@@ -1,0 +1,44 @@
+blockType: ToolExperienceBlock
+blockName: tool_experience
+dataPath: surveyApi.survey.${id}_experience
+keysPath: surveyApi.survey.${id}_experience.experience.keys
+bucketKeysName: tools
+showLegend: true
+enableExport: true
+hidden: true
+query: >
+    surveyApi {
+        survey(survey: ${surveyType}) {
+            ${id}_experience: tool(id: ${id}) {
+                id
+                entity {
+                    homepage
+                    description
+                    name
+                    github {
+                        url
+                    }
+                }
+                experience {
+                    keys
+                    all_years {
+                        year
+                        completion {
+                            total
+                            count
+                            percentage_survey
+                        }
+                        facets {
+                            buckets {
+                                id
+                                count
+                                countDelta
+                                percentage_survey
+                                percentage_question
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }

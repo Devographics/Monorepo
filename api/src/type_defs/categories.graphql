@@ -1,0 +1,40 @@
+enum CategoryID {
+    # JS
+    javascript_flavors
+    front_end_frameworks
+    data_layer
+    back_end_frameworks
+    testing
+    mobile_desktop
+    # CSS
+    pre_post_processors
+    css_frameworks
+    css_methodologies
+    css_in_js
+}
+
+"""
+Happiness
+"""
+type CategoryHappiness {
+    id: CategoryID!
+    all_years: [YearHappiness]
+    year(year: Int!): YearHappiness
+}
+
+"""
+Other Tools
+"""
+type CategoryOtherTools {
+    id: CategoryID!
+    all_years: [YearOtherTools]
+    year(year: Int!): YearOtherTools
+}
+
+"""
+Category
+"""
+type Category {
+    happiness(filters: Filters): CategoryHappiness
+    tools_others(filters: Filters): CategoryOtherTools
+}

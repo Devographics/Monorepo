@@ -1,0 +1,43 @@
+blockType: HorizontalBarBlock
+showDescription: true
+dataPath: "surveyApi.survey.${id}.year.facets.0"
+enableExport: true
+query: >
+    surveyApi {
+        survey(survey: ${surveyType}) {
+            ${id}: ${fieldId}(id: ${id}, filters: ${filters}, options: ${options}) {
+                id
+                year(year: ${currentYear}) {
+                    year
+                    completion {
+                        total
+                        count
+                        percentage_survey
+                    }
+                    facets {
+                        id
+                        type
+                        completion {
+                            total
+                            percentage_question
+                            percentage_survey
+                            count
+                        }
+                        buckets {
+                            id
+                            count
+                            percentage_question
+                            percentage_survey
+                            entity {
+                                homepage
+                                name
+                                github {
+                                    url
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }

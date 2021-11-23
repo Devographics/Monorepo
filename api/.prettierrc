@@ -1,0 +1,6 @@
+printWidth:    100
+semi:          false
+tabWidth:      4
+singleQuote:   true
+arrowParens:   avoid
+trailingComma: none

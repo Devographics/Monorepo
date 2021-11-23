@@ -1,0 +1,22 @@
+- name: Frontend Masters
+  id: frontendmasters
+  url: https://frontendmasters.com/
+  image: frontend-masters-dark.png
+  description: >
+    Advance your skills with in-depth, modern front-end engineering courses. 
+# - name: Newline
+#   id: newline
+#   url: https://www.newline.co/
+#   image: newline-logo-dark.png
+# - name: Chroma
+#   id: chroma
+#   url: https://www.hichroma.com/
+#   image: chroma_logo.svg
+# - name: ZensHome
+#   id: zenshome
+#   url: https://zenshome.jp
+#   image: zenshome-whitebg.svg
+# - name: Design+Code
+#   id: designcode
+#   url: https://designcode.io/
+#   image: designcode.svg

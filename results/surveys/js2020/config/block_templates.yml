@@ -1,0 +1,1356 @@
+###############################################################################
+#
+# GENERIC
+#
+###############################################################################
+
+pageIntroductionTemplate:
+    id: ${parentId}_introduction
+    blockType: PageIntroductionBlock
+
+recommendedResourcesTemplate:
+    id: ${parentId}_resources
+    blockName: recommended_resources
+    blockType: RecommendedResourcesBlock
+    showDescription: false
+
+    #  note: query does not currently work because sponsor values would need to be
+    #  wrapped in quotes
+    # dataPath: 'resources.edges'
+    # query: >
+    #     resources: allRecommendedResourcesYaml(filter: {id: {in: [${sponsors}]}}) {
+    #         edges {
+    #             node {
+    #                 name
+    #                 url
+    #                 image
+    #                 id
+    #                 description
+    #             }
+    #         }
+    #     }
+
+###############################################################################
+#
+# DEMOGRAPHICS
+#
+###############################################################################
+
+# Used for salaries, company size, experience, etc. blocks that only show the current year of data
+demographicsTemplate:
+    blockType: VerticalBarBlock
+    dataPath: 'surveyApi.survey.demographics.${id}.year'
+    showDescription: true
+    enableExport: true
+    query: >
+        surveyApi {
+            survey(survey: ${surveyType}) {
+                demographics {
+                    ${id} {
+                        year(year: ${currentYear}) {
+                            year
+                            total
+                            completion {
+                                percentage
+                                count
+                            }
+                            buckets {
+                                id
+                                count
+                                percentage
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+knowledgeScoreTemplate:
+    id: knowledge_score
+    blockType: KnowledgeScoreBlock
+    dataPath: 'surveyApi.survey.demographics.knowledge_score.year'
+    showDescription: true
+    enableExport: true
+    query: >
+        surveyApi {
+            survey(survey: ${surveyType}) {
+                demographics {
+                    knowledge_score {
+                        year(year: ${currentYear}) {
+                            year
+                            buckets {
+                                id
+                                count
+                                percentage
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+proficiencyTemplate:
+    blockType: VerticalBarBlock
+    dataPath: 'surveyApi.survey.${id}.year'
+    showDescription: true
+    showLegend: true
+    enableExport: true
+    query: >
+        surveyApi {
+            survey(survey: ${surveyType}) {
+                ${id}: proficiency(id: ${id}) {
+                    id
+                    year(year: ${currentYear}) {
+                        year
+                        total
+                        completion {
+                            count
+                            percentage
+                        }
+                        buckets {
+                            id
+                            count
+                            percentage
+                        }
+                    }
+                }
+            }
+        }
+
+sourceTemplate:
+    blockType: VerticalBarBlock
+    dataPath: 'surveyApi.survey.demographics.${id}.year' # select the 4th array item to select the 4th year
+    showDescription: true
+    enableExport: true
+    query: >
+        surveyApi {
+            survey(survey: ${surveyType}) {
+                demographics {
+                    ${id} {
+                        year(year: ${currentYear}) {
+                            year
+                            total
+                            completion {
+                                percentage
+                                count
+                            }
+                            buckets {
+                                id
+                                count
+                                percentage
+                                entity {
+                                    name
+                                    homepage
+                                    github {
+                                        url
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+###############################################################################
+#
+# OVERVIEW
+#
+###############################################################################
+
+scatterplotOverviewTemplate:
+    id: scatterplot_overview
+    blockType: ToolsScatterplotBlock
+    dataPath: 'surveyApi.survey.scatterplot_tools'
+    showDescription: true
+    enableExport: true
+    query: >
+        surveyApi {
+            survey(survey: ${surveyType}) {
+                 scatterplot_tools: tools(ids: [${allTools}]) {
+                    id
+                    entity {
+                        homepage
+                        name
+                        github {
+                            url
+                        }
+                    }
+                    experience {
+                        year(year:${currentYear}) {
+                            total
+                            buckets{
+                                id
+                                count
+                                percentage
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+cityscapeOverviewTemplate:
+    id: cityscape_overview
+    blockType: ToolsCityscapeBlock
+    dataPath: 'surveyApi.survey.cityscape_tools'
+    showDescription: true
+    enableExport: true
+    query: >
+        surveyApi {
+            survey(survey: ${surveyType}) {
+                 cityscape_tools: tools(ids: [${allTools}]) {
+                    id
+                    entity {
+                        homepage
+                        name
+                        github {
+                            url
+                        }
+                    }
+                    experience {
+                        year(year:${currentYear}) {
+                            total
+                            buckets{
+                                id
+                                count
+                                percentage
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+toolsArrowsTemplate:
+    id: arrows_overview
+    blockType: ToolsArrowsBlock
+    dataPath: 'surveyApi.survey.arrows_tools'
+    showDescription: true
+    enableExport: true
+    query: >
+        surveyApi {
+            survey(survey: ${surveyType}) {
+                arrows_tools: tools(ids: [${allTools}]) {
+                    id
+                    entity {
+                        name
+                        description
+                        id
+                    }
+                    experience {
+                        all_years {
+                            year
+                            buckets {
+                                percentage
+                                id
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+###############################################################################
+#
+# FEATURES
+#
+###############################################################################
+
+featuresOverviewTemplate:
+    id: features_overview
+    blockName: features_overview
+    blockType: FeaturesOverviewBlock
+    dataPath: 'surveyApi.survey.features'
+    enableExport: true
+    query: >
+        surveyApi {
+            survey(survey: ${surveyType}) {
+                features(ids: [${allFeatures}]) {
+                    id
+                    name
+                    experience{
+                        year(year: ${currentYear}) {
+                            year
+                            completion {
+                                count
+                                percentage
+                            }
+                            buckets {
+                                id
+                                count
+                                percentage
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+featuresCategoryOverviewTemplate:
+    blockType: FeaturesOverviewBlock
+    blockName: featuresCategoryOverview
+    dataPath: 'surveyApi.survey.features'
+    bucketKeysName: featureExperienceSimplified
+    showLegend: true
+    enableExport: true
+    query: >
+        surveyApi {
+            survey(survey: ${surveyType}) {
+                features(ids: [${featureIds}]) {
+                    id
+                    experience{
+                        year(year: ${currentYear}) {
+                            year
+                            completion {
+                                count
+                                percentage
+                            }
+                            buckets {
+                                id
+                                count
+                                percentage
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+# Used for destructuring, arrow functions, WebGL, etc.
+featureExperienceTemplate:
+    blockType: FeatureExperienceBlock
+    dataPath: 'surveyApi.survey.${id}'
+    showDescription: true
+    bucketKeysName: features
+    showLegend: true
+    enableExport: true
+    query: >
+        surveyApi {
+            survey(survey: ${surveyType}) {
+                ${id}: feature(id: ${id}) {
+                    id
+                    name
+                    mdn {
+                        locale
+                        url
+                        title
+                        summary
+                    }
+                    experience {
+                        all_years {
+                            year
+                            completion {
+                                count
+                                percentage
+                            }
+                            buckets {
+                                id
+                                count
+                                countDelta
+                                percentage
+                                percentageDelta
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+otherFeaturesTemplate:
+    blockType: HorizontalBarBlock
+    showDescription: true
+    mode: relative
+    dataPath: 'surveyApi.survey.${id}.year'
+    translateData: true
+    units: count
+    enableExport: true
+    query: >
+        surveyApi {
+            survey(survey: ${surveyType}) {
+                ${id}: features_others(id: ${id}) {
+                    id
+                    year(year: ${currentYear}) {
+                        year
+                        total
+                        completion {
+                            count
+                            percentage
+                        }
+                        buckets{
+                            id
+                            name
+                            count
+                            percentage
+                        }
+                    }
+                }
+            }
+        }
+
+###############################################################################
+#
+# TOOLS
+#
+###############################################################################
+
+toolsSectionOverviewTemplate:
+    id: '${parentId}_section_overview'
+    blockType: ToolsSectionOverviewBlock
+    dataPath: 'surveyApi.survey.${parentId}_tools_overview'
+    bucketKeysName: tools
+    showLegend: true
+    enableExport: true
+    query: >
+        surveyApi {
+            survey(survey: ${surveyType}) {
+                ${parentId}_tools_overview: tools(ids: [${toolsCategories[parentId]}]) {
+                    id
+                    entity {
+                        name
+                    }
+                    experience {
+                        year(year: ${currentYear}) {
+                            buckets {
+                                id
+                                count
+                                percentage
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+toolsExperienceMarimekkoTemplate:
+    id: '${parentId}_experience_marimekko'
+    blockType: ToolsExperienceMarimekkoBlock
+    blockName: tools_experience_marimekko
+    dataPath: 'surveyApi.survey.${parentId}_marimekko'
+    bucketKeysName: tools
+    showLegend: true
+    enableExport: true
+    query: >
+        surveyApi {
+            survey(survey: ${surveyType}) {
+                ${parentId}_marimekko: tools(ids: [${toolsCategories[parentId]}]) {
+                    id
+                    entity {
+                        name
+                    }
+                    experience {
+                        year(year: ${currentYear}) {
+                            total
+                            buckets {
+                                id
+                                count
+                                percentage
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+toolsSectionStreamsTemplate:
+    id: '${parentId}_section_streams'
+    blockName: tools_section_streams
+    blockType: ToolsSectionStreamsBlock
+    dataPath: 'surveyApi.survey.${parentId}_streams'
+    bucketKeysName: tools
+    showLegend: true
+    enableExport: true
+    query: >
+        surveyApi {
+            survey(survey: ${surveyType}) {
+                ${parentId}_streams: tools(ids: [${toolsCategories[parentId]}]) {
+                    id
+                    entity {
+                        name
+                        homepage
+                        github {
+                            url
+                        }
+                    }
+                    experience {
+                        all_years {
+                            year
+                            total
+                            completion {
+                                count
+                                percentage
+                            }
+                            buckets {
+                                id
+                                count
+                                percentage
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+toolHeaderTemplate:
+    blockType: ToolHeaderBlock
+    dataPath: surveyApi.survey.${parentId}_headerData
+    query: >
+        surveyApi {
+            survey(survey: ${surveyType}) {
+                ${parentId}_headerData: tool(id: ${toolId}) {
+                    id
+                    entity {
+                        name
+                        description
+                        homepage
+                        npm
+                        github {
+                            stars
+                            url
+                        }
+                    }
+                }
+            }
+        }
+
+toolExperienceTemplate:
+    blockType: ToolExperienceBlock
+    blockName: tool_experience
+    dataPath: surveyApi.survey.${id}_experience
+    bucketKeysName: tools
+    showLegend: true
+    enableExport: true
+    hidden: true
+    query: >
+        surveyApi {
+            survey(survey: ${surveyType}) {
+                ${id}_experience: tool(id: ${id}) {
+                    id
+                    entity {
+                        homepage
+                        description
+                        name
+                        github {
+                            url
+                        }
+                    }
+                    experience {
+                        all_years {
+                            year
+                            total
+                            completion {
+                                count
+                                percentage
+                            }
+                            awarenessUsageInterestSatisfaction {
+                                awareness
+                                usage
+                                interest
+                                satisfaction
+                            }
+                            buckets {
+                                id
+                                count
+                                countDelta
+                                percentage
+                                percentageDelta
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+toolExperienceGraphTemplate:
+    blockType: ToolExperienceGraphBlock
+    dataPath: surveyApi.survey.tool
+    showLegend: true
+    enableExport: true
+    query: >
+        surveyApi {
+            survey(survey: ${surveyType}) {
+                tool(id: ${toolId}) {
+                    id
+                    entity {
+                        homepage
+                        name
+                        github {
+                            url
+                        }
+                    }
+                    experienceGraph {
+                        nodes {
+                            id
+                            year
+                            experience
+                        }
+                        links {
+                            source
+                            target
+                            count
+                        }
+                    }
+                }
+            }
+        }
+
+toolsExperienceRankingTemplate:
+    id: '${parentId}_experience_ranking'
+    blockType: ToolsExperienceRankingBlock
+    blockName: tools_experience_ranking
+    dataPath: 'surveyApi.survey.${parentId}_rankings.experience'
+    enableExport: true
+    query: >
+        surveyApi {
+            survey(survey: ${surveyType}) {
+                ${parentId}_rankings: tools_rankings(ids: [${toolsCategories[parentId]}]) {
+                    ids
+                    experience {
+                        id
+                        entity {
+                            name
+                        }
+                        usage {
+                            year
+                            rank
+                            percentage
+                        }
+                        awareness {
+                            year
+                            rank
+                            percentage
+                        }
+                        interest {
+                            year
+                            rank
+                            percentage
+                        }
+                        satisfaction {
+                            year
+                            rank
+                            percentage
+                        }
+                    }
+                }
+            }
+        }
+
+toolsUsageVariationsTemplate:
+    id: ${parentId}_tools_usage_variations
+    blockType: ToolsUsageVariationsBlock
+    blockName: tools_usage_variations
+    dataPath: 'surveyApi.survey.${parentId}_tools_usage_variations.tools[0]'
+    enableExport: true
+    query: >
+        surveyApi {
+            survey(survey: ${surveyType}) {
+                ${parentId}_tools_usage_variations: matrices {
+                    tools(
+                        year: ${currentYear},
+                        experiences: [positive_sentiment],
+                        dimensions: [
+                            years_of_experience,
+                            yearly_salary,
+                            company_size,
+                        ],
+                        ids: [${toolsCategories[parentId]}]
+                    ) {
+                        experience
+                        dimensions {
+                            dimension
+                            tools {
+                                id
+                                entity {
+                                    id
+                                    name
+                                    homepage
+                                    github {
+                                        url
+                                    }
+                                }
+                                total
+                                percentage
+                                buckets {
+                                    id
+                                    count
+                                    percentage
+                                    range_total
+                                    range_percentage
+                                    range_percentage_delta
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+allSectionsToolsCardinalityByUserTemplate:
+    id: 'all_sections_tools_cardinality_by_user'
+    blockType: AllSectionsToolsCardinalityByUserBlock
+    dataPath: surveyApi.survey
+    bucketKeysName: tools
+    enableExport: true
+    # this query is quite repetitive, in order to be able
+    # to generate it in a more dynamic way, we would have
+    # to support loops.
+    query: >
+        surveyApi {
+            survey(survey: ${surveyType}) {
+                javascript_flavors: tools_cardinality_by_user(
+                    year: ${currentYear},
+                    ids: [${toolsCategories.javascript_flavors}],
+                    experienceId: would_use
+                ) {
+                    cardinality
+                    count
+                    percentage
+                }
+                front_end_frameworks: tools_cardinality_by_user(
+                    year: ${currentYear},
+                    ids: [${toolsCategories.front_end_frameworks}],
+                    experienceId: would_use
+                ) {
+                    cardinality
+                    count
+                    percentage
+                }
+                datalayer: tools_cardinality_by_user(
+                    year: ${currentYear},
+                    ids: [${toolsCategories.datalayer}],
+                    experienceId: would_use
+                ) {
+                    cardinality
+                    count
+                    percentage
+                }
+                back_end_frameworks: tools_cardinality_by_user(
+                    year: ${currentYear},
+                    ids: [${toolsCategories.back_end_frameworks}],
+                    experienceId: would_use
+                ) {
+                    cardinality
+                    count
+                    percentage
+                }
+                testing: tools_cardinality_by_user(
+                    year: ${currentYear},
+                    ids: [${toolsCategories.testing}],
+                    experienceId: would_use
+                ) {
+                    cardinality
+                    count
+                    percentage
+                }
+                build_tools: tools_cardinality_by_user(
+                    year: ${currentYear},
+                    ids: [${toolsCategories.build_tools}],
+                    experienceId: would_use
+                ) {
+                    cardinality
+                    count
+                    percentage
+                }
+                mobile_desktop: tools_cardinality_by_user(
+                    year: ${currentYear},
+                    ids: [${toolsCategories.mobile_desktop}],
+                    experienceId: would_use
+                ) {
+                    cardinality
+                    count
+                    percentage
+                }
+            }
+        }
+
+sectionToolsCardinalityByUserTemplate:
+    id: '${parentId}_tools_cardinality_by_user'
+    blockType: SectionToolsCardinalityByUserBlock
+    dataPath: 'surveyApi.survey.${parentId}_tools_cardinality_by_user'
+    bucketKeysName: tools
+    enableExport: true
+    query: >
+        surveyApi {
+            survey(survey: ${surveyType}) {
+                ${parentId}_tools_cardinality_by_user: tools_cardinality_by_user(
+                    year: ${currentYear},
+                    ids: [${toolsCategories[parentId]}],
+                    experienceId: would_use
+                ) {
+                    cardinality
+                    count
+                    percentage
+                }
+            }
+        }
+
+# QUERY NEEDS TO BE ADJUSTED IF WE ENABLE THIS BLOCK!
+toolsMatricesTemplate:
+    id: ${parentId}_matrices
+    blockType: ToolsMatricesBlock
+    blockName: tools_matrices
+    dataPath: 'surveyApi.survey.${parentId}_matrices.tools'
+    enableExport: true
+    query: >
+        surveyApi {
+            survey(survey: ${surveyType}) {
+                ${parentId}_matrices: matrices {
+                    tools(ids: [${toolsCategories[parentId]}]) {
+                        years_of_experience(experience: would_use) {
+                            year(year: ${currentYear}) {
+                                tools {
+                                    id
+                                    entity {
+                                        name
+                                        homepage
+                                        github {
+                                            url
+                                        }
+                                    }
+                                    ranges {
+                                        range
+                                        count
+                                        percentage
+                                    }
+                                }
+                            }
+                        }
+                        yearly_salary(experience: would_use) {
+                            year(year: ${currentYear}) {
+                                tools {
+                                    id
+                                    entity {
+                                        name
+                                        homepage
+                                        github {
+                                            url
+                                        }
+                                    }
+                                    ranges {
+                                        range
+                                        count
+                                        percentage
+                                    }
+                                }
+                            }
+                        }
+                        company_size(experience: would_use) {
+                            year(year: ${currentYear}) {
+                                tools {
+                                    id
+                                    entity {
+                                        homepage
+                                        name
+                                        github {
+                                            url
+                                        }
+                                    }
+                                    ranges {
+                                        range
+                                        count
+                                        percentage
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+# QUERY NEEDS TO BE ADJUSTED IF WE ENABLE THIS BLOCK!
+heatmapTemplate:
+    blockType: HeatmapBlock
+    dataPath: 'surveyApi.survey.${parentId}_matrices.tools.${heatmapId}.year'
+    showDescription: true
+    enableExport: true
+    query: >
+        surveyApi {
+            survey(survey: ${surveyType}) {
+                ${parentId}_matrices: matrices {
+                    tools(ids: [${toolsCategories[parentId]}]) {
+                        ${heatmapId}(experience: would_use) {
+                            year(year: ${currentYear}) {
+                                year
+                                tools {
+                                    id
+                                    total
+                                    entity {
+                                        name
+                                    }
+                                    ranges {
+                                        range
+                                        count
+                                        percentage
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+scatterplotTemplate:
+    id: scatterplot
+    blockType: ToolsScatterplotBlock
+    dataPath: 'surveyApi.survey.tools'
+    showDescription: true
+    enableExport: true
+    query: >
+        surveyApi {
+            survey(survey: ${surveyType}) {
+                 tools(ids:[${toolsCategories[parentId]}]) {
+                    id
+                    entity {
+                        homepage
+                        name
+                        github {
+                                url
+                              }
+                    }
+                    experience {
+                        year(year:${currentYear}) {
+                            total
+                            buckets{
+                                id
+                                count
+                                percentage
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+###############################################################################
+#
+# Happiness
+#
+###############################################################################
+
+happinessSingleYearTemplate:
+    id: '${parentId}_happiness'
+    blockType: VerticalBarBlock
+    dataPath: 'surveyApi.survey.${parentId}_happiness.year'
+    showDescription: true
+    i18nNamespace: happiness
+    bucketKeysName: happiness
+    blockName: happiness
+    enableExport: true
+    query: >
+        surveyApi {
+            survey(survey: ${surveyType}) {
+                ${parentId}_happiness: happiness(id: ${parentId}) {
+                    year(year: ${currentYear}) {
+                        year
+                        mean
+                        buckets {
+                            count
+                            id
+                            percentage
+                        }
+                    }
+                }
+            }
+        }
+
+happinessHistoryTemplate:
+    id: '${parentId}_happiness'
+    blockType: HappinessHistoryBlock
+    dataPath: 'surveyApi.survey.${parentId}_happiness.all_years'
+    showDescription: true
+    i18nNamespace: happiness
+    bucketKeysName: happiness
+    blockName: happiness
+    enableExport: true
+    query: >
+        surveyApi {
+            survey(survey: ${surveyType}) {
+                ${parentId}_happiness: happiness(id: ${parentId}) {
+                    all_years {
+                        year
+                        mean
+                    }
+                }
+            }
+        }
+
+opinionHappinessTemplate:
+    titleId: 'happiness.${id}'
+    # blockType: HappinessBlock
+    blockType: VerticalBarBlock
+    dataPath: 'surveyApi.survey.${id}_happiness.year'
+    showDescription: false
+    i18nNamespace: happiness
+    bucketKeysName: happiness
+    blockName: happiness
+    enableExport: true
+    query: >
+        surveyApi {
+            survey(survey: ${surveyType}) {
+                ${id}_happiness: happiness(id: ${id}) {
+                    year(year: ${currentYear}) {
+                        year
+                        mean
+                        buckets {
+                            count
+                            id
+                            percentage
+                        }
+                    }
+                }
+            }
+        }
+
+###############################################################################
+#
+# OPINIONS
+#
+###############################################################################
+
+# Used for "I think JavaScript is moving in the right direction", etc. blocks
+# {id} refers to the current subject
+opinionTemplate:
+    blockType: OpinionBlock
+    dataPath: 'surveyApi.survey.${id}.all_years'
+    showDescription: true
+    enableExport: true
+    query: >
+        surveyApi {
+            survey(survey: ${surveyType}) {
+                ${id}: opinion(id: ${id}) {
+                    id
+                    all_years {
+                        year
+                        total
+                        completion {
+                            count
+                            percentage
+                        }
+                        buckets {
+                            id
+                            count
+                            percentage
+                        }
+                    }
+                }
+            }
+        }
+
+opinionsOthersTemplate:
+    titleId: 'opinions_others.${id}.others'
+    blockType: HorizontalBarBlock
+    dataPath: 'surveyApi.survey.${id}.year'
+    showDescription: true
+    units: count
+    enableExport: true
+    query: >
+        surveyApi {
+            survey(survey: ${surveyType}) {
+                ${id}: opinions_others(id: ${id}) {
+                    id
+                    year(year: ${currentYear}) {
+                        year
+                        total
+                        completion {
+                            count
+                            percentage
+                        }
+                        buckets {
+                            id
+                            count
+                            percentage
+                            entity {
+                                id
+                                homepage
+                                name
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+###############################################################################
+#
+# OTHER TOOLS
+#
+###############################################################################
+
+sectionOtherToolsTemplate:
+    id: ${parentId}_others
+    blockName: category_other_tools
+    blockType: HorizontalBarBlock
+    showDescription: true
+    mode: relative
+    units: count
+    dataPath: 'surveyApi.survey.${parentId}_others.year'
+    enableExport: true
+    query: >
+        surveyApi {
+            survey(survey: ${surveyType}) {
+                ${parentId}_others: tools_others(id: ${parentId}_others) {
+                    id
+                    year(year: ${currentYear}) {
+                        year
+                        total
+                        completion {
+                            count
+                            percentage
+                        }
+                        buckets{
+                            id
+                            count
+                            percentage
+                            entity {
+                                id
+                                homepage
+                                name
+                                github {
+                                    url
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+otherToolsTemplate:
+    blockType: HorizontalBarBlock
+    showDescription: true
+    mode: relative
+    units: count
+    dataPath: 'surveyApi.survey.${id}.year'
+    enableExport: true
+    query: >
+        surveyApi {
+            survey(survey: ${surveyType}) {
+                ${id}: tools_others(id: ${id}) {
+                    id
+                    year(year: ${currentYear}) {
+                        year
+                        total
+                        completion {
+                            count
+                            percentage
+                        }
+                        buckets{
+                            id
+                            count
+                            percentage
+                            entity {
+                                id
+                                homepage
+                                name
+                                github {
+                                    url
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+otherToolsFreeFormTemplate:
+    blockType: HorizontalBarBlock
+    showDescription: true
+    mode: relative
+    units: count
+    dataPath: 'surveyApi.survey.${id}.year'
+    colorVariant: secondary
+    enableExport: true
+    query: >
+        surveyApi {
+            survey(survey: ${surveyType}) {
+                ${id}: tools_others(id: ${id}) {
+                    id
+                    year(year: ${currentYear}) {
+                        year
+                        total
+                        completion {
+                            count
+                            percentage
+                        }
+                        buckets{
+                            id
+                            count
+                            percentage
+                            entity {
+                                id
+                                homepage
+                                name
+                                github {
+                                    url
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+###############################################################################
+#
+# RESOURCES
+#
+###############################################################################
+
+resourcesTemplate:
+    blockType: HorizontalBarBlock
+    showDescription: true
+    mode: relative
+    units: count
+    dataPath: 'surveyApi.survey.${id}.year'
+    enableExport: true
+    query: >
+        surveyApi {
+            survey(survey: ${surveyType}) {
+                ${id}: resources(id: ${id}) {
+                    id
+                    year(year: ${currentYear}) {
+                        year
+                        total
+                        completion {
+                            count
+                            percentage
+                        }
+                        buckets {
+                            id
+                            count
+                            percentage
+                            entity {
+                                homepage
+                                name
+                                github {
+                                    url
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+resourcesFreeFormTemplate:
+    blockType: HorizontalBarBlock
+    showDescription: true
+    mode: relative
+    units: count
+    dataPath: 'surveyApi.survey.${id}.year'
+    colorVariant: secondary
+    enableExport: true
+    query: >
+        surveyApi {
+            survey(survey: ${surveyType}) {
+                ${id}: resources(id: ${id}) {
+                    id
+                    year(year: ${currentYear}) {
+                        year
+                        total
+                        completion {
+                            count
+                            percentage
+                        }
+                        buckets {
+                            id
+                            count
+                            percentage
+                            entity {
+                                homepage
+                                name
+                                github {
+                                    url
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+###############################################################################
+#
+# ENVIRONMENTS
+#
+###############################################################################
+
+environmentTemplate:
+    blockType: HorizontalBarBlock
+    showDescription: true
+    mode: relative
+    dataPath: 'surveyApi.survey.${id}_environments.year'
+    units: count
+    enableExport: true
+    query: >
+        surveyApi {
+            survey(survey: ${surveyType}) {
+                ${id}_environments: environments(id: ${id}) {
+                    id
+                    year(year: ${currentYear}) {
+                        year
+                        total
+                        completion {
+                            count
+                            percentage
+                        }
+                        buckets {
+                            id
+                            count
+                            percentage
+                            entity {
+                                homepage
+                                name
+                                github {
+                                    url
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+environmentRatingTemplate:
+    blockType: VerticalBarBlock
+    showDescription: true
+    showLegend: true
+    mode: relative
+    # i18nNamespace: frequency
+    dataPath: 'surveyApi.survey.${id}.year'
+    enableExport: true
+    query: >
+        surveyApi {
+            survey(survey: ${surveyType}) {
+                ${id}: environments_ratings(id: ${id}) {
+                    id
+                    year(year: ${currentYear}) {
+                        year
+                        total
+                        completion {
+                            count
+                            percentage
+                        }
+                        buckets {
+                            id
+                            count
+                            percentage
+                        }
+                    }
+                }
+            }
+        }
+
+###############################################################################
+#
+# OTHER
+#
+###############################################################################
+
+picksTemplate:
+    blockType: PicksBlock
+
+hintTemplate:
+    blockType: HintBlock

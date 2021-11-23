@@ -1,0 +1,242 @@
+surveyType: state_of_js
+
+# used for scatterplot chart
+totalCountRounded: 20000
+
+currentYear: 2020
+
+allFeatures:
+    # syntax
+    - destructuring
+    - spread_operator
+    - arrow_functions
+    - nullish_coalescing
+    - optional_chaining
+    - private_fields
+
+    # language
+    - proxies
+    - async_await
+    - promises
+    - decorators
+    - promise_all_settled
+    - dynamic_import
+
+    # data_structures
+    - maps
+    - sets
+    - typed_arrays
+    - array_prototype_flat
+    - big_int
+
+    # browser_apis
+    - service_workers
+    - local_storage
+    - intl
+    - web_audio
+    - webgl
+    - web_animations
+    - webrtc
+    - web_speech
+    - webvr
+    - websocket
+    - fetch
+    - custom_elements
+    - shadow_dom
+
+    # other_features
+    - pwa
+    - wasm
+
+featuresCategories:
+    syntax:
+        - destructuring
+        - spread_operator
+        - arrow_functions
+        - nullish_coalescing
+        - optional_chaining
+        - private_fields
+
+    language:
+        - proxies
+        - async_await
+        - promises
+        - decorators
+        - promise_all_settled
+        - dynamic_import
+
+    data_structures:
+        - maps
+        - sets
+        - typed_arrays
+        - array_prototype_flat
+        - big_int
+
+    browser_apis:
+        - service_workers
+        - local_storage
+        - intl
+        - web_audio
+        - webgl
+        - web_animations
+        - webrtc
+        - web_speech
+        - webvr
+        - websocket
+        - fetch
+        - custom_elements
+        - shadow_dom
+
+    other_features:
+        - pwa
+        - wasm
+
+allTools:
+    # javascript_flavors
+    - typescript
+    - reason
+    - elm
+    - clojurescript
+    - purescript
+
+    # front_end_frameworks
+    - react
+    - vuejs
+    - angular
+    - preact
+    - ember
+    - svelte
+    - alpinejs
+    - litelement
+    - stimulus
+
+    # datalayer
+    - redux
+    - apollo
+    - graphql
+    - mobx
+    - relay
+    - xstate
+    - vuex
+
+    # back_end_frameworks
+    - express
+    - nextjs
+    - koa
+    - meteor
+    - nuxt
+    - gatsby
+    - nest
+    - strapi
+    - fastify
+    - hapi
+
+    # testing
+    - jest
+    - mocha
+    - storybook
+    - cypress
+    - ava
+    - jasmine
+    - puppeteer
+    - testing_library
+    - playwright
+    - webdriverio
+
+    # build_tools
+    - webpack
+    - parcel
+    - gulp
+    - rollup
+    - browserify
+    - tsc
+    - rome
+    - snowpack
+    - swc
+    - esbuild
+
+    # mobile_desktop
+    - electron
+    - reactnative
+    - nativeapps
+    - cordova
+    - ionic
+    - capacitor
+    - nwjs
+    - expo
+    - quasar
+
+toolsCategories:
+    javascript_flavors:
+        - typescript
+        - reason
+        - elm
+        - clojurescript
+        - purescript
+
+    front_end_frameworks:
+        - react
+        - vuejs
+        - angular
+        - preact
+        - ember
+        - svelte
+        - alpinejs
+        - litelement
+        - stimulus
+
+    datalayer:
+        - redux
+        - apollo
+        - graphql
+        - mobx
+        - relay
+        - xstate
+        - vuex
+
+    back_end_frameworks:
+        - express
+        - nextjs
+        - koa
+        - meteor
+        - nuxt
+        - gatsby
+        - nest
+        - strapi
+        - fastify
+        - hapi
+
+    testing:
+        - jest
+        - mocha
+        - storybook
+        - cypress
+        - ava
+        - jasmine
+        - puppeteer
+        - testing_library
+        - playwright
+        - webdriverio
+
+    build_tools:
+        - webpack
+        - parcel
+        - gulp
+        - rollup
+        - browserify
+        - tsc
+        - rome
+        - snowpack
+        - swc
+        - esbuild
+
+    mobile_desktop:
+        - electron
+        - reactnative
+        - nativeapps
+        - cordova
+        - ionic
+        - capacitor
+        - nwjs
+        - expo
+        - quasar

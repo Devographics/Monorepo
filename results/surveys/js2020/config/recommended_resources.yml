@@ -1,0 +1,188 @@
+# Idera
+
+- name: WebTestIt - a Free Tool for Creating UI Tests for Web Applications
+  id: id-webtestit
+  description: WebTestIt lets developers build reliable and efficient UI web tests for Selenium and Protractor. Check it out.
+  url: https://www.sencha.com/products/webtestit/?utm_source=stateofjs2020&utm_medium=direct&utm_content=stateofjs2020-sponsor-201211
+  image: /images/resources/Sencha-WebTestIt-Logo-svg.png
+
+- name: Enhance your App with Rich Editing Capabilities from Froala 
+  id: id-froala
+  description: Add simple yet smart editing capabilities into your Apps using the WYSIWYG HTML Froala Editor. 
+  url: https://froala.com/?utm_source=stateofjs2020&utm_medium=direct&utm_content=stateofjs2020-sponsor-201211
+  image: /images/resources/froala.png
+
+# Front End Masters
+
+- name: Frontend Masters
+  id: fm-homepage
+  description: >
+      Advance Your Skills with In-Depth, Modern Front-End Engineering Courses
+  url: https://frontendmasters.com/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2020
+  image: /images/resources/m-black-highres.png
+
+- name: Professional JavaScript Learning Path
+  teacher: Will Sentance
+  id: fm-javascript
+  description: >
+      From JavaScript foundations, all the way to Hardcore Functional JavaScript, find out how far you can go with your JavaScript abilities in this comprehensive learning path.
+  url: https://frontendmasters.com/learn/javascript/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2020
+  image: https://static.frontendmasters.com/assets/teachers/sentance/thumb@2x.jpg
+
+- name: Creative Coding with Canvas & WebGL
+  teacher: Matt DesLauriers
+  id: fm-canvas
+  description: >
+      Learn to use Canvas and WebGL with ThreeJS in this JavaScript course on Creative Coding!
+  url: https://frontendmasters.com/courses/canvas-webgl/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2020
+  image: https://static.frontendmasters.com/assets/teachers/deslauriers/thumb@2x.jpg
+
+- name: Exploring Service Workers
+  teacher: Kyle Simpson
+  id: fm-service-workers
+  description: >
+      PWAs represent the dream of web apps getting all the same capabilities, and performance, of native apps.
+  url: https://frontendmasters.com/courses/service-workers/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2020
+  image: https://static.frontendmasters.com/assets/teachers/simpson/thumb@2x.jpg
+
+- name: Complete Intro to React, v5
+  teacher: Brian Holt
+  id: fm-react
+  description: >
+      Much more than an intro, you’ll start from the ground up, getting all the way to using the latest features in React, including hooks, effects, context, and portals. 
+  url: https://frontendmasters.com/courses/complete-react-v5/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2020
+  image: https://static.frontendmasters.com/assets/teachers/holt/thumb@2x.jpg
+
+- name: Introduction to Vue 3
+  teacher: Sarah Drasner
+  id: fm-vue
+  description: >
+      Get started quickly with the Vue.js JavaScript framework. You’ll learn how to build reusable components and make them flexible with props, lifecycles, and slots. 
+  url: https://frontendmasters.com/courses/vue-3/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2020
+  image: https://static.frontendmasters.com/assets/teachers/drasner/thumb@2x.jpg
+
+- name: Svelte
+  teacher: Rich Harris
+  id: fm-svelte
+  description: >
+      This course is the definitive introduction to the Svelte framework. You’ll learn how Svelte works, write svelte components, and take a tour through the entire Svelte API. 
+  url: https://frontendmasters.com/courses/svelte/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2020
+  image: https://static.frontendmasters.com/assets/teachers/harris/thumb@2x.jpg
+
+- name: React Native, v2
+  teacher: Kadi Kraman
+  id: fm-react-native
+  description: >
+      Leverage your JavaScript and React skills for mobile iOS and Android platforms using React Native. 
+  url: https://frontendmasters.com/courses/react-native-v2/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2020
+  image: https://static.frontendmasters.com/assets/teachers/kraman/thumb@2x.jpg
+
+- name: JavaScript and TypeScript Monorepos
+  teacher: Mike North
+  id: fm-monorepos
+  description: >
+      You'll get hands-on experience with best-in-class tools designed to keep the workflows for even complex projects simple!
+  url: https://frontendmasters.com/courses/monorepos/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2020
+  image: https://static.frontendmasters.com/assets/teachers/north/thumb@2x.jpg
+
+- name: Learn Webpack
+  teacher: Sean Larkin
+  id: fm-webpack
+  description: >
+      Webpack enables you to integrate your favorite tools and take control of how you deliver your JavaScript, CSS, and more!​
+  url: https://frontendmasters.com/learn/webpack/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2020
+  image: https://static.frontendmasters.com/assets/teachers/larkin/thumb.png
+
+- name: Introduction to Next.js
+  teacher: Scott Moss
+  id: fm-next
+  description: >
+      In this course, you'll learn server-side rendering, static site generation, data fetching, build API endpoints, creating pages with the file system, add CSS modules inside of Next.js, and much more! 
+  url: https://frontendmasters.com/courses/next-js/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2020
+  image: https://static.frontendmasters.com/assets/teachers/moss/thumb@2x.jpg
+
+- name: State Management in Pure React, v2
+  teacher: Steve Kinney
+  id: fm-react-state
+  description: >
+      In this course, we’ll look at the core APIs in React to handle state, including both in the traditional component state, as well as in React hooks. 
+  url: https://frontendmasters.com/courses/pure-react-state/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2020
+  image: https://static.frontendmasters.com/assets/teachers/kinney/thumb@2x.jpg
+
+- name: Client-Side GraphQL in React
+  teacher: Scott Moss
+  id: fm-graphql
+  description: >
+      In this course, you'll use queries and mutations to fetch and update GraphQL API data. You'll go further with variables, inputs, aliases on fields.
+  url: https://frontendmasters.com/courses/client-graphql-react/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2020
+  image: https://static.frontendmasters.com/assets/teachers/moss/thumb@2x.jpg
+
+- name: TypeScript 3 Fundamentals, v2
+  teacher: Mike North
+  id: fm-typescript
+  description: >
+      Learn key Typescript features such as typing variables and function signatures, abstract classes, interfaces, enums and more.
+  url: https://frontendmasters.com/courses/typescript-v2/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2020
+  image: https://static.frontendmasters.com/assets/teachers/north/thumb@2x.jpg
+  
+# Wes Bos
+
+- name: Master Gatsby
+  teacher: Wes Bos
+  id: wb-gatsby
+  description: > 
+      Learn to build & style websites with Gatsby, React.js and friends.
+  url: https://mastergatsby.com/friend/STATEOFJS
+  # image: /images/resources/wesbos.jpg
+  image: /images/resources/wb-gatsby.png
+  imageRatio: wide
+
+- name: Beginner JavaScript
+  teacher: Wes Bos
+  id: wb-javascript
+  description: >
+      A fun, exercise heavy approach to learning Modern JavaScript from scratch.
+  url: https://BeginnerJavaScript.com/friend/STATEOFJS
+  # image: /images/resources/wesbos.jpg
+  image: /images/resources/wb-javascript.png
+  imageRatio: wide
+
+- name: Fullstack Advanced React and GraphQL
+  teacher: Wes Bos
+  id: wb-graphql
+  description: >
+      This course is a start-to-finish way to learn Full Stack Advanced React, GraphQL, Node.js and friends.
+  url: https://AdvancedReact.com/friend/STATEOFJS
+  # image: /images/resources/wesbos.jpg
+  image: /images/resources/wb-graphql.png
+  imageRatio: wide
+
+- name: Learn Node
+  teacher: Wes Bos
+  id: wb-node
+  description: >
+      A premium training course to learn to build apps with Node.js, Express, MongoDB, and friends.
+  url: https://LearnNode.com/friend/STATEOFJS
+  # image: /images/resources/wesbos.jpg
+  image: /images/resources/wb-node.jpg
+  imageRatio: wide
+
+- name: ES6 for Everyone
+  teacher: Wes Bos
+  id: wb-es6
+  description: >
+      This premium video course is the best way to learn about all that ES6 has to offer while sharpening your core JavaScript skills.
+  url: https://ES6.io/friend/STATEOFJS
+  # image: /images/resources/wesbos.jpg
+  image: /images/resources/wb-es6.jpg
+  imageRatio: wide
+
+- name: React For Beginners
+  teacher: Wes Bos
+  id: wb-react
+  description: >
+      Upgrade your JavaScript skills to learn React.js in just a couple of afternoons.
+  url: https://ReactForBeginners.com/friend/STATEOFJS
+  # image: /images/resources/wesbos.jpg
+  image: /images/resources/wb-react.jpg
+  imageRatio: wide

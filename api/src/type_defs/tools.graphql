@@ -1,0 +1,257 @@
+enum ToolID {
+    # JS flavors
+    typescript
+    reason
+    elm
+    clojurescript
+    purescript
+    # JS front end frameworks
+    react
+    vuejs
+    angular
+    preact
+    ember
+    svelte
+    alpinejs
+    litelement
+    stimulus
+    # JS data layer
+    redux
+    apollo
+    graphql
+    mobx
+    relay
+    xstate
+    vuex
+    # JS back end frameworks
+    express
+    nextjs
+    koa
+    meteor
+    sails
+    feathers
+    nuxt
+    gatsby
+    nest
+    strapi
+    fastify
+    hapi
+    # JS testing
+    jest
+    mocha
+    storybook
+    cypress
+    enzyme
+    ava
+    jasmine
+    puppeteer
+    testing_library
+    playwright
+    webdriverio
+    # JS build tools
+    webpack
+    parcel
+    gulp
+    rollup
+    browserify
+    tsc
+    rome
+    snowpack
+    swc
+    esbuild
+    # JS mobile desktop
+    electron
+    reactnative
+    nativeapps
+    cordova
+    ionic
+    nwjs
+    expo
+    capacitor
+    quasar
+    # CSS Pre-/Post-processors
+    sass
+    less
+    post_css
+    stylus
+    assembler_css
+    # CSS frameworks
+    bootstrap
+    materialize_css
+    ant_design
+    semantic_ui
+    bulma
+    foundation
+    ui_kit
+    tachyons
+    primer
+    tailwind_css
+    pure_css
+    skeleton
+    spectre_css
+    halfmoon
+    # CSS methodologies
+    bem
+    atomic_css
+    oocss
+    smacss
+    it_css
+    cube_css
+    # CSS in JS
+    styled_components
+    jss
+    styled_jsx
+    radium
+    emotion
+    css_modules
+    styled_system
+    stitches
+    styletron
+    fela
+    linaria
+    astroturf
+    twin
+    theme_ui
+    vanilla_extract
+    windi_css
+}
+
+"""
+An aggregation bucket for tool experience containing both an absolute count
+for the parent year, and the percentage it corresponds to regarding
+the total number of respondents who have answered the question
+in this particular year.
+"""
+type ToolExperienceBucket {
+    id: ToolExperienceID
+    count: Int
+    countDelta: Int
+    percentage_question: Float
+    percentage_survey: Float
+    percentage_facet: Float
+    percentageDelta: Float
+}
+
+"""
+Tool data for a specific facet
+"""
+type ToolExperienceFacet {
+    type: Facet
+    id: String
+    buckets: [ToolExperienceBucket]
+    completion: FacetCompletion
+}
+
+"""
+Experience ranking for a tool in a specific year, even if the data
+is computed at the same point in time, we estimate that there is a logical
+progression in this:
+
+awareness > usage > interest > satisfaction
+"""
+type ToolAwarenessUsageInterestSatisfaction {
+    """
+    Awareness is the total number of participants who answered to
+    the experience question VS those who never heard of a tool.
+
+    This value is expressed as a percentage.
+    """
+    awareness: Float
+    """
+    Usage is the total number of participants who used the tool,
+    include both users willing to use it again and those who wouldn't.
+
+    This value is expressed as a percentage.
+    """
+    usage: Float
+    """
+    Interest is the ratio of participants who heard of tool and
+    are interested/not interested VS those who are only interested in it.
+
+    This value is expressed as a percentage.
+    """
+    interest: Float
+    """
+    Satisfaction is the ratio of participants who used of tool and
+    are satisfied/not satisfied VS those who are willing to use it again.
+
+    This value is expressed as a percentage.
+    """
+    satisfaction: Float
+}
+
+type ToolYearExperience {
+    year: Int
+    completion: YearCompletion
+    facets: [ToolExperienceFacet]
+    # awarenessUsageInterestSatisfaction: ToolAwarenessUsageInterestSatisfaction
+}
+
+type ToolExperience {
+    all_years: [ToolYearExperience]
+    year(year: Int!): ToolYearExperience
+    keys: [ToolExperienceID]
+}
+
+type ToolExperienceGraphNode {
+    id: String
+    year: Int
+    experience: ToolExperienceID
+}
+
+"""
+Track number of connections between 2 nodes,
+for example number of user who were interested in React in 206
+and are willing to use it in 2017, connections are only established
+for consecutive years.
+"""
+type ToolExperienceGraphLink {
+    source: String
+    target: String
+    count: Int
+}
+
+"""
+A graph of users' experience over years, compared to just computing
+the overall choice count for each year, this keeps continuity for each user.
+"""
+type ToolExperienceGraph {
+    nodes: [ToolExperienceGraphNode]
+    links: [ToolExperienceGraphLink]
+}
+
+type Tool {
+    id: ToolID!
+    experience(filters: Filters): ToolExperience
+    experienceGraph(filters: Filters): ToolExperienceGraph
+    entity: Entity
+}
+
+type ToolExperienceRankingYearMetric {
+    year: Int
+    rank: Int
+    percentage_question: Float
+    percentage_survey: Float
+    percentage_facet: Float
+}
+
+"""
+Used to represent the ranking of a tool compared to others
+for awareness/interest and stisfaction.
+"""
+type ToolExperienceRanking {
+    id: ToolID
+    entity: Entity
+    awareness: [ToolExperienceRankingYearMetric]
+    usage: [ToolExperienceRankingYearMetric]
+    interest: [ToolExperienceRankingYearMetric]
+    satisfaction: [ToolExperienceRankingYearMetric]
+}
+
+"""
+Contains various rankings for a set of tools.
+"""
+type ToolsRankings {
+    ids: [ToolID]!
+    experience(filters: Filters): [ToolExperienceRanking]
+}

@@ -1,0 +1,39 @@
+blockType: OpinionBlock
+dataPath: "surveyApi.survey.${id}.all_years"
+keysPath: "surveyApi.survey.${id}.keys"
+showDescription: true
+enableExport: true
+query: >
+    surveyApi {
+        survey(survey: ${surveyType}) {
+            ${id}: opinion(id: ${id}) {
+                id
+                keys
+                all_years {
+                    year
+                    mean
+                    completion {
+                        total
+                        count
+                        percentage_survey
+                    }
+                    facets {
+                        id
+                        type
+                        completion {
+                            total
+                            percentage_question
+                            percentage_survey
+                            count
+                        }
+                        buckets {
+                            id
+                            count
+                            percentage_question
+                            percentage_survey
+                        }
+                    }
+                }
+            }
+        }
+    }

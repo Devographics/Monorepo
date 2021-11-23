@@ -1,0 +1,53 @@
+blockType: GenderByCountriesBlock
+dataPath: "surveyApi.survey.demographics"
+keysPath: "surveyApi.survey.demographics.all_countries.keys"
+showDescription: true
+enableExport: true
+defaultUnits: percentage_survey
+query: >
+  surveyApi {
+    survey(survey: ${surveyType}) {
+      demographics {
+        all_countries: gender(filters: {}, options: {}, facet: null) {
+          keys
+          year(year: ${currentYear}) {
+            year
+            facets {
+              id
+              type
+              buckets {
+                id
+                count
+                percentage_question
+                percentage_survey
+                percentage_facet
+              }
+            }
+          }
+        }
+        gender_by_countries: gender(filters: {}, options: {}, facet: country) {
+          keys
+          year(year: ${currentYear}) {
+            year
+            facets {
+              id
+              type
+              completion {
+                count
+                percentage_question
+                percentage_survey
+                total
+              }
+              buckets {
+                id
+                count
+                percentage_question
+                percentage_survey
+                percentage_facet
+              }
+            }
+          }
+        }
+      }
+    }
+  }

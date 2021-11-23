@@ -1,0 +1,63 @@
+enum BracketID {
+  tools_others__tool_evaluation
+  opinions__css_pain_points
+  opinions__currently_missing_from_css
+}
+
+"""
+Bracket Wins
+(how many wins a player has accumulated)
+"""
+
+type BracketWinsStats {
+    count: Int # number of time that bracket item won a match
+    percentage: Float # percentage of all matches won
+}
+
+type BracketWinsBucket {
+    id: String
+    round1: BracketWinsStats
+    round2: BracketWinsStats
+    round3: BracketWinsStats
+    combined: BracketWinsStats
+}
+
+type YearBracketWins {
+    year: Int
+    completion: YearCompletion
+    buckets: [BracketWinsBucket]
+}
+
+type BracketWins {
+    id: BracketID!
+    all_years: [YearBracketWins]
+    year(year: Int!): YearBracketWins
+}
+
+"""
+Bracket Matchups
+(how a player fared against other players)
+"""
+
+type BracketMatchupStats {
+    id: String # id of the player
+    count: Int # number of time player won against root player
+    percentage: Float # percentage player won against root player
+}
+
+type BracketMatchupsBucket {
+    id: String # id of the "root" player
+    matchups: [BracketMatchupStats]
+}
+
+type YearBracketMatchups {
+    year: Int
+    completion: YearCompletion
+    buckets: [BracketMatchupsBucket]
+}
+
+type BracketMatchups {
+    id: BracketID!
+    all_years: [YearBracketMatchups]
+    year(year: Int!): YearBracketMatchups
+}

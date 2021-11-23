@@ -1,0 +1,234 @@
+import Block from 'core/report/ReportBlockImport'
+import Overlay from 'core/report/ReportOverlay'
+import Heading from 'core/report/ReportHeading'
+import SectionLink from 'core/report/ReportSectionLink'
+import ReportNewsletter from 'core/report/ReportNewsletter'
+import ReportCredits from 'core/report/ReportCredits'
+import Note from 'core/report/ReportNote'
+
+Au tout début de ma carrière de développeur web, j'ai commis l'erreur tragique de m'arrêter quelques années de construire des sites web.
+
+Je me rappelle encore clairement du moment où je me suis replongé dans l’univers web et j’ai alors réalisé que les mise en pages à base de tableaux n’étaient plus au goût du jour. A la place, tout le monde utilisait maintenant des nouveaux machins appelés “floats”.
+
+Tout ça est désormais de l’histoire ancienne, et je suis prêt à parier que la plupart d’entre vous n’ont jamais connu la joie d’obtenir le comportement souhaité en manipulant `float: right`. Vous êtes nés dans un monde de `display: flex;`, insouciant des douleurs et souffrances de vos prédécesseurs.
+
+Mais attention! Ne baissez pas votre garde… Qui frappe à la porte? C’est Grid qui débarque en promettant de tout changer… encore une fois!
+
+<Heading>Sonder | Le Web</Heading>
+
+Et voilà le cycle du web. Une vague après l’autre, en constant changement; et en promettant à chaque fois une meilleure manière de centrer les éléments verticalement qui est la bonne cette fois, c’est sûr c’est promis!
+
+C’est pour ça que nous sommes toujours à la recherche de nouvelles ressources pour nous aider, et c’est là que le sondage State of CSS intervient. Cette année encore, nous avons agrégé une tonne de données provenant de développeurs autour du monde, et ces données font vraiment ressortir les différents changements que l’univers CSS subit actuellement.
+
+Bien sûr, nous vous encourageons à aller parcourir les [résultats complets](/), mais nous voulions aussi compiler ce petit rapport pour identifier quelques tendances majeures. Mais avant toute chose, commençons par quelques informations démographiques.
+
+<Note>
+    Si vous voulez en savoir plus sur les différentes techniques CSS utilisées pour créer ce
+    mini-site, j’ai enregistré une [vidéo explicative](https://www.youtube.com/watch?v=OlanYHcz9S8)
+    qui résume le processus de making-of.
+</Note>
+
+<Block id="country" size="l" title="Répartition Géographique des Participants">
+    <Overlay id="USA">
+        Plus de 11000 participants issus de 102 pays ont répondu au sondage, dont une large partie
+        (**20.7%**) venant des USA.
+    </Overlay>
+    <Overlay id="RUS">
+        Pour la première fois cette année nous avons pu traduire les questions du sondage en 13
+        langues différentes grâce à une super équipe de volontaires, avec comme conséquence le fait
+        d’avoir **5.1%** de participants issus de Russie.
+    </Overlay>
+</Block>
+
+<SectionLink path="/demographics">Résultats Complets: Infos Démographiques&nbsp;»</SectionLink>
+
+
+<Heading>L’Ère Du CSS | “Utility-First”</Heading>
+
+A l’époque des mise en pages a base de tableaux, on écrivait tout simplement `<font color="red">Hello World</font>` quand on voulait rendre du texte rouge. Ca marchait plutôt bien jusqu’au jour où quelqu'un a fait remarquer que si Le Client décidait que les titres seraient maintenant bleus et pas rouges, il faudrait s’embarquer dans une grosse opération de rechercher-remplacer.
+
+La solution fut d’utiliser le CSS! On pouvait maintenant écrire `<h1>Hello World</h1>` a la place, et styler les titres avec `h1 { color: red; }`.
+
+Grâce à cette “séparation des préoccupations” (“separation of concerns”), on pouvait désormais produire des sites tels que le fameux [CSS Zen Garden](http://www.csszengarden.com/), où le meme document HTML pouvait être transformé en résultat completements differents rien qu’en changeant de feuille de style. Et comme nous le savons bien, tout projet CSS depuis lors à été mené à bien sans le moindre problème d’architecture ou maintenance.
+
+Bon, peut-être pas. Le HTML et le CSS étaient adéquats pour construire des sites statiques de taille moyenne qui n’allaient pas trop changer avec le temps, mais les méthodes traditionnelles ont commencé à montrer leurs faiblesses quand il s’est agi de gérer des applications web à large échelle. Et avec la popularité des frameworks JavaScript orientés vers les composants, peut-être est-il temps de revoir nos vieilles hypothèses?
+
+C’est là qu’entre en jeu [Tailwind CSS](https://tailwindcss.com/) et les autres frameworks “utility-first”. Tailwind CSS se démarque du lot par son taux de popularité de 86%, autrement dit la proportion de développeurs ayant utilisé Tailwind CSS et étant prêts à l’utiliser à nouveau.
+
+<Block
+    id="css_frameworks_abridged_experience_ranking"
+    size="l"
+    title={({ translate, current }) => {
+        const sortKey = current === null ? 'satisfaction' : current
+        return `Classements Frameworks CSS (${translate(`options.experience_ranking.${sortKey}`)})`
+    }}
+    customStyles={`
+        .Block__Contents{
+            pointer-events: none;
+        }
+    `}
+>
+    <Overlay id="satisfaction">
+        *Tailwind CSS* a remporté la première place dans notre classement **satisfaction** (la
+        proportion d’utilisateurs d’une technologie qui seraient prêts à l’utiliser à nouveau).
+    </Overlay>
+    <Overlay id="interest">
+        Lorsque l’on regarde le taux d’**intérêt** (la proportion de non-utilisateurs intéressés par
+        apprendre une technologie), *Bootstrap* tombe en bas du classement…
+    </Overlay>
+    <Overlay id="usage">…avant de remonter quand on isole le taux d’**utilisation**…</Overlay>
+    <Overlay id="awareness">
+        …aussi bien que le taux d’**information** (avoir déjà entendu parler d’une technologie).
+    </Overlay>
+</Block>
+
+<SectionLink path="/technologies/css-frameworks/">
+    Résultats Complets: Les Frameworks CSS&nbsp;»
+</SectionLink>
+
+Un autre point de donnée à considérer est la proportion de participants qui sont d’accord avec l’idée que “les classes utilitaires (non-sémantiques) telles que `.center`, `.texte-large`, etc. doivent être évitées”. Ce taux est passé de **25%** en 2019 (déjà une minorité) à **20%** cette année. Bien que cela ne soit pas une chute dramatique, cela confirme l’idée que les méthodes plus orthodoxe commencent à être remises en question.
+
+<Block
+    id="utility_classes_to_be_avoided"
+    size="s"
+    title="Êtes vous d’accord avec le fait que les classes utilitaires doivent être évitées?"
+/>
+
+Cela ne veut pas dire qu’il y a une bonne et une mauvaise méthode. D’ailleurs, un des points clés qui aident Tailwind CSS à se démarquer est justement le fait que l’outil contourne certains des défauts de l’approche non-sémantique.
+
+Mais ça montre bien que les développeurs CSS sont prêts à expérimenter et essayer de nouvelles choses, ce qui est la clé d’un écosystème dynamique.
+
+Et cela explique aussi pourquoi Tailwind CSS est sur le point de devenir une librairie plus “mainstream”, tel que l’indique notre graphe en quadrants.
+
+<Block id="scatterplot_overview" size="l" title="Satisfaction vs Utilisation">
+    <Overlay id="tailwind_css">
+        Seul un quart des participants utilisent *Tailwind CSS*, mais son taux de satisfaction est
+        extrêmement élevé.
+    </Overlay>
+    <Overlay id="bootstrap">
+        À l’inverse, *Bootstrap* fait preuve d’un fort taux d’adoption, mais une taux de
+        satisfaction bien plus bas.
+    </Overlay>
+    <Overlay id="sass">
+        Au final, *Sass* est la seule technologie à combiner à la fois un fort taux d’adoption et de
+        satisfaction.{' '}
+    </Overlay>
+</Block>
+
+<SectionLink path="/technologies/">Résultats Complets: Technologies&nbsp;»</SectionLink>
+
+<Heading>Le Champ de Bataille | CSS-in-JS</Heading>
+
+En parlant d’expériences, le “CSS-in-JS” est un autre prétendant au trône de la disruption.
+
+Si un “tabou” du CSS est de mélanger les styles visuels avec le markup, un autre est de mélanger les styles avec **\*mon dieu!\*** du JavaScript. Mais tels que l’indique son nom, c’est là toute la raison d’être du CSS-in-JS.
+
+Mais encore une fois, les librairies CSS-in-JS qui arrivent à tirer leur épingle du jeu sont celles qui arrivent à offrir les avantages sans les inconvénients. A titre d’exemple, la plupart permettent d’utiliser la syntaxe traditionnelle CSS, sans avoir à convertir vos styles en objets JavaScript.
+
+<Block id="css_in_js_section_streams" size="l" title="Expérience Librairies CSS-in-JS sur Plusieurs Années">
+    <Overlay id="would_use">
+        La proportion de participants prêts à **utiliser les librairies CSS-in-JS à nouveau**
+        augmente.
+    </Overlay>
+    <Overlay id="interested">
+        De même que **l'intérêt** pour ces librairies de la part des non-utilisateurs.
+    </Overlay>
+</Block>
+
+L’autre point qui se démarque est la quantité d’approches différentes qui coexistent. Des [CSS Modules](https://github.com/css-modules/css-modules) à [Styled Components](https://styled-components.com/) à [Fela](https://fela.js.org/) en passant par [Stitches](https://stitches.dev/), chaque méthode résoud les mêmes problèmes avec une solution légèrement différente. Le résultat est une sorte d'expérience génétique grandeur nature, en utilisant la sélection naturelle pour déterminer quelle approche convaincra le plus grand nombre de développeurs.
+
+<Block
+    id="css_in_js_experience_marimekko"
+    size="l"
+    title="Répartition Positive/Négative de l’Expérience avec les Librairies CSS-in-JS"
+>
+    <Overlay id="css_modules">
+        Les *CSS Modules* sont une manière simple d’avoir les bénéfices du CSS-in-JS sans trop
+        changer ses habitudes, et cela se voit par le fort taux de sentiments positifs.
+    </Overlay>
+    <Overlay id="styled_components">
+        *Styled Components* est juste derrière, également avec beaucoup de satisfaction et
+        d'intérêt.{' '}
+    </Overlay>
+    <Overlay id="styled_jsx">
+        Les solutions moins populaires telles que *Styled JSX* montrent quant à elles une division
+        d’opinions plus tranchée.
+    </Overlay>
+</Block>
+
+<SectionLink path="/technologies/css-in-js/">Résultats Complets: CSS-in-JS&nbsp;»</SectionLink>
+
+<Heading>Repenser CSS | À Partir de Zéro</Heading>
+
+Certains d’entre vous sont sans doute en train d’émettre quelques réticences. Vous n’allez pas jeter à la poubelle des années d’habitudes à écrire des classes sémantiques juste à cause de quelques jolies courbes colorées, et vous n’allez pas non plus commencer à mettre du JavaScript dans votre CSS (ou bien est-ce le contraire?) juste parce que c’est ce que les petits jeunes ont décidé de faire! Non, tout ce dont vous avez besoin c’est de votre bon vieux CSS tel que vous l’avez toujours connu!
+
+Mauvaise nouvelle: le CSS lui-même est en train de changer, et les plus gros changements sont sans doute encore à venir.
+
+Quand Grid est sorti, on a finalement obtenu une méthode dédiée pour gérer les mises en page en CSS. Et maintenant que Grid devient plus populaire, on commence à constater des effets de second ordre sur d’autres aspects du CSS.
+
+Par exemple, une grille bien conçue peut permettre de gérer plusieurs tailles d’écran sans écrire la moindre media query. Et le module Subgrid qui est sur le point d’arriver va à son tour débloquer tout un tas de possibilités, rendant de nombreuses méthodes et astuces actuelles complètement obsolètes. Les bouquins CSS de 2021 risquent d'être plutôt différents!
+
+Mais cette refonte des bases du CSS ne se limite pas à Grid. Les Propriétés Logiques (Logical Properties) promettent de nous faire repenser notre compréhension même des directions. Dans ce nouvel univers CSS, la gauche peut être à droite et le haut peut être en bas. Qui eût cru que M.C. Escher était membre du CSS Working Group?
+
+Si tous ces changements vous donnent mal au cœur, pas de problème. C’est facilement réglé en utilisant la media query `prefers-reduced-motion`. Et si la situation vous paraît lugubre, peut-être est-il temps d’enlever le mode sombre avec `prefers-color-scheme`?
+
+Au total, toutes ces nouvelles propriétés ouvrent la porte sur un CSS radicalement nouveau.
+
+<Block id="features_overview" size="l" title="Les Nouvelles Propriétés CSS">
+    <Overlay id={['logical_properties']}>
+        Une propriété telles que les “Logical Properties” n’est utilisée que par **11%** des
+        participants (le disque intérieur clair) alors que **31%** savent ce que c’est (disque
+        extérieur foncé), mais a d’ores et déjà le potentiel de changer notre manière de concevoir
+        la mise en page.
+    </Overlay>
+    <Overlay id={['grid', 'subgrid']}>
+        **73%** des participants utilisent déjà *Grid*, et bien que *Subgrid* ne soit disponible que
+        dans Firefox actuellement **50%** des participants savent déjà ce que c’est (disque
+        extérieur foncé).
+    </Overlay>
+    <Overlay id={['prefers_reduced_motion', 'prefers_color_scheme']}>
+        Les nouvelles media queries telles que `prefers-reduced-motion` (**15%** d’utilisation) and
+        `prefers-color-scheme` (**18%** d’utilisation) vont certainement aussi beaucoup influencer
+        la manière d’écrire des styles.
+    </Overlay>
+</Block>
+
+Et encore, nous n’avons même pas évoqué les propriétés qui n’existent _pas encore_. Les développeurs ont une longue liste de souhaits, parmi lesquels les _container queries_ et les sélecteurs parents. Deux propriétés qui nous feront sûrement reconsidérer à leur tour la manière dont on écrit le CSS un jour ou l’autre.
+
+<Block id="currently_missing_from_css" size="s" title="Qu’est-ce qui manque actuellement au CSS?" />
+
+<SectionLink path="/features/">Résultats Complets: Propriétés&nbsp;»</SectionLink>
+
+<Heading>Le Nouveau | CSS</Heading>
+
+Que ce soit à travers de nouvelles méthodes ou de nouvelles media queries, le credo du nouveau CSS est d'accueillir à bras ouverts l’adaptabilité et la flexibilité. Peut-être que nous devrions en faire de même?
+
+Le CSS est souvent critiqué comme trop compliqué, arbitraire, ou “pas un vrai langage de programmation”. Mais si on prend le temps de considérer les nombreux rôles remplis par le CSS, l’énormité du challenge devient plus claire. Et le fait d’avoir désormais un système solide pour styler les différents aspects du web qui ne fait que s’améliorer est en soi une grande réussite.
+
+<Block id="state_of_css" size="s" title="Êtes vous satisfait de l’état général du CSS?" />
+
+
+Ces améliorations cela dit leur prix: les nouveaux développeurs auront plus à apprendre avant d'être opérationnels, et les développeurs plus expérimentés ne pourront plus se reposer sur leurs lauriers autant qu’avant.
+
+Mais il en faut plus pour nous effrayer. Nous sommes développeurs CSS après tout, et ce n’est pas un petit challenge qui va nous faire peur!
+
+Du moment qu’il ne s’agit pas de faire marcher `float: right`.
+
+<ReportNewsletter
+    title="Merci d’avoir tout lu!"
+    description="Laissez-nous votre email si vous voulez savoir quand on publiera nos prochains sondages, ou d’autres résultats."
+/>
+
+<ReportCredits
+    title="Le sondage State of CSS est créé par"
+    bios={[
+        {
+            slug: 'raphael',
+            contents: `Créateur de la librairie de visualization de donnés JavaScript [Nivo](http://nivo.rocks/), ainsi que de [Mozaik](http://mozaik.rocks/), un outil de construction de dashboards.`,
+        },
+        {
+            slug: 'sacha',
+            contents: `Créateur de [Sidebar](http://sidebar.io), une newsletter de design quotidienne, et de [VulcanJS](http://vulcanjs.org), un framework open-source React+GraphQL`,
+        },
+    ]}
+/>

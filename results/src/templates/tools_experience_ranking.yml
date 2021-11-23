@@ -1,0 +1,39 @@
+id: "${parentId}_experience_ranking"
+blockType: ToolsExperienceRankingBlock
+blockName: tools_experience_ranking
+dataPath: "surveyApi.survey.${parentId}_rankings.experience"
+enableExport: true
+query: >
+    surveyApi {
+        survey(survey: ${surveyType}) {
+            ${parentId}_rankings: tools_rankings(ids: [${toolsCategories[parentId]}]) {
+                ids
+                experience {
+                    id
+                    entity {
+                        name
+                    }
+                    usage {
+                        year
+                        rank
+                        percentage_question
+                    }
+                    awareness {
+                        year
+                        rank
+                        percentage_question
+                    }
+                    interest {
+                        year
+                        rank
+                        percentage_question
+                    }
+                    satisfaction {
+                        year
+                        rank
+                        percentage_question
+                    }
+                }
+            }
+        }
+    }

@@ -1,0 +1,799 @@
+--- # ------------------------------------------------------------------------------------
+
+# ------------------------------------------------------------------------------------
+# Pages Properties
+# - id: the unique (survey-wide) ID of the page
+# - path: the page's path
+# - children: the page's children pages
+# - blocks: the page's blocks
+# - pageTemplate: a template from which to inherit its properties (not used)
+# - showTitle: whether to show the page title or not
+# - variables: page variables (compiled during sitemap generation)
+
+# Block Properties
+# - id: the unique (survey-wide) ID of the block
+# - blockName: the name of the block (used for titles, descriptions, etc.)
+# - bucketKeysName: the name of the block's keys (used for legends, formatting data, etc.)
+# - blockType: the type of block (which component to use)
+# - query: the query used to populate the block's data
+# - dataPath: the path to use (from the query root) to access the block's data
+# - showLegend: whether to show the block's legend
+# - showDescription: whether to show the block's description
+# - template: a template from which to inherit its properties
+# - translateData: whether to try and translate
+# - queryVariables: GraphQL query variables (handled by GraphQL)
+# - variables: block variables (compiled during sitemap generation)
+
+- id: introduction
+  path: /
+  showTitle: false
+  blocks:
+      - id: survey_intro
+        blockType: SurveyIntroBlock
+      - id: survey_newsletter
+        blockType: NewsletterBlock
+      - id: survey_sponsors
+        blockType: SponsorsBlock
+      - id: survey_translators
+        blockType: TranslatorsBlock
+
+- id: tshirt
+  path: /tshirt
+  showTitle: false
+  blocks:
+      - id: tshirt_intro
+        template: pageIntroductionTemplate
+      - id: tshirt_block
+        blockType: TshirtBlock
+
+- id: user_info
+  titleId: sections.demographics.title
+  path: /demographics
+  blocks:
+      - template: pageIntroductionTemplate
+
+      - id: country
+        template: demographicsTemplate
+        blockType: ParticipationByCountryBlock
+
+      - id: locale
+        template: demographicsTemplate
+        blockType: HorizontalBarBlock
+        translateData: true
+
+      - id: yearly_salary
+        template: demographicsTemplate
+
+      - id: hint_hint
+        template: hintTemplate
+
+      - id: years_of_experience
+        template: demographicsTemplate
+
+      - id: company_size
+        template: demographicsTemplate
+
+      - id: source
+        template: sourceTemplate
+        blockType: HorizontalBarBlock
+
+      - id: gender
+        template: demographicsTemplate
+        showLegend: true
+        blockType: GenderBlock
+
+      - id: race_ethnicity
+        template: demographicsTemplate
+        blockType: HorizontalBarBlock
+        translateData: true
+
+      - id: job_title
+        template: demographicsTemplate
+        blockType: HorizontalBarBlock
+        translateData: true
+
+      - id: industry_sector
+        template: demographicsTemplate
+        blockType: HorizontalBarBlock
+        translateData: true
+
+      - id: units_switcher_hint
+        template: hintTemplate
+
+      - id: css_proficiency
+        template: proficiencyTemplate
+
+      - id: javascript_proficiency
+        template: proficiencyTemplate
+
+      - id: backend_proficiency
+        template: proficiencyTemplate
+
+      - items: [fm-homepage]
+        template: recommendedResourcesTemplate
+
+- id: features
+  path: /features
+  blocks:
+      - template: pageIntroductionTemplate
+
+      - template: featuresOverviewTemplate
+
+      - template: knowledgeScoreTemplate
+
+  children:
+      - id: syntax
+        path: /syntax
+        blocks:
+            - id: syntax
+              template: pageIntroductionTemplate
+
+            - id: destructuring
+              template: featureExperienceTemplate
+
+            - id: export_hint
+              template: hintTemplate
+              
+            - id: spread_operator
+              template: featureExperienceTemplate
+
+            - id: arrow_functions
+              template: featureExperienceTemplate
+
+            - id: joshwcomeau
+              template: picksTemplate
+
+            - id: nullish_coalescing
+              template: featureExperienceTemplate
+
+            - id: optional_chaining
+              template: featureExperienceTemplate
+
+            - id: private_fields
+              template: featureExperienceTemplate
+
+            - items: [fm-javascript]
+              template: recommendedResourcesTemplate
+
+      - id: language
+        path: /language
+        blocks:
+            - id: language
+              template: pageIntroductionTemplate
+
+            - id: proxies
+              template: featureExperienceTemplate
+
+            - id: completion_hint
+              template: hintTemplate
+
+            - id: async_await
+              template: featureExperienceTemplate
+
+            - id: markdalgleish
+              template: picksTemplate
+
+            - id: promises
+              template: featureExperienceTemplate
+
+            - id: decorators
+              template: featureExperienceTemplate
+
+            - id: promise_all_settled
+              template: featureExperienceTemplate
+
+            - id: dynamic_import
+              template: featureExperienceTemplate
+
+            - items: [fm-javascript]
+              template: recommendedResourcesTemplate
+
+      - id: data_structures
+        path: /data-structures
+        blocks:
+            - id: data_structures
+              template: pageIntroductionTemplate
+
+            - id: maps
+              template: featureExperienceTemplate
+
+            - id: sets
+              template: featureExperienceTemplate
+
+            - id: lauragift_
+              template: picksTemplate
+
+            - id: typed_arrays
+              template: featureExperienceTemplate
+
+            - id: array_prototype_flat
+              template: featureExperienceTemplate
+
+            - id: big_int
+              template: featureExperienceTemplate
+
+            - items: [wb-es6]
+              template: recommendedResourcesTemplate
+
+      - id: browser_apis
+        path: /browser-apis
+        blocks:
+            - id: browser_apis
+              template: pageIntroductionTemplate
+
+            - id: service_workers
+              template: featureExperienceTemplate
+
+            - id: local_storage
+              template: featureExperienceTemplate
+
+            - id: intl
+              template: featureExperienceTemplate
+
+            - id: web_audio
+              template: featureExperienceTemplate
+
+            - id: webgl
+              template: featureExperienceTemplate
+
+            - id: web_animations
+              template: featureExperienceTemplate
+
+            - id: webrtc
+              template: featureExperienceTemplate
+
+            - id: swyx
+              template: picksTemplate
+
+            - id: web_speech
+              template: featureExperienceTemplate
+
+            - id: webvr
+              template: featureExperienceTemplate
+
+            - id: websocket
+              template: featureExperienceTemplate
+
+            - id: fetch
+              template: featureExperienceTemplate
+
+            - id: custom_elements
+              template: featureExperienceTemplate
+
+            - id: shadow_dom
+              template: featureExperienceTemplate
+
+            - items: [fm-canvas]
+              template: recommendedResourcesTemplate
+
+      - id: other_features
+        path: /other-features
+        blocks:
+            - id: other_features
+              template: pageIntroductionTemplate
+
+            - id: pwa
+              template: featureExperienceTemplate
+
+            - id: wasm
+              template: featureExperienceTemplate
+
+            - items: [fm-service-workers]
+              template: recommendedResourcesTemplate
+
+- id: technologies
+  path: /technologies
+  blocks:
+      - id: technologies_introduction
+        template: pageIntroductionTemplate
+
+      - template: toolsArrowsTemplate
+
+      - template: scatterplotOverviewTemplate
+
+      - template: allSectionsToolsCardinalityByUserTemplate
+
+      # - template: cityscapeOverviewTemplate
+
+  children:
+      - id: javascript_flavors
+        path: /javascript-flavors
+        blocks:
+            - template: pageIntroductionTemplate
+
+            # - template: sectionToolsCardinalityByUserTemplate
+
+            - template: toolsExperienceRankingTemplate
+
+            - id: tool_modal_hint
+              template: hintTemplate
+
+            - template: toolsSectionStreamsTemplate
+
+            - template: toolsExperienceMarimekkoTemplate
+
+            # - template: toolsUsageVariationsTemplate
+
+            - id: typescript
+              template: toolExperienceTemplate
+            - id: reason
+              template: toolExperienceTemplate
+            - id: elm
+              template: toolExperienceTemplate
+            - id: clojurescript
+              template: toolExperienceTemplate
+            - id: purescript
+              template: toolExperienceTemplate
+
+            - template: sectionOtherToolsTemplate
+
+            - template: happinessHistoryTemplate
+
+            - items: [fm-react, wb-react]
+              template: recommendedResourcesTemplate
+
+      - id: front_end_frameworks
+        path: /front-end-frameworks
+        blocks:
+            - template: pageIntroductionTemplate
+
+            # - template: sectionToolsCardinalityByUserTemplate
+
+            - template: toolsExperienceRankingTemplate
+
+            - id: rankings_modes_hint
+              template: hintTemplate
+
+            - template: toolsSectionStreamsTemplate
+
+            - template: toolsExperienceMarimekkoTemplate
+
+            # - template: toolsUsageVariationsTemplate
+
+            - id: react
+              template: toolExperienceTemplate
+            - id: vuejs
+              template: toolExperienceTemplate
+            - id: angular
+              template: toolExperienceTemplate
+            - id: preact
+              template: toolExperienceTemplate
+            - id: ember
+              template: toolExperienceTemplate
+
+            - id: svelte
+              template: toolExperienceTemplate
+            - id: alpinejs
+              template: toolExperienceTemplate
+            - id: litelement
+              template: toolExperienceTemplate
+            - id: stimulus
+              template: toolExperienceTemplate
+
+            - template: sectionOtherToolsTemplate
+
+            - template: happinessHistoryTemplate
+
+            - items: [fm-vue, fm-svelte]
+              template: recommendedResourcesTemplate
+
+      - id: datalayer
+        path: /datalayer
+        blocks:
+            - template: pageIntroductionTemplate
+
+            # - template: sectionToolsCardinalityByUserTemplate
+
+            - template: toolsExperienceRankingTemplate
+
+            - id: sarah_edo
+              template: picksTemplate
+
+            - template: toolsSectionStreamsTemplate
+
+            - template: toolsExperienceMarimekkoTemplate
+
+            # - template: toolsUsageVariationsTemplate
+
+            - id: redux
+              template: toolExperienceTemplate
+            - id: apollo
+              template: toolExperienceTemplate
+            - id: graphql
+              template: toolExperienceTemplate
+
+            - id: mobx
+              template: toolExperienceTemplate
+            - id: relay
+              template: toolExperienceTemplate
+            - id: xstate
+              template: toolExperienceTemplate
+            - id: vuex
+              template: toolExperienceTemplate
+
+            - template: sectionOtherToolsTemplate
+
+            - template: happinessHistoryTemplate
+
+            - items: [fm-react-state, fm-graphql]
+              template: recommendedResourcesTemplate
+
+      - id: back_end_frameworks
+        path: /back-end-frameworks
+        blocks:
+            - template: pageIntroductionTemplate
+
+            # - template: sectionToolsCardinalityByUserTemplate
+
+            - template: toolsExperienceRankingTemplate
+
+            - id: kentcdodds
+              template: picksTemplate
+
+            - template: toolsSectionStreamsTemplate
+
+            - template: toolsExperienceMarimekkoTemplate
+
+            - id: koa
+              template: toolExperienceTemplate
+            - id: meteor
+              template: toolExperienceTemplate
+            - id: express
+              template: toolExperienceTemplate
+            - id: nextjs
+              template: toolExperienceTemplate
+            - id: nuxt
+              template: toolExperienceTemplate
+            - id: gatsby
+              template: toolExperienceTemplate
+            - id: nest
+              template: toolExperienceTemplate
+            - id: strapi
+              template: toolExperienceTemplate
+            - id: fastify
+              template: toolExperienceTemplate
+            - id: hapi
+              template: toolExperienceTemplate
+
+            - template: sectionOtherToolsTemplate
+
+            - template: happinessHistoryTemplate
+
+            - items: [fm-next, wb-gatsby]
+              template: recommendedResourcesTemplate
+
+      - id: testing
+        path: /testing
+        blocks:
+            - template: pageIntroductionTemplate
+
+            # - template: sectionToolsCardinalityByUserTemplate
+
+            - template: toolsExperienceRankingTemplate
+
+            - id: ladyleet
+              template: picksTemplate
+
+            - template: toolsSectionStreamsTemplate
+
+            - template: toolsExperienceMarimekkoTemplate
+
+            - id: jest
+              template: toolExperienceTemplate
+            - id: mocha
+              template: toolExperienceTemplate
+            - id: storybook
+              template: toolExperienceTemplate
+            - id: cypress
+              template: toolExperienceTemplate
+            - id: ava
+              template: toolExperienceTemplate
+            - id: jasmine
+              template: toolExperienceTemplate
+            - id: puppeteer
+              template: toolExperienceTemplate
+            - id: testing_library
+              template: toolExperienceTemplate
+            - id: playwright
+              template: toolExperienceTemplate
+            - id: webdriverio
+              template: toolExperienceTemplate
+
+            - template: sectionOtherToolsTemplate
+
+            - template: happinessHistoryTemplate
+
+            - items: [id-webtestit, fm-monorepos]
+              template: recommendedResourcesTemplate
+              
+      - id: build_tools
+        path: /build-tools
+        blocks:
+            - template: pageIntroductionTemplate
+
+            # - template: sectionToolsCardinalityByUserTemplate
+
+            - template: toolsExperienceRankingTemplate
+
+            - id: tomdale
+              template: picksTemplate
+              
+            - template: toolsSectionStreamsTemplate
+
+            - template: toolsExperienceMarimekkoTemplate
+
+            - id: webpack
+              template: toolExperienceTemplate
+            - id: parcel
+              template: toolExperienceTemplate
+            - id: gulp
+              template: toolExperienceTemplate
+            - id: rollup
+              template: toolExperienceTemplate
+            - id: browserify
+              template: toolExperienceTemplate
+            - id: tsc
+              template: toolExperienceTemplate
+            - id: rome
+              template: toolExperienceTemplate
+            - id: snowpack
+              template: toolExperienceTemplate
+            - id: swc
+              template: toolExperienceTemplate
+            - id: esbuild
+              template: toolExperienceTemplate
+
+            - template: sectionOtherToolsTemplate
+
+            - template: happinessHistoryTemplate
+
+            - items: [fm-webpack, fm-monorepos]
+              template: recommendedResourcesTemplate
+
+      - id: mobile_desktop
+        path: /mobile-desktop
+        blocks:
+            - template: pageIntroductionTemplate
+
+            # - template: sectionToolsCardinalityByUserTemplate
+
+            - template: toolsExperienceRankingTemplate
+
+            - id: sachagreif
+              template: picksTemplate
+
+            - template: toolsSectionStreamsTemplate
+
+            - template: toolsExperienceMarimekkoTemplate
+
+            - id: electron
+              template: toolExperienceTemplate
+            - id: reactnative
+              template: toolExperienceTemplate
+            - id: nativeapps
+              template: toolExperienceTemplate
+            - id: cordova
+              template: toolExperienceTemplate
+            - id: ionic
+              template: toolExperienceTemplate
+            - id: capacitor
+              template: toolExperienceTemplate
+            - id: nwjs
+              template: toolExperienceTemplate
+            - id: expo
+              template: toolExperienceTemplate
+            - id: quasar
+              template: toolExperienceTemplate
+
+            - template: sectionOtherToolsTemplate
+
+            - template: happinessHistoryTemplate
+
+            - items: [fm-react-native]
+              template: recommendedResourcesTemplate
+
+- id: tools_others
+  path: /other-tools
+  blocks:
+      - id: tools_others_intro
+        template: pageIntroductionTemplate
+
+      - id: libraries
+        template: otherToolsTemplate
+      - id: libraries_others
+        template: otherToolsFreeFormTemplate
+
+      - id: utilities
+        template: otherToolsTemplate
+      - id: utilities_others
+        template: otherToolsFreeFormTemplate
+
+      - id: midudev
+        template: picksTemplate
+        
+      - id: runtimes
+        template: otherToolsTemplate
+      - id: runtimes_others
+        template: otherToolsFreeFormTemplate
+
+      - id: text_editors
+        template: otherToolsTemplate
+      - id: text_editors_others
+        template: otherToolsFreeFormTemplate
+
+      - id: browsers
+        template: otherToolsTemplate
+      - id: browsers_others
+        template: otherToolsFreeFormTemplate
+
+      - id: non_js_languages
+        template: otherToolsTemplate
+      - id: non_js_languages_others
+        template: otherToolsFreeFormTemplate
+
+      - items: [id-froala]
+        template: recommendedResourcesTemplate
+
+- id: resources
+  path: /resources
+  blocks:
+      - template: pageIntroductionTemplate
+
+      - id: blogs_news_magazines
+        template: resourcesTemplate
+      - id: blogs_news_magazines_others
+        template: resourcesFreeFormTemplate
+
+      - id: sites_courses
+        template: resourcesTemplate
+      - id: sites_courses_others
+        template: resourcesFreeFormTemplate
+
+      - id: podcasts
+        template: resourcesTemplate
+      - id: podcasts_others
+        template: resourcesFreeFormTemplate
+
+      - items: [wb-graphql, wb-node]
+        template: recommendedResourcesTemplate
+
+- id: opinions
+  path: /opinions
+  blocks:
+      - template: pageIntroductionTemplate
+
+      - id: js_moving_in_right_direction
+        template: opinionTemplate
+      - id: building_js_apps_overly_complex
+        template: opinionTemplate
+      - id: js_over_used_online
+        template: opinionTemplate
+
+      - id: cassidoo
+        template: picksTemplate
+
+      - id: enjoy_building_js_apps
+        template: opinionTemplate
+      - id: would_like_js_to_be_main_lang
+        template: opinionTemplate
+      - id: js_ecosystem_changing_to_fast
+        template: opinionTemplate
+
+      - id: state_of_the_web
+        template: opinionHappinessTemplate
+      - id: state_of_js
+        template: opinionHappinessTemplate
+
+      - id: missing_from_js
+        template: opinionsOthersTemplate
+
+      - items: [wb-react, fm-typescript]
+        template: recommendedResourcesTemplate
+
+- id: awards
+  path: /awards
+  blocks:
+      - template: pageIntroductionTemplate
+
+      # - id: feature_adoption_delta_award
+      #   blockType: AwardBlock
+      #   enableExport: true
+      #   awards:
+      #       - id: grid
+      #         value: '+18.6%'
+      #       - id: object_fit
+      #         value: '+17.8%'
+      #       - id: variables
+      #         value: '+15.2%'
+
+      - id: tool_usage_delta_award
+        blockType: AwardBlock
+        enableExport: true
+        awards:
+            - id: typescript
+              value: '+14.7%'
+            - id: nextjs
+              value: '+11.5%'
+            - id: cypress
+              value: '+10.1%'
+
+      - id: tool_satisfaction_award
+        blockType: AwardBlock
+        enableExport: true
+        awards:
+            - id: testing_library
+              value: '97%'
+            - id: jest
+              value: '96%'
+            - id: graphql
+              value: '94%'
+
+      - id: tool_interest_award
+        blockType: AwardBlock
+        enableExport: true
+        awards:
+            - id: graphql
+              value: '86%'
+            - id: jest
+              value: '83%'
+            - id: snowpack
+              value: '81%'
+
+      - id: most_write_ins_award
+        blockType: AwardBlock
+        enableExport: true
+        awards:
+            - id: intellij
+              value: '134'
+            - id: adonis
+              value: '117'
+            - id: vite
+              value: '85'
+
+      # - id: prediction_award
+      #   blockType: AwardBlock
+      #   awards:
+      #       - id: svelte
+      #       - id: nest
+      #       - id: stencil
+
+      # - id: best_blog_award
+      #   blockType: AwardBlock
+      #   awards:
+      #       - id: svelte
+      #       - id: nest
+      #       - id: stencil
+
+      # - id: best_article_award
+      #   blockType: AwardBlock
+      #   awards:
+      #       - id: svelte
+      #       - id: nest
+      #       - id: stencil
+
+- id: conclusion
+  path: /conclusion
+  showTitle: false
+  blocks:
+      - id: conclusion
+        blockType: ConclusionBlock
+      - id: conclusion_newsletter
+        blockType: NewsletterBlock
+
+# note: other pages need to be included in the sitemap too so they can get the proper
+# locale passed to them
+
+- id: support
+  path: /support
+  is_hidden: true
+  blocks:
+      - id: support
+        template: pageIntroductionTemplate
+
+- id: notfound
+  titleId: notfound.title
+  path: /404
+  is_hidden: true
+  blocks:
+      - id: notfound
+        blockType: NotFoundBlock

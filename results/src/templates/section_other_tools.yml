@@ -1,0 +1,46 @@
+id: ${parentId}_others
+blockName: category_other_tools
+blockType: HorizontalBarBlock
+showDescription: true
+dataPath: "surveyApi.survey.${parentId}_others.year.facets.0"
+enableExport: true
+query: >
+    surveyApi {
+        survey(survey: ${surveyType}) {
+            ${parentId}_others: tools_others(id: ${parentId}_others) {
+                id
+                year(year: ${currentYear}) {
+                    year
+                    completion {
+                        total
+                        count
+                        percentage_survey
+                    }
+                    facets {
+                        id
+                        type
+                        completion {
+                            total
+                            percentage_question
+                            percentage_survey
+                            count
+                        }
+                        buckets{
+                            id
+                            count
+                            percentage_question
+                            percentage_survey
+                            entity {
+                                id
+                                homepage
+                                name
+                                github {
+                                    url
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }

@@ -1,0 +1,43 @@
+titleId: "happiness.${id}"
+# blockType: HappinessBlock
+blockType: VerticalBarBlock
+dataPath: "surveyApi.survey.${id}_happiness.year.facets.0"
+keysPath: "surveyApi.survey.${id}_happiness.keys"
+showDescription: false
+i18nNamespace: happiness
+bucketKeysName: happiness
+blockName: happiness
+enableExport: true
+query: >
+    surveyApi {
+        survey(survey: ${surveyType}) {
+            ${id}_happiness: happiness(id: ${id}) {
+                keys
+                year(year: ${currentYear}) {
+                    year
+                    mean
+                    completion {
+                        total
+                        count
+                        percentage_survey
+                    }
+                    facets {
+                        id
+                        type
+                        completion {
+                            total
+                            percentage_question
+                            percentage_survey
+                            count
+                        }
+                        buckets {
+                            id
+                            count
+                            percentage_question
+                            percentage_survey
+                        }
+                    }
+                }
+            }
+        }
+    }

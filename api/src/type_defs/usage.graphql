@@ -1,0 +1,5 @@
+enum UsageID {
+    used_it
+    know_not_used
+    never_heard_not_sure
+}

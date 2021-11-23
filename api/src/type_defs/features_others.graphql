@@ -1,0 +1,31 @@
+enum OtherFeaturesID {
+    units
+    pseudo_elements
+    combinators
+    tree_document_structure
+    attributes
+    links_urls
+    interaction
+    form_controls
+}
+
+type FeatureBucket {
+    id: FeatureID
+    name: String
+    count: Int
+    percentage_question: Float
+    percentage_survey: Float
+    percentage_facet: Float
+}
+
+type YearOtherFeatures {
+    year: Int
+    completion: YearCompletion
+    buckets: [FeatureBucket]
+}
+
+type OtherFeatures {
+    id: OtherFeaturesID!
+    all_years: [YearOtherFeatures]
+    year(year: Int!): YearOtherFeatures
+}

@@ -1,0 +1,851 @@
+--- # ------------------------------------------------------------------------------------
+
+# ------------------------------------------------------------------------------------
+# Pages Properties
+# - id: the unique (survey-wide) ID of the page
+# - path: the page's path
+# - children: the page's children pages
+# - blocks: the page's blocks
+# - pageTemplate: a template from which to inherit its properties (not used)
+# - showTitle: whether to show the page title or not
+# - variables: page variables (compiled during sitemap generation)
+
+# Block Properties
+# - id: the unique (survey-wide) ID of the block
+# - blockName: the name of the block (used for titles, descriptions, etc.)
+# - bucketKeysName: the name of the block's keys (used for legends, formatting data, etc.)
+# - blockType: the type of block (which component to use)
+# - query: the query used to populate the block's data
+# - dataPath: the path to use (from the query root) to access the block's data
+# - showLegend: whether to show the block's legend
+# - showDescription: whether to show the block's description
+# - template: a template from which to inherit its properties
+# - translateData: whether to try and translate
+# - queryVariables: GraphQL query variables (handled by GraphQL)
+# - variables: block variables (compiled during sitemap generation)
+
+- id: introduction
+  path: /
+  showTitle: false
+  blocks:
+      - id: survey_intro
+        blockType: SurveyIntroBlock
+      - id: survey_newsletter
+        blockType: NewsletterBlock
+      - id: survey_sponsors
+        blockType: SponsorsBlock
+      - id: survey_translators
+        blockType: TranslatorsBlock
+
+- id: tshirt
+  path: /tshirt
+  showTitle: false
+  blocks:
+      - id: tshirt_intro
+        template: pageIntroductionTemplate
+      - id: tshirt_block
+        blockType: TshirtBlock
+
+- id: user_info
+  titleId: sections.demographics.title
+  path: /demographics
+  blocks:
+      - template: pageIntroductionTemplate
+
+      - id: country
+        template: demographicsTemplate
+        blockType: ParticipationByCountryBlock
+
+      - id: locale
+        template: demographicsTemplate
+        blockType: HorizontalBarBlock
+        translateData: true
+
+      - id: yearly_salary
+        template: demographicsTemplate
+
+      - id: years_of_experience
+        template: demographicsTemplate
+
+      - id: company_size
+        template: demographicsTemplate
+
+      - id: source
+        template: sourceTemplate
+        blockType: HorizontalBarBlock
+
+      - id: gender
+        template: demographicsTemplate
+        showLegend: true
+        blockType: GenderBlock
+
+      - id: race_ethnicity
+        template: demographicsTemplate
+        blockType: HorizontalBarBlock
+        translateData: true
+
+      - id: job_title
+        template: demographicsTemplate
+        blockType: HorizontalBarBlock
+        translateData: true
+
+      - id: css_proficiency
+        template: proficiencyTemplate
+
+      - id: javascript_proficiency
+        template: proficiencyTemplate
+
+      - id: backend_proficiency
+        template: proficiencyTemplate
+
+      - items: [fm-homepage]
+        template: recommendedResourcesTemplate
+        
+#- id: overview
+#  path: /overview
+#  blocks:
+#      - id: overviewIntroduction
+#        template: pageIntroductionTemplate
+#        variables:
+#            pageId: '${id}'
+#      - id: toolsArrow
+#        template: toolsArrowsTemplate
+#      - id: scatterplotOverview
+#        template: scatterplotOverviewTemplate
+#      - id: overview_recommended_resources
+#        template: recommendedResourcesTemplate
+#        sponsors:
+#            - fullstack-d3
+
+- id: features
+  path: /features
+  blocks:
+      - template: pageIntroductionTemplate
+
+      - template: featuresOverviewTemplate
+
+      - template: knowledgeScoreTemplate
+
+      - items: [fm-learncss]
+        template: recommendedResourcesTemplate
+        
+  children:
+      - id: layout
+        path: /layout
+        blocks:
+            - id: layout
+              template: pageIntroductionTemplate
+
+            - id: grid
+              template: featureExperienceTemplate
+
+            - id: subgrid
+              template: featureExperienceTemplate
+
+            - id: flexbox
+              template: featureExperienceTemplate
+
+            - id: multi_column
+              template: featureExperienceTemplate
+
+            - id: writing_modes
+              template: featureExperienceTemplate
+
+            - id: shadeed9
+              template: picksTemplate
+
+            - id: exclusions
+              template: featureExperienceTemplate
+
+            - id: position_sticky
+              template: featureExperienceTemplate
+
+            - id: logical_properties
+              template: featureExperienceTemplate
+
+            - id: aspect_ratio
+              template: featureExperienceTemplate
+
+            - id: content_visibility
+              template: featureExperienceTemplate
+
+            - items: [fm-gridsflexbox]
+              template: recommendedResourcesTemplate
+
+      - id: shapes_graphics
+        path: /shapes-and-graphics
+        blocks:
+            - id: shapes_graphics
+              template: pageIntroductionTemplate
+
+            - id: shapes
+              template: featureExperienceTemplate
+
+            - id: object_fit
+              template: featureExperienceTemplate
+
+            - id: clip_path
+              template: featureExperienceTemplate
+
+            - id: masks
+              template: featureExperienceTemplate
+
+            - id: blend_modes
+              template: featureExperienceTemplate
+
+            - id: filter_effects
+              template: featureExperienceTemplate
+
+            - id: backdrop_filter
+              template: featureExperienceTemplate
+
+            - items: [fm-svg]
+              template: recommendedResourcesTemplate
+
+      - id: interactions
+        path: /interactions
+        blocks:
+            - id: interactions
+              template: pageIntroductionTemplate
+
+            - id: scroll_snap
+              template: featureExperienceTemplate
+
+            - id: overscroll_behavior
+              template: featureExperienceTemplate
+
+            - id: walterstephanie
+              template: picksTemplate
+
+            - id: overflow_anchor
+              template: featureExperienceTemplate
+
+            - id: touch_action
+              template: featureExperienceTemplate
+
+            - id: pointer_events
+              template: featureExperienceTemplate
+
+      - id: typography
+        path: /typography
+        blocks:
+            - id: typography
+              template: pageIntroductionTemplate
+
+            - id: web_fonts
+              template: featureExperienceTemplate
+
+            - id: line_breaking
+              template: featureExperienceTemplate
+
+            - id: font_variant
+              template: featureExperienceTemplate
+
+            - id: piccalilli_
+              template: picksTemplate
+
+            - id: initial_letter
+              template: featureExperienceTemplate
+
+            - id: font_variant_numeric
+              template: featureExperienceTemplate
+
+            - id: font_display
+              template: featureExperienceTemplate
+
+            - id: line_clamp
+              template: featureExperienceTemplate
+
+            - items: [fm-typography]
+              template: recommendedResourcesTemplate
+
+      - id: animations_transforms
+        path: /animations-and-transforms
+        blocks:
+            - id: animations_transforms
+              template: pageIntroductionTemplate
+
+            - id: transitions
+              template: featureExperienceTemplate
+
+            - id: transforms
+              template: featureExperienceTemplate
+
+            - id: sarasoueidan
+              template: picksTemplate
+
+            - id: animations
+              template: featureExperienceTemplate
+
+            - id: perspective
+              template: featureExperienceTemplate
+
+      - id: media_queries
+        path: /media-queries
+        blocks:
+            - id: media_queries
+              template: pageIntroductionTemplate
+
+            - id: prefers_reduced_motion
+              template: featureExperienceTemplate
+
+            - id: prefers_color_scheme
+              template: featureExperienceTemplate
+
+            - id: color_gamut
+              template: featureExperienceTemplate
+
+      - id: other_features
+        path: /other-features
+        blocks:
+            - id: other_features
+              template: pageIntroductionTemplate
+
+            - id: variables
+              template: featureExperienceTemplate
+
+            - id: feature_support_queries
+              template: featureExperienceTemplate
+
+            - id: containment
+              template: featureExperienceTemplate
+
+            - id: argyleink
+              template: picksTemplate
+
+            - id: will_change
+              template: featureExperienceTemplate
+
+            - id: calc
+              template: featureExperienceTemplate
+
+            - id: houdini
+              template: featureExperienceTemplate
+
+            - id: comparison_functions
+              template: featureExperienceTemplate
+
+            - items: [fm-layouts]
+              template: recommendedResourcesTemplate
+
+- id: units_selectors
+  path: /units-and-selectors
+  i18nNamespace: features_others
+  blocks:
+      - id: units_selectors
+        template: pageIntroductionTemplate
+
+      - id: units
+        template: otherFeaturesTemplate
+
+      - id: pseudo_elements
+        template: otherFeaturesTemplate
+
+      - id: combinators
+        template: otherFeaturesTemplate
+
+      - id: tree_document_structure
+        template: otherFeaturesTemplate
+
+      - id: kilianvalkhof
+        template: picksTemplate
+
+      - id: attributes
+        template: otherFeaturesTemplate
+
+      - id: links_urls
+        template: otherFeaturesTemplate
+
+      - id: interaction
+        template: otherFeaturesTemplate
+
+      - id: form_controls
+        template: otherFeaturesTemplate
+
+- id: technologies
+  path: /technologies
+  blocks:
+      - id: technologiesIntroduction
+        template: pageIntroductionTemplate
+
+      - id: scatterplot_overview
+        template: scatterplotOverviewTemplate
+  children:
+      - id: pre_post_processors
+        path: /pre-post-processors
+        blocks:
+            - template: pageIntroductionTemplate
+
+            - template: toolsExperienceRankingTemplate
+
+            - template: toolsSectionStreamsTemplate
+
+            - template: toolsExperienceMarimekkoTemplate
+
+            # - template: toolsUsageVariationsTemplate
+
+            - id: sass
+              template: toolExperienceTemplate
+            - id: less
+              template: toolExperienceTemplate
+            - id: post_css
+              template: toolExperienceTemplate
+            - id: stylus
+              template: toolExperienceTemplate
+
+            - template: sectionOtherToolsTemplate
+
+            - template: happinessTemplate
+
+            - items: [fm-sass]
+              template: recommendedResourcesTemplate
+
+
+      - id: css_frameworks
+        path: /css-frameworks
+        blocks:
+            - template: pageIntroductionTemplate
+
+            - template: toolsExperienceRankingTemplate
+
+            - template: toolsSectionStreamsTemplate
+
+            - template: toolsExperienceMarimekkoTemplate
+
+            # - template: toolsUsageVariationsTemplate
+
+            - id: bootstrap
+              template: toolExperienceTemplate
+            - id: materialize_css
+              template: toolExperienceTemplate
+            - id: ant_design
+              template: toolExperienceTemplate
+            - id: semantic_ui
+              template: toolExperienceTemplate
+            - id: bulma
+              template: toolExperienceTemplate
+            - id: foundation
+              template: toolExperienceTemplate
+            - id: ui_kit
+              template: toolExperienceTemplate
+
+            - id: christianoliff
+              template: picksTemplate
+
+            - id: tachyons
+              template: toolExperienceTemplate
+            - id: primer
+              template: toolExperienceTemplate
+            - id: tailwind_css
+              template: toolExperienceTemplate
+            - id: pure_css
+              template: toolExperienceTemplate
+            - id: skeleton
+              template: toolExperienceTemplate
+            - id: spectre_css
+              template: toolExperienceTemplate
+
+            - template: sectionOtherToolsTemplate
+
+            - template: happinessTemplate
+
+      - id: css_methodologies
+        path: /methodologies
+        blocks:
+            - template: pageIntroductionTemplate
+
+            - template: toolsExperienceRankingTemplate
+
+            - template: toolsSectionStreamsTemplate
+
+            - template: toolsExperienceMarimekkoTemplate
+
+            # - template: toolsUsageVariationsTemplate
+
+            - id: bem
+              template: toolExperienceTemplate
+            - id: atomic_css
+              template: toolExperienceTemplate
+            - id: oocss
+              template: toolExperienceTemplate
+
+            - id: sachagreif
+              template: picksTemplate
+
+            - id: smacss
+              template: toolExperienceTemplate
+            - id: it_css
+              template: toolExperienceTemplate
+            - id: cube_css
+              template: toolExperienceTemplate
+
+            - template: sectionOtherToolsTemplate
+
+            - template: happinessTemplate
+
+            - items: [fm-smacss]
+              template: recommendedResourcesTemplate
+
+      - id: css_in_js
+        path: /css-in-js
+        blocks:
+            - template: pageIntroductionTemplate
+
+            - template: toolsExperienceRankingTemplate
+
+            - template: toolsSectionStreamsTemplate
+
+            - template: toolsExperienceMarimekkoTemplate
+
+            # - template: toolsUsageVariationsTemplate
+
+            - id: styled_components
+              template: toolExperienceTemplate
+            - id: jss
+              template: toolExperienceTemplate
+            - id: styled_jsx
+              template: toolExperienceTemplate
+            - id: radium
+              template: toolExperienceTemplate
+            - id: emotion
+              template: toolExperienceTemplate
+            - id: css_modules
+              template: toolExperienceTemplate
+            - id: styled_system
+              template: toolExperienceTemplate
+
+            - id: hugogiraudel
+              template: picksTemplate
+
+            - id: stitches
+              template: toolExperienceTemplate
+            - id: styletron
+              template: toolExperienceTemplate
+            - id: fela
+              template: toolExperienceTemplate
+            - id: linaria
+              template: toolExperienceTemplate
+            - id: astroturf
+              template: toolExperienceTemplate
+
+            - template: sectionOtherToolsTemplate
+
+            - template: happinessTemplate
+
+            - items: [fm-react]
+              template: recommendedResourcesTemplate
+
+- id: tools_others
+  path: /other-tools
+  blocks:
+      - id: tools_others_intro
+        template: pageIntroductionTemplate
+
+      - id: utilities
+        template: otherToolsTemplate
+
+      - id: utilities_others
+        template: otherToolsFreeFormTemplate
+
+      - id: text_editors
+        template: otherToolsTemplate
+
+      - id: foolip
+        template: picksTemplate
+
+      - id: text_editors_others
+        template: otherToolsFreeFormTemplate
+
+      - id: browsers
+        template: otherToolsTemplate
+
+      - id: browsers_others
+        template: otherToolsFreeFormTemplate
+
+      - items: [fm-storybook]
+        template: recommendedResourcesTemplate
+
+- id: environments
+  path: /environments
+  blocks:
+      - template: pageIntroductionTemplate
+
+      - id: browsers
+        template: environmentTemplate
+
+      - id: form_factors
+        translateData: true
+        template: environmentTemplate
+
+      - id: css_for_print
+        template: environmentRatingTemplate
+
+      - id: css_for_email
+        template: environmentRatingTemplate
+
+- id: resources
+  path: /resources
+  blocks:
+      - template: pageIntroductionTemplate
+
+      - id: blogs_news_magazines
+        template: resourcesTemplate
+
+      - id: blogs_news_magazines_others
+        template: resourcesFreeFormTemplate
+
+      - id: sites_courses
+        template: resourcesTemplate
+
+      - id: 5t3ph
+        template: picksTemplate
+
+      - id: sites_courses_others
+        template: resourcesFreeFormTemplate
+
+      - id: podcasts
+        template: resourcesTemplate
+
+      - id: podcasts_others
+        template: resourcesFreeFormTemplate
+
+- id: opinions
+  path: /opinions
+  blocks:
+      - template: pageIntroductionTemplate
+
+      - id: css_easy_to_learn
+        template: opinionTemplate
+
+      - id: css_evolving_slowly
+        template: opinionTemplate
+
+      - id: utility_classes_to_be_avoided
+        template: opinionTemplate
+
+      - id: selector_nesting_to_be_avoided
+        template: opinionTemplate
+
+      - id: jina
+        template: picksTemplate
+
+      - id: css_is_programming_language
+        template: opinionTemplate
+
+      - id: enjoy_writing_css
+        template: opinionTemplate
+
+      - id: state_of_the_web
+        template: opinionHappinessTemplate
+
+      - id: state_of_css
+        template: opinionHappinessTemplate
+
+      - id: currently_missing_from_css
+        template: opinionsOthersTemplate
+
+- id: awards
+  path: /awards
+  blocks:
+      - template: pageIntroductionTemplate
+
+      - id: feature_adoption_delta_award
+        blockType: AwardBlock
+        enableExport: true
+        awards:
+            - id: grid
+              value: '+18.6%'
+            - id: object_fit
+              value: '+17.8%'
+            - id: variables
+              value: '+15.2%'
+
+      - id: tool_usage_delta_award
+        blockType: AwardBlock
+        enableExport: true
+        awards:
+            - id: tailwind_css
+              value: '+17.8%'
+            - id: atomic_css
+              value: '+10.8%'
+            - id: css_modules
+              value: '+10.1%'
+
+      - id: tool_satisfaction_award
+        blockType: AwardBlock
+        enableExport: true
+        awards:
+            - id: post_css
+              value: '91.4%'
+            - id: css_modules
+              value: '86.8%'
+            - id: tailwind_css
+              value: '86.6%'
+
+      - id: tool_interest_award
+        blockType: AwardBlock
+        enableExport: true
+        awards:
+            - id: css_modules
+              value: '75.1%'
+            - id: tailwind_css
+              value: '62%'
+            - id: styled_components
+              value: '60%'
+
+      - id: most_write_ins_award
+        blockType: AwardBlock
+        enableExport: true
+        awards:
+            - id: phpstorm
+              value: '200'
+            - id: udemy
+              value: '159'
+            - id: frontendmasters
+              value: '112'
+
+      # - id: prediction_award
+      #   blockType: AwardBlock
+      #   awards:
+      #       - id: svelte
+      #       - id: nest
+      #       - id: stencil
+
+      # - id: best_blog_award
+      #   blockType: AwardBlock
+      #   awards:
+      #       - id: svelte
+      #       - id: nest
+      #       - id: stencil
+
+      # - id: best_article_award
+      #   blockType: AwardBlock
+      #   awards:
+      #       - id: svelte
+      #       - id: nest
+      #       - id: stencil
+
+- id: conclusion
+  path: /conclusion
+  showTitle: false
+  blocks:
+      - id: conclusion
+        blockType: ConclusionBlock
+      - id: conclusion_newsletter
+        blockType: NewsletterBlock
+
+# note: other pages need to be included in the sitemap too so they can get the proper
+# locale passed to them
+
+- id: support
+  path: /support
+  is_hidden: true
+  blocks:
+      - id: support
+        template: pageIntroductionTemplate
+
+- id: notfound
+  titleId: notfound.title
+  path: /404
+  is_hidden: true
+  blocks:
+      - id: notfound
+        blockType: NotFoundBlock
+
+- id: report
+  showTitle: false
+  path: /report
+  is_hidden: true
+  showSidebar: false
+  blocks:
+      - id: report_contents
+        isReport: true
+        blockType: ReportBlock
+
+      - id: country
+        isReport: true
+        template: demographicsTemplate
+        blockType: ParticipationByCountryBlock
+        hidden: true
+        pageId: user_info
+
+      - template: featuresOverviewTemplate
+        isReport: true
+        hidden: true
+        
+      - template: knowledgeScoreTemplate
+        isReport: true
+        hidden: true
+        pageId: features
+
+      - template: toolsExperienceMarimekkoTemplate
+        isReport: true
+        hidden: true
+        variables: 
+          parentId: css_in_js
+
+      - template: toolsSectionStreamsTemplate
+        isReport: true
+        hidden: true
+        variables: 
+          parentId: css_in_js
+          
+      - template: toolsExperienceRankingTemplate
+        isReport: true
+        hidden: true
+        variables: 
+          parentId: css_frameworks_abridged
+
+      - id: scatterplot_overview
+        isReport: true
+        template: scatterplotOverviewTemplate
+        hidden: true
+
+      - id: grid
+        isReport: true
+        template: featureExperienceTemplate
+        hidden: true
+
+      - id: subgrid
+        isReport: true
+        template: featureExperienceTemplate
+        hidden: true
+
+      - id: logical_properties
+        isReport: true
+        template: featureExperienceTemplate
+        hidden: true
+        
+      - id: prefers_reduced_motion
+        isReport: true
+        template: featureExperienceTemplate
+        hidden: true
+
+      - id: prefers_color_scheme
+        isReport: true
+        template: featureExperienceTemplate
+        hidden: true
+
+      - id: utility_classes_to_be_avoided
+        isReport: true
+        hidden: true
+        template: opinionTemplate
+        pageId: opinions
+
+      - id: css_is_programming_language
+        isReport: true
+        template: opinionTemplate
+        hidden: true
+        pageId: opinions
+
+      - id: state_of_css
+        template: opinionHappinessTemplate
+        isReport: true
+        hidden: true
+        pageId: opinions
+
+      - id: currently_missing_from_css
+        template: opinionsOthersTemplate
+        isReport: true
+        hidden: true
+        pageId: opinions

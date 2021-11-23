@@ -1,0 +1,33 @@
+blockType: ToolsScatterplotBlock
+dataPath: "surveyApi.survey.${id}"
+keysPath: "surveyApi.survey.${id}.0.experience.keys"
+showDescription: true
+enableExport: true
+query: >
+    surveyApi {
+        survey(survey: ${surveyType}) {
+              ${id}: tools(ids: [${allTools}]) {
+                id
+                entity {
+                    homepage
+                    name
+                    github {
+                        url
+                    }
+                }
+                experience {
+                    keys
+                    year(year:${currentYear}) {
+                        facets {
+                            buckets{
+                                id
+                                count
+                                percentage_question
+                                percentage_survey
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }

@@ -1,0 +1,35 @@
+blockName: features_overview
+blockType: FeaturesOverviewBlock
+dataPath: "surveyApi.survey.${id}"
+keysPath: "surveyApi.survey.${id}.0.experience.keys"
+enableExport: true
+query: >
+    surveyApi {
+        survey(survey: ${surveyType}) {
+            ${id}: features(ids: [${allFeatures}]) {
+                id
+                name
+                experience{
+                    keys
+                    year(year: ${currentYear}) {
+                        year
+                        completion {
+                            total
+                            count
+                            percentage_survey
+                        }
+                        facets{
+                            type
+                            id
+                            buckets {
+                                id
+                                count
+                                percentage_question
+                                percentage_survey
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }

@@ -1,0 +1,39 @@
+enum OtherToolsID {
+    pre_post_processors_others
+    css_frameworks_others
+    css_methodologies_others
+    css_in_js_others
+    utilities
+    utilities_others
+    text_editors
+    text_editors_others
+    browsers
+    browsers_others
+    build_tools
+    build_tools_others
+    non_js_languages
+    non_js_languages_others
+    javascript_flavors_others
+    front_end_frameworks_others
+    datalayer_others
+    back_end_frameworks_others
+    testing_others
+    mobile_desktop_others
+    libraries
+    libraries_others
+    runtimes
+    runtimes_others
+}
+
+type YearOtherTools {
+    year: Int
+    completion: YearCompletion
+    facets: [EntityFacet]
+}
+
+type OtherTools {
+    id: OtherToolsID!
+    # byYear: [YearResource]
+    year(year: Int!): YearOtherTools
+    all_years: [YearOtherTools]
+}

@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "es2017",
+    "module": "commonjs",
+    "lib": ["es7", "es2019"],
+    "outDir": "dist",
+    "rootDir": "src",
+    "removeComments": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "noImplicitAny": true
+  },
+  "files": ["file_types.d.ts"],
+  "exclude": ["/node_modules/"],
+  "include": ["src/**/*"]
+}

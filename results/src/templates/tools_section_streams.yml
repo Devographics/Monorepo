@@ -1,0 +1,42 @@
+id: "${parentId}_section_streams"
+blockName: tools_section_streams
+blockType: ToolsSectionStreamsBlock
+dataPath: "surveyApi.survey.${parentId}_streams"
+keysPath: "surveyApi.survey.${parentId}_streams.0.experience.keys"
+bucketKeysName: tools
+showLegend: true
+enableExport: true
+query: >
+    surveyApi {
+        survey(survey: ${surveyType}) {
+            ${parentId}_streams: tools(ids: [${toolsCategories[parentId]}]) {
+                id
+                entity {
+                    name
+                    homepage
+                    github {
+                        url
+                    }
+                }
+                experience {
+                    keys
+                    all_years {
+                        year
+                        completion {
+                            total
+                            count
+                            percentage_survey
+                        }
+                        facets {
+                            buckets {
+                                id
+                                count
+                                percentage_question
+                                percentage_survey
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }

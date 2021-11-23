@@ -1,0 +1,77 @@
+# Front End Masters
+
+- name: Frontend Masters
+  id: fm-homepage
+  description: Advance Your Skills with In-Depth, Modern Front-End Engineering Courses
+  url: https://frontendmasters.com/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2020
+  image: https://static.frontendmasters.com/assets/brand/logos/m-black.jpg
+
+- name: Learn CSS, from Laying Out Websites to Performant Animations
+  id: fm-learncss
+  description: >
+    CSS is rich in capabilities and is more than simply laying out pages! Replace costly JavaScript with CSS.
+  url: https://frontendmasters.com/learn/css/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2020
+  image: https://static.frontendmasters.com/assets/brand/icons/icon-paths.jpg
+
+- name: CSS Grids and Flexbox for Responsive Web Design
+  id: fm-gridsflexbox
+  description: >
+    Starting with a review of floats for context, but quickly moving into Flexbox and CSS grids, 
+    this essential course is for web developers that want to build responsive, beautiful web applications faster using less code and best practices. 
+  url: https://frontendmasters.com/courses/css-grids-flexbox/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2020
+  image: https://static.frontendmasters.com/assets/teachers/kramer/thumb.png
+
+- name: SVG Essentials & Animation, v2
+  id: fm-svg
+  description: >
+    Learn to build and optimize SVG – the scalable graphics format for 
+    the web that can achieve impressively small filesizes for fast-loading websites. I
+  url: https://frontendmasters.com/courses/svg-essentials-animation/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2020
+  image: https://static.frontendmasters.com/assets/teachers/drasner/thumb@2x.jpg
+
+- name: Responsive Web Typography v2
+  id: fm-typography
+  description: >
+    In this course, Jason Pamental demonstrates 
+    type fundamentals to create better user experiences on mobile and desktop.
+  url: https://frontendmasters.com/courses/responsive-typography-v2/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2020
+  image: https://static.frontendmasters.com/assets/teachers/pamental/thumb@2x.jpg
+
+- name: Sass Fundamentals
+  id: fm-sass
+  description: >
+    Leverage the Sass preprocessing to empower your CSS practices and 
+    master styling complex applications. 
+  url: https://frontendmasters.com/courses/sass/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2020
+  image: https://static.frontendmasters.com/assets/teachers/north/thumb@2x.jpg
+
+- name: Scalable Modular Architecture for CSS (SMACSS)
+  id: fm-smacss
+  description: > 
+    CSS architecture expert Jonathan Snook shares his experience building large sites 
+    with large teams to make your CSS more maintainable using his SMACSS methodology.
+  url: https://frontendmasters.com/courses/smacss/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2020
+  image: https://static.frontendmasters.com/assets/teachers/snook/thumb@2x.jpg
+
+- name: Intermediate React, v2
+  id: fm-react
+  description: >
+    You’ll learn hooks in-depth, CSS-in-JS with emotion, 
+    increase performance with code splitting and server-side rendering, and more. 
+  url: https://frontendmasters.com/courses/intermediate-react-v2/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2020
+  image: https://static.frontendmasters.com/assets/teachers/holt/thumb@2x.jpg
+
+- name: Advanced CSS Layouts
+  id: fm-layouts
+  description: >
+    For the first time in the history of the web, 
+    CSS is graced with tools for laying out web pages without hacks. 
+  url: https://frontendmasters.com/courses/advanced-css-layouts/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2020
+  image: https://static.frontendmasters.com/assets/teachers/kramer/thumb@2x.jpg
+
+- name: Design Systems with React & Storybook
+  id: fm-storybook
+  description: >
+    Design systems increase the speed of development across teams, as well as make your applications look and feel consistent.
+  url: https://frontendmasters.com/courses/design-systems/
+  image: https://static.frontendmasters.com/assets/teachers/bostian/thumb@2x.jpg

@@ -1,0 +1,233 @@
+enum FeatureID {
+    # JS syntax
+    destructuring
+    spread_operator
+    arrow_functions
+    nullish_coalescing
+    optional_chaining
+    private_fields
+    # JS language
+    proxies
+    async_await
+    promises
+    decorators
+    promise_all_settled
+    dynamic_import
+    # JS data structures
+    maps
+    sets
+    typed_arrays
+    array_prototype_flat
+    big_int
+    # JS browser apis
+    service_workers
+    local_storage
+    intl
+    web_audio
+    webgl
+    web_animations
+    webrtc
+    web_speech
+    webvr
+    websocket
+    fetch
+    custom_elements
+    shadow_dom
+    i18n
+    web_components
+    # JS other features
+    pwa
+    wasm
+
+    # CSS layout features
+    grid
+    subgrid
+    regions
+    flexbox
+    multi_column
+    writing_modes
+    exclusions
+    position_sticky
+    logical_properties
+    aspect_ratio
+    content_visibility
+    flexbox_gap
+    break_rules
+    at_container
+    # CSS shapes & graphics features
+    shapes
+    object_fit
+    clip_path
+    masks
+    blend_modes
+    filter_effects
+    backdrop_filter
+    intrinsic_sizing
+    conic_gradient
+    color_function
+    accent_color
+    color_gamut
+    # CSS interactions features
+    scroll_snap
+    overscroll_behavior
+    overflow_anchor
+    touch_action
+    pointer_events
+    scroll_timeline
+    # CSS typography features
+    web_fonts
+    line_breaking
+    font_variant
+    initial_letter
+    font_variant_numeric
+    font_display
+    line_clamp
+    leading_trim
+    direction
+    variable_fonts
+    # CSS animations & transforms features
+    transitions
+    transforms
+    animations
+    perspective
+    # CSS accessibility features
+    prefers_reduced_data
+    prefers_reduced_motion
+    prefers_color_scheme
+    color_contrast
+    color_scheme
+    tabindex
+    aria_attributes
+    # CSS other features
+    variables
+    feature_support_queries
+    containment
+    will_change
+    calc
+    houdini
+    comparison_functions
+    at_property
+    marker
+    # units_selectors
+    px
+    pt
+    percent
+    em
+    rem
+    vh_vw
+    vmin_vmax
+    ch
+    ex
+    mm
+    cm
+    in
+    # pseudo_elements
+    before
+    after
+    first_line
+    first_letter
+    selection
+    placeholder
+    backdrop
+    # combinators
+    descendant
+    child
+    next_sibling
+    subsequent_sibling
+    # tree_document_structure
+    root
+    empty
+    not
+    nth_child
+    nth_last_child
+    first_child
+    last_child
+    only_child
+    nth_of_type
+    nth_last_of_type
+    first_of_type
+    last_of_type
+    only_of_type
+    lang
+    is
+    where
+    # attributes
+    presence
+    equality
+    starts_with
+    ends_with
+    contains_word
+    contains_substring
+    # links_urls
+    any_link
+    link_visited
+    local_link
+    target
+    # interaction
+    hover
+    active
+    focus
+    focus_within
+    focus_visible
+    # form_controls
+    enabled_disabled
+    read_only_write
+    placeholder_shown
+    default
+    checked
+    indeterminate
+    valid_invalid
+    user_invalid
+    in_out_range
+    required_optional
+}
+
+"""
+A feature experience datapoint
+"""
+type FeatureExperienceBucket {
+    id: FeatureExperienceID
+    count: Int
+    # difference with previous year
+    countDelta: Int
+    percentage_question: Float
+    percentage_survey: Float
+    percentage_facet: Float
+    # difference with previous year
+    percentageDelta: Float
+}
+
+"""
+Feature data for a specific facet
+"""
+type FeatureFacet {
+    type: Facet
+    id: String
+    buckets: [FeatureExperienceBucket]
+    completion: FacetCompletion
+}
+
+"""
+Feature data for a specific year
+"""
+type YearFeature {
+    year: Int
+    completion: YearCompletion
+    facets: [FeatureFacet]
+}
+
+type FeatureExperience {
+    all_years: [YearFeature]
+    year(year: Int!): YearFeature
+    keys: [FeatureExperienceID]
+}
+
+"""
+A feature (e.g. arrow functions, websocket, etc.)
+"""
+type Feature {
+    id: FeatureID!
+    name: String
+    mdn: MDN
+    experience(filters: Filters): FeatureExperience
+}

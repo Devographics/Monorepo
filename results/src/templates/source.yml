@@ -1,0 +1,44 @@
+blockType: VerticalBarBlock
+dataPath: "surveyApi.survey.demographics.${id}.year.facets.0"
+showDescription: true
+enableExport: true
+query: >
+    surveyApi {
+        survey(survey: ${surveyType}) {
+            demographics {
+                ${id} (filters: ${filters}, options: ${options}, facet: ${facet}){
+                    year(year: ${currentYear}) {
+                        year
+                        completion {
+                            total
+                            percentage_survey
+                            count
+                        }
+                        facets {
+                            id
+                            type
+                            completion {
+                                total
+                                percentage_question
+                                percentage_survey
+                                count
+                            }
+                            buckets {
+                                id
+                                count
+                                percentage_question
+                                percentage_survey
+                                entity {
+                                    name
+                                    homepage
+                                    github {
+                                        url
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }

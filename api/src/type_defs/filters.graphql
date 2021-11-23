@@ -1,0 +1,58 @@
+input GenderFilter {
+    eq: GenderID
+    in: [GenderID]
+    nin: [GenderID]
+}
+
+input CountryFilter {
+    eq: CountryID
+    in: [CountryID]
+    nin: [CountryID]
+}
+
+input RaceEthnicityFilter {
+    eq: RaceEthnicityID
+    # in: [RaceEthnicityID]
+    # nin: [RaceEthnicityID]
+}
+
+input IndustrySectorFilter {
+    eq: IndustrySectorID
+    # in: [IndustrySectorID]
+    # nin: [IndustrySectorID]
+}
+
+input YearlySalaryRangeFilter {
+    eq: SalaryRange
+    in: [SalaryRange]
+    nin: [SalaryRange]
+}
+
+input CompanySizeFilter {
+    eq: CompanySizeRange
+    in: [CompanySizeRange]
+    nin: [CompanySizeRange]
+}
+
+input YearsOfExperienceFilter {
+    eq: WorkExperienceRange
+    in: [WorkExperienceRange]
+    nin: [WorkExperienceRange]
+}
+
+input SourceFilter {
+    eq: String
+    in: [String]
+    nin: [String]
+}
+
+input Filters {
+    gender: GenderFilter
+    country: CountryFilter
+    race_ethnicity: RaceEthnicityFilter
+    yearly_salary: YearlySalaryRangeFilter
+    company_size: CompanySizeFilter
+    years_of_experience: YearsOfExperienceFilter
+    source: SourceFilter
+    industry_sector: IndustrySectorFilter
+}

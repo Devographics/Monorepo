@@ -1,0 +1,87 @@
+age:
+  - range_less_than_10
+  - range_10_18
+  - range_18_24
+  - range_25_34
+  - range_35_44
+  - range_45_54
+  - range_55_64
+  - range_more_than_65
+
+years_of_experience:
+  - range_less_than_1
+  - range_1_2
+  - range_2_5
+  - range_5_10
+  - range_10_20
+  - range_more_than_20
+
+company_size:
+  - range_1
+  - range_1_5
+  - range_5_10
+  - range_10_20
+  - range_20_50
+  - range_50_100
+  - range_100_1000
+  - range_more_than_1000
+
+yearly_salary:
+  - range_work_for_free
+  - range_0_10
+  - range_10_30
+  - range_30_50
+  - range_50_100
+  - range_100_200
+  - range_more_than_200
+
+higher_education_degree:
+  - no_degree
+  - yes_related
+  - yes_unrelated
+
+gender:
+  - male
+  - female
+  - prefer_not_to_say
+  - non_binary
+  - not_listed
+
+race_ethnicity:
+  - biracial
+  - black_african
+  - east_asian
+  - hispanic_latin
+  - middle_eastern
+  - multiracial
+  - native_american_islander_australian
+  - south_asian
+  - white_european
+  - south_east_asian
+  - not_listed
+
+tool:
+  - would_use
+  - would_not_use
+  - interested
+  - not_interested
+  - never_heard
+
+feature:
+  - never_heard
+  - heard
+  - used
+
+happiness: 
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+
+opinions: 
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4

@@ -1,0 +1,48 @@
+# Logs
+logs
+*.log
+
+# Captures
+# static/images/captures
+
+# Builds
+results/public
+# images are survey-dependent and copied over from surveys/foo/images by webpack
+results/static/images
+
+# Dependency directory
+# https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git
+node_modules
+
+# Cache
+.cache
+.sass-cache
+.gatsby-context.js
+
+# IDE
+.idea
+
+# OSX
+.DS_Store
+
+# Secrets
+.env
+
+# docker volumes
+esdata
+
+.env
+
+sitemap.yml
+blocks.yml
+
+.logs
+.logs/*
+
+.idea
+node_modules
+.DS_Store
+.env
+test.mjs
+dist
+.logs

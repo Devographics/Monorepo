@@ -1,0 +1,8 @@
+type ToolsCardinalityByUser {
+    cardinality: Int
+    count: Int
+    """
+    Percentage against number of respondents for the related year.
+    """
+    percentage: Float
+}

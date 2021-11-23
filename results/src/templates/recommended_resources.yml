@@ -1,0 +1,20 @@
+id: ${parentId}_resources
+blockName: recommended_resources
+blockType: RecommendedResourcesBlock
+showDescription: false
+
+#  note: query does not currently work because sponsor values would need to be
+#  wrapped in quotes
+# dataPath: 'resources.edges'
+# query: >
+#     resources: allRecommendedResourcesYaml(filter: {id: {in: [${sponsors}]}}) {
+#         edges {
+#             node {
+#                 name
+#                 url
+#                 image
+#                 id
+#                 description
+#             }
+#         }
+#     }

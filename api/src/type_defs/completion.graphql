@@ -1,0 +1,36 @@
+"""
+Completion ratio and count
+"""
+type YearCompletion {
+    """
+    Total number of respondents who have answered the survey for a specific year
+    """
+    total: Int
+    """
+    Number of respondents who have answered this question for a specific year
+    """
+    count: Int
+    """
+    Completion percentage relative to total number of survey respondents for a given year
+    """
+    percentage_survey: Float
+}
+
+type FacetCompletion {
+    """
+    Total number of respondents who have answered the survey for a specific year
+    """
+    total: Int
+    """
+    Number of respondents in this facet
+    """
+    count: Int
+    """
+    Completion percentage relative to total number of question respondents
+    """
+    percentage_question: Float
+    """
+    Completion percentage relative to total number of survey respondents for a given year
+    """
+    percentage_survey: Float
+}

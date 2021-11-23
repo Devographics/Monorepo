@@ -1,0 +1,38 @@
+id: "${parentId}_experience_marimekko"
+blockType: ToolsExperienceMarimekkoBlock
+blockName: tools_experience_marimekko
+dataPath: "surveyApi.survey.${parentId}_marimekko"
+keysPath: "surveyApi.survey.${parentId}_marimekko.0.experience.keys"
+bucketKeysName: tools
+showLegend: true
+enableExport: true
+query: >
+    surveyApi {
+        survey(survey: ${surveyType}) {
+            ${parentId}_marimekko: tools(ids: [${toolsCategories[parentId]}]) {
+                id
+                entity {
+                    name
+                }
+                experience {
+                    keys
+                    year(year: ${currentYear}) {
+                        year
+                        completion {
+                            total
+                            count
+                            percentage_survey
+                        }
+                        facets {
+                            buckets {
+                                id
+                                count
+                                percentage_survey
+                                percentage_question
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }

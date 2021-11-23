@@ -1,0 +1,42 @@
+titleId: "opinions_others.${id}.others"
+blockType: HorizontalBarBlock
+dataPath: "surveyApi.survey.${id}.year.facets.0"
+showDescription: true
+enableExport: true
+query: >
+    surveyApi {
+        survey(survey: ${surveyType}) {
+            ${id}: opinions_others(id: ${id}) {
+                id
+                year(year: ${currentYear}) {
+                    year
+                    completion {
+                        total
+                        count
+                        percentage_survey
+                    }
+                    facets {
+                        id
+                        type
+                        completion {
+                            total
+                            percentage_question
+                            percentage_survey
+                            count
+                        }
+                        buckets {
+                            id
+                            count
+                            percentage_question
+                            percentage_survey
+                            entity {
+                                id
+                                homepage
+                                name
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }

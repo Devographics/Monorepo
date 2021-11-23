@@ -1,0 +1,54 @@
+- twitterName: joshwcomeau
+  fullName: Josh W. Comeau
+  url: https://a11y.coffee/
+  pickName: A11y Coffee
+
+- twitterName: swyx
+  fullName: Shawn Wang
+  url: https://svelte.dev/
+  pickName: Svelte
+
+- twitterName: kentcdodds
+  fullName: Kent C. Dodds
+  url: https://remix.run/
+  pickName: Remix
+
+- twitterName: sarah_edo
+  fullName: Sarah Drasner
+  url: https://insomnia.rest/
+  pickName: Insomnia
+
+- twitterName: ladyleet
+  fullName: Tracy Lee
+  url: https://redwoodjs.com/
+  pickName: RedwoodJS
+
+- twitterName: midudev
+  fullName: Miguel Ángel Durán
+  url: https://nodejs.org/api/esm.html#esm_modules_ecmascript_modules
+  pickName: ECMAScript Modules
+
+- twitterName: cassidoo
+  fullName: Cassidy Williams
+  url: https://twitter.com/bencodezen
+  pickName: Ben Hong
+
+- twitterName: lauragift_
+  fullName: Gift Egwuenu
+  url: https://www.joshwcomeau.com/
+  pickName: Josh W. Comeau
+
+- twitterName: tomdale
+  fullName: Tom Dale
+  url: https://volta.sh/
+  pickName: Volta
+
+- twitterName: markdalgleish
+  fullName: Mark Dalgleish
+  url: https://github.com/atlassian/changesets
+  pickName: Changesets
+
+- twitterName: sachagreif
+  fullName: Sacha Greif
+  url: https://bestofjs.org/
+  pickName: Best Of JS

@@ -1,0 +1,19 @@
+translationContexts: [common, results, state_of_js, state_of_js_2020]
+socialMediaImage: stateofjs2020_socialmedia.png
+hashtag: '#StateOfJS'
+year: 2020
+siteContext: stateofjs
+siteTitle: State of JS 2020
+siteUrl: https://2020.stateofjs.com
+emailOctopusUrl: https://emailoctopus.com/lists/ed0386c4-2f55-11e9-a3c9-06b79b628af2/members/embedded/1.3/add
+emailOctopusSiteKey: 6LdYsmsUAAAAAPXVTt-ovRsPIJ_IVhvYBBhGvRV6
+emailOctopusCode: hpc4b27b6e-eb38-11e9-be00-06b4694bee2a
+translationLink: https://github.com/StateOfJS/locale-en-US
+capturesUrl: https://stateofx-images.netlify.app/captures/js2020
+discordUrl: https://discord.gg/zRDb35jfrt
+issuesUrl: https://github.com/StateOfJS/StateOfJS-2020
+tshirtImages: ['stateofjs2019tshirt1.jpg', 'stateofjs2019tshirt2.jpg', 'stateofjs2020-tshirt-export.png']
+tshirtLink: https://cottonbureau.com/products/state-of-js-2020-edition
+tshirtPrice: 29
+gaUAid: UA-83022212-9
+gaNewid: G-24J0W9RDC8

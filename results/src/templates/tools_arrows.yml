@@ -1,0 +1,29 @@
+blockType: ToolsArrowsBlock
+dataPath: "surveyApi.survey.${id}"
+keysPath: "surveyApi.survey.${id}.0.experience.keys"
+showDescription: true
+enableExport: true
+query: >
+    surveyApi {
+        survey(survey: ${surveyType}) {
+            ${id}: tools {
+                id
+                entity {
+                    name
+                    description
+                    id
+                }
+                experience {
+                    keys
+                    all_years {
+                        facets {
+                            buckets {
+                                percentage_question
+                                id
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
