@@ -1,16 +1,25 @@
-# State of JS 2020 report
+# Results
 
-The repo for the [2020 State of JS survey](https://2020.stateofjs.com/) site. Powered by [Gatsby](https://www.gatsbyjs.org/).
+The repo for the survey results sites, such as the [2020 State of JS survey](https://2020.stateofjs.com/) site. Powered by [Gatsby](https://www.gatsbyjs.org/).
 
 ## Setup
 
-1. Create `.env` file at the root of this repo.
-2. Add the following line*: `API_URL=http://api.stateofjs.com/graphql`
-3. `yarn`
+Create an `.env` file at the root of the `/results` directory.
 
-## Selecting a survey
+```
+API_URL=http://api.stateofjs.com/graphql
+SURVEY=css2021
+FAST_BUILD=true
+```
 
-This monorepo contains all our survey results sites going forward. To activate a specific survey add `SURVEY=js2020` or `SURVEY=css2020` in `.env`. 
+Other possible values for the `API_URL` variable:
+
+- `http://localhost:4000/graphql` to use a locally running API. 
+- `http://api-staging.stateofjs.com/graphql` to use the staging API. 
+
+The Gatsby app powers all our survey results sites going forward. To activate a specific survey add `SURVEY=js2020` or `SURVEY=css2020` in `.env`. 
+
+The `FAST_BUILD` option turns off some features to increase build speed during development and testing, such as generating individual block pages and internationalized versions. 
 
 ## Running the app
 
