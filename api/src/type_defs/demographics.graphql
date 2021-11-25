@@ -190,5 +190,5 @@ type Demographics {
     """
     Disability Status (Other)
     """
-    disability_status_other(filters: Filters, options: Options, facet: Facet): OtherDisabilityStatus
+    disability_status_others(filters: Filters, options: Options, facet: Facet): OtherDisabilityStatus
 }
