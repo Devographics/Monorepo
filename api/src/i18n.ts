@@ -82,7 +82,7 @@ export const loadLocally = async (localesWithRepos: any) => {
         const [owner, repo] = locale.repo.split('/')
 
         // __dirname = /Users/sacha/Dev/state-of-js-graphql-results-api/dist
-        const devDir = __dirname.split('/').slice(1, -2).join('/')
+        const devDir = __dirname.split('/').slice(1, -3).join('/')
         const path = `/${devDir}/stateof-locales/${repo}`
         const files = await readdir(path)
         const yamlFiles = files.filter((f: String) => f.includes('.yml'))

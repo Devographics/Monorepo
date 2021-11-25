@@ -63,7 +63,7 @@ export const loadLocally = async () => {
 
     const entities: Entity[] = []
 
-    const devDir = __dirname.split('/').slice(1, -2).join('/')
+    const devDir = __dirname.split('/').slice(1, -3).join('/')
     const path = `/${devDir}/stateof-entities/`
     const files = await readdir(path)
     const yamlFiles = files.filter((f: String) => f.includes('.yml'))
