@@ -5,7 +5,7 @@ import BlockTitle from 'core/blocks/block/BlockTitle'
 import styled from 'styled-components'
 import { spacing, fontSize } from 'core/theme'
 import T from 'core/i18n/T'
-import { getBlockTitleKey } from 'core/helpers/blockHelpers'
+import { getBlockTabKey } from 'core/helpers/blockHelpers'
 import { usePageContext } from 'core/helpers/pageContext'
 
 export const EmptyWrapper = ({ block, pageData, blockIndex }) => (
@@ -75,7 +75,7 @@ export const TabsWrapper = ({ block, pageData, blockIndex }) => {
                                         k={
                                             variantIndex === 0
                                                 ? 'tabs.all_respondents'
-                                                : getBlockTitleKey(block, context)
+                                                : getBlockTabKey(block, context)
                                         }
                                     />
                                 </TabsTrigger>

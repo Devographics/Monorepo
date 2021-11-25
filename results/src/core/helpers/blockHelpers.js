@@ -12,6 +12,9 @@ export const getBlockKey = (block, page) => {
         return `${pageId}.${blockId}`
     }
 }
+
+export const getBlockTabKey = (block, page) => block.tabId ? `tabs.${block.tabId}` : getBlockTitleKey(block, page)
+
 export const getBlockNoteKey = (block, page) => block.noteId || `${getBlockKey(block, page)}.note`
 
 export const getBlockTitleKey = (block, page) => block.titleId || getBlockKey(block, page)

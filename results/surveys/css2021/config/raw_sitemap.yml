@@ -54,14 +54,6 @@
     - id: country
       template: demographics
       blockType: ParticipationByCountryBlock
-      variants:
-        - id: country_gender_fnb
-          blockType: ParticipationByCountryBlock
-          bucketKeysName: country
-          variables:
-            fieldId: country
-            filters: "{gender: {in: [female, non_binary, not_listed]}}"
-          template: demographics
 
     - id: locale
       template: demographics
@@ -81,23 +73,16 @@
 
     - id: yearly_salary
       template: demographics
-      variants:
-        - id: yearly_salary_gender_fnb
-          bucketKeysName: yearly_salary
-          variables:
-            fieldId: yearly_salary
-            filters: "{gender: {in: [female, non_binary, not_listed]}}"
-          template: demographics
 
     - id: higher_education_degree
       template: demographics
-      variants:
-        - id: higher_education_degree_gender_fnb
-          bucketKeysName: higher_education_degree
-          variables:
-            fieldId: higher_education_degree
-            filters: "{gender: {in: [female, non_binary, not_listed]}}"
-          template: demographics
+      # variants:
+      #   - id: higher_education_degree_gender_fnb
+      #     bucketKeysName: higher_education_degree
+      #     variables:
+      #       fieldId: higher_education_degree
+      #       filters: "{gender: {in: [female, non_binary, not_listed]}}"
+      #     template: demographics
 
     - id: source
       template: source
@@ -560,31 +545,39 @@
     - template: page_introduction
 
     - id: first_steps
+      tabId: main_answers
       template: multiple_options
+      translateData: true
       variables:
         fieldId: resources
       variants:
         - id: first_steps_others
+          tabId: other_answers
           template: multiple_options
+          translateData: true
           variables:
             fieldId: resources
 
     - id: blogs_news_magazines
+      tabId: main_answers
       template: multiple_options
       variables:
         fieldId: resources
       variants:
         - id: blogs_news_magazines_others
+          tabId: other_answers
           template: multiple_options
           variables:
             fieldId: resources
 
     - id: sites_courses
+      tabId: main_answers
       template: multiple_options
       variables:
         fieldId: resources
       variants:
         - id: sites_courses_others
+          tabId: other_answers
           template: multiple_options
           variables:
             fieldId: resources
@@ -593,11 +586,13 @@
       template: picks
 
     - id: podcasts
+      tabId: main_answers
       template: multiple_options
       variables:
         fieldId: resources
       variants:
         - id: podcasts_others
+          tabId: other_answers
           template: multiple_options
           variables:
             fieldId: resources
@@ -605,6 +600,7 @@
     - id: people_others
       template: multiple_options
       variables:
+        options: '{ cutoff: 10 }'
         fieldId: resources
 
 - id: opinions

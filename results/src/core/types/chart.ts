@@ -1,4 +1,5 @@
 import { BlockMode, BlockUnits, BlockLegend } from './block'
+import { Entity } from './data'
 
 export interface ChartComponentProps {
   viewportWidth?: number
@@ -12,4 +13,13 @@ export interface ChartComponentProps {
   chartProps?: any
   colorVariant?: string,
   // 'buckets' is declared by chart
+}
+
+export interface TickItemProps {
+  x: number
+  y: number
+  value: number
+  shouldTranslate: boolean
+  i18nNamespace: string
+  entity: Entity
 }

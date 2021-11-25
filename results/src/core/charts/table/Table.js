@@ -4,54 +4,73 @@ import React from 'react'
 import { useTheme } from 'styled-components'
 import { fontSize } from 'core/theme'
 
-const Table = ({ tables = [] }) => {
-    const theme = useTheme()
-
+const Tables = ({ tables = [] }) => {
     return (
         <TableWrapper>
             {tables.map((table) => {
                 return (
                     <>
                         {table.title && <Title>{table.title}</Title>}
-                        <DataTable>
-                            <thead>
-                                <tr>
-                                    {table.headings.map((heading) => (
-                                        <th scope="col" key={heading.id} id={heading.id}>
-                                            <T k={heading.labelId} />
-                                        </th>
-                                    ))}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {table.rows.map((row, i) => {
-                                    return (
-                                        <tr key={i}>
-                                            {row.map(
-                                                (
-                                                    { label, labelId, value },
-                                                    index
-                                                ) => {
-                                                    return index === 0 ? (
-                                                        <th key={index} scope="row">
-                                                            {label ?? <T k={labelId} />}
-                                                        </th>
-                                                    ) : (
-                                                        <td key={index}>{value}</td>
-                                                    )
-                                                }
-                                            )}
-                                        </tr>
-                                    )
-                                })}
-                            </tbody>
-                        </DataTable>
+                        <Table {...table} />
                     </>
                 )
             })}
         </TableWrapper>
     )
 }
+
+const Table = ({ headings, rows, years }) => (
+    <DataTable>
+        <thead>
+            <tr>
+                {headings.map((heading, i) => (
+                    <TableHeading
+                        key={i}
+                        {...heading}
+                        years={years}
+                        colSpan={i > 0 && years && years.length > 0 ? years.length : 1}
+                    />
+                ))}
+            </tr>
+        </thead>
+        <tbody>
+            {rows.map((row, i) => (
+                <TableRow row={row} key={i} />
+            ))}
+        </tbody>
+    </DataTable>
+)
+
+const TableHeading = ({ id, colSpan, labelId }) => (
+    <th scope="col" id={id} colSpan={colSpan}>
+        <T k={labelId} />
+    </th>
+)
+
+const TableRow = ({ row }) => (
+    <tr>
+        {row.map((cell, index) => {
+            return index === 0 ? (
+                <th key={index} scope="row">
+                    {cell.label ?? <T k={cell.labelId} />}
+                </th>
+            ) : Array.isArray(cell.value) ? (
+                cell.value.map((yearValue) => (
+                    <TableCell key={yearValue.value} {...cell} {...yearValue} />
+                ))
+            ) : (
+                <TableCell {...cell} />
+            )
+        })}
+    </tr>
+)
+
+const TableCell = ({ value, isPercentage }) => (
+    <td>
+        {value}
+        {isPercentage && '%'}
+    </td>
+)
 
 const TableWrapper = styled.div`
     max-height: 450px;
@@ -80,4 +99,4 @@ const Title = styled.h4`
     margin-bottom: 0.25rem;
 `
 
-export default Table
+export default Tables

@@ -127,7 +127,7 @@ export const getEntity = async ({ id }: { id: string | number }) => {
   }
 
   const lowerCaseId = id.toLowerCase()
-  const entity = entities.find(e => {
+  const entity = entities.filter(e => !e.normalizationOnly).find(e => {
       return (
           (e.id && e.id.toLowerCase() === lowerCaseId) ||
           (e.id && e.id.toLowerCase().replace(/\-/g, '_') === lowerCaseId) ||

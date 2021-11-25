@@ -42,20 +42,18 @@ export interface Entity {
 export interface BucketItem {
     id: number | string
     count: number
-    // percentage?: number
-    // percentage_survey?: number
 
+    // percentage relative to the number of respondents in the survey
+    percentage_survey: number
     // percentage relative to the number of question respondents
     percentage_question: number
     // percentage relative to the number of respondents in the facet
-    percentage_facet: number
-    // percentage relative to the number of respondents in the survey
-    percentage_survey: number
+    percentage_facet?: number
 
     // count when no facet is selected
-    count_all_facets: number
+    count_all_facets?: number
     // percentage relative to the number
-    percentage_all_facets: number
+    percentage_all_facets?: number
 
     entity?: Entity
 }

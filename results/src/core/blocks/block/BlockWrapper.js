@@ -4,7 +4,7 @@ import { ErrorBoundary } from 'core/blocks/block/BlockError'
 
 const BlockWrapper = (props) => {
     const { block, pageData, index: blockIndex } = props
-    const { wrapBlock = true } = block
+    const wrapBlock = block.wrapBlock ?? block?.variants[0]?.wrapBlock ?? true
     const WrapperComponent = wrapBlock ? TabsWrapper : EmptyWrapper
     const isHidden = block.variants.every((v) => v.hidden)
     return isHidden ? null : (

@@ -9,7 +9,7 @@ import { useBarChart } from 'core/charts/hooks'
 import BarTooltip from 'core/charts/generic/BarTooltip'
 import HorizontalBarStripes from './HorizontalBarStripes'
 import { isPercentage } from 'core/helpers/units'
-import { ChartComponentProps, BlockUnits, BucketItem, BlockLegend } from 'core/types'
+import { ChartComponentProps, BlockUnits, BucketItem, BlockLegend, TickItemProps } from 'core/types'
 
 const labelMaxLength = 20
 
@@ -42,16 +42,14 @@ const Text = ({ hasLink = false, label }: { hasLink: boolean; label: string }) =
     )
 }
 
-const TickItem = (tick: any) => {
+const TickItem = (tick: TickItemProps) => {
     const { translate } = useI18n()
 
     const { x, y, value, shouldTranslate, i18nNamespace, entity } = tick
 
     let label, link
 
-    if (shouldTranslate) {
-        label = translate(`options.${i18nNamespace}.${value}`)
-    } else if (entity) {
+    if (entity) {
         const { name, homepage, github } = entity
         if (name) {
             label = name
@@ -62,6 +60,8 @@ const TickItem = (tick: any) => {
         if (!label) {
             label = value
         }
+    } else if (shouldTranslate) {
+        label = translate(`options.${i18nNamespace}.${value}`)
     } else {
         label = value
     }

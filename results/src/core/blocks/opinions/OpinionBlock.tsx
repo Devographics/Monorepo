@@ -11,14 +11,34 @@ import StreamChart from 'core/charts/generic/StreamChart'
 import { useBucketKeys, useLegends } from 'core/helpers/useBucketKeys'
 // @ts-ignore
 import { useI18n } from 'core/i18n/i18nContext'
+import { TableBucketItem, getTableData } from 'core/helpers/datatables'
+import { BlockUnits, ResultsByYear } from 'core/types'
+import { isPercentage } from 'core/helpers/units'
 
 const OPINION_BUCKET_KEYS_ID = 'opinions'
 
 interface OpinionBlockProps {
     block: BlockContext<'opinionTemplate', 'OpinionBlock'>
     data: OpinionAllYearsData
-    units: 'percentage_survey' | 'percentage_question' |'count'
+    units: 'percentage_survey' | 'percentage_question' | 'count'
     keys: string[]
+}
+
+const getBucketValue = ({
+    data,
+    year,
+    key,
+    valueKey,
+}: {
+    data: ResultsByYear[]
+    year: number
+    key: number | string
+    valueKey: BlockUnits
+}) => {
+    const yearData = data.find((d) => d.year === year)
+    const yearBuckets = yearData.facets[0].buckets
+    const bucket = yearBuckets.find((b) => b.id === key)
+    return bucket[valueKey]
 }
 
 export const OpinionBlock = ({
@@ -29,7 +49,7 @@ export const OpinionBlock = ({
 }: OpinionBlockProps) => {
     const { id } = block
     const [units, setUnits] = useState(defaultUnits)
-    
+
     const [current, setCurrent] = useState<OpinionBucket['id'] | null>(null)
 
     const { translate } = useI18n()
@@ -42,7 +62,9 @@ export const OpinionBlock = ({
             data.map((yearData) => ({
                 ...yearData,
                 buckets: bucketKeys.map(({ id }) => {
-                    const matchingBucket = yearData.facets[0].buckets.find((bucket) => bucket.id === id)
+                    const matchingBucket = yearData.facets[0].buckets.find(
+                        (bucket) => bucket.id === id
+                    )
                     if (matchingBucket) {
                         return matchingBucket
                     }
@@ -57,30 +79,26 @@ export const OpinionBlock = ({
         [data, bucketKeys]
     )
 
-    let headings = [{id: 'label', label: translate('table.year'), shortLabel: translate('table.year'), color: ''}];
-    headings = headings.concat(bucketKeys);
+    const years = data.map((y) => y.year)
 
-    const generateRows = (data) => {
-      const rows = [];
-      data.forEach((row) => {
-        const newRow = [];
-        newRow.push({id: 'label', label: row.year});
-        row.facets[0].buckets.forEach((bucket) => newRow.push({id: bucket.id, label: `${bucket.percentage_survey}% (${bucket.count})`}));
-        rows.push(newRow);
-      });
+    const valueKeys: BlockUnits[] = ['percentage_survey', 'percentage_question', 'count']
 
-      return rows;
-    }
+    const tableData = keys.map((key) => {
+        const bucket: TableBucketItem = {
+            id: key,
+        }
+        valueKeys.forEach((valueKey) => {
+            bucket[valueKey] = years.map((year) => ({
+                year,
+                value: getBucketValue({ data, year, key, valueKey }),
+                isPercentage: isPercentage(valueKey),
+            }))
+        })
+        return bucket
+    })
 
-    const tables = [{
-      headings: headings,
-      rows: generateRows(normalizedData),
-    }];
-    
     return (
         <Block
-            
-            
             units={units}
             setUnits={setUnits}
             block={{
@@ -97,7 +115,13 @@ export const OpinionBlock = ({
                     setCurrent(null)
                 },
             }}
-            tables={tables}
+            tables={[
+                getTableData({
+                    data: tableData,
+                    valueKeys,
+                    years,
+                }),
+            ]}
         >
             <ChartContainer height={300} fit={true}>
                 <StreamChart

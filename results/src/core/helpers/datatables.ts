@@ -1,35 +1,54 @@
 import { BlockUnits, BlockLegend, BucketItem } from 'core/types'
 import { isPercentage } from 'core/helpers/units'
 
-interface TableBucketItem extends BucketItem {
+export interface TableBucketItem {
+    id: string
     label?: string
+    count?: number | TableBucketYearValue[]
+    percentage_survey?: number | TableBucketYearValue[]
+    // percentage relative to the number of question respondents
+    percentage_question?: number | TableBucketYearValue[]
+    // percentage relative to the number of respondents in the facet
+    percentage_facet?: number | TableBucketYearValue[]
 }
-interface TableParams {
+
+export interface TableBucketYearValue {
+    year: number
+    value: number
+    isPercentage: boolean
+}
+
+export interface TableParams {
+    title?: string
     data: TableBucketItem[]
     legends?: BlockLegend[]
     valueKeys?: BlockUnits[]
     translateData?: boolean
     i18nNamespace?: string
+    years?: number[]
 }
 
-interface TableData {
+export interface TableData {
     headings: TableDataHeading[]
     rows: TableDataRow[]
+    title?: string
+    years?: number[]
 }
 
-interface TableDataHeading {
+export interface TableDataHeading {
     id: string
     labelId: string
 }
 
-type TableDataRow = TableDataCell[]
+export type TableDataRow = TableDataCell[]
 
-interface TableDataCell {
+export interface TableDataCell {
     id: string | number
     label?: string | number
     labelId?: string | number
-    value?: string | number
+    value?: number | number[]
     translateData?: boolean
+    isPercentage?: boolean
 }
 
 const getLabel = (id: string | number, legends?: BlockLegend[]) => {
@@ -39,13 +58,13 @@ const getLabel = (id: string | number, legends?: BlockLegend[]) => {
 
 const getValue = (row: TableBucketItem, units: BlockUnits) => {
     const value = row[units]
-    return isPercentage(units) ? `${value}%` : value
+    return value
 }
 
 const defaultValueKeys: BlockUnits[] = ['percentage_survey', 'percentage_question', 'count']
 
 export const getTableData = (params: TableParams): TableData => {
-    const { data, legends, valueKeys = defaultValueKeys, translateData, i18nNamespace } = params
+    const { title, data, legends, valueKeys = defaultValueKeys, translateData, i18nNamespace, years } = params
     const headings = [{ id: 'label', labelId: 'table.label' }]
 
     valueKeys.forEach((k) => {
@@ -72,5 +91,5 @@ export const getTableData = (params: TableParams): TableData => {
         return [firstColumn, ...columns]
     })
 
-    return { headings, rows }
+    return { title, headings, rows, years }
 }

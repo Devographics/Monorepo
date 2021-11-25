@@ -14,7 +14,8 @@ export interface BlockDefinition {
   id: string
   template: string
   blockType: string
-
+  tabId: string
+  
   // config
   mode: BlockMode
   i18nNamespace: string
