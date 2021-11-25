@@ -3,31 +3,21 @@ import config from 'Config/config.yml'
 
 const { siteTitle, capturesUrl, hashtag, year } = config
 
-export const getBlockTitleKey = (block, page) => {
-    const { blockName, titleId } = block
-    if (titleId) {
-        return titleId
-    } else if (blockName) {
-        return `blocks.${blockName}.title`
+export const getBlockKey = (block, page) => {
+    if (block.blockName) {
+        return `blocks.${block.blockName}`
     } else {
         const pageId = page.i18nNamespace || block.pageId || page.id
         const blockId = block?.id?.replace('_others', '.others')
         return `${pageId}.${blockId}`
     }
 }
+export const getBlockNoteKey = (block, page) => block.noteId || `${getBlockKey(block, page)}.note`
 
-export const getBlockDescriptionKey = (block, page) => {
-    const { blockName, descriptionId } = block
-    if (descriptionId) {
-        return descriptionId
-    } else if (blockName) {
-        return `blocks.${blockName}.description`
-    } else {
-        const pageId = page.i18nNamespace || block.pageId || page.id
-        const blockId = block?.id?.replace('_others', '.others')
-        return `${pageId}.${blockId}.description`
-    }
-}
+export const getBlockTitleKey = (block, page) => block.titleId || getBlockKey(block, page)
+
+export const getBlockDescriptionKey = (block, page) =>
+    block.descriptionId || `${getBlockKey(block, page)}.description`
 
 export const getBlockTitle = (block, page, translate) => {
     return block.title || translate(getBlockTitleKey(block, page))

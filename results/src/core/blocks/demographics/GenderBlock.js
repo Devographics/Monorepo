@@ -2,7 +2,7 @@ import React, { memo, useState, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { useTheme } from 'styled-components'
 import { keys } from 'core/bucket_keys'
-import Block from 'core/blocks/block/Block'
+import Block from 'core/blocks/block/BlockVariant'
 import GaugeBarChart from 'core/charts/generic/GaugeBarChart'
 import ChartContainer from 'core/charts/ChartContainer'
 import { useI18n } from 'core/i18n/i18nContext'
@@ -11,7 +11,7 @@ import T from 'core/i18n/T'
 const GenderBlock = ({ block, data }) => {
     const { units: defaultUnits = 'percentage_survey' } = block
     const [units, setUnits] = useState(defaultUnits)
-    const [view, setView] = useState('viz')
+    
     const theme = useTheme()
 
     const colorMapping = useMemo(
@@ -27,8 +27,8 @@ const GenderBlock = ({ block, data }) => {
 
     return (
         <Block 
-          view={view}
-          setView={setView}
+          
+          
           units={units}
           setUnits={setUnits}
           data={data.buckets}

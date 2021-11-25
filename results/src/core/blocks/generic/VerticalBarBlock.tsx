@@ -1,25 +1,28 @@
 import React, { memo, useState } from 'react'
 import PropTypes from 'prop-types'
 import { keys } from 'core/bucket_keys'
-import Block from 'core/blocks/block/Block'
+import BlockVariant from 'core/blocks/block/BlockVariant'
 import ChartContainer from 'core/charts/ChartContainer'
 import VerticalBarChart from 'core/charts/generic/VerticalBarChart'
 import { usePageContext } from 'core/helpers/pageContext'
 import { useLegends } from 'core/helpers/useBucketKeys'
 import T from 'core/i18n/T'
+import { FacetItem, BlockComponentProps } from 'core/types'
+import { getTableData } from 'core/helpers/datatables'
 
-const VerticalBarBlock = ({ block, data, keys }) => {
+export interface VerticalBarBlockProps extends BlockComponentProps {
+    data: FacetItem
+}
+
+const VerticalBarBlock = ({ block, data, keys }: VerticalBarBlockProps) => {
     if (!data) {
-        throw new Error(
-            `VerticalBarBlock: Missing data for block ${block.id}, page data is undefined`
-        )
+        throw new Error(`VerticalBarBlock: Missing data for block ${block.id}.`)
     }
     const {
         id,
         mode = 'relative',
-        units: defaultUnits = 'percentage_survey',
+        defaultUnits = 'percentage_survey',
         translateData,
-        bucketKeysName = id,
         i18nNamespace,
         colorVariant,
     } = block
@@ -28,44 +31,19 @@ const VerticalBarBlock = ({ block, data, keys }) => {
     const { width } = context
 
     const [units, setUnits] = useState(defaultUnits)
-    const [view, setView] = useState('viz')
-
     const bucketKeys = useLegends(block, keys)
 
     const { buckets, completion } = data
-
     const { total } = completion
-    
-    // const sortedBuckets = bucketKeys.map(({ id: bucketKey }) => {
-    //     const bucket = buckets.find((b) => b.id === bucketKey)
-    //     if (bucket === undefined) {
-    //         return {
-    //             id: bucketKey,
-    //             count: 0,
-    //             percentage: 0,
-    //         }
-    //         // throw new Error(`no bucket found for key: '${bucketKey}' in block: ${block.id}`)
-    //     }
-    //     return bucket
-    // })
 
     return (
-        <Block
-            view={view}
-            setView={setView}
-            tables={[{
-              headings: [{id: 'label', label: <T k='table.label' />}, {id: 'percentage', label: <T k='table.percentage' />}, {id: 'count', label: <T k='table.count' />}],
-              rows: data.buckets.map((bucket) => ([{
-                id: 'label',
-                label: bucketKeys.find(key => key.id === bucket.id)?.shortLabel,
-              }, {
-                id: 'percentage',
-                label: `${bucket.percentage}%`,
-              }, {
-                id: 'count',
-                label: bucket.count,
-              }]))
-            }]}
+        <BlockVariant
+            tables={[getTableData({
+                legends: bucketKeys,
+                data: data.buckets,
+                valueKeys: ['percentage_survey', 'percentage_question', 'count'],
+                translateData
+            })]}
             units={units}
             setUnits={setUnits}
             completion={completion}
@@ -86,7 +64,7 @@ const VerticalBarBlock = ({ block, data, keys }) => {
                     colorVariant={colorVariant}
                 />
             </ChartContainer>
-        </Block>
+        </BlockVariant>
     )
 }
 

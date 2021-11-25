@@ -21,7 +21,6 @@
 # - showDescription: whether to show the block's description
 # - template: a template from which to inherit its properties
 # - translateData: whether to try and translate
-# - queryVariables: GraphQL query variables (handled by GraphQL)
 # - variables: block variables (compiled during sitemap generation)
 
 - id: introduction
@@ -122,7 +121,7 @@
       blockType: HorizontalBarBlock
       translateData: true
       variants:
-        - id: disability_status_other
+        - id: disability_status_others
           template: demographics
           blockType: HorizontalBarBlock
           units: count

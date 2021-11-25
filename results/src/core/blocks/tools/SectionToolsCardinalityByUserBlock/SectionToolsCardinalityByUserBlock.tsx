@@ -1,7 +1,7 @@
 import React, {useMemo, useState} from 'react'
 import { Pie } from '@nivo/pie'
 // @ts-ignore
-import Block from 'core/blocks/block/Block'
+import Block from 'core/blocks/block/BlockVariant'
 import { BlockContext } from 'core/blocks/types'
 import { ToolsCardinalityByUserBucket } from 'core/survey_api/tools'
 
@@ -20,15 +20,15 @@ export const SectionToolsCardinalityByUserBlock = ({
     units: defaultUnits = 'percentage',
 }: SectionToolsCardinalityByUserBlockProps) => {
     const [units, setUnits] = useState(defaultUnits)
-    const [view, setView] = useState('viz')
+    
 
     // exclude datums with a percentage lower than 1
     const filteredData = useMemo(() => data.filter(datum => datum.percentage >= 1).reverse(), [data])
 
     return (
         <Block
-            view={view}
-            setView={setView} 
+            
+             
             units={units}
             setUnits={setUnits}
             block={{

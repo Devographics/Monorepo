@@ -1,6 +1,6 @@
 import React, { memo, useState } from 'react'
 import PropTypes from 'prop-types'
-import Block from 'core/blocks/block/Block'
+import Block from 'core/blocks/block/BlockVariant'
 import ChartContainer from 'core/charts/ChartContainer'
 import VerticalBarChart from 'core/charts/generic/VerticalBarChart'
 import { useI18n } from 'core/i18n/i18nContext'
@@ -44,7 +44,7 @@ const YearOpinionBlock = ({ block, data }) => {
 
     const { units: defaultUnits = 'percentage', translateData } = block
     const [units, setUnits] = useState(defaultUnits)
-    const [view, setView] = useState('viz')
+    
 
     const getScaleTickLabel = formatTick(translate)
 
@@ -53,8 +53,8 @@ const YearOpinionBlock = ({ block, data }) => {
     return (
         <Block
             id={block.id}
-            view={view}
-            setView={setView}
+            
+            
             showDescription={true}
             units={units}
             setUnits={setUnits}

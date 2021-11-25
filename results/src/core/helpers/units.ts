@@ -1,7 +1,5 @@
-export type Units = 'percentage_question' | 'percentage_facet' | 'percentage_survey' | 'count'
-
-export type Mode = 'relative' | 'absolute'
+import { BlockUnits } from 'core/types'
 
 export const percentageUnits = ['percentage_question', 'percentage_facet', 'percentage_survey']
 
-export const isPercentage = (units: Units) => percentageUnits.includes(units)
+export const isPercentage = (units: BlockUnits) => percentageUnits.includes(units)

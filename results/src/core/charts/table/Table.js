@@ -18,26 +18,29 @@ const Table = ({ tables = [] }) => {
                                 <tr>
                                     {table.headings.map((heading) => (
                                         <th scope="col" key={heading.id} id={heading.id}>
-                                            {heading.label}
+                                            <T k={heading.labelId} />
                                         </th>
                                     ))}
                                 </tr>
                             </thead>
                             <tbody>
-                                {table.rows.map((row) => {
+                                {table.rows.map((row, i) => {
                                     return (
-                                        <tr key={row.id}>
-                                            {table.headings.map((cell, index) => {
-                                                return index > 0 ? (
-                                                    <td key={cell.id}>
-                                                        {row.find((r) => r.id === cell.id)?.label}
-                                                    </td>
-                                                ) : (
-                                                    <th key={cell.id} scope="row">
-                                                        {row.find((r) => r.id === cell.id).label}
-                                                    </th>
-                                                )
-                                            })}
+                                        <tr key={i}>
+                                            {row.map(
+                                                (
+                                                    { label, labelId, value },
+                                                    index
+                                                ) => {
+                                                    return index === 0 ? (
+                                                        <th key={index} scope="row">
+                                                            {label ?? <T k={labelId} />}
+                                                        </th>
+                                                    ) : (
+                                                        <td key={index}>{value}</td>
+                                                    )
+                                                }
+                                            )}
                                         </tr>
                                     )
                                 })}

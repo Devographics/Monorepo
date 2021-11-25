@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react'
 import get from 'lodash/get'
 import compact from 'lodash/compact'
-import Block from 'core/blocks/block/Block'
+import Block from 'core/blocks/block/BlockVariant'
 import FeaturesOverviewCirclePackingChart from 'core/charts/features/FeaturesOverviewCirclePackingChart'
 import { useI18n } from 'core/i18n/i18nContext'
 import { useEntities } from 'core/entities/entitiesContext'
@@ -62,7 +62,7 @@ const getChartData = (data, getName, translate) => {
 const FeaturesOverviewBlock = ({ block, data, triggerId }) => {
     const { getName } = useEntities()
     const { translate } = useI18n()
-    const [view, setView] = useState('viz')
+    
 
     const chartData = useMemo(() => getChartData(data, getName, translate), [
         data,
@@ -124,8 +124,8 @@ const FeaturesOverviewBlock = ({ block, data, triggerId }) => {
             data={chartData}
             className="FeaturesOverviewBlock"
             showDescription={true}
-            view={view}
-            setView={setView}
+            
+            
             tables={tables}
         >
             <ChartContainer vscroll={false} height={height}>

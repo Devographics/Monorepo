@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react'
 import PropTypes from 'prop-types'
-import Block from 'core/blocks/block/Block'
+import Block from 'core/blocks/block/BlockVariant'
 import StreamChart from 'core/charts/generic/StreamChart'
 import { useBucketKeys } from 'core/helpers/useBucketKeys'
 import styled from 'styled-components'
@@ -18,7 +18,7 @@ const ToolsSectionStreamsBlock = ({
     units: defaultUnits = 'percentage_question',
 }) => {
     const [units, setUnits] = useState(defaultUnits)
-    const [view, setView] = useState('viz')
+    
     const [current, setCurrent] = useState(null)
     const { translate } = useI18n()
 
@@ -57,8 +57,8 @@ const ToolsSectionStreamsBlock = ({
     return (
         <Block
             tables={tables}
-            view={view}
-            setView={setView}
+            
+            
             units={units}
             setUnits={setUnits}
             block={{

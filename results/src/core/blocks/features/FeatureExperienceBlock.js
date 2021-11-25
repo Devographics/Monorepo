@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import get from 'lodash/get'
 import styled from 'styled-components'
-import Block from 'core/blocks/block/Block'
+import Block from 'core/blocks/block/BlockVariant'
 import ChartContainer from 'core/charts/ChartContainer'
 import GaugeBarChart from 'core/charts/generic/GaugeBarChart'
 import { usePageContext } from 'core/helpers/pageContext'
@@ -16,7 +16,7 @@ const parseMDNLinks = (content) =>
 
 const FeatureExperienceBlock = ({ block, keys, data, units: defaultUnits = 'percentage_question' }) => {
     const [units, setUnits] = useState(defaultUnits)
-    const [view, setView] = useState('viz')
+    
 
     const context = usePageContext()
     const { locale } = context
@@ -57,8 +57,8 @@ const FeatureExperienceBlock = ({ block, keys, data, units: defaultUnits = 'perc
         <Block
             tables={tables}
             headings={headings}
-            view={view}
-            setView={setView}
+            
+            
             title={name}
             units={units}
             setUnits={setUnits}

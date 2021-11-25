@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react'
 // @ts-ignore
-import Block from 'core/blocks/block/Block'
+import Block from 'core/blocks/block/BlockVariant'
 import { BlockContext } from 'core/blocks/types'
 // @ts-ignore
 import variables from 'Config/variables.yml'
@@ -148,7 +148,7 @@ export const ToolsCityscapeBlock = ({
     const theme = useTheme()
 
     const [units, setUnits] = useState(defaultUnits)
-    const [view, setView] = useState('viz')
+    
 
     const chartData = getChartData(data, theme)
 
@@ -163,8 +163,8 @@ export const ToolsCityscapeBlock = ({
 
     return (
         <Block
-            view={view}
-            setView={setView}
+            
+            
             units={units}
             setUnits={setUnits}
             block={{

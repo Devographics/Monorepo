@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react'
 import { range, maxBy } from 'lodash'
 // @ts-ignore
-import Block from 'core/blocks/block/Block'
+import Block from 'core/blocks/block/BlockVariant'
 import { BlockContext } from 'core/blocks/types'
 import { ToolsCardinalityByUserBucket } from 'core/survey_api/tools'
 // @ts-ignore

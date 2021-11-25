@@ -7,17 +7,18 @@ import { useBarChart } from 'core/charts/hooks'
 import BarTooltip from './BarTooltip'
 import ChartLabel from 'core/components/ChartLabel'
 import { isPercentage } from 'core/helpers/units'
+import { ChartComponentProps, BlockUnits, BucketItem, BlockLegend } from 'core/types'
 
 const breakpoint = 600
 
-const getMargins = (viewportWidth) => ({
+const getMargins = (viewportWidth: number) => ({
     top: 10,
     right: 70,
     bottom: viewportWidth < breakpoint ? 110 : 60,
     left: 40,
 })
 
-const getLabelsLayer = (units) => (props) => {
+const getLabelsLayer = (units: BlockUnits) => (props: any) => {
     // adjust settings according to dimensions
     let fontSize = 13
     let rotation = 0
@@ -26,7 +27,7 @@ const getLabelsLayer = (units) => (props) => {
         rotation = -90
     }
 
-    return props.bars.map((bar) => {
+    return props.bars.map((bar: any) => {
         const label = isPercentage(units) ? `${bar.data.value}%` : bar.data.value
 
         return (
@@ -45,15 +46,19 @@ const getLabelsLayer = (units) => (props) => {
     })
 }
 
-const getAxisLabels = (v, bucketKeys) => {
-    const key = bucketKeys.find((key) => key.id === v)
+const getAxisLabels = (v: any, legends: BlockLegend[]) => {
+    const key = legends.find((key) => key.id === v)
     return key && (key.shortLabel || key.label)
+}
+
+export interface VerticalBarChartProps extends ChartComponentProps {
+    total: number
+    buckets: BucketItem[]
 }
 
 const VerticalBarChart = ({
     viewportWidth,
     className,
-    buckets,
     bucketKeys,
     total,
     i18nNamespace,
@@ -62,7 +67,8 @@ const VerticalBarChart = ({
     units,
     chartProps,
     colorVariant = 'primary',
-}) => {
+    buckets,
+}: VerticalBarChartProps) => {
     const theme = useTheme()
     const { translate } = useI18n()
 

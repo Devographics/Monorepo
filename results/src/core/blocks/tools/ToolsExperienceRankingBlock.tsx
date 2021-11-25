@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react'
 import { BlockContext } from 'core/blocks/types'
 // @ts-ignore
-import Block from 'core/blocks/block/Block'
+import Block from 'core/blocks/block/BlockVariant'
 // @ts-ignore
 import ChartContainer from 'core/charts/ChartContainer'
 import { RankingChart, RankingChartSerie } from 'core/charts/generic/RankingChart'
@@ -131,8 +131,8 @@ export const ToolsExperienceRankingBlock = ({
     
     return (
         <Block
-            view={view}
-            setView={setView}
+            
+            
             block={block}
             titleProps={{ switcher: <Switcher setMetric={setMetric} metric={controlledMetric} /> }}
             data={data}

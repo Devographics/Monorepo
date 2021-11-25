@@ -3,7 +3,7 @@ import keyBy from 'lodash/keyBy'
 import { BlockContext } from 'core/blocks/types'
 import { ToolAllYearsExperience, ToolExperienceBucket } from 'core/survey_api/tools'
 // @ts-ignore
-import Block from 'core/blocks/block/Block'
+import Block from 'core/blocks/block/BlockVariant'
 // @ts-ignore
 import ChartContainer from 'core/charts/ChartContainer'
 // @ts-ignore
@@ -36,7 +36,7 @@ export const ToolExperienceBlock = ({
     const { translate } = useI18n()
 
     const [units, setUnits] = useState(defaultUnits)
-    const [view, setView] = useState('viz')
+    
 
     const title = data.entity.name
     const titleLink = data.entity.homepage
@@ -111,8 +111,8 @@ export const ToolExperienceBlock = ({
             block={{ ...block, title, titleLink, description, showDescription: !!description }}
             data={allYears}
             titleProps={{ closeComponent }}
-            view={view}
-            setView={setView}
+            
+            
             tables={tables}
         >
             <ChartContainer height={chartHeight} fit>

@@ -3,7 +3,8 @@ import ceil from 'lodash/ceil'
 // @ts-ignore
 import { useI18n } from 'core/i18n/i18nContext'
 import { Units, Mode, isPercentage } from 'core/helpers/units'
-import { EntityBucket } from 'core/types'
+import { BucketItem } from 'core/types/data'
+import { BlockMode, BlockUnits } from 'core/types'
 
 const getMode = (units: Units, mode: Mode) => {
     if (mode) {
@@ -17,7 +18,7 @@ const getMode = (units: Units, mode: Mode) => {
     }
 }
 
-const getMaxValue = (units: Units, mode: Mode, buckets: EntityBucket[], total: number) => {
+const getMaxValue = (units: Units, mode: Mode, buckets: BucketItem[], total: number) => {
     if (isPercentage(units)) {
         if (getMode(units, mode) === 'absolute') {
             return 100
@@ -44,10 +45,10 @@ export const useBarChart = ({
     i18nNamespace,
     shouldTranslate,
 }: {
-    buckets: EntityBucket[]
+    buckets: BucketItem[]
     total: number
-    mode: 'relative' | 'absolute'
-    units: 'count' | 'percentage_question' | 'percentage_facet' | 'percentage_survey'
+    mode: BlockMode
+    units: BlockUnits
     i18nNamespace: string
     shouldTranslate?: boolean
 }) => {

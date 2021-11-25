@@ -1,10 +1,10 @@
 import React, { memo, useState } from 'react'
 import PropTypes from 'prop-types'
-import Block from 'core/blocks/block/Block'
+import Block from 'core/blocks/block/BlockVariant'
 import ChartContainer from 'core/charts/ChartContainer'
 import ParticipationByCountryChart from 'core/charts/demographics/ParticipationByCountryChart'
-import countries from 'data/geo/world_countries'
-import T from 'core/i18n/T'
+import { getTableData } from 'core/helpers/datatables'
+import { getCountryName } from 'core/helpers/countries'
 
 const ParticipationByCountryBlock = ({
     block,
@@ -13,28 +13,21 @@ const ParticipationByCountryBlock = ({
     units: defaultUnits = 'percentage_survey',
 }) => {
     const [units, setUnits] = useState(defaultUnits)
-    const [view, setView] = useState('viz')
 
     const chartClassName = triggerId ? `ParticipationByCountryChart--${triggerId}` : ''
 
-    const { height = 500 } = block
-
-    const tables = [{
-      headings: [{id: 'label', label: <T k='table.label' />}, {id: 'percentage', label: <T k='table.percentage' />}, {id: 'count', label: <T k='table.count' />}],
-      rows: data.buckets.map((bucket) => ([{
-        id: 'label',
-        label: countries.features.find((country) => country.id === bucket.id)?.properties.name,
-      }, {
-        id: 'percentage',
-        label: `${bucket.percentage_survey}%`,
-      }, {
-        id: 'count',
-        label: bucket.count,
-      }]))
-    }];
-
     return (
-        <Block tables={tables} view={view} setView={setView} units={units} setUnits={setUnits} data={data} block={block}>
+        <Block
+            tables={[
+                getTableData({
+                    data: data.buckets.map((b) => ({ ...b, label: getCountryName(b.id) })),
+                }),
+            ]}
+            units={units}
+            setUnits={setUnits}
+            data={data}
+            block={block}
+        >
             <ChartContainer height={600}>
                 <div
                     style={{ height: '100%' }}

@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { BlockContext } from 'core/blocks/types'
 // @ts-ignore
-import Block from 'core/blocks/block/Block'
+import Block from 'core/blocks/block/BlockVariant'
 import { UsageVariationsChart } from 'core/charts/generic/UsageVariationsChart'
 import { keys } from 'core/bucket_keys'
 import { ToolsExperienceMatrices } from 'core/survey_api/matrices'

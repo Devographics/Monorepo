@@ -9,6 +9,7 @@ import { useBarChart } from 'core/charts/hooks'
 import BarTooltip from 'core/charts/generic/BarTooltip'
 import HorizontalBarStripes from './HorizontalBarStripes'
 import { isPercentage } from 'core/helpers/units'
+import { ChartComponentProps, BlockUnits, BucketItem, BlockLegend } from 'core/types'
 
 const labelMaxLength = 20
 
@@ -19,7 +20,7 @@ const margin = {
     left: 200,
 }
 
-const Text = ({ hasLink = false, label }) => {
+const Text = ({ hasLink = false, label }: { hasLink: boolean; label: string }) => {
     const theme = useTheme()
     const shortenLabel = label.length > labelMaxLength
     const shortLabel = shortenLabel ? label.substr(0, labelMaxLength) + '…' : label
@@ -41,7 +42,7 @@ const Text = ({ hasLink = false, label }) => {
     )
 }
 
-const TickItem = (tick) => {
+const TickItem = (tick: any) => {
     const { translate } = useI18n()
 
     const { x, y, value, shouldTranslate, i18nNamespace, entity } = tick
@@ -78,6 +79,11 @@ const TickItem = (tick) => {
     )
 }
 
+export interface HorizontalBarChartProps extends ChartComponentProps {
+    total: number
+    buckets: BucketItem[]
+}
+
 const HorizontalBarChart = ({
     buckets,
     total,
@@ -87,7 +93,7 @@ const HorizontalBarChart = ({
     units,
     chartProps,
     colorVariant = 'primary',
-}) => {
+}: HorizontalBarChartProps) => {
     const theme = useTheme()
     const { translate } = useI18n()
 

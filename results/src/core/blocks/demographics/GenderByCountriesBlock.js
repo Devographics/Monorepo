@@ -1,6 +1,6 @@
 import React, { memo, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
-import Block from 'core/blocks/block/Block'
+import Block from 'core/blocks/block/BlockVariant'
 import ChartContainer from 'core/charts/ChartContainer'
 import HorizontalStackedBarChart from 'core/charts/generic/HorizontalStackedBarChart'
 import { useI18n } from 'core/i18n/i18nContext'
@@ -11,14 +11,10 @@ import take from 'lodash/take'
 import { useLegends } from 'core/helpers/useBucketKeys'
 import sortBy from 'lodash/sortBy'
 import reverse from 'lodash/reverse'
-import countries from 'data/geo/world_countries'
 import styled from 'styled-components'
 import { fontSize, spacing } from 'core/theme'
+import { getCountryName } from 'core/helpers/countries'
 
-const getCountryName = (code) => {
-    const country = countries?.features?.find((c) => c.id === code)
-    return country?.properties?.name
-}
 
 const GenderByCountries = ({ block, data, keys }) => {
     const {
@@ -31,7 +27,6 @@ const GenderByCountries = ({ block, data, keys }) => {
     } = block
 
     const [units, setUnits] = useState(defaultUnits)
-    const [view, setView] = useState('viz')
 
     const { translate } = useI18n()
 
@@ -62,8 +57,6 @@ const GenderByCountries = ({ block, data, keys }) => {
 
     return (
         <Block
-            view={view}
-            setView={setView}
             units={units}
             setUnits={setUnits}
             data={data}
@@ -105,7 +98,9 @@ const Facet = ({ facet, colorMapping, i }) => (
     <Row>
         <TableHeading>
             {facet.id === 'default' ? (
-                <Average>Average</Average>
+                <Average>
+                    <T k="charts.all_respondents" />
+                </Average>
             ) : (
                 <div>
                     <CountryName>{getCountryName(facet.id)} </CountryName>
@@ -113,7 +108,7 @@ const Facet = ({ facet, colorMapping, i }) => (
                 </div>
             )}
         </TableHeading>
-        <ChartContainer height={50} fit={true}>
+        <ChartContainer height={40} fit={true}>
             <GaugeBarChart
                 units="percentage_facet"
                 buckets={facet.buckets}

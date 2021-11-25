@@ -32,7 +32,7 @@ export const useBucketKeys = (bucketKeysId) => {
     }, [keysConfig, theme, translate])
 }
 
-export const useLegends = (block: Block, keys: string[], fieldId: string) => {
+export const useLegends = (block: Block, keys: string[], fieldId?: string) => {
     if (!keys || keys.length === 0) {
         return []
     }

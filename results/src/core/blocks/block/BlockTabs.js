@@ -4,6 +4,9 @@ import * as Tabs from '@radix-ui/react-tabs'
 import BlockTitle from 'core/blocks/block/BlockTitle'
 import styled from 'styled-components'
 import { spacing, fontSize } from 'core/theme'
+import T from 'core/i18n/T'
+import { getBlockTitleKey } from 'core/helpers/blockHelpers'
+import { usePageContext } from 'core/helpers/pageContext'
 
 export const EmptyWrapper = ({ block, pageData, blockIndex }) => (
     <Wrapper className="empty-wrapper">
@@ -51,39 +54,48 @@ const TabsTrigger = styled(Tabs.Trigger)`
         border-bottom: 0;
     }
     &[data-state='inactive'] {
-      opacity: 0.6;
-      background: ${(props) => props.theme.colors.backgroundBackground};
-
+        opacity: 0.6;
+        background: ${(props) => props.theme.colors.backgroundBackground};
     }
 `
 
-export const TabsWrapper = ({ block, pageData, blockIndex }) => (
-    <Wrapper className="tabs-wrapper">
-        <Tabs.Root defaultValue="tab0" orientation="horizontal">
-            <BlockHeader>
-                <BlockTitle block={block.variants[0]} {...block.variants[0].titleProps} />
-                {block.variants.length > 1 && (
-                    <TabsList aria-label="tabs example">
-                        {block.variants.map((block, variantIndex) => (
-                            <TabsTrigger key={block.id} value={`tab${variantIndex}`}>
-                                {block.id}
-                            </TabsTrigger>
-                        ))}
-                    </TabsList>
-                )}
-            </BlockHeader>
-            {block.variants.map((block, variantIndex) => (
-                <Tabs.Content key={block.id} value={`tab${variantIndex}`}>
-                    <BlockSwitcher
-                        block={block}
-                        pageData={pageData}
-                        blockIndex={blockIndex}
-                        variantIndex={variantIndex}
-                    />
-                </Tabs.Content>
-            ))}
-        </Tabs.Root>
-    </Wrapper>
-)
+export const TabsWrapper = ({ block, pageData, blockIndex }) => {
+    const context = usePageContext()
+
+    return (
+        <Wrapper className="tabs-wrapper">
+            <Tabs.Root defaultValue="tab0" orientation="horizontal">
+                <BlockHeader>
+                    <BlockTitle block={block.variants[0]} {...block.variants[0].titleProps} />
+                    {block.variants.length > 1 && (
+                        <TabsList aria-label="tabs example">
+                            {block.variants.map((block, variantIndex) => (
+                                <TabsTrigger key={block.id} value={`tab${variantIndex}`}>
+                                    <T
+                                        k={
+                                            variantIndex === 0
+                                                ? 'tabs.all_respondents'
+                                                : getBlockTitleKey(block, context)
+                                        }
+                                    />
+                                </TabsTrigger>
+                            ))}
+                        </TabsList>
+                    )}
+                </BlockHeader>
+                {block.variants.map((block, variantIndex) => (
+                    <Tabs.Content key={block.id} value={`tab${variantIndex}`}>
+                        <BlockSwitcher
+                            block={block}
+                            pageData={pageData}
+                            blockIndex={blockIndex}
+                            variantIndex={variantIndex}
+                        />
+                    </Tabs.Content>
+                ))}
+            </Tabs.Root>
+        </Wrapper>
+    )
+}
 
 export default TabsWrapper

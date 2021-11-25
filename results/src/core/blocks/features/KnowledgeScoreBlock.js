@@ -1,7 +1,7 @@
 import React, { memo, useState } from 'react'
 import PropTypes from 'prop-types'
 import { keys } from 'core/bucket_keys'
-import Block from 'core/blocks/block/Block'
+import Block from 'core/blocks/block/BlockVariant'
 import ChartContainer from 'core/charts/ChartContainer'
 import VerticalBarChart from 'core/charts/generic/VerticalBarChart'
 import { usePageContext } from 'core/helpers/pageContext'
@@ -28,7 +28,7 @@ const KnowledgeScoreBlock = ({ block, data }) => {
     const { width } = context
 
     const [units, setUnits] = useState(defaultUnits)
-    const [view, setView] = useState('viz')
+    
 
     const { buckets, total, completion } = data
 
@@ -78,8 +78,8 @@ const KnowledgeScoreBlock = ({ block, data }) => {
     return (
         <Block
             tables={tables}
-            view={view}
-            setView={setView}
+            
+            
             units={units}
             setUnits={setUnits}
             completion={completion}

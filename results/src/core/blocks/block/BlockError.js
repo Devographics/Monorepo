@@ -1,5 +1,5 @@
 import React from 'react'
-import Block from 'core/blocks/block/Block'
+import Block from 'core/blocks/block/BlockVariant'
 import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
 

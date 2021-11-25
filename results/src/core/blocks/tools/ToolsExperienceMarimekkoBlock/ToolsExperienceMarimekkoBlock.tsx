@@ -4,7 +4,7 @@ import { keyBy, sortBy } from 'lodash'
 // @ts-ignore
 import { useI18n } from 'core/i18n/i18nContext'
 // @ts-ignore
-import Block from 'core/blocks/block/Block'
+import Block from 'core/blocks/block/BlockVariant'
 // @ts-ignore
 import ChartContainer from 'core/charts/ChartContainer'
 import { BlockContext } from 'core/blocks/types'
@@ -77,7 +77,7 @@ export const ToolsExperienceMarimekkoBlock = ({
 
     const controlledCurrent = triggerId
 
-    const [view, setView] = useState('viz')
+    
     const { translate } = useI18n()
 
     const headings = [{id: 'label', label: translate('tools.technology')}];
@@ -112,8 +112,8 @@ export const ToolsExperienceMarimekkoBlock = ({
                 showLegend: false,
             }}
             data={data}
-            view={view}
-            setView={setView}
+            
+            
             tables={tables}
         >
             <ChartContainer fit height={height}>

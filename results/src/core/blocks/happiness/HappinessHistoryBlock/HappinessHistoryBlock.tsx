@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 // @ts-ignore
-import Block from 'core/blocks/block/Block'
+import Block from 'core/blocks/block/BlockVariant'
 import { BlockContext } from 'core/blocks/types'
 import { HappinessYearMean } from 'core/survey_api/happiness'
 import { HappinessHistoryChart } from './HappinessHistoryChart'
@@ -13,7 +13,7 @@ interface HappinessHistoryBlockProps {
 }
 
 export const HappinessHistoryBlock = ({ block, data }: HappinessHistoryBlockProps) => {
-  const [view, setView] = useState('viz');
+  ;
   const { translate } = useI18n()
 
   const headings = [{id: 'year', label: translate('table.year')}, {id: 'mean', label: translate('table.mean')}];
@@ -24,7 +24,7 @@ export const HappinessHistoryBlock = ({ block, data }: HappinessHistoryBlockProp
 
   const tables = [{headings: headings, rows: rows}];
 
-  return  <Block data={data} block={block} view={view} setView={setView} tables={tables}>
+  return  <Block data={data} block={block}   tables={tables}>
         <HappinessHistoryChart data={data} />
     </Block>
 }
