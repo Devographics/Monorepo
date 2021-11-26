@@ -14,9 +14,14 @@ import { useI18n } from 'core/i18n/i18nContext'
 const parseMDNLinks = (content) =>
     content.replace(new RegExp(`href="/`, 'g'), `href="https://developer.mozilla.org/`)
 
-const FeatureExperienceBlock = ({ block, keys, data, units: defaultUnits = 'percentage_question' }) => {
+const FeatureExperienceBlock = ({
+    block,
+    keys,
+    data,
+    i18nNamespace = 'features',
+    units: defaultUnits = 'percentage_question',
+}) => {
     const [units, setUnits] = useState(defaultUnits)
-    
 
     const context = usePageContext()
     const { locale } = context
@@ -33,37 +38,46 @@ const FeatureExperienceBlock = ({ block, keys, data, units: defaultUnits = 'perc
 
     const isLastYear = (year) =>
         allYears.findIndex((y) => y.year === year.year) === allYears.length - 1
-  
-    let headings = [{id: 'label', label: translate('table.year')}];
-    headings = headings.concat(bucketKeys);
+
+    let headings = [{ id: 'label', label: translate('table.year') }]
+    headings = headings.concat(bucketKeys)
 
     const generateRows = (data) => {
-      const rows = [];
-      data.forEach(row => {
-        const newRow = [];
-        newRow.push({id: 'label', label: row.year});
-        row?.buckets?.forEach(bucket => newRow.push({id: bucket.id, label: `${bucket.percentage}% (${bucket.count})`}));
-        rows.push(newRow);
-      });
-      return rows;
+        const rows = []
+        data.forEach((row) => {
+            const newRow = []
+            newRow.push({ id: 'label', label: row.year })
+            row?.buckets?.forEach((bucket) =>
+                newRow.push({ id: bucket.id, label: `${bucket.percentage}% (${bucket.count})` })
+            )
+            rows.push(newRow)
+        })
+        return rows
     }
 
-    const tables = [{
-      headings: headings,
-      rows: generateRows(allYears),
-    }];
+    const tables = [
+        {
+            headings: headings,
+            rows: generateRows(allYears),
+        },
+    ]
 
     return (
         <Block
             tables={tables}
             headings={headings}
-            
-            
+            legends={bucketKeys}
             title={name}
             units={units}
             setUnits={setUnits}
             data={allYears}
-            block={{ ...block, title: name, titleLink: mdnLink, description, enableDescriptionMarkdown: false }}
+            block={{
+                ...block,
+                title: name,
+                titleLink: mdnLink,
+                description,
+                enableDescriptionMarkdown: false,
+            }}
         >
             {allYears.map((year) => (
                 <Row key={year.year}>
@@ -74,11 +88,12 @@ const FeatureExperienceBlock = ({ block, keys, data, units: defaultUnits = 'perc
                         className="FeatureChart"
                     >
                         <GaugeBarChart
+                            keys={keys}
                             buckets={year.facets[0].buckets}
                             colorMapping={bucketKeys}
                             units={units}
                             applyEmptyPatternTo="never_heard"
-                            i18nNamespace="options.features"
+                            i18nNamespace={i18nNamespace}
                             showProgression={isLastYear(year)}
                         />
                     </ChartContainer>

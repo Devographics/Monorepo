@@ -113,9 +113,9 @@ const VerticalBarChart = ({
                 }}
                 axisBottom={{
                     format: (v) => getAxisLabels(v, bucketKeys),
-                    // legend: translate(`charts.axis_legends.${i18nNamespace}`),
-                    // legendPosition: 'middle',
-                    // legendOffset: viewportWidth < breakpoint ? 90 : 50,
+                    legend: translate(`charts.axis_legends.${i18nNamespace}`),
+                    legendPosition: 'middle',
+                    legendOffset: viewportWidth < breakpoint ? 90 : 50,
                     tickRotation: viewportWidth < breakpoint ? -45 : 0,
                 }}
                 tooltip={(barProps) => (

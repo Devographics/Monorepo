@@ -24,7 +24,7 @@ interface OpinionBlockProps {
     keys: string[]
 }
 
-const getBucketValue = ({
+export const getBucketValue = ({
     data,
     year,
     key,
@@ -41,11 +41,38 @@ const getBucketValue = ({
     return bucket[valueKey]
 }
 
+export const groupDataByYears = ({
+    keys,
+    data,
+    valueKeys,
+    years,
+}: {
+    years: number[]
+    data: ResultsByYear
+    valueKeys: BlockUnits[]
+    keys: string[]
+}) => {
+    return keys.map((key) => {
+        const bucket: TableBucketItem = {
+            id: key,
+        }
+        valueKeys.forEach((valueKey) => {
+            bucket[valueKey] = years.map((year) => ({
+                year,
+                value: getBucketValue({ data, year, key, valueKey }),
+                isPercentage: isPercentage(valueKey),
+            }))
+        })
+        return bucket
+    })
+}
+
 export const OpinionBlock = ({
     block,
     data,
     keys,
     units: defaultUnits = 'percentage_question',
+    translateData = true,
 }: OpinionBlockProps) => {
     const { id } = block
     const [units, setUnits] = useState(defaultUnits)
@@ -79,23 +106,14 @@ export const OpinionBlock = ({
         [data, bucketKeys]
     )
 
+    // console.log(data)
+    // console.log(normalizedData)
+
     const years = data.map((y) => y.year)
 
     const valueKeys: BlockUnits[] = ['percentage_survey', 'percentage_question', 'count']
 
-    const tableData = keys.map((key) => {
-        const bucket: TableBucketItem = {
-            id: key,
-        }
-        valueKeys.forEach((valueKey) => {
-            bucket[valueKey] = years.map((year) => ({
-                year,
-                value: getBucketValue({ data, year, key, valueKey }),
-                isPercentage: isPercentage(valueKey),
-            }))
-        })
-        return bucket
-    })
+    const tableData = groupDataByYears({ keys, data, valueKeys, years })
 
     return (
         <Block
@@ -106,6 +124,7 @@ export const OpinionBlock = ({
                 showLegend: true,
                 bucketKeysName: OPINION_BUCKET_KEYS_ID,
             }}
+            legends={bucketKeys}
             data={data}
             legendProps={{
                 onMouseEnter: ({ id }: { id: OpinionBucket['id'] }) => {
@@ -139,6 +158,7 @@ export const OpinionBlock = ({
                     units={units}
                     applyEmptyPatternTo={2}
                     namespace={id}
+                    translateData={translateData}
                 />
             </ChartContainer>
         </Block>

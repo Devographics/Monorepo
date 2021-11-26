@@ -32,6 +32,16 @@ const Table = ({ headings, rows, years }) => (
                     />
                 ))}
             </tr>
+            {years && (
+                <tr>
+                    <TH>
+                        <T k="table.year" />
+                    </TH>
+                    {[...Array(headings.length - 1)].map((heading, i) =>
+                        years.map((year) => <TH key={year}>{year}</TH>)
+                    )}
+                </tr>
+            )}
         </thead>
         <tbody>
             {rows.map((row, i) => (
@@ -42,18 +52,22 @@ const Table = ({ headings, rows, years }) => (
 )
 
 const TableHeading = ({ id, colSpan, labelId }) => (
-    <th scope="col" id={id} colSpan={colSpan}>
+    <TH scope="col" id={id} colSpan={colSpan}>
         <T k={labelId} />
-    </th>
+    </TH>
 )
+
+const TH = styled.th`
+    background: ${(props) => props.theme.colors.backgroundAlt};
+`
 
 const TableRow = ({ row }) => (
     <tr>
         {row.map((cell, index) => {
             return index === 0 ? (
-                <th key={index} scope="row">
+                <TH key={index} scope="row">
                     {cell.label ?? <T k={cell.labelId} />}
-                </th>
+                </TH>
             ) : Array.isArray(cell.value) ? (
                 cell.value.map((yearValue) => (
                     <TableCell key={yearValue.value} {...cell} {...yearValue} />
@@ -74,7 +88,7 @@ const TableCell = ({ value, isPercentage }) => (
 
 const TableWrapper = styled.div`
     max-height: 450px;
-    overflow-y: scroll;
+    overflow-y: auto;
     margin-bottom: 2rem;
     box-shadow: inset 0px 0px 5px 5px rgba(0, 0, 0, 0.25);
 `

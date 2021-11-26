@@ -15,6 +15,7 @@ const BlockVariant = (props) => {
     const {
         className,
         children,
+        legends,
         units,
         setUnits,
         error,

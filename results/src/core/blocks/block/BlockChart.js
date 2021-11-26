@@ -10,7 +10,7 @@ import T from 'core/i18n/T'
 import BlockFooter from 'core/blocks/block/BlockFooter'
 
 const BlockChart = (props) => {
-  const { children, units, error, data, block = {}, legendProps } = props
+  const { children, units, error, data, block = {}, legends, legendProps } = props
   const { showLegend, legendPosition = 'bottom', showNote = true, showDescription } = block
 
   return (
@@ -35,6 +35,7 @@ const BlockChart = (props) => {
                   data={data}
                   units={units}
                   position={legendPosition}
+                  legends={legends}
                   {...legendProps}
               />
           )}
@@ -53,7 +54,7 @@ const BlockDescriptionContents = ({ block }) => {
     if (description || translate(key, {}, null)) {
         return (
             <Description className="Block__Description">
-                <T t={description} k={key} md={enableDescriptionMarkdown} fallback={null} />
+                <T t={description} k={key} md={enableDescriptionMarkdown} fallback={null} html={true} />
             </Description>
         )
     }

@@ -2,9 +2,9 @@ blockType: FeatureExperienceBlock
 dataPath: "surveyApi.survey.${id}"
 keysPath: "surveyApi.survey.${id}.experience.keys"
 showDescription: true
-bucketKeysName: features
 showLegend: true
 enableExport: true
+i18nNamespace: features
 query: >
     surveyApi {
         survey(survey: ${surveyType}) {

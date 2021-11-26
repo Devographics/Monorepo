@@ -31,7 +31,7 @@ const VerticalBarBlock = ({ block, data, keys }: VerticalBarBlockProps) => {
     const { width } = context
 
     const [units, setUnits] = useState(defaultUnits)
-    const bucketKeys = useLegends(block, keys)
+    const bucketKeys = keys && useLegends(block, keys)
 
     const { buckets, completion } = data
     const { total } = completion

@@ -17,7 +17,7 @@ const BlockTitleContents = ({ block, context }) => {
     if (title) {
         return titleLink ? <a href={titleLink}>{title}</a> : title
     } else {
-        return <T k={getBlockTitleKey(block, context)} />
+        return <T k={getBlockTitleKey(block, context)} html={true} />
     }
 }
 

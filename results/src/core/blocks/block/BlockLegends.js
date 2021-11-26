@@ -7,6 +7,7 @@ import { useBucketKeys, useLegends } from '../../helpers/useBucketKeys'
 
 
 const BlockLegends = ({
+    legends = [],
     block,
     layout = 'horizontal',
     withFrame,
@@ -25,7 +26,7 @@ const BlockLegends = ({
 }) => {
     const { id: blockId, bucketKeysName = blockId } = block
 
-    const blockLegends = useLegends(block, data?.buckets)
+    const blockLegends = legends
 
     const rootStyle = { ...style }
 

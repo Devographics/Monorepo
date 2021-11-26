@@ -80,7 +80,9 @@ const StreamChart = ({
         tooltipFormat = (d) => `${d}%`
     }
 
-    const getLayerColor = ({ index }) => {
+    const getLayerColor = (props) => {
+        const { id } = props
+        const index = Number(id)
         if (current !== null && current !== keys[index]) {
             return `${colorScale[index]}33`
         }
@@ -111,7 +113,7 @@ const StreamChart = ({
                 animate={false}
                 tooltipLabel={(d) => {
                     const key = bucketKeys.find((key) => key.id === d.id)
-                    return key.shortLabel || key.label
+                    return key.shortLabel ?? key.label
                 }}
                 tooltipFormat={tooltipFormat}
                 defs={[theme.charts.emptyPattern]}

@@ -10,47 +10,53 @@ import { isPercentage } from 'core/helpers/units'
 
 // Custom labels using an extra `layer`,
 // this way, we can add an extra outline to bar labels
-const getLabels = (units) => ({ bars }) => {
-    return bars.map((bar) => {
-        let deltaLabel = ''
+const getLabels =
+    (units) =>
+    ({ bars }) => {
+        return bars.map((bar) => {
+            let deltaLabel = ''
 
-        // skip legend for small bars
-        if (bar.width < 60) return null
+            // skip legend for small bars
+            if (bar.width < 60) return null
 
-        // only keep 1 decimal
-        let value = Math.round(bar.data.value * 10) / 10
+            // only keep 1 decimal
+            let value = Math.round(bar.data.value * 10) / 10
 
-        if (isPercentage(units)) value = `${value}%`
+            if (isPercentage(units)) value = `${value}%`
 
-        // delta is not shown right now
-        // const deltaValue = bar.data.data[`${bar.data.id}_${units}Delta`]
-        // if (typeof deltaValue !== 'undefined' && deltaValue !== null) {
-        //     deltaLabel = deltaValue > 0 ? `+${deltaValue}` : deltaValue
-        //     if (units === 'percentage') deltaLabel = `${deltaLabel}%`
-        //     deltaLabel = `(${deltaLabel})`
-        // }
+            // delta is not shown right now
+            // const deltaValue = bar.data.data[`${bar.data.id}_${units}Delta`]
+            // if (typeof deltaValue !== 'undefined' && deltaValue !== null) {
+            //     deltaLabel = deltaValue > 0 ? `+${deltaValue}` : deltaValue
+            //     if (units === 'percentage') deltaLabel = `${deltaLabel}%`
+            //     deltaLabel = `(${deltaLabel})`
+            // }
 
-        // `pointerEvents: none` is used to not
-        // disturb mouse events
-        return (
-            <ChartLabel
-                key={bar.key}
-                label={`${value} ${deltaLabel}`}
-                transform={`translate(${bar.x + bar.width / 2},${bar.y + bar.height / 2})`}
-                style={{ pointerEvents: 'none' }}
-            />
-        )
-    })
-}
+            // `pointerEvents: none` is used to not
+            // disturb mouse events
+            return (
+                <ChartLabel
+                    key={bar.key}
+                    label={`${value} ${deltaLabel}`}
+                    transform={`translate(${bar.x + bar.width / 2},${bar.y + bar.height / 2})`}
+                    style={{ pointerEvents: 'none' }}
+                />
+            )
+        })
+    }
 
 const Tooltip = ({ translate, i18nNamespace, bar, units }) => {
     const theme = useNivoTheme()
-
     return (
         <div style={theme.tooltip.container}>
             <div style={theme.tooltip.basic}>
                 <Chip color={bar.color} style={{ marginRight: 7 }} />
-                {translate(`${i18nNamespace}.${bar.id}`)}:{' '}
+                <span
+                    dangerouslySetInnerHTML={{
+                        __html: translate(`options.${i18nNamespace}.${bar.id}`),
+                    }}
+                />
+                :{' '}
                 <strong>
                     {bar.data[`${bar.id}_${units}`]}
                     {isPercentage(units) && '%'}
@@ -60,11 +66,17 @@ const Tooltip = ({ translate, i18nNamespace, bar, units }) => {
     )
 }
 
-const GaugeBarChart = ({ buckets, colorMapping, units, applyEmptyPatternTo, i18nNamespace }) => {
+const GaugeBarChart = ({
+    buckets,
+    keys,
+    colorMapping,
+    units,
+    applyEmptyPatternTo,
+    i18nNamespace,
+}) => {
     const { translate } = useI18n()
     const theme = useTheme()
 
-    const keys = useMemo(() => colorMapping.map((m) => m.id), [colorMapping])
     const data = useMemo(
         () => [
             buckets.reduce((acc, bucket) => {
@@ -73,6 +85,7 @@ const GaugeBarChart = ({ buckets, colorMapping, units, applyEmptyPatternTo, i18n
                     [bucket.id]: bucket[units],
                     [`${bucket.id}_count`]: bucket.count,
                     [`${bucket.id}_percentage_survey`]: bucket.percentage_survey,
+                    [`${bucket.id}_percentage_question`]: bucket.percentage_question,
                     [`${bucket.id}_percentage_facet`]: bucket.percentage_facet,
                     [`${bucket.id}_countDelta`]: bucket.countDelta,
                     [`${bucket.id}_percentageDelta`]: bucket.percentageDelta,
@@ -153,7 +166,12 @@ GaugeBarChart.propTypes = {
             color: PropTypes.string.isRequired,
         })
     ).isRequired,
-    units: PropTypes.oneOf(['count', 'percentage_facet', 'percentage_survey', 'percentage_question']),
+    units: PropTypes.oneOf([
+        'count',
+        'percentage_facet',
+        'percentage_survey',
+        'percentage_question',
+    ]),
     applyEmptyPatternTo: PropTypes.string,
     i18nNamespace: PropTypes.string.isRequired,
 }

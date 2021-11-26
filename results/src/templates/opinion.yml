@@ -3,6 +3,8 @@ dataPath: "surveyApi.survey.${id}.all_years"
 keysPath: "surveyApi.survey.${id}.keys"
 showDescription: true
 enableExport: true
+translateData: true
+i18nNamespace: opinions
 query: >
     surveyApi {
         survey(survey: ${surveyType}) {

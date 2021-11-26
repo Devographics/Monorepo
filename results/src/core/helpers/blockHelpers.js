@@ -7,9 +7,9 @@ export const getBlockKey = (block, page) => {
     if (block.blockName) {
         return `blocks.${block.blockName}`
     } else {
-        const pageId = page.i18nNamespace || block.pageId || page.id
+        const namespace = block.i18nNamespace ?? page.i18nNamespace ?? page.id
         const blockId = block?.id?.replace('_others', '.others')
-        return `${pageId}.${blockId}`
+        return `${namespace}.${blockId}`
     }
 }
 
