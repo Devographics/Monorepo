@@ -1,5 +1,5 @@
 id: ${parentId}_others
-blockName: category_other_tools
+titleId: blocks.category_other_tools
 blockType: HorizontalBarBlock
 showDescription: true
 dataPath: "surveyApi.survey.${parentId}_others.year.facets.0"

@@ -4,20 +4,17 @@ import config from 'Config/config.yml'
 const { siteTitle, capturesUrl, hashtag, year } = config
 
 export const getBlockKey = (block, page) => {
-    if (block.blockName) {
-        return `blocks.${block.blockName}`
-    } else {
-        const namespace = block.i18nNamespace ?? page.i18nNamespace ?? page.id
-        const blockId = block?.id?.replace('_others', '.others')
-        return `${namespace}.${blockId}`
-    }
+    const namespace = block.i18nNamespace ?? page.i18nNamespace ?? page.id
+    const blockId = block.id.replace('_others', '.others')
+    return `${namespace}.${blockId}`
 }
 
-export const getBlockTabKey = (block, page) => block.tabId ? `tabs.${block.tabId}` : getBlockTitleKey(block, page)
+export const getBlockTabKey = (block, page) =>
+    block.tabId ? `tabs.${block.tabId}` : getBlockTitleKey(block, page)
 
 export const getBlockNoteKey = (block, page) => block.noteId || `${getBlockKey(block, page)}.note`
 
-export const getBlockTitleKey = (block, page) => block.titleId || getBlockKey(block, page)
+export const getBlockTitleKey = (block, page) => block.titleId || `${getBlockKey(block, page)}`
 
 export const getBlockDescriptionKey = (block, page) =>
     block.descriptionId || `${getBlockKey(block, page)}.description`

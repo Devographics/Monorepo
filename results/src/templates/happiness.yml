@@ -5,8 +5,6 @@ dataPath: "surveyApi.survey.${id}_happiness.year.facets.0"
 keysPath: "surveyApi.survey.${id}_happiness.keys"
 showDescription: false
 i18nNamespace: happiness
-bucketKeysName: happiness
-blockName: happiness
 enableExport: true
 query: >
     surveyApi {

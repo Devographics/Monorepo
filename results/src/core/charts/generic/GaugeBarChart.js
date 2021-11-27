@@ -103,9 +103,13 @@ const GaugeBarChart = ({
             }),
             {}
         )
+        console.log(colorById)
+        console.log(colorById)
 
-        return (bar) => colorById[bar.id]
+        return (bar) => {console.log(bar); return colorById[bar.id]}
     }, [colorMapping])
+
+    
     const labelsLayer = useMemo(() => getLabels(units), [units])
     const patternRules = useMemo(
         () => [

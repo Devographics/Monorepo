@@ -1,5 +1,5 @@
 blockType: ToolExperienceBlock
-blockName: tool_experience
+titleId: blocks.tool_experience
 dataPath: surveyApi.survey.${id}_experience
 keysPath: surveyApi.survey.${id}_experience.experience.keys
 bucketKeysName: tools

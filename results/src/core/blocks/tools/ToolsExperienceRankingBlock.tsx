@@ -93,46 +93,48 @@ export const ToolsExperienceRankingBlock = ({
         [data, controlledMetric]
     )
 
-    const [view, setView] = useState<ViewId>('viz');
+    const [view, setView] = useState<ViewId>('viz')
 
     const sections = [
-      {id: 'satisfaction', label: translate('options.experience_ranking.satisfaction')},
-      {id: 'interest', label: translate('options.experience_ranking.interest')},
-      {id: 'usage', label: translate('options.experience_ranking.usage')},
-      {id: 'awareness', label: translate('options.experience_ranking.awareness')},
+        { id: 'satisfaction', label: translate('options.experience_ranking.satisfaction') },
+        { id: 'interest', label: translate('options.experience_ranking.interest') },
+        { id: 'usage', label: translate('options.experience_ranking.usage') },
+        { id: 'awareness', label: translate('options.experience_ranking.awareness') },
     ]
 
     const getRows = (data, section) => {
-      const rows = [];
-      data.forEach((row) => {
-        const newRow = [{ id: 'label', label: row.entity.name }];
-        row[section].forEach((cell) => {
-          newRow.push({
-            id: `y_${cell.year}`,
-            label: cell.percentage_question ? `${cell.percentage_question}% (#${cell.rank})` : '-'
-          })
-        });
-        rows.push(newRow);
-      });
-      return rows;
-    };
+        const rows = []
+        data.forEach((row) => {
+            const newRow = [{ id: 'label', label: row.entity.name }]
+            row[section].forEach((cell) => {
+                newRow.push({
+                    id: `y_${cell.year}`,
+                    label: cell.percentage_question
+                        ? `${cell.percentage_question}% (#${cell.rank})`
+                        : '-',
+                })
+            })
+            rows.push(newRow)
+        })
+        return rows
+    }
 
-    let headings = [{id: 'label', label: translate('tools.technology')}];
-    headings = headings.concat(data[0].awareness.map(row => ({id: `y_${row.year}`, label: row.year})));
-    const tables = [];
+    let headings = [{ id: 'label', label: translate('tools.technology') }]
+    headings = headings.concat(
+        data[0].awareness.map((row) => ({ id: `y_${row.year}`, label: row.year }))
+    )
+    const tables = []
     sections.forEach((section) => {
-      tables.push({
-        id: section.id,
-        title: section.label,
-        headings: headings,
-        rows: getRows(data, section.id),
-      })
-    });
-    
+        tables.push({
+            id: section.id,
+            title: section.label,
+            headings: headings,
+            rows: getRows(data, section.id),
+        })
+    })
+
     return (
         <Block
-            
-            
             block={block}
             titleProps={{ switcher: <Switcher setMetric={setMetric} metric={controlledMetric} /> }}
             data={data}

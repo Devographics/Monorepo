@@ -1,6 +1,7 @@
 id: "${parentId}_experience_ranking"
 blockType: ToolsExperienceRankingBlock
-blockName: tools_experience_ranking
+titleId: blocks.tools_experience_ranking
+
 dataPath: "surveyApi.survey.${parentId}_rankings.experience"
 enableExport: true
 query: >

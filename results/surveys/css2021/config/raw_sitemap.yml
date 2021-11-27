@@ -525,16 +525,19 @@
         fieldId: environments
 
     - id: accessibility_features
+      translateData: true
       template: multiple_options
       variables:
         fieldId: environments
 
     - id: what_do_you_use_css_for
+      translateData: true
       template: multiple_options
       variables:
         fieldId: environments
 
     - id: what_do_you_use_css_for_others
+      translateData: true
       template: multiple_options
       variables:
         fieldId: environments

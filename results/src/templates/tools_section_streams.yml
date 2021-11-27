@@ -1,5 +1,5 @@
 id: "${parentId}_section_streams"
-blockName: tools_section_streams
+titleId: blocks.tools_section_streams
 blockType: ToolsSectionStreamsBlock
 dataPath: "surveyApi.survey.${parentId}_streams"
 keysPath: "surveyApi.survey.${parentId}_streams.0.experience.keys"

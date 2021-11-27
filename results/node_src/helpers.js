@@ -171,8 +171,8 @@ exports.getAllBlocks = (sitemap) => {
     sitemap.contents.forEach((page) => {
         allBlocks = [...allBlocks, ...page.blocks]
         if (page.children) {
-            page.children.forEach((page) => {
-                allBlocks = [...allBlocks, ...page.blocks]
+            page.children.forEach((childPage) => {
+                allBlocks = [...allBlocks, ...childPage.blocks]
             })
         }
     })
