@@ -5,7 +5,7 @@ dataPath: "surveyApi.survey.${parentId}_streams"
 keysPath: "surveyApi.survey.${parentId}_streams.0.experience.keys"
 bucketKeysName: tools
 showLegend: true
-enableExport: true
+
 query: >
     surveyApi {
         survey(survey: ${surveyType}) {

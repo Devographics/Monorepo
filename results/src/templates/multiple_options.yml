@@ -1,7 +1,7 @@
 blockType: HorizontalBarBlock
-showDescription: true
+
 dataPath: "surveyApi.survey.${id}.year.facets.0"
-enableExport: true
+
 query: >
     surveyApi {
         survey(survey: ${surveyType}) {

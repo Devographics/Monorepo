@@ -4,7 +4,7 @@ dataPath: surveyApi.survey.${id}_experience
 keysPath: surveyApi.survey.${id}_experience.experience.keys
 bucketKeysName: tools
 showLegend: true
-enableExport: true
+
 hidden: true
 query: >
     surveyApi {

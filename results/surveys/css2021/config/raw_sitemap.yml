@@ -504,6 +504,16 @@
           variables:
             fieldId: tools_others
 
+    - id: tool_evaluation_wins
+      template: bracket_wins
+      variables:
+        fieldId: tools_others__tool_evaluation
+      variants: 
+        - id: tool_evaluation_matchups
+          variables:
+            fieldId: tools_others__tool_evaluation
+          template: bracket_matchups
+
     - id: tools_others_resources
       items: [fm-storybook]
       template: recommended_resources
@@ -629,8 +639,28 @@
     - id: browser_interoperability_features
       template: opinions_others
 
+    - id: css_pain_points_wins
+      template: bracket_wins
+      variables:
+        fieldId: opinions__css_pain_points
+      variants: 
+        - id: css_pain_points_matchups
+          variables:
+            fieldId: opinions__css_pain_points
+          template: bracket_matchups
+
     - id: css_pain_points
       template: opinions_others
+
+    - id: currently_missing_from_css_wins
+      template: bracket_wins
+      variables:
+        fieldId: opinions__currently_missing_from_css
+      variants: 
+        - id: currently_missing_from_css_matchups
+          variables:
+            fieldId: opinions__currently_missing_from_css
+          template: bracket_matchups
 
     - id: currently_missing_from_css
       template: opinions_others

@@ -8,7 +8,8 @@ import BlockData from './BlockData'
 import * as Tabs from '@radix-ui/react-tabs'
 import BlockChart from 'core/blocks/block/BlockChart'
 import BlockShare from 'core/blocks/block/BlockShare'
-import { ChartIcon, DataIcon, ShareIcon } from 'core/icons'
+import BlockDebug from 'core/blocks/block/BlockDebug'
+import { ChartIcon, DataIcon, ShareIcon, DebugIcon } from 'core/icons'
 import { ErrorBoundary } from 'core/blocks/block/BlockError'
 
 const BlockVariant = (props) => {
@@ -63,6 +64,9 @@ const BlockVariant = (props) => {
                         <TabsTrigger value="share">
                             <ShareIcon enableTooltip={true} labelId="tabs.share" />
                         </TabsTrigger>
+                        <TabsTrigger value="debug">
+                            <DebugIcon enableTooltip={true} labelId="tabs.debug" />
+                        </TabsTrigger>
                     </TabsList>
                 </SideArea>
                 <MainArea>
@@ -79,6 +83,11 @@ const BlockVariant = (props) => {
                     <Tabs.Content value="share">
                         <TabWithBoundary>
                             <BlockShare {...props} />
+                        </TabWithBoundary>
+                    </Tabs.Content>
+                    <Tabs.Content value="debug">
+                        <TabWithBoundary>
+                            <BlockDebug {...props} />
                         </TabWithBoundary>
                     </Tabs.Content>
                 </MainArea>
@@ -165,10 +174,6 @@ BlockVariant.propTypes = {
     isShareable: PropTypes.bool.isRequired,
     className: PropTypes.string,
     values: PropTypes.object,
-}
-BlockVariant.defaultProps = {
-    showDescription: true,
-    isShareable: true,
 }
 
 export default memo(BlockVariant)

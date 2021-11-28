@@ -142,11 +142,6 @@ BlockTitle.propTypes = {
     isShareable: PropTypes.bool.isRequired,
 }
 
-BlockTitle.defaultProps = {
-    showDescription: true,
-    isShareable: true,
-}
-
 const StyledBlockTitle = styled.div`
     /* border-bottom: ${(props) => props.theme.separationBorder};
     padding-bottom: ${spacing(0.5)};

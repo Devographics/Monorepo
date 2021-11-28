@@ -1,7 +1,7 @@
 blockType: VerticalBarBlock
 dataPath: "surveyApi.survey.demographics.${id}.year.facets.0"
-showDescription: true
-enableExport: true
+
+
 query: >
     surveyApi {
         survey(survey: ${surveyType}) {

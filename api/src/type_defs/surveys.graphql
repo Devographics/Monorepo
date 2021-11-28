@@ -140,6 +140,6 @@ type Survey {
     """
     Brackets
     """
-    bracketWins(id: BracketID!, filters: Filters): BracketWins
-    bracketMatchups(id: BracketID!, filters: Filters): BracketMatchups
+    bracket_wins(id: BracketID!, filters: Filters, options: Options): BracketWins
+    bracket_matchups(id: BracketID!, filters: Filters, options: Options): BracketMatchups
 }

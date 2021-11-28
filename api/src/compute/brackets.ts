@@ -106,10 +106,23 @@ export const winsAggregationFunction = async (
     const completionByYear = await computeCompletionByYear(db, match)
 
     // group by years and add counts
-    const resultsByYear = await groupByYears(resultsWithId, db, survey, match, totalRespondentsByYear, completionByYear)
-    
-    // console.log(JSON.stringify(resultsByYear, '', 2))
-    return resultsByYear
+    const resultsByYear = await groupByYears(
+        resultsWithId,
+        db,
+        survey,
+        match,
+        totalRespondentsByYear,
+        completionByYear
+    )
+
+    // add "fake" facet for now
+    const resultsWithFacets = resultsByYear.map(y => ({
+        ...y,
+        facets: [{ completion: y.completion, type: 'default', id: 'default', buckets: y.buckets }]
+    }))
+
+    // console.log(JSON.stringify(resultsWithFacets, undefined, 2))
+    return resultsWithFacets
 }
 
 export const matchupsAggregationFunction = async (
@@ -134,7 +147,9 @@ export const matchupsAggregationFunction = async (
     }
 
     const matchupsPipeline = getMatchupsPipeline(match, key)
-    const rawResults = (await collection.aggregate(matchupsPipeline).toArray()) as MatchupAggregationResult[]
+    const rawResults = (await collection
+        .aggregate(matchupsPipeline)
+        .toArray()) as MatchupAggregationResult[]
 
     console.log(
         inspect(
@@ -167,14 +182,26 @@ export const matchupsAggregationFunction = async (
     const completionByYear = await computeCompletionByYear(db, match)
 
     // group by years and add counts
-    const resultsByYear = await groupByYears(rawResults, db, survey, match, totalRespondentsByYear, completionByYear)
+    const resultsByYear = await groupByYears(
+        rawResults,
+        db,
+        survey,
+        match,
+        totalRespondentsByYear,
+        completionByYear
+    )
 
-    // console.log('// resultsByYear')
-    // console.log(JSON.stringify(resultsByYear, '', 2))
+    // add "fake" facet for now
+    const resultsWithFacets = resultsByYear.map(y => ({
+        ...y,
+        facets: [{ completion: y.completion, type: 'default', id: 'default', buckets: y.buckets }]
+    }))
+    
+    // console.log('// resultsWithFacets')
+    // console.log(JSON.stringify(resultsWithFacets, '', 2))
 
-    return resultsByYear
+    return resultsWithFacets
 }
-
 
 interface GroupByYearResult {
     id: string | number

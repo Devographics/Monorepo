@@ -45,6 +45,10 @@ import { ToolsCityscapeBlock } from 'core/blocks/tools/ToolsCityscapeBlock'
 // import ToolsMatricesBlock from 'core/blocks/tools/ToolsMatricesBlock'
 // import { ToolsUsageVariationsBlock } from 'core/blocks/tools/ToolsUsageVariationsBlock'
 
+// brackets
+import BracketMatchupsBlock from 'core/blocks/brackets/BracketMatchupsBlock'
+import BracketWinsBlock from 'core/blocks/brackets/BracketWinsBlock'
+
 // happiness
 import { HappinessHistoryBlock } from 'core/blocks/happiness/HappinessHistoryBlock'
 
@@ -102,6 +106,10 @@ const blockRegistry = {
     // ToolsSectionOverviewBlock,
     // ToolsMatricesBlock,
     // ToolsUsageVariationsBlock,
+
+    // brackets
+    BracketMatchupsBlock,
+    BracketWinsBlock,
 
     // happiness
     HappinessHistoryBlock,

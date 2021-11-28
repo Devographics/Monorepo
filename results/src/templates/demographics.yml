@@ -1,8 +1,8 @@
 blockType: VerticalBarBlock
 dataPath: "surveyApi.survey.demographics.${id}.year.facets.0"
 keysPath: "surveyApi.survey.demographics.${id}.keys"
-showDescription: true
-enableExport: true
+
+
 defaultUnits: percentage_survey
 query: >
     surveyApi {

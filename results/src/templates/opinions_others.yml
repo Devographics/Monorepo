@@ -1,8 +1,8 @@
 titleId: "opinions_others.${id}.others"
 blockType: HorizontalBarBlock
 dataPath: "surveyApi.survey.${id}.year.facets.0"
-showDescription: true
-enableExport: true
+
+
 query: >
     surveyApi {
         survey(survey: ${surveyType}) {

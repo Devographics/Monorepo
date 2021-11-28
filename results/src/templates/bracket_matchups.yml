@@ -1,38 +1,31 @@
-blockType: OpinionBlock
-dataPath: "surveyApi.survey.${id}.all_years"
-keysPath: "surveyApi.survey.${id}.keys"
-
-
-translateData: true
-i18nNamespace: opinions
+blockType: BracketMatchupsBlock
+dataPath: "surveyApi.survey.${id}.year.facets.0"
 query: >
     surveyApi {
         survey(survey: ${surveyType}) {
-            ${id}: opinion(id: ${id}) {
+            ${id}: bracket_matchups(id: ${fieldId}, filters: ${filters}, options: ${options}) {
                 id
-                keys
-                all_years {
+                year(year: ${currentYear}) {
                     year
-                    mean
                     completion {
                         total
                         count
                         percentage_survey
                     }
                     facets {
-                        id
-                        type
                         completion {
                             total
-                            percentage_question
-                            percentage_survey
                             count
+                            percentage_survey
+                            percentage_question
                         }
                         buckets {
                             id
-                            count
-                            percentage_question
-                            percentage_survey
+                            matchups {
+                                id
+                                count
+                                percentage
+                            }
                         }
                     }
                 }

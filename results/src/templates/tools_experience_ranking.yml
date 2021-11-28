@@ -3,7 +3,7 @@ blockType: ToolsExperienceRankingBlock
 titleId: blocks.tools_experience_ranking
 
 dataPath: "surveyApi.survey.${parentId}_rankings.experience"
-enableExport: true
+
 query: >
     surveyApi {
         survey(survey: ${surveyType}) {
