@@ -2,16 +2,19 @@ import React, { memo, useMemo } from 'react'
 import { ChartComponentProps, BlockUnits, BucketItem, BlockLegend, TickItemProps } from 'core/types'
 import { useTheme } from 'styled-components'
 import { useI18n } from 'core/i18n/i18nContext'
+import Tooltip from 'core/components/Tooltip'
 
 const labelMaxLength = 20
 
 export const Text = ({
     hasLink = false,
     label,
+    description,
     tickRotation,
 }: {
     hasLink: boolean
     label: string
+    description: string
     tickRotation?: number
 }) => {
     const theme = useTheme()
@@ -36,8 +39,8 @@ export const Text = ({
 
     return (
         <text {...textProps}>
-            <title>{label}</title>
-            {shortLabel || label}
+            <title>{description ?? label}</title>
+            {shortLabel ?? label}
         </text>
     )
 }
@@ -47,7 +50,9 @@ export const TickItem = (tick: TickItemProps) => {
 
     const { x, y, value, shouldTranslate, i18nNamespace, entity, tickRotation } = tick
 
-    let label, link
+    let label,
+        link,
+        description = tick.description
 
     if (entity) {
         const { name, homepage, github } = entity
@@ -62,18 +67,25 @@ export const TickItem = (tick: TickItemProps) => {
         }
     } else if (shouldTranslate) {
         label = translate(`options.${i18nNamespace}.${value}`)
+        description = translate(`options.${i18nNamespace}.${value}.description`)
     } else {
         label = value
+    }
+
+    const textProps = {
+        label,
+        description,
+        tickRotation,
     }
 
     return (
         <g transform={`translate(${x},${y})`}>
             {link ? (
                 <a href={link}>
-                    <Text hasLink={true} label={label} tickRotation={tickRotation} />
+                    <Text hasLink={true} {...textProps} />
                 </a>
             ) : (
-                <Text hasLink={false} label={label} tickRotation={tickRotation} />
+                <Text hasLink={false} {...textProps} />
             )}
         </g>
     )

@@ -656,26 +656,26 @@
           template: bracket_matchups
           variables:
             fieldId: opinions__css_pain_points
-
-    - id: css_pain_points
-      template: opinions_others
+        - id: css_pain_points
+          tabId: tabs.other_answers
+          template: opinions_others
 
     - id: currently_missing_from_css_wins
       tabId: bracket_wins
       template: bracket_wins
-      i18nNamespace: features
+      i18nNamespace: currently_missing_from_css
       variables:
         fieldId: opinions__currently_missing_from_css
       variants: 
         - id: currently_missing_from_css_matchups
           tabId: bracket_matchups
-          i18nNamespace: features
+          i18nNamespace: currently_missing_from_css
           template: bracket_matchups
           variables:
             fieldId: opinions__currently_missing_from_css
-
-    - id: currently_missing_from_css
-      template: opinions_others
+        - id: currently_missing_from_css
+          tabId: tabs.other_answers
+          template: opinions_others
 
     - id: state_of_the_web
       template: happiness

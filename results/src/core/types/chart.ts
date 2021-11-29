@@ -23,4 +23,5 @@ export interface TickItemProps {
   i18nNamespace: string
   entity: Entity
   tickRotation?: number
+  description?: string
 }
