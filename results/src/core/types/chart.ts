@@ -22,4 +22,5 @@ export interface TickItemProps {
   shouldTranslate: boolean
   i18nNamespace: string
   entity: Entity
+  tickRotation?: number
 }

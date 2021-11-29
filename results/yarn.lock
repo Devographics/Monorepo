@@ -1609,9 +1609,9 @@
     d3-geo "^1.11.3"
     lodash "^4.17.21"
 
-"@nivo/heatmap@0.74.0":
+"@nivo/heatmap@^0.74.0":
   version "0.74.0"
-  resolved "https://registry.npmjs.org/@nivo/heatmap/-/heatmap-0.74.0.tgz"
+  resolved "https://registry.yarnpkg.com/@nivo/heatmap/-/heatmap-0.74.0.tgz#80b30b45dde0a66668175012b04d6cb2968c6900"
   integrity sha512-z38FYzRTpRnf8mVBsmpxrVYwlTrRdX2qZOiEz5L6NSZ6be0lFrg27WY8h4llnwyhtvJsWPBkDjlA9jYo3PwvoA==
   dependencies:
     "@nivo/axes" "0.74.0"

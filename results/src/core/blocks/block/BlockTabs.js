@@ -71,13 +71,7 @@ export const TabsWrapper = ({ block, pageData, blockIndex }) => {
                         <TabsList aria-label="tabs example">
                             {block.variants.map((block, variantIndex) => (
                                 <TabsTrigger key={block.id} value={`tab${variantIndex}`}>
-                                    <T
-                                        k={
-                                            variantIndex === 0
-                                                ? 'tabs.all_respondents'
-                                                : getBlockTabKey(block, context)
-                                        }
-                                    />
+                                    <T k={getBlockTabKey(block, context, variantIndex)} />
                                 </TabsTrigger>
                             ))}
                         </TabsList>

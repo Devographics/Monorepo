@@ -2,9 +2,17 @@ import React, { memo, useState } from 'react'
 import PropTypes from 'prop-types'
 import Block from 'core/blocks/block/BlockVariant'
 import ChartContainer from 'core/charts/ChartContainer'
-import HorizontalBarChart from 'core/charts/generic/HorizontalBarChart'
+import HeatmapChart from 'core/charts/generic/HeatmapChart'
 import { getTableData } from 'core/helpers/datatables'
 import { FacetItem, BlockComponentProps } from 'core/types'
+import { useLegends } from 'core/helpers/useBucketKeys'
+import { ResponsiveHeatMap } from '@nivo/heatmap'
+import { useTheme } from 'styled-components'
+import TickItem from 'core/charts/generic/TickItem'
+import { isPercentage } from 'core/helpers/units'
+import round from 'lodash/round'
+import sortBy from 'lodash/sortBy'
+import sumBy from 'lodash/sumBy'
 
 export interface HorizontalBarBlockProps extends BlockComponentProps {
     data: FacetItem
@@ -14,11 +22,13 @@ const BracketMatchupsBlock = ({ block, data }: HorizontalBarBlockProps) => {
     const {
         id,
         mode = 'relative',
-        defaultUnits = 'percentage_survey',
-        translateData,
+        defaultUnits = 'percentage',
+        translateData = true,
         i18nNamespace = block.id,
         colorVariant,
     } = block
+
+    const theme = useTheme()
 
     const [units, setUnits] = useState(defaultUnits)
 
@@ -26,6 +36,25 @@ const BracketMatchupsBlock = ({ block, data }: HorizontalBarBlockProps) => {
 
     const { total } = completion
 
+    const sortedBuckets = sortBy(buckets, (b) => sumBy(b.matchups, 'count')).reverse()
+    const keys = sortedBuckets.map((b) => b.id)
+    const legends = useLegends(block, keys, 'bracket')
+
+    const heatmapBuckets = sortedBuckets.map((bucket) => {
+        const { id, matchups } = bucket
+        const heatmapBucket = { id }
+        keys.forEach((k) => {
+            matchups.forEach((matchup) => {
+                heatmapBucket[`${matchup.id}___count`] = matchup.count // not really used
+                heatmapBucket[`${matchup.id}___percentage`] = matchup.percentage // not really used
+                heatmapBucket[matchup.id] = matchup.percentage
+            })
+        })
+        return heatmapBucket
+    })
+
+    console.log(legends)
+    console.log(heatmapBuckets)
     return (
         <Block
             units={units}
@@ -41,15 +70,87 @@ const BracketMatchupsBlock = ({ block, data }: HorizontalBarBlockProps) => {
             ]}
             block={block}
         >
-            <ChartContainer fit={true}>
-                <HorizontalBarChart
+            <ChartContainer fit={true} height={600}>
+                {/* <HeatmapChart
                     total={total}
-                    buckets={buckets}
+                    buckets={heatmapBuckets}
+                    data={heatmapBuckets}
+                    bucketKeys={legends}
                     i18nNamespace={i18nNamespace}
-                    translateData={translateData}
-                    mode={mode}
-                    units={units}
-                    colorVariant={colorVariant}
+                    // mode={mode}
+                    // units={units}
+                    // colorVariant={colorVariant}
+                /> */}
+                <ResponsiveHeatMap
+                    data={heatmapBuckets}
+                    keys={keys}
+                    colors={theme.colors.velocity}
+                    labelTextColor={theme.colors.text}
+                    // colors="PRGn"
+                    minValue={0}
+                    maxValue={100}
+                    margin={{ top: 130, right: 60, bottom: 60, left: 60 }}
+                    label={(rowData, cellId) =>
+                        isPercentage(units) ? `${round(rowData[cellId], 1)}%` : rowData[cellId]
+                    }
+                    forceSquare={true}
+                    axisTop={{
+                        // orient: 'top',
+                        // tickSize: 5,
+                        // tickPadding: 5,
+                        // tickRotation: -45,
+                        // legend: '',
+                        // legendOffset: 36,
+                        renderTick: (tick) => (
+                            <TickItem
+                                tickRotation={-45}
+                                i18nNamespace={i18nNamespace}
+                                shouldTranslate={translateData}
+                                entity={buckets.find((b) => b.id === tick.value)?.entity}
+                                {...tick}
+                            />
+                        ),
+                    }}
+                    // axisRight={null}
+                    // axisBottom={null}
+                    axisLeft={{
+                        // orient: 'left',
+                        // tickSize: 5,
+                        // tickPadding: 5,
+                        // tickRotation: 0,
+                        // legend: '',
+                        // legendPosition: 'middle',
+                        // legendOffset: -40,
+                        renderTick: (tick) => (
+                            <TickItem
+                                i18nNamespace={i18nNamespace}
+                                shouldTranslate={translateData}
+                                entity={buckets.find((b) => b.id === tick.value)?.entity}
+                                {...tick}
+                            />
+                        ),
+                    }}
+                    // cellOpacity={1}
+                    // cellBorderColor={{ from: 'color', modifiers: [['darker', 0.4]] }}
+                    // labelTextColor={{ from: 'color', modifiers: [['darker', 1.8]] }}
+                    // defs={[
+                    //     {
+                    //         id: 'lines',
+                    //         type: 'patternLines',
+                    //         background: 'inherit',
+                    //         color: 'rgba(0, 0, 0, 0.1)',
+                    //         rotation: -45,
+                    //         lineWidth: 4,
+                    //         spacing: 7,
+                    //     },
+                    // ]}
+                    // fill={[{ id: 'lines' }]}
+                    // animate={true}
+                    // motionConfig="wobbly"
+                    // motionStiffness={80}
+                    // motionDamping={9}
+                    // hoverTarget="cell"
+                    // cellHoverOthersOpacity={0.25}
                 />
             </ChartContainer>
         </Block>

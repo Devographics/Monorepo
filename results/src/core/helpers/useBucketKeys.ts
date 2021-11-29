@@ -42,9 +42,8 @@ export const useLegends = (block: Block, keys: string[], fieldId?: string) => {
     const namespace = fieldId ?? block.i18nNamespace ?? block.id
     const colorRange = theme.colors.ranges[namespace]
     const legends = keys.map((id) => {
-        const prefix = `options.${namespace}.`
-        const labelKey = prefix + id
-        const shortLabelKey = prefix + id + '.short'
+        const labelKey = `options.${namespace}.${id}`
+        const shortLabelKey = labelKey + '.short'
         const label = translate(labelKey)
         const shortLabelObject = getString(shortLabelKey)
         const shortLabel = shortLabelObject.missing ? undefined : shortLabelObject.t

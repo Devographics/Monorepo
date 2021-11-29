@@ -1,9 +1,7 @@
 blockType: FeatureExperienceBlock
 dataPath: "surveyApi.survey.${id}"
 keysPath: "surveyApi.survey.${id}.experience.keys"
-
 showLegend: true
-
 i18nNamespace: features
 query: >
     surveyApi {

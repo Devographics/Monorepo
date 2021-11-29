@@ -1,10 +1,12 @@
 blockType: BracketWinsBlock
 dataPath: "surveyApi.survey.${id}.year.facets.0"
+keysPath: "surveyApi.survey.${id}.keys"
 query: >
     surveyApi {
         survey(survey: ${surveyType}) {
             ${id}: bracket_wins(id: ${fieldId}, filters: ${filters}, options: ${options}) {
                 id
+                keys
                 year(year: ${currentYear}) {
                     year
                     completion {

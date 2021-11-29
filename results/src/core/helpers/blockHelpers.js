@@ -9,8 +9,12 @@ export const getBlockKey = (block, page) => {
     return `${namespace}.${blockId}`
 }
 
-export const getBlockTabKey = (block, page) =>
-    block.tabId ? `tabs.${block.tabId}` : getBlockTitleKey(block, page)
+export const getBlockTabKey = (block, page, variantIndex) =>
+    block.tabId
+        ? `tabs.${block.tabId}`
+        : variantIndex === 0
+        ? 'tabs.all_respondents'
+        : getBlockTitleKey(block, page)
 
 export const getBlockNoteKey = (block, page) => block.noteId || `${getBlockKey(block, page)}.note`
 

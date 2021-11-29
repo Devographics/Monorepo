@@ -72,6 +72,11 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
             1: colors.blueLight,
             0: colors.blue,
         },
+        bracket: {
+            round1: colors.pink,
+            round2: colors.blue,
+            round3: colors.blueLight
+        }
     },
     distinct: [
         colors.indigo,
@@ -96,15 +101,14 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
         colors.pink,
     ],
     velocity: [
-        colors.tealDarker,
-        colors.tealDark,
-        colors.teal,
-        colors.tealLight,
-        colors.greyMedium,
-        colors.redLighter,
-        colors.redLight,
-        colors.red,
-        colors.redDark,
+        '#1734BF',
+        '#3633B7',
+        '#5432AE',
+        '#7331A6',
+        '#91319D',
+        '#B03095',
+        '#CE2F8C',
+        '#ED2E84',
     ],
 }
 

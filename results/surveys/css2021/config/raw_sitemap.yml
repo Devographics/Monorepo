@@ -505,11 +505,15 @@
             fieldId: tools_others
 
     - id: tool_evaluation_wins
+      tabId: bracket_wins
       template: bracket_wins
+      i18nNamespace: tool_evaluation
       variables:
         fieldId: tools_others__tool_evaluation
       variants: 
         - id: tool_evaluation_matchups
+          tabId: bracket_matchups
+          i18nNamespace: tool_evaluation
           variables:
             fieldId: tools_others__tool_evaluation
           template: bracket_matchups
@@ -558,39 +562,39 @@
     - template: page_introduction
 
     - id: first_steps
-      tabId: main_answers
+      tabId: tabs.main_answers
       template: multiple_options
       translateData: true
       variables:
         fieldId: resources
       variants:
         - id: first_steps_others
-          tabId: other_answers
+          tabId: tabs.other_answers
           template: multiple_options
           translateData: true
           variables:
             fieldId: resources
 
     - id: blogs_news_magazines
-      tabId: main_answers
+      tabId: tabs.main_answers
       template: multiple_options
       variables:
         fieldId: resources
       variants:
         - id: blogs_news_magazines_others
-          tabId: other_answers
+          tabId: tabs.other_answers
           template: multiple_options
           variables:
             fieldId: resources
 
     - id: sites_courses
-      tabId: main_answers
+      tabId: tabs.main_answers
       template: multiple_options
       variables:
         fieldId: resources
       variants:
         - id: sites_courses_others
-          tabId: other_answers
+          tabId: tabs.other_answers
           template: multiple_options
           variables:
             fieldId: resources
@@ -599,13 +603,13 @@
       template: picks
 
     - id: podcasts
-      tabId: main_answers
+      tabId: tabs.main_answers
       template: multiple_options
       variables:
         fieldId: resources
       variants:
         - id: podcasts_others
-          tabId: other_answers
+          tabId: tabs.other_answers
           template: multiple_options
           variables:
             fieldId: resources
@@ -640,27 +644,35 @@
       template: opinions_others
 
     - id: css_pain_points_wins
+      tabId: bracket_wins
       template: bracket_wins
+      i18nNamespace: css_pain_points
       variables:
         fieldId: opinions__css_pain_points
       variants: 
         - id: css_pain_points_matchups
+          tabId: bracket_matchups
+          i18nNamespace: css_pain_points
+          template: bracket_matchups
           variables:
             fieldId: opinions__css_pain_points
-          template: bracket_matchups
 
     - id: css_pain_points
       template: opinions_others
 
     - id: currently_missing_from_css_wins
+      tabId: bracket_wins
       template: bracket_wins
+      i18nNamespace: features
       variables:
         fieldId: opinions__currently_missing_from_css
       variants: 
         - id: currently_missing_from_css_matchups
+          tabId: bracket_matchups
+          i18nNamespace: features
+          template: bracket_matchups
           variables:
             fieldId: opinions__currently_missing_from_css
-          template: bracket_matchups
 
     - id: currently_missing_from_css
       template: opinions_others

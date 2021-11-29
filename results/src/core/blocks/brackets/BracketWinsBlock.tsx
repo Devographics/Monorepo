@@ -4,27 +4,50 @@ import Block from 'core/blocks/block/BlockVariant'
 import ChartContainer from 'core/charts/ChartContainer'
 import HorizontalBarChart from 'core/charts/generic/HorizontalBarChart'
 import { getTableData } from 'core/helpers/datatables'
-import { FacetItem, BlockComponentProps } from 'core/types'
+import { BracketFacetItem, BlockComponentProps } from 'core/types'
+import sortBy from 'lodash/sortBy'
+import { useLegends } from 'core/helpers/useBucketKeys'
+import { useTheme } from 'styled-components'
+import { useTheme as useNivoTheme } from '@nivo/core'
+import { useI18n } from 'core/i18n/i18nContext'
+import { useEntities } from 'core/entities/entitiesContext'
+import { isPercentage } from 'core/helpers/units'
 
 export interface HorizontalBarBlockProps extends BlockComponentProps {
-    data: FacetItem
+    data: BracketFacetItem
 }
 
-const BracketWinsBlock = ({ block, data }: HorizontalBarBlockProps) => {
+const BracketWinsBlock = ({ block, data, keys }: HorizontalBarBlockProps) => {
     const {
         id,
         mode = 'relative',
-        defaultUnits = 'percentage_survey',
-        translateData,
+        defaultUnits = 'count',
+        translateData = true,
         i18nNamespace = block.id,
         colorVariant,
     } = block
 
+    const theme = useTheme()
+
+    const rounds = keys
+
     const [units, setUnits] = useState(defaultUnits)
 
-    const { completion, buckets } = data
+    const { completion } = data
 
     const { total } = completion
+
+    const legends = keys && useLegends(block, keys, 'bracket')
+
+    const buckets = sortBy(data.buckets, (b) => b.combined.count).map((bucket) => {
+        const bucketByRound = { id: bucket.id }
+        rounds?.forEach((r) => {
+            bucketByRound[`${r}___count`] = bucket[r]['count']
+            bucketByRound[`${r}___percentage`] = bucket[r]['percentage']
+            bucketByRound.color = theme.colors.ranges.bracket[r]
+        })
+        return bucketByRound
+    })
 
     return (
         <Block
@@ -39,6 +62,7 @@ const BracketWinsBlock = ({ block, data }: HorizontalBarBlockProps) => {
                     i18nNamespace,
                 }),
             ]}
+            legends={legends}
             block={block}
         >
             <ChartContainer fit={true}>
@@ -50,9 +74,49 @@ const BracketWinsBlock = ({ block, data }: HorizontalBarBlockProps) => {
                     mode={mode}
                     units={units}
                     colorVariant={colorVariant}
+                    chartProps={{
+                        keys: rounds.map((r) => `${r}___${units}`),
+                        indexBy: 'id',
+                        maxValue: data.completion.count * 2,
+                        // colorBy: 'color',
+                        colors: rounds.map(r => theme.colors.ranges.bracket[r]),
+                        tooltip:(barProps) => (
+                            <BarTooltip
+                                units={units}
+                                i18nNamespace={i18nNamespace}
+                                shouldTranslate={translateData}
+                                {...barProps}
+                            />
+                        )
+                    }}
                 />
             </ChartContainer>
         </Block>
+    )
+}
+
+const BarTooltip = (props) => {
+    const { id, units, indexValue, data, i18nNamespace, shouldTranslate } = props
+    const { getName } = useEntities()
+    const { translate } = useI18n()
+    const label = shouldTranslate
+        ? translate(`options.${i18nNamespace}.${indexValue}`)
+        : getName(indexValue)
+    const nivoTheme = useNivoTheme()
+
+    const units_ = id
+
+    const round = id.split('___')[0]
+    const roundLabel = translate(`options.bracket.${round}`)
+    
+    return (
+        <div style={{ ...nivoTheme?.tooltip?.container, maxWidth: 300 }}>
+            {label} ({roundLabel}):&nbsp;
+            <strong>
+                {data[units_]}
+                {isPercentage(units) && '%'}
+            </strong>
+        </div>
     )
 }
 

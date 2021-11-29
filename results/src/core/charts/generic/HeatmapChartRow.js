@@ -29,7 +29,9 @@ const HeatmapChartRow = ({
                 {get(item, 'entity.name', item.id)}
             </LabelCell>
             {keys.map((keyId) => {
-                const cell = item.ranges.find((r) => r.range === keyId)
+                console.log(item)
+                console.log(keyId)
+                const cell = item?.ranges?.find((r) => r.range === keyId)
 
                 return (
                     <ValueCell

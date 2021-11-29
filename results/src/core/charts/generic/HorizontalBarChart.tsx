@@ -10,73 +10,13 @@ import BarTooltip from 'core/charts/generic/BarTooltip'
 import HorizontalBarStripes from './HorizontalBarStripes'
 import { isPercentage } from 'core/helpers/units'
 import { ChartComponentProps, BlockUnits, BucketItem, BlockLegend, TickItemProps } from 'core/types'
-
-const labelMaxLength = 20
+import TickItem from 'core/charts/generic/TickItem'
 
 const margin = {
     top: 40,
     right: 20,
     bottom: 50,
     left: 200,
-}
-
-const Text = ({ hasLink = false, label }: { hasLink: boolean; label: string }) => {
-    const theme = useTheme()
-    const shortenLabel = label.length > labelMaxLength
-    const shortLabel = shortenLabel ? label.substr(0, labelMaxLength) + '…' : label
-
-    return (
-        <text
-            dominantBaseline="central"
-            textAnchor="end"
-            transform="translate(-10,0) rotate(0)"
-            style={{
-                fill: hasLink ? theme.colors.link : theme.colors.text,
-                fontSize: 14,
-                fontFamily: theme.typography.fontFamily,
-            }}
-        >
-            <title>{label}</title>
-            {shortLabel || label}
-        </text>
-    )
-}
-
-const TickItem = (tick: TickItemProps) => {
-    const { translate } = useI18n()
-
-    const { x, y, value, shouldTranslate, i18nNamespace, entity } = tick
-
-    let label, link
-
-    if (entity) {
-        const { name, homepage, github } = entity
-        if (name) {
-            label = name
-        }
-        link = homepage || (github && github.url)
-
-        // @todo: remove this once all entities have been added
-        if (!label) {
-            label = value
-        }
-    } else if (shouldTranslate) {
-        label = translate(`options.${i18nNamespace}.${value}`)
-    } else {
-        label = value
-    }
-
-    return (
-        <g transform={`translate(${x},${y})`}>
-            {link ? (
-                <a href={link}>
-                    <Text hasLink={true} label={label} />
-                </a>
-            ) : (
-                <Text hasLink={false} label={label} />
-            )}
-        </g>
-    )
 }
 
 export interface HorizontalBarChartProps extends ChartComponentProps {

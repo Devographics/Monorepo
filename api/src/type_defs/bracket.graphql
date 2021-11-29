@@ -4,6 +4,12 @@ enum BracketID {
   opinions__currently_missing_from_css
 }
 
+enum BracketKey {
+    round1
+    round2
+    round3
+}
+
 """
 Bracket Wins
 (how many wins a player has accumulated)
@@ -37,6 +43,7 @@ type YearBracketWins {
 
 type BracketWins {
     id: BracketID!
+    keys: [BracketKey]
     all_years: [YearBracketWins]
     year(year: Int!): YearBracketWins
 }
