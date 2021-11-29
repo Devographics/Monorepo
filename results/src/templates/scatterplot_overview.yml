@@ -1,8 +1,6 @@
 blockType: ToolsScatterplotBlock
 dataPath: "surveyApi.survey.${id}"
-keysPath: "surveyApi.survey.${id}.0.experience.keys"
-
-
+keysPath: "surveyApi.survey.${id}.experience.keys"
 query: >
     surveyApi {
         survey(survey: ${surveyType}) {

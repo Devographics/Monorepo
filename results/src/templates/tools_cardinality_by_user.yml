@@ -8,7 +8,7 @@ bucketKeysName: tools
 query: >
     surveyApi {
         survey(survey: ${surveyType}) {
-            pre_post_processors: tools_cardinality_by_user(
+            pre_post_processors_cardinality: tools_cardinality_by_user(
                 year: ${currentYear},
                 ids: [${toolsCategories.pre_post_processors}],
                 experienceId: would_use
@@ -17,7 +17,7 @@ query: >
                 count
                 percentage
             }
-            css_frameworks: tools_cardinality_by_user(
+            css_frameworks_cardinality: tools_cardinality_by_user(
                 year: ${currentYear},
                 ids: [${toolsCategories.css_frameworks}],
                 experienceId: would_use
@@ -26,7 +26,7 @@ query: >
                 count
                 percentage
             }
-            css_in_js: tools_cardinality_by_user(
+            css_in_js_cardinality: tools_cardinality_by_user(
                 year: ${currentYear},
                 ids: [${toolsCategories.css_in_js}],
                 experienceId: would_use

@@ -83,6 +83,7 @@ const BracketMatchupsBlock = ({ block, data }: HorizontalBarBlockProps) => {
                 /> */}
                 <ResponsiveHeatMap
                     data={heatmapBuckets}
+                    nanColor={'rgba(255,255,255,0.1)'}
                     keys={keys}
                     colors={theme.colors.velocity}
                     labelTextColor={theme.colors.text}

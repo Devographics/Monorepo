@@ -34,8 +34,8 @@ const useChartData = (data, translate, metric = 'satisfaction') => {
                 categoryTools.map((tool) => {
                     const { id, entity, experience } = tool
                     const name = entity.name
-                    const buckets = get(experience, 'year.buckets')
-                    const total = get(experience, 'year.total')
+                    const buckets = get(experience, 'year.facets[0].buckets')
+                    const total = get(experience, 'year.completion.total')
 
                     // if tool doesn't have experience data, abort
                     if (!buckets) {
@@ -112,6 +112,8 @@ const ToolsScatterplotBlock = ({ block, data, triggerId, titleProps }) => {
 
     const [metric, setMetric] = useState('satisfaction')
     const chartData = useChartData(data, translate, metric)
+    console.log(chartData)
+
     const [current, setCurrent] = useState(null)
 
     const legends = keys.toolSections.keys.map(({ id: keyId, color }) => ({
@@ -128,7 +130,7 @@ const ToolsScatterplotBlock = ({ block, data, triggerId, titleProps }) => {
     return (
         <Block
             className="ToolsScatterplotBlock"
-            data={chartData}
+            data={data}
             block={{ ...block, blockName: 'tools_quadrant', showLegend: false, legends }}
             titleProps={{
                 switcher: <Switcher setMetric={setMetric} metric={metric} />,
