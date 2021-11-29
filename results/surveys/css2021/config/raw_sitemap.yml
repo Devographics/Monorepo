@@ -562,39 +562,39 @@
     - template: page_introduction
 
     - id: first_steps
-      tabId: tabs.main_answers
+      tabId: main_answers
       template: multiple_options
       translateData: true
       variables:
         fieldId: resources
       variants:
         - id: first_steps_others
-          tabId: tabs.other_answers
+          tabId: other_answers
           template: multiple_options
           translateData: true
           variables:
             fieldId: resources
 
     - id: blogs_news_magazines
-      tabId: tabs.main_answers
+      tabId: main_answers
       template: multiple_options
       variables:
         fieldId: resources
       variants:
         - id: blogs_news_magazines_others
-          tabId: tabs.other_answers
+          tabId: other_answers
           template: multiple_options
           variables:
             fieldId: resources
 
     - id: sites_courses
-      tabId: tabs.main_answers
+      tabId: main_answers
       template: multiple_options
       variables:
         fieldId: resources
       variants:
         - id: sites_courses_others
-          tabId: tabs.other_answers
+          tabId: other_answers
           template: multiple_options
           variables:
             fieldId: resources
@@ -603,13 +603,13 @@
       template: picks
 
     - id: podcasts
-      tabId: tabs.main_answers
+      tabId: main_answers
       template: multiple_options
       variables:
         fieldId: resources
       variants:
         - id: podcasts_others
-          tabId: tabs.other_answers
+          tabId: other_answers
           template: multiple_options
           variables:
             fieldId: resources
@@ -657,7 +657,7 @@
           variables:
             fieldId: opinions__css_pain_points
         - id: css_pain_points
-          tabId: tabs.other_answers
+          tabId: other_answers
           template: opinions_others
 
     - id: currently_missing_from_css_wins
@@ -674,7 +674,7 @@
           variables:
             fieldId: opinions__currently_missing_from_css
         - id: currently_missing_from_css
-          tabId: tabs.other_answers
+          tabId: other_answers
           template: opinions_others
 
     - id: state_of_the_web

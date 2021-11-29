@@ -16,7 +16,7 @@ const HorizontalBarBlock = ({ block, data }: HorizontalBarBlockProps) => {
         mode = 'relative',
         defaultUnits = 'percentage_survey',
         translateData,
-        i18nNamespace = `options.${block.id}`,
+        i18nNamespace = block.id,
         colorVariant,
     } = block
 

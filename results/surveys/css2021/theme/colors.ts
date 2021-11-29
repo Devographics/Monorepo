@@ -73,9 +73,9 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
             0: colors.blue,
         },
         bracket: {
-            round1: colors.pink,
-            round2: colors.blue,
-            round3: colors.blueLight
+            round1: '#7331A6',
+            round2: '#B03095',
+            round3: '#ED2E84',
         }
     },
     distinct: [

@@ -67,6 +67,7 @@ const BracketWinsBlock = ({ block, data, keys }: HorizontalBarBlockProps) => {
         >
             <ChartContainer fit={true}>
                 <HorizontalBarChart
+                    size="l"
                     total={total}
                     buckets={buckets}
                     i18nNamespace={i18nNamespace}
@@ -79,15 +80,15 @@ const BracketWinsBlock = ({ block, data, keys }: HorizontalBarBlockProps) => {
                         indexBy: 'id',
                         maxValue: data.completion.count * 2,
                         // colorBy: 'color',
-                        colors: rounds.map(r => theme.colors.ranges.bracket[r]),
-                        tooltip:(barProps) => (
+                        colors: rounds.map((r) => theme.colors.ranges.bracket[r]),
+                        tooltip: (barProps) => (
                             <BarTooltip
                                 units={units}
                                 i18nNamespace={i18nNamespace}
                                 shouldTranslate={translateData}
                                 {...barProps}
                             />
-                        )
+                        ),
                     }}
                 />
             </ChartContainer>
@@ -108,7 +109,7 @@ const BarTooltip = (props) => {
 
     const round = id.split('___')[0]
     const roundLabel = translate(`options.bracket.${round}`)
-    
+
     return (
         <div style={{ ...nivoTheme?.tooltip?.container, maxWidth: 300 }}>
             {label} ({roundLabel}):&nbsp;

@@ -11,13 +11,13 @@ import BlockFooter from 'core/blocks/block/BlockFooter'
 
 const BlockChart = (props) => {
     const { children, units, error, data, block = {}, legends, legendProps } = props
-    const { legendPosition = 'bottom', showNote = true, showDescription } = block
+    const { legendPosition = 'bottom', showNote = true } = block
 
     const legendProps_ = { block, data, units, position: legendPosition, legends, ...legendProps }
     
     return (
         <div>
-            {showDescription && <BlockDescriptionContents block={block} />}
+            <BlockDescriptionContents block={block} />
 
             {legends && legendPosition === 'top' && <BlockLegends {...legendProps_} />}
             <div className="Block__Contents">

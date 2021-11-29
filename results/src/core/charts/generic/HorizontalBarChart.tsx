@@ -22,6 +22,7 @@ const margin = {
 export interface HorizontalBarChartProps extends ChartComponentProps {
     total: number
     buckets: BucketItem[]
+    size: 's' | 'm' | 'l'
 }
 
 const HorizontalBarChart = ({
@@ -33,6 +34,7 @@ const HorizontalBarChart = ({
     units,
     chartProps,
     colorVariant = 'primary',
+    size = 'm',
 }: HorizontalBarChartProps) => {
     const theme = useTheme()
     const { translate } = useI18n()
@@ -51,8 +53,23 @@ const HorizontalBarChart = ({
         'count'
     )
 
+    let baseSize
+    switch (size) {
+        case 's':
+            baseSize = '30'
+            break
+
+        case 'm':
+            baseSize = '40'
+            break
+
+        case 'l':
+            baseSize = '50'
+            break
+    }
+
     return (
-        <div style={{ height: buckets.length * 36 + 80 }}>
+        <div style={{ height: buckets.length * baseSize + 80 }}>
             <ResponsiveBar
                 layout="horizontal"
                 margin={margin}
