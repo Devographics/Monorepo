@@ -1,11 +1,40 @@
 import template from 'lodash/template'
 
+interface Translation {
+    key: string
+    t: string
+}
+
+export interface Locale {
+    id?: string
+    strings?: Translation[]
+}
+
+interface InterpolationValues {
+    values?: { [key: string]: string }
+}
+
+export interface LegacyTranslator {
+    (key: string, interpolation: InterpolationValues, fallback?: string): string
+}
+
+export interface StringTranslator {
+    (key: string, interpolation: InterpolationValues, fallback?: string): StringTranslatorResult
+}
+
+interface StringTranslatorResult {
+    locale: Omit<Locale, 'strings'>
+    missing?: boolean
+    key?: string
+    t?: string
+}
+
 /*
 
 Returns the translation string object
 
 */
-const findString = (key, strings) => {
+const findString = (key: string, strings: Translation[]) => {
     // reverse strings so that strings added last take priority
     return strings
         .slice()
@@ -14,10 +43,10 @@ const findString = (key, strings) => {
 }
 
 export const getStringTranslator =
-    (locale = {}) =>
+    (locale: Locale = {}): StringTranslator =>
     (key, { values } = {}, fallback) => {
         const { strings = [], ...rest } = locale
-        let result = { locale: rest }
+        const result: StringTranslatorResult = { locale: rest }
 
         let s = findString(key, strings)
 
@@ -37,9 +66,7 @@ export const getStringTranslator =
             }
         }
 
-        result = { ...result, ...s }
-
-        return result
+        return { ...result, ...s }
     }
 
 /*
@@ -48,7 +75,7 @@ Returns the translated string (legacy)
 
 */
 export const getTranslator =
-    (locale = {}) =>
+    (locale: Locale = {}): LegacyTranslator =>
     (key, { values } = {}, fallback) => {
         const { id, strings = [] } = locale
         // reverse strings so that strings added last take priority
@@ -71,5 +98,5 @@ export const getTranslator =
         }
     }
 
-export const translateOrFallback = (translatedKey, fallback) =>
+export const translateOrFallback = (translatedKey: string, fallback: string) =>
     translatedKey.match(/\[[a-z]{2}-[A-Z]{2}?\] [a-z_\-.]+/) ? fallback : translatedKey
