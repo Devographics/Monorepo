@@ -293,14 +293,14 @@ export const keys = {
             },
         ] as BucketKeyWithShortLabel<ToolExperienceId>[],
     },
-    toolSections: {
-        keys: [
-            { id: 'pre_post_processors' },
-            { id: 'css_frameworks' },
-            { id: 'css_methodologies' },
-            { id: 'css_in_js' },
-        ],
-    },
+    // toolSections: {
+    //     keys: [
+    //         { id: 'pre_post_processors' },
+    //         { id: 'css_frameworks' },
+    //         { id: 'css_methodologies' },
+    //         { id: 'css_in_js' },
+    //     ],
+    // },
     features: {
         colorRange: 'features',
         keys: [

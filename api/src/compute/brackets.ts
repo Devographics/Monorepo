@@ -244,7 +244,7 @@ export async function groupByYears(
             completion: {
                 total: totalRespondents,
                 count: completionCount,
-                percentage: ratioToPercentage(completionCount / totalRespondents)
+                percentage_survey: ratioToPercentage(completionCount / totalRespondents)
             },
             buckets: yearBuckets
         }

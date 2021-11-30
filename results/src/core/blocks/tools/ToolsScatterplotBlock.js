@@ -4,7 +4,6 @@ import Block from 'core/blocks/block/BlockVariant'
 import compact from 'lodash/compact'
 import round from 'lodash/round'
 import get from 'lodash/get'
-import { keys } from 'core/bucket_keys'
 import ToolsScatterplotChart from 'core/charts/tools/ToolsScatterplotChart'
 import { useI18n } from 'core/i18n/i18nContext'
 import ChartContainer from 'core/charts/ChartContainer'
@@ -112,14 +111,13 @@ const ToolsScatterplotBlock = ({ block, data, triggerId, titleProps }) => {
 
     const [metric, setMetric] = useState('satisfaction')
     const chartData = useChartData(data, translate, metric)
-    console.log(chartData)
 
     const [current, setCurrent] = useState(null)
 
-    const legends = keys.toolSections.keys.map(({ id: keyId, color }) => ({
+    const legends = Object.keys(toolsCategories).map(keyId => ({
         id: `toolCategories.${keyId}`,
-        label: translate(`page.${keyId}.short`),
-        keyLabel: `${translate(`page.${keyId}.short`)}:`,
+        label: translate(`sections.${keyId}.title`),
+        keyLabel: `${translate(`sections.${keyId}.title`)}:`,
         color: theme.colors.ranges.toolSections[keyId],
     }))
 
@@ -129,6 +127,7 @@ const ToolsScatterplotBlock = ({ block, data, triggerId, titleProps }) => {
 
     return (
         <Block
+            legends={legends}
             className="ToolsScatterplotBlock"
             data={data}
             block={{ ...block, blockName: 'tools_quadrant', showLegend: false, legends }}

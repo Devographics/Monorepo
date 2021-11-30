@@ -1,4 +1,5 @@
 import template from 'lodash/template'
+import clone from 'lodash/clone'
 
 interface Translation {
     key: string
@@ -39,34 +40,40 @@ const findString = (key: string, strings: Translation[]) => {
     return strings
         .slice()
         .reverse()
-        .find((t) => t.key === key)
+        .find(t => t.key === key)
+}
+
+export const applyTemplate = (t: string, values: { [key: string]: string }, locale: Locale, key: string) => {
+    try {
+        return template(t, { interpolate: /{([\s\S]+?)}/g })(values)
+    } catch (error) {
+        console.error(error)
+        return `[${locale.id}][ERR] ${key}`
+    }
 }
 
 export const getStringTranslator =
     (locale: Locale = {}): StringTranslator =>
     (key, { values } = {}, fallback) => {
         const { strings = [], ...rest } = locale
-        const result: StringTranslatorResult = { locale: rest }
+        let result: StringTranslatorResult = { key, locale: rest }
 
-        let s = findString(key, strings)
+        const stringObject = findString(key, strings)
 
-        if (!s) {
+        if (stringObject) {
+            result = { ...result, ...stringObject }
+        } else {
             result.missing = true
             if (fallback) {
-                s = { key, t: fallback }
+                result.t = fallback
             }
         }
 
-        if (s && values) {
-            try {
-                s.t = template(s.t, { interpolate: /{([\s\S]+?)}/g })(values)
-            } catch (error) {
-                console.error(error)
-                s.t = `[${locale.id}][ERR] ${key}`
-            }
+        if (result.t) {
+            result.t = values ? applyTemplate(result.t, values, locale, key) : result.t
         }
 
-        return { ...result, ...s }
+        return result
     }
 
 /*
@@ -82,7 +89,7 @@ export const getTranslator =
         const translation = strings
             .slice()
             .reverse()
-            .find((t) => t.key === key)
+            .find(t => t.key === key)
 
         if (translation === undefined) {
             return typeof fallback === 'undefined' ? `[${id}] ${key}` : fallback

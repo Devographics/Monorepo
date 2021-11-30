@@ -73,7 +73,7 @@ const TableRow = ({ row }) => (
                     <TableCell key={yearValue.value} {...cell} {...yearValue} />
                 ))
             ) : (
-                <TableCell {...cell} />
+                <TableCell key={index} {...cell} />
             )
         })}
     </tr>
