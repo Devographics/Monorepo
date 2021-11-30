@@ -22,14 +22,14 @@ const Units = styled.div`
     justify-content: center;
 `
 
-const BlockFooter = ({ data, units, setUnits }) => (
+const BlockFooter = ({ completion, units, setUnits }) => (
     <Footer>
         <Respondents>
             <T
                 k="chart_units.respondents"
                 values={{
-                    count: data?.completion?.count,
-                    percentage: data?.completion?.percentage_survey,
+                    count: completion?.count,
+                    percentage: completion?.percentage_survey,
                 }}
             />
         </Respondents>

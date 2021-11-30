@@ -1,8 +1,7 @@
 blockType: VerticalBarBlock
+titleId: user_info.${id}
 dataPath: "surveyApi.survey.demographics.${id}.year.facets.0"
 keysPath: "surveyApi.survey.demographics.${id}.keys"
-
-
 defaultUnits: percentage_survey
 query: >
     surveyApi {

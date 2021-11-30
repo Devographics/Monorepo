@@ -79,18 +79,19 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
 
         try {
             if (pageQuery) {
-                const wrappedPageQuery = wrapWithQuery(
-                    `page${_.upperFirst(cleanIdString(page.id))}Query`,
-                    pageQuery
-                )
+                const queryName = _.upperFirst(cleanIdString(page.id))
+                const wrappedPageQuery = wrapWithQuery(`page${queryName}Query`, pageQuery)
                 logToFile('queries.txt', wrappedPageQuery, { mode: 'append' })
-
+                const start = new Date()
                 const queryResults = await graphql(
                     `
                         ${wrappedPageQuery}
                     `
                 )
+                const end = new Date()
+                const timeDiff = Math.round((end - start)/1000)
                 pageData = queryResults.data
+                logToFile(`data/${queryName}_${timeDiff}s.json`, pageData, { mode: 'overwrite' })
             }
         } catch (error) {
             console.log(`// Error while loading data for page ${page.id}`)

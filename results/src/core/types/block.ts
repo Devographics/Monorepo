@@ -12,31 +12,28 @@ export interface BlockComponentProps {
 
 export interface BlockDefinition {
   id: string
-  template: string
-  blockType: string
-  tabId: string
-  
+  template?: string
+  blockType?: string
+  tabId?: string
+  titleId?: string
+
   // config
-  mode: BlockMode
-  i18nNamespace: string
-  colorVariant: string
-  overrides: object
+  mode?: BlockMode
+  i18nNamespace?: string
+  colorVariant?: string
+  overrides?: object
 
   // data
-  query: string
-  variables: object
-  dataPath: string
-  keysPath: string
-  defaultUnits: BlockUnits
+  query?: string
+  variables?: object
+  dataPath?: string
+  keysPath?: string
+  entityPath?: string
+  defaultUnits?: BlockUnits
 
   // booleans
-  showDescription: boolean
-  showLegend: boolean
-  legendPosition: 'bottom' | 'top'
-  showTitle: boolean
-  showNote: boolean
-  translateData: boolean
-
+  legendPosition?: 'bottom' | 'top'
+  translateData?: boolean
 }
 
 export interface BlockVariantProps {

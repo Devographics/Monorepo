@@ -28,15 +28,13 @@ export const ToolExperienceBlock = ({
     block,
     data,
     units: defaultUnits = 'percentage_question',
-    closeComponent,
+    closeComponent
 }: ToolExperienceBlockProps) => {
-
     const context = usePageContext()
     const { locale } = context
     const { translate } = useI18n()
 
     const [units, setUnits] = useState(defaultUnits)
-    
 
     const title = data.entity.name
     const titleLink = data.entity.homepage
@@ -47,18 +45,21 @@ export const ToolExperienceBlock = ({
 
     const bucketKeys = useBucketKeys('tools')
     const allYears = data.experience.all_years
+
+    const completion = allYears[allYears.length - 1]?.completion
+
     const normalizedData = useMemo(
         () =>
             allYears.map((yearExperience, index) => {
                 const yearData: ToolExperienceBucket[] = bucketKeys.map((key: { id: string }) => {
                     const matchingBucket = yearExperience.facets[0].buckets.find(
-                        (bucket) => bucket.id === key.id
+                        bucket => bucket.id === key.id
                     )
                     return (
                         matchingBucket || {
                             id: key.id,
                             count: 0,
-                            percentage: 0,
+                            percentage: 0
                         }
                     )
                 })
@@ -68,7 +69,7 @@ export const ToolExperienceBlock = ({
                 return {
                     year: yearExperience.year,
                     ...keyBy(yearData, 'id'),
-                    thickness: isLastYear ? 2 : 1,
+                    thickness: isLastYear ? 2 : 1
                 }
             }),
         [data, bucketKeys]
@@ -83,12 +84,12 @@ export const ToolExperienceBlock = ({
     let headings = [{ id: 'label', label: translate('table.year') }]
     headings = headings.concat(bucketKeys)
 
-    const generateRows = (data) => {
+    const generateRows = data => {
         const rows = []
-        data.forEach((row) => {
+        data.forEach(row => {
             const newRow = []
             newRow.push({ id: 'label', label: row.year })
-            row.facets[0].buckets.forEach((bucket) =>
+            row.facets[0].buckets.forEach(bucket =>
                 newRow.push({ id: bucket.id, label: `${bucket.percentage}% (${bucket.count})` })
             )
             rows.push(newRow)
@@ -100,20 +101,19 @@ export const ToolExperienceBlock = ({
     const tables = [
         {
             headings: headings,
-            rows: generateRows(allYears),
-        },
+            rows: generateRows(allYears)
+        }
     ]
 
     return (
         <Block
             units={units}
             setUnits={setUnits}
-            block={{ ...block, title, titleLink, description, showDescription: !!description }}
-            data={allYears}
+            block={{ ...block, title, titleLink, description }}
+            data={data}
             titleProps={{ closeComponent }}
-            
-            
             tables={tables}
+            completion={completion}
         >
             <ChartContainer height={chartHeight} fit>
                 <ExperienceByYearBarChart

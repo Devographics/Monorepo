@@ -4,7 +4,7 @@ import config from 'Config/config.yml'
 const { siteTitle, capturesUrl, hashtag, year } = config
 
 export const getBlockKey = (block, page) => {
-    const namespace = block.i18nNamespace ?? page.i18nNamespace ?? page.id
+    const namespace = block.i18nNamespace ?? 'blocks'
     const blockId = block.id.replace('_others', '.others')
     return `${namespace}.${blockId}`
 }

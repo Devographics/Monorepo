@@ -7,6 +7,7 @@ import { spacing, fontSize } from 'core/theme'
 import T from 'core/i18n/T'
 import { getBlockTabKey } from 'core/helpers/blockHelpers'
 import { usePageContext } from 'core/helpers/pageContext'
+import get from 'lodash/get'
 
 export const EmptyWrapper = ({ block, pageData, blockIndex }) => (
     <Wrapper className="empty-wrapper">
@@ -30,7 +31,7 @@ const BlockHeader = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: ${(props) => props.theme.border};
+    border-bottom: ${props => props.theme.border};
 `
 
 const TabsList = styled(Tabs.List)`
@@ -41,9 +42,9 @@ const TabsList = styled(Tabs.List)`
 `
 
 const TabsTrigger = styled(Tabs.Trigger)`
-    border: ${(props) => props.theme.border};
-    background: ${(props) => props.theme.colors.background};
-    /* border: 1px solid ${(props) => props.theme.colors.border}; */
+    border: ${props => props.theme.border};
+    background: ${props => props.theme.colors.background};
+    /* border: 1px solid ${props => props.theme.colors.border}; */
     border-radius: 3px 3px 0 0;
     padding: ${spacing(0.5)};
     cursor: pointer;
@@ -55,18 +56,28 @@ const TabsTrigger = styled(Tabs.Trigger)`
     }
     &[data-state='inactive'] {
         opacity: 0.6;
-        background: ${(props) => props.theme.colors.backgroundBackground};
+        background: ${props => props.theme.colors.backgroundBackground};
     }
 `
 
 export const TabsWrapper = ({ block, pageData, blockIndex }) => {
     const context = usePageContext()
 
+    let firstBlock = block.variants[0]
+    if (firstBlock.entityPath) {
+        const blockEntity = get(pageData, firstBlock.entityPath)
+        firstBlock = {
+            ...firstBlock,
+            title: blockEntity.name,
+            titleLink: blockEntity.homepage
+        }
+    }
+
     return (
         <Wrapper className="tabs-wrapper">
             <Tabs.Root defaultValue="tab0" orientation="horizontal">
                 <BlockHeader>
-                    <BlockTitle block={block.variants[0]} {...block.variants[0].titleProps} />
+                    <BlockTitle block={firstBlock} />
                     {block.variants.length > 1 && (
                         <TabsList aria-label="tabs example">
                             {block.variants.map((block, variantIndex) => (
