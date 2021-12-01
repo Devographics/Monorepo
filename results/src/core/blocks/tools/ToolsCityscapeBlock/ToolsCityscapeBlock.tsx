@@ -158,8 +158,8 @@ export const ToolsCityscapeBlock = ({
 
     const chartDataByCategory = groupByCategory(chartData)
 
-    console.log(chartDataAllCategories)
-    console.log(chartDataByCategory)
+    // console.log(chartDataAllCategories)
+    // console.log(chartDataByCategory)
 
     return (
         <Block

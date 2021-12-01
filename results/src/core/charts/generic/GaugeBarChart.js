@@ -103,10 +103,8 @@ const GaugeBarChart = ({
             }),
             {}
         )
-        console.log(colorById)
-        console.log(colorById)
 
-        return (bar) => {console.log(bar); return colorById[bar.id]}
+        return (bar) => {return colorById[bar.id]}
     }, [colorMapping])
 
     

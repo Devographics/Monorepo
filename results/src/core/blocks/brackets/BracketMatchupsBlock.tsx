@@ -53,8 +53,6 @@ const BracketMatchupsBlock = ({ block, data }: HorizontalBarBlockProps) => {
         return heatmapBucket
     })
 
-    console.log(legends)
-    console.log(heatmapBuckets)
     return (
         <Block
             units={units}
