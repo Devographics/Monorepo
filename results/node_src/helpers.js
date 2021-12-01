@@ -21,8 +21,7 @@ Get locales without the strings, to avoid loading every locale's dictionnary in 
 Also add paths
 
 */
-const getCleanLocales = (locales) =>
-    locales.map((l) => ({ path: `/${l.id}`, ...omit(l, ['strings']) }))
+const getCleanLocales = locales => locales.map(l => ({ path: `/${l.id}`, ...omit(l, ['strings']) }))
 exports.getCleanLocales = getCleanLocales
 
 /*
@@ -30,13 +29,13 @@ exports.getCleanLocales = getCleanLocales
 Get a page's context
 
 */
-exports.getPageContext = (page) => {
+exports.getPageContext = page => {
     const context = omit(page, ['path', 'children'])
     context.basePath = page.path
 
     return {
         ...context,
-        ...page.data,
+        ...page.data
     }
 }
 
@@ -45,7 +44,7 @@ exports.getPageContext = (page) => {
 Clean ID string
 
 */
-exports.cleanIdString = (id) => id.replace(new RegExp('-', 'g'), '_')
+exports.cleanIdString = id => id.replace(new RegExp('-', 'g'), '_')
 
 /*
 
@@ -61,7 +60,7 @@ exports.wrapWithQuery = (queryName, queryContents) => `query ${queryName} {
 Load a template yml file
 
 */
-exports.loadTemplate = async (name) => {
+exports.loadTemplate = async name => {
     const templatePath = `${path.join(__dirname, '../')}src/templates/${name}.yml`
     try {
         const data = await fsPromises.readFile(templatePath, 'utf8')
@@ -79,10 +78,10 @@ exports.loadTemplate = async (name) => {
 Loop over a page's blocks to assemble its page query
 
 */
-exports.getPageQuery = (page) => {
+exports.getPageQuery = page => {
     const queries = []
-    page.blocks.forEach((b) => {
-        b?.variants.forEach((v) => {
+    page.blocks.forEach(b => {
+        b?.variants.forEach(v => {
             if (v.query) {
                 queries.push(`# ${v.id}\n` + v.query)
             }
@@ -101,28 +100,30 @@ Log to file
 
 */
 exports.logToFile = async (fileName, object, options = {}) => {
-    const { mode = 'append', timestamp = false } = options
+    if (process.env.NODE_ENV !== 'production') {
+        const { mode = 'append', timestamp = false } = options
 
-    const logsDirPath = `${__dirname}/.logs`
-    if (!fs.existsSync(logsDirPath)) {
-        fs.mkdirSync(logsDirPath, { recursive: true })
-    }
-    const fullPath = `${logsDirPath}/${fileName}`
-    const contents = typeof object === 'string' ? object : JSON.stringify(object, null, 2)
-    const now = new Date()
-    const text = timestamp ? now.toString() + '\n---\n' + contents : contents
-    if (mode === 'append') {
-        const stream = fs.createWriteStream(fullPath, { flags: 'a' })
-        stream.write(text + '\n')
-        stream.end()
-    } else {
-        fs.writeFile(fullPath, text, (error) => {
-            // throws an error, you could also catch it here
-            if (error) throw error
+        const logsDirPath = `${__dirname}/.logs`
+        if (!fs.existsSync(logsDirPath)) {
+            fs.mkdirSync(logsDirPath, { recursive: true })
+        }
+        const fullPath = `${logsDirPath}/${fileName}`
+        const contents = typeof object === 'string' ? object : JSON.stringify(object, null, 2)
+        const now = new Date()
+        const text = timestamp ? now.toString() + '\n---\n' + contents : contents
+        if (mode === 'append') {
+            const stream = fs.createWriteStream(fullPath, { flags: 'a' })
+            stream.write(text + '\n')
+            stream.end()
+        } else {
+            fs.writeFile(fullPath, text, error => {
+                // throws an error, you could also catch it here
+                if (error) throw error
 
-            // eslint-disable-next-line no-console
-            console.log(`Object saved to ${fullPath}`)
-        })
+                // eslint-disable-next-line no-console
+                console.log(`Object saved to ${fullPath}`)
+            })
+        }
     }
 }
 
@@ -137,13 +138,13 @@ exports.createBlockPages = (page, context, createPage, locales) => {
         return
     }
 
-    blocks.forEach((block) => {
-        block.variants.forEach((blockVariant) => {
+    blocks.forEach(block => {
+        block.variants.forEach(blockVariant => {
             // allow for specifying explicit pageId in block definition
             if (!blockVariant.pageId) {
                 blockVariant.pageId = page.id
             }
-            locales.forEach((locale) => {
+            locales.forEach(locale => {
                 const blockPage = {
                     path: getLocalizedPath(blockVariant.path, locale),
                     component: path.resolve(`./src/core/share/ShareBlockTemplate.js`),
@@ -152,8 +153,8 @@ exports.createBlockPages = (page, context, createPage, locales) => {
                         redirect: `${getLocalizedPath(page.path, locale)}#${blockVariant.id}`,
                         block: blockVariant,
                         locales: getCleanLocales(locales),
-                        locale,
-                    },
+                        locale
+                    }
                 }
                 createPage(blockPage)
             })
@@ -166,12 +167,12 @@ exports.createBlockPages = (page, context, createPage, locales) => {
 Flatten sitemap into array of all blocks
 
 */
-exports.getAllBlocks = (sitemap) => {
+exports.getAllBlocks = sitemap => {
     let allBlocks = []
-    sitemap.contents.forEach((page) => {
+    sitemap.contents.forEach(page => {
         allBlocks = [...allBlocks, ...page.blocks]
         if (page.children) {
-            page.children.forEach((childPage) => {
+            page.children.forEach(childPage => {
                 allBlocks = [...allBlocks, ...childPage.blocks]
             })
         }
