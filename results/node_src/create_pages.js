@@ -62,13 +62,12 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
     }
 
     const cleanLocales = getCleanLocales(locales)
-
-    const { flat } = await computeSitemap(rawSitemap, cleanLocales)
-
     logToFile('locales.json', cleanLocales, { mode: 'overwrite' })
     locales.forEach(locale => {
         logToFile(`locales/${locale.id}.json`, locale, { mode: 'overwrite' })
     })
+
+    const { flat } = await computeSitemap(rawSitemap, cleanLocales)
 
     for (const page of flat) {
         let pageData = {}
@@ -89,7 +88,7 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
                     `
                 )
                 const end = new Date()
-                const timeDiff = Math.round((end - start)/1000)
+                const timeDiff = Math.round((end - start) / 1000)
                 pageData = queryResults.data
                 logToFile(`data/${queryName}_${timeDiff}s.json`, pageData, { mode: 'overwrite' })
             }

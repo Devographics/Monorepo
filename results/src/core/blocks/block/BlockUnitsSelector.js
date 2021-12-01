@@ -18,8 +18,8 @@ const UnitButton = ({ units, current, onChange }) => (
 const BlockUnitsSelector = ({ units, onChange }) => {
     return (
         <ButtonGroup>
-            <UnitButton units="percentage_survey" current={units} onChange={onChange} />
             <UnitButton units="percentage_question" current={units} onChange={onChange} />
+            <UnitButton units="percentage_survey" current={units} onChange={onChange} />
             <UnitButton units="count" current={units} onChange={onChange} />
         </ButtonGroup>
     )
