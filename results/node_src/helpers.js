@@ -82,7 +82,7 @@ Loop over a page's blocks to assemble its page query
 exports.getPageQuery = (page) => {
     const queries = []
     page.blocks.forEach((b) => {
-        b.variants.forEach((v) => {
+        b?.variants.forEach((v) => {
             if (v.query) {
                 queries.push(`# ${v.id}\n` + v.query)
             }

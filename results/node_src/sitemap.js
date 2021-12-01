@@ -47,20 +47,35 @@ const applyTemplate = (block, templateObject, parent) => {
     }
 }
 
-exports.pageFromConfig = async (stack, item, parent, pageIndex) => {
-    try {
-        // if template has been provided, apply it
-        if (item.template) {
-            const template = await loadTemplate(item.template)
+const flattenSitemap = (stack, pages, parent, pageIndex) => {
+    pages.forEach(page => {
+        if (parent) {
+            page.parent = omit(parent, 'children')
+        }
+        // always push everything at the root level, even during recursive iterations
+        stack.flat.push(page)
 
-            item = applyTemplate(item, template, parent)
+        if (Array.isArray(page.children)) {
+            flattenSitemap(stack, page.children, page, pageIndex)
+        }
+    })
+}
+
+exports.pageFromConfig = async (page, pageIndex) => {
+    try {
+        const { parent } = page
+        // if template has been provided, apply it
+        if (page.template) {
+            const template = await loadTemplate(page.template)
+            page = applyTemplate(page, template, parent)
         }
 
-        const pagePath = item.path || `/${item.id}`
-        const page = {
-            ...item,
-            path: parent === undefined ? pagePath : `${parent.path.replace(/\/$/, '')}${pagePath}`,
-            is_hidden: !!item.is_hidden,
+        const pagePath = page.path || `/${page.id}`
+        page = {
+            ...page,
+            path:
+                parent === undefined ? pagePath : `${parent?.path?.replace(/\/$/, '')}${pagePath}`,
+            is_hidden: !!page.is_hidden,
             children: [],
             pageIndex
         }
@@ -90,7 +105,7 @@ exports.pageFromConfig = async (stack, item, parent, pageIndex) => {
                     // if block has variables, inject them based on current page and global variables
                     if (blockVariant.variables) {
                         blockVariant.variables = injectVariables(blockVariant.variables, {
-                            ...item,
+                            ...page,
                             ...globalVariables
                         })
                     }
@@ -98,7 +113,7 @@ exports.pageFromConfig = async (stack, item, parent, pageIndex) => {
                     // also pass page variables to block so it can inherit them
                     if (page.variables) {
                         blockVariant.pageVariables = injectVariables(page.variables, {
-                            ...item,
+                            ...page,
                             ...globalVariables
                         })
                     }
@@ -125,19 +140,6 @@ exports.pageFromConfig = async (stack, item, parent, pageIndex) => {
 
             page.blocks = blocks
         }
-
-        if (parent === undefined) {
-            stack.hierarchy.push(page)
-        }
-        // always push everything at the root level, even during recursive iterations
-        stack.flat.push(page)
-
-        if (Array.isArray(item.children)) {
-            page.children = await Promise.all(
-                item.children.map(child => exports.pageFromConfig(stack, child, page, pageIndex))
-            )
-        }
-
         return page
     } catch (error) {
         console.log('// pageFromConfig Error')
@@ -147,21 +149,20 @@ exports.pageFromConfig = async (stack, item, parent, pageIndex) => {
 
 let computedSitemap = null
 
-exports.computeSitemap = async (rawSitemap, locales) => {
+exports.computeSitemap = async (rawSitemap) => {
     if (computedSitemap !== null) {
         return computedSitemap
     }
 
     const stack = {
         flat: [],
-        hierarchy: []
     }
 
-    let pageIndex = 0
-    for (const page of rawSitemap) {
-        await exports.pageFromConfig(stack, page, undefined, pageIndex)
-        pageIndex++
-    }
+    flattenSitemap(stack, rawSitemap, undefined, 0)
+
+    stack.flat = await Promise.all(
+        stack.flat.map((page, pageIndex) => exports.pageFromConfig(page, pageIndex))
+    )
 
     // assign prev/next page using flat pages
     stack.flat.forEach(page => {
@@ -185,11 +186,8 @@ exports.computeSitemap = async (rawSitemap, locales) => {
         }
     })
 
-    logToFile('sitemap.yml', yaml.dump(stack.hierarchy, { noRefs: true }), { mode: 'overwrite' })
     logToFile('flat_sitemap.yml', yaml.dump(stack.flat, { noRefs: true }), { mode: 'overwrite' })
 
-    const blocsContent = yaml.dump(getAllBlocks({ contents: stack.hierarchy }), { noRefs: true })
-    logToFile('blocks.yml', blocsContent, { mode: 'overwrite' })
 
     return stack
 }
