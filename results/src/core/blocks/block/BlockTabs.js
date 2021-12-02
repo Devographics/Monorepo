@@ -24,11 +24,11 @@ export const EmptyWrapper = ({ block, pageData, blockIndex }) => (
 )
 
 const Wrapper = styled.section`
-    margin-bottom: ${spacing(3)};
+  margin-bottom: ${spacing(3)};
 
-    @media ${mq.large} {
-      margin-bottom: ${spacing(6)};
-    }
+  @media ${mq.large} {
+    margin-bottom: ${spacing(6)};
+  }
 `
 
 const BlockHeader = styled.div`
