@@ -7,7 +7,7 @@ const stateOfCSSThemeTypography: DefaultTheme['typography'] = {
         desktop: '17px',
     },
     size: {
-        smaller: '0.7rem',
+        smaller: '0.75rem',
         small: '0.8rem',
         smallish: '0.9rem',
         medium: '1rem',
