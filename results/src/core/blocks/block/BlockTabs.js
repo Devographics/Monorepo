@@ -3,7 +3,7 @@ import BlockSwitcher from 'core/blocks/block/BlockSwitcher'
 import * as Tabs from '@radix-ui/react-tabs'
 import BlockTitle from 'core/blocks/block/BlockTitle'
 import styled from 'styled-components'
-import { spacing, fontSize } from 'core/theme'
+import { mq, spacing, fontSize } from 'core/theme'
 import T from 'core/i18n/T'
 import { getBlockTabKey } from 'core/helpers/blockHelpers'
 import { usePageContext } from 'core/helpers/pageContext'
@@ -30,15 +30,25 @@ const Wrapper = styled.section`
 const BlockHeader = styled.div`
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: ${spacing(0.5)};
     border-bottom: ${props => props.theme.border};
 `
 
 const TabsList = styled(Tabs.List)`
     display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    padding-right: 52px;
+    justify-content: flex-start;
+    align-items: flex-end;
+    overflow:auto;
+    overflow-y: hidden;
+
+    @media ${mq.large} {
+      overflow:visible;
+      width:max-content;
+      padding-right: 52px;
+      overflow:visible;
+    }
 `
 
 const TabsTrigger = styled(Tabs.Trigger)`
