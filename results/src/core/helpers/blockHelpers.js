@@ -5,7 +5,7 @@ const { siteTitle, capturesUrl, hashtag, year } = config
 
 export const getBlockKey = (block, page) => {
     const namespace = block.i18nNamespace ?? 'blocks'
-    const blockId = block.id.replace('_others', '.others')
+    const blockId = block?.id?.replace('_others', '.others')
     return `${namespace}.${blockId}`
 }
 

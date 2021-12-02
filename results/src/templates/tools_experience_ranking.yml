@@ -1,14 +1,13 @@
 id: "${parentId}_experience_ranking"
 blockType: ToolsExperienceRankingBlock
 titleId: blocks.tools_experience_ranking
-
-dataPath: "surveyApi.survey.${parentId}_rankings.experience"
-
+dataPath: "surveyApi.survey.${parentId}_rankings"
 query: >
     surveyApi {
         survey(survey: ${surveyType}) {
             ${parentId}_rankings: tools_rankings(ids: [${toolsCategories[parentId]}]) {
                 ids
+                years
                 experience {
                     id
                     entity {

@@ -1,4 +1,4 @@
-import { computeToolsExperienceRanking } from '../compute'
+import { computeToolsExperienceRankingYears, computeToolsExperienceRanking } from '../compute'
 import { useCache } from '../caching'
 import { Filters } from '../filters'
 import keys from '../data/keys.yml'
@@ -10,6 +10,11 @@ import {
 
 export default {
     ToolsRankings: {
+        years: async  (
+            { survey, ids, filters }: { survey: SurveyConfig; ids: string[]; filters?: Filters },
+            args: any,
+            { db }: RequestContext
+        ) => useCache(computeToolsExperienceRankingYears, db, [survey, ids, filters]),
         experience: async (
             { survey, ids, filters }: { survey: SurveyConfig; ids: string[]; filters?: Filters },
             args: any,

@@ -4,6 +4,8 @@ export const percentageUnits = [
     'percentage',
     'satisfaction_percentage',
     'interest_percentage',
+    'usage_percentage',
+    'awareness_percentage',
     'usage_ratio',
     'percentage_question',
     'percentage_facet',
