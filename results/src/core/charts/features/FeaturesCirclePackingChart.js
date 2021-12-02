@@ -25,7 +25,7 @@ const fontSizeByRadius = radius => {
 }
 
 const getOffset = (mode, index) => {
-    return mode === 'grouped' ? 0 : 40
+    return mode === 'grouped' ? 0 : 50
     // return mode === 'grouped' ? (index % 2 === 0 ? -6 : 6) : 50
 }
 
