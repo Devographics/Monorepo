@@ -34,15 +34,25 @@ const Wrapper = styled.section`
 const BlockHeader = styled.div`
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: ${spacing(0.5)};
     border-bottom: ${props => props.theme.border};
 `
 
 const TabsList = styled(Tabs.List)`
     display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    padding-right: 52px;
+    justify-content: flex-start;
+    align-items: flex-end;
+    overflow:auto;
+    overflow-y: hidden;
+
+    @media ${mq.large} {
+      overflow:visible;
+      width:max-content;
+      padding-right: 52px;
+      overflow:visible;
+    }
 `
 
 const TabsTrigger = styled(Tabs.Trigger)`
