@@ -15,7 +15,7 @@ query: >
             ) {
                 cardinality
                 count
-                percentage
+                percentage_survey
             }
             css_frameworks: tools_cardinality_by_user(
                 year: ${currentYear},
@@ -24,7 +24,7 @@ query: >
             ) {
                 cardinality
                 count
-                percentage
+                percentage_survey
             }
             css_in_js: tools_cardinality_by_user(
                 year: ${currentYear},
@@ -33,7 +33,7 @@ query: >
             ) {
                 cardinality
                 count
-                percentage
+                percentage_survey
             }
         }
     }

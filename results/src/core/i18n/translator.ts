@@ -20,7 +20,7 @@ export interface LegacyTranslator {
 }
 
 export interface StringTranslator {
-    (key: string, interpolation: InterpolationValues, fallback?: string): StringTranslatorResult
+    (key: string, interpolation?: InterpolationValues, fallback?: string): StringTranslatorResult
 }
 
 interface StringTranslatorResult {

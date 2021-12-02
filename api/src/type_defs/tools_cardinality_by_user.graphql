@@ -4,5 +4,5 @@ type ToolsCardinalityByUser {
     """
     Percentage against number of respondents for the related year.
     """
-    percentage: Float
+    percentage_survey: Float
 }

@@ -19,7 +19,7 @@ export const SectionItem = memo(
     }: {
         sectionId: string
         data: ToolsCardinalityByUserBucket[]
-        units: 'percentage' | 'count'
+        units: 'percentage_survey' | 'count'
         maxNumberOfTools: number
     }) => {
         const { translate } = useI18n()
@@ -29,7 +29,7 @@ export const SectionItem = memo(
             return (bucket: ToolsCardinalityByUserBucket) => {
                 return units === 'count'
                     ? formatter(bucket.count)
-                    : `${formatter(bucket.percentage)}%`
+                    : `${formatter(bucket.percentage_survey)}%`
             }
         }, [units])
 
@@ -55,7 +55,7 @@ export const SectionItem = memo(
                                     <CellsWrapper />
                                     <InnerBar
                                         style={{
-                                            width: `${bucket.percentage}%`,
+                                            width: `${bucket.percentage_survey}%`,
                                         }}
                                     />
                                     {isMax && <span className="sr-only">{translate('blocks.cardinality.max')}</span>}
