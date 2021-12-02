@@ -18,4 +18,5 @@ export interface TranslationStringObject {
     tHtml: string
     context: string
     fallback: Boolean
+    aliasFor?: string
 }
