@@ -4,7 +4,7 @@ import ButtonGroup from 'core/components/ButtonGroup'
 import Button from 'core/components/Button'
 import T from 'core/i18n/T'
 
-const UnitButton = ({ units, current, onChange, i18nNamespace = 'charts_units' }) => (
+const UnitButton = ({ units, current, onChange, i18nNamespace = 'chart_units' }) => (
     <Button
         size="small"
         className={`Button--${current === units ? 'selected' : 'unselected'}`}
