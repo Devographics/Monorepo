@@ -8,8 +8,25 @@ import { usePageContext } from 'core/helpers/pageContext'
 import range from 'lodash/range'
 import sumBy from 'lodash/sumBy'
 import T from 'core/i18n/T'
+import { getTableData } from 'core/helpers/datatables'
 
 const groupBy = 10
+
+const getLabel = (n) => `${n * groupBy}-${(n + 1) * groupBy}%`
+
+const getChartData = ({ data }) => {
+    return range(0, 100 / groupBy).map((n) => {
+        const selectedBuckets = data.buckets.filter(
+            (b) => b.id >= n * groupBy && b.id < (n + 1) * groupBy
+        )
+        return {
+            id: getLabel(n),
+            count: sumBy(selectedBuckets, 'count'),
+            percentage_survey: Math.round(100 * sumBy(selectedBuckets, 'percentage_survey')) / 100,
+            percentage_question: Math.round(100 * sumBy(selectedBuckets, 'percentage_question')) / 100,
+        }
+    })
+}
 
 const KnowledgeScoreBlock = ({ block, data }) => {
     if (!data) {
@@ -30,56 +47,21 @@ const KnowledgeScoreBlock = ({ block, data }) => {
     const [units, setUnits] = useState(defaultUnits)
     
 
-    const { buckets, total, completion } = data
-
-    const getLabel = (n) => `${n * groupBy}-${(n + 1) * groupBy}%`
+    const { total, completion } = data
 
     const bucketKeys = range(0, 100 / groupBy).map((n) => ({
         id: getLabel(n),
         shortLabel: getLabel(n),
     }))
 
-    const groupedBuckets = range(0, 100 / groupBy).map((n) => {
-        const selectedBuckets = buckets.filter(
-            (b) => b.id >= n * groupBy && b.id < (n + 1) * groupBy
-        )
-        return {
-            id: getLabel(n),
-            count: sumBy(selectedBuckets, 'count'),
-            percentage_survey: Math.round(100 * sumBy(selectedBuckets, 'percentage_survey')) / 100,
-            percentage_question: Math.round(100 * sumBy(selectedBuckets, 'percentage_question')) / 100,
-        }
-    })
-
-    const tables = [
-        {
-            headings: [
-                { id: 'label', label: <T k="table.label" /> },
-                { id: 'percentage', label: <T k="table.percentage" /> },
-                { id: 'count', label: <T k="table.count" /> },
-            ],
-            rows: groupedBuckets.map((bucket) => [
-                {
-                    id: 'label',
-                    label: bucket.id,
-                },
-                {
-                    id: 'percentage',
-                    label: `${bucket.percentage}%`,
-                },
-                {
-                    id: 'count',
-                    label: bucket.count,
-                },
-            ]),
-        },
-    ]
+    const groupedBuckets = getChartData({ data })
 
     return (
         <Block
-            tables={tables}
-            
-            
+            tables={[getTableData({
+                legends: bucketKeys,
+                data: groupedBuckets,
+            })]}
             units={units}
             setUnits={setUnits}
             completion={completion}

@@ -49,14 +49,14 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
             heard: colors.greyTeal,
             never_heard: colors.navyLighter
         },
-        featureSections: {
+        features_categories: {
             layout: colors.indigo,
             shapes_graphics: colors.pink,
             interactions: colors.red,
             typography: colors.purple,
             animations_transforms: colors.orange,
-            media_queries: colors.green,
-            other_features: colors.skyblue
+            other_features: colors.green,
+            accessibility: colors.yellow
         },
         features_simplified: {
             know_it: '#ACFFC3',

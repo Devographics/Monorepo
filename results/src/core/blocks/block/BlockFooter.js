@@ -35,9 +35,11 @@ const BlockFooter = ({ completion, units, setUnits }) => (
                 />
             </Respondents>
         )}
-        <Units>
-            <BlockUnitsSelector units={units} onChange={setUnits} />
-        </Units>
+        {setUnits && (
+            <Units>
+                <BlockUnitsSelector units={units} onChange={setUnits} />
+            </Units>
+        )}
     </Footer>
 )
 

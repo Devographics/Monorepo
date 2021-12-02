@@ -4,12 +4,29 @@ import PropTypes from 'prop-types'
 import { ResponsiveCirclePacking, useNodeMouseHandlers } from '@nivo/circle-packing'
 import ChartLabel from 'core/components/ChartLabel'
 import { FeaturesCirclePackingChartTooltip } from './FeaturesCirclePackingChartTooltip'
+import truncate from 'lodash/truncate'
 
-const fontSizeByRadius = (radius) => {
-    if (radius < 25) return 8
-    if (radius < 35) return 10
-    if (radius < 45) return 12
-    return 14
+const nodesPerRow = 8
+const spacing = 110
+const getGridCoords = rank => {
+    return {
+        x: 80 + (rank % nodesPerRow) * spacing,
+        y: 100 + Math.floor(rank / nodesPerRow) * spacing
+    }
+}
+
+const fontSizeByRadius = radius => {
+    // if (radius < 25) return 8
+    // if (radius < 35) return 10
+    // if (radius < 45) return 12
+    // return 14
+
+    return 12
+}
+
+const getOffset = (mode, index) => {
+    return mode === 'grouped' ? 0 : 50
+    // return mode === 'grouped' ? (index % 2 === 0 ? -6 : 6) : 50
 }
 
 const sectionLabelOffsets = {
@@ -19,19 +36,19 @@ const sectionLabelOffsets = {
     typography: 320,
     animations_transforms: 50,
     media_queries: 0,
-    other_features: 135,
+    other_features: 135
 }
 
-const Node = (props) => {
+const Node = props => {
     // note that `current` is an array of ids for this chart
-    const { node, current } = props
+    const { node, current, mode } = props
     const radius = node.radius
     const theme = useTheme()
 
     const handlers = useNodeMouseHandlers(node, {
         onMouseEnter: props.onMouseEnter,
         onMouseMove: props.onMouseMove,
-        onMouseLeave: props.onMouseLeave,
+        onMouseLeave: props.onMouseLeave
     })
 
     if (node.depth === 0) {
@@ -39,10 +56,10 @@ const Node = (props) => {
     }
 
     if (node.depth === 1 && node.data.isSection) {
-        const color = theme.colors.ranges.featureSections[node.data.id]
+        const color = theme.colors.ranges.features_categories[node.data.id]
 
         const categoryContainsIds = (categoryNode, itemIds) => {
-            return categoryNode.data.children.some((node) => itemIds.includes(node.id))
+            return categoryNode.data.children.some(node => itemIds.includes(node.id))
         }
 
         const state =
@@ -53,7 +70,11 @@ const Node = (props) => {
                 : 'inactive'
 
         return (
-            <CirclePackingNodeCategory state={state} transform={`translate(${node.x},${node.y})`}>
+            <CirclePackingNodeCategory
+                chartMode={mode}
+                state={state}
+                transform={`translate(${node.x},${node.y})`}
+            >
                 <defs>
                     <path
                         d={`M-${radius},0a${radius},${radius} 0 1,0 ${
@@ -62,20 +83,20 @@ const Node = (props) => {
                         id={`textcircle-${node.data.id}`}
                     />
                 </defs>
-                <CirclePackingNodeCategoryLabel dy={30}>
+                {/* <CirclePackingNodeCategoryLabel dy={30}>
                     <textPath
                         xlinkHref={`#textcircle-${node.data.id}`}
                         side="right"
                         fill={color}
                         style={{
                             fontWeight: '600',
-                            fontSize: '0.9rem',
+                            fontSize: '0.9rem'
                         }}
                         startOffset={sectionLabelOffsets[node.data.id]}
                     >
                         {node.data.name}
                     </textPath>
-                </CirclePackingNodeCategoryLabel>
+                </CirclePackingNodeCategoryLabel> */}
                 <circle
                     r={radius}
                     fill={theme.colors.backgroundAlt}
@@ -89,27 +110,31 @@ const Node = (props) => {
         )
     } else {
         const usageRadius = radius * (node.data.usage / node.data.awareness)
-        const color = theme.colors.ranges.featureSections[node.data.sectionId]
+        const color = theme.colors.ranges.features_categories[node.data.sectionId]
 
         const state =
             current === null ? 'default' : current.includes(node.data.id) ? 'active' : 'inactive'
 
-        const offset = node.data.index % 2 === 0 ? -6 : 6
+        const offset = getOffset(mode, node.data.index)
+
+        const x = mode === 'grouped' ? node.x : getGridCoords(node.data[mode]).x
+        const y = mode === 'grouped' ? node.y : getGridCoords(node.data[mode]).y
 
         return (
             <CirclePackingNode
                 className="CirclePackingNode"
-                transform={`translate(${node.x},${node.y})`}
+                // transform={`translate(${x},${y})`}
                 onMouseEnter={handlers.onMouseEnter}
                 onMouseMove={handlers.onMouseMove}
                 onMouseLeave={handlers.onMouseLeave}
                 state={state}
+                style={{ transition: 'all ease-in 300ms', transform: `translate(${x}px,${y}px)` }}
             >
                 <circle r={radius} fill={`${color}50`} />
                 <circle r={usageRadius} fill={color} />
                 <ChartLabel
                     transform={`translate(0,${offset})`}
-                    label={node.data.name}
+                    label={truncate(node.data.name, { length: 12, omission: '…' })}
                     fontSize={fontSizeByRadius(radius)}
                 />
             </CirclePackingNode>
@@ -117,7 +142,7 @@ const Node = (props) => {
     }
 }
 
-const FeaturesCirclePackingChart = ({ data, className, current = null }) => {
+const FeaturesCirclePackingChart = ({ data, className, current = null, mode }) => {
     const theme = useTheme()
 
     return (
@@ -128,7 +153,7 @@ const FeaturesCirclePackingChart = ({ data, className, current = null }) => {
                     top: 2,
                     right: 2,
                     bottom: 2,
-                    left: 2,
+                    left: 2
                 }}
                 identity="name"
                 leavesOnly={false}
@@ -136,7 +161,7 @@ const FeaturesCirclePackingChart = ({ data, className, current = null }) => {
                 colors={['white', 'blue']}
                 data={data}
                 value="awareness"
-                circleComponent={(props) => <Node {...props} current={current} />}
+                circleComponent={props => <Node {...props} mode={mode} current={current} />}
                 animate={false}
                 tooltip={FeaturesCirclePackingChartTooltip}
             />
@@ -155,13 +180,13 @@ FeaturesCirclePackingChart.propTypes = {
                         PropTypes.shape({
                             id: PropTypes.string.isRequired,
                             count: PropTypes.number.isRequired,
-                            percentage: PropTypes.number.isRequired,
+                            percentage: PropTypes.number.isRequired
                         })
-                    ).isRequired,
-                }).isRequired,
+                    ).isRequired
+                }).isRequired
             })
-        ),
-    }),
+        )
+    })
 }
 
 const Chart = styled.div`
@@ -170,9 +195,10 @@ const Chart = styled.div`
     }
 `
 const CirclePackingNodeCategory = styled.g`
-    ${({ state }) =>
+    transition: all ease-in 300ms;
+    ${({ chartMode, state }) =>
         css`
-            opacity: ${state === 'inactive' ? 0.15 : 1};
+            opacity: ${chartMode === 'grouped' ? (state === 'inactive' ? 0.15 : 1) : 0};
         `}
 `
 
@@ -191,4 +217,4 @@ const CirclePackingNodeCategoryLabel = styled.text`
     opacity: 0.65;
 `
 
-export default memo(FeaturesCirclePackingChart)
+export default FeaturesCirclePackingChart

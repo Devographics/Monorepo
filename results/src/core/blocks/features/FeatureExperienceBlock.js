@@ -6,12 +6,13 @@ import Block from 'core/blocks/block/BlockVariant'
 import ChartContainer from 'core/charts/ChartContainer'
 import GaugeBarChart from 'core/charts/generic/GaugeBarChart'
 import { usePageContext } from 'core/helpers/pageContext'
-import { useBucketKeys, useLegends } from 'core/helpers/useBucketKeys'
+import { useLegends } from 'core/helpers/useBucketKeys'
 import { spacing } from 'core/theme'
 import { useI18n } from 'core/i18n/i18nContext'
+import { getTableData, groupDataByYears } from 'core/helpers/datatables'
 
 // convert relative links into absolute MDN links
-const parseMDNLinks = (content) =>
+const parseMDNLinks = content =>
     content.replace(new RegExp(`href="/`, 'g'), `href="https://developer.mozilla.org/`)
 
 const FeatureExperienceBlock = ({
@@ -19,7 +20,7 @@ const FeatureExperienceBlock = ({
     keys,
     data,
     i18nNamespace = 'features',
-    units: defaultUnits = 'percentage_question',
+    units: defaultUnits = 'percentage_question'
 }) => {
     const [units, setUnits] = useState(defaultUnits)
 
@@ -36,36 +37,17 @@ const FeatureExperienceBlock = ({
     // only show descriptions for english version
     const description = locale.id === 'en-US' && mdn && parseMDNLinks(mdn.summary)
 
-    const isLastYear = (year) =>
-        allYears.findIndex((y) => y.year === year.year) === allYears.length - 1
-
-    let headings = [{ id: 'label', label: translate('table.year') }]
-    headings = headings.concat(bucketKeys)
-
-    const generateRows = (data) => {
-        const rows = []
-        data.forEach((row) => {
-            const newRow = []
-            newRow.push({ id: 'label', label: row.year })
-            row?.buckets?.forEach((bucket) =>
-                newRow.push({ id: bucket.id, label: `${bucket.percentage}% (${bucket.count})` })
-            )
-            rows.push(newRow)
-        })
-        return rows
-    }
-
-    const tables = [
-        {
-            headings: headings,
-            rows: generateRows(allYears),
-        },
-    ]
+    const isLastYear = year => allYears.findIndex(y => y.year === year.year) === allYears.length - 1
 
     return (
         <Block
-            tables={tables}
-            headings={headings}
+            tables={[
+                getTableData({
+                    legends: bucketKeys,
+                    data: groupDataByYears({ keys, data: allYears }),
+                    years: allYears.map(y => y.year)
+                })
+            ]}
             legends={bucketKeys}
             title={name}
             units={units}
@@ -76,10 +58,10 @@ const FeatureExperienceBlock = ({
                 title: name,
                 titleLink: mdnLink,
                 description,
-                enableDescriptionMarkdown: false,
+                enableDescriptionMarkdown: false
             }}
         >
-            {allYears.map((year) => (
+            {allYears.map(year => (
                 <Row key={year.year}>
                     <RowYear>{year.year}</RowYear>
                     <ChartContainer
@@ -118,7 +100,7 @@ const RowYear = styled.h4`
 FeatureExperienceBlock.propTypes = {
     block: PropTypes.shape({
         id: PropTypes.string.isRequired,
-        path: PropTypes.string.isRequired,
+        path: PropTypes.string.isRequired
     }).isRequired,
     data: PropTypes.shape({
         id: PropTypes.string.isRequired,
@@ -129,7 +111,7 @@ FeatureExperienceBlock.propTypes = {
                     year: PropTypes.number.isRequired,
                     completion: PropTypes.shape({
                         count: PropTypes.number.isRequired,
-                        percentage: PropTypes.number.isRequired,
+                        percentage: PropTypes.number.isRequired
                     }).isRequired,
                     buckets: PropTypes.arrayOf(
                         PropTypes.shape({
@@ -140,16 +122,16 @@ FeatureExperienceBlock.propTypes = {
                                     PropTypes.shape({
                                         id: PropTypes.string.isRequired,
                                         count: PropTypes.number.isRequired,
-                                        percentage: PropTypes.number.isRequired,
+                                        percentage: PropTypes.number.isRequired
                                     })
-                                ).isRequired,
-                            }),
+                                ).isRequired
+                            })
                         })
-                    ).isRequired,
+                    ).isRequired
                 })
-            ).isRequired,
-        }).isRequired,
-    }).isRequired,
+            ).isRequired
+        }).isRequired
+    }).isRequired
 }
 
 export default FeatureExperienceBlock

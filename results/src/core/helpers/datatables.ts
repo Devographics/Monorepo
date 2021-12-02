@@ -1,8 +1,8 @@
-import { BlockUnits, BlockLegend, BucketItem } from 'core/types'
+import { BlockUnits, BlockLegend, BucketItem, ResultsByYear } from 'core/types'
 import { isPercentage } from 'core/helpers/units'
 
 export interface TableBucketItem {
-    id: string
+    id: string | number
     label?: string
     count?: number | TableBucketYearValue[]
     percentage_survey?: number | TableBucketYearValue[]
@@ -46,7 +46,7 @@ export interface TableDataCell {
     id: string | number
     label?: string | number
     labelId?: string | number
-    value?: number | number[]
+    value?: number | TableBucketYearValue[]
     translateData?: boolean
     isPercentage?: boolean
 }
@@ -85,11 +85,53 @@ export const getTableData = (params: TableParams): TableData => {
         const columns: TableDataCell[] = []
 
         valueKeys.forEach((key) => {
-            columns.push({ id: key, value: getValue(row, key) })
+            columns.push({ id: key, value: getValue(row, key), isPercentage: isPercentage(key) })
         })
 
         return [firstColumn, ...columns]
     })
 
     return { title, headings, rows, years }
+}
+
+export const groupDataByYears = ({
+    keys = [],
+    data = [],
+    valueKeys = defaultValueKeys,
+}: {
+    data: ResultsByYear[]
+    valueKeys?: BlockUnits[]
+    keys: string[]
+}) => {
+    const years = data.map(y => y.year)
+    return keys.map((key) => {
+        const bucket: TableBucketItem = {
+            id: key,
+        }
+        valueKeys.forEach((valueKey) => {
+            bucket[valueKey] = years.map((year) => ({
+                year,
+                value: getBucketValue({ data, year, key, valueKey }),
+                isPercentage: isPercentage(valueKey),
+            }))
+        })
+        return bucket
+    })
+}
+
+export const getBucketValue = ({
+    data,
+    year,
+    key,
+    valueKey,
+}: {
+    data: ResultsByYear[]
+    year: number
+    key: number | string
+    valueKey: BlockUnits
+}) => {
+    const yearData = data.find((d) => d.year === year)
+    const yearBuckets = yearData.facets[0].buckets
+    const bucket = yearBuckets.find((b) => b.id === key)
+    return bucket[valueKey]
 }

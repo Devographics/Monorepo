@@ -126,6 +126,7 @@
 
     - id: knowledge_score
       template: demographics
+      titleId: features.knowledge_score
       blockType: KnowledgeScoreBlock
 
     - id: features_resources

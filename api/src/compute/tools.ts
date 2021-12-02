@@ -5,6 +5,7 @@ import { Filters } from '../filters'
 import config from '../config'
 import { computeChoicesOverYearsGraph } from './choices_over_years_graph'
 import { getParticipationByYearMap } from './demographics'
+import round from 'lodash/round'
 
 export const allToolExperienceIds = [
     'would_use',
@@ -211,7 +212,7 @@ export async function computeToolsCardinalityByUser(
     const resultsWithPercentage = results.map(result => ({
         cardinality: result.cardinality,
         count: result.count,
-        percentage: result.count / numberOfRespondents * 100
+        percentage_survey: round(result.count / numberOfRespondents * 100, 1)
     }))
 
     // console.log(inspect({ numberOfRespondents, pipeline, results, resultsWithPercentage }, { colors: true, depth: null }))

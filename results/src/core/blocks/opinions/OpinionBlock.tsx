@@ -11,7 +11,7 @@ import StreamChart from 'core/charts/generic/StreamChart'
 import { useBucketKeys, useLegends } from 'core/helpers/useBucketKeys'
 // @ts-ignore
 import { useI18n } from 'core/i18n/i18nContext'
-import { TableBucketItem, getTableData } from 'core/helpers/datatables'
+import { TableBucketItem, getTableData, groupDataByYears } from 'core/helpers/datatables'
 import { BlockUnits, ResultsByYear } from 'core/types'
 import { isPercentage } from 'core/helpers/units'
 
@@ -24,48 +24,7 @@ interface OpinionBlockProps {
     keys: string[]
 }
 
-export const getBucketValue = ({
-    data,
-    year,
-    key,
-    valueKey,
-}: {
-    data: ResultsByYear[]
-    year: number
-    key: number | string
-    valueKey: BlockUnits
-}) => {
-    const yearData = data.find((d) => d.year === year)
-    const yearBuckets = yearData.facets[0].buckets
-    const bucket = yearBuckets.find((b) => b.id === key)
-    return bucket[valueKey]
-}
 
-export const groupDataByYears = ({
-    keys,
-    data,
-    valueKeys,
-    years,
-}: {
-    years: number[]
-    data: ResultsByYear
-    valueKeys: BlockUnits[]
-    keys: string[]
-}) => {
-    return keys.map((key) => {
-        const bucket: TableBucketItem = {
-            id: key,
-        }
-        valueKeys.forEach((valueKey) => {
-            bucket[valueKey] = years.map((year) => ({
-                year,
-                value: getBucketValue({ data, year, key, valueKey }),
-                isPercentage: isPercentage(valueKey),
-            }))
-        })
-        return bucket
-    })
-}
 
 export const OpinionBlock = ({
     block,
@@ -106,14 +65,11 @@ export const OpinionBlock = ({
         [data, bucketKeys]
     )
 
-    // console.log(data)
-    // console.log(normalizedData)
-
     const years = data.map((y) => y.year)
 
     const valueKeys: BlockUnits[] = ['percentage_survey', 'percentage_question', 'count']
 
-    const tableData = groupDataByYears({ keys, data, valueKeys, years })
+    const tableData = groupDataByYears({ keys, data, valueKeys })
 
     return (
         <Block

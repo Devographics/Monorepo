@@ -4,7 +4,7 @@ import Block from 'core/blocks/block/BlockVariant'
 import ChartContainer from 'core/charts/ChartContainer'
 import HorizontalBarChart from 'core/charts/generic/HorizontalBarChart'
 import { getTableData } from 'core/helpers/datatables'
-import { BracketFacetItem, BlockComponentProps } from 'core/types'
+import { BracketFacetItem, BlockComponentProps, BlockDefinition } from 'core/types'
 import sortBy from 'lodash/sortBy'
 import { useLegends } from 'core/helpers/useBucketKeys'
 import { useTheme } from 'styled-components'
@@ -17,6 +17,25 @@ export interface HorizontalBarBlockProps extends BlockComponentProps {
     data: BracketFacetItem
 }
 
+export interface HorizontalBarChartBucketItem {
+    id: string | number
+    color?: string
+}
+
+const getChartData = ({ data, keys }: { data: BracketFacetItem; keys?: string[] }) => {
+    const theme = useTheme()
+
+    return sortBy(data.buckets, b => b.combined.count).map(bucket => {
+        const bucketByRound: HorizontalBarChartBucketItem = { id: bucket.id }
+        keys?.forEach(r => {
+            bucketByRound[`${r}___count`] = bucket[r]['count']
+            bucketByRound[`${r}___percentage`] = bucket[r]['percentage']
+            bucketByRound.color = theme.colors.ranges.bracket[r]
+        })
+        return bucketByRound
+    })
+}
+
 const BracketWinsBlock = ({ block, data, keys }: HorizontalBarBlockProps) => {
     const {
         id,
@@ -24,7 +43,7 @@ const BracketWinsBlock = ({ block, data, keys }: HorizontalBarBlockProps) => {
         defaultUnits = 'count',
         translateData = true,
         i18nNamespace = block.id,
-        colorVariant,
+        colorVariant
     } = block
 
     const theme = useTheme()
@@ -39,15 +58,7 @@ const BracketWinsBlock = ({ block, data, keys }: HorizontalBarBlockProps) => {
 
     const legends = keys && useLegends(block, keys, 'bracket')
 
-    const buckets = sortBy(data.buckets, (b) => b.combined.count).map((bucket) => {
-        const bucketByRound = { id: bucket.id }
-        rounds?.forEach((r) => {
-            bucketByRound[`${r}___count`] = bucket[r]['count']
-            bucketByRound[`${r}___percentage`] = bucket[r]['percentage']
-            bucketByRound.color = theme.colors.ranges.bracket[r]
-        })
-        return bucketByRound
-    })
+    const buckets = getChartData({ data, keys })
 
     return (
         <Block
@@ -59,8 +70,8 @@ const BracketWinsBlock = ({ block, data, keys }: HorizontalBarBlockProps) => {
                     data: data.buckets,
                     valueKeys: ['percentage_survey', 'percentage_question', 'count'],
                     translateData,
-                    i18nNamespace,
-                }),
+                    i18nNamespace
+                })
             ]}
             legends={legends}
             block={block}
@@ -76,19 +87,19 @@ const BracketWinsBlock = ({ block, data, keys }: HorizontalBarBlockProps) => {
                     units={units}
                     colorVariant={colorVariant}
                     chartProps={{
-                        keys: rounds.map((r) => `${r}___${units}`),
+                        keys: rounds.map(r => `${r}___${units}`),
                         indexBy: 'id',
                         maxValue: data.completion.count * 2,
                         // colorBy: 'color',
-                        colors: rounds.map((r) => theme.colors.ranges.bracket[r]),
-                        tooltip: (barProps) => (
+                        colors: rounds.map(r => theme.colors.ranges.bracket[r]),
+                        tooltip: barProps => (
                             <BarTooltip
                                 units={units}
                                 i18nNamespace={i18nNamespace}
                                 shouldTranslate={translateData}
                                 {...barProps}
                             />
-                        ),
+                        )
                     }}
                 />
             </ChartContainer>
@@ -96,7 +107,7 @@ const BracketWinsBlock = ({ block, data, keys }: HorizontalBarBlockProps) => {
     )
 }
 
-const BarTooltip = (props) => {
+const BarTooltip = props => {
     const { id, units, indexValue, data, i18nNamespace, shouldTranslate } = props
     const { getName } = useEntities()
     const { translate } = useI18n()
@@ -129,15 +140,15 @@ BracketWinsBlock.propTypes = {
         translateData: PropTypes.bool,
         mode: PropTypes.oneOf(['absolute', 'relative']),
         defaultUnits: PropTypes.oneOf(['percentage_survey', 'percentage_question', 'count']),
-        colorVariant: PropTypes.oneOf(['primary', 'secondary']),
+        colorVariant: PropTypes.oneOf(['primary', 'secondary'])
     }).isRequired,
     data: PropTypes.shape({
         buckets: PropTypes.arrayOf(
             PropTypes.shape({
-                id: PropTypes.string.isRequired,
+                id: PropTypes.string.isRequired
             })
-        ).isRequired,
-    }).isRequired,
+        ).isRequired
+    }).isRequired
 }
 
 export default memo(BracketWinsBlock)
