@@ -56,7 +56,7 @@ const Node = props => {
     }
 
     if (node.depth === 1 && node.data.isSection) {
-        const color = theme.colors.ranges.featureSections[node.data.id]
+        const color = theme.colors.ranges.features_categories[node.data.id]
 
         const categoryContainsIds = (categoryNode, itemIds) => {
             return categoryNode.data.children.some(node => itemIds.includes(node.id))
@@ -83,7 +83,7 @@ const Node = props => {
                         id={`textcircle-${node.data.id}`}
                     />
                 </defs>
-                <CirclePackingNodeCategoryLabel dy={30}>
+                {/* <CirclePackingNodeCategoryLabel dy={30}>
                     <textPath
                         xlinkHref={`#textcircle-${node.data.id}`}
                         side="right"
@@ -96,7 +96,7 @@ const Node = props => {
                     >
                         {node.data.name}
                     </textPath>
-                </CirclePackingNodeCategoryLabel>
+                </CirclePackingNodeCategoryLabel> */}
                 <circle
                     r={radius}
                     fill={theme.colors.backgroundAlt}
@@ -110,7 +110,7 @@ const Node = props => {
         )
     } else {
         const usageRadius = radius * (node.data.usage / node.data.awareness)
-        const color = theme.colors.ranges.featureSections[node.data.sectionId]
+        const color = theme.colors.ranges.features_categories[node.data.sectionId]
 
         const state =
             current === null ? 'default' : current.includes(node.data.id) ? 'active' : 'inactive'

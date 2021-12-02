@@ -11,8 +11,9 @@ import round from 'lodash/round'
 import sortBy from 'lodash/sortBy'
 import { getTableData } from 'core/helpers/datatables'
 import BlockUnitsSelector from 'core/blocks/block/BlockUnitsSelector'
+import { useLegends } from 'core/helpers/useBucketKeys'
 
-const modes = ['grouped', 'awareness_rank', 'usage_rank', 'usage_ratio_rank']
+const modes = ['grouped', 'awareness_rank', 'usage_rank' /*'usage_ratio_rank'*/]
 
 const getNodeData = (feature, index) => {
     const buckets = get(feature, 'experience.year.facets.0.buckets')
@@ -83,7 +84,6 @@ const getChartData = (data, getName, translate) => {
     }
 }
 
-
 const FeaturesOverviewBlock = ({ block, data, triggerId }) => {
     const { getName } = useEntities()
     const { translate } = useI18n()
@@ -92,8 +92,14 @@ const FeaturesOverviewBlock = ({ block, data, triggerId }) => {
         () => getChartData(data, getName, translate),
         [data, getName, translate]
     )
+    const categories = chartData.children
+    const legends = useLegends(
+        block,
+        categories.map(c => c.id),
+        'features_categories'
+    )
 
-    const [mode, setMode ] = useState(modes[0])
+    const [mode, setMode] = useState(modes[0])
 
     const controlledCurrent = triggerId
 
@@ -107,12 +113,13 @@ const FeaturesOverviewBlock = ({ block, data, triggerId }) => {
         <Block
             block={{
                 ...block,
-                showLegend: true,
+                legendPosition: 'top',
                 bucketKeysName: 'features_simplified'
             }}
+            legends={legends}
             data={data}
             className="FeaturesOverviewBlock"
-            tables={chartData.children.map(category =>
+            tables={categories.map(category =>
                 getTableData({
                     title: category.name,
                     data: sortBy(category.children, 'usage_ratio')
@@ -124,16 +131,21 @@ const FeaturesOverviewBlock = ({ block, data, triggerId }) => {
             showUnits={false}
         >
             <>
-            <BlockUnitsSelector units={mode} onChange={setMode} options={modes} i18nNamespace="options.features_mode"/>
-            <ChartContainer vscroll={false} height={height}>
-                <FeaturesOverviewCirclePackingChart
-                    className={`FeaturesOverviewChart ${chartClassName}`}
-                    data={chartData}
-                    variant="allFeatures"
-                    current={controlledCurrent}
-                    mode={mode}
+                <BlockUnitsSelector
+                    units={mode}
+                    onChange={setMode}
+                    options={modes}
+                    i18nNamespace="options.features_mode"
                 />
-            </ChartContainer>
+                <ChartContainer vscroll={false} height={height}>
+                    <FeaturesOverviewCirclePackingChart
+                        className={`FeaturesOverviewChart ${chartClassName}`}
+                        data={chartData}
+                        variant="allFeatures"
+                        current={controlledCurrent}
+                        mode={mode}
+                    />
+                </ChartContainer>
             </>
         </Block>
     )
