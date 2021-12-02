@@ -33,11 +33,6 @@ const RecommendedResourcesBlock = ({ block, data }) => {
     return (
         <div className="Block">
             <div className="resources">
-                <BlockTitle
-                    block={{ ...block, showDescription: false }}
-                    isExportable={false}
-                    isShareable={false}
-                />
                 <List className="Resources__list">
                     {sectionResources.map((resource) => {
                         const url = resource.url.includes('utm_source')
@@ -100,6 +95,7 @@ RecommendedResourcesBlock.propTypes = {
 }
 
 const List = styled.div`
+  margin-top: ${spacing(1)};
     @media ${mq.large} {
         display: grid;
         grid-template-columns: auto auto;
