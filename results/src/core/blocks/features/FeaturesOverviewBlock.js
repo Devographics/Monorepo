@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import get from 'lodash/get'
 import compact from 'lodash/compact'
 import Block from 'core/blocks/block/BlockVariant'
@@ -10,50 +10,68 @@ import variables from 'Config/variables.yml'
 import round from 'lodash/round'
 import sortBy from 'lodash/sortBy'
 import { getTableData } from 'core/helpers/datatables'
+import BlockUnitsSelector from 'core/blocks/block/BlockUnitsSelector'
+
+const modes = ['grouped', 'awareness_rank', 'usage_rank', 'usage_ratio_rank']
+
+const getNodeData = (feature, index) => {
+    const buckets = get(feature, 'experience.year.facets.0.buckets')
+
+    if (!buckets) {
+        throw new Error(`Feature “${feature.id}” does not have any data associated.`)
+    }
+
+    let usageBucket = buckets.find(b => b.id === 'used')
+    if (!usageBucket) {
+        usageBucket = { count: 0 }
+    }
+
+    let knowNotUsedBucket = buckets.find(b => b.id === 'heard')
+    if (!knowNotUsedBucket) {
+        knowNotUsedBucket = { count: 0 }
+    }
+
+    const usage = usageBucket.count
+    const awareness = usage + knowNotUsedBucket.count
+
+    return {
+        index,
+        id: feature.id,
+        awareness,
+        usage,
+        unused_count: knowNotUsedBucket.count,
+        usage_ratio: round((usage / awareness) * 100, 1),
+        name: feature.name
+    }
+}
+
+const addRanks = features => {
+    const rankedByUsage = sortBy(features, 'usage').reverse()
+    const rankedByAwareness = sortBy(features, 'awareness').reverse()
+    const rankedByUsageRatio = sortBy(features, 'usage_ratio').reverse()
+    const featuresWithRanks = features.map(f => ({
+        ...f,
+        usage_rank: rankedByUsage.findIndex(ff => ff.id === f.id),
+        awareness_rank: rankedByAwareness.findIndex(ff => ff.id === f.id),
+        usage_ratio_rank: rankedByUsageRatio.findIndex(ff => ff.id === f.id)
+    }))
+    return featuresWithRanks
+}
 
 const getChartData = (data, getName, translate) => {
     const categories = variables.featuresCategories
     const sectionIds = Object.keys(categories)
+    const allNodes = data.map((feature, index) => getNodeData(feature, index))
+    const allNodesWithRanks = addRanks(allNodes)
     const sections = sectionIds.map(sectionId => {
         const sectionFeatures = categories[sectionId]
-        let features = data.filter(f => sectionFeatures.includes(f.id))
-        features = features.map((feature, index) => {
-            const buckets = get(feature, 'experience.year.facets.0.buckets')
-
-            if (!buckets) {
-                throw new Error(`Feature “${feature.id}” does not have any data associated.`)
-            }
-
-            let usageBucket = buckets.find(b => b.id === 'used')
-            if (!usageBucket) {
-                usageBucket = { count: 0 }
-            }
-
-            let knowNotUsedBucket = buckets.find(b => b.id === 'heard')
-            if (!knowNotUsedBucket) {
-                knowNotUsedBucket = { count: 0 }
-            }
-
-            const usage = usageBucket.count
-            const awareness = usage + knowNotUsedBucket.count
-
-            return {
-                index,
-                id: feature.id,
-                awareness,
-                usage,
-                unused_count: knowNotUsedBucket.count,
-                usage_ratio: round((usage / awareness) * 100, 1),
-                name: feature.name,
-                sectionId
-            }
-        })
+        let features = allNodesWithRanks.filter(f => sectionFeatures.includes(f.id))
 
         return features.length
             ? {
                   id: sectionId,
                   isSection: true,
-                  children: features,
+                  children: features.map(f => ({ ...f, sectionId })),
                   name: translate(`sections.${sectionId}.title`)
               }
             : null
@@ -65,6 +83,7 @@ const getChartData = (data, getName, translate) => {
     }
 }
 
+
 const FeaturesOverviewBlock = ({ block, data, triggerId }) => {
     const { getName } = useEntities()
     const { translate } = useI18n()
@@ -74,6 +93,8 @@ const FeaturesOverviewBlock = ({ block, data, triggerId }) => {
         [data, getName, translate]
     )
 
+    const [mode, setMode ] = useState(modes[0])
+
     const controlledCurrent = triggerId
 
     const { height = '800px' } = block
@@ -81,47 +102,6 @@ const FeaturesOverviewBlock = ({ block, data, triggerId }) => {
     const chartClassName = controlledCurrent
         ? `FeaturesOverviewChart--${controlledCurrent.join('_')}`
         : ''
-
-    const tables = []
-
-    const generateRows = data => {
-        const rows = []
-        data.forEach(row => {
-            rows.push([
-                {
-                    id: 'tech',
-                    label: row.name
-                },
-                {
-                    id: 'awareness',
-                    label: row.awareness
-                },
-                {
-                    id: 'usage',
-                    label: row.usage
-                },
-                {
-                    id: 'ratio',
-                    label: `${parseInt((row.usage / row.awareness) * 10000) / 100}%`
-                }
-            ])
-        })
-        return rows
-    }
-
-    chartData.children.forEach(feature => {
-        tables.push({
-            id: feature.id,
-            title: feature.name,
-            headings: [
-                { id: 'tech', label: translate('tools.technology') },
-                { id: 'awareness', label: translate('options.experience_ranking.awareness') },
-                { id: 'usage', label: translate('options.experience_ranking.usage') },
-                { id: 'ratio', label: translate('options.features_simplified.usage_ratio') }
-            ],
-            rows: generateRows(feature.children)
-        })
-    })
 
     return (
         <Block
@@ -134,20 +114,27 @@ const FeaturesOverviewBlock = ({ block, data, triggerId }) => {
             className="FeaturesOverviewBlock"
             tables={chartData.children.map(category =>
                 getTableData({
-                    data: sortBy(category.children, 'usage_ratio').reverse().map(f => ({ ...f, id: f.name })),
-                    valueKeys: ['awareness', 'usage', 'usage_ratio'],
+                    title: category.name,
+                    data: sortBy(category.children, 'usage_ratio')
+                        .reverse()
+                        .map(f => ({ ...f, id: f.name })),
+                    valueKeys: ['awareness', 'usage', 'usage_ratio']
                 })
             )}
             showUnits={false}
         >
+            <>
+            <BlockUnitsSelector units={mode} onChange={setMode} options={modes} i18nNamespace="options.features_mode"/>
             <ChartContainer vscroll={false} height={height}>
                 <FeaturesOverviewCirclePackingChart
                     className={`FeaturesOverviewChart ${chartClassName}`}
                     data={chartData}
                     variant="allFeatures"
                     current={controlledCurrent}
+                    mode={mode}
                 />
             </ChartContainer>
+            </>
         </Block>
     )
 }

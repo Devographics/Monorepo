@@ -4,30 +4,38 @@ import ButtonGroup from 'core/components/ButtonGroup'
 import Button from 'core/components/Button'
 import T from 'core/i18n/T'
 
-const UnitButton = ({ units, current, onChange }) => (
+const UnitButton = ({ units, current, onChange, i18nNamespace = 'charts_units' }) => (
     <Button
         size="small"
         className={`Button--${current === units ? 'selected' : 'unselected'}`}
         onClick={() => onChange(units)}
         aria-pressed={current === units}
     >
-        <T k={`chart_units.${units}`} />
+        <T k={`${i18nNamespace}.${units}`} />
     </Button>
 )
 
-const BlockUnitsSelector = ({ units, onChange }) => {
+const defaultOptions = ['percentage_question', 'percentage_survey', 'count']
+
+const BlockUnitsSelector = ({ units, onChange, options = defaultOptions, i18nNamespace }) => {
     return (
         <ButtonGroup>
-            <UnitButton units="percentage_question" current={units} onChange={onChange} />
-            <UnitButton units="percentage_survey" current={units} onChange={onChange} />
-            <UnitButton units="count" current={units} onChange={onChange} />
+            {options.map(option => (
+                <UnitButton
+                    key={option}
+                    units={option}
+                    current={units}
+                    onChange={onChange}
+                    i18nNamespace={i18nNamespace}
+                />
+            ))}
         </ButtonGroup>
     )
 }
 
 BlockUnitsSelector.propTypes = {
     units: PropTypes.oneOf(['percentage', 'count', 'percentage_survey']).isRequired,
-    onChange: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired
 }
 
 export default memo(BlockUnitsSelector)
