@@ -3,7 +3,7 @@ import BlockSwitcher from 'core/blocks/block/BlockSwitcher'
 import * as Tabs from '@radix-ui/react-tabs'
 import BlockTitle from 'core/blocks/block/BlockTitle'
 import styled from 'styled-components'
-import { spacing, fontSize } from 'core/theme'
+import {mq, spacing, fontSize } from 'core/theme'
 import T from 'core/i18n/T'
 import { getBlockTabKey } from 'core/helpers/blockHelpers'
 import { usePageContext } from 'core/helpers/pageContext'
@@ -24,7 +24,11 @@ export const EmptyWrapper = ({ block, pageData, blockIndex }) => (
 )
 
 const Wrapper = styled.section`
+  margin-bottom: ${spacing(3)};
+
+  @media ${mq.large} {
     margin-bottom: ${spacing(6)};
+  }
 `
 
 const BlockHeader = styled.div`
