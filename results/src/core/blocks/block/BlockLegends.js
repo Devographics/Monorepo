@@ -86,7 +86,7 @@ const Container = styled.table`
     margin-bottom: ${({ position }) => (position === 'top' ? spacing() : 0)};
     width: 100%;
 
-    /* ${(props) => {
+    ${(props) => {
         if (props.withFrame) {
             return css`
                 border: 1px solid ${color('border')};
@@ -97,7 +97,7 @@ const Container = styled.table`
                 }
             `
         }
-    }} */
+    }}
 `
 
 const ContainerInner = styled.tbody`

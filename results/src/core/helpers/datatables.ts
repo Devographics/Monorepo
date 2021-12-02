@@ -1,8 +1,9 @@
-import { BlockUnits, BlockLegend, BucketItem, ResultsByYear } from 'core/types'
+import { Entity, BlockUnits, BlockLegend, BucketItem, ResultsByYear } from 'core/types'
 import { isPercentage } from 'core/helpers/units'
 
 export interface TableBucketItem {
     id: string | number
+    entity?: Entity
     label?: string
     count?: number | TableBucketYearValue[]
     percentage_survey?: number | TableBucketYearValue[]
@@ -79,7 +80,7 @@ export const getTableData = (params: TableParams): TableData => {
         if (translateData) {
             firstColumn.labelId = `options.${i18nNamespace}.${row.id}`
         } else {
-            firstColumn.label = row.label || getLabel(row.id, legends)
+            firstColumn.label = row.label ?? row?.entity?.name ?? getLabel(row.id, legends)
         }
 
         const columns: TableDataCell[] = []

@@ -24,16 +24,21 @@ export interface HorizontalBarChartBucketItem {
 
 const getChartData = ({ data, keys }: { data: BracketFacetItem; keys?: string[] }) => {
     const theme = useTheme()
-
-    return sortBy(data.buckets, b => b.combined.count).map(bucket => {
-        const bucketByRound: HorizontalBarChartBucketItem = { id: bucket.id }
-        keys?.forEach(r => {
-            bucketByRound[`${r}___count`] = bucket[r]['count']
-            bucketByRound[`${r}___percentage`] = bucket[r]['percentage']
-            bucketByRound.color = theme.colors.ranges.bracket[r]
+    try {
+        return sortBy(data.buckets, b => b.combined.count).map(bucket => {
+            const bucketByRound: HorizontalBarChartBucketItem = { id: bucket.id }
+            keys?.forEach(r => {
+                bucketByRound[`${r}___count`] = bucket[r]['count']
+                bucketByRound[`${r}___percentage`] = bucket[r]['percentage']
+                bucketByRound.color = theme.colors.ranges.bracket[r]
+            })
+            return bucketByRound
         })
-        return bucketByRound
-    })
+    } catch (error) {
+        console.log('// Bracket wins getChartData error')
+        console.log(error)
+        return []
+    }
 }
 
 const BracketWinsBlock = ({ block, data, keys }: HorizontalBarBlockProps) => {
@@ -50,7 +55,8 @@ const BracketWinsBlock = ({ block, data, keys }: HorizontalBarBlockProps) => {
 
     const rounds = keys
 
-    const [units, setUnits] = useState(defaultUnits)
+    // const [units, setUnits] = useState(defaultUnits)
+    const units = defaultUnits
 
     const { completion } = data
 
@@ -63,7 +69,7 @@ const BracketWinsBlock = ({ block, data, keys }: HorizontalBarBlockProps) => {
     return (
         <Block
             units={units}
-            setUnits={setUnits}
+            // setUnits={setUnits}
             data={data}
             tables={[
                 getTableData({

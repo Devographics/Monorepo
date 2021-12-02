@@ -85,16 +85,16 @@ export const winsAggregationFunction = async (
 
     const rawResults = (await collection.aggregate(winsPipeline).toArray()) as WinsBucket[]
 
-    console.log(
-        inspect(
-            {
-                match,
-                winsPipeline,
-                rawResults
-            },
-            { colors: true, depth: null }
-        )
-    )
+    // console.log(
+    //     inspect(
+    //         {
+    //             match,
+    //             winsPipeline,
+    //             rawResults
+    //         },
+    //         { colors: true, depth: null }
+    //     )
+    // )
 
     // add proper ids
     const resultsWithId = rawResults.map(result => ({
@@ -151,16 +151,16 @@ export const matchupsAggregationFunction = async (
         .aggregate(matchupsPipeline)
         .toArray()) as MatchupAggregationResult[]
 
-    console.log(
-        inspect(
-            {
-                match,
-                matchupsPipeline,
-                rawResults
-            },
-            { colors: true, depth: null }
-        )
-    )
+    // console.log(
+    //     inspect(
+    //         {
+    //             match,
+    //             matchupsPipeline,
+    //             rawResults
+    //         },
+    //         { colors: true, depth: null }
+    //     )
+    // )
 
     // add proper ids
     // const resultsWithId = rawResults.map(result => ({

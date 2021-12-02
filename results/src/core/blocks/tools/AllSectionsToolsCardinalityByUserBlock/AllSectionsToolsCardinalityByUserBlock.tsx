@@ -63,10 +63,10 @@ const getChartData = (data: AllSectionsToolsCardinalityByUserBlockProps['data'])
 export const AllSectionsToolsCardinalityByUserBlock = ({
     block,
     data,
-    units: defaultUnits = 'percentage_survey'
+    defaultUnits = 'percentage_survey'
 }: AllSectionsToolsCardinalityByUserBlockProps) => {
-    const [units, setUnits] = useState(defaultUnits)
-
+    // const [units, setUnits] = useState(defaultUnits)
+    const units = defaultUnits
     const { getString } = useI18n()
 
     const chartData = useMemo(() => getChartData(data), [data])
@@ -77,7 +77,7 @@ export const AllSectionsToolsCardinalityByUserBlock = ({
     return (
         <Block
             units={units}
-            setUnits={setUnits}
+            // setUnits={setUnits}
             block={{
                 ...block,
                 blockName: 'all_sections_tools_cardinality_by_user',
@@ -85,7 +85,7 @@ export const AllSectionsToolsCardinalityByUserBlock = ({
                 // description,
                 showLegend: false
             }}
-            tables={chartData.map(({sectionId, data}) =>
+            tables={chartData.map(({ sectionId, data }) =>
                 getTableData({
                     title: getString(`sections.${sectionId}.title`)?.t,
                     data: data.map(item => ({ ...item, label: item.cardinality })).reverse(),
