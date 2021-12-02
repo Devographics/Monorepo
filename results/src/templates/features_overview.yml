@@ -2,7 +2,6 @@ titleId: blocks.features_overview
 blockType: FeaturesOverviewBlock
 dataPath: "surveyApi.survey.${id}"
 keysPath: "surveyApi.survey.${id}.0.experience.keys"
-
 query: >
     surveyApi {
         survey(survey: ${surveyType}) {

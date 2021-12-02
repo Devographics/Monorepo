@@ -2,7 +2,7 @@ import { BlockUnits, BlockLegend, BucketItem } from 'core/types'
 import { isPercentage } from 'core/helpers/units'
 
 export interface TableBucketItem {
-    id: string
+    id: string | number
     label?: string
     count?: number | TableBucketYearValue[]
     percentage_survey?: number | TableBucketYearValue[]
@@ -46,7 +46,7 @@ export interface TableDataCell {
     id: string | number
     label?: string | number
     labelId?: string | number
-    value?: number | number[]
+    value?: number | TableBucketYearValue[]
     translateData?: boolean
     isPercentage?: boolean
 }
@@ -85,7 +85,7 @@ export const getTableData = (params: TableParams): TableData => {
         const columns: TableDataCell[] = []
 
         valueKeys.forEach((key) => {
-            columns.push({ id: key, value: getValue(row, key) })
+            columns.push({ id: key, value: getValue(row, key), isPercentage: isPercentage(key) })
         })
 
         return [firstColumn, ...columns]

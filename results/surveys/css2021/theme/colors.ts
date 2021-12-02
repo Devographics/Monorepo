@@ -56,7 +56,8 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
             typography: colors.purple,
             animations_transforms: colors.orange,
             media_queries: colors.green,
-            other_features: colors.skyblue
+            other_features: colors.skyblue,
+            accessibility: colors.skyblue
         },
         features_simplified: {
             know_it: '#ACFFC3',

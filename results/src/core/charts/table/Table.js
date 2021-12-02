@@ -2,12 +2,12 @@ import styled from 'styled-components'
 import T from 'core/i18n/T'
 import React from 'react'
 import { useTheme } from 'styled-components'
-import { fontSize } from 'core/theme'
+import { fontSize, spacing } from 'core/theme'
 
 const Tables = ({ tables = [] }) => {
     return (
         <TableWrapper>
-            {tables.map((table) => {
+            {tables.map(table => {
                 return (
                     <>
                         {table.title && <Title>{table.title}</Title>}
@@ -38,7 +38,7 @@ const Table = ({ headings, rows, years }) => (
                         <T k="table.year" />
                     </TH>
                     {[...Array(headings.length - 1)].map((heading, i) =>
-                        years.map((year) => <TH key={year}>{year}</TH>)
+                        years.map(year => <TH key={year}>{year}</TH>)
                     )}
                 </tr>
             )}
@@ -58,7 +58,7 @@ const TableHeading = ({ id, colSpan, labelId }) => (
 )
 
 const TH = styled.th`
-    background: ${(props) => props.theme.colors.backgroundAlt};
+    background: ${props => props.theme.colors.backgroundAlt};
 `
 
 const TableRow = ({ row }) => (
@@ -69,7 +69,7 @@ const TableRow = ({ row }) => (
                     {cell.label ?? <T k={cell.labelId} />}
                 </TH>
             ) : Array.isArray(cell.value) ? (
-                cell.value.map((yearValue) => (
+                cell.value.map(yearValue => (
                     <TableCell key={yearValue.value} {...cell} {...yearValue} />
                 ))
             ) : (
@@ -96,6 +96,10 @@ const TableWrapper = styled.div`
 const DataTable = styled.table`
     width: 100%;
     border-collapse: collapse;
+    margin-bottom: ${spacing(2)};
+    &:last-of-type {
+        margin-bottom: 0;
+    }
     th {
         text-align: left;
     }

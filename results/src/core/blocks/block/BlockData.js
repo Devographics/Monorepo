@@ -33,8 +33,6 @@ const BlockData = (props) => {
                 <GraphQLExport {...props} />
             </ModalTrigger>
             <Table {...props} />
-            <BlockFooter block={props.block}/>
-
         </>
     )
 }
