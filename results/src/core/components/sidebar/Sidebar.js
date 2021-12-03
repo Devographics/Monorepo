@@ -46,7 +46,7 @@ export const Sidebar = ({ showSidebar, closeSidebar, rest }) => {
     )
 }
 
-const SidebarContainer = styled.nav`
+const SidebarContainer = styled.div`
     border-right: ${(props) => props.theme.separationBorder};
     display: flex;
     flex-direction: column;

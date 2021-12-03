@@ -27,9 +27,9 @@ const MainLayout = ({
                     nocapture: !context.isCapturing,
                 })}
             >
-                <div>
-                  <MenuToggle 
-                    onClick={toggleSidebar} 
+                <header>
+                  <MenuToggle
+                    onClick={toggleSidebar}
                     aria-haspopup="menu"
                     aria-expanded={showSidebar}
                   >
@@ -37,7 +37,7 @@ const MainLayout = ({
                     <Hamburger />
                   </MenuToggle>
                   <Sidebar {...props} showSidebar={showSidebar} closeSidebar={closeSidebar} />
-                </div>
+                </header>
                 <PageContent className="PageContent">
                     <PaginationWrapper>
                         {showPagination && <Pagination position="top" />}   
@@ -137,7 +137,7 @@ const Page = styled.div`
     position: relative;
 `
 
-const PageMain = styled.main`
+const PageMain = styled.div`
     flex-grow: 1;
     overflow-x: hidden;
     overflow-y: visible;
