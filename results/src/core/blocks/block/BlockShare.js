@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { useI18n } from 'core/i18n/i18nContext'
 import { getBlockMeta } from 'core/helpers/blockHelpers'
 import { usePageContext } from 'core/helpers/pageContext'
-import { spacing } from 'core/theme'
+import { mq, spacing } from 'core/theme'
 
 import SharePreview from 'core/share/SharePreview'
 import ShareTwitter from 'core/share/ShareTwitter'
@@ -14,14 +14,20 @@ import ShareEmail from 'core/share/ShareEmail'
 import ShareImage from 'core/share/ShareImage'
 
 const Share = styled.div`
+  display:flex;
+  flex-direction: column;
+
+  @media ${mq.mediumLarge} {
     display: grid;
     grid-template-columns: 300px 1fr;
+  }
 `
 
 const ShareIcons = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: ${spacing()};
     a {
         margin-right: ${spacing()};
         &:last-child {
