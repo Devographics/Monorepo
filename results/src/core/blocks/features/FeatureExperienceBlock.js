@@ -64,21 +64,23 @@ const FeatureExperienceBlock = ({
             {allYears.map(year => (
                 <Row key={year.year}>
                     <RowYear>{year.year}</RowYear>
-                    <ChartContainer
-                        height={isLastYear(year) ? 40 : 40}
-                        fit={true}
-                        className="FeatureChart"
-                    >
-                        <GaugeBarChart
-                            keys={keys}
-                            buckets={year.facets[0].buckets}
-                            colorMapping={bucketKeys}
-                            units={units}
-                            applyEmptyPatternTo="never_heard"
-                            i18nNamespace={i18nNamespace}
-                            showProgression={isLastYear(year)}
-                        />
-                    </ChartContainer>
+                    <RowChart>
+                      <ChartContainer
+                          height={isLastYear(year) ? 40 : 40}
+                          fit={true}
+                          className="FeatureChart"
+                      >
+                          <GaugeBarChart
+                              keys={keys}
+                              buckets={year.facets[0].buckets}
+                              colorMapping={bucketKeys}
+                              units={units}
+                              applyEmptyPatternTo="never_heard"
+                              i18nNamespace={i18nNamespace}
+                              showProgression={isLastYear(year)}
+                          />
+                      </ChartContainer>
+                    </RowChart>
                 </Row>
             ))}
         </Block>
@@ -93,7 +95,11 @@ const Row = styled.div`
     margin-bottom: ${spacing()};
 `
 
-const RowYear = styled.h4`
+const RowYear = styled.dt`
+    font-weight: bold;
+    margin: 0;
+`
+const RowChart = styled.dd`
     margin: 0;
 `
 
