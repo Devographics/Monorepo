@@ -1,3 +1,5 @@
+@use "sass:math";
+
 .Feature__Support {
     font-size: $smallish-font;
     @include font-regular;
@@ -9,7 +11,7 @@
 }
 
 .FTBlock__Links__Item {
-    margin-bottom: $spacing/3;
+    margin-bottom: math.div($spacing, 3);
 }
 
 .Features__Overview {
@@ -51,7 +53,7 @@
         margin-top: $spacing;
     }
     h3 {
-        margin-bottom: $spacing/2;
+        margin-bottom: $spacing*0.5;
         font-size: $medium-font;
     }
     ul {
