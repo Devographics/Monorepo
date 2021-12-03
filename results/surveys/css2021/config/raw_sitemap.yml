@@ -94,6 +94,7 @@
       template: demographics
       variants:
         - id: gender_by_countries
+          tabId: user_info.gender_by_countries
           template: gender_by_countries
 
     - id: race_ethnicity
@@ -510,14 +511,14 @@
             fieldId: tools_others
 
     - id: tool_evaluation_wins
-      tabId: bracket_wins
+      tabId: tabs.bracket_wins
       template: bracket_wins
       i18nNamespace: tool_evaluation
       variables:
         fieldId: tools_others__tool_evaluation
       variants: 
         - id: tool_evaluation_matchups
-          tabId: bracket_matchups
+          tabId: tabs.bracket_matchups
           i18nNamespace: tool_evaluation
           variables:
             fieldId: tools_others__tool_evaluation
@@ -533,35 +534,40 @@
     - template: page_introduction
 
     - id: browsers
-      i18nNamespace: environments
+      titleId: environments.browsers
+      i18nNamespace: browsers
       template: multiple_options
       variables:
         fieldId: environments
 
     - id: form_factors
-      i18nNamespace: environments
+      titleId: environments.form_factors
+      i18nNamespace: form_factors
       translateData: true
       template: multiple_options
       variables:
         fieldId: environments
 
     - id: accessibility_features
-      i18nNamespace: environments
+      titleId: environments.accessibility_features
+      i18nNamespace: accessibility_features
       translateData: true
       template: multiple_options
       variables:
         fieldId: environments
 
     - id: what_do_you_use_css_for
-      i18nNamespace: environments
+      titleId: environments.what_do_you_use_css_for
+      i18nNamespace: what_do_you_use_css_for
       translateData: true
       template: multiple_options
       variables:
         fieldId: environments
       variants: 
         - id: what_do_you_use_css_for_others
+          titleId: environments.what_do_you_use_css_for.others
           tabId: tabs.other_answers
-          i18nNamespace: environments
+          i18nNamespace: what_do_you_use_css_for
           translateData: true
           template: multiple_options
           variables:
@@ -575,7 +581,7 @@
     - id: first_steps
       titleId: resources.first_steps
       i18nNamespace: first_steps
-      tabId: main_answers
+      tabId: tabs.main_answers
       template: multiple_options
       translateData: true
       variables:
@@ -583,7 +589,7 @@
       variants:
         - id: first_steps_others
           i18nNamespace: first_steps
-          tabId: other_answers
+          tabId: tabs.other_answers
           template: multiple_options
           translateData: true
           variables:
@@ -591,28 +597,28 @@
 
     - id: blogs_news_magazines
       i18nNamespace: resources
-      tabId: main_answers
+      tabId: tabs.main_answers
       template: multiple_options
       variables:
         fieldId: resources
       variants:
         - id: blogs_news_magazines_others
           i18nNamespace: resources
-          tabId: other_answers
+          tabId: tabs.other_answers
           template: multiple_options
           variables:
             fieldId: resources
 
     - id: sites_courses
       i18nNamespace: resources
-      tabId: main_answers
+      tabId: tabs.main_answers
       template: multiple_options
       variables:
         fieldId: resources
       variants:
         - id: sites_courses_others
           i18nNamespace: resources
-          tabId: other_answers
+          tabId: tabs.other_answers
           template: multiple_options
           variables:
             fieldId: resources
@@ -622,14 +628,14 @@
 
     - id: podcasts
       i18nNamespace: resources
-      tabId: main_answers
+      tabId: tabs.main_answers
       template: multiple_options
       variables:
         fieldId: resources
       variants:
         - id: podcasts_others
           i18nNamespace: resources
-          tabId: other_answers
+          tabId: tabs.other_answers
           template: multiple_options
           variables:
             fieldId: resources
@@ -665,37 +671,37 @@
       template: opinions_others
 
     - id: css_pain_points_wins
-      tabId: bracket_wins
+      tabId: tabs.bracket_wins
       template: bracket_wins
       i18nNamespace: css_pain_points
       variables:
         fieldId: opinions__css_pain_points
       variants: 
         - id: css_pain_points_matchups
-          tabId: bracket_matchups
+          tabId: tabs.bracket_matchups
           i18nNamespace: css_pain_points
           template: bracket_matchups
           variables:
             fieldId: opinions__css_pain_points
         - id: css_pain_points
-          tabId: other_answers
+          tabId: tabs.other_answers
           template: opinions_others
 
     - id: currently_missing_from_css_wins
-      tabId: bracket_wins
+      tabId: tabs.bracket_wins
       template: bracket_wins
       i18nNamespace: currently_missing_from_css
       variables:
         fieldId: opinions__currently_missing_from_css
       variants: 
         - id: currently_missing_from_css_matchups
-          tabId: bracket_matchups
+          tabId: tabs.bracket_matchups
           i18nNamespace: currently_missing_from_css
           template: bracket_matchups
           variables:
             fieldId: opinions__currently_missing_from_css
         - id: currently_missing_from_css
-          tabId: other_answers
+          tabId: tabs.other_answers
           template: opinions_others
 
     - id: state_of_the_web
