@@ -65,9 +65,14 @@ const BracketMatchupsBlock = ({ block, data }: HorizontalBarBlockProps) => {
             setUnits={setUnits}
             data={data}
             tables={[
+                
                 getTableData({
-                    data: data.buckets,
-                    valueKeys: ['percentage_survey', 'percentage_question', 'count'],
+                    data: heatmapBuckets,
+                    valueKeys: keys?.map(k => ({
+                        id: `${k}___percentage`,
+                        labelId: `options.${i18nNamespace}.${k}`,
+                        isPercentage: true,
+                    })),
                     translateData,
                     i18nNamespace
                 })

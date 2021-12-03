@@ -73,8 +73,11 @@ const BracketWinsBlock = ({ block, data, keys }: HorizontalBarBlockProps) => {
             data={data}
             tables={[
                 getTableData({
-                    data: data.buckets,
-                    valueKeys: ['percentage_survey', 'percentage_question', 'count'],
+                    data: [...buckets].reverse(),
+                    valueKeys: keys?.map(k => ({
+                        id: `${k}___count`,
+                        labelId: `options.bracket.${k}`
+                    })),
                     translateData,
                     i18nNamespace
                 })

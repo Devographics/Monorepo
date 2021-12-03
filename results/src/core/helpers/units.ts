@@ -16,4 +16,4 @@ export const percentageUnits = [
     'percentage_survey'
 ]
 
-export const isPercentage = (units: BlockUnits) => percentageUnits.includes(units)
+export const isPercentage = (units: string) => percentageUnits.includes(units)

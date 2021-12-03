@@ -80,7 +80,7 @@ const TableRow = ({ row }) => (
 const TableCell = ({ value, isPercentage }) => (
     <td>
         {value}
-        {isPercentage && '%'}
+        {value && isPercentage && '%'}
     </td>
 )
 
