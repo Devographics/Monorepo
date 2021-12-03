@@ -107,18 +107,22 @@ const Container = styled.div`
 
 const TabsList = styled(Tabs.List)`
     display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+    width:100%;
+    justify-content: space-around;
+
+    @media ${mq.mediumLarge} {
+      justify-content: flex-start;
+      align-items: flex-start;
+      flex-direction: column;
+    }
 `
 
 const TabsTrigger = styled(Tabs.Trigger)`
     cursor: pointer;
-    margin-bottom: ${spacing()};
     padding: ${spacing(0.5)};
-    padding-left: ${spacing()};
-    margin-left: -1px;
-    border-radius: 0 3px 3px 0;
+    margin-top: ${spacing(0.25)};
+    border-radius: 3px 3px 0px 0;
+
     button {
         display: block;
     }
@@ -129,12 +133,25 @@ const TabsTrigger = styled(Tabs.Trigger)`
     }
     &[data-state='inactive'] {
     }
+
+    @media ${mq.mediumLarge} {
+      margin-top: 0;
+      margin-left: -1px;
+      border-radius: 0 3px 3px 0;
+      margin-bottom: ${spacing()};
+      padding-left: ${spacing()};
+    }
 `
 
 const TabsRoot = styled(Tabs.Root)`
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-areas: 'main side';
+    display:flex;
+    flex-direction:column;
+
+    @media ${mq.mediumLarge} {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-areas: 'main side'
+    }
 `
 
 const MainArea = styled.div`
@@ -143,17 +160,15 @@ const MainArea = styled.div`
 `
 
 const SideArea = styled.div`
-    grid-area: side;
-    /* border-bottom: ${(props) => props.theme.border}; */
-    /* border-right: ${(props) => props.theme.border}; */
-    /* border-left: ${(props) => props.theme.separationBorder}; */
-    /* padding-right: ${spacing()}; */
+  grid-area: side;
+  background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAAXNSR0IArs4c6QAAACZJREFUGFdjZEAD////b2BEFgMLMDIiBGECIEVglcgCYEF0AZAgAOgcE4P59g1CAAAAAElFTkSuQmCC')
+    repeat;
+
+  @media ${mq.mediumLarge} {
     padding-top: ${spacing(2)};
     padding-right: ${spacing(0.5)};
     margin-left: ${spacing()};
-    /* background: ${(props) => props.theme.colors.backgroundForeground}; */
-    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAAXNSR0IArs4c6QAAACZJREFUGFdjZEAD////b2BEFgMLMDIiBGECIEVglcgCYEF0AZAgAOgcE4P59g1CAAAAAElFTkSuQmCC')
-        repeat;
+  }
 `
 
 BlockVariant.propTypes = {
