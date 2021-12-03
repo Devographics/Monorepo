@@ -21,9 +21,9 @@ const BlockChart = props => {
             <BlockDescriptionContents block={block} />
             {modeProps && <BlockUnitsSelector {...modeProps} />}
             {legends && legendPosition === 'top' && <BlockLegends {...legendProps_} />}
-            <div className="Block__Contents">
+            <dl className="Block__Contents">
                 {error ? <div className="error">{error}</div> : children}
-            </div>
+            </dl>
             {legends && legendPosition === 'bottom' && <BlockLegends {...legendProps_} />}
             <BlockFooter {...props} />
             {showNote && <BlockNote block={block} />}
