@@ -6,7 +6,14 @@ import { getBlockMeta } from 'core/helpers/blockHelpers'
 import { usePageContext } from 'core/helpers/pageContext'
 import { spacing } from 'core/theme'
 
-const BlockDebug = ({ block, data }) => {
+import { BlockComponentProps, FacetItem } from 'core/types'
+
+export interface BlockDebugProps extends BlockComponentProps {
+    // should this be optional?
+    data: FacetItem
+}
+
+const BlockDebug = ({ block, data }: BlockDebugProps) => {
     return (
         <div>
             debug
