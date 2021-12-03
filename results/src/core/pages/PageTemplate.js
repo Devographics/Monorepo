@@ -10,12 +10,12 @@ const PageTemplate = ({ pageContext = {} }) => {
     return (
         <>
             {showTitle && <PageHeader />}
-            <div className="Page__Contents">
+            <main className="Page__Contents">
                 {context.blocks &&
                     context.blocks.map((block, i) => (
                         <BlockWrapper key={`${block.id}_${i}`} isCapturing={isCapturing} block={block} pageData={pageData} index={i} />
                     ))}
-            </div>
+            </main>
             {!is_hidden && <PageFooter />}
         </>
     )

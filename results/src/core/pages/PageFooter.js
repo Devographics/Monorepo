@@ -62,7 +62,7 @@ const PageFooter = () => {
     )
 }
 
-const Container = styled.div`
+const Container = styled.footer`
     @media ${mq.small} {
         margin-top: ${spacing(4)};
     }

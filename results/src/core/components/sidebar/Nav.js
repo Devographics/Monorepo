@@ -123,7 +123,7 @@ export const Nav = ({ closeSidebar }) => {
     )
 }
 
-const NavContainer = styled.div`
+const NavContainer = styled.nav`
     flex-grow: 1;
     /* display: flex; */
     /* flex-direction: column; */
