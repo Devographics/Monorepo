@@ -33,9 +33,9 @@ const BlockUnitsSelector = ({ units, onChange, options = defaultOptions, i18nNam
     )
 }
 
-BlockUnitsSelector.propTypes = {
-    units: PropTypes.oneOf(['percentage', 'count', 'percentage_survey']).isRequired,
-    onChange: PropTypes.func.isRequired
-}
+// BlockUnitsSelector.propTypes = {
+//     units: PropTypes.oneOf(['percentage', 'count', 'percentage_survey']).isRequired,
+//     onChange: PropTypes.func.isRequired
+// }
 
 export default memo(BlockUnitsSelector)

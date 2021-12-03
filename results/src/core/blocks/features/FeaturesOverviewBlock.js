@@ -128,25 +128,22 @@ const FeaturesOverviewBlock = ({ block, data, triggerId }) => {
                     valueKeys: ['awareness', 'usage', 'usage_ratio']
                 })
             )}
-            showUnits={false}
+            modeProps={{
+                units: mode,
+                options: modes,
+                onChange: setMode,
+                i18nNamespace: 'options.features_mode'
+            }}
         >
-            <>
-                <BlockUnitsSelector
-                    units={mode}
-                    onChange={setMode}
-                    options={modes}
-                    i18nNamespace="options.features_mode"
+            <ChartContainer vscroll={false} height={height}>
+                <FeaturesOverviewCirclePackingChart
+                    className={`FeaturesOverviewChart ${chartClassName}`}
+                    data={chartData}
+                    variant="allFeatures"
+                    current={controlledCurrent}
+                    mode={mode}
                 />
-                <ChartContainer vscroll={false} height={height}>
-                    <FeaturesOverviewCirclePackingChart
-                        className={`FeaturesOverviewChart ${chartClassName}`}
-                        data={chartData}
-                        variant="allFeatures"
-                        current={controlledCurrent}
-                        mode={mode}
-                    />
-                </ChartContainer>
-            </>
+            </ChartContainer>
         </Block>
     )
 }

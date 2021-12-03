@@ -10,6 +10,7 @@ import range from 'lodash/range'
 import ToolLabel from 'core/charts/tools/ToolLabel'
 import { useI18n } from 'core/i18n/i18nContext'
 import { useLegends } from '../../helpers/useBucketKeys'
+import { groupDataByYears, getTableData } from 'core/helpers/datatables'
 
 const ToolsSectionStreamsBlock = ({
     block,
@@ -29,37 +30,15 @@ const ToolsSectionStreamsBlock = ({
 
     const controlledCurrent = triggerId || current
 
-    let headings = [{ id: 'label', label: translate('table.year') }]
-    headings = headings.concat(
-        data[0].experience.all_years[0].facets[0].buckets.map((bucket) => ({
-            id: bucket.id,
-            label: translate(`options.tools.${bucket.id}.short`),
-        }))
-    )
-
-    const generateRows = (data) => {
-        const rows = []
-        // data.forEach((row) => {
-        //     const newRow = []
-        //     newRow.push({ id: 'label', label: row.year })
-        //     row.facets[0].buckets.forEach((bucket) =>
-        //         newRow.push({ id: bucket.id, label: `${bucket.percentage}% (${bucket.count})` })
-        //     )
-        //     rows.push(newRow)
-        // })
-        return rows
-    }
-
-    const tables = data.map((table) => ({
-        id: table.id,
-        title: table.entity.name,
-        headings: headings,
-        rows: generateRows(table.experience.all_years),
-    }))
-
     return (
         <Block
-            tables={tables}
+            tables={filteredData.map(tool => getTableData({
+                title: tool?.entity?.name,
+                data: groupDataByYears({ keys, data: tool.experience.all_years }),
+                years: tool.experience.all_years.map(y => y.year),
+                translateData: true,
+                i18nNamespace: 'tools'
+            }))}
             units={units}
             setUnits={setUnits}
             block={{

@@ -66,10 +66,7 @@ export const OpinionBlock = ({
     )
 
     const years = data.map((y) => y.year)
-
-    const valueKeys: BlockUnits[] = ['percentage_survey', 'percentage_question', 'count']
-
-    const tableData = groupDataByYears({ keys, data, valueKeys })
+    const tableData = groupDataByYears({ keys, data })
 
     return (
         <Block
@@ -93,7 +90,6 @@ export const OpinionBlock = ({
             tables={[
                 getTableData({
                     data: tableData,
-                    valueKeys,
                     years,
                 }),
             ]}

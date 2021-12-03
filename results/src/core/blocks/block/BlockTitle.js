@@ -35,7 +35,7 @@ const BlockTitle = ({
     units,
     setUnits,
 }) => {
-    const { id, showDescription = true } = block
+    const { id } = block
     const completion =
         data && (Array.isArray(data) ? last(data) && last(data).completion : data.completion)
     const [showOptions, setShowOptions] = useState(false)
@@ -138,7 +138,6 @@ BlockTitle.propTypes = {
         description: PropTypes.node,
         descriptionId: PropTypes.string,
     }).isRequired,
-    showDescription: PropTypes.bool.isRequired,
     isShareable: PropTypes.bool.isRequired,
 }
 

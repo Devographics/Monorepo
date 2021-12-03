@@ -64,7 +64,7 @@ const TableRow = ({ row }) => (
         {row.map((cell, index) => {
             return index === 0 ? (
                 <TH key={index} scope="row">
-                    {cell.label ?? <T k={cell.labelId} />}
+                    {cell.label ?? <T k={cell.labelId} html={true} />}
                 </TH>
             ) : Array.isArray(cell.value) ? (
                 cell.value.map(yearValue => (

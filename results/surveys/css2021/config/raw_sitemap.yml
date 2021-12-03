@@ -573,7 +573,8 @@
     - template: page_introduction
 
     - id: first_steps
-      i18nNamespace: resources
+      titleId: resources.first_steps
+      i18nNamespace: first_steps
       tabId: main_answers
       template: multiple_options
       translateData: true
@@ -581,7 +582,7 @@
         fieldId: resources
       variants:
         - id: first_steps_others
-          i18nNamespace: resources
+          i18nNamespace: first_steps
           tabId: other_answers
           template: multiple_options
           translateData: true
