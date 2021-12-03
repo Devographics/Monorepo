@@ -10,55 +10,24 @@ const { totalCountRounded } = variables
 const labelPositions = {
     satisfaction: {
         esbuild: [0, -15],
-        Playwright: [-100, 0],
-        Nest: [0, 5],
-        Svelte: [-5, -10],
-        'Alpine.js': [0, 5],
-        XState: [-70, 0],
-        LitElement: [-100, 0],
-        SWC: [-24, -12],
-        Strapi: [-24, 12],
-        Koa: [0, 5],
-        PureScript: [0, -5],
-        Quasar: [0, 8],
-        Stimulus: [0, 5],
-        Rome: [-25, -10],
-        AVA: [-40, 0],
-        Hapi: [0, -8],
-        Parcel: [-65, 0],
-        Vuex: [-50, 0],
-        Electron: [-80, -10],
-        Puppeteer: [0, 10],
-        Rollup: [-40, 20],
-        Cypress: [-75, 0],
-        Ember: [-65, 0],
-        Express: [-75, 0],
     },
     interest: {
         'NW.js': [0, 5],
-        Quasar: [-70, 0],
-        WebdriverIO: [-105, 0],
-        Fastify: [-80, 0],
-        PureScript: [-100, 0],
-        'Next.js': [0, 8],
-        Nest: [0, 5],
-        Jasmine: [-40, -15],
-        'Testing Library': [-140, 0],
     },
 }
 
 const margins = { top: 20, right: 90, bottom: 70, left: 90 }
 
 const Nodes = (props) => {
-    const { width, height, margin, nodes, current, setCurrent, metric } = props
+    const { outerWidth, outerHeight, margin, nodes, current, setCurrent, metric } = props
     return (
         <g>
             {nodes.map((node, i) => (
                 <Node
                     key={i}
                     {...node}
-                    width={width}
-                    height={height}
+                    width={outerWidth}
+                    height={outerHeight}
                     margin={margin}
                     current={current}
                     setCurrent={setCurrent}
@@ -110,9 +79,9 @@ const Crosshair = ({ x, y, label, cutoffX = 0, cutoffY = 0 }) => {
 const Node = (props) => {
     const theme = useTheme()
 
-    const { id, data, style, x, y, height, margin, metric, current, setCurrent } = props
+    const { id, color, data, x, y, formattedX, formattedY, height, margin, metric, current, setCurrent } = props
 
-    const { name, formattedX, formattedY, originalId } = data
+    const { name, originalId } = data
     const yInverted = height - margin.top - margin.bottom - y
     const cutoff = 12 // cut off the lines a little before the node
     const translateLabel = labelPositions[metric][name] || [0, 0]
@@ -147,7 +116,7 @@ const Node = (props) => {
             <circle
                 className="Scatterplot__Node__Point"
                 r={6}
-                fill={style?.color}
+                fill={color}
                 opacity={opacity}
             />
 

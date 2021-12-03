@@ -7,6 +7,8 @@ import { ToolsCardinalityByUserBucket } from 'core/survey_api/tools'
 // @ts-ignore
 import variables from 'Config/variables.yml'
 import { AllSectionsToolsCardinalityByUserChart } from './AllSectionsToolsCardinalityByUserChart'
+import { getTableData } from 'core/helpers/datatables'
+import { useI18n } from 'core/i18n/i18nContext'
 
 const { toolsCategories } = variables
 
@@ -16,7 +18,7 @@ interface AllSectionsToolsCardinalityByUserBlockProps {
         'SectionToolsCardinalityByUserBlock'
     >
     data: Record<string, ToolsCardinalityByUserBucket[]>
-    units?: 'percentage' | 'count'
+    units?: 'percentage_survey' | 'count'
 }
 
 const getChartData = (data: AllSectionsToolsCardinalityByUserBlockProps['data']) => {
@@ -27,9 +29,9 @@ const getChartData = (data: AllSectionsToolsCardinalityByUserBlockProps['data'])
         if (sectionId in data) {
             const sectionBuckets = data[sectionId]
 
-            const normalizedBuckets = range(toolIds.length, 0).map((cardinality) => {
+            const normalizedBuckets = range(toolIds.length, 0).map(cardinality => {
                 const matchingBucket = sectionBuckets.find(
-                    (bucket) => bucket.cardinality === cardinality
+                    bucket => bucket.cardinality === cardinality
                 )
                 if (matchingBucket) {
                     return matchingBucket
@@ -38,18 +40,18 @@ const getChartData = (data: AllSectionsToolsCardinalityByUserBlockProps['data'])
                 return {
                     cardinality,
                     count: 0,
-                    percentage: 0,
+                    percentage_survey: 0
                 }
             })
 
             return {
                 sectionId,
-                data: normalizedBuckets,
+                data: normalizedBuckets
             }
         } else {
             return {
                 sectionId,
-                data: [],
+                data: []
             }
         }
     }) as {
@@ -61,29 +63,39 @@ const getChartData = (data: AllSectionsToolsCardinalityByUserBlockProps['data'])
 export const AllSectionsToolsCardinalityByUserBlock = ({
     block,
     data,
-    units: defaultUnits = 'percentage',
+    defaultUnits = 'percentage_survey'
 }: AllSectionsToolsCardinalityByUserBlockProps) => {
-    const [units, setUnits] = useState(defaultUnits)
+    // const [units, setUnits] = useState(defaultUnits)
+    const units = defaultUnits
+    const { getString } = useI18n()
 
-    const charData = useMemo(() => getChartData(data), [data])
+    const chartData = useMemo(() => getChartData(data), [data])
 
     const maxNumberOfTools = maxBy<string[]>(Object.values(toolsCategories), 'length')!.length
 
+    console.log(chartData)
     return (
         <Block
             units={units}
-            setUnits={setUnits}
+            // setUnits={setUnits}
             block={{
                 ...block,
                 blockName: 'all_sections_tools_cardinality_by_user',
                 // title,
                 // description,
-                showLegend: false,
+                showLegend: false
             }}
+            tables={chartData.map(({ sectionId, data }) =>
+                getTableData({
+                    title: getString(`sections.${sectionId}.title`)?.t,
+                    data: data.map(item => ({ ...item, label: item.cardinality })).reverse(),
+                    valueKeys: ['count', 'percentage_survey']
+                })
+            )}
             data={data}
         >
             <AllSectionsToolsCardinalityByUserChart
-                data={charData}
+                data={chartData}
                 units={units}
                 maxNumberOfTools={maxNumberOfTools}
             />

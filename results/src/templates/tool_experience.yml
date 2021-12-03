@@ -2,9 +2,9 @@ blockType: ToolExperienceBlock
 titleId: blocks.tool_experience
 dataPath: surveyApi.survey.${id}_experience
 keysPath: surveyApi.survey.${id}_experience.experience.keys
+entityPath: surveyApi.survey.${id}_experience.entity
 bucketKeysName: tools
 showLegend: true
-
 hidden: true
 query: >
     surveyApi {

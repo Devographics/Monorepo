@@ -16,16 +16,7 @@ const BlockVariant = (props) => {
     const {
         className,
         children,
-        legends,
-        units,
-        setUnits,
-        error,
-        data,
         block = {},
-        legendProps,
-        titleProps,
-        headings,
-        tables,
     } = props
     
     const {

@@ -171,15 +171,8 @@ Get locale strings for a specific locale
 export const getLocaleStrings = (locale: Locale, contexts?: string[]) => {
     let stringFiles = locale.stringFiles
 
-    // if contexts are specified, filter strings by them
-    if (contexts) {
-        stringFiles = stringFiles.filter((sf: StringFile) => {
-            return contexts.includes(sf.context)
-        })
-    }
-
     // flatten all stringFiles together
-    const strings = stringFiles
+    let strings = stringFiles
         .map((sf: StringFile) => {
             let { strings, prefix, context } = sf
             if (strings === null) {
@@ -203,6 +196,22 @@ export const getLocaleStrings = (locale: Locale, contexts?: string[]) => {
             return strings
         })
         .flat()
+
+    // resolve aliases
+    strings = strings.map((s: TranslationStringObject) => {
+        if (s.aliasFor) {
+            const s2 = strings.find(ss => ss.key === s.aliasFor)
+            s = { ...s2, ...s }
+        }
+        return s
+    })
+
+    // if contexts are specified, filter strings by them
+    if (contexts) {
+        strings = strings.filter((s: TranslationStringObject) => {
+            return contexts.includes(s.context)
+        })
+    }
 
     return { strings }
 }

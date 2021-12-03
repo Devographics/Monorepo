@@ -39,7 +39,8 @@ const BlockSwitcher = ({ pageData, block, index, ...props }) => {
     if (block.keysPath) {
         blockKeys = get(pageData, block.keysPath)
     }
-    return hidden && !pageContext.isCapturing ? null : (
+
+    return (
         <BlockComponent block={block} data={blockData} keys={blockKeys} index={index} {...props} />
     )
 }
@@ -57,9 +58,9 @@ BlockSwitcher.propTypes = {
         // which mode to use for generic bar charts
         mode: PropTypes.oneOf(['absolute', 'relative']),
         // which unit to use for generic bar charts
-        units: PropTypes.oneOf(['percentage', 'count']),
+        units: PropTypes.oneOf(['percentage', 'count'])
     }),
-    pageData: PropTypes.any.isRequired,
+    pageData: PropTypes.any.isRequired
 }
 
 export default BlockSwitcher

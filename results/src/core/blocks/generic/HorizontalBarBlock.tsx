@@ -40,6 +40,7 @@ const HorizontalBarBlock = ({ block, data }: HorizontalBarBlockProps) => {
                 }),
             ]}
             block={block}
+            completion={completion}
         >
             <ChartContainer fit={true}>
                 <HorizontalBarChart

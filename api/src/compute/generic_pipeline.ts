@@ -101,8 +101,8 @@ export const getGenericPipeline = (pipelineProps: PipelineProps) => {
                 year: `$_id.year`,
                 facets: 1
             }
-        }
-        // { $sort: { [sort]: order } }
+        },
+        { $sort: { year: 1 } }
     ]
 
     // if (cutoff) {

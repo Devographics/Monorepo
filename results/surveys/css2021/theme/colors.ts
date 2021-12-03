@@ -21,7 +21,7 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
     lineChartDefaultColor: '#59DF7F',
     barChart: {
         primary: '#ED2E84',
-        secondary: '#556ad7',
+        secondary: '#556ad7'
     },
     ranges: {
         tools: {
@@ -29,7 +29,7 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
             would_not_use: colors.pink,
             interested: '#ACFFC3',
             not_interested: colors.pinkLight,
-            never_heard: '#59608a',
+            never_heard: '#59608a'
         },
         toolSections: {
             javascript_flavors: colors.indigo,
@@ -40,42 +40,45 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
             build_tools: colors.yellow,
             mobile_desktop: colors.green,
             other_tools: colors.blue,
+            css_in_js: colors.blue,
+            pre_post_processors: colors.purple,
+            css_frameworks: colors.green
         },
         features: {
             used: colors.blue,
             heard: colors.greyTeal,
-            never_heard: colors.navyLighter,
+            never_heard: colors.navyLighter
         },
-        featureSections: {
+        features_categories: {
             layout: colors.indigo,
             shapes_graphics: colors.pink,
             interactions: colors.red,
             typography: colors.purple,
             animations_transforms: colors.orange,
-            media_queries: colors.green,
-            other_features: colors.skyblue,
+            other_features: colors.green,
+            accessibility: colors.yellow
         },
         features_simplified: {
             know_it: '#ACFFC3',
-            used_it: '#59DF7F',
+            used_it: '#59DF7F'
         },
         gender: {
             male: colors.blue,
             female: colors.teal,
             non_binary: colors.red,
-            prefer_not_to_say: colors.greyMediumer,
+            prefer_not_to_say: colors.greyMediumer
         },
         opinions: {
             4: colors.pink,
             3: colors.pinkLight,
             2: '#59608a',
             1: colors.blueLight,
-            0: colors.blue,
+            0: colors.blue
         },
         bracket: {
             round1: '#7331A6',
             round2: '#B03095',
-            round3: '#ED2E84',
+            round3: '#ED2E84'
         }
     },
     distinct: [
@@ -89,7 +92,7 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
         colors.orange,
         colors.olive,
         colors.skyblue,
-        colors.purple,
+        colors.purple
     ],
     countries: [
         colors.blue,
@@ -98,7 +101,7 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
         colors.pinkLightest,
         colors.pinkLighter,
         colors.pinkLight,
-        colors.pink,
+        colors.pink
     ],
     velocity: [
         '#1734BF',
@@ -108,8 +111,8 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
         '#91319D',
         '#B03095',
         '#CE2F8C',
-        '#ED2E84',
-    ],
+        '#ED2E84'
+    ]
 }
 
 export default stateOfCSSThemeColors

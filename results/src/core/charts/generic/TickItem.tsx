@@ -2,7 +2,8 @@ import React, { memo, useMemo } from 'react'
 import { ChartComponentProps, BlockUnits, BucketItem, BlockLegend, TickItemProps } from 'core/types'
 import { useTheme } from 'styled-components'
 import { useI18n } from 'core/i18n/i18nContext'
-import Tooltip from 'core/components/Tooltip'
+import TooltipComponent from 'core/components/Tooltip'
+import * as Tooltip from '@radix-ui/react-tooltip'
 
 const labelMaxLength = 20
 
@@ -11,11 +12,13 @@ export const Text = ({
     label,
     description,
     tickRotation,
+    i18nNamespace
 }: {
     hasLink: boolean
     label: string
     description: string
     tickRotation?: number
+    i18nNamespace?: string
 }) => {
     const theme = useTheme()
     const shortenLabel = label.length > labelMaxLength
@@ -28,8 +31,8 @@ export const Text = ({
         style: {
             fill: hasLink ? theme.colors.link : theme.colors.text,
             fontSize: 14,
-            fontFamily: theme.typography.fontFamily,
-        },
+            fontFamily: theme.typography.fontFamily
+        }
     }
 
     if (tickRotation) {
@@ -37,16 +40,21 @@ export const Text = ({
         textProps.textAnchor = 'start'
     }
 
-    return (
+    const component = (
         <text {...textProps}>
             <title>{description ?? label}</title>
             {shortLabel ?? label}
         </text>
     )
+    return description ? (
+        <TooltipComponent trigger={component} contents={description} asChild={true} />
+    ) : (
+        component
+    )
 }
 
 export const TickItem = (tick: TickItemProps) => {
-    const { translate } = useI18n()
+    const { translate, getString } = useI18n()
 
     const { x, y, value, shouldTranslate, i18nNamespace, entity, tickRotation } = tick
 
@@ -67,7 +75,10 @@ export const TickItem = (tick: TickItemProps) => {
         }
     } else if (shouldTranslate) {
         label = translate(`options.${i18nNamespace}.${value}`)
-        description = translate(`options.${i18nNamespace}.${value}.description`)
+        const descriptionString = getString(`options.${i18nNamespace}.${value}.description`)
+        if (!descriptionString.missing) {
+            description = descriptionString.t
+        }
     } else {
         label = value
     }
@@ -75,7 +86,7 @@ export const TickItem = (tick: TickItemProps) => {
     const textProps = {
         label,
         description,
-        tickRotation,
+        tickRotation
     }
 
     return (

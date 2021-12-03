@@ -12,7 +12,7 @@ const Footer = styled.div`
 const Respondents = styled.div`
     font-size: ${fontSize('small')};
     text-align: center;
-    color: ${(props) => props.theme.colors.textAlt};
+    color: ${props => props.theme.colors.textAlt};
     margin-bottom: ${spacing(0.5)};
 `
 
@@ -22,20 +22,24 @@ const Units = styled.div`
     justify-content: center;
 `
 
-const BlockFooter = ({ data, units, setUnits }) => (
+const BlockFooter = ({ completion, units, setUnits }) => (
     <Footer>
-        <Respondents>
-            <T
-                k="chart_units.respondents"
-                values={{
-                    count: data?.completion?.count,
-                    percentage: data?.completion?.percentage_survey,
-                }}
-            />
-        </Respondents>
-        <Units>
-            <BlockUnitsSelector units={units} onChange={setUnits} />
-        </Units>
+        {completion && (
+            <Respondents>
+                <T
+                    k="chart_units.respondents"
+                    values={{
+                        count: completion?.count,
+                        percentage: completion?.percentage_survey
+                    }}
+                />
+            </Respondents>
+        )}
+        {setUnits && (
+            <Units>
+                <BlockUnitsSelector units={units} onChange={setUnits} />
+            </Units>
+        )}
     </Footer>
 )
 

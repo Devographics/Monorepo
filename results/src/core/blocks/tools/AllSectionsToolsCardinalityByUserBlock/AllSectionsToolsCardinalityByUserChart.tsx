@@ -14,7 +14,7 @@ export const AllSectionsToolsCardinalityByUserChart = ({
         sectionId: string
         data: ToolsCardinalityByUserBucket[]
     }[]
-    units: 'percentage' | 'count'
+    units: 'percentage_survey' | 'count'
     maxNumberOfTools: number
 }) => (
     <GridContainer>
@@ -45,7 +45,7 @@ const GridContainer = styled.div`
     }
 
     @media ${mq.large} {
-        grid-template-columns: repeat(4, minmax(120px, 1fr));
+        grid-template-columns: repeat(3, minmax(120px, 1fr));
         row-gap: ${spacing(1.5)};
         column-gap: ${spacing(1.5)};
     }

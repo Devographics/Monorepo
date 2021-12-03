@@ -1,4 +1,5 @@
 blockType: ToolsScatterplotBlock
+titleId: blocks.tools_quadrant
 dataPath: "surveyApi.survey.${id}"
 keysPath: "surveyApi.survey.${id}.experience.keys"
 query: >

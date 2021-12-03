@@ -274,3 +274,20 @@ export async function computeToolsExperienceRanking(
 
     return byTool
 }
+
+export async function computeToolsExperienceRankingYears(
+    db: Db,
+    survey: SurveyConfig,
+    tools: string[],
+    filters?: Filters
+) {
+    let availableYears: any[] = []
+    for (const tool of tools) {
+        const toolAllYearsExperience = await computeExperienceOverYears(db, survey, tool, filters)
+        toolAllYearsExperience.forEach((toolYear: any) => {
+            availableYears.push(toolYear.year)
+        })
+    }
+    availableYears = _.uniq(availableYears).sort()
+    return availableYears
+}

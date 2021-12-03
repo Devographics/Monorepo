@@ -7,6 +7,7 @@ import { ToolExperienceBlock } from 'core/blocks/tools/ToolExperienceBlock'
 import { usePageContext } from 'core/helpers/pageContext'
 import get from 'lodash/get'
 import ModalTrigger from 'core/components/ModalTrigger'
+import BlockWrapper from 'core/blocks/block/BlockWrapper'
 
 const ToolLabel = ({ id }) => {
     const { getEntity } = useEntities()
@@ -36,9 +37,13 @@ const ToolLabel = ({ id }) => {
 
 const ToolLabelModal = ({ id, closeComponent }) => {
     const pageContext = usePageContext()
-    const block = pageContext.blocks.find((block) => block.id === id)
-    const blockData = get(pageContext.pageData, block.variants[0].dataPath)
-    return <ToolExperienceBlock block={block} data={blockData} closeComponent={closeComponent}/>
+    const block = pageContext.blocks.find(block => block.id === id)
+    // unhide variants
+    const variants = block.variants.map(b => ({ ...b, hidden: false }))
+    // const blockData = get(pageContext.pageData, block.variants[0].dataPath)
+    return <BlockWrapper block={{ ...block, variants }} pageData={pageContext.pageData} index={0} />
+
+    // return <ToolExperienceBlock block={block} data={blockData} closeComponent={closeComponent}/>
 }
 
 const LabelLink = styled(Button)`

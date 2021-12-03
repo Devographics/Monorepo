@@ -25,7 +25,7 @@ const BracketMatchupsBlock = ({ block, data }: HorizontalBarBlockProps) => {
         defaultUnits = 'percentage',
         translateData = true,
         i18nNamespace = block.id,
-        colorVariant,
+        colorVariant
     } = block
 
     const theme = useTheme()
@@ -36,37 +36,46 @@ const BracketMatchupsBlock = ({ block, data }: HorizontalBarBlockProps) => {
 
     const { total } = completion
 
-    const sortedBuckets = sortBy(buckets, (b) => sumBy(b.matchups, 'count')).reverse()
-    const keys = sortedBuckets.map((b) => b.id)
+    const sortedBuckets = sortBy(buckets, b => sumBy(b.matchups, 'count')).reverse()
+    const keys = sortedBuckets.map(b => b.id)
     const legends = useLegends(block, keys, 'bracket')
 
-    const heatmapBuckets = sortedBuckets.map((bucket) => {
-        const { id, matchups } = bucket
-        const heatmapBucket = { id }
-        keys.forEach((k) => {
-            matchups.forEach((matchup) => {
-                heatmapBucket[`${matchup.id}___count`] = matchup.count // not really used
-                heatmapBucket[`${matchup.id}___percentage`] = matchup.percentage // not really used
-                heatmapBucket[matchup.id] = matchup.percentage
+    const heatmapBuckets = sortedBuckets.map(bucket => {
+        try {
+            const { id, matchups } = bucket
+            const heatmapBucket = { id }
+            keys.forEach(k => {
+                matchups.forEach(matchup => {
+                    heatmapBucket[`${matchup.id}___count`] = matchup.count // not really used
+                    heatmapBucket[`${matchup.id}___percentage`] = matchup.percentage // not really used
+                    heatmapBucket[matchup.id] = matchup.percentage
+                })
             })
-        })
-        return heatmapBucket
+            return heatmapBucket
+        } catch (error) {
+            console.log('// BracketMatchupsBlock data error')
+            console.log(error)
+            return {}
+        }
     })
 
-    console.log(legends)
-    console.log(heatmapBuckets)
     return (
         <Block
             units={units}
             setUnits={setUnits}
             data={data}
             tables={[
+                
                 getTableData({
-                    data: data.buckets,
-                    valueKeys: ['percentage_survey', 'percentage_question', 'count'],
+                    data: heatmapBuckets,
+                    valueKeys: keys?.map(k => ({
+                        id: `${k}___percentage`,
+                        labelId: `options.${i18nNamespace}.${k}`,
+                        isPercentage: true,
+                    })),
                     translateData,
-                    i18nNamespace,
-                }),
+                    i18nNamespace
+                })
             ]}
             block={block}
         >
@@ -102,15 +111,15 @@ const BracketMatchupsBlock = ({ block, data }: HorizontalBarBlockProps) => {
                         // tickRotation: -45,
                         // legend: '',
                         // legendOffset: 36,
-                        renderTick: (tick) => (
+                        renderTick: tick => (
                             <TickItem
                                 tickRotation={-45}
                                 i18nNamespace={i18nNamespace}
                                 shouldTranslate={translateData}
-                                entity={buckets.find((b) => b.id === tick.value)?.entity}
+                                entity={buckets.find(b => b.id === tick.value)?.entity}
                                 {...tick}
                             />
-                        ),
+                        )
                     }}
                     // axisRight={null}
                     // axisBottom={null}
@@ -122,14 +131,14 @@ const BracketMatchupsBlock = ({ block, data }: HorizontalBarBlockProps) => {
                         // legend: '',
                         // legendPosition: 'middle',
                         // legendOffset: -40,
-                        renderTick: (tick) => (
+                        renderTick: tick => (
                             <TickItem
                                 i18nNamespace={i18nNamespace}
                                 shouldTranslate={translateData}
-                                entity={buckets.find((b) => b.id === tick.value)?.entity}
+                                entity={buckets.find(b => b.id === tick.value)?.entity}
                                 {...tick}
                             />
-                        ),
+                        )
                     }}
                     // cellOpacity={1}
                     // cellBorderColor={{ from: 'color', modifiers: [['darker', 0.4]] }}
@@ -166,15 +175,15 @@ BracketMatchupsBlock.propTypes = {
         translateData: PropTypes.bool,
         mode: PropTypes.oneOf(['absolute', 'relative']),
         defaultUnits: PropTypes.oneOf(['percentage_survey', 'percentage_question', 'count']),
-        colorVariant: PropTypes.oneOf(['primary', 'secondary']),
+        colorVariant: PropTypes.oneOf(['primary', 'secondary'])
     }).isRequired,
     data: PropTypes.shape({
         buckets: PropTypes.arrayOf(
             PropTypes.shape({
-                id: PropTypes.string.isRequired,
+                id: PropTypes.string.isRequired
             })
-        ).isRequired,
-    }).isRequired,
+        ).isRequired
+    }).isRequired
 }
 
 export default memo(BracketMatchupsBlock)

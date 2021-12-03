@@ -1,6 +1,6 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
-import sitemap from 'Config/sitemap.yml'
+import sitemap from 'Config/raw_sitemap.yml'
 import { mq, fancyLinkMixin, spacing } from 'core/theme'
 import { usePageContext } from 'core/helpers/pageContext'
 import PageLink from 'core/pages/PageLink'
@@ -8,7 +8,7 @@ import LanguageSwitcher from 'core/i18n/LanguageSwitcher'
 import { getPageLabelKey } from 'core/helpers/pageHelpers'
 import T from 'core/i18n/T'
 
-const filteredNav = sitemap.contents.filter((page) => !page.is_hidden)
+const filteredNav = sitemap?.filter((page) => !page.is_hidden) ?? []
 
 const StyledPageLink = styled(PageLink)`
     display: flex;
@@ -67,7 +67,7 @@ const StyledPageLink = styled(PageLink)`
         })}
 `
 
-const NavItem = ({ page, currentPath, closeSidebar, isHidden = false, depth = 0 }) => {
+const NavItem = ({ page, parentPage, currentPath, closeSidebar, isHidden = false, depth = 0 }) => {
     const isActive = currentPath.indexOf(page.path) !== -1
     const hasChildren = page.children && page.children.length > 0
     const displayChildren = hasChildren > 0 && isActive
@@ -80,6 +80,7 @@ const NavItem = ({ page, currentPath, closeSidebar, isHidden = false, depth = 0 
                 page={page}
                 depth={depth}
                 isHidden={isHidden}
+                parentPage={parentPage}
             >
                 <T k={getPageLabelKey(page)} />
             </StyledPageLink>
@@ -88,6 +89,7 @@ const NavItem = ({ page, currentPath, closeSidebar, isHidden = false, depth = 0 
                     {page.children.map((childPage) => (
                         <NavItem
                             key={childPage.id}
+                            parentPage={page}
                             page={childPage}
                             closeSidebar={closeSidebar}
                             currentPath={currentPath}

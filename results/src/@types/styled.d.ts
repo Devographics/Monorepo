@@ -66,7 +66,7 @@ declare module 'styled-components' {
                 tools: Record<ToolExperienceId, string>
                 toolSections: Record<ToolsSectionId, string>
                 features: Record<FeatureExperienceId, string>
-                featureSections: Record<FeaturesSectionId, string>
+                features_categories: Record<FeaturesSectionId, string>
                 features_simplified: Record<SimplifiedFeatureExperienceId, string>
                 gender: Record<GenderId, string>
                 opinions: {

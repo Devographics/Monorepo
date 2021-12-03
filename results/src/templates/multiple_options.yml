@@ -1,7 +1,5 @@
 blockType: HorizontalBarBlock
-
 dataPath: "surveyApi.survey.${id}.year.facets.0"
-
 query: >
     surveyApi {
         survey(survey: ${surveyType}) {

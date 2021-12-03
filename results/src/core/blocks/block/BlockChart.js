@@ -8,17 +8,18 @@ import { usePageContext } from 'core/helpers/pageContext'
 import { getBlockDescriptionKey } from 'core/helpers/blockHelpers'
 import T from 'core/i18n/T'
 import BlockFooter from 'core/blocks/block/BlockFooter'
+import BlockUnitsSelector from 'core/blocks/block/BlockUnitsSelector'
 
-const BlockChart = (props) => {
-    const { children, units, error, data, block = {}, legends, legendProps } = props
+const BlockChart = props => {
+    const { children, units, error, data, block = {}, legends, legendProps, modeProps } = props
     const { legendPosition = 'bottom', showNote = true } = block
 
     const legendProps_ = { block, data, units, position: legendPosition, legends, ...legendProps }
-    
+
     return (
         <div>
             <BlockDescriptionContents block={block} />
-
+            {modeProps && <BlockUnitsSelector {...modeProps} />}
             {legends && legendPosition === 'top' && <BlockLegends {...legendProps_} />}
             <div className="Block__Contents">
                 {error ? <div className="error">{error}</div> : children}

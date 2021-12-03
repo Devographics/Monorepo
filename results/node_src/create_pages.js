@@ -7,7 +7,7 @@ const {
     cleanIdString,
     getLocalizedPath,
     getCleanLocales,
-    createBlockPages,
+    createBlockPages
 } = require('./helpers.js')
 const yaml = require('js-yaml')
 const fs = require('fs')
@@ -56,16 +56,18 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
     )
     let locales = localesResults.data.surveyApi.locales
 
-    if (process.env.FAST_BUILD === true) {
+    if (Boolean(process.env.FAST_BUILD) === true) {
         // if locales are turned off (to make build faster), only keep en-US locale
-        locales = localesResults.data.surveyApi.locales.filter((l) => l.id === 'en-US')
+        locales = localesResults.data.surveyApi.locales.filter(l => l.id === 'en-US')
     }
 
     const cleanLocales = getCleanLocales(locales)
+    logToFile('locales.json', cleanLocales, { mode: 'overwrite' })
+    locales.forEach(locale => {
+        logToFile(`locales/${locale.id}.json`, locale, { mode: 'overwrite' })
+    })
 
     const { flat } = await computeSitemap(rawSitemap, cleanLocales)
-
-    logToFile('locales.json', cleanLocales, { mode: 'overwrite' })
 
     for (const page of flat) {
         let pageData = {}
@@ -76,18 +78,19 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
 
         try {
             if (pageQuery) {
-                const wrappedPageQuery = wrapWithQuery(
-                    `page${_.upperFirst(cleanIdString(page.id))}Query`,
-                    pageQuery
-                )
+                const queryName = _.upperFirst(cleanIdString(page.id))
+                const wrappedPageQuery = wrapWithQuery(`page${queryName}Query`, pageQuery)
                 logToFile('queries.txt', wrappedPageQuery, { mode: 'append' })
-
+                const start = new Date()
                 const queryResults = await graphql(
                     `
                         ${wrappedPageQuery}
                     `
                 )
+                const end = new Date()
+                const timeDiff = Math.round((end - start) / 1000)
                 pageData = queryResults.data
+                logToFile(`data/${queryName}_${timeDiff}s.json`, pageData, { mode: 'overwrite' })
             }
         } catch (error) {
             console.log(`// Error while loading data for page ${page.id}`)
@@ -109,8 +112,8 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
                     locales: cleanLocales,
                     locale,
                     pageData,
-                    pageQuery, // passed for debugging purposes
-                },
+                    pageQuery // passed for debugging purposes
+                }
             }
 
             if (page.id === 'notfound') {
@@ -124,10 +127,10 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
         createRedirect({
             fromPath: getLocalizedPath(page.path, null),
             toPath: getLocalizedPath(page.path, { id: 'en-US' }),
-            isPermanent: true,
+            isPermanent: true
         })
 
-        if (!process.env.FAST_BUILD === true) {
+        if (Boolean(!process.env.FAST_BUILD) === true) {
             // skip this is fast_build option is enabled
             createBlockPages(page, context, createPage, locales)
         }
@@ -185,8 +188,8 @@ exports.createPagesTwoLoops = async ({ graphql, actions: { createPage, createRed
                     ...context,
                     locales: cleanLocales,
                     locale,
-                    pageData: allPageData,
-                },
+                    pageData: allPageData
+                }
             }
             createPage(pageObject)
         }
@@ -195,7 +198,7 @@ exports.createPagesTwoLoops = async ({ graphql, actions: { createPage, createRed
         createRedirect({
             fromPath: getLocalizedPath(page.path, null),
             toPath: getLocalizedPath(page.path, { id: 'en-US' }),
-            isPermanent: true,
+            isPermanent: true
         })
 
         createBlockPages(page, context, createPage, locales)
