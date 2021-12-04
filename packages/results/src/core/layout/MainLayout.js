@@ -7,6 +7,9 @@ import colors from 'core/theme/colors'
 import classNames from 'classnames'
 import Hamburger from 'core/components/Hamburger'
 import { useI18n } from 'core/i18n/i18nContext'
+import { test } from '@stateofjs/common/src/index'
+
+test()
 
 const MainLayout = ({
     context,

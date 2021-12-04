@@ -1,0 +1,7 @@
+# Captures
+# static/images/captures
+
+# Builds
+packages/results/public
+# images are survey-dependent and copied over from surveys/foo/images by webpack
+packages/results/static/images
