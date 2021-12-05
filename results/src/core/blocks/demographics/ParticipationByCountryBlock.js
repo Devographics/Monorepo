@@ -27,6 +27,7 @@ const ParticipationByCountryBlock = ({
             setUnits={setUnits}
             data={data}
             block={block}
+            completion={data.completion}
         >
             <ChartContainer height={600}>
                 <div

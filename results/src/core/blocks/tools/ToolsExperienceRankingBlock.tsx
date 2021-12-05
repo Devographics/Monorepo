@@ -14,6 +14,7 @@ import { Entity } from 'core/types'
 import T from 'core/i18n/T'
 // @ts-ignore
 import { useI18n } from 'core/i18n/i18nContext'
+import { getTableData } from 'core/helpers/datatables'
 
 type MetricId = 'satisfaction' | 'interest' | 'usage' | 'awareness'
 type ViewId = 'viz' | 'data'
@@ -28,7 +29,7 @@ interface SwitcherProps {
 const Switcher = ({ setMetric, metric }: SwitcherProps) => {
     return (
         <ButtonGroup>
-            {ALL_METRICS.map((key) => (
+            {ALL_METRICS.map(key => (
                 <Button
                     key={key}
                     size="small"
@@ -53,6 +54,11 @@ interface ToolData extends Record<MetricId, MetricBucket[]> {
     entity: Entity
 }
 
+interface ToolsExperienceRankingBlockData {
+    years: number[]
+    experience: ToolData[]
+}
+
 interface ToolsExperienceRankingBlockProps {
     block: BlockContext<
         'toolsExperienceRankingTemplate',
@@ -61,84 +67,85 @@ interface ToolsExperienceRankingBlockProps {
         any
     >
     triggerId: MetricId
-    data: ToolData[]
+    data: ToolsExperienceRankingBlockData
     titleProps: any
+}
+
+const getChartData = ({ data, controlledMetric }: { data: ToolData[]; controlledMetric: any }) => {
+    return useMemo(
+        () =>
+            data.map(tool => {
+                return {
+                    id: tool.id,
+                    name: tool.entity.name,
+                    data: tool[controlledMetric].map(bucket => {
+                        return {
+                            x: bucket.year,
+                            y: bucket.rank,
+                            percentage_question: bucket.percentage_question
+                        }
+                    })
+                }
+            }),
+        [data, controlledMetric]
+    )
 }
 
 export const ToolsExperienceRankingBlock = ({
     block,
     data,
-    triggerId,
+    triggerId
 }: ToolsExperienceRankingBlockProps) => {
     const [metric, setMetric] = useState<MetricId>('satisfaction')
-    const { translate } = useI18n()
+    const { getString } = useI18n()
 
     const controlledMetric = triggerId || metric
 
-    const chartData: RankingChartSerie[] = useMemo(
-        () =>
-            data.map((tool) => {
-                return {
-                    id: tool.id,
-                    name: tool.entity.name,
-                    data: tool[controlledMetric].map((bucket) => {
-                        return {
-                            x: bucket.year,
-                            y: bucket.rank,
-                            percentage_question: bucket.percentage_question,
-                        }
-                    }),
-                }
-            }),
-        [data, controlledMetric]
-    )
+    const { years, experience } = data
+    const chartData: RankingChartSerie[] = getChartData({ data: experience, controlledMetric })
 
-    const [view, setView] = useState<ViewId>('viz');
+    const tableData = experience.map(tool => {
+        const cellData = { label: tool.entity.name }
+        ALL_METRICS.forEach(metric => {
+            cellData[`${metric}_percentage`] = tool[metric].map(y => ({
+                year: y.year,
+                value: y.percentage_question
+            }))
+            cellData[`${metric}_rank`] = tool[metric].map(y => ({
+                year: y.year,
+                value: y.rank
+            }))
+        })
+        return cellData
+    })
 
-    const sections = [
-      {id: 'satisfaction', label: translate('options.experience_ranking.satisfaction')},
-      {id: 'interest', label: translate('options.experience_ranking.interest')},
-      {id: 'usage', label: translate('options.experience_ranking.usage')},
-      {id: 'awareness', label: translate('options.experience_ranking.awareness')},
-    ]
-
-    const getRows = (data, section) => {
-      const rows = [];
-      data.forEach((row) => {
-        const newRow = [{ id: 'label', label: row.entity.name }];
-        row[section].forEach((cell) => {
-          newRow.push({
-            id: `y_${cell.year}`,
-            label: cell.percentage_question ? `${cell.percentage_question}% (#${cell.rank})` : '-'
-          })
-        });
-        rows.push(newRow);
-      });
-      return rows;
-    };
-
-    let headings = [{id: 'label', label: translate('tools.technology')}];
-    headings = headings.concat(data[0].awareness.map(row => ({id: `y_${row.year}`, label: row.year})));
-    const tables = [];
-    sections.forEach((section) => {
-      tables.push({
-        id: section.id,
-        title: section.label,
-        headings: headings,
-        rows: getRows(data, section.id),
-      })
-    });
-    
     return (
         <Block
-            
-            
             block={block}
-            titleProps={{ switcher: <Switcher setMetric={setMetric} metric={controlledMetric} /> }}
+            // titleProps={{ switcher: <Switcher setMetric={setMetric} metric={controlledMetric} /> }}
             data={data}
-            tables={tables}
+            modeProps={{
+                units: controlledMetric,
+                options: ALL_METRICS,
+                onChange: setMetric,
+                i18nNamespace: 'options.experience_ranking'
+            }}
+            tables={[
+                getTableData({
+                    title: getString('table.rankings_table').t,
+                    data: tableData,
+                    valueKeys: ALL_METRICS.map(m => `${m}_rank`),
+                    years
+                }),
+                getTableData({
+                    title: getString('table.percentages_table').t,
+                    data: tableData,
+                    valueKeys: ALL_METRICS.map(m => `${m}_percentage`),
+                    years
+                })
+            ]}
         >
-            <ChartContainer height={data.length * 50 + 80}>
+            <ChartContainer height={experience.length * 50 + 80}>
                 <RankingChart data={chartData} />
             </ChartContainer>
         </Block>

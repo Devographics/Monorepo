@@ -159,16 +159,16 @@ export async function computeDefaultTermAggregationByYear(
         .aggregate(getGenericPipeline(pipelineProps))
         .toArray()) as ResultsByYear[]
 
-    console.log(
-        inspect(
-            {
-                match,
-                sampleAggregationPipeline: getGenericPipeline(pipelineProps),
-                results
-            },
-            { colors: true, depth: null }
-        )
-    )
+    // console.log(
+    //     inspect(
+    //         {
+    //             match,
+    //             sampleAggregationPipeline: getGenericPipeline(pipelineProps),
+    //             results
+    //         },
+    //         { colors: true, depth: null }
+    //     )
+    // )
 
     await addEntities(results)
 
@@ -182,7 +182,7 @@ export async function computeDefaultTermAggregationByYear(
 
     await sortResults(results, { sort, order, values })
 
-    console.log(JSON.stringify(results, undefined, 2))
+    // console.log(JSON.stringify(results, undefined, 2))
 
     return results
 }

@@ -9,6 +9,8 @@ import sortBy from 'lodash/sortBy'
 import range from 'lodash/range'
 import ToolLabel from 'core/charts/tools/ToolLabel'
 import { useI18n } from 'core/i18n/i18nContext'
+import { useLegends } from '../../helpers/useBucketKeys'
+import { groupDataByYears, getTableData } from 'core/helpers/datatables'
 
 const ToolsSectionStreamsBlock = ({
     block,
@@ -18,47 +20,25 @@ const ToolsSectionStreamsBlock = ({
     units: defaultUnits = 'percentage_question',
 }) => {
     const [units, setUnits] = useState(defaultUnits)
-    
+
     const [current, setCurrent] = useState(null)
     const { translate } = useI18n()
+
+    const legends = useLegends(block, keys, 'tools')
 
     const filteredData = data.filter((toolData) => toolData.experience.all_years.length > 1)
 
     const controlledCurrent = triggerId || current
 
-    let headings = [{ id: 'label', label: translate('table.year') }]
-    headings = headings.concat(
-        data[0].experience.all_years[0].facets[0].buckets.map((bucket) => ({
-            id: bucket.id,
-            label: translate(`options.tools.${bucket.id}.short`),
-        }))
-    )
-
-    const generateRows = (data) => {
-        const rows = []
-        // data.forEach((row) => {
-        //     const newRow = []
-        //     newRow.push({ id: 'label', label: row.year })
-        //     row.facets[0].buckets.forEach((bucket) =>
-        //         newRow.push({ id: bucket.id, label: `${bucket.percentage}% (${bucket.count})` })
-        //     )
-        //     rows.push(newRow)
-        // })
-        return rows
-    }
-
-    const tables = data.map((table) => ({
-        id: table.id,
-        title: table.entity.name,
-        headings: headings,
-        rows: generateRows(table.experience.all_years),
-    }))
-
     return (
         <Block
-            tables={tables}
-            
-            
+            tables={filteredData.map(tool => getTableData({
+                title: tool?.entity?.name,
+                data: groupDataByYears({ keys, data: tool.experience.all_years }),
+                years: tool.experience.all_years.map(y => y.year),
+                translateData: true,
+                i18nNamespace: 'tools'
+            }))}
             units={units}
             setUnits={setUnits}
             block={{
@@ -66,6 +46,7 @@ const ToolsSectionStreamsBlock = ({
                 legendProps: { layout: 'horizontal' },
                 ...block,
             }}
+            legends={legends}
             data={filteredData}
             legendProps={{
                 current: controlledCurrent,
@@ -85,6 +66,8 @@ const ToolsSectionStreamsBlock = ({
                             toolData={toolData}
                             current={controlledCurrent}
                             units={units}
+                            legends={legends}
+                            keys={keys}
                         />
                     )
                 })}
@@ -93,10 +76,9 @@ const ToolsSectionStreamsBlock = ({
     )
 }
 
-const Stream = ({ toolData, current, units }) => {
-    const chartData = toolData.experience.all_years.map(year => year.facets[0])
-    const bucketKeys = useBucketKeys('tools')
-    const colors = useMemo(() => bucketKeys.map((key) => key.color), [bucketKeys])
+const Stream = ({ toolData, current, units, keys, legends }) => {
+    const chartData = toolData.experience.all_years.map((year) => year.facets[0])
+    const colors = legends.map((key) => key.color)
 
     return (
         <StreamItem>
@@ -106,8 +88,8 @@ const Stream = ({ toolData, current, units }) => {
                 // for tools only having one year of data, we duplicate the year's data
                 // to be able to use the stream chart.
                 data={chartData.length === 1 ? [chartData[0], chartData[0]] : chartData}
-                keys={bucketKeys.map((k) => k.id)}
-                bucketKeys={bucketKeys}
+                keys={keys}
+                bucketKeys={legends}
                 units={units}
                 applyEmptyPatternTo="never_heard"
                 namespace="options.tools"

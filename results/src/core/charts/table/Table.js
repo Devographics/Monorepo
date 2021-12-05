@@ -2,53 +2,51 @@ import styled from 'styled-components'
 import T from 'core/i18n/T'
 import React from 'react'
 import { useTheme } from 'styled-components'
-import { fontSize } from 'core/theme'
+import { fontSize, spacing } from 'core/theme'
 
 const Tables = ({ tables = [] }) => {
     return (
-        <TableWrapper>
-            {tables.map((table) => {
-                return (
-                    <>
-                        {table.title && <Title>{table.title}</Title>}
-                        <Table {...table} />
-                    </>
-                )
-            })}
-        </TableWrapper>
+        <TablesWrapper>
+            {tables.map((table, i) => (
+                <Table key={i} {...table} />
+            ))}
+        </TablesWrapper>
     )
 }
 
-const Table = ({ headings, rows, years }) => (
-    <DataTable>
-        <thead>
-            <tr>
-                {headings.map((heading, i) => (
-                    <TableHeading
-                        key={i}
-                        {...heading}
-                        years={years}
-                        colSpan={i > 0 && years && years.length > 0 ? years.length : 1}
-                    />
-                ))}
-            </tr>
-            {years && (
+const Table = ({ title, headings, rows, years }) => (
+    <TableWrapper>
+        {title && <Title>{title}</Title>}
+        <DataTable>
+            <thead>
                 <tr>
-                    <TH>
-                        <T k="table.year" />
-                    </TH>
-                    {[...Array(headings.length - 1)].map((heading, i) =>
-                        years.map((year) => <TH key={year}>{year}</TH>)
-                    )}
+                    {headings.map((heading, i) => (
+                        <TableHeading
+                            key={i}
+                            {...heading}
+                            years={years}
+                            colSpan={i > 0 && years && years.length > 0 ? years.length : 1}
+                        />
+                    ))}
                 </tr>
-            )}
-        </thead>
-        <tbody>
-            {rows.map((row, i) => (
-                <TableRow row={row} key={i} />
-            ))}
-        </tbody>
-    </DataTable>
+                {years && (
+                    <tr>
+                        <TH>
+                            <T k="table.year" />
+                        </TH>
+                        {[...Array(headings.length - 1)].map((heading, i) =>
+                            years.map(year => <TH key={year}>{year}</TH>)
+                        )}
+                    </tr>
+                )}
+            </thead>
+            <tbody>
+                {rows.map((row, i) => (
+                    <TableRow row={row} key={i} />
+                ))}
+            </tbody>
+        </DataTable>
+    </TableWrapper>
 )
 
 const TableHeading = ({ id, colSpan, labelId }) => (
@@ -58,7 +56,7 @@ const TableHeading = ({ id, colSpan, labelId }) => (
 )
 
 const TH = styled.th`
-    background: ${(props) => props.theme.colors.backgroundAlt};
+    background: ${props => props.theme.colors.backgroundAlt};
 `
 
 const TableRow = ({ row }) => (
@@ -66,14 +64,14 @@ const TableRow = ({ row }) => (
         {row.map((cell, index) => {
             return index === 0 ? (
                 <TH key={index} scope="row">
-                    {cell.label ?? <T k={cell.labelId} />}
+                    {cell.label ?? <T k={cell.labelId} html={true} />}
                 </TH>
             ) : Array.isArray(cell.value) ? (
-                cell.value.map((yearValue) => (
+                cell.value.map(yearValue => (
                     <TableCell key={yearValue.value} {...cell} {...yearValue} />
                 ))
             ) : (
-                <TableCell {...cell} />
+                <TableCell key={index} {...cell} />
             )
         })}
     </tr>
@@ -82,15 +80,22 @@ const TableRow = ({ row }) => (
 const TableCell = ({ value, isPercentage }) => (
     <td>
         {value}
-        {isPercentage && '%'}
+        {value && isPercentage && '%'}
     </td>
 )
 
-const TableWrapper = styled.div`
+const TablesWrapper = styled.div`
     max-height: 450px;
     overflow-y: auto;
     margin-bottom: 2rem;
-    box-shadow: inset 0px 0px 5px 5px rgba(0, 0, 0, 0.25);
+    /* box-shadow: inset 0px 0px 5px 5px rgba(0, 0, 0, 0.25); */
+`
+
+const TableWrapper = styled.div`
+    margin-bottom: ${spacing(2)};
+    &:last-of-type {
+        margin-bottom: 0;
+    }
 `
 
 const DataTable = styled.table`
@@ -110,7 +115,7 @@ const DataTable = styled.table`
 `
 
 const Title = styled.h4`
-    margin-bottom: 0.25rem;
+    margin-bottom: ${spacing(0.5)};
 `
 
 export default Tables

@@ -16,14 +16,9 @@ export const MARGIN = {
     top: 30,
     right: 10,
     bottom: 120,
-    left: 160,
+    left: 160
 }
 export const ROW_HEIGHT = 40
-
-/**
- * Create a map of tool experience keys for easier access.
- */
-const experienceKeys = keyBy(keys.tools.keys, 'id')
 
 /**
  * In order to create a diverging chart (<– negative | positive –>),
@@ -38,7 +33,7 @@ const valueFormatter = ((value: number) => `${Math.abs(Math.round(value))}%`) as
 const ShadowsLayer = ({ data }: CustomLayerProps<ToolsExperienceMarimekkoToolData>) => {
     return (
         <g>
-            {data.map((datum) => (
+            {data.map(datum => (
                 <rect
                     key={datum.id}
                     x={datum.x - 4}
@@ -58,7 +53,7 @@ const ShadowsLayer = ({ data }: CustomLayerProps<ToolsExperienceMarimekkoToolDat
 const ToolsLabels = ({ data }: CustomLayerProps<ToolsExperienceMarimekkoToolData>) => {
     return (
         <g>
-            {data.map((datum) => (
+            {data.map(datum => (
                 <g key={datum.id} transform={`translate(-160, ${datum.y})`}>
                     <foreignObject style={{ overflow: 'visible' }} width="1" height="1">
                         <ToolLabel id={datum.id} data={datum} />
@@ -78,38 +73,21 @@ export const ToolsExperienceMarimekkoChart = (props: ToolsExperienceMarimekkoCha
     const { translate } = useI18n()
 
     const { current } = props
-    
+
     // `id` is the label while `value` is the accessor
     // for a given dimension.
-    const dimensions = useMemo(
-        () => [
-            {
-                id: translate(experienceKeys.not_interested.label),
-                value: experienceKeys.not_interested.id,
-            },
-            {
-                id: translate(experienceKeys.would_not_use.label),
-                value: experienceKeys.would_not_use.id,
-            },
-            {
-                id: translate(experienceKeys.would_use.label),
-                value: experienceKeys.would_use.id,
-            },
-            {
-                id: translate(experienceKeys.interested.label),
-                value: experienceKeys.interested.id,
-            },
-        ],
-        [translate]
-    )
+    const dimensions = keys.tools.keys.map(k => ({
+        id: translate(k.label),
+        originalId: k.id,
+        value: `${k.id}_percentage`
+    }))
 
     const theme = useTheme()
 
-
     const getLayerColor = (props: any) => {
-        const dimension = dimensions.find((d) => d.id === props.id)
+        const dimension = dimensions.find(d => d.id === props.id)
         if (dimension) {
-            const color = theme.colors.ranges.tools[dimension.value]
+            const color = theme.colors.ranges.tools[dimension.originalId]
             if (current !== null && current !== props.datum.id) {
                 return `${color}33`
             }
@@ -123,10 +101,10 @@ export const ToolsExperienceMarimekkoChart = (props: ToolsExperienceMarimekkoCha
         <ResponsiveMarimekko<ToolsExperienceMarimekkoToolData>
             margin={MARGIN}
             axisTop={{
-                format: valueFormatter,
+                format: valueFormatter
             }}
             axisBottom={{
-                format: valueFormatter,
+                format: valueFormatter
             }}
             id="id"
             value="awareness"
@@ -157,7 +135,7 @@ export const ToolsExperienceMarimekkoChart = (props: ToolsExperienceMarimekkoCha
                 'axes',
                 // ShadowsLayer,
                 ToolsLabels,
-                'bars',
+                'bars'
             ]}
         />
     )

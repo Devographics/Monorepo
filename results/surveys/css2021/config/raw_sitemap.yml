@@ -94,6 +94,7 @@
       template: demographics
       variants:
         - id: gender_by_countries
+          tabId: user_info.gender_by_countries
           template: gender_by_countries
 
     - id: race_ethnicity
@@ -126,6 +127,7 @@
 
     - id: knowledge_score
       template: demographics
+      titleId: features.knowledge_score
       blockType: KnowledgeScoreBlock
 
     - id: features_resources
@@ -173,151 +175,151 @@
           items: [fm-gridsflexbox]
           template: recommended_resources
 
-    # - id: shapes_graphics
-    #   path: /shapes-and-graphics
-    #   blocks:
-    #     - id: shapes_graphics
-    #       template: page_introduction
+    - id: shapes_graphics
+      path: /shapes-and-graphics
+      blocks:
+        - id: shapes_graphics
+          template: page_introduction
 
-    #     - id: shapes
-    #       template: feature_experience
-    #     - id: object_fit
-    #       template: feature_experience
-    #     - id: clip_path
-    #       template: feature_experience
-    #     - id: masks
-    #       template: feature_experience
-    #     - id: blend_modes
-    #       template: feature_experience
-    #     - id: filter_effects
-    #       template: feature_experience
-    #     - id: backdrop_filter
-    #       template: feature_experience
-    #     - id: color_gamut
-    #       template: feature_experience
-    #     - id: perspective
-    #       template: feature_experience
-    #     - id: intrinsic_sizing
-    #       template: feature_experience
-    #       year: 2021
-    #     - id: conic_gradient
-    #       template: feature_experience
-    #       year: 2021
-    #     - id: color_function
-    #       template: feature_experience
-    #       year: 2021
-    #     - id: accent_color
-    #       template: feature_experience
-    #       year: 2021
+        - id: shapes
+          template: feature_experience
+        - id: object_fit
+          template: feature_experience
+        - id: clip_path
+          template: feature_experience
+        - id: masks
+          template: feature_experience
+        - id: blend_modes
+          template: feature_experience
+        - id: filter_effects
+          template: feature_experience
+        - id: backdrop_filter
+          template: feature_experience
+        - id: color_gamut
+          template: feature_experience
+        - id: perspective
+          template: feature_experience
+        - id: intrinsic_sizing
+          template: feature_experience
+          year: 2021
+        - id: conic_gradient
+          template: feature_experience
+          year: 2021
+        - id: color_function
+          template: feature_experience
+          year: 2021
+        - id: accent_color
+          template: feature_experience
+          year: 2021
 
-    #     - items: [fm-svg]
-    #       template: recommended_resources
+        - items: [fm-svg]
+          template: recommended_resources
 
-    # - id: interactions
-    #   path: /interactions
-    #   blocks:
-    #     - id: interactions
-    #       template: page_introduction
+    - id: interactions
+      path: /interactions
+      blocks:
+        - id: interactions
+          template: page_introduction
 
-    #     - id: scroll_snap
-    #       template: feature_experience
-    #     - id: overscroll_behavior
-    #       template: feature_experience
-    #     - id: walterstephanie
-    #       template: picks
-    #     - id: overflow_anchor
-    #       template: feature_experience
-    #     - id: touch_action
-    #       template: feature_experience
-    #     - id: pointer_events
-    #       template: feature_experience
-    #     - id: scroll_timeline
-    #       template: feature_experience
-    #       year: 2021
+        - id: scroll_snap
+          template: feature_experience
+        - id: overscroll_behavior
+          template: feature_experience
+        - id: walterstephanie
+          template: picks
+        - id: overflow_anchor
+          template: feature_experience
+        - id: touch_action
+          template: feature_experience
+        - id: pointer_events
+          template: feature_experience
+        - id: scroll_timeline
+          template: feature_experience
+          year: 2021
 
-    # - id: typography
-    #   path: /typography
-    #   blocks:
-    #     - id: typography
-    #       template: page_introduction
+    - id: typography
+      path: /typography
+      blocks:
+        - id: typography
+          template: page_introduction
 
-    #     - id: font_variant
-    #       template: feature_experience
-    #     - id: piccalilli_
-    #       template: picks
-    #     - id: initial_letter
-    #       template: feature_experience
-    #     - id: font_variant_numeric
-    #       template: feature_experience
-    #     - id: font_display
-    #       template: feature_experience
-    #     - id: line_clamp
-    #       template: feature_experience
-    #     - id: variable_fonts
-    #       template: feature_experience
+        - id: font_variant
+          template: feature_experience
+        - id: piccalilli_
+          template: picks
+        - id: initial_letter
+          template: feature_experience
+        - id: font_variant_numeric
+          template: feature_experience
+        - id: font_display
+          template: feature_experience
+        - id: line_clamp
+          template: feature_experience
+        - id: variable_fonts
+          template: feature_experience
 
-    #     - items: [fm-typography]
-    #       template: recommended_resources
+        - items: [fm-typography]
+          template: recommended_resources
 
-    # - id: accessibility
-    #   path: /accessibility
-    #   blocks:
-    #     - id: accessibility
-    #       template: page_introduction
+    - id: accessibility
+      path: /accessibility
+      blocks:
+        - id: accessibility
+          template: page_introduction
 
-    #     - id: prefers_reduced_motion
-    #       template: feature_experience
-    #     - id: prefers_color_scheme
-    #       template: feature_experience
-    #     - id: sarasoueidan
-    #       template: picks
-    #     - id: prefers_reduced_data
-    #       template: feature_experience
-    #       year: 2021
-    #     - id: color_contrast
-    #       template: feature_experience
-    #       year: 2021
-    #     - id: color_scheme
-    #       template: feature_experience
-    #       year: 2021
-    #     - id: tabindex
-    #       template: feature_experience
-    #       year: 2021
-    #     - id: aria_attributes
-    #       template: feature_experience
-    #       year: 2021
+        - id: prefers_reduced_motion
+          template: feature_experience
+        - id: prefers_color_scheme
+          template: feature_experience
+        - id: sarasoueidan
+          template: picks
+        - id: prefers_reduced_data
+          template: feature_experience
+          year: 2021
+        - id: color_contrast
+          template: feature_experience
+          year: 2021
+        - id: color_scheme
+          template: feature_experience
+          year: 2021
+        - id: tabindex
+          template: feature_experience
+          year: 2021
+        - id: aria_attributes
+          template: feature_experience
+          year: 2021
 
-    # - id: other_features
-    #   path: /other-features
-    #   blocks:
-    #     - id: other_features
-    #       template: page_introduction
+    - id: other_features
+      path: /other-features
+      blocks:
+        - id: other_features
+          template: page_introduction
 
-    #     - id: variables
-    #       template: feature_experience
-    #     - id: feature_support_queries
-    #       template: feature_experience
-    #     - id: containment
-    #       template: feature_experience
-    #     - id: argyleink
-    #       template: picks
-    #     - id: will_change
-    #       template: feature_experience
-    #     - id: calc
-    #       template: feature_experience
-    #     - id: houdini
-    #       template: feature_experience
-    #     - id: comparison_functions
-    #       template: feature_experience
-    #     - id: at_property
-    #       template: feature_experience
-    #       year: 2021
-    #     - id: marker
-    #       template: feature_experience
-    #       year: 2021
+        - id: variables
+          template: feature_experience
+        - id: feature_support_queries
+          template: feature_experience
+        - id: containment
+          template: feature_experience
+        - id: argyleink
+          template: picks
+        - id: will_change
+          template: feature_experience
+        - id: calc
+          template: feature_experience
+        - id: houdini
+          template: feature_experience
+        - id: comparison_functions
+          template: feature_experience
+        - id: at_property
+          template: feature_experience
+          year: 2021
+        - id: marker
+          template: feature_experience
+          year: 2021
 
-    #     - items: [fm-layouts]
-    #       template: recommended_resources
+        - items: [fm-layouts]
+          template: recommended_resources
 
 - id: technologies
   path: /technologies
@@ -368,110 +370,110 @@
 
 
 
-    # - id: css_frameworks
-    #   path: /css-frameworks
-    #   blocks:
-    #     - template: page_introduction
+    - id: css_frameworks
+      path: /css-frameworks
+      blocks:
+        - template: page_introduction
 
-    #     - template: tools_experience_ranking
+        - template: tools_experience_ranking
 
-    #     - template: tools_section_streams
+        - template: tools_section_streams
 
-    #     - template: tools_experience_marimekko
+        - template: tools_experience_marimekko
 
-    #     - id: christianoliff
-    #       template: picks
+        - id: christianoliff
+          template: picks
 
-    #     - template: section_other_tools
+        - template: section_other_tools
 
-    #     - id: css_frameworks
-    #       template: happiness
+        - id: css_frameworks
+          template: happiness
 
-    #     # - template: toolsUsageVariationsTemplate
+        # - template: toolsUsageVariationsTemplate
 
-    #     - id: bootstrap
-    #       template: tool_experience
-    #     - id: materialize_css
-    #       template: tool_experience
-    #     - id: ant_design
-    #       template: tool_experience
-    #     - id: semantic_ui
-    #       template: tool_experience
-    #     - id: bulma
-    #       template: tool_experience
-    #     - id: foundation
-    #       template: tool_experience
-    #     - id: ui_kit
-    #       template: tool_experience
-    #     - id: tachyons
-    #       template: tool_experience
-    #     - id: primer
-    #       template: tool_experience
-    #     - id: tailwind_css
-    #       template: tool_experience
-    #     - id: pure_css
-    #       template: tool_experience
-    #     - id: halfmoon
-    #       template: tool_experience
-    #       year: 2021
+        - id: bootstrap
+          template: tool_experience
+        - id: materialize_css
+          template: tool_experience
+        - id: ant_design
+          template: tool_experience
+        - id: semantic_ui
+          template: tool_experience
+        - id: bulma
+          template: tool_experience
+        - id: foundation
+          template: tool_experience
+        - id: ui_kit
+          template: tool_experience
+        - id: tachyons
+          template: tool_experience
+        - id: primer
+          template: tool_experience
+        - id: tailwind_css
+          template: tool_experience
+        - id: pure_css
+          template: tool_experience
+        - id: halfmoon
+          template: tool_experience
+          year: 2021
 
 
-    # - id: css_in_js
-    #   path: /css-in-js
-    #   blocks:
-    #     - template: page_introduction
+    - id: css_in_js
+      path: /css-in-js
+      blocks:
+        - template: page_introduction
 
-    #     - template: tools_experience_ranking
+        - template: tools_experience_ranking
 
-    #     - template: tools_section_streams
+        - template: tools_section_streams
 
-    #     - template: tools_experience_marimekko
+        - template: tools_experience_marimekko
 
-    #     # - template: toolsUsageVariationsTemplate
+        # - template: toolsUsageVariationsTemplate
         
-    #     - id: hugogiraudel
-    #       template: picks
+        - id: hugogiraudel
+          template: picks
 
-    #     - template: section_other_tools
+        - template: section_other_tools
 
-    #     - id: css_in_js
-    #       template: happiness
+        - id: css_in_js
+          template: happiness
 
-    #     - items: [fm-react]
-    #       template: recommended_resources
+        - items: [fm-react]
+          template: recommended_resources
 
-    #     - id: styled_components
-    #       template: tool_experience
-    #     - id: jss
-    #       template: tool_experience
-    #     - id: styled_jsx
-    #       template: tool_experience
-    #     - id: emotion
-    #       template: tool_experience
-    #     - id: css_modules
-    #       template: tool_experience
-    #     - id: styled_system
-    #       template: tool_experience
-    #     - id: stitches
-    #       template: tool_experience
-    #     - id: fela
-    #       template: tool_experience
-    #     - id: linaria
-    #       template: tool_experience
-    #     - id: astroturf
-    #       template: tool_experience
-    #     - id: twin
-    #       template: tool_experience
-    #       year: 2021
-    #     - id: theme_ui
-    #       template: tool_experience
-    #       year: 2021
-    #     - id: vanilla_extract
-    #       template: tool_experience
-    #       year: 2021
-    #     - id: windi_css
-    #       template: tool_experience
-    #       year: 2021
+        - id: styled_components
+          template: tool_experience
+        - id: jss
+          template: tool_experience
+        - id: styled_jsx
+          template: tool_experience
+        - id: emotion
+          template: tool_experience
+        - id: css_modules
+          template: tool_experience
+        - id: styled_system
+          template: tool_experience
+        - id: stitches
+          template: tool_experience
+        - id: fela
+          template: tool_experience
+        - id: linaria
+          template: tool_experience
+        - id: astroturf
+          template: tool_experience
+        - id: twin
+          template: tool_experience
+          year: 2021
+        - id: theme_ui
+          template: tool_experience
+          year: 2021
+        - id: vanilla_extract
+          template: tool_experience
+          year: 2021
+        - id: windi_css
+          template: tool_experience
+          year: 2021
 
 - id: tools_others
   path: /other-tools
@@ -480,11 +482,13 @@
       template: page_introduction
 
     - id: utilities
+      i18nNamespace: tools_others  
       template: multiple_options
       variables:
         fieldId: tools_others
       variants:
         - id: utilities_others
+          i18nNamespace: tools_others  
           template: multiple_options
           defaultUnits: count
           variables:
@@ -494,15 +498,31 @@
       template: picks
 
     - id: browsers
+      i18nNamespace: tools_others  
       template: multiple_options
       variables:
         fieldId: tools_others
       variants: 
         - id: browsers_others
+          i18nNamespace: tools_others  
           template: multiple_options
           defaultUnits: count
           variables:
             fieldId: tools_others
+
+    - id: tool_evaluation_wins
+      tabId: tabs.bracket_wins
+      template: bracket_wins
+      i18nNamespace: tool_evaluation
+      variables:
+        fieldId: tools_others__tool_evaluation
+      variants: 
+        - id: tool_evaluation_matchups
+          tabId: tabs.bracket_matchups
+          i18nNamespace: tool_evaluation
+          variables:
+            fieldId: tools_others__tool_evaluation
+          template: bracket_matchups
 
     - id: tools_others_resources
       items: [fm-storybook]
@@ -514,30 +534,44 @@
     - template: page_introduction
 
     - id: browsers
+      titleId: environments.browsers
+      i18nNamespace: browsers
       template: multiple_options
       variables:
         fieldId: environments
 
     - id: form_factors
+      titleId: environments.form_factors
+      i18nNamespace: form_factors
       translateData: true
       template: multiple_options
       variables:
         fieldId: environments
 
     - id: accessibility_features
+      titleId: environments.accessibility_features
+      i18nNamespace: accessibility_features
+      translateData: true
       template: multiple_options
       variables:
         fieldId: environments
 
     - id: what_do_you_use_css_for
+      titleId: environments.what_do_you_use_css_for
+      i18nNamespace: what_do_you_use_css_for
+      translateData: true
       template: multiple_options
       variables:
         fieldId: environments
-
-    - id: what_do_you_use_css_for_others
-      template: multiple_options
-      variables:
-        fieldId: environments
+      variants: 
+        - id: what_do_you_use_css_for_others
+          titleId: environments.what_do_you_use_css_for.others
+          tabId: tabs.other_answers
+          i18nNamespace: what_do_you_use_css_for
+          translateData: true
+          template: multiple_options
+          variables:
+            fieldId: environments
 
 - id: resources
   path: /resources
@@ -545,39 +579,46 @@
     - template: page_introduction
 
     - id: first_steps
-      tabId: main_answers
+      titleId: resources.first_steps
+      i18nNamespace: first_steps
+      tabId: tabs.main_answers
       template: multiple_options
       translateData: true
       variables:
         fieldId: resources
       variants:
         - id: first_steps_others
-          tabId: other_answers
+          i18nNamespace: first_steps
+          tabId: tabs.other_answers
           template: multiple_options
           translateData: true
           variables:
             fieldId: resources
 
     - id: blogs_news_magazines
-      tabId: main_answers
+      i18nNamespace: resources
+      tabId: tabs.main_answers
       template: multiple_options
       variables:
         fieldId: resources
       variants:
         - id: blogs_news_magazines_others
-          tabId: other_answers
+          i18nNamespace: resources
+          tabId: tabs.other_answers
           template: multiple_options
           variables:
             fieldId: resources
 
     - id: sites_courses
-      tabId: main_answers
+      i18nNamespace: resources
+      tabId: tabs.main_answers
       template: multiple_options
       variables:
         fieldId: resources
       variants:
         - id: sites_courses_others
-          tabId: other_answers
+          i18nNamespace: resources
+          tabId: tabs.other_answers
           template: multiple_options
           variables:
             fieldId: resources
@@ -586,18 +627,21 @@
       template: picks
 
     - id: podcasts
-      tabId: main_answers
+      i18nNamespace: resources
+      tabId: tabs.main_answers
       template: multiple_options
       variables:
         fieldId: resources
       variants:
         - id: podcasts_others
-          tabId: other_answers
+          i18nNamespace: resources
+          tabId: tabs.other_answers
           template: multiple_options
           variables:
             fieldId: resources
 
     - id: people_others
+      i18nNamespace: resources
       template: multiple_options
       variables:
         options: '{ cutoff: 10 }'
@@ -626,11 +670,39 @@
     - id: browser_interoperability_features
       template: opinions_others
 
-    - id: css_pain_points
-      template: opinions_others
+    - id: css_pain_points_wins
+      tabId: tabs.bracket_wins
+      template: bracket_wins
+      i18nNamespace: css_pain_points
+      variables:
+        fieldId: opinions__css_pain_points
+      variants: 
+        - id: css_pain_points_matchups
+          tabId: tabs.bracket_matchups
+          i18nNamespace: css_pain_points
+          template: bracket_matchups
+          variables:
+            fieldId: opinions__css_pain_points
+        - id: css_pain_points
+          tabId: tabs.other_answers
+          template: opinions_others
 
-    - id: currently_missing_from_css
-      template: opinions_others
+    - id: currently_missing_from_css_wins
+      tabId: tabs.bracket_wins
+      template: bracket_wins
+      i18nNamespace: currently_missing_from_css
+      variables:
+        fieldId: opinions__currently_missing_from_css
+      variants: 
+        - id: currently_missing_from_css_matchups
+          tabId: tabs.bracket_matchups
+          i18nNamespace: currently_missing_from_css
+          template: bracket_matchups
+          variables:
+            fieldId: opinions__currently_missing_from_css
+        - id: currently_missing_from_css
+          tabId: tabs.other_answers
+          template: opinions_others
 
     - id: state_of_the_web
       template: happiness
@@ -638,86 +710,86 @@
     - id: state_of_css
       template: happiness
 
-# - id: awards
-#   path: /awards
-#   blocks:
-#     - template: page_introduction
+- id: awards
+  path: /awards
+  blocks:
+    - template: page_introduction
 
-#     - id: feature_adoption_delta_award
-#       blockType: AwardBlock
-#       enableExport: true
-#       awards:
-#         - id: grid
-#           value: "+18.6%"
-#         - id: object_fit
-#           value: "+17.8%"
-#         - id: variables
-#           value: "+15.2%"
+    - id: feature_adoption_delta_award
+      blockType: AwardBlock
+      enableExport: true
+      awards:
+        - id: grid
+          value: "+18.6%"
+        - id: object_fit
+          value: "+17.8%"
+        - id: variables
+          value: "+15.2%"
 
-#     - id: tool_usage_delta_award
-#       blockType: AwardBlock
-#       enableExport: true
-#       awards:
-#         - id: tailwind_css
-#           value: "+17.8%"
-#         - id: atomic_css
-#           value: "+10.8%"
-#         - id: css_modules
-#           value: "+10.1%"
+    - id: tool_usage_delta_award
+      blockType: AwardBlock
+      enableExport: true
+      awards:
+        - id: tailwind_css
+          value: "+17.8%"
+        - id: atomic_css
+          value: "+10.8%"
+        - id: css_modules
+          value: "+10.1%"
 
-#     - id: tool_satisfaction_award
-#       blockType: AwardBlock
-#       enableExport: true
-#       awards:
-#         - id: post_css
-#           value: "91.4%"
-#         - id: css_modules
-#           value: "86.8%"
-#         - id: tailwind_css
-#           value: "86.6%"
+    - id: tool_satisfaction_award
+      blockType: AwardBlock
+      enableExport: true
+      awards:
+        - id: post_css
+          value: "91.4%"
+        - id: css_modules
+          value: "86.8%"
+        - id: tailwind_css
+          value: "86.6%"
 
-#     - id: tool_interest_award
-#       blockType: AwardBlock
-#       enableExport: true
-#       awards:
-#         - id: css_modules
-#           value: "75.1%"
-#         - id: tailwind_css
-#           value: "62%"
-#         - id: styled_components
-#           value: "60%"
+    - id: tool_interest_award
+      blockType: AwardBlock
+      enableExport: true
+      awards:
+        - id: css_modules
+          value: "75.1%"
+        - id: tailwind_css
+          value: "62%"
+        - id: styled_components
+          value: "60%"
 
-#     - id: most_write_ins_award
-#       blockType: AwardBlock
-#       enableExport: true
-#       awards:
-#         - id: phpstorm
-#           value: "200"
-#         - id: udemy
-#           value: "159"
-#         - id: frontendmasters
-#           value: "112"
+    - id: most_write_ins_award
+      blockType: AwardBlock
+      enableExport: true
+      awards:
+        - id: phpstorm
+          value: "200"
+        - id: udemy
+          value: "159"
+        - id: frontendmasters
+          value: "112"
 
-# - id: prediction_award
-#   blockType: AwardBlock
-#   awards:
-#       - id: svelte
-#       - id: nest
-#       - id: stencil
+    - id: prediction_award
+      blockType: AwardBlock
+      awards:
+          - id: svelte
+          - id: nest
+          - id: stencil
 
-# - id: best_blog_award
-#   blockType: AwardBlock
-#   awards:
-#       - id: svelte
-#       - id: nest
-#       - id: stencil
+    - id: best_blog_award
+      blockType: AwardBlock
+      awards:
+          - id: svelte
+          - id: nest
+          - id: stencil
 
-# - id: best_article_award
-#   blockType: AwardBlock
-#   awards:
-#       - id: svelte
-#       - id: nest
-#       - id: stencil
+    - id: best_article_award
+      blockType: AwardBlock
+      awards:
+          - id: svelte
+          - id: nest
+          - id: stencil
 
 - id: conclusion
   path: /conclusion

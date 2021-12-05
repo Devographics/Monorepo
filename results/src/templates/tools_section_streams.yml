@@ -1,11 +1,11 @@
 id: "${parentId}_section_streams"
-blockName: tools_section_streams
+titleId: blocks.tools_section_streams
 blockType: ToolsSectionStreamsBlock
 dataPath: "surveyApi.survey.${parentId}_streams"
 keysPath: "surveyApi.survey.${parentId}_streams.0.experience.keys"
 bucketKeysName: tools
 showLegend: true
-enableExport: true
+
 query: >
     surveyApi {
         survey(survey: ${surveyType}) {

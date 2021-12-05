@@ -5,13 +5,14 @@ import {
     FeatureExperienceId,
     SimplifiedFeatureExperienceId,
     FeaturesSectionId,
-    GenderId,
+    GenderId
 } from 'core/bucket_keys'
 
 declare module 'styled-components' {
     export interface DefaultTheme {
         separationBorder: string
         blockShadow: string
+        border: string
         dimensions: {
             spacing: number
             sidebar: {
@@ -66,7 +67,7 @@ declare module 'styled-components' {
                 tools: Record<ToolExperienceId, string>
                 toolSections: Record<ToolsSectionId, string>
                 features: Record<FeatureExperienceId, string>
-                featureSections: Record<FeaturesSectionId, string>
+                features_categories: Record<FeaturesSectionId, string>
                 features_simplified: Record<SimplifiedFeatureExperienceId, string>
                 gender: Record<GenderId, string>
                 opinions: {

@@ -18,7 +18,7 @@ export const FeaturesCirclePackingChartTooltip = (props) => {
     const { name, awareness, usage } = data
     const nivoTheme = useNivoTheme()
     const theme = useTheme()
-    const color = theme.colors.ranges.featureSections[data.sectionId]
+    const color = theme.colors.ranges.features_categories[data.sectionId]
 
     return (
         <div style={nivoTheme.tooltip.container}>

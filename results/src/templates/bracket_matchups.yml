@@ -1,0 +1,34 @@
+blockType: BracketMatchupsBlock
+dataPath: "surveyApi.survey.${id}.year.facets.0"
+query: >
+    surveyApi {
+        survey(survey: ${surveyType}) {
+            ${id}: bracket_matchups(id: ${fieldId}, filters: ${filters}, options: ${options}) {
+                id
+                year(year: ${currentYear}) {
+                    year
+                    completion {
+                        total
+                        count
+                        percentage_survey
+                    }
+                    facets {
+                        completion {
+                            total
+                            count
+                            percentage_survey
+                            percentage_question
+                        }
+                        buckets {
+                            id
+                            matchups {
+                                id
+                                count
+                                percentage
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }

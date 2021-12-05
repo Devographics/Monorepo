@@ -33,6 +33,7 @@ type TranslationString {
     tHtml: String
     context: String
     fallback: Boolean
+    aliasFor: String
 }
 
 type Locale {

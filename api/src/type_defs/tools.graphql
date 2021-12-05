@@ -253,5 +253,6 @@ Contains various rankings for a set of tools.
 """
 type ToolsRankings {
     ids: [ToolID]!
+    years: [Int]
     experience(filters: Filters): [ToolExperienceRanking]
 }

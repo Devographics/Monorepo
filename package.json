@@ -1,4 +1,7 @@
 {
   "private": true,
-  "workspaces": ["api", "results", "common"]
+  "workspaces": ["api", "results", "common"],
+  "dependencies": {
+    "@radix-ui/react-id": "^0.1.1"
+  }
 }

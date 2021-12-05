@@ -45,7 +45,6 @@ export const ToolsArrowsBlock = ({ block, data, triggerId = null }: ToolsArrowsB
         <Block
             block={{
                 ...block,
-                blockName: 'tools_arrows',
                 showLegend: false,
             }}
             data={data}

@@ -33,11 +33,6 @@ BlockNote.propTypes = {
     }).isRequired,
 }
 
-BlockNote.defaultProps = {
-    showDescription: true,
-    isShareable: true,
-}
-
 const Note = styled.div`
     background: ${(props) => props.theme.colors.backgroundAlt};
     padding: ${spacing()};

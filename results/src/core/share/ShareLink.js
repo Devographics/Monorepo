@@ -42,12 +42,6 @@ const Link = styled.a`
         }
     }
 
-    @media ${mq.small} {
-        top: 0;
-        left: 0;
-        position: absolute;
-    }
-
     .ShareBlock & {
         height: 24px;
         width: 24px;

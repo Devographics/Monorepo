@@ -158,8 +158,8 @@ export const ToolsCityscapeBlock = ({
 
     const chartDataByCategory = groupByCategory(chartData)
 
-    console.log(chartDataAllCategories)
-    console.log(chartDataByCategory)
+    // console.log(chartDataAllCategories)
+    // console.log(chartDataByCategory)
 
     return (
         <Block
@@ -169,7 +169,6 @@ export const ToolsCityscapeBlock = ({
             setUnits={setUnits}
             block={{
                 ...block,
-                blockName: 'all_sections_tools_cardinality_by_user',
                 // title,
                 // description,
                 showLegend: false,

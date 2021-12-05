@@ -30,11 +30,11 @@ export default {
         surveyName: (survey: SurveyConfig) => {
             return survey.survey
         },
-        bracketWins: (survey: SurveyConfig, args: ResolverArguments) => ({
+        bracket_wins: (survey: SurveyConfig, args: ResolverArguments) => ({
             survey,
             ...args
         }),
-        bracketMatchups: (survey: SurveyConfig, args: ResolverArguments) => ({
+        bracket_matchups: (survey: SurveyConfig, args: ResolverArguments) => ({
             survey,
             ...args
         }),

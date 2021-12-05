@@ -23,9 +23,9 @@ const Trigger = styled(Tooltip.Trigger)`
     display: inline-block;
 `
 
-const Tip = ({ trigger, contents }) => (
-    <Tooltip.Root>
-        <Trigger>{trigger}</Trigger>
+const Tip = ({ trigger, contents, asChild = false }) => (
+    <Tooltip.Root delayDuration={200}>
+        <Trigger asChild={asChild}>{trigger}</Trigger>
         <Content side="top">
             {contents}
             <Tooltip.Arrow />

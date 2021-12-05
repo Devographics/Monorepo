@@ -3,10 +3,11 @@ import { EmptyWrapper, TabsWrapper } from 'core/blocks/block/BlockTabs'
 import { ErrorBoundary } from 'core/blocks/block/BlockError'
 
 const BlockWrapper = (props) => {
-    const { block, pageData, index: blockIndex } = props
+    const { block, pageData, index: blockIndex, isCapturing } = props
     const wrapBlock = block.wrapBlock ?? block?.variants[0]?.wrapBlock ?? true
     const WrapperComponent = wrapBlock ? TabsWrapper : EmptyWrapper
-    const isHidden = block.variants.every((v) => v.hidden)
+    // const isHidden = block.variants.every((v) => v.hidden) && !isCapturing
+    const isHidden = false
     return isHidden ? null : (
         <WrapperComponent block={block} pageData={pageData} blockIndex={blockIndex} />
     )

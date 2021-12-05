@@ -15,7 +15,6 @@ import styled from 'styled-components'
 import { fontSize, spacing } from 'core/theme'
 import { getCountryName } from 'core/helpers/countries'
 
-
 const GenderByCountries = ({ block, data, keys }) => {
     const {
         id,
@@ -88,13 +87,13 @@ const GenderByCountries = ({ block, data, keys }) => {
             block={block}
         >
             {allFacets.map((facet, i) => (
-                <Facet key={facet.id} i={i} facet={facet} colorMapping={colorMapping} />
+                <Facet key={facet.id} i={i} facet={facet} colorMapping={colorMapping} keys={keys} />
             ))}
         </Block>
     )
 }
 
-const Facet = ({ facet, colorMapping, i }) => (
+const Facet = ({ facet, colorMapping, keys }) => (
     <Row>
         <TableHeading>
             {facet.id === 'default' ? (
@@ -110,6 +109,7 @@ const Facet = ({ facet, colorMapping, i }) => (
         </TableHeading>
         <ChartContainer height={40} fit={true}>
             <GaugeBarChart
+                keys={keys}
                 units="percentage_facet"
                 buckets={facet.buckets}
                 colorMapping={colorMapping}

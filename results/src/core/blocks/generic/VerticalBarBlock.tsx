@@ -6,7 +6,7 @@ import ChartContainer from 'core/charts/ChartContainer'
 import VerticalBarChart from 'core/charts/generic/VerticalBarChart'
 import { usePageContext } from 'core/helpers/pageContext'
 import { useLegends } from 'core/helpers/useBucketKeys'
-import T from 'core/i18n/T'
+// import T from 'core/i18n/T'
 import { FacetItem, BlockComponentProps } from 'core/types'
 import { getTableData } from 'core/helpers/datatables'
 
@@ -19,12 +19,12 @@ const VerticalBarBlock = ({ block, data, keys }: VerticalBarBlockProps) => {
         throw new Error(`VerticalBarBlock: Missing data for block ${block.id}.`)
     }
     const {
-        id,
+        // id,
         mode = 'relative',
         defaultUnits = 'percentage_survey',
         translateData,
-        i18nNamespace,
-        colorVariant,
+        i18nNamespace = block.id,
+        colorVariant
     } = block
 
     const context = usePageContext()
@@ -38,12 +38,14 @@ const VerticalBarBlock = ({ block, data, keys }: VerticalBarBlockProps) => {
 
     return (
         <BlockVariant
-            tables={[getTableData({
-                legends: bucketKeys,
-                data: data.buckets,
-                valueKeys: ['percentage_survey', 'percentage_question', 'count'],
-                translateData
-            })]}
+            tables={[
+                getTableData({
+                    legends: bucketKeys,
+                    data: data.buckets,
+                    valueKeys: ['percentage_survey', 'percentage_question', 'count'],
+                    translateData
+                })
+            ]}
             units={units}
             setUnits={setUnits}
             completion={completion}
@@ -56,7 +58,7 @@ const VerticalBarBlock = ({ block, data, keys }: VerticalBarBlockProps) => {
                     bucketKeys={bucketKeys}
                     total={total}
                     buckets={buckets}
-                    i18nNamespace={i18nNamespace || id}
+                    i18nNamespace={i18nNamespace}
                     translateData={translateData}
                     mode={mode}
                     units={units}
@@ -77,15 +79,15 @@ VerticalBarBlock.propTypes = {
         mode: PropTypes.oneOf(['absolute', 'relative']),
         units: PropTypes.oneOf(['percentage', 'count']),
         view: PropTypes.oneOf(['data', 'viz']),
-        colorVariant: PropTypes.oneOf(['primary', 'secondary']),
+        colorVariant: PropTypes.oneOf(['primary', 'secondary'])
     }).isRequired,
     data: PropTypes.shape({
         buckets: PropTypes.arrayOf(
             PropTypes.shape({
-                id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+                id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
             })
-        ).isRequired,
-    }).isRequired,
+        ).isRequired
+    }).isRequired
 }
 
 export default memo(VerticalBarBlock)

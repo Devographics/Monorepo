@@ -82,11 +82,11 @@ const StreamChart = ({
 
     const getLayerColor = (props) => {
         const { id } = props
-        const index = Number(id)
-        if (current !== null && current !== keys[index]) {
-            return `${colorScale[index]}33`
+        const color = bucketKeys.find(b => b.id === id)?.color
+        if (current !== null && current !== id) {
+            return `${color}33`
         }
-        return colorScale[index]
+        return color
     }
 
     return (

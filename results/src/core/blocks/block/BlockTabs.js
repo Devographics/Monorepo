@@ -3,10 +3,11 @@ import BlockSwitcher from 'core/blocks/block/BlockSwitcher'
 import * as Tabs from '@radix-ui/react-tabs'
 import BlockTitle from 'core/blocks/block/BlockTitle'
 import styled from 'styled-components'
-import { spacing, fontSize } from 'core/theme'
+import { mq, spacing, fontSize } from 'core/theme'
 import T from 'core/i18n/T'
 import { getBlockTabKey } from 'core/helpers/blockHelpers'
 import { usePageContext } from 'core/helpers/pageContext'
+import get from 'lodash/get'
 
 export const EmptyWrapper = ({ block, pageData, blockIndex }) => (
     <Wrapper className="empty-wrapper">
@@ -23,27 +24,41 @@ export const EmptyWrapper = ({ block, pageData, blockIndex }) => (
 )
 
 const Wrapper = styled.section`
+  margin-bottom: ${spacing(3)};
+
+  @media ${mq.large} {
     margin-bottom: ${spacing(6)};
+  }
 `
 
 const BlockHeader = styled.div`
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    border-bottom: ${(props) => props.theme.border};
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: ${spacing(0.5)};
+    border-bottom: ${props => props.theme.border};
 `
 
 const TabsList = styled(Tabs.List)`
     display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    padding-right: 52px;
+    justify-content: flex-start;
+    align-items: flex-end;
+    overflow:auto;
+    overflow-y: hidden;
+
+    @media ${mq.large} {
+      overflow:visible;
+      width:max-content;
+      padding-right: 52px;
+      overflow:visible;
+    }
 `
 
 const TabsTrigger = styled(Tabs.Trigger)`
-    border: ${(props) => props.theme.border};
-    background: ${(props) => props.theme.colors.background};
-    /* border: 1px solid ${(props) => props.theme.colors.border}; */
+    border: ${props => props.theme.border};
+    background: ${props => props.theme.colors.background};
+    /* border: 1px solid ${props => props.theme.colors.border}; */
     border-radius: 3px 3px 0 0;
     padding: ${spacing(0.5)};
     cursor: pointer;
@@ -55,29 +70,33 @@ const TabsTrigger = styled(Tabs.Trigger)`
     }
     &[data-state='inactive'] {
         opacity: 0.6;
-        background: ${(props) => props.theme.colors.backgroundBackground};
+        background: ${props => props.theme.colors.backgroundBackground};
     }
 `
 
 export const TabsWrapper = ({ block, pageData, blockIndex }) => {
     const context = usePageContext()
 
+    let firstBlock = block.variants[0]
+    if (firstBlock.entityPath) {
+        const blockEntity = get(pageData, firstBlock.entityPath)
+        firstBlock = {
+            ...firstBlock,
+            title: blockEntity.name,
+            titleLink: blockEntity.homepage
+        }
+    }
+
     return (
         <Wrapper className="tabs-wrapper">
             <Tabs.Root defaultValue="tab0" orientation="horizontal">
                 <BlockHeader>
-                    <BlockTitle block={block.variants[0]} {...block.variants[0].titleProps} />
+                    <BlockTitle block={firstBlock} />
                     {block.variants.length > 1 && (
                         <TabsList aria-label="tabs example">
                             {block.variants.map((block, variantIndex) => (
                                 <TabsTrigger key={block.id} value={`tab${variantIndex}`}>
-                                    <T
-                                        k={
-                                            variantIndex === 0
-                                                ? 'tabs.all_respondents'
-                                                : getBlockTabKey(block, context)
-                                        }
-                                    />
+                                    <T k={getBlockTabKey(block, context, variantIndex)} />
                                 </TabsTrigger>
                             ))}
                         </TabsList>

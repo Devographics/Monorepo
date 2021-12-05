@@ -1,5 +1,5 @@
 id: ${parentId}_resources
-blockName: recommended_resources
+titleId: blocks.recommended_resources
 blockType: RecommendedResourcesBlock
 showDescription: false
 

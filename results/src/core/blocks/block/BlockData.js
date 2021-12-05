@@ -11,6 +11,7 @@ import BlockFooter from 'core/blocks/block/BlockFooter'
 const BlockData = (props) => {
     return (
         <>
+          <ExportWrapper>
             <ModalTrigger
                 trigger={
                     <ExportButton className="ExportButton" size="small">
@@ -32,9 +33,8 @@ const BlockData = (props) => {
             >
                 <GraphQLExport {...props} />
             </ModalTrigger>
-            <Table {...props} />
-            <BlockFooter block={props.block}/>
-
+          </ExportWrapper>
+          <Table {...props} />
         </>
     )
 }
@@ -78,11 +78,16 @@ ${trimmedQuery}
         </div>
     )
 }
+const ExportWrapper = styled.div`
+  margin-bottom: ${spacing(0.5)};
+  display: flex;
+  flex-wrap: wrap;
+  gap: ${spacing(0.5)};
+`
 
 const ExportButton = styled(Button)`
-    @media ${mq.mediumLarge} {
-        margin-left: ${spacing(0.5)};
-    }
+  display: inline;
+  margin: 0;
 `
 
 const Text = ({ value }) => {

@@ -5,6 +5,8 @@ import { useMotionConfig } from '@nivo/core'
 import { ResponsiveMarimekko } from '@nivo/marimekko'
 // @ts-ignore
 import ChartLabel from 'core/components/ChartLabel'
+import { isPercentage } from 'core/helpers/units'
+import { BlockUnits } from 'core/types'
 
 interface ExperienceByYearBarChartProps {
     data: any[]
@@ -13,7 +15,7 @@ interface ExperienceByYearBarChartProps {
         label: string
         color: string
     }[]
-    units: 'percentage' | 'count'
+    units: BlockUnits
     spacing: number
 }
 
@@ -121,7 +123,7 @@ export const ExperienceByYearBarChart = ({
     )
 
     const valueFormat =
-        units === 'percentage'
+        isPercentage(units)
             ? (value: number) => `${Math.round(value * 100) / 100}%`
             : (value: number) => value
 

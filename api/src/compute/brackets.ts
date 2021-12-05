@@ -85,16 +85,16 @@ export const winsAggregationFunction = async (
 
     const rawResults = (await collection.aggregate(winsPipeline).toArray()) as WinsBucket[]
 
-    console.log(
-        inspect(
-            {
-                match,
-                winsPipeline,
-                rawResults
-            },
-            { colors: true, depth: null }
-        )
-    )
+    // console.log(
+    //     inspect(
+    //         {
+    //             match,
+    //             winsPipeline,
+    //             rawResults
+    //         },
+    //         { colors: true, depth: null }
+    //     )
+    // )
 
     // add proper ids
     const resultsWithId = rawResults.map(result => ({
@@ -106,10 +106,23 @@ export const winsAggregationFunction = async (
     const completionByYear = await computeCompletionByYear(db, match)
 
     // group by years and add counts
-    const resultsByYear = await groupByYears(resultsWithId, db, survey, match, totalRespondentsByYear, completionByYear)
-    
-    // console.log(JSON.stringify(resultsByYear, '', 2))
-    return resultsByYear
+    const resultsByYear = await groupByYears(
+        resultsWithId,
+        db,
+        survey,
+        match,
+        totalRespondentsByYear,
+        completionByYear
+    )
+
+    // add "fake" facet for now
+    const resultsWithFacets = resultsByYear.map(y => ({
+        ...y,
+        facets: [{ completion: y.completion, type: 'default', id: 'default', buckets: y.buckets }]
+    }))
+
+    // console.log(JSON.stringify(resultsWithFacets, undefined, 2))
+    return resultsWithFacets
 }
 
 export const matchupsAggregationFunction = async (
@@ -134,18 +147,20 @@ export const matchupsAggregationFunction = async (
     }
 
     const matchupsPipeline = getMatchupsPipeline(match, key)
-    const rawResults = (await collection.aggregate(matchupsPipeline).toArray()) as MatchupAggregationResult[]
+    const rawResults = (await collection
+        .aggregate(matchupsPipeline)
+        .toArray()) as MatchupAggregationResult[]
 
-    console.log(
-        inspect(
-            {
-                match,
-                matchupsPipeline,
-                rawResults
-            },
-            { colors: true, depth: null }
-        )
-    )
+    // console.log(
+    //     inspect(
+    //         {
+    //             match,
+    //             matchupsPipeline,
+    //             rawResults
+    //         },
+    //         { colors: true, depth: null }
+    //     )
+    // )
 
     // add proper ids
     // const resultsWithId = rawResults.map(result => ({
@@ -167,14 +182,26 @@ export const matchupsAggregationFunction = async (
     const completionByYear = await computeCompletionByYear(db, match)
 
     // group by years and add counts
-    const resultsByYear = await groupByYears(rawResults, db, survey, match, totalRespondentsByYear, completionByYear)
+    const resultsByYear = await groupByYears(
+        rawResults,
+        db,
+        survey,
+        match,
+        totalRespondentsByYear,
+        completionByYear
+    )
 
-    // console.log('// resultsByYear')
-    // console.log(JSON.stringify(resultsByYear, '', 2))
+    // add "fake" facet for now
+    const resultsWithFacets = resultsByYear.map(y => ({
+        ...y,
+        facets: [{ completion: y.completion, type: 'default', id: 'default', buckets: y.buckets }]
+    }))
+    
+    // console.log('// resultsWithFacets')
+    // console.log(JSON.stringify(resultsWithFacets, '', 2))
 
-    return resultsByYear
+    return resultsWithFacets
 }
-
 
 interface GroupByYearResult {
     id: string | number
@@ -217,7 +244,7 @@ export async function groupByYears(
             completion: {
                 total: totalRespondents,
                 count: completionCount,
-                percentage: ratioToPercentage(completionCount / totalRespondents)
+                percentage_survey: ratioToPercentage(completionCount / totalRespondents)
             },
             buckets: yearBuckets
         }

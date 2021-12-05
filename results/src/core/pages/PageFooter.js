@@ -62,7 +62,7 @@ const PageFooter = () => {
     )
 }
 
-const Container = styled.div`
+const Container = styled.footer`
     @media ${mq.small} {
         margin-top: ${spacing(4)};
     }
@@ -72,16 +72,11 @@ const Container = styled.div`
 `
 
 const Nav = styled.div`
-    @media ${mq.small} {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        column-gap: ${spacing()};
-    }
-    @media ${mq.mediumLarge} {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+    display: flex;
+    flex-wrap: wrap;
+    gap: ${spacing()};
+    align-items: center;
+    justify-content: center;
 `
 
 const Notes = styled.div`
@@ -108,12 +103,20 @@ const FooterLink = styled(Button)`
 `
 
 const PreviousLink = styled(FooterLink)`
-    @media ${mq.mediumLarge} {
-        margin-right: ${spacing()};
-    }
+  flex:1 1 min-content;
+
+  @media ${mq.mediumLarge} {
+    flex:0 1 max-content;
+  }
 `
 
-const NextLink = styled(FooterLink)``
+const NextLink = styled(FooterLink)`
+  flex:1 1 min-content;
+
+  @media ${mq.mediumLarge} {
+    flex:0 1 max-content;
+  }
+`
 
 const LinkLabel = styled.span`
     @media ${mq.small} {

@@ -1,16 +1,8 @@
 const fs = require('fs')
 const { findIndex, findLastIndex, omit, template } = require('lodash')
 const yaml = require('js-yaml')
-const { getAllBlocks, loadTemplate } = require('./helpers.js')
+const { getAllBlocks, loadTemplate, logToFile } = require('./helpers.js')
 
-const rawPageTemplates = fs.readFileSync(
-    `./surveys/${process.env.SURVEY}/config/page_templates.yml`,
-    'utf8'
-)
-const rawBlockTemplates = fs.readFileSync(
-    `./surveys/${process.env.SURVEY}/config/block_templates.yml`,
-    'utf8'
-)
 const globalVariables = yaml.load(
     fs.readFileSync(`./surveys/${process.env.SURVEY}/config/variables.yml`, 'utf8')
 )
@@ -44,33 +36,48 @@ const applyTemplate = (block, templateObject, parent) => {
         id: block.id,
         fieldId: block.id,
         ...(block.variables || {}),
-        ...(block.pageVariables || {}),
+        ...(block.pageVariables || {})
     }
 
     const populatedTemplate = injectVariables(templateObject, variables, templateObject.name)
 
     return {
         ...populatedTemplate,
-        ...block,
+        ...block
     }
 }
 
-exports.pageFromConfig = async (stack, item, parent, pageIndex) => {
-    try {
-        // if template has been provided, apply it
-        if (item.template) {
-            const template = await loadTemplate(item.template)
+const flattenSitemap = (stack, pages, parent, pageIndex) => {
+    pages.forEach(page => {
+        if (parent) {
+            page.parent = omit(parent, 'children')
+        }
+        // always push everything at the root level, even during recursive iterations
+        stack.flat.push(page)
 
-            item = applyTemplate(item, template, parent)
+        if (Array.isArray(page.children)) {
+            flattenSitemap(stack, page.children, page, pageIndex)
+        }
+    })
+}
+
+exports.pageFromConfig = async (page, pageIndex) => {
+    try {
+        const { parent } = page
+        // if template has been provided, apply it
+        if (page.template) {
+            const template = await loadTemplate(page.template)
+            page = applyTemplate(page, template, parent)
         }
 
-        const pagePath = item.path || `/${item.id}`
-        const page = {
-            ...item,
-            path: parent === undefined ? pagePath : `${parent.path.replace(/\/$/, '')}${pagePath}`,
-            is_hidden: !!item.is_hidden,
+        const pagePath = page.path || `/${page.id}`
+        page = {
+            ...page,
+            path:
+                parent === undefined ? pagePath : `${parent?.path?.replace(/\/$/, '')}${pagePath}`,
+            is_hidden: !!page.is_hidden,
             children: [],
-            pageIndex,
+            pageIndex
         }
         // if page has no defaultBlockType, get it from parent
         if (!page.defaultBlockType) {
@@ -98,16 +105,16 @@ exports.pageFromConfig = async (stack, item, parent, pageIndex) => {
                     // if block has variables, inject them based on current page and global variables
                     if (blockVariant.variables) {
                         blockVariant.variables = injectVariables(blockVariant.variables, {
-                            ...item,
-                            ...globalVariables,
+                            ...page,
+                            ...globalVariables
                         })
                     }
 
                     // also pass page variables to block so it can inherit them
                     if (page.variables) {
                         blockVariant.pageVariables = injectVariables(page.variables, {
-                            ...item,
-                            ...globalVariables,
+                            ...page,
+                            ...globalVariables
                         })
                     }
 
@@ -133,19 +140,6 @@ exports.pageFromConfig = async (stack, item, parent, pageIndex) => {
 
             page.blocks = blocks
         }
-
-        if (parent === undefined) {
-            stack.hierarchy.push(page)
-        }
-        stack.flat.push(page)
-
-        if (Array.isArray(item.children)) {
-            item.children.forEach(async (child) => {
-                const pageChild = await exports.pageFromConfig(stack, child, page, pageIndex)
-                page.children.push(pageChild)
-            })
-        }
-
         return page
     } catch (error) {
         console.log('// pageFromConfig Error')
@@ -155,28 +149,27 @@ exports.pageFromConfig = async (stack, item, parent, pageIndex) => {
 
 let computedSitemap = null
 
-exports.computeSitemap = async (rawSitemap, locales) => {
+exports.computeSitemap = async (rawSitemap) => {
     if (computedSitemap !== null) {
         return computedSitemap
     }
 
     const stack = {
         flat: [],
-        hierarchy: [],
     }
 
-    let pageIndex = 0
-    for (const item of rawSitemap) {
-        await exports.pageFromConfig(stack, item, undefined, pageIndex)
-        pageIndex++
-    }
+    flattenSitemap(stack, rawSitemap, undefined, 0)
+
+    stack.flat = await Promise.all(
+        stack.flat.map((page, pageIndex) => exports.pageFromConfig(page, pageIndex))
+    )
 
     // assign prev/next page using flat pages
-    stack.flat.forEach((page) => {
+    stack.flat.forEach(page => {
         // if the page is hidden, do not generate pagination for it
         if (page.is_hidden) return
 
-        const index = findIndex(stack.flat, (p) => p.path === page.path)
+        const index = findIndex(stack.flat, p => p.path === page.path)
         const previous = stack.flat[index - 1]
 
         // we exclude hidden pages from pagination
@@ -184,7 +177,7 @@ exports.computeSitemap = async (rawSitemap, locales) => {
             page.previous = omit(previous, ['is_hidden', 'previous', 'next', 'children', 'blocks'])
         }
 
-        const lastIndex = findLastIndex(stack.flat, (p) => p.path === page.path)
+        const lastIndex = findLastIndex(stack.flat, p => p.path === page.path)
         const next = stack.flat[lastIndex + 1]
 
         // we exclude hidden pages from pagination
@@ -193,22 +186,8 @@ exports.computeSitemap = async (rawSitemap, locales) => {
         }
     })
 
-    const now = new Date()
-    const sitemapContent = [
-        `###################################################################`,
-        `# DO NOT EDIT`,
-        `###################################################################`,
-        `# this file was generated by \`gatsby-node.js\``,
-        `# please edit \`raw_sitemap.yaml\` instead.`,
-        `# generated on: ${now.toISOString()}`,
-        `###################################################################`,
-        yaml.dump({ locales, contents: stack.hierarchy }, { noRefs: true }),
-    ].join('\n')
-    await fs.writeFileSync(`./surveys/${process.env.SURVEY}/config/sitemap.yml`, sitemapContent)
-    await fs.writeFileSync(
-        `./surveys/${process.env.SURVEY}/config/blocks.yml`,
-        yaml.dump(getAllBlocks({ contents: stack.hierarchy }), { noRefs: true })
-    )
+    logToFile('flat_sitemap.yml', yaml.dump(stack.flat, { noRefs: true }), { mode: 'overwrite' })
+
 
     return stack
 }
