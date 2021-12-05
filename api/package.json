@@ -1,11 +1,12 @@
 {
-    "name": "state-of-js-graphql-results-api",
+    "name": "@stateofjs/api",
     "version": "1.0.0",
     "license": "MIT",
     "dependencies": {
         "@octokit/core": "^3.5.1",
         "@sentry/node": "^6.13.3",
         "@sentry/tracing": "^6.13.3",
+        "@stateofjs/common": "1.0.0",
         "apollo-server-express": "^3.3.0",
         "apollo-server-plugin-response-cache": "^3.2.0",
         "dotenv": "^10.0.0",

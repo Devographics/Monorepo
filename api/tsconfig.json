@@ -1,12 +1,14 @@
 {
+  "extends": "../tsconfig.json",
+  "references": [{ "path": "../common" }],
   "compilerOptions": {
+    "composite": true,
     "target": "es2017",
     "module": "commonjs",
     "lib": ["es7", "es2019"],
     "outDir": "dist",
     "rootDir": "src",
     "removeComments": true,
-    "strict": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "noImplicitAny": true
