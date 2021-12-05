@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+     "composite": true,
+     "noEmit": false, /* referenced projects may not disable emit */
+     "rootDir": "./",
+     "isolatedModules": true,
+     "skipDefaultLibCheck": true, 
+     "skipLibCheck": true,
+     "declaration": true,
+     "typeRoots": ["**/@types"],
+     "strict": true,
+  },
+  "exclude": ["node_modules"]
+ }

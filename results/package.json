@@ -1,5 +1,5 @@
 {
-    "name": "state-of-js-2020",
+    "name": "@stateofjs/results",
     "description": "State of JS 2020 survey report",
     "version": "0.1.0",
     "repository": {
@@ -38,6 +38,7 @@
         "@radix-ui/react-dropdown-menu": "^0.1.1",
         "@radix-ui/react-tabs": "^0.1.1",
         "@radix-ui/react-tooltip": "^0.1.1",
+        "@stateofjs/common": "1.0.0",
         "@types/d3-scale": "^4.0.2",
         "@types/d3-shape": "^3.0.2",
         "@types/react": "^17.0.33",

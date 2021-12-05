@@ -1,7 +1,10 @@
 {
+  "extends": "../tsconfig.json",
+  "references": [{ "path": "../common" }],
   "include": ["./src/**/*"],
   "exclude": ["node_modules"],
   "compilerOptions": {
+    "composite": true,
     "target": "es5",
     "jsx": "react",
     "skipLibCheck": true,
@@ -11,8 +14,6 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "typeRoots": ["node_modules/@types/", "./src/@types/", ".src/**/@types/"],
-    "strict": true,
     "baseUrl": "./",
     "paths": {
       "core/*": ["./src/core/*"]

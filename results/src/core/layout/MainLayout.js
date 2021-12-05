@@ -8,6 +8,10 @@ import classNames from 'classnames'
 import Hamburger from 'core/components/Hamburger'
 import { useI18n } from 'core/i18n/i18nContext'
 
+import { testCommon } from '@stateofjs/common'
+
+testCommon()
+
 const MainLayout = ({
     context,
     showPagination,

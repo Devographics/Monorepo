@@ -1,0 +1,4 @@
+# These will be generated when building other projects
+**/*.d.ts
+**/*.js
+tsconfig.tsbuildinfo
