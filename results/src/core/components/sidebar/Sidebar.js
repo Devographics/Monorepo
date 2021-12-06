@@ -48,8 +48,6 @@ export const Sidebar = ({ showSidebar, closeSidebar, rest }) => {
 
 const SidebarContainer = styled.div`
     border-right: ${(props) => props.theme.separationBorder};
-    /* display: flex;
-    flex-direction: column; */
     display: grid;
     grid-template-rows: auto 1fr auto;
 
@@ -68,10 +66,8 @@ const SidebarContainer = styled.div`
         background: ${color('background')};
         z-index: 1000;
         text-align: center;
-        /* overflow-x: hidden; */
-        /* overflow-y: scroll; */
         position: fixed;
-        display: ${(props) => (props.show ? 'flex' : 'none')};
+        display: ${(props) => (props.show ? 'grid' : 'none')};
     }
 `
 
