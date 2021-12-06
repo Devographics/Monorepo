@@ -13,6 +13,7 @@ import { getGenericPipeline } from './generic_pipeline'
 import { CompletionResult, computeCompletionByYear } from './completion'
 import sum from 'lodash/sum'
 import sumBy from 'lodash/sumBy'
+import take from 'lodash/take'
 
 export interface TermAggregationOptions {
     // filter aggregations
@@ -118,7 +119,7 @@ export async function computeDefaultTermAggregationByYear(
         sort = 'count',
         order = -1,
         cutoff = 10,
-        limit = 25,
+        limit = 50,
         year,
         facet,
         keys: values
@@ -182,9 +183,21 @@ export async function computeDefaultTermAggregationByYear(
 
     await sortResults(results, { sort, order, values })
 
+    await limitFacets(results, limit)
+
     // console.log(JSON.stringify(results, undefined, 2))
 
     return results
+}
+
+export async function limitFacets(resultsByYears: ResultsByYear[], limit: number) {
+    if (limit) {
+        for (let year of resultsByYears) {
+            for (let facet of year.facets) {
+                facet.buckets = take(facet.buckets, limit)
+            }
+        }
+    }
 }
 
 // add entities to facet and bucket items if applicable
