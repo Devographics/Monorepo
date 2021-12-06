@@ -52,10 +52,20 @@ export default {
             }
         },
         twitter: async (entity: Entity, args: any, { db }: RequestContext) => {
-            const twitter = entity.twitterName && useCache(fetchTwitterUser, db, [entity.twitterName])
+            const twitter =
+                entity.twitterName && useCache(fetchTwitterUser, db, [entity.twitterName])
 
             // const twitter = await fetchTwitterResource(entity.id)
             return twitter
+        },
+        homepage: async (entity: Entity, args: any, { db }: RequestContext) => {
+            return { name: entity.homepage, url: entity.homepage }
+        },
+        caniuse: async (entity: Entity, args: any, { db }: RequestContext) => {
+            return { name: entity.caniuse, url: `https://caniuse.com/${entity.caniuse}` }
+        },
+        npm: async (entity: Entity, args: any, { db }: RequestContext) => {
+            return { name: entity.npm, url: `https://www.npmjs.com/package/${entity.npm}` }
         }
     }
 }

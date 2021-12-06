@@ -12,7 +12,7 @@ const ToolHeaderBlock = ({ block, data }) => {
     const { translate } = useI18n()
 
     const toolName = get(data, 'entity.name')
-    const homepageLink = get(data, 'entity.homepage')
+    const homepageLink = get(data, 'entity.homepage.url')
     const description = get(data, 'entity.description')
     const githubLink = get(data, 'entity.github.url')
     const stars = get(data, 'entity.github.stars')

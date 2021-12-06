@@ -9,7 +9,9 @@ const entitiesQuery = graphql`
             entities {
                 id
                 name
-                homepage
+                homepage {
+                    url
+                }
                 mdn {
                     url
                 }
@@ -50,7 +52,7 @@ const EntitiesContextProviderInner = ({ children, entities }) => {
         (id) => {
             const entity = findEntity(entities, id)
 
-            return (entity && entity.homepage) || null
+            return entity?.homepage?.url || null
         },
         [entities]
     )

@@ -1,6 +1,7 @@
 blockType: FeatureExperienceBlock
 dataPath: "surveyApi.survey.${id}"
 keysPath: "surveyApi.survey.${id}.experience.keys"
+entityPath: surveyApi.survey.${id}.entity
 showLegend: true
 i18nNamespace: features
 query: >
@@ -8,6 +9,15 @@ query: >
         survey(survey: ${surveyType}) {
             ${id}: feature(id: ${id}) {
                 id
+                entity {
+                    caniuse {
+                        name
+                        url
+                    }
+                    mdn {
+                        url
+                    }
+                }
                 name
                 mdn {
                     locale

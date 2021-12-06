@@ -13,7 +13,9 @@ query: >
                 id
                 entity {
                     name
-                    homepage
+                    homepage {
+                        url
+                    }
                     github {
                         url
                     }

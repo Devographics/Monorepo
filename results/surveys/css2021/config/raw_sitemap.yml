@@ -668,6 +668,7 @@
       template: picks
 
     - id: browser_interoperability_features
+      titleId: opinions_others.browser_interoperability_features.others
       template: opinions_others
 
     - id: css_pain_points_wins

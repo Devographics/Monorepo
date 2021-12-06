@@ -34,6 +34,11 @@ export default {
             })
     },
     Feature: {
+        entity: async ({ id }: { id: string }) => {
+            const features = await getEntities({ tag: 'features' })
+            const feature = features.find((f: Entity) => f.id === id)
+            return feature
+        },
         name: async ({ id }: { id: string }) => {
             const features = await getEntities({ tag: 'features' })
             const feature = features.find((f: Entity) => f.id === id)

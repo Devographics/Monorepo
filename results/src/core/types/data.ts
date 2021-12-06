@@ -27,16 +27,38 @@ export interface Entity {
     name: string
     otherName: string
     twitterName: string
-    homepage?: string
     category?: string
     description?: string
     tags?: string[]
     match?: string[]
-    github?: GitHub
-    npm?: string
     type?: string
-    mdn?: string
     patterns?: string[]
+
+    homepage?: Homepage
+    npm?: Npm
+    mdn?: MDN
+    caniuse?: CanIUse
+    github?: GitHub
+}
+
+export interface Homepage {
+    name: string
+    url: string
+}
+
+export interface CanIUse {
+    name: string
+    url: string
+}
+
+export interface Npm {
+    name: string
+    url: string
+}
+
+export interface MDN {
+    name: string
+    url: string
 }
 
 export interface BucketItem {

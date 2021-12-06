@@ -70,7 +70,7 @@ export const ToolExperienceBlock = ({
     const [units, setUnits] = useState(defaultUnits)
 
     const title = data.entity.name
-    const titleLink = data.entity.homepage
+    const titleLink = data?.entity?.homepage?.url
 
     // as descriptions are extracted from best of js/github...
     // we only have english available.

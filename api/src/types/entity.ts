@@ -14,6 +14,7 @@ export interface Entity {
     match?: string[]
     github?: GitHub
     npm?: string
+    caniuse?: string
     type?: string
     mdn?: string
     patterns?: string[]

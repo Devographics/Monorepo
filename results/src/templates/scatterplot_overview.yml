@@ -8,7 +8,9 @@ query: >
               ${id}: tools(ids: [${allTools}]) {
                 id
                 entity {
-                    homepage
+                    homepage {
+                        url
+                    }
                     name
                     github {
                         url

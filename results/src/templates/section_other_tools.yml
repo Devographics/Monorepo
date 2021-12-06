@@ -32,7 +32,9 @@ query: >
                             percentage_survey
                             entity {
                                 id
-                                homepage
+                                homepage {
+                                    url
+                                }
                                 name
                                 github {
                                     url

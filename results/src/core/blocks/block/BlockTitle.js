@@ -11,16 +11,12 @@ import SharePermalink from 'core/share/SharePermalink'
 import BlockCompletionIndicator from 'core/blocks/block/BlockCompletionIndicator'
 import { getBlockMeta, getBlockTitleKey, getBlockTitle } from 'core/helpers/blockHelpers'
 import T from 'core/i18n/T'
+import BlockLinks from 'core/blocks/block/BlockLinks'
 
 const BlockTitleContents = ({ block, context }) => {
-    const { title, titleLink } = block
-    if (title) {
-        return titleLink ? <a href={titleLink}>{title}</a> : title
-    } else {
-        return <T k={getBlockTitleKey(block, context)} html={true} />
-    }
+    const { translate } = useI18n()
+    return <span dangerouslySetInnerHTML={{ __html: getBlockTitle(block, context, translate) }} />
 }
-
 
 const BlockTitle = ({
     isShareable,
@@ -33,9 +29,9 @@ const BlockTitle = ({
     view,
     setView,
     units,
-    setUnits,
+    setUnits
 }) => {
-    const { id } = block
+    const { id, entity } = block
     const completion =
         data && (Array.isArray(data) ? last(data) && last(data).completion : data.completion)
     const [showOptions, setShowOptions] = useState(false)
@@ -60,7 +56,7 @@ const BlockTitle = ({
         view,
         setView,
         units,
-        setUnits,
+        setUnits
     }
 
     return (
@@ -79,10 +75,11 @@ const BlockTitle = ({
                             <BlockTitleActions {...properties} />
                             <BlockTitleSwitcher {...properties} />
                         </PopoverContents>
-                    </Popover>
-                    <BlockTitleActionsWrapper>
+                    </Popover> */}
+                    {/* <BlockTitleActionsWrapper>
                         <BlockTitleActions {...properties} />
                     </BlockTitleActionsWrapper> */}
+                    {entity && <BlockLinks entity={entity} />}
                 </LeftPart>
                 {/* <BlockTitleSwitcherWrapper>
                     <BlockTitleSwitcher {...properties} />
@@ -104,7 +101,7 @@ const BlockTitleActions = ({
     data,
     blockTitle,
     setShowOptions,
-    showOptions,
+    showOptions
 }) => (
     <>
         {isExportable && block && !context.isCapturing && (
@@ -136,13 +133,13 @@ BlockTitle.propTypes = {
         title: PropTypes.node,
         titleId: PropTypes.string,
         description: PropTypes.node,
-        descriptionId: PropTypes.string,
+        descriptionId: PropTypes.string
     }).isRequired,
-    isShareable: PropTypes.bool.isRequired,
+    isShareable: PropTypes.bool.isRequired
 }
 
 const StyledBlockTitle = styled.div`
-    /* border-bottom: ${(props) => props.theme.separationBorder};
+    /* border-bottom: ${props => props.theme.separationBorder};
     padding-bottom: ${spacing(0.5)};
     margin-bottom: ${spacing(1)}; */
     display: flex;
@@ -186,6 +183,7 @@ const LeftPart = styled.div`
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    margin-bottom: ${spacing(0.5)};
 `
 
 export default memo(BlockTitle)

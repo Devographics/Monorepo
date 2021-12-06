@@ -2,7 +2,7 @@ import React from 'react'
 import BlockSwitcher from 'core/blocks/block/BlockSwitcher'
 import * as Tabs from '@radix-ui/react-tabs'
 import BlockTitle from 'core/blocks/block/BlockTitle'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { mq, spacing, fontSize } from 'core/theme'
 import T from 'core/i18n/T'
 import { getBlockTabKey } from 'core/helpers/blockHelpers'
@@ -24,11 +24,15 @@ export const EmptyWrapper = ({ block, pageData, blockIndex }) => (
 )
 
 const Wrapper = styled.section`
-  margin-bottom: ${spacing(3)};
+    ${props =>
+        props.withMargin &&
+        css`
+            margin-bottom: ${spacing(3)};
 
-  @media ${mq.large} {
-    margin-bottom: ${spacing(6)};
-  }
+            @media ${mq.large} {
+                margin-bottom: ${spacing(6)};
+            }
+        `}
 `
 
 const BlockHeader = styled.div`
@@ -44,14 +48,14 @@ const TabsList = styled(Tabs.List)`
     display: flex;
     justify-content: flex-start;
     align-items: flex-end;
-    overflow:auto;
+    overflow: auto;
     overflow-y: hidden;
 
     @media ${mq.large} {
-      overflow:visible;
-      width:max-content;
-      padding-right: 52px;
-      overflow:visible;
+        overflow: visible;
+        width: max-content;
+        padding-right: 52px;
+        overflow: visible;
     }
 `
 
@@ -74,7 +78,7 @@ const TabsTrigger = styled(Tabs.Trigger)`
     }
 `
 
-export const TabsWrapper = ({ block, pageData, blockIndex }) => {
+export const TabsWrapper = ({ block, pageData, blockIndex, withMargin = true }) => {
     const context = usePageContext()
 
     let firstBlock = block.variants[0]
@@ -82,13 +86,14 @@ export const TabsWrapper = ({ block, pageData, blockIndex }) => {
         const blockEntity = get(pageData, firstBlock.entityPath)
         firstBlock = {
             ...firstBlock,
+            entity: blockEntity,
             title: blockEntity.name,
-            titleLink: blockEntity.homepage
+            titleLink: blockEntity?.homepage?.url
         }
     }
 
     return (
-        <Wrapper className="tabs-wrapper">
+        <Wrapper className="tabs-wrapper" withMargin={withMargin}>
             <Tabs.Root defaultValue="tab0" orientation="horizontal">
                 <BlockHeader>
                     <BlockTitle block={firstBlock} />

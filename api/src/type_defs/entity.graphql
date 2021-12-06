@@ -8,11 +8,12 @@ type Entity {
     name: String
     otherName: String
     twitterName: String
-    homepage: String
+    homepage: Homepage
     category: String
     github: GitHub
-    npm: String
+    npm: NPM
     mdn: MDN
+    caniuse: CanIUse
     description: String
     type: String
     tags: [String]
@@ -22,6 +23,31 @@ type Entity {
     blog: String
     rss: String
     related: [Entity]
+}
+
+
+"""
+Homepage Info
+"""
+type Homepage {
+    name: String
+    url: String
+}
+
+"""
+CanIUse Info
+"""
+type CanIUse {
+    name: String
+    url: String
+}
+
+"""
+NPM Info
+"""
+type NPM {
+    name: String
+    url: String
 }
 
 """

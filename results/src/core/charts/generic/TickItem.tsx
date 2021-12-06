@@ -46,11 +46,7 @@ export const Text = ({
             {shortLabel ?? label}
         </text>
     )
-    return description ? (
-        <TooltipComponent trigger={component} contents={description} asChild={true} />
-    ) : (
-        component
-    )
+    return <TooltipComponent trigger={component} contents={description ?? label} asChild={true} />
 }
 
 export const TickItem = (tick: TickItemProps) => {
@@ -67,7 +63,7 @@ export const TickItem = (tick: TickItemProps) => {
         if (name) {
             label = name
         }
-        link = homepage || (github && github.url)
+        link = homepage?.url || github?.url
 
         // @todo: remove this once all entities have been added
         if (!label) {
