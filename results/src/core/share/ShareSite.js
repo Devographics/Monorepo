@@ -30,8 +30,8 @@ const ShareSite = () => {
 
 const Container = styled.div`
     border-top: ${(props) => props.theme.separationBorder};
-    display: flex;
-    justify-content: space-evenly;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
     position: relative;
     z-index: 1;
 `

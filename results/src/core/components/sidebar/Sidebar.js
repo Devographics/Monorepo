@@ -48,9 +48,10 @@ export const Sidebar = ({ showSidebar, closeSidebar, rest }) => {
 
 const SidebarContainer = styled.div`
     border-right: ${(props) => props.theme.separationBorder};
-    display: flex;
-    flex-direction: column;
-
+    /* display: flex;
+    flex-direction: column; */
+    display: grid;
+    grid-template-rows: auto 1fr auto;
     @media ${mq.large} {
         width: ${({ theme }) => theme.dimensions.sidebar.width}px;
         height: 100vh;
