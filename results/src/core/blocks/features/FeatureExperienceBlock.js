@@ -19,7 +19,7 @@ const FeatureExperienceBlock = ({
     block,
     keys,
     data,
-    i18nNamespace = 'features',
+    chartNamespace = 'features',
     units: defaultUnits = 'percentage_question'
 }) => {
     const [units, setUnits] = useState(defaultUnits)
@@ -76,7 +76,7 @@ const FeatureExperienceBlock = ({
                               colorMapping={bucketKeys}
                               units={units}
                               applyEmptyPatternTo="never_heard"
-                              i18nNamespace={i18nNamespace}
+                              i18nNamespace={chartNamespace}
                               showProgression={isLastYear(year)}
                           />
                       </ChartContainer>

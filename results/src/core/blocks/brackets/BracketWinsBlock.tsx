@@ -47,7 +47,7 @@ const BracketWinsBlock = ({ block, data, keys }: HorizontalBarBlockProps) => {
         mode = 'relative',
         defaultUnits = 'count',
         translateData = true,
-        i18nNamespace = block.id,
+        chartNamespace = block.blockNamespace ?? block.id,
         colorVariant
     } = block
 
@@ -79,7 +79,7 @@ const BracketWinsBlock = ({ block, data, keys }: HorizontalBarBlockProps) => {
                         labelId: `options.bracket.${k}`
                     })),
                     translateData,
-                    i18nNamespace
+                    i18nNamespace: chartNamespace
                 })
             ]}
             legends={legends}
@@ -90,7 +90,7 @@ const BracketWinsBlock = ({ block, data, keys }: HorizontalBarBlockProps) => {
                     size="l"
                     total={total}
                     buckets={buckets}
-                    i18nNamespace={i18nNamespace}
+                    i18nNamespace={chartNamespace}
                     translateData={translateData}
                     mode={mode}
                     units={units}

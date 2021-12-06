@@ -3,7 +3,8 @@ dataPath: "surveyApi.survey.${id}"
 keysPath: "surveyApi.survey.${id}.experience.keys"
 entityPath: surveyApi.survey.${id}.entity
 showLegend: true
-i18nNamespace: features
+blockNamespace: features
+chartNamespace: features
 query: >
     surveyApi {
         survey(survey: ${surveyType}) {

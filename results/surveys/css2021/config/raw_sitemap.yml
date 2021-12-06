@@ -127,7 +127,7 @@
 
     - id: knowledge_score
       template: demographics
-      titleId: features.knowledge_score
+      blockNamespace: features
       blockType: KnowledgeScoreBlock
 
     - id: features_resources
@@ -482,13 +482,13 @@
       template: page_introduction
 
     - id: utilities
-      i18nNamespace: tools_others  
+      blockNamespace: tools_others  
       template: multiple_options
       variables:
         fieldId: tools_others
       variants:
         - id: utilities_others
-          i18nNamespace: tools_others  
+          blockNamespace: tools_others  
           template: multiple_options
           defaultUnits: count
           variables:
@@ -498,13 +498,13 @@
       template: picks
 
     - id: browsers
-      i18nNamespace: tools_others  
+      blockNamespace: tools_others  
       template: multiple_options
       variables:
         fieldId: tools_others
       variants: 
         - id: browsers_others
-          i18nNamespace: tools_others  
+          blockNamespace: tools_others  
           template: multiple_options
           defaultUnits: count
           variables:
@@ -513,13 +513,13 @@
     - id: tool_evaluation_wins
       tabId: tabs.bracket_wins
       template: bracket_wins
-      i18nNamespace: tool_evaluation
+      blockNamespace: tool_evaluation
       variables:
         fieldId: tools_others__tool_evaluation
       variants: 
         - id: tool_evaluation_matchups
           tabId: tabs.bracket_matchups
-          i18nNamespace: tool_evaluation
+          blockNamespace: tool_evaluation
           variables:
             fieldId: tools_others__tool_evaluation
           template: bracket_matchups
@@ -534,40 +534,40 @@
     - template: page_introduction
 
     - id: browsers
-      titleId: environments.browsers
-      i18nNamespace: browsers
+      blockNamespace: environments
+      chartNamespace: browsers
       template: multiple_options
       variables:
         fieldId: environments
 
     - id: form_factors
-      titleId: environments.form_factors
-      i18nNamespace: form_factors
+      blockNamespace: environments
+      chartNamespace: form_factors
       translateData: true
       template: multiple_options
       variables:
         fieldId: environments
 
     - id: accessibility_features
-      titleId: environments.accessibility_features
-      i18nNamespace: accessibility_features
+      blockNamespace: environments
+      chartNamespace: accessibility_features
       translateData: true
       template: multiple_options
       variables:
         fieldId: environments
 
     - id: what_do_you_use_css_for
-      titleId: environments.what_do_you_use_css_for
-      i18nNamespace: what_do_you_use_css_for
+      blockNamespace: environments
+      chartNamespace: what_do_you_use_css_for
       translateData: true
       template: multiple_options
       variables:
         fieldId: environments
       variants: 
         - id: what_do_you_use_css_for_others
-          titleId: environments.what_do_you_use_css_for.others
+          blockNamespace: environments
           tabId: tabs.other_answers
-          i18nNamespace: what_do_you_use_css_for
+          chartNamespace: what_do_you_use_css_for
           translateData: true
           template: multiple_options
           variables:
@@ -579,8 +579,8 @@
     - template: page_introduction
 
     - id: first_steps
-      titleId: resources.first_steps
-      i18nNamespace: first_steps
+      blockNamespace: resources
+      chartNamespace: first_steps
       tabId: tabs.main_answers
       template: multiple_options
       translateData: true
@@ -588,7 +588,8 @@
         fieldId: resources
       variants:
         - id: first_steps_others
-          i18nNamespace: first_steps
+          blockNamespace: resources
+          chartNamespace: first_steps
           tabId: tabs.other_answers
           template: multiple_options
           translateData: true
@@ -596,28 +597,32 @@
             fieldId: resources
 
     - id: blogs_news_magazines
-      i18nNamespace: resources
+      blockNamespace: resources
+      chartNamespace: blogs_news_magazines
       tabId: tabs.main_answers
       template: multiple_options
       variables:
         fieldId: resources
       variants:
         - id: blogs_news_magazines_others
-          i18nNamespace: resources
+          blockNamespace: resources
+          chartNamespace: blogs_news_magazines
           tabId: tabs.other_answers
           template: multiple_options
           variables:
             fieldId: resources
 
     - id: sites_courses
-      i18nNamespace: resources
+      blockNamespace: resources
+      chartNamespace: sites_courses
       tabId: tabs.main_answers
       template: multiple_options
       variables:
         fieldId: resources
       variants:
         - id: sites_courses_others
-          i18nNamespace: resources
+          blockNamespace: resources
+          chartNamespace: sites_courses
           tabId: tabs.other_answers
           template: multiple_options
           variables:
@@ -627,21 +632,24 @@
       template: picks
 
     - id: podcasts
-      i18nNamespace: resources
+      blockNamespace: resources
+      chartNamespace: podcasts
       tabId: tabs.main_answers
       template: multiple_options
       variables:
         fieldId: resources
       variants:
         - id: podcasts_others
-          i18nNamespace: resources
+          blockNamespace: resources
+          chartNamespace: podcasts
           tabId: tabs.other_answers
           template: multiple_options
           variables:
             fieldId: resources
 
     - id: people_others
-      i18nNamespace: resources
+      blockNamespace: resources
+      chartNamespace: people
       template: multiple_options
       variables:
         options: '{ cutoff: 10 }'
@@ -674,13 +682,13 @@
     - id: css_pain_points_wins
       tabId: tabs.bracket_wins
       template: bracket_wins
-      i18nNamespace: css_pain_points
+      blockNamespace: css_pain_points
       variables:
         fieldId: opinions__css_pain_points
       variants: 
         - id: css_pain_points_matchups
           tabId: tabs.bracket_matchups
-          i18nNamespace: css_pain_points
+          blockNamespace: css_pain_points
           template: bracket_matchups
           variables:
             fieldId: opinions__css_pain_points
@@ -691,13 +699,13 @@
     - id: currently_missing_from_css_wins
       tabId: tabs.bracket_wins
       template: bracket_wins
-      i18nNamespace: currently_missing_from_css
+      blockNamespace: currently_missing_from_css
       variables:
         fieldId: opinions__currently_missing_from_css
       variants: 
         - id: currently_missing_from_css_matchups
           tabId: tabs.bracket_matchups
-          i18nNamespace: currently_missing_from_css
+          blockNamespace: currently_missing_from_css
           template: bracket_matchups
           variables:
             fieldId: opinions__currently_missing_from_css

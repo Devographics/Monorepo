@@ -1,6 +1,8 @@
 import React from 'react'
 import { useTheme } from 'styled-components'
 import { ResponsiveStream } from '@nivo/stream'
+import { isPercentage } from 'core/helpers/units'
+import { useI18n } from 'core/i18n/i18nContext'
 
 const Dot = ({ x, y, datum, current, units }) => {
     if (current !== null && datum.key !== current) {
@@ -11,7 +13,7 @@ const Dot = ({ x, y, datum, current, units }) => {
     if (availableHeight < 8 && current === null) return null
 
     let label = datum.value
-    if (units === 'percentage') {
+    if (isPercentage(units)) {
         label = `${label}%`
     }
 
@@ -25,7 +27,7 @@ const Dot = ({ x, y, datum, current, units }) => {
                 alignmentBaseline="middle"
                 style={{
                     fontSize: 11,
-                    fontWeight: 600,
+                    fontWeight: 600
                 }}
             >
                 {label}
@@ -38,16 +40,17 @@ const margin = {
     top: 0,
     right: 20,
     bottom: 40,
-    left: 20,
+    left: 20
 }
 
 const getChartData = (data, units) => {
-    return data.map((y) => {
+    return data.map(y => {
         const { year, buckets } = y
         const item = {
             id: year,
+            year
         }
-        buckets.forEach((b) => {
+        buckets.forEach(b => {
             item[b.id] = b[units]
         })
         return item
@@ -63,24 +66,23 @@ const StreamChart = ({
     current,
     colorScale,
     applyEmptyPatternTo,
+    i18nNamespace,
     showLabels = true,
     showYears = true,
-    height = 260,
+    height = 260
 }) => {
     const theme = useTheme()
+    const { translate } = useI18n()
 
     const horizontalAxis = {
         tickSize: 10,
         tickPadding: 6,
-        format: (i) => data[i].year,
+        format: i => {
+            return data[i].year
+        }
     }
 
-    let tooltipFormat
-    if (units === 'percentage') {
-        tooltipFormat = (d) => `${d}%`
-    }
-
-    const getLayerColor = (props) => {
+    const getLayerColor = props => {
         const { id } = props
         const color = bucketKeys.find(b => b.id === id)?.color
         if (current !== null && current !== id) {
@@ -94,7 +96,7 @@ const StreamChart = ({
             <ResponsiveStream
                 theme={{
                     ...theme.charts,
-                    axis: theme.charts.streamTimelineAxis,
+                    axis: theme.charts.streamTimelineAxis
                 }}
                 offsetType="expand"
                 colors={getLayerColor}
@@ -104,26 +106,29 @@ const StreamChart = ({
                 data={getChartData(data, units)}
                 enableGridX={false}
                 enableGridY={false}
-                axisLeft={undefined}
+                axisLeft={null}
                 axisTop={horizontalAxis}
                 axisBottom={horizontalAxis}
                 enableDots={showLabels}
-                dotComponent={(d) => <Dot {...d} current={current} units={units} />}
+                dotComponent={d => <Dot {...d} current={current} units={units} />}
                 dotColor="inherit:brighter(0.6)"
                 animate={false}
-                tooltipLabel={(d) => {
-                    const key = bucketKeys.find((key) => key.id === d.id)
-                    return key.shortLabel ?? key.label
+                label={({ id }) => {
+                    const fullLabel = translate(`options.${i18nNamespace}.${id}`)
+                    const shortLabel = translate(`options.${i18nNamespace}.${id}.short`)
+                    return shortLabel ?? fullLabel
                 }}
-                tooltipFormat={tooltipFormat}
+                valueFormat={v => {
+                    return isPercentage(units) ? `${v}%` : v.toString()
+                }}
                 defs={[theme.charts.emptyPattern]}
                 fill={[
                     {
                         match: {
-                            id: applyEmptyPatternTo,
+                            id: applyEmptyPatternTo
                         },
-                        id: 'empty',
-                    },
+                        id: 'empty'
+                    }
                 ]}
             />
         </div>

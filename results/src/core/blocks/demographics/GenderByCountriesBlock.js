@@ -21,7 +21,6 @@ const GenderByCountries = ({ block, data, keys }) => {
         mode = 'relative',
         defaultUnits = 'percentage_facet',
         translateData,
-        i18nNamespace,
         colorVariant,
     } = block
 
@@ -59,31 +58,6 @@ const GenderByCountries = ({ block, data, keys }) => {
             units={units}
             setUnits={setUnits}
             data={data}
-            // tables={[
-            //     {
-            //         headings: [
-            //             { id: 'label', label: <T k="table.label" /> },
-            //             { id: 'percentage_survey', label: <T k="table.percentage" /> },
-            //             { id: 'count', label: <T k="table.count" /> },
-            //         ],
-            //         rows: data.buckets.map((bucket) => [
-            //             {
-            //                 id: 'label',
-            //                 label: bucket.entity
-            //                     ? bucket.entity.name
-            //                     : translate(`options.${i18nNamespace || id}.${bucket.id}`),
-            //             },
-            //             {
-            //                 id: 'percentage_survey',
-            //                 label: `${bucket.percentage_survey}%`,
-            //             },
-            //             {
-            //                 id: 'count',
-            //                 label: bucket.count,
-            //             },
-            //         ]),
-            //     },
-            // ]}
             block={block}
         >
             {allFacets.map((facet, i) => (
@@ -113,7 +87,7 @@ const Facet = ({ facet, colorMapping, keys }) => (
                 units="percentage_facet"
                 buckets={facet.buckets}
                 colorMapping={colorMapping}
-                i18nNamespace="options.gender"
+                i18nNamespace="gender"
             />
         </ChartContainer>
     </Row>

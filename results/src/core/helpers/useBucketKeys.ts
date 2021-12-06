@@ -39,7 +39,7 @@ export const useLegends = (block: Block, keys: string[], fieldId?: string) => {
     const theme = useTheme()
     const { translate, getString } = useI18n()
 
-    const namespace = fieldId ?? block.i18nNamespace ?? block.id
+    const namespace = fieldId ?? block.chartNamespace ?? block.id
     const colorRange = theme.colors.ranges[namespace]
     const legends = keys.map((id) => {
         const labelKey = `options.${namespace}.${id}`

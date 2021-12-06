@@ -23,7 +23,7 @@ const VerticalBarBlock = ({ block, data, keys }: VerticalBarBlockProps) => {
         mode = 'relative',
         defaultUnits = 'percentage_survey',
         translateData,
-        i18nNamespace = block.id,
+        chartNamespace = block.blockNamespace ?? block.id,
         colorVariant
     } = block
 
@@ -58,7 +58,7 @@ const VerticalBarBlock = ({ block, data, keys }: VerticalBarBlockProps) => {
                     bucketKeys={bucketKeys}
                     total={total}
                     buckets={buckets}
-                    i18nNamespace={i18nNamespace}
+                    i18nNamespace={chartNamespace}
                     translateData={translateData}
                     mode={mode}
                     units={units}

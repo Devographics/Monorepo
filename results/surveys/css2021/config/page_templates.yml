@@ -84,7 +84,7 @@
 #               id: ${id}_others
 
 #         - id: '${id}_happiness'
-#           i18nNamespace: happiness
+#           blockNamespace: happiness
 #           blockName: happiness
 #           template: happinessTemplate
 #           bucketKeysName: happiness

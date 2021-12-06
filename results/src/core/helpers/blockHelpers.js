@@ -6,7 +6,7 @@ const { siteTitle, capturesUrl, hashtag, year } = config
 export const replaceOthers = s => s?.replace('_others', '.others')
 
 export const getBlockKey = (block) => {
-    const namespace = block.i18nNamespace ?? 'blocks'
+    const namespace = block.blockNamespace ?? 'blocks'
     const blockId = replaceOthers(block?.id)
     return `${namespace}.${blockId}`
 }
@@ -20,7 +20,7 @@ export const getBlockTabKey = (block, page, variantIndex) =>
 
 export const getBlockNoteKey = (block, page) => block.noteId || `${getBlockKey(block, page)}.note`
 
-export const getBlockTitleKey = (block, page) => replaceOthers(block.titleId) || `${getBlockKey(block, page)}`
+export const getBlockTitleKey = (block, page) => block.titleId || `${getBlockKey(block, page)}`
 
 export const getBlockDescriptionKey = (block, page) =>
     block.descriptionId || `${getBlockKey(block, page)}.description`

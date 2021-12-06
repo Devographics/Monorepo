@@ -4,8 +4,8 @@ blockType: VerticalBarBlock
 dataPath: "surveyApi.survey.${id}_happiness.year.facets.0"
 keysPath: "surveyApi.survey.${id}_happiness.keys"
 showDescription: false
-i18nNamespace: happiness
-
+blockNamespace: happiness
+chartNamespace: happiness
 query: >
     surveyApi {
         survey(survey: ${surveyType}) {

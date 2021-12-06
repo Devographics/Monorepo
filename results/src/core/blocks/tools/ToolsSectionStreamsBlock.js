@@ -17,7 +17,7 @@ const ToolsSectionStreamsBlock = ({
     data,
     keys,
     triggerId,
-    units: defaultUnits = 'percentage_question',
+    units: defaultUnits = 'percentage_question'
 }) => {
     const [units, setUnits] = useState(defaultUnits)
 
@@ -26,25 +26,27 @@ const ToolsSectionStreamsBlock = ({
 
     const legends = useLegends(block, keys, 'tools')
 
-    const filteredData = data.filter((toolData) => toolData.experience.all_years.length > 1)
+    const filteredData = data.filter(toolData => toolData.experience.all_years.length > 1)
 
     const controlledCurrent = triggerId || current
 
     return (
         <Block
-            tables={filteredData.map(tool => getTableData({
-                title: tool?.entity?.name,
-                data: groupDataByYears({ keys, data: tool.experience.all_years }),
-                years: tool.experience.all_years.map(y => y.year),
-                translateData: true,
-                i18nNamespace: 'tools'
-            }))}
+            tables={filteredData.map(tool =>
+                getTableData({
+                    title: tool?.entity?.name,
+                    data: groupDataByYears({ keys, data: tool.experience.all_years }),
+                    years: tool.experience.all_years.map(y => y.year),
+                    translateData: true,
+                    i18nNamespace: 'tools'
+                })
+            )}
             units={units}
             setUnits={setUnits}
             block={{
                 legendPosition: 'top',
                 legendProps: { layout: 'horizontal' },
-                ...block,
+                ...block
             }}
             legends={legends}
             data={filteredData}
@@ -55,11 +57,11 @@ const ToolsSectionStreamsBlock = ({
                 },
                 onMouseLeave: () => {
                     setCurrent(null)
-                },
+                }
             }}
         >
             <GridContainer count={filteredData.length}>
-                {filteredData.map((toolData) => {
+                {filteredData.map(toolData => {
                     return (
                         <Stream
                             key={toolData.id}
@@ -77,8 +79,11 @@ const ToolsSectionStreamsBlock = ({
 }
 
 const Stream = ({ toolData, current, units, keys, legends }) => {
-    const chartData = toolData.experience.all_years.map((year) => year.facets[0])
-    const colors = legends.map((key) => key.color)
+    const chartData = toolData.experience.all_years.map(year => ({
+        year: year.year,
+        buckets: year.facets[0].buckets
+    }))
+    const colors = legends.map(key => key.color)
 
     return (
         <StreamItem>
@@ -92,7 +97,7 @@ const Stream = ({ toolData, current, units, keys, legends }) => {
                 bucketKeys={legends}
                 units={units}
                 applyEmptyPatternTo="never_heard"
-                namespace="options.tools"
+                i18nNamespace="tools"
                 showLabels={false}
                 showYears={false}
                 height={160}
@@ -106,12 +111,12 @@ const Stream = ({ toolData, current, units, keys, legends }) => {
 
 const minCols = 4
 const maxCols = 5
-const getColNumber = (count) => {
+const getColNumber = count => {
     // calculate number of items on the last line for 3, 4, or 5 columns
     // note: we give modulo 0 a higher "score" of 999
-    const colOptions = range(minCols, maxCols + 1).map((cols) => ({
+    const colOptions = range(minCols, maxCols + 1).map(cols => ({
         cols,
-        itemsOnLastLine: count % cols || 999,
+        itemsOnLastLine: count % cols || 999
     }))
     // take the option with the most number of orphans
     const bestOption = sortBy(colOptions, ['itemsOnLastLine']).reverse()[0]
@@ -126,7 +131,7 @@ const GridContainer = styled.div`
     @media ${mq.mediumLarge} {
         display: grid;
         width: 100%;
-        grid-template-columns: repeat(${(props) => getColNumber(props.count)}, 1fr);
+        grid-template-columns: repeat(${props => getColNumber(props.count)}, 1fr);
         column-gap: ${spacing(2)};
         row-gap: ${spacing(2)};
     }
@@ -146,13 +151,13 @@ const StreamTitle = styled.h4`
 
 ToolsSectionStreamsBlock.propTypes = {
     block: PropTypes.shape({
-        id: PropTypes.string.isRequired,
+        id: PropTypes.string.isRequired
     }).isRequired,
     data: PropTypes.arrayOf(
         PropTypes.shape({
             id: PropTypes.string.isRequired,
             entity: PropTypes.shape({
-                name: PropTypes.string.isRequired,
+                name: PropTypes.string.isRequired
             }).isRequired,
             experience: PropTypes.shape({
                 year: PropTypes.shape({
@@ -160,13 +165,13 @@ ToolsSectionStreamsBlock.propTypes = {
                         PropTypes.shape({
                             id: PropTypes.string.isRequired,
                             count: PropTypes.number.isRequired,
-                            percentage: PropTypes.number.isRequired,
+                            percentage: PropTypes.number.isRequired
                         })
-                    ).isRequired,
-                }),
-            }),
+                    ).isRequired
+                })
+            })
         })
-    ).isRequired,
+    ).isRequired
 }
 
 export default ToolsSectionStreamsBlock

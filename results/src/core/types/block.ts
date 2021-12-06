@@ -19,7 +19,8 @@ export interface BlockDefinition {
 
     // config
     mode?: BlockMode
-    i18nNamespace?: string
+    blockNamespace?: string
+    chartNamespace?: string
     colorVariant?: string
     overrides?: object
 

@@ -16,7 +16,7 @@ const HorizontalBarBlock = ({ block, data }: HorizontalBarBlockProps) => {
         mode = 'relative',
         defaultUnits = 'percentage_survey',
         translateData,
-        i18nNamespace = block.id,
+        chartNamespace = block.blockNamespace ?? block.id,
         colorVariant,
     } = block
 
@@ -36,7 +36,7 @@ const HorizontalBarBlock = ({ block, data }: HorizontalBarBlockProps) => {
                     data: data.buckets,
                     valueKeys: ['percentage_survey', 'percentage_question', 'count'],
                     translateData,
-                    i18nNamespace,
+                    i18nNamespace: chartNamespace,
                 }),
             ]}
             block={block}
@@ -46,7 +46,7 @@ const HorizontalBarBlock = ({ block, data }: HorizontalBarBlockProps) => {
                 <HorizontalBarChart
                     total={total}
                     buckets={buckets}
-                    i18nNamespace={i18nNamespace}
+                    i18nNamespace={chartNamespace}
                     translateData={translateData}
                     mode={mode}
                     units={units}

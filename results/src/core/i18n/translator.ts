@@ -16,7 +16,7 @@ interface InterpolationValues {
 }
 
 export interface LegacyTranslator {
-    (key: string, interpolation: InterpolationValues, fallback?: string): string
+    (key: string, interpolation?: InterpolationValues, fallback?: string): string
 }
 
 export interface StringTranslator {

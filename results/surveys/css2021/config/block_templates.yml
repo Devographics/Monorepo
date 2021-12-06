@@ -532,7 +532,7 @@ happinessTemplate:
     dataPath: "surveyApi.survey.${id}_happiness.year"
     keysPath: "surveyApi.survey.${id}_happiness.keys"
     showDescription: false
-    i18nNamespace: happiness
+    blockNamespace: happiness
     bucketKeysName: happiness
     blockName: happiness
     enableExport: true

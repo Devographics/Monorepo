@@ -40,7 +40,6 @@ const Link = styled(Button)`
 `
 
 const getDomain = url => {
-    console.log(url)
     const { hostname } = new URL(url)
     return hostname
 }
@@ -50,7 +49,7 @@ const BlockLink = ({ id, label, url, icon }) => {
     const label_ = id === 'homepage' ? getDomain(url) : label
     return (
         <Item>
-            <Link href={url} title={id}>
+            <Link as="a" href={url} title={id}>
                 {label_}
                 {/* <Icon labelId={`links.${id}`} /> */}
             </Link>

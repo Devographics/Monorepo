@@ -27,8 +27,6 @@ const GenderBlock = ({ block, data }) => {
 
     return (
         <Block 
-          
-          
           units={units}
           setUnits={setUnits}
           data={data.buckets}

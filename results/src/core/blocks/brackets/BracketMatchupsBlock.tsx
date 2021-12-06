@@ -24,7 +24,7 @@ const BracketMatchupsBlock = ({ block, data }: HorizontalBarBlockProps) => {
         mode = 'relative',
         defaultUnits = 'percentage',
         translateData = true,
-        i18nNamespace = block.id,
+        chartNamespace = block.id,
         colorVariant
     } = block
 
@@ -65,16 +65,15 @@ const BracketMatchupsBlock = ({ block, data }: HorizontalBarBlockProps) => {
             setUnits={setUnits}
             data={data}
             tables={[
-                
                 getTableData({
                     data: heatmapBuckets,
                     valueKeys: keys?.map(k => ({
                         id: `${k}___percentage`,
-                        labelId: `options.${i18nNamespace}.${k}`,
+                        labelId: `options.${chartNamespace}.${k}`,
                         isPercentage: true,
                     })),
                     translateData,
-                    i18nNamespace
+                    i18nNamespace: chartNamespace
                 })
             ]}
             block={block}
@@ -114,7 +113,7 @@ const BracketMatchupsBlock = ({ block, data }: HorizontalBarBlockProps) => {
                         renderTick: tick => (
                             <TickItem
                                 tickRotation={-45}
-                                i18nNamespace={i18nNamespace}
+                                i18nNamespace={chartNamespace}
                                 shouldTranslate={translateData}
                                 entity={buckets.find(b => b.id === tick.value)?.entity}
                                 {...tick}
@@ -133,7 +132,7 @@ const BracketMatchupsBlock = ({ block, data }: HorizontalBarBlockProps) => {
                         // legendOffset: -40,
                         renderTick: tick => (
                             <TickItem
-                                i18nNamespace={i18nNamespace}
+                                i18nNamespace={chartNamespace}
                                 shouldTranslate={translateData}
                                 entity={buckets.find(b => b.id === tick.value)?.entity}
                                 {...tick}

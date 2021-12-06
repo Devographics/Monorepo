@@ -66,7 +66,8 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
             male: colors.blue,
             female: colors.teal,
             non_binary: colors.red,
-            prefer_not_to_say: colors.greyMediumer
+            prefer_not_to_say: colors.greyMediumer,
+            not_listed: colors.greyMedium,
         },
         opinions: {
             4: colors.pink,

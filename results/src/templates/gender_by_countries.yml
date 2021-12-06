@@ -1,8 +1,6 @@
 blockType: GenderByCountriesBlock
 dataPath: "surveyApi.survey.demographics"
 keysPath: "surveyApi.survey.demographics.all_countries.keys"
-
-
 defaultUnits: percentage_survey
 query: >
   surveyApi {

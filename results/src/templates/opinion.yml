@@ -2,7 +2,7 @@ blockType: OpinionBlock
 dataPath: "surveyApi.survey.${id}.all_years"
 keysPath: "surveyApi.survey.${id}.keys"
 translateData: true
-i18nNamespace: opinions
+blockNamespace: opinions
 query: >
     surveyApi {
         survey(survey: ${surveyType}) {
