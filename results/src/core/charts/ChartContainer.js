@@ -85,6 +85,12 @@ const Container = styled.div`
     @media ${mq.smallMedium} {
         overflow-x: scroll;
     }
+
+    .FeatureExperienceBlock__RowChart & {
+      @media ${mq.smallMedium} {
+          overflow-x: visible;
+      }
+    }
 `
 
 const ChartContainerInner = styled.div`

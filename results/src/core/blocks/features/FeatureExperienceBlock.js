@@ -7,7 +7,7 @@ import ChartContainer from 'core/charts/ChartContainer'
 import GaugeBarChart from 'core/charts/generic/GaugeBarChart'
 import { usePageContext } from 'core/helpers/pageContext'
 import { useLegends } from 'core/helpers/useBucketKeys'
-import { spacing } from 'core/theme'
+import { mq, spacing } from 'core/theme'
 import { useI18n } from 'core/i18n/i18nContext'
 import { getTableData, groupDataByYears } from 'core/helpers/datatables'
 
@@ -65,7 +65,7 @@ const FeatureExperienceBlock = ({
                 {allYears.map(year => (
                     <Row key={year.year}>
                         <RowYear>{year.year}</RowYear>
-                        <RowChart>
+                        <RowChart className="FeatureExperienceBlock__RowChart">
                             <ChartContainer
                                 height={isLastYear(year) ? 40 : 40}
                                 fit={true}
@@ -103,6 +103,10 @@ const RowYear = styled.dt`
 `
 const RowChart = styled.dd`
     margin: 0;
+
+    @media ${mq.smallMedium} {
+      max-width: calc(100vw - 40px - 30px - 20px); /* total width - page padding - year width - gap */
+    }
 `
 
 FeatureExperienceBlock.propTypes = {
