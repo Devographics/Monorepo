@@ -34,7 +34,6 @@ export const fancyLinkMixin = ({ color, activeClassName = '_is-active', activeCo
     &:active,
     &:focus {
         color: ${color};
-        ${textShadowMixin(color)}
     }
 
     > span {
@@ -57,7 +56,6 @@ export const fancyLinkMixin = ({ color, activeClassName = '_is-active', activeCo
 
     &.${activeClassName} {
         color: ${activeColor};
-        ${textShadowMixin(activeColor)}
 
         > span::before {
             background-color: ${activeColor};
@@ -66,7 +64,6 @@ export const fancyLinkMixin = ({ color, activeClassName = '_is-active', activeCo
 
     &:hover, &:focus {
         text-decoration: none;
-        ${textShadowHighlightMixin(color)}
 
         > span::before {
             transform-origin: bottom left;
