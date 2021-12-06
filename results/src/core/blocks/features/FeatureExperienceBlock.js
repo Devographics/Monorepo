@@ -61,28 +61,30 @@ const FeatureExperienceBlock = ({
                 enableDescriptionMarkdown: false
             }}
         >
-            {allYears.map(year => (
-                <Row key={year.year}>
-                    <RowYear>{year.year}</RowYear>
-                    <RowChart>
-                      <ChartContainer
-                          height={isLastYear(year) ? 40 : 40}
-                          fit={true}
-                          className="FeatureChart"
-                      >
-                          <GaugeBarChart
-                              keys={keys}
-                              buckets={year.facets[0].buckets}
-                              colorMapping={bucketKeys}
-                              units={units}
-                              applyEmptyPatternTo="never_heard"
-                              i18nNamespace={chartNamespace}
-                              showProgression={isLastYear(year)}
-                          />
-                      </ChartContainer>
-                    </RowChart>
-                </Row>
-            ))}
+            <dl>
+                {allYears.map(year => (
+                    <Row key={year.year}>
+                        <RowYear>{year.year}</RowYear>
+                        <RowChart>
+                            <ChartContainer
+                                height={isLastYear(year) ? 40 : 40}
+                                fit={true}
+                                className="FeatureChart"
+                            >
+                                <GaugeBarChart
+                                    keys={keys}
+                                    buckets={year.facets[0].buckets}
+                                    colorMapping={bucketKeys}
+                                    units={units}
+                                    applyEmptyPatternTo="never_heard"
+                                    i18nNamespace={chartNamespace}
+                                    showProgression={isLastYear(year)}
+                                />
+                            </ChartContainer>
+                        </RowChart>
+                    </Row>
+                ))}
+            </dl>
         </Block>
     )
 }

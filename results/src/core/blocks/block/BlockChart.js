@@ -25,9 +25,9 @@ const BlockChart = props => {
                     <BlockUnitsSelector {...modeProps} />
                 </SwitcherWrapper>
             )}
-            <dl className="Block__Contents">
+            <div className="Block__Contents">
                 {error ? <div className="error">{error}</div> : children}
-            </dl>
+            </div>
             {legends && legendPosition === 'bottom' && <BlockLegends {...legendProps_} />}
             <BlockFooter {...props} />
             {showNote && <BlockNote block={block} />}

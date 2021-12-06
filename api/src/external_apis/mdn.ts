@@ -23,7 +23,7 @@ export const normalizeMdnResource = (res: MDNJSONRes): TranslatedMDNInfo[] => {
             locale,
             title,
             summary,
-            url: mdn_url
+            url: `https://developer.mozilla.org${mdn_url}`
         }
     ]
 }
