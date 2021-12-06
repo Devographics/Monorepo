@@ -25,14 +25,14 @@ export const Sidebar = ({ showSidebar, closeSidebar, rest }) => {
 
     return (
         <SidebarContainer id="sidebar" show={showSidebar} className="Sidebar">
-            <SidebarCloseButton 
+            <SidebarCloseButton
                 onClick={closeSidebar}
                 aria-haspopup="menu"
-                aria-expanded={showSidebar}> 
+                aria-expanded={showSidebar}>
                     <CloseIcon />
                     <ScreenReadersHint>{translate('general.close_nav')}</ScreenReadersHint>
             </SidebarCloseButton>
-                
+
             <SidebarScreenReadersTitle>{siteTitle}</SidebarScreenReadersTitle>
             <SidebarHeader>
                 <SidebarLogoLink to="/">
@@ -52,6 +52,7 @@ const SidebarContainer = styled.div`
     flex-direction: column; */
     display: grid;
     grid-template-rows: auto 1fr auto;
+
     @media ${mq.large} {
         width: ${({ theme }) => theme.dimensions.sidebar.width}px;
         height: 100vh;
