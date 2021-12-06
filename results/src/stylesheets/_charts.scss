@@ -175,6 +175,7 @@ Bump Chart
 }
 .text-teal-darker {
     @include coloredText($tealDarker);
+    color: #fff;
 }
 
 .text-blue {
