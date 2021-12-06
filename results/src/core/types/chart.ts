@@ -18,7 +18,8 @@ export interface ChartComponentProps {
 export interface TickItemProps {
   x: number
   y: number
-  value: number
+  id?: string | number
+  value?: string | number
   shouldTranslate: boolean
   i18nNamespace: string
   entity: Entity

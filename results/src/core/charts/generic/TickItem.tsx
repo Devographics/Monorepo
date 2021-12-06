@@ -7,6 +7,14 @@ import * as Tooltip from '@radix-ui/react-tooltip'
 
 const labelMaxLength = 20
 
+const shorten = label => {
+    if (label.length > labelMaxLength + 1) {
+        return label.substr(0, labelMaxLength) + '…'
+    } else {
+        return label
+    }
+}
+
 export const Text = ({
     hasLink = false,
     label,
@@ -22,7 +30,7 @@ export const Text = ({
 }) => {
     const theme = useTheme()
     const shortenLabel = label.length > labelMaxLength
-    const shortLabel = shortenLabel ? label.substr(0, labelMaxLength) + '…' : label
+    const shortLabel = shortenLabel ? shorten(label) : label
 
     const textProps = {
         transform: 'translate(-10,0) rotate(0)',
@@ -49,34 +57,41 @@ export const Text = ({
     return <TooltipComponent trigger={component} contents={description ?? label} asChild={true} />
 }
 
+export const getBucketLabel = args => {
+    const { translate } = useI18n()
+    const { shouldTranslate, i18nNamespace, id, entity, shortenLabel = false } = args
+    let label = ''
+    if (entity?.name) {
+        label = entity.name
+    } else if (shouldTranslate) {
+        label = translate(`options.${i18nNamespace}.${id}`)
+    } else {
+        label = id
+    }
+    const shortenedLabel = shortenLabel ? shorten(label) + '…' : label
+
+    return shortenedLabel
+}
+
 export const TickItem = (tick: TickItemProps) => {
-    const { translate, getString } = useI18n()
+    const { getString } = useI18n()
 
     const { x, y, value, shouldTranslate, i18nNamespace, entity, tickRotation } = tick
 
-    let label,
-        link,
+    let link,
         description = tick.description
 
-    if (entity) {
-        const { name, homepage, github } = entity
-        if (name) {
-            label = name
-        }
-        link = homepage?.url || github?.url
+    const label = getBucketLabel({ shouldTranslate, i18nNamespace, entity, id: tick.value })
 
-        // @todo: remove this once all entities have been added
-        if (!label) {
-            label = value
-        }
-    } else if (shouldTranslate) {
-        label = translate(`options.${i18nNamespace}.${value}`)
+    if (entity) {
+        const { homepage, github } = entity
+        link = homepage?.url || github?.url
+    }
+    if (shouldTranslate) {
         const descriptionString = getString(`options.${i18nNamespace}.${value}.description`)
         if (!descriptionString.missing) {
             description = descriptionString.t
         }
-    } else {
-        label = value
     }
 
     const textProps = {

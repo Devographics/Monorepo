@@ -73,7 +73,6 @@ export const AllSectionsToolsCardinalityByUserBlock = ({
 
     const maxNumberOfTools = maxBy<string[]>(Object.values(toolsCategories), 'length')!.length
 
-    console.log(chartData)
     return (
         <Block
             units={units}

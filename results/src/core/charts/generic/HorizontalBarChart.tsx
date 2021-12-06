@@ -10,19 +10,37 @@ import BarTooltip from 'core/charts/generic/BarTooltip'
 import HorizontalBarStripes from './HorizontalBarStripes'
 import { isPercentage } from 'core/helpers/units'
 import { ChartComponentProps, BlockUnits, BucketItem, BlockLegend, TickItemProps } from 'core/types'
-import TickItem from 'core/charts/generic/TickItem'
+import TickItem, { getBucketLabel } from 'core/charts/generic/TickItem'
+import maxBy from 'lodash/maxBy'
 
 const margin = {
     top: 40,
     right: 20,
     bottom: 50,
-    left: 200,
+    left: 200
 }
 
 export interface HorizontalBarChartProps extends ChartComponentProps {
     total: number
     buckets: BucketItem[]
     size: 's' | 'm' | 'l'
+}
+
+const marginCoeff = 9
+
+const getLeftMargin = ({ data, shouldTranslate, i18nNamespace }) => {
+    const labels = data.map(bucket =>
+        getBucketLabel({
+            shouldTranslate,
+            i18nNamespace,
+            id: bucket.id,
+            entity: bucket.entity,
+            shortenLabel: true
+        })
+    )
+    const longestLabel = maxBy(labels, l => l.length)
+    const longestLabelLength = longestLabel.length
+    return longestLabelLength * marginCoeff
 }
 
 const HorizontalBarChart = ({
@@ -34,7 +52,7 @@ const HorizontalBarChart = ({
     units,
     chartProps,
     colorVariant = 'primary',
-    size = 'm',
+    size = 'm'
 }: HorizontalBarChartProps) => {
     const theme = useTheme()
     const { translate } = useI18n()
@@ -45,11 +63,11 @@ const HorizontalBarChart = ({
         i18nNamespace,
         shouldTranslate: translateData,
         mode,
-        units,
+        units
     })
 
     const data = sortBy(
-        buckets.map((bucket) => ({ ...bucket })),
+        buckets.map(bucket => ({ ...bucket })),
         'count'
     )
 
@@ -68,11 +86,13 @@ const HorizontalBarChart = ({
             break
     }
 
+    const left = getLeftMargin({ data, shouldTranslate: translateData, i18nNamespace })
+
     return (
         <div style={{ height: buckets.length * baseSize + 80 }}>
             <ResponsiveBar
                 layout="horizontal"
-                margin={margin}
+                margin={{ ...margin, left }}
                 keys={[units]}
                 data={data}
                 maxValue={maxValue}
@@ -80,7 +100,7 @@ const HorizontalBarChart = ({
                 enableGridX={true}
                 enableGridY={false}
                 enableLabel={true}
-                label={(d) => (isPercentage(units) ? `${round(d.value, 1)}%` : d.value)}
+                label={d => (isPercentage(units) ? `${round(d.value, 1)}%` : d.value)}
                 labelTextColor={theme.colors.text}
                 labelSkipWidth={40}
                 colors={[theme.colors.barChart[colorVariant]]}
@@ -88,31 +108,31 @@ const HorizontalBarChart = ({
                 borderRadius={1}
                 axisTop={{
                     tickValues: 5,
-                    format: formatValue,
+                    format: formatValue
                 }}
                 axisBottom={{
                     tickValues: 5,
                     format: formatValue,
                     legend: translate(`charts.axis_legends.users_${units}`),
                     legendPosition: 'middle',
-                    legendOffset: 40,
+                    legendOffset: 40
                 }}
                 axisLeft={{
                     format: formatTick,
                     tickSize: 0,
                     tickPadding: 10,
-                    renderTick: (tick) => {
+                    renderTick: tick => {
                         return (
                             <TickItem
                                 i18nNamespace={i18nNamespace}
                                 shouldTranslate={translateData}
-                                entity={buckets.find((b) => b.id === tick.value)?.entity}
+                                entity={buckets.find(b => b.id === tick.value)?.entity}
                                 {...tick}
                             />
                         )
-                    },
+                    }
                 }}
-                tooltip={(barProps) => (
+                tooltip={barProps => (
                     <BarTooltip
                         units={units}
                         i18nNamespace={i18nNamespace}
@@ -121,10 +141,10 @@ const HorizontalBarChart = ({
                     />
                 )}
                 layers={[
-                    (layerProps) => <HorizontalBarStripes {...layerProps} />,
+                    layerProps => <HorizontalBarStripes {...layerProps} />,
                     'grid',
                     'axes',
-                    'bars',
+                    'bars'
                 ]}
                 {...chartProps}
             />
@@ -138,14 +158,14 @@ HorizontalBarChart.propTypes = {
         PropTypes.shape({
             id: PropTypes.string.isRequired,
             count: PropTypes.number.isRequired,
-            percentage: PropTypes.number,
+            percentage: PropTypes.number
         })
     ),
     i18nNamespace: PropTypes.string.isRequired,
     translateData: PropTypes.bool,
     mode: PropTypes.oneOf(['absolute', 'relative']).isRequired,
     units: PropTypes.oneOf(['count', 'percentage', 'percentage_survey']).isRequired,
-    colorVariant: PropTypes.oneOf(['primary', 'secondary']),
+    colorVariant: PropTypes.oneOf(['primary', 'secondary'])
 }
 
 export default memo(HorizontalBarChart)

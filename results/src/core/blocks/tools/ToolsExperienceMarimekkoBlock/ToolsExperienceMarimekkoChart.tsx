@@ -119,7 +119,6 @@ export const ToolsExperienceMarimekkoChart = (props: ToolsExperienceMarimekkoCha
             layout="horizontal"
             animate={true}
             motionConfig="default"
-            label={p=>{console.log(p);return 'foo'}}
             innerPadding={3}
             outerPadding={7}
             layers={[
