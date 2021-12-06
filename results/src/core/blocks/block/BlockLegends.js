@@ -110,13 +110,13 @@ const ContainerInner = styled.tbody`
 
                 @media ${mq.medium} {
                     grid-template-columns: 1fr 1fr;
-                    column-gap: ${spacing()};
+                    column-gap: ${spacing(0.75)};
                 }
 
                 @media ${mq.large} {
                     // fit in as many columns as possible as long as they're wider than 150px
                     grid-template-columns: repeat(auto-fit, minmax(120px, auto));
-                    column-gap: ${spacing()};
+                    column-gap: ${spacing(0.85)};
                 }
             `
         }
