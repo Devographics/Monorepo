@@ -42,7 +42,7 @@ const HorizontalBarBlock = ({ block, data }: HorizontalBarBlockProps) => {
             block={block}
             completion={completion}
         >
-            <ChartContainer fit={true}>
+            <ChartContainer fit={false}>
                 <HorizontalBarChart
                     total={total}
                     buckets={buckets}
