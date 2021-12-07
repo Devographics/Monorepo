@@ -2,5 +2,18 @@
 input Options {
   limit: Int
   cutoff: Int
-  # sort: SortSpecifier # TODO
+  sort: SortSpecifier
+  facetSort: SortSpecifier
+  facetMinPercent: Float
+  facetMinCount: Float
+}
+
+input SortSpecifier {
+  property: String
+  order: SortOrder
+}
+
+enum SortOrder {
+  asc
+  desc
 }

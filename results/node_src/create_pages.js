@@ -90,7 +90,11 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
                 const end = new Date()
                 const timeDiff = Math.round((end - start) / 1000)
                 pageData = queryResults.data
-                logToFile(`data/${queryName}_${timeDiff}s.json`, pageData, { mode: 'overwrite' })
+                logToFile(
+                    `data/${queryName}.json`,
+                    { data: pageData, duration: timeDiff },
+                    { mode: 'overwrite' }
+                )
             }
         } catch (error) {
             console.log(`// Error while loading data for page ${page.id}`)

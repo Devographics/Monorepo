@@ -43,7 +43,7 @@ higher_education_degree:
 gender:
   - male
   - female
-  - prefer_not_to_say
+  # - prefer_not_to_say
   - non_binary
   - not_listed
 

@@ -11,8 +11,7 @@ export async function computeOpinionByYear(
 ) {
     const opinionByYear = await computeTermAggregationAllYears(db, survey, `opinions.${id}`, {
         filters,
-        sort: 'id',
-        order: 1
+        sort: { property: 'id', order: 'asc' }
     })
 
     // compute mean for each year

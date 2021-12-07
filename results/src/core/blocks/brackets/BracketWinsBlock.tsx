@@ -53,7 +53,7 @@ const BracketWinsBlock = ({ block, data, keys }: HorizontalBarBlockProps) => {
 
     const theme = useTheme()
 
-    const rounds = keys
+    const rounds = ['round1', 'round2', 'round3']
 
     // const [units, setUnits] = useState(defaultUnits)
     const units = defaultUnits
@@ -62,7 +62,7 @@ const BracketWinsBlock = ({ block, data, keys }: HorizontalBarBlockProps) => {
 
     const { total } = completion
 
-    const legends = keys && useLegends(block, keys, 'bracket')
+    const legends = useLegends(block, rounds, 'bracket')
 
     const buckets = getChartData({ data, keys })
 
@@ -104,7 +104,7 @@ const BracketWinsBlock = ({ block, data, keys }: HorizontalBarBlockProps) => {
                         tooltip: barProps => (
                             <BarTooltip
                                 units={units}
-                                i18nNamespace={i18nNamespace}
+                                i18nNamespace={chartNamespace}
                                 shouldTranslate={translateData}
                                 {...barProps}
                             />

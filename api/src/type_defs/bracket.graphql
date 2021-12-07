@@ -5,6 +5,7 @@ enum BracketID {
 }
 
 enum BracketKey {
+    combined
     round1
     round2
     round3

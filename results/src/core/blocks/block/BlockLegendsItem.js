@@ -15,12 +15,12 @@ export default class LegendsItem extends Component {
         onMouseEnter: PropTypes.func,
         onMouseLeave: PropTypes.func,
         onClick: PropTypes.func,
-        isCurrent: PropTypes.bool,
+        isCurrent: PropTypes.bool
     }
 
     static defaultProps = {
         style: {},
-        chipStyle: {},
+        chipStyle: {}
     }
 
     handleMouseEnter = () => {
@@ -55,12 +55,14 @@ export default class LegendsItem extends Component {
             onMouseEnter,
             useShortLabels,
             layout,
-            current = null,
+            current = null
         } = this.props
 
         const isInteractive = typeof onMouseEnter !== 'undefined'
 
         const state = current === null ? 'default' : current === id ? 'active' : 'inactive'
+
+        const label_ = useShortLabels ? shortLabel ?? label : label
 
         return (
             <Container
@@ -79,7 +81,7 @@ export default class LegendsItem extends Component {
                                 width: chipSize,
                                 height: chipSize,
                                 background: color,
-                                ...chipStyle,
+                                ...chipStyle
                             }}
                         />
                     </ChipWrapper>
@@ -93,7 +95,7 @@ export default class LegendsItem extends Component {
                     layout={layout}
                     className="Legends__Item__Label"
                     dangerouslySetInnerHTML={{
-                        __html: useShortLabels ? shortLabel || label : label,
+                        __html: label_
                     }}
                 />
                 {data && (
@@ -108,7 +110,8 @@ export default class LegendsItem extends Component {
 
 const Container = styled.tr`
     cursor: default;
-
+    display: flex;
+    
     &:last-child {
         margin-bottom: 0;
     }
@@ -148,8 +151,11 @@ const KeyLabel = styled.th`
 `
 
 const Label = styled.td`
-    padding: ${spacing(0.25)} ${spacing(0.5)} ${spacing(0.25)} 0;
+    padding: ${spacing(0.2)} ${spacing(0.5)} ${spacing(0.25)} 0;
     width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 `
 
 const Value = styled.td`

@@ -11,8 +11,7 @@ export async function computeHappinessByYear(
 ) {
     const happinessByYear = await computeTermAggregationAllYears(db, survey, `happiness.${id}`, {
         filters,
-        sort: 'id',
-        order: 1
+        sort: { property: 'id', order: 'asc' }
     })
 
     // compute mean for each year

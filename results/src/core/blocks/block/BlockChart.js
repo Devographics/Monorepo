@@ -41,7 +41,7 @@ const BlockDescriptionContents = ({ block }) => {
 
     const { description, enableDescriptionMarkdown = true } = block
     const key = `${getBlockDescriptionKey(block, context)}`
-    if (description || translate(key, {}, null)) {
+    if (description ?? translate(key, {}, null)) {
         return (
             <Description className="Block__Description">
                 <T

@@ -22,7 +22,7 @@ import HintBlock from 'core/blocks/other/HintBlock'
 // demographics
 import ParticipationByCountryBlock from 'core/blocks/demographics/ParticipationByCountryBlock'
 import GenderBlock from 'core/blocks/demographics/GenderBlock'
-import GenderByCountriesBlock from 'core/blocks/demographics/GenderByCountriesBlock'
+import ByFacetBlock from 'core/blocks/demographics/ByFacetBlock'
 
 // features
 import FeatureExperienceBlock from 'core/blocks/features/FeatureExperienceBlock'
@@ -84,7 +84,7 @@ const blockRegistry = {
     // demographics
     ParticipationByCountryBlock,
     GenderBlock,
-    GenderByCountriesBlock,
+    ByFacetBlock,
 
     // features
     FeatureExperienceBlock,

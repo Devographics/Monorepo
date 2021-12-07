@@ -14,17 +14,28 @@ import { CompletionResult, computeCompletionByYear } from './completion'
 import sum from 'lodash/sum'
 import sumBy from 'lodash/sumBy'
 import take from 'lodash/take'
+import round from 'lodash/round'
+import { count } from 'console'
 
 export interface TermAggregationOptions {
     // filter aggregations
     filters?: Filters
-    sort?: string
-    order?: -1 | 1
+    // sort?: string
+    // order?: -1 | 1
+    sort?: SortSpecifier
+    facetSort?: SortSpecifier
     cutoff?: number
     limit?: number
     year?: number
     keys?: string[]
     facet?: Facet
+    facetMinPercent?: number
+    facetMinCount?: number
+}
+
+export interface SortSpecifier {
+    property: string
+    order: 'asc' | 'desc'
 }
 
 export interface ResultsByYear {
@@ -34,6 +45,7 @@ export interface ResultsByYear {
 }
 
 export interface FacetItem {
+    mean?: number
     type: Facet
     id: number | string
     buckets: BucketItem[]
@@ -116,15 +128,27 @@ export async function computeDefaultTermAggregationByYear(
 
     const {
         filters,
-        sort = 'count',
-        order = -1,
+        // sort = 'count',
+        // order = -1,
         cutoff = 10,
         limit = 50,
         year,
         facet,
-        keys: values
+        keys: values,
+        facetMinPercent,
+        facetMinCount
     }: TermAggregationOptions = options
 
+    const convertOrder = (order: 'asc' | 'desc') => (order === 'asc' ? 1 : -1)
+
+    const sort = options?.sort?.property ?? 'count'
+    const order = convertOrder(options?.sort?.order ?? 'desc')
+
+    const facetSort = options?.facetSort?.property ?? 'mean'
+    const facetOrder = convertOrder(options?.facetSort?.order ?? 'desc')
+
+    // console.log('// key')
+    // console.log(key)
     // console.log('// options')
     // console.log(options)
 
@@ -181,21 +205,60 @@ export async function computeDefaultTermAggregationByYear(
 
     // await addDeltas(results)
 
-    await sortResults(results, { sort, order, values })
+    await sortBuckets(results, { sort, order, values })
 
-    await limitFacets(results, limit)
+    if (values) {
+        await addMeans(results, values)
+    }
+
+    await sortFacets(results, { sort: facetSort, order: facetOrder })
+
+    await limitFacets(results, limit, { facetMinPercent, facetMinCount })
 
     // console.log(JSON.stringify(results, undefined, 2))
 
     return results
 }
 
-export async function limitFacets(resultsByYears: ResultsByYear[], limit: number) {
+export async function limitFacets(
+    resultsByYears: ResultsByYear[],
+    limit: number,
+    { facetMinPercent, facetMinCount }: { facetMinPercent?: number; facetMinCount?: number }
+) {
     if (limit) {
         for (let year of resultsByYears) {
-            for (let facet of year.facets) {
-                facet.buckets = take(facet.buckets, limit)
+            let facets = year.facets
+            // if a minimum question percentage/count is specified, filter out
+            // any facets that represent less than that
+            if (facetMinPercent || facetMinCount) {
+                facets = facets.filter(f => {
+                    const abovePercent = facetMinPercent
+                        ? f.completion.percentage_question > facetMinPercent
+                        : true
+                    const aboveCount = facetMinCount
+                        ? f.completion.count > facetMinCount
+                        : true
+                    return abovePercent && aboveCount
+                })
             }
+            year.facets = take(facets, limit)
+        }
+    }
+}
+
+export async function addMeans(resultsByYears: ResultsByYear[], values: string[] | number[]) {
+    for (let year of resultsByYears) {
+        for (let facet of year.facets) {
+            let totalValue = 0
+            let totalCount = 0
+            const coeffs = values.map((id, index) => ({ id, coeff: index + 1 }))
+            facet.buckets.forEach((bucket, index) => {
+                const { count, id } = bucket
+                const coeff = coeffs.find(c => c.id === id)?.coeff ?? 1
+                totalValue += count * coeff
+                totalCount += count
+            })
+            facet.mean = round(totalValue / totalCount, 2)
         }
     }
 }
@@ -301,7 +364,7 @@ interface SortOptions {
     order: 1 | -1
     values?: string[] | number[]
 }
-export async function sortResults(resultsByYears: ResultsByYear[], options: SortOptions) {
+export async function sortBuckets(resultsByYears: ResultsByYear[], options: SortOptions) {
     const { sort, order, values } = options
     for (let year of resultsByYears) {
         for (let facet of year.facets) {
@@ -322,6 +385,16 @@ export async function sortResults(resultsByYears: ResultsByYear[], options: Sort
                     facet.buckets.reverse()
                 }
             }
+        }
+    }
+}
+
+export async function sortFacets(resultsByYears: ResultsByYear[], options: SortOptions) {
+    const { sort, order } = options
+    for (let year of resultsByYears) {
+        year.facets = sortBy(year.facets, sort)
+        if (order === -1) {
+            year.facets.reverse()
         }
     }
 }

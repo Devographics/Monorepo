@@ -60,47 +60,82 @@
       blockType: HorizontalBarBlock
       translateData: true
       variables:
-        options: "{cutoff: 20}"
+        options: {cutoff: 20}
 
     - id: age
       template: demographics
 
     - id: years_of_experience
       template: demographics
+      variants:
+        - id: years_of_experience_by_salary
+          blockNamespace: user_info
+          tabId: tabs.by_salary
+          template: by_facet
+          variables:  
+            fieldId: years_of_experience
+            facetId: yearly_salary
+            options: {facetSort: {order: ___asc___, property: mean}, facetMinCount: 100}
+
 
     - id: company_size
       template: demographics
 
-    - id: yearly_salary
-      template: demographics
-
     - id: higher_education_degree
       template: demographics
-      # variants:
-      #   - id: higher_education_degree_gender_fnb
-      #     bucketKeysName: higher_education_degree
-      #     variables:
-      #       fieldId: higher_education_degree
-      #       filters: "{gender: {in: [female, non_binary, not_listed]}}"
-      #     template: demographics
+
+    - id: yearly_salary
+      template: demographics
+      variants:
+        - id: yearly_salary_by_country
+          blockNamespace: user_info
+          tabId: tabs.by_country
+          template: by_facet
+          variables:  
+            fieldId: yearly_salary
+            facetId: country
+            options: {facetSort: {order: ___desc___, property: mean}, facetMinCount: 100}
+        - id: yearly_salary_by_degree
+          blockNamespace: user_info
+          tabId: tabs.by_degree
+          template: by_facet
+          variables:  
+            fieldId: yearly_salary
+            facetId: higher_education_degree
+            options: {facetSort: {order: ___desc___, property: mean}, facetMinCount: 100}
 
     - id: source
       template: source
       blockType: HorizontalBarBlock
       variables:
-        options: "{cutoff: 20}"
+        options: {cutoff: 20}
 
     - id: gender
       template: demographics
       variants:
-        - id: gender_by_countries
-          tabId: user_info.gender_by_countries
-          template: gender_by_countries
+        - id: gender_by_country
+          blockNamespace: user_info
+          tabId: tabs.by_country
+          template: by_facet
+          variables:  
+            fieldId: gender
+            facetId: country
+            options: {facetSort: {order: ___desc___, property: mean}, limit: 11, facetMinCount: 100}
 
     - id: race_ethnicity
       template: demographics
       blockType: HorizontalBarBlock
       translateData: true
+      variants:
+        - id: race_ethnicity_by_years_of_experience
+          blockNamespace: user_info
+          tabId: tabs.by_years_of_experience
+          template: by_facet
+          variables:  
+            fieldId: race_ethnicity
+            facetId: years_of_experience
+            options: {facetSort: {order: ___asc___, property: mean}, limit: 11, facetMinCount: 100}
+
 
     - id: disability_status
       template: demographics
@@ -652,7 +687,7 @@
       chartNamespace: people
       template: multiple_options
       variables:
-        options: '{ cutoff: 10 }'
+        options: { cutoff: 10 }
         fieldId: resources
 
 - id: opinions

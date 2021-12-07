@@ -1,18 +1,19 @@
-blockType: GenderByCountriesBlock
+blockType: ByFacetBlock
 dataPath: "surveyApi.survey.demographics"
-keysPath: "surveyApi.survey.demographics.all_countries.keys"
+keysPath: "surveyApi.survey.demographics.${fieldId}_all_${facetId}.keys"
 defaultUnits: percentage_survey
 query: >
   surveyApi {
     survey(survey: ${surveyType}) {
       demographics {
-        all_countries: gender(filters: {}, options: {}, facet: null) {
+        ${fieldId}_all_${facetId}: ${fieldId}(filters: {}, options: {}, facet: null) {
           keys
           year(year: ${currentYear}) {
             year
             facets {
               id
               type
+              mean
               buckets {
                 id
                 count
@@ -23,13 +24,14 @@ query: >
             }
           }
         }
-        gender_by_countries: gender(filters: {}, options: {}, facet: country) {
+        ${fieldId}_by_${facetId}: ${fieldId}(filters: {}, options: ${options}, facet: ${facetId}) {
           keys
           year(year: ${currentYear}) {
             year
             facets {
               id
               type
+              mean
               completion {
                 count
                 percentage_question

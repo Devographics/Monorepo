@@ -173,7 +173,7 @@ BlockVariant.propTypes = {
         title: PropTypes.node,
         description: PropTypes.node
     }).isRequired,
-    isShareable: PropTypes.bool.isRequired,
+    isShareable: PropTypes.bool,
     className: PropTypes.string,
     values: PropTypes.object
 }

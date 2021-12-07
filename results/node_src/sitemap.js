@@ -7,12 +7,31 @@ const globalVariables = yaml.load(
     fs.readFileSync(`./surveys/${process.env.SURVEY}/config/variables.yml`, 'utf8')
 )
 
+const stringify = value => {
+    const json = JSON.stringify(value)
+    let unquoted = json.replace(/"([^"]+)":/g, '$1:')
+    // also remove any quotes next to "___" because this indicates a GraphQL enum
+    unquoted = unquoted.replace('"___', '')
+    unquoted = unquoted.replace('___"', '')
+    return unquoted
+}
+
+// these two variables are used inside GraphQL arguments, 
+// so they need to be converted to strings
+const keysToStringify = ['options', 'filters']
+
 const injectVariables = (yamlObject, variables, templateName) => {
+    const stringVariables = {}
+    Object.keys(variables).forEach(key => {
+        const value = variables[key]
+        stringVariables[key] = keysToStringify.includes(key) ? stringify(value) : value
+    })
+
     try {
         // convert template object back to string for variables injection
         const templateString = yaml.dump(yamlObject)
         // Inject variables in raw yaml templates
-        const interpolatedTemplate = template(templateString)(variables)
+        const interpolatedTemplate = template(templateString)(stringVariables)
         // convert raw populated template to object
         const populatedTemplate = yaml.load(interpolatedTemplate)
 
@@ -27,8 +46,8 @@ const applyTemplate = (block, templateObject, parent) => {
     // defines all available variables to be injected
     // at build time in the GraphQL queries
     const variables = {
-        filters: '{}', // this wil be injected into the GraphQL query, so it should be a string
-        options: '{}', // this wil be injected into the GraphQL query, so it should be a string
+        filters: {}, // this wil be injected into the GraphQL query, so it should be a string
+        options: {}, // this wil be injected into the GraphQL query, so it should be a string
         facet: 'null',
         ...(parent ? { parentId: parent.id } : {}),
         ...(templateObject.defaultVariables || {}),
@@ -149,13 +168,13 @@ exports.pageFromConfig = async (page, pageIndex) => {
 
 let computedSitemap = null
 
-exports.computeSitemap = async (rawSitemap) => {
+exports.computeSitemap = async rawSitemap => {
     if (computedSitemap !== null) {
         return computedSitemap
     }
 
     const stack = {
-        flat: [],
+        flat: []
     }
 
     flattenSitemap(stack, rawSitemap, undefined, 0)
@@ -187,7 +206,6 @@ exports.computeSitemap = async (rawSitemap) => {
     })
 
     logToFile('flat_sitemap.yml', yaml.dump(stack.flat, { noRefs: true }), { mode: 'overwrite' })
-
 
     return stack
 }

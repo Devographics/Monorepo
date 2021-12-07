@@ -13,8 +13,17 @@ export type PipelineProps = {
 }
 
 const getFacetPath = (facet: string | undefined) => {
-    // make exception for source and country since their paths are different
+    // make exception for some fields if their paths are different
     switch (facet) {
+        case 'race_ethnicity':
+            return 'race_ethnicity.choices'
+
+        case 'industry_sector':
+            return 'industry_sector.choices'
+
+        case 'disability_status':
+            return 'disability_status.choices'
+
         case 'source':
             return 'source.normalized'
 
@@ -54,6 +63,15 @@ export const getGenericPipeline = (pipelineProps: PipelineProps) => {
                 path: `$${key}`
             }
         },
+        ...(facetPath
+            ? [
+                  {
+                      $unwind: {
+                          path: `$user_info.${facetPath}`
+                      }
+                  }
+              ]
+            : []),
         {
             $group: {
                 _id: {

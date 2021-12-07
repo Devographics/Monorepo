@@ -30,7 +30,6 @@ export default {
         }
     },
     OtherOpinions: getDynamicResolvers(id => `opinions_others.${id}.others.normalized`, {
-        sort: 'id',
-        order: 1
+        sort: { property: 'id', order: 'asc' }
     })
 }

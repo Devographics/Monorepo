@@ -59,6 +59,7 @@ type EntityFacet {
     buckets: [EntityBucket]
     entity: Entity
     completion: FacetCompletion
+    mean: Float
 }
 
 """

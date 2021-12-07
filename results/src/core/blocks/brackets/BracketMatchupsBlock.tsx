@@ -24,7 +24,7 @@ const BracketMatchupsBlock = ({ block, data }: HorizontalBarBlockProps) => {
         mode = 'relative',
         defaultUnits = 'percentage',
         translateData = true,
-        chartNamespace = block.id,
+        chartNamespace = block.blockNamespace,
         colorVariant
     } = block
 

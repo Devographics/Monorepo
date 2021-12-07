@@ -29,18 +29,22 @@ export interface HorizontalBarChartProps extends ChartComponentProps {
 const marginCoeff = 9
 
 const getLeftMargin = ({ data, shouldTranslate, i18nNamespace }) => {
-    const labels = data.map(bucket =>
-        getBucketLabel({
-            shouldTranslate,
-            i18nNamespace,
-            id: bucket.id,
-            entity: bucket.entity,
-            shortenLabel: true
-        })
-    )
-    const longestLabel = maxBy(labels, l => l.length)
-    const longestLabelLength = longestLabel.length
-    return longestLabelLength * marginCoeff
+    if (data && data.length > 0) {
+        const labels = data.map(bucket =>
+            getBucketLabel({
+                shouldTranslate,
+                i18nNamespace,
+                id: bucket.id,
+                entity: bucket.entity,
+                shortenLabel: true
+            })
+        )
+        const longestLabel = maxBy(labels, l => l.length)
+        const longestLabelLength = longestLabel ? longestLabel.length : 100
+        return longestLabelLength * marginCoeff
+    } else {
+        return margin.left
+    }
 }
 
 const HorizontalBarChart = ({

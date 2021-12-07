@@ -69,7 +69,7 @@ export const winsAggregationFunction = async (
 ) => {
     const collection = db.collection(config.mongo.normalized_collection)
 
-    const { filters, sort = 'total', order = -1, year }: TermAggregationOptions = options
+    const { filters, year }: TermAggregationOptions = options
 
     const match: any = {
         survey: survey.survey,
@@ -133,7 +133,7 @@ export const matchupsAggregationFunction = async (
 ) => {
     const collection = db.collection(config.mongo.normalized_collection)
 
-    const { filters, sort = 'total', order = -1, year }: TermAggregationOptions = options
+    const { filters, year }: TermAggregationOptions = options
 
     const match: any = {
         survey: survey.survey,

@@ -135,7 +135,7 @@ BlockTitle.propTypes = {
         description: PropTypes.node,
         descriptionId: PropTypes.string
     }).isRequired,
-    isShareable: PropTypes.bool.isRequired
+    isShareable: PropTypes.bool
 }
 
 const StyledBlockTitle = styled.div`
