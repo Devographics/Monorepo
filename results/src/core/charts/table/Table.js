@@ -51,12 +51,16 @@ const Table = ({ title, headings, rows, years }) => (
 
 const TableHeading = ({ id, colSpan, labelId }) => (
     <TH scope="col" id={id} colSpan={colSpan}>
-        <T k={labelId} />
+        <T useShort={true} k={labelId} />
     </TH>
 )
 
 const TH = styled.th`
     background: ${props => props.theme.colors.backgroundAlt};
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 25ch;
 `
 
 const TableRow = ({ row }) => (
@@ -64,7 +68,7 @@ const TableRow = ({ row }) => (
         {row.map((cell, index) => {
             return index === 0 ? (
                 <TH key={index} scope="row">
-                    {cell.label ?? <T k={cell.labelId} html={true} />}
+                    {cell.label ?? <T k={cell.labelId} useShort={true} html={true} />}
                 </TH>
             ) : Array.isArray(cell.value) ? (
                 cell.value.map(yearValue => (

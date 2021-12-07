@@ -13,16 +13,32 @@ import reverse from 'lodash/reverse'
 import styled from 'styled-components'
 import { fontSize, spacing } from 'core/theme'
 import { getCountryName } from 'core/helpers/countries'
+import { getTableData } from 'core/helpers/datatables'
+
+const getLabel = (facetId, facet) => {
+    const { translate } = useI18n()
+    if (facetId === 'country') {
+        return getCountryName(facet.id)
+    } else {
+        const fullLabel = translate(`options.${facetId}.${facet.id}`)
+        const shortLabel = translate(`options.${facetId}.${facet.id}.short`)
+        const label =
+            facet.id === 'default' ? translate('charts.all_respondents') : shortLabel ?? fullLabel
+        return label
+    }
+}
 
 const ByFacetBlock = ({ block, data, keys }) => {
     const {
         id,
         mode = 'relative',
         defaultUnits = 'percentage_facet',
-        translateData,
+        translateData = true,
         colorVariant,
         variables
     } = block
+
+    const { translate } = useI18n()
 
     const { fieldId, facetId, options = {} } = variables
     const { facetSort = {} } = options
@@ -52,12 +68,36 @@ const ByFacetBlock = ({ block, data, keys }) => {
         [theme]
     )
 
+    console.log(sortedFacets)
+
     return (
         <Block
             legends={bucketKeys}
             units={units}
             data={data}
             block={{ ...block, legendPosition: 'top' }}
+            tables={[
+                getTableData({
+                    data: sortedFacets.map(facet => {
+                        const label = getLabel(facetId, facet)
+                        const rowData = { id: facet.id, displayAsPercentage: true, label }
+                        keys.forEach(key => {
+                            const bucket = facet.buckets.find(b => b.id === key)
+                            if (bucket) {
+                                // note: some buckets might not contain all keys
+                                rowData[key] = bucket[units]
+                            }
+                        })
+                        return rowData
+                    }),
+                    valueKeys: keys?.map(k => ({
+                        id: `${k}`,
+                        labelId: `options.${fieldId}.${k}`
+                    })),
+                    translateData,
+                    i18nNamespace: facetId
+                })
+            ]}
         >
             {sortedFacets.map((facet, i) => (
                 <Facet
@@ -90,9 +130,14 @@ const Facet = ({ facet, colorMapping, keys, fieldId, facetId }) => {
                     <div>
                         {/* {facet.mean} */}
                         <FacetName>
-                            {facetId === 'country' ? getCountryName(facet.id) : label}
+                            {getLabel(facetId, facet)}
                         </FacetName>
-                        <FacetStats>{facet?.completion?.count} responses</FacetStats>
+                        <FacetStats>
+                            <T
+                                k="charts.facet_responses"
+                                values={{ count: facet?.completion?.count }}
+                            />
+                        </FacetStats>
                     </div>
                 )}
             </TableHeading>
@@ -111,10 +156,10 @@ const Facet = ({ facet, colorMapping, keys, fieldId, facetId }) => {
 
 const Row = styled.div`
     display: grid;
-    grid-template-columns: 150px auto;
+    grid-template-columns: 170px auto;
     column-gap: ${spacing()};
     margin-bottom: ${spacing(0.5)};
-    font-size: ${fontSize('smallish')};
+    font-size: ${fontSize('small')};
 `
 const TableHeading = styled.div`
     display: flex;

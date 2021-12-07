@@ -7,7 +7,7 @@ import { useKeydownContext } from 'core/helpers/keydownContext'
 const getGitHubSearchUrl = (k, localeId) =>
     `https://github.com/search?q=${k}+repo%3AStateOfJS%2Fstate-of-js-graphql-results-api+path%3A%2Fsrc%2Fi18n%2F${localeId}%2F+path%3A%2Fsrc%2Fi18n%2Fen-US%2F&type=Code&ref=advsearch&l=&l=`
 
-const T = ({ t: override, k, values, md = false, html = false, fallback }) => {
+const T = ({ t: override, k, values, md = false, html = false, fallback, useShort = false }) => {
     const { getString } = useI18n()
     const { modKeyDown } = useKeydownContext()
 
@@ -21,7 +21,10 @@ const T = ({ t: override, k, values, md = false, html = false, fallback }) => {
     if (t) {
         classNames.push('t-override')
     } else {
-        const tString = getString(k, { values }, fallback)
+        const tFullString = getString(k, { values }, fallback)
+        const tShortString = getString(`${k}.short`, { values }, fallback)
+
+        const tString = useShort && !tShortString.missing ? tShortString : tFullString
 
         const handleClick = (e) => {
             // note: `fallback` here denotes whether a string is itself a fallback for a missing string

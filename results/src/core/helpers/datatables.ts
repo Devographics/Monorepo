@@ -7,6 +7,7 @@ export interface TableBucketItem {
     entity?: Entity
     label?: string
     count?: number | TableBucketYearValue[]
+    displayAsPercentage?: boolean
     percentage_survey?: number | TableBucketYearValue[]
     // percentage relative to the number of question respondents
     percentage_question?: number | TableBucketYearValue[]
@@ -92,11 +93,8 @@ export const getTableData = (params: TableParams): TableData => {
             id: 'label',
             translateData
         }
-        if (translateData) {
-            firstColumn.labelId = `options.${i18nNamespace}.${row.id}`
-        } else {
-            firstColumn.label = row.label ?? row?.entity?.name ?? getLabel(row.id, legends)
-        }
+        firstColumn.labelId = `options.${i18nNamespace}.${row.id}`
+        firstColumn.label = row.label ?? row?.entity?.name ?? getLabel(row.id, legends)
 
         const columns: TableDataCell[] = []
 
@@ -106,7 +104,7 @@ export const getTableData = (params: TableParams): TableData => {
             columns.push({
                 id: valueKey,
                 value: getValue(row, valueKey),
-                isPercentage: valueIsPercentage
+                isPercentage: row.displayAsPercentage ?? valueIsPercentage
             })
         })
 

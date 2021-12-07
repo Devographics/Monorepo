@@ -48,7 +48,7 @@ gender:
   - not_listed
 
 race_ethnicity:
-  - biracial
+  # - biracial
   - black_african
   - east_asian
   - hispanic_latin
