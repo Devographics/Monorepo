@@ -4,9 +4,10 @@ import { spacing, fontSize } from 'core/theme'
 import { useI18n } from 'core/i18n/i18nContext'
 import T from 'core/i18n/T'
 import BlockUnitsSelector from 'core/blocks/block/BlockUnitsSelector'
+import { usePageContext } from 'core/helpers/pageContext'
 
 const Footer = styled.div`
-    margin-top: ${spacing(2)};
+    margin-top: ${spacing()};
 `
 
 const Respondents = styled.div`
@@ -22,7 +23,11 @@ const Units = styled.div`
     justify-content: center;
 `
 
-const BlockFooter = ({ completion, units, setUnits }) => (
+const BlockFooter = ({ completion, units, setUnits }) => {
+
+    const context = usePageContext()
+    const { isCapturing } = context
+    return (
     <Footer>
         {completion && (
             <Respondents>
@@ -35,12 +40,12 @@ const BlockFooter = ({ completion, units, setUnits }) => (
                 />
             </Respondents>
         )}
-        {setUnits && (
+        {setUnits && !isCapturing && (
             <Units>
                 <BlockUnitsSelector units={units} onChange={setUnits} />
             </Units>
         )}
     </Footer>
-)
+)}
 
 export default BlockFooter

@@ -18,7 +18,7 @@ const Icon = styled.span`
         height: 100%;
         width: 100%;
         display: block;
-        path {
+        path, circle {
             fill: ${(props) => props.theme.colors.text};
         }
     }

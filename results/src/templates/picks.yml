@@ -1,2 +1,3 @@
 blockType: PicksBlock
 blockNamespace: picks
+wrapBlock: false

@@ -205,7 +205,5 @@ exports.computeSitemap = async rawSitemap => {
         }
     })
 
-    logToFile('flat_sitemap.yml', yaml.dump(stack.flat, { noRefs: true }), { mode: 'overwrite' })
-
     return stack
 }

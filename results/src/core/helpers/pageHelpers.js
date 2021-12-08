@@ -15,7 +15,7 @@ export const getTranslationValuesFromContext = (context, translate) => {
     return values
 }
 
-export const getPageLabelKey = (page) => page.titleId || `sections.${page.id}.title`
+export const getPageLabelKey = page => page.titleId || `sections.${page.id}.title`
 
 export const getPageLabel = (page, translate, { includeWebsite = false } = {}) => {
     let label
@@ -33,7 +33,7 @@ export const getPageLabel = (page, translate, { includeWebsite = false } = {}) =
  * example:
  *   http://2018.stateofjs.com/images/captures/en-US/front-end_overview.png
  */
-export const getPageImageUrl = (context) => {
+export const getPageImageUrl = context => {
     const baseUrl = `${context.host}/images/`
 
     let imageUrl
@@ -57,7 +57,7 @@ export const getPageMeta = (context, translate, overrides = {}) => {
             ? config.siteTitle
             : getPageLabel(context, translate, { includeWebsite: true }),
         imageUrl,
-        ...overrides,
+        ...overrides
     }
 
     return meta
@@ -76,7 +76,7 @@ export const getPageSocialMeta = (context, translate, overrides = {}) => {
         { name: 'twitter:card', content: 'summary_large_image' },
         { name: 'twitter:image:src', content: meta.imageUrl },
         { name: 'twitter:title', content: meta.title },
-        { name: 'twitter:description', content: meta.description },
+        { name: 'twitter:description', content: meta.description }
     ]
 
     return socialMeta.filter(({ content }) => content !== undefined)
@@ -102,6 +102,6 @@ export const mergePageContext = (pageContext, location, state) => {
         currentPath: location ? location.pathname : undefined,
         isCapturing,
         isDebugEnabled,
-        ...state,
+        ...state
     }
 }

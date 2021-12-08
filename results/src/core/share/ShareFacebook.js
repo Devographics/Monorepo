@@ -5,7 +5,7 @@ import track from './tracking'
 import ShareLink from './ShareLink'
 import { FacebookIcon } from 'core/icons'
 
-const ShareFacebook = ({ link, trackingId }) => {
+const ShareFacebook = ({ link, trackingId, ...rest }) => {
     const { translate } = useI18n()
 
     return (
@@ -15,7 +15,8 @@ const ShareFacebook = ({ link, trackingId }) => {
             href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}`}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label={translate('share.facebook')}
+            labelId="share.facebook"
+            {...rest}
         >
             <FacebookIcon labelId="share.facebook" />
         </ShareLink>

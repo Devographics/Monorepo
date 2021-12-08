@@ -39,10 +39,12 @@ export const getBlockImage = (block, context) => {
 
 export const getBlockMeta = (block, context, translate, title) => {
     const { id } = block
-    const link = `${context.host}${context.currentPath}#${id}`
+    const link = `${context.host}${context.currentPath}/${id}`
     const trackingId = `${context.currentPath}${id}`.replace(/^\//, '')
 
     title = title || getBlockTitle(block, context, translate)
+
+    const subtitle = getBlockDescription(block, context, translate)
 
     const imageUrl = getBlockImage(block, context, translate)
 
@@ -68,6 +70,7 @@ export const getBlockMeta = (block, context, translate, title) => {
         link,
         trackingId,
         title,
+        subtitle,
         twitterText,
         emailSubject,
         emailBody,

@@ -1,4 +1,4 @@
---- # ------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------------------
 # Pages Properties
@@ -29,12 +29,16 @@
   blocks:
     - id: survey_intro
       blockType: SurveyIntroBlock
+      disableExport: true
     - id: survey_newsletter
       blockType: NewsletterBlock
+      disableExport: true
     - id: survey_sponsors
       blockType: SponsorsBlock
+      disableExport: true
     - id: survey_translators
       blockType: TranslatorsBlock
+      disableExport: true
 
 - id: tshirt
   path: /tshirt
@@ -44,6 +48,7 @@
       template: page_introduction
     - id: tshirt_block
       blockType: TshirtBlock
+      disableExport: true
 
 - id: user_info
   titleId: sections.demographics.title
@@ -77,12 +82,20 @@
             facetId: yearly_salary
             options: {facetSort: {order: ___asc___, property: mean}, facetMinCount: 100}
 
-
     - id: company_size
       template: demographics
 
     - id: higher_education_degree
       template: demographics
+      variants:
+        - id: higher_education_degree_by_gender
+          blockNamespace: user_info
+          tabId: tabs.by_gender
+          template: by_facet
+          variables:  
+            fieldId: higher_education_degree
+            facetId: gender
+            options: {facetSort: {order: ___asc___, property: mean}, facetMinCount: 100}
 
     - id: yearly_salary
       template: demographics
@@ -186,7 +199,7 @@
           template: feature_experience
         - id: writing_modes
           template: feature_experience
-        - id: shadeed9
+        - id: georgedoescode
           template: picks
         - id: position_sticky
           template: feature_experience
@@ -260,7 +273,7 @@
           template: feature_experience
         - id: overscroll_behavior
           template: feature_experience
-        - id: walterstephanie
+        - id: shadeed9
           template: picks
         - id: overflow_anchor
           template: feature_experience
@@ -280,7 +293,7 @@
 
         - id: font_variant
           template: feature_experience
-        - id: piccalilli_
+        - id: cassidoo
           template: picks
         - id: initial_letter
           template: feature_experience
@@ -306,7 +319,7 @@
           template: feature_experience
         - id: prefers_color_scheme
           template: feature_experience
-        - id: sarasoueidan
+        - id: joshwcomeau
           template: picks
         - id: prefers_reduced_data
           template: feature_experience
@@ -336,7 +349,7 @@
           template: feature_experience
         - id: containment
           template: feature_experience
-        - id: argyleink
+        - id: kevinjpowell
           template: picks
         - id: will_change
           template: feature_experience
@@ -416,7 +429,7 @@
 
         - template: tools_experience_marimekko
 
-        - id: christianoliff
+        - id: mmatuzo
           template: picks
 
         - template: section_other_tools
@@ -466,7 +479,7 @@
 
         # - template: toolsUsageVariationsTemplate
         
-        - id: hugogiraudel
+        - id: lauragift_
           template: picks
 
         - template: section_other_tools
@@ -517,6 +530,7 @@
       template: page_introduction
 
     - id: utilities
+      tabId: tabs.main_answers
       blockNamespace: tools_others  
       template: multiple_options
       variables:
@@ -529,10 +543,11 @@
           variables:
             fieldId: tools_others
 
-    - id: foolip
+    - id: ericwbailey
       template: picks
 
     - id: browsers
+      tabId: tabs.main_answers
       blockNamespace: tools_others  
       template: multiple_options
       variables:
@@ -592,6 +607,7 @@
         fieldId: environments
 
     - id: what_do_you_use_css_for
+      tabId: tabs.main_answers
       blockNamespace: environments
       chartNamespace: what_do_you_use_css_for
       translateData: true
@@ -663,7 +679,7 @@
           variables:
             fieldId: resources
 
-    - id: 5t3ph
+    - id: samuelkraft
       template: picks
 
     - id: podcasts
@@ -707,8 +723,8 @@
     - id: enjoy_writing_css
       template: opinion
 
-    - id: jina
-      template: picks
+    # - id: jina
+    #   template: picks
 
     - id: browser_interoperability_features
       titleId: opinions_others.browser_interoperability_features.others

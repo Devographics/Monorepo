@@ -68,8 +68,6 @@ const ByFacetBlock = ({ block, data, keys }) => {
         [theme]
     )
 
-    console.log(sortedFacets)
-
     return (
         <Block
             legends={bucketKeys}

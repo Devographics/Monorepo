@@ -9,32 +9,6 @@ import { getBlockTabKey } from 'core/helpers/blockHelpers'
 import { usePageContext } from 'core/helpers/pageContext'
 import get from 'lodash/get'
 
-export const EmptyWrapper = ({ block, pageData, blockIndex }) => (
-    <Wrapper className="empty-wrapper">
-        {block.variants.map((block, variantIndex) => (
-            <BlockSwitcher
-                key={block.id}
-                block={block}
-                pageData={pageData}
-                blockIndex={blockIndex}
-                variantIndex={variantIndex}
-            />
-        ))}
-    </Wrapper>
-)
-
-const Wrapper = styled.section`
-    ${props =>
-        props.withMargin &&
-        css`
-            margin-bottom: ${spacing(3)};
-
-            @media ${mq.large} {
-                margin-bottom: ${spacing(6)};
-            }
-        `}
-`
-
 const BlockHeader = styled.div`
     display: flex;
     justify-content: space-between;
@@ -121,5 +95,17 @@ export const TabsWrapper = ({ block, pageData, blockIndex, withMargin = true }) 
         </Wrapper>
     )
 }
+
+const Wrapper = styled.section`
+    ${props =>
+        props.withMargin &&
+        css`
+            margin-bottom: ${spacing(3)};
+
+            @media ${mq.large} {
+                margin-bottom: ${spacing(6)};
+            }
+        `}
+`
 
 export default TabsWrapper

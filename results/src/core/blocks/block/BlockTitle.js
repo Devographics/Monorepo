@@ -1,6 +1,6 @@
 import React, { memo, useState } from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import last from 'lodash/last'
 import { mq, spacing } from 'core/theme'
 import ShareBlock from 'core/share/ShareBlock'
@@ -10,7 +10,6 @@ import { usePageContext } from 'core/helpers/pageContext'
 import SharePermalink from 'core/share/SharePermalink'
 import BlockCompletionIndicator from 'core/blocks/block/BlockCompletionIndicator'
 import { getBlockMeta, getBlockTitleKey, getBlockTitle } from 'core/helpers/blockHelpers'
-import T from 'core/i18n/T'
 import BlockLinks from 'core/blocks/block/BlockLinks'
 
 const BlockTitleContents = ({ block, context }) => {
@@ -36,6 +35,8 @@ const BlockTitle = ({
         data && (Array.isArray(data) ? last(data) && last(data).completion : data.completion)
     const [showOptions, setShowOptions] = useState(false)
     const context = usePageContext()
+    const { isCapturing } = context
+
     const { translate } = useI18n()
 
     const blockTitle = getBlockTitle(block, context, translate)
@@ -61,7 +62,7 @@ const BlockTitle = ({
 
     return (
         <>
-            <StyledBlockTitle className="Block__Title">
+            <StyledBlockTitle isCapturing={isCapturing} className="Block__Title">
                 <LeftPart>
                     <BlockTitleText className="BlockTitleText">
                         <SharePermalink url={blockMeta.link} />
@@ -79,7 +80,7 @@ const BlockTitle = ({
                     {/* <BlockTitleActionsWrapper>
                         <BlockTitleActions {...properties} />
                     </BlockTitleActionsWrapper> */}
-                    {entity && <BlockLinks entity={entity} />}
+                    {entity && !isCapturing && <BlockLinks entity={entity} />}
                 </LeftPart>
                 {/* <BlockTitleSwitcherWrapper>
                     <BlockTitleSwitcher {...properties} />
@@ -90,42 +91,6 @@ const BlockTitle = ({
         </>
     )
 }
-
-const BlockTitleActions = ({
-    isExportable,
-    isShareable,
-    values,
-    block,
-    context,
-    id,
-    data,
-    blockTitle,
-    setShowOptions,
-    showOptions
-}) => (
-    <>
-        {isExportable && block && !context.isCapturing && (
-            <BlockExport
-                id={id}
-                data={data}
-                block={block}
-                title={blockTitle}
-                className="Block__Title__Export"
-            />
-        )}
-        {isShareable && !context.isCapturing && (
-            <ShareBlock
-                block={block}
-                className="Block__Title__Share"
-                values={values}
-                title={blockTitle}
-                toggleClass={() => {
-                    setShowOptions(!showOptions)
-                }}
-            />
-        )}
-    </>
-)
 
 BlockTitle.propTypes = {
     block: PropTypes.shape({
@@ -139,9 +104,13 @@ BlockTitle.propTypes = {
 }
 
 const StyledBlockTitle = styled.div`
-    /* border-bottom: ${props => props.theme.separationBorder};
-    padding-bottom: ${spacing(0.5)};
-    margin-bottom: ${spacing(1)}; */
+    ${({ isCapturing }) =>
+        isCapturing &&
+        css`
+            border-bottom: ${props => props.theme.separationBorder};
+            padding-bottom: ${spacing(0.5)};
+            margin-bottom: ${spacing(1)};
+        `}
     display: flex;
     align-items: center;
 

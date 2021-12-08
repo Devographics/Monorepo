@@ -1,6 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
-import { mq, spacing } from 'core/theme'
+import { mq, spacing, fontSize } from 'core/theme'
+import { useI18n } from 'core/i18n/i18nContext'
+import Button from 'core/components/Button'
 
 const Link = styled.a`
     display: block;
@@ -22,7 +24,8 @@ const Link = styled.a`
         }
     }
 
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
         svg path,
         svg circle {
             fill: ${({ theme }) => theme.colors.link};
@@ -39,11 +42,13 @@ const Link = styled.a`
             border-right: ${({ theme }) => theme.separationBorder};
         }
 
-        &:hover, &:focus {
+        &:hover,
+        &:focus {
             background: ${({ theme }) => theme.colors.backgroundAlt};
         }
 
-        span, svg {
+        span,
+        svg {
             display: block;
             margin: 0 auto;
             height: 24px;
@@ -56,8 +61,43 @@ const Link = styled.a`
     }
 `
 
-const ShareLink = ({ media, ...props }) => (
-    <Link {...props} className={`ShareLink ShareLink--${media}`} />
-)
+const Label = styled.span`
+    font-size: ${fontSize('small')};
+`
+
+const Icon = styled.span`
+    margin-right: ${spacing()};
+`
+
+const LinkWithLabel = styled(Button)`
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    &:hover {
+        path, circle {
+            fill: ${props => props.theme.colors.link};
+            stroke: ${props => props.theme.colors.link};
+        }
+    }
+`
+
+const ShareLink = ({ media, showLabel, labelId, children, ...props }) => {
+    const { translate } = useI18n()
+    const label = translate(labelId)
+    return showLabel ? (
+        <LinkWithLabel
+            {...props}
+            as="a"
+            title={label}
+            aria-label={label}
+            className={`ShareLink ShareLink--${media}`}
+        >
+            <Icon>{children}</Icon>
+            <Label>{label}</Label>
+        </LinkWithLabel>
+    ) : (
+        <Link {...props} className={`ShareLink ShareLink--${media}`} />
+    )
+}
 
 export default ShareLink

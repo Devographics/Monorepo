@@ -2,15 +2,14 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 // import ReactMarkdown from 'react-markdown'
-import { useI18n } from 'core/i18n/i18nContext'
 import { mq, spacing, fontSize, color } from 'core/theme'
 import picks from 'Config/picks.yml'
+import T from 'core/i18n/T'
 
 const PicksBlock = ({ block, data }) => {
-    const { translate } = useI18n()
 
     const { id } = block
-    const pick = picks.find((p) => p.twitterName === id)
+    const pick = picks.find(p => p.twitterName === id)
 
     if (!pick) {
         return null
@@ -19,24 +18,31 @@ const PicksBlock = ({ block, data }) => {
     const { twitterName, fullName, pickName, avatarUrl, url } = pick
     return (
         <PicksContainer className="Block">
-            <PicksIntroMobile>{translate(`picks.intro`)}</PicksIntroMobile>
-
+            <PicksIntroMobile>
+                <T k="picks.intro" />
+            </PicksIntroMobile>
             <div className="pick">
                 <Pick>
                     <PickContentWrapper>
                         <PickContent>
                             <PickTitle>
-                                <span>{translate(`picks.my_2020_pick`)}</span>
-                                <a href={url}>{pickName}</a>
+                                <span>
+                                    <T k="picks.my_pick" />
+                                </span>
+                                <a href={url}>
+                                    <T k={`picks.${twitterName}.name`} />
+                                </a>
                             </PickTitle>
                             <Description>
                                 {/* <ReactMarkdown
                                     source={translate(`picks.${twitterName}.description`, { markdown: true })}
                                 /> */}
-                                {translate(`picks.${twitterName}.description`, { md: true })}
+                                <T k={`picks.${twitterName}.description`} md={true} />
                             </Description>
                         </PickContent>
-                        <PicksIntro>{translate(`picks.intro`)}</PicksIntro>
+                        <PicksIntro>
+                            <T k="picks.intro" />
+                        </PicksIntro>
                     </PickContentWrapper>
                     <PickPerson>
                         <PickImage>
@@ -44,7 +50,7 @@ const PicksBlock = ({ block, data }) => {
                                 <a
                                     href={`https://twitter.com/${twitterName}`}
                                     style={{
-                                        backgroundImage: `url(/images/picks/${twitterName}.jpg)`,
+                                        backgroundImage: `url(/images/picks/${twitterName}.jpg)`
                                     }}
                                     title={fullName}
                                 >
@@ -56,7 +62,9 @@ const PicksBlock = ({ block, data }) => {
                             <PickName>
                                 <a href={`https://twitter.com/${twitterName}`}>{fullName}</a>
                             </PickName>
-                            <PickBio>{translate(`picks.${twitterName}.bio`)}</PickBio>
+                            <PickBio>
+                                <T k={`picks.${twitterName}.bio`} />
+                            </PickBio>
                         </PickCredit>
                     </PickPerson>
                 </Pick>
@@ -66,7 +74,7 @@ const PicksBlock = ({ block, data }) => {
 }
 
 PicksBlock.propTypes = {
-    section: PropTypes.string,
+    section: PropTypes.string
 }
 
 const PicksContainer = styled.div`

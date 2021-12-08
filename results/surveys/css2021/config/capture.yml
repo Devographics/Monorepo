@@ -1,3 +1,2 @@
-baseUrl: http://localhost:9000
-outputDir: static/images/captures
-sitemap: config/sitemap.yml
+baseUrl: http://localhost:8001
+sitemap: ../../../node_src/.logs/flat_sitemap.yml

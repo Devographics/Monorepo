@@ -14,6 +14,8 @@ const fs = require('fs')
 const _ = require('lodash')
 const path = require('path')
 
+const USE_FAST_BUILD = process.env.FAST_BUILD === 'true'
+
 const rawSitemap = yaml.load(
     fs.readFileSync(
         path.resolve(__dirname, `../surveys/${process.env.SURVEY}/config/raw_sitemap.yml`),
@@ -56,7 +58,7 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
     )
     let locales = localesResults.data.surveyApi.locales
 
-    if (Boolean(process.env.FAST_BUILD) === true) {
+    if (USE_FAST_BUILD) {
         // if locales are turned off (to make build faster), only keep en-US locale
         locales = localesResults.data.surveyApi.locales.filter(l => l.id === 'en-US')
     }
@@ -68,6 +70,12 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
     })
 
     const { flat } = await computeSitemap(rawSitemap, cleanLocales)
+
+    logToFile(
+        'flat_sitemap.yml',
+        yaml.dump({ locales: cleanLocales, contents: flat }, { noRefs: true }),
+        { mode: 'overwrite' }
+    )
 
     for (const page of flat) {
         let pageData = {}
@@ -134,7 +142,7 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
             isPermanent: true
         })
 
-        if (Boolean(!process.env.FAST_BUILD) === true) {
+        if (!USE_FAST_BUILD) {
             // skip this is fast_build option is enabled
             createBlockPages(page, context, createPage, locales)
         }
@@ -155,7 +163,11 @@ exports.createPagesTwoLoops = async ({ graphql, actions: { createPage, createRed
 
     const { flat } = await computeSitemap(rawSitemap, cleanLocales)
 
-    logToFile('locales.json', cleanLocales, { mode: 'overwrite' })
+    logToFile(
+        'flat_sitemap.yml',
+        yaml.dump({ locales: cleanLocales, contents: flat }, { noRefs: true }),
+        { mode: 'overwrite' }
+    )
 
     // first loop: aggregate all page queries together
     for (const page of flat) {

@@ -11,6 +11,7 @@ import BlockFooter from 'core/blocks/block/BlockFooter'
 import BlockUnitsSelector from 'core/blocks/block/BlockUnitsSelector'
 
 const BlockChart = props => {
+
     const { children, units, error, data, block = {}, legends, legendProps, modeProps } = props
     const { legendPosition = 'bottom', showNote = true } = block
 

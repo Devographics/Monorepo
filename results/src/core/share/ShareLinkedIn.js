@@ -1,12 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useI18n } from 'core/i18n/i18nContext'
 import track from './tracking'
 import ShareLink from './ShareLink'
 import { LinkedInIcon } from 'core/icons'
 
-const ShareLinkedIn = ({ link, title, summary = '', trackingId }) => {
-    const { translate } = useI18n()
+const ShareLinkedIn = ({ link, title, summary = '', trackingId, ...rest }) => {
 
     return (
         <ShareLink
@@ -17,7 +15,8 @@ const ShareLinkedIn = ({ link, title, summary = '', trackingId }) => {
             )}&title=${title}&summary=${summary}`}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label={translate('share.linkedin')}
+            labelId="share.linkedin"
+            {...rest}
         >
             <LinkedInIcon labelId="share.linkedin" />
         </ShareLink>

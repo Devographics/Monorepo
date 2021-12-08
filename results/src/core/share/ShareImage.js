@@ -4,7 +4,7 @@ import track from './tracking'
 import ShareLink from './ShareLink'
 import { ImageIcon } from 'core/icons'
 
-const ShareImage = ({ trackingId, url }) => {
+const ShareImage = ({ trackingId, url, ...rest }) => {
     const { translate } = useI18n()
 
     return (
@@ -14,7 +14,8 @@ const ShareImage = ({ trackingId, url }) => {
             href={url}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label={translate('share.image')}
+            labelId="share.image" 
+            {...rest}
         >
             <ImageIcon labelId="share.image" />
         </ShareLink>

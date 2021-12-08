@@ -1,13 +1,16 @@
 import React from 'react'
-import { EmptyWrapper, TabsWrapper } from 'core/blocks/block/BlockTabs'
+import TabsWrapper from 'core/blocks/block/BlockTabsWrapper'
+import EmptyWrapper from 'core/blocks/block/BlockEmptyWrapper'
+import TitleWrapper from 'core/blocks/block/BlockTitleWrapper'
 import { ErrorBoundary } from 'core/blocks/block/BlockError'
+import { usePageContext } from 'core/helpers/pageContext'
 
-const BlockWrapper = props => {
-    const { block, pageData, index: blockIndex, isCapturing, withMargin } = props
+const BlockWrapper = ({ block, index: blockIndex, withMargin }) => {
+    const context = usePageContext()
+    const { pageData, isCapturing } = context
     const wrapBlock = block.wrapBlock ?? block?.variants[0]?.wrapBlock ?? true
-    const WrapperComponent = wrapBlock ? TabsWrapper : EmptyWrapper
+    const WrapperComponent = wrapBlock ? (isCapturing ? TitleWrapper : TabsWrapper) : EmptyWrapper
     const isHidden = block.variants.every(v => v.hidden) && !isCapturing
-    // const isHidden = false
     return isHidden ? null : (
         <WrapperComponent
             block={block}

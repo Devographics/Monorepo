@@ -1,3 +1,4 @@
 id: ${parentId}_introduction
 blockType: PageIntroductionBlock
 wrapBlock: false
+disableExport: true
