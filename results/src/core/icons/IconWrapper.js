@@ -6,7 +6,7 @@ import Tooltip from 'core/components/Tooltip'
 const Icon = styled.span`
     height: 24px;
     width: 24px;
-    display: block;
+    appearance: initial !important;
     ${(props) =>
         props.enableHover &&
         `
