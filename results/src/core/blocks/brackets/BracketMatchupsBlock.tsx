@@ -15,8 +15,7 @@ import sortBy from 'lodash/sortBy'
 import sumBy from 'lodash/sumBy'
 
 export interface HorizontalBarBlockProps extends BlockComponentProps {
-    data: FacetItem,
-    fit: false
+    data: FacetItem
 }
 
 const BracketMatchupsBlock = ({ block, data }: HorizontalBarBlockProps) => {
