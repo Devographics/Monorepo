@@ -15,7 +15,8 @@ import sortBy from 'lodash/sortBy'
 import sumBy from 'lodash/sumBy'
 
 export interface HorizontalBarBlockProps extends BlockComponentProps {
-    data: FacetItem
+    data: FacetItem,
+    fit: false
 }
 
 const BracketMatchupsBlock = ({ block, data }: HorizontalBarBlockProps) => {
@@ -78,7 +79,7 @@ const BracketMatchupsBlock = ({ block, data }: HorizontalBarBlockProps) => {
             ]}
             block={block}
         >
-            <ChartContainer fit={true} height={600}>
+            <ChartContainer fit={false} height={600}>
                 {/* <HeatmapChart
                     total={total}
                     buckets={heatmapBuckets}
@@ -95,12 +96,21 @@ const BracketMatchupsBlock = ({ block, data }: HorizontalBarBlockProps) => {
                     keys={keys}
                     colors={theme.colors.velocity}
                     labelTextColor={theme.colors.text}
+                    theme={{
+                        tooltip: {
+                            container: {
+                                color: 'rgb(39, 35, 37)',
+                            },
+                        },
+                    }}
                     // colors="PRGn"
                     minValue={0}
                     maxValue={100}
-                    margin={{ top: 130, right: 60, bottom: 60, left: 60 }}
-                    label={(rowData, cellId) =>
-                        isPercentage(units) ? `${round(rowData[cellId], 1)}%` : rowData[cellId]
+                    margin={{ top: 130, right: 80, bottom: 60, left: 160 }}
+                    label={(rowData, cellId) => {
+                      console.log(rowData[cellId]);
+                        return !rowData[cellId] ? '-' : isPercentage(units) ? `${round(rowData[cellId], 1)}%` : rowData[cellId]
+                      }
                     }
                     forceSquare={true}
                     axisTop={{
