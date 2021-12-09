@@ -116,6 +116,14 @@
             fieldId: yearly_salary
             facetId: higher_education_degree
             options: {facetSort: {order: ___desc___, property: mean}, facetMinCount: 100}
+        - id: yearly_salary_by_experience
+          blockNamespace: user_info
+          tabId: tabs.by_experience
+          template: by_facet
+          variables:  
+            fieldId: yearly_salary
+            facetId: years_of_experience
+            options: {facetSort: {order: ___asc___, property: mean}, facetMinCount: 100}
 
     - id: source
       template: source
@@ -142,7 +150,7 @@
       variants:
         - id: race_ethnicity_by_years_of_experience
           blockNamespace: user_info
-          tabId: tabs.by_years_of_experience
+          tabId: tabs.by_experience
           template: by_facet
           variables:  
             fieldId: race_ethnicity
@@ -605,6 +613,15 @@
       template: multiple_options
       variables:
         fieldId: environments
+      variants: 
+        - id: accessibility_features_others
+          blockNamespace: environments
+          tabId: tabs.other_answers
+          chartNamespace: accessibility_features
+          translateData: true
+          template: multiple_options
+          variables:
+            fieldId: environments
 
     - id: what_do_you_use_css_for
       tabId: tabs.main_answers
@@ -723,8 +740,8 @@
     - id: enjoy_writing_css
       template: opinion
 
-    # - id: jina
-    #   template: picks
+    - id: argyleink
+      template: picks
 
     - id: browser_interoperability_features
       titleId: opinions_others.browser_interoperability_features.others

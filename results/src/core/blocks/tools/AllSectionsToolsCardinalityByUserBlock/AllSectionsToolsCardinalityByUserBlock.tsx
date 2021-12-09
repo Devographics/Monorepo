@@ -27,8 +27,6 @@ const getChartData = (data: AllSectionsToolsCardinalityByUserBlockProps['data'])
     // the data itself, hence the use of `toolsCategories`.
     return Object.entries<string[]>(toolsCategories).map(([sectionId, toolIds]) => {
         if (sectionId in data) {
-            console.log(data)
-            console.log(sectionId)
             const sectionBuckets = data[sectionId]
 
             const normalizedBuckets = range(toolIds.length, 0).map(cardinality => {

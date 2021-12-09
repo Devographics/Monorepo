@@ -54,9 +54,9 @@ const BlockVariant = (props: BlockVariantProps) => {
                             <TabsTrigger value="share">
                                 <ShareIcon enableTooltip={true} labelId="tabs.share" />
                             </TabsTrigger>
-                            <TabsTrigger value="debug">
+                            {/* <TabsTrigger value="debug">
                                 <DebugIcon enableTooltip={true} labelId="tabs.debug" />
-                            </TabsTrigger>
+                            </TabsTrigger> */}
                         </TabsList>
                     </SideArea>
                 )}
@@ -76,12 +76,11 @@ const BlockVariant = (props: BlockVariantProps) => {
                             <BlockShare {...props} />
                         </TabWithBoundary>
                     </Tabs.Content>
-                    <Tabs.Content value="debug">
+                    {/* <Tabs.Content value="debug">
                         <TabWithBoundary>
-                            {/* errors below as data on BlockDebug is expected but BlockVariantProps does not declare it. should it?*/}
                             <BlockDebug {...props} />
                         </TabWithBoundary>
-                    </Tabs.Content>
+                    </Tabs.Content> */}
                 </MainArea>
             </TabsRoot>
         </Container>

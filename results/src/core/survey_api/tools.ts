@@ -41,5 +41,5 @@ export interface ToolAllYearsExperience {
 export interface ToolsCardinalityByUserBucket {
     cardinality: number
     count: number
-    percentage: number
+    percentage_survey: number
 }

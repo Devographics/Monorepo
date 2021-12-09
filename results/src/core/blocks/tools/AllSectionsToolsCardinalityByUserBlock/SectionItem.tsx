@@ -9,78 +9,95 @@ import { fontSize, fontWeight, spacing, mq } from 'core/theme'
 // @ts-ignore
 import { useI18n } from 'core/i18n/i18nContext'
 import range from 'lodash/range'
+import sumBy from 'lodash/sumBy'
 
-export const SectionItem = memo(
-    ({
-        sectionId,
-        data,
-        units,
-        maxNumberOfTools,
-    }: {
-        sectionId: string
-        data: ToolsCardinalityByUserBucket[]
-        units: 'percentage_survey' | 'count'
-        maxNumberOfTools: number
-    }) => {
-        const { translate } = useI18n()
-        const getValue = useMemo(() => {
-            const formatter = units === 'count' ? format('>-.2s') : format('>-.1f')
+export const SectionItem = ({
+    sectionId,
+    data,
+    units,
+    maxNumberOfTools
+}: {
+    sectionId: string
+    data: ToolsCardinalityByUserBucket[]
+    units: 'percentage_survey' | 'count'
+    maxNumberOfTools: number
+}) => {
+    const { translate } = useI18n()
+    const getValue = useMemo(() => {
+        const formatter = units === 'count' ? format('>-.2s') : format('>-.1f')
 
-            return (bucket: ToolsCardinalityByUserBucket) => {
-                return units === 'count'
-                    ? formatter(bucket.count)
-                    : `${formatter(bucket.percentage_survey)}%`
-            }
-        }, [units])
-
-        let maxCount = 0
-        const maxBucket = maxBy(data, 'count')
-        if (maxBucket) {
-            maxCount = maxBucket.count
+        return (bucket: ToolsCardinalityByUserBucket) => {
+            return units === 'count'
+                ? formatter(bucket.count)
+                : `${formatter(bucket.percentage_survey)}%`
         }
+    }, [units])
 
-        return (
-            <SectionContainer>
-                <SectionTitle>{translate(`sections.${sectionId}.title`)}</SectionTitle>
-                <Grid>
-                    {range(1, maxNumberOfTools + 1).map((i) => {
-                        const bucket = data.find((b) => b.cardinality === i)
-                        const isMax =
-                            bucket !== undefined && maxCount > 0 && maxCount === bucket.count
-
-                        return bucket ? (
-                            <Row key={i}>
-                                <Metric isMax={isMax}>{bucket.cardinality}</Metric>
-                                <Bar isMax={isMax}>
-                                    <CellsWrapper />
-                                    <InnerBar
-                                        style={{
-                                            width: `${bucket.percentage_survey}%`,
-                                        }}
-                                    />
-                                    {isMax && <span className="sr-only">{translate('blocks.cardinality.max')}</span>}
-                                </Bar>
-                                <Metric isMax={isMax}>{getValue(bucket)}</Metric>
-                            </Row>
-                        ) : (
-                            <Row key={i}>
-                                <div />
-                                <Bar isMax={false}>
-                                    <CellsWrapper />
-                                </Bar>
-                                <div />
-                            </Row>
-                        )
-                    })}
-                </Grid>
-            </SectionContainer>
-        )
+    let maxCount = 0
+    const maxBucket = maxBy(data, 'count')
+    if (maxBucket) {
+        maxCount = maxBucket.count
     }
-)
+
+    const totalPercentage = sumBy(data, 'percentage_survey')
+
+    return (
+        <SectionContainer>
+            <SectionTitle>{translate(`sections.${sectionId}.title`)}</SectionTitle>
+            <Grid>
+                <Row>
+                    <Metric>∑</Metric>
+                    <Bar>
+                        <CellsWrapper />
+                        <InnerBar
+                            variant="total"
+                            style={{
+                                width: `${totalPercentage}%`
+                            }}
+                        />
+                    </Bar>
+                    <Metric>{totalPercentage}%</Metric>
+                </Row>
+                {range(1, maxNumberOfTools + 1).map(i => {
+                    const bucket = data.find(b => b.cardinality === i)
+                    const isMax = bucket !== undefined && maxCount > 0 && maxCount === bucket.count
+
+                    return bucket ? (
+                        <Row key={i}>
+                            <Metric isMax={isMax}>{bucket.cardinality}</Metric>
+                            <Bar isMax={isMax}>
+                                <CellsWrapper />
+                                <InnerBar
+                                    style={{
+                                        width: `${bucket.percentage_survey}%`
+                                    }}
+                                />
+                                {isMax && (
+                                    <span className="sr-only">
+                                        {translate('blocks.cardinality.max')}
+                                    </span>
+                                )}
+                            </Bar>
+                            <Metric isMax={isMax}>{getValue(bucket)}</Metric>
+                        </Row>
+                    ) : (
+                        <Row key={i}>
+                            <div />
+                            <Bar isMax={false}>
+                                <CellsWrapper />
+                            </Bar>
+                            <div />
+                        </Row>
+                    )
+                })}
+            </Grid>
+        </SectionContainer>
+    )
+}
 
 const CellsWrapper = () => (
     <Cells>
-        {range(0, 10).map((i) => (
+        {range(0, 10).map(i => (
             <Cell key={i} />
         ))}
     </Cells>
@@ -122,10 +139,9 @@ const Cells = styled.div`
     grid-template-columns: repeat(10, 1fr);
     column-gap: 2px;
     height: 100%;
-
 `
 const Cell = styled.div`
-    background: ${(props) => props.theme.colors.backgroundAlt};
+    background: ${props => props.theme.colors.backgroundAlt};
 `
 
 const Bar = styled.div<{
@@ -135,9 +151,9 @@ const Bar = styled.div<{
     overflow: hidden;
     display: flex;
     justify-content: center;
-    opacity: ${(props) => (props.isMax ? 1 : 0.7)};
+    opacity: ${props => (props.isMax ? 1 : 0.7)};
 
-    ${(props) =>
+    ${props =>
         props.isMax
             ? css`
                   &:before,
@@ -149,7 +165,7 @@ const Bar = styled.div<{
                       width: 8px;
                       height: 8px;
                       z-index: 10;
-                      background-color: ${(props) => props.theme.colors.barChart.primary};
+                      background-color: ${props => props.theme.colors.barChart.primary};
                       transform-origin: center center;
                   }
 
@@ -167,19 +183,20 @@ const Bar = styled.div<{
 `
 
 const InnerBar = styled.div`
-    background-color: ${(props) => props.theme.colors.barChart.primary};
+    background-color: ${({ variant, theme }) =>
+        variant === 'total' ? theme.colors.barChart.secondary : theme.colors.barChart.primary};
     height: 100%;
     z-index: 1;
 `
 
 const Metric = styled.span<{
-    isMax: boolean
+    isMax?: boolean
 }>`
     display: flex;
     justify-content: flex-end;
     align-items: center;
     font-size: ${fontSize('smaller')};
-    font-weight: ${(props) =>
+    font-weight: ${props =>
         props.isMax ? props.theme.typography.weight.bold : props.theme.typography.weight.light};
 `
 

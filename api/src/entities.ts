@@ -127,6 +127,7 @@ export const getEntity = async ({ id }: { id: string | number }) => {
   }
 
   const lowerCaseId = id.toLowerCase()
+  // some entities are only for normalization and should not be made available through API
   const entity = entities.filter(e => !e.normalizationOnly).find(e => {
       return (
           (e.id && e.id.toLowerCase() === lowerCaseId) ||

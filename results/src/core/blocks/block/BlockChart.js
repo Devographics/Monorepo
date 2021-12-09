@@ -13,7 +13,7 @@ import BlockUnitsSelector from 'core/blocks/block/BlockUnitsSelector'
 const BlockChart = props => {
 
     const { children, units, error, data, block = {}, legends, legendProps, modeProps } = props
-    const { legendPosition = 'bottom', showNote = true } = block
+    const { legendPosition = 'top', showNote = true } = block
 
     const legendProps_ = { block, data, units, position: legendPosition, legends, ...legendProps }
 
