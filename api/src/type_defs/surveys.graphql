@@ -106,7 +106,7 @@ type Survey {
     """
     Opinions data
     """
-    opinions_others(id: OtherOpinionsID!, filters: Filters): OtherOpinions
+    opinions_others(id: OtherOpinionsID!, filters: Filters, options: Options, facet: Facet): OtherOpinions
     """
     Resources (sites, blogs, podcasts, etc.)
     """

@@ -550,6 +550,7 @@
           defaultUnits: count
           variables:
             fieldId: tools_others
+            options: { cutoff: 5 }
 
     - id: ericwbailey
       template: picks
@@ -745,6 +746,7 @@
 
     - id: browser_interoperability_features
       titleId: opinions_others.browser_interoperability_features.others
+      descriptionId: opinions_others.browser_interoperability_features.others.description
       template: opinions_others
 
     - id: css_pain_points_wins
@@ -763,6 +765,8 @@
         - id: css_pain_points
           tabId: tabs.other_answers
           template: opinions_others
+          variables:
+            options: { cutoff: 5 }
 
     - id: currently_missing_from_css_wins
       tabId: tabs.bracket_wins
