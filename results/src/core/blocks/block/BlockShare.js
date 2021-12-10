@@ -17,9 +17,11 @@ import ShareURL from 'core/share/ShareURL'
 const Share = styled.div`
     display: flex;
     flex-direction: column;
+    gap:2rem;
 
     @media ${mq.mediumLarge} {
         display: grid;
+        gap: 0;
         grid-template-columns: 500px 1fr;
     }
 `

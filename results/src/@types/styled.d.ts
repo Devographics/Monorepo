@@ -55,6 +55,7 @@ declare module 'styled-components' {
             textHighlight: string
             link: string
             linkActive: string
+            linkHover: string
             contrast: string
             border: string
             heatmap: string

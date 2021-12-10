@@ -1,6 +1,12 @@
 import { css } from 'styled-components'
 import { transparentize } from 'polished'
 
+export interface FancyLinkMixinProps {
+    color: string
+    activeClassName: string
+    activeColor: string
+}
+
 export const screenReadersOnlyMixin = css`
     border: 0;
     clip: rect(0 0 0 0);
@@ -15,15 +21,19 @@ export const screenReadersOnlyMixin = css`
     white-space: nowrap;
 `
 
-export const textShadowMixin = (color) => css`
+export const textShadowMixin = (color: string) => css`
     text-shadow: 0px 2px 3px ${transparentize(0.6, color)};
 `
 
-export const textShadowHighlightMixin = (color, transparency = 0.1) => css`
+export const textShadowHighlightMixin = (color: string, transparency = 0.1) => css`
     text-shadow: 0px 2px 7px ${transparentize(transparency, color)};
 `
 
-export const fancyLinkMixin = ({ color, activeClassName = '_is-active', activeColor }) => css`
+export const fancyLinkMixin = ({
+    color,
+    activeClassName = '_is-active',
+    activeColor
+}: FancyLinkMixinProps) => css`
     position: relative;
     text-decoration: none;
     transition: all ease-in 300ms;
@@ -62,7 +72,8 @@ export const fancyLinkMixin = ({ color, activeClassName = '_is-active', activeCo
         }
     }
 
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
         text-decoration: none;
 
         > span::before {
@@ -72,21 +83,22 @@ export const fancyLinkMixin = ({ color, activeClassName = '_is-active', activeCo
     }
 `
 
-export const antsMixin = (background, foreground) => css`
-    /*
-        // via https://codepen.io/danichk/pen/PPRxrR
-@keyframes ants {
-    to {
-        background-position: 100% 100%;
-    }
-}
+// Below is unsused and it does not return anything
+// export const antsMixin = (background, foreground) => css`
+//     /*
+//         // via https://codepen.io/danichk/pen/PPRxrR
+// @keyframes ants {
+//     to {
+//         background-position: 100% 100%;
+//     }
+// }
 
-        */
-    /*
-       border: 1px solid transparent;
-    background: linear-gradient($antsBg, $antsBg) padding-box,
-        repeating-linear-gradient(-45deg, $antsFg 0, $antsFg 25%, transparent 0, transparent 50%) 0 /
-            0.6em 0.6em;
-    animation: ants 12s linear infinite;
-    */
-`
+//         */
+//     /*
+//        border: 1px solid transparent;
+//     background: linear-gradient($antsBg, $antsBg) padding-box,
+//         repeating-linear-gradient(-45deg, $antsFg 0, $antsFg 25%, transparent 0, transparent 50%) 0 /
+//             0.6em 0.6em;
+//     animation: ants 12s linear infinite;
+//     */
+// `
