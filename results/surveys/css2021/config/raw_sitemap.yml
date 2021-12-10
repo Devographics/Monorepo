@@ -30,15 +30,23 @@
     - id: survey_intro
       blockType: SurveyIntroBlock
       disableExport: true
+      wrapBlock: false
+    - id: survey_credits
+      blockType: CreditsBlock
+      disableExport: true
+      wrapBlock: false
     - id: survey_newsletter
       blockType: NewsletterBlock
       disableExport: true
+      wrapBlock: false
     - id: survey_sponsors
       blockType: SponsorsBlock
       disableExport: true
+      wrapBlock: false
     - id: survey_translators
       blockType: TranslatorsBlock
       disableExport: true
+      wrapBlock: false
 
 - id: tshirt
   path: /tshirt
@@ -48,6 +56,7 @@
       template: page_introduction
     - id: tshirt_block
       blockType: TshirtBlock
+      wrapBlock: false
       disableExport: true
 
 - id: user_info
@@ -616,6 +625,7 @@
         fieldId: environments
       variants: 
         - id: accessibility_features_others
+          defaultUnits: count
           blockNamespace: environments
           tabId: tabs.other_answers
           chartNamespace: accessibility_features
@@ -634,6 +644,7 @@
         fieldId: environments
       variants: 
         - id: what_do_you_use_css_for_others
+          defaultUnits: count
           blockNamespace: environments
           tabId: tabs.other_answers
           chartNamespace: what_do_you_use_css_for
@@ -657,6 +668,7 @@
         fieldId: resources
       variants:
         - id: first_steps_others
+          defaultUnits: count
           blockNamespace: resources
           chartNamespace: first_steps
           tabId: tabs.other_answers
@@ -674,6 +686,7 @@
         fieldId: resources
       variants:
         - id: blogs_news_magazines_others
+          defaultUnits: count
           blockNamespace: resources
           chartNamespace: blogs_news_magazines
           tabId: tabs.other_answers
@@ -690,6 +703,7 @@
         fieldId: resources
       variants:
         - id: sites_courses_others
+          defaultUnits: count
           blockNamespace: resources
           chartNamespace: sites_courses
           tabId: tabs.other_answers
@@ -709,6 +723,7 @@
         fieldId: resources
       variants:
         - id: podcasts_others
+          defaultUnits: count
           blockNamespace: resources
           chartNamespace: podcasts
           tabId: tabs.other_answers
@@ -717,6 +732,7 @@
             fieldId: resources
 
     - id: people_others
+      defaultUnits: count
       blockNamespace: resources
       chartNamespace: people
       template: multiple_options
@@ -797,80 +813,55 @@
     - template: page_introduction
 
     - id: feature_adoption_delta_award
-      blockType: AwardBlock
-      enableExport: true
+      template: award
       awards:
+        - id: comparison_functions
+          value: "+15.5%"
+        - id: prefers_reduced_motion
+          value: "+10.9%"
         - id: grid
-          value: "+18.6%"
-        - id: object_fit
-          value: "+17.8%"
-        - id: variables
-          value: "+15.2%"
+          value: "+9.8%"
 
-    - id: tool_usage_delta_award
-      blockType: AwardBlock
-      enableExport: true
-      awards:
-        - id: tailwind_css
-          value: "+17.8%"
-        - id: atomic_css
-          value: "+10.8%"
-        - id: css_modules
-          value: "+10.1%"
+    # - id: tool_usage_delta_award
+    #   template: award
+    #   awards:
+    #     - id: tailwind_css
+    #       value: "+17.8%"
+    #     - id: atomic_css
+    #       value: "+10.8%"
+    #     - id: css_modules
+    #       value: "+10.1%"
 
     - id: tool_satisfaction_award
-      blockType: AwardBlock
-      enableExport: true
+      template: award
       awards:
         - id: post_css
-          value: "91.4%"
+          value: "91%"
+        - id: vanilla_extract
+          value: "87%"
         - id: css_modules
-          value: "86.8%"
-        - id: tailwind_css
-          value: "86.6%"
+          value: "86%"
 
     - id: tool_interest_award
-      blockType: AwardBlock
-      enableExport: true
+      template: award
       awards:
         - id: css_modules
-          value: "75.1%"
-        - id: tailwind_css
-          value: "62%"
-        - id: styled_components
-          value: "60%"
+          value: "74%"
+        - id: vanilla_extract
+          value: "68%"
+        - id: stitches
+          value: "55%"
 
-    - id: most_write_ins_award
-      blockType: AwardBlock
-      enableExport: true
-      awards:
-        - id: phpstorm
-          value: "200"
-        - id: udemy
-          value: "159"
-        - id: frontendmasters
-          value: "112"
+    # - id: most_write_ins_award
+    #   template: award
+    #   awards:
+    #     - id: phpstorm
+    #       value: "200"
+    #     - id: udemy
+    #       value: "159"
+    #     - id: frontendmasters
+    #       value: "112"
 
-    - id: prediction_award
-      blockType: AwardBlock
-      awards:
-          - id: svelte
-          - id: nest
-          - id: stencil
-
-    - id: best_blog_award
-      blockType: AwardBlock
-      awards:
-          - id: svelte
-          - id: nest
-          - id: stencil
-
-    - id: best_article_award
-      blockType: AwardBlock
-      awards:
-          - id: svelte
-          - id: nest
-          - id: stencil
 
 - id: conclusion
   path: /conclusion

@@ -16,6 +16,7 @@ import TshirtBlock from 'core/blocks/other/TshirtBlock'
 import AwardBlock from 'core/blocks/awards/AwardBlock'
 import ConclusionBlock from 'core/blocks/other/ConclusionBlock'
 import NotFoundBlock from 'core/blocks/other/NotFoundBlock'
+import CreditsBlock from 'core/blocks/other/CreditsBlock'
 // import ReportBlock from 'core/report/ReportBlock'
 import HintBlock from 'core/blocks/other/HintBlock'
 
@@ -79,6 +80,7 @@ const blockRegistry = {
     TranslatorsBlock,
     NotFoundBlock,
     HintBlock,
+    CreditsBlock,
     // ReportBlock,
     
     // demographics

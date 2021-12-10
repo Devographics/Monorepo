@@ -15,6 +15,10 @@ const entitiesQuery = graphql`
                 mdn {
                     url
                 }
+                twitterName
+                twitter {
+                    avatarUrl
+                }
             }
         }
     }

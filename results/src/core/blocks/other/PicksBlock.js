@@ -16,6 +16,9 @@ const PicksBlock = ({ block, data }) => {
     }
 
     const { twitterName, fullName, pickName, avatarUrl, url } = pick
+
+    const avatarFileName = avatarUrl ?? `${twitterName}.jpg`
+    
     return (
         <PicksContainer className="Block">
             <PicksIntroMobile>
@@ -50,7 +53,7 @@ const PicksBlock = ({ block, data }) => {
                                 <a
                                     href={`https://twitter.com/${twitterName}`}
                                     style={{
-                                        backgroundImage: `url(/images/picks/${twitterName}.jpg)`
+                                        backgroundImage: `url(/images/picks/${avatarFileName})`
                                     }}
                                     title={fullName}
                                 >

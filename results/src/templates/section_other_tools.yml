@@ -1,9 +1,8 @@
 id: ${parentId}_others
 titleId: blocks.category_other_tools
 blockType: HorizontalBarBlock
-
+defaultUnits: count
 dataPath: "surveyApi.survey.${parentId}_others.year.facets.0"
-
 query: >
     surveyApi {
         survey(survey: ${surveyType}) {
