@@ -2,6 +2,7 @@ id: ${parentId}_resources
 titleId: blocks.recommended_resources
 blockType: RecommendedResourcesBlock
 showDescription: false
+disableExport: true
 
 #  note: query does not currently work because sponsor values would need to be
 #  wrapped in quotes

@@ -72,7 +72,7 @@ const bgGlow = keyframes`
     background: #fce49155;
   }
   100% {
-    background: #fce49115;
+    background: #fce49125;
   }
 `
 

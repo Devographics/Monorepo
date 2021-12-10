@@ -42,14 +42,14 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
     textInverted: '#272325',
     textHighlight: colors.greenDark,
     link: '#ef4e88',
-    linkActive: '#7c83db',
+    linkActive: '#5C63E0',
     contrast: '#0bdf67',
     border: '#FFF6E6',
     heatmap: colors.pinkLight,
     lineChartDefaultColor: '#59DF7F',
     barChart: {
         primary: '#ef4e88',
-        secondary: '#7c83db'
+        secondary: '#5C63E0'
     },
     ranges: {
         tools: {

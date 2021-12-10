@@ -2,9 +2,10 @@ import { DefaultTheme } from 'styled-components'
 
 const stateOfCSSThemeTypography: DefaultTheme['typography'] = {
     fontFamily: `'IBM Plex Mono', monospace`,
+    fontFamily2: `'Bebas Neue'`,
     rootSize: {
         mobile: '13px',
-        desktop: '17px',
+        desktop: '15px',
     },
     size: {
         smaller: '0.75rem',
@@ -15,6 +16,8 @@ const stateOfCSSThemeTypography: DefaultTheme['typography'] = {
         larger: '1.3rem',
         largest: '2rem',
         huge: '4rem',
+        huger: '5rem',
+        hugest: '6rem',
     },
     weight: {
         light: 300,

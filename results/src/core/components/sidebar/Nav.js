@@ -63,7 +63,8 @@ const StyledPageLink = styled(PageLink)`
     ${(props) =>
         fancyLinkMixin({
             color: props.depth === 0 ? props.theme.colors.link : props.theme.colors.text,
-            activeColor: props.theme.colors.linkActive,
+            // activeColor: props.theme.colors.linkActive,
+            activeColor: props.theme.colors.text,
         })}
 `
 

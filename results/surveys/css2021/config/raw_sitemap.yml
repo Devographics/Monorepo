@@ -76,6 +76,9 @@
       variables:
         options: {cutoff: 20}
 
+    - id: hint_hint
+      template: hint
+      
     - id: age
       template: demographics
 
@@ -93,6 +96,9 @@
 
     - id: company_size
       template: demographics
+
+    - id: variants_hint
+      template: hint
 
     - id: higher_education_degree
       template: demographics
@@ -139,7 +145,7 @@
       blockType: HorizontalBarBlock
       variables:
         options: {cutoff: 20}
-
+      
     - id: gender
       template: demographics
       variants:
@@ -165,7 +171,6 @@
             fieldId: race_ethnicity
             facetId: years_of_experience
             options: {facetSort: {order: ___asc___, property: mean}, limit: 11, facetMinCount: 100}
-
 
     - id: disability_status
       template: demographics
@@ -224,6 +229,10 @@
           template: feature_experience
         - id: aspect_ratio
           template: feature_experience
+
+        - id: export_hint
+          template: hint
+
         - id: content_visibility
           template: feature_experience
         - id: flexbox_gap
@@ -254,6 +263,10 @@
           template: feature_experience
         - id: masks
           template: feature_experience
+
+        - id: share_hint
+          template: hint
+
         - id: blend_modes
           template: feature_experience
         - id: filter_effects
@@ -294,6 +307,10 @@
           template: picks
         - id: overflow_anchor
           template: feature_experience
+
+        - id: units_switcher_hint
+          template: hint
+
         - id: touch_action
           template: feature_experience
         - id: pointer_events
@@ -354,6 +371,10 @@
           template: feature_experience
           year: 2021
 
+        - items: [fm-accessibility]
+          template: recommended_resources
+
+
     - id: other_features
       path: /other-features
       blocks:
@@ -383,7 +404,7 @@
           template: feature_experience
           year: 2021
 
-        - items: [fm-layouts]
+        - items: [fm-cssvariables]
           template: recommended_resources
 
 - id: technologies
@@ -408,6 +429,9 @@
 
         - template: tools_section_streams
 
+        - id: tool_modal_hint
+          template: hint
+          
         - template: tools_experience_marimekko
 
         - template: section_other_tools
@@ -442,6 +466,9 @@
 
         - template: tools_experience_ranking
 
+        - id: rankings_modes_hint
+          template: hint
+          
         - template: tools_section_streams
 
         - template: tools_experience_marimekko
@@ -504,7 +531,7 @@
         - id: css_in_js
           template: happiness
 
-        - items: [fm-react]
+        - items: [fm-reactv3]
           template: recommended_resources
 
         - id: styled_components
@@ -578,6 +605,9 @@
           variables:
             fieldId: tools_others
 
+    - id: bracket_hint
+      template: hint
+
     - id: tool_evaluation_wins
       tabId: tabs.bracket_wins
       template: bracket_wins
@@ -615,6 +645,9 @@
       template: multiple_options
       variables:
         fieldId: environments
+
+    - id: sharing_hint
+      template: hint
 
     - id: accessibility_features
       blockNamespace: environments
@@ -751,6 +784,9 @@
     - id: css_evolving_slowly
       template: opinion
 
+    - id: tshirt_hint
+      template: hint
+
     - id: utility_classes_to_be_avoided
       template: opinion
 
@@ -761,6 +797,7 @@
       template: picks
 
     - id: browser_interoperability_features
+      defaultUnits: count
       titleId: opinions_others.browser_interoperability_features.others
       descriptionId: opinions_others.browser_interoperability_features.others.description
       template: opinions_others
@@ -812,55 +849,58 @@
   blocks:
     - template: page_introduction
 
-    - id: feature_adoption_delta_award
-      template: award
+    - id: awards
+      template: awards
       awards:
-        - id: comparison_functions
-          value: "+15.5%"
-        - id: prefers_reduced_motion
-          value: "+10.9%"
-        - id: grid
-          value: "+9.8%"
+        - id: feature_adoption_delta_award
+          template: award
+          awards:
+            - id: comparison_functions
+              value: "+15.5%"
+            - id: prefers_reduced_motion
+              value: "+10.9%"
+            - id: grid
+              value: "+9.8%"
 
-    # - id: tool_usage_delta_award
-    #   template: award
-    #   awards:
-    #     - id: tailwind_css
-    #       value: "+17.8%"
-    #     - id: atomic_css
-    #       value: "+10.8%"
-    #     - id: css_modules
-    #       value: "+10.1%"
+        # - id: tool_usage_delta_award
+        #   template: award
+        #   awards:
+        #     - id: tailwind_css
+        #       value: "+17.8%"
+        #     - id: atomic_css
+        #       value: "+10.8%"
+        #     - id: css_modules
+        #       value: "+10.1%"
 
-    - id: tool_satisfaction_award
-      template: award
-      awards:
-        - id: post_css
-          value: "91%"
-        - id: vanilla_extract
-          value: "87%"
-        - id: css_modules
-          value: "86%"
+        - id: tool_satisfaction_award
+          template: award
+          awards:
+            - id: post_css
+              value: "91%"
+            - id: vanilla_extract
+              value: "87%"
+            - id: css_modules
+              value: "86%"
 
-    - id: tool_interest_award
-      template: award
-      awards:
-        - id: css_modules
-          value: "74%"
-        - id: vanilla_extract
-          value: "68%"
-        - id: stitches
-          value: "55%"
+        - id: tool_interest_award
+          template: award
+          awards:
+            - id: css_modules
+              value: "74%"
+            - id: vanilla_extract
+              value: "68%"
+            - id: stitches
+              value: "55%"
 
-    # - id: most_write_ins_award
-    #   template: award
-    #   awards:
-    #     - id: phpstorm
-    #       value: "200"
-    #     - id: udemy
-    #       value: "159"
-    #     - id: frontendmasters
-    #       value: "112"
+        # - id: most_write_ins_award
+        #   template: award
+        #   awards:
+        #     - id: phpstorm
+        #       value: "200"
+        #     - id: udemy
+        #       value: "159"
+        #     - id: frontendmasters
+        #       value: "112"
 
 
 - id: conclusion

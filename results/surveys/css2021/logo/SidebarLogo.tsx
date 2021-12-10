@@ -21,12 +21,11 @@ const Container = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 30px;
     height: 67px;
 `
 
 const SVG = styled.svg`
-    width: 100%;
+    width: 60%;
 `
 
 export default SidebarLogo

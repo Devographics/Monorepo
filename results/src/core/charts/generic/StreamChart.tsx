@@ -72,7 +72,7 @@ const StreamChart = ({
     height = 260
 }) => {
     const theme = useTheme()
-    const { translate } = useI18n()
+    const { getString } = useI18n()
 
     const horizontalAxis = {
         tickSize: 10,
@@ -114,8 +114,8 @@ const StreamChart = ({
                 dotColor="inherit:brighter(0.6)"
                 animate={false}
                 label={({ id }) => {
-                    const fullLabel = translate(`options.${i18nNamespace}.${id}`)
-                    const shortLabel = translate(`options.${i18nNamespace}.${id}.short`)
+                    const fullLabel = getString(`options.${i18nNamespace}.${id}`)?.t
+                    const shortLabel = getString(`options.${i18nNamespace}.${id}.short`)?.t
                     return shortLabel ?? fullLabel
                 }}
                 valueFormat={v => {

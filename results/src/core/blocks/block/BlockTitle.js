@@ -14,8 +14,11 @@ import BlockLinks from 'core/blocks/block/BlockLinks'
 
 const BlockTitleContents = ({ block, context }) => {
     const { translate } = useI18n()
-    return <span dangerouslySetInnerHTML={{ __html: getBlockTitle(block, context, translate) }} />
+    return <Title dangerouslySetInnerHTML={{ __html: getBlockTitle(block, context, translate) }} />
 }
+
+const Title = styled.span`
+`
 
 const BlockTitle = ({
     isShareable,

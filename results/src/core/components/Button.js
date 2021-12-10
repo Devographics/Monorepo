@@ -16,6 +16,9 @@ const Button = styled.button.attrs(({ className, size = 'medium', variant = 'def
     box-shadow: 0 0 0 rgba(0, 0, 0, 0);
     transition: all 300ms ease-out;
 
+    /* text-transform: uppercase; */
+    /* letter-spacing: 1.5px; */
+
     &,
     &:link,
     &:visited {

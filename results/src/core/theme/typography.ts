@@ -6,6 +6,7 @@ export const primaryFontMixin = css`
 `
 
 export const secondaryFontMixin = css`
-    font-family: ${({ theme }) => theme.typography.fontFamily};
-    font-weight: ${({ theme }) => theme.typography.weight.bold};
+    font-family: ${({ theme }) => theme.typography.fontFamily2};
+    letter-spacing: 2px;
+    /* font-weight: ${({ theme }) => theme.typography.weight.bold}; */
 `

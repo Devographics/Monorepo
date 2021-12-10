@@ -3,22 +3,23 @@
 - name: Frontend Masters
   id: fm-homepage
   description: Advance Your Skills with In-Depth, Modern Front-End Engineering Courses
-  url: https://frontendmasters.com/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2020
+  url: https://frontendmasters.com/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2021
   image: https://static.frontendmasters.com/assets/brand/logos/m-black.jpg
 
 - name: Learn CSS, from Laying Out Websites to Performant Animations
   id: fm-learncss
   description: >
     CSS is rich in capabilities and is more than simply laying out pages! Replace costly JavaScript with CSS.
-  url: https://frontendmasters.com/learn/css/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2020
+  url: https://frontendmasters.com/learn/css/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2021
   image: https://static.frontendmasters.com/assets/brand/icons/icon-paths.jpg
 
-- name: CSS Grids and Flexbox for Responsive Web Design
+- name: CSS Grid & Flexbox for Responsive Layouts, v2
   id: fm-gridsflexbox
   description: >
-    Starting with a review of floats for context, but quickly moving into Flexbox and CSS grids, 
-    this essential course is for web developers that want to build responsive, beautiful web applications faster using less code and best practices. 
-  url: https://frontendmasters.com/courses/css-grids-flexbox/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2020
+    Learn the essential CSS layout techniques for building responsive, beautiful web applications. 
+    You'll get hands-on practice using CSS Grid for two-dimensional, 
+    grid-based layouts and Flexbox for styling one-directional flow. 
+  url: https://frontendmasters.com/courses/css-grid-flexbox-v2/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2021
   image: https://static.frontendmasters.com/assets/teachers/kramer/thumb.png
 
 - name: SVG Essentials & Animation, v2
@@ -26,7 +27,7 @@
   description: >
     Learn to build and optimize SVG – the scalable graphics format for 
     the web that can achieve impressively small filesizes for fast-loading websites. I
-  url: https://frontendmasters.com/courses/svg-essentials-animation/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2020
+  url: https://frontendmasters.com/courses/svg-essentials-animation/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2021
   image: https://static.frontendmasters.com/assets/teachers/drasner/thumb@2x.jpg
 
 - name: Responsive Web Typography v2
@@ -34,7 +35,7 @@
   description: >
     In this course, Jason Pamental demonstrates 
     type fundamentals to create better user experiences on mobile and desktop.
-  url: https://frontendmasters.com/courses/responsive-typography-v2/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2020
+  url: https://frontendmasters.com/courses/responsive-typography-v2/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2021
   image: https://static.frontendmasters.com/assets/teachers/pamental/thumb@2x.jpg
 
 - name: Sass Fundamentals
@@ -42,7 +43,7 @@
   description: >
     Leverage the Sass preprocessing to empower your CSS practices and 
     master styling complex applications. 
-  url: https://frontendmasters.com/courses/sass/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2020
+  url: https://frontendmasters.com/courses/sass/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2021
   image: https://static.frontendmasters.com/assets/teachers/north/thumb@2x.jpg
 
 - name: Scalable Modular Architecture for CSS (SMACSS)
@@ -50,7 +51,7 @@
   description: > 
     CSS architecture expert Jonathan Snook shares his experience building large sites 
     with large teams to make your CSS more maintainable using his SMACSS methodology.
-  url: https://frontendmasters.com/courses/smacss/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2020
+  url: https://frontendmasters.com/courses/smacss/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2021
   image: https://static.frontendmasters.com/assets/teachers/snook/thumb@2x.jpg
 
 - name: Intermediate React, v2
@@ -58,7 +59,7 @@
   description: >
     You’ll learn hooks in-depth, CSS-in-JS with emotion, 
     increase performance with code splitting and server-side rendering, and more. 
-  url: https://frontendmasters.com/courses/intermediate-react-v2/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2020
+  url: https://frontendmasters.com/courses/intermediate-react-v2/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2021
   image: https://static.frontendmasters.com/assets/teachers/holt/thumb@2x.jpg
 
 - name: Advanced CSS Layouts
@@ -66,12 +67,38 @@
   description: >
     For the first time in the history of the web, 
     CSS is graced with tools for laying out web pages without hacks. 
-  url: https://frontendmasters.com/courses/advanced-css-layouts/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2020
+  url: https://frontendmasters.com/courses/advanced-css-layouts/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2021
   image: https://static.frontendmasters.com/assets/teachers/kramer/thumb@2x.jpg
 
 - name: Design Systems with React & Storybook
   id: fm-storybook
   description: >
     Design systems increase the speed of development across teams, as well as make your applications look and feel consistent.
-  url: https://frontendmasters.com/courses/design-systems/
+  url: https://frontendmasters.com/courses/design-systems/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2021
   image: https://static.frontendmasters.com/assets/teachers/bostian/thumb@2x.jpg
+
+- name: Website Accessibility, v2
+  id: fm-accessibility
+  description: >
+    Learn how to make your website applications accessible to a wider audience.
+     Use keyboard shortcuts and navigation to help both power users and those with disabilities.
+  url: https://frontendmasters.com/courses/accessibility-v2/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2021
+  image: https://static.frontendmasters.com/assets/teachers/kuperman/thumb@2x.webp
+
+- name: Dynamic CSS with Custom Properties (aka CSS Variables)
+  id: fm-cssvariables
+  url: https://frontendmasters.com/courses/css-variables/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2021
+  description: >
+    Modern browsers ship with CSS Custom Properties, also known as “CSS variables”, 
+    a superpower that enables us to create reusable components without 
+    any JavaScript dependencies needed – using only vanilla CSS! 
+  image: https://static.frontendmasters.com/assets/teachers/verou/thumb@2x.webp
+
+- name: Intermediate React, v3
+  id: fm-reactv3
+  url: https://frontendmasters.com/courses/intermediate-react-v3/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2021
+  image: https://static.frontendmasters.com/assets/teachers/holt/thumb@2x.webp
+  description: >
+    Learn to build scalable React applications using the latest tools and 
+    techniques available in the React ecosystem! This course is modular,
+     where you can pick and choose various react ecosystems you want to learn.

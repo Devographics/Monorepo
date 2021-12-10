@@ -50,7 +50,7 @@ const BlockDescriptionContents = ({ block }) => {
                     k={key}
                     md={enableDescriptionMarkdown}
                     fallback={null}
-                    html={true}
+                    html={false}
                 />
             </Description>
         )

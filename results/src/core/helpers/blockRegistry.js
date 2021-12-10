@@ -13,7 +13,7 @@ import SponsorsBlock from 'core/blocks/other/SponsorsBlock'
 import PicksBlock from 'core/blocks/other/PicksBlock'
 import TranslatorsBlock from 'core/blocks/other/TranslatorsBlock'
 import TshirtBlock from 'core/blocks/other/TshirtBlock'
-import AwardBlock from 'core/blocks/awards/AwardBlock'
+import AwardsBlock from 'core/blocks/awards/AwardsBlock'
 import ConclusionBlock from 'core/blocks/other/ConclusionBlock'
 import NotFoundBlock from 'core/blocks/other/NotFoundBlock'
 import CreditsBlock from 'core/blocks/other/CreditsBlock'
@@ -72,7 +72,7 @@ const blockRegistry = {
     RecommendedResourcesBlock,
     TshirtBlock,
     SurveyIntroBlock,
-    AwardBlock,
+    AwardsBlock,
     ConclusionBlock,
     NewsletterBlock,
     SponsorsBlock,

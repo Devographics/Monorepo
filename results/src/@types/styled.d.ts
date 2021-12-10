@@ -21,6 +21,7 @@ declare module 'styled-components' {
         }
         typography: {
             fontFamily: string
+            fontFamily2: string
             rootSize: {
                 mobile: string
                 desktop: string

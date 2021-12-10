@@ -7,7 +7,6 @@ import picks from 'Config/picks.yml'
 import T from 'core/i18n/T'
 
 const PicksBlock = ({ block, data }) => {
-
     const { id } = block
     const pick = picks.find(p => p.twitterName === id)
 
@@ -18,7 +17,7 @@ const PicksBlock = ({ block, data }) => {
     const { twitterName, fullName, pickName, avatarUrl, url } = pick
 
     const avatarFileName = avatarUrl ?? `${twitterName}.jpg`
-    
+
     return (
         <PicksContainer className="Block">
             <PicksIntroMobile>
@@ -122,6 +121,9 @@ const PickTitle = styled.h3`
 
 const Description = styled.div`
     font-size: ${fontSize('smallish')};
+    p {
+        margin: 0;
+    }
 `
 
 const PicksIntroMobile = styled.div`

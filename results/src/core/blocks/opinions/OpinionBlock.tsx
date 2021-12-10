@@ -109,7 +109,7 @@ export const OpinionBlock = ({
                     keys={bucketKeys.map((key) => key.id)}
                     units={units}
                     applyEmptyPatternTo={2}
-                    namespace={id}
+                    i18nNamespace="opinions"
                     translateData={translateData}
                 />
             </ChartContainer>
