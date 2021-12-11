@@ -7,7 +7,8 @@ const {
     cleanIdString,
     getLocalizedPath,
     getCleanLocales,
-    createBlockPages
+    createBlockPages,
+    runPageQuery
 } = require('./helpers.js')
 const yaml = require('js-yaml')
 const fs = require('fs')
@@ -51,12 +52,15 @@ query {
 
 // v1. single loop, run graphql queries and create pages in the same loop
 exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createRedirect } }) => {
+    const buildInfo = { USE_FAST_BUILD, localeCount: 0, pages: [], pageCount: 0, blocks: [], blockCount: 0 }
     const localesResults = await graphql(
         `
             ${localesQuery}
         `
     )
     let locales = localesResults.data.surveyApi.locales
+
+    buildInfo.localeCount = locales.length
 
     if (USE_FAST_BUILD) {
         // if locales are turned off (to make build faster), only keep en-US locale
@@ -84,35 +88,12 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
 
         logToFile('queries.txt', '', { mode: 'overwrite' })
 
-        try {
-            if (pageQuery) {
-                const queryName = _.upperFirst(cleanIdString(page.id))
-                const wrappedPageQuery = wrapWithQuery(`page${queryName}Query`, pageQuery)
-                logToFile('queries.txt', wrappedPageQuery, { mode: 'append' })
-                const start = new Date()
-                const queryResults = await graphql(
-                    `
-                        ${wrappedPageQuery}
-                    `
-                )
-                const end = new Date()
-                const timeDiff = Math.round((end - start) / 1000)
-                pageData = queryResults.data
-                logToFile(
-                    `data/${queryName}.json`,
-                    { data: pageData, duration: timeDiff },
-                    { mode: 'overwrite' }
-                )
-            }
-        } catch (error) {
-            console.log(`// Error while loading data for page ${page.id}`)
-            logToFile('errorQueries.txt', pageQuery, { mode: 'append' })
-            console.log(pageQuery)
-            console.log(error)
-        }
+        pageData = await runPageQuery({ page, graphql })
 
         // loop over locales
         for (let index = 0; index < locales.length; index++) {
+            buildInfo.pageCount++
+
             const locale = locales[index]
             locale.path = `/${locale.id}`
 
@@ -144,9 +125,10 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
 
         if (!USE_FAST_BUILD) {
             // skip this is fast_build option is enabled
-            createBlockPages(page, context, createPage, locales)
+            createBlockPages(page, context, createPage, locales, buildInfo)
         }
     }
+    logToFile('build.yml', yaml.dump(buildInfo, { noRefs: true }), { mode: 'overwrite' })
 }
 
 // v2. two loops, one for batching all queries together and one for creating pages

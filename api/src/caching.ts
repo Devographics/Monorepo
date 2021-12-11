@@ -19,7 +19,7 @@ export const computeKey = (func: Function, args?: any) => {
     const serializedArgs = args
         ? args
               .map((a: any) => {
-                  return JSON.stringify(a)
+                  return typeof a === 'function' ? a.name : JSON.stringify(a)
               })
               .join(', ')
         : ''

@@ -132,7 +132,7 @@ exports.logToFile = async (fileName, object, options = {}) => {
 Create individual pages for each block (for social media meta tags)
 
 */
-exports.createBlockPages = (page, context, createPage, locales) => {
+exports.createBlockPages = (page, context, createPage, locales, buildInfo) => {
     const blocks = page.blocks
     if (!Array.isArray(blocks) || blocks.length === 0) {
         return
@@ -140,11 +140,15 @@ exports.createBlockPages = (page, context, createPage, locales) => {
 
     blocks.forEach(block => {
         block.variants.forEach(blockVariant => {
+            
             // allow for specifying explicit pageId in block definition
             if (!blockVariant.pageId) {
                 blockVariant.pageId = page.id
             }
             locales.forEach(locale => {
+    
+                buildInfo.blockCount ++
+                
                 const blockPage = {
                     path: getLocalizedPath(blockVariant.path, locale),
                     component: path.resolve(`./src/core/share/ShareBlockTemplate.js`),
@@ -178,4 +182,39 @@ exports.getAllBlocks = sitemap => {
         }
     })
     return allBlocks
+}
+
+const Queries = {}
+
+exports.runPageQuery = async ({ page, graphql }) => {
+    console.log(`// Running GraphQL query for page ${page.id}…`)
+    const pageQuery = exports.getPageQuery(page)
+    let pageData = {}
+    if (pageQuery) {
+        try {
+            const queryName = _.upperFirst(exports.cleanIdString(page.id))
+            const wrappedPageQuery = exports.wrapWithQuery(`page${queryName}Query`, pageQuery)
+            exports.logToFile('queries.txt', wrappedPageQuery, { mode: 'append' })
+            const start = new Date()
+            const queryResults = await graphql(
+                `
+                    ${wrappedPageQuery}
+                `
+            )
+            const end = new Date()
+            const timeDiff = Math.round((end - start) / 1000)
+            pageData = queryResults.data
+            exports.logToFile(
+                `data/${queryName}.json`,
+                { data: pageData, duration: timeDiff },
+                { mode: 'overwrite' }
+            )
+        } catch (error) {
+            console.log(`// Error while loading data for page ${page.id}`)
+            exports.logToFile('errorQueries.txt', pageQuery, { mode: 'append' })
+            console.log(pageQuery)
+            console.log(error)
+        }
+    }
+    return pageData
 }
