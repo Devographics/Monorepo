@@ -78,7 +78,7 @@ const getChartData = ({ data, controlledMetric }: { data: ToolData[]; controlled
                 return {
                     id: tool.id,
                     name: tool?.entity?.name,
-                    data: tool[controlledMetric].map(bucket => {
+                    data: tool[controlledMetric]?.map(bucket => {
                         return {
                             x: bucket.year,
                             y: bucket.rank,
