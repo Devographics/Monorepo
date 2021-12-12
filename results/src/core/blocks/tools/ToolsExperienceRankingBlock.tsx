@@ -105,7 +105,7 @@ export const ToolsExperienceRankingBlock = ({
     const chartData: RankingChartSerie[] = getChartData({ data: experience, controlledMetric })
 
     const tableData = experience.map(tool => {
-        const cellData = { label: tool.entity.name }
+        const cellData = { label: tool?.entity?.name }
         ALL_METRICS.forEach(metric => {
             cellData[`${metric}_percentage`] = tool[metric].map(y => ({
                 year: y.year,
