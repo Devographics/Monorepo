@@ -80,9 +80,6 @@ export const AllSectionsToolsCardinalityByUserBlock = ({
             block={{
                 ...block,
                 blockName: 'all_sections_tools_cardinality_by_user',
-                // title,
-                // description,
-                showLegend: false
             }}
             tables={chartData.map(({ sectionId, data }) =>
                 getTableData({

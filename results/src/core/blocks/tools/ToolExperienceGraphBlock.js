@@ -25,7 +25,6 @@ const ToolExperienceGraphBlock = ({ block, data }) => {
                 ...block,
                 title,
                 description,
-                showLegend: false,
             }}
             data={data}
         >

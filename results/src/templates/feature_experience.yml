@@ -2,7 +2,6 @@ blockType: FeatureExperienceBlock
 dataPath: "surveyApi.survey.${id}"
 keysPath: "surveyApi.survey.${id}.experience.keys"
 entityPath: surveyApi.survey.${id}.entity
-showLegend: true
 blockNamespace: features
 chartNamespace: features
 query: >

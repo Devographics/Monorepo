@@ -25,5 +25,4 @@ export interface BlockContext<
     // Injected variables for the block
     variables: BlockVariables
     enableExport: boolean
-    showLegend: boolean
 }

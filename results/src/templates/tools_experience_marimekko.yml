@@ -1,12 +1,9 @@
 id: "${parentId}_experience_marimekko"
 blockType: ToolsExperienceMarimekkoBlock
 titleId: blocks.tools_experience_marimekko
-
 dataPath: "surveyApi.survey.${parentId}_marimekko"
 keysPath: "surveyApi.survey.${parentId}_marimekko.0.experience.keys"
 bucketKeysName: tools
-showLegend: true
-
 query: >
     surveyApi {
         survey(survey: ${surveyType}) {

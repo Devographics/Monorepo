@@ -167,12 +167,7 @@ export const ToolsCityscapeBlock = ({
             
             units={units}
             setUnits={setUnits}
-            block={{
-                ...block,
-                // title,
-                // description,
-                showLegend: false,
-            }}
+            block={block}
             data={data}
         >
             <ToolsCityscapeChart data={chartDataByCategory} units={units} />

@@ -74,7 +74,6 @@ export const OpinionBlock = ({
             setUnits={setUnits}
             block={{
                 ...block,
-                showLegend: true,
                 bucketKeysName: OPINION_BUCKET_KEYS_ID,
             }}
             legends={bucketKeys}

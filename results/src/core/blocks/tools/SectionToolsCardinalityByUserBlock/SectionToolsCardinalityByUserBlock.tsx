@@ -31,10 +31,7 @@ export const SectionToolsCardinalityByUserBlock = ({
              
             units={units}
             setUnits={setUnits}
-            block={{
-                ...block,
-                showLegend: false,
-            }}
+            block={block}
             data={data}
         >
             <Pie

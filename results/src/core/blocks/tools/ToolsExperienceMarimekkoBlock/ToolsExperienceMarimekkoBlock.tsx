@@ -101,10 +101,7 @@ export const ToolsExperienceMarimekkoBlock = ({
 
     return (
         <Block
-            block={{
-                ...block,
-                showLegend: false
-            }}
+            block={block}
             data={data}
             tables={[
                 getTableData({

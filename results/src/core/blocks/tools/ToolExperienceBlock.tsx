@@ -7,7 +7,7 @@ import Block from 'core/blocks/block/BlockVariant'
 // @ts-ignore
 import ChartContainer from 'core/charts/ChartContainer'
 // @ts-ignore
-import { useBucketKeys } from 'core/helpers/useBucketKeys'
+import { useLegends } from 'core/helpers/useBucketKeys'
 // @ts-ignore
 import { usePageContext } from 'core/helpers/pageContext'
 import { ExperienceByYearBarChart } from 'core/charts/generic/ExperienceByYearBarChart'
@@ -76,7 +76,8 @@ export const ToolExperienceBlock = ({
     // we only have english available.
     const description = locale.id === 'en-US' && data.entity.description
 
-    const bucketKeys = useBucketKeys('tools')
+    const bucketKeys = useLegends(block, keys, 'tools')
+
     const allYears = data.experience.all_years
     const completion = allYears[allYears.length - 1]?.completion
 
@@ -95,6 +96,7 @@ export const ToolExperienceBlock = ({
             block={{ ...block, title, titleLink, description }}
             data={data}
             titleProps={{ closeComponent }}
+            legends={bucketKeys}
             tables={[
                 getTableData({
                     title: data?.entity?.name,

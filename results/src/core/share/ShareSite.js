@@ -20,7 +20,7 @@ const ShareSite = () => {
 
     return (
         <Container className="ShareSite">
-            <ShareTwitter text={twitterText} />
+            <ShareTwitter twitterText={twitterText} />
             <ShareFacebook link={siteUrl} />
             <ShareLinkedIn link={siteUrl} title={title} />
             <ShareEmail subject={subject} body={body} />

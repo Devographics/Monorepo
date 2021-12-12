@@ -74,7 +74,8 @@ const LinkWithLabel = styled(Button)`
     justify-content: flex-start;
     align-items: center;
     &:hover {
-        path, circle {
+        path,
+        circle {
             fill: ${props => props.theme.colors.link};
             stroke: ${props => props.theme.colors.link};
         }
@@ -96,7 +97,9 @@ const ShareLink = ({ media, showLabel, labelId, children, ...props }) => {
             <Label>{label}</Label>
         </LinkWithLabel>
     ) : (
-        <Link {...props} className={`ShareLink ShareLink--${media}`} />
+        <Link {...props} className={`ShareLink ShareLink--${media}`}>
+            {children}
+        </Link>
     )
 }
 

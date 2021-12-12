@@ -43,10 +43,7 @@ export const ToolsArrowsBlock = ({ block, data, triggerId = null }: ToolsArrowsB
     
     return (
         <Block
-            block={{
-                ...block,
-                showLegend: false,
-            }}
+            block={block}
             data={data}
         >
             <ChartContainer vscroll={false}>
