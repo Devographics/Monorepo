@@ -107,11 +107,11 @@ export const ToolsExperienceRankingBlock = ({
     const tableData = experience.map(tool => {
         const cellData = { label: tool?.entity?.name }
         ALL_METRICS.forEach(metric => {
-            cellData[`${metric}_percentage`] = tool[metric].map(y => ({
+            cellData[`${metric}_percentage`] = tool[metric]?.map(y => ({
                 year: y.year,
                 value: y.percentage_question
             }))
-            cellData[`${metric}_rank`] = tool[metric].map(y => ({
+            cellData[`${metric}_rank`] = tool[metric]?.map(y => ({
                 year: y.year,
                 value: y.rank
             }))
