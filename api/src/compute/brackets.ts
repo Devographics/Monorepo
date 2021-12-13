@@ -61,12 +61,12 @@ export interface MatchupYearAggregations {
     buckets: MatchupBucket[]
 }
 
-export const winsAggregationFunction = async (
+export async function winsAggregationFunction(
     db: Db,
     survey: SurveyConfig,
     key: string,
     options: TermAggregationOptions = {}
-) => {
+) {
     const collection = db.collection(config.mongo.normalized_collection)
 
     const { filters, year }: TermAggregationOptions = options
@@ -125,12 +125,12 @@ export const winsAggregationFunction = async (
     return resultsWithFacets
 }
 
-export const matchupsAggregationFunction = async (
+export async function matchupsAggregationFunction (
     db: Db,
     survey: SurveyConfig,
     key: string,
     options: TermAggregationOptions = {}
-) => {
+) {
     const collection = db.collection(config.mongo.normalized_collection)
 
     const { filters, year }: TermAggregationOptions = options
