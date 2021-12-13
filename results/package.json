@@ -107,6 +107,8 @@
         "eslint-config-react-app": "^6.0.0",
         "eslint-plugin-import": "^2.25.2",
         "eslint-plugin-react": "^7.26.1",
+        "gatsby-plugin-perf-budgets": "^0.0.18",
+        "gatsby-plugin-webpack-bundle-analyser-v2": "^1.1.26",
         "prettier": "^2.4.1",
         "webpack": "^5.62.1"
     },

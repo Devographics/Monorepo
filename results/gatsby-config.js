@@ -2,7 +2,7 @@ require('dotenv').config()
 
 module.exports = {
     siteMetadata: {
-        title: `State Of JS 2020`,
+        title: `State Of CSS 2021`,
     },
     plugins: [
         'gatsby-transformer-yaml',
@@ -26,6 +26,8 @@ module.exports = {
         { resolve: 'gatsby-plugin-netlify', options: {} },
         'gatsby-plugin-styled-components',
         `gatsby-plugin-mdx`,
+        `gatsby-plugin-perf-budgets`,
+        `gatsby-plugin-webpack-bundle-analyser-v2`
         // 'gatsby-plugin-webpack-bundle-analyzer',
     ],
 }
