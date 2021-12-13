@@ -1,11 +1,11 @@
 import React from 'react'
-import { spacing, mq, fontSize } from 'core/theme'
+import { spacing, mq } from 'core/theme'
 import styled from 'styled-components'
 import T from 'core/i18n/T'
 import credits from 'Config/credits.yml'
-import { useEntities } from 'core/entities/entitiesContext'
+import SurveyCreditItem from 'core/blocks/other/CreditItem'
 
-const CreditsBlock = ({ survey }) => {
+const CreditsBlock = () => {
     return (
         <Credits>
             <Heading>
@@ -17,31 +17,6 @@ const CreditsBlock = ({ survey }) => {
                 ))}
             </CreditItems>
         </Credits>
-    )
-}
-
-const SurveyCreditItem = ({ id, role }) => {
-    const { getEntity } = useEntities()
-    const entity = getEntity(id)
-    if (!entity) {
-        return null
-    }
-    const { name, twitterName, twitter } = entity
-    return (
-        <CreditItem>
-            <Avatar href={`https://twitter.com/${twitterName}`}>
-                <img src={twitter?.avatarUrl} />
-            </Avatar>
-            <Details>
-                <Name>{name}</Name>
-                <Twitter>
-                    <a href={`https://twitter.com/${twitterName}`}>@{twitterName}</a>
-                </Twitter>
-                <Role>
-                    <T k={`credits.${role}`} />
-                </Role>
-            </Details>
-        </CreditItem>
     )
 }
 
@@ -65,36 +40,4 @@ const CreditItems = styled.div`
     @media ${mq.small} {
         grid-template-columns: repeat(1, 1fr);
     }
-`
-
-const CreditItem = styled.div`
-    display: flex;
-`
-
-const Avatar = styled.a`
-    margin-right: ${spacing(0.5)};
-    overflow: hidden;
-    border-radius: 100%;
-    height: 60px;
-    width: 60px;
-    img {
-        display: block;
-        height: 100%;
-        width: 100%;
-    }
-`
-
-const Details = styled.div``
-
-const Name = styled.h4`
-    font-size: ${fontSize('large')};
-    margin-bottom: 0px;
-`
-
-const Twitter = styled.div`
-    font-size: ${fontSize('small')};
-`
-
-const Role = styled.div`
-    font-size: ${fontSize('small')};
 `

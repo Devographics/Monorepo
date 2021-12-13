@@ -23,7 +23,7 @@ const margin = {
 const barSizes = {
     s: 30,
     m: 40,
-    l: 50,
+    l: 50
 }
 
 export interface HorizontalBarChartProps extends ChartComponentProps {
@@ -76,10 +76,14 @@ const HorizontalBarChart = ({
         units
     })
 
-    const data = useMemo(() =>sortBy(
-        buckets.map(bucket => ({ ...bucket })),
-        'count'
-    ), [buckets])
+    const data = useMemo(
+        () =>
+            sortBy(
+                buckets.map(bucket => ({ ...bucket })),
+                'count'
+            ),
+        [buckets]
+    )
 
     const baseSize = barSizes[size]
 
@@ -146,16 +150,20 @@ const HorizontalBarChart = ({
                     'axes',
                     'bars'
                 ]}
-                defs={[{
-                    id: `${colorVariant}GradientHorizontal`,
-                    type: 'linearGradient',
-                    x2: 1,
-                    y2: 0,
-                    colors: [
-                        { offset: 0, color: gradientColors[0] },
-                        { offset: 100, color: gradientColors[1] },
-                    ],
-                }]}
+                defs={[
+                    {
+                        id: `${colorVariant}GradientHorizontal`,
+                        type: 'linearGradient',
+                        x1: 0,
+                        y1: 1,
+                        x2: 1,
+                        y2: 1,
+                        colors: [
+                            { offset: 0, color: gradientColors[0] },
+                            { offset: 100, color: gradientColors[1] }
+                        ],
+                    }
+                ]}
                 fill={[{ match: '*', id: `${colorVariant}GradientHorizontal` }]}
                 {...chartProps}
             />

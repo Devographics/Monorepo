@@ -52,7 +52,14 @@ query {
 
 // v1. single loop, run graphql queries and create pages in the same loop
 exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createRedirect } }) => {
-    const buildInfo = { USE_FAST_BUILD, localeCount: 0, pages: [], pageCount: 0, blocks: [], blockCount: 0 }
+    const buildInfo = {
+        USE_FAST_BUILD,
+        localeCount: 0,
+        pages: [],
+        pageCount: 0,
+        blocks: [],
+        blockCount: 0
+    }
     const localesResults = await graphql(
         `
             ${localesQuery}
@@ -64,7 +71,9 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
 
     if (USE_FAST_BUILD) {
         // if locales are turned off (to make build faster), only keep en-US locale
-        locales = localesResults.data.surveyApi.locales.filter(l => l.id === 'en-US')
+        locales = localesResults.data.surveyApi.locales.filter(l =>
+            ['en-US', 'ru-RU'].includes(l.id)
+        )
     }
 
     const cleanLocales = getCleanLocales(locales)

@@ -911,10 +911,13 @@
   path: /conclusion
   showTitle: false
   blocks:
+
     - id: conclusion
       blockType: ConclusionBlock
       wrapBlock: false
       disableExport: true
+      author: kilian_valkhof
+
     - id: conclusion_newsletter
       blockType: NewsletterBlock
       wrapBlock: false

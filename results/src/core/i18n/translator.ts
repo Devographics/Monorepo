@@ -28,6 +28,7 @@ interface StringTranslatorResult {
     missing?: boolean
     key?: string
     t?: string
+    tHtml?: string
 }
 
 /*
@@ -71,6 +72,7 @@ export const getStringTranslator =
 
         if (result.t) {
             result.t = values ? applyTemplate(result.t, values, locale, key) : result.t
+            result.tHtml = values ? applyTemplate(result.tHtml, values, locale, key) : result.tHtml
         }
 
         return result

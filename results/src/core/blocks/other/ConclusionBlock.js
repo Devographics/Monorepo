@@ -1,34 +1,46 @@
 import React from 'react'
 import styled from 'styled-components'
-import { mq, spacing, fontSize } from 'core/theme'
+import { mq, spacing, fontSize, secondaryFontMixin } from 'core/theme'
 import T from 'core/i18n/T'
+import CreditItem from 'core/blocks/other/CreditItem'
 
-const ConclusionBlock = () => {
+const ConclusionBlock = ({ block }) => {
     return (
         <Conclusion className="Conclusion">
-            {/* <Title>
-                <T k="sections.conclusion.title" />
-            </Title> */}
+            <Heading>
+                <Title>
+                    <T k="sections.conclusion.title" />
+                </Title>
+                <CreditItem id={block.author} labelId="conclusion.bio" />
+            </Heading>
             <T k="sections.conclusion.description" md={true} />
         </Conclusion>
     )
 }
 
-const Title = styled.h2`
-    font-size: ${fontSize('largest')};
+const Heading = styled.div`
+    margin-bottom: ${spacing()};
 `
+
+const Title = styled.h2`
+    ${secondaryFontMixin}
+    @media ${mq.small} {
+        font-size: ${fontSize('larger')};
+    }
+    @media ${mq.mediumLarge} {
+        font-size: ${fontSize('largest')};
+    }
+`
+
 const Conclusion = styled.div`
     @media ${mq.large} {
         max-width: 700px;
         margin: 0 auto;
         margin-bottom: ${spacing(4)};
     }
-    .block__content {
-        p:first-child {
-            @media ${mq.mediumLarge} {
-                max-width: 700px;
-                font-size: $larger-font;
-            }
+    .first-line {
+        @media ${mq.mediumLarge} {
+            font-size: ${fontSize('largest')};
         }
     }
 `

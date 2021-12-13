@@ -67,11 +67,11 @@ const AwardBlock = ({ block }) => {
             </ElementContainer>
             <Comment className="Award__Comment">
                 <T k={`award.${type}.comment`} md={true} values={{ value: winner.value }} />
-                <ShareBlock
+                {/* <ShareBlock
                     title={`${translate(`award.${type}.title`)}`}
                     block={block}
                     className="Award__Share"
-                />
+                /> */}
             </Comment>
             <div className="Awards__RunnerUps">
                 <RunnerUpsHeading className="Awards__RunnerUps__Heading">

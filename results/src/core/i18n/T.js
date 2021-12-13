@@ -12,57 +12,59 @@ const T = ({ t: override, k, values, md = false, html = false, fallback, useShor
     const { modKeyDown } = useKeydownContext()
 
     // accept override to just use provided string as translation result
-    let t = override
+    let translation = override,
+        tRaw,
+        tHtml
     const props = {
-        'data-key': k,
+        'data-key': k
     }
     const classNames = ['t']
 
-    if (t) {
+    if (translation) {
         classNames.push('t-override')
     } else {
         const tFullString = getString(k, { values }, fallback)
         const tShortString = getString(`${k}.short`, { values }, fallback)
 
-        const tString = useShort && !tShortString.missing ? tShortString : tFullString
+        const translationObject = useShort && !tShortString.missing ? tShortString : tFullString
 
-        const handleClick = (e) => {
+        const handleClick = e => {
             // note: `fallback` here denotes whether a string is itself a fallback for a missing string
             if (modKeyDown) {
                 e.preventDefault()
                 e.stopPropagation()
-                window.open(getGitHubSearchUrl(k, tString.locale.id))
+                window.open(getGitHubSearchUrl(k, translationObject.locale.id))
             }
         }
 
-        if (!tString.t || tString.fallback) {
+        if (translationObject.t) {
+            translation = md ? translationObject.tHtml : translationObject.t
+        } else {
             props.onClick = handleClick
             props.title = 'Cmd/ctrl-click to add missing translation'
             classNames.push(modKeyDown ? 't-modkeydown' : 't-modkeyup')
-            if (!tString.t) {
-                // no translation was found
-                t = `[${tString.locale.id}] ${k}`
-                classNames.push('t-missing')
-            } else if (tString.fallback) {
+            if (translationObject.fallback) {
                 // a translation was found, but it's a fallback placeholder
-                t = tString.t
+                translation = md ? translationObject.tHtml : translationObject.t
                 classNames.push('t-fallback')
+            } else {
+                // no translation was found
+                translation = `[${translationObject.locale.id}] ${k}`
+                classNames.push('t-missing')
             }
-        } else {
-            t = md ? tString.tHtml : tString.t
         }
     }
 
     props.className = classNames.join(' ')
-    
+
     //<ReactMarkdown rehypePlugins={[rehypeRaw]}>{t}</ReactMarkdown>
 
     return md ? (
-        <div {...props} dangerouslySetInnerHTML={{ __html: t }} />
+        <div {...props} dangerouslySetInnerHTML={{ __html: translation }} />
     ) : html ? (
-        <span {...props} dangerouslySetInnerHTML={{ __html: t }} />
+        <span {...props} dangerouslySetInnerHTML={{ __html: translation }} />
     ) : (
-        <span {...props}>{t}</span>
+        <span {...props}>{translation}</span>
     )
 }
 
