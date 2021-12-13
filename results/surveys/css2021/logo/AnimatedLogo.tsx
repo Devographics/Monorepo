@@ -26,7 +26,7 @@ export const Logo = ({ className, animated = true, showText = true, size = 'l' }
                         className="soc-logo__shadow"
                         points="84.683 374.081 376.624 693.354 668.565 374.081 84.683 374.081"
                         fill="black"
-                        fillRule="evenodd"
+                        fill-rule="evenodd"
                         style={{ '--g': '1' } as React.CSSProperties}
                     />
                 </mask>
@@ -204,7 +204,7 @@ export const Logo = ({ className, animated = true, showText = true, size = 'l' }
             <g
                 className="soc-logo__lines"
                 mask="url(#soc-logo-shadow)"
-                style={{ '--t': '8' } as React.CSSProperties}
+                style={{ '--count': '8' } as React.CSSProperties}
             >
                 <rect
                     x="263.49012"
@@ -334,7 +334,7 @@ export const Logo = ({ className, animated = true, showText = true, size = 'l' }
                 <g style={{ '--g': '1' } as React.CSSProperties}>
                     <g
                         clipPath="url(#soc-logo-c1-tl)"
-                        style={{ '--i': '1' } as React.CSSProperties}
+                        style={{ '--a': '-270deg', '--i': ' 1' } as React.CSSProperties}
                     >
                         <g className="soc-logo__quarter soc-logo__quarter--ghost" data-curve="nw">
                             <use xlinkHref="#soc-logo-quarter-nw" x="198.28919" y="317.6259" />
@@ -345,7 +345,7 @@ export const Logo = ({ className, animated = true, showText = true, size = 'l' }
                     </g>
                     <g
                         clipPath="url(#soc-logo-c1-tr)"
-                        style={{ '--i': '2' } as React.CSSProperties}
+                        style={{ '--a': '120deg', '--i': ' 2' } as React.CSSProperties}
                     >
                         <g className="soc-logo__quarter soc-logo__quarter--ghost" data-curve="se">
                             <use xlinkHref="#soc-logo-quarter-se" x="257.76" y="317.6259" />
@@ -356,7 +356,7 @@ export const Logo = ({ className, animated = true, showText = true, size = 'l' }
                     </g>
                     <g
                         clipPath="url(#soc-logo-c1-bl)"
-                        style={{ '--i': '3' } as React.CSSProperties}
+                        style={{ '--a': '150deg', '--i': ' 3' } as React.CSSProperties}
                     >
                         <g className="soc-logo__quarter soc-logo__quarter--ghost" data-curve="sw">
                             <use xlinkHref="#soc-logo-quarter-sw" x="198.28919" y="377.09688" />
@@ -367,7 +367,7 @@ export const Logo = ({ className, animated = true, showText = true, size = 'l' }
                     </g>
                     <g
                         clipPath="url(#soc-logo-c1-br)"
-                        style={{ '--i': '4' } as React.CSSProperties}
+                        style={{ '--a': '270deg', '--i': ' 4' } as React.CSSProperties}
                     >
                         <g className="soc-logo__quarter soc-logo__quarter--ghost" data-curve="ne">
                             <use xlinkHref="#soc-logo-quarter-ne" x="257.76" y="377.09688" />
@@ -382,7 +382,7 @@ export const Logo = ({ className, animated = true, showText = true, size = 'l' }
                 <g style={{ '--g': '2' } as React.CSSProperties}>
                     <g
                         clipPath="url(#soc-logo-s1-tl)"
-                        style={{ '--i': '1' } as React.CSSProperties}
+                        style={{ '--a': '-270deg', '--i': ' 1' } as React.CSSProperties}
                     >
                         <g className="soc-logo__quarter soc-logo__quarter--ghost" data-curve="nw">
                             <use xlinkHref="#soc-logo-quarter-nw" x="320.17056" y="317.6259" />
@@ -393,7 +393,7 @@ export const Logo = ({ className, animated = true, showText = true, size = 'l' }
                     </g>
                     <g
                         clipPath="url(#soc-logo-s1-tr)"
-                        style={{ '--i': '2' } as React.CSSProperties}
+                        style={{ '--a': '120deg', '--i': ' 2' } as React.CSSProperties}
                     >
                         <g className="soc-logo__quarter soc-logo__quarter--ghost" data-curve="se">
                             <use xlinkHref="#soc-logo-quarter-se" x="379.56477" y="317.6259" />
@@ -404,7 +404,7 @@ export const Logo = ({ className, animated = true, showText = true, size = 'l' }
                     </g>
                     <g
                         clipPath="url(#soc-logo-s1-bl)"
-                        style={{ '--i': '3' } as React.CSSProperties}
+                        style={{ '--a': '-120deg', '--i': ' 3' } as React.CSSProperties}
                     >
                         <g className="soc-logo__quarter soc-logo__quarter--ghost" data-curve="nw">
                             <use xlinkHref="#soc-logo-quarter-nw" x="320.17056" y="377.09688" />
@@ -415,7 +415,7 @@ export const Logo = ({ className, animated = true, showText = true, size = 'l' }
                     </g>
                     <g
                         clipPath="url(#soc-logo-s1-br)"
-                        style={{ '--i': '4' } as React.CSSProperties}
+                        style={{ '--a': '135deg', '--i': ' 4' } as React.CSSProperties}
                     >
                         <g className="soc-logo__quarter soc-logo__quarter--ghost" data-curve="se">
                             <use xlinkHref="#soc-logo-quarter-se" x="379.56477" y="377.09688" />
@@ -430,7 +430,7 @@ export const Logo = ({ className, animated = true, showText = true, size = 'l' }
                 <g style={{ '--g': '3' } as React.CSSProperties}>
                     <g
                         clipPath="url(#soc-logo-s2-tl)"
-                        style={{ '--i': '1' } as React.CSSProperties}
+                        style={{ '--a': '-135deg', '--i': ' 1' } as React.CSSProperties}
                     >
                         <g className="soc-logo__quarter soc-logo__quarter--ghost" data-curve="nw">
                             <use xlinkHref="#soc-logo-quarter-nw" x="436.17146" y="317.6259" />
@@ -441,7 +441,7 @@ export const Logo = ({ className, animated = true, showText = true, size = 'l' }
                     </g>
                     <g
                         clipPath="url(#soc-logo-s2-tr)"
-                        style={{ '--i': '2' } as React.CSSProperties}
+                        style={{ '--a': '270deg', '--i': ' 2' } as React.CSSProperties}
                     >
                         <g className="soc-logo__quarter soc-logo__quarter--ghost" data-curve="se">
                             <use xlinkHref="#soc-logo-quarter-se" x="495.567" y="317.6259" />
@@ -452,7 +452,7 @@ export const Logo = ({ className, animated = true, showText = true, size = 'l' }
                     </g>
                     <g
                         clipPath="url(#soc-logo-s2-bl)"
-                        style={{ '--i': '3' } as React.CSSProperties}
+                        style={{ '--a': '180deg', '--i': ' 3' } as React.CSSProperties}
                     >
                         <g className="soc-logo__quarter soc-logo__quarter--ghost" data-curve="nw">
                             <use xlinkHref="#soc-logo-quarter-nw" x="436.17146" y="377.09688" />
@@ -463,7 +463,7 @@ export const Logo = ({ className, animated = true, showText = true, size = 'l' }
                     </g>
                     <g
                         clipPath="url(#soc-logo-s2-br)"
-                        style={{ '--i': '4' } as React.CSSProperties}
+                        style={{ '--a': '-180deg', '--i': ' 4' } as React.CSSProperties}
                     >
                         <g className="soc-logo__quarter soc-logo__quarter--ghost" data-curve="se">
                             <use xlinkHref="#soc-logo-quarter-se" x="495.567" y="377.09688" />
