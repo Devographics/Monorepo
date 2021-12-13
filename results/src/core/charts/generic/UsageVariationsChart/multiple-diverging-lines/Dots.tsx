@@ -1,5 +1,5 @@
 import React, { memo, useMemo } from 'react'
-import { useTransition, animated, to } from 'react-spring'
+import { useTransition, animated, to } from '@react-spring/web'
 import { useTheme } from 'styled-components'
 import { useMotionConfig, useTheme as useNivoTheme } from '@nivo/core'
 import { useTooltip } from '@nivo/tooltip'
