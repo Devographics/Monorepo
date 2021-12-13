@@ -1,6 +1,6 @@
 import React from 'react'
 import { Area, Line as D3Line } from 'd3-shape'
-import { animated } from 'react-spring'
+import { animated } from '@react-spring/web'
 import { useAnimatedPath } from '@nivo/core'
 import { ComputedDatum, ComputedPoint } from './types'
 import { NegativePattern } from './NegativePattern'

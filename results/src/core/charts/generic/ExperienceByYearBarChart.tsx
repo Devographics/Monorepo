@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { useTransition, animated } from 'react-spring'
+import { useTransition, animated } from '@react-spring/web'
 import { useTheme } from 'styled-components'
 import { useMotionConfig } from '@nivo/core'
 import { ResponsiveMarimekko } from '@nivo/marimekko'
