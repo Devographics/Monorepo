@@ -110,7 +110,7 @@ export const ToolsExperienceMarimekkoBlock = ({
                 })
             ]}
         >
-            <ChartContainer fit height={height}>
+            <ChartContainer height={height}>
                 <ToolsExperienceMarimekkoChart data={normalizedData} current={controlledCurrent} />
             </ChartContainer>
         </Block>

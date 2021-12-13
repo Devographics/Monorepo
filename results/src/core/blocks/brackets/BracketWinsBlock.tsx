@@ -85,7 +85,7 @@ const BracketWinsBlock = ({ block, data, keys }: HorizontalBarBlockProps) => {
             legends={legends}
             block={block}
         >
-            <ChartContainer fit={true}>
+            <ChartContainer>
                 <HorizontalBarChart
                     size="l"
                     total={total}
