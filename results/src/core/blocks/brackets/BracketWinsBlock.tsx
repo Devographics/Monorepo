@@ -95,6 +95,7 @@ const BracketWinsBlock = ({ block, data, keys }: HorizontalBarBlockProps) => {
                     mode={mode}
                     units={units}
                     colorVariant={colorVariant}
+                    chartDefs={[]}
                     chartProps={{
                         keys: rounds.map(r => `${r}___${units}`),
                         indexBy: 'id',

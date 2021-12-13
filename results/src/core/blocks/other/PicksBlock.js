@@ -65,7 +65,7 @@ const PicksBlock = ({ block, data }) => {
                                 <a href={`https://twitter.com/${twitterName}`}>{fullName}</a>
                             </PickName>
                             <PickBio>
-                                <T k={`picks.${twitterName}.bio`} />
+                                <T k={`picks.${twitterName}.bio`} md={true} />
                             </PickBio>
                         </PickCredit>
                     </PickPerson>

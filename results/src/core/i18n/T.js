@@ -12,15 +12,14 @@ const T = ({ t: override, k, values, md = false, html = false, fallback, useShor
     const { modKeyDown } = useKeydownContext()
 
     // accept override to just use provided string as translation result
-    let translation = override,
-        tRaw,
-        tHtml
+    let translation = override
+
     const props = {
         'data-key': k
     }
     const classNames = ['t']
 
-    if (translation) {
+    if (override) {
         classNames.push('t-override')
     } else {
         const tFullString = getString(k, { values }, fallback)

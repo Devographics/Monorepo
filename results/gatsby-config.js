@@ -26,8 +26,7 @@ module.exports = {
         { resolve: 'gatsby-plugin-netlify', options: {} },
         'gatsby-plugin-styled-components',
         `gatsby-plugin-mdx`,
-        `gatsby-plugin-perf-budgets`,
-        `gatsby-plugin-webpack-bundle-analyser-v2`
-        // 'gatsby-plugin-webpack-bundle-analyzer',
+        // `gatsby-plugin-perf-budgets`,
+        // `gatsby-plugin-webpack-bundle-analyser-v2`
     ],
 }

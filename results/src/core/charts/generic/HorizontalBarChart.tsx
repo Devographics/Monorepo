@@ -62,7 +62,8 @@ const HorizontalBarChart = ({
     units,
     chartProps,
     colorVariant = 'primary',
-    size = 'm'
+    size = 'm',
+    chartDefs,
 }: HorizontalBarChartProps) => {
     const theme = useTheme()
     const { translate } = useI18n()
@@ -150,7 +151,7 @@ const HorizontalBarChart = ({
                     'axes',
                     'bars'
                 ]}
-                defs={[
+                defs={chartDefs ? chartDefs : [
                     {
                         id: `${colorVariant}GradientHorizontal`,
                         type: 'linearGradient',

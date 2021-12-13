@@ -4,6 +4,7 @@ import React, { createContext, useContext, FC } from 'react'
 interface PageContextValue {
     locale?: Locale
     width?: number
+    isCapturing?: boolean
 }
 
 const pageContext = createContext({})

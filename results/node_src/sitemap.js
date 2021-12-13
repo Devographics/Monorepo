@@ -1,7 +1,7 @@
 const fs = require('fs')
 const { findIndex, findLastIndex, omit, template } = require('lodash')
 const yaml = require('js-yaml')
-const { getAllBlocks, loadTemplate, logToFile } = require('./helpers.js')
+const { loadTemplate } = require('./helpers.js')
 
 const globalVariables = yaml.load(
     fs.readFileSync(`./surveys/${process.env.SURVEY}/config/variables.yml`, 'utf8')

@@ -25,7 +25,9 @@ const BlockVariant = (props: BlockVariantProps) => {
     return (
         <Container
             // id={id}
-            className={`Block Block--${id}${className !== undefined ? ` ${className}` : ''}`}
+            className={`Block ${
+                isCapturing ? 'Block--isCapturing' : 'Block--notcapturing'
+            } Block--${id}${className !== undefined ? ` ${className}` : ''}`}
         >
             {/* {showTitle && (
                 <BlockTitle
@@ -40,49 +42,52 @@ const BlockVariant = (props: BlockVariantProps) => {
                 />
             )} */}
             <ShareBlockDebug block={block} />
-
-            <TabsRoot defaultValue="chart" orientation="vertical">
-                {!isCapturing && (
-                    <SideArea>
-                        <TabsList aria-label="tabs example">
-                            <TabsTrigger value="chart">
-                                <ChartIcon enableTooltip={true} labelId="tabs.chart" />
-                            </TabsTrigger>
-                            <TabsTrigger value="data">
-                                <DataIcon enableTooltip={true} labelId="tabs.data" />
-                            </TabsTrigger>
-                            <TabsTrigger value="share">
-                                <ShareIcon enableTooltip={true} labelId="tabs.share" />
-                            </TabsTrigger>
-                            {/* <TabsTrigger value="debug">
+            {isCapturing ? (
+                <BlockChart {...props}>{children}</BlockChart>
+            ) : (
+                <>
+                    <TabsRoot defaultValue="chart" orientation="vertical">
+                        <SideArea className="Block__SideArea">
+                            <TabsList aria-label="tabs example">
+                                <TabsTrigger value="chart">
+                                    <ChartIcon enableTooltip={true} labelId="tabs.chart" />
+                                </TabsTrigger>
+                                <TabsTrigger value="data">
+                                    <DataIcon enableTooltip={true} labelId="tabs.data" />
+                                </TabsTrigger>
+                                <TabsTrigger value="share">
+                                    <ShareIcon enableTooltip={true} labelId="tabs.share" />
+                                </TabsTrigger>
+                                {/* <TabsTrigger value="debug">
                                 <DebugIcon enableTooltip={true} labelId="tabs.debug" />
                             </TabsTrigger> */}
-                        </TabsList>
-                    </SideArea>
-                )}
-                <MainArea isCapturing={isCapturing}>
-                    <Tabs.Content value="chart">
-                        <TabWithBoundary {...props}>
-                            <BlockChart {...props}>{children}</BlockChart>
-                        </TabWithBoundary>
-                    </Tabs.Content>
-                    <Tabs.Content value="data">
-                        <TabWithBoundary>
-                            <BlockData {...props} />
-                        </TabWithBoundary>
-                    </Tabs.Content>
-                    <Tabs.Content value="share">
-                        <TabWithBoundary>
-                            <BlockShare {...props} />
-                        </TabWithBoundary>
-                    </Tabs.Content>
-                    {/* <Tabs.Content value="debug">
+                            </TabsList>
+                        </SideArea>
+                        <MainArea>
+                            <Tabs.Content value="chart">
+                                <TabWithBoundary {...props}>
+                                    <BlockChart {...props}>{children}</BlockChart>
+                                </TabWithBoundary>
+                            </Tabs.Content>
+                            <Tabs.Content value="data">
+                                <TabWithBoundary>
+                                    <BlockData {...props} />
+                                </TabWithBoundary>
+                            </Tabs.Content>
+                            <Tabs.Content value="share">
+                                <TabWithBoundary>
+                                    <BlockShare {...props} />
+                                </TabWithBoundary>
+                            </Tabs.Content>
+                            {/* <Tabs.Content value="debug">
                         <TabWithBoundary>
                             <BlockDebug {...props} />
                         </TabWithBoundary>
                     </Tabs.Content> */}
-                </MainArea>
-            </TabsRoot>
+                        </MainArea>
+                    </TabsRoot>
+                </>
+            )}
         </Container>
     )
 }
@@ -102,6 +107,11 @@ const Container = styled.div`
 
     &:last-child {
         margin-bottom: 0;
+    }
+    &.Block--isCapturing {
+        .Block__SideArea {
+            display: none;
+        }
     }
 `
 
@@ -154,7 +164,7 @@ const TabsRoot = styled(Tabs.Root)`
     }
 `
 
-const MainArea = styled.div`
+const MainArea = styled.div<{ isCapturing?: boolean }>`
     grid-area: main;
     padding-top: ${({ isCapturing }) => (isCapturing ? 0 : spacing())};
 `
