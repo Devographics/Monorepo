@@ -1,16 +1,15 @@
 import React, { useMemo, useState } from 'react'
 import get from 'lodash/get'
 import compact from 'lodash/compact'
+import round from 'lodash/round'
+import sortBy from 'lodash/sortBy'
 import Block from 'core/blocks/block/BlockVariant'
-import FeaturesOverviewCirclePackingChart from 'core/charts/features/FeaturesOverviewCirclePackingChart'
+import { FeaturesCirclePackingChart } from 'core/charts/features/FeaturesCirclePackingChart'
 import { useI18n } from 'core/i18n/i18nContext'
 import { useEntities } from 'core/entities/entitiesContext'
 import ChartContainer from 'core/charts/ChartContainer'
 import variables from 'Config/variables.yml'
-import round from 'lodash/round'
-import sortBy from 'lodash/sortBy'
 import { getTableData } from 'core/helpers/datatables'
-import BlockUnitsSelector from 'core/blocks/block/BlockUnitsSelector'
 import { useLegends } from 'core/helpers/useBucketKeys'
 
 const modes = ['grouped', 'awareness_rank', 'usage_rank' /*'usage_ratio_rank'*/]
@@ -136,11 +135,11 @@ const FeaturesOverviewBlock = ({ block, data, triggerId }) => {
             }}
         >
             <ChartContainer vscroll={false} height={height}>
-                <FeaturesOverviewCirclePackingChart
+                <FeaturesCirclePackingChart
                     className={`FeaturesOverviewChart ${chartClassName}`}
                     data={chartData}
                     variant="allFeatures"
-                    current={controlledCurrent}
+                    currentFeatureIds={controlledCurrent}
                     mode={mode}
                 />
             </ChartContainer>
