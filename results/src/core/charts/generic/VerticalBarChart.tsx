@@ -83,6 +83,9 @@ const VerticalBarChart = ({
 
     const labelsLayer = useMemo(() => getLabelsLayer(units), [units])
 
+    const colors = [theme.colors.barChart[colorVariant]]
+    const gradientColors = theme.colors.barChart[`${colorVariant}Gradient`]
+
     return (
         <div style={{ height: 260 }} className={`VerticalBarChart ${className}`}>
             <ResponsiveBar
@@ -94,7 +97,7 @@ const VerticalBarChart = ({
                 padding={0.4}
                 theme={theme.charts}
                 animate={false}
-                colors={[theme.colors.barChart[colorVariant]]}
+                colors={colors}
                 borderRadius={1}
                 enableLabel={false}
                 enableGridX={false}
@@ -127,6 +130,15 @@ const VerticalBarChart = ({
                     />
                 )}
                 layers={['grid', 'axes', 'bars', labelsLayer]}
+                defs={[{
+                    id: `${colorVariant}GradientVertical`,
+                    type: 'linearGradient',
+                    colors: [
+                        { offset: 0, color: gradientColors[1] },
+                        { offset: 100, color: gradientColors[0] },
+                    ],
+                }]}
+                fill={[{ match: '*', id: `${colorVariant}GradientVertical` }]}
                 {...chartProps}
             />
         </div>

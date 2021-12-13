@@ -63,7 +63,9 @@ declare module 'styled-components' {
             lineChartDefaultColor: string
             barChart: {
                 primary: string
+                primaryGradient: [string, string]
                 secondary: string
+                secondaryGradient: [string, string]
             }
             ranges: {
                 tools: Record<ToolExperienceId, string>
