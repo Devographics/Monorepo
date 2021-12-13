@@ -358,6 +358,10 @@
         - id: prefers_reduced_data
           template: feature_experience
           year: 2021
+
+        - id: walterstephanie
+          template: picks
+          
         - id: color_contrast
           template: feature_experience
           year: 2021

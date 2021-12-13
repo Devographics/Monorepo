@@ -12,3 +12,7 @@
   role: mobile_testing
 - id: raphael_benitte
   role: data_visualizations
+- id: dan_cowell
+  role: repo_architecture
+- id: ben_szabo
+  role: code_refactoring

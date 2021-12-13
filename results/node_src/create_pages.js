@@ -70,7 +70,7 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
     const cleanLocales = getCleanLocales(locales)
     logToFile('locales.json', cleanLocales, { mode: 'overwrite' })
     locales.forEach(locale => {
-        logToFile(`locales/${locale.id}.json`, locale, { mode: 'overwrite' })
+        logToFile(`${locale.id}.json`, locale, { mode: 'overwrite', subDir: 'locales' })
     })
 
     const { flat } = await computeSitemap(rawSitemap, cleanLocales)

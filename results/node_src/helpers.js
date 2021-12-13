@@ -100,30 +100,34 @@ Log to file
 
 */
 exports.logToFile = async (fileName, object, options = {}) => {
-    if (process.env.NODE_ENV !== 'production') {
-        const { mode = 'append', timestamp = false } = options
+    try {
+        if (process.env.NODE_ENV !== 'production') {
+            const { mode = 'append', timestamp = false, subDir } = options
 
-        const logsDirPath = `${__dirname}/.logs`
-        if (!fs.existsSync(logsDirPath)) {
-            fs.mkdirSync(logsDirPath, { recursive: true })
-        }
-        const fullPath = `${logsDirPath}/${fileName}`
-        const contents = typeof object === 'string' ? object : JSON.stringify(object, null, 2)
-        const now = new Date()
-        const text = timestamp ? now.toString() + '\n---\n' + contents : contents
-        if (mode === 'append') {
-            const stream = fs.createWriteStream(fullPath, { flags: 'a' })
-            stream.write(text + '\n')
-            stream.end()
-        } else {
-            fs.writeFile(fullPath, text, error => {
-                // throws an error, you could also catch it here
-                if (error) throw error
+            const logsDirPath = `${__dirname}/.logs${subDir ? `/${subDir}` : ''}`
+            if (!fs.existsSync(logsDirPath)) {
+                fs.mkdirSync(logsDirPath, { recursive: true })
+            }
+            const fullPath = `${logsDirPath}/${fileName}`
+            const contents = typeof object === 'string' ? object : JSON.stringify(object, null, 2)
+            const now = new Date()
+            const text = timestamp ? now.toString() + '\n---\n' + contents : contents
+            if (mode === 'append') {
+                const stream = fs.createWriteStream(fullPath, { flags: 'a' })
+                stream.write(text + '\n')
+                stream.end()
+            } else {
+                fs.writeFile(fullPath, text, error => {
+                    // throws an error, you could also catch it here
+                    if (error) throw error
 
-                // eslint-disable-next-line no-console
-                console.log(`Object saved to ${fullPath}`)
-            })
+                    // eslint-disable-next-line no-console
+                    console.log(`Object saved to ${fullPath}`)
+                })
+            }
         }
+    } catch (error) {
+        console.warn(`// error while trying to log out ${fileName}`)
     }
 }
 
@@ -140,15 +144,13 @@ exports.createBlockPages = (page, context, createPage, locales, buildInfo) => {
 
     blocks.forEach(block => {
         block.variants.forEach(blockVariant => {
-            
             // allow for specifying explicit pageId in block definition
             if (!blockVariant.pageId) {
                 blockVariant.pageId = page.id
             }
             locales.forEach(locale => {
-    
-                buildInfo.blockCount ++
-                
+                buildInfo.blockCount++
+
                 const blockPage = {
                     path: getLocalizedPath(blockVariant.path, locale),
                     component: path.resolve(`./src/core/share/ShareBlockTemplate.js`),
@@ -205,9 +207,9 @@ exports.runPageQuery = async ({ page, graphql }) => {
             const timeDiff = Math.round((end - start) / 1000)
             pageData = queryResults.data
             exports.logToFile(
-                `data/${queryName}.json`,
+                `${queryName}.json`,
                 { data: pageData, duration: timeDiff },
-                { mode: 'overwrite' }
+                { mode: 'overwrite', subDir: 'data' }
             )
         } catch (error) {
             console.log(`// Error while loading data for page ${page.id}`)

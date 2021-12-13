@@ -53,6 +53,11 @@
   avatarUrl: sachagreif.jpg
   url: https://open-props.style/
 
+- twitterName: walterstephanie
+  fullName: Stéphanie Walter
+  avatarUrl: walterstephanie.jpg
+  url: https://www.miriamsuzanne.com/
+  
 # - twitterName: kilianvalkhof
 #   fullName: Kilian Valkhof
 #   avatarUrl: kilianvalkhof.jpg
@@ -62,11 +67,6 @@
 #   fullName: Christian Oliff
 #   avatarUrl: christianoliff.jpg
 #   url: https://purgecss.com/
-
-# - twitterName: walterstephanie
-#   fullName: Stéphanie Walter
-#   avatarUrl: walterstephanie.jpg
-#   url: https://www.youtube.com/c/LayoutLand
 
 # - twitterName: piccalilli_
 #   fullName: Andy Bell
