@@ -66,6 +66,7 @@ const Label = styled.span`
 `
 
 const Icon = styled.span`
+    display: flex;
     margin-right: ${spacing()};
 `
 
