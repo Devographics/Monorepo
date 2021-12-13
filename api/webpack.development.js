@@ -7,6 +7,6 @@ module.exports = {
     ...common,
     devtool: 'inline-source-map',
     mode: 'development',
-    plugins: [new CleanWebpackPlugin(), new NodemonPlugin()],
-    watch: true,
+    plugins: [...common.plugins, new CleanWebpackPlugin(), new NodemonPlugin()],
+    watch: true
 }

@@ -6,5 +6,5 @@ module.exports = {
     ...common,
     devtool: 'source-map',
     mode: 'production',
-    plugins: [new CleanWebpackPlugin()],
+    plugins: [...common.plugins, new CleanWebpackPlugin()]
 }
