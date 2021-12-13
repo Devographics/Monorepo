@@ -9,7 +9,7 @@ import { useBarChart } from 'core/charts/hooks'
 import BarTooltip from 'core/charts/generic/BarTooltip'
 import HorizontalBarStripes from './HorizontalBarStripes'
 import { isPercentage } from 'core/helpers/units'
-import { ChartComponentProps, BlockUnits, BucketItem, BlockLegend, TickItemProps } from 'core/types'
+import { ChartComponentProps, BucketItem } from 'core/types'
 import TickItem, { getBucketLabel } from 'core/charts/generic/TickItem'
 import maxBy from 'lodash/maxBy'
 
@@ -20,10 +20,16 @@ const margin = {
     left: 200
 }
 
+const barSizes = {
+    s: 30,
+    m: 40,
+    l: 50,
+}
+
 export interface HorizontalBarChartProps extends ChartComponentProps {
     total: number
     buckets: BucketItem[]
-    size: 's' | 'm' | 'l'
+    size: keyof typeof barSizes
 }
 
 const marginCoeff = 9
@@ -70,27 +76,17 @@ const HorizontalBarChart = ({
         units
     })
 
-    const data = sortBy(
+    const data = useMemo(() =>sortBy(
         buckets.map(bucket => ({ ...bucket })),
         'count'
-    )
+    ), [buckets])
 
-    let baseSize
-    switch (size) {
-        case 's':
-            baseSize = '30'
-            break
-
-        case 'm':
-            baseSize = '40'
-            break
-
-        case 'l':
-            baseSize = '50'
-            break
-    }
+    const baseSize = barSizes[size]
 
     const left = getLeftMargin({ data, shouldTranslate: translateData, i18nNamespace })
+
+    const colors = [theme.colors.barChart[colorVariant]]
+    const gradientColors = theme.colors.barChart[`${colorVariant}Gradient`]
 
     return (
         <div style={{ height: buckets.length * baseSize + 80 }}>
@@ -107,7 +103,7 @@ const HorizontalBarChart = ({
                 label={d => (isPercentage(units) ? `${round(d.value, 1)}%` : d.value)}
                 labelTextColor={theme.colors.text}
                 labelSkipWidth={40}
-                colors={[theme.colors.barChart[colorVariant]]}
+                colors={colors}
                 padding={0.4}
                 borderRadius={1}
                 axisTop={{
@@ -150,6 +146,17 @@ const HorizontalBarChart = ({
                     'axes',
                     'bars'
                 ]}
+                defs={[{
+                    id: `${colorVariant}GradientHorizontal`,
+                    type: 'linearGradient',
+                    x2: 1,
+                    y2: 0,
+                    colors: [
+                        { offset: 0, color: gradientColors[0] },
+                        { offset: 100, color: gradientColors[1] },
+                    ],
+                }]}
+                fill={[{ match: '*', id: `${colorVariant}GradientHorizontal` }]}
                 {...chartProps}
             />
         </div>

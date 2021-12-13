@@ -49,7 +49,9 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
     lineChartDefaultColor: '#59DF7F',
     barChart: {
         primary: '#ef4e88',
-        secondary: '#5C63E0'
+        primaryGradient: ['#E2EEA3', '#EA1C78'],
+        secondary: '#5C63E0',
+        secondaryGradient: ['#E2EEA3', '#EA1C78'],
     },
     ranges: {
         tools: {

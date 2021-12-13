@@ -11,7 +11,7 @@ export interface ChartComponentProps {
   mode: BlockMode
   units: BlockUnits
   chartProps?: any
-  colorVariant?: string,
+  colorVariant?: 'primary' | 'secondary',
   // 'buckets' is declared by chart
 }
 
