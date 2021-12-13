@@ -5,6 +5,6 @@ const common = require('./webpack.common.js')
 module.exports = {
     ...common,
     devtool: 'source-map',
-    mode: 'production',
+    mode: 'development',
     plugins: [...common.plugins, new CleanWebpackPlugin()]
 }
