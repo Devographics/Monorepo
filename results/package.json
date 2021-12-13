@@ -84,7 +84,6 @@
         "react-intersection-observer": "^8.32.2",
         "react-markdown": "^7.1.0",
         "react-modal": "^3.14.3",
-        "react-spring": "^9.3.0",
         "react-tabs": "^3.2.3",
         "rehype-raw": "^6.1.0",
         "remove-markdown": "^0.3.0",
@@ -112,7 +111,7 @@
     },
     "private": true,
     "scripts": {
-        "build": "node scripts/patch-react-spring.js && gatsby build",
+        "build": "gatsby build",
         "serve": "yarn run build && gatsby serve",
         "deploy": "yarn run build && gh-pages -d public",
         "dev": "gatsby develop --port 8001",
