@@ -5,7 +5,7 @@ import { ResponsiveScatterPlot } from '@nivo/scatterplot'
 import { useI18n } from 'core/i18n/i18nContext'
 import variables from 'Config/variables.yml'
 
-const { totalCountRounded } = variables
+const { totalCountRounded, toolsCategories } = variables
 
 const labelPositions = {
     satisfaction: {
@@ -88,9 +88,10 @@ const Node = (props) => {
     const cutoff = 12 // cut off the lines a little before the node
     const translateLabel = labelPositions[metric][name] ?? [0, 0]
     // const category = id.split('.')[0]
-    const state = current === null ? 'default' : current === originalId ? 'active' : 'inactive'
-    // const opacity = current === null ? 1 : current === originalId ? 1 : 0.3
-    const opacity = 1
+    const isHover = current && current === originalId
+    const isSelected = current in toolsCategories && toolsCategories[current].includes(originalId)
+    const state = !current || isSelected ? 'default' : isHover ? 'active' : 'inactive' 
+    const opacity = !current || isSelected || isHover ? 1 : 0.3
 
     return (
         <g
