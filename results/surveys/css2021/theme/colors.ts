@@ -19,7 +19,9 @@ const colors = {
     yellowLight: '#FFF1C0',
     yellow: '#FFE589',
     grey: '#8B8085',
-    greyLight: '#BBB2B6'
+    greyLight: '#BBB2B6',
+    greyLighter: '#DED1D7',
+    greyLightest: '#EADEE3'
 }
 
 const velocity = [
@@ -85,7 +87,7 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
             would_not_use: [colors.pink, colors.pinkLight],
             interested: [colors.blueLighter, colors.blueLightest],
             not_interested: [colors.pinkLighter, colors.pinkLightest],
-            never_heard: [colors.grey, colors.greyLight]
+            never_heard: [colors.greyLight, colors.greyLightest]
         },
         toolSections: {
             javascript_flavors: colors.indigo,
