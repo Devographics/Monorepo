@@ -1,6 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 import { mq, spacing, fontSize, color } from 'core/theme'
+import { stripMarkdown } from 'core/helpers/stripMarkdown'
+import { stripHtml } from 'core/helpers/stripHtml'
 import config from 'Config/config.yml'
 import T from 'core/i18n/T'
 
@@ -48,7 +50,7 @@ const SharePreview = ({ title, subtitle, image, link }) => {
                 <Image src={image} />
                 <Meta>
                     <Title>{title}</Title>
-                    <Subtitle>{subtitle}</Subtitle>
+                    {subtitle && <Subtitle>{stripMarkdown(stripHtml(subtitle))}</Subtitle>}
                     <Domain>{hostname}</Domain>
                 </Meta>
             </Container>
