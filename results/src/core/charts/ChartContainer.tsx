@@ -1,9 +1,22 @@
-import React, { memo } from 'react'
-import PropTypes from 'prop-types'
+import React, { memo, ReactNode } from 'react'
 import styled from 'styled-components'
 import { mq, spacing } from 'core/theme'
 
-const Indicator = memo(({ position }) => (
+type PositionProp = 'top' | 'right' | 'bottom' | 'left'
+
+interface IndicatorProps {
+    position: PositionProp
+}
+
+interface ChartContainerProps {
+    children: ReactNode
+    height?: string | number
+    className?: string
+    fit?: boolean
+    vscroll?: boolean
+}
+
+const Indicator = memo(({ position }: IndicatorProps) => (
     <ChartContainerIndicator
         position={position}
         className={`ChartContainerIndicator ChartContainerIndicator--${position}`}
@@ -36,12 +49,19 @@ const Indicator = memo(({ position }) => (
         </svg>
     </ChartContainerIndicator>
 ))
+Indicator.displayName = 'Indicator'
 
 /**
  * - Fit: fit to viewport width
  * - Expand: force a 600px width
  */
-const ChartContainer = ({ children, height, fit = false, className = '', vscroll = false }) => (
+const ChartContainer = ({
+    children,
+    height,
+    fit = false,
+    className = '',
+    vscroll = false
+}: ChartContainerProps) => (
     <ChartContainerOuter className={`ChartContainerOuter ${className}`} style={{ height }}>
         <Container className="ChartContainer" style={{ height }}>
             <ChartContainerInner
@@ -66,13 +86,6 @@ const ChartContainer = ({ children, height, fit = false, className = '', vscroll
     </ChartContainerOuter>
 )
 
-ChartContainer.propTypes = {
-    height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-    fit: PropTypes.bool,
-    className: PropTypes.string,
-    vscroll: PropTypes.bool,
-}
-
 const ChartContainerOuter = styled.div`
     position: relative;
 `
@@ -87,16 +100,16 @@ const Container = styled.div`
     }
 
     .FeatureExperienceBlock__RowChart & {
-      @media ${mq.smallMedium} {
-          overflow-x: visible;
-      }
+        @media ${mq.smallMedium} {
+            overflow-x: visible;
+        }
     }
 `
 
 const ChartContainerInner = styled.div`
     &.ChartContainerInner--expand {
         @media ${mq.small} {
-          min-width:500px;
+            min-width: 500px;
         }
         @media ${mq.medium} {
             max-width: auto;
@@ -106,7 +119,7 @@ const ChartContainerInner = styled.div`
     }
 `
 
-const ChartContainerIndicator = styled.span`
+const ChartContainerIndicator = styled.span<IndicatorProps>`
     position: absolute;
     display: flex;
     justify-content: center;
