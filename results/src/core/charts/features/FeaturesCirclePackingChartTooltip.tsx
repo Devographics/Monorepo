@@ -5,20 +5,29 @@ import { useTheme as useNivoTheme } from '@nivo/core'
 import { useI18n } from 'core/i18n/i18nContext'
 import { spacing, fontWeight } from 'core/theme'
 
-const Chip = ({ color, color2 }) => (
+const Chip = ({ color, color2 }: { color: string; color2?: string }) => (
     <span className={`Chip Tooltip__Chip ${color2 && 'Chip--split'}`}>
         <span style={{ background: color }} className="Chip__Inner" />
         {color2 && <span style={{ background: color2 }} className="Chip__Inner" />}
     </span>
 )
 
-export const FeaturesCirclePackingChartTooltip = (props) => {
+export const FeaturesCirclePackingChartTooltip = ({
+    node: { name, sectionId, awareness, usage }
+}: {
+    node: {
+        name: string
+        sectionId: string
+        awareness: number
+        usage: number
+    }
+}) => {
     const { translate } = useI18n()
-    const { data } = props
-    const { name, awareness, usage } = data
     const nivoTheme = useNivoTheme()
     const theme = useTheme()
-    const color = theme.colors.ranges.features_categories[data.sectionId]
+
+    // @ts-ignore: sections depend on the survey, and we didn't solved this issue
+    const color = theme.colors.ranges.features_categories[sectionId]
 
     return (
         <div style={nivoTheme.tooltip.container}>
@@ -26,15 +35,15 @@ export const FeaturesCirclePackingChartTooltip = (props) => {
                 <Heading>{name}</Heading>
                 <Grid>
                     <Chip color={`${color}50`} />
-                    {translate('options.features_simplified.know_it')}
+                    {translate!('options.features_simplified.know_it')}
                     <Value>{awareness}</Value>
 
                     <Chip color={color} />
-                    {translate('options.features_simplified.used_it')}
+                    {translate!('options.features_simplified.used_it')}
                     <Value>{usage}</Value>
 
                     <Chip color={`${color}50`} color2={color} />
-                    {translate('options.features_simplified.usage_ratio')}
+                    {translate!('options.features_simplified.usage_ratio')}
                     <Value>{round((usage / awareness) * 100, 1)}%</Value>
                 </Grid>
             </div>
