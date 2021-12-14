@@ -111,6 +111,7 @@ export default class LegendsItem extends Component {
 const Container = styled.tr`
     cursor: default;
     display: flex;
+    align-items: center;
     
     &:last-child {
         margin-bottom: 0;
@@ -141,7 +142,7 @@ const Container = styled.tr`
 `
 
 const ChipWrapper = styled.th`
-    padding: ${spacing(0.25)} ${spacing(0.5)} ${spacing(0.25)} 0;
+    padding: ${spacing(0.25)} ${spacing(0.5)} ${spacing(0.25)};
 `
 const Chip = styled.div``
 
