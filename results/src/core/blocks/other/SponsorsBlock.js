@@ -36,7 +36,7 @@ const SponsorsBlock = () => {
 }
 
 const Container = styled.div`
-    background: ${(props) => props.theme.colors.backgroundAlt};
+    background: ${props => props.theme.colors.backgroundAlt};
     padding: ${spacing(2)};
     margin-top: ${spacing(2)};
 `
@@ -47,19 +47,26 @@ const Header = styled.h3`
 `
 
 const SponsorList = styled.div`
-
-@media ${mq.large} {
+    @media ${mq.large} {
         display: grid;
-        grid-template-columns: repeat( auto-fit, minmax(250px, 1fr) );
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
         column-gap: ${spacing(4)};
     }
 `
 
 const Sponsor = styled.div`
+    @media ${mq.smallMedium} {
+        margin-bottom: ${spacing()};
+        &:last-child {
+            margin: 0;
+        }
+    }
+    @media ${mq.large} {
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
         align-items: center;
+    }
 `
 
 const SponsorLogo = styled.div`

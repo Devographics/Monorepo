@@ -120,10 +120,10 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
         },
         gender: {
             male: [velocity[0], velocity[1]],
-            female: [velocity[2], velocity[3]],
-            non_binary: [velocity[4], velocity[5]],
-            prefer_not_to_say: [velocity[6], velocity[7]],
-            not_listed: [velocity[8], velocity[9]]
+            female: [velocity[3], velocity[4]],
+            non_binary: [velocity[6], velocity[7]],
+            prefer_not_to_say: [velocity[8], velocity[9]],
+            not_listed: [velocity[10], velocity[11]]
         },
         race_ethnicity: {
             biracial: velocity[0],

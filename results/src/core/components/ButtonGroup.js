@@ -4,9 +4,11 @@ import { mq } from 'core/theme'
 const ButtonGroup = styled.div`
     @media ${mq.small} {
         display: flex;
-        flex-direction: column;
-        align-items: center;
+        flex-direction: row;
         justify-content: center;
+        .Button {
+            white-space: wrap;
+        }
     }
     @media ${mq.mediumLarge} {
         display: inline-flex;
