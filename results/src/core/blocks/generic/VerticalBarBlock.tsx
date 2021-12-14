@@ -33,7 +33,8 @@ const VerticalBarBlock = ({ block, data, keys }: VerticalBarBlockProps) => {
     const [units, setUnits] = useState(defaultUnits)
     const bucketKeys = keys && useLegends(block, keys)
 
-    const { buckets, completion } = data
+    const { facets, completion } = data
+    const buckets = facets[0].buckets
     const { total } = completion
 
     return (
@@ -41,7 +42,7 @@ const VerticalBarBlock = ({ block, data, keys }: VerticalBarBlockProps) => {
             tables={[
                 getTableData({
                     legends: bucketKeys,
-                    data: data.buckets,
+                    data: buckets,
                     valueKeys: ['percentage_survey', 'percentage_question', 'count'],
                     translateData
                 })
@@ -82,9 +83,13 @@ VerticalBarBlock.propTypes = {
         colorVariant: PropTypes.oneOf(['primary', 'secondary'])
     }).isRequired,
     data: PropTypes.shape({
-        buckets: PropTypes.arrayOf(
+        facets: PropTypes.arrayOf(
             PropTypes.shape({
-                id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
+                buckets: PropTypes.arrayOf(
+                    PropTypes.shape({
+                        id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
+                    })
+                ).isRequired
             })
         ).isRequired
     }).isRequired

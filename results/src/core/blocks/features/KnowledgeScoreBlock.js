@@ -15,8 +15,9 @@ const groupBy = 10
 const getLabel = (n) => `${n * groupBy}-${(n + 1) * groupBy}%`
 
 const getChartData = ({ data }) => {
+    const buckets = data.facets[0].buckets
     return range(0, 100 / groupBy).map((n) => {
-        const selectedBuckets = data.buckets.filter(
+        const selectedBuckets = buckets.filter(
             (b) => b.id >= n * groupBy && b.id < (n + 1) * groupBy
         )
         return {

@@ -10,9 +10,11 @@ const ParticipationByCountryBlock = ({
     block,
     data,
     triggerId,
-    units: defaultUnits = 'percentage_survey',
+    units: defaultUnits = 'percentage_survey'
 }) => {
     const [units, setUnits] = useState(defaultUnits)
+
+    const buckets = data.facets[0].buckets
 
     const chartClassName = triggerId ? `ParticipationByCountryChart--${triggerId}` : ''
 
@@ -20,8 +22,8 @@ const ParticipationByCountryBlock = ({
         <Block
             tables={[
                 getTableData({
-                    data: data.buckets.map((b) => ({ ...b, label: getCountryName(b.id) })),
-                }),
+                    data: buckets.map(b => ({ ...b, label: getCountryName(b.id) }))
+                })
             ]}
             units={units}
             setUnits={setUnits}
@@ -34,7 +36,7 @@ const ParticipationByCountryBlock = ({
                     style={{ height: '100%' }}
                     className={`ParticipationByCountryChart ${chartClassName}`}
                 >
-                    <ParticipationByCountryChart units={units} data={data.buckets} />
+                    <ParticipationByCountryChart units={units} data={buckets} />
                 </div>
             </ChartContainer>
         </Block>
@@ -43,22 +45,23 @@ const ParticipationByCountryBlock = ({
 
 ParticipationByCountryBlock.propTypes = {
     block: PropTypes.shape({
-        id: PropTypes.string.isRequired,
+        id: PropTypes.string.isRequired
     }).isRequired,
     data: PropTypes.shape({
         completion: PropTypes.shape({
             count: PropTypes.number.isRequired,
-            percentage_survey: PropTypes.number.isRequired,
+            percentage_survey: PropTypes.number.isRequired
         }).isRequired,
-        buckets: PropTypes.arrayOf(
+        facets: PropTypes.arrayOf(
             PropTypes.shape({
-                id: PropTypes.string.isRequired,
-                count: PropTypes.number.isRequired,
-                percentage_survey: PropTypes.number.isRequired,
-                percentage_question: PropTypes.number.isRequired,
+                buckets: PropTypes.arrayOf(
+                    PropTypes.shape({
+                        id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
+                    })
+                ).isRequired
             })
-        ).isRequired,
-    }).isRequired,
+        ).isRequired
+    }).isRequired
 }
 
 export default memo(ParticipationByCountryBlock)

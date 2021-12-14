@@ -1,5 +1,5 @@
 blockType: VerticalBarBlock
-dataPath: "surveyApi.survey.demographics.${id}.year.facets.0"
+dataPath: "surveyApi.survey.demographics.${id}.year"
 titleId: user_info.${id}
 query: >
     surveyApi {

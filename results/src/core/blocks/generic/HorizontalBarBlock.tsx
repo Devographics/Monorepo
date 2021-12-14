@@ -68,12 +68,16 @@ HorizontalBarBlock.propTypes = {
         colorVariant: PropTypes.oneOf(['primary', 'secondary']),
     }).isRequired,
     data: PropTypes.shape({
-        buckets: PropTypes.arrayOf(
+        facets: PropTypes.arrayOf(
             PropTypes.shape({
-                id: PropTypes.string.isRequired,
+                buckets: PropTypes.arrayOf(
+                    PropTypes.shape({
+                        id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
+                    })
+                ).isRequired
             })
-        ).isRequired,
-    }).isRequired,
+        ).isRequired
+    }).isRequired
 }
 
 export default memo(HorizontalBarBlock)

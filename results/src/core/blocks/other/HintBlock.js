@@ -66,13 +66,18 @@ const spark = keyframes`
 
 const bgGlow = keyframes`
   0% {
-    background: ${color('backgroundAlt')};
+    /* background: ${color('backgroundAlt')}; */
+    background: radial-gradient(circle at 2% 3%, rgba(252,228,145,0) 0%, rgba(252,228,145,0) 100%);
+
   }
   30% {
-    background: #fce49155;
+    /* background: #fce49155; */
+    background: radial-gradient(circle at 2% 3%, rgba(252,228,145,0.5) 0%, rgba(252,228,145,0.3) 100%);
+
   }
   100% {
-    background: #fce49125;
+    /* background: #fce49125; */
+    background: radial-gradient(circle at 2% 3%, rgba(252,228,145,0.3) 0%, rgba(252,228,145,0.15) 100%);
   }
 `
 
@@ -100,7 +105,10 @@ const HintContainer = styled.div`
     background: ${color('backgroundAlt')};
     display: grid;
     column-gap: ${spacing()};
+    align-items: center;
     ${animate(bgGlow)}
+    /* background: radial-gradient(circle at 2% 3%, rgba(252,228,145,0.5) 0%, rgba(252,228,145,0.3) 100%); */
+
     @media ${mq.small} {
         padding: ${spacing()};
         grid-template-columns: 30px auto;

@@ -4,7 +4,19 @@ import { keys } from 'core/bucket_keys'
 import { useI18n } from 'core/i18n/i18nContext'
 import { Block } from 'core/types/block'
 
-export const useBucketKeys = (bucketKeysId) => {
+const getColor = (colorRange, id) => {
+    if (!colorRange) {
+        return
+    }
+    const color = colorRange[id]
+    if (Array.isArray(color)) {
+        return { color: color[0], gradient: color }
+    } else {
+        return { color, gradient: [color, color] }
+    }
+}
+
+export const useBucketKeys = bucketKeysId => {
     const theme = useTheme()
     const { translate, getString } = useI18n()
     const keysConfig = keys[bucketKeysId]
@@ -18,7 +30,7 @@ export const useBucketKeys = (bucketKeysId) => {
             colorRange = theme.colors.ranges[keysConfig.colorRange]
         }
 
-        return keysConfig.keys.map((key) => {
+        return keysConfig.keys.map(key => {
             const label = translate(key.label)
             const shortLabelObject = getString(key.shortLabel)
             const shortLabel = shortLabelObject.missing ? undefined : shortLabelObject.t
@@ -26,7 +38,8 @@ export const useBucketKeys = (bucketKeysId) => {
                 id: key.id,
                 label,
                 shortLabel,
-                color: colorRange ? colorRange[key.id] : undefined,
+                color: getColor(colorRange, key.id)?.color,
+                gradientColors: getColor(colorRange, key.id)?.gradient
             }
         })
     }, [keysConfig, theme, translate])
@@ -41,7 +54,7 @@ export const useLegends = (block: Block, keys: string[], fieldId?: string) => {
 
     const namespace = fieldId ?? block.chartNamespace ?? block.id
     const colorRange = theme.colors.ranges[namespace]
-    const legends = keys.map((id) => {
+    const legends = keys.map(id => {
         const labelKey = `options.${namespace}.${id}`
         const shortLabelKey = labelKey + '.short'
         const label = translate(labelKey)
@@ -51,9 +64,8 @@ export const useLegends = (block: Block, keys: string[], fieldId?: string) => {
             id,
             label,
             shortLabel,
-        }
-        if (colorRange) {
-            legend.color = colorRange[id]
+            color: getColor(colorRange, id)?.color,
+            gradientColors: getColor(colorRange, id)?.gradient
         }
         return legend
     })

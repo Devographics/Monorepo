@@ -2,18 +2,24 @@ import { DefaultTheme } from 'styled-components'
 import colors_ from 'core/theme/colors'
 
 const colors = {
-    ...colors_, 
+    ...colors_,
+    pinkDark: '#9D0E66',
     pink: '#ef4e88',
     pinkLight: '#FE79B4',
     pinkLighter: '#FFADD2',
+    pinkLightest: '#FFCEE4',
     blue: '#3633B7',
     blueLight: '#775CE0',
     blueLighter: '#B0AEEF',
+    blueLightest: '#D0CFF9',
     green: '#4BC77D',
     greenLight: '#73D49A',
     greenLighter: '#B6F4CF',
-    lightYellow: '#FFF6E6',
+    white: '#FFF6E6',
+    yellowLight: '#FFF1C0',
     yellow: '#FFE589',
+    grey: '#8B8085',
+    greyLight: '#BBB2B6'
 }
 
 const velocity = [
@@ -28,7 +34,8 @@ const velocity = [
     '#FB549F',
     '#FE79B4',
     '#FFA6CE',
-    '#FFCEE4'
+    '#FFCEE4',
+    '#FFE3F0'
 ]
 
 const distinct = [
@@ -43,7 +50,7 @@ const distinct = [
     colors.olive,
     colors.skyblue,
     colors.purple,
-    colors.blueLighter,
+    colors.blueLighter
 ]
 
 const stateOfCSSThemeColors: DefaultTheme['colors'] = {
@@ -54,7 +61,7 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
     backgroundAlt2: '#5F4C54',
     backgroundInverted: '#FFF6E6',
     backgroundInvertedAlt: '#E3D8C4',
-    text: colors.lightYellow,
+    text: colors.white,
     textAlt: '#E3D8C4',
     textInverted: '#272325',
     textHighlight: colors.greenDark,
@@ -66,17 +73,19 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
     lineChartDefaultColor: '#59DF7F',
     barChart: {
         primary: colors.pink,
-        primaryGradient: ['#9D0E66', colors.pink],
-        secondary: colors.lightYellow,
-        secondaryGradient: ['#FCEDB9', colors.pink],
+        primaryGradient: [colors.pinkDark, colors.pink],
+        // secondary: colors.yellowLight,
+        // secondaryGradient: [colors.yellow, colors.yellowLight],
+        secondary: colors.blue,
+        secondaryGradient: [colors.blue, colors.blueLight]
     },
     ranges: {
         tools: {
-            would_use: colors.blue,
-            would_not_use: colors.pink,
-            interested: colors.blueLighter,
-            not_interested: colors.pinkLighter,
-            never_heard: '#59608a'
+            would_use: [colors.blue, colors.blueLight],
+            would_not_use: [colors.pink, colors.pinkLight],
+            interested: [colors.blueLighter, colors.blueLightest],
+            not_interested: [colors.pinkLighter, colors.pinkLightest],
+            never_heard: [colors.grey, colors.greyLight]
         },
         toolSections: {
             javascript_flavors: colors.indigo,
@@ -92,9 +101,9 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
             css_frameworks: colors.pink
         },
         features: {
-            used: colors.pink,
-            heard: colors.blue,
-            never_heard: colors.navyLighter
+            used: [colors.pink, colors.pinkLight],
+            heard: [colors.blue, colors.blueLight],
+            never_heard: [colors.grey, colors.greyLight]
         },
         features_categories: {
             layout: colors.indigo,
@@ -110,11 +119,11 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
             used_it: '#59DF7F'
         },
         gender: {
-            male: velocity[0],
-            female: velocity[2],
-            non_binary: velocity[4],
-            prefer_not_to_say: velocity[6],
-            not_listed: velocity[8]
+            male: [velocity[0], velocity[1]],
+            female: [velocity[2], velocity[3]],
+            non_binary: [velocity[4], velocity[5]],
+            prefer_not_to_say: [velocity[6], velocity[7]],
+            not_listed: [velocity[8], velocity[9]]
         },
         race_ethnicity: {
             biracial: velocity[0],
@@ -130,21 +139,21 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
             not_listed: velocity[10]
         },
         yearly_salary: {
-            range_work_for_free: velocity[0],
-            range_0_10: velocity[1],
-            range_10_30: velocity[2],
-            range_30_50: velocity[3],
-            range_50_100: velocity[4],
-            range_100_200: velocity[5],
-            range_more_than_200: velocity[6]
+            range_work_for_free: [velocity[0], velocity[1]],
+            range_0_10: [velocity[2], velocity[3]],
+            range_10_30: [velocity[4], velocity[5]],
+            range_30_50: [velocity[6], velocity[7]],
+            range_50_100: [velocity[8], velocity[9]],
+            range_100_200: [velocity[10], velocity[11]],
+            range_more_than_200: [velocity[12], velocity[13]]
         },
         years_of_experience: {
-            range_less_than_1: velocity[0],
-            range_1_2: velocity[2],
-            range_2_5: velocity[4],
-            range_5_10: velocity[6],
-            range_10_20: velocity[8],
-            range_more_than_20: velocity[10]
+            range_less_than_1: [velocity[0], velocity[1]],
+            range_1_2: [velocity[2], velocity[3]],
+            range_2_5: [velocity[4], velocity[5]],
+            range_5_10: [velocity[6], velocity[7]],
+            range_10_20: [velocity[8], velocity[9]],
+            range_more_than_20: [velocity[10], velocity[11]]
         },
         higher_education_degree: {
             no_degree: velocity[0],
@@ -152,16 +161,16 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
             yes_unrelated: velocity[4]
         },
         opinions: {
-            4: velocity[8],
-            3: velocity[6],
-            2: velocity[4],
-            1: velocity[2],
-            0: velocity[0],
+            4: [velocity[9], velocity[8]],
+            3: [velocity[7], velocity[6]],
+            2: [velocity[5], velocity[4]],
+            1: [velocity[3], velocity[2]],
+            0: [velocity[1], velocity[0]]
         },
         bracket: {
-            round1: velocity[3],
-            round2: velocity[5],
-            round3: velocity[7]
+            round1: [velocity[2], velocity[3]],
+            round2: [velocity[5], velocity[6]],
+            round3: [velocity[7], velocity[8]]
         }
     },
     distinct,

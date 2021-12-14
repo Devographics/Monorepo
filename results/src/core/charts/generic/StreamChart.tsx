@@ -122,14 +122,23 @@ const StreamChart = ({
                     return isPercentage(units) ? `${v}%` : v.toString()
                 }}
                 // defs={[theme.charts.emptyPattern]}
-                fill={[
-                    {
-                        match: {
-                            id: applyEmptyPatternTo
-                        },
-                        id: 'empty'
-                    }
-                ]}
+                // fill={[
+                //     {
+                //         match: {
+                //             id: applyEmptyPatternTo
+                //         },
+                //         id: 'empty'
+                //     }
+                // ]}
+                defs={bucketKeys.map(({ id, gradientColors }) => ({
+                    id,
+                    type: 'linearGradient',
+                    colors: [
+                        { offset: 0, color: gradientColors[0] },
+                        { offset: 100, color: gradientColors[1] }
+                    ]
+                }))}
+                fill={bucketKeys.map(({ id }) => ({ match: {id }, id}))}
             />
         </div>
     )

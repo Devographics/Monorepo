@@ -183,8 +183,15 @@ const Bar = styled.div<{
 `
 
 const InnerBar = styled.div`
-    background-color: ${({ variant, theme }) =>
-        variant === 'total' ? theme.colors.barChart.secondary : theme.colors.barChart.primary};
+    background: ${({ variant, theme }) =>
+        variant === 'total'
+            ? css`linear-gradient(90deg, ${props =>
+                  props.theme.colors.barChart.secondaryGradient[0]}, ${props =>
+                  props.theme.colors.barChart.secondaryGradient[1]})`
+            : css`linear-gradient(90deg, ${props =>
+                  props.theme.colors.barChart.primaryGradient[0]}, ${props =>
+                  props.theme.colors.barChart.primaryGradient[1]})`};
+
     height: 100%;
     z-index: 1;
 `

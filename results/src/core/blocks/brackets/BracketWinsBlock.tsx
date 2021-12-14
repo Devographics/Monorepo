@@ -64,7 +64,41 @@ const BracketWinsBlock = ({ block, data, keys }: HorizontalBarBlockProps) => {
 
     const legends = useLegends(block, rounds, 'bracket')
 
+    console.log(legends)
     const buckets = getChartData({ data, keys })
+
+    const chartProps = {
+        keys: rounds.map(r => `${r}___${units}`),
+        indexBy: 'id',
+        maxValue: data.completion.count * 2,
+        // colorBy: 'color',
+        colors: rounds.map(r => theme.colors.ranges.bracket[r]),
+        defs: legends.map(({ id, gradientColors }) => ({
+            id,
+            type: 'linearGradient',
+            x1: 0,
+            y1: 1,
+            x2: 1,
+            y2: 1,
+            colors: [
+                { offset: 0, color: gradientColors[0] },
+                { offset: 100, color: gradientColors[1] }
+            ]
+        })),
+        fill: rounds.map(round => ({
+            // key is of the form round3___count.responsive_design
+            match: ({ key }) => key.substring(0, 6) === round,
+            id: round
+        })),
+        tooltip: barProps => (
+            <BarTooltip
+                units={units}
+                i18nNamespace={chartNamespace}
+                shouldTranslate={translateData}
+                {...barProps}
+            />
+        )
+    }
 
     return (
         <Block
@@ -95,22 +129,8 @@ const BracketWinsBlock = ({ block, data, keys }: HorizontalBarBlockProps) => {
                     mode={mode}
                     units={units}
                     colorVariant={colorVariant}
-                    chartDefs={[]}
-                    chartProps={{
-                        keys: rounds.map(r => `${r}___${units}`),
-                        indexBy: 'id',
-                        maxValue: data.completion.count * 2,
-                        // colorBy: 'color',
-                        colors: rounds.map(r => theme.colors.ranges.bracket[r]),
-                        tooltip: barProps => (
-                            <BarTooltip
-                                units={units}
-                                i18nNamespace={chartNamespace}
-                                shouldTranslate={translateData}
-                                {...barProps}
-                            />
-                        )
-                    }}
+                    colorMappings={legends}
+                    chartProps={chartProps}
                 />
             </ChartContainer>
         </Block>

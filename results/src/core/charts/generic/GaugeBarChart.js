@@ -11,9 +11,9 @@ import { isPercentage } from 'core/helpers/units'
 // Custom labels using an extra `layer`,
 // this way, we can add an extra outline to bar labels
 const getLabels =
-    (units) =>
+    units =>
     ({ bars }) => {
-        return bars.map((bar) => {
+        return bars.map(bar => {
             let deltaLabel = ''
 
             // skip legend for small bars
@@ -53,7 +53,7 @@ const Tooltip = ({ translate, i18nNamespace, bar, units }) => {
                 <Chip color={bar.color} style={{ marginRight: 7 }} />
                 <span
                     dangerouslySetInnerHTML={{
-                        __html: translate(`options.${i18nNamespace}.${bar.id}`),
+                        __html: translate(`options.${i18nNamespace}.${bar.id}`)
                     }}
                 />
                 :{' '}
@@ -72,7 +72,7 @@ const GaugeBarChart = ({
     colorMapping,
     units,
     applyEmptyPatternTo,
-    i18nNamespace,
+    i18nNamespace
 }) => {
     const { translate } = useI18n()
     const theme = useTheme()
@@ -88,9 +88,9 @@ const GaugeBarChart = ({
                     [`${bucket.id}_percentage_question`]: bucket.percentage_question,
                     [`${bucket.id}_percentage_facet`]: bucket.percentage_facet,
                     [`${bucket.id}_countDelta`]: bucket.countDelta,
-                    [`${bucket.id}_percentageDelta`]: bucket.percentageDelta,
+                    [`${bucket.id}_percentageDelta`]: bucket.percentageDelta
                 }
-            }, {}),
+            }, {})
         ],
         [buckets, units]
     )
@@ -99,22 +99,23 @@ const GaugeBarChart = ({
         const colorById = colorMapping.reduce(
             (acc, m) => ({
                 ...acc,
-                [m.id]: m.color,
+                [m.id]: m.color
             }),
             {}
         )
 
-        return (bar) => {return colorById[bar.id]}
+        return bar => {
+            return colorById[bar.id]
+        }
     }, [colorMapping])
 
-    
     const labelsLayer = useMemo(() => getLabels(units), [units])
     const patternRules = useMemo(
         () => [
             {
                 id: 'empty',
-                match: { id: applyEmptyPatternTo },
-            },
+                match: { id: applyEmptyPatternTo }
+            }
         ],
         [applyEmptyPatternTo]
     )
@@ -125,11 +126,10 @@ const GaugeBarChart = ({
             keys={keys}
             layout="horizontal"
             indexBy={() => 'serie'}
-            colors={colors}
             enableLabel={false}
             labelTextColor={{
                 from: 'color',
-                modifiers: [['brighter', 1.4]],
+                modifiers: [['brighter', 1.4]]
             }}
             axisLeft={null}
             axisBottom={null}
@@ -139,8 +139,8 @@ const GaugeBarChart = ({
             theme={theme.charts}
             layers={['bars', labelsLayer]}
             // defs={[theme.charts.emptyPattern]}
-            fill={patternRules}
-            tooltip={(bar) => (
+            // fill={patternRules}
+            tooltip={bar => (
                 <Tooltip
                     bar={bar}
                     translate={translate}
@@ -148,6 +148,20 @@ const GaugeBarChart = ({
                     units={units}
                 />
             )}
+            colors={colors}
+            defs={colorMapping.map(({ id, gradientColors }) => ({
+                id,
+                type: 'linearGradient',
+                x1: 0,
+                y1: 1,
+                x2: 1,
+                y2: 1,
+                colors: [
+                    { offset: 0, color: gradientColors[0] },
+                    { offset: 100, color: gradientColors[1] }
+                ]
+            }))}
+            fill={colorMapping.map(({ id }) => ({ match: {id }, id}))}
         />
     )
 }
@@ -159,23 +173,23 @@ GaugeBarChart.propTypes = {
             count: PropTypes.number.isRequired,
             percentage_survey: PropTypes.number,
             percentage_question: PropTypes.number,
-            percentage_facet: PropTypes.number,
+            percentage_facet: PropTypes.number
         }).isRequired
     ).isRequired,
     colorMapping: PropTypes.arrayOf(
         PropTypes.shape({
             id: PropTypes.string.isRequired,
-            color: PropTypes.string.isRequired,
+            color: PropTypes.string.isRequired
         })
     ).isRequired,
     units: PropTypes.oneOf([
         'count',
         'percentage_facet',
         'percentage_survey',
-        'percentage_question',
+        'percentage_question'
     ]),
     applyEmptyPatternTo: PropTypes.string,
-    i18nNamespace: PropTypes.string.isRequired,
+    i18nNamespace: PropTypes.string.isRequired
 }
 
 export default GaugeBarChart

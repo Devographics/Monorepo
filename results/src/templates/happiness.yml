@@ -1,7 +1,7 @@
 titleId: "happiness.${id}"
 # blockType: HappinessBlock
 blockType: VerticalBarBlock
-dataPath: "surveyApi.survey.${id}_happiness.year.facets.0"
+dataPath: "surveyApi.survey.${id}_happiness.year"
 keysPath: "surveyApi.survey.${id}_happiness.keys"
 showDescription: false
 blockNamespace: happiness

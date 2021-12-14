@@ -7,7 +7,8 @@ const Icon = styled.span`
     height: 24px;
     width: 24px;
     appearance: initial !important;
-    ${(props) =>
+    display: block;
+    ${props =>
         props.enableHover &&
         `
         &:hover {
@@ -18,9 +19,9 @@ const Icon = styled.span`
         height: 100%;
         width: 100%;
         display: block;
-        stroke: ${(props) => props.theme.colors.text};
+        color: ${props => props.theme.colors.text};
         /* path, circle {
-            fill: ${(props) => props.theme.colors.text};
+            fill: ${props => props.theme.colors.text};
         } */
     }
 `
@@ -29,7 +30,7 @@ const IconWithHover = styled(Icon)`
     &:hover {
         svg {
             path {
-                fill: ${(props) => props.theme.colors.link};
+                fill: ${props => props.theme.colors.link};
             }
         }
     }
