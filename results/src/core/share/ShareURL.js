@@ -23,9 +23,8 @@ const ShareURL = ({ link, trackingId, ...rest }) => {
 }
 
 ShareURL.propTypes = {
-    subject: PropTypes.string.isRequired,
-    body: PropTypes.string.isRequired,
-    trackingId: PropTypes.string,
+    subject: PropTypes.string,
+    trackingId: PropTypes.string
 }
 
 export default ShareURL
