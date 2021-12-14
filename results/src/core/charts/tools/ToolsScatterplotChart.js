@@ -9,7 +9,9 @@ const { totalCountRounded } = variables
 
 const labelPositions = {
     satisfaction: {
-        esbuild: [0, -15],
+        halfmoon: [0, -15],
+        primer: [0, -15],
+        twin: [-40, 0],
     },
     interest: {
         'NW.js': [0, 5],
@@ -84,7 +86,7 @@ const Node = (props) => {
     const { name, originalId } = data
     const yInverted = height - margin.top - margin.bottom - y
     const cutoff = 12 // cut off the lines a little before the node
-    const translateLabel = labelPositions[metric][name] || [0, 0]
+    const translateLabel = labelPositions[metric][name] ?? [0, 0]
     // const category = id.split('.')[0]
     const state = current === null ? 'default' : current === originalId ? 'active' : 'inactive'
     // const opacity = current === null ? 1 : current === originalId ? 1 : 0.3

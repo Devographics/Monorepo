@@ -36,18 +36,24 @@ const Head = () => {
 
     return (
         <>
-            <Helmet meta={mergedMeta} defaultTitle={meta.fullTitle}>
+            <Helmet defaultTitle={meta.fullTitle}>
                 <html lang="en" />
                 <title>{meta.title}</title>
                 <link rel="shortcut icon" href="/images/favicon.png" />
                 <meta name="theme-color" content="#ED2E84" />
-                <link rel="preconnect" href="https://fonts.googleapis.com"/>
+                <link rel="preconnect" href="https://fonts.googleapis.com" />
                 <link rel="preconnect" href="https://fonts.gstatic.com/" crossOrigin />
                 <link
                     href="https://fonts.googleapis.com/css?family=IBM+Plex+Mono:300,300i,500,600"
                     rel="stylesheet"
                 />
-                <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet"/>
+                <link
+                    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap"
+                    rel="stylesheet"
+                />
+                {mergedMeta.map((meta, i) => (
+                    <meta {...meta} key={i} />
+                ))}
             </Helmet>
         </>
     )

@@ -166,7 +166,6 @@ const HorizontalBarChart = ({
                     }
                 ]}
                 fill={[{ match: '*', id: `${colorVariant}GradientHorizontal` }]}
-
                 {...chartProps}
             />
         </div>

@@ -87,7 +87,7 @@ export const ToolsExperienceMarimekkoChart = (props: ToolsExperienceMarimekkoCha
     const getLayerColor = (props: any) => {
         const dimension = dimensions.find(d => d.id === props.id)
         if (dimension) {
-            const color = theme.colors.ranges.tools[dimension.originalId]
+            const color = theme.colors.ranges.tools[dimension.originalId][0]
             if (current !== null && current !== props.datum.id) {
                 return `${color}33`
             }
