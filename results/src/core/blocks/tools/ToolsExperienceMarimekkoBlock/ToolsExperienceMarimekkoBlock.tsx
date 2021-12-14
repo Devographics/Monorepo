@@ -14,6 +14,7 @@ import { getTableData } from 'core/helpers/datatables'
 import keyBy from 'lodash/keyBy'
 import round from 'lodash/round'
 import sortBy from 'lodash/sortBy'
+import { useLegends } from 'core/helpers/useBucketKeys'
 
 const valueKeys = [
     'would_not_use_percentage',
@@ -99,6 +100,8 @@ export const ToolsExperienceMarimekkoBlock = ({
     const height = MARGIN.top + ROW_HEIGHT * data.length + MARGIN.bottom
     const controlledCurrent = triggerId
 
+    const legends = useLegends(block, keys, 'tools')
+
     return (
         <Block
             block={block}
@@ -111,7 +114,11 @@ export const ToolsExperienceMarimekkoBlock = ({
             ]}
         >
             <ChartContainer height={height}>
-                <ToolsExperienceMarimekkoChart data={normalizedData} current={controlledCurrent} />
+                <ToolsExperienceMarimekkoChart
+                    colorMapping={legends}
+                    data={normalizedData}
+                    current={controlledCurrent}
+                />
             </ChartContainer>
         </Block>
     )

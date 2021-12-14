@@ -72,7 +72,7 @@ interface ToolsExperienceMarimekkoChartProps {
 export const ToolsExperienceMarimekkoChart = (props: ToolsExperienceMarimekkoChartProps) => {
     const { translate } = useI18n()
 
-    const { current } = props
+    const { current, data, colorMapping } = props
 
     // `id` is the label while `value` is the accessor
     // for a given dimension.
@@ -109,7 +109,7 @@ export const ToolsExperienceMarimekkoChart = (props: ToolsExperienceMarimekkoCha
             id="id"
             value="awareness"
             valueFormat={valueFormatter}
-            data={props.data}
+            data={data}
             dimensions={dimensions}
             theme={theme.charts}
             colors={getLayerColor}
@@ -137,6 +137,34 @@ export const ToolsExperienceMarimekkoChart = (props: ToolsExperienceMarimekkoCha
                 ToolsLabels,
                 'bars'
             ]}
+            defs={colorMapping.map(({ id, gradientColors }) => ({
+                id,
+                type: 'linearGradient',
+                x1: 0,
+                y1: 1,
+                x2: 1,
+                y2: 1,
+                colors: [
+                    { offset: 0, color: gradientColors[0] },
+                    { offset: 100, color: gradientColors[1] }
+                ]
+            }))}
+            fill={colorMapping.map(({ id }) => ({
+                // labels of the form tailwind_css-Used it > Would not use again
+                match: ({ key }) => {
+                    const label = key.split('-')[1]
+                    return labelsLookup[label] === id
+                },
+                id
+            }))}
         />
     )
+}
+
+const labelsLookup = {
+    'Used it > Would not use again': 'would_not_use',
+    'Heard of it > Not interested': 'not_interested',
+    'Used it > Would use again': 'would_use',
+    'Heard of it > Would like to learn': 'interested',
+    'Never heard of it/Not sure what it is': 'never_heard'
 }
