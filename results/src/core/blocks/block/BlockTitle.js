@@ -18,11 +18,6 @@ const BlockTitleContents = ({ block, context }) => {
 }
 
 const Title = styled.span`
-    ${secondaryFontMixin}
-    font-size: ${fontSize('largerest')}
-    @media ${mq.small} {
-        font-size: ${fontSize('large')};
-    }
 `
 
 const BlockTitle = ({
@@ -148,10 +143,11 @@ const BlockTitleText = styled.h3`
     align-items: center;
     justify-content: flex-start;
     line-height: 1.2;
+    ${secondaryFontMixin};
+    font-size: ${fontSize('largerest')};
     @media ${mq.small} {
-        opacity: 1;
-        transition: all 300ms ease-in;
         flex: 1;
+        font-size: ${fontSize('larger')};
     }
 `
 
