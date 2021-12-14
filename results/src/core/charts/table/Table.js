@@ -72,7 +72,7 @@ const TableRow = ({ row }) => (
                 </TH>
             ) : Array.isArray(cell.value) ? (
                 cell.value.map(yearValue => (
-                    <TableCell key={yearValue.value} {...cell} {...yearValue} />
+                    <TableCell key={yearValue.year} {...cell} {...yearValue} />
                 ))
             ) : (
                 <TableCell key={index} {...cell} />
