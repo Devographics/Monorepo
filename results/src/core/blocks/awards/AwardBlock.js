@@ -90,7 +90,7 @@ const AwardBlock = ({ block }) => {
 
 const EntityItem = ({ entity }) => {
     const { name, homepage, mdn } = entity
-    const url = homepage || (mdn && `https://developer.mozilla.org${mdn.url}`)
+    const url = homepage.url || (mdn && `https://developer.mozilla.org${mdn.url}`)
     return url ? <a href={url}>{name}</a> : <span>{name}</span>
 }
 
