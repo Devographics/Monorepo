@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { fontSize, spacing } from 'core/theme'
 
 import * as Tooltip from '@radix-ui/react-tooltip'
@@ -18,9 +18,16 @@ const Content = styled(Tooltip.Content)`
 const Trigger = styled(Tooltip.Trigger)`
     background: none;
     border: none;
-    cursor: pointer;
     padding: 0;
     display: inline-block;
+
+    ${props => {
+        if (props.$clickable) {
+            return css`
+                cursor: pointer;
+            `
+        }
+    }}
 `
 
 const Arrow = styled(Tooltip.Arrow)`
@@ -29,9 +36,11 @@ const Arrow = styled(Tooltip.Arrow)`
     stroke-width: 2px;
 `
 
-const Tip = ({ trigger, contents, asChild = true }) => (
+const Tip = ({ trigger, contents, asChild = true, clickable = false }) => (
     <Tooltip.Root delayDuration={200}>
-        <Trigger asChild={asChild}>{trigger}</Trigger>
+        <Trigger asChild={asChild} $clickable={clickable}>
+            {trigger}
+        </Trigger>
         <Content side="top">
             {contents}
             {/* <Arrow /> */}

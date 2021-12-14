@@ -48,13 +48,16 @@ export const Text = ({
         textProps.textAnchor = 'start'
     }
 
-    const component = (
-        <text {...textProps}>
-            <title>{description ?? label}</title>
-            {shortLabel ?? label}
-        </text>
+    const component = <text {...textProps}>{shortLabel ?? label}</text>
+
+    return (
+        <TooltipComponent
+            trigger={component}
+            contents={description ?? label}
+            asChild={true}
+            clickable={hasLink}
+        />
     )
-    return <TooltipComponent trigger={component} contents={description ?? label} asChild={true} />
 }
 
 export const getBucketLabel = args => {
