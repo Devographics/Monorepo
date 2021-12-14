@@ -75,8 +75,8 @@ Quadrant/Scatterplot Chart
 
 */
 .Quadrant__Label {
-    color: $teal;
-    fill: $teal;
+    color: #E3D8C4;
+    fill: #E3D8C4;
     text-transform: uppercase;
     letter-spacing: 3px;
     opacity: 0.75;
@@ -168,14 +168,14 @@ Bump Chart
     @include coloredText($red);
 }
 .text-teal {
-    @include coloredText($teal);
+    // @include coloredText($teal);
 }
 .text-teal-dark {
-    @include coloredText($tealDark);
+    // @include coloredText($tealDark);
 }
 .text-teal-darker {
-    @include coloredText($tealDarker);
-    color: #fff;
+    // @include coloredText($tealDarker);
+    // color: #fff;
 }
 
 .text-blue {

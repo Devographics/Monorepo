@@ -64,7 +64,7 @@ const ToolsSectionOverviewChart = ({ data, units, current, namespace }) => {
             axisBottom={{
                 format: formatTick,
             }}
-            defs={[theme.charts.emptyPattern]}
+            // defs={[theme.charts.emptyPattern]}
             fill={[
                 {
                     id: 'empty',

@@ -58,10 +58,10 @@
   avatarUrl: walterstephanie.jpg
   url: https://www.miriamsuzanne.com/
   
-# - twitterName: kilianvalkhof
-#   fullName: Kilian Valkhof
-#   avatarUrl: kilianvalkhof.jpg
-#   url: https://web.dev/content-visibility/
+- twitterName: kilianvalkhof
+  fullName: Kilian Valkhof
+  avatarUrl: kilianvalkhof.jpg
+  url: https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-data
 
 # - twitterName: christianoliff
 #   fullName: Christian Oliff

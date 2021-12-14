@@ -4,10 +4,10 @@ import Block from 'core/blocks/block/BlockVariant'
 import ChartContainer from 'core/charts/ChartContainer'
 import HorizontalBarChart from 'core/charts/generic/HorizontalBarChart'
 import { getTableData } from 'core/helpers/datatables'
-import { FacetItem, BlockComponentProps } from 'core/types'
+import { ResultsByYear, BlockComponentProps } from 'core/types'
 
 export interface HorizontalBarBlockProps extends BlockComponentProps {
-    data: FacetItem
+    data: ResultsByYear
 }
 
 const HorizontalBarBlock = ({ block, data }: HorizontalBarBlockProps) => {
@@ -22,8 +22,8 @@ const HorizontalBarBlock = ({ block, data }: HorizontalBarBlockProps) => {
 
     const [units, setUnits] = useState(defaultUnits)
 
-    const { completion, buckets } = data
-
+    const { facets, completion } = data
+    const buckets = facets[0].buckets
     const { total } = completion
 
     return (
@@ -33,7 +33,7 @@ const HorizontalBarBlock = ({ block, data }: HorizontalBarBlockProps) => {
             data={data}
             tables={[
                 getTableData({
-                    data: data.buckets,
+                    data: buckets,
                     valueKeys: ['percentage_survey', 'percentage_question', 'count'],
                     translateData,
                     i18nNamespace: chartNamespace,

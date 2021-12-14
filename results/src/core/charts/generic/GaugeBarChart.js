@@ -138,7 +138,7 @@ const GaugeBarChart = ({
             animate={false}
             theme={theme.charts}
             layers={['bars', labelsLayer]}
-            defs={[theme.charts.emptyPattern]}
+            // defs={[theme.charts.emptyPattern]}
             fill={patternRules}
             tooltip={(bar) => (
                 <Tooltip

@@ -8,9 +8,9 @@ const ConclusionBlock = ({ block }) => {
     return (
         <Conclusion className="Conclusion">
             <Heading>
-                <Title>
+                {/* <Title>
                     <T k="sections.conclusion.title" />
-                </Title>
+                </Title> */}
                 <CreditItem id={block.author} labelId="conclusion.bio" />
             </Heading>
             <T k="sections.conclusion.description" md={true} />

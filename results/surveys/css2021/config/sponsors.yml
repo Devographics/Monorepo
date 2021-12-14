@@ -2,14 +2,14 @@
   id: frontendmasters
   url: https://frontendmasters.com/
   image: frontend-masters-dark.png
-  description: >
-    Advance your skills with in-depth, modern front-end engineering courses.
 - name: Polypane
   id: polypane
   url: https://polypane.app/
   image: polypane.png
-  description: >
-    The browser for ambitious devs. Build responsive, accessible and fast websites with ease.
+- name: Google Chrome
+  id: google_chrome
+  url: https://www.google.com/chrome/
+  image: google.png
 # - name: Newline
 #   id: newline
 #   url: https://www.newline.co/
@@ -18,10 +18,6 @@
 #   id: chroma
 #   url: https://www.hichroma.com/
 #   image: chroma_logo.svg
-# - name: ZensHome
-#   id: zenshome
-#   url: https://zenshome.jp
-#   image: zenshome-whitebg.svg
 # - name: Design+Code
 #   id: designcode
 #   url: https://designcode.io/

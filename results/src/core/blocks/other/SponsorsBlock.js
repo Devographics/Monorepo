@@ -4,7 +4,7 @@ import Link from 'core/components/LocaleLink'
 import sponsors from 'Config/sponsors.yml'
 import { useI18n } from 'core/i18n/i18nContext'
 import { mq, spacing, fontSize } from 'core/theme'
-import TextBlock from 'core/blocks/other/TextBlock'
+import T from 'core/i18n/T'
 
 const SponsorsBlock = () => {
     const { translate } = useI18n()
@@ -14,7 +14,7 @@ const SponsorsBlock = () => {
             <Container>
                 <Header>{translate('partners.our_partners')}</Header>
                 <SponsorList className="Sponsor__list">
-                    {sponsors.map(({ name, image, url, id, description }) => (
+                    {sponsors.map(({ name, image, url, id }) => (
                         <Sponsor className={`Sponsor Sponsor--${id}`} key={name}>
                             <SponsorLogo>
                                 <a href={url} title={name}>
@@ -22,7 +22,7 @@ const SponsorsBlock = () => {
                                 </a>
                             </SponsorLogo>
                             <SponsorDescription>
-                                <TextBlock text={description} />
+                                <T k={`partners.${id}.description`} />
                             </SponsorDescription>
                         </Sponsor>
                     ))}

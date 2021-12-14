@@ -138,7 +138,7 @@
           variables:  
             fieldId: yearly_salary
             facetId: years_of_experience
-            options: {facetSort: {order: ___asc___, property: mean}, facetMinCount: 100}
+            options: {facetSort: {order: ___desc___, property: mean}, facetMinCount: 100}
 
     - id: source
       template: source
@@ -439,6 +439,9 @@
         - template: tools_experience_marimekko
 
         - template: section_other_tools
+
+        - id: kilian_valkhof
+          template: picks
 
         - id: pre_post_processors
           template: happiness
@@ -774,7 +777,7 @@
       chartNamespace: people
       template: multiple_options
       variables:
-        options: { cutoff: 10 }
+        options: { cutoff: 15 }
         fieldId: resources
 
 - id: opinions
@@ -909,7 +912,6 @@
 
 - id: conclusion
   path: /conclusion
-  showTitle: false
   blocks:
 
     - id: conclusion
@@ -925,6 +927,15 @@
 
 # note: other pages need to be included in the sitemap too so they can get the proper
 # locale passed to them
+
+- id: about
+  path: /about
+  blocks:
+
+    - id: about_contents
+      blockType: AboutBlock
+      wrapBlock: false
+      disableExport: true
 
 - id: support
   path: /support

@@ -121,7 +121,7 @@ const StreamChart = ({
                 valueFormat={v => {
                     return isPercentage(units) ? `${v}%` : v.toString()
                 }}
-                defs={[theme.charts.emptyPattern]}
+                // defs={[theme.charts.emptyPattern]}
                 fill={[
                     {
                         match: {

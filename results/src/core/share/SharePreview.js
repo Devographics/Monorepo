@@ -53,7 +53,7 @@ const SharePreview = ({ title, subtitle, image, link }) => {
                 </Meta>
             </Container>
             <Legend>
-                <T k="share.preview" />
+                <T k="share.preview" md={true} />
             </Legend>
         </div>
     )

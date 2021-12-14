@@ -1,5 +1,20 @@
 import { DefaultTheme } from 'styled-components'
-import colors from 'core/theme/colors'
+import colors_ from 'core/theme/colors'
+
+const colors = {
+    ...colors_, 
+    pink: '#ef4e88',
+    pinkLight: '#FE79B4',
+    pinkLighter: '#FFADD2',
+    blue: '#3633B7',
+    blueLight: '#775CE0',
+    blueLighter: '#B0AEEF',
+    green: '#4BC77D',
+    greenLight: '#73D49A',
+    greenLighter: '#B6F4CF',
+    lightYellow: '#FFF6E6',
+    yellow: '#FFE589',
+}
 
 const velocity = [
     '#1734BF',
@@ -15,6 +30,7 @@ const velocity = [
     '#FFA6CE',
     '#FFCEE4'
 ]
+
 const distinct = [
     colors.indigo,
     colors.teal,
@@ -26,7 +42,8 @@ const distinct = [
     colors.orange,
     colors.olive,
     colors.skyblue,
-    colors.purple
+    colors.purple,
+    colors.blueLighter,
 ]
 
 const stateOfCSSThemeColors: DefaultTheme['colors'] = {
@@ -34,31 +51,31 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
     backgroundBackground: '#3E3036',
     backgroundForeground: colors.navyLighter,
     backgroundAlt: '#3E3036',
-    backgroundAlt2: '#3E3036',
+    backgroundAlt2: '#5F4C54',
     backgroundInverted: '#FFF6E6',
     backgroundInvertedAlt: '#E3D8C4',
-    text: '#FFF6E6',
+    text: colors.lightYellow,
     textAlt: '#E3D8C4',
     textInverted: '#272325',
     textHighlight: colors.greenDark,
-    link: '#ef4e88',
+    link: colors.pink,
     linkActive: '#5C63E0',
     contrast: '#0bdf67',
     border: '#FFF6E6',
     heatmap: colors.pinkLight,
     lineChartDefaultColor: '#59DF7F',
     barChart: {
-        primary: '#ef4e88',
-        primaryGradient: ['#9D0E66', '#ef4e88'],
-        secondary: '#5C63E0',
-        secondaryGradient: ['#FCEDB9', '#ef4e88'],
+        primary: colors.pink,
+        primaryGradient: ['#9D0E66', colors.pink],
+        secondary: colors.lightYellow,
+        secondaryGradient: ['#FCEDB9', colors.pink],
     },
     ranges: {
         tools: {
-            would_use: '#59DF7F',
+            would_use: colors.blue,
             would_not_use: colors.pink,
-            interested: '#ACFFC3',
-            not_interested: colors.pinkLight,
+            interested: colors.blueLighter,
+            not_interested: colors.pinkLighter,
             never_heard: '#59608a'
         },
         toolSections: {
@@ -71,12 +88,12 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
             mobile_desktop: colors.green,
             other_tools: colors.blue,
             css_in_js: colors.blue,
-            pre_post_processors: colors.purple,
-            css_frameworks: colors.green
+            pre_post_processors: colors.yellow,
+            css_frameworks: colors.pink
         },
         features: {
-            used: colors.blue,
-            heard: colors.greyTeal,
+            used: colors.pink,
+            heard: colors.blue,
             never_heard: colors.navyLighter
         },
         features_categories: {
@@ -135,16 +152,16 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
             yes_unrelated: velocity[4]
         },
         opinions: {
-            4: colors.pink,
-            3: colors.pinkLight,
-            2: '#59608a',
-            1: colors.blueLight,
-            0: colors.blue
+            4: velocity[8],
+            3: velocity[6],
+            2: velocity[4],
+            1: velocity[2],
+            0: velocity[0],
         },
         bracket: {
             round1: velocity[3],
-            round2: velocity[7],
-            round3: velocity[5]
+            round2: velocity[5],
+            round3: velocity[7]
         }
     },
     distinct,

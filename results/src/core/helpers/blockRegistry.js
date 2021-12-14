@@ -19,6 +19,7 @@ import NotFoundBlock from 'core/blocks/other/NotFoundBlock'
 import CreditsBlock from 'core/blocks/other/CreditsBlock'
 // import ReportBlock from 'core/report/ReportBlock'
 import HintBlock from 'core/blocks/other/HintBlock'
+import AboutBlock from 'core/blocks/other/AboutBlock'
 
 // demographics
 import ParticipationByCountryBlock from 'core/blocks/demographics/ParticipationByCountryBlock'
@@ -81,6 +82,7 @@ const blockRegistry = {
     NotFoundBlock,
     HintBlock,
     CreditsBlock,
+    AboutBlock,
     // ReportBlock,
     
     // demographics
