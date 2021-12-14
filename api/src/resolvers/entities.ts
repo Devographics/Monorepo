@@ -65,6 +65,10 @@ export default {
             return { name: entity.caniuse, url: `https://caniuse.com/${entity.caniuse}` }
         },
         npm: async (entity: Entity, args: any, { db }: RequestContext) => {
+            if (!entity || !entity.npm) {
+                return
+            }
+                        
             return { name: entity.npm, url: `https://www.npmjs.com/package/${entity.npm}` }
         }
     }
