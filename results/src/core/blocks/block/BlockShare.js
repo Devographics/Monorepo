@@ -55,8 +55,6 @@ const BlockShare = ({ isShareable, block, values, blockTitle }) => {
 
     const meta = getBlockMeta(block, context, translate, blockTitle)
 
-    console.log(meta)
-
     const props = { ...meta, showLabel: true }
 
     return (
