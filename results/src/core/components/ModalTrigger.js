@@ -12,7 +12,7 @@ const Close = styled.button`
     position: absolute;
     cursor: pointer;
     background: transparent;
-    border: none;
+    border: 2px solid transparent;
     outline: none;
     color: ${(props) => props.theme.colors.text};
 
@@ -24,7 +24,7 @@ const Close = styled.button`
     }
 
     &:focus {
-        border: 2px solid ${(props) => props.theme.colors.link};
+        border-color: ${(props) => props.theme.colors.link};
     }
 
     @media ${mq.small} {
