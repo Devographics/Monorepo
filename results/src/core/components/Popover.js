@@ -133,9 +133,6 @@ const PopoverPopup = styled.div`
     @media ${mq.small} {
         width: 100%;
     }
-    @media ${mq.mediumLarge} {
-        width: 300px;
-    }
     position: absolute;
     top: 125%;
     left: 50%;
