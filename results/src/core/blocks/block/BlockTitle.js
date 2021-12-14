@@ -2,7 +2,7 @@ import React, { memo, useState } from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 import last from 'lodash/last'
-import { mq, spacing } from 'core/theme'
+import { mq, spacing, fontSize, secondaryFontMixin } from 'core/theme'
 import ShareBlock from 'core/share/ShareBlock'
 import BlockExport from 'core/blocks/block/BlockExport'
 import { useI18n } from 'core/i18n/i18nContext'
@@ -18,6 +18,11 @@ const BlockTitleContents = ({ block, context }) => {
 }
 
 const Title = styled.span`
+    ${secondaryFontMixin}
+    font-size: ${fontSize('largerest')}
+    @media ${mq.small} {
+        font-size: ${fontSize('large')};
+    }
 `
 
 const BlockTitle = ({
@@ -116,7 +121,6 @@ const StyledBlockTitle = styled.div`
         `}
     display: flex;
     align-items: center;
-
     /* .Block__Title__Share {
         margin-left: ${spacing(0.5)};
     } */
@@ -143,6 +147,7 @@ const BlockTitleText = styled.h3`
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    line-height: 1.2;
     @media ${mq.small} {
         opacity: 1;
         transition: all 300ms ease-in;
