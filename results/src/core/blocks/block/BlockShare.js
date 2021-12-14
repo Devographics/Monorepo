@@ -21,7 +21,7 @@ const Share = styled.div`
 
     @media ${mq.mediumLarge} {
         display: grid;
-        gap: 0;
+        gap: 1rem;
         grid-template-columns: 500px 1fr;
     }
 `

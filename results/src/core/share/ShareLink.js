@@ -74,6 +74,7 @@ const LinkWithLabel = styled(Button)`
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    text-align: initial;
     &:hover {
         path,
         circle {
