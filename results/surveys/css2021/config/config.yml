@@ -1,4 +1,4 @@
-translationContexts: [common, results, state_of_css, state_of_css_2021]
+translationContexts: [common, results, state_of_css, state_of_css_2021, state_of_css_2021_results]
 socialMediaImage: social/state-of-css-2021-logo-social.png
 hashtag: '#StateOfCSS'
 siteContext: stateofcss
