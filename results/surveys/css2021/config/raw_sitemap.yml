@@ -440,7 +440,7 @@
 
         - template: section_other_tools
 
-        - id: kilian_valkhof
+        - id: kilianvalkhof
           template: picks
 
         - id: pre_post_processors
