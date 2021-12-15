@@ -3,6 +3,7 @@ import { useTheme } from 'styled-components'
 import { keys } from 'core/bucket_keys'
 import { useI18n } from 'core/i18n/i18nContext'
 import { Block } from 'core/types/block'
+import { stripHtml } from 'core/helpers/stripHtml'
 
 const getColor = (colorRange, id) => {
     if (!colorRange) {
@@ -57,7 +58,7 @@ export const useLegends = (block: Block, keys: string[], fieldId?: string) => {
     const legends = keys.map(id => {
         const labelKey = `options.${namespace}.${id}`
         const shortLabelKey = labelKey + '.short'
-        const label = translate(labelKey)
+        const label = stripHtml(translate(labelKey))
         const shortLabelObject = getString(shortLabelKey)
         const shortLabel = shortLabelObject.missing ? undefined : shortLabelObject.t
         const legend = {
