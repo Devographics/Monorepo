@@ -14,7 +14,7 @@ const SurveyCreditItem = ({ id, role, labelId }) => {
     return (
         <CreditItem>
             <Avatar href={`https://twitter.com/${twitterName}`}>
-                <img src={twitter?.avatarUrl} />
+                <img src={twitter?.avatarUrl} alt={name} />
             </Avatar>
             <Details>
                 <Name>{name}</Name>
