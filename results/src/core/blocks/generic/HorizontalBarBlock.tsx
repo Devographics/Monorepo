@@ -10,7 +10,7 @@ export interface HorizontalBarBlockProps extends BlockComponentProps {
     data: ResultsByYear
 }
 
-const HorizontalBarBlock = ({ block, data }: HorizontalBarBlockProps) => {
+const HorizontalBarBlock = ({ block, data, controlledUnits, isCustom }: HorizontalBarBlockProps) => {
     const {
         id,
         mode = 'relative',
@@ -28,7 +28,7 @@ const HorizontalBarBlock = ({ block, data }: HorizontalBarBlockProps) => {
 
     return (
         <Block
-            units={units}
+            units={controlledUnits ?? units}
             setUnits={setUnits}
             data={data}
             tables={[
@@ -49,8 +49,8 @@ const HorizontalBarBlock = ({ block, data }: HorizontalBarBlockProps) => {
                     i18nNamespace={chartNamespace}
                     translateData={translateData}
                     mode={mode}
-                    units={units}
-                    colorVariant={colorVariant}
+                    units={controlledUnits ?? units}
+                    colorVariant={isCustom ? 'secondary': 'primary'}
                 />
             </ChartContainer>
         </Block>

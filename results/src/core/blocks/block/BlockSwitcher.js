@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import blockRegistry from 'core/helpers/blockRegistry'
 import { keys } from 'core/bucket_keys'
@@ -9,9 +9,13 @@ import { usePageContext } from 'core/helpers/pageContext'
 import { BlockError } from 'core/blocks/block/BlockError'
 
 const BlockSwitcher = ({ pageData, block, index, ...props }) => {
+    let blockData = block.dataPath && get(pageData, block.dataPath)
+
+    const [customData, setCustomData] = useState()
+
+    let blockKeys = block.keysPath && get(pageData, block.keysPath)
     const pageContext = usePageContext()
     const { id, blockType, hidden } = block
-    let blockData, blockKeys
     if (!blockRegistry[blockType]) {
         return (
             <BlockError
@@ -21,27 +25,37 @@ const BlockSwitcher = ({ pageData, block, index, ...props }) => {
         )
     }
     const BlockComponent = blockRegistry[blockType]
-    if (block.dataPath) {
-        blockData = get(pageData, block.dataPath)
-        if (!blockData || blockData === null || isEmpty(blockData)) {
-            console.log(pageData)
-            console.log(block.dataPath)
-            return (
-                <BlockError
-                    block={block}
-                    message={`No available data for block ${id} | path: ${block.dataPath} | type: ${blockType}`}
-                >
-                    <textarea>{JSON.stringify(pageData, undefined, 2)}</textarea>
-                </BlockError>
-            )
-        }
-    }
-    if (block.keysPath) {
-        blockKeys = get(pageData, block.keysPath)
+    if (block.dataPath && (!blockData || blockData === null || isEmpty(blockData))) {
+        console.log(pageData)
+        console.log(block.dataPath)
+        return (
+            <BlockError
+                block={block}
+                message={`No available data for block ${id} | path: ${block.dataPath} | type: ${blockType}`}
+            >
+                <textarea>{JSON.stringify(pageData, undefined, 2)}</textarea>
+            </BlockError>
+        )
     }
 
+    const customChart = customData && (
+        <BlockComponent
+            block={{ ...block, chartOnly: true }}
+            data={customData}
+            keys={blockKeys}
+            index={index}
+            {...props}
+        />
+    )
+
     return (
-        <BlockComponent block={block} data={blockData} keys={blockKeys} index={index} {...props} />
+        <BlockComponent
+            block={{ ...block, setCustomData, customData, customChart }}
+            data={blockData}
+            keys={blockKeys}
+            index={index}
+            {...props}
+        />
     )
 }
 

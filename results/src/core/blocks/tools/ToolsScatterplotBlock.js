@@ -28,7 +28,7 @@ const getNodeData = (tool, metric = 'satisfaction') => {
 
     // get count for a given bucket
     const getCount = id => {
-        return buckets && buckets.find(b => b.id === id).count
+        return buckets && buckets.find(b => b.id === id)?.count
     }
 
     const totals = {

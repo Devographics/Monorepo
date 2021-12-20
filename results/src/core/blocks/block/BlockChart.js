@@ -9,11 +9,12 @@ import { getBlockDescriptionKey } from 'core/helpers/blockHelpers'
 import T from 'core/i18n/T'
 import BlockFooter from 'core/blocks/block/BlockFooter'
 import BlockUnitsSelector from 'core/blocks/block/BlockUnitsSelector'
+import EditInline from 'core/components/EditInline'
 
 const BlockChart = props => {
-
     const { children, units, error, data, block = {}, legends, legendProps, modeProps } = props
-    const { legendPosition = 'top', showNote = true } = block
+    const { legendPosition = 'top', showNote = true, customChart } = block
+    const { translate } = useI18n()
 
     const legendProps_ = { block, data, units, position: legendPosition, legends, ...legendProps }
 
@@ -29,6 +30,17 @@ const BlockChart = props => {
             <div className="Block__Contents">
                 {error ? <div className="error">{error}</div> : children}
             </div>
+            {customChart && (
+                <div className="Block__Contents">
+                    <CustomChartHeading>
+                        <EditInline defaultValue={translate('custom_data.chart_title')} />
+                    </CustomChartHeading>
+                    {React.cloneElement(customChart, {
+                        controlledUnits: units,
+                        isCustom: true
+                    })}
+                </div>
+            )}
             {legends && legendPosition === 'bottom' && <BlockLegends {...legendProps_} />}
             <BlockFooter {...props} />
             {showNote && <BlockNote block={block} />}
@@ -74,5 +86,7 @@ const Description = styled.div`
         }
     }
 `
+
+const CustomChartHeading = styled.h3``
 
 export default BlockChart

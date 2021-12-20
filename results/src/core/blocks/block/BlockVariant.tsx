@@ -9,10 +9,11 @@ import * as Tabs from '@radix-ui/react-tabs'
 import BlockChart from 'core/blocks/block/BlockChart'
 import BlockShare from 'core/blocks/block/BlockShare'
 import BlockDebug from 'core/blocks/block/BlockDebug'
-import { ChartIcon, DataIcon, ShareIcon, DebugIcon } from 'core/icons'
+import { ChartIcon, DataIcon, ShareIcon } from 'core/icons'
 import { ErrorBoundary } from 'core/blocks/block/BlockError'
 import { BlockVariantProps } from 'core/types'
 import { usePageContext } from 'core/helpers/pageContext'
+import CustomInputTrigger from 'core/blocks/block/CustomInputTrigger'
 
 const BlockVariant = (props: BlockVariantProps) => {
     const context = usePageContext()
@@ -20,16 +21,19 @@ const BlockVariant = (props: BlockVariantProps) => {
     const { className, children, block = {} } = props
     // id is erroring as we provide a default empty string without an ID on it.
     // potential solution is to amend the BlockDefinition with `id?: string` or have and ID on the default? unsure what's best
-    const { id } = block
+    const { id, chartOnly = false } = block
 
-    return (
-        <Container
-            // id={id}
-            className={`Block ${
-                isCapturing ? 'Block--isCapturing' : 'Block--notcapturing'
-            } Block--${id}${className !== undefined ? ` ${className}` : ''}`}
-        >
-            {/* {showTitle && (
+    if (chartOnly) {
+        return <div className="Block__Contents">{children}</div>
+    } else {
+        return (
+            <Container
+                // id={id}
+                className={`Block ${
+                    isCapturing ? 'Block--isCapturing' : 'Block--notcapturing'
+                } Block--${id}${className !== undefined ? ` ${className}` : ''}`}
+            >
+                {/* {showTitle && (
                 <BlockTitle
                     isShareable={isShareable}
                     units={units}
@@ -41,55 +45,57 @@ const BlockVariant = (props: BlockVariantProps) => {
                     {...titleProps}
                 />
             )} */}
-            <ShareBlockDebug block={block} />
-            {isCapturing ? (
-                <BlockChart {...props}>{children}</BlockChart>
-            ) : (
-                <>
-                    <TabsRoot defaultValue="chart" orientation="vertical">
-                        <SideArea className="Block__SideArea">
-                            <TabsList aria-label="tabs example">
-                                <TabsTrigger value="chart">
-                                    <ChartIcon enableTooltip={true} labelId="tabs.chart" />
-                                </TabsTrigger>
-                                <TabsTrigger value="data">
-                                    <DataIcon enableTooltip={true} labelId="tabs.data" />
-                                </TabsTrigger>
-                                <TabsTrigger value="share">
-                                    <ShareIcon enableTooltip={true} labelId="tabs.share" />
-                                </TabsTrigger>
-                                {/* <TabsTrigger value="debug">
+                <ShareBlockDebug block={block} />
+                {isCapturing ? (
+                    <BlockChart {...props}>{children}</BlockChart>
+                ) : (
+                    <>
+                        <TabsRoot defaultValue="chart" orientation="vertical">
+                            <SideArea className="Block__SideArea">
+                                <TabsList aria-label="tabs example">
+                                    <TabsTrigger value="chart">
+                                        <ChartIcon enableTooltip={true} labelId="tabs.chart" />
+                                    </TabsTrigger>
+                                    <TabsTrigger value="data">
+                                        <DataIcon enableTooltip={true} labelId="tabs.data" />
+                                    </TabsTrigger>
+                                    <TabsTrigger value="share">
+                                        <ShareIcon enableTooltip={true} labelId="tabs.share" />
+                                    </TabsTrigger>
+                                    <CustomInputTrigger {...props} />
+                                    {/* <TabsTrigger value="debug">
                                 <DebugIcon enableTooltip={true} labelId="tabs.debug" />
                             </TabsTrigger> */}
-                            </TabsList>
-                        </SideArea>
-                        <MainArea>
-                            <Tabs.Content value="chart">
-                                <TabWithBoundary {...props}>
-                                    <BlockChart {...props}>{children}</BlockChart>
-                                </TabWithBoundary>
-                            </Tabs.Content>
-                            <Tabs.Content value="data">
-                                <TabWithBoundary>
-                                    <BlockData {...props} />
-                                </TabWithBoundary>
-                            </Tabs.Content>
-                            <Tabs.Content value="share">
-                                <TabWithBoundary>
-                                    <BlockShare {...props} />
-                                </TabWithBoundary>
-                            </Tabs.Content>
-                            {/* <Tabs.Content value="debug">
+                                </TabsList>
+                            </SideArea>
+                            <MainArea>
+                                <Tabs.Content value="chart">
+                                    <TabWithBoundary {...props}>
+                                        <BlockChart {...props}>{children}</BlockChart>
+                                    </TabWithBoundary>
+                                </Tabs.Content>
+                                <Tabs.Content value="data">
+                                    <TabWithBoundary>
+                                        <BlockData {...props} />
+                                    </TabWithBoundary>
+                                </Tabs.Content>
+                                <Tabs.Content value="share">
+                                    <TabWithBoundary>
+                                        <BlockShare {...props} />
+                                    </TabWithBoundary>
+                                </Tabs.Content>
+                                {/* <Tabs.Content value="debug">
                         <TabWithBoundary>
                             <BlockDebug {...props} />
                         </TabWithBoundary>
                     </Tabs.Content> */}
-                        </MainArea>
-                    </TabsRoot>
-                </>
-            )}
-        </Container>
-    )
+                            </MainArea>
+                        </TabsRoot>
+                    </>
+                )}
+            </Container>
+        )
+    }
 }
 
 const TabWithBoundary = ({ children, ...props }) => (

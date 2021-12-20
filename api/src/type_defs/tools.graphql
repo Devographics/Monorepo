@@ -200,6 +200,35 @@ type ToolExperienceGraphNode {
 }
 
 """
+Aggregate the experience of multiple tools
+"""
+type ToolExperienceAggregatedBucket {
+    ids: [ToolExperienceID]
+    count: Int
+    countDelta: Int
+    percentage_question: Float
+    percentage_survey: Float
+    percentage_facet: Float
+    percentageDelta: Float
+}
+type ToolExperienceAggregatedFacet {
+    type: Facet
+    id: String
+    buckets: [ToolExperienceAggregatedBucket]
+    # completion: FacetCompletion
+}
+type ToolYearExperienceAggregated {
+    year: Int
+    # completion: YearCompletion
+    facets: [ToolExperienceAggregatedFacet]
+}
+type ToolExperienceAggregated {
+    all_years: [ToolYearExperienceAggregated]
+    year(year: Int!): ToolYearExperienceAggregated
+    keys: [ToolExperienceID]
+}
+
+"""
 Track number of connections between 2 nodes,
 for example number of user who were interested in React in 206
 and are willing to use it in 2017, connections are only established
@@ -222,7 +251,8 @@ type ToolExperienceGraph {
 
 type Tool {
     id: ToolID!
-    experience(filters: Filters): ToolExperience
+    experience(filters: Filters, options: Options, facet: Facet): ToolExperience
+    experienceAggregated(filters: Filters, options: Options, facet: Facet): ToolExperienceAggregated
     experienceGraph(filters: Filters): ToolExperienceGraph
     entity: Entity
 }

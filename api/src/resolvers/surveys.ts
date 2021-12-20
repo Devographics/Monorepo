@@ -15,7 +15,7 @@ const toolIds = getGraphQLEnumValues('ToolID')
 const featureIds = getGraphQLEnumValues('FeatureID')
 
 export interface ResolverArguments {
-    id: string
+    id?: string
     filters?: Filters
     options?: Options
     facet?: Facet
@@ -118,10 +118,10 @@ export default {
             survey,
             id,
             entity: await getEntity({ id }),
-            experience: ({ filters }: { filters?: Filters }) => ({
+            experience: (args: ResolverArguments) => ({
                 survey,
                 id,
-                filters
+                ...args
             }),
             experienceGraph: async ({ filters }: { filters?: Filters }, { db }: RequestContext) =>
                 useCache(computeToolExperienceGraph, db, [survey, id, filters])
@@ -131,10 +131,15 @@ export default {
                 survey,
                 id,
                 entity: await getEntity({ id }),
-                experience: ({ filters }: { filters?: Filters }) => ({
+                experience: (args: ResolverArguments) => ({
                     survey,
                     id,
-                    filters
+                    ...args,
+                }),
+                experienceAggregated: (args: ResolverArguments) => ({
+                    survey,
+                    id,
+                    ...args,
                 }),
                 experienceGraph: async (
                     { filters }: { filters?: Filters },

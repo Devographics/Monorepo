@@ -14,7 +14,7 @@ export interface VerticalBarBlockProps extends BlockComponentProps {
     data: FacetItem
 }
 
-const VerticalBarBlock = ({ block, data, keys }: VerticalBarBlockProps) => {
+const VerticalBarBlock = ({ block, data, keys, controlledUnits, isCustom }: VerticalBarBlockProps) => {
     if (!data) {
         throw new Error(`VerticalBarBlock: Missing data for block ${block.id}.`)
     }
@@ -47,7 +47,7 @@ const VerticalBarBlock = ({ block, data, keys }: VerticalBarBlockProps) => {
                     translateData
                 })
             ]}
-            units={units}
+            units={controlledUnits ?? units}
             setUnits={setUnits}
             completion={completion}
             data={data}
@@ -62,9 +62,9 @@ const VerticalBarBlock = ({ block, data, keys }: VerticalBarBlockProps) => {
                     i18nNamespace={chartNamespace}
                     translateData={translateData}
                     mode={mode}
-                    units={units}
+                    units={controlledUnits ?? units}
                     viewportWidth={width}
-                    colorVariant={colorVariant}
+                    colorVariant={isCustom ? 'secondary': 'primary'}
                 />
             </ChartContainer>
         </BlockVariant>

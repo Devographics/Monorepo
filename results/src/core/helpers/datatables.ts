@@ -153,5 +153,5 @@ export const getBucketValue = ({
     const yearData = data.find(d => d.year === year)
     const yearBuckets = yearData.facets[0].buckets
     const bucket = yearBuckets.find(b => b.id === key)
-    return bucket[valueKey]
+    return bucket && bucket[valueKey]
 }

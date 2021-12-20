@@ -3,9 +3,20 @@ import styled from 'styled-components'
 import { useI18n } from 'core/i18n/i18nContext'
 import Tooltip from 'core/components/Tooltip'
 
+const getIconSize = ({ size = 'medium' }) => {
+    switch (size) {
+        case 'small':
+            return '16px'
+        case 'medium':
+            return '24px'
+        case 'large':
+            return '30px'
+    }
+}
+
 const Icon = styled.span`
-    height: 24px;
-    width: 24px;
+    height: ${getIconSize};
+    width: ${getIconSize};
     appearance: initial !important;
     display: block;
     ${props =>
@@ -36,12 +47,19 @@ const IconWithHover = styled(Icon)`
     }
 `
 
-const IconWrapper = ({ enableHover = true, enableTooltip = true, labelId, label, children }) => {
+const IconWrapper = ({
+    enableHover = true,
+    enableTooltip = true,
+    labelId,
+    label,
+    children,
+    size
+}) => {
     const { translate } = useI18n()
     const label_ = label || translate(labelId)
     const IconComponent = enableHover ? IconWithHover : Icon
     const icon = (
-        <IconComponent>
+        <IconComponent size={size}>
             {children}
             <span className="sr-only">{label_}</span>
         </IconComponent>

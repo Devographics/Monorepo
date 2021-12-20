@@ -14,17 +14,17 @@ const Close = styled.button`
     background: transparent;
     border: 2px solid transparent;
     outline: none;
-    color: ${(props) => props.theme.colors.text};
+    color: ${props => props.theme.colors.text};
 
     &:hover,
     &:focus {
-        color: ${(props) => props.theme.colors.link};
-        border-bottom: 2px solid ${(props) => props.theme.colors.link};
+        color: ${props => props.theme.colors.link};
+        border-bottom: 2px solid ${props => props.theme.colors.link};
         padding-bottom: 0.15rem;
     }
 
     &:focus {
-        border-color: ${(props) => props.theme.colors.link};
+        border-color: ${props => props.theme.colors.link};
     }
 
     @media ${mq.small} {
@@ -42,13 +42,13 @@ const ModalTrigger = ({ label, trigger, children }) => {
     const [modalIsOpen, setIsOpen] = useState(false)
     const { translate } = useI18n()
 
-    const openModal = (e) => {
-        e.preventDefault()
+    const openModal = e => {
+        e && e.preventDefault()
         setIsOpen(true)
     }
 
-    const closeModal = (e) => {
-        e.preventDefault()
+    const closeModal = e => {
+        e && e.preventDefault()
         setIsOpen(false)
     }
 
@@ -60,12 +60,14 @@ const ModalTrigger = ({ label, trigger, children }) => {
         </TriggerDefaultComponent>
     )
 
+    const childrenComponent = React.cloneElement(children, { openModal, closeModal })
+
     const customStyles = {
         overlay: {
             backgroundColor: `${theme.colors.background}99`,
-            backdropFilter: 'blur(5px)',
+            backdropFilter: 'blur(5px)'
         },
-        content: {},
+        content: {}
     }
 
     const ModalClose = ({ closeModal }) => (
@@ -89,7 +91,7 @@ const ModalTrigger = ({ label, trigger, children }) => {
             >
                 <Content>
                     <ModalClose closeModal={closeModal} />
-                    {children}
+                    {childrenComponent}
                 </Content>
             </Modal>
         </>
