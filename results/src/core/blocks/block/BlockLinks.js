@@ -40,13 +40,24 @@ const Link = styled(Button)`
 `
 
 const getDomain = url => {
-    const { hostname } = new URL(url)
-    return hostname
+    try {
+        const { hostname } = new URL(url)
+        return hostname
+    } catch (error) {
+        console.log(`// BlockLinks: invalid url ${url}`)
+        console.log(error)
+        return undefined;
+    }
 }
 
 const BlockLink = ({ id, label, url, icon }) => {
     const Icon = icon
     const label_ = id === 'homepage' ? getDomain(url) : label
+    
+    if (!label_) {
+        return null;
+    }
+    
     return (
         <Item>
             <Link as="a" href={url} title={id}>
