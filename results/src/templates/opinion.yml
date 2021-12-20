@@ -3,6 +3,7 @@ dataPath: "surveyApi.survey.${id}.all_years"
 keysPath: "surveyApi.survey.${id}.keys"
 translateData: true
 blockNamespace: opinions
+enableCustomization: true
 query: >
     surveyApi {
         survey(survey: ${surveyType}) {

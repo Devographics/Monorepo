@@ -6,6 +6,7 @@ keysPath: "surveyApi.survey.${id}_happiness.keys"
 showDescription: false
 blockNamespace: happiness
 chartNamespace: happiness
+enableCustomization: true
 query: >
     surveyApi {
         survey(survey: ${surveyType}) {

@@ -4,6 +4,7 @@ keysPath: "surveyApi.survey.demographics.${id}.keys"
 defaultUnits: percentage_survey
 blockNamespace: user_info
 chartNamespace: ${id}
+enableCustomization: true
 query: >
     surveyApi {
         survey(survey: ${surveyType}) {

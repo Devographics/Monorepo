@@ -5,6 +5,7 @@ keysPath: surveyApi.survey.${id}_experience.experience.keys
 entityPath: surveyApi.survey.${id}_experience.entity
 bucketKeysName: tools
 hidden: true
+enableCustomization: true
 query: >
     surveyApi {
         survey(survey: ${surveyType}) {

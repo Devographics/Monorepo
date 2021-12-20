@@ -62,7 +62,7 @@ const BlockVariant = (props: BlockVariantProps) => {
                                     <TabsTrigger value="share">
                                         <ShareIcon enableTooltip={true} labelId="tabs.share" />
                                     </TabsTrigger>
-                                    <CustomInputTrigger {...props} />
+                                    {block.enableCustomization && <CustomInputTrigger {...props} />}
                                     {/* <TabsTrigger value="debug">
                                 <DebugIcon enableTooltip={true} labelId="tabs.debug" />
                             </TabsTrigger> */}

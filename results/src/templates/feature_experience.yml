@@ -4,6 +4,7 @@ keysPath: "surveyApi.survey.${id}.experience.keys"
 entityPath: surveyApi.survey.${id}.entity
 blockNamespace: features
 chartNamespace: features
+enableCustomization: true
 query: >
     surveyApi {
         survey(survey: ${surveyType}) {
