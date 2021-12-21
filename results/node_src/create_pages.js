@@ -132,8 +132,10 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
             isPermanent: true
         })
 
+        if (!USE_FAST_BUILD) {
             // skip this is fast_build option is enabled
             createBlockPages(page, context, createPage, locales, buildInfo)
+        }
     }
     logToFile('build.yml', yaml.dump(buildInfo, { noRefs: true }), { mode: 'overwrite' })
 }
