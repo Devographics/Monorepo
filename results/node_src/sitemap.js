@@ -83,11 +83,6 @@ const flattenSitemap = (stack, pages, parent, pageIndex) => {
 exports.pageFromConfig = async (page, pageIndex) => {
     try {
         const { parent } = page
-        // if template has been provided, apply it
-        if (page.template) {
-            const template = await loadTemplate(page.template)
-            page = applyTemplate(page, template, parent)
-        }
 
         const pagePath = page.path || `/${page.id}`
         page = {
@@ -98,6 +93,7 @@ exports.pageFromConfig = async (page, pageIndex) => {
             children: [],
             pageIndex
         }
+
         // if page has no defaultBlockType, get it from parent
         if (!page.defaultBlockType) {
             page.defaultBlockType = (parent && parent.defaultBlockType) || 'default'
@@ -113,8 +109,6 @@ exports.pageFromConfig = async (page, pageIndex) => {
                 // everything that's not in block.variants is part of the main block
                 const { variants: variants_ = [], ...mainBlockConfig } = block
                 const blockVariants = [{ ...mainBlockConfig, isMainBlock: true }, ...variants_]
-
-                const blockPath = `${page.path}${block.id}/`
 
                 const variants = []
 
@@ -147,10 +141,8 @@ exports.pageFromConfig = async (page, pageIndex) => {
                         blockVariant.blockType = page.defaultBlockType
                     }
 
-                    blockVariant.path = blockVariant.isMainBlock
-                        ? blockPath
-                        : blockPath + `${blockVariant.id}/`
-
+                    blockVariant.path = `${page.path}${blockVariant.id}/`
+                    
                     variants.push(blockVariant)
                 }
 

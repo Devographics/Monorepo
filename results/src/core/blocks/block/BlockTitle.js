@@ -43,7 +43,6 @@ const BlockTitle = ({
     const { translate } = useI18n()
 
     const blockTitle = getBlockTitle(block, context, translate)
-    const blockMeta = getBlockMeta(block, context, translate)
 
     const properties = {
         context,
@@ -68,7 +67,7 @@ const BlockTitle = ({
             <StyledBlockTitle isCapturing={isCapturing} className="Block__Title">
                 <LeftPart>
                     <BlockTitleText className="BlockTitleText">
-                        <SharePermalink url={blockMeta.link} />
+                        <SharePermalink block={block} />
                         <BlockTitleContents block={block} context={context} />
                         {completion && !context.isCapturing && (
                             <BlockCompletionIndicator completion={completion} />

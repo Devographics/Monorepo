@@ -401,6 +401,10 @@
           template: feature_experience
         - id: comparison_functions
           template: feature_experience
+
+        - id: michebarks
+          template: picks
+
         - id: at_property
           template: feature_experience
           year: 2021
@@ -443,8 +447,9 @@
         - id: kilianvalkhof
           template: picks
 
-        - id: pre_post_processors
-          template: happiness
+        - template: happiness
+          variables:
+            fieldId: pre_post_processors
 
         - id: pre_post_processors_resources
           items: [fm-sass]
@@ -463,8 +468,6 @@
         - id: assembler_css
           template: tool_experience
           year: 2021
-
-
 
     - id: css_frameworks
       path: /css-frameworks
@@ -485,8 +488,9 @@
 
         - template: section_other_tools
 
-        - id: css_frameworks
-          template: happiness
+        - template: happiness
+          variables:
+            fieldId: css_frameworks
 
         # - template: toolsUsageVariationsTemplate
 
@@ -535,8 +539,9 @@
 
         - template: section_other_tools
 
-        - id: css_in_js
-          template: happiness
+        - template: happiness
+          variables:
+            fieldId: css_in_js
 
         - items: [fm-reactv3]
           template: recommended_resources
@@ -847,9 +852,13 @@
 
     - id: state_of_the_web
       template: happiness
+      variables:
+        fieldId: state_of_the_web
 
     - id: state_of_css
       template: happiness
+      variables:
+        fieldId: state_of_css
 
 - id: awards
   path: /awards

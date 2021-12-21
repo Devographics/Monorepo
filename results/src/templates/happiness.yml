@@ -1,8 +1,9 @@
-titleId: "happiness.${id}"
+id: "${parentId}_happiness"
+titleId: "happiness.${fieldId}"
 # blockType: HappinessBlock
 blockType: VerticalBarBlock
-dataPath: "surveyApi.survey.${id}_happiness.year"
-keysPath: "surveyApi.survey.${id}_happiness.keys"
+dataPath: "surveyApi.survey.${fieldId}_happiness.year"
+keysPath: "surveyApi.survey.${fieldId}_happiness.keys"
 showDescription: false
 blockNamespace: happiness
 chartNamespace: happiness
@@ -10,7 +11,7 @@ enableCustomization: true
 query: >
     surveyApi {
         survey(survey: ${surveyType}) {
-            ${id}_happiness: happiness(id: ${id}) {
+            ${fieldId}_happiness: happiness(id: ${fieldId}) {
                 keys
                 year(year: ${currentYear}) {
                     year

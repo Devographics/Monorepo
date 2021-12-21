@@ -3,6 +3,8 @@ import styled from 'styled-components'
 import mq from 'core/theme/mq'
 import track from './tracking'
 import { useI18n } from 'core/i18n/i18nContext'
+import { getBlockMeta } from 'core/helpers/blockHelpers'
+import { usePageContext } from 'core/helpers/pageContext'
 
 const Link = styled.a`
     float: left;
@@ -27,17 +29,26 @@ const Link = styled.a`
     }
 `
 
-const SharePermalink = ({ trackingId, url }) => {
+const SharePermalink = ({ block }) => {
     const { translate } = useI18n()
+    const context = usePageContext()
+    const blockMeta = getBlockMeta(block, context, translate)
 
     return (
         <Link
-            onClick={track('Permalink', trackingId)}
+            // onClick={track('Permalink', trackingId)}
             className="SharePermalink share__link"
-            href={url}
+            href={blockMeta.link}
             rel="noopener noreferrer"
+            id={block.id}
         >
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+            >
                 <g id="Filled_Icons_1_">
                     <g id="Filled_Icons">
                         <path d="M14.474,10.232l-0.706-0.706C12.208,7.966,9.67,7.964,8.11,9.525l-4.597,4.597c-1.56,1.56-1.56,4.097,0,5.657 l0.707,0.706c0.756,0.757,1.76,1.173,2.829,1.173c1.068,0,2.072-0.417,2.827-1.172l2.173-2.171c0.391-0.391,0.391-1.024,0-1.414 c-0.391-0.392-1.023-0.392-1.414,0l-2.173,2.17c-0.755,0.756-2.071,0.757-2.828,0l-0.707-0.706c-0.779-0.781-0.779-2.049,0-2.829 l4.597-4.596c0.756-0.756,2.073-0.756,2.828,0l0.707,0.707c0.391,0.391,1.023,0.391,1.414,0 C14.864,11.256,14.864,10.623,14.474,10.232z" />
