@@ -7,11 +7,11 @@ import VerticalBarChart from 'core/charts/generic/VerticalBarChart'
 import { usePageContext } from 'core/helpers/pageContext'
 import { useLegends } from 'core/helpers/useBucketKeys'
 // import T from 'core/i18n/T'
-import { FacetItem, BlockComponentProps } from 'core/types'
+import { BlockComponentProps, ResultsByYear } from 'core/types'
 import { getTableData } from 'core/helpers/datatables'
 
 export interface VerticalBarBlockProps extends BlockComponentProps {
-    data: FacetItem
+    data: ResultsByYear
 }
 
 const VerticalBarBlock = ({ block, data, keys, controlledUnits, isCustom }: VerticalBarBlockProps) => {
@@ -19,7 +19,6 @@ const VerticalBarBlock = ({ block, data, keys, controlledUnits, isCustom }: Vert
         throw new Error(`VerticalBarBlock: Missing data for block ${block.id}.`)
     }
     const {
-        // id,
         mode = 'relative',
         defaultUnits = 'percentage_survey',
         translateData,
@@ -52,7 +51,7 @@ const VerticalBarBlock = ({ block, data, keys, controlledUnits, isCustom }: Vert
             completion={completion}
             data={data}
             block={block}
-            legendProps={{ layout: 'vertical' }}
+            legendProps={{ layout: 'horizontal' }} // unsure if this is used?
         >
             <ChartContainer fit={true}>
                 <VerticalBarChart

@@ -1,7 +1,8 @@
-import React, { FC } from 'react'
+import React, { ReactNode } from 'react'
+import { ColorVariant, ResultsByYear, YearCompletion } from '.'
 
 export type BlockUnits = 'count' | 'percentage_survey' | 'percentage_question' | 'percentage_facet'
-export type BlockSetUnits = React.Dispatch<React.SetStateAction<string>>
+export type BlockSetUnits = React.Dispatch<React.SetStateAction<BlockUnits>>
 export type BlockMode = 'absolute' | 'relative'
 
 export interface BlockComponentProps {
@@ -21,7 +22,7 @@ export interface BlockDefinition {
     mode?: BlockMode
     blockNamespace?: string
     chartNamespace?: string
-    colorVariant?: string
+    colorVariant?: ColorVariant
     overrides?: object
 
     // data
@@ -38,18 +39,20 @@ export interface BlockDefinition {
 }
 
 export interface BlockVariantProps {
-    id: string
-    className: string
-    children: FC
+    id?: string
+    className?: string
+    children: ReactNode
     units: BlockUnits
     setUnits: BlockSetUnits
     block: BlockDefinition
+    completion: YearCompletion
+    data: ResultsByYear
+    // tables have the type of TableData but as it is being returned form a fn I'm unsure on how to do this in TS
+    tables: unknown
+    legendProps: unknown // is this used at all?
     // error,
-    // data,
-    // legendProps,
     // titleProps,
     // headings,
-    // tables,
 }
 
 export interface BlockLegend {
