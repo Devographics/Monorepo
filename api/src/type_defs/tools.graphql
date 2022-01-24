@@ -15,6 +15,7 @@ enum ToolID {
     alpinejs
     litelement
     stimulus
+    solid # 2021
     # JS data layer
     redux
     apollo
@@ -36,6 +37,12 @@ enum ToolID {
     strapi
     fastify
     hapi
+    redwood # 2021
+    astro # 2021
+    eleventy # 2021
+    blitz # 2021
+    remix # 2021
+    sveltekit # 2021
     # JS testing
     jest
     mocha
@@ -48,6 +55,7 @@ enum ToolID {
     testing_library
     playwright
     webdriverio
+    vitest # 2021
     # JS build tools
     webpack
     parcel
@@ -59,6 +67,8 @@ enum ToolID {
     snowpack
     swc
     esbuild
+    vite # 2021
+    wmr # 2021
     # JS mobile desktop
     electron
     reactnative
@@ -69,6 +79,16 @@ enum ToolID {
     expo
     capacitor
     quasar
+    tauri # 2021
+    # JS Monorepo tools
+    rush # 2021
+    turborepo # 2021
+    yarn_workspaces # 2021
+    yalc # 2021
+    lerna # 2021
+    npm_workspaces # 2021
+    pnpm # 2021
+    nx # 2021
     # CSS Pre-/Post-processors
     sass
     less

@@ -42,7 +42,8 @@ const getChartData = ({
         const keyedBuckets = keyBy(get(tool, 'experience.year.facets.0.buckets'), 'id')
 
         const total = get(tool, 'experience.year.completion.total')
-        const aware = total - keyedBuckets.never_heard.count
+        const neverheard = keyedBuckets?.never_heard?.count || 0
+        const aware = total - neverheard
 
         const coeff = makeAbsolute ? 1 : -1
 
@@ -52,15 +53,15 @@ const getChartData = ({
             tool: { ...tool.entity, id: tool.id },
             awareness: aware,
             would_not_use_percentage: round(
-                (keyedBuckets.would_not_use.count / aware) * 100 * coeff,
+                ((keyedBuckets?.would_not_use?.count || 0) / aware) * 100 * coeff,
                 1
             ),
             not_interested_percentage: round(
-                (keyedBuckets.not_interested.count / aware) * 100 * coeff,
+                ((keyedBuckets?.not_interested?.count || 0) / aware) * 100 * coeff,
                 1
             ),
-            interested_percentage: round((keyedBuckets.interested.count / aware) * 100, 1),
-            would_use_percentage: round((keyedBuckets.would_use.count / aware) * 100, 1)
+            interested_percentage: round(((keyedBuckets?.interested?.count || 0) / aware) * 100, 1),
+            would_use_percentage: round(((keyedBuckets?.would_use?.count || 0) / aware) * 100, 1)
         }
     })
 

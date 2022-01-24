@@ -426,6 +426,38 @@
 
     - id: all_sections_tools_cardinality_by_user
       template: tools_cardinality_by_user
+      query: >
+          surveyApi {
+              cardinality: survey(survey: ${surveyType}) {
+                  pre_post_processors: tools_cardinality_by_user(
+                      year: ${currentYear},
+                      ids: [${toolsCategories.pre_post_processors}],
+                      experienceId: would_use
+                  ) {
+                      cardinality
+                      count
+                      percentage_survey
+                  }
+                  css_frameworks: tools_cardinality_by_user(
+                      year: ${currentYear},
+                      ids: [${toolsCategories.css_frameworks}],
+                      experienceId: would_use
+                  ) {
+                      cardinality
+                      count
+                      percentage_survey
+                  }
+                  css_in_js: tools_cardinality_by_user(
+                      year: ${currentYear},
+                      ids: [${toolsCategories.css_in_js}],
+                      experienceId: would_use
+                  ) {
+                      cardinality
+                      count
+                      percentage_survey
+                  }
+              }
+          }
 
   children:
     - id: pre_post_processors

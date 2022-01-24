@@ -13,6 +13,13 @@ enum FeatureID {
     decorators
     promise_all_settled
     dynamic_import
+    numeric_separators # 2021
+    string_replace_all # 2021
+    string_match_all # 2021
+    logical_assignment # 2021
+    promise_any # 2021
+    array_at # 2021
+    top_level_await # 2021
     # JS data structures
     maps
     sets
@@ -35,6 +42,12 @@ enum FeatureID {
     shadow_dom
     i18n
     web_components
+    page_visibility # 2021
+    broadcast_channel # 2021
+    geolocation # 2021
+    file_system_access # 2021
+    web_share # 2021
+    webxr # 2021
     # JS other features
     pwa
     wasm

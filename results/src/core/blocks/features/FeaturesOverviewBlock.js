@@ -83,7 +83,7 @@ const getChartData = (data, getName, translate) => {
     }
 }
 
-const FeaturesOverviewBlock = ({ block, data, triggerId }) => {
+const FeaturesOverviewBlock = ({ block, data, triggerId, controlledMode }) => {
     const { getName } = useEntities()
     const { translate } = useI18n()
 
@@ -128,7 +128,7 @@ const FeaturesOverviewBlock = ({ block, data, triggerId }) => {
                 })
             )}
             modeProps={{
-                units: mode,
+                units: controlledMode || mode,
                 options: modes,
                 onChange: setMode,
                 i18nNamespace: 'options.features_mode'
@@ -140,7 +140,7 @@ const FeaturesOverviewBlock = ({ block, data, triggerId }) => {
                     data={chartData}
                     variant="allFeatures"
                     currentFeatureIds={controlledCurrent}
-                    mode={mode}
+                    mode={controlledMode || mode}
                 />
             </ChartContainer>
         </Block>

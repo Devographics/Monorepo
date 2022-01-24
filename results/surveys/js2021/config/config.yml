@@ -1,0 +1,19 @@
+translationContexts: [common, results, state_of_js, state_of_js_2021, state_of_js_2021_results]
+socialMediaImage: social/state-of-css-2021-logo-social.png
+hashtag: '#StateOfJS'
+siteContext: stateofjs
+siteTitle: The State of JS 2021
+siteUrl: https://2021.stateofjs.com
+emailOctopusUrl: https://emailoctopus.com/lists/ed0386c4-2f55-11e9-a3c9-06b79b628af2/members/embedded/1.3/add
+emailOctopusSiteKey: 6LdYsmsUAAAAAPXVTt-ovRsPIJ_IVhvYBBhGvRV6
+emailOctopusCode: hpc4b27b6e-eb38-11e9-be00-06b4694bee2a
+translationLink: https://github.com/StateOfJS/locale-en-US
+capturesUrl: https://stateofx-images.netlify.app/captures/js2021
+discordUrl: https://discord.gg/zRDb35jfrt
+issuesUrl: https://github.com/StateOfJS/Monorepo
+
+tshirtImages: ['shirt-mockup.jpg', 'css2021-tshirt.png', 'shirt-lean.jpg']
+tshirtLink: https://cottonbureau.com/products/css-retro-vhs-t-shirt#/12563968/tee-men-standard-tee-vintage-black-tri-blend-s
+tshirtPrice: 29
+tshirtDesignerLink: https://chriskirknielsen.com/
+

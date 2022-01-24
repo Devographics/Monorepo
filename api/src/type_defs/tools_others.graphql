@@ -13,12 +13,14 @@ enum OtherToolsID {
     build_tools_others
     non_js_languages
     non_js_languages_others
+    javascript_flavors
     javascript_flavors_others
     front_end_frameworks_others
     datalayer_others
     back_end_frameworks_others
     testing_others
     mobile_desktop_others
+    monorepo_tools_others
     libraries
     libraries_others
     runtimes

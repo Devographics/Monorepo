@@ -56,11 +56,14 @@ Other Opinions
 """
 
 enum OtherOpinionsID {
+    # backwards compatibility
     missing_from_js
 
     currently_missing_from_css
+    currently_missing_from_js
     browser_interoperability_features
     css_pain_points
+    js_pain_points
 }
 
 type YearOtherOpinions {
