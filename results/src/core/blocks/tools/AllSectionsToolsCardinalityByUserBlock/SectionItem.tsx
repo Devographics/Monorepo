@@ -10,6 +10,7 @@ import { fontSize, fontWeight, spacing, mq } from 'core/theme'
 import { useI18n } from 'core/i18n/i18nContext'
 import range from 'lodash/range'
 import sumBy from 'lodash/sumBy'
+import round from 'lodash/round'
 
 export const SectionItem = ({
     sectionId,
@@ -39,7 +40,7 @@ export const SectionItem = ({
         maxCount = maxBucket.count
     }
 
-    const totalPercentage = sumBy(data, 'percentage_survey')
+    const totalPercentage = round(sumBy(data, 'percentage_survey'),2)
 
     return (
         <SectionContainer>

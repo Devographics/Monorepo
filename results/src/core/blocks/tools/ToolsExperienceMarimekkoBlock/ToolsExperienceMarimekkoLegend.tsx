@@ -17,19 +17,19 @@ export const ToolsExperienceMarimekkoLegend = ({ colors }: ToolsExperienceMarime
 
     const items = [
         {
-            id: translate('options.tools.would_not_use.short'),
-            x: 0,
-            width: ITEM_WIDTH,
-            fill: colors.would_not_use[0],
-            label: [ITEM_WIDTH * 0.25, 12],
-            labelAnchor: 'end',
-        },
-        {
             id: translate('options.tools.not_interested.short'),
             x: 0,
             width: ITEM_WIDTH,
             fill: colors.not_interested[0],
             label: [ITEM_WIDTH * 0.25, 30],
+            labelAnchor: 'end',
+        },
+        {
+            id: translate('options.tools.would_not_use.short'),
+            x: 0,
+            width: ITEM_WIDTH,
+            fill: colors.would_not_use[0],
+            label: [ITEM_WIDTH * 0.25, 12],
             labelAnchor: 'end',
         },
         {

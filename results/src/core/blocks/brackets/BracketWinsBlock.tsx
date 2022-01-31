@@ -64,7 +64,6 @@ const BracketWinsBlock = ({ block, data, keys }: HorizontalBarBlockProps) => {
 
     const legends = useLegends(block, rounds, 'bracket')
 
-    console.log(legends)
     const buckets = getChartData({ data, keys })
 
     const chartProps = {
