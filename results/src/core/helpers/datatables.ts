@@ -89,8 +89,6 @@ export const getTableData = (params: TableParams): TableData => {
     })
 
     const rows = data.map(row => {
-        console.log('// row')
-        console.log(row)
         if (!row) {
             return 
         }
