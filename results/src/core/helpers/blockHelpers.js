@@ -39,9 +39,10 @@ export const getBlockImage = (block, context) => {
 
 export const getBlockMeta = (block, context, translate, title) => {
     const { id } = block
-    let link = `${context.host}${context.currentPath}/${id}`
+    let path = `${context.currentPath}/${id}`
     // remove any double slashes
-    link = link.replaceAll('//', '/')
+    path = path.replaceAll('//', '/')
+    const link = `${context.host}${path}`
 
     const trackingId = `${context.currentPath}${id}`.replace(/^\//, '')
 
