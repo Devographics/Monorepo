@@ -112,3 +112,8 @@
   label: Română
   translators: ['magdaavram']
   repo: StateOfJS/locale-ro-RO
+
+- id: hu-HU
+  label: Magyar
+  translators: ['b3nk3', 'punkah']
+  repo: StateOfJS/locale-hu-HU
