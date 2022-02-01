@@ -16,6 +16,7 @@ import sumBy from 'lodash/sumBy'
 import take from 'lodash/take'
 import round from 'lodash/round'
 import { count } from 'console'
+import difference from 'lodash/difference'
 
 export interface TermAggregationOptions {
     // filter aggregations
@@ -130,7 +131,7 @@ export async function computeDefaultTermAggregationByYear(
         filters,
         // sort = 'count',
         // order = -1,
-        cutoff = 10,
+        cutoff = 1,
         limit = 50,
         year,
         facet,
@@ -195,12 +196,19 @@ export async function computeDefaultTermAggregationByYear(
     //     )
     // )
 
+    if (values) {
+        await addMissingBucketValues(results, values)
+    }
+
     await addEntities(results)
 
     await addCompletionCounts(results, totalRespondentsByYear, completionByYear)
 
-    await applyCutoff(results, cutoff)
-
+    if (!values) {
+        // do not apply cutoff for aggregations that have predefined values, 
+        // as that might result in unexpectedly missing buckets
+        await applyCutoff(results, cutoff)
+    }
     await addPercentages(results)
 
     // await addDeltas(results)
@@ -235,9 +243,7 @@ export async function limitFacets(
                     const abovePercent = facetMinPercent
                         ? f.completion.percentage_question > facetMinPercent
                         : true
-                    const aboveCount = facetMinCount
-                        ? f.completion.count > facetMinCount
-                        : true
+                    const aboveCount = facetMinCount ? f.completion.count > facetMinCount : true
                     return abovePercent && aboveCount
                 })
             }
@@ -259,6 +265,29 @@ export async function addMeans(resultsByYears: ResultsByYear[], values: string[]
                 totalCount += count
             })
             facet.mean = round(totalValue / totalCount, 2)
+        }
+    }
+}
+
+// if aggregation has values defined, set any missing value to 0 
+// so that all buckets have the same shape
+export async function addMissingBucketValues(resultsByYears: ResultsByYear[], values: string[]) {
+    for (let year of resultsByYears) {
+        for (let facet of year.facets) {
+            const existingValues = facet.buckets.map(b => b.id)
+            const missingValues = difference(values, existingValues)
+            missingValues.forEach(id => {
+                const zeroBucketItem = {
+                    id,
+                    count: 0,
+                    percentage_question: 0,
+                    percentage_facet: 0,
+                    percentage_survey: 0,
+                    count_all_facets: 0,
+                    percentage_all_facets: 0
+                }
+                facet.buckets.push(zeroBucketItem)
+            })
         }
     }
 }

@@ -7,7 +7,17 @@ opinions.css_pain_points:
   - responsive_design
   - form_elements_styling
   - performance_issues
-  
+
+opinions.js_pain_points:
+  - state_management
+  - architecture
+  - finding_packages
+  - debugging
+  - managing_dependencies
+  - async_code
+  - writing_modules
+  - date_management
+
 tools_others.tool_evaluation:
   - learning_curve_documentation # is a tool is easy to learn?
   - momentum_popularity # does it have a lot of hype?
@@ -27,3 +37,13 @@ opinions.currently_missing_from_css:
   - browser_support
   - mixins
   - scoping
+
+opinions.currently_missing_from_js:
+  - static_typing
+  - standard_library
+  - pattern_matching
+  - pipe_operator
+  - decorators
+  - immutable_data_structures
+  - better_date_management
+  - observable

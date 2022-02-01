@@ -31,7 +31,8 @@ export default {
             computeTermAggregationAllYearsWithCache(db, survey, `tools.${id}.experience`, {
                 ...options,
                 filters,
-                facet
+                facet,
+                keys: keys.tool
             }),
         year: async (
             { survey, id, filters, options, facet }: ResolverDynamicConfig,
@@ -42,7 +43,8 @@ export default {
                 ...options,
                 filters,
                 year,
-                facet
+                facet,
+                keys: keys.tool
             })
     },
     ToolExperienceAggregated: {
@@ -55,7 +57,8 @@ export default {
             computeTermAggregationAllYearsWithCache(db, survey, `tools.${id}.experience`, {
                 ...options,
                 filters,
-                facet
+                facet,
+                keys: keys.tool
             }),
         year: async (
             { survey, id, filters, options, facet }: ResolverDynamicConfig,
@@ -66,7 +69,8 @@ export default {
                 ...options,
                 filters,
                 year,
-                facet
+                facet,
+                keys: keys.tool
             })
     }
 }
