@@ -1,7 +1,7 @@
 /**
  * The various types of surveys supported by the API
  */
-export type SurveyType = 'js' | 'css'
+export type SurveyType = 'state_of_js' | 'state_of_css'
 
 export type SurveyYear = 2016 | 2017 | 2018 | 2019 | 2020 | 2021
 

@@ -6,6 +6,19 @@ import { getEntity } from '../entities'
 import { YearCompletion, SurveyConfig } from '../types'
 import { Filters, generateFiltersQuery } from '../filters'
 import { computeCompletionByYear } from './completion'
+import { computeYearlyTransitions, YearlyTransitionsResult } from './yearly_transitions'
+
+const EXPERIENCE_RANKING = {
+    never_heard: 1,
+    interested: 2,
+    not_interested: 3,
+    would_use: 4,
+    would_not_use: 5
+} as const
+
+type ExperienceChoice = keyof typeof EXPERIENCE_RANKING
+
+const sortExperience = (experience: ExperienceChoice) => EXPERIENCE_RANKING[experience]
 
 interface ExperienceBucket {
     id: string
@@ -290,4 +303,19 @@ export async function computeToolsExperienceRankingYears(
     }
     availableYears = _.uniq(availableYears).sort()
     return availableYears
+}
+
+export async function computeToolExperienceTransitions<ToolID extends string = string>(
+    db: Db,
+    survey: SurveyConfig,
+    tool: ToolID,
+    years: [number, number]
+) {
+    return computeYearlyTransitions<ExperienceChoice>(
+        db,
+        survey,
+        `tools.${tool}.experience`,
+        years,
+        sortExperience
+    )
 }
