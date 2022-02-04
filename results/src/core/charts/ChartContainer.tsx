@@ -3,9 +3,20 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { mq, spacing } from 'core/theme'
 
-const Indicator = memo(({ position }) => (
+export interface IndicatorProps {
+    position: "top"|"right"|"bottom"|"left"
+}
+
+export interface ChartContainerProps {
+    children: React.ReactNode
+    height: number
+    fit: boolean
+    className: string
+    vscroll: boolean
+}
+
+const Indicator = ({ position }: IndicatorProps) => (
     <ChartContainerIndicator
-        position={position}
         className={`ChartContainerIndicator ChartContainerIndicator--${position}`}
     >
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="100" viewBox="0 0 30 100">
@@ -35,13 +46,14 @@ const Indicator = memo(({ position }) => (
             </g>
         </svg>
     </ChartContainerIndicator>
-))
+)
+const MemoIndicator = memo(Indicator)
 
 /**
  * - Fit: fit to viewport width
  * - Expand: force a 600px width
  */
-const ChartContainer = ({ children, height, fit = false, className = '', vscroll = false }) => (
+const ChartContainer = ({ children, height, fit = false, className = '', vscroll = false }: ChartContainerProps) => (
     <ChartContainerOuter className={`ChartContainerOuter ${className}`} style={{ height }}>
         <Container className="ChartContainer" style={{ height }}>
             <ChartContainerInner
@@ -53,12 +65,12 @@ const ChartContainer = ({ children, height, fit = false, className = '', vscroll
         </Container>
         {!fit && (
             <>
-                <Indicator position="left" />
-                <Indicator position="right" />
+                <MemoIndicator position="left" />
+                <MemoIndicator position="right" />
                 {vscroll && (
                     <>
-                        <Indicator position="top" />
-                        <Indicator position="bottom" />
+                        <MemoIndicator position="top" />
+                        <MemoIndicator position="bottom" />
                     </>
                 )}
             </>
