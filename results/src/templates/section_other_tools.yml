@@ -6,7 +6,7 @@ dataPath: "surveyApi.survey.${parentId}_others.year"
 query: >
     surveyApi {
         survey(survey: ${surveyType}) {
-            ${parentId}_others: tools_others(id: ${parentId}_others, options: {cutoff: 10}) {
+            ${parentId}_others: tools_others(id: ${parentId}_others, options: {limit: 20}) {
                 id
                 year(year: ${currentYear}) {
                     year

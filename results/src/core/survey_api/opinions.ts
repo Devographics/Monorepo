@@ -1,4 +1,4 @@
-import { FacetCompletion, Completion } from 'core/types'
+import { FacetCompletion, YearCompletion } from 'core/types'
 
 export interface OpinionBucket {
     id: 0 | 1 | 2 | 3 | 4
@@ -16,7 +16,7 @@ export interface OpinionYearFacet {
 }
 export interface OpinionYearData {
     year: number
-    completion: Completion
+    completion: YearCompletion
     facets: OpinionYearFacet[]
 }
 

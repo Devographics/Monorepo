@@ -34,6 +34,8 @@ const colors = {
     greyLightest: '#EADEE3'
 }
 
+const tiers = [colors.red, '#ffc38a', '#ffe38d', '#feff8e', '#c3ff89']
+
 const velocity = [
     '#c3494e',
     '#ce595c',
@@ -64,7 +66,7 @@ const distinct = [
     colors.blueLighter
 ]
 
-const stateOfCSSThemeColors: DefaultTheme['colors'] = {
+const stateOfJSThemeColors: DefaultTheme['colors'] = {
     background: '#272325',
     backgroundBackground: '#3E3036',
     backgroundForeground: colors.navyLighter,
@@ -99,12 +101,12 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
             never_heard: [colors.greyLight, colors.greyLightest]
         },
         toolSections: {
-            front_end_frameworks: colors.pink,
-            back_end_frameworks: colors.purple,
+            front_end_frameworks: colors.pinkLight,
+            back_end_frameworks: colors.purpleLight,
             testing: colors.orange,
-            build_tools: colors.yellow,
+            build_tools: colors.skyblue,
             monorepo_tools: colors.red,
-            mobile_desktop: colors.green,
+            mobile_desktop: colors.green
         },
         features: {
             used: [colors.pink, colors.pinkLight],
@@ -114,7 +116,7 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
         features_categories: {
             language: colors.purple,
             browser_apis: colors.pink,
-            other_features: colors.green,
+            other_features: colors.green
         },
         features_simplified: {
             know_it: '#ACFFC3',
@@ -176,15 +178,9 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
         }
     },
     distinct,
-    countries: [
-        velocity[6],
-        velocity[7],
-        velocity[8],
-        velocity[9],
-        velocity[10],
-        velocity[11],
-    ],
-    velocity
+    countries: [velocity[6], velocity[7], velocity[8], velocity[9], velocity[10], velocity[11]],
+    velocity,
+    tiers
 }
 
-export default stateOfCSSThemeColors
+export default stateOfJSThemeColors

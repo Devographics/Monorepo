@@ -1,4 +1,5 @@
 import { Entity } from 'core/types'
+import { YearCompletion } from 'core/types/data'
 
 export interface ToolExperienceBucket {
     id: string
@@ -12,7 +13,8 @@ export interface ToolsExperienceToolData {
     experience: {
         year: {
             total: number
-            buckets: ToolExperienceBucket[]
+            facets: ToolExperienceFacet[]
+            completion: YearCompletion
         }
     }
 }

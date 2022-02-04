@@ -8,13 +8,13 @@ import T from 'core/i18n/T'
 
 const PicksBlock = ({ block, data }) => {
     const { id } = block
-    const pick = picks.find(p => p.twitterName === id)
+    const pick = picks.find(p => p.twitterName === id || p.id === id)
 
     if (!pick) {
         return null
     }
 
-    const { twitterName, fullName, pickName, avatarUrl, url } = pick
+    const { id: pickId, twitterName = pickId, fullName, pickName, avatarUrl, url } = pick
 
     const avatarFileName = avatarUrl ?? `${twitterName}.jpg`
 
@@ -32,14 +32,14 @@ const PicksBlock = ({ block, data }) => {
                                     <T k="picks.my_pick" />
                                 </span>
                                 <a href={url}>
-                                    <T k={`picks.${twitterName}.name`} />
+                                    <T k={`picks.${pickId}.name`} />
                                 </a>
                             </PickTitle>
                             <Description>
                                 {/* <ReactMarkdown
                                     source={translate(`picks.${twitterName}.description`, { markdown: true })}
                                 /> */}
-                                <T k={`picks.${twitterName}.description`} md={true} />
+                                <T k={`picks.${pickId}.description`} md={true} />
                             </Description>
                         </PickContent>
                         <PicksIntro>
@@ -65,7 +65,7 @@ const PicksBlock = ({ block, data }) => {
                                 <a href={`https://twitter.com/${twitterName}`}>{fullName}</a>
                             </PickName>
                             <PickBio>
-                                <T k={`picks.${twitterName}.bio`} md={true} />
+                                <T k={`picks.${pickId}.bio`} md={true} />
                             </PickBio>
                         </PickCredit>
                     </PickPerson>

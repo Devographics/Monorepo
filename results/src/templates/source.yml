@@ -1,6 +1,8 @@
 blockType: VerticalBarBlock
 dataPath: "surveyApi.survey.demographics.${id}.year"
 titleId: user_info.${id}
+descriptionId: user_info.${id}.description
+noteId: user_info.${id}.note
 query: >
     surveyApi {
         survey(survey: ${surveyType}) {
