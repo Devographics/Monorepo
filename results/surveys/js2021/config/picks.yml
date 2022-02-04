@@ -1,104 +1,103 @@
-- twitterName: georgedoescode
-  fullName: George Francis
-  avatarUrl: georgedoescode.png
-  url: https://houdini.how/
+- id: lee_robinson
+  twitterName: leeerob
+  fullName: Lee Robinson
+  avatarUrl: leeerob.jpg
+  url: https://kit.svelte.dev/
 
-- twitterName: shadeed9
-  fullName: Ahmad Shadeed
-  avatarUrl: shadeed9.jpg
-  url: https://www.miriamsuzanne.com/2021/05/02/container-queries/
+- id: vadim_makeev
+  twitterName: pepelsbey_
+  fullName: Vadim Makeev
+  avatarUrl: pepelsbey_.jpg
+  url: https://reactjs.org/blog/2020/12/21/data-fetching-with-react-server-components.html
 
-- twitterName: cassidoo
-  fullName: Cassidy Williams
-  avatarUrl: cassidoo.jpg
-  url: https://twitter.com/lynnandtonic
+- id: ben_ilegbodu
+  twitterName: benmvp
+  fullName: Ben Ilegbodu
+  avatarUrl: ben_ilegbodu.jpg
+  url: https://twitter.com/leeerob
 
-- twitterName: joshwcomeau
-  fullName: Josh Comeau
-  avatarUrl: joshwcomeau.jpg
-  url: https://wattenberger.com/blog/css-percents
+- id: shawn_wang
+  twitterName: swyx
+  fullName: Shawn Wang
+  avatarUrl: shawn_wang.jpg
+  url: https://supabase.com/
 
-- twitterName: kevinjpowell
-  fullName: Kevin Powell
-  avatarUrl: kevinjpowell.jpg
-  url: https://thinkdobecreate.com/
-  
-- twitterName: mmatuzo
-  fullName: Manuel Matuzović
-  avatarUrl: mmatuzo.jpg
-  url: https://developer.mozilla.org/en-US/docs/Web/CSS/aspect-ratio
+- id: sarah_drasner
+  twitterName: sarah_edo
+  fullName: Sarah Drasner
+  avatarUrl: sarah_drasner.jpg
+  url: https://twitter.com/pkozlowski_os
 
-- twitterName: lauragift_
-  fullName: Gift Egwuenu
-  avatarUrl: lauragift_.jpg
-  url: https://www.youtube.com/kepowob/videos
+- id: sara_vieira
+  twitterName: NikkitaFTW
+  fullName: Sara Vieira
+  avatarUrl: sara_vieira.jpg
+  url: https://twitter.com/0xca0a
 
-- twitterName: ericwbailey
-  fullName: Eric Bailey
-  avatarUrl: ericwbailey.jpg
-  url: https://www.miriamsuzanne.com/
+- id: mark_erikson
+  twitterName: acemarke
+  fullName: Mark Erikson
+  avatarUrl: mark_erikson.jpg
+  url: https://twitter.com/ryancarniato
 
-- twitterName: samuelkraft
-  fullName: Samuel Kraft
-  avatarUrl: samuelkraft.jpg
-  url: https://vanilla-extract.style/
+- id: miguel_angel_duran
+  twitterName: midudev
+  fullName: Miguel Ángel Durán
+  avatarUrl: miguel_angel_duran.jpg
+  url: https://vitejs.dev/
 
-- twitterName: argyleink
-  fullName: Adam Argyle
-  avatarUrl: argyleink.jpg
-  url: https://fffuel.co/nnnoise/
+- id: alyssa_nicoll
+  twitterName: AlyssaNicoll
+  fullName: Alyssa Nicoll
+  avatarUrl: alyssa_nicoll.jpg
+  url: https://www.twitch.tv/broccodev
 
-- twitterName: sachagreif
-  fullName: Sacha Greif
-  avatarUrl: sachagreif.jpg
-  url: https://open-props.style/
+- id: michael_jackson
+  twitterName: mjackson
+  fullName: Michael Jackson
+  avatarUrl: michael_jackson.jpg
+  url: https://esbuild.github.io/
 
-- twitterName: walterstephanie
-  fullName: Stéphanie Walter
-  avatarUrl: walterstephanie.jpg
-  url: https://www.miriamsuzanne.com/
-  
-- twitterName: kilianvalkhof
-  fullName: Kilian Valkhof
-  avatarUrl: kilianvalkhof.jpg
-  url: https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-data
+- id: david_khourshid
+  twitterName: DavidKPiano
+  fullName: David Khourshid
+  avatarUrl: david_khourshid.jpg
+  url: https://remix.run/
 
-- twitterName: michebarks
-  fullName: Michelle Barker
-  avatarUrl: michebarks.jpg
-  url: https://web.dev/building-a-color-scheme/
+- id: tejas_kumar
+  twitterName: TejasKumar_
+  fullName: Tejas Kumar
+  avatarUrl: tejas_kumar.jpg
+  url: https://twitter.com/timer150
 
-# - twitterName: christianoliff
-#   fullName: Christian Oliff
-#   avatarUrl: christianoliff.jpg
-#   url: https://purgecss.com/
+- id: kent_c_dodds
+  twitterName: kentcdodds
+  fullName: Kent C. Dodds
+  avatarUrl: kent_c_dodds.jpg
+  url: https://fly.io/
 
-# - twitterName: piccalilli_
-#   fullName: Andy Bell
-#   avatarUrl: piccalilli_.jpg
-#   url: https://css-irl.info/
+# - twitterName:
+#   fullName: 
+#   avatarUrl:
+#   url:
 
-# - twitterName: sarasoueidan
-#   fullName: Sara Soueidan
-#   avatarUrl: sarasoueidan.jpg
-#   url: https://rachelandrew.co.uk/
+# - twitterName:
+#   fullName: 
+#   avatarUrl:
+#   url:
 
-# - twitterName: 5t3ph
-#   fullName: Stephanie Eckles
-#   avatarUrl: 5t3ph.jpg
-#   url: https://www.youtube.com/watch?v=o6ssu5oKyaU
+# - twitterName:
+#   fullName: 
+#   avatarUrl:
+#   url:
 
-# - twitterName: hugogiraudel
-#   fullName: Hugo “Kitty” Giraudel
-#   avatarUrl: hugogiraudel.jpg
-#   url: https://fela.js.org/
+# - twitterName:
+#   fullName: 
+#   avatarUrl:
+#   url:
 
-# - twitterName: foolip
-#   fullName: Philip Jägenstedt
-#   avatarUrl: foolip.jpg
-#   url: https://blogs.igalia.com/svillar/2020/10/01/closing-the-gap-in-flexbox/
+# - twitterName:
+#   fullName: 
+#   avatarUrl:
+#   url:
 
-# - twitterName: jina
-#   fullName: Jina Anne
-#   avatarUrl: jina.jpg
-#   url: https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion

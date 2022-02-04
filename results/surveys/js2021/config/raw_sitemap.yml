@@ -144,7 +144,7 @@
       template: source
       blockType: HorizontalBarBlock
       variables:
-        options: {cutoff: 20}
+        options: {limit: 20}
       
     - id: gender
       template: demographics
@@ -241,6 +241,10 @@
         - id: logical_assignment
           template: feature_experience
           year: 2021
+
+        - id: michael_jackson
+          template: picks
+
         - id: promise_any
           template: feature_experience
           year: 2021
@@ -273,6 +277,10 @@
           template: feature_experience
         - id: webrtc
           template: feature_experience
+
+        - id: david_khourshid
+          template: picks
+
         - id: web_speech
           template: feature_experience
         - id: websocket
@@ -318,6 +326,9 @@
       - id: units_switcher_hint
         template: hint
 
+      - id: tejas_kumar
+        template: picks
+
       - id: wasm
         template: feature_experience
 
@@ -326,6 +337,9 @@
   blocks:
     - id: librariesIntroduction
       template: page_introduction
+
+    - id: tier_list
+      template: tier_list
 
     - id: scatterplot_overview
       template: scatterplot_overview
@@ -350,7 +364,7 @@
 
         - template: section_other_tools
 
-        - id: kilianvalkhof
+        - id: lee_robinson
           template: picks
 
         - template: happiness
@@ -399,7 +413,7 @@
 
         - template: section_other_tools
 
-        - id: kilianvalkhof
+        - id: vadim_makeev
           template: picks
 
         - template: happiness
@@ -461,7 +475,7 @@
 
         - template: section_other_tools
 
-        - id: kilianvalkhof
+        - id: ben_ilegbodu
           template: picks
 
         - template: happiness
@@ -512,7 +526,7 @@
 
         - template: section_other_tools
 
-        - id: kilianvalkhof
+        - id: shawn_wang
           template: picks
 
         - template: happiness
@@ -561,7 +575,7 @@
 
         - template: section_other_tools
 
-        - id: kilianvalkhof
+        - id: sarah_drasner
           template: picks
 
         - template: happiness
@@ -615,7 +629,7 @@
 
         - template: section_other_tools
 
-        - id: kilianvalkhof
+        - id: sara_vieira
           template: picks
 
         - template: happiness
@@ -670,9 +684,9 @@
           defaultUnits: count
           variables:
             fieldId: tools_others
-            options: { cutoff: 10 }
+            options: { limit: 15 }
 
-    - id: ericwbailey
+    - id: mark_erikson
       template: picks
 
     - id: utilities
@@ -688,6 +702,7 @@
           defaultUnits: count
           variables:
             fieldId: tools_others
+            options: { limit: 15 }
 
     - id: sharing_hint
       template: hint
@@ -705,6 +720,7 @@
           defaultUnits: count
           variables:
             fieldId: tools_others
+            options: { limit: 15 }
 
     - id: javascript_flavors
       tabId: tabs.main_answers
@@ -719,7 +735,12 @@
           defaultUnits: count
           variables:
             fieldId: tools_others
+            options: { limit: 15 }
 
+
+    - id: kent_c_dodds
+      template: picks
+      
     - id: non_js_languages
       tabId: tabs.main_answers
       blockNamespace: tools_others  
@@ -733,6 +754,7 @@
           defaultUnits: count
           variables:
             fieldId: tools_others
+            options: { limit: 15 }
 
     - id: bracket_hint
       template: hint
@@ -778,6 +800,7 @@
           translateData: true
           variables:
             fieldId: resources
+            options: { limit: 15 }
 
     - id: blogs_news_magazines
       blockNamespace: resources
@@ -795,6 +818,7 @@
           template: multiple_options
           variables:
             fieldId: resources
+            options: { limit: 15 }
 
     - id: sites_courses
       blockNamespace: resources
@@ -812,8 +836,9 @@
           template: multiple_options
           variables:
             fieldId: resources
+            options: { limit: 15 }
 
-    - id: samuelkraft
+    - id: miguel_angel_duran
       template: picks
 
     - id: podcasts
@@ -832,6 +857,7 @@
           template: multiple_options
           variables:
             fieldId: resources
+            options: { limit: 15 }
 
     - id: people_others
       defaultUnits: count
@@ -839,7 +865,7 @@
       chartNamespace: people
       template: multiple_options
       variables:
-        options: { cutoff: 15 }
+        options: { limit: 25 }
         fieldId: resources
 
 - id: opinions
@@ -859,7 +885,7 @@
     - id: js_ecosystem_changing_to_fast
       template: opinion
 
-    - id: argyleink
+    - id: alyssa_nicoll
       template: picks
 
     - id: js_pain_points_wins
