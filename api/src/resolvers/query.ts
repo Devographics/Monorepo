@@ -20,6 +20,6 @@ export default {
             getTranslation(key, localeId),
         locale: (parent: any, { localeId, contexts, enableFallbacks }: { localeId: string; contexts: string[], enableFallbacks?: boolean }) =>
             getLocaleObject(localeId, contexts, enableFallbacks),
-        locales: (parent: any, { contexts, enableFallbacks }: { contexts: string[], enableFallbacks?: boolean }) => getLocales(contexts, enableFallbacks)
+        locales: (parent: any, { contexts, localeIds, enableFallbacks }: { contexts: string[], localeIds: string[], enableFallbacks?: boolean }) => getLocales(contexts, enableFallbacks, localeIds)
     }
 }

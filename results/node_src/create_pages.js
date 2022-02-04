@@ -30,10 +30,12 @@ const config = yaml.load(
     )
 )
 
-const localesQuery = `
+const getLocalesQuery = (localeIds, contexts) => `
 query {
     surveyApi {
-        locales(contexts: [${config.translationContexts.join(', ')}]) {
+        locales(localeIds: [${localeIds
+            .map(id => `"${id}"`)
+            .join(',')}], contexts: [${contexts.join(', ')}]) {
             completion
             id
             label
@@ -58,23 +60,26 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
         pages: [],
         pageCount: 0,
         blocks: [],
-        blockCount: 0
+        blockCount: 0,
+        translationContexts: config.translationContexts
     }
+
+    // if USE_FAST_BUILD is turned on only keep en-US and ru-RU locale to make build faster
+    const localeIds = USE_FAST_BUILD ? ['en-US', 'ru-RU'] : []
+
+    const localesQuery = getLocalesQuery(localeIds, config.translationContexts)
+    logToFile('localesQuery.graphql', localesQuery, { mode: 'overwrite' })
+
     const localesResults = await graphql(
         `
             ${localesQuery}
         `
     )
-    let locales = localesResults.data.surveyApi.locales
+    logToFile('localesResults.json', localesResults, { mode: 'overwrite' })
+
+    const locales = localesResults.data.surveyApi.locales
 
     buildInfo.localeCount = locales.length
-
-    if (USE_FAST_BUILD) {
-        // if locales are turned off (to make build faster), only keep en-US locale
-        locales = localesResults.data.surveyApi.locales.filter(l =>
-            ['en-US', 'ru-RU'].includes(l.id)
-        )
-    }
 
     const cleanLocales = getCleanLocales(locales)
     logToFile('locales.json', cleanLocales, { mode: 'overwrite' })

@@ -311,8 +311,11 @@ export const getLocaleObject = async (
 Get all locales
 
 */
-export const getLocales = async (contexts?: string[], enableFallbacks?: boolean) => {
-    const rawLocales = await loadOrGetLocales()
+export const getLocales = async (contexts?: string[], enableFallbacks?: boolean, localeIds: string[] = []) => {
+    let rawLocales = await loadOrGetLocales()
+    if (localeIds.length) {
+        rawLocales = rawLocales.filter(l => localeIds.includes(l.id))
+    }
     const locales = []
     for (const locale of rawLocales) {
         const localeObject = await getLocaleObject(locale.id, contexts, enableFallbacks)
