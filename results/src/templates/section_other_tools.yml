@@ -3,10 +3,12 @@ titleId: blocks.category_other_tools
 blockType: HorizontalBarBlock
 defaultUnits: count
 dataPath: "surveyApi.survey.${parentId}_others.year"
+defaultVariables:
+    limit: 20
 query: >
     surveyApi {
         survey(survey: ${surveyType}) {
-            ${parentId}_others: tools_others(id: ${parentId}_others, options: {limit: 20}) {
+            ${parentId}_others: tools_others(id: ${parentId}_others, options: {limit: ${limit}}) {
                 id
                 year(year: ${currentYear}) {
                     year

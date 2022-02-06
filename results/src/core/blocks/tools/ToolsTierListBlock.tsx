@@ -24,8 +24,8 @@ const tiers = [
     { letter: 'S', upperBound: 100, lowerBound: 90 },
     { letter: 'A', upperBound: 89, lowerBound: 80 },
     { letter: 'B', upperBound: 79, lowerBound: 60 },
-    { letter: 'C', upperBound: 59, lowerBound: 40 },
-    { letter: 'D', upperBound: 39, lowerBound: 0 }
+    { letter: 'C', upperBound: 59, lowerBound: 0 },
+    // { letter: 'D', upperBound: 39, lowerBound: 0 }
 ]
 
 /*
@@ -35,6 +35,8 @@ Parse data and convert it into a format compatible with the Scatterplot chart
 */
 const getChartData = (data: ToolsExperienceToolData[], theme: any) => {
     let sortedData = tiers.map(tier => ({ ...tier, items: [] as TierItemData[] }))
+    // remove native apps for this chart
+    data = data.filter(tool => tool.id !== 'nativeapps')
     data.forEach(tool => {
         const total = tool?.experience?.year?.completion?.total
         const buckets = tool?.experience?.year?.facets[0].buckets
@@ -42,9 +44,7 @@ const getChartData = (data: ToolsExperienceToolData[], theme: any) => {
         const wouldNotUseCount = buckets?.find(b => b.id === 'would_not_use')?.count || 0
         const userCount = wouldUseCount + wouldNotUseCount
         const cutoff = Math.round((total * cutoffPercentage) / 100)
-        const satisfactionRatio = Math.round(
-            (wouldUseCount / (wouldUseCount + wouldNotUseCount)) * 100
-        )
+        const satisfactionRatio = Math.round((wouldUseCount / userCount) * 100)
         const categoryId = Object.keys(toolsCategories).find(categoryId =>
             toolsCategories[categoryId].includes(tool.id)
         )
@@ -52,7 +52,7 @@ const getChartData = (data: ToolsExperienceToolData[], theme: any) => {
         if (userCount >= cutoff) {
             sortedData.forEach(tier => {
                 if (satisfactionRatio >= tier.lowerBound && satisfactionRatio <= tier.upperBound) {
-                    tier.items.push({ ...tool, satisfactionRatio, color })
+                    tier.items.push({ ...tool, userCount, satisfactionRatio, color })
                 }
             })
         }
@@ -69,6 +69,8 @@ const TierListBlock = ({ block, data, triggerId, titleProps }) => {
     const theme = useTheme()
 
     const chartData = getChartData(data, theme)
+
+    const total = data[0].experience?.year?.completion?.total
 
     const legends = Object.keys(toolsCategories).map(keyId => ({
         id: `toolCategories.${keyId}`,
@@ -91,7 +93,7 @@ const TierListBlock = ({ block, data, triggerId, titleProps }) => {
             block={block}
         >
             <ChartContainer vscroll={false}>
-                <TierListChart data={chartData} />
+                <TierListChart data={chartData} total={total} />
             </ChartContainer>
         </Block>
     )

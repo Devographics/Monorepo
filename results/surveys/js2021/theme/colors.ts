@@ -34,7 +34,8 @@ const colors = {
     greyLightest: '#EADEE3'
 }
 
-const tiers = [colors.red, '#ffc38a', '#ffe38d', '#feff8e', '#c3ff89']
+// const tiers = [colors.red, '#ffc38a', '#ffe38d', '#feff8e', '#c3ff89']
+const tiers = [colors.red, '#ffc38a', '#feff8e', '#c3ff89']
 
 const velocity = [
     '#c3494e',

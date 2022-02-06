@@ -76,8 +76,8 @@ export const ToolsArrowsChart = ({ data, activeCategory }) => {
     const items = useMemo(
         () =>
             data.map((tool) =>
-                get(tool, 'experience.all_years', []).map(({ year, buckets }) => {
-                    const points = buckets.map(({ id, percentage }) =>
+                get(tool, 'experience.all_years', []).map(({ year, facets }) => {
+                    const points = facets[0].buckets.map(({ id, percentage }) =>
                         conditionDiffs[id].map((d) => d * percentage)
                     )
                     return [sum(points.map((d) => d[0])), sum(points.map((d) => d[1])), year]

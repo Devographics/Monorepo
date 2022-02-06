@@ -338,6 +338,9 @@
     - id: librariesIntroduction
       template: page_introduction
 
+    - id: tools_arrows
+      template: tools_arrows
+
     - id: tier_list
       template: tier_list
 
@@ -363,6 +366,8 @@
         - template: tools_experience_marimekko
 
         - template: section_other_tools
+          variables:
+            limit: 10
 
         - id: lee_robinson
           template: picks
@@ -412,6 +417,8 @@
         - template: tools_experience_marimekko
 
         - template: section_other_tools
+          variables:
+            limit: 10
 
         - id: vadim_makeev
           template: picks
@@ -474,6 +481,8 @@
         - template: tools_experience_marimekko
 
         - template: section_other_tools
+          variables:
+            limit: 10
 
         - id: ben_ilegbodu
           template: picks
@@ -525,6 +534,8 @@
         - template: tools_experience_marimekko
 
         - template: section_other_tools
+          variables:
+            limit: 5
 
         - id: shawn_wang
           template: picks
@@ -574,6 +585,8 @@
         - template: tools_experience_marimekko
 
         - template: section_other_tools
+          variables:
+            limit: 5
 
         - id: sarah_drasner
           template: picks
@@ -628,6 +641,8 @@
         - template: tools_experience_marimekko
 
         - template: section_other_tools
+          variables:
+            limit: 5
 
         - id: sara_vieira
           template: picks

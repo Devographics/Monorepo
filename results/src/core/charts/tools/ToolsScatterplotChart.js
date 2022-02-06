@@ -151,8 +151,8 @@ const Node = (props) => {
 }
 
 const quadrantLabels = {
-    satisfaction: ['assess', 'adopt', 'avoid', 'analyze'],
-    interest: ['mainstream', 'next_big_thing', 'unknown', 'low_interest'],
+    satisfaction: ['1', '2', '3', '4'],
+    interest: ['mainstream', 'next_big_thing', 'unknown', 'low_interest']
 }
 
 const Quadrants = (props) => {

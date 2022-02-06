@@ -1,6 +1,6 @@
 {
-    "name": "state-of-js-2020",
-    "description": "State of JS 2020 survey report",
+    "name": "state-of-results",
+    "description": "State Of survey results",
     "version": "0.1.0",
     "repository": {
         "type": "git",
