@@ -4,8 +4,9 @@ input Options {
   cutoff: Int
   sort: SortSpecifier
   facetSort: SortSpecifier
+  facetLimit: Int
   facetMinPercent: Float
-  facetMinCount: Float
+  facetMinCount: Int
 }
 
 input SortSpecifier {

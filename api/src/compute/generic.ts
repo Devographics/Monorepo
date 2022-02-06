@@ -25,11 +25,14 @@ export interface TermAggregationOptions {
     // order?: -1 | 1
     sort?: SortSpecifier
     facetSort?: SortSpecifier
-    cutoff?: number
-    limit?: number
     year?: number
     keys?: string[]
     facet?: Facet
+    // bucket
+    cutoff?: number
+    limit?: number
+    // facet
+    facetLimit?: number
     facetMinPercent?: number
     facetMinCount?: number
 }
@@ -136,6 +139,7 @@ export async function computeDefaultTermAggregationByYear(
         year,
         facet,
         keys: values,
+        facetLimit,
         facetMinPercent,
         facetMinCount
     }: TermAggregationOptions = options
@@ -205,7 +209,7 @@ export async function computeDefaultTermAggregationByYear(
     await addCompletionCounts(results, totalRespondentsByYear, completionByYear)
 
     if (!values) {
-        // do not apply cutoff for aggregations that have predefined values, 
+        // do not apply cutoff for aggregations that have predefined values,
         // as that might result in unexpectedly missing buckets
         await applyCutoff(results, cutoff)
     }
@@ -214,6 +218,7 @@ export async function computeDefaultTermAggregationByYear(
     // await addDeltas(results)
 
     await sortBuckets(results, { sort, order, values })
+    await limitBuckets(results, limit)
 
     if (values) {
         await addMeans(results, values)
@@ -221,33 +226,45 @@ export async function computeDefaultTermAggregationByYear(
 
     await sortFacets(results, { sort: facetSort, order: facetOrder })
 
-    await limitFacets(results, limit, { facetMinPercent, facetMinCount })
+    await limitFacets(results, { facetLimit, facetMinPercent, facetMinCount })
 
     // console.log(JSON.stringify(results, undefined, 2))
 
     return results
 }
 
+// add facet limits
+/* 
+
+For example, when faceting salary by countries we might want to only
+keep the top 10 countries; or discard any countries with less than X
+respondents or representing less than Y% of respondents
+
+*/
 export async function limitFacets(
     resultsByYears: ResultsByYear[],
-    limit: number,
-    { facetMinPercent, facetMinCount }: { facetMinPercent?: number; facetMinCount?: number }
+    {
+        facetLimit,
+        facetMinPercent,
+        facetMinCount
+    }: { facetLimit?: number; facetMinPercent?: number; facetMinCount?: number }
 ) {
-    if (limit) {
-        for (let year of resultsByYears) {
-            let facets = year.facets
-            // if a minimum question percentage/count is specified, filter out
-            // any facets that represent less than that
-            if (facetMinPercent || facetMinCount) {
-                facets = facets.filter(f => {
-                    const abovePercent = facetMinPercent
-                        ? f.completion.percentage_question > facetMinPercent
-                        : true
-                    const aboveCount = facetMinCount ? f.completion.count > facetMinCount : true
-                    return abovePercent && aboveCount
-                })
-            }
-            year.facets = take(facets, limit)
+    for (let year of resultsByYears) {
+        let facets = year.facets
+        // if a minimum question percentage/count is specified, filter out
+        // any facets that represent less than that
+        if (facetMinPercent || facetMinCount) {
+            facets = facets.filter(f => {
+                const abovePercent = facetMinPercent
+                    ? f.completion.percentage_question > facetMinPercent
+                    : true
+                const aboveCount = facetMinCount ? f.completion.count > facetMinCount : true
+                return abovePercent && aboveCount
+            })
+        }
+        // if a max number of facets is specified, limit list to that
+        if (facetLimit) {
+            year.facets = take(facets, facetLimit)
         }
     }
 }
@@ -269,7 +286,7 @@ export async function addMeans(resultsByYears: ResultsByYear[], values: string[]
     }
 }
 
-// if aggregation has values defined, set any missing value to 0 
+// if aggregation has values defined, set any missing value to 0
 // so that all buckets have the same shape
 export async function addMissingBucketValues(resultsByYears: ResultsByYear[], values: string[]) {
     for (let year of resultsByYears) {
@@ -338,11 +355,20 @@ export async function addCompletionCounts(
     }
 }
 
-// add completion counts for each year
+// apply bucket cutoff
 export async function applyCutoff(resultsByYears: ResultsByYear[], cutoff: number = 1) {
     for (let year of resultsByYears) {
         for (let facet of year.facets) {
             facet.buckets = facet.buckets.filter(bucket => bucket.count >= cutoff)
+        }
+    }
+}
+
+// apply bucket limit
+export async function limitBuckets(resultsByYears: ResultsByYear[], limit: number = 1000) {
+    for (let year of resultsByYears) {
+        for (let facet of year.facets) {
+            facet.buckets = take(facet.buckets, limit)
         }
     }
 }
