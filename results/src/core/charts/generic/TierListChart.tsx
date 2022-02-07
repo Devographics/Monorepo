@@ -1,18 +1,7 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled, { useTheme } from 'styled-components'
-import Block from 'core/blocks/block/BlockVariant'
-import compact from 'lodash/compact'
-import round from 'lodash/round'
-import get from 'lodash/get'
-import { useI18n } from 'core/i18n/i18nContext'
-import ChartContainer from 'core/charts/ChartContainer'
-import ButtonGroup from 'core/components/ButtonGroup'
-import Button from 'core/components/Button'
-import variables from 'Config/variables.yml'
-import T from 'core/i18n/T'
-import { getTableData } from 'core/helpers/datatables'
 import { mq, spacing, fontSize, fontWeight } from 'core/theme'
-import { ToolsExperienceToolData, ToolExperienceBucket } from 'core/survey_api/tools'
+import { ToolsExperienceToolData } from 'core/survey_api/tools'
 
 const customImages = {
     testing_library: 'png',
@@ -23,7 +12,7 @@ const customImages = {
     reactnative: 'png',
     lerna: 'png',
     cordova: 'jpg',
-    vuejs: 'svg',
+    vuejs: 'svg'
 }
 
 interface TierItemData extends ToolsExperienceToolData {
@@ -57,13 +46,11 @@ const getRadius = (userCount: number, total: number) => {
 
 const TierListChart = ({ data, total }: TierListProps) => {
     return (
-        <table>
-            <tbody>
-                {data.map((tier, index) => (
-                    <Tier {...tier} key={tier.letter} index={index} total={total} />
-                ))}
-            </tbody>
-        </table>
+        <Table>
+            {data.map((tier, index) => (
+                <Tier {...tier} key={tier.letter} index={index} total={total} />
+            ))}
+        </Table>
     )
 }
 
@@ -71,11 +58,11 @@ const Tier = ({ letter, items, lowerBound, upperBound, index, total }: TierProps
     const theme = useTheme()
     const color = theme.colors.tiers[index]
     return (
-        <tr>
+        <Row>
             <Letter color={color}>
                 <LetterInner>{letter}</LetterInner>
-                {index === 0 && <UpperBound>{upperBound}%</UpperBound>}
-                <LowerBound>{lowerBound}%</LowerBound>
+                {/* {index === 0 && <UpperBound>{upperBound}%</UpperBound>} */}
+                {lowerBound !== 0 && <LowerBound>{lowerBound}%</LowerBound>}
             </Letter>
             <TierItems>
                 <TierItemsInner>
@@ -84,7 +71,7 @@ const Tier = ({ letter, items, lowerBound, upperBound, index, total }: TierProps
                     ))}
                 </TierItemsInner>
             </TierItems>
-        </tr>
+        </Row>
     )
 }
 
@@ -113,30 +100,49 @@ const TierItem = ({ id, entity, satisfactionRatio, userCount, color, total }: Ti
     )
 }
 
-const Letter = styled.th`
-    padding: ${spacing()};
+const Table = styled.div``
+
+const Row = styled.div`
+    display: grid;
+    grid-template-columns: 50px 1fr;
+    column-gap: 5px;
+    margin-bottom: 5px;
+`
+const Letter = styled.div`
     background: ${({ color }) => color};
     color: ${({ theme }) => theme.colors.textInverted};
+    height: 100%;
+    display: grid;
+    place-items: center;
+    position: relative;
+    padding: ${spacing()};
 `
 
 const LetterInner = styled.div`
-    position: relative;
+    text-align: center;
+    font-weight: ${fontWeight('bold')};
 `
 
 const Bound = styled.div`
     position: absolute;
     left: 50%;
-    transform: translateX(-50%) translateY(-50%);
-    background: ${({ theme }) => theme.colors.backgroundAlt};
-    padding: 3px 8px;
+    border: 4px solid ${({ theme }) => theme.colors.background};
+    background: ${({ theme }) => theme.colors.backgroundInverted};
+    padding: 1px 4px;
     border-radius: 3px;
+    z-index: 10;
+    font-size: ${fontSize('smaller')};
 `
-const UpperBound = styled(Bound)`
-    top: 0;
-`
+// const UpperBound = styled(Bound)`
+//     top: 0;
+//     bottom: auto;
+//     transform: translateX(-50%) translateY(-50%);
+// `
 
 const LowerBound = styled(Bound)`
     bottom: 0;
+    top: auto;
+    transform: translateX(-50%) translateY(50%);
 `
 
 const TierItems = styled.td`
@@ -148,17 +154,10 @@ const TierItemsInner = styled.td`
     display: flex;
     flex-wrap: wrap;
     justify-content: top;
-    gap: ${spacing(0.75)};
+    gap: ${spacing(0.25)};
 `
 
 const Link = styled.div`
-    /* background: linear-gradient(#00000000, #00000022), ${({ color }) => color}; */
-    /* background: ${({ color }) => color}; */
-    /* background: ${({ theme }) => theme.colors.backgroundInverted}; */
-    /* border: 5px solid ${({ color }) => color}; */
-    /* white-space: nowrap; */
-    /* width: ${maxRadius}; */
-    /* height: 100px; */
     position: relative;
     display: grid;
     place-items: center;
@@ -168,31 +167,30 @@ const Link = styled.div`
 `
 
 const ColorWrapper = styled.div`
-    /* background: ${({ color }) => color}; */
-    border: 5px solid ${({ color }) => color};
-    background: ${({ theme }) => theme.colors.backgroundInverted};
+    border: 3px solid ${({ color }) => color};
+    background: white;
     padding: ${spacing(0.5)};
     display: grid;
     place-items: center;
 `
 
-const ImageWrapper = styled.div``
+const ImageWrapper = styled.div`
+    padding: 7px;
+`
 
 const Image = styled.img`
     display: block;
     width: 100%;
     aspect-ratio: 1 / 1;
-    /* display: none; */
 `
 
 const Name = styled.span`
-    /* color: ${({ color }) => color}; */
-    /* position: relative; */
+    background: ${({ color }) => color};
     text-align: center;
     font-weight: ${fontWeight('bold')};
     line-height: 1.2;
     width: 100%;
-    padding: 5px;
+    padding: 2px 5px 5px 5px;
     font-size: ${fontSize('small')};
     text-overflow: ellipsis;
     overflow: hidden;
@@ -200,44 +198,21 @@ const Name = styled.span`
 `
 const Ratio = styled.span`
     position: absolute;
-    bottom: 0;
+    top: 0;
     right: 0;
-    transform: translateY(-100%);
     display: grid;
     place-items: center;
-    /* opacity: 0.3; */
     font-weight: ${fontWeight('bold')};
-    /* text-shadow: 1px 1px #00000022; */
     z-index: 1;
     background: ${({ color }) => color};
     height: 30px;
     width: 30px;
     padding: 2px 4px;
-    /* border-radius: 100%; */
-    /* border-radius: 6px; */
-    /* height: ${maxRadius}px; */
-    /* width: ${maxRadius + 20}px; */
-    /* background: #222; */
-    /* display: none; */
-`
-const RatioInner = styled.span`
-    /* line-height: 0; */
-    text-align: center;
-    /* color: ${({ theme }) => theme.colors.text}44; */
-    /* background: ${({ color }) => color}; */
-
-    /* border-radius: 100%; */
-    /* border-radius: 4px; */
-    /* height: ${({ radius }) => radius}px; */
-    /* width: ${({ radius }) => radius}px; */
-    /* font-size: ${({ radius }) => radius * 0.5}px; */
-    /* transform: translateX(-20px); */
-
-    /* display: grid; */
-    /* place-items: center; */
+    border-radius: 0 0 0 3px;
 `
 
 const RatioNumber = styled.span`
+    line-height: 0;
     text-align: center;
     font-size: ${fontSize('small')};
 `

@@ -8,7 +8,7 @@ noteId: blocks.tools_arrows.note
 query: >
     surveyApi {
         survey(survey: ${surveyType}) {
-            ${id}: tools {
+            ${id}: tools(ids: [${allTools}]) {
                 id
                 entity {
                     name

@@ -305,6 +305,10 @@
         - id: file_system_access
           template: feature_experience
           year: 2021
+
+        - id: wes_bos
+          template: picks
+
         - id: web_share
           template: feature_experience
           year: 2021

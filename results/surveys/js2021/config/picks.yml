@@ -76,10 +76,11 @@
   avatarUrl: kent_c_dodds.jpg
   url: https://fly.io/
 
-# - twitterName:
-#   fullName: 
-#   avatarUrl:
-#   url:
+- id: wes_bos
+  twitterName: wesbos
+  fullName: Wes Bos
+  avatarUrl: wes_bos.jpg
+  url: https://github.com/tc39/proposals
 
 # - twitterName:
 #   fullName: 

@@ -77,8 +77,8 @@ export const ToolsArrowsChart = ({ data, activeCategory }) => {
         () =>
             data.map((tool) =>
                 get(tool, 'experience.all_years', []).map(({ year, facets }) => {
-                    const points = facets[0].buckets.map(({ id, percentage }) =>
-                        conditionDiffs[id].map((d) => d * percentage)
+                    const points = facets[0].buckets.map(({ id, percentage_question }) =>
+                        conditionDiffs[id].map((d) => d * percentage_question)
                     )
                     return [sum(points.map((d) => d[0])), sum(points.map((d) => d[1])), year]
                 })
@@ -121,7 +121,7 @@ export const ToolsArrowsChart = ({ data, activeCategory }) => {
 
                     const velocity = getVelocity(points)
                     const color = getVelocityColor(velocity, theme)
-                    
+
                     return {
                         tool,
                         toolName,
