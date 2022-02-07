@@ -4,7 +4,7 @@ import Block from 'core/blocks/block/BlockVariant'
 import compact from 'lodash/compact'
 import round from 'lodash/round'
 import get from 'lodash/get'
-import ToolsScatterplotChart from 'core/charts/tools/ToolsScatterplotChart'
+import { ToolsScatterPlot } from 'core/charts/tools/ToolsScatterplot'
 import { useI18n } from 'core/i18n/i18nContext'
 import ChartContainer from 'core/charts/ChartContainer'
 import ButtonGroup from 'core/components/ButtonGroup'
@@ -121,7 +121,8 @@ const ToolsScatterplotBlock = ({ block, data, triggerId, titleProps }) => {
     const [metric, setMetric] = useState('satisfaction')
     const chartData = getChartData(data, translate, metric)
 
-    const [current, setCurrent] = useState(null)
+    const [currentCategory, setCurrentCategory] = useState(null)
+    const controlledCurrentCategory = triggerId || currentCategory
 
     const legends = Object.keys(toolsCategories).map(keyId => ({
         id: `toolCategories.${keyId}`,
@@ -130,9 +131,7 @@ const ToolsScatterplotBlock = ({ block, data, triggerId, titleProps }) => {
         color: theme.colors.ranges.toolSections[keyId]
     }))
 
-    const controlledCurrent = triggerId || current
-
-    const chartClassName = controlledCurrent ? `ToolsScatterplotChart--${controlledCurrent}` : ''
+    const chartClassName = controlledCurrentCategory ? `ToolsScatterplotChart--${controlledCurrentCategory}` : ''
 
     return (
         <Block
@@ -153,21 +152,21 @@ const ToolsScatterplotBlock = ({ block, data, triggerId, titleProps }) => {
             legendProps={{
                 legends,
                 onMouseEnter: ({ id }) => {
-                    setCurrent(id.replace('toolCategories.', ''))
+                    setCurrentCategory(id.replace('toolCategories.', ''))
                 },
                 onMouseLeave: () => {
-                    setCurrent(null)
+                    setCurrentCategory(null)
                 }
             }}
         >
             <ChartContainer vscroll={false}>
-                <ToolsScatterplotChart
+                <ToolsScatterPlot
                     className={`ToolsScatterplotChart ${chartClassName}`}
                     data={chartData}
                     metric={metric}
                     showQuadrants={metric === 'satisfaction'}
-                    current={controlledCurrent}
-                    setCurrent={setCurrent}
+                    currentCategory={controlledCurrentCategory}
+                    setCurrentCategory={setCurrentCategory}
                 />
             </ChartContainer>
         </Block>
