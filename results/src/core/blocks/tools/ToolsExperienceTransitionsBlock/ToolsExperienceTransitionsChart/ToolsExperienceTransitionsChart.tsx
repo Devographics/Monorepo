@@ -15,6 +15,7 @@ export const ToolsExperienceTransitionsChart = ({
                 source: transition.from,
                 target: transition.to,
                 value: transition.count,
+                percentage: transition.percentage,
             }
         }),
     }
@@ -35,6 +36,8 @@ export const ToolsExperienceTransitionsChart = ({
                 linkContract={1}
                 linkOpacity={1}
                 animate={false}
+                // @ts-ignore
+                layers={staticProps.layers}
             />
         </div>
     )

@@ -3,6 +3,7 @@ import {
     SankeyLinkDatum as BaseSankeyLinkDatum
 } from '@nivo/sankey'
 import { BlockContext } from 'core/blocks/types'
+import { ToolExperienceId } from 'core/bucket_keys'
 
 export type ToolsExperienceTransitionsBlockData = BlockContext<
     'tools_experience_transitions',
@@ -23,7 +24,7 @@ export interface ApiToolExperienceTransitions {
 export interface ChartNodeData {
     id: string
     year: number
-    choice: string
+    choice: ToolExperienceId
 }
 
 export interface ChartLinkData {
