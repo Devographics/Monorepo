@@ -35,7 +35,6 @@ export const ToolsExperienceTransitionsBlock = ({
     return (
         <Block
             block={block}
-            tables={[]}
             data={filteredData}
             legends={legends}
             legendProps={legendProps}
