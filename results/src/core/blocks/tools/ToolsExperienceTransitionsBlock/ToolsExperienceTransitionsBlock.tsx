@@ -16,6 +16,7 @@ export const ToolsExperienceTransitionsBlock = ({
     block: ToolsExperienceTransitionsBlockData
     data: ApiToolExperienceTransitions[]
 }) => {
+    console.log(data)
     const filteredData = useMemo(() =>
         data.filter(toolData => toolData.experienceTransitions.nodes.length > 0),
         [data]

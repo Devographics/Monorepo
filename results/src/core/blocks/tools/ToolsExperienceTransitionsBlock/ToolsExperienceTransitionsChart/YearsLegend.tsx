@@ -1,6 +1,7 @@
 import React, { memo, useMemo } from 'react'
 import styled from 'styled-components'
 import { SankeyYear } from '../types'
+import { staticProps } from './config'
 
 export const NonMemoizedYearsLegend = ({ years }: {
     years: SankeyYear[]
@@ -29,14 +30,14 @@ export const NonMemoizedYearsLegend = ({ years }: {
                 return (
                     <g
                         key={`${previous.year}.${next.year}`}
-                        transform="translate(0, -20)"
+                        transform={`translate(0,-${staticProps.yearsLegendHeight / 2})`}
                         opacity={.4}
                     >
                         <Line
-                            x1={previous.x + 26}
-                            x2={next.x - 26}
+                            x1={previous.x + staticProps.yearsLegendSpacing}
+                            x2={next.x - staticProps.yearsLegendSpacing}
                         />
-                        <g transform={`translate(${next.x - 26},0)`}>
+                        <g transform={`translate(${next.x - staticProps.yearsLegendSpacing},0)`}>
                             <PolyLine
                                 points="-5,-5 0,0 -5,5"
                             />
@@ -48,11 +49,11 @@ export const NonMemoizedYearsLegend = ({ years }: {
                 return (
                     <g
                         key={year.year}
-                        transform={`translate(${year.x},0)`}
+                        transform={`translate(${year.x},-${staticProps.yearsLegendHeight / 2})`}
                     >
                         <YearLabel
                             textAnchor="middle"
-                            y={-16}
+                            dominantBaseline="central"
                         >
                             {year.year}
                         </YearLabel>

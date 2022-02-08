@@ -4,6 +4,7 @@ import { ResponsiveSankey } from '@nivo/sankey'
 import { ToolExperienceId } from 'core/bucket_keys'
 import { ApiToolExperienceTransitions } from '../types'
 import { staticProps } from './config'
+import { ChartContainer, ToolLegendContainer, ToolLegend } from './ChartContainer'
 import { ChartContextProvider } from './state'
 
 export const ToolsExperienceTransitionsChart = ({
@@ -53,7 +54,12 @@ export const ToolsExperienceTransitionsChart = ({
 
     return (
         <ChartContextProvider value={context}>
-            <div style={{ height: 180 }}>
+            <ChartContainer>
+                <ToolLegendContainer>
+                    <ToolLegend>
+                        {data.entity.name}
+                    </ToolLegend>
+                </ToolLegendContainer>
                 <ResponsiveSankey
                     margin={staticProps.margin}
                     data={chartData}
@@ -68,7 +74,7 @@ export const ToolsExperienceTransitionsChart = ({
                     // @ts-ignore
                     layers={staticProps.layers}
                 />
-            </div>
+            </ChartContainer>
         </ChartContextProvider>
     )
 }

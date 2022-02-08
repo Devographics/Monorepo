@@ -9,6 +9,21 @@ query: >
         survey(survey: ${surveyType}) {
             ${parentId}_experience_transitions: tools(ids: [${toolsCategories[parentId]}]) {
                 id
+                entity {
+                    homepage {
+                        url
+                    }
+                    description
+                    name
+                    github {
+                        name
+                        url
+                    }
+                    npm {
+                        name
+                        url
+                    }
+                }
                 experienceTransitions(year: 2020) {
                     keys
                     nodes {

@@ -2,6 +2,7 @@ import {
     SankeyNodeDatum as BaseSankeyNodeDatum,
     SankeyLinkDatum as BaseSankeyLinkDatum
 } from '@nivo/sankey'
+import { Entity } from 'core/types'
 import { BlockContext } from 'core/blocks/types'
 import { ToolExperienceId } from 'core/bucket_keys'
 
@@ -15,6 +16,7 @@ export type ToolsExperienceTransitionsBlockData = BlockContext<
 export interface ApiToolExperienceTransitions {
     // tool ID
     id: string
+    entity: Entity
     experienceTransitions: {
         keys: ToolExperienceId[]
         nodes: {
