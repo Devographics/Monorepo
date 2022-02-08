@@ -1,8 +1,9 @@
-import _ from 'lodash'
+import _, { keys } from 'lodash'
 import { Db } from 'mongodb'
 import config from '../config'
 import { ratioToPercentage, appendCompletionToYearlyResults } from './common'
 import { getEntity } from '../entities'
+import surveyKeys from '../data/keys.yml'
 import { YearCompletion, SurveyConfig } from '../types'
 import { Filters, generateFiltersQuery } from '../filters'
 import { computeCompletionByYear } from './completion'
@@ -311,11 +312,16 @@ export async function computeToolExperienceTransitions<ToolID extends string = s
     tool: ToolID,
     years: [number, number]
 ) {
-    return computeYearlyTransitions<ExperienceChoice>(
+    const yearlyTransitions = await computeYearlyTransitions<ExperienceChoice>(
         db,
         survey,
         `tools.${tool}.experience`,
         years,
         sortExperience
     )
+
+    return {
+        ...yearlyTransitions,
+        keys: surveyKeys.tool,
+    }
 }

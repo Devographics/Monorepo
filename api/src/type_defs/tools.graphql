@@ -315,6 +315,7 @@ type ToolExperienceTransitionsTransition {
 
 type ToolExperienceTransitions {
     tool: ToolID
+    keys: [ToolExperienceID]
     nodes: [ToolExperienceTransitionsNode]
     transitions: [ToolExperienceTransitionsTransition]
 }
