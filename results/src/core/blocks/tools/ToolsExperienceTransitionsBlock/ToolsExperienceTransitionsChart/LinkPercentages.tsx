@@ -1,9 +1,9 @@
 import React from 'react'
+import styled, { DefaultTheme, useTheme } from 'styled-components'
 // @ts-ignore: indirect dependency managed by nivo
 import { interpolateRgb } from 'd3-interpolate'
 import { useTransition, animated, to, config } from '@react-spring/web'
 import { SankeyLinkDatum } from '../types'
-import { DefaultTheme, useTheme } from 'styled-components'
 
 const getLinkCenter = (link: SankeyLinkDatum) => {
     const x = link.target.x0 + (link.source.x1 - link.target.x0) / 2
@@ -80,33 +80,32 @@ export const LinkPercentages = ({
                             pointerEvents: 'none'
                         }}
                     >
-                        <text
+                        <Label
                             textAnchor="middle"
                             dominantBaseline="central"
                             style={{
                                 stroke: percentage.color,
-                                strokeWidth: 6,
-                                strokeLinejoin: 'round',
-                                fontSize: 12,
-                                fontWeight: 800,
+                                strokeWidth: 4,
                             }}
                         >
                             {percentage.percentage}%
-                        </text>
-                        <text
+                        </Label>
+                        <Label
                             textAnchor="middle"
                             dominantBaseline="central"
-                            style={{
-                                fill: '#1a181a',
-                                fontSize: 12,
-                                fontWeight: 800,
-                            }}
                         >
                             {percentage.percentage}%
-                        </text>
+                        </Label>
                     </animated.g>
                 )
             })}
         </>
     )
 }
+
+const Label = styled.text`
+    font-size: ${({ theme }) => theme.typography.size.smaller};
+    font-weight: ${({ theme }) => theme.typography.weight.medium};
+    fill: ${({ theme }) => theme.colors.textInverted};
+    stroke-linejoin: round;
+`
