@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true
+  },
+  // TypeScript has been added marginally, a lot of things
+  // are incomplete or weren't maintained, so we're only
+  // including things that we expect to pass, eventually
+  // we should include everything, but given the state
+  // of the app, that's not feasible right now.
+  "include": [
+    "./src/core/blocks/tools/ToolsQuadrantsBlock/*"
+  ]
+}

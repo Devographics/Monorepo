@@ -16,6 +16,7 @@ export interface BlockDefinition {
     blockType?: string
     tabId?: string
     titleId?: string
+    blockName?: string
 
     // config
     mode?: BlockMode
@@ -40,7 +41,6 @@ export interface BlockDefinition {
 export interface BlockVariantProps {
     id: string
     className: string
-    children: FC
     units: BlockUnits
     setUnits: BlockSetUnits
     block: BlockDefinition

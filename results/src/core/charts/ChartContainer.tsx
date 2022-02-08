@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React, { memo, PropsWithChildren } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { mq, spacing } from 'core/theme'
@@ -8,11 +8,10 @@ export interface IndicatorProps {
 }
 
 export interface ChartContainerProps {
-    children: React.ReactNode
-    height: number
-    fit: boolean
-    className: string
-    vscroll: boolean
+    height?: number
+    fit?: boolean
+    className?: string
+    vscroll?: boolean
 }
 
 const Indicator = ({ position }: IndicatorProps) => (
@@ -53,7 +52,13 @@ const MemoIndicator = memo(Indicator)
  * - Fit: fit to viewport width
  * - Expand: force a 600px width
  */
-const ChartContainer = ({ children, height, fit = false, className = '', vscroll = false }: ChartContainerProps) => (
+const ChartContainer = ({
+    children,
+    height,
+    fit = false,
+    className = '',
+    vscroll = false
+}: PropsWithChildren<ChartContainerProps>) => (
     <ChartContainerOuter className={`ChartContainerOuter ${className}`} style={{ height }}>
         <Container className="ChartContainer" style={{ height }}>
             <ChartContainerInner
