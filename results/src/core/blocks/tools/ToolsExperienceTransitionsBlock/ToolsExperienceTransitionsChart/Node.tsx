@@ -1,12 +1,12 @@
 import React, { memo, useCallback, useState } from 'react'
 import { ToolExperienceId } from 'core/bucket_keys'
 import { SankeyNodeDatum } from '../types'
+import { staticProps } from './config'
+import styled from 'styled-components'
 
 const style = {
     cursor: 'pointer'
 }
-
-const minHeight = 24
 
 const NonMemoizedNode = ({
     node,
@@ -50,23 +50,25 @@ const NonMemoizedNode = ({
                 onMouseLeave={handleLeave}
                 onClick={handleClick}
             />
-            {node.height >= minHeight && (
+            {node.height >= staticProps.nodeLabelMinHeight && (
                 <g transform={`translate(${centerX},${centerY}) rotate(-90)`}>
-                    <text
+                    <NodeLabel
                         textAnchor="middle"
                         dominantBaseline="central"
-                        style={{
-                            fontSize: 10,
-                            fontWeight: 600,
-                            pointerEvents: 'none',
-                        }}
                     >
                         {node.value}
-                    </text>
+                    </NodeLabel>
                 </g>
             )}
         </>
     )
 }
+
+const NodeLabel = styled.text`
+    fill: ${({ theme }) => theme.colors.textInverted};
+    font-size: 10px;
+    pointer-events: none;
+    font-weight: ${({ theme }) => theme.typography.weight.bold};
+`
 
 export const Node = memo(NonMemoizedNode)

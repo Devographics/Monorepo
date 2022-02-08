@@ -8,4 +8,5 @@ export const staticProps = {
         bottom: 10,
         left: 10,
     },
+    nodeLabelMinHeight: 24,
 }
