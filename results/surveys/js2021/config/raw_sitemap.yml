@@ -826,6 +826,7 @@
       chartNamespace: blogs_news_magazines
       tabId: tabs.main_answers
       template: multiple_options
+      dataFunction: removePersonalBlogs
       variables:
         fieldId: resources
       variants:

@@ -1,13 +1,13 @@
 - id: lee_robinson
   twitterName: leeerob
   fullName: Lee Robinson
-  avatarUrl: leeerob.jpg
+  avatarUrl: lee_robinson.jpg
   url: https://kit.svelte.dev/
 
 - id: vadim_makeev
   twitterName: pepelsbey_
   fullName: Vadim Makeev
-  avatarUrl: pepelsbey_.jpg
+  avatarUrl: vadim_makeev.jpg
   url: https://reactjs.org/blog/2020/12/21/data-fetching-with-react-server-components.html
 
 - id: ben_ilegbodu

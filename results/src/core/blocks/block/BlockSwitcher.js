@@ -7,10 +7,15 @@ import Block from 'core/blocks/block/BlockVariant'
 import get from 'lodash/get'
 import { usePageContext } from 'core/helpers/pageContext'
 import { BlockError } from 'core/blocks/block/BlockError'
+import dataFunctions from 'core/data_functions/index'
 
 const BlockSwitcher = ({ pageData, block, index, ...props }) => {
     let blockData = block.dataPath && get(pageData, block.dataPath)
 
+    if (block.dataFunction) {
+        const dataFunction = dataFunctions[block.dataFunction]
+        blockData = dataFunction(blockData)
+    }
     const [customData, setCustomData] = useState()
 
     let blockKeys = block.keysPath && get(pageData, block.keysPath)
