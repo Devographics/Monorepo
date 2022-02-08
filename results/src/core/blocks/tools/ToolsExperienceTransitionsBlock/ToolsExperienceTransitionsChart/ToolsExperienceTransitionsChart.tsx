@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTheme } from 'styled-components'
-import {Sankey} from "@nivo/sankey";
+import { Sankey } from '@nivo/sankey'
 import { ApiToolExperienceTransitions } from '../types'
 import { staticProps } from './config'
 
@@ -26,7 +26,7 @@ export const ToolsExperienceTransitionsChart = ({
     return (
         <div>
             <Sankey
-                width={600}
+                width={320}
                 height={160}
                 margin={staticProps.margin}
                 data={chartData}

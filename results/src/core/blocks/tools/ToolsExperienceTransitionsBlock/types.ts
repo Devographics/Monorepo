@@ -37,3 +37,8 @@ export interface ChartLinkData {
 export type SankeyNodeDatum = BaseSankeyNodeDatum<ChartNodeData, ChartLinkData>
 
 export type SankeyLinkDatum = BaseSankeyLinkDatum<ChartNodeData, ChartLinkData>
+
+export type SankeyYear = {
+    year: number
+    x: number
+}
