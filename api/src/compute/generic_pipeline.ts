@@ -132,11 +132,5 @@ export const getGenericPipeline = (pipelineProps: PipelineProps) => {
     //     pipeline.push({ $limit: limit })
     // }
 
-    const inspect = require('util').inspect
-    console.log(inspect(pipeline, {
-        depth: null,
-        colors: true,
-    }))
-
     return pipeline
 }
