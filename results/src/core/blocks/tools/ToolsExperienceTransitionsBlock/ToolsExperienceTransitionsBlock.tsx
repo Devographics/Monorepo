@@ -22,6 +22,7 @@ export const ToolsExperienceTransitionsBlock = ({
     )
 
     const [currentExperience, setCurrentExperience] = useState<ToolExperienceId>('interested')
+    const [currentTransition, setCurrentTransition] = useState<[ToolExperienceId, ToolExperienceId] | null>(null)
 
     const keys = data[0].experienceTransitions.keys
     const legends = useLegends(block, keys, 'tools')
@@ -40,16 +41,16 @@ export const ToolsExperienceTransitionsBlock = ({
             legendProps={legendProps}
         >
             <Grid>
-                {filteredData.map(toolData => {
-                    return (
-                        <ToolsExperienceTransitionsChart
-                            key={toolData.id}
-                            data={toolData}
-                            currentExperience={currentExperience}
-                            setCurrentExperience={setCurrentExperience}
-                        />
-                    )
-                })}
+                {filteredData.map(toolData => (
+                    <ToolsExperienceTransitionsChart
+                        key={toolData.id}
+                        data={toolData}
+                        currentExperience={currentExperience}
+                        setCurrentExperience={setCurrentExperience}
+                        currentTransition={currentTransition}
+                        setCurrentTransition={setCurrentTransition}
+                    />
+                ))}
             </Grid>
         </Block>
     )

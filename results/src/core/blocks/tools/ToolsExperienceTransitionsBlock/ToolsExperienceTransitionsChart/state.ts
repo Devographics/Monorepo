@@ -5,6 +5,8 @@ export interface ChartContextData {
     toolId: string
     currentExperience: ToolExperienceId
     setCurrentExperience: (experience: ToolExperienceId) => void
+    currentTransition: [ToolExperienceId, ToolExperienceId] | null
+    setCurrentTransition: (transition: [ToolExperienceId, ToolExperienceId] | null) => void
 }
 
 // @ts-ignore

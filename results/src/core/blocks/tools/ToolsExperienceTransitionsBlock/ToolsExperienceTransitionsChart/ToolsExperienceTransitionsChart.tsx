@@ -1,6 +1,6 @@
-import React, { useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { useTheme } from 'styled-components'
-import { Sankey } from '@nivo/sankey'
+import { ResponsiveSankey } from '@nivo/sankey'
 import { ToolExperienceId } from 'core/bucket_keys'
 import { ApiToolExperienceTransitions } from '../types'
 import { staticProps } from './config'
@@ -10,10 +10,14 @@ export const ToolsExperienceTransitionsChart = ({
     data,
     currentExperience,
     setCurrentExperience,
+    currentTransition,
+    setCurrentTransition,
 }: {
     data: ApiToolExperienceTransitions
     currentExperience: ToolExperienceId
     setCurrentExperience: (experience: ToolExperienceId) => void
+    currentTransition: [ToolExperienceId, ToolExperienceId] | null
+    setCurrentTransition: (transition: [ToolExperienceId, ToolExperienceId] | null) => void
 }) => {
     const theme = useTheme()
 
@@ -33,30 +37,38 @@ export const ToolsExperienceTransitionsChart = ({
         toolId: data.id,
         currentExperience,
         setCurrentExperience,
-    }), [data.id, currentExperience, setCurrentExperience])
+        currentTransition,
+        setCurrentTransition,
+    }), [
+        data.id,
+        currentExperience,
+        setCurrentExperience,
+        currentTransition,
+        setCurrentTransition,
+    ])
+
+    const getColor = useCallback(({ choice }: { choice: ToolExperienceId }) => {
+        return theme.colors.ranges.tools[choice][0]
+    }, [theme])
 
     return (
         <ChartContextProvider value={context}>
-            <Sankey
-                width={320}
-                height={160}
-                margin={staticProps.margin}
-                data={chartData}
-                sort="input"
-                align="justify"
-                colors={(node) => {
-                    return theme.colors.ranges.tools[node.choice][0]
-                }}
-                nodeThickness={18}
-                nodeInnerPadding={1}
-                nodeSpacing={2}
-                nodeOpacity={1}
-                linkContract={1}
-                linkOpacity={1}
-                animate={false}
-                // @ts-ignore
-                layers={staticProps.layers}
-            />
+            <div style={{ height: 180 }}>
+                <ResponsiveSankey
+                    margin={staticProps.margin}
+                    data={chartData}
+                    sort="input"
+                    align="justify"
+                    colors={getColor}
+                    nodeThickness={18}
+                    nodeInnerPadding={1}
+                    nodeSpacing={2}
+                    linkContract={1}
+                    animate={false}
+                    // @ts-ignore
+                    layers={staticProps.layers}
+                />
+            </div>
         </ChartContextProvider>
     )
 }
