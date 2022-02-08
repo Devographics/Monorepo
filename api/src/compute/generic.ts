@@ -218,7 +218,12 @@ export async function computeDefaultTermAggregationByYear(
     // await addDeltas(results)
 
     await sortBuckets(results, { sort, order, values })
-    await limitBuckets(results, limit)
+
+    if (!values) {
+        // do not apply limits for aggregations that have predefined values,
+        // as that might result in unexpectedly missing buckets
+        await limitBuckets(results, limit)
+    }
 
     if (values) {
         await addMeans(results, values)
@@ -269,6 +274,7 @@ export async function limitFacets(
     }
 }
 
+// add means
 export async function addMeans(resultsByYears: ResultsByYear[], values: string[] | number[]) {
     for (let year of resultsByYears) {
         for (let facet of year.facets) {
@@ -292,7 +298,10 @@ export async function addMissingBucketValues(resultsByYears: ResultsByYear[], va
     for (let year of resultsByYears) {
         for (let facet of year.facets) {
             const existingValues = facet.buckets.map(b => b.id)
-            const missingValues = difference(values, existingValues)
+            const missingValues = difference(
+                values.map(i => i.toString()),
+                existingValues.map(i => i.toString())
+            )
             missingValues.forEach(id => {
                 const zeroBucketItem = {
                     id,
