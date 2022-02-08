@@ -1,3 +1,12 @@
+/**
+ * This file can be used as a playground before implementing an API.
+ *
+ * When using `yarn dev`, this file is watched and the compiled js
+ * version is available in `dist/playground.js`.
+ *
+ * It's not included in the API, and you shouldn't rely too much on
+ * what's here :)
+ */
 import dotenv from 'dotenv'
 dotenv.config()
 import { MongoClient } from 'mongodb'
