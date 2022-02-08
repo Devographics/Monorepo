@@ -1,17 +1,17 @@
 import React, { useMemo } from 'react'
 import { useTheme } from 'styled-components'
 import { useI18n } from 'core/i18n/i18nContext'
-import { LayerProps } from './types'
-import { useToolsScatterPlotContext } from './state'
+import { ChartLayerProps } from '../types'
+import { useToolsQuadrantsChartContext } from './state'
 import { quadrantLabels, quadrantsConfig } from './config'
 import { Quadrant } from './Quadrant'
 
-const useQuadrants = (xScale: LayerProps['xScale'], yScale: LayerProps['yScale']) => {
-    const { metric } = useToolsScatterPlotContext()
+const useQuadrants = (xScale: ChartLayerProps['xScale'], yScale: ChartLayerProps['yScale']) => {
+    const { metric } = useToolsQuadrantsChartContext()
     const { translate } = useI18n()
     const theme = useTheme()
 
-    const quadrants = useMemo(() => [
+    return useMemo(() => [
         {
             x: xScale(quadrantsConfig[0].xRange[0]),
             y: yScale(quadrantsConfig[0].yRange[0]),
@@ -44,12 +44,7 @@ const useQuadrants = (xScale: LayerProps['xScale'], yScale: LayerProps['yScale']
             color: theme.colors.background,
             label: translate!(`options.quadrant.${quadrantLabels[metric][3]}`),
         },
-    ], [xScale, yScale, theme, translate])
-
-    return {
-        metric,
-        quadrants,
-    }
+    ], [xScale, yScale, theme, translate, metric])
 }
 
 export const Quadrants = ({
@@ -57,9 +52,9 @@ export const Quadrants = ({
     innerHeight,
     xScale,
     yScale,
-}: LayerProps) => {
-    const { metric, quadrants } = useQuadrants(xScale, yScale)
-    const { zoomedQuadrantIndex, toggleQuadrantZoom } = useToolsScatterPlotContext()
+}: ChartLayerProps) => {
+    const quadrants = useQuadrants(xScale, yScale)
+    const { zoomedQuadrantIndex, toggleQuadrantZoom } = useToolsQuadrantsChartContext()
 
     return (
         <>
@@ -74,7 +69,6 @@ export const Quadrants = ({
                 {quadrants.map(({ x, y, width, height, color, label }, quadrantIndex) => (
                     <Quadrant
                         key={quadrantIndex}
-                        metric={metric}
                         index={quadrantIndex}
                         label={label}
                         color={color}

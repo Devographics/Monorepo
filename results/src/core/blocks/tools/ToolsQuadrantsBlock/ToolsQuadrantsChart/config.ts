@@ -1,11 +1,13 @@
 // @ts-ignore: we don't have typings for the variables
-import { totalCountRounded } from 'Config/variables.yml'
-import { ToolsScatterPlotMetric } from './types'
+import variables from 'Config/variables.yml'
+import { ToolsQuadrantsMetric } from '../types'
+
+const { totalCountRounded } = variables
 
 // Defines the variants available for the chart,
 // those labels are picked depending on the `metric` property
 // passed to the chart.
-export const quadrantLabels: Record<ToolsScatterPlotMetric, string[]> = {
+export const quadrantLabels: Record<ToolsQuadrantsMetric, string[]> = {
     satisfaction: ['assess', 'adopt', 'avoid', 'analyze'],
     interest: ['mainstream', 'next_big_thing', 'unknown', 'low_interest'],
 }
@@ -16,6 +18,7 @@ export const staticProps = {
     nodeRadius: 7,
     nodeCaptureRadius: 16,
     formatPercentage: (value: number) => `${value}%`,
+    quadrantBorder: 2,
 }
 
 // base scales configuration when no quadrant is zoomed in.
@@ -91,7 +94,7 @@ export const crosshair = {
 }
 
 // This can be used to force the position of nodes' label.
-export const forcedLabelPositions: Record<ToolsScatterPlotMetric, Record<string, [x: number, y: number]>> = {
+export const forcedLabelPositions: Record<ToolsQuadrantsMetric, Record<string, [x: number, y: number]>> = {
     satisfaction: {
         halfmoon: [0, -15],
         primer: [0, -15],

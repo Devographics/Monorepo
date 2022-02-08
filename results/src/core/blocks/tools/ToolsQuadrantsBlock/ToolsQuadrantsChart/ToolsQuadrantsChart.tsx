@@ -1,22 +1,21 @@
-import React, { memo, useCallback, useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { useTheme } from 'styled-components'
 import { ResponsiveScatterPlot } from '@nivo/scatterplot'
 import { useI18n } from 'core/i18n/i18nContext'
-import { ToolsScatterPlotSeries, ToolsScatterPlotTool, ToolsScatterPlotMetric } from './types'
-import { ToolsScatterPlotContextProvider, useToolsScatterPlot } from './state'
-import { Nodes } from './Nodes'
-import { Quadrants } from './Quadrants'
-import { staticProps } from './config'
-import { Crosshair } from './Crosshair'
 import { ToolsSectionId } from 'core/bucket_keys'
+import { ToolsQuadrantsMetric, ToolsQuadrantsChartToolsCategoryData, ToolsQuadrantsChartToolData } from '../types'
+import { staticProps } from './config'
+import { ToolsQuadrantsChartContextProvider, useToolsQuadrantsChart } from './state'
+import { Quadrants } from './Quadrants'
+import { Nodes } from './Nodes'
+import { Crosshair } from './Crosshair'
 
 interface ToolsScatterPlotProps {
-    data: ToolsScatterPlotSeries[]
-    metric: ToolsScatterPlotMetric
-    currentCategory: string | null
-    setCurrentCategory: (category: string | null) => void
+    data: ToolsQuadrantsChartToolsCategoryData[]
+    metric: ToolsQuadrantsMetric
+    currentCategory: ToolsSectionId | null
+    setCurrentCategory: (category: ToolsSectionId | null) => void
     className: string
-    showQuadrants: boolean
 }
 
 // Custom chart layers, layers expressed as strings
@@ -30,14 +29,20 @@ const layers = [
 ]
 
 /**
- * This chart classifies tools into 4 categories (quadrants):
- * - Assess
- * - Adopt
- * - Avoid
- * - Analyze
+ * This chart classifies tools into 4 categories (quadrants)
+ * depending on the selected metric:
  *
- * The quadrant a tool is in depends on 2 metrics, satisfaction (%)
- * and number of users.
+ *   +––––––––––+––––––––––––––+––––––––––––––––+
+ *   | Quadrant | satisfaction | interest       |
+ *   +––––––––––+––––––––––––––+––––––––––––––––+
+ *   |        0 | assess       | mainstream     |
+ *   |        1 | adopt        | next_big_thing |
+ *   |        2 | avoid        | unknown        |
+ *   |        3 | analyze      | low_interest   |
+ *   +––––––––––+––––––––––––––+––––––––––––––––+
+ *
+ * The quadrant a tool is in depends on 2 metrics, satisfaction
+ * or interest (%) and number of users.
  *
  * We have the ability to highlight a specific tool on hover,
  * this will then show a crosshair indicator, this is managed
@@ -55,14 +60,14 @@ const layers = [
  * layers and has extra state management for the current tool/category
  * and zoomed quadrant, please see `state.ts` for more information.
  */
-const NonMemoizedToolsScatterPlot = ({
+export const ToolsQuadrantsChart = ({
     data,
-    metric = 'satisfaction',
+    metric,
     currentCategory,
     setCurrentCategory,
     className,
 }: ToolsScatterPlotProps) => {
-    const { xScale, yScale, context } = useToolsScatterPlot({
+    const { xScale, yScale, context } = useToolsQuadrantsChart({
         metric,
         currentCategory,
         setCurrentCategory,
@@ -85,7 +90,7 @@ const NonMemoizedToolsScatterPlot = ({
             legendPosition: 'middle' as const,
             legendOffset: 46,
         },
-    }), [translate])
+    }), [translate, metric])
 
     // reset the current category & tool when leaving the chart
     const handleChartLeave = useCallback(() => {
@@ -94,13 +99,13 @@ const NonMemoizedToolsScatterPlot = ({
     }, [setCurrentCategory, context.setCurrentTool])
 
     return (
-        <ToolsScatterPlotContextProvider value={context}>
+        <ToolsQuadrantsChartContextProvider value={context}>
             <div
                 style={staticProps.containerStyle}
                 className={className}
                 onMouseLeave={handleChartLeave}
             >
-                <ResponsiveScatterPlot<ToolsScatterPlotTool>
+                <ResponsiveScatterPlot<ToolsQuadrantsChartToolData>
                     data={data}
                     margin={staticProps.margin}
                     xScale={xScale}
@@ -118,9 +123,6 @@ const NonMemoizedToolsScatterPlot = ({
                     motionConfig="gentle"
                 />
             </div>
-        </ToolsScatterPlotContextProvider>
+        </ToolsQuadrantsChartContextProvider>
     )
 }
-
-export const ToolsScatterPlot = memo(NonMemoizedToolsScatterPlot)
-

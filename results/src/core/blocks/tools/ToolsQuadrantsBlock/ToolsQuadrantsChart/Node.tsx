@@ -1,8 +1,8 @@
 import React, { memo, useCallback } from 'react'
 import styled, { useTheme } from 'styled-components'
 import { animated, SpringValues, to } from '@react-spring/web'
-import { NodeData, NodeAnimatedProps } from './types'
-import { useToolsScatterPlotContext } from './state'
+import { NodeData, NodeAnimatedProps } from '../types'
+import { useToolsQuadrantsChartContext } from './state'
 import { staticProps, forcedLabelPositions, crosshair } from './config'
 
 const NonMemoizedNode = ({
@@ -18,7 +18,7 @@ const NonMemoizedNode = ({
     const {
         metric,
         setCurrentTool,
-    } = useToolsScatterPlotContext()
+    } = useToolsQuadrantsChartContext()
 
     const translateLabel = forcedLabelPositions[metric][name] ?? [0, 0]
 

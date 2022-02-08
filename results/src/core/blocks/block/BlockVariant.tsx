@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React, { memo, PropsWithChildren } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { mq, spacing } from 'core/theme'
@@ -8,14 +8,14 @@ import BlockData from './BlockData'
 import * as Tabs from '@radix-ui/react-tabs'
 import BlockChart from 'core/blocks/block/BlockChart'
 import BlockShare from 'core/blocks/block/BlockShare'
-import BlockDebug from 'core/blocks/block/BlockDebug'
+// import BlockDebug from 'core/blocks/block/BlockDebug'
 import { ChartIcon, DataIcon, ShareIcon } from 'core/icons'
 import { ErrorBoundary } from 'core/blocks/block/BlockError'
 import { BlockVariantProps } from 'core/types'
 import { usePageContext } from 'core/helpers/pageContext'
 import CustomInputTrigger from 'core/blocks/block/CustomInputTrigger'
 
-const BlockVariant = (props: BlockVariantProps) => {
+const BlockVariant = (props: PropsWithChildren<BlockVariantProps>) => {
     const context = usePageContext()
     const { isCapturing } = context
     const { className, children, block = {} } = props

@@ -1,14 +1,14 @@
 import React from 'react'
 import styled, { useTheme } from 'styled-components'
-import { LayerProps } from './types'
+import { ChartLayerProps } from '../types'
 import { crosshair } from './config'
-import { useToolsScatterPlotContext } from './state'
+import { useToolsQuadrantsChartContext } from './state'
 
-export const Crosshair = ({ nodes, innerHeight }: LayerProps) => {
+export const Crosshair = ({ nodes, innerHeight }: ChartLayerProps) => {
     const theme = useTheme()
 
-    const { currentTool } = useToolsScatterPlotContext()
-    const node = currentTool !== null ? nodes.find(node => node.data.originalId === currentTool) : undefined
+    const { currentTool } = useToolsQuadrantsChartContext()
+    const node = currentTool !== null ? nodes.find(node => node.data.id === currentTool) : undefined
 
     if (!node) return null
 

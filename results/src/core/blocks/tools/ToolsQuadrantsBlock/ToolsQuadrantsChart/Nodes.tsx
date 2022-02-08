@@ -3,9 +3,9 @@ import { useTransition } from '@react-spring/web'
 import { useMotionConfig } from '@nivo/core'
 // @ts-ignore: we don't have typings for the variables
 import variables from 'Config/variables.yml'
-import { LayerProps, NodeData, NodeAnimatedProps } from './types'
+import { ChartLayerProps, NodeData, NodeAnimatedProps } from '../types'
 import { Node } from './Node'
-import { useToolsScatterPlotContext } from './state'
+import { useToolsQuadrantsChartContext } from './state'
 
 const { toolsCategories } = variables
 
@@ -13,13 +13,12 @@ export const Nodes = ({
     nodes: _nodes,
     innerWidth,
     innerHeight,
-}: LayerProps) => {
+}: ChartLayerProps) => {
     const {
-        metric,
         currentCategory,
         currentTool,
         zoomedQuadrantIndex,
-    } = useToolsScatterPlotContext()
+    } = useToolsQuadrantsChartContext()
 
     const nodes: NodeData[] = useMemo(() => {
         const hasCurrentCategory = currentCategory !== null
@@ -29,29 +28,29 @@ export const Nodes = ({
         return _nodes.map(node => {
             let opacity = 1
             if (hasCurrentTool) {
-                opacity = currentTool === node.data.originalId ? 1 : .2
+                opacity = currentTool === node.data.id ? 1 : .2
             }
             if (hasCurrentCategory) {
-                opacity = toolsCategories[currentCategory].includes(node.data.originalId) ? 1 : .2
+                opacity = toolsCategories[currentCategory].includes(node.data.id) ? 1 : .2
             }
 
-            const isHover = hasCurrentTool && currentTool === node.data.originalId
+            const isHover = hasCurrentTool && currentTool === node.data.id
 
             return {
-                id: node.data.originalId,
+                id: node.data.id,
                 categoryId: node.serieId as string,
                 name: node.data.name,
                 x: node.x,
                 y: node.y,
                 color: node.color,
                 opacity,
-                isHover: hasCurrentTool && currentTool === node.data.originalId,
+                isHover: hasCurrentTool && currentTool === node.data.id,
                 labelOpacity: (hasZoom || isHover) ? 1 : 0,
                 labelOffset: isHover ? 16 : 0,
                 labelBackgroundOpacity: isHover ? 1 : 0,
             }
         })
-    }, [_nodes, metric, currentCategory, currentTool, zoomedQuadrantIndex])
+    }, [_nodes, currentCategory, currentTool, zoomedQuadrantIndex])
 
     const { animate, config: springConfig } = useMotionConfig()
     const transitions = useTransition<NodeData, NodeAnimatedProps>(nodes, {

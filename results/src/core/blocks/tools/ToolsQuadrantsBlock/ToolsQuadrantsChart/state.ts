@@ -1,11 +1,12 @@
 import { createContext, useCallback, useContext, useMemo, useState } from 'react'
-import { ToolsScatterPlotMetric } from './types'
+import { ToolsSectionId } from 'core/bucket_keys'
+import { ToolsQuadrantsMetric } from '../types'
 import { baseScales, quadrantsConfig } from './config'
 
-export interface ToolsScatterPlotContextData {
-    metric: ToolsScatterPlotMetric
-    currentCategory: string | null
-    setCurrentCategory: (category: string | null) => void
+export interface ToolsQuadrantsChartContextData {
+    metric: ToolsQuadrantsMetric
+    currentCategory: ToolsSectionId | null
+    setCurrentCategory: (category: ToolsSectionId | null) => void
     currentTool: string | null
     setCurrentTool: (tool: string | null) => void
     zoomedQuadrantIndex: number | null
@@ -13,20 +14,20 @@ export interface ToolsScatterPlotContextData {
 }
 
 // @ts-ignore
-export const ToolsScatterPlotContext = createContext<ToolsScatterPlotContextData>(null)
+export const ToolsQuadrantsChartContext = createContext<ToolsQuadrantsChartContextData>(null)
 
-export const ToolsScatterPlotContextProvider = ToolsScatterPlotContext.Provider
+export const ToolsQuadrantsChartContextProvider = ToolsQuadrantsChartContext.Provider
 
-export const useToolsScatterPlotContext = () => useContext(ToolsScatterPlotContext)
+export const useToolsQuadrantsChartContext = () => useContext(ToolsQuadrantsChartContext)
 
-export const useToolsScatterPlot = ({
+export const useToolsQuadrantsChart = ({
     metric,
     currentCategory,
     setCurrentCategory,
 }: {
-    metric: ToolsScatterPlotMetric
-    currentCategory: string | null
-    setCurrentCategory: (category: string | null) => void
+    metric: ToolsQuadrantsMetric
+    currentCategory: ToolsSectionId | null
+    setCurrentCategory: (categoryId: ToolsSectionId | null) => void
 }) => {
     // used to highlight a specific tool
     const [currentTool, setCurrentTool] = useState<string | null>(null)
@@ -86,7 +87,7 @@ export const useToolsScatterPlot = ({
         }
     }, [zoomedQuadrantIndex])
 
-    const context: ToolsScatterPlotContextData = useMemo(() => ({
+    const context: ToolsQuadrantsChartContextData = useMemo(() => ({
         metric,
         currentCategory,
         setCurrentCategory,
