@@ -1,4 +1,6 @@
 import React, { memo } from 'react'
+import styled from 'styled-components'
+import { darken } from 'polished'
 import { SankeyLinkDatum } from '../types'
 import { getLinkId } from './getLinkId'
 import { getLinkPath } from './getLinkPath'
@@ -8,13 +10,16 @@ const NonMemoizedLinksBackground = ({ links }: {
 }) => (
     <>
         {links.map(link => (
-            <path
+            <LinkShape
                 key={getLinkId(link)}
-                fill="#1a181a"
                 d={getLinkPath(link, 1)}
             />
         ))}
     </>
 )
+
+const LinkShape = styled.path`
+    fill: ${({ theme }) => darken(.03, theme.colors.background)};
+`
 
 export const LinksBackground = memo(NonMemoizedLinksBackground)
