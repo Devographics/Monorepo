@@ -3,19 +3,19 @@ import { useSpring, animated, config } from '@react-spring/web'
 import { ToolExperienceId } from 'core/bucket_keys'
 import { SankeyLinkDatum } from '../types'
 import { LinkWithGradient} from './LinkWithGradient'
+import { useChartContext } from './state'
 
 export const NonMemoizedExperienceLinks = ({
-    uid,
     experience,
     links,
     isActive
 }: {
-    uid: number
     experience: ToolExperienceId
     links: SankeyLinkDatum[]
     isActive: boolean
 }) => {
-    const maskId = `${experience}LinksMask${uid}`
+    const { toolId } = useChartContext()
+    const maskId = `${experience}LinksMask${toolId}`
     const maxWidth = useMemo(() => Math.max(...links.map((link) => link.target.x0)), [links])
     const maskStyles = useSpring({
         width: isActive ? maxWidth : 0,

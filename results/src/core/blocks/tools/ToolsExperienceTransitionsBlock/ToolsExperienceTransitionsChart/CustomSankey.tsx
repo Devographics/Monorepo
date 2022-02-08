@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 import { ToolExperienceId } from 'core/bucket_keys'
 import { SankeyNodeDatum, SankeyLinkDatum, SankeyYear } from '../types'
 import { YearsLegend } from './YearsLegend'
@@ -6,8 +6,7 @@ import { LinksBackground } from './LinksBackground'
 import { LinkPercentages } from './LinkPercentages'
 import { Nodes } from './Nodes'
 import { ExperienceLinks } from './ExperienceLinks'
-
-let _uid = 0
+import { useChartContext } from './state'
 
 /**
  * Used to entirely replace the default nivo Sankey component,
@@ -20,18 +19,10 @@ export const CustomSankey = ({ nodes, links }: {
     nodes: SankeyNodeDatum[]
     links: SankeyLinkDatum[]
 }) => {
-    console.log({
-        nodes,
-        links,
-    })
-    const [currentExperience, setCurrentExperience] = useState<ToolExperienceId>('interested')
-
-    const uid = useMemo(() => {
-        const newUid = _uid
-        _uid += 1
-
-        return newUid
-    }, [])
+    const {
+        currentExperience,
+        setCurrentExperience,
+    } = useChartContext()
 
     const {
         years,
@@ -110,17 +101,14 @@ export const CustomSankey = ({ nodes, links }: {
                 setCurrentExperience={setCurrentExperience}
             />
             <LinksBackground links={links} />
-            {linksByExperience.map(links => {
-                return (
-                    <ExperienceLinks
-                        key={links.experience}
-                        uid={uid}
-                        experience={links.experience}
-                        links={links.links}
-                        isActive={links.experience === currentExperience}
-                    />
-                )
-            })}
+            {linksByExperience.map(links => (
+                <ExperienceLinks
+                    key={links.experience}
+                    experience={links.experience}
+                    links={links.links}
+                    isActive={links.experience === currentExperience}
+                />
+            ))}
             <LinkPercentages links={currentLinks!.links} />
         </>
     )

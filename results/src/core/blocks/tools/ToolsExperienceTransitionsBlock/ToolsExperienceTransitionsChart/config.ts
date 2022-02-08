@@ -5,7 +5,7 @@ export const staticProps = {
     margin: {
         top: 30,
         right: 10,
-        bottom: 1,
+        bottom: 10,
         left: 10,
     },
 }

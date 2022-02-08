@@ -1,13 +1,19 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useTheme } from 'styled-components'
 import { Sankey } from '@nivo/sankey'
+import { ToolExperienceId } from 'core/bucket_keys'
 import { ApiToolExperienceTransitions } from '../types'
 import { staticProps } from './config'
+import { ChartContextProvider } from './state'
 
 export const ToolsExperienceTransitionsChart = ({
-    data
+    data,
+    currentExperience,
+    setCurrentExperience,
 }: {
     data: ApiToolExperienceTransitions
+    currentExperience: ToolExperienceId
+    setCurrentExperience: (experience: ToolExperienceId) => void
 }) => {
     const theme = useTheme()
 
@@ -23,8 +29,14 @@ export const ToolsExperienceTransitionsChart = ({
         }),
     }
 
+    const context = useMemo(() => ({
+        toolId: data.id,
+        currentExperience,
+        setCurrentExperience,
+    }), [data.id, currentExperience, setCurrentExperience])
+
     return (
-        <div>
+        <ChartContextProvider value={context}>
             <Sankey
                 width={320}
                 height={160}
@@ -45,6 +57,6 @@ export const ToolsExperienceTransitionsChart = ({
                 // @ts-ignore
                 layers={staticProps.layers}
             />
-        </div>
+        </ChartContextProvider>
     )
 }

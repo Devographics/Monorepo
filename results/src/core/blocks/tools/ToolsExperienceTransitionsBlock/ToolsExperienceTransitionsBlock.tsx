@@ -1,4 +1,5 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
+import { ToolExperienceId } from 'core/bucket_keys'
 import Block from 'core/blocks/block/BlockVariant'
 import {
     ToolsExperienceTransitionsBlockData,
@@ -19,6 +20,8 @@ export const ToolsExperienceTransitionsBlock = ({
         [data]
     )
 
+    const [currentExperience, setCurrentExperience] = useState<ToolExperienceId>('interested')
+
     return (
         <Block
             block={block}
@@ -31,6 +34,8 @@ export const ToolsExperienceTransitionsBlock = ({
                         <ToolsExperienceTransitionsChart
                             key={toolData.id}
                             data={toolData}
+                            currentExperience={currentExperience}
+                            setCurrentExperience={setCurrentExperience}
                         />
                     )
                 })}
