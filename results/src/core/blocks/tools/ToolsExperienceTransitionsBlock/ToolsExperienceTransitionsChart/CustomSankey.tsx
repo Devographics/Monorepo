@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react'
 import { ToolExperienceId } from 'core/bucket_keys'
 import { SankeyNodeDatum, SankeyLinkDatum, SankeyYear } from '../types'
+import { YearsLegend } from './YearsLegend'
 import { LinksBackground } from './LinksBackground'
 import { LinkPercentages } from './LinkPercentages'
 import { Nodes } from './Nodes'
@@ -33,8 +34,6 @@ export const CustomSankey = ({ nodes, links }: {
 
     const {
         years,
-        startNodes,
-        endNodes,
         linksByExperience,
     } = useMemo(() => {
         const _years: SankeyYear[] = []
@@ -103,6 +102,7 @@ export const CustomSankey = ({ nodes, links }: {
 
     return (
         <>
+            <YearsLegend years={years} />
             <LinksBackground links={links} />
             <Nodes
                 nodes={nodes}
