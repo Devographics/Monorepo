@@ -5,6 +5,7 @@ import { YearsLegend } from './YearsLegend'
 import { LinksBackground } from './LinksBackground'
 import { LinkPercentages } from './LinkPercentages'
 import { Nodes } from './Nodes'
+import { ExperienceLinks } from './ExperienceLinks'
 
 let _uid = 0
 
@@ -103,12 +104,23 @@ export const CustomSankey = ({ nodes, links }: {
     return (
         <>
             <YearsLegend years={years} />
-            <LinksBackground links={links} />
             <Nodes
                 nodes={nodes}
                 currentExperience={currentExperience}
                 setCurrentExperience={setCurrentExperience}
             />
+            <LinksBackground links={links} />
+            {linksByExperience.map(links => {
+                return (
+                    <ExperienceLinks
+                        key={links.experience}
+                        uid={uid}
+                        experience={links.experience}
+                        links={links.links}
+                        isActive={links.experience === currentExperience}
+                    />
+                )
+            })}
             <LinkPercentages links={currentLinks!.links} />
         </>
     )
