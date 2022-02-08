@@ -1,6 +1,8 @@
 import React, { useMemo, useState } from 'react'
+import { ToolExperienceId } from 'core/bucket_keys'
 import { SankeyNodeDatum, SankeyLinkDatum } from '../types'
 import { LinkPercentages } from './LinkPercentages'
+import { Nodes } from './Nodes'
 
 let _uid = 0
 
@@ -19,7 +21,7 @@ export const CustomSankey = ({ nodes, links }: {
         nodes,
         links,
     })
-    const [currentChoice, setCurrentChoice] = useState<string>('interested')
+    const [currentExperience, setCurrentExperience] = useState<ToolExperienceId>('interested')
 
     const uid = useMemo(() => {
         const newUid = _uid
@@ -30,6 +32,11 @@ export const CustomSankey = ({ nodes, links }: {
 
     return (
         <>
+            <Nodes
+                nodes={nodes}
+                currentExperience={currentExperience}
+                setCurrentExperience={setCurrentExperience}
+            />
             <LinkPercentages links={links} />
         </>
     )
