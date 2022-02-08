@@ -10,6 +10,7 @@ query: >
             ${parentId}_experience_transitions: tools(ids: [${toolsCategories[parentId]}]) {
                 id
                 experienceTransitions(year: 2020) {
+                    keys
                     nodes {
                         choice
                         id

@@ -7,6 +7,7 @@ import {
 } from './types'
 import { Grid } from './Grid'
 import { ToolsExperienceTransitionsChart } from './ToolsExperienceTransitionsChart'
+import { useLegends } from 'core/helpers/useBucketKeys'
 
 export const ToolsExperienceTransitionsBlock = ({
     block,
@@ -22,11 +23,22 @@ export const ToolsExperienceTransitionsBlock = ({
 
     const [currentExperience, setCurrentExperience] = useState<ToolExperienceId>('interested')
 
+    const keys = data[0].experienceTransitions.keys
+    const legends = useLegends(block, keys, 'tools')
+    const legendProps = useMemo(() => ({
+        current: currentExperience,
+        onClick: ({ id }: { id: ToolExperienceId }) => {
+            setCurrentExperience(id)
+        }
+    }), [currentExperience, setCurrentExperience])
+
     return (
         <Block
             block={block}
             tables={[]}
             data={filteredData}
+            legends={legends}
+            legendProps={legendProps}
         >
             <Grid>
                 {filteredData.map(toolData => {

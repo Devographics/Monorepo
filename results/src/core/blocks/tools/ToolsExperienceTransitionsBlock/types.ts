@@ -16,8 +16,19 @@ export interface ApiToolExperienceTransitions {
     // tool ID
     id: string
     experienceTransitions: {
-        nodes: any[]
-        transitions: any[]
+        keys: ToolExperienceId[]
+        nodes: {
+            id: string
+            year: number
+            choice: ToolExperienceId
+            count: number
+        }[]
+        transitions: {
+            from: string
+            to: string
+            count: number
+            percentage: number
+        }[]
     }
 }
 
