@@ -370,7 +370,10 @@
 
         - id: tool_modal_hint
           template: hint
-          
+
+        - id: tools_experience_transitions
+          template: tools_experience_transitions
+
         - template: tools_experience_marimekko
 
         - template: section_other_tools
