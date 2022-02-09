@@ -269,14 +269,6 @@ type ToolExperienceGraph {
     links: [ToolExperienceGraphLink]
 }
 
-type Tool {
-    id: ToolID!
-    experience(filters: Filters, options: Options, facet: Facet): ToolExperience
-    experienceAggregated(filters: Filters, options: Options, facet: Facet): ToolExperienceAggregated
-    experienceGraph(filters: Filters): ToolExperienceGraph
-    entity: Entity
-}
-
 type ToolExperienceRankingYearMetric {
     year: Int
     rank: Int
@@ -305,4 +297,34 @@ type ToolsRankings {
     ids: [ToolID]!
     years: [Int]
     experience(filters: Filters): [ToolExperienceRanking]
+}
+
+type ToolExperienceTransitionsNode {
+    id: String
+    year: Int
+    choice: ToolExperienceID
+    count: Int
+}
+
+type ToolExperienceTransitionsTransition {
+    from: String
+    to: String
+    count: Int
+    percentage: Int
+}
+
+type ToolExperienceTransitions {
+    tool: ToolID
+    keys: [ToolExperienceID]
+    nodes: [ToolExperienceTransitionsNode]
+    transitions: [ToolExperienceTransitionsTransition]
+}
+
+type Tool {
+    id: ToolID!
+    experience(filters: Filters, options: Options, facet: Facet): ToolExperience
+    experienceAggregated(filters: Filters, options: Options, facet: Facet): ToolExperienceAggregated
+    experienceGraph(filters: Filters): ToolExperienceGraph
+    experienceTransitions(year: Int!): ToolExperienceTransitions
+    entity: Entity
 }

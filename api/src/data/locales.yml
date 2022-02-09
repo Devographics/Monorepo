@@ -37,7 +37,7 @@
   label: Galego
   translators: [nunhes]
   repo: StateOfJS/locale-gl-ES
-  
+
 - id: hi-IN
   label: Hindi
   translators: ['jaideepghosh']
@@ -107,7 +107,7 @@
   label: Nederlands
   translators: ['MaxAltena']
   repo: StateOfJS/locale-nl-NL
-  
+
 - id: ro-RO
   label: Română
   translators: ['magdaavram']

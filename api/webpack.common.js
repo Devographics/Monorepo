@@ -6,7 +6,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 module.exports = {
     entry: {
         server: path.join(__dirname, 'src/server.ts'),
-        standalone: path.join(__dirname, 'src/standalone.ts')
+        playground: path.join(__dirname, 'src/playground.ts')
     },
     module: {
         rules: [

@@ -6,6 +6,7 @@ import { Options } from '../options'
 import { Facet } from '../facets'
 import {
     computeToolExperienceGraph,
+    computeToolExperienceTransitions,
     computeToolsCardinalityByUser,
     ToolExperienceId
 } from '../compute'
@@ -141,6 +142,10 @@ export default {
                     id,
                     ...args,
                 }),
+                experienceTransitions: async (
+                    { year }: { year: number },
+                    { db }: RequestContext
+                ) => useCache(computeToolExperienceTransitions, db, [survey, id, [year - 1, year]]),
                 experienceGraph: async (
                     { filters }: { filters?: Filters },
                     { db }: RequestContext
