@@ -28,6 +28,7 @@ export const Label = styled.div`
     display: flex;
     align-items: center;
     padding: 0 12px;
+    white-space: nowrap;
     color: ${({ theme }) => theme.colors.text};
     transform: rotate(-90deg);
     font-size: ${({ theme }) => theme.typography.size.smaller};
