@@ -1,10 +1,8 @@
 import React, { useMemo } from 'react'
 import { ToolExperienceId } from 'core/bucket_keys'
 import { SankeyNodeDatum, SankeyLinkDatum, SankeyYear } from '../types'
-import { staticProps } from './config'
 import { useChartContext } from './state'
 import { YearsLegend } from './YearsLegend'
-import { LinksBackground } from './LinksBackground'
 import { LinkPercentages } from './LinkPercentages'
 import { Nodes } from './Nodes'
 import { ExperienceLinks } from './ExperienceLinks'
@@ -85,9 +83,6 @@ export const CustomSankey = ({ nodes, links }: {
                 currentExperience={currentExperience}
                 setCurrentExperience={setCurrentExperience}
             />
-            {staticProps.showLinksSilhouette && (
-                <LinksBackground links={links} />
-            )}
             {linksByExperience.map(links => (
                 <ExperienceLinks
                     key={links.experience}

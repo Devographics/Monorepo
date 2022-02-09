@@ -1,8 +1,8 @@
 import React, { memo, useCallback, useState } from 'react'
+import styled from 'styled-components'
 import { ToolExperienceId } from 'core/bucket_keys'
 import { SankeyNodeDatum } from '../types'
 import { staticProps } from './config'
-import styled from 'styled-components'
 
 const style = {
     cursor: 'pointer'

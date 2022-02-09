@@ -18,5 +18,4 @@ export const staticProps = {
     yearsLegendArrowSize: 4,
     // nodes below this height won't have labels
     nodeLabelMinHeight: 28,
-    showLinksSilhouette: false,
 }
