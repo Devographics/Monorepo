@@ -1,15 +1,15 @@
 import React, { memo, useCallback } from 'react'
-import { SankeyLinkDatum } from '../types'
-import { getLinkPath } from './getLinkPath'
-import { useChartContext } from './state'
 import styled from 'styled-components'
+import { SankeyLinkDatum } from '../types'
+import { useChartContext } from './state'
+import { getLinkPath } from './getLinkPath'
+import { getLinkId } from './getLinkId'
 
 const NonMemoizedLinkWithGradient = ({ link, isActive }: {
     link: SankeyLinkDatum
     isActive: boolean
 }) => {
-    const linkId = `${link.source.id}.${link.target.id}`
-    const gradientId = `${linkId}Gradient`
+    const gradientId = `${getLinkId(link)}Gradient`
 
     const { currentTransition, setCurrentTransition } = useChartContext()
 
