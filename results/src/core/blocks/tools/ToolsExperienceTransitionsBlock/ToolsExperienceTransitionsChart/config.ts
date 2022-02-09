@@ -8,7 +8,7 @@ export const staticProps = {
         top: 30,
         // extra space for last year legend
         right: 10,
-        // extra space for links percentage
+        // space the current transition legend
         bottom: 50,
         // extra space for first year legend
         left: 10,

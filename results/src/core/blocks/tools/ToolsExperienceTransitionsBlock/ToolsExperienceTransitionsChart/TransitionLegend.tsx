@@ -4,14 +4,8 @@ import { useI18n } from 'core/i18n/i18nContext'
 import { staticProps } from './config'
 import { SankeyLinkDatum } from '../types'
 
-export const TransitionLegend = ({
-    link
-}: {
-    link: SankeyLinkDatum | undefined
-}) => {
+export const TransitionLegend = ({ link }: { link: SankeyLinkDatum }) => {
     const { translate } = useI18n()
-
-    if (link === undefined) return null
 
     const x0 = link.source.x
     const x1 = link.target.x + link.target.width

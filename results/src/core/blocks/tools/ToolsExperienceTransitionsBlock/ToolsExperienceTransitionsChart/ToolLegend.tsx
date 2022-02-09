@@ -2,17 +2,13 @@ import React from 'react'
 import styled from 'styled-components'
 import { Entity } from 'core/types'
 
-export const ToolLegend = ({ tool }: {
-    tool: Entity
-}) => {
-    return (
-        <Container>
-            <Label>
-                {tool.name}
-            </Label>
-        </Container>
-    )
-}
+export const ToolLegend = ({ tool }: { tool: Entity }) => (
+    <Container>
+        <Label>
+            {tool.name}
+        </Label>
+    </Container>
+)
 
 const Container = styled.div`
     flex-grow: 0;

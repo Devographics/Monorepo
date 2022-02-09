@@ -11,19 +11,15 @@ export const Nodes = ({
     nodes: SankeyNodeDatum[]
     currentExperience: ToolExperienceId
     setCurrentExperience: (experience: ToolExperienceId) => void
-}) => {
-    return (
-        <>
-            {nodes.map(node => {
-                return (
-                    <Node
-                        key={node.id}
-                        node={node}
-                        isCurrent={node.choice === currentExperience}
-                        setCurrentExperience={setCurrentExperience}
-                    />
-                )
-            })}
-        </>
-    )
-}
+}) => (
+    <>
+        {nodes.map(node => (
+            <Node
+                key={node.id}
+                node={node}
+                isCurrent={node.choice === currentExperience}
+                setCurrentExperience={setCurrentExperience}
+            />
+        ))}
+    </>
+)

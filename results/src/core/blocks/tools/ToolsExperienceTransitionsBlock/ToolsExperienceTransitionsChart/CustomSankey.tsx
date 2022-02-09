@@ -92,7 +92,7 @@ export const CustomSankey = ({ nodes, links }: {
                 />
             ))}
             <LinkPercentages links={currentLinks!.links} />
-            <TransitionLegend link={currentTransitionLink} />
+            {currentTransitionLink && <TransitionLegend link={currentTransitionLink} />}
         </>
     )
 }
