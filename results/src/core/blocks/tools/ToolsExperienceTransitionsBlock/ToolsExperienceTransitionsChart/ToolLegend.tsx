@@ -1,24 +1,29 @@
+import React from 'react'
 import styled from 'styled-components'
-import { staticProps } from './config'
+import { Entity } from 'core/types'
 
-export const ChartContainer = styled.div`
-    display: flex;
-    align-items: stretch;
-    height: 180px;
-`
+export const ToolLegend = ({ tool }: {
+    tool: Entity
+}) => {
+    return (
+        <Container>
+            <Label>
+                {tool.name}
+            </Label>
+        </Container>
+    )
+}
 
-export const ToolLegendContainer = styled.div`
+const Container = styled.div`
     flex-grow: 0;
     flex-shrink: 0;
     width: 20px;
-    margin-top: ${staticProps.margin.top}px;
-    margin-bottom: ${staticProps.margin.bottom}px;
     display: flex;
     align-items: center;
     justify-content: center;
 `
 
-export const ToolLegend = styled.div`
+export const Label = styled.div`
     height: 20px;
     display: flex;
     align-items: center;

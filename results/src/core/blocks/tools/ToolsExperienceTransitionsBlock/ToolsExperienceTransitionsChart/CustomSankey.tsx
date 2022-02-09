@@ -2,12 +2,13 @@ import React, { useMemo } from 'react'
 import { ToolExperienceId } from 'core/bucket_keys'
 import { SankeyNodeDatum, SankeyLinkDatum, SankeyYear } from '../types'
 import { staticProps } from './config'
+import { useChartContext } from './state'
 import { YearsLegend } from './YearsLegend'
 import { LinksBackground } from './LinksBackground'
 import { LinkPercentages } from './LinkPercentages'
 import { Nodes } from './Nodes'
 import { ExperienceLinks } from './ExperienceLinks'
-import { useChartContext } from './state'
+import { TransitionLegend } from './TransitionLegend'
 
 /**
  * Used to entirely replace the default nivo Sankey component,
@@ -23,12 +24,10 @@ export const CustomSankey = ({ nodes, links }: {
     const {
         currentExperience,
         setCurrentExperience,
+        currentTransition,
     } = useChartContext()
 
-    const {
-        years,
-        linksByExperience,
-    } = useMemo(() => {
+    const { years, linksByExperience } = useMemo(() => {
         const _years: SankeyYear[] = []
 
         const _nodesByExperience: Partial<Record<ToolExperienceId, SankeyNodeDatum[]>> = {}
@@ -66,24 +65,9 @@ export const CustomSankey = ({ nodes, links }: {
 
         _years.sort((a, b) => a.year - b.year)
 
-        const _startNodes: SankeyNodeDatum[] = []
-        const _endNodes: SankeyNodeDatum[] = []
-        const firstYear = _years[0]
-        const lastYear = _years[_years.length - 1]
-        nodes.forEach(node => {
-            if (node.year === firstYear.year) {
-                _startNodes.push(node)
-            }
-            if (node.year === lastYear.year) {
-                _endNodes.push(node)
-            }
-        })
-
         return {
             years: _years,
             nodesByChoice: _nodesByExperience,
-            startNodes: _startNodes,
-            endNodes: _endNodes,
             linksByExperience: Object.values(_linksByExperience),
         }
     }, [nodes, links])
@@ -92,6 +76,13 @@ export const CustomSankey = ({ nodes, links }: {
         linksByExperience.find(link => link.experience === currentExperience),
         [linksByExperience, currentExperience]
     )
+
+    let currentTransitionLink: SankeyLinkDatum | undefined = undefined
+    if (currentTransition !== null) {
+        currentTransitionLink = currentLinks!.links.find(link => {
+            return link.source.choice === currentTransition[0] && link.target.choice === currentTransition[1]
+        })
+    }
 
     return (
         <>
@@ -113,6 +104,7 @@ export const CustomSankey = ({ nodes, links }: {
                 />
             ))}
             <LinkPercentages links={currentLinks!.links} />
+            <TransitionLegend link={currentTransitionLink} />
         </>
     )
 }

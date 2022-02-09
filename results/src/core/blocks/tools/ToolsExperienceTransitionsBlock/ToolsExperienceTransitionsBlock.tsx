@@ -1,13 +1,13 @@
-import React, { useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
+import styled from 'styled-components'
 import { ToolExperienceId } from 'core/bucket_keys'
+import { useLegends } from 'core/helpers/useBucketKeys'
 import Block from 'core/blocks/block/BlockVariant'
 import {
     ToolsExperienceTransitionsBlockData,
     ApiToolExperienceTransitions,
 } from './types'
-import { Grid } from './Grid'
 import { ToolsExperienceTransitionsChart } from './ToolsExperienceTransitionsChart'
-import { useLegends } from 'core/helpers/useBucketKeys'
 
 export const ToolsExperienceTransitionsBlock = ({
     block,
@@ -16,14 +16,36 @@ export const ToolsExperienceTransitionsBlock = ({
     block: ToolsExperienceTransitionsBlockData
     data: ApiToolExperienceTransitions[]
 }) => {
-    console.log(data)
     const filteredData = useMemo(() =>
         data.filter(toolData => toolData.experienceTransitions.nodes.length > 0),
         [data]
     )
 
-    const [currentExperience, setCurrentExperience] = useState<ToolExperienceId>('interested')
-    const [currentTransition, setCurrentTransition] = useState<[ToolExperienceId, ToolExperienceId] | null>(null)
+    const [currentExperience, _setCurrentExperience] = useState<ToolExperienceId>('interested')
+    const [currentTransition, _setCurrentTransition] = useState<[ToolExperienceId, ToolExperienceId] | null>([
+        'interested',
+        'would_use'
+    ])
+
+    // avoid creating a new transition array if the values don't change
+    const setCurrentTransition = useCallback((transition: [ToolExperienceId, ToolExperienceId] | null) => {
+        _setCurrentTransition((previous) => {
+            if (transition === null) return null
+            if (previous !== null && previous[0] === transition[0] && previous[1] === transition[1]) {
+                return previous
+            }
+
+            return transition
+        })
+    }, [_setCurrentTransition])
+
+    // reset the current transition when a new source experience is selected
+    const setCurrentExperience = useCallback((experience: ToolExperienceId) => {
+        if (experience === currentExperience) return
+
+        _setCurrentExperience(experience)
+        _setCurrentTransition(null)
+    }, [currentExperience, _setCurrentTransition])
 
     const keys = data[0].experienceTransitions.keys
     const legends = useLegends(block, keys, 'tools')
@@ -56,3 +78,11 @@ export const ToolsExperienceTransitionsBlock = ({
         </Block>
     )
 }
+
+const Grid = styled.div`
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+    column-gap: 24px;
+    row-gap: 16px;
+`

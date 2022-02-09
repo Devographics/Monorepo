@@ -1,11 +1,11 @@
 import React, { useCallback, useMemo } from 'react'
-import { useTheme } from 'styled-components'
+import styled, { useTheme } from 'styled-components'
 import { ResponsiveSankey } from '@nivo/sankey'
 import { ToolExperienceId } from 'core/bucket_keys'
 import { ApiToolExperienceTransitions } from '../types'
 import { staticProps } from './config'
-import { ChartContainer, ToolLegendContainer, ToolLegend } from './ChartContainer'
 import { ChartContextProvider } from './state'
+import { ToolLegend } from './ToolLegend'
 
 export const ToolsExperienceTransitionsChart = ({
     data,
@@ -22,7 +22,7 @@ export const ToolsExperienceTransitionsChart = ({
 }) => {
     const theme = useTheme()
 
-    const chartData = {
+    const chartData = useMemo(() => ({
         nodes: data.experienceTransitions.nodes,
         links: data.experienceTransitions.transitions.map(transition => {
             return {
@@ -32,7 +32,7 @@ export const ToolsExperienceTransitionsChart = ({
                 percentage: transition.percentage,
             }
         }),
-    }
+    }), [data])
 
     const context = useMemo(() => ({
         toolId: data.id,
@@ -54,27 +54,36 @@ export const ToolsExperienceTransitionsChart = ({
 
     return (
         <ChartContextProvider value={context}>
-            <ChartContainer>
-                <ToolLegendContainer>
-                    <ToolLegend>
-                        {data.entity.name}
-                    </ToolLegend>
-                </ToolLegendContainer>
-                <ResponsiveSankey
-                    margin={staticProps.margin}
-                    data={chartData}
-                    sort="input"
-                    align="justify"
-                    colors={getColor}
-                    nodeThickness={18}
-                    nodeInnerPadding={1}
-                    nodeSpacing={2}
-                    linkContract={1}
-                    animate={false}
-                    // @ts-ignore
-                    layers={staticProps.layers}
-                />
-            </ChartContainer>
+            <Container>
+                <ToolLegend tool={data.entity} />
+                <ChartContainer>
+                    <ResponsiveSankey
+                        margin={staticProps.margin}
+                        data={chartData}
+                        sort="input"
+                        align="justify"
+                        colors={getColor}
+                        nodeThickness={18}
+                        nodeInnerPadding={1}
+                        nodeSpacing={2}
+                        linkContract={1}
+                        animate={false}
+                        // @ts-ignore
+                        layers={staticProps.layers}
+                    />
+                </ChartContainer>
+            </Container>
         </ChartContextProvider>
     )
 }
+
+const Container = styled.div`
+    display: flex;
+    overflow: hidden;
+    align-items: center;
+`
+
+const ChartContainer = styled.div`
+    width: calc(100% - 20px);
+    height: ${staticProps.margin.top + staticProps.chartHeight + staticProps.margin.bottom}px;
+`

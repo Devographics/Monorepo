@@ -26,40 +26,40 @@ export const NonMemoizedYearsLegend = ({ years }: {
 
     return (
         <>
-            {pairs.map(({previous, next}) => {
-                return (
-                    <g
-                        key={`${previous.year}.${next.year}`}
-                        transform={`translate(0,-${staticProps.yearsLegendHeight / 2})`}
-                        opacity={.4}
-                    >
-                        <Line
-                            x1={previous.x + staticProps.yearsLegendSpacing}
-                            x2={next.x - staticProps.yearsLegendSpacing}
+            {pairs.map(({previous, next}) => (
+                <g
+                    key={`${previous.year}.${next.year}`}
+                    transform={`translate(0,-${staticProps.yearsLegendHeight / 2})`}
+                    opacity={.4}
+                >
+                    <Line
+                        x1={previous.x + staticProps.yearsLegendSpacing}
+                        x2={next.x - staticProps.yearsLegendSpacing}
+                    />
+                    <g transform={`translate(${next.x - staticProps.yearsLegendSpacing},0)`}>
+                        <PolyLine
+                            points={`
+                                -${staticProps.yearsLegendArrowSize},-${staticProps.yearsLegendArrowSize}
+                                0,0
+                                -${staticProps.yearsLegendArrowSize},${staticProps.yearsLegendArrowSize}
+                            `}
                         />
-                        <g transform={`translate(${next.x - staticProps.yearsLegendSpacing},0)`}>
-                            <PolyLine
-                                points="-5,-5 0,0 -5,5"
-                            />
-                        </g>
                     </g>
-                )
-            })}
-            {years.map(year => {
-                return (
-                    <g
-                        key={year.year}
-                        transform={`translate(${year.x},-${staticProps.yearsLegendHeight / 2})`}
+                </g>
+            ))}
+            {years.map(year => (
+                <g
+                    key={year.year}
+                    transform={`translate(${year.x},-${staticProps.yearsLegendHeight / 2})`}
+                >
+                    <YearLabel
+                        textAnchor="middle"
+                        dominantBaseline="central"
                     >
-                        <YearLabel
-                            textAnchor="middle"
-                            dominantBaseline="central"
-                        >
-                            {year.year}
-                        </YearLabel>
-                    </g>
-                )
-            })}
+                        {year.year}
+                    </YearLabel>
+                </g>
+            ))}
         </>
     )
 }

@@ -40,6 +40,7 @@ export const NonMemoizedExperienceLinks = ({
                     <LinkWithGradient
                         key={`${link.source.id}.${link.target.id}`}
                         link={link}
+                        isActive={isActive}
                     />
                 ))}
             </animated.g>
