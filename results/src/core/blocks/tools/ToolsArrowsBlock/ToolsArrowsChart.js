@@ -426,8 +426,9 @@ export const ToolsArrowsChart = ({ data, activeCategory }) => {
                 <p 
                     className="legend_label right" 
                     style={{
-                        borderColor: getVelocityColor(90, theme), 
-                        color: getVelocityColor(90, theme)
+                        borderColor: getVelocityColor(100, theme), 
+                        color: theme.colors.highVelocity,
+                        fontWeight: 'bold'
                     }}
                 >
                     {translate('charts.tools_arrows.popularity_positive')}
@@ -444,7 +445,8 @@ export const ToolsArrowsChart = ({ data, activeCategory }) => {
                     className="legend_label left" 
                     style={{
                         borderColor: getVelocityColor(-80, theme), 
-                        color: getVelocityColor(-70, theme)
+                        color: theme.colors.lowVelocity,
+                        fontWeight: 'bold'
                     }}
                 >
                     {translate('charts.tools_arrows.popularity_negative')}

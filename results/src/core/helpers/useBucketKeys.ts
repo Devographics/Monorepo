@@ -17,7 +17,15 @@ const getColor = (colorRange, id) => {
     }
 }
 
-export const useBucketKeys = bucketKeysId => {
+const getNoAnswerKey = (theme: any, translate: any) => ({
+    id: 'no_answer',
+    label: translate('charts.no_answer'),
+    shortLabel: translate('charts.no_answer'),
+    color: theme.colors.no_answer[0],
+    gradientColors: theme.colors.no_answer
+})
+
+export const useBucketKeys = (bucketKeysId, addNoAnswer = false) => {
     const theme = useTheme()
     const { translate, getString } = useI18n()
     const keysConfig = keys[bucketKeysId]
@@ -31,7 +39,7 @@ export const useBucketKeys = bucketKeysId => {
             colorRange = theme.colors.ranges[keysConfig.colorRange]
         }
 
-        return keysConfig.keys.map(key => {
+        const keys = keysConfig.keys.map(key => {
             const label = translate(key.label)
             const shortLabelObject = getString(key.shortLabel)
             const shortLabel = shortLabelObject.missing ? undefined : shortLabelObject.t
@@ -43,10 +51,12 @@ export const useBucketKeys = bucketKeysId => {
                 gradientColors: getColor(colorRange, key.id)?.gradient
             }
         })
+
+        return addNoAnswer ? [...keys, getNoAnswerKey(theme, translate)] : keys
     }, [keysConfig, theme, translate])
 }
 
-export const useLegends = (block: Block, keys: string[], fieldId?: string) => {
+export const useLegends = (block: Block, keys: string[], fieldId?: string, addNoAnswer = false) => {
     if (!keys || keys.length === 0) {
         return []
     }
@@ -70,5 +80,6 @@ export const useLegends = (block: Block, keys: string[], fieldId?: string) => {
         }
         return legend
     })
-    return legends
+
+    return addNoAnswer ? [...legends, getNoAnswerKey(theme, translate)] : legends
 }

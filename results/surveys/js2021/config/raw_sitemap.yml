@@ -217,6 +217,10 @@
           template: feature_experience
         - id: dynamic_import
           template: feature_experience
+
+        - id: scott_tolinkski
+          template: picks
+
         - id: nullish_coalescing
           template: feature_experience
         - id: optional_chaining
@@ -965,52 +969,52 @@
         - id: feature_adoption_delta_award
           template: award
           awards:
-            - id: comparison_functions
-              value: "+15.5%"
-            - id: prefers_reduced_motion
-              value: "+10.9%"
-            - id: grid
-              value: "+9.8%"
+            - id: nullish_coalescing
+              value: "+21.8%"
+            - id: optional_chaining
+              value: "+19%"
+            - id: private_fields
+              value: "+9.5%"
 
-        # - id: tool_usage_delta_award
-        #   template: award
-        #   awards:
-        #     - id: tailwind_css
-        #       value: "+17.8%"
-        #     - id: atomic_css
-        #       value: "+10.8%"
-        #     - id: css_modules
-        #       value: "+10.1%"
+        - id: tool_usage_delta_award
+          template: award
+          awards:
+            - id: esbuild
+              value: "+20.1%"
+            - id: tsc
+              value: "+17.3%"
+            - id: testing_library
+              value: "+8.3%"
 
         - id: tool_satisfaction_award
           template: award
           awards:
-            - id: post_css
-              value: "91%"
-            - id: vanilla_extract
-              value: "87%"
-            - id: css_modules
-              value: "86%"
+            - id: vite
+              value: "97.4%"
+            - id: testing_library
+              value: "96.3%"
+            - id: esbuild
+              value: "96.2%"
 
         - id: tool_interest_award
           template: award
           awards:
-            - id: css_modules
-              value: "74%"
-            - id: vanilla_extract
-              value: "68%"
-            - id: stitches
-              value: "55%"
+            - id: vite
+              value: "83%"
+            - id: vitest
+              value: "81.8%"
+            - id: esbuild
+              value: "80.4%"
 
-        # - id: most_write_ins_award
-        #   template: award
-        #   awards:
-        #     - id: phpstorm
-        #       value: "200"
-        #     - id: udemy
-        #       value: "159"
-        #     - id: frontendmasters
-        #       value: "112"
+        - id: most_write_ins_award
+          template: award
+          awards:
+            - id: elm
+              value: "124"
+            - id: stencil
+              value: "104"
+            - id: platzi
+              value: "100"
 
 
 - id: conclusion

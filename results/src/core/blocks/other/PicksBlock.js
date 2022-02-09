@@ -31,9 +31,9 @@ const PicksBlock = ({ block, data }) => {
                                 <span>
                                     <T k="picks.my_pick" />
                                 </span>
-                                <a href={url}>
+                                <PickTitleLink href={url}>
                                     <T k={`picks.${pickId}.name`} />
-                                </a>
+                                </PickTitleLink>
                             </PickTitle>
                             <Description>
                                 {/* <ReactMarkdown
@@ -117,6 +117,16 @@ const PickContent = styled.div`
 
 const PickTitle = styled.h3`
     margin-bottom: ${spacing(0.5)};
+    a,
+    a:link,
+    a:visited,
+    a:hover {
+        color: ${({ theme }) => theme.colors.textInverted};
+    }
+`
+
+const PickTitleLink = styled.a`
+    text-decoration: underline;
 `
 
 const Description = styled.div`

@@ -3,11 +3,13 @@ import colors_ from 'core/theme/colors'
 
 const colors = {
     ...colors_,
-    tealDark: '#2eb9b9',
-    teal: '#42e0e0',
-    tealLight: '#6FF9F9',
-    tealLighter: '#90F9F9',
-    tealLightest: '#B7FCFC',
+    tealDarkest: '#167387',
+    tealDarker: '#2594AC',
+    tealDark: '#2EB1CE',
+    teal: '#47CFED',
+    tealLight: '#6BDAF2',
+    tealLighter: '#92E4F6',
+    tealLightest: '#BFF4FF',
     pinkDark: '#9D0E66',
     pink: '#ef4e88',
     pinkLight: '#FE79B4',
@@ -22,6 +24,14 @@ const colors = {
     blueLight: '#775CE0',
     blueLighter: '#B0AEEF',
     blueLightest: '#D0CFF9',
+    purpleDarkest: '#3E1A4D',
+    purpleDarker: '#532566',
+    purpleDark: '#6D3385',
+    purple: '#8D4CA8',
+    purpleLight: '#A964C6',
+    purpleLighter: '#C185DA',
+    purpleLightest: '#D5A7E8',
+    purpleLightester: '#EFDCF8',
     green: '#4BC77D',
     greenLight: '#73D49A',
     greenLighter: '#B6F4CF',
@@ -38,18 +48,34 @@ const colors = {
 const tiers = [colors.red, '#ffc38a', '#feff8e', '#c3ff89']
 
 const velocity = [
-    '#c3494e',
-    '#ce595c',
-    '#dc6365',
-    '#d36567',
-    '#aa676a',
-    '#786e71',
-    '#578587',
-    '#47a5a6',
-    '#3fbbbb',
-    '#37babb',
-    '#26aeae',
-    '#0ea5a5'
+    colors.purpleDarkest,
+    colors.purpleDarker,
+    colors.purpleDark,
+    colors.purple,
+    colors.purpleLight,
+    colors.purpleLighter,
+    colors.purpleLightest,
+    colors.tealLightest,
+    colors.tealLighter,
+    colors.tealLight,
+    colors.teal,
+    colors.tealDark,
+    colors.tealDarker,
+    colors.tealDarkest,
+]
+
+const arrowsVelocity = [
+    colors.purple,
+    colors.purpleLight,
+    colors.purpleLighter,
+    colors.purpleLightest,
+    colors.tealLightest,
+    colors.tealLighter,
+    colors.tealLight,
+    colors.teal,
+    colors.tealDark,
+    colors.tealDarker,
+    colors.tealDarkest,
 ]
 
 const distinct = [
@@ -85,14 +111,17 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
     border: '#FFF6E6',
     heatmap: colors.tealLight,
     lineChartDefaultColor: '#59DF7F',
+    lowVelocity: colors.purpleLighter,
+    highVelocity: colors.teal,
     barChart: {
         primary: colors.teal,
         primaryGradient: [colors.tealDark, colors.teal],
         // secondary: colors.yellowLight,
         // secondaryGradient: [colors.yellow, colors.yellowLight],
-        secondary: colors.blue,
-        secondaryGradient: [colors.blue, colors.blueLight]
+        secondary: colors.purple,
+        secondaryGradient: [colors.purple, colors.purpleLighter]
     },
+    no_answer: [colors.greyLight, colors.greyLightest],
     ranges: {
         tools: {
             would_use: [colors.teal, colors.tealLight],
@@ -175,12 +204,13 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
         bracket: {
             round1: [velocity[2], velocity[3]],
             round2: [velocity[5], velocity[6]],
-            round3: [velocity[7], velocity[8]]
+            round3: [velocity[10], velocity[11]]
         }
     },
     distinct,
-    countries: [velocity[6], velocity[7], velocity[8], velocity[9], velocity[10], velocity[11]],
+    countries: [velocity[7], velocity[8], velocity[9], velocity[10], velocity[11], velocity[12]],
     velocity,
+    arrowsVelocity,
     tiers
 }
 

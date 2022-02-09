@@ -37,7 +37,8 @@ const EntitiesContextProviderInner = ({ children, entities }) => {
     const getEntity = useCallback(
         (id) => {
             const entity = findEntity(entities, id)
-
+            console.log(id)
+            console.log(entity)
             return entity
         },
         [entities]

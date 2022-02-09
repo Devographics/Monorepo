@@ -15,7 +15,7 @@ const getMargins = (viewportWidth: number) => ({
     top: 10,
     right: 70,
     bottom: viewportWidth < breakpoint ? 110 : 60,
-    left: 40,
+    left: 40
 })
 
 const getLabelsLayer = (units: BlockUnits) => (props: any) => {
@@ -39,7 +39,7 @@ const getLabelsLayer = (units: BlockUnits) => (props: any) => {
                 }) rotate(${rotation})`}
                 fontSize={fontSize}
                 style={{
-                    pointerEvents: 'none',
+                    pointerEvents: 'none'
                 }}
             />
         )
@@ -47,7 +47,7 @@ const getLabelsLayer = (units: BlockUnits) => (props: any) => {
 }
 
 const getAxisLabels = (v: any, legends: BlockLegend[]) => {
-    const key = legends.find((key) => key.id === v)
+    const key = legends.find(key => key.id === v)
     return key && (key.shortLabel || key.label)
 }
 
@@ -67,7 +67,7 @@ const VerticalBarChart = ({
     units,
     chartProps,
     colorVariant = 'primary',
-    buckets,
+    buckets
 }: VerticalBarChartProps) => {
     const theme = useTheme()
     const { translate } = useI18n()
@@ -78,13 +78,14 @@ const VerticalBarChart = ({
         i18nNamespace,
         shouldTranslate: translateData,
         mode,
-        units,
+        units
     })
 
     const labelsLayer = useMemo(() => getLabelsLayer(units), [units])
 
     const colors = [theme.colors.barChart[colorVariant]]
     const gradientColors = theme.colors.barChart[`${colorVariant}Gradient`]
+    const noAnswerColors = theme.colors.no_answer
 
     return (
         <div style={{ height: 260 }} className={`VerticalBarChart ${className}`}>
@@ -105,23 +106,23 @@ const VerticalBarChart = ({
                 enableGridY={true}
                 axisLeft={{
                     format: formatValue,
-                    tickValues: ticks,
+                    tickValues: ticks
                 }}
                 axisRight={{
                     format: formatValue,
                     tickValues: ticks,
                     legend: translate(`charts.axis_legends.users_${units}`),
                     legendPosition: 'middle',
-                    legendOffset: 52,
+                    legendOffset: 52
                 }}
                 axisBottom={{
-                    format: (v) => getAxisLabels(v, bucketKeys),
+                    format: v => getAxisLabels(v, bucketKeys),
                     // legend: translate(`charts.axis_legends.${i18nNamespace}`),
                     legendPosition: 'middle',
                     legendOffset: viewportWidth < breakpoint ? 90 : 50,
-                    tickRotation: viewportWidth < breakpoint ? -45 : 0,
+                    tickRotation: viewportWidth < breakpoint ? -45 : 0
                 }}
-                tooltip={(barProps) => (
+                tooltip={barProps => (
                     <BarTooltip
                         units={units}
                         i18nNamespace={i18nNamespace}
@@ -130,15 +131,31 @@ const VerticalBarChart = ({
                     />
                 )}
                 layers={['grid', 'axes', 'bars', labelsLayer]}
-                defs={[{
-                    id: `${colorVariant}GradientVertical`,
-                    type: 'linearGradient',
-                    colors: [
-                        { offset: 0, color: gradientColors[1] },
-                        { offset: 100, color: gradientColors[0] },
-                    ],
-                }]}
-                fill={[{ match: '*', id: `${colorVariant}GradientVertical` }]}
+                defs={[
+                    {
+                        id: `${colorVariant}GradientVertical`,
+                        type: 'linearGradient',
+                        colors: [
+                            { offset: 0, color: gradientColors[1] },
+                            { offset: 100, color: gradientColors[0] }
+                        ]
+                    },
+                    {
+                        id: `noAnswerGradientVertical`,
+                        type: 'linearGradient',
+                        colors: [
+                            { offset: 0, color: noAnswerColors[1] },
+                            { offset: 100, color: noAnswerColors[0] }
+                        ]
+                    }
+                ]}
+                fill={[
+                    {
+                        match: d => d.data.indexValue === 'no_answer',
+                        id: `noAnswerGradientVertical`
+                    },
+                    { match: '*', id: `${colorVariant}GradientVertical` }
+                ]}
                 {...chartProps}
             />
         </div>
@@ -151,17 +168,17 @@ VerticalBarChart.propTypes = {
         PropTypes.shape({
             id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
             count: PropTypes.number.isRequired,
-            percentage: PropTypes.number,
+            percentage: PropTypes.number
         })
     ).isRequired,
     i18nNamespace: PropTypes.string.isRequired,
     translateData: PropTypes.bool.isRequired,
     mode: PropTypes.oneOf(['absolute', 'relative']).isRequired,
     units: PropTypes.oneOf(['percentage_survey', 'percentage_question', 'count']).isRequired,
-    colorVariant: PropTypes.oneOf(['primary', 'secondary']),
+    colorVariant: PropTypes.oneOf(['primary', 'secondary'])
 }
 VerticalBarChart.defaultProps = {
-    translateData: true,
+    translateData: true
 }
 
 export default memo(VerticalBarChart)

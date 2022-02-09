@@ -9,12 +9,19 @@ import { useLegends } from 'core/helpers/useBucketKeys'
 // import T from 'core/i18n/T'
 import { FacetItem, BlockComponentProps } from 'core/types'
 import { getTableData } from 'core/helpers/datatables'
+import sumBy from 'lodash/sumBy'
 
 export interface VerticalBarBlockProps extends BlockComponentProps {
     data: FacetItem
 }
 
-const VerticalBarBlock = ({ block, data, keys, controlledUnits, isCustom }: VerticalBarBlockProps) => {
+const VerticalBarBlock = ({
+    block,
+    data,
+    keys,
+    controlledUnits,
+    isCustom
+}: VerticalBarBlockProps) => {
     if (!data) {
         throw new Error(`VerticalBarBlock: Missing data for block ${block.id}.`)
     }
@@ -31,11 +38,23 @@ const VerticalBarBlock = ({ block, data, keys, controlledUnits, isCustom }: Vert
     const { width } = context
 
     const [units, setUnits] = useState(defaultUnits)
-    const bucketKeys = keys && useLegends(block, keys)
+    const addNoAnswer = units === 'percentage_survey'
+    const bucketKeys = keys && useLegends(block, keys, undefined, addNoAnswer)
 
     const { facets, completion } = data
-    const buckets = facets[0].buckets
+
+    const countSum = sumBy(facets[0].buckets, b => b.count)
+    const percentageSum = sumBy(facets[0].buckets, b => b.percentage_survey)
+    const noAnswerBucket = {
+        id: 'no_answer',
+        count: completion.total - countSum,
+        percentage_question: 0,
+        percentage_survey: Math.round((100 - percentageSum)*10)/10
+    }
+
+    const buckets = addNoAnswer ? [...facets[0].buckets, noAnswerBucket] : facets[0].buckets
     const { total } = completion
+
 
     return (
         <BlockVariant
@@ -64,7 +83,7 @@ const VerticalBarBlock = ({ block, data, keys, controlledUnits, isCustom }: Vert
                     mode={mode}
                     units={controlledUnits ?? units}
                     viewportWidth={width}
-                    colorVariant={isCustom ? 'secondary': 'primary'}
+                    colorVariant={isCustom ? 'secondary' : 'primary'}
                 />
             </ChartContainer>
         </BlockVariant>

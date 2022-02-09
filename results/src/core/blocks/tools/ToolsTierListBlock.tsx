@@ -1,19 +1,19 @@
-import React, { useState } from 'react'
-import { useTheme, DefaultTheme } from 'styled-components'
+import React, { useState, useMemo } from 'react'
+import { useTheme } from 'styled-components'
 import Block from 'core/blocks/block/BlockVariant'
-import compact from 'lodash/compact'
-import round from 'lodash/round'
-import get from 'lodash/get'
 import TierListChart, { TierItemData } from 'core/charts/generic/TierListChart'
 import { useI18n } from 'core/i18n/i18nContext'
 import ChartContainer from 'core/charts/ChartContainer'
-import ButtonGroup from 'core/components/ButtonGroup'
-import Button from 'core/components/Button'
 import variables from 'Config/variables.yml'
-import T from 'core/i18n/T'
-import { getTableData } from 'core/helpers/datatables'
-import { ToolsExperienceToolData } from 'core/survey_api/tools'
 import sortBy from 'lodash/sortBy'
+import { ToolsSectionId } from 'core/bucket_keys'
+import { ToolsExperienceToolData } from 'core/survey_api/tools'
+import { BlockContext } from 'core/blocks/types'
+
+interface TierListBlockProps {
+    block: BlockContext<'toolsTierListTemplate', 'ToolsTierListBlock', { toolIds: string }, any>
+    data: ToolsExperienceToolData[]
+}
 
 const { toolsCategories } = variables
 
@@ -24,7 +24,7 @@ const tiers = [
     { letter: 'S', upperBound: 100, lowerBound: 90 },
     { letter: 'A', upperBound: 89, lowerBound: 80 },
     { letter: 'B', upperBound: 79, lowerBound: 60 },
-    { letter: 'C', upperBound: 59, lowerBound: 0 },
+    { letter: 'C', upperBound: 59, lowerBound: 0 }
     // { letter: 'D', upperBound: 39, lowerBound: 0 }
 ]
 
@@ -52,7 +52,7 @@ const getChartData = (data: ToolsExperienceToolData[], theme: any) => {
         if (userCount >= cutoff) {
             sortedData.forEach(tier => {
                 if (satisfactionRatio >= tier.lowerBound && satisfactionRatio <= tier.upperBound) {
-                    tier.items.push({ ...tool, userCount, satisfactionRatio, color })
+                    tier.items.push({ ...tool, userCount, satisfactionRatio, color, categoryId })
                 }
             })
         }
@@ -64,7 +64,7 @@ const getChartData = (data: ToolsExperienceToolData[], theme: any) => {
     return sortedData
 }
 
-const TierListBlock = ({ block, data, triggerId, titleProps }) => {
+const TierListBlock = ({ block, data }: TierListBlockProps) => {
     const { translate } = useI18n()
     const theme = useTheme()
 
@@ -79,9 +79,25 @@ const TierListBlock = ({ block, data, triggerId, titleProps }) => {
         color: theme.colors.ranges.toolSections[keyId]
     }))
 
+    const [currentCategory, setCurrentCategory] = useState<ToolsSectionId | null>(null)
+
+    const legendProps = useMemo(
+        () => ({
+            legends,
+            onMouseEnter: ({ id }: { id: string }) => {
+                setCurrentCategory(id.replace('toolCategories.', '') as ToolsSectionId)
+            },
+            onMouseLeave: () => {
+                setCurrentCategory(null)
+            }
+        }),
+        [legends, setCurrentCategory]
+    )
+
     return (
         <Block
             legends={legends}
+            legendProps={legendProps}
             className="ToolsScatterplotBlock"
             data={data}
             // tables={[
@@ -92,8 +108,8 @@ const TierListBlock = ({ block, data, triggerId, titleProps }) => {
             // ]}
             block={block}
         >
-            <ChartContainer vscroll={false}>
-                <TierListChart data={chartData} total={total} />
+            <ChartContainer vscroll={true} fit={true}>
+                <TierListChart data={chartData} total={total} currentCategory={currentCategory} />
             </ChartContainer>
         </Block>
     )

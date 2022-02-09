@@ -82,10 +82,11 @@
   avatarUrl: wes_bos.jpg
   url: https://github.com/tc39/proposals
 
-# - twitterName:
-#   fullName: 
-#   avatarUrl:
-#   url:
+- id: scott_tolinkski
+  twitterName: stolinski
+  fullName: Scott Tolinski
+  avatarUrl: scott_tolinkski.jpg
+  url: https://kit.svelte.dev/
 
 # - twitterName:
 #   fullName: 

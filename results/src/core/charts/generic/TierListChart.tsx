@@ -2,6 +2,7 @@ import React from 'react'
 import styled, { useTheme } from 'styled-components'
 import { mq, spacing, fontSize, fontWeight } from 'core/theme'
 import { ToolsExperienceToolData } from 'core/survey_api/tools'
+import { ToolsSectionId } from 'core/bucket_keys'
 
 const customImages = {
     testing_library: 'png',
@@ -15,11 +16,18 @@ const customImages = {
     vuejs: 'svg'
 }
 
-interface TierItemData extends ToolsExperienceToolData {
+export interface TierItemData extends ToolsExperienceToolData {
     satisfactionRatio: number
     userCount: number
     color: string
     total: number
+    categoryId?: ToolsSectionId
+}
+
+export interface TierListProps {
+    data: TierProps[]
+    total: number
+    currentCategory: ToolsSectionId | null
 }
 
 export interface TierProps {
@@ -29,32 +37,41 @@ export interface TierProps {
     items: TierItemData[]
     index: number
     total: number
+    currentCategory: ToolsSectionId | null
 }
 
-export interface TierListProps {
-    data: TierProps[]
-    total: number
+export interface TierItemProps extends TierItemData {
+    currentCategory: ToolsSectionId | null
 }
 
-const maxRadius = 70
-const minRadius = 30
-const getRadius = (userCount: number, total: number) => {
-    const ratio = userCount / total
-    const range = maxRadius - minRadius
-    return minRadius + range * ratio
-}
-
-const TierListChart = ({ data, total }: TierListProps) => {
+export const TierListChart = ({ data, total, currentCategory }: TierListProps) => {
     return (
         <Table>
             {data.map((tier, index) => (
-                <Tier {...tier} key={tier.letter} index={index} total={total} />
+                <Tier
+                    {...tier}
+                    key={tier.letter}
+                    index={index}
+                    total={total}
+                    currentCategory={currentCategory}
+                />
             ))}
         </Table>
     )
 }
 
-const Tier = ({ letter, items, lowerBound, upperBound, index, total }: TierProps) => {
+const Table = styled.div`
+`
+
+const Tier = ({
+    letter,
+    items,
+    lowerBound,
+    upperBound,
+    index,
+    total,
+    currentCategory
+}: TierProps) => {
     const theme = useTheme()
     const color = theme.colors.tiers[index]
     return (
@@ -67,40 +84,18 @@ const Tier = ({ letter, items, lowerBound, upperBound, index, total }: TierProps
             <TierItems>
                 <TierItemsInner>
                     {items.map(item => (
-                        <TierItem {...item} key={item.id} total={total} />
+                        <TierItem
+                            {...item}
+                            key={item.id}
+                            total={total}
+                            currentCategory={currentCategory}
+                        />
                     ))}
                 </TierItemsInner>
             </TierItems>
         </Row>
     )
 }
-
-const TierItem = ({ id, entity, satisfactionRatio, userCount, color, total }: TierItemData) => {
-    const imageSrc = customImages[id]
-        ? `/images/logos/${id}.${customImages[id]}`
-        : `https://bestofjs.org/logos/${id}.svg`
-
-    return (
-        <Link color={color}>
-            <ColorWrapper color={color}>
-                <ImageWrapper>
-                    <Image
-                        // src={`/images/logos/${id}.svg`}
-                        width="100%"
-                        src={imageSrc}
-                        // onError={(event) => event.target.style.display = 'none'}
-                    />
-                </ImageWrapper>
-                <Ratio color={color} radius={getRadius(userCount, total)}>
-                    <RatioNumber>{satisfactionRatio}%</RatioNumber>
-                </Ratio>
-            </ColorWrapper>
-            <Name color={color}>{entity.name}</Name>
-        </Link>
-    )
-}
-
-const Table = styled.div``
 
 const Row = styled.div`
     display: grid;
@@ -133,11 +128,6 @@ const Bound = styled.div`
     z-index: 10;
     font-size: ${fontSize('smaller')};
 `
-// const UpperBound = styled(Bound)`
-//     top: 0;
-//     bottom: auto;
-//     transform: translateX(-50%) translateY(-50%);
-// `
 
 const LowerBound = styled(Bound)`
     bottom: 0;
@@ -145,25 +135,69 @@ const LowerBound = styled(Bound)`
     transform: translateX(-50%) translateY(50%);
 `
 
-const TierItems = styled.td`
+const TierItems = styled.div`
     background: #333;
     padding: ${spacing(0.5)};
 `
 
-const TierItemsInner = styled.td`
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: top;
-    gap: ${spacing(0.25)};
+const TierItemsInner = styled.div`
+    display: grid;
+    grid-template-columns: repeat( auto-fit, minmax(60px, 90px));
+    /* display: flex; */
+    /* flex-wrap: wrap; */
+    /* justify-content: top; */
+    /* gap: ${spacing(0.25)}; */
+    column-gap: ${spacing(0.25)};
+    row-gap: ${spacing(0.25)};
 `
+
+const TierItem = ({
+    id,
+    entity,
+    satisfactionRatio,
+    userCount,
+    color,
+    total,
+    categoryId,
+    currentCategory
+}: TierItemProps) => {
+    const imageSrc = customImages[id]
+        ? `/images/logos/${id}.${customImages[id]}`
+        : `https://bestofjs.org/logos/${id}.svg`
+
+    const isHighlighted = currentCategory ? currentCategory === categoryId : true
+
+    return (
+        <Link color={color} isHighlighted={isHighlighted}>
+            <ColorWrapper color={color}>
+                <ImageWrapper>
+                    <Image
+                        // src={`/images/logos/${id}.svg`}
+                        width="100%"
+                        src={imageSrc}
+                        // onError={(event) => event.target.style.display = 'none'}
+                    />
+                </ImageWrapper>
+                <Ratio color={color}>
+                    <RatioNumber>{satisfactionRatio}%</RatioNumber>
+                </Ratio>
+            </ColorWrapper>
+            <Name color={color}>{entity.name}</Name>
+        </Link>
+    )
+}
 
 const Link = styled.div`
     position: relative;
     display: grid;
     place-items: center;
     overflow: hidden;
-
-    width: ${maxRadius + 20}px;
+    /* width: 90px; */
+    opacity: ${({ isHighlighted }) => (isHighlighted ? 1 : 0.2)};
+    transition: opacity ease-out 300ms;
+    @media ${mq.small} {
+        /* width: 60px; */
+    }
 `
 
 const ColorWrapper = styled.div`
@@ -172,10 +206,17 @@ const ColorWrapper = styled.div`
     padding: ${spacing(0.5)};
     display: grid;
     place-items: center;
+    width: 100%;
+    aspect-ratio: 1 / 1;
 `
 
 const ImageWrapper = styled.div`
+width: 100%;
+aspect-ratio: 1 / 1;
     padding: 7px;
+    @media ${mq.small} {
+        padding: 1px;
+    }
 `
 
 const Image = styled.img`
@@ -185,7 +226,7 @@ const Image = styled.img`
 `
 
 const Name = styled.span`
-    background: ${({ color }) => color};
+    background: ${({ color }) => color}cc;
     text-align: center;
     font-weight: ${fontWeight('bold')};
     line-height: 1.2;
@@ -196,6 +237,7 @@ const Name = styled.span`
     overflow: hidden;
     white-space: nowrap;
 `
+
 const Ratio = styled.span`
     position: absolute;
     top: 0;
@@ -209,12 +251,20 @@ const Ratio = styled.span`
     width: 30px;
     padding: 2px 4px;
     border-radius: 0 0 0 3px;
+    @media ${mq.small} {
+        height: 24px;
+        width: 24px;
+        padding: 2px 2px;
+    }
 `
 
 const RatioNumber = styled.span`
     line-height: 0;
     text-align: center;
     font-size: ${fontSize('small')};
+    @media ${mq.small} {
+        font-size: ${fontSize('smaller')};
+    }
 `
 
 export default TierListChart
