@@ -30,7 +30,6 @@ export const CustomSankey = ({ nodes, links }: {
     const { years, linksByExperience } = useMemo(() => {
         const _years: SankeyYear[] = []
 
-        const _nodesByExperience: Partial<Record<ToolExperienceId, SankeyNodeDatum[]>> = {}
         const _linksByExperience: Partial<Record<ToolExperienceId, {
             experience: ToolExperienceId
             links: SankeyLinkDatum[]
@@ -45,11 +44,6 @@ export const CustomSankey = ({ nodes, links }: {
                 }
                 _years.push(year)
             }
-
-            if (!_nodesByExperience[node.choice]) {
-                _nodesByExperience[node.choice] = []
-            }
-            _nodesByExperience[node.choice]!.push(node)
         })
 
         links.forEach(link => {
@@ -67,7 +61,6 @@ export const CustomSankey = ({ nodes, links }: {
 
         return {
             years: _years,
-            nodesByChoice: _nodesByExperience,
             linksByExperience: Object.values(_linksByExperience),
         }
     }, [nodes, links])
