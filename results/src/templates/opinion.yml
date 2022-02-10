@@ -4,6 +4,7 @@ keysPath: "surveyApi.survey.${id}.keys"
 translateData: true
 blockNamespace: opinions
 enableCustomization: true
+hasSponsor: true
 query: >
     surveyApi {
         survey(survey: ${surveyType}) {

@@ -6,6 +6,7 @@ blockType: ToolsSectionStreamsBlock
 dataPath: "surveyApi.survey.${parentId}_streams"
 keysPath: "surveyApi.survey.${parentId}_streams.0.experience.keys"
 bucketKeysName: tools
+hasSponsor: true
 query: >
     surveyApi {
         survey(survey: ${surveyType}) {

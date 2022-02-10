@@ -8,6 +8,7 @@ showDescription: false
 blockNamespace: happiness
 chartNamespace: happiness
 enableCustomization: true
+hasSponsor: true
 query: >
     surveyApi {
         survey(survey: ${surveyType}) {

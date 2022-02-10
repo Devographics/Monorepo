@@ -5,6 +5,7 @@ defaultUnits: percentage_survey
 blockNamespace: user_info
 chartNamespace: ${id}
 enableCustomization: true
+hasSponsor: true
 query: >
     surveyApi {
         survey(survey: ${surveyType}) {

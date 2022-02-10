@@ -4,6 +4,7 @@ titleId: blocks.tools_experience_ranking
 descriptionId: blocks.tools_experience_ranking.description
 noteId: blocks.tools_experience_ranking.note
 dataPath: "surveyApi.survey.${parentId}_rankings"
+hasSponsor: true
 query: >
     surveyApi {
         survey(survey: ${surveyType}) {

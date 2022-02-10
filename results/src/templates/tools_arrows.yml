@@ -4,7 +4,7 @@ keysPath: "surveyApi.survey.${id}.0.experience.keys"
 titleId: blocks.tools_arrows
 descriptionId: blocks.tools_arrows.description
 noteId: blocks.tools_arrows.note
-
+hasSponsor: true
 query: >
     surveyApi {
         survey(survey: ${surveyType}) {

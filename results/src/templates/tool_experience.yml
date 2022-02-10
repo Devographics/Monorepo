@@ -8,6 +8,7 @@ entityPath: surveyApi.survey.${id}_experience.entity
 bucketKeysName: tools
 hidden: true
 enableCustomization: true
+hasSponsor: true
 query: >
     surveyApi {
         survey(survey: ${surveyType}) {

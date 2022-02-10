@@ -1,6 +1,7 @@
 blockType: AllSectionsToolsCardinalityByUserBlock
 dataPath: surveyApi.cardinality
 bucketKeysName: tools
+hasSponsor: true
 
 # this chart's query is quite repetitive, in order to be able
 # to generate it in a more dynamic way, we would have

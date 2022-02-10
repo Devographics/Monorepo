@@ -1,6 +1,7 @@
 blockType: BracketWinsBlock
 dataPath: "surveyApi.survey.${id}.year.facets.0"
 keysPath: "surveyApi.survey.${id}.keys"
+hasSponsor: true
 query: >
     surveyApi {
         survey(survey: ${surveyType}) {

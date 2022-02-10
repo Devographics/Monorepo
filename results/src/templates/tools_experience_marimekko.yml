@@ -6,6 +6,7 @@ noteId: blocks.tools_experience_marimekko.note
 dataPath: "surveyApi.survey.${parentId}_marimekko"
 keysPath: "surveyApi.survey.${parentId}_marimekko.0.experience.keys"
 bucketKeysName: tools
+hasSponsor: true
 query: >
     surveyApi {
         survey(survey: ${surveyType}) {

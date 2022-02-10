@@ -4,6 +4,7 @@ descriptionId: blocks.tools_quadrant.description
 noteId: blocks.tools_quadrant.note
 dataPath: "surveyApi.survey.${id}"
 keysPath: "surveyApi.survey.${id}.experience.keys"
+hasSponsor: true
 query: >
     surveyApi {
         survey(survey: ${surveyType}) {

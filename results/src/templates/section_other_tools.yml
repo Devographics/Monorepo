@@ -3,6 +3,7 @@ titleId: blocks.category_other_tools
 blockType: HorizontalBarBlock
 defaultUnits: count
 dataPath: "surveyApi.survey.${parentId}_others.year"
+hasSponsor: true
 defaultVariables:
     limit: 20
 query: >

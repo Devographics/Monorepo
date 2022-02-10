@@ -1,5 +1,6 @@
 blockType: BracketMatchupsBlock
 dataPath: "surveyApi.survey.${id}.year.facets.0"
+hasSponsor: true
 query: >
     surveyApi {
         survey(survey: ${surveyType}) {
