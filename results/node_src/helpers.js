@@ -4,6 +4,7 @@ const _ = require('lodash')
 const path = require('path')
 const fs = require('fs')
 const yaml = require('js-yaml')
+const {TwitterApi} = require('twitter-api-v2')
 
 const fsPromises = fs.promises
 /*
@@ -219,4 +220,28 @@ exports.runPageQuery = async ({ page, graphql }) => {
         }
     }
     return pageData
+}
+
+// Instanciate with desired auth type (here's Bearer v2 auth)
+const twitterClient = new TwitterApi(process.env.TWITTER_BEARER_TOKEN || '')
+
+// Tell typescript it's a readonly app
+const roClient = twitterClient.readOnly
+
+exports.getTwitterUser = async (twitterName) => {
+    try {
+        const data = await roClient.v2.userByUsername(twitterName, {
+            'user.fields': ['public_metrics', 'profile_image_url', 'description']
+        })
+        const user = data && data.data
+        return user
+    } catch (error) {
+        console.log('// getTwitterUser error')
+        // console.log(error)
+        console.log(error.rateLimit)
+        const resetTime = new Date(error.rateLimit.reset * 1000)
+        console.log(resetTime)
+        console.log(error.data)
+        return
+    }
 }

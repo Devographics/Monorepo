@@ -5,6 +5,7 @@ interface PageContextValue {
     locale?: Locale
     width?: number
     isCapturing?: boolean
+    chartSponsors?: any
 }
 
 const pageContext = createContext({})

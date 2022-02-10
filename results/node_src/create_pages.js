@@ -8,8 +8,10 @@ const {
     getLocalizedPath,
     getCleanLocales,
     createBlockPages,
-    runPageQuery
+    runPageQuery,
+    getTwitterUser
 } = require('./helpers.js')
+const { getSendOwlData } = require('./sendowl.js')
 const yaml = require('js-yaml')
 const fs = require('fs')
 const _ = require('lodash')
@@ -95,6 +97,8 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
         { mode: 'overwrite' }
     )
 
+    const chartSponsors = await getSendOwlData({ flat, config })
+
     for (const page of flat) {
         let pageData = {}
         const context = getPageContext(page)
@@ -118,6 +122,7 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
                     ...context,
                     locales: cleanLocales,
                     locale,
+                    chartSponsors,
                     pageData,
                     pageQuery // passed for debugging purposes
                 }
