@@ -36,6 +36,7 @@ export interface BlockDefinition {
     // booleans
     legendPosition?: 'bottom' | 'top'
     translateData?: boolean
+    hasSponsor?: boolean
 }
 
 export interface BlockVariantProps {

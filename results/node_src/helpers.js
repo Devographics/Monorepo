@@ -4,7 +4,7 @@ const _ = require('lodash')
 const path = require('path')
 const fs = require('fs')
 const yaml = require('js-yaml')
-const {TwitterApi} = require('twitter-api-v2')
+const { TwitterApi } = require('twitter-api-v2')
 
 const fsPromises = fs.promises
 /*
@@ -228,7 +228,7 @@ const twitterClient = new TwitterApi(process.env.TWITTER_BEARER_TOKEN || '')
 // Tell typescript it's a readonly app
 const roClient = twitterClient.readOnly
 
-exports.getTwitterUser = async (twitterName) => {
+exports.getTwitterUser = async twitterName => {
     try {
         const data = await roClient.v2.userByUsername(twitterName, {
             'user.fields': ['public_metrics', 'profile_image_url', 'description']
@@ -244,4 +244,10 @@ exports.getTwitterUser = async (twitterName) => {
         console.log(error.data)
         return
     }
+}
+
+exports.sleep = ms => {
+    return new Promise(resolve => {
+        setTimeout(resolve, ms)
+    })
 }

@@ -11,6 +11,7 @@ import SharePermalink from 'core/share/SharePermalink'
 import BlockCompletionIndicator from 'core/blocks/block/BlockCompletionIndicator'
 import { getBlockMeta, getBlockTitleKey, getBlockTitle } from 'core/helpers/blockHelpers'
 import BlockLinks from 'core/blocks/block/BlockLinks'
+import BlockSponsor from 'core/blocks/block/BlockSponsor'
 
 const BlockTitleContents = ({ block, context }) => {
     const { translate } = useI18n()
@@ -73,6 +74,7 @@ const BlockTitle = ({
                             <BlockCompletionIndicator completion={completion} />
                         )}
                     </BlockTitleText>
+                    <BlockSponsor block={block}/>
                     {/* <Popover trigger={<More />}>
                         <PopoverContents>
                             <BlockTitleActions {...properties} />
