@@ -111,6 +111,7 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
     contrast: '#0bdf67',
     border: '#FFF6E6',
     borderAlt: '#3E3036',
+    borderAlt2: '#5F4C54',
     heatmap: colors.tealLight,
     lineChartDefaultColor: '#59DF7F',
     lowVelocity: colors.purpleLighter,

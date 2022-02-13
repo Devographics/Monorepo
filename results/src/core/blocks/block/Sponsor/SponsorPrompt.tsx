@@ -2,13 +2,9 @@ import React from 'react'
 import styled from 'styled-components'
 import { mq, spacing, fontSize } from 'core/theme'
 import T from 'core/i18n/T'
-import { BlockDefinition } from 'core/types'
 import { usePageContext } from 'core/helpers/pageContext'
-import config from 'Config/config.yml'
-import Tooltip from 'core/components/Tooltip'
 import ModalTrigger from 'core/components/ModalTrigger'
-import { SponsorIcon, ChevronDownIcon } from 'core/icons'
-import SharePreview from 'core/share/SharePreview'
+import { SponsorIcon } from 'core/icons'
 import { getBlockMeta } from 'core/helpers/blockHelpers'
 import { useI18n } from 'core/i18n/i18nContext'
 import Button from 'core/components/Button'
@@ -19,63 +15,10 @@ import {
     AccordionContent
 } from 'core/components/Accordion'
 
-interface BlockSponsorProps {
-    block: BlockDefinition
-}
-
 const faqItems = ['public', 'refund', 'influence', 'feedback']
 
 const baseAmount = 10
 
-const BlockSponsor = ({ block }: BlockSponsorProps) => {
-    const context = usePageContext()
-    const { hasSponsor } = block
-    const { chartSponsors } = context
-    const { products, orders } = chartSponsors
-    const order = orders.find(o => o.chartId === `${config.surveySlug}___${block.id}`)
-    const product = products.find(p => p.chartId === `${config.surveySlug}___${block.id}`)
-    return hasSponsor ? (
-        <div>
-            {order ? (
-                <SponsorCredit sponsor={order} />
-            ) : (
-                <SponsorPrompt product={product} block={block} />
-            )}
-        </div>
-    ) : null
-}
-
-const SponsorCredit = ({ sponsor }) => {
-    const avatarUrl = sponsor?.twitterData?.profile_image_url
-    const username = sponsor?.twitterData?.username
-    const amount = sponsor?.amount
-    const link = `https://twitter/${username}`
-    return (
-        <div>
-            <Tooltip
-                trigger={
-                    <SponsorLink href={link}>
-                        <SponsorImage src={avatarUrl} alt={`@${username}`} />
-                    </SponsorLink>
-                }
-                contents={<T k="chart.sponsored_by" values={{ username, amount }} />}
-            />
-        </div>
-    )
-}
-
-const SponsorLink = styled.a`
-    border: 3px solid ${({ theme }) => theme.colors.border};
-    border-radius: 100%;
-    height: 24px;
-    width: 24px;
-`
-
-const SponsorImage = styled.img`
-    display: block;
-    height: 100%;
-    width: 100%;
-`
 const SponsorPrompt = ({ product, block }) => (
     <div>
         <ModalTrigger
@@ -90,16 +33,22 @@ const SponsorPrompt = ({ product, block }) => (
     </div>
 )
 
-const SponsorIconWrapper = styled.div`
+const SponsorIconWrapper = styled(Button)`
+    display: block;
     height: 24px;
     width: 24px;
     border-radius: 100%;
-    background: ${({ theme }) => theme.colors.backgroundAlt};
-    /* border: 2px solid ${({ theme }) => theme.colors.border}; */
+    /* background: ${({ theme }) => theme.colors.backgroundAlt}; */
+    /* border: 2px solid ${({ theme }) => theme.colors.borderAlt2}; */
     display: grid;
     place-items: center;
     /* padding: 4px; */
     margin-left: ${spacing(0.5)};
+    padding: 3px;
+    opacity: 0.4;
+    &:hover {
+        opacity: 1;
+    }
     cursor: pointer;
     span {
         display: block;
@@ -260,4 +209,4 @@ const FaqItem = ({ faqId }: { faqId: string }) => (
     </AccordionItem>
 )
 
-export default BlockSponsor
+export default SponsorPrompt
