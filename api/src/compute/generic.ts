@@ -255,11 +255,10 @@ export async function limitFacets(
     }: { facetLimit?: number; facetMinPercent?: number; facetMinCount?: number }
 ) {
     for (let year of resultsByYears) {
-        let facets = year.facets
         // if a minimum question percentage/count is specified, filter out
         // any facets that represent less than that
         if (facetMinPercent || facetMinCount) {
-            facets = facets.filter(f => {
+            year.facets = year.facets.filter(f => {
                 const abovePercent = facetMinPercent
                     ? f.completion.percentage_question > facetMinPercent
                     : true
@@ -269,7 +268,7 @@ export async function limitFacets(
         }
         // if a max number of facets is specified, limit list to that
         if (facetLimit) {
-            year.facets = take(facets, facetLimit)
+            year.facets = take(year.facets, facetLimit)
         }
     }
 }
