@@ -4,6 +4,7 @@ import { usePageContext } from 'core/helpers/pageContext'
 import { getPageSocialMeta, getPageMeta } from 'core/helpers/pageHelpers'
 import { useI18n } from 'core/i18n/i18nContext'
 // import { useTools } from 'core/helpers/toolsContext'
+import colors from 'core/theme/colors'
 
 const Head = () => {
     const context = usePageContext()
@@ -39,8 +40,8 @@ const Head = () => {
             <Helmet defaultTitle={meta.fullTitle}>
                 <html lang="en" />
                 <title>{meta.title}</title>
-                <link rel="shortcut icon" href="/images/favicon.png" />
-                <meta name="theme-color" content="#ED2E84" />
+                <link rel="shortcut icon" href="/images/favicon.svg" />
+                <meta name="theme-color" content={colors.link} />
                 <link rel="preconnect" href="https://fonts.googleapis.com" />
                 <link rel="preconnect" href="https://fonts.gstatic.com/" crossOrigin />
                 <link
