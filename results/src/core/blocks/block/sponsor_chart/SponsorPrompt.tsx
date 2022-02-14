@@ -179,13 +179,13 @@ const Image = styled.img`
     width: 100%;
 `
 
-const ChartId = styled.div`
+export const ChartId = styled.div`
     font-size: ${fontSize('small')};
     /* color: ${({ theme }) => theme.colors.textAlt}; */
     text-align: center;
 `
 
-const ChartIdCode = styled.code`
+export const ChartIdCode = styled.code`
     /* border: 1px solid ${({ theme }) => theme.colors.border}; */
     background: ${({ theme }) => theme.colors.backgroundInvertedAlt};
     padding: 3px 6px;

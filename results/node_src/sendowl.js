@@ -67,10 +67,12 @@ const getOrders = async products => {
     const orders = []
     const ordersData = await fetchUntilNoMore(`${sendOwlAPIUrl}/v1_3/orders/`, getSendOwlOptions())
     ordersData.forEach(({ order }) => {
-        const twitterName = _.get(
+        let twitterName = _.get(
             order,
             'order_custom_checkout_fields.0.order_custom_checkout_field.value'
         )
+        // get rid of any @ in the twitter name
+        twitterName = twitterName.replace('@', '')
         order.cart.cart_items.forEach(({ cart_item }) => {
             // cart items only have productId, not product name, so look up product name
             const product = products.find(p => p.productId === cart_item.product_id)

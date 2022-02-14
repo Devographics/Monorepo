@@ -20,6 +20,7 @@ import CreditsBlock from 'core/blocks/other/CreditsBlock'
 // import ReportBlock from 'core/report/ReportBlock'
 import HintBlock from 'core/blocks/other/HintBlock'
 import AboutBlock from 'core/blocks/other/AboutBlock'
+import SponsorFinishBlock from 'core/blocks/block/sponsor_chart/SponsorFinishBlock'
 
 // demographics
 import ParticipationByCountryBlock from 'core/blocks/demographics/ParticipationByCountryBlock'
@@ -84,6 +85,7 @@ const blockRegistry = {
     HintBlock,
     CreditsBlock,
     AboutBlock,
+    SponsorFinishBlock,
     // ReportBlock,
     
     // demographics
