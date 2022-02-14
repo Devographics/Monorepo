@@ -11,7 +11,7 @@ import SharePermalink from 'core/share/SharePermalink'
 import BlockCompletionIndicator from 'core/blocks/block/BlockCompletionIndicator'
 import { getBlockMeta, getBlockTitleKey, getBlockTitle } from 'core/helpers/blockHelpers'
 import BlockLinks from 'core/blocks/block/BlockLinks'
-import BlockSponsor from 'core/blocks/block/sponsor/BlockSponsor'
+import BlockSponsor from 'core/blocks/block/sponsor_chart/BlockSponsor'
 
 const BlockTitleContents = ({ block, context }) => {
     const { translate } = useI18n()
