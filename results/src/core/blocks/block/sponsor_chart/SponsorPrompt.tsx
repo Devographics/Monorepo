@@ -15,7 +15,7 @@ import {
     AccordionContent
 } from 'core/components/Accordion'
 
-const faqItems = ['public', 'refund', 'influence', 'feedback']
+const faqItems = ['usage', 'public', 'refund', 'influence', 'feedback']
 
 const baseAmount = 10
 

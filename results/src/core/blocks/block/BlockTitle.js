@@ -18,8 +18,7 @@ const BlockTitleContents = ({ block, context }) => {
     return <Title dangerouslySetInnerHTML={{ __html: getBlockTitle(block, context, translate) }} />
 }
 
-const Title = styled.span`
-`
+const Title = styled.span``
 
 const BlockTitle = ({
     isShareable,
@@ -74,7 +73,6 @@ const BlockTitle = ({
                             <BlockCompletionIndicator completion={completion} />
                         )}
                     </BlockTitleText>
-                    <BlockSponsor block={block}/>
                     {/* <Popover trigger={<More />}>
                         <PopoverContents>
                             <BlockTitleActions {...properties} />
@@ -85,6 +83,7 @@ const BlockTitle = ({
                         <BlockTitleActions {...properties} />
                     </BlockTitleActionsWrapper> */}
                     {entity && !isCapturing && <BlockLinks entity={entity} />}
+                    {!isCapturing && <BlockSponsor block={block} />}
                 </LeftPart>
                 {/* <BlockTitleSwitcherWrapper>
                     <BlockTitleSwitcher {...properties} />
