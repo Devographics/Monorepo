@@ -90,8 +90,8 @@ const getOrders = async products => {
     for (const order of orders) {
         if (order.twitterName) {
             const twitterData = await getTwitterUser(order.twitterName)
-            const { username, profile_image_url } = twitterData
-            order.twitterData = { username, profile_image_url }
+            const { username, profile_image_url, name } = twitterData
+            order.twitterData = { username, profile_image_url, name }
         }
     }
     logToFile('orders.json', ordersData, logOptions)

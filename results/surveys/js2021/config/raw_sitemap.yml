@@ -1025,7 +1025,7 @@
       blockType: ConclusionBlock
       wrapBlock: false
       disableExport: true
-      author: kilian_valkhof
+      author: shawn_wang
 
     - id: conclusion_newsletter
       blockType: NewsletterBlock

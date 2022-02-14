@@ -9,6 +9,9 @@ const Content = styled(Tooltip.Content)`
     font-size: ${fontSize('small')};
     padding: ${spacing(0.3)} ${spacing(0.6)};
     border: 1px solid ${props => props.theme.colors.border};
+    p:last-child{
+        margin: 0;
+    }
     // see https://www.joshwcomeau.com/css/designing-shadows/
     /* filter: drop-shadow(1px 2px 8px hsl(220deg 60% 50% / 0.3))
         drop-shadow(2px 4px 16px hsl(220deg 60% 50% / 0.3))

@@ -75,7 +75,7 @@ const SponsorModal = ({ product, block }) => {
                     <Description>
                         <T k="sponsor.sponsor_chart.description" md={true} html={true} />
                     </Description>
-                    <SponsorButton as="a" href={product.add_to_cart_url}>
+                    <SponsorButton as="a" href={product.add_to_cart_url} target="_blank">
                         <T k="sponsor.sponsor_this_chart" values={{ baseAmount }} />
                     </SponsorButton>
                 </Contents>

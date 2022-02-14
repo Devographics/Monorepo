@@ -7,6 +7,7 @@ import Tooltip from 'core/components/Tooltip'
 const SponsorCredit = ({ sponsor }) => {
     const avatarUrl = sponsor?.twitterData?.profile_image_url
     const username = sponsor?.twitterData?.username
+    const name = sponsor?.twitterData?.name
     const amount = sponsor?.amount
     const link = `https://twitter.com/${username}`
     return (
@@ -22,7 +23,9 @@ const SponsorCredit = ({ sponsor }) => {
                         </Username>
                     </SponsorLink>
                 }
-                contents={<T k="sponsor.sponsored_by" values={{ username, amount }} />}
+                contents={
+                    <T k="sponsor.sponsored_by" values={{ username, name, amount }} md={true} />
+                }
             />
         </div>
     )
@@ -39,6 +42,15 @@ const UsernameInner = styled.div`
     font-size: ${fontSize('small')};
 `
 
+const ImageWrapper = styled.div`
+    border: 2px solid ${({ theme }) => theme.colors.borderAlt2};
+    border-radius: 100%;
+    height: 30px;
+    width: 30px;
+    overflow: hidden;
+    margin: -2px -2px -2px -2px;
+`
+
 const SponsorLink = styled.a`
     margin-left: ${spacing(0.5)};
     border: 2px solid ${({ theme }) => theme.colors.borderAlt2};
@@ -48,18 +60,15 @@ const SponsorLink = styled.a`
     align-items: center;
     border-radius: 20px;
     height: 30px;
+    &:hover {
+        border-color: ${({ theme }) => theme.colors.link};
+    }
     &:hover ${Username} {
         max-width: 300px;
     }
-`
-
-const ImageWrapper = styled.div`
-    border: 2px solid ${({ theme }) => theme.colors.borderAlt2};
-    border-radius: 100%;
-    height: 30px;
-    width: 30px;
-    overflow: hidden;
-    margin: -2px -2px -2px -2px;
+    &:hover ${ImageWrapper} {
+        border-color: ${({ theme }) => theme.colors.link};
+    }
 `
 
 const Image = styled.img`
