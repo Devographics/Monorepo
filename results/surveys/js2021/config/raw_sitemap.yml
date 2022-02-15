@@ -141,6 +141,7 @@
     - id: source
       template: source
       blockType: HorizontalBarBlock
+      dataFunction: cleanUpSources
       variables:
         options: {limit: 20}
       
@@ -502,7 +503,7 @@
             fieldId: testing
 
         - id: testing_resources
-          items: [fm-sass]
+          items: [fm-testing-practices-principles]
           template: recommended_resources
 
         - id: jest

@@ -14,7 +14,7 @@
   role: repo_architecture
 - id: ben_szabo
   role: code_refactoring
-- id: una_kravets
-  role: survey_design
-- id: adam_argyle
-  role: survey_design
+# - id: una_kravets
+#   role: survey_design
+# - id: adam_argyle
+#   role: survey_design

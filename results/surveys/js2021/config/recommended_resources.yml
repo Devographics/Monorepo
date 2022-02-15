@@ -122,9 +122,11 @@
   teacher: Scott Moss
   company: Netflix
   
-# - name: 
-#   id: fm-
-#   description: 
-#   url: 
-#   image: 
+- name: JavaScript Testing Practices and Principles
+  id: fm-testing-practices-principles
+  description: Learn the principles and best practices for writing maintainable test applications to catch errors before your product reaches the end user!
+  url: https://frontendmasters.com/courses/testing-practices-principles/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2021
+  image: https://static.frontendmasters.com/assets/teachers/dodds/thumb@2x.webp
+  teacher: Kent C. Dodds
+  company: Remix
   

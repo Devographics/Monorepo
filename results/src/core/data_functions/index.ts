@@ -1,3 +1,4 @@
 import removePersonalBlogs from './removePersonalBlogs'
+import cleanUpSources from './cleanUpSources'
 
-export default { removePersonalBlogs }
+export default { removePersonalBlogs, cleanUpSources }

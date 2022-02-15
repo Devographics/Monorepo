@@ -11,7 +11,6 @@ import dataFunctions from 'core/data_functions/index'
 
 const BlockSwitcher = ({ pageData, block, index, ...props }) => {
     let blockData = block.dataPath && get(pageData, block.dataPath)
-
     if (block.dataFunction) {
         const dataFunction = dataFunctions[block.dataFunction]
         blockData = dataFunction(blockData)
