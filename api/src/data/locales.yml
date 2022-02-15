@@ -20,7 +20,7 @@
 
 - id: es-ES
   label: Español
-  translators: [timbergus, ezakto]
+  translators: [timbergus, ezakto, fransyrcc]
   repo: StateOfJS/locale-es-ES
 
 - id: fa-IR

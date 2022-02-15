@@ -62,13 +62,14 @@ export default {
             return { name: entity.homepage, url: entity.homepage }
         },
         caniuse: async (entity: Entity, args: any, { db }: RequestContext) => {
-            return { name: entity.caniuse, url: `https://caniuse.com/${entity.caniuse}` }
+            const { caniuse } = entity
+            return caniuse ? { name: caniuse, url: `https://caniuse.com/${caniuse}` } : null
         },
         npm: async (entity: Entity, args: any, { db }: RequestContext) => {
             if (!entity || !entity.npm) {
                 return
             }
-                        
+
             return { name: entity.npm, url: `https://www.npmjs.com/package/${entity.npm}` }
         }
     }
