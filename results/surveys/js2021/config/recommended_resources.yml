@@ -34,13 +34,13 @@
   
 - name: Be Productive with React.js, Today's Most Popular Framework
   id: fm-react
-  description: React makes it painless to create interactive UIs. Design simple views for each state in your application, and React will efficiently update and render just the right components when your data changes.
+  description: Much more than an intro, you’ll build with the latest features in React, including hooks, effects, context, and portals.
   url: https://frontendmasters.com/learn/react/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2021
   image: https://static.frontendmasters.com/assets/teachers/holt/thumb.webp
   
 - name: Learn Vue.js, An Easy to Pick Up and Powerful Framework
   id: fm-vue
-  description: Vue is easy to pick up and integrate with other libraries or existing projects, but can scale up to power sophisticated web applications.
+  description: Learn fundamental concepts in Vue, such as directives, methods, and computed watchers. You’ll learn Vue’s reactivity system and the new Composition API in Vue 3.
   url: https://frontendmasters.com/learn/vue/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2021
   image: https://static.frontendmasters.com/assets/teachers/drasner/thumb.webp
   
