@@ -7,6 +7,10 @@ const globalVariables = yaml.load(
     fs.readFileSync(`./surveys/${process.env.SURVEY}/config/variables.yml`, 'utf8')
 )
 
+const credits = yaml.load(
+    fs.readFileSync(`./surveys/${process.env.SURVEY}/config/credits.yml`, 'utf8')
+)
+
 const stringify = value => {
     const json = JSON.stringify(value)
     let unquoted = json.replace(/"([^"]+)":/g, '$1:')
@@ -52,6 +56,7 @@ const applyTemplate = (block, templateObject, parent) => {
         ...(parent ? { parentId: parent.id } : {}),
         ...(templateObject.defaultVariables || {}),
         ...globalVariables,
+        credits: credits.map(c => c.id),
         id: block.id,
         fieldId: block.id,
         ...(block.variables || {}),

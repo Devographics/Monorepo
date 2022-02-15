@@ -10,7 +10,6 @@ import { useLegends } from 'core/helpers/useBucketKeys'
 import { useTheme } from 'styled-components'
 import { useTheme as useNivoTheme } from '@nivo/core'
 import { useI18n } from 'core/i18n/i18nContext'
-import { useEntities } from 'core/entities/entitiesContext'
 import { isPercentage } from 'core/helpers/units'
 
 export interface HorizontalBarBlockProps extends BlockComponentProps {
@@ -138,11 +137,13 @@ const BracketWinsBlock = ({ block, data, keys }: HorizontalBarBlockProps) => {
 
 const BarTooltip = props => {
     const { id, units, indexValue, data, i18nNamespace, shouldTranslate } = props
-    const { getName } = useEntities()
+    const { entity } = data
     const { translate } = useI18n()
     const label = shouldTranslate
         ? translate(`options.${i18nNamespace}.${indexValue}`)
-        : getName(indexValue)
+        : entity
+        ? entity.name
+        : indexValue
     const nivoTheme = useNivoTheme()
 
     const units_ = id

@@ -104,8 +104,11 @@ export const initEntities = async () => {
   logToFile('entities.json', entities, { mode: 'overwrite' })
 }
 
-export const getEntities = async ({ type, tag, tags }: { type?: string; tag?: string, tags?: string[] }) => {
+export const getEntities = async ({ ids, type, tag, tags }: { ids?: string[], type?: string; tag?: string, tags?: string[] }) => {
   let entities = await loadOrGetEntities()
+  if (ids) {
+    entities = entities.filter(e => ids.includes(e.id))
+  }
   if (type) {
       entities = entities.filter(e => e.type === type)
   }

@@ -5,7 +5,7 @@ import T from 'core/i18n/T'
 import credits from 'Config/credits.yml'
 import SurveyCreditItem from 'core/blocks/other/CreditItem'
 
-const CreditsBlock = () => {
+const CreditsBlock = ({ data }) => {
     return (
         <Credits>
             <Heading>
@@ -13,7 +13,7 @@ const CreditsBlock = () => {
             </Heading>
             <CreditItems>
                 {credits.map(c => (
-                    <SurveyCreditItem key={c.id} {...c} />
+                    <SurveyCreditItem entities={data.entities} key={c.id} {...c} />
                 ))}
             </CreditItems>
         </Credits>

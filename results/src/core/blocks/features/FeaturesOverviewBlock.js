@@ -6,7 +6,6 @@ import sortBy from 'lodash/sortBy'
 import Block from 'core/blocks/block/BlockVariant'
 import { FeaturesCirclePackingChart } from 'core/charts/features/FeaturesCirclePackingChart'
 import { useI18n } from 'core/i18n/i18nContext'
-import { useEntities } from 'core/entities/entitiesContext'
 import ChartContainer from 'core/charts/ChartContainer'
 import variables from 'Config/variables.yml'
 import { getTableData } from 'core/helpers/datatables'
@@ -58,7 +57,7 @@ const addRanks = features => {
     return featuresWithRanks
 }
 
-const getChartData = (data, getName, translate) => {
+const getChartData = (data, translate) => {
     const categories = variables.featuresCategories
     const sectionIds = Object.keys(categories)
     const allNodes = data.map((feature, index) => getNodeData(feature, index))
@@ -84,12 +83,11 @@ const getChartData = (data, getName, translate) => {
 }
 
 const FeaturesOverviewBlock = ({ block, data, triggerId, controlledMode }) => {
-    const { getName } = useEntities()
     const { translate } = useI18n()
 
     const chartData = useMemo(
-        () => getChartData(data, getName, translate),
-        [data, getName, translate]
+        () => getChartData(data, translate),
+        [data, translate]
     )
     const categories = chartData.children
     const legends = useLegends(

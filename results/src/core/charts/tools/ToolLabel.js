@@ -1,5 +1,4 @@
 import React from 'react'
-import { useEntities } from 'core/entities/entitiesContext'
 import styled from 'styled-components'
 import { fontSize } from 'core/theme'
 import Button from 'core/components/Button'
@@ -9,10 +8,7 @@ import get from 'lodash/get'
 import ModalTrigger from 'core/components/ModalTrigger'
 import BlockWrapper from 'core/blocks/block/BlockWrapper'
 
-const ToolLabel = ({ id }) => {
-    const { getEntity } = useEntities()
-
-    const entity = getEntity(id)
+const ToolLabel = ({ id, entity }) => {
     if (!entity) {
         return <span title="Missing entity">{id}</span>
     }
@@ -23,7 +19,7 @@ const ToolLabel = ({ id }) => {
         <ModalTrigger
             trigger={
                 <span className="ToolLabel">
-                    <LabelLink as="a" href={homepage.url}>
+                    <LabelLink >
                         {name}
                     </LabelLink>
                 </span>

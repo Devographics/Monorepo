@@ -7,12 +7,9 @@ import ShareBlock from 'core/share/ShareBlock'
 import { useI18n } from 'core/i18n/i18nContext'
 import { mq, spacing, fontSize } from 'core/theme'
 import AwardIcon from './AwardIcon'
-import { useEntities } from 'core/entities/entitiesContext'
 import T from 'core/i18n/T'
 
-const AwardBlock = ({ block }) => {
-    const { getEntity } = useEntities()
-
+const AwardBlock = ({ block, data }) => {
     const { id, awards } = block
     const type = id
     const { translate } = useI18n()
@@ -23,7 +20,10 @@ const AwardBlock = ({ block }) => {
         setIsRevealed(true)
     }, [setIsRevealed])
 
-    const awardsWithEntities = awards.map((a) => ({ ...a, entity: getEntity(a.id) }))
+    const awardsWithEntities = awards.map(a => ({
+        ...a,
+        entity: data.entities.find(e => e.id === a.id)
+    }))
     const winner = awardsWithEntities[0]
     const runnerUps = awardsWithEntities.slice(1)
 
@@ -101,10 +101,10 @@ AwardBlock.propTypes = {
             PropTypes.shape({
                 id: PropTypes.string.isRequired,
                 name: PropTypes.string.isRequired,
-                value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).number,
+                value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).number
             })
-        ).isRequired,
-    }).isRequired,
+        ).isRequired
+    }).isRequired
 }
 
 const Container = styled.div`
@@ -142,7 +142,7 @@ const ElementContainer = styled.div`
 
 const getGlowColor = (color, alpha) => tinycolor(color).setAlpha(alpha).toRgbString()
 
-const glowSoft = (theme) => keyframes`
+const glowSoft = theme => keyframes`
     from {
         box-shadow: 0px 1px 1px 1px ${getGlowColor(theme.colors.link, 0.1)};
     }
@@ -154,7 +154,7 @@ const glowSoft = (theme) => keyframes`
     }
 `
 
-const glow = (theme) => keyframes`
+const glow = theme => keyframes`
     from {
         box-shadow: 0px 1px 2px 1px ${getGlowColor(theme.colors.link, 0.5)};
     }
@@ -166,7 +166,7 @@ const glow = (theme) => keyframes`
     }
 `
 
-const burst = (theme) => keyframes`
+const burst = theme => keyframes`
     from {
         box-shadow: 0px 0px 0px 0px ${getGlowColor(theme.colors.link, 0)};
     }

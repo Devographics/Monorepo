@@ -2,11 +2,9 @@ import React from 'react'
 import { spacing, mq, fontSize } from 'core/theme'
 import styled from 'styled-components'
 import T from 'core/i18n/T'
-import { useEntities } from 'core/entities/entitiesContext'
 
-const SurveyCreditItem = ({ id, role, labelId }) => {
-    const { getEntity } = useEntities()
-    const entity = getEntity(id)
+const SurveyCreditItem = ({ entities, id, role, labelId }) => {
+    const entity = entities.find(e => e.id === id)
     if (!entity) {
         return null
     }

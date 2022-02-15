@@ -1,3 +1,5 @@
+// should not be used because loading all entities is too heavy
+
 import React, { createContext, useContext, useCallback, useMemo } from 'react'
 import { StaticQuery, graphql } from 'gatsby'
 

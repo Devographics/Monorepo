@@ -32,9 +32,7 @@
       disableExport: true
       wrapBlock: false
     - id: survey_credits
-      blockType: CreditsBlock
-      disableExport: true
-      wrapBlock: false
+      template: credits
     - id: survey_newsletter
       blockType: NewsletterBlock
       disableExport: true
@@ -965,6 +963,19 @@
 
     - id: awards
       template: awards
+      variables:
+        entities: 
+          - nullish_coalescing
+          - optional_chaining
+          - private_fields
+          - esbuild
+          - tsc
+          - testing_library
+          - vite
+          - vitest
+          - elm
+          - stencil
+          - platzi
       awards:
         - id: feature_adoption_delta_award
           template: award

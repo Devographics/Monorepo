@@ -103,7 +103,7 @@ const Stream = ({ toolData, current, units, keys, legends }) => {
                 height={160}
             />
             <StreamTitle>
-                <ToolLabel id={toolData.id} />
+                <ToolLabel id={toolData.id} entity={toolData.entity} />
             </StreamTitle>
         </StreamItem>
     )

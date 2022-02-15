@@ -7,7 +7,7 @@ import { PageContextProvider } from 'core/helpers/pageContext'
 import { KeydownContextProvider } from 'core/helpers/keydownContext'
 import { mergePageContext } from 'core/helpers/pageHelpers'
 import { I18nContextProvider } from 'core/i18n/i18nContext'
-import { EntitiesContextProvider } from 'core/entities/entitiesContext'
+// import { EntitiesContextProvider } from 'core/entities/entitiesContext'
 // import PageMetaDebug from './pages/PageMetaDebug'
 import { GlobalStyle } from 'core/theme'
 import MainLayout from 'core/layout/MainLayout'
@@ -17,11 +17,11 @@ import theme from 'Theme/index.ts'
 const ThemedLayout = (props) => {
     return (
         <ThemeProvider theme={theme}>
-            <EntitiesContextProvider>
+            {/* <EntitiesContextProvider> */}
                 <GlobalStyle />
                 <Head />
                 {props.context.id === 'report' ? <ReportLayout {...props} />:<MainLayout {...props} />}
-            </EntitiesContextProvider>
+            {/* </EntitiesContextProvider> */}
         </ThemeProvider>
     )
 }

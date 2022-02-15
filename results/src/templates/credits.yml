@@ -1,8 +1,9 @@
-blockType: AwardsBlock
+blockType: CreditsBlock
+disableExport: true
 wrapBlock: false
 query: >
     surveyApi {
-        entities(ids: [${entities}]) {
+        entities(ids: [${credits}]) {
           id
           name
           homepage
