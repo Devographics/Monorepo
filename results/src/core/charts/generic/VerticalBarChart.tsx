@@ -125,6 +125,7 @@ const VerticalBarChart = ({
                 tooltip={barProps => (
                     <BarTooltip
                         units={units}
+                        bucketKeys={bucketKeys}
                         i18nNamespace={i18nNamespace}
                         shouldTranslate={translateData}
                         {...barProps}

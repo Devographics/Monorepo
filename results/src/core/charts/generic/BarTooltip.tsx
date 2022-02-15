@@ -4,20 +4,31 @@ import { useTheme } from '@nivo/core'
 import { useI18n } from 'core/i18n/i18nContext'
 import { isPercentage } from 'core/helpers/units'
 
+const getLabel = (props, translate) => {
+    const { id, bucketKeys, units, indexValue, data, i18nNamespace, shouldTranslate } = props
+    const bucketKey = bucketKeys && bucketKeys.find(b => b.id === indexValue)
+    const { entity } = data
+    if (bucketKey?.label) {
+        return bucketKey.label
+    } else if (shouldTranslate) {
+        return translate(`options.${i18nNamespace}.${indexValue}`)
+    } else if (entity) {
+        return entity.name
+    } else {
+        return indexValue
+    }
+}
+
 /**
  * This tooltip can be used for general bar charts:
  * - HorizontalBarChart
  * - VerticalBarChart
  */
 const BarTooltip = props => {
-    const { id, units, indexValue, data, i18nNamespace, shouldTranslate } = props
+    const { id, bucketKeys, units, indexValue, data, i18nNamespace, shouldTranslate } = props
     const { translate } = useI18n()
-    const { entity } = data
-    const label = shouldTranslate
-        ? translate(`options.${i18nNamespace}.${indexValue}`)
-        : entity
-        ? entity.name
-        : indexValue
+    const label = getLabel(props, translate)
+
     const nivoTheme = useTheme()
 
     const units_ = id
