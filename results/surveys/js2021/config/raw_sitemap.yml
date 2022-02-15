@@ -181,9 +181,9 @@
           units: count
           translateData: true
 
-    - id: user_info_resources
-      items: [fm-homepage]
-      template: recommended_resources
+    # - id: user_info_resources
+    #   items: [fm-homepage]
+    #   template: recommended_resources
 
 - id: features
   path: /features

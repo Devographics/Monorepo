@@ -45,21 +45,18 @@ const RecommendedResourcesBlock = ({ block, data }) => {
                                     className="Resource__image"
                                     isWide={resource.imageRatio === 'wide'}
                                 >
-                                    <ResourceImageInner>
-                                        <a
-                                            onClick={() => trackClick(id, resource, 'text')}
-                                            href={`${url}&utm_content=textlink`}
-                                            style={{
-                                                backgroundImage: `url(${resource.image})`
-                                            }}
-                                            title={resource.name}
-                                        >
-                                            {resource.name}
-                                        </a>
-                                    </ResourceImageInner>
-
+                                    <ImageLink
+                                        onClick={() => trackClick(id, resource, 'text')}
+                                        href={`${url}&utm_content=textlink`}
+                                        title={resource.name}
+                                    >
+                                        <ImageImage src={resource.image} alt={resource.name} />
+                                    </ImageLink>
                                     {resource.teacher && (
-                                        <ResourceTeacher>{resource.teacher}</ResourceTeacher>
+                                        <>
+                                            <ResourceTeacher>{resource.teacher}</ResourceTeacher>
+                                            <ResourceCompany>{resource.company}</ResourceCompany>
+                                        </>
                                     )}
                                 </ResourceImage>
                                 <ResourceContent className="Resource__content">
@@ -95,11 +92,13 @@ RecommendedResourcesBlock.propTypes = {
 }
 
 const List = styled.div`
-    margin-top: ${spacing(1)};
+    background: ${({ theme }) => theme.colors.backgroundAlt};
+    padding: ${spacing()};
+    /* margin-top: ${spacing(1)}; */
     @media ${mq.large} {
         display: grid;
         grid-template-columns: auto auto;
-        grid-gap: ${spacing(2)};
+        grid-gap: ${spacing(3)};
     }
 `
 
@@ -112,8 +111,9 @@ const Description = styled.div`
 `
 
 const Resource = styled.div`
-    margin-bottom: ${spacing()};
-
+    @media ${mq.small} {
+        margin-bottom: ${spacing()};
+    }
     @media ${mq.mediumLarge} {
         display: flex;
     }
@@ -127,47 +127,27 @@ const ResourceImage = styled.div`
     }
 
     @media ${mq.mediumLarge} {
-        width: 80px;
-        margin-right: ${spacing()};
+        width: 100px;
+        margin-right: ${spacing(1.5)};
         ${({ isWide }) =>
             isWide &&
             css`
                 width: 150px;
             `}
     }
-
-    a {
-        display: block;
-        width: 100%;
-
-        padding-bottom: 90%;
-        ${({ isWide }) =>
-            isWide &&
-            css`
-                padding-bottom: 50%;
-            `}
-
-        height: 0;
-        background-position: center center;
-        background-size: cover;
-        line-height: 0;
-        font-size: 0;
-        color: transparent;
-    }
-
-    img,
-    svg {
-        display: block;
-        width: 100%;
-        border: 3px solid ${({ theme }) => theme.colors.border};
-    }
 `
-const ResourceImageInner = styled.div`
-    background: ${({ theme }) => theme.colors.text};
-    position: relative;
-    z-index: 10;
-    border: 2px solid ${({ theme }) => theme.colors.border};
-    overflow: hidden;
+
+const ImageLink = styled.a`
+    display: block;
+    width: 100%;
+    border-radius: 100%;
+`
+const ImageImage = styled.img`
+    display: block;
+    width: 100%;
+    border: 3px solid ${({ theme }) => theme.colors.border};
+    aspect-ratio: 1/1;
+    border-radius: 100%;
 `
 
 const ResourceContent = styled.div`
@@ -185,6 +165,15 @@ const ResourceTeacher = styled.div`
     text-align: center;
     margin-top: ${spacing(0.5)};
     font-size: ${fontSize('small')};
+    font-weight: ${fontWeight('bold')};
+`
+
+const ResourceCompany = styled.div`
+    text-align: center;
+    margin-top: ${spacing(0)};
+    font-size: ${fontSize('smaller')};
+    text-transform: uppercase;
+    color: ${({ theme }) => theme.colors.textAlt};
 `
 
 export default RecommendedResourcesBlock
