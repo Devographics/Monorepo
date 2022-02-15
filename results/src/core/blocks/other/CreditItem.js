@@ -4,6 +4,9 @@ import styled from 'styled-components'
 import T from 'core/i18n/T'
 
 const CreditItem = ({ entity, role, labelId }) => {
+    if (!entity) {
+        return null
+    }
     const { name, twitterName, twitter } = entity
     return (
         <CreditItemDiv>
