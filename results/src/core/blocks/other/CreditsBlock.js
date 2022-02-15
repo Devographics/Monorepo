@@ -13,7 +13,7 @@ const CreditsBlock = ({ data: entities }) => {
             </Heading>
             <CreditItems>
                 {credits.map(c => (
-                    <CreditItem entities={entities} key={c.id} {...c} />
+                    <CreditItem entity={entities.find(e => e.id === c.id)} key={c.id} {...c} />
                 ))}
             </CreditItems>
         </Credits>
