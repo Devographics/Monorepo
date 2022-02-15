@@ -1,5 +1,6 @@
-blockType: AwardsBlock
+blockType: ConclusionBlock
 wrapBlock: false
+disableExport: true
 dataPath: surveyApi.entities
 query: >
     surveyApi {
@@ -9,6 +10,11 @@ query: >
             homepage{
                 name
                 url
+            }
+            twitterName
+            twitter {
+                avatarUrl
+                userName
             }
         }
     }

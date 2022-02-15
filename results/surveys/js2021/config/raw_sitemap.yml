@@ -1030,10 +1030,10 @@
   blocks:
 
     - id: conclusion
-      blockType: ConclusionBlock
-      wrapBlock: false
-      disableExport: true
-      author: shawn_wang
+      template: conclusion
+      variables:
+        author: shawn_wang
+        entities: '"shawn_wang"'
 
     - id: conclusion_newsletter
       blockType: NewsletterBlock

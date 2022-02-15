@@ -3,14 +3,10 @@ import { spacing, mq, fontSize } from 'core/theme'
 import styled from 'styled-components'
 import T from 'core/i18n/T'
 
-const SurveyCreditItem = ({ entities, id, role, labelId }) => {
-    const entity = entities.find(e => e.id === id)
-    if (!entity) {
-        return null
-    }
+const CreditItem = ({ entity, role, labelId }) => {
     const { name, twitterName, twitter } = entity
     return (
-        <CreditItem>
+        <CreditItemDiv>
             <Avatar href={`https://twitter.com/${twitterName}`}>
                 <img src={twitter?.avatarUrl} alt={name} />
             </Avatar>
@@ -23,13 +19,13 @@ const SurveyCreditItem = ({ entities, id, role, labelId }) => {
                     <T k={labelId ?? `credits.${role}`} />
                 </Role>
             </Details>
-        </CreditItem>
+        </CreditItemDiv>
     )
 }
 
-export default SurveyCreditItem
+export default CreditItem
 
-const CreditItem = styled.div`
+const CreditItemDiv = styled.div`
     display: flex;
 `
 

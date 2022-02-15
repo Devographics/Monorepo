@@ -13,7 +13,7 @@ const trackClick = (id, resource, label) => {
     ReactGA.event({
         category: 'Sponsor Clicks',
         action: `${id}: ${resource.name}`,
-        label,
+        label
     })
 }
 
@@ -24,7 +24,7 @@ const RecommendedResourcesBlock = ({ block, data }) => {
         return null
     }
     const { id } = block
-    const sectionResources = resources.filter((r) => sponsors.includes(r.id))
+    const sectionResources = resources.filter(r => sponsors.includes(r.id))
 
     if (!sectionResources.length) {
         return null
@@ -34,7 +34,7 @@ const RecommendedResourcesBlock = ({ block, data }) => {
         <div className="Block">
             <div className="resources">
                 <List className="Resources__list">
-                    {sectionResources.map((resource) => {
+                    {sectionResources.map(resource => {
                         const url = resource.url.includes('utm_source')
                             ? resource.url
                             : `${resource.url}?utm_source=${config.siteContext}&utm_medium=sponsor&utm_campaign=${id}`
@@ -50,7 +50,7 @@ const RecommendedResourcesBlock = ({ block, data }) => {
                                             onClick={() => trackClick(id, resource, 'text')}
                                             href={`${url}&utm_content=textlink`}
                                             style={{
-                                                backgroundImage: `url(${resource.image})`,
+                                                backgroundImage: `url(${resource.image})`
                                             }}
                                             title={resource.name}
                                         >
@@ -91,11 +91,11 @@ const RecommendedResourcesBlock = ({ block, data }) => {
 }
 
 RecommendedResourcesBlock.propTypes = {
-    section: PropTypes.string,
+    section: PropTypes.string
 }
 
 const List = styled.div`
-  margin-top: ${spacing(1)};
+    margin-top: ${spacing(1)};
     @media ${mq.large} {
         display: grid;
         grid-template-columns: auto auto;
@@ -127,7 +127,7 @@ const ResourceImage = styled.div`
     }
 
     @media ${mq.mediumLarge} {
-        width: 130px;
+        width: 80px;
         margin-right: ${spacing()};
         ${({ isWide }) =>
             isWide &&
@@ -159,14 +159,15 @@ const ResourceImage = styled.div`
     svg {
         display: block;
         width: 100%;
-        border: 3px solid white;
+        border: 3px solid ${({ theme }) => theme.colors.border};
     }
 `
 const ResourceImageInner = styled.div`
     background: ${({ theme }) => theme.colors.text};
     position: relative;
     z-index: 10;
-    border: 2px solid ${({ theme }) => theme.colors.text};
+    border: 2px solid ${({ theme }) => theme.colors.border};
+    overflow: hidden;
 `
 
 const ResourceContent = styled.div`
