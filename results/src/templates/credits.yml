@@ -1,13 +1,20 @@
 blockType: CreditsBlock
 disableExport: true
 wrapBlock: false
+dataPath: "surveyApi.entities"
 query: >
-    surveyApi {
-        entities(ids: [${credits}]) {
+  surveyApi {
+      entities(ids: [${credits}]) {
           id
           name
-          homepage
-          github
-          npm
-        }
-    }
+          homepage{
+              name
+              url
+          }
+          twitterName
+          twitter {
+              avatarUrl
+              userName
+          }
+      }
+  }

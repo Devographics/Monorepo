@@ -3,9 +3,9 @@ import { spacing, mq } from 'core/theme'
 import styled from 'styled-components'
 import T from 'core/i18n/T'
 import credits from 'Config/credits.yml'
-import SurveyCreditItem from 'core/blocks/other/CreditItem'
+import CreditItem from 'core/blocks/other/CreditItem'
 
-const CreditsBlock = ({ data }) => {
+const CreditsBlock = ({ data: entities }) => {
     return (
         <Credits>
             <Heading>
@@ -13,7 +13,7 @@ const CreditsBlock = ({ data }) => {
             </Heading>
             <CreditItems>
                 {credits.map(c => (
-                    <SurveyCreditItem entities={data.entities} key={c.id} {...c} />
+                    <CreditItem entities={entities} key={c.id} {...c} />
                 ))}
             </CreditItems>
         </Credits>

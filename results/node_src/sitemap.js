@@ -56,7 +56,7 @@ const applyTemplate = (block, templateObject, parent) => {
         ...(parent ? { parentId: parent.id } : {}),
         ...(templateObject.defaultVariables || {}),
         ...globalVariables,
-        credits: credits.map(c => c.id),
+        credits: credits.map(c => `"${c.id}"`),
         id: block.id,
         fieldId: block.id,
         ...(block.variables || {}),

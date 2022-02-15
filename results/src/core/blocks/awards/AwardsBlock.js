@@ -3,10 +3,10 @@ import styled, { useTheme, keyframes } from 'styled-components'
 import { mq, spacing, fontSize } from 'core/theme'
 import AwardBlock from 'core/blocks/awards/AwardBlock'
 
-const AwardsBlock = ({ block }) => (
+const AwardsBlock = ({ block, data: entities }) => (
     <Wrapper>
         {block.awards.map(award => (
-            <AwardBlock key={award.id} block={award} />
+            <AwardBlock key={award.id} block={award} entities={entities} />
         ))}
     </Wrapper>
 )

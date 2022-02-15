@@ -99,46 +99,58 @@ export const loadEntities = async () => {
 }
 
 export const initEntities = async () => {
-  console.log('// initializing locales…')
-  const entities = await loadOrGetEntities()
-  logToFile('entities.json', entities, { mode: 'overwrite' })
+    console.log('// initializing locales…')
+    const entities = await loadOrGetEntities()
+    logToFile('entities.json', entities, { mode: 'overwrite' })
 }
 
-export const getEntities = async ({ ids, type, tag, tags }: { ids?: string[], type?: string; tag?: string, tags?: string[] }) => {
-  let entities = await loadOrGetEntities()
-  if (ids) {
-    entities = entities.filter(e => ids.includes(e.id))
-  }
-  if (type) {
-      entities = entities.filter(e => e.type === type)
-  }
-  if (tag) {
-      entities = entities.filter(e => e.tags && e.tags.includes(tag))
-  }
-  if (tags) {
-      entities = entities.filter(e => tags.every(t => e.tags && e.tags.includes(t)))
-  }
-  return entities
+export const getEntities = async ({
+    ids,
+    type,
+    tag,
+    tags
+}: {
+    ids?: string[]
+    type?: string
+    tag?: string
+    tags?: string[]
+}) => {
+    let entities = await loadOrGetEntities()
+    if (ids) {
+        entities = entities.filter(e => ids.includes(e.id))
+    }
+    if (type) {
+        entities = entities.filter(e => e.type === type)
+    }
+    if (tag) {
+        entities = entities.filter(e => e.tags && e.tags.includes(tag))
+    }
+    if (tags) {
+        entities = entities.filter(e => tags.every(t => e.tags && e.tags.includes(t)))
+    }
+    return entities
 }
 
 // Look up entities by id, name, or aliases (case-insensitive)
 export const getEntity = async ({ id }: { id: string | number }) => {
-  const entities = await loadOrGetEntities()
+    const entities = await loadOrGetEntities()
 
-  if (!id || typeof id !== 'string') {
-      return
-  }
+    if (!id || typeof id !== 'string') {
+        return
+    }
 
-  const lowerCaseId = id.toLowerCase()
-  // some entities are only for normalization and should not be made available through API
-  const entity = entities.filter(e => !e.normalizationOnly).find(e => {
-      return (
-          (e.id && e.id.toLowerCase() === lowerCaseId) ||
-          (e.id && e.id.toLowerCase().replace(/\-/g, '_') === lowerCaseId) ||
-          (e.name && e.name.toLowerCase() === lowerCaseId) ||
-          (e.aliases && e.aliases.find((a: string) => a.toLowerCase() === lowerCaseId))
-      )
-  })
+    const lowerCaseId = id.toLowerCase()
+    // some entities are only for normalization and should not be made available through API
+    const entity = entities
+        .filter(e => !e.normalizationOnly)
+        .find(e => {
+            return (
+                (e.id && e.id.toLowerCase() === lowerCaseId) ||
+                (e.id && e.id.toLowerCase().replace(/\-/g, '_') === lowerCaseId) ||
+                (e.name && e.name.toLowerCase() === lowerCaseId) ||
+                (e.aliases && e.aliases.find((a: string) => a.toLowerCase() === lowerCaseId))
+            )
+        })
 
-  return entity
+    return entity
 }

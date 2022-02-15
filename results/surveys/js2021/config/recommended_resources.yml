@@ -1,104 +1,100 @@
 # Front End Masters
 
-- name: Frontend Masters
-  id: fm-homepage
-  description: Advance Your Skills with In-Depth, Modern Front-End Engineering Courses
-  url: https://frontendmasters.com/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2021
-  image: https://static.frontendmasters.com/assets/brand/logos/m-black.jpg
 
-- name: Learn CSS, from Laying Out Websites to Performant Animations
-  id: fm-learncss
+- name: Write Professional, Modern JavaScript
+  id: fm-javascript
+  description: From JavaScript foundations, all the way to Hardcore Functional JavaScript, find out how far you can go with your JavaScript abilities!
+  url: https://frontendmasters.com/learn/javascript/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2021
+  image: https://static.frontendmasters.com/assets/teachers/gandolfo/thumb.webp
+
+- name: 'JavaScript: The New Hard Parts'
+  id: fm-javascript-new-hard-parts
   description: >
-    CSS is rich in capabilities and is more than simply laying out pages! Replace costly JavaScript with CSS.
-  url: https://frontendmasters.com/learn/css/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2021
-  image: https://static.frontendmasters.com/assets/brand/icons/icon-paths.jpg
-
-- name: CSS Grid & Flexbox for Responsive Layouts, v2
-  id: fm-gridsflexbox
-  description: >
-    Learn the essential CSS layout techniques for building responsive, beautiful web applications. 
-    You'll get hands-on practice using CSS Grid for two-dimensional, 
-    grid-based layouts and Flexbox for styling one-directional flow. 
-  url: https://frontendmasters.com/courses/css-grid-flexbox-v2/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2021
-  image: https://static.frontendmasters.com/assets/teachers/kramer/thumb.png
-
-- name: SVG Essentials & Animation, v2
-  id: fm-svg
-  description: >
-    Learn to build and optimize SVG – the scalable graphics format for 
-    the web that can achieve impressively small filesizes for fast-loading websites. I
-  url: https://frontendmasters.com/courses/svg-essentials-animation/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2021
-  image: https://static.frontendmasters.com/assets/teachers/drasner/thumb@2x.jpg
-
-- name: Responsive Web Typography v2
-  id: fm-typography
-  description: >
-    In this course, Jason Pamental demonstrates 
-    type fundamentals to create better user experiences on mobile and desktop.
-  url: https://frontendmasters.com/courses/responsive-typography-v2/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2021
-  image: https://static.frontendmasters.com/assets/teachers/pamental/thumb@2x.jpg
-
-- name: Sass Fundamentals
-  id: fm-sass
-  description: >
-    Leverage the Sass preprocessing to empower your CSS practices and 
-    master styling complex applications. 
-  url: https://frontendmasters.com/courses/sass/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2021
-  image: https://static.frontendmasters.com/assets/teachers/north/thumb@2x.jpg
-
-- name: Scalable Modular Architecture for CSS (SMACSS)
-  id: fm-smacss
-  description: > 
-    CSS architecture expert Jonathan Snook shares his experience building large sites 
-    with large teams to make your CSS more maintainable using his SMACSS methodology.
-  url: https://frontendmasters.com/courses/smacss/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2021
-  image: https://static.frontendmasters.com/assets/teachers/snook/thumb@2x.jpg
-
-- name: Intermediate React, v2
+    In this course, you will develop an intuitive understanding of the new features of JavaScript in ES6+: iterators, generators, promises, and async/await. 
+  url: https://frontendmasters.com/courses/javascript-new-hard-parts/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2021
+  image: https://static.frontendmasters.com/assets/teachers/sentance/thumb@2x.webp
+  
+- name: Exploring Service Workers
+  id: fm-service-workers
+  description: PWAs represent the dream of web apps getting all the same capabilities, and performance, of native apps. 
+  url: https://frontendmasters.com/courses/service-workers/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2021
+  image: https://static.frontendmasters.com/assets/teachers/simpson/thumb@2x.webp
+  
+- name: Web Assembly (Wasm)
+  id: fm-web-assembly
+  description: In this course, you'll learn foundational, low-level programming such as binary, hexadecimal, and all about how memory works within computers. 
+  url: https://frontendmasters.com/courses/web-assembly/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2021
+  image: https://static.frontendmasters.com/assets/teachers/young/thumb@2x.webp
+  
+- name: Build Progressive Web Apps (PWAs) from Scratch
+  id: fm-pwas
+  description: Wouldn't it be fantastic if you could build apps that didn't always rely on an internet connection? Modern web browsers now enable you to create offline-capable Progressive Web Apps (PWAs)! 
+  url: https://frontendmasters.com/courses/pwas/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2021
+  image: https://static.frontendmasters.com/assets/teachers/firtman/thumb@2x.webp
+  
+- name: Be Productive with React.js, Today's Most Popular Framework
   id: fm-react
-  description: >
-    You’ll learn hooks in-depth, CSS-in-JS with emotion, 
-    increase performance with code splitting and server-side rendering, and more. 
-  url: https://frontendmasters.com/courses/intermediate-react-v2/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2021
-  image: https://static.frontendmasters.com/assets/teachers/holt/thumb@2x.jpg
-
-- name: Advanced CSS Layouts
-  id: fm-layouts
-  description: >
-    For the first time in the history of the web, 
-    CSS is graced with tools for laying out web pages without hacks. 
-  url: https://frontendmasters.com/courses/advanced-css-layouts/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2021
-  image: https://static.frontendmasters.com/assets/teachers/kramer/thumb@2x.jpg
-
-- name: Design Systems with React & Storybook
-  id: fm-storybook
-  description: >
-    Design systems increase the speed of development across teams, as well as make your applications look and feel consistent.
-  url: https://frontendmasters.com/courses/design-systems/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2021
-  image: https://static.frontendmasters.com/assets/teachers/bostian/thumb@2x.jpg
-
-- name: Website Accessibility, v2
-  id: fm-accessibility
-  description: >
-    Learn how to make your website applications accessible to a wider audience.
-     Use keyboard shortcuts and navigation to help both power users and those with disabilities.
-  url: https://frontendmasters.com/courses/accessibility-v2/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2021
-  image: https://static.frontendmasters.com/assets/teachers/kuperman/thumb@2x.webp
-
-- name: Dynamic CSS with Custom Properties (aka CSS Variables)
-  id: fm-cssvariables
-  url: https://frontendmasters.com/courses/css-variables/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2021
-  description: >
-    Modern browsers ship with CSS Custom Properties, also known as “CSS variables”, 
-    a superpower that enables us to create reusable components without 
-    any JavaScript dependencies needed – using only vanilla CSS! 
-  image: https://static.frontendmasters.com/assets/teachers/verou/thumb@2x.webp
-
-- name: Intermediate React, v3
-  id: fm-reactv3
-  url: https://frontendmasters.com/courses/intermediate-react-v3/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2021
-  image: https://static.frontendmasters.com/assets/teachers/holt/thumb@2x.webp
-  description: >
-    Learn to build scalable React applications using the latest tools and 
-    techniques available in the React ecosystem! This course is modular,
-     where you can pick and choose various react ecosystems you want to learn.
+  description: React makes it painless to create interactive UIs. Design simple views for each state in your application, and React will efficiently update and render just the right components when your data changes.
+  url: https://frontendmasters.com/learn/react/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2021
+  image: https://static.frontendmasters.com/assets/teachers/holt/thumb.webp
+  
+- name: Learn Vue.js, An Easy to Pick Up and Powerful Framework
+  id: fm-vue
+  description: Vue is easy to pick up and integrate with other libraries or existing projects, but can scale up to power sophisticated web applications.
+  url: https://frontendmasters.com/learn/vue/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2021
+  image: https://static.frontendmasters.com/assets/teachers/drasner/thumb.webp
+  
+- name: API Design in Node.js, v3
+  id: fm-api-design-nodejs-v3
+  description: Design and build APIs in Node.js from the ground up! You'll plan your routes and model data for real-world applications. 
+  url: https://frontendmasters.com/courses/api-design-nodejs-v3/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2021
+  image: https://static.frontendmasters.com/assets/teachers/moss/thumb@2x.webp
+  
+- name: Introduction to Next.js
+  id: fm-next-js
+  description: In this course, you'll learn server-side rendering, static site generation, data fetching, build API endpoints, creating pages with the file system, add CSS modules inside of Next.js, and much more!
+  url: https://frontendmasters.com/courses/next-js/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2021
+  image: https://static.frontendmasters.com/assets/teachers/moss/thumb@2x.webp
+  
+- name: React Native, v2
+  id: fm-react-native-v2
+  description: Leverage your JavaScript and React skills for mobile iOS and Android platforms using React Native.
+  url: https://frontendmasters.com/courses/react-native-v2/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2021
+  image: https://static.frontendmasters.com/assets/teachers/kraman/thumb@2x.webp
+  
+- name: Intermediate React Native
+  id: fm-intermediate-react-native
+  description: Go beyond the basics of React Native. You’ll learn how to persist data across app launches, various ways of handling images and SVG, adding app icons and splash screens, animations, and gestures. 
+  url: https://frontendmasters.com/courses/intermediate-react-native/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2021
+  image: https://static.frontendmasters.com/assets/teachers/kraman/thumb@2x.webp
+  
+- name: Learn Webpack, the most popular and flexible build tool for JavaScript
+  id: fm-webpack
+  description: Webpack enables you to integrate your favorite tools and take control of how you deliver your JavaScript, CSS, and more!​
+  url: https://frontendmasters.com/learn/webpack/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2021
+  image: https://static.frontendmasters.com/assets/teachers/larkin/thumb.webp
+  
+- name: JavaScript and TypeScript Monorepos
+  id: fm-monorepos
+  description: You'll get hands-on experience with best-in-class tools designed to keep the workflows for even complex projects simple!
+  url: https://frontendmasters.com/courses/monorepos/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2021
+  image: https://static.frontendmasters.com/assets/teachers/north/thumb@2x.webp
+  
+- name: Add Types to Your Web and Node.js Apps with TypeScript
+  id: fm-typescript
+  description: Write robust JavaScript with a superior developer experience for your teams with Typescript.
+  url: https://frontendmasters.com/learn/typescript/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2021
+  image: https://static.frontendmasters.com/assets/teachers/north/thumb.webp
+  
+- name: Build Web APIs and Applications with Node.js
+  id: fm-node-js
+  description: Node.js has emerged as one of the main server-side language choices that powers the web!
+  url: https://frontendmasters.com/learn/node-js/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2021
+  image: https://static.frontendmasters.com/assets/teachers/moss/thumb.webp
+  
+# - name: 
+#   id: fm-
+#   description: 
+#   url: 
+#   image: 
+  

@@ -9,7 +9,7 @@ import { mq, spacing, fontSize } from 'core/theme'
 import AwardIcon from './AwardIcon'
 import T from 'core/i18n/T'
 
-const AwardBlock = ({ block, data }) => {
+const AwardBlock = ({ block, entities }) => {
     const { id, awards } = block
     const type = id
     const { translate } = useI18n()
@@ -22,7 +22,7 @@ const AwardBlock = ({ block, data }) => {
 
     const awardsWithEntities = awards.map(a => ({
         ...a,
-        entity: data.entities.find(e => e.id === a.id)
+        entity: entities.find(e => e.id === a.id)
     }))
     const winner = awardsWithEntities[0]
     const runnerUps = awardsWithEntities.slice(1)

@@ -1,12 +1,14 @@
 blockType: AwardsBlock
 wrapBlock: false
+dataPath: "surveyApi.entities"
 query: >
     surveyApi {
         entities(ids: [${entities}]) {
-          id
-          name
-          homepage
-          github
-          npm
+            id
+            name
+            homepage{
+                name
+                url
+            }
         }
     }

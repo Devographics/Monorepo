@@ -199,7 +199,7 @@
       blockType: KnowledgeScoreBlock
 
     - id: features_resources
-      items: [fm-learncss]
+      items: [fm-javascript]
       template: recommended_resources
 
   children:
@@ -258,7 +258,7 @@
           year: 2021
 
         - id: language_resources
-          items: [fm-gridsflexbox]
+          items: [fm-javascript-new-hard-parts]
           template: recommended_resources
 
     - id: browser_apis
@@ -319,7 +319,7 @@
           year: 2021
 
         - id: browser_apis_resources
-          items: [fm-svg]
+          items: [fm-service-workers]
           template: recommended_resources
 
     - id: other_features
@@ -337,6 +337,10 @@
 
       - id: wasm
         template: feature_experience
+
+      - id: browser_apis_resources
+        items: [fm-web-assembly, fm-pwas]
+        template: recommended_resources
 
 - id: libraries
   path: /libraries
@@ -383,7 +387,7 @@
             fieldId: front_end_frameworks
 
         - id: front_end_frameworks_resources
-          items: [fm-sass]
+          items: [fm-react, fm-vue]
           template: recommended_resources
 
         - id: react
@@ -434,7 +438,7 @@
             fieldId: back_end_frameworks
 
         - id: back_end_frameworks_resources
-          items: [fm-sass]
+          items: [fm-api-design-nodejs-v3, fm-next-js]
           template: recommended_resources
 
         - id: express
@@ -551,7 +555,7 @@
             fieldId: mobile_desktop
 
         - id: mobile_desktop_resources
-          items: [fm-sass]
+          items: [fm-react-native-v2, fm-intermediate-react-native]
           template: recommended_resources
 
         - id: electron
@@ -602,7 +606,7 @@
             fieldId: build_tools
 
         - id: build_tools_resources
-          items: [fm-sass]
+          items: [fm-webpack]
           template: recommended_resources
 
         - id: webpack
@@ -658,7 +662,7 @@
             fieldId: monorepo_tools
 
         - id: monorepo_tools_resources
-          items: [fm-sass]
+          items: [fm-monorepos]
           template: recommended_resources
 
         - id: rush
@@ -795,7 +799,7 @@
           template: bracket_matchups
 
     - id: tools_others_resources
-      items: [fm-storybook]
+      items: [fm-typescript, fm-node-js]
       template: recommended_resources
 
 - id: resources
@@ -956,6 +960,10 @@
       variables:
         fieldId: state_of_js
 
+    - id: tools_others_resources
+      items: [fm-javascript]
+      template: recommended_resources
+
 - id: awards
   path: /awards
   blocks:
@@ -964,18 +972,7 @@
     - id: awards
       template: awards
       variables:
-        entities: 
-          - nullish_coalescing
-          - optional_chaining
-          - private_fields
-          - esbuild
-          - tsc
-          - testing_library
-          - vite
-          - vitest
-          - elm
-          - stencil
-          - platzi
+        entities: '"nullish_coalescing","optional_chaining","private_fields","esbuild","tsc","testing_library","vite","vitest","elm","stencil","platzi"'
       awards:
         - id: feature_adoption_delta_award
           template: award

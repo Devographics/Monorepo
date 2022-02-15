@@ -1,7 +1,7 @@
 type Twitter {
     userName: String
     avatarUrl: String
-    id: Int
+    id: ID
     description: String
     publicMetrics: TwittterPublicMetrics
 }
