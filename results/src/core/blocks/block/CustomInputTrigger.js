@@ -7,10 +7,12 @@ import { mq, spacing, fontSize } from 'core/theme'
 import get from 'lodash/get'
 import { getGraphQLQuery, AutoSelectText, TextArea, Message } from 'core/blocks/block/BlockData'
 import { EditIcon } from 'core/icons'
+import isEmpty from 'lodash/isEmpty'
 
 const parseData = (block, contents) => {
     const apiDataPath = block.dataPath.replace('surveyApi', 'data')
     const customData = JSON.parse(contents)
+    // const customData = {foo: 'bar'}
     const blockData = get(customData, apiDataPath) ?? customData
     return blockData
 }
@@ -19,12 +21,17 @@ const InputData = ({ block, closeModal }) => {
     const textData = block.customData && JSON.stringify(block.customData, '', 2)
 
     const [contents, setContents] = useState(textData)
+    const [error, setError] = useState()
 
     const handleChange = event => {
         setContents(event.target.value)
     }
 
     const handleClick = event => {
+        if (isEmpty(contents)) {
+            setError('custom_data.empty_contents')
+            return
+        }
         const data = parseData(block, contents)
         block.setCustomData(data)
         closeModal()
@@ -52,6 +59,11 @@ const InputData = ({ block, closeModal }) => {
             <Button onClick={handleClick}>
                 <T k="custom_data.customize" />
             </Button>
+            {error && (
+                <Error>
+                    <T k={error} />
+                </Error>
+            )}
         </div>
     )
 }
@@ -84,11 +96,10 @@ const TextFieldContainer = styled.div`
 const TextFieldHeading = styled.h3``
 
 const DataTextArea = styled(TextArea)`
-flex: 1;
+    flex: 1;
 `
 const GraphQLTextArea = styled(AutoSelectText)`
-
-flex: 1;
+    flex: 1;
 `
 
 const TabsIcon = styled.div`
@@ -106,4 +117,8 @@ const TabsIcon = styled.div`
     }
 `
 
+const Error = styled.p`
+    color: ${({ theme }) => theme.colors.textError};
+    margin-top: ${spacing()};
+`
 export default CustomInputTrigger

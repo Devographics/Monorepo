@@ -36,7 +36,7 @@ const BlockChart = props => {
                         <EditInline defaultValue={translate('custom_data.chart_title')} />
                     </CustomChartHeading>
                     {React.cloneElement(customChart, {
-                        controlledMode: modeProps.units,
+                        controlledMode: modeProps?.units,
                         controlledUnits: units,
                         isCustom: true
                     })}

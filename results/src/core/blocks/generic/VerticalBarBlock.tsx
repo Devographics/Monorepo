@@ -7,12 +7,14 @@ import VerticalBarChart from 'core/charts/generic/VerticalBarChart'
 import { usePageContext } from 'core/helpers/pageContext'
 import { useLegends } from 'core/helpers/useBucketKeys'
 // import T from 'core/i18n/T'
-import { FacetItem, BlockComponentProps } from 'core/types'
+import { FacetItem, BlockComponentProps, BlockUnits } from 'core/types'
 import { getTableData } from 'core/helpers/datatables'
 import sumBy from 'lodash/sumBy'
 
 export interface VerticalBarBlockProps extends BlockComponentProps {
     data: FacetItem
+    controlledUnits: BlockUnits
+    isCustom: boolean
 }
 
 const VerticalBarBlock = ({
@@ -37,7 +39,9 @@ const VerticalBarBlock = ({
     const context = usePageContext()
     const { width } = context
 
-    const [units, setUnits] = useState(defaultUnits)
+    const [uncontrolledUnits, setUnits] = useState(defaultUnits)
+    const units = controlledUnits || uncontrolledUnits
+    
     const addNoAnswer = units === 'percentage_survey'
     const bucketKeys = keys && useLegends(block, keys, undefined, addNoAnswer)
 

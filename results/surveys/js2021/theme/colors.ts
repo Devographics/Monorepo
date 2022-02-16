@@ -108,6 +108,7 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
     textInverted: '#272325',
     textInvertedAlt: colors.greyDark,
     textHighlight: colors.greenDark,
+    textError: colors.redLighter,
     link: colors.teal,
     linkActive: '#5C63E0',
     contrast: '#0bdf67',
