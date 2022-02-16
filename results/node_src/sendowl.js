@@ -76,7 +76,7 @@ const getOrders = async products => {
         order.cart.cart_items.forEach(({ cart_item }) => {
             // cart items only have productId, not product name, so look up product name
             const product = products.find(p => p.productId === cart_item.product_id)
-            if (product) {
+            if (product && cart_item.quantity > 0) {
                 // if order does not correspond to a real product just ignore it
                 orders.push({
                     orderId: order.id,
