@@ -145,7 +145,7 @@ export const ToolsExperienceRankingBlock = ({
                 })
             ]}
         >
-            <ChartContainer height={experience.length * 50 + 80}>
+            <ChartContainer height={experience.length * 50 + 80} minWidth={800}>
                 <RankingChart data={chartData} />
             </ChartContainer>
         </Block>

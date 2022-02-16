@@ -31,9 +31,9 @@ const ParticipationByCountryBlock = ({
             block={block}
             completion={data.completion}
         >
-            <ChartContainer height={600}>
+            <ChartContainer height={600} minWidth={800}>
                 <div
-                    style={{ height: '100%' }}
+                    style={{ height: '100%', overflow: 'hidden' }}
                     className={`ParticipationByCountryChart ${chartClassName}`}
                 >
                     <ParticipationByCountryChart units={units} data={buckets} />
