@@ -20,8 +20,11 @@ const List = styled.ul`
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    margin: 0 0 0 ${spacing(0.5)};
     padding: 0;
+    margin: 0;
+    @media ${mq.small} {
+        margin-top: ${spacing(0.5)};
+    }
 `
 const Item = styled.li`
     margin-right: ${spacing(0.5)};
@@ -36,7 +39,7 @@ const Link = styled(Button)`
     border-radius: 20px;
     border: 1px solid transparent;
     background: ${props => props.theme.colors.backgroundAlt};
-    background: rgba(255,255,255,0.1);
+    background: rgba(255, 255, 255, 0.1);
 `
 
 const getDomain = url => {
@@ -46,18 +49,18 @@ const getDomain = url => {
     } catch (error) {
         console.log(`// BlockLinks: invalid url ${url}`)
         console.log(error)
-        return undefined;
+        return undefined
     }
 }
 
 const BlockLink = ({ id, label, url, icon }) => {
     const Icon = icon
     const label_ = id === 'homepage' ? getDomain(url) : label
-    
+
     if (!label_) {
-        return null;
+        return null
     }
-    
+
     return (
         <Item>
             <Link as="a" href={url} title={id}>

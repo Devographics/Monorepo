@@ -2,11 +2,13 @@ import styled, { css } from 'styled-components'
 import { mq, fontSize, fontWeight, spacing, color } from 'core/theme'
 import ButtonGroup from './ButtonGroup'
 
-const Button = styled.button.attrs(({ className, size = 'medium', variant = 'default', ...props }) => {
-    return {
-        className: `Button${className ? ` ${className}` : ''}`,
+const Button = styled.button.attrs(
+    ({ className, size = 'medium', variant = 'default', ...props }) => {
+        return {
+            className: `Button${className ? ` ${className}` : ''}`
+        }
     }
-})`
+)`
     background: none;
     cursor: pointer;
     display: block;
@@ -26,7 +28,7 @@ const Button = styled.button.attrs(({ className, size = 'medium', variant = 'def
     }
 
     // sizing
-    ${(props) => {
+    ${props => {
         if (props.size === 'small') {
             return css`
                 font-size: ${fontSize('small')};
@@ -62,7 +64,7 @@ const Button = styled.button.attrs(({ className, size = 'medium', variant = 'def
     }}
 
     // variants
-    ${(props) => {
+    ${props => {
         // default
         return css`
             &,
@@ -72,7 +74,8 @@ const Button = styled.button.attrs(({ className, size = 'medium', variant = 'def
                 color: ${color('text')};
             }
 
-            &:hover, &:focus {
+            &:hover,
+            &:focus {
                 border-style: solid;
                 border-color: ${color('link')};
                 color: ${color('link')};
@@ -97,12 +100,13 @@ const Button = styled.button.attrs(({ className, size = 'medium', variant = 'def
         @media ${mq.small} {
             width: 100%;
             flex-basis: 100%;
-            border-top-width: 0;
+            font-size: ${fontSize('smallest')};
             &:first-child {
                 border-top-width: 1px;
             }
 
-            &:hover, &:focus {
+            &:hover,
+            &:focus {
                 border-top-color: ${color('border')};
                 border-bottom-color: ${color('border')};
 
@@ -121,7 +125,8 @@ const Button = styled.button.attrs(({ className, size = 'medium', variant = 'def
                 border-left-width: 1px;
             }
 
-            &:hover, &:focus {
+            &:hover,
+            &:focus {
                 border-left-color: ${color('border')};
                 border-right-color: ${color('border')};
 

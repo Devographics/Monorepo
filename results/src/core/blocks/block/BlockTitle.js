@@ -72,6 +72,7 @@ const BlockTitle = ({
                         {completion && !context.isCapturing && (
                             <BlockCompletionIndicator completion={completion} />
                         )}
+                        {!isCapturing && <BlockSponsor block={block} />}
                     </BlockTitleText>
                     {/* <Popover trigger={<More />}>
                         <PopoverContents>
@@ -83,7 +84,6 @@ const BlockTitle = ({
                         <BlockTitleActions {...properties} />
                     </BlockTitleActionsWrapper> */}
                     {entity && !isCapturing && <BlockLinks entity={entity} />}
-                    {!isCapturing && <BlockSponsor block={block} />}
                 </LeftPart>
                 {/* <BlockTitleSwitcherWrapper>
                     <BlockTitleSwitcher {...properties} />
@@ -152,11 +152,17 @@ const BlockTitleText = styled.h3`
 `
 
 const LeftPart = styled.div`
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
     margin-bottom: ${spacing(0.5)};
+    @media ${mq.small} {
+    }
+
+    @media ${mq.mediumLarge} {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: ${spacing(0.5)};
+    }
 `
 
 export default memo(BlockTitle)
