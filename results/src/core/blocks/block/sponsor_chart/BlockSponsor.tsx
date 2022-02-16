@@ -12,8 +12,8 @@ interface BlockSponsorProps {
 const BlockSponsor = ({ block }: BlockSponsorProps) => {
     const context = usePageContext()
     const { hasSponsor } = block
-    const { chartSponsors } = context
-    const { products, orders } = chartSponsors
+    const { chartSponsors = {} } = context
+    const { products = [], orders = [] } = chartSponsors
     const order = orders.find(o => o.chartId === `${config.surveySlug}___${block.id}`)
     const product = products.find(p => p.chartId === `${config.surveySlug}___${block.id}`)
     return hasSponsor ? (

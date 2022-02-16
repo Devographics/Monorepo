@@ -1,5 +1,5 @@
 import React from 'react'
-import { Logo } from './Logo'
+import { Logo } from './AnimatedLogo'
 
 export const IntroLogo = () => <Logo size="l" />
 
