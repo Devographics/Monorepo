@@ -50,11 +50,12 @@ const MemoIndicator = memo(Indicator)
 
 /**
  * - Fit: fit to viewport width
- * - Expand: force a 600px width
+ * - Expand: force a 600px or props width
  */
 const ChartContainer = ({
     children,
     height,
+    minWidth = 600,
     fit = false,
     className = '',
     vscroll = false
@@ -63,7 +64,7 @@ const ChartContainer = ({
         <Container className="ChartContainer" style={{ height }}>
             <ChartContainerInner
                 className={`ChartContainerInner${!fit ? ' ChartContainerInner--expand' : ''}`}
-                style={{ height }}
+                style={{ height, minWidth: fit ? '' : minWidth }}
             >
                 {children}
             </ChartContainerInner>
