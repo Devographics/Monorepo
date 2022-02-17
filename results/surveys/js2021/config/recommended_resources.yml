@@ -130,3 +130,11 @@
   teacher: Kent C. Dodds
   company: Remix
   
+# Reacthathon
+
+- name: Reactathon returns in-person this May
+  id: reactathon
+  description: Join Lee Robinson, Jenn Creighton, Wes Bos, & more at the largest React conference in the US. Now with a full day of talks on Serverless! Fully-outdoors, fully-vaxxed, fully-tested. Reactathon.com 
+  url: https://www.reactathon.com/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2021
+  image: https://pbs.twimg.com/profile_images/1483184990141632513/0PyJ5KIo_400x400.jpg
+  teacher: Berkeley, CA
