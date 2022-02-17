@@ -32,9 +32,7 @@
       disableExport: true
       wrapBlock: false
     - id: survey_credits
-      blockType: CreditsBlock
-      disableExport: true
-      wrapBlock: false
+      template: credits
     - id: survey_newsletter
       blockType: NewsletterBlock
       disableExport: true
@@ -867,6 +865,8 @@
 
     - id: awards
       template: awards
+      variables:
+        entities: '"comparison_functions","prefers_reduced_motion","grid","post_css","vanilla_extract","css_modules","stitches"'
       awards:
         - id: feature_adoption_delta_award
           template: award
@@ -924,10 +924,10 @@
   blocks:
 
     - id: conclusion
-      blockType: ConclusionBlock
-      wrapBlock: false
-      disableExport: true
-      author: kilian_valkhof
+      template: conclusion
+      variables:
+        author: kilian_valkhof
+        entities: '"kilian_valkhof"'
 
     - id: conclusion_newsletter
       blockType: NewsletterBlock
