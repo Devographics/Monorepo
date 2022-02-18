@@ -27,6 +27,10 @@
   path: /
   showTitle: false
   blocks:
+    - id: survey_livestream
+      blockType: LivestreamBlock
+      disableExport: true
+      wrapBlock: false
     - id: survey_intro
       blockType: SurveyIntroBlock
       disableExport: true
