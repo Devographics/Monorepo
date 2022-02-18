@@ -6,7 +6,7 @@ import T from 'core/i18n/T'
 const LivestreamBlock = () => {
     return (
         <Livestream>
-            <T k="general.livestream_announcement" />
+            <T k="general.livestream_announcement" md={true} />
         </Livestream>
     )
 }
