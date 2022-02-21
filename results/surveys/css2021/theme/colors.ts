@@ -72,7 +72,8 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
     contrast: '#0bdf67',
     border: '#FFF6E6',
     heatmap: colors.pinkLight,
-    lineChartDefaultColor: '#59DF7F',
+    lineChartDefaultColor: '#59DF7F',    
+    no_answer: [colors.greyLight, colors.greyLightest],
     barChart: {
         primary: colors.pink,
         primaryGradient: [colors.pinkDark, colors.pink],

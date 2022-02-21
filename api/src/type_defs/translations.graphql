@@ -27,6 +27,8 @@ enum Contexts {
     state_of_css_2021
     state_of_css_2021_survey
     state_of_css_2021_results
+
+    how_to_help
 }
 
 type TranslationString {

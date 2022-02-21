@@ -1061,6 +1061,15 @@
       wrapBlock: false
       disableExport: true
 
+- id: how_to_help
+  path: /how_to_help
+  blocks:
+
+    - id: how_to_help_contents
+      blockType: HowToHelpBlock
+      wrapBlock: false
+      disableExport: true
+
 - id: support
   path: /support
   is_hidden: true

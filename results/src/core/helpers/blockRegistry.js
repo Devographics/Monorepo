@@ -20,6 +20,7 @@ import CreditsBlock from 'core/blocks/other/CreditsBlock'
 // import ReportBlock from 'core/report/ReportBlock'
 import HintBlock from 'core/blocks/other/HintBlock'
 import AboutBlock from 'core/blocks/other/AboutBlock'
+import HowToHelpBlock from 'core/blocks/other/HowToHelpBlock'
 import SponsorFinishBlock from 'core/blocks/block/sponsor_chart/SponsorFinishBlock'
 import LivestreamBlock from 'core/blocks/other/LivestreamBlock'
 
@@ -86,6 +87,7 @@ const blockRegistry = {
     HintBlock,
     CreditsBlock,
     AboutBlock,
+    HowToHelpBlock,
     SponsorFinishBlock,
     LivestreamBlock,
     // ReportBlock,
