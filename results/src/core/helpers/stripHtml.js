@@ -1,1 +1,1 @@
-export const stripHtml = s => s.replace(/<([^>]+?)([^>]*?)>(.*?)<\/\1>/gi, '$3')
+export const stripHtml = s => s && s.replace(/<([^>]+?)([^>]*?)>(.*?)<\/\1>/gi, '$3')
