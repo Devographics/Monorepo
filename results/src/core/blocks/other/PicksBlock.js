@@ -7,14 +7,14 @@ import picks from 'Config/picks.yml'
 import T from 'core/i18n/T'
 
 const PicksBlock = ({ block, data }) => {
-    const { id } = block
-    const pick = picks.find(p => p.twitterName === id || p.id === id)
+    const { id: pickId } = block
+    const pick = picks.find(p => p.twitterName === pickId || p.id === pickId)
 
     if (!pick) {
         return null
     }
 
-    const { id: pickId, twitterName = pickId, fullName, pickName, avatarUrl, url } = pick
+    const { twitterName, fullName, pickName, avatarUrl, url } = pick
 
     const avatarFileName = avatarUrl ?? `${twitterName}.jpg`
 
