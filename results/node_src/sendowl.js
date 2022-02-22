@@ -26,12 +26,19 @@ const getSendOwlOptions = () => ({
 const fetchUntilNoMore = async (url, options) => {
     let page = 1,
         hasMore = true,
-        allData = []
+        allData = [],
+        data
     while (hasMore) {
         const fetchUrl = `${url}?per_page=50&page=${page}`
         console.log(`// Fetching url ${fetchUrl}…`)
         const response = await fetch(fetchUrl, options)
-        const data = await response.json()
+        const text = await response.text()
+        try {
+            data = JSON.parse(text)
+        } catch (error) {
+            throw Error(text)
+        }
+        // const data = await response.json()
         if (data.length === 0) {
             hasMore = false
         } else {
