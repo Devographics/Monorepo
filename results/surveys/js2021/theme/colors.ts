@@ -138,11 +138,11 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
         },
         toolSections: {
             front_end_frameworks: colors.pinkLight,
-            back_end_frameworks: colors.purpleLight,
+            back_end_frameworks: colors.purple,
             testing: colors.orange,
-            build_tools: colors.skyblue,
-            monorepo_tools: colors.red,
-            mobile_desktop: colors.green
+            build_tools: colors.teal,
+            mobile_desktop: colors.green,
+            monorepo_tools: colors.navyLighter
         },
         features: {
             used: [colors.pink, colors.pinkLight],
