@@ -45,7 +45,7 @@
 
 - id: it-IT
   label: Italiano
-  translators: ['polettoweb']
+  translators: ['polettoweb', 'alfiofederico']
   repo: StateOfJS/locale-it-IT
 
 - id: pt-PT
