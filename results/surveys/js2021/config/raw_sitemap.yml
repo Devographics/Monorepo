@@ -27,10 +27,10 @@
   path: /
   showTitle: false
   blocks:
-    - id: survey_livestream
-      blockType: LivestreamBlock
-      disableExport: true
-      wrapBlock: false
+    # - id: survey_livestream
+    #   blockType: LivestreamBlock
+    #   disableExport: true
+    #   wrapBlock: false
     - id: survey_intro
       blockType: SurveyIntroBlock
       disableExport: true
@@ -1061,14 +1061,14 @@
       wrapBlock: false
       disableExport: true
 
-- id: how_to_help
-  path: /how_to_help
-  blocks:
+# - id: how_to_help
+#   path: /how_to_help
+#   blocks:
 
-    - id: how_to_help_contents
-      blockType: HowToHelpBlock
-      wrapBlock: false
-      disableExport: true
+#     - id: how_to_help_contents
+#       blockType: HowToHelpBlock
+#       wrapBlock: false
+#       disableExport: true
 
 - id: support
   path: /support

@@ -145,9 +145,15 @@ const BlockTitleText = styled.h3`
     line-height: 1.2;
     ${secondaryFontMixin};
     font-size: ${fontSize('largerest')};
+    code {
+        font-size: ${fontSize('largest')};
+    }
     @media ${mq.small} {
         flex: 1;
         font-size: ${fontSize('larger')};
+        code {
+            font-size: ${fontSize('large')};
+        }
     }
 `
 
