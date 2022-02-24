@@ -1,4 +1,6 @@
 import React from 'react'
+import { useMatch } from "@reach/router"
+import get from 'lodash/get'
 import styled, { css } from 'styled-components'
 import sitemap from 'Config/raw_sitemap.yml'
 import { mq, fancyLinkMixin, spacing } from 'core/theme'
@@ -73,10 +75,14 @@ const NavItem = ({ page, parentPage, currentPath, closeSidebar, isHidden = false
     const hasChildren = page.children && page.children.length > 0
     const displayChildren = hasChildren > 0 && isActive
 
+    const match = useMatch(
+        `${get(usePageContext(), 'locale.path')}${parentPage?.path ?? ''}${page.path}`
+    )
+
     return (
         <>
             <StyledPageLink
-                activeClassName="_is-active"
+                className={match ? "_is-active" : undefined}
                 onClick={closeSidebar}
                 page={page}
                 depth={depth}
