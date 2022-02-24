@@ -53,6 +53,11 @@
   translators: ['danisal']
   repo: StateOfJS/locale-pt-PT
 
+- id: pt-BR
+  label: Português (Brasil)
+  translators: ['the-physicist', 'thiagoloal']
+  repo: StateOfJS/locale-pt-BR
+
 - id: ru-RU
   label: Русский
   translators: ['lex111', 'Omhet', 'shramkoweb']
