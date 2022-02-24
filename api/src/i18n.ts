@@ -15,6 +15,8 @@ let locales: Locale[] = []
 
 const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
 
+const excludedFiles = ['crowdin.yml']
+
 // load locales if not yet loaded
 export const loadOrGetLocales = async () => {
     if (locales.length === 0) {
@@ -46,7 +48,7 @@ export const loadFromGitHub = async (localesWithRepos: any) => {
         // loop over repo contents and fetch raw yaml files
         for (const file of files) {
             const extension: string = last(file?.name.split('.')) || ''
-            if (['yml', 'yaml'].includes(extension)) {
+            if (['yml', 'yaml'].includes(extension) && !excludedFiles.includes(file.name)) {
                 const response = await fetch(file.download_url)
                 const contents = await response.text()
                 try {
@@ -89,16 +91,18 @@ export const loadLocally = async (localesWithRepos: any) => {
 
         // loop over repo contents and fetch raw yaml files
         for (const fileName of yamlFiles) {
-            const filePath = path + '/' + fileName
-            const contents = await readFile(filePath, 'utf8')
-            const yamlContents: any = yaml.load(contents)
-            const strings = yamlContents.translations
-            const context = fileName.replace('./', '').replace('.yml', '')
-            locale.stringFiles.push({
-                strings,
-                url: filePath,
-                context
-            })
+            if (!excludedFiles.includes(fileName)) {
+                const filePath = path + '/' + fileName
+                const contents = await readFile(filePath, 'utf8')
+                const yamlContents: any = yaml.load(contents)
+                const strings = yamlContents.translations
+                const context = fileName.replace('./', '').replace('.yml', '')
+                locale.stringFiles.push({
+                    strings,
+                    url: filePath,
+                    context
+                })
+            }
         }
         locales.push(locale)
     }
@@ -170,7 +174,6 @@ Get locale strings for a specific locale
 */
 export const getLocaleStrings = (locale: Locale, contexts?: string[]) => {
     let stringFiles = locale.stringFiles
-
     // flatten all stringFiles together
     let strings = stringFiles
         .map((sf: StringFile) => {
@@ -311,7 +314,11 @@ export const getLocaleObject = async (
 Get all locales
 
 */
-export const getLocales = async (contexts?: string[], enableFallbacks?: boolean, localeIds: string[] = []) => {
+export const getLocales = async (
+    contexts?: string[],
+    enableFallbacks?: boolean,
+    localeIds: string[] = []
+) => {
     let rawLocales = await loadOrGetLocales()
     if (localeIds.length) {
         rawLocales = rawLocales.filter(l => localeIds.includes(l.id))
