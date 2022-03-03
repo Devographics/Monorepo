@@ -90,7 +90,7 @@
 
 - id: 'zh-Hans'
   label: 简体中文
-  translators: ['TIOvOIT', 'scarsu', 'shadowings-zy']
+  translators: ['TIOvOIT', 'scarsu', 'shadowings-zy', 'littleee']
   repo: StateOfJS/locale-zh-Hans
 
 - id: 'zh-Hant'
