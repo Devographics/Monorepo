@@ -6,7 +6,7 @@ import Tooltip from 'core/components/Tooltip'
 
 const SponsorCredit = ({ sponsor }) => {
     const avatarUrl = sponsor?.twitterData?.profile_image_url
-    const username = sponsor?.twitterData?.username
+    const username = sponsor?.twitterData?.username || sponsor?.twitterName
     const name = sponsor?.twitterData?.name
     const amount = sponsor?.amount
     const link = `https://twitter.com/${username}`
