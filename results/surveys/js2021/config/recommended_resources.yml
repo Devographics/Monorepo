@@ -138,3 +138,12 @@
   url: https://www.reactathon.com/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2021
   image: https://pbs.twimg.com/profile_images/1483184990141632513/0PyJ5KIo_400x400.jpg
   teacher: Berkeley, CA
+  
+# Render
+
+- name: Front-end engineering. Web3. Fresh vibes. 
+  id: renderatl
+  description: RenderATL is the four-day software engineering conference & music festival with 50+ expert speakers in tech covering upcoming and current best software engineering practices, web3, engineering leadership, accessibility practices, and more.
+  url: http://www.renderatl.com/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2021
+  image: /images/resources/render.png
+  teacher: Atlanta, Georgia

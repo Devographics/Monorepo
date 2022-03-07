@@ -900,7 +900,7 @@
         fieldId: resources
 
     - id: resources_resources
-      items: [reactathon]
+      items: [reactathon, renderatl]
       template: recommended_resources
 
 - id: opinions
