@@ -1,5 +1,4 @@
 import { getDynamicResolvers, getOtherKey } from '../helpers'
+import type { Resolvers } from '../generated/graphql'
 
-export default {
-    Resources: getDynamicResolvers(id => `resources.${getOtherKey(id)}`)
-}
+export const Resources: Resolvers['Resources'] = getDynamicResolvers(id => `resources.${getOtherKey(id)}`)

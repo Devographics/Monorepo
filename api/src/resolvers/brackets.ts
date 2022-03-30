@@ -1,26 +1,25 @@
 import { getDynamicResolvers } from '../helpers'
 import { winsAggregationFunction, matchupsAggregationFunction } from '../compute/brackets'
 import keys from '../data/keys.yml'
+import type { Resolvers } from '../generated/graphql'
 
-export default {
-    BracketWins: {
-        keys: () => keys.bracket,
-        ...getDynamicResolvers(
-            id => {
-                const fullPath = id.replace('__', '.')
-                return fullPath
-            },
-            {},
-            winsAggregationFunction
-        )
-    },
-
-    BracketMatchups: getDynamicResolvers(
+export const BracketWins: Resolvers['BracketWins'] = {
+    keys: () => keys.bracket,
+    ...getDynamicResolvers(
         id => {
             const fullPath = id.replace('__', '.')
             return fullPath
         },
         {},
-        matchupsAggregationFunction
+        winsAggregationFunction
     )
 }
+
+export const BracketMatchups: Resolvers['BracketMatchups'] = getDynamicResolvers(
+    id => {
+        const fullPath = id.replace('__', '.')
+        return fullPath
+    },
+    {},
+    matchupsAggregationFunction
+)

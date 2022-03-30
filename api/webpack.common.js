@@ -23,7 +23,13 @@ module.exports = {
             {
                 test: /\.ts$/,
                 exclude: /node_modules/,
-                use: 'ts-loader'
+                // TODO: remove transpileOnly after fixing all type errors
+                use: process.env.NODE_ENV === 'development' ? {
+                    loader: 'ts-loader',
+                    options: {
+                        transpileOnly: true
+                    }
+                } : 'ts-loader'
             }
         ]
     },

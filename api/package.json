@@ -21,12 +21,15 @@
         "write-file-webpack-plugin": "^4.5.1"
     },
     "devDependencies": {
-        "@types/node-fetch": "^2.5.12",
+        "@graphql-codegen/cli": "^2.6.2",
+        "@graphql-codegen/typescript": "^2.4.8",
+        "@graphql-codegen/typescript-resolvers": "^2.6.1",
         "@types/js-yaml": "^4.0.3",
         "@types/lodash": "^4.14.175",
         "@types/marked": "^2.0.4",
         "@types/mongodb": "^4.0.7",
         "@types/node": "^16.7.0",
+        "@types/node-fetch": "^2.5.12",
         "@types/webpack-env": "^1.16.3",
         "clean-webpack-plugin": "4.0.0",
         "copy-webpack-plugin": "^9.0.1",
@@ -44,6 +47,7 @@
     },
     "scripts": {
         "build": "NODE_ENV=production webpack --config webpack.production.js",
+        "prebuild": "graphql-codegen --config codegen.yml",
         "dev": "NODE_ENV=development webpack --config webpack.development.js",
         "dev:clean": "NODE_ENV=development DISABLE_CACHE=true webpack --config webpack.development.js",
         "fmt": "prettier --write \"src/**/*.{ts,js,mjs,yml,graphql}\"",

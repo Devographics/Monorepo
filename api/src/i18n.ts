@@ -146,12 +146,12 @@ export const getGraphQLEnumValues = (name: string): string[] => {
 
 For a given locale id, get closest existing key.
 
-Ex: 
+Ex:
 
 en-US -> en-US
 en-us -> en-US
 en-gb -> en-US
-etc. 
+etc.
 
 */
 export const truncateKey = (key: string) => key.split('-')[0]
