@@ -60,7 +60,7 @@
 
 - id: pt-BR
   label: Português (Brasil)
-  translators: ['the-physicist', 'thiagoloal']
+  translators: ['the-physicist', 'thiagoloal', 'willmustafa']
   repo: StateOfJS/locale-pt-BR
 
 - id: ru-RU
