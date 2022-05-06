@@ -28,6 +28,7 @@
 enum SurveyType {
     state_of_js
     state_of_css
+    state_of_graphql
 }
 
 
@@ -37,6 +38,7 @@ All surveys
 type Surveys {
     state_of_js: StateOfJSSurvey
     state_of_css: StateOfCSSSurvey
+    state_of_graphql: StateOfGraphQLSurvey
 }
 
 type StateOfJSSurvey {
@@ -44,6 +46,10 @@ type StateOfJSSurvey {
 }
 
 type StateOfCSSSurvey {
+    foobar: String
+}
+
+type StateOfGraphQLSurvey {
     foobar: String
 }
 

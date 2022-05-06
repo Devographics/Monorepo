@@ -28,6 +28,8 @@ enum Contexts {
     state_of_css_2021_survey
     state_of_css_2021_results
 
+    state_of_graphql
+
     how_to_help
 }
 

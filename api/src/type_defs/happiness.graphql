@@ -17,6 +17,8 @@ enum HappinessID {
   state_of_css
   # Other
   state_of_the_web
+  # GraphQL
+  state_of_graphql
 }
 
 """
