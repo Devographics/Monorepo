@@ -8,5 +8,8 @@
         "api",
         "jobs",
         "results"
-    ]
+    ],
+    "installConfig": {
+        "hoistingLimits": "workspaces"
+    }
 }

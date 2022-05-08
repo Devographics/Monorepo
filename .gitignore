@@ -51,3 +51,11 @@ dist
 !.yarn/sdks
 !.yarn/versions
 .pnp.*
+
+api/.yarn/*
+!api/.yarn/patches
+!api/.yarn/releases
+!api/.yarn/plugins
+!api/.yarn/sdks
+!api/.yarn/versions
+api/.pnp.*
