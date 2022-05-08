@@ -1,5 +1,12 @@
 {
-  "dependencies": {
-    "@radix-ui/react-id": "^0.1.1"
-  }
+    "dependencies": {
+        "@radix-ui/react-id": "^0.1.1"
+    },
+    "packageManager": "yarn@3.2.0",
+    "private": true,
+    "workspaces": [
+        "api",
+        "jobs",
+        "results"
+    ]
 }

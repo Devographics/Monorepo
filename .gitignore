@@ -43,3 +43,11 @@ node_modules
 test.mjs
 dist
 .logs
+
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
