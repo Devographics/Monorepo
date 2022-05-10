@@ -45,7 +45,7 @@
 
 - id: hi-IN
   label: Hindi
-  translators: ['jaideepghosh']
+  translators: ['srk1195','jaideepghosh']
   repo: StateOfJS/locale-hi-IN
 
 - id: it-IT
