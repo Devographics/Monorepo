@@ -26,7 +26,7 @@ const roClient = twitterClient.readOnly
 
 // https://github.com/PLhery/node-twitter-api-v2/blob/master/doc/v2.md#single-user-by-username
 
-export async function fetchTwitterUser (db: Db, twitterName: string) {
+export async function fetchTwitterUser(db: Db, twitterName: string) {
     const user = await getTwitterUser(twitterName)
     if (!user) {
         return
@@ -53,9 +53,11 @@ export const getTwitterUser = async (twitterName: string) => {
     } catch (error: any) {
         console.log('// getTwitterUser error')
         // console.log(error)
-        console.log(error.rateLimit)
-        const resetTime = new Date(error.rateLimit.reset * 1000)
-        console.log(resetTime)
+        if (error.rateLimit) {
+            console.log(error.rateLimit)
+            const resetTime = new Date(error.rateLimit.reset * 1000)
+            console.log(resetTime)
+        }
         console.log(error.data)
         return
     }
