@@ -8,7 +8,7 @@
 
 Create an `.env` file at the root of the `api` directory: 
 
-```
+```dotenv
 # MongoDB connection string and database name
 MONGO_URI=***
 MONGO_DB_NAME=***
@@ -35,7 +35,7 @@ Note: contact me (Sacha) on [Discord](https://discord.gg/zRDb35jfrt) if you need
 
 ## Running the App
 
-```
+```sh
 npm run dev
 npm run dev:clean # run without cache
 ```

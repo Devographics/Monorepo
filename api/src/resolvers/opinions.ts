@@ -1,35 +1,27 @@
 import { getDynamicResolvers } from '../helpers'
 import { computeOpinionByYear } from '../compute/opinions'
 import { useCache } from '../caching'
-import { RequestContext, SurveyConfig } from '../types'
-import { Filters } from '../filters'
-import { YearAggregations } from '../compute/generic'
+import { YearAggregations } from '../compute'
 import keys from '../data/keys.yml'
+import type { Resolvers } from '../generated/graphql'
 
-interface OpinionConfig {
-    survey: SurveyConfig
-    id: string
-    filters?: Filters
+export const Opinion: Resolvers['Opinion'] = {
+    keys: () => keys.opinions,
+    all_years: (
+        { survey, id, filters },
+        args,
+        { db }
+    ) => useCache(computeOpinionByYear, db, [survey, id, filters]),
+    year: async (
+        { survey, id, filters },
+        { year },
+        { db }
+    ) => {
+        const allYears = await useCache(computeOpinionByYear, db, [survey, id, filters])
+        return allYears.find((yearItem: YearAggregations) => yearItem.year === year)
+    }
 }
 
-export default {
-    Opinion: {
-        keys: () => keys.opinions,
-        all_years: async (
-            { survey, id, filters }: OpinionConfig,
-            args: any,
-            { db }: RequestContext
-        ) => useCache(computeOpinionByYear, db, [survey, id, filters]),
-        year: async (
-            { survey, id, filters }: OpinionConfig,
-            { year }: { year: number },
-            { db }: RequestContext
-        ) => {
-            const allYears = await useCache(computeOpinionByYear, db, [survey, id, filters])
-            return allYears.find((yearItem: YearAggregations) => yearItem.year === year)
-        }
-    },
-    OtherOpinions: getDynamicResolvers(id => `opinions_others.${id}.others.normalized`, {
-        sort: { property: 'id', order: 'asc' }
-    })
-}
+export const OtherOpinions: Resolvers['OtherOpinions'] = getDynamicResolvers(id => `opinions_others.${id}.others.normalized`, {
+    sort: { property: 'id', order: 'asc' }
+})

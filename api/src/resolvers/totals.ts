@@ -1,7 +1,8 @@
 import { useCache } from '../caching'
-import { RequestContext, SurveyConfig } from '../types'
+import { SurveyConfig } from '../types'
 import config from '../config'
 import { Db } from 'mongodb'
+import type { Resolvers } from '../generated/graphql'
 
 export async function getSurveyTotals(db: Db, surveyConfig: SurveyConfig, year?: Number) {
     const collection = db.collection(config.mongo.normalized_collection)
@@ -14,11 +15,10 @@ export async function getSurveyTotals(db: Db, surveyConfig: SurveyConfig, year?:
     return collection.countDocuments(selector)
 }
 
-export default {
-    Totals: {
-        all_years: async (survey: SurveyConfig, args: any, { db }: RequestContext) =>
-            useCache(getSurveyTotals, db, [survey]),
-        year: async (survey: SurveyConfig, { year }: { year: number }, { db }: RequestContext) =>
-            useCache(getSurveyTotals, db, [survey, year])
-    }
+export const Totals: Resolvers['Totals'] = {
+    all_years: (survey, args, { db }) =>
+        useCache(getSurveyTotals, db, [survey]),
+    year: (survey, { year }, { db }) =>
+        useCache(getSurveyTotals, db, [survey, year])
 }
+
