@@ -2,6 +2,7 @@ import { GitHub, SurveyConfig, Entity, RequestContext } from '../types'
 import projects from '../data/bestofjs.yml'
 import { fetchMdnResource, fetchTwitterUser } from '../external_apis'
 import { useCache } from '../caching'
+import { getEntity } from '../entities'
 
 const getSimulatedGithub = (id: string): GitHub | null => {
     const project = projects.find((p: Entity) => p.id === id)
@@ -71,6 +72,10 @@ export default {
             }
 
             return { name: entity.npm, url: `https://www.npmjs.com/package/${entity.npm}` }
+        },
+        company: async (entity: Entity, args: any, { db }: RequestContext) => {
+            const company = entity.companyName && getEntity({ id: entity.companyName })
+            return company
         }
     }
 }

@@ -19,6 +19,8 @@ export interface Entity {
     mdn?: string
     patterns?: string[]
     normalizationOnly?: boolean
+    companyName?: string
+    company?: Entity
 }
 
 export interface EntityBucket {

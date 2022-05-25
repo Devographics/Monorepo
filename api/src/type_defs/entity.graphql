@@ -7,7 +7,6 @@ type Entity {
     id: String
     name: String
     otherName: String
-    twitterName: String
     homepage: Homepage
     category: String
     github: GitHub
@@ -18,11 +17,18 @@ type Entity {
     type: String
     tags: [String]
     patterns: [String]
+
+    twitterName: String
     twitter: Twitter
+
     youtubeName: String
     blog: String
     rss: String
+
     related: [Entity]
+
+    companyName: String
+    company: Entity
 }
 
 
