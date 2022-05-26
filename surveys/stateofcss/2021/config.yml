@@ -1,0 +1,20 @@
+surveyId: css2021 # used as first part of field names
+createdAt: October 30, 2020
+hashtag: StateOfCSS
+shareUrl: https://stateofcss.com
+resultsUrl: https://2021.stateofcss.com/
+year: 2021
+status: 3 # preview/open/closed
+imageUrl: 'stateofcss2021.png'
+
+credits:
+  - id: sarah_fossheim
+    role: accessibility
+  - id: una_kravets
+    role: survey_design
+  - id: adam_argyle
+    role: survey_design
+  - id: philip_jagenstedt
+    role: survey_design
+  - id: christopher_kirk_nielsen
+    role: logo_design

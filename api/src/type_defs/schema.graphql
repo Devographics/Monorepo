@@ -8,6 +8,10 @@ type Query {
     """
     survey(survey: SurveyType!): Survey
     """
+    All surveys.
+    """
+    surveys: [SurveyItem]
+    """
     Data about a specific entity (tool, library, framework, features, etc.)
     """
     entity(id: ID!): Entity

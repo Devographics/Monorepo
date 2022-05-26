@@ -1,0 +1,24 @@
+surveyId: graphql2022
+createdAt: December 1, 2021
+shareUrl: https://stateofgraphql.com
+# resultsUrl: https://2022.stateofgraphql.com/
+year: 2022
+status: 1 # preview/open/closed/hidden
+imageUrl: "stateofgraphql2022.png"
+credits:
+  - id: praveen_durairaju
+    role: survey_design
+  - id: benjie_gillam
+    role: survey_design
+  - id: uri_goldshtein
+    role: survey_design
+  - id: michael_hayes
+    role: survey_design
+  - id: charly_poly
+    role: survey_design
+  - id: phil_prasek
+    role: survey_design
+  - id: laurin_quast
+    role: survey_design
+  - id: john_p_vadja
+    role: survey_design

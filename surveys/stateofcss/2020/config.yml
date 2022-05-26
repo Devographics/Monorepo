@@ -1,0 +1,7 @@
+surveyId: css2020 # used as first part of field names
+createdAt: October 1, 2020
+shareUrl: https://stateofcss.com
+resultsUrl: https://2020.stateofcss.com/
+year: 2020
+status: 3 # closed
+imageUrl: 'stateofcss2020.png'

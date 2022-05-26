@@ -1,0 +1,33 @@
+surveyId: js2021
+createdAt: December 1, 2021
+shareUrl: https://stateofjs.com
+resultsUrl: https://2021.stateofjs.com/
+year: 2021
+status: 3 # preview/open/closed
+imageUrl: "stateofjs2021.png"
+
+credits:
+  - id: shawn_wang
+    role: survey_design
+  - id: mark_erikson
+    role: survey_design
+
+translationContexts: [common, results, state_of_js, state_of_js_2021, state_of_js_2021_results, how_to_help]
+socialMediaImage: social/js2021-social.png
+siteContext: stateofjs
+surveySlug: js2021
+siteTitle: The State of JS 2021
+siteUrl: https://2021.stateofjs.com
+emailOctopusUrl: https://emailoctopus.com/lists/ed0386c4-2f55-11e9-a3c9-06b79b628af2/members/embedded/1.3/add
+emailOctopusSiteKey: 6LdYsmsUAAAAAPXVTt-ovRsPIJ_IVhvYBBhGvRV6
+emailOctopusCode: hpc4b27b6e-eb38-11e9-be00-06b4694bee2a
+translationLink: https://github.com/StateOfJS/locale-en-US
+capturesUrl: https://stateofx-images.netlify.app/captures/js2021
+discordUrl: https://discord.gg/zRDb35jfrt
+issuesUrl: https://github.com/StateOfJS/Monorepo
+
+tshirtImages: ['js2021-tshirt.jpg']
+tshirtLink: https://cottonbureau.com/products/javascript-retro-vhs
+tshirtPrice: 29
+tshirtDesignerLink: https://chriskirknielsen.com/
+
