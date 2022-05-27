@@ -1,0 +1,54 @@
+---
+  import SurveyEdition from '../components/SurveyEdition.tsx';
+  import query from '../data/query'
+
+  export async function getStaticPaths() {
+
+    const response = await fetch("http://localhost:4000/graphql",
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          query,
+        }),
+      })
+
+    const json = await response.json();
+    return json.data.locales.map(locale => ({ params: { localeId: locale.id }, props: { locale, data: json.data } }))
+  }
+
+  const {locale, data } = Astro.props
+  const { surveys } = data
+
+  const survey = surveys.find(s => s?.slug === import.meta.env.SURVEY)
+
+---
+
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <style>
+    html,
+    body {
+      font-family: system-ui;
+      margin: 0;
+    }
+
+    body {
+      padding: 2rem;
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <h2>{survey.name} {locale.label}</h2>
+    {survey.editions.reverse().map(edition =>
+    <SurveyEdition key={edition.surveyId} {...edition} />)}
+  </main>
+</body>
+
+</html>

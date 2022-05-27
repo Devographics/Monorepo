@@ -4,7 +4,7 @@ shareUrl: https://stateofjs.com
 resultsUrl: https://2021.stateofjs.com/
 year: 2021
 status: 3 # preview/open/closed
-imageUrl: "stateofjs2021.png"
+imageUrl: http://static.devographics.com/stateofjs/2021/images/stateofjs2021.png
 
 credits:
   - id: shawn_wang

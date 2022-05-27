@@ -4,7 +4,7 @@ shareUrl: https://stateofgraphql.com
 # resultsUrl: https://2022.stateofgraphql.com/
 year: 2022
 status: 1 # preview/open/closed/hidden
-imageUrl: "stateofgraphql2022.png"
+imageUrl: http://static.devographics.com/stateofgraphql/2022/images/stateofgraphql2022.png
 credits:
   - id: praveen_durairaju
     role: survey_design
