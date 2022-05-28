@@ -10,8 +10,11 @@ interface PageContextValue {
 
 const pageContext = createContext({})
 
-export const PageContextProvider: FC<{ value: PageContextValue }> = props => {
-    return <pageContext.Provider value={props.value}>{props.children}</pageContext.Provider>
+export const PageContextProvider: FC<{ value: PageContextValue, children: React.ReactNode }> = ({
+    value,
+    children
+}) => {
+    return <pageContext.Provider value={value}>{children}</pageContext.Provider>
 }
 
 export const usePageContext = () => useContext<PageContextValue>(pageContext)

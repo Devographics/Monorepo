@@ -1,0 +1,23 @@
+---
+  import { I18nContext, I18nContextProvider } from '../helpers/I18nContext'
+  // import { I18nContext } from '../helpers/I18nContext'
+---
+
+<I18nContext.Provider value={{ foo: 678 }}>
+  <html lang="en">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+
+  </head>
+
+  <body>
+    <main>
+      <slot />
+    </main>
+  </body>
+
+  </html>
+</I18nContext.Provider>

@@ -1,6 +1,9 @@
 ---
-  import SurveyEdition from '../components/SurveyEdition.tsx';
   import query from '../data/query'
+  import Homepage from '../components/Homepage';
+  import DefaultLayout from '../layouts/DefaultLayout.astro'
+
+  import { I18nContext, I18nContextProvider } from '../helpers/I18nContext'
 
   export async function getStaticPaths() {
 
@@ -14,41 +17,19 @@
       })
 
     const json = await response.json();
+    if (json.errors) {
+      throw new Error(json.errors[0].message)
+    }
     return json.data.locales.map(locale => ({ params: { localeId: locale.id }, props: { locale, data: json.data } }))
   }
 
-  const {locale, data } = Astro.props
+  const { locale, data } = Astro.props
   const { surveys } = data
 
   const survey = surveys.find(s => s?.slug === import.meta.env.SURVEY)
 
 ---
 
-<html lang="en">
-
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width" />
-  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-  <style>
-    html,
-    body {
-      font-family: system-ui;
-      margin: 0;
-    }
-
-    body {
-      padding: 2rem;
-    }
-  </style>
-</head>
-
-<body>
-  <main>
-    <h2>{survey.name} {locale.label}</h2>
-    {survey.editions.reverse().map(edition =>
-    <SurveyEdition key={edition.surveyId} {...edition} />)}
-  </main>
-</body>
-
-</html>
+<DefaultLayout survey={survey} locale={locale}>
+  <Homepage survey={survey} locale={locale} />
+</DefaultLayout>

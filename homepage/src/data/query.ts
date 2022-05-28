@@ -15,9 +15,18 @@ export default /* GraphQL */`
         imageUrl
       }
     }  
-    locales {
+    locales(contexts: [homepage]) {
       id
       label
+      strings {
+        key
+        t
+        tHtml
+        context
+        fallback
+        aliasFor
+      }
+      translators
     }
   }
 `
