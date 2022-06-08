@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import ReactGA from 'react-ga'
 import styled from 'styled-components'
@@ -7,8 +7,11 @@ import { mq, spacing } from 'core/theme'
 import Button from 'core/components/Button'
 import { useI18n } from 'core/i18n/i18nContext'
 
-const { emailOctopusUrl, emailOctopusCode, emailOctopusSiteKey } = config
-const postUrl = emailOctopusUrl
+const getEOConfig = (listId) => ({
+    emailOctopusUrl: `https://emailoctopus.com/lists/${listId}/members/embedded/1.3/add`,
+    emailOctopusSiteKey: '6LdYsmsUAAAAAPXVTt-ovRsPIJ_IVhvYBBhGvRV6',
+    emailOctopusCode: 'hpc4b27b6e-eb38-11e9-be00-06b4694bee2a'
+})
 
 export default class Newsletter extends Component {
     static propTypes = {

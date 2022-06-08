@@ -43,6 +43,20 @@ type SurveyItem {
     domain: String
     editions: [SurveyEditionConfig]
     data: SurveyData
+    colors: SurveyColors
+    emailOctopus: EmailOctopusConfig
+}
+
+type SurveyColors {
+    primary: String
+    secondary: String
+    text: String
+    background: String
+    backgroundSecondary: String
+}
+
+type EmailOctopusConfig {
+    listId: String
 }
 
 type SurveyData {

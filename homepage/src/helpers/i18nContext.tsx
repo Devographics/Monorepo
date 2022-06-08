@@ -37,13 +37,10 @@ export const I18nContextProvider = ({ locale, locales, children }) => {
         foo: 4356
     }
 
-    console.log(`locales count: ${locales.length}`)
-
     return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>
 }
 
 export const useI18n = () => {
-    console.log(I18nContext)
     return useContext<{
         locale?: Locale
         locales?: Locale[]

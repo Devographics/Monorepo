@@ -5,6 +5,9 @@ export default /* GraphQL */`
       hashtag
       name
       domain
+      emailOctopus{
+        listId
+      }
       editions {
         surveyId
         createdAt
@@ -13,6 +16,13 @@ export default /* GraphQL */`
         shareUrl
         resultsUrl
         imageUrl
+      }
+      colors {
+        primary
+        secondary
+        text
+        background
+        backgroundSecondary
       }
     }  
     locales(contexts: [homepage]) {

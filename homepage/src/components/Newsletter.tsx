@@ -1,18 +1,20 @@
 import React, { useState } from 'react'
 import { useI18n } from '../helpers/i18nContext'
 
-const emailOctopusUrl = import.meta.env.EO_URL
-const emailOctopusCode = import.meta.env.EO_CODE
-const emailOctopusSiteKey = import.meta.env.EO_SITEKEY
+const getEOConfig = listId => ({
+    emailOctopusUrl: `https://emailoctopus.com/lists/${listId}/members/embedded/1.3/add`,
+    emailOctopusSiteKey: '6LdYsmsUAAAAAPXVTt-ovRsPIJ_IVhvYBBhGvRV6',
+    emailOctopusCode: 'hpc4b27b6e-eb38-11e9-be00-06b4694bee2a'
+})
 
-const postUrl = emailOctopusUrl
-
-export default function Newsletter() {
+export default function Newsletter({ listId }) {
     const [email, setEmail] = useState('')
     const [submitted, setSubmitted] = useState(false)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
     const [success, setSuccess] = useState(null)
+
+    const eoConfig = getEOConfig(listId)
 
     const handleChange = e => {
         const email = e.target.value
@@ -25,7 +27,7 @@ export default function Newsletter() {
         console.log('SUBMITTING')
 
         e.preventDefault()
-        const response = await fetch(postUrl, {
+        const response = await fetch(eoConfig.emailOctopusUrl, {
             method: 'POST',
             body: `field_0=${encodeURIComponent(email)}`,
             headers: {
@@ -58,40 +60,55 @@ export default function Newsletter() {
                     loading={loading}
                     handleSubmit={handleSubmit}
                     handleChange={handleChange}
+                    {...eoConfig}
                 />
             )}
         </>
     )
 }
 
-const NewsletterForm = ({ email, loading, handleSubmit, handleChange }) => {
+const NewsletterForm = ({
+    email,
+    loading,
+    handleSubmit,
+    handleChange,
+    emailOctopusUrl,
+    emailOctopusSiteKey,
+    emailOctopusCode
+}) => {
     const { getString } = useI18n()
     return (
-        <form
-            method="post"
-            action={postUrl}
-            datasitekey={emailOctopusSiteKey}
-            onSubmit={handleSubmit}
-        >
-            <input
-                id="field_0"
-                name="field_0"
-                type="email"
-                placeholder={getString('blocks.newsletter.email')?.t}
-                onChange={handleChange}
-                value={email}
-                disabled={loading}
-            />
-            <input
-                type="text"
-                name={emailOctopusCode}
-                tabIndex={-1}
-                autoComplete="nope"
-                style={{ display: 'none' }}
-            />
-            <button type="submit" name="subscribe" className="border-dotted border-1 border-black ">
-                {getString('blocks.newsletter.submit')?.t}
-            </button>
-        </form>
+        <div className="newsletter">
+            <form
+                method="post"
+                action={emailOctopusUrl}
+                datasitekey={emailOctopusSiteKey}
+                onSubmit={handleSubmit}
+            >
+                <input
+                    id="field_0"
+                    name="field_0"
+                    type="email"
+                    placeholder={getString('blocks.newsletter.email')?.t}
+                    onChange={handleChange}
+                    value={email}
+                    disabled={loading}
+                />
+                <input
+                    type="text"
+                    name={emailOctopusCode}
+                    tabIndex={-1}
+                    autoComplete="nope"
+                    style={{ display: 'none' }}
+                />
+                <button
+                    type="submit"
+                    name="subscribe"
+                    className="border-dotted border-1 border-black "
+                >
+                    {getString('blocks.newsletter.submit')?.t}
+                </button>
+            </form>
+        </div>
     )
 }

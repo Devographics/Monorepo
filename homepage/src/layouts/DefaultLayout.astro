@@ -1,7 +1,9 @@
 ---
 import { I18nContext, I18nContextProvider } from '../helpers/I18nContext'
 import Footer from '../components/Footer'
-import '../stylesheets/screen.scss'
+
+// import '../stylesheets/screen.scss'
+
 // import { I18nContext } from '../helpers/I18nContext'
 import {
   getStringTranslator,
@@ -9,7 +11,7 @@ import {
 
 
 const { survey, locale, locales, redirect } = Astro.props;
-const { name, imageUrl, slug, domain, faviconUrl } = survey
+const { name, imageUrl, slug, domain, faviconUrl, colors } = survey
 
 const getString = getStringTranslator(locale)
 
@@ -52,7 +54,7 @@ const meta = [
   </head>
 
   <body>
-    <main>
+    <main class="layout-narrow">
       <slot />
       <Footer />
     </main>
@@ -60,3 +62,21 @@ const meta = [
 
   </html>
 </I18nContextProvider>
+
+<style is:global>
+  :root {
+    --primary: {colors.primary};
+    --secondary: {colors.secondary};
+    --text: {colors.text};
+    --background: {colors.background};
+    --backgroundSecondary: {colors.backgroundSecondary};
+  }
+
+  body {
+    background: var(--background);
+    text: var(--text);
+  }
+  a {
+    color: var(--primary);
+  }
+</style>

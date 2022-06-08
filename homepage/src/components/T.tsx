@@ -13,8 +13,6 @@ const T: FC<{
     fallback?: string
 }> = ({ t: override, k, values, md = false, html = false, fallback, useShort = false }) => {
     const i18n = useI18n()
-    console.log('//T')
-    console.log(i18n)
     const { getString } = i18n
 
     // accept override to just use provided string as translation result

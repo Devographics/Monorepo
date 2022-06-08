@@ -1,6 +1,8 @@
 ---
 import query from '../data/query'
 import Homepage from '../components/Homepage';
+import Newsletter from '../components/Newsletter'
+
 import DefaultLayout from '../layouts/DefaultLayout.astro'
 import '../stylesheets/screen.scss'
 
@@ -20,7 +22,7 @@ export async function getStaticPaths() {
   if (json.errors) {
     throw new Error(json.errors[0].message)
   }
-const { surveys, locales } = json.data
+  const { surveys, locales } = json.data
 
   return json.data.locales.map(locale => ({ params: { localeId: locale.id }, props: { locale, locales, surveys } }))
 }
@@ -35,5 +37,6 @@ const props = { survey, locale, locales }
 <DefaultLayout {...props}>
 
   <Homepage {...props} />
+  <Newsletter client:load listId={survey.emailOctopus.listId} />
 
 </DefaultLayout>
