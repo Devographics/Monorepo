@@ -11,6 +11,8 @@
     "isolatedModules": true,
     // Add type definitions for our Vite runtime.
     "types": ["vite/client"],
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    // TODO: not sure if preserve or react is the best
+    "jsx": "react"
   }
 }
