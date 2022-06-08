@@ -1,6 +1,7 @@
 surveyId: js2021
 createdAt: December 1, 2021
 shareUrl: https://stateofjs.com
+questionsUrl: https://survey.stateofjs.com/state-of-js/2021
 resultsUrl: https://2021.stateofjs.com/
 year: 2021
 status: 3 # preview/open/closed

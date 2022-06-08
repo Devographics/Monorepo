@@ -1,0 +1,18 @@
+.Wrapper {
+  padding: $spacing * 2 $spacing;
+}
+.layout-narrow {
+  margin: 0 auto;
+  max-width: 600px;
+}
+
+.Block {
+  margin-bottom: $spacing * 3;
+}
+.Block__Heading {
+  text-align: center;
+}
+
+.Footer {
+  text-align: center;
+}

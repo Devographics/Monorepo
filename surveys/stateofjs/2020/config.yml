@@ -1,6 +1,7 @@
 surveyId: js2020
 createdAt: December 1, 2020
 shareUrl: https://stateofjs.com
+questionsUrl: https://survey.stateofjs.com/state-of-js/2020
 resultsUrl: https://2020.stateofjs.com/
 year: 2020
 status: 3 # closed

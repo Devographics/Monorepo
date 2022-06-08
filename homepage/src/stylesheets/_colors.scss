@@ -1,0 +1,67 @@
+/*****************************************************************************\
+  base colors
+\*****************************************************************************/
+
+$greyLight: #e0e4e4;
+$grey: #d9dedf;
+$greyMedium: #cecdcc;
+$greyDark: #AEAFB5;
+$greyDarker: #343539;
+
+$blueLighter: #B2BBEE;
+$blueLight: #808EE1;
+$blue: #3c52d1;
+$blueDark: #273aa2;
+
+$pinkLightest: #D3BBF2;
+$pinkLighter: #D68DF0;
+$pinkLight: #EC75CB;
+// $pink: #ec2f95; // contrast too low
+$pink: #F649A7; // better contrast
+// $pink: #f055a9; // even better contrast but looks washed out
+
+$greenLighter: #E7FFED;
+$greenLight: #ACFFC3;
+$green: #85EBA2;
+$greenDark: #59DF7F;
+
+$tealLight: #bad9db;
+$teal: #9ac6c9;
+$tealDark: #6a8f92;
+$tealDarker: #445a5a;
+
+$purpleLight: #B096E7;
+$purple: #7854C3;
+$purpleDark: #57457C;
+
+$red: #FE6A6A;
+$yellow: #fbf34c;
+$aqua: #1ea0f2;
+
+$white: #ffffff;
+
+$navyLightest: #7e86ad;
+$navyLighter: #484F73;
+$navyLight: #303652;
+$navy: #232840;
+$navyDark: #1a1f35;
+
+$slate: #222429;
+$brightTeal: #41c7c7;
+
+/*****************************************************************************\
+  "functional" colors
+\*****************************************************************************/
+
+$bg-color: $slate;
+$bg-color-light: $greyLight;
+
+$border-color: $brightTeal;
+$dark-border-color: $greyLight;
+$hover-color: $red;
+
+$text-color: $greyLight;
+$text-color-inverted: $blueDark;
+$link-color: $brightTeal;
+
+$active-color: $brightTeal;

@@ -1,35 +1,39 @@
 ---
-  import query from '../data/query'
-  import Homepage from '../components/Homepage';
-  import DefaultLayout from '../layouts/DefaultLayout.astro'
+import query from '../data/query'
+import Homepage from '../components/Homepage';
+import DefaultLayout from '../layouts/DefaultLayout.astro'
+import '../stylesheets/screen.scss'
 
-  import { I18nContext, I18nContextProvider } from '../helpers/I18nContext'
+export async function getStaticPaths() {
 
-  export async function getStaticPaths() {
 
-    const response = await fetch("http://localhost:4000/graphql",
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          query,
-        }),
-      })
+  const response = await fetch("http://localhost:4000/graphql",
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        query,
+      }),
+    })
 
-    const json = await response.json();
-    if (json.errors) {
-      throw new Error(json.errors[0].message)
-    }
-    return json.data.locales.map(locale => ({ params: { localeId: locale.id }, props: { locale, data: json.data } }))
+  const json = await response.json();
+  if (json.errors) {
+    throw new Error(json.errors[0].message)
   }
+const { surveys, locales } = json.data
 
-  const { locale, data } = Astro.props
-  const { surveys } = data
+  return json.data.locales.map(locale => ({ params: { localeId: locale.id }, props: { locale, locales, surveys } }))
+}
 
-  const survey = surveys.find(s => s?.slug === import.meta.env.SURVEY)
+const { locale, locales, surveys } = Astro.props
 
+const survey = surveys.find(s => s?.slug === import.meta.env.SURVEY)
+
+const props = { survey, locale, locales }
 ---
 
-<DefaultLayout survey={survey} locale={locale}>
-  <Homepage survey={survey} locale={locale} />
+<DefaultLayout {...props}>
+
+  <Homepage {...props} />
+
 </DefaultLayout>

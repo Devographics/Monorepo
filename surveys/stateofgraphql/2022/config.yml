@@ -1,6 +1,7 @@
 surveyId: graphql2022
 createdAt: December 1, 2021
 shareUrl: https://stateofgraphql.com
+questionsUrl: https://survey.stateofjs.com/state-of-graphql/2022
 # resultsUrl: https://2022.stateofgraphql.com/
 year: 2022
 status: 1 # preview/open/closed/hidden

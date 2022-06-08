@@ -1,23 +1,62 @@
 ---
-  import { I18nContext, I18nContextProvider } from '../helpers/I18nContext'
-  // import { I18nContext } from '../helpers/I18nContext'
+import { I18nContext, I18nContextProvider } from '../helpers/I18nContext'
+import Footer from '../components/Footer'
+import '../stylesheets/screen.scss'
+// import { I18nContext } from '../helpers/I18nContext'
+import {
+  getStringTranslator,
+} from '../helpers/translator'
+
+
+const { survey, locale, locales, redirect } = Astro.props;
+const { name, imageUrl, slug, domain, faviconUrl } = survey
+
+const getString = getStringTranslator(locale)
+
+const description = getString(`general.${slug}.description`)?.t
+const title = name
+const url = `https://${domain}`
+
+const meta = [
+  { charset: "utf-8" },
+  { name: "description", content: description },
+  // responsive
+  { name: "viewport", content: "width=device-width, initial-scale=1" },
+  // facebook
+  { property: "og:type", content: "article" },
+  { property: "og:url", content: url },
+  { property: "og:image", content: imageUrl },
+  { property: "og:title", content: title },
+  { property: "og:description", content: description },
+  // twitter
+  { name: "twitter:card", content: "summary_large_image" },
+  { name: "twitter:image:src", content: imageUrl },
+  { name: "twitter:title", content: title },
+  { name: "twitter:description", content: description },
+]
+
 ---
 
-<I18nContext.Provider value={{ foo: 678 }}>
+<I18nContextProvider locale={locale} locales={locales}>
   <html lang="en">
 
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+
+    {redirect &&
+    <meta http-equiv="refresh" content={ `0; url=/en-US` } /> }
+    {meta.map((tag) =>
+    <meta {...tag} />)}
+
+    <link rel="icon" type="image/x-icon" href={faviconUrl} />
 
   </head>
 
   <body>
     <main>
       <slot />
+      <Footer />
     </main>
   </body>
 
   </html>
-</I18nContext.Provider>
+</I18nContextProvider>

@@ -12,10 +12,10 @@ const T: FC<{
     useShort?: boolean
     fallback?: string
 }> = ({ t: override, k, values, md = false, html = false, fallback, useShort = false }) => {
-
-    return <span>foo</span>
-    
-    const { getString } = useI18n()
+    const i18n = useI18n()
+    console.log('//T')
+    console.log(i18n)
+    const { getString } = i18n
 
     // accept override to just use provided string as translation result
     let translation = override

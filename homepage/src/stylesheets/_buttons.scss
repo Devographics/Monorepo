@@ -1,0 +1,94 @@
+@use "sass:math";
+
+.Button,
+.button {
+  background: none;
+  @include border;
+  padding: math.div($spacing,2) $spacing;
+  cursor: pointer;
+  display: block;
+  text-align: center;
+  white-space: nowrap;
+  @include font-bold;
+  @include secondary-font;
+  @include small {
+    font-size: $small-font;
+  }
+  @include medium-large {
+    font-size: $medium-font;
+  }
+  white-space: nowrap;
+  transition: color 400ms, border-color 400ms;
+  &.button-disabled {
+    cursor: default;
+  }
+  &,
+  &:link,
+  &:visited {
+    color: $text-color;
+    text-decoration: none;
+  }
+
+  &:hover {
+    color: $hover-color;
+    border-color: $hover-color;
+    border-style: solid;
+    text-decoration: none;
+  }
+
+  &--small {
+    font-size: $small-font;
+    padding: math.div($spacing, 5) math.div($spacing, 2);
+  }
+
+  &--large {
+    padding: $spacing $spacing;
+    font-size: $large-font;
+  }
+
+  &--disabled {
+    color: $tealDarker;
+  }
+
+  &--active {
+    border-style: solid;
+  }
+}
+
+.ButtonGroup {
+  display: inline-flex;
+  vertical-align: middle;
+
+  .Button {
+    border-left-width: 0;
+
+    &:hover {
+      border-left-color: $border-color;
+      border-right-color: $border-color;
+
+      &:first-child {
+        border-left-color: $hover-color;
+        border-right-style: dashed;
+      }
+      &:last-child {
+        border-right-color: $hover-color;
+        border-left-style: dashed;
+      }
+    }
+
+    &--active {
+      cursor: default;
+      pointer-events: none;
+      &:first-child {
+        border-right-style: dashed;
+      }
+      &:last-child {
+        border-left-style: dashed;
+      }
+    }
+
+    &:first-child {
+      border-left-width: 1px;
+    }
+  }
+}

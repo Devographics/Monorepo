@@ -8,7 +8,14 @@ interface Translation {
 
 export interface Locale {
     id?: string
+    label?: string
     strings?: Translation[]
+}
+
+export interface i18nContextType {
+    locale: Locale
+    locales: Locale[]
+    getString: StringTranslator
 }
 
 interface InterpolationValues {
