@@ -72,6 +72,7 @@ type SurveyEditionConfig {
     shareUrl: String
     resultsUrl: String
     imageUrl: String
+    faviconUrl: String
 }
 
 """

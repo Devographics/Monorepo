@@ -1,33 +1,42 @@
 ---
-import SurveyEdition from './SurveyEdition.astro'
-import T from './T'
-import Newsletter from './Newsletter'
-
+import SurveyEdition from '@components/SurveyEdition.astro'
+import T from '@components/T'
+import Newsletter from '@components/Newsletter'
+import { statuses} from '@helpers/constants'
 const { survey, locale } = Astro.props
 const editions = survey.editions.sort((e1, e2) => e2.year - e1.year)
-const { slug, emailOctopus } = survey
-const [currentEdition, ...pastEditions] = editions
+const { slug } = survey
+const openEdition = editions.find(e =>e.status === statuses.open)
+const closedEditions = editions.filter(e =>e.status === statuses.closed)
 ---
 
 <div class="homepage">
-  <h2 class="text-3xl">
+  <h1>
     {survey.name}
-  </h2>
+  </h1>
   <T locale={locale} k={`general.${slug}.description`} />
-  <section class="current-edition">
-    <h3 class="text-xl">
+  {openEdition && <section class="current-edition">
+    <h2>
       <T locale={locale} k="homepage.current_survey" />
-    </h3>
-    <SurveyEdition locale={locale} {...currentEdition} />
-  </section>
+    </h2>
+    <SurveyEdition locale={locale} {...openEdition} />
+  </section>}
   <section class="past-editions">
-    <h3 class="text-xl">
+    <h2>
       <T locale={locale} k="homepage.past_surveys" />
-    </h3>
-    {pastEditions.map(edition => (
+    </h2>
+    {closedEditions.map(edition => (
     <SurveyEdition locale={locale} key={edition.surveyId} {...edition} />
     ))}
   </section>
   <Newsletter client:load locale={locale} listId={survey.emailOctopus.listId} />
-
 </div>
+
+<style lang="scss">
+  h1{
+    font-size: var(--largest-font);
+  }
+  h2{
+    font-size: var(--larger-font);
+  }
+</style>

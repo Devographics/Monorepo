@@ -13,6 +13,13 @@
     "types": ["vite/client"],
     "allowSyntheticDefaultImports": true,
     // TODO: not sure if preserve or react is the best
-    "jsx": "react"
+    "jsx": "react",
+    "baseUrl": ".",
+    "paths": {
+      "@components/*": ["src/components/*"],
+      "@helpers/*": ["src/helpers/*"],
+      "@layouts/*": ["src/layouts/*"],
+      "@stylesheets/*": ["src/layouts/*"]
+    }
   }
 }

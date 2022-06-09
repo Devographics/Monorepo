@@ -2,14 +2,11 @@ import React, { useContext, FC } from 'react'
 // import { useI18n, i18nContext } from '../helpers/i18nContext'
 // import ReactMarkdown from 'react-markdown'
 // import rehypeRaw from 'rehype-raw'
-import {
-    getStringTranslator,
-    Locale,
-} from '../helpers/translator'
+import { getStringTranslator, Locale } from '../helpers/translator'
 
-import { dataFetcher} from '../helpers/data'
+import { dataFetcher } from '../helpers/data'
 
-const T: FC<{
+export interface Tproperties {
     k: string
     t?: string
     values?: any
@@ -18,8 +15,18 @@ const T: FC<{
     useShort?: boolean
     fallback?: string
     locale?: Locale
-}> = ({ t: override, k, values, md = false, html = false, fallback, useShort = false, locale }) => {
-    
+}
+
+const T = ({
+    t: override,
+    k,
+    values,
+    md = false,
+    html = false,
+    fallback,
+    useShort = false,
+    locale
+}: Tproperties) => {
     // const data = await dataFetcher.getData()
     // props version
     const getString = getStringTranslator(locale)

@@ -7,6 +7,7 @@ resultsUrl: https://2021.stateofcss.com/
 year: 2021
 status: 3 # preview/open/closed
 imageUrl: https://static.devographics.com/stateofcss/2021/images/stateofcss2021.png
+faviconUrl: https://static.devographics.com/stateofcss/2021/images/favicon.svg
 
 credits:
   - id: sarah_fossheim
