@@ -6,7 +6,7 @@ questionsUrl: https://survey.stateofjs.com/state-of-css/2021
 resultsUrl: https://2021.stateofcss.com/
 year: 2021
 status: 3 # preview/open/closed
-imageUrl: http://static.devographics.com/stateofcss/2021/images/stateofcss2021.png
+imageUrl: https://static.devographics.com/stateofcss/2021/images/stateofcss2021.png
 
 credits:
   - id: sarah_fossheim

@@ -5,7 +5,7 @@ questionsUrl: https://survey.stateofjs.com/state-of-graphql/2022
 # resultsUrl: https://2022.stateofgraphql.com/
 year: 2022
 status: 1 # preview/open/closed/hidden
-imageUrl: http://static.devographics.com/stateofgraphql/2022/images/stateofgraphql2022.png
+imageUrl: https://static.devographics.com/stateofgraphql/2022/images/stateofgraphql2022.png
 credits:
   - id: praveen_durairaju
     role: survey_design

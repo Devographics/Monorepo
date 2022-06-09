@@ -5,7 +5,7 @@ questionsUrl: https://survey.stateofjs.com/state-of-js/2021
 resultsUrl: https://2021.stateofjs.com/
 year: 2021
 status: 3 # preview/open/closed
-imageUrl: http://static.devographics.com/stateofjs/2021/images/stateofjs2021.png
+imageUrl: https://static.devographics.com/stateofjs/2021/images/stateofjs2021.png
 
 credits:
   - id: shawn_wang
