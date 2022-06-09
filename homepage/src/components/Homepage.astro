@@ -1,0 +1,33 @@
+---
+import SurveyEdition from './SurveyEdition.astro'
+import T from './T'
+import Newsletter from './Newsletter'
+
+const { survey, locale } = Astro.props
+const editions = survey.editions.sort((e1, e2) => e2.year - e1.year)
+const { slug, emailOctopus } = survey
+const [currentEdition, ...pastEditions] = editions
+---
+
+<div class="homepage">
+  <h2 class="text-3xl">
+    {survey.name}
+  </h2>
+  <T locale={locale} k={`general.${slug}.description`} />
+  <section class="current-edition">
+    <h3 class="text-xl">
+      <T locale={locale} k="homepage.current_survey" />
+    </h3>
+    <SurveyEdition locale={locale} {...currentEdition} />
+  </section>
+  <section class="past-editions">
+    <h3 class="text-xl">
+      <T locale={locale} k="homepage.past_surveys" />
+    </h3>
+    {pastEditions.map(edition => (
+    <SurveyEdition locale={locale} key={edition.surveyId} {...edition} />
+    ))}
+  </section>
+  <Newsletter client:load locale={locale} listId={survey.emailOctopus.listId} />
+
+</div>

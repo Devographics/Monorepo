@@ -1,8 +1,10 @@
 ---
 import { I18nContext, I18nContextProvider } from '../helpers/i18nContext'
-import Footer from '../components/Footer'
+import Footer from '../components/Footer.astro'
 
-// import '../stylesheets/screen.scss'
+import '../stylesheets/_breakpoints.scss'
+import '../stylesheets/_global.scss'
+import '../stylesheets/_buttons.scss'
 
 // import { I18nContext } from '../helpers/i18nContext'
 import {
@@ -37,9 +39,10 @@ const meta = [
   { name: "twitter:description", content: description },
 ]
 
+const { primary, secondary, background, backgroundSecondary, text } = colors
 ---
 
-<I18nContextProvider locale={locale} locales={locales}>
+<I18nContextProvider locale={locale} locales={locales} client:load>
   <html lang="en">
 
   <head>
@@ -56,27 +59,32 @@ const meta = [
   <body>
     <main class="layout-narrow">
       <slot />
-      <Footer />
+      <Footer locale={locale} survey={survey} />
     </main>
   </body>
 
   </html>
 </I18nContextProvider>
 
-<style is:global>
-  :root {
-    --primary: {colors.primary};
-    --secondary: {colors.secondary};
-    --text: {colors.text};
-    --background: {colors.background};
-    --backgroundSecondary: {colors.backgroundSecondary};
-  }
+<style is:global define:vars={{ primary, secondary, background, backgroundSecondary, text }}>
 
   body {
     background: var(--background);
-    text: var(--text);
+    color: var(--text);
+    font-weight: var(--medium);
   }
+
   a {
     color: var(--primary);
+    font-weight: var(--bold);
   }
+
+  a,
+  a:link,
+  a:visited,
+  a:active,
+  a:focus {
+    color: var(--primary);
+  }
+
 </style>

@@ -1,0 +1,34 @@
+---
+import T from './T'
+import LanguageSwitcher from './LanguageSwitcher'
+
+const { survey, locale } = Astro.props
+
+const getLinks = (survey) => [
+    {
+        link: 'https://www.devographics.com',
+        k: 'general.made_by_devographics'
+    },
+    {
+        link: 'https://www.netlify.com',
+        k: 'general.netlify_link'
+    },
+    {
+        link: 'https://github.com/StateOfJS/Monorepo/issues',
+        k: 'general.leave_issue'
+    },
+    {
+        link: 'https://discord.gg/zRDb35jfrt',
+        k: 'general.join_discord'
+    }
+]
+---
+
+<footer>
+    <LanguageSwitcher />
+    {getLinks(survey).map(({ link, k }) => (
+    <a href={link}>
+        <T locale={locale} k={k} values={{ link }} html={true} />
+    </a>
+    ))}
+</footer>

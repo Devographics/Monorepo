@@ -1,7 +1,13 @@
 import React, { useContext, FC } from 'react'
-import { useI18n, I18nContext } from '../helpers/i18nContext'
+// import { useI18n, i18nContext } from '../helpers/i18nContext'
 // import ReactMarkdown from 'react-markdown'
 // import rehypeRaw from 'rehype-raw'
+import {
+    getStringTranslator,
+    Locale,
+} from '../helpers/translator'
+
+import { dataFetcher} from '../helpers/data'
 
 const T: FC<{
     k: string
@@ -11,9 +17,17 @@ const T: FC<{
     html?: boolean
     useShort?: boolean
     fallback?: string
-}> = ({ t: override, k, values, md = false, html = false, fallback, useShort = false }) => {
-    const i18n = useI18n()
-    const { getString } = i18n
+    locale?: Locale
+}> = ({ t: override, k, values, md = false, html = false, fallback, useShort = false, locale }) => {
+    
+    // const data = await dataFetcher.getData()
+    // props version
+    const getString = getStringTranslator(locale)
+
+    // context version
+    // const i18n = useI18n()
+    // console.log(i18n)
+    // const {getString} = i18n
 
     // accept override to just use provided string as translation result
     let translation = override

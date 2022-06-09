@@ -1,20 +1,19 @@
 ---
-import query from '../data/query'
-import Homepage from '../components/Homepage';
-import Newsletter from '../components/Newsletter'
+import getQuery from '../data/query'
+// import Homepage from '../components/Homepage';
+import Homepage from '../components/Homepage.astro';
 
 import DefaultLayout from '../layouts/DefaultLayout.astro'
-import '../stylesheets/screen.scss'
+
 
 export async function getStaticPaths() {
 
-
-  const response = await fetch("http://localhost:4000/graphql",
+  const response = await fetch(import.meta.env.API_URL,
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        query,
+        query: getQuery(import.meta.env.SURVEY),
       }),
     })
 
@@ -35,8 +34,5 @@ const props = { survey, locale, locales }
 ---
 
 <DefaultLayout {...props}>
-
-  <Homepage {...props} />
-  <Newsletter client:load listId={survey.emailOctopus.listId} />
-
+  <Homepage client:load {...props} />
 </DefaultLayout>

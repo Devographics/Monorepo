@@ -1,11 +1,10 @@
 @use "sass:math";
+@import "_breakpoints.scss";
 
-.Newsletter {
-  // border: 1px solid $border-color;
-  // padding: $spacing/2 $spacing/2;
-  // margin-bottom: $spacing * 2;
-  @include flex-center;
-  flex-direction: column;
+.newsletter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   form {
       flex: 1;
       width: 100%;
@@ -19,53 +18,41 @@
   }
 }
 
-.Newsletter__Email {
+.newsletter-email {
   @include small {
-      margin-bottom: math.div($spacing,2);
+      margin-bottom: var(--halfspacing);
   }
-  @include font-regular;
   display: block;
-  padding: math.div($spacing, 2)  math.div($spacing, 2);
+  padding: var(--halfspacing)  var(--halfspacing);
   border: none;
-  margin-right: math.div($spacing,2);
+  margin-right: var(--halfspacing);
   flex-grow: 1;
   width: 100%;
   &:focus {
       outline: none;
   }
-  .Newsletter--loading & {
-      background: $bg-color-light;
+  .newsletter-loading & {
+      background: var(--background-secondary);
   }
 }
-.Newsletter__Button {
+.newsletter-button {
   min-width: 140px;
   display: block;
   @include small {
       width: 100%;
   }
 }
-.Newsletter__Hidden {
-  display: none;
-}
-.Newsletter__Message {
-  @include border;
+.newsletter-message {
   width: 100%;
-  padding: $spacing;
+  padding: var(--spacing);
   text-align: center;
-  @include font-bold;
 }
-.Newsletter__Error {
-  border-color: $red;
-  color: $red;
-  margin-top: $spacing;
+.newsletter-error {
+  border-color: var(--red);
+  color: var(--red);
+  margin-top: var(--spacing);
 }
-.Newsletter__Success {
-  border-color: $border-color;
-  color: $border-color;
-}
-.Newsletter__Heading {
-  margin-bottom: math.div($spacing, 2);
-}
-.Newsletter__Description {
-  margin-bottom: $spacing;
+.newsletter-success {
+  border-color: var(--border-color);
+  color: var(--border-color);
 }

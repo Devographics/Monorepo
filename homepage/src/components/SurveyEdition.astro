@@ -1,0 +1,19 @@
+---
+import T from './T'
+const { name, year, questionsUrl, resultsUrl, imageUrl, locale } = Astro.props
+---
+<div>
+    <h4>{year}</h4>
+    <img src={imageUrl} width={300} />
+    <h3>{name}</h3>
+    <div>
+        <a href={questionsUrl}>
+            <T locale={locale} k="homepage.review_questions" />
+        </a>
+    </div>
+    <div>
+        <a href={resultsUrl}>
+            <T locale={locale} k="homepage.view_results" />
+        </a>
+    </div>
+</div>

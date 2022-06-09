@@ -1,9 +1,7 @@
 import React, { createContext, useContext, FC } from 'react'
 import {
-    getTranslator,
     getStringTranslator,
     Locale,
-    LegacyTranslator,
     StringTranslator,
     i18nContextType
 } from './translator'
@@ -26,7 +24,6 @@ export const I18nContext = createContext(dummyContext)
 // export const I18nContext = createContext({})
 
 export const I18nContextProvider = ({ locale, locales, children }) => {
-    const translate = getTranslator(locale)
     const getString = getStringTranslator(locale)
 
     const value = {

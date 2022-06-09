@@ -1,72 +1,43 @@
-html {
-  box-sizing: border-box;
+:root {
+    --medium: 400;
+    --bold: 800;
+    --spacing: 20px;
+    --halfspacing: calc(var(--spacing) / 2);
+    --quarterspacing: calc(var(--spacing) / 4);
+
+    --red: #fe6a6a;
+    --border-color: var(--text);
+    --link-color: var(--primary);
+    --hover-color: var(--primary);
+
+    --border: 1px dashed var(--border-color);
+
+    --smaller-font: 0.7rem;
+    --small-font: 0.8rem;
+    --smallish-font: 0.9rem;
+    --medium-font: 1rem;
+    --large-font: 1.1rem;
+    --larger-font: 1.3rem;
+    --largest-font: 1.5rem;
 }
+
+html {
+    box-sizing: border-box;
+}
+
+* {
+    font-family: 'IBM Plex Mono', monospace;
+}
+
 *,
 *:before,
 *:after {
-  box-sizing: inherit;
+    box-sizing: inherit;
 }
-
-body {
-  background: $bg-color;
-  color: $text-color;
-  padding: 0;
-  font-feature-settings: "liga" 0;
-  line-height: 1.7;
-
-  // background: linear-gradient(180deg, rgb(30, 32, 32) 0%, rgb(55, 58, 58) 100%) fixed;
-  // @include text-shadow-faint;
-  @include primary-font;
-  @include small {
-    font-size: $root-size-mobile;
-  }
-  @include large {
-    font-size: $root-size;
-    // border: 10px solid $active-color;
-    // padding: 10px;
-    min-height: 100vh;
-  }
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  @include secondary-font;
-  margin: 0 0 $spacing 0;
-}
-
-p,
-ul,
-ol {
-  margin: 0 0 $spacing 0;
-  @include small {
-    line-height: 1.6;
-  }
-  @include medium-large {
-    line-height: 1.8;
-  }
-}
-
 a {
-  text-decoration: none;
-  @include font-bold;
-  transition: all ease-in 300ms;
-  &,
-  &:link,
-  &:visited,
-  &:active,
-  &:focus {
-    @include small {
-      color: $link-color;
-    }
-    @include medium-large {
-      color: $link-color;
-    }
-  }
-  &:hover{
+    text-decoration: none;
+    transition: all ease-in 300ms;
+}
+a:hover {
     text-decoration: underline;
-  }
 }

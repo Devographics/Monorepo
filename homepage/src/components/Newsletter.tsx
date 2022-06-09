@@ -1,5 +1,13 @@
 import React, { useState } from 'react'
 import { useI18n } from '../helpers/i18nContext'
+import '../stylesheets/_newsletter.scss'
+import T from './T'
+
+import {
+    getStringTranslator,
+    Locale,
+} from '../helpers/translator'
+
 
 const getEOConfig = listId => ({
     emailOctopusUrl: `https://emailoctopus.com/lists/${listId}/members/embedded/1.3/add`,
@@ -7,7 +15,7 @@ const getEOConfig = listId => ({
     emailOctopusCode: 'hpc4b27b6e-eb38-11e9-be00-06b4694bee2a'
 })
 
-export default function Newsletter({ listId }) {
+export default function Newsletter({ listId, locale }) {
     const [email, setEmail] = useState('')
     const [submitted, setSubmitted] = useState(false)
     const [loading, setLoading] = useState(false)
@@ -51,15 +59,22 @@ export default function Newsletter({ listId }) {
 
     return (
         <>
-            {error && <div className="Newsletter__Error">{error.message}</div>}
+            <h3>
+                <T locale={locale} k="homepage.newsletter.title" />
+            </h3>
+            <h3>
+                <T locale={locale} k="homepage.newsletter.description" />
+            </h3>{' '}
+            {error && <div className="newsletter-message newsletter-error">{error.message}</div>}
             {success ? (
-                <div>{success.message}</div>
+                <div className="newsletter-message newsletter-success">{success.message}</div>
             ) : (
                 <NewsletterForm
                     email={email}
                     loading={loading}
                     handleSubmit={handleSubmit}
                     handleChange={handleChange}
+                    locale={locale}
                     {...eoConfig}
                 />
             )}
@@ -74,9 +89,12 @@ const NewsletterForm = ({
     handleChange,
     emailOctopusUrl,
     emailOctopusSiteKey,
-    emailOctopusCode
+    emailOctopusCode,
+    locale,
 }) => {
-    const { getString } = useI18n()
+    // const { getString } = useI18n()
+    const getString = getStringTranslator(locale)
+
     return (
         <div className="newsletter">
             <form
@@ -86,10 +104,11 @@ const NewsletterForm = ({
                 onSubmit={handleSubmit}
             >
                 <input
+                    className="newsletter-email"
                     id="field_0"
                     name="field_0"
                     type="email"
-                    placeholder={getString('blocks.newsletter.email')?.t}
+                    placeholder={getString('homepage.newsletter.email')?.t}
                     onChange={handleChange}
                     value={email}
                     disabled={loading}
@@ -101,12 +120,8 @@ const NewsletterForm = ({
                     autoComplete="nope"
                     style={{ display: 'none' }}
                 />
-                <button
-                    type="submit"
-                    name="subscribe"
-                    className="border-dotted border-1 border-black "
-                >
-                    {getString('blocks.newsletter.submit')?.t}
+                <button type="submit" name="subscribe" className="newsletter-button button">
+                    {getString('homepage.newsletter.submit')?.t}
                 </button>
             </form>
         </div>

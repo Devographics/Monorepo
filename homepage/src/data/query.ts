@@ -1,4 +1,4 @@
-export default /* GraphQL */`
+export default (surveySlug) => /* GraphQL */`
   query AllSurveys {
     surveys {
       slug
@@ -25,7 +25,7 @@ export default /* GraphQL */`
         backgroundSecondary
       }
     }  
-    locales(contexts: [homepage]) {
+    locales(contexts: [homepage, results, common, ${surveySlug}]) {
       id
       label
       strings {
