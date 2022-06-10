@@ -1,7 +1,5 @@
-[build]
-  base = "homepage"
-  publish = "homepage/dist"
-  command = "yarn run build"
+[context.production]
+  environment = { API_URL = "https://api.stateofjs.com/graphql" }
 
 [[redirects]]
   from = "/"
