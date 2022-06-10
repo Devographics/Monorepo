@@ -1,26 +1,27 @@
 ---
-import DefaultLayout from '@layouts/DefaultLayout.astro'
-import getQuery from '@data/query'
-import { getMeta } from '@helpers/meta'
-import { getData } from '@helpers/data'
-const data = await getData()
-const { surveys, locales } = data
-const survey = surveys.find(s => s?.slug === import.meta.env.SURVEY)
-const lastEdition = survey.editions.sort((e1, e2) => e2.year - e1.year)[0]
-const { faviconUrl } = lastEdition
+// import getQuery from '@data/query'
+// import { getMeta } from '@helpers/meta'
+// import { getData } from '@helpers/data'
+// const data = await getData()
+// const { surveys, locales } = data
+// const survey = surveys.find(s => s?.slug === import.meta.env.SURVEY)
+// const lastEdition = survey.editions.sort((e1, e2) => e2.year - e1.year)[0]
+// const { faviconUrl } = lastEdition
 
-const locale = locales.find(l => l.id === 'en-US')
-const meta = getMeta({ survey, locale })
+// const locale = locales.find(l => l.id === 'en-US')
+// const meta = getMeta({ survey, locale })
+
+return Astro.redirect('/en-US');
 ---
 
 <html>
 
-<head>
+<!-- <head>
   <link rel="icon" type="image/x-icon" href={faviconUrl} />
   <meta http-equiv="refresh" content={ `0; url=/en-US` } />
   {meta.map((tag) =>
   <meta {...tag} />)}
-</head>
+</head> -->
 
 <body>
   Redirecting…
