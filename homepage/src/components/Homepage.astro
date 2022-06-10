@@ -5,7 +5,7 @@ import Newsletter from '@components/Newsletter'
 import { statuses } from '@helpers/constants'
 import { getLocaleSubset } from '@helpers/translator'
 const { survey, locale, surveys } = Astro.props
-const editions = survey.editions.sort((e1, e2) => e2.year - e1.year)
+const editions = survey.editions.sort((e1, e2) => e2.year - e1.year).filter(e => e.status !== statuses.hidden)
 const { slug } = survey
 
 const [lastEdition, ...pastEditions] = editions
@@ -34,7 +34,7 @@ const closedEditions = editions.filter(e => e.status === statuses.closed)
   <Newsletter client:load locale={getLocaleSubset(locale, ['newsletter.stay_tuned', 'newsletter.leave_your_email'
     , 'homepage.newsletter.email' , 'homepage.newsletter.submit' ])} listId={survey.emailOctopus.listId} />
 
-  <section class="past-editions">
+  {pastEditions.length && <section class="past-editions">
     <h2>
       <T locale={locale} k="homepage.past_surveys" />
     </h2>
@@ -43,12 +43,11 @@ const closedEditions = editions.filter(e => e.status === statuses.closed)
       <SurveyEdition locale={locale} key={edition.surveyId} edition={edition} survey={survey} />
       ))}
     </div>
-  </section>
+  </section>}
 
 </div>
 
 <style lang="scss">
-
   h1 {
     font-size: var(--title-font);
     text-align: center;

@@ -8,8 +8,17 @@ const { survey, edition, locale, isLast } = Astro.props
 const { year, questionsUrl, resultsUrl, imageUrl, status, colors = {} } = edition
 const { background } = colors
 const isOpen = status === statuses.open
+const isPreview = status === statuses.preview
 const mainLink = isOpen ? questionsUrl : resultsUrl;
-const marker = isOpen ? 'homepage.survey_open_now' : isLast ? 'homepage.most_recent_survey' : null;
+
+let marker
+if (isOpen) {
+    marker = 'homepage.survey_open_now'
+} else if (isPreview) {
+    marker = 'homepage.survey_preview'
+} else if (isLast) {
+    marker = 'homepage.most_recent_survey'
+}
 
 ---
 
@@ -29,7 +38,7 @@ const marker = isOpen ? 'homepage.survey_open_now' : isLast ? 'homepage.most_rec
         <TakeSurvey client:load locale={getLocaleSubset(locale, ['homepage.take_survey'])} url={questionsUrl} />
     </div>): (<div class="survey-edition-actions survey-closed button-group">
         {questionsUrl && <a href={questionsUrl} class="button">
-            <T locale={locale} k="homepage.view_questions" />
+            <T locale={locale} k={isPreview ? "homepage.preview_questions": "homepage.view_questions"} />
         </a>}
         {resultsUrl &&
         <a href={resultsUrl} class="button">
