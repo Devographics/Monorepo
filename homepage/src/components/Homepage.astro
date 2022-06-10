@@ -15,18 +15,23 @@ const closedEditions = editions.filter(e => e.status === statuses.closed)
   <h1>
     {survey.name}
   </h1>
-  <!-- <p class="survey-description">
+  <p class="survey-description">
     <T locale={locale} k={`general.${slug}.description`} />
-  </p> -->
+  </p>
   <div class="intro">
     <T locale={locale} k={`general.${slug}.intro`} />
   </div>
+
   {openEdition && <section class="current-edition">
     <h2>
       <T locale={locale} k="homepage.current_survey" />
     </h2>
     <SurveyEdition locale={locale} edition={openEdition} survey={survey} />
   </section>}
+
+  <Newsletter client:load locale={getLocaleSubset(locale, ['newsletter.stay_tuned', 'newsletter.leave_your_email'
+    , 'homepage.newsletter.email' , 'homepage.newsletter.submit' ])} listId={survey.emailOctopus.listId} />
+
   <section class="past-editions">
     <h2>
       <T locale={locale} k="homepage.past_surveys" />
@@ -37,7 +42,7 @@ const closedEditions = editions.filter(e => e.status === statuses.closed)
       ))}
     </div>
   </section>
-  <Newsletter client:load locale={getLocaleSubset(locale, ['newsletter.stay_tuned', 'newsletter.leave_your_email', 'homepage.newsletter.email', 'homepage.newsletter.submit'])} listId={survey.emailOctopus.listId} />
+
 </div>
 
 <style lang="scss">
@@ -45,10 +50,11 @@ const closedEditions = editions.filter(e => e.status === statuses.closed)
     font-size: var(--title-font);
     text-align: center;
     margin-bottom: var(--halfspacing);
+    line-height: 1;
   }
 
   .survey-description {
-    font-size: var(--larger-font);
+    font-size: var(--large-font);
     margin-bottom: var(--doublespacing);
     text-align: center;
   }
@@ -63,6 +69,12 @@ const closedEditions = editions.filter(e => e.status === statuses.closed)
     font-size: var(--larger-font);
     margin-bottom: var(--doublespacing);
     text-align: center;
+  }
+
+  .current-edition,
+  .past-editions {
+    margin-bottom: var(--doublespacing);
+
   }
 
   .past-editions-items {
