@@ -6,7 +6,8 @@ year: 2016
 status: 3 # preview/open/closed
 imageUrl: https://static.devographics.com/stateofjs/2016/images/javascript9.svg
 colors:
-  background: #fffef0;
-  primary: #49b7be
-  secondary: #ed387a
-  text: #344c4c
+  background: "#fffef0"
+  backgroundSecondary: "#fffef0"
+  primary: "#49b7be"
+  secondary: "#ed387a"
+  text: "#344c4c"

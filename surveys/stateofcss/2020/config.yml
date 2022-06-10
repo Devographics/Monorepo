@@ -6,3 +6,9 @@ resultsUrl: https://2020.stateofcss.com/
 year: 2020
 status: 3 # closed
 imageUrl: https://static.devographics.com/stateofcss/2020/images/stateofcss2020.png
+
+colors:
+  background: "#232840"
+  primary: "#f649a7"
+  secondary: "#59df7f"
+  text: "#9ac6c9"

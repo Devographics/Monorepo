@@ -1,6 +1,7 @@
 ---
 import { I18nContext, I18nContextProvider } from '../helpers/i18nContext'
 import Footer from '../components/Footer.astro'
+import OtherSurveys from '@components/OtherSurveys.astro'
 
 import '../stylesheets/_breakpoints.scss'
 import '../stylesheets/_global.scss'
@@ -12,9 +13,11 @@ import {
 } from '../helpers/translator'
 
 
-const { survey, locale, locales, redirect } = Astro.props;
-const { name, imageUrl, slug, domain, faviconUrl, colors } = survey
+const { surveys, survey, locale, locales, redirect } = Astro.props;
+const { name, imageUrl, slug, domain, faviconUrl, editions } = survey
 
+const lastEdition = editions.sort((e1, e2) => e2.year - e1.year)[0]
+const { colors } = lastEdition
 const getString = getStringTranslator(locale)
 
 const description = getString(`general.${slug}.description`)?.t
@@ -57,6 +60,7 @@ const { primary, secondary, background, backgroundSecondary, text } = colors
   </head>
 
   <body>
+    <OtherSurveys locale={locale} surveys={surveys} survey={survey} />
     <main class="layout">
       <slot />
       <Footer {...Astro.props} />
@@ -68,9 +72,11 @@ const { primary, secondary, background, backgroundSecondary, text } = colors
 
 <style is:global define:vars={{ primary, secondary, background, backgroundSecondary, text }}>
   body {
-    background: var(--background);
+    background: var(--backgroundSecondary);
     color: var(--text);
     font-weight: var(--medium);
+    padding: 0;
+    margin: 0;
   }
 
   a {
@@ -87,7 +93,7 @@ const { primary, secondary, background, backgroundSecondary, text } = colors
   }
 
   .layout {
-    max-width: 800px;
+    max-width: var(--layout-width);
     margin: 0 auto;
   }
 </style>

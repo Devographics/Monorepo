@@ -3,25 +3,30 @@ import T from '@components/T'
 import { statuses } from '@helpers/constants'
 
 const { survey, edition, locale } = Astro.props
-const { name } = survey
-const { year, questionsUrl, resultsUrl, imageUrl, status } = edition
+const { year, questionsUrl, resultsUrl, imageUrl, status, colors = {} } = edition
+const { background } = colors
+const mainLink = status === statuses.open ? questionsUrl : resultsUrl;
 ---
 
 <div class="survey-edition">
-    {status === statuses.open && <h4 class="survey-edition-open-now">
-        <T locale={locale} k="homepage.survey_open_now" />
-    </h4>}
-    <h4 class="survey-edition-year">{year}</h4>
-    <img src={imageUrl} />
+    <div class="survey-edition-card" style={`background: ${background};`}>
 
-    {status === statuses.open ? (<div class="survey-open">
+        {status === statuses.open && <h4 class="survey-edition-open-now">
+            <T locale={locale} k="homepage.survey_open_now" />
+        </h4>}
+        <h4 class="survey-edition-year">{year}</h4>
+        <div class="image-wrapper">
+            <a href={mainLink}><img src={imageUrl} /></a>
+        </div>
+    </div>
+    {status === statuses.open ? (<div class="survey-edition-actions survey-open">
         <a href={questionsUrl} class="button">
             <T locale={locale} k="homepage.take_survey" />
         </a>
-    </div>): (<div class="survey-closed button-group">
-        <a href={questionsUrl} class="button">
+    </div>): (<div class="survey-edition-actions survey-closed button-group">
+        {questionsUrl && <a href={questionsUrl} class="button">
             <T locale={locale} k="homepage.view_questions" />
-        </a>
+        </a>}
         {resultsUrl &&
         <a href={resultsUrl} class="button">
             <T locale={locale} k="homepage.view_results" />
@@ -32,11 +37,17 @@ const { year, questionsUrl, resultsUrl, imageUrl, status } = edition
 
 <style lang="scss">
     .survey-edition {
-        // border: var(--border);
-        background: linear-gradient(0deg, var(--background), var(--backgroundSecondary));
-        padding: var(--spacing);
         margin-bottom: var(--doublespacing);
+    }
+
+    .survey-edition-card {
+        // border: var(--border);
+        // background: linear-gradient(0deg, var(--background), var(--backgroundSecondary));
+        // padding: var(--spacing);
         position: relative;
+        border-radius: 3px;
+        overflow: hidden;
+        margin-bottom: var(--quarterspacing);
     }
 
     .survey-edition-open-now,
@@ -57,6 +68,13 @@ const { year, questionsUrl, resultsUrl, imageUrl, status } = edition
 
     .survey-edition-year {
         right: 0;
+    }
+
+    .image-wrapper {
+        padding: var(--halfspacing);
+        aspect-ratio: 300/200;
+        display: grid;
+        place-items: center;
     }
 
     img {

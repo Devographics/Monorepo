@@ -2,6 +2,21 @@
 @import "_breakpoints.scss";
 
 .newsletter {
+  background: var(--background);
+  padding: var(--spacing);
+  margin-bottom: var(--doublespacing);
+  text-align: center;
+}
+
+.newsletter-heading {
+  margin-bottom: var(--halfspacing);
+}
+
+.newsletter-details {
+  margin-bottom: var(--spacing);
+}
+
+.newsletter-form {
   display: flex;
   justify-content: center;
   align-items: center;

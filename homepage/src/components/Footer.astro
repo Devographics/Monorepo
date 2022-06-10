@@ -1,6 +1,6 @@
 ---
 import T from './T'
-import LanguageSwitcher from './LanguageSwitcher'
+import LanguageSwitcher from './LanguageSwitcher.astro'
 
 const { survey, locale, locales } = Astro.props
 
@@ -25,10 +25,22 @@ const getLinks = (survey) => [
 ---
 
 <footer>
-    <LanguageSwitcher client:load canonicalUrl={Astro.canonicalURL} locale={locale} locales={locales} survey={survey}/>
+    <LanguageSwitcher client:load canonicalUrl={Astro.canonicalURL} locale={locale} locales={locales} survey={survey} />
     {getLinks(survey).map(({ link, k }) => (
-    <a href={link}>
+    <span>
         <T locale={locale} k={k} values={{ link }} html={true} />
-    </a>
+    </span>
     ))}
 </footer>
+
+<style lang="scss">
+    footer {
+        text-align: center;
+        margin-bottom: var(--doublespacing);
+    }
+
+    span {
+        display: inline-flex;
+        margin: 0 var(--halfspacing);
+    }
+</style>

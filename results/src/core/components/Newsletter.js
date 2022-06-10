@@ -69,7 +69,7 @@ export default class Newsletter extends Component {
         const { email, loading, error, success } = this.state
 
         return (
-            <>
+            <div className="newsletter">
                 {error && (
                     <ErrorFeedback className="Newsletter__Error">{error.message}</ErrorFeedback>
                 )}
@@ -83,7 +83,7 @@ export default class Newsletter extends Component {
                         handleChange={this.handleChange}
                     />
                 )}
-            </>
+            </div>
         )
     }
 }

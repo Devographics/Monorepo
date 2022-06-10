@@ -1,6 +1,9 @@
 :root {
     --medium: 400;
     --bold: 800;
+
+    --layout-width: 800px;
+
     --spacing: 20px;
     --halfspacing: calc(var(--spacing) / 2);
     --quarterspacing: calc(var(--spacing) / 4);
@@ -20,10 +23,12 @@
     --large-font: 1.1rem;
     --larger-font: 1.3rem;
     --largest-font: 1.5rem;
+    --title-font: 3rem;
 }
 
 html {
     box-sizing: border-box;
+    line-height: 1.7;
 }
 
 * {

@@ -10,6 +10,13 @@ status: 3 # preview/open/closed
 imageUrl: https://static.devographics.com/stateofcss/2021/images/stateofcss2021.png
 faviconUrl: https://static.devographics.com/stateofcss/2021/images/favicon.svg
 
+colors: 
+  primary: rgb(239, 78, 136)
+  secondary: "#3633B7"
+  text: rgb(255, 246, 230)
+  background: rgb(39, 35, 37)
+  backgroundSecondary: rgb(62, 48, 54) 
+
 credits:
   - id: sarah_fossheim
     role: accessibility

@@ -3,7 +3,7 @@ import SurveyEdition from '@components/SurveyEdition.astro'
 import T from '@components/T'
 import Newsletter from '@components/Newsletter'
 import { statuses } from '@helpers/constants'
-const { survey, locale } = Astro.props
+const { survey, locale, surveys } = Astro.props
 const editions = survey.editions.sort((e1, e2) => e2.year - e1.year)
 const { slug } = survey
 const openEdition = editions.find(e => e.status === statuses.open)
@@ -14,26 +14,26 @@ const closedEditions = editions.filter(e => e.status === statuses.closed)
   <h1>
     {survey.name}
   </h1>
-  <h2>
+  <p class="survey-description">
     <T locale={locale} k={`general.${slug}.description`} />
-  </h2>
-  <div>
+  </p>
+  <div class="intro">
     <T locale={locale} k={`general.${slug}.intro`} />
   </div>
   {openEdition && <section class="current-edition">
     <h2>
       <T locale={locale} k="homepage.current_survey" />
     </h2>
-    <SurveyEdition locale={locale} edition={openEdition} survey={survey}/>
+    <SurveyEdition locale={locale} edition={openEdition} survey={survey} />
   </section>}
   <section class="past-editions">
     <h2>
       <T locale={locale} k="homepage.past_surveys" />
     </h2>
     <div class="past-editions-items">
-    {closedEditions.map(edition => (
-    <SurveyEdition locale={locale} key={edition.surveyId} edition={edition} survey={survey}/>
-    ))}
+      {closedEditions.map(edition => (
+      <SurveyEdition locale={locale} key={edition.surveyId} edition={edition} survey={survey} />
+      ))}
     </div>
   </section>
   <Newsletter client:load locale={locale} listId={survey.emailOctopus.listId} />
@@ -41,15 +41,23 @@ const closedEditions = editions.filter(e => e.status === statuses.closed)
 
 <style lang="scss">
   h1 {
-    font-size: var(--largest-font);
+    font-size: var(--title-font);
+    text-align: center;
+    margin-bottom: var(--halfspacing);
+  }
+
+  .survey-description {
+    font-size: var(--larger-font);
+    margin-bottom: var(--doublespacing);
     text-align: center;
   }
 
-  h2 {
+  .intro{
     font-size: var(--larger-font);
-    text-align: center;
     margin-bottom: var(--doublespacing);
+    text-align: center;
   }
+
   .past-editions-items {
     display: grid;
     grid-template-columns: 1fr 1fr;

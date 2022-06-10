@@ -10,20 +10,21 @@ export default (surveySlug) => /* GraphQL */`
       }
       editions {
         surveyId
-        createdAt
+        startedAt
+        endedAt
         year
         status
         shareUrl
         questionsUrl
         resultsUrl
         imageUrl
-      }
-      colors {
-        primary
-        secondary
-        text
-        background
-        backgroundSecondary
+        colors {
+          primary
+          secondary
+          text
+          background
+          backgroundSecondary
+        }
       }
     }  
     locales(contexts: [homepage, results, common, ${surveySlug}]) {

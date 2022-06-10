@@ -6,7 +6,7 @@ year: 2019
 status: 3 # preview/open/closed
 imageUrl: https://static.devographics.com/stateofcss/2019/images/stateofcss2019.png
 colors:
-  background: #232840;
-  primary: #f649a7
-  secondary: #59df7f
-  text: #9ac6c9
+  background: "#232840"
+  primary: "#f649a7"
+  secondary: "#59df7f"
+  text: "#9ac6c9"

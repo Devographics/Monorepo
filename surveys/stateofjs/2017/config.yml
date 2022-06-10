@@ -4,9 +4,10 @@ endedAt: December 31, 2017
 resultsUrl: https://2017.stateofjs.com/
 year: 2017
 status: 3 # preview/open/closed
-imageUrl: https://static.devographics.com/stateofjs/2016/images/javascript9.svg
+imageUrl: https://static.devographics.com/stateofjs/2017/images/javascript2017.svg
 colors:
-  background: #edefed;
-  primary: #4500ee
-  secondary: #9688e4
-  text: #344c4c
+  background: "#edefed"
+  backgroundSecondary: "#edefed"
+  primary: "#4500ee"
+  secondary: "#9688e4"
+  text: "#344c4c"

@@ -9,6 +9,13 @@ status: 2 # preview/open/closed
 imageUrl: https://static.devographics.com/stateofjs/2021/images/stateofjs2021.png
 faviconUrl: https://static.devographics.com/stateofjs/2021/images/favicon.svg
 
+colors: 
+  primary: rgb(71, 207, 237)
+  secondary: "#8D4CA8"
+  text: rgb(255, 246, 230)
+  background: rgb(39, 35, 37)
+  backgroundSecondary: rgb(48, 52, 53)
+  
 credits:
   - id: shawn_wang
     role: survey_design

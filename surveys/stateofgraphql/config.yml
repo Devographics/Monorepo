@@ -2,12 +2,6 @@ slug: state_of_graphql
 hashtag: StateOfGraphQL
 domain: stateofgraphql.com
 name: State of GraphQL
-colors: 
-  primary: rgb(71, 207, 237)
-  secondary: "#8D4CA8"
-  text: rgb(255, 246, 230)
-  background: rgb(39, 35, 37)
-  backgroundSecondary: rgb(48, 52, 53)
 
 emailOctopus:
   listId: 3fb96da2-e6d5-11ec-9258-0241b9615763

@@ -2,12 +2,6 @@ slug: state_of_css
 hashtag: StateOfCSS
 domain: stateofcss.com
 name: State of CSS
-colors: 
-  primary: rgb(239, 78, 136)
-  secondary: "#3633B7"
-  text: rgb(255, 246, 230)
-  background: rgb(39, 35, 37)
-  backgroundSecondary: rgb(62, 48, 54) 
 
 emailOctopus:
   listId: ed0386c4-2f55-11e9-a3c9-06b79b628af2

@@ -6,3 +6,9 @@ resultsUrl: https://2019.stateofjs.com/
 year: 2019
 status: 3 # closed
 imageUrl: https://static.devographics.com/stateofjs/2019/images/stateofjs2019.png
+
+colors:
+  background: "#212424"
+  primary: "#41c7c7"
+  secondary: "#FE6A6A"
+  text: "#e1e1e1"

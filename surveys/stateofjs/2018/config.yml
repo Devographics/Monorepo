@@ -1,12 +1,13 @@
-surveyId: js2017
-startedAt: December 1, 2017
-endedAt: December 31, 2017
-resultsUrl: https://2017.stateofjs.com/
-year: 2017
+surveyId: js2018
+startedAt: December 1, 2018
+endedAt: December 31, 2018
+resultsUrl: https://2018.stateofjs.com/
+year: 2018
 status: 3 # preview/open/closed
-imageUrl: https://static.devographics.com/stateofjs/2016/images/stateofjs2018.png
+imageUrl: https://static.devographics.com/stateofjs/2018/images/stateofjs2018.png
 colors:
-  background: #212424;
-  primary: #41c7c7
-  secondary: #FE6A6A
-  text: #e1e1e1
+  background: "#212424"
+  backgroundSecondary: "#212424"
+  primary: "#41c7c7"
+  secondary: "#FE6A6A"
+  text: "#e1e1e1"

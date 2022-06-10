@@ -58,11 +58,11 @@ export default function Newsletter({ listId, locale }) {
     }
 
     return (
-        <>
-            <h3>
+        <div className="newsletter">
+            <h3 className="newsletter-heading">
                 <T locale={locale} k="newsletter.stay_tuned" />
             </h3>
-            <p>
+            <p className="newsletter-details">
                 <T locale={locale} k="newsletter.leave_your_email" />
             </p>{' '}
             {error && <div className="newsletter-message newsletter-error">{error.message}</div>}
@@ -78,7 +78,7 @@ export default function Newsletter({ listId, locale }) {
                     {...eoConfig}
                 />
             )}
-        </>
+        </div>
     )
 }
 
@@ -96,7 +96,7 @@ const NewsletterForm = ({
     const getString = getStringTranslator(locale)
 
     return (
-        <div className="newsletter">
+        <div className="newsletter-form">
             <form
                 method="post"
                 action={emailOctopusUrl}
