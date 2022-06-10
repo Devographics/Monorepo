@@ -1,0 +1,8 @@
+[build]
+  base = "homepage"
+  publish = "homepage/dist"
+  command = "yarn run build"
+
+[[redirects]]
+  from = "/"
+  to = "/en-US"

@@ -7,5 +7,5 @@ import netlify from '@astrojs/netlify/functions'
 export default defineConfig({
     // Enable React to support React JSX components.
     integrations: [react()],
-    adapter: netlify()
+    // adapter: netlify()
 })

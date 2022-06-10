@@ -3,6 +3,7 @@ import SurveyEdition from '@components/SurveyEdition.astro'
 import T from '@components/T'
 import Newsletter from '@components/Newsletter'
 import { statuses } from '@helpers/constants'
+import { getLocaleSubset } from '@helpers/translator'
 const { survey, locale, surveys } = Astro.props
 const editions = survey.editions.sort((e1, e2) => e2.year - e1.year)
 const { slug } = survey
@@ -36,7 +37,7 @@ const closedEditions = editions.filter(e => e.status === statuses.closed)
       ))}
     </div>
   </section>
-  <Newsletter client:load locale={locale} listId={survey.emailOctopus.listId} />
+  <Newsletter client:load locale={getLocaleSubset(locale, ['newsletter.stay_tuned', 'newsletter.leave_your_email', 'homepage.newsletter.email', 'homepage.newsletter.submit'])} listId={survey.emailOctopus.listId} />
 </div>
 
 <style lang="scss">

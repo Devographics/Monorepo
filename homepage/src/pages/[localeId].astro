@@ -15,5 +15,5 @@ const survey = surveys.find(s => s?.slug === import.meta.env.SURVEY)
 ---
 
 <DefaultLayout {...Astro.props} survey={survey}>
-  <Homepage client:load {...Astro.props} survey={survey} />
+  <Homepage {...Astro.props} survey={survey} />
 </DefaultLayout>
