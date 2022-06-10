@@ -55,40 +55,45 @@
     }
 }
 
-// .ButtonGroup {
+.button-group {
+    display: grid;
+    grid-auto-columns: minmax(0, 1fr);
+grid-auto-flow: column;
 //   display: inline-flex;
-//   vertical-align: middle;
+  vertical-align: middle;
 
-//   .Button {
-//     border-left-width: 0;
+  .button {
+    // flex-grow: 1;
+    //   flex-basis: 0;
+    border-left-width: 0;
 
-//     &:hover {
-//       border-left-color: var(--border-color);
-//       border-right-color: var(--border-color);
+    &:hover {
+      border-left-color: var(--border-color);
+      border-right-color: var(--border-color);
 
-//       &:first-child {
-//         border-left-color: $hover-color;
-//         border-right-style: dashed;
-//       }
-//       &:last-child {
-//         border-right-color: $hover-color;
-//         border-left-style: dashed;
-//       }
-//     }
+      &:first-child {
+        border-left-color: var(--hover-color);
+        border-right-style: dashed;
+      }
+      &:last-child {
+        border-right-color: var(--hover-color);
+        border-left-style: dashed;
+      }
+    }
 
-//     &--active {
-//       cursor: default;
-//       pointer-events: none;
-//       &:first-child {
-//         border-right-style: dashed;
-//       }
-//       &:last-child {
-//         border-left-style: dashed;
-//       }
-//     }
+    &--active {
+      cursor: default;
+      pointer-events: none;
+      &:first-child {
+        border-right-style: dashed;
+      }
+      &:last-child {
+        border-left-style: dashed;
+      }
+    }
 
-//     &:first-child {
-//       border-left-width: 1px;
-//     }
-//   }
-// }
+    &:first-child {
+      border-left-width: 1px;
+    }
+  }
+}

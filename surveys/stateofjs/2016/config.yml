@@ -1,0 +1,12 @@
+surveyId: js2016
+startedAt: December 1, 2016
+endedAt: December 31, 2016
+resultsUrl: https://2016.stateofjs.com/
+year: 2016
+status: 3 # preview/open/closed
+imageUrl: https://static.devographics.com/stateofjs/2016/images/javascript9.svg
+colors:
+  background: #fffef0;
+  primary: #49b7be
+  secondary: #ed387a
+  text: #344c4c

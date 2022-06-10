@@ -2,41 +2,58 @@
 import SurveyEdition from '@components/SurveyEdition.astro'
 import T from '@components/T'
 import Newsletter from '@components/Newsletter'
-import { statuses} from '@helpers/constants'
+import { statuses } from '@helpers/constants'
 const { survey, locale } = Astro.props
 const editions = survey.editions.sort((e1, e2) => e2.year - e1.year)
 const { slug } = survey
-const openEdition = editions.find(e =>e.status === statuses.open)
-const closedEditions = editions.filter(e =>e.status === statuses.closed)
+const openEdition = editions.find(e => e.status === statuses.open)
+const closedEditions = editions.filter(e => e.status === statuses.closed)
 ---
 
 <div class="homepage">
   <h1>
     {survey.name}
   </h1>
-  <T locale={locale} k={`general.${slug}.description`} />
+  <h2>
+    <T locale={locale} k={`general.${slug}.description`} />
+  </h2>
+  <div>
+    <T locale={locale} k={`general.${slug}.intro`} />
+  </div>
   {openEdition && <section class="current-edition">
     <h2>
       <T locale={locale} k="homepage.current_survey" />
     </h2>
-    <SurveyEdition locale={locale} {...openEdition} />
+    <SurveyEdition locale={locale} edition={openEdition} survey={survey}/>
   </section>}
   <section class="past-editions">
     <h2>
       <T locale={locale} k="homepage.past_surveys" />
     </h2>
+    <div class="past-editions-items">
     {closedEditions.map(edition => (
-    <SurveyEdition locale={locale} key={edition.surveyId} {...edition} />
+    <SurveyEdition locale={locale} key={edition.surveyId} edition={edition} survey={survey}/>
     ))}
+    </div>
   </section>
   <Newsletter client:load locale={locale} listId={survey.emailOctopus.listId} />
 </div>
 
 <style lang="scss">
-  h1{
+  h1 {
     font-size: var(--largest-font);
+    text-align: center;
   }
-  h2{
+
+  h2 {
     font-size: var(--larger-font);
+    text-align: center;
+    margin-bottom: var(--doublespacing);
+  }
+  .past-editions-items {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: var(--doublespacing);
+    row-gap: var(--doublespacing);
   }
 </style>

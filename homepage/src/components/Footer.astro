@@ -2,7 +2,7 @@
 import T from './T'
 import LanguageSwitcher from './LanguageSwitcher'
 
-const { survey, locale } = Astro.props
+const { survey, locale, locales } = Astro.props
 
 const getLinks = (survey) => [
     {
@@ -25,7 +25,7 @@ const getLinks = (survey) => [
 ---
 
 <footer>
-    <LanguageSwitcher />
+    <LanguageSwitcher client:load canonicalUrl={Astro.canonicalURL} locale={locale} locales={locales} survey={survey}/>
     {getLinks(survey).map(({ link, k }) => (
     <a href={link}>
         <T locale={locale} k={k} values={{ link }} html={true} />

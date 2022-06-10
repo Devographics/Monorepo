@@ -1,19 +1,68 @@
 ---
-import T from './T'
-const { name, year, questionsUrl, resultsUrl, imageUrl, locale } = Astro.props
+import T from '@components/T'
+import { statuses } from '@helpers/constants'
+
+const { survey, edition, locale } = Astro.props
+const { name } = survey
+const { year, questionsUrl, resultsUrl, imageUrl, status } = edition
 ---
-<div>
-    <h4>{year}</h4>
-    <img src={imageUrl} width={300} />
-    <h3>{name}</h3>
-    <div>
-        <a href={questionsUrl}>
-            <T locale={locale} k="homepage.review_questions" />
+
+<div class="survey-edition">
+    {status === statuses.open && <h4 class="survey-edition-open-now">
+        <T locale={locale} k="homepage.survey_open_now" />
+    </h4>}
+    <h4 class="survey-edition-year">{year}</h4>
+    <img src={imageUrl} />
+
+    {status === statuses.open ? (<div class="survey-open">
+        <a href={questionsUrl} class="button">
+            <T locale={locale} k="homepage.take_survey" />
         </a>
-    </div>
-    <div>
-        <a href={resultsUrl}>
+    </div>): (<div class="survey-closed button-group">
+        <a href={questionsUrl} class="button">
+            <T locale={locale} k="homepage.view_questions" />
+        </a>
+        {resultsUrl &&
+        <a href={resultsUrl} class="button">
             <T locale={locale} k="homepage.view_results" />
         </a>
-    </div>
+        }
+    </div>)}
 </div>
+
+<style lang="scss">
+    .survey-edition {
+        // border: var(--border);
+        background: linear-gradient(0deg, var(--background), var(--backgroundSecondary));
+        padding: var(--spacing);
+        margin-bottom: var(--doublespacing);
+        position: relative;
+    }
+
+    .survey-edition-open-now,
+    .survey-edition-year {
+        position: absolute;
+        background: var(--primary);
+        color: var(--background);
+        padding: var(--quarterspacing) var(--halfspacing);
+        top: 0;
+    }
+
+    .survey-edition-open-now {
+        left: 0;
+        text-transform: uppercase;
+        background: var(--secondary);
+        color: var(--text);
+    }
+
+    .survey-edition-year {
+        right: 0;
+    }
+
+    img {
+        width: 100%;
+        max-width: 1000px;
+    }
+
+    .survey-open {}
+</style>

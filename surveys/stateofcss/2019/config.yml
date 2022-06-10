@@ -1,0 +1,12 @@
+surveyId: css2019
+startedAt: October 1, 2019
+endedAt: October 31, 2019
+resultsUrl: https://2019.stateofcss.com/
+year: 2019
+status: 3 # preview/open/closed
+imageUrl: https://static.devographics.com/stateofcss/2019/images/stateofcss2019.png
+colors:
+  background: #232840;
+  primary: #f649a7
+  secondary: #59df7f
+  text: #9ac6c9

@@ -1,5 +1,6 @@
 surveyId: css2021 # used as first part of field names
-createdAt: October 30, 2020
+startedAt:  October 1, 2021
+endedAt:  October 30, 2021
 hashtag: StateOfCSS
 shareUrl: https://stateofcss.com
 questionsUrl: https://survey.stateofjs.com/state-of-css/2021

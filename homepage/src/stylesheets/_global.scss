@@ -4,6 +4,7 @@
     --spacing: 20px;
     --halfspacing: calc(var(--spacing) / 2);
     --quarterspacing: calc(var(--spacing) / 4);
+    --doublespacing: calc(var(--spacing) * 2);
 
     --red: #fe6a6a;
     --border-color: var(--text);
@@ -40,4 +41,9 @@ a {
 }
 a:hover {
     text-decoration: underline;
+}
+
+h1, h2, h3, h4, h5, h6, p, ul, ol {
+    margin-top: 0;
+    margin-bottom: var(--spacing);
 }

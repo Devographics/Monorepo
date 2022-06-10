@@ -60,11 +60,11 @@ export default function Newsletter({ listId, locale }) {
     return (
         <>
             <h3>
-                <T locale={locale} k="homepage.newsletter.title" />
+                <T locale={locale} k="newsletter.stay_tuned" />
             </h3>
-            <h3>
-                <T locale={locale} k="homepage.newsletter.description" />
-            </h3>{' '}
+            <p>
+                <T locale={locale} k="newsletter.leave_your_email" />
+            </p>{' '}
             {error && <div className="newsletter-message newsletter-error">{error.message}</div>}
             {success ? (
                 <div className="newsletter-message newsletter-success">{success.message}</div>
@@ -100,7 +100,7 @@ const NewsletterForm = ({
             <form
                 method="post"
                 action={emailOctopusUrl}
-                datasitekey={emailOctopusSiteKey}
+                data-sitekey={emailOctopusSiteKey}
                 onSubmit={handleSubmit}
             >
                 <input

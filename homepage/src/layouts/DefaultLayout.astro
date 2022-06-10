@@ -57,9 +57,9 @@ const { primary, secondary, background, backgroundSecondary, text } = colors
   </head>
 
   <body>
-    <main class="layout-narrow">
+    <main class="layout">
       <slot />
-      <Footer locale={locale} survey={survey} />
+      <Footer {...Astro.props} />
     </main>
   </body>
 
@@ -67,7 +67,6 @@ const { primary, secondary, background, backgroundSecondary, text } = colors
 </I18nContextProvider>
 
 <style is:global define:vars={{ primary, secondary, background, backgroundSecondary, text }}>
-
   body {
     background: var(--background);
     color: var(--text);
@@ -87,4 +86,8 @@ const { primary, secondary, background, backgroundSecondary, text } = colors
     color: var(--primary);
   }
 
+  .layout {
+    max-width: 800px;
+    margin: 0 auto;
+  }
 </style>

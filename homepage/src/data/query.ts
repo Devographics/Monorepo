@@ -14,6 +14,7 @@ export default (surveySlug) => /* GraphQL */`
         year
         status
         shareUrl
+        questionsUrl
         resultsUrl
         imageUrl
       }
