@@ -1,29 +1,13 @@
 ---
-import getQuery from '../data/query'
-// import Homepage from '../components/Homepage';
 import Homepage from '../components/Homepage.astro';
 
+import { getData } from '@helpers/data'
 import DefaultLayout from '../layouts/DefaultLayout.astro'
 
-
 export async function getStaticPaths() {
-
-  const response = await fetch(import.meta.env.API_URL,
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        query: getQuery(import.meta.env.SURVEY),
-      }),
-    })
-
-  const json = await response.json();
-  if (json.errors) {
-    throw new Error(json.errors[0].message)
-  }
-  const { surveys, locales } = json.data
-
-  return json.data.locales.map(locale => ({ params: { localeId: locale.id }, props: { locale, locales, surveys } }))
+  const data = await getData()
+  const { surveys, locales } = data
+  return locales.map(locale => ({ params: { localeId: locale.id }, props: { locale, locales, surveys } }))
 }
 
 const { locale, locales, surveys } = Astro.props

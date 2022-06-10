@@ -1,5 +1,21 @@
 import getQuery from '../data/query'
 
+export const getData = async () => {
+    const response = await fetch(import.meta.env.API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            query: getQuery(import.meta.env.SURVEY)
+        })
+    })
+
+    const json = await response.json()
+    if (json.errors) {
+        throw new Error(json.errors[0].message)
+    }
+    return json.data
+}
+
 export const dataFetcher = {
     data: {},
     _init: async function () {

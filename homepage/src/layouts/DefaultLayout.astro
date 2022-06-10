@@ -1,46 +1,20 @@
 ---
 import { I18nContext, I18nContextProvider } from '../helpers/i18nContext'
-import Footer from '../components/Footer.astro'
+import Footer from '@components/Footer.astro'
 import OtherSurveys from '@components/OtherSurveys.astro'
+import { getMeta } from '@helpers/meta'
 
 import '../stylesheets/_breakpoints.scss'
 import '../stylesheets/_global.scss'
 import '../stylesheets/_buttons.scss'
 
-// import { I18nContext } from '../helpers/i18nContext'
-import {
-  getStringTranslator,
-} from '../helpers/translator'
-
-
 const { surveys, survey, locale, locales, redirect } = Astro.props;
-const { name, imageUrl, slug, domain, editions } = survey
+const { editions } = survey
 
 const lastEdition = editions.sort((e1, e2) => e2.year - e1.year)[0]
 const { colors, faviconUrl } = lastEdition
-const getString = getStringTranslator(locale)
 
-const description = getString(`general.${slug}.description`)?.t
-const title = name
-const url = `https://${domain}`
-
-const meta = [
-  { charset: "utf-8" },
-  { name: "description", content: description },
-  // responsive
-  { name: "viewport", content: "width=device-width, initial-scale=1" },
-  // facebook
-  { property: "og:type", content: "article" },
-  { property: "og:url", content: url },
-  { property: "og:image", content: imageUrl },
-  { property: "og:title", content: title },
-  { property: "og:description", content: description },
-  // twitter
-  { name: "twitter:card", content: "summary_large_image" },
-  { name: "twitter:image:src", content: imageUrl },
-  { name: "twitter:title", content: title },
-  { name: "twitter:description", content: description },
-]
+const meta = getMeta({ survey, locale })
 
 const { primary, secondary, background, backgroundSecondary, text } = colors
 ---
@@ -50,8 +24,6 @@ const { primary, secondary, background, backgroundSecondary, text } = colors
 
   <head>
 
-    {redirect &&
-    <meta http-equiv="refresh" content={ `0; url=/en-US` } /> }
     {meta.map((tag) =>
     <meta {...tag} />)}
 
