@@ -2,6 +2,12 @@ slug: state_of_js
 hashtag: StateOfJS
 name: State of JavaScript
 domain: stateofjs.com
+colors: 
+  primary: rgb(71, 207, 237)
+  secondary: "#8D4CA8"
+  text: rgb(255, 246, 230)
+  background: rgb(39, 35, 37)
+  backgroundSecondary: rgb(48, 52, 53)
 
 emailOctopus:
   listId: 463dc2a9-b2ff-11e8-a3c9-06b79b628af2
