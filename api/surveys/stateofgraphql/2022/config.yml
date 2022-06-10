@@ -1,19 +1,20 @@
 surveyId: graphql2022
-createdAt: December 1, 2021
+startedAt: June 15, 2022
+endedAt: July 15, 2022
 shareUrl: https://stateofgraphql.com
 questionsUrl: https://survey.stateofjs.com/state-of-graphql/2022
 # resultsUrl: https://2022.stateofgraphql.com/
 year: 2022
-status: 1 # preview/open/closed/hidden
+status: 2 # preview/open/closed/hidden
 imageUrl: https://static.devographics.com/stateofgraphql/2022/images/stateofgraphql2022.png
 faviconUrl: https://static.devographics.com/stateofgraphql/2022/images/favicon.svg
 
 colors: 
-  primary: rgb(71, 207, 237)
-  secondary: "#8D4CA8"
-  text: rgb(255, 246, 230)
-  background: rgb(39, 35, 37)
-  backgroundSecondary: rgb(48, 52, 53)
+  primary: "#FDB8E7"
+  secondary: "#7A9BE2"
+  text: "#E8ECF5"
+  background: "#2D3036"
+  backgroundSecondary: "#454B58"
 
 credits:
   - id: praveen_durairaju

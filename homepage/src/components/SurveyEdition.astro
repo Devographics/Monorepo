@@ -1,28 +1,32 @@
 ---
 import T from '@components/T'
 import { statuses } from '@helpers/constants'
+import TakeSurvey from '@components/TakeSurvey'
+import { getLocaleSubset } from '@helpers/translator'
 
-const { survey, edition, locale } = Astro.props
+const { survey, edition, locale, isLast } = Astro.props
 const { year, questionsUrl, resultsUrl, imageUrl, status, colors = {} } = edition
 const { background } = colors
-const mainLink = status === statuses.open ? questionsUrl : resultsUrl;
+const isOpen = status === statuses.open
+const mainLink = isOpen ? questionsUrl : resultsUrl;
+const marker = isOpen ? 'homepage.survey_open_now' : isLast ? 'homepage.most_recent_survey' : null;
+
 ---
 
-<div class="survey-edition">
+<div class:list={['survey-edition', {'survey-edition-last': isLast}]}>
     <div class="survey-edition-card" style={`background: ${background};`}>
 
-        {status === statuses.open && <h4 class="survey-edition-open-now">
-            <T locale={locale} k="homepage.survey_open_now" />
+        {marker && <h4 class="survey-edition-status">
+            <T locale={locale} k={marker} />
         </h4>}
+
         <h4 class="survey-edition-year">{year}</h4>
-        <div class="image-wrapper">
-            <a href={mainLink}><img src={imageUrl} /></a>
-        </div>
+
+        <a class="image-wrapper" href={mainLink}><img src={imageUrl} /></a>
+
     </div>
-    {status === statuses.open ? (<div class="survey-edition-actions survey-open">
-        <a href={questionsUrl} class="button">
-            <T locale={locale} k="homepage.take_survey" />
-        </a>
+    {isOpen ? (<div class="survey-edition-actions survey-open">
+        <TakeSurvey client:load locale={getLocaleSubset(locale, ['homepage.take_survey'])} url={questionsUrl} />
     </div>): (<div class="survey-edition-actions survey-closed button-group">
         {questionsUrl && <a href={questionsUrl} class="button">
             <T locale={locale} k="homepage.view_questions" />
@@ -36,7 +40,6 @@ const mainLink = status === statuses.open ? questionsUrl : resultsUrl;
 </div>
 
 <style lang="scss">
-
     .survey-edition-card {
         // border: var(--border);
         // background: linear-gradient(0deg, var(--background), var(--backgroundSecondary));
@@ -47,7 +50,7 @@ const mainLink = status === statuses.open ? questionsUrl : resultsUrl;
         margin-bottom: var(--quarterspacing);
     }
 
-    .survey-edition-open-now,
+    .survey-edition-status,
     .survey-edition-year {
         position: absolute;
         background: var(--primary);
@@ -56,7 +59,7 @@ const mainLink = status === statuses.open ? questionsUrl : resultsUrl;
         top: 0;
     }
 
-    .survey-edition-open-now {
+    .survey-edition-status {
         left: 0;
         text-transform: uppercase;
         background: var(--secondary);
@@ -77,6 +80,16 @@ const mainLink = status === statuses.open ? questionsUrl : resultsUrl;
 
     img {
         width: 100%;
+    }
+
+    .survey-edition-last {
+        .image-wrapper {
+            aspect-ratio: auto;
+        }
+
+        img {
+            width: 90%;
+        }
     }
 
     .survey-open {}

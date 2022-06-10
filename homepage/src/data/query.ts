@@ -18,6 +18,7 @@ export default (surveySlug) => /* GraphQL */`
         questionsUrl
         resultsUrl
         imageUrl
+        faviconUrl
         colors {
           primary
           secondary

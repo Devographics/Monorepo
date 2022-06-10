@@ -7,27 +7,29 @@ import { getLocaleSubset } from '@helpers/translator'
 const { survey, locale, surveys } = Astro.props
 const editions = survey.editions.sort((e1, e2) => e2.year - e1.year)
 const { slug } = survey
+
+const [lastEdition, ...pastEditions] = editions
 const openEdition = editions.find(e => e.status === statuses.open)
 const closedEditions = editions.filter(e => e.status === statuses.closed)
 ---
 
 <div class="homepage">
+
   <h1>
     {survey.name}
   </h1>
   <p class="survey-description">
     <T locale={locale} k={`general.${slug}.description`} />
   </p>
+
+  <section class="last-edition">
+    <SurveyEdition locale={locale} edition={lastEdition} survey={survey} isLast={true} />
+  </section>
+
   <div class="intro">
     <T locale={locale} k={`general.${slug}.intro`} />
   </div>
 
-  {openEdition && <section class="current-edition">
-    <h2>
-      <T locale={locale} k="homepage.current_survey" />
-    </h2>
-    <SurveyEdition locale={locale} edition={openEdition} survey={survey} />
-  </section>}
 
   <Newsletter client:load locale={getLocaleSubset(locale, ['newsletter.stay_tuned', 'newsletter.leave_your_email'
     , 'homepage.newsletter.email' , 'homepage.newsletter.submit' ])} listId={survey.emailOctopus.listId} />
@@ -37,7 +39,7 @@ const closedEditions = editions.filter(e => e.status === statuses.closed)
       <T locale={locale} k="homepage.past_surveys" />
     </h2>
     <div class="past-editions-items">
-      {closedEditions.map(edition => (
+      {pastEditions.map(edition => (
       <SurveyEdition locale={locale} key={edition.surveyId} edition={edition} survey={survey} />
       ))}
     </div>
@@ -46,6 +48,7 @@ const closedEditions = editions.filter(e => e.status === statuses.closed)
 </div>
 
 <style lang="scss">
+
   h1 {
     font-size: var(--title-font);
     text-align: center;
@@ -57,6 +60,7 @@ const closedEditions = editions.filter(e => e.status === statuses.closed)
     font-size: var(--large-font);
     margin-bottom: var(--doublespacing);
     text-align: center;
+    opacity: var(--secondary-opacity);
   }
 
   h2 {
@@ -66,12 +70,12 @@ const closedEditions = editions.filter(e => e.status === statuses.closed)
   }
 
   .intro {
-    font-size: var(--larger-font);
+    font-size: var(--large-font);
     margin-bottom: var(--doublespacing);
     text-align: center;
   }
 
-  .current-edition,
+  .last-edition,
   .past-editions {
     margin-bottom: var(--doublespacing);
 
