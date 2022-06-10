@@ -1,18 +1,18 @@
-import jsConfig from '../../surveys/stateofjs/config.yml'
-import js2016Config from '../../surveys/stateofjs/2016/config.yml'
-import js2017Config from '../../surveys/stateofjs/2017/config.yml'
-import js2018Config from '../../surveys/stateofjs/2018/config.yml'
-import js2019Config from '../../surveys/stateofjs/2019/config.yml'
-import js2020Config from '../../surveys/stateofjs/2020/config.yml'
-import js2021Config from '../../surveys/stateofjs/2021/config.yml'
+import jsConfig from '../surveys/stateofjs/config.yml'
+import js2016Config from '../surveys/stateofjs/2016/config.yml'
+import js2017Config from '../surveys/stateofjs/2017/config.yml'
+import js2018Config from '../surveys/stateofjs/2018/config.yml'
+import js2019Config from '../surveys/stateofjs/2019/config.yml'
+import js2020Config from '../surveys/stateofjs/2020/config.yml'
+import js2021Config from '../surveys/stateofjs/2021/config.yml'
 
-import cssConfig from '../../surveys/stateofcss/config.yml'
-import css2019Config from '../../surveys/stateofcss/2019/config.yml'
-import css2020Config from '../../surveys/stateofcss/2020/config.yml'
-import css2021Config from '../../surveys/stateofcss/2021/config.yml'
+import cssConfig from '../surveys/stateofcss/config.yml'
+import css2019Config from '../surveys/stateofcss/2019/config.yml'
+import css2020Config from '../surveys/stateofcss/2020/config.yml'
+import css2021Config from '../surveys/stateofcss/2021/config.yml'
 
-import graphqlConfig from '../../surveys/stateofgraphql/config.yml'
-import graphql2022Config from '../../surveys/stateofgraphql/2022/config.yml'
+import graphqlConfig from '../surveys/stateofgraphql/config.yml'
+import graphql2022Config from '../surveys/stateofgraphql/2022/config.yml'
 
 const surveys = [
     {
