@@ -1,8 +1,7 @@
 ---
 import T from './T'
 const { locale, locales = [], canonicalUrl, survey } = Astro.props
-const { href } = canonicalUrl
-
+const { pathname } = canonicalUrl
 ---
 
 <div class="language-switcher">
@@ -12,7 +11,7 @@ const { href } = canonicalUrl
   <ul>
     {locales.map(({ id, label }) => (
     <li class:list={{'locale-active': locale.id===id}}>
-      <a href={href.replace(locale.id, id)}>{label}</a>
+      <a href={pathname.replace(locale.id, id)}>{label}</a>
     </li>
     ))}
   </ul>
