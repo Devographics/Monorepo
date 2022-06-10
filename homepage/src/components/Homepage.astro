@@ -14,9 +14,9 @@ const closedEditions = editions.filter(e => e.status === statuses.closed)
   <h1>
     {survey.name}
   </h1>
-  <p class="survey-description">
+  <!-- <p class="survey-description">
     <T locale={locale} k={`general.${slug}.description`} />
-  </p>
+  </p> -->
   <div class="intro">
     <T locale={locale} k={`general.${slug}.intro`} />
   </div>
@@ -52,7 +52,13 @@ const closedEditions = editions.filter(e => e.status === statuses.closed)
     text-align: center;
   }
 
-  .intro{
+  h2 {
+    font-size: var(--larger-font);
+    margin-bottom: var(--doublespacing);
+    text-align: center;
+  }
+
+  .intro {
     font-size: var(--larger-font);
     margin-bottom: var(--doublespacing);
     text-align: center;
