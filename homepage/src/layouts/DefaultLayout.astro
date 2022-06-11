@@ -43,7 +43,7 @@ const { primary, secondary, background, backgroundSecondary, text } = colors
   </html>
 </I18nContextProvider>
 
-<style is:global define:vars={{ primary, secondary, background, backgroundSecondary, text }}>
+<style lang="scss" is:global define:vars={{ primary, secondary, background, backgroundSecondary, text }}>
   body {
     background: var(--backgroundSecondary);
     color: var(--text);
@@ -65,8 +65,12 @@ const { primary, secondary, background, backgroundSecondary, text } = colors
     color: var(--primary);
   }
 
+
   .layout {
     max-width: var(--layout-width);
     margin: 0 auto;
+    @media screen and (max-width: 666px) {
+      padding: 0 var(--spacing);
+    }
   }
 </style>

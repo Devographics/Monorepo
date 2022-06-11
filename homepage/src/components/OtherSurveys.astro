@@ -6,25 +6,37 @@ const otherSurveys = surveys.filter(s => s.slug !== survey.slug)
 
 <div class="other-surveys">
   <div class="other-surveys-inner">
-  <T locale={locale} k="homepage.other_surveys" />
-  {otherSurveys.map(
-  ({name, domain})=> (<a class="other-survey-link" href={`https://www.${domain}`}>{name}</a>)
-  )}
-</div></div>
+    <T locale={locale} k="homepage.other_surveys" />
+    {otherSurveys.map(
+    ({name, domain})=> (<a class="other-survey-link" href={`https://www.${domain}`}>{name}</a>)
+    )}
+  </div>
+</div>
 
 <style lang="scss">
-  .other-surveys{
+  .other-surveys {
     background: var(--background);
     padding: var(--halfspacing) 0;
     text-align: center;
     margin-bottom: var(--spacing);
   }
-  .other-surveys-inner{
-    width: var(--layout-width);
+
+  .other-surveys-inner {
+    width: 100%;
+    max-width: var(--layout-width);
     margin: 0 auto;
+
+    @media screen and (max-width: 666px) {
+      font-size: var(--small-font);
+    }
   }
-  .other-survey-link{
+
+  .other-survey-link {
     display: inline-block;
     margin-left: var(--doublespacing);
+
+    @media screen and (max-width: 666px) {
+      margin-left: var(--halfspacing);
+    }
   }
 </style>

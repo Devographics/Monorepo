@@ -34,7 +34,7 @@ const closedEditions = editions.filter(e => e.status === statuses.closed)
   <Newsletter client:load locale={getLocaleSubset(locale, ['newsletter.stay_tuned', 'newsletter.leave_your_email'
     , 'homepage.newsletter.email' , 'homepage.newsletter.submit' ])} listId={survey.emailOctopus.listId} />
 
-  {pastEditions.length && <section class="past-editions">
+  {pastEditions.length > 0 && <section class="past-editions">
     <h2>
       <T locale={locale} k="homepage.past_surveys" />
     </h2>
@@ -53,6 +53,10 @@ const closedEditions = editions.filter(e => e.status === statuses.closed)
     text-align: center;
     margin-bottom: var(--halfspacing);
     line-height: 1;
+
+    @media screen and (max-width: 666px) {
+      font-size: var(--largest-font);
+    }
   }
 
   .survey-description {
@@ -72,6 +76,10 @@ const closedEditions = editions.filter(e => e.status === statuses.closed)
     font-size: var(--large-font);
     margin-bottom: var(--doublespacing);
     text-align: center;
+
+    @media screen and (max-width: 666px) {
+      font-size: var(--medium-font);
+    }
   }
 
   .last-edition,
@@ -82,8 +90,13 @@ const closedEditions = editions.filter(e => e.status === statuses.closed)
 
   .past-editions-items {
     display: grid;
-    grid-template-columns: 1fr 1fr;
     column-gap: var(--doublespacing);
     row-gap: var(--doublespacing);
+    grid-template-columns: 1fr 1fr;
+
+    @media screen and (max-width: 666px) {
+      grid-template-columns: 1fr;
+    }
+
   }
 </style>
