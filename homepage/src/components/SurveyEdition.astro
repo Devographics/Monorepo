@@ -9,7 +9,7 @@ const { year, questionsUrl, resultsUrl, imageUrl, status, colors = {} } = editio
 const { background } = colors
 const isOpen = status === statuses.open
 const isPreview = status === statuses.preview
-const mainLink = isOpen ? questionsUrl : resultsUrl;
+const mainLink = (isOpen || isPreview) ? questionsUrl : resultsUrl;
 
 let marker
 if (isOpen) {
@@ -38,7 +38,7 @@ if (isOpen) {
         <TakeSurvey client:load locale={getLocaleSubset(locale, ['homepage.take_survey'])} url={questionsUrl} />
     </div>): (<div class="survey-edition-actions survey-closed button-group">
         {questionsUrl && <a href={questionsUrl} class="button">
-            <T locale={locale} k={isPreview ? "homepage.preview_questions": "homepage.view_questions"} />
+            <T locale={locale} k={isPreview ? "homepage.preview_questions" : "homepage.view_questions" } />
         </a>}
         {resultsUrl &&
         <a href={resultsUrl} class="button">

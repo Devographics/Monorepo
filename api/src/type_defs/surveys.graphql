@@ -65,6 +65,7 @@ type SurveyEditionConfig {
     resultsUrl: String
     questionsUrl: String
     imageUrl: String
+    socialImageUrl: String
     faviconUrl: String
     colors: SurveyEditionColors
 }

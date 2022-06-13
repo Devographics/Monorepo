@@ -3,12 +3,14 @@ startedAt:  October 1, 2021
 endedAt:  October 30, 2021
 hashtag: StateOfCSS
 shareUrl: https://stateofcss.com
-questionsUrl: https://survey.stateofjs.com/state-of-css/2021
+questionsUrl: https://survey.devographics.com/state-of-css/2021
 resultsUrl: https://2021.stateofcss.com/
 year: 2021
 status: 3 # preview/open/closed
-imageUrl: https://static.devographics.com/stateofcss/2021/images/stateofcss2021.png
+# imageUrl: https://static.devographics.com/stateofcss/2021/images/stateofcss2021.png
+imageUrl: https://static.devographics.com/stateofcss/2021/images/logo-web-socss2021.svg
 faviconUrl: https://static.devographics.com/stateofcss/2021/images/favicon.svg
+socialImageUrl: https://static.devographics.com/stateofcss/2021/images/state-of-css-2021-logo-social.png
 
 colors: 
   primary: rgb(239, 78, 136)

@@ -48,13 +48,15 @@ const closedEditions = editions.filter(e => e.status === statuses.closed)
 </div>
 
 <style lang="scss">
+  @import '../stylesheets/_breakpoints.scss';
+
   h1 {
     font-size: var(--title-font);
     text-align: center;
     margin-bottom: var(--halfspacing);
     line-height: 1;
 
-    @media screen and (max-width: 666px) {
+    @include small {
       font-size: var(--largest-font);
     }
   }
@@ -77,7 +79,7 @@ const closedEditions = editions.filter(e => e.status === statuses.closed)
     margin-bottom: var(--doublespacing);
     text-align: center;
 
-    @media screen and (max-width: 666px) {
+    @include small {
       font-size: var(--medium-font);
     }
   }
@@ -94,7 +96,7 @@ const closedEditions = editions.filter(e => e.status === statuses.closed)
     row-gap: var(--doublespacing);
     grid-template-columns: 1fr 1fr;
 
-    @media screen and (max-width: 666px) {
+    @include small {
       grid-template-columns: 1fr;
     }
 

@@ -2,12 +2,14 @@ surveyId: js2021
 startedAt: January 1, 2022
 endedAt: January 31, 2022
 shareUrl: https://stateofjs.com
-questionsUrl: https://survey.stateofjs.com/state-of-js/2021
+questionsUrl: https://survey.devographics.com/state-of-js/2021
 resultsUrl: https://2021.stateofjs.com/
 year: 2021
 status: 3 # preview/open/closed
-imageUrl: https://static.devographics.com/stateofjs/2021/images/stateofjs2021.png
+# imageUrl: https://static.devographics.com/stateofjs/2021/images/stateofjs2021.png
+imageUrl: https://static.devographics.com/stateofjs/2021/images/logo-web-sojs.svg
 faviconUrl: https://static.devographics.com/stateofjs/2021/images/favicon.svg
+socialImageUrl: https://static.devographics.com/stateofjs/2021/images/js2021-social.png
 
 colors: 
   primary: rgb(71, 207, 237)
