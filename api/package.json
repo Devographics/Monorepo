@@ -43,8 +43,8 @@
         "webpack-node-externals": "^3.0.0"
     },
     "scripts": {
-        "build": "NODE_ENV=production webpack --config webpack.production.js",
-        "dev": "NODE_ENV=development webpack --config webpack.development.js",
+        "build": "NODE_ENV=production webpack-cli --config webpack.production.js",
+        "dev": "NODE_ENV=development webpack-cli --config webpack.development.js",
         "dev:clean": "NODE_ENV=development DISABLE_CACHE=true webpack --config webpack.development.js",
         "fmt": "prettier --write \"src/**/*.{ts,js,mjs,yml,graphql}\"",
         "heroku-postbuild": "NODE_ENV=production webpack --config webpack.production.js",
