@@ -1,5 +1,5 @@
 [context.production]
-  environment = { API_URL = "https://api.stateofjs.com/graphql" }
+  environment = { API_URL = "https://api.devographics.com/graphql" }
 
 [[redirects]]
   from = "/"
