@@ -9,7 +9,6 @@ query AllSurveys {
       createdAt
       year
       status
-      shareUrl
       resultsUrl
       imageUrl
     }

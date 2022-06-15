@@ -14,12 +14,12 @@ export default (surveySlug) => /* GraphQL */`
         endedAt
         year
         status
-        shareUrl
         questionsUrl
         resultsUrl
         imageUrl
         socialImageUrl
         faviconUrl
+        tags
         colors {
           primary
           secondary
