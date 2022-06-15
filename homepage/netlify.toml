@@ -4,3 +4,4 @@
 [[redirects]]
   from = "/"
   to = "/en-US"
+  force = true
