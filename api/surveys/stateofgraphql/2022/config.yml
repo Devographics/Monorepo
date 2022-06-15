@@ -8,6 +8,7 @@ year: 2022
 status: 2 # preview/open/closed/hidden
 imageUrl: https://static.devographics.com/stateofgraphql/2022/images/stateofgraphql2022.png
 faviconUrl: https://static.devographics.com/stateofgraphql/2022/images/favicon.svg
+socialImageUrl: https://static.devographics.com/stateofgraphql/2022/images/stateofgraphql2022-social.png
 
 colors: 
   primary: "#FDB8E7"
