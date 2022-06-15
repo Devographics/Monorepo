@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import qs from 'qs'
-import T from '@components/T'
 
-const TakeSurvey = ({ locale, url }) => {
+const LanguageLink = ({ url, label }) => {
     let suffix = ''
     const [source, setSource] = useState()
     const [referrer, setReferrer] = useState('')
@@ -29,11 +28,7 @@ const TakeSurvey = ({ locale, url }) => {
         }
     }
 
-    return (
-        <a href={url + suffix} className="button">
-            <T locale={locale} k="homepage.take_survey" />
-        </a>
-    )
+    return <a href={url + suffix}>{label}</a>
 }
 
-export default TakeSurvey
+export default LanguageLink

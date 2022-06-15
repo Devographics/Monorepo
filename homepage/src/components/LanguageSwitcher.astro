@@ -1,7 +1,9 @@
 ---
-import T from './T'
+import T from '@components/T'
+import LanguageLink from '@components/LanguageLink'
 const { locale, locales = [], canonicalUrl, survey } = Astro.props
 const { pathname } = canonicalUrl
+console.log()
 ---
 
 <div class="language-switcher">
@@ -11,7 +13,7 @@ const { pathname } = canonicalUrl
   <ul>
     {locales.map(({ id, label }) => (
     <li class:list={{'locale-active': locale.id===id}}>
-      <a href={pathname.replace(locale.id, id)}>{label}</a>
+      <LanguageLink client:load url={pathname.replace(locale.id, id)} label={label} />
     </li>
     ))}
   </ul>

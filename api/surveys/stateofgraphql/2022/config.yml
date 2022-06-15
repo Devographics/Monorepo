@@ -5,7 +5,7 @@ shareUrl: https://stateofgraphql.com
 questionsUrl: https://survey.devographics.com/state-of-graphql/2022
 # resultsUrl: https://2022.stateofgraphql.com/
 year: 2022
-status: 1 # preview/open/closed/hidden
+status: 2 # preview/open/closed/hidden
 imageUrl: https://static.devographics.com/stateofgraphql/2022/images/stateofgraphql2022.png
 faviconUrl: https://static.devographics.com/stateofgraphql/2022/images/favicon.svg
 
