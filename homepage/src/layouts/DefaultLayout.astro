@@ -25,6 +25,7 @@ const { primary, secondary, background, backgroundSecondary, text } = colors
 
   <head>
 
+    <title>{survey.name}</title>
     {meta.map((tag) =>
     <meta {...tag} />)}
 
@@ -69,6 +70,7 @@ const { primary, secondary, background, backgroundSecondary, text } = colors
   .layout {
     max-width: var(--layout-width);
     margin: 0 auto;
+
     @media screen and (max-width: 666px) {
       padding: 0 var(--spacing);
     }
