@@ -27,12 +27,13 @@ const closedEditions = editions.filter(e => e.status === statuses.closed)
   </section>
 
   <div class="intro">
-    <T locale={locale} k={`general.${slug}.intro`} />
+    <T locale={locale} k={`general.${slug}.intro`} md={true} />
   </div>
 
 
-  <Newsletter client:load locale={getLocaleSubset(locale, ['newsletter.stay_tuned', 'newsletter.leave_your_email'
-    , 'homepage.newsletter.email' , 'homepage.newsletter.submit' ])} listId={survey.emailOctopus.listId} />
+  <Newsletter client:load locale={getLocaleSubset(locale,
+    ['homepage.newsletter.stay_tuned', 'homepage.newsletter.leave_your_email' , 'homepage.newsletter.email'
+    , 'homepage.newsletter.submit' ])} listId={survey.emailOctopus.listId} />
 
   {pastEditions.length > 0 && <section class="past-editions">
     <h2>

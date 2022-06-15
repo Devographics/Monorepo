@@ -29,7 +29,7 @@ export default (surveySlug) => /* GraphQL */`
         }
       }
     }  
-    locales(contexts: [homepage, results, common, ${surveySlug}]) {
+    locales(contexts: [homepage, ${surveySlug}]) {
       id
       label
       strings {

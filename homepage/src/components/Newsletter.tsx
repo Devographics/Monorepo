@@ -60,10 +60,10 @@ export default function Newsletter({ listId, locale }) {
     return (
         <div className="newsletter">
             <h3 className="newsletter-heading">
-                <T locale={locale} k="newsletter.stay_tuned" />
+                <T locale={locale} k="homepage.newsletter.stay_tuned" />
             </h3>
             <p className="newsletter-details">
-                <T locale={locale} k="newsletter.leave_your_email" />
+                <T locale={locale} k="homepage.newsletter.leave_your_email" />
             </p>{' '}
             {error && <div className="newsletter-message newsletter-error">{error.message}</div>}
             {success ? (
