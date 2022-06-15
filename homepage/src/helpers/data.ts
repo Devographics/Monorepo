@@ -1,7 +1,6 @@
 import getQuery from '../data/query'
 
 export const getData = async () => {
-    console.log(`// API_URL: ${import.meta.env.API_URL}`)
     const response = await fetch(import.meta.env.API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -9,12 +8,19 @@ export const getData = async () => {
             query: getQuery(import.meta.env.SURVEY)
         })
     })
+    const text = await response.text()
 
-    const json = await response.json()
-    if (json.errors) {
-        throw new Error(json.errors[0].message)
+    try {
+        const json = JSON.parse(text) // Try to parse it as JSON
+        if (json.errors) {
+            throw new Error(json.errors[0].message)
+        }
+        return json.data
+    } catch (error) {
+        console.log(`// getData error (API_URL: ${import.meta.env.API_URL})`)
+        console.log(text)
+        throw new Error(error)
     }
-    return json.data
 }
 
 export const dataFetcher = {
