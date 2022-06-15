@@ -11,3 +11,6 @@ colors:
   primary: "#49b7be"
   secondary: "#ed387a"
   text: "#344c4c"
+
+tags: 
+  - js

@@ -12,3 +12,6 @@ colors:
   primary: "#f649a7"
   secondary: "#59df7f"
   text: "#9ac6c9"
+
+tags: 
+  - css

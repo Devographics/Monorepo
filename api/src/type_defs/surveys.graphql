@@ -56,18 +56,54 @@ type SurveyData {
 }
 
 type SurveyEditionConfig {
+    """
+    Unique identifier (usually survey name + year)
+    """
     surveyId: String
+    """
+    When the survey edition started
+    """
     startedAt: String
+    """
+    When the survey edition closed
+    """
     endedAt: String
+    """
+    Year
+    """
     year: Int
+    """
+    Status (preview/open/closed/hidden)
+    """
     status: Int
-    shareUrl: String
+    """
+    URL of the survey results, once they're published
+    """
     resultsUrl: String
+    """
+    URL of the survey questions
+    """
     questionsUrl: String
+    """
+    Main survey hero image
+    """
     imageUrl: String
+    """
+    Image used for social media sharing meta tag
+    """
     socialImageUrl: String
+    """
+    Favicon
+    """
     faviconUrl: String
+    """
+    Survey color scheme
+    """
     colors: SurveyEditionColors
+    """
+    Which entity tags to load
+    """
+    tags: [String]
 }
 
 type SurveyEditionColors {

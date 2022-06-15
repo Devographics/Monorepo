@@ -11,6 +11,9 @@ imageUrl: https://static.devographics.com/stateofjs/2021/images/logo-web-sojs.sv
 faviconUrl: https://static.devographics.com/stateofjs/2021/images/favicon.svg
 socialImageUrl: https://static.devographics.com/stateofjs/2021/images/js2021-social.png
 
+tags: 
+  - js
+  
 colors: 
   primary: rgb(71, 207, 237)
   secondary: "#8D4CA8"
