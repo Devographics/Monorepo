@@ -1,6 +1,7 @@
 import getQuery from '../data/query'
 
 export const getData = async () => {
+    console.log(`// API_URL: ${import.meta.env.API_URL}`)
     const response = await fetch(import.meta.env.API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
