@@ -182,7 +182,7 @@ const TierItem = ({
                     <RatioNumber>{satisfactionRatio}%</RatioNumber>
                 </Ratio>
             </ColorWrapper>
-            <Name color={color}>{entity.name}</Name>
+            <Name color={color}>{entity?.name}</Name>
         </Link>
     )
 }

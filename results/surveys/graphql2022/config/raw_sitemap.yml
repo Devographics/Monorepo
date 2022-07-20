@@ -330,8 +330,8 @@
     - id: librariesIntroduction
       template: page_introduction
 
-    - id: tools_arrows
-      template: tools_arrows
+    # - id: tools_arrows
+    #   template: tools_arrows
 
     - id: tier_list
       template: tier_list

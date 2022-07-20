@@ -19,6 +19,10 @@ enum HappinessID {
   state_of_the_web
   # GraphQL
   state_of_graphql
+  graphql_servers
+  graphql_clients
+  graphql_api_generators
+  schema_builders
 }
 
 """
