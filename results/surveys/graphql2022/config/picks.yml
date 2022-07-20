@@ -1,0 +1,105 @@
+- id: lee_robinson
+  twitterName: leeerob
+  fullName: Lee Robinson
+  avatarUrl: lee_robinson.jpg
+  url: https://kit.svelte.dev/
+
+- id: vadim_makeev
+  twitterName: pepelsbey_
+  fullName: Vadim Makeev
+  avatarUrl: vadim_makeev.jpg
+  url: https://reactjs.org/blog/2020/12/21/data-fetching-with-react-server-components.html
+
+- id: ben_ilegbodu
+  twitterName: benmvp
+  fullName: Ben Ilegbodu
+  avatarUrl: ben_ilegbodu.jpg
+  url: https://twitter.com/leeerob
+
+- id: shawn_wang
+  twitterName: swyx
+  fullName: Shawn Wang
+  avatarUrl: shawn_wang.jpg
+  url: https://supabase.com/
+
+- id: sarah_drasner
+  twitterName: sarah_edo
+  fullName: Sarah Drasner
+  avatarUrl: sarah_drasner.jpg
+  url: https://twitter.com/pkozlowski_os
+
+- id: sara_vieira
+  twitterName: NikkitaFTW
+  fullName: Sara Vieira
+  avatarUrl: sara_vieira.jpg
+  url: https://twitter.com/0xca0a
+
+- id: mark_erikson
+  twitterName: acemarke
+  fullName: Mark Erikson
+  avatarUrl: mark_erikson.jpg
+  url: https://twitter.com/ryancarniato
+
+- id: miguel_angel_duran
+  twitterName: midudev
+  fullName: Miguel Ángel Durán
+  avatarUrl: miguel_angel_duran.jpg
+  url: https://vitejs.dev/
+
+- id: alyssa_nicoll
+  twitterName: AlyssaNicoll
+  fullName: Alyssa Nicoll
+  avatarUrl: alyssa_nicoll.jpg
+  url: https://www.twitch.tv/broccodev
+
+- id: michael_jackson
+  twitterName: mjackson
+  fullName: Michael Jackson
+  avatarUrl: michael_jackson.jpg
+  url: https://esbuild.github.io/
+
+- id: david_khourshid
+  twitterName: DavidKPiano
+  fullName: David Khourshid
+  avatarUrl: david_khourshid.jpg
+  url: https://remix.run/
+
+- id: tejas_kumar
+  twitterName: TejasKumar_
+  fullName: Tejas Kumar
+  avatarUrl: tejas_kumar.png
+  url: https://twitter.com/timer150
+
+- id: kent_c_dodds
+  twitterName: kentcdodds
+  fullName: Kent C. Dodds
+  avatarUrl: kent_c_dodds.jpg
+  url: https://fly.io/
+
+- id: wes_bos
+  twitterName: wesbos
+  fullName: Wes Bos
+  avatarUrl: wes_bos.jpg
+  url: https://github.com/tc39/proposals
+
+- id: scott_tolinkski
+  twitterName: stolinski
+  fullName: Scott Tolinski
+  avatarUrl: scott_tolinski.jpg
+  url: https://kit.svelte.dev/
+
+# - twitterName:
+#   fullName: 
+#   avatarUrl:
+#   url:
+
+# - twitterName:
+#   fullName: 
+#   avatarUrl:
+#   url:
+
+# - twitterName:
+#   fullName: 
+#   avatarUrl:
+#   url:
+

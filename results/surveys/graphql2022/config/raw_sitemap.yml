@@ -1,0 +1,1060 @@
+# ------------------------------------------------------------------------------------
+
+# ------------------------------------------------------------------------------------
+# Pages Properties
+# - id: the unique (survey-wide) ID of the page
+# - path: the page's path
+# - children: the page's children pages
+# - blocks: the page's blocks
+# - pageTemplate: a template from which to inherit its properties (not used)
+# - showTitle: whether to show the page title or not
+# - variables: page variables (compiled during sitemap generation)
+
+# Block Properties
+# - id: the unique (survey-wide) ID of the block
+# - blockName: the name of the block (used for titles, descriptions, etc.)
+# - bucketKeysName: the name of the block's keys (used for legends, formatting data, etc.)
+# - blockType: the type of block (which component to use)
+# - query: the query used to populate the block's data
+# - dataPath: the path to use (from the query root) to access the block's data
+# - showLegend: whether to show the block's legend
+# - showDescription: whether to show the block's description
+# - template: a template from which to inherit its properties
+# - translateData: whether to try and translate
+# - variables: block variables (compiled during sitemap generation)
+
+- id: introduction
+  path: /
+  showTitle: false
+  blocks:
+    # - id: survey_livestream
+    #   blockType: LivestreamBlock
+    #   disableExport: true
+    #   wrapBlock: false
+    - id: survey_intro
+      blockType: SurveyIntroBlock
+      disableExport: true
+      wrapBlock: false
+    - id: survey_credits
+      template: credits
+    - id: survey_newsletter
+      blockType: NewsletterBlock
+      disableExport: true
+      wrapBlock: false
+    - id: survey_sponsors
+      blockType: SponsorsBlock
+      disableExport: true
+      wrapBlock: false
+    - id: survey_translators
+      blockType: TranslatorsBlock
+      disableExport: true
+      wrapBlock: false
+
+- id: tshirt
+  path: /tshirt
+  showTitle: false
+  blocks:
+    - id: tshirt_intro
+      template: page_introduction
+    - id: tshirt_block
+      blockType: TshirtBlock
+      wrapBlock: false
+      disableExport: true
+
+- id: user_info
+  titleId: sections.demographics.title
+  path: /demographics
+  blocks:
+    - template: page_introduction
+
+    - id: country
+      template: demographics
+      blockType: ParticipationByCountryBlock
+
+    - id: locale
+      template: demographics
+      blockType: HorizontalBarBlock
+      translateData: true
+      variables:
+        options: {cutoff: 20}
+
+    - id: hint_hint
+      template: hint
+      
+    - id: age
+      template: demographics
+
+    - id: years_of_experience
+      template: demographics
+      variants:
+        - id: years_of_experience_by_salary
+          blockNamespace: user_info
+          tabId: tabs.by_salary
+          template: by_facet
+          variables:  
+            fieldId: years_of_experience
+            facetId: yearly_salary
+            options: {facetSort: {order: ___asc___, property: mean}, facetMinCount: 100}
+
+    - id: company_size
+      template: demographics
+
+    - id: variants_hint
+      template: hint
+
+    - id: higher_education_degree
+      template: demographics
+      variants:
+        - id: higher_education_degree_by_gender
+          blockNamespace: user_info
+          tabId: tabs.by_gender
+          template: by_facet
+          variables:  
+            fieldId: higher_education_degree
+            facetId: gender
+            options: {facetSort: {order: ___asc___, property: mean}, facetMinCount: 100}
+
+    - id: yearly_salary
+      template: demographics
+      variants:
+        - id: yearly_salary_by_country
+          blockNamespace: user_info
+          tabId: tabs.by_country
+          template: by_facet
+          variables:  
+            fieldId: yearly_salary
+            facetId: country
+            options: {facetSort: {order: ___desc___, property: mean}, facetMinCount: 100}
+        - id: yearly_salary_by_degree
+          blockNamespace: user_info
+          tabId: tabs.by_degree
+          template: by_facet
+          variables:  
+            fieldId: yearly_salary
+            facetId: higher_education_degree
+            options: {facetSort: {order: ___desc___, property: mean}, facetMinCount: 100}
+        - id: yearly_salary_by_experience
+          blockNamespace: user_info
+          tabId: tabs.by_experience
+          template: by_facet
+          variables:  
+            fieldId: yearly_salary
+            facetId: years_of_experience
+            options: {facetSort: {order: ___desc___, property: mean}, facetMinCount: 100}
+
+    - id: source
+      template: source
+      blockType: HorizontalBarBlock
+      dataFunction: cleanUpSources
+      variables:
+        options: {limit: 20}
+      
+    - id: gender
+      template: demographics
+      variants:
+        - id: gender_by_country
+          blockNamespace: user_info
+          tabId: tabs.by_country
+          template: by_facet
+          variables:  
+            fieldId: gender
+            facetId: country
+            options: {facetSort: {order: ___desc___, property: mean}, limit: 11, facetMinCount: 100}
+
+    - id: race_ethnicity
+      template: demographics
+      blockType: HorizontalBarBlock
+      translateData: true
+      variants:
+        - id: race_ethnicity_by_years_of_experience
+          blockNamespace: user_info
+          tabId: tabs.by_experience
+          template: by_facet
+          variables:  
+            fieldId: race_ethnicity
+            facetId: years_of_experience
+            options: {facetSort: {order: ___asc___, property: mean}, limit: 11, facetMinCount: 100}
+
+    - id: disability_status
+      template: demographics
+      blockType: HorizontalBarBlock
+      translateData: true
+      # variants:
+      #   - id: disability_status_others
+      #     template: demographics
+      #     blockType: HorizontalBarBlock
+      #     units: count
+      #     translateData: true
+
+    # - id: user_info_resources
+    #   items: [fm-homepage]
+    #   template: recommended_resources
+
+- id: features
+  path: /features
+  blocks:
+    - template: page_introduction
+
+    - id: features_overview
+      template: features_overview
+
+    - id: knowledge_score
+      template: demographics
+      blockNamespace: features
+      blockType: KnowledgeScoreBlock
+
+    - id: features_resources
+      items: [fm-javascript]
+      template: recommended_resources
+
+  children:
+    - id: graphql_language
+      path: /language
+      blocks:
+        - id: graphql_language
+          template: page_introduction
+
+        - id: custom_directives
+          template: feature_experience
+        - id: custom_scalars
+          template: feature_experience
+        - id: fragments
+          template: feature_experience
+
+        - id: scott_tolinkski
+          template: picks
+
+        - id: unions
+          template: feature_experience
+        - id: interfaces
+          template: feature_experience
+
+        - id: export_hint
+          template: hint
+
+        - id: michael_jackson
+          template: picks
+
+        - id: language_resources
+          items: [fm-javascript-new-hard-parts]
+          template: recommended_resources
+
+    - id: directives
+      path: /directives
+      blocks:
+        - id: directives
+          template: page_introduction
+
+        - id: at_skip
+          template: feature_experience
+        - id: at_include
+          template: feature_experience
+        - id: at_deprecated
+          template: feature_experience
+        - id: at_specified_by
+          template: feature_experience
+        - id: at_defer
+          template: feature_experience
+        - id: at_stream
+          template: feature_experience
+
+        - id: david_khourshid
+          template: picks
+
+        - id: share_hint
+          template: hint
+
+        - id: browser_apis_resources
+          items: [fm-service-workers]
+          template: recommended_resources
+
+    - id: security_performance
+      path: /security-performance
+      blocks:
+        
+      - id: query_timeouts
+        template: feature_experience
+      - id: query_rate_limit
+        template: feature_experience
+
+      - id: units_switcher_hint
+        template: hint
+
+      - id: tejas_kumar
+        template: picks
+
+      - id: query_depth_limit
+        template: feature_experience
+
+      - id: query_depth_limit
+        template: feature_experience
+      - id: query_cost_analysis
+        template: feature_experience
+      - id: disabling_introspection
+        template: feature_experience
+      - id: ip_allowlisting
+        template: feature_experience
+      - id: require_authentication
+        template: feature_experience
+
+      - id: browser_apis_resources
+        items: [fm-web-assembly, fm-pwas]
+        template: recommended_resources
+
+
+    - id: other_features
+      path: /other-features
+      blocks:
+        
+      - id: graphql_subscriptions
+        template: feature_experience
+
+      - id: tejas_kumar
+        template: picks
+
+      - id: live_queries
+        template: feature_experience
+
+      - id: apollo_federation
+        template: feature_experience
+      - id: schema_stitching
+        template: feature_experience
+
+      - id: browser_apis_resources
+        items: [fm-web-assembly, fm-pwas]
+        template: recommended_resources
+
+- id: libraries
+  path: /libraries
+  blocks:
+    - id: librariesIntroduction
+      template: page_introduction
+
+    - id: tools_arrows
+      template: tools_arrows
+
+    - id: tier_list
+      template: tier_list
+
+    - id: scatterplot_overview
+      template: scatterplot_overview
+
+    - id: all_sections_tools_cardinality_by_user
+      template: tools_cardinality_by_user_js
+
+  children:
+    - id: graphql_servers
+      path: /servers
+      blocks:
+        - template: page_introduction
+
+        - template: tools_experience_ranking
+
+        - template: tools_section_streams
+
+        - id: tool_modal_hint
+          template: hint
+          
+        - template: tools_experience_marimekko
+
+        - template: section_other_tools
+          variables:
+            limit: 10
+
+        - id: lee_robinson
+          template: picks
+
+        - template: happiness
+          variables:
+            fieldId: front_end_frameworks
+
+        - id: front_end_frameworks_resources
+          items: [fm-react, fm-vue]
+          template: recommended_resources
+
+        - id: yoga
+          template: tool_experience
+        - id: graphql_js
+          template: tool_experience
+        - id: helix
+          template: tool_experience
+        - id: express_graphql
+          template: tool_experience
+        - id: mercurius
+          template: tool_experience
+        - id: dgs
+          template: tool_experience
+        - id: graphql_dotnet
+          template: tool_experience
+        - id: absinthe
+          template: tool_experience
+        - id: graphql_go
+          template: tool_experience
+
+    - id: graphql_clients
+      path: /clients
+      blocks:
+        - template: page_introduction
+
+        - template: tools_experience_ranking
+
+        - template: tools_section_streams
+
+        - id: tool_modal_hint
+          template: hint
+          
+        - template: tools_experience_marimekko
+
+        - template: section_other_tools
+          variables:
+            limit: 10
+
+        - id: vadim_makeev
+          template: picks
+
+        - template: happiness
+          variables:
+            fieldId: back_end_frameworks
+
+        - id: back_end_frameworks_resources
+          items: [fm-api-design-nodejs-v3, fm-next-js]
+          template: recommended_resources
+        
+        - id: apollo_client
+          template: tool_experience
+        - id: urql
+          template: tool_experience
+        - id: react_query
+          template: tool_experience
+        - id: relay
+          template: tool_experience
+        - id: apollo_ios
+          template: tool_experience
+        - id: swift_graphql
+          template: tool_experience
+        - id: apollo_kotlin
+          template: tool_experience
+        - id: graphql_hooks
+          template: tool_experience
+        - id: graphql_request
+          template: tool_experience
+        - id: no_client
+          template: tool_experience
+
+    - id: graphql_api_generators
+      path: /api-generators
+      blocks:
+        - template: page_introduction
+
+        - template: tools_experience_ranking
+
+        - template: tools_section_streams
+
+        - id: tool_modal_hint
+          template: hint
+          
+        - template: tools_experience_marimekko
+
+        - template: section_other_tools
+          variables:
+            limit: 10
+
+        - id: ben_ilegbodu
+          template: picks
+
+        - template: happiness
+          variables:
+            fieldId: testing
+
+        - id: testing_resources
+          items: [fm-testing-practices-principles]
+          template: recommended_resources
+
+        - id: postgraphile
+          template: tool_experience
+        - id: hasura
+          template: tool_experience
+        - id: graphcms
+          template: tool_experience
+        - id: datocms
+          template: tool_experience
+        - id: sanity
+          template: tool_experience
+        - id: wpgraphql
+          template: tool_experience
+        - id: wundergraph
+          template: tool_experience
+        - id: fauna
+          template: tool_experience
+        - id: dgraph
+          template: tool_experience
+        - id: graphql_editor
+          template: tool_experience
+        - id: strapi
+          template: tool_experience
+        - id: appsync
+          template: tool_experience
+        - id: contentful
+          template: tool_experience
+        - id: graphene
+          template: tool_experience
+        - id: graphql_mesh
+          template: tool_experience
+ 
+    - id: schema_builders
+      path: /schema-builders
+      blocks:
+        - template: page_introduction
+
+        - template: tools_experience_ranking
+
+        - template: tools_section_streams
+
+        - id: tool_modal_hint
+          template: hint
+          
+        - template: tools_experience_marimekko
+
+        - template: section_other_tools
+          variables:
+            limit: 5
+
+        - id: shawn_wang
+          template: picks
+
+        - template: happiness
+          variables:
+            fieldId: mobile_desktop
+
+        - id: mobile_desktop_resources
+          items: [fm-react-native-v2, fm-intermediate-react-native]
+          template: recommended_resources
+
+        - id: nexus
+          template: tool_experience
+        - id: typegraphql
+          template: tool_experience
+        - id: pothos
+          template: tool_experience
+        - id: strawberry
+          template: tool_experience
+        - id: sangria
+          template: tool_experience
+        - id: graphql_java
+          template: tool_experience
+        - id: gqlgen
+          template: tool_experience
+        - id: graphql_zeus
+          template: tool_experience
+        - id: genql
+          template: tool_experience
+        - id: graphql_code_generator
+          template: tool_experience
+
+- id: tools_others
+  path: /other-tools
+  blocks:
+    - id: tools_others_intro
+      template: page_introduction
+
+    - id: combining_schemas
+      tabId: tabs.main_answers
+      blockNamespace: tools_others  
+      template: multiple_options
+      variables:
+        fieldId: tools_others
+      variants:
+        - id: combining_schemas_others
+          blockNamespace: tools_others  
+          template: multiple_options
+          defaultUnits: count
+          variables:
+            fieldId: tools_others
+            options: { limit: 15 }
+
+    - id: mark_erikson
+      template: picks
+
+    - id: web_frameworks
+      tabId: tabs.main_answers
+      blockNamespace: tools_others  
+      template: multiple_options
+      variables:
+        fieldId: tools_others
+      variants: 
+        - id: web_frameworks_others
+          blockNamespace: tools_others  
+          template: multiple_options
+          defaultUnits: count
+          variables:
+            fieldId: tools_others
+            options: { limit: 15 }
+
+    - id: sharing_hint
+      template: hint
+
+    - id: databases
+      tabId: tabs.main_answers
+      blockNamespace: tools_others  
+      template: multiple_options
+      variables:
+        fieldId: tools_others
+      variants: 
+        - id: databases_others
+          blockNamespace: tools_others  
+          template: multiple_options
+          defaultUnits: count
+          variables:
+            fieldId: tools_others
+            options: { limit: 15 }
+
+    - id: server_languages
+      tabId: tabs.main_answers
+      blockNamespace: tools_others  
+      template: multiple_options
+      variables:
+        fieldId: tools_others
+      variants: 
+        - id: server_languages_others
+          blockNamespace: tools_others  
+          template: multiple_options
+          defaultUnits: count
+          variables:
+            fieldId: tools_others
+            options: { limit: 15 }
+
+
+    - id: kent_c_dodds
+      template: picks
+      
+    - id: graphql_ides
+      tabId: tabs.main_answers
+      blockNamespace: tools_others  
+      template: multiple_options
+      variables:
+        fieldId: tools_others
+      variants: 
+        - id: graphql_ides_others
+          blockNamespace: tools_others  
+          template: multiple_options
+          defaultUnits: count
+          variables:
+            fieldId: tools_others
+            options: { limit: 15 }
+
+    - id: other_tools
+      tabId: tabs.main_answers
+      blockNamespace: tools_others  
+      template: multiple_options
+      variables:
+        fieldId: tools_others
+      variants: 
+        - id: other_tools_others
+          blockNamespace: tools_others  
+          template: multiple_options
+          defaultUnits: count
+          variables:
+            fieldId: tools_others
+            options: { limit: 15 }
+
+    - id: tools_others_resources
+      items: [fm-typescript, fm-node-js]
+      template: recommended_resources
+
+- id: usage
+  path: /usage
+  blocks:
+    - template: page_introduction
+
+    - id: graphql_experience
+      blockNamespace: usage
+      chartNamespace: graphql_experience
+      tabId: tabs.main_answers
+      template: single_option
+      translateData: true
+      variables:
+        fieldId: usage
+
+    - id: api_type
+      blockNamespace: usage
+      chartNamespace: api_type
+      tabId: tabs.main_answers
+      template: multiple_options
+      translateData: true
+      variables:
+        fieldId: usage
+      variants:
+        - id: api_type_others
+          defaultUnits: count
+          blockNamespace: usage
+          chartNamespace: api_type
+          tabId: tabs.other_answers
+          template: multiple_options
+          translateData: true
+          variables:
+            fieldId: usage
+            options: { limit: 15 }
+
+    - id: client_type
+      blockNamespace: resources
+      chartNamespace: client_type
+      tabId: tabs.main_answers
+      template: multiple_options
+      translateData: true
+      variables:
+        fieldId: usage
+      variants:
+        - id: client_type_others
+          defaultUnits: count
+          blockNamespace: usage
+          chartNamespace: client_type
+          tabId: tabs.other_answers
+          template: multiple_options
+          translateData: true
+          variables:
+            fieldId: usage
+            options: { limit: 15 }
+
+    - id: data_sources
+      blockNamespace: usage
+      chartNamespace: data_sources
+      tabId: tabs.main_answers
+      template: multiple_options
+      translateData: true
+      variables:
+        fieldId: usage
+      variants:
+        - id: data_sources_others
+          defaultUnits: count
+          blockNamespace: usage
+          chartNamespace: data_sources
+          tabId: tabs.other_answers
+          template: multiple_options
+          translateData: true
+          variables:
+            fieldId: usage
+            options: { limit: 15 }
+
+    - id: code_generation_type
+      blockNamespace: usage
+      chartNamespace: code_generation_type
+      tabId: tabs.main_answers
+      template: single_option
+      translateData: true
+      variables:
+        fieldId: usage
+      variants:
+        - id: code_generation_type_others
+          defaultUnits: count
+          blockNamespace: usage
+          chartNamespace: code_generation_type
+          tabId: tabs.other_answers
+          template: multiple_options
+          translateData: true
+          variables:
+            fieldId: usage
+            options: { limit: 15 }
+
+    - id: code_generation_target
+      blockNamespace: usage
+      chartNamespace: code_generation_target
+      tabId: tabs.main_answers
+      template: single_option
+      translateData: true
+      variables:
+        fieldId: usage
+      variants:
+        - id: code_generation_target_others
+          defaultUnits: count
+          blockNamespace: usage
+          chartNamespace: code_generation_target
+          tabId: tabs.other_answers
+          template: multiple_options
+          translateData: true
+          variables:
+            fieldId: usage
+            options: { limit: 15 }
+
+    - id: industry_sector
+      blockNamespace: usage
+      chartNamespace: industry_sector
+      tabId: tabs.main_answers
+      template: single_option
+      translateData: true
+      variables:
+        fieldId: usage
+      variants:
+        - id: industry_sector_others
+          defaultUnits: count
+          blockNamespace: usage
+          chartNamespace: industry_sector
+          tabId: tabs.other_answers
+          template: multiple_options
+          translateData: true
+          variables:
+            fieldId: usage
+            options: { limit: 15 }
+
+    - id: bracket_hint
+      template: hint
+
+    - id: strong_points
+      tabId: tabs.bracket_wins
+      template: bracket_wins
+      blockNamespace: strong_points
+      variables:
+        fieldId: usage__strong_points
+      variants: 
+        - id: strong_points_matchups
+          tabId: tabs.bracket_matchups
+          blockNamespace: strong_points
+          variables:
+            fieldId: usage__strong_points
+          template: bracket_matchups
+        - id: strong_points_others
+          defaultUnits: count
+          blockNamespace: usage
+          chartNamespace: strong_points
+          tabId: tabs.other_answers
+          template: multiple_options
+          translateData: true
+          variables:
+            fieldId: usage
+            options: { limit: 15 }
+
+    - id: pain_points
+      tabId: tabs.bracket_wins
+      template: bracket_wins
+      blockNamespace: pain_points
+      variables:
+        fieldId: usage__pain_points
+      variants: 
+        - id: pain_points_matchups
+          tabId: tabs.bracket_matchups
+          blockNamespace: pain_points
+          variables:
+            fieldId: usage__pain_points
+          template: bracket_matchups
+        - id: pain_points_others
+          defaultUnits: count
+          blockNamespace: usage
+          chartNamespace: pain_points
+          tabId: tabs.other_answers
+          template: multiple_options
+          translateData: true
+          variables:
+            fieldId: usage
+            options: { limit: 15 }
+
+    - id: state_of_graphql
+      template: happiness
+      variables:
+        fieldId: state_of_graphql
+
+- id: resources
+  path: /resources
+  blocks:
+    - template: page_introduction
+
+    - id: first_steps
+      blockNamespace: resources
+      chartNamespace: first_steps
+      tabId: tabs.main_answers
+      template: multiple_options
+      translateData: true
+      variables:
+        fieldId: resources
+      variants:
+        - id: first_steps_others
+          defaultUnits: count
+          blockNamespace: resources
+          chartNamespace: first_steps
+          tabId: tabs.other_answers
+          template: multiple_options
+          translateData: true
+          variables:
+            fieldId: resources
+            options: { limit: 15 }
+
+    - id: sites_courses
+      blockNamespace: resources
+      chartNamespace: sites_courses
+      tabId: tabs.main_answers
+      template: multiple_options
+      variables:
+        fieldId: resources
+      variants:
+        - id: sites_courses_others
+          defaultUnits: count
+          blockNamespace: resources
+          chartNamespace: sites_courses
+          tabId: tabs.other_answers
+          template: multiple_options
+          variables:
+            fieldId: resources
+            options: { limit: 15 }
+
+    - id: miguel_angel_duran
+      template: picks
+
+    - id: podcasts_others
+      defaultUnits: count
+      blockNamespace: resources
+      chartNamespace: podcasts
+      tabId: tabs.other_answers
+      template: multiple_options
+      variables:
+        fieldId: resources
+        options: { limit: 15 }
+
+    - id: people_others
+      defaultUnits: count
+      blockNamespace: resources
+      chartNamespace: people
+      template: multiple_options
+      variables:
+        options: { limit: 25 }
+        fieldId: resources
+
+    - id: other_surveys
+      blockNamespace: resources
+      chartNamespace: other_surveys
+      tabId: tabs.main_answers
+      template: multiple_options
+      variables:
+        fieldId: resources
+      # variants:
+      #   - id: other_surveys_others
+      #     defaultUnits: count
+      #     blockNamespace: resources
+      #     chartNamespace: other_surveys
+      #     tabId: tabs.other_answers
+      #     template: multiple_options
+      #     variables:
+      #       fieldId: resources
+      #       options: { limit: 15 }
+
+    - id: resources_resources
+      items: [reactathon, renderatl]
+      template: recommended_resources
+
+- id: awards
+  path: /awards
+  blocks:
+    - template: page_introduction
+
+    - id: awards
+      template: awards
+      variables:
+        entities: '"nullish_coalescing","optional_chaining","private_fields","esbuild","tsc","testing_library","vite","vitest","elm","stencil","platzi"'
+      awards:
+        - id: feature_adoption_delta_award
+          template: award
+          awards:
+            - id: nullish_coalescing
+              value: "+21.8%"
+            - id: optional_chaining
+              value: "+19%"
+            - id: private_fields
+              value: "+9.5%"
+
+        - id: tool_usage_delta_award
+          template: award
+          awards:
+            - id: esbuild
+              value: "+20.1%"
+            - id: tsc
+              value: "+17.3%"
+            - id: testing_library
+              value: "+8.3%"
+
+        - id: tool_satisfaction_award
+          template: award
+          awards:
+            - id: vite
+              value: "97.4%"
+            - id: testing_library
+              value: "96.3%"
+            - id: esbuild
+              value: "96.2%"
+
+        - id: tool_interest_award
+          template: award
+          awards:
+            - id: vite
+              value: "83%"
+            - id: vitest
+              value: "81.8%"
+            - id: esbuild
+              value: "80.4%"
+
+        - id: most_write_ins_award
+          template: award
+          awards:
+            - id: elm
+              value: "124"
+            - id: stencil
+              value: "104"
+            - id: platzi
+              value: "100"
+
+
+- id: conclusion
+  path: /conclusion
+  blocks:
+
+    - id: conclusion
+      template: conclusion
+      variables:
+        author: shawn_wang
+        entities: '"shawn_wang"'
+
+    - id: conclusion_newsletter
+      blockType: NewsletterBlock
+      wrapBlock: false
+      disableExport: true
+
+# note: other pages need to be included in the sitemap too so they can get the proper
+# locale passed to them
+
+- id: about
+  path: /about
+  blocks:
+
+    - id: about_contents
+      blockType: AboutBlock
+      wrapBlock: false
+      disableExport: true
+
+# - id: how_to_help
+#   path: /how_to_help
+#   blocks:
+
+#     - id: how_to_help_contents
+#       blockType: HowToHelpBlock
+#       wrapBlock: false
+#       disableExport: true
+
+- id: support
+  path: /support
+  is_hidden: true
+  blocks:
+    - id: support
+      template: page_introduction
+
+- id: sponsor_finish
+  path: /sponsor-chart-finish
+  is_hidden: true
+  blocks:
+    - id: sponsor_finish
+      blockType: SponsorFinishBlock
+      wrapBlock: false
+
+- id: notfound
+  titleId: notfound.title
+  path: /404
+  is_hidden: true
+  blocks:
+    - id: notfound
+      blockType: NotFoundBlock
+      wrapBlock: false
