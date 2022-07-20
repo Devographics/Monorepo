@@ -698,7 +698,7 @@
       #       options: { limit: 15 }
 
     - id: client_type
-      blockNamespace: resources
+      blockNamespace: usage
       chartNamespace: client_type
       tabId: tabs.main_answers
       template: multiple_options
@@ -800,20 +800,20 @@
     - id: bracket_hint
       template: hint
 
-    - id: strong_points
+    - id: graphql_strong_points
       tabId: tabs.bracket_wins
       template: bracket_wins
       blockNamespace: strong_points
       variables:
-        fieldId: usage__strong_points
+        fieldId: usage__graphql_strong_points
       variants: 
-        - id: strong_points_matchups
+        - id: graphql_strong_points_matchups
           tabId: tabs.bracket_matchups
           blockNamespace: strong_points
           variables:
-            fieldId: usage__strong_points
+            fieldId: usage__graphql_strong_points
           template: bracket_matchups
-        - id: strong_points_others
+        - id: graphql_strong_points_others
           defaultUnits: count
           blockNamespace: usage
           chartNamespace: strong_points
@@ -824,20 +824,20 @@
             fieldId: usage
             options: { limit: 15 }
 
-    - id: pain_points
+    - id: graphql_pain_points
       tabId: tabs.bracket_wins
       template: bracket_wins
       blockNamespace: pain_points
       variables:
-        fieldId: usage__pain_points
+        fieldId: usage__graphql_pain_points
       variants: 
-        - id: pain_points_matchups
+        - id: graphql_pain_points_matchups
           tabId: tabs.bracket_matchups
           blockNamespace: pain_points
           variables:
-            fieldId: usage__pain_points
+            fieldId: usage__graphql_pain_points
           template: bracket_matchups
-        - id: pain_points_others
+        - id: graphql_pain_points_others
           defaultUnits: count
           blockNamespace: usage
           chartNamespace: pain_points

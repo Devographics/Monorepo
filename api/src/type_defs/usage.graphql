@@ -12,10 +12,10 @@ enum UsageID {
     code_generation_target_others
     industry_sector
     industry_sector_others
-    strong_points
-    strong_points_others
-    pain_points
-    pain_points_others
+    graphql_strong_points
+    graphql_strong_points_others
+    graphql_pain_points
+    graphql_pain_points_others
 }
 
 type YearUsage {
@@ -28,4 +28,5 @@ type Usage {
     id: UsageID!
     all_years: [YearUsage]
     year(year: Int!): YearUsage
+    keys: [String]
 }
