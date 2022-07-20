@@ -126,7 +126,7 @@ export async function computeDefaultTermAggregationByYear(
     key: string,
     options: TermAggregationOptions = {}
 ) {
-    const { db } = context
+    const { db, isDebug } = context
     const collection = db.collection(config.mongo.normalized_collection)
 
     // use last segment of field as id
@@ -198,17 +198,18 @@ export async function computeDefaultTermAggregationByYear(
         .aggregate(getGenericPipeline(pipelineProps))
         .toArray()) as ResultsByYear[]
 
-    // console.log(
-    //     inspect(
-    //         {
-    //             match,
-    //             sampleAggregationPipeline: getGenericPipeline(pipelineProps),
-    //             results
-    //         },
-    //         { colors: true, depth: null }
-    //     )
-    // )
-
+    if (isDebug) {
+        console.log(
+            inspect(
+                {
+                    match,
+                    sampleAggregationPipeline: getGenericPipeline(pipelineProps),
+                    results
+                },
+                { colors: true, depth: null }
+            )
+        )
+    }
     if (values) {
         await addMissingBucketValues(results, values)
     }
@@ -478,7 +479,12 @@ export async function computeTermAggregationAllYearsWithCache(
     options: TermAggregationOptions = {},
     aggregationFunction?: AggregationFunction
 ) {
-    return useCache(computeTermAggregationAllYears, context, [survey, id, options, aggregationFunction])
+    return useCache(computeTermAggregationAllYears, context, [
+        survey,
+        id,
+        options,
+        aggregationFunction
+    ])
 }
 
 export async function computeTermAggregationSingleYear(

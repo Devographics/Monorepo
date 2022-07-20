@@ -221,8 +221,8 @@
         - id: fragments
           template: feature_experience
 
-        - id: scott_tolinkski
-          template: picks
+        # - id: scott_tolinkski
+        #   template: picks
 
         - id: unions
           template: feature_experience
@@ -232,8 +232,8 @@
         - id: export_hint
           template: hint
 
-        - id: michael_jackson
-          template: picks
+        # - id: michael_jackson
+        #   template: picks
 
         - id: language_resources
           items: [fm-javascript-new-hard-parts]
@@ -258,8 +258,8 @@
         - id: at_stream
           template: feature_experience
 
-        - id: david_khourshid
-          template: picks
+        # - id: david_khourshid
+        #   template: picks
 
         - id: share_hint
           template: hint
@@ -280,8 +280,8 @@
       - id: units_switcher_hint
         template: hint
 
-      - id: tejas_kumar
-        template: picks
+      # - id: tejas_kumar
+      #   template: picks
 
       - id: query_depth_limit
         template: feature_experience
@@ -309,8 +309,8 @@
       - id: graphql_subscriptions
         template: feature_experience
 
-      - id: tejas_kumar
-        template: picks
+      # - id: tejas_kumar
+      #   template: picks
 
       - id: live_queries
         template: feature_experience
@@ -361,8 +361,8 @@
           variables:
             limit: 10
 
-        - id: lee_robinson
-          template: picks
+        # - id: lee_robinson
+        #   template: picks
 
         - template: happiness
           variables:
@@ -409,8 +409,8 @@
           variables:
             limit: 10
 
-        - id: vadim_makeev
-          template: picks
+        # - id: vadim_makeev
+        #   template: picks
 
         - template: happiness
           variables:
@@ -459,8 +459,8 @@
           variables:
             limit: 10
 
-        - id: ben_ilegbodu
-          template: picks
+        # - id: ben_ilegbodu
+        #   template: picks
 
         - template: happiness
           variables:
@@ -519,8 +519,8 @@
           variables:
             limit: 5
 
-        - id: shawn_wang
-          template: picks
+        # - id: shawn_wang
+        #   template: picks
 
         - template: happiness
           variables:
@@ -572,8 +572,8 @@
             fieldId: tools_others
             options: { limit: 15 }
 
-    - id: mark_erikson
-      template: picks
+    # - id: mark_erikson
+    #   template: picks
 
     - id: web_frameworks
       tabId: tabs.main_answers
@@ -624,8 +624,8 @@
             options: { limit: 15 }
 
 
-    - id: kent_c_dodds
-      template: picks
+    # - id: kent_c_dodds
+    #   template: picks
       
     - id: graphql_ides
       tabId: tabs.main_answers
@@ -896,8 +896,8 @@
             fieldId: resources
             options: { limit: 15 }
 
-    - id: miguel_angel_duran
-      template: picks
+    # - id: miguel_angel_duran
+    #   template: picks
 
     - id: podcasts_others
       defaultUnits: count

@@ -6,228 +6,161 @@ totalCountRounded: 16000
 currentYear: 2022
 
 allFeatures:
-    - proxies
-    - promise_all_settled
-    - dynamic_import
-    - nullish_coalescing
-    - optional_chaining
-    - private_fields
-    - big_int
-    - numeric_separators
-    - string_replace_all
-    - string_match_all
-    - logical_assignment
-    - promise_any
-    - array_at
-    - top_level_await
-    - service_workers
-    - intl
-    - web_audio
-    - webgl
-    - web_animations
-    - webrtc
-    - web_speech
-    - websocket
-    - custom_elements
-    - shadow_dom
-    - page_visibility
-    - broadcast_channel
-    - geolocation
-    - file_system_access
-    - web_share
-    - webxr
-    - pwa
-    - wasm
+    # graphql_language:
+    - custom_directives
+    - custom_scalars
+    - fragments
+    - unions
+    - interfaces
+    # directives:
+    - at_skip
+    - at_include
+    - at_deprecated
+    - at_specified_by
+    - at_defer
+    - at_stream
+    # security_performance:
+    - persisted_queries
+    - query_timeouts
+    - query_rate_limit
+    - query_depth_limit
+    - query_cost_analysis
+    - disabling_introspection
+    - ip_allowlisting
+    - require_authentication
+    # other_features:
+    - graphql_subscriptions
+    - live_queries
+    - apollo_federation
+    - schema_stitching
 
 featuresCategories:
-    language:
-        - proxies
-        - promise_all_settled
-        - dynamic_import
-        - nullish_coalescing
-        - optional_chaining
-        - private_fields
-        - big_int
-        - numeric_separators
-        - string_replace_all
-        - string_match_all
-        - logical_assignment
-        - promise_any
-        - array_at
-        - top_level_await
-    browser_apis:
-        - service_workers
-        - intl
-        - web_audio
-        - webgl
-        - web_animations
-        - webrtc
-        - web_speech
-        - websocket
-        - custom_elements
-        - shadow_dom
-        - page_visibility
-        - broadcast_channel
-        - geolocation
-        - file_system_access
-        - web_share
-        - webxr
+    graphql_language:
+        - custom_directives
+        - custom_scalars
+        - fragments
+        - unions
+        - interfaces
+    directives:
+        - at_skip
+        - at_include
+        - at_deprecated
+        - at_specified_by
+        - at_defer
+        - at_stream
+    security_performance:
+        - persisted_queries
+        - query_timeouts
+        - query_rate_limit
+        - query_depth_limit
+        - query_cost_analysis
+        - disabling_introspection
+        - ip_allowlisting
+        - require_authentication
     other_features:
-        - pwa
-        - wasm
+        - graphql_subscriptions
+        - live_queries
+        - apollo_federation
+        - schema_stitching
 
 allTools:
-    # JS front end frameworks
-    - react
-    - vuejs
-    - angular
-    - preact
-    - ember
-    - svelte
-    - alpinejs
-    - litelement
-    - stimulus
-    - solid # 2021
-    # JS back end frameworks
-    - express
-    - nextjs
-    # - koa
-    # - meteor
-    # - sails
-    # - feathers
-    - nuxt
-    - gatsby
-    - nest
+    # graphql_servers:
+    - apollo_server
+    - yoga
+    - graphql_js
+    - helix
+    - express_graphql
+    - mercurius
+    - dgs
+    - graphql_dotnet
+    - absinthe
+    - graphql_go
+    # graphql_clients:
+    - apollo_client
+    - urql
+    - react_query
+    - relay
+    - apollo_ios
+    - swift_graphql
+    - apollo_kotlin
+    - graphql_hooks
+    - graphql_request
+    - no_client
+    # graphql_api_generators:
+    - postgraphile
+    - hasura
+    - graphcms
+    - datocms
+    - sanity
+    - wpgraphql
+    - wundergraph
+    - fauna
+    - dgraph
+    - graphql_editor
     - strapi
-    - fastify
-    # - hapi
-    - redwood # 2021
-    - astro # 2021
-    - eleventy # 2021
-    - blitz # 2021
-    - remix # 2021
-    - sveltekit # 2021
-    # JS testing
-    - jest
-    - mocha
-    - storybook
-    - cypress
-    - enzyme
-    - ava
-    - jasmine
-    - puppeteer
-    - testing_library
-    - playwright
-    - webdriverio
-    - vitest # 2021
-    # JS build tools
-    - webpack
-    - parcel
-    - gulp
-    - rollup
-    - browserify
-    - tsc
-    - rome
-    - snowpack
-    - swc
-    - esbuild
-    - vite # 2021
-    - wmr # 2021
-    # JS mobile desktop
-    - electron
-    - reactnative
-    - nativeapps
-    - cordova
-    - ionic
-    - nwjs
-    - expo
-    - capacitor
-    - quasar
-    - tauri # 2021
-    # JS Monorepo tools
-    - rush # 2021
-    - turborepo # 2021
-    - yarn_workspaces # 2021
-    - yalc # 2021
-    - lerna # 2021
-    - npm_workspaces # 2021
-    - pnpm # 2021
-    - nx # 2021
+    - appsync
+    - contentful
+    - graphene
+    - graphql_mesh
+    # schema_builders:
+    - nexus
+    - typegraphql
+    - pothos
+    - strawberry
+    - sangria
+    - graphql_java
+    - gqlgen
+    - graphql_zeus
+    - genql
+    - graphql_code_generator
 
 toolsCategories:
-    front_end_frameworks:
-        - react
-        - vuejs
-        - angular
-        - preact
-        - ember
-        - svelte
-        - alpinejs
-        - litelement
-        - stimulus
-        - solid # 2021
-    back_end_frameworks:
-        - express
-        - nextjs
-        # - koa
-        # - meteor
-        # - sails
-        # - feathers
-        - nuxt
-        - gatsby
-        - nest
+    graphql_servers:
+        - apollo_server
+        - yoga
+        - graphql_js
+        - helix
+        - express_graphql
+        - mercurius
+        - dgs
+        - graphql_dotnet
+        - absinthe
+        - graphql_go
+    graphql_clients:
+        - apollo_client
+        - urql
+        - react_query
+        - relay
+        - apollo_ios
+        - swift_graphql
+        - apollo_kotlin
+        - graphql_hooks
+        - graphql_request
+        - no_client
+    graphql_api_generators:
+        - postgraphile
+        - hasura
+        - graphcms
+        - datocms
+        - sanity
+        - wpgraphql
+        - wundergraph
+        - fauna
+        - dgraph
+        - graphql_editor
         - strapi
-        - fastify
-        # - hapi
-        - redwood # 2021
-        - astro # 2021
-        - eleventy # 2021
-        - blitz # 2021
-        - remix # 2021
-        - sveltekit # 2021
-    testing:
-        - jest
-        - mocha
-        - storybook
-        - cypress
-        # - enzyme
-        - ava
-        - jasmine
-        - puppeteer
-        - testing_library
-        - playwright
-        - webdriverio
-        - vitest # 2021
-    build_tools:
-        - webpack
-        - parcel
-        - gulp
-        - rollup
-        - browserify
-        - tsc
-        - rome
-        - snowpack
-        - swc
-        - esbuild
-        - vite # 2021
-        - wmr # 2021
-    mobile_desktop:
-        - electron
-        - reactnative
-        - nativeapps
-        - cordova
-        - ionic
-        - nwjs
-        - expo
-        - capacitor
-        - quasar
-        - tauri # 2021
-    monorepo_tools:
-        - rush # 2021
-        - turborepo # 2021
-        - yarn_workspaces # 2021
-        - yalc # 2021
-        - lerna # 2021
-        - npm_workspaces # 2021
-        - pnpm # 2021
-        - nx # 2021
+        - appsync
+        - contentful
+        - graphene
+        - graphql_mesh
+    schema_builders:
+        - nexus
+        - typegraphql
+        - pothos
+        - strawberry
+        - sangria
+        - graphql_java
+        - gqlgen
+        - graphql_zeus
+        - genql
+        - graphql_code_generator
