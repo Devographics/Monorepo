@@ -1,5 +1,5 @@
 {
-    "name": "state-of-results",
+    "name": "monorepo-results",
     "description": "State Of survey results",
     "version": "0.1.0",
     "repository": {
@@ -16,7 +16,7 @@
     ],
     "engineStrict": true,
     "engines": {
-        "node": "^14.17.5"
+        "node": "^16.15.0"
     },
     "dependencies": {
         "@mdx-js/mdx": "^1.6.22",

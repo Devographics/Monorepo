@@ -366,9 +366,9 @@
 
         - template: happiness
           variables:
-            fieldId: front_end_frameworks
+            fieldId: graphql_servers
 
-        - id: front_end_frameworks_resources
+        - id: graphql_servers_resources
           items: [fm-react, fm-vue]
           template: recommended_resources
 
@@ -414,9 +414,9 @@
 
         - template: happiness
           variables:
-            fieldId: back_end_frameworks
+            fieldId: graphql_clients
 
-        - id: back_end_frameworks_resources
+        - id: graphql_clients_resources
           items: [fm-api-design-nodejs-v3, fm-next-js]
           template: recommended_resources
         
@@ -464,9 +464,9 @@
 
         - template: happiness
           variables:
-            fieldId: testing
+            fieldId: graphql_api_generators
 
-        - id: testing_resources
+        - id: graphql_api_generators_resources
           items: [fm-testing-practices-principles]
           template: recommended_resources
 
@@ -524,9 +524,9 @@
 
         - template: happiness
           variables:
-            fieldId: mobile_desktop
+            fieldId: schema_builders
 
-        - id: mobile_desktop_resources
+        - id: schema_builders_resources
           items: [fm-react-native-v2, fm-intermediate-react-native]
           template: recommended_resources
 

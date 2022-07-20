@@ -70,7 +70,7 @@ export const ToolsArrowsChart = ({ data, activeCategory }) => {
     const tools = data.map((d) => d.id)
     let toolNames = {}
     data.forEach((tool) => {
-        toolNames[tool.id] = tool.entity.name
+        toolNames[tool.id] = tool?.entity?.name
     })
 
     const items = useMemo(
