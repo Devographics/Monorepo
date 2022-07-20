@@ -8,25 +8,25 @@ import keys from '../data/keys.yml'
 import range from 'lodash/range'
 
 const computeParticipation = async (
-    db: Db,
+    context: RequestContext,
     survey: SurveyConfig,
     filters?: Filters,
     year?: number
-) => useCache(computeParticipationByYear, db, [survey, filters, year])
+) => useCache(computeParticipationByYear, context, [survey, filters, year])
 
 export default {
     Participation: {
         all_years: async (
             { survey, filters }: ResolverStaticConfig,
             args: any,
-            { db }: RequestContext
-        ) => computeParticipation(db, survey, filters),
+            context: RequestContext
+        ) => computeParticipation(context, survey, filters),
         year: async (
             { survey, filters }: ResolverStaticConfig,
             { year }: { year: number },
-            { db }: RequestContext
+            context: RequestContext
         ) => {
-            const allYears = await computeParticipation(db, survey, filters)
+            const allYears = await computeParticipation(context, survey, filters)
             return allYears.find(y => y.year === year)
         }
     },

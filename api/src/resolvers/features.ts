@@ -14,9 +14,9 @@ export default {
         all_years: async (
             { survey, id, filters, options, facet }: ResolverDynamicConfig,
             args: any,
-            { db }: RequestContext
+            context: RequestContext
         ) =>
-            computeTermAggregationAllYearsWithCache(db, survey, `features.${id}.experience`, {
+            computeTermAggregationAllYearsWithCache(context, survey, `features.${id}.experience`, {
                 ...options,
                 filters,
                 facet
@@ -24,9 +24,9 @@ export default {
         year: async (
             { survey, id, filters, options, facet }: ResolverDynamicConfig,
             { year }: { year: number },
-            { db }: RequestContext
+            context: RequestContext
         ) =>
-            computeTermAggregationSingleYearWithCache(db, survey, `features.${id}.experience`, {
+            computeTermAggregationSingleYearWithCache(context, survey, `features.${id}.experience`, {
                 ...options,
                 filters,
                 year,

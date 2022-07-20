@@ -761,7 +761,7 @@
       blockNamespace: usage
       chartNamespace: code_generation_target
       tabId: tabs.main_answers
-      template: single_option
+      template: multiple_options
       translateData: true
       variables:
         fieldId: usage
@@ -803,20 +803,20 @@
     - id: graphql_strong_points
       tabId: tabs.bracket_wins
       template: bracket_wins
-      blockNamespace: strong_points
+      blockNamespace: usage
       variables:
         fieldId: usage__graphql_strong_points
       variants: 
         - id: graphql_strong_points_matchups
           tabId: tabs.bracket_matchups
-          blockNamespace: strong_points
+          blockNamespace: usage
           variables:
             fieldId: usage__graphql_strong_points
           template: bracket_matchups
         - id: graphql_strong_points_others
           defaultUnits: count
           blockNamespace: usage
-          chartNamespace: strong_points
+          chartNamespace: graphql_strong_points
           tabId: tabs.other_answers
           template: multiple_options
           translateData: true
@@ -827,20 +827,20 @@
     - id: graphql_pain_points
       tabId: tabs.bracket_wins
       template: bracket_wins
-      blockNamespace: pain_points
+      blockNamespace: usage
       variables:
         fieldId: usage__graphql_pain_points
       variants: 
         - id: graphql_pain_points_matchups
           tabId: tabs.bracket_matchups
-          blockNamespace: pain_points
+          blockNamespace: usage
           variables:
             fieldId: usage__graphql_pain_points
           template: bracket_matchups
         - id: graphql_pain_points_others
           defaultUnits: count
           blockNamespace: usage
-          chartNamespace: pain_points
+          chartNamespace: graphql_pain_points
           tabId: tabs.other_answers
           template: multiple_options
           translateData: true

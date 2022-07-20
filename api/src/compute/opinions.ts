@@ -1,15 +1,15 @@
 import { Db } from 'mongodb'
 import { computeTermAggregationAllYears } from './generic'
-import { SurveyConfig } from '../types'
+import { RequestContext, SurveyConfig } from '../types'
 import { Filters } from '../filters'
 
 export async function computeOpinionByYear(
-    db: Db,
+    context: RequestContext,
     survey: SurveyConfig,
     id: string,
     filters?: Filters
 ) {
-    const opinionByYear = await computeTermAggregationAllYears(db, survey, `opinions.${id}`, {
+    const opinionByYear = await computeTermAggregationAllYears(context, survey, `opinions.${id}`, {
         filters,
         sort: { property: 'id', order: 'asc' }
     })

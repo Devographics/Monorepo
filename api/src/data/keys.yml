@@ -97,3 +97,8 @@ graphql_experience:
   - range_1_2
   - range_3_5
   - range_6_10
+
+code_generation_type: 
+  - code_first
+  - schema_first
+  - database_first

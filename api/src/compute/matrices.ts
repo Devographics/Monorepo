@@ -4,7 +4,7 @@ import { Db } from 'mongodb'
 import config from '../config'
 import { ratioToPercentage } from './common'
 import { getEntity } from '../entities'
-import { SurveyConfig } from '../types'
+import { RequestContext, SurveyConfig } from '../types'
 import { ToolExperienceFilterId, toolExperienceConfigById } from './tools'
 
 export const computeToolMatrixBreakdown = async (
@@ -163,7 +163,7 @@ export const computeToolMatrixBreakdown = async (
 }
 
 export async function computeToolsMatrix(
-    db: Db,
+    context: RequestContext,
     {
         survey,
         tools,
@@ -181,7 +181,7 @@ export async function computeToolsMatrix(
     const allTools: any[] = []
     for (const tool of tools) {
         allTools.push(
-            await computeToolMatrixBreakdown(db, {
+            await computeToolMatrixBreakdown(context.db, {
                 survey,
                 tool,
                 experience,

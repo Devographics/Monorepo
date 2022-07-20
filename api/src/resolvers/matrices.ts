@@ -17,13 +17,13 @@ export default {
                 experiences: ToolExperienceFilterId[]
                 dimensions: string[]
             },
-            { db }: RequestContext
+            context: RequestContext
         ) => {
             const result = []
             for (const experience of experiences) {
                 const by_dimension = []
                 for (const dimension of dimensions) {
-                    const tools = await useCache(computeToolsMatrix, db, [
+                    const tools = await useCache(computeToolsMatrix, context, [
                         {
                             survey,
                             tools: ids,

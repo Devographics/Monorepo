@@ -1,5 +1,5 @@
 import { Db } from 'mongodb'
-import { YearCompletion, SurveyConfig } from '../types'
+import { RequestContext, YearCompletion, SurveyConfig } from '../types'
 import { TermAggregationOptions } from '../compute/generic'
 import config from '../config'
 import { generateFiltersQuery } from '../filters'
@@ -62,11 +62,12 @@ export interface MatchupYearAggregations {
 }
 
 export async function winsAggregationFunction(
-    db: Db,
+    context: RequestContext,
     survey: SurveyConfig,
     key: string,
     options: TermAggregationOptions = {}
 ) {
+    const { db } = context
     const collection = db.collection(config.mongo.normalized_collection)
 
     const { filters }: TermAggregationOptions = options
@@ -106,8 +107,8 @@ export async function winsAggregationFunction(
         id: idsLookupTable[key][result.id]
     }))
 
-    const totalRespondentsByYear = await getParticipationByYearMap(db, survey)
-    const completionByYear = await computeCompletionByYear(db, match)
+    const totalRespondentsByYear = await getParticipationByYearMap(context, survey)
+    const completionByYear = await computeCompletionByYear(context, match)
 
     // group by years and add counts
     const resultsByYear = await groupByYears(
@@ -129,11 +130,12 @@ export async function winsAggregationFunction(
 }
 
 export async function matchupsAggregationFunction(
-    db: Db,
+    context: RequestContext,
     survey: SurveyConfig,
     key: string,
     options: TermAggregationOptions = { year: new Date().getFullYear() }
 ) {
+    const { db } = context
     const collection = db.collection(config.mongo.normalized_collection)
 
     const { filters }: TermAggregationOptions = options
@@ -185,8 +187,8 @@ export async function matchupsAggregationFunction(
     // console.log('// resultsWithId')
     // console.log(JSON.stringify(rawResults, '', 2))
 
-    const totalRespondentsByYear = await getParticipationByYearMap(db, survey)
-    const completionByYear = await computeCompletionByYear(db, match)
+    const totalRespondentsByYear = await getParticipationByYearMap(context, survey)
+    const completionByYear = await computeCompletionByYear(context, match)
 
     // group by years and add counts
     const resultsByYear = await groupByYears(

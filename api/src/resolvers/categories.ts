@@ -11,8 +11,8 @@ interface CategoryConfig {
     filters?: Filters
 }
 
-const computeOtherTools = async (db: Db, survey: SurveyConfig, id: string, filters?: Filters) =>
-    useCache(computeTermAggregationAllYears, db, [
+const computeOtherTools = async (context: RequestContext, survey: SurveyConfig, id: string, filters?: Filters) =>
+    useCache(computeTermAggregationAllYears, context, [
         survey,
         `tools_others.${id}.others.normalized`,
         { filters }
@@ -23,14 +23,14 @@ export default {
         all_years: async (
             { survey, id, filters }: CategoryConfig,
             args: any,
-            { db }: RequestContext
-        ) => computeOtherTools(db, survey, id, filters),
+            context: RequestContext
+        ) => computeOtherTools(context, survey, id, filters),
         year: async (
             { survey, id, filters }: CategoryConfig,
             { year }: { year: number },
-            { db }: RequestContext
+            context: RequestContext
         ) => {
-            const allYears = await computeOtherTools(db, survey, id, filters)
+            const allYears = await computeOtherTools(context, survey, id, filters)
             return allYears.find((yearItem: YearAggregations) => yearItem.year === year)
         }
     },
@@ -38,14 +38,14 @@ export default {
         all_years: async (
             { survey, id, filters }: CategoryConfig,
             args: any,
-            { db }: RequestContext
-        ) => useCache(computeHappinessByYear, db, [survey, id, filters]),
+            context: RequestContext
+        ) => useCache(computeHappinessByYear, context, [survey, id, filters]),
         year: async (
             { survey, id, filters }: CategoryConfig,
             { year }: { year: number },
-            { db }: RequestContext
+            context: RequestContext
         ) => {
-            const allYears = await useCache(computeHappinessByYear, db, [survey, id, filters])
+            const allYears = await useCache(computeHappinessByYear, context, [survey, id, filters])
             return allYears.find((yearItem: YearAggregations) => yearItem.year === year)
         }
     }

@@ -128,8 +128,8 @@ export default {
                 id,
                 ...args
             }),
-            experienceGraph: async ({ filters }: { filters?: Filters }, { db }: RequestContext) =>
-                useCache(computeToolExperienceGraph, db, [survey, id, filters])
+            experienceGraph: async ({ filters }: { filters?: Filters }, context: RequestContext) =>
+                useCache(computeToolExperienceGraph, context, [survey, id, filters])
         }),
         tools: async (survey: SurveyConfig, { ids = toolIds }: { ids?: string[] }) =>
             ids.map(async id => ({
@@ -148,12 +148,12 @@ export default {
                 }),
                 experienceTransitions: async (
                     { year }: { year: number },
-                    { db }: RequestContext
-                ) => useCache(computeToolExperienceTransitions, db, [survey, id, [year - 1, year]]),
+                    context: RequestContext
+                ) => useCache(computeToolExperienceTransitions, context, [survey, id, [year - 1, year]]),
                 experienceGraph: async (
                     { filters }: { filters?: Filters },
-                    { db }: RequestContext
-                ) => useCache(computeToolExperienceGraph, db, [survey, id, filters])
+                    context: RequestContext
+                ) => useCache(computeToolExperienceGraph, context, [survey, id, filters])
             })),
         tools_cardinality_by_user: (
             survey: SurveyConfig,
@@ -168,7 +168,7 @@ export default {
                 experienceId: ToolExperienceId
             },
             context: RequestContext
-        ) => useCache(computeToolsCardinalityByUser, context.db, [survey, year, ids, experienceId]),
+        ) => useCache(computeToolsCardinalityByUser, context, [survey, year, ids, experienceId]),
         tools_others: (survey: SurveyConfig, args: ResolverArguments) => ({
             survey,
             ...args

@@ -15,14 +15,14 @@ interface OtherFeaturesConfig {
 }
 
 const computeOtherFeatures = async (
-    db: Db,
+    context: RequestContext,
     survey: SurveyConfig,
     id: string,
     filters?: Filters
 ) => {
     const features = await getEntities({ tag: 'feature'})
 
-    const otherFeaturesByYear = await useCache(computeTermAggregationAllYears, db, [
+    const otherFeaturesByYear = await useCache(computeTermAggregationAllYears, context, [
         survey,
         `features_others.${getOtherKey(id)}`,
         { filters }
@@ -48,14 +48,14 @@ export default {
         all_years: async (
             { survey, id, filters }: OtherFeaturesConfig,
             args: any,
-            { db }: RequestContext
-        ) => computeOtherFeatures(db, survey, id, filters),
+            context: RequestContext
+        ) => computeOtherFeatures(context, survey, id, filters),
         year: async (
             { survey, id, filters }: OtherFeaturesConfig,
             { year }: { year: number },
-            { db }: RequestContext
+            context: RequestContext
         ) => {
-            const allYears = await computeOtherFeatures(db, survey, id, filters)
+            const allYears = await computeOtherFeatures(context, survey, id, filters)
             return allYears.find((yearItem: YearAggregations) => yearItem.year === year)
         }
     }

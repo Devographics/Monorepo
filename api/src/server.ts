@@ -22,21 +22,21 @@ const Tracing = require('@sentry/tracing')
 
 const app = express()
 
-const environment = process.env.ENVIRONMENT || process.env.NODE_ENV;
+const environment = process.env.ENVIRONMENT || process.env.NODE_ENV
 
 Sentry.init({
-  dsn: process.env.SENTRY_DSN,
+    dsn: process.env.SENTRY_DSN,
     integrations: [
-    // enable HTTP calls tracing
-    new Sentry.Integrations.Http({ tracing: true }),
-    // enable Express.js middleware tracing
-    // new Tracing.Integrations.Express({ app }),
-  ],
-  // We recommend adjusting this value in production, or using tracesSampler
-  // for finer control
-  tracesSampleRate: 1.0,
-  environment,
-});
+        // enable HTTP calls tracing
+        new Sentry.Integrations.Http({ tracing: true })
+        // enable Express.js middleware tracing
+        // new Tracing.Integrations.Express({ app }),
+    ],
+    // We recommend adjusting this value in production, or using tracesSampler
+    // for finer control
+    tracesSampleRate: 1.0,
+    environment
+})
 
 // const path = require('path')
 
@@ -69,17 +69,22 @@ const start = async () => {
         // engine: {
         //     debugPrintReports: true
         // },
-        context: (): RequestContext => ({
-            db
-        })
+        context: (expressContext): RequestContext => {
+            // TODO: do this better with a custom header
+            const isDebug = expressContext?.req?.rawHeaders?.includes('http://localhost:4001')
+            return {
+                db,
+                isDebug
+            }
+        }
     })
 
-    app.use(Sentry.Handlers.requestHandler());
+    app.use(Sentry.Handlers.requestHandler())
     // TracingHandler creates a trace for every incoming request
     // app.use(Sentry.Handlers.tracingHandler());
 
     await server.start()
-    
+
     server.applyMiddleware({ app })
 
     app.get('/', function (req, res) {
@@ -87,8 +92,8 @@ const start = async () => {
     })
 
     app.get('/debug-sentry', function mainHandler(req, res) {
-    throw new Error('My first Sentry error!');
-    });
+        throw new Error('My first Sentry error!')
+    })
 
     app.get('/analyze-twitter', async function (req, res) {
         checkSecretKey(req)
@@ -102,7 +107,7 @@ const start = async () => {
         res.status(200).send('Cache cleared')
     })
 
-    app.use(Sentry.Handlers.errorHandler());
+    app.use(Sentry.Handlers.errorHandler())
 
     const port = process.env.PORT || 4000
 
@@ -112,8 +117,6 @@ const start = async () => {
     app.listen({ port: port }, () =>
         console.log(`🚀 Server ready at http://localhost:${port}${server.graphqlPath}`)
     )
-
-    
 }
 
 start()

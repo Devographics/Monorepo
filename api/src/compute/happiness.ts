@@ -1,15 +1,15 @@
 import { Db } from 'mongodb'
 import { computeTermAggregationAllYears } from './generic'
-import { SurveyConfig } from '../types'
+import { RequestContext, SurveyConfig } from '../types'
 import { Filters } from '../filters'
 
 export async function computeHappinessByYear(
-    db: Db,
+    context: RequestContext,
     survey: SurveyConfig,
     id: string,
     filters?: Filters
 ) {
-    const happinessByYear = await computeTermAggregationAllYears(db, survey, `happiness.${id}`, {
+    const happinessByYear = await computeTermAggregationAllYears(context, survey, `happiness.${id}`, {
         filters,
         sort: { property: 'id', order: 'asc' }
     })

@@ -4,7 +4,7 @@ import config from '../config'
 import { ratioToPercentage, appendCompletionToYearlyResults } from './common'
 import { getEntity } from '../entities'
 import keys from '../data/keys.yml'
-import { YearCompletion, SurveyConfig } from '../types'
+import { YearCompletion, SurveyConfig, RequestContext } from '../types'
 import { Filters, generateFiltersQuery } from '../filters'
 import { computeCompletionByYear } from './completion'
 import { computeYearlyTransitions, YearlyTransitionsResult } from './yearly_transitions'
@@ -69,12 +69,12 @@ const computeSatisfaction = (buckets: ExperienceBucket[]) => {
 }
 
 export async function computeExperienceOverYears(
-    db: Db,
+    context: RequestContext,
     survey: SurveyConfig,
     tool: string,
     filters?: Filters
 ) {
-    const collection = db.collection(config.mongo.normalized_collection)
+    const collection = context.db.collection(config.mongo.normalized_collection)
 
     const path = `tools.${tool}.experience`
 
@@ -109,7 +109,7 @@ export async function computeExperienceOverYears(
         ])
         .toArray()
 
-    const completionByYear = await computeCompletionByYear(db, match)
+    const completionByYear = await computeCompletionByYear(context, match)
 
     // group by years and add counts
     const experienceByYear = _.orderBy(
@@ -204,13 +204,13 @@ export async function computeExperienceOverYears(
         }
     })
 
-    return appendCompletionToYearlyResults(db, survey, experienceByYear)
+    return appendCompletionToYearlyResults(context, survey, experienceByYear)
 }
 
 const metrics = ['awareness', 'usage', 'interest', 'satisfaction']
 
 export async function computeToolsExperienceRanking(
-    db: Db,
+    context: RequestContext,
     survey: SurveyConfig,
     tools: string[],
     filters?: Filters
@@ -219,7 +219,7 @@ export async function computeToolsExperienceRanking(
     const metricByYear: { [key: string]: any } = {}
 
     for (const tool of tools) {
-        const toolAllYearsExperience = await computeExperienceOverYears(db, survey, tool, filters)
+        const toolAllYearsExperience = await computeExperienceOverYears(context, survey, tool, filters)
         const toolAwarenessUsageInterestSatisfactionOverYears: any[] = []
 
         toolAllYearsExperience.forEach((toolYear: any) => {
@@ -290,14 +290,14 @@ export async function computeToolsExperienceRanking(
 }
 
 export async function computeToolsExperienceRankingYears(
-    db: Db,
+    context: RequestContext,
     survey: SurveyConfig,
     tools: string[],
     filters?: Filters
 ) {
     let availableYears: any[] = []
     for (const tool of tools) {
-        const toolAllYearsExperience = await computeExperienceOverYears(db, survey, tool, filters)
+        const toolAllYearsExperience = await computeExperienceOverYears(context, survey, tool, filters)
         toolAllYearsExperience.forEach((toolYear: any) => {
             availableYears.push(toolYear.year)
         })
@@ -307,13 +307,13 @@ export async function computeToolsExperienceRankingYears(
 }
 
 export async function computeToolExperienceTransitions<ToolID extends string = string>(
-    db: Db,
+    context: RequestContext,
     survey: SurveyConfig,
     tool: ToolID,
     years: [number, number]
 ) {
     const yearlyTransitions = await computeYearlyTransitions<ExperienceChoice>(
-        db,
+        context,
         survey,
         `tools.${tool}.experience`,
         years,

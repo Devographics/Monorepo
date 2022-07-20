@@ -1,5 +1,6 @@
 blockType: VerticalBarBlock
 dataPath: "surveyApi.survey.${id}.year"
+keysPath: "surveyApi.survey.${id}.keys"
 enableCustomization: true
 hasSponsor: true
 query: >

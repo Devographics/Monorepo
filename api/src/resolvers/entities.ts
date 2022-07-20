@@ -52,28 +52,28 @@ export default {
                 return
             }
         },
-        twitter: async (entity: Entity, args: any, { db }: RequestContext) => {
+        twitter: async (entity: Entity, args: any, context: RequestContext) => {
             const twitter =
-                entity.twitterName && useCache(fetchTwitterUser, db, [entity.twitterName])
+                entity.twitterName && useCache(fetchTwitterUser, context, [entity.twitterName])
 
             // const twitter = await fetchTwitterResource(entity.id)
             return twitter
         },
-        homepage: async (entity: Entity, args: any, { db }: RequestContext) => {
+        homepage: async (entity: Entity, args: any, context: RequestContext) => {
             return { name: entity.homepage, url: entity.homepage }
         },
-        caniuse: async (entity: Entity, args: any, { db }: RequestContext) => {
+        caniuse: async (entity: Entity, args: any, context: RequestContext) => {
             const { caniuse } = entity
             return caniuse ? { name: caniuse, url: `https://caniuse.com/${caniuse}` } : null
         },
-        npm: async (entity: Entity, args: any, { db }: RequestContext) => {
+        npm: async (entity: Entity, args: any, context: RequestContext) => {
             if (!entity || !entity.npm) {
                 return
             }
 
             return { name: entity.npm, url: `https://www.npmjs.com/package/${entity.npm}` }
         },
-        company: async (entity: Entity, args: any, { db }: RequestContext) => {
+        company: async (entity: Entity, args: any, context: RequestContext) => {
             const company = entity.companyName && getEntity({ id: entity.companyName })
             return company
         }

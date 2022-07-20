@@ -18,14 +18,14 @@ export default {
         all_years: async (
             { survey, id, filters }: OpinionConfig,
             args: any,
-            { db }: RequestContext
-        ) => useCache(computeOpinionByYear, db, [survey, id, filters]),
+            context: RequestContext
+        ) => useCache(computeOpinionByYear, context, [survey, id, filters]),
         year: async (
             { survey, id, filters }: OpinionConfig,
             { year }: { year: number },
-            { db }: RequestContext
+            context: RequestContext
         ) => {
-            const allYears = await useCache(computeOpinionByYear, db, [survey, id, filters])
+            const allYears = await useCache(computeOpinionByYear, context, [survey, id, filters])
             return allYears.find((yearItem: YearAggregations) => yearItem.year === year)
         }
     },

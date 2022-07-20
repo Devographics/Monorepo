@@ -46,10 +46,10 @@ export const getStaticResolvers = (
     all_years: async (
         { survey, filters, options: queryOptions, facet }: ResolverDynamicConfig,
         args: any,
-        { db }: RequestContext
+        context: RequestContext
     ) =>
         computeTermAggregationAllYearsWithCache(
-            db,
+            context,
             survey,
             id,
             { ...options, ...queryOptions, filters, facet },
@@ -58,10 +58,10 @@ export const getStaticResolvers = (
     year: async (
         { survey, filters, options: queryOptions, facet }: ResolverDynamicConfig,
         { year }: { year: number },
-        { db }: RequestContext
+        context: RequestContext
     ) =>
         computeTermAggregationSingleYearWithCache(
-            db,
+            context,
             survey,
             id,
             { ...options, ...queryOptions, filters, year, facet },
@@ -83,10 +83,10 @@ export const getDynamicResolvers = (
     all_years: async (
         { survey, id, filters, options: queryOptions, facet }: ResolverDynamicConfig,
         args: any,
-        { db }: RequestContext
+        context: RequestContext
     ) =>
         computeTermAggregationAllYearsWithCache(
-            db,
+            context,
             survey,
             getId(id),
             { ...options, ...queryOptions, filters, facet },
@@ -95,10 +95,10 @@ export const getDynamicResolvers = (
     year: async (
         { survey, id, filters, options: queryOptions, facet }: ResolverDynamicConfig,
         { year }: { year: number },
-        { db }: RequestContext
+        context: RequestContext
     ) =>
         computeTermAggregationSingleYearWithCache(
-            db,
+            context,
             survey,
             getId(id),
             {
@@ -118,9 +118,6 @@ export const getDynamicResolversWithKeys = (
     aggregationFunction?: AggregationFunction
 ) => ({
     keys: async ({ id }: ResolverDynamicConfig) => {
-        console.log('// keys')
-        console.log(id)
-        console.log(yamlKeys[id])
         return yamlKeys[id] || []
     },
     ...getDynamicResolvers(getId, options, aggregationFunction)

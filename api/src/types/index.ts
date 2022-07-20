@@ -9,6 +9,7 @@ import { Options } from '../options'
  */
 export interface RequestContext {
     db: Db
+    isDebug?: Boolean
 }
 
 export interface SurveyConfig {

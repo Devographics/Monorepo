@@ -1,15 +1,16 @@
 import orderBy from 'lodash/orderBy'
 import { Db } from 'mongodb'
 import config from '../config'
-import { SurveyConfig, YearParticipation } from '../types'
+import { RequestContext, SurveyConfig, YearParticipation } from '../types'
 import { Filters } from '../filters'
 
 export async function computeParticipationByYear(
-    db: Db,
+    context: RequestContext,
     survey: SurveyConfig,
     filters?: Filters,
     year?: number
 ): Promise<YearParticipation[]> {
+    const { db } = context
     const collection = db.collection(config.mongo.normalized_collection)
 
     const participantsByYear = await collection
@@ -39,12 +40,12 @@ export async function computeParticipationByYear(
 }
 
 export async function getParticipationByYearMap(
-    db: Db,
+    context: RequestContext,
     survey: SurveyConfig
 ): Promise<{
     [key: number]: number
 }> {
-    const buckets = await computeParticipationByYear(db, survey)
+    const buckets = await computeParticipationByYear(context, survey)
 
     return buckets.reduce((acc, bucket) => {
         return {

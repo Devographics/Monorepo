@@ -1,5 +1,6 @@
 import TwitterApi, { ApiResponseError, UserFollowingV2Paginator } from 'twitter-api-v2'
 import { Db } from 'mongodb'
+import { RequestContext } from '../types'
 
 // Instanciate with desired auth type (here's Bearer v2 auth)
 const twitterClient = new TwitterApi(process.env.TWITTER_BEARER_TOKEN || '')
@@ -26,7 +27,7 @@ const roClient = twitterClient.readOnly
 
 // https://github.com/PLhery/node-twitter-api-v2/blob/master/doc/v2.md#single-user-by-username
 
-export async function fetchTwitterUser(db: Db, twitterName: string) {
+export async function fetchTwitterUser(context: RequestContext, twitterName: string) {
     const user = await getTwitterUser(twitterName)
     if (!user) {
         return

@@ -1,7 +1,7 @@
 import { Db } from 'mongodb'
 import { inspect } from 'util'
 import config from '../config'
-import { YearCompletion, FacetCompletion, SurveyConfig, Entity } from '../types'
+import { YearCompletion, FacetCompletion, SurveyConfig, Entity, RequestContext } from '../types'
 import { Filters, generateFiltersQuery } from '../filters'
 import { Facet } from '../facets'
 import { ratioToPercentage } from './common'
@@ -104,28 +104,29 @@ export interface YearAggregations {
 }
 
 export type AggregationFunction = (
-    db: Db,
+    context: RequestContext,
     survey: SurveyConfig,
     key: string,
     options: TermAggregationOptions
 ) => Promise<any>
 
 export async function computeTermAggregationAllYears(
-    db: Db,
+    context: RequestContext,
     survey: SurveyConfig,
     key: string,
     options: TermAggregationOptions = {},
     aggregationFunction: AggregationFunction = computeDefaultTermAggregationByYear
 ) {
-    return aggregationFunction(db, survey, key, options)
+    return aggregationFunction(context, survey, key, options)
 }
 
 export async function computeDefaultTermAggregationByYear(
-    db: Db,
+    context: RequestContext,
     survey: SurveyConfig,
     key: string,
     options: TermAggregationOptions = {}
 ) {
+    const { db } = context
     const collection = db.collection(config.mongo.normalized_collection)
 
     // use last segment of field as id
@@ -176,8 +177,8 @@ export async function computeDefaultTermAggregationByYear(
     }
 
     // TODO: merge these counts into the main aggregation pipeline if possible
-    const totalRespondentsByYear = await getParticipationByYearMap(db, survey)
-    const completionByYear = await computeCompletionByYear(db, match)
+    const totalRespondentsByYear = await getParticipationByYearMap(context, survey)
+    const completionByYear = await computeCompletionByYear(context, match)
 
     // console.log(match)
 
@@ -471,24 +472,24 @@ export async function sortFacets(resultsByYears: ResultsByYear[], options: SortO
 }
 
 export async function computeTermAggregationAllYearsWithCache(
-    db: Db,
+    context: RequestContext,
     survey: SurveyConfig,
     id: string,
     options: TermAggregationOptions = {},
     aggregationFunction?: AggregationFunction
 ) {
-    return useCache(computeTermAggregationAllYears, db, [survey, id, options, aggregationFunction])
+    return useCache(computeTermAggregationAllYears, context, [survey, id, options, aggregationFunction])
 }
 
 export async function computeTermAggregationSingleYear(
-    db: Db,
+    context: RequestContext,
     survey: SurveyConfig,
     key: string,
     options: TermAggregationOptions,
     aggregationFunction?: AggregationFunction
 ) {
     const allYears = await computeTermAggregationAllYears(
-        db,
+        context,
         survey,
         key,
         options,
@@ -498,13 +499,13 @@ export async function computeTermAggregationSingleYear(
 }
 
 export async function computeTermAggregationSingleYearWithCache(
-    db: Db,
+    context: RequestContext,
     survey: SurveyConfig,
     id: string,
     options: TermAggregationOptions,
     aggregationFunction?: AggregationFunction
 ) {
-    return useCache(computeTermAggregationSingleYear, db, [
+    return useCache(computeTermAggregationSingleYear, context, [
         survey,
         id,
         options,

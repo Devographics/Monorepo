@@ -1,6 +1,6 @@
 import { inspect } from 'util'
 import { Db } from 'mongodb'
-import { SurveyConfig } from '../types'
+import { RequestContext, SurveyConfig } from '../types'
 import { Filters } from '../filters'
 import config from '../config'
 import { computeChoicesOverYearsGraph } from './choices_over_years_graph'
@@ -98,14 +98,14 @@ export const toolExperienceConfigById: Record<
 } as const
 
 export async function computeToolExperienceGraph(
-    db: Db,
+    context: RequestContext,
     survey: SurveyConfig,
     tool: string,
     filters?: Filters
 ) {
     const field = `tools.${tool}.experience`
 
-    const { nodes, links } = await computeChoicesOverYearsGraph(db, survey, field, filters)
+    const { nodes, links } = await computeChoicesOverYearsGraph(context, survey, field, filters)
 
     return {
         // remap for experience
@@ -119,7 +119,7 @@ export async function computeToolExperienceGraph(
 }
 
 export async function computeToolsCardinalityByUser(
-    db: Db,
+    context: RequestContext,
     survey: SurveyConfig,
     year: number,
     toolIds: string[],
@@ -193,6 +193,7 @@ export async function computeToolsCardinalityByUser(
         }
     ]
 
+    const { db } = context
     const results = await db.collection(config.mongo.normalized_collection).aggregate<{
         _id: number
         cardinality: number
@@ -203,7 +204,7 @@ export async function computeToolsCardinalityByUser(
         return []
     }
 
-    const totalRespondentsByYear = await getParticipationByYearMap(db, survey)
+    const totalRespondentsByYear = await getParticipationByYearMap(context, survey)
     const numberOfRespondents = totalRespondentsByYear[year]
     if (numberOfRespondents === undefined) {
         throw new Error(`unable to find number of respondents for year: ${year}`)

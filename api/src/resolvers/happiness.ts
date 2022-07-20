@@ -17,14 +17,14 @@ export default {
         all_years: async (
             { survey, id, filters }: HappinessConfig,
             args: any,
-            { db }: RequestContext
-        ) => useCache(computeHappinessByYear, db, [survey, id, filters]),
+            context: RequestContext
+        ) => useCache(computeHappinessByYear, context, [survey, id, filters]),
         year: async (
             { survey, id, filters }: HappinessConfig,
             { year }: { year: number },
-            { db }: RequestContext
+            context: RequestContext
         ) => {
-            const allYears = await useCache(computeHappinessByYear, db, [survey, id, filters])
+            const allYears = await useCache(computeHappinessByYear, context, [survey, id, filters])
             return allYears.find((yearItem: YearAggregations) => yearItem.year === year)
         }
     }

@@ -148,7 +148,7 @@ const run = async () => {
 
     // await naive(collection)
     const res = await computeToolExperienceTransitions(
-        db,
+        { db },
         { survey: 'state_of_js' },
         'ember',
         [2019, 2020],

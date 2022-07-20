@@ -3,8 +3,8 @@ import { RequestContext, SurveyConfig } from '../types'
 import config from '../config'
 import { Db } from 'mongodb'
 
-export async function getSurveyTotals(db: Db, surveyConfig: SurveyConfig, year?: Number) {
-    const collection = db.collection(config.mongo.normalized_collection)
+export async function getSurveyTotals(context: RequestContext, surveyConfig: SurveyConfig, year?: Number) {
+    const collection = context.db.collection(config.mongo.normalized_collection)
     let selector: any = {
         survey: surveyConfig.survey
     }
@@ -16,9 +16,9 @@ export async function getSurveyTotals(db: Db, surveyConfig: SurveyConfig, year?:
 
 export default {
     Totals: {
-        all_years: async (survey: SurveyConfig, args: any, { db }: RequestContext) =>
-            useCache(getSurveyTotals, db, [survey]),
-        year: async (survey: SurveyConfig, { year }: { year: number }, { db }: RequestContext) =>
-            useCache(getSurveyTotals, db, [survey, year])
+        all_years: async (survey: SurveyConfig, args: any, context: RequestContext) =>
+            useCache(getSurveyTotals, context, [survey]),
+        year: async (survey: SurveyConfig, { year }: { year: number }, context: RequestContext) =>
+            useCache(getSurveyTotals, context, [survey, year])
     }
 }

@@ -1,6 +1,6 @@
 import { Db } from 'mongodb'
 import { sortBy } from 'lodash'
-import { SurveyConfig } from '../types'
+import { RequestContext, SurveyConfig } from '../types'
 import config from '../config'
 
 /**
@@ -61,13 +61,13 @@ export type YearlyTransitionsResult<Choice> = {
  * for charts sensitive to the order of the data such as sankey charts.
  */
 export const computeYearlyTransitions = async <Choice>(
-    db: Db,
+    context: RequestContext,
     survey: SurveyConfig,
     key: string,
     years: [number, number],
     sortChoices?: YearlyTransitionChoiceSort<Choice>
 ): Promise<YearlyTransitionsResult<Choice>> => {
-    const collection = db.collection(config.mongo.normalized_collection)
+    const collection = context.db.collection(config.mongo.normalized_collection)
 
     const pipeline = [
         {

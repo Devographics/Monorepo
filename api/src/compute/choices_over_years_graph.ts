@@ -1,15 +1,16 @@
 import _ from 'lodash'
 import { Db } from 'mongodb'
 import config from '../config'
-import { SurveyConfig } from '../types'
+import { RequestContext, SurveyConfig } from '../types'
 import { Filters, generateFiltersQuery } from '../filters'
 
 export async function computeChoicesOverYearsGraph(
-    db: Db,
+    context: RequestContext,
     survey: SurveyConfig,
     field: string,
     filters?: Filters
 ) {
+    const { db } = context
     const collection = db.collection(config.mongo.normalized_collection)
 
     const results = await collection
