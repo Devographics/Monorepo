@@ -91,3 +91,9 @@ bracket:
   - round2
   - round3
   - combined
+
+graphql_experience:
+  - range_less_than_1
+  - range_1_2
+  - range_3_5
+  - range_6_10

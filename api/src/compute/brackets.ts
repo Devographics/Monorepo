@@ -69,7 +69,7 @@ export async function winsAggregationFunction(
 ) {
     const collection = db.collection(config.mongo.normalized_collection)
 
-    const { filters, year }: TermAggregationOptions = options
+    const { filters }: TermAggregationOptions = options
 
     const match: any = {
         survey: survey.survey,
@@ -77,24 +77,28 @@ export async function winsAggregationFunction(
         ...generateFiltersQuery(filters)
     }
     // if year is passed, restrict aggregation to specific year
-    if (year) {
-        match.year = year
-    }
+    // NOTE: for now year is always specified
+    const year = options.year || new Date().getFullYear()
+    match.year = year
 
-    const winsPipeline = getWinsPipeline(match, key)
+    const winsPipeline = getWinsPipeline(match, key, year)
 
     const rawResults = (await collection.aggregate(winsPipeline).toArray()) as WinsBucket[]
 
-    // console.log(
-    //     inspect(
-    //         {
-    //             match,
-    //             winsPipeline,
-    //             rawResults
-    //         },
-    //         { colors: true, depth: null }
-    //     )
-    // )
+    console.log(
+        inspect(
+            {
+                match,
+                winsPipeline,
+                rawResults
+            },
+            { colors: true, depth: null }
+        )
+    )
+
+    if (!idsLookupTable[key]) {
+        throw new Error(`IDs for bracket ${key} missing in IDs lookup table`)
+    }
 
     // add proper ids
     const resultsWithId = rawResults.map(result => ({
@@ -114,26 +118,25 @@ export async function winsAggregationFunction(
         totalRespondentsByYear,
         completionByYear
     )
-
     // add "fake" facet for now
     const resultsWithFacets = resultsByYear.map(y => ({
         ...y,
         facets: [{ completion: y.completion, type: 'default', id: 'default', buckets: y.buckets }]
     }))
 
-    // console.log(JSON.stringify(resultsWithFacets, undefined, 2))
+    console.log(JSON.stringify(resultsWithFacets, undefined, 2))
     return resultsWithFacets
 }
 
-export async function matchupsAggregationFunction (
+export async function matchupsAggregationFunction(
     db: Db,
     survey: SurveyConfig,
     key: string,
-    options: TermAggregationOptions = {}
+    options: TermAggregationOptions = { year: new Date().getFullYear() }
 ) {
     const collection = db.collection(config.mongo.normalized_collection)
 
-    const { filters, year }: TermAggregationOptions = options
+    const { filters }: TermAggregationOptions = options
 
     const match: any = {
         survey: survey.survey,
@@ -142,11 +145,11 @@ export async function matchupsAggregationFunction (
     }
 
     // if year is passed, restrict aggregation to specific year
-    if (year) {
-        match.year = year
-    }
+    // NOTE: for now year is always specified
+    const year = options.year || new Date().getFullYear()
+    match.year = year
 
-    const matchupsPipeline = getMatchupsPipeline(match, key)
+    const matchupsPipeline = getMatchupsPipeline(match, key, year)
     const rawResults = (await collection
         .aggregate(matchupsPipeline)
         .toArray()) as MatchupAggregationResult[]
@@ -167,6 +170,10 @@ export async function matchupsAggregationFunction (
     //     ...result,
     //     id: idsLookupTable[key][result.id]
     // }))
+    if (!idsLookupTable[key]) {
+        throw new Error(`IDs for bracket ${key} missing in IDs lookup table`)
+    }
+
     rawResults.forEach(result => {
         result.id = idsLookupTable[key][result.id]
         result.matchups = result.matchups.map(matchup => ({
@@ -196,7 +203,7 @@ export async function matchupsAggregationFunction (
         ...y,
         facets: [{ completion: y.completion, type: 'default', id: 'default', buckets: y.buckets }]
     }))
-    
+
     // console.log('// resultsWithFacets')
     // console.log(JSON.stringify(resultsWithFacets, '', 2))
 
@@ -220,7 +227,6 @@ export async function groupByYears(
     values?: string[] | number[]
 ) {
     const years = uniq(results.map(r => r.year))
-
     const resultsWithYears = years.map((year: number) => {
         const totalRespondents = totalRespondentsByYear[year] ?? 0
         const completionCount = completionByYear[year]?.total ?? 0

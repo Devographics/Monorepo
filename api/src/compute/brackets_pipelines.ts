@@ -1,6 +1,6 @@
 // see https://github.com/StateOfJS/state-of-js-graphql-results-api/issues/190#issuecomment-952308689
 // thanks @thomasheyenbrock!!
-export const getWinsPipeline = (match: any, key: String) => [
+export const getWinsPipeline = (match: any, key: String, year: Number) => [
     { $match: match },
     /**
      * Reduce over the bracketResult array and determine the round. (Use $reduce
@@ -154,7 +154,7 @@ export const getWinsPipeline = (match: any, key: String) => [
     {
         $project: {
             id: 1,
-            year: { $literal: 2021 },
+            year: { $literal: year },
             combined: {
                 count: '$combined.count',
                 percentage: {
@@ -200,7 +200,7 @@ export const getWinsPipeline = (match: any, key: String) => [
 ]
 
 // count how many matches each item won
-export const getMatchupsPipeline = (match: any, key: String) => [
+export const getMatchupsPipeline = (match: any, key: String, year: Number) => [
     { $match: match },
     /**
      * Map over the individual matches and transform the shape.
@@ -299,7 +299,7 @@ export const getMatchupsPipeline = (match: any, key: String) => [
             _id: 0,
             id: '$_id',
             matchups: 1,
-            year: { $literal: 2021 }
+            year: { $literal: year }
         }
     },
     /**

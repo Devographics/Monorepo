@@ -662,6 +662,7 @@
       template: recommended_resources
 
 - id: usage
+  titleId: sections.usage_graphql.title
   path: /usage
   blocks:
     - template: page_introduction
@@ -672,6 +673,7 @@
       tabId: tabs.main_answers
       template: single_option
       translateData: true
+      # dataFunction: sortGraphQLExperience
       variables:
         fieldId: usage
 
@@ -683,17 +685,17 @@
       translateData: true
       variables:
         fieldId: usage
-      variants:
-        - id: api_type_others
-          defaultUnits: count
-          blockNamespace: usage
-          chartNamespace: api_type
-          tabId: tabs.other_answers
-          template: multiple_options
-          translateData: true
-          variables:
-            fieldId: usage
-            options: { limit: 15 }
+      # variants:
+      #   - id: api_type_others
+      #     defaultUnits: count
+      #     blockNamespace: usage
+      #     chartNamespace: api_type
+      #     tabId: tabs.other_answers
+      #     template: multiple_options
+      #     translateData: true
+      #     variables:
+      #       fieldId: usage
+      #       options: { limit: 15 }
 
     - id: client_type
       blockNamespace: resources
@@ -779,7 +781,7 @@
       blockNamespace: usage
       chartNamespace: industry_sector
       tabId: tabs.main_answers
-      template: single_option
+      template: multiple_options
       translateData: true
       variables:
         fieldId: usage

@@ -47,3 +47,25 @@ opinions.currently_missing_from_js:
   - immutable_data_structures
   - better_date_management
   - observable
+
+# graphql
+usage.strong_points:
+  - avoiding_overfetching
+  - introspection
+  - tooling_ecosystem
+  - type_checking
+  - api_aggregation
+  - aggregating_requests
+  - community
+  - fragment_colocation
+
+# graphql
+usage.pain_points:
+  - performance
+  - security
+  - combining_schemas
+  - api_versioning
+  - file_upload
+  - testing
+  - error_handling
+  - client_side_caching

@@ -17,6 +17,7 @@ import take from 'lodash/take'
 import round from 'lodash/round'
 import { count } from 'console'
 import difference from 'lodash/difference'
+import yamlKeys from '../data/keys.yml'
 
 export interface TermAggregationOptions {
     // filter aggregations
@@ -138,11 +139,18 @@ export async function computeDefaultTermAggregationByYear(
         limit = 50,
         year,
         facet,
-        keys: values,
         facetLimit,
         facetMinPercent,
         facetMinCount
     }: TermAggregationOptions = options
+
+    // if values (keys) are not passed as options, look in globally defined yaml keys
+    let values
+    if (options.keys) {
+        values = options.keys
+    } else if (yamlKeys[fieldId]) {
+        values = yamlKeys[fieldId]
+    }
 
     const convertOrder = (order: 'asc' | 'desc') => (order === 'asc' ? 1 : -1)
 

@@ -47,7 +47,7 @@ const getLabelsLayer = (units: BlockUnits) => (props: any) => {
 }
 
 const getAxisLabels = (v: any, legends: BlockLegend[]) => {
-    const key = legends.find(key => key.id === v)
+    const key = legends && legends.find(key => key.id === v)
     return key && (key.shortLabel || key.label)
 }
 

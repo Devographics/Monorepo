@@ -18,6 +18,8 @@ type Entity {
     tags: [String]
     patterns: [String]
 
+    apiOnly: Boolean
+
     twitterName: String
     twitter: Twitter
 
