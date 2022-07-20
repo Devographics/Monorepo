@@ -11,6 +11,7 @@ import { Options } from './options'
 import { Facet } from './facets'
 import { loadOrGetEntities } from './entities'
 import { TermAggregationOptions, AggregationFunction } from './compute/generic'
+import yamlKeys from './data/keys.yml'
 
 /**
  * Return either e.g. other_tools.browsers.choices or other_tools.browsers.others.normalized
@@ -109,6 +110,20 @@ export const getDynamicResolvers = (
             },
             aggregationFunction
         )
+})
+
+export const getDynamicResolversWithKeys = (
+    getId: (id: string) => string,
+    options: TermAggregationOptions = {},
+    aggregationFunction?: AggregationFunction
+) => ({
+    keys: async ({ id }: ResolverDynamicConfig) => {
+        console.log('// keys')
+        console.log(id)
+        console.log(yamlKeys[id])
+        return yamlKeys[id] || []
+    },
+    ...getDynamicResolvers(getId, options, aggregationFunction)
 })
 
 const demographicsFields = [

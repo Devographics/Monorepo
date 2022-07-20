@@ -85,16 +85,16 @@ export async function winsAggregationFunction(
 
     const rawResults = (await collection.aggregate(winsPipeline).toArray()) as WinsBucket[]
 
-    console.log(
-        inspect(
-            {
-                match,
-                winsPipeline,
-                rawResults
-            },
-            { colors: true, depth: null }
-        )
-    )
+    // console.log(
+    //     inspect(
+    //         {
+    //             match,
+    //             winsPipeline,
+    //             rawResults
+    //         },
+    //         { colors: true, depth: null }
+    //     )
+    // )
 
     if (!idsLookupTable[key]) {
         throw new Error(`IDs for bracket ${key} missing in IDs lookup table`)
@@ -124,7 +124,7 @@ export async function winsAggregationFunction(
         facets: [{ completion: y.completion, type: 'default', id: 'default', buckets: y.buckets }]
     }))
 
-    console.log(JSON.stringify(resultsWithFacets, undefined, 2))
+    // console.log(JSON.stringify(resultsWithFacets, undefined, 2))
     return resultsWithFacets
 }
 

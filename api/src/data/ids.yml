@@ -49,7 +49,7 @@ opinions.currently_missing_from_js:
   - observable
 
 # graphql
-usage.strong_points:
+usage.graphql_strong_points:
   - avoiding_overfetching
   - introspection
   - tooling_ecosystem
@@ -60,7 +60,7 @@ usage.strong_points:
   - fragment_colocation
 
 # graphql
-usage.pain_points:
+usage.graphql_pain_points:
   - performance
   - security
   - combining_schemas
