@@ -10,6 +10,7 @@ import opinions from './opinions'
 import proficiency from './proficiency'
 import query from './query'
 import resources from './resources'
+import usage from './usage'
 import surveys from './surveys'
 import totals from './totals'
 import tools from './tools'
@@ -28,6 +29,7 @@ export default {
     ...otherFeatures,
     ...otherTools,
     ...resources,
+    ...usage,
     ...entities,
     ...environments,
     ...proficiency,

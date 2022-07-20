@@ -13,7 +13,7 @@ import { loadOrGetEntities } from './entities'
 import { TermAggregationOptions, AggregationFunction } from './compute/generic'
 
 /**
- * Return either e.g. other_tools.browsers.choices or other_tools.browsers.others_normalized
+ * Return either e.g. other_tools.browsers.choices or other_tools.browsers.others.normalized
  */
 export const getOtherKey = (id: string) =>
     id.includes('_others') ? `${id.replace('_others', '')}.others.normalized` : `${id}.choices`

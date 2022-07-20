@@ -1,5 +1,31 @@
 enum UsageID {
-    used_it
-    know_not_used
-    never_heard_not_sure
+    graphql_experience
+    api_type
+    api_type_others
+    client_type
+    client_type_others
+    data_sources
+    data_sources_others
+    code_generation_type
+    code_generation_type_others
+    code_generation_target
+    code_generation_target_others
+    industry_sector
+    industry_sector_others
+    strong_points
+    strong_points_others
+    pain_points
+    pain_points_others
+}
+
+type YearUsage {
+    year: Int
+    completion: YearCompletion
+    facets: [EntityFacet]
+}
+
+type Usage {
+    id: UsageID!
+    all_years: [YearUsage]
+    year(year: Int!): YearUsage
 }

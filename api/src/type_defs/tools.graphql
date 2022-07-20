@@ -134,6 +134,53 @@ enum ToolID {
     theme_ui
     vanilla_extract
     windi_css
+
+    # GraphQL
+    apollo_server
+    yoga
+    graphql_js
+    helix
+    express_graphql
+    mercurius
+    dgs
+    graphql_dotnet
+    absinthe
+    graphql_go
+    apollo_client
+    urql
+    react_query
+    # relay already defined
+    apollo_ios
+    swift_graphql
+    apollo_kotlin
+    graphql_hooks
+    graphql_request
+    no_client
+    postgraphile
+    hasura
+    graphcms
+    datocms
+    sanity
+    wpgraphql
+    wundergraph
+    fauna
+    dgraph
+    graphql_editor
+    # strapi already defined
+    appsync
+    contentful
+    graphene
+    graphql_mesh
+    nexus
+    typegraphql
+    pothos
+    strawberry
+    sangria
+    graphql_java
+    gqlgen
+    graphql_zeus
+    genql
+    graphql_code_generator
 }
 
 """

@@ -193,6 +193,31 @@ enum FeatureID {
     user_invalid
     in_out_range
     required_optional
+
+    # GraphQL
+    custom_directives
+    custom_scalars
+    fragments
+    unions
+    interfaces
+    at_skip
+    at_include
+    at_deprecated
+    at_specified_by
+    at_defer
+    at_stream
+    persisted_queries
+    query_timeouts
+    query_rate_limit
+    query_depth_limit
+    query_cost_analysis
+    disabling_introspection
+    ip_allowlisting
+    require_authentication
+    graphql_subscriptions
+    live_queries
+    apollo_federation
+    schema_stitching
 }
 
 """

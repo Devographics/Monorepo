@@ -25,6 +25,25 @@ enum OtherToolsID {
     libraries_others
     runtimes
     runtimes_others
+
+    # GraphQL
+    graphql_servers_others
+    graphql_clients_others
+    graphql_api_generators_others
+    schema_builders_others
+
+    combining_schemas
+    combining_schemas_others
+    web_frameworks
+    web_frameworks_others
+    databases
+    databases_others
+    server_languages
+    server_languages_others
+    graphql_ides
+    graphql_ides_others
+    other_tools
+    other_tools_others
 }
 
 type YearOtherTools {

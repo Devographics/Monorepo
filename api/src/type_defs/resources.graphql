@@ -8,6 +8,8 @@ enum ResourcesID {
     first_steps
     first_steps_others
     people_others
+    other_surveys
+    other_surveys_others
 }
 
 type YearResources {

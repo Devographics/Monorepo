@@ -4,6 +4,8 @@ enum BracketID {
   opinions__js_pain_points
   opinions__currently_missing_from_css
   opinions__currently_missing_from_js
+  usage__pain_points
+  usage__strong_points
 }
 
 enum BracketKey {

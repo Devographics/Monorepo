@@ -24,6 +24,7 @@
 #import "./totals.graphql"
 #import "./happiness.graphql"
 #import "./bracket.graphql"
+#import "./usage.graphql"
 
 enum SurveyType {
     state_of_js
@@ -179,6 +180,10 @@ type Survey {
     Resources (sites, blogs, podcasts, etc.)
     """
     resources(id: ResourcesID!, filters: Filters, options: Options, facet: Facet): Resources
+    """
+    Usage (questions about people's usage)
+    """
+    usage(id: UsageID!, filters: Filters, options: Options, facet: Facet): Usage
     """
     Data about a specific tool category
     """

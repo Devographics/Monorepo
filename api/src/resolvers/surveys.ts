@@ -115,6 +115,10 @@ export default {
             survey,
             ...args
         }),
+        usage: (survey: SurveyConfig, args: ResolverArguments) => ({
+            survey,
+            ...args
+        }),
         tool: async (survey: SurveyConfig, { id }: { id: string }) => ({
             survey,
             id,

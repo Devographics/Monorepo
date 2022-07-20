@@ -1,51 +1,34 @@
 import React, { useState } from 'react'
-import PropTypes from 'prop-types'
-import ReactGA from 'react-ga'
-import styled from 'styled-components'
-import config from 'Config/config.yml'
-import { mq, spacing } from 'core/theme'
-import Button from 'core/components/Button'
 import { useI18n } from 'core/i18n/i18nContext'
+import T from 'core/i18n/T'
 
-const getEOConfig = (listId) => ({
+const getEOConfig = listId => ({
     emailOctopusUrl: `https://emailoctopus.com/lists/${listId}/members/embedded/1.3/add`,
     emailOctopusSiteKey: '6LdYsmsUAAAAAPXVTt-ovRsPIJ_IVhvYBBhGvRV6',
     emailOctopusCode: 'hpc4b27b6e-eb38-11e9-be00-06b4694bee2a'
 })
 
-export default class Newsletter extends Component {
-    static propTypes = {
-        line: PropTypes.string
-    }
+export default function Newsletter({ listId = '', locale }) {
+    const [email, setEmail] = useState('')
+    const [submitted, setSubmitted] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState(null)
+    const [success, setSuccess] = useState(null)
 
-    state = {
-        email: '',
-        submitted: false,
-        loading: false,
-        error: null,
-        success: null
-    }
+    const eoConfig = getEOConfig(listId)
 
-    handleChange = e => {
+    const handleChange = e => {
         const email = e.target.value
-        this.setState({
-            email
-        })
+        setEmail(email)
     }
 
-    handleSubmit = async e => {
-        const { email } = this.state
-
-        this.setState({ loading: true })
+    const handleSubmit = async e => {
+        setLoading(true)
 
         console.log('SUBMITTING')
 
         e.preventDefault()
-        ReactGA.event({
-            category: 'Subscribe',
-            action: `Newsletter subscribe`
-        })
-        const response = await fetch(postUrl, {
+        const response = await fetch(eoConfig.emailOctopusUrl, {
             method: 'POST',
             body: `field_0=${encodeURIComponent(email)}`,
             headers: {
@@ -56,130 +39,83 @@ export default class Newsletter extends Component {
         const result = await response.json()
         const { error, message } = result
 
-        this.setState({ loading: false })
+        setLoading(false)
 
         if (error) {
-            this.setState({ error, success: null })
+            setError(error)
+            setSuccess(null)
         } else {
-            this.setState({ error: null, success: { message } })
+            setError(null)
+            setSuccess({ message })
         }
     }
 
-    render() {
-        const { email, loading, error, success } = this.state
-
-        return (
-            <div className="newsletter">
-                {error && (
-                    <ErrorFeedback className="Newsletter__Error">{error.message}</ErrorFeedback>
-                )}
-                {success ? (
-                    <SuccessFeedback>{success.message}</SuccessFeedback>
-                ) : (
-                    <NewsletterForm
-                        email={email}
-                        loading={loading}
-                        handleSubmit={this.handleSubmit}
-                        handleChange={this.handleChange}
-                    />
-                )}
-            </div>
-        )
-    }
-}
-
-const NewsletterForm = ({ email, loading, handleSubmit, handleChange }) => {
-    const { translate } = useI18n()
     return (
-        <Form
-            method="post"
-            action={postUrl}
-            datasitekey={emailOctopusSiteKey}
-            onSubmit={handleSubmit}
-        >
-            <Email
-                id="field_0"
-                name="field_0"
-                type="email"
-                placeholder={translate('blocks.newsletter.email')}
-                onChange={handleChange}
-                value={email}
-                disabled={loading}
-                isLoading={loading}
-            />
-            <input
-                type="text"
-                name={emailOctopusCode}
-                tabIndex="-1"
-                autoComplete="nope"
-                style={{ display: 'none' }}
-            />
-            <SubmitButton as="button" type="submit" name="subscribe">
-                {translate('blocks.newsletter.submit')}
-            </SubmitButton>
-        </Form>
+        <div className="newsletter">
+            <h3 className="newsletter-heading">
+                <T k="newsletter.stay_tuned" />
+            </h3>
+            <p className="newsletter-details">
+                <T k="newsletter.leave_your_email" />
+            </p>{' '}
+            {error && <div className="newsletter-message newsletter-error">{error.message}</div>}
+            {success ? (
+                <div className="newsletter-message newsletter-success">{success.message}</div>
+            ) : (
+                <NewsletterForm
+                    email={email}
+                    loading={loading}
+                    handleSubmit={handleSubmit}
+                    handleChange={handleChange}
+                    locale={locale}
+                    {...eoConfig}
+                />
+            )}
+        </div>
     )
 }
 
-const Form = styled.form`
-    margin: 0;
+const NewsletterForm = ({
+    email,
+    loading,
+    handleSubmit,
+    handleChange,
+    emailOctopusUrl,
+    emailOctopusSiteKey,
+    emailOctopusCode,
+    locale
+}) => {
+    const { getString } = useI18n()
 
-    @media ${mq.mediumLarge} {
-        display: flex;
-    }
-`
-
-const Email = styled.input`
-    display: block;
-    padding: ${spacing(0.5)};
-    border: none;
-    margin-right: ${spacing(0.5)};
-    flex-grow: 1;
-    width: 100%;
-    max-width: 300px;
-    background: ${props => (props.isLoading ? props.theme.colors.backgroundAlt2 : props.theme.colors.backgroundAlt)};
-    /*
-    @include small {
-        margin-bottom: $spacing/2;
-    }
-    @include font-regular;
-    &:focus {
-        outline: none;
-        border-color: $hover-color;
-    }
-    .Newsletter--loading & {
-        background: $grey;
-    }
-    */
-`
-
-const SubmitButton = styled(Button)`
-    min-width: 140px;
-    display: block;
-    @media ${mq.small} {
-        margin-top: ${spacing()};
-        width: 100%;
-    }
-    /*
-    @include small {
-        width: 100%;
-    }
-    &:hover{
-        @include ants;
-    }
-    */
-`
-
-const ErrorFeedback = styled.div`
-    padding: ${spacing()};
-    margin-bottom: ${spacing()};
-    /*
-    border: 1px solid $red;
-    color: $red;
-    */
-`
-
-const SuccessFeedback = styled.div`
-    border: ${props => props.theme.separationBorder};
-    padding: ${spacing()};
-`
+    return (
+        <div className="newsletter-form">
+            <form
+                method="post"
+                action={emailOctopusUrl}
+                data-sitekey={emailOctopusSiteKey}
+                onSubmit={handleSubmit}
+            >
+                <input
+                    className="newsletter-email"
+                    id="field_0"
+                    name="field_0"
+                    type="email"
+                    placeholder={getString('newsletter.email')?.t}
+                    onChange={handleChange}
+                    value={email}
+                    disabled={loading}
+                />
+                <input
+                    type="text"
+                    name={emailOctopusCode}
+                    tabIndex={-1}
+                    autoComplete="nope"
+                    style={{ display: 'none' }}
+                />
+                <button type="submit" name="subscribe" className="newsletter-button button">
+                    <T k="newsletter.submit" />
+                </button>
+            </form>
+        </div>
+    )
+}
