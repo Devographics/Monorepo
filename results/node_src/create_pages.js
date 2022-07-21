@@ -97,7 +97,7 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
         { mode: 'overwrite' }
     )
 
-    const chartSponsors = await getSendOwlData({ flat, config })
+    const chartSponsors = USE_FAST_BUILD ? {} : await getSendOwlData({ flat, config })
 
     for (const page of flat) {
         let pageData = {}
@@ -106,7 +106,13 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
 
         logToFile('queries.txt', '', { mode: 'overwrite' })
 
-        pageData = await runPageQuery({ page, graphql })
+        try {
+            pageData = await runPageQuery({ page, graphql })
+        } catch (error) {
+            console.log(`// GraphQL error for page ${page.id}`)
+            console.log(page)
+            throw(error)
+        }
 
         // loop over locales
         for (let index = 0; index < locales.length; index++) {

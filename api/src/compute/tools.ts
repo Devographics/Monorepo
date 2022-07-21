@@ -125,6 +125,9 @@ export async function computeToolsCardinalityByUser(
     toolIds: string[],
     experienceId: ToolExperienceId
 ) {
+    if (toolIds.length === 0) {
+        throw new Error('computeToolsCardinalityByUser error: please specify at least one tool ID')
+    }
     const pipeline = [
         {
             // filter on specific survey and year.

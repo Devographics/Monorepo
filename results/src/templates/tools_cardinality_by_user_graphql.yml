@@ -1,0 +1,50 @@
+blockType: AllSectionsToolsCardinalityByUserBlock
+dataPath: surveyApi.cardinality
+bucketKeysName: tools
+hasSponsor: true
+
+# this chart's query is quite repetitive, in order to be able
+# to generate it in a more dynamic way, we would have
+# to support loops.
+
+query: >
+    surveyApi {
+        cardinality: survey(survey: ${surveyType}) {
+            graphql_servers: tools_cardinality_by_user(
+                year: ${currentYear},
+                ids: [${toolsCategories.graphql_servers}],
+                experienceId: would_use
+            ) {
+                cardinality
+                count
+                percentage_survey
+            }
+            graphql_clients: tools_cardinality_by_user(
+                year: ${currentYear},
+                ids: [${toolsCategories.graphql_clients}],
+                experienceId: would_use
+            ) {
+                cardinality
+                count
+                percentage_survey
+            }
+            graphql_api_generators: tools_cardinality_by_user(
+                year: ${currentYear},
+                ids: [${toolsCategories.graphql_api_generators}],
+                experienceId: would_use
+            ) {
+                cardinality
+                count
+                percentage_survey
+            }
+            schema_builders: tools_cardinality_by_user(
+                year: ${currentYear},
+                ids: [${toolsCategories.schema_builders}],
+                experienceId: would_use
+            ) {
+                cardinality
+                count
+                percentage_survey
+            }
+        }
+    }

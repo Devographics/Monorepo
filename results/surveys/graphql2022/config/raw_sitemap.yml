@@ -340,7 +340,7 @@
       template: scatterplot_overview
 
     - id: all_sections_tools_cardinality_by_user
-      template: tools_cardinality_by_user_js
+      template: tools_cardinality_by_user_graphql
 
   children:
     - id: graphql_servers

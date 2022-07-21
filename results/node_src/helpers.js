@@ -1,5 +1,6 @@
 const { omit } = require('lodash')
-const indentString = require('indent-string')
+const { indentString } = require('./indent_string.js')
+// const indentString = require('indent-string')
 const _ = require('lodash')
 const path = require('path')
 const fs = require('fs')
