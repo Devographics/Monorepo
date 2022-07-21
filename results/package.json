@@ -116,6 +116,9 @@
         "prettier": "^2.4.1",
         "webpack": "^5.62.1"
     },
+    "resolutions": {
+        "webpack": "5.62.1"
+    },
     "private": true,
     "scripts": {
         "build": "gatsby build",
