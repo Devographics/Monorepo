@@ -68,11 +68,11 @@ const extractToolData = (
     // note: we use the same x (nb of users) for all metrics to stay consistent
     return {
         id,
-        name: entity.name,
-        usage_count: totals.usage,
-        satisfaction_percentage: percentages.satisfaction,
-        interest_percentage: percentages.interest,
-        x: totals.usage,
+        name: entity?.name,
+        usage_count: totals?.usage,
+        satisfaction_percentage: percentages?.satisfaction,
+        interest_percentage: percentages?.interest,
+        x: totals?.usage,
         y: percentages[metric],
     }
 }
