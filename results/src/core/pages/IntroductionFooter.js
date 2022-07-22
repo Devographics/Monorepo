@@ -16,7 +16,7 @@ const IntroductionFooter = () => {
                 as={Link}
                 size="large"
                 className="IntroductionFooter__Link--start"
-                to={context.next.path}
+                to={context?.next?.path}
             >
                 {translate('results.start')} »
             </Button>

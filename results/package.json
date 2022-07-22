@@ -108,7 +108,7 @@
         "copy-webpack-plugin": "^9.0.1",
         "eslint": "^8.2.0",
         "eslint-config-prettier": "^8.3.0",
-        "eslint-config-react-app": "^6.0.0",
+        "eslint-config-react-app": "^7.0.1",
         "eslint-plugin-import": "^2.25.2",
         "eslint-plugin-react": "^7.26.1",
         "gatsby-plugin-perf-budgets": "^0.0.18",
