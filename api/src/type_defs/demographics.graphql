@@ -47,6 +47,12 @@ type LocaleStats {
     keys: [String]
 }
 
+type CompletionStats {
+    all_years: [DemographicsItemYear]
+    year(year: Int!): DemographicsItemYear
+    keys: [String]
+}
+
 type Source {
     all_years: [DemographicsItemYear]
     year(year: Int!): DemographicsItemYear
@@ -143,6 +149,10 @@ type Demographics {
     Locale
     """
     locale(filters: Filters, options: Options, facet: Facet): LocaleStats
+    """
+    Completion
+    """
+    completion(filters: Filters, options: Options, facet: Facet): CompletionStats
     """
     How respondents found the survey
     """
