@@ -6,11 +6,11 @@ import dotenv from 'dotenv'
 import 'graphiql/graphiql.css'
 import './App.css'
 
-const envFile = process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env'
+const envFile = process?.env?.NODE_ENV ? `.env.${process?.env?.NODE_ENV}` : '.env'
 dotenv.config({ path: envFile })
 
 function fetcher(params) {
-    return fetch(process.env.ENDPOINT_URL, {
+    return fetch(process?.env?.REACT_APP_ENDPOINT_URL, {
         method: 'POST',
         headers: {
             Accept: 'application/json',
@@ -73,8 +73,8 @@ class App extends Component {
             query: getIntrospectionQuery()
         }).then(result => {
             const editor = this._graphiql.getQueryEditor()
-            editor.setOption('extraKeys', {
-                ...(editor.options.extraKeys || {}),
+            editor?.setOption('extraKeys', {
+                ...(editor?.options?.extraKeys || {}),
                 'Shift-Alt-LeftClick': this._handleInspectOperation
             })
 
@@ -167,7 +167,7 @@ class App extends Component {
                     query={query}
                     onEditQuery={this._handleEditQuery}
                 >
-                    <GraphiQL.Logo>State of JS</GraphiQL.Logo>
+                    <GraphiQL.Logo>Devographics</GraphiQL.Logo>
                     <GraphiQL.Toolbar>
                         <GraphiQL.Button
                             onClick={() => this._graphiql.handlePrettifyQuery()}
@@ -191,7 +191,7 @@ class App extends Component {
                                     return
                                 }
 
-                                window.open('https://api.stateofjs.com/')
+                                window.open('https://api.devographics.com/')
                             }}
                             label="Help"
                             title="Open API help"
