@@ -1,0 +1,59 @@
+"""
+An entity is any object that can have associated metadata
+(such as a homepage, github repo, description).
+For example: a library, a podcast, a blog, a framework…
+"""
+type Entity {
+    id: String
+    name: String
+    otherName: String
+    homepage: Homepage
+    category: String
+    github: GitHub
+    npm: NPM
+    mdn: MDN
+    caniuse: CanIUse
+    description: String
+    type: String
+    tags: [String]
+    patterns: [String]
+
+    apiOnly: Boolean
+
+    twitterName: String
+    twitter: Twitter
+
+    youtubeName: String
+    blog: String
+    rss: String
+
+    related: [Entity]
+
+    companyName: String
+    company: Entity
+}
+
+
+"""
+Homepage Info
+"""
+type Homepage {
+    name: String
+    url: String
+}
+
+"""
+CanIUse Info
+"""
+type CanIUse {
+    name: String
+    url: String
+}
+
+"""
+NPM Info
+"""
+type NPM {
+    name: String
+    url: String
+}

@@ -41,6 +41,11 @@ export default {
         cutoff: 1
     }),
 
+    CompletionStats: getStaticResolvers('user_info.completion', {
+        limit: 100,
+        cutoff: 1
+    }),
+
     Source: getStaticResolvers('user_info.source.normalized'),
 
     Gender: getStaticResolvers('user_info.gender', { cutoff: 1, keys: keys.gender }),

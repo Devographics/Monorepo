@@ -7,38 +7,39 @@ import { PageContextProvider } from 'core/helpers/pageContext'
 import { KeydownContextProvider } from 'core/helpers/keydownContext'
 import { mergePageContext } from 'core/helpers/pageHelpers'
 import { I18nContextProvider } from 'core/i18n/i18nContext'
-// import { EntitiesContextProvider } from 'core/entities/entitiesContext'
 // import PageMetaDebug from './pages/PageMetaDebug'
 import { GlobalStyle } from 'core/theme'
 import MainLayout from 'core/layout/MainLayout'
 import ReportLayout from 'core/report/ReportLayout'
 import theme from 'Theme/index.ts'
 
-const ThemedLayout = (props) => {
+const ThemedLayout = props => {
     return (
         <ThemeProvider theme={theme}>
-            {/* <EntitiesContextProvider> */}
-                <GlobalStyle />
-                <Head />
-                {props.context.id === 'report' ? <ReportLayout {...props} />:<MainLayout {...props} />}
-            {/* </EntitiesContextProvider> */}
+            <GlobalStyle />
+            <Head />
+            {props.context.id === 'report' ? (
+                <ReportLayout {...props} />
+            ) : (
+                <MainLayout {...props} />
+            )}
         </ThemeProvider>
     )
 }
 
 export default class Layout extends PureComponent {
     static propTypes = {
-        showPagination: propTypes.bool.isRequired,
+        showPagination: propTypes.bool.isRequired
     }
 
     static defaultProps = {
-        showPagination: true,
+        showPagination: true
     }
 
     constructor() {
         super()
         this.state = {
-            showSidebar: false,
+            showSidebar: false
         }
     }
 
@@ -57,13 +58,13 @@ export default class Layout extends PureComponent {
 
     toggleSidebar = () => {
         this.setState({
-            showSidebar: !this.state.showSidebar,
+            showSidebar: !this.state.showSidebar
         })
     }
 
     closeSidebar = () => {
         this.setState({
-            showSidebar: false,
+            showSidebar: false
         })
     }
 

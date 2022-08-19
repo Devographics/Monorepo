@@ -150,8 +150,9 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
             never_heard: [colors.grey, colors.greyLight]
         },
         features_categories: {
-            language: colors.purple,
-            browser_apis: colors.pink,
+            graphql_language: colors.purple,
+            directives: colors.pink,
+            security_performance: colors.green,
             other_features: colors.green
         },
         features_simplified: {
