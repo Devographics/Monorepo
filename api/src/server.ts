@@ -85,11 +85,7 @@ const start = async () => {
 
     await server.start()
 
-    const corsOptions = {
-        origin: '*'
-    }
-
-    server.applyMiddleware({ app, cors: corsOptions })
+    server.applyMiddleware({ app })
 
     app.get('/', function (req, res) {
         res.sendFile(path.join(__dirname + '/public/welcome.html'))
