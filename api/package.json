@@ -51,6 +51,6 @@
         "start": "node dist/server.js"
     },
     "engines": {
-        "node": "16.15.0"
+        "node": "16.16.0"
     }
 }
