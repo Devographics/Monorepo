@@ -1,0 +1,14 @@
+type Twitter {
+    userName: String
+    avatarUrl: String
+    id: ID
+    description: String
+    publicMetrics: TwittterPublicMetrics
+}
+
+type TwittterPublicMetrics {
+    followers: Int
+    following: Int
+    tweet: Int
+    listed: Int
+}

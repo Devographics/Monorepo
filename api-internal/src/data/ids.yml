@@ -1,0 +1,71 @@
+opinions.css_pain_points:
+  - browser_interoperability
+  - interactions
+  - architecture
+  - layout_positioning
+  - scoping_specificity
+  - responsive_design
+  - form_elements_styling
+  - performance_issues
+
+opinions.js_pain_points:
+  - state_management
+  - architecture
+  - finding_packages
+  - debugging
+  - managing_dependencies
+  - async_code
+  - writing_modules
+  - date_management
+
+tools_others.tool_evaluation:
+  - learning_curve_documentation # is a tool is easy to learn?
+  - momentum_popularity # does it have a lot of hype?
+  - user_base_size # is it a well-established option?
+  - developer_experience_tooling # does it provide a good developer experience?
+  - performance_user_experience # does it provide a good user experience?
+  - creator_team # is it backed by a well-known/well-funded team?
+  - accessibility_features # does it implement accessibility features well?
+  - community_inclusivity # does it have a good community?
+
+opinions.currently_missing_from_css:
+  - container_queries
+  - parent_selector
+  - nesting
+  - color_functions
+  - subgrid
+  - browser_support
+  - mixins
+  - scoping
+
+opinions.currently_missing_from_js:
+  - static_typing
+  - standard_library
+  - pattern_matching
+  - pipe_operator
+  - decorators
+  - immutable_data_structures
+  - better_date_management
+  - observable
+
+# graphql
+usage.graphql_strong_points:
+  - avoiding_overfetching
+  - introspection
+  - tooling_ecosystem
+  - type_checking
+  - api_aggregation
+  - aggregating_requests
+  - community
+  - fragment_colocation
+
+# graphql
+usage.graphql_pain_points:
+  - performance
+  - security
+  - combining_schemas
+  - api_versioning
+  - file_upload
+  - testing
+  - error_handling
+  - client_side_caching

@@ -1,0 +1,55 @@
+{
+    "name": "state-of-js-graphql-results-api",
+    "version": "1.0.0",
+    "license": "MIT",
+    "dependencies": {
+        "@octokit/core": "^3.5.1",
+        "@sentry/node": "^7.11.1",
+        "@sentry/tracing": "^7.11.1",
+        "apollo-server-express": "^3.3.0",
+        "apollo-server-plugin-response-cache": "^3.2.0",
+        "dotenv": "^10.0.0",
+        "express": "^4.17.1",
+        "graphql": "^15.6.1",
+        "js-yaml": "^4.1.0",
+        "lodash": "^4.17.21",
+        "markdown-it": "^12.2.0",
+        "marked": "^3.0.7",
+        "node-fetch": "^2.6.5",
+        "twitter-api-v2": "^1.5.2",
+        "write-file-webpack-plugin": "^4.5.1"
+    },
+    "devDependencies": {
+        "@types/node-fetch": "^2.5.12",
+        "@types/js-yaml": "^4.0.3",
+        "@types/lodash": "^4.14.175",
+        "@types/marked": "^2.0.4",
+        "@types/mongodb": "^4.0.7",
+        "@types/node": "^16.7.0",
+        "@types/webpack-env": "^1.16.3",
+        "clean-webpack-plugin": "4.0.0",
+        "copy-webpack-plugin": "^9.0.1",
+        "graphql-tag": "^2.12.5",
+        "js-yaml-loader": "^1.2.2",
+        "nodemon-webpack-plugin": "^4.5.2",
+        "npm-run-all": "^4.1.5",
+        "prettier": "^2.3.2",
+        "ts-loader": "^9.2.5",
+        "typescript": "^4.3.5",
+        "webpack": "^5.58.2",
+        "webpack-cli": "^4.9.0",
+        "webpack-merge": "^5.8.0",
+        "webpack-node-externals": "^3.0.0"
+    },
+    "scripts": {
+        "build": "NODE_ENV=production webpack --config webpack.production.js",
+        "dev": "NODE_ENV=development webpack --config webpack.development.js",
+        "dev:clean": "NODE_ENV=development DISABLE_CACHE=true webpack --config webpack.development.js",
+        "fmt": "prettier --write \"src/**/*.{ts,js,mjs,yml,graphql}\"",
+        "heroku-postbuild": "NODE_ENV=production webpack --config webpack.production.js",
+        "start": "node dist/server.js"
+    },
+    "engines": {
+        "node": "16.15.0"
+    }
+}

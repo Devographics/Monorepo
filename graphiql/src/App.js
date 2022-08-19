@@ -10,7 +10,7 @@ const envFile = process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env'
 dotenv.config({ path: envFile })
 
 function fetcher(params) {
-    return fetch(process.env.REACT_APP_ENDPOINT_URL, {
+    return fetch(process.env.ENDPOINT_URL, {
         method: 'POST',
         headers: {
             Accept: 'application/json',
