@@ -8,6 +8,7 @@ import resolvers from './resolvers'
 import express from 'express'
 import { initLocales } from './i18n'
 import { initEntities } from './entities'
+import { createClient } from 'redis'
 
 // import Sentry from '@sentry/node'
 // import Tracing from '@sentry/tracing'
@@ -46,6 +47,13 @@ const checkSecretKey = (req: any) => {
 }
 
 const start = async () => {
+    const redisClient = createClient({
+        url: process.env.REDIS_URL
+      })
+
+    redisClient.on('error', err => console.log('Redis Client Error', err))
+
+    await redisClient.connect()
 
     const server = new ApolloServer({
         typeDefs,
@@ -63,6 +71,7 @@ const start = async () => {
             // TODO: do this better with a custom header
             const isDebug = expressContext?.req?.rawHeaders?.includes('http://localhost:4002')
             return {
+                redisClient, 
                 isDebug
             }
         }

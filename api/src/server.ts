@@ -12,6 +12,8 @@ import { initEntities } from './entities'
 import { analyzeTwitterFollowings } from './rpcs'
 import { clearCache } from './caching'
 
+import { createClient } from 'redis'
+
 // import Sentry from '@sentry/node'
 // import Tracing from '@sentry/tracing'
 
@@ -49,6 +51,15 @@ const checkSecretKey = (req: any) => {
 }
 
 const start = async () => {
+
+    const redisClient = createClient({
+        url: process.env.REDIS_URL
+      })
+
+    redisClient.on('error', err => console.log('Redis Client Error', err))
+
+    await redisClient.connect()
+
     const mongoClient = new MongoClient(process.env!.MONGO_URI!, {
         // useNewUrlParser: true,
         // useUnifiedTopology: true,
@@ -74,6 +85,7 @@ const start = async () => {
             const isDebug = expressContext?.req?.rawHeaders?.includes('http://localhost:4001')
             return {
                 db,
+                redisClient,
                 isDebug
             }
         }
@@ -111,7 +123,7 @@ const start = async () => {
 
     const port = process.env.PORT || 4000
 
-    await initLocales()
+    // await initLocales()
     await initEntities()
 
     app.listen({ port: port }, () =>
