@@ -1,5 +1,5 @@
 blockType: AllSectionsToolsCardinalityByUserBlock
-dataPath: surveyApi.cardinality
+dataPath: dataAPI.cardinality
 bucketKeysName: tools
 hasSponsor: true
 
@@ -7,7 +7,7 @@ hasSponsor: true
 # to generate it in a more dynamic way, we would have
 # to support loops.
 query: >
-    surveyApi {
+    dataAPI {
         cardinality: survey(survey: ${surveyType}) {
             pre_post_processors: tools_cardinality_by_user(
                 year: ${currentYear},

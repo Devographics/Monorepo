@@ -1,9 +1,9 @@
 blockType: HorizontalBarBlock
-dataPath: "surveyApi.survey.${id}.year"
+dataPath: "dataAPI.survey.${id}.year"
 enableCustomization: true
 hasSponsor: true
 query: >
-    surveyApi {
+    dataAPI {
         survey(survey: ${surveyType}) {
             ${id}: ${fieldId}(id: ${id}, filters: ${filters}, options: ${options}) {
                 id

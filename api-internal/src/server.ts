@@ -47,6 +47,7 @@ const checkSecretKey = (req: any) => {
 }
 
 const start = async () => {
+    console.log(`// Connecting to Redis using URL ${process.env.REDIS_URL}…`)
     const redisClient = createClient({
         url: process.env.REDIS_URL
       })

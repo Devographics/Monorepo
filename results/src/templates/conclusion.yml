@@ -1,9 +1,9 @@
 blockType: ConclusionBlock
 wrapBlock: false
 disableExport: true
-dataPath: surveyApi.entities
+dataPath: internalAPI.entities
 query: >
-    surveyApi {
+    internalAPI {
         entities(ids: [${entities}]) {
             id
             name

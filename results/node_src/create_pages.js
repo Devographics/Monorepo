@@ -34,7 +34,7 @@ const config = yaml.load(
 
 const getLocalesQuery = (localeIds, contexts) => `
 query {
-    surveyApi {
+    internalAPI {
         locales(localeIds: [${localeIds
             .map(id => `"${id}"`)
             .join(',')}], contexts: [${contexts.join(', ')}]) {
@@ -79,7 +79,7 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
     )
     logToFile('localesResults.json', localesResults, { mode: 'overwrite' })
 
-    const locales = localesResults.data.surveyApi.locales
+    const locales = localesResults.data.internalAPI.locales
 
     buildInfo.localeCount = locales.length
 
@@ -165,7 +165,7 @@ exports.createPagesTwoLoops = async ({ graphql, actions: { createPage, createRed
             ${localesQuery}
         `
     )
-    const locales = localesResults.data.surveyApi.locales
+    const locales = localesResults.data.internalAPI.locales
     const cleanLocales = getCleanLocales(locales)
 
     const { flat } = await computeSitemap(rawSitemap, cleanLocales)

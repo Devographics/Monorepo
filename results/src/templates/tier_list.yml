@@ -2,11 +2,11 @@ blockType: ToolsTierListBlock
 titleId: blocks.tools_tier_list
 descriptionId: blocks.tools_tier_list.description
 noteId: blocks.tools_tier_list.note
-dataPath: "surveyApi.survey.${id}"
-keysPath: "surveyApi.survey.${id}.experience.keys"
+dataPath: "dataAPI.survey.${id}"
+keysPath: "dataAPI.survey.${id}.experience.keys"
 hasSponsor: true
 query: >
-    surveyApi {
+    dataAPI {
         survey(survey: ${surveyType}) {
               ${id}: tools(ids: [${allTools}]) {
                 id

@@ -62,7 +62,7 @@ const JSONExport = ({ block, data }) => {
 
 export const getGraphQLQuery = block => {
     const { id, query } = block
-    // remove first and last lines of query to remove "surveyApi" field
+    // remove first and last lines of query to remove "dataAPI" field
     const trimmedQuery = query && query.split('\n').slice(1, -2).join('\n')
     const graphQLExport = `query ${camelCase(id)}Query {
 ${trimmedQuery}

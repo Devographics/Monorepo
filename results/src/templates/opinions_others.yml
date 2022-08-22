@@ -1,8 +1,8 @@
 titleId: "opinions_others.${id}.others"
 blockType: HorizontalBarBlock
-dataPath: "surveyApi.survey.${id}.year"
+dataPath: "dataAPI.survey.${id}.year"
 query: >
-    surveyApi {
+    dataAPI {
         survey(survey: ${surveyType}) {
             ${id}: opinions_others(id: ${id}) {
                 id

@@ -2,12 +2,12 @@ id: ${parentId}_others
 titleId: blocks.category_other_tools
 blockType: HorizontalBarBlock
 defaultUnits: count
-dataPath: "surveyApi.survey.${parentId}_others.year"
+dataPath: "dataAPI.survey.${parentId}_others.year"
 hasSponsor: true
 defaultVariables:
     limit: 20
 query: >
-    surveyApi {
+    dataAPI {
         survey(survey: ${surveyType}) {
             ${parentId}_others: tools_others(id: ${parentId}_others, options: {limit: ${limit}}) {
                 id

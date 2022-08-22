@@ -1,11 +1,11 @@
 titleId: blocks.features_overview
 blockType: FeaturesOverviewBlock
-dataPath: "surveyApi.survey.${id}"
-keysPath: "surveyApi.survey.${id}.0.experience.keys"
+dataPath: "dataAPI.survey.${id}"
+keysPath: "dataAPI.survey.${id}.0.experience.keys"
 enableCustomization: true
 hasSponsor: true
 query: >
-    surveyApi {
+    dataAPI {
         survey(survey: ${surveyType}) {
             ${id}: features(ids: [${allFeatures}]) {
                 id

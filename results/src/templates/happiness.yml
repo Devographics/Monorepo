@@ -2,15 +2,15 @@ id: "${parentId}_happiness"
 titleId: "happiness.${fieldId}"
 # blockType: HappinessBlock
 blockType: VerticalBarBlock
-dataPath: "surveyApi.survey.${fieldId}_happiness.year"
-keysPath: "surveyApi.survey.${fieldId}_happiness.keys"
+dataPath: "dataAPI.survey.${fieldId}_happiness.year"
+keysPath: "dataAPI.survey.${fieldId}_happiness.keys"
 showDescription: false
 blockNamespace: happiness
 chartNamespace: happiness
 enableCustomization: true
 hasSponsor: true
 query: >
-    surveyApi {
+    dataAPI {
         survey(survey: ${surveyType}) {
             ${fieldId}_happiness: happiness(id: ${fieldId}) {
                 keys

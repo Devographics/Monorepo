@@ -6,7 +6,7 @@
 
 // const toolsQuery = graphql`
 //     query {
-//         surveyApi {
+//         dataAPI {
 //             survey(survey: state_of_css) {
 //                 tools {
 //                     id
@@ -23,7 +23,7 @@
 //     return (
 //         <StaticQuery query={toolsQuery}>
 //             {(data) => {
-//                 const tools = get(data, 'surveyApi.survey.tools')
+//                 const tools = get(data, 'dataAPI.survey.tools')
 //                 const getToolName = ({ id }) => {
 //                     const tool = tools.find((t) => t.id === id)
 //                     return get(tool, 'entity.name')
