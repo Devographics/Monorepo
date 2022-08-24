@@ -4,7 +4,9 @@ import { RequestContext } from './types'
 
 type DynamicComputeCall = (context: RequestContext, ...args: any[]) => Promise<any>
 
-type ArgumentTypes<F> = F extends (context: RequestContext, ...args: infer A) => Promise<any> ? A : never
+type ArgumentTypes<F> = F extends (context: RequestContext, ...args: infer A) => Promise<any>
+    ? A
+    : never
 
 type ResultType<F> = F extends (...args: any[]) => infer P
     ? P extends Promise<infer R>
@@ -49,19 +51,28 @@ export const useCache = async <F extends DynamicComputeCall>(
     const { db, isDebug = false } = context
     const collection = db.collection(config.mongo.cache_collection)
     const existingResult = await collection.findOne({ key })
-    if (existingResult && !process.env.DISABLE_CACHE && !isDebug) {
+
+    const useCache = !process.env.DISABLE_CACHE && !isDebug
+
+    if (existingResult && useCache) {
         console.log(`> using result from cache for: ${key}`)
         return existingResult.value
+    } else {
+        const value = await func(context, ...(args || []))
+
+        if (isDebug) {
+            console.log(`> fetching result for: ${key} (isDebug = true)`)
+        } else if (process.env.DISABLE_CACHE) {
+            console.log(`> fetching result for: ${key} (DISABLE_CACHE = true)`)
+        } else {
+            console.log(`> fetching and caching result for: ${key}`)
+            // in case previous cached entry exists, delete it
+            await collection.deleteOne({ key })
+            await collection.insertOne({ key, value })
+        }
+
+        return value
     }
-
-    console.log(`> fetching and caching result for: ${key}`)
-    const value = await func(context, ...(args || []))
-
-    // in case previous cached entry exists, delete it
-    await collection.deleteOne({ key })
-    await collection.insertOne({ key, value })
-
-    return value
 }
 
 export const clearCache = async (db: Db) => {

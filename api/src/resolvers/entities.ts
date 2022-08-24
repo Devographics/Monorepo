@@ -39,12 +39,15 @@ export default {
             // const github = await fetchGithubResource(projectObject.github)
             // return github
         },
-        mdn: async (entity: Entity) => {
+        mdn: async (entity: Entity, args: any, context: RequestContext) => {
             if (!entity || !entity.mdn) {
                 return
             }
 
-            const mdn = await fetchMdnResource(entity.mdn)
+            // const mdn = await fetchMdnResource(entity.mdn)
+
+            const mdn = await useCache(fetchMdnResource, context, [entity.mdn])
+
 
             if (mdn) {
                 return mdn.find((t: any) => t.locale === 'en-US')
@@ -54,7 +57,7 @@ export default {
         },
         twitter: async (entity: Entity, args: any, context: RequestContext) => {
             const twitter =
-                entity.twitterName && useCache(fetchTwitterUser, context, [entity.twitterName])
+                entity.twitterName && await useCache(fetchTwitterUser, context, [entity.twitterName])
 
             // const twitter = await fetchTwitterResource(entity.id)
             return twitter

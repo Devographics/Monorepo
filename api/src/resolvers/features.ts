@@ -7,6 +7,7 @@ import {
     computeTermAggregationAllYearsWithCache,
     computeTermAggregationSingleYearWithCache
 } from '../compute'
+import { useCache } from '../caching'
 
 export default {
     FeatureExperience: {
@@ -26,12 +27,17 @@ export default {
             { year }: { year: number },
             context: RequestContext
         ) =>
-            computeTermAggregationSingleYearWithCache(context, survey, `features.${id}.experience`, {
-                ...options,
-                filters,
-                year,
-                facet
-            })
+            computeTermAggregationSingleYearWithCache(
+                context,
+                survey,
+                `features.${id}.experience`,
+                {
+                    ...options,
+                    filters,
+                    year,
+                    facet
+                }
+            )
     },
     Feature: {
         entity: async ({ id }: { id: string }) => {
@@ -44,14 +50,14 @@ export default {
             const feature = features.find((f: Entity) => f.id === id)
             return feature && feature.name
         },
-        mdn: async ({ id }: { id: string }) => {
+        mdn: async ({ id }: { id: string }, {}, context: RequestContext) => {
             const features = await getEntities({ tag: 'features' })
             const feature = features.find((f: Entity) => f.id === id)
             if (!feature || !feature.mdn) {
                 return
             }
 
-            const mdn = await fetchMdnResource(feature.mdn)
+            const mdn = await useCache(fetchMdnResource, context, [feature.mdn])
 
             if (mdn) {
                 return mdn.find(t => t.locale === 'en-US')
