@@ -17,16 +17,13 @@ query: >
                         url
                     }
                     mdn {
+                        locale
                         url
+                        title
+                        summary
                     }
                 }
                 name
-                mdn {
-                    locale
-                    url
-                    title
-                    summary
-                }
                 experience {
                     keys
                     all_years {
