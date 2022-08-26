@@ -52,7 +52,7 @@ export const getTwitterUser = async (twitterName: string) => {
         const user = data && data.data
         return user
     } catch (error: any) {
-        console.log('// getTwitterUser error')
+        console.log(`// getTwitterUser error for ${twitterName}`)
         // console.log(error)
         if (error.rateLimit) {
             console.log(error.rateLimit)
