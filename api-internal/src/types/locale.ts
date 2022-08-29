@@ -59,7 +59,7 @@ export interface TranslationStringObject {
     key: string
     t: string
     tHtml?: string
-    context: string
+    context?: string
     isFallback: Boolean
     aliasFor?: string
 }

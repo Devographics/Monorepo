@@ -22,7 +22,9 @@ import {
     getAllLocalesListCacheKey
 } from './i18n'
 
-let locales: Locale[] = []
+///////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////// Data Loading //////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
 
 const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
 
@@ -173,23 +175,23 @@ export const loadLocale = async (localeId: string): Promise<LocaleRawData> => {
     return locales[0]
 }
 
+///////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////// Parsing ////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+
 /*
 
-Parse a string file and add parsed markdown versions where needed
-
-Also resolve aliases and add fallbacks
+Resolve aliases
 
 */
-export const parseStringFile = (stringFile: StringFile, localeRawData: LocaleRawData) => {
+export const resolveAliases = (stringFile: StringFile, localeRawData: LocaleRawData) => {
     stringFile.strings = stringFile.strings.map((s: TranslationStringObject) => {
         // resolve alias
         if (s.aliasFor) {
             // look through all stringFiles to find the "real" string being aliased
             let realString
             for (const sf of localeRawData.stringFiles) {
-                const rs = stringFile.strings.find(
-                    (ss: TranslationStringObject) => ss.key === s.aliasFor
-                )
+                const rs = sf.strings.find((ss: TranslationStringObject) => ss.key === s.aliasFor)
                 if (rs) {
                     realString = rs
                     break
@@ -199,7 +201,18 @@ export const parseStringFile = (stringFile: StringFile, localeRawData: LocaleRaw
                 s = { ...realString, key: s.key, aliasFor: s.aliasFor }
             }
         }
+        return s
+    })
+    return stringFile
+}
 
+/*
+
+Parse a string file and add parsed markdown versions where needed
+
+*/
+export const parseMarkdown = (stringFile: StringFile) => {
+    stringFile.strings = stringFile.strings.map((s: TranslationStringObject) => {
         // if markdown-parsed version of the string is different from original, add it as HTML
         const tHtml = marked.parseInline(String(s.t))
         if (tHtml !== s.t) {
@@ -213,13 +226,13 @@ export const parseStringFile = (stringFile: StringFile, localeRawData: LocaleRaw
 export const addFallbacks = (
     stringFile: StringFile,
     locale: LocaleRawData,
-    allEnStrings: TranslationStringObject[]
+    enStringFile: StringFile
 ) => {
     const localeStrings = stringFile.strings
     if (locale.id === 'en-US') {
         return stringFile
     } else {
-        allEnStrings.forEach((enTranslation: TranslationStringObject) => {
+        enStringFile.strings.forEach((enTranslation: TranslationStringObject) => {
             // note: exclude fallback strings that might have been added during
             // a previous iteration of the current loop
             const localeTranslationIndex = localeStrings.findIndex(
@@ -247,6 +260,10 @@ export const addFallbacks = (
     }
 }
 
+///////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////// Metadata ///////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+
 export const computeMetaData = (locale: LocaleRawData, parsedStringFiles: StringFile[]) => {
     const isEn = locale.id === 'en-US'
     const allStrings: TranslationStringObject[] = flattenStringFiles(parsedStringFiles)
@@ -268,45 +285,95 @@ export const computeMetaData = (locale: LocaleRawData, parsedStringFiles: String
     return { ...dynamicData, ...yamlData }
 }
 
+///////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////// Caching //////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+
 /*
 
 Init locales by parsing them and then caching them
 
 */
+const STORE_RAW_DATA = false
 export const initLocales = async (context: RequestContext) => {
+    console.log(`// Initializing locales cache (Redis)…`)
+    let i = 0
     const allLocalesRawData = await loadLocales()
     const enLocale = allLocalesRawData.find(l => l.id === 'en-US')
     if (!enLocale) {
         throw Error('Could not load locale en-US')
     }
 
-    const enStringsParsed = flattenStringFiles(enLocale.stringFiles.map((sf: StringFile) => parseStringFile(sf, enLocale)))
+    // parse en-US strings only once outside of main loop to 
+    // avoid repeating work
+    const enParsedStringFiles = enLocale.stringFiles.map((sf: StringFile) => {
+        const stringFileWithAliases = resolveAliases(sf, enLocale)
+        const stringFileWithMarkdown = parseMarkdown(stringFileWithAliases)
+        return stringFileWithMarkdown
+    })
 
     // store list of all locales
     setCache(getAllLocalesListCacheKey(), getLocaleIdsList(), context)
+    console.log(`-> Done caching list of all locales (${getAllLocalesListCacheKey()})`)
 
     for (const locale of allLocalesRawData) {
+        let j = 0
+        i++
+        console.log(`\n\n// Processing locale ${locale.id} (${i}/${allLocalesRawData.length})`)
+
         const parsedStringFiles: StringFile[] = []
-        for (const stringFile of locale.stringFiles) {
-            // store raw data
-            setCache(
-                getLocaleRawContextCacheKey(locale.id, stringFile.context),
-                stringFile,
-                context
+        // always use en-US as reference to know what to include
+        for (const enStringFile of enParsedStringFiles) {
+            j++
+
+            const localeStringFile = locale.stringFiles.find(
+                (s: StringFile) => s.context === enStringFile.context
             )
 
-            // store parsed data
-            const parsedStringFile = parseStringFile(stringFile, locale)
-            const parsedStringFileWithFallbacks = addFallbacks(
-                parsedStringFile,
-                locale,
-                enStringsParsed
-            )
-            parsedStringFiles.push(parsedStringFileWithFallbacks)
+            if (STORE_RAW_DATA && localeStringFile) {
+                // store raw data
+                setCache(
+                    getLocaleRawContextCacheKey(locale.id, localeStringFile.context),
+                    localeStringFile,
+                    context
+                )
+                console.log(
+                    `-> Done caching raw locale (${getLocaleRawContextCacheKey(
+                        locale.id,
+                        localeStringFile.context
+                    )})`
+                )
+            }
+
+            let stringFileWithFallbacks
+            if (!localeStringFile) {
+                // this context does not exist in the current locale
+                // use en-US with every string marked as being a fallback instead
+                console.warn(`  !! File for context ${locale.id}/${enStringFile.context} is missing, using en-US/${enStringFile.context} instead.`)
+                stringFileWithFallbacks = {
+                    context: enStringFile.context,
+                    strings: enStringFile.strings.map((s: TranslationStringObject) => ({
+                        ...s,
+                        isFallback: true
+                    }))
+                }
+            } else {
+                // this context does exist, go through parsing process
+                const stringFileWithAliases = resolveAliases(localeStringFile, locale)
+                const stringFileWithMarkdown = parseMarkdown(stringFileWithAliases)
+                stringFileWithFallbacks = addFallbacks(stringFileWithMarkdown, locale, enStringFile)
+            }
+            parsedStringFiles.push(stringFileWithFallbacks)
             setCache(
-                getLocaleParsedContextCacheKey(locale.id, stringFile.context),
-                parsedStringFileWithFallbacks,
+                getLocaleParsedContextCacheKey(locale.id, enStringFile.context),
+                stringFileWithFallbacks,
                 context
+            )
+            console.log(
+                `-> Done caching locale ${getLocaleParsedContextCacheKey(
+                    locale.id,
+                    enStringFile.context
+                )} (${j}/${enParsedStringFiles.length})`
             )
         }
 
@@ -316,5 +383,7 @@ export const initLocales = async (context: RequestContext) => {
             computeMetaData(locale, parsedStringFiles),
             context
         )
+        console.log(`-> Done caching metadata ${getLocaleMetaDataCacheKey(locale.id)}`)
     }
+    console.log(`=> Cache initialization done.`)
 }

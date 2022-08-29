@@ -67,8 +67,10 @@ export const getValidLocaleId = async (localeId: string, context: RequestContext
 ///////////////////////////////////// Load From Cache /////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
 
-export const getLocaleRawContextCacheKey = (localeId: string, context: string) => `${localeId}_${context}_raw`
-export const getLocaleParsedContextCacheKey = (localeId: string, context: string) => `${localeId}_${context}_parsed`
+export const getLocaleRawContextCacheKey = (localeId: string, context: string) =>
+    `${localeId}_${context}_raw`
+export const getLocaleParsedContextCacheKey = (localeId: string, context: string) =>
+    `${localeId}_${context}_parsed`
 export const getLocaleMetaDataCacheKey = (localeId: string) => `${localeId}_metadata`
 export const getAllLocalesListCacheKey = () => 'all_locales_ids'
 
@@ -111,7 +113,7 @@ export const getLocaleStrings = async (
             stringFiles.push(stringFile)
         }
     }
-    return flattenStringFiles(stringFiles)
+    return flattenStringFiles(stringFiles, true)
 }
 
 /*
@@ -119,7 +121,10 @@ export const getLocaleStrings = async (
 Flatten an array of stringfiles into a single array of strings with context
 
 */
-export const flattenStringFiles = (stringFiles: StringFile[]): TranslationStringObject[] => {
+export const flattenStringFiles = (
+    stringFiles: StringFile[],
+    addContext: boolean = false
+): TranslationStringObject[] => {
     // flatten all stringFiles together
     const stringObjects = stringFiles
         .map((sf: StringFile) => {
@@ -127,8 +132,10 @@ export const flattenStringFiles = (stringFiles: StringFile[]): TranslationString
             if (strings === null) {
                 return []
             }
-            // add context to all strings
-            strings = strings.map((s: TranslationStringObject) => ({ ...s, context }))
+            if (addContext) {
+                // add context to all strings
+                strings = strings.map((s: TranslationStringObject) => ({ ...s, context }))
+            }
             return strings
         })
         .flat()
