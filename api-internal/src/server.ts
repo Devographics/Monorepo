@@ -6,7 +6,7 @@ import typeDefs from './type_defs/schema.graphql'
 import { RequestContext } from './types'
 import resolvers from './resolvers'
 import express from 'express'
-import { initLocales } from './i18n'
+import { initLocales } from './load_locales'
 import { initEntities } from './entities'
 import { createClient } from 'redis'
 
@@ -49,7 +49,7 @@ const checkSecretKey = (req: any) => {
 const start = async () => {
     const redisClient = createClient({
         url: process.env.REDIS_URL
-      })
+    })
 
     redisClient.on('error', err => console.log('Redis Client Error', err))
 
@@ -71,7 +71,7 @@ const start = async () => {
             // TODO: do this better with a custom header
             const isDebug = expressContext?.req?.rawHeaders?.includes('http://localhost:4002')
             return {
-                redisClient, 
+                redisClient,
                 isDebug
             }
         }
@@ -103,7 +103,7 @@ const start = async () => {
 
     const port = process.env.PORT || 4020
 
-    await initLocales()
+    await initLocales({ redisClient })
     await initEntities()
 
     app.listen({ port: port }, () =>

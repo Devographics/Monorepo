@@ -1,128 +1,18 @@
 import { EnumTypeDefinitionNode } from 'graphql'
-import { Entity, StringFile, Locale, TranslationStringObject } from './types'
+import {
+    StringFile,
+    Locale,
+    TranslationStringObject,
+    RequestContext,
+    LocaleMetaData
+} from './types'
 import typeDefs from './type_defs/schema.graphql'
-import { Octokit } from '@octokit/core'
-import fetch from 'node-fetch'
-import localesYAML from './data/locales.yml'
-import yaml from 'js-yaml'
-import marked from 'marked'
-import { logToFile } from './debug'
-import { readdir, readFile } from 'fs/promises'
-import last from 'lodash/last'
-import { loadOrGetEntities } from './entities'
+import { getCache } from './caching'
+import allContexts from './data/contexts.yml'
 
-let locales: Locale[] = []
-
-const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
-
-const excludedFiles = ['crowdin.yml']
-
-// load locales if not yet loaded
-export const loadOrGetLocales = async () => {
-    if (locales.length === 0) {
-        locales = await loadLocales()
-    }
-    return locales
-}
-
-export const loadFromGitHub = async (localesWithRepos: any) => {
-    let locales: Locale[] = []
-    let i = 0
-
-    for (const locale of localesWithRepos) {
-        i++
-        console.log(`-> loading repo ${locale.repo} (${i}/${localesWithRepos.length})`)
-
-        locale.stringFiles = []
-
-        const [owner, repo] = locale.repo.split('/')
-        const options = {
-            owner,
-            repo,
-            path: ''
-        }
-
-        const contents = await octokit.request('GET /repos/{owner}/{repo}/contents/{path}', options)
-        const files = contents.data as any[]
-
-        // loop over repo contents and fetch raw yaml files
-        for (const file of files) {
-            const extension: string = last(file?.name.split('.')) || ''
-            if (['yml', 'yaml'].includes(extension) && !excludedFiles.includes(file.name)) {
-                const response = await fetch(file.download_url)
-                const contents = await response.text()
-                try {
-                    const yamlContents: any = yaml.load(contents)
-                    const strings = yamlContents.translations
-                    const context = file.name.replace('./', '').replace('.yml', '')
-                    locale.stringFiles.push({
-                        strings,
-                        url: file.download_url,
-                        context
-                    })
-                } catch (error) {
-                    console.log(`// Error loading file ${file.name}`)
-                    console.log(error)
-                }
-            }
-        }
-        locales.push(locale)
-    }
-    return locales
-}
-
-// when developing locally, load from local files
-export const loadLocally = async (localesWithRepos: any) => {
-    let i = 0
-
-    for (const locale of localesWithRepos) {
-        i++
-        console.log(`-> loading directory ${locale.repo} locally (${i}/${localesWithRepos.length})`)
-
-        locale.stringFiles = []
-
-        const [owner, repo] = locale.repo.split('/')
-
-        // __dirname = /Users/sacha/Dev/state-of-js-graphql-results-api/dist
-        const devDir = __dirname.split('/').slice(1, -3).join('/')
-        const path = `/${devDir}/stateof-locales/${repo}`
-        const files = await readdir(path)
-        const yamlFiles = files.filter((f: String) => f.includes('.yml'))
-
-        // loop over repo contents and fetch raw yaml files
-        for (const fileName of yamlFiles) {
-            if (!excludedFiles.includes(fileName)) {
-                const filePath = path + '/' + fileName
-                const contents = await readFile(filePath, 'utf8')
-                const yamlContents: any = yaml.load(contents)
-                const strings = yamlContents.translations
-                const context = fileName.replace('./', '').replace('.yml', '')
-                locale.stringFiles.push({
-                    strings,
-                    url: filePath,
-                    context
-                })
-            }
-        }
-        locales.push(locale)
-    }
-    return locales
-}
-
-// load locales contents through GitHub API or locally
-export const loadLocales = async () => {
-    console.log('// loading locales…')
-    // only keep locales which have a repo defined
-    const localesWithRepos = localesYAML.filter((locale: Locale) => !!locale.repo)
-
-    const locales: Locale[] =
-        process.env.LOAD_LOCALES === 'local'
-            ? await loadLocally(localesWithRepos)
-            : await loadFromGitHub(localesWithRepos)
-    console.log('// done loading locales')
-
-    return locales
-}
+///////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////// Helpers //////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Return either e.g. other_tools.browsers.choices or other_tools.browsers.others_normalized
@@ -156,177 +46,161 @@ etc.
 */
 export const truncateKey = (key: string) => key.split('-')[0]
 
-export const getValidLocale = async (localeId: string) => {
-    const locales = await loadOrGetLocales()
-    const exactLocale = locales.find(
-        (locale: Locale) => locale.id.toLowerCase() === localeId.toLowerCase()
+export const getValidLocaleId = async (localeId: string, context: RequestContext) => {
+    const localeIdsList = await getLocaleIds(context)
+    const exactLocaleId = localeIdsList.find(
+        (lId: string) => lId.toLowerCase() === localeId.toLowerCase()
     )
-    const similarLocale = locales.find(
-        (locale: Locale) => truncateKey(locale.id) === truncateKey(localeId)
+    const similarLocaleId = localeIdsList.find(
+        (lId: string) => truncateKey(lId) === truncateKey(localeId)
     )
-    return exactLocale || similarLocale
+
+    const validLocaleId = exactLocaleId || similarLocaleId
+    if (!validLocaleId) {
+        throw Error(`No valid locale found for id ${localeId}`)
+    } else {
+        return validLocaleId
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////// Load From Cache /////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+
+export const getLocaleRawContextCacheKey = (localeId: string, context: string) => `${localeId}_${context}_raw`
+export const getLocaleParsedContextCacheKey = (localeId: string, context: string) => `${localeId}_${context}_parsed`
+export const getLocaleMetaDataCacheKey = (localeId: string) => `${localeId}_metadata`
+export const getAllLocalesListCacheKey = () => 'all_locales_ids'
+
+/*
+
+Get locale metadata from cache
+
+*/
+export const getLocaleMetaData = async (
+    localeId: string,
+    context: RequestContext
+): Promise<LocaleMetaData> => {
+    return await getCache(getLocaleMetaDataCacheKey(localeId), context)
 }
 
 /*
 
-Get locale strings for a specific locale
+Get locale ids list from cache
 
 */
-export const getLocaleStrings = (locale: Locale, contexts?: string[]) => {
-    let stringFiles = locale.stringFiles
+export const getLocaleIds = async (context: RequestContext) => {
+    return await getCache(getAllLocalesListCacheKey(), context)
+}
+
+/*
+
+Get locale strings from cache and flatten them
+
+*/
+export const getLocaleStrings = async (
+    localeId: string,
+    contexts: string[],
+    context: RequestContext
+) => {
+    const stringFiles = []
+    for (const c of contexts) {
+        const stringFile = await getCache(getLocaleParsedContextCacheKey(localeId, c), context)
+        if (stringFile) {
+            // not all contexts exist for all languages
+            stringFiles.push(stringFile)
+        }
+    }
+    return flattenStringFiles(stringFiles)
+}
+
+/*
+
+Flatten an array of stringfiles into a single array of strings with context
+
+*/
+export const flattenStringFiles = (stringFiles: StringFile[]): TranslationStringObject[] => {
     // flatten all stringFiles together
-    let strings = stringFiles
+    const stringObjects = stringFiles
         .map((sf: StringFile) => {
-            let { strings, prefix, context } = sf
+            let { strings, context } = sf
             if (strings === null) {
                 return []
             }
-
-            // if strings need to be prefixed, do it now
-            if (prefix) {
-                strings = strings.map((s: TranslationStringObject) => ({
-                    ...s,
-                    key: `${prefix}.${s.key}`
-                }))
-            }
-            // add context to all strings just in case
+            // add context to all strings
             strings = strings.map((s: TranslationStringObject) => ({ ...s, context }))
-            // add HTML version in case string is markdown
-            strings = strings.map((s: TranslationStringObject) => ({
-                ...s,
-                tHtml: marked(String(s.t))
-            }))
             return strings
         })
         .flat()
 
-    // resolve aliases
-    strings = strings.map((s: TranslationStringObject) => {
-        if (s.aliasFor) {
-            const s2 = strings.find(ss => ss.key === s.aliasFor)
-            s = { ...s2, ...s }
-        }
-        return s
-    })
-
-    // if contexts are specified, filter strings by them
-    if (contexts) {
-        strings = strings.filter((s: TranslationStringObject) => {
-            return contexts.includes(s.context)
-        })
-    }
-
-    return { strings }
+    return stringObjects
 }
 
 /*
 
-Get locale strings with en-US strings as fallback
+Get locale strings
 
 */
-export const getLocaleStringsWithFallback = async (locale: Locale, contexts?: string[]) => {
-    let localeStrings: TranslationStringObject[] = [],
-        translatedCount: number = 0,
-        totalCount: number = 0,
-        untranslatedKeys: string[] = []
-
-    const enLocale = await getValidLocale('en-US')
-    if (enLocale) {
-        const enStrings = getLocaleStrings(enLocale, contexts).strings
-
-        // handle en-US locale separetely first
-        if (locale.id === 'en-US') {
-            return {
-                strings: enStrings.map((t: TranslationStringObject) => ({ ...t, fallback: false })),
-                translatedCount: enStrings.length,
-                totalCount: enStrings.length,
-                completion: 100,
-                untranslatedKeys
-            }
-        }
-
-        localeStrings = getLocaleStrings(locale, contexts).strings
-
-        enStrings.forEach((enTranslation: TranslationStringObject) => {
-            totalCount++
-            // note: exclude fallback strings that might have been added during
-            // a previous iteration of the current loop
-            const localeTranslationIndex = localeStrings.findIndex(
-                t => t.key === enTranslation.key && !t.fallback
-            )
-
-            if (
-                localeTranslationIndex === -1 ||
-                localeStrings[localeTranslationIndex].t === enTranslation.t ||
-                (localeStrings[localeTranslationIndex].t &&
-                    localeStrings[localeTranslationIndex].t.trim() === 'TODO')
-            ) {
-                // en-US key doesn't exist in current locale file
-                // OR current locale file's translation is same as en-US (untranslated)
-                // OR is "TODO"
-                localeStrings.push({
-                    ...enTranslation,
-                    fallback: true
-                })
-                untranslatedKeys.push(enTranslation.key)
-            } else {
-                // current locale has key, no fallback needed
-                translatedCount++
-                localeStrings[localeTranslationIndex].fallback = false
-            }
-        })
-    }
+export const getLocaleObject = async ({
+    localeId,
+    contexts: providedContexts,
+    context
+}: {
+    localeId: string
+    contexts?: string[]
+    context: RequestContext
+}) => {
+    const contexts = providedContexts ? providedContexts : allContexts
+    const strings = await getLocaleStrings(localeId, contexts, context)
+    const metadata = await getLocaleMetaData(localeId, context)
     return {
-        strings: localeStrings,
-        translatedCount,
-        totalCount,
-        completion: Math.round((translatedCount * 100) / totalCount),
-        untranslatedKeys
+        ...metadata,
+        strings
     }
 }
+
+///////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////// Resolvers ////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
 
 /*
 
 Get a specific locale object with properly parsed strings
 
 */
-export const getLocaleObject = async (
-    localeId: string,
-    contexts?: string[],
-    enableFallbacks: boolean = true
-) => {
-    const validLocale = await getValidLocale(localeId)
-    if (!validLocale) {
-        throw new Error(`No locale found for key ${localeId}`)
-    }
-    const localeData = enableFallbacks
-        ? await getLocaleStringsWithFallback(validLocale, contexts)
-        : await getLocaleStrings(validLocale, contexts)
-
-    return {
-        ...validLocale,
-        ...localeData
-    }
+export const getLocale = async ({
+    localeId,
+    contexts,
+    enableFallbacks = true,
+    context
+}: {
+    localeId: string
+    contexts?: string[]
+    enableFallbacks?: boolean
+    context: RequestContext
+}): Promise<Locale> => {
+    const validLocaleId = await getValidLocaleId(localeId, context)
+    const locale = getLocaleObject({ localeId: validLocaleId, contexts, context })
+    return locale
 }
 
 /*
 
-Get all locales
+Get multiple locales
 
 */
-export const getLocales = async (
-    contexts?: string[],
-    enableFallbacks?: boolean,
-    localeIds: string[] = []
-) => {
-    let rawLocales = await loadOrGetLocales()
-    if (localeIds.length) {
-        rawLocales = rawLocales.filter(l => localeIds.includes(l.id))
-    }
+export const getLocales = async (options: {
+    contexts?: string[]
+    enableFallbacks?: boolean
+    localeIds: string[]
+    context: RequestContext
+}) => {
     const locales = []
-    for (const locale of rawLocales) {
-        const localeObject = await getLocaleObject(locale.id, contexts, enableFallbacks)
-        locales.push(localeObject)
+    const { localeIds: providedLocaleIds, context } = options
+    const localeIds = providedLocaleIds || (await getLocaleIds(context))
+    for (const localeId of localeIds) {
+        const locale = await getLocale({ localeId, ...options })
+        locales.push(locale)
     }
     return locales
 }
@@ -338,15 +212,7 @@ Get a specific translation
 Reverse array first so that strings added last take priority
 
 */
-export const getTranslation = async (key: string, localeId: string) => {
-    const locale = await getLocaleObject(localeId)
-    return locale.strings.reverse().find((s: any) => s.key === key)
-}
-
-export const initLocales = async () => {
-    console.log('// initializing locales…')
-    const rawLocales = await loadOrGetLocales()
-    logToFile('raw_locales.json', rawLocales, { mode: 'overwrite' })
-    const parsedLocales = await getLocales()
-    logToFile('parsed_locales.json', parsedLocales, { mode: 'overwrite' })
+export const getTranslation = async (key: string, localeId: string, context: RequestContext) => {
+    const locale = await getLocale({ localeId, context })
+    return locale?.strings?.reverse().find((s: any) => s.key === key)
 }

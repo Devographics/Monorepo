@@ -50,29 +50,32 @@ export const useCache = async <F extends DynamicComputeCall>(
     const key = computeKey(func, args)
     const { db, isDebug = false } = context
     const collection = db.collection(config.mongo.cache_collection)
-    const existingResult = await collection.findOne({ key })
+    const disableCache = process.env.DISABLE_CACHE
+    let value, verb
 
-    const useCache = !process.env.DISABLE_CACHE && !isDebug
+    const useCache = !disableCache && !isDebug
 
-    if (existingResult && useCache) {
-        console.log(`> using result from cache for: ${key}`)
-        return existingResult.value
-    } else {
-        const value = await func(context, ...(args || []))
+    const settings = { isDebug, disableCache, db: 'mongo' }
+    const settingsLogs = JSON.stringify(settings)
 
-        if (isDebug) {
-            console.log(`> fetching result for: ${key} (isDebug = true)`)
-        } else if (process.env.DISABLE_CACHE) {
-            console.log(`> fetching result for: ${key} (DISABLE_CACHE = true)`)
+    if (useCache) {
+        const existingResult = await collection.findOne({ key })
+        if (existingResult) {
+            verb = 'using result from cache'
+            value = existingResult.value
         } else {
-            console.log(`> fetching and caching result for: ${key}`)
+            verb = 'getting and caching result'
+            value = await func(context, ...(args || []))
             // in case previous cached entry exists, delete it
             await collection.deleteOne({ key })
             await collection.insertOne({ key, value })
         }
-
-        return value
+    } else {
+        verb = 'getting result'
+        value = await func(context, ...(args || []))
     }
+    console.log(`> ${verb} for key: ${key} ( ${settingsLogs} )`)
+    return value
 }
 
 export const clearCache = async (db: Db) => {

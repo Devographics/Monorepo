@@ -27,7 +27,13 @@ const roClient = twitterClient.readOnly
 
 // https://github.com/PLhery/node-twitter-api-v2/blob/master/doc/v2.md#single-user-by-username
 
-export async function fetchTwitterUser(context: RequestContext, twitterName: string) {
+export async function fetchTwitterUser({
+    context,
+    twitterName
+}: {
+    context: RequestContext
+    twitterName: string
+}) {
     const user = await getTwitterUser(twitterName)
     if (!user) {
         return
