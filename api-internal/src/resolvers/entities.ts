@@ -39,12 +39,16 @@ export default {
             // const github = await fetchGithubResource(projectObject.github)
             // return github
         },
-        mdn: async (entity: Entity) => {
+        mdn: async (entity: Entity, args: any, context: RequestContext) => {
             if (!entity || !entity.mdn) {
                 return
             }
 
-            const mdn = await fetchMdnResource(entity.mdn)
+            const mdn = await useCache({
+                func: fetchMdnResource,
+                context,
+                funcOptions: { path: entity.mdn }
+            })
 
             if (mdn) {
                 return mdn.find((t: any) => t.locale === 'en-US')

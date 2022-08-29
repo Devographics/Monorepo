@@ -34,7 +34,7 @@ export const computeKey = (func: Function, funcOptions?: any) => {
         )
     }
 
-    return `${func.name}(${serializedOptions})`
+    return `func_${func.name}(${serializedOptions})`
 }
 
 /**
@@ -63,14 +63,15 @@ export const useCache = async <F extends DynamicComputeCall>(options: {
         const existingResultText = await getCache(key, context)
         const existingResult = JSON.parse(existingResultText)
         if (existingResult) {
-            verb = 'using result from cache'
+            verb = 'using cache'
             value = existingResult.value
         } else {
             verb = 'computing and caching result'
             value = await func(funcOptions)
-            console.log(value)
-            // in case previous cached entry exists, delete it
-            await setCache(key, JSON.stringify(value), context)
+            if (value) {
+                // in case previous cached entry exists, delete it
+                await setCache(key, JSON.stringify(value), context)
+            }
         }
     } else {
         verb = 'computing result'

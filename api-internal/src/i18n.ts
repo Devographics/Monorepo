@@ -68,11 +68,11 @@ export const getValidLocaleId = async (localeId: string, context: RequestContext
 ///////////////////////////////////////////////////////////////////////////////////////
 
 export const getLocaleRawContextCacheKey = (localeId: string, context: string) =>
-    `${localeId}_${context}_raw`
+    `locale_${localeId}_${context}_raw`
 export const getLocaleParsedContextCacheKey = (localeId: string, context: string) =>
-    `${localeId}_${context}_parsed`
-export const getLocaleMetaDataCacheKey = (localeId: string) => `${localeId}_metadata`
-export const getAllLocalesListCacheKey = () => 'all_locales_ids'
+    `locale_${localeId}_${context}_parsed`
+export const getLocaleMetaDataCacheKey = (localeId: string) => `locale_${localeId}_metadata`
+export const getAllLocalesListCacheKey = () => 'locale_all_locales_ids'
 
 /*
 
