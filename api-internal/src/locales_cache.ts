@@ -20,7 +20,7 @@ import {
     getLocaleParsedContextCacheKey,
     getLocaleMetaDataCacheKey,
     getAllLocalesListCacheKey
-} from './i18n'
+} from './locales'
 
 ///////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////// Data Loading //////////////////////////////////
@@ -296,6 +296,7 @@ Init locales by parsing them and then caching them
 */
 const STORE_RAW_DATA = false
 export const initLocales = async (context: RequestContext) => {
+    const startedAt = new Date()
     console.log(`// Initializing locales cache (Redis)…`)
     let i = 0
     const allLocalesRawData = await loadLocales()
@@ -304,7 +305,7 @@ export const initLocales = async (context: RequestContext) => {
         throw Error('Could not load locale en-US')
     }
 
-    // parse en-US strings only once outside of main loop to 
+    // parse en-US strings only once outside of main loop to
     // avoid repeating work
     const enParsedStringFiles = enLocale.stringFiles.map((sf: StringFile) => {
         const stringFileWithAliases = resolveAliases(sf, enLocale)
@@ -349,7 +350,9 @@ export const initLocales = async (context: RequestContext) => {
             if (!localeStringFile) {
                 // this context does not exist in the current locale
                 // use en-US with every string marked as being a fallback instead
-                console.warn(`  !! File for context ${locale.id}/${enStringFile.context} is missing, using en-US/${enStringFile.context} instead.`)
+                console.warn(
+                    `  !! File for context ${locale.id}/${enStringFile.context} is missing, using en-US/${enStringFile.context} instead.`
+                )
                 stringFileWithFallbacks = {
                     context: enStringFile.context,
                     strings: enStringFile.strings.map((s: TranslationStringObject) => ({
@@ -385,5 +388,8 @@ export const initLocales = async (context: RequestContext) => {
         )
         console.log(`-> Done caching metadata ${getLocaleMetaDataCacheKey(locale.id)}`)
     }
-    console.log(`=> Cache initialization done.`)
+    const finishedAt = new Date()
+    console.log(
+        `=> Locales cache initialization done in ${finishedAt.getTime() - startedAt.getTime()}ms.`
+    )
 }

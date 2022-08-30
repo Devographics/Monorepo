@@ -2,6 +2,11 @@ import { Db } from 'mongodb'
 // import config from './config'
 import { RequestContext } from './types'
 
+import NodeCache from 'node-cache'
+const nodeCache = new NodeCache()
+
+const cacheType = process.env.CACHE_TYPE === 'local' ? 'local' : 'redis'
+
 type DynamicComputeCall = (...args: any[]) => Promise<any>
 
 type ArgumentTypes<F> = F extends (...args: infer A) => Promise<any> ? A : never
@@ -57,18 +62,18 @@ export const useCache = async <F extends DynamicComputeCall>(options: {
 
     const enableCache = !disableCache && !isDebug
 
-    const settings = { isDebug, disableCache, db: 'redis' }
+    const settings = { isDebug, disableCache, cacheType }
     const settingsLogs = JSON.stringify(settings)
 
     if (enableCache) {
-        const existingResultText = await getCache(key, context)
-        const existingResult = JSON.parse(existingResultText)
+        const existingResult = await getCache(key, context)
         if (existingResult) {
             verb = 'using cache'
             value = existingResult
         } else {
             verb = 'computing and caching result'
-            value = await func(funcOptions)
+            // always pass context to cached function just in case it's needed
+            value = await func({ ...funcOptions, context })
             if (value) {
                 // in case previous cached entry exists, delete it
                 await setCache(key, JSON.stringify(value), context)
@@ -79,17 +84,29 @@ export const useCache = async <F extends DynamicComputeCall>(options: {
         value = await func(funcOptions)
     }
     const finishedAt = new Date()
-    console.log(`> ${verb} for key: ${key} in ${finishedAt.getTime()-startedAt.getTime()}ms ( ${settingsLogs} )`)
+    console.log(
+        `> ${verb} for key: ${key} in ${
+            finishedAt.getTime() - startedAt.getTime()
+        }ms ( ${settingsLogs} )`
+    )
     return value
 }
 
 export const getCache = async (key: string, context: RequestContext) => {
-    const value = await context.redisClient.get(key)
-    return JSON.parse(value)
+    if (cacheType === 'local') {
+        return nodeCache.get(key)
+    } else {
+        const value = await context.redisClient.get(key)
+        return JSON.parse(value)
+    }
 }
 
 export const setCache = async (key: string, value: any, context: RequestContext) => {
-    await context.redisClient.set(key, JSON.stringify(value))
+    if (cacheType === 'local') {
+        nodeCache.set(key, value)
+    } else {
+        await context.redisClient.set(key, JSON.stringify(value))
+    }
 }
 
 export const clearCache = async (db: Db) => {

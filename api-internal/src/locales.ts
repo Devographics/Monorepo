@@ -145,7 +145,7 @@ export const flattenStringFiles = (
 
 /*
 
-Get locale strings
+Get locale strings and metadata
 
 */
 export const getLocaleObject = async ({

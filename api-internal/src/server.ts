@@ -6,7 +6,7 @@ import typeDefs from './type_defs/schema.graphql'
 import { RequestContext } from './types'
 import resolvers from './resolvers'
 import express from 'express'
-import { initLocales } from './load_locales'
+import { initLocales } from './locales_cache'
 import { initEntities } from './entities'
 import { createClient } from 'redis'
 
@@ -53,8 +53,10 @@ const start = async () => {
 
     redisClient.on('error', err => console.log('Redis Client Error', err))
 
-    await redisClient.connect()
-
+    if (process.env.CACHE_TYPE !== 'local') {
+        await redisClient.connect()
+    }
+    
     const server = new ApolloServer({
         typeDefs,
         resolvers: resolvers as any,

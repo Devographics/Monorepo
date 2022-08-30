@@ -1,5 +1,5 @@
 import { getEntities, getEntity } from '../entities'
-import { getLocales, getLocale, getTranslation } from '../i18n'
+import { getLocales, getLocale, getTranslation } from '../locales'
 import { RequestContext } from '../types'
 
 export default {
