@@ -3,15 +3,25 @@ import { computeTermAggregationAllYears } from './generic'
 import { RequestContext, SurveyConfig } from '../types'
 import { Filters } from '../filters'
 
-export async function computeHappinessByYear(
-    context: RequestContext,
-    survey: SurveyConfig,
-    id: string,
+export async function computeHappinessByYear({
+    context,
+    survey,
+    id,
+    filters
+}: {
+    context: RequestContext
+    survey: SurveyConfig
+    id: string
     filters?: Filters
-) {
-    const happinessByYear = await computeTermAggregationAllYears(context, survey, `happiness.${id}`, {
-        filters,
-        sort: { property: 'id', order: 'asc' }
+}) {
+    const happinessByYear = await computeTermAggregationAllYears({
+        context,
+        survey,
+        key: `happiness.${id}`,
+        options: {
+            filters,
+            sort: { property: 'id', order: 'asc' }
+        }
     })
 
     // compute mean for each year

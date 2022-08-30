@@ -10,7 +10,7 @@ export default {
                 year,
                 ids,
                 experiences,
-                dimensions,
+                dimensions
             }: {
                 year: number
                 ids: string[]
@@ -23,25 +23,27 @@ export default {
             for (const experience of experiences) {
                 const by_dimension = []
                 for (const dimension of dimensions) {
-                    const tools = await useCache(computeToolsMatrix, context, [
-                        {
+                    const tools = await useCache({
+                        func: computeToolsMatrix,
+                        context,
+                        funcOptions: {
                             survey,
                             tools: ids,
                             experience,
                             type: dimension,
-                            year,
+                            year
                         }
-                    ])
+                    })
 
                     by_dimension.push({
                         dimension,
-                        tools,
+                        tools
                     })
                 }
 
                 result.push({
                     experience,
-                    dimensions: by_dimension,
+                    dimensions: by_dimension
                 })
             }
 

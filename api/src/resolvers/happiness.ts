@@ -18,13 +18,22 @@ export default {
             { survey, id, filters }: HappinessConfig,
             args: any,
             context: RequestContext
-        ) => useCache(computeHappinessByYear, context, [survey, id, filters]),
+        ) =>
+            useCache({
+                func: computeHappinessByYear,
+                context,
+                funcOptions: { survey, id, filters }
+            }),
         year: async (
             { survey, id, filters }: HappinessConfig,
             { year }: { year: number },
             context: RequestContext
         ) => {
-            const allYears = await useCache(computeHappinessByYear, context, [survey, id, filters])
+            const allYears = await useCache({
+                func: computeHappinessByYear,
+                context,
+                funcOptions: { survey, id, filters }
+            })
             return allYears.find((yearItem: YearAggregations) => yearItem.year === year)
         }
     }

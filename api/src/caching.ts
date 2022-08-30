@@ -1,12 +1,15 @@
 import { Db } from 'mongodb'
-import config from './config'
+// import config from './config'
 import { RequestContext } from './types'
 
-type DynamicComputeCall = (context: RequestContext, ...args: any[]) => Promise<any>
+import NodeCache from 'node-cache'
+const nodeCache = new NodeCache()
 
-type ArgumentTypes<F> = F extends (context: RequestContext, ...args: infer A) => Promise<any>
-    ? A
-    : never
+const cacheType = process.env.CACHE_TYPE === 'local' ? 'local' : 'redis'
+
+type DynamicComputeCall = (...args: any[]) => Promise<any>
+
+type ArgumentTypes<F> = F extends (...args: infer A) => Promise<any> ? A : never
 
 type ResultType<F> = F extends (...args: any[]) => infer P
     ? P extends Promise<infer R>
@@ -18,11 +21,12 @@ type ResultType<F> = F extends (...args: any[]) => infer P
  * Compute a cache key from a function and its arguments,
  * the function should have a name in order to generate a proper key.
  */
-export const computeKey = (func: Function, args?: any) => {
-    const serializedArgs = args
-        ? args
-              .map((a: any) => {
-                  return typeof a === 'function' ? a.name : JSON.stringify(a)
+export const computeKey = (func: Function, funcOptions?: any) => {
+    const serializedOptions = funcOptions
+        ? Object.keys(funcOptions)
+              .map((key: string) => {
+                  const argument = funcOptions[key]
+                  return typeof argument === 'function' ? argument.name : JSON.stringify(argument)
               })
               .join(', ')
         : ''
@@ -35,51 +39,80 @@ export const computeKey = (func: Function, args?: any) => {
         )
     }
 
-    return `${func.name}(${serializedArgs})`
+    return `func_${func.name}(${serializedOptions})`
 }
 
 /**
- * Cache results in a dedicated mongo collection to improve performance,
- * if the result isn't already available in the collection, it will be created.
+ * Cache results in a dedicated Redis db to improve performance,
+ * if the result isn't already available in the db, it will be created.
  */
-export const useCache = async <F extends DynamicComputeCall>(
-    func: F,
-    context: RequestContext,
-    args: ArgumentTypes<F>
-): Promise<ResultType<F>> => {
-    const key = computeKey(func, args)
-    const { db, isDebug = false } = context
-    const collection = db.collection(config.mongo.cache_collection)
+export const useCache = async <F extends DynamicComputeCall>(options: {
+    func: F
+    context: RequestContext
+    funcOptions?: any
+    // args?: ArgumentTypes<F>
+    key?: string
+}): Promise<ResultType<F>> => {
+    const startedAt = new Date()
+    const { func, context, key: providedKey, funcOptions = {} } = options
+    const key = providedKey ?? computeKey(func, funcOptions)
+    const { redisClient, isDebug = false } = context
     const disableCache = process.env.DISABLE_CACHE
     let value, verb
+    
+    // always pass context to cached function just in case it's needed
+    const funcOptionsWithContext = { ...funcOptions, context }
+    
+    const enableCache = !disableCache && !isDebug
 
-    const useCache = !disableCache && !isDebug
-
-    const settings = { isDebug, disableCache, db: 'mongo' }
+    const settings = { isDebug, disableCache, cacheType }
     const settingsLogs = JSON.stringify(settings)
 
-    if (useCache) {
-        const existingResult = await collection.findOne({ key })
+    if (enableCache) {
+        const existingResult = await getCache(key, context)
         if (existingResult) {
-            verb = 'using result from cache'
-            value = existingResult.value
+            verb = 'using cache'
+            value = existingResult
         } else {
-            verb = 'getting and caching result'
-            value = await func(context, ...(args || []))
-            // in case previous cached entry exists, delete it
-            await collection.deleteOne({ key })
-            await collection.insertOne({ key, value })
+            verb = 'computing and caching result'
+            value = await func(funcOptionsWithContext)
+            if (value) {
+                // in case previous cached entry exists, delete it
+                await setCache(key, JSON.stringify(value), context)
+            }
         }
     } else {
-        verb = 'getting result'
-        value = await func(context, ...(args || []))
+        verb = 'computing result'
+        value = await func(funcOptionsWithContext)
     }
-    console.log(`> ${verb} for key: ${key} ( ${settingsLogs} )`)
+    const finishedAt = new Date()
+    console.log(
+        `> ${verb} for key: ${key} in ${
+            finishedAt.getTime() - startedAt.getTime()
+        }ms ( ${settingsLogs} )`
+    )
     return value
 }
 
+export const getCache = async (key: string, context: RequestContext) => {
+    if (cacheType === 'local') {
+        return nodeCache.get(key)
+    } else {
+        const value = await context.redisClient.get(key)
+        return JSON.parse(value)
+    }
+}
+
+export const setCache = async (key: string, value: any, context: RequestContext) => {
+    if (cacheType === 'local') {
+        nodeCache.set(key, value)
+    } else {
+        await context.redisClient.set(key, JSON.stringify(value))
+    }
+}
+
 export const clearCache = async (db: Db) => {
-    const collection = db.collection(config.mongo.cache_collection)
-    const result = await collection.deleteMany({})
-    return result
+    // const collection = db.collection(config.mongo.cache_collection)
+    // const result = await collection.deleteMany({})
+    // return result
 }

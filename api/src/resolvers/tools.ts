@@ -10,16 +10,26 @@ import {
 
 export default {
     ToolsRankings: {
-        years: async  (
+        years: async (
             { survey, ids, filters }: { survey: SurveyConfig; ids: string[]; filters?: Filters },
             args: any,
             context: RequestContext
-        ) => useCache(computeToolsExperienceRankingYears, context, [survey, ids, filters]),
+        ) =>
+            useCache({
+                func: computeToolsExperienceRankingYears,
+                context,
+                funcOptions: { survey, ids, filters }
+            }),
         experience: async (
             { survey, ids, filters }: { survey: SurveyConfig; ids: string[]; filters?: Filters },
             args: any,
             context: RequestContext
-        ) => useCache(computeToolsExperienceRanking, context, [survey, ids, filters])
+        ) =>
+            useCache({
+                func: computeToolsExperienceRanking,
+                context,
+                funcOptions: { survey, ids, filters }
+            })
     },
     ToolExperience: {
         keys: () => keys.tool,

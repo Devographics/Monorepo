@@ -103,29 +103,35 @@ export interface YearAggregations {
     buckets: TermBucket[]
 }
 
-export type AggregationFunction = (
-    context: RequestContext,
-    survey: SurveyConfig,
-    key: string,
+export type AggregationFunction = (funcOptions: {
+    context: RequestContext
+    survey: SurveyConfig
+    key: string
     options: TermAggregationOptions
-) => Promise<any>
+}) => Promise<any>
 
-export async function computeTermAggregationAllYears(
-    context: RequestContext,
-    survey: SurveyConfig,
-    key: string,
-    options: TermAggregationOptions = {},
-    aggregationFunction: AggregationFunction = computeDefaultTermAggregationByYear
-) {
-    return aggregationFunction(context, survey, key, options)
+export async function computeTermAggregationAllYears(funcOptions: {
+    context: RequestContext
+    survey: SurveyConfig
+    key: string
+    options: TermAggregationOptions
+    aggregationFunction?: AggregationFunction
+}) {
+    const { aggregationFunction = computeDefaultTermAggregationByYear, ...options } = funcOptions
+    return aggregationFunction(options)
 }
 
-export async function computeDefaultTermAggregationByYear(
-    context: RequestContext,
-    survey: SurveyConfig,
-    key: string,
-    options: TermAggregationOptions = {}
-) {
+export async function computeDefaultTermAggregationByYear({
+    context,
+    survey,
+    key,
+    options = {}
+}: {
+    context: RequestContext
+    survey: SurveyConfig
+    key: string
+    options: TermAggregationOptions
+}) {
     const { db, isDebug } = context
     const collection = db.collection(config.mongo.normalized_collection)
 
@@ -479,12 +485,16 @@ export async function computeTermAggregationAllYearsWithCache(
     options: TermAggregationOptions = {},
     aggregationFunction?: AggregationFunction
 ) {
-    return useCache(computeTermAggregationAllYears, context, [
-        survey,
-        id,
-        options,
-        aggregationFunction
-    ])
+    return useCache({
+        func: computeTermAggregationAllYears,
+        context,
+        funcOptions: {
+            survey,
+            key: id,
+            options,
+            aggregationFunction
+        }
+    })
 }
 
 export async function computeTermAggregationSingleYear(
@@ -494,13 +504,13 @@ export async function computeTermAggregationSingleYear(
     options: TermAggregationOptions,
     aggregationFunction?: AggregationFunction
 ) {
-    const allYears = await computeTermAggregationAllYears(
+    const allYears = await computeTermAggregationAllYears({
         context,
         survey,
         key,
         options,
         aggregationFunction
-    )
+    })
     return allYears[0]
 }
 
@@ -511,10 +521,14 @@ export async function computeTermAggregationSingleYearWithCache(
     options: TermAggregationOptions,
     aggregationFunction?: AggregationFunction
 ) {
-    return useCache(computeTermAggregationSingleYear, context, [
-        survey,
-        id,
-        options,
-        aggregationFunction
-    ])
+    return useCache({
+        func: computeTermAggregationSingleYear,
+        context,
+        funcOptions: {
+            survey,
+            id,
+            options,
+            aggregationFunction
+        }
+    })
 }

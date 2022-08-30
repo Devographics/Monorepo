@@ -1,4 +1,4 @@
-import { GitHub, SurveyConfig, Entity, RequestContext } from '../types'
+import { GitHub, Entity, RequestContext } from '../types'
 import projects from '../data/bestofjs.yml'
 import { fetchMdnResource, fetchTwitterUser } from '../external_apis'
 import { useCache } from '../caching'
@@ -25,7 +25,7 @@ const getSimulatedGithub = (id: string): GitHub | null => {
 
 export default {
     Entity: {
-        github: async ({ id }: { survey: SurveyConfig; id: string }) => {
+        github: async ({ id }: { id: string }) => {
             // note: for now just get local data from projects.yml
             // instead of actually querying github
             return getSimulatedGithub(id)
@@ -44,10 +44,11 @@ export default {
                 return
             }
 
-            // const mdn = await fetchMdnResource(entity.mdn)
-
-            const mdn = await useCache(fetchMdnResource, context, [entity.mdn])
-
+            const mdn = await useCache({
+                func: fetchMdnResource,
+                context,
+                funcOptions: { path: entity.mdn }
+            })
 
             if (mdn) {
                 return mdn.find((t: any) => t.locale === 'en-US')
@@ -56,10 +57,15 @@ export default {
             }
         },
         twitter: async (entity: Entity, args: any, context: RequestContext) => {
-            const twitter =
-                entity.twitterName && await useCache(fetchTwitterUser, context, [entity.twitterName])
+            if (!entity || !entity.twitterName) {
+                return
+            }
+            const twitter = await useCache({
+                func: fetchTwitterUser,
+                context,
+                funcOptions: { twitterName: entity.twitterName }
+            })
 
-            // const twitter = await fetchTwitterResource(entity.id)
             return twitter
         },
         homepage: async (entity: Entity, args: any, context: RequestContext) => {

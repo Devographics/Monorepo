@@ -4,16 +4,21 @@ import config from '../config'
 import { RequestContext, SurveyConfig, YearParticipation } from '../types'
 import { Filters } from '../filters'
 
-export async function computeParticipationByYear(
-    context: RequestContext,
-    survey: SurveyConfig,
-    filters?: Filters,
+export async function computeParticipationByYear({
+    context,
+    survey,
+    filters,
+    year
+}: {
+    context: RequestContext
+    survey: SurveyConfig
+    filters?: Filters
     year?: number
-): Promise<YearParticipation[]> {
+}): Promise<YearParticipation[]> {
     const { db } = context
     const collection = db.collection(config.mongo.normalized_collection)
 
-    const participantsByYear = await collection
+    const participantsByYear = (await collection
         .aggregate([
             {
                 $match: {
@@ -34,7 +39,7 @@ export async function computeParticipationByYear(
                 }
             }
         ])
-        .toArray() as YearParticipation[]
+        .toArray()) as YearParticipation[]
 
     return orderBy(participantsByYear, 'year')
 }
@@ -45,7 +50,7 @@ export async function getParticipationByYearMap(
 ): Promise<{
     [key: number]: number
 }> {
-    const buckets = await computeParticipationByYear(context, survey)
+    const buckets = await computeParticipationByYear({ context, survey })
 
     return buckets.reduce((acc, bucket) => {
         return {

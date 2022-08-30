@@ -163,14 +163,15 @@ export const computeToolMatrixBreakdown = async (
 }
 
 export async function computeToolsMatrix(
-    context: RequestContext,
     {
+        context,
         survey,
         tools,
         experience,
         type,
         year
     }: {
+    context: RequestContext,
         survey: SurveyConfig
         tools: string[]
         experience: ToolExperienceFilterId

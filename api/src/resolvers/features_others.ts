@@ -20,13 +20,17 @@ const computeOtherFeatures = async (
     id: string,
     filters?: Filters
 ) => {
-    const features = await getEntities({ tag: 'feature'})
+    const features = await getEntities({ tag: 'feature' })
 
-    const otherFeaturesByYear = await useCache(computeTermAggregationAllYears, context, [
-        survey,
-        `features_others.${getOtherKey(id)}`,
-        { filters }
-    ])
+    const otherFeaturesByYear = await useCache({
+        func: computeTermAggregationAllYears,
+        context,
+        funcOptions: {
+            survey,
+            key: `features_others.${getOtherKey(id)}`,
+            options: { filters }
+        }
+    })
 
     return otherFeaturesByYear.map((yearOtherFeatures: YearAggregations) => {
         return {
