@@ -57,15 +57,15 @@ export default {
             }
         },
         twitter: async (entity: Entity, args: any, context: RequestContext) => {
-            const twitter =
-                entity.twitterName &&
-                useCache({
-                    func: fetchTwitterUser,
-                    context,
-                    funcOptions: { twitterName: entity.twitterName }
-                })
+            if (!entity || !entity.twitterName) {
+                return
+            }
+            const twitter = await useCache({
+                func: fetchTwitterUser,
+                context,
+                funcOptions: { twitterName: entity.twitterName }
+            })
 
-            // const twitter = await fetchTwitterResource(entity.id)
             return twitter
         },
         homepage: async (entity: Entity, args: any, context: RequestContext) => {

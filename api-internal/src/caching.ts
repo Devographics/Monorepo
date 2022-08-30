@@ -48,6 +48,7 @@ export const useCache = async <F extends DynamicComputeCall>(options: {
     // args?: ArgumentTypes<F>
     key?: string
 }): Promise<ResultType<F>> => {
+    const startedAt = new Date()
     const { func, context, key: providedKey, funcOptions = {} } = options
     const key = providedKey ?? computeKey(func, funcOptions)
     const { redisClient, isDebug = false } = context
@@ -64,7 +65,7 @@ export const useCache = async <F extends DynamicComputeCall>(options: {
         const existingResult = JSON.parse(existingResultText)
         if (existingResult) {
             verb = 'using cache'
-            value = existingResult.value
+            value = existingResult
         } else {
             verb = 'computing and caching result'
             value = await func(funcOptions)
@@ -77,7 +78,8 @@ export const useCache = async <F extends DynamicComputeCall>(options: {
         verb = 'computing result'
         value = await func(funcOptions)
     }
-    console.log(`> ${verb} for key: ${key} ( ${settingsLogs} )`)
+    const finishedAt = new Date()
+    console.log(`> ${verb} for key: ${key} in ${finishedAt.getTime()-startedAt.getTime()}ms ( ${settingsLogs} )`)
     return value
 }
 
