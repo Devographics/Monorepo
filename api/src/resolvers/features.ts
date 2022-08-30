@@ -15,27 +15,32 @@ export default {
             args: any,
             context: RequestContext
         ) =>
-            computeTermAggregationAllYearsWithCache(context, survey, `features.${id}.experience`, {
-                ...options,
-                filters,
-                facet
+            computeTermAggregationAllYearsWithCache({
+                context,
+                survey,
+                key: `features.${id}.experience`,
+                options: {
+                    ...options,
+                    filters,
+                    facet
+                }
             }),
         year: async (
             { survey, id, filters, options, facet }: ResolverDynamicConfig,
             { year }: { year: number },
             context: RequestContext
         ) =>
-            computeTermAggregationSingleYearWithCache(
+            computeTermAggregationSingleYearWithCache({
                 context,
                 survey,
-                `features.${id}.experience`,
-                {
+                key: `features.${id}.experience`,
+                options: {
                     ...options,
                     filters,
                     year,
                     facet
                 }
-            )
+            })
     },
     Feature: {
         entity: async ({ id }: { id: string }) => {
@@ -47,6 +52,6 @@ export default {
             const features = await getEntities({ tag: 'features' })
             const feature = features.find((f: Entity) => f.id === id)
             return feature && feature.name
-        },
+        }
     }
 }

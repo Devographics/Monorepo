@@ -1,5 +1,4 @@
 import fetch from 'node-fetch'
-import { RequestContext } from '../types'
 
 interface MDNJSONRes {
     doc: TranslatedMDNInfo
@@ -29,15 +28,16 @@ export const normalizeMdnResource = (res: MDNJSONRes): TranslatedMDNInfo[] => {
     ]
 }
 
-export const fetchMdnResource = async (context: RequestContext, path: string) => {
+export const fetchMdnResource = async ({ path }: { path: string }) => {
     try {
-        const url = `https://developer.mozilla.org${path}/index.json`
+        const pathWithoutAnchor = path.split('#')[0]
+        const url = `https://developer.mozilla.org${pathWithoutAnchor}/index.json`
         const res = await fetch(url)
-        const json = await res.json() as MDNJSONRes
+        const json = (await res.json()) as MDNJSONRes
 
         return normalizeMdnResource(json)
     } catch (error) {
-        // console.error(`an error occurred while fetching mdn resource`, error)
+        console.error(`an error occurred while fetching mdn resource ${path}`)
         // throw error
         return
     }

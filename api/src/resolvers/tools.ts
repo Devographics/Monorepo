@@ -18,7 +18,7 @@ export default {
             useCache({
                 func: computeToolsExperienceRankingYears,
                 context,
-                funcOptions: { survey, ids, filters }
+                funcOptions: { survey, tools: ids, filters }
             }),
         experience: async (
             { survey, ids, filters }: { survey: SurveyConfig; ids: string[]; filters?: Filters },
@@ -28,7 +28,7 @@ export default {
             useCache({
                 func: computeToolsExperienceRanking,
                 context,
-                funcOptions: { survey, ids, filters }
+                funcOptions: { survey, tools: ids, filters }
             })
     },
     ToolExperience: {
@@ -38,23 +38,33 @@ export default {
             args: any,
             context: RequestContext
         ) =>
-            computeTermAggregationAllYearsWithCache(context, survey, `tools.${id}.experience`, {
-                ...options,
-                filters,
-                facet,
-                keys: keys.tool
+            computeTermAggregationAllYearsWithCache({
+                context,
+                survey,
+                key: `tools.${id}.experience`,
+                options: {
+                    ...options,
+                    filters,
+                    facet,
+                    keys: keys.tool
+                }
             }),
         year: async (
             { survey, id, filters, options, facet }: ResolverDynamicConfig,
             { year }: { year: number },
             context: RequestContext
         ) =>
-            computeTermAggregationSingleYearWithCache(context, survey, `tools.${id}.experience`, {
-                ...options,
-                filters,
-                year,
-                facet,
-                keys: keys.tool
+            computeTermAggregationSingleYearWithCache({
+                context,
+                survey,
+                key: `tools.${id}.experience`,
+                options: {
+                    ...options,
+                    filters,
+                    year,
+                    facet,
+                    keys: keys.tool
+                }
             })
     },
     ToolExperienceAggregated: {
@@ -64,23 +74,33 @@ export default {
             args: any,
             context: RequestContext
         ) =>
-            computeTermAggregationAllYearsWithCache(context, survey, `tools.${id}.experience`, {
-                ...options,
-                filters,
-                facet,
-                keys: keys.tool
+            computeTermAggregationAllYearsWithCache({
+                context,
+                survey,
+                key: `tools.${id}.experience`,
+                options: {
+                    ...options,
+                    filters,
+                    facet,
+                    keys: keys.tool
+                }
             }),
         year: async (
             { survey, id, filters, options, facet }: ResolverDynamicConfig,
             { year }: { year: number },
             context: RequestContext
         ) =>
-            computeTermAggregationSingleYearWithCache(context, survey, `tools.${id}.experience`, {
-                ...options,
-                filters,
-                year,
-                facet,
-                keys: keys.tool
+            computeTermAggregationSingleYearWithCache({
+                context,
+                survey,
+                key: `tools.${id}.experience`,
+                options: {
+                    ...options,
+                    filters,
+                    year,
+                    facet,
+                    keys: keys.tool
+                }
             })
     }
 }

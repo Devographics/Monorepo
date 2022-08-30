@@ -48,25 +48,25 @@ export const getStaticResolvers = (
         args: any,
         context: RequestContext
     ) =>
-        computeTermAggregationAllYearsWithCache(
+        computeTermAggregationAllYearsWithCache({
             context,
             survey,
-            id,
-            { ...options, ...queryOptions, filters, facet },
+            key: id,
+            options: { ...options, ...queryOptions, filters, facet },
             aggregationFunction
-        ),
+        }),
     year: async (
         { survey, filters, options: queryOptions, facet }: ResolverDynamicConfig,
         { year }: { year: number },
         context: RequestContext
     ) =>
-        computeTermAggregationSingleYearWithCache(
+        computeTermAggregationSingleYearWithCache({
             context,
             survey,
-            id,
-            { ...options, ...queryOptions, filters, year, facet },
+            key: id,
+            options: { ...options, ...queryOptions, filters, year, facet },
             aggregationFunction
-        )
+        })
 })
 
 /**
@@ -85,23 +85,23 @@ export const getDynamicResolvers = (
         args: any,
         context: RequestContext
     ) =>
-        computeTermAggregationAllYearsWithCache(
+        computeTermAggregationAllYearsWithCache({
             context,
             survey,
-            getId(id),
-            { ...options, ...queryOptions, filters, facet },
+            key: getId(id),
+            options: { ...options, ...queryOptions, filters, facet },
             aggregationFunction
-        ),
+        }),
     year: async (
         { survey, id, filters, options: queryOptions, facet }: ResolverDynamicConfig,
         { year }: { year: number },
         context: RequestContext
     ) =>
-        computeTermAggregationSingleYearWithCache(
+        computeTermAggregationSingleYearWithCache({
             context,
             survey,
-            getId(id),
-            {
+            key: getId(id),
+            options: {
                 ...options,
                 ...queryOptions,
                 filters,
@@ -109,7 +109,7 @@ export const getDynamicResolvers = (
                 year
             },
             aggregationFunction
-        )
+        })
 })
 
 export const getDynamicResolversWithKeys = (

@@ -186,7 +186,7 @@ export default {
             useCache({
                 func: computeToolsCardinalityByUser,
                 context,
-                funcOptions: { survey, year, ids, experienceId }
+                funcOptions: { survey, year, toolIds: ids, experienceId }
             }),
         tools_others: (survey: SurveyConfig, args: ResolverArguments) => ({
             survey,
