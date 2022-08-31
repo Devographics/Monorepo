@@ -1,4 +1,3 @@
-import { fetchMdnResource } from '../external_apis'
 import { Entity } from '../types'
 import { getEntities } from '../entities'
 import keys from '../data/keys.yml'
@@ -16,21 +15,31 @@ export default {
             args: any,
             context: RequestContext
         ) =>
-            computeTermAggregationAllYearsWithCache(context, survey, `features.${id}.experience`, {
-                ...options,
-                filters,
-                facet
+            computeTermAggregationAllYearsWithCache({
+                context,
+                survey,
+                key: `features.${id}.experience`,
+                options: {
+                    ...options,
+                    filters,
+                    facet
+                }
             }),
         year: async (
             { survey, id, filters, options, facet }: ResolverDynamicConfig,
             { year }: { year: number },
             context: RequestContext
         ) =>
-            computeTermAggregationSingleYearWithCache(context, survey, `features.${id}.experience`, {
-                ...options,
-                filters,
-                year,
-                facet
+            computeTermAggregationSingleYearWithCache({
+                context,
+                survey,
+                key: `features.${id}.experience`,
+                options: {
+                    ...options,
+                    filters,
+                    year,
+                    facet
+                }
             })
     },
     Feature: {
@@ -43,21 +52,6 @@ export default {
             const features = await getEntities({ tag: 'features' })
             const feature = features.find((f: Entity) => f.id === id)
             return feature && feature.name
-        },
-        mdn: async ({ id }: { id: string }) => {
-            const features = await getEntities({ tag: 'features' })
-            const feature = features.find((f: Entity) => f.id === id)
-            if (!feature || !feature.mdn) {
-                return
-            }
-
-            const mdn = await fetchMdnResource(feature.mdn)
-
-            if (mdn) {
-                return mdn.find(t => t.locale === 'en-US')
-            } else {
-                return
-            }
         }
     }
 }

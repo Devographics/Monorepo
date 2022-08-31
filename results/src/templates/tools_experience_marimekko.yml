@@ -3,12 +3,12 @@ blockType: ToolsExperienceMarimekkoBlock
 titleId: blocks.tools_experience_marimekko
 descriptionId: blocks.tools_experience_marimekko.description
 noteId: blocks.tools_experience_marimekko.note
-dataPath: "surveyApi.survey.${parentId}_marimekko"
-keysPath: "surveyApi.survey.${parentId}_marimekko.0.experience.keys"
+dataPath: "dataAPI.survey.${parentId}_marimekko"
+keysPath: "dataAPI.survey.${parentId}_marimekko.0.experience.keys"
 bucketKeysName: tools
 hasSponsor: true
 query: >
-    surveyApi {
+    dataAPI {
         survey(survey: ${surveyType}) {
             ${parentId}_marimekko: tools(ids: [${toolsCategories[parentId]}]) {
                 id

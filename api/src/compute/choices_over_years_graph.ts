@@ -4,12 +4,17 @@ import config from '../config'
 import { RequestContext, SurveyConfig } from '../types'
 import { Filters, generateFiltersQuery } from '../filters'
 
-export async function computeChoicesOverYearsGraph(
-    context: RequestContext,
-    survey: SurveyConfig,
-    field: string,
+export async function computeChoicesOverYearsGraph({
+    context,
+    survey,
+    field,
+    filters
+}: {
+    context: RequestContext
+    survey: SurveyConfig
+    field: string
     filters?: Filters
-) {
+}) {
     const { db } = context
     const collection = db.collection(config.mongo.normalized_collection)
 

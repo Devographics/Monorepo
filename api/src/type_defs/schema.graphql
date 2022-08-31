@@ -11,24 +11,24 @@ type Query {
     All surveys.
     """
     surveys: [SurveyItem]
-    """
-    Data about a specific entity (tool, library, framework, features, etc.)
-    """
-    entity(id: ID!): Entity
-    """
-    Get multiple entities (tools, libraries, frameworks, features, etc.)
-    """
-    entities(ids: [String], type: String, tag: String, tags: [String]): [Entity]
-    """
-    Translate a string
-    """
-    translation(key: String!, localeId: String!): TranslationString
-    """
-    Get a locale
-    """
-    locale(localeId: String!, contexts: [Contexts], enableFallbacks: Boolean): Locale
-    """
-    Get multiple locales
-    """
-    locales(contexts: [Contexts], localeIds: [String], enableFallbacks: Boolean): [Locale]
+    # """
+    # Data about a specific entity (tool, library, framework, features, etc.)
+    # """
+    # entity(id: ID!): Entity
+    # """
+    # Get multiple entities (tools, libraries, frameworks, features, etc.)
+    # """
+    # entities(ids: [String], type: String, tag: String, tags: [String]): [Entity]
+    # """
+    # Translate a string
+    # """
+    # translation(key: String!, localeId: String!): TranslationString
+    # """
+    # Get a locale
+    # """
+    # locale(localeId: String!, contexts: [Contexts], enableFallbacks: Boolean): Locale
+    # """
+    # Get multiple locales
+    # """
+    # locales(contexts: [Contexts], localeIds: [String], enableFallbacks: Boolean): [Locale]
 }

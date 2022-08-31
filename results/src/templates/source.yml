@@ -1,11 +1,11 @@
 blockType: VerticalBarBlock
-dataPath: "surveyApi.survey.demographics.${id}.year"
+dataPath: "dataAPI.survey.demographics.${id}.year"
 titleId: user_info.${id}
 descriptionId: user_info.${id}.description
 noteId: user_info.${id}.note
 hasSponsor: true
 query: >
-    surveyApi {
+    dataAPI {
         survey(survey: ${surveyType}) {
             demographics {
                 ${id} (filters: ${filters}, options: ${options}, facet: ${facet}){

@@ -1,7 +1,10 @@
+import { RedisClientType } from 'redis'
+
 /**
  * This context is injected in each and every requests.
  */
 export interface RequestContext {
+    redisClient: any
     isDebug?: Boolean
 }
 

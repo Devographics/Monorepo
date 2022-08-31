@@ -38,7 +38,7 @@ type TranslationString {
     t: String
     tHtml: String
     context: String
-    fallback: Boolean
+    isFallback: Boolean
     aliasFor: String
 }
 

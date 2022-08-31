@@ -1,12 +1,12 @@
 blockType: ToolsArrowsBlock
-dataPath: "surveyApi.survey.${id}"
-keysPath: "surveyApi.survey.${id}.0.experience.keys"
+dataPath: "dataAPI.survey.${id}"
+keysPath: "dataAPI.survey.${id}.0.experience.keys"
 titleId: blocks.tools_arrows
 descriptionId: blocks.tools_arrows.description
 noteId: blocks.tools_arrows.note
 hasSponsor: true
 query: >
-    surveyApi {
+    dataAPI {
         survey(survey: ${surveyType}) {
             ${id}: tools(ids: [${allTools}]) {
                 id

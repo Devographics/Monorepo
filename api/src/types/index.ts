@@ -9,6 +9,7 @@ import { Options } from '../options'
  */
 export interface RequestContext {
     db: Db
+    redisClient?: any
     isDebug?: Boolean
 }
 

@@ -3,15 +3,25 @@ import { computeTermAggregationAllYears } from './generic'
 import { RequestContext, SurveyConfig } from '../types'
 import { Filters } from '../filters'
 
-export async function computeOpinionByYear(
-    context: RequestContext,
-    survey: SurveyConfig,
-    id: string,
+export async function computeOpinionByYear({
+    context,
+    survey,
+    id,
+    filters
+}: {
+    context: RequestContext
+    survey: SurveyConfig
+    id: string
     filters?: Filters
-) {
-    const opinionByYear = await computeTermAggregationAllYears(context, survey, `opinions.${id}`, {
-        filters,
-        sort: { property: 'id', order: 'asc' }
+}) {
+    const opinionByYear = await computeTermAggregationAllYears({
+        context,
+        survey,
+        key: `opinions.${id}`,
+        options: {
+            filters,
+            sort: { property: 'id', order: 'asc' }
+        }
     })
 
     // compute mean for each year

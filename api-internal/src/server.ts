@@ -6,8 +6,9 @@ import typeDefs from './type_defs/schema.graphql'
 import { RequestContext } from './types'
 import resolvers from './resolvers'
 import express from 'express'
-import { initLocales } from './i18n'
+import { initLocales } from './locales_cache'
 import { initEntities } from './entities'
+import { createClient } from 'redis'
 
 // import Sentry from '@sentry/node'
 // import Tracing from '@sentry/tracing'
@@ -46,7 +47,16 @@ const checkSecretKey = (req: any) => {
 }
 
 const start = async () => {
+    const redisClient = createClient({
+        url: process.env.REDIS_URL
+    })
 
+    redisClient.on('error', err => console.log('Redis Client Error', err))
+
+    if (process.env.CACHE_TYPE !== 'local') {
+        await redisClient.connect()
+    }
+    
     const server = new ApolloServer({
         typeDefs,
         resolvers: resolvers as any,
@@ -63,6 +73,7 @@ const start = async () => {
             // TODO: do this better with a custom header
             const isDebug = expressContext?.req?.rawHeaders?.includes('http://localhost:4002')
             return {
+                redisClient,
                 isDebug
             }
         }
@@ -94,7 +105,7 @@ const start = async () => {
 
     const port = process.env.PORT || 4020
 
-    await initLocales()
+    await initLocales({ redisClient })
     await initEntities()
 
     app.listen({ port: port }, () =>

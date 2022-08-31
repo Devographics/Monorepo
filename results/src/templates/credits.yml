@@ -1,9 +1,9 @@
 blockType: CreditsBlock
 disableExport: true
 wrapBlock: false
-dataPath: "surveyApi.entities"
+dataPath: "internalAPI.entities"
 query: >
-  surveyApi {
+  internalAPI {
       entities(ids: [${credits}]) {
           id
           name

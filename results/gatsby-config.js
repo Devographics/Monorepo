@@ -2,7 +2,7 @@ require('dotenv').config()
 
 module.exports = {
     siteMetadata: {
-        title: `State Of CSS 2021`,
+        title: `Devographics Survey Results`,
     },
     plugins: [
         'gatsby-transformer-yaml',
@@ -16,9 +16,17 @@ module.exports = {
         {
             resolve: 'gatsby-source-graphql',
             options: {
-                typeName: 'SurveyApi',
-                fieldName: 'surveyApi',
-                url: process.env.API_URL,
+                typeName: 'DataAPI',
+                fieldName: 'dataAPI',
+                url: process.env.DATA_API_URL,
+            },
+        },
+        {
+            resolve: 'gatsby-source-graphql',
+            options: {
+                typeName: 'InternalAPI',
+                fieldName: 'internalAPI',
+                url: process.env.INTERNAL_API_URL,
             },
         },
         'gatsby-plugin-react-helmet',

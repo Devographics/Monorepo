@@ -61,12 +61,17 @@ export interface MatchupYearAggregations {
     buckets: MatchupBucket[]
 }
 
-export async function winsAggregationFunction(
-    context: RequestContext,
-    survey: SurveyConfig,
-    key: string,
-    options: TermAggregationOptions = {}
-) {
+export async function winsAggregationFunction({
+    context,
+    survey,
+    key,
+    options = {}
+}: {
+    context: RequestContext
+    survey: SurveyConfig
+    key: string
+    options: TermAggregationOptions
+}) {
     const { db } = context
     const collection = db.collection(config.mongo.normalized_collection)
 
@@ -129,12 +134,17 @@ export async function winsAggregationFunction(
     return resultsWithFacets
 }
 
-export async function matchupsAggregationFunction(
-    context: RequestContext,
-    survey: SurveyConfig,
-    key: string,
-    options: TermAggregationOptions = { year: new Date().getFullYear() }
-) {
+export async function matchupsAggregationFunction({
+    context,
+    survey,
+    key,
+    options = { year: new Date().getFullYear() }
+}: {
+    context: RequestContext
+    survey: SurveyConfig
+    key: string
+    options: TermAggregationOptions
+}) {
     const { db } = context
     const collection = db.collection(config.mongo.normalized_collection)
 

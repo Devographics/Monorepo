@@ -10,16 +10,26 @@ import {
 
 export default {
     ToolsRankings: {
-        years: async  (
+        years: async (
             { survey, ids, filters }: { survey: SurveyConfig; ids: string[]; filters?: Filters },
             args: any,
             context: RequestContext
-        ) => useCache(computeToolsExperienceRankingYears, context, [survey, ids, filters]),
+        ) =>
+            useCache({
+                func: computeToolsExperienceRankingYears,
+                context,
+                funcOptions: { survey, tools: ids, filters }
+            }),
         experience: async (
             { survey, ids, filters }: { survey: SurveyConfig; ids: string[]; filters?: Filters },
             args: any,
             context: RequestContext
-        ) => useCache(computeToolsExperienceRanking, context, [survey, ids, filters])
+        ) =>
+            useCache({
+                func: computeToolsExperienceRanking,
+                context,
+                funcOptions: { survey, tools: ids, filters }
+            })
     },
     ToolExperience: {
         keys: () => keys.tool,
@@ -28,23 +38,33 @@ export default {
             args: any,
             context: RequestContext
         ) =>
-            computeTermAggregationAllYearsWithCache(context, survey, `tools.${id}.experience`, {
-                ...options,
-                filters,
-                facet,
-                keys: keys.tool
+            computeTermAggregationAllYearsWithCache({
+                context,
+                survey,
+                key: `tools.${id}.experience`,
+                options: {
+                    ...options,
+                    filters,
+                    facet,
+                    keys: keys.tool
+                }
             }),
         year: async (
             { survey, id, filters, options, facet }: ResolverDynamicConfig,
             { year }: { year: number },
             context: RequestContext
         ) =>
-            computeTermAggregationSingleYearWithCache(context, survey, `tools.${id}.experience`, {
-                ...options,
-                filters,
-                year,
-                facet,
-                keys: keys.tool
+            computeTermAggregationSingleYearWithCache({
+                context,
+                survey,
+                key: `tools.${id}.experience`,
+                options: {
+                    ...options,
+                    filters,
+                    year,
+                    facet,
+                    keys: keys.tool
+                }
             })
     },
     ToolExperienceAggregated: {
@@ -54,23 +74,33 @@ export default {
             args: any,
             context: RequestContext
         ) =>
-            computeTermAggregationAllYearsWithCache(context, survey, `tools.${id}.experience`, {
-                ...options,
-                filters,
-                facet,
-                keys: keys.tool
+            computeTermAggregationAllYearsWithCache({
+                context,
+                survey,
+                key: `tools.${id}.experience`,
+                options: {
+                    ...options,
+                    filters,
+                    facet,
+                    keys: keys.tool
+                }
             }),
         year: async (
             { survey, id, filters, options, facet }: ResolverDynamicConfig,
             { year }: { year: number },
             context: RequestContext
         ) =>
-            computeTermAggregationSingleYearWithCache(context, survey, `tools.${id}.experience`, {
-                ...options,
-                filters,
-                year,
-                facet,
-                keys: keys.tool
+            computeTermAggregationSingleYearWithCache({
+                context,
+                survey,
+                key: `tools.${id}.experience`,
+                options: {
+                    ...options,
+                    filters,
+                    year,
+                    facet,
+                    keys: keys.tool
+                }
             })
     }
 }

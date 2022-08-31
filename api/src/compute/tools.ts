@@ -97,15 +97,20 @@ export const toolExperienceConfigById: Record<
     }
 } as const
 
-export async function computeToolExperienceGraph(
-    context: RequestContext,
-    survey: SurveyConfig,
-    tool: string,
+export async function computeToolExperienceGraph({
+    context,
+    survey,
+    tool,
+    filters
+}: {
+    context: RequestContext
+    survey: SurveyConfig
+    tool: string
     filters?: Filters
-) {
+}) {
     const field = `tools.${tool}.experience`
 
-    const { nodes, links } = await computeChoicesOverYearsGraph(context, survey, field, filters)
+    const { nodes, links } = await computeChoicesOverYearsGraph({ context, survey, field, filters })
 
     return {
         // remap for experience
@@ -118,13 +123,19 @@ export async function computeToolExperienceGraph(
     }
 }
 
-export async function computeToolsCardinalityByUser(
-    context: RequestContext,
-    survey: SurveyConfig,
-    year: number,
-    toolIds: string[],
+export async function computeToolsCardinalityByUser({
+    context,
+    survey,
+    year,
+    toolIds,
+    experienceId
+}: {
+    context: RequestContext
+    survey: SurveyConfig
+    year: number
+    toolIds: string[]
     experienceId: ToolExperienceId
-) {
+}) {
     if (toolIds.length === 0) {
         throw new Error('computeToolsCardinalityByUser error: please specify at least one tool ID')
     }
@@ -133,7 +144,7 @@ export async function computeToolsCardinalityByUser(
             // filter on specific survey and year.
             $match: {
                 survey: survey.survey,
-                year,
+                year
             }
         },
         {
@@ -145,16 +156,13 @@ export async function computeToolsCardinalityByUser(
                     ...acc,
                     [toolId]: {
                         $cond: {
-	                        if: {
-	                            $eq: [
-	                                `$tools.${toolId}.experience`,
-                                    experienceId
-                                ]
+                            if: {
+                                $eq: [`$tools.${toolId}.experience`, experienceId]
                             },
-	                        then: 1,
+                            then: 1,
                             else: 0
-	                    }
-                    },
+                        }
+                    }
                 }
             }, {})
         },
@@ -169,7 +177,7 @@ export async function computeToolsCardinalityByUser(
         {
             // aggregate cardinality
             $group: {
-                _id: "$cardinality",
+                _id: '$cardinality',
                 count: { $sum: 1 }
             }
         },
@@ -184,9 +192,9 @@ export async function computeToolsCardinalityByUser(
             // exclude 0 cardinality
             $match: {
                 cardinality: {
-                    $gt: 0,
-                },
-            },
+                    $gt: 0
+                }
+            }
         },
         {
             // higher cardinality first
@@ -197,11 +205,14 @@ export async function computeToolsCardinalityByUser(
     ]
 
     const { db } = context
-    const results = await db.collection(config.mongo.normalized_collection).aggregate<{
-        _id: number
-        cardinality: number
-        count: number
-    }>(pipeline).toArray()
+    const results = await db
+        .collection(config.mongo.normalized_collection)
+        .aggregate<{
+            _id: number
+            cardinality: number
+            count: number
+        }>(pipeline)
+        .toArray()
 
     if (results.length === 0) {
         return []
@@ -216,7 +227,7 @@ export async function computeToolsCardinalityByUser(
     const resultsWithPercentage = results.map(result => ({
         cardinality: result.cardinality,
         count: result.count,
-        percentage_survey: round(result.count / numberOfRespondents * 100, 1)
+        percentage_survey: round((result.count / numberOfRespondents) * 100, 1)
     }))
 
     // console.log(inspect({ numberOfRespondents, pipeline, results, resultsWithPercentage }, { colors: true, depth: null }))

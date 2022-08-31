@@ -1,13 +1,13 @@
 blockType: FeatureExperienceBlock
-dataPath: "surveyApi.survey.${id}"
-keysPath: "surveyApi.survey.${id}.experience.keys"
-entityPath: surveyApi.survey.${id}.entity
+dataPath: "dataAPI.survey.${id}"
+keysPath: "dataAPI.survey.${id}.experience.keys"
+entityPath: dataAPI.survey.${id}.entity
 blockNamespace: features
 chartNamespace: features
 enableCustomization: true
 hasSponsor: true
 query: >
-    surveyApi {
+    dataAPI {
         survey(survey: ${surveyType}) {
             ${id}: feature(id: ${id}) {
                 id
@@ -17,16 +17,13 @@ query: >
                         url
                     }
                     mdn {
+                        locale
                         url
+                        title
+                        summary
                     }
                 }
                 name
-                mdn {
-                    locale
-                    url
-                    title
-                    summary
-                }
                 experience {
                     keys
                     all_years {

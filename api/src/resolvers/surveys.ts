@@ -129,7 +129,11 @@ export default {
                 ...args
             }),
             experienceGraph: async ({ filters }: { filters?: Filters }, context: RequestContext) =>
-                useCache(computeToolExperienceGraph, context, [survey, id, filters])
+                useCache({
+                    func: computeToolExperienceGraph,
+                    context,
+                    funcOptions: { survey, id, filters }
+                })
         }),
         tools: async (survey: SurveyConfig, { ids = toolIds }: { ids?: string[] }) =>
             ids.map(async id => ({
@@ -139,21 +143,31 @@ export default {
                 experience: (args: ResolverArguments) => ({
                     survey,
                     id,
-                    ...args,
+                    ...args
                 }),
                 experienceAggregated: (args: ResolverArguments) => ({
                     survey,
                     id,
-                    ...args,
+                    ...args
                 }),
                 experienceTransitions: async (
                     { year }: { year: number },
                     context: RequestContext
-                ) => useCache(computeToolExperienceTransitions, context, [survey, id, [year - 1, year]]),
+                ) =>
+                    useCache({
+                        func: computeToolExperienceTransitions,
+                        context,
+                        funcOptions: { survey, id, years: [year - 1, year] }
+                    }),
                 experienceGraph: async (
                     { filters }: { filters?: Filters },
                     context: RequestContext
-                ) => useCache(computeToolExperienceGraph, context, [survey, id, filters])
+                ) =>
+                    useCache({
+                        func: computeToolExperienceGraph,
+                        context,
+                        funcOptions: { survey, id, filters }
+                    })
             })),
         tools_cardinality_by_user: (
             survey: SurveyConfig,
@@ -168,7 +182,12 @@ export default {
                 experienceId: ToolExperienceId
             },
             context: RequestContext
-        ) => useCache(computeToolsCardinalityByUser, context, [survey, year, ids, experienceId]),
+        ) =>
+            useCache({
+                func: computeToolsCardinalityByUser,
+                context,
+                funcOptions: { survey, year, toolIds: ids, experienceId }
+            }),
         tools_others: (survey: SurveyConfig, args: ResolverArguments) => ({
             survey,
             ...args

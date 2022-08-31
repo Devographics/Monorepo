@@ -1,8 +1,8 @@
 blockType: AwardsBlock
 wrapBlock: false
-dataPath: surveyApi.entities
+dataPath: internalAPI.entities
 query: >
-    surveyApi {
+    internalAPI {
         entities(ids: [${entities}]) {
             id
             name

@@ -43,3 +43,4 @@ node_modules
 test.mjs
 dist
 .logs
+.mongo

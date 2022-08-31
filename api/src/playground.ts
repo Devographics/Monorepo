@@ -147,12 +147,12 @@ const run = async () => {
     const db = mongoClient.db(process.env.MONGO_DB_NAME)
 
     // await naive(collection)
-    const res = await computeToolExperienceTransitions(
-        { db },
-        { survey: 'state_of_js' },
-        'ember',
-        [2019, 2020],
-    )
+    const res = await computeToolExperienceTransitions({
+        context:{ db },
+        survey: { survey: 'state_of_js' },
+        tool: 'ember',
+        years: [2019, 2020],
+    })
     // console.log(inspect(res.ember,{ depth: null, colors: true }))
     // console.log('\n\n\n-------------------------------\n\n\n')
 

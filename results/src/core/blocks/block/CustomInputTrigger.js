@@ -10,7 +10,7 @@ import { EditIcon } from 'core/icons'
 import isEmpty from 'lodash/isEmpty'
 
 const parseData = (block, contents) => {
-    const apiDataPath = block.dataPath.replace('surveyApi', 'data')
+    const apiDataPath = block.dataPath.replace('dataAPI', 'data')
     const customData = JSON.parse(contents)
     // const customData = {foo: 'bar'}
     const blockData = get(customData, apiDataPath) ?? customData

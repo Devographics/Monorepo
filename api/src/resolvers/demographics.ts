@@ -12,7 +12,7 @@ const computeParticipation = async (
     survey: SurveyConfig,
     filters?: Filters,
     year?: number
-) => useCache(computeParticipationByYear, context, [survey, filters, year])
+) => useCache({ func: computeParticipationByYear, context, funcOptions: { survey, filters, year } })
 
 export default {
     Participation: {

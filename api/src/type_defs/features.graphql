@@ -267,6 +267,6 @@ type Feature {
     id: FeatureID!
     entity: Entity
     name: String
-    mdn: MDN
+    # mdn: MDN
     experience(filters: Filters): FeatureExperience
 }

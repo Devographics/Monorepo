@@ -3,10 +3,10 @@ blockType: ToolsExperienceRankingBlock
 titleId: blocks.tools_experience_ranking
 descriptionId: blocks.tools_experience_ranking.description
 noteId: blocks.tools_experience_ranking.note
-dataPath: "surveyApi.survey.${parentId}_rankings"
+dataPath: "dataAPI.survey.${parentId}_rankings"
 hasSponsor: true
 query: >
-    surveyApi {
+    dataAPI {
         survey(survey: ${surveyType}) {
             ${parentId}_rankings: tools_rankings(ids: [${toolsCategories[parentId]}]) {
                 ids

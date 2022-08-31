@@ -103,29 +103,24 @@ export interface YearAggregations {
     buckets: TermBucket[]
 }
 
-export type AggregationFunction = (
-    context: RequestContext,
-    survey: SurveyConfig,
-    key: string,
+export type AggregationFunction = (funcOptions: {
+    context: RequestContext
+    survey: SurveyConfig
+    key: string
     options: TermAggregationOptions
-) => Promise<any>
+}) => Promise<any>
 
-export async function computeTermAggregationAllYears(
-    context: RequestContext,
-    survey: SurveyConfig,
-    key: string,
-    options: TermAggregationOptions = {},
-    aggregationFunction: AggregationFunction = computeDefaultTermAggregationByYear
-) {
-    return aggregationFunction(context, survey, key, options)
-}
-
-export async function computeDefaultTermAggregationByYear(
-    context: RequestContext,
-    survey: SurveyConfig,
-    key: string,
-    options: TermAggregationOptions = {}
-) {
+export async function computeDefaultTermAggregationByYear({
+    context,
+    survey,
+    key,
+    options = {}
+}: {
+    context: RequestContext
+    survey: SurveyConfig
+    key: string
+    options: TermAggregationOptions
+}) {
     const { db, isDebug } = context
     const collection = db.collection(config.mongo.normalized_collection)
 
@@ -472,49 +467,86 @@ export async function sortFacets(resultsByYears: ResultsByYear[], options: SortO
     }
 }
 
-export async function computeTermAggregationAllYearsWithCache(
-    context: RequestContext,
-    survey: SurveyConfig,
-    id: string,
-    options: TermAggregationOptions = {},
+export async function computeTermAggregationAllYears(funcOptions: {
+    context: RequestContext
+    survey: SurveyConfig
+    key: string
+    options: TermAggregationOptions
     aggregationFunction?: AggregationFunction
-) {
-    return useCache(computeTermAggregationAllYears, context, [
-        survey,
-        id,
-        options,
-        aggregationFunction
-    ])
+}) {
+    const { aggregationFunction = computeDefaultTermAggregationByYear, ...options } = funcOptions
+    return aggregationFunction(options)
 }
 
-export async function computeTermAggregationSingleYear(
-    context: RequestContext,
-    survey: SurveyConfig,
-    key: string,
-    options: TermAggregationOptions,
+export async function computeTermAggregationAllYearsWithCache({
+    context,
+    survey,
+    key,
+    options = {},
+    aggregationFunction
+}: {
+    context: RequestContext
+    survey: SurveyConfig
+    key: string
+    options: TermAggregationOptions
     aggregationFunction?: AggregationFunction
-) {
-    const allYears = await computeTermAggregationAllYears(
+}) {
+    return useCache({
+        func: computeTermAggregationAllYears,
+        context,
+        funcOptions: {
+            survey,
+            key,
+            options,
+            aggregationFunction
+        }
+    })
+}
+
+export async function computeTermAggregationSingleYear({
+    context,
+    survey,
+    key,
+    options,
+    aggregationFunction
+}: {
+    context: RequestContext
+    survey: SurveyConfig
+    key: string
+    options: TermAggregationOptions
+    aggregationFunction?: AggregationFunction
+}) {
+    const allYears = await computeTermAggregationAllYears({
         context,
         survey,
         key,
         options,
         aggregationFunction
-    )
+    })
     return allYears[0]
 }
 
-export async function computeTermAggregationSingleYearWithCache(
-    context: RequestContext,
-    survey: SurveyConfig,
-    id: string,
-    options: TermAggregationOptions,
+export async function computeTermAggregationSingleYearWithCache({
+    context,
+    survey,
+    key,
+    options,
+    aggregationFunction
+}: {
+    context: RequestContext
+    survey: SurveyConfig
+    key: string
+    options: TermAggregationOptions
     aggregationFunction?: AggregationFunction
-) {
-    return useCache(computeTermAggregationSingleYear, context, [
-        survey,
-        id,
-        options,
-        aggregationFunction
-    ])
+}) {
+    return useCache({
+        func: computeTermAggregationSingleYear,
+        context,
+        funcOptions: {
+            survey,
+            key,
+            options,
+            aggregationFunction
+        }
+    })
 }

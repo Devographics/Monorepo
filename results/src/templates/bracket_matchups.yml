@@ -1,8 +1,8 @@
 blockType: BracketMatchupsBlock
-dataPath: "surveyApi.survey.${id}.year.facets.0"
+dataPath: "dataAPI.survey.${id}.year.facets.0"
 hasSponsor: true
 query: >
-    surveyApi {
+    dataAPI {
         survey(survey: ${surveyType}) {
             ${id}: bracket_matchups(id: ${fieldId}, filters: ${filters}, options: ${options}) {
                 id

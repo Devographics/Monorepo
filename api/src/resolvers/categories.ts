@@ -11,12 +11,22 @@ interface CategoryConfig {
     filters?: Filters
 }
 
-const computeOtherTools = async (context: RequestContext, survey: SurveyConfig, id: string, filters?: Filters) =>
-    useCache(computeTermAggregationAllYears, context, [
-        survey,
-        `tools_others.${id}.others.normalized`,
-        { filters }
-    ])
+const computeOtherTools = async (
+    context: RequestContext,
+    survey: SurveyConfig,
+    id: string,
+    filters?: Filters
+) =>
+    useCache({
+        func: computeTermAggregationAllYears,
+        context,
+        funcOptions: {
+            context,
+            survey,
+            key: `tools_others.${id}.others.normalized`,
+            options: { filters }
+        }
+    })
 
 export default {
     CategoryOtherTools: {
@@ -39,13 +49,22 @@ export default {
             { survey, id, filters }: CategoryConfig,
             args: any,
             context: RequestContext
-        ) => useCache(computeHappinessByYear, context, [survey, id, filters]),
+        ) =>
+            useCache({
+                func: computeHappinessByYear,
+                context,
+                funcOptions: { survey, id, filters }
+            }),
         year: async (
             { survey, id, filters }: CategoryConfig,
             { year }: { year: number },
             context: RequestContext
         ) => {
-            const allYears = await useCache(computeHappinessByYear, context, [survey, id, filters])
+            const allYears = await useCache({
+                func: computeHappinessByYear,
+                context,
+                funcOptions: { survey, id, filters }
+            })
             return allYears.find((yearItem: YearAggregations) => yearItem.year === year)
         }
     }
