@@ -7,7 +7,6 @@ import { modelDef as modelDefCommon } from "./model";
 import { schema as schemaServer } from "./schema.server";
 import { createMongooseConnector } from "@vulcanjs/mongo";
 import { subscribe } from "~/server/email/email_octopus";
-import { createEmailHash } from "~/account/email/api/encryptEmail";
 import { surveyFromResponse } from "~/modules/responses/helpers";
 
 // import { updateElasticSearchOnCreate, updateElasticSearchOnUpdate } from '../elasticsearch/index';
@@ -92,13 +91,13 @@ export const ResponseConnector = createMongooseConnector<ResponseDocument>(
   Response,
   {
     mongooseSchema: new mongoose.Schema({ _id: String }, { strict: false }),
-  }
+  },
 );
 Response.crud.connector = ResponseConnector;
 
 // Using Mongoose (advised)
-export const ResponseMongooseModel =
-  ResponseConnector.getRawCollection() as mongoose.Model<ResponseDocument>;
+export const ResponseMongooseModel = ResponseConnector
+  .getRawCollection() as mongoose.Model<ResponseDocument>;
 
 /**
  * For direct Mongo access (not advised, used only for aggregations)
@@ -108,7 +107,7 @@ export const ResponseMongooseModel =
 export const ResponseMongoCollection = () => {
   if (!mongoose.connection.db) {
     throw new Error(
-      "Trying to access Response mongo collection before Mongo/Mongoose is connected."
+      "Trying to access Response mongo collection before Mongo/Mongoose is connected.",
     );
   }
   return mongoose.connection.db.collection<ResponseDocument>("responses");

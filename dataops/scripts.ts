@@ -1,18 +1,20 @@
-import type { Model } from "mongoose";
-import { normalizeResponse } from "../admin/server/normalization/normalize";
-import { fetchEntities } from "~/modules/entities/server/graphql";
+// import { normalizeResponse } from "../admin/server/normalization/normalize";
+// import { fetchEntities } from "~/modules/entities/server/graphql";
+import { fetchEntities } from "./fetchEntities";
+
 // import Users from 'meteor/vulcan:users';
 //import {
 //  js2019FieldMigrations,
 //  normalizeJS2019Value,
 //  otherValueNormalisations,
 //} from "./migrations";
-import { ResponseMongooseModel } from "~/modules/responses/model.server";
 // import { NormalizedResponseMongooseModel } from "~/modules/normalized_responses/model.server";
-import { createEmailHash } from "~/account/email/api/encryptEmail";
-import { UserMongooseModel } from "~/core/models/user.server";
-import { connectToAppDb } from "~/lib/server/mongoose/connection";
-import { logToFile } from "~/lib/server/debug";
+//import { createEmailHash } from "~/account/email/api/encryptEmail";
+// import { logToFile } from "~/lib/server/debug";
+import { createEmailHash } from "../shared/server/createEmailHash";
+import { logToFile } from "../shared/server/debug";
+import type { Collection } from "mongodb";
+import { getResponseCollection } from "./mongo/models";
 
 /*
 
@@ -20,20 +22,21 @@ Migrations
 
 */
 export const renameFieldMigration = async (
-  collection: Model<any>,
-  field1,
-  field2
+  collection: Collection,
+  field1: string,
+  field2: string,
 ) => {
-  await connectToAppDb();
+  // Make sure you are connected before this call
+  // await connectToAppDb();
 
   const result = await collection.updateMany(
     { [field1]: { $exists: true } },
-    { $rename: { [field1]: field2 } }
+    { $rename: { [field1]: field2 } },
   );
 
   // eslint-disable-next-line no-console
   console.log(
-    `// ${field1} -> ${field2} migration done, renamed ${result.modifiedCount} fields `
+    `// ${field1} -> ${field2} migration done, renamed ${result.modifiedCount} fields `,
   );
 };
 
@@ -42,8 +45,8 @@ export const renameFieldMigration = async (
 Renormalize a survey's results
 
 */
-const renormalizeSurvey = async (surveySlug) => {
-  await connectToAppDb();
+const renormalizeSurvey = async (surveySlug: string) => {
+  const ResponseCollection = await getResponseCollection();
 
   const fileName = `${surveySlug}_normalization`;
   const limit = 99999;
@@ -65,23 +68,23 @@ const renormalizeSurvey = async (surveySlug) => {
 
   const startAt = new Date();
   let progress = 0;
-  const responsesCursor = ResponseMongooseModel.find(selector, null, { limit });
+  const responsesCursor = ResponseCollection.find(selector, { limit });
   const count = await responsesCursor.clone().count();
   const tickInterval = Math.round(count / 200);
 
   await logToFile(
     `${fileName}.txt`,
     "id, fieldName, value, matchTags, id, pattern, rules, match \n",
-    { mode: "overwrite" }
+    { mode: "overwrite" },
   );
   await logToFile(`${fileName}.txt`, "", { mode: "overwrite" });
   await logToFile("normalization_errors.txt", "", { mode: "overwrite" });
 
   console.log(
-    `// Renormalizing survey ${surveySlug}… Found ${count} responses to renormalize. (${startAt})`
+    `// Renormalizing survey ${surveySlug}… Found ${count} responses to renormalize. (${startAt})`,
   );
 
-  const responses = await responsesCursor.clone().exec();
+  const responses = await responsesCursor.clone().toArray();
   for (const response of responses) {
     try {
       // console.log(progress, progress % tickInterval, response._id);
@@ -117,10 +120,10 @@ const renormalizeSurvey = async (surveySlug) => {
 
   const endAt = new Date();
   const duration = Math.ceil(
-    (endAt.valueOf() - startAt.valueOf()) / (1000 * 60)
+    (endAt.valueOf() - startAt.valueOf()) / (1000 * 60),
   );
   console.log(
-    `-> Done renormalizing ${count} responses in survey ${surveySlug}. (${endAt}) - ${duration} min`
+    `-> Done renormalizing ${count} responses in survey ${surveySlug}. (${endAt}) - ${duration} min`,
   );
 };
 
@@ -130,9 +133,9 @@ Log all "currently missing features from CSS" answers to file
 
 */
 export const logField = async (
-  collection: Model<any>,
-  fieldName,
-  surveySlug
+  collection: Collection,
+  fieldName: string,
+  surveySlug: string,
 ) => {
   const selector: any = {
     [fieldName]: {
@@ -150,27 +153,29 @@ export const logField = async (
 };
 
 export async function migrateUserEmails() {
+  const db = await connectToAppDb();
+  const UserCollection = db.collection("users");
   console.log("// migrateUserEmails");
   // get all users that have a plain-text email stored
-  const usersToMigrate = await UserMongooseModel.find({
+  const usersToMigrate = await UserCollection.find({
     email: { $exists: true },
     legacyEmailHash: { $exists: false },
-  });
+  }).toArray();
   console.log(`// Found ${usersToMigrate.length} users to migrate…`);
   for (const user of usersToMigrate) {
     const { _id, email, emailHash: legacyEmailHash } = user;
     const newEmailHash = createEmailHash(email);
     const set = { legacyEmailHash, emailHash: newEmailHash };
     console.log(
-      `// Updating user ${_id}, email: ${email}, old hash: ${legacyEmailHash}, new hash: ${newEmailHash}`
+      `// Updating user ${_id}, email: ${email}, old hash: ${legacyEmailHash}, new hash: ${newEmailHash}`,
     );
 
     const unset = {};
     // for now keep emails for safety, in the future delete them
     // const unset = { email: 1, emails: 1}
-    const update = await UserMongooseModel.updateOne(
+    const update = await UserCollection.updateOne(
       { _id },
-      { $set: set, $unset: unset }
+      { $set: set, $unset: unset },
     );
   }
 }
@@ -204,8 +209,15 @@ export const renameGraphQL2022Fields = async () => {
   // await renameFieldMigration(ResponseMongooseModel, 'graphql2022__usage_others__strong_points', 'graphql2022__usage_others__graphql_strong_points');
   // await renameFieldMigration(ResponseMongooseModel, 'graphql2022__usage_others__pain_points', 'graphql2022__usage_others__graphql_pain_points');
 
-  await renameFieldMigration(ResponseMongooseModel, 'graphql2022__usage__graphql_experience', 'graphql2022__usage__graphql_experience__choices');
-  await renameFieldMigration(ResponseMongooseModel, 'graphql2022__usage__code_generation_type', 'graphql2022__usage__code_generation_type__choices');
-
-
+  const ResponseCollection = await getResponseCollection();
+  await renameFieldMigration(
+    ResponseCollection,
+    "graphql2022__usage__graphql_experience",
+    "graphql2022__usage__graphql_experience__choices",
+  );
+  await renameFieldMigration(
+    ResponseCollection,
+    "graphql2022__usage__code_generation_type",
+    "graphql2022__usage__code_generation_type__choices",
+  );
 };
