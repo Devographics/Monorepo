@@ -69,7 +69,7 @@ interface Entity {
 }
 
 /**
- * Fetch raw entities from the trasnlation API
+ * Fetch raw entities from the translation API
  * @returns
  */
 export const fetchEntities = async () => {
@@ -94,7 +94,6 @@ export const fetchEntities = async () => {
 const ENTITIES_PROMISE_TTL_SECONDS = 10 * 60;
 
 /**
- *
  * @param root
  * @param args
  * @returns
@@ -127,7 +126,7 @@ export const getOrFetchEntities = async ({
     let entities = await cachedPromise(
       promisesNodeCache,
       entitiesPromiseCacheKey,
-      ENTITIES_PROMISE_TTL_SECONDS
+      ENTITIES_PROMISE_TTL_SECONDS,
     )(async () => await fetchEntities());
 
     // const { tags, name, id, ids } = args;
