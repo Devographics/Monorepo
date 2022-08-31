@@ -1,0 +1,40 @@
+.nav-wrapper {
+  margin: $spacing;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: $border;
+}
+.navbar {
+  padding: 0;
+  position: relative;
+}
+.navbar-nav {
+  width: 100%;
+}
+.navbar-dark .navbar-toggler {
+  @include border;
+  @include border-radius;
+  padding: 5px;
+}
+
+.nav-item {
+  margin-right: $spacing;
+}
+.nav-item-locale {
+  padding: $spacing 0;
+}
+
+.navbar-collapse {
+  @include small-medium {
+    position: absolute;
+    padding: $spacing;
+    @include border;
+    @include border-radius;
+    background: var(--bg-color);
+    top: 100%;
+    z-index: 1;
+    width: calc(100vw - #{$spacing * 2});
+    text-align: center;
+  }
+}

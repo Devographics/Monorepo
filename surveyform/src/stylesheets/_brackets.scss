@@ -1,0 +1,393 @@
+@use 'sass:math';
+// height of a bracket item (fixed because we want them to all have the same height)
+$item-height: 80px;
+// gap between two columns
+$horizontal-gap: $spacing;
+// gap between two bracket items
+$vertical-gap-item: math.div($spacing, 2);
+// gap between two matches
+$vertical-gap-match: $spacing * 2;
+// width of the connecting line
+$line-width: math.div($horizontal-gap, 2);
+
+$highlight-width: 3px;
+$highlight: $highlight-width solid var(--active-color);
+
+@mixin disabled {
+  opacity: 0.4;
+}
+
+.bracket {
+  margin-top: $spacing;
+}
+
+.bracket-player {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  .btn {
+    white-space: normal !important;
+    flex: 1;
+  }
+}
+
+.bracket-player-name {
+  margin-bottom: 0;
+  font-size: $medium-font;
+  line-height: 1.7;
+}
+
+.bracket-player-description {
+  @include font-regular;
+  font-size: $small-font;
+}
+
+.bracket-results {
+  margin-top: $spacing;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  column-gap: $horizontal-gap;
+  @include small {
+    column-gap: math.div($horizontal-gap, 2);
+  }
+}
+
+.bracket-matchgroup {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  &:last-child {
+    margin-right: 0;
+  }
+  &.bracket-matchgroup-level1 {
+    grid-column: 1 / 3;
+    grid-row: 1;
+  }
+  &.bracket-matchgroup-level2 {
+    grid-column: 3 / 5;
+    grid-row: 1;
+  }
+  &.bracket-matchgroup-level3 {
+    grid-column: 4 / 6;
+    grid-row: 1;
+  }
+  &.bracket-matchgroup-level4 {
+    grid-column: 5 / 7;
+    grid-row: 1;
+  }
+}
+
+.bracket-match {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: space-evenly;
+  position: relative;
+  margin-bottom: $vertical-gap-match;
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.bracket-item {
+  height: $item-height;
+  @include flex-center;
+  background: var(--bg-color);
+
+  &.bracket-item-empty {
+    border-radius: 3px;
+    border: 1px dashed $dark-border-color;
+    &:after {
+      border-style: dashed;
+    }
+  }
+
+  &-winner {
+    border-color: $contrast-color;
+    border-width: 2px;
+  }
+  &-overallwinner {
+    border-color: $contrast-color;
+    border-width: 4px;
+  }
+
+  .bracket-matchgroup-level1 & {
+    margin-bottom: $vertical-gap-item;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  &:after {
+    content: " ";
+    display: block;
+    position: absolute;
+    border: 0px dashed var(--dark-border-color);
+    border-left: none !important;
+    height: 25%;
+
+    width: $line-width;
+    right: -$line-width;
+
+    @include small {
+      width: math.div($line-width, 2);
+      right: -(math.div($line-width, 2));
+    }
+    border-right-width: 1px;
+  }
+
+  &.bracket-item-disabled:not(.bracket-item-overallwinner) {
+    .bracket-item-button,
+    &:after {
+      @include disabled;
+    }
+  }
+
+  &:nth-child(1):after {
+    top: 25%;
+    border-top-width: 1px;
+    border-bottom: none !important;
+  }
+
+  // the spacer counts as the second child
+  &:nth-child(3):after {
+    top: 75%;
+    border-bottom-width: 1px;
+    border-top: none !important;
+    transform: translateY(-100%);
+  }
+
+  // highlight first level items and any defending item
+  &.bracket-item-defending,
+  &.bracket-item-active {
+    .bracket-item-button {
+      border: $highlight;
+    }
+  }
+
+  &.bracket-item-winner {
+    .bracket-item-button {
+      border: $highlight;
+    }
+    &:after {
+      border: $highlight;
+    }
+  }
+
+  .bracket-matchgroup-level1 &:nth-child(1):after {
+    height: calc(25% + #{$vertical-gap-item}/ 4);
+    // for first level, gap/margin is between each player instead of around
+    top: calc((100% - #{$vertical-gap-item}) / 4);
+  }
+  .bracket-matchgroup-level1 &:nth-child(2):after {
+    height: calc(25% + #{$vertical-gap-item}/ 4);
+    top: 50%;
+    transform: none;
+  }
+  &.bracket-item-overallwinner:after {
+    display: none;
+  }
+}
+
+.bracket-item-button-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.bracket-item-button {
+  padding: math.div($spacing, 2) !important;
+  text-align: center;
+  white-space: break-spaces !important;
+  position: relative;
+  @include flex-center;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  display: flex !important;
+  z-index: 1;
+  font-size: $smallish-font !important;
+  border-radius: 3px;
+  @include small {
+    font-size: $smallest-font !important;
+  }
+  .bracket-item-disabled & {
+    cursor: pointer;
+    pointer-events: none;
+  }
+}
+
+.bracket-item-details-trigger,
+.bracket-item-cancel {
+  padding: 0;
+  display: inline-block;
+  // background: rgba(255, 255, 255, 0.1);
+  background: var(--bg-color);
+  border-radius: 100%;
+  border: 3px solid var(--active-color);
+  color: var(--text-color);
+  height: 24px;
+  width: 24px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  transform: translateX(30%) translateY(-30%);
+
+  cursor: pointer;
+
+  &:hover {
+    border-color: var(--contrast-color);
+  }
+
+  span {
+    line-height: 1;
+  }
+  svg {
+    display: block;
+    height: 100%;
+    width: 100%;
+  }
+}
+
+.bracket-item-inner,
+.bracket-item-tooltip-trigger {
+  position: relative;
+  @include flex-center;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.bracket-item-inner {
+  &:before {
+    display: none;
+    content: " ";
+    position: absolute;
+    border-top: 1px solid var(--dark-border-color);
+    // border-left: none !important;
+    height: 1px;
+    width: $line-width;
+    left: -$line-width;
+    // border-style: solid;
+    // border-color: $border-color;
+    // border-top-width: 3px;
+    // border-bottom-width: 0px !important;
+    top: 50%;
+    transform: translateY(-50%);
+    @include disabled;
+
+    @include small {
+      width: math.div($line-width, 2);
+      left: -(math.div($line-width, 2));
+    }
+
+    .bracket-item-empty & {
+      border-top: 1px dashed var(--dark-border-color);
+    }
+
+    .bracket-item-defending & {
+      border-top: $highlight;
+      width: $line-width + $highlight-width;
+      left: -$line-width - $highlight-width;
+    }
+
+    // only enable the "before" line for level 2
+    .bracket-matchgroup-level2 & {
+      display: block;
+    }
+  }
+}
+
+.bracket-spacer {
+  height: $vertical-gap-match;
+  .bracket-matchgroup-level1 & {
+    display: none;
+  }
+}
+
+.bracket-over {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+}
+
+.bracket-item-name {
+  display: inline;
+}
+.bracket-item-description {
+  display: block;
+  @include font-regular;
+  font-size: $smallest-font;
+  display: none;
+}
+
+.bracket-startover {
+  margin-top: math.div($spacing, 2);
+  padding: 5px 10px !important;
+  width: auto !important;
+  position: absolute;
+  top: 100%;
+  z-index: 10;
+  background: var(--bg-color) !important;
+}
+
+.bracket-item-radio {
+  opacity: 0;
+  cursor: pointer;
+
+  &:after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: pointer;
+  }
+}
+
+.bracket-legend {
+  font-size: $small-font;
+  @include small {
+    display: block;
+  }
+}
+.bracket-legend-item {
+  @include small {
+    display: block;
+  }
+}
+
+.bracket-legend-heading {
+  @include font-bold;
+
+  @include small {
+    display: block;
+  }
+  @include medium-large {
+    text-align: right;
+    white-space: nowrap;
+    vertical-align: top;
+
+    padding: math.div($spacing, 2) 0;
+    padding-right: $spacing;
+  }
+}
+
+.bracket-legend-description {
+  padding: math.div($spacing, 2) 0;
+  vertical-align: top;
+
+  @include small {
+    display: block;
+  }
+}

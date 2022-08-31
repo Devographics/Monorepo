@@ -1,0 +1,16 @@
+.debug-database,
+.admin-content {
+  background: $white;
+  padding: $spacing;
+  color: $text-color-inverted;
+  h3 {
+    color: $text-color-inverted;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: $spacing;
+    .dropdown {
+      display: inline-block;
+    }
+  }
+}

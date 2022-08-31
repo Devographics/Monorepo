@@ -1,0 +1,40 @@
+// Import styles from vulcan:bootstrap (Meteor version, copied locally)
+// TODO: if we recreate bootstrap in vulcan npm, we can expose those styles
+@import "./vulcan:bootstrap/bootstrap.min.css";
+@import "./vulcan:bootstrap/datetime.scss";
+@import "./vulcan:bootstrap/likert.scss";
+@import "./vulcan:bootstrap/style.scss";
+@import "./vulcan:bootstrap/typeahead-bs4.scss";
+@import "./vulcan:bootstrap/typeahead.scss";
+
+// Import State of js styles
+@import "_bootstrap.scss";
+
+@import "_colors.scss";
+@import "_variables.scss";
+@import "_breakpoints.scss";
+@import "_typography.scss";
+
+@import "_overrides.scss";
+@import "_forms.scss";
+@import "_buttons.scss";
+@import "_datatable.scss";
+@import "_spinner.scss";
+@import "_share.scss";
+
+@import "_global.scss";
+@import "_layout.scss";
+@import "_header.scss";
+
+@import "_banner.scss";
+@import "_survey_page.scss";
+@import "_surveys.scss";
+@import "_accounts.scss";
+@import "_score.scss";
+@import "_brackets.scss";
+@import "_credits.scss";
+@import "_translators.scss";
+@import "_faq.scss";
+@import "_admin.scss";
+@import "_support.scss";
+@import "_rtl_support.scss";
