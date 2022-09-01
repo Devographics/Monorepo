@@ -1,5 +1,5 @@
 {
-    "name": "state-of-js-graphql-results-api",
+    "name": "devographics-api-internal",
     "version": "1.0.0",
     "license": "MIT",
     "dependencies": {
@@ -52,6 +52,6 @@
         "start": "node dist/server.js"
     },
     "engines": {
-        "node": "16.15.0"
+        "node": "16.16.0"
     }
 }
