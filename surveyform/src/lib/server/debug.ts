@@ -2,6 +2,7 @@
 import fs from "fs";
 import path from "path";
 const logsDirectory = ".logs";
+import { fileURLToPath } from 'url';
 
 /**
  * NOTE: not working on Windows yet
@@ -17,12 +18,15 @@ export const logToFile = async (
   const { mode = "append", timestamp = false } = options;
   // the server path is of type "/Users/foo/bar/appName/.meteor/local/build/programs/server"
   // we remove the last five segments to get the app directory
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = path.dirname(__filename);
+
   // eslint-disable-next-line no-undef
   const serverDir = process.env.VERCEL
     ? "/tmp"
-    : path.resolve(__dirname, "../../../");
-  const filePath = serverDir.split(path.sep).slice(1, -5).join(path.sep); //__meteor_bootstrap__.serverDir
-  const logsDirPath = `/${filePath}/${logsDirectory}`;
+    : path.resolve();
+  const logsDirPath = `/${serverDir}/${logsDirectory}`;
+
   if (!fs.existsSync(logsDirPath)) {
     fs.mkdirSync(logsDirPath, { recursive: true });
   }

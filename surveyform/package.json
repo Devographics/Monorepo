@@ -56,7 +56,7 @@
     "start:docker": "docker run -p 3000:3000 --env-file .env.development -it vns:latest",
     "//----MONGO----": "",
     "//start:mongo": " # will start or create & start the image + store data locally in .mongo folder + remove the container when stopped",
-    "start:mongo": "docker run --rm -p 27017:27017 -v \"$(pwd)/.mongo:/data/db\" --label vulcan-mongodb mongo:4.0.4",
+    "start:mongo": "docker run --rm -p 27017:27017 -v \"$(pwd)/.mongo:/data/db\" --label vulcan-mongodb mongo:4.4",
     "//----REDIS----": "",
     "redis": "docker run --rm -p 6379:6379 --label vulcan-redis redis:7.0.0",
     "//----STORYBOOK----": "",

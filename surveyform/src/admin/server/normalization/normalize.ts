@@ -60,7 +60,7 @@ const fieldsToCopy = [
   ["createdAt"],
   ["updatedAt"],
   ["finishedAt"],
-  ["completion"],
+  ["completion", "user_info.completion"],
   ["userId"],
   ["isFake"],
   ["isFinished"],
@@ -196,6 +196,7 @@ export const normalizeResponse = async ({
         const [initialSegment, ...restOfPath] = fieldName.split("__");
         const normPath = restOfPath.join(".");
         const value = response[fieldName];
+
         // clean value to eliminate empty spaces, "none", "n/a", etc.
         const cleanValue = cleanupValue(value);
 

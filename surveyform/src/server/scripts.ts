@@ -13,6 +13,8 @@ import { createEmailHash } from "~/account/email/api/encryptEmail";
 import { UserMongooseModel } from "~/core/models/user.server";
 import { connectToAppDb } from "~/lib/server/mongoose/connection";
 import { logToFile } from "~/lib/server/debug";
+import { getSurveyBySlug } from "~/modules/surveys/helpers";
+import surveys, { Field, SurveyType } from "~/surveys";
 
 /*
 
@@ -31,9 +33,10 @@ export const renameFieldMigration = async (
     { $rename: { [field1]: field2 } }
   );
 
+  const emoji = result.modifiedCount === 0 ? '':'✅'
   // eslint-disable-next-line no-console
   console.log(
-    `// ${field1} -> ${field2} migration done, renamed ${result.modifiedCount} fields `
+    `// ${emoji} ${field1} -> ${field2} migration done, renamed ${result.modifiedCount} fields `
   );
 };
 
@@ -180,8 +183,8 @@ export const renormalizeGraphQL2022 = async () => {
   await renormalizeSurvey("graphql2022");
 };
 
-export const renameGraphQL2022Fields = async () => {
-  console.log("// renameGraphQL2022Fields");
+export const renameFields = async () => {
+  console.log("// renameFields");
   // const questionIds = [
   //   "combining_schemas",
   //   "web_frameworks",
@@ -192,10 +195,10 @@ export const renameGraphQL2022Fields = async () => {
   // ];
   // for (const id of questionIds) {
   //   const before1 = `graphql2022__tools_others__${id}__choices`;
-  //   const after1 = `graphql2022__tools_others__${id}__choices`;
+  //   const after1 =  `graphql2022__tools_others__${id}__choices`;
   //   await renameFieldMigration(ResponseMongooseModel, before1, after1);
   //   const before2 = `graphql2022__tools_others__${id}__others`;
-  //   const after2 = `graphql2022__tools_others__${id}__others`;
+  //   const after2 =  `graphql2022__tools_others__${id}__others`;
   //   await renameFieldMigration(ResponseMongooseModel, before2, after2);
   // }
 
@@ -204,8 +207,44 @@ export const renameGraphQL2022Fields = async () => {
   // await renameFieldMigration(ResponseMongooseModel, 'graphql2022__usage_others__strong_points', 'graphql2022__usage_others__graphql_strong_points');
   // await renameFieldMigration(ResponseMongooseModel, 'graphql2022__usage_others__pain_points', 'graphql2022__usage_others__graphql_pain_points');
 
-  await renameFieldMigration(ResponseMongooseModel, 'graphql2022__usage__graphql_experience', 'graphql2022__usage__graphql_experience__choices');
-  await renameFieldMigration(ResponseMongooseModel, 'graphql2022__usage__code_generation_type', 'graphql2022__usage__code_generation_type__choices');
+  const suffix = "__choices";
+
+  for (const survey of surveys) {
+    for (const s of survey.outline) {
+      for (const field of s.questions) {
+        const { fieldName, template } = field as Field;
+        if (fieldName && template === "single") {
+          await renameFieldMigration(
+            ResponseMongooseModel,
+            fieldName.replace(suffix, ""),
+            fieldName
+          );
+        }
+      }
+    }
+  }
+};
 
 
+// graphql2022__usage__graphql_experience__choices__choices -> graphql2022__usage__graphql_experience__choices
+export const fixRenameFields = async () => {
+  console.log("// fixRenameFields");
+  
+  const suffix = "__choices";
+
+  for (const survey of surveys) {
+    for (const s of survey.outline) {
+      for (const field of s.questions) {
+        const { fieldName, template } = field as Field;
+        if (fieldName && template === "single") {
+          // note: fieldName already includes the suffix, we just don't want to include it twice
+          await renameFieldMigration(
+            ResponseMongooseModel,
+            `${fieldName}${suffix}`,
+            fieldName
+          );
+        }
+      }
+    }
+  }
 };
