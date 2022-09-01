@@ -8,8 +8,6 @@ import { logToFile } from './debug'
 
 let entities: Entity[] = []
 
-const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
-
 // load locales if not yet loaded
 export const loadOrGetEntities = async () => {
     if (entities.length === 0) {
@@ -19,6 +17,7 @@ export const loadOrGetEntities = async () => {
 }
 
 export const loadFromGitHub = async () => {
+    const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
     const entities: Entity[] = []
     console.log(`-> loading entities repo`)
 
