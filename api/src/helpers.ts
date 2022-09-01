@@ -127,6 +127,7 @@ const demographicsFields = [
     'age',
     'country',
     'locale',
+    'completion_stats',
     'source',
     'gender',
     'race_ethnicity',

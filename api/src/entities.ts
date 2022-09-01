@@ -99,7 +99,7 @@ export const loadEntities = async () => {
 }
 
 export const initEntities = async () => {
-    console.log('// initializing locales…')
+    console.log('// initializing entities…')
     const entities = await loadOrGetEntities()
     logToFile('entities.json', entities, { mode: 'overwrite' })
 }

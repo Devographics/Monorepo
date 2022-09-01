@@ -85,6 +85,10 @@ exports.getPageQuery = page => {
     page.blocks.forEach(b => {
         b?.variants.forEach(v => {
             if (v.query) {
+                exports.logToFile(`${v.id}.graphql`, v.query.replace('dataAPI', 'query'), {
+                    mode: 'overwrite',
+                    subDir: 'queries'
+                })
                 queries.push(`# ${v.id}\n` + v.query)
             }
         })
@@ -194,11 +198,12 @@ exports.runPageQuery = async ({ page, graphql }) => {
     console.log(`// Running GraphQL query for page ${page.id}…`)
     const pageQuery = exports.getPageQuery(page)
     let pageData = {}
+
     if (pageQuery) {
+        const queryName = _.upperFirst(exports.cleanIdString(page.id))
+        const wrappedPageQuery = exports.wrapWithQuery(`page${queryName}Query`, pageQuery)
+
         try {
-            const queryName = _.upperFirst(exports.cleanIdString(page.id))
-            const wrappedPageQuery = exports.wrapWithQuery(`page${queryName}Query`, pageQuery)
-            exports.logToFile('queries.txt', wrappedPageQuery, { mode: 'append' })
             const start = new Date()
             const queryResults = await graphql(
                 `
@@ -215,7 +220,10 @@ exports.runPageQuery = async ({ page, graphql }) => {
             )
         } catch (error) {
             console.log(`// Error while loading data for page ${page.id}`)
-            exports.logToFile('errorQueries.txt', pageQuery, { mode: 'append' })
+            exports.logToFile(`${queryName}.graphql`, wrappedPageQuery, {
+                mode: 'overwrite',
+                subDir: 'error_queries'
+            })
             console.log(pageQuery)
             console.log(error)
         }

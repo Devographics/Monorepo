@@ -43,39 +43,39 @@ export default {
 
     CompletionStats: getStaticResolvers('user_info.completion', {
         limit: 100,
-        cutoff: 1
+        cutoff: 1,
+        keys: [...Array(100)].map((a, b) => (b + 1).toString()) // numbers from 1 to 100
     }),
-
     Source: getStaticResolvers('user_info.source.normalized'),
 
-    Gender: getStaticResolvers('user_info.gender', { cutoff: 1, keys: keys.gender }),
+    Gender: getStaticResolvers('user_info.gender.choices', { cutoff: 1, keys: keys.gender }),
 
     RaceEthnicity: getStaticResolvers('user_info.race_ethnicity.choices', {
         cutoff: 1,
         keys: keys.race_ethnicity
     }),
 
-    Age: getStaticResolvers('user_info.age', { limit: 100, cutoff: 1, keys: keys.age }),
+    Age: getStaticResolvers('user_info.age.choices', { limit: 100, cutoff: 1, keys: keys.age }),
 
-    Salary: getStaticResolvers('user_info.yearly_salary', {
+    Salary: getStaticResolvers('user_info.yearly_salary.choices', {
         limit: 100,
         cutoff: 1,
         keys: keys.yearly_salary
     }),
 
-    CompanySize: getStaticResolvers('user_info.company_size', {
+    CompanySize: getStaticResolvers('user_info.company_size.choices', {
         limit: 100,
         cutoff: 1,
         keys: keys.company_size
     }),
 
-    WorkExperience: getStaticResolvers('user_info.years_of_experience', {
+    WorkExperience: getStaticResolvers('user_info.years_of_experience.choices', {
         limit: 100,
         cutoff: 1,
         keys: keys.years_of_experience
     }),
 
-    JobTitle: getStaticResolvers('user_info.job_title', {
+    JobTitle: getStaticResolvers('user_info.job_title.choices', {
         cutoff: 1
     }),
 
@@ -89,7 +89,7 @@ export default {
         keys: range(1, 101).map(k => k.toString())
     }),
 
-    HigherEducationDegree: getStaticResolvers('user_info.higher_education_degree', {
+    HigherEducationDegree: getStaticResolvers('user_info.higher_education_degree.choices', {
         cutoff: 1,
         keys: keys.higher_education_degree
     }),

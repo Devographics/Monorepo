@@ -59,10 +59,10 @@ export const useCache = async <F extends DynamicComputeCall>(options: {
     const { redisClient, isDebug = false } = context
     const disableCache = process.env.DISABLE_CACHE
     let value, verb
-    
+
     // always pass context to cached function just in case it's needed
     const funcOptionsWithContext = { ...funcOptions, context }
-    
+
     const enableCache = !disableCache && !isDebug
 
     const settings = { isDebug, disableCache, cacheType }
@@ -96,10 +96,17 @@ export const useCache = async <F extends DynamicComputeCall>(options: {
 
 export const getCache = async (key: string, context: RequestContext) => {
     if (cacheType === 'local') {
-        return nodeCache.get(key)
+        const value: string | undefined = nodeCache.get(key)
+        return value && JSON.parse(value)
     } else {
         const value = await context.redisClient.get(key)
-        return JSON.parse(value)
+        let parsedValue = JSON.parse(value)
+        if (typeof parsedValue === 'string') {
+            // somehow cached values can get "over-stringified"?
+            // see https://stackoverflow.com/a/51955729/649299
+            parsedValue = JSON.parse(parsedValue)
+        }
+        return parsedValue
     }
 }
 

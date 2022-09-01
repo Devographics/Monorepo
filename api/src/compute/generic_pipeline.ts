@@ -15,14 +15,26 @@ export type PipelineProps = {
 const getFacetPath = (facet: string | undefined) => {
     // make exception for some fields if their paths are different
     switch (facet) {
+        case 'gender':
+            return 'gender.choices'
+
         case 'race_ethnicity':
             return 'race_ethnicity.choices'
+
+        case 'yearly_salary':
+            return 'yearly_salary.choices'
 
         case 'industry_sector':
             return 'industry_sector.choices'
 
         case 'disability_status':
             return 'disability_status.choices'
+
+        case 'company_size':
+            return 'company_size.choices'
+
+        case 'years_of_experience':
+            return 'years_of_experience.choices'
 
         case 'source':
             return 'source.normalized'

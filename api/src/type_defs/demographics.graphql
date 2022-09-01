@@ -152,7 +152,7 @@ type Demographics {
     """
     Completion
     """
-    completion(filters: Filters, options: Options, facet: Facet): CompletionStats
+    completion_stats(filters: Filters, options: Options, facet: Facet): CompletionStats
     """
     How respondents found the survey
     """

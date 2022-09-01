@@ -3,7 +3,7 @@
 export const getWinsPipeline = (match: any, key: String, year: Number) => [
     { $match: match },
     /**
-     * Reduce over the bracketResult array and determine the round. (Use $reduce
+     * Reduce over the bracketResult array and determine the roundNumber. (Use $reduce
      * instead of $map in order to get a running index.)
      */
     {
@@ -21,7 +21,7 @@ export const getWinsPipeline = (match: any, key: String, year: Number) => [
                                     {
                                         player: { $slice: ['$$this', 2] },
                                         winner: { $arrayElemAt: ['$$this', 2] },
-                                        round: {
+                                        roundNumber: {
                                             $switch: {
                                                 branches: [
                                                     {
@@ -51,12 +51,12 @@ export const getWinsPipeline = (match: any, key: String, year: Number) => [
     { $unwind: '$match' },
     { $unwind: '$match.player' },
     /**
-     * Group by player and round, summing up the totals and wins.
+     * Group by player and roundNumber, summing up the totals and wins.
      */
     {
         $project: {
             player: '$match.player',
-            round: '$match.round',
+            roundNumber: '$match.roundNumber',
             hasWon: {
                 $cond: {
                     if: { $eq: ['$match.player', '$match.winner'] },
@@ -68,22 +68,22 @@ export const getWinsPipeline = (match: any, key: String, year: Number) => [
     },
     {
         $group: {
-            _id: { player: '$player', round: '$round' },
+            _id: { player: '$player', roundNumber: '$roundNumber' },
             totalCount: { $sum: 1 },
             count: { $sum: '$hasWon' }
         }
     },
     /**
-     * Create the three properties "round1", "round2", and "round3". Only one of
+     * Create the three properties "roundNumber1", "roundNumber2", and "roundNumber3". Only one of
      * them will actually contain data at this stage.
      */
     {
         $project: {
             _id: 0,
             player: '$_id.player',
-            round1: {
+            roundNumber1: {
                 $cond: {
-                    if: { $eq: ['$_id.round', 1] },
+                    if: { $eq: ['$_id.roundNumber', 1] },
                     then: {
                         totalCount: '$totalCount',
                         count: '$count',
@@ -92,9 +92,9 @@ export const getWinsPipeline = (match: any, key: String, year: Number) => [
                     else: {}
                 }
             },
-            round2: {
+            roundNumber2: {
                 $cond: {
-                    if: { $eq: ['$_id.round', 2] },
+                    if: { $eq: ['$_id.roundNumber', 2] },
                     then: {
                         totalCount: '$totalCount',
                         count: '$count',
@@ -103,9 +103,9 @@ export const getWinsPipeline = (match: any, key: String, year: Number) => [
                     else: {}
                 }
             },
-            round3: {
+            roundNumber3: {
                 $cond: {
-                    if: { $eq: ['$_id.round', 3] },
+                    if: { $eq: ['$_id.roundNumber', 3] },
                     then: {
                         totalCount: '$totalCount',
                         count: '$count',
@@ -117,19 +117,19 @@ export const getWinsPipeline = (match: any, key: String, year: Number) => [
         }
     },
     /**
-     * Group by player and merge together the round-fields created in the
+     * Group by player and merge together the roundNumber-fields created in the
      * previous stage.
      */
     {
         $group: {
             _id: '$player',
-            round1: { $mergeObjects: '$round1' },
-            round2: { $mergeObjects: '$round2' },
-            round3: { $mergeObjects: '$round3' }
+            roundNumber1: { $mergeObjects: '$roundNumber1' },
+            roundNumber2: { $mergeObjects: '$roundNumber2' },
+            roundNumber3: { $mergeObjects: '$roundNumber3' }
         }
     },
     /**
-     * Sum up the totals and wins of all three rounds.
+     * Sum up the totals and wins of all three roundNumbers.
      */
     {
         $project: {
@@ -137,15 +137,15 @@ export const getWinsPipeline = (match: any, key: String, year: Number) => [
             id: '$_id',
             combined: {
                 totalCount: {
-                    $sum: ['$round1.totalCount', '$round2.totalCount', '$round3.totalCount']
+                    $sum: ['$roundNumber1.totalCount', '$roundNumber2.totalCount', '$roundNumber3.totalCount']
                 },
                 count: {
-                    $sum: ['$round1.count', '$round2.count', '$round3.count']
+                    $sum: ['$roundNumber1.count', '$roundNumber2.count', '$roundNumber3.count']
                 }
             },
-            round1: 1,
-            round2: 1,
-            round3: 1
+            roundNumber1: 1,
+            roundNumber2: 1,
+            roundNumber3: 1
         }
     },
     /**
@@ -169,22 +169,22 @@ export const getWinsPipeline = (match: any, key: String, year: Number) => [
                     ]
                 }
             },
-            round1: {
-                count: { $ifNull: ['$round1.count', 0] },
+            roundNumber1: {
+                count: { $ifNull: ['$roundNumber1.count', 0] },
                 percentage: {
-                    $round: [{ $multiply: [{ $ifNull: ['$round1.percentage', null] }, 100] }, 1]
+                    $round: [{ $multiply: [{ $ifNull: ['$roundNumber1.percentage', null] }, 100] }, 1]
                 }
             },
-            round2: {
-                count: { $ifNull: ['$round2.count', 0] },
+            roundNumber2: {
+                count: { $ifNull: ['$roundNumber2.count', 0] },
                 percentage: {
-                    $round: [{ $multiply: [{ $ifNull: ['$round2.percentage', null] }, 100] }, 1]
+                    $round: [{ $multiply: [{ $ifNull: ['$roundNumber2.percentage', null] }, 100] }, 1]
                 }
             },
-            round3: {
-                count: { $ifNull: ['$round3.count', 0] },
+            roundNumber3: {
+                count: { $ifNull: ['$roundNumber3.count', 0] },
                 percentage: {
-                    $round: [{ $multiply: [{ $ifNull: ['$round3.percentage', null] }, 100] }, 1]
+                    $round: [{ $multiply: [{ $ifNull: ['$roundNumber3.percentage', null] }, 100] }, 1]
                 }
             }
         }

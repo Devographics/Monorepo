@@ -50,7 +50,7 @@ export default {
                 funcOptions: { path: entity.mdn }
             })
 
-            if (mdn) {
+            if (mdn && Array.isArray(mdn)) {
                 return mdn.find((t: any) => t.locale === 'en-US')
             } else {
                 return

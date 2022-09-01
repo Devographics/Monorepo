@@ -32,12 +32,21 @@ const config = yaml.load(
     )
 )
 
-const getLocalesQuery = (localeIds, contexts) => `
+const getLocalesQuery = (localeIds, contexts) => {
+    const args = []
+    if (localeIds.length > 0) {
+        args.push(`localeIds: [${localeIds.map(id => `"${id}"`).join(',')}]`)
+    }
+    if (contexts.length > 0) {
+        args.push(`contexts: [${contexts.join(', ')}]`)
+    }
+
+    const argumentsString = args.length > 0 ? `(${args.join(', ')})` : ''
+
+    return `
 query {
     internalAPI {
-        locales(localeIds: [${localeIds
-            .map(id => `"${id}"`)
-            .join(',')}], contexts: [${contexts.join(', ')}]) {
+        locales${argumentsString} {
             completion
             id
             label
@@ -46,13 +55,14 @@ query {
                 t
                 tHtml
                 context
-                fallback
+                isFallback
             }
             translators
         }
     }
 }
 `
+}
 
 // v1. single loop, run graphql queries and create pages in the same loop
 exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createRedirect } }) => {
@@ -65,6 +75,8 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
         blockCount: 0,
         translationContexts: config.translationContexts
     }
+
+    console.log(`// Building ${process.env.SURVEY}…`)
 
     // if USE_FAST_BUILD is turned on only keep en-US and ru-RU locale to make build faster
     const localeIds = USE_FAST_BUILD ? ['en-US', 'ru-RU'] : []
@@ -104,14 +116,12 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
         const context = getPageContext(page)
         const pageQuery = getPageQuery(page)
 
-        logToFile('queries.txt', '', { mode: 'overwrite' })
-
         try {
             pageData = await runPageQuery({ page, graphql })
         } catch (error) {
             console.log(`// GraphQL error for page ${page.id}`)
             console.log(page)
-            throw(error)
+            throw error
         }
 
         // loop over locales
@@ -185,7 +195,6 @@ exports.createPagesTwoLoops = async ({ graphql, actions: { createPage, createRed
     }
 
     allQueries = wrapWithQuery('megaSurveyQuery', allQueries)
-    logToFile('queries.txt', allQueries, { mode: 'overwrite' })
     const allQueriesResults = await graphql(
         `
             ${allQueries}

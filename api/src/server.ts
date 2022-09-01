@@ -51,21 +51,26 @@ const checkSecretKey = (req: any) => {
 }
 
 const start = async () => {
-
+    const startedAt = new Date()
+    console.log('// Starting server…')
     const redisClient = createClient({
         url: process.env.REDIS_URL
-      })
+    })
 
     redisClient.on('error', err => console.log('Redis Client Error', err))
-
-    await redisClient.connect()
 
     const mongoClient = new MongoClient(process.env!.MONGO_URI!, {
         // useNewUrlParser: true,
         // useUnifiedTopology: true,
         connectTimeoutMS: 10000
     })
+
+    if (process.env.CACHE_TYPE !== 'local') {
+        await redisClient.connect()
+    }
+
     await mongoClient.connect()
+
     const db = mongoClient.db(process.env.MONGO_DB_NAME)
 
     const server = new ApolloServer({
@@ -80,6 +85,10 @@ const start = async () => {
         // engine: {
         //     debugPrintReports: true
         // },
+        formatError: err => {
+            console.log(err)
+            return err
+        },
         context: (expressContext): RequestContext => {
             // TODO: do this better with a custom header
             const isDebug = expressContext?.req?.rawHeaders?.includes('http://localhost:4001')
@@ -123,11 +132,16 @@ const start = async () => {
 
     const port = process.env.PORT || 4000
 
-    // await initLocales()
     await initEntities()
 
+    const finishedAt = new Date()
+
     app.listen({ port: port }, () =>
-        console.log(`🚀 Server ready at http://localhost:${port}${server.graphqlPath}`)
+        console.log(
+            `🚀 Server ready at http://localhost:${port}${server.graphqlPath} (in ${
+                finishedAt.getTime() - startedAt.getTime()
+            }ms)`
+        )
     )
 }
 
