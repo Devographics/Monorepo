@@ -27,11 +27,13 @@ node_modules
 
 # Secrets
 .env
+# NOTE: in Vite or Next app, .env can actually be tracked
+# However, .local are NEVER tracked whatever the framework
+*.local
 
 # docker volumes
 esdata
 
-.env
 
 .logs
 .logs/*
@@ -44,3 +46,4 @@ test.mjs
 dist
 .logs
 .mongo
+

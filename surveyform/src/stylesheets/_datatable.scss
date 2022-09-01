@@ -1,0 +1,25 @@
+@use 'sass:math';
+.datatable-header-cell-inner {
+  display: flex;
+}
+.datatable-sorter,
+.datatable-filter {
+  cursor: pointer;
+  margin-left: math.div($spacing, 2);
+}
+.datatable-list {
+  background: $white;
+  overflow: scroll;
+}
+.dashboard-user {
+  display: flex;
+  align-items: center;
+  .avatar {
+    margin-right: math.div($spacing, 2);
+    height: 24px;
+    width: 24px;
+    font-size: $small-font;
+  }
+}
+.datatable {
+}

@@ -1,0 +1,73 @@
+@use 'sass:math';
+$root-size-mobile: 13px;
+$root-size: 17px;
+
+$smallest-font: 0.6rem;
+$smaller-font: 0.7rem;
+$small-font: 0.8rem;
+$smallish-font: 0.9rem;
+$medium-font: 1rem;
+$large-font: 1.1rem;
+$largeish-font: 1.3rem;
+$larger-font: 1.5rem;
+$largest-font: 2rem;
+
+$light: 300; // not used currently
+$medium: 400;
+$bold: 800;
+
+@mixin font-light {
+  font-weight: $light;
+}
+
+@mixin font-regular {
+  font-weight: $medium;
+}
+
+@mixin font-bold {
+  font-weight: $bold;
+}
+
+@mixin primary-font {
+  font-family: "IBM Plex Mono", monospace;
+  font-weight: $medium;
+}
+@mixin secondary-font {
+  font-family: "IBM Plex Mono", monospace;
+  font-weight: $bold;
+}
+@mixin emoji-font {
+  font-family: "apple color emoji", "segoe ui emoji", "noto color emoji",
+    "android emoji", "emojisymbols", "emojione mozilla", "twemoji mozilla",
+    "segoe ui symbol";
+}
+
+pre,
+code {
+  @include secondary-font;
+  color: $text-color;
+}
+
+strong {
+  font-weight: $bold;
+}
+
+.first-letter {
+  float: left;
+  display: block;
+  font-size: 6rem;
+  margin-right: math.div($spacing, 2);
+  line-height: 1;
+}
+
+.section-questions {
+  code {
+    background: $bg-color-light;
+    color: var(--text-color) !important;
+    // background: #F3F4F4;
+    // color: #24292e;
+    padding: 3px 8px;
+    @include font-regular;
+    @include border-radius;
+  }
+}

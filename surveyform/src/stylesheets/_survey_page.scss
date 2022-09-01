@@ -1,0 +1,100 @@
+@use 'sass:math';
+.survey-item-contents {
+  @include small {
+    text-align: center;
+  }
+  @include medium-large {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  margin-bottom: $spacing;
+}
+.survey-image {
+  max-width: 600px;
+  margin: 0 auto $spacing * 2 auto;
+  img {
+    display: block;
+    width: 100%;
+  }
+  &-small {
+    max-width: 250px;
+  }
+}
+.survey-name {
+  @include small {
+    margin-bottom: math.div($spacing, 2);
+  }
+  font-size: $large-font;
+  margin: 0;
+}
+.survey-page-message {
+  text-align: center;
+}
+.survey-login-options {
+  @include medium-large {
+    display: grid;
+    column-gap: $spacing * 2;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.survey-login-option {
+  @include border;
+  padding: $spacing;
+}
+.survey-login-option-description {
+  font-size: $smallish-font;
+  margin-bottom: $spacing/2;
+}
+.survey-login-option-note {
+  margin-top: $spacing;
+  font-size: $small-font;
+}
+.survey-login-action {
+  input,
+  button {
+    width: 100%;
+  }
+}
+.magic-link-login-form {
+  label {
+    display: none;
+  }
+  input {
+    margin-bottom: $spacing/2;
+  }
+}
+.account-message {
+  h3 {
+    font-size: $large-font;
+  }
+  margin-top: $spacing * 2;
+  // p, li{
+  //   font-size: $smallish-font;
+  // }
+  ul:last-child,
+  p:last-child {
+    margin-bottom: 0;
+  }
+}
+.survey-actions {
+  margin: 0 auto;
+  max-width: 500px;
+}
+.survey-action {
+  margin: 0 auto;
+  max-width: 300px;
+}
+
+.survey-action-inner {
+  display: flex;
+  justify-content: center;
+}
+.survey-action-closed {
+  background: $bg-color-light;
+  padding: math.div($spacing, 2);
+  text-align: center;
+}
+.survey-item-error {
+  margin-top: math.div($spacing, 2);
+}
