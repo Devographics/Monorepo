@@ -1,7 +1,10 @@
 import dotenv from 'dotenv'
 dotenv.config()
 import { ApolloServer } from 'apollo-server-express'
-import responseCachePlugin from 'apollo-server-plugin-response-cache'
+// @see https://github.com/apollographql/apollo-server/issues/6022
+import responseCachePluginPkg from 'apollo-server-plugin-response-cache'
+const responseCachePlugin = (responseCachePluginPkg as any).default
+
 import typeDefs from './type_defs/schema.graphql'
 import { RequestContext } from './types'
 import resolvers from './resolvers'

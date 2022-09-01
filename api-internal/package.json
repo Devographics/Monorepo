@@ -47,9 +47,9 @@
         "webpack-node-externals": "^3.0.0"
     },
     "scripts": {
+        "clean": "rm -Rf ./dist",
         "build": "NODE_ENV=production tsup",
-        "dev": "NODE_ENV=development webpack --config webpack.development.js",
-        "dev:clean": "NODE_ENV=development DISABLE_CACHE=true webpack --config webpack.development.js",
+        "dev": "NODE_ENV=development tsup --watch --onSuccess='node ./dist/server.mjs'",
         "build:webpack": "NODE_ENV=production webpack --config webpack.production.js",
         "dev:webpack": "NODE_ENV=development webpack --config webpack.development.js",
         "dev:clean:webpack": "NODE_ENV=development DISABLE_CACHE=true webpack --config webpack.development.js",
