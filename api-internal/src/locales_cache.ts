@@ -11,7 +11,7 @@ import fetch from 'node-fetch'
 import localesYAML from './data/locales.yml'
 import yaml from 'js-yaml'
 import { readdir, readFile } from 'fs/promises'
-import last from 'lodash/last'
+import last from 'lodash/last.js'
 import { setCache } from './caching'
 import marked from 'marked'
 import {

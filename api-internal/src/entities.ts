@@ -3,7 +3,7 @@ import { Octokit } from '@octokit/core'
 import fetch from 'node-fetch'
 import yaml from 'js-yaml'
 import { readdir, readFile } from 'fs/promises'
-import last from 'lodash/last'
+import last from 'lodash/last.js'
 import { logToFile } from './debug'
 
 let entities: Entity[] = []
