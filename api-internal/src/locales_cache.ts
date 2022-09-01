@@ -26,13 +26,12 @@ import {
 /////////////////////////////////////// Data Loading //////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
 
-const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
-
 const excludedFiles = ['crowdin.yml']
 
 export const loadAllFromGitHub = async (
     localesToLoad: LocaleMetaData[]
 ): Promise<LocaleRawData[]> => {
+    const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
     let locales: LocaleRawData[] = []
     let i = 0
 

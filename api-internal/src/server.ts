@@ -1,5 +1,9 @@
 import dotenv from 'dotenv'
+// NOTE: when building as ESM, it seems that modules logic will be run
+// BEFORE server.ts => be careful on top-level code that uses process.env,
+// values might be undefined
 dotenv.config()
+
 import { ApolloServer } from 'apollo-server-express'
 // @see https://github.com/apollographql/apollo-server/issues/6022
 import responseCachePluginPkg from 'apollo-server-plugin-response-cache'
@@ -15,7 +19,7 @@ import { createClient } from 'redis'
 
 import path from 'path'
 
-import Sentry  from '@sentry/node'
+import Sentry from '@sentry/node'
 //import Tracing from '@sentry/tracing'
 
 const app = express()
@@ -56,7 +60,7 @@ const start = async () => {
     if (process.env.CACHE_TYPE !== 'local') {
         await redisClient.connect()
     }
-    
+
     const server = new ApolloServer({
         typeDefs,
         resolvers: resolvers as any,
