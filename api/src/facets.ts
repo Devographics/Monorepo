@@ -18,6 +18,7 @@ export type Facet =
     | 'disability_status'
     | 'company_size'
     | 'years_of_experience'
+    | 'higher_education_degree'
     | 'source'
     | 'country'
 

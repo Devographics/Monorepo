@@ -36,6 +36,9 @@ const getFacetPath = (facet: string | undefined) => {
         case 'years_of_experience':
             return 'years_of_experience.choices'
 
+        case 'higher_education_degree':
+            return 'higher_education_degree.choices'
+
         case 'source':
             return 'source.normalized'
 

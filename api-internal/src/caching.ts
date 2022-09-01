@@ -60,6 +60,9 @@ export const useCache = async <F extends DynamicComputeCall>(options: {
     const disableCache = process.env.DISABLE_CACHE
     let value, verb
 
+    // always pass context to cached function just in case it's needed
+    const funcOptionsWithContext = { ...funcOptions, context }
+
     const enableCache = !disableCache && !isDebug
 
     const settings = { isDebug, disableCache, cacheType }
@@ -72,8 +75,7 @@ export const useCache = async <F extends DynamicComputeCall>(options: {
             value = existingResult
         } else {
             verb = 'computing and caching result'
-            // always pass context to cached function just in case it's needed
-            value = await func({ ...funcOptions, context })
+            value = await func(funcOptionsWithContext)
             if (value) {
                 // in case previous cached entry exists, delete it
                 await setCache(key, JSON.stringify(value), context)
@@ -81,7 +83,7 @@ export const useCache = async <F extends DynamicComputeCall>(options: {
         }
     } else {
         verb = 'computing result'
-        value = await func(funcOptions)
+        value = await func(funcOptionsWithContext)
     }
     const finishedAt = new Date()
     console.log(
@@ -94,10 +96,17 @@ export const useCache = async <F extends DynamicComputeCall>(options: {
 
 export const getCache = async (key: string, context: RequestContext) => {
     if (cacheType === 'local') {
-        return nodeCache.get(key)
+        const value: string | undefined = nodeCache.get(key)
+        return value && JSON.parse(value)
     } else {
         const value = await context.redisClient.get(key)
-        return JSON.parse(value)
+        let parsedValue = JSON.parse(value)
+        if (typeof parsedValue === 'string') {
+            // somehow cached values can get "over-stringified"?
+            // see https://stackoverflow.com/a/51955729/649299
+            parsedValue = JSON.parse(parsedValue)
+        }
+        return parsedValue
     }
 }
 
