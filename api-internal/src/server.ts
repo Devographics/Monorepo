@@ -20,6 +20,7 @@ import { createClient } from 'redis'
 import path from 'path'
 
 import Sentry from '@sentry/node'
+import { __dirname } from './dirname'
 //import Tracing from '@sentry/tracing'
 
 const app = express()

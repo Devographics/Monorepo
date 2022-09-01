@@ -1,6 +1,7 @@
 import fs, { promises as fsAsync } from 'fs'
+import { __dirname } from './dirname'
 
-const logsDirectory = '.logs';
+const logsDirectory = '.logs'
 
 export const logToFile = async (fileName: string, object: any, options: any = {}) => {
     const { mode = 'append', timestamp = false } = options

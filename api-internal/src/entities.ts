@@ -5,6 +5,7 @@ import yaml from 'js-yaml'
 import { readdir, readFile } from 'fs/promises'
 import last from 'lodash/last.js'
 import { logToFile } from './debug'
+import { __dirname } from './dirname'
 
 let entities: Entity[] = []
 
