@@ -1,4 +1,4 @@
-import TwitterApi, { ApiResponseError, UserFollowingV2Paginator } from 'twitter-api-v2'
+import  { TwitterApi, ApiResponseError, UserFollowingV2Paginator } from 'twitter-api-v2'
 import { Db } from 'mongodb'
 import { RequestContext } from '../types'
 

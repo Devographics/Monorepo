@@ -10,13 +10,10 @@ import { initLocales } from './locales_cache'
 import { initEntities } from './entities'
 import { createClient } from 'redis'
 
-// import Sentry from '@sentry/node'
-// import Tracing from '@sentry/tracing'
-
 import path from 'path'
 
-const Sentry = require('@sentry/node')
-const Tracing = require('@sentry/tracing')
+import Sentry  from '@sentry/node'
+//import Tracing from '@sentry/tracing'
 
 const app = express()
 
