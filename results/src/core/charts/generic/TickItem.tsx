@@ -3,7 +3,6 @@ import { ChartComponentProps, BlockUnits, BucketItem, BlockLegend, TickItemProps
 import { useTheme } from 'styled-components'
 import { useI18n } from 'core/i18n/i18nContext'
 import TooltipComponent from 'core/components/Tooltip'
-import * as Tooltip from '@radix-ui/react-tooltip'
 
 const labelMaxLength = 20
 

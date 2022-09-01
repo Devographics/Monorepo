@@ -138,7 +138,7 @@ const TabsTrigger = styled(Tabs.Trigger)`
     padding: ${spacing(0.5)};
     margin-top: ${spacing(0.25)};
     border-radius: 3px 3px 0px 0;
-
+    border: none;
     button {
         display: block;
     }
@@ -148,6 +148,7 @@ const TabsTrigger = styled(Tabs.Trigger)`
         background: ${props => props.theme.colors.background};
     }
     &[data-state='inactive'] {
+        background: none;
     }
 
     @media ${mq.mediumLarge} {

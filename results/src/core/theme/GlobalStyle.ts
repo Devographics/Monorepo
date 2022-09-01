@@ -107,7 +107,7 @@ export const GlobalStyle = createGlobalStyle`
         overflow: hidden;
     }
     .t-modkeydown{
-        &.t-fallback, &.t-missing{
+        &.t-isFallback, &.t-missing{
             ${textShadowHighlightMixin(colors.green, 0.05)}
             &:hover{
                 cursor: pointer;

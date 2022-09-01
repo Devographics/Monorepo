@@ -9,7 +9,7 @@ const Content = styled(Tooltip.Content)`
     font-size: ${fontSize('small')};
     padding: ${spacing(0.3)} ${spacing(0.6)};
     border: 1px solid ${props => props.theme.colors.border};
-    p:last-child{
+    p:last-child {
         margin: 0;
     }
     // see https://www.joshwcomeau.com/css/designing-shadows/
@@ -40,15 +40,19 @@ const Arrow = styled(Tooltip.Arrow)`
 `
 
 const Tip = ({ trigger, contents, asChild = true, clickable = false }) => (
-    <Tooltip.Root delayDuration={200}>
-        <Trigger asChild={asChild} $clickable={clickable}>
-            {trigger}
-        </Trigger>
-        <Content side="top">
-            {contents}
-            {/* <Arrow /> */}
-        </Content>
-    </Tooltip.Root>
+    <Tooltip.Provider>
+        <Tooltip.Root delayDuration={200}>
+            <Trigger asChild={asChild} $clickable={clickable}>
+                {trigger}
+            </Trigger>
+            <Tooltip.Portal>
+                <Content side="top">
+                    {contents}
+                    {/* <Arrow /> */}
+                </Content>
+            </Tooltip.Portal>
+        </Tooltip.Root>
+    </Tooltip.Provider>
 )
 
 export default Tip
