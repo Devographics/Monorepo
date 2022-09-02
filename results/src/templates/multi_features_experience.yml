@@ -1,0 +1,36 @@
+titleId: blocks.features_overview
+blockType: MultiFeaturesExperienceBlock
+dataPath: "dataAPI.survey.${id}"
+keysPath: "dataAPI.survey.${id}.0.experience.keys"
+enableCustomization: true
+hasSponsor: true
+query: >
+    dataAPI {
+        survey(survey: ${surveyType}) {
+            ${id}: features(ids: [${toolsCategories[categoryId]}]) {
+                id
+                name
+                experience{
+                    keys
+                    year(year: ${currentYear}) {
+                        year
+                        completion {
+                            total
+                            count
+                            percentage_survey
+                        }
+                        facets{
+                            type
+                            id
+                            buckets {
+                                id
+                                count
+                                percentage_question
+                                percentage_survey
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }

@@ -33,6 +33,7 @@ import ByFacetBlock from 'core/blocks/demographics/ByFacetBlock'
 import FeatureExperienceBlock from 'core/blocks/features/FeatureExperienceBlock'
 import FeaturesOverviewBlock from 'core/blocks/features/FeaturesOverviewBlock'
 import KnowledgeScoreBlock from 'core/blocks/features/KnowledgeScoreBlock'
+import MultiFeaturesExperienceBlock from 'core/blocks/features/MultiFeaturesExperienceBlock'
 
 // tools
 import ToolHeaderBlock from 'core/blocks/tools/ToolHeaderBlock'
@@ -101,6 +102,7 @@ const blockRegistry = {
     FeatureExperienceBlock,
     FeaturesOverviewBlock,
     KnowledgeScoreBlock,
+    MultiFeaturesExperienceBlock,
 
     // tools
     ToolHeaderBlock,
