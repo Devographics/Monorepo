@@ -114,10 +114,10 @@
         "gatsby-plugin-perf-budgets": "^0.0.18",
         "gatsby-plugin-webpack-bundle-analyser-v2": "^1.1.26",
         "prettier": "^2.4.1",
-        "webpack": "^5.62.1"
+        "webpack": "^5.74.0"
     },
     "resolutions": {
-        "webpack": "5.62.1"
+        "webpack": "5.74.0"
     },
     "private": true,
     "scripts": {
