@@ -16,6 +16,7 @@ import path from 'path'
 import Sentry from '@sentry/node'
 
 import { rootDir } from './rootDir'
+import { appSettings } from './settings'
 
 //import Tracing from '@sentry/tracing'
 
@@ -49,12 +50,12 @@ const checkSecretKey = (req: any) => {
 
 const start = async () => {
     const redisClient = createClient({
-        url: process.env.REDIS_URL
+        url: appSettings.redisUrl
     })
 
     redisClient.on('error', err => console.log('Redis Client Error', err))
 
-    if (process.env.CACHE_TYPE !== 'local') {
+    if (appSettings.cacheType !== 'local') {
         await redisClient.connect()
     }
 

@@ -5,6 +5,7 @@ interface AppSettings {
     disableCache: boolean
     loadLocalesMode?: 'local'
     githubToken: string
+    redisUrl: string
 }
 /**
  * TODO: Centralize .env loading here
@@ -15,6 +16,7 @@ interface AppSettings {
  */
 const loadSettings = () => {
     dotenv.config()
+    const redisUrl = process.env.REDIS_URL || 'redis://localhost:6379'
     const cacheType = process.env.CACHE_TYPE === 'local' ? 'local' : 'redis'
     const disableCache = !!process.env.DISABLE_CACHE
     const loadLocalesMode = process.env.LOAD_LOCALES
@@ -30,7 +32,8 @@ const loadSettings = () => {
         cacheType,
         disableCache,
         loadLocalesMode: loadLocalesMode as 'local' | undefined,
-        githubToken
+        githubToken,
+        redisUrl
     }
     return settings
 }
