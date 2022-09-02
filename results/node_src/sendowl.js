@@ -69,11 +69,14 @@ const getProducts = async () => {
     return productsDataClean
 }
 
-const getOrders = async products => {
+const getOrders = async ({ products, config }) => {
+    const { surveyId } = config
     // get orders
     const orders = []
-    const ordersData = await fetchUntilNoMore(`${sendOwlAPIUrl}/v1_3/orders/`, getSendOwlOptions())
+    let ordersData = await fetchUntilNoMore(`${sendOwlAPIUrl}/v1_3/orders/`, getSendOwlOptions())
+
     ordersData.forEach(({ order }) => {
+        console.log(order)
         let twitterName = _.get(
             order,
             'order_custom_checkout_fields.0.order_custom_checkout_field.value'
@@ -83,14 +86,17 @@ const getOrders = async products => {
         order.cart.cart_items.forEach(({ cart_item }) => {
             // cart items only have productId, not product name, so look up product name
             const product = products.find(p => p.productId === cart_item.product_id)
+            // if order does not correspond to a real product just ignore it
             if (product && cart_item.quantity > 0) {
-                // if order does not correspond to a real product just ignore it
-                orders.push({
-                    orderId: order.id,
-                    chartId: product.chartId,
-                    amount: cart_item.price_at_checkout,
-                    twitterName
-                })
+                // only add products that belongs to current survey
+                if (product.chartId.split('___')[0] === surveyId) {
+                    orders.push({
+                        orderId: order.id,
+                        chartId: product.chartId,
+                        amount: cart_item.price_at_checkout,
+                        twitterName
+                    })
+                }
             }
         })
     })
@@ -177,7 +183,7 @@ exports.getSendOwlData = async ({ flat, config }) => {
     }
 
     const products = await getProducts()
-    const orders = await getOrders(products)
+    const orders = await getOrders({ products, config })
     const newProducts = await createMissingProducts({ products, chartVariants, config })
     const allProducts = [...products, ...newProducts]
 

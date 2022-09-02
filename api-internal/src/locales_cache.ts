@@ -213,9 +213,16 @@ Parse a string file and add parsed markdown versions where needed
 */
 export const parseMarkdown = (stringFile: StringFile) => {
     stringFile.strings = stringFile.strings.map((s: TranslationStringObject) => {
-        // if markdown-parsed version of the string is different from original, add it as HTML
-        const tHtml = marked.parseInline(String(s.t))
-        if (tHtml !== s.t) {
+        const str = String(s.t)
+        // if string contains line breaks parse it as paragraph, else parse it inline
+        const containsLineBreaks = (str.match(/\n/g)||[]).length > 0
+        const tHtml = containsLineBreaks
+            ? marked.parse(str)
+            : marked.parseInline(str)
+        const containsTagRegex = new RegExp(/(<([^>]+)>)/i)
+        // if markdown-parsed version of the string is different from original,
+        // or original contains one or more HTML tags, add it as HTML
+        if (tHtml !== s.t || containsTagRegex.test(s.t)) {
             s.tHtml = tHtml
         }
         return s

@@ -9,6 +9,7 @@ const {
     getCleanLocales,
     createBlockPages,
     runPageQuery,
+    runPageQueries,
     getTwitterUser
 } = require('./helpers.js')
 const { getSendOwlData } = require('./sendowl.js')
@@ -25,12 +26,15 @@ const rawSitemap = yaml.load(
         'utf8'
     )
 )
-const config = yaml.load(
-    fs.readFileSync(
-        path.resolve(__dirname, `../surveys/${process.env.SURVEY}/config/config.yml`),
-        'utf8'
-    )
-)
+const config = {
+    ...yaml.load(
+        fs.readFileSync(
+            path.resolve(__dirname, `../surveys/${process.env.SURVEY}/config/config.yml`),
+            'utf8'
+        )
+    ),
+    surveyId: process.env.SURVEY
+}
 
 const getLocalesQuery = (localeIds, contexts) => {
     const args = []
@@ -117,7 +121,8 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
         const pageQuery = getPageQuery(page)
 
         try {
-            pageData = await runPageQuery({ page, graphql })
+            // pageData = await runPageQuery({ page, graphql })
+            pageData = await runPageQueries({ page, graphql, config })
         } catch (error) {
             console.log(`// GraphQL error for page ${page.id}`)
             console.log(page)

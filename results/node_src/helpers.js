@@ -4,6 +4,7 @@ const { indentString } = require('./indent_string.js')
 const _ = require('lodash')
 const path = require('path')
 const fs = require('fs')
+const fetch = require('node-fetch')
 const yaml = require('js-yaml')
 const { TwitterApi } = require('twitter-api-v2')
 
@@ -108,9 +109,11 @@ Log to file
 exports.logToFile = async (fileName, object, options = {}) => {
     try {
         if (process.env.NODE_ENV !== 'production') {
-            const { mode = 'append', timestamp = false, subDir } = options
+            const { mode = 'append', timestamp = false, subDir, dirPath } = options
 
-            const logsDirPath = `${__dirname}/.logs${subDir ? `/${subDir}` : ''}`
+            const logsDirPath = dirPath
+                ? path.resolve(dirPath)
+                : `${__dirname}/.logs${subDir ? `/${subDir}` : ''}`
             if (!fs.existsSync(logsDirPath)) {
                 fs.mkdirSync(logsDirPath, { recursive: true })
             }
@@ -195,6 +198,7 @@ exports.getAllBlocks = sitemap => {
 const Queries = {}
 
 exports.runPageQuery = async ({ page, graphql }) => {
+    const startedAt = new Date()
     console.log(`// Running GraphQL query for page ${page.id}…`)
     const pageQuery = exports.getPageQuery(page)
     let pageData = {}
@@ -228,6 +232,108 @@ exports.runPageQuery = async ({ page, graphql }) => {
             console.log(error)
         }
     }
+    const finishedAt = new Date()
+    console.log(`-> Done in ${startedAt.getTime() - finishedAt.getTime()}ms`)
+    return pageData
+}
+
+/*
+
+Get a file from the disk or from GitHub
+
+*/
+exports.getExistingData = async ({ dataFileName, dataFilePath, baseUrl }) => {
+    let contents, data
+    if (process.env.JSON_CACHE_TYPE === 'local') {
+        if (fs.existsSync(dataFilePath)) {
+            console.log(`// 🎯 File ${dataFileName} found on disk, loading its contents…`)
+            contents = fs.readFileSync(dataFilePath, 'utf8')
+        }
+    } else {
+        const response = await fetch(`${baseUrl}/data/${dataFileName}`)
+        contents = await response.text()
+        if (contents) {
+            console.log(`// 🎯 File ${dataFileName} found on GitHub, loading its contents…`)
+        }
+    }
+    try {
+        data = JSON.parse(contents)
+    } catch (error) {
+        return
+    }
+    return data
+}
+
+/*
+
+Try loading data from disk or GitHub, or else run queries for *each block* in a page
+
+*/
+exports.runPageQueries = async ({ page, graphql, config }) => {
+    const startedAt = new Date()
+    console.log(`// Running GraphQL queries for page ${page.id}…`)
+
+    const basePath = `./../../devographics-surveys/${config.slug}/${config.year}/results`
+    const baseUrl = `https://devographics.github.io/surveys/${config.slug}/${config.year}/results`
+
+    let pageData = {}
+
+    for (const b of page.blocks) {
+        for (const v of b.variants) {
+            if (v.query) {
+                let data
+
+                const dataDirPath = path.resolve(`${basePath}/data`)
+                const dataFileName = `${v.id}.json`
+                const dataFilePath = `${dataDirPath}/${dataFileName}`
+                const queryDirPath = path.resolve(`${basePath}/queries`)
+                const queryFileName = `${v.id}.graphql`
+                const queryFilePath = `${queryDirPath}/${queryFileName}`
+
+                const existingData = await exports.getExistingData({
+                    dataFileName,
+                    dataFilePath,
+                    baseUrl
+                })
+                if (existingData) {
+                    data = existingData
+                } else {
+                    exports.logToFile(queryFileName, v.query.replace('dataAPI', 'query'), {
+                        mode: 'overwrite',
+                        dirPath: queryDirPath
+                    })
+
+                    const queryName = _.upperFirst(exports.cleanIdString(v.id))
+                    const wrappedQuery = exports.wrapWithQuery(`${queryName}Query`, v.query)
+
+                    const result = await graphql(
+                        `
+                            ${wrappedQuery}
+                        `
+                    )
+                    data = result.data
+
+                    exports.logToFile(dataFileName, data, {
+                        mode: 'overwrite',
+                        dirPath: dataDirPath
+                    })
+                }
+                pageData = _.merge(pageData, data)
+            }
+        }
+    }
+
+    const finishedAt = new Date()
+    const duration = finishedAt.getTime() - startedAt.getTime()
+    const pageQueryName = exports.cleanIdString(page.id)
+
+    exports.logToFile(
+        `${pageQueryName}.json`,
+        { data: pageData, duration },
+        { mode: 'overwrite', subDir: 'data' }
+    )
+
+    console.log(`-> Done in ${duration}ms`)
     return pageData
 }
 
@@ -245,7 +351,7 @@ exports.getTwitterUser = async twitterName => {
         const user = data && data.data
         return user
     } catch (error) {
-        console.log('// getTwitterUser error')
+        console.log(`// getTwitterUser error for ${twitterName}`)
         // console.log(error)
         console.log(error.rateLimit)
         const resetTime = new Date(error.rateLimit.reset * 1000)

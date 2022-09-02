@@ -1,7 +1,7 @@
 import { Db } from 'mongodb'
 import { inspect } from 'util'
 import config from '../config'
-import { YearCompletion, FacetCompletion, SurveyConfig, Entity, RequestContext } from '../types'
+import { YearCompletion, FacetCompletion, SurveyConfig, Entity, RequestContext, ResolverDynamicConfig } from '../types'
 import { Filters, generateFiltersQuery } from '../filters'
 import { Facet } from '../facets'
 import { ratioToPercentage } from './common'
@@ -28,6 +28,7 @@ export interface TermAggregationOptions {
     facetSort?: SortSpecifier
     year?: number
     keys?: string[]
+    keysFunction?: (arg0: ResolverDynamicConfig) => Promise<string[]>
     facet?: Facet
     // bucket
     cutoff?: number
@@ -124,8 +125,8 @@ export async function computeDefaultTermAggregationByYear({
     const { db, isDebug } = context
     const collection = db.collection(config.mongo.normalized_collection)
 
-    // use last segment of field as id
-    const fieldId = key.split('.').reverse()[0]
+    // use last segment of field (except '.choices') as id
+    const fieldId = key.replace('.choices', '').split('.').reverse()[0]
 
     const {
         filters,
@@ -142,7 +143,9 @@ export async function computeDefaultTermAggregationByYear({
 
     // if values (keys) are not passed as options, look in globally defined yaml keys
     let values
-    if (options.keys) {
+    if (options.keysFunction) {
+        values = await options.keysFunction({ id: fieldId, survey })
+    } else if (options.keys) {
         values = options.keys
     } else if (yamlKeys[fieldId]) {
         values = yamlKeys[fieldId]
