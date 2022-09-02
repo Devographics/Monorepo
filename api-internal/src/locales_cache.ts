@@ -21,7 +21,12 @@ import {
     getLocaleMetaDataCacheKey,
     getAllLocalesListCacheKey
 } from './locales'
-import { __dirname } from './dirname'
+
+// @see https://blog.logrocket.com/alternatives-dirname-node-js-es-modules/
+// /!\ __dirname must be recomputed for each file, don't try to move this code
+import * as url from 'url'
+const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
+//const __filename = url.fileURLToPath(import.meta.url)
 
 ///////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////// Data Loading //////////////////////////////////
@@ -92,6 +97,8 @@ export const loadAllLocally = async (localesToLoad: LocaleMetaData[]): Promise<L
         const [owner, repo] = localeMetaData.repo.split('/')
 
         // __dirname = /Users/sacha/Dev/state-of-js-graphql-results-api/dist
+
+        console.log('dirname value in locales_cache.ts', __dirname)
         const devDir = __dirname.split('/').slice(1, -3).join('/')
         const path = `/${devDir}/stateof-locales/${repo}`
         const files = await readdir(path)
@@ -296,12 +303,12 @@ export const computeMetaData = (locale: LocaleRawData, parsedStringFiles: String
 //////////////////////////////////////////// Caching //////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
 
-/*
+const STORE_RAW_DATA = false
+/**
 
 Init locales by parsing them and then caching them
 
-*/
-const STORE_RAW_DATA = false
+**/
 export const initLocales = async (context: RequestContext) => {
     const startedAt = new Date()
     console.log(`// Initializing locales cache (Redis)…`)
@@ -309,7 +316,7 @@ export const initLocales = async (context: RequestContext) => {
     const allLocalesRawData = await loadLocales()
     const enLocale = allLocalesRawData.find(l => l.id === 'en-US')
     if (!enLocale) {
-        throw Error('Could not load locale en-US')
+        throw Error('en-US not found in loaded locales')
     }
 
     // parse en-US strings only once outside of main loop to

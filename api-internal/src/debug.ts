@@ -1,11 +1,18 @@
 import fs, { promises as fsAsync } from 'fs'
-import { __dirname } from './dirname'
+import path from 'path'
+
+// @see https://blog.logrocket.com/alternatives-dirname-node-js-es-modules/
+// /!\ __dirname must be recomputed for each file, don't try to move this code
+import * as url from 'url'
+const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
+//const __filename = url.fileURLToPath(import.meta.url)
 
 const logsDirectory = '.logs'
 
 export const logToFile = async (fileName: string, object: any, options: any = {}) => {
     const { mode = 'append', timestamp = false } = options
     // __dirname = /Users/sacha/Dev/state-of-js-graphql-results-api/dist
+    console.log('dirname value in debug.ts', __dirname)
     const path = __dirname.split('/').slice(1, -1).join('/')
     const logsDirPath = `/${path}/${logsDirectory}`
     if (!fs.existsSync(logsDirPath)) {
