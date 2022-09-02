@@ -26,12 +26,15 @@ const rawSitemap = yaml.load(
         'utf8'
     )
 )
-const config = yaml.load(
-    fs.readFileSync(
-        path.resolve(__dirname, `../surveys/${process.env.SURVEY}/config/config.yml`),
-        'utf8'
-    )
-)
+const config = {
+    ...yaml.load(
+        fs.readFileSync(
+            path.resolve(__dirname, `../surveys/${process.env.SURVEY}/config/config.yml`),
+            'utf8'
+        )
+    ),
+    surveyId: process.env.SURVEY
+}
 
 const getLocalesQuery = (localeIds, contexts) => {
     const args = []

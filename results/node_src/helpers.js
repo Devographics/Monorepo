@@ -351,7 +351,7 @@ exports.getTwitterUser = async twitterName => {
         const user = data && data.data
         return user
     } catch (error) {
-        console.log('// getTwitterUser error')
+        console.log(`// getTwitterUser error for ${twitterName}`)
         // console.log(error)
         console.log(error.rateLimit)
         const resetTime = new Date(error.rateLimit.reset * 1000)
