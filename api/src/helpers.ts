@@ -116,12 +116,15 @@ export const getDynamicResolversWithKeys = (
     getId: (id: string) => string,
     options: TermAggregationOptions = {},
     aggregationFunction?: AggregationFunction
-) => ({
-    keys: async ({ id }: ResolverDynamicConfig) => {
+) => {
+    const keysFunction = async ({ id }: ResolverDynamicConfig) => {
         return yamlKeys[id] || []
-    },
-    ...getDynamicResolvers(getId, options, aggregationFunction)
-})
+    }
+    return {
+        keys: keysFunction,
+        ...getDynamicResolvers(getId, { ...options, keysFunction }, aggregationFunction)
+    }
+}
 
 const demographicsFields = [
     'age',

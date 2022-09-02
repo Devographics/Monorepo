@@ -29,6 +29,7 @@ enum Contexts {
     state_of_css_2021_results
 
     state_of_graphql
+    state_of_graphql_2022
 
     how_to_help
 }
