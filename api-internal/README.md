@@ -27,8 +27,13 @@ TWITTER_ACCESS_TOKEN=***
 TWITTER_ACCESS_TOKEN_SECRET=***
 
 # Whether to load locales and entities data from GitHub or from a local directory
+# local | undefined
 LOAD_LOCALES=local
+# local | undefined
 LOAD_ENTITIES=local
+
+# redis | undefined
+CACHE_TYPE=redis
 ```
 
 Note: contact me (Sacha) on [Discord](https://discord.gg/zRDb35jfrt) if you need the actual values. 

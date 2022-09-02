@@ -1,9 +1,3 @@
-import dotenv from 'dotenv'
-// NOTE: when building as ESM, it seems that modules logic will be run
-// BEFORE server.ts => be careful on top-level code that uses process.env,
-// values might be undefined
-dotenv.config()
-
 import { ApolloServer } from 'apollo-server-express'
 // @see https://github.com/apollographql/apollo-server/issues/6022
 import responseCachePluginPkg from 'apollo-server-plugin-response-cache'
@@ -21,11 +15,7 @@ import path from 'path'
 
 import Sentry from '@sentry/node'
 
-// @see https://blog.logrocket.com/alternatives-dirname-node-js-es-modules/
-// /!\ __dirname must be recomputed for each file, don't try to move this code
-import * as url from 'url'
-const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
-//const __filename = url.fileURLToPath(import.meta.url)
+import { rootDir } from './rootDir'
 
 //import Tracing from '@sentry/tracing'
 
@@ -99,8 +89,7 @@ const start = async () => {
     server.applyMiddleware({ app })
 
     app.get('/', function (req, res) {
-        console.log('dirname value in server.ts', __dirname)
-        res.sendFile(path.join(__dirname + '/public/welcome.html'))
+        res.sendFile(path.join(rootDir + '/public/welcome.html'))
     })
 
     app.get('/debug-sentry', function mainHandler(req, res) {

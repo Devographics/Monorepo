@@ -25,6 +25,7 @@ import {
 // @see https://blog.logrocket.com/alternatives-dirname-node-js-es-modules/
 // /!\ __dirname must be recomputed for each file, don't try to move this code
 import * as url from 'url'
+import { appSettings } from './settings'
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
 //const __filename = url.fileURLToPath(import.meta.url)
 
@@ -98,7 +99,6 @@ export const loadAllLocally = async (localesToLoad: LocaleMetaData[]): Promise<L
 
         // __dirname = /Users/sacha/Dev/state-of-js-graphql-results-api/dist
 
-        console.log('dirname value in locales_cache.ts', __dirname)
         const devDir = __dirname.split('/').slice(1, -3).join('/')
         const path = `/${devDir}/stateof-locales/${repo}`
         const files = await readdir(path)
@@ -165,7 +165,7 @@ export const loadLocales = async (localeIds?: string[]): Promise<LocaleRawData[]
         : allLocales
     console.log(`// loading locales… (${localesToLoad.map((l: LocaleMetaData) => l.id).join(',')})`)
     const locales =
-        process.env.LOAD_LOCALES === 'local'
+        appSettings.loadLocalesMode === 'local'
             ? await loadAllLocally(localesToLoad)
             : await loadAllFromGitHub(localesToLoad)
     console.log('// done loading locales')
@@ -222,10 +222,8 @@ export const parseMarkdown = (stringFile: StringFile) => {
     stringFile.strings = stringFile.strings.map((s: TranslationStringObject) => {
         const str = String(s.t)
         // if string contains line breaks parse it as paragraph, else parse it inline
-        const containsLineBreaks = (str.match(/\n/g)||[]).length > 0
-        const tHtml = containsLineBreaks
-            ? marked.parse(str)
-            : marked.parseInline(str)
+        const containsLineBreaks = (str.match(/\n/g) || []).length > 0
+        const tHtml = containsLineBreaks ? marked.parse(str) : marked.parseInline(str)
         const containsTagRegex = new RegExp(/(<([^>]+)>)/i)
         // if markdown-parsed version of the string is different from original,
         // or original contains one or more HTML tags, add it as HTML

@@ -9,6 +9,7 @@ import { logToFile } from './debug'
 // @see https://blog.logrocket.com/alternatives-dirname-node-js-es-modules/
 // /!\ __dirname must be recomputed for each file, don't try to move this code
 import * as url from 'url'
+import { appSettings } from './settings'
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
 //const __filename = url.fileURLToPath(import.meta.url)
 
@@ -98,7 +99,7 @@ export const loadEntities = async () => {
     console.log('// loading entities')
 
     const entities: Entity[] =
-        process.env.LOAD_LOCALES === 'local' ? await loadLocally() : await loadFromGitHub()
+        appSettings.loadLocalesMode === 'local' ? await loadLocally() : await loadFromGitHub()
     console.log('// done loading entities')
 
     return entities
