@@ -9,6 +9,7 @@ const {
     getCleanLocales,
     createBlockPages,
     runPageQuery,
+    runPageQueries,
     getTwitterUser
 } = require('./helpers.js')
 const { getSendOwlData } = require('./sendowl.js')
@@ -117,7 +118,8 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
         const pageQuery = getPageQuery(page)
 
         try {
-            pageData = await runPageQuery({ page, graphql })
+            // pageData = await runPageQuery({ page, graphql })
+            pageData = await runPageQueries({ page, graphql, config })
         } catch (error) {
             console.log(`// GraphQL error for page ${page.id}`)
             console.log(page)
