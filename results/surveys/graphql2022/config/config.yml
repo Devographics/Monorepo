@@ -1,8 +1,10 @@
-translationContexts: [common, results, state_of_js, state_of_js_2021, state_of_js_2021_results, how_to_help, state_of_graphql]
+translationContexts: [common, results, how_to_help, state_of_graphql, state_of_graphql_2022]
 socialMediaImage: social/js2021-social.png
 hashtag: '#StateOfGraphQL'
 siteContext: stateofgraphql
 surveySlug: graphql2022
+slug: state_of_graphql
+year: 2022
 siteTitle: The State of GraphQL 2022
 siteUrl: https://2022.stateofgraphql.com
 emailOctopusUrl: https://emailoctopus.com/lists/ed0386c4-2f55-11e9-a3c9-06b79b628af2/members/embedded/1.3/add

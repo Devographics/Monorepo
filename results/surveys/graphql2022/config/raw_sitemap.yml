@@ -78,6 +78,11 @@
       variables:
         options: {cutoff: 20}
 
+    - id: completion_stats
+      template: demographics
+      blockType: KnowledgeScoreBlock
+      translateData: true
+
     - id: hint_hint
       template: hint
       
@@ -198,6 +203,26 @@
     - id: features_overview
       template: features_overview
 
+    - id: features_graphql_language
+      template: multi_features_experience
+      variables:
+        categoryId: graphql_language
+
+    - id: features_directives
+      template: multi_features_experience
+      variables:
+        categoryId: directives
+
+    - id: features_security_performance
+      template: multi_features_experience
+      variables:
+        categoryId: security_performance
+
+    - id: features_other_features
+      template: multi_features_experience
+      variables:
+        categoryId: other_features
+
     - id: knowledge_score
       template: demographics
       blockNamespace: features
@@ -207,122 +232,122 @@
       items: [fm-javascript]
       template: recommended_resources
 
-  children:
-    - id: graphql_language
-      path: /language
-      blocks:
-        - id: graphql_language
-          template: page_introduction
+  # children:
+  #   - id: graphql_language
+  #     path: /language
+  #     blocks:
+  #       - id: graphql_language
+  #         template: page_introduction
 
-        - id: custom_directives
-          template: feature_experience
-        - id: custom_scalars
-          template: feature_experience
-        - id: fragments
-          template: feature_experience
+  #       - id: custom_directives
+  #         template: feature_experience
+  #       - id: custom_scalars
+  #         template: feature_experience
+  #       - id: fragments
+  #         template: feature_experience
 
-        # - id: scott_tolinkski
-        #   template: picks
+  #       # - id: scott_tolinkski
+  #       #   template: picks
 
-        - id: unions
-          template: feature_experience
-        - id: interfaces
-          template: feature_experience
+  #       - id: unions
+  #         template: feature_experience
+  #       - id: interfaces
+  #         template: feature_experience
 
-        - id: export_hint
-          template: hint
+  #       - id: export_hint
+  #         template: hint
 
-        # - id: michael_jackson
-        #   template: picks
+  #       # - id: michael_jackson
+  #       #   template: picks
 
-        - id: language_resources
-          items: [fm-javascript-new-hard-parts]
-          template: recommended_resources
+  #       - id: language_resources
+  #         items: [fm-javascript-new-hard-parts]
+  #         template: recommended_resources
 
-    - id: directives
-      path: /directives
-      blocks:
-        - id: directives
-          template: page_introduction
+  #   - id: directives
+  #     path: /directives
+  #     blocks:
+  #       - id: directives
+  #         template: page_introduction
 
-        - id: at_skip
-          template: feature_experience
-        - id: at_include
-          template: feature_experience
-        - id: at_deprecated
-          template: feature_experience
-        - id: at_specified_by
-          template: feature_experience
-        - id: at_defer
-          template: feature_experience
-        - id: at_stream
-          template: feature_experience
+  #       - id: at_skip
+  #         template: feature_experience
+  #       - id: at_include
+  #         template: feature_experience
+  #       - id: at_deprecated
+  #         template: feature_experience
+  #       - id: at_specified_by
+  #         template: feature_experience
+  #       - id: at_defer
+  #         template: feature_experience
+  #       - id: at_stream
+  #         template: feature_experience
 
-        # - id: david_khourshid
-        #   template: picks
+  #       # - id: david_khourshid
+  #       #   template: picks
 
-        - id: share_hint
-          template: hint
+  #       - id: share_hint
+  #         template: hint
 
-        - id: browser_apis_resources
-          items: [fm-service-workers]
-          template: recommended_resources
+  #       - id: browser_apis_resources
+  #         items: [fm-service-workers]
+  #         template: recommended_resources
 
-    - id: security_performance
-      path: /security-performance
-      blocks:
+  #   - id: security_performance
+  #     path: /security-performance
+  #     blocks:
         
-      - id: query_timeouts
-        template: feature_experience
-      - id: query_rate_limit
-        template: feature_experience
+  #     - id: query_timeouts
+  #       template: feature_experience
+  #     - id: query_rate_limit
+  #       template: feature_experience
 
-      - id: units_switcher_hint
-        template: hint
+  #     - id: units_switcher_hint
+  #       template: hint
 
-      # - id: tejas_kumar
-      #   template: picks
+  #     # - id: tejas_kumar
+  #     #   template: picks
 
-      - id: query_depth_limit
-        template: feature_experience
+  #     - id: query_depth_limit
+  #       template: feature_experience
 
-      - id: query_depth_limit
-        template: feature_experience
-      - id: query_cost_analysis
-        template: feature_experience
-      - id: disabling_introspection
-        template: feature_experience
-      - id: ip_allowlisting
-        template: feature_experience
-      - id: require_authentication
-        template: feature_experience
+  #     - id: query_depth_limit
+  #       template: feature_experience
+  #     - id: query_cost_analysis
+  #       template: feature_experience
+  #     - id: disabling_introspection
+  #       template: feature_experience
+  #     - id: ip_allowlisting
+  #       template: feature_experience
+  #     - id: require_authentication
+  #       template: feature_experience
 
-      - id: browser_apis_resources
-        items: [fm-web-assembly, fm-pwas]
-        template: recommended_resources
+  #     - id: browser_apis_resources
+  #       items: [fm-web-assembly, fm-pwas]
+  #       template: recommended_resources
 
 
-    - id: other_features
-      path: /other-features
-      blocks:
+  #   - id: other_features
+  #     path: /other-features
+  #     blocks:
         
-      - id: graphql_subscriptions
-        template: feature_experience
+  #     - id: graphql_subscriptions
+  #       template: feature_experience
 
-      # - id: tejas_kumar
-      #   template: picks
+  #     # - id: tejas_kumar
+  #     #   template: picks
 
-      - id: live_queries
-        template: feature_experience
+  #     - id: live_queries
+  #       template: feature_experience
 
-      - id: apollo_federation
-        template: feature_experience
-      - id: schema_stitching
-        template: feature_experience
+  #     - id: apollo_federation
+  #       template: feature_experience
+  #     - id: schema_stitching
+  #       template: feature_experience
 
-      - id: browser_apis_resources
-        items: [fm-web-assembly, fm-pwas]
-        template: recommended_resources
+  #     - id: browser_apis_resources
+  #       items: [fm-web-assembly, fm-pwas]
+  #       template: recommended_resources
 
 - id: libraries
   path: /libraries
@@ -804,12 +829,14 @@
       tabId: tabs.bracket_wins
       template: bracket_wins
       blockNamespace: usage
+      chartNamespace: graphql_strong_points
       variables:
         fieldId: usage__graphql_strong_points
       variants: 
         - id: graphql_strong_points_matchups
           tabId: tabs.bracket_matchups
           blockNamespace: usage
+          chartNamespace: graphql_strong_points
           variables:
             fieldId: usage__graphql_strong_points
           template: bracket_matchups
@@ -828,12 +855,14 @@
       tabId: tabs.bracket_wins
       template: bracket_wins
       blockNamespace: usage
+      chartNamespace: graphql_pain_points
       variables:
         fieldId: usage__graphql_pain_points
       variants: 
         - id: graphql_pain_points_matchups
           tabId: tabs.bracket_matchups
           blockNamespace: usage
+          chartNamespace: graphql_pain_points
           variables:
             fieldId: usage__graphql_pain_points
           template: bracket_matchups
