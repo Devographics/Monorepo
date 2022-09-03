@@ -1,5 +1,4 @@
-import { Entity } from '../types'
-import { getEntities } from '../entities'
+import { getEntity } from '../entities'
 import keys from '../data/keys.yml'
 import { RequestContext, ResolverDynamicConfig } from '../types'
 import {
@@ -44,14 +43,7 @@ export default {
     },
     Feature: {
         entity: async ({ id }: { id: string }) => {
-            const features = await getEntities({ tag: 'features' })
-            const feature = features.find((f: Entity) => f.id === id)
-            return feature
-        },
-        name: async ({ id }: { id: string }) => {
-            const features = await getEntities({ tag: 'features' })
-            const feature = features.find((f: Entity) => f.id === id)
-            return feature && feature.name
+            return await getEntity({ id })
         }
     }
 }

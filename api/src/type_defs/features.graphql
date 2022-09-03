@@ -266,7 +266,5 @@ A feature (e.g. arrow functions, websocket, etc.)
 type Feature {
     id: FeatureID!
     entity: Entity
-    name: String
-    # mdn: MDN
     experience(filters: Filters): FeatureExperience
 }
