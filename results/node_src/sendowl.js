@@ -76,7 +76,6 @@ const getOrders = async ({ products, config }) => {
     let ordersData = await fetchUntilNoMore(`${sendOwlAPIUrl}/v1_3/orders/`, getSendOwlOptions())
 
     ordersData.forEach(({ order }) => {
-        console.log(order)
         let twitterName = _.get(
             order,
             'order_custom_checkout_fields.0.order_custom_checkout_field.value'
