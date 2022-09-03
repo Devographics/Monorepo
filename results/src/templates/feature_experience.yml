@@ -12,6 +12,10 @@ query: >
             ${id}: feature(id: ${id}) {
                 id
                 entity {
+                    name
+                    homepage {
+                        url
+                    }
                     caniuse {
                         name
                         url
@@ -23,7 +27,6 @@ query: >
                         summary
                     }
                 }
-                name
                 experience {
                     keys
                     all_years {

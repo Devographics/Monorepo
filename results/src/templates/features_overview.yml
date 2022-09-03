@@ -9,7 +9,22 @@ query: >
         survey(survey: ${surveyType}) {
             ${id}: features(ids: [${allFeatures}]) {
                 id
-                name
+                entity {
+                    name
+                    homepage {
+                        url
+                    }
+                    caniuse {
+                        name
+                        url
+                    }
+                    mdn {
+                        locale
+                        url
+                        title
+                        summary
+                    }
+                }
                 experience{
                     keys
                     year(year: ${currentYear}) {

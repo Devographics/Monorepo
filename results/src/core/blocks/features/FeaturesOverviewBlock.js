@@ -121,7 +121,7 @@ const FeaturesOverviewBlock = ({ block, data, triggerId, controlledMode }) => {
                     title: category.name,
                     data: sortBy(category.children, 'usage_ratio')
                         .reverse()
-                        .map(f => ({ ...f, id: f.name })),
+                        .map(f => ({ ...f, id: f?.entity?.name })),
                     valueKeys: ['awareness', 'usage', 'usage_ratio']
                 })
             )}
