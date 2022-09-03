@@ -1,6 +1,6 @@
 const path = require('path')
 const { createPagesSingleLoop, createPagesTwoLoops } = require('./node_src/create_pages')
-const webpack = require('webpack')
+// const webpack = require('webpack')
 const CopyPlugin = require('copy-webpack-plugin')
 
 require('dotenv').config({
