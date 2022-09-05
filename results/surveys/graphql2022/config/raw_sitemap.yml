@@ -50,16 +50,16 @@
       disableExport: true
       wrapBlock: false
 
-- id: tshirt
-  path: /tshirt
-  showTitle: false
-  blocks:
-    - id: tshirt_intro
-      template: page_introduction
-    - id: tshirt_block
-      blockType: TshirtBlock
-      wrapBlock: false
-      disableExport: true
+# - id: tshirt
+#   path: /tshirt
+#   showTitle: false
+#   blocks:
+#     - id: tshirt_intro
+#       template: page_introduction
+#     - id: tshirt_block
+#       blockType: TshirtBlock
+#       wrapBlock: false
+#       disableExport: true
 
 - id: user_info
   titleId: sections.demographics.title
@@ -158,12 +158,12 @@
       template: demographics
       blockType: HorizontalBarBlock
       translateData: true
-      variants:
-        - id: disability_status_others
-          template: demographics
-          blockType: HorizontalBarBlock
-          units: count
-          translateData: true
+      # variants:
+      #   - id: disability_status_others
+      #     template: demographics
+      #     blockType: HorizontalBarBlock
+      #     units: count
+      #     translateData: true
 
     # - id: user_info_resources
     #   items: [fm-homepage]
