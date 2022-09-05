@@ -1,6 +1,11 @@
+/**
+ * To be used for subdependencies
+ */
+const PNPM_ROOT = "../node_modules/.pnpm/"
 const edits = [
   [
-    "node_modules/ts-invariant/package.json",
+    // PNPM version
+    PNPM_ROOT + "node_modules/ts-invariant/package.json",
     {
       type: "module",
       exports: {
@@ -10,7 +15,7 @@ const edits = [
     },
   ],
   [
-    "node_modules/ts-invariant/process/package.json",
+    PNPM_ROOT + "node_modules/ts-invariant/process/package.json",
     {
       type: "module",
     },
