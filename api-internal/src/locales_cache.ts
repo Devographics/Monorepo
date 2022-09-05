@@ -21,6 +21,7 @@ import {
     getLocaleMetaDataCacheKey,
     getAllLocalesListCacheKey
 } from './locales'
+import path from 'path'
 
 // @see https://blog.logrocket.com/alternatives-dirname-node-js-es-modules/
 // /!\ __dirname must be recomputed for each file, don't try to move this code
@@ -99,15 +100,15 @@ export const loadAllLocally = async (localesToLoad: LocaleMetaData[]): Promise<L
 
         // __dirname = /Users/sacha/Dev/state-of-js-graphql-results-api/dist
 
-        const devDir = __dirname.split('/').slice(1, -3).join('/')
-        const path = `/${devDir}/stateof-locales/${repo}`
-        const files = await readdir(path)
+        // const devDir = __dirname.split('/').slice(1, -3).join('/')
+        const localeDirPath = path.resolve(`../../stateof-locales/${repo}`)
+        const files = await readdir(localeDirPath)
         const yamlFiles = files.filter((f: String) => f.includes('.yml'))
 
         // loop over repo contents and fetch raw yaml files
         for (const fileName of yamlFiles) {
             if (!excludedFiles.includes(fileName)) {
-                const filePath = path + '/' + fileName
+                const filePath = localeDirPath + '/' + fileName
                 const contents = await readFile(filePath, 'utf8')
                 const yamlContents: any = yaml.load(contents)
                 const strings = yamlContents.translations
