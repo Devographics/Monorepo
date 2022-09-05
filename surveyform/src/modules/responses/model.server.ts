@@ -7,8 +7,7 @@ import { modelDef as modelDefCommon } from "./model";
 import { schema as schemaServer } from "./schema.server";
 import { createMongooseConnector } from "@vulcanjs/mongo";
 import { subscribe } from "~/server/email/email_octopus";
-import { createEmailHash } from "~/account/email/api/encryptEmail";
-import { surveyFromResponse } from "~/modules/responses/helpers";
+//import { createEmailHash } from "~/account/email/api/encryptEmail";
 
 // import { updateElasticSearchOnCreate, updateElasticSearchOnUpdate } from '../elasticsearch/index';
 // note: normalizing responses on every response update is too slow
@@ -87,6 +86,7 @@ export const Response = createGraphqlModelServer(modelDef);
 type ResponseDocument = any;
 import mongoose from "mongoose";
 import { captureException } from "@sentry/nextjs";
+import { surveyFromResponse } from "./helpers";
 // Using Vulcan (limited to CRUD operations)
 export const ResponseConnector = createMongooseConnector<ResponseDocument>(
   Response,
