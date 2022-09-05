@@ -1,7 +1,8 @@
-import dotenv from 'dotenv'
-dotenv.config()
 import { ApolloServer } from 'apollo-server-express'
-import responseCachePlugin from 'apollo-server-plugin-response-cache'
+// @see https://github.com/apollographql/apollo-server/issues/6022
+import responseCachePluginPkg from 'apollo-server-plugin-response-cache'
+const responseCachePlugin = (responseCachePluginPkg as any).default
+
 import typeDefs from './type_defs/schema.graphql'
 import { RequestContext } from './types'
 import resolvers from './resolvers'
@@ -10,13 +11,14 @@ import { initLocales } from './locales_cache'
 import { initEntities } from './entities'
 import { createClient } from 'redis'
 
-// import Sentry from '@sentry/node'
-// import Tracing from '@sentry/tracing'
-
 import path from 'path'
 
-const Sentry = require('@sentry/node')
-const Tracing = require('@sentry/tracing')
+import Sentry from '@sentry/node'
+
+import { rootDir } from './rootDir'
+import { appSettings } from './settings'
+
+//import Tracing from '@sentry/tracing'
 
 const app = express()
 
@@ -48,15 +50,15 @@ const checkSecretKey = (req: any) => {
 
 const start = async () => {
     const redisClient = createClient({
-        url: process.env.REDIS_URL
+        url: appSettings.redisUrl
     })
 
     redisClient.on('error', err => console.log('Redis Client Error', err))
 
-    if (process.env.CACHE_TYPE !== 'local') {
+    if (appSettings.cacheType !== 'local') {
         await redisClient.connect()
     }
-    
+
     const server = new ApolloServer({
         typeDefs,
         resolvers: resolvers as any,
@@ -88,7 +90,7 @@ const start = async () => {
     server.applyMiddleware({ app })
 
     app.get('/', function (req, res) {
-        res.sendFile(path.join(__dirname + '/public/welcome.html'))
+        res.sendFile(path.join(rootDir + '/public/welcome.html'))
     })
 
     app.get('/debug-sentry', function mainHandler(req, res) {

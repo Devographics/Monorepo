@@ -3,12 +3,17 @@ import { Octokit } from '@octokit/core'
 import fetch from 'node-fetch'
 import yaml from 'js-yaml'
 import { readdir, readFile } from 'fs/promises'
-import last from 'lodash/last'
+import last from 'lodash/last.js'
 import { logToFile } from './debug'
 
-let entities: Entity[] = []
+// @see https://blog.logrocket.com/alternatives-dirname-node-js-es-modules/
+// /!\ __dirname must be recomputed for each file, don't try to move this code
+import * as url from 'url'
+import { appSettings } from './settings'
+const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
+//const __filename = url.fileURLToPath(import.meta.url)
 
-const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
+let entities: Entity[] = []
 
 // load locales if not yet loaded
 export const loadOrGetEntities = async () => {
@@ -19,6 +24,7 @@ export const loadOrGetEntities = async () => {
 }
 
 export const loadFromGitHub = async () => {
+    const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
     const entities: Entity[] = []
     console.log(`-> loading entities repo`)
 
@@ -63,6 +69,7 @@ export const loadLocally = async () => {
 
     const entities: Entity[] = []
 
+    console.log('dirname value in entities.ts', __dirname)
     const devDir = __dirname.split('/').slice(1, -3).join('/')
     const path = `/${devDir}/stateof-entities/`
     const files = await readdir(path)
@@ -92,7 +99,7 @@ export const loadEntities = async () => {
     console.log('// loading entities')
 
     const entities: Entity[] =
-        process.env.LOAD_LOCALES === 'local' ? await loadLocally() : await loadFromGitHub()
+        appSettings.loadLocalesMode === 'local' ? await loadLocally() : await loadFromGitHub()
     console.log('// done loading entities')
 
     return entities

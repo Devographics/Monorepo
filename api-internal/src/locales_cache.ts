@@ -11,7 +11,7 @@ import fetch from 'node-fetch'
 import localesYAML from './data/locales.yml'
 import yaml from 'js-yaml'
 import { readdir, readFile } from 'fs/promises'
-import last from 'lodash/last'
+import last from 'lodash/last.js'
 import { setCache } from './caching'
 import marked from 'marked'
 import {
@@ -22,17 +22,23 @@ import {
     getAllLocalesListCacheKey
 } from './locales'
 
+// @see https://blog.logrocket.com/alternatives-dirname-node-js-es-modules/
+// /!\ __dirname must be recomputed for each file, don't try to move this code
+import * as url from 'url'
+import { appSettings } from './settings'
+const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
+//const __filename = url.fileURLToPath(import.meta.url)
+
 ///////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////// Data Loading //////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
-
-const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
 
 const excludedFiles = ['crowdin.yml']
 
 export const loadAllFromGitHub = async (
     localesToLoad: LocaleMetaData[]
 ): Promise<LocaleRawData[]> => {
+    const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
     let locales: LocaleRawData[] = []
     let i = 0
 
@@ -92,6 +98,7 @@ export const loadAllLocally = async (localesToLoad: LocaleMetaData[]): Promise<L
         const [owner, repo] = localeMetaData.repo.split('/')
 
         // __dirname = /Users/sacha/Dev/state-of-js-graphql-results-api/dist
+
         const devDir = __dirname.split('/').slice(1, -3).join('/')
         const path = `/${devDir}/stateof-locales/${repo}`
         const files = await readdir(path)
@@ -158,7 +165,7 @@ export const loadLocales = async (localeIds?: string[]): Promise<LocaleRawData[]
         : allLocales
     console.log(`// loading locales… (${localesToLoad.map((l: LocaleMetaData) => l.id).join(',')})`)
     const locales =
-        process.env.LOAD_LOCALES === 'local'
+        appSettings.loadLocalesMode === 'local'
             ? await loadAllLocally(localesToLoad)
             : await loadAllFromGitHub(localesToLoad)
     console.log('// done loading locales')
@@ -215,10 +222,8 @@ export const parseMarkdown = (stringFile: StringFile) => {
     stringFile.strings = stringFile.strings.map((s: TranslationStringObject) => {
         const str = String(s.t)
         // if string contains line breaks parse it as paragraph, else parse it inline
-        const containsLineBreaks = (str.match(/\n/g)||[]).length > 0
-        const tHtml = containsLineBreaks
-            ? marked.parse(str)
-            : marked.parseInline(str)
+        const containsLineBreaks = (str.match(/\n/g) || []).length > 0
+        const tHtml = containsLineBreaks ? marked.parse(str) : marked.parseInline(str)
         const containsTagRegex = new RegExp(/(<([^>]+)>)/i)
         // if markdown-parsed version of the string is different from original,
         // or original contains one or more HTML tags, add it as HTML
@@ -296,12 +301,12 @@ export const computeMetaData = (locale: LocaleRawData, parsedStringFiles: String
 //////////////////////////////////////////// Caching //////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
 
-/*
+const STORE_RAW_DATA = false
+/**
 
 Init locales by parsing them and then caching them
 
-*/
-const STORE_RAW_DATA = false
+**/
 export const initLocales = async (context: RequestContext) => {
     const startedAt = new Date()
     console.log(`// Initializing locales cache (Redis)…`)
@@ -309,7 +314,7 @@ export const initLocales = async (context: RequestContext) => {
     const allLocalesRawData = await loadLocales()
     const enLocale = allLocalesRawData.find(l => l.id === 'en-US')
     if (!enLocale) {
-        throw Error('Could not load locale en-US')
+        throw Error('en-US not found in loaded locales')
     }
 
     // parse en-US strings only once outside of main loop to

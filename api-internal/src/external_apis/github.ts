@@ -1,4 +1,5 @@
 import fetch from 'node-fetch'
+import { appSettings } from '../settings'
 
 export const normalizeGithubResource = (res: any) => {
     return {
@@ -16,7 +17,7 @@ export const normalizeGithubResource = (res: any) => {
 export const fetchGithubResource = async (ownerAndRepo: string) => {
     try {
         const res = await fetch(`https://api.github.com/repos/${ownerAndRepo}`, {
-            headers: { Authorization: `token ${process.env.GITHUB_TOKEN}` }
+            headers: { Authorization: `token ${appSettings.githubToken}` }
         })
         const json = await res.json()
         const data = normalizeGithubResource(json)
