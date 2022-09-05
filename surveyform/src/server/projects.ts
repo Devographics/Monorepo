@@ -9,7 +9,7 @@ const replaceAll = function (target, search, replacement) {
 
 const formatId = (id) => id && replaceAll(id, "-", "_");
 
-const idFieldName = 'slug'
+const idFieldName = "slug";
 
 export const loadProjects = async () => {
   await connectToAppDb();
@@ -19,7 +19,7 @@ export const loadProjects = async () => {
   const response = await fetch(
     "https://bestofjs-static-api.vercel.app/projects-full.json"
   );
-  const BestOfJSData = await response.json();
+  const BestOfJSData: any = await response.json();
   const projectsData = BestOfJSData.projects.filter((p) => !!p[idFieldName]);
 
   // format all ids (- to _)

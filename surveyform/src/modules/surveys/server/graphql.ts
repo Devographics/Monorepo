@@ -4,7 +4,6 @@ Note: not used yet, for now surveys are still bundled locally from YAML
 
 */
 
-import sortBy from "lodash/sortBy";
 import fetch from "node-fetch";
 import get from "lodash/get.js";
 import { serverConfig } from "~/config/server";
@@ -35,7 +34,7 @@ export const editionType = `type SurveyEdition {
   shareUrl: String
   resultsUrl: String
   imageUrl: String
-}`
+}`;
 
 const surveysQuery = `query SurveysQuery{
   surveys {
@@ -72,15 +71,15 @@ const fetchSurveys = async () => {
     },
     body: JSON.stringify({ query: surveysQuery, variables: {} }),
   });
-  const json = await response.json();
+  const json: any = await response.json();
   if (json.errors) {
     console.log("// surveysQuery API query error");
     console.log(JSON.stringify(json.errors, null, 2));
     throw new Error();
   }
   const surveys = get(json, "data.surveys") as Array<Survey>;
-  console.log('// fetchSurveys')
-  console.log(surveys)
+  console.log("// fetchSurveys");
+  console.log(surveys);
   return surveys;
 };
 
@@ -98,10 +97,7 @@ export const surveysResolver = async (root, args) => {
   >;
   if (disableAPICache || !surveysPromise) {
     surveysPromise = fetchSurveys();
-    nodeCache.set(
-      surveysPromiseCacheKey,
-      surveysPromise,
-    );
+    nodeCache.set(surveysPromiseCacheKey, surveysPromise);
   }
 
   const surveys = await surveysPromise;
