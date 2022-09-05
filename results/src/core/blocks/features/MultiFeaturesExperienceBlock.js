@@ -61,10 +61,10 @@ const MultiFeaturesExperienceBlock = ({
                 enableDescriptionMarkdown: false
             }}
         >
-            <dl>
+            <Row>
                 {data.map(feature => (
-                    <Row key={feature.id}>
-                        <RowYear>{feature.id}</RowYear>
+                    <>
+                        <RowFeature>{feature.entity.name}</RowFeature>
                         <RowChart className="FeatureExperienceBlock__RowChart">
                             <ChartContainer
                                 height={40}
@@ -73,7 +73,7 @@ const MultiFeaturesExperienceBlock = ({
                             >
                                 <GaugeBarChart
                                     keys={keys}
-                                    buckets={feature.facets[0].buckets}
+                                    buckets={feature?.experience?.year?.facets[0]?.buckets}
                                     colorMapping={bucketKeys}
                                     units={units}
                                     applyEmptyPatternTo="never_heard"
@@ -81,22 +81,23 @@ const MultiFeaturesExperienceBlock = ({
                                 />
                             </ChartContainer>
                         </RowChart>
-                    </Row>
+                    </>
                 ))}
-            </dl>
+            </Row>
         </Block>
     )
 }
 
-const Row = styled.div`
+const Row = styled.dl`
     display: grid;
-    grid-template-columns: auto 1fr;
+    grid-template-columns: minmax(200px, auto) 1fr;
     column-gap: ${spacing()};
+    row-gap: ${spacing(0.5)};
     align-items: center;
-    margin-bottom: ${spacing()};
+    /* margin-bottom: ${spacing()}; */
 `
 
-const RowYear = styled.dt`
+const RowFeature = styled.dt`
     font-weight: bold;
     margin: 0;
 `

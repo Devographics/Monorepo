@@ -157,8 +157,8 @@ const GaugeBarChart = ({
                 x2: 1,
                 y2: 1,
                 colors: [
-                    { offset: 0, color: gradientColors[0] },
-                    { offset: 100, color: gradientColors[1] }
+                    { offset: 0, color: gradientColors?.[0] },
+                    { offset: 100, color: gradientColors?.[1] }
                 ]
             }))}
             fill={colorMapping.map(({ id }) => ({ match: {id }, id}))}

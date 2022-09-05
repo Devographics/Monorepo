@@ -1,13 +1,15 @@
-titleId: blocks.features_overview
+titleId: sections.${categoryId}.title
 blockType: MultiFeaturesExperienceBlock
 dataPath: "dataAPI.survey.${id}"
 keysPath: "dataAPI.survey.${id}.0.experience.keys"
+blockNamespace: features
+chartNamespace: features
 enableCustomization: true
 hasSponsor: true
 query: >
     dataAPI {
         survey(survey: ${surveyType}) {
-            ${id}: features(ids: [${toolsCategories[categoryId]}]) {
+            ${id}: features(ids: [${featuresCategories[categoryId]}]) {
                 id
                 entity {
                     name

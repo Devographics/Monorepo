@@ -109,27 +109,10 @@
 
     - id: higher_education_degree
       template: demographics
-      variants:
-        - id: higher_education_degree_by_gender
-          blockNamespace: user_info
-          tabId: tabs.by_gender
-          template: by_facet
-          variables:  
-            fieldId: higher_education_degree
-            facetId: gender
-            options: {facetSort: {order: ___asc___, property: mean}, facetMinCount: 100}
 
     - id: yearly_salary
       template: demographics
       variants:
-        - id: yearly_salary_by_country
-          blockNamespace: user_info
-          tabId: tabs.by_country
-          template: by_facet
-          variables:  
-            fieldId: yearly_salary
-            facetId: country
-            options: {facetSort: {order: ___desc___, property: mean}, facetMinCount: 100}
         - id: yearly_salary_by_degree
           blockNamespace: user_info
           tabId: tabs.by_degree
@@ -156,15 +139,6 @@
       
     - id: gender
       template: demographics
-      variants:
-        - id: gender_by_country
-          blockNamespace: user_info
-          tabId: tabs.by_country
-          template: by_facet
-          variables:  
-            fieldId: gender
-            facetId: country
-            options: {facetSort: {order: ___desc___, property: mean}, limit: 11, facetMinCount: 100}
 
     - id: race_ethnicity
       template: demographics
@@ -184,12 +158,12 @@
       template: demographics
       blockType: HorizontalBarBlock
       translateData: true
-      # variants:
-      #   - id: disability_status_others
-      #     template: demographics
-      #     blockType: HorizontalBarBlock
-      #     units: count
-      #     translateData: true
+      variants:
+        - id: disability_status_others
+          template: demographics
+          blockType: HorizontalBarBlock
+          units: count
+          translateData: true
 
     # - id: user_info_resources
     #   items: [fm-homepage]
@@ -358,8 +332,8 @@
     # - id: tools_arrows
     #   template: tools_arrows
 
-    - id: tier_list
-      template: tier_list
+    # - id: tier_list
+    #   template: tier_list
 
     - id: scatterplot_overview
       template: scatterplot_overview
@@ -375,7 +349,6 @@
 
         - template: tools_experience_ranking
 
-        - template: tools_section_streams
 
         - id: tool_modal_hint
           template: hint
@@ -422,8 +395,6 @@
         - template: page_introduction
 
         - template: tools_experience_ranking
-
-        - template: tools_section_streams
 
         - id: tool_modal_hint
           template: hint
@@ -472,8 +443,6 @@
         - template: page_introduction
 
         - template: tools_experience_ranking
-
-        - template: tools_section_streams
 
         - id: tool_modal_hint
           template: hint
@@ -532,8 +501,6 @@
         - template: page_introduction
 
         - template: tools_experience_ranking
-
-        - template: tools_section_streams
 
         - id: tool_modal_hint
           template: hint

@@ -40,7 +40,7 @@ const getNodeData = (feature, index) => {
         usage,
         unused_count: knowNotUsedBucket.count,
         usage_ratio: round((usage / awareness) * 100, 1),
-        name: feature.name
+        name: feature.entity.name
     }
 }
 
@@ -89,6 +89,7 @@ const FeaturesOverviewBlock = ({ block, data, triggerId, controlledMode }) => {
         () => getChartData(data, translate),
         [data, translate]
     )
+
     const categories = chartData.children
     const legends = useLegends(
         block,
@@ -121,7 +122,7 @@ const FeaturesOverviewBlock = ({ block, data, triggerId, controlledMode }) => {
                     title: category.name,
                     data: sortBy(category.children, 'usage_ratio')
                         .reverse()
-                        .map(f => ({ ...f, id: f?.entity?.name })),
+                        .map(f => ({ ...f, id: f?.name })),
                     valueKeys: ['awareness', 'usage', 'usage_ratio']
                 })
             )}

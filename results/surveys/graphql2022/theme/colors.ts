@@ -137,12 +137,10 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
             never_heard: [colors.greyLight, colors.greyLightest]
         },
         toolSections: {
-            front_end_frameworks: colors.pinkLight,
-            back_end_frameworks: colors.purple,
-            testing: colors.orange,
-            build_tools: colors.teal,
-            mobile_desktop: colors.green,
-            monorepo_tools: colors.navyLighter
+            graphql_servers: colors.pinkLight,
+            graphql_clients: colors.purple,
+            graphql_api_generators: colors.orange,
+            schema_builders: colors.teal,
         },
         features: {
             used: [colors.pink, colors.pinkLight],
