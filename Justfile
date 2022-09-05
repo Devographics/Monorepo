@@ -1,4 +1,6 @@
 # https://github.com/casey/just
+install:
+    pnpm install
 
 # For external and internal APIs
 redis:
