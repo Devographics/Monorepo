@@ -57,7 +57,7 @@
         "dev:clean:webpack": "NODE_ENV=development DISABLE_CACHE=true webpack --config webpack.development.js",
         "fmt": "prettier --write \"src/**/*.{ts,js,mjs,yml,graphql}\"",
         "heroku-postbuild": "NODE_ENV=production webpack --config webpack.production.js",
-        "start": "node dist/server.js"
+        "start": "node dist/server.mjs"
     },
     "engines": {
         "node": "16.15.0"
