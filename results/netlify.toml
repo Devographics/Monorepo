@@ -1,0 +1,9 @@
+# netlify.toml
+
+[dev]
+
+  targetPort = 8001
+
+[[edge_functions]]
+  path = "/*"
+  function = "add_block_meta_tags"

@@ -23,7 +23,6 @@ const Head = () => {
 
     const mergedMeta = [
         { charset: 'utf-8' },
-        { name: 'description', content: description },
         // responsive
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         // google check
@@ -31,8 +30,11 @@ const Head = () => {
             name: 'google-site-verification',
             content: 'hrTRsz9fkGmQlVbLBWA4wmhn0qsI6_M3NKemTGCkpps'
         },
+        { name: 'custom-meta-start' },
+        { name: 'description', content: description },
         // social
-        ...socialMeta
+        ...socialMeta,
+        { name: 'custom-meta-end' }
     ]
 
     return (

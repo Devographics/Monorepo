@@ -152,28 +152,30 @@ exports.createBlockPages = (page, context, createPage, locales, buildInfo) => {
     }
 
     blocks.forEach(block => {
-        block.variants.forEach(blockVariant => {
-            // allow for specifying explicit pageId in block definition
-            if (!blockVariant.pageId) {
-                blockVariant.pageId = page.id
-            }
-            locales.forEach(locale => {
-                buildInfo.blockCount++
-
-                const blockPage = {
-                    path: getLocalizedPath(blockVariant.path, locale),
-                    component: path.resolve(`./src/core/share/ShareBlockTemplate.js`),
-                    context: {
-                        ...context,
-                        redirect: `${getLocalizedPath(page.path, locale)}#${blockVariant.id}`,
-                        block: blockVariant,
-                        locales: getCleanLocales(locales),
-                        locale
-                    }
+        if (!block.disableExport) {
+            block.variants.forEach(blockVariant => {
+                // allow for specifying explicit pageId in block definition
+                if (!blockVariant.pageId) {
+                    blockVariant.pageId = page.id
                 }
-                createPage(blockPage)
+                locales.forEach(locale => {
+                    buildInfo.blockCount++
+
+                    const blockPage = {
+                        path: getLocalizedPath(blockVariant.path, locale),
+                        component: path.resolve(`./src/core/share/ShareBlockTemplate.js`),
+                        context: {
+                            ...context,
+                            redirect: `${getLocalizedPath(page.path, locale)}#${blockVariant.id}`,
+                            block: blockVariant,
+                            locales: getCleanLocales(locales),
+                            locale
+                        }
+                    }
+                    createPage(blockPage)
+                })
             })
-        })
+        }
     })
 }
 

@@ -165,7 +165,7 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
 
         if (!USE_FAST_BUILD) {
             // skip this is fast_build option is enabled
-            createBlockPages(page, context, createPage, locales, buildInfo)
+            // createBlockPages(page, context, createPage, locales, buildInfo)
         }
     }
     logToFile('build.yml', yaml.dump(buildInfo, { noRefs: true }), { mode: 'overwrite' })
