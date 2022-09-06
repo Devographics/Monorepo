@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router.js";
-import surveys, { SurveyDocument } from "~/surveys";
+import type { SurveyDocument } from "~/surveys";
 import { useIntlContext } from "@vulcanjs/react-i18n";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { useEntitiesQuery } from "~/core/hooks/useEntitiesQuery";
 import { convertSurveyToMarkdown } from "~/modules/surveys/outlineExport";
+import { surveysWithTemplates } from "~/surveys/withTemplates";
+const surveys = surveysWithTemplates;
 
 const useCurrentSurvey = () => {
   const router = useRouter();

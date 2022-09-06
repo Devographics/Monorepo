@@ -5,7 +5,7 @@ import CountUp from "react-countup";
 import Confetti from "react-confetti";
 import take from "lodash/take";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
-import { SurveyType } from "~/surveys";
+import type { SurveyType } from "~/surveys";
 import { useIntlContext } from "@vulcanjs/react-i18n";
 import { useEntitiesQuery } from "~/core/hooks/useEntitiesQuery";
 

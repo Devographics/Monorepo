@@ -15,7 +15,9 @@ import React, { useState, useEffect, useRef } from "react";
 import { ResponseType } from "~/modules/responses";
 import { getSectionCompletionPercentage } from "~/modules/responses/helpers";
 import { getSurveyPath } from "~/modules/surveys/helpers";
-import surveys, { SurveySection, SurveyType } from "~/surveys";
+import { SurveySection, SurveyType } from "~/surveys";
+import { surveysWithTemplates } from "~/surveys/withTemplates";
+const surveys = surveysWithTemplates;
 
 // TODO
 // const getOverallCompletionPercentage = (response) => {
@@ -169,7 +171,9 @@ const SectionNavItem = ({
             setCurrentFocusIndex(null);
           }}
         >
-          <Components.FormattedMessage id={`sections.${section.intlId || section.id}.title`} />{" "}
+          <Components.FormattedMessage
+            id={`sections.${section.intlId || section.id}.title`}
+          />{" "}
           {showCompletion && (
             <span className="section-nav-item-completion">{completion}%</span>
           )}

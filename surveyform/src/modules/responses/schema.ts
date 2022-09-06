@@ -1,11 +1,8 @@
 import surveys from "~/surveys";
 
-import {
-  getQuestionObject,
-  getQuestionSchema,
-  getQuestionFieldName,
-} from "./helpers";
+import { getQuestionSchema } from "./helpers";
 import { VulcanGraphqlSchema } from "@vulcanjs/graphql";
+import { getQuestionFieldName, getQuestionObject } from "./parseSurvey";
 
 export const schema: VulcanGraphqlSchema = {
   // default properties

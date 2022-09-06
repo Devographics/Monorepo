@@ -1,7 +1,6 @@
 import React from "react";
 import ShareSite from "../share/ShareSite";
 import { getSurveyPath } from "~/modules/surveys/helpers";
-import surveys from "~/surveys";
 import Score from "../common/Score";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { useSingle } from "@vulcanjs/react-hooks";
@@ -9,6 +8,8 @@ import { Response } from "~/modules/responses";
 import { ResponseFragmentWithRanking } from "~/modules/responses/fragments";
 import { useRouter } from "next/router.js";
 import { useSurveyResponseParams } from "../survey/hooks";
+import { surveysWithTemplates } from "~/surveys/withTemplates";
+const surveys = surveysWithTemplates;
 
 const Thanks = () => {
   const { responseId } = useSurveyResponseParams();

@@ -1,4 +1,4 @@
-import { SurveyDocument } from "~/surveys";
+import type { SurveyDocument } from "~/surveys";
 
 export interface ExportOptions {
   format: {

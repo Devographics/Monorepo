@@ -8,7 +8,6 @@ Note: form has a customized "FormSubmit" component to show the prev/next buttons
 
 */
 import React from "react";
-import surveys from "~/surveys";
 import SurveyNav from "./SurveyNav";
 import SurveySectionContents from "./SurveySectionContents";
 import SurveyHeadTags from "../SurveyHeadTags";
@@ -19,6 +18,8 @@ import { Response } from "~/modules/responses/model";
 import { ResponseFragment } from "~/modules/responses/fragments";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { getFragmentName } from "@vulcanjs/graphql";
+import { surveysWithTemplates } from "~/surveys/withTemplates";
+const surveys = surveysWithTemplates;
 
 const SurveySection = () => {
   let { responseId, sectionNumber = 1 } = useSurveyResponseParams();
@@ -29,8 +30,8 @@ const SurveySection = () => {
     fragmentName: getFragmentName(ResponseFragment),
     input: { id: responseId },
     queryOptions: {
-      pollInterval: 0
-    }
+      pollInterval: 0,
+    },
   });
   const { document: response, loading } = data;
   const Components = useVulcanComponents();
@@ -72,8 +73,8 @@ const SurveySection = () => {
         <SurveyNav
           survey={response.survey}
           response={response}
-        // Not actually used in SurveyNav
-        //currentSectionNumber={sectionNumber}
+          // Not actually used in SurveyNav
+          //currentSectionNumber={sectionNumber}
         />
         <div className="section-contents">
           <SurveyHeadTags survey={survey} />

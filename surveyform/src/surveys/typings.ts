@@ -69,6 +69,7 @@ export interface ParsedQuestion extends Pick<Field, "template"> {
   slug?: string;
   suffix?: string;
 }
+
 // A question can nest fields
 export type SurveyQuestion = Field | Array<Field>;
 export interface SurveySection {
