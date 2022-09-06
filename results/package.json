@@ -16,7 +16,7 @@
     ],
     "engineStrict": true,
     "engines": {
-        "node": "^16.15.0"
+        "node": "^16.17.0"
     },
     "dependencies": {
         "@mdx-js/mdx": "^1.6.22",
