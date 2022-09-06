@@ -49,17 +49,10 @@ const MultiFeaturesExperienceBlock = ({
                 // })
             ]}
             legends={bucketKeys}
-            title={name}
             units={units}
             setUnits={setUnits}
             data={data}
-            block={{
-                ...block,
-                title: name,
-                // titleLink: mdnLink,
-                // description,
-                enableDescriptionMarkdown: false
-            }}
+            block={block}
         >
             <Row>
                 {data.map(feature => (
