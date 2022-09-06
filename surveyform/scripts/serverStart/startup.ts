@@ -7,8 +7,8 @@ TODO: shouldn't they be run on-demand instead of running at app startup?
 */
 import * as scripts from "~/server/scripts";
 // import { convertAllYAML } from "~/server/yaml";
-import { loadProjects } from "~/server/projects";
-import { logAllRules } from "~/server/normalization/helpers";
+// import { loadProjects } from "~/server/projects";
+// import { logAllRules } from "~/server/normalization/helpers";
 //import { normalizeJob } from "~/server/normalization/cronjob";
 //import { exportEmailsJob } from "~/server/users/cronjob";
 

@@ -1,3 +1,9 @@
+/**
+ * Parse a survey
+ *
+ * /!\ Template parsing is done separately, because it involves
+ * JSX and should not be reused in scripts
+ */
 import { slugify } from "@vulcanjs/utils";
 import pick from "lodash/pick.js";
 import pickBy from "lodash/pickBy.js";
@@ -6,7 +12,6 @@ import surveys, {
   Field,
   FieldTemplateId,
   ParsedQuestion,
-  SurveyDocument,
   SurveySection,
   SurveyType,
 } from "~/surveys";
@@ -15,9 +20,13 @@ import { statuses } from "../constants";
 //import { data } from "autoprefixer";
 import { ResponseType } from "./typings";
 import { isAdmin } from "@vulcanjs/permissions";
-import { templates } from "./schemaTemplates";
 import { VulcanGraphqlFieldSchema } from "@vulcanjs/graphql";
 import SimpleSchema from "simpl-schema";
+import {
+  getQuestionFieldName,
+  getQuestionObject,
+  parseSurvey,
+} from "./parseSurvey";
 
 // Previously it lived in Vulcan NPM, but that's something you'd want to control more
 // precisely at app level
@@ -109,20 +118,6 @@ export const makeId = (str) => {
   return s;
 };
 
-/*
-
-Note: section's slug can be overriden by the question
-
-*/
-export const getQuestionFieldName = (survey, section, question) => {
-  const sectionSlug = question.sectionSlug || section.slug || section.id;
-  let fieldName = survey.slug + "__" + sectionSlug + "__" + question.id;
-  if (question.suffix) {
-    fieldName += `__${question.suffix}`;
-  }
-  return fieldName;
-};
-
 export const getThanksPath = (response: ResponseType) => {
   const survey = getSurveyFromResponse(response);
   if (!survey)
@@ -132,49 +127,6 @@ export const getThanksPath = (response: ResponseType) => {
   const { name, year } = survey;
   const path = `/survey/${slugify(name)}/${year}/${response._id}/thanks`;
   return path;
-};
-
-// build question object from outline
-export const getQuestionObject = (
-  questionObject: Field & {
-    slug?: any;
-    type?: any;
-    fieldType?: any;
-    showOther?: boolean;
-    allowother?: boolean;
-  },
-  section: SurveySection,
-  number?: number
-) => {
-  questionObject.slug = questionObject.id;
-  questionObject.type = String; // default to String type
-
-  // get template from either question or parent section
-  const templateName = questionObject.template || section.template;
-  // Question does not necessarilly use a known template, it's ok if templateName is not defined
-  if (templateName) {
-    const questionTemplate = templates[templateName];
-    if (questionTemplate) {
-      const template = questionTemplate(questionObject);
-      questionObject = {
-        ...questionObject,
-        ...template,
-      };
-    } else {
-      console.warn(`Template ${templateName} does not exist.`);
-    }
-  }
-
-  questionObject.showOther = questionObject.allowother;
-
-  // if type is specified, use it
-  if (questionObject.fieldType) {
-    if (questionObject.fieldType === "Number") {
-      questionObject.type = Number;
-    }
-  }
-
-  return questionObject;
 };
 
 export const parseOptions = (questionObject, options) => {
@@ -209,7 +161,8 @@ export const generateIntlId = (questionObject, section, survey) => {
   // const surveySegment = survey.context;
   const surveySegment = "";
   // for section segment, use either intlPrefix, section slug or sectionSlug override on question
-  const sectionSegment = intlPrefix || sectionSlug || section.slug || section.id;
+  const sectionSegment =
+    intlPrefix || sectionSlug || section.slug || section.id;
   const questionSegment = `.${String(id)}`;
   // for now hardcode "others" and "prenormalized" as the only valid suffixes
   const suffixSegment =
@@ -276,36 +229,6 @@ export const getQuestionSchema = (
   }
 
   return questionSchema;
-};
-
-/*
-
-Take a raw survey YAML and process it to give ids, fieldNames, etc.
-to every question
-
-*/
-export const parseSurvey = (survey: SurveyDocument) => {
-  let i = 0;
-  const parsedSurvey = { ...survey, createdAt: new Date(survey.createdAt) };
-  parsedSurvey.outline = survey.outline.map((section) => {
-    return {
-      ...section,
-      questions:
-        section.questions &&
-        section.questions.map((question) => {
-          i++;
-          // @ts-ignore TODO: question may be an array according to types
-          const questionObject = getQuestionObject(question, section, i);
-          questionObject.fieldName = getQuestionFieldName(
-            survey,
-            section,
-            questionObject
-          );
-          return questionObject;
-        }),
-    };
-  });
-  return parsedSurvey;
 };
 
 /**

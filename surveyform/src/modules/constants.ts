@@ -1,4 +1,4 @@
-import { SurveyStatus, SurveyStatusLabel } from "~/surveys";
+import type { SurveyStatus, SurveyStatusLabel } from "~/surveys";
 
 export const statuses: { [label in SurveyStatusLabel]: SurveyStatus } = {
   preview: 1,

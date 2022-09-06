@@ -14,7 +14,7 @@ import js2022 from "./stateofjs/js2022.yml";
 
 import graphql2022 from "./stateofgraphql/graphql2022.yml";
 
-import { parseSurvey } from "~/modules/responses/helpers";
+import { parseSurvey } from "~/modules/responses/parseSurvey";
 
 // make sure array is properly sorted here
 import { SurveyType } from "./typings";
@@ -46,6 +46,11 @@ if (
   surveys.push(testSurvey);
 }
 
+/**
+ * FOR REACT CODE, USE surveyWithTemplates INSTEAD
+ *
+ * This version doesn't include templates and thus do not load any JSX code
+ */
 const parsedSurveys: Array<SurveyType> = surveys.map(parseSurvey);
 
 export default parsedSurveys;
