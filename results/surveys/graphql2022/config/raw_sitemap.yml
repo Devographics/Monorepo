@@ -50,16 +50,16 @@
       disableExport: true
       wrapBlock: false
 
-- id: tshirt
-  path: /tshirt
-  showTitle: false
-  blocks:
-    - id: tshirt_intro
-      template: page_introduction
-    - id: tshirt_block
-      blockType: TshirtBlock
-      wrapBlock: false
-      disableExport: true
+# - id: tshirt
+#   path: /tshirt
+#   showTitle: false
+#   blocks:
+#     - id: tshirt_intro
+#       template: page_introduction
+#     - id: tshirt_block
+#       blockType: TshirtBlock
+#       wrapBlock: false
+#       disableExport: true
 
 - id: user_info
   titleId: sections.demographics.title
@@ -158,12 +158,12 @@
       template: demographics
       blockType: HorizontalBarBlock
       translateData: true
-      variants:
-        - id: disability_status_others
-          template: demographics
-          blockType: HorizontalBarBlock
-          units: count
-          translateData: true
+      # variants:
+      #   - id: disability_status_others
+      #     template: demographics
+      #     blockType: HorizontalBarBlock
+      #     units: count
+      #     translateData: true
 
     # - id: user_info_resources
     #   items: [fm-homepage]
@@ -359,8 +359,8 @@
           variables:
             limit: 10
 
-        # - id: lee_robinson
-        #   template: picks
+        - id: jamie_barton
+          template: picks
 
         - template: happiness
           variables:
@@ -405,8 +405,8 @@
           variables:
             limit: 10
 
-        # - id: vadim_makeev
-        #   template: picks
+        - id: tanmai_gopal
+          template: picks
 
         - template: happiness
           variables:
@@ -453,8 +453,8 @@
           variables:
             limit: 10
 
-        # - id: ben_ilegbodu
-        #   template: picks
+        - id: tim_suchanek
+          template: picks
 
         - template: happiness
           variables:
@@ -511,8 +511,8 @@
           variables:
             limit: 5
 
-        # - id: shawn_wang
-        #   template: picks
+        - id: uri_goldshtein
+          template: picks
 
         - template: happiness
           variables:
@@ -564,8 +564,8 @@
             fieldId: tools_others
             options: { limit: 15 }
 
-    # - id: mark_erikson
-    #   template: picks
+    - id: benjie_gillam
+      template: picks
 
     - id: web_frameworks
       tabId: tabs.main_answers
