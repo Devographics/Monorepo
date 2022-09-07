@@ -29,7 +29,8 @@ Since we rely on Node 16+, you can use `yarn` and `pnpm` by enabling the [Corepa
 corepack enable
 ```
 
-### Caveats
+### Caveats with pnpm
 
 - If you import a subdependency of an installe dependency, you need to install it explicitely. For example, `apollo-server-express` depens on `apollo-server-core`. But if you want to use `apollo-server-core` directly in your code, it must be installed. Yarn and NPM were more flexible (but also less reliable).
 - The `node_modules` folder structure is altered. This might trick Webpack cache (see the PNPM plugin used for Gatsby) and also our Apollo patch. Subdependencies are located in `node_modules/.pnpm/node_modules`, only direct dependencies of the project are located in `node_modules` (but they also link towards PNPM shared cache)
+- You need `preserveSymlinks: true` in tsconfig.

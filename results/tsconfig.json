@@ -1,7 +1,13 @@
 {
-  "include": ["./src/**/*"],
-  "exclude": ["node_modules"],
+  "include": [
+    "./src/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ],
   "compilerOptions": {
+    /** For PNPM to work correctly with TypeScript and React*/
+    "preserveSymlinks": true,
     "target": "es5",
     "jsx": "react",
     "skipLibCheck": true,
@@ -20,7 +26,9 @@
     "strict": true,
     "baseUrl": "./",
     "paths": {
-      "core/*": ["./src/core/*"]
+      "core/*": [
+        "./src/core/*"
+      ]
     }
   }
 }
