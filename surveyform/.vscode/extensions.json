@@ -1,6 +1,5 @@
 {
     "recommendations": [
-        "silvenon.mdx",
-        "IronGeek.vscode-env"
+        "irongeek.vscode-env"
     ]
 }
