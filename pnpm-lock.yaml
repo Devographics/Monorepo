@@ -243,6 +243,7 @@ importers:
       '@nivo/line': 0.78.0
       '@nivo/marimekko': 0.79.1
       '@nivo/pie': 0.79.1
+      '@nivo/radar': ^0.79.1
       '@nivo/sankey': 0.79.1
       '@nivo/scatterplot': 0.79.1
       '@nivo/stream': 0.79.1
@@ -333,6 +334,7 @@ importers:
       '@nivo/line': 0.78.0_4qmvjl2ql6a6ce4bs63nxw7cku
       '@nivo/marimekko': 0.79.1_4qmvjl2ql6a6ce4bs63nxw7cku
       '@nivo/pie': 0.79.1_4qmvjl2ql6a6ce4bs63nxw7cku
+      '@nivo/radar': 0.79.1_4qmvjl2ql6a6ce4bs63nxw7cku
       '@nivo/sankey': 0.79.1_4qmvjl2ql6a6ce4bs63nxw7cku
       '@nivo/scatterplot': 0.79.1_4qmvjl2ql6a6ce4bs63nxw7cku
       '@nivo/stream': 0.79.1_4qmvjl2ql6a6ce4bs63nxw7cku
@@ -8132,6 +8134,25 @@ packages:
       - react-dom
     dev: false
 
+  /@nivo/radar/0.79.1_4qmvjl2ql6a6ce4bs63nxw7cku:
+    resolution: {integrity: sha512-T91l/905PMjYNFT1ikOxNOVvDzTw4ysIOZcRj+xT7fLMpqd4TKlNUFoQ/t3XyrYFgIlVaSCSQxF/XKlPD8AhCw==}
+    peerDependencies:
+      '@nivo/core': 0.79.0
+      react: '>= 16.14.0 < 18.0.0'
+    dependencies:
+      '@nivo/colors': 0.79.1_xxexekmh3odp7co7m3ylubdwcu
+      '@nivo/core': 0.78.0_vcdwbqqj4lpdy45youhd2o3pxm
+      '@nivo/legends': 0.79.1_xxexekmh3odp7co7m3ylubdwcu
+      '@nivo/tooltip': 0.79.0_2jsefjoq2bsk2ncrimnwepov6q
+      '@react-spring/web': 9.3.1_biqbaboplfbrettd7655fr4n2y
+      d3-scale: 3.3.0
+      d3-shape: 1.3.7
+      react: 18.2.0
+    transitivePeerDependencies:
+      - prop-types
+      - react-dom
+    dev: false
+
   /@nivo/recompose/0.78.0_react@18.2.0:
     resolution: {integrity: sha512-iYrScMqmw2RUy6erhS/9w3wan5oWkdEYCLbB7NF9RwHXuS9TxqdWGw5BTCgibGnjZGHHvtZGr+J1TTX5M6WmEA==}
     peerDependencies:
@@ -8607,7 +8628,7 @@ packages:
       '@parcel/diagnostic': 2.6.2
       '@parcel/fs': 2.6.2_@parcel+core@2.6.2
       '@parcel/logger': 2.6.2
-      '@parcel/types': 2.6.2_@parcel+core@2.6.2
+      '@parcel/types': 2.6.2
       '@parcel/utils': 2.6.2
       '@parcel/workers': 2.6.2_@parcel+core@2.6.2
       semver: 5.7.1
@@ -8765,6 +8786,18 @@ packages:
       react-refresh: 0.9.0
     transitivePeerDependencies:
       - '@parcel/core'
+    dev: false
+
+  /@parcel/types/2.6.2:
+    resolution: {integrity: sha512-MV8BFpCIs2jMUvK2RHqzkoiuOQ//JIbrD1zocA2YRW3zuPL/iABvbAABJoXpoPCKikVWOoCWASgBfWQo26VvJQ==}
+    dependencies:
+      '@parcel/cache': 2.6.2_@parcel+core@2.6.2
+      '@parcel/diagnostic': 2.6.2
+      '@parcel/fs': 2.6.2_@parcel+core@2.6.2
+      '@parcel/package-manager': 2.6.2_@parcel+core@2.6.2
+      '@parcel/source-map': 2.1.0
+      '@parcel/workers': 2.6.2_@parcel+core@2.6.2
+      utility-types: 3.10.0
     dev: false
 
   /@parcel/types/2.6.2_@parcel+core@2.6.2:
