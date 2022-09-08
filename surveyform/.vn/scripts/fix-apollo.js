@@ -1,22 +1,27 @@
 /**
  * To be used for subdependencies
+ * (you can also explicitely install the subdependency to create
+ * a symlink directly in "node_modues/ts-invariant")
  */
 // This doesn't work on Vercel, probably because of the symlinks
-//const PNPM_ROOT = "../node_modules/.pnpm/"
+const PNPM_ROOT = "../node_modules/.pnpm/"
 const edits = [
   [
     // PNPM version
-    /*PNPM_ROOT + */"node_modules/ts-invariant/package.json",
+    PNPM_ROOT + "node_modules/ts-invariant/package.json",
     {
       type: "module",
       exports: {
-        ".": "./lib/invariant.esm.js",
+        // v0.9 of ts-invariant
+        // ".": "./lib/invariant.esm.js",
+        // v0.10 of ts-invariant
+        ".": "./lib/invariant.js",
         "./process/index.js": "./process/index.js",
       },
     },
   ],
   [
-    /*PNPM_ROOT + */"node_modules/ts-invariant/process/package.json",
+    PNPM_ROOT + "node_modules/ts-invariant/process/package.json",
     {
       type: "module",
     },
