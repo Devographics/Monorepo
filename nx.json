@@ -1,0 +1,109 @@
+{
+  "extends": "nx/presets/npm.json",
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "nx/tasks-runners/default",
+      "options": {
+        "cacheableOperations": [
+          "build",
+          "dev",
+          "dev:clean",
+          "fmt",
+          "heroku-postbuild",
+          "clean",
+          "//build",
+          "copy:public",
+          "build:webpack",
+          "dev:webpack",
+          "dev:clean:webpack",
+          "api",
+          "api-internal",
+          "test",
+          "eject",
+          "preview",
+          "deploy",
+          "lint",
+          "types:check",
+          "analyze:bundle:storybook",
+          "analyze:bundle",
+          "auto-changelog",
+          "build-storybook",
+          "build:docker",
+          "//old-build:scripts",
+          "//build:scripts",
+          "//build:scripts:FIXME",
+          "build:scripts",
+          "build:static",
+          "build:storybook",
+          "build:test:docker",
+          "chromatic",
+          "combine:reports",
+          "copy:reports",
+          "coverage:e2e",
+          "coverage:unit",
+          "coverage",
+          "cypress:open",
+          "cypress:run",
+          "db:test:seed",
+          "//db:test:reset",
+          "db:test:reset",
+          "debug",
+          "predev",
+          "//dev:test",
+          "dev:test",
+          "link:vulcan",
+          "unlink:vulcan",
+          "mkdir:reports",
+          "//mongo",
+          "mongo",
+          "postbuild",
+          "postcoverage",
+          "//postinstall",
+          "postinstall",
+          "precombine:reports",
+          "precopy:reports",
+          "precoverage",
+          "prepare",
+          "detect-leaks",
+          "pre-commit:gitleaks",
+          "pre-commit",
+          "pre-commit2",
+          "prereport:combined",
+          "report:combined",
+          "//----MONGO----",
+          "//----REDIS----",
+          "redis",
+          "//----STORYBOOK----",
+          "storybook",
+          "test:docker",
+          "test:e2e",
+          "test:unit",
+          "test:vn",
+          "//upgrade:vulcan",
+          "upgrade:vulcan",
+          "//upgrade:vulcan2",
+          "upgrade:vulcan2",
+          "typecheck-watch",
+          "//typecheck",
+          "typecheck",
+          "update-link-vulcan"
+        ]
+      }
+    }
+  },
+  "targetDefaults": {
+    "build": {
+      "dependsOn": [
+        "^build"
+      ]
+    },
+    "prepare": {
+      "dependsOn": [
+        "^prepare"
+      ]
+    }
+  },
+  "affected": {
+    "defaultBase": "main"
+  }
+}

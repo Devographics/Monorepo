@@ -19,7 +19,10 @@ dbs:
     pnpm exec concurrently --prefix-colors "bgRed,bgGreen" \
     --names "redis,mongo" "just redis" "just mongo";
 
-
+# Create local build
+# Don't forget to run Redis and Mongo dbs
+build:
+    pnpm exec nx run-many --target=build
 
 default:
     @just --list --justfile {{justfile()}}
