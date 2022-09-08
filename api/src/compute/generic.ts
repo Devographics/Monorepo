@@ -18,6 +18,7 @@ import round from 'lodash/round'
 import { count } from 'console'
 import difference from 'lodash/difference'
 import yamlKeys from '../data/keys.yml'
+import isEmpty from 'lodash/isEmpty'
 
 export interface TermAggregationOptions {
     // filter aggregations
@@ -439,7 +440,7 @@ export async function sortBuckets(resultsByYears: ResultsByYear[], options: Sort
     const { sort, order, values } = options
     for (let year of resultsByYears) {
         for (let facet of year.facets) {
-            if (values) {
+            if (values && !isEmpty(values)) {
                 // if values are specified, sort by values
                 facet.buckets = [...facet.buckets].sort((a, b) => {
                     // make sure everything is a string to avoid type mismatches
