@@ -348,7 +348,7 @@
         - template: page_introduction
 
         - template: tools_experience_ranking
-
+          blockType: ToolsExperienceRankingSingleYearBlock
 
         - id: tool_modal_hint
           template: hint
@@ -370,6 +370,8 @@
           items: [fm-react, fm-vue]
           template: recommended_resources
 
+        - id: apollo_server
+          template: tool_experience
         - id: yoga
           template: tool_experience
         - id: graphql_js
@@ -395,6 +397,7 @@
         - template: page_introduction
 
         - template: tools_experience_ranking
+          blockType: ToolsExperienceRankingSingleYearBlock
 
         - id: tool_modal_hint
           template: hint
@@ -443,6 +446,7 @@
         - template: page_introduction
 
         - template: tools_experience_ranking
+          blockType: ToolsExperienceRankingSingleYearBlock
 
         - id: tool_modal_hint
           template: hint
@@ -501,6 +505,7 @@
         - template: page_introduction
 
         - template: tools_experience_ranking
+          blockType: ToolsExperienceRankingSingleYearBlock
 
         - id: tool_modal_hint
           template: hint

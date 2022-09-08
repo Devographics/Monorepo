@@ -41,13 +41,13 @@ const MultiFeaturesExperienceBlock = ({
 
     return (
         <Block
-            tables={[
-                // getTableData({
-                //     legends: bucketKeys,
-                //     data: groupDataByYears({ keys, data: allYears }),
-                //     years: allYears.map(y => y.year)
-                // })
-            ]}
+            tables={data.map(feature =>
+                getTableData({
+                    title: feature.entity.name,
+                    legends: bucketKeys,
+                    data: feature.experience.year.facets[0].buckets
+                })
+            )}
             legends={bucketKeys}
             units={units}
             setUnits={setUnits}
@@ -59,11 +59,7 @@ const MultiFeaturesExperienceBlock = ({
                     <>
                         <RowFeature>{feature.entity.name}</RowFeature>
                         <RowChart className="FeatureExperienceBlock__RowChart">
-                            <ChartContainer
-                                height={40}
-                                fit={true}
-                                className="FeatureChart"
-                            >
+                            <ChartContainer height={40} fit={true} className="FeatureChart">
                                 <GaugeBarChart
                                     keys={keys}
                                     buckets={feature?.experience?.year?.facets[0]?.buckets}
@@ -98,7 +94,9 @@ const RowChart = styled.dd`
     margin: 0;
 
     @media ${mq.smallMedium} {
-      max-width: calc(100vw - 40px - 30px - 20px); /* total width - page padding - year width - gap */
+        max-width: calc(
+            100vw - 40px - 30px - 20px
+        ); /* total width - page padding - year width - gap */
     }
 `
 

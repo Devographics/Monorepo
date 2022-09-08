@@ -133,9 +133,9 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
     ranges: {
         tools: {
             would_use: [colors.teal, colors.tealLight],
-            would_not_use: [colors.red, colors.redLight],
+            would_not_use: [colors.pink, colors.pinkLight],
             interested: [colors.tealLighter, colors.tealLightest],
-            not_interested: [colors.redLighter, colors.redLightest],
+            not_interested: [colors.pinkLighter, colors.pinkLightest],
             never_heard: [colors.greyLight, colors.greyLightest]
         },
         toolSections: {
