@@ -16,10 +16,9 @@ import T from 'core/i18n/T'
 import { useI18n } from 'core/i18n/i18nContext'
 import { getTableData } from 'core/helpers/datatables'
 
-type MetricId = 'satisfaction' | 'interest' | 'usage' | 'awareness'
-type ViewId = 'viz' | 'data'
+import { MetricId, ALL_METRICS } from 'core/helpers/units'
 
-const ALL_METRICS: MetricId[] = ['satisfaction', 'interest', 'usage', 'awareness']
+type ViewId = 'viz' | 'data'
 
 interface SwitcherProps {
     setMetric: (metric: MetricId) => void
@@ -43,23 +42,27 @@ const Switcher = ({ setMetric, metric }: SwitcherProps) => {
     )
 }
 
-interface MetricBucket {
+export interface MetricBucket {
     year: number
     rank: number
     percentage_question: number
 }
 
-interface ToolData extends Record<MetricId, MetricBucket[]> {
+export interface ToolData extends Record<MetricId, MetricBucket[]> {
     id: string
     entity: Entity
+    usage: MetricBucket[]
+    awareness: MetricBucket[]
+    interest: MetricBucket[]
+    satisfaction: MetricBucket[]
 }
 
-interface ToolsExperienceRankingBlockData {
+export interface ToolsExperienceRankingBlockData {
     years: number[]
     experience: ToolData[]
 }
 
-interface ToolsExperienceRankingBlockProps {
+export interface ToolsExperienceRankingBlockProps {
     block: BlockContext<
         'toolsExperienceRankingTemplate',
         'ToolsExperienceRankingBlock',

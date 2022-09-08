@@ -61,7 +61,9 @@ export interface MDN {
     url: string
 }
 
-export interface BucketItem {
+export type BucketItem = DefaultBucketItem | RatioBucketItem
+
+export interface DefaultBucketItem {
     id: number | string
     count: number
 
@@ -76,6 +78,17 @@ export interface BucketItem {
     count_all_facets?: number
     // percentage relative to the number
     percentage_all_facets?: number
+
+    entity?: Entity
+}
+
+export interface RatioBucketItem {
+    id: number | string
+
+    interest_percentage?: number
+    satisfaction_percentage?: number
+    awareness_percentage?: number
+    usage_percentage?: number
 
     entity?: Entity
 }

@@ -17,3 +17,7 @@ export const percentageUnits = [
 ]
 
 export const isPercentage = (units: string) => percentageUnits.includes(units)
+
+export type MetricId = 'satisfaction' | 'interest' | 'usage' | 'awareness'
+
+export const ALL_METRICS: MetricId[] = ['satisfaction', 'interest', 'usage', 'awareness']

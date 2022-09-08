@@ -330,7 +330,7 @@ exports.runPageQueries = async ({ page, graphql, config }) => {
     const pageQueryName = exports.cleanIdString(page.id)
 
     exports.logToFile(
-        `${pageQueryName}.json`,
+        `${config.slug}__${pageQueryName}.json`,
         { data: pageData, duration },
         { mode: 'overwrite', subDir: 'data' }
     )

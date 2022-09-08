@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import blockRegistry from 'core/helpers/blockRegistry'
+// import globalBlockRegistry from 'core/helpers/blockRegistry'
+import blockRegistry from 'Config/blocks'
 import { keys } from 'core/bucket_keys'
 import isEmpty from 'lodash/isEmpty'
 import Block from 'core/blocks/block/BlockVariant'
