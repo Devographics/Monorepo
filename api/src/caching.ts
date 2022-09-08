@@ -78,7 +78,7 @@ export const useCache = async <F extends DynamicComputeCall>(options: {
             value = await func(funcOptionsWithContext)
             if (value) {
                 // in case previous cached entry exists, delete it
-                await setCache(key, JSON.stringify(value), context)
+                await setCache(key, value, context)
             }
         }
     } else {

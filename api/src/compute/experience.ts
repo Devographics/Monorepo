@@ -276,10 +276,11 @@ export async function computeToolsExperienceRanking({
     availableYears = _.uniq(availableYears).sort()
 
     const byTool: any[] = []
-    tools.forEach(async tool => {
+    for (const tool of tools) {
+        const entity = await getEntity({ id: tool })
         byTool.push({
             id: tool,
-            entity: await getEntity({ id: tool }),
+            entity,
             ...metrics.reduce((acc, metric) => {
                 return {
                     ...acc,
@@ -299,7 +300,8 @@ export async function computeToolsExperienceRanking({
                 }
             }, {})
         })
-    })
+    }
+
 
     return byTool
 }
