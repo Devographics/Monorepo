@@ -1,11 +1,12 @@
 /**
  * To be used for subdependencies
  */
-const PNPM_ROOT = "../node_modules/.pnpm/"
+// This doesn't work on Vercel, probably because of the symlinks
+//const PNPM_ROOT = "../node_modules/.pnpm/"
 const edits = [
   [
     // PNPM version
-    PNPM_ROOT + "node_modules/ts-invariant/package.json",
+    /*PNPM_ROOT + */"node_modules/ts-invariant/package.json",
     {
       type: "module",
       exports: {
@@ -15,7 +16,7 @@ const edits = [
     },
   ],
   [
-    PNPM_ROOT + "node_modules/ts-invariant/process/package.json",
+    /*PNPM_ROOT + */"node_modules/ts-invariant/process/package.json",
     {
       type: "module",
     },
