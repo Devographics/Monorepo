@@ -1,5 +1,5 @@
 {
 	"devDependencies": {
-		"turbo": "^1.4.5"
+		"concurrently": "^7.4.0"
 	}
 }
