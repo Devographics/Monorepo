@@ -416,12 +416,16 @@ importers:
       eslint-plugin-react: 7.31.7_eslint@8.23.0
       prettier: 2.7.1
 
+  shared/encrypt-email:
+    specifiers: {}
+
   surveyform:
     specifiers:
       '@apollo/client': ^3.5.10
       '@babel/core': ^7.10.2
       '@cypress/code-coverage': ^3.8.1
       '@cypress/webpack-preprocessor': ^5.4.1
+      '@devographics/encrypt-email': workspace:*
       '@emotion/cache': ^11.4.0
       '@emotion/react': ^11.4.1
       '@emotion/server': ^11.4.0
@@ -570,6 +574,7 @@ importers:
       yalc: ^1.0.0-pre.53
     dependencies:
       '@apollo/client': 3.6.9_lzr65dqsq734t3cvuoj57dyq6e
+      '@devographics/encrypt-email': link:../shared/encrypt-email
       '@emotion/cache': 11.10.3
       '@emotion/react': 11.10.4_ojifsuyn6iuplkhus525glrlo4
       '@emotion/server': 11.10.0

@@ -83,6 +83,7 @@
     "update-link-vulcan": "yalc update"
   },
   "dependencies": {
+    "@devographics/encrypt-email": "workspace:*",
     "@apollo/client": "^3.5.10",
     "@emotion/cache": "^11.4.0",
     "@emotion/react": "^11.4.1",
