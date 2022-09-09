@@ -6,7 +6,7 @@ import { mq, spacing, fontSize, color } from 'core/theme'
 import picks from 'Config/picks.yml'
 import T from 'core/i18n/T'
 
-const PicksBlock = ({ block, data }) => {
+const PicksBlock = ({ block, data: entity }) => {
     const { id: pickId } = block
     const pick = picks.find(p => p.twitterName === pickId || p.id === pickId)
 
@@ -14,9 +14,9 @@ const PicksBlock = ({ block, data }) => {
         return null
     }
 
-    const { twitterName, fullName, pickName, avatarUrl, url } = pick
-
-    const avatarFileName = avatarUrl ?? `${twitterName}.jpg`
+    const { url } = pick
+    const { name: fullName, twitter, twitterName } = entity
+    const { avatarUrl } = twitter
 
     return (
         <PicksContainer className="Block">
@@ -52,7 +52,7 @@ const PicksBlock = ({ block, data }) => {
                                 <a
                                     href={`https://twitter.com/${twitterName}`}
                                     style={{
-                                        backgroundImage: `url(/images/picks/${avatarFileName})`
+                                        backgroundImage: `url(${avatarUrl})`
                                     }}
                                     title={fullName}
                                 >

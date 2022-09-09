@@ -2,10 +2,11 @@ import React from 'react'
 import { spacing, mq } from 'core/theme'
 import styled from 'styled-components'
 import T from 'core/i18n/T'
-import credits from 'Config/credits.yml'
 import CreditItem from 'core/blocks/other/CreditItem'
+import config from 'Config/config.yml'
 
-const CreditsBlock = ({ data: entities }) => {
+const CreditsBlock = ({ data }) => {
+    const credits = data?.find(s => s.slug === config.slug)?.editions?.find(e => e.year = config.year)?.credits
     return (
         <Credits>
             <Heading>
@@ -13,7 +14,7 @@ const CreditsBlock = ({ data: entities }) => {
             </Heading>
             <CreditItems>
                 {credits.map(c => (
-                    <CreditItem entity={entities.find(e => e.id === c.id)} key={c.id} {...c} />
+                    <CreditItem key={c.id} {...c} />
                 ))}
             </CreditItems>
         </Credits>

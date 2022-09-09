@@ -1,22 +1,17 @@
 const { computeSitemap } = require('./sitemap.js')
 const {
-    logToFile,
     getPageContext,
-    getPageQuery,
-    wrapWithQuery,
-    cleanIdString,
     getLocalizedPath,
     getCleanLocales,
     createBlockPages,
-    runPageQuery,
     runPageQueries,
-    getTwitterUser
 } = require('./helpers.js')
 const { getSendOwlData } = require('./sendowl.js')
 const yaml = require('js-yaml')
 const fs = require('fs')
 const _ = require('lodash')
 const path = require('path')
+const { logToFile } = require('./log_to_file.js')
 
 const USE_FAST_BUILD = process.env.FAST_BUILD === 'true'
 
@@ -68,7 +63,6 @@ query {
 `
 }
 
-// v1. single loop, run graphql queries and create pages in the same loop
 exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createRedirect } }) => {
     const buildInfo = {
         USE_FAST_BUILD,
@@ -86,14 +80,20 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
     const localeIds = USE_FAST_BUILD ? ['en-US', 'ru-RU'] : []
 
     const localesQuery = getLocalesQuery(localeIds, config.translationContexts)
-    logToFile('localesQuery.graphql', localesQuery, { mode: 'overwrite' })
+    logToFile('localesQuery.graphql', localesQuery, {
+        mode: 'overwrite',
+        surveyId: config.surveyId
+    })
 
     const localesResults = await graphql(
         `
             ${localesQuery}
         `
     )
-    logToFile('localesResults.json', localesResults, { mode: 'overwrite' })
+    logToFile('localesResults.json', localesResults, {
+        mode: 'overwrite',
+        surveyId: config.surveyId
+    })
 
     const locales = localesResults.data.internalAPI.locales
 
@@ -102,7 +102,11 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
     const cleanLocales = getCleanLocales(locales)
     logToFile('locales.json', cleanLocales, { mode: 'overwrite' })
     locales.forEach(locale => {
-        logToFile(`${locale.id}.json`, locale, { mode: 'overwrite', subDir: 'locales' })
+        logToFile(`${locale.id}.json`, locale, {
+            mode: 'overwrite',
+            subDir: 'locales',
+            surveyId: config.surveyId
+        })
     })
 
     const { flat } = await computeSitemap(rawSitemap, cleanLocales)
@@ -110,7 +114,7 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
     logToFile(
         'flat_sitemap.yml',
         yaml.dump({ locales: cleanLocales, contents: flat }, { noRefs: true }),
-        { mode: 'overwrite' }
+        { mode: 'overwrite', surveyId: config.surveyId }
     )
 
     const chartSponsors = USE_FAST_BUILD ? {} : await getSendOwlData({ flat, config })
@@ -118,7 +122,6 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
     for (const page of flat) {
         let pageData = {}
         const context = getPageContext(page)
-        const pageQuery = getPageQuery(page)
 
         try {
             // pageData = await runPageQuery({ page, graphql })
@@ -145,7 +148,7 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
                     locale,
                     chartSponsors,
                     pageData,
-                    pageQuery // passed for debugging purposes
+                    config
                 }
             }
 
@@ -168,76 +171,8 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
             // createBlockPages(page, context, createPage, locales, buildInfo)
         }
     }
-    logToFile('build.yml', yaml.dump(buildInfo, { noRefs: true }), { mode: 'overwrite' })
-}
-
-// v2. two loops, one for batching all queries together and one for creating pages
-exports.createPagesTwoLoops = async ({ graphql, actions: { createPage, createRedirect } }) => {
-    let allQueries = ''
-
-    const localesResults = await graphql(
-        `
-            ${localesQuery}
-        `
-    )
-    const locales = localesResults.data.internalAPI.locales
-    const cleanLocales = getCleanLocales(locales)
-
-    const { flat } = await computeSitemap(rawSitemap, cleanLocales)
-
-    logToFile(
-        'flat_sitemap.yml',
-        yaml.dump({ locales: cleanLocales, contents: flat }, { noRefs: true }),
-        { mode: 'overwrite' }
-    )
-
-    // first loop: aggregate all page queries together
-    for (const page of flat) {
-        const pageQuery = getPageQuery(page)
-        if (pageQuery) {
-            allQueries += pageQuery + `\n\n`
-        }
-    }
-
-    allQueries = wrapWithQuery('megaSurveyQuery', allQueries)
-    const allQueriesResults = await graphql(
-        `
-            ${allQueries}
-        `
-    )
-    const allPageData = allQueriesResults.data
-
-    logToFile('allQueriesResults.txt', allQueriesResults)
-
-    // second loop: create pages
-    for (const page of flat) {
-        const context = getPageContext(page)
-
-        // loop over locales
-        for (let index = 0; index < locales.length; index++) {
-            const locale = locales[index]
-            locale.path = `/${locale.id}`
-
-            const pageObject = {
-                path: getLocalizedPath(page.path, locale),
-                component: path.resolve(`./src/core/pages/PageTemplate.js`),
-                context: {
-                    ...context,
-                    locales: cleanLocales,
-                    locale,
-                    pageData: allPageData
-                }
-            }
-            createPage(pageObject)
-        }
-
-        // also redirect "naked" paths (whithout a locale) to en-US
-        createRedirect({
-            fromPath: getLocalizedPath(page.path, null),
-            toPath: getLocalizedPath(page.path, { id: 'en-US' }),
-            isPermanent: true
-        })
-
-        createBlockPages(page, context, createPage, locales)
-    }
+    logToFile('build.yml', yaml.dump(buildInfo, { noRefs: true }), {
+        mode: 'overwrite',
+        surveyId: config.surveyId
+    })
 }

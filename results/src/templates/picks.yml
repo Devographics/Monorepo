@@ -2,3 +2,22 @@ blockType: PicksBlock
 blockNamespace: picks
 wrapBlock: false
 disableExport: true
+dataPath: "internalAPI.entity_${id}"
+query: >
+  internalAPI {
+    entity_${id}: entity(id: "${id}") {
+      id
+      homepage {
+        name
+        url
+      }
+      name
+      twitterName
+      twitter {
+        userName
+        avatarUrl
+        id
+        description
+      }
+    }
+  }

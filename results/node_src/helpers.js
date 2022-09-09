@@ -7,6 +7,7 @@ const fs = require('fs')
 const fetch = require('node-fetch')
 const yaml = require('js-yaml')
 const { TwitterApi } = require('twitter-api-v2')
+const { logToFile } = require('./log_to_file.js')
 
 const fsPromises = fs.promises
 /*
@@ -78,70 +79,6 @@ exports.loadTemplate = async name => {
 
 /*
 
-Loop over a page's blocks to assemble its page query
-
-*/
-exports.getPageQuery = page => {
-    const queries = []
-    page.blocks.forEach(b => {
-        b?.variants.forEach(v => {
-            if (v.query) {
-                exports.logToFile(`${v.id}.graphql`, v.query.replace('dataAPI', 'query'), {
-                    mode: 'overwrite',
-                    subDir: 'queries'
-                })
-                queries.push(`# ${v.id}\n` + v.query)
-            }
-        })
-    })
-    return queries.length === 0
-        ? undefined
-        : `### ${page.id}
-${queries.join('\n')}
-`
-}
-
-/*
-
-Log to file
-
-*/
-exports.logToFile = async (fileName, object, options = {}) => {
-    try {
-        if (process.env.NODE_ENV !== 'production') {
-            const { mode = 'append', timestamp = false, subDir, dirPath } = options
-
-            const logsDirPath = dirPath
-                ? path.resolve(dirPath)
-                : `${__dirname}/.logs${subDir ? `/${subDir}` : ''}`
-            if (!fs.existsSync(logsDirPath)) {
-                fs.mkdirSync(logsDirPath, { recursive: true })
-            }
-            const fullPath = `${logsDirPath}/${fileName}`
-            const contents = typeof object === 'string' ? object : JSON.stringify(object, null, 2)
-            const now = new Date()
-            const text = timestamp ? now.toString() + '\n---\n' + contents : contents
-            if (mode === 'append') {
-                const stream = fs.createWriteStream(fullPath, { flags: 'a' })
-                stream.write(text + '\n')
-                stream.end()
-            } else {
-                fs.writeFile(fullPath, text, error => {
-                    // throws an error, you could also catch it here
-                    if (error) throw error
-
-                    // eslint-disable-next-line no-console
-                    console.log(`Object saved to ${fullPath}`)
-                })
-            }
-        }
-    } catch (error) {
-        console.warn(`// error while trying to log out ${fileName}`)
-    }
-}
-
-/*
-
 Create individual pages for each block (for social media meta tags)
 
 */
@@ -177,66 +114,6 @@ exports.createBlockPages = (page, context, createPage, locales, buildInfo) => {
             })
         }
     })
-}
-
-/*
-
-Flatten sitemap into array of all blocks
-
-*/
-exports.getAllBlocks = sitemap => {
-    let allBlocks = []
-    sitemap.contents.forEach(page => {
-        allBlocks = [...allBlocks, ...page.blocks]
-        if (page.children) {
-            page.children.forEach(childPage => {
-                allBlocks = [...allBlocks, ...childPage.blocks]
-            })
-        }
-    })
-    return allBlocks
-}
-
-const Queries = {}
-
-exports.runPageQuery = async ({ page, graphql }) => {
-    const startedAt = new Date()
-    console.log(`// Running GraphQL query for page ${page.id}…`)
-    const pageQuery = exports.getPageQuery(page)
-    let pageData = {}
-
-    if (pageQuery) {
-        const queryName = _.upperFirst(exports.cleanIdString(page.id))
-        const wrappedPageQuery = exports.wrapWithQuery(`page${queryName}Query`, pageQuery)
-
-        try {
-            const start = new Date()
-            const queryResults = await graphql(
-                `
-                    ${wrappedPageQuery}
-                `
-            )
-            const end = new Date()
-            const timeDiff = Math.round((end - start) / 1000)
-            pageData = queryResults.data
-            exports.logToFile(
-                `${queryName}.json`,
-                { data: pageData, duration: timeDiff },
-                { mode: 'overwrite', subDir: 'data' }
-            )
-        } catch (error) {
-            console.log(`// Error while loading data for page ${page.id}`)
-            exports.logToFile(`${queryName}.graphql`, wrappedPageQuery, {
-                mode: 'overwrite',
-                subDir: 'error_queries'
-            })
-            console.log(pageQuery)
-            console.log(error)
-        }
-    }
-    const finishedAt = new Date()
-    console.log(`-> Done in ${startedAt.getTime() - finishedAt.getTime()}ms`)
-    return pageData
 }
 
 /*
@@ -300,7 +177,7 @@ exports.runPageQueries = async ({ page, graphql, config }) => {
                 if (existingData) {
                     data = existingData
                 } else {
-                    exports.logToFile(queryFileName, v.query.replace('dataAPI', 'query'), {
+                    logToFile(queryFileName, v.query.replace('dataAPI', 'query'), {
                         mode: 'overwrite',
                         dirPath: queryDirPath
                     })
@@ -315,7 +192,7 @@ exports.runPageQueries = async ({ page, graphql, config }) => {
                     )
                     data = result.data
 
-                    exports.logToFile(dataFileName, data, {
+                    logToFile(dataFileName, data, {
                         mode: 'overwrite',
                         dirPath: dataDirPath
                     })
@@ -329,10 +206,10 @@ exports.runPageQueries = async ({ page, graphql, config }) => {
     const duration = finishedAt.getTime() - startedAt.getTime()
     const pageQueryName = exports.cleanIdString(page.id)
 
-    exports.logToFile(
+    logToFile(
         `${config.slug}__${pageQueryName}.json`,
         { data: pageData, duration },
-        { mode: 'overwrite', subDir: 'data' }
+        { mode: 'overwrite', subDir: 'data', surveyId: config.surveyId }
     )
 
     console.log(`-> Done in ${duration}ms`)
