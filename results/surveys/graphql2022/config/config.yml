@@ -1,4 +1,4 @@
-translationContexts: [common, results, how_to_help, state_of_graphql, state_of_graphql_2022]
+translationContexts: [homepage, common, results, how_to_help, state_of_graphql, state_of_graphql_2022]
 socialMediaImage: social/js2021-social.png
 hashtag: '#StateOfGraphQL'
 siteContext: stateofgraphql

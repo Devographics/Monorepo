@@ -1,4 +1,4 @@
-translationContexts: [common, results, state_of_js, state_of_js_2021, state_of_js_2021_results, how_to_help]
+translationContexts: [homepage, common, results, state_of_js, state_of_js_2021, state_of_js_2021_results, how_to_help]
 socialMediaImage: social/js2021-social.png
 hashtag: '#StateOfJS'
 siteContext: stateofjs
