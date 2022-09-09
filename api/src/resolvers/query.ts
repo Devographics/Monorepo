@@ -3,7 +3,7 @@ import surveys from '../surveys'
 
 export default {
     Query: {
-        surveys: () => surveys,
+        allSurveys: () => surveys,
         survey: (parent: any, { survey }: { survey: SurveyType }) => ({
             survey
         }),
