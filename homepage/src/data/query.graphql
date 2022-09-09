@@ -1,5 +1,5 @@
 query AllSurveys {
-  surveys {
+  allSurveys {
     slug
     hashtag
     name

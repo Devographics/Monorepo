@@ -1,6 +1,6 @@
 export default (surveySlug) => /* GraphQL */`
   query AllSurveys {
-    surveys {
+    allSurveys {
       slug
       hashtag
       name
