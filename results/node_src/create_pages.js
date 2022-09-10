@@ -63,7 +63,43 @@ query {
 `
 }
 
+const getAllSurveysQuery = () => {
+return `
+query {
+    dataAPI {
+        allSurveys {
+            name
+            slug
+            editions {
+                surveyId
+                year
+                faviconUrl
+                socialImageUrl
+                colors {
+                    primary
+                    secondary
+                    text
+                    background
+                    backgroundSecondary
+                }
+                endedAt
+                imageUrl
+                questionsUrl
+                resultsUrl
+                startedAt
+                status
+                tags
+            }
+            domain
+            hashtag
+        }
+    }
+}`
+}
+
 exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createRedirect } }) => {
+    const surveyId = process.env.SURVEY
+
     const buildInfo = {
         USE_FAST_BUILD,
         localeCount: 0,
@@ -82,7 +118,7 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
     const localesQuery = getLocalesQuery(localeIds, config.translationContexts)
     logToFile('localesQuery.graphql', localesQuery, {
         mode: 'overwrite',
-        surveyId: config.surveyId
+        surveyId
     })
 
     const localesResults = await graphql(
@@ -92,7 +128,7 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
     )
     logToFile('localesResults.json', localesResults, {
         mode: 'overwrite',
-        surveyId: config.surveyId
+        surveyId
     })
 
     const locales = localesResults.data.internalAPI.locales
@@ -100,7 +136,7 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
     buildInfo.localeCount = locales.length
 
     const cleanLocales = getCleanLocales(locales)
-    logToFile('locales.json', cleanLocales, { mode: 'overwrite' })
+    logToFile('locales.json', cleanLocales, { mode: 'overwrite', surveyId })
     locales.forEach(locale => {
         logToFile(`${locale.id}.json`, locale, {
             mode: 'overwrite',
@@ -109,12 +145,20 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
         })
     })
 
+    const allSurveysQuery = getAllSurveysQuery()
+    const allSurveysResults = await graphql(`${allSurveysQuery}`)
+    const allSurveys = allSurveysResults.data.dataAPI.allSurveys
+    const currentSurvey = allSurveys.find(s => 
+        s.editions.some(e => e.surveyId === surveyId)
+    )
+    const currentEdition = currentSurvey.editions.find(e => e.surveyId === surveyId)
+    
     const { flat } = await computeSitemap(rawSitemap, cleanLocales)
 
     logToFile(
         'flat_sitemap.yml',
         yaml.dump({ locales: cleanLocales, contents: flat }, { noRefs: true }),
-        { mode: 'overwrite', surveyId: config.surveyId }
+        { mode: 'overwrite', surveyId }
     )
 
     const chartSponsors = USE_FAST_BUILD ? {} : await getSendOwlData({ flat, config })
@@ -148,7 +192,9 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
                     locale,
                     chartSponsors,
                     pageData,
-                    config
+                    config,
+                    currentSurvey,
+                    currentEdition
                 }
             }
 
