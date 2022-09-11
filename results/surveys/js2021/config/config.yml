@@ -3,6 +3,8 @@ socialMediaImage: social/js2021-social.png
 hashtag: '#StateOfJS'
 siteContext: stateofjs
 surveySlug: js2021
+slug: state_of_js
+year: 2021
 siteTitle: The State of JS 2021
 siteUrl: https://2021.stateofjs.com
 emailOctopusUrl: https://emailoctopus.com/lists/ed0386c4-2f55-11e9-a3c9-06b79b628af2/members/embedded/1.3/add

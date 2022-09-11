@@ -2,6 +2,8 @@ translationContexts: [homepage, common, results, state_of_css, state_of_css_2021
 socialMediaImage: social/state-of-css-2021-logo-social.png
 hashtag: '#StateOfCSS'
 surveySlug: css2021
+slug: state_of_css
+year: 2021
 siteContext: stateofcss
 siteTitle: The State of CSS 2021
 siteUrl: https://2021.stateofcss.com
