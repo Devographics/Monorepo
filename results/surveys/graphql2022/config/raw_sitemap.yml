@@ -951,65 +951,65 @@
       items: [reactathon, renderatl]
       template: recommended_resources
 
-- id: awards
-  path: /awards
-  blocks:
-    - template: page_introduction
+# - id: awards
+#   path: /awards
+#   blocks:
+#     - template: page_introduction
 
-    - id: awards
-      template: awards
-      variables:
-        entities: '"nullish_coalescing","optional_chaining","private_fields","esbuild","tsc","testing_library","vite","vitest","elm","stencil","platzi"'
-      awards:
-        - id: feature_adoption_delta_award
-          template: award
-          awards:
-            - id: nullish_coalescing
-              value: "+21.8%"
-            - id: optional_chaining
-              value: "+19%"
-            - id: private_fields
-              value: "+9.5%"
+#     - id: awards
+#       template: awards
+#       variables:
+#         entities: '"nullish_coalescing","optional_chaining","private_fields","esbuild","tsc","testing_library","vite","vitest","elm","stencil","platzi"'
+#       awards:
+#         - id: feature_adoption_delta_award
+#           template: award
+#           awards:
+#             - id: nullish_coalescing
+#               value: "+21.8%"
+#             - id: optional_chaining
+#               value: "+19%"
+#             - id: private_fields
+#               value: "+9.5%"
 
-        - id: tool_usage_delta_award
-          template: award
-          awards:
-            - id: esbuild
-              value: "+20.1%"
-            - id: tsc
-              value: "+17.3%"
-            - id: testing_library
-              value: "+8.3%"
+#         - id: tool_usage_delta_award
+#           template: award
+#           awards:
+#             - id: esbuild
+#               value: "+20.1%"
+#             - id: tsc
+#               value: "+17.3%"
+#             - id: testing_library
+#               value: "+8.3%"
 
-        - id: tool_satisfaction_award
-          template: award
-          awards:
-            - id: vite
-              value: "97.4%"
-            - id: testing_library
-              value: "96.3%"
-            - id: esbuild
-              value: "96.2%"
+#         - id: tool_satisfaction_award
+#           template: award
+#           awards:
+#             - id: vite
+#               value: "97.4%"
+#             - id: testing_library
+#               value: "96.3%"
+#             - id: esbuild
+#               value: "96.2%"
 
-        - id: tool_interest_award
-          template: award
-          awards:
-            - id: vite
-              value: "83%"
-            - id: vitest
-              value: "81.8%"
-            - id: esbuild
-              value: "80.4%"
+#         - id: tool_interest_award
+#           template: award
+#           awards:
+#             - id: vite
+#               value: "83%"
+#             - id: vitest
+#               value: "81.8%"
+#             - id: esbuild
+#               value: "80.4%"
 
-        - id: most_write_ins_award
-          template: award
-          awards:
-            - id: elm
-              value: "124"
-            - id: stencil
-              value: "104"
-            - id: platzi
-              value: "100"
+#         - id: most_write_ins_award
+#           template: award
+#           awards:
+#             - id: elm
+#               value: "124"
+#             - id: stencil
+#               value: "104"
+#             - id: platzi
+#               value: "100"
 
 
 - id: conclusion
