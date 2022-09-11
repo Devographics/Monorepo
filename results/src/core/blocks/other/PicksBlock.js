@@ -3,18 +3,11 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 // import ReactMarkdown from 'react-markdown'
 import { mq, spacing, fontSize, color } from 'core/theme'
-import picks from 'Config/picks.yml'
 import T from 'core/i18n/T'
 
 const PicksBlock = ({ block, data: entity }) => {
-    const { id: pickId } = block
-    const pick = picks.find(p => p.twitterName === pickId || p.id === pickId)
-
-    if (!pick) {
-        return null
-    }
-
-    const { url } = pick
+    const { id: pickId, variables } = block
+    const { url } = variables
     const { name: fullName, twitter, twitterName } = entity
     const { avatarUrl } = twitter
 

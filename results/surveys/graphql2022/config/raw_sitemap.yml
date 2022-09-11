@@ -361,6 +361,8 @@
 
         - id: jamie_barton
           template: picks
+          variables:
+            url: https://www.the-guild.dev/graphql/mesh
 
         - template: happiness
           variables:
@@ -410,6 +412,8 @@
 
         - id: tanmai_gopal
           template: picks
+          variables:
+            url: https://www.youtube.com/watch?v=C1TDDlXPSmI
 
         - template: happiness
           variables:
@@ -459,6 +463,8 @@
 
         - id: tim_suchanek
           template: picks
+          variables:
+            url: https://github.com/benjie
 
         - template: happiness
           variables:
@@ -518,6 +524,8 @@
 
         - id: uri_goldshtein
           template: picks
+          variables:
+            url: https://www.the-guild.dev/graphql/yoga-server
 
         - template: happiness
           variables:
@@ -571,6 +579,8 @@
 
     - id: benjie_gillam
       template: picks
+      variables:
+        url: https://specnewspod.com/
 
     - id: web_frameworks
       tabId: tabs.main_answers

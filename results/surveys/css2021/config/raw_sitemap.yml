@@ -221,6 +221,8 @@
           template: feature_experience
         - id: georgedoescode
           template: picks
+          variables:
+            url: https://houdini.how/
         - id: position_sticky
           template: feature_experience
         - id: logical_properties
@@ -303,6 +305,8 @@
           template: feature_experience
         - id: shadeed9
           template: picks
+          variables:
+            url: https://www.miriamsuzanne.com/2021/05/02/container-queries/
         - id: overflow_anchor
           template: feature_experience
 
@@ -327,6 +331,8 @@
           template: feature_experience
         - id: cassidoo
           template: picks
+          variables:
+            url: https://twitter.com/lynnandtonic
         - id: initial_letter
           template: feature_experience
         - id: font_variant_numeric
@@ -353,12 +359,16 @@
           template: feature_experience
         - id: joshwcomeau
           template: picks
+          variables:
+            url: https://wattenberger.com/blog/css-percents
         - id: prefers_reduced_data
           template: feature_experience
           year: 2021
 
         - id: walterstephanie
           template: picks
+          variables:
+            url: https://thinkdobecreate.com/
           
         - id: color_contrast
           template: feature_experience
@@ -391,6 +401,8 @@
           template: feature_experience
         - id: kevinjpowell
           template: picks
+          variables:
+            url: https://thinkdobecreate.com/
         - id: will_change
           template: feature_experience
         - id: calc
@@ -402,6 +414,8 @@
 
         - id: michebarks
           template: picks
+          variables:
+            url: https://web.dev/building-a-color-scheme/
 
         - id: at_property
           template: feature_experience
@@ -444,6 +458,8 @@
 
         - id: kilianvalkhof
           template: picks
+          variables:
+            url: https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-data
 
         - template: happiness
           variables:
@@ -483,6 +499,8 @@
 
         - id: mmatuzo
           template: picks
+          variables:
+            url: https://developer.mozilla.org/en-US/docs/Web/CSS/aspect-ratio
 
         - template: section_other_tools
 
@@ -534,6 +552,8 @@
         
         - id: lauragift_
           template: picks
+          variables:
+            url: https://www.youtube.com/kepowob/videos
 
         - template: section_other_tools
 
@@ -600,6 +620,8 @@
 
     - id: ericwbailey
       template: picks
+      variables:
+        url: https://www.miriamsuzanne.com/
 
     - id: browsers
       tabId: tabs.main_answers
@@ -756,6 +778,8 @@
 
     - id: samuelkraft
       template: picks
+      variables:
+        url: https://vanilla-extract.style/
 
     - id: podcasts
       blockNamespace: resources
@@ -805,6 +829,8 @@
 
     - id: argyleink
       template: picks
+      variables:
+        url: https://fffuel.co/nnnoise/
 
     - id: browser_interoperability_features
       defaultUnits: count
