@@ -23,7 +23,7 @@ export const loadFromGitHub = async () => {
     console.log(`-> loading entities repo`)
 
     const options = {
-        owner: 'StateOfJS',
+        owner: 'Devographics',
         repo: 'entities',
         path: ''
     }
@@ -92,7 +92,7 @@ export const loadEntities = async () => {
     console.log('// loading entities')
 
     const entities: Entity[] =
-        process.env.LOAD_LOCALES === 'local' ? await loadLocally() : await loadFromGitHub()
+        process.env.LOAD_DATA === 'local' ? await loadLocally() : await loadFromGitHub()
     console.log('// done loading entities')
 
     return entities
