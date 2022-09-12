@@ -221,7 +221,7 @@
         - id: dynamic_import
           template: feature_experience
 
-        - id: scott_tolinkski
+        - id: scott_tolinski
           template: picks
           variables:
             url: https://kit.svelte.dev/

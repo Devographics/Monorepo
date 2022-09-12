@@ -6,8 +6,11 @@ import CreditItem from 'core/blocks/other/CreditItem'
 import config from 'Config/config.yml'
 
 const CreditsBlock = ({ data }) => {
-    const credits = data?.find(s => s.slug === config.slug)?.editions?.find(e => e.year = config.year)?.credits
-    return (
+    const { slug, year } = config
+    const survey = data?.find(s => s.slug === slug)
+    const edition = survey?.editions?.find(e => e.year === year)
+    const credits = edition?.credits
+    return credits && credits.length > 0 ? (
         <Credits>
             <Heading>
                 <T k="credits.thanks" />
@@ -18,7 +21,7 @@ const CreditsBlock = ({ data }) => {
                 ))}
             </CreditItems>
         </Credits>
-    )
+    ) : null
 }
 
 export default CreditsBlock
