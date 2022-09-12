@@ -3,7 +3,6 @@ import { Octokit } from '@octokit/core'
 import fetch from 'node-fetch'
 import yaml from 'js-yaml'
 import { readdir, readFile, lstat } from 'fs/promises'
-import last from 'lodash/last'
 import { logToFile } from './debug'
 
 let allSurveys: Survey[] = []
@@ -43,7 +42,6 @@ const getGitHubYamlFile = async (url: string) => {
 }
 
 export const loadFromGitHub = async () => {
-    const entities: Survey[] = []
     console.log(`-> loading surveys repo`)
     const surveys: Survey[] = []
 
@@ -52,7 +50,6 @@ export const loadFromGitHub = async () => {
     // loop over repo contents and fetch raw yaml files
     for (const file of repoDirContents) {
         if (file.type === 'dir') {
-
             console.log(`// Loading survey ${file.name}…`)
             const editions: any[] = []
             let editionConfigYaml = {}
@@ -63,7 +60,6 @@ export const loadFromGitHub = async () => {
                     // found config.yml for survey
                     editionConfigYaml = await getGitHubYamlFile(file2.download_url)
                 } else if (file2.type === 'dir') {
-
                     console.log(`    -> Edition ${file2.name}…`)
                     const editionsDirContents = await listGitHubFiles(file2.path)
 
