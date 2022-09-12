@@ -139,7 +139,7 @@ const Page = styled.div`
 
 const PageMain = styled.div`
     flex-grow: 1;
-    overflow-x: hidden;
+    /* overflow-x: hidden; */
     overflow-y: visible;
 
     @media ${mq.smallMedium} {

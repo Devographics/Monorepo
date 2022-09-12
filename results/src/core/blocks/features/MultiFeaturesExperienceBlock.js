@@ -10,6 +10,10 @@ import { useLegends } from 'core/helpers/useBucketKeys'
 import { mq, spacing } from 'core/theme'
 import { useI18n } from 'core/i18n/i18nContext'
 import { getTableData, groupDataByYears } from 'core/helpers/datatables'
+import Popover from 'core/components/Popover'
+import CodeExample from 'core/components/CodeExample'
+import { CodeIcon } from 'core/icons'
+import T from 'core/i18n/T'
 
 // convert relative links into absolute MDN links
 const parseMDNLinks = content =>
@@ -57,7 +61,9 @@ const MultiFeaturesExperienceBlock = ({
             <Row>
                 {data.map(feature => (
                     <>
-                        <RowFeature>{feature.entity.name}</RowFeature>
+                        <RowFeature>
+                            <FeatureName {...feature.entity} />
+                        </RowFeature>
                         <RowChart className="FeatureExperienceBlock__RowChart">
                             <ChartContainer height={40} fit={true} className="FeatureChart">
                                 <GaugeBarChart
@@ -76,6 +82,35 @@ const MultiFeaturesExperienceBlock = ({
         </Block>
     )
 }
+
+const FeatureName = ({ name, homepage, example }) => (
+    <FeatureNameWrapper>
+        {homepage?.url ? <a href={homepage.url}>{name}</a> : <span>{name}</span>}
+        {example && (
+            <PopoverWrapper>
+                <Popover
+                    trigger={
+                        <span>
+                            <CodeIcon label={<T k="general.view_code_example" />} />
+                        </span>
+                    }
+                    addPadding={false}
+                >
+                    <CodeExample {...example} />
+                </Popover>
+            </PopoverWrapper>
+        )}
+    </FeatureNameWrapper>
+)
+
+const FeatureNameWrapper = styled.div`
+    display: flex;
+    align-items: center;
+`
+
+const PopoverWrapper = styled.div`
+    margin-left: ${spacing(0.5)};
+`
 
 const Row = styled.dl`
     display: grid;
