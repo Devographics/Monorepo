@@ -24,12 +24,13 @@ const Popover = ({ position = 'bottom', positionOpen = 'top', trigger, label, ch
         [isOpened]
     )
 
-    useEffect(() => {
-        document.addEventListener('click', handleClickOutside, false)
-        return () => {
-            document.removeEventListener('click', handleClickOutside, false)
-        }
-    }, [handleClickOutside])
+    // TODO: make this work again, currently it breaks toggle open/close
+    // useEffect(() => {
+    //     document.addEventListener('click', handleClickOutside, false)
+    //     return () => {
+    //         document.removeEventListener('click', handleClickOutside, false)
+    //     }
+    // }, [handleClickOutside])
 
     const triggerComponent = trigger ? (
         React.cloneElement(trigger, { onClick: toggle, 'aria-expanded': isOpened, 'aria-haspopup': wrapperRef, 'aria-controls': wrapperRef })
