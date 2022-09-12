@@ -219,7 +219,7 @@
           template: feature_experience
         - id: writing_modes
           template: feature_experience
-        - id: georgedoescode
+        - id: george_francis
           template: picks
           variables:
             url: https://houdini.how/
@@ -303,7 +303,7 @@
           template: feature_experience
         - id: overscroll_behavior
           template: feature_experience
-        - id: shadeed9
+        - id: ahmad_shadeed
           template: picks
           variables:
             url: https://www.miriamsuzanne.com/2021/05/02/container-queries/
@@ -329,7 +329,7 @@
 
         - id: font_variant
           template: feature_experience
-        - id: cassidoo
+        - id: cassidy_williams
           template: picks
           variables:
             url: https://twitter.com/lynnandtonic
@@ -357,7 +357,7 @@
           template: feature_experience
         - id: prefers_color_scheme
           template: feature_experience
-        - id: joshwcomeau
+        - id: josh_comeau
           template: picks
           variables:
             url: https://wattenberger.com/blog/css-percents
@@ -365,7 +365,7 @@
           template: feature_experience
           year: 2021
 
-        - id: walterstephanie
+        - id: stephanie_walter
           template: picks
           variables:
             url: https://thinkdobecreate.com/
@@ -399,7 +399,7 @@
           template: feature_experience
         - id: containment
           template: feature_experience
-        - id: kevinjpowell
+        - id: kevin_j_powell
           template: picks
           variables:
             url: https://thinkdobecreate.com/
@@ -412,7 +412,7 @@
         - id: comparison_functions
           template: feature_experience
 
-        - id: michebarks
+        - id: michelle_barker
           template: picks
           variables:
             url: https://web.dev/building-a-color-scheme/
@@ -456,7 +456,7 @@
 
         - template: section_other_tools
 
-        - id: kilianvalkhof
+        - id: kilian_valkhof
           template: picks
           variables:
             url: https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-data
@@ -497,7 +497,7 @@
 
         - template: tools_experience_marimekko
 
-        - id: mmatuzo
+        - id: manuel_matuzovic
           template: picks
           variables:
             url: https://developer.mozilla.org/en-US/docs/Web/CSS/aspect-ratio
@@ -550,7 +550,7 @@
 
         # - template: toolsUsageVariationsTemplate
         
-        - id: lauragift_
+        - id: gift_egwuenu
           template: picks
           variables:
             url: https://www.youtube.com/kepowob/videos
@@ -618,7 +618,7 @@
             fieldId: tools_others
             options: { cutoff: 5 }
 
-    - id: ericwbailey
+    - id: eric_w_bailey
       template: picks
       variables:
         url: https://www.miriamsuzanne.com/
@@ -776,7 +776,7 @@
           variables:
             fieldId: resources
 
-    - id: samuelkraft
+    - id: samuel_kraft
       template: picks
       variables:
         url: https://vanilla-extract.style/
@@ -827,7 +827,7 @@
     - id: enjoy_writing_css
       template: opinion
 
-    - id: argyleink
+    - id: adam_argyle
       template: picks
       variables:
         url: https://fffuel.co/nnnoise/

@@ -8,8 +8,7 @@ import T from 'core/i18n/T'
 const PicksBlock = ({ block, data: entity }) => {
     const { id: pickId, variables } = block
     const { url } = variables
-    const { name: fullName, twitter = {}, twitterName } = entity
-    const { avatarUrl } = twitter
+    const { name: fullName, twitter, twitterName } = entity
 
     return (
         <PicksContainer className="Block">
@@ -45,7 +44,7 @@ const PicksBlock = ({ block, data: entity }) => {
                                 <a
                                     href={`https://twitter.com/${twitterName}`}
                                     style={{
-                                        backgroundImage: `url(${avatarUrl})`
+                                        backgroundImage: `url(${twitter?.avatarUrl})`
                                     }}
                                     title={fullName}
                                 >

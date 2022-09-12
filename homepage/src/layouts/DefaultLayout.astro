@@ -13,11 +13,19 @@ const { editions } = survey
 
 const lastEdition = editions.sort((e1, e2) => e2.year - e1.year)[0]
 const { colors, faviconUrl } = lastEdition
-
 const meta = getMeta({ survey, locale, lastEdition })
 
 const { primary, secondary, background, backgroundSecondary, text } = colors
 
+const variables = `
+:root {
+        --primary: ${primary};
+        --secondary: ${secondary};
+        --background: ${background};
+        --backgroundSecondary: ${backgroundSecondary};
+        --text: ${text};
+      }
+`
 ---
 
 <I18nContextProvider locale={locale} locales={locales}>
@@ -31,20 +39,23 @@ const { primary, secondary, background, backgroundSecondary, text } = colors
 
     <link rel="icon" type="image/x-icon" href={faviconUrl} />
 
+    <style set:html={variables}/>
   </head>
 
   <body>
-    <OtherSurveys locale={locale} surveys={surveys} survey={survey} />
-    <main class="layout">
-      <slot />
-      <Footer {...Astro.props} />
-    </main>
+      <OtherSurveys locale={locale} surveys={surveys} survey={survey} />
+      <div class="layout">
+        <div>
+        <slot />
+        </div>
+        <Footer {...Astro.props} />
+      </div>
   </body>
 
   </html>
 </I18nContextProvider>
 
-<style lang="scss" is:global define:vars={{ primary, secondary, background, backgroundSecondary, text }}>
+<style lang="scss" is:global>
   body {
     background: var(--backgroundSecondary);
     color: var(--text);

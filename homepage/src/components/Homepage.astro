@@ -32,8 +32,8 @@ const closedEditions = editions.filter(e => e.status === statuses.closed)
 
 
   <Newsletter client:load locale={getLocaleSubset(locale,
-    ['homepage.newsletter.stay_tuned', 'homepage.newsletter.leave_your_email' , 'homepage.newsletter.email'
-    , 'homepage.newsletter.submit' ])} listId={survey.emailOctopus.listId} />
+    ['newsletter.stay_tuned', 'newsletter.leave_your_email' , 'newsletter.email'
+    , 'newsletter.submit' ])} listId={survey.emailOctopus.listId} />
 
   {pastEditions.length > 0 && <section class="past-editions">
     <h2>

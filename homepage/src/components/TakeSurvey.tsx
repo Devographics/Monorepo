@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import qs from 'qs'
 import T from '@components/T'
 
-const TakeSurvey = ({ locale, url }) => {
+export default function TakeSurvey({ locale, url }) {
     let suffix = ''
     const [source, setSource] = useState()
     const [referrer, setReferrer] = useState('')
@@ -35,5 +35,3 @@ const TakeSurvey = ({ locale, url }) => {
         </a>
     )
 }
-
-export default TakeSurvey

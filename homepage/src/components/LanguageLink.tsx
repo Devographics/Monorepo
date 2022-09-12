@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import qs from 'qs'
 
-const LanguageLink = ({ url, label }) => {
+export default function LanguageLink({ url, label }) {
     let suffix = ''
     const [source, setSource] = useState()
     const [referrer, setReferrer] = useState('')
@@ -30,5 +30,3 @@ const LanguageLink = ({ url, label }) => {
 
     return <a href={url + suffix}>{label}</a>
 }
-
-export default LanguageLink

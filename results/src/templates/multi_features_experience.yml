@@ -26,6 +26,10 @@ query: >
                         title
                         summary
                     }
+                    example {
+                        language
+                        code
+                    }
                 }
                 experience{
                     keys
