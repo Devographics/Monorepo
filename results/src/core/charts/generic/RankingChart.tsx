@@ -23,6 +23,10 @@ export interface RankingChartSerie {
 }
 
 interface CustomPointProps {
+    point: Point
+}
+
+interface Point {
     x: number
     y: number
     isInactive: boolean
@@ -32,21 +36,14 @@ interface CustomPointProps {
     data: RankingChartDatum
 }
 
-const CustomPoint = ({
-    x,
-    y,
-    data,
-    isInactive,
-    size,
-    borderColor,
-    borderWidth,
-}: CustomPointProps) => {
+const CustomPoint = (props: CustomPointProps) => {
+    const { x, y, data, isInactive, size, borderColor, borderWidth } = props.point
     const theme = useTheme()
 
     const transition = useSpring({
         transform: `translate(${x}, ${y})`,
         radius: size / 2,
-        shadowRadius: (size + borderWidth) / 2,
+        shadowRadius: (size + borderWidth) / 2
     })
 
     return (
@@ -60,7 +57,7 @@ const CustomPoint = ({
             />
             {!isInactive && (
                 <text textAnchor="middle" y={4} fill={theme.colors.text} fontSize="11px">
-                    {Math.round(data.percentage_question)}%
+                    {Math.round(data?.percentage_question)}%
                 </text>
             )}
         </animated.g>
@@ -72,8 +69,8 @@ interface CustomTooltipProps {
     color: string
 }
 
-const CustomTooltip = ({ name, color }: CustomTooltipProps) => (
-    <BasicTooltip id={name} enableChip={true} color={color} />
+const CustomTooltip = ({ id, color }: CustomTooltipProps) => (
+    <BasicTooltip id={id} enableChip={true} color={color} />
 )
 
 interface RankingChartProps {
@@ -95,24 +92,24 @@ export const RankingChart = ({ data }: RankingChartProps) => {
             enableGridY={false}
             axisTop={{
                 tickSize: 0,
-                tickPadding: 9,
+                tickPadding: 9
             }}
             axisRight={null}
             axisBottom={{
                 tickSize: 0,
-                tickPadding: 9,
+                tickPadding: 9
             }}
             axisLeft={null}
-            startLabel={(d) => d.name}
+            startLabel={d => d.name}
             startLabelTextColor={{
                 from: 'color',
-                modifiers: [['brighter', 1]],
+                modifiers: [['brighter', 1]]
             }}
             startLabelPadding={20}
-            endLabel={(d) => d.name}
+            endLabel={d => d.name}
             endLabelTextColor={{
                 from: 'color',
-                modifiers: [['brighter', 1]],
+                modifiers: [['brighter', 1]]
             }}
             endLabelPadding={20}
             pointComponent={CustomPoint}

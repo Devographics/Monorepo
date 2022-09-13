@@ -221,8 +221,10 @@
         - id: dynamic_import
           template: feature_experience
 
-        - id: scott_tolinkski
+        - id: scott_tolinski
           template: picks
+          variables:
+            url: https://kit.svelte.dev/
 
         - id: nullish_coalescing
           template: feature_experience
@@ -251,6 +253,8 @@
 
         - id: michael_jackson
           template: picks
+          variables:
+            url: https://esbuild.github.io/
 
         - id: promise_any
           template: feature_experience
@@ -287,6 +291,8 @@
 
         - id: david_khourshid
           template: picks
+          variables:
+            url: https://remix.run/
 
         - id: web_speech
           template: feature_experience
@@ -315,6 +321,8 @@
 
         - id: wes_bos
           template: picks
+          variables:
+            url: https://github.com/tc39/proposals
 
         - id: web_share
           template: feature_experience
@@ -339,6 +347,8 @@
 
       - id: tejas_kumar
         template: picks
+        variables:
+          url: https://twitter.com/timer150
 
       - id: wasm
         template: feature_experience
@@ -386,6 +396,8 @@
 
         - id: lee_robinson
           template: picks
+          variables:
+            url: https://kit.svelte.dev/
 
         - template: happiness
           variables:
@@ -437,6 +449,8 @@
 
         - id: vadim_makeev
           template: picks
+          variables:
+            url: https://reactjs.org/blog/2020/12/21/data-fetching-with-react-server-components.html
 
         - template: happiness
           variables:
@@ -501,6 +515,8 @@
 
         - id: ben_ilegbodu
           template: picks
+          variables:
+            url: https://twitter.com/leeerob
 
         - template: happiness
           variables:
@@ -554,6 +570,8 @@
 
         - id: shawn_wang
           template: picks
+          variables:
+            url: https://supabase.com/
 
         - template: happiness
           variables:
@@ -605,6 +623,8 @@
 
         - id: sarah_drasner
           template: picks
+          variables:
+            url: https://twitter.com/pkozlowski_os
 
         - template: happiness
           variables:
@@ -661,6 +681,8 @@
 
         - id: sara_vieira
           template: picks
+          variables:
+            url: https://twitter.com/0xca0a
 
         - template: happiness
           variables:
@@ -718,6 +740,8 @@
 
     - id: mark_erikson
       template: picks
+      variables:
+        url: https://twitter.com/ryancarniato
 
     - id: utilities
       tabId: tabs.main_answers
@@ -770,6 +794,8 @@
 
     - id: kent_c_dodds
       template: picks
+      variables:
+        url: https://fly.io/
       
     - id: non_js_languages
       tabId: tabs.main_answers
@@ -871,6 +897,8 @@
 
     - id: miguel_angel_duran
       template: picks
+      variables:
+        url: https://vitejs.dev/
 
     - id: podcasts
       blockNamespace: resources
@@ -922,6 +950,8 @@
 
     - id: alyssa_nicoll
       template: picks
+      variables:
+        url: https://www.twitch.tv/broccodev
 
     - id: js_pain_points_wins
       tabId: tabs.bracket_wins

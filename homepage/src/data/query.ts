@@ -1,6 +1,6 @@
-export default (surveySlug) => /* GraphQL */`
+export const getAllSurveysQuery = () => /* GraphQL */`
   query AllSurveys {
-    surveys {
+    allSurveys {
       slug
       hashtag
       name
@@ -29,6 +29,11 @@ export default (surveySlug) => /* GraphQL */`
         }
       }
     }  
+  }
+`
+
+export const getAllLocalesQuery = (surveySlug) => /* GraphQL */`
+  query AllLocales {
     locales(contexts: [homepage, ${surveySlug}]) {
       id
       label
@@ -37,7 +42,7 @@ export default (surveySlug) => /* GraphQL */`
         t
         tHtml
         context
-        fallback
+        isFallback
         aliasFor
       }
       translators

@@ -1,11 +1,10 @@
 ---
 // client-side redirect
-import getQuery from '@data/query'
 import { getMeta } from '@helpers/meta'
 import { getData } from '@helpers/data'
 const data = await getData()
-const { surveys, locales } = data
-const survey = surveys.find(s => s?.slug === import.meta.env.SURVEY)
+const { allSurveys, locales } = data
+const survey = allSurveys.find(s => s?.slug === import.meta.env.SURVEY)
 const lastEdition = survey.editions.sort((e1, e2) => e2.year - e1.year)[0]
 const { faviconUrl } = lastEdition
 

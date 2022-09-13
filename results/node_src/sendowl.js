@@ -1,7 +1,8 @@
-const { logToFile, sleep, getTwitterUser } = require('./helpers.js')
+const { sleep, getTwitterUser } = require('./helpers.js')
 const fetch = require('node-fetch')
 const _ = require('lodash')
 const FormData = require('form-data')
+const { logToFile } = require('./log_to_file.js')
 
 // `https://opensheet.elk.sh/${process.env.GDOCS_SPREADSHEET}/Public%20Data`
 
@@ -50,7 +51,8 @@ const fetchUntilNoMore = async (url, options) => {
     return allData
 }
 
-const getProducts = async () => {
+const getProducts = async ({ config }) => {
+    const { surveyId } = config
     // get products
     const productsData = await fetchUntilNoMore(
         `${sendOwlAPIUrl}/v1/products/`,
@@ -63,8 +65,8 @@ const getProducts = async () => {
         add_to_cart_url: product.add_to_cart_url,
         sales_page_url: product.sales_page_url
     }))
-    logToFile('products.json', productsData, logOptions)
-    logToFile('product_clean.json', productsDataClean, logOptions)
+    logToFile('products.json', productsData, { ...logOptions, surveyId })
+    logToFile('product_clean.json', productsDataClean, { ...logOptions, surveyId })
 
     return productsDataClean
 }
@@ -110,8 +112,8 @@ const getOrders = async ({ products, config }) => {
             }
         }
     }
-    logToFile('orders.json', ordersData, logOptions)
-    logToFile('orders_clean.json', orders, logOptions)
+    logToFile('orders.json', ordersData, { ...logOptions, surveyId })
+    logToFile('orders_clean.json', orders, { ...logOptions, surveyId })
 
     return orders
 }
@@ -120,6 +122,7 @@ const maxProductsToCreateInOneGo = 100
 const createMissingProducts = async ({ products, chartVariants, config }) => {
     console.log(`// Found ${chartVariants.length} chart variants, checking for missing products…`)
     const newProducts = []
+    const { surveyId } = config
     let i = 0
     // create any missing products
     for (const variant of chartVariants) {
@@ -147,7 +150,8 @@ const createMissingProducts = async ({ products, chartVariants, config }) => {
 
             logToFile('created_products.json', createProductData, {
                 mode: 'append',
-                subDir: 'chart_sponsors'
+                subDir: 'chart_sponsors',
+                surveyId
             })
 
             // add newly created product to list of all products
@@ -181,7 +185,7 @@ exports.getSendOwlData = async ({ flat, config }) => {
         }
     }
 
-    const products = await getProducts()
+    const products = await getProducts({ config })
     const orders = await getOrders({ products, config })
     const newProducts = await createMissingProducts({ products, chartVariants, config })
     const allProducts = [...products, ...newProducts]

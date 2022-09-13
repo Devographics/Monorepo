@@ -1,7 +1,9 @@
-translationContexts: [common, results, state_of_css, state_of_css_2021, state_of_css_2021_results, how_to_help]
+translationContexts: [homepage, common, results, state_of_css, state_of_css_2021, state_of_css_2021_results, how_to_help]
 socialMediaImage: social/state-of-css-2021-logo-social.png
 hashtag: '#StateOfCSS'
 surveySlug: css2021
+slug: state_of_css
+year: 2021
 siteContext: stateofcss
 siteTitle: The State of CSS 2021
 siteUrl: https://2021.stateofcss.com
@@ -17,4 +19,8 @@ tshirtImages: ['shirt-mockup.jpg', 'css2021-tshirt.png', 'shirt-lean.jpg']
 tshirtLink: https://cottonbureau.com/products/css-retro-vhs
 tshirtPrice: 29
 tshirtDesignerLink: https://chriskirknielsen.com/
+
+baseUrl: http://localhost:8001
+# baseUrl: http://localhost:9000/
+sitemap: ../../../node_src/.logs/flat_sitemap.yml
 

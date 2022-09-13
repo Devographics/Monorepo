@@ -116,7 +116,7 @@ export const loadLocales = async () => {
     const localesWithRepos = localesYAML.filter((locale: Locale) => !!locale.repo)
 
     const locales: Locale[] =
-        process.env.LOAD_LOCALES === 'local'
+        process.env.LOAD_DATA === 'local'
             ? await loadLocally(localesWithRepos)
             : await loadFromGitHub(localesWithRepos)
     console.log('// done loading locales')

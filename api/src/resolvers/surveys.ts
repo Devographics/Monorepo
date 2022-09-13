@@ -201,5 +201,8 @@ export default {
             filters
         }),
         totals: (survey: SurveyConfig) => survey
+    },
+    SurveyCreditsItem: {
+        entity: async ({ id }: { id: string }) => await getEntity({ id })
     }
 }

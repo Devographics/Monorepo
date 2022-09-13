@@ -13,7 +13,7 @@ import { ChartComponentProps, BucketItem } from 'core/types'
 import TickItem, { getBucketLabel } from 'core/charts/generic/TickItem'
 import maxBy from 'lodash/maxBy'
 
-const margin = {
+export const margin = {
     top: 40,
     right: 20,
     bottom: 50,
@@ -34,7 +34,7 @@ export interface HorizontalBarChartProps extends ChartComponentProps {
 
 const marginCoeff = 9
 
-const getLeftMargin = ({ data, shouldTranslate, i18nNamespace }) => {
+export const getLeftMargin = ({ data, shouldTranslate, i18nNamespace }) => {
     if (data && data.length > 0) {
         const labels = data.map(bucket =>
             getBucketLabel({

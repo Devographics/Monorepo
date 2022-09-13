@@ -9,6 +9,7 @@ import resolvers from './resolvers'
 import express from 'express'
 import { initLocales } from './i18n'
 import { initEntities } from './entities'
+import { initSurveys } from './surveys'
 import { analyzeTwitterFollowings } from './rpcs'
 import { clearCache } from './caching'
 
@@ -133,6 +134,8 @@ const start = async () => {
     const port = process.env.PORT || 4000
 
     await initEntities()
+
+    await initSurveys()
 
     const finishedAt = new Date()
 

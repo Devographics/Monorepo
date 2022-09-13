@@ -17,7 +17,7 @@ export interface Tproperties {
     locale?: Locale
 }
 
-const T = ({
+export default function T({
     t: override,
     k,
     values,
@@ -26,7 +26,7 @@ const T = ({
     fallback,
     useShort = false,
     locale
-}: Tproperties) => {
+}: Tproperties) {
     // const data = await dataFetcher.getData()
     // props version
     const getString = getStringTranslator(locale)
@@ -75,5 +75,3 @@ const T = ({
         <span {...props}>{translation}</span>
     )
 }
-
-export default T

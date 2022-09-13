@@ -7,17 +7,24 @@ const CreditItem = ({ entity, role, labelId }) => {
     if (!entity) {
         return null
     }
-    const { name, twitterName, twitter } = entity
+    const { name, twitterName, twitter, company } = entity
     return (
         <CreditItemDiv>
             <Avatar href={`https://twitter.com/${twitterName}`}>
                 <img src={twitter?.avatarUrl} alt={name} />
             </Avatar>
             <Details>
-                <Name>{name}</Name>
-                <Twitter>
+                <Name>
+                    <a href={`https://twitter.com/${twitterName}`}>{name}</a>
+                </Name>
+                {company && (
+                    <Company>
+                        <a href={company.homepage.url}>{company.name}</a>
+                    </Company>
+                )}
+                {/* <Twitter>
                     <a href={`https://twitter.com/${twitterName}`}>@{twitterName}</a>
-                </Twitter>
+                </Twitter> */}
                 <Role>
                     <T k={labelId ?? `credits.${role}`} />
                 </Role>
@@ -56,6 +63,10 @@ const Name = styled.h4`
 `
 
 const Twitter = styled.div`
+    font-size: ${fontSize('small')};
+`
+
+const Company = styled.div`
     font-size: ${fontSize('small')};
 `
 

@@ -15,3 +15,8 @@ export type SurveySlug =
     | 'js2019'
     | 'js2020'
     | 'js2021'
+
+// todo: generate this from GraphQL?
+export type Survey = {
+    editions?: any[]
+}

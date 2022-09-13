@@ -1,4 +1,4 @@
-translationContexts: [common, results, state_of_css, state_of_css_2020]
+translationContexts: [homepage, common, results, state_of_css, state_of_css_2020]
 socialMediaImage: stateofcss2020_socialmedia.png
 hashtag: '#StateOfCSS'
 siteContext: stateofcss

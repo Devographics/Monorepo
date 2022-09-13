@@ -1,11 +1,13 @@
 import { SurveyType } from '../types'
-import surveys from '../surveys'
+import { getSurveys } from '../surveys'
 
 export default {
     Query: {
-        surveys: () => surveys,
+        allSurveys: () => {
+            return getSurveys()
+        },
         survey: (parent: any, { survey }: { survey: SurveyType }) => ({
             survey
-        }),
+        })
     }
 }

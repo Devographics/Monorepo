@@ -1,20 +1,41 @@
 blockType: CreditsBlock
 disableExport: true
 wrapBlock: false
-dataPath: "internalAPI.entities"
+dataPath: "dataAPI.all_credits"
+# note: this currently gets *all* credits for *all* surveys. in the future, 
+# add an endpoint to get metadata for a *single* survey and use it instead
 query: >
-  internalAPI {
-      entities(ids: [${credits}]) {
-          id
-          name
-          homepage{
-              name
-              url
-          }
-          twitterName
-          twitter {
-              avatarUrl
-              userName
-          }
-      }
-  }
+    dataAPI {
+        all_credits: allSurveys {
+            name
+            slug
+            editions {
+                year
+                surveyId
+                credits {
+                    id
+                    role
+                    entity {
+                        name
+                        twitter {
+                            userName
+                            avatarUrl
+                            id
+                        }
+                        homepage {
+                            url
+                        }
+                        company {
+                            name
+                            homepage {
+                                url
+                            }
+                            id
+                        }
+                        companyName
+                        twitterName
+                    }
+                }
+            }
+        }
+    }

@@ -105,6 +105,10 @@ type SurveyEditionConfig {
     Which entity tags to load
     """
     tags: [String]
+    """
+    Credits
+    """
+    credits: [SurveyCreditsItem]
 }
 
 type SurveyEditionColors {
@@ -115,6 +119,11 @@ type SurveyEditionColors {
     backgroundSecondary: String
 }
 
+type SurveyCreditsItem {
+    id: String
+    role: String
+    entity: Entity
+}
 
 """
 A survey

@@ -127,7 +127,7 @@ exports.onCreateWebpackConfig = ({ stage, actions, plugins }) => {
                 Config: path.resolve(__dirname, `surveys/${process.env.SURVEY}/config`),
                 Theme: path.resolve(__dirname, `surveys/${process.env.SURVEY}/theme`),
                 Logo: path.resolve(__dirname, `surveys/${process.env.SURVEY}/logo`),
-                Images: path.resolve(__dirname, `surveys/${process.env.SURVEY}/imagess`),
+                Images: path.resolve(__dirname, `surveys/${process.env.SURVEY}/images`),
             },
             modules: [path.resolve(__dirname, 'src'), 'node_modules'],
             fallback: {

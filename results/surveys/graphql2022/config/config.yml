@@ -1,4 +1,4 @@
-translationContexts: [common, results, how_to_help, state_of_graphql, state_of_graphql_2022]
+translationContexts: [homepage, common, results, how_to_help, state_of_graphql, state_of_graphql_2022]
 socialMediaImage: social/js2021-social.png
 hashtag: '#StateOfGraphQL'
 siteContext: stateofgraphql
@@ -19,4 +19,10 @@ tshirtImages: ['js2021-tshirt.jpg']
 tshirtLink: https://cottonbureau.com/products/javascript-retro-vhs
 tshirtPrice: 29
 tshirtDesignerLink: https://chriskirknielsen.com/
+
+# screenshot capture
+
+baseUrl: http://localhost:8001
+# baseUrl: http://localhost:9000/
+sitemap: ../../../node_src/.logs/flat_sitemap.yml
 

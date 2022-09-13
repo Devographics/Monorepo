@@ -1,13 +1,16 @@
 ---
-import Homepage from '../components/Homepage.astro';
+import Homepage from '../components/Homepage.astro'
 
 import { getData } from '@helpers/data'
 import DefaultLayout from '../layouts/DefaultLayout.astro'
 
 export async function getStaticPaths() {
-  const data = await getData()
-  const { surveys, locales } = data
-  return locales.map(locale => ({ params: { localeId: locale.id }, props: { locale, locales, surveys } }))
+    const data = await getData()
+    const { allSurveys: surveys, locales } = data
+    return locales.map(locale => ({
+        params: { localeId: locale.id },
+        props: { locale, locales, surveys }
+    }))
 }
 
 const { locale, locales, surveys } = Astro.props
@@ -15,5 +18,5 @@ const survey = surveys.find(s => s?.slug === import.meta.env.SURVEY)
 ---
 
 <DefaultLayout {...Astro.props} survey={survey}>
-  <Homepage {...Astro.props} survey={survey} />
+    <Homepage {...Astro.props} survey={survey} />
 </DefaultLayout>

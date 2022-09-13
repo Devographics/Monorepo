@@ -4,19 +4,26 @@ import { mq, spacing, fontSize, color, zIndex } from 'core/theme'
 
 const svgs = {
     top: <polygon stroke="#000" points="0,50 100,50 50,0" />,
-    bottom: <polygon stroke="#000" points="0,0 100,0 50,50" />,
+    bottom: <polygon stroke="#000" points="0,0 100,0 50,50" />
 }
 
-const Popover = ({ position = 'bottom', positionOpen = 'top', trigger, label, children }) => {
+const Popover = ({
+    position = 'bottom',
+    positionOpen = 'top',
+    trigger,
+    label,
+    addPadding = true,
+    children
+}) => {
     const wrapperRef = useRef(null)
 
     const [isOpened, setIsOpened] = useState(false)
     const toggle = useCallback(() => {
-        setIsOpened((flag) => !flag)
+        setIsOpened(flag => !flag)
     }, [setIsOpened])
 
     const handleClickOutside = useCallback(
-        (event) => {
+        event => {
             if (isOpened && wrapperRef.current && !wrapperRef.current.contains(event.target)) {
                 setIsOpened(false)
             }
@@ -24,18 +31,24 @@ const Popover = ({ position = 'bottom', positionOpen = 'top', trigger, label, ch
         [isOpened]
     )
 
-    useEffect(() => {
-        document.addEventListener('click', handleClickOutside, false)
-        return () => {
-            document.removeEventListener('click', handleClickOutside, false)
-        }
-    }, [handleClickOutside])
+    // TODO: make this work again, currently it breaks toggle open/close
+    // useEffect(() => {
+    //     document.addEventListener('click', handleClickOutside, false)
+    //     return () => {
+    //         document.removeEventListener('click', handleClickOutside, false)
+    //     }
+    // }, [handleClickOutside])
 
     const triggerComponent = trigger ? (
-        React.cloneElement(trigger, { onClick: toggle, 'aria-expanded': isOpened, 'aria-haspopup': wrapperRef, 'aria-controls': wrapperRef })
+        React.cloneElement(trigger, {
+            onClick: toggle,
+            'aria-expanded': isOpened,
+            'aria-haspopup': wrapperRef,
+            'aria-controls': wrapperRef
+        })
     ) : (
-        <PopoverToggle 
-            className="PopoverToggle" 
+        <PopoverToggle
+            className="PopoverToggle"
             onClick={toggle}
             aria-label={`${label}`}
             aria-haspopup="menu"
@@ -54,7 +67,13 @@ const Popover = ({ position = 'bottom', positionOpen = 'top', trigger, label, ch
         >
             <PopoverInner className="PopoverInner">
                 {triggerComponent}
-                <PopoverPopup ref={wrapperRef} className="PopoverPopup" id="PopoverPopup" position={position}>
+                <PopoverPopup
+                    ref={wrapperRef}
+                    className="PopoverPopup"
+                    id="PopoverPopup"
+                    position={position}
+                    addPadding={addPadding}
+                >
                     {children}
                 </PopoverPopup>
             </PopoverInner>
@@ -123,7 +142,7 @@ const PopoverToggle = styled.button`
     }
 
     &:focus {
-      outline: 5px auto -webkit-focus-ring-color;
+        outline: 5px auto -webkit-focus-ring-color;
     }
 `
 
@@ -136,9 +155,9 @@ const PopoverPopup = styled.div`
     position: absolute;
     top: 125%;
     left: 50%;
-    padding: ${spacing(1)};
+    padding: ${props => (props.addPadding ? spacing(1) : 0)};
     background: ${color('backgroundAlt')};
-    border: ${(props) => props.theme.separationBorder};
+    border: ${props => props.theme.separationBorder};
     transform: translateX(-50%);
     z-index: ${zIndex('popover')};
     box-shadow: ${({ theme }) => theme.blockShadow};
@@ -149,11 +168,11 @@ const PopoverPopup = styled.div`
         content: ' ';
         height: ${ARROW_SIZE}px;
         width: ${ARROW_SIZE}px;
-        background: ${(props) => props.theme.colors.backgroundAlt};
+        background: ${props => props.theme.colors.backgroundAlt};
         position: absolute;
         pointer-events: none;
         transform-origin: center center;
-        border: ${(props) => props.theme.separationBorder};
+        border: ${props => props.theme.separationBorder};
         top: 0;
         transform: translate(${ARROW_SIZE * -0.5}px, ${ARROW_SIZE * -0.5}px) rotate(-45deg);
         border-bottom: 0;

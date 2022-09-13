@@ -1,104 +1,104 @@
-- twitterName: georgedoescode
-  fullName: George Francis
-  avatarUrl: georgedoescode.png
-  url: https://houdini.how/
+# - twitterName: georgedoescode
+#   fullName: George Francis
+#   avatarUrl: georgedoescode.png
+#   url: https://houdini.how/
 
-- twitterName: shadeed9
-  fullName: Ahmad Shadeed
-  avatarUrl: shadeed9.jpg
-  url: https://www.miriamsuzanne.com/2021/05/02/container-queries/
+# - twitterName: shadeed9
+#   fullName: Ahmad Shadeed
+#   avatarUrl: shadeed9.jpg
+#   url: https://www.miriamsuzanne.com/2021/05/02/container-queries/
 
-- twitterName: cassidoo
-  fullName: Cassidy Williams
-  avatarUrl: cassidoo.jpg
-  url: https://twitter.com/lynnandtonic
+# - twitterName: cassidoo
+#   fullName: Cassidy Williams
+#   avatarUrl: cassidoo.jpg
+#   url: https://twitter.com/lynnandtonic
 
-- twitterName: joshwcomeau
-  fullName: Josh Comeau
-  avatarUrl: joshwcomeau.jpg
-  url: https://wattenberger.com/blog/css-percents
+# - twitterName: joshwcomeau
+#   fullName: Josh Comeau
+#   avatarUrl: joshwcomeau.jpg
+#   url: https://wattenberger.com/blog/css-percents
 
-- twitterName: kevinjpowell
-  fullName: Kevin Powell
-  avatarUrl: kevinjpowell.jpg
-  url: https://thinkdobecreate.com/
+# - twitterName: kevinjpowell
+#   fullName: Kevin Powell
+#   avatarUrl: kevinjpowell.jpg
+#   url: https://thinkdobecreate.com/
   
-- twitterName: mmatuzo
-  fullName: Manuel Matuzović
-  avatarUrl: mmatuzo.jpg
-  url: https://developer.mozilla.org/en-US/docs/Web/CSS/aspect-ratio
+# - twitterName: mmatuzo
+#   fullName: Manuel Matuzović
+#   avatarUrl: mmatuzo.jpg
+#   url: https://developer.mozilla.org/en-US/docs/Web/CSS/aspect-ratio
 
-- twitterName: lauragift_
-  fullName: Gift Egwuenu
-  avatarUrl: lauragift_.jpg
-  url: https://www.youtube.com/kepowob/videos
+# - twitterName: lauragift_
+#   fullName: Gift Egwuenu
+#   avatarUrl: lauragift_.jpg
+#   url: https://www.youtube.com/kepowob/videos
 
-- twitterName: ericwbailey
-  fullName: Eric Bailey
-  avatarUrl: ericwbailey.jpg
-  url: https://www.miriamsuzanne.com/
+# - twitterName: ericwbailey
+#   fullName: Eric Bailey
+#   avatarUrl: ericwbailey.jpg
+#   url: https://www.miriamsuzanne.com/
 
-- twitterName: samuelkraft
-  fullName: Samuel Kraft
-  avatarUrl: samuelkraft.jpg
-  url: https://vanilla-extract.style/
+# - twitterName: samuelkraft
+#   fullName: Samuel Kraft
+#   avatarUrl: samuelkraft.jpg
+#   url: https://vanilla-extract.style/
 
-- twitterName: argyleink
-  fullName: Adam Argyle
-  avatarUrl: argyleink.jpg
-  url: https://fffuel.co/nnnoise/
+# - twitterName: argyleink
+#   fullName: Adam Argyle
+#   avatarUrl: argyleink.jpg
+#   url: https://fffuel.co/nnnoise/
 
-- twitterName: sachagreif
-  fullName: Sacha Greif
-  avatarUrl: sachagreif.jpg
-  url: https://open-props.style/
+# - twitterName: sachagreif
+#   fullName: Sacha Greif
+#   avatarUrl: sachagreif.jpg
+#   url: https://open-props.style/
 
-- twitterName: walterstephanie
-  fullName: Stéphanie Walter
-  avatarUrl: walterstephanie.jpg
-  url: https://www.miriamsuzanne.com/
+# - twitterName: walterstephanie
+#   fullName: Stéphanie Walter
+#   avatarUrl: walterstephanie.jpg
+#   url: https://www.miriamsuzanne.com/
   
-- twitterName: kilianvalkhof
-  fullName: Kilian Valkhof
-  avatarUrl: kilianvalkhof.jpg
-  url: https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-data
+# - twitterName: kilianvalkhof
+#   fullName: Kilian Valkhof
+#   avatarUrl: kilianvalkhof.jpg
+#   url: https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-data
 
-- twitterName: michebarks
-  fullName: Michelle Barker
-  avatarUrl: michebarks.jpg
-  url: https://web.dev/building-a-color-scheme/
+# - twitterName: michebarks
+#   fullName: Michelle Barker
+#   avatarUrl: michebarks.jpg
+#   url: https://web.dev/building-a-color-scheme/
 
-# - twitterName: christianoliff
-#   fullName: Christian Oliff
-#   avatarUrl: christianoliff.jpg
-#   url: https://purgecss.com/
+# # - twitterName: christianoliff
+# #   fullName: Christian Oliff
+# #   avatarUrl: christianoliff.jpg
+# #   url: https://purgecss.com/
 
-# - twitterName: piccalilli_
-#   fullName: Andy Bell
-#   avatarUrl: piccalilli_.jpg
-#   url: https://css-irl.info/
+# # - twitterName: piccalilli_
+# #   fullName: Andy Bell
+# #   avatarUrl: piccalilli_.jpg
+# #   url: https://css-irl.info/
 
-# - twitterName: sarasoueidan
-#   fullName: Sara Soueidan
-#   avatarUrl: sarasoueidan.jpg
-#   url: https://rachelandrew.co.uk/
+# # - twitterName: sarasoueidan
+# #   fullName: Sara Soueidan
+# #   avatarUrl: sarasoueidan.jpg
+# #   url: https://rachelandrew.co.uk/
 
-# - twitterName: 5t3ph
-#   fullName: Stephanie Eckles
-#   avatarUrl: 5t3ph.jpg
-#   url: https://www.youtube.com/watch?v=o6ssu5oKyaU
+# # - twitterName: 5t3ph
+# #   fullName: Stephanie Eckles
+# #   avatarUrl: 5t3ph.jpg
+# #   url: https://www.youtube.com/watch?v=o6ssu5oKyaU
 
-# - twitterName: hugogiraudel
-#   fullName: Hugo “Kitty” Giraudel
-#   avatarUrl: hugogiraudel.jpg
-#   url: https://fela.js.org/
+# # - twitterName: hugogiraudel
+# #   fullName: Hugo “Kitty” Giraudel
+# #   avatarUrl: hugogiraudel.jpg
+# #   url: https://fela.js.org/
 
-# - twitterName: foolip
-#   fullName: Philip Jägenstedt
-#   avatarUrl: foolip.jpg
-#   url: https://blogs.igalia.com/svillar/2020/10/01/closing-the-gap-in-flexbox/
+# # - twitterName: foolip
+# #   fullName: Philip Jägenstedt
+# #   avatarUrl: foolip.jpg
+# #   url: https://blogs.igalia.com/svillar/2020/10/01/closing-the-gap-in-flexbox/
 
-# - twitterName: jina
-#   fullName: Jina Anne
-#   avatarUrl: jina.jpg
-#   url: https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion
+# # - twitterName: jina
+# #   fullName: Jina Anne
+# #   avatarUrl: jina.jpg
+# #   url: https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion

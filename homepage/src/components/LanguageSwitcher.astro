@@ -6,56 +6,58 @@ const { pathname } = canonicalUrl
 ---
 
 <div class="language-switcher">
-  <h3 class="language-switcher-heading">
-    <T locale={locale} k="languages.available_languages" />
-  </h3>
-  <ul>
-    {locales.map(({ id, label }) => (
-    <li class:list={{'locale-active': locale.id === id}}>
-      <LanguageLink client:load url={pathname.replace(locale.id, id)} label={label} />
-    </li>
-    ))}
-  </ul>
-  <h4>
-    <a href="https://github.com/StateOfJS/locale-en-US">
-      <T locale={locale} k="languages.help_us_translate" />
-    </a>
-  </h4>
+    <h3 class="language-switcher-heading">
+        <T locale={locale} k="languages.available_languages" />
+    </h3>
+    <ul>
+        {
+            locales.map(({ id, label }) => (
+                <li class:list={{ 'locale-active': locale.id === id }}>
+                    <LanguageLink client:load url={pathname.replace(locale.id, id)} label={label} />
+                </li>
+            ))
+        }
+    </ul>
+    <h4>
+        <a href="https://github.com/StateOfJS/locale-en-US">
+            <T locale={locale} k="languages.help_us_translate" />
+        </a>
+    </h4>
 </div>
 
 <style lang="scss">
-  .language-switcher {
-    margin-bottom: var(--doublespacing);
-    text-align: center;
-  }
+    .language-switcher {
+        margin-bottom: var(--doublespacing);
+        text-align: center;
+    }
 
-  .language-switcher-heading {
-    display: inline-block;
-    margin: 0 var(--halfspacing);
-    font-size: var(--medium-font);
-  }
+    .language-switcher-heading {
+        display: inline-block;
+        margin: 0 var(--halfspacing);
+        font-size: var(--medium-font);
+    }
 
-  ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    display: inline;
-  }
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        display: inline;
+    }
 
-  li {
-    display: inline-block;
-    margin: 0 var(--halfspacing);
-    font-size: var(--medium-font);
-  }
+    li {
+        display: inline-block;
+        margin: 0 var(--halfspacing);
+        font-size: var(--medium-font);
 
-  .locale-active :global(a) {
-    background: var(--primary);
-    color: var(--background);
-    border-radius: 3px;
-    padding: calc(var(--quarterspacing)*0.8) var(--halfspacing);
-  }
+        &.locale-active :global(a) {
+            background: var(--primary);
+            color: var(--background);
+            border-radius: 3px;
+            padding: calc(var(--quarterspacing) * 0.8) var(--halfspacing);
+        }
+    }
 
-  h4 {
-    margin-top: var(--spacing);
-  }
+    h4 {
+        margin-top: var(--spacing);
+    }
 </style>

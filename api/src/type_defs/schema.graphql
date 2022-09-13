@@ -10,7 +10,7 @@ type Query {
     """
     All surveys.
     """
-    surveys: [SurveyItem]
+    allSurveys: [SurveyItem]
     # """
     # Data about a specific entity (tool, library, framework, features, etc.)
     # """

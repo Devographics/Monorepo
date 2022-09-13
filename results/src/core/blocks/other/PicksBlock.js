@@ -3,20 +3,12 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 // import ReactMarkdown from 'react-markdown'
 import { mq, spacing, fontSize, color } from 'core/theme'
-import picks from 'Config/picks.yml'
 import T from 'core/i18n/T'
 
-const PicksBlock = ({ block, data }) => {
-    const { id: pickId } = block
-    const pick = picks.find(p => p.twitterName === pickId || p.id === pickId)
-
-    if (!pick) {
-        return null
-    }
-
-    const { twitterName, fullName, pickName, avatarUrl, url } = pick
-
-    const avatarFileName = avatarUrl ?? `${twitterName}.jpg`
+const PicksBlock = ({ block, data: entity }) => {
+    const { id: pickId, variables } = block
+    const { url } = variables
+    const { name: fullName, twitter, twitterName } = entity
 
     return (
         <PicksContainer className="Block">
@@ -52,7 +44,7 @@ const PicksBlock = ({ block, data }) => {
                                 <a
                                     href={`https://twitter.com/${twitterName}`}
                                     style={{
-                                        backgroundImage: `url(/images/picks/${avatarFileName})`
+                                        backgroundImage: `url(${twitter?.avatarUrl})`
                                     }}
                                     title={fullName}
                                 >
