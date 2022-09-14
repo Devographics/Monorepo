@@ -200,9 +200,9 @@
       blockNamespace: features
       blockType: KnowledgeScoreBlock
 
-    - id: features_resources
-      items: [fm-javascript]
-      template: recommended_resources
+    # - id: features_resources
+    #   items: [fm-javascript]
+    #   template: recommended_resources
 
   # children:
   #   - id: graphql_language
@@ -367,7 +367,7 @@
             fieldId: graphql_servers
 
         - id: graphql_servers_resources
-          items: [fm-react, fm-vue]
+          items: [fm-server-graphql]
           template: recommended_resources
 
         - id: apollo_server
@@ -418,7 +418,7 @@
             fieldId: graphql_clients
 
         - id: graphql_clients_resources
-          items: [fm-api-design-nodejs-v3, fm-next-js]
+          items: [fm-client-graphql]
           template: recommended_resources
         
         - id: apollo_client
@@ -469,7 +469,7 @@
             fieldId: graphql_api_generators
 
         - id: graphql_api_generators_resources
-          items: [fm-testing-practices-principles]
+          items: [fm-fullstack-typescript]
           template: recommended_resources
 
         - id: postgraphile
@@ -529,9 +529,9 @@
           variables:
             fieldId: schema_builders
 
-        - id: schema_builders_resources
-          items: [fm-react-native-v2, fm-intermediate-react-native]
-          template: recommended_resources
+        # - id: schema_builders_resources
+        #   items: [fm-react-native-v2, fm-intermediate-react-native]
+        #   template: recommended_resources
 
         - id: nexus
           template: tool_experience
@@ -662,9 +662,9 @@
             fieldId: tools_others
             options: { limit: 15 }
 
-    - id: tools_others_resources
-      items: [fm-typescript, fm-node-js]
-      template: recommended_resources
+    # - id: tools_others_resources
+    #   items: [fm-typescript, fm-node-js]
+    #   template: recommended_resources
 
 - id: usage
   titleId: sections.usage_graphql.title
@@ -945,9 +945,9 @@
       #       fieldId: resources
       #       options: { limit: 15 }
 
-    - id: resources_resources
-      items: [reactathon, renderatl]
-      template: recommended_resources
+    # - id: resources_resources
+    #   items: [reactathon, renderatl]
+    #   template: recommended_resources
 
 # - id: awards
 #   path: /awards
