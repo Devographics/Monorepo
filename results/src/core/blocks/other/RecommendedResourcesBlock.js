@@ -77,9 +77,9 @@ const RecommendedResourcesBlock = ({ block, data }) => {
                     })}
                 </List>
                 <Sponsoring className="Resources__sponsoring">
-                    <T k="partners.thanks" />{' '}
+                    <T k="sponsors.thanks" />{' '}
                     <Link to="/support">
-                        <T k="partners.learn_more" />
+                        <T k="sponsors.learn_more" />
                     </Link>
                 </Sponsoring>
             </div>
