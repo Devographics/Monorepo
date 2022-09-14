@@ -1,5 +1,9 @@
 {
   "compilerOptions": {
+    /**
+    /!\ This is important for pnpm to load the right versions
+    */
+    "preserveSymlinks": true,
     "allowJs": true,
     "alwaysStrict": true,
     "baseUrl": "./",

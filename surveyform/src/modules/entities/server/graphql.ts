@@ -1,10 +1,7 @@
 import sortBy from "lodash/sortBy.js";
 import fetch from "node-fetch";
 import get from "lodash/get.js";
-import { serverConfig } from "~/config/server";
 import { cachedPromise, promisesNodeCache } from "~/lib/server/caching";
-const translationAPI = serverConfig.translationAPI; //getSetting("translationAPI");
-const disableAPICache = false; //getSetting("disableAPICache", false);
 
 const entitiesPromiseCacheKey = "entitiesPromise";
 /*
@@ -81,7 +78,7 @@ export const fetchEntities = async () => {
     },
     body: JSON.stringify({ query: entitiesQuery, variables: {} }),
   });
-  const json = await response.json();
+  const json: any = await response.json();
   if (json.errors) {
     console.log("// entities API query error");
     console.log(JSON.stringify(json.errors, null, 2));

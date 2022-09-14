@@ -1,5 +1,8 @@
 import React from "react";
-import surveys from "~/surveys";
+import { surveysWithTemplates } from "~/surveys/withTemplates";
+// just an alias to avoid changing the whole code
+const surveys = surveysWithTemplates;
+
 //import User from "~/core/models/user";
 import { getSurveyPath } from "~/modules/surveys/helpers";
 import Link from "next/link"; //"react-router-dom";

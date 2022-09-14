@@ -289,7 +289,7 @@ const fetchLocalesWithStrings = async () => {
       variables: { contexts },
     }),
   });
-  const json = await response.json();
+  const json: any = await response.json();
 
   if (json.errors) {
     console.log(json.errors);

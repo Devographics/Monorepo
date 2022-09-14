@@ -7,7 +7,7 @@ const apiKey = process.env.EMAIL_OCTOPUS_APIKEY;
 /**
  * Subscribe a user to the mailing list
  */
-export async function subscribe({email, confirm = false, listId}) {
+export async function subscribe({ email, confirm = false, listId }) {
   try {
     if (!(apiKey && listId)) {
       // FIXME: NODE_ENV should be test in test but it is still production
@@ -41,7 +41,7 @@ export async function subscribe({email, confirm = false, listId}) {
         headers: { "Content-Type": "application/json" },
       }
     );
-    const json = await subscribe.json();
+    const json: any = await subscribe.json();
     if (json.error) {
       throw json.error;
     }

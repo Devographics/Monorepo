@@ -1,0 +1,12 @@
+packages:
+    # Packages
+    - 'shared/*'
+    # API
+    - 'api'
+    - 'api-internal'
+    # Webapps
+    - 'surveyform'
+    - 'results'
+    - 'jobs'
+    - 'homepage'
+    - 'graphiql'

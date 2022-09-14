@@ -5,6 +5,8 @@ module.exports = {
         title: `Devographics Survey Results`,
     },
     plugins: [
+        // @see https://www.gatsbyjs.com/plugins/gatsby-plugin-pnpm/
+        'gatsby-plugin-pnpm',
         'gatsby-transformer-yaml',
         {
             resolve: 'gatsby-source-filesystem',

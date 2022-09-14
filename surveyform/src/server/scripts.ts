@@ -13,7 +13,7 @@ import { createEmailHash } from "~/account/email/api/encryptEmail";
 import { UserMongooseModel } from "~/core/models/user.server";
 import { connectToAppDb } from "~/lib/server/mongoose/connection";
 import { logToFile } from "~/lib/server/debug";
-import { getSurveyBySlug } from "~/modules/surveys/helpers";
+// import { getSurveyBySlug } from "~/modules/surveys/helpers";
 import surveys, { Field, SurveyType } from "~/surveys";
 
 /*
@@ -33,7 +33,7 @@ export const renameFieldMigration = async (
     { $rename: { [field1]: field2 } }
   );
 
-  const emoji = result.modifiedCount === 0 ? '':'✅'
+  const emoji = result.modifiedCount === 0 ? "" : "✅";
   // eslint-disable-next-line no-console
   console.log(
     `// ${emoji} ${field1} -> ${field2} migration done, renamed ${result.modifiedCount} fields `
@@ -225,11 +225,10 @@ export const renameFields = async () => {
   }
 };
 
-
 // graphql2022__usage__graphql_experience__choices__choices -> graphql2022__usage__graphql_experience__choices
 export const fixRenameFields = async () => {
   console.log("// fixRenameFields");
-  
+
   const suffix = "__choices";
 
   for (const survey of surveys) {

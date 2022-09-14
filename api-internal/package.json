@@ -40,7 +40,7 @@
         "prettier": "^2.3.2",
         "ts-loader": "^9.2.5",
         "tsup": "^6.2.3",
-        "typescript": "^4.3.5",
+        "typescript": "=4.3.5",
         "webpack": "^5.58.2",
         "webpack-cli": "^4.9.0",
         "webpack-merge": "^5.8.0",

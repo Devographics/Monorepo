@@ -17,7 +17,7 @@ import {
 } from "@vulcanjs/react-ui";
 import { Response } from "~/modules/responses/model";
 import { Save } from "~/modules/saves/model";
-import { ParsedQuestion, SurveyType } from "~/surveys";
+import type { ParsedQuestion, SurveyType } from "~/surveys";
 import { useUser } from "~/account/user/hooks";
 import { EntitiesProvider } from "~/core/components/common/EntitiesContext";
 

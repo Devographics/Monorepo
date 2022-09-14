@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import { useQuery } from "@apollo/client";
 import gql from "graphql-tag";
 import get from "lodash/get.js";
-import surveys from "~/surveys";
 // import { useLocation, useHistory } from "react-router-dom";
 import qs from "qs";
 import { useRouter } from "next/router.js";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
+import { surveysWithTemplates } from "~/surveys/withTemplates";
+// just an alias to avoid changing the whole code
+const surveys = surveysWithTemplates;
 
 const normalizationQuery = gql`
   query NormalizationQuery($surveySlug: String, $fieldName: String) {

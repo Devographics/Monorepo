@@ -61,6 +61,7 @@
         "gatsby-cli": "^4.22.0",
         "gatsby-plugin-mdx": "^4.1.0",
         "gatsby-plugin-netlify": "^5.0.1",
+        "gatsby-plugin-pnpm": "^1.2.10",
         "gatsby-plugin-react-helmet": "^5.22.0",
         "gatsby-plugin-sass": "^5.22.0",
         "gatsby-plugin-styled-components": "^5.22.0",

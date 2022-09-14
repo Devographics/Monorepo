@@ -47,3 +47,6 @@ dist
 .logs
 .mongo
 
+
+# Turborepo
+.turbo
