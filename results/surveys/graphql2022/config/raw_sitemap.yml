@@ -1017,8 +1017,8 @@
     - id: conclusion
       template: conclusion
       variables:
-        author: shawn_wang
-        entities: '"shawn_wang"'
+        author: jamie_barton
+        entities: '"jamie_barton"'
 
     - id: conclusion_newsletter
       blockType: NewsletterBlock
