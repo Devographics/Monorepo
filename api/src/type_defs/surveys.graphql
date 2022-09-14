@@ -109,6 +109,10 @@ type SurveyEditionConfig {
     Credits
     """
     credits: [SurveyCreditsItem]
+    """
+    Sponsors
+    """
+    sponsors: [SurveySponsorsItem]
 }
 
 type SurveyEditionColors {
@@ -123,6 +127,13 @@ type SurveyCreditsItem {
     id: String
     role: String
     entity: Entity
+}
+
+type SurveySponsorsItem {
+    id: String
+    name: String
+    url: String
+    imageUrl: String
 }
 
 """
