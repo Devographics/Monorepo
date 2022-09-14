@@ -42,9 +42,7 @@
       disableExport: true
       wrapBlock: false
     - id: survey_sponsors
-      blockType: SponsorsBlock
-      disableExport: true
-      wrapBlock: false
+      template: sponsors
     - id: survey_translators
       blockType: TranslatorsBlock
       disableExport: true

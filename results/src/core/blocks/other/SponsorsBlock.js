@@ -1,38 +1,42 @@
 import React from 'react'
 import styled from 'styled-components'
 import Link from 'core/components/LocaleLink'
-import sponsors from 'Config/sponsors.yml'
 import { useI18n } from 'core/i18n/i18nContext'
 import { mq, spacing, fontSize } from 'core/theme'
 import T from 'core/i18n/T'
+import config from 'Config/config.yml'
 
-const SponsorsBlock = () => {
+const SponsorsBlock = ({ data }) => {
+    const { slug, year } = config
+    const survey = data?.find(s => s.slug === slug)
+    const edition = survey?.editions?.find(e => e.year === year)
+    const sponsors = edition?.sponsors
     const { translate } = useI18n()
 
-    return (
+    return sponsors && sponsors.length > 0 ? (
         <>
             <Container>
-                <Header>{translate('partners.our_partners')}</Header>
+                <Header>{translate('sponsors.our_partners')}</Header>
                 <SponsorList className="Sponsor__list">
-                    {sponsors.map(({ name, image, url, id }) => (
+                    {sponsors.map(({ name, imageUrl, url, id }) => (
                         <Sponsor className={`Sponsor Sponsor--${id}`} key={name}>
                             <SponsorLogo>
                                 <a href={url} title={name}>
-                                    <img src={`/images/sponsors/${image}`} alt={name} />
+                                    <img src={imageUrl} alt={name} />
                                 </a>
                             </SponsorLogo>
                             <SponsorDescription>
-                                <T k={`partners.${id}.description`} />
+                                <T k={`sponsors.${id}.description`} />
                             </SponsorDescription>
                         </Sponsor>
                     ))}
                 </SponsorList>
             </Container>
             <Support className="Sponsors__Support">
-                <Link to="/support">{translate('partners.become_partner')}</Link>
+                <Link to="/support">{translate('sponsors.become_partner')}</Link>
             </Support>
         </>
-    )
+    ) : null
 }
 
 const Container = styled.div`
