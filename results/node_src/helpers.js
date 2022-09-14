@@ -143,6 +143,11 @@ exports.getExistingData = async ({ dataFileName, dataFilePath, baseUrl }) => {
     return data
 }
 
+exports.getConfigLocations = config => ({
+    localPath: `./../../devographics-surveys/${config.slug}/${config.year}`,
+    url: `https://devographics.github.io/surveys/${config.slug}/${config.year}`
+})
+
 /*
 
 Try loading data from disk or GitHub, or else run queries for *each block* in a page
@@ -152,8 +157,9 @@ exports.runPageQueries = async ({ page, graphql, config }) => {
     const startedAt = new Date()
     console.log(`// Running GraphQL queries for page ${page.id}…`)
 
-    const basePath = `./../../devographics-surveys/${config.slug}/${config.year}/results`
-    const baseUrl = `https://devographics.github.io/surveys/${config.slug}/${config.year}/results`
+    const paths = exports.getConfigLocations(config)
+    const basePath = paths.localPath + '/results'
+    const baseUrl = paths.url + '/results'
 
     let pageData = {}
 

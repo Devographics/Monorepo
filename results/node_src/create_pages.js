@@ -161,7 +161,7 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
         { mode: 'overwrite', surveyId }
     )
 
-    const chartSponsors = USE_FAST_BUILD ? {} : await getSendOwlData({ flat, config })
+    const chartSponsors = await getSendOwlData({ flat, config })
 
     for (const page of flat) {
         let pageData = {}

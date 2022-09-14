@@ -1,4 +1,4 @@
-const { sleep, getTwitterUser } = require('./helpers.js')
+const { sleep, getTwitterUser, getConfigLocations, getExistingData } = require('./helpers.js')
 const fetch = require('node-fetch')
 const _ = require('lodash')
 const FormData = require('form-data')
@@ -58,13 +58,15 @@ const getProducts = async ({ config }) => {
         `${sendOwlAPIUrl}/v1/products/`,
         getSendOwlOptions()
     )
-    const productsDataClean = productsData.map(({ product }) => ({
+    let productsDataClean = productsData.map(({ product }) => ({
+        surveyId: product.name.split('___')[0],
         chartId: product.name,
         productId: product.id,
         instant_buy_url: product.instant_buy_url,
         add_to_cart_url: product.add_to_cart_url,
         sales_page_url: product.sales_page_url
     }))
+    productsDataClean = productsDataClean.filter(p => p.surveyId === surveyId)
     logToFile('products.json', productsData, { ...logOptions, surveyId })
     logToFile('product_clean.json', productsDataClean, { ...logOptions, surveyId })
 
@@ -173,22 +175,42 @@ exports.getSendOwlData = async ({ flat, config }) => {
         return {}
     }
 
-    // get list of all chart variants that should have corresponding products
-    const chartVariants = []
-    for (const page of flat) {
-        for (const block of page.blocks) {
-            for (const variant of block.variants) {
-                if (variant.hasSponsor) {
-                    chartVariants.push(variant)
+    const { localPath, url } = getConfigLocations(config)
+    const dataFileName = 'sendowl.json'
+    const dataDirName = 'results/chart_sponsorships'
+    const dataDirPath = localPath + '/' + dataDirName
+    const existingData = await getExistingData({
+        dataFileName,
+        dataFilePath: dataDirPath + '/' + dataFileName,
+        baseUrl: url + '/' + dataDirName
+    })
+
+    if (existingData) {
+        return JSON.parse(existingData)
+    } else {
+        // get list of all chart variants that should have corresponding products
+        const chartVariants = []
+        for (const page of flat) {
+            for (const block of page.blocks) {
+                for (const variant of block.variants) {
+                    if (variant.hasSponsor) {
+                        chartVariants.push(variant)
+                    }
                 }
             }
         }
+
+        const products = await getProducts({ config })
+        const orders = await getOrders({ products, config })
+        const newProducts = await createMissingProducts({ products, chartVariants, config })
+        const allProducts = [...products, ...newProducts]
+
+        const data = { products: allProducts, orders }
+
+        logToFile(dataFileName, data, {
+            mode: 'overwrite',
+            dirPath: dataDirPath
+        })
+        return data
     }
-
-    const products = await getProducts({ config })
-    const orders = await getOrders({ products, config })
-    const newProducts = await createMissingProducts({ products, chartVariants, config })
-    const allProducts = [...products, ...newProducts]
-
-    return { products: allProducts, orders }
 }
