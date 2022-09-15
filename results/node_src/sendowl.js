@@ -186,7 +186,7 @@ exports.getSendOwlData = async ({ flat, config }) => {
     })
 
     if (existingData) {
-        return JSON.parse(existingData)
+        return existingData
     } else {
         // get list of all chart variants that should have corresponding products
         const chartVariants = []
