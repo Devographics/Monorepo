@@ -44,6 +44,18 @@ const edits = [
       },
     },
   ],
+  /*
+  Experiment to force Gatsby to use the ESM version of globals
+  but it keeps loading "globals.cjs" instead because it uses @apollo/client CJS version
+  [
+    "node_modules/@apollo/client/utilities/globals/package.json",
+    {
+      exports: {
+        ".": "./index.js",
+      },
+    },
+  ],
+  */
 ];
 
 const fs = require("fs");
