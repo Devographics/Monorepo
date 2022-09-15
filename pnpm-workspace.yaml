@@ -9,7 +9,7 @@ packages:
     # Tmp remove Gatsby so it uses its own @apollo/client
     # until we figure https://github.com/apollographql/apollo-client
     # The patch used for Next breaks Gatsby... and no patch breaks Next
-    # - 'results'
+    - 'results'
     - 'jobs'
     - 'homepage'
     - 'graphiql'

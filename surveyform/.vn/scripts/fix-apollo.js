@@ -44,18 +44,14 @@ const edits = [
       },
     },
   ],
-  /*
-  Experiment to force Gatsby to use the ESM version of globals
-  but it keeps loading "globals.cjs" instead because it uses @apollo/client CJS version
   [
-    "node_modules/@apollo/client/utilities/globals/package.json",
+    "node_modules/@apollo/client/utilities/package.json",
     {
       exports: {
-        ".": "./index.js",
+        "./globals": "./globals/index.js",
       },
     },
   ],
-  */
 ];
 
 const fs = require("fs");
@@ -67,7 +63,7 @@ edits.forEach(([packageJsonPath, fieldsToAdd]) => {
   console.log("Edited");
   const currentPackage = JSON.parse(fs.readFileSync(fullPath));
   const editedPackage = { ...currentPackage, ...fieldsToAdd };
-  fs.writeFileSync(fullPath, JSON.stringify(editedPackage));
+  fs.writeFileSync(fullPath, JSON.stringify(editedPackage, null, 2));
   // Drop .next folder to force a rebuild
   console.log(
     "Edited, will drop '.next' folder to avoid build issues (only during dev)"
