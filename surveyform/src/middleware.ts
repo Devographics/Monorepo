@@ -1,12 +1,14 @@
-// middleware.ts
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import {
   adminAreaMatcher,
   adminLoginMiddleware,
 } from "~/admin/server/edge/adminMiddleware";
-import { debugAccessMiddleware } from "~/core/server/edge/debugMiddleware";
-import { cronMiddleware } from "~/core/server/edge/cronMiddleware";
+import {
+  debugAccessMiddleware,
+  debugAreaMatcher,
+} from "~/core/server/edge/debugMiddleware";
+import { cronMiddleware, cronMatcher } from "~/core/server/edge/cronMiddleware";
 
 export function middleware(request: NextRequest) {
   // TODO: this condition should use the admin area matcher?
@@ -28,9 +30,6 @@ export function middleware(request: NextRequest) {
 }
 
 // middleware will run only on those paths
-/*
-Uncomment when upgrading to Next 12.2
 export const config = {
   matcher: [...adminAreaMatcher, ...debugAreaMatcher, ...cronMatcher],
 };
-*/

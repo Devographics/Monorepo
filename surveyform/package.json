@@ -140,7 +140,7 @@
     "lodash": "^4.17.19",
     "mongoose": "^6.4.5",
     "nanoid": "^3.1.25",
-    "next": "=12.1.6",
+    "next": "=12.3",
     "next-connect": "^0.9.1",
     "next-sitemap": "^1.4.17",
     "node-cache": "^5.1.2",

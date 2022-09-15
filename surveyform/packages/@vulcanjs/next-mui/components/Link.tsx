@@ -11,7 +11,7 @@ const Anchor = styled("a")({});
 export interface NextLinkComposedProps
   extends Omit<
       React.AnchorHTMLAttributes<HTMLAnchorElement>,
-      "href" | "onClick" | "onMouseEnter"
+      "href" | "onClick" | "onMouseEnter" | "onTouchStart"
     >,
     Omit<NextLinkProps, "href" | "as" | "onClick" | "onMouseEnter"> {
   to: NextLinkProps["href"];
