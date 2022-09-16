@@ -71,14 +71,19 @@ const fieldsToCopy = [
   ["common__user_info__os", "user_info.os"],
   ["common__user_info__referrer", "user_info.referrer"],
   ["common__user_info__source", "user_info.sourcetag"],
-  ["common__user_info__authmode", 'user_info.authmode'],
+  ["common__user_info__authmode", "user_info.authmode"],
 ];
 
 // a response must have at least one of those fields to be added to the normalized dataset
 // (discard empty responses)
 const mustHaveKeys = [
-  'features', 'tools', 'resources', 'usage', 'opinions', 'environments'
-]
+  "features",
+  "tools",
+  "resources",
+  "usage",
+  "opinions",
+  "environments",
+];
 
 const privateFieldPaths = [
   "user_info.github_username",
@@ -315,9 +320,9 @@ export const normalizeResponse = async ({
     */
     if (intersection(Object.keys(normResp), mustHaveKeys).length === 0) {
       if (verbose) {
-        console.log(`!! Discarding response ${response._id} as empty`)
+        console.log(`!! Discarding response ${response._id} as empty`);
       }
-      return
+      return;
     }
 
     /*
@@ -401,6 +406,9 @@ export const normalizeResponse = async ({
       { _id: response._id },
       {
         $set: {
+          // NOTE: at the time of writing 09/2022 this is not really used by the app
+          // the admin area resolve the normalizedResponse based on its responseId (instead of using response.normalizedResponseId)
+          // using a reversed relation
           normalizedResponseId: updatedNormalizedResponse._id,
           isNormalized: true,
         },

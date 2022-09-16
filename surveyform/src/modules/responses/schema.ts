@@ -125,6 +125,11 @@ export const schema: VulcanGraphqlSchema = {
     canCreate: ["admins"],
     canUpdate: ["admins"],
   },
+  /*
+  NOTE: this field will exist in the database, but is only used in the admin area
+  Currently (09/2022) the admin area doesn't use this field but instead rely on a virtual field with a
+  "reversed relation" to get the normalizedResponse from a response
+  However the normalization adds this field in the db for convenience of future changes
   normalizedResponseId: {
     type: String,
     optional: true,
@@ -132,6 +137,7 @@ export const schema: VulcanGraphqlSchema = {
     canCreate: ["admins"],
     canUpdate: ["admins"],
   },
+  */
   isFinished: {
     type: Boolean,
     optional: true,
