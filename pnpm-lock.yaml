@@ -248,6 +248,7 @@ importers:
       '@mui/icons-material': ^5.0.0
       '@mui/material': ^5.0.0
       '@next/bundle-analyzer': ^9.4.4
+      '@next/env': ^12.3.0
       '@next/mdx': ^10.0.2
       '@next/plugin-storybook': ^12.1.5
       '@sentry/nextjs': '6'
@@ -372,6 +373,7 @@ importers:
       sass: ^1.43.5
       serve: ^11.3.2
       shelljs: ^0.8.4
+      simpl-schema: ^1.12.3
       smtp-tester: ^1.2.0
       source-map-support: ^0.5.19
       start-server-and-test: ^1.11.0
@@ -400,6 +402,7 @@ importers:
       '@mdx-js/react': 1.6.22_react@17.0.2
       '@mui/icons-material': 5.10.3_svug6heml23mu4tw5tunbm3oj4
       '@mui/material': 5.10.3_jyl6hmschmdid4lxqxuaosgwoq
+      '@next/env': 12.3.0
       '@next/mdx': 10.2.3_6vwedlnwdegenaf6jioaeirvlu
       '@sentry/nextjs': 6.19.7_a35hq5dbfry5p2ocz6qikdlbw4
       '@sentry/node': 7.12.1
@@ -475,6 +478,7 @@ importers:
       rehype-raw: 6.1.1
       sanitize-html: 2.7.1
       sass: 1.54.8
+      simpl-schema: 1.12.3
       styled-jsx-plugin-postcss: 3.0.2
       swr: 0.4.2_react@17.0.2
       uuid: 8.3.2
@@ -12319,7 +12323,7 @@ packages:
       mississippi: 3.0.0
       mkdirp: 0.5.6
       move-concurrently: 1.0.1
-      promise-inflight: 1.0.1_bluebird@3.7.2
+      promise-inflight: 1.0.1
       rimraf: 2.7.1
       ssri: 6.0.2
       unique-filename: 1.1.1
@@ -24235,17 +24239,6 @@ packages:
     peerDependenciesMeta:
       bluebird:
         optional: true
-    dev: false
-
-  /promise-inflight/1.0.1_bluebird@3.7.2:
-    resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
-    peerDependencies:
-      bluebird: '*'
-    peerDependenciesMeta:
-      bluebird:
-        optional: true
-    dependencies:
-      bluebird: 3.7.2
     dev: false
 
   /promise.allsettled/1.0.5:

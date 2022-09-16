@@ -96,6 +96,7 @@
     "@mdx-js/react": "^1.6.13",
     "@mui/icons-material": "^5.0.0",
     "@mui/material": "^5.0.0",
+    "@next/env": "^12.3.0",
     "@next/mdx": "^10.0.2",
     "@sentry/nextjs": "6",
     "@sentry/node": "^7.11.1",
@@ -171,6 +172,7 @@
     "rehype-raw": "^6.1.0",
     "sanitize-html": "^2.6.1",
     "sass": "^1.43.5",
+    "simpl-schema": "^1.12.3",
     "styled-jsx-plugin-postcss": "^3.0.2",
     "swr": "^0.4.0",
     "uuid": "^8.3.2"

@@ -19,8 +19,9 @@ mongo:
 # @see https://stackoverflow.com/questions/47207616/auto-remove-container-with-docker-compose-yml
 # It is not currently possible to automatically remove containers using docker-compose.yml
 # so it's easier tp run both commands concurrently
+# Exec from justfile_directly so we avoid having .mongo everywhere
 dbs:
-    pnpm exec concurrently --prefix-colors "bgRed,bgGreen" \
+    cd {{justfile_directory()}} && pnpm exec concurrently --prefix-colors "bgRed,bgGreen" \
     --names "redis,mongo" "just redis" "just mongo";
 
 # Create local build
