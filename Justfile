@@ -1,6 +1,10 @@
 # https://github.com/casey/just
+
+# @see https://github.com/Devographics/Monorepo/pull/114
+# Gatsby result app is currently opted-out of PNPM because of the patch on Apollo client needed for Next
 install:
-    pnpm install
+    pnpm install;
+    cd {{justfile()}}/result yarn install;
 
 # For external and internal APIs
 redis:
@@ -23,6 +27,7 @@ dbs:
 # Don't forget to run Redis and Mongo dbs
 build:
     pnpm exec nx run-many --target=build
+    cd {{justfile()}}/result yarn run build;
 
 default:
     @just --list --justfile {{justfile()}}
