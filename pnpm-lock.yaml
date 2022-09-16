@@ -225,6 +225,24 @@ importers:
       astro: 1.2.3_sass@1.54.9
       sass: 1.54.9
 
+  shared/core-models:
+    specifiers:
+      '@vulcanjs/graphql': ^0.7.1
+      '@vulcanjs/mongo': ^0.7.1
+      graphql-tag: ^2.12.6
+      lodash: ^4.17.21
+      moment: ^2.29.4
+      mongoose: ^6.4.5
+      nanoid: ^3.1.25
+    dependencies:
+      '@vulcanjs/graphql': 0.7.1_moment@2.29.4
+      '@vulcanjs/mongo': 0.7.1_ldcudf3m6x2ghsrsnbenfgklue
+      graphql-tag: 2.12.6
+      lodash: 4.17.21
+      moment: 2.29.4
+      mongoose: 6.5.4
+      nanoid: 3.3.4
+
   shared/encrypt-email:
     specifiers: {}
 
@@ -234,6 +252,7 @@ importers:
       '@babel/core': ^7.10.2
       '@cypress/code-coverage': ^3.8.1
       '@cypress/webpack-preprocessor': ^5.4.1
+      '@devographics/core-models': workspace:*
       '@devographics/encrypt-email': workspace:*
       '@emotion/cache': ^11.4.0
       '@emotion/react': ^11.4.1
@@ -390,6 +409,7 @@ importers:
       yalc: ^1.0.0-pre.53
     dependencies:
       '@apollo/client': 3.6.9_lzr65dqsq734t3cvuoj57dyq6e
+      '@devographics/core-models': link:../shared/core-models
       '@devographics/encrypt-email': link:../shared/encrypt-email
       '@emotion/cache': 11.10.3
       '@emotion/react': 11.10.4_ojifsuyn6iuplkhus525glrlo4
@@ -2397,7 +2417,7 @@ packages:
       '@babel/core': ^7.0.0-0
     dependencies:
       '@babel/core': 7.18.13
-      '@babel/helper-plugin-utils': 7.19.0
+      '@babel/helper-plugin-utils': 7.18.9
     dev: false
     optional: true
 
@@ -2418,7 +2438,7 @@ packages:
       '@babel/core': ^7.0.0-0
     dependencies:
       '@babel/core': 7.9.0
-      '@babel/helper-plugin-utils': 7.19.0
+      '@babel/helper-plugin-utils': 7.18.9
     dev: false
     optional: true
 
@@ -9786,6 +9806,26 @@ packages:
       - supports-color
     dev: false
 
+  /@vulcanjs/crud/0.7.1_moment@2.29.4:
+    resolution: {integrity: sha512-3vdjG4HuNhqUMpb+63JtY23V8HoM4jRIYtwgcN5+JAv8t4afzyyIIwXLHdE/OnAiHgRNvuOjRJ/mamHJ8hwLTg==}
+    dependencies:
+      '@vulcanjs/core': 0.7.1_moment@2.29.4
+      '@vulcanjs/model': 0.7.1
+      '@vulcanjs/permissions': 0.7.1
+      '@vulcanjs/schema': 0.7.1
+      '@vulcanjs/utils': 0.7.1_moment@2.29.4
+      debug: 4.3.4
+      lodash: 4.17.21
+    optionalDependencies:
+      msw: 0.35.0
+    transitivePeerDependencies:
+      - encoding
+      - moment
+      - react
+      - react-dom
+      - supports-color
+    dev: false
+
   /@vulcanjs/crud/0.7.1_tonpzznxmdkdqlpcs7osdmovtq:
     resolution: {integrity: sha512-3vdjG4HuNhqUMpb+63JtY23V8HoM4jRIYtwgcN5+JAv8t4afzyyIIwXLHdE/OnAiHgRNvuOjRJ/mamHJ8hwLTg==}
     dependencies:
@@ -9802,6 +9842,36 @@ packages:
       - encoding
       - moment
       - react
+      - react-dom
+      - supports-color
+    dev: false
+
+  /@vulcanjs/graphql/0.7.1_moment@2.29.4:
+    resolution: {integrity: sha512-ywiAmhrO9p8YLqCL+J0y6bxmsb9crloGavVxQ43Moqdj1oodCSvkNaM+pzIsdNQZ9bbX8t+wwgtXcqTMbpjNjw==}
+    peerDependencies:
+      '@apollo/client': ^3.5.5
+      apollo-server: ^2.18.2
+      graphql: ^16.2.0
+      react: ^17.0.1
+    dependencies:
+      '@vulcanjs/crud': 0.7.1_moment@2.29.4
+      '@vulcanjs/i18n': 0.7.1_moment@2.29.4
+      '@vulcanjs/model': 0.7.1
+      '@vulcanjs/permissions': 0.7.1
+      '@vulcanjs/schema': 0.7.1
+      '@vulcanjs/utils': 0.7.1_moment@2.29.4
+      apollo-datasource: 3.3.2
+      debug: 4.3.4
+      deepmerge: 4.2.2
+      graphql-date: 1.0.3
+      graphql-type-json: 0.3.2
+      lodash: 4.17.21
+      moment-timezone: 0.5.37
+    optionalDependencies:
+      msw: 0.35.0
+    transitivePeerDependencies:
+      - encoding
+      - moment
       - react-dom
       - supports-color
     dev: false
@@ -9837,6 +9907,21 @@ packages:
       - encoding
       - moment
       - react-dom
+      - supports-color
+    dev: false
+
+  /@vulcanjs/i18n/0.7.1_moment@2.29.4:
+    resolution: {integrity: sha512-8gQdgBISAj+UCrMvvgXSpRGEv4PnyjIEzaOy+9/k9YCEPVTKpzaWJzYlfu3Le91DPFJh3j+85/atih+o/XHbzw==}
+    peerDependencies:
+      '@apollo/client': ^3.5.5
+    dependencies:
+      '@vulcanjs/schema': 0.7.1
+      '@vulcanjs/utils': 0.7.1_moment@2.29.4
+      prop-types: 15.8.1
+      simpl-schema: 1.12.3
+    transitivePeerDependencies:
+      - encoding
+      - moment
       - supports-color
     dev: false
 
@@ -9891,6 +9976,29 @@ packages:
       - supports-color
     dev: false
 
+  /@vulcanjs/mongo/0.7.1_ldcudf3m6x2ghsrsnbenfgklue:
+    resolution: {integrity: sha512-7T22Exav5iUFaS8HM8QhqYPd3ig7/cGYdaUUlxxMgHJu4WzwHNfm7vTAY8IHNzRf4B5Xgjcv+S+urSmEHLn4rA==}
+    peerDependencies:
+      mongodb: '>= 3.6.2'
+      mongoose: '>= 6.2'
+    dependencies:
+      '@vulcanjs/crud': 0.7.1_moment@2.29.4
+      '@vulcanjs/model': 0.7.1
+      '@vulcanjs/permissions': 0.7.1
+      '@vulcanjs/schema': 0.7.1
+      '@vulcanjs/utils': 0.7.1_moment@2.29.4
+      lodash: 4.17.21
+      mongoose: 6.5.4
+    optionalDependencies:
+      mongodb-memory-server: 8.9.2
+    transitivePeerDependencies:
+      - encoding
+      - moment
+      - react
+      - react-dom
+      - supports-color
+    dev: false
+
   /@vulcanjs/mongo/0.7.1_x37edkvl4kwwaodogoaavq4elu:
     resolution: {integrity: sha512-7T22Exav5iUFaS8HM8QhqYPd3ig7/cGYdaUUlxxMgHJu4WzwHNfm7vTAY8IHNzRf4B5Xgjcv+S+urSmEHLn4rA==}
     peerDependencies:
@@ -9912,6 +10020,17 @@ packages:
       - react
       - react-dom
       - supports-color
+    dev: false
+
+  /@vulcanjs/permissions/0.7.1:
+    resolution: {integrity: sha512-u338e9tMVP2V7XXur1KwqzT0WqUnA8oHR97PeTY5U0lSN7cl6DKkVJt7gKEjJT1+0a5IhY+d8tmna+gtmJpveA==}
+    peerDependencies:
+      react: ^17.0.1
+      react-dom: ^17.0.1
+    dependencies:
+      '@vulcanjs/model': 0.7.1
+      '@vulcanjs/schema': 0.7.1
+      lodash: 4.17.21
     dev: false
 
   /@vulcanjs/permissions/0.7.1_sfoxds7t5ydpegc3knd667wn6m:
@@ -10314,7 +10433,6 @@ packages:
     dependencies:
       webpack: 5.74.0_webpack-cli@4.10.0
       webpack-cli: 4.10.0_webpack@5.74.0
-    dev: true
 
   /@webpack-cli/info/1.5.0_webpack-cli@4.10.0:
     resolution: {integrity: sha512-e8tSXZpw2hPl2uMJY6fsMswaok5FdlGNRTktvFk2sD8RjH0hE2+XistawJx1vmKteh4NmGmNUrp+Tb2w+udPcQ==}
@@ -10323,7 +10441,6 @@ packages:
     dependencies:
       envinfo: 7.8.1
       webpack-cli: 4.10.0_webpack@5.74.0
-    dev: true
 
   /@webpack-cli/serve/1.7.0_webpack-cli@4.10.0:
     resolution: {integrity: sha512-oxnCNGj88fL+xzV+dacXs44HcDwf1ovs3AuEzvP7mqXw7fQntqIhQ1BRmynh4qEKQSSSRSWVyXRjmTbZIX9V2Q==}
@@ -10335,7 +10452,6 @@ packages:
         optional: true
     dependencies:
       webpack-cli: 4.10.0_webpack@5.74.0
-    dev: true
 
   /@wry/context/0.6.1:
     resolution: {integrity: sha512-LOmVnY1iTU2D8tv4Xf6MVMZZ+juIJ87Kt/plMijjN20NMAXGmH4u8bS1t0uT74cZ5gwpocYueV58YwyI8y+GKw==}
@@ -12605,7 +12721,7 @@ packages:
       minipass-pipeline: 1.2.4
       mkdirp: 1.0.4
       p-map: 4.0.0
-      promise-inflight: 1.0.1
+      promise-inflight: 1.0.1_bluebird@3.7.2
       rimraf: 3.0.2
       ssri: 8.0.1
       tar: 6.1.11
@@ -15073,7 +15189,6 @@ packages:
     resolution: {integrity: sha512-/o+BXHmB7ocbHEAs6F2EnG0ogybVVUdkRunTT2glZU9XAaGmhqskrvKwqXuDfNjEO0LZKWdejEEpnq8aM0tOaw==}
     engines: {node: '>=4'}
     hasBin: true
-    dev: true
 
   /eol/0.9.1:
     resolution: {integrity: sha512-Ds/TEoZjwggRoz/Q2O7SE3i4Jm66mqTDfmdHdq/7DKVk3bro9Q8h6WdXKdPqFLMoqxrDK5SVRzHVPOS6uuGtrg==}
@@ -16684,7 +16799,6 @@ packages:
   /fastest-levenshtein/1.0.16:
     resolution: {integrity: sha512-eRnCtTTtGZFpQCwhJiUOuxPQWRXVKYDn0b2PeHfXL6/Zi53SLAzAHfVhVWK2AryC/WH05kGfxhFIPvTF0SXQzg==}
     engines: {node: '>= 4.9.1'}
-    dev: true
 
   /fastq/1.13.0:
     resolution: {integrity: sha512-YpkpUnK8od0o1hmeSc7UUs/eB/vIPWJYjKck2QKIzAf71Vm1AAQ3EbuZB3g2JIy+pg+ERD0vqI79KyZiB2e2Nw==}
@@ -17671,6 +17785,14 @@ packages:
       - graphql-ws
     dev: false
 
+  /graphql-date/1.0.3:
+    resolution: {integrity: sha512-qRcdjyenXGby5PMSn8GqDY/jNm5jb8FJ+DoKprvnDz2pcFGIwPmPFzRh+83cr+6QD/mHK4pVE06kR4JS/aVN/A==}
+    peerDependencies:
+      graphql: '>=0.5.0'
+    dependencies:
+      assert-err: 1.1.0
+    dev: false
+
   /graphql-date/1.0.3_graphql@15.4.0:
     resolution: {integrity: sha512-qRcdjyenXGby5PMSn8GqDY/jNm5jb8FJ+DoKprvnDz2pcFGIwPmPFzRh+83cr+6QD/mHK4pVE06kR4JS/aVN/A==}
     peerDependencies:
@@ -17712,6 +17834,15 @@ packages:
       graphql: 15.4.0
     dev: false
 
+  /graphql-tag/2.12.6:
+    resolution: {integrity: sha512-FdSNcu2QQcWnM2VNvSCCDCVS5PpPqpzgFT8+GXzqJuoDd0CBncxCY278u4mhRO7tMgo2JjgJA5aZ+nWSQ/Z+xg==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      graphql: ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
+    dependencies:
+      tslib: 2.4.0
+    dev: false
+
   /graphql-tag/2.12.6_graphql@15.4.0:
     resolution: {integrity: sha512-FdSNcu2QQcWnM2VNvSCCDCVS5PpPqpzgFT8+GXzqJuoDd0CBncxCY278u4mhRO7tMgo2JjgJA5aZ+nWSQ/Z+xg==}
     engines: {node: '>=10'}
@@ -17730,6 +17861,12 @@ packages:
     dependencies:
       graphql: 15.8.0
       tslib: 2.4.0
+
+  /graphql-type-json/0.3.2:
+    resolution: {integrity: sha512-J+vjof74oMlCWXSvt0DOf2APEdZOCdubEvGDUAlqH//VBYcOYsGgRW7Xzorr44LvkjiuvecWc8fChxuZZbChtg==}
+    peerDependencies:
+      graphql: '>=0.8.0'
+    dev: false
 
   /graphql-type-json/0.3.2_graphql@15.4.0:
     resolution: {integrity: sha512-J+vjof74oMlCWXSvt0DOf2APEdZOCdubEvGDUAlqH//VBYcOYsGgRW7Xzorr44LvkjiuvecWc8fChxuZZbChtg==}
@@ -24588,15 +24725,6 @@ packages:
     resolution: {integrity: sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==}
     engines: {node: '>=0.4.0'}
 
-  /promise-inflight/1.0.1:
-    resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
-    peerDependencies:
-      bluebird: '*'
-    peerDependenciesMeta:
-      bluebird:
-        optional: true
-    dev: false
-
   /promise-inflight/1.0.1_bluebird@3.7.2:
     resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
     peerDependencies:
@@ -25546,7 +25674,6 @@ packages:
     engines: {node: '>= 0.10'}
     dependencies:
       resolve: 1.22.1
-    dev: true
 
   /recompose/0.30.0_react@17.0.2:
     resolution: {integrity: sha512-ZTrzzUDa9AqUIhRk4KmVFihH0rapdCSMFXjhHbNrjAWxBuUD/guYlyysMnuHjlZC/KRiOKRtB4jf96yYSkKE8w==}
@@ -27997,7 +28124,7 @@ packages:
       schema-utils: 3.1.1
       serialize-javascript: 6.0.0
       terser: 5.15.0
-      webpack: 5.74.0
+      webpack: 5.74.0_webpack-cli@4.10.0
 
   /terser/4.8.1:
     resolution: {integrity: sha512-4GnLC0x667eJG0ewJTa6z/yXrbLGv80D9Ru6HIpCQmO+Q4PfEtBFi0ObSckqwL6VyQv/7ENJieXHo2ANmdQwgw==}
@@ -29543,7 +29670,6 @@ packages:
       rechoir: 0.7.1
       webpack: 5.74.0_webpack-cli@4.10.0
       webpack-merge: 5.8.0
-    dev: true
 
   /webpack-dev-middleware/3.7.3_webpack@4.44.2:
     resolution: {integrity: sha512-djelc/zGiz9nZj/U7PTBi2ViorGJXEWo/3ltkPbDyxCXhhEXkW0ce99falaok4TPj+AsxLiXJR0EBOb0zh9fKQ==}
@@ -29686,7 +29812,6 @@ packages:
     dependencies:
       clone-deep: 4.0.1
       wildcard: 2.0.0
-    dev: true
 
   /webpack-node-externals/3.0.0:
     resolution: {integrity: sha512-LnL6Z3GGDPht/AigwRh2dvL9PQPFQ8skEpVrWZXLWBYmqcaojHNN0onvHzie6rq7EWKrrBfPYqNEzTJgiwEQDQ==}
@@ -29918,7 +30043,6 @@ packages:
       - '@swc/core'
       - esbuild
       - uglify-js
-    dev: true
 
   /websocket-driver/0.7.4:
     resolution: {integrity: sha512-b17KeDIQVjvb0ssuSDF2cYXSg2iztliJ4B9WdsuB6J952qCPKmnVq4DyW5motImXHDC1cBT/1UezrJVsKw5zjg==}
@@ -30059,7 +30183,6 @@ packages:
 
   /wildcard/2.0.0:
     resolution: {integrity: sha512-JcKqAHLPxcdb9KM49dufGXn2x3ssnfjbcaQdLlfZsL9rH9wgDQjUtDxbo8NE0F6SFvydeu1VhZe7hZuHsB2/pw==}
-    dev: true
 
   /word-wrap/1.2.3:
     resolution: {integrity: sha512-Hz/mrNwitNRh/HUAtM/VT/5VH+ygD6DV7mYKZAtHOrbs8U7lvPS6xf7EJKMF0uW1KJCl0H701g3ZGus+muE5vQ==}

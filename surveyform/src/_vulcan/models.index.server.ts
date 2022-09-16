@@ -2,7 +2,7 @@
 // Please do not remove the User model, which is necessary for auth
 import NormalizedResponse from "~/admin/models/normalized_responses/model.server";
 import { Response } from "~/modules/responses/model.server";
-import { Save } from "~/modules/saves/model.server";
+import { Save } from "@devographics/core-models/server";
 import { User } from "~/core/models/user.server";
 import { Project } from "~/modules/projects/model.server";
 const models = [User, Response, NormalizedResponse, Save, Project];

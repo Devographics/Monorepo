@@ -82,6 +82,7 @@
   "dependencies": {
     "@apollo/client": "^3.5.10",
     "@devographics/encrypt-email": "workspace:*",
+    "@devographics/core-models": "workspace:*",
     "@emotion/cache": "^11.4.0",
     "@emotion/react": "^11.4.1",
     "@emotion/server": "^11.4.0",

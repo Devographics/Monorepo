@@ -7,7 +7,7 @@ import { schema as schemaCommon } from "./schema";
 
 import { getSurveyPath } from "~/modules/surveys/helpers";
 import { ResponseConnector } from "~/modules/responses/model.server";
-import { extendSchemaServer } from "../schemaUtils";
+import { extendSchemaServer } from "@devographics/core-models";
 
 import { nanoid } from "nanoid";
 import { ApiContext } from "~/lib/server/context";

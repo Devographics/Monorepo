@@ -10,7 +10,7 @@ import { nodeCache, promisesNodeCache } from "~/lib/server/caching";
 
 import { ResponseMongoCollection } from "~/modules/responses/model.server";
 import { isAdmin } from "@vulcanjs/permissions";
-import { SaveMongoCollection } from "~/modules/saves/model.server";
+import { SaveMongoCollection } from "@devographics/core-models/server";
 import {
   normalizeIdsTypeDefs,
   normalizeIds,

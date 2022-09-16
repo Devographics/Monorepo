@@ -1,16 +1,16 @@
+import mongoose from "mongoose";
 import {
   CreateGraphqlModelOptionsServer,
   createGraphqlModelServer,
   GraphqlModelDefinitionServer,
   mergeModelDefinitionServer,
 } from "@vulcanjs/graphql/server";
+import { createMongooseConnector } from "@vulcanjs/mongo";
 import { modelDef as modelDefCommon } from "./model";
 import { schema as schemaServer } from "./schema.server";
-import { createMongooseConnector } from "@vulcanjs/mongo";
 
-export const modelDef: GraphqlModelDefinitionServer = mergeModelDefinitionServer(
-  modelDefCommon,
-  {
+export const modelDef: GraphqlModelDefinitionServer =
+  mergeModelDefinitionServer(modelDefCommon, {
     schema: schemaServer,
     graphql: {
       //mutationResolvers: {
@@ -22,14 +22,12 @@ export const modelDef: GraphqlModelDefinitionServer = mergeModelDefinitionServer
         */
       //},
     },
-  }
-);
+  });
 
 export const Save = createGraphqlModelServer(modelDef);
 
 type SaveDocument = any;
 
-import mongoose from "mongoose";
 const SaveConnector = createMongooseConnector<SaveDocument>(
   Save,
 
@@ -41,7 +39,8 @@ const SaveConnector = createMongooseConnector<SaveDocument>(
 Save.crud.connector = SaveConnector;
 
 // Using Mongoose (advised)
-export const SaveMongooseModel = SaveConnector.getRawCollection() as mongoose.Model<SaveDocument>;
+export const SaveMongooseModel =
+  SaveConnector.getRawCollection() as mongoose.Model<SaveDocument>;
 
 // For direct Mongo access (not advised, used only for aggregations)
 export const SaveMongoCollection = () => {

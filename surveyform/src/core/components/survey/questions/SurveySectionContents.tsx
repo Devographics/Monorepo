@@ -9,14 +9,13 @@ import FormOptionLabel from "./FormOptionLabel";
 //import { getSurveyPath } from "~/modules/surveys/helpers";
 import { canModifyResponse } from "~/modules/responses/helpers";
 import { useCreate } from "@vulcanjs/react-hooks";
-import { SaveFragment } from "~/modules/saves/fragments";
 import {
   //  SmartForm,
   useVulcanComponents,
   VulcanComponentsProvider,
 } from "@vulcanjs/react-ui";
 import { Response } from "~/modules/responses/model";
-import { Save } from "~/modules/saves/model";
+import { Save, SaveFragment } from "@devographics/core-models";
 import type { ParsedQuestion, SurveyType } from "~/surveys";
 import { useUser } from "~/account/user/hooks";
 import { EntitiesProvider } from "~/core/components/common/EntitiesContext";

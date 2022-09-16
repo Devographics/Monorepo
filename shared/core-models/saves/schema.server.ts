@@ -1,9 +1,9 @@
 import moment from "moment";
+import { nanoid } from "nanoid";
 import { extendSchemaServer } from "../schemaUtils";
 
 import { schema as commonSchema } from "./schema";
 
-import { nanoid } from "nanoid";
 export const schema = extendSchemaServer(commonSchema, {
   // MANDATORY when using string ids for a collection instead of ObjectId
   // you have to handle the id creation manually
