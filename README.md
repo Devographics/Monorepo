@@ -1,5 +1,14 @@
 # Monorepo
 
+## Shared packages
+
+To use a shared package in your app:
+- Add a workspace dependency: "@devographics/core-models":"workspace:*"
+- When deploying, configure the host to load the whole monorepo (eg on Vercel)
+- If the shared code is not bundled, eg written in pure TypeScript, include it in the app bundle.
+In Next.js this is done via [next-transpile-modules](https://www.npmjs.com/package/next-transpile-modules) in next.config.js
+
+
 ## Run scripts with Just
 
 [Just](https://github.com/casey/just) is similar to NPM scripts or makefile, but language agnostic, simple and powerful.

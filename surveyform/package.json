@@ -81,8 +81,8 @@
   },
   "dependencies": {
     "@apollo/client": "^3.5.10",
-    "@devographics/encrypt-email": "workspace:*",
     "@devographics/core-models": "workspace:*",
+    "@devographics/encrypt-email": "workspace:*",
     "@emotion/cache": "^11.4.0",
     "@emotion/react": "^11.4.1",
     "@emotion/server": "^11.4.0",
@@ -195,6 +195,7 @@
     "eslint-plugin-storybook": "^0.5.11",
     "graphql-voyager": "^1.0.0-rc.31",
     "mongodb-memory-server": "^7.3.6",
+    "next-transpile-modules": "^9.0.0",
     "react-is": "^16.13.1",
     "source-map-support": "^0.5.19",
     "storybook-css-modules-preset": "^1.1.1",

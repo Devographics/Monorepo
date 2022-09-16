@@ -11,6 +11,10 @@ const debug = require("debug")("vns:next");
 
 const { withSentryConfig } = require("@sentry/nextjs");
 
+// Pass the modules that are written directly in TS here
+const withTM = require('next-transpile-modules')(['@devographics/core-models']);
+
+
 // @see https://nextjs.org/docs/api-reference/next.config.js/runtime-configuration
 const moduleExports = (phase, { defaultConfig }) => {
   /**
@@ -132,6 +136,7 @@ const moduleExports = (phase, { defaultConfig }) => {
 
   // Finally add relevant webpack configs/utils
   extendedConfig = flowRight([
+    withTM,
     withPkgInfo,
     withMDX,
     (config) => withSentryConfig(config, sentryWebpackPluginOptions),
