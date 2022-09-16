@@ -4,7 +4,7 @@
 # Gatsby result app is currently opted-out of PNPM because of the patch on Apollo client needed for Next
 install:
     pnpm install;
-    cd {{justfile()}}/result yarn install;
+    cd {{justfile_directory()}}/results yarn install;
 
 # For external and internal APIs
 redis:
