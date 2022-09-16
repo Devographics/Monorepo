@@ -16,7 +16,8 @@ const mongoConnectionMiddleware = (mongoUri: string) => {
   // init the first database connection on server startup
   const isLocalMongo = mongoUri.match(/localhost/);
   connectToDb(mongoUri, {
-    serverSelectionTimeoutMS: isLocalMongo ? 3000 : undefined,
+    // do not seem to exist in mongoose 6
+    //serverSelectionTimeoutMS: isLocalMongo ? 3000 : undefined,
   }).catch((err) => {
     console.error(
       `\nCould not connect to Mongo database on URI ${mongoUri} during route initialization.`

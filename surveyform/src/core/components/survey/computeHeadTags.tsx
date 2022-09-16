@@ -1,5 +1,4 @@
 import React, { PureComponent } from "react";
-import PropTypes from "prop-types";
 
 // registerSetting('logoUrl', null, 'Absolute URL for the logo image');
 // registerSetting('title', 'My App', 'App title');

@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { useLocales } from "~/i18n/hooks/locales";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
 
@@ -39,11 +38,6 @@ const LocaleSelector = (props, { setLocale, getLocale }) => {
       </a>
     </div>
   );
-};
-
-LocaleSelector.contextTypes = {
-  getLocale: PropTypes.func,
-  setLocale: PropTypes.func,
 };
 
 export default LocaleSelector;

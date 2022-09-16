@@ -1,8 +1,13 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { useIntlContext } from "@vulcanjs/react-i18n";
 
-const ShareTwitter = ({ text, trackingId }) => {
+const ShareTwitter = ({
+  text,
+  trackingId,
+}: {
+  text: string;
+  trackingId?: string;
+}) => {
   const intl = useIntlContext();
   return (
     <a
@@ -41,11 +46,6 @@ const ShareTwitter = ({ text, trackingId }) => {
       </span>
     </a>
   );
-};
-
-ShareTwitter.propTypes = {
-  text: PropTypes.string.isRequired,
-  trackingId: PropTypes.string,
 };
 
 export default ShareTwitter;

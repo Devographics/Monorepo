@@ -16,23 +16,6 @@ async function runSeed() {
       // We pass the default graphql context to the seed function,
       // so it can access our models
       await seedDatabase(contextBase);
-      // also seed restaurant manually to demo a custom server
-      const seedRestaurants = async () => {
-        const db = mongoose.connection;
-        const count = await db.collection("restaurants").countDocuments();
-        if (count === 0) {
-          await db.collection("restaurants").insertMany([
-            {
-              name: "The Restaurant at the End of the Universe",
-            },
-            { name: "The Last Supper" },
-            { name: "Shoney's" },
-            { name: "Big Bang Burger" },
-            { name: "Fancy Eats" },
-          ]);
-        }
-      };
-      await seedRestaurants();
     } catch (err) {
       console.error(
         `\nCould not connect to Mongo database on URI during seed step.`

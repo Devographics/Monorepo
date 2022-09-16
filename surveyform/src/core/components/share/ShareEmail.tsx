@@ -1,8 +1,15 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { useIntlContext } from "@vulcanjs/react-i18n";
 
-const ShareEmail = ({ subject, body, trackingId }) => {
+const ShareEmail = ({
+  subject,
+  body,
+}: //trackingId,
+{
+  subject: string;
+  body: string;
+  //trackingId?: string;
+}) => {
   const intl = useIntlContext();
   return (
     <a
@@ -38,12 +45,6 @@ const ShareEmail = ({ subject, body, trackingId }) => {
       </span>
     </a>
   );
-};
-
-ShareEmail.propTypes = {
-  subject: PropTypes.string.isRequired,
-  body: PropTypes.string.isRequired,
-  trackingId: PropTypes.string,
 };
 
 export default ShareEmail;

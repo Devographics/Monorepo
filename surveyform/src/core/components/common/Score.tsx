@@ -109,6 +109,7 @@ const Score = ({ response, survey }: { response: any; survey: SurveyType }) => {
           <CountUp
             start={0}
             delay={0.3}
+            // @ts-ignore
             duration={2}
             end={score}
             onStart={() => {

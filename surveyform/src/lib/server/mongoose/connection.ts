@@ -81,7 +81,8 @@ export const connectToAppDb = async () => {
   try {
     await connectToDb(mongoUri, {
       // fail the seed early during development
-      serverSelectionTimeoutMS: isLocalMongo ? 3000 : undefined,
+      // Do not seem to exist with mongoose 6?
+      //serverSelectionTimeoutMS: isLocalMongo ? 3000 : undefined,
     });
   } catch (err) {
     console.error(`\nCould not connect to Mongo database on URI ${mongoUri}.`);

@@ -1,8 +1,17 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { useIntlContext } from "@vulcanjs/react-i18n";
 
-const ShareLinkedIn = ({ link, title, summary = "", trackingId }) => {
+const ShareLinkedIn = ({
+  link,
+  title,
+  summary = "",
+  trackingId,
+}: {
+  link: string;
+  title: string;
+  summary?: string;
+  trackingId?: string;
+}) => {
   const intl = useIntlContext();
   return (
     <a
@@ -35,13 +44,6 @@ const ShareLinkedIn = ({ link, title, summary = "", trackingId }) => {
       </span>
     </a>
   );
-};
-
-ShareLinkedIn.propTypes = {
-  link: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  summary: PropTypes.string,
-  trackingId: PropTypes.string,
 };
 
 export default ShareLinkedIn;
