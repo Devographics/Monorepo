@@ -21,6 +21,7 @@ const commonConfig = {
   name: "",
   platform: "node" as const,
   target: "node14",
+  //noExternal: [/^@devographics($|\/)/],
   esbuildPlugins: [yamlPlugin({})],
 };
 export default defineConfig([
