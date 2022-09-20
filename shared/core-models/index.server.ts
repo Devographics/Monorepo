@@ -7,3 +7,5 @@ export {
 export type { ResponseDocument } from "./responses/typings";
 
 export { logToFile } from "./debug";
+
+export { Project, ProjectMongooseModel } from "./projects/index.server";

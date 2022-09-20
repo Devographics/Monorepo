@@ -274,15 +274,6 @@ export const getCompletionPercentage = (response: ResponseDocument) => {
   return completion;
 };
 
-/*
-
-Filter a response object to only keep fields relevant to the survey
-
-*/
-export const getResponseData = (response) => {
-  return pickBy(response, (r, k) => k.includes(response.surveySlug));
-};
-
 export const surveyFromResponse = (response: ResponseDocument) => {
   const survey = surveys.find((s) => s.slug === response.surveySlug);
   if (!survey)

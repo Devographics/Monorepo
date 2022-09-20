@@ -4,7 +4,7 @@ import NormalizedResponse from "~/admin/models/normalized_responses/model.server
 import { Response } from "~/modules/responses/model.server";
 import { Save } from "@devographics/core-models/server";
 import { User } from "~/core/models/user.server";
-import { Project } from "~/modules/projects/model.server";
+import { Project } from "@devographics/core-models/server";
 const models = [User, Response, NormalizedResponse, Save, Project];
 
 // Add default connectors and dataSources creators for models that may miss some

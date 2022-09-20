@@ -1,6 +1,7 @@
 import { useVulcanComponents } from "@vulcanjs/react-ui";
 import React from "react";
-import { getResponseData } from "~/modules/responses/helpers";
+import { responseHelpers } from "@devographics/core-models";
+const { getResponseData }= responseHelpers
 
 const ResponseData = ({ document }) => {
   const Components = useVulcanComponents();

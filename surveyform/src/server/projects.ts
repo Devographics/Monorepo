@@ -1,4 +1,4 @@
-import { ProjectMongooseModel } from "~/modules/projects/model.server";
+import { ProjectMongooseModel } from "@devographics/core-models/server";
 // import projectsData from "~/data/js/projects";
 import fetch from "node-fetch";
 import { connectToAppDb } from "~/lib/server/mongoose/connection";

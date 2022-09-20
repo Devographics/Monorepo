@@ -1,6 +1,6 @@
 import React from 'react';
 import { Components } from 'meteor/vulcan:core';
-import surveys from '../../surveys';
+import surveys from '~/surveys';
 
 const AdminSurveys = () => (
   <div className="admin-surveys admin-content">

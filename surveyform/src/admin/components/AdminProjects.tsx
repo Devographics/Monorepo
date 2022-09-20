@@ -1,17 +1,21 @@
-import { useVulcanComponents, VulcanComponentsProvider, defaultDatatableComponents } from "@vulcanjs/react-ui";
+import {
+  useVulcanComponents,
+  VulcanComponentsProvider,
+  defaultDatatableComponents,
+} from "@vulcanjs/react-ui";
 import React from "react";
-import { Project } from "~/modules/projects";
+import { Project } from "@devographics/core-models/server";
 
 const AdminProjects = () => {
   const Components = useVulcanComponents();
 
   return (
     <div className="admin-projects admin-content">
-
       <VulcanComponentsProvider
         value={{
           ...defaultDatatableComponents,
-        }}>
+        }}
+      >
         <Components.Datatable
           model={Project}
           columns={[

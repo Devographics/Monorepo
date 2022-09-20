@@ -4,6 +4,7 @@ export { SaveFragment } from "./saves/fragments";
 export { extendSchemaServer } from "./schemaUtils";
 
 export type { ResponseDocument } from "./responses/typings";
+export * as responseHelpers from "./responses/helpers";
 
 export type {
   SurveyType,
