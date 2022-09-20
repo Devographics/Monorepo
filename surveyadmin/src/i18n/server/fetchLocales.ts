@@ -4,7 +4,7 @@
 // cache for translation API request
 // must be defined top-level to get the same cache for all requests
 import { captureException } from "@sentry/nextjs";
-import { print } from "graphql/language/printer";
+import { print } from "graphql/language/printer.js";
 import gql from "graphql-tag";
 import get from "lodash/get.js";
 import fetch from "node-fetch";

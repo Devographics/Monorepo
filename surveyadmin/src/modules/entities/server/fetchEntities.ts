@@ -3,7 +3,7 @@ import sortBy from "lodash/sortBy.js";
 import fetch from "node-fetch";
 import get from "lodash/get.js";
 import { cachedPromise, promisesNodeCache } from "~/lib/server/caching";
-import { print } from "graphql/language/printer";
+import { print } from "graphql/language/printer.js";
 import gql from "graphql-tag";
 import { Entity } from "@devographics/core-models/entities/typings";
 
