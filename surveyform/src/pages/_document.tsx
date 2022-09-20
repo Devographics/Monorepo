@@ -1,4 +1,3 @@
-// @see https://github.com/mui-org/material-ui/blob/master/examples/nextjs/pages/_document.js
 import React from "react";
 import Document, {
   Html,
@@ -7,7 +6,6 @@ import Document, {
   NextScript,
   //DocumentInitialProps,
 } from "next/document";
-import theme from "~/lib/style/defaultTheme";
 import {
   i18nPropsFromCtx,
   DocumentLanguageProps,
@@ -27,7 +25,7 @@ export default class MyDocument extends Document<VNSDocumentProps> {
       >
         <Head>
           {/* PWA primary color */}
-          <meta name="theme-color" content={theme.palette.primary.main} />
+          {/*<meta name="theme-color" content={theme.palette.primary.main} />*/}
           {/* @see https://next.material-ui.com/getting-started/installation/ */}
           <link
             rel="stylesheet"

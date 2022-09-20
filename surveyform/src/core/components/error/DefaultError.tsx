@@ -1,9 +1,5 @@
 import React from "react";
 
-//import WarningIcon from "@mui/icons-material/Warning";
-//
-//import Button from "@mui/material/Button";
-//import makeStyles from "~/lib/mui/makeStyles";
 import { useIntlContext } from "@vulcanjs/react-i18n";
 // import routes from "~/config/routes";
 import { useRouter } from "next/router.js";
