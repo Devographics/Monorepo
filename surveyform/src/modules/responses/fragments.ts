@@ -46,7 +46,7 @@ export const ResponseFragment = gql`
  * a fragment with only the current survey fields
  */
 export const LightweightResponseFragment = gql`
-  fragment ResponseFragment on Response {
+  fragment LightweightResponseFragment on Response {
     _id
     createdAt
     updatedAt
@@ -103,5 +103,5 @@ export const CreateResponseOutputFragment = gql`
       ...${getFragmentName(LightweightResponseFragment)}
     }
   }
-  ${ResponseFragment}
+  ${LightweightResponseFragment}
 `;
