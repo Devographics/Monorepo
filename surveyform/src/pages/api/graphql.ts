@@ -17,6 +17,11 @@ import models from "~/_vulcan/models.index.server";
 // Custom graphql API from Vulcan
 import { graphql as i18nSchema } from "@vulcanjs/i18n/server";
 
+import {
+  typeDefs as sojsTypeDefs,
+  resolvers as sojsResolvers,
+} from "~/core/server/graphql";
+
 /**
  * Example graphQL schema and resolvers generated using Vulcan declarative approach
  * http://vulcanjs.org/
@@ -69,7 +74,7 @@ const mergedSchema = {
   typeDefs: mergeTypeDefs([
     i18nSchema.typeDefs,
     vulcanRawSchema.typeDefs,
-    // sojsTypeDefs,
+    sojsTypeDefs,
     currentUserTypeDefs,
   ]),
   resolvers: mergeResolvers([
@@ -78,7 +83,7 @@ const mergedSchema = {
       LocalesRegistry: localesRegistry,
     }),
     vulcanRawSchema.resolvers,
-    // sojsResolvers,
+    sojsResolvers,
     currentUserResolver,
   ]),
 };
