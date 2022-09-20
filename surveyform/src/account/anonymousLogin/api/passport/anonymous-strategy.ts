@@ -27,7 +27,6 @@ class AnonymousLoginStrategy /* extends Strategy*/ {
     req: Request
   ): void {
     const self = this;
-    console.log("self");
 
     return (self._options.checkSpam?.(req) || Promise.resolve(false))
       .then((isSpammer) => {

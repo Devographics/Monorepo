@@ -58,7 +58,8 @@ export const cachedPromise =
         // Don't forget to drop failed promises from the cache!
         nodeCache.del(cacheKey);
         console.error(
-          `Error in a cached promise "${cacheKey}", will flush the cache and return undefined`
+          `Error in a cached promise "${cacheKey}", will flush the cache and return undefined`,
+          err
         );
         // NOTE: if you don't use a node cache with "useClones: false" you will never be able to catch the error
         // because the promise gets cloned! Be careful to pass a "promisesNodeCache" with the right options
