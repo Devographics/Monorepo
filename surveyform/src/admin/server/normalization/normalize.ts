@@ -6,7 +6,7 @@ import {
   normalizeSource,
   generateEntityRules,
 } from "./helpers";
-import { getOrFetchEntities } from "~/modules/entities/server/graphql";
+import { getOrFetchEntities } from "~/modules/entities/server";
 import set from "lodash/set.js";
 import last from "lodash/last.js";
 import intersection from "lodash/intersection.js";

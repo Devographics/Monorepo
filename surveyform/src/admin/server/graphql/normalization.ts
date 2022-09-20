@@ -1,7 +1,7 @@
 import get from "lodash/get.js";
 import { normalizeResponse } from "../normalization/normalize";
 import { UserType } from "~/core/models/user";
-import { ResponseMongooseModel } from "~/modules/responses/model.server";
+import { ResponseAdminMongooseModel } from "@devographics/core-models/server";
 import { NormalizedResponseMongooseModel } from "~/admin/models/normalized_responses/model.server";
 /*
 
@@ -26,7 +26,7 @@ export const normalizeIds = async (
 
   const { ids } = args;
   // TODO: use Response model and connector instead
-  const responses = await ResponseMongooseModel.find({
+  const responses = await ResponseAdminMongooseModel.find({
     _id: { $in: ids },
   });
   for (const document of responses) {

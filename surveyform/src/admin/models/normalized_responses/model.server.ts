@@ -6,7 +6,6 @@ import {
 } from "@devographics/core-models/server";
 import { SurveyType } from "@devographics/core-models";
 import mongoose from "mongoose";
-
 import { nanoid } from "nanoid";
 
 export const NormalizedResponse = createGraphqlModelServer({

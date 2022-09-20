@@ -1,6 +1,6 @@
 import type { Model } from "mongoose";
 import { normalizeResponse } from "../admin/server/normalization/normalize";
-import { fetchEntities } from "~/modules/entities/server/graphql";
+import { fetchEntities } from "~/modules/entities/server";
 // import Users from 'meteor/vulcan:users';
 //import {
 //  js2019FieldMigrations,

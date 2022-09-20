@@ -1,6 +1,6 @@
 import { QueryHookOptions, useQuery } from "@apollo/client";
 import gql from "graphql-tag";
-import type { Entity } from "~/modules/entities/typings";
+import type { Entity } from "@devographics/core-models";
 const entitiesQuery = gql`
   query EntitiesQuery(
     $tags: [String]

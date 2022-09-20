@@ -10,7 +10,7 @@ import React, { useContext } from "react";
 
 import { useQuery } from "@apollo/client";
 import gql from "graphql-tag";
-import { Entity } from "~/modules/entities/typings";
+import { Entity } from "@devographics/core-models";
 
 const entitiesQuery = gql`
   query EntitiesQuery($tags: [String], $ids: [String]) {
@@ -51,7 +51,15 @@ const EntitiesContext = React.createContext<{
   data: { entities: [] },
 });
 
-export const EntitiesProvider = ({ children, tags, ids }: { children: any, tags?: string[], ids?: string[] }) => {
+export const EntitiesProvider = ({
+  children,
+  tags,
+  ids,
+}: {
+  children: any;
+  tags?: string[];
+  ids?: string[];
+}) => {
   const res = useEntitiesQuery({ tags, ids });
   const { loading, error, data } = res;
   const entities = data?.entities || [];

@@ -5,10 +5,10 @@ import uniqBy from "lodash/uniqBy.js";
 import sortBy from "lodash/sortBy.js";
 import compact from "lodash/compact.js";
 import isEmpty from "lodash/isEmpty.js";
-import { Entity } from "~/modules/entities/typings";
-import { getOrFetchEntities } from "~/modules/entities/server/graphql";
+import type { Entity } from "@devographics/core-models";
 import type { SurveyType, SurveyQuestion } from "@devographics/core-models";
 import { logToFile } from "@devographics/core-models/server";
+import { getOrFetchEntities } from "~/modules/entities/server";
 
 /*
 
@@ -336,7 +336,7 @@ export const generateEntityRules = (entities: Array<Entity>) => {
       rules.push({
         id,
         pattern: idPattern,
-        tags,
+        tags: tags || [],
       });
 
       // note: the following should not be needed because all entities
@@ -375,18 +375,18 @@ export const generateEntityRules = (entities: Array<Entity>) => {
               pattern,
               context: patternSegments[0],
               fieldId: patternSegments[1],
-              tags,
+              tags: tags || [],
             });
           } else {
             const pattern = new RegExp(patternSegments[0], "i");
-            rules.push({ id, pattern, tags });
+            rules.push({ id, pattern, tags: tags || [] });
           }
         });
 
       // 5. also add twitter username if available (useful for people entities)
       if (twitterName) {
         const pattern = new RegExp(twitterName, "i");
-        rules.push({ id, pattern, tags });
+        rules.push({ id, pattern, tags: tags || [] });
       }
     });
   return rules;

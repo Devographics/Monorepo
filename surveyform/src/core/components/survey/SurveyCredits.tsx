@@ -1,7 +1,7 @@
 import React from "react";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { useEntitiesQuery } from "~/core/hooks/useEntitiesQuery";
-import { Entity } from "~/modules/entities/typings";
+import { Entity } from "@devographics/core-models";
 import type { SurveyType } from "@devographics/core-models";
 
 const SurveyCredits = ({ survey }) => {
@@ -59,7 +59,13 @@ const SurveyCredit = ({
   return <SurveyCreditItem {...entity} role={role} />;
 };
 
-const SurveyCreditItem = ({ name, twitterName, twitter, role, company }) => {
+const SurveyCreditItem = ({
+  name,
+  twitterName,
+  twitter,
+  role,
+  company,
+}: Entity & { role?: string }) => {
   return (
     <div className="survey-credits-item">
       <a

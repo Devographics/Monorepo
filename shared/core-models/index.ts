@@ -17,3 +17,5 @@ export type {
   SurveyStatus,
   SurveyStatusLabel,
 } from "./surveys/typings";
+
+export type { Entity } from "./entities/typings";
