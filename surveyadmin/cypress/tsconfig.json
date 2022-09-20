@@ -1,0 +1,26 @@
+{
+  "extends": "../tsconfig.common.json",
+  "outDir": "./dist/",
+  "compilerOptions": {
+    "types": [
+      "cypress",
+      "@testing-library/cypress"
+    ],
+    "noEmit": false,
+    "sourceMap": false,
+    "isolatedModules": false,
+    // @see https://github.com/scottohara/loot/issues/185
+    // ES2020 won't work
+    "target": "ES2019"
+  },
+  "include": [
+    "./**/*.ts",
+    "./**/*.tsx"
+  ],
+  "paths": {
+    // for cypress, doesn't seem to work yet...
+    "#/helpers/*": [
+      "helpers/*"
+    ]
+  },
+}

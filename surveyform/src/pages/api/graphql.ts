@@ -14,11 +14,6 @@ import { contextFromReq } from "~/lib/server/context";
 import models from "~/_vulcan/models.index.server";
 //import { apiWrapper } from "~/lib/server/sentry";
 
-// Custom graphql API from StateOfJS
-import {
-  typeDefs as sojsTypeDefs,
-  resolvers as sojsResolvers,
-} from "~/admin/server/graphql";
 // Custom graphql API from Vulcan
 import { graphql as i18nSchema } from "@vulcanjs/i18n/server";
 
@@ -74,7 +69,7 @@ const mergedSchema = {
   typeDefs: mergeTypeDefs([
     i18nSchema.typeDefs,
     vulcanRawSchema.typeDefs,
-    sojsTypeDefs,
+    // sojsTypeDefs,
     currentUserTypeDefs,
   ]),
   resolvers: mergeResolvers([
@@ -83,54 +78,11 @@ const mergedSchema = {
       LocalesRegistry: localesRegistry,
     }),
     vulcanRawSchema.resolvers,
-    sojsResolvers,
+    // sojsResolvers,
     currentUserResolver,
   ]),
 };
 const vulcanSchema = makeExecutableSchema(mergedSchema); //vulcanRawSchema);
-
-/**
- * Example custom Apollo server, written by hand
- */
-/*
-const typeDefs = gql`
-  type Query {
-    restaurants: [Restaurant]
-  }
-  type Restaurant {
-    _id: ID!
-    name: String
-  }
-`;
-const resolvers = {
-  Query: {
-    // Demo with mongoose
-    // Expected the database to be setup with the demo "restaurant" API from mongoose
-    async restaurants() {
-      try {
-        const db = mongoose.connection;
-        const restaurants = db.collection("restaurants");
-        // @ts-ignore
-        const resultsCursor = (await restaurants.find(null, null)).limit(5);
-        const results = await resultsCursor.toArray();
-        return results;
-      } catch (err) {
-        console.log("Could not fetch restaurants", err);
-        throw err;
-      }
-    },
-  },
-};
-*/
-/*
-const customSchema = makeExecutableSchema({
-  typeDefs: sojsTypeDefs,
-  resolvers: sojsResolvers,
-});
-*/
-// NOTE: schema stitching can cause a bad developer experience with errors
-// And it means that both schema must be executable
-//const mergedSchema = vulcanSchema; //mergeSchemas({ schemas: [vulcanSchema, customSchema] });
 
 const mongoUri = process.env.MONGO_URI;
 if (!mongoUri) throw new Error("MONGO_URI env variable is not defined");
