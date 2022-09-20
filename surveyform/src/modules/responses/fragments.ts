@@ -8,7 +8,9 @@ const ResponsesDefaultFragment = gql`
   ${Response.graphql.defaultFragment}
 `;
 
-//registerFragment(/* GraphQL */
+/**
+ * /!\ this fragment is massive as it embeds all active surveys fragments
+ */
 export const ResponseFragment = gql`
   fragment ResponseFragment on Response {
     _id
@@ -36,6 +38,38 @@ export const ResponseFragment = gql`
   }
   ${ResponsesDefaultFragment}
 `;
+
+/**
+ * Doesn't include survey specific
+ *
+ * TODO: we probably need smth intermediate:
+ * a fragment with only the current survey fields
+ */
+export const LightweightResponseFragment = gql`
+  fragment ResponseFragment on Response {
+    _id
+    createdAt
+    updatedAt
+
+    pagePath
+
+    user {
+      _id
+      displayName
+      pagePath
+    }
+    userId
+
+    survey {
+      name
+      year
+      status
+      slug
+      prettySlug
+    }
+  }
+`;
+
 //registerFragment(/* GraphQL */
 export const ResponseFragmentWithRanking = gql`
   fragment ResponseFragmentWithRanking on Response {
@@ -62,11 +96,11 @@ export const ResponseAdminFragment = gql`
   }
   ${ResponseFragment}
 `;
-//registerFragment(/* GraphQL */
+
 export const CreateResponseOutputFragment = gql`
   fragment CreateResponseOutputFragment on ResponseMutationOutput {
     data {
-      ...${getFragmentName(ResponseFragment)}
+      ...${getFragmentName(LightweightResponseFragment)}
     }
   }
   ${ResponseFragment}
