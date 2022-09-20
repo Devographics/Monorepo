@@ -1,0 +1,130 @@
+@use 'sass:math';
+.btn {
+  // This selector was there to gain specificity? It doesn't work anymore
+  // &:not(:disabled):not(.disabled),
+  // &:not(:disabled):not(.disabled).active,
+  &.btn-default, // replaced the "disabled" non-working to gain specificity
+  &.active,
+  &.btn-primary,
+  &-primary.disabled,
+  &-primary:disabled {
+    background: none;
+    @include border;
+    padding: math.div($spacing, 2) $spacing;
+    cursor: pointer;
+    display: block;
+    text-align: center;
+    white-space: nowrap;
+    @include font-bold;
+    @include secondary-font;
+    @include small {
+      font-size: $small-font;
+    }
+    @include medium-large {
+      font-size: $medium-font;
+    }
+    white-space: nowrap;
+    // transition: color 400ms, border-color 400ms;
+
+    &,
+    &:link,
+    &:visited {
+      color: $text-color;
+      color: var(--text-color);
+      text-decoration: none;
+    }
+
+    &--small {
+      font-size: $small-font;
+      padding: math.div($spacing, 5) math.div($spacing, 2);
+    }
+
+    &--large {
+      padding: $spacing $spacing;
+      font-size: $large-font;
+    }
+
+    &--disabled {
+      color: $active-color-dark;
+    }
+
+    &--active {
+      border-style: solid;
+    }
+    .admin-content & {
+      color: $text-color-inverted;
+      border-color: $text-color-inverted;
+    }
+    .modal-dialog & {
+      color: $text-color-inverted;
+    }
+    &.loading-button-loading {
+      background: $greyMediumer;
+      cursor: default;
+    }
+  }
+  &:not(:disabled):not(.disabled),
+  &:not(:disabled):not(.disabled).active,
+  &.active {
+    &:hover {
+      color: $hover-color;
+      color: var(--text-color);
+      border-color: var(--link-color);
+      border-style: solid;
+      text-decoration: none;
+      background: $bg-color-light;
+    }
+
+    &:active,
+    &:focus {
+      color: $white;
+      border-color: var(--link-color);
+      border-style: solid;
+      text-decoration: none;
+      background: var(--link-color);
+    }
+  }
+  &-primary.disabled,
+  &-primary:disabled {
+    // opacity: 0.4;
+    cursor: default;
+  }
+}
+
+.ButtonGroup {
+  display: inline-flex;
+  vertical-align: middle;
+
+  .Button {
+    border-left-width: 0;
+
+    &:hover {
+      border-left-color: $border-color;
+      border-right-color: $border-color;
+
+      &:first-child {
+        border-left-color: $hover-color;
+        border-right-style: dashed;
+      }
+      &:last-child {
+        border-right-color: $hover-color;
+        border-left-style: dashed;
+      }
+    }
+
+    &--active {
+      cursor: default;
+      pointer-events: none;
+      &:first-child {
+        border-right-style: dashed;
+      }
+      &:last-child {
+        border-left-style: dashed;
+      }
+    }
+
+    &:first-child {
+      border-left-width: 1px;
+    }
+  }
+}
