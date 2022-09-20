@@ -6,7 +6,7 @@ const adminLoginUrl = "/admin/login";
 export function adminLoginMiddleware(req: NextRequest) {
   // TODO: this is not a real auth check!!! User can set a token manually!!!
   // We only avoid the most obvious unauthorized access
-  const isAuth = req.cookies["token"];
+  const isAuth = req.cookies.get("token");
   const isAdminLoginPage = req.nextUrl.pathname === adminLoginUrl;
   if (!isAuth && !isAdminLoginPage) {
     // @see https://nextjs.org/docs/messages/middleware-relative-urls
