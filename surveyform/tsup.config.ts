@@ -21,7 +21,13 @@ const commonConfig = {
   name: "",
   platform: "node" as const,
   target: "node14",
-  //noExternal: [/^@devographics($|\/)/],
+  // TODO: remove "~" from noExternal, remove external,
+  // and use "tsup-node" instead of "tsup" when this
+  // PR lands in:
+  // @see https://github.com/egoist/tsup/issues/718
+  // @see https://github.com/egoist/tsup/pull/720
+  noExternal: [/^@devographics($|\/)/, /^~/],
+  external: [/^[^.\/]|^\.[^.\/]|^\.\.[^\/]/],
   esbuildPlugins: [yamlPlugin({})],
 };
 export default defineConfig([
