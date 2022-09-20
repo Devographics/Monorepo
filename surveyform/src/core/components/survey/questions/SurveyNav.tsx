@@ -12,7 +12,7 @@ TODO
 import { useVulcanComponents } from "@vulcanjs/react-ui";
 import Link from "next/link";
 import React, { useState, useEffect, useRef } from "react";
-import { ResponseType } from "~/modules/responses";
+import { ResponseDocument } from "@devographics/core-models";
 import { getSectionCompletionPercentage } from "~/modules/responses/helpers";
 import { getSurveyPath } from "~/modules/surveys/helpers";
 import { SurveySection, SurveyType } from "~/surveys";
@@ -131,7 +131,7 @@ const SectionNavItem = ({
   setCurrentFocusIndex,
 }: {
   survey: SurveyType;
-  response?: ResponseType;
+  response?: ResponseDocument;
   section: SurveySection;
   number: any;
   setShown: (boolean) => void;

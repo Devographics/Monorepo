@@ -4,8 +4,11 @@ importers:
 
   .:
     specifiers:
+      '@vulcanjs/schema': ^0.7.1
       concurrently: ^7.4.0
       nx: 14.6.5
+    dependencies:
+      '@vulcanjs/schema': 0.7.1
     devDependencies:
       concurrently: 7.4.0
       nx: 14.6.5

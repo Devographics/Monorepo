@@ -1,7 +1,10 @@
 import { SurveyType } from "~/surveys";
 import { createGraphqlModelServer } from "@vulcanjs/graphql/server";
 import { createMongooseConnector } from "@vulcanjs/mongo";
-import { Response, ResponseType } from "~/modules/responses";
+import {
+  ResponseAdmin,
+  ResponseDocument,
+} from "@devographics/core-models/server";
 import mongoose from "mongoose";
 
 import { nanoid } from "nanoid";
@@ -35,7 +38,10 @@ export const NormalizedResponse = createGraphqlModelServer({
       // (this is what reversedRelation does under the hood for basic use cases)
       // do NOT import NormalizedResponse in the core Response model
       reversedRelation: {
-        model: Response,
+        // ResponseAdmin is just the "skeleton" of Response
+        // because we don't need the full-fledged Vulcan model here with cb and all,
+        // just the right graphql model
+        model: ResponseAdmin,
         kind: "hasOneReversed",
         foreignFieldName: "normalizedResponse",
       },
@@ -82,8 +88,8 @@ export const NormalizedResponseCollection = mongoose.connection.db.collection(
 );
 */
 
-export interface NormalizedResponseDocument extends ResponseType {
-  responseId: ResponseType["_id"];
+export interface NormalizedResponseDocument extends ResponseDocument {
+  responseId: ResponseDocument["_id"];
   generatedAt: Date;
   survey: SurveyType["context"];
   year: SurveyType["year"];

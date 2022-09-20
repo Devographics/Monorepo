@@ -18,7 +18,7 @@ import surveys, {
 import { statuses } from "../constants";
 
 //import { data } from "autoprefixer";
-import { ResponseType } from "./typings";
+import { ResponseDocument } from "@devographics/core-models";
 import { isAdmin } from "@vulcanjs/permissions";
 import { VulcanGraphqlFieldSchema } from "@vulcanjs/graphql";
 import SimpleSchema from "simpl-schema";
@@ -118,7 +118,7 @@ export const makeId = (str) => {
   return s;
 };
 
-export const getThanksPath = (response: ResponseType) => {
+export const getThanksPath = (response: ResponseDocument) => {
   const survey = getSurveyFromResponse(response);
   if (!survey)
     throw new Error(
@@ -241,7 +241,7 @@ export const ignoredFieldTypes: Array<FieldTemplateId> = [
   "help",
 ];
 
-export const getCompletionPercentage = (response: ResponseType) => {
+export const getCompletionPercentage = (response: ResponseDocument) => {
   let completedCount = 0;
   let totalCount = 0;
   const survey = getSurveyFromResponse(response);
@@ -282,7 +282,7 @@ export const getResponseData = (response) => {
   return pickBy(response, (r, k) => k.includes(response.surveySlug));
 };
 
-export const surveyFromResponse = (response: ResponseType) => {
+export const surveyFromResponse = (response: ResponseDocument) => {
   const survey = surveys.find((s) => s.slug === response.surveySlug);
   if (!survey)
     throw new Error(
@@ -300,7 +300,7 @@ export const surveyFromResponse = (response: ResponseType) => {
  */
 export const getSectionCompletionPercentage = (
   section: SurveySection,
-  response?: ResponseType
+  response?: ResponseDocument
 ) => {
   if (!response || !section.questions) {
     return null;
@@ -342,7 +342,7 @@ export const getSectionCompletionPercentage = (
 Calculate CSS features knowledge score
 
 */
-export const getKnowledgeScore = (response: ResponseType) => {
+export const getKnowledgeScore = (response: ResponseDocument) => {
   const survey = surveyFromResponse(response);
   const featureSections = survey.outline.filter(
     (section) => section.slug === "features"
