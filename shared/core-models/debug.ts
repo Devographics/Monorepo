@@ -2,7 +2,7 @@
 import fs from "fs";
 import path from "path";
 const logsDirectory = ".logs";
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from "url";
 
 /**
  * NOTE: not working on Windows yet
@@ -22,9 +22,7 @@ export const logToFile = async (
   const __dirname = path.dirname(__filename);
 
   // eslint-disable-next-line no-undef
-  const serverDir = process.env.VERCEL
-    ? "/tmp"
-    : path.resolve();
+  const serverDir = process.env.VERCEL ? "/tmp" : path.resolve();
   const logsDirPath = `/${serverDir}/${logsDirectory}`;
 
   if (!fs.existsSync(logsDirPath)) {

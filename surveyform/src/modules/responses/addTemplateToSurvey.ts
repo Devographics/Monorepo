@@ -9,7 +9,7 @@ import type {
   ParsedQuestion,
   SurveyDocument,
   SurveySection,
-} from "~/surveys/typings";
+} from "@devographics/core-models";
 
 import { templates } from "./schemaTemplates";
 

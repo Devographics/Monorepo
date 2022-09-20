@@ -2,7 +2,10 @@ import countriesOptions from "../countriesOptions";
 import Bracket from "~/core/components/forms/Bracket";
 import { makeAutocomplete } from "@vulcanjs/graphql";
 import { Help } from "~/core/components/forms/Help";
-import { FieldTemplateId, ParsedQuestion } from "~/surveys";
+import type {
+  FieldTemplateId,
+  ParsedQuestion,
+} from "@devographics/core-models";
 import RaceEthnicity from "~/core/components/forms/RaceEthnicity";
 import Email2 from "~/core/components/forms/Email2";
 import Hidden from "~/core/components/forms/Hidden";

@@ -12,9 +12,10 @@ import { ResponseMongooseModel } from "~/modules/responses/model.server";
 import { createEmailHash } from "~/account/email/api/encryptEmail";
 import { UserMongooseModel } from "~/core/models/user.server";
 import { connectToAppDb } from "~/lib/server/mongoose/connection";
-import { logToFile } from "~/lib/server/debug";
+import { logToFile } from "@devographics/core-models/server";
 // import { getSurveyBySlug } from "~/modules/surveys/helpers";
-import surveys, { Field, SurveyType } from "~/surveys";
+import surveys from "~/surveys";
+import type { Field } from "@devographics/core-models";
 
 /*
 

@@ -5,12 +5,12 @@
  *
  */
 
-import {
+import type {
   FieldTemplateId,
   ParsedQuestion,
   SurveyDocument,
   SurveySection,
-} from "~/surveys";
+} from "@devographics/core-models";
 
 interface MarkdownOptions {
   showFieldName?: boolean;

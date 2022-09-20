@@ -5,7 +5,8 @@
  */
 
 import { localMailTransport } from "~/lib/server/mail/transports";
-import surveys, { SurveyType } from "~/surveys";
+import surveys from "~/surveys";
+import { SurveyType } from "@devographics/core-models";
 
 /**
  * Email will be rendered using React Dom server rendering (renderToStaticMarkup())
@@ -58,8 +59,9 @@ export const sendMagicLinkEmail = async ({
   locale: string;
   //token: string;
 }) => {
-  
-  const survey = surveys.find((s) => s.context === prettySlug.replace(/-/g, "_"));
+  const survey = surveys.find(
+    (s) => s.context === prettySlug.replace(/-/g, "_")
+  );
 
   const from =
     survey && survey.domain && `${survey.name} <login@mail.${survey.domain}>`;

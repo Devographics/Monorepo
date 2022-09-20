@@ -15,7 +15,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { ResponseDocument } from "@devographics/core-models";
 import { getSectionCompletionPercentage } from "~/modules/responses/helpers";
 import { getSurveyPath } from "~/modules/surveys/helpers";
-import { SurveySection, SurveyType } from "~/surveys";
+import type { SurveySection, SurveyType } from "@devographics/core-models";
 import { surveysWithTemplates } from "~/surveys/withTemplates";
 const surveys = surveysWithTemplates;
 

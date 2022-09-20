@@ -23,7 +23,7 @@ import bowser from "bowser";
 import { useRouter } from "next/router.js";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { getErrors } from "@vulcanjs/core";
-import { SurveyType } from "~/surveys";
+import { SurveyType } from "@devographics/core-models";
 import gql from "graphql-tag";
 import { getFragmentName } from "@vulcanjs/graphql";
 import { CreateResponseOutputFragment } from "~/modules/responses/fragments";
@@ -147,10 +147,10 @@ interface PrefilledData extends BrowserData {
 const SurveyAction = ({
   survey,
 }: //currentUser,
-  {
-    survey: SurveyType;
-    currentUser?: UserType;
-  }) => {
+{
+  survey: SurveyType;
+  currentUser?: UserType;
+}) => {
   //const isAdmin = checkIsAdmin(currentUser);
   const Components = useVulcanComponents();
   const [errors, setErrors] = useState<Array<any> | undefined>();
@@ -210,9 +210,9 @@ const SurveyAction = ({
     mutationArguments: { input: { data } },
     successCallback:
       (result: // TODO: how to type this better? It's the return of a createMutation, we may have this type already in vulcan?
-        {
-          data: { createResponse: { data: { pagePath: string } } };
-        }) => {
+      {
+        data: { createResponse: { data: { pagePath: string } } };
+      }) => {
         //console.log("calling success cb");
         router.push(get(result, "data.createResponse.data.pagePath"));
       },
@@ -224,7 +224,9 @@ const SurveyAction = ({
   return (
     <div className="survey-action">
       <div className="survey-action-inner">
-        {status === statuses.preview || status === statuses.open || status === statuses.hidden ? (
+        {status === statuses.preview ||
+        status === statuses.open ||
+        status === statuses.hidden ? (
           hasResponse ? (
             <SurveyLink
               survey={survey}

@@ -1,10 +1,10 @@
-import { SurveyType } from "~/surveys";
 import { createGraphqlModelServer } from "@vulcanjs/graphql/server";
 import { createMongooseConnector } from "@vulcanjs/mongo";
 import {
   ResponseAdmin,
   ResponseDocument,
 } from "@devographics/core-models/server";
+import { SurveyType } from "@devographics/core-models";
 import mongoose from "mongoose";
 
 import { nanoid } from "nanoid";

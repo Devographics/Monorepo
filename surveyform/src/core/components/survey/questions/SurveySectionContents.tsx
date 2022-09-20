@@ -16,7 +16,7 @@ import {
 } from "@vulcanjs/react-ui";
 import { Response } from "~/modules/responses/model";
 import { Save, SaveFragment } from "@devographics/core-models";
-import type { ParsedQuestion, SurveyType } from "~/surveys";
+import type { ParsedQuestion, SurveyType } from "@devographics/core-models";
 import { useUser } from "~/account/user/hooks";
 import { EntitiesProvider } from "~/core/components/common/EntitiesContext";
 

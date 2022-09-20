@@ -2,7 +2,7 @@ import React from "react";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { useEntitiesQuery } from "~/core/hooks/useEntitiesQuery";
 import { Entity } from "~/modules/entities/typings";
-import type { SurveyType } from "~/surveys";
+import type { SurveyType } from "@devographics/core-models";
 
 const SurveyCredits = ({ survey }) => {
   const Components = useVulcanComponents();

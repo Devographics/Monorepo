@@ -1,4 +1,4 @@
-import { ResponseMongooseModel } from "~/modules/responses/model.server";
+import { ResponseAdminMongooseModel } from "@devographics/core-models/server";
 import { normalizeResponse } from "./normalize";
 
 const limit = 800;
@@ -12,7 +12,7 @@ export const normalizeJob = async ({
   rules?: any;
 }) => {
   const startAt = new Date();
-  const unnormalizedResponses = await ResponseMongooseModel.find(
+  const unnormalizedResponses = await ResponseAdminMongooseModel.find(
     {
       isNormalized: false,
     },

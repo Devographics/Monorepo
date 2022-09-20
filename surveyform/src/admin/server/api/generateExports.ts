@@ -2,7 +2,7 @@ import { exec } from "child_process";
 import path from "path";
 import { serverConfig } from "~/config/server";
 import { captureMessage } from "@sentry/nextjs";
-import type { SurveyDocument } from "~/surveys";
+import type { SurveyDocument } from "@devographics/core-models";
 
 type SupportedFormat = "json" | "csv";
 

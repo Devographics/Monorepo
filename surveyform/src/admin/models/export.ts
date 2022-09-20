@@ -1,4 +1,4 @@
-import type { SurveyDocument } from "~/surveys";
+import type { SurveyDocument } from "@devographics/core-models";
 
 export interface ExportOptions {
   format: {

@@ -8,13 +8,14 @@ import { slugify } from "@vulcanjs/utils";
 import pick from "lodash/pick.js";
 import pickBy from "lodash/pickBy.js";
 import { getSurveyFromResponse } from "../surveys/helpers";
-import surveys, {
+import {
   Field,
   FieldTemplateId,
   ParsedQuestion,
   SurveySection,
   SurveyType,
-} from "~/surveys";
+} from "@devographics/core-models";
+import surveys from "~/surveys";
 import { statuses } from "../constants";
 
 //import { data } from "autoprefixer";

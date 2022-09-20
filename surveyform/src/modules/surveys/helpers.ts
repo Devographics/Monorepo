@@ -1,5 +1,5 @@
-import surveys, { SurveyType } from "~/surveys";
-import type { ResponseDocument } from "@devographics/core-models";
+import surveys from "~/surveys";
+import type { SurveyType, ResponseDocument } from "@devographics/core-models";
 
 export const getSurveyFromResponse = (response: ResponseDocument) =>
   surveys.find((s) => s.slug === response.surveySlug);

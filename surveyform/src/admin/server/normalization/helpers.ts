@@ -7,8 +7,8 @@ import compact from "lodash/compact.js";
 import isEmpty from "lodash/isEmpty.js";
 import { Entity } from "~/modules/entities/typings";
 import { getOrFetchEntities } from "~/modules/entities/server/graphql";
-import { SurveyType, SurveyQuestion } from "~/surveys/typings";
-import { logToFile } from "~/lib/server/debug";
+import type { SurveyType, SurveyQuestion } from "@devographics/core-models";
+import { logToFile } from "@devographics/core-models/server";
 
 /*
 

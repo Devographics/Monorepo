@@ -15,18 +15,20 @@ import intersection from "lodash/intersection.js";
 //import PrivateResponses from "~/modules/private_responses/collection";
 import { getSurveyBySlug } from "~/modules/surveys/helpers";
 import isEmpty from "lodash/isEmpty.js";
-import { Field, SurveyType } from "~/surveys";
+import type { Field } from "@devographics/core-models";
 import {
   NormalizedResponseMongooseModel,
   NormalizedResponseDocument,
 } from "~/admin/models/normalized_responses/model.server";
-import { ResponseMongooseModel } from "~/modules/responses/model.server";
 import {
   PrivateResponseDocument,
   PrivateResponseMongooseModel,
 } from "~/admin/models/private_responses/model.server";
 import { getUUID } from "~/account/email/api/encryptEmail";
-import { logToFile } from "~/lib/server/debug";
+import {
+  ResponseAdminMongooseModel,
+  logToFile,
+} from "@devographics/core-models/server";
 
 // import { ObjectId } from "mongo";
 
@@ -402,7 +404,7 @@ export const normalizeResponse = async ({
         normResp,
         { upsert: true, returnDocument: "after" }
       );
-    await ResponseMongooseModel.updateOne(
+    await ResponseAdminMongooseModel.updateOne(
       { _id: response._id },
       {
         $set: {

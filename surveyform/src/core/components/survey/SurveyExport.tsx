@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router.js";
-import type { SurveyDocument } from "~/surveys";
+import type { SurveyDocument } from "@devographics/core-models";
 import { useIntlContext } from "@vulcanjs/react-i18n";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { useEntitiesQuery } from "~/core/hooks/useEntitiesQuery";

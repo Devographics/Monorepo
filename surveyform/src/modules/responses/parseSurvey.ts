@@ -1,4 +1,8 @@
-import type { SurveyDocument, Field, SurveySection } from "~/surveys/typings";
+import type {
+  SurveyDocument,
+  Field,
+  SurveySection,
+} from "@devographics/core-models";
 
 // build question object from outline
 export const getQuestionObject = (
