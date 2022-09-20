@@ -12,6 +12,9 @@ export const modelDef: CreateGraphqlModelOptionsShared = {
   graphql: {
     typeName: name,
     multiTypeName: "Responses",
+    defaultFragmentOptions: {
+      noIntlFields: true,
+    },
   },
   permissions: {
     canRead: ["owners", "admins"],
