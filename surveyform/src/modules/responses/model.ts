@@ -13,6 +13,11 @@ export const modelDef: CreateGraphqlModelOptionsShared = {
     typeName: name,
     multiTypeName: "Responses",
     defaultFragmentOptions: {
+      // Some fields might be named "js_features_intl"
+      // because they literally talk about _intl
+      // we don't want them in the default fragment
+      // TODO: we should probably provide our own default fragment
+      // without survey fields anyway
       noIntlFields: true,
     },
   },
