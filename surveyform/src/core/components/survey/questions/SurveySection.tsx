@@ -15,26 +15,42 @@ import SurveyMessage from "../SurveyMessage";
 import { useSurveyResponseParams } from "../hooks";
 import { useSingle } from "@vulcanjs/react-hooks";
 import { Response } from "~/modules/responses/model";
-import { ResponseFragment } from "~/modules/responses/fragments";
+import { SurveyResponseFragment } from "~/modules/responses/fragments";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { getFragmentName } from "@vulcanjs/graphql";
 import { surveysWithTemplates } from "~/surveys/withTemplates";
 const surveys = surveysWithTemplates;
 
 const SurveySection = () => {
-  let { responseId, sectionNumber = 1 } = useSurveyResponseParams();
-
+  const Components = useVulcanComponents();
+  let {
+    responseId,
+    sectionNumber = 1,
+    slug,
+    year,
+    paramsReady,
+  } = useSurveyResponseParams();
+  // TODO: use a "SurveyContext" that is populated at layout level with the
+  // current survey, and use "useCurrentSurvey"
+  // This needs to wait for the incoming layout update of Next.js
+  const survey = surveys.find(
+    (s) => s.prettySlug === slug && s.year === Number(year)
+  );
   const data = useSingle({
     model: Response,
-    fragment: ResponseFragment,
-    fragmentName: getFragmentName(ResponseFragment),
+    fragment: survey && SurveyResponseFragment(survey),
+    fragmentName: survey && getFragmentName(SurveyResponseFragment(survey)),
     input: { id: responseId },
     queryOptions: {
       pollInterval: 0,
+      skip: !survey,
     },
   });
+  if (!paramsReady) {
+    return <Components.Loading />;
+  }
+  if (!survey) throw new Error(`Survey with slug ${slug} not found`);
   const { document: response, loading } = data;
-  const Components = useVulcanComponents();
   if (loading) {
     return <Components.Loading />;
   }
@@ -51,8 +67,7 @@ const SurveySection = () => {
     );
   }
 
-  const survey = surveys.find((s) => s.slug === response.survey.slug);
-  if (!survey) throw new Error(`Survey with slug ${survey} not found`);
+  //const survey = surveys.find((s) => s.slug === response.survey.slug);
   const surveyOutline = survey.outline;
   const sectionIndex = sectionNumber - 1;
   const section = surveyOutline[sectionIndex];

@@ -12,9 +12,9 @@ export const getQuestionObject = (
     fieldType?: any;
     showOther?: boolean;
     allowother?: boolean;
-  },
-  section: SurveySection,
-  number?: number
+  }
+  // section: SurveySection,
+  // number?: number
 ) => {
   questionObject.slug = questionObject.id;
   questionObject.type = String; // default to String type

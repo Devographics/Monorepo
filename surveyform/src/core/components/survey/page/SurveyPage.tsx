@@ -3,7 +3,7 @@ import React from "react";
 // import { STATES } from "meteor/vulcan:accounts";
 // import AccountMessage from "../../users/AccountMessage";
 import SurveyAction from "./SurveyAction";
-import { getSurvey } from "~/modules/surveys/helpers";
+import { getSurvey } from "~/modules/surveys/getters";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import SurveyHeadTags from "../SurveyHeadTags";

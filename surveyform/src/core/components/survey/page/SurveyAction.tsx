@@ -11,7 +11,7 @@ import React, { useEffect, useState } from "react";
 //import { Link } from "react-router-dom";
 import Link from "next/link";
 import get from "lodash/get.js";
-import { getSurveyPath } from "~/modules/surveys/helpers";
+import { getSurveyPath } from "~/modules/surveys/getters";
 import isEmpty from "lodash/isEmpty.js";
 import { statuses } from "~/modules/constants";
 
@@ -186,6 +186,8 @@ const SurveyAction = ({
 
   const hasResponse = currentSurveyResponse && !isEmpty(currentSurveyResponse);
 
+  const surveyCreateResponseOutputFragment =
+    CreateResponseOutputFragment(survey);
   const mutationButtonProps = {
     loadingButtonProps: {
       label: <Components.FormattedMessage id="general.start_survey" />,
@@ -194,10 +196,10 @@ const SurveyAction = ({
     mutation: gql`
     mutation createResponse($input: CreateResponseInput) {
       createResponse(input: $input) {
-        ...${getFragmentName(CreateResponseOutputFragment)}
+        ...${getFragmentName(surveyCreateResponseOutputFragment)}
       }
     }
-    ${CreateResponseOutputFragment}
+    ${surveyCreateResponseOutputFragment}
     `,
     mutationOptions: {
       /* name: "createResponse",

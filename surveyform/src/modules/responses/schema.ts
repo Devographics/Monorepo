@@ -224,22 +224,22 @@ export const schema: VulcanGraphqlSchema = {
   // },
 };
 
-/*
-
-Just put all questions for all surveys on the root of the schema
-
-*/
-let i = 0;
+/**
+ *
+ *
+ * Just put all questions for all surveys on the root of the schema
+ */
+// let i = 0;
 surveys.forEach((survey) => {
   survey.outline.forEach((section) => {
     section.questions &&
       section.questions.forEach((questionOrId) => {
-        i++;
+        //i++;
         if (Array.isArray(questionOrId)) {
           // NOTE: from the typings, it seems that questions can be arrays? To be confirmed
           throw new Error("Found an array of questions");
         }
-        const questionObject = getQuestionObject(questionOrId, section, i);
+        const questionObject = getQuestionObject(questionOrId /*, section, i*/);
         const questionSchema = getQuestionSchema(
           questionObject,
           section,

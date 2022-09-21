@@ -3,7 +3,7 @@ import Footer from "./Footer";
 import Header from "./Header";
 import DevographicsBanner from "./DevographicsBanner";
 // import { useParams } from "react-router-dom";
-import { getSurvey } from "~/modules/surveys/helpers";
+import { getSurvey } from "~/modules/surveys/getters";
 import { KeydownContextProvider } from "./KeydownContext";
 import { useSurveyParams } from "../survey/hooks";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
