@@ -4,6 +4,7 @@ import { getQuestionSchema } from "./helpers";
 import { VulcanGraphqlSchema } from "@vulcanjs/graphql";
 import { getQuestionId, getQuestionObject } from "./parseSurvey";
 import cloneDeep from "lodash/cloneDeep.js";
+import { addComponentToQuestionObject } from './customComponents';
 
 export const schema: VulcanGraphqlSchema = {
   // default properties
@@ -249,12 +250,14 @@ surveys.forEach((survey) => {
           // NOTE: from the typings, it seems that questions can be arrays? To be confirmed
           throw new Error("Found an array of questions");
         }
-        const questionObject = getQuestionObject(questionOrId /*, section, i*/);
+        let questionObject = getQuestionObject(questionOrId, section);
+        questionObject = addComponentToQuestionObject(questionObject)
         const questionSchema = getQuestionSchema(
           questionObject,
           section,
           survey
         );
+
         const questionId = getQuestionId(survey, section, questionObject);
         schema[questionId] = questionSchema;
         if (survey.slug) {
