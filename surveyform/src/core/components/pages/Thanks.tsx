@@ -8,8 +8,7 @@ import { Response } from "~/modules/responses";
 import { ResponseFragmentWithRanking } from "~/modules/responses/fragments";
 import { useRouter } from "next/router.js";
 import { useSurveyResponseParams } from "../survey/hooks";
-import { surveysWithTemplates } from "~/surveys/withTemplates";
-const surveys = surveysWithTemplates;
+import surveys from "~/surveys";
 
 const Thanks = () => {
   const { responseId } = useSurveyResponseParams();

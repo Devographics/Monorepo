@@ -23,13 +23,13 @@ import { templates } from "./schemaTemplates";
  * @param number
  * @returns
  */
-const addTemplateToQuestionObject = (
+export const addTemplateToQuestionObject = (
   questionObject: ParsedQuestion,
   section: SurveySection,
   number?: number
 ) => {
   // get template from either question or parent section
-  const templateName = questionObject.template || section.template;
+  const templateName = questionObject?.template || section?.template;
   // Question does not necessarilly use a known template, it's ok if templateName is not defined
   if (templateName) {
     const questionTemplate = templates[templateName];

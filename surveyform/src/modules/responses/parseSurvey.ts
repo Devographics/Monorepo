@@ -3,6 +3,7 @@ import type {
   Field,
   SurveySection,
 } from "@devographics/core-models";
+import { addTemplateToQuestionObject } from "~/modules/responses/addTemplateToSurvey";
 
 // build question object from outline
 export const getQuestionObject = (
@@ -12,8 +13,8 @@ export const getQuestionObject = (
     fieldType?: any;
     showOther?: boolean;
     allowother?: boolean;
-  }
-  // section: SurveySection,
+  },
+  section: SurveySection
   // number?: number
 ) => {
   questionObject.slug = questionObject.id;
@@ -28,7 +29,8 @@ export const getQuestionObject = (
     }
   }
 
-  return questionObject;
+  // apply template to question
+  return addTemplateToQuestionObject(questionObject, section);
 };
 
 /** 
@@ -60,21 +62,16 @@ export const parseSurvey = (survey: SurveyDocument) => {
   let i = 0;
   const parsedSurvey = { ...survey, createdAt: new Date(survey.createdAt) };
   parsedSurvey.outline = survey.outline.map((section) => {
+    const questions = section.questions.map((question) => {
+      i++;
+      // @ts-ignore TODO: question may be an array according to types
+      const questionObject = getQuestionObject(question, section, i);
+      questionObject.fieldName = getQuestionId(survey, section, questionObject);
+      return questionObject;
+    });
     return {
       ...section,
-      questions:
-        section.questions &&
-        section.questions.map((question) => {
-          i++;
-          // @ts-ignore TODO: question may be an array according to types
-          const questionObject = getQuestionObject(question, section, i);
-          questionObject.fieldName = getQuestionId(
-            survey,
-            section,
-            questionObject
-          );
-          return questionObject;
-        }),
+      questions,
     };
   });
   return parsedSurvey;

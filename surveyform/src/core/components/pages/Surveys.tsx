@@ -1,7 +1,6 @@
 import React from "react";
-import { surveysWithTemplates } from "~/surveys/withTemplates";
+import surveys from "~/surveys";
 // just an alias to avoid changing the whole code
-const surveys = surveysWithTemplates;
 
 //import User from "~/core/models/user";
 import { getSurveyPath } from "~/modules/surveys/getters";

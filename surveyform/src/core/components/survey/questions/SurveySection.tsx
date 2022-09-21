@@ -18,8 +18,7 @@ import { Response } from "~/modules/responses/model";
 import { SurveyResponseFragment } from "~/modules/responses/fragments";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { getFragmentName } from "@vulcanjs/graphql";
-import { surveysWithTemplates } from "~/surveys/withTemplates";
-const surveys = surveysWithTemplates;
+import surveys from "~/surveys";
 
 const SurveySection = () => {
   const Components = useVulcanComponents();

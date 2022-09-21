@@ -5,8 +5,7 @@ import { useIntlContext } from "@vulcanjs/react-i18n";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { useEntitiesQuery } from "~/core/hooks/useEntitiesQuery";
 import { convertSurveyToMarkdown } from "~/modules/surveys/outlineExport";
-import { surveysWithTemplates } from "~/surveys/withTemplates";
-const surveys = surveysWithTemplates;
+import surveys from "~/surveys";
 
 const useCurrentSurvey = () => {
   const router = useRouter();
