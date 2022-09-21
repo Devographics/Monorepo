@@ -23,11 +23,7 @@ import { ResponseDocument } from "@devographics/core-models";
 import { isAdmin } from "@vulcanjs/permissions";
 import { VulcanGraphqlFieldSchema } from "@vulcanjs/graphql";
 import SimpleSchema from "simpl-schema";
-import {
-  getQuestionFieldName,
-  getQuestionObject,
-  parseSurvey,
-} from "./parseSurvey";
+import { getQuestionId, getQuestionObject, parseSurvey } from "./parseSurvey";
 
 // Previously it lived in Vulcan NPM, but that's something you'd want to control more
 // precisely at app level
@@ -258,7 +254,7 @@ export const getCompletionPercentage = (response: ResponseDocument) => {
       section.questions.forEach((question) => {
         if (Array.isArray(question))
           throw new Error("Question cannot be an array");
-        const questionId = getQuestionFieldName(survey, section, question);
+        const questionId = getQuestionId(survey, section, question);
         const answer = response[questionId];
         const ignoreQuestion =
           question.template && ignoredFieldTypes.includes(question.template);

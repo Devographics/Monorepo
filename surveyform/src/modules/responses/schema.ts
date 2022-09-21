@@ -2,7 +2,7 @@ import surveys from "~/surveys";
 
 import { getQuestionSchema } from "./helpers";
 import { VulcanGraphqlSchema } from "@vulcanjs/graphql";
-import { getQuestionFieldName, getQuestionObject } from "./parseSurvey";
+import { getQuestionId, getQuestionObject } from "./parseSurvey";
 
 export const schema: VulcanGraphqlSchema = {
   // default properties
@@ -245,11 +245,7 @@ surveys.forEach((survey) => {
           section,
           survey
         );
-        const questionId = getQuestionFieldName(
-          survey,
-          section,
-          questionObject
-        );
+        const questionId = getQuestionId(survey, section, questionObject);
         schema[questionId] = questionSchema;
       });
   });

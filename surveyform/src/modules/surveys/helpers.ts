@@ -3,11 +3,7 @@
  * This avoid bundling all surveys in a page
  */
 import { SurveyDocument } from "@devographics/core-models";
-import { getQuestionSchema } from "../responses/helpers";
-import {
-  getQuestionFieldName,
-  getQuestionObject,
-} from "../responses/parseSurvey";
+import { getQuestionObject } from "../responses/parseSurvey";
 
 export const getSurveyFieldNames = (survey: SurveyDocument) => {
   let questionFieldName: Array<string> = [];
@@ -20,22 +16,19 @@ export const getSurveyFieldNames = (survey: SurveyDocument) => {
         }
         const questionObject = getQuestionObject(questionOrId /*, section, i*/);
         /*
-        const questionId = getQuestionFieldName(
+        const questionId = getQuestionId(
           survey,
           section,
           questionObject
         );
         */
-        const questionSchema = getQuestionSchema(
-          questionObject,
-          section,
-          survey
-        );
         if (!questionObject.fieldName) {
           return;
         }
         questionFieldName.push(questionObject.fieldName);
       });
   });
-  return questionFieldName;
+  // remvoe dups (different suffix for same question)
+  const fieldNamesWithoutDups = [...new Set(questionFieldName).values()];
+  return fieldNamesWithoutDups;
 };

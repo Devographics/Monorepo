@@ -99,6 +99,7 @@ const SurveySectionContents = ({
 
   const isLastSection = !nextSection;
 
+  console.log("response");
   const isDisabled = !canModifyResponse(response, user);
 
   return (
