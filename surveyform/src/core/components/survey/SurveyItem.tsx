@@ -88,9 +88,9 @@ const SurveyItem = ({ survey, currentUser }) => {
               }}
               mutation={gql`
                 mutation createResponse($input: CreateResponseInput) {
-                  ...${getFragmentName(CreateResponseOutputFragment)}
+                  ...${getFragmentName(CreateResponseOutputFragment(survey))}
                 }
-                ${CreateResponseOutputFragment}
+                ${CreateResponseOutputFragment(survey)}
               `}
               /*
                   mutationOptions={{
