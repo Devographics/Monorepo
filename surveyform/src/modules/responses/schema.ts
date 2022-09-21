@@ -225,8 +225,6 @@ export const schema: VulcanGraphqlSchema = {
   // },
 };
 
-const coreSchema = Object.freeze(cloneDeep(schema)) as VulcanGraphqlSchema;
-
 /**
  *
  *
@@ -238,9 +236,10 @@ const coreSchema = Object.freeze(cloneDeep(schema)) as VulcanGraphqlSchema;
  */
 export const schemaPerSurvey: { [slug: string]: VulcanGraphqlSchema } = {};
 
+const coreSchema = cloneDeep(schema) as VulcanGraphqlSchema;
 surveys.forEach((survey) => {
   if (survey.slug) {
-    schemaPerSurvey[survey.slug] = coreSchema;
+    schemaPerSurvey[survey.slug] = cloneDeep(coreSchema);
   }
   survey.outline.forEach((section) => {
     section.questions &&
