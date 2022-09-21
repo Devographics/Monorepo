@@ -1,0 +1,20 @@
+{
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "search.exclude": {
+    "cypress/examples/": true
+  },
+  "files.associations": {
+    "*.env.development": "env",
+    "*.env.production": "env",
+    "*.env.development.local": "env",
+    "*.env.production.local": "env",
+    ".env.local": "env",
+    ".env.test": "env",
+    ".env.test.local": "env"
+  }
+}

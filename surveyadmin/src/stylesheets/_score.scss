@@ -1,0 +1,59 @@
+.score {
+  margin-bottom: $spacing * 2;
+  text-align: center;
+  @include border;
+  padding: $spacing * 2;
+  @include border-radius;
+  position: relative;
+}
+.score-calcuation-heading {
+  font-size: $largest-font;
+  // text-transform: uppercase;
+}
+.score-percent {
+  font-size: 4rem;
+}
+.score-ratio {
+  font-size: $large-font;
+}
+.score-number {
+  @include font-bold;
+  color: var(--hover-color);
+}
+.score-confetti {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.score-share {
+  @include flex-center;  
+  margin-top: $spacing * 2;
+}
+
+// features
+
+.score-features {
+  // display: grid;
+  // grid-template-columns: 1fr 1fr 1fr;
+  // column-gap: $spacing;
+  // row-gap: $spacing;
+  // display: none;
+  margin-top: $spacing * 2;
+}
+.score-features-heading {
+  display: inline;
+  margin-bottom: 0;
+  font-size: $smallish-font;
+  @include font-regular;
+}
+.score-features-items{
+  display: inline;
+}
+.score-feature {
+  display: inline;
+  font-size: $smallish-font;
+}

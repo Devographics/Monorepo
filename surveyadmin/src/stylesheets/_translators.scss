@@ -1,0 +1,38 @@
+.translators {
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: $spacing * 2;
+  @include border2;
+  @include border-radius;
+  &-locales {
+    @include large {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: $spacing;
+      row-gap: $spacing;
+    }
+  }
+  &-locale {
+  }
+  &-locale-heading {
+    font-size: $smallish-font;
+    // margin-bottom: math.div($spacing,4);
+    display: inline;
+    &::after {
+      content: ": ";
+    }
+  }
+  &-locale-translators {
+    display: inline;
+  }
+  &-locale-translator {
+    font-size: $smallish-font;
+  }
+}
+
+.translators-help {
+  text-align: center;
+  margin-top: $spacing * 2;
+  font-size: $medium-font;
+}

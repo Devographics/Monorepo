@@ -1,23 +1,4 @@
 const plugins = [
-  // @see https://mui.com/guides/minimizing-bundle-size/
-  [
-    "babel-plugin-import",
-    {
-      libraryName: "@mui/material",
-      libraryDirectory: "",
-      camel2DashComponentName: false,
-    },
-    "core",
-  ],
-  [
-    "babel-plugin-import",
-    {
-      libraryName: "@mui/icons-material",
-      libraryDirectory: "",
-      camel2DashComponentName: false,
-    },
-    "icons",
-  ],
   // @see https://github.com/ant-design/babel-plugin-import
   [
     "babel-plugin-import",

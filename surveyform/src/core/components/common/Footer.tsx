@@ -38,10 +38,6 @@ export const Footer = () => {
             <LogoutButton component={"a" as const} /> |{" "}
           </>
         )}{" "}
-        |{" "}
-        <>
-          <Link href="/admin">Admin area</Link>
-        </>
       </div>
       <div className="footer-bottom">
         <a

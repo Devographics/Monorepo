@@ -1,6 +1,10 @@
 # https://github.com/casey/just
+
+# @see https://github.com/Devographics/Monorepo/pull/114
+# Gatsby result app is currently opted-out of PNPM because of the patch on Apollo client needed for Next
 install:
-    pnpm install
+    pnpm install;
+    cd {{justfile_directory()}}/results yarn install;
 
 # For external and internal APIs
 redis:
@@ -15,14 +19,16 @@ mongo:
 # @see https://stackoverflow.com/questions/47207616/auto-remove-container-with-docker-compose-yml
 # It is not currently possible to automatically remove containers using docker-compose.yml
 # so it's easier tp run both commands concurrently
+# Exec from justfile_directly so we avoid having .mongo everywhere
 dbs:
-    pnpm exec concurrently --prefix-colors "bgRed,bgGreen" \
+    cd {{justfile_directory()}} && pnpm exec concurrently --prefix-colors "bgRed,bgGreen" \
     --names "redis,mongo" "just redis" "just mongo";
 
 # Create local build
 # Don't forget to run Redis and Mongo dbs
 build:
     pnpm exec nx run-many --target=build
+    cd {{justfile()}}/result yarn run build;
 
 default:
     @just --list --justfile {{justfile()}}

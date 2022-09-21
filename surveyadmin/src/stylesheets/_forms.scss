@@ -1,0 +1,242 @@
+@use 'sass:math';
+.survey-section {
+  // .form-control {
+  //   background: $bg-color-lightest;
+  // }
+  .form-input {
+    position: relative;
+
+    margin-bottom: $spacing;
+    &:focus-within {
+      border-color: var(--link-color);
+      background: $greyDarkish;
+    }
+    @include small {
+      margin-bottom: $spacing * 2;
+    }
+    @include medium {
+      @include border;
+      padding: math.div($spacing, 2);
+    }
+    @include large {
+      @include border;
+      padding: $spacing;
+    }
+  }
+  .form-component-Help {
+    background: var(--bg-color-light);
+    border: 0;
+    :last-child {
+      margin: 0;
+    }
+  }
+  .form-label-heading {
+    margin-bottom: math.div($spacing, 2);
+  }
+  .form-label {
+    @include small-medium {
+      font-size: $large-font;
+    }
+    @include large {
+      font-size: $largeish-font;
+    }
+    @include font-bold;
+    display: flex;
+    align-items: center;
+    line-height: 1.7;
+    code {
+      font-size: $medium-font;
+    }
+    .entity-label {
+      // white-space: nowrap;
+    }
+    .question-label-new {
+      text-transform: uppercase;
+      background: $active-color-dark;
+      color: $text-color-inverted;
+      padding: 1px 5px;
+      margin-left: math.div($spacing, 2);
+      font-size: $smaller-font;
+      // @include font-regular;
+    }
+  }
+  .form-check {
+    display: flex;
+    align-items: center;
+    padding: 0 math.div($spacing, 2);
+    &:last-of-type {
+      margin: 0;
+    }
+    &:hover {
+      background: $bg-color-light;
+    }
+  }
+  .form-component-text {
+    input {
+      resize: vertical;
+    }
+  }
+  .form-component-radiogroup {
+    .form-check-checked {
+    }
+    .form-check-unchecked {
+      // opacity: 0.3;
+    }
+  }
+  .form-check-input {
+    margin: 0px math.div($spacing, 1.5) 0 0;
+    position: relative;
+    display: block;
+  }
+  .form-check-label {
+    flex: 1;
+    padding: math.div($spacing, 1.5) 0;
+  }
+  .form-item-contents {
+    display: flex;
+    flex-direction: column;
+  }
+  .form-item-input {
+    textarea,
+    input[type="text"],
+    select {
+      background: $greyLightest;
+      color: $greyDarker;
+    }
+  }
+  .form-text {
+    background: var(--bg-color-light);
+    padding: math.div($spacing, 2);
+    margin-bottom: math.div($spacing, 2);
+    color: var(--text-color);
+    p:last-child {
+      margin: 0;
+    }
+  }
+  .form-submit-actions {
+    display: flex;
+    justify-content: space-between;
+    .prev-placeholder,
+    button {
+      @include small-medium {
+        flex-basis: 49%;
+      }
+      @include large {
+        flex-basis: 35%;
+      }
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    div:first-child,
+    button:first-child {
+      // margin-right: $spacing;
+    }
+    .form-btn-prev,
+    .prev-placeholder {
+      order: 1;
+    }
+    .form-btn-next {
+      order: 2;
+    }
+  }
+
+  .form-submit-help {
+    margin-top: $spacing;
+    text-align: center;
+    font-size: $small-font;
+  }
+
+  .form-component-clear {
+    @include flex-center;
+    height: 30px;
+    width: 30px;
+    @include border;
+    background: transparent;
+    top: 0;
+    right: 0;
+    border-radius: 0 0 0 3px;
+    span {
+      font-size: $medium-font;
+    }
+  }
+}
+
+.input-css2020__user_info__skin_tone {
+  .form-check {
+    margin-bottom: 5px;
+    label {
+      font-size: $largest-font;
+      background: $white;
+      flex: 0;
+      padding: 3px;
+      @include border-radius;
+      @include emoji-font;
+    }
+    img {
+      height: 32px;
+      width: 32px;
+    }
+  }
+}
+
+.rbt-token {
+  background-color: $grey;
+  color: $greyDarker;
+}
+
+.rbt-menu {
+  a {
+    &,
+    &:link,
+    &:visited {
+      color: $text-color-inverted;
+    }
+    &:hover {
+      background: $bg-color-lightest;
+    }
+  }
+}
+
+.rbt-input {
+  resize: vertical;
+}
+
+.form-floating > label {
+  color: var(--text-color-inverted);
+}
+
+.magic-error, .magic-success{
+  padding: $spacing/2;
+  font-size: $smallish-font;
+  margin-top: $spacing;
+}
+.magic-error{
+  border: 3px solid $red;
+}
+
+.magic-success{
+  border: 3px solid $green;
+}
+
+.form-note {
+  // background: var(--bg-color-light);
+  // padding: $spacing/2;
+  margin-top: $spacing/2;
+  color: var(--text-color-dark);
+  font-size: $small-font;
+  p:last-child {
+    margin: 0;
+  }
+}
+
+.form-help{
+  p:last-child {
+    margin: 0;
+  }
+}
+
+.form-race-ethnicity-not-allowed{
+  padding: $spacing/2;
+  background: $redTransparent;
+  margin-bottom: $spacing;
+}

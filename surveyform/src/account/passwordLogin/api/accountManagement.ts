@@ -19,7 +19,7 @@ import passport from "passport";
  * @returns
  */
 export const authenticate = (
-  method: "local" | "magiclink",
+  method: "magiclink",
   /** May vary depending on the strategy, check relevant doc */
   options: any,
   req,

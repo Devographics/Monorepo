@@ -1,0 +1,36 @@
+{
+  "name": "@devographics/core-models",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "exports": {
+    ".": "./index.ts",
+    "./server": "./index.server.ts",
+    "./client": "./index.client.ts"
+  },
+  "types": "./index.ts",
+  "typesVersions": {
+    "*": {
+      "server": [
+        "./index.server.ts"
+      ],
+      "client": [
+        "./index.client.ts"
+      ]
+    }
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@vulcanjs/graphql": "^0.7.1",
+    "@vulcanjs/mongo": "^0.7.1",
+    "graphql-tag": "^2.12.6",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.4",
+    "mongoose": "^6.4.5",
+    "nanoid": "^3.1.25"
+  }
+}

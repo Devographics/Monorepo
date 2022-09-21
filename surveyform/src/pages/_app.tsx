@@ -2,10 +2,6 @@ import { NextPage } from "next";
 import App, { AppContext, AppProps } from "next/app";
 import { ReactElement } from "react";
 
-// Comment if you don't need Material UI
-import { createEmotionCache } from "@vulcanjs/next-mui";
-import { MuiThemeProvider } from "~/core/components/providers";
-
 import Head from "next/head";
 import {
   VulcanComponentsProvider,
@@ -34,7 +30,6 @@ export function reportWebVitals(metric) {
 
 import { ApolloProvider } from "@apollo/client";
 import { useApollo } from "@vulcanjs/next-apollo";
-import { CacheProvider, EmotionCache } from "@emotion/react";
 import { useUser } from "~/account/user/hooks";
 
 // TODO: still quite experimental, migrated specifically for the state of js
@@ -53,9 +48,6 @@ import { getAppGraphqlUri } from "~/lib/graphql";
 import Layout from "~/core/components/common/Layout";
 //import { useCookies } from "react-cookie";
 
-// Client-side cache, shared for the whole session of the user in the browser.
-const clientSideEmotionCache = createEmotionCache();
-
 // @see https://nextjs.org/docs/basic-features/layouts#with-typescript
 // Doc says to use "ReactNode" as the return type at the time of writing (09/2021) but then that fails appWithTranslation
 // , ReactElement seems more appropriate
@@ -65,7 +57,6 @@ type NextPageWithLayout = NextPage & {
 
 export interface VNAppProps extends AppProps {
   Component: NextPageWithLayout;
-  emotionCache: EmotionCache;
   /** Locale extracted from cookies server-side */
   pageProps: {
     locale?: string;
@@ -93,11 +84,7 @@ const Favicons = () => (
   </>
 );
 
-function VNApp({
-  Component,
-  pageProps,
-  emotionCache = clientSideEmotionCache,
-}: VNAppProps) {
+function VNApp({ Component, pageProps }: VNAppProps) {
   const apolloClient = useApollo(pageProps.initialApolloState, {
     graphqlUri: getAppGraphqlUri(/*origin*/),
     crossDomainGraphqlUri:
@@ -116,61 +103,55 @@ function VNApp({
       {/** TODO: this error boundary to display anything useful since it doesn't have i18n */}
       {getLayout(
         <ApolloProvider client={apolloClient}>
-          <CacheProvider value={emotionCache}>
-            <DefaultLocaleContextProvider>
-              <LocaleContextProvider
-                locale={locale}
-                localeStrings={localeStrings}
-                currentUser={user}
+          <DefaultLocaleContextProvider>
+            <LocaleContextProvider
+              locale={locale}
+              localeStrings={localeStrings}
+              currentUser={user}
+            >
+              <VulcanCurrentUserProvider
+                // @ts-ignore FIXME: weird error with groups
+                value={{
+                  currentUser: user || null,
+                  loading:
+                    false /* TODO: we don't get the loading information from useUser yet */,
+                }}
               >
-                <VulcanCurrentUserProvider
-                  // @ts-ignore FIXME: weird error with groups
+                <VulcanComponentsProvider
                   value={{
-                    currentUser: user || null,
-                    loading:
-                      false /* TODO: we don't get the loading information from useUser yet */,
+                    ...defaultCoreComponents,
+                    ...defaultFormComponents,
+                    ...liteCoreComponents,
+                    ...liteFormComponents,
+                    ...bootstrapCoreComponents,
+                    ...bootstrapFormComponents,
+                    FormattedMessage: FormattedMessage,
                   }}
                 >
-                  <VulcanComponentsProvider
-                    value={{
-                      ...defaultCoreComponents,
-                      ...defaultFormComponents,
-                      ...liteCoreComponents,
-                      ...liteFormComponents,
-                      ...bootstrapCoreComponents,
-                      ...bootstrapFormComponents,
-                      FormattedMessage: FormattedMessage,
-                    }}
+                  <Head>
+                    <title>State of JS</title>
+                    <meta
+                      name="viewport"
+                      content="minimum-scale=1, initial-scale=1, width=device-width"
+                    />
+                    <Favicons />
+                  </Head>
+                  <ErrorBoundary
+                    proposeReload={true}
+                    proposeHomeRedirection={true}
                   >
-                    <Head>
-                      <title>State of JS</title>
-                      <meta
-                        name="viewport"
-                        content="minimum-scale=1, initial-scale=1, width=device-width"
-                      />
-                      <Favicons />
-                    </Head>
-                    {/** Provide MUI theme but also mui utilities like CSS baseline, StyledEngineProvider... */}
-                    <MuiThemeProvider>
-                      {/** This ErrorBoundary have Mui theming + i18n + Vulcan components */}
-                      <ErrorBoundary
-                        proposeReload={true}
-                        proposeHomeRedirection={true}
-                      >
-                        <Layout
-                          surveySlug={pageProps?.slug}
-                          surveyYear={pageProps?.year}
-                        >
-                          {/** @ts-ignore */}
-                          <Component {...pageProps} />
-                        </Layout>
-                      </ErrorBoundary>
-                    </MuiThemeProvider>
-                  </VulcanComponentsProvider>
-                </VulcanCurrentUserProvider>
-              </LocaleContextProvider>
-            </DefaultLocaleContextProvider>
-          </CacheProvider>
+                    <Layout
+                      surveySlug={pageProps?.slug}
+                      surveyYear={pageProps?.year}
+                    >
+                      {/** @ts-ignore */}
+                      <Component {...pageProps} />
+                    </Layout>
+                  </ErrorBoundary>
+                </VulcanComponentsProvider>
+              </VulcanCurrentUserProvider>
+            </LocaleContextProvider>
+          </DefaultLocaleContextProvider>
         </ApolloProvider>
       )}
     </ErrorBoundary>

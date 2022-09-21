@@ -50,7 +50,7 @@ const localeStringsQuery = print(gql`
           key
           t
           context
-          fallback
+          isFallback
       }
     }
   }
@@ -369,7 +369,7 @@ const localesWithStringsQuery = print(gql`
         key
         t
         context
-        fallback
+        isFallback
       }
       translators
     }
