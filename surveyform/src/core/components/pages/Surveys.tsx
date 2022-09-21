@@ -4,7 +4,7 @@ import { surveysWithTemplates } from "~/surveys/withTemplates";
 const surveys = surveysWithTemplates;
 
 //import User from "~/core/models/user";
-import { getSurveyPath } from "~/modules/surveys/helpers";
+import { getSurveyPath } from "~/modules/surveys/getters";
 import Link from "next/link"; //"react-router-dom";
 import { statuses } from "~/modules/constants";
 import LocaleSelector from "~/core/components/common/LocaleSelector";

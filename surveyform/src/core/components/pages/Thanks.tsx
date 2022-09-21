@@ -1,6 +1,6 @@
 import React from "react";
 import ShareSite from "../share/ShareSite";
-import { getSurveyPath } from "~/modules/surveys/helpers";
+import { getSurveyPath } from "~/modules/surveys/getters";
 import Score from "../common/Score";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { useSingle } from "@vulcanjs/react-hooks";

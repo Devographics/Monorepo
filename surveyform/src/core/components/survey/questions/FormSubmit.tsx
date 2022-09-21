@@ -15,7 +15,7 @@ import { useVulcanComponents, useFormContext } from "@vulcanjs/react-ui";
 import { useRouter } from "next/router.js";
 import React, { useState } from "react";
 import { getThanksPath } from "~/modules/responses/helpers";
-import { getSurveyPath } from "~/modules/surveys/helpers";
+import { getSurveyPath } from "~/modules/surveys/getters";
 
 const FormSubmit = ({
   survey,

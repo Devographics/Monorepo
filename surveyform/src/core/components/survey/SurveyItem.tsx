@@ -11,7 +11,7 @@ import React, { useState } from "react";
 import { getErrors } from "@vulcanjs/core";
 import get from "lodash/get.js";
 import Link from "next/link"; //"react-router-dom";
-import { getSurveyPath } from "~/modules/surveys/helpers";
+import { getSurveyPath } from "~/modules/surveys/getters";
 import isEmpty from "lodash/isEmpty.js";
 import { statuses } from "~/modules/constants";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
@@ -78,37 +78,37 @@ const SurveyItem = ({ survey, currentUser }) => {
               </a>
             </Link>
           ) : // </LinkContainer>
-            status === statuses.open ? (
-              <Components.MutationButton
-                loadingButtonProps={{
-                  label: (
-                    <Components.FormattedMessage id="general.start_survey" />
-                  ),
-                  variant: "primary",
-                }}
-                mutation={gql`
+          status === statuses.open ? (
+            <Components.MutationButton
+              loadingButtonProps={{
+                label: (
+                  <Components.FormattedMessage id="general.start_survey" />
+                ),
+                variant: "primary",
+              }}
+              mutation={gql`
                 mutation createResponse($input: CreateResponseInput) {
                   ...${getFragmentName(CreateResponseOutputFragment)}
                 }
                 ${CreateResponseOutputFragment}
               `}
-                /*
+              /*
                   mutationOptions={{
                     name: "createResponse",
                     args: { input: "CreateResponseInput" },
                     fragmentName: "CreateResponseOutputFragment",
                   }}*/
-                mutationArguments={{ input: { data } }}
-                successCallback={(result) => {
-                  router.push(get(result, "data.createResponse.data.pagePath"));
-                }}
-                errorCallback={(error) => {
-                  setErrors(getErrors(error));
-                }}
-              />
-            ) : (
-              <div className="survey-action-closed">Survey closed.</div>
-            )}
+              mutationArguments={{ input: { data } }}
+              successCallback={(result) => {
+                router.push(get(result, "data.createResponse.data.pagePath"));
+              }}
+              errorCallback={(error) => {
+                setErrors(getErrors(error));
+              }}
+            />
+          ) : (
+            <div className="survey-action-closed">Survey closed.</div>
+          )}
         </div>
       </div>
       {errors &&

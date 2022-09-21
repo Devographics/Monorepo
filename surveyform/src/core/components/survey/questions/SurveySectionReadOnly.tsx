@@ -1,7 +1,7 @@
 import React from "react";
 import SurveyNav from "./SurveyNav";
 import SurveySectionContents from "./SurveySectionContents";
-import { getSurvey } from "~/modules/surveys/helpers";
+import { getSurvey } from "~/modules/surveys/getters";
 import { useSurveyResponseParams } from "../hooks";
 
 const SurveySectionReadOnly = () => {

@@ -2,7 +2,8 @@ import surveys from "~/surveys";
 
 import { getQuestionSchema } from "./helpers";
 import { VulcanGraphqlSchema } from "@vulcanjs/graphql";
-import { getQuestionFieldName, getQuestionObject } from "./parseSurvey";
+import { getQuestionId, getQuestionObject } from "./parseSurvey";
+import cloneDeep from "lodash/cloneDeep.js";
 
 export const schema: VulcanGraphqlSchema = {
   // default properties
@@ -224,33 +225,41 @@ export const schema: VulcanGraphqlSchema = {
   // },
 };
 
-/*
+/**
+ *
+ *
+ * Just put all questions for all surveys on the root of the schema
+ */
+// let i = 0;
+/**
+ * Have one schema per survey
+ */
+export const schemaPerSurvey: { [slug: string]: VulcanGraphqlSchema } = {};
 
-Just put all questions for all surveys on the root of the schema
-
-*/
-let i = 0;
+const coreSchema = cloneDeep(schema) as VulcanGraphqlSchema;
 surveys.forEach((survey) => {
+  if (survey.slug) {
+    schemaPerSurvey[survey.slug] = cloneDeep(coreSchema);
+  }
   survey.outline.forEach((section) => {
     section.questions &&
       section.questions.forEach((questionOrId) => {
-        i++;
+        //i++;
         if (Array.isArray(questionOrId)) {
           // NOTE: from the typings, it seems that questions can be arrays? To be confirmed
           throw new Error("Found an array of questions");
         }
-        const questionObject = getQuestionObject(questionOrId, section, i);
+        const questionObject = getQuestionObject(questionOrId /*, section, i*/);
         const questionSchema = getQuestionSchema(
           questionObject,
           section,
           survey
         );
-        const questionId = getQuestionFieldName(
-          survey,
-          section,
-          questionObject
-        );
+        const questionId = getQuestionId(survey, section, questionObject);
         schema[questionId] = questionSchema;
+        if (survey.slug) {
+          schemaPerSurvey[survey.slug][questionId] = questionSchema;
+        }
       });
   });
 });

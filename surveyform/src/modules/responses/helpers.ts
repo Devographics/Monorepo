@@ -7,7 +7,7 @@
 import { slugify } from "@vulcanjs/utils";
 import pick from "lodash/pick.js";
 import pickBy from "lodash/pickBy.js";
-import { getSurveyFromResponse } from "../surveys/helpers";
+import { getSurveyFromResponse } from "../surveys/getters";
 import {
   Field,
   FieldTemplateId,
@@ -23,11 +23,7 @@ import { ResponseDocument } from "@devographics/core-models";
 import { isAdmin } from "@vulcanjs/permissions";
 import { VulcanGraphqlFieldSchema } from "@vulcanjs/graphql";
 import SimpleSchema from "simpl-schema";
-import {
-  getQuestionFieldName,
-  getQuestionObject,
-  parseSurvey,
-} from "./parseSurvey";
+import { getQuestionId, getQuestionObject, parseSurvey } from "./parseSurvey";
 
 // Previously it lived in Vulcan NPM, but that's something you'd want to control more
 // precisely at app level
@@ -258,7 +254,7 @@ export const getCompletionPercentage = (response: ResponseDocument) => {
       section.questions.forEach((question) => {
         if (Array.isArray(question))
           throw new Error("Question cannot be an array");
-        const questionId = getQuestionFieldName(survey, section, question);
+        const questionId = getQuestionId(survey, section, question);
         const answer = response[questionId];
         const ignoreQuestion =
           question.template && ignoredFieldTypes.includes(question.template);
@@ -304,7 +300,7 @@ export const getSectionCompletionPercentage = (
       console.warn("Found array question", section, question);
       return false;
     }
-    const questionObject = getQuestionObject(question, section);
+    const questionObject = getQuestionObject(question /*, section*/);
     // NOTE: if question has no template it's a valid one, it will use the default radiogroup input
     const isValidTemplate =
       !questionObject.template ||
@@ -316,9 +312,9 @@ export const getSectionCompletionPercentage = (
   if (!questionsCount) return null;
 
   const completedQuestions = completableQuestions.filter((question) => {
-    const questionObject = getQuestionObject(question, section) as Required<
-      Pick<Field, "fieldName">
-    >;
+    const questionObject = getQuestionObject(
+      question /*, section*/
+    ) as Required<Pick<Field, "fieldName">>;
     const { fieldName } = questionObject;
     const isCompleted =
       response[fieldName] !== null &&
