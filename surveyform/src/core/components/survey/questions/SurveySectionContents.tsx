@@ -14,7 +14,7 @@ import {
   useVulcanComponents,
   VulcanComponentsProvider,
 } from "@vulcanjs/react-ui";
-import { Response } from "~/modules/responses/model";
+import { ResponsePerSurvey } from "~/modules/responses/model";
 import { Save, SaveFragment } from "@devographics/core-models";
 import type { ParsedQuestion, SurveyType } from "@devographics/core-models";
 import { useUser } from "~/account/user/hooks";
@@ -99,7 +99,6 @@ const SurveySectionContents = ({
 
   const isLastSection = !nextSection;
 
-  console.log("response");
   const isDisabled = !canModifyResponse(response, user);
 
   return (
@@ -139,7 +138,7 @@ const SurveySectionContents = ({
           <Components.SmartForm
             documentId={response && response._id}
             fields={fields}
-            model={Response}
+            model={ResponsePerSurvey[survey.slug!]}
             // TODO: check those params in the smart form, they should accept DocumentNode and not only strings
             // + the name should be retrieved using getFragmentName from the DocumentNode fragment
             //queryFragment={ResponseFragment}

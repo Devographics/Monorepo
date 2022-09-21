@@ -1,7 +1,6 @@
-import Surveys from "~/core/components/pages/Surveys";
 import { getLocaleStaticProps } from "~/i18n/server/ssr";
 export const IndexPage = () => {
-  return <Surveys />;
+  return <a href="/admin">Go to admin area</a>;
 };
 
 export async function getStaticProps(ctx) {

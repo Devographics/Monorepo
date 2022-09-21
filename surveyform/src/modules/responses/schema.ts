@@ -3,6 +3,7 @@ import surveys from "~/surveys";
 import { getQuestionSchema } from "./helpers";
 import { VulcanGraphqlSchema } from "@vulcanjs/graphql";
 import { getQuestionId, getQuestionObject } from "./parseSurvey";
+import cloneDeep from "lodash/cloneDeep.js";
 
 export const schema: VulcanGraphqlSchema = {
   // default properties
@@ -224,13 +225,23 @@ export const schema: VulcanGraphqlSchema = {
   // },
 };
 
+const coreSchema = Object.freeze(cloneDeep(schema)) as VulcanGraphqlSchema;
+
 /**
  *
  *
  * Just put all questions for all surveys on the root of the schema
  */
 // let i = 0;
+/**
+ * Have one schema per survey
+ */
+export const schemaPerSurvey: { [slug: string]: VulcanGraphqlSchema } = {};
+
 surveys.forEach((survey) => {
+  if (survey.slug) {
+    schemaPerSurvey[survey.slug] = coreSchema;
+  }
   survey.outline.forEach((section) => {
     section.questions &&
       section.questions.forEach((questionOrId) => {
@@ -247,6 +258,9 @@ surveys.forEach((survey) => {
         );
         const questionId = getQuestionId(survey, section, questionObject);
         schema[questionId] = questionSchema;
+        if (survey.slug) {
+          schemaPerSurvey[survey.slug][questionId] = questionSchema;
+        }
       });
   });
 });
