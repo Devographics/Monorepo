@@ -1,14 +1,9 @@
 import countriesOptions from "../countriesOptions";
-import Bracket from "~/core/components/forms/Bracket";
 import { makeAutocomplete } from "@vulcanjs/graphql";
-import { Help } from "~/core/components/forms/Help";
 import type {
   FieldTemplateId,
   ParsedQuestion,
 } from "@devographics/core-models";
-import RaceEthnicity from "~/core/components/forms/RaceEthnicity";
-import Email2 from "~/core/components/forms/Email2";
-import Hidden from "~/core/components/forms/Hidden";
 
 export const templates: {
   [templateName in FieldTemplateId]: (
@@ -55,25 +50,23 @@ export const templates: {
     ],
   }),
   project: () =>
-    makeAutocomplete(
-      {
+      ({
         suffix: "prenormalized",
         type: Array,
         arrayItem: {
           type: String,
           optional: true,
         },
-      },
-      {
+        autocompleteOptions: {
         autocompletePropertyName: "name",
         queryResolverName: "projects",
         fragmentName: "ProjectFragment",
         valuePropertyName: "id",
       }
-    ),
+    }),
 
   people: () =>
-    makeAutocomplete(
+    (
       {
         suffix: "prenormalized",
         type: Array,
@@ -104,12 +97,12 @@ export const templates: {
             }
           }
         `,
-      },
-      {
-        autocompletePropertyName: "name", // overridden by field definition above
-        queryResolverName: "entities", // overridden by field definition above
-        fragmentName: "EntityFragment", // overridden by field definition above
-        valuePropertyName: "id", // overridden by field definition above
+        autocompleteOptions: {
+          autocompletePropertyName: "name", // overridden by field definition above
+          queryResolverName: "entities", // overridden by field definition above
+          fragmentName: "EntityFragment", // overridden by field definition above
+          valuePropertyName: "id", // overridden by field definition above
+        }
       }
     ),
   proficiency: ({ allowother = false }) => ({
@@ -166,7 +159,7 @@ export const templates: {
   }),
   // statictext: () => ({}),
   // just normal text
-  help: () => ({ input: Help }),
+  help: () => ({ input: 'help' }),
   happiness: () => ({
     input: "radiogroup",
     type: Number,
@@ -186,7 +179,7 @@ export const templates: {
   },
   bracket: (/*questionObject: any*/) => {
     return {
-      input: Bracket,
+      input: 'bracket',
       type: Array,
       // TODO: probably wont work
       arrayItem: {
@@ -200,13 +193,13 @@ export const templates: {
       },
     };
   },
-  email2: () => ({ input: Email2 }),
-  receive_notifications: () => ({ input: Hidden, type: Boolean }),
+  email2: () => ({ input: 'email2' }),
+  receive_notifications: () => ({ input: 'hidden', type: Boolean }),
   race_ethnicity: ({ id, allowother = false }) => ({
     allowmultiple: true,
     allowother,
     randomize: true,
     suffix: "choices",
-    input: RaceEthnicity,
+    input: 'raceEthnicity',
   }),
 };
