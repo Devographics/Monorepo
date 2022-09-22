@@ -2,10 +2,20 @@
 FROM node:16-alpine AS deps
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
-WORKDIR /app
+WORKDIR /monorepo
 
 # Install dependencies based on the preferred package manager
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
+COPY yarn.lock* package-lock.json* pnpm-lock.yaml* ./
+# Package.json for the monorepo but also PNPM workspace config
+# /!\ This means workspace names must be the same as in the file,
+# avoid naming the folder "app" instead keep it "surveyform"
+COPY package.json .npmrc pnpm-workspace.yaml ./
+# App dependency and shared code
+# Be careful with the end "/" => no slash mean copy folder/file WITH this name,
+# a slash mean copy IN this folder
+COPY surveyadmin/package.json ./surveyadmin/
+# TODO: we should copy only package.json, can we use a glob here?
+COPY shared ./shared
 # FIXME: not working in monorepo 
 # See https://github.com/pnpm/pnpm/discussions/4247
 # RUN \
@@ -16,13 +26,18 @@ COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
 #     fi
 # FIXME: won't work either if we don't copy shared code 
 # => we need a Dockerfile at the root instead
-RUN yarn global add pnpm && pnpm i;
+RUN yarn global add pnpm && pnpm i --no-optional;
+RUN exit 0
 
 # Rebuild the source code only when needed
 FROM node:16-alpine AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
+WORKDIR /monorepo
+# Copy node_modules generated earlier in a first layer
+COPY --from=deps /monorepo/node_modules ./node_modules
+COPY --from=deps /monorepo/shared ./shared
+COPY --from=deps /monorepo/surveyadmin/node_modules ./surveyadmin/node_modules
+# Copy code as well
+COPY ./surveyadmin ./surveyadmin
 
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry
@@ -30,6 +45,8 @@ COPY . .
 # ENV NEXT_TELEMETRY_DISABLED 1
 
 # RUN yarn build
+WORKDIR /monorepo/surveyadmin
+RUN yarn global add pnpm;
 RUN pnpm build
 
 # If using npm comment out above and use below instead
@@ -46,12 +63,12 @@ ENV NODE_ENV production
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-COPY --from=builder /app/public ./public
+COPY --from=builder /monorepo/surveyadmin/public ./public
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /monorepo/app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /monorepo/app/.next/static ./.next/static
 
 USER nextjs
 

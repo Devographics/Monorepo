@@ -1,14 +1,14 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Build and Unit test
+name: Typecheck and unit test Surveyform
 
 # Controls when the action will run.
 on:
-  # Triggers the workflow on push or pull request events but only for the devel branch
   push:
-    branches: [devel]
+    branches: [main]
+    paths: ["surveyform/src/**", "shared/**"]
   pull_request:
-    branches: [devel]
+    branches: [main]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -21,8 +21,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2.1.5
-      - run: npm i -g yarn || true # Not necessary on Github but useful to test locally with `act`
-      - run: yarn install --frozen-lockfile 
+      - run: npm i -g pnpm || true # Not necessary on Github but useful to test locally with `act`
+      - run: pnpm install --frozen-lockfile
       # Doesn't exist in yarn v2
       # --check-files
 
@@ -34,15 +34,16 @@ jobs:
 
       # Steps represent a sequence of tasks that will be executed as part of the job
       #  steps:
-      - run: yarn run typecheck
-      - run: yarn run test:unit
+      - run: pnpm run typecheck
+      - run: pnpm run test:unit
 
       #build:
       #  runs-on: ubuntu-latest
       #  needs: install
-      #
       #    steps:
-      - run: yarn run build
+      # UNCOMMENT TO TEST BUILD
+      # quite slow
+      # - run: pnpm run build
       # Runs a single command using the runners shell
       #- name: Run a one-line script
       #  run: echo Hello, world!
