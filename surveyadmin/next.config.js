@@ -1,3 +1,4 @@
+const path = require("path")
 const { locales } = require("./src/i18n/data/locales");
 const { extendNextConfig } = require("./packages/@vulcanjs/next-config");
 // Use @next/mdx for a basic MDX support.
@@ -133,6 +134,13 @@ const moduleExports = (phase, { defaultConfig }) => {
     disableServerWebpackPlugin: shouldDisableSentry,
     disableClientWebpackPlugin: shouldDisableSentry,
   };
+
+  extendedConfig.output = "standalone"
+
+  extendedConfig.experimental = {
+    ...(extendNextConfig.experimental || {}),
+    outputFileTracingRoot: path.join(__dirname, '../'),
+  }
 
   // Finally add relevant webpack configs/utils
   extendedConfig = flowRight([
