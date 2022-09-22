@@ -40,6 +40,7 @@ export interface ParsedQuestion extends Pick<Field, "template"> {
   // we may want to differentiate the QuestionTemplate from the parsed question generated
   // by "getQuestionObject" in the future
   /** Simple Schema type: String | Number etc. */
+  fieldName?: string;
   type?: any;
   optional?: any;
   arrayItem?: ParsedQuestion;
@@ -50,6 +51,13 @@ export interface ParsedQuestion extends Pick<Field, "template"> {
   alias?: string;
   year?: any;
   autocompleteQuery?: () => any;
+  autocompleteOptions?: {
+    autocompletePropertyName: string;
+    fragmentName?: string;
+    valuePropertyName?: string;
+    multi?: boolean;
+    queryResolverName?: string;
+  };
   dynamicQuery?: () => any;
   /**
    * Inherited from Vulcan

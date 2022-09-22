@@ -49,62 +49,58 @@ export const templates: {
       { value: "would_not_use", intlId: "options.tools.would_not_use" },
     ],
   }),
-  project: () =>
-      ({
-        suffix: "prenormalized",
-        type: Array,
-        arrayItem: {
-          type: String,
-          optional: true,
-        },
-        autocompleteOptions: {
-        autocompletePropertyName: "name",
-        queryResolverName: "projects",
-        fragmentName: "ProjectFragment",
-        valuePropertyName: "id",
-      }
-    }),
+  project: () => ({
+    suffix: "prenormalized",
+    type: Array,
+    arrayItem: {
+      type: String,
+      optional: true,
+    },
+    autocompleteOptions: {
+      autocompletePropertyName: "name",
+      queryResolverName: "projects",
+      fragmentName: "ProjectFragment",
+      valuePropertyName: "id",
+    },
+  }),
 
-  people: () =>
-    (
-      {
-        suffix: "prenormalized",
-        type: Array,
-        arrayItem: {
-          type: String,
-          optional: true,
-        },
-        options: (props) => {
-          return props?.data?.entities.map((document) => ({
-            ...document,
-            value: document.id,
-            label: document.name,
-          }));
-        },
-        query: () => /* GraphQL */ `
-          query FormComponentDynamicEntityQuery($value: [String!]) {
-            entities(id: { _in: $value }) {
-              id
-              name
-            }
-          }
-        `,
-        autocompleteQuery: () => /* GraphQL */ `
-          query AutocompletePeopleQuery($queryString: String) {
-            entities(tags: ["people"], name: { _like: $queryString }) {
-              id
-              name
-            }
-          }
-        `,
-        autocompleteOptions: {
-          autocompletePropertyName: "name", // overridden by field definition above
-          queryResolverName: "entities", // overridden by field definition above
-          fragmentName: "EntityFragment", // overridden by field definition above
-          valuePropertyName: "id", // overridden by field definition above
+  people: () => ({
+    suffix: "prenormalized",
+    type: Array,
+    arrayItem: {
+      type: String,
+      optional: true,
+    },
+    options: (props) => {
+      return props?.data?.entities.map((document) => ({
+        ...document,
+        value: document.id,
+        label: document.name,
+      }));
+    },
+    query: () => /* GraphQL */ `
+      query FormComponentDynamicEntityQuery($value: [String!]) {
+        entities(id: { _in: $value }) {
+          id
+          name
         }
       }
-    ),
+    `,
+    autocompleteQuery: () => /* GraphQL */ `
+      query AutocompletePeopleQuery($queryString: String) {
+        entities(tags: ["people"], name: { _like: $queryString }) {
+          id
+          name
+        }
+      }
+    `,
+    autocompleteOptions: {
+      autocompletePropertyName: "name", // overridden by field definition above
+      queryResolverName: "entities", // overridden by field definition above
+      fragmentName: "EntityFragment", // overridden by field definition above
+      valuePropertyName: "id", // overridden by field definition above
+    },
+  }),
   proficiency: ({ allowother = false }) => ({
     allowmultiple: false,
     allowother,
@@ -159,7 +155,7 @@ export const templates: {
   }),
   // statictext: () => ({}),
   // just normal text
-  help: () => ({ input: 'help' }),
+  help: () => ({ input: "help" }),
   happiness: () => ({
     input: "radiogroup",
     type: Number,
@@ -179,7 +175,7 @@ export const templates: {
   },
   bracket: (/*questionObject: any*/) => {
     return {
-      input: 'bracket',
+      input: "bracket",
       type: Array,
       // TODO: probably wont work
       arrayItem: {
@@ -193,13 +189,13 @@ export const templates: {
       },
     };
   },
-  email2: () => ({ input: 'email2' }),
-  receive_notifications: () => ({ input: 'hidden', type: Boolean }),
+  email2: () => ({ input: "email2" }),
+  receive_notifications: () => ({ input: "hidden", type: Boolean }),
   race_ethnicity: ({ id, allowother = false }) => ({
     allowmultiple: true,
     allowother,
     randomize: true,
     suffix: "choices",
-    input: 'raceEthnicity',
+    input: "raceEthnicity",
   }),
 };

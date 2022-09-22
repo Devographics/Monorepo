@@ -300,7 +300,7 @@ export const getSectionCompletionPercentage = (
       console.warn("Found array question", section, question);
       return false;
     }
-    const questionObject = getQuestionObject(question /*, section*/);
+    const questionObject = getQuestionObject(question, section);
     // NOTE: if question has no template it's a valid one, it will use the default radiogroup input
     const isValidTemplate =
       !questionObject.template ||
@@ -312,9 +312,9 @@ export const getSectionCompletionPercentage = (
   if (!questionsCount) return null;
 
   const completedQuestions = completableQuestions.filter((question) => {
-    const questionObject = getQuestionObject(
-      question /*, section*/
-    ) as Required<Pick<Field, "fieldName">>;
+    const questionObject = getQuestionObject(question, section) as Required<
+      Pick<Field, "fieldName">
+    >;
     const { fieldName } = questionObject;
     const isCompleted =
       response[fieldName] !== null &&
