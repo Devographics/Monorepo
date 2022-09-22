@@ -1,4 +1,14 @@
+# See https://github.com/vercel/next.js/tree/cc1e35d821e72e191a01635cd7e97c48d36afbc3/examples/with-docker
+# See https://github.com/vercel/next.js/tree/canary/examples/with-docker
+Dockerfile
+.dockerignore
+node_modules
+npm-debug.log
+README.md
+.next
+.git
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
 
 # dependencies
 node_modules
