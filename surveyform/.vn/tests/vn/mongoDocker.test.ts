@@ -30,7 +30,7 @@ describe("mongo docker", () => {
   });
   test("connects to local mongo db", async () => {
     // most of the complexity comes from running yarn run start:mongo in the background, then killing it in order to have a clean test
-    const rawCmd = "yarn";
+    const rawCmd = "pnpm";
     const args = ["run", "start:mongo"];
     const child = spawn(rawCmd, args, {
       env: { ...process.env, COVERAGE: "1" },
