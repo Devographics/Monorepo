@@ -49,11 +49,7 @@ const entitiesQuery = print(gql`
  * Fetch raw entities from the trasnlation API
  * @returns
  */
-export const fetchEntities = async (vulcanVariables) => {
-  const { id } = vulcanVariables;
-  const variables = {
-    ids: id._in,
-  };
+export const fetchEntities = async (variables) => {
   const response = await fetch(serverConfig.translationAPI, {
     method: "POST",
     headers: {

@@ -14,8 +14,8 @@ import { SaveMongoCollection } from "@devographics/core-models/server";
 import {
   entitiesResolver,
   entitiesTypeDefs,
-  entityType,
-  exampleType,
+  // entityType,
+  // exampleType,
 } from "~/modules/entities/server/graphql";
 import {
   localeResolver,
@@ -118,8 +118,8 @@ const twitterType = `type Twitter {
 
 addGraphQLSchema(twitterType);
 
-addGraphQLSchema(entityType);
-addGraphQLSchema(exampleType);
+// addGraphQLSchema(entityType);
+// addGraphQLSchema(exampleType);
 addGraphQLQuery(entitiesTypeDefs);
 addGraphQLResolvers({ Query: { entities: entitiesResolver } });
 
