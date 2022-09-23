@@ -68,6 +68,7 @@ Example Info
 type Example {
     language: String
     code: String
+    codeHighlighted: String
 }
 
 """

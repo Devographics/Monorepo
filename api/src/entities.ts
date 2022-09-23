@@ -1,4 +1,4 @@
-import { Entity } from './types'
+import { Entity } from "@devographics/core-models";
 import { Octokit } from '@octokit/core'
 import fetch from 'node-fetch'
 import yaml from 'js-yaml'
@@ -6,6 +6,7 @@ import { readdir, readFile } from 'fs/promises'
 import last from 'lodash/last'
 import { logToFile } from './debug'
 import marked from 'marked'
+import hljs from 'highlight.js/lib/common'
 
 let entities: Entity[] = []
 
@@ -16,7 +17,7 @@ export const loadOrGetEntities = async () => {
     if (entities.length === 0) {
         entities = await loadEntities()
     }
-    return parseEntitiesMarkdown(entities)
+    return highlightEntitiesExampleCode(parseEntitiesMarkdown(entities))
 }
 
 const markdownFields = ['name', 'description']
@@ -36,6 +37,17 @@ export const parseEntitiesMarkdown = (entities: Entity[]) => {
     }
     return entities
 }
+
+export const highlightEntitiesExampleCode = (entities: Entity[]) => {
+    for (const entity of entities) {
+        const { example } = entity
+        if (example) {
+            const { code, language} = example
+            example.codeHighlighted = hljs.highlight(code, {language}).value
+        }
+    }
+    return entities
+}  
 
 export const loadFromGitHub = async () => {
     const entities: Entity[] = []

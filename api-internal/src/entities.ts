@@ -1,4 +1,5 @@
-import { Entity } from './types'
+// import { Entity } from './types'
+import { Entity } from "@devographics/core-models";
 import { Octokit } from '@octokit/core'
 import fetch from 'node-fetch'
 import yaml from 'js-yaml'
@@ -7,6 +8,7 @@ import last from 'lodash/last.js'
 import { logToFile } from './debug'
 import path from 'path'
 import marked from 'marked'
+import hljs from 'highlight.js/lib/common'
 
 // @see https://blog.logrocket.com/alternatives-dirname-node-js-es-modules/
 // /!\ __dirname must be recomputed for each file, don't try to move this code
@@ -22,7 +24,7 @@ export const loadOrGetEntities = async () => {
     if (entities.length === 0) {
         entities = await loadEntities()
     }
-    return parseEntitiesMarkdown(entities)
+    return highlightEntitiesExampleCode(parseEntitiesMarkdown(entities))
 }
 
 const markdownFields = ['name', 'description']
@@ -42,6 +44,17 @@ export const parseEntitiesMarkdown = (entities: Entity[]) => {
     }
     return entities
 }
+
+export const highlightEntitiesExampleCode = (entities: Entity[]) => {
+    for (const entity of entities) {
+        const { example } = entity
+        if (example) {
+            const { code, language} = example
+            example.codeHighlighted = hljs.highlight(code, {language}).value
+        }
+    }
+    return entities
+}   
 
 export const loadFromGitHub = async () => {
     const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
