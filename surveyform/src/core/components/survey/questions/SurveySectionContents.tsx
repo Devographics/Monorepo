@@ -35,8 +35,10 @@ const getEntityIds = (questions: Array<ParsedQuestion & { id: string }>) => {
       } else {
         optionsArray = options;
       }
-      optionsArray.forEach((option) => {
-        ids.push(option.id);
+      optionsArray.forEach(({ id }) => {
+        if (id) {
+          ids.push(id);
+        }
       });
     }
   });
