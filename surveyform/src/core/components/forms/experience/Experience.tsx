@@ -99,6 +99,7 @@ export const FormComponentRadioGroup = ({
               : "form-check-unchecked"
             : "";
           return (
+            // @ts-expect-error
             <FormCheck
               {...otherInputProperties}
               key={i}
