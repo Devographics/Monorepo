@@ -19,4 +19,5 @@ export interface Entity {
 export interface Example {
   language: string;
   code: string;
+  codeHighlighted: string;
 }
