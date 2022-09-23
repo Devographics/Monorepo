@@ -31,6 +31,9 @@ type Entity {
 
     companyName: String
     company: Entity
+
+    # for features
+    example: Example
 }
 
 
@@ -56,4 +59,13 @@ NPM Info
 type NPM {
     name: String
     url: String
+}
+
+
+"""
+Example Info
+"""
+type Example {
+    language: String
+    code: String
 }

@@ -6,6 +6,7 @@ import { readdir, readFile } from 'fs/promises'
 import last from 'lodash/last.js'
 import { logToFile } from './debug'
 import path from 'path'
+import marked from 'marked'
 
 // @see https://blog.logrocket.com/alternatives-dirname-node-js-es-modules/
 // /!\ __dirname must be recomputed for each file, don't try to move this code
@@ -20,6 +21,24 @@ let entities: Entity[] = []
 export const loadOrGetEntities = async () => {
     if (entities.length === 0) {
         entities = await loadEntities()
+    }
+    return parseEntitiesMarkdown(entities)
+}
+
+const markdownFields = ['name', 'description']
+export const parseEntitiesMarkdown = (entities: Entity[]) => {
+    for (const entity of entities) {
+        for (const fieldName of markdownFields) {
+            const field = entity[fieldName]
+            if (field) {
+                const fieldHtml = marked.parseInline(field)
+                const containsTagRegex = new RegExp(/(<([^>]+)>)/i)
+
+                if (field !== fieldHtml || containsTagRegex.test(field)) {
+                    entity[fieldName] = fieldHtml
+                }
+            }
+        }
     }
     return entities
 }

@@ -5,6 +5,7 @@ import yaml from 'js-yaml'
 import { readdir, readFile } from 'fs/promises'
 import last from 'lodash/last'
 import { logToFile } from './debug'
+import marked from 'marked'
 
 let entities: Entity[] = []
 
@@ -14,6 +15,24 @@ const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
 export const loadOrGetEntities = async () => {
     if (entities.length === 0) {
         entities = await loadEntities()
+    }
+    return parseEntitiesMarkdown(entities)
+}
+
+const markdownFields = ['name', 'description']
+export const parseEntitiesMarkdown = (entities: Entity[]) => {
+    for (const entity of entities) {
+        for (const fieldName of markdownFields) {
+            const field = entity[fieldName]
+            if (field) {
+                const fieldHtml = marked.parseInline(field)
+                const containsTagRegex = new RegExp(/(<([^>]+)>)/i)
+
+                if (field !== fieldHtml || containsTagRegex.test(field)) {
+                    entity[fieldName] = fieldHtml
+                }
+            }
+        }
     }
     return entities
 }
