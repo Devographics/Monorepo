@@ -15,6 +15,7 @@ import {
   entitiesResolver,
   entitiesTypeDefs,
   entityType,
+  exampleType,
 } from "~/modules/entities/server/graphql";
 import {
   localeResolver,
@@ -118,6 +119,7 @@ const twitterType = `type Twitter {
 addGraphQLSchema(twitterType);
 
 addGraphQLSchema(entityType);
+addGraphQLSchema(exampleType);
 addGraphQLQuery(entitiesTypeDefs);
 addGraphQLResolvers({ Query: { entities: entitiesResolver } });
 

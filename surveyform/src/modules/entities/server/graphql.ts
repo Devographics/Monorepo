@@ -20,6 +20,13 @@ export const entityType = `type Entity {
   twitter: Twitter
   companyName: String
   company: Entity
+  example: Example
+}`;
+
+
+export const exampleType = `type Example {
+  language: String
+  code: String
 }`;
 
 /**
