@@ -29,14 +29,14 @@ describe("auth", () => {
   beforeEach(() => {
     // NOTE: those operations are expensive! When testing less-critical part of your UI,
     // prefer mocking API calls! We do this only because auth is very critical
-    cy.exec("yarn run db:test:reset");
-    cy.exec("yarn run db:test:seed");
+    cy.exec("pnpm run db:test:reset");
+    cy.exec("pnpm run db:test:seed");
     cy.task("resetEmails");
   });
   after(() => {
     // clean the db when done
-    cy.exec("yarn run db:test:reset");
-    cy.exec("yarn run db:test:seed");
+    cy.exec("pnpm run db:test:reset");
+    cy.exec("pnpm run db:test:seed");
   });
 
   // NOTE: for integration testing, prefer short, unit test

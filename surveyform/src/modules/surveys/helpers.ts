@@ -14,7 +14,7 @@ export const getSurveyFieldNames = (survey: SurveyDocument) => {
           // NOTE: from the typings, it seems that questions can be arrays? To be confirmed
           throw new Error("Found an array of questions");
         }
-        const questionObject = getQuestionObject(questionOrId /*, section, i*/);
+        const questionObject = getQuestionObject(questionOrId, section);
         /*
         const questionId = getQuestionId(
           survey,

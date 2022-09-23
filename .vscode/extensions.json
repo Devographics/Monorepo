@@ -1,5 +1,6 @@
 {
     "recommendations": [
-        "skellock.just"
+        "skellock.just",
+        "esbenp.prettier-vscode"
     ]
 }

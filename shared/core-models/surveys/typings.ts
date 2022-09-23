@@ -52,6 +52,13 @@ export interface ParsedQuestion extends Pick<Field, "template"> {
   year?: any;
   autocompleteOptions?: any;
   autocompleteQuery?: () => any;
+  autocompleteOptions?: {
+    autocompletePropertyName: string;
+    fragmentName?: string;
+    valuePropertyName?: string;
+    multi?: boolean;
+    queryResolverName?: string;
+  };
   dynamicQuery?: () => any;
   /**
    * Inherited from Vulcan

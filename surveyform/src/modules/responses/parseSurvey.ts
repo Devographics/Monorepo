@@ -72,7 +72,7 @@ export const parseSurvey = (survey: SurveyDocument) => {
     return {
       ...section,
       questions,
-    };
+    } as SurveySection;
   });
   return parsedSurvey;
 };
