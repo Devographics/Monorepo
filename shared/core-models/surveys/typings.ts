@@ -50,7 +50,6 @@ export interface ParsedQuestion extends Pick<Field, "template"> {
   allowother?: boolean;
   alias?: string;
   year?: any;
-  autocompleteOptions?: any;
   autocompleteQuery?: () => any;
   autocompleteOptions?: {
     autocompletePropertyName: string;
