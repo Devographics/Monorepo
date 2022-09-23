@@ -8,39 +8,42 @@
  */
 import React, { useContext } from "react";
 
-import { useQuery } from "@apollo/client";
-import gql from "graphql-tag";
 import { Entity } from "@devographics/core-models";
+import { useEntitiesQuery } from "~/core/hooks/useEntitiesQuery";
 
-const entitiesQuery = gql`
-  query EntitiesQuery($tags: [String], $ids: [String]) {
-    entities(tags: $tags, ids: $ids) {
-      name
-      id
-      type
-      category
-      description
-      tags
-      mdn
-      twitterName
-      twitter {
-        userName
-        avatarUrl
-      }
-      company {
-        name
-        homepage {
-          url
-        }
-      }
-    }
-  }
-`;
+// const entitiesQuery = gql`
+//   query EntitiesQuery($tags: [String], $ids: [String]) {
+//     entities(tags: $tags, ids: $ids) {
+//       name
+//       id
+//       type
+//       category
+//       description
+//       tags
+//       mdn
+//       twitterName
+//       twitter {
+//         userName
+//         avatarUrl
+//       }
+//       company {
+//         name
+//         homepage {
+//           url
+//         }
+//       }
+//       example {
+//         language
+//         code
+//       }
+//     }
+//   }
+// `;
 
-const useEntitiesQuery = ({ tags, ids }: { tags?: string[]; ids?: string[] }) =>
-  useQuery<{ entities: Array<Entity> }>(entitiesQuery, {
-    variables: { tags, ids },
-  });
+// const useEntitiesQuery = ({ tags, ids }: { tags?: string[]; ids?: string[] }) =>
+//   useQuery<{ entities: Array<Entity> }>(entitiesQuery, {
+//     variables: { tags, ids },
+//   });
 
 const EntitiesContext = React.createContext<{
   data: { entities: Array<Entity> }; // use empty array even if loading to avoid crash if not waiting for loading
