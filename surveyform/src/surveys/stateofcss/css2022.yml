@@ -44,7 +44,7 @@ outline:
       - id: grid
       - id: subgrid
       # - id: flexbox # removed in 2022, too high usage
-      - id: multi_column
+      # - id: multi_column # removed in 2022, not new anymore, too niche
       - id: writing_modes
       - id: position_sticky
       - id: logical_properties
@@ -56,20 +56,23 @@ outline:
         year: 2021
       - id: at_container # (@container)
         year: 2021
+      # - id: containment # remove in 2022? confusing with container queries
 
-      # - id: object_view_box # too new?
-      #   year: 2023
-      # - id: viewport_percentage_length_units # too new? couldn't find much in terms of code examples
-      #   year: 2023
+      - id: object_view_box # too new?
+        year: 2022
+      - id: viewport_percentage_length_units
+        year: 2022
+      - id: media_queries_range_contexts
+        year: 2022
       
   - id: shapes_graphics
     template: feature
     slug: features
     questions:
-      - id: shapes
+      # - id: shapes # removed in 2022, not new anymore, downward trend
       - id: object_fit
-      - id: clip_path
-      - id: masks
+      # - id: clip_path # remove in 2022?
+      # - id: masks # remove in 2022?
       - id: blend_modes
       - id: filter_effects
       - id: backdrop_filter
@@ -95,8 +98,10 @@ outline:
         year: 2022
       - id: wide_gamut_colors
         year: 2022
-      # - id: relative_colors # too new?
-        # year: 2023
+      - id: predefined_color_spaces
+        year: 2022
+      - id: relative_colors
+        year: 2022
 
   - id: interactions
     template: feature
@@ -104,30 +109,32 @@ outline:
     questions:
       - id: scroll_snap
       - id: overscroll_behavior
-      - id: overflow_anchor
-      - id: touch_action
-      - id: pointer_events
+      # - id: overflow_anchor # removed in 2022, too niche/no upwards trend
+      - id: touch_action # remove in 2022?
+      # - id: pointer_events # removed in 2022, too old
       - id: scroll_timeline
 
       - id: scroll_behavior
         year: 2022
       - id: scroll_padding
         year: 2022
+      - id: scrollbar_gutter
+        year: 2022
 
   - id: typography
     template: feature
     slug: features
     questions:
-      - id: font_variant
-      - id: initial_letter
-      # - id: font_variant_numeric # removed because there is already font-variant
+      # - id: font_variant # remove in 2022? downward trend
+      # - id: initial_letter # removed in 2022, downward trend and no browser support
+      # - id: font_variant_numeric # removed in 2022, because there is already font-variant
       - id: font_display
       - id: line_clamp
       - id: variable_fonts
 
       - id: font_palette
         year: 2022
-      # - id: color_fonts # redundant with font-palette?
+      # - id: color_fonts # not a specific CSS feature…
       #   year: 2022
 
   - id: accessibility
@@ -142,13 +149,15 @@ outline:
         year: 2021
       - id: color_scheme
         year: 2021
-      - id: tabindex
-        year: 2021
-      - id: aria_attributes
-        year: 2021
+      # - id: tabindex # removed in 2022, not CSS
+      #   year: 2021
+      # - id: aria_attributes # removed in 2022, not CSS
+      #   year: 2021
       # - prefers-reduced-transparency # not supported yet
-      # - prefers-contrast # not supported yet
-      # - forced-colors # not supported yet
+      - id: prefers_contrast
+        year: 2022
+      - id: forced_colors
+        year: 2022
       # - inverted-colors # not supported yet
 
       - id: focus_visible
@@ -184,7 +193,6 @@ outline:
     questions:
       - id: variables
       - id: feature_support_queries # (@supports)
-      - id: containment
       - id: will_change
       # - id: calc # removed in 2022, too high usage
       # - id: houdini # removed in 2022, not specific enough
@@ -196,20 +204,29 @@ outline:
       - id: cascade_layers
         year: 2022
 
-      - id: houdini_paint_api
+      - id: shadow_dom_part
         year: 2022
+      - id: shadow_dom_host
+        year: 2022
+      - id: shadow_dom_slotted
+        year: 2022
+      # - id: houdini_paint_api # remove in 2022? not much activity
+      #   year: 2022
 
       # - id: when_else_rules # too new?
       #   year: 2023
-      # - id: trigonometric_functions # too new?
-      #   year: 2023
+      - id: trigonometric_functions # too new?
+        year: 2022
       # - id: stepped_value_functions # too new?
       #   year: 2023
-      # - id: css_nesting # too new?
-      #   year: 2023
+      - id: css_nesting # too new?
+        year: 2022
       # - id: env_function # too new?
       #   year: 2023
 
+      - id: image_set
+        year: 2022
+        
   ### TOOLS ###
 
   # - id: pre_post_processors # removed in 2022
