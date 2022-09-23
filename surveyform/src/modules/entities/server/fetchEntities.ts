@@ -40,6 +40,7 @@ const entitiesQuery = print(gql`
       example {
         language
         code
+        codeHighlighted
       }
     }
   }

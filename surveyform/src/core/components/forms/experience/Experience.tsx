@@ -125,12 +125,16 @@ export const FormComponentRadioGroup = ({
   );
 };
 
-const CodeExample = ({ language, code }) => (
-  <div>
-    <pre>
-      <code>{code}</code>
-    </pre>
-  </div>
-);
+const CodeExample = ({ language, code, codeHighlighted }) => {
+  const Components = useVulcanComponents();
+  return (
+    <div className="code-example">
+      <h5 className="code-example-heading">
+        <Components.FormattedMessage id="general.code_example" />
+      </h5>
+      <div dangerouslySetInnerHTML={{ __html: codeHighlighted }} />
+    </div>
+  );
+};
 
 export default FormComponentRadioGroup;

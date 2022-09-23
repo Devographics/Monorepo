@@ -98,8 +98,6 @@ outline:
         year: 2022
       - id: wide_gamut_colors
         year: 2022
-      - id: predefined_color_spaces
-        year: 2022
       - id: relative_colors
         year: 2022
 

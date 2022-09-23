@@ -235,8 +235,17 @@
   }
 }
 
-.form-race-ethnicity-not-allowed{
+.form-race-ethnicity-not-allowed {
   padding: $spacing/2;
   background: $redTransparent;
   margin-bottom: $spacing;
+}
+
+.code-example {
+  background: $bg-color-light;
+  padding: $spacing/2;
+  &-heading {
+    text-transform: uppercase;
+    font-size: $small-font;
+  }
 }
