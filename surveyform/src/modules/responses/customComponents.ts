@@ -3,6 +3,8 @@ import Email2 from "~/core/components/forms/Email2";
 import Hidden from "~/core/components/forms/Hidden";
 import { Help } from "~/core/components/forms/Help";
 import Bracket from "~/core/components/forms/Bracket";
+import Feature from "~/core/components/forms/experience/Feature";
+import Tool from "~/core/components/forms/experience/Tool";
 import { makeAutocomplete } from "@vulcanjs/graphql";
 import type { ParsedQuestion } from "@devographics/core-models";
 
@@ -12,6 +14,8 @@ const customComponents = {
   hidden: Hidden,
   raceEthnicity: RaceEthnicity,
   bracket: Bracket,
+  feature: Feature,
+  tool: Tool,
 };
 
 /**

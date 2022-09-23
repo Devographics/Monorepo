@@ -47,14 +47,15 @@ const EntityLabel = ({ id, intlId, label, fallback }: EntityLabelProps) => {
     return <span className="label label-fallback">{fallback}</span>;
   }
   const { entities } = data;
-  const entity = entities && entities.find((e) => e.id === id);
+  const entity = entities?.find((e) => e.id === id);
   if (entity) {
-    const { name, isCode } = entity;
-    if (isCode) {
-      return <code className="entity-label entity-label-code">{name}</code>;
-    } else {
-      return <span className="entity-label">{name}</span>;
-    }
+    const { name } = entity;
+    return (
+      <span
+        className="entity-label"
+        dangerouslySetInnerHTML={{ __html: name }}
+      />
+    );
   } else {
     return (
       <span className="entity-label entity-label-fallback">{fallback}</span>

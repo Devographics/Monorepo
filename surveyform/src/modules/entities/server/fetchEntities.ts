@@ -65,7 +65,6 @@ export const fetchEntities = async (variables) => {
     throw new Error();
   }
   const entities = get(json, "data.entities") as Array<Entity>;
-  console.log(entities.length);
   return entities;
 };
 

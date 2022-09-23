@@ -12,7 +12,7 @@ export const templates: {
   Partial<ParsedQuestion>;
 } = {
   feature: () => ({
-    input: "radiogroup",
+    input: "feature",
     suffix: "experience",
     options: [
       {
@@ -35,7 +35,7 @@ export const templates: {
     ],
   }),
   tool: () => ({
-    input: "radiogroup",
+    input: "tool",
     suffix: "experience",
     intlPrefix: "tools",
     options: [
