@@ -13,4 +13,10 @@ export interface Entity {
   apiOnly?: boolean;
   mdn?: { url: string };
   isCode?: boolean;
+  example: Example
+}
+
+export interface Example {
+  language: string;
+  code: string;
 }
