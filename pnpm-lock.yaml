@@ -133,7 +133,6 @@ importers:
       npm-run-all: ^4.1.5
       prettier: ^2.3.2
       redis: ^4.2.0
-      shiki: ^0.11.1
       ts-loader: ^9.2.5
       tsup: ^6.2.3
       twitter-api-v2: ^1.5.2
@@ -161,7 +160,6 @@ importers:
       node-cache: 5.1.2
       node-fetch: 2.6.7
       redis: 4.3.0
-      shiki: 0.11.1
       twitter-api-v2: 1.12.5
       write-file-webpack-plugin: 4.5.1
     devDependencies:
@@ -9472,7 +9470,7 @@ packages:
     dependencies:
       '@storybook/addons': 6.5.12_sfoxds7t5ydpegc3knd667wn6m
       '@storybook/csf': 0.0.2--canary.87bc651.0
-      '@storybook/react': 6.5.12_sj4maglvst2rqfo756zxeddlqe
+      '@storybook/react': 6.5.12_kyajjngsio5o4vmfuvy754dzdq
       react: 17.0.2
     dev: false
     optional: true
@@ -21316,7 +21314,7 @@ packages:
     dependencies:
       '@mdx-js/mdx': 1.6.22
       '@mdx-js/react': 1.6.22_react@16.14.0
-      babel-jest: 26.0.1_@babel+core@7.18.13
+      babel-jest: 26.0.1_@babel+core@7.19.1
       babel-preset-react-app: 9.1.2
       gray-matter: 4.0.3
       react: 16.14.0
@@ -21605,6 +21603,7 @@ packages:
 
   /jsonc-parser/3.2.0:
     resolution: {integrity: sha512-gfFQZrcTc8CnKXp6Y4/CBT3fTc0OVuDofpre4aEeEpSBPV5X5v4+Vmx+8snU7RLPrNHPKSgLxGo9YuQzz20o+w==}
+    dev: true
 
   /jsonfile/4.0.0:
     resolution: {integrity: sha512-m6F1R3z8jjlf2imQHS2Qez5sjKWQzbuuhuJ/FKYFRZvPE3PuHcSMVZzfsLhGVOkfd20obL5SWEBew5ShlquNxg==}
@@ -28189,6 +28188,7 @@ packages:
       jsonc-parser: 3.2.0
       vscode-oniguruma: 1.6.2
       vscode-textmate: 6.0.0
+    dev: true
 
   /side-channel/1.0.4:
     resolution: {integrity: sha512-q5XPytqFEIKHkGdiMIrY10mvLRvnQh42/+GoBlFW3b2LXLE2xxJpZFdm94we0BaoV3RwJyGqg5wS7epxTv0Zvw==}
@@ -30818,9 +30818,11 @@ packages:
 
   /vscode-oniguruma/1.6.2:
     resolution: {integrity: sha512-KH8+KKov5eS/9WhofZR8M8dMHWN2gTxjMsG4jd04YhpbPR91fUj7rYQ2/XjeHCJWbg7X++ApRIU9NUwM2vTvLA==}
+    dev: true
 
   /vscode-textmate/6.0.0:
     resolution: {integrity: sha512-gu73tuZfJgu+mvCSy4UZwd2JXykjK9zAZsfmDeut5dx/1a7FeTk0XwJsSuqQn+cuMCGVbIBfl+s53X4T19DnzQ==}
+    dev: true
 
   /vscode-uri/2.1.2:
     resolution: {integrity: sha512-8TEXQxlldWAuIODdukIb+TR5s+9Ds40eSJrw+1iDDA9IFORPjMELarNQE3myz5XIkWWpdprmJjm1/SxMlWOC8A==}
