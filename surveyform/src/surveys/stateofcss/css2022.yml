@@ -496,21 +496,6 @@ outline:
         year: 2022
         template: slider
 
-      - id: interoperability_features_freeform
-        year: 2021
-        template: others
-        matchTags: [features, browser_interoperability, css_missing_features]
-
-      - id: missing_features_freeform
-        year: 2021
-        template: others
-        matchTags: [features, browser_interoperability, css_missing_features]
-
-      - id: other_pain_points_freeform
-        year: 2021
-        template: others
-        matchTags: [features, browser_interoperability, css_missing_features]
-
       - id: interop_features
         year: 2022
         template: top_n
@@ -528,6 +513,21 @@ outline:
           - id: at_container
           - id: attr_function
           
+      - id: interoperability_features_freeform
+        year: 2021
+        template: others
+        matchTags: [features, browser_interoperability, css_missing_features]
+
+      - id: missing_features_freeform
+        year: 2021
+        template: others
+        matchTags: [features, browser_interoperability, css_missing_features]
+
+      - id: other_pain_points_freeform
+        year: 2021
+        template: others
+        matchTags: [features, browser_interoperability, css_missing_features]
+
       # - id: css_pain_points
       #   intlId: opinions.css_pain_points
       #   year: 2021
