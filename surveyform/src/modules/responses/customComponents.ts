@@ -6,6 +6,7 @@ import Bracket from "~/core/components/forms/Bracket";
 import Feature from "~/core/components/forms/experience/Feature";
 import Tool from "~/core/components/forms/experience/Tool";
 import TopN from "~/core/components/forms/TopN";
+import Slider from "~/core/components/forms/Slider";
 import { makeAutocomplete } from "@vulcanjs/graphql";
 import type { ParsedQuestion } from "@devographics/core-models";
 
@@ -18,6 +19,7 @@ const customComponents = {
   feature: Feature,
   tool: Tool,
   top_n: TopN,
+  slider: Slider,
 };
 
 /**

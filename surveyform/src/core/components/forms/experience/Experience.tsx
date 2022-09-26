@@ -9,6 +9,8 @@ import {
 } from "@vulcanjs/react-ui";
 import { useEntities } from "~/core/components/common/EntitiesContext";
 
+import IconComment from "~/core/components/icons/Comment";
+
 // const OtherComponent = ({ value, path }: Pick<FormInputProps, "path" | "value">) => {
 //   const { updateCurrentValues } = useFormContext()
 //   const Components = useVulcanComponents()
@@ -121,6 +123,7 @@ export const FormComponentRadioGroup = ({
         <OtherComponent value={value} path={path} />
       )} */}
       </div>
+      <IconComment />
     </Components.FormItem>
   );
 };
