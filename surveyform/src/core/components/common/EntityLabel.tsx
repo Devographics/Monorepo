@@ -1,6 +1,7 @@
 import { useVulcanComponents } from "@vulcanjs/react-ui";
 import React from "react";
 import { Entity } from "@devographics/core-models";
+import { useEntities } from "~/core/components/common/EntitiesContext";
 
 /**
  * When using a string as label
@@ -24,8 +25,12 @@ const EntityLabel = ({
   intlId,
   label,
   fallback,
-  entity,
 }: EntityLabelProps) => {
+
+  const { data, loading: entitiesLoading, error } = useEntities();
+  const { entities } = data;
+  const entity = entities?.find((e) => e.id === id);
+
   // string label
   if (label) {
     // if label is provided, use that

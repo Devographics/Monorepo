@@ -498,19 +498,16 @@ outline:
 
       - id: interoperability_features_freeform
         year: 2021
-        sectionSlug: opinions_others
         template: others
         matchTags: [features, browser_interoperability, css_missing_features]
 
       - id: missing_features_freeform
         year: 2021
-        sectionSlug: opinions_others
         template: others
         matchTags: [features, browser_interoperability, css_missing_features]
 
       - id: other_pain_points_freeform
         year: 2021
-        sectionSlug: opinions_others
         template: others
         matchTags: [features, browser_interoperability, css_missing_features]
 
