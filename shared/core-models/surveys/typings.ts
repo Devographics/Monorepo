@@ -21,7 +21,9 @@ export type FieldTemplateId =
   | "people"
   | "email2"
   | "receive_notifications"
-  | "race_ethnicity";
+  | "race_ethnicity"
+  | "slider"
+  | "top_n";
 
 // TODO: what is a section template? The default for all questions?
 export type SectionTemplateId = FieldTemplateId | string;

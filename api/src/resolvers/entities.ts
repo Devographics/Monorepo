@@ -1,4 +1,5 @@
-import { GitHub, Entity, RequestContext } from '../types'
+import { Entity } from "@devographics/core-models";
+import { GitHub, RequestContext } from '../types'
 import projects from '../data/bestofjs.yml'
 import { fetchMdnResource, fetchTwitterUser } from '../external_apis'
 import { useCache } from '../caching'
