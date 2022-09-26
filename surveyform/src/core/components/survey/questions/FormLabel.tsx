@@ -11,7 +11,7 @@ export interface FormLabelProps {
   path: string;
   year?: number;
   inputProperties: any;
-  entity: Entity;
+  entity?: Entity;
 }
 export const FormLabel = ({
   questionId,

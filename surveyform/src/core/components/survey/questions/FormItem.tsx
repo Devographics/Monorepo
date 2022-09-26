@@ -22,7 +22,7 @@ export interface FormItemProps
   description?: string;
   loading?: boolean;
   intlKeys?: Array<string>;
-  questionId?: string;
+  questionId: string;
 }
 export const FormItem = (props: FormItemProps) => {
   const {
