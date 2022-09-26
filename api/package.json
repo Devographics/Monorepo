@@ -3,6 +3,7 @@
     "version": "1.0.0",
     "license": "MIT",
     "dependencies": {
+        "@devographics/core-models": "workspace:*",
         "@octokit/core": "^3.5.1",
         "@sentry/node": "^7.11.1",
         "@sentry/tracing": "^7.11.1",

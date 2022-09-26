@@ -1,5 +1,5 @@
 // import { Entity } from './types'
-import { Entity } from "@devographics/core-models";
+import { Entity } from '@devographics/core-models'
 import { Octokit } from '@octokit/core'
 import fetch from 'node-fetch'
 import yaml from 'js-yaml'
@@ -24,10 +24,12 @@ export const loadOrGetEntities = async () => {
     if (entities.length === 0) {
         entities = await loadEntities()
     }
-    return highlightEntitiesExampleCode(parseEntitiesMarkdown(entities))
+    return await highlightEntitiesExampleCode(parseEntitiesMarkdown(entities))
 }
 
-const markdownFields = ['name', 'description']
+type EntityFields = keyof Entity;
+
+const markdownFields = ['name', 'description'] as EntityFields[] 
 export const parseEntitiesMarkdown = (entities: Entity[]) => {
     for (const entity of entities) {
         for (const fieldName of markdownFields) {
@@ -45,16 +47,17 @@ export const parseEntitiesMarkdown = (entities: Entity[]) => {
     return entities
 }
 
-export const highlightEntitiesExampleCode = (entities: Entity[]) => {
+export const highlightEntitiesExampleCode = async (entities: Entity[]) => {
     for (const entity of entities) {
         const { example } = entity
         if (example) {
-            const { code, language} = example
-            example.codeHighlighted = hljs.highlight(code, {language}).value
+            const { code, language } = example
+            // make sure to trim any extra /n at the end
+            example.codeHighlighted = hljs.highlight(code.trim(), {language}).value
         }
     }
     return entities
-}   
+}
 
 export const loadFromGitHub = async () => {
     const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
@@ -145,21 +148,16 @@ export const initEntities = async () => {
 
 export const getEntities = async ({
     ids,
-    type,
     tag,
     tags
 }: {
     ids?: string[]
-    type?: string
     tag?: string
     tags?: string[]
 }) => {
     let entities = await loadOrGetEntities()
     if (ids) {
         entities = entities.filter(e => ids.includes(e.id))
-    }
-    if (type) {
-        entities = entities.filter(e => e.type === type)
     }
     if (tag) {
         entities = entities.filter(e => e.tags && e.tags.includes(tag))
@@ -186,8 +184,7 @@ export const getEntity = async ({ id }: { id: string | number }) => {
             return (
                 (e.id && e.id.toLowerCase() === lowerCaseId) ||
                 (e.id && e.id.toLowerCase().replace(/\-/g, '_') === lowerCaseId) ||
-                (e.name && e.name.toLowerCase() === lowerCaseId) ||
-                (e.aliases && e.aliases.find((a: string) => a.toLowerCase() === lowerCaseId))
+                (e.name && e.name.toLowerCase() === lowerCaseId)
             )
         })
 

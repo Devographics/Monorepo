@@ -1,5 +1,6 @@
 import { EnumTypeDefinitionNode } from 'graphql'
-import { Entity, StringFile, Locale, TranslationStringObject } from './types'
+import { Entity } from "@devographics/core-models";
+import { StringFile, Locale, TranslationStringObject } from './types'
 import typeDefs from './type_defs/schema.graphql'
 import { Octokit } from '@octokit/core'
 import fetch from 'node-fetch'

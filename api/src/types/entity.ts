@@ -1,5 +1,6 @@
 import { GitHub } from './github'
 import { MDN } from './mdn'
+import { Entity } from "@devographics/core-models";
 
 export interface EntityBucket {
     id: string
