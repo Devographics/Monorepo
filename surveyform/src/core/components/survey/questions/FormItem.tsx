@@ -11,6 +11,7 @@ import { FormLabel, FormLabelProps } from "./FormLabel";
 import { FormInputLoading } from "./FormInputLoading";
 import FormNote from "./FormNote";
 import { useIntlContext } from "@vulcanjs/react-i18n";
+import { useEntities } from "~/core/components/common/EntitiesContext";
 
 export interface FormItemProps
   extends FormLabelProps,
@@ -21,6 +22,7 @@ export interface FormItemProps
   description?: string;
   loading?: boolean;
   intlKeys?: Array<string>;
+  questionId?: string;
 }
 export const FormItem = (props: FormItemProps) => {
   const {
@@ -28,10 +30,17 @@ export const FormItem = (props: FormItemProps) => {
     children,
     beforeInput,
     afterInput,
-    description,
+    description: intlDescription,
     loading,
     intlKeys,
+    questionId,
   } = props;
+
+  const { data, loading: entitiesLoading, error } = useEntities();
+  const { entities } = data;
+  const entity = entities?.find((e) => e.id === questionId);
+
+  const description = intlDescription || entity?.description;
 
   const innerComponent = loading ? (
     <FormInputLoading loading={loading}>{children}</FormInputLoading>
@@ -45,7 +54,7 @@ export const FormItem = (props: FormItemProps) => {
 
   return (
     <Form.Group controlId={path}>
-      <FormLabel {...props} />
+      <FormLabel {...props} entity={entity}/>
       <div className="form-item-contents">
         {description && <FormDescription description={description} />}
         <div className="form-item-input">

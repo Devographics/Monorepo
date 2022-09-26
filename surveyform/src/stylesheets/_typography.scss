@@ -70,4 +70,11 @@ strong {
     @include font-regular;
     @include border-radius;
   }
+  pre {
+    background: $bg-color-light;
+    code {
+      background: none;
+      padding: 0;
+    }
+  }
 }

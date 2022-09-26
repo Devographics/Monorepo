@@ -184,6 +184,7 @@ export const getQuestionSchema = (
     allowmultiple = false,
     alias,
     year,
+    limit,
     arrayItem,
   } = questionObject;
 
@@ -210,6 +211,7 @@ export const getQuestionSchema = (
     itemProperties: {
       questionId: id,
       year,
+      limit,
     },
   };
 

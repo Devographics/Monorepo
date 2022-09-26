@@ -8,9 +8,10 @@ export interface FormDescriptionProps {
 }
 export const FormDescription = ({ description }: FormDescriptionProps) => {
   return (
-    <Form.Text>
-      <ReactMarkdown rehypePlugins={[rehypeRaw]}>{description}</ReactMarkdown>
-    </Form.Text>
+    <div
+      className="form-description"
+      dangerouslySetInnerHTML={{ __html: description }}
+    />
   );
 };
 

@@ -132,7 +132,7 @@ const CodeExample = ({ language, code, codeHighlighted }) => {
       <h5 className="code-example-heading">
         <Components.FormattedMessage id="general.code_example" />
       </h5>
-      <div dangerouslySetInnerHTML={{ __html: codeHighlighted }} />
+      <pre><code dangerouslySetInnerHTML={{ __html: codeHighlighted }} ></code></pre>
     </div>
   );
 };

@@ -1,7 +1,6 @@
-import { captureException } from "@sentry/nextjs";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
 import React from "react";
-import { useEntities } from "~/core/components/common/EntitiesContext";
+import { Entity } from "@devographics/core-models";
 
 /**
  * When using a string as label
@@ -16,12 +15,17 @@ interface EntityLabelDefinition {
   id?: string;
   intlId?: string;
   fallback?: any;
+  entity?: Entity;
 }
 export interface EntityLabelProps extends EntityLabelDefinition, StringLabel {}
 
-const EntityLabel = ({ id, intlId, label, fallback }: EntityLabelProps) => {
-  const Components = useVulcanComponents();
-  const { data, loading, error } = useEntities();
+const EntityLabel = ({
+  id,
+  intlId,
+  label,
+  fallback,
+  entity,
+}: EntityLabelProps) => {
   // string label
   if (label) {
     // if label is provided, use that
@@ -31,24 +35,7 @@ const EntityLabel = ({ id, intlId, label, fallback }: EntityLabelProps) => {
         dangerouslySetInnerHTML={{ __html: label }}
       />
     );
-  }
-  // entity label
-  if (loading) return <Components.Loading />;
-  if (error || !data) {
-    console.warn(
-      "No label provided and could load entities either",
-      intlId,
-      label,
-      fallback
-    );
-    if (error) {
-      captureException(error);
-    }
-    return <span className="label label-fallback">{fallback}</span>;
-  }
-  const { entities } = data;
-  const entity = entities?.find((e) => e.id === id);
-  if (entity) {
+  } else if (entity) {
     const { name } = entity;
     return (
       <span

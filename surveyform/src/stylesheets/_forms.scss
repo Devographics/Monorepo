@@ -104,15 +104,6 @@
       color: $greyDarker;
     }
   }
-  .form-text {
-    background: var(--bg-color-light);
-    padding: math.div($spacing, 2);
-    margin-bottom: math.div($spacing, 2);
-    color: var(--text-color);
-    p:last-child {
-      margin: 0;
-    }
-  }
   .form-submit-actions {
     display: flex;
     justify-content: space-between;
@@ -243,9 +234,23 @@
 
 .code-example {
   background: $bg-color-light;
-  padding: $spacing/2;
+  pre {
+    background: none;
+    padding: $spacing/2 $spacing;
+  }
   &-heading {
     text-transform: uppercase;
     font-size: $small-font;
+    border-bottom: 1px solid rgba(255,255,255,0.25);
+    padding: $spacing/2 $spacing/3;
+    margin: 0;
+  }
+}
+
+.form-description {
+  margin-bottom: $spacing;
+  color: var(--text-color);
+  p:last-child {
+    margin: 0;
   }
 }
