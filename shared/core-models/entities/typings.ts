@@ -6,7 +6,7 @@
 export interface Entity {
   id: string
   name: string
-  homepage?: string
+  homepage?: Resource
   category?: string
   description?: string
   tags?: string[]
@@ -14,9 +14,9 @@ export interface Entity {
   normalizationOnly?: boolean
 
   github?: any
-  npm?: string
-  caniuse?: string
-  mdn?: string
+  npm?: any
+  caniuse?: any
+  mdn?: any
 
   twitterName: string
   twitter: any
@@ -27,6 +27,10 @@ export interface Entity {
   example?: Example
 }
 
+export interface Resource {
+  name: string;
+  url: string;
+}
 
 export interface Example {
   language: string;
