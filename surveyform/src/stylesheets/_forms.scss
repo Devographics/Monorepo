@@ -304,10 +304,6 @@
   }
 }
 
-.form-component-Experience {
-  position: relative;
-}
-
 .experience-contents {
   display: grid;
   grid-template-columns: 1fr min-content;
@@ -374,6 +370,6 @@
   }
 }
 
-.form-component-Hidden {
+.form-input:empty {
   display: none;
 }
