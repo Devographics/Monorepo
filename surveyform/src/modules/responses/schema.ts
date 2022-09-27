@@ -5,6 +5,7 @@ import { VulcanGraphqlSchema } from "@vulcanjs/graphql";
 import { getQuestionId, getQuestionObject } from "./parseSurvey";
 import cloneDeep from "lodash/cloneDeep.js";
 import { addComponentToQuestionObject } from "./customComponents";
+import { VulcanFieldSchema } from "@vulcanjs/schema";
 
 export const schema: VulcanGraphqlSchema = {
   // default properties
@@ -274,7 +275,7 @@ surveys.forEach((survey) => {
         }
 
         if (questionObject.suffix === 'experience') {
-          const commentSchema = addComponentToQuestionObject(getCommentSchema())
+          const commentSchema = addComponentToQuestionObject(getCommentSchema()) as VulcanFieldSchema<any> 
           const commentQuestionId = getQuestionId(survey, section, {...questionObject, suffix: 'comment'});
           schema[commentQuestionId] = commentSchema;
           if (survey.slug) {
