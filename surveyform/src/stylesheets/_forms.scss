@@ -234,17 +234,18 @@
 }
 
 .code-example {
-  background: $bg-color-light;
+  margin-top: $spacing;
+  // background: $bg-color-light;
   pre {
     background: none;
-    padding: $spacing/2 $spacing;
+    // padding: $spacing/2 $spacing;
   }
   &-heading {
     text-transform: uppercase;
     font-size: $small-font;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
-    padding: $spacing/2 $spacing/3;
-    margin: 0;
+    // border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+    // padding: $spacing/2 $spacing/3;
+    margin: 0 0 math.div($spacing, 3) 0;
   }
 }
 

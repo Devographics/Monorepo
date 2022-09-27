@@ -25,7 +25,10 @@ export const Experience = (props: FormInputProps) => {
   const { getDocument, updateCurrentValues } = useFormContext();
   const { questionId } = itemProperties;
 
-  const [showCommentInput, setShowCommentInput] = useState(false);
+  const commentPath = path.replace("__experience", "__comment");
+  const commentValue = get(document, commentPath);
+
+  const [showCommentInput, setShowCommentInput] = useState(!!commentValue);
 
   const { data, loading, error } = useEntities();
   const { entities } = data;
@@ -34,9 +37,6 @@ export const Experience = (props: FormInputProps) => {
   // @ts-expect-error
   const { options = [], value, ...otherInputProperties } = inputProperties;
   const hasValue = value !== "";
-
-  const commentPath = path.replace("__experience", "__comment");
-  const commentValue = get(document, commentPath);
 
   return (
     <Components.FormItem
@@ -145,7 +145,7 @@ const CommentInput = ({
   // if label has been translated, use that to override entity name
   const label =
     (questionLabel.toLowerCase() !== questionPath && questionLabel) ||
-    questionEntity.name;
+    questionEntity?.name;
   const response = questionOptions?.find(
     (o) => o.value === questionValue
   )?.label;
