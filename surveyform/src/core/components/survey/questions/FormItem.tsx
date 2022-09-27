@@ -23,6 +23,7 @@ export interface FormItemProps
   loading?: boolean;
   intlKeys?: Array<string>;
   questionId: string;
+  showDescription?: boolean;
 }
 export const FormItem = (props: FormItemProps) => {
   const {
@@ -34,13 +35,14 @@ export const FormItem = (props: FormItemProps) => {
     loading,
     intlKeys,
     questionId,
+    showDescription = true,
   } = props;
 
   const { data, loading: entitiesLoading, error } = useEntities();
   const { entities } = data;
   const entity = entities?.find((e) => e.id === questionId);
 
-  const description = intlDescription || entity?.description;
+  const description = showDescription && (intlDescription || entity?.description);
 
   const innerComponent = loading ? (
     <FormInputLoading loading={loading}>{children}</FormInputLoading>

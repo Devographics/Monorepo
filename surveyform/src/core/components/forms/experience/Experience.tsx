@@ -13,13 +13,18 @@ import get from "lodash/get.js";
 import IconComment from "~/core/components/icons/Comment";
 import IconCommentDots from "~/core/components/icons/CommentDots";
 
-export const Experience = (props: FormInputProps) => {
+interface ExperienceProps extends FormInputProps {
+  showDescription: boolean;
+}
+
+export const Experience = (props: ExperienceProps) => {
   const {
     refFunction,
     path,
     inputProperties,
     itemProperties = {},
     document,
+    showDescription,
   } = props;
   const Components = useVulcanComponents();
   const { getDocument, updateCurrentValues } = useFormContext();
@@ -42,6 +47,7 @@ export const Experience = (props: FormInputProps) => {
     <Components.FormItem
       path={/*inputProperties.*/ path}
       label={inputProperties.label}
+      showDescription={showDescription}
       {...itemProperties}
     >
       {entity?.example && <CodeExample {...entity.example} />}

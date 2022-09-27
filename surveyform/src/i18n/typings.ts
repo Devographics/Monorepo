@@ -13,7 +13,7 @@ export interface RawLocale {
   /**
    * Loading strings is costly! Use only when necessary
    */
-  strings?: Array<{ key: string; t: string }>;
+  strings?: Array<{ key: string; t: string; tHtml?: string }>;
 }
 /**
  * Parsed version used in the app

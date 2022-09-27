@@ -1,3 +1,5 @@
-import Experience from './Experience'
+import Experience from "./Experience";
 
-export default Experience
+const Tool = (props) => <Experience {...props} showDescription={false} />;
+
+export default Tool;

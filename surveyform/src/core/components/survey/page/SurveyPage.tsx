@@ -65,9 +65,9 @@ const SurveyPageWrapper = (props: SurveyPageWrapperProps) => {
         />
       </h1>
       <div className="survey-page-block">
-        <SurveyPage survey={survey} />
+        <SurveyMain survey={survey} />
       </div>
-      <Faq />
+      <Faq survey={survey} />
       {survey.credits && <SurveyCredits survey={survey} />}
       <Translators />
       <Support />
@@ -96,7 +96,7 @@ const useSurveyPageParams = ():
   return { paramsReady: true, email: email as string };
 };
 
-const SurveyPage = ({ survey }) => {
+const SurveyMain = ({ survey }) => {
   const Components = useVulcanComponents();
   const intl = useIntlContext();
   const { user, loading: currentUserLoading } = useUser();

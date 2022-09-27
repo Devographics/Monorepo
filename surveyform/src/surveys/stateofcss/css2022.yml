@@ -25,12 +25,17 @@ textColor: '#9ac6c9'
 linkColor: '#F95DB2'
 hoverColor: '#59df7f'
 tags: [css]
+faq:
+  - questions_required
+  - data_used_css2022
+  - survey_design_css2022
+  - results_released_css2022
+  - team
+  - learn_more_css2022
 credits:
-  - id: sarah_fossheim
-    role: accessibility
-  - id: una_kravets
+  - id: lea_verou
     role: survey_design
-  - id: adam_argyle
+  - id: nicole_sullivan
     role: survey_design
   - id: philip_jagenstedt
     role: survey_design
