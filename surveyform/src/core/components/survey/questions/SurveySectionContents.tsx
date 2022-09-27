@@ -73,6 +73,13 @@ const SurveySectionContents = ({
   const questions = section.questions.filter((q) => !q.hidden);
   const fields = questions.map((question) => question.fieldName);
 
+  // we need to tell SmartForm to accept the comment fields as valid fields too
+  for (const f of fields) {
+    if (f.includes('__experience')) {
+      fields.push(f.replace('__experience', '__comment'))
+    }
+  }
+
   const entityIds = getEntityIds(questions);
 
   const { id, intlId } = section;
@@ -102,7 +109,6 @@ const SurveySectionContents = ({
   const isLastSection = !nextSection;
 
   const isDisabled = !canModifyResponse(response, user);
-
   return (
     <div className="section-questions" id="section-questions">
       <div className="section-heading">

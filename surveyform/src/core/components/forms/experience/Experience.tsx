@@ -8,75 +8,24 @@ import {
   useVulcanComponents,
 } from "@vulcanjs/react-ui";
 import { useEntities } from "~/core/components/common/EntitiesContext";
-
+import { FormControl } from "react-bootstrap";
+import get from "lodash/get.js";
 import IconComment from "~/core/components/icons/Comment";
+import IconCommentDots from "~/core/components/icons/CommentDots";
 
-// const OtherComponent = ({ value, path }: Pick<FormInputProps, "path" | "value">) => {
-//   const { updateCurrentValues } = useFormContext()
-//   const Components = useVulcanComponents()
-//   const otherValue = removeOtherMarker(value);
-
-//   // keep track of whether "other" field is shown or not
-//   const [showOther, setShowOther] = useState(isOtherValue(value));
-
-//   // keep track of "other" field value locally
-//   const [textFieldValue, setTextFieldValue] = useState(otherValue);
-
-//   // whenever value changes (and is not empty), if it's not an "other" value
-//   // this means another option has been selected and we need to uncheck the "other" radio button
-//   useEffect(() => {
-//     if (value) {
-//       setShowOther(isOtherValue(value));
-//     }
-//   }, [value]);
-
-//   // textfield properties
-//   const textFieldInputProperties = {
-//     name: path,
-//     value: textFieldValue,
-//     onChange: event => {
-//       const fieldValue = event.target.value;
-//       // first, update local state
-//       setTextFieldValue(fieldValue);
-//       // then update global form state
-//       const newValue = isEmpty(fieldValue) ? null : addOtherMarker(fieldValue);
-//       updateCurrentValues({ [path]: newValue });
-//     },
-//   };
-//   const textFieldItemProperties = { layout: 'elementOnly' };
-
-//   return (
-//     <div className="form-option-other">
-//       <FormCheck
-//         name={path}
-//         // @ts-expect-error
-//         layout="elementOnly"
-//         label={'Other'}
-//         value={showOther}
-//         checked={showOther}
-//         type="radio"
-//         onClick={event => {
-//           // @ts-expect-error
-//           const isChecked = event.target.checked;
-//           // clear any previous values to uncheck all other checkboxes
-//           updateCurrentValues({ [path]: null });
-//           setShowOther(isChecked);
-//         }}
-//       />
-//       {showOther && <Components.FormComponentText inputProperties={textFieldInputProperties} itemProperties={textFieldItemProperties} />}
-//     </div>
-//   );
-// };
-
-export const FormComponentRadioGroup = ({
-  refFunction,
-  path,
-  inputProperties,
-  itemProperties = {},
-}: FormInputProps) => {
+export const Experience = (props: FormInputProps) => {
+  const {
+    refFunction,
+    path,
+    inputProperties,
+    itemProperties = {},
+    document,
+  } = props;
   const Components = useVulcanComponents();
-  const { updateCurrentValues } = useFormContext();
+  const { getDocument, updateCurrentValues } = useFormContext();
   const { questionId } = itemProperties;
+
+  const [showCommentInput, setShowCommentInput] = useState(false);
 
   const { data, loading, error } = useEntities();
   const { entities } = data;
@@ -85,6 +34,10 @@ export const FormComponentRadioGroup = ({
   // @ts-expect-error
   const { options = [], value, ...otherInputProperties } = inputProperties;
   const hasValue = value !== "";
+
+  const commentPath = path.replace("__experience", "__comment");
+  const commentValue = get(document, commentPath);
+
   return (
     <Components.FormItem
       path={/*inputProperties.*/ path}
@@ -92,38 +45,53 @@ export const FormComponentRadioGroup = ({
       {...itemProperties}
     >
       {entity?.example && <CodeExample {...entity.example} />}
-      <div>
-        {options.map((option, i) => {
-          const isChecked = value === option.value;
-          const checkClass = hasValue
-            ? isChecked
-              ? "form-check-checked"
-              : "form-check-unchecked"
-            : "";
-          return (
-            // @ts-expect-error
-            <FormCheck
-              {...otherInputProperties}
-              key={i}
-              layout="elementOnly"
-              type="radio"
-              // @ts-ignore
-              label={<Components.FormOptionLabel option={option} />}
-              value={option.value}
-              name={path}
-              id={`${path}.${i}`}
-              path={`${path}.${i}`}
-              ref={refFunction}
-              checked={isChecked}
-              className={checkClass}
-            />
-          );
-        })}
-        {/* {itemProperties.showOther && (
-        <OtherComponent value={value} path={path} />
-      )} */}
+      <div className="experience-contents">
+        <div className="experience-options">
+          {options.map((option, i) => {
+            const isChecked = value === option.value;
+            const checkClass = hasValue
+              ? isChecked
+                ? "form-check-checked"
+                : "form-check-unchecked"
+              : "";
+            return (
+              // @ts-expect-error
+              <FormCheck
+                {...otherInputProperties}
+                key={i}
+                layout="elementOnly"
+                type="radio"
+                // @ts-ignore
+                label={<Components.FormOptionLabel option={option} />}
+                value={option.value}
+                name={path}
+                id={`${path}.${i}`}
+                path={`${path}.${i}`}
+                ref={refFunction}
+                checked={isChecked}
+                className={checkClass}
+              />
+            );
+          })}
+        </div>
+
+        <CommentTrigger
+          value={commentValue}
+          showCommentInput={showCommentInput}
+          setShowCommentInput={setShowCommentInput}
+        />
       </div>
-      <IconComment />
+      {showCommentInput && (
+        <CommentInput
+          path={commentPath}
+          value={commentValue}
+          questionLabel={inputProperties.label}
+          questionEntity={entity}
+          questionValue={value}
+          questionOptions={options}
+          questionPath={path}
+        />
+      )}
     </Components.FormItem>
   );
 };
@@ -142,4 +110,82 @@ const CodeExample = ({ language, code, codeHighlighted }) => {
   );
 };
 
-export default FormComponentRadioGroup;
+const CommentTrigger = ({ value, showCommentInput, setShowCommentInput }) => {
+  const isActive = showCommentInput || !!value;
+  return (
+    <div className="comment-trigger-wrapper">
+      <button
+        className={`comment-trigger comment-trigger-${
+          isActive ? "active" : "inactive"
+        }`}
+        type="button"
+        aria-describedby="popover-basic"
+        onClick={() => {
+          setShowCommentInput(!showCommentInput);
+        }}
+      >
+        {value ? <IconCommentDots /> : <IconComment />}
+      </button>
+    </div>
+  );
+};
+
+const CommentInput = ({
+  path,
+  value,
+  questionLabel,
+  questionValue,
+  questionOptions,
+  questionEntity,
+  questionPath,
+}) => {
+  const { getDocument, updateCurrentValues } = useFormContext();
+  const Components = useVulcanComponents();
+
+  // if label has been translated, use that to override entity name
+  const label =
+    (questionLabel.toLowerCase() !== questionPath && questionLabel) ||
+    questionEntity.name;
+  const response = questionOptions?.find(
+    (o) => o.value === questionValue
+  )?.label;
+
+  return (
+    <div className="comment-input">
+      <h5 className="comment-input-heading">
+        <Components.FormattedMessage
+          id="experience.leave_comment"
+          values={{ label }}
+          html={true}
+        />
+      </h5>
+      <p className="comment-input-subheading">
+        {questionValue ? (
+          <Components.FormattedMessage
+            id="experience.tell_us_more"
+            values={{ response }}
+            html={true}
+          />
+        ) : (
+          <Components.FormattedMessage id="experience.tell_us_more_no_value" />
+        )}
+      </p>
+      <FormControl
+        as="textarea"
+        onChange={(event) => {
+          let value = event.target.value;
+          if (value === "") {
+            updateCurrentValues({ [path]: null });
+          } else {
+            updateCurrentValues({ [path]: value });
+          }
+        }}
+        value={value}
+        // ref={refFunction}
+        // {...inputProperties}
+      />
+    </div>
+  );
+};
+
+export default Experience;

@@ -1,4 +1,4 @@
-@use 'sass:math';
+@use "sass:math";
 .survey-section {
   // .form-control {
   //   background: $bg-color-lightest;
@@ -9,7 +9,7 @@
     margin-bottom: $spacing;
     &:focus-within {
       border-color: var(--link-color);
-      background: $greyDarkish;
+      // background: $greyDarkish;
     }
     @include small {
       margin-bottom: $spacing * 2;
@@ -196,16 +196,17 @@
   color: var(--text-color-inverted);
 }
 
-.magic-error, .magic-success{
+.magic-error,
+.magic-success {
   padding: $spacing/2;
   font-size: $smallish-font;
   margin-top: $spacing;
 }
-.magic-error{
+.magic-error {
   border: 3px solid $red;
 }
 
-.magic-success{
+.magic-success {
   border: 3px solid $green;
 }
 
@@ -220,7 +221,7 @@
   }
 }
 
-.form-help{
+.form-help {
   p:last-child {
     margin: 0;
   }
@@ -241,7 +242,7 @@
   &-heading {
     text-transform: uppercase;
     font-size: $small-font;
-    border-bottom: 1px solid rgba(255,255,255,0.25);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
     padding: $spacing/2 $spacing/3;
     margin: 0;
   }
@@ -268,7 +269,7 @@
     padding: math.div($spacing, 2);
     position: relative;
     margin: 0;
-    &>div {
+    & > div {
       position: static;
       padding: 0;
       display: flex;
@@ -300,4 +301,78 @@
     //   }
     // }
   }
+}
+
+.form-component-Experience {
+  position: relative;
+}
+
+.experience-contents {
+  display: grid;
+  grid-template-columns: 1fr min-content;
+}
+.comment-trigger-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.comment-trigger {
+  // position: absolute;
+  // bottom: 0px;
+  // right: 0px;
+  // border-top: 1px solid var(--dark-border-color);
+  // border-left: 1px solid var(--dark-border-color);
+  padding: math.div($spacing, 2);
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1/1;
+  background: none;
+  border: none;
+  margin: 0;
+  color: $text-color;
+  &-inactive {
+    svg {
+      opacity: 0.5;
+    }
+  }
+  &-active {
+  }
+  svg {
+    display: block;
+    color: inherit;
+  }
+}
+
+.comment-input {
+  position: relative;
+  margin-top: math.div($spacing, 2);
+  background: $bg-color-light;
+  padding: $spacing;
+  // border-radius: 5px;
+  &-heading {
+    margin-bottom: math.div($spacing, 2);
+    font-size: $medium-font;
+  }
+  &-subheading {
+    margin-bottom: $spacing;
+    font-size: $smallish-font;
+  }
+  &::after {
+    bottom: 100%;
+    right: 11px;
+    border: solid transparent;
+    content: "";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-color: rgba(102, 213, 47, 0);
+    border-bottom-color: $bg-color-light;
+    border-width: 12px;
+    margin-left: -12px;
+  }
+}
+
+.form-component-Hidden {
+  display: none;
 }

@@ -4,7 +4,7 @@ import { getQuestionSchema } from "./helpers";
 import { VulcanGraphqlSchema } from "@vulcanjs/graphql";
 import { getQuestionId, getQuestionObject } from "./parseSurvey";
 import cloneDeep from "lodash/cloneDeep.js";
-import { addComponentToQuestionObject } from './customComponents';
+import { addComponentToQuestionObject } from "./customComponents";
 
 export const schema: VulcanGraphqlSchema = {
   // default properties
@@ -237,6 +237,15 @@ export const schema: VulcanGraphqlSchema = {
  */
 export const schemaPerSurvey: { [slug: string]: VulcanGraphqlSchema } = {};
 
+export const getCommentSchema = () => ({
+  type: String,
+  input: "hidden",
+  optional: true,
+  canRead: ["owners", "admins"],
+  canCreate: ["members"],
+  canUpdate: ["owners", "admins"],
+});
+
 const coreSchema = cloneDeep(schema) as VulcanGraphqlSchema;
 surveys.forEach((survey) => {
   if (survey.slug) {
@@ -251,7 +260,7 @@ surveys.forEach((survey) => {
           throw new Error("Found an array of questions");
         }
         let questionObject = getQuestionObject(questionOrId, section);
-        questionObject = addComponentToQuestionObject(questionObject)
+        questionObject = addComponentToQuestionObject(questionObject);
         const questionSchema = getQuestionSchema(
           questionObject,
           section,
@@ -262,6 +271,15 @@ surveys.forEach((survey) => {
         schema[questionId] = questionSchema;
         if (survey.slug) {
           schemaPerSurvey[survey.slug][questionId] = questionSchema;
+        }
+
+        if (questionObject.suffix === 'experience') {
+          const commentSchema = addComponentToQuestionObject(getCommentSchema())
+          const commentQuestionId = getQuestionId(survey, section, {...questionObject, suffix: 'comment'});
+          schema[commentQuestionId] = commentSchema;
+          if (survey.slug) {
+            schemaPerSurvey[survey.slug][commentQuestionId] = commentSchema;
+          }
         }
       });
   });
