@@ -9,8 +9,8 @@ export default {
         }),
         entities: (
             parent: any,
-            { ids, type, tag, tags }: { ids: string[]; type: string; tag: string; tags: string[] }
-        ) => getEntities({ ids, type, tag, tags }),
+            { ids, tag, tags }: { ids: string[]; tag: string; tags: string[] }
+        ) => getEntities({ ids, tag, tags }),
         translation: (
             parent: any,
             { key, localeId }: { key: string; localeId: string },
