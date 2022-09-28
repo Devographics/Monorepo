@@ -128,13 +128,15 @@ function VNApp({ Component, pageProps }: VNAppProps) {
                     ...defaultCoreComponents,
                     ...defaultFormComponents,
                     ...liteCoreComponents,
+                    Alert,
+                    // TODO: should not be needed, since we use Bootstrap Button instead,
+                    // but need double checking
+                    // Button,
+                    TooltipTrigger,
+                    Loading,
                     ...liteFormComponents,
                     ...bootstrapCoreComponents,
                     ...bootstrapFormComponents,
-                    Alert,
-                    Button,
-                    TooltipTrigger,
-                    Loading,
                     // Keep the component here even if we don't use Components.FormattedMessage directly
                     // This allows Vulcan components to depend on it
                     FormattedMessage: FormattedMessage,
