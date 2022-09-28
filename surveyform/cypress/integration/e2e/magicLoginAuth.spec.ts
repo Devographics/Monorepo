@@ -10,6 +10,9 @@ import { startSurveyButtonName } from "../../helpers/selectors";
 import { apiRoutes } from "~/lib/apiRoutes";
 import { getCreateAccountButton } from "../../helpers/getters";
 
+// Must be seeded in the db
+const TEST_USER_EMAIL = "test@devographics.com";
+
 beforeEach(() => {
   // NOTE: those operations are expensive! When testing less-critical part of your UI,
   // prefer mocking API calls! We do this only because auth is very critical
@@ -51,8 +54,9 @@ test("Access state of 2022, magic auth new user", () => {
     url: `${apiRoutes.account.magicLogin.sendEmail.href}*`,
   }).as("sendEmailRequest");
 
+  // this email should not exist in db yet (not test user)
   const email = "test@test.test";
-  cy.findByLabelText(/email/i).type(email /*Cypress.env("ADMIN_EMAIL")*/);
+  cy.findByLabelText(/email/i).type(email);
   getCreateAccountButton().click();
 
   // Check that the request succeeded
@@ -106,7 +110,7 @@ test("Access state of 2022, magic auth existing admin user", () => {
     url: `${apiRoutes.account.magicLogin.sendEmail.href}*`,
   }).as("sendEmailRequest");
 
-  const email = Cypress.env("ADMIN_EMAIL");
+  const email = TEST_USER_EMAIL;
   cy.findByLabelText(/email/i).type(email);
   getCreateAccountButton().click();
 

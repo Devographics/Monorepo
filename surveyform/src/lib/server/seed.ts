@@ -1,4 +1,4 @@
-import { seedAdminUser } from "~/account/user/api/seedAdminUser";
+import { seedTestUser } from "~/account/user/api/seedTestUser";
 
 const seed = async (context) => {
   if (process.env.MONGO_URI?.match(/lbke-demo/)) {
@@ -7,7 +7,7 @@ const seed = async (context) => {
   }
 
   // Run the seed functions
-  await seedAdminUser(context);
+  await seedTestUser();
 };
 
 export default seed;
