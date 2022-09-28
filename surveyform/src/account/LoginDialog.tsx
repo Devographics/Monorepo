@@ -3,8 +3,6 @@ import { AnonymousLoginForm } from "~/account/anonymousLogin/components/Anonymou
 //import { isAnonymousAuthEnabled } from "~/account/anonymousLogin/lib";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { useUser } from "~/account/user/hooks";
-import { DynamicReactMarkdown } from "~/core/components/markdown/DynamicReactMarkdown";
-import rehypeRaw from "rehype-raw";
 import { useIntlContext } from "@vulcanjs/react-i18n";
 import { StandaloneMagicLoginForm } from "~/account/magicLogin/components/StandaloneMagicLoginForm";
 
@@ -24,11 +22,10 @@ const LoginOptions = () => {
           <Components.FormattedMessage id="accounts.create_account" />
         </h4>
         <div className="survey-login-option-description">
-          <DynamicReactMarkdown rehypePlugins={[rehypeRaw]}>
-            {intl.formatMessage({
-              id: `accounts.create_account.description`,
-            })}
-          </DynamicReactMarkdown>
+          <Components.FormattedMessage
+            id="accounts.create_account.description"
+            html={true}
+          />
         </div>
         <div className="survey-login-action">
           <StandaloneMagicLoginForm
@@ -38,9 +35,10 @@ const LoginOptions = () => {
           />
         </div>
         <div className="survey-login-option-note">
-          <DynamicReactMarkdown rehypePlugins={[rehypeRaw]}>
-            {intl.formatMessage({ id: `accounts.create_account.note` })}
-          </DynamicReactMarkdown>
+          <Components.FormattedMessage
+            id="accounts.create_account.note"
+            html={true}
+          />
         </div>
       </div>
       <div className="survey-login-option">
@@ -48,11 +46,7 @@ const LoginOptions = () => {
           <Components.FormattedMessage id="accounts.continue_as_guest" />
         </h4>
         <div className="survey-login-option-description">
-          <DynamicReactMarkdown rehypePlugins={[rehypeRaw]}>
-            {intl.formatMessage({
-              id: `accounts.continue_as_guest.description`,
-            })}
-          </DynamicReactMarkdown>
+          <Components.FormattedMessage id="accounts.continue_as_guest.description" />
         </div>
         <div className="survey-login-action">
           <AnonymousLoginForm
