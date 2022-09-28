@@ -103,7 +103,7 @@ Get locale strings from cache and flatten them
 */
 export const getLocaleStrings = async (
     localeId: string,
-    contexts: string[],
+    contexts: string[] = allContexts,
     context: RequestContext
 ) => {
     const stringFiles = []
@@ -146,25 +146,21 @@ export const flattenStringFiles = (
 
 /*
 
-Get locale strings and metadata
+Get locale metadata (strings have their own separate resolver)
 
 */
 export const getLocaleObject = async ({
     localeId,
-    contexts: providedContexts,
+    contexts,
     context
 }: {
     localeId: string
     contexts?: string[]
     context: RequestContext
 }) => {
-    const contexts = providedContexts ? providedContexts : allContexts
-    const strings = await getLocaleStrings(localeId, contexts, context)
     const metadata = await getLocaleMetaData(localeId, context)
-    return {
-        ...metadata,
-        strings
-    }
+    // return contexts so nested resolvers (i.e. strings resolver) can access it
+    return {...metadata, contexts}
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////

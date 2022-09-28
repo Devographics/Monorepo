@@ -1,7 +1,9 @@
-import entities from './entities'
+import entity from './entity'
+import locale from './locale'
 import query from './query'
 
 export default {
-    ...entities,
+    ...entity,
+    ...locale,
     ...query,
 }
