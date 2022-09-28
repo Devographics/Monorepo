@@ -3,7 +3,6 @@
  * @see https://github.com/vercel/examples/blob/main/edge-functions/basic-auth-password/pages/_middleware.ts
  */
 import { NextRequest, NextResponse } from "next/server";
-//import { apiWrapper } from "~/lib/server/sentry";
 
 export function cronMiddleware(req: NextRequest) {
   const { GITHUB_ACTIONS_APP_KEY } = process.env;
@@ -27,6 +26,6 @@ export function cronMiddleware(req: NextRequest) {
   return NextResponse.next();
 }
 
-// does not work?
-// export const middleware = apiWrapper(middlewareUnwrapped);
+// This doesn't work,
+// middleware matchers have to be defined statically
 export const cronMatcher = ["/api/crons/*"];

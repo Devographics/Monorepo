@@ -1,15 +1,12 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import {
-  debugAccessMiddleware,
-  debugAreaMatcher,
-} from "~/core/server/edge/debugMiddleware";
-import { cronMiddleware, cronMatcher } from "~/core/server/edge/cronMiddleware";
+import { debugAccessMiddleware } from "~/core/server/edge/debugMiddleware";
+import { cronMiddleware } from "~/core/server/edge/cronMiddleware";
 
 export function middleware(request: NextRequest) {
-  // TODO: this condition should use the admin area matcher?
   const pathname = request.nextUrl.pathname;
   if (pathname.startsWith("/debug")) {
+    // TODO: can we run Sentry in an edge middleware?
     console.log("Accessing debug area");
     return debugAccessMiddleware(request);
   }
@@ -23,5 +20,7 @@ export function middleware(request: NextRequest) {
 
 // middleware will run only on those paths
 export const config = {
-  matcher: [...debugAreaMatcher, ...cronMatcher],
+  matcher: ["/debug/:path*", "/api/crons/:path*"],
+  // we can't use variables here
+  //...debugAreaMatcher, ...cronMatcher],
 };

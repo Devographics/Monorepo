@@ -1,4 +1,4 @@
-import { NextFetchEvent, NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export function debugAccessMiddleware(req: NextRequest) {
   // @see https://nextjs.org/docs/messages/middleware-relative-urls
@@ -28,4 +28,6 @@ export function debugAccessMiddleware(req: NextRequest) {
   return NextResponse.next();
 }
 
-export const debugAreaMatcher = ["/debug/*"];
+// This doesn't work,
+// middleware matchers have to be defined statically
+// export const debugAreaMatcher = ["/debug/*"];
