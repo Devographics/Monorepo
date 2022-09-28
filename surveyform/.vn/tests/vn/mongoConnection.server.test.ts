@@ -12,7 +12,7 @@ if (!process.env.MONGO_URI)
   throw new Error("MONGO_URI env variable not defined");
 
 const mongoUri = process.env.MONGO_URI;
-describe("api/middlewares/mongoConnection", () => {
+describe("mongo connection", () => {
   afterEach(async () => {
     await closeDbConnection();
   });

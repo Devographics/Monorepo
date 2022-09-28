@@ -1,6 +1,3 @@
-/**
- * Similar to "mongoConnection" middleware but uses the default uri
- */
 import { connectToAppDb } from "~/lib/server/mongoose/connection";
 /**
  * Mongoose connection is not set automtically,

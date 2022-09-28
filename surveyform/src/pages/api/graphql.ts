@@ -1,18 +1,17 @@
 import express, { Request } from "express";
 import cors from "cors";
 // import mongoose from "mongoose";
-import { ApolloServer, gql } from "apollo-server-express";
+import { ApolloServer } from "apollo-server-express";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import { mergeResolvers, mergeTypeDefs } from "@graphql-tools/merge";
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
 
 import { buildApolloSchema, createDataSources } from "@vulcanjs/graphql/server";
 
-import mongoConnection from "~/lib/server/middlewares/mongoConnection";
 import corsOptions from "~/lib/server/cors";
 import { contextFromReq } from "~/lib/server/context";
 import models from "~/_vulcan/models.index.server";
-//import { apiWrapper } from "~/lib/server/sentry";
+import { localesRegistry, stringsRegistry } from "~/i18n";
 
 // Custom graphql API from Vulcan
 import { graphql as i18nSchema } from "@vulcanjs/i18n/server";
@@ -21,6 +20,7 @@ import {
   typeDefs as sojsTypeDefs,
   resolvers as sojsResolvers,
 } from "~/core/server/graphql";
+import { connectToAppDbMiddleware } from "~/lib/server/middlewares/mongoAppConnection";
 
 /**
  * Example graphQL schema and resolvers generated using Vulcan declarative approach
@@ -32,9 +32,6 @@ const vulcanRawSchema = buildApolloSchema(models);
 const currentUserTypeDefs = `type Query { 
   currentUser: User
  }`;
-
-import { localesRegistry, stringsRegistry } from "~/i18n";
-
 const currentUserResolver = {
   Query: {
     currentUser: async (root, any, { /*req*/ currentUser }) => {
@@ -48,18 +45,6 @@ const currentUserResolver = {
         user.password = undefined;
       }
       return user || null;
-      // // hack to reuse the user API endpoint
-      // // TODO: reuse the core logic to get current user more cleanly
-      // let jsonRes;
-      // const fakeRes = {
-      //   status: () => ({
-      //     json: (val) => {
-      //       jsonRes = val;
-      //     },
-      //   }),
-      // };
-      // await user(req, fakeRes);
-      // return jsonRes.user;
     },
   },
 };
@@ -87,11 +72,12 @@ const mergedSchema = {
     currentUserResolver,
   ]),
 };
-const vulcanSchema = makeExecutableSchema(mergedSchema); //vulcanRawSchema);
+const vulcanSchema = makeExecutableSchema(mergedSchema);
 
 const mongoUri = process.env.MONGO_URI;
 if (!mongoUri) throw new Error("MONGO_URI env variable is not defined");
 
+// Data sources avoid the N+1 problem in Mongo
 const createDataSourcesForModels = createDataSources(models);
 
 // Define the server (using Express for easier middleware usage)
@@ -117,6 +103,7 @@ const server = new ApolloServer({
           }),
         ]
       : [],
+  // Important otherwie Apollo swallows errors
   formatError: (err) => {
     console.error(err);
     return err;
@@ -126,15 +113,13 @@ const server = new ApolloServer({
 await server.start();
 
 const app = express();
-
 app.set("trust proxy", true);
-
 const gqlPath = "/api/graphql";
 // setup cors
 app.use(gqlPath, cors(corsOptions));
 // init the db
 // TODO: we should probably use the "connectToAppDbMiddleware"?
-app.use(gqlPath, mongoConnection(mongoUri));
+app.use(gqlPath, connectToAppDbMiddleware);
 
 server.applyMiddleware({ app, path: "/api/graphql" });
 
@@ -143,5 +128,6 @@ export default app;
 export const config = {
   api: {
     bodyParser: false,
+    externalResolver: true,
   },
 };
