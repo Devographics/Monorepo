@@ -1,8 +1,12 @@
 {
   "compilerOptions": {
-    "target": "es2017",
-    "module": "commonjs",
-    "lib": ["es7", "es2019"],
+    "target": "es2020",
+    "moduleResolution": "Node",
+    "module": "ES2020",
+    "lib": [
+      "es7",
+      "es2019"
+    ],
     "outDir": "dist",
     "rootDir": "src",
     "removeComments": true,
@@ -11,7 +15,13 @@
     "experimentalDecorators": true,
     "noImplicitAny": true
   },
-  "files": ["file_types.d.ts"],
-  "exclude": ["/node_modules/"],
-  "include": ["src/**/*"]
+  "files": [
+    "file_types.d.ts"
+  ],
+  "exclude": [
+    "/node_modules/"
+  ],
+  "include": [
+    "src/**/*"
+  ]
 }
