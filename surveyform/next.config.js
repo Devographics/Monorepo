@@ -45,17 +45,21 @@ const moduleExports = (phase, { defaultConfig }) => {
   };
 
   //*** */ Enable Webpack analyzer
-  if (process.env.ANALYZE && process.env.ANALYZE !== "false") {
+  if (process.env.ANALYZE) {
     const debug = require("debug")("webpack");
     debug("Enabling Webpack bundle analyzer");
     const withBundleAnalyzer = require("@next/bundle-analyzer")({
-      enabled: process.env.ANALYZE === "true",
+      enabled: !!process.env.ANALYZE,
     });
     extendedConfig = withBundleAnalyzer(extendedConfig);
   }
 
   //*** */ Yaml support
-  extendedConfig.webpack = function (config) {
+  const currentWebpack = extendedConfig.webpack
+  extendedConfig.webpack = function (configArg, ...otherArgs) {
+    // run previously configured function!
+    const config = currentWebpack ? currentWebpack(configArg, ...otherArgs) : configArg
+    // then extend
     config.module.rules.push({
       test: /\.ya?ml$/,
       use: "js-yaml-loader",
