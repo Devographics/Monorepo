@@ -6,6 +6,7 @@ import { cachedPromise, promisesNodeCache } from "~/lib/server/caching";
 import { print } from "graphql/language/printer";
 import gql from "graphql-tag";
 import { Entity } from "@devographics/core-models/entities/typings";
+import { getSizeInKB } from "~/lib/server/utils";
 
 /** Query sent to the translation API => load all entitites */
 const entitiesQuery = print(gql`
@@ -51,6 +52,7 @@ const entitiesQuery = print(gql`
  * @returns
  */
 export const fetchEntities = async (variables) => {
+  const startAt = new Date();
   const response = await fetch(serverConfig.translationAPI, {
     method: "POST",
     headers: {
@@ -66,6 +68,12 @@ export const fetchEntities = async (variables) => {
     throw new Error();
   }
   const entities = get(json, "data.entities") as Array<Entity>;
+  const endAt = new Date();
+  console.log(
+    `🕚 fetchEntities: ran query entitiesQuery in ${
+      endAt.getTime() - startAt.getTime()
+    }ms (${getSizeInKB(entities)}kb)`
+  );
   return entities;
 };
 
