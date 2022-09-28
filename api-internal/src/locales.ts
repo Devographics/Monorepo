@@ -47,20 +47,20 @@ etc.
 */
 export const truncateKey = (key: string) => key.split('-')[0]
 
-export const getValidLocaleId = async (localeId: string, context: RequestContext) => {
-    const localeIdsList = await getLocaleIds(context)
-    const exactLocaleId = localeIdsList.find(
-        (lId: string) => lId.toLowerCase() === localeId.toLowerCase()
+export const getValidLocale = async (localeId: string, context: RequestContext) => {
+    const locales = await getLocalesMetadata(context)
+    const exactLocale = locales.find(
+        ({ id }: { id: string }) => id.toLowerCase() === localeId.toLowerCase()
     )
-    const similarLocaleId = localeIdsList.find(
-        (lId: string) => truncateKey(lId) === truncateKey(localeId)
+    const similarLocale = locales.find(
+        ({ id }: { id: string }) => truncateKey(id) === truncateKey(localeId)
     )
 
-    const validLocaleId = exactLocaleId || similarLocaleId
-    if (!validLocaleId) {
+    const validLocale = exactLocale || similarLocale
+    if (!validLocale) {
         throw Error(`No valid locale found for id ${localeId}`)
     } else {
-        return validLocaleId
+        return validLocale
     }
 }
 
@@ -72,28 +72,31 @@ export const getLocaleRawContextCacheKey = (localeId: string, context: string) =
     `locale_${localeId}_${context}_raw`
 export const getLocaleParsedContextCacheKey = (localeId: string, context: string) =>
     `locale_${localeId}_${context}_parsed`
-export const getLocaleMetaDataCacheKey = (localeId: string) => `locale_${localeId}_metadata`
-export const getAllLocalesListCacheKey = () => 'locale_all_locales_ids'
+// export const getLocaleMetaDataCacheKey = (localeId: string) => `locale_${localeId}_metadata`
+export const getLocaleUntranslatedKeysCacheKey = (localeId: string) =>
+    `locale_${localeId}_untranslated`
+export const getAllLocalesMetadataCacheKey = () => 'locale_all_locales_metadata'
 
 /*
 
-Get locale metadata from cache
+Get locale metadata (untranslated keys get their own resolver)
 
 */
 export const getLocaleMetaData = async (
     localeId: string,
     context: RequestContext
 ): Promise<LocaleMetaData> => {
-    return await getCache(getLocaleMetaDataCacheKey(localeId), context)
+    const allLocales = await getLocalesMetadata(context)
+    return allLocales.find((l: Locale) => l.id === localeId)
 }
 
 /*
 
-Get locale ids list from cache
+Get locales metadata from cache (untranslated keys get their own resolver)
 
 */
-export const getLocaleIds = async (context: RequestContext) => {
-    return await getCache(getAllLocalesListCacheKey(), context)
+export const getLocalesMetadata = async (context: RequestContext) => {
+    return await getCache(getAllLocalesMetadataCacheKey(), context)
 }
 
 /*
@@ -144,34 +147,18 @@ export const flattenStringFiles = (
     return stringObjects
 }
 
-/*
-
-Get locale metadata (strings have their own separate resolver)
-
-*/
-export const getLocaleObject = async ({
-    localeId,
-    contexts,
-    context
-}: {
-    localeId: string
-    contexts?: string[]
-    context: RequestContext
-}) => {
-    const metadata = await getLocaleMetaData(localeId, context)
-    // return contexts so nested resolvers (i.e. strings resolver) can access it
-    return {...metadata, contexts}
-}
-
 ///////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////// Resolvers ////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
 
 /*
 
-Get a specific locale object with properly parsed strings
+Get a specific locale object (strings get their own separate resolver)
 
 */
+export interface LocaleWithExtraProps extends Locale {
+    contexts?: string[]
+}
 export const getLocale = async ({
     localeId,
     contexts,
@@ -182,9 +169,12 @@ export const getLocale = async ({
     contexts?: string[]
     enableFallbacks?: boolean
     context: RequestContext
-}): Promise<Locale> => {
-    const validLocaleId = await getValidLocaleId(localeId, context)
-    const locale = getLocaleObject({ localeId: validLocaleId, contexts, context })
+}): Promise<LocaleWithExtraProps> => {
+    const validLocale = await getValidLocale(localeId, context)
+    // return contexts so nested resolvers (i.e. strings resolver) can access them
+    const locale = { ...validLocale, contexts }
+    console.log(localeId)
+    console.log(validLocale)
     return locale
 }
 
@@ -199,14 +189,9 @@ export const getLocales = async (options: {
     localeIds: string[]
     context: RequestContext
 }) => {
-    const locales = []
-    const { localeIds: providedLocaleIds, context } = options
-    const localeIds = providedLocaleIds || (await getLocaleIds(context))
-    for (const localeId of localeIds) {
-        const locale = await getLocale({ localeId, ...options })
-        locales.push(locale)
-    }
-    return locales
+    const { localeIds, context } = options
+    const allLocales = await getLocalesMetadata(context)
+    return localeIds ? allLocales.filter((l: Locale) => localeIds.includes(l.id)) : allLocales
 }
 
 /*
