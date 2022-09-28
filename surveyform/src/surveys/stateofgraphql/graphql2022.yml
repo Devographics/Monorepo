@@ -18,7 +18,7 @@ textColor: rgb(224, 228, 228)
 linkColor: rgb(65, 199, 199)
 hoverColor: rgb(254, 106, 106)
 tags: [graphql]
-contexts: [state_of_graphql, state_of_graphql_2022]
+contexts: [state_of_graphql]
 emailOctopus:
   listId: 3fb96da2-e6d5-11ec-9258-0241b9615763
 

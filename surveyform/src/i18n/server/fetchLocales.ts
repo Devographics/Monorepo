@@ -69,13 +69,8 @@ const commonContexts = ["common", "surveys", "accounts"];
 // TODO: move this elsewhere, maybe in surveys config?
 const surveyContexts = [
   "state_of_css",
-  "state_of_css_2021_survey",
   "state_of_js",
-  "state_of_js_2020_survey",
-  "state_of_js_2021_survey",
   "state_of_graphql",
-  "state_of_graphql_2022",
-  "state_of_css_2022",
 ];
 // TODO: we should query only relevant strings per survey ideally
 const contexts = [...commonContexts, ...surveyContexts];

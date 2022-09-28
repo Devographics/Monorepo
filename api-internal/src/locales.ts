@@ -173,8 +173,6 @@ export const getLocale = async ({
     const validLocale = await getValidLocale(localeId, context)
     // return contexts so nested resolvers (i.e. strings resolver) can access them
     const locale = { ...validLocale, contexts }
-    console.log(localeId)
-    console.log(validLocale)
     return locale
 }
 

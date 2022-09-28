@@ -2,7 +2,7 @@ import React from "react";
 import { useIntlContext } from "@vulcanjs/react-i18n";
 import { FormInputProps, useVulcanComponents } from "@vulcanjs/react-ui";
 import type { FormOption } from "@vulcanjs/react-ui";
-import { FormSelect } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 
 export const FormComponentSelect = ({
   path,
@@ -25,6 +25,9 @@ export const FormComponentSelect = ({
   };
   let otherOptions = Array.isArray(options) && options.length ? options : [];
   const allOptions = [noneOption, ...otherOptions];
+  // don't pass options to Form.Select
+  // @ts-ignore
+  const { options: deleteOptions, ...newInputProperties } = inputProperties;
   return (
     <Components.FormItem
       path={path}
@@ -38,13 +41,17 @@ export const FormComponentSelect = ({
        *
        */}
       {/** @ts-expect-error */}
-      <FormSelect {...inputProperties} ref={refFunction}>
+      <Form.Select
+        {...newInputProperties}
+        ref={refFunction}
+        defaultValue={emptyValue}
+      >
         {allOptions.map(({ value, label, intlId, ...rest }) => (
           <option key={value} value={value} {...rest}>
             {label}
           </option>
         ))}
-      </FormSelect>
+      </Form.Select>
     </Components.FormItem>
   );
 };
