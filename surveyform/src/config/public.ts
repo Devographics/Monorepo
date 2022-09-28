@@ -1,4 +1,15 @@
 /**
+ * It has to be an env variable
+ * because server side we can't access current domain via "window"
+ *
+ * @see https://vercel.com/docs/concepts/projects/environment-variables
+ */
+const appUrl =
+  process.env.NODE_ENV === "production"
+    ? process.env.NEXT_PUBLIC_APP_URL ||
+      `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+    : "http://localhost:3000";
+/**
  *
  * Values are defined in ".env.*", depending on the environment
  * You can set them as environment variables in production
@@ -16,4 +27,5 @@ export const publicConfig = {
    * @deprecated
    */
   environment: "development",
+  appUrl,
 };
