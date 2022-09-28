@@ -48,10 +48,18 @@ For example, `apollo-server-express` depens on `apollo-server-core`. But if you 
 ## Services
 
 - Apollo Studio for graqphl debugging: https://studio.apollographql.com/
-- Sentry for debugging: https://sentry.io/organizations/devographics
-- ScaleGrid for database hosting: https://scalegrid.io/
-- Render.com for long running: APIs, admin form
-- Vercel for serverless (surveyform): https://vercel.com/devographics
-- Stellate for graphql caching: https://stellate.co/
 
-- Admin area: https://surveyadmin.onrender.com
+- Sentry for debugging: https://sentry.io/organizations/devographics
+
+- ScaleGrid for database hosting: https://scalegrid.io/
+
+- Render.com for long running: APIs, admin form
+You can configure folders that are relevant for an app (eg "surveyadmin" & "shared") from the UI
+
+Admin area: https://surveyadmin.onrender.com
+
+- Vercel for serverless (surveyform): https://vercel.com/devographics
+You can configure folders that are relevant for an app (eg "surveyform" & "shared") via "vercel.json"
+@see https://vercel.com/guides/how-do-i-use-the-ignored-build-step-field-on-vercel
+
+- Stellate for graphql caching: https://stellate.co/
