@@ -3,7 +3,7 @@ import { getKnowledgeScore } from "~/modules/responses/helpers";
 import get from "lodash/get.js";
 import CountUp from "react-countup";
 import Confetti from "react-confetti";
-import take from "lodash/take";
+import take from "lodash/take.js";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
 import type { SurveyType } from "@devographics/core-models";
 import { useIntlContext } from "@vulcanjs/react-i18n";
@@ -28,7 +28,7 @@ const Features = ({
           <FeatureItem
             key={feature.id}
             feature={feature}
-            showComma={i < (limit - 1)}
+            showComma={i < limit - 1}
           />
         ))}
         .

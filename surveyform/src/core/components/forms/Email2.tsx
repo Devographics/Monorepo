@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import ReactMarkdown from "react-markdown";
-import rehypeRaw from "rehype-raw";
 import { useIntlContext } from "@vulcanjs/react-i18n";
 import {
   FormInputProps,

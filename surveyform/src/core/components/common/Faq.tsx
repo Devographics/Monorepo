@@ -1,6 +1,4 @@
 import React from "react";
-import ReactMarkdown from "react-markdown";
-// import rehypeRaw from "rehype-raw";
 // import Accordion from "react-bootstrap/Accordion";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { useIntlContext } from "@vulcanjs/react-i18n";
@@ -18,7 +16,7 @@ const defaultItems = [
 
 const Faq = ({ survey }) => {
   const Components = useVulcanComponents();
-  const items = survey.faq || defaultItems
+  const items = survey.faq || defaultItems;
   return (
     <div className="faq survey-page-block">
       <h3 className="faq-heading survey-page-block-heading">
@@ -45,7 +43,10 @@ const FaqItem = ({ item, index }) => {
         {/* <ReactMarkdown rehypePlugins={[rehypeRaw]}>
           {intl.formatMessage({ id: `faq.${item}.description` })}
         </ReactMarkdown> */}
-        <Components.FormattedMessage id={`faq.${item}.description`} html={true} />
+        <Components.FormattedMessage
+          id={`faq.${item}.description`}
+          html={true}
+        />
       </dd>
     </dl>
   );

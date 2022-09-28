@@ -1,11 +1,13 @@
 import React from "react";
-import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
+import { DynamicReactMarkdown } from "~/core/components/markdown/DynamicReactMarkdown";
 
 const FormNote = ({ note }) => {
   return (
     <div className="form-note">
-      <ReactMarkdown rehypePlugins={[rehypeRaw]}>{note}</ReactMarkdown>
+      <DynamicReactMarkdown rehypePlugins={[rehypeRaw]}>
+        {note}
+      </DynamicReactMarkdown>
     </div>
   );
 };

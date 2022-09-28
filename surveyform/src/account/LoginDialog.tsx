@@ -3,7 +3,7 @@ import { AnonymousLoginForm } from "~/account/anonymousLogin/components/Anonymou
 //import { isAnonymousAuthEnabled } from "~/account/anonymousLogin/lib";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { useUser } from "~/account/user/hooks";
-import ReactMarkdown from "react-markdown";
+import { DynamicReactMarkdown } from "~/core/components/markdown/DynamicReactMarkdown";
 import rehypeRaw from "rehype-raw";
 import { useIntlContext } from "@vulcanjs/react-i18n";
 import { StandaloneMagicLoginForm } from "~/account/magicLogin/components/StandaloneMagicLoginForm";
@@ -14,7 +14,7 @@ const LoginOptions = () => {
 
   const { user } = useUser({ redirectTo: "/", redirectIfFound: true });
   const router = useRouter();
-  const redirectedFrom = router.query?.from as string;
+  //const redirectedFrom = router.query?.from as string;
   return user ? (
     <div>You are already logged in.</div>
   ) : (
@@ -24,11 +24,11 @@ const LoginOptions = () => {
           <Components.FormattedMessage id="accounts.create_account" />
         </h4>
         <div className="survey-login-option-description">
-          <ReactMarkdown rehypePlugins={[rehypeRaw]}>
+          <DynamicReactMarkdown rehypePlugins={[rehypeRaw]}>
             {intl.formatMessage({
               id: `accounts.create_account.description`,
             })}
-          </ReactMarkdown>
+          </DynamicReactMarkdown>
         </div>
         <div className="survey-login-action">
           <StandaloneMagicLoginForm
@@ -38,9 +38,9 @@ const LoginOptions = () => {
           />
         </div>
         <div className="survey-login-option-note">
-          <ReactMarkdown rehypePlugins={[rehypeRaw]}>
+          <DynamicReactMarkdown rehypePlugins={[rehypeRaw]}>
             {intl.formatMessage({ id: `accounts.create_account.note` })}
-          </ReactMarkdown>
+          </DynamicReactMarkdown>
         </div>
       </div>
       <div className="survey-login-option">
@@ -48,11 +48,11 @@ const LoginOptions = () => {
           <Components.FormattedMessage id="accounts.continue_as_guest" />
         </h4>
         <div className="survey-login-option-description">
-          <ReactMarkdown rehypePlugins={[rehypeRaw]}>
+          <DynamicReactMarkdown rehypePlugins={[rehypeRaw]}>
             {intl.formatMessage({
               id: `accounts.continue_as_guest.description`,
             })}
-          </ReactMarkdown>
+          </DynamicReactMarkdown>
         </div>
         <div className="survey-login-action">
           <AnonymousLoginForm

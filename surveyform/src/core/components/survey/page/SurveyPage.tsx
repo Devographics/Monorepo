@@ -4,8 +4,6 @@ import React from "react";
 // import AccountMessage from "../../users/AccountMessage";
 import SurveyAction from "./SurveyAction";
 import { getSurvey } from "~/modules/surveys/getters";
-import ReactMarkdown from "react-markdown";
-import rehypeRaw from "rehype-raw";
 import SurveyHeadTags from "../SurveyHeadTags";
 import SurveyMessage from "../SurveyMessage";
 import SurveyCredits from "../SurveyCredits";
@@ -81,7 +79,9 @@ const SurveyIntro = ({ survey }) => {
     <div
       className="survey-intro"
       dangerouslySetInnerHTML={{
-        __html: intl.formatMessage({ id: `general.${survey.slug}.survey_intro` }),
+        __html: intl.formatMessage({
+          id: `general.${survey.slug}.survey_intro`,
+        }),
       }}
     />
   );

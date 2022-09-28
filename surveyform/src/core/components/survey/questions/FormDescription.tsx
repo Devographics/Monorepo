@@ -1,7 +1,4 @@
 import React from "react";
-import Form from "react-bootstrap/Form";
-import ReactMarkdown from "react-markdown";
-import rehypeRaw from "rehype-raw";
 
 export interface FormDescriptionProps {
   description: string;
