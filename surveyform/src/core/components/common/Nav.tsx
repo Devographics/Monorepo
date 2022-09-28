@@ -30,50 +30,12 @@ const loggedInNavContents: Array<NavItemDef> = [
   },
 ];
 
-const adminNavContents: Array<NavItemDef> = [
-  {
-    label: "Stats",
-    to: "/admin/stats",
-  },
-  // {
-  //   label: 'Surveys',
-  //   to: '/admin/surveys',
-  // },
-  {
-    label: "Users",
-    to: "/admin/users",
-  },
-  {
-    label: "Responses",
-    to: "/admin/responses",
-  },
-  {
-    label: "Normalization",
-    to: "/admin/normalization",
-  },
-  {
-    label: "Projects",
-    to: "/admin/projects",
-  },
-  {
-    label: "Export",
-    to: routes.admin.export.href,
-  },
-  // {
-  //   label: 'Normalized Responses',
-  //   to: '/admin/normalized-responses',
-  // },
-];
-
 const Navigation = () => {
   const Components = useVulcanComponents();
   const { user } = useUser();
   let navItems = navContents;
   if (user) {
     navItems = [...navItems, ...loggedInNavContents];
-    if (isAdmin(user)) {
-      navItems = [...navItems, ...adminNavContents];
-    }
   }
   return (
     <div className="nav-wrapper">

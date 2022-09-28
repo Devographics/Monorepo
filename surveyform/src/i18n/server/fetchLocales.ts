@@ -16,16 +16,10 @@ import {
 } from "~/lib/server/caching";
 import { Locale, RawLocale } from "../typings";
 import { getFragmentName } from "@vulcanjs/graphql";
+import { getSizeInKB } from "~/lib/server/utils";
 
 const disableAPICache = false; //getSetting("disableAPICache", false);
 const translationAPI = serverConfig.translationAPI; //getSetting("translationAPI");
-
-const getSizeInKB = obj => {
-  const str = JSON.stringify(obj);
-  // Get the length of the Uint8Array
-  const bytes = new TextEncoder().encode(str).length;
-  return Math.round(bytes/1000);
-};
 
 const localeDefinitionFragment = gql`
   fragment LocaleDefinition on Locale {

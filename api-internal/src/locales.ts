@@ -200,6 +200,6 @@ Reverse array first so that strings added last take priority
 
 */
 export const getTranslation = async (key: string, localeId: string, context: RequestContext) => {
-    const locale = await getLocale({ localeId, context })
-    return locale?.strings?.reverse().find((s: any) => s.key === key)
+    const strings = await getLocaleStrings(localeId, allContexts, context)
+    return strings?.reverse().find((s: any) => s.key === key)
 }

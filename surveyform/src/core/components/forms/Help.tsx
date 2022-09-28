@@ -1,7 +1,5 @@
 import React from "react";
-import rehypeRaw from "rehype-raw";
 import { useIntlContext } from "@vulcanjs/react-i18n";
-import { DynamicReactMarkdown } from "../markdown/DynamicReactMarkdown";
 
 const getFormattedMessage = (intlKeys, intl) => {
   if (!intlKeys.length) {
@@ -22,11 +20,7 @@ export const Help = ({ intlKeys }) => {
   const intl = useIntlContext();
   const formattedMessage = getFormattedMessage(intlKeys, intl);
   return (
-    <div className="form-help">
-      <DynamicReactMarkdown rehypePlugins={[rehypeRaw]}>
-        {formattedMessage}
-      </DynamicReactMarkdown>
-    </div>
+    <div className="form-help" dangerouslySetInnerHTML={{__html: formattedMessage}}/>
   );
 };
 
