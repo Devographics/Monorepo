@@ -1,8 +1,6 @@
 import { AnonymousLoginForm } from "~/account/anonymousLogin/components/AnonymousLogin";
 //import { isAnonymousAuthEnabled } from "~/account/anonymousLogin/lib";
 import { useUser } from "~/account/user/hooks";
-import { DynamicReactMarkdown } from "~/core/components/markdown/DynamicReactMarkdown";
-import rehypeRaw from "rehype-raw";
 import { useIntlContext } from "@vulcanjs/react-i18n";
 import { StandaloneMagicLoginForm } from "~/account/magicLogin/components/StandaloneMagicLoginForm";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
@@ -21,11 +19,7 @@ const LoginOptions = () => {
           <FormattedMessage id="accounts.create_account" />
         </h4>
         <div className="survey-login-option-description">
-          <DynamicReactMarkdown rehypePlugins={[rehypeRaw]}>
-            {intl.formatMessage({
-              id: `accounts.create_account.description`,
-            })}
-          </DynamicReactMarkdown>
+          <FormattedMessage id="accounts.create_account.description" />
         </div>
         <div className="survey-login-action">
           <StandaloneMagicLoginForm
@@ -33,9 +27,7 @@ const LoginOptions = () => {
           />
         </div>
         <div className="survey-login-option-note">
-          <DynamicReactMarkdown rehypePlugins={[rehypeRaw]}>
-            {intl.formatMessage({ id: `accounts.create_account.note` })}
-          </DynamicReactMarkdown>
+          <FormattedMessage id="accounts.create_account.note" />
         </div>
       </div>
       <div className="survey-login-option">
@@ -43,11 +35,7 @@ const LoginOptions = () => {
           <FormattedMessage id="accounts.continue_as_guest" />
         </h4>
         <div className="survey-login-option-description">
-          <DynamicReactMarkdown rehypePlugins={[rehypeRaw]}>
-            {intl.formatMessage({
-              id: `accounts.continue_as_guest.description`,
-            })}
-          </DynamicReactMarkdown>
+          <FormattedMessage id="accounts.continue_as_guest.description" />
         </div>
         <div className="survey-login-action">
           <AnonymousLoginForm
