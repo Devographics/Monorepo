@@ -6,18 +6,9 @@
 
 import { publicConfig } from "./public";
 
-/**
- * @see https://vercel.com/docs/concepts/projects/environment-variables
- */
-const appUrl =
-  process.env.NODE_ENV === "production"
-    ? process.env.APP_URL || `https://${process.env.VERCEL_URL}`
-    : "http://localhost:3000";
-
 export const serverConfig = {
   // reexpose public variables for consistency
   ...publicConfig,
-  appUrl,
   /**
    * Internal API for translations and entities
    */

@@ -54,11 +54,17 @@ export const computeHeadTags = ({
 }: HeadTagsProps) => {
   // add site url base if the image is stored locally
   let imageAbsoluteUrl;
-  if (!!imageUrl && imageUrl.indexOf("//") === -1) {
-    // remove starting slash from image path if needed
-    if (imageUrl.charAt(0) === "/") {
-      imageUrl = imageUrl.slice(1);
-    }
+  if (
+    !!imageUrl &&
+    // check if image already has a protocole (absolute URL)
+    // if not build based on siteUrl
+    imageUrl.indexOf("//") === -1
+  ) {
+    // remove starting slash from image path if needed => not needed anymore,
+    // appUrl should not have an ending "/"
+    //if (imageUrl.charAt(0) === "/") {
+    //  imageUrl = imageUrl.slice(1);
+    //}
     imageAbsoluteUrl = siteUrl + imageUrl;
   }
 
