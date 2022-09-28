@@ -1,10 +1,9 @@
 import React from "react";
-import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { useCookies } from "react-cookie";
 import { useMounted } from "~/core/hooks/useMounted";
+import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 
 const DevographicsBanner = () => {
-  const Components = useVulcanComponents();
   const [cookies, setCookie] = useCookies(["hideDevographicsBanner"]);
   const mounted = useMounted();
   const hideBanner = !mounted || cookies.hideDevographicsBanner;
@@ -17,10 +16,7 @@ const DevographicsBanner = () => {
     <div className="devographics-banner">
       <div className="devographics-banner-inner">
         <div className="devographics-banner-message">
-          <Components.FormattedMessage
-            id="general.devographics_banner"
-            html={true}
-          />
+          <FormattedMessage id="general.devographics_banner" html={true} />
         </div>
       </div>
       <div className="devographics-banner-close" onClick={handleClose}>

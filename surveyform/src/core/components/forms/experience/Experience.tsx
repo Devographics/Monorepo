@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { FormCheck } from "react-bootstrap";
-import isEmpty from "lodash/isEmpty.js";
+import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 // import { isOtherValue, removeOtherMarker, addOtherMarker } from './Checkboxgroup';
 import {
   FormInputProps,
@@ -27,7 +27,6 @@ export const Experience = (props: ExperienceProps) => {
     showDescription,
   } = props;
   const Components = useVulcanComponents();
-  const { getDocument, updateCurrentValues } = useFormContext();
   const { questionId } = itemProperties;
 
   const commentPath = path.replace("__experience", "__comment");
@@ -107,7 +106,7 @@ const CodeExample = ({ language, code, codeHighlighted }) => {
   return (
     <div className="code-example">
       <h5 className="code-example-heading">
-        <Components.FormattedMessage id="general.code_example" />
+        <FormattedMessage id="general.code_example" />
       </h5>
       <pre>
         <code dangerouslySetInnerHTML={{ __html: codeHighlighted }}></code>
@@ -159,7 +158,7 @@ const CommentInput = ({
   return (
     <div className="comment-input">
       <h5 className="comment-input-heading">
-        <Components.FormattedMessage
+        <FormattedMessage
           id="experience.leave_comment"
           values={{ label }}
           html={true}
@@ -167,13 +166,13 @@ const CommentInput = ({
       </h5>
       <p className="comment-input-subheading">
         {questionValue ? (
-          <Components.FormattedMessage
+          <FormattedMessage
             id="experience.tell_us_more"
             values={{ response }}
             html={true}
           />
         ) : (
-          <Components.FormattedMessage id="experience.tell_us_more_no_value" />
+          <FormattedMessage id="experience.tell_us_more_no_value" />
         )}
       </p>
       <FormControl

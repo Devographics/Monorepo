@@ -1,5 +1,6 @@
 import React from "react";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
+import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 
 const disallowedCountries = ["FR", "GF", "TF", "PF"];
 
@@ -17,7 +18,7 @@ export const RaceEthnicity = (props) => {
     <div className="form-race-ethnicity">
       {isDisabled && (
         <div className="form-race-ethnicity-not-allowed">
-          <Components.FormattedMessage id="user_info.race_ethnicity.not_allowed" />
+          <FormattedMessage id="user_info.race_ethnicity.not_allowed" />
         </div>
       )}
       <Components.FormComponentCheckboxGroup {...props} />

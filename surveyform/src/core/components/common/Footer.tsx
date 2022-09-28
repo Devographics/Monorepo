@@ -1,13 +1,12 @@
-import { useVulcanComponents } from "@vulcanjs/react-ui";
 import React from "react";
 import Link from "next/link";
 import { useUser } from "~/account/user/hooks";
 import { routes } from "~/lib/routes";
 import { LogoutButton } from "~/account/user/components/LogoutButton";
 import Image from "next/image";
+import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 
 export const Footer = () => {
-  const Components = useVulcanComponents();
   const { user } = useUser();
 
   return (
@@ -16,11 +15,11 @@ export const Footer = () => {
         &copy; 2022 <a href="https://devographics.com/">Devographics</a> |{" "}
         <Link href="/privacy-policy">
           <a>
-            <Components.FormattedMessage id="general.privacy_policy" />
+            <FormattedMessage id="general.privacy_policy" />
           </a>
         </Link>{" "}
-        | <Components.FormattedMessage id="general.emoji_icons" html={true} /> |{" "}
-        <Components.FormattedMessage
+        | <FormattedMessage id="general.emoji_icons" html={true} /> |{" "}
+        <FormattedMessage
           id="general.leave_issue"
           values={{
             link: "https://github.com/StateOfJS/StateOfJS-Vulcan/issues",

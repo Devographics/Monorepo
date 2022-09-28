@@ -12,6 +12,12 @@ import {
   defaultFormComponents,
 } from "@vulcanjs/react-ui";
 import {
+  Alert,
+  Button,
+  // Not needed, we bring our own
+  //FormattedMessage,
+  Loading,
+  TooltipTrigger,
   liteCoreComponents,
   liteFormComponents,
 } from "@vulcanjs/react-ui-lite";
@@ -125,6 +131,12 @@ function VNApp({ Component, pageProps }: VNAppProps) {
                     ...liteFormComponents,
                     ...bootstrapCoreComponents,
                     ...bootstrapFormComponents,
+                    Alert,
+                    Button,
+                    TooltipTrigger,
+                    Loading,
+                    // Keep the component here even if we don't use Components.FormattedMessage directly
+                    // This allows Vulcan components to depend on it
                     FormattedMessage: FormattedMessage,
                   }}
                 >

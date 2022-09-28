@@ -10,6 +10,7 @@ import { useRouter } from "next/router.js";
 import { useSurveyResponseParams } from "../survey/hooks";
 import surveys from "~/surveys";
 import Image from "next/image";
+import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 
 const Thanks = () => {
   const { responseId, slug, year } = useSurveyResponseParams();
@@ -60,7 +61,7 @@ const Thanks = () => {
       </h1>
       <Score response={response} survey={survey} />
       <div>
-        <Components.FormattedMessage id="general.thanks" />
+        <FormattedMessage id="general.thanks" />
       </div>
       <ShareSite survey={survey} />
       <div className="form-submit form-section-nav form-section-nav-bottom">
@@ -80,7 +81,7 @@ const Thanks = () => {
               );
             }}
           >
-            « <Components.FormattedMessage id="general.back" />
+            « <FormattedMessage id="general.back" />
           </Components.Button>
         </div>
       </div>
