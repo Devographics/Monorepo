@@ -37,5 +37,5 @@ docker-build-surveyadmin:
     docker build -f ./docker/surveyadmin.prod.dockerfile -t surveyadmin .
 
 docker-run-surveyadmin:
-    docker run -p 3000:3000 --env-file .env.development -it surveyadmin:latest
+    docker run -p 3000:3000 --env-file {{justfile_directory()}}/surveyadmin/.env.development -it surveyadmin:latest
 
