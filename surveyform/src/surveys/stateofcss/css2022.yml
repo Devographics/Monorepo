@@ -25,13 +25,13 @@ textColor: '#9ac6c9'
 linkColor: '#F95DB2'
 hoverColor: '#59df7f'
 tags: [css]
-contexts: [state_of_css, state_of_css_2022]
+contexts: [state_of_css]
 faq:
-  - questions_required
   - data_used_css2022
   - survey_design_css2022
   - results_released_css2022
   - team
+  - questions_required
   - learn_more_css2022
 credits:
   - id: lea_verou
