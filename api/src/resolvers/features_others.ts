@@ -4,7 +4,7 @@ import { computeTermAggregationAllYears } from '../compute'
 import { getOtherKey } from '../helpers'
 import { RequestContext, SurveyConfig } from '../types'
 import { Filters } from '../filters'
-import { Entity } from '../types'
+import { Entity } from "@devographics/core-models";
 import { getEntities } from '../entities'
 import { YearAggregations } from '../compute/generic'
 

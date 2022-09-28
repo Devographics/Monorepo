@@ -29,7 +29,7 @@ const SurveyCreditItems = ({ survey }: { survey: SurveyType }) => {
     // in case there are null values
     .filter((id) => !!id);
   const { data, loading, error } = useEntitiesQuery({
-    id: { _in: surveyDesignersIds },
+    ids: surveyDesignersIds,
   });
   if (error) return <span>Could not load entities</span>;
   if (loading) return <Components.Loading />;
@@ -80,7 +80,7 @@ const SurveyCreditItem = ({
         </h4>
         {company && (
           <p className="survey-credits-item-company">
-            <a href={company.homepage.url}>{company.name}</a>
+            <a href={company?.homepage?.url}>{company.name}</a>
           </p>
         )}
         {/* <p className="survey-credits-item-twitter">

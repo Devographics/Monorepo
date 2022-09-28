@@ -1,4 +1,4 @@
-@use 'sass:math';
+@use "sass:math";
 .survey-section {
   // .form-control {
   //   background: $bg-color-lightest;
@@ -9,7 +9,7 @@
     margin-bottom: $spacing;
     &:focus-within {
       border-color: var(--link-color);
-      background: $greyDarkish;
+      // background: $greyDarkish;
     }
     @include small {
       margin-bottom: $spacing * 2;
@@ -104,15 +104,6 @@
       color: $greyDarker;
     }
   }
-  .form-text {
-    background: var(--bg-color-light);
-    padding: math.div($spacing, 2);
-    margin-bottom: math.div($spacing, 2);
-    color: var(--text-color);
-    p:last-child {
-      margin: 0;
-    }
-  }
   .form-submit-actions {
     display: flex;
     justify-content: space-between;
@@ -205,16 +196,17 @@
   color: var(--text-color-inverted);
 }
 
-.magic-error, .magic-success{
+.magic-error,
+.magic-success {
   padding: $spacing/2;
   font-size: $smallish-font;
   margin-top: $spacing;
 }
-.magic-error{
+.magic-error {
   border: 3px solid $red;
 }
 
-.magic-success{
+.magic-success {
   border: 3px solid $green;
 }
 
@@ -229,14 +221,155 @@
   }
 }
 
-.form-help{
+.form-help {
   p:last-child {
     margin: 0;
   }
 }
 
-.form-race-ethnicity-not-allowed{
+.form-race-ethnicity-not-allowed {
   padding: $spacing/2;
   background: $redTransparent;
   margin-bottom: $spacing;
+}
+
+.code-example {
+  margin-top: $spacing;
+  // background: $bg-color-light;
+  pre {
+    background: none;
+    // padding: $spacing/2 $spacing;
+  }
+  &-heading {
+    text-transform: uppercase;
+    font-size: $small-font;
+    // border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+    // padding: $spacing/2 $spacing/3;
+    margin: 0 0 math.div($spacing, 3) 0;
+  }
+}
+
+.form-description {
+  margin-bottom: $spacing;
+  color: var(--text-color);
+  p:last-child {
+    margin: 0;
+  }
+}
+
+.form-slider {
+  padding: $spacing 0 $spacing * 2 0;
+  &-options {
+    display: grid;
+    grid-auto-columns: minmax(0, 1fr);
+    grid-auto-flow: column;
+    column-gap: 2px;
+  }
+  .form-check-wrapper {
+    background: $bg-color-light;
+    padding: math.div($spacing, 2);
+    position: relative;
+    margin: 0;
+    & > div {
+      position: static;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 0;
+      &:hover {
+        background: none;
+      }
+    }
+    input {
+      margin: 0;
+    }
+    label {
+      padding: 0;
+      position: absolute;
+      top: calc(100% + 5px);
+      left: 0px;
+      right: 0px;
+      text-align: center;
+      // display: none;
+    }
+    &:hover {
+      background: $bg-color-lighter;
+    }
+    // &:nth-child(4) {
+    //   label {
+    //     display: block;
+    //   }
+    // }
+  }
+}
+
+.experience-contents {
+  display: grid;
+  grid-template-columns: 1fr min-content;
+}
+.comment-trigger-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.comment-trigger {
+  // position: absolute;
+  // bottom: 0px;
+  // right: 0px;
+  // border-top: 1px solid var(--dark-border-color);
+  // border-left: 1px solid var(--dark-border-color);
+  padding: math.div($spacing, 2);
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1/1;
+  background: none;
+  border: none;
+  margin: 0;
+  color: $text-color;
+  &-inactive {
+    svg {
+      opacity: 0.5;
+    }
+  }
+  &-active {
+  }
+  svg {
+    display: block;
+    color: inherit;
+  }
+}
+
+.comment-input {
+  position: relative;
+  margin-top: math.div($spacing, 2);
+  background: $bg-color-light;
+  padding: $spacing;
+  // border-radius: 5px;
+  &-heading {
+    margin-bottom: math.div($spacing, 2);
+    font-size: $medium-font;
+  }
+  &-subheading {
+    margin-bottom: $spacing;
+    font-size: $smallish-font;
+  }
+  &::after {
+    bottom: 100%;
+    right: 11px;
+    border: solid transparent;
+    content: "";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-color: rgba(102, 213, 47, 0);
+    border-bottom-color: $bg-color-light;
+    border-width: 12px;
+    margin-left: -12px;
+  }
+}
+
+.form-input:empty {
+  display: none;
 }

@@ -49,6 +49,7 @@ const localeStringsQuery = print(gql`
       strings {
           key
           t
+          tHtml
           context
           isFallback
       }
@@ -188,8 +189,8 @@ const fetchLocaleStrings = async (variables: {
     if (convertedLocale) return convertedLocale;
     const convertedStrings = {};
     locale.strings &&
-      locale.strings.forEach(({ key, t }) => {
-        convertedStrings[key] = t;
+      locale.strings.forEach(({ key, t, tHtml }) => {
+        convertedStrings[key] = tHtml || t;
       });
     convertedLocale = { ...locale, strings: convertedStrings };
     nodeCache.set(

@@ -12,7 +12,7 @@ export const templates: {
   Partial<ParsedQuestion>;
 } = {
   feature: () => ({
-    input: "radiogroup",
+    input: "feature",
     suffix: "experience",
     options: [
       {
@@ -35,7 +35,7 @@ export const templates: {
     ],
   }),
   tool: () => ({
-    input: "radiogroup",
+    input: "tool",
     suffix: "experience",
     intlPrefix: "tools",
     options: [
@@ -122,12 +122,39 @@ export const templates: {
     randomize: false,
     suffix: "choices",
   }),
+  slider: ({ allowother = false }) => ({
+    allowmultiple: false,
+    allowother: false,
+    input: "slider",
+    type: Number,
+    randomize: false,
+    suffix: "choices",
+    options: [
+      { value: 0 },
+      { value: 1 },
+      { value: 2 },
+      { value: 3 },
+      { value: 4 },
+      { value: 5 },
+      { value: 6 },
+      { value: 7 },
+      { value: 8 },
+    ],
+  }),
   multiple: ({ id, allowother = false }) => ({
     allowmultiple: true,
     allowother,
     input: "checkboxgroup",
     randomize: true,
     suffix: "choices",
+  }),
+  top_n: ({ id, allowother = false }) => ({
+    allowmultiple: true,
+    allowother,
+    input: "top_n",
+    randomize: true,
+    suffix: "choices",
+    limit: 3,
   }),
   others: () => ({
     input: "textarea",

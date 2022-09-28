@@ -65,9 +65,9 @@ const SurveyPageWrapper = (props: SurveyPageWrapperProps) => {
         />
       </h1>
       <div className="survey-page-block">
-        <SurveyPage survey={survey} />
+        <SurveyMain survey={survey} />
       </div>
-      <Faq />
+      <Faq survey={survey} />
       {survey.credits && <SurveyCredits survey={survey} />}
       <Translators />
       <Support />
@@ -78,11 +78,12 @@ const SurveyPageWrapper = (props: SurveyPageWrapperProps) => {
 const SurveyIntro = ({ survey }) => {
   const intl = useIntlContext();
   return (
-    <div className="survey-intro">
-      <ReactMarkdown rehypePlugins={[rehypeRaw]}>
-        {intl.formatMessage({ id: `general.${survey.slug}.intro` })}
-      </ReactMarkdown>
-    </div>
+    <div
+      className="survey-intro"
+      dangerouslySetInnerHTML={{
+        __html: intl.formatMessage({ id: `general.${survey.slug}.survey_intro` }),
+      }}
+    />
   );
 };
 
@@ -96,7 +97,7 @@ const useSurveyPageParams = ():
   return { paramsReady: true, email: email as string };
 };
 
-const SurveyPage = ({ survey }) => {
+const SurveyMain = ({ survey }) => {
   const Components = useVulcanComponents();
   const intl = useIntlContext();
   const { user, loading: currentUserLoading } = useUser();

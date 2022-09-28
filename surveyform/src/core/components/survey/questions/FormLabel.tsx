@@ -2,6 +2,7 @@ import React from "react";
 import Form from "react-bootstrap/Form";
 import EntityLabel, { EntityLabelProps } from "../../common/EntityLabel";
 import { useIntlContext } from "@vulcanjs/react-i18n";
+import { Entity } from "@devographics/core-models";
 
 export interface FormLabelProps {
   questionId: string;
@@ -10,6 +11,7 @@ export interface FormLabelProps {
   path: string;
   year?: number;
   inputProperties: any;
+  entity?: Entity;
 }
 export const FormLabel = ({
   questionId,
@@ -17,6 +19,7 @@ export const FormLabel = ({
   layout,
   path,
   year,
+  entity,
   inputProperties,
 }: FormLabelProps) => {
   const intl = useIntlContext();
@@ -34,7 +37,7 @@ export const FormLabel = ({
   return (
     <h3 className="form-label-heading">
       <Form.Label {...labelProps}>
-        <EntityLabel {...entityProps} />
+        <EntityLabel {...entityProps} entity={entity} />
         {year === 2022 && (
           <span
             className="question-label-new"

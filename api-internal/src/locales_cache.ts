@@ -19,7 +19,8 @@ import {
     getLocaleRawContextCacheKey,
     getLocaleParsedContextCacheKey,
     getLocaleMetaDataCacheKey,
-    getAllLocalesListCacheKey
+    getAllLocalesListCacheKey,
+    allContexts
 } from './locales'
 import path from 'path'
 
@@ -35,6 +36,12 @@ const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
 ///////////////////////////////////////////////////////////////////////////////////////
 
 const excludedFiles = ['crowdin.yml']
+
+export const addToAllContexts = (context: string) => {
+    if (!allContexts.includes(context)) {
+        allContexts.push(context)
+    }
+}
 
 export const loadAllFromGitHub = async (
     localesToLoad: LocaleMetaData[]
@@ -68,6 +75,7 @@ export const loadAllFromGitHub = async (
                     const yamlContents: any = yaml.load(contents)
                     const strings = yamlContents.translations
                     const context = file.name.replace('./', '').replace('.yml', '')
+                    addToAllContexts(context)
                     localeRawData.stringFiles.push({
                         strings,
                         url: file.download_url,
@@ -113,6 +121,7 @@ export const loadAllLocally = async (localesToLoad: LocaleMetaData[]): Promise<L
                 const yamlContents: any = yaml.load(contents)
                 const strings = yamlContents.translations
                 const context = fileName.replace('./', '').replace('.yml', '')
+                addToAllContexts(context)
                 localeRawData.stringFiles.push({
                     strings,
                     url: filePath,
@@ -221,7 +230,8 @@ Parse a string file and add parsed markdown versions where needed
 */
 export const parseMarkdown = (stringFile: StringFile) => {
     stringFile.strings = stringFile.strings.map((s: TranslationStringObject) => {
-        const str = String(s.t)
+        const str = String(s.t).trim()
+        s.t = str
         // if string contains line breaks parse it as paragraph, else parse it inline
         const containsLineBreaks = (str.match(/\n/g) || []).length > 0
         const tHtml = containsLineBreaks ? marked.parse(str) : marked.parseInline(str)

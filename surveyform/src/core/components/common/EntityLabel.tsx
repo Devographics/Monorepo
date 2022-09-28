@@ -1,6 +1,6 @@
-import { captureException } from "@sentry/nextjs";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
 import React from "react";
+import { Entity } from "@devographics/core-models";
 import { useEntities } from "~/core/components/common/EntitiesContext";
 
 /**
@@ -16,12 +16,21 @@ interface EntityLabelDefinition {
   id?: string;
   intlId?: string;
   fallback?: any;
+  entity?: Entity;
 }
 export interface EntityLabelProps extends EntityLabelDefinition, StringLabel {}
 
-const EntityLabel = ({ id, intlId, label, fallback }: EntityLabelProps) => {
-  const Components = useVulcanComponents();
-  const { data, loading, error } = useEntities();
+const EntityLabel = ({
+  id,
+  intlId,
+  label,
+  fallback,
+}: EntityLabelProps) => {
+
+  const { data, loading: entitiesLoading, error } = useEntities();
+  const { entities } = data;
+  const entity = entities?.find((e) => e.id === id);
+
   // string label
   if (label) {
     // if label is provided, use that
@@ -31,30 +40,14 @@ const EntityLabel = ({ id, intlId, label, fallback }: EntityLabelProps) => {
         dangerouslySetInnerHTML={{ __html: label }}
       />
     );
-  }
-  // entity label
-  if (loading) return <Components.Loading />;
-  if (error || !data) {
-    console.warn(
-      "No label provided and could load entities either",
-      intlId,
-      label,
-      fallback
+  } else if (entity) {
+    const { name } = entity;
+    return (
+      <span
+        className="entity-label"
+        dangerouslySetInnerHTML={{ __html: name }}
+      />
     );
-    if (error) {
-      captureException(error);
-    }
-    return <span className="label label-fallback">{fallback}</span>;
-  }
-  const { entities } = data;
-  const entity = entities && entities.find((e) => e.id === id);
-  if (entity) {
-    const { name, isCode } = entity;
-    if (isCode) {
-      return <code className="entity-label entity-label-code">{name}</code>;
-    } else {
-      return <span className="entity-label">{name}</span>;
-    }
   } else {
     return (
       <span className="entity-label entity-label-fallback">{fallback}</span>

@@ -1,5 +1,5 @@
 import { YearCompletion } from './index'
-import { Entity } from './entity'
+import { Entity } from "@devographics/core-models";
 
 export interface ToolExperienceBucket {
     id: string

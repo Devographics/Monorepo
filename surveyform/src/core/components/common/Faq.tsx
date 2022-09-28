@@ -1,32 +1,34 @@
 import React from "react";
 import ReactMarkdown from "react-markdown";
-import rehypeRaw from "rehype-raw";
-import Accordion from "react-bootstrap/Accordion";
+// import rehypeRaw from "rehype-raw";
+// import Accordion from "react-bootstrap/Accordion";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { useIntlContext } from "@vulcanjs/react-i18n";
 
-const items = [
+const defaultItems = [
   // "create_account",
   // "anonymous_survey",
   "questions_required",
-  "data_published",
+  "data_used",
   "survey_design",
   "results_released",
   "team",
+  "learn_more",
 ];
 
-const Faq = () => {
+const Faq = ({ survey }) => {
   const Components = useVulcanComponents();
+  const items = survey.faq || defaultItems
   return (
     <div className="faq survey-page-block">
       <h3 className="faq-heading survey-page-block-heading">
         <Components.FormattedMessage id="general.faq" />
       </h3>
-      <Accordion flush className="faq-contents">
+      <div className="faq-contents">
         {items.map((item, index) => (
           <FaqItem item={item} index={index} key={item} />
         ))}
-      </Accordion>
+      </div>
     </div>
   );
 };
@@ -35,17 +37,17 @@ const FaqItem = ({ item, index }) => {
   const Components = useVulcanComponents();
   const intl = useIntlContext();
   return (
-    <Accordion.Item as="dl" eventKey={index} className="faq-item">
-      <Accordion.Header as="dt" className="faq-item-heading">
+    <dl className="faq-item">
+      <dt className="faq-item-heading">
         <Components.FormattedMessage id={`faq.${item}`} />
-      </Accordion.Header>
-      <Accordion.Body as="dd" className="faq-item-body">
-        <ReactMarkdown rehypePlugins={[rehypeRaw]}>
+      </dt>
+      <dd className="faq-item-body">
+        {/* <ReactMarkdown rehypePlugins={[rehypeRaw]}>
           {intl.formatMessage({ id: `faq.${item}.description` })}
-        </ReactMarkdown>
-        {/* <Components.FormattedMessage id={`faq.${item}.description`} md={true} /> */}
-      </Accordion.Body>
-    </Accordion.Item>
+        </ReactMarkdown> */}
+        <Components.FormattedMessage id={`faq.${item}.description`} html={true} />
+      </dd>
+    </dl>
   );
 };
 

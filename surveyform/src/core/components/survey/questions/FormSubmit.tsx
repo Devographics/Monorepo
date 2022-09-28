@@ -57,7 +57,7 @@ const FormSubmit = ({
               <Components.FormattedMessage id="general.next_section" />
             </span>
             <Components.FormattedMessage
-              id={`sections.${nextSection.id}.title`}
+              id={`sections.${nextSection.intlId || nextSection.id}.title`}
             />{" "}
             <span aria-hidden>»</span>
           </Components.LoadingButton>
@@ -101,7 +101,7 @@ const FormSubmit = ({
             </span>
             <span aria-hidden>«</span>{" "}
             <Components.FormattedMessage
-              id={`sections.${previousSection.id}.title`}
+              id={`sections.${previousSection.intlId || previousSection.id}.title`}
             />
           </Components.LoadingButton>
         ) : (

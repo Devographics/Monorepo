@@ -1,7 +1,8 @@
 import { Db } from 'mongodb'
 import { inspect } from 'util'
 import config from '../config'
-import { YearCompletion, FacetCompletion, SurveyConfig, Entity, RequestContext, ResolverDynamicConfig } from '../types'
+import { Entity } from "@devographics/core-models";
+import { YearCompletion, FacetCompletion, SurveyConfig, RequestContext, ResolverDynamicConfig } from '../types'
 import { Filters, generateFiltersQuery } from '../filters'
 import { Facet } from '../facets'
 import { ratioToPercentage } from './common'

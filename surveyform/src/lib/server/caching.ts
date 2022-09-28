@@ -50,7 +50,7 @@ export const cachedPromise =
     let promise;
     const promiseFromCache = nodeCache.get(cacheKey) as Promise<TReturn>;
     if (!promiseFromCache) {
-      console.info(`Cache MISS for cached promise "${cacheKey}"`);
+      // console.info(`Cache MISS for cached promise "${cacheKey}"`);
       promise = asyncFn().catch((err) => {
         // This catch block will be called in case error
         // I haven't found a way to both use "try/catch" and manipulate the promise, it just doesn't work
@@ -72,7 +72,7 @@ export const cachedPromise =
         nodeCache.set(cacheKey, promise);
       }
     } else {
-      console.info(`Cache HIT for cached promise "${cacheKey}"`);
+      // console.info(`Cache HIT for cached promise "${cacheKey}"`);
       promise = promiseFromCache;
     }
     return promise;
