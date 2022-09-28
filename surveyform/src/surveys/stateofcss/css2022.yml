@@ -75,7 +75,7 @@ outline:
     slug: features
     questions:
       # - id: shapes # removed in 2022, not new anymore, downward trend
-      - id: object_fit
+      # - id: object_fit # removed in 2022, not new anymore
       # - id: clip_path # remove in 2022?
       # - id: masks # remove in 2022?
       - id: blend_modes
@@ -104,6 +104,8 @@ outline:
       - id: wide_gamut_colors
         year: 2022
       - id: relative_colors
+        year: 2022
+      - id: gradient_color_spaces
         year: 2022
 
   - id: interactions
@@ -603,7 +605,7 @@ outline:
           - id: self_directed
 
       - id: first_steps
-        intlId: resources.first_steps_css.others
+        intlId: resources.first_steps.others
         template: others
         matchTags: [first_steps, courses, people, youtube, sites, newsletters, socialmedia]
 

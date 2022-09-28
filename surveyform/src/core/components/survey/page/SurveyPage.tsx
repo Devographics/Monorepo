@@ -78,11 +78,12 @@ const SurveyPageWrapper = (props: SurveyPageWrapperProps) => {
 const SurveyIntro = ({ survey }) => {
   const intl = useIntlContext();
   return (
-    <div className="survey-intro">
-      <ReactMarkdown rehypePlugins={[rehypeRaw]}>
-        {intl.formatMessage({ id: `general.${survey.slug}.intro` })}
-      </ReactMarkdown>
-    </div>
+    <div
+      className="survey-intro"
+      dangerouslySetInnerHTML={{
+        __html: intl.formatMessage({ id: `general.${survey.slug}.survey_intro` }),
+      }}
+    />
   );
 };
 

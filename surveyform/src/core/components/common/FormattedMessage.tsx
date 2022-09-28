@@ -74,13 +74,10 @@ export const FormattedMessage = ({
   }
 
   props.className = classNames.join(" ");
-
-  return html ? (
+  return (
     <span
       {...props}
       dangerouslySetInnerHTML={{ __html: sanitizeHtml(message) }}
     />
-  ) : (
-    <span {...props}>{message}</span>
   );
 };
