@@ -43,84 +43,6 @@ const guaranteeOwnership = (data) => {
   return data;
 };
 
-/**
- * Store hash and salt, and remove temporary password from form document
- * @deprecated We don't use password login anymore
- * @param data
- * @param props
- * @returns
- */
-const handlePasswordCreation = (data: UserTypeServer, props) => {
-  if (data.authMode && data.authMode !== "password") {
-    // Skip password hashing, but delete password just in case
-    delete data.password;
-    return data;
-  }
-  const { password } = data;
-  // const user = await DB.findUser(...)
-  const { hash, salt } = hashPassword(password);
-  data.hash = hash;
-  data.salt = salt;
-  // Do not store the password in the database
-  data.password = null;
-  return data;
-};
-
-/**
- * @deprecated We don't store password anymore
- * @param data
- * @returns
- */
-const handlePasswordUpdate = (data) => {
-  if (data.authMode === "passwordless") {
-    // Skip password hashing, but delete password just in case
-    delete data.password;
-    return data;
-  }
-  const { password } = data;
-  // update the hash
-  if (password) {
-    // const user = await DB.findUser(...)
-    const { hash, salt } = hashPassword(data.password);
-    data.hash = hash;
-    data.salt = salt;
-    // Do not store the password in the database
-    data.password = null;
-  }
-  return data;
-};
-
-const passwordAuthSchema: VulcanGraphqlSchemaServer = {
-  // password auth management
-  hash: {
-    type: String,
-    canRead: [],
-    canCreate: [],
-    canUpdate: [],
-  },
-  salt: {
-    type: String,
-    canRead: [],
-    canCreate: [],
-    canUpdate: [],
-  },
-  // Example of a custom field resolver to get data from other API
-  /*
-  twitterId: {
-    type: String,
-    canRead: ["admins", "owners"],
-    canCreate: ["admins"],
-    canUpdate: ["admins"],
-    resolveAs: {
-      type: "JSON",
-      resolver:(root, args, context) => {
-        return {twiterHandle: "@VulcanJS"}
-      }
-    }
-  }
-   */
-};
-
 // Previously in Users API schema
 //import Responses from "~/modules/responses/collection";
 //import Users from "meteor/vulcan:users";
@@ -164,7 +86,6 @@ const schema: VulcanGraphqlSchemaServer = merge(
   {},
   clientSchema,
   {
-    ...passwordAuthSchema,
     ...apiSchema,
     // MANDATORY when using string ids for a collection instead of ObjectId
     // you have to handle the id creation manually
@@ -197,11 +118,12 @@ const modelDef: CreateGraphqlModelOptionsServer = merge({}, clientModelDef, {
     // server only fields
     callbacks: {
       create: {
-        before: [handlePasswordCreation, hashEmailBeforeSave],
+        // legacy password cleanup
+        before: [hashEmailBeforeSave],
         after: [guaranteeOwnership],
       },
       update: {
-        before: [handlePasswordUpdate, hashEmailBeforeSave],
+        before: [hashEmailBeforeSave],
       },
     },
   },
