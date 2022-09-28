@@ -9,15 +9,20 @@ import { ResponseFragmentWithRanking } from "~/modules/responses/fragments";
 import { useRouter } from "next/router.js";
 import { useSurveyResponseParams } from "../survey/hooks";
 import surveys from "~/surveys";
+import Image from "next/image";
 
 const Thanks = () => {
-  const { responseId } = useSurveyResponseParams();
+  const { responseId, slug, year } = useSurveyResponseParams();
+
   const Components = useVulcanComponents();
   const router = useRouter();
+  const survey = surveys.find(
+    (s) => s.prettySlug === slug && s.year === Number(year)
+  );
 
   const data = useSingle({
     model: Response,
-    fragment: ResponseFragmentWithRanking,
+    fragment: survey && ResponseFragmentWithRanking(survey),
     input: { id: responseId },
   });
   const { document: response, loading } = data;
@@ -38,15 +43,20 @@ const Thanks = () => {
     );
   }
 
-  const survey = surveys.find((s) => s.slug === response.survey.slug);
-  if (!survey)
-    throw new Error(`Could not find survey for slug ${response.survey.slug}`);
-  const { imageUrl, name, year } = survey;
+  if (!survey) {
+    return <div>Could not find survey.</div>;
+  }
+  const { imageUrl, name } = survey;
 
   return (
     <div className="contents-narrow thanks">
       <h1 className="survey-image survey-image-small">
-        <img src={`/surveys/${imageUrl}`} alt={`${name} ${year}`} />
+        <Image
+          width={300}
+          height={200}
+          src={`/surveys/${imageUrl}`}
+          alt={`${name} ${year}`}
+        />
       </h1>
       <Score response={response} survey={survey} />
       <div>

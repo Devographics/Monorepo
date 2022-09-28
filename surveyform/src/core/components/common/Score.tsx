@@ -18,7 +18,6 @@ const Features = ({
 }) => {
   const limitedFeatures = take(features, limit);
   const Components = useVulcanComponents();
-
   return (
     <div className="score-features">
       <h4 className="score-features-heading">
@@ -29,7 +28,7 @@ const Features = ({
           <FeatureItem
             key={feature.id}
             feature={feature}
-            showComma={i < feature.length - 1}
+            showComma={i < (limit - 1)}
           />
         ))}
         .
@@ -52,9 +51,8 @@ const FeatureItem = ({ feature, showComma }) => {
           target: "_blank",
           rel: "norefferer",
         })}
-      >
-        {entity.name}
-      </TagName>
+        dangerouslySetInnerHTML={{ __html: entity.name }}
+      />
       {showComma && ", "}
       {/* <p className="score-feature-summary" dangerouslySetInnerHTML={{ __html: get(entity, 'mdn.summary') }} /> */}
     </div>
