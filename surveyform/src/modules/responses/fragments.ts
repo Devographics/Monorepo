@@ -102,31 +102,15 @@ export const SurveyResponseFragment = (survey: SurveyDocument) => {
 };
 
 //registerFragment(/* GraphQL */
-export const ResponseFragmentWithRanking = gql`
+export const ResponseFragmentWithRanking = (survey: SurveyDocument) => {
+  const srf = SurveyResponseFragment(survey)
+  return gql`
   fragment ResponseFragmentWithRanking on Response {
-    ...${getFragmentName(ResponseFragment)}
+    ...${getFragmentName(srf)}
     knowledgeRanking
   }
-  ${ResponseFragment}
-`;
-//registerFragment(/* GraphQL */
-export const ResponseAdminFragment = gql`
-  fragment ResponseAdminFragment on Response {
-    ...${getFragmentName(ResponseFragment)}
-
-    completion
-
-    normalizedResponse
-
-    user {
-      _id
-      displayName
-      pagePath
-      email
-    }
-  }
-  ${ResponseFragment}
-`;
+  ${srf}
+`}
 
 export const CreateResponseOutputFragment = (survey: SurveyDocument) => {
   const surveySpecificFragment = SurveyResponseFragment(survey);

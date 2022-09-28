@@ -504,22 +504,22 @@ outline:
         year: 2022
         template: slider
 
-      - id: interop_features
-        year: 2022
-        template: top_n
-        random: true
-        options: 
-          - id: leading_trim
-          - id: image_function
-          - id: media_queries
-          - id: math_functions
-          - id: masks
-          - id: border_image
-          - id: image_set
-          - id: media_queries_range_contexts
-          - id: has_selector
-          - id: at_container
-          - id: attr_function
+      # - id: interop_features
+      #   year: 2022
+      #   template: top_n
+      #   random: true
+      #   options: 
+      #     - id: leading_trim
+      #     - id: image_function
+      #     - id: media_queries
+      #     - id: math_functions
+      #     - id: masks
+      #     - id: border_image
+      #     - id: image_set
+      #     - id: media_queries_range_contexts
+      #     - id: has_selector
+      #     - id: at_container
+      #     - id: attr_function
           
       - id: interoperability_features_freeform
         year: 2021
