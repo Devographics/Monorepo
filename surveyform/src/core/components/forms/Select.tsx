@@ -2,7 +2,7 @@ import React from "react";
 import { useIntlContext } from "@vulcanjs/react-i18n";
 import { FormInputProps, useVulcanComponents } from "@vulcanjs/react-ui";
 import type { FormOption } from "@vulcanjs/react-ui";
-import Form from 'react-bootstrap/Form';
+import { FormSelect } from "react-bootstrap";
 
 export const FormComponentSelect = ({
   path,
@@ -16,7 +16,8 @@ export const FormComponentSelect = ({
   const Components = useVulcanComponents();
   const intl = useIntlContext();
   // depending on field type, empty value can be '' or null
-  const emptyValue = datatype === String || datatype === Number ? "" : undefined;
+  const emptyValue =
+    datatype === String || datatype === Number ? "" : undefined;
   const noneOption: FormOption<any> = {
     label: intl.formatMessage({ id: "forms.select_option" }),
     value: emptyValue,
@@ -24,8 +25,6 @@ export const FormComponentSelect = ({
   };
   let otherOptions = Array.isArray(options) && options.length ? options : [];
   const allOptions = [noneOption, ...otherOptions];
-  // @ts-ignore
-  const { options: deleteOptions, ...newInputProperties } = inputProperties;
   return (
     <Components.FormItem
       path={path}
@@ -33,16 +32,19 @@ export const FormComponentSelect = ({
       name={inputProperties.name}
       {...itemProperties}
     >
-      <Form.Select
-        {...newInputProperties}
-        ref={refFunction}
-      >
+      {/** React.HTMLProps will define a weird "as" string HTML attribute
+       * I cannot find any documentation on it and its not standard HTML,
+       * at least for inputs
+       *
+       */}
+      {/** @ts-expect-error */}
+      <FormSelect {...inputProperties} ref={refFunction}>
         {allOptions.map(({ value, label, intlId, ...rest }) => (
           <option key={value} value={value} {...rest}>
             {label}
           </option>
         ))}
-      </Form.Select>
+      </FormSelect>
     </Components.FormItem>
   );
 };

@@ -14,6 +14,8 @@ COPY package.json .npmrc pnpm-workspace.yaml ./
 # Be careful with the end "/" => no slash mean copy folder/file WITH this name,
 # a slash mean copy IN this folder
 COPY surveyadmin/package.json ./surveyadmin/
+# Apollo patch
+COPY surveyadmin/.vn/scripts/fix-apollo.js ./surveyadmin/.vn/scripts/
 # TODO: we should copy only package.json, can we use a glob here?
 COPY shared ./shared
 # FIXME: not working in monorepo 
@@ -27,7 +29,6 @@ COPY shared ./shared
 # FIXME: won't work either if we don't copy shared code 
 # => we need a Dockerfile at the root instead
 RUN yarn global add pnpm && pnpm i --no-optional;
-RUN exit 0
 
 # Rebuild the source code only when needed
 FROM node:16-alpine AS builder
@@ -67,8 +68,8 @@ COPY --from=builder /monorepo/surveyadmin/public ./public
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=builder --chown=nextjs:nodejs /monorepo/app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /monorepo/app/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /monorepo/surveyadmin/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /monorepo/surveyadmin/.next/static ./.next/static
 
 USER nextjs
 

@@ -54,7 +54,7 @@ test("Access state of 2022, signup, start filling form", () => {
     // "Used" radio
     // TODO: doesn't work with regex it seems
     cy.findByLabelText(
-      "I've used it",
+      /I've used it|^used$/,
       // not exact because we need the emoji also
       { exact: false }
     ).click();
@@ -77,12 +77,12 @@ test("Access state of 2022, signup, start filling form", () => {
   // Click a bracket
   // Be careful not to match "Others GraphQL strong points", that's why we need a ^ and a $
   getQuestionBlock(
-    /^GraphQL Strong Points|graphql_demo__usage__strong_points$/i
+    /^GraphQL Strong Points|graphql_demo__usage__graphql_strong_points$/i
   ).within(() => {
     // TODO: order is random so hard to test, we would need more
     // logic to find siblings
     cy.findByRole("button", {
-      name: /Type-checking|options\.strong_points\.type_checking/i,
+      name: /Type-checking|options\.graphql_strong_points\.type_checking/i,
     }).click();
   });
 
