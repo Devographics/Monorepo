@@ -20,6 +20,13 @@ import { getFragmentName } from "@vulcanjs/graphql";
 const disableAPICache = false; //getSetting("disableAPICache", false);
 const translationAPI = serverConfig.translationAPI; //getSetting("translationAPI");
 
+const getSizeInKB = obj => {
+  const str = JSON.stringify(obj);
+  // Get the length of the Uint8Array
+  const bytes = new TextEncoder().encode(str).length;
+  return Math.round(bytes/1000);
+};
+
 const localeDefinitionFragment = gql`
   fragment LocaleDefinition on Locale {
     id
@@ -32,8 +39,8 @@ const localeDefinitionFragment = gql`
  * Get the list of all locales from the API
  */
 const localesQuery = print(gql`
-  query Locales($contexts: [Contexts]) {
-    locales(contexts: $contexts) {
+  query Locales {
+    locales {
       id
       completion
       label
@@ -59,6 +66,7 @@ const localeStringsQuery = print(gql`
 `);
 
 const commonContexts = ["common", "surveys", "accounts"];
+// TODO: move this elsewhere, maybe in surveys config?
 const surveyContexts = [
   "state_of_css",
   "state_of_css_2021_survey",
@@ -66,11 +74,14 @@ const surveyContexts = [
   "state_of_js_2020_survey",
   "state_of_js_2021_survey",
   "state_of_graphql",
+  "state_of_graphql_2022",
+  "state_of_css_2022",
 ];
 // TODO: we should query only relevant strings per survey ideally
 const contexts = [...commonContexts, ...surveyContexts];
 
-const fetchTranslationApi = async (query: string, variables?: any) => {
+const fetchTranslationApi = async (query: string, variables?: any, queryName?: string) => {
+  const startAt = new Date()
   const response = await fetch(translationAPI, {
     method: "POST",
     headers: {
@@ -94,6 +105,8 @@ const fetchTranslationApi = async (query: string, variables?: any) => {
     console.error(json.errors);
     throw new Error(`Translation API query error ${json.errors}`);
   }
+  const endAt = new Date()
+  console.log(`🕚 fetchTranslationApi: ran query ${queryName} in ${endAt.getTime() - startAt.getTime()}ms (${getSizeInKB(json)}kb)`)
   return json;
 };
 
@@ -111,17 +124,14 @@ const LOCALES_TTL_SECONDS = 15 * 60; // 1 request per 15 minutes
  * @param variables
  * @returns
  */
-const fetchLocales = async (variables?: { contexts?: Array<String> }) => {
+const fetchLocales = async () => {
   const cached = cachedPromise(
     promisesNodeCache,
     localesPromiseKey,
     LOCALES_TTL_SECONDS
   );
   const json = await cached(() =>
-    fetchTranslationApi(localesQuery, {
-      contexts,
-      ...(variables || {}),
-    })
+    fetchTranslationApi(localesQuery, {}, 'localesQuery')
   );
   const locales = get(json, "data.locales");
   if (locales) {
@@ -178,7 +188,7 @@ const fetchLocaleStrings = async (variables: {
       /** Will use en-US strings if language is not yet covered, this is the default */
       enableFallbacks: true,
       ...variables,
-    })
+    }, 'localeStringsQuery')
   );
   const locale = get(json, "data.locale") as RawLocale | undefined | null;
   if (locale) {

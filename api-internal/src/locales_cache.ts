@@ -18,8 +18,8 @@ import {
     flattenStringFiles,
     getLocaleRawContextCacheKey,
     getLocaleParsedContextCacheKey,
-    getLocaleMetaDataCacheKey,
-    getAllLocalesListCacheKey,
+    getLocaleUntranslatedKeysCacheKey,
+    getAllLocalesMetadataCacheKey,
     allContexts
 } from './locales'
 import path from 'path'
@@ -156,15 +156,6 @@ export const getLocaleYAML = (localeId: string) => {
 
 /*
 
-Get a list of the ids for all the locales in the YAML
-
-*/
-export const getLocaleIdsList = () => {
-    return getLocalesYAML().map((l: Locale) => l.id)
-}
-
-/*
-
 Load locales contents through GitHub API or locally
 
 */
@@ -287,25 +278,28 @@ export const addFallbacks = (
 ////////////////////////////////////////// Metadata ///////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
 
-export const computeMetaData = (locale: LocaleRawData, parsedStringFiles: StringFile[]) => {
+export const computeMetaData = (locale: LocaleRawData, allStrings: TranslationStringObject[], untranslatedKeys: string[]) => {
     const isEn = locale.id === 'en-US'
-    const allStrings: TranslationStringObject[] = flattenStringFiles(parsedStringFiles)
     const totalCount = allStrings.length
-    const untranslatedKeys = isEn
-        ? []
-        : allStrings
-              .filter((s: TranslationStringObject) => s.isFallback)
-              .map((s: TranslationStringObject) => s.key)
     const translatedCount = totalCount - untranslatedKeys.length
     const completion = isEn ? 100 : Math.round((translatedCount * 100) / totalCount)
     const dynamicData = {
         totalCount,
         translatedCount,
         completion,
-        untranslatedKeys
     }
     const yamlData = getLocaleYAML(locale.id)
     return { ...dynamicData, ...yamlData }
+}
+
+export const computeUntranslatedKeys = (locale: LocaleRawData, allStrings: TranslationStringObject[]) => {
+    const isEn = locale.id === 'en-US'
+    const untranslatedKeys = isEn
+        ? []
+        : allStrings
+              .filter((s: TranslationStringObject) => s.isFallback)
+              .map((s: TranslationStringObject) => s.key)
+    return untranslatedKeys
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -320,6 +314,7 @@ Init locales by parsing them and then caching them
 **/
 export const initLocales = async (context: RequestContext) => {
     const startedAt = new Date()
+    const allLocalesMetadata = []
     console.log(`// Initializing locales cache (Redis)…`)
     let i = 0
     const allLocalesRawData = await loadLocales()
@@ -335,10 +330,6 @@ export const initLocales = async (context: RequestContext) => {
         const stringFileWithMarkdown = parseMarkdown(stringFileWithAliases)
         return stringFileWithMarkdown
     })
-
-    // store list of all locales
-    setCache(getAllLocalesListCacheKey(), getLocaleIdsList(), context)
-    console.log(`-> Done caching list of all locales (${getAllLocalesListCacheKey()})`)
 
     for (const locale of allLocalesRawData) {
         let j = 0
@@ -396,21 +387,31 @@ export const initLocales = async (context: RequestContext) => {
                 context
             )
             console.log(
-                `-> Done caching locale ${getLocaleParsedContextCacheKey(
+                `-> Done caching locale file ${getLocaleParsedContextCacheKey(
                     locale.id,
                     enStringFile.context
                 )} (${j}/${enParsedStringFiles.length})`
             )
         }
 
-        // store metadata
+        const allStrings: TranslationStringObject[] = flattenStringFiles(parsedStringFiles)
+
+        const untranslatedKeys = computeUntranslatedKeys(locale, allStrings)
+        allLocalesMetadata.push(computeMetaData(locale, allStrings, untranslatedKeys))
+        // store untranslated keys
         setCache(
-            getLocaleMetaDataCacheKey(locale.id),
-            computeMetaData(locale, parsedStringFiles),
+            getLocaleUntranslatedKeysCacheKey(locale.id),
+            untranslatedKeys,
             context
         )
-        console.log(`-> Done caching metadata ${getLocaleMetaDataCacheKey(locale.id)}`)
+        console.log(`-> Done caching untranslated keys ${getLocaleUntranslatedKeysCacheKey(locale.id)}`)
     }
+
+    // store metadata for all locales
+    setCache(getAllLocalesMetadataCacheKey(), allLocalesMetadata, context)
+    console.log(`-> Done caching list of all locales (${getAllLocalesMetadataCacheKey()})`)
+
+
     const finishedAt = new Date()
     console.log(
         `=> Locales cache initialization done in ${finishedAt.getTime() - startedAt.getTime()}ms.`
