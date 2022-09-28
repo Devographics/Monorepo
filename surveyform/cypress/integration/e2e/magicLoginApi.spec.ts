@@ -8,6 +8,9 @@ import { loginAnonymously } from "~/account/anonymousLogin/lib";
 import { magicLinkRegex } from "../../helpers/magicLogin";
 import { apiRoutes } from "~/lib/apiRoutes";
 
+// Must be seeded in the db
+const TEST_USER_EMAIL = "test@devographics.com";
+
 // @see https://stackoverflow.com/questions/63457717/how-can-i-call-fetch-from-within-a-cypress-test
 // wrap null, so that you can use `then` to invoke a callback as an arbitrary command
 // and return a Cypress.Promise - so that cypress will wait on it's result
@@ -77,7 +80,7 @@ describe("auth - API", () => {
         .should("equal", 200);
     });
     it("sends verification email for existing user", () => {
-      const email = Cypress.env("ADMIN_EMAIL");
+      const email = TEST_USER_EMAIL;
       cyfy(() => sendMagicLoginEmail({ destination: email }))
         .its("status")
         .should("equal", 200);
@@ -100,7 +103,7 @@ describe("auth - API", () => {
         });
     });
     it("adds anonymousId to existing user when sending email", () => {
-      const email = Cypress.env("ADMIN_EMAIL");
+      const email = TEST_USER_EMAIL;
       cyfy(() => loginAnonymously())
         .as("anonymousLogin")
         .then(async (res: any) => {
