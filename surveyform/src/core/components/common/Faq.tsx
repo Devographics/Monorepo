@@ -1,7 +1,5 @@
 import React from "react";
 // import Accordion from "react-bootstrap/Accordion";
-import { useVulcanComponents } from "@vulcanjs/react-ui";
-import { useIntlContext } from "@vulcanjs/react-i18n";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 
 const defaultItems = [
@@ -32,17 +30,12 @@ const Faq = ({ survey }) => {
 };
 
 const FaqItem = ({ item, index }) => {
-  const Components = useVulcanComponents();
-  const intl = useIntlContext();
   return (
     <dl className="faq-item">
       <dt className="faq-item-heading">
         <FormattedMessage id={`faq.${item}`} />
       </dt>
       <dd className="faq-item-body">
-        {/* <ReactMarkdown rehypePlugins={[rehypeRaw]}>
-          {intl.formatMessage({ id: `faq.${item}.description` })}
-        </ReactMarkdown> */}
         <FormattedMessage id={`faq.${item}.description`} html={true} />
       </dd>
     </dl>

@@ -12,6 +12,7 @@ import { FormControl } from "react-bootstrap";
 import get from "lodash/get.js";
 import IconComment from "~/core/components/icons/Comment";
 import IconCommentDots from "~/core/components/icons/CommentDots";
+import { useIntlContext } from "@vulcanjs/react-i18n";
 
 interface ExperienceProps extends FormInputProps {
   showDescription: boolean;
@@ -117,6 +118,8 @@ const CodeExample = ({ language, code, codeHighlighted }) => {
 
 const CommentTrigger = ({ value, showCommentInput, setShowCommentInput }) => {
   const isActive = showCommentInput || !!value;
+  const intl = useIntlContext();
+
   return (
     <div className="comment-trigger-wrapper">
       <button
@@ -125,11 +128,15 @@ const CommentTrigger = ({ value, showCommentInput, setShowCommentInput }) => {
         }`}
         type="button"
         aria-describedby="popover-basic"
+        aria-label={intl.formatMessage({ id: "experience.leave_comment" })}
         onClick={() => {
           setShowCommentInput(!showCommentInput);
         }}
       >
         {value ? <IconCommentDots /> : <IconComment />}
+        <span className="visually-hidden">
+          <FormattedMessage id="experience.leave_comment" />
+        </span>
       </button>
     </div>
   );
