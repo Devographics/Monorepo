@@ -648,8 +648,8 @@ importers:
       '@vulcanjs/react-hooks': 0.7.2-alpha.3
       '@vulcanjs/react-i18n': 0.7.2-alpha.4
       '@vulcanjs/react-ui': 0.7.2-alpha.5
-      '@vulcanjs/react-ui-bootstrap': 0.7.2-alpha.5
-      '@vulcanjs/react-ui-lite': 0.7.2-alpha.5
+      '@vulcanjs/react-ui-bootstrap': 0.7.2-alpha.7
+      '@vulcanjs/react-ui-lite': 0.7.2-alpha.6
       '@vulcanjs/schema': 0.7.2-alpha.3
       '@vulcanjs/utils': 0.7.2-alpha.3
       apollo-server: '3'
@@ -770,8 +770,8 @@ importers:
       '@vulcanjs/react-hooks': 0.7.2-alpha.3_44jfp46lv3sumohuzkilvtohoe
       '@vulcanjs/react-i18n': 0.7.2-alpha.4_h4ztn5ivnyfxft62lykkhuibd4
       '@vulcanjs/react-ui': 0.7.2-alpha.5_44jfp46lv3sumohuzkilvtohoe
-      '@vulcanjs/react-ui-bootstrap': 0.7.2-alpha.5_pcy7sa4u2cd4z64xrohcmdyfcm
-      '@vulcanjs/react-ui-lite': 0.7.2-alpha.5_jaqlift6akkucvv73cokyw3jzy
+      '@vulcanjs/react-ui-bootstrap': 0.7.2-alpha.7_rgaqj5okzjgu7wdmki6hvenzou
+      '@vulcanjs/react-ui-lite': 0.7.2-alpha.6_jaqlift6akkucvv73cokyw3jzy
       '@vulcanjs/schema': 0.7.2-alpha.3
       '@vulcanjs/utils': 0.7.2-alpha.3
       apollo-server: 3.10.2_graphql@15.4.0
@@ -11100,8 +11100,8 @@ packages:
       - supports-color
     dev: false
 
-  /@vulcanjs/react-ui-bootstrap/0.7.2-alpha.5_pcy7sa4u2cd4z64xrohcmdyfcm:
-    resolution: {integrity: sha512-xFpulhMQi+eMaJBflc5vyZ0L7O86S1q3d5F1hCihp9UUsM8bG7IAIlCVdBhNLazUyctMOyA3ZSrcDeZUI0YAxQ==}
+  /@vulcanjs/react-ui-bootstrap/0.7.2-alpha.7_rgaqj5okzjgu7wdmki6hvenzou:
+    resolution: {integrity: sha512-eaB6jEXLXm6ph4WJvvf3oLMwSTX9Mc72LX3Ju5Z9dEk3ZWBXYoYOM07fMKb3LVKFGNBM8s0MIpRL1pBYrv6sFg==}
     peerDependencies:
       '@apollo/client': ^3.5.5
       '@vulcanjs/react-ui': '*'
@@ -11112,7 +11112,7 @@ packages:
     dependencies:
       '@apollo/client': 3.6.9_lzr65dqsq734t3cvuoj57dyq6e
       '@vulcanjs/react-ui': 0.7.2-alpha.5_44jfp46lv3sumohuzkilvtohoe
-      '@vulcanjs/react-ui-lite': 0.7.2-alpha.5_jaqlift6akkucvv73cokyw3jzy
+      '@vulcanjs/react-ui-lite': 0.7.2-alpha.6_jaqlift6akkucvv73cokyw3jzy
       classnames: 2.3.2
       debug: 4.3.4
       graphql: 15.4.0
@@ -11159,8 +11159,8 @@ packages:
       - supports-color
     dev: false
 
-  /@vulcanjs/react-ui-lite/0.7.2-alpha.5_jaqlift6akkucvv73cokyw3jzy:
-    resolution: {integrity: sha512-NFYmzgveXVeX33FHdJI79DONxt1h1tGh2euyEExumY5qik/5G9FO4Eq/s/lyT4W68mqM+MQ1M5CCpHh1Jg59Pg==}
+  /@vulcanjs/react-ui-lite/0.7.2-alpha.6_jaqlift6akkucvv73cokyw3jzy:
+    resolution: {integrity: sha512-3b9VN86TbqhSjIJf1ge8oiuLXWb9T/voFXBsSKWMwuAnjxdgRPGg3s5bnUg8BBqVK4KxjoocmeNJSXbnx+QQNQ==}
     peerDependencies:
       '@apollo/client': ^3.5.5
       moment: ^2.29.1
@@ -13825,7 +13825,7 @@ packages:
       mississippi: 3.0.0
       mkdirp: 0.5.6
       move-concurrently: 1.0.1
-      promise-inflight: 1.0.1_bluebird@3.7.2
+      promise-inflight: 1.0.1
       rimraf: 2.7.1
       ssri: 6.0.2
       unique-filename: 1.1.1
@@ -26054,17 +26054,6 @@ packages:
     peerDependenciesMeta:
       bluebird:
         optional: true
-    dev: false
-
-  /promise-inflight/1.0.1_bluebird@3.7.2:
-    resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
-    peerDependencies:
-      bluebird: '*'
-    peerDependenciesMeta:
-      bluebird:
-        optional: true
-    dependencies:
-      bluebird: 3.7.2
     dev: false
 
   /promise.allsettled/1.0.5:
