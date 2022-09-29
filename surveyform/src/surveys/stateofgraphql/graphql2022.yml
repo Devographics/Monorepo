@@ -522,6 +522,7 @@ outline:
         matchTags: [first_steps, courses, podcasts, people, youtube, sites, newsletters, socialmedia, graphql]
 
       - id: sites_courses
+        intlId: resources.sites_courses_graphql
         template: multiple
         options:
           - id: stack_overflow
@@ -540,10 +541,12 @@ outline:
         matchTags: [courses, people, youtube, sites, newsletters, socialmedia, graphql]
 
       - id: podcasts
+        intlId: resources.podcasts_graphql.others
         template: others
         matchTags: [podcasts, people, sites, graphql]
 
       - id: people
+        intlId: resources.people_graphql.others
         template: others
         matchTags: [people, youtube, graphql]
 
