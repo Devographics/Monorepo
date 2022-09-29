@@ -1,5 +1,4 @@
 import React from "react";
-import sanitizeHtml from "sanitize-html";
 import { useKeydownContext } from "./KeydownContext";
 import { useDefaultLocaleContext } from "./DefaultLocaleContext";
 import { useIntlContext } from "@vulcanjs/react-i18n";
@@ -77,7 +76,7 @@ export const FormattedMessage = ({
   return (
     <span
       {...props}
-      dangerouslySetInnerHTML={{ __html: sanitizeHtml(message) }}
+      dangerouslySetInnerHTML={{ __html: message }}
     />
   );
 };
