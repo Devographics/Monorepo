@@ -1,3 +1,5 @@
+// @ts-no-check
+
 import dotenv from 'dotenv'
 dotenv.config()
 import { ApolloServer } from 'apollo-server-express'

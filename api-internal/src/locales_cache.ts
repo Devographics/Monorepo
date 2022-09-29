@@ -225,7 +225,9 @@ export const parseMarkdown = (stringFile: StringFile) => {
         s.t = str
         // if string contains line breaks parse it as paragraph, else parse it inline
         const containsLineBreaks = (str.match(/\n/g) || []).length > 0
-        const tHtml = containsLineBreaks ? marked.parse(str) : marked.parseInline(str)
+        let tHtml = containsLineBreaks ? marked.parse(str) : marked.parseInline(str)
+        // we don't actually want to replace quotes
+        tHtml = tHtml.replaceAll('&#39;', `'`)
         const containsTagRegex = new RegExp(/(<([^>]+)>)/i)
         // if markdown-parsed version of the string is different from original,
         // or original contains one or more HTML tags, add it as HTML

@@ -5,7 +5,7 @@
     "module": "ES2020",
     "lib": [
       "es7",
-      "es2019"
+      "es2021"
     ],
     "outDir": "dist",
     "rootDir": "src",
