@@ -1,12 +1,11 @@
-import { useVulcanComponents } from "@vulcanjs/react-ui";
 import React from "react";
+import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 
 const Support = () => {
-  const Components = useVulcanComponents();
   return (
     <div className="support survey-page-block">
       <h3 className="support-heading survey-page-block-heading">
-        <Components.FormattedMessage id="general.support_from" />
+        <FormattedMessage id="general.support_from" />
       </h3>
       <div className="support-item">
         <a href="https://google.com">

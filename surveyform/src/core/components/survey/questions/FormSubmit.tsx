@@ -16,6 +16,7 @@ import { useRouter } from "next/router.js";
 import React, { useState } from "react";
 import { getThanksPath } from "~/modules/responses/helpers";
 import { getSurveyPath } from "~/modules/surveys/getters";
+import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 
 const FormSubmit = ({
   survey,
@@ -54,9 +55,9 @@ const FormSubmit = ({
             }}
           >
             <span className="sr-only">
-              <Components.FormattedMessage id="general.next_section" />
+              <FormattedMessage id="general.next_section" />
             </span>
-            <Components.FormattedMessage
+            <FormattedMessage
               id={`sections.${nextSection.intlId || nextSection.id}.title`}
             />{" "}
             <span aria-hidden>»</span>
@@ -76,7 +77,7 @@ const FormSubmit = ({
               router.push(getThanksPath(response));
             }}
           >
-            <Components.FormattedMessage id="general.finish_survey" />
+            <FormattedMessage id="general.finish_survey" />
           </Components.LoadingButton>
         )}
         {previousSection ? (
@@ -97,11 +98,13 @@ const FormSubmit = ({
             }}
           >
             <span className="sr-only">
-              <Components.FormattedMessage id="general.previous_section" />
+              <FormattedMessage id="general.previous_section" />
             </span>
             <span aria-hidden>«</span>{" "}
-            <Components.FormattedMessage
-              id={`sections.${previousSection.intlId || previousSection.id}.title`}
+            <FormattedMessage
+              id={`sections.${
+                previousSection.intlId || previousSection.id
+              }.title`}
             />
           </Components.LoadingButton>
         ) : (
@@ -111,7 +114,7 @@ const FormSubmit = ({
 
       {showMessage && (
         <div className="form-submit-help">
-          <Components.FormattedMessage id="general.data_is_saved" />
+          <FormattedMessage id="general.data_is_saved" />
         </div>
       )}
     </div>

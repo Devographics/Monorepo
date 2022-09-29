@@ -18,6 +18,7 @@ import { useSurveyParams } from "../hooks";
 import LoginDialog from "~/account/LoginDialog";
 import { useUser } from "~/account/user/hooks";
 import Image from "next/image";
+import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 
 interface SurveyPageWrapperProps {
   slug?: string;
@@ -49,7 +50,7 @@ const SurveyPageWrapper = (props: SurveyPageWrapperProps) => {
       {resultsUrl && (
         <div className="survey-results">
           <a href={resultsUrl} target="_blank" rel="noreferrer noopener">
-            <Components.FormattedMessage id="general.survey_results" />
+            <FormattedMessage id="general.survey_results" />
           </a>
         </div>
       )}

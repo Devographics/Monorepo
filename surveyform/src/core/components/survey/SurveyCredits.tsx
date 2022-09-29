@@ -3,16 +3,16 @@ import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { useEntitiesQuery } from "~/core/hooks/useEntitiesQuery";
 import { Entity } from "@devographics/core-models";
 import type { SurveyType } from "@devographics/core-models";
+import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 
 const SurveyCredits = ({ survey }) => {
-  const Components = useVulcanComponents();
   return (
     <div className="survey-credits survey-page-block">
       <h3 className="survey-credits-heading survey-page-block-heading">
-        <Components.FormattedMessage id="credits.contributors" />
+        <FormattedMessage id="credits.contributors" />
       </h3>
       <p>
-        <Components.FormattedMessage id="credits.contributors.description" />
+        <FormattedMessage id="credits.contributors.description" />
       </p>
       <div className="survey-credits-items">
         <SurveyCreditItems survey={survey} />

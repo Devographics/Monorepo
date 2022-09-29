@@ -3,6 +3,7 @@ import { useCurrentUserWithResponses } from "~/core/components/survey/page/Surve
 import Link from "next/link";
 import { statusesReverse } from "~/modules/constants";
 import orderBy from "lodash/orderBy.js";
+import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 
 const UserResponses = ({ user }) => {
   const Components = useVulcanComponents();
@@ -12,7 +13,7 @@ const UserResponses = ({ user }) => {
     <div>
       <div>
         <h3>
-          <Components.FormattedMessage id="accounts.your_surveys" />
+          <FormattedMessage id="accounts.your_surveys" />
         </h3>
         <ul className="user-responses-list">
           {responses &&
@@ -23,7 +24,7 @@ const UserResponses = ({ user }) => {
       </div>
       {/* <div>
         <h3>
-          <Components.FormattedMessage id="account.past_surveys" />
+          <FormattedMessage id="account.past_surveys" />
         </h3>
         <ul>
           <ResponseItem response={{}}/>
@@ -33,7 +34,13 @@ const UserResponses = ({ user }) => {
   );
 };
 
-const ResponseItem = ({ createdAt, pagePath, completion = 0, survey, status }) => {
+const ResponseItem = ({
+  createdAt,
+  pagePath,
+  completion = 0,
+  survey,
+  status,
+}) => {
   const Components = useVulcanComponents();
   const surveyStatus = statusesReverse[survey?.status];
   return (
@@ -45,19 +52,17 @@ const ResponseItem = ({ createdAt, pagePath, completion = 0, survey, status }) =
           </a>
         </Link>
         <span className={`survey-status survey-status-${surveyStatus}`}>
-          <Components.FormattedMessage
-            id={`general.survey_status_${surveyStatus}`}
-          />
+          <FormattedMessage id={`general.survey_status_${surveyStatus}`} />
         </span>
       </h4>
       <div className="response-item-details">
-        <Components.FormattedMessage
+        <FormattedMessage
           id="response.details"
           values={{ startedAt: createdAt.substr(0, 10), completion }}
         />{" "}
         {survey.resultsUrl && (
           <a href={survey.resultsUrl}>
-            <Components.FormattedMessage id="response.view_results" />
+            <FormattedMessage id="response.view_results" />
           </a>
         )}
       </div>

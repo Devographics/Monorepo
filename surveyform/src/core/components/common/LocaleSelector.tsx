@@ -1,6 +1,7 @@
 import React from "react";
 import { useLocales } from "~/i18n/hooks/locales";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
+import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 
 const LocaleSelector = (props, { setLocale, getLocale }) => {
   const Components = useVulcanComponents();
@@ -12,7 +13,7 @@ const LocaleSelector = (props, { setLocale, getLocale }) => {
   return (
     <div className="locale-selector">
       <p className="locale-selector-languages">
-        <Components.FormattedMessage id="general.surveys_available_languages" />{" "}
+        <FormattedMessage id="general.surveys_available_languages" />{" "}
         {locales.map(({ label, id }, i) => (
           <span key={id} className="locale-selector-item">
             <a
@@ -34,7 +35,7 @@ const LocaleSelector = (props, { setLocale, getLocale }) => {
         target="_blank"
         rel="noreferrer"
       >
-        <Components.FormattedMessage id="general.help_us_translate" />
+        <FormattedMessage id="general.help_us_translate" />
       </a>
     </div>
   );

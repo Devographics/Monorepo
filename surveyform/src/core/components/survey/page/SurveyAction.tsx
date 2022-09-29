@@ -29,6 +29,7 @@ import { getFragmentName } from "@vulcanjs/graphql";
 import { CreateResponseOutputFragment } from "~/modules/responses/fragments";
 import { UserType } from "~/core/models/user";
 import { useQuery } from "@apollo/client";
+import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 
 const useSurveyActionParams = ():
   | { paramsReady: false; source: undefined; referrer: undefined }
@@ -190,7 +191,7 @@ const SurveyAction = ({
     CreateResponseOutputFragment(survey);
   const mutationButtonProps = {
     loadingButtonProps: {
-      label: <Components.FormattedMessage id="general.start_survey" />,
+      label: <FormattedMessage id="general.start_survey" />,
       variant: "primary",
     },
     mutation: gql`
@@ -286,7 +287,7 @@ const SurveyLink = ({
       {/* This simulates what a "LinkContainer" is doing in react-router-bootstrap, replacing the button by a link*/}
       <a type="button" className="btn btn-primary">
         {/*<Components.Button>*/}
-        <Components.FormattedMessage id={message} />
+        <FormattedMessage id={message} />
         {/* </Components.Button>*/}
       </a>
     </Link>
@@ -301,7 +302,7 @@ const ErrorItem = ({ survey, id, message, properties, response }) => {
         {message}{" "}
         <Link href={getSurveyPath({ survey, response })}>
           <a>
-            <Components.FormattedMessage id="general.continue_survey" />
+            <FormattedMessage id="general.continue_survey" />
           </a>
         </Link>
       </div>

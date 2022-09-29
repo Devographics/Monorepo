@@ -9,6 +9,7 @@ import { useVulcanComponents } from "@vulcanjs/react-ui";
 import Link from "next/link";
 import { routes } from "~/lib/routes";
 import { useUser } from "~/account/user/hooks";
+import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 
 interface NavItemDef {
   id?: string;
@@ -45,7 +46,7 @@ const Navigation = () => {
         aria-labelledby="global-nav"
       >
         <p className="hidden" id="global-nav">
-          <Components.FormattedMessage id={"general.global_nav"} />
+          <FormattedMessage id={"general.global_nav"} />
         </p>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
@@ -71,9 +72,7 @@ const NavItem = ({ to, label, id }) => {
     <Nav.Item>
       {/*<IndexLinkContainer to={to}>*/}
       <Link href={to} passHref>
-        <Nav.Link>
-          {label ? label : <Components.FormattedMessage id={id} />}
-        </Nav.Link>
+        <Nav.Link>{label ? label : <FormattedMessage id={id} />}</Nav.Link>
       </Link>
       {/*</IndexLinkContainer>*/}
     </Nav.Item>

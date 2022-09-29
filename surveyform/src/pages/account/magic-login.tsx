@@ -11,6 +11,8 @@ import { useMagicToken } from "~/account/magicLogin/hooks";
 import { verifyMagicToken } from "~/account/magicLogin/lib";
 import { routes } from "~/lib/routes";
 
+import { FormattedMessage } from "~/core/components/common/FormattedMessage";
+
 const useMagicLoginCheck = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<null | Error>(null);
@@ -56,7 +58,7 @@ export const MagicLoginCheckPage = () => {
   if (error) return <p>Error: {error.message}</p>;
   return (
     <p>
-      <Components.FormattedMessage id="accounts.token_verified" />
+      <FormattedMessage id="accounts.token_verified" />
     </p>
   );
 };

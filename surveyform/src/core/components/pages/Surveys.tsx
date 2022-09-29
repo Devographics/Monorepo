@@ -8,6 +8,7 @@ import Link from "next/link"; //"react-router-dom";
 import { statuses } from "~/modules/constants";
 import LocaleSelector from "~/core/components/common/LocaleSelector";
 import Translators from "~/core/components/common/Translators";
+import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
 import Image from "next/image";
 
@@ -47,7 +48,7 @@ const SurveyGroup = ({ status }) => {
   return (
     <div className="surveys-group">
       <h3 className="surveys-group-heading">
-        <Components.FormattedMessage id={`general.${status}_surveys`} />
+        <FormattedMessage id={`general.${status}_surveys`} />
       </h3>
       {filteredSurveys.length > 0 ? (
         filteredSurveys.map((survey) => (
@@ -55,7 +56,7 @@ const SurveyGroup = ({ status }) => {
         ))
       ) : (
         <div className={`surveys-none surveys-no${status}`}>
-          <Components.FormattedMessage id={`general.no_${status}_surveys`} />
+          <FormattedMessage id={`general.no_${status}_surveys`} />
         </div>
       )}
     </div>

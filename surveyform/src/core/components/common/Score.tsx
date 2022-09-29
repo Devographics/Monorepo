@@ -8,6 +8,7 @@ import { useVulcanComponents } from "@vulcanjs/react-ui";
 import type { SurveyType } from "@devographics/core-models";
 import { useIntlContext } from "@vulcanjs/react-i18n";
 import { useEntitiesQuery } from "~/core/hooks/useEntitiesQuery";
+import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 
 const Features = ({
   features,
@@ -21,7 +22,7 @@ const Features = ({
   return (
     <div className="score-features">
       <h4 className="score-features-heading">
-        <Components.FormattedMessage id="thanks.learn_more_about" />
+        <FormattedMessage id="thanks.learn_more_about" />
       </h4>{" "}
       <div className="score-features-items">
         {limitedFeatures.map((feature, i) => (
@@ -101,7 +102,7 @@ const Score = ({ response, survey }: { response: any; survey: SurveyType }) => {
     <div className="score">
       <div className="score-calculation">
         <div className="score-calcuation-heading">
-          <Components.FormattedMessage id="thanks.knowledge_score" />
+          <FormattedMessage id="thanks.knowledge_score" />
         </div>
         <div className="score-percent">
           <CountUp
@@ -137,7 +138,7 @@ const Score = ({ response, survey }: { response: any; survey: SurveyType }) => {
           </div>
         </div>
         <div className="score-ratio">
-          <Components.FormattedMessage
+          <FormattedMessage
             id="thanks.score_explanation"
             values={{ known, total, knowledgeRankingFromTop }}
             html={true}
@@ -150,7 +151,7 @@ const Score = ({ response, survey }: { response: any; survey: SurveyType }) => {
               text
             )}`}
           >
-            <Components.FormattedMessage id="thanks.share_on_twitter" />
+            <FormattedMessage id="thanks.share_on_twitter" />
           </Components.Button>
         </div>
         {unknownFeatures.length > 0 && (

@@ -17,6 +17,7 @@ import { getSectionCompletionPercentage } from "~/modules/responses/helpers";
 import { getSurveyPath } from "~/modules/surveys/getters";
 import type { SurveySection, SurveyType } from "@devographics/core-models";
 import surveys from "~/surveys";
+import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 
 // TODO
 // const getOverallCompletionPercentage = (response) => {
@@ -90,7 +91,7 @@ const SurveyNav = ({
           }}
         >
           <h3 className="section-nav-toc">
-            <Components.FormattedMessage id="general.table_of_contents" />
+            <FormattedMessage id="general.table_of_contents" />
           </h3>
           <span className="section-nav-toggle">{shown ? "▼" : "▶"}</span>
         </Components.Button>
@@ -112,7 +113,7 @@ const SurveyNav = ({
             {/* {response && <li>Overall: {getOverallCompletionPercentage(response)}%</li>} */}
           </ul>
           <p className="completion-message">
-            <Components.FormattedMessage id="general.all_questions_optional" />
+            <FormattedMessage id="general.all_questions_optional" />
           </p>
         </div>
       </div>
@@ -170,7 +171,7 @@ const SectionNavItem = ({
             setCurrentFocusIndex(null);
           }}
         >
-          <Components.FormattedMessage
+          <FormattedMessage
             id={`sections.${section.intlId || section.id}.title`}
           />{" "}
           {showCompletion && (

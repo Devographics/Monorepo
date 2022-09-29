@@ -2,6 +2,7 @@ import React from "react";
 // import Accordion from "react-bootstrap/Accordion";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { useIntlContext } from "@vulcanjs/react-i18n";
+import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 
 const defaultItems = [
   // "create_account",
@@ -15,12 +16,11 @@ const defaultItems = [
 ];
 
 const Faq = ({ survey }) => {
-  const Components = useVulcanComponents();
   const items = survey.faq || defaultItems;
   return (
     <div className="faq survey-page-block">
       <h3 className="faq-heading survey-page-block-heading">
-        <Components.FormattedMessage id="general.faq" />
+        <FormattedMessage id="general.faq" />
       </h3>
       <div className="faq-contents">
         {items.map((item, index) => (
@@ -37,16 +37,13 @@ const FaqItem = ({ item, index }) => {
   return (
     <dl className="faq-item">
       <dt className="faq-item-heading">
-        <Components.FormattedMessage id={`faq.${item}`} />
+        <FormattedMessage id={`faq.${item}`} />
       </dt>
       <dd className="faq-item-body">
         {/* <ReactMarkdown rehypePlugins={[rehypeRaw]}>
           {intl.formatMessage({ id: `faq.${item}.description` })}
         </ReactMarkdown> */}
-        <Components.FormattedMessage
-          id={`faq.${item}.description`}
-          html={true}
-        />
+        <FormattedMessage id={`faq.${item}.description`} html={true} />
       </dd>
     </dl>
   );

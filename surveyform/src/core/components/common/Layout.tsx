@@ -8,6 +8,7 @@ import { KeydownContextProvider } from "./KeydownContext";
 import { useSurveyParams } from "../survey/hooks";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { useRouter } from "next/router";
+import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 
 export const Layout = ({
   children,
@@ -63,7 +64,7 @@ export const Layout = ({
       <div className="wrapper" id="wrapper">
         <style dangerouslySetInnerHTML={{ __html: style }} />
         <a href="#section-questions" className="skip">
-          <Components.FormattedMessage id="general.skip_to_content" />
+          <FormattedMessage id="general.skip_to_content" />
         </a>
         <DevographicsBanner />
         <Header />

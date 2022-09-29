@@ -19,6 +19,7 @@ import { Save, SaveFragment } from "@devographics/core-models";
 import type { ParsedQuestion, SurveyType } from "@devographics/core-models";
 import { useUser } from "~/account/user/hooks";
 import { EntitiesProvider } from "~/core/components/common/EntitiesContext";
+import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 
 const getEntityIds = (questions: Array<ParsedQuestion & { id: string }>) => {
   let ids: string[] = [];
@@ -75,8 +76,8 @@ const SurveySectionContents = ({
 
   // we need to tell SmartForm to accept the comment fields as valid fields too
   for (const f of fields) {
-    if (f.includes('__experience')) {
-      fields.push(f.replace('__experience', '__comment'))
+    if (f.includes("__experience")) {
+      fields.push(f.replace("__experience", "__comment"));
     }
   }
 
@@ -116,7 +117,7 @@ const SurveySectionContents = ({
           <span className="section-title-pagenumber">
             {sectionNumber}/{survey.outline.length}
           </span>
-          <Components.FormattedMessage
+          <FormattedMessage
             className="section-title-label"
             id={`sections.${intlId || id}.title`}
             defaultMessage={id}
@@ -124,7 +125,7 @@ const SurveySectionContents = ({
           />
         </h2>
         <p className="section-description">
-          <Components.FormattedMessage
+          <FormattedMessage
             id={`sections.${intlId || id}.description`}
             defaultMessage={id}
             values={{ ...survey }}

@@ -19,6 +19,7 @@ import { useRouter } from "next/router.js";
 import gql from "graphql-tag";
 import { getFragmentName } from "@vulcanjs/graphql";
 import { CreateResponseOutputFragment } from "~/modules/responses/fragments";
+import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 
 // for some reason this throws error?
 // import bowser from 'bowser';
@@ -70,9 +71,9 @@ const SurveyItem = ({ survey, currentUser }) => {
               <a>
                 <Components.Button>
                   {status === statuses.open ? (
-                    <Components.FormattedMessage id="general.continue_survey" />
+                    <FormattedMessage id="general.continue_survey" />
                   ) : (
-                    <Components.FormattedMessage id="general.review_survey" />
+                    <FormattedMessage id="general.review_survey" />
                   )}
                 </Components.Button>
               </a>
@@ -81,9 +82,7 @@ const SurveyItem = ({ survey, currentUser }) => {
           status === statuses.open ? (
             <Components.MutationButton
               loadingButtonProps={{
-                label: (
-                  <Components.FormattedMessage id="general.start_survey" />
-                ),
+                label: <FormattedMessage id="general.start_survey" />,
                 variant: "primary",
               }}
               mutation={gql`

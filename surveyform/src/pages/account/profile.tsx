@@ -1,12 +1,11 @@
 import { useUser } from "~/account/user/hooks";
 import { PageLayout } from "~/core/components/layout";
 import { routes } from "~/lib/routes";
-import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { LogoutButton } from "~/account/user/components/LogoutButton";
 import UserResponses from "~/core/components/users/UserResponses";
+import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 
 const Profile = () => {
-  const Components = useVulcanComponents();
   const { user } = useUser({ redirectTo: routes.account.login.href });
   if (!user) return null; // will redirect
   return (
@@ -14,12 +13,12 @@ const Profile = () => {
       <div className="contents-narrow account">
         <p>
           {user.authMode === "anonymous" && (
-            <Components.FormattedMessage id="accounts.logged_in_as_guest" />
+            <FormattedMessage id="accounts.logged_in_as_guest" />
           )}
         </p>
         <UserResponses user={user} />
         <p>
-          <Components.FormattedMessage id="accounts.questions" html={true} />
+          <FormattedMessage id="accounts.questions" html={true} />
         </p>
         <p>
           <LogoutButton />
