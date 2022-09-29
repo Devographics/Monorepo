@@ -49,6 +49,10 @@ outline:
     template: feature
     slug: features
     questions:
+
+      - id: features_intro_css
+        template: help
+
       # - id: grid # removed in 2022, not that new anymore
       - id: subgrid
       # - id: flexbox # removed in 2022, too high usage
@@ -271,6 +275,10 @@ outline:
     template: tool
     slug: tools
     questions:
+
+      - id: tools_intro_css
+        template: help
+
       - id: bootstrap
       - id: materialize_css
       - id: ant_design
@@ -635,6 +643,7 @@ outline:
         matchTags: [courses, people, youtube, sites, newsletters, socialmedia]
 
       - id: sites_courses
+        intlId: resources.sites_courses_css
         template: multiple
         options:
           - id: stack_overflow
@@ -683,11 +692,11 @@ outline:
           - id: working_draft
           - id: web_standards
 
-      - id: podcasts
+      - id: podcasts_css
         template: others
         matchTags: [podcasts, people, sites]
 
-      - id: people
+      - id: people_css
         year: 2021
         template: others
         matchTags: [people, sites, youtube]
