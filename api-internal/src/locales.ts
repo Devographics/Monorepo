@@ -187,9 +187,10 @@ export const getLocales = async (options: {
     localeIds: string[]
     context: RequestContext
 }) => {
-    const { localeIds, context } = options
+    const { localeIds, context, contexts } = options
     const allLocales = await getLocalesMetadata(context)
-    return localeIds ? allLocales.filter((l: Locale) => localeIds.includes(l.id)) : allLocales
+    const allLocalesWithContexts = allLocales.map((l: Locale) => ({...l, contexts}))
+    return localeIds ? allLocalesWithContexts.filter((l: Locale) => localeIds.includes(l.id)) : allLocalesWithContexts
 }
 
 /*

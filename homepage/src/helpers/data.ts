@@ -29,7 +29,7 @@ export const getData = async (): Promise<HomepageData> => {
             }
             data = { ...data, ...json.data }
         } catch (error) {
-            console.log(`// getData error (API_URL: ${import.meta.env.DATA_API_URL})`)
+            console.log(`// getData error (API_URL: ${url})`)
             console.log(text)
             throw new Error(error)
         }
