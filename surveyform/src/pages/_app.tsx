@@ -7,24 +7,16 @@ import {
   VulcanComponentsProvider,
   VulcanCurrentUserProvider,
 } from "@vulcanjs/react-ui";
-import {
-  defaultCoreComponents,
-  defaultFormComponents,
-} from "@vulcanjs/react-ui";
+import { defaultCoreComponents } from "@vulcanjs/react-ui";
 import {
   Alert,
-  Button,
   // Not needed, we bring our own
   //FormattedMessage,
   Loading,
   TooltipTrigger,
   liteCoreComponents,
-  liteFormComponents,
 } from "@vulcanjs/react-ui-lite";
-import {
-  bootstrapCoreComponents,
-  bootstrapFormComponents,
-} from "@vulcanjs/react-ui-bootstrap";
+import { bootstrapCoreComponents } from "@vulcanjs/react-ui-bootstrap";
 
 import debug from "debug";
 
@@ -126,7 +118,6 @@ function VNApp({ Component, pageProps }: VNAppProps) {
                 <VulcanComponentsProvider
                   value={{
                     ...defaultCoreComponents,
-                    ...defaultFormComponents,
                     ...liteCoreComponents,
                     Alert,
                     // TODO: should not be needed, since we use Bootstrap Button instead,
@@ -134,9 +125,7 @@ function VNApp({ Component, pageProps }: VNAppProps) {
                     // Button,
                     TooltipTrigger,
                     Loading,
-                    ...liteFormComponents,
                     ...bootstrapCoreComponents,
-                    ...bootstrapFormComponents,
                     // Keep the component here even if we don't use Components.FormattedMessage directly
                     // This allows Vulcan components to depend on it
                     FormattedMessage: FormattedMessage,

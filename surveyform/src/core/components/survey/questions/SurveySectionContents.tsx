@@ -20,6 +20,9 @@ import type { ParsedQuestion, SurveyType } from "@devographics/core-models";
 import { useUser } from "~/account/user/hooks";
 import { EntitiesProvider } from "~/core/components/common/EntitiesContext";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
+import { defaultFormComponents } from "@vulcanjs/react-ui";
+import { liteFormComponents } from "@vulcanjs/react-ui-lite";
+import { bootstrapFormComponents } from "@vulcanjs/react-ui-bootstrap";
 
 const getEntityIds = (questions: Array<ParsedQuestion & { id: string }>) => {
   let ids: string[] = [];
@@ -135,6 +138,9 @@ const SurveySectionContents = ({
       <EntitiesProvider ids={entityIds}>
         <VulcanComponentsProvider
           value={{
+            ...defaultFormComponents,
+            ...liteFormComponents,
+            ...bootstrapFormComponents,
             FormItem,
             FormLayout,
             FormSubmit: FormSubmitWrapper,
