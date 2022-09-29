@@ -73,7 +73,7 @@ const Score = ({ response, survey }: { response: any; survey: SurveyType }) => {
 
   const text = intl.formatMessage(
     { id: "thanks.share_score_message" },
-    { score, name, shareUrl, hashtag }
+    { score, name, shareUrl: `${shareUrl}?source=post_survey_share`, hashtag }
   );
 
   const unknownFieldIds = unknownFields

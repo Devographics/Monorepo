@@ -10,14 +10,16 @@ slug: css2022 # used as first part of field names
 surveyId: css2022 # used as first part of field names
 context: state_of_css
 topic: CSS
-createdAt: October 30, 2022
+createdAt: October 1, 2022
+startAt: October 1, 2022
+endAt: November 1, 2022
 prettySlug: state-of-css
 hashtag: StateOfCSS
 shareUrl: https://stateofcss.com
 # resultsUrl: https://2022.stateofcss.com/
 name: 'State of CSS'
 year: 2022
-status: 1 # preview/open/closed/hidden
+status: 2 # preview/open/closed/hidden
 imageUrl: 'stateofcss2022.png'
 domain: stateofcss.com
 bgColor: '#232840'

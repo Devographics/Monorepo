@@ -7,12 +7,13 @@ import { useIntlContext } from "@vulcanjs/react-i18n";
 
 const ShareSite = ({ survey }) => {
   const intl = useIntlContext();
-  const { name, year, hashtag, shareUrl: link } = survey;
+  const { name, year, hashtag, shareUrl } = survey;
+  const link = `${shareUrl}?source=post_survey_share`
   const surveyName = `${name} ${year}`;
   const values = { surveyName, link };
   const title = intl.formatMessage({ id: "general.share_subject" }, values);
   const body = intl.formatMessage({ id: "general.share_text" }, values);
-  const twitterText = body + `#${hashtag}`;
+  const twitterText = body + ` #${hashtag}`;
 
   return (
     <div className="ShareSite">
