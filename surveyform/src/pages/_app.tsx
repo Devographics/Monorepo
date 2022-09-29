@@ -172,48 +172,4 @@ function VNApp({ Component, pageProps }: VNAppProps) {
   );
 }
 
-// Only uncomment this method if you have blocking data requirements for
-// every single page in your application. This disables the ability to
-// perform automatic static optimization, causing every page in your app to
-// be server-side rendered.
-/*
-VNApp.getInitialProps = async (appContext: AppContext) => {
-  // NOTE: in Vercel this is also equal to https://VERCEL_URL
-  const origin = appContext.ctx.req?.headers.origin;
-  // calls page's `getInitialProps` and fills `appProps.pageProps`
-  const appProps = await App.getInitialProps(appContext);
-  // get the right locale for current user based on cookies
-  const req = appContext.ctx.req;
-  // Not SSR context (SSG or client-side call)
-  if (!req) {
-    return { ...appProps };
-  }
-  // SSR
-  const localeId = getLocaleFromReq(req);
-  if (!localeId) {
-    return { ...appProps };
-  }
-  try {
-    // TODO: if the locale id is not known (eg try zz-ZZ)
-    // we should try to fetch english instead
-    const localeWithStrings = await getLocaleStringsCached(localeId, origin);
-    return {
-      ...appProps,
-      locale: localeId,
-      localeStrings: localeWithStrings?.strings,
-    };
-  } catch (err) {
-    console.warn("Could not get locales", localeId, err);
-  }
-  return {
-    ...appProps,
-    locale: localeId,
-    origin,
-  };
-};
-*/
-
-// TODO: we currently mix our own custom i18n system with next-i18n which
-// is setup as a default in Vulcan Next
-// Don't remove until all translations are moved to our own system
 export default VNApp;
