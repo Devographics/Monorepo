@@ -143,7 +143,7 @@ function VNApp({ Component, pageProps }: VNAppProps) {
                   }}
                 >
                   <Head>
-                    <title>State of JS</title>
+                    <title>Devographics Surveys</title>
                     <meta
                       name="viewport"
                       content="minimum-scale=1, initial-scale=1, width=device-width"
