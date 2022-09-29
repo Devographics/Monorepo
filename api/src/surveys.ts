@@ -4,6 +4,7 @@ import fetch from 'node-fetch'
 import yaml from 'js-yaml'
 import { readdir, readFile, lstat } from 'fs/promises'
 import { logToFile } from './debug'
+import path from 'path'
 
 let allSurveys: Survey[] = []
 
@@ -87,14 +88,13 @@ export const loadLocally = async () => {
 
     const surveys: Survey[] = []
 
-    const devDir = __dirname.split('/').slice(1, -3).join('/')
-    const path = `/${devDir}/devographics-surveys/`
-    const surveysDirs = await readdir(path)
+    const surveysDirPath = path.resolve(`../../devographics-surveys/`)
+    const surveysDirs = await readdir(surveysDirPath)
 
     // loop over dir contents and fetch raw yaml files
     for (const surveyDirName of surveysDirs) {
         const editions = []
-        const surveyDirPath = path + surveyDirName
+        const surveyDirPath = surveysDirPath + '/' + surveyDirName
         const stat = await lstat(surveyDirPath)
         if (!excludeDirs.includes(surveyDirName) && stat.isDirectory()) {
             console.log(`// Loading survey ${surveyDirName}…`)

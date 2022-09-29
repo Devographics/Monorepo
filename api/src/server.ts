@@ -1,29 +1,27 @@
-// @ts-no-check
-
-import dotenv from 'dotenv'
-dotenv.config()
 import { ApolloServer } from 'apollo-server-express'
 import { MongoClient } from 'mongodb'
-import responseCachePlugin from 'apollo-server-plugin-response-cache'
+// @see https://github.com/apollographql/apollo-server/issues/6022
+import responseCachePluginPkg from 'apollo-server-plugin-response-cache'
+const responseCachePlugin = (responseCachePluginPkg as any).default
+
 import typeDefs from './type_defs/schema.graphql'
 import { RequestContext } from './types'
 import resolvers from './resolvers'
 import express from 'express'
-import { initLocales } from './i18n'
 import { initEntities } from './entities'
 import { initSurveys } from './surveys'
 import { analyzeTwitterFollowings } from './rpcs'
 import { clearCache } from './caching'
-
 import { createClient } from 'redis'
-
-// import Sentry from '@sentry/node'
-// import Tracing from '@sentry/tracing'
 
 import path from 'path'
 
-const Sentry = require('@sentry/node')
-const Tracing = require('@sentry/tracing')
+import Sentry from '@sentry/node'
+
+import { rootDir } from './rootDir'
+import { appSettings } from './settings'
+
+//import Tracing from '@sentry/tracing'
 
 const app = express()
 
@@ -57,7 +55,7 @@ const start = async () => {
     const startedAt = new Date()
     console.log('// Starting server…')
     const redisClient = createClient({
-        url: process.env.REDIS_URL
+        url: appSettings.redisUrl
     })
 
     redisClient.on('error', err => console.log('Redis Client Error', err))
@@ -68,7 +66,7 @@ const start = async () => {
         connectTimeoutMS: 10000
     })
 
-    if (process.env.CACHE_TYPE !== 'local') {
+    if (appSettings.cacheType !== 'local') {
         await redisClient.connect()
     }
 
@@ -112,7 +110,7 @@ const start = async () => {
     server.applyMiddleware({ app })
 
     app.get('/', function (req, res) {
-        res.sendFile(path.join(__dirname + '/public/welcome.html'))
+        res.sendFile(path.join(rootDir + '/public/welcome.html'))
     })
 
     app.get('/debug-sentry', function mainHandler(req, res) {

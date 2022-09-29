@@ -1,4 +1,7 @@
-import _ from 'lodash'
+import orderBy from 'lodash/orderBy.js'
+import sumBy from 'lodash/sumBy.js'
+import sortBy from 'lodash/sortBy.js'
+import uniq from 'lodash/uniq.js'
 import { Db } from 'mongodb'
 import config from '../config'
 import { ratioToPercentage, appendCompletionToYearlyResults } from './common'
@@ -117,7 +120,7 @@ export async function computeExperienceOverYears({
     const completionByYear = await computeCompletionByYear(context, match)
 
     // group by years and add counts
-    const experienceByYear = _.orderBy(
+    const experienceByYear = orderBy(
         results.reduce<
             Array<{
                 year: number
@@ -174,7 +177,7 @@ export async function computeExperienceOverYears({
 
     // compute percentages
     experienceByYear.forEach(bucket => {
-        bucket.total = _.sumBy(bucket.buckets, 'count')
+        bucket.total = sumBy(bucket.buckets, 'count')
         bucket.buckets.forEach(subBucket => {
             subBucket['percentage_survey'] = 0 // TODO
             subBucket['percentage_question'] = ratioToPercentage(subBucket.count / bucket.total)
@@ -265,7 +268,7 @@ export async function computeToolsExperienceRanking({
 
     for (const yearMetrics of Object.values(metricByYear)) {
         metrics.forEach(metric => {
-            yearMetrics[metric] = _.sortBy(yearMetrics[metric], 'percentage_question').reverse()
+            yearMetrics[metric] = sortBy(yearMetrics[metric], 'percentage_question').reverse()
             yearMetrics[metric].forEach((bucket: any, index: number) => {
                 // make ranking starts at 1
                 bucket.rank = index + 1
@@ -273,7 +276,7 @@ export async function computeToolsExperienceRanking({
         })
     }
 
-    availableYears = _.uniq(availableYears).sort()
+    availableYears = uniq(availableYears).sort()
 
     const byTool: any[] = []
     for (const tool of tools) {
@@ -329,7 +332,7 @@ export async function computeToolsExperienceRankingYears({
             availableYears.push(toolYear.year)
         })
     }
-    availableYears = _.uniq(availableYears).sort()
+    availableYears = uniq(availableYears).sort()
     return availableYears
 }
 

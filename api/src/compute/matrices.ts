@@ -1,5 +1,7 @@
 import { inspect } from 'util'
-import _ from 'lodash'
+import sumBy from 'lodash/sumBy.js'
+import keyBy from 'lodash/keyBy.js'
+import round from 'lodash/round.js'
 import { Db } from 'mongodb'
 import config from '../config'
 import { ratioToPercentage } from './common'
@@ -68,9 +70,9 @@ export const computeToolMatrixBreakdown = async (
         .aggregate(comparisonRangesAggregationPipeline)
         .toArray()
 
-    const comparisonTotal = _.sumBy(comparisonRangesResults, 'count')
+    const comparisonTotal = sumBy(comparisonRangesResults, 'count')
 
-    const comparisonRangeById = _.keyBy(comparisonRangesResults, 'id')
+    const comparisonRangeById = keyBy(comparisonRangesResults, 'id')
 
     const experienceDistributionByRangeAggregationPipeline = [
         {
@@ -132,7 +134,7 @@ export const computeToolMatrixBreakdown = async (
         bucket.range_percentage = ratioToPercentage(bucket.count / comparisonRange.count)
         // how does the distribution for this specific experience/range compare
         // to the overall distribution for the range?
-        bucket.range_percentage_delta = _.round(bucket.range_percentage - overallPercentage, 2)
+        bucket.range_percentage_delta = round(bucket.range_percentage - overallPercentage, 2)
     })
 
     // console.log(

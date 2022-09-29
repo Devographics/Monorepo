@@ -1,23 +1,24 @@
-import { Entity } from "@devographics/core-models";
+// import { Entity } from './types'
+import { Entity } from '@devographics/core-models'
 import { Octokit } from '@octokit/core'
 import fetch from 'node-fetch'
 import yaml from 'js-yaml'
 import { readdir, readFile } from 'fs/promises'
-import last from 'lodash/last'
+import last from 'lodash/last.js'
 import { logToFile } from './debug'
+import path from 'path'
 import marked from 'marked'
 import hljs from 'highlight.js/lib/common'
+import { appSettings } from './settings'
 
 let entities: Entity[] = []
-
-const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
 
 // load locales if not yet loaded
 export const loadOrGetEntities = async () => {
     if (entities.length === 0) {
         entities = await loadEntities()
     }
-    return highlightEntitiesExampleCode(parseEntitiesMarkdown(entities))
+    return await highlightEntitiesExampleCode(parseEntitiesMarkdown(entities))
 }
 
 type EntityFields = keyof Entity;
@@ -40,23 +41,25 @@ export const parseEntitiesMarkdown = (entities: Entity[]) => {
     return entities
 }
 
-export const highlightEntitiesExampleCode = (entities: Entity[]) => {
+export const highlightEntitiesExampleCode = async (entities: Entity[]) => {
     for (const entity of entities) {
         const { example } = entity
         if (example) {
-            const { code, language} = example
-            example.codeHighlighted = hljs.highlight(code, {language}).value
+            const { code, language } = example
+            // make sure to trim any extra /n at the end
+            example.codeHighlighted = hljs.highlight(code.trim(), {language}).value
         }
     }
     return entities
-}  
+}
 
 export const loadFromGitHub = async () => {
+    const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
     const entities: Entity[] = []
     console.log(`-> loading entities repo`)
 
     const options = {
-        owner: 'Devographics',
+        owner: 'StateOfJS',
         repo: 'entities',
         path: ''
     }
@@ -96,14 +99,13 @@ export const loadLocally = async () => {
 
     const entities: Entity[] = []
 
-    const devDir = __dirname.split('/').slice(1, -3).join('/')
-    const path = `/${devDir}/stateof-entities/`
-    const files = await readdir(path)
+    const entitiesDirPath = path.resolve(`../../stateof-entities/`)
+    const files = await readdir(entitiesDirPath)
     const yamlFiles = files.filter((f: String) => f.includes('.yml'))
 
     // loop over dir contents and fetch raw yaml files
     for (const fileName of yamlFiles) {
-        const filePath = path + '/' + fileName
+        const filePath = entitiesDirPath + '/' + fileName
         const contents = await readFile(filePath, 'utf8')
         const yamlContents: any = yaml.load(contents)
         const category = fileName.replace('./', '').replace('.yml', '')
@@ -125,7 +127,7 @@ export const loadEntities = async () => {
     console.log('// loading entities')
 
     const entities: Entity[] =
-        process.env.LOAD_DATA === 'local' ? await loadLocally() : await loadFromGitHub()
+        appSettings.loadLocalesMode === 'local' ? await loadLocally() : await loadFromGitHub()
     console.log('// done loading entities')
 
     return entities

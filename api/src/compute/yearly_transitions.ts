@@ -1,5 +1,5 @@
 import { Db } from 'mongodb'
-import { sortBy } from 'lodash'
+import sortBy from 'lodash/sortBy.js'
 import { RequestContext, SurveyConfig } from '../types'
 import config from '../config'
 

@@ -25,6 +25,7 @@
         "write-file-webpack-plugin": "^4.5.1"
     },
     "devDependencies": {
+        "@luckycatfactory/esbuild-graphql-loader": "^3.7.0",
         "@types/js-yaml": "^4.0.3",
         "@types/lodash": "^4.14.175",
         "@types/marked": "^2.0.4",
@@ -33,6 +34,8 @@
         "@types/webpack-env": "^1.16.3",
         "clean-webpack-plugin": "4.0.0",
         "copy-webpack-plugin": "^9.0.1",
+        "esbuild": "^0.15.6",
+        "esbuild-plugin-yaml": "^0.0.1",
         "graphql-tag": "^2.12.5",
         "js-yaml-loader": "^1.2.2",
         "nodemon-webpack-plugin": "^4.5.2",
@@ -47,12 +50,15 @@
         "webpack-node-externals": "^3.0.0"
     },
     "scripts": {
-        "build": "NODE_ENV=production webpack --config webpack.production.js",
-        "dev": "NODE_ENV=development webpack --config webpack.development.js",
-        "dev:clean": "NODE_ENV=development DISABLE_CACHE=true webpack --config webpack.development.js",
+        "clean": "rm -Rf ./dist",
+        "build": "NODE_ENV=production tsup && cp -R public/ dist/",
+        "dev": "NODE_ENV=development tsup --watch --onSuccess='cp -R public/ dist/ && node ./dist/server.mjs'",
+        "copy:public": "cp -R public/ dist/",
+        "build:webpack": "NODE_ENV=production webpack --config webpack.production.js",
+        "dev:webpack": "NODE_ENV=development webpack --config webpack.development.js",
+        "dev:clean:webpack": "NODE_ENV=development DISABLE_CACHE=true webpack --config webpack.development.js",
         "fmt": "prettier --write \"src/**/*.{ts,js,mjs,yml,graphql}\"",
-        "heroku-postbuild": "NODE_ENV=production webpack --config webpack.production.js",
-        "start": "node dist/server.js",
+        "start": "node dist/server.mjs",
         "typecheck": "tsc --noEmit --p ./tsconfig.json"
     },
     "engines": {

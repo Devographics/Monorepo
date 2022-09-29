@@ -5,7 +5,7 @@ import { Filters } from '../filters'
 import config from '../config'
 import { computeChoicesOverYearsGraph } from './choices_over_years_graph'
 import { getParticipationByYearMap } from './demographics'
-import round from 'lodash/round'
+import round from 'lodash/round.js'
 
 export const allToolExperienceIds = [
     'would_use',

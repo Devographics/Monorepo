@@ -9,13 +9,7 @@ import { logToFile } from './debug'
 import path from 'path'
 import marked from 'marked'
 import hljs from 'highlight.js/lib/common'
-
-// @see https://blog.logrocket.com/alternatives-dirname-node-js-es-modules/
-// /!\ __dirname must be recomputed for each file, don't try to move this code
-import * as url from 'url'
 import { appSettings } from './settings'
-const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
-//const __filename = url.fileURLToPath(import.meta.url)
 
 let entities: Entity[] = []
 
@@ -105,7 +99,6 @@ export const loadLocally = async () => {
 
     const entities: Entity[] = []
 
-    console.log('dirname value in entities.ts', __dirname)
     const entitiesDirPath = path.resolve(`../../stateof-entities/`)
     const files = await readdir(entitiesDirPath)
     const yamlFiles = files.filter((f: String) => f.includes('.yml'))
@@ -141,7 +134,7 @@ export const loadEntities = async () => {
 }
 
 export const initEntities = async () => {
-    console.log('// initializing locales…')
+    console.log('// initializing entities…')
     const entities = await loadOrGetEntities()
     logToFile('entities.json', entities, { mode: 'overwrite' })
 }

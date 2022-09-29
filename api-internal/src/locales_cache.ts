@@ -24,12 +24,7 @@ import {
 } from './locales'
 import path from 'path'
 
-// @see https://blog.logrocket.com/alternatives-dirname-node-js-es-modules/
-// /!\ __dirname must be recomputed for each file, don't try to move this code
-import * as url from 'url'
 import { appSettings } from './settings'
-const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
-//const __filename = url.fileURLToPath(import.meta.url)
 
 ///////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////// Data Loading //////////////////////////////////
@@ -106,9 +101,6 @@ export const loadAllLocally = async (localesToLoad: LocaleMetaData[]): Promise<L
 
         const [owner, repo] = localeMetaData.repo.split('/')
 
-        // __dirname = /Users/sacha/Dev/state-of-js-graphql-results-api/dist
-
-        // const devDir = __dirname.split('/').slice(1, -3).join('/')
         const localeDirPath = path.resolve(`../../stateof-locales/${repo}`)
         const files = await readdir(localeDirPath)
         const yamlFiles = files.filter((f: String) => f.includes('.yml'))

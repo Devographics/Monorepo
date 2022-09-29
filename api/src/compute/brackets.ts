@@ -8,9 +8,9 @@ import idsLookupTable from '../data/ids.yml'
 import { getWinsPipeline, getMatchupsPipeline } from './brackets_pipelines'
 import { getParticipationByYearMap } from './demographics'
 import { computeCompletionByYear, CompletionResult } from './completion'
-import uniq from 'lodash/uniq'
+import uniq from 'lodash/uniq.js'
 import { ratioToPercentage } from './common'
-import orderBy from 'lodash/orderBy'
+import orderBy from 'lodash/orderBy.js'
 
 // Wins
 

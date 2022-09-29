@@ -5,7 +5,7 @@ import { useCache } from '../caching'
 import { computeParticipationByYear } from '../compute'
 import { getStaticResolvers } from '../helpers'
 import keys from '../data/keys.yml'
-import range from 'lodash/range'
+import range from 'lodash/range.js'
 
 const computeParticipation = async (
     context: RequestContext,
