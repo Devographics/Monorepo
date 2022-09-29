@@ -32,9 +32,37 @@ export const getAllSurveysQuery = () => /* GraphQL */`
   }
 `
 
+export const getAllLocalesMetadataQuery = (surveySlug) => /* GraphQL */`
+  query AllLocales {
+    locales(contexts: [homepage, ${surveySlug}]) {
+      id
+      label
+      translators
+    }
+  }
+`
+
 export const getAllLocalesQuery = (surveySlug) => /* GraphQL */`
   query AllLocales {
     locales(contexts: [homepage, ${surveySlug}]) {
+      id
+      label
+      strings {
+        key
+        t
+        tHtml
+        context
+        isFallback
+        aliasFor
+      }
+      translators
+    }
+  }
+`
+
+export const getSingleLocaleQuery = (localeId, surveySlug) => /* GraphQL */`
+  query SingleLocale {
+    locale(contexts: [homepage, ${surveySlug}], localeId: "${localeId}") {
       id
       label
       strings {

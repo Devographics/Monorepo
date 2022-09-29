@@ -1,39 +1,69 @@
-import { getAllSurveysQuery, getAllLocalesQuery } from '../data/query'
+import {
+    getAllSurveysQuery,
+    getAllLocalesQuery,
+    getAllLocalesMetadataQuery,
+    getSingleLocaleQuery
+} from '../data/query'
 
 type HomepageData = {
     allSurveys?: any[]
     locales?: any[]
 }
 
-export const getData = async (): Promise<HomepageData> => {
-    let data = {}
-    const requests = [
-        { url: import.meta.env.DATA_API_URL, query: getAllSurveysQuery() },
-        { url: import.meta.env.INTERNAL_API_URL, query: getAllLocalesQuery(import.meta.env.SURVEY) }
-    ]
-    for (const r of requests) {
-        const { url, query } = r
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                query
-            })
+export const getSizeInKB = obj => {
+  const str = JSON.stringify(obj);
+  // Get the length of the Uint8Array
+  const bytes = new TextEncoder().encode(str).length;
+  return Math.round(bytes/1000);
+};
+const runQuery = async (url: string, query: string, queryName: string): Promise<any> => {
+    const startAt = new Date()
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            query
         })
-        const text = await response.text()
+    })
+    const text = await response.text()
+    const endAt = new Date()
+    try {
 
-        try {
-            const json = JSON.parse(text) // Try to parse it as JSON
-            if (json.errors) {
-                throw new Error(json.errors[0].message)
-            }
-            data = { ...data, ...json.data }
-        } catch (error) {
-            console.log(`// getData error (API_URL: ${url})`)
-            console.log(text)
-            throw new Error(error)
+        const json = JSON.parse(text) // Try to parse it as JSON
+        if (json.errors) {
+            throw new Error(json.errors[0].message)
         }
+        console.log(`🕚 Ran query ${queryName} in ${endAt.getTime() - startAt.getTime()}ms (${getSizeInKB(json)}kb) | ${url}`)
+
+        return json.data
+    } catch (error) {
+        console.log(`// runQuery error (API_URL: ${url})`)
+        console.log(text)
+        throw new Error(error)
     }
+}
+
+export const getData = async (): Promise<HomepageData> => {
+    const surveySlug = import.meta.env.SURVEY
+    const dataApiUrl = import.meta.env.DATA_API_URL
+    const internalApiUrl = import.meta.env.INTERNAL_API_URL
+    const locales = []
+    const allSurveysData = await runQuery(dataApiUrl, getAllSurveysQuery(), 'AllSurveys')
+
+    const allLocalesMetadata = await runQuery(
+        internalApiUrl,
+        getAllLocalesMetadataQuery(surveySlug),
+        'AllLocalesMetadata'
+    )
+    for (const locale of allLocalesMetadata.locales) {
+        const localeWithStrings = await runQuery(
+            internalApiUrl,
+            getSingleLocaleQuery(locale.id, surveySlug),
+            `SingleLocale_${locale.id}`
+        )
+        locales.push(localeWithStrings.locale)
+    }
+    const data = { ...allSurveysData, locales }
     return data
 }
 
