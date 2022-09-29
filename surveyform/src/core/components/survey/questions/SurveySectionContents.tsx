@@ -49,7 +49,50 @@ const getEntityIds = (questions: Array<ParsedQuestion & { id: string }>) => {
   return ids;
 };
 
-const SurveySectionContents = ({
+const SurveySectionContents = (props) => {
+  const {
+    response,
+    sectionNumber,
+    nextSection,
+    previousSection,
+    survey,
+    readOnly,
+  } = props;
+  const FormSubmitWrapper = (props) => (
+    <FormSubmit
+      {...props}
+      response={response}
+      sectionNumber={sectionNumber}
+      nextSection={nextSection}
+      previousSection={previousSection}
+      survey={survey}
+      readOnly={readOnly}
+    />
+  );
+  return (
+    /** Components rendered below this ComponentsProvider
+     * can use the "Components.Form*" components
+     */
+    <VulcanComponentsProvider
+      value={{
+        ...defaultFormComponents,
+        ...liteFormComponents,
+        ...bootstrapFormComponents,
+        FormItem,
+        FormLayout,
+        FormSubmit: FormSubmitWrapper,
+        FormOptionLabel,
+        // TODO: the SmartForm do not allow to configure those 2 yet
+        // FormLabel,
+        // FormDescription,
+      }}
+    >
+      <SurveySectionContentsInner {...props} />
+    </VulcanComponentsProvider>
+  );
+};
+
+const SurveySectionContentsInner = ({
   survey,
   sectionNumber,
   section,
@@ -67,6 +110,7 @@ const SurveySectionContents = ({
   readOnly?: boolean;
 }) => {
   const Components = useVulcanComponents();
+  console.log(Components.SmartForm);
   const { user } = useUser();
 
   const [createSave, { data, loading, error }] = useCreate({
@@ -98,18 +142,6 @@ const SurveySectionContents = ({
     createSave({ input: { data } });
   };
 
-  const FormSubmitWrapper = (props) => (
-    <FormSubmit
-      {...props}
-      response={response}
-      sectionNumber={sectionNumber}
-      nextSection={nextSection}
-      previousSection={previousSection}
-      survey={survey}
-      readOnly={readOnly}
-    />
-  );
-
   const isLastSection = !nextSection;
 
   const isDisabled = !canModifyResponse(response, user);
@@ -136,34 +168,17 @@ const SurveySectionContents = ({
         </p>
       </div>
       <EntitiesProvider ids={entityIds}>
-        {/** Components rendered below this ComponentsProvider
-         * can use the "Components.Form*" components
-         */}
-        <VulcanComponentsProvider
-          value={{
-            ...defaultFormComponents,
-            ...liteFormComponents,
-            ...bootstrapFormComponents,
-            FormItem,
-            FormLayout,
-            FormSubmit: FormSubmitWrapper,
-            FormOptionLabel,
-            // TODO: the SmartForm do not allow to configure those 2 yet
-            // FormLabel,
-            // FormDescription,
-          }}
-        >
-          <Components.SmartForm
-            documentId={response && response._id}
-            fields={fields}
-            model={ResponsePerSurvey[survey.slug!]}
-            // TODO: check those params in the smart form, they should accept DocumentNode and not only strings
-            // + the name should be retrieved using getFragmentName from the DocumentNode fragment
-            //queryFragment={ResponseFragment}
-            //mutationFragment={ResponseFragment}
-            //queryFragmentName="ResponseFragment"
-            //mutationFragmentName="ResponseFragment"
-            /*
+        <Components.SmartForm
+          documentId={response && response._id}
+          fields={fields}
+          model={ResponsePerSurvey[survey.slug!]}
+          // TODO: check those params in the smart form, they should accept DocumentNode and not only strings
+          // + the name should be retrieved using getFragmentName from the DocumentNode fragment
+          //queryFragment={ResponseFragment}
+          //mutationFragment={ResponseFragment}
+          //queryFragmentName="ResponseFragment"
+          //mutationFragmentName="ResponseFragment"
+          /*
           Instead, we use the context to pass new components
           However, we could reenable this prop as well for more flexbility
         components={{
@@ -174,33 +189,32 @@ const SurveySectionContents = ({
           FormLabel,
           FormDescription,
         }}*/
-            // TODO: not all those props are correctly handled by the SmartForm
-            showDelete={false}
-            itemProperties={{
-              layout: "vertical",
-            }}
-            submitCallback={(data) => {
-              data.lastSavedAt = new Date();
-              if (isLastSection) {
-                data.isFinished = true;
-              }
-              return data;
-            }}
-            successCallback={(result) => {
-              const { lastSavedAt } = result;
-              trackSave({ lastSavedAt, isError: false });
-            }}
-            errorCallback={(document, error) => {
-              if (document) {
-                const { lastSavedAt } = document;
-                trackSave({ lastSavedAt, isError: true });
-              }
-              console.error(error);
-            }}
-            warnUnsavedChanges={false}
-            disabled={isDisabled}
-          />
-        </VulcanComponentsProvider>
+          // TODO: not all those props are correctly handled by the SmartForm
+          showDelete={false}
+          itemProperties={{
+            layout: "vertical",
+          }}
+          submitCallback={(data) => {
+            data.lastSavedAt = new Date();
+            if (isLastSection) {
+              data.isFinished = true;
+            }
+            return data;
+          }}
+          successCallback={(result) => {
+            const { lastSavedAt } = result;
+            trackSave({ lastSavedAt, isError: false });
+          }}
+          errorCallback={(document, error) => {
+            if (document) {
+              const { lastSavedAt } = document;
+              trackSave({ lastSavedAt, isError: true });
+            }
+            console.error(error);
+          }}
+          warnUnsavedChanges={false}
+          disabled={isDisabled}
+        />
       </EntitiesProvider>
     </div>
   );
