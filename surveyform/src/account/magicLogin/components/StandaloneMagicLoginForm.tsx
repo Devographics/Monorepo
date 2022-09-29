@@ -6,6 +6,7 @@ import { sendMagicLoginEmail } from "../lib/sendMagicLoginEmail";
 import { useUser } from "~/account/user/hooks";
 import { useRouter } from "next/router";
 import { useLocaleContext } from "~/i18n/components/LocaleContext";
+import { FormComponentEmail } from "./FormComponentEmail";
 
 /**
  * With passwordless approach, there is no signup step,
@@ -106,7 +107,7 @@ const MagicLinkLoginForm = ({
   return (
     <form onSubmit={onSubmit} className="magic-link-login-form">
       {/* <span>Your Email</span> */}
-      <Components.FormComponentEmail
+      <FormComponentEmail
         inputProperties={{
           placeholder: "Your Email",
           name: "email",

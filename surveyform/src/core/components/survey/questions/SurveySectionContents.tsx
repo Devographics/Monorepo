@@ -136,6 +136,9 @@ const SurveySectionContents = ({
         </p>
       </div>
       <EntitiesProvider ids={entityIds}>
+        {/** Components rendered below this ComponentsProvider
+         * can use the "Components.Form*" components
+         */}
         <VulcanComponentsProvider
           value={{
             ...defaultFormComponents,
