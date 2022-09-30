@@ -666,6 +666,7 @@ outline:
         matchTags: [courses, people, youtube, sites, newsletters, socialmedia]
 
       - id: podcasts
+        intlId: resources.podcasts_css
         template: multiple
         options:
           - id: shop_talk_show
@@ -692,7 +693,7 @@ outline:
           - id: working_draft
           - id: web_standards
 
-      - id: podcasts_css
+      - id: podcasts
         template: others
         matchTags: [podcasts, people, sites]
 
