@@ -23,7 +23,7 @@
       padding: $spacing;
     }
   }
-  .form-component-Help {
+  .form-input:has(.form-help) {
     background: var(--bg-color-light);
     border: 0;
     :last-child {
