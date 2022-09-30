@@ -3,9 +3,8 @@ import { useLocales } from "~/i18n/hooks/locales";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { useLocaleContext } from "~/i18n/components/LocaleContext";
 import { getLocale } from "~/i18n";
-//import { useLocaleContext } from "@vulcanjs/i18n";
 
-const LocaleSwitcher = (props) => {
+const LocaleSwitcher = () => {
   const Components = useVulcanComponents();
   const { loading, locales = [] } = useLocales();
   const { getLocale: getLocaleContext, setLocale } = useLocaleContext();

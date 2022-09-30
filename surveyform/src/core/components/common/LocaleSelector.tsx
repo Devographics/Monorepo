@@ -2,13 +2,16 @@ import React from "react";
 import { useLocales } from "~/i18n/hooks/locales";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
+import { useLocaleContext } from "~/i18n/components/LocaleContext";
 
-const LocaleSelector = (props, { setLocale, getLocale }) => {
+const LocaleSelector = () => {
   const Components = useVulcanComponents();
   const { loading, locales = [] } = useLocales();
   if (loading) {
     return <Components.Loading />;
   }
+
+  const { setLocale } = useLocaleContext();
 
   return (
     <div className="locale-selector">
@@ -31,7 +34,7 @@ const LocaleSelector = (props, { setLocale, getLocale }) => {
       </p>
       <a
         className="locale-selector-help"
-        href="https://github.com/StateOfJS/Translations/issues/1"
+        href="https://github.com/Devographics/Translations/issues/1"
         target="_blank"
         rel="noreferrer"
       >

@@ -1,15 +1,11 @@
 import React from "react";
 import surveys from "~/surveys";
-// just an alias to avoid changing the whole code
-
-//import User from "~/core/models/user";
 import { getSurveyPath } from "~/modules/surveys/getters";
-import Link from "next/link"; //"react-router-dom";
+import Link from "next/link";
 import { statuses } from "~/modules/constants";
 import LocaleSelector from "~/core/components/common/LocaleSelector";
 import Translators from "~/core/components/common/Translators";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
-import { useVulcanComponents } from "@vulcanjs/react-ui";
 import Image from "next/image";
 
 const SurveyItem = ({ survey }) => {
@@ -44,7 +40,6 @@ const SurveyItem = ({ survey }) => {
 
 const SurveyGroup = ({ status }) => {
   const filteredSurveys = surveys.filter((s) => s.status === statuses[status]);
-  const Components = useVulcanComponents();
   return (
     <div className="surveys-group">
       <h3 className="surveys-group-heading">
