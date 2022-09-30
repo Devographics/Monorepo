@@ -787,7 +787,7 @@ outline:
           - id: not_listed
 
       - id: race_ethnicity
-        template: multiple
+        template: race_ethnicity
         allowother: true
         options:
           - id: black_african
