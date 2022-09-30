@@ -21,8 +21,8 @@ async function duplicateCheck(validationErrors, { document, currentUser }) {
   if (existingResponse) {
     validationErrors.push({
       break: true,
-      id: "responses.duplicate_responses",
-      message: "Sorry, you already have a session in progress for this survey",
+      id: "error.duplicate_response",
+      message: "Sorry, you already have a session in progress for this survey.",
       properties: { responseId: existingResponse._id },
     });
   }

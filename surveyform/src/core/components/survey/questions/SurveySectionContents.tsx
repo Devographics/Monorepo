@@ -110,7 +110,6 @@ const SurveySectionContentsInner = ({
   readOnly?: boolean;
 }) => {
   const Components = useVulcanComponents();
-  console.log(Components.SmartForm);
   const { user } = useUser();
 
   const [createSave, { data, loading, error }] = useCreate({

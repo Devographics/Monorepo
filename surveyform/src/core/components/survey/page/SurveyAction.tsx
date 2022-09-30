@@ -31,6 +31,8 @@ import { UserType } from "~/core/models/user";
 import { useQuery } from "@apollo/client";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 
+const duplicateResponseErrorId = "error.duplicate_response";
+
 const useSurveyActionParams = ():
   | { paramsReady: false; source: undefined; referrer: undefined }
   | { paramsReady: true; source?: string; referrer?: string } => {
@@ -187,6 +189,15 @@ const SurveyAction = ({
 
   const hasResponse = currentSurveyResponse && !isEmpty(currentSurveyResponse);
 
+  const extractError = (rawError: any) => {
+    try {
+      const errorObject = JSON.parse(rawError.message);
+      return errorObject[0]?.data?.errors[0];
+    } catch (error) {
+      return { id: "app.unknown_error" };
+    }
+  };
+
   const surveyCreateResponseOutputFragment =
     CreateResponseOutputFragment(survey);
   const mutationButtonProps = {
@@ -224,38 +235,45 @@ const SurveyAction = ({
     },
   };
 
+  const parsedErrors = errors && errors.map(extractError);
+  // hide action button if there is already a duplicate response
+  const hideAction =
+    parsedErrors && parsedErrors.some((e) => e.id === duplicateResponseErrorId);
+
   return (
     <div className="survey-action">
-      <div className="survey-action-inner">
-        {status === statuses.preview ||
-        status === statuses.open ||
-        status === statuses.hidden ? (
-          hasResponse ? (
-            <SurveyLink
-              survey={survey}
-              response={currentSurveyResponse}
-              message="general.continue_survey"
-            />
-          ) : (
-            <Components.MutationButton {...mutationButtonProps} />
-          )
-        ) : status === statuses.closed ? (
-          hasResponse ? (
-            <SurveyLink
-              survey={survey}
-              response={currentSurveyResponse}
-              message="general.review_survey"
-            />
-          ) : (
-            <SurveyLink survey={survey} message="general.review_survey" />
-          )
-        ) : null}
-      </div>
-      {errors &&
-        errors.map((error, i) => (
+      {!hideAction && (
+        <div className="survey-action-inner">
+          {status === statuses.preview ||
+          status === statuses.open ||
+          status === statuses.hidden ? (
+            hasResponse ? (
+              <SurveyLink
+                survey={survey}
+                response={currentSurveyResponse}
+                message="general.continue_survey"
+              />
+            ) : (
+              <Components.MutationButton {...mutationButtonProps} />
+            )
+          ) : status === statuses.closed ? (
+            hasResponse ? (
+              <SurveyLink
+                survey={survey}
+                response={currentSurveyResponse}
+                message="general.review_survey"
+              />
+            ) : (
+              <SurveyLink survey={survey} message="general.review_survey" />
+            )
+          ) : null}
+        </div>
+      )}
+      {parsedErrors &&
+        parsedErrors.map((error, i) => (
           <ErrorItem
             key={i}
-            {...error}
+            error={error}
             survey={survey}
             response={currentSurveyResponse}
           />
@@ -294,22 +312,28 @@ const SurveyLink = ({
     //</LinkContainer>
   );
 };
-const ErrorItem = ({ survey, id, message, properties, response }) => {
+
+const ErrorItem = ({ survey, error, response }) => {
   const Components = useVulcanComponents();
-  if (id === "responses.duplicate_responses") {
-    return (
-      <div className="survey-item-error error message">
-        {message}{" "}
-        <Link href={getSurveyPath({ survey, response })}>
+  console.log(error);
+  const { id, message, properties } = error;
+  return (
+    <div className="survey-item-error error message">
+      <FormattedMessage id={id} />{" "}
+      {id === duplicateResponseErrorId && (
+        <Link
+          href={getSurveyPath({
+            survey,
+            response: { _id: properties.responseId },
+          })}
+        >
           <a>
             <FormattedMessage id="general.continue_survey" />
           </a>
         </Link>
-      </div>
-    );
-  } else {
-    return <div className="survey-item-error error message">{message}</div>;
-  }
+      )}
+    </div>
+  );
 };
 
 export default SurveyAction;
