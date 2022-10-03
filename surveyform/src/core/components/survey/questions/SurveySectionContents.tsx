@@ -59,8 +59,8 @@ const SurveySectionContents = (props) => {
     readOnly,
   } = props;
 
-  const [prevLoading, setPrevLoading] = useState(true);
-  const [nextLoading, setNextLoading] = useState(true);
+  const [prevLoading, setPrevLoading] = useState(false);
+  const [nextLoading, setNextLoading] = useState(false);
 
   const loadingProps = {
     prevLoading,

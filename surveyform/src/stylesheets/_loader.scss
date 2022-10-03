@@ -12,7 +12,7 @@
   color:rgba(255, 255, 255, 0);
   display: block;
   .loading-button & {
-    transform: translateZ(0);
+    transform: translateX(0px) translateZ(0);
   }
 }
 @-webkit-keyframes load5 {
