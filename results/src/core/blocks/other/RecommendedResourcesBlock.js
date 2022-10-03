@@ -49,6 +49,7 @@ const RecommendedResourcesBlock = ({ block, data }) => {
                                         onClick={() => trackClick(id, resource, 'text')}
                                         href={`${url}&utm_content=textlink`}
                                         title={resource.name}
+                                        padding={resource.padding} 
                                     >
                                         <ImageImage src={resource.image} alt={resource.name} />
                                     </ImageLink>
@@ -138,16 +139,19 @@ const ResourceImage = styled.div`
 `
 
 const ImageLink = styled.a`
-    display: block;
+    display: grid;
+    place-items: center;
     width: 100%;
     border-radius: 100%;
+    padding: ${({ padding }) => padding ? padding+'px' : 0};
+    border: 3px solid ${({ theme }) => theme.colors.border};
+    border-radius: 100%;
+    aspect-ratio: 1/1;
+    overflow: hidden;
 `
 const ImageImage = styled.img`
     display: block;
     width: 100%;
-    border: 3px solid ${({ theme }) => theme.colors.border};
-    aspect-ratio: 1/1;
-    border-radius: 100%;
 `
 
 const ResourceContent = styled.div`

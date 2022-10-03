@@ -367,7 +367,7 @@
             fieldId: graphql_servers
 
         - id: graphql_servers_resources
-          items: [fm-server-graphql]
+          items: [fm-server-graphql, tg-yoga]
           template: recommended_resources
 
         - id: apollo_server
@@ -418,7 +418,7 @@
             fieldId: graphql_clients
 
         - id: graphql_clients_resources
-          items: [fm-client-graphql]
+          items: [fm-client-graphql, tg-best-practices]
           template: recommended_resources
         
         - id: apollo_client
@@ -442,7 +442,7 @@
         - id: no_client
           template: tool_experience
 
-    - id: graphql_api_generators
+    - id: api_generators
       path: /api-generators
       blocks:
         - template: page_introduction
@@ -466,10 +466,10 @@
 
         - template: happiness
           variables:
-            fieldId: graphql_api_generators
+            fieldId: api_generators
 
-        - id: graphql_api_generators_resources
-          items: [fm-fullstack-typescript]
+        - id: api_generators_resources
+          items: [ha-subscriptions, tg-mesh]
           template: recommended_resources
 
         - id: postgraphile
@@ -523,15 +523,15 @@
         - id: uri_goldshtein
           template: picks
           variables:
-            url: https://www.the-guild.dev/graphql/yoga-server
+            url: https://pothos-graphql.dev/
 
         - template: happiness
           variables:
             fieldId: schema_builders
 
-        # - id: schema_builders_resources
-        #   items: [fm-react-native-v2, fm-intermediate-react-native]
-        #   template: recommended_resources
+        - id: schema_builders_resources
+          items: [tg-mesh-hive, fm-fullstack-typescript]
+          template: recommended_resources
 
         - id: nexus
           template: tool_experience
@@ -662,9 +662,9 @@
             fieldId: tools_others
             options: { limit: 15 }
 
-    # - id: tools_others_resources
-    #   items: [fm-typescript, fm-node-js]
-    #   template: recommended_resources
+    - id: tools_others_resources
+      items: [tg-hive]
+      template: recommended_resources
 
 - id: usage
   titleId: sections.usage_graphql.title
@@ -862,6 +862,10 @@
       variables:
         fieldId: state_of_graphql
 
+    - id: resources_usage
+      items: [ha-backend]
+      template: recommended_resources
+
 - id: resources
   path: /resources
   blocks:
@@ -945,9 +949,9 @@
       #       fieldId: resources
       #       options: { limit: 15 }
 
-    # - id: resources_resources
-    #   items: [reactathon, renderatl]
-    #   template: recommended_resources
+    - id: resources_resources
+      items: [tg-wtf, renderatl]
+      template: recommended_resources
 
 # - id: awards
 #   path: /awards

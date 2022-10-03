@@ -86,7 +86,7 @@ allTools:
     - graphql_hooks
     - graphql_request
     - no_client
-    # graphql_api_generators:
+    # api_generators:
     - postgraphile
     - hasura
     - graphcms
@@ -137,7 +137,7 @@ toolsCategories:
         - graphql_hooks
         - graphql_request
         - no_client
-    graphql_api_generators:
+    api_generators:
         - postgraphile
         - hasura
         - graphcms

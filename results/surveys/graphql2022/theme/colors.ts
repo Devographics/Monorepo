@@ -141,7 +141,7 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
         toolSections: {
             graphql_servers: colors.pinkLight,
             graphql_clients: colors.purple,
-            graphql_api_generators: colors.orange,
+            api_generators: colors.orange,
             schema_builders: colors.teal,
         },
         features: {

@@ -1,6 +1,5 @@
 # Front End Masters
 
-
 - name: Server-Side GraphQL in Node.js
   id: fm-server-graphql
   description: Learn everything you need to create a GraphQL API on the server in Node.js with Apollo Server.
@@ -20,8 +19,101 @@
 
 - name: Fullstack TypeScript (feat. GraphQL & Node.js)
   id: fm-fullstack-typescript
-  description: We'll build a Twitter App with React and generate TypeScript code based on a GraphQL schema.
+  description: >
+    We'll build a Twitter App with React and generate TypeScript code based on a GraphQL schema.
   url: https://frontendmasters.com/courses/fullstack-typescript/?utm_source=stateofgraphql&utm_medium=website&utm_campaign=stateofgraphql2022
   image: https://static.frontendmasters.com/assets/teachers/north/thumb@2x.webp
   teacher: Mike North
   company: LinkedIn
+
+# The Guild
+
+- name: Yoga Server Tutorial
+  id: tg-yoga
+  description: >
+    Learn to create a performant, modern GraphQL Server that can run on any platform with Yoga Server, the best GraphQL Server in the ecosystem. 
+  url: https://www.the-guild.dev/graphql/yoga-server/tutorial/basic/?utm_source=stateofgraphql&utm_medium=website&utm_campaign=stateofgraphql2022
+  image: /images/resources/yoga.svg
+  padding: 12
+  teacher: The Guild
+
+- name: Best Practices for using GraphQL on the client
+  id: tg-best-practices
+  description: >
+    GraphQL on the client has evolved a lot in the last years. Learn what are the latest best practices and tooling that you should use in your client apps.
+  url: https://the-guild.dev/blog/unleash-the-power-of-fragments-with-graphql-codegen?utm_source=stateofgraphql&utm_medium=website&utm_campaign=stateofgraphql2022
+  image: /images/resources/code-generator.svg
+  padding: 12
+  teacher: The Guild
+
+- name: GraphQL Mesh
+  id: tg-mesh
+  description: >
+    The Graph of Everything - Federated architecture for any API service (GraphQL, REST/OpenAPI/Swagger, json-schema, SOAP, gRPC, Databases and more..). The ultimate gateway for any API technology.
+  url: https://www.the-guild.dev/graphql/mesh?utm_source=stateofgraphql&utm_medium=website&utm_campaign=stateofgraphql2022
+  image: /images/resources/mesh.svg
+  padding: 12
+  teacher: The Guild
+
+- name: Mesh+Hive
+  id: tg-mesh-hive
+  description: > 
+    The ultimate GraphQL workflow - Create your schema from any source (GraphQL, REST/OpenAPI/Swagger, json-schema, SOAP, gRPC, Databases and more..), store it on Hive’s CDN and serve it automatically to your Federated gateway
+  url: https://www.the-guild.dev/graphql/mesh/docs/getting-started/overview?utm_source=stateofgraphql&utm_medium=website&utm_campaign=stateofgraphql2022
+  image: /images/resources/hive.svg
+  padding: 12
+  teacher: The Guild
+
+- name: GraphQL Hive
+  id: tg-hive
+  description: >
+    Prevent breaking changes, monitor performance of your GraphQL API, and manage your Federated API gateway with whe ultimate GraphQL Workflow manager. Hosted Cloud and fully open source and self hosted.
+  url: https://graphql-hive.com/?utm_source=stateofgraphql&utm_medium=website&utm_campaign=stateofgraphql2022
+  image: /images/resources/hive.svg
+  padding: 12
+  teacher: The Guild
+
+- name: GraphQL WTF
+  id: tg-wtf
+  description: >
+    Learn something new with GraphQL, every week. Videos, Guides, Courses and training for you and your team. Everything you need in order to take your GraphQL experience to the next level..
+  url: https://graphql.wtf/?utm_source=stateofgraphql&utm_medium=website&utm_campaign=stateofgraphql2022
+  image: /images/resources/wtf.svg
+  padding: 16
+  teacher: GraphQL WTF
+
+# Render
+
+- name: Front-end engineering. Web3. Fresh vibes. 
+  id: renderatl
+  description: RenderATL is the four-day software engineering conference & music festival with 50+ expert speakers in tech covering upcoming and current best software engineering practices, web3, engineering leadership, accessibility practices, and more.
+  url: http://www.renderatl.com/?utm_source=stateofgraphql&utm_medium=website&utm_campaign=stateofgraphql2022
+  image: /images/resources/render.png
+  teacher: Atlanta, Georgia
+
+# Hasura
+
+- name: GraphQL backend stack tutorial
+  id: ha-backend
+  description: >
+    Learn how to create a GraphQL backend stack reusing existing APIs with the language or framework of your choice.
+  url: https://hasura.io/learn/graphql/backend-stack/introduction/?utm_source=stateofgraphql&utm_medium=website&utm_campaign=stateofgraphql2022
+  image: /images/resources/hasura.svg
+  teacher: Hasura
+  padding: 20
+
+- name: Building a real-time chat app with GraphQL subscriptions
+  id: ha-subscriptions
+  description: >
+    Learn how GraphQL Subscriptions can be used to build a full-fledged real-time group chat app on Postgres with React.
+  url: https://hasura.io/blog/building-a-realtime-chat-app-with-graphql-subscriptions-d68cd33e73f/?utm_source=stateofgraphql&utm_medium=website&utm_campaign=stateofgraphql2022
+  image: /images/resources/hasura.svg
+  teacher: Hasura
+  padding: 20
+
+# - name: 
+#   id: 
+#   description: >
+   
+#   url: 
+#   image: 

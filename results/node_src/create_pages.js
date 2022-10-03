@@ -141,9 +141,18 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
         logToFile(`${locale.id}.json`, locale, {
             mode: 'overwrite',
             subDir: 'locales',
-            surveyId: config.surveyId
+            surveyId
         })
     })
+
+    const { flat } = await computeSitemap(rawSitemap, cleanLocales)
+
+    const flatSitemap = { locales: cleanLocales, contents: flat }
+    logToFile(
+        'flat_sitemap.yml',
+        yaml.dump(flatSitemap, { noRefs: true }),
+        { mode: 'overwrite', surveyId }
+    )
 
     const allSurveysQuery = getAllSurveysQuery()
     const allSurveysResults = await graphql(`${allSurveysQuery}`)
@@ -153,14 +162,6 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
     )
     const currentEdition = currentSurvey.editions.find(e => e.surveyId === surveyId)
     
-    const { flat } = await computeSitemap(rawSitemap, cleanLocales)
-
-    logToFile(
-        'flat_sitemap.yml',
-        yaml.dump({ locales: cleanLocales, contents: flat }, { noRefs: true }),
-        { mode: 'overwrite', surveyId }
-    )
-
     const chartSponsors = await getSendOwlData({ flat, config })
 
     for (const page of flat) {
@@ -190,8 +191,11 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
                     ...context,
                     locales: cleanLocales,
                     locale,
+                    localeId: locale.id,
+                    localeContexts: config.translationContexts,
                     chartSponsors,
                     pageData,
+                    surveyId,
                     config,
                     currentSurvey,
                     currentEdition
@@ -219,6 +223,6 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
     }
     logToFile('build.yml', yaml.dump(buildInfo, { noRefs: true }), {
         mode: 'overwrite',
-        surveyId: config.surveyId
+        surveyId
     })
 }

@@ -28,9 +28,9 @@ query: >
                 count
                 percentage_survey
             }
-            graphql_api_generators: tools_cardinality_by_user(
+            api_generators: tools_cardinality_by_user(
                 year: ${currentYear},
-                ids: [${toolsCategories.graphql_api_generators}],
+                ids: [${toolsCategories.api_generators}],
                 experienceId: would_use
             ) {
                 cardinality

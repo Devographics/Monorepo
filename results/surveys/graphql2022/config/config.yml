@@ -22,7 +22,7 @@ tshirtDesignerLink: https://chriskirknielsen.com/
 
 # screenshot capture
 
-baseUrl: http://localhost:8001
-# baseUrl: http://localhost:9000/
-sitemap: ../../../node_src/.logs/flat_sitemap.yml
+# baseUrl: http://localhost:8001
+baseUrl: http://localhost:9000/
+sitemap: ../../../node_src/.logs/graphql2022/flat_sitemap.yml
 
