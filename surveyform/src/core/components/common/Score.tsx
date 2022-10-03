@@ -48,7 +48,7 @@ const FeatureItem = ({ feature, showComma }) => {
       <TagName
         className="score-feature-name"
         {...(mdnUrl && {
-          href: `https://developer.mozilla.org${mdnUrl}`,
+          href: mdnUrl,
           target: "_blank",
           rel: "norefferer",
         })}
