@@ -219,7 +219,10 @@ outline:
       - id: cascade_layers
         year: 2022
 
-      - id: shadow_dom_css
+      # - id: shadow_dom_css # removed mid-survey in favor of more specific shadow_dom_part
+      #   year: 2022
+
+      - id: shadow_dom_part
         year: 2022
 
       # decided to group the following as a single question after all
