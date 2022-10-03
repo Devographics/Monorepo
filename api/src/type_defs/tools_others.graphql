@@ -29,7 +29,7 @@ enum OtherToolsID {
     # GraphQL
     graphql_servers_others
     graphql_clients_others
-    graphql_api_generators_others
+    api_generators_others
     schema_builders_others
 
     combining_schemas
