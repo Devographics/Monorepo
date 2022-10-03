@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { FormCheck } from "react-bootstrap";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 // import { isOtherValue, removeOtherMarker, addOtherMarker } from './Checkboxgroup';
@@ -13,6 +13,7 @@ import get from "lodash/get.js";
 import IconComment from "~/core/components/icons/Comment";
 import IconCommentDots from "~/core/components/icons/CommentDots";
 import { useIntlContext } from "@vulcanjs/react-i18n";
+import isEmpty from "lodash/isEmpty.js";
 
 interface ExperienceProps extends FormInputProps {
   showDescription: boolean;
@@ -28,20 +29,21 @@ export const Experience = (props: ExperienceProps) => {
     showDescription,
   } = props;
   const Components = useVulcanComponents();
-  const { questionId } = itemProperties;
+  const { isFirstQuestion, questionId } = itemProperties;
 
   const commentPath = path.replace("__experience", "__comment");
   const commentValue = get(document, commentPath);
 
+  // @ts-expect-error
+  const { options = [], value, ...otherInputProperties } = inputProperties;
+  const hasValue = !isEmpty(value);
+
+  // open the comment widget if there is already a comment
   const [showCommentInput, setShowCommentInput] = useState(!!commentValue);
 
   const { data, loading, error } = useEntities();
   const { entities } = data;
   const entity = entities?.find((e) => e.id === questionId);
-
-  // @ts-expect-error
-  const { options = [], value, ...otherInputProperties } = inputProperties;
-  const hasValue = value !== "";
 
   return (
     <Components.FormItem
@@ -85,6 +87,7 @@ export const Experience = (props: ExperienceProps) => {
           value={commentValue}
           showCommentInput={showCommentInput}
           setShowCommentInput={setShowCommentInput}
+          isFirstQuestion={isFirstQuestion}
         />
       </div>
       {showCommentInput && (
@@ -116,13 +119,25 @@ const CodeExample = ({ language, code, codeHighlighted }) => {
   );
 };
 
-const CommentTrigger = ({ value, showCommentInput, setShowCommentInput }) => {
+import Overlay from "react-bootstrap/Overlay";
+import Tooltip from "react-bootstrap/Tooltip";
+
+const CommentTrigger = ({
+  value,
+  showCommentInput,
+  setShowCommentInput,
+  isFirstQuestion = false,
+}) => {
+  const [show, setShow] = useState(isFirstQuestion);
+
   const isActive = showCommentInput || !!value;
   const intl = useIntlContext();
+  const target = useRef(null);
 
   return (
     <div className="comment-trigger-wrapper">
       <button
+        ref={target}
         className={`comment-trigger comment-trigger-${
           isActive ? "active" : "inactive"
         }`}
@@ -133,12 +148,29 @@ const CommentTrigger = ({ value, showCommentInput, setShowCommentInput }) => {
         onClick={() => {
           setShowCommentInput(!showCommentInput);
         }}
+        onMouseOver={() => {
+          setShow(true);
+        }}
+        onMouseOut={() => {
+          setShow(false);
+        }}
       >
         {value ? <IconCommentDots /> : <IconComment />}
         <span className="visually-hidden">
           <FormattedMessage id="experience.leave_comment" />
         </span>
       </button>
+      <Overlay
+        target={target.current}
+        show={show}
+        placement={window?.innerWidth < 600 ? "right" : "top"}
+      >
+        {(props) => (
+          <Tooltip id="leave_comment" {...props}>
+            <FormattedMessage id="experience.leave_comment_short" />
+          </Tooltip>
+        )}
+      </Overlay>
     </div>
   );
 };

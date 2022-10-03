@@ -23,6 +23,9 @@
 }
 .nav-item-locale {
   padding: $spacing 0;
+  .loading {
+    transform: translateX(-10px);
+  }
 }
 
 .navbar-collapse {

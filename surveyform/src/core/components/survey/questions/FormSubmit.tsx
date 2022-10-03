@@ -27,12 +27,17 @@ const FormSubmit = ({
   showMessage = true,
   variant = "bottom",
   readOnly,
+  prevLoading,
+  setPrevLoading,
+  nextLoading,
+  setNextLoading,
 }) => {
-  const { submitForm } = useFormContext();
+  const formContext = useFormContext();
+  const { submitForm } = formContext
   // const { intl } = context;
+
   const router = useRouter();
-  const [prevLoading, setPrevLoading] = useState(false);
-  const [nextLoading, setNextLoading] = useState(false);
+
   const Components = useVulcanComponents();
   return (
     <div className={`form-submit form-section-nav form-section-nav-${variant}`}>

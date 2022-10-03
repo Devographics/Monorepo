@@ -186,6 +186,7 @@ export const getQuestionSchema = (
     year,
     limit,
     arrayItem,
+    itemProperties,
   } = questionObject;
 
   const intlId = generateIntlId(questionObject, section, survey);
@@ -209,6 +210,7 @@ export const getQuestionSchema = (
     canCreate: ["members"],
     canUpdate: ["owners", "admins"],
     itemProperties: {
+      ...itemProperties,
       questionId: id,
       year,
       limit,

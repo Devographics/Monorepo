@@ -1,17 +1,19 @@
 /* from https://projects.lukehaas.me/css-loaders/ */
 
-.loader, .loading, .loading-button>span>span:nth-child(2)>span {
+.loader, .loading {
   font-size: 5px;
   width: 1em;
   height: 1em;
   border-radius: 50%;
   position: relative;
   text-indent: -9999em;
-  -webkit-animation: load5 1.1s infinite ease;
   animation: load5 1.1s infinite ease;
-  -webkit-transform: translateZ(0);
-  -ms-transform: translateZ(0);
-  transform: translateZ(0);
+  transform: translateX(25px) translateZ(0);
+  color:rgba(255, 255, 255, 0);
+  display: block;
+  .loading-button & {
+    transform: translateZ(0);
+  }
 }
 @-webkit-keyframes load5 {
   0%,

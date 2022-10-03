@@ -165,7 +165,7 @@ outline:
         template: happiness
         sectionSlug: happiness
 
-  - id: graphql_api_generators
+  - id: api_generators
     template: tool
     slug: tools
     questions:

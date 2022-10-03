@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 //import { statuses } from "~/modules/constants.js";
 import { FormItem } from "./FormItem";
 import FormSubmit from "./FormSubmit";
@@ -58,17 +58,31 @@ const SurveySectionContents = (props) => {
     survey,
     readOnly,
   } = props;
+
+  const [prevLoading, setPrevLoading] = useState(true);
+  const [nextLoading, setNextLoading] = useState(true);
+
+  const loadingProps = {
+    prevLoading,
+    setPrevLoading,
+    nextLoading,
+    setNextLoading,
+  }
+  
+  const formSubmitProps = {
+    response,
+    sectionNumber,
+    nextSection,
+    previousSection,
+    survey,
+    readOnly,
+    ...loadingProps
+  };
+
   const FormSubmitWrapper = (props) => (
-    <FormSubmit
-      {...props}
-      response={response}
-      sectionNumber={sectionNumber}
-      nextSection={nextSection}
-      previousSection={previousSection}
-      survey={survey}
-      readOnly={readOnly}
-    />
+    <FormSubmit {...props} {...formSubmitProps} />
   );
+
   return (
     /** Components rendered below this ComponentsProvider
      * can use the "Components.Form*" components
@@ -87,7 +101,7 @@ const SurveySectionContents = (props) => {
         // FormDescription,
       }}
     >
-      <SurveySectionContentsInner {...props} />
+      <SurveySectionContentsInner {...props} {...loadingProps} />
     </VulcanComponentsProvider>
   );
 };

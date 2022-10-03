@@ -55,6 +55,8 @@ outline:
 
       # - id: grid # removed in 2022, not that new anymore
       - id: subgrid
+        itemProperties:
+          isFirstQuestion: true
       # - id: flexbox # removed in 2022, too high usage
       # - id: multi_column # removed in 2022, not new anymore, too niche
       - id: writing_modes
@@ -204,14 +206,15 @@ outline:
     slug: features
     questions:
       - id: variables
+
+      - id: at_property #(@property)
+        year: 2021
+
       - id: feature_support_queries # (@supports)
       - id: will_change
       # - id: calc # removed in 2022, too high usage
       # - id: houdini # removed in 2022, not specific enough
       - id: comparison_functions
-
-      - id: at_property #(@property)
-        year: 2021
 
       - id: cascade_layers
         year: 2022

@@ -26,6 +26,12 @@
   .form-input:has(.form-help) {
     background: var(--bg-color-light);
     border: 0;
+    @include small-medium {
+      padding: math.div($spacing, 2);
+    }
+    @include large {
+      padding: $spacing;
+    }
     :last-child {
       margin: 0;
     }
@@ -308,13 +314,17 @@
 }
 
 .experience-contents {
-  display: grid;
-  grid-template-columns: 1fr min-content;
+  @include medium-large {
+    display: grid;
+    grid-template-columns: 1fr min-content;
+  }
 }
 .comment-trigger-wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
+  @include medium-large {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
 }
 .comment-trigger {
   // position: absolute;
@@ -359,7 +369,12 @@
   }
   &::after {
     bottom: 100%;
-    right: 11px;
+    @include small {
+      left: 21px;
+    }
+    @include medium-large {
+      right: 11px;
+    }
     border: solid transparent;
     content: "";
     height: 0;
