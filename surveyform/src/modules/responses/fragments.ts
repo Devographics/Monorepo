@@ -71,10 +71,11 @@ export const LightweightResponseFragment = gql`
 `;
 
 export const SurveyResponseFragment = (survey: SurveyDocument) => {
+  const responseSpecificFragmentName = `SurveyResponseFragment_${survey.slug}`;
   const surveySpecificFragmentName = `SurveySpecificFields_${survey.slug}`;
   const surveySpecificFields = getSurveyFieldNames(survey);
   return gql`
-  fragment SurveyResponseFragment on Response {
+  fragment ${responseSpecificFragmentName} on Response {
     _id
     createdAt
     updatedAt
