@@ -8,7 +8,6 @@ Note: form has a customized "FormSubmit" component to show the prev/next buttons
 
 */
 import React from "react";
-import SurveyNav from "./SurveyNav";
 import SurveySectionContents from "./SurveySectionContents";
 import SurveyHeadTags from "../SurveyHeadTags";
 import SurveyMessage from "../SurveyMessage";
@@ -35,36 +34,35 @@ const SurveySection = () => {
   const survey = surveys.find(
     (s) => s.prettySlug === slug && s.year === Number(year)
   );
-  const data = useSingle({
-    model: Response,
-    fragment: survey && SurveyResponseFragment(survey),
-    fragmentName: survey && getFragmentName(SurveyResponseFragment(survey)),
-    input: { id: responseId },
-    queryOptions: {
-      pollInterval: 0,
-      skip: !survey,
-    },
-  });
+  // const { document: response, loading } = useSingle({
+  //   model: Response,
+  //   fragment: survey && SurveyResponseFragment(survey),
+  //   fragmentName: survey && getFragmentName(SurveyResponseFragment(survey)),
+  //   input: { id: responseId },
+  //   queryOptions: {
+  //     pollInterval: 0,
+  //     skip: !survey,
+  //   },
+  // });
+
   if (!paramsReady) {
-    return <Components.Loading />;
+    return <div>Loading section…</div>;
   }
+
   if (!survey) throw new Error(`Survey with slug ${slug} not found`);
-  const { document: response, loading } = data;
-  if (loading) {
-    return <Components.Loading />;
-  }
-  if (!response) {
-    return (
-      <div>
-        Could not find survey response document. Please reload, or if that
-        doesn’t work{" "}
-        <a href="https://github.com/StateOfJS/StateOfJS-Vulcan/issues">
-          leave an issue
-        </a>
-        .
-      </div>
-    );
-  }
+
+  // if (!response) {
+  //   return (
+  //     <div>
+  //       Could not find survey response document. Please reload, or if that
+  //       doesn’t work{" "}
+  //       <a href="https://github.com/devographics/monorepo/issues">
+  //         leave an issue
+  //       </a>
+  //       .
+  //     </div>
+  //   );
+  // }
 
   //const survey = surveys.find((s) => s.slug === response.survey.slug);
   const surveyOutline = survey.outline;
@@ -75,7 +73,8 @@ const SurveySection = () => {
   const sectionProps = {
     sectionNumber,
     section,
-    response,
+    // response,
+    responseId,
     previousSection,
     nextSection,
   };
@@ -83,24 +82,8 @@ const SurveySection = () => {
   return (
     <div className="survey-section-wrapper">
       <SurveyMessage survey={survey} />
-      <div className="survey-section">
-        <SurveyNav
-          survey={response.survey}
-          response={response}
-          // Not actually used in SurveyNav
-          //currentSectionNumber={sectionNumber}
-        />
-        <div className="section-contents">
-          <SurveyHeadTags survey={survey} />
-          {loading ? (
-            <Components.Loading />
-          ) : !response ? (
-            <p>Could not find survey.</p>
-          ) : (
-            <SurveySectionContents survey={survey} {...sectionProps} />
-          )}
-        </div>
-      </div>
+      <SurveyHeadTags survey={survey} />
+      <SurveySectionContents survey={survey} {...sectionProps} />
     </div>
   );
 };
