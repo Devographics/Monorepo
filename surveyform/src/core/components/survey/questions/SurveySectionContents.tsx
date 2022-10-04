@@ -25,31 +25,6 @@ import { bootstrapFormComponents } from "@vulcanjs/react-ui-bootstrap";
 import SurveySectionHeading from "~/core/components/survey/questions/SurveySectionHeading";
 import { SurveyResponseFragment } from "~/modules/responses/fragments";
 
-const getEntityIds = (questions: Array<ParsedQuestion & { id: string }>) => {
-  let ids: string[] = [];
-  questions.forEach((question) => {
-    const { id, options } = question;
-    ids.push(id);
-    if (options) {
-      let optionsArray;
-      if (typeof options === "function") {
-        // TODO: options is a function of the props, that should contain a "data" field
-        // Probably coming from an autocomplete
-        // We can't handle that yet
-        optionsArray = []; //options();
-      } else {
-        optionsArray = options;
-      }
-      optionsArray.forEach(({ id }) => {
-        if (id) {
-          ids.push(id);
-        }
-      });
-    }
-  });
-  return ids;
-};
-
 const SurveySectionContents = (props) => {
   const [prevLoading, setPrevLoading] = useState(false);
   const [nextLoading, setNextLoading] = useState(false);
@@ -131,10 +106,6 @@ const SurveySectionContentsInner = ({
     }
   }
 
-  const entityIds = getEntityIds(questions);
-
-  const { id, intlId } = section;
-
   const trackSave = ({ lastSavedAt, isError = false }) => {
     const data = {
       startedAt: lastSavedAt,
@@ -150,7 +121,6 @@ const SurveySectionContentsInner = ({
   // const isDisabled = !canModifyResponse(response, user);
 
   return (
-    <EntitiesProvider ids={entityIds}>
       <Components.SmartForm
         documentId={responseId}
         fields={fields}
@@ -198,7 +168,6 @@ const SurveySectionContentsInner = ({
         warnUnsavedChanges={false}
         // disabled={isDisabled}
       />
-    </EntitiesProvider>
   );
 };
 
