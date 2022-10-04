@@ -20,7 +20,7 @@ import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 
 const FormSubmit = ({
   survey,
-  response,
+  // response,
   sectionNumber,
   nextSection,
   previousSection,
@@ -33,8 +33,8 @@ const FormSubmit = ({
   setNextLoading,
 }) => {
   const formContext = useFormContext();
-  const { submitForm } = formContext
-  // const { intl } = context;
+  const { getDocument, submitForm } = formContext;
+  const response = getDocument()
 
   const router = useRouter();
 

@@ -1,5 +1,4 @@
 import React from "react";
-import SurveyNav from "./SurveyNav";
 import SurveySectionContents from "./SurveySectionContents";
 import { getSurvey } from "~/modules/surveys/getters";
 import { useSurveyResponseParams } from "../hooks";
@@ -28,22 +27,7 @@ const SurveySectionReadOnly = () => {
     nextSection,
   };
   return (
-    <div className="survey-section">
-      <SurveyNav
-        survey={survey}
-        // Not used yet
-        //currentSectionNumber={sectionNumber}
-        // Not used yet
-        //readOnly={true}
-      />
-      <div className="section-contents">
-        <SurveySectionContents
-          survey={survey}
-          {...sectionProps}
-          readOnly={true}
-        />
-      </div>
-    </div>
+    <SurveySectionContents survey={survey} {...sectionProps} readOnly={true} />
   );
 };
 
