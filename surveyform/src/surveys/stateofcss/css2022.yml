@@ -697,7 +697,6 @@ outline:
           - id: css_podcast
           - id: undefined_podcast
           - id: working_draft
-          - id: web_standards
 
       - id: podcasts
         template: others
