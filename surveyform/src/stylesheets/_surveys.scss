@@ -130,7 +130,20 @@
     }
   }
 }
-
+.section-nav-inner {
+  position: relative;
+}
+.section-nav-loading {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  background: rgba(255,255,255,0.2);
+  display: grid;
+  place-items: center;
+  backdrop-filter: blur(5px);
+}
 .section-nav-heading {
   font-size: $large-font;
   margin-bottom: $spacing;
@@ -175,8 +188,6 @@
     padding: $spacing;
     margin-bottom: $spacing;
   }
-}
-.section-nav-inner {
 }
 .section-nav-toc {
   font-size: $medium-font;

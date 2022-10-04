@@ -9,15 +9,14 @@ TODO
 - Simplify this by using already-parsed with getQuestionObject() outline
 
 */
-import { useVulcanComponents } from "@vulcanjs/react-ui";
+import { useVulcanComponents, useFormContext } from "@vulcanjs/react-ui";
 import Link from "next/link";
-import React, { useState, useEffect, useRef } from "react";
-import { ResponseDocument } from "@devographics/core-models";
-import { getSectionCompletionPercentage } from "~/modules/responses/helpers";
+import React, { useState, useEffect } from "react";
 import { getSurveyPath } from "~/modules/surveys/getters";
-import type { SurveySection, SurveyType } from "@devographics/core-models";
+import type { SurveyType } from "@devographics/core-models";
 import surveys from "~/surveys";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
+import SurveyNavItem from "~/core/components/survey/questions/SurveyNavItem";
 
 // TODO
 // const getOverallCompletionPercentage = (response) => {
@@ -26,11 +25,20 @@ import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 
 const SurveyNav = ({
   survey,
-  response,
+  // response,
+  navLoading,
+  setNavLoading,
 }: {
   survey: SurveyType;
-  response?: any;
+  // response?: any;
+  navLoading?: boolean;
+  setNavLoading?: any;
 }) => {
+  const formContext = useFormContext();
+  const { getDocument, submitForm } = formContext;
+
+  const response = getDocument()
+
   const Components = useVulcanComponents();
   const outline = surveys.find((o) => o.slug === survey.slug)?.outline;
   if (!outline)
@@ -98,7 +106,7 @@ const SurveyNav = ({
         <div className="section-nav-contents">
           <ul>
             {outline.map((section, i) => (
-              <SectionNavItem
+              <SurveyNavItem
                 survey={survey}
                 setShown={setShown}
                 response={response}
@@ -108,6 +116,8 @@ const SurveyNav = ({
                 currentTabindex={currentTabindex}
                 setCurrentTabindex={setCurrentTabindex}
                 setCurrentFocusIndex={setCurrentFocusIndex}
+                submitForm={submitForm}
+                setNavLoading={setNavLoading}
               />
             ))}
             {/* {response && <li>Overall: {getOverallCompletionPercentage(response)}%</li>} */}
@@ -116,70 +126,9 @@ const SurveyNav = ({
             <FormattedMessage id="general.all_questions_optional" />
           </p>
         </div>
+        {navLoading && <div className="section-nav-loading"><Components.Loading/></div>}
       </div>
     </nav>
-  );
-};
-
-const SectionNavItem = ({
-  survey,
-  response,
-  section,
-  number,
-  setShown,
-  currentTabindex,
-  setCurrentFocusIndex,
-}: {
-  survey: SurveyType;
-  response?: ResponseDocument;
-  section: SurveySection;
-  number: any;
-  setShown: (boolean) => void;
-  currentTabindex?: number | null;
-  setCurrentFocusIndex: (index: number | null) => void;
-  setCurrentTabindex: (index: number | null) => void;
-}) => {
-  const textInput = useRef<any>(null);
-  const completion = getSectionCompletionPercentage(section, response);
-  const showCompletion = completion !== null && completion > 0;
-
-  useEffect(() => {
-    if (currentTabindex === number) {
-      textInput.current?.focus();
-    }
-  }, [currentTabindex]);
-
-  const Components = useVulcanComponents();
-
-  return (
-    <li className="section-nav-item">
-      {/** TODO: was a NavLink previously from bootstrap */}
-      <Link
-        //exact={true}
-        href={getSurveyPath({ survey, number, response })}
-      >
-        <a
-          ref={textInput}
-          tabIndex={currentTabindex === number ? 0 : -1}
-          onClick={() => {
-            setShown(false);
-          }}
-          onFocus={() => {
-            setCurrentFocusIndex(number);
-          }}
-          onBlur={() => {
-            setCurrentFocusIndex(null);
-          }}
-        >
-          <FormattedMessage
-            id={`sections.${section.intlId || section.id}.title`}
-          />{" "}
-          {showCompletion && (
-            <span className="section-nav-item-completion">{completion}%</span>
-          )}
-        </a>
-      </Link>
-    </li>
   );
 };
 
