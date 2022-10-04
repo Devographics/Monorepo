@@ -21,6 +21,7 @@ export const StandaloneMagicLoginForm = ({
 }) => {
   const router = useRouter();
   const intl = useIntlContext();
+  const placeholder = intl.formatMessage({ id: `accounts.your_email` });
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
   const resetMessages = () => {
@@ -85,6 +86,7 @@ export const StandaloneMagicLoginForm = ({
           successMessage={successMsg}
           onSubmit={handleSubmit}
           label={label}
+          placeholder={placeholder}
         />
       </div>
     </>
@@ -96,26 +98,29 @@ const MagicLinkLoginForm = ({
   successMessage,
   onSubmit,
   label = "Send me a magic link",
+  placeholder,
 }: {
   /** Path to redirect to on successful implementation */
   errorMessage?: string;
   successMessage?: string;
   onSubmit?: FormEventHandler<HTMLFormElement>;
   label?: string | ReactNode;
+  placeholder?: string;
 }) => {
   const Components = useVulcanComponents();
+  
   return (
     <form onSubmit={onSubmit} className="magic-link-login-form">
       {/* <span>Your Email</span> */}
       <FormComponentEmail
         inputProperties={{
-          placeholder: "Your Email",
+          placeholder,
           name: "email",
           required: true,
           autoCorrect: "off",
           autoCapitalize: "none",
         }}
-        label="Your Email"
+        label={placeholder}
         name="email"
       />
       <div className="submit">
