@@ -91,10 +91,10 @@ const SurveySectionContentsInner = ({
   const Components = useVulcanComponents();
   const { user } = useUser();
 
-  const [createSave, { data, loading, error }] = useCreate({
-    model: Save,
-    fragment: SaveFragment,
-  });
+  // const [createSave, { data, loading, error }] = useCreate({
+  //   model: Save,
+  //   fragment: SaveFragment,
+  // });
 
   const questions = section.questions.filter((q) => !q.hidden);
   const fields = questions.map((question) => question.fieldName);
@@ -106,15 +106,15 @@ const SurveySectionContentsInner = ({
     }
   }
 
-  const trackSave = ({ lastSavedAt, isError = false }) => {
-    const data = {
-      startedAt: lastSavedAt,
-      finishedAt: new Date(),
-      responseId,
-      isError,
-    };
-    createSave({ input: { data } });
-  };
+  // const trackSave = ({ lastSavedAt, isError = false }) => {
+  //   const data = {
+  //     startedAt: lastSavedAt,
+  //     finishedAt: new Date(),
+  //     responseId,
+  //     isError,
+  //   };
+  //   createSave({ input: { data } });
+  // };
 
   const isLastSection = !nextSection;
 
@@ -154,17 +154,17 @@ const SurveySectionContentsInner = ({
           }
           return data;
         }}
-        successCallback={(result) => {
-          const { lastSavedAt } = result;
-          trackSave({ lastSavedAt, isError: false });
-        }}
-        errorCallback={(document, error) => {
-          if (document) {
-            const { lastSavedAt } = document;
-            trackSave({ lastSavedAt, isError: true });
-          }
-          console.error(error);
-        }}
+        // successCallback={(result) => {
+        //   const { lastSavedAt } = result;
+        //   trackSave({ lastSavedAt, isError: false });
+        // }}
+        // errorCallback={(document, error) => {
+        //   if (document) {
+        //     const { lastSavedAt } = document;
+        //     trackSave({ lastSavedAt, isError: true });
+        //   }
+        //   console.error(error);
+        // }}
         warnUnsavedChanges={false}
         // disabled={isDisabled}
       />
