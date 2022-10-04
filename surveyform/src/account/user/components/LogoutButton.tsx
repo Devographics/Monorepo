@@ -24,6 +24,7 @@ export const LogoutButton = ({
         });
         window.location.replace(routes.home.href);
       }}
+      {...(component && { href: "#" })}
     >
       {intl.formatMessage({
         id: `accounts.sign_out`,
