@@ -15,7 +15,7 @@ export const getTranslationValuesFromContext = (context, translate) => {
     return values
 }
 
-export const getPageLabelKey = page => page.titleId || `sections.${page.id}.title`
+export const getPageLabelKey = page => page.titleId || `sections.${page.intlId || page.id}.title`
 
 export const getPageLabel = (page, translate, { includeWebsite = false } = {}) => {
     let label

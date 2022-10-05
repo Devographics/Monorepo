@@ -870,6 +870,7 @@
       template: recommended_resources
 
 - id: resources
+  intlId: resources_graphql
   path: /resources
   blocks:
     - template: page_introduction
@@ -916,6 +917,7 @@
     #   template: picks
 
     - id: podcasts_others
+      intlId: podcasts_graphql_others
       defaultUnits: count
       blockNamespace: resources
       chartNamespace: podcasts
@@ -953,7 +955,7 @@
       #       options: { limit: 15 }
 
     - id: resources_resources
-      items: [tg-wtf, renderatl]
+      items: [tg-wtf]
       template: recommended_resources
 
 # - id: awards
