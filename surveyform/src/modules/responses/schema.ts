@@ -2,7 +2,10 @@ import surveys from "~/surveys";
 
 import { getQuestionSchema } from "./helpers";
 import { VulcanGraphqlSchema } from "@vulcanjs/graphql";
-import { getQuestionId, getQuestionObject } from "./parseSurvey";
+import {
+  getQuestionId,
+  getQuestionObject,
+} from "~/modules/surveys/parser/parseSurvey";
 import cloneDeep from "lodash/cloneDeep.js";
 import { addComponentToQuestionObject } from "./customComponents";
 import { VulcanFieldSchema } from "@vulcanjs/schema";
@@ -274,9 +277,14 @@ surveys.forEach((survey) => {
           schemaPerSurvey[survey.slug][questionId] = questionSchema;
         }
 
-        if (questionObject.suffix === 'experience') {
-          const commentSchema = addComponentToQuestionObject(getCommentSchema()) as VulcanFieldSchema<any> 
-          const commentQuestionId = getQuestionId(survey, section, {...questionObject, suffix: 'comment'});
+        if (questionObject.suffix === "experience") {
+          const commentSchema = addComponentToQuestionObject(
+            getCommentSchema()
+          ) as VulcanFieldSchema<any>;
+          const commentQuestionId = getQuestionId(survey, section, {
+            ...questionObject,
+            suffix: "comment",
+          });
           schema[commentQuestionId] = commentSchema;
           if (survey.slug) {
             schemaPerSurvey[survey.slug][commentQuestionId] = commentSchema;
