@@ -9,6 +9,7 @@ import RecommendedResourcesBlock from 'core/blocks/other/RecommendedResourcesBlo
 import PageIntroductionBlock from 'core/blocks/other/PageIntroductionBlock'
 import SurveyIntroBlock from 'core/blocks/other/SurveyIntroBlock'
 import NewsletterBlock from 'core/blocks/other/NewsletterBlock'
+import PartnersBlock from 'core/blocks/other/PartnersBlock'
 import SponsorsBlock from 'core/blocks/other/SponsorsBlock'
 import PicksBlock from 'core/blocks/other/PicksBlock'
 import TranslatorsBlock from 'core/blocks/other/TranslatorsBlock'
@@ -82,6 +83,7 @@ const blockRegistry = {
     AwardsBlock,
     ConclusionBlock,
     NewsletterBlock,
+    PartnersBlock,
     SponsorsBlock,
     PicksBlock,
     TranslatorsBlock,
