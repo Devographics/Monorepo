@@ -113,6 +113,10 @@ type SurveyEditionConfig {
     Sponsors
     """
     sponsors: [SurveySponsorsItem]
+    """
+    Partners
+    """
+    partners: [SurveySponsorsItem]
 }
 
 type SurveyEditionColors {

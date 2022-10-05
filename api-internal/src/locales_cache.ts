@@ -246,12 +246,11 @@ export const addFallbacks = (
             const localeTranslationIndex = localeStrings.findIndex(
                 t => t.key === enTranslation.key && !t.isFallback
             )
-
+            const localeString = localeStrings[localeTranslationIndex]
             if (
                 localeTranslationIndex === -1 ||
-                localeStrings[localeTranslationIndex].t === enTranslation.t ||
-                (localeStrings[localeTranslationIndex].t &&
-                    localeStrings[localeTranslationIndex].t.trim() === 'TODO')
+                localeString.t === enTranslation.t ||
+                (localeString.t && localeString.t.trim() === 'TODO')
             ) {
                 // en-US key doesn't exist in current locale file
                 // OR current locale file's translation is same as en-US (untranslated)
@@ -261,7 +260,7 @@ export const addFallbacks = (
                     isFallback: true
                 })
             } else {
-                localeStrings[localeTranslationIndex].isFallback = false
+                localeString.isFallback = false
             }
         })
         return stringFile
