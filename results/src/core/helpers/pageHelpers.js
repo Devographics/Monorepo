@@ -34,13 +34,13 @@ export const getPageLabel = (page, translate, { includeWebsite = false } = {}) =
  *   http://2018.stateofjs.com/images/captures/en-US/front-end_overview.png
  */
 export const getPageImageUrl = context => {
-    const baseUrl = `${context.host}/images/`
+    const { currentEdition, block } = context
 
     let imageUrl
-    if (context.block !== undefined) {
-        imageUrl = getBlockImage(context.block, context)
+    if (block !== undefined) {
+        imageUrl = getBlockImage(block, context)
     } else {
-        imageUrl = `${baseUrl}${config.socialMediaImage}`
+        imageUrl = currentEdition.socialImageUrl
     }
 
     return imageUrl
