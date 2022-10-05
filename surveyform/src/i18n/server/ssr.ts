@@ -4,7 +4,7 @@ import { getLocaleStrings } from "./fetchLocales";
 // Currently, loading locales will happen on each and every page
 // to be improved when Next.js layouts are released
 // so they are loaded only once
-const DEACTIVATE_LOCALE_SSR = false;
+const DEACTIVATE_LOCALE_SSR = true;
 const LOCALE_STRINGS_TTL_SECONDS = 20 * 60;
 
 export const getLocaleStaticProps: GetStaticProps = async ({ locale }) => {

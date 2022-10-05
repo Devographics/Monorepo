@@ -14,7 +14,6 @@ import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { useIntlContext } from "@vulcanjs/react-i18n";
 import { useRouter } from "next/router.js";
 import { useSurveyParams } from "../hooks";
-// import { StandaloneLoginForm } from "~/core/components/account/StandaloneLoginForm";
 import LoginDialog from "~/account/LoginDialog";
 import { useUser } from "~/account/user/hooks";
 import Image from "next/image";
