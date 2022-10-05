@@ -119,8 +119,7 @@ const CodeExample = ({ language, code, codeHighlighted }) => {
   );
 };
 
-import Overlay from "react-bootstrap/Overlay";
-import Tooltip from "react-bootstrap/Tooltip";
+import { Overlay, Tooltip } from "react-bootstrap";
 
 const CommentTrigger = ({
   value,
