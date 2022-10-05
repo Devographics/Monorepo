@@ -43,6 +43,12 @@ export const FormattedMessage = ({
     }
   };
 
+  /**
+   * NOTE: this currently barely ever happens,
+   * because for each locale, when a token is missing,
+   * the server will use the default (en-US) token
+   * Empty tokens can only happen if en-US also misses a new token
+   */
   if (message === "") {
     props.onClick = handleClick;
     // We need both title and aria-label because otherwise "title"
