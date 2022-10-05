@@ -92,6 +92,9 @@ query {
             }
             domain
             hashtag
+            emailOctopus {
+                listId
+            }
         }
     }
 }`

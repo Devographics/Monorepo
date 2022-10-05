@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { useI18n } from 'core/i18n/i18nContext'
 import T from 'core/i18n/T'
+import { usePageContext } from 'core/helpers/pageContext'
+
 
 const getEOConfig = listId => ({
     emailOctopusUrl: `https://emailoctopus.com/lists/${listId}/members/embedded/1.3/add`,
@@ -8,7 +10,10 @@ const getEOConfig = listId => ({
     emailOctopusCode: 'hpc4b27b6e-eb38-11e9-be00-06b4694bee2a'
 })
 
-export default function Newsletter({ listId = '', locale }) {
+export default function Newsletter({ locale }) {
+    const { currentSurvey } = usePageContext()
+    const listId = currentSurvey?.emailOctopus?.listId
+
     const [email, setEmail] = useState('')
     const [submitted, setSubmitted] = useState(false)
     const [loading, setLoading] = useState(false)
