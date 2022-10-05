@@ -1,5 +1,4 @@
-import countriesOptions from "../countriesOptions";
-import { makeAutocomplete } from "@vulcanjs/graphql";
+import countriesOptions from "../../countriesOptions";
 import type {
   FieldTemplateId,
   ParsedQuestion,

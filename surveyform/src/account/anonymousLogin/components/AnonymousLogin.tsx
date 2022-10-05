@@ -1,7 +1,22 @@
 // TODO: provide this component in Vulcan Next as well
 import { useVulcanComponents } from "@vulcanjs/react-ui";
+import { useRouter } from "next/router";
 import { useState, ReactNode } from "react";
 import { loginAnonymously } from "../lib";
+import { useSWRConfig } from "swr";
+import { apiRoutes } from "~/lib/apiRoutes";
+
+/**
+ * Will update all "useUser" hooks
+ */
+const useRefreshUser = () => {
+  const { mutate } = useSWRConfig();
+  return async function refreshUser() {
+    // NOTE: this step is very important,
+    // it updates "useUser" hook so user is connected
+    await mutate(apiRoutes.account.user.href);
+  };
+};
 
 export const AnonymousLoginForm = ({
   successRedirection,
@@ -13,6 +28,8 @@ export const AnonymousLoginForm = ({
 }) => {
   const Components = useVulcanComponents();
   const [errorMsg, setErrorMsg] = useState("");
+  const router = useRouter();
+  const refreshUser = useRefreshUser();
 
   async function loginAnonymouslyOnClick() {
     //e.preventDefault();
@@ -22,12 +39,10 @@ export const AnonymousLoginForm = ({
       if (!res.ok) {
         setErrorMsg(await res.text());
       } else {
-        // @see https://github.com/vercel/next.js/discussions/19601
-        // This force SWR to update all queries subscribed to "user"
+        await refreshUser();
         if (successRedirection) {
-          window.location.replace(successRedirection);
-        } else {
-          window.location.reload();
+          console.log("push to", successRedirection);
+          router.push(successRedirection);
         }
       }
     } catch (error) {

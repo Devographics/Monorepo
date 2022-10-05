@@ -6,7 +6,6 @@
  */
 import { slugify } from "@vulcanjs/utils";
 import pick from "lodash/pick.js";
-import pickBy from "lodash/pickBy.js";
 import { getSurveyFromResponse } from "../surveys/getters";
 import {
   Field,
@@ -23,7 +22,11 @@ import { ResponseDocument } from "@devographics/core-models";
 import { isAdmin } from "@vulcanjs/permissions";
 import { VulcanGraphqlFieldSchema } from "@vulcanjs/graphql";
 import SimpleSchema from "simpl-schema";
-import { getQuestionId, getQuestionObject, parseSurvey } from "./parseSurvey";
+import {
+  getQuestionId,
+  getQuestionObject,
+  parseSurvey,
+} from "../surveys/parser/parseSurvey";
 
 // Previously it lived in Vulcan NPM, but that's something you'd want to control more
 // precisely at app level

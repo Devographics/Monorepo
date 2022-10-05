@@ -7,11 +7,11 @@ import { useLocaleContext } from "~/i18n/components/LocaleContext";
 const LocaleSelector = () => {
   const Components = useVulcanComponents();
   const { loading, locales = [] } = useLocales();
+  const { setLocale } = useLocaleContext();
+
   if (loading) {
     return <Components.Loading />;
   }
-
-  const { setLocale } = useLocaleContext();
 
   return (
     <div className="locale-selector">

@@ -1,7 +1,12 @@
 import { GetServerSideProps, GetStaticProps } from "next";
 import { getLocaleStrings } from "./fetchLocales";
 
+// Currently, loading locales will happen on each and every page
+// to be improved when Next.js layouts are released
+// so they are loaded only once
+const DEACTIVATE_LOCALE_SSR = true;
 const LOCALE_STRINGS_TTL_SECONDS = 20 * 60;
+
 export const getLocaleStaticProps: GetStaticProps = async ({ locale }) => {
   if (!locale) {
     return {
@@ -9,6 +14,13 @@ export const getLocaleStaticProps: GetStaticProps = async ({ locale }) => {
       revalidate: LOCALE_STRINGS_TTL_SECONDS,
     };
   }
+  // Just return the current locale, without strings
+  if (DEACTIVATE_LOCALE_SSR)
+    return {
+      props: {
+        locale,
+      },
+    };
   try {
     // TODO: if the locale id is not known (eg try zz-ZZ)
     // we should try to fetch english instead
@@ -53,6 +65,12 @@ export const getLocaleServerSideProps: GetServerSideProps = async ({
   if (!locale) {
     return { props: { locale: "en" } };
   }
+  if (DEACTIVATE_LOCALE_SSR)
+    return {
+      props: {
+        locale,
+      },
+    };
   try {
     // TODO: if the locale id is not known (eg try zz-ZZ)
     // we should try to fetch english instead

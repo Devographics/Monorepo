@@ -30,10 +30,7 @@ import { ApolloProvider } from "@apollo/client";
 import { useApollo } from "@vulcanjs/next-apollo";
 import { useUser } from "~/account/user/hooks";
 
-// TODO: still quite experimental, migrated specifically for the state of js
-//import { LocaleContextProvider } from "@vulcanjs/i18n";
 import { LocaleContextProvider } from "~/i18n/components/LocaleContext";
-import { DefaultLocaleContextProvider } from "~/core/components/common/DefaultLocaleContext";
 
 import "~/stylesheets/main.scss";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
@@ -101,60 +98,58 @@ function VNApp({ Component, pageProps }: VNAppProps) {
       {/** TODO: this error boundary to display anything useful since it doesn't have i18n */}
       {getLayout(
         <ApolloProvider client={apolloClient}>
-          <DefaultLocaleContextProvider>
-            <LocaleContextProvider
-              locale={locale}
-              localeStrings={localeStrings}
-              currentUser={user}
+          <LocaleContextProvider
+            locale={locale}
+            localeStrings={localeStrings}
+            currentUser={user}
+          >
+            <VulcanCurrentUserProvider
+              // @ts-ignore FIXME: weird error with groups
+              value={{
+                currentUser: user || null,
+                loading:
+                  false /* TODO: we don't get the loading information from useUser yet */,
+              }}
             >
-              <VulcanCurrentUserProvider
-                // @ts-ignore FIXME: weird error with groups
+              <VulcanComponentsProvider
                 value={{
-                  currentUser: user || null,
-                  loading:
-                    false /* TODO: we don't get the loading information from useUser yet */,
+                  ...defaultCoreComponents,
+                  ...liteCoreComponents,
+                  Alert,
+                  // TODO: should not be needed, since we use Bootstrap Button instead,
+                  // but need double checking
+                  // Button,
+                  TooltipTrigger,
+                  Loading,
+                  ...bootstrapCoreComponents,
+                  // Keep the component here even if we don't use Components.FormattedMessage directly
+                  // This allows Vulcan components to depend on it
+                  FormattedMessage: FormattedMessage,
                 }}
               >
-                <VulcanComponentsProvider
-                  value={{
-                    ...defaultCoreComponents,
-                    ...liteCoreComponents,
-                    Alert,
-                    // TODO: should not be needed, since we use Bootstrap Button instead,
-                    // but need double checking
-                    // Button,
-                    TooltipTrigger,
-                    Loading,
-                    ...bootstrapCoreComponents,
-                    // Keep the component here even if we don't use Components.FormattedMessage directly
-                    // This allows Vulcan components to depend on it
-                    FormattedMessage: FormattedMessage,
-                  }}
+                <Head>
+                  <title>Devographics Surveys</title>
+                  <meta
+                    name="viewport"
+                    content="minimum-scale=1, initial-scale=1, width=device-width"
+                  />
+                  <Favicons />
+                </Head>
+                <ErrorBoundary
+                  proposeReload={true}
+                  proposeHomeRedirection={true}
                 >
-                  <Head>
-                    <title>Devographics Surveys</title>
-                    <meta
-                      name="viewport"
-                      content="minimum-scale=1, initial-scale=1, width=device-width"
-                    />
-                    <Favicons />
-                  </Head>
-                  <ErrorBoundary
-                    proposeReload={true}
-                    proposeHomeRedirection={true}
+                  <Layout
+                    surveySlug={pageProps?.slug}
+                    surveyYear={pageProps?.year}
                   >
-                    <Layout
-                      surveySlug={pageProps?.slug}
-                      surveyYear={pageProps?.year}
-                    >
-                      {/** @ts-ignore */}
-                      <Component {...pageProps} />
-                    </Layout>
-                  </ErrorBoundary>
-                </VulcanComponentsProvider>
-              </VulcanCurrentUserProvider>
-            </LocaleContextProvider>
-          </DefaultLocaleContextProvider>
+                    {/** @ts-ignore */}
+                    <Component {...pageProps} />
+                  </Layout>
+                </ErrorBoundary>
+              </VulcanComponentsProvider>
+            </VulcanCurrentUserProvider>
+          </LocaleContextProvider>
         </ApolloProvider>
       )}
     </ErrorBoundary>

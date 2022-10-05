@@ -3,7 +3,7 @@ import type {
   Field,
   SurveySection,
 } from "@devographics/core-models";
-import { addTemplateToQuestionObject } from "~/modules/responses/addTemplateToSurvey";
+import { addTemplateToQuestionObject } from "./addTemplateToSurvey";
 
 // build question object from outline
 export const getQuestionObject = (
@@ -55,7 +55,7 @@ export const getQuestionId = (survey, section, question) => {
 Take a raw survey YAML and process it to give ids, fieldNames, etc.
 to every question
 
-/!\ Will NOT add templates, so that it can be reused in scripts
+/!\ Will NOT add components, so that it can be reused in scripts
 
 */
 export const parseSurvey = (survey: SurveyDocument) => {

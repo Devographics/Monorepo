@@ -3,7 +3,7 @@
  * This avoid bundling all surveys in a page
  */
 import { SurveyDocument } from "@devographics/core-models";
-import { getQuestionObject } from "../responses/parseSurvey";
+import { getQuestionObject } from "./parser/parseSurvey";
 
 export const getSurveyFieldNames = (survey: SurveyDocument) => {
   let questionFieldName: Array<string> = [];
