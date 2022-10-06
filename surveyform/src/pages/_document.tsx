@@ -26,7 +26,6 @@ export default class MyDocument extends Document<VNSDocumentProps> {
         <Head>
           {/* PWA primary color */}
           {/*<meta name="theme-color" content={theme.palette.primary.main} />*/}
-          {/* @see https://next.material-ui.com/getting-started/installation/ */}
           <link
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
@@ -34,10 +33,6 @@ export default class MyDocument extends Document<VNSDocumentProps> {
           <link
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=IBM+Plex+Mono:300,300i,600&display=swap"
-          />
-          <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/icon?family=Material+Icons"
           />
         </Head>
         <body>

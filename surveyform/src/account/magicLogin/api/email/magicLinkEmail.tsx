@@ -1,7 +1,5 @@
 /**
  * Mail for the magic link strategy
- *
- * NOTE: in other examples we used Material UI + SSR but it definitely won't work!
  */
 
 import { localMailTransport } from "~/lib/server/mail/transports";
