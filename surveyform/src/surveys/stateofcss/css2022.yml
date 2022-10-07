@@ -666,6 +666,7 @@ outline:
           - id: egghead
           - id: newline
           - id: web_dev
+          - id: linkedin_learning
 
       - id: sites_courses
         template: others
