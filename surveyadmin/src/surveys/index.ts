@@ -14,7 +14,7 @@ import js2022 from "./stateofjs/js2022.yml";
 
 import graphql2022 from "./stateofgraphql/graphql2022.yml";
 
-import { parseSurvey } from "~/modules/responses/parseSurvey";
+import { parseSurvey } from "~/modules/surveys/parser/parseSurvey";
 
 // make sure array is properly sorted here
 import { SurveyType } from "@devographics/core-models";
@@ -38,13 +38,13 @@ export const surveys: Array<SurveyType> = [
   js2019,
 ];
 
-if (
-  process.env.NEXT_PUBLIC_NODE_ENV === "test" ||
-  process.env.NODE_ENV !== "production"
-) {
-  const { testSurvey } = require("./testSurvey");
-  surveys.push(testSurvey);
-}
+// if (
+//   process.env.NEXT_PUBLIC_NODE_ENV === "test" ||
+//   process.env.NODE_ENV !== "production"
+// ) {
+//   const { testSurvey } = require("./testSurvey");
+//   surveys.push(testSurvey);
+// }
 
 /**
  * FOR REACT CODE, USE surveyWithTemplates INSTEAD

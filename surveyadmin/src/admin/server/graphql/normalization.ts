@@ -3,6 +3,9 @@ import { normalizeResponse } from "../normalization/normalize";
 import { UserType } from "~/core/models/user";
 import { ResponseAdminMongooseModel } from "@devographics/core-models/server";
 import { NormalizedResponseMongooseModel } from "~/admin/models/normalized_responses/model.server";
+import { getOrFetchEntities } from "~/modules/entities/server";
+import pick from "lodash/pick.js";
+
 /*
 
 Normalization
@@ -17,9 +20,9 @@ export const normalizeIds = async (
   //   throw new Error('You cannot perform this operation');
   // }
   const results: Array<{
-    normalizedId: string;
-    _id: string;
-    normalizedFields: Array<any>;
+    normalizedResponseId?: string;
+    responseId?: string;
+    normalizedFields?: Array<any>;
   }> = [];
 
   if (!currentUser.isAdmin) throw new Error("Non admin cannot normalize ids");
@@ -32,17 +35,141 @@ export const normalizeIds = async (
   for (const document of responses) {
     const { _id } = document;
     const normalization = await normalizeResponse({ document, verbose: true });
-    if (!normalization)
+    if (!normalization) {
       throw new Error(
         `Could not normalize response ${JSON.stringify(document)}`
       );
-    const { result, normalizedFields } = normalization;
-    results.push({ normalizedId: result._id, _id, normalizedFields });
+    }
+    results.push(normalization);
   }
   return results;
 };
 
 export const normalizeIdsTypeDefs = "normalizeIds(ids: [String]): [JSON]";
+
+/*
+
+Normalization (entire survey)
+
+*/
+const defaultLimit = 999;
+const isSimulation = false;
+const verbose = false;
+export const normalizeSurvey = async (
+  root,
+  args,
+  { currentUser }: { currentUser: UserType }
+) => {
+  const { surveyId, startFrom = 0, limit = defaultLimit } = args;
+  const startAt = new Date();
+  let progress = 0;
+
+  const metadata: {
+    surveyId: string;
+    normalizedDocuments: any[];
+    duration?: number;
+    count?: number;
+    errorCount: number;
+  } = { surveyId, normalizedDocuments: [], errorCount: 0 };
+
+  if (!currentUser.isAdmin)
+    throw new Error("Non admin cannot normalize surveys");
+
+  const entities = await getOrFetchEntities();
+
+  // TODO: use Response model and connector instead
+  const responses = await ResponseAdminMongooseModel.find({
+    surveySlug: surveyId,
+  }).skip(startFrom).limit(limit);
+  const count = responses.length;
+  metadata.count = count;
+  const tickInterval = Math.round(count / 200);
+
+  console.log(
+    `// Renormalizing survey ${surveyId}… Found ${count} responses to renormalize (startFrom: ${startFrom}, limit: ${limit}). (${startAt})`
+  );
+
+  for (const response of responses) {
+    const normalizationResult = await normalizeResponse({
+      document: response,
+      verbose,
+      isSimulation,
+      entities,
+    });
+
+    progress++;
+    if (limit > 1000 && progress % tickInterval === 0) {
+      console.log(`  -> Normalized ${progress}/${count} responses…`);
+    }
+
+    if (!normalizationResult) {
+      metadata.errorCount++;
+      metadata.normalizedDocuments.push({
+        responseId: response._id,
+        errors: [
+          {
+            type: "normalization_failed",
+            documentId: response._id,
+          },
+        ],
+      });
+    } else {
+      if (normalizationResult.errors.length > 0) {
+        metadata.errorCount += normalizationResult.errors.length;
+      }
+      metadata.normalizedDocuments.push(
+        pick(normalizationResult, [
+          "errors",
+          "responseId",
+          "normalizedResponseId",
+          "normalizedFieldsCount",
+          "prenormalizedFieldsCount",
+          "regularFieldsCount",
+        ])
+      );
+    }
+  }
+
+  const endAt = new Date();
+  const duration = Math.ceil((endAt.valueOf() - startAt.valueOf()) / 1000);
+  // duration in seconds
+  metadata.duration = duration;
+  console.log(
+    `-> Done renormalizing ${count} responses in survey ${surveyId}. (${endAt}) - ${
+      duration / 60
+    } min`
+  );
+
+  return metadata;
+};
+
+export const normalizeSurveyTypeDefs =
+  "normalizeSurvey(surveyId: String, startFrom: Int, limit: Int): JSON";
+
+
+/*
+
+Get survey metadata
+
+*/
+export const getSurveyMetadata = async (
+  root,
+  args,
+  { currentUser }: { currentUser: UserType }
+) => {
+  const { surveyId } = args;
+  if (!currentUser.isAdmin)
+    throw new Error("Non admin cannot do this");
+
+  // TODO: use Response model and connector instead
+  const responses = await ResponseAdminMongooseModel.find({
+    surveySlug: surveyId,
+  });
+
+  return { responsesCount: responses.length};
+};
+export const getSurveyMetadataTypeDefs =
+"getSurveyMetadata(surveyId: String): JSON";
 
 /*
 
@@ -69,6 +196,8 @@ export const surveyNormalization = async (root, { surveySlug, fieldName }) => {
     ],
   };
 
+  console.log(query)
+  
   const responses = await NormalizedResponseMongooseModel.find(
     query,
     {

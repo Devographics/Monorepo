@@ -17,14 +17,16 @@ interface NavItemDef {
 }
 const navContents: Array<NavItemDef> = [
   {
-    id: "nav.surveys",
+    id: "home",
+    label: "Home",
     to: routes.home.href,
   },
 ];
 
 const loggedInNavContents: Array<NavItemDef> = [
   {
-    id: "nav.account",
+    id: "account",
+    label: "Account",
     to: routes.account.profile.href,
   },
 ];
@@ -49,10 +51,6 @@ const adminNavContents: Array<NavItemDef> = [
   {
     label: "Normalization",
     to: "/admin/normalization",
-  },
-  {
-    label: "Projects",
-    to: "/admin/projects",
   },
   {
     label: "Export",

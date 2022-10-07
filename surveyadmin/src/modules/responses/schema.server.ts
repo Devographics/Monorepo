@@ -62,11 +62,6 @@ export const schema: VulcanGraphqlSchemaServer = extendSchemaServer(
         );
       },
     },
-    completion: {
-      onUpdate: ({ document, data }) => {
-        return getCompletionPercentage({ ...document, ...data });
-      },
-    },
     knowledgeScore: {
       onUpdate: ({ document }) => {
         return getKnowledgeScore(document).score;

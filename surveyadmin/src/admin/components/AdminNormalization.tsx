@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useQuery } from "@apollo/client";
-import gql from "graphql-tag";
+// import gql from "graphql-tag";
+import { gql, useMutation } from "@apollo/client";
 import get from "lodash/get.js";
 // import { useLocation, useHistory } from "react-router-dom";
 import qs from "qs";
 import { useRouter } from "next/router.js";
-import { useVulcanComponents } from "@vulcanjs/react-ui";
+import { Components, useVulcanComponents } from "@vulcanjs/react-ui";
 import { surveysWithTemplates } from "~/surveys/withTemplates";
 // just an alias to avoid changing the whole code
 const surveys = surveysWithTemplates;
@@ -63,7 +64,6 @@ const AdminNormalization = () => {
           return { mutationArguments: { ids } };
         }}
         successCallback={(result) => {
-          console.log(result);
           alert("Responses normalized");
         }}
       />
@@ -97,23 +97,11 @@ const NormalizationData = ({ surveySlug, fieldId }) => {
     : normalizeableFields[0];
   const [field, setField] = useState(defaultField);
 
-  // run GraphQL query
-  const { loading, data = {} } = useQuery(normalizationQuery, {
-    variables: { surveySlug: survey?.slug, fieldName: field.fieldName },
-  });
-
-  if (loading) {
-    return <Components.Loading />;
-  }
-
-  const results = get(data, "surveyNormalization");
-
-  if (!results) return <p>Nothing to normalize</p>;
-
   return (
     <div>
+      {survey && <LaunchNormalization survey={survey} />}
+
       <h3>
-        {results.length} Missing Normalizations for{" "}
         <Components.Dropdown
           label={survey.slug}
           menuItems={surveys.map((survey) => ({
@@ -124,7 +112,7 @@ const NormalizationData = ({ surveySlug, fieldId }) => {
               // build search string to update the browser URL query string
               const search = qs.stringify({
                 surveySlug: survey.slug,
-                fieldId: field.id,
+                fieldId,
               });
               const newUrl = new URL(window.location.href);
               newUrl.search = search;
@@ -134,7 +122,7 @@ const NormalizationData = ({ surveySlug, fieldId }) => {
         />{" "}
         &gt;{" "}
         <Components.Dropdown
-          label={field.id}
+          label={fieldId}
           menuItems={normalizeableFields.map((field) => ({
             label: field.id,
             onClick: () => {
@@ -153,6 +141,38 @@ const NormalizationData = ({ surveySlug, fieldId }) => {
         />
       </h3>
 
+      {field ? (
+        <MissingNormalizations survey={survey} field={field} />
+      ) : (
+        <div>
+          Could not find field {surveySlug}/{fieldId}
+        </div>
+      )}
+
+      {/* <Components.Datatable data={[{ a: 1 }, { a: 2 }]} /> */}
+    </div>
+  );
+};
+
+const MissingNormalizations = ({ survey, field }) => {
+  const Components = useVulcanComponents();
+
+  // run GraphQL query
+  const { loading, data = {} } = useQuery(normalizationQuery, {
+    variables: { surveySlug: survey?.slug, fieldName: field?.fieldName },
+  });
+
+  if (loading) {
+    return <Components.Loading />;
+  }
+
+  const results = get(data, "surveyNormalization");
+
+  if (!results) return <p>Nothing to normalize</p>;
+
+  return (
+    <div>
+      {results.length} Missing Normalizations for {survey.slug}/{field.id}
       <ol>
         {results.map(({ _id, responseId, value }) => (
           <li key={_id}>
@@ -160,9 +180,160 @@ const NormalizationData = ({ surveySlug, fieldId }) => {
           </li>
         ))}
       </ol>
-
-      {/* <Components.Datatable data={[{ a: 1 }, { a: 2 }]} /> */}
     </div>
   );
 };
+
+const segmentSize = 200;
+const statuses = { scheduled: 0, inProgress: 1, done: 2 };
+const getSegmentStatus = (doneCount, i) => {
+  const startFrom = i * segmentSize;
+  if (startFrom < doneCount) {
+    return statuses.done;
+  } else if (startFrom === doneCount) {
+    return statuses.inProgress;
+  } else {
+    return statuses.scheduled;
+  }
+};
+
+const LaunchNormalization = ({ survey }) => {
+  const Components = useVulcanComponents();
+  const [responsesCount, setResponsesCount] = useState(0);
+  const [doneCount, setDoneCount] = useState(0);
+  const [enabled, setEnabled] = useState(true);
+  const segments = [...Array(Math.ceil(responsesCount / segmentSize))].map(
+    (x, i) => ({
+      i,
+      startFrom: i * segmentSize,
+      status: getSegmentStatus(doneCount, i),
+    })
+  );
+  const segmentInProgress = segments.find(
+    (s) => s.status === statuses.inProgress
+  );
+  const segmentsDone = segments.filter((s) => s.status === statuses.done);
+  return (
+    <div className="survey-normalization">
+      <Components.MutationButton
+        label={`Renormalize ${survey.slug}`}
+        mutation={gql`
+          mutation getSurveyMetadata($surveyId: String) {
+            getSurveyMetadata(surveyId: $surveyId)
+          }
+        `}
+        mutationArguments={{ surveyId: survey.slug }}
+        successCallback={(result) => {
+          setResponsesCount(result?.data?.getSurveyMetadata?.responsesCount);
+        }}
+      />
+      {/* <Components.MutationButton
+        label={`Renormalize ${survey.slug}`}
+        mutation={gql`
+          mutation normalizeSurvey($surveyId: String) {
+            normalizeSurvey(surveyId: $surveyId)
+          }
+        `}
+        submitCallback={() => {
+          const startFrom = Number(prompt("Start from", "0")) || 0;
+          return { mutationArguments: { startFrom } };
+        }}
+        // mutationOptions={{
+        //   name: "normalizeSurvey",
+        //   args: { surveyId: "String" },
+        // }}
+        mutationArguments={{ surveyId: survey.slug }}
+        successCallback={(result) => {
+          console.log(result);
+          // alert("Survey normalized");
+        }}
+      /> */}
+      {responsesCount > 0 && (
+        <div>
+          <h3>
+            Found {responsesCount} responses to normalize…{" "}
+            {enabled ? (
+              <button
+                onClick={() => {
+                  setEnabled(false);
+                }}
+              >
+                Stop
+              </button>
+            ) : (
+              <button
+                onClick={() => {
+                  setEnabled(true);
+                }}
+              >
+                Restart
+              </button>
+            )}
+          </h3>
+          {segmentsDone.map((s, i) => (
+            <SegmentDone key={i} {...s} responsesCount={responsesCount} />
+          ))}
+          {
+            <SegmentInProgress
+              segmentIndex={segmentsDone.length}
+              surveyId={survey.slug}
+              startFrom={segmentInProgress?.startFrom}
+              responsesCount={responsesCount}
+              setDoneCount={setDoneCount}
+              enabled={enabled}
+            />
+          }
+        </div>
+      )}
+    </div>
+  );
+};
+
+const SegmentDone = ({ startFrom, responsesCount }) => (
+  <div>
+    {startFrom}/{responsesCount} done
+  </div>
+);
+
+const normalizeSurveyMutation = gql`
+  mutation normalizeSurvey($surveyId: String, $startFrom: Int, $limit: Int) {
+    normalizeSurvey(surveyId: $surveyId, startFrom: $startFrom, limit: $limit)
+  }
+`;
+
+const SegmentInProgress = ({
+  surveyId,
+  segmentIndex,
+  startFrom,
+  responsesCount,
+  setDoneCount,
+  enabled,
+}) => {
+  const Components = useVulcanComponents();
+
+  const [mutateFunction, { data, loading, error }] = useMutation(
+    normalizeSurveyMutation,
+    {
+      onCompleted: (data) => {
+        setDoneCount(startFrom + data?.normalizeSurvey?.count);
+      },
+    }
+  );
+
+  useEffect(() => {
+    if (enabled) {
+      mutateFunction({
+        variables: { surveyId, startFrom, limit: segmentSize },
+      });
+    }
+  }, [segmentIndex, enabled]);
+
+  return (
+    <div>
+      Normalizing {startFrom}/{responsesCount} responses…{" "}
+      {enabled ? <Components.Loading /> : <span>Paused</span>}
+    </div>
+  );
+};
+
 export default AdminNormalization;

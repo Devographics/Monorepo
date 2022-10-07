@@ -14,8 +14,12 @@ import { SaveMongoCollection } from "@devographics/core-models/server";
 import {
   normalizeIdsTypeDefs,
   normalizeIds,
+  normalizeSurveyTypeDefs,
+  normalizeSurvey,
   surveyNormalizationTypeDefs,
   surveyNormalization,
+  getSurveyMetadataTypeDefs,
+  getSurveyMetadata,
 } from "./normalization";
 import {
   entitiesResolver,
@@ -193,7 +197,10 @@ addGraphQLQuery(surveyNormalizationTypeDefs);
 addGraphQLResolvers({ Query: { surveyNormalization } });
 
 addGraphQLMutation(normalizeIdsTypeDefs);
-addGraphQLResolvers({ Mutation: { normalizeIds } });
+addGraphQLMutation(normalizeSurveyTypeDefs);
+addGraphQLMutation(getSurveyMetadataTypeDefs);
+addGraphQLResolvers({ Mutation: { normalizeIds, normalizeSurvey, getSurveyMetadata } });
+
 
 // Final merge
 

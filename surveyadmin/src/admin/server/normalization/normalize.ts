@@ -92,10 +92,34 @@ const privateFieldPaths = [
   "user_info.twitter_username",
 ];
 
-interface NormalizedField {
-  fieldName?: string;
+interface RegularField {
+  fieldName: string;
   value: any;
-  normTokens?: Array<string>;
+}
+interface NormalizedField extends RegularField{
+  normTokens: Array<string>;
+}
+interface NormalizationError {
+  type: string;
+  documentId: string;
+}
+interface NormalizationResult {
+  response: any;
+  responseId: string;
+
+  errors: Array<NormalizationError>;
+
+  normalizedResponseId?: string;
+  normalizedResponse?: any;
+
+  normalizedFields?: Array<NormalizedField>;
+  prenormalizedFields?: Array<RegularField>;
+  regularFields?: Array<RegularField>;
+
+  normalizedFieldsCount?: number;
+  prenormalizedFieldsCount?: number;
+  regularFieldsCount?: number;
+
 }
 export const normalizeResponse = async ({
   document: response,
@@ -104,6 +128,7 @@ export const normalizeResponse = async ({
   log = false,
   fileName: _fileName,
   verbose = false,
+  isSimulation = false,
 }: {
   document: any;
   entities?: Array<any>;
@@ -111,14 +136,18 @@ export const normalizeResponse = async ({
   log?: Boolean;
   fileName?: string;
   verbose?: boolean;
+  isSimulation?: boolean;
 }): Promise<
-  | {
-      result: { _id: string };
-      normalizedFields: Array<NormalizedField>;
-    }
+  | NormalizationResult
   | undefined
 > => {
   try {
+    const result = {
+      response,
+      responseId: response?._id,
+    }
+    const errors: NormalizationError[] = []
+
     if (verbose) {
       console.log(`// Normalizing document ${response._id}…`);
     }
@@ -126,9 +155,13 @@ export const normalizeResponse = async ({
     const normResp: Partial<NormalizedResponseDocument> = {};
     const privateFields = {};
     const normalizedFields: Array<NormalizedField> = [];
+    const prenormalizedFields: Array<RegularField>  = [];
+    const regularFields: Array<RegularField>  = [];
     const survey = getSurveyBySlug(response.surveySlug);
     if (!survey)
       throw new Error(`Could not find survey for slug ${response.surveySlug}`);
+
+    let updatedNormalizedResponse;
 
     let allEntities;
     if (entities) {
@@ -306,9 +339,18 @@ export const normalizeResponse = async ({
               set(normResp, `${newPath}.raw`, value);
               set(normResp, `${newPath}.normalized`, value);
               set(normResp, `${newPath}.patterns`, ["prenormalized"]);
+
+              prenormalizedFields.push({
+                fieldName,
+                value,
+              });
             } else {
               // C. any other field
               set(normResp, normPath, value);
+              regularFields.push({
+                fieldName,
+                value,
+              });
             }
           }
         }
@@ -324,7 +366,8 @@ export const normalizeResponse = async ({
       if (verbose) {
         console.log(`!! Discarding response ${response._id} as empty`);
       }
-      return;
+      errors.push({ type: "empty_document", documentId: response._id})
+      return { ...result, errors };
     }
 
     /*
@@ -379,13 +422,15 @@ export const normalizeResponse = async ({
         surveySlug: response.surveySlug,
         responseId: response._id,
       };
-      // NOTE: findOneAndUpdate and updateOne with option "upsert:true" are roughly equivalent,
-      // but update is probably faster when appliable (the result will have a different shape)
-      await PrivateResponseMongooseModel.updateOne(
-        { responseId: response._id },
-        privateInfo,
-        { upsert: true }
-      );
+      if (!isSimulation) {
+        // NOTE: findOneAndUpdate and updateOne with option "upsert:true" are roughly equivalent,
+        // but update is probably faster when appliable (the result will have a different shape)
+        await PrivateResponseMongooseModel.updateOne(
+          { responseId: response._id },
+          privateInfo,
+          { upsert: true }
+        );
+      }
       //set(normResp, "user_info.hash", createHash(response.email));
     }
 
@@ -395,36 +440,46 @@ export const normalizeResponse = async ({
     // doesn't work currently:
     // MongoServerError: Performing an update on the path '_id' would modify the immutable field '_id'
     // normResp._id = (new ObjectId()).toString()
-
-    // update normalized response, or insert it if it doesn't exist
-    // NOTE: this will generate ObjectId _id for unknown reason, see https://github.com/Devographics/StateOfJS-next2/issues/31
-    const updatedNormalizedResponse =
-      await NormalizedResponseMongooseModel.findOneAndUpdate(
-        { responseId: response._id },
-        normResp,
-        { upsert: true, returnDocument: "after" }
+    
+    if (!isSimulation) {
+      // update normalized response, or insert it if it doesn't exist
+      // NOTE: this will generate ObjectId _id for unknown reason, see https://github.com/Devographics/StateOfJS-next2/issues/31
+      updatedNormalizedResponse =
+        await NormalizedResponseMongooseModel.findOneAndUpdate(
+          { responseId: response._id },
+          normResp,
+          { upsert: true, returnDocument: "after" }
+        );
+      await ResponseAdminMongooseModel.updateOne(
+        { _id: response._id },
+        {
+          $set: {
+            // NOTE: at the time of writing 09/2022 this is not really used by the app
+            // the admin area resolve the normalizedResponse based on its responseId (instead of using response.normalizedResponseId)
+            // using a reversed relation
+            normalizedResponseId: updatedNormalizedResponse._id,
+            isNormalized: true,
+          },
+        }
       );
-    await ResponseAdminMongooseModel.updateOne(
-      { _id: response._id },
-      {
-        $set: {
-          // NOTE: at the time of writing 09/2022 this is not really used by the app
-          // the admin area resolve the normalizedResponse based on its responseId (instead of using response.normalizedResponseId)
-          // using a reversed relation
-          normalizedResponseId: updatedNormalizedResponse._id,
-          isNormalized: true,
-        },
-      }
-    );
+    }
 
     // eslint-disable-next-line
     // console.log(result);
     return {
+      ...result,
       /*
       Previously was the result of "upsert", but in Mongoose we use findOneAndUpdate instead
       result,*/
-      result: updatedNormalizedResponse,
+      normalizedResponse: normResp,
+      normalizedResponseId: updatedNormalizedResponse?._id,
       normalizedFields,
+      normalizedFieldsCount: normalizedFields.length,
+      prenormalizedFields,
+      prenormalizedFieldsCount: prenormalizedFields.length,
+      regularFields,
+      regularFieldsCount: regularFields.length,
+      errors,
     };
   } catch (error) {
     console.log("// normalizeResponse error");

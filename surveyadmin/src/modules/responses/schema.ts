@@ -2,7 +2,13 @@ import surveys from "~/surveys";
 
 import { getQuestionSchema } from "./helpers";
 import { VulcanGraphqlSchema } from "@vulcanjs/graphql";
-import { getQuestionFieldName, getQuestionObject } from "./parseSurvey";
+import {
+  getQuestionId,
+  getQuestionObject,
+} from "~/modules/surveys/parser/parseSurvey";
+import cloneDeep from "lodash/cloneDeep.js";
+// import { addComponentToQuestionObject } from "~/modules/responses/customComponents";
+import { VulcanFieldSchema } from "@vulcanjs/schema";
 
 export const schema: VulcanGraphqlSchema = {
   // default properties
@@ -224,33 +230,67 @@ export const schema: VulcanGraphqlSchema = {
   // },
 };
 
-/*
+/**
+ *
+ *
+ * Just put all questions for all surveys on the root of the schema
+ */
+// let i = 0;
+/**
+ * Have one schema per survey
+ */
+export const schemaPerSurvey: { [slug: string]: VulcanGraphqlSchema } = {};
 
-Just put all questions for all surveys on the root of the schema
+export const getCommentSchema = () => ({
+  type: String,
+  input: "hidden",
+  optional: true,
+  canRead: ["owners", "admins"],
+  canCreate: ["members"],
+  canUpdate: ["owners", "admins"],
+});
 
-*/
-let i = 0;
+const coreSchema = cloneDeep(schema) as VulcanGraphqlSchema;
 surveys.forEach((survey) => {
+  if (survey.slug) {
+    schemaPerSurvey[survey.slug] = cloneDeep(coreSchema);
+  }
   survey.outline.forEach((section) => {
     section.questions &&
       section.questions.forEach((questionOrId) => {
-        i++;
+        //i++;
         if (Array.isArray(questionOrId)) {
           // NOTE: from the typings, it seems that questions can be arrays? To be confirmed
           throw new Error("Found an array of questions");
         }
-        const questionObject = getQuestionObject(questionOrId, section, i);
+        let questionObject = getQuestionObject(questionOrId, section);
+        // questionObject = addComponentToQuestionObject(questionObject);
         const questionSchema = getQuestionSchema(
           questionObject,
           section,
           survey
         );
-        const questionId = getQuestionFieldName(
-          survey,
-          section,
-          questionObject
-        );
+
+        const questionId = getQuestionId(survey, section, questionObject);
         schema[questionId] = questionSchema;
+        if (survey.slug) {
+          schemaPerSurvey[survey.slug][questionId] = questionSchema;
+        }
+
+        if (questionObject.suffix === "experience") {
+          // const commentSchema = addComponentToQuestionObject(
+          //   getCommentSchema()
+          // ) as VulcanFieldSchema<any>;
+          const commentSchema = getCommentSchema() as VulcanFieldSchema<any>;
+          const commentQuestionId = getQuestionId(survey, section, {
+            ...questionObject,
+            suffix: "comment",
+          });
+          schema[commentQuestionId] = commentSchema;
+          if (survey.slug) {
+            schemaPerSurvey[survey.slug][commentQuestionId] = commentSchema;
+          }
+        }
       });
   });
 });

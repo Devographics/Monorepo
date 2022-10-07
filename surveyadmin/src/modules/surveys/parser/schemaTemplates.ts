@@ -1,4 +1,4 @@
-import countriesOptions from "~/modules/countriesOptions";
+import countriesOptions from "../../countriesOptions";
 import type {
   FieldTemplateId,
   ParsedQuestion,
