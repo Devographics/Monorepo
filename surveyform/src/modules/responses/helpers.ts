@@ -28,7 +28,7 @@ import {
   getQuestionObject,
   parseSurvey,
 } from "../surveys/parser/parseSurvey";
-import { captureException } from "@sentry/node";
+import { captureException } from "@sentry/nextjs";
 
 // Previously it lived in Vulcan NPM, but that's something you'd want to control more
 // precisely at app level
