@@ -17,6 +17,7 @@ import React, { useState } from "react";
 import { getThanksPath } from "~/modules/responses/helpers";
 import { getSurveyPath } from "~/modules/surveys/getters";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
+import { SurveyDocument } from "@devographics/core-models";
 
 const FormSubmit = ({
   survey,
@@ -31,10 +32,10 @@ const FormSubmit = ({
   setPrevLoading,
   nextLoading,
   setNextLoading,
-}) => {
+}: { survey: SurveyDocument } & any) => {
   const formContext = useFormContext();
   const { getDocument, submitForm } = formContext;
-  const response = getDocument()
+  const response = getDocument();
 
   const router = useRouter();
 
@@ -79,7 +80,7 @@ const FormSubmit = ({
               setNextLoading(true);
               await submitForm();
               setNextLoading(false);
-              router.push(getThanksPath(response));
+              router.push(getThanksPath(response, survey));
             }}
           >
             <FormattedMessage id="general.finish_survey" />

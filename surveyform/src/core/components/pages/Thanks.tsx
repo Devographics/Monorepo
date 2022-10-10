@@ -11,6 +11,7 @@ import { useSurveyResponseParams } from "../survey/hooks";
 import surveys from "~/surveys";
 import Image from "next/image";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
+import { publicConfig } from "~/config/public";
 
 const Thanks = () => {
   const { responseId, slug, year } = useSurveyResponseParams();
@@ -36,7 +37,11 @@ const Thanks = () => {
       <div>
         Could not find survey response document. Please reload, or if that
         doesn’t work{" "}
-        <a href="https://github.com/StateOfJS/StateOfJS-Vulcan/issues">
+        <a
+          href={`${publicConfig.repoUrl}/issues/new?title=${encodeURIComponent(
+            "Thank you page not working"
+          )}`}
+        >
           leave an issue
         </a>
         .
