@@ -25,6 +25,7 @@ export interface Entity {
   company?: Entity
 
   example?: Example
+  apiOnly?: boolean;
 }
 
 export interface Resource {

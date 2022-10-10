@@ -1,7 +1,7 @@
 import moment from "moment";
 import surveys from "~/surveys";
 
-import { getCompletionPercentage, getKnowledgeScore } from "./helpers";
+import { getKnowledgeScore } from "./helpers";
 import { VulcanGraphqlSchemaServer } from "@vulcanjs/graphql/server";
 import { schema as schemaCommon } from "./schema";
 
