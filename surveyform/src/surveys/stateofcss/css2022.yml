@@ -17,15 +17,20 @@ prettySlug: state-of-css
 hashtag: StateOfCSS
 shareUrl: https://stateofcss.com
 # resultsUrl: https://2022.stateofcss.com/
-name: 'State of CSS'
+name: "State of CSS"
 year: 2022
 status: 2 # preview/open/closed/hidden
-imageUrl: 'stateofcss2022.png'
+# TODO: this is the old version using a relative path
+imageUrl: "stateofcss2022.png"
+# TODO: should switch to absolute image
+# imageUrl: https://devographics.github.io/surveys/state_of_css/2022/images/stateofcss2022.png
+faviconUrl: https://devographics.github.io/surveys/state_of_css/2022/images/favicon.svg
+socialImageUrl: https://devographics.github.io/surveys/state_of_css/2022/images/stateofcss2022-og.png
 domain: stateofcss.com
-bgColor: '#232840'
-textColor: '#9ac6c9'
-linkColor: '#F95DB2'
-hoverColor: '#59df7f'
+bgColor: "#232840"
+textColor: "#9ac6c9"
+linkColor: "#F95DB2"
+hoverColor: "#59df7f"
 tags: [css]
 contexts: [state_of_css]
 faq:
@@ -49,7 +54,6 @@ outline:
     template: feature
     slug: features
     questions:
-
       - id: features_intro_css
         template: help
 
@@ -78,7 +82,7 @@ outline:
         year: 2022
       - id: media_queries_range_contexts
         year: 2022
-      
+
   - id: shapes_graphics
     template: feature
     slug: features
@@ -194,12 +198,12 @@ outline:
   #   slug: features
   #   questions:
 
-      # - id: houdini_typed_om # too new?
-      #   year: 2023
-      # - id: houdini_layout_api # too new?
-      #   year: 2023
-      # - id: houdini_animation_worklet # too new?
-      #   year: 2023
+  # - id: houdini_typed_om # too new?
+  #   year: 2023
+  # - id: houdini_layout_api # too new?
+  #   year: 2023
+  # - id: houdini_animation_worklet # too new?
+  #   year: 2023
 
   - id: other_features
     template: feature
@@ -252,7 +256,7 @@ outline:
 
       - id: image_function
         year: 2022
-        
+
   ### TOOLS ###
 
   # - id: pre_post_processors # removed in 2022
@@ -281,7 +285,6 @@ outline:
     template: tool
     slug: tools
     questions:
-
       - id: tools_intro_css
         template: help
 
@@ -330,7 +333,7 @@ outline:
         year: 2021
       - id: vanilla_extract
         year: 2021
-      - id: windi_css 
+      - id: windi_css
         year: 2021
 
       - id: css_in_js
@@ -349,7 +352,6 @@ outline:
   - id: other_tools
     slug: tools_others
     questions:
-
       - id: pre_post_processors
         template: multiple
         options:
@@ -419,7 +421,6 @@ outline:
   - id: usage
     intlId: usage_css
     questions:
-
       - id: form_factors
         intlId: environments.form_factors
         template: multiple
@@ -524,7 +525,7 @@ outline:
       #   year: 2022
       #   template: top_n
       #   random: true
-      #   options: 
+      #   options:
       #     - id: leading_trim
       #     - id: image_function
       #     - id: media_queries
@@ -536,7 +537,7 @@ outline:
       #     - id: has_selector
       #     - id: at_container
       #     - id: attr_function
-          
+
       - id: interoperability_features_freeform
         year: 2021
         template: others
@@ -577,7 +578,7 @@ outline:
       #   year: 2021
       #   optionsIntlId: features
       #   template: bracket
-      #   options: 
+      #   options:
       #     - id: container_queries
       #     - id: parent_selector
       #     - id: nesting
@@ -605,7 +606,6 @@ outline:
 
   - id: resources
     questions:
-
       - id: first_steps
         intlId: resources.first_steps_css
         template: multiple
@@ -624,7 +624,16 @@ outline:
       - id: first_steps
         intlId: resources.first_steps.others
         template: others
-        matchTags: [first_steps, courses, people, youtube, sites, newsletters, socialmedia]
+        matchTags:
+          [
+            first_steps,
+            courses,
+            people,
+            youtube,
+            sites,
+            newsletters,
+            socialmedia,
+          ]
 
       - id: blogs_news_magazines
         template: multiple
@@ -728,7 +737,6 @@ outline:
 
   - id: user_info
     questions:
-
       - id: age
         template: single
         options:
@@ -776,7 +784,7 @@ outline:
 
       - id: higher_education_degree
         template: single
-        options: 
+        options:
           - id: no_degree
           - id: yes_related
           - id: yes_unrelated
@@ -818,12 +826,12 @@ outline:
           - id: mobility_impairments
           - id: cognitive_impairments
           - id: not_listed
-          
+
       - id: disability_status
         year: 2021
         template: others
         matchTags: [disabilities]
-        
+
       - id: how_did_user_find_out_about_the_survey
         template: text
 
