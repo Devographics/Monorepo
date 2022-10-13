@@ -26,7 +26,7 @@ import {
   getQuestionId,
   getQuestionObject,
   parseSurvey,
-} from "../surveys/parser/parseSurvey";
+} from "~/modules/surveys/parser/parseSurvey";
 
 // Previously it lived in Vulcan NPM, but that's something you'd want to control more
 // precisely at app level

@@ -157,10 +157,14 @@ const NormalizationData = ({ surveySlug, fieldId }) => {
 const MissingNormalizations = ({ survey, field }) => {
   const Components = useVulcanComponents();
 
+  const [showIds, setShowIds] = useState(true);
+
+  // useEffect(()=> {
   // run GraphQL query
   const { loading, data = {} } = useQuery(normalizationQuery, {
     variables: { surveySlug: survey?.slug, fieldName: field?.fieldName },
   });
+  // }, [survey, field])
 
   if (loading) {
     return <Components.Loading />;
@@ -172,11 +176,28 @@ const MissingNormalizations = ({ survey, field }) => {
 
   return (
     <div>
-      {results.length} Missing Normalizations for {survey.slug}/{field.id}
+      <h5>
+        {results.length} Missing Normalizations for {survey.slug}/{field.id}
+      </h5>
+      <p>
+        <input
+          type="checkbox"
+          checked={showIds}
+          onClick={() => {
+            setShowIds(!showIds);
+          }}
+        />{" "}
+        Show IDs
+      </p>
       <ol>
         {results.map(({ _id, responseId, value }) => (
           <li key={_id}>
-            {value} (<code>{responseId}</code>→<code>{_id}</code>)
+            {value}{" "}
+            {showIds && (
+              <span>
+                (<code>{responseId}</code>→<code>{_id}</code>)
+              </span>
+            )}
           </li>
         ))}
       </ol>
