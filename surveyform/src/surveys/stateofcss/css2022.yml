@@ -604,6 +604,7 @@ outline:
     ### RESOURCES ###
 
   - id: resources
+    intlId: resources_css
     questions:
 
       - id: first_steps
@@ -703,7 +704,8 @@ outline:
         template: others
         matchTags: [podcasts, people, sites]
 
-      - id: people_css
+      - id: people
+        intlId: people_css
         year: 2021
         template: others
         matchTags: [people, sites, youtube]

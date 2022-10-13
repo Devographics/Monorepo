@@ -624,22 +624,59 @@ outline:
 
       - id: sites_courses
         template: multiple
+        itemProperties:
+          cutoff: 12
         options:
           - id: stack_overflow
-          - id: mdn
+          - id: udemy
           - id: w3schools
+          - id: mdn
           - id: freecodecamp
           - id: codecademy
-          - id: levelup
-          - id: wes_bos
+          - id: web_dev
+          - id: javascript_info
+          - id: scrimba
           - id: frontendmasters
+          - id: wes_bos
+          - id: platzi
+          - id: skillshare
+          - id: coursera
+          - id: egghead
+          - id: kent_c_dodds
+          - id: o_reilly
+          - id: pluralsight
+          - id: linkedin_learning
           - id: pluralsight
           - id: designcode
-          - id: udemy
-          - id: egghead
+          - id: academind
+          - id: ui_dev
+          - id: vue_mastery
           - id: newline
-          - id: web_dev
+          - id: epic_react
+          - id: midu_dev
+          - id: levelup
+          - id: doka
       - id: sites_courses
+        template: others
+        matchTags: [courses, people, youtube, sites, newsletters, socialmedia]
+
+      - id: video_creators
+        template: multiple
+        options:
+          - id: fireship
+          - id: theo_browne
+          - id: tina_huang
+          - id: jason_goodison # https://www.youtube.com/c/JasonGoodison/videos
+          - id: programming_with_mosh # mosh_hamedani https://codewithmosh.com/ https://www.youtube.com/c/programmingwithmosh
+          - id: kent_c_dodds
+          - id: brad_traversy
+          - id: clever_programmer # rafeh_qazi https://www.youtube.com/c/CleverProgrammer
+          - id: ben_awad # https://www.youtube.com/channel/UC-8QAzbLcRglXeN_MY9blyw
+          - id: kevin_powell
+          - id: web_dev_simplified # kyle cook https://www.youtube.com/c/WebDevSimplified/
+          - id: coding_train # Daniel Shiffman https://www.youtube.com/user/shiffman?app=desktop
+          - id: net_ninja # https://www.youtube.com/channel/UCW5YeuERMmlnqo4oq8vwUpg?app=desktop
+      - id: video_creators
         template: others
         matchTags: [courses, people, youtube, sites, newsletters, socialmedia]
 
