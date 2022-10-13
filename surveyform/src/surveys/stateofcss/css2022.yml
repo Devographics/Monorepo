@@ -540,17 +540,17 @@ outline:
       - id: interoperability_features_freeform
         year: 2021
         template: others
-        matchTags: [features, browser_interoperability, css_missing_features]
+        matchTags: [features, browser_interoperability, css_missing_features, css_pain_points]
 
       - id: missing_features_freeform
         year: 2021
         template: others
-        matchTags: [features, browser_interoperability, css_missing_features]
+        matchTags: [features, browser_interoperability, css_missing_features, css_pain_points]
 
       - id: other_pain_points_freeform
         year: 2021
         template: others
-        matchTags: [features, browser_interoperability, css_missing_features]
+        matchTags: [features, browser_interoperability, css_missing_features, css_pain_points]
 
       # - id: css_pain_points
       #   intlId: opinions.css_pain_points
