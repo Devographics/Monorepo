@@ -117,6 +117,7 @@
         "eslint-config-react-app": "^7.0.1",
         "eslint-plugin-import": "^2.26.0",
         "eslint-plugin-react": "^7.31.7",
+        "gatsby-plugin-bundle-stats": "^4.0.6",
         "graphql": ">=15.0.0 <16.0.0",
         "prettier": "^2.7.1",
         "react-is": ">= 16.8.0",

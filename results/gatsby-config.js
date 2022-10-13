@@ -36,6 +36,7 @@ module.exports = {
         { resolve: 'gatsby-plugin-netlify', options: {} },
         'gatsby-plugin-styled-components',
         `gatsby-plugin-mdx`,
+        'gatsby-plugin-bundle-stats',
         // `gatsby-plugin-perf-budgets`,
         // `gatsby-plugin-webpack-bundle-analyser-v2`
     ],
