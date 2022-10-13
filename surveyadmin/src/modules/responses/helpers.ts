@@ -4,10 +4,7 @@
  * /!\ Template parsing is done separately, because it involves
  * JSX and should not be reused in scripts
  */
-import { slugify } from "@vulcanjs/utils";
 import pick from "lodash/pick.js";
-import pickBy from "lodash/pickBy.js";
-import { getSurveyFromResponse } from "../surveys/helpers";
 import {
   Field,
   FieldTemplateId,
@@ -23,10 +20,7 @@ import { ResponseDocument } from "@devographics/core-models";
 import { isAdmin } from "@vulcanjs/permissions";
 import { VulcanGraphqlFieldSchema } from "@vulcanjs/graphql";
 import SimpleSchema from "simpl-schema";
-import {
-  getQuestionObject,
-  parseSurvey,
-} from "~/modules/surveys/parser/parseSurvey";
+import { getQuestionObject } from "~/modules/surveys/parser/parseSurvey";
 
 // Previously it lived in Vulcan NPM, but that's something you'd want to control more
 // precisely at app level
@@ -116,17 +110,6 @@ export const makeId = (str) => {
     s = s.replaceAll(`\\${c}`, "");
   });
   return s;
-};
-
-export const getThanksPath = (response: ResponseDocument) => {
-  const survey = getSurveyFromResponse(response);
-  if (!survey)
-    throw new Error(
-      `Survey not found for response ${JSON.stringify(response)}`
-    );
-  const { name, year } = survey;
-  const path = `/survey/${slugify(name)}/${year}/${response._id}/thanks`;
-  return path;
 };
 
 export const parseOptions = (questionObject, options) => {

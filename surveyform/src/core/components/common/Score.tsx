@@ -70,7 +70,7 @@ const Score = ({ response, survey }: { response: any; survey: SurveyType }) => {
     //survey
   );
   const knowledgeRankingFromTop = knowledgeRanking;
-  const { imageUrl, name, year, shareUrl, hashtag } = survey;
+  const { name, shareUrl, hashtag } = survey;
 
   const text = intl.formatMessage(
     { id: "thanks.share_score_message" },

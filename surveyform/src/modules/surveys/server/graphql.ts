@@ -34,6 +34,8 @@ export const editionType = `type SurveyEdition {
   shareUrl: String
   resultsUrl: String
   imageUrl: String
+  socialImageUrl: String
+  faviconUrl: String
 }`;
 
 const surveysQuery = `query SurveysQuery{
@@ -50,6 +52,8 @@ const surveysQuery = `query SurveysQuery{
       shareUrl
       resultsUrl
       imageUrl
+      faviconUrl
+      socialImageUrl
     }
   }
 }

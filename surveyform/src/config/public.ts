@@ -28,4 +28,5 @@ export const publicConfig = {
    */
   environment: "development",
   appUrl,
+  repoUrl: "https://github.com/Devographics/Monorepo",
 };

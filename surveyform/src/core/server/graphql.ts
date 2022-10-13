@@ -54,6 +54,8 @@ const surveyType = `type Survey {
   year: Float 
   status: Float 
   imageUrl: String 
+  socialImageUrl: String
+  faviconUrl: String
   resultsUrl: String
 }`;
 

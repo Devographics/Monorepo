@@ -11,6 +11,7 @@ import {
   Field,
   FieldTemplateId,
   ParsedQuestion,
+  SurveyDocument,
   SurveySection,
   SurveyType,
 } from "@devographics/core-models";
@@ -27,6 +28,7 @@ import {
   getQuestionObject,
   parseSurvey,
 } from "~/modules/surveys/parser/parseSurvey";
+import { captureException } from "@sentry/nextjs";
 
 // Previously it lived in Vulcan NPM, but that's something you'd want to control more
 // precisely at app level
@@ -118,12 +120,21 @@ export const makeId = (str) => {
   return s;
 };
 
-export const getThanksPath = (response: ResponseDocument) => {
+export const getThanksPath = (
+  response: ResponseDocument,
+  surveyArg: SurveyDocument
+) => {
   const survey = getSurveyFromResponse(response);
   if (!survey)
     throw new Error(
       `Survey not found for response ${JSON.stringify(response)}`
     );
+  if (!response._id) {
+    // we do not throw so user still has a sensible thank you UI.
+    captureException(
+      new Error(`Found a response with no _id when computing thanks path`)
+    );
+  }
   const { name, year } = survey;
   const path = `/survey/${slugify(name)}/${year}/${response._id}/thanks`;
   return path;

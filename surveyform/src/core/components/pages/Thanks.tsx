@@ -11,6 +11,8 @@ import { useSurveyResponseParams } from "../survey/hooks";
 import surveys from "~/surveys";
 import Image from "next/image";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
+import { publicConfig } from "~/config/public";
+import { getSurveyImageUrl } from "~/surveys/getSurveyImageUrl";
 
 const Thanks = () => {
   const { responseId, slug, year } = useSurveyResponseParams();
@@ -36,7 +38,11 @@ const Thanks = () => {
       <div>
         Could not find survey response document. Please reload, or if that
         doesn’t work{" "}
-        <a href="https://github.com/StateOfJS/StateOfJS-Vulcan/issues">
+        <a
+          href={`${publicConfig.repoUrl}/issues/new?title=${encodeURIComponent(
+            "Thank you page not working"
+          )}`}
+        >
           leave an issue
         </a>
         .
@@ -47,7 +53,9 @@ const Thanks = () => {
   if (!survey) {
     return <div>Could not find survey.</div>;
   }
-  const { imageUrl, name } = survey;
+  const { name } = survey;
+
+  const imageUrl = getSurveyImageUrl(survey);
 
   return (
     <div className="contents-narrow thanks">
@@ -55,8 +63,9 @@ const Thanks = () => {
         <Image
           width={300}
           height={200}
-          src={`/surveys/${imageUrl}`}
+          src={imageUrl}
           alt={`${name} ${year}`}
+          quality={100}
         />
       </h1>
       <Score response={response} survey={survey} />
