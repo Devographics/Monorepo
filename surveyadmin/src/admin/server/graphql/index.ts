@@ -16,8 +16,8 @@ import {
   normalizeIds,
   normalizeSurveyTypeDefs,
   normalizeSurvey,
-  surveyNormalizationTypeDefs,
-  surveyNormalization,
+  unnormalizedFieldsTypeDefs,
+  unnormalizedFields,
   getSurveyMetadataTypeDefs,
   getSurveyMetadata,
 } from "./normalization";
@@ -193,8 +193,8 @@ const stats = async () => {
 addGraphQLQuery("stats: Stats");
 addGraphQLResolvers({ Query: { stats } });
 
-addGraphQLQuery(surveyNormalizationTypeDefs);
-addGraphQLResolvers({ Query: { surveyNormalization } });
+addGraphQLQuery(unnormalizedFieldsTypeDefs);
+addGraphQLResolvers({ Query: { unnormalizedFields } });
 
 addGraphQLMutation(normalizeIdsTypeDefs);
 addGraphQLMutation(normalizeSurveyTypeDefs);

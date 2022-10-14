@@ -1,5 +1,5 @@
 import { useUser } from "~/account/user/hooks";
-import AdminNormalization from "~/admin/components/AdminNormalization";
+import AdminNormalization from "~/admin/components/normalization/Normalization";
 import { routes } from "~/lib/routes";
 
 export default function AdminNormalizationPage() {

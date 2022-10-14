@@ -239,21 +239,7 @@ export const normalizeSource = async (normResp, allRules, survey) => {
     "newsletters",
     "people",
     "sources",
-  ];
-
-  // add a special rule for emails to normalize "email" sources into current survey id
-  const allRulesWithEmail = [
-    ...allRules,
-    {
-      id: survey.normalizationId,
-      pattern: /e( |-)*mail/i,
-      tags: ["sources"],
-    },
-    {
-      id: survey.normalizationId,
-      pattern: /mail.google.com/i,
-      tags: ["sources"],
-    },
+    `sources_${survey.normalizationId}`
   ];
 
   const rawSource = get(normResp, "user_info.sourcetag");
@@ -277,7 +263,7 @@ export const normalizeSource = async (normResp, allRules, survey) => {
       rawFindOut &&
       (await normalizeSingle({
         value: rawFindOut,
-        allRules: allRulesWithEmail,
+        allRules: allRules,
         tags,
         survey,
         field: { id: "how_did_user_find_out_about_the_survey" },
@@ -286,7 +272,7 @@ export const normalizeSource = async (normResp, allRules, survey) => {
       rawRef &&
       (await normalizeSingle({
         value: rawRef,
-        allRules: allRulesWithEmail,
+        allRules: allRules,
         tags,
         survey,
         field: { id: "referrer" },

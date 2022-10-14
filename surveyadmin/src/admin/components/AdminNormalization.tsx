@@ -13,7 +13,7 @@ const surveys = surveysWithTemplates;
 
 const normalizationQuery = gql`
   query NormalizationQuery($surveySlug: String, $fieldName: String) {
-    surveyNormalization(surveySlug: $surveySlug, fieldName: $fieldName)
+    unnormalizedFields(surveySlug: $surveySlug, fieldName: $fieldName)
   }
 `;
 
@@ -170,7 +170,7 @@ const MissingNormalizations = ({ survey, field }) => {
     return <Components.Loading />;
   }
 
-  const results = get(data, "surveyNormalization");
+  const results = get(data, "unnormalizedFields");
 
   if (!results) return <p>Nothing to normalize</p>;
 
@@ -218,11 +218,21 @@ const getSegmentStatus = (doneCount, i) => {
   }
 };
 
+const allFields = { id: "all_fields", label: "All Fields" };
 const LaunchNormalization = ({ survey }) => {
   const Components = useVulcanComponents();
   const [responsesCount, setResponsesCount] = useState(0);
   const [doneCount, setDoneCount] = useState(0);
   const [enabled, setEnabled] = useState(true);
+  const [fieldId, setFieldId] = useState(null);
+
+  // get list of all normalizeable ("other") field for current survey
+  const normalizeableFields = [allFields, ...getNormalizableFields(survey)];
+
+  const currentField = fieldId
+    ? normalizeableFields.find((f) => f.id === fieldId)
+    : allFields;
+
   const segments = [...Array(Math.ceil(responsesCount / segmentSize))].map(
     (x, i) => ({
       i,
@@ -236,18 +246,34 @@ const LaunchNormalization = ({ survey }) => {
   const segmentsDone = segments.filter((s) => s.status === statuses.done);
   return (
     <div className="survey-normalization">
-      <Components.MutationButton
-        label={`Renormalize ${survey.slug}`}
-        mutation={gql`
-          mutation getSurveyMetadata($surveyId: String) {
-            getSurveyMetadata(surveyId: $surveyId)
-          }
-        `}
-        mutationArguments={{ surveyId: survey.slug }}
-        successCallback={(result) => {
-          setResponsesCount(result?.data?.getSurveyMetadata?.responsesCount);
-        }}
-      />
+      <h3 className="survey-normalization-actions">
+        <Components.MutationButton
+          label={`Renormalize ${survey.slug}`}
+          mutation={gql`
+            mutation getSurveyMetadata($surveyId: String, $fieldId: String) {
+              getSurveyMetadata(surveyId: $surveyId, fieldId: $fieldId)
+            }
+          `}
+          mutationArguments={{ surveyId: survey.slug, fieldId }}
+          successCallback={(result) => {
+            setResponsesCount(result?.data?.getSurveyMetadata?.responsesCount);
+          }}
+        />{" "}
+        &gt;{" "}
+        <Components.Dropdown
+          label={currentField.id}
+          menuItems={normalizeableFields.map((field) => ({
+            label: field.id,
+            onClick: () => {
+              if (field.id === allFields.id) {
+                setFieldId(null);
+              } else {
+                setFieldId(field.id);
+              }
+            },
+          }))}
+        />
+      </h3>
       {/* <Components.MutationButton
         label={`Renormalize ${survey.slug}`}
         mutation={gql`

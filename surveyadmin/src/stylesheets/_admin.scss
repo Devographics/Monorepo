@@ -15,7 +15,20 @@
   }
 }
 
-.survey-normalization {
+
+.normalization-actions {
+  display: flex;
+  justify-content: space-between;
+  font-size: $large-font;
+  margin-bottom: $spacing;
+  .primary, .secondary {
+    display: flex;
+    align-items: center;
+    gap: $spacing;
+  }
+}
+
+.normalization-progress {
   padding: $spacing;
   border: 1px solid grey;
   background: #cccccc;
