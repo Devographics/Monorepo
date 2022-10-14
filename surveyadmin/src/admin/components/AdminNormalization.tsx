@@ -12,8 +12,8 @@ import { surveysWithTemplates } from "~/surveys/withTemplates";
 const surveys = surveysWithTemplates;
 
 const normalizationQuery = gql`
-  query NormalizationQuery($surveySlug: String, $fieldName: String) {
-    unnormalizedFields(surveySlug: $surveySlug, fieldName: $fieldName)
+  query NormalizationQuery($surveyId: String, $fieldId: String) {
+    unnormalizedFields(surveyId: $surveyId, fieldId: $fieldId)
   }
 `;
 
@@ -162,7 +162,7 @@ const MissingNormalizations = ({ survey, field }) => {
   // useEffect(()=> {
   // run GraphQL query
   const { loading, data = {} } = useQuery(normalizationQuery, {
-    variables: { surveySlug: survey?.slug, fieldName: field?.fieldName },
+    variables: { surveyId: survey?.surveyId, fieldId: field?.id },
   });
   // }, [survey, field])
 

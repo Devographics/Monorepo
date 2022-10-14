@@ -14,6 +14,8 @@ const Actions = ({
   setResponsesCount,
   setSurveyId,
   setFieldId,
+  onlyUnnormalized,
+  setNormalizationMode,
 }) => {
   const Components = useVulcanComponents();
   const router = useRouter();
@@ -66,15 +68,41 @@ const Actions = ({
         <Components.MutationButton
           label={`Renormalize ${survey.slug}/${fieldId}`}
           mutation={gql`
-            mutation getSurveyMetadata($surveyId: String, $fieldId: String) {
-              getSurveyMetadata(surveyId: $surveyId, fieldId: $fieldId)
+            mutation getSurveyMetadata(
+              $surveyId: String
+              $fieldId: String
+              $onlyUnnormalized: Boolean
+            ) {
+              getSurveyMetadata(
+                surveyId: $surveyId
+                fieldId: $fieldId
+                onlyUnnormalized: $onlyUnnormalized
+              )
             }
           `}
-          mutationArguments={{ surveyId: survey.slug, fieldId }}
+          mutationArguments={{
+            surveyId: survey.slug,
+            fieldId,
+            onlyUnnormalized,
+          }}
           successCallback={(result) => {
             setResponsesCount(result?.data?.getSurveyMetadata?.responsesCount);
           }}
         />
+        {fieldId !== "all" && (
+          <label>
+            <input
+              type="checkbox"
+              checked={onlyUnnormalized}
+              onClick={() => {
+                setNormalizationMode(
+                  onlyUnnormalized ? "all" : "only_normalized"
+                );
+              }}
+            />{" "}
+            Only normalize unnormalized values
+          </label>
+        )}
       </div>
       <div className="secondary">
         <Components.MutationButton

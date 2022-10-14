@@ -7,9 +7,9 @@ import Progress from "~/admin/components/normalization/Progress";
 import Fields from "~/admin/components/normalization/Fields";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
 
-const normalizationQuery = gql`
-  query NormalizationQuery($surveySlug: String, $fieldName: String) {
-    unnormalizedFields(surveySlug: $surveySlug, fieldName: $fieldName)
+const unnormalizedFieldsQuery = gql`
+  query UnnormalizedFieldsQuery($surveyId: String, $fieldId: String) {
+    unnormalizedFields(surveyId: $surveyId, fieldId: $fieldId)
   }
 `;
 
@@ -54,6 +54,7 @@ const Normalization = ({ surveyId: surveyId_, fieldId: fieldId_ }) => {
   const [enabled, setEnabled] = useState(true);
   const [surveyId, setSurveyId] = useState(surveyId_);
   const [fieldId, setFieldId] = useState(fieldId_);
+  const [normalizationMode, setNormalizationMode] = useState('only_normalized');
 
   const stateStuff = {
     responsesCount,
@@ -66,6 +67,8 @@ const Normalization = ({ surveyId: surveyId_, fieldId: fieldId_ }) => {
     setSurveyId,
     fieldId,
     setFieldId,
+    normalizationMode,
+    setNormalizationMode
   };
 
   const survey = surveysWithTemplates.find((s) => s.slug === surveyId);
@@ -76,19 +79,22 @@ const Normalization = ({ surveyId: surveyId_, fieldId: fieldId_ }) => {
   const field = normalizeableFields.find((f) => f.id === fieldId);
 
   const {
-    loading: missingFieldsLoading,
-    data: missingFieldsData = {},
+    loading: unnormalizedFieldsLoading,
+    data: unnormalizedFieldsData = {},
     refetch: refetchMissingFields,
-  } = useQuery(normalizationQuery, {
-    variables: { surveySlug: survey?.slug, fieldName: field?.fieldName },
+  } = useQuery(unnormalizedFieldsQuery, {
+    variables: { surveyId, fieldId },
   });
+
+  const onlyUnnormalized = normalizationMode === "only_normalized";
 
   const props = {
     survey,
     field,
     normalizeableFields,
-    missingFieldsLoading,
-    missingFieldsData,
+    unnormalizedFieldsLoading,
+    unnormalizedFieldsData,
+    onlyUnnormalized,
     refetchMissingFields,
     ...stateStuff,
   };

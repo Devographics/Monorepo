@@ -80,6 +80,7 @@ export interface ParsedQuestion extends Pick<Field, "template"> {
   showOther?: boolean;
   slug?: string;
   suffix?: string;
+  matchTags?: Array<string>;
 }
 
 export type SurveyQuestion = Field;

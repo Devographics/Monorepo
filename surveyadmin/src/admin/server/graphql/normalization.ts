@@ -1,5 +1,12 @@
 import get from "lodash/get.js";
-import { normalizeResponse, getSurveyFieldById } from "../normalization/normalize";
+import { normalizeResponse } from "../normalization/normalize";
+import {
+  getFieldSegments,
+  getSurveyFieldById,
+  getSelector,
+  getFieldPaths,
+  getUnnormalizedResponses,
+} from "../normalization/helpers";
 import { UserType } from "~/core/models/user";
 import { ResponseAdminMongooseModel } from "@devographics/core-models/server";
 import { NormalizedResponseMongooseModel } from "~/admin/models/normalized_responses/model.server";
@@ -50,53 +57,25 @@ export const normalizeIdsTypeDefs = "normalizeIds(ids: [String]): [JSON]";
 
 /*
 
-Normalization (entire survey)
+Normalization
 
 */
 const defaultLimit = 999;
 const isSimulation = false;
 const verbose = false;
 
-const getSourceFields = (surveyId) => [
-  "common__user_info__referrer",
-  "common__user_info__source",
-  `${surveyId}__user_info__how_did_user_find_out_about_the_survey`,
-];
-
-const getSelector = (surveyId, fieldId) => {
-  const survey = getSurveyBySlug(surveyId);
-
-  if (!survey) {
-    throw new Error(`Could not find survey for slug ${surveyId}`);
-  }
-
-  const selector = {
-    surveySlug: surveyId,
-  };
-  if (fieldId) {
-    if (fieldId === "source") {
-      // source field should be treated differently
-      selector["$or"] = getSourceFields(surveyId).map((f) => ({
-        [f]: { $exists: true },
-      }));
-    } else {
-      const field = getSurveyFieldById(survey, fieldId)
-
-      if (!field || !field.fieldName) {
-        throw new Error(`Could not find field for fieldId ${fieldId}`);
-      }
-      selector[field.fieldName] = { $exists: true };
-    }
-  }
-  return selector;
-};
-
 export const normalizeSurvey = async (
   root,
   args,
   { currentUser }: { currentUser: UserType }
 ) => {
-  const { surveyId, fieldId, startFrom = 0, limit = defaultLimit } = args;
+  const {
+    surveyId,
+    fieldId,
+    startFrom = 0,
+    limit = defaultLimit,
+    onlyUnnormalized,
+  } = args;
   const startAt = new Date();
   let progress = 0;
 
@@ -115,8 +94,9 @@ export const normalizeSurvey = async (
 
   // TODO: use Response model and connector instead
 
+  const selector = await getSelector(surveyId, fieldId, onlyUnnormalized)
   const responses = await ResponseAdminMongooseModel.find(
-    getSelector(surveyId, fieldId)
+    selector
   )
     .skip(startFrom)
     .limit(limit);
@@ -186,7 +166,7 @@ export const normalizeSurvey = async (
 };
 
 export const normalizeSurveyTypeDefs =
-  "normalizeSurvey(surveyId: String, fieldId: String, startFrom: Int, limit: Int): JSON";
+  "normalizeSurvey(surveyId: String, fieldId: String, startFrom: Int, limit: Int, onlyUnnormalized: Boolean): JSON";
 
 /*
 
@@ -198,55 +178,27 @@ export const getSurveyMetadata = async (
   args,
   { currentUser }: { currentUser: UserType }
 ) => {
-  const { surveyId, fieldId } = args;
+  const { surveyId, fieldId, onlyUnnormalized } = args;
   if (!currentUser.isAdmin) throw new Error("Non admin cannot do this");
 
-  // TODO: use Response model and connector instead
-  const responses = await ResponseAdminMongooseModel.find(
-    getSelector(surveyId, fieldId)
-  );
+  const selector = await getSelector(surveyId, fieldId, onlyUnnormalized);
 
-  return { responsesCount: responses.length };
+  // TODO: use Response model and connector instead
+  const responsesCount = await ResponseAdminMongooseModel.count(selector);
+  return { responsesCount };
 };
+
 export const getSurveyMetadataTypeDefs =
-  "getSurveyMetadata(surveyId: String, fieldId: String): JSON";
+  "getSurveyMetadata(surveyId: String, fieldId: String, onlyUnnormalized: Boolean): JSON";
 
 /*
 
-Normalization Debugging
+Unnormalized Fields
 
 */
-export const unnormalizedFields = async (root, { surveySlug, fieldName }) => {
+export const unnormalizedFields = async (root, { surveyId, fieldId }) => {
   // console.log(`// unnormalizedFields ${surveySlug} ${fieldName}`);
-  const [initialSegment, sectionSegment, fieldSegment, ...restOfPath] =
-    fieldName.split("__");
-  let rawFieldPath = `${sectionSegment}.${fieldSegment}.others.raw`;
-  let normalizedFieldPath = `${sectionSegment}.${fieldSegment}.others.normalized`;
-  if (fieldSegment === "source") {
-    // treat source field differently because it doesn't have "others"
-    rawFieldPath = "user_info.source.raw";
-    normalizedFieldPath = "user_info.source.normalized";
-  }
-  const query = {
-    surveySlug,
-    [rawFieldPath]: { $exists: true },
-    $or: [
-      { [normalizedFieldPath]: [] },
-      { [normalizedFieldPath]: { $exists: false } },
-    ],
-  };
-
-  // console.log(query);
-
-  const responses = await NormalizedResponseMongooseModel.find(
-    query,
-    {
-      _id: 1,
-      responseId: 1,
-      [rawFieldPath]: 1,
-    },
-    { lean: true }
-  ).exec();
+  const { responses, rawFieldPath } = await getUnnormalizedResponses(surveyId, fieldId)
 
   const cleanResponses = responses.map((r) => {
     return {
@@ -260,4 +212,4 @@ export const unnormalizedFields = async (root, { surveySlug, fieldName }) => {
 };
 
 export const unnormalizedFieldsTypeDefs =
-  "unnormalizedFields(surveySlug: String, fieldName: String): [JSON]";
+  "unnormalizedFields(surveyId: String, fieldId: String): [JSON]";

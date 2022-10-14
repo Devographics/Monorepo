@@ -26,6 +26,7 @@ const Progress = ({
   setDoneCount,
   fieldId,
   refetchMissingFields,
+  onlyUnnormalized,
 }) => {
   const segments = [...Array(Math.ceil(responsesCount / segmentSize))].map(
     (x, i) => ({
@@ -85,6 +86,7 @@ const Progress = ({
               setDoneCount={setDoneCount}
               enabled={enabled}
               fieldId={fieldId}
+              onlyUnnormalized={onlyUnnormalized}
             />
           )}
           {doneCount === responsesCount && <div>Done</div>}
@@ -106,12 +108,14 @@ const normalizeSurveyMutation = gql`
     $fieldId: String
     $startFrom: Int
     $limit: Int
+    $onlyUnnormalized: Boolean
   ) {
     normalizeSurvey(
       surveyId: $surveyId
       fieldId: $fieldId
       startFrom: $startFrom
       limit: $limit
+      onlyUnnormalized: $onlyUnnormalized
     )
   }
 `;
@@ -124,6 +128,7 @@ const SegmentInProgress = ({
   responsesCount,
   setDoneCount,
   enabled,
+  onlyUnnormalized, 
 }) => {
   const Components = useVulcanComponents();
 
@@ -139,7 +144,7 @@ const SegmentInProgress = ({
   useEffect(() => {
     if (enabled) {
       mutateFunction({
-        variables: { surveyId, fieldId, startFrom, limit: segmentSize },
+        variables: { surveyId, fieldId, startFrom, limit: segmentSize, onlyUnnormalized },
       });
     }
   }, [segmentIndex, enabled]);

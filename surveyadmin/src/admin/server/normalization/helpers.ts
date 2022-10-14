@@ -6,9 +6,47 @@ import sortBy from "lodash/sortBy.js";
 import compact from "lodash/compact.js";
 import isEmpty from "lodash/isEmpty.js";
 import type { Entity } from "@devographics/core-models";
-import type { SurveyType, SurveyQuestion } from "@devographics/core-models";
+import type {
+  Field,
+  SurveyType,
+  SurveyQuestion,
+} from "@devographics/core-models";
 import { logToFile } from "@devographics/core-models/server";
 import { getOrFetchEntities } from "~/modules/entities/server";
+import { getSurveyBySlug } from "~/modules/surveys/helpers";
+import { NormalizedResponseMongooseModel } from "~/admin/models/normalized_responses/model.server";
+
+export const getFieldSegments = (field: Field) => {
+  if (!field.fieldName) {
+    console.log(field);
+    throw new Error("Could not find fieldName for field");
+  }
+  const [initialSegment, sectionSegment, fieldSegment, suffix] =
+    field.fieldName.split("__");
+  return { initialSegment, sectionSegment, fieldSegment, suffix };
+};
+
+export const getFieldPaths = (field: Field) => {
+  const { sectionSegment, fieldSegment } = getFieldSegments(field);
+  const basePath = `${sectionSegment}.${fieldSegment}`;
+  const choicesFieldPath = `${basePath}.choices`;
+  const rawFieldPath = `${basePath}.others.raw`;
+  const normalizedFieldPath = `${basePath}.others.normalized`;
+  return { basePath, choicesFieldPath, rawFieldPath, normalizedFieldPath };
+};
+
+export const getSurveyFieldById = (survey, fieldId) => {
+  const allFields = survey.outline.map((s) => s.questions).flat();
+  // make sure to narrow it down to the freeform "others" field since the main "choices"
+  // field can have the same id
+  const field = allFields.find(
+    (f) => f.id === fieldId && f.template === "others"
+  );
+  if (!field) {
+    throw new Error(`Could not find field for fieldId "${fieldId}"`);
+  }
+  return field;
+};
 
 /*
 
@@ -239,7 +277,7 @@ export const normalizeSource = async (normResp, allRules, survey) => {
     "newsletters",
     "people",
     "sources",
-    `sources_${survey.normalizationId}`
+    `sources_${survey.normalizationId}`,
   ];
 
   const rawSource = get(normResp, "user_info.sourcetag");
@@ -247,6 +285,7 @@ export const normalizeSource = async (normResp, allRules, survey) => {
     normResp,
     "user_info.how_did_user_find_out_about_the_survey"
   );
+  
   const rawRef = get(normResp, "user_info.referrer");
 
   try {
@@ -312,39 +351,41 @@ export const generateEntityRules = (entities: Array<Entity>) => {
     .filter((e) => !e.apiOnly)
     .forEach((entity) => {
       const { id, patterns, tags, twitterName } = entity;
-      // we match the separator group 0 to 2 times to account for double spaces,
-      // double hyphens, etc.
-      const separator = "( |-|_|.){0,2}";
 
-      // 1. replace "_" by separator
-      const idPatternString = id.replaceAll("_", separator);
-      const idPattern = new RegExp(idPatternString, "i");
-      rules.push({
-        id,
-        pattern: idPattern,
-        tags: tags || [],
-      });
+      if (id) {
+        // we match the separator group 0 to 2 times to account for double spaces,
+        // double hyphens, etc.
+        const separator = "( |-|_|.){0,2}";
 
-      // note: the following should not be needed because all entities
-      // should already follow the foo_js/foo_css forma
-      // 2. replace "js" at the end by separator+js
-      //if (id.substr(-2) === "js") {
-      //  const patternString = id.substr(0, id.length - 2) + separator + "js";
-      //  const pattern = new RegExp(patternString, "i");
-      //  rules.push({ id, pattern, tags });
-      //}
-      //
-      //    // 3. replace "css" at the end by separator+css
-      //    if (id.substr(-3) === "css") {
-      //      const patternString = id.substr(0, id.length - 3) + separator + "css";
-      //      const pattern = new RegExp(patternString, "i");
-      //      rules.push({ id, pattern, tags });
-      //    }
+        // 1. replace "_" by separator
+        const idPatternString = id.replaceAll("_", separator);
+        const idPattern = new RegExp(idPatternString, "i");
+        rules.push({
+          id,
+          pattern: idPattern,
+          tags: tags || [],
+        });
 
-      // 4. add custom patterns
-      patterns &&
-        patterns.forEach((patternString) => {
-          /*
+        // note: the following should not be needed because all entities
+        // should already follow the foo_js/foo_css forma
+        // 2. replace "js" at the end by separator+js
+        //if (id.substr(-2) === "js") {
+        //  const patternString = id.substr(0, id.length - 2) + separator + "js";
+        //  const pattern = new RegExp(patternString, "i");
+        //  rules.push({ id, pattern, tags });
+        //}
+        //
+        //    // 3. replace "css" at the end by separator+css
+        //    if (id.substr(-3) === "css") {
+        //      const patternString = id.substr(0, id.length - 3) + separator + "css";
+        //      const pattern = new RegExp(patternString, "i");
+        //      rules.push({ id, pattern, tags });
+        //    }
+
+        // 4. add custom patterns
+        patterns &&
+          patterns.forEach((patternString) => {
+            /*
           Some patterns are of the form context||question||pattern
           to only match a specific question in a specific context.
           
@@ -353,26 +394,27 @@ export const generateEntityRules = (entities: Array<Entity>) => {
           state_of_graphql||sites_courses||official documentation
         */
 
-          const patternSegments = patternString.split("||");
-          if (patternSegments.length === 3) {
-            const pattern = new RegExp(patternSegments[2], "i");
-            rules.push({
-              id,
-              pattern,
-              context: patternSegments[0],
-              fieldId: patternSegments[1],
-              tags: tags || [],
-            });
-          } else {
-            const pattern = new RegExp(patternSegments[0], "i");
-            rules.push({ id, pattern, tags: tags || [] });
-          }
-        });
+            const patternSegments = patternString.split("||");
+            if (patternSegments.length === 3) {
+              const pattern = new RegExp(patternSegments[2], "i");
+              rules.push({
+                id,
+                pattern,
+                context: patternSegments[0],
+                fieldId: patternSegments[1],
+                tags: tags || [],
+              });
+            } else {
+              const pattern = new RegExp(patternSegments[0], "i");
+              rules.push({ id, pattern, tags: tags || [] });
+            }
+          });
 
-      // 5. also add twitter username if available (useful for people entities)
-      if (twitterName) {
-        const pattern = new RegExp(twitterName, "i");
-        rules.push({ id, pattern, tags: tags || [] });
+        // 5. also add twitter username if available (useful for people entities)
+        if (twitterName) {
+          const pattern = new RegExp(twitterName, "i");
+          rules.push({ id, pattern, tags: tags || [] });
+        }
       }
     });
   return rules;
@@ -396,3 +438,147 @@ export const logAllRules = async () => {
     console.log("// Could not get entities");
   }
 };
+
+export const getSourceFields = (surveyId) => [
+  "common__user_info__referrer",
+  "common__user_info__source",
+  `${surveyId}__user_info__how_did_user_find_out_about_the_survey`,
+];
+
+// get mongo selector
+export const getSelector = async (surveyId, fieldId, onlyUnnormalized) => {
+  console.log(surveyId);
+  console.log(fieldId);
+  console.log(onlyUnnormalized);
+  const survey = getSurveyBySlug(surveyId);
+
+  const selector = {
+    surveySlug: surveyId,
+  } as any;
+  if (fieldId) {
+    if (onlyUnnormalized) {
+      const { responses } = await getUnnormalizedResponses(surveyId, fieldId);
+      const unnormalizedIds = responses.map((r) => r.responseId);
+      selector._id = { $in: unnormalizedIds };
+    } else {
+      if (fieldId === "source") {
+        // source field should be treated differently
+        selector["$or"] = getSourceFields(surveyId).map((f) => ({
+          [f]: { $exists: true },
+        }));
+      } else {
+        const field = getSurveyFieldById(survey, fieldId);
+        selector[field.fieldName] = { $exists: true };
+      }
+    }
+  }
+  // console.log(JSON.stringify(selector, undefined, 2));
+  return selector;
+};
+
+export const getUnnormalizedResponses = async (surveyId, fieldId) => {
+  let rawFieldPath, normalizedFieldPath;
+  const survey = getSurveyBySlug(surveyId);
+  if (fieldId === "source") {
+    rawFieldPath = "user_info.source.raw";
+    normalizedFieldPath = "user_info.source.normalized";
+  } else {
+    const field = getSurveyFieldById(survey, fieldId);
+    rawFieldPath = getFieldPaths(field).rawFieldPath;
+    normalizedFieldPath = getFieldPaths(field).normalizedFieldPath;
+  }
+
+  const selector = {
+    surveySlug: surveyId,
+    [rawFieldPath]: { $exists: true },
+    $or: [
+      { [normalizedFieldPath]: [] },
+      { [normalizedFieldPath]: { $exists: false } },
+    ],
+  };
+
+  // console.log(query);
+
+  const responses = await NormalizedResponseMongooseModel.find(
+    selector,
+    {
+      _id: 1,
+      responseId: 1,
+      [rawFieldPath]: 1,
+    },
+    { lean: true }
+  ).exec();
+
+  return { responses, rawFieldPath, normalizedFieldPath };
+};
+
+// export const getSelector = (surveyId, fieldId, onlyUnnormalized) => {
+//   const survey = getSurveyBySlug(surveyId);
+//   const surveySlug = surveyId;
+//   if (!survey) {
+//     throw new Error(`Could not find survey for slug ${surveyId}`);
+//   }
+
+//   // by default, select all documents belonging to a survey
+//   let selector = {
+//     surveySlug,
+//   } as any;
+
+//   if (fieldId) {
+//     // we're only interested in working on a single field
+
+//     if (onlyUnnormalized) {
+//       let rawFieldPath, normalizedFieldPath;
+
+//       if (fieldId === "source") {
+//         // treat source field differently because it doesn't have "others"
+//         rawFieldPath = "user_info.source.raw";
+//         normalizedFieldPath = "user_info.source.normalized";
+//       } else {
+//         const field = getSurveyFieldById(survey, fieldId);
+//         const { sectionSegment, fieldSegment } = getFieldSegments(field);
+
+//         rawFieldPath = `${sectionSegment}.${fieldSegment}.others.raw`;
+//         normalizedFieldPath = `${sectionSegment}.${fieldSegment}.others.normalized`;
+//       }
+
+//       /*
+
+//       Select all document that:
+
+//       - belong to a survey
+//       - have a raw value
+//       - do *not* have a corresponding normalized value
+
+//       */
+//       selector = {
+//         ...selector,
+//         [rawFieldPath]: { $exists: true },
+//         $or: [
+//           { [normalizedFieldPath]: [] },
+//           { [normalizedFieldPath]: { $exists: false } },
+//         ],
+//       };
+//     } else {
+//       if (fieldId === "source") {
+//         // source field should be treated differently
+//         selector = {
+//           ...selector,
+//           $or: getSourceFields(surveyId).map((f) => ({
+//             [f]: { $exists: true },
+//           })),
+//         };
+//       } else {
+//         const field = getSurveyFieldById(survey, fieldId);
+//         // select all documents which contain the field
+//         selector = {
+//           ...selector,
+//           [field.fieldName]: { $exists: true },
+//         };
+//       }
+//     }
+//   }
+//   console.log("// selector");
+//   console.log(selector);
+//   return selector;
+// };
