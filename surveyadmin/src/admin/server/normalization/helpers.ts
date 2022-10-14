@@ -29,10 +29,24 @@ export const getFieldSegments = (field: Field) => {
 export const getFieldPaths = (field: Field) => {
   const { sectionSegment, fieldSegment } = getFieldSegments(field);
   const basePath = `${sectionSegment}.${fieldSegment}`;
-  const choicesFieldPath = `${basePath}.choices`;
-  const rawFieldPath = `${basePath}.others.raw`;
-  const normalizedFieldPath = `${basePath}.others.normalized`;
-  return { basePath, choicesFieldPath, rawFieldPath, normalizedFieldPath };
+
+  const errorPath = `${basePath}.error`;
+  const choicesPath = `${basePath}.choices`;
+  const othersPath = `${basePath}.others`;
+
+  const rawFieldPath = `${othersPath}.raw`;
+  const normalizedFieldPath = `${othersPath}.normalized`;
+  const patternsFieldPath = `${othersPath}.patterns`;
+  
+  return {
+    basePath,
+    errorPath,
+    othersPath,
+    choicesPath,
+    rawFieldPath,
+    normalizedFieldPath,
+    patternsFieldPath,
+  };
 };
 
 export const getSurveyFieldById = (survey, fieldId) => {
@@ -285,7 +299,7 @@ export const normalizeSource = async (normResp, allRules, survey) => {
     normResp,
     "user_info.how_did_user_find_out_about_the_survey"
   );
-  
+
   const rawRef = get(normResp, "user_info.referrer");
 
   try {
@@ -447,9 +461,6 @@ export const getSourceFields = (surveyId) => [
 
 // get mongo selector
 export const getSelector = async (surveyId, fieldId, onlyUnnormalized) => {
-  console.log(surveyId);
-  console.log(fieldId);
-  console.log(onlyUnnormalized);
   const survey = getSurveyBySlug(surveyId);
 
   const selector = {
@@ -497,7 +508,7 @@ export const getUnnormalizedResponses = async (surveyId, fieldId) => {
     ],
   };
 
-  // console.log(query);
+  console.log(selector);
 
   const responses = await NormalizedResponseMongooseModel.find(
     selector,

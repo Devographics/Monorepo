@@ -1,18 +1,13 @@
 import get from "lodash/get.js";
 import { normalizeResponse } from "../normalization/normalize";
 import {
-  getFieldSegments,
-  getSurveyFieldById,
   getSelector,
-  getFieldPaths,
   getUnnormalizedResponses,
 } from "../normalization/helpers";
 import { UserType } from "~/core/models/user";
 import { ResponseAdminMongooseModel } from "@devographics/core-models/server";
-import { NormalizedResponseMongooseModel } from "~/admin/models/normalized_responses/model.server";
 import { getOrFetchEntities } from "~/modules/entities/server";
 import pick from "lodash/pick.js";
-import { getSurveyBySlug } from "~/modules/surveys/helpers";
 
 /*
 

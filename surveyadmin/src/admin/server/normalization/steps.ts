@@ -242,11 +242,9 @@ export const normalizeField = async ({
     verbose = false,
   } = options;
 
-  console.log(field);
-
   const { fieldName, suffix, matchTags = [] } = field as ParsedQuestion;
   if (!fieldName) throw new Error(`Field without fieldName`);
-  const { basePath } = getFieldPaths(field);
+  const { basePath, rawFieldPath, normalizedFieldPath, patternsFieldPath, errorPath } = getFieldPaths(field);
 
   const value = response[fieldName];
 
@@ -260,7 +258,7 @@ export const normalizeField = async ({
     } else {
       if (suffix === "others") {
         // A. "others" fields needing to be normalized
-        set(normResp, `${basePath}.raw`, value);
+        set(normResp, rawFieldPath, value);
 
         if (log) {
           await logToFile(
@@ -334,8 +332,8 @@ export const normalizeField = async ({
           const normPatterns = normTokens.map((token) =>
             token.pattern.toString()
           );
-          set(normResp, `${basePath}.normalized`, normIds);
-          set(normResp, `${basePath}.patterns`, normPatterns);
+          set(normResp, normalizedFieldPath, normIds);
+          set(normResp, patternsFieldPath, normPatterns);
 
           // keep trace of fields that were normalized
           normalizedFields.push({
@@ -344,7 +342,7 @@ export const normalizeField = async ({
             normTokens,
           });
         } catch (error) {
-          set(normResp, `${basePath}.error`, error.message);
+          set(normResp, errorPath, error.message);
         }
       } else if (suffix === "prenormalized") {
         // B. these fields are "prenormalized" through autocomplete inputs

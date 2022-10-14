@@ -140,13 +140,16 @@ export const normalizeResponse = async (
         default:
           const field = getSurveyFieldById(survey, fieldId);
           await steps.normalizeField({ field, ...normalizationParams });
-          basePath = getFieldPaths(field.fieldName).basePath;
+          basePath = getFieldPaths(field).basePath;
           break;
       }
 
       const selector = { responseId: response._id };
       const value = get(normResp, basePath);
       const modifier = { $set: { [basePath]: value } };
+
+      // console.log(JSON.stringify(selector, null, 2))
+      // console.log(JSON.stringify(modifier, null, 2))
 
       if (!isSimulation) {
         // update normalized response, or insert it if it doesn't exist

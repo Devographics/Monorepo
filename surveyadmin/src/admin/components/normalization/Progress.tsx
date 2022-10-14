@@ -43,9 +43,9 @@ const Progress = ({
   const segmentsDone = segments.filter((s) => s.status === statuses.done);
 
   useEffect(() => {
-    console.log('// useEffect')
+    console.log("// useEffect");
     if (doneCount === responsesCount) {
-      console.log('// refetching…')
+      console.log("// refetching…");
       refetchMissingFields();
     }
   }, [doneCount, responsesCount]);
@@ -128,7 +128,7 @@ const SegmentInProgress = ({
   responsesCount,
   setDoneCount,
   enabled,
-  onlyUnnormalized, 
+  onlyUnnormalized,
 }) => {
   const Components = useVulcanComponents();
 
@@ -143,8 +143,20 @@ const SegmentInProgress = ({
 
   useEffect(() => {
     if (enabled) {
+      /*
+
+      When only normalizing unnormalized results, we'll first get a fresh list of all unnormalized
+      IDs at every iteration, so we don't need to offset them using startFrom
+
+      */
       mutateFunction({
-        variables: { surveyId, fieldId, startFrom, limit: segmentSize, onlyUnnormalized },
+        variables: {
+          surveyId,
+          fieldId,
+          startFrom: onlyUnnormalized ? 0 : startFrom,
+          limit: segmentSize,
+          onlyUnnormalized,
+        },
       });
     }
   }, [segmentIndex, enabled]);
