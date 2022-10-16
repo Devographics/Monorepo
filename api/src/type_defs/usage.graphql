@@ -1,4 +1,5 @@
 enum UsageID {
+    css_js_balance
     graphql_experience
     api_type
     api_type_others
@@ -16,6 +17,13 @@ enum UsageID {
     graphql_strong_points_others
     graphql_pain_points
     graphql_pain_points_others
+
+    interoperability_features_freeform
+    missing_features_freeform
+    other_pain_points_freeform
+
+    form_factors
+    what_do_you_use_css_for
 }
 
 type YearUsage {

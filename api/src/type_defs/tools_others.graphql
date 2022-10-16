@@ -1,4 +1,6 @@
 enum OtherToolsID {
+    # CSS
+    pre_post_processors
     pre_post_processors_others
     css_frameworks_others
     css_methodologies_others
@@ -9,6 +11,8 @@ enum OtherToolsID {
     text_editors_others
     browsers
     browsers_others
+
+    # JS
     build_tools
     build_tools_others
     non_js_languages

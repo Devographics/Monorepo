@@ -67,6 +67,9 @@ enum FeatureID {
     flexbox_gap
     break_rules
     at_container
+    object_view_box
+    viewport_percentage_length_units
+    media_queries_range_contexts
     # CSS shapes & graphics features
     shapes
     object_fit
@@ -80,6 +83,11 @@ enum FeatureID {
     color_function
     accent_color
     color_gamut
+    currentcolor
+    color_mix
+    wide_gamut_colors
+    relative_colors
+    gradient_color_spaces
     # CSS interactions features
     scroll_snap
     overscroll_behavior
@@ -87,6 +95,8 @@ enum FeatureID {
     touch_action
     pointer_events
     scroll_timeline
+    scroll_behavior
+    scrollbar_gutter
     # CSS typography features
     web_fonts
     line_breaking
@@ -98,6 +108,7 @@ enum FeatureID {
     leading_trim
     direction
     variable_fonts
+    font_palette
     # CSS animations & transforms features
     transitions
     transforms
@@ -111,6 +122,8 @@ enum FeatureID {
     color_scheme
     tabindex
     aria_attributes
+    prefers_contrast
+    forced_colors
     # CSS other features
     variables
     feature_support_queries
@@ -121,6 +134,11 @@ enum FeatureID {
     comparison_functions
     at_property
     marker
+    shadow_dom_part
+    trigonometric_functions
+    css_nesting
+    image_set
+    image_function
     # units_selectors
     px
     pt
@@ -134,6 +152,9 @@ enum FeatureID {
     mm
     cm
     in
+    has_selector
+    where_selector
+    cascade_layers
     # pseudo_elements
     before
     after
