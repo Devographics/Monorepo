@@ -125,13 +125,13 @@ export const normalizeResponse = async (
     */
 
     if (fieldId) {
-      let basePath;
+      let fullPath;
       // 1. we only need to renormalize a single field
       switch (fieldId) {
         case "source":
           await steps.copyFields(normalizationParams);
           await steps.normalizeSourceField(normalizationParams);
-          basePath = "user_info.source";
+          fullPath = "user_info.source";
           break;
         case "country":
           throw new Error(
@@ -140,13 +140,13 @@ export const normalizeResponse = async (
         default:
           const field = getSurveyFieldById(survey, fieldId);
           await steps.normalizeField({ field, ...normalizationParams });
-          basePath = getFieldPaths(field).basePath;
+          fullPath = getFieldPaths(field).fullPath;
           break;
       }
 
       const selector = { responseId: response._id };
-      const value = get(normResp, basePath);
-      const modifier = { $set: { [basePath]: value } };
+      const value = get(normResp, fullPath);
+      const modifier = { $set: { [fullPath]: value } };
 
       // console.log(JSON.stringify(selector, null, 2))
       // console.log(JSON.stringify(modifier, null, 2))

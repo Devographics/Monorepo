@@ -10,6 +10,7 @@ import type {
   Field,
   SurveyType,
   SurveyQuestion,
+  ParsedQuestion,
 } from "@devographics/core-models";
 import { logToFile } from "@devographics/core-models/server";
 import { getOrFetchEntities } from "~/modules/entities/server";
@@ -27,22 +28,23 @@ export const getFieldSegments = (field: Field) => {
 };
 
 export const getFieldPaths = (field: Field) => {
+  const { suffix } = field as ParsedQuestion
   const { sectionSegment, fieldSegment } = getFieldSegments(field);
-  const basePath = `${sectionSegment}.${fieldSegment}`;
 
+  const basePath = `${sectionSegment}.${fieldSegment}`
+  const fullPath = suffix ? `${basePath}.${suffix}` : basePath;
   const errorPath = `${basePath}.error`;
-  const choicesPath = `${basePath}.choices`;
-  const othersPath = `${basePath}.others`;
+  const commentPath = `${basePath}.comment`;
 
-  const rawFieldPath = `${othersPath}.raw`;
-  const normalizedFieldPath = `${othersPath}.normalized`;
-  const patternsFieldPath = `${othersPath}.patterns`;
+  const rawFieldPath = `${basePath}.raw`;
+  const normalizedFieldPath = `${basePath}.normalized`;
+  const patternsFieldPath = `${basePath}.patterns`;
   
   return {
     basePath,
+    commentPath,
+    fullPath,
     errorPath,
-    othersPath,
-    choicesPath,
     rawFieldPath,
     normalizedFieldPath,
     patternsFieldPath,
@@ -466,6 +468,7 @@ export const getSelector = async (surveyId, fieldId, onlyUnnormalized) => {
   const selector = {
     surveySlug: surveyId,
   } as any;
+
   if (fieldId) {
     if (onlyUnnormalized) {
       const { responses } = await getUnnormalizedResponses(surveyId, fieldId);
@@ -481,6 +484,12 @@ export const getSelector = async (surveyId, fieldId, onlyUnnormalized) => {
         const field = getSurveyFieldById(survey, fieldId);
         selector[field.fieldName] = { $exists: true };
       }
+    }
+  } else {
+    if (onlyUnnormalized) {
+      selector.isNormalized = { $ne: true };
+    } else {
+      // do nothing, use default selector
     }
   }
   // console.log(JSON.stringify(selector, undefined, 2));

@@ -5,10 +5,12 @@ import { useRouter } from "next/router.js";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { surveysWithTemplates } from "~/surveys/withTemplates";
 
-const allFields = { id: "all_fields", label: "All Fields" };
+export const allFields = { id: "all_fields", label: "All Fields" };
 
 const Actions = ({
+  surveyId,
   survey,
+  fieldId,
   field,
   normalizeableFields,
   setResponsesCount,
@@ -16,12 +18,12 @@ const Actions = ({
   setFieldId,
   onlyUnnormalized,
   setNormalizationMode,
+  isAllFields,
 }) => {
   const Components = useVulcanComponents();
   const router = useRouter();
 
-  const fieldId = field.id;
-  const surveySlug = survey.slug;
+  const surveySlug = surveyId;
 
   // get list of all normalizeable ("other") field for current survey
   const fields = [allFields, ...normalizeableFields];
@@ -48,7 +50,7 @@ const Actions = ({
         />{" "}
         &gt;{" "}
         <Components.Dropdown
-          label={field.id}
+          label={fieldId}
           menuItems={fields.map((field) => ({
             label: field.id,
             onClick: () => {
@@ -66,7 +68,9 @@ const Actions = ({
         />{" "}
         &gt;{" "}
         <Components.MutationButton
-          label={`Renormalize ${survey.slug}/${fieldId}`}
+          label={`Renormalize ${survey.slug}/${
+            isAllFields ? allFields.id : fieldId
+          }`}
           mutation={gql`
             mutation getSurveyMetadata(
               $surveyId: String
@@ -82,27 +86,25 @@ const Actions = ({
           `}
           mutationArguments={{
             surveyId: survey.slug,
-            fieldId,
+            fieldId: isAllFields ? null : fieldId,
             onlyUnnormalized,
           }}
           successCallback={(result) => {
             setResponsesCount(result?.data?.getSurveyMetadata?.responsesCount);
           }}
         />
-        {fieldId !== "all" && (
-          <label>
-            <input
-              type="checkbox"
-              checked={onlyUnnormalized}
-              onClick={() => {
-                setNormalizationMode(
-                  onlyUnnormalized ? "all" : "only_normalized"
-                );
-              }}
-            />{" "}
-            Only normalize unnormalized values
-          </label>
-        )}
+        <label>
+          <input
+            type="checkbox"
+            checked={onlyUnnormalized}
+            onClick={() => {
+              setNormalizationMode(
+                onlyUnnormalized ? "all" : "only_normalized"
+              );
+            }}
+          />{" "}
+          Only normalize unnormalized values
+        </label>
       </div>
       <div className="secondary">
         <Components.MutationButton

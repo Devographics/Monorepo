@@ -6,6 +6,7 @@ import Actions from "~/admin/components/normalization/Actions";
 import Progress from "~/admin/components/normalization/Progress";
 import Fields from "~/admin/components/normalization/Fields";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
+import { allFields } from "./Actions";
 
 const unnormalizedFieldsQuery = gql`
   query UnnormalizedFieldsQuery($surveyId: String, $fieldId: String) {
@@ -54,7 +55,7 @@ const Normalization = ({ surveyId: surveyId_, fieldId: fieldId_ }) => {
   const [enabled, setEnabled] = useState(true);
   const [surveyId, setSurveyId] = useState(surveyId_);
   const [fieldId, setFieldId] = useState(fieldId_);
-  const [normalizationMode, setNormalizationMode] = useState('only_normalized');
+  const [normalizationMode, setNormalizationMode] = useState("only_normalized");
 
   const stateStuff = {
     responsesCount,
@@ -68,7 +69,7 @@ const Normalization = ({ surveyId: surveyId_, fieldId: fieldId_ }) => {
     fieldId,
     setFieldId,
     normalizationMode,
-    setNormalizationMode
+    setNormalizationMode,
   };
 
   const survey = surveysWithTemplates.find((s) => s.slug === surveyId);
@@ -78,15 +79,16 @@ const Normalization = ({ surveyId: surveyId_, fieldId: fieldId_ }) => {
   // set field
   const field = normalizeableFields.find((f) => f.id === fieldId);
 
+  const isAllFields = fieldId === allFields.id;
+  const onlyUnnormalized = normalizationMode === "only_normalized";
+
   const {
     loading: unnormalizedFieldsLoading,
     data: unnormalizedFieldsData = {},
     refetch: refetchMissingFields,
   } = useQuery(unnormalizedFieldsQuery, {
-    variables: { surveyId, fieldId },
+    variables: { surveyId, fieldId: isAllFields ? null : fieldId },
   });
-
-  const onlyUnnormalized = normalizationMode === "only_normalized";
 
   const props = {
     survey,
@@ -96,6 +98,7 @@ const Normalization = ({ surveyId: surveyId_, fieldId: fieldId_ }) => {
     unnormalizedFieldsData,
     onlyUnnormalized,
     refetchMissingFields,
+    isAllFields,
     ...stateStuff,
   };
 
@@ -103,7 +106,7 @@ const Normalization = ({ surveyId: surveyId_, fieldId: fieldId_ }) => {
     <div className="admin-normalization admin-content">
       <Actions {...props} />
       {!!responsesCount && <Progress {...props} />}
-      <Fields {...props} />
+      {field && <Fields {...props} />}
     </div>
   );
 };

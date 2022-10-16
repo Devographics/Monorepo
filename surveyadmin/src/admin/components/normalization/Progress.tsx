@@ -27,6 +27,7 @@ const Progress = ({
   fieldId,
   refetchMissingFields,
   onlyUnnormalized,
+  isAllFields,
 }) => {
   const segments = [...Array(Math.ceil(responsesCount / segmentSize))].map(
     (x, i) => ({
@@ -43,9 +44,7 @@ const Progress = ({
   const segmentsDone = segments.filter((s) => s.status === statuses.done);
 
   useEffect(() => {
-    console.log("// useEffect");
     if (doneCount === responsesCount) {
-      console.log("// refetching…");
       refetchMissingFields();
     }
   }, [doneCount, responsesCount]);
@@ -87,6 +86,7 @@ const Progress = ({
               enabled={enabled}
               fieldId={fieldId}
               onlyUnnormalized={onlyUnnormalized}
+              isAllFields={isAllFields}
             />
           )}
           {doneCount === responsesCount && <div>Done</div>}
@@ -129,6 +129,7 @@ const SegmentInProgress = ({
   setDoneCount,
   enabled,
   onlyUnnormalized,
+  isAllFields,
 }) => {
   const Components = useVulcanComponents();
 
@@ -152,7 +153,7 @@ const SegmentInProgress = ({
       mutateFunction({
         variables: {
           surveyId,
-          fieldId,
+          fieldId: isAllFields ? null : fieldId,
           startFrom: onlyUnnormalized ? 0 : startFrom,
           limit: segmentSize,
           onlyUnnormalized,

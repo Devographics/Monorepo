@@ -89,10 +89,8 @@ export const normalizeSurvey = async (
 
   // TODO: use Response model and connector instead
 
-  const selector = await getSelector(surveyId, fieldId, onlyUnnormalized)
-  const responses = await ResponseAdminMongooseModel.find(
-    selector
-  )
+  const selector = await getSelector(surveyId, fieldId, onlyUnnormalized);
+  const responses = await ResponseAdminMongooseModel.find(selector)
     .skip(startFrom)
     .limit(limit);
   const count = responses.length;
@@ -193,18 +191,37 @@ Unnormalized Fields
 */
 export const unnormalizedFields = async (root, { surveyId, fieldId }) => {
   // console.log(`// unnormalizedFields ${surveySlug} ${fieldName}`);
-  const { responses, rawFieldPath } = await getUnnormalizedResponses(surveyId, fieldId)
+  if (fieldId) {
+    const { responses, rawFieldPath } = await getUnnormalizedResponses(
+      surveyId,
+      fieldId
+    );
 
-  const cleanResponses = responses.map((r) => {
-    return {
-      _id: r._id,
-      responseId: r.responseId,
-      value: get(r, rawFieldPath),
-    };
-  });
+    const cleanResponses = responses.map((r) => {
+      return {
+        _id: r._id,
+        responseId: r.responseId,
+        value: get(r, rawFieldPath),
+      };
+    });
 
-  return cleanResponses;
+    return cleanResponses;
+  } else {
+    return [];
+  }
 };
 
 export const unnormalizedFieldsTypeDefs =
   "unnormalizedFields(surveyId: String, fieldId: String): [JSON]";
+
+/*
+
+Reset Normalization
+
+TODO
+
+*/
+export const resetNormalization = async (root, { surveyId }) => {};
+
+export const resetNormalizationTypeDefs =
+  "resetNormalization(surveyId: String): [JSON]";

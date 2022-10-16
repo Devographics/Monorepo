@@ -5,6 +5,7 @@ import {
   normalize,
   normalizeSource,
   getFieldPaths,
+  getFieldSegments,
 } from "./helpers";
 import set from "lodash/set.js";
 import last from "lodash/last.js";
@@ -44,7 +45,7 @@ const logRow = async (columns, fileName) => {
 };
 
 // fields to copy, along with the path at which to copy them (if different)
-const getFieldsToCopy = surveyId => [
+const getFieldsToCopy = (surveyId) => [
   ["surveySlug"],
   ["createdAt"],
   ["updatedAt"],
@@ -61,7 +62,10 @@ const getFieldsToCopy = surveyId => [
   ["common__user_info__referrer", "user_info.referrer"],
   ["common__user_info__source", "user_info.sourcetag"],
   ["common__user_info__authmode", "user_info.authmode"],
-  [`${surveyId}__user_info__how_did_user_find_out_about_the_survey`, "user_info.how_did_user_find_out_about_the_survey"]
+  [
+    `${surveyId}__user_info__how_did_user_find_out_about_the_survey`,
+    "user_info.how_did_user_find_out_about_the_survey",
+  ],
 ];
 
 export const copyFields = async ({ normResp, response, survey }) => {
@@ -244,17 +248,40 @@ export const normalizeField = async ({
 
   const { fieldName, suffix, matchTags = [] } = field as ParsedQuestion;
   if (!fieldName) throw new Error(`Field without fieldName`);
-  const { basePath, rawFieldPath, normalizedFieldPath, patternsFieldPath, errorPath } = getFieldPaths(field);
+  const { initialSegment, sectionSegment, fieldSegment } =
+    getFieldSegments(field);
+  const {
+    commentPath,
+    fullPath,
+    rawFieldPath,
+    normalizedFieldPath,
+    patternsFieldPath,
+    errorPath,
+  } = getFieldPaths(field);
+
+  // handle freeform comments related to the field
+  const responseCommentPath = [
+    initialSegment,
+    sectionSegment,
+    fieldSegment,
+    "comment",
+  ].join("__");
+  const responseCommentValue = cleanupValue(response[responseCommentPath]);
+  if (responseCommentValue !== null) {
+    console.log(response._id)
+    console.log(commentPath)
+    console.log(responseCommentValue)
+    set(normResp, commentPath, responseCommentValue);
+  }
 
   const value = response[fieldName];
-
   // clean value to eliminate empty spaces, "none", "n/a", etc.
   const cleanValue = cleanupValue(value);
 
   if (cleanValue !== null) {
-    if (privateFieldPaths.includes(basePath)) {
+    if (privateFieldPaths.includes(fullPath)) {
       // handle private info fields separately
-      set(privateFields, basePath, value);
+      set(privateFields, fullPath, value);
     } else {
       if (suffix === "others") {
         // A. "others" fields needing to be normalized
@@ -346,7 +373,7 @@ export const normalizeField = async ({
         }
       } else if (suffix === "prenormalized") {
         // B. these fields are "prenormalized" through autocomplete inputs
-        const newPath = basePath.replace(".prenormalized", ".others");
+        const newPath = fullPath.replace(".prenormalized", ".others");
         set(normResp, `${newPath}.raw`, value);
         set(normResp, `${newPath}.normalized`, value);
         set(normResp, `${newPath}.patterns`, ["prenormalized"]);
@@ -357,7 +384,7 @@ export const normalizeField = async ({
         });
       } else {
         // C. any other field
-        set(normResp, basePath, value);
+        set(normResp, fullPath, value);
         regularFields.push({
           fieldName,
           value,
