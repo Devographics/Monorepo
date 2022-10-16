@@ -115,6 +115,8 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
             typography: colors.purple,
             animations_transforms: colors.orange,
             other_features: colors.green,
+            colors: colors.orange,
+            selectors: colors.aqua,
             accessibility: colors.yellow
         },
         features_simplified: {

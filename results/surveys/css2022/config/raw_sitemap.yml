@@ -495,8 +495,9 @@
     - id: scatterplot_overview
       template: scatterplot_overview
 
-    - id: all_sections_tools_cardinality_by_user
-      template: tools_cardinality_by_user_css
+    # note: to re-enable this we would need another template
+    # - id: all_sections_tools_cardinality_by_user
+    #   template: tools_cardinality_by_user_css
 
   children:
     

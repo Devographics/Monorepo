@@ -32,7 +32,7 @@ export const FeaturesCirclePackingChartTooltip = ({
     return (
         <div style={nivoTheme.tooltip.container}>
             <div>
-                <Heading>{name}</Heading>
+                <Heading dangerouslySetInnerHTML={{ __html: name }} />
                 <Grid>
                     <Chip color={`${color}50`} />
                     {translate!('options.features_simplified.know_it')}
