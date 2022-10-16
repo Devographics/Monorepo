@@ -158,6 +158,7 @@ exports.runPageQueries = async ({ page, graphql, config }) => {
     console.log(`// Running GraphQL queries for page ${page.id}…`)
 
     const paths = exports.getConfigLocations(config)
+
     const basePath = paths.localPath + '/results'
     const baseUrl = paths.url + '/results'
 

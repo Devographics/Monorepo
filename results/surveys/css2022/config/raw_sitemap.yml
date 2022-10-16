@@ -1,0 +1,1084 @@
+# ------------------------------------------------------------------------------------
+
+# ------------------------------------------------------------------------------------
+# Pages Properties
+# - id: the unique (survey-wide) ID of the page
+# - path: the page's path
+# - children: the page's children pages
+# - blocks: the page's blocks
+# - pageTemplate: a template from which to inherit its properties (not used)
+# - showTitle: whether to show the page title or not
+# - variables: page variables (compiled during sitemap generation)
+
+# Block Properties
+# - id: the unique (survey-wide) ID of the block
+# - blockName: the name of the block (used for titles, descriptions, etc.)
+# - bucketKeysName: the name of the block's keys (used for legends, formatting data, etc.)
+# - blockType: the type of block (which component to use)
+# - query: the query used to populate the block's data
+# - dataPath: the path to use (from the query root) to access the block's data
+# - showLegend: whether to show the block's legend
+# - showDescription: whether to show the block's description
+# - template: a template from which to inherit its properties
+# - translateData: whether to try and translate
+# - variables: block variables (compiled during sitemap generation)
+
+- id: introduction
+  path: /
+  showTitle: false
+  blocks:
+    - id: survey_intro
+      blockType: SurveyIntroBlock
+      disableExport: true
+      wrapBlock: false
+    - id: survey_credits
+      template: credits
+    - id: survey_newsletter
+      blockType: NewsletterBlock
+      disableExport: true
+      wrapBlock: false
+    - id: survey_sponsors
+      blockType: SponsorsBlock
+      disableExport: true
+      wrapBlock: false
+    - id: survey_translators
+      blockType: TranslatorsBlock
+      disableExport: true
+      wrapBlock: false
+
+- id: tshirt
+  path: /tshirt
+  showTitle: false
+  blocks:
+    - id: tshirt_intro
+      template: page_introduction
+    - id: tshirt_block
+      blockType: TshirtBlock
+      wrapBlock: false
+      disableExport: true
+
+- id: user_info
+  titleId: sections.demographics.title
+  path: /demographics
+  blocks:
+    - template: page_introduction
+
+    - id: country
+      template: demographics
+      blockType: ParticipationByCountryBlock
+
+    - id: locale
+      template: demographics
+      blockType: HorizontalBarBlock
+      translateData: true
+      variables:
+        options: {cutoff: 20}
+
+    - id: hint_hint
+      template: hint
+
+    - id: completion_stats
+      template: demographics
+      blockType: KnowledgeScoreBlock
+      translateData: true
+      
+    - id: age
+      template: demographics
+
+    - id: years_of_experience
+      template: demographics
+      variants:
+        - id: years_of_experience_by_salary
+          blockNamespace: user_info
+          tabId: tabs.by_salary
+          template: by_facet
+          variables:  
+            fieldId: years_of_experience
+            facetId: yearly_salary
+            options: {facetSort: {order: ___asc___, property: mean}, facetMinCount: 100}
+
+    - id: company_size
+      template: demographics
+
+    - id: variants_hint
+      template: hint
+
+    - id: higher_education_degree
+      template: demographics
+      variants:
+        - id: higher_education_degree_by_gender
+          blockNamespace: user_info
+          tabId: tabs.by_gender
+          template: by_facet
+          variables:  
+            fieldId: higher_education_degree
+            facetId: gender
+            options: {facetSort: {order: ___asc___, property: mean}, facetMinCount: 100}
+
+    - id: yearly_salary
+      template: demographics
+      variants:
+        - id: yearly_salary_by_country
+          blockNamespace: user_info
+          tabId: tabs.by_country
+          template: by_facet
+          variables:  
+            fieldId: yearly_salary
+            facetId: country
+            options: {facetSort: {order: ___desc___, property: mean}, facetMinCount: 100}
+        - id: yearly_salary_by_degree
+          blockNamespace: user_info
+          tabId: tabs.by_degree
+          template: by_facet
+          variables:  
+            fieldId: yearly_salary
+            facetId: higher_education_degree
+            options: {facetSort: {order: ___desc___, property: mean}, facetMinCount: 100}
+        - id: yearly_salary_by_experience
+          blockNamespace: user_info
+          tabId: tabs.by_experience
+          template: by_facet
+          variables:  
+            fieldId: yearly_salary
+            facetId: years_of_experience
+            options: {facetSort: {order: ___desc___, property: mean}, facetMinCount: 100}
+
+    - id: source
+      template: source
+      blockType: HorizontalBarBlock
+      variables:
+        options: {cutoff: 20}
+      
+    - id: gender
+      template: demographics
+      variants:
+        - id: gender_by_country
+          blockNamespace: user_info
+          tabId: tabs.by_country
+          template: by_facet
+          variables:  
+            fieldId: gender
+            facetId: country
+            options: {facetSort: {order: ___desc___, property: mean}, limit: 11, facetMinCount: 100}
+
+    - id: race_ethnicity
+      template: demographics
+      blockType: HorizontalBarBlock
+      translateData: true
+      variants:
+        - id: race_ethnicity_by_years_of_experience
+          blockNamespace: user_info
+          tabId: tabs.by_experience
+          template: by_facet
+          variables:  
+            fieldId: race_ethnicity
+            facetId: years_of_experience
+            options: {facetSort: {order: ___asc___, property: mean}, limit: 11, facetMinCount: 100}
+
+    - id: disability_status
+      template: demographics
+      blockType: HorizontalBarBlock
+      translateData: true
+      variants:
+        - id: disability_status_others
+          template: demographics
+          blockType: HorizontalBarBlock
+          units: count
+          translateData: true
+
+    - id: user_info_resources
+      items: [fm-homepage]
+      template: recommended_resources
+
+- id: features
+  path: /features
+  blocks:
+    - template: page_introduction
+
+    - id: features_overview
+      template: features_overview
+
+    - id: knowledge_score
+      template: demographics
+      blockNamespace: features
+      blockType: KnowledgeScoreBlock
+
+    - id: features_resources
+      items: [fm-learncss]
+      template: recommended_resources
+
+  children:
+    - id: layout
+      path: /layout
+      blocks:
+        - id: layout
+          template: page_introduction
+
+        - id: subgrid
+          template: feature_experience
+        - id: writing_modes
+          template: feature_experience
+
+        - id: george_francis
+          template: picks
+          variables:
+            url: https://houdini.how/
+
+        - id: logical_properties
+          template: feature_experience
+        - id: aspect_ratio
+          template: feature_experience
+
+        - id: export_hint
+          template: hint
+
+        - id: content_visibility
+          template: feature_experience
+        - id: flexbox_gap
+          template: feature_experience
+          year: 2021
+        - id: at_container
+          template: feature_experience
+          year: 2021
+
+
+        - id: object_view_box
+          template: feature_experience
+          year: 2022
+        - id: viewport_percentage_length_units
+          template: feature_experience
+          year: 2022
+        - id: media_queries_range_contexts
+          template: feature_experience
+          year: 2022
+
+        - id: layout_resources
+          items: [fm-gridsflexbox]
+          template: recommended_resources
+
+    - id: shapes_graphics
+      path: /shapes-and-graphics
+      blocks:
+        - id: shapes_graphics
+          template: page_introduction
+
+        - id: blend_modes
+          template: feature_experience
+        - id: filter_effects
+          template: feature_experience
+        - id: backdrop_filter
+          template: feature_experience
+
+        - id: share_hint
+          template: hint
+
+        - id: intrinsic_sizing
+          template: feature_experience
+          year: 2021
+        - id: conic_gradient
+          template: feature_experience
+          year: 2021
+
+        - items: [fm-svg]
+          template: recommended_resources
+    - id: colors
+      path: /colors
+      blocks:
+        - id: colors
+          template: page_introduction
+  
+        - id: color_function
+          template: feature_experience
+          year: 2021
+        - id: accent_color
+          template: feature_experience
+          year: 2021
+
+        - id: currentcolor
+          template: feature_experience
+          year: 2022
+        - id: color_mix
+          template: feature_experience
+          year: 2022
+        - id: wide_gamut_colors
+          template: feature_experience
+          year: 2022
+        - id: relative_colors
+          template: feature_experience
+          year: 2022
+        - id: gradient_color_spaces
+          template: feature_experience
+          year: 2022
+
+    - id: interactions
+      path: /interactions
+      blocks:
+        - id: interactions
+          template: page_introduction
+
+        - id: scroll_snap
+          template: feature_experience
+        - id: overscroll_behavior
+          template: feature_experience
+
+        - id: ahmad_shadeed
+          template: picks
+          variables:
+            url: https://www.miriamsuzanne.com/2021/05/02/container-queries/
+
+        - id: units_switcher_hint
+          template: hint
+
+        - id: touch_action
+          template: feature_experience
+
+        - id: scroll_behavior
+          template: feature_experience
+        - id: scrollbar_gutter
+          template: feature_experience
+          year: 2021
+
+    - id: typography
+      path: /typography
+      blocks:
+        - id: typography
+          template: page_introduction
+
+        - id: font_display
+          template: feature_experience
+        - id: line_clamp
+          template: feature_experience
+
+        - id: cassidy_williams
+          template: picks
+          variables:
+            url: https://twitter.com/lynnandtonic
+
+        - id: variable_fonts
+          template: feature_experience
+        - id: font_palette
+          template: feature_experience
+
+        - items: [fm-typography]
+          template: recommended_resources
+
+    - id: accessibility
+      path: /accessibility
+      blocks:
+        - id: accessibility
+          template: page_introduction
+
+        - id: prefers_reduced_motion
+          template: feature_experience
+        - id: prefers_color_scheme
+          template: feature_experience
+        - id: josh_comeau
+          template: picks
+          variables:
+            url: https://wattenberger.com/blog/css-percents
+
+        - id: prefers_reduced_data
+          template: feature_experience
+          year: 2021
+
+        - id: stephanie_walter
+          template: picks
+          variables:
+            url: https://thinkdobecreate.com/
+          
+        - id: color_contrast
+          template: feature_experience
+          year: 2021
+        - id: color_scheme
+          template: feature_experience
+          year: 2021
+        
+        - id: prefers_contrast
+          template: feature_experience
+          year: 2022
+        - id: forced_colors
+          template: feature_experience
+          year: 2022
+        - id: focus_visible
+          template: feature_experience
+          year: 2022
+
+        - items: [fm-accessibility]
+          template: recommended_resources
+
+
+    - id: selectors
+      slug: /selectors
+      blocks:
+        - id: selectors
+          template: page_introduction
+
+        - id: marker
+          template: feature_experience
+          year: 2021
+
+        - id: michelle_barker
+          template: picks
+          variables:
+            url: https://web.dev/building-a-color-scheme/
+
+        - id: has_selector
+          template: feature_experience
+          year: 2022
+        - id: where_selector
+          template: feature_experience
+          year: 2022
+
+        - items: [fm-accessibility]
+          template: recommended_resources
+
+    - id: other_features
+      path: /other-features
+      blocks:
+        - id: other_features
+          template: page_introduction
+
+        - id: variables
+          template: feature_experience
+
+        - id: kevin_j_powell
+          template: picks
+          variables:
+            url: https://thinkdobecreate.com/
+
+        - id: feature_support_queries
+          template: feature_experience
+
+        - id: will_change
+          template: feature_experience
+          
+        - id: comparison_functions
+          template: feature_experience
+
+        - id: at_property
+          template: feature_experience
+          year: 2021
+
+        - id: cascade_layers
+          template: feature_experience
+          year: 2022
+
+        - id: shadow_dom_part
+          template: feature_experience
+          year: 2022
+
+        - id: trigonometric_functions
+          template: feature_experience
+          year: 2022
+
+        - id: css_nesting
+          template: feature_experience
+          year: 2022
+
+        - id: image_set
+          template: feature_experience
+          year: 2022
+
+        - id: image_function
+          template: feature_experience
+          year: 2022
+
+        - items: [fm-cssvariables]
+          template: recommended_resources
+
+- id: technologies
+  path: /technologies
+  blocks:
+    - id: technologiesIntroduction
+      template: page_introduction
+
+    - id: scatterplot_overview
+      template: scatterplot_overview
+
+    - id: all_sections_tools_cardinality_by_user
+      template: tools_cardinality_by_user_css
+
+  children:
+    
+    - id: css_frameworks
+      path: /css-frameworks
+      blocks:
+        - template: page_introduction
+
+        - template: tools_experience_ranking
+
+        - id: rankings_modes_hint
+          template: hint
+          
+        - template: tools_section_streams
+
+        - template: tools_experience_marimekko
+
+        - id: manuel_matuzovic
+          template: picks
+          variables:
+            url: https://developer.mozilla.org/en-US/docs/Web/CSS/aspect-ratio
+
+        - template: section_other_tools
+
+        - template: happiness
+          variables:
+            fieldId: css_frameworks
+
+        # - template: toolsUsageVariationsTemplate
+
+        - id: bootstrap
+          template: tool_experience
+        - id: materialize_css
+          template: tool_experience
+        - id: ant_design
+          template: tool_experience
+        - id: semantic_ui
+          template: tool_experience
+        - id: bulma
+          template: tool_experience
+        - id: foundation
+          template: tool_experience
+        - id: ui_kit
+          template: tool_experience
+        - id: tachyons
+          template: tool_experience
+        - id: primer
+          template: tool_experience
+        - id: tailwind_css
+          template: tool_experience
+        - id: pure_css
+          template: tool_experience
+        - id: halfmoon
+          template: tool_experience
+          year: 2021
+
+    - id: css_in_js
+      path: /css-in-js
+      blocks:
+        - template: page_introduction
+
+        - template: tools_experience_ranking
+
+        - template: tools_section_streams
+
+        - template: tools_experience_marimekko
+
+        # - template: toolsUsageVariationsTemplate
+        
+        - id: gift_egwuenu
+          template: picks
+          variables:
+            url: https://www.youtube.com/kepowob/videos
+
+        - template: section_other_tools
+
+        - template: happiness
+          variables:
+            fieldId: css_in_js
+
+        - items: [fm-reactv3]
+          template: recommended_resources
+
+        - id: styled_components
+          template: tool_experience
+        - id: jss
+          template: tool_experience
+        - id: styled_jsx
+          template: tool_experience
+        - id: emotion
+          template: tool_experience
+        - id: css_modules
+          template: tool_experience
+        - id: styled_system
+          template: tool_experience
+        - id: stitches
+          template: tool_experience
+        - id: fela
+          template: tool_experience
+        - id: linaria
+          template: tool_experience
+        - id: astroturf
+          template: tool_experience
+        - id: twin
+          template: tool_experience
+          year: 2021
+        - id: theme_ui
+          template: tool_experience
+          year: 2021
+        - id: vanilla_extract
+          template: tool_experience
+          year: 2021
+        - id: windi_css
+          template: tool_experience
+          year: 2021
+
+- id: tools_others
+  path: /other-tools
+  blocks:
+    - id: tools_others_intro
+      template: page_introduction
+
+    - id: pre_post_processors
+      tabId: tabs.main_answers
+      blockNamespace: tools_others  
+      template: multiple_options
+      variables:
+        fieldId: tools_others
+      variants:
+        - id: pre_post_processors_others
+          blockNamespace: tools_others  
+          template: multiple_options
+          defaultUnits: count
+          variables:
+            fieldId: tools_others
+            options: { cutoff: 5 }
+
+    - id: utilities
+      tabId: tabs.main_answers
+      blockNamespace: tools_others  
+      template: multiple_options
+      variables:
+        fieldId: tools_others
+      variants:
+        - id: utilities_others
+          blockNamespace: tools_others  
+          template: multiple_options
+          defaultUnits: count
+          variables:
+            fieldId: tools_others
+            options: { cutoff: 5 }
+
+    - id: eric_w_bailey
+      template: picks
+      variables:
+        url: https://www.miriamsuzanne.com/
+
+    - id: browsers
+      tabId: tabs.main_answers
+      blockNamespace: tools_others  
+      template: multiple_options
+      variables:
+        fieldId: tools_others
+      variants: 
+        - id: browsers_others
+          blockNamespace: tools_others  
+          template: multiple_options
+          defaultUnits: count
+          variables:
+            fieldId: tools_others
+
+    - id: bracket_hint
+      template: hint
+
+    - id: tool_evaluation_wins
+      tabId: tabs.bracket_wins
+      template: bracket_wins
+      blockNamespace: tool_evaluation
+      variables:
+        fieldId: tools_others__tool_evaluation
+      variants: 
+        - id: tool_evaluation_matchups
+          tabId: tabs.bracket_matchups
+          blockNamespace: tool_evaluation
+          variables:
+            fieldId: tools_others__tool_evaluation
+          template: bracket_matchups
+
+    - id: tools_others_resources
+      items: [fm-storybook]
+      template: recommended_resources
+
+- id: usage
+  intlId: usage_css
+  path: /usage
+  blocks:
+    - template: page_introduction
+
+    - id: form_factors
+      blockNamespace: environments
+      chartNamespace: form_factors
+      translateData: true
+      template: multiple_options
+      variables:
+        fieldId: environments
+
+    - id: sharing_hint
+      template: hint
+
+    - id: what_do_you_use_css_for
+      tabId: tabs.main_answers
+      blockNamespace: environments
+      chartNamespace: what_do_you_use_css_for
+      translateData: true
+      template: multiple_options
+      variables:
+        fieldId: environments
+      variants: 
+        - id: what_do_you_use_css_for_others
+          defaultUnits: count
+          blockNamespace: environments
+          tabId: tabs.other_answers
+          chartNamespace: what_do_you_use_css_for
+          translateData: true
+          template: multiple_options
+          variables:
+            fieldId: environments
+
+    - id: css_js_balance
+      tabId: tabs.main_answers
+      blockNamespace: usage
+      chartNamespace: css_js_balance
+      translateData: true
+      template: single_option
+      variables:
+        fieldId: usage
+
+    - id: interoperability_features_freeform
+      blockNamespace: usage
+      # chartNamespace: css_js_balance
+      translateData: true
+      template: multiple_options
+      variables:
+        fieldId: usage
+
+    - id: missing_features_freeform
+      blockNamespace: usage
+      # chartNamespace: css_js_balance
+      translateData: true
+      template: multiple_options
+      variables:
+        fieldId: usage
+
+    - id: other_pain_points_freeform
+      blockNamespace: usage
+      # chartNamespace: css_js_balance
+      translateData: true
+      template: multiple_options
+      variables:
+        fieldId: usage
+
+    - id: state_of_the_web
+      template: happiness
+      variables:
+        fieldId: state_of_the_web
+
+    - id: state_of_css
+      template: happiness
+      variables:
+        fieldId: state_of_css
+
+- id: resources
+  path: /resources
+  blocks:
+    - template: page_introduction
+
+    - id: first_steps
+      blockNamespace: resources
+      chartNamespace: first_steps
+      tabId: tabs.main_answers
+      template: multiple_options
+      translateData: true
+      variables:
+        fieldId: resources
+      variants:
+        - id: first_steps_others
+          defaultUnits: count
+          blockNamespace: resources
+          chartNamespace: first_steps
+          tabId: tabs.other_answers
+          template: multiple_options
+          translateData: true
+          variables:
+            fieldId: resources
+
+    - id: blogs_news_magazines
+      blockNamespace: resources
+      chartNamespace: blogs_news_magazines
+      tabId: tabs.main_answers
+      template: multiple_options
+      variables:
+        fieldId: resources
+      variants:
+        - id: blogs_news_magazines_others
+          defaultUnits: count
+          blockNamespace: resources
+          chartNamespace: blogs_news_magazines
+          tabId: tabs.other_answers
+          template: multiple_options
+          variables:
+            fieldId: resources
+
+    - id: sites_courses
+      blockNamespace: resources
+      chartNamespace: sites_courses
+      tabId: tabs.main_answers
+      template: multiple_options
+      variables:
+        fieldId: resources
+      variants:
+        - id: sites_courses_others
+          defaultUnits: count
+          blockNamespace: resources
+          chartNamespace: sites_courses
+          tabId: tabs.other_answers
+          template: multiple_options
+          variables:
+            fieldId: resources
+
+    - id: samuel_kraft
+      template: picks
+      variables:
+        url: https://vanilla-extract.style/
+
+    - id: podcasts
+      blockNamespace: resources
+      chartNamespace: podcasts
+      tabId: tabs.main_answers
+      template: multiple_options
+      variables:
+        fieldId: resources
+      variants:
+        - id: podcasts_others
+          defaultUnits: count
+          blockNamespace: resources
+          chartNamespace: podcasts
+          tabId: tabs.other_answers
+          template: multiple_options
+          variables:
+            fieldId: resources
+
+    - id: people_others
+      defaultUnits: count
+      blockNamespace: resources
+      chartNamespace: people
+      template: multiple_options
+      variables:
+        options: { cutoff: 15 }
+        fieldId: resources
+
+    - id: other_surveys
+      blockNamespace: resources
+      chartNamespace: podcasts
+      tabId: tabs.main_answers
+      template: multiple_options
+      variables:
+        fieldId: resources
+      variants:
+        - id: other_surveys_others
+          defaultUnits: count
+          blockNamespace: resources
+          chartNamespace: podcasts
+          tabId: tabs.other_answers
+          template: multiple_options
+          variables:
+            fieldId: resources
+
+- id: awards
+  path: /awards
+  blocks:
+    - template: page_introduction
+
+    - id: awards
+      template: awards
+      variables:
+        entities: '"comparison_functions","prefers_reduced_motion","grid","post_css","vanilla_extract","css_modules","stitches"'
+      awards:
+        - id: feature_adoption_delta_award
+          template: award
+          awards:
+            - id: comparison_functions
+              value: "+15.5%"
+            - id: prefers_reduced_motion
+              value: "+10.9%"
+            - id: grid
+              value: "+9.8%"
+
+        # - id: tool_usage_delta_award
+        #   template: award
+        #   awards:
+        #     - id: tailwind_css
+        #       value: "+17.8%"
+        #     - id: atomic_css
+        #       value: "+10.8%"
+        #     - id: css_modules
+        #       value: "+10.1%"
+
+        - id: tool_satisfaction_award
+          template: award
+          awards:
+            - id: post_css
+              value: "91%"
+            - id: vanilla_extract
+              value: "87%"
+            - id: css_modules
+              value: "86%"
+
+        - id: tool_interest_award
+          template: award
+          awards:
+            - id: css_modules
+              value: "74%"
+            - id: vanilla_extract
+              value: "68%"
+            - id: stitches
+              value: "55%"
+
+        # - id: most_write_ins_award
+        #   template: award
+        #   awards:
+        #     - id: phpstorm
+        #       value: "200"
+        #     - id: udemy
+        #       value: "159"
+        #     - id: frontendmasters
+        #       value: "112"
+
+
+- id: conclusion
+  path: /conclusion
+  blocks:
+
+    - id: conclusion
+      template: conclusion
+      variables:
+        author: kilian_valkhof
+        entities: '"kilian_valkhof"'
+
+    - id: conclusion_newsletter
+      blockType: NewsletterBlock
+      wrapBlock: false
+      disableExport: true
+
+# note: other pages need to be included in the sitemap too so they can get the proper
+# locale passed to them
+
+- id: about
+  path: /about
+  blocks:
+
+    - id: about_contents
+      blockType: AboutBlock
+      wrapBlock: false
+      disableExport: true
+
+- id: how_to_help
+  path: /how_to_help
+  blocks:
+
+    - id: how_to_help_contents
+      blockType: HowToHelpBlock
+      wrapBlock: false
+      disableExport: true
+
+- id: support
+  path: /support
+  is_hidden: true
+  blocks:
+    - id: support
+      template: page_introduction
+
+- id: notfound
+  titleId: notfound.title
+  path: /404
+  is_hidden: true
+  blocks:
+    - id: notfound
+      blockType: NotFoundBlock
+# - id: report
+#   showTitle: false
+#   path: /report
+#   is_hidden: true
+#   showSidebar: false
+#   blocks:
+#     - id: report_contents
+#       isReport: true
+#       blockType: ReportBlock
+
+#     - id: country
+#       isReport: true
+#       template: demographics
+#       blockType: ParticipationByCountryBlock
+#       hidden: true
+#       pageId: user_info
+
+#     - template: features_overview
+#       isReport: true
+#       hidden: true
+
+#     - template: knowledgeScoreTemplate
+#       isReport: true
+#       hidden: true
+#       pageId: features
+
+#     - template: tools_experience_marimekko
+#       isReport: true
+#       hidden: true
+#       variables:
+#         parentId: css_in_js
+
+#     - template: tools_section_streams
+#       isReport: true
+#       hidden: true
+#       variables:
+#         parentId: css_in_js
+
+#     - template: tools_experience_ranking
+#       isReport: true
+#       hidden: true
+#       variables:
+#         parentId: css_frameworks_abridged
+
+#     - id: scatterplot_overview
+#       isReport: true
+#       template: scatterplot_overview
+#       hidden: true
+
+#     - id: grid
+#       isReport: true
+#       template: feature_experience
+#       hidden: true
+
+#     - id: subgrid
+#       isReport: true
+#       template: feature_experience
+#       hidden: true
+
+#     - id: logical_properties
+#       isReport: true
+#       template: feature_experience
+#       hidden: true
+
+#     - id: prefers_reduced_motion
+#       isReport: true
+#       template: feature_experience
+#       hidden: true
+
+#     - id: prefers_color_scheme
+#       isReport: true
+#       template: feature_experience
+#       hidden: true
+
+#     - id: utility_classes_to_be_avoided
+#       isReport: true
+#       hidden: true
+#       template: opinion
+#       pageId: opinions
+
+#     - id: css_is_programming_language
+#       isReport: true
+#       template: opinion
+#       hidden: true
+#       pageId: opinions
+
+#     - id: state_of_css
+#       template: opinionHappinessTemplate
+#       isReport: true
+#       hidden: true
+#       pageId: opinions
+
+#     - id: currently_missing_from_css
+#       template: opinions_others
+#       isReport: true
+#       hidden: true
+#       pageId: opinions
