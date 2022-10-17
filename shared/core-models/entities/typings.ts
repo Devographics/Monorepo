@@ -6,9 +6,11 @@
 export interface Entity {
   id: string
   name: string
+  nameClean?: string
   homepage?: Resource
   category?: string
   description?: string
+  descriptionClean?: string
   tags?: string[]
   patterns?: string[]
   normalizationOnly?: boolean

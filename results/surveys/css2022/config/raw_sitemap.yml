@@ -118,6 +118,14 @@
     - id: yearly_salary
       template: demographics
       variants:
+        - id: yearly_salary_by_gender
+          blockNamespace: user_info
+          tabId: tabs.by_gender
+          template: by_facet
+          variables:  
+            fieldId: yearly_salary
+            facetId: gender
+            options: {facetSort: {order: ___desc___, property: mean}, facetMinCount: 100}
         - id: yearly_salary_by_country
           blockNamespace: user_info
           tabId: tabs.by_country
@@ -486,133 +494,133 @@
         - items: [fm-cssvariables]
           template: recommended_resources
 
-- id: technologies
-  path: /technologies
-  blocks:
-    - id: technologiesIntroduction
-      template: page_introduction
+# - id: technologies
+#   path: /technologies
+#   blocks:
+#     - id: technologiesIntroduction
+#       template: page_introduction
 
-    - id: scatterplot_overview
-      template: scatterplot_overview
+#     - id: scatterplot_overview
+#       template: scatterplot_overview
 
-    # note: to re-enable this we would need another template
-    # - id: all_sections_tools_cardinality_by_user
-    #   template: tools_cardinality_by_user_css
+#     # note: to re-enable this we would need another template
+#     # - id: all_sections_tools_cardinality_by_user
+#     #   template: tools_cardinality_by_user_css
 
-  children:
+#   children:
     
-    - id: css_frameworks
-      path: /css-frameworks
-      blocks:
-        - template: page_introduction
+- id: css_frameworks
+  path: /css-frameworks
+  blocks:
+    - template: page_introduction
 
-        - template: tools_experience_ranking
+    - template: tools_experience_ranking
 
-        - id: rankings_modes_hint
-          template: hint
-          
-        - template: tools_section_streams
+    - id: rankings_modes_hint
+      template: hint
+      
+    - template: tools_section_streams
 
-        - template: tools_experience_marimekko
+    - template: tools_experience_marimekko
 
-        - id: manuel_matuzovic
-          template: picks
-          variables:
-            url: https://developer.mozilla.org/en-US/docs/Web/CSS/aspect-ratio
+    - id: manuel_matuzovic
+      template: picks
+      variables:
+        url: https://developer.mozilla.org/en-US/docs/Web/CSS/aspect-ratio
 
-        - template: section_other_tools
+    - template: section_other_tools
 
-        - template: happiness
-          variables:
-            fieldId: css_frameworks
+    - template: happiness
+      variables:
+        fieldId: css_frameworks
 
-        # - template: toolsUsageVariationsTemplate
+    # - template: toolsUsageVariationsTemplate
 
-        - id: bootstrap
-          template: tool_experience
-        - id: materialize_css
-          template: tool_experience
-        - id: ant_design
-          template: tool_experience
-        - id: semantic_ui
-          template: tool_experience
-        - id: bulma
-          template: tool_experience
-        - id: foundation
-          template: tool_experience
-        - id: ui_kit
-          template: tool_experience
-        - id: tachyons
-          template: tool_experience
-        - id: primer
-          template: tool_experience
-        - id: tailwind_css
-          template: tool_experience
-        - id: pure_css
-          template: tool_experience
-        - id: halfmoon
-          template: tool_experience
-          year: 2021
+    - id: bootstrap
+      template: tool_experience
+    - id: materialize_css
+      template: tool_experience
+    - id: ant_design
+      template: tool_experience
+    - id: semantic_ui
+      template: tool_experience
+    - id: bulma
+      template: tool_experience
+    - id: foundation
+      template: tool_experience
+    - id: ui_kit
+      template: tool_experience
+    - id: tachyons
+      template: tool_experience
+    - id: primer
+      template: tool_experience
+    - id: tailwind_css
+      template: tool_experience
+    - id: pure_css
+      template: tool_experience
+    - id: halfmoon
+      template: tool_experience
+      year: 2021
 
-    - id: css_in_js
-      path: /css-in-js
-      blocks:
-        - template: page_introduction
+- id: css_in_js
+  path: /css-in-js
+  blocks:
+    - template: page_introduction
 
-        - template: tools_experience_ranking
+    - template: tools_experience_ranking
 
-        - template: tools_section_streams
+    - template: tools_section_streams
 
-        - template: tools_experience_marimekko
+    - template: tools_experience_marimekko
 
-        # - template: toolsUsageVariationsTemplate
-        
-        - id: gift_egwuenu
-          template: picks
-          variables:
-            url: https://www.youtube.com/kepowob/videos
+    # - template: toolsUsageVariationsTemplate
+    
+    - id: gift_egwuenu
+      template: picks
+      variables:
+        url: https://www.youtube.com/kepowob/videos
 
-        - template: section_other_tools
+    - template: section_other_tools
 
-        - template: happiness
-          variables:
-            fieldId: css_in_js
+    - template: happiness
+      variables:
+        fieldId: css_in_js
 
-        - items: [fm-reactv3]
-          template: recommended_resources
+    - items: [fm-reactv3]
+      template: recommended_resources
 
-        - id: styled_components
-          template: tool_experience
-        - id: jss
-          template: tool_experience
-        - id: styled_jsx
-          template: tool_experience
-        - id: emotion
-          template: tool_experience
-        - id: css_modules
-          template: tool_experience
-        - id: styled_system
-          template: tool_experience
-        - id: stitches
-          template: tool_experience
-        - id: fela
-          template: tool_experience
-        - id: linaria
-          template: tool_experience
-        - id: astroturf
-          template: tool_experience
-        - id: twin
-          template: tool_experience
-          year: 2021
-        - id: theme_ui
-          template: tool_experience
-          year: 2021
-        - id: vanilla_extract
-          template: tool_experience
-          year: 2021
-        - id: windi_css
-          template: tool_experience
-          year: 2021
+    - id: styled_components
+      template: tool_experience
+    - id: jss
+      template: tool_experience
+    - id: styled_jsx
+      template: tool_experience
+    - id: emotion
+      template: tool_experience
+    - id: css_modules
+      template: tool_experience
+    - id: styled_system
+      template: tool_experience
+    - id: stitches
+      template: tool_experience
+    - id: fela
+      template: tool_experience
+    - id: linaria
+      template: tool_experience
+    - id: astroturf
+      template: tool_experience
+    - id: twin
+      template: tool_experience
+      year: 2021
+    - id: theme_ui
+      template: tool_experience
+      year: 2021
+    - id: vanilla_extract
+      template: tool_experience
+      year: 2021
+    - id: windi_css
+      template: tool_experience
+      year: 2021
 
 - id: tools_others
   path: /other-tools
@@ -702,7 +710,7 @@
       translateData: true
       template: multiple_options
       variables:
-        fieldId: environments
+        fieldId: usage
 
     - id: sharing_hint
       template: hint
@@ -714,7 +722,7 @@
       translateData: true
       template: multiple_options
       variables:
-        fieldId: environments
+        fieldId: usage
       variants: 
         - id: what_do_you_use_css_for_others
           defaultUnits: count
@@ -724,7 +732,7 @@
           translateData: true
           template: multiple_options
           variables:
-            fieldId: environments
+            fieldId: usage
 
     - id: css_js_balance
       tabId: tabs.main_answers
