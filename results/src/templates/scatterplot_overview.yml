@@ -11,10 +11,11 @@ query: >
               ${id}: tools(ids: [${allTools}]) {
                 id
                 entity {
+                    name
+                    nameClean
                     homepage {
                         url
                     }
-                    name
                     github {
                         url
                     }

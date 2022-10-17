@@ -13,6 +13,7 @@ query: >
                 id
                 entity {
                     name
+                    nameClean
                     homepage {
                         url
                     }

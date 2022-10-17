@@ -15,6 +15,7 @@ query: >
                     id
                     entity {
                         name
+                        nameClean
                     }
                     usage {
                         year

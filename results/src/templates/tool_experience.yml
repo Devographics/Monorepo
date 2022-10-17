@@ -15,11 +15,12 @@ query: >
             ${id}_experience: tool(id: ${id}) {
                 id
                 entity {
+                    name
+                    nameClean
                     homepage {
                         url
                     }
                     description
-                    name
                     github {
                         name
                         url

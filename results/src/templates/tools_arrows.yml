@@ -12,6 +12,7 @@ query: >
                 id
                 entity {
                     name
+                    nameClean
                     description
                     id
                 }

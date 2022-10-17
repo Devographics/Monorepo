@@ -33,6 +33,7 @@ query: >
                                     url
                                 }
                                 name
+                                nameClean
                                 github {
                                     url
                                 }
