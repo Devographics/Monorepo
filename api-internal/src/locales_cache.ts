@@ -23,6 +23,7 @@ import {
     allContexts
 } from './locales'
 import path from 'path'
+import sanitizeHtml from 'sanitize-html'
 
 import { appSettings } from './settings'
 
@@ -224,7 +225,10 @@ export const parseMarkdown = (stringFile: StringFile) => {
         // if markdown-parsed version of the string is different from original,
         // or original contains one or more HTML tags, add it as HTML
         if (tHtml !== s.t || containsTagRegex.test(s.t)) {
-            s.tHtml = tHtml
+            s.tHtml = sanitizeHtml(tHtml)
+            s.tClean = sanitizeHtml(tHtml, {
+                allowedTags: []
+            })
         }
         return s
     })
@@ -271,7 +275,11 @@ export const addFallbacks = (
 ////////////////////////////////////////// Metadata ///////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
 
-export const computeMetaData = (locale: LocaleRawData, allStrings: TranslationStringObject[], untranslatedKeys: string[]) => {
+export const computeMetaData = (
+    locale: LocaleRawData,
+    allStrings: TranslationStringObject[],
+    untranslatedKeys: string[]
+) => {
     const isEn = locale.id === 'en-US'
     const totalCount = allStrings.length
     const translatedCount = totalCount - untranslatedKeys.length
@@ -279,13 +287,16 @@ export const computeMetaData = (locale: LocaleRawData, allStrings: TranslationSt
     const dynamicData = {
         totalCount,
         translatedCount,
-        completion,
+        completion
     }
     const yamlData = getLocaleYAML(locale.id)
     return { ...dynamicData, ...yamlData }
 }
 
-export const computeUntranslatedKeys = (locale: LocaleRawData, allStrings: TranslationStringObject[]) => {
+export const computeUntranslatedKeys = (
+    locale: LocaleRawData,
+    allStrings: TranslationStringObject[]
+) => {
     const isEn = locale.id === 'en-US'
     const untranslatedKeys = isEn
         ? []
@@ -392,18 +403,15 @@ export const initLocales = async (context: RequestContext) => {
         const untranslatedKeys = computeUntranslatedKeys(locale, allStrings)
         allLocalesMetadata.push(computeMetaData(locale, allStrings, untranslatedKeys))
         // store untranslated keys
-        setCache(
-            getLocaleUntranslatedKeysCacheKey(locale.id),
-            untranslatedKeys,
-            context
+        setCache(getLocaleUntranslatedKeysCacheKey(locale.id), untranslatedKeys, context)
+        console.log(
+            `-> Done caching untranslated keys ${getLocaleUntranslatedKeysCacheKey(locale.id)}`
         )
-        console.log(`-> Done caching untranslated keys ${getLocaleUntranslatedKeysCacheKey(locale.id)}`)
     }
 
     // store metadata for all locales
     setCache(getAllLocalesMetadataCacheKey(), allLocalesMetadata, context)
     console.log(`-> Done caching list of all locales (${getAllLocalesMetadataCacheKey()})`)
-
 
     const finishedAt = new Date()
     console.log(

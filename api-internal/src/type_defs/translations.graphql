@@ -39,6 +39,7 @@ type TranslationString {
     key: String
     t: String
     tHtml: String
+    tClean: String
     context: String
     isFallback: Boolean
     aliasFor: String

@@ -6,6 +6,7 @@ For example: a library, a podcast, a blog, a framework…
 type Entity {
     id: String
     name: String
+    nameClean: String
     otherName: String
     homepage: Homepage
     category: String
@@ -14,6 +15,7 @@ type Entity {
     mdn: MDN
     caniuse: CanIUse
     description: String
+    descriptionClean: String
     type: String
     tags: [String]
     patterns: [String]
