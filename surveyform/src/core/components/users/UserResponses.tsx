@@ -34,21 +34,21 @@ const UserResponses = ({ user }) => {
   );
 };
 
-const ResponseItem = ({
-  createdAt,
-  pagePath,
-  completion = 0,
-  survey,
-  status,
-}) => {
+const ResponseItem = ({ createdAt, pagePath, completion = 0, survey }) => {
   const Components = useVulcanComponents();
-  const surveyStatus = statusesReverse[survey?.status];
+
+  if (!survey) {
+    return null;
+  }
+  const { status, name, year, resultsUrl } = survey;
+
+  const surveyStatus = statusesReverse[status];
   return (
     <li className="response-item">
       <h4 className="response-item-survey">
         <Link href={pagePath}>
           <a>
-            {survey.name} {survey.year}
+            {name} {year}
           </a>
         </Link>
         <span className={`survey-status survey-status-${surveyStatus}`}>
@@ -60,8 +60,8 @@ const ResponseItem = ({
           id="response.details"
           values={{ startedAt: createdAt.substr(0, 10), completion }}
         />{" "}
-        {survey.resultsUrl && (
-          <a href={survey.resultsUrl}>
+        {resultsUrl && (
+          <a href={resultsUrl}>
             <FormattedMessage id="response.view_results" />
           </a>
         )}
