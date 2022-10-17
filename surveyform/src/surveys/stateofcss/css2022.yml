@@ -714,7 +714,7 @@ outline:
         matchTags: [podcasts, people, sites]
 
       - id: people
-        intlId: people_css
+        intlId: resources.people_css.others
         year: 2021
         template: others
         matchTags: [people, sites, youtube]
