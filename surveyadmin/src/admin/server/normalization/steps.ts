@@ -147,18 +147,33 @@ export const setUuid = async ({ response, normResp }) => {
   }
 };
 
-export const handleLocale = async ({ normResp, response }) => {
-  /*
-  
-    3. Store locale
-    
-    Note: change 'en', 'en-GB', 'en-AU', etc. to 'en-US' for consistency
+const localesTable = [
+  {
+    id: "en-US",
+    aliases: ["en", "en-GB", "en-CA", "en-AU", "en,en", "en,es", "en,de"],
+  },
+  { id: "de-DE", aliases: ["de,en"] },
+  { id: "fr-FR", aliases: ["fr,fr", "fr,en"] },
+  { id: "es-ES", aliases: ["es-41", "es-US", "es,en"] },
+  { id: "nl-NL", aliases: ["nl,en"] },
+  { id: "pl-PL", aliases: ["pl,en"] },
+  { id: "zh-Hant", aliases: ["zh-TW"] },
+  { id: "zh-Hans", aliases: ["zh-CN"] },
+  { id: "ru-RU", aliases: ["ru,en", "ru"] },
+  { id: "ja-JP", aliases: ["ja,en"] },
+];
 
-    */
-  const enLocales = ["en", "en-GB", "en-CA", "en-AU", "en,en"];
-  const locale = enLocales.includes(response.locale)
-    ? "en-US"
-    : response.locale;
+// Note: change 'en', 'en-GB', 'en-AU', etc. to 'en-US' for consistency
+const findCorrectLocale = (locale) => {
+  localesTable.forEach(({ id, aliases }) => {
+    if (aliases.includes(locale)) {
+      return id;
+    }
+  });
+};
+
+export const handleLocale = async ({ normResp, response }) => {
+  const locale = findCorrectLocale(response.locale);
   set(normResp, "user_info.locale", locale);
 };
 
@@ -268,9 +283,9 @@ export const normalizeField = async ({
   ].join("__");
   const responseCommentValue = cleanupValue(response[responseCommentPath]);
   if (responseCommentValue !== null) {
-    console.log(response._id)
-    console.log(commentPath)
-    console.log(responseCommentValue)
+    console.log(response._id);
+    console.log(commentPath);
+    console.log(responseCommentValue);
     set(normResp, commentPath, responseCommentValue);
   }
 
