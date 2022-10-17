@@ -59,6 +59,7 @@ export interface TranslationStringObject {
     key: string
     t: string
     tHtml?: string
+    tClean?: string
     context?: string
     isFallback: Boolean
     aliasFor?: string

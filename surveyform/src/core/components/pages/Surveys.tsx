@@ -7,9 +7,11 @@ import LocaleSelector from "~/core/components/common/LocaleSelector";
 import Translators from "~/core/components/common/Translators";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import Image from "next/image";
+import { getSurveyImageUrl } from "~/surveys/getSurveyImageUrl";
 
 const SurveyItem = ({ survey }) => {
-  const { imageUrl, name, year, resultsUrl } = survey;
+  const { name, year, resultsUrl } = survey;
+  const imageUrl = getSurveyImageUrl(survey);
   //const Components = useVulcanComponents();
   return (
     <div>
@@ -21,8 +23,9 @@ const SurveyItem = ({ survey }) => {
                 <Image
                   width={300}
                   height={200}
-                  src={`/surveys/${imageUrl}`}
+                  src={imageUrl}
                   alt={`${name} ${year}`}
+                  quality={100}
                 />
               </span>
               <span className="survey-name">

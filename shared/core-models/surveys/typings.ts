@@ -70,20 +70,20 @@ export interface ParsedQuestion extends Pick<Field, "template"> {
   input?: any;
   intlId?: string;
   options?:
-    | ((
-        props: any
-      ) => Array<{ value?: string | number; intlId?: string; label?: string }>)
-    | Array<{ value?: string | number; intlId?: string; label?: string }>;
+  | ((
+    props: any
+  ) => Array<{ value?: string | number; intlId?: string; label?: string }>)
+  | Array<{ value?: string | number; intlId?: string; label?: string }>;
   query?: () => any;
   queryWaitsForValue?: boolean;
   sectionSlug?: string;
   showOther?: boolean;
   slug?: string;
   suffix?: string;
+  matchTags?: Array<string>;
 }
 
-// A question can nest fields
-export type SurveyQuestion = Field | Array<Field>;
+export type SurveyQuestion = Field;
 export interface SurveySection {
   intlId?: string;
   id?: string;
@@ -96,7 +96,7 @@ export interface EOConfig {
   listId: string;
 }
 
-export interface SurveyType {
+export interface SurveyDocument {
   createdAt?: Date;
   updatedAt?: Date;
   /**
@@ -113,7 +113,28 @@ export interface SurveyType {
   status?: SurveyStatus;
   outline: Array<SurveySection>;
   context?: any;
-  imageUrl?: string;
+  /**
+   * Home page URL. May be big!
+   * 
+   * /!\ in older configs, was relative to "/surveys"!
+   * /!\ In newer configs, is absolute!
+   * 
+   * If you need to read this value,
+   * use the "getSurveyImageUrl" helper 
+   * that handles the legacy behaviour properly
+   */
+  imageUrl: string;
+  faviconUrl?: string;
+  /**
+   * Absolute URL to a social image
+   * 
+   * Should be smaller to consume less bandwidth
+   * 
+   * As a best practice, should be hosted outside of the app,
+   * as it consumes a lot of bandwith
+   */
+  socialImageUrl?: string;
+
   credits?: any;
   domain?: string;
   tags?: string[];
@@ -143,10 +164,7 @@ export type SerializedSurveyDocument = Omit<
 /**
  * Survey as stored in the database
  */
-export interface SurveyDocument extends SurveyType {
-  createdAt?: any;
-  updatedAt?: any;
-}
+export type SurveyType = SurveyDocument
 
 export type SurveyStatus = 1 | 2 | 3 | 4;
 export type SurveyStatusLabel = "preview" | "open" | "closed" | "hidden";

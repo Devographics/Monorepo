@@ -31,11 +31,10 @@ const ChartLabel = ({
                     pointerEvents: 'none',
                     fontSize,
                     fontWeight: 600,
-                    opacity: 1,
+                    opacity: 1
                 }}
-            >
-                {label}
-            </text>
+                dangerouslySetInnerHTML={{ __html: label }}
+            />
             <text
                 textAnchor="middle"
                 dominantBaseline="central"
@@ -43,7 +42,7 @@ const ChartLabel = ({
                 style={{
                     pointerEvents: 'none',
                     fontSize,
-                    fontWeight: 600,
+                    fontWeight: 600
                 }}
             >
                 {label}
@@ -56,7 +55,7 @@ ChartLabel.propTypes = {
     label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     fontSize: PropTypes.number,
     outlineColor: PropTypes.string,
-    textColor: PropTypes.string,
+    textColor: PropTypes.string
 }
 
 export default memo(ChartLabel)

@@ -16,8 +16,18 @@ import yamlKeys from './data/keys.yml'
 /**
  * Return either e.g. other_tools.browsers.choices or other_tools.browsers.others.normalized
  */
-export const getOtherKey = (id: string) =>
-    id.includes('_others') ? `${id.replace('_others', '')}.others.normalized` : `${id}.choices`
+// TODO: find less brittle/more systematized way to do this
+export const getOtherKey = (id: string) => {
+    let key
+    if (id.includes('_others')) {
+        key = `${id.replace('_others', '')}.others.normalized`
+    } else if (id.includes('_freeform')) {
+        key = `${id}.normalized`
+    } else {
+        key = `${id}.choices`
+    }
+    return key
+}
 
 export const getGraphQLEnumValues = (name: string): string[] => {
     const enumDef = typeDefs.definitions.find(def => {

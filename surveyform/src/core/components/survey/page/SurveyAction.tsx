@@ -122,6 +122,8 @@ export const useCurrentUserWithResponses = () => {
             domain
             status
             imageUrl
+            faviconUrl
+            socialImageUrl
             resultsUrl
           }
         }

@@ -500,6 +500,7 @@ outline:
   ######################################################
 
   - id: resources
+    intlId: resources_graphql
     questions:
       - id: first_steps
         intlId: resources.first_steps_graphql

@@ -7,7 +7,7 @@ export const replaceOthers = s => s?.replace('_others', '.others')
 
 export const getBlockKey = (block) => {
     const namespace = block.blockNamespace ?? 'blocks'
-    const blockId = replaceOthers(block?.id)
+    const blockId = replaceOthers(block?.intlId || block?.id)
     return `${namespace}.${blockId}`
 }
 

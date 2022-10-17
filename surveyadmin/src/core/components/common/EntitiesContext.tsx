@@ -23,10 +23,6 @@ const entitiesQuery = gql`
       tags
       mdn
       twitterName
-      twitter {
-        userName
-        avatarUrl
-      }
       company {
         name
         homepage {

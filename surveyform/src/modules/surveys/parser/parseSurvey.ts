@@ -60,7 +60,7 @@ to every question
 */
 export const parseSurvey = (survey: SurveyDocument) => {
   let i = 0;
-  const parsedSurvey = { ...survey, createdAt: new Date(survey.createdAt) };
+  const parsedSurvey = { ...survey, createdAt: survey.createdAt ? new Date(survey.createdAt) : undefined };
   parsedSurvey.outline = survey.outline.map((section) => {
     const questions = section.questions.map((question) => {
       i++;

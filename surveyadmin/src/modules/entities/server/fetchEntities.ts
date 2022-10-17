@@ -21,17 +21,7 @@ const entitiesQuery = print(gql`
       description
       patterns
       apiOnly
-      mdn {
-        locale
-        url
-        title
-        summary
-      }
       twitterName
-      twitter {
-        userName
-        avatarUrl
-      }
       companyName
       company {
         name

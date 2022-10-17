@@ -17,6 +17,7 @@ query: >
                     role
                     entity {
                         name
+                        nameClean
                         twitter {
                             userName
                             avatarUrl

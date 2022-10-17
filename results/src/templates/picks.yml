@@ -12,6 +12,7 @@ query: >
         url
       }
       name
+      nameClean
       twitterName
       twitter {
         userName

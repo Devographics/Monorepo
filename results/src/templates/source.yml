@@ -32,6 +32,7 @@ query: >
                                 percentage_survey
                                 entity {
                                     name
+                                    nameClean
                                     homepage {
                                         url
                                     }

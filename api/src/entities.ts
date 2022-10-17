@@ -56,7 +56,7 @@ export const highlightEntitiesExampleCode = async (entities: Entity[]) => {
 export const loadFromGitHub = async () => {
     const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
     const entities: Entity[] = []
-    console.log(`-> loading entities repo`)
+    console.log(`-> loading entities from GitHub`)
 
     const options = {
         owner: 'StateOfJS',

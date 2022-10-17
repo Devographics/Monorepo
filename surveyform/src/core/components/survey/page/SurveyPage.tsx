@@ -18,6 +18,7 @@ import LoginDialog from "~/account/LoginDialog";
 import { useUser } from "~/account/user/hooks";
 import Image from "next/image";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
+import { getSurveyImageUrl } from "~/surveys/getSurveyImageUrl";
 
 interface SurveyPageWrapperProps {
   slug?: string;
@@ -38,7 +39,9 @@ const SurveyPageWrapper = (props: SurveyPageWrapperProps) => {
   const survey = getSurvey(slug, year);
   // TODO: send a better message
   if (!survey) throw new Error("Survey not found");
-  const { imageUrl, name, slug: surveySlug, resultsUrl } = survey;
+  const { name, slug: surveySlug, resultsUrl } = survey;
+
+  const imageUrl = getSurveyImageUrl(survey);
 
   // console.log(props)
   return (
@@ -58,8 +61,9 @@ const SurveyPageWrapper = (props: SurveyPageWrapperProps) => {
         <Image
           width={600}
           height={400}
-          src={`/surveys/${imageUrl}`}
+          src={imageUrl}
           alt={`${name} ${year}`}
+          quality={100}
         />
       </h1>
       <div className="survey-page-block">

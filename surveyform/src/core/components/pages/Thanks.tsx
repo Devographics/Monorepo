@@ -12,6 +12,7 @@ import surveys from "~/surveys";
 import Image from "next/image";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import { publicConfig } from "~/config/public";
+import { getSurveyImageUrl } from "~/surveys/getSurveyImageUrl";
 
 const Thanks = () => {
   const { responseId, slug, year } = useSurveyResponseParams();
@@ -52,7 +53,9 @@ const Thanks = () => {
   if (!survey) {
     return <div>Could not find survey.</div>;
   }
-  const { imageUrl, name } = survey;
+  const { name } = survey;
+
+  const imageUrl = getSurveyImageUrl(survey);
 
   return (
     <div className="contents-narrow thanks">
@@ -60,8 +63,9 @@ const Thanks = () => {
         <Image
           width={300}
           height={200}
-          src={`/surveys/${imageUrl}`}
+          src={imageUrl}
           alt={`${name} ${year}`}
+          quality={100}
         />
       </h1>
       <Score response={response} survey={survey} />

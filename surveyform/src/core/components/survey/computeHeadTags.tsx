@@ -10,8 +10,16 @@ import React, { PureComponent } from "react";
 export interface HeadTagsProps {
   title: string;
   description?: string;
-  /** Absolute or relative image for this page, used for Open Graph, Twitter */
-  imageUrl: string;
+  /**
+   * Must be an absolute URL because it is called outside of the app
+   *
+   * Matches "socialImageUrl" in surveys config
+   * /!\ double check that this url is absolute when passing the param!
+   */
+  imageAbsoluteUrl?: string;
+  /**
+   * Relative or absolute URL of the favicon
+   */
   faviconUrl?: string;
   /** Website base URL, https://your-survey.com  (needed to compute absolute paths)*/
   siteUrl: string;
@@ -49,24 +57,10 @@ export const computeHeadTags = ({
   description,
   siteUrl,
   faviconUrl,
-  imageUrl,
+  imageAbsoluteUrl,
   url = siteUrl,
 }: HeadTagsProps) => {
   // add site url base if the image is stored locally
-  let imageAbsoluteUrl;
-  if (
-    !!imageUrl &&
-    // check if image already has a protocole (absolute URL)
-    // if not build based on siteUrl
-    imageUrl.indexOf("//") === -1
-  ) {
-    // remove starting slash from image path if needed => not needed anymore,
-    // appUrl should not have an ending "/"
-    //if (imageUrl.charAt(0) === "/") {
-    //  imageUrl = imageUrl.slice(1);
-    //}
-    imageAbsoluteUrl = siteUrl + imageUrl;
-  }
 
   return (
     <>

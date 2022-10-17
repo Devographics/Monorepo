@@ -9,10 +9,10 @@ const PageIntroductionBlock = () => {
     const page = usePageContext()
     const { getString } = useI18n()
 
-    const t = getString(`sections.${page.id}.description`)
+    const t = getString(`sections.${page.intlId || page.id}.description`)
     return t.missing ? null : (
         <Introduction className="Page__Introduction">
-            <T k={`sections.${page.id}.description`} md={true} />
+            <T k={`sections.${page.intlId || page.id}.description`} md={true} />
         </Introduction>
     )
 }
