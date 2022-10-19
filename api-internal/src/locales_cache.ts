@@ -24,6 +24,7 @@ import {
 } from './locales'
 import path from 'path'
 import sanitizeHtml from 'sanitize-html'
+import { decode } from 'html-entities'
 
 import { appSettings } from './settings'
 
@@ -226,9 +227,11 @@ export const parseMarkdown = (stringFile: StringFile) => {
         // or original contains one or more HTML tags, add it as HTML
         if (tHtml !== s.t || containsTagRegex.test(s.t)) {
             s.tHtml = sanitizeHtml(tHtml)
-            s.tClean = sanitizeHtml(tHtml, {
-                allowedTags: []
-            })
+            s.tClean = decode(
+                sanitizeHtml(tHtml, {
+                    allowedTags: []
+                })
+            )
         }
         return s
     })

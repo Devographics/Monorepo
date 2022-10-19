@@ -139,6 +139,7 @@ importers:
       graphql: ^15.6.1
       graphql-tag: ^2.12.6
       highlight.js: ^11.6.0
+      html-entities: ^2.3.3
       js-yaml: ^4.1.0
       js-yaml-loader: ^1.2.2
       lodash: ^4.17.21
@@ -171,6 +172,7 @@ importers:
       express: 4.18.1
       graphql: 15.8.0
       highlight.js: 11.6.0
+      html-entities: 2.3.3
       js-yaml: 4.1.0
       lodash: 4.17.21
       markdown-it: 12.3.2
