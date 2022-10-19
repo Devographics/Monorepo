@@ -17,6 +17,7 @@ query: >
                 entity {
                     name
                     nameClean
+                    nameHtml
                     homepage {
                         url
                     }

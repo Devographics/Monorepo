@@ -29,6 +29,7 @@ interface StringTranslatorResult {
     key?: string
     t?: string
     tHtml?: string
+    tClean?: string
     fallback?: string
 }
 

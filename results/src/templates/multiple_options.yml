@@ -29,11 +29,12 @@ query: >
                             percentage_question
                             percentage_survey
                             entity {
+                                name
+                                nameClean
+                                nameHtml
                                 homepage {
                                     url
                                 }
-                                name
-                                nameClean
                                 github {
                                     url
                                 }

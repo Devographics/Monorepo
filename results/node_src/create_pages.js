@@ -53,6 +53,7 @@ query {
                 key
                 t
                 tHtml
+                tClean
                 context
                 isFallback
             }

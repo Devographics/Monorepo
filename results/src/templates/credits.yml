@@ -18,6 +18,7 @@ query: >
                     entity {
                         name
                         nameClean
+                        nameHtml
                         twitter {
                             userName
                             avatarUrl

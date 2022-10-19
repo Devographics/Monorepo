@@ -16,6 +16,7 @@ query: >
                     entity {
                         name
                         nameClean
+                        nameHtml
                     }
                     usage {
                         year
