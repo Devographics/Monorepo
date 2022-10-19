@@ -2,9 +2,8 @@ import { Db } from 'mongodb'
 import { inspect } from 'util'
 import config from '../config'
 import { Entity } from "@devographics/core-models";
-import { YearCompletion, FacetCompletion, SurveyConfig, RequestContext, ResolverDynamicConfig } from '../types'
+import { YearCompletion, Facet, FacetCompletion, SurveyConfig, RequestContext, ResolverDynamicConfig } from '../types'
 import { Filters, generateFiltersQuery } from '../filters'
-import { Facet } from '../facets'
 import { ratioToPercentage } from './common'
 import { getEntity } from '../entities'
 import { getParticipationByYearMap } from './demographics'
@@ -31,7 +30,7 @@ export interface TermAggregationOptions {
     year?: number
     keys?: string[]
     keysFunction?: (arg0: ResolverDynamicConfig) => Promise<string[]>
-    facet?: Facet
+    facet?: Facet | string
     // bucket
     cutoff?: number
     limit?: number

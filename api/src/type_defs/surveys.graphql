@@ -26,6 +26,7 @@
 #import "./bracket.graphql"
 #import "./usage.graphql"
 #import "./comments.graphql"
+#import "./explorer.graphql"
 
 enum SurveyType {
     state_of_js
@@ -240,4 +241,8 @@ type Survey {
     """
     bracket_wins(id: BracketID!, filters: Filters, options: Options): BracketWins
     bracket_matchups(id: BracketID!, filters: Filters, options: Options): BracketMatchups
+    """
+    Explorer
+    """
+    explorer(facet1: String, facet2: String): ExplorerExperience
 }

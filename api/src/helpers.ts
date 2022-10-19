@@ -1,14 +1,13 @@
 import { EnumTypeDefinitionNode } from 'graphql'
 import typeDefs from './type_defs/schema.graphql'
 // import allEntities from './data/entities/index'
-import { RequestContext, ResolverDynamicConfig, SurveyConfig } from './types'
+import { RequestContext, ResolverDynamicConfig, SurveyConfig, Facet } from './types'
 import {
     computeTermAggregationAllYearsWithCache,
     computeTermAggregationSingleYearWithCache
 } from './compute'
 import { Filters } from './filters'
 import { Options } from './options'
-import { Facet } from './facets'
 import { loadOrGetEntities } from './entities'
 import { TermAggregationOptions, AggregationFunction } from './compute/generic'
 import yamlKeys from './data/keys.yml'
@@ -41,39 +40,41 @@ export const getGraphQLEnumValues = (name: string): string[] => {
     return enumDef.values!.map(v => v.name.value)
 }
 
+interface DemographicsResolverConfig extends ResolverDynamicConfig {
+    fieldName: string
+}
 /**
  * Get resolvers when the db key is the same as the field id
  *
  * @param id the field's GraphQL id
  * @param options options
  */
-export const getStaticResolvers = (
-    id: string,
+export const getDemographicsResolverFunctions = (
     options: TermAggregationOptions = {},
     aggregationFunction?: AggregationFunction
 ) => ({
     keys: async () => options.keys || [],
     all_years: async (
-        { survey, filters, options: queryOptions, facet }: ResolverDynamicConfig,
+        { fieldName, survey, filters, options: queryOptions, facet }: DemographicsResolverConfig,
         args: any,
         context: RequestContext
     ) =>
         computeTermAggregationAllYearsWithCache({
             context,
             survey,
-            key: id,
+            key: getDemographicsFieldPath(fieldName),
             options: { ...options, ...queryOptions, filters, facet },
             aggregationFunction
         }),
     year: async (
-        { survey, filters, options: queryOptions, facet }: ResolverDynamicConfig,
+        { fieldName, survey, filters, options: queryOptions, facet }: DemographicsResolverConfig,
         { year }: { year: number },
         context: RequestContext
     ) =>
         computeTermAggregationSingleYearWithCache({
             context,
             survey,
-            key: id,
+            key: getDemographicsFieldPath(fieldName),
             options: { ...options, ...queryOptions, filters, year, facet },
             aggregationFunction
         })
@@ -164,20 +165,63 @@ const demographicsFields = [
 export const getDemographicsResolvers = (survey: SurveyConfig) => {
     const resolvers: any = {}
     demographicsFields.forEach(field => {
-        resolvers[field] = ({
-            filters,
-            options,
-            facet
-        }: {
-            filters: Filters
-            options: Options
-            facet: Facet
-        }) => ({
-            survey,
-            filters,
-            options,
-            facet
-        })
+        resolvers[field] = (
+            args: { filters: Filters; options: Options; facet: Facet },
+            context: RequestContext,
+            info: any
+        ) => {
+            console.log('// getDemographicsResolvers')
+            // console.log(args)
+            // console.log(context)
+            // console.log(info)
+            const { fieldName } = info
+            console.log(fieldName)
+            const { filters, options, facet } = args
+            return {
+                fieldName,
+                survey,
+                filters,
+                options,
+                facet
+            }
+        }
     })
     return resolvers
 }
+
+export const getFacetPath = (facet: string) => {
+    // if facet contains "/" assume it's of the format "section/field"
+    // else default to treating it as a demographics facet
+    const [section, fieldName] = facet?.includes('/') ? facet.split('/') : ['demographics', facet]
+    switch (section) {
+        case 'demographics':
+            return getDemographicsFieldPath(fieldName)
+        case 'features':
+        case 'tools':
+            return `${section}.${fieldName}.experience`
+        case 'resources':
+        case 'tools_others':
+        default:
+            return `${section}.${fieldName}.choices`
+    }
+}
+
+export const getDemographicsFacetPath = (facet: string) => {
+    switch (facet) {
+        case 'source':
+            return 'source.normalized'
+        case 'country':
+            return 'country_alpha3'
+        case 'completion_stats':
+            return 'completion'
+        case 'locale':
+            return 'locale'
+        case 'knowledge_score':
+            return 'knowledge_score'
+        default:
+            return `${facet}.choices`
+    }
+}
+
+export const getDemographicsFieldPath = (fieldName: string) =>
+    `user_info.${getDemographicsFacetPath(fieldName)}`

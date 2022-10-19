@@ -16,6 +16,7 @@ import totals from './totals'
 import tools from './tools'
 import otherTools from './tools_others'
 import brackets from './brackets'
+import explorer from './explorer'
 
 export default {
     ...surveys,
@@ -36,4 +37,5 @@ export default {
     ...happiness,
     ...query,
     ...brackets,
+    ...explorer,
 }

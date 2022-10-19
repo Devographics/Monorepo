@@ -1,0 +1,36 @@
+
+type ExplorerBucket {
+    id: String
+    count: Int
+    # countDelta: Int
+    # percentageDelta: Float
+    percentage_question: Float
+    percentage_survey: Float
+    percentage_facet: Float
+}
+
+#  only support two nesting levels for now (facet and bucket)
+
+# type ExplorerFacet2 {
+#     type: Facet
+#     id: String
+#     buckets: [ExplorerBucket]
+#     completion: FacetCompletion
+# }
+
+type ExplorerFacet {
+    type: String
+    id: String
+    buckets: [ExplorerBucket]
+    completion: FacetCompletion
+}
+
+type YearExplorerExperience {
+    year: Int
+    facets: [ExplorerFacet]
+}
+
+type ExplorerExperience {
+    all_years: [YearExplorerExperience]
+    year(year: Int!): YearExplorerExperience
+}
