@@ -155,7 +155,8 @@ Try loading data from disk or GitHub, or else run queries for *each block* in a 
 */
 exports.runPageQueries = async ({ page, graphql, config }) => {
     const startedAt = new Date()
-    console.log(`// Running GraphQL queries for page ${page.id}…`)
+    const useCache = !!process.env.USE_CACHE
+    console.log(`// Running GraphQL queries for page ${page.id}… (useCache=${useCache})`)
 
     const paths = exports.getConfigLocations(config)
 
@@ -181,7 +182,7 @@ exports.runPageQueries = async ({ page, graphql, config }) => {
                     dataFilePath,
                     baseUrl
                 })
-                if (existingData) {
+                if (existingData && useCache) {
                     data = existingData
                 } else {
                     logToFile(queryFileName, v.query.replace('dataAPI', 'query'), {
