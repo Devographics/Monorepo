@@ -102,3 +102,14 @@ code_generation_type:
   - code_first
   - schema_first
   - database_first
+
+css_js_balance: 
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8

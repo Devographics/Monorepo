@@ -10,6 +10,7 @@ import path from 'path'
 import marked from 'marked'
 import hljs from 'highlight.js/lib/common'
 import { appSettings } from './settings'
+import sanitizeHtml from 'sanitize-html'
 
 let entities: Entity[] = []
 
@@ -21,9 +22,10 @@ export const loadOrGetEntities = async () => {
     return await highlightEntitiesExampleCode(parseEntitiesMarkdown(entities))
 }
 
-type EntityFields = keyof Entity;
+type MarkdownFields = "name" | "description"
 
-const markdownFields = ['name', 'description'] as EntityFields[] 
+const markdownFields: MarkdownFields[] = ['name', 'description']
+
 export const parseEntitiesMarkdown = (entities: Entity[]) => {
     for (const entity of entities) {
         for (const fieldName of markdownFields) {
@@ -33,7 +35,10 @@ export const parseEntitiesMarkdown = (entities: Entity[]) => {
                 const containsTagRegex = new RegExp(/(<([^>]+)>)/i)
 
                 if (field !== fieldHtml || containsTagRegex.test(field)) {
-                    entity[fieldName] = fieldHtml
+                    entity[`${fieldName}Html`] = sanitizeHtml(fieldHtml)
+                    entity[`${fieldName}Clean`] = sanitizeHtml(fieldHtml, {
+                        allowedTags: []
+                    })
                 }
             }
         }

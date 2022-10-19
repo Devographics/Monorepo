@@ -22,8 +22,6 @@ export const loadOrGetEntities = async () => {
     return await highlightEntitiesExampleCode(parseEntitiesMarkdown(entities))
 }
 
-type EntityFields = keyof Entity
-
 type MarkdownFields = "name" | "description"
 
 const markdownFields: MarkdownFields[] = ['name', 'description']
@@ -37,7 +35,7 @@ export const parseEntitiesMarkdown = (entities: Entity[]) => {
                 const containsTagRegex = new RegExp(/(<([^>]+)>)/i)
 
                 if (field !== fieldHtml || containsTagRegex.test(field)) {
-                    entity[fieldName] = sanitizeHtml(fieldHtml)
+                    entity[`${fieldName}Html`] = sanitizeHtml(fieldHtml)
                     entity[`${fieldName}Clean`] = sanitizeHtml(fieldHtml, {
                         allowedTags: []
                     })

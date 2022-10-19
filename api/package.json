@@ -22,6 +22,8 @@
         "node-cache": "^5.1.2",
         "node-fetch": "^2.6.5",
         "redis": "^4.2.0",
+        "sanitize-html": "^2.6.1",
+        "strip-markdown": "^5.0.0",
         "twitter-api-v2": "^1.5.2",
         "write-file-webpack-plugin": "^4.5.1"
     },
