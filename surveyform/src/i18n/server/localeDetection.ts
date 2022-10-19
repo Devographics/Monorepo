@@ -63,7 +63,10 @@ export const getLocaleFromAcceptLanguage = (req: IncomingMessage) => {
   const acceptLanguage = req?.headers?.["accept-language"];
   if (!acceptLanguage) return undefined;
   // Accept-Language: fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7
-  const locale = acceptLanguage.slice(0, 5);
+  // Or fr,en_US;q=0.8
+  // This header has a weird syntax if we want a full parser
+  // here we keep only the first value
+  const locale = acceptLanguage.split(",")[0]; //.slice(0, 5);
   return locale;
 };
 
@@ -74,6 +77,7 @@ export const getLocaleFromCookie = (req: IncomingMessage) => {
     return undefined;
   }
   const cookieHeader = req.headers.cookie;
+  // foo=1;bar=hello
   const cookies = cookieHeader.split(";").map((c) => c.trim().split("="));
   const localeCookie = cookies.find(([cookieName, cookieValue]) => {
     return cookieName === LOCALE_COOKIE_NAME;
@@ -87,11 +91,18 @@ export const getLocaleFromCookie = (req: IncomingMessage) => {
 };
 /**
  * 1. Get from cookie
- * 2. get from Accept-Language
+ * 2. Get from Accept-Language
+ *
+ * Locale can have region or not: fr or fr-FR etc.
  *
  * TODO: we could also get the locale from the database
  * via the "user.locale" preference field
  * Not yet setup, this means an asynchronous call
+ *
+ * Next doesn't provide the locale in API requests
+ * So we need custom logic
+ * @see https://github.com/vercel/next.js/discussions/21798
+ *
  * @param req
  * @returns
  */

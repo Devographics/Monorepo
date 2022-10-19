@@ -57,6 +57,7 @@ export const contextBase = {
 interface LocaleApiContext {
   locale?: string;
 }
+
 const localeContextFromReq = async (req: Request) => {
   return { locale: getLocaleFromReq(req) };
 };
