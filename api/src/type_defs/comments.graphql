@@ -1,0 +1,25 @@
+
+"""
+Comment
+"""
+type Comment {
+    comment: String
+    # sentimentScore: Float # not implemented yet
+}
+
+"""
+Comments for a specific year
+"""
+type YearComments {
+    year: Int
+    count: Int
+    comments_raw: [Comment]
+}
+
+"""
+Comments
+"""
+type Comments {
+    all_years: [YearComments]
+    year(year: Int!): YearComments
+}

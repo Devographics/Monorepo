@@ -275,6 +275,9 @@ type YearFeature {
     facets: [FeatureFacet]
 }
 
+"""
+Feature data
+"""
 type FeatureExperience {
     all_years: [YearFeature]
     year(year: Int!): YearFeature
@@ -288,4 +291,5 @@ type Feature {
     id: FeatureID!
     entity: Entity
     experience(filters: Filters): FeatureExperience
+    comments: Comments
 }

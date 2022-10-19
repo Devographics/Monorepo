@@ -72,6 +72,11 @@ export default {
                 survey,
                 id,
                 filters
+            }),
+            comments: ({ filters }: { filters?: Filters }) => ({
+                survey,
+                id,
+                filters
             })
         }),
         features: (survey: SurveyConfig, { ids = featureIds }: { ids: string[] }) =>
@@ -133,7 +138,12 @@ export default {
                     func: computeToolExperienceGraph,
                     context,
                     funcOptions: { survey, id, filters }
-                })
+                }),
+            comments: ({ filters }: { filters?: Filters }) => ({
+                survey,
+                id,
+                filters
+            })
         }),
         tools: async (survey: SurveyConfig, { ids = toolIds }: { ids?: string[] }) =>
             ids.map(async id => ({

@@ -3,7 +3,8 @@ import keys from '../data/keys.yml'
 import { RequestContext, ResolverDynamicConfig } from '../types'
 import {
     computeTermAggregationAllYearsWithCache,
-    computeTermAggregationSingleYearWithCache
+    computeTermAggregationSingleYearWithCache,
+    getRawCommentsWithCache
 } from '../compute'
 
 export default {
@@ -40,6 +41,15 @@ export default {
                     facet
                 }
             })
+    },
+    Comments: {
+        all_years: async ({ survey, id }: ResolverDynamicConfig, {}, context: RequestContext) =>
+            await getRawCommentsWithCache({ survey, id, context, key: `features.${id}.comment` }),
+        year: async (
+            { survey, id }: ResolverDynamicConfig,
+            { year }: { year: number },
+            context: RequestContext
+        ) => await getRawCommentsWithCache({ survey, id, year, context, key: `features.${id}.comment` })
     },
     Feature: {
         entity: async ({ id }: { id: string }) => {

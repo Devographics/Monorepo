@@ -25,6 +25,7 @@
 #import "./happiness.graphql"
 #import "./bracket.graphql"
 #import "./usage.graphql"
+#import "./comments.graphql"
 
 enum SurveyType {
     state_of_js

@@ -5,7 +5,8 @@ import keys from '../data/keys.yml'
 import { RequestContext, ResolverDynamicConfig, SurveyConfig } from '../types'
 import {
     computeTermAggregationAllYearsWithCache,
-    computeTermAggregationSingleYearWithCache
+    computeTermAggregationSingleYearWithCache,
+    getRawCommentsWithCache
 } from '../compute'
 
 export default {
@@ -102,5 +103,14 @@ export default {
                     keys: keys.tool
                 }
             })
+    },
+    Comments: {
+        all_years: async ({ survey, id }: ResolverDynamicConfig, {}, context: RequestContext) =>
+            await getRawCommentsWithCache({ survey, id, context, key: `tools.${id}.comment` }),
+        year: async (
+            { survey, id }: ResolverDynamicConfig,
+            { year }: { year: number },
+            context: RequestContext
+        ) => await getRawCommentsWithCache({ survey, id, year, context, key: `tools.${id}.comment` })
     }
 }
