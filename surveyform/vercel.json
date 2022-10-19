@@ -2,7 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "ignoreCommand": "git diff HEAD^ HEAD --quiet ../shared ../surveyform/",
   "functions": {
-    "src/api/**/*": {
+    "src/pages/api/**/*": {
       "memory": 768
     }
   }
