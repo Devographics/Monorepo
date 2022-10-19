@@ -26,6 +26,7 @@ importers:
       '@types/natural': ^5.1.1
       '@types/node': ^16.7.0
       '@types/node-fetch': ^2.5.12
+      '@types/sanitize-html': ^2.6.2
       '@types/webpack-env': ^1.16.3
       apollo-server-express: ^3.10.1
       apollo-server-plugin-response-cache: ^3.7.0
@@ -94,6 +95,7 @@ importers:
       '@types/natural': 5.1.1
       '@types/node': 16.11.57
       '@types/node-fetch': 2.6.2
+      '@types/sanitize-html': 2.6.2
       '@types/webpack-env': 1.18.0
       clean-webpack-plugin: 4.0.0_webpack@5.74.0
       copy-webpack-plugin: 9.1.0_webpack@5.74.0

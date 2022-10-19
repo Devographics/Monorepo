@@ -35,6 +35,7 @@
         "@types/natural": "^5.1.1",
         "@types/node": "^16.7.0",
         "@types/node-fetch": "^2.5.12",
+        "@types/sanitize-html": "^2.6.2",
         "@types/webpack-env": "^1.16.3",
         "clean-webpack-plugin": "4.0.0",
         "copy-webpack-plugin": "^9.0.1",
