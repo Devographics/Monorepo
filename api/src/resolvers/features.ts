@@ -42,7 +42,7 @@ export default {
                 }
             })
     },
-    Comments: {
+    FeatureComments: {
         all_years: async ({ survey, id }: ResolverDynamicConfig, {}, context: RequestContext) =>
             await getRawCommentsWithCache({ survey, id, context, key: `features.${id}.comment` }),
         year: async (

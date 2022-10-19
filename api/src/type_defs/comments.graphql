@@ -19,7 +19,12 @@ type YearComments {
 """
 Comments
 """
-type Comments {
+type FeatureComments {
+    all_years: [YearComments]
+    year(year: Int!): YearComments
+}
+
+type ToolComments {
     all_years: [YearComments]
     year(year: Int!): YearComments
 }

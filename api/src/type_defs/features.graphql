@@ -291,5 +291,5 @@ type Feature {
     id: FeatureID!
     entity: Entity
     experience(filters: Filters): FeatureExperience
-    comments: Comments
+    comments: FeatureComments
 }

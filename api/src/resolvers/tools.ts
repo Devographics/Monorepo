@@ -104,7 +104,7 @@ export default {
                 }
             })
     },
-    Comments: {
+    ToolComments: {
         all_years: async ({ survey, id }: ResolverDynamicConfig, {}, context: RequestContext) =>
             await getRawCommentsWithCache({ survey, id, context, key: `tools.${id}.comment` }),
         year: async (

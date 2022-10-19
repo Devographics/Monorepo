@@ -373,6 +373,6 @@ type Tool {
     experienceAggregated(filters: Filters, options: Options, facet: Facet): ToolExperienceAggregated
     experienceGraph(filters: Filters): ToolExperienceGraph
     experienceTransitions(year: Int!): ToolExperienceTransitions
-    comments: Comments
+    comments: ToolComments
     entity: Entity
 }
