@@ -6,7 +6,7 @@ import TooltipComponent from 'core/components/Tooltip'
 
 const labelMaxLength = 20
 
-const shorten = label => {
+const shorten = (label: string) => {
     if (label.length > labelMaxLength + 1) {
         return label.substr(0, labelMaxLength) + '…'
     } else {
@@ -27,6 +27,9 @@ export const Text = ({
     tickRotation?: number
     i18nNamespace?: string
 }) => {
+    if (!label) {
+        return null
+    }
     const theme = useTheme()
     const shortenLabel = label.length > labelMaxLength
     const shortLabel = shortenLabel ? shorten(label) : label
@@ -62,16 +65,17 @@ export const Text = ({
 export const getBucketLabel = args => {
     const { getString } = useI18n()
     const { shouldTranslate, i18nNamespace, id, entity, shortenLabel = false } = args
-    let label = ''
+    let label
+    const s = getString(`options.${i18nNamespace}.${id}`)
 
     if (entity?.name) {
         label = entity.nameClean || entity.name
-    } else if (shouldTranslate) {
-        const s = getString(`options.${i18nNamespace}.${id}`)
+    } else if (shouldTranslate && !s.missing) {
         label = s.tClean || s.t
     } else {
         label = id
     }
+
     const shortenedLabel = shortenLabel ? shorten(label) + '…' : label
 
     return shortenedLabel
