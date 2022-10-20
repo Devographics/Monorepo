@@ -686,13 +686,13 @@
       blockNamespace: tool_evaluation
       variables:
         fieldId: tools_others__tool_evaluation
-      variants: 
-        - id: tool_evaluation_matchups
-          tabId: tabs.bracket_matchups
-          blockNamespace: tool_evaluation
-          variables:
-            fieldId: tools_others__tool_evaluation
-          template: bracket_matchups
+      # variants: 
+      #   - id: tool_evaluation_matchups
+      #     tabId: tabs.bracket_matchups
+      #     blockNamespace: tool_evaluation
+      #     variables:
+      #       fieldId: tools_others__tool_evaluation
+      #     template: bracket_matchups
 
     - id: tools_others_resources
       items: [fm-storybook]
@@ -745,7 +745,7 @@
 
     - id: interoperability_features_freeform
       blockNamespace: usage
-      # chartNamespace: css_js_balance
+      chartNamespace: features
       translateData: true
       template: multiple_options
       variables:

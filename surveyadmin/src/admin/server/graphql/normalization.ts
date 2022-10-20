@@ -8,6 +8,11 @@ import { UserType } from "~/core/models/user";
 import { ResponseAdminMongooseModel } from "@devographics/core-models/server";
 import { getOrFetchEntities } from "~/modules/entities/server";
 import pick from "lodash/pick.js";
+import { NormalizedResponseMongooseModel } from "~/admin/models/normalized_responses/model.server";
+
+interface BulkOperation {
+  updateMany: any;
+}
 
 /*
 
@@ -57,7 +62,7 @@ Normalization
 */
 const defaultLimit = 999;
 const isSimulation = false;
-const verbose = false;
+const verbose = true;
 
 export const normalizeSurvey = async (
   root,
@@ -73,6 +78,8 @@ export const normalizeSurvey = async (
   } = args;
   const startAt = new Date();
   let progress = 0;
+
+  const bulkOperations: BulkOperation[] = [];
 
   const metadata: {
     surveyId: string;
@@ -110,6 +117,7 @@ export const normalizeSurvey = async (
       isSimulation,
       entities,
       fieldId,
+      isBulk: true,
     });
 
     progress++;
@@ -132,6 +140,14 @@ export const normalizeSurvey = async (
       if (normalizationResult.errors.length > 0) {
         metadata.errorCount += normalizationResult.errors.length;
       }
+
+      const { selector, modifier } = normalizationResult;
+      bulkOperations.push({
+        updateMany: {
+          filter: selector,
+          update: modifier,
+        },
+      });
       metadata.normalizedDocuments.push(
         pick(normalizationResult, [
           "errors",
@@ -144,6 +160,10 @@ export const normalizeSurvey = async (
       );
     }
   }
+
+  // see https://www.mongodb.com/docs/manual/reference/method/db.collection.bulkWrite
+  console.log(`-> Now starting bulk write…`);
+  NormalizedResponseMongooseModel.bulkWrite(bulkOperations);
 
   const endAt = new Date();
   const duration = Math.ceil((endAt.valueOf() - startAt.valueOf()) / 1000);

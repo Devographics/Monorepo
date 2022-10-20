@@ -9,7 +9,6 @@
 slug: css2020 # used as first part of field names
 surveyId: css2020 # used as first part of field names
 context: state_of_css
-normalizationId: stateofcss
 topic: CSS
 createdAt: October 1, 2020
 prettySlug: state-of-css

@@ -28,6 +28,9 @@ interface NormalizationResult {
   response: any;
   responseId: string;
 
+  selector: any;
+  modifier: any;
+
   errors: Array<NormalizationError>;
 
   normalizedResponseId?: string;
@@ -49,7 +52,8 @@ interface NormalizationOptions {
   fileName?: string;
   verbose?: boolean;
   isSimulation?: boolean;
-  fieldId?: String;
+  fieldId?: string;
+  isBulk?: boolean;
 }
 
 export const normalizeResponse = async (
@@ -65,6 +69,7 @@ export const normalizeResponse = async (
       verbose = false,
       isSimulation = false,
       fieldId,
+      isBulk = false,
     } = options;
 
     if (verbose) {
@@ -76,10 +81,14 @@ export const normalizeResponse = async (
     Init
 
     */
+    const selector = { responseId: response._id };
+
     const result = {
       response,
       responseId: response?._id,
+      selector,
     };
+
     const errors: NormalizationError[] = [];
     let normResp: Partial<NormalizedResponseDocument> = {};
     const privateFields = {};
@@ -91,8 +100,7 @@ export const normalizeResponse = async (
     if (!survey)
       throw new Error(`Could not find survey for slug ${response.surveySlug}`);
 
-    let updatedNormalizedResponse;
-    let allEntities;
+    let updatedNormalizedResponse, allEntities, modifier;
     if (entities) {
       allEntities = entities;
     } else {
@@ -116,6 +124,7 @@ export const normalizeResponse = async (
       result,
       errors,
       fieldId,
+      verbose,
     };
 
     /*
@@ -144,14 +153,13 @@ export const normalizeResponse = async (
           break;
       }
 
-      const selector = { responseId: response._id };
       const value = get(normResp, fullPath);
-      const modifier = { $set: { [fullPath]: value } };
+      modifier = { $set: { [fullPath]: value } };
 
-      // console.log(JSON.stringify(selector, null, 2))
-      // console.log(JSON.stringify(modifier, null, 2))
+      // console.log(JSON.stringify(selector, null, 2));
+      // console.log(JSON.stringify(modifier, null, 2));
 
-      if (!isSimulation) {
+      if (!isSimulation && !isBulk) {
         // update normalized response, or insert it if it doesn't exist
         // NOTE: this will generate ObjectId _id for unknown reason, see https://github.com/Devographics/StateOfJS-next2/issues/31
         updatedNormalizedResponse =
@@ -202,13 +210,15 @@ export const normalizeResponse = async (
       // handle private info (legacy)
       await steps.handlePrivateInfo(normalizationParams);
 
-      if (!isSimulation) {
+      modifier = normResp;
+
+      if (!isSimulation && !isBulk) {
         // update normalized response, or insert it if it doesn't exist
         // NOTE: this will generate ObjectId _id for unknown reason, see https://github.com/Devographics/StateOfJS-next2/issues/31
         updatedNormalizedResponse =
           await NormalizedResponseMongooseModel.findOneAndUpdate(
-            { responseId: response._id },
-            normResp,
+            selector,
+            modifier,
             { upsert: true, returnDocument: "after" }
           );
         await ResponseAdminMongooseModel.updateOne(
@@ -224,22 +234,22 @@ export const normalizeResponse = async (
           }
         );
       }
-
-      // eslint-disable-next-line
-      // console.log(result);
-      return {
-        ...result,
-        normalizedResponse: normResp,
-        normalizedResponseId: updatedNormalizedResponse?._id,
-        normalizedFields,
-        normalizedFieldsCount: normalizedFields.length,
-        prenormalizedFields,
-        prenormalizedFieldsCount: prenormalizedFields.length,
-        regularFields,
-        regularFieldsCount: regularFields.length,
-        errors,
-      };
     }
+    // eslint-disable-next-line
+    // console.log(result);
+    return {
+      ...result,
+      modifier,
+      normalizedResponse: normResp,
+      normalizedResponseId: updatedNormalizedResponse?._id,
+      normalizedFields,
+      normalizedFieldsCount: normalizedFields.length,
+      prenormalizedFields,
+      prenormalizedFieldsCount: prenormalizedFields.length,
+      regularFields,
+      regularFieldsCount: regularFields.length,
+      errors,
+    };
   } catch (error) {
     console.log("// normalizeResponse error");
     console.log(error);

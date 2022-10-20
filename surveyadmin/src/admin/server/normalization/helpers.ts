@@ -284,7 +284,7 @@ Handle source normalization separately since its value can come from
 three different fields (source field, referrer field, 'how did you hear' field)
 
 */
-export const normalizeSource = async (normResp, allRules, survey) => {
+export const normalizeSource = async (normResp, allRules, survey, verbose) => {
   const tags = [
     "sites",
     "podcasts",
@@ -293,7 +293,7 @@ export const normalizeSource = async (normResp, allRules, survey) => {
     "newsletters",
     "people",
     "sources",
-    `sources_${survey.normalizationId}`,
+    `sources_${survey.context}`,
   ];
 
   const rawSource = get(normResp, "user_info.sourcetag");
@@ -313,6 +313,7 @@ export const normalizeSource = async (normResp, allRules, survey) => {
         tags,
         survey,
         field: { id: "source" },
+        verbose
       }));
     const normFindOut =
       rawFindOut &&
@@ -322,6 +323,7 @@ export const normalizeSource = async (normResp, allRules, survey) => {
         tags,
         survey,
         field: { id: "how_did_user_find_out_about_the_survey" },
+        verbose
       }));
     const normReferrer =
       rawRef &&
@@ -331,6 +333,7 @@ export const normalizeSource = async (normResp, allRules, survey) => {
         tags,
         survey,
         field: { id: "referrer" },
+        verbose
       }));
 
     if (normSource) {
@@ -516,8 +519,6 @@ export const getUnnormalizedResponses = async (surveyId, fieldId) => {
       { [normalizedFieldPath]: { $exists: false } },
     ],
   };
-
-  console.log(selector);
 
   const responses = await NormalizedResponseMongooseModel.find(
     selector,

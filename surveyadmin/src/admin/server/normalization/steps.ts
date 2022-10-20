@@ -105,13 +105,8 @@ export const normalizeCountryField = async ({ normResp, options }) => {
   }
 };
 
-export const normalizeSourceField = async ({ normResp, allRules, survey }) => {
-  /*
-
-  5d. Handle source field separately
-
-  */
-  const normSource = await normalizeSource(normResp, allRules, survey);
+export const normalizeSourceField = async ({ normResp, allRules, survey, verbose }) => {
+  const normSource = await normalizeSource(normResp, allRules, survey, verbose);
   if (normSource.raw) {
     set(normResp, "user_info.source.raw", normSource.raw);
   }
