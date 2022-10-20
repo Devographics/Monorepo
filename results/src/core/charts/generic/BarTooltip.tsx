@@ -4,14 +4,15 @@ import { useTheme } from '@nivo/core'
 import { useI18n } from 'core/i18n/i18nContext'
 import { isPercentage } from 'core/helpers/units'
 
-const getLabel = (props, translate) => {
+const getLabel = (props, getString) => {
     const { id, bucketKeys, units, indexValue, data, i18nNamespace, shouldTranslate } = props
     const bucketKey = bucketKeys && bucketKeys.find(b => b.id === indexValue)
     const { entity } = data
+    const s = getString(`options.${i18nNamespace}.${indexValue}`)
     if (bucketKey?.label) {
         return bucketKey.label
-    } else if (shouldTranslate) {
-        return translate(`options.${i18nNamespace}.${indexValue}`)
+    } else if (shouldTranslate && !s.missing) {
+        return s.t
     } else if (entity) {
         return entity.name
     } else {
@@ -26,8 +27,8 @@ const getLabel = (props, translate) => {
  */
 const BarTooltip = props => {
     const { id, bucketKeys, units, indexValue, data, i18nNamespace, shouldTranslate } = props
-    const { translate } = useI18n()
-    const label = getLabel(props, translate)
+    const { getString } = useI18n()
+    const label = getLabel(props, getString)
 
     const nivoTheme = useTheme()
 

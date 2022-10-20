@@ -171,10 +171,10 @@ exports.runPageQueries = async ({ page, graphql, config }) => {
                 let data
 
                 const dataDirPath = path.resolve(`${basePath}/data`)
-                const dataFileName = `${v.id}.json`
+                const dataFileName = `${page.id}__${v.id}.json`
                 const dataFilePath = `${dataDirPath}/${dataFileName}`
                 const queryDirPath = path.resolve(`${basePath}/queries`)
-                const queryFileName = `${v.id}.graphql`
+                const queryFileName = `${page.id}__${v.id}.graphql`
                 const queryFilePath = `${queryDirPath}/${queryFileName}`
 
                 const existingData = await exports.getExistingData({

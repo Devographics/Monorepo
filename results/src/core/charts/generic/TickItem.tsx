@@ -63,8 +63,9 @@ export const getBucketLabel = args => {
     const { getString } = useI18n()
     const { shouldTranslate, i18nNamespace, id, entity, shortenLabel = false } = args
     let label = ''
+
     if (entity?.name) {
-        label = entity.name
+        label = entity.nameClean || entity.name
     } else if (shouldTranslate) {
         const s = getString(`options.${i18nNamespace}.${id}`)
         label = s.tClean || s.t
