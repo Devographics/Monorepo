@@ -123,8 +123,10 @@ export const normalizeSurvey = async (
 
   // first, get all the responses we're going to operate on
   const selector = await getSelector(surveyId, fieldId, onlyUnnormalized);
-  const responses = await ResponseAdminMongooseModel.find(selector, {
-    createdAt: 1,
+  const responses = await ResponseAdminMongooseModel.find(selector, null, {
+    sort: {
+      createdAt: 1,
+    },
   })
     .skip(startFrom)
     .limit(limit);
@@ -161,7 +163,6 @@ export const normalizeSurvey = async (
         errors: [
           {
             type: "normalization_failed",
-            documentId: response._id,
           },
         ],
       });
