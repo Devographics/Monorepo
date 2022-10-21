@@ -195,23 +195,29 @@ export const normalizeSurvey = async (
     }
   }
 
+  /*
+
+  Note: when renormalizing a specific field with onlyUnnormalized=false, *all* responses where
+  that field exists will be selected. This might include responses who do not have a corresponding
+  normalized response document (for example, because they have been discarded for being empty).
+
+  Because bulkWrite() will run with upsert=false when normalizing a specific field, 
+  these responses will not be created.
+
+  Make sure to only renormalize a specific field *after* having normalized all fields for all documents.
+
+  */
   // see https://www.mongodb.com/docs/manual/reference/method/db.collection.bulkWrite
   console.log(`-> Now starting bulk write…`);
-  const operationResult = await NormalizedResponseMongooseModel.bulkWrite(
-    bulkOperations
-  );
-
-  mutationResult.operationResult = operationResult.result;
-  mutationResult.discardedCount = discardedCount;
-
-  const modifiedCount = operationResult.result.nModified;
-
-  // when we're only updating specific fields, we might try to update a normalized response that doesn't yet exist
-  // if this happens the operation will fail and nModifier will be less than the expected limit
-  if (!isReplace && modifiedCount < limit) {
-    throw new Error(
-      `${modifiedCount}/${limit} documents modified; make sure normalized responses exist before trying to update them.`
+  try {
+    const operationResult = await NormalizedResponseMongooseModel.bulkWrite(
+      bulkOperations
     );
+    mutationResult.operationResult = operationResult.result;
+    mutationResult.discardedCount = discardedCount;
+  } catch (error) {
+    console.log("// Bulk write error");
+    throw error;
   }
 
   const endAt = new Date();
@@ -223,7 +229,7 @@ export const normalizeSurvey = async (
       discardedCount > 0
         ? `(${discardedCount}/${limit} responses discarded)`
         : ""
-    }. (${endAt}) - ${duration / 60} min`
+    }. (${endAt}) - ${duration}s`
   );
 
   return mutationResult;

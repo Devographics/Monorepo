@@ -15,13 +15,13 @@
   }
 }
 
-
 .normalization-actions {
   display: flex;
   justify-content: space-between;
   font-size: $large-font;
   margin-bottom: $spacing;
-  .primary, .secondary {
+  .primary,
+  .secondary {
     display: flex;
     align-items: center;
     gap: $spacing;
@@ -33,4 +33,10 @@
   border: 1px solid grey;
   background: #cccccc;
   margin: $spacing 0;
+}
+
+.normalization-options {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing/2;
 }

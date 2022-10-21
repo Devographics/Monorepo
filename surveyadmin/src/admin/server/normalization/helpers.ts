@@ -292,6 +292,7 @@ export const normalizeSource = async (normResp, allRules, survey, verbose) => {
     "socialmedia",
     "newsletters",
     "people",
+    "courses",
     "sources",
     `sources_${survey.context}`,
   ];
@@ -481,11 +482,11 @@ export const getSelector = async (surveyId, fieldId, onlyUnnormalized) => {
       if (fieldId === "source") {
         // source field should be treated differently
         selector["$or"] = getSourceFields(surveyId).map((f) => ({
-          [f]: { $exists: true },
+          [f]: { $exists: true, $ne: "" },
         }));
       } else {
         const field = getSurveyFieldById(survey, fieldId);
-        selector[field.fieldName] = { $exists: true };
+        selector[field.fieldName] = { $exists: true, $ne: "" };
       }
     }
   } else {
@@ -532,77 +533,6 @@ export const getUnnormalizedResponses = async (surveyId, fieldId) => {
 
   return { responses, rawFieldPath, normalizedFieldPath };
 };
-
-// export const getSelector = (surveyId, fieldId, onlyUnnormalized) => {
-//   const survey = getSurveyBySlug(surveyId);
-//   const surveySlug = surveyId;
-//   if (!survey) {
-//     throw new Error(`Could not find survey for slug ${surveyId}`);
-//   }
-
-//   // by default, select all documents belonging to a survey
-//   let selector = {
-//     surveySlug,
-//   } as any;
-
-//   if (fieldId) {
-//     // we're only interested in working on a single field
-
-//     if (onlyUnnormalized) {
-//       let rawFieldPath, normalizedFieldPath;
-
-//       if (fieldId === "source") {
-//         // treat source field differently because it doesn't have "others"
-//         rawFieldPath = "user_info.source.raw";
-//         normalizedFieldPath = "user_info.source.normalized";
-//       } else {
-//         const field = getSurveyFieldById(survey, fieldId);
-//         const { sectionSegment, fieldSegment } = getFieldSegments(field);
-
-//         rawFieldPath = `${sectionSegment}.${fieldSegment}.others.raw`;
-//         normalizedFieldPath = `${sectionSegment}.${fieldSegment}.others.normalized`;
-//       }
-
-//       /*
-
-//       Select all document that:
-
-//       - belong to a survey
-//       - have a raw value
-//       - do *not* have a corresponding normalized value
-
-//       */
-//       selector = {
-//         ...selector,
-//         [rawFieldPath]: { $exists: true },
-//         $or: [
-//           { [normalizedFieldPath]: [] },
-//           { [normalizedFieldPath]: { $exists: false } },
-//         ],
-//       };
-//     } else {
-//       if (fieldId === "source") {
-//         // source field should be treated differently
-//         selector = {
-//           ...selector,
-//           $or: getSourceFields(surveyId).map((f) => ({
-//             [f]: { $exists: true },
-//           })),
-//         };
-//       } else {
-//         const field = getSurveyFieldById(survey, fieldId);
-//         // select all documents which contain the field
-//         selector = {
-//           ...selector,
-//           [field.fieldName]: { $exists: true },
-//         };
-//       }
-//     }
-//   }
-//   console.log("// selector");
-//   console.log(selector);
-//   return selector;
-// };
 
 export const getBulkOperation = (selector, modifier, isReplace) =>
   isReplace
