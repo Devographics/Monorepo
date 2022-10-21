@@ -36,9 +36,9 @@ export const getFieldPaths = (field: Field) => {
   const errorPath = `${basePath}.error`;
   const commentPath = `${basePath}.comment`;
 
-  const rawFieldPath = `${basePath}.raw`;
-  const normalizedFieldPath = `${basePath}.normalized`;
-  const patternsFieldPath = `${basePath}.patterns`;
+  const rawFieldPath = `${fullPath}.raw`;
+  const normalizedFieldPath = `${fullPath}.normalized`;
+  const patternsFieldPath = `${fullPath}.patterns`;
 
   return {
     basePath,
@@ -125,6 +125,9 @@ const stringLimit = enableLimit ? 170 : 1000; // max length of string to try and
 const rulesLimit = 1500; // max number of rules to try and match for any given string
 const extractTokens = async ({ value, rules, survey, field, verbose }) => {
   const rawString = value;
+
+  // RegExp.prototype.toJSON = RegExp.prototype.toString;
+  // console.log(JSON.stringify(rules))
 
   if (rawString.length > stringLimit) {
     await logToFile(
@@ -293,6 +296,7 @@ export const normalizeSource = async (normResp, allRules, survey, verbose) => {
     "newsletters",
     "people",
     "courses",
+    "surveys",
     "sources",
     `sources_${survey.context}`,
   ];
