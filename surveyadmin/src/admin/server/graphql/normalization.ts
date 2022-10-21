@@ -3,16 +3,13 @@ import { normalizeResponse } from "../normalization/normalize";
 import {
   getSelector,
   getUnnormalizedResponses,
+  getBulkOperation,
 } from "../normalization/helpers";
 import { UserType } from "~/core/models/user";
 import { ResponseAdminMongooseModel } from "@devographics/core-models/server";
 import { getOrFetchEntities } from "~/modules/entities/server";
 import pick from "lodash/pick.js";
 import { NormalizedResponseMongooseModel } from "~/admin/models/normalized_responses/model.server";
-
-interface BulkOperation {
-  updateMany: any;
-}
 
 /*
 
@@ -62,13 +59,41 @@ Normalization
 */
 const defaultLimit = 999;
 const isSimulation = false;
-const verbose = true;
+const verbose = false;
+
+interface BulkOperation {
+  updateMany?: any;
+  replaceOne?: any;
+}
+
+interface NormalizedDocumentMetadata {
+  responseId: string;
+  errors?: any[];
+  normalizedResponseId?: string;
+  normalizedFieldsCount?: number;
+  prenormalizedFieldsCount?: number;
+  regularFieldsCount?: number;
+}
+
+interface NormalizeSurveyResult {
+  surveyId: string;
+  normalizedDocuments: NormalizedDocumentMetadata[];
+  duration?: number;
+  count?: number;
+  errorCount: number;
+  operationResult?: any;
+  discardedCount?: number;
+}
 
 export const normalizeSurvey = async (
   root,
   args,
   { currentUser }: { currentUser: UserType }
 ) => {
+  if (!currentUser.isAdmin) {
+    throw new Error("Non admin cannot normalize surveys");
+  }
+
   const {
     surveyId,
     fieldId,
@@ -77,31 +102,34 @@ export const normalizeSurvey = async (
     onlyUnnormalized,
   } = args;
   const startAt = new Date();
-  let progress = 0;
+  let progress = 0,
+    discardedCount = 0;
 
   const bulkOperations: BulkOperation[] = [];
 
-  const metadata: {
-    surveyId: string;
-    normalizedDocuments: any[];
-    duration?: number;
-    count?: number;
-    errorCount: number;
-  } = { surveyId, normalizedDocuments: [], errorCount: 0 };
+  // if no fieldId is defined then we are normalizing the entire document and want
+  // to replace everything instead of updating a single field
+  const isReplace = !fieldId;
 
-  if (!currentUser.isAdmin)
-    throw new Error("Non admin cannot normalize surveys");
+  const mutationResult: NormalizeSurveyResult = {
+    surveyId,
+    normalizedDocuments: [],
+    errorCount: 0,
+  };
 
   const entities = await getOrFetchEntities();
 
   // TODO: use Response model and connector instead
 
+  // first, get all the responses we're going to operate on
   const selector = await getSelector(surveyId, fieldId, onlyUnnormalized);
-  const responses = await ResponseAdminMongooseModel.find(selector)
+  const responses = await ResponseAdminMongooseModel.find(selector, {
+    createdAt: 1,
+  })
     .skip(startFrom)
     .limit(limit);
   const count = responses.length;
-  metadata.count = count;
+  mutationResult.count = count;
   const tickInterval = Math.round(count / 200);
 
   console.log(
@@ -110,6 +138,7 @@ export const normalizeSurvey = async (
     }… Found ${count} responses to renormalize (startFrom: ${startFrom}, limit: ${limit}). (${startAt})`
   );
 
+  // iterate over responses to populate bulkOperations array
   for (const response of responses) {
     const normalizationResult = await normalizeResponse({
       document: response,
@@ -126,8 +155,8 @@ export const normalizeSurvey = async (
     }
 
     if (!normalizationResult) {
-      metadata.errorCount++;
-      metadata.normalizedDocuments.push({
+      mutationResult.errorCount++;
+      mutationResult.normalizedDocuments.push({
         responseId: response._id,
         errors: [
           {
@@ -137,18 +166,13 @@ export const normalizeSurvey = async (
         ],
       });
     } else {
+      // keep track of total error count
       if (normalizationResult.errors.length > 0) {
-        metadata.errorCount += normalizationResult.errors.length;
+        mutationResult.errorCount += normalizationResult.errors.length;
       }
 
-      const { selector, modifier } = normalizationResult;
-      bulkOperations.push({
-        updateMany: {
-          filter: selector,
-          update: modifier,
-        },
-      });
-      metadata.normalizedDocuments.push(
+      // create a list of metadata about normalization process to return as mutation result
+      mutationResult.normalizedDocuments.push(
         pick(normalizationResult, [
           "errors",
           "responseId",
@@ -158,24 +182,50 @@ export const normalizeSurvey = async (
           "regularFieldsCount",
         ])
       );
+
+      // if normalization was valid, add it to bulk operations array
+      if (!normalizationResult.discard) {
+        const { selector, modifier } = normalizationResult;
+        const operation = getBulkOperation(selector, modifier, isReplace);
+        bulkOperations.push(operation);
+      } else {
+        discardedCount++;
+      }
     }
   }
 
   // see https://www.mongodb.com/docs/manual/reference/method/db.collection.bulkWrite
   console.log(`-> Now starting bulk write…`);
-  NormalizedResponseMongooseModel.bulkWrite(bulkOperations);
+  const operationResult = await NormalizedResponseMongooseModel.bulkWrite(
+    bulkOperations
+  );
+
+  mutationResult.operationResult = operationResult.result;
+  mutationResult.discardedCount = discardedCount;
+
+  const modifiedCount = operationResult.result.nModified;
+
+  // when we're only updating specific fields, we might try to update a normalized response that doesn't yet exist
+  // if this happens the operation will fail and nModifier will be less than the expected limit
+  if (!isReplace && modifiedCount < limit) {
+    throw new Error(
+      `${modifiedCount}/${limit} documents modified; make sure normalized responses exist before trying to update them.`
+    );
+  }
 
   const endAt = new Date();
   const duration = Math.ceil((endAt.valueOf() - startAt.valueOf()) / 1000);
   // duration in seconds
-  metadata.duration = duration;
+  mutationResult.duration = duration;
   console.log(
-    `-> Done renormalizing ${count} responses in survey ${surveyId}. (${endAt}) - ${
-      duration / 60
-    } min`
+    `-> Normalized ${limit - discardedCount} responses in survey ${surveyId} ${
+      discardedCount > 0
+        ? `(${discardedCount}/${limit} responses discarded)`
+        : ""
+    }. (${endAt}) - ${duration / 60} min`
   );
 
-  return metadata;
+  return mutationResult;
 };
 
 export const normalizeSurveyTypeDefs =

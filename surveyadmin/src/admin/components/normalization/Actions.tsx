@@ -19,6 +19,8 @@ const Actions = ({
   onlyUnnormalized,
   setNormalizationMode,
   isAllFields,
+  setSegments,
+  initializeSegments,
 }) => {
   const Components = useVulcanComponents();
   const router = useRouter();
@@ -90,7 +92,9 @@ const Actions = ({
             onlyUnnormalized,
           }}
           successCallback={(result) => {
-            setResponsesCount(result?.data?.getSurveyMetadata?.responsesCount);
+            const responsesCount =
+              result?.data?.getSurveyMetadata?.responsesCount;
+            initializeSegments({ responsesCount });
           }}
         />
         <label>

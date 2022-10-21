@@ -105,7 +105,12 @@ export const normalizeCountryField = async ({ normResp, options }) => {
   }
 };
 
-export const normalizeSourceField = async ({ normResp, allRules, survey, verbose }) => {
+export const normalizeSourceField = async ({
+  normResp,
+  allRules,
+  survey,
+  verbose,
+}) => {
   const normSource = await normalizeSource(normResp, allRules, survey, verbose);
   if (normSource.raw) {
     set(normResp, "user_info.source.raw", normSource.raw);
@@ -227,8 +232,8 @@ export const discardEmptyResponses = async ({
     if (verbose) {
       console.log(`!! Discarding response ${response._id} as empty`);
     }
-    errors.push({ type: "empty_document", documentId: response._id });
-    return { ...result, errors };
+    errors.push({ type: "empty_document" });
+    result.discard = true;
   }
 };
 
@@ -278,9 +283,6 @@ export const normalizeField = async ({
   ].join("__");
   const responseCommentValue = cleanupValue(response[responseCommentPath]);
   if (responseCommentValue !== null) {
-    console.log(response._id);
-    console.log(commentPath);
-    console.log(responseCommentValue);
     set(normResp, commentPath, responseCommentValue);
   }
 

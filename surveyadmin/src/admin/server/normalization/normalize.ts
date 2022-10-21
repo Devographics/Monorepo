@@ -24,6 +24,7 @@ interface NormalizationError {
   type: string;
   documentId: string;
 }
+
 interface NormalizationResult {
   response: any;
   responseId: string;
@@ -32,6 +33,7 @@ interface NormalizationResult {
   modifier: any;
 
   errors: Array<NormalizationError>;
+  discard?: boolean;
 
   normalizedResponseId?: string;
   normalizedResponse?: any;
@@ -44,6 +46,7 @@ interface NormalizationResult {
   prenormalizedFieldsCount?: number;
   regularFieldsCount?: number;
 }
+
 interface NormalizationOptions {
   document: any;
   entities?: Array<any>;
@@ -221,18 +224,6 @@ export const normalizeResponse = async (
             modifier,
             { upsert: true, returnDocument: "after" }
           );
-        await ResponseAdminMongooseModel.updateOne(
-          { _id: response._id },
-          {
-            $set: {
-              // NOTE: at the time of writing 09/2022 this is not really used by the app
-              // the admin area resolve the normalizedResponse based on its responseId (instead of using response.normalizedResponseId)
-              // using a reversed relation
-              normalizedResponseId: updatedNormalizedResponse._id,
-              isNormalized: true,
-            },
-          }
-        );
       }
     }
     // eslint-disable-next-line

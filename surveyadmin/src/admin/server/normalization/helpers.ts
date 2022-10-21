@@ -28,10 +28,10 @@ export const getFieldSegments = (field: Field) => {
 };
 
 export const getFieldPaths = (field: Field) => {
-  const { suffix } = field as ParsedQuestion
+  const { suffix } = field as ParsedQuestion;
   const { sectionSegment, fieldSegment } = getFieldSegments(field);
 
-  const basePath = `${sectionSegment}.${fieldSegment}`
+  const basePath = `${sectionSegment}.${fieldSegment}`;
   const fullPath = suffix ? `${basePath}.${suffix}` : basePath;
   const errorPath = `${basePath}.error`;
   const commentPath = `${basePath}.comment`;
@@ -39,7 +39,7 @@ export const getFieldPaths = (field: Field) => {
   const rawFieldPath = `${basePath}.raw`;
   const normalizedFieldPath = `${basePath}.normalized`;
   const patternsFieldPath = `${basePath}.patterns`;
-  
+
   return {
     basePath,
     commentPath,
@@ -313,7 +313,7 @@ export const normalizeSource = async (normResp, allRules, survey, verbose) => {
         tags,
         survey,
         field: { id: "source" },
-        verbose
+        verbose,
       }));
     const normFindOut =
       rawFindOut &&
@@ -323,7 +323,7 @@ export const normalizeSource = async (normResp, allRules, survey, verbose) => {
         tags,
         survey,
         field: { id: "how_did_user_find_out_about_the_survey" },
-        verbose
+        verbose,
       }));
     const normReferrer =
       rawRef &&
@@ -333,7 +333,7 @@ export const normalizeSource = async (normResp, allRules, survey, verbose) => {
         tags,
         survey,
         field: { id: "referrer" },
-        verbose
+        verbose,
       }));
 
     if (normSource) {
@@ -603,3 +603,20 @@ export const getUnnormalizedResponses = async (surveyId, fieldId) => {
 //   console.log(selector);
 //   return selector;
 // };
+
+export const getBulkOperation = (selector, modifier, isReplace) =>
+  isReplace
+    ? {
+        replaceOne: {
+          filter: selector,
+          replacement: modifier,
+          upsert: true,
+        },
+      }
+    : {
+        updateMany: {
+          filter: selector,
+          update: modifier,
+          upsert: false,
+        },
+      };

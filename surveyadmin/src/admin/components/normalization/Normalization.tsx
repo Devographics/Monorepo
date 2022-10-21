@@ -8,6 +8,8 @@ import Fields from "~/admin/components/normalization/Fields";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { allFields } from "./Actions";
 
+export const segmentSize = 200;
+
 const unnormalizedFieldsQuery = gql`
   query UnnormalizedFieldsQuery($surveyId: String, $fieldId: String) {
     unnormalizedFields(surveyId: $surveyId, fieldId: $fieldId)
@@ -34,6 +36,37 @@ const getNormalizableFields = (survey) => {
   return fields;
 };
 
+export const statuses = { scheduled: 0, inProgress: 1, done: 2 };
+
+export const getSegmentStatus = (doneCount, i) => {
+  const startFrom = i * segmentSize;
+  if (startFrom < doneCount) {
+    return statuses.done;
+  } else if (startFrom === doneCount) {
+    return statuses.inProgress;
+  } else {
+    return statuses.scheduled;
+  }
+};
+
+interface Segment {
+  i: number;
+  startFrom: number;
+  status: number;
+  data?: any;
+}
+
+export const getSegments = ({ responsesCount }): Segment[] => {
+  const segments = [...Array(Math.ceil(responsesCount / segmentSize))].map(
+    (x, i) => ({
+      i,
+      startFrom: i * segmentSize,
+      status: getSegmentStatus(0, i),
+    })
+  );
+  return segments;
+};
+
 const NormalizationWrapper = () => {
   const Components = useVulcanComponents();
   const { surveySlug: surveyId, fieldId, paramsReady } = usePageParams();
@@ -49,6 +82,7 @@ const NormalizationWrapper = () => {
 
   return <Normalization surveyId={surveyId} fieldId={fieldId} />;
 };
+
 const Normalization = ({ surveyId: surveyId_, fieldId: fieldId_ }) => {
   const [responsesCount, setResponsesCount] = useState(0);
   const [doneCount, setDoneCount] = useState(0);
@@ -56,6 +90,29 @@ const Normalization = ({ surveyId: surveyId_, fieldId: fieldId_ }) => {
   const [surveyId, setSurveyId] = useState(surveyId_);
   const [fieldId, setFieldId] = useState(fieldId_);
   const [normalizationMode, setNormalizationMode] = useState("only_normalized");
+  const emptySegments: Segment[] = [];
+  const [segments, setSegments] = useState(emptySegments);
+
+  const initializeSegments = ({ responsesCount }) => {
+    console.log('// initializeSegments')
+    const segments = getSegments({ responsesCount });
+    setResponsesCount(responsesCount);
+    setSegments(segments);
+  };
+
+  const updateSegments = ({ doneCount, doneSegmentIndex, doneSegmentData }) => {
+    console.log('// updateSegments')
+    setDoneCount(doneCount);
+    setSegments((oldSegments) => {
+      console.log('// setSegments')
+      const newSegments = oldSegments.map((s, i) => ({
+        ...s,
+        status: getSegmentStatus(doneCount, i),
+        ...(doneSegmentIndex === i ? { data: doneSegmentData } : {}),
+      }));
+      return newSegments;
+    });
+  };
 
   const stateStuff = {
     responsesCount,
@@ -70,6 +127,10 @@ const Normalization = ({ surveyId: surveyId_, fieldId: fieldId_ }) => {
     setFieldId,
     normalizationMode,
     setNormalizationMode,
+    segments,
+    setSegments,
+    initializeSegments,
+    updateSegments,
   };
 
   const survey = surveysWithTemplates.find((s) => s.slug === surveyId);

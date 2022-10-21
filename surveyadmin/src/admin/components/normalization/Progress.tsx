@@ -1,21 +1,7 @@
 import React, { useEffect } from "react";
 import { gql, useMutation } from "@apollo/client";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
-
-const segmentSize = 200;
-
-const statuses = { scheduled: 0, inProgress: 1, done: 2 };
-
-const getSegmentStatus = (doneCount, i) => {
-  const startFrom = i * segmentSize;
-  if (startFrom < doneCount) {
-    return statuses.done;
-  } else if (startFrom === doneCount) {
-    return statuses.inProgress;
-  } else {
-    return statuses.scheduled;
-  }
-};
+import { segmentSize, statuses } from "./Normalization";
 
 const Progress = ({
   survey,
@@ -24,19 +10,14 @@ const Progress = ({
   enabled,
   setEnabled,
   setDoneCount,
+  setSegments,
   fieldId,
   refetchMissingFields,
   onlyUnnormalized,
   isAllFields,
+  segments,
+  updateSegments,
 }) => {
-  const segments = [...Array(Math.ceil(responsesCount / segmentSize))].map(
-    (x, i) => ({
-      i,
-      startFrom: i * segmentSize,
-      status: getSegmentStatus(doneCount, i),
-    })
-  );
-
   const segmentInProgress = segments.find(
     (s) => s.status === statuses.inProgress
   );
@@ -83,10 +64,12 @@ const Progress = ({
               startFrom={segmentInProgress?.startFrom}
               responsesCount={responsesCount}
               setDoneCount={setDoneCount}
+              setSegments={setSegments}
               enabled={enabled}
               fieldId={fieldId}
               onlyUnnormalized={onlyUnnormalized}
               isAllFields={isAllFields}
+              updateSegments={updateSegments}
             />
           )}
           {doneCount === responsesCount && <div>Done</div>}
@@ -96,11 +79,15 @@ const Progress = ({
   );
 };
 
-const SegmentDone = ({ startFrom, responsesCount }) => (
-  <div>
-    {startFrom}/{responsesCount} done
-  </div>
-);
+const SegmentDone = ({ startFrom, responsesCount, data }) => {
+  const { duration, discardedCount, errorCount } = data
+  return (
+    <div>
+      {startFrom}/{responsesCount} done in {duration}s ({errorCount} errors, {discardedCount}{" "}
+      responses discarded)
+    </div>
+  );
+};
 
 const normalizeSurveyMutation = gql`
   mutation normalizeSurvey(
@@ -127,9 +114,11 @@ const SegmentInProgress = ({
   startFrom,
   responsesCount,
   setDoneCount,
+  setSegments,
   enabled,
   onlyUnnormalized,
   isAllFields,
+  updateSegments,
 }) => {
   const Components = useVulcanComponents();
 
@@ -137,7 +126,12 @@ const SegmentInProgress = ({
     normalizeSurveyMutation,
     {
       onCompleted: (data) => {
-        setDoneCount(startFrom + data?.normalizeSurvey?.count);
+        const doneCount = startFrom + data?.normalizeSurvey?.count;
+        updateSegments({
+          doneCount,
+          doneSegmentIndex: segmentIndex,
+          doneSegmentData: data?.normalizeSurvey,
+        });
       },
     }
   );
