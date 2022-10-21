@@ -165,11 +165,13 @@ const localesTable = [
 
 // Note: change 'en', 'en-GB', 'en-AU', etc. to 'en-US' for consistency
 const findCorrectLocale = (locale) => {
+  let correctLocale;
   localesTable.forEach(({ id, aliases }) => {
-    if (aliases.includes(locale)) {
-      return id;
+    if (locale === id || aliases.includes(locale)) {
+      correctLocale = id;
     }
   });
+  return correctLocale;
 };
 
 export const handleLocale = async ({ normResp, response }) => {
