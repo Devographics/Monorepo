@@ -1,7 +1,7 @@
 import React from "react";
 import { gql } from "@apollo/client";
 import qs from "qs";
-import { useRouter } from "next/router.js";
+import { useRouter } from "next/router";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { surveysWithTemplates } from "~/surveys/withTemplates";
 import Options from "./Options";
@@ -37,15 +37,15 @@ const Actions = (props) => {
           menuItems={surveysWithTemplates.map((survey) => ({
             label: survey.slug,
             onClick: () => {
-              setSurveyId(survey.slug);
               // build search string to update the browser URL query string
               const search = qs.stringify({
-                surveySlug,
+                surveySlug: survey.slug,
                 fieldId,
               });
               const newUrl = new URL(window.location.href);
               newUrl.search = search;
               router.push(newUrl);
+              setSurveyId(survey.slug);
             },
           }))}
         />{" "}
@@ -55,15 +55,15 @@ const Actions = (props) => {
           menuItems={fields.map((field) => ({
             label: field.id,
             onClick: () => {
-              setFieldId(field.id);
               // build search string to update the browser URL query string
               const search = qs.stringify({
                 surveySlug,
-                fieldId,
+                fieldId: field.id,
               });
               const newUrl = new URL(window.location.href);
               newUrl.search = search;
               router.push(newUrl);
+              setFieldId(field.id);
             },
           }))}
         />{" "}
