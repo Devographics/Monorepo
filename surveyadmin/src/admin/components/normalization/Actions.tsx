@@ -4,24 +4,23 @@ import qs from "qs";
 import { useRouter } from "next/router.js";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { surveysWithTemplates } from "~/surveys/withTemplates";
+import Options from "./Options";
 
 export const allFields = { id: "all_fields", label: "All Fields" };
 
-const Actions = ({
-  surveyId,
-  survey,
-  fieldId,
-  field,
-  normalizeableFields,
-  setResponsesCount,
-  setSurveyId,
-  setFieldId,
-  onlyUnnormalized,
-  setNormalizationMode,
-  isAllFields,
-  setSegments,
-  initializeSegments,
-}) => {
+const Actions = (props) => {
+  const {
+    surveyId,
+    survey,
+    fieldId,
+    normalizeableFields,
+    setSurveyId,
+    setFieldId,
+    onlyUnnormalized,
+    isAllFields,
+    initializeSegments,
+    segmentSize,
+  } = props;
   const Components = useVulcanComponents();
   const router = useRouter();
 
@@ -94,21 +93,10 @@ const Actions = ({
           successCallback={(result) => {
             const responsesCount =
               result?.data?.getSurveyMetadata?.responsesCount;
-            initializeSegments({ responsesCount });
+            initializeSegments({ responsesCount, segmentSize });
           }}
         />
-        <label>
-          <input
-            type="checkbox"
-            checked={onlyUnnormalized}
-            onClick={() => {
-              setNormalizationMode(
-                onlyUnnormalized ? "all" : "only_normalized"
-              );
-            }}
-          />{" "}
-          Only normalize unnormalized values
-        </label>
+        <Options {...props} />
       </div>
       <div className="secondary">
         <Components.MutationButton

@@ -8,7 +8,7 @@ import Fields from "~/admin/components/normalization/Fields";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { allFields } from "./Actions";
 
-export const segmentSize = 200;
+export const defaultSegmentSize = 200;
 
 const unnormalizedFieldsQuery = gql`
   query UnnormalizedFieldsQuery($surveyId: String, $fieldId: String) {
@@ -38,7 +38,7 @@ const getNormalizableFields = (survey) => {
 
 export const statuses = { scheduled: 0, inProgress: 1, done: 2 };
 
-export const getSegmentStatus = (doneCount, i) => {
+export const getSegmentStatus = ({ doneCount, i, segmentSize }) => {
   const startFrom = i * segmentSize;
   if (startFrom < doneCount) {
     return statuses.done;
@@ -56,12 +56,12 @@ interface Segment {
   data?: any;
 }
 
-export const getSegments = ({ responsesCount }): Segment[] => {
+export const getSegments = ({ responsesCount, segmentSize }): Segment[] => {
   const segments = [...Array(Math.ceil(responsesCount / segmentSize))].map(
     (x, i) => ({
       i,
       startFrom: i * segmentSize,
-      status: getSegmentStatus(0, i),
+      status: getSegmentStatus({ doneCount: 0, i, segmentSize }),
     })
   );
   return segments;
@@ -91,23 +91,26 @@ const Normalization = ({ surveyId: surveyId_, fieldId: fieldId_ }) => {
   const [fieldId, setFieldId] = useState(fieldId_);
   const [normalizationMode, setNormalizationMode] = useState("only_normalized");
   const emptySegments: Segment[] = [];
+  const [segmentSize, setSegmentSize] = useState(defaultSegmentSize);
   const [segments, setSegments] = useState(emptySegments);
 
-  const initializeSegments = ({ responsesCount }) => {
-    console.log('// initializeSegments')
-    const segments = getSegments({ responsesCount });
+  const initializeSegments = ({ responsesCount, segmentSize }) => {
+    const segments = getSegments({ responsesCount, segmentSize });
     setResponsesCount(responsesCount);
     setSegments(segments);
   };
 
-  const updateSegments = ({ doneCount, doneSegmentIndex, doneSegmentData }) => {
-    console.log('// updateSegments')
+  const updateSegments = ({
+    doneCount,
+    doneSegmentIndex,
+    doneSegmentData,
+    segmentSize,
+  }) => {
     setDoneCount(doneCount);
     setSegments((oldSegments) => {
-      console.log('// setSegments')
       const newSegments = oldSegments.map((s, i) => ({
         ...s,
-        status: getSegmentStatus(doneCount, i),
+        status: getSegmentStatus({ doneCount, i, segmentSize }),
         ...(doneSegmentIndex === i ? { data: doneSegmentData } : {}),
       }));
       return newSegments;
@@ -131,6 +134,8 @@ const Normalization = ({ surveyId: surveyId_, fieldId: fieldId_ }) => {
     setSegments,
     initializeSegments,
     updateSegments,
+    segmentSize,
+    setSegmentSize,
   };
 
   const survey = surveysWithTemplates.find((s) => s.slug === surveyId);
