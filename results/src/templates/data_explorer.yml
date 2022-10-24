@@ -1,0 +1,53 @@
+blockType: DataExplorerBlock
+dataPath: "dataAPI.survey.explorer"
+hasSponsor: true
+query: >
+    dataAPI {
+        survey(survey: ${surveyType}) {
+            explorer(
+                facet1: "demographics/yearly_salary"
+                facet2: "demographics/years_of_experience"
+            ) {
+                keys1
+                keys2
+                all_years {
+                  year
+                  facets {
+                      buckets {
+                          id
+                          count
+                          percentage_question
+                          percentage_survey
+                          percentage_facet
+                          entity {
+                              id
+                              name
+                              nameClean
+                              nameHtml
+                              homepage {
+                                  url
+                              }
+                          }
+                      }
+                      completion {
+                          total
+                          count
+                          percentage_question
+                          percentage_survey
+                      }
+                      id
+                      type
+                      entity {
+                          id
+                          name
+                          nameClean
+                          nameHtml
+                          homepage {
+                              url
+                          }
+                      }
+                    }
+                }
+            }
+        }
+    }

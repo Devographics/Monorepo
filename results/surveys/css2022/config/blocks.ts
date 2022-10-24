@@ -24,6 +24,9 @@ import HowToHelpBlock from 'core/blocks/other/HowToHelpBlock'
 import SponsorFinishBlock from 'core/blocks/block/sponsor_chart/SponsorFinishBlock'
 import LivestreamBlock from 'core/blocks/other/LivestreamBlock'
 
+// data explorer
+import DataExplorerBlock from 'core/blocks/explorer/DataExplorerBlock'
+
 // demographics
 import ParticipationByCountryBlock from 'core/blocks/demographics/ParticipationByCountryBlock'
 import GenderBlock from 'core/blocks/demographics/GenderBlock'
@@ -93,6 +96,9 @@ const blockRegistry = {
     SponsorFinishBlock,
     LivestreamBlock,
     // ReportBlock,
+    
+    // explorer
+    DataExplorerBlock,
     
     // demographics
     ParticipationByCountryBlock,

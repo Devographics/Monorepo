@@ -3,16 +3,19 @@ import {
     computeTermAggregationAllYearsWithCache,
     computeTermAggregationSingleYearWithCache
 } from '../compute'
-import { getFacetPath } from '../helpers'
+import { getFacetPath, getFacetKeys } from '../helpers'
 
 interface ExplorerResolverDynamicConfig extends ResolverDynamicConfig {
     facet1: string
     facet2: string
 }
 
-
 export default {
     ExplorerExperience: {
+        keys1: async ({ facet1 }: ExplorerResolverDynamicConfig) => getFacetKeys(facet1),
+
+        keys2: async ({ facet2 }: ExplorerResolverDynamicConfig) => getFacetKeys(facet2),
+
         all_years: async (
             { survey, id, filters, options, facet1, facet2 }: ExplorerResolverDynamicConfig,
             args: any,

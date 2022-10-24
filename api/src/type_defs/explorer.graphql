@@ -7,6 +7,7 @@ type ExplorerBucket {
     percentage_question: Float
     percentage_survey: Float
     percentage_facet: Float
+    entity: Entity
 }
 
 #  only support two nesting levels for now (facet and bucket)
@@ -23,6 +24,7 @@ type ExplorerFacet {
     id: String
     buckets: [ExplorerBucket]
     completion: FacetCompletion
+    entity: Entity
 }
 
 type YearExplorerExperience {
@@ -33,4 +35,6 @@ type YearExplorerExperience {
 type ExplorerExperience {
     all_years: [YearExplorerExperience]
     year(year: Int!): YearExplorerExperience
+    keys1: [String]
+    keys2: [String]
 }

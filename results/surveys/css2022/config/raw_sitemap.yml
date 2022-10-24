@@ -57,6 +57,15 @@
       wrapBlock: false
       disableExport: true
 
+- id: data_explorer
+  titleId: sections.data_explorer.title
+  path: /explorer
+  blocks:
+    - template: page_introduction
+
+    - id: data_explorer
+      template: data_explorer
+
 - id: user_info
   titleId: sections.demographics.title
   path: /demographics
