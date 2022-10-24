@@ -34,7 +34,7 @@ export interface ExplorerData {
 
 export interface Dot {
   i: number 
-  visible: boolean
+  visible?: boolean
   x: number
   y: number
   rowIndex?: number

@@ -1,24 +1,20 @@
 import React from 'react'
 import styled from 'styled-components'
-import { mq, spacing, fontSize } from 'core/theme'
-import T from 'core/i18n/T'
+// import { mq, spacing, fontSize } from 'core/theme'
+// import T from 'core/i18n/T'
 import DataExplorer from './DataExplorer'
+import { ExplorerData } from './types'
 
-const DataExplorerBlock = ({ data }) => {
+const DataExplorerBlock = ({ data }: { data: ExplorerData }) => {
     console.log(data)
     return (
-        <About>
+        <Wrapper>
             <DataExplorer data={data} />
-        </About>
+        </Wrapper>
     )
 }
 
-const About = styled.div`
-    @media ${mq.large} {
-        max-width: 700px;
-        margin: 0 auto;
-        margin-bottom: ${spacing(4)};
-    }
+const Wrapper = styled.div`
 `
 
 export default DataExplorerBlock

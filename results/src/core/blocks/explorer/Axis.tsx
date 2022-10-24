@@ -1,12 +1,19 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
-import { mq, spacing, fontSize } from 'core/theme'
-import T from 'core/i18n/T'
+// import { mq, spacing, fontSize } from 'core/theme'
+// import T from 'core/i18n/T'
 // import Cell from './Cell'
 import { GAP } from './constants'
 import { Key } from './types'
 
-const Axis = ({ type, keys }) => {
+type AxisType = 'x' | 'y'
+
+interface AxisProps {
+    type: AxisType
+    keys: Key[]
+}
+
+const Axis = ({ type, keys }: AxisProps) => {
     return (
         <Axis_ type={type} count={keys.length}>
             {keys.map((key: string) => (
@@ -16,9 +23,9 @@ const Axis = ({ type, keys }) => {
     )
 }
 
-const AxisItem = ({ id }) => <AxisItem_>{id}</AxisItem_>
+const AxisItem = ({ id }: { id: string }) => <AxisItem_>{id}</AxisItem_>
 
-const Axis_ = styled.div`
+const Axis_ = styled.div<{ type: AxisType; count: number }>`
     position: absolute;
     display: grid;
     font-size: 10px;
