@@ -41,3 +41,5 @@ export interface Dot {
   columnIndex?: number
   dotIndex?: number
 }
+
+export type AxisType = 'x' | 'y'

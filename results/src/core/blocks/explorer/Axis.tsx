@@ -4,18 +4,11 @@ import styled, { css } from 'styled-components'
 // import T from 'core/i18n/T'
 // import Cell from './Cell'
 import { GAP } from './constants'
-import { Key } from './types'
+import { Key, AxisType } from './types'
 
-type AxisType = 'x' | 'y'
-
-interface AxisProps {
-    type: AxisType
-    keys: Key[]
-}
-
-const Axis = ({ type, keys }: AxisProps) => {
+const Axis = ({ axis, keys }: { axis: AxisType; keys: Key[] }) => {
     return (
-        <Axis_ type={type} count={keys.length}>
+        <Axis_ axis={axis} count={keys.length}>
             {keys.map((key: string) => (
                 <AxisItem key={key} id={key} />
             ))}
@@ -25,12 +18,12 @@ const Axis = ({ type, keys }: AxisProps) => {
 
 const AxisItem = ({ id }: { id: string }) => <AxisItem_>{id}</AxisItem_>
 
-const Axis_ = styled.div<{ type: AxisType; count: number }>`
+const Axis_ = styled.div<{ axis: AxisType; count: number }>`
     position: absolute;
     display: grid;
     font-size: 10px;
-    ${({ type, count }) =>
-        type === 'x'
+    ${({ axis, count }) =>
+        axis === 'x'
             ? css`
                   color: red;
                   grid-template-columns: repeat(${count}, 1fr);

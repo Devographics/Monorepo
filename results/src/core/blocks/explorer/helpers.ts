@@ -1,6 +1,7 @@
 import sumBy from 'lodash/sumBy'
 import { ExplorerDataBucket, ExplorerDataFacet, Dot, Key } from './types'
 import { TOTAL_DOTS, PEOPLE_PER_DOTS, INCREMENT, GAP, GRID_WIDTH } from './constants'
+import variables from 'Config/variables.yml'
 
 /*
 
@@ -129,4 +130,36 @@ export const getDots = ({
         }
     })
     return dots
+}
+
+const getOptGroups = (categories: any) => {
+    return Object.keys(categories).map(id => {
+        return { id, fields: categories[id] }
+    })
+}
+
+export const getSelectorItems = () => {
+    const selectorItems = [
+        {
+            id: 'demographics',
+            optGroups: [
+                {
+                    id: 'all_fields',
+                    fields: [
+                        'age',
+                        'years_of_experience',
+                        'company_size',
+                        'higher_education_degree',
+                        'yearly_salary',
+                        'gender',
+                        'race_ethnicity',
+                        'disability_status'
+                    ]
+                }
+            ]
+        },
+        { id: 'features', optGroups: getOptGroups(variables.featuresCategories) },
+        { id: 'tools', optGroups: getOptGroups(variables.toolsCategories) }
+    ]
+    return selectorItems
 }

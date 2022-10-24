@@ -11,5 +11,4 @@ export const PEOPLE_PER_DOTS = 10
 
 export const MAX_DOT_PER_CELL_LINE = 10
 
-
 export const GRID_WIDTH = 760
