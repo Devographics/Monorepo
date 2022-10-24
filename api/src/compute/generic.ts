@@ -1,8 +1,15 @@
 import { Db } from 'mongodb'
 import { inspect } from 'util'
 import config from '../config'
-import { Entity } from "@devographics/core-models";
-import { YearCompletion, Facet, FacetCompletion, SurveyConfig, RequestContext, ResolverDynamicConfig } from '../types'
+import { Entity } from '@devographics/core-models'
+import {
+    YearCompletion,
+    Facet,
+    FacetCompletion,
+    SurveyConfig,
+    RequestContext,
+    ResolverDynamicConfig
+} from '../types'
 import { Filters, generateFiltersQuery } from '../filters'
 import { ratioToPercentage } from './common'
 import { getEntity } from '../entities'
@@ -19,6 +26,7 @@ import { count } from 'console'
 import difference from 'lodash/difference.js'
 import yamlKeys from '../data/keys.yml'
 import isEmpty from 'lodash/isEmpty.js'
+import { getFacetSegments } from '../helpers'
 
 export interface TermAggregationOptions {
     // filter aggregations
@@ -157,13 +165,17 @@ export async function computeDefaultTermAggregationByYear({
     const sort = options?.sort?.property ?? 'count'
     const order = convertOrder(options?.sort?.order ?? 'desc')
 
+    const { fieldName: facetId } = options.facet && getFacetSegments(options.facet) || {}
     const facetSort = options?.facetSort?.property ?? 'mean'
     const facetOrder = convertOrder(options?.facetSort?.order ?? 'desc')
+    const facetValues = facetId && yamlKeys[facetId]
 
     // console.log('// key')
     // console.log(key)
     // console.log('// options')
     // console.log(options)
+    // console.log('// values')
+    // console.log(values)
 
     const match: any = {
         survey: survey.survey,
@@ -238,7 +250,7 @@ export async function computeDefaultTermAggregationByYear({
         await addMeans(results, values)
     }
 
-    await sortFacets(results, { sort: facetSort, order: facetOrder })
+    await sortFacets(results, { sort: facetSort, order: facetOrder, values: facetValues })
 
     await limitFacets(results, { facetLimit, facetMinPercent, facetMinCount })
 
@@ -462,11 +474,21 @@ export async function sortBuckets(resultsByYears: ResultsByYear[], options: Sort
 }
 
 export async function sortFacets(resultsByYears: ResultsByYear[], options: SortOptions) {
-    const { sort, order } = options
+    const { sort, order, values } = options
     for (let year of resultsByYears) {
-        year.facets = sortBy(year.facets, sort)
-        if (order === -1) {
-            year.facets.reverse()
+        if (values && !isEmpty(values)) {
+            // if values are specified, sort by values
+            year.facets = [...year.facets].sort((a, b) => {
+                // make sure everything is a string to avoid type mismatches
+                const stringValues = values.map(v => v.toString())
+                return stringValues.indexOf(a.id.toString()) - stringValues.indexOf(b.id.toString())
+            })
+        } else {
+            // sort by sort/order
+            year.facets = sortBy(year.facets, sort)
+            if (order === -1) {
+                year.facets.reverse()
+            }
         }
     }
 }

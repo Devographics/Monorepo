@@ -189,10 +189,15 @@ export const getDemographicsResolvers = (survey: SurveyConfig) => {
     return resolvers
 }
 
+export const getFacetSegments = (facet: string) => {
+    const [section, fieldName] = facet?.includes('/') ? facet.split('/') : ['demographics', facet]
+    return { section, fieldName }
+}
+
 export const getFacetPath = (facet: string) => {
     // if facet contains "/" assume it's of the format "section/field"
     // else default to treating it as a demographics facet
-    const [section, fieldName] = facet?.includes('/') ? facet.split('/') : ['demographics', facet]
+    const { section, fieldName } = getFacetSegments(facet)
     switch (section) {
         case 'demographics':
             return getDemographicsFieldPath(fieldName)
@@ -204,6 +209,12 @@ export const getFacetPath = (facet: string) => {
         default:
             return `${section}.${fieldName}.choices`
     }
+}
+
+export const getFacetKeys = (facet: string) => {
+    const { fieldName } = getFacetSegments(facet)
+    const keys = yamlKeys[fieldName]
+    return keys
 }
 
 export const getDemographicsFacetPath = (facet: string) => {
