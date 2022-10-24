@@ -651,7 +651,7 @@ outline:
           - id: frontend_horse
           - id: frontend_focus
           - id: css_irl
-          - id: modern_css
+          - id: moderncss
           - id: medium
 
       - id: blogs_news_magazines
