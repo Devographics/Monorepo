@@ -37,6 +37,8 @@ export interface Dot {
   visible?: boolean
   x: number
   y: number
+  xAbs: number
+  yAbs: number
   rowIndex?: number
   columnIndex?: number
   dotIndex?: number

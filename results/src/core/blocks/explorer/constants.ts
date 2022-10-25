@@ -1,5 +1,7 @@
 export const INCREMENT = 10
 
+export const INCREMENT_Y = 10
+
 export const GAP = INCREMENT
 
 export const TOTAL_DOTS = 1000

@@ -69,7 +69,8 @@ const Grid_ = styled.div`
 `
 const Row_ = styled.div`
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-auto-columns: minmax(0, 1fr);
+    grid-auto-flow: column;
     gap: 10px;
     height: 100px;
 `

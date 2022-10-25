@@ -3,7 +3,7 @@ import styled from 'styled-components'
 // import { mq, spacing, fontSize } from 'core/theme'
 // import T from 'core/i18n/T'
 // import Dot from './Dot'
-import { getDots, getDataAttr, getParameters } from './helpers'
+import { getDots, getDataAttr, getDotStyle, getParameters } from './helpers'
 import { ExplorerDataFacet, Key } from './types'
 
 interface DotsProps {
@@ -13,24 +13,27 @@ interface DotsProps {
 }
 
 const Dots = ({ facets, keys1, keys2 }: DotsProps) => {
-    console.log(facets)
+    // console.log(facets)
     const dots = getDots({ facets, keys1, keys2 })
-    console.log(dots)
-    console.log(getParameters({ keys1, keys2 }))
+    const params = getParameters({ keys1, keys2 })
+    // console.log(dots)
+    // console.log(params)
     return (
         <Dots_>
             {dots.map((dot, i) => (
-                <Dot_
-                    {...getDataAttr(dot)}
-                    key={i}
-                    style={{ left: `${dot.x}px`, top: `${dot.y}px` }}
-                />
+                <Dot_ {...getDataAttr(dot)} key={i} style={getDotStyle(dot, params)} />
             ))}
         </Dots_>
     )
 }
 
-const Dots_ = styled.div``
+const Dots_ = styled.div`
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    bottom: 0px;
+    right: 0px;
+`
 
 const Dot_ = styled.div`
     border-radius: 100%;
@@ -43,6 +46,7 @@ const Dot_ = styled.div`
     margin-bottom: 2px;
     position: absolute;
     z-index: 5;
+    transition: all 300ms ease-in;
 `
 
 export default Dots

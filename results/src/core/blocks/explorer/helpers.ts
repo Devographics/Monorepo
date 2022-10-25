@@ -1,6 +1,14 @@
 import sumBy from 'lodash/sumBy'
 import { ExplorerDataBucket, ExplorerDataFacet, Dot, Key } from './types'
-import { TOTAL_DOTS, PEOPLE_PER_DOTS, INCREMENT, GAP, GRID_WIDTH } from './constants'
+import {
+    TOTAL_DOTS,
+    PEOPLE_PER_DOTS,
+    INCREMENT,
+    GAP,
+    GRID_WIDTH,
+    MAX_DOT_PER_CELL_LINE,
+    INCREMENT_Y
+} from './constants'
 import variables from 'Config/variables.yml'
 
 /*
@@ -15,7 +23,40 @@ export const getParameters = ({ keys1, keys2 }: { keys1: Key[]; keys2: Key[] }) 
     const maxDotsPerLine = Math.floor(cellWidth / INCREMENT)
     const columnWidth = maxDotsPerLine * INCREMENT
     const rowHeight = 100
-    return { gap: GAP, columnCount, rowCount, cellWidth, maxDotsPerLine, columnWidth, rowHeight }
+    const cellColumnCount = MAX_DOT_PER_CELL_LINE
+    const cellRowCount = 10
+    return {
+        gap: GAP,
+        columnCount,
+        rowCount,
+        cellWidth,
+        maxDotsPerLine,
+        columnWidth,
+        rowHeight,
+        cellColumnCount,
+        cellRowCount
+    }
+}
+
+export const getDotStyle = (dot: Dot, params) => {
+    const { x, y, visible } = dot
+    const { columnCount, rowCount, cellColumnCount, cellRowCount } = params
+    // x
+    const gapCountX = columnCount - 1
+    const cellWidth = `((100% - ${gapCountX * GAP}px)/${columnCount})`
+    const incrementX = `(${cellWidth}/${cellColumnCount})`
+    const numberOfXGaps = Math.floor(x / cellColumnCount)
+    const left = `calc(${x} * ${incrementX} + ${GAP * numberOfXGaps}px)`
+
+    // y
+    const gapCountY = rowCount - 1
+    const cellHeight = `((100% - ${gapCountY * GAP}px)/${rowCount})`
+    const incrementY = `(${cellHeight}/${cellRowCount})`
+    const numberOfYGaps = Math.floor(y / cellRowCount)
+    const top = `calc(${y} * ${incrementY} + ${GAP * numberOfYGaps}px)`
+    console.log(x, y, left, top)
+    const opacity = visible ? 0.8 : 0;
+    return { left, top, opacity }
 }
 
 /*
@@ -38,13 +79,17 @@ export const getPixelCoordinates = ({
     columnIndex: number
     dotIndex: number
 }) => {
-    const { maxDotsPerLine, columnWidth, rowHeight } = getParameters({ keys1, keys2 })
+    const { cellColumnCount, cellRowCount, maxDotsPerLine, columnWidth, rowHeight } = getParameters(
+        { keys1, keys2 }
+    )
 
-    const x = columnIndex * (columnWidth + GAP) + (dotIndex % maxDotsPerLine) * INCREMENT
-    const y = rowIndex * (rowHeight + GAP) + Math.floor(dotIndex / maxDotsPerLine) * INCREMENT
+    const x = columnIndex * cellColumnCount + (dotIndex % MAX_DOT_PER_CELL_LINE)
+    const y = rowIndex * cellRowCount + Math.floor(dotIndex / MAX_DOT_PER_CELL_LINE)
+    const xAbs = columnIndex * (columnWidth + GAP) + (dotIndex % maxDotsPerLine) * INCREMENT
+    const yAbs = rowIndex * (rowHeight + GAP) + Math.floor(dotIndex / maxDotsPerLine) * INCREMENT
     // const x = columnIndex
     // const y = rowIndex
-    return { x, y }
+    return { x, y, xAbs, yAbs }
 }
 
 // get data attr for debugging
@@ -123,8 +168,14 @@ export const getDots = ({
             const { rowIndex } = facet
             const { columnIndex } = bucket
             const dotIndex = Math.floor((peopleCount - bucket.fromCount) / INCREMENT)
-            const { x, y } = getPixelCoordinates({ keys1, keys2, rowIndex, columnIndex, dotIndex })
-            return { i, visible: true, x, y, rowIndex, columnIndex, dotIndex }
+            const { x, y, xAbs, yAbs } = getPixelCoordinates({
+                keys1,
+                keys2,
+                rowIndex,
+                columnIndex,
+                dotIndex
+            })
+            return { i, visible: true, x, y, xAbs, yAbs, rowIndex, columnIndex, dotIndex }
         } else {
             return { i, visible: false, x: 0, y: 0 }
         }

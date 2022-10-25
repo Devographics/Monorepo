@@ -5,8 +5,8 @@ query: >
     dataAPI {
         survey(survey: ${surveyType}) {
             explorer(
-                facet1: "demographics/yearly_salary"
-                facet2: "demographics/years_of_experience"
+                facet1: "${facet1}"
+                facet2: "${facet2}"
             ) {
                 keys1
                 keys2

@@ -22,27 +22,38 @@ const DataExplorer = ({ data, stateStuff }: { data: ExplorerData; stateStuff: an
     facets = addExtraCounts(facets)
     return (
         <Wrapper>
-            <Axis axis="x" keys={keys1} />
-            <Axis axis="y" keys={keys2} />
-            <Dots facets={facets} keys1={keys1} keys2={keys2} />
-            <Grid facets={facets} keys1={keys1} keys2={keys2} />
-            <Stats facets={facets} />
-            <Selector axis="y" stateStuff={stateStuff} />
-            <Selector axis="x" stateStuff={stateStuff} />
+            <GridWrapper_>
+                <Dots facets={facets} keys1={keys1} keys2={keys2} />
+                <Grid facets={facets} keys1={keys1} keys2={keys2} />
+                <Axis axis="x" keys={keys1} />
+                <Axis axis="y" keys={keys2} />
+            </GridWrapper_>
+            <Footer_>
+                <Stats facets={facets} />
+                <Selector axis="y" stateStuff={stateStuff} />
+                <Selector axis="x" stateStuff={stateStuff} />
+            </Footer_>
         </Wrapper>
     )
 }
 
 const Wrapper = styled.div`
     position: relative;
-    height: 760px;
-    width: 760px;
+    /* height: 760px; */
+    /* width: 760px; */
     margin: 20px;
     /* @media ${mq.large} {
         max-width: 700px;
         margin: 0 auto;
         margin-bottom: ${spacing(4)};
     } */
+`
+
+const GridWrapper_ = styled.div`
+    position: relative;
+`
+const Footer_ = styled.div`
+    margin-top: 30px;
 `
 
 export default DataExplorer

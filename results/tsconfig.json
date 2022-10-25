@@ -28,6 +28,9 @@
     "paths": {
       "core/*": [
         "./src/core/*"
+      ],
+      "@templates/*": [
+        "./src/templates/*"
       ]
     }
   }

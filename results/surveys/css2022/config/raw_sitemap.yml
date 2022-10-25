@@ -65,6 +65,9 @@
 
     - id: data_explorer
       template: data_explorer
+      variables:
+        facet1: demographics/yearly_salary
+        facet2: demographics/years_of_experience
 
 - id: user_info
   titleId: sections.demographics.title
