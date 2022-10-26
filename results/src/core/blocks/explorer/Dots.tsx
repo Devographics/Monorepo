@@ -46,7 +46,7 @@ const Dot_ = styled.div`
     margin-bottom: 2px;
     position: absolute;
     z-index: 5;
-    transition: all 300ms ease-in;
+    transition: all 700ms ease-in;
 `
 
 export default Dots

@@ -7,8 +7,8 @@ import TooltipComponent from 'core/components/Tooltip'
 const labelMaxLength = 20
 
 const shorten = (label: string) => {
-    if (label.length > labelMaxLength + 1) {
-        return label.substr(0, labelMaxLength) + '…'
+    if (label?.length > labelMaxLength + 1) {
+        return label?.substring(0, labelMaxLength) + '…'
     } else {
         return label
     }

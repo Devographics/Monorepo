@@ -29,7 +29,7 @@ const YearSelector_ = styled.div`
     margin-bottom: 10px;
 `
 
-const Year_ = styled.button`
+const Year_ = styled.button<{ isCurrentYear: boolean }>`
     border: ${({ isCurrentYear }) => (isCurrentYear ? '3px solid white' : 'none')};
 `
 

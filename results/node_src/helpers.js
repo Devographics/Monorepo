@@ -125,15 +125,11 @@ exports.getExistingData = async ({ dataFileName, dataFilePath, baseUrl }) => {
     let contents, data
     if (process.env.JSON_CACHE_TYPE === 'local') {
         if (fs.existsSync(dataFilePath)) {
-            console.log(`// 🎯 File ${dataFileName} found on disk, loading its contents…`)
             contents = fs.readFileSync(dataFilePath, 'utf8')
         }
     } else {
         const response = await fetch(`${baseUrl}/data/${dataFileName}`)
         contents = await response.text()
-        if (contents) {
-            console.log(`// 🎯 File ${dataFileName} found on GitHub, loading its contents…`)
-        }
     }
     try {
         data = JSON.parse(contents)
@@ -155,7 +151,7 @@ Try loading data from disk or GitHub, or else run queries for *each block* in a 
 */
 exports.runPageQueries = async ({ page, graphql, config }) => {
     const startedAt = new Date()
-    const useCache = !!process.env.USE_CACHE
+    const useCache = process.env.USE_CACHE === 'false' ? false : true
     console.log(`// Running GraphQL queries for page ${page.id}… (useCache=${useCache})`)
 
     const paths = exports.getConfigLocations(config)
@@ -183,6 +179,11 @@ exports.runPageQueries = async ({ page, graphql, config }) => {
                     baseUrl
                 })
                 if (existingData && useCache) {
+                    const loadingMethod =
+                        process.env.JSON_CACHE_TYPE === 'local' ? 'disk' : 'GitHub'
+                    console.log(
+                        `// 🎯 File ${dataFileName} found on ${loadingMethod}, loading its contents…`
+                    )
                     data = existingData
                 } else {
                     logToFile(queryFileName, v.query.replace('dataAPI', 'query'), {
