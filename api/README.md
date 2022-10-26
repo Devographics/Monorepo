@@ -55,3 +55,16 @@ query GetLocaleData {
   }
 }
 ```
+
+## Field Naming Format
+
+Format: `section.field.suffix`
+
+- `section`
+  - `field`
+    - no suffix: string/string[] (deprecated, always use `choices` or `others`)
+    - `choices`: string/string[]
+    - `others`
+      - `raw`: string
+      - `normalized`: string[]
+      - `patterns`: string[]

@@ -170,12 +170,7 @@ export const getDemographicsResolvers = (survey: SurveyConfig) => {
             context: RequestContext,
             info: any
         ) => {
-            console.log('// getDemographicsResolvers')
-            // console.log(args)
-            // console.log(context)
-            // console.log(info)
             const { fieldName } = info
-            console.log(fieldName)
             const { filters, options, facet } = args
             return {
                 fieldName,
@@ -190,30 +185,45 @@ export const getDemographicsResolvers = (survey: SurveyConfig) => {
 }
 
 export const getFacetSegments = (facet: string) => {
-    const [section, fieldName] = facet?.includes('/') ? facet.split('/') : ['demographics', facet]
-    return { section, fieldName }
+    const [sectionName, fieldName] = facet?.includes('/')
+        ? facet.split('/')
+        : ['demographics', facet]
+    return { sectionName, fieldName }
 }
 
 export const getFacetPath = (facet: string) => {
     // if facet contains "/" assume it's of the format "section/field"
     // else default to treating it as a demographics facet
-    const { section, fieldName } = getFacetSegments(facet)
-    switch (section) {
+    const { sectionName, fieldName } = getFacetSegments(facet)
+    switch (sectionName) {
         case 'demographics':
             return getDemographicsFieldPath(fieldName)
         case 'features':
         case 'tools':
-            return `${section}.${fieldName}.experience`
+            return `${sectionName}.${fieldName}.experience`
         case 'resources':
         case 'tools_others':
         default:
-            return `${section}.${fieldName}.choices`
+            return `${sectionName}.${fieldName}.choices`
     }
 }
 
 export const getFacetKeys = (facet: string) => {
-    const { fieldName } = getFacetSegments(facet)
-    const keys = yamlKeys[fieldName]
+    let keys
+    const { sectionName, fieldName } = getFacetSegments(facet)
+    switch (sectionName) {
+        case 'features':
+            keys = yamlKeys.feature
+            break
+
+        case 'tools':
+            keys = yamlKeys.tool
+            break
+
+        default:
+            keys = yamlKeys[fieldName]
+            break
+    }
     return keys
 }
 

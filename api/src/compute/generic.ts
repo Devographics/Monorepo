@@ -46,6 +46,8 @@ export interface TermAggregationOptions {
     facetLimit?: number
     facetMinPercent?: number
     facetMinCount?: number
+    facet1keys?: string[]
+    facet2keys?: string[]
 }
 
 export interface SortSpecifier {
@@ -156,6 +158,8 @@ export async function computeDefaultTermAggregationByYear({
         values = await options.keysFunction({ id: fieldId, survey })
     } else if (options.keys) {
         values = options.keys
+    } else if (options.facet1keys) {
+        values = options.facet1keys
     } else if (yamlKeys[fieldId]) {
         values = yamlKeys[fieldId]
     }
@@ -168,14 +172,14 @@ export async function computeDefaultTermAggregationByYear({
     const { fieldName: facetId } = options.facet && getFacetSegments(options.facet) || {}
     const facetSort = options?.facetSort?.property ?? 'mean'
     const facetOrder = convertOrder(options?.facetSort?.order ?? 'desc')
-    const facetValues = facetId && yamlKeys[facetId]
+    const facetValues = options.facet2keys || facetId && yamlKeys[facetId]
 
-    // console.log('// key')
-    // console.log(key)
-    // console.log('// options')
-    // console.log(options)
-    // console.log('// values')
-    // console.log(values)
+    console.log('// key')
+    console.log(key)
+    console.log('// options')
+    console.log(options)
+    console.log('// values')
+    console.log(values)
 
     const match: any = {
         survey: survey.survey,

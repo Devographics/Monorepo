@@ -28,7 +28,9 @@ export default {
                 options: {
                     ...options,
                     filters,
-                    facet: facet2
+                    facet: facet2,
+                    facet1keys: getFacetKeys(facet1),
+                    facet2keys: getFacetKeys(facet2)
                 }
             }),
         year: async (
