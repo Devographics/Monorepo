@@ -28,7 +28,7 @@ export interface BlockDefinition {
 
     // data
     query?: string
-    variables?: object
+    variables?: any
     dataPath?: string
     keysPath?: string
     entityPath?: string

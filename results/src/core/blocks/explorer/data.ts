@@ -2,6 +2,13 @@ import template from 'lodash/template'
 
 export const getFacetPath = (section: string, field: string) => `${section}/${field}`
 
+export const getFacetSegments = (facet: string) => {
+    const [sectionName, fieldName] = facet?.includes('/')
+        ? facet.split('/')
+        : ['demographics', facet]
+    return { sectionName, fieldName }
+}
+
 export const getSizeInKB = (obj: any) => {
   const str = JSON.stringify(obj)
   // Get the length of the Uint8Array

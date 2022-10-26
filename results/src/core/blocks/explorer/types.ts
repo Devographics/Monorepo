@@ -24,6 +24,7 @@ export interface ExplorerDataFacet {
 
 export interface ExplorerDataYear {
     facets: ExplorerDataFacet[]
+    year: number
 }
 
 export interface ExplorerData {

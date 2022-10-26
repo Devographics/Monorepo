@@ -16,7 +16,7 @@ const Grid = ({
     return (
         <Grid_>
             {keys2.map((f, i) => (
-                <Row key={i} yIndex={i} facets={facets} keys1={keys1} />
+                <Row key={i} yIndex={i} facets={facets} keys1={keys1} keys2={keys2} />
             ))}
         </Grid_>
     )
@@ -25,10 +25,12 @@ const Grid = ({
 const Row = ({
     facets,
     keys1,
+    keys2,
     yIndex
 }: {
     facets: ExplorerDataFacet[]
     keys1: Key[]
+    keys2: Key[]
     yIndex: number
 }) => {
     const facet = facets[yIndex]
@@ -63,16 +65,21 @@ const Cell = ({
     )
 }
 const Grid_ = styled.div`
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-auto-rows: minmax(0, 1fr);
+    grid-auto-flow: row;
     gap: 10px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
 `
 const Row_ = styled.div`
     display: grid;
     grid-auto-columns: minmax(0, 1fr);
     grid-auto-flow: column;
     gap: 10px;
-    height: 100px;
 `
 
 const Cell_ = styled.div`

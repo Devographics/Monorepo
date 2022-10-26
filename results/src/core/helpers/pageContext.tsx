@@ -6,6 +6,7 @@ interface PageContextValue {
     width?: number
     isCapturing?: boolean
     chartSponsors?: any
+    config?: any
 }
 
 const pageContext = createContext({})

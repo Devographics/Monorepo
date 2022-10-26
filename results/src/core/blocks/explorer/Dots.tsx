@@ -15,9 +15,9 @@ interface DotsProps {
 const Dots = ({ facets, keys1, keys2 }: DotsProps) => {
     // console.log(facets)
     const dots = getDots({ facets, keys1, keys2 })
-    const params = getParameters({ keys1, keys2 })
+    const params = getParameters({ facets, keys1, keys2 })
     // console.log(dots)
-    // console.log(params)
+    console.log(params)
     return (
         <Dots_>
             {dots.map((dot, i) => (

@@ -7,6 +7,7 @@ import { getSelectorItems } from './helpers'
 
 const Selector = ({ axis, stateStuff }: { axis: AxisType; stateStuff: any }) => {
     const selectorItems = getSelectorItems()
+    const { setCurrentYear, lastYear } = stateStuff
     const section = stateStuff[`${axis}Section`]
     const setSection = stateStuff[`set${axis}Section`]
     const field = stateStuff[`${axis}Field`]
@@ -15,15 +16,16 @@ const Selector = ({ axis, stateStuff }: { axis: AxisType; stateStuff: any }) => 
     const currentSection = selectorItems.find(s => s.id === section)
     return (
         <Selector_>
-            <span>{axis === 'x' ? '→' : '↑'}</span>
-            {' '}
+            <span>{axis === 'x' ? '→' : '↑'}</span>{' '}
             <select
                 onChange={e => {
                     setSection(e.target.value)
+                    setField('')
                 }}
+                value={section}
             >
                 {selectorItems.map(({ id }) => (
-                    <option key={id} value={id} selected={id === section}>
+                    <option key={id} value={id}>
                         {id}
                     </option>
                 ))}
@@ -31,20 +33,23 @@ const Selector = ({ axis, stateStuff }: { axis: AxisType; stateStuff: any }) => 
             <select
                 onChange={e => {
                     setField(e.target.value)
+                    setCurrentYear(lastYear)
                 }}
+                value={field}
             >
+                <option value="" disabled>Select item</option>
                 {currentSection?.optGroups.map(({ id, fields }) => (
-                    <Group key={id} id={id} fields={fields} field={field} />
+                    <Group key={id} id={id} fields={fields} />
                 ))}
             </select>
         </Selector_>
     )
 }
 
-const Group = ({ id, fields, field }: { id: string; fields: string[]; field: string }) => (
+const Group = ({ id, fields }: { id: string; fields: string[] }) => (
     <optgroup label={id}>
         {fields.map(f => (
-            <option key={f} value={f} selected={f === field}>
+            <option key={f} value={f}>
                 {f}
             </option>
         ))}

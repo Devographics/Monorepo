@@ -55,7 +55,7 @@ const JSONExport = ({ block, data }) => {
 
     return (
         <div>
-            <AutoSelectText value={jsonExport} block={block} />
+            <AutoSelectText value={jsonExport} />
         </div>
     )
 }

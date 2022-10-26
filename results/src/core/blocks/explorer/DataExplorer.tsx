@@ -6,6 +6,7 @@ import Dots from './Dots'
 import Grid from './Grid'
 import Axis from './Axis'
 import Selector from './Selector'
+import YearSelector from './YearSelector'
 import Stats from './Stats'
 import { ExplorerData } from './types'
 import { addExtraCounts } from './helpers'
@@ -18,8 +19,13 @@ keys2: y-axis
 */
 const DataExplorer = ({ data, stateStuff }: { data: ExplorerData; stateStuff: any }) => {
     const { keys1, keys2, all_years } = data
-    let facets = all_years[1].facets
-    facets = addExtraCounts(facets)
+    const { isLoading, currentYear } = stateStuff
+    const allYears = all_years.map(y => y.year)
+    const currentYearData = all_years.find(y => y.year === currentYear)
+    if (!currentYearData) {
+        return <div>No data for year {currentYear}.</div>
+    }
+    const facets = addExtraCounts(currentYearData.facets)
     return (
         <Wrapper>
             <GridWrapper_>
@@ -27,9 +33,11 @@ const DataExplorer = ({ data, stateStuff }: { data: ExplorerData; stateStuff: an
                 <Grid facets={facets} keys1={keys1} keys2={keys2} />
                 <Axis axis="x" keys={keys1} />
                 <Axis axis="y" keys={keys2} />
+                {isLoading && <Loading_>loading…</Loading_>}
             </GridWrapper_>
             <Footer_>
                 <Stats facets={facets} />
+                <YearSelector allYears={allYears} stateStuff={stateStuff} />
                 <Selector axis="y" stateStuff={stateStuff} />
                 <Selector axis="x" stateStuff={stateStuff} />
             </Footer_>
@@ -51,9 +59,20 @@ const Wrapper = styled.div`
 
 const GridWrapper_ = styled.div`
     position: relative;
+    height: 600px;
 `
 const Footer_ = styled.div`
     margin-top: 30px;
+`
+const Loading_ = styled.div`
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(4px);
+    z-index: 20;
 `
 
 export default DataExplorer

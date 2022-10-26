@@ -19,15 +19,6 @@ query: >
                           percentage_question
                           percentage_survey
                           percentage_facet
-                          entity {
-                              id
-                              name
-                              nameClean
-                              nameHtml
-                              homepage {
-                                  url
-                              }
-                          }
                       }
                       completion {
                           total
@@ -37,15 +28,6 @@ query: >
                       }
                       id
                       type
-                      entity {
-                          id
-                          name
-                          nameClean
-                          nameHtml
-                          homepage {
-                              url
-                          }
-                      }
                     }
                 }
             }
