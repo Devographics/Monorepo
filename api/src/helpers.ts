@@ -21,7 +21,7 @@ export const getOtherKey = (id: string) => {
     if (id.includes('_others')) {
         key = `${id.replace('_others', '')}.others.normalized`
     } else if (id.includes('_freeform')) {
-        key = `${id}.normalized`
+        key = `${id}.others.normalized`
     } else {
         key = `${id}.choices`
     }
