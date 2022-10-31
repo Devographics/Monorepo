@@ -20,6 +20,8 @@ const entitiesQuery = print(gql`
       type
       category
       description
+      descriptionHtml
+      descriptionClean
       patterns
       apiOnly
       mdn {

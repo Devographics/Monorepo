@@ -1,13 +1,15 @@
 import React from "react";
 
 export interface FormDescriptionProps {
-  description: string;
+  description?: string;
+  descriptionHtml?: string;
 }
-export const FormDescription = ({ description }: FormDescriptionProps) => {
+
+export const FormDescription = ({ description, descriptionHtml }: FormDescriptionProps) => {
   return (
     <div
       className="form-description"
-      dangerouslySetInnerHTML={{ __html: description }}
+      dangerouslySetInnerHTML={{ __html: descriptionHtml || description }}
     />
   );
 };
