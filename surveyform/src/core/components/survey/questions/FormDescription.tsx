@@ -1,7 +1,7 @@
 import React from "react";
 
 export interface FormDescriptionProps {
-  description?: string;
+  description: string;
   descriptionHtml?: string;
 }
 
