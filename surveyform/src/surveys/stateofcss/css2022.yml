@@ -19,7 +19,7 @@ shareUrl: https://stateofcss.com
 # resultsUrl: https://2022.stateofcss.com/
 name: "State of CSS"
 year: 2022
-status: 2 # preview/open/closed/hidden
+status: 3 # preview/open/closed/hidden
 # TODO: this is the old version using a relative path
 imageUrl: "stateofcss2022.png"
 # TODO: should switch to absolute image
@@ -663,20 +663,17 @@ outline:
         template: multiple
         options:
           - id: stack_overflow
-          - id: mdn
+          - id: udemy
           - id: w3schools
+          - id: mdn
           - id: freecodecamp
           - id: codecademy
-          - id: levelup
-          - id: wes_bos
-          - id: frontendmasters
-          - id: pluralsight
-          - id: designcode
-          - id: udemy
-          - id: egghead
-          - id: newline
           - id: web_dev
-          - id: linkedin_learning
+          - id: javascript_info
+          - id: scrimba
+          - id: frontendmasters
+          - id: wes_bos
+          - id: platzi
 
       - id: sites_courses
         template: others

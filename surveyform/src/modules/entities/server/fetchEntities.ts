@@ -14,6 +14,8 @@ const entitiesQuery = print(gql`
     entities(ids: $ids) {
       id
       name
+      nameHtml
+      nameClean
       tags
       type
       category
@@ -48,7 +50,7 @@ const entitiesQuery = print(gql`
 `);
 
 /**
- * Fetch raw entities from the trasnlation API
+ * Fetch raw entities from the translation API
  * @returns
  */
 export const fetchEntities = async (variables) => {

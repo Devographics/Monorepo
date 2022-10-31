@@ -21,11 +21,11 @@ import { SurveyType } from "@devographics/core-models";
 
 export const surveys: Array<SurveyType> = [
   // @ts-ignore
+  js2022,
+  // @ts-ignore
   css2022,
   // @ts-ignore
   graphql2022,
-  // @ts-ignore
-  js2022,
   // @ts-ignore
   js2021,
   // @ts-ignore

@@ -41,11 +41,11 @@ const EntityLabel = ({
       />
     );
   } else if (entity) {
-    const { name } = entity;
+    const { name, nameHtml } = entity;
     return (
       <span
         className="entity-label"
-        dangerouslySetInnerHTML={{ __html: name }}
+        dangerouslySetInnerHTML={{ __html: nameHtml || name }}
       />
     );
   } else {
