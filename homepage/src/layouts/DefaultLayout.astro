@@ -1,6 +1,7 @@
 ---
 import { I18nContext, I18nContextProvider } from '../helpers/i18nContext'
 import Footer from '@components/Footer.astro'
+import Partners from '@components/Partners.astro'
 import OtherSurveys from '@components/OtherSurveys.astro'
 import { getMeta } from '@helpers/meta'
 
@@ -48,6 +49,7 @@ const variables = `
         <div>
         <slot />
         </div>
+        <Partners {...Astro.props} />
         <Footer {...Astro.props} />
       </div>
   </body>

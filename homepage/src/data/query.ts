@@ -5,6 +5,12 @@ export const getAllSurveysQuery = () => /* GraphQL */`
       hashtag
       name
       domain
+      partners {
+        name
+        id
+        url
+        imageUrl
+      }
       emailOctopus{
         listId
       }
