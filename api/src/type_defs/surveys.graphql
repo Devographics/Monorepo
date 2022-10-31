@@ -47,6 +47,7 @@ type SurveyItem {
     editions: [SurveyEditionConfig]
     data: SurveyData
     emailOctopus: EmailOctopusConfig
+    partners: [SurveySponsorsItem]
 }
 
 type EmailOctopusConfig {
