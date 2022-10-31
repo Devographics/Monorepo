@@ -42,7 +42,7 @@ export const FormItem = (props: FormItemProps) => {
   const { entities } = data;
   const entity = entities?.find((e) => e.id === questionId);
 
-  const description = showDescription && (intlDescription || entity?.description);
+  const description = showDescription && (intlDescription || entity?.descriptionHtml || entity?.description);
 
   const innerComponent = loading ? (
     <FormInputLoading loading={loading}>{children}</FormInputLoading>

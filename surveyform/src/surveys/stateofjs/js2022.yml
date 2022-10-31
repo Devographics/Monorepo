@@ -241,8 +241,8 @@ outline:
       # new in 2021
       - id: redwood
         year: 2021
-      - id: blitz
-        year: 2021
+      # - id: blitz # removed in 2022, too niche?
+      #   year: 2021
       - id: remix
         year: 2021
       - id: astro
