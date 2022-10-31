@@ -3,7 +3,7 @@ import styled from 'styled-components'
 // import { mq, spacing, fontSize } from 'core/theme'
 // import T from 'core/i18n/T'
 // import Dot from './Dot'
-import { getDots, getDataAttr, getDotStyle, getParameters } from './helpers'
+import { getAllDots, getDataAttr, getDotStyle, getParameters } from './helpers'
 import { ExplorerDataFacet, Key } from './types'
 
 interface DotsProps {
@@ -14,7 +14,7 @@ interface DotsProps {
 
 const Dots = ({ facets, keys1, keys2 }: DotsProps) => {
     // console.log(facets)
-    const dots = getDots({ facets, keys1, keys2 })
+    const dots = getAllDots({ facets, keys1, keys2 })
     const params = getParameters({ facets, keys1, keys2 })
     // console.log(dots)
     console.log(params)

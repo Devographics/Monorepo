@@ -8,8 +8,10 @@ import Axis from './Axis'
 import Selector from './Selector'
 import YearSelector from './YearSelector'
 import Stats from './Stats'
+import Totals from './Totals'
+import UnitsSelector from './UnitsSelector'
 import { ExplorerData } from './types'
-import { addExtraCounts } from './helpers'
+import { addExtraCounts, getTotals } from './helpers'
 
 /*
 
@@ -26,13 +28,18 @@ const DataExplorer = ({ data, stateStuff }: { data: ExplorerData; stateStuff: an
         return <div>No data for year {currentYear}.</div>
     }
     const facets = addExtraCounts(currentYearData.facets)
+    const totals1 = getTotals({ facets, axis: 'x', keys: keys1 })
+    const totals2 = getTotals({ facets, axis: 'y', keys: keys2 })
+    const commonProps = { facets, keys1, keys2, totals1, totals2, stateStuff }
     return (
         <Wrapper>
             <GridWrapper_>
-                <Dots facets={facets} keys1={keys1} keys2={keys2} />
-                <Grid facets={facets} keys1={keys1} keys2={keys2} />
+                <Dots {...commonProps} />
+                <Grid {...commonProps} />
                 <Axis axis="x" keys={keys1} />
                 <Axis axis="y" keys={keys2} />
+                <Totals axis="x" totals={totals1} />
+                <Totals axis="y" totals={totals2} />
                 {isLoading && <Loading_>loading…</Loading_>}
             </GridWrapper_>
             <Footer_>
@@ -40,6 +47,7 @@ const DataExplorer = ({ data, stateStuff }: { data: ExplorerData; stateStuff: an
                 <YearSelector allYears={allYears} stateStuff={stateStuff} />
                 <Selector axis="y" stateStuff={stateStuff} />
                 <Selector axis="x" stateStuff={stateStuff} />
+                <UnitsSelector {...commonProps} />
             </Footer_>
         </Wrapper>
     )
@@ -59,10 +67,10 @@ const Wrapper = styled.div`
 
 const GridWrapper_ = styled.div`
     position: relative;
-    height: 600px;
+    height: 700px;
 `
 const Footer_ = styled.div`
-    margin-top: 30px;
+    margin-top: 60px;
 `
 const Loading_ = styled.div`
     position: absolute;

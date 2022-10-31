@@ -41,6 +41,7 @@ const DataExplorerBlock = ({
     const [query, setQuery] = useState(defaultQuery)
     const [isLoading, setIsLoading] = useState(false)
     const [currentYear, setCurrentYear] = useState(lastYear)
+    const [unit, setUnit] = useState('count')
 
     const stateStuff = {
         xSection,
@@ -57,6 +58,8 @@ const DataExplorerBlock = ({
         setCurrentYear,
         data,
         setData,
+        unit,
+        setUnit,
         lastYear // not really state but who cares…
     }
 
@@ -91,6 +94,19 @@ const DataExplorerBlock = ({
         <Wrapper>
             <DataExplorer data={data} stateStuff={stateStuff} />
             <BlockData block={{ id: `${xField}__${yField}`, query }} data={data} />
+            <div>
+                ### Chart Scale  <br/><br/>
+                
+                One dot represents 10 respondents. <br/><br/>
+                
+                ### Extra & Missing Respondents<br/><br/>
+                
+                If 50% of question respondents are right-handed, and there are 1000 CSS Grid users,
+                you'd expect to find 500 right-handed CSS Grid users. <br/><br/>
+                
+                Any deviation above or below that expected total is highlighted with either green dots (for extra respondents) or
+                empty red dots (for missing respondents).
+            </div>
         </Wrapper>
     )
 }

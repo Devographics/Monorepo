@@ -1,13 +1,11 @@
 import sumBy from 'lodash/sumBy'
-import { ExplorerDataBucket, ExplorerDataFacet, Dot, Key } from './types'
+import { ExplorerDataBucket, ExplorerDataFacet, Dot, Key, AxisType, Total } from './types'
 import {
     TOTAL_DOTS,
     PEOPLE_PER_DOTS,
     INCREMENT,
     GAP,
     GRID_WIDTH,
-    MAX_DOT_PER_CELL_LINE,
-    INCREMENT_Y
 } from './constants'
 import variables from 'Config/variables.yml'
 
@@ -178,8 +176,12 @@ export const isBetween = (i: number, lowerBound = 0, upperBound = 0) => {
     return lowerBound <= i && i <= upperBound
 }
 
-// get all dots
-export const getDots = ({
+/*
+
+Get all the dots for the entire grid as one array
+
+*/
+export const getAllDots = ({
     facets,
     keys1,
     keys2
@@ -262,4 +264,86 @@ export const getSelectorItems = () => {
         { id: 'tools', optGroups: getOptGroups(variables.toolsCategories) }
     ]
     return selectorItems
+}
+
+export const getTotals = ({
+    facets,
+    axis,
+    keys
+}: {
+    facets: ExplorerDataFacet[]
+    axis: AxisType
+    keys: Key[]
+}): Total[] => {
+    if (axis === 'x') {
+        // facet 1
+        return keys.map((key: Key) => {
+            const total = sumBy(facets, (facet: ExplorerDataFacet) => {
+                const bucket = facet.buckets.find(b => b.id === key)
+                return bucket?.count || 0
+            })
+            return {
+                id: key,
+                total
+            }
+        })
+    } else {
+        // facet 2
+        return keys.map((key: Key) => {
+            const facet = facets.find((f: ExplorerDataFacet) => f.id === key)
+            return { id: key, total: facet?.completion?.count || 0 }
+        })
+    }
+}
+
+/*
+
+Get all data for a single cell
+
+*/
+export const getCellData = ({
+    facet,
+    totals1,
+    xIndex
+}: {
+    facet: ExplorerDataFacet
+    totals1: Total[]
+    xIndex: number
+}) => {
+    // find the right bucket for the current cell based on its xIndex (column index)
+    const bucket = facet?.buckets[xIndex]
+    // aggregated sum for every instance of this bucket (column total)
+    const bucketTotal = totals1.find(t => t.id === bucket.id)?.total || 0
+    // total count for current facet (row total)
+    const facetTotal = facet.completion.count
+    // what percentage of question respondents are represented by this facet
+    const facetPercentageQuestion = facet.completion.percentage_question
+    // what perrcentage of survey respondents are represented by this facet
+    // note: we probably don't want to use this here because all totals used already
+    // discount people who didn't answer the question
+    const facetPercentageSurvey = facet.completion.percentage_survey
+    // count for current bucket (cell)
+    const bucketCount = bucket.count
+    // percentage of bucket relative to current facet (row)
+    const bucketPercentage = Math.round(bucketCount * 100 / facetTotal)
+    // count that you would expect based solely on total respondents for this bucket overall,
+    // divided by percentage of question respondents in this facet
+    const normalizedCount = Math.round((bucketTotal * facetPercentageQuestion) / 100)
+    // delta between expected count and real count
+    const normalizedCountDelta = bucketCount - normalizedCount
+    // same delta expressed as a percentage
+    const normalizedPercentage = Math.round(normalizedCount * 100 / facetTotal)
+    const normalizedPercentageDelta = bucketPercentage - normalizedPercentage
+
+    return {
+        bucketTotal,
+        facetTotal,
+        facetPercentageQuestion,
+        facetPercentageSurvey,
+        bucketCount,
+        bucketPercentage,
+        normalizedCount,
+        normalizedCountDelta,
+        normalizedPercentageDelta
+    }
 }

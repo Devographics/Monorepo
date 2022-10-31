@@ -1,8 +1,9 @@
-
 export type Key = string
 
 export interface Completion {
     count: number
+    percentage_survey: number
+    percentage_question: number
 }
 
 export interface ExplorerDataBucket {
@@ -34,15 +35,28 @@ export interface ExplorerData {
 }
 
 export interface Dot {
-  i: number 
-  visible?: boolean
-  x: number
-  y: number
-  xAbs: number
-  yAbs: number
-  rowIndex?: number
-  columnIndex?: number
-  dotIndex?: number
+    i: number
+    visible?: boolean
+    x: number
+    y: number
+    xAbs: number
+    yAbs: number
+    rowIndex?: number
+    columnIndex?: number
+    dotIndex?: number
 }
 
 export type AxisType = 'x' | 'y'
+
+export interface Total {
+    id: Key
+    total: number
+}
+
+export interface CommonProps {
+    facets: ExplorerDataFacet[]
+    keys1: Key[]
+    keys2: Key[]
+    totals1: Total[]
+    totals2: Total[]
+}
