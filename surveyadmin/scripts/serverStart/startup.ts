@@ -15,7 +15,7 @@ import * as scripts from "~/server/scripts";
 const startup = []; //getSetting("startup", []);
 const environment = process.env.NODE_ENV; //getSetting("environment");
 
-const runScripts = process.env.RUN_SCRIPTS; //getSetting("runScripts", false);
+const runScripts = Boolean(process.env.RUN_SCRIPTS); //getSetting("runScripts", false);
 
 export async function onStartup() {
   // todo
@@ -35,6 +35,8 @@ export async function onStartup() {
 
     // await scripts.renameGraphQL2022Fields();
     // await scripts.renormalizeGraphQL2022();
+    // await scripts.addChoicesSuffixToUserInfoFields()
+    // await scripts.fixChoicesChoices()
 
     // for some reason JSON arrays are of the form: { '0': 'testScript', '1': 'testScript2' },
     // convert it to regular array first to make things easier

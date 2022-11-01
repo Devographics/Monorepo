@@ -16,6 +16,10 @@ import { logToFile } from "@devographics/core-models/server";
 // import { getSurveyBySlug } from "~/modules/surveys/helpers";
 import surveys from "~/surveys";
 import type { Field } from "@devographics/core-models";
+import { NormalizedResponseMongooseModel } from "~/admin/models/normalized_responses/model.server";
+
+import mongoose from "mongoose";
+const ObjectId = mongoose.Types.ObjectId;
 
 /*
 
@@ -247,4 +251,151 @@ export const fixRenameFields = async () => {
       }
     }
   }
+};
+
+const fieldsToAddChoicesTo = [
+  "yearly_salary",
+  "years_of_experience",
+  "company_size",
+  "gender",
+  "race_ethnicity",
+  "job_title",
+  "css_proficiency",
+  "javascript_proficiency",
+  "backend_proficiency",
+];
+
+// user_info.yearly_salary => user_info.yearly_salary.choices
+export const addChoicesSuffixToUserInfoFields = async () => {
+  await connectToAppDb();
+
+  console.log("// addChoicesSuffixToUserInfoFields");
+
+  // note: we can't rename user_info.foo to user_info.foo.choices
+  // because they both share the same subfield path, so first we
+  // move the field we want to rename to temporary user_info_temp subfield
+
+  // find all fields with user_info.foo but not user_info.foo.choices
+  const selector1: { $or: any[] } = { $or: [] };
+  fieldsToAddChoicesTo.forEach((fieldName) => {
+    selector1.$or.push({
+      $and: [
+        { [`user_info.${fieldName}`]: { $exists: true, $nin: [null, "", []] } },
+        { [`user_info.${fieldName}.choices`]: { $exists: false } },
+      ],
+    });
+  });
+  console.log("// selector1");
+  console.log(JSON.stringify(selector1, null, 2));
+
+  const rename1: any = {};
+  fieldsToAddChoicesTo.forEach((fieldName) => {
+    rename1[`user_info.${fieldName}`] = `user_info_temp.${fieldName}`;
+  });
+  const operation1 = {
+    $rename: rename1,
+  };
+  console.log("// operation1");
+  console.log(operation1);
+
+  const result1 = await NormalizedResponseMongooseModel.updateMany(
+    selector1,
+    operation1
+  );
+  console.log("// result1");
+  console.log(result1);
+
+  // rename user_info_temp.foo to user_info.foo.choices
+  const rename2: any = {};
+  fieldsToAddChoicesTo.forEach((fieldName) => {
+    rename2[`user_info_temp.${fieldName}`] = `user_info.${fieldName}.choices`;
+  });
+  const operation2 = {
+    $rename: rename2,
+  };
+  console.log("// operation2");
+  console.log(operation2);
+
+  const result2 = await NormalizedResponseMongooseModel.updateMany(
+    { user_info_temp: { $exists: true } },
+    operation2
+  );
+  console.log("// result2");
+  console.log(result2);
+
+  // unset all user_info_temp subfields to clean up
+  const result3 = await NormalizedResponseMongooseModel.updateMany(
+    { user_info_temp: { $exists: true } },
+    { $unset: { user_info_temp: 1 } }
+  );
+  console.log("// result3");
+  console.log(result3);
+};
+
+const fieldsToRemoveChoicesFrom = [
+  "race_ethnicity",
+  "css_proficiency",
+  "javascript_proficiency",
+  "backend_proficiency",
+];
+
+// user_info.yearly_salary => user_info.yearly_salary.choices
+export const fixChoicesChoices = async () => {
+  await connectToAppDb();
+
+  console.log("// addChoicesSuffixToUserInfoFields");
+
+  for (const fieldName of fieldsToRemoveChoicesFrom) {
+    console.log(`//// fieldName: ${fieldName}`);
+
+    // note: we can't rename user_info.foo to user_info.foo.choices
+    // because they both share the same subfield path, so first we
+    // move the field we want to rename to temporary user_info_temp subfield
+
+    // find all fields with user_info.foo but not user_info.foo.choices
+    const selector1 = {
+      [`user_info.${fieldName}.choices.choices`]: { $exists: 1 },
+    };
+    console.log("// selector1");
+    console.log(selector1);
+    const operation1 = {
+      $rename: {
+        [`user_info.${fieldName}.choices`]: `user_info_temp.${fieldName}`,
+      },
+    };
+    console.log("// operation1");
+    console.log(operation1);
+
+    const result1 = await NormalizedResponseMongooseModel.updateMany(
+      selector1,
+      operation1
+    );
+    console.log("// result1");
+    console.log(result1);
+
+    // rename user_info_temp.foo to user_info.foo.choices
+    const selector2 = { [`user_info_temp.${fieldName}`]: { $exists: true } }
+    console.log("// selector2");
+    console.log(selector2);
+    const operation2 = {
+      $rename: { [`user_info_temp.${fieldName}`]: `user_info.${fieldName}` },
+    };
+    console.log("// operation2");
+    console.log(operation2);
+
+    const result2 = await NormalizedResponseMongooseModel.updateMany(
+      selector2,
+      operation2
+    );
+    console.log("// result2");
+    console.log(result2);
+  }
+
+  // unset all user_info_temp subfields to clean up
+  const result3 = await NormalizedResponseMongooseModel.updateMany(
+    { user_info_temp: { $exists: true } },
+    { $unset: { user_info_temp: 1 } }
+  );
+  console.log("// result3");
+  console.log(result3);
 };
