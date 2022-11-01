@@ -13,7 +13,7 @@ const { surveys, survey, locale, locales, redirect } = Astro.props;
 const { editions } = survey
 
 const lastEdition = editions.sort((e1, e2) => e2.year - e1.year)[0]
-const { colors, faviconUrl } = lastEdition
+const { colors = {}, faviconUrl } = lastEdition
 const meta = getMeta({ survey, locale, lastEdition })
 
 const { primary, secondary, background, backgroundSecondary, text } = colors

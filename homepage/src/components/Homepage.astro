@@ -5,7 +5,9 @@ import Newsletter from '@components/Newsletter'
 import { statuses } from '@helpers/constants'
 import { getLocaleSubset } from '@helpers/translator'
 const { survey, locale, surveys } = Astro.props
-const editions = survey.editions.sort((e1, e2) => e2.year - e1.year).filter(e => e.status !== statuses.hidden)
+const editions = survey.editions
+    .sort((e1, e2) => e2.year - e1.year)
+    .filter(e => [statuses.open, statuses.closed].includes(e.status))
 const { slug } = survey
 
 const [lastEdition, ...pastEditions] = editions
@@ -14,92 +16,103 @@ const closedEditions = editions.filter(e => e.status === statuses.closed)
 ---
 
 <div class="homepage">
+    <h1>
+        {survey.name}
+    </h1>
+    <p class="survey-description">
+        <T locale={locale} k={`general.${slug}.description`} />
+    </p>
 
-  <h1>
-    {survey.name}
-  </h1>
-  <p class="survey-description">
-    <T locale={locale} k={`general.${slug}.description`} />
-  </p>
+    <section class="last-edition">
+        <SurveyEdition locale={locale} edition={lastEdition} survey={survey} isLast={true} />
+    </section>
 
-  <section class="last-edition">
-    <SurveyEdition locale={locale} edition={lastEdition} survey={survey} isLast={true} />
-  </section>
-
-  <div class="intro">
-    <T locale={locale} k={`general.${slug}.intro`} md={true} />
-  </div>
-
-
-  <Newsletter client:load locale={getLocaleSubset(locale,
-    ['newsletter.stay_tuned', 'newsletter.leave_your_email' , 'newsletter.email'
-    , 'newsletter.submit' ])} listId={survey.emailOctopus.listId} />
-
-  {pastEditions.length > 0 && <section class="past-editions">
-    <h2>
-      <T locale={locale} k="homepage.past_surveys" />
-    </h2>
-    <div class="past-editions-items">
-      {pastEditions.map(edition => (
-      <SurveyEdition locale={locale} key={edition.surveyId} edition={edition} survey={survey} />
-      ))}
+    <div class="intro">
+        <T locale={locale} k={`general.${slug}.intro`} md={true} />
     </div>
-  </section>}
 
+    <Newsletter
+        client:load
+        locale={getLocaleSubset(locale, [
+            'newsletter.stay_tuned',
+            'newsletter.leave_your_email',
+            'newsletter.email',
+            'newsletter.submit'
+        ])}
+        listId={survey.emailOctopus.listId}
+    />
+
+    {
+        pastEditions.length > 0 && (
+            <section class="past-editions">
+                <h2>
+                    <T locale={locale} k="homepage.past_surveys" />
+                </h2>
+                <div class="past-editions-items">
+                    {pastEditions.map(edition => (
+                        <SurveyEdition
+                            locale={locale}
+                            key={edition.surveyId}
+                            edition={edition}
+                            survey={survey}
+                        />
+                    ))}
+                </div>
+            </section>
+        )
+    }
 </div>
 
 <style lang="scss">
-  @import '../stylesheets/_breakpoints.scss';
+    @import '../stylesheets/_breakpoints.scss';
 
-  h1 {
-    font-size: var(--title-font);
-    text-align: center;
-    margin-bottom: var(--halfspacing);
-    line-height: 1;
+    h1 {
+        font-size: var(--title-font);
+        text-align: center;
+        margin-bottom: var(--halfspacing);
+        line-height: 1;
 
-    @include small {
-      font-size: var(--largest-font);
-    }
-  }
-
-  .survey-description {
-    font-size: var(--large-font);
-    margin-bottom: var(--doublespacing);
-    text-align: center;
-    opacity: var(--secondary-opacity);
-  }
-
-  h2 {
-    font-size: var(--larger-font);
-    margin-bottom: var(--doublespacing);
-    text-align: center;
-  }
-
-  .intro {
-    font-size: var(--large-font);
-    margin-bottom: var(--doublespacing);
-    text-align: center;
-
-    @include small {
-      font-size: var(--medium-font);
-    }
-  }
-
-  .last-edition,
-  .past-editions {
-    margin-bottom: var(--doublespacing);
-
-  }
-
-  .past-editions-items {
-    display: grid;
-    column-gap: var(--doublespacing);
-    row-gap: var(--doublespacing);
-    grid-template-columns: 1fr 1fr;
-
-    @include small {
-      grid-template-columns: 1fr;
+        @include small {
+            font-size: var(--largest-font);
+        }
     }
 
-  }
+    .survey-description {
+        font-size: var(--large-font);
+        margin-bottom: var(--doublespacing);
+        text-align: center;
+        opacity: var(--secondary-opacity);
+    }
+
+    h2 {
+        font-size: var(--larger-font);
+        margin-bottom: var(--doublespacing);
+        text-align: center;
+    }
+
+    .intro {
+        font-size: var(--large-font);
+        margin-bottom: var(--doublespacing);
+        text-align: center;
+
+        @include small {
+            font-size: var(--medium-font);
+        }
+    }
+
+    .last-edition,
+    .past-editions {
+        margin-bottom: var(--doublespacing);
+    }
+
+    .past-editions-items {
+        display: grid;
+        column-gap: var(--doublespacing);
+        row-gap: var(--doublespacing);
+        grid-template-columns: 1fr 1fr;
+
+        @include small {
+            grid-template-columns: 1fr;
+        }
+    }
 </style>
