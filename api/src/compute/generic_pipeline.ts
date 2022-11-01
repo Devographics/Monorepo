@@ -23,7 +23,7 @@ export const getGenericPipeline = (pipelineProps: PipelineProps) => {
 
     const match: any = {
         survey,
-        [key]: { $nin: [null, '', []] },
+        [key]: { $nin: [null, '', [], {}] },
         ...generateFiltersQuery(filters)
     }
 

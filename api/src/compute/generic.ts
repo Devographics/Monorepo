@@ -174,16 +174,18 @@ export async function computeDefaultTermAggregationByYear({
     const facetOrder = convertOrder(options?.facetSort?.order ?? 'desc')
     const facetValues = options.facet2keys || facetId && yamlKeys[facetId]
 
-    console.log('// key')
-    console.log(key)
-    console.log('// options')
-    console.log(options)
-    console.log('// values')
-    console.log(values)
+    // console.log('// key')
+    // console.log(key)
+    // console.log('// options')
+    // console.log(options)
+    // console.log('// values')
+    // console.log(values)
+    // console.log('// facetValues')
+    // console.log(facetValues)
 
     const match: any = {
         survey: survey.survey,
-        [key]: { $nin: [null, '', []] },
+        [key]: { $nin: [null, '', [], {}] },
         ...generateFiltersQuery(filters)
     }
     // if year is passed, restrict aggregation to specific year
