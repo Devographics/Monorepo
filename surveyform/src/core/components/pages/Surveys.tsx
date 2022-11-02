@@ -8,9 +8,10 @@ import Translators from "~/core/components/common/Translators";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import Image from "next/image";
 import { getSurveyImageUrl } from "~/surveys/getSurveyImageUrl";
+import { SurveyDocument } from "@devographics/core-models";
 
-const SurveyItem = ({ survey }) => {
-  const { name, year, resultsUrl } = survey;
+const SurveyItem = ({ survey }: { survey: SurveyDocument }) => {
+  const { name, year, status } = survey;
   const imageUrl = getSurveyImageUrl(survey);
   //const Components = useVulcanComponents();
   return (
@@ -21,15 +22,16 @@ const SurveyItem = ({ survey }) => {
             href={getSurveyPath({ survey, home: true })}
             className="survey-link"
           >
-            <span className="survey-image-inner">
+            <div className="survey-image-inner">
               <Image
+                priority={[1, 2].includes(status)}
                 width={300}
                 height={200}
                 src={imageUrl}
                 alt={`${name} ${year}`}
                 quality={100}
               />
-            </span>
+            </div>
             <span className="survey-name">
               <span>
                 {name} {year}

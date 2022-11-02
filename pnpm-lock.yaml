@@ -716,7 +716,7 @@ importers:
       next: 13.0.1
       next-connect: ^0.9.1
       next-sitemap: ^1.4.17
-      next-transpile-modules: ^9.0.0
+      next-transpile-modules: ^10.0.0
       node-cache: ^5.1.2
       node-fetch: ^3.2.10
       nodemailer: ^6.6.3
@@ -904,7 +904,7 @@ importers:
       eslint-plugin-storybook: 0.5.13_cl6qtdo3npn4kngw26aibg642e
       graphql-voyager: 1.0.0-rc.31_ur6l4sgkudx3u5z6sjjtibwat4
       mongodb-memory-server: 7.6.3
-      next-transpile-modules: 9.0.0
+      next-transpile-modules: 10.0.0
       react-is: 16.13.1
       source-map-support: 0.5.21
       storybook-css-modules-preset: 1.1.1
@@ -16967,7 +16967,7 @@ packages:
       mississippi: 3.0.0
       mkdirp: 0.5.6
       move-concurrently: 1.0.1
-      promise-inflight: 1.0.1
+      promise-inflight: 1.0.1_bluebird@3.7.2
       rimraf: 2.7.1
       ssri: 6.0.2
       unique-filename: 1.1.1
@@ -27131,6 +27131,12 @@ packages:
     resolution: {integrity: sha512-CXdUiJembsNjuToQvxayPZF9Vqht7hewsvy2sOWafLvi2awflj9mOC6bHIg50orX8IJvWKY9wYQ/zB2kogPslQ==}
     dev: false
 
+  /next-transpile-modules/10.0.0:
+    resolution: {integrity: sha512-FyeJ++Lm2Fq31gbThiRCrJlYpIY9QaI7A3TjuhQLzOix8ChQrvn5ny4MhfIthS5cy6+uK1AhDRvxVdW17y3Xdw==}
+    dependencies:
+      enhanced-resolve: 5.10.0
+    dev: true
+
   /next-transpile-modules/9.0.0:
     resolution: {integrity: sha512-VCNFOazIAnXn1hvgYYSTYMnoWgKgwlYh4lm1pKbSfiB3kj5ZYLcKVhfh3jkPOg1cnd9DP+pte9yCUocdPEUBTQ==}
     dependencies:
@@ -29470,6 +29476,17 @@ packages:
     peerDependenciesMeta:
       bluebird:
         optional: true
+    dev: false
+
+  /promise-inflight/1.0.1_bluebird@3.7.2:
+    resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
+    peerDependencies:
+      bluebird: '*'
+    peerDependenciesMeta:
+      bluebird:
+        optional: true
+    dependencies:
+      bluebird: 3.7.2
     dev: false
 
   /promise.allsettled/1.0.5:
