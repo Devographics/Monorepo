@@ -16,7 +16,7 @@ const DevographicsBanner = () => {
     <div className="devographics-banner">
       <div className="devographics-banner-inner">
         <div className="devographics-banner-message">
-          <FormattedMessage id="general.devographics_banner" html={true} />
+          <FormattedMessage id="general.devographics_banner" />
         </div>
       </div>
       <div className="devographics-banner-close" onClick={handleClose}>

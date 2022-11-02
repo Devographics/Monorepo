@@ -4,7 +4,7 @@ export interface FormDescriptionProps {
   description: string;
 }
 
-export const FormDescription = ({ description, descriptionHtml }: FormDescriptionProps) => {
+export const FormDescription = ({ description }: FormDescriptionProps) => {
   return (
     <div
       className="form-description"

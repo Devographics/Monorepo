@@ -197,18 +197,13 @@ const CommentInput = ({
   return (
     <div className="comment-input">
       <h5 className="comment-input-heading">
-        <FormattedMessage
-          id="experience.leave_comment"
-          values={{ label }}
-          html={true}
-        />
+        <FormattedMessage id="experience.leave_comment" values={{ label }} />
       </h5>
       <p className="comment-input-subheading">
         {questionValue ? (
           <FormattedMessage
             id="experience.tell_us_more"
             values={{ response }}
-            html={true}
           />
         ) : (
           <FormattedMessage id="experience.tell_us_more_no_value" />

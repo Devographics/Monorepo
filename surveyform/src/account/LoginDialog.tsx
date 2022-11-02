@@ -19,10 +19,7 @@ const LoginOptions = () => {
           <FormattedMessage id="accounts.create_account" />
         </h4>
         <div className="survey-login-option-description">
-          <FormattedMessage
-            id="accounts.create_account.description"
-            html={true}
-          />
+          <FormattedMessage id="accounts.create_account.description" />
         </div>
         <div className="survey-login-action">
           <StandaloneMagicLoginForm
@@ -30,7 +27,7 @@ const LoginOptions = () => {
           />
         </div>
         <div className="survey-login-option-note">
-          <FormattedMessage id="accounts.create_account.note" html={true} />
+          <FormattedMessage id="accounts.create_account.note" />
         </div>
       </div>
       <div className="survey-login-option">
