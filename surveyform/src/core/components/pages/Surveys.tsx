@@ -17,23 +17,24 @@ const SurveyItem = ({ survey }) => {
     <div>
       <div className="survey-item">
         <div className="survey-image">
-          <Link href={getSurveyPath({ survey, home: true })}>
-            <a className="survey-link">
-              <span className="survey-image-inner">
-                <Image
-                  width={300}
-                  height={200}
-                  src={imageUrl}
-                  alt={`${name} ${year}`}
-                  quality={100}
-                />
+          <Link
+            href={getSurveyPath({ survey, home: true })}
+            className="survey-link"
+          >
+            <span className="survey-image-inner">
+              <Image
+                width={300}
+                height={200}
+                src={imageUrl}
+                alt={`${name} ${year}`}
+                quality={100}
+              />
+            </span>
+            <span className="survey-name">
+              <span>
+                {name} {year}
               </span>
-              <span className="survey-name">
-                <span>
-                  {name} {year}
-                </span>
-              </span>
-            </a>
+            </span>
           </Link>
         </div>
       </div>

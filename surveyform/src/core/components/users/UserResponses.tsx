@@ -47,9 +47,7 @@ const ResponseItem = ({ createdAt, pagePath, completion = 0, survey }) => {
     <li className="response-item">
       <h4 className="response-item-survey">
         <Link href={pagePath}>
-          <a>
-            {name} {year}
-          </a>
+          {name} {year}
         </Link>
         <span className={`survey-status survey-status-${surveyStatus}`}>
           <FormattedMessage id={`general.survey_status_${surveyStatus}`} />

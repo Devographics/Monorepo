@@ -298,20 +298,18 @@ const SurveyLink = ({
   response?: { pagePath?: string };
   message: string;
 }) => {
-  const Components = useVulcanComponents();
   return (
     // TODO: see https://www.npmjs.com/package/react-router-bootstrap
     // We should probably use a NavLink bootstrap component
     //<LinkContainer to={response.pagePath || getSurveyPath({ survey })}>
-    <Link href={response.pagePath || getSurveyPath({ survey })}>
-      {/* This simulates what a "LinkContainer" is doing in react-router-bootstrap, replacing the button by a link*/}
-      <a type="button" className="btn btn-primary">
-        {/*<Components.Button>*/}
-        <FormattedMessage id={message} />
-        {/* </Components.Button>*/}
-      </a>
-    </Link>
     //</LinkContainer>
+    <Link
+      href={response.pagePath || getSurveyPath({ survey })}
+      type="button"
+      className="btn btn-primary"
+    >
+      <FormattedMessage id={message} />
+    </Link>
   );
 };
 
@@ -329,9 +327,7 @@ const ErrorItem = ({ survey, error, response }) => {
             response: { _id: properties.responseId },
           })}
         >
-          <a>
-            <FormattedMessage id="general.continue_survey" />
-          </a>
+          <FormattedMessage id="general.continue_survey" />
         </Link>
       )}
     </div>
