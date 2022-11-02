@@ -67,14 +67,20 @@
     }
   }
   .form-check {
-    display: flex;
-    align-items: center;
+    label {
+      display: flex;
+      // align-items: center;
+    }
     padding: 0 math.div($spacing, 2);
     &:last-of-type {
       margin: 0;
     }
     &:hover {
       background: $bg-color-light;
+    }
+    .form-check-input {
+      float: none;
+      margin: 0;
     }
   }
   .form-component-text {
@@ -89,8 +95,8 @@
       // opacity: 0.3;
     }
   }
-  .form-check-input {
-    margin: 0px math.div($spacing, 1.5) 0 0;
+  .form-input-wrapper {
+    margin: 7px math.div($spacing, 1.5) 0 0;
     position: relative;
     display: block;
   }
@@ -390,4 +396,14 @@
 
 .form-input:empty {
   display: none;
+}
+
+.form-option-label {
+  display: block;
+}
+
+.form-option-description {
+  display: block;
+  font-size: $smallish-font;
+  color: var(--text-color-dark);
 }

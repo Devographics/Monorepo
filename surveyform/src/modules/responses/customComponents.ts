@@ -8,6 +8,8 @@ import Tool from "~/core/components/forms/experience/Tool";
 import TopN from "~/core/components/forms/TopN";
 import Slider from "~/core/components/forms/Slider";
 import Select from "~/core/components/forms/Select";
+import Checkboxgroup from "~/core/components/forms/Checkboxgroup";
+import Radiogroup from "~/core/components/forms/Radiogroup";
 import { makeAutocomplete } from "@vulcanjs/graphql";
 import type { ParsedQuestion } from "@devographics/core-models";
 
@@ -22,6 +24,8 @@ const customComponents = {
   top_n: TopN,
   slider: Slider,
   select: Select,
+  checkboxgroup: Checkboxgroup,
+  radiogroup: Radiogroup,
 };
 
 /**
