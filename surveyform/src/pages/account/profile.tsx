@@ -18,7 +18,7 @@ const Profile = () => {
         </p>
         <UserResponses user={user} />
         <p>
-          <FormattedMessage id="accounts.questions" html={true} />
+          <FormattedMessage id="accounts.questions" />
         </p>
         <p>
           <LogoutButton />

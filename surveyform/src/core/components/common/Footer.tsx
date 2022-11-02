@@ -18,13 +18,12 @@ export const Footer = () => {
             <FormattedMessage id="general.privacy_policy" />
           </a>
         </Link>{" "}
-        | <FormattedMessage id="general.emoji_icons" html={true} /> |{" "}
+        | <FormattedMessage id="general.emoji_icons" /> |{" "}
         <FormattedMessage
           id="general.leave_issue"
           values={{
             link: "https://github.com/StateOfJS/StateOfJS-Vulcan/issues",
           }}
-          html={true}
         />{" "}
         |{" "}
         {!user && (
