@@ -36,7 +36,7 @@ const FaqItem = ({ item, index }) => {
         <FormattedMessage id={`faq.${item}`} />
       </dt>
       <dd className="faq-item-body">
-        <FormattedMessage id={`faq.${item}.description`} html={true} />
+        <FormattedMessage id={`faq.${item}.description`} />
       </dd>
     </dl>
   );

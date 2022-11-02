@@ -141,7 +141,6 @@ const Score = ({ response, survey }: { response: any; survey: SurveyType }) => {
           <FormattedMessage
             id="thanks.score_explanation"
             values={{ known, total, knowledgeRankingFromTop }}
-            html={true}
           />
         </div>
         <div className="score-share">
