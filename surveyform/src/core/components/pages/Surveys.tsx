@@ -24,7 +24,9 @@ const SurveyItem = ({ survey }: { survey: SurveyDocument }) => {
           >
             <div className="survey-image-inner">
               <Image
-                priority={[1, 2].includes(status)}
+                priority={
+                  typeof status !== "undefined" && [1, 2].includes(status)
+                }
                 width={300}
                 height={200}
                 src={imageUrl}
