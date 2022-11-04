@@ -89,7 +89,7 @@ const Normalization = ({ surveyId: surveyId_, fieldId: fieldId_ }) => {
   const [enabled, setEnabled] = useState(true);
   const [surveyId, setSurveyId] = useState(surveyId_);
   const [fieldId, setFieldId] = useState(fieldId_);
-  const [normalizationMode, setNormalizationMode] = useState("only_normalized");
+  const [normalizationMode, setNormalizationMode] = useState("all");
   const emptySegments: Segment[] = [];
   const [segmentSize, setSegmentSize] = useState(defaultSegmentSize);
   const [segments, setSegments] = useState(emptySegments);

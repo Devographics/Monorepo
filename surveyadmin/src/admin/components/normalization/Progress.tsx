@@ -5,20 +5,12 @@ import { statuses } from "./Normalization";
 
 const Progress = (props) => {
   const {
-    survey,
     responsesCount,
     doneCount,
     enabled,
     setEnabled,
-    setDoneCount,
-    setSegments,
-    fieldId,
     refetchMissingFields,
-    onlyUnnormalized,
-    isAllFields,
     segments,
-    updateSegments,
-    segmentSize,
   } = props;
   const segmentInProgress = segments.find(
     (s) => s.status === statuses.inProgress
@@ -27,7 +19,7 @@ const Progress = (props) => {
   const segmentsDone = segments.filter((s) => s.status === statuses.done);
 
   useEffect(() => {
-    if (doneCount === responsesCount) {
+    if (doneCount >= responsesCount) {
       refetchMissingFields();
     }
   }, [doneCount, responsesCount]);
@@ -66,7 +58,7 @@ const Progress = (props) => {
               startFrom={segmentInProgress?.startFrom}
             />
           )}
-          {doneCount === responsesCount && <div>Done</div>}
+          {doneCount >= responsesCount && <div>Done</div>}
         </div>
       )}
     </div>
@@ -107,8 +99,6 @@ const SegmentInProgress = ({
   segmentIndex,
   startFrom,
   responsesCount,
-  setDoneCount,
-  setSegments,
   enabled,
   onlyUnnormalized,
   isAllFields,

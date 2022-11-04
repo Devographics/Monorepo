@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import get from "lodash/get.js";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
 
-const Fields = ({ survey, field, unnormalizedFieldsLoading, unnormalizedFieldsData }) => {
+const Fields = ({
+  survey,
+  field,
+  unnormalizedFieldsLoading,
+  unnormalizedFieldsData,
+}) => {
   const Components = useVulcanComponents();
 
   const [showIds, setShowIds] = useState(true);
@@ -13,7 +18,11 @@ const Fields = ({ survey, field, unnormalizedFieldsLoading, unnormalizedFieldsDa
   // }, [survey, field])
 
   if (unnormalizedFieldsLoading) {
-    return <Components.Loading />;
+    return (
+      <div>
+        Loading… <Components.Loading />
+      </div>
+    );
   }
 
   const results = get(unnormalizedFieldsData, "unnormalizedFields");

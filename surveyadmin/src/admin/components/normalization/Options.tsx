@@ -8,7 +8,12 @@ const Options = ({
 }) => {
   return (
     <div className="normalization-options">
-      <label>
+      {/* 
+      note: the following feature does not currently work in conjunction with segmenting
+      normalizations in batches, because after a while it always reruns on the same initial segment
+      of unnormalized responses. 
+      */}
+      {/* <label>
         <input
           type="checkbox"
           checked={onlyUnnormalized}
@@ -17,7 +22,7 @@ const Options = ({
           }}
         />{" "}
         Only normalize unnormalized values
-      </label>
+      </label> */}
       <label>
         <input
           type="text"

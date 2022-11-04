@@ -139,6 +139,7 @@ export const normalizeSurvey = async (
       fieldId ? ` (field [${fieldId}])` : ""
     }… Found ${count} responses to renormalize (startFrom: ${startFrom}, limit: ${limit}). (${startAt})`
   );
+  // console.log(JSON.stringify(selector, null, 2))
 
   // iterate over responses to populate bulkOperations array
   for (const response of responses) {
@@ -217,6 +218,7 @@ export const normalizeSurvey = async (
     mutationResult.discardedCount = discardedCount;
   } catch (error) {
     console.log("// Bulk write error");
+    // console.log(JSON.stringify(bulkOperations, null, 2))
     throw error;
   }
 
@@ -225,7 +227,7 @@ export const normalizeSurvey = async (
   // duration in seconds
   mutationResult.duration = duration;
   console.log(
-    `-> Normalized ${limit - discardedCount} responses in survey ${surveyId} ${
+    `👍 Normalized ${limit - discardedCount} responses in survey ${surveyId} ${
       discardedCount > 0
         ? `(${discardedCount}/${limit} responses discarded)`
         : ""

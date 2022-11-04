@@ -70,6 +70,7 @@ Clean up values to remove 'none', 'n/a', etc.
 
 */
 export const ignoreValues = [
+  "",
   " ",
   "  ",
   "   ",
@@ -89,11 +90,14 @@ export const ignoreValues = [
   "NA",
   "None",
   "none",
-  "no",
+  "Nothing",
+  "nothing",
   "No",
+  "no",
   ".",
   "?",
 ];
+
 export const cleanupValue = (value) =>
   typeof value === "undefined" || ignoreValues.includes(value) ? null : value;
 
@@ -469,6 +473,8 @@ export const getSourceFields = (surveyId) => [
   `${surveyId}__user_info__how_did_user_find_out_about_the_survey`,
 ];
 
+const existsSelector = { $exists: true, $nin: ignoreValues }
+
 // get mongo selector
 export const getSelector = async (surveyId, fieldId, onlyUnnormalized) => {
   const survey = getSurveyBySlug(surveyId);
@@ -486,11 +492,11 @@ export const getSelector = async (surveyId, fieldId, onlyUnnormalized) => {
       if (fieldId === "source") {
         // source field should be treated differently
         selector["$or"] = getSourceFields(surveyId).map((f) => ({
-          [f]: { $exists: true, $ne: "" },
+          [f]: existsSelector,
         }));
       } else {
         const field = getSurveyFieldById(survey, fieldId);
-        selector[field.fieldName] = { $exists: true, $ne: "" };
+        selector[field.fieldName] = existsSelector;
       }
     }
   } else {
@@ -518,7 +524,7 @@ export const getUnnormalizedResponses = async (surveyId, fieldId) => {
 
   const selector = {
     surveySlug: surveyId,
-    [rawFieldPath]: { $exists: true },
+    [rawFieldPath]: existsSelector,
     $or: [
       { [normalizedFieldPath]: [] },
       { [normalizedFieldPath]: { $exists: false } },

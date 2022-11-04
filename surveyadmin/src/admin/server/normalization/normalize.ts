@@ -90,6 +90,7 @@ export const normalizeResponse = async (
       response,
       responseId: response?._id,
       selector,
+      discard: false,
     };
 
     const errors: NormalizationError[] = [];
@@ -157,29 +158,35 @@ export const normalizeResponse = async (
       }
 
       const value = get(normResp, fullPath);
-      modifier = { $set: { [fullPath]: value } };
+      if (!value) {
+        // we shouldn't be running field-specific normalization on documents where
+        // that field is empty, but handle it just in case
+        result.discard = true;
+      } else {
+        modifier = { $set: { [fullPath]: value } };
 
-      // console.log(JSON.stringify(selector, null, 2));
-      // console.log(JSON.stringify(modifier, null, 2));
+        // console.log(JSON.stringify(selector, null, 2));
+        // console.log(JSON.stringify(modifier, null, 2));
 
-      if (!isSimulation && !isBulk) {
-        // update normalized response, or insert it if it doesn't exist
-        // NOTE: this will generate ObjectId _id for unknown reason, see https://github.com/Devographics/StateOfJS-next2/issues/31
-        updatedNormalizedResponse =
-          await NormalizedResponseMongooseModel.updateOne(selector, modifier);
+        if (!isSimulation && !isBulk) {
+          // update normalized response, or insert it if it doesn't exist
+          // NOTE: this will generate ObjectId _id for unknown reason, see https://github.com/Devographics/StateOfJS-next2/issues/31
+          updatedNormalizedResponse =
+            await NormalizedResponseMongooseModel.updateOne(selector, modifier);
 
-        if (
-          !updatedNormalizedResponse ||
-          !updatedNormalizedResponse.matchedCount
-        ) {
-          console.log(response._id);
-          console.log(updatedNormalizedResponse);
-          console.log(normResp);
-          console.log(selector);
-          console.log(modifier);
-          throw new Error(
-            `Could not find existing normalized response for responseId ${response._id}, normalize entire document first to create it.`
-          );
+          if (
+            !updatedNormalizedResponse ||
+            !updatedNormalizedResponse.matchedCount
+          ) {
+            console.log(response._id);
+            console.log(updatedNormalizedResponse);
+            console.log(normResp);
+            console.log(selector);
+            console.log(modifier);
+            throw new Error(
+              `Could not find existing normalized response for responseId ${response._id}, normalize entire document first to create it.`
+            );
+          }
         }
       }
     } else {
