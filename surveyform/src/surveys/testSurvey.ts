@@ -5,5 +5,5 @@ export const testSurvey = {
   status: 2,
   name: "Graphql survey demo",
   slug: "graphql_demo",
-  prettySlug: "graphql-demo",
+  prettySlug: "graphql-survey-demo",
 };

@@ -49,10 +49,8 @@ const SurveyNavItem = ({
     setShown(false);
     await submitForm();
     setNavLoading(false);
-    router.push(
-      getSurveyPath({ survey, response, number })
-    );
-  }
+    router.push(getSurveyPath({ survey, response, number }));
+  };
 
   return (
     <li className="section-nav-item">
@@ -60,28 +58,25 @@ const SurveyNavItem = ({
       <Link
         //exact={true}
         href={getSurveyPath({ survey, number, response })}
+        ref={textInput}
+        tabIndex={currentTabindex === number ? 0 : -1}
+        onClick={handleClick}
+        onFocus={() => {
+          setCurrentFocusIndex(number);
+        }}
+        onBlur={() => {
+          setCurrentFocusIndex(null);
+        }}
       >
-        <a
-          ref={textInput}
-          tabIndex={currentTabindex === number ? 0 : -1}
-          onClick={handleClick}
-          onFocus={() => {
-            setCurrentFocusIndex(number);
-          }}
-          onBlur={() => {
-            setCurrentFocusIndex(null);
-          }}
-        >
-          <FormattedMessage
-            id={`sections.${section.intlId || section.id}.title`}
-          />{" "}
-          {showCompletion && (
-            <span className="section-nav-item-completion">{completion}%</span>
-          )}
-        </a>
+        <FormattedMessage
+          id={`sections.${section.intlId || section.id}.title`}
+        />{" "}
+        {showCompletion && (
+          <span className="section-nav-item-completion">{completion}%</span>
+        )}
       </Link>
     </li>
   );
 };
 
-export default SurveyNavItem
+export default SurveyNavItem;

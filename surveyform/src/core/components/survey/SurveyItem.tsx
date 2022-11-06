@@ -68,15 +68,13 @@ const SurveyItem = ({ survey, currentUser }) => {
           {currentSurveyResponse && !isEmpty(currentSurveyResponse) ? (
             //<LinkContainer to={currentSurveyResponse.pagePath}>
             <Link href={currentSurveyResponse.pagePath}>
-              <a>
-                <Components.Button>
-                  {status === statuses.open ? (
-                    <FormattedMessage id="general.continue_survey" />
-                  ) : (
-                    <FormattedMessage id="general.review_survey" />
-                  )}
-                </Components.Button>
-              </a>
+              <Components.Button>
+                {status === statuses.open ? (
+                  <FormattedMessage id="general.continue_survey" />
+                ) : (
+                  <FormattedMessage id="general.review_survey" />
+                )}
+              </Components.Button>
             </Link>
           ) : // </LinkContainer>
           status === statuses.open ? (
@@ -129,7 +127,7 @@ const ErrorItem = ({ survey, id, message, properties, response }) => {
       <div className="survey-item-error error message">
         {message}{" "}
         <Link href={getSurveyPath({ survey, response })}>
-          <a>Continue Survey →</a>
+          Continue Survey →
         </Link>
       </div>
     );

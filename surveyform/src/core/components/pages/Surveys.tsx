@@ -8,32 +8,37 @@ import Translators from "~/core/components/common/Translators";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import Image from "next/image";
 import { getSurveyImageUrl } from "~/surveys/getSurveyImageUrl";
+import { SurveyDocument } from "@devographics/core-models";
 
-const SurveyItem = ({ survey }) => {
-  const { name, year, resultsUrl } = survey;
+const SurveyItem = ({ survey }: { survey: SurveyDocument }) => {
+  const { name, year, status } = survey;
   const imageUrl = getSurveyImageUrl(survey);
   //const Components = useVulcanComponents();
   return (
     <div>
       <div className="survey-item">
         <div className="survey-image">
-          <Link href={getSurveyPath({ survey, home: true })}>
-            <a className="survey-link">
-              <span className="survey-image-inner">
-                <Image
-                  width={300}
-                  height={200}
-                  src={imageUrl}
-                  alt={`${name} ${year}`}
-                  quality={100}
-                />
+          <Link
+            href={getSurveyPath({ survey, home: true })}
+            className="survey-link"
+          >
+            <div className="survey-image-inner">
+              <Image
+                priority={
+                  typeof status !== "undefined" && [1, 2].includes(status)
+                }
+                width={300}
+                height={200}
+                src={imageUrl}
+                alt={`${name} ${year}`}
+                quality={100}
+              />
+            </div>
+            <span className="survey-name">
+              <span>
+                {name} {year}
               </span>
-              <span className="survey-name">
-                <span>
-                  {name} {year}
-                </span>
-              </span>
-            </a>
+            </span>
           </Link>
         </div>
       </div>

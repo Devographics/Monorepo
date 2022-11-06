@@ -67,11 +67,10 @@ const Navigation = () => {
 };
 
 const NavItem = ({ to, label, id }) => {
-  const Components = useVulcanComponents();
   return (
     <Nav.Item>
       {/*<IndexLinkContainer to={to}>*/}
-      <Link href={to} passHref>
+      <Link href={to} passHref legacyBehavior>
         <Nav.Link>{label ? label : <FormattedMessage id={id} />}</Nav.Link>
       </Link>
       {/*</IndexLinkContainer>*/}

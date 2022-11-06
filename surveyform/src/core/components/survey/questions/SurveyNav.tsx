@@ -37,7 +37,7 @@ const SurveyNav = ({
   const formContext = useFormContext();
   const { getDocument, submitForm } = formContext;
 
-  const response = getDocument()
+  const response = getDocument();
 
   const Components = useVulcanComponents();
   const outline = surveys.find((o) => o.slug === survey.slug)?.outline;
@@ -46,8 +46,9 @@ const SurveyNav = ({
 
   const [shown, setShown] = useState(false);
   const [currentTabindex, setCurrentTabindex] = useState<number | null>(null);
-  const [currentFocusIndex, setCurrentFocusIndex] =
-    useState<number | null>(null);
+  const [currentFocusIndex, setCurrentFocusIndex] = useState<number | null>(
+    null
+  );
 
   useEffect(() => {
     const keyPressHandler = (e) => {
@@ -87,9 +88,7 @@ const SurveyNav = ({
       <div className="section-nav-inner">
         <h2 className="section-nav-heading">
           <Link href={getSurveyPath({ survey, home: true })}>
-            <a>
-              {survey.name} {survey.year}
-            </a>
+            {survey.name} {survey.year}
           </Link>
         </h2>
         <Components.Button
@@ -126,7 +125,11 @@ const SurveyNav = ({
             <FormattedMessage id="general.all_questions_optional" />
           </p>
         </div>
-        {navLoading && <div className="section-nav-loading"><Components.Loading/></div>}
+        {navLoading && (
+          <div className="section-nav-loading">
+            <Components.Loading />
+          </div>
+        )}
       </div>
     </nav>
   );

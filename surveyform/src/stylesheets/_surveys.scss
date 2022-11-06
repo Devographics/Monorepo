@@ -62,8 +62,14 @@
   }
 }
 .survey-image-inner {
-  display: block;
-  padding: $spacing * 1.5;
+  padding: $spacing;
+  width: 300px;
+  max-height: 200px;
+  & img {
+    width:90%;
+    height:auto;
+    margin: 0 auto;
+  }
 }
 .survey-name {
   position: absolute;

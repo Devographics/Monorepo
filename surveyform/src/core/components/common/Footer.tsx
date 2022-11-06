@@ -14,9 +14,7 @@ export const Footer = () => {
       <div className="footer-top">
         &copy; 2022 <a href="https://devographics.com/">Devographics</a> |{" "}
         <Link href="/privacy-policy">
-          <a>
-            <FormattedMessage id="general.privacy_policy" />
-          </a>
+          <FormattedMessage id="general.privacy_policy" />
         </Link>{" "}
         | <FormattedMessage id="general.emoji_icons" /> |{" "}
         <FormattedMessage

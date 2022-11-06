@@ -61,6 +61,7 @@ const SurveyPageWrapper = (props: SurveyPageWrapperProps) => {
         <Image
           width={600}
           height={400}
+          priority={true}
           src={imageUrl}
           alt={`${name} ${year}`}
           quality={100}

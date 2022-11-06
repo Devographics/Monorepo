@@ -17,11 +17,7 @@ const Layout = (props) => (
               database.
             </p>
             <p>
-              See{" "}
-              <Link href="/">
-                <a>home README </a>
-              </Link>{" "}
-              for relevant instructions.
+              See <Link href="/">home README</Link> for relevant instructions.
             </p>
           </div>
         ) : (

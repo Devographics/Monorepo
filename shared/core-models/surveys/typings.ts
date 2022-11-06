@@ -166,5 +166,11 @@ export type SerializedSurveyDocument = Omit<
  */
 export type SurveyType = SurveyDocument
 
+/**
+ * 1 preview
+ * 2 open
+ * 3 closed
+ * 4 hidden
+ */
 export type SurveyStatus = 1 | 2 | 3 | 4;
 export type SurveyStatusLabel = "preview" | "open" | "closed" | "hidden";
