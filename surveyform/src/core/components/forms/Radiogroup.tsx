@@ -91,7 +91,7 @@ export const FormComponentRadioGroup = ({
   const Components = useVulcanComponents();
   const { updateCurrentValues } = useFormContext();
   // @ts-expect-error
-  const { options = [], value, ...otherInputProperties } = inputProperties;
+  const { options = [], value, onChange, as, ...otherInputProperties } = inputProperties;
   const hasValue = value !== "";
   return (
     <Components.FormItem
@@ -112,30 +112,33 @@ export const FormComponentRadioGroup = ({
         });
 
         return (
-          // @ts-expect-error
           <Form.Check
             {...otherInputProperties}
             key={i}
             layout="elementOnly"
             type="radio"
-            // @ts-ignore
-            // label={<FormOptionLabel option={option} />}
-            value={option.value}
-            name={path}
-            id={`${path}.${i}`}
-            path={`${path}.${i}`}
-            ref={refFunction}
-            checked={isChecked}
-            className={checkClass}
           >
             <Form.Check.Label>
               <div className="form-input-wrapper">
-                <Form.Check.Input type="radio" />
+                <Form.Check.Input
+                  {...otherInputProperties}
+                  type="radio"
+                  value={option.value}
+                  name={path}
+                  id={`${path}.${i}`}
+                  path={`${path}.${i}`}
+                  ref={refFunction}
+                  checked={isChecked}
+                  className={checkClass}
+                  onChange={onChange}
+                />
               </div>
               <div className="form-option">
                 <FormOptionLabel option={option} />
                 {optionDescription && (
-                  <FormOptionDescription optionDescription={optionDescription} />
+                  <FormOptionDescription
+                    optionDescription={optionDescription}
+                  />
                 )}
               </div>
             </Form.Check.Label>

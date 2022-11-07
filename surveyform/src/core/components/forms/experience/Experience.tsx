@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { FormCheck } from "react-bootstrap";
+import Form from "react-bootstrap/Form";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 // import { isOtherValue, removeOtherMarker, addOtherMarker } from './Checkboxgroup';
 import {
@@ -14,6 +14,7 @@ import IconComment from "~/core/components/icons/Comment";
 import IconCommentDots from "~/core/components/icons/CommentDots";
 import { useIntlContext } from "@vulcanjs/react-i18n";
 import isEmpty from "lodash/isEmpty.js";
+import FormOptionLabel from "~/core/components/survey/questions/FormOptionLabel";
 
 interface ExperienceProps extends FormInputProps {
   showDescription: boolean;
@@ -35,7 +36,13 @@ export const Experience = (props: ExperienceProps) => {
   const commentValue = get(document, commentPath);
 
   // @ts-expect-error
-  const { options = [], value, ...otherInputProperties } = inputProperties;
+  const {
+    options = [],
+    value,
+    onChange,
+    as,
+    ...otherInputProperties
+  } = inputProperties;
   const hasValue = !isEmpty(value);
 
   // open the comment widget if there is already a comment
@@ -63,22 +70,32 @@ export const Experience = (props: ExperienceProps) => {
                 : "form-check-unchecked"
               : "";
             return (
-              // @ts-expect-error
-              <FormCheck
+              <Form.Check
                 {...otherInputProperties}
                 key={i}
                 layout="elementOnly"
                 type="radio"
-                // @ts-ignore
-                label={<Components.FormOptionLabel option={option} />}
-                value={option.value}
-                name={path}
-                id={`${path}.${i}`}
-                path={`${path}.${i}`}
-                ref={refFunction}
-                checked={isChecked}
-                className={checkClass}
-              />
+              >
+                <Form.Check.Label>
+                  <div className="form-input-wrapper">
+                    <Form.Check.Input
+                      {...otherInputProperties}
+                      onChange={onChange}
+                      type="radio"
+                      value={option.value}
+                      name={path}
+                      id={`${path}.${i}`}
+                      path={`${path}.${i}`}
+                      ref={refFunction}
+                      checked={isChecked}
+                      className={checkClass}
+                    />
+                  </div>
+                  <div className="form-option">
+                    <FormOptionLabel option={option} />
+                  </div>
+                </Form.Check.Label>
+              </Form.Check>
             );
           })}
         </div>

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import without from "lodash/without.js";
 import uniq from "lodash/uniq.js";
+import take from "lodash/take.js";
 import isEmpty from "lodash/isEmpty.js";
 import {
   FormInputProps,
@@ -109,12 +110,14 @@ export const FormComponentCheckboxGroup = ({
   itemProperties = {},
 }: FormInputProps) => {
   const intl = useIntlContext();
-
+  const [showMore, setShowMore] = useState(false);
   const { updateCurrentValues } = useFormContext();
   const Components = useVulcanComponents();
 
   // @ts-expect-error
-  const { options = [], name, ...otherInputProperties } = inputProperties;
+  const { options = [], name, onChange, as, ...otherInputProperties } = inputProperties;
+
+  const { cutoff } = itemProperties;
 
   // get rid of duplicate values; or any values that are not included in the options provided
   // (unless they have the "other" marker)
@@ -138,10 +141,16 @@ export const FormComponentCheckboxGroup = ({
     }
   }
 
+  const optionsToShow = cutoff
+    ? showMore
+      ? options
+      : take(options, cutoff)
+    : options;
+
   return (
     <Components.FormItem path={path} label={label} {...itemProperties}>
       <div className="form-item-options">
-        {options.map((option, i) => {
+        {optionsToShow.map((option, i) => {
           const isChecked = value.includes(option.value);
           const checkClass = hasValue
             ? isChecked
@@ -154,42 +163,53 @@ export const FormComponentCheckboxGroup = ({
           });
 
           return (
-            // @ts-expect-error
             <Form.Check
               {...otherInputProperties}
               name={name}
               layout="elementOnly"
               key={i}
-              // @ts-ignore
-              // label={<FormOptionLabel option={option} name={name} />}
-              value={isChecked}
-              checked={isChecked}
-              id={`${path}.${i}`}
-              path={`${path}.${i}`}
-              ref={refFunction}
-              onChange={(event) => {
-                const isChecked = event.target.checked;
-                const newValue = isChecked
-                  ? [...value, option.value]
-                  : without(value, option.value);
-                updateCurrentValues({ [path]: newValue });
-              }}
               className={checkClass}
             >
               <Form.Check.Label>
                 <div className="form-input-wrapper">
-                  <Form.Check.Input type="checkbox" />
+                  <Form.Check.Input
+                    {...otherInputProperties}
+                    type="checkbox"
+                    value={isChecked}
+                    checked={isChecked}
+                    id={`${path}.${i}`}
+                    path={`${path}.${i}`}
+                    ref={refFunction}
+                    onChange={(event) => {
+                      const isChecked = event.target.checked;
+                      const newValue = isChecked
+                        ? [...value, option.value]
+                        : without(value, option.value);
+                      updateCurrentValues({ [path]: newValue });
+                    }}
+                  />
                 </div>
                 <div className="form-option">
                   <FormOptionLabel option={option} />
                   {optionDescription && (
-                    <FormOptionDescription optionDescription={optionDescription} />
+                    <FormOptionDescription
+                      optionDescription={optionDescription}
+                    />
                   )}
                 </div>
               </Form.Check.Label>
             </Form.Check>
           );
         })}
+        {cutoff && !showMore && (
+          <Components.Button
+            onClick={() => {
+              setShowMore(true);
+            }}
+          >
+            Show More…
+          </Components.Button>
+        )}
         {itemProperties.showOther && (
           <OtherComponent value={value} path={path} />
         )}
