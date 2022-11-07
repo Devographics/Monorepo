@@ -14,7 +14,7 @@ $largest-font: 2rem;
 
 $light: 300; // not used currently
 $medium: 400;
-$bold: 800;
+$bold: 700;
 
 @mixin font-light {
   font-weight: $light;
@@ -29,7 +29,8 @@ $bold: 800;
 }
 
 @mixin primary-font {
-  font-family: "IBM Plex Mono", monospace;
+  // font-family: "IBM Plex Mono", monospace;
+  font-family: avenir next, avenir, -apple-system, BlinkMacSystemFont, segoe ui, helvetica neue, helvetica, Cantarell, Ubuntu, roboto, noto, arial, sans-serif;
   font-weight: $medium;
 }
 @mixin secondary-font {
