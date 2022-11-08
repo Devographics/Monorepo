@@ -170,7 +170,7 @@ export const FormComponentCheckboxGroup = ({
               key={i}
               className={checkClass}
             >
-              <Form.Check.Label>
+              <Form.Check.Label htmlFor={`${path}.${i}`}>
                 <div className="form-input-wrapper">
                   <Form.Check.Input
                     {...otherInputProperties}

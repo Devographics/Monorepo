@@ -73,10 +73,10 @@ export const Experience = (props: ExperienceProps) => {
               <Form.Check
                 {...otherInputProperties}
                 key={i}
-                layout="elementOnly"
+                // layout="elementOnly"
                 type="radio"
               >
-                <Form.Check.Label>
+                <Form.Check.Label htmlFor={`${path}.${i}`}>
                   <div className="form-input-wrapper">
                     <Form.Check.Input
                       {...otherInputProperties}
@@ -85,7 +85,7 @@ export const Experience = (props: ExperienceProps) => {
                       value={option.value}
                       name={path}
                       id={`${path}.${i}`}
-                      path={`${path}.${i}`}
+                      // path={`${path}.${i}`}
                       ref={refFunction}
                       checked={isChecked}
                       className={checkClass}
@@ -179,7 +179,7 @@ const CommentTrigger = ({
       <Overlay
         target={target.current}
         show={show}
-        placement={window?.innerWidth < 600 ? "right" : "top"}
+        placement={"right"}
       >
         {(props) => (
           <Tooltip id="leave_comment" {...props}>

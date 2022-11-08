@@ -118,7 +118,7 @@ export const FormComponentRadioGroup = ({
             layout="elementOnly"
             type="radio"
           >
-            <Form.Check.Label>
+            <Form.Check.Label htmlFor={`${path}.${i}`}>
               <div className="form-input-wrapper">
                 <Form.Check.Input
                   {...otherInputProperties}
