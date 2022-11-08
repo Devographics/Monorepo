@@ -1,5 +1,5 @@
 import { GetServerSideProps, GetStaticProps } from "next";
-import { getLocaleStrings } from "./fetchLocales";
+import { getLocaleStrings } from "./fetchLocalesRedis";
 
 // Currently, loading locales will happen on each and every page
 // to be improved when Next.js layouts are released

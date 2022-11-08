@@ -16,7 +16,7 @@ import {
 } from "~/lib/server/caching";
 import { Locale, RawLocale } from "../typings";
 import { getFragmentName } from "@vulcanjs/graphql";
-import { getSizeInKB } from "~/lib/server/utils";
+import { measureTime } from "~/lib/server/utils";
 
 const disableAPICache = false; //getSetting("disableAPICache", false);
 const translationAPI = serverConfig.translationAPI; //getSetting("translationAPI");
@@ -35,12 +35,10 @@ const localeDefinitionFragment = gql`
 const localesQuery = print(gql`
   query Locales {
     locales {
-      id
-      completion
-      label
-      translators
+      ...${getFragmentName(localeDefinitionFragment)}
     }
   }
+  ${localeDefinitionFragment}
 `);
 
 const localeStringsQuery = print(gql`
@@ -61,27 +59,28 @@ const localeStringsQuery = print(gql`
 
 const commonContexts = ["common", "surveys", "accounts"];
 // TODO: move this elsewhere, maybe in surveys config?
-const surveyContexts = [
-  "state_of_css",
-  "state_of_js",
-  "state_of_graphql",
-];
+const surveyContexts = ["state_of_css", "state_of_js", "state_of_graphql"];
 // TODO: we should query only relevant strings per survey ideally
 const contexts = [...commonContexts, ...surveyContexts];
 
-const fetchTranslationApi = async (query: string, variables?: any, queryName?: string) => {
-  const startAt = new Date()
-  const response = await fetch(translationAPI, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
-    body: JSON.stringify({
-      query,
-      variables,
-    }),
-  });
+const fetchTranslationApiGraphQL = async (
+  query: string,
+  variables?: any,
+  queryName?: string
+) => {
+  const response = await measureTime(async () => {
+    return await fetch(translationAPI, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        query,
+        variables,
+      }),
+    });
+  }, `fetchTranslationApiGraphQL ${queryName}`);
   if (!response.ok) {
     const body = await response.text();
     throw new Error(
@@ -94,8 +93,6 @@ const fetchTranslationApi = async (query: string, variables?: any, queryName?: s
     console.error(json.errors);
     throw new Error(`Translation API query error ${json.errors}`);
   }
-  const endAt = new Date()
-  console.log(`🕚 fetchTranslationApi: ran query ${queryName} in ${endAt.getTime() - startAt.getTime()}ms (${getSizeInKB(json)}kb)`)
   return json;
 };
 
@@ -119,10 +116,14 @@ const fetchLocales = async () => {
     localesPromiseKey,
     LOCALES_TTL_SECONDS
   );
-  const json = await cached(() =>
-    fetchTranslationApi(localesQuery, {}, 'localesQuery')
-  );
+
+  const json = await cached(() => fetchTranslationApiGraphQL(
+    localesQuery,
+    {},
+    "localesQuery"
+  ));
   const locales = get(json, "data.locales");
+
   if (locales) {
     return locales as Array<
       Pick<Locale, "id" | "completion" | "label" | "translators">
@@ -171,15 +172,21 @@ const fetchLocaleStrings = async (variables: {
     localePromiseKey(variables.localeId),
     LOCALES_TTL_SECONDS
   );
+  const queryVariables = {
+    contexts,
+    /** Will use en-US strings if language is not yet covered, this is the default */
+    enableFallbacks: true,
+    ...variables,
+  };
   const json = await cached(() =>
-    fetchTranslationApi(localeStringsQuery, {
-      contexts,
-      /** Will use en-US strings if language is not yet covered, this is the default */
-      enableFallbacks: true,
-      ...variables,
-    }, 'localeStringsQuery')
+    fetchTranslationApiGraphQL(
+      localeStringsQuery,
+      queryVariables,
+      "localeStringsQuery"
+    )
   );
   const locale = get(json, "data.locale") as RawLocale | undefined | null;
+
   if (locale) {
     //console.debug("Got locale", locale.id);
     // Convert strings array to a map (and cache the result)

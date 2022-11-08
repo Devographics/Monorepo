@@ -2,8 +2,7 @@ import { GraphQLResolveInfo } from "graphql";
 import {
   getLocales,
   getLocaleStrings,
-  getLocalesWithStrings,
-} from "./fetchLocales";
+} from "./fetchLocalesRedis";
 import graphqlFields from "graphql-fields";
 /*
 
@@ -34,13 +33,7 @@ export const localesResolver = async (
   context,
   info: GraphQLResolveInfo
 ) => {
-  const fields = graphqlFields(info);
-  //console.debug("Need locales string:", !!fields.strings);
-  const locales = await (!!fields.strings
-    ? // legacy
-      getLocalesWithStrings()
-    : // now we return only locales definition, strings are only fetched per locale
-      getLocales());
+  const locales = await getLocales();
   return locales;
 };
 
@@ -58,5 +51,4 @@ export const localesQueryTypeDef = "locales: [SurveyLocale]";
  */
 export const localeResolver = async (root, { localeId }, context) => {
   return await getLocaleStrings(localeId);
-  //return getLocaleWithStrings(localeId);
 };

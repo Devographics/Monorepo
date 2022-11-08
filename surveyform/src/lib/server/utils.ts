@@ -6,9 +6,21 @@ export const getRootUrl = (req: NextApiRequest) => {
   return headers.origin;
 };
 
-export const getSizeInKB = obj => {
-  const str = JSON.stringify(obj);
+export const getSizeInKB = (obj) => {
+  const str = typeof obj === "string" ? obj : JSON.stringify(obj);
   // Get the length of the Uint8Array
   const bytes = new TextEncoder().encode(str).length;
-  return Math.round(bytes/1000);
+  return Math.round(bytes / 1000);
+};
+
+export const measureTime = async (f, log) => {
+  const startAt = new Date();
+  const result = await f();
+  const endAt = new Date();
+  console.log(
+    `🕚 ${log} in ${endAt.getTime() - startAt.getTime()}ms (${getSizeInKB(
+      result
+    )}kb)`
+  );
+  return result;
 };
