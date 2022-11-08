@@ -352,21 +352,6 @@ export const initLocales = async (context: RequestContext) => {
                 (s: StringFile) => s.context === enStringFile.context
             )
 
-            if (STORE_RAW_DATA && localeStringFile) {
-                // store raw data
-                setCache(
-                    getLocaleRawContextCacheKey(locale.id, localeStringFile.context),
-                    localeStringFile,
-                    context
-                )
-                console.log(
-                    `-> Done caching raw locale (${getLocaleRawContextCacheKey(
-                        locale.id,
-                        localeStringFile.context
-                    )})`
-                )
-            }
-
             let stringFileWithFallbacks
             if (!localeStringFile) {
                 // this context does not exist in the current locale
@@ -382,22 +367,30 @@ export const initLocales = async (context: RequestContext) => {
                     }))
                 }
             } else {
+                const rawCacheKey = getLocaleRawContextCacheKey({
+                    localeId: locale.id,
+                    context: localeStringFile.context
+                })
+
+                if (STORE_RAW_DATA && localeStringFile) {
+                    // store raw data
+                    setCache(rawCacheKey, localeStringFile, context)
+                    console.log(`-> Done caching raw locale (${rawCacheKey})`)
+                }
+
                 // this context does exist, go through parsing process
                 const stringFileWithAliases = resolveAliases(localeStringFile, locale)
                 const stringFileWithMarkdown = parseMarkdown(stringFileWithAliases)
                 stringFileWithFallbacks = addFallbacks(stringFileWithMarkdown, locale, enStringFile)
             }
             parsedStringFiles.push(stringFileWithFallbacks)
-            setCache(
-                getLocaleParsedContextCacheKey(locale.id, enStringFile.context),
-                stringFileWithFallbacks,
-                context
-            )
+            const parsedCacheKey = getLocaleParsedContextCacheKey({
+                localeId: locale.id,
+                context: enStringFile.context
+            })
+            setCache(parsedCacheKey, stringFileWithFallbacks, context)
             console.log(
-                `-> Done caching locale file ${getLocaleParsedContextCacheKey(
-                    locale.id,
-                    enStringFile.context
-                )} (${j}/${enParsedStringFiles.length})`
+                `-> Done caching locale file ${parsedCacheKey} (${j}/${enParsedStringFiles.length})`
             )
         }
 

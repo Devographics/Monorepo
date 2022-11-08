@@ -154,6 +154,7 @@ export const getEntities = async ({
     tags?: string[]
 }) => {
     let entities = await loadOrGetEntities()
+    entities = entities.filter(e => !e.normalizationOnly)
     if (ids) {
         entities = entities.filter(e => ids.includes(e.id))
     }
@@ -168,16 +169,16 @@ export const getEntities = async ({
 
 // Look up entities by id, name, or aliases (case-insensitive)
 export const getEntity = async ({ id }: { id: string | number }) => {
-    const entities = await loadOrGetEntities()
 
     if (!id || typeof id !== 'string') {
         return
     }
 
+    const entities = await getEntities({})
+
     const lowerCaseId = id.toLowerCase()
     // some entities are only for normalization and should not be made available through API
     const entity = entities
-        .filter(e => !e.normalizationOnly)
         .find(e => {
             return (
                 (e.id && e.id.toLowerCase() === lowerCaseId) ||
