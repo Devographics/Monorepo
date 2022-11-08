@@ -551,22 +551,22 @@ outline:
           - id: strapi
           - id: fastify
           - id: meteor
-          - id: sails
           - id: hapi
-          - id: redwood
-            year: 2021
-          - id: blitz # removed in 2022?
-            year: 2021
           - id: koa # added again in 2022
-          # new in 2022
           - id: adonis
-            year: 2022
-          - id: directus
             year: 2022
           - id: keystone
             year: 2022
+          - id: redwood
+            year: 2021
+          - id: sails # added again in 2022
+          # new in 2022
+          - id: directus
+            year: 2022
           - id: amplication
             year: 2022
+          - id: blitz # removed in 2022?
+            year: 2021
       - id: backend_frameworks
         year: 2022
         template: project
@@ -802,6 +802,8 @@ outline:
       - id: js_app_patterns
         year: 2022
         template: multiple
+        itemProperties:
+          cutoff: 0
         options:
           - id: single_page_app
           - id: multiple_page_app
@@ -927,12 +929,12 @@ outline:
           # - id: overreacted
           # - id: kentcdodds
 
+          - id: medium
+          - id: devto
           - id: css_tricks
-          - id: a_list_apart
           - id: smashing_magazine
           - id: codrops
           - id: sitepoint
-          - id: devto
           - id: daily_js
           - id: echo_js
           - id: front_end_front
@@ -941,15 +943,13 @@ outline:
           - id: js_weekly
           - id: bestofjs
           - id: alligator
-          - id: medium
+          - id: a_list_apart
       - id: blogs_news_magazines
         template: others
         matchTags: [courses, people, youtube, sites, newsletters, socialmedia]
 
       - id: sites_courses
         template: multiple
-        itemProperties:
-          cutoff: 12
         options:
           - id: stack_overflow
           - id: udemy
@@ -987,6 +987,7 @@ outline:
         template: multiple
         options:
           - id: fireship
+          - id: kevin_j_powell
           - id: fun_fun_function
           - id: theo_browne
           - id: tina_huang
@@ -996,7 +997,6 @@ outline:
           - id: brad_traversy
           - id: clever_programmer # rafeh_qazi https://www.youtube.com/c/CleverProgrammer
           - id: ben_awad # https://www.youtube.com/channel/UC-8QAzbLcRglXeN_MY9blyw
-          - id: kevin_j_powell
           - id: web_dev_simplified # kyle cook https://www.youtube.com/c/WebDevSimplified/
           - id: coding_train # Daniel Shiffman https://www.youtube.com/user/shiffman?app=desktop
           - id: net_ninja # https://www.youtube.com/channel/UCW5YeuERMmlnqo4oq8vwUpg?app=desktop
@@ -1007,21 +1007,19 @@ outline:
 
       - id: podcasts
         template: multiple
-        itemProperties:
-          cutoff: 12
         options:
           - id: syntaxfm
           - id: js_party
           - id: changelog
           - id: http_203
           - id: shop_talk_show
-          - id: web_standards_ru
           - id: full_stack_radio
           - id: javascript_jabber
           - id: front_end_happy_hour
           - id: react_podcast
-          - id: software_engineering_daily
           - id: ladybug
+          - id: web_standards_ru
+          - id: software_engineering_daily
           - id: big_web_show
           - id: jamstack_radio
           - id: web_platform_podcast
@@ -1056,6 +1054,7 @@ outline:
           - id: codingame_survey
           - id: uxtools_survey
           - id: postman_survey
+          - id: jamstack_survey
       - id: other_surveys
         template: others
         matchTags: [surveys]

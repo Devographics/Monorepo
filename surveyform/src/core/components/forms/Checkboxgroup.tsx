@@ -98,6 +98,8 @@ const OtherComponent = ({ value, path }) => {
   );
 };
 
+const defaultCutoff = 10;
+
 // note: treat checkbox group the same as a nested component, using `path`
 export const FormComponentCheckboxGroup = ({
   refFunction,
@@ -115,9 +117,15 @@ export const FormComponentCheckboxGroup = ({
   const Components = useVulcanComponents();
 
   // @ts-expect-error
-  const { options = [], name, onChange, as, ...otherInputProperties } = inputProperties;
+  const {
+    options = [],
+    name,
+    onChange,
+    as,
+    ...otherInputProperties
+  } = inputProperties;
 
-  const { cutoff } = itemProperties;
+  const { cutoff = defaultCutoff } = itemProperties;
 
   // get rid of duplicate values; or any values that are not included in the options provided
   // (unless they have the "other" marker)
@@ -141,7 +149,9 @@ export const FormComponentCheckboxGroup = ({
     }
   }
 
-  const optionsToShow = cutoff
+  const useCutoff =
+    typeof cutoff !== "undefined" && cutoff > 0 && options.length > cutoff;
+  const optionsToShow = useCutoff
     ? showMore
       ? options
       : take(options, cutoff)
@@ -201,8 +211,9 @@ export const FormComponentCheckboxGroup = ({
             </Form.Check>
           );
         })}
-        {cutoff && !showMore && (
+        {useCutoff && !showMore && (
           <Components.Button
+            className="form-show-more"
             onClick={() => {
               setShowMore(true);
             }}

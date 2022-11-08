@@ -17,6 +17,7 @@ import type { SurveyType } from "@devographics/core-models";
 import surveys from "~/surveys";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import SurveyNavItem from "~/core/components/survey/questions/SurveyNavItem";
+import { getCompletionPercentage } from "~/modules/responses/helpers";
 
 // TODO
 // const getOverallCompletionPercentage = (response) => {
@@ -49,6 +50,8 @@ const SurveyNav = ({
   const [currentFocusIndex, setCurrentFocusIndex] = useState<number | null>(
     null
   );
+
+  const overallCompletion = getCompletionPercentage(response)
 
   useEffect(() => {
     const keyPressHandler = (e) => {
@@ -97,9 +100,12 @@ const SurveyNav = ({
             setShown(!shown);
           }}
         >
+          <span className="section-nav-head-left">
           <h3 className="section-nav-toc">
             <FormattedMessage id="general.table_of_contents" />
           </h3>
+          <span className="section-nav-completion">{overallCompletion}%</span>
+          </span>
           <span className="section-nav-toggle">{shown ? "▼" : "▶"}</span>
         </Components.Button>
         <div className="section-nav-contents">

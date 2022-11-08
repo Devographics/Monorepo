@@ -75,12 +75,15 @@
     &:last-of-type {
       margin: 0;
     }
-    &:hover {
-      background: $bg-color-light;
-    }
     .form-check-input {
       float: none;
       margin: 0;
+    }
+    &:nth-child(2n) {
+      background: rgba(255, 255, 255, 0.04);
+    }
+    &:hover {
+      background: $bg-color-light;
     }
   }
   .form-component-text {
@@ -102,7 +105,7 @@
   }
   .form-check-label {
     flex: 1;
-    padding: math.div($spacing, 1.5) 0;
+    padding: math.div($spacing, 2) 0;
   }
   .form-item-contents {
     display: flex;
@@ -267,6 +270,7 @@
 .form-description {
   margin-bottom: $spacing;
   color: var(--text-color);
+  font-size: $medium-font;
   p:last-child {
     margin: 0;
   }
@@ -303,33 +307,57 @@
       padding: 0;
       position: absolute;
       top: calc(100% + 5px);
-      left: 0px;
-      right: 0px;
       text-align: center;
       // display: none;
     }
     &:hover {
       background: $bg-color-lighter;
     }
-    // &:nth-child(4) {
-    //   label {
-    //     display: block;
-    //   }
-    // }
+    &:nth-child(1),
+    &:nth-child(9) {
+      background: rgba(255, 255, 255, 0.05);
+    }
+    &:nth-child(2),
+    &:nth-child(8) {
+      background: rgba(255, 255, 255, 0.1);
+    }
+    &:nth-child(3),
+    &:nth-child(7) {
+      background: rgba(255, 255, 255, 0.15);
+    }
+    &:nth-child(4),
+    &:nth-child(6) {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    &:nth-child(5) {
+      background: rgba(255, 255, 255, 0.35);
+    }
+    &:first-child {
+      label {
+        text-align: left;
+        left: 0px;
+      }
+    }
+    &:last-child {
+      label {
+        text-align: right;
+        right: 0px;
+      }
+    }
   }
 }
 
 .experience-contents {
   @include medium-large {
-    display: grid;
-    grid-template-columns: 1fr min-content;
+    // display: grid;
+    // grid-template-columns: 1fr min-content;
   }
 }
 .comment-trigger-wrapper {
   @include medium-large {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
+    // display: flex;
+    // flex-direction: column;
+    // justify-content: flex-end;
   }
 }
 .comment-trigger {
@@ -339,9 +367,9 @@
   // border-top: 1px solid var(--dark-border-color);
   // border-left: 1px solid var(--dark-border-color);
   padding: math.div($spacing, 2);
-  display: grid;
-  place-items: center;
-  aspect-ratio: 1/1;
+  // display: grid;
+  // place-items: center;
+  // aspect-ratio: 1/1;
   background: none;
   border: none;
   margin: 0;
@@ -375,12 +403,10 @@
   }
   &::after {
     bottom: 100%;
-    @include small {
-      left: 21px;
-    }
-    @include medium-large {
-      right: 11px;
-    }
+    left: 21px;
+    // @include medium-large {
+    //   right: 11px;
+    // }
     border: solid transparent;
     content: "";
     height: 0;
@@ -398,12 +424,25 @@
   display: none;
 }
 
+.form-option {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 .form-option-label {
   display: block;
+  font-size: $medium-font;
 }
 
 .form-option-description {
   display: block;
   font-size: $smallish-font;
   color: var(--text-color-dark);
+}
+
+.form-show-more {
+  margin-top: $spacing;
+  @include small {
+    width: 100%;
+  }
 }

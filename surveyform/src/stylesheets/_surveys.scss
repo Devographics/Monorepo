@@ -1,4 +1,4 @@
-@use 'sass:math';
+@use "sass:math";
 // locale selector
 .locale-selector {
   max-width: 600px;
@@ -66,8 +66,8 @@
   width: 300px;
   max-height: 200px;
   & img {
-    width:90%;
-    height:auto;
+    width: 90%;
+    height: auto;
     margin: 0 auto;
   }
 }
@@ -145,7 +145,7 @@
   left: 0px;
   right: 0px;
   bottom: 0px;
-  background: rgba(255,255,255,0.2);
+  background: rgba(255, 255, 255, 0.2);
   display: grid;
   place-items: center;
   backdrop-filter: blur(5px);
@@ -167,13 +167,20 @@
     display: flex !important;
     margin-bottom: $spacing;
     width: 100%;
+    justify-content: space-between;
+    align-items: center;
   }
   @include large {
     display: none !important;
   }
 }
+.section-nav-head-left {
+  display: flex !important;
+  align-items: center;
+  gap: 8px;
+  line-height: 1;
+}
 .section-nav-toggle {
-  margin-left: math.div($spacing, 2);
   font-size: $medium-font;
   @include large {
     display: none;
@@ -209,8 +216,10 @@
   font-size: $small-font;
   margin: $spacing 0 0 0;
 }
+.section-nav-completion,
 .section-nav-item-completion {
   @include font-regular;
+  @include primary-font;
   color: $text-color;
 }
 .section-questions {
@@ -276,4 +285,11 @@
 .survey-page-block-heading {
   margin-bottom: $spacing * 2;
   text-align: center;
+}
+
+
+.form-item-options {
+  // display: grid;
+  // grid-template-columns: 1fr 1fr;
+  // gap: math.div($spacing, 2);
 }

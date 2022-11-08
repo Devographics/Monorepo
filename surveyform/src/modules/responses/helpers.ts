@@ -254,6 +254,8 @@ export const ignoredFieldTypes: Array<FieldTemplateId> = [
   "email2",
   "receive_notifications",
   "help",
+  "others",
+  "project",
 ];
 
 export const getCompletionPercentage = (response: ResponseDocument) => {

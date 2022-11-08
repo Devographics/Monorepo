@@ -26,7 +26,9 @@ export const Footer = () => {
         |{" "}
         {!user && (
           <>
-            <Link href={routes.account.login.href}>Login</Link>
+            <Link href={routes.account.login.href}>
+              <FormattedMessage id="accounts.sign_in" />
+            </Link>
           </>
         )}
         {user && (
@@ -36,7 +38,7 @@ export const Footer = () => {
         )}{" "}
       </div>
       <div className="footer-bottom">
-        <a
+        {/* <a
           className="stellate-badge"
           href="https://stellate.co/?source=devographics"
         >
@@ -46,7 +48,7 @@ export const Footer = () => {
             height={60}
             alt="Powered by Stellate"
           />
-        </a>
+        </a> */}
       </div>
     </footer>
   );

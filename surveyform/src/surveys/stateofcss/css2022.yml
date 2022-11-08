@@ -441,7 +441,7 @@ outline:
       - id: form_factors
         intlId: environments.form_factors.others
         template: others
-        matchTags: [form_factors]
+        matchTags: [form_factors, browsers]
         year: 2022
 
       # - id: accessibility_features
