@@ -266,16 +266,16 @@ importers:
       graphql-tag: ^2.12.6
       lodash: ^4.17.21
       moment: ^2.29.4
-      mongoose: ^6.4.5
+      mongoose: ^6.7.1
       nanoid: ^3.1.25
     dependencies:
       '@types/lodash': 4.14.184
       '@vulcanjs/graphql': 0.7.1_moment@2.29.4
-      '@vulcanjs/mongo': 0.7.1_ldcudf3m6x2ghsrsnbenfgklue
+      '@vulcanjs/mongo': 0.7.1_6zw25q2yhthnzz66c6os22ggrm
       graphql-tag: 2.12.6
       lodash: 4.17.21
       moment: 2.29.4
-      mongoose: 6.5.4
+      mongoose: 6.7.1
       nanoid: 3.3.4
 
   shared/encrypt-email:
@@ -7973,8 +7973,8 @@ packages:
       '@mdx-js/loader': '>=0.15.0'
       '@mdx-js/react': '*'
     dependencies:
-      '@mdx-js/loader': 1.6.22_react@18.2.0
-      '@mdx-js/react': 1.6.22_react@18.2.0
+      '@mdx-js/loader': 1.6.22_react@17.0.2
+      '@mdx-js/react': 1.6.22_react@17.0.2
     dev: false
 
   /@next/plugin-storybook/12.3.1_next@12.3.0:
@@ -13546,7 +13546,7 @@ packages:
       - supports-color
     dev: false
 
-  /@vulcanjs/mongo/0.7.1_ldcudf3m6x2ghsrsnbenfgklue:
+  /@vulcanjs/mongo/0.7.1_6zw25q2yhthnzz66c6os22ggrm:
     resolution: {integrity: sha512-7T22Exav5iUFaS8HM8QhqYPd3ig7/cGYdaUUlxxMgHJu4WzwHNfm7vTAY8IHNzRf4B5Xgjcv+S+urSmEHLn4rA==}
     peerDependencies:
       mongodb: '>= 3.6.2'
@@ -13558,7 +13558,7 @@ packages:
       '@vulcanjs/schema': 0.7.1
       '@vulcanjs/utils': 0.7.1_moment@2.29.4
       lodash: 4.17.21
-      mongoose: 6.5.4
+      mongoose: 6.7.1
     optionalDependencies:
       mongodb-memory-server: 8.9.5
     transitivePeerDependencies:
@@ -16755,7 +16755,7 @@ packages:
       minipass-pipeline: 1.2.4
       mkdirp: 1.0.4
       p-map: 4.0.0
-      promise-inflight: 1.0.1
+      promise-inflight: 1.0.1_bluebird@3.7.2
       rimraf: 3.0.2
       ssri: 8.0.1
       tar: 6.1.12
@@ -20077,7 +20077,7 @@ packages:
     dependencies:
       debug: 4.3.4
       eslint: 7.32.0
-      eslint-plugin-import: 2.26.0_ahzhtd7l5tu6kgxltpsxz2gtcq
+      eslint-plugin-import: 2.26.0_k2fj7mtd2vnwiotnzv3dk5dwma
       glob: 7.2.3
       is-glob: 4.0.3
       resolve: 1.22.1
@@ -24565,7 +24565,7 @@ packages:
     dependencies:
       '@mdx-js/mdx': 1.6.22
       '@mdx-js/react': 1.6.22_react@16.14.0
-      babel-jest: 26.0.1_@babel+core@7.20.2
+      babel-jest: 26.0.1_@babel+core@7.19.1
       babel-preset-react-app: 9.1.2
       gray-matter: 4.0.3
       react: 16.14.0
@@ -29420,15 +29420,6 @@ packages:
   /progress/2.0.3:
     resolution: {integrity: sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==}
     engines: {node: '>=0.4.0'}
-
-  /promise-inflight/1.0.1:
-    resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
-    peerDependencies:
-      bluebird: '*'
-    peerDependenciesMeta:
-      bluebird:
-        optional: true
-    dev: false
 
   /promise-inflight/1.0.1_bluebird@3.7.2:
     resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
