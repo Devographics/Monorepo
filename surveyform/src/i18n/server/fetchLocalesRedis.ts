@@ -4,15 +4,14 @@
 // cache for translation API request
 // must be defined top-level to get the same cache for all requests
 import { captureException } from "@sentry/nextjs";
-import { serverConfig } from "~/config/server";
 import {
   cachedPromise,
   promisesNodeCache,
   nodeCache,
 } from "~/lib/server/caching";
 import { Locale } from "../typings";
-import { createClient } from "redis";
 import { measureTime } from "~/lib/server/utils";
+import { getRedisClient } from "~/lib/server/redis";
 
 const commonContexts = ["common", "surveys", "accounts"];
 // TODO: move this elsewhere, maybe in surveys config?
@@ -31,22 +30,13 @@ export const getLocaleParsedContextCacheKey = ({
 export const getAllLocalesMetadataCacheKey = () =>
   "locale_all_locales_metadata";
 
-// TODO: only do once
-export const getRedisClient = async () => {
-  const redisClient = createClient({
-    url: process.env.REDIS_URL,
-  });
-  await redisClient.connect();
-  return redisClient;
-};
-
 /*
 
 Fetch a list of all locales, without strings
 
 */
 const fetchAllLocalesRedis = async () => {
-  const redisClient = await getRedisClient();
+  const redisClient = getRedisClient();
   const key = getAllLocalesMetadataCacheKey();
   const value = await measureTime(async () => {
     return await redisClient.get(key);
@@ -65,14 +55,14 @@ const fetchAllLocalesRedis = async () => {
 Fetch a single locale, with strings
 
 */
-const fetchLocaleStringsRedis = async (variables) => {
+const fetchLocaleStringsRedis = async (variables: LocaleStringsVariables) => {
   const redisClient = await getRedisClient();
   const { localeId, contexts } = variables;
-  const keyArray = contexts.map((context) =>
+  const keyArray = (contexts || []).map((context) =>
     getLocaleParsedContextCacheKey({ ...variables, context })
   );
   const valueArray = await measureTime(async () => {
-    return await redisClient.mGet(keyArray);
+    return await redisClient.mget(keyArray);
   }, `fetchFromRedis ${localeId}: ${keyArray.join()}`);
   try {
     const stringFiles = valueArray.map(JSON.parse);
@@ -144,6 +134,12 @@ export const getLocales = async () => {
 // ONE LOCALE WITH STRINGS
 
 const localePromiseKey = (id: string) => ["localePromise", id].join("/");
+
+interface LocaleStringsVariables {
+  contexts?: Array<string>;
+  localeId: string;
+}
+
 /**
  * Will cache promise for each locale
  *
@@ -157,10 +153,7 @@ const localePromiseKey = (id: string) => ["localePromise", id].join("/");
  * @param localeId
  * @returns
  */
-const fetchLocaleStrings = async (variables: {
-  contexts?: Array<string>;
-  localeId: string;
-}) => {
+const fetchLocaleStrings = async (variables: LocaleStringsVariables) => {
   //console.debug("Fetching locale", variables.localeId);
   const cached = cachedPromise(
     promisesNodeCache,
