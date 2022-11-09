@@ -15,7 +15,7 @@ export function middleware(request: NextRequest) {
   if (pathname === "/") {
     const locale =
       getLocaleFromAcceptLanguage(request.headers.get("accept-language")) ||
-      request.cookies.get(LOCALE_COOKIE_NAME);
+      request.cookies.get(LOCALE_COOKIE_NAME)?.value;
     const validLocale = getClosestLocale(locale);
     if (validLocale !== locale) {
       console.warn(
