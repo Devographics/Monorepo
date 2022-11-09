@@ -8,12 +8,9 @@ const debugRootLayout = console.debug; //debug("dgs:rootlayout");
 //*** I18n redirections
 // @see https://nextjs.org/docs/advanced-features/i18n-routing
 import { locales } from "~/i18n/data/locales";
-const localeIds = locales.map((l) => l.id);
-const countryIds = localeIds.map((l) => l.slice(0, 2));
-const uniqueLocales = [...new Set([...localeIds, ...countryIds]).values()];
 
 export function generateStaticParams() {
-  return uniqueLocales.map((l) => ({ lang: l }));
+  return locales.map((l) => ({ lang: l }));
 }
 
 export default async function RootLayout({
@@ -27,6 +24,7 @@ export default async function RootLayout({
 }) {
   const locale = params.lang; // getCurrentLocale();
   const localeWithStrings = locale ? await getLocaleStrings(locale) : undefined;
+  // FIXME: the [lang] parameter seems to sometime be vercel.svg, favicon.ico = static files
   debugRootLayout("Got locale", locale, localeWithStrings);
   return (
     <html lang={params.lang}>

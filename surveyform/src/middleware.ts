@@ -5,6 +5,7 @@ import { cronMiddleware } from "~/core/server/edge/cronMiddleware";
 
 import { getLocaleFromAcceptLanguage } from "~/i18n/server/localeDetection";
 import { LOCALE_COOKIE_NAME } from "./i18n/cookie";
+import { getClosestLocale } from "./i18n/data/locales";
 
 export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
@@ -15,8 +16,14 @@ export function middleware(request: NextRequest) {
     const locale =
       getLocaleFromAcceptLanguage(request.headers.get("accept-language")) ||
       request.cookies.get(LOCALE_COOKIE_NAME);
+    const validLocale = getClosestLocale(locale);
+    if (validLocale !== locale) {
+      console.warn(
+        `Locale ${locale} is not yet supported, falling back to ${locale}`
+      );
+    }
     const url = request.nextUrl.clone();
-    url.pathname = "/" + locale;
+    url.pathname = "/" + validLocale;
     return NextResponse.redirect(url);
   }
   if (pathname.startsWith("/debug")) {
