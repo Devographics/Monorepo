@@ -1,3 +1,4 @@
+"use client";
 // TODO: this was copied from Vulcan NPM, put it back there when fixed
 /**
  * In Vulcan Meteor, this is setup in packages/vulcan-core/lib/modules/components/App.jsx
@@ -25,7 +26,7 @@ import { withRouter } from "react-router";
 */
 import get from "lodash/get.js";
 import merge from "lodash/merge.js";
-import { useLocaleData } from "../hooks/useLocaleData";
+// import { useLocaleData } from "../hooks/useLocaleData";
 
 // see https://stackoverflow.com/questions/42862028/react-router-v4-with-multiple-layouts
 interface LocaleContextType {
@@ -52,9 +53,10 @@ interface LocaleState {
 import { useCookies } from "react-cookie";
 import { LOCALE_COOKIE_NAME } from "../cookie";
 import { useRouter } from "next/router";
+import { localesDefsMap, defaultLocale } from "~/i18n/data/locales";
+import { captureException } from "@sentry/nextjs";
 export const LocaleContextProvider = (props: {
-  /** Can force a locale */
-  locale?: string;
+  locale: string;
   /** SSRed locale strings */
   localeStrings?: any;
 
@@ -70,10 +72,15 @@ export const LocaleContextProvider = (props: {
     locale: localeFromProps,
     localeStrings: localeStringsFromProps,
   } = props;
-  const locale = useLocaleData({ currentUser, locale: localeFromProps });
+  const locale = localesDefsMap[localeFromProps] || defaultLocale; //useLocaleData({ currentUser, locale: localeFromProps });
+  if (locale.id !== localeFromProps) {
+    captureException(
+      `${localeFromProps} doesn't exist, falling back to defaultLocale`
+    );
+  }
   // get translation strings loaded dynamically
   // Use the server version in priority
-  const loadedStrings = localeStringsFromProps || locale?.data?.locale?.strings;
+  const loadedStrings = localeStringsFromProps; //  || locale?.data?.locale?.strings;
   // get translation strings bundled statically
   // @ts-ignore
   const bundledStrings = stringsRegistry.Strings[locale.id];

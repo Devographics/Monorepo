@@ -42,7 +42,7 @@ import Layout from "~/core/components/common/Layout";
 
 export interface AppLayoutProps {
   /** Locale extracted from cookies server-side */
-  locale?: string;
+  locale: string;
   localeStrings?: any;
   initialApolloState?: any;
   // When on a specific survey

@@ -2,7 +2,7 @@
  * We need a .js file until next.config.ts is supported,
  * as we use this list to configure locale redirections
  */
-module.exports.locales = [
+export const localesDefs = [
   {
     id: "ca-ES",
     label: "Català",
@@ -103,3 +103,47 @@ module.exports.locales = [
     label: "Magyar",
   },
 ];
+
+export const localesDefsMap = localesDefs.reduce((lm, localeDef) => ({
+  ...lm,
+  [localeDef.id]: localeDef,
+}));
+
+const localeIds = localesDefs.map((l) => l.id);
+/**
+ * Might contain duplicates, not safe to use
+ */
+const countryIdsWithDups = localeIds.map((l) => l.slice(0, 2));
+
+/**
+ * We list both the country locale and the full locale with region as valid
+ * Beware of duplicates
+ */
+const uniqueLocales = [
+  ...new Set([...localeIds, ...countryIdsWithDups]).values(),
+];
+
+export const locales = uniqueLocales;
+
+export const defaultLocale = "en-US";
+
+/**
+ * Return a locale that exists in our locales definitions
+ * If passed a country, will use the first matching locale for this country
+ * Return default locale (en-US) otherwise
+ * @param localeId
+ * @returns
+ */
+export const getClosestLocale = (localeId: string) => {
+  if (uniqueLocales.includes(localeId)) return localeId;
+  const isCountry = localeId.length === 2;
+  if (isCountry) {
+    const firstMatchingLocale = uniqueLocales.find((l) => {
+      return l.slice(0, 2) === localeId;
+    });
+    if (firstMatchingLocale) return firstMatchingLocale;
+  } else {
+    return defaultLocale;
+  }
+  return defaultLocale;
+};

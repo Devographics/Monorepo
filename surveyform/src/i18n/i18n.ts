@@ -1,6 +1,4 @@
-import { locales } from "./data/locales";
-/** We reexport this value that must stay in a JS file, because we use it in next.config.js */
-export { locales } from "./data/locales";
+import { localesDefs } from "./data/locales";
 import { makeStringsRegistry, makeLocalesRegistry } from "@vulcanjs/i18n";
 // TODO: since we get the list of locales dynamically, we should probably get this from
 // the server (same way we feed the locale switch button)
@@ -22,7 +20,8 @@ export const localesRegistry = makeLocalesRegistry();
 export const { Locales, getLocale, registerLocale } = localesRegistry;
 export const stringsRegistry = makeStringsRegistry();
 
-locales.forEach((locale) => {
+// TODO: can we remove this?
+localesDefs.forEach((locale) => {
   //locales.forEach((locale) => {
   const { id, /*stringFiles,*/ label, rtl } = locale;
   // Make all locales dynamic => loaded from the server
