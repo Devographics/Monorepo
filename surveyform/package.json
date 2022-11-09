@@ -157,6 +157,7 @@
     "react-i18next": "^11.18.6",
     "react-markdown": "^7.1.2",
     "react-spring": "^8.0.27",
+    "redis": "^4.2.0",
     "rehype-raw": "^6.1.1",
     "sanitize-html": "^2.7.3",
     "sass": "^1.56.0",
@@ -190,7 +191,7 @@
     "supertest": "^6.3.1",
     "ts-loader": "^7.0.5",
     "tsup": "^6.0.1",
-    "typescript": "^4.3.5",
+    "typescript": "^4.8.4",
     "webpack": "^5.74.0",
     "yalc": "^1.0.0-pre.53"
   },

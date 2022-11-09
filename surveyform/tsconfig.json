@@ -15,5 +15,8 @@
     // must exclude collocated code too
     // can create inconsistencies with VS Code...
     "cypress"
-  ]
+  ],
+  "compilerOptions": {
+    "incremental": true
+  }
 }

@@ -35,8 +35,8 @@ export const Experience = (props: ExperienceProps) => {
   const commentPath = path.replace("__experience", "__comment");
   const commentValue = get(document, commentPath);
 
-  // @ts-expect-error
   const {
+    // @ts-expect-error
     options = [],
     value,
     onChange,
@@ -70,6 +70,7 @@ export const Experience = (props: ExperienceProps) => {
                 : "form-check-unchecked"
               : "";
             return (
+              // @ts-ignore
               <Form.Check
                 {...otherInputProperties}
                 key={i}
@@ -176,11 +177,7 @@ const CommentTrigger = ({
           <FormattedMessage id="experience.leave_comment" />
         </span>
       </button>
-      <Overlay
-        target={target.current}
-        show={show}
-        placement={"right"}
-      >
+      <Overlay target={target.current} show={show} placement={"right"}>
         {(props) => (
           <Tooltip id="leave_comment" {...props}>
             <FormattedMessage id="experience.leave_comment_short" />

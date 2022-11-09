@@ -90,8 +90,14 @@ export const FormComponentRadioGroup = ({
 
   const Components = useVulcanComponents();
   const { updateCurrentValues } = useFormContext();
-  // @ts-expect-error
-  const { options = [], value, onChange, as, ...otherInputProperties } = inputProperties;
+  const {
+    // @ts-expect-error
+    options = [],
+    value,
+    onChange,
+    as,
+    ...otherInputProperties
+  } = inputProperties;
   const hasValue = value !== "";
   return (
     <Components.FormItem
@@ -115,6 +121,8 @@ export const FormComponentRadioGroup = ({
           <Form.Check
             {...otherInputProperties}
             key={i}
+            // @ts-ignore
+            // TODO
             layout="elementOnly"
             type="radio"
           >
@@ -126,6 +134,8 @@ export const FormComponentRadioGroup = ({
                   value={option.value}
                   name={path}
                   id={`${path}.${i}`}
+                  // @ts-ignore
+                  // TODO
                   path={`${path}.${i}`}
                   ref={refFunction}
                   checked={isChecked}
