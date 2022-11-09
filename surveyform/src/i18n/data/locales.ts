@@ -134,7 +134,8 @@ export const defaultLocale = "en-US";
  * @param localeId
  * @returns
  */
-export const getClosestLocale = (localeId: string) => {
+export const getClosestLocale = (localeId?: string) => {
+  if (!localeId) return defaultLocale;
   if (uniqueLocales.includes(localeId)) return localeId;
   const isCountry = localeId.length === 2;
   if (isCountry) {
