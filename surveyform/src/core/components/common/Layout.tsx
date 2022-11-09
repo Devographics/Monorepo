@@ -7,7 +7,8 @@ import { getSurvey } from "~/modules/surveys/getters";
 import { KeydownContextProvider } from "./KeydownContext";
 import { useSurveyParams } from "../survey/hooks";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
-import { useRouter } from "next/router";
+// import { useRouter } from "next/router";
+import { useSearchParams } from "next/navigation";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 
 export const Layout = ({
@@ -21,9 +22,12 @@ export const Layout = ({
   surveyYear?: string;
 }) => {
   const Components = useVulcanComponents();
-  const router = useRouter();
-  const { query = {} } = router;
-  const { source, referrer } = query;
+  //const router = useRouter();
+  const query = useSearchParams();
+  //const { query = {} } = router;
+  // const { source, referrer } = query;
+  const source = query.get("source");
+  const referrer = query.get("referrer");
 
   useEffect(() => {
     if (source) {
@@ -36,13 +40,13 @@ export const Layout = ({
 
   // const { loading, data = {} } = useQuery(gql(entitiesQuery));
 
-  const { slug, year, paramsReady } = useSurveyParams({
+  const { slug, year } = useSurveyParams({
     slug: surveySlug,
     year: surveyYear,
   });
   let style = "";
 
-  if (paramsReady && slug && year) {
+  if (slug && year) {
     const survey = getSurvey(slug, year);
     if (survey) {
       const { bgColor, textColor, linkColor, hoverColor } = survey;
