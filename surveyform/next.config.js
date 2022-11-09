@@ -1,4 +1,3 @@
-const { locales } = require("./src/i18n/data/locales");
 const { extendNextConfig } = require("./packages/@vulcanjs/next-config");
 // Use @next/mdx for a basic MDX support.
 // See the how Vulcan Next docs are setup with next-mdx-remote
@@ -14,35 +13,54 @@ const { withSentryConfig } = require("@sentry/nextjs");
 // Pass the modules that are written directly in TS here
 const withTM = require('next-transpile-modules')(['@devographics/core-models']);
 
+const path = require("path")
 
 // @see https://nextjs.org/docs/api-reference/next.config.js/runtime-configuration
 const moduleExports = (phase, { defaultConfig }) => {
+  console.log("defaultConfig", defaultConfig)
+
+
   /**
    * @type {import('next/dist/next-server/server/config').NextConfig}
    **/
-  let extendedConfig;
-  extendedConfig = extendNextConfig(defaultConfig);
+  let nextConfig = {
+    // NOTE: the doc is unclear about whether we should merge this default config or not
+    // ...defaultConfig,
+    experimental: {
+      appDir: true
+    },
+    // Disable linting during build => the linter may have optional dev dependencies
+    // (eslint-plugin-cypress) that wont exist during prod build
+    // You should lint manually only
+    eslint: {
+      // Warning: This allows production builds to successfully complete even if
+      // your project has ESLint errors.
+      ignoreDuringBuilds: true,
+    },
+    /*
+    i18n: {
+      locales: uniqueLocales,
+      // It won't be prefixed
+      defaultLocale: "en-US", //-US",
 
-  //*** I18n redirections
-  // @see https://nextjs.org/docs/advanced-features/i18n-routing
-  const localeIds = locales.map((l) => l.id);
-  const countryIds = localeIds.map((l) => l.slice(0, 2));
-  const uniqueLocales = [...new Set([...localeIds, ...countryIds]).values()];
-  extendedConfig.i18n = {
-    locales: uniqueLocales,
-    // It won't be prefixed
-    defaultLocale: "en-US", //-US",
-  };
+    },*/
+    env: {
+      NEXT_PUBLIC_IS_USING_DEMO_DATABASE: !!(process.env.MONGO_URI || "").match(
+        /lbke\-demo/
+      ),
+      NEXT_PUBLIC_IS_USING_LOCAL_DATABASE: !!(process.env.MONGO_URI || "").match(
+        /localhost/
+      ),
+    },
+    sassOptions: {
+      includePaths: [path.join(__dirname, 'src/stylesheets')],
+    },
 
-  //*** Env variables (TODO: move to config)
-  extendedConfig.env = {
-    NEXT_PUBLIC_IS_USING_DEMO_DATABASE: !!(process.env.MONGO_URI || "").match(
-      /lbke\-demo/
-    ),
-    NEXT_PUBLIC_IS_USING_LOCAL_DATABASE: !!(process.env.MONGO_URI || "").match(
-      /localhost/
-    ),
+
+    // uncomment to support markdown
+    // pageExtensions:["js", "jsx", "md", "mdx", "ts", "tsx"];
   };
+  let extendedConfig = extendNextConfig(nextConfig);
 
   //*** */ Enable Webpack analyzer
   if (process.env.ANALYZE) {
@@ -68,17 +86,6 @@ const moduleExports = (phase, { defaultConfig }) => {
     return config;
   };
 
-  // Disable linting during build => the linter may have optional dev dependencies
-  // (eslint-plugin-cypress) that wont exist during prod build
-  // You should lint manually only
-  extendedConfig.eslint = {
-    // Warning: This allows production builds to successfully complete even if
-    // your project has ESLint errors.
-    ignoreDuringBuilds: true,
-  };
-
-  // To support markdown import
-  extendedConfig.pageExtensions = ["js", "jsx", "md", "mdx", "ts", "tsx"];
 
   //*** Sentry
   /**

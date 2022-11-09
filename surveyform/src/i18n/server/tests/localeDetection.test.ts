@@ -1,4 +1,7 @@
-import { getLocaleFromAcceptLanguage } from "../localeDetection";
+import {
+  getLocaleFromAcceptLanguage,
+  getReqAcceptLanguage,
+} from "../localeDetection";
 
 test("can parse accept-language header", () => {
   const req1 = {
@@ -11,6 +14,8 @@ test("can parse accept-language header", () => {
       "accept-language": "ru,en-US;q=0.1",
     },
   } as any;
-  expect(getLocaleFromAcceptLanguage(req1)).toEqual("fr-FR");
-  expect(getLocaleFromAcceptLanguage(req2)).toEqual("ru");
+  expect(getLocaleFromAcceptLanguage(getReqAcceptLanguage(req1))).toEqual(
+    "fr-FR"
+  );
+  expect(getLocaleFromAcceptLanguage(getReqAcceptLanguage(req2))).toEqual("ru");
 });

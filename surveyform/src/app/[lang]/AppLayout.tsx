@@ -1,8 +1,4 @@
-import { NextPage } from "next";
-import App, { AppContext, AppProps } from "next/app";
-import { ReactElement } from "react";
-
-import Head from "next/head";
+"use client";
 import {
   VulcanComponentsProvider,
   VulcanCurrentUserProvider,
@@ -22,9 +18,12 @@ import debug from "debug";
 
 const debugPerf = debug("vns:perf");
 // @see https://nextjs.org/docs/advanced-features/measuring-performance
+/*
+TODO: planned in v13 but not yet available 2022/11
 export function reportWebVitals(metric) {
   debugPerf(metric); // The metric object ({ id, name, startTime, value, label }) is logged to the console
 }
+*/
 
 import { ApolloProvider } from "@apollo/client";
 import { useApollo } from "@vulcanjs/next-apollo";
@@ -32,7 +31,6 @@ import { useUser } from "~/account/user/hooks";
 
 import { LocaleContextProvider } from "~/i18n/components/LocaleContext";
 
-//import "~/stylesheets/main.scss";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 
 // Various side effects (registering locales etc.)
@@ -41,46 +39,23 @@ import "~/i18n";
 import { ErrorBoundary } from "~/core/components/error";
 import { getAppGraphqlUri } from "~/lib/graphql";
 import Layout from "~/core/components/common/Layout";
-//import { useCookies } from "react-cookie";
 
-// @see https://nextjs.org/docs/basic-features/layouts#with-typescript
-// Doc says to use "ReactNode" as the return type at the time of writing (09/2021) but then that fails appWithTranslation
-// , ReactElement seems more appropriate
-type NextPageWithLayout = NextPage & {
-  getLayout?: (page: ReactElement) => ReactElement; //ReactNode;
-};
-
-export interface VNAppProps extends AppProps {
-  Component: NextPageWithLayout;
+export interface AppLayoutProps {
   /** Locale extracted from cookies server-side */
-  pageProps: {
-    locale?: string;
-    localeStrings?: any;
-    initialApolloState?: any;
-    // When on a specific survey
-    year?: string;
-    slug?: string;
-  };
-  /**
-   * The request origin
-   * Will allow to have consistent SSR without needing
-   * to setup an explicit graphql URI
-   */
-  //origin?: string;
+  locale?: string;
+  localeStrings?: any;
+  initialApolloState?: any;
+  // When on a specific survey
+  // TODO: will be handled by a nested layout later on
+  year?: string;
+  slug?: string;
+  children: React.ReactNode;
 }
 
-const Favicons = () => (
-  <>
-    {/* Favicon created using https://realfavicongenerator.net/ */}
-    <link rel="manifest" href="/site.webmanifest"></link>
-    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"></link>
-    <meta name="msapplication-TileColor" content="#da532c"></meta>
-    <meta name="theme-color" content="#ffffff"></meta>
-  </>
-);
-
-function VNApp({ Component, pageProps }: VNAppProps) {
-  const apolloClient = useApollo(pageProps.initialApolloState, {
+export function AppLayout(props: AppLayoutProps) {
+  const { children, initialApolloState, locale, localeStrings, slug, year } =
+    props;
+  const apolloClient = useApollo(initialApolloState, {
     graphqlUri: getAppGraphqlUri(/*origin*/),
     crossDomainGraphqlUri:
       !!process.env.NEXT_PUBLIC_CROSS_DOMAIN_GRAPHQL_URI || false,
@@ -89,14 +64,10 @@ function VNApp({ Component, pageProps }: VNAppProps) {
   // @see https://nextjs.org/docs/basic-features/layouts
   const { user } = useUser();
 
-  const getLayout = Component.getLayout ?? ((page) => page);
-
-  const { locale, localeStrings } = pageProps;
-
   return (
     <ErrorBoundary proposeReload={true} proposeHomeRedirection={true}>
       {/** TODO: this error boundary to display anything useful since it doesn't have i18n */}
-      {getLayout(
+      {
         <ApolloProvider client={apolloClient}>
           <LocaleContextProvider
             locale={locale}
@@ -127,33 +98,19 @@ function VNApp({ Component, pageProps }: VNAppProps) {
                   FormattedMessage: FormattedMessage,
                 }}
               >
-                <Head>
-                  <title>Devographics Surveys</title>
-                  <meta
-                    name="viewport"
-                    content="minimum-scale=1, initial-scale=1, width=device-width"
-                  />
-                  <Favicons />
-                </Head>
                 <ErrorBoundary
                   proposeReload={true}
                   proposeHomeRedirection={true}
                 >
-                  <Layout
-                    surveySlug={pageProps?.slug}
-                    surveyYear={pageProps?.year}
-                  >
-                    {/** @ts-ignore */}
-                    <Component {...pageProps} />
+                  <Layout surveySlug={slug} surveyYear={year}>
+                    {children}
                   </Layout>
                 </ErrorBoundary>
               </VulcanComponentsProvider>
             </VulcanCurrentUserProvider>
           </LocaleContextProvider>
         </ApolloProvider>
-      )}
+      }
     </ErrorBoundary>
   );
 }
-
-export default VNApp;
