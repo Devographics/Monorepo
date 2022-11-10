@@ -116,8 +116,8 @@ export const FormComponentCheckboxGroup = ({
   const { updateCurrentValues } = useFormContext();
   const Components = useVulcanComponents();
 
-  // @ts-expect-error
   const {
+    // @ts-expect-error
     options = [],
     name,
     onChange,
@@ -176,6 +176,8 @@ export const FormComponentCheckboxGroup = ({
             <Form.Check
               {...otherInputProperties}
               name={name}
+              // @ts-ignore
+              // TODO
               layout="elementOnly"
               key={i}
               className={checkClass}
@@ -188,6 +190,8 @@ export const FormComponentCheckboxGroup = ({
                     value={isChecked}
                     checked={isChecked}
                     id={`${path}.${i}`}
+                    // @ts-ignore
+                    // TODO
                     path={`${path}.${i}`}
                     ref={refFunction}
                     onChange={(event) => {

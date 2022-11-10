@@ -26,5 +26,6 @@
     "**/dist": true,
     "**/pnpm-lock.yaml": true,
     "**/page-data.json": true
-  }
+  },
+  "svn.ignoreMissingSvnWarning": true
 }

@@ -1,6 +1,6 @@
 {
-  "name": "vulcan-next",
-  "version": "0.6.2",
+  "name": "@devographics/surveyform",
+  "version": "0.6.3",
   "private": true,
   "scripts": {
     "build-storybook": "build-storybook",
@@ -127,10 +127,12 @@
     "i18next": "^19.9.2",
     "i18next-browser-languagedetector": "^4.3.1",
     "i18next-http-backend": "^1.4.5",
+    "ioredis": "^5.2.4",
     "js-yaml": "^4.1.0",
     "js-yaml-loader": "^1.2.2",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
+    "mongodb": "4.9.0",
     "mongoose": "^6.7.1",
     "nanoid": "^3.3.4",
     "next": "13.0.1",
@@ -190,7 +192,7 @@
     "supertest": "^6.3.1",
     "ts-loader": "^7.0.5",
     "tsup": "^6.0.1",
-    "typescript": "^4.3.5",
+    "typescript": "^4.8.4",
     "webpack": "^5.74.0",
     "yalc": "^1.0.0-pre.53"
   },

@@ -1,5 +1,6 @@
 import { cachedPromise, promisesNodeCache } from "~/lib/server/caching";
-import { measureTime, getRedisClient } from "~/lib/server/utils";
+import { measureTime } from "~/lib/server/utils";
+import { getRedisClient } from "~/lib/server/redis";
 
 export const getSurveyEditionEntitiesCacheKey = ({ surveyId }: { surveyId: string }) =>
     `entities_${surveyId}`

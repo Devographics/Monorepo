@@ -25,12 +25,3 @@ export const measureTime = async (f, log) => {
   );
   return result;
 };
-
-// TODO: only do once
-export const getRedisClient = async () => {
-  const redisClient = createClient({
-    url: process.env.REDIS_URL,
-  });
-  await redisClient.connect();
-  return redisClient;
-};
