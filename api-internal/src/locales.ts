@@ -121,7 +121,10 @@ export const getLocaleStrings = async (
 ) => {
     const stringFiles = []
     for (const c of contexts) {
-        const stringFile = await getCache(getLocaleParsedContextCacheKey(localeId, c), context)
+        const stringFile = await getCache(
+            getLocaleParsedContextCacheKey({ localeId, context: c }),
+            context
+        )
         if (stringFile) {
             // not all contexts exist for all languages
             stringFiles.push(stringFile)
