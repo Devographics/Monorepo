@@ -7,8 +7,8 @@ import take from "lodash/take.js";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
 import type { SurveyType } from "@devographics/core-models";
 import { useIntlContext } from "@vulcanjs/react-i18n";
-import { useEntitiesQuery } from "~/core/hooks/useEntitiesQuery";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
+import { useEntities } from "~/core/components/common/EntitiesContext";
 
 const Features = ({
   features,
@@ -80,16 +80,17 @@ const Score = ({ response, survey }: { response: any; survey: SurveyType }) => {
   const unknownFieldIds = unknownFields
     .map((f) => f.id)
     .filter((id) => !!id) as Array<string>;
-  const { data, loading, error } = useEntitiesQuery({
-    ids: unknownFieldIds,
-  });
+
+  const { data, loading: entitiesLoading, error } = useEntities();
+  const { entities } = data;
+
   // if (loading) return <Components.Loading />;
   // if (error) return <span>Could not load entities</span>;
 
   // only keep features which have an associated entity which itself has a URL
   const unknownFeatures = unknownFields
     .map((field) => {
-      const entity = data?.entities?.find((e) => e.id === field.id);
+      const entity = entities?.find((e) => e.id === field.id);
       return {
         field,
         entity,

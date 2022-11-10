@@ -24,7 +24,7 @@ export const getSurveyPath = ({
   number?: any;
   response?: any;
   home?: boolean;
-  page: "thanks";
+  page?: "thanks";
 }) => {
   const survey = surveyArgument || getSurveyFromResponse(response);
   if (!survey) {

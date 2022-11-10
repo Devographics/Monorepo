@@ -13,6 +13,7 @@ import Image from "next/image";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import { publicConfig } from "~/config/public";
 import { getSurveyImageUrl } from "~/surveys/getSurveyImageUrl";
+import { EntitiesProvider } from "~/core/components/common/EntitiesContext";
 
 const Thanks = () => {
   const { responseId, slug, year } = useSurveyResponseParams();
@@ -58,43 +59,45 @@ const Thanks = () => {
   const imageUrl = getSurveyImageUrl(survey);
 
   return (
-    <div className="contents-narrow thanks">
-      <h1 className="survey-image survey-image-small">
-        <Image
-          width={300}
-          height={200}
-          src={imageUrl}
-          alt={`${name} ${year}`}
-          quality={100}
-        />
-      </h1>
-      <Score response={response} survey={survey} />
-      <div>
-        <FormattedMessage id="general.thanks" />
-      </div>
-      <ShareSite survey={survey} />
-      <div className="form-submit form-section-nav form-section-nav-bottom">
-        <div className="form-submit-actions">
-          <Components.Button
-            className="form-btn-prev"
-            type="submit"
-            variant="primary"
-            onClick={async (e) => {
-              e.preventDefault();
-              router.push(
-                getSurveyPath({
-                  survey,
-                  response,
-                  number: survey.outline.length,
-                })
-              );
-            }}
-          >
-            « <FormattedMessage id="general.back" />
-          </Components.Button>
+    <EntitiesProvider surveyId={survey.surveyId}>
+      <div className="contents-narrow thanks">
+        <h1 className="survey-image survey-image-small">
+          <Image
+            width={300}
+            height={200}
+            src={imageUrl}
+            alt={`${name} ${year}`}
+            quality={100}
+          />
+        </h1>
+        <Score response={response} survey={survey} />
+        <div>
+          <FormattedMessage id="general.thanks" />
+        </div>
+        <ShareSite survey={survey} />
+        <div className="form-submit form-section-nav form-section-nav-bottom">
+          <div className="form-submit-actions">
+            <Components.Button
+              className="form-btn-prev"
+              type="submit"
+              variant="primary"
+              onClick={async (e) => {
+                e.preventDefault();
+                router.push(
+                  getSurveyPath({
+                    survey,
+                    response,
+                    number: survey.outline.length,
+                  })
+                );
+              }}
+            >
+              « <FormattedMessage id="general.back" />
+            </Components.Button>
+          </div>
         </div>
       </div>
-    </div>
+    </EntitiesProvider>
   );
 };
 
