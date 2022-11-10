@@ -150,7 +150,7 @@ export const templates: {
   top_n: ({ id, allowother = false }) => ({
     allowmultiple: true,
     allowother,
-    input: "top_n",
+    input: "checkboxgroup",
     randomize: true,
     suffix: "choices",
     limit: 3,

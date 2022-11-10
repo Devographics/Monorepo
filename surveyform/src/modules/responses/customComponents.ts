@@ -5,7 +5,6 @@ import { Help } from "~/core/components/forms/Help";
 import Bracket from "~/core/components/forms/Bracket";
 import Feature from "~/core/components/forms/experience/Feature";
 import Tool from "~/core/components/forms/experience/Tool";
-import TopN from "~/core/components/forms/TopN";
 import Slider from "~/core/components/forms/Slider";
 import Select from "~/core/components/forms/Select";
 import Checkboxgroup from "~/core/components/forms/Checkboxgroup";
@@ -22,7 +21,6 @@ const customComponents = {
   bracket: Bracket,
   feature: Feature,
   tool: Tool,
-  top_n: TopN,
   slider: Slider,
   select: Select,
   checkboxgroup: Checkboxgroup,

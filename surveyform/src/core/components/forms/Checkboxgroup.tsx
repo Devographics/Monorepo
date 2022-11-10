@@ -139,6 +139,9 @@ export const FormComponentCheckboxGroup = ({
 
   const hasValue = value.length > 0;
 
+  const { limit } = itemProperties;
+  const hasReachedLimit = limit && value.length >= limit;
+
   // if this is a "new document" form check options' "checked" property to populate value
   if (formType === "new" && value.length === 0) {
     const checkedValues = options
@@ -189,6 +192,7 @@ export const FormComponentCheckboxGroup = ({
                     type="checkbox"
                     value={isChecked}
                     checked={isChecked}
+                    disabled={!isChecked && hasReachedLimit}
                     id={`${path}.${i}`}
                     // @ts-ignore
                     // TODO

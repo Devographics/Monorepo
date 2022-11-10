@@ -414,7 +414,7 @@ outline:
 
       # new in 2022
       - id: turbopack
-        year: 2021
+        year: 2022
 
       - id: build_tools
         intlId: tools.other_tools
@@ -844,7 +844,7 @@ outline:
       - id: js_ecosystem_changing_to_fast
         template: opinion
 
-      - id: js_pain_points
+      - id: top_js_pain_points
         year: 2021
         # template: bracket
         template: top_n
@@ -858,13 +858,13 @@ outline:
           - id: writing_modules
           - id: date_management
 
-      - id: js_pain_points
+      - id: top_js_pain_points
         year: 2021
         sectionSlug: opinions_others
         template: others
         matchTags: [js_pain_points]
 
-      - id: currently_missing_from_js
+      - id: top_currently_missing_from_js
         year: 2021
         # template: bracket
         template: top_n
@@ -878,16 +878,16 @@ outline:
           - id: better_date_management
           - id: observable
 
-      - id: currently_missing_from_js
+      - id: top_currently_missing_from_js
         sectionSlug: opinions_others
         template: others
         matchTags: [js_missing_features]
 
-      - id: pick_of_the_year
-        year: 2022
-        sectionSlug: opinions_others
-        template: others
-        matchTags: [js_missing_features]
+      # - id: pick_of_the_year
+      #   year: 2022
+      #   sectionSlug: opinions_others
+      #   template: others
+      #   matchTags: [js_missing_features]
 
       - id: state_of_the_web
         template: happiness
