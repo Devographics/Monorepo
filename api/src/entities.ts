@@ -266,7 +266,7 @@ export const extractEntityIds = (edition: SurveyEdition) => {
     if (edition.config.credits) {
         entityIds = [...entityIds, ...edition.config.credits.map(c => c.id)]
     }
-    if (edition.questions) {
+    if (edition.questions && !isEmpty(edition.questions)) {
         for (const section of edition.questions) {
             for (const question of section.questions) {
                 entityIds.push(question.id)

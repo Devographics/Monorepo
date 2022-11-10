@@ -120,26 +120,6 @@ export const makeId = (str) => {
   return s;
 };
 
-export const getThanksPath = (
-  response: ResponseDocument,
-  surveyArg: SurveyDocument
-) => {
-  const survey = getSurveyFromResponse(response);
-  if (!survey)
-    throw new Error(
-      `Survey not found for response ${JSON.stringify(response)}`
-    );
-  if (!response._id) {
-    // we do not throw so user still has a sensible thank you UI.
-    captureException(
-      new Error(`Found a response with no _id when computing thanks path`)
-    );
-  }
-  const { name, year } = survey;
-  const path = `/survey/${slugify(name)}/${year}/${response._id}/thanks`;
-  return path;
-};
-
 export const parseOptions = (questionObject, options) => {
   const { optionsIntlId } = questionObject;
   return options.map((option) => {

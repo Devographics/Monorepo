@@ -89,7 +89,7 @@ const Score = ({ response, survey }: { response: any; survey: SurveyType }) => {
   // only keep features which have an associated entity which itself has a URL
   const unknownFeatures = unknownFields
     .map((field) => {
-      const entity = data?.entities.find((e) => e.id === field.id);
+      const entity = data?.entities?.find((e) => e.id === field.id);
       return {
         field,
         entity,

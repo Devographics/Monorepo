@@ -18,28 +18,33 @@ export const getSurveyPath = ({
   number,
   response,
   home = false,
+  page,
 }: {
   survey?: SurveyDocument | null;
   number?: any;
   response?: any;
   home?: boolean;
+  page: "thanks";
 }) => {
   const survey = surveyArgument || getSurveyFromResponse(response);
   if (!survey) {
     return "";
   }
   const { year, prettySlug } = survey;
-  const prefixSegment = "/survey";
-  const slugSegment = `/${prettySlug}/${year}`;
-  const responseSegment = home
-    ? ""
-    : (response && `/${response._id}`) || "/read-only";
-  const numberSegment = number ? `/${number}` : "";
-  const path = [
-    prefixSegment,
-    slugSegment,
-    responseSegment,
-    numberSegment,
-  ].join("");
+  const prefixSegment = "survey";
+  const slugSegment = prettySlug;
+  const yearSegment = year;
+  const pathSegments = ['/', prefixSegment, slugSegment, yearSegment];
+
+  if (!home) {
+    const responseSegment = (response && `${response._id}`) || "read-only";
+    pathSegments.push(responseSegment);
+
+    if (page || number) {
+      const suffixSegment = page || number;
+      pathSegments.push(suffixSegment);
+    }
+  }
+  const path = pathSegments.join("/");
   return path;
 };

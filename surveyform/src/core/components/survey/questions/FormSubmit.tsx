@@ -14,7 +14,6 @@ TODO
 import { useVulcanComponents, useFormContext } from "@vulcanjs/react-ui";
 import { useRouter } from "next/router.js";
 import React, { useState } from "react";
-import { getThanksPath } from "~/modules/responses/helpers";
 import { getSurveyPath } from "~/modules/surveys/getters";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import { SurveyDocument } from "@devographics/core-models";
@@ -80,7 +79,8 @@ const FormSubmit = ({
               setNextLoading(true);
               await submitForm();
               setNextLoading(false);
-              router.push(getThanksPath(response, survey));
+              router.push(getSurveyPath({ survey, response, page: 'thanks' })
+              );
             }}
           >
             <FormattedMessage id="general.finish_survey" />
