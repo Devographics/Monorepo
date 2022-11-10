@@ -13,6 +13,8 @@ import { appSettings } from './settings'
 import sanitizeHtml from 'sanitize-html'
 import { RequestContext, Survey, SurveyEdition } from './types'
 import { setCache } from './caching'
+import entityResolvers from './resolvers/entities'
+import isEmpty from 'lodash/isEmpty.js'
 
 let entities: Entity[] = []
 
@@ -210,7 +212,16 @@ export const cacheSurveysEntities = async ({
         for (const edition of survey.editions) {
             const surveyId = edition?.config?.surveyId
             const entityIds = extractEntityIds(edition)
-            const editionEntities = entities.filter(e => entityIds.includes(e.id))
+            const editionEntities = entities
+                .filter(e => entityIds.includes(e.id))
+                .map(e => {
+                    const { category, patterns, ...fieldsToKeep } = e
+                    return fieldsToKeep
+                })
+
+            for (let e of editionEntities) {
+                e = await applyEntityResolvers(e, context)
+            }
             if (editionEntities.length > 0) {
                 setCache(getSurveyEditionEntitiesCacheKey({ surveyId }), editionEntities, context)
                 console.log(
@@ -221,6 +232,27 @@ export const cacheSurveysEntities = async ({
             }
         }
     }
+}
+
+/*
+
+Apply GraphQL resolvers for Entity type to end up with the same object
+as if we were querying the API through GraphQL
+
+*/
+// TODO: seems unnecessary to have to define this type?
+type EntityResolverKey = "github" | "mdn" | "twitter" | "caniuse" | "homepage" | "npm" | "company"
+
+const applyEntityResolvers = async (entity: Entity, context: RequestContext) => {
+    const resolvers = entityResolvers.Entity
+    for (const resolverKey in resolvers) {
+        const resolver = resolvers[resolverKey as EntityResolverKey]
+        const resolvedValue = await resolver(entity, null, context)
+        if (!isEmpty(resolvedValue)) {
+            entity[resolverKey as EntityResolverKey] = resolvedValue
+        }
+    }
+    return entity
 }
 
 /*

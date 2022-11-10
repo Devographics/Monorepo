@@ -69,7 +69,8 @@ export default {
             return twitter
         },
         homepage: async (entity: Entity, args: any, context: RequestContext) => {
-            return { name: entity.homepage, url: entity.homepage }
+            const { homepage } = entity
+            return homepage ? { name: entity.homepage, url: entity.homepage } : null
         },
         caniuse: async (entity: Entity, args: any, context: RequestContext) => {
             const { caniuse } = entity
