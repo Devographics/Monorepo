@@ -214,6 +214,7 @@ export const cacheSurveysEntities = async ({
             const entityIds = extractEntityIds(edition)
             const editionEntities = entities
                 .filter(e => entityIds.includes(e.id))
+                .filter(e => !e.normalizationOnly)
                 .map(e => {
                     const { category, patterns, ...fieldsToKeep } = e
                     return fieldsToKeep
