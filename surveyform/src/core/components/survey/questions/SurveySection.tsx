@@ -41,7 +41,6 @@ const SurveySection = () => {
     previousSection,
     nextSection,
   };
-  console.log(survey)
 
   return (
     <EntitiesProvider surveyId={survey.surveyId}>

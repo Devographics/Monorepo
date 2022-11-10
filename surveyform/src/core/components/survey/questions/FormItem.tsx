@@ -24,6 +24,7 @@ export interface FormItemProps
   intlKeys?: Array<string>;
   questionId: string;
   showDescription?: boolean;
+  noteIntlId?: string;
 }
 export const FormItem = (props: FormItemProps) => {
   const {
@@ -33,9 +34,10 @@ export const FormItem = (props: FormItemProps) => {
     afterInput,
     description: intlDescription,
     loading,
-    intlKeys,
+    intlKeys = [],
     questionId,
     showDescription = true,
+    noteIntlId: noteIntlId_
   } = props;
 
   const { data, loading: entitiesLoading, error } = useEntities();
@@ -51,8 +53,8 @@ export const FormItem = (props: FormItemProps) => {
   );
 
   const intl = useIntlContext();
-  const note =
-    intlKeys?.length && intl.formatMessage({ id: `${intlKeys[0]}.note` });
+  const noteIntlId = noteIntlId_ || `${intlKeys[0]}.note`
+  const note = intl.formatMessage({ id: noteIntlId });
 
   return (
     <Form.Group controlId={path}>

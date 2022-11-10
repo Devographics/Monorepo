@@ -10,7 +10,8 @@ import Slider from "~/core/components/forms/Slider";
 import Select from "~/core/components/forms/Select";
 import Checkboxgroup from "~/core/components/forms/Checkboxgroup";
 import Radiogroup from "~/core/components/forms/Radiogroup";
-import { makeAutocomplete } from "@vulcanjs/graphql";
+import AutocompleteMultiple from "~/core/components/forms/AutocompleteMultiple";
+import { makeAutocomplete } from "~/core/utils/autocomplete";
 import type { ParsedQuestion } from "@devographics/core-models";
 
 const customComponents = {
@@ -26,6 +27,7 @@ const customComponents = {
   select: Select,
   checkboxgroup: Checkboxgroup,
   radiogroup: Radiogroup,
+  multiautocomplete: AutocompleteMultiple
 };
 
 /**
@@ -41,16 +43,19 @@ const customComponents = {
 export const addComponentToQuestionObject = (
   questionObject: ParsedQuestion
 ) => {
+  let question = questionObject
+
   const customComponent = customComponents[questionObject.input];
   if (customComponent) {
-    let questionWithComponent = { ...questionObject, input: customComponent };
-    if (questionWithComponent.autocompleteOptions) {
-      questionWithComponent = makeAutocomplete(
-        questionWithComponent,
-        questionWithComponent.autocompleteOptions
-      );
-    }
-    return questionWithComponent;
+    question = { ...questionObject, input: customComponent };
   }
-  return questionObject;
+  
+  if (question.autocompleteOptions) {
+    question = makeAutocomplete(
+      question,
+      question.autocompleteOptions
+    );
+  }
+  
+  return question;
 };

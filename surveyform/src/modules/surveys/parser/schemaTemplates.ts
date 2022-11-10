@@ -49,6 +49,7 @@ export const templates: {
     ],
   }),
   project: () => ({
+    input: "multiautocomplete",
     suffix: "prenormalized",
     type: Array,
     arrayItem: {
@@ -59,7 +60,6 @@ export const templates: {
       autocompletePropertyName: "name",
       queryResolverName: "projects",
       fragmentName: "ProjectFragment",
-      valuePropertyName: "id",
     },
   }),
 
