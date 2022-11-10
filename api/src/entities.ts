@@ -210,7 +210,7 @@ export const cacheSurveysEntities = async ({
     console.log(`// Initializing entities cache (Redis)…`)
     for (const survey of surveys) {
         for (const edition of survey.editions) {
-            const surveyId = edition?.config?.surveyId
+            const surveyId = edition?.surveyId
             const entityIds = extractEntityIds(edition)
             const editionEntities = entities
                 .filter(e => entityIds.includes(e.id))
@@ -263,8 +263,8 @@ For a given survey questions outline, extract all mentioned entities
 */
 export const extractEntityIds = (edition: SurveyEdition) => {
     let entityIds: string[] = []
-    if (edition.config.credits) {
-        entityIds = [...entityIds, ...edition.config.credits.map(c => c.id)]
+    if (edition.credits) {
+        entityIds = [...entityIds, ...edition.credits.map(c => c.id)]
     }
     if (edition.questions && !isEmpty(edition.questions)) {
         for (const section of edition.questions) {

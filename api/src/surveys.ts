@@ -63,16 +63,16 @@ export const loadFromGitHub = async () => {
                 } else if (file2.type === 'dir') {
                     console.log(`    -> Edition ${file2.name}…`)
                     const editionsDirContents = await listGitHubFiles(file2.path)
-                    const edition = { config: {}, questions: {} }
+                    let edition = {}
                     for (const file3 of editionsDirContents) {
                         if (file3.name === 'config.yml') {
                             // found config.yml for edition
                             const editionConfigYaml = await getGitHubYamlFile(file3.download_url)
-                            edition.config = editionConfigYaml
+                            edition = { ...edition, ...editionConfigYaml }
                         } else if (file3.name === 'questions.yml') {
                             // found config.yml for edition
                             const editionQuestionsYaml = await getGitHubYamlFile(file3.download_url)
-                            edition.questions = editionQuestionsYaml
+                            edition = { ...edition, questions: editionQuestionsYaml }
                         }
                     }
                     editions.push(edition)
@@ -113,14 +113,14 @@ export const loadLocally = async () => {
                 const stat = await lstat(editionDirPath)
                 if (!excludeDirs.includes(editionDirName) && stat.isDirectory()) {
                     console.log(`    -> Edition ${editionDirName}…`)
-                    const edition = { config: {}, questions: [] }
+                    let edition
                     try {
                         const editionConfigContents = await readFile(
                             editionDirPath + '/config.yml',
                             'utf8'
                         )
                         const editionConfigYaml: any = yaml.load(editionConfigContents)
-                        edition.config = editionConfigYaml
+                        edition = editionConfigYaml
                     } catch (error) {}
                     try {
                         const editionQuestionsContents = await readFile(
