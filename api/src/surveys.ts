@@ -63,14 +63,19 @@ export const loadFromGitHub = async () => {
                 } else if (file2.type === 'dir') {
                     console.log(`    -> Edition ${file2.name}…`)
                     const editionsDirContents = await listGitHubFiles(file2.path)
-
+                    const edition = { config: {}, questions: {} }
                     for (const file3 of editionsDirContents) {
                         if (file3.name === 'config.yml') {
                             // found config.yml for edition
                             const editionConfigYaml = await getGitHubYamlFile(file3.download_url)
-                            editions.push(editionConfigYaml)
+                            edition.config = editionConfigYaml
+                        } else if (file3.name === 'questions.yml') {
+                            // found config.yml for edition
+                            const editionQuestionsYaml = await getGitHubYamlFile(file3.download_url)
+                            edition.questions = editionQuestionsYaml
                         }
                     }
+                    editions.push(edition)
                 }
             }
             const survey = { ...editionConfigYaml, editions }
@@ -108,14 +113,24 @@ export const loadLocally = async () => {
                 const stat = await lstat(editionDirPath)
                 if (!excludeDirs.includes(editionDirName) && stat.isDirectory()) {
                     console.log(`    -> Edition ${editionDirName}…`)
-                    const editionConfigContents = await readFile(
-                        editionDirPath + '/config.yml',
-                        'utf8'
-                    )
-                    const editionConfigYaml: any = yaml.load(editionConfigContents)
-                    if (editionConfigYaml) {
-                        editions.push(editionConfigYaml)
-                    }
+                    const edition = { config: {}, questions: [] }
+                    try {
+                        const editionConfigContents = await readFile(
+                            editionDirPath + '/config.yml',
+                            'utf8'
+                        )
+                        const editionConfigYaml: any = yaml.load(editionConfigContents)
+                        edition.config = editionConfigYaml
+                    } catch (error) {}
+                    try {
+                        const editionQuestionsContents = await readFile(
+                            editionDirPath + '/questions.yml',
+                            'utf8'
+                        )
+                        const editionQuestionsYaml: any = yaml.load(editionQuestionsContents)
+                        edition.questions = editionQuestionsYaml
+                    } catch (error) {}
+                    editions.push(edition)
                 }
             }
 
@@ -141,6 +156,7 @@ export const initSurveys = async () => {
     console.log('// initializing surveys')
     const surveys = await loadOrGetSurveys()
     logToFile('surveys.json', surveys, { mode: 'overwrite' })
+    return surveys
 }
 
 export const getSurveys = async () => {

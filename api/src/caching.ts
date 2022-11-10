@@ -1,11 +1,10 @@
-import { Db } from 'mongodb'
+// import { Db } from 'mongodb'
 // import config from './config'
 import { RequestContext } from './types'
 
 import NodeCache from 'node-cache'
+import { appSettings } from './settings'
 const nodeCache = new NodeCache()
-
-const cacheType = process.env.CACHE_TYPE === 'local' ? 'local' : 'redis'
 
 type DynamicComputeCall = (...args: any[]) => Promise<any>
 
@@ -57,7 +56,7 @@ export const useCache = async <F extends DynamicComputeCall>(options: {
     const { func, context, key: providedKey, funcOptions = {} } = options
     const key = providedKey ?? computeKey(func, funcOptions)
     const { redisClient, isDebug = false } = context
-    const disableCache = process.env.DISABLE_CACHE
+    const { disableCache, cacheType } = appSettings
     let value, verb
 
     // always pass context to cached function just in case it's needed
@@ -78,7 +77,7 @@ export const useCache = async <F extends DynamicComputeCall>(options: {
             value = await func(funcOptionsWithContext)
             if (value) {
                 // in case previous cached entry exists, delete it
-                await setCache(key, value, context)
+                await setCache(key, JSON.stringify(value), context)
             }
         }
     } else {
@@ -95,6 +94,7 @@ export const useCache = async <F extends DynamicComputeCall>(options: {
 }
 
 export const getCache = async (key: string, context: RequestContext) => {
+    const { cacheType } = appSettings
     if (cacheType === 'local') {
         const value: string | undefined = nodeCache.get(key)
         return value && JSON.parse(value)
@@ -111,6 +111,7 @@ export const getCache = async (key: string, context: RequestContext) => {
 }
 
 export const setCache = async (key: string, value: any, context: RequestContext) => {
+    const { cacheType } = appSettings
     if (cacheType === 'local') {
         nodeCache.set(key, value)
     } else {
@@ -118,8 +119,8 @@ export const setCache = async (key: string, value: any, context: RequestContext)
     }
 }
 
-export const clearCache = async (db: Db) => {
+// export const clearCache = async (db: Db) => {
     // const collection = db.collection(config.mongo.cache_collection)
     // const result = await collection.deleteMany({})
     // return result
-}
+// }

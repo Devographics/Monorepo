@@ -11,6 +11,8 @@ import marked from 'marked'
 import hljs from 'highlight.js/lib/common'
 import { appSettings } from './settings'
 import sanitizeHtml from 'sanitize-html'
+import { RequestContext, Survey, SurveyEdition } from './types'
+import { setCache } from './caching'
 
 let entities: Entity[] = []
 
@@ -22,7 +24,7 @@ export const loadOrGetEntities = async () => {
     return await highlightEntitiesExampleCode(parseEntitiesMarkdown(entities))
 }
 
-type MarkdownFields = "name" | "description"
+type MarkdownFields = 'name' | 'description'
 
 const markdownFields: MarkdownFields[] = ['name', 'description']
 
@@ -52,7 +54,7 @@ export const highlightEntitiesExampleCode = async (entities: Entity[]) => {
         if (example) {
             const { code, language } = example
             // make sure to trim any extra /n at the end
-            example.codeHighlighted = hljs.highlight(code.trim(), {language}).value
+            example.codeHighlighted = hljs.highlight(code.trim(), { language }).value
         }
     }
     return entities
@@ -142,6 +144,7 @@ export const initEntities = async () => {
     console.log('// initializing entities…')
     const entities = await loadOrGetEntities()
     logToFile('entities.json', entities, { mode: 'overwrite' })
+    return entities
 }
 
 export const getEntities = async ({
@@ -169,7 +172,6 @@ export const getEntities = async ({
 
 // Look up entities by id, name, or aliases (case-insensitive)
 export const getEntity = async ({ id }: { id: string | number }) => {
-
     if (!id || typeof id !== 'string') {
         return
     }
@@ -178,14 +180,71 @@ export const getEntity = async ({ id }: { id: string | number }) => {
 
     const lowerCaseId = id.toLowerCase()
     // some entities are only for normalization and should not be made available through API
-    const entity = entities
-        .find(e => {
-            return (
-                (e.id && e.id.toLowerCase() === lowerCaseId) ||
-                (e.id && e.id.toLowerCase().replace(/\-/g, '_') === lowerCaseId) ||
-                (e.name && e.name.toLowerCase() === lowerCaseId)
-            )
-        })
+    const entity = entities.find(e => {
+        return (
+            (e.id && e.id.toLowerCase() === lowerCaseId) ||
+            (e.id && e.id.toLowerCase().replace(/\-/g, '_') === lowerCaseId) ||
+            (e.name && e.name.toLowerCase() === lowerCaseId)
+        )
+    })
 
     return entity
 }
+
+/*
+
+Cache all the entities needed by a survey form
+
+*/
+export const cacheSurveysEntities = async ({
+    surveys,
+    entities,
+    context
+}: {
+    surveys: Survey[]
+    entities: Entity[]
+    context: RequestContext
+}) => {
+    console.log(`// Initializing entities cache (Redis)…`)
+    for (const survey of surveys) {
+        for (const edition of survey.editions) {
+            const surveyId = edition?.config?.surveyId
+            const entityIds = extractEntityIds(edition)
+            const editionEntities = entities.filter(e => entityIds.includes(e.id))
+            if (editionEntities.length > 0) {
+                setCache(getSurveyEditionEntitiesCacheKey({ surveyId }), editionEntities, context)
+                console.log(
+                    `-> Cached ${
+                        editionEntities.length
+                    } entities (${getSurveyEditionEntitiesCacheKey({ surveyId })})`
+                )
+            }
+        }
+    }
+}
+
+/*
+
+For a given survey questions outline, extract all mentioned entities
+
+*/
+export const extractEntityIds = (edition: SurveyEdition) => {
+    let entityIds: string[] = []
+    if (edition.config.credits) {
+        entityIds = [...entityIds, ...edition.config.credits.map(c => c.id)]
+    }
+    if (edition.questions) {
+        for (const section of edition.questions) {
+            for (const question of section.questions) {
+                entityIds.push(question.id)
+                if (question.options) {
+                    entityIds = [...entityIds, ...question.options.map(o => o.id)]
+                }
+            }
+        }
+    }
+    return entityIds
+}
+
+export const getSurveyEditionEntitiesCacheKey = ({ surveyId }: { surveyId: string }) =>
+    `entities_${surveyId}`

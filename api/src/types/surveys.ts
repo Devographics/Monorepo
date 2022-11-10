@@ -18,5 +18,32 @@ export type SurveySlug =
 
 // todo: generate this from GraphQL?
 export type Survey = {
-    editions?: any[]
+    editions: SurveyEdition[]
+}
+
+export type SurveyEdition = {
+    config: SurveyConfig;
+    questions: SurveySections[]
+}
+
+export type SurveyConfig = {
+    surveyId: string
+    credits: SurveyCredit[]
+}
+
+export type SurveyCredit = {
+    id: string
+}
+
+export type SurveySections = {
+    questions: SurveyQuestion[]
+}
+
+export type SurveyQuestion = {
+    id: string
+    options?: QuestionOption[]
+}
+
+export type QuestionOption = {
+    id: string
 }

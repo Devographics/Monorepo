@@ -8,10 +8,11 @@ import typeDefs from './type_defs/schema.graphql'
 import { RequestContext } from './types'
 import resolvers from './resolvers'
 import express from 'express'
-import { initEntities } from './entities'
+import { initEntities, cacheSurveysEntities } from './entities'
 import { initSurveys } from './surveys'
+import { initProjects } from './projects'
 import { analyzeTwitterFollowings } from './rpcs'
-import { clearCache } from './caching'
+// import { clearCache } from './caching'
 import { createClient } from 'redis'
 
 import path from 'path'
@@ -125,7 +126,7 @@ const start = async () => {
 
     app.get('/clear-cache', async function (req, res) {
         checkSecretKey(req)
-        clearCache(db)
+        // clearCache(db)
         res.status(200).send('Cache cleared')
     })
 
@@ -133,9 +134,20 @@ const start = async () => {
 
     const port = process.env.PORT || 4000
 
-    await initEntities()
+    const entities = await initEntities()
 
-    await initSurveys()
+    const surveys = await initSurveys()
+
+    await cacheSurveysEntities({
+        surveys,
+        entities,
+        context: {
+            db,
+            redisClient
+        }
+    })
+
+    await initProjects({ db })
 
     const finishedAt = new Date()
 
