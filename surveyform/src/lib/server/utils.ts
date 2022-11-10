@@ -1,5 +1,4 @@
 import { NextApiRequest } from "next";
-import { createClient } from "redis";
 
 export const getRootUrl = (req: NextApiRequest) => {
   const { headers } = req;
