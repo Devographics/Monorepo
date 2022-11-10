@@ -97,6 +97,7 @@ export interface EOConfig {
 }
 
 export interface SurveyDocument {
+  surveyId: string;
   createdAt?: Date;
   updatedAt?: Date;
   /**

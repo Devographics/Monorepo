@@ -22,14 +22,12 @@ const EntitiesContext = React.createContext<{
 
 export const EntitiesProvider = ({
   children,
-  tags,
-  ids,
+  surveyId,
 }: {
   children: any;
-  tags?: string[];
-  ids?: string[];
+  surveyId: string;
 }) => {
-  const res = useEntitiesQuery({ tags, ids });
+  const res = useEntitiesQuery({ surveyId });
   const { loading, error, data } = res;
   const entities = data?.entities || [];
   return (

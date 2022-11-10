@@ -1,9 +1,8 @@
 import React from "react";
-import { useVulcanComponents } from "@vulcanjs/react-ui";
-import { useEntitiesQuery } from "~/core/hooks/useEntitiesQuery";
 import { Entity } from "@devographics/core-models";
 import type { SurveyType } from "@devographics/core-models";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
+import { useEntities } from "~/core/components/common/EntitiesContext";
 
 const SurveyCredits = ({ survey }) => {
   return (
@@ -22,18 +21,7 @@ const SurveyCredits = ({ survey }) => {
 };
 
 const SurveyCreditItems = ({ survey }: { survey: SurveyType }) => {
-  const Components = useVulcanComponents();
-  const surveyDesignersIds = survey.credits
-    .filter((c) => c.role === "survey_design")
-    .map((c) => c.id)
-    // in case there are null values
-    .filter((id) => !!id);
-  const { data, loading, error } = useEntitiesQuery({
-    ids: surveyDesignersIds,
-  });
-  if (error) return <span>Could not load entities</span>;
-  if (loading) return <Components.Loading />;
-  if (!data) return <span>No entities found</span>;
+  const { data, loading, error } = useEntities();
   const { entities } = data;
   return (
     <>

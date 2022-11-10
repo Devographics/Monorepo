@@ -41,11 +41,10 @@ const SurveySection = () => {
     previousSection,
     nextSection,
   };
-
-  const entityIds = getEntityIdsFromSurvey(survey)
+  console.log(survey)
 
   return (
-    <EntitiesProvider ids={entityIds}>
+    <EntitiesProvider surveyId={survey.surveyId}>
       <div className="survey-section-wrapper">
         <SurveyMessage survey={survey} />
         <SurveyHeadTags survey={survey} />

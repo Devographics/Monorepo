@@ -1,4 +1,4 @@
-import { getOrFetchEntities } from "./fetchEntities";
+import { getOrFetchEntities } from "./fetchEntitiesRedis";
 
 /*
 
@@ -36,7 +36,7 @@ Entities
  * @returns
  */
 export const entitiesTypeDefs =
-  "entities(tags: [String], ids: [String], name: String_Selector, id: String_Selector): [JSON]";
+  "entities(surveyId: String): [JSON]";
 
 // legacy typed version
 

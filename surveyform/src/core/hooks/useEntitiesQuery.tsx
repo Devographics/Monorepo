@@ -4,50 +4,14 @@ import type { Entity } from "@devographics/core-models";
 
 export const entitiesQuery = gql`
   query EntitiesQuery(
-    $tags: [String]
-    $ids: [String]
+    $surveyId: String
   ) {
-    entities(tags: $tags, ids: $ids)
+    entities(surveyId: $surveyId)
   }
 `;
 
-// legacy typed version
-
-// export const entitiesQuery = gql`
-//   query EntitiesQuery(
-//     $tags: [String]
-//     $ids: [String]
-//   ) {
-//     entities(tags: $tags, ids: $id) {
-//       name
-//       id
-//       type
-//       category
-//       description
-//       tags
-//       mdn
-//       twitterName
-//       twitter {
-//         userName
-//         avatarUrl
-//       }
-//       company {
-//         name
-//         homepage {
-//           url
-//         }
-//       }
-//       example {
-//         language
-//         code
-//       }
-//     }
-//   }
-// `;
-
 interface EntitiesQueryVariables {
-  ids?: Array<string>;
-  tags?: Array<string>;
+  surveyId: string;
 }
 
 export const useEntitiesQuery = (
