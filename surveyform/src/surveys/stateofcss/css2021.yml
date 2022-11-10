@@ -18,7 +18,9 @@ resultsUrl: https://2021.stateofcss.com/
 name: 'State of CSS'
 year: 2021
 status: 3 # preview/open/closed
-imageUrl: 'stateofcss2021.png'
+imageUrl: https://devographics.github.io/surveys/state_of_css/2021/images/css2021.png
+faviconUrl: https://devographics.github.io/surveys/state_of_css/2021/images/css2021-favicon.svg
+socialImageUrl: https://devographics.github.io/surveys/state_of_css/2021/images/css2021-og.png
 domain: stateofcss.com
 bgColor: '#232840'
 textColor: '#9ac6c9'

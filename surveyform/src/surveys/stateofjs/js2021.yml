@@ -11,7 +11,9 @@ resultsUrl: https://2021.stateofjs.com/
 name: State of JavaScript
 year: 2021
 status: 3 # preview/open/closed
-imageUrl: "stateofjs2021.png"
+imageUrl: https://devographics.github.io/surveys/state_of_js/2021/images/js2021.png
+faviconUrl: https://devographics.github.io/surveys/state_of_js/2021/images/js2021-favicon.svg
+socialImageUrl: https://devographics.github.io/surveys/state_of_js/2021/images/js2021-og.png
 domain: stateofjs.com
 bgColor: rgb(34, 36, 41)
 textColor: rgb(224, 228, 228)

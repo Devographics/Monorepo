@@ -11,7 +11,9 @@ shareUrl: https://stateofgraphql.com
 name: State of GraphQL
 year: 2022
 status: 3 # preview/open/closed/hidden
-imageUrl: "stateofgraphql2022.png"
+imageUrl: https://devographics.github.io/surveys/state_of_graphql/2022/images/graphql2022.png
+faviconUrl: https://devographics.github.io/surveys/state_of_graphql/2022/images/graphql2022-favicon.svg
+socialImageUrl: https://devographics.github.io/surveys/state_of_graphql/2022/images/graphql2022-og.png
 bgColor: rgb(34, 36, 41)
 textColor: rgb(224, 228, 228)
 linkColor: rgb(65, 199, 199)

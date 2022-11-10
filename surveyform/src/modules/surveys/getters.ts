@@ -31,10 +31,10 @@ export const getSurveyPath = ({
     return "";
   }
   const { year, prettySlug } = survey;
-  const prefixSegment = "survey";
+  const prefixSegment = "/survey";
   const slugSegment = prettySlug;
   const yearSegment = year;
-  const pathSegments = ['/', prefixSegment, slugSegment, yearSegment];
+  const pathSegments = [prefixSegment, slugSegment, yearSegment];
 
   if (!home) {
     const responseSegment = (response && `${response._id}`) || "read-only";

@@ -138,6 +138,15 @@ const moduleExports = (phase, { defaultConfig }) => {
     disableClientWebpackPlugin: shouldDisableSentry,
   };
 
+  extendedConfig.images = {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'devographics.github.io',
+      },
+    ],
+  }
+
   // Finally add relevant webpack configs/utils
   extendedConfig = flowRight([
     withTM,

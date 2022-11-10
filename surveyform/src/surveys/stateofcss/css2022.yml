@@ -20,12 +20,9 @@ shareUrl: https://stateofcss.com
 name: "State of CSS"
 year: 2022
 status: 3 # preview/open/closed/hidden
-# TODO: this is the old version using a relative path
-imageUrl: "stateofcss2022.png"
-# TODO: should switch to absolute image
-# imageUrl: https://devographics.github.io/surveys/state_of_css/2022/images/stateofcss2022.png
-faviconUrl: https://devographics.github.io/surveys/state_of_css/2022/images/favicon.svg
-socialImageUrl: https://devographics.github.io/surveys/state_of_css/2022/images/stateofcss2022-og.png
+imageUrl: https://devographics.github.io/surveys/state_of_css/2022/images/css2022.png
+faviconUrl: https://devographics.github.io/surveys/state_of_css/2022/images/css2022-favicon.svg
+socialImageUrl: https://devographics.github.io/surveys/state_of_css/2022/images/css2022-og.png
 domain: stateofcss.com
 bgColor: "#232840"
 textColor: "#9ac6c9"
