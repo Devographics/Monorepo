@@ -11,8 +11,7 @@ import {
   nodeCache,
 } from "~/lib/server/caching";
 import { Locale } from "../typings";
-import { createClient } from "redis";
-import { measureTime } from "~/lib/server/utils";
+import { getRedisClient, measureTime } from "~/lib/server/utils";
 
 const commonContexts = ["common", "surveys", "accounts"];
 // TODO: move this elsewhere, maybe in surveys config?
@@ -30,15 +29,6 @@ export const getLocaleParsedContextCacheKey = ({
 }) => `locale_${localeId}_${context}_parsed`;
 export const getAllLocalesMetadataCacheKey = () =>
   "locale_all_locales_metadata";
-
-// TODO: only do once
-export const getRedisClient = async () => {
-  const redisClient = createClient({
-    url: process.env.REDIS_URL,
-  });
-  await redisClient.connect();
-  return redisClient;
-};
 
 /*
 

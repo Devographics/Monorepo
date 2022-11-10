@@ -1,4 +1,5 @@
 import { NextApiRequest } from "next";
+import { createClient } from "redis";
 
 export const getRootUrl = (req: NextApiRequest) => {
   const { headers } = req;
@@ -23,4 +24,13 @@ export const measureTime = async (f, log) => {
     )}kb)`
   );
   return result;
+};
+
+// TODO: only do once
+export const getRedisClient = async () => {
+  const redisClient = createClient({
+    url: process.env.REDIS_URL,
+  });
+  await redisClient.connect();
+  return redisClient;
 };
