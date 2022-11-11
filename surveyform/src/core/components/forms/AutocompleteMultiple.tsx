@@ -65,7 +65,7 @@
    const selectedItems =
      queryData &&
      optionsFunction({ data: queryData }).filter((d) =>
-       (value as Array<any>).includes(d.value)
+       (value as Array<any>)?.includes(d.value)
      );
  
    // console.log(queryData)
