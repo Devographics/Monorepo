@@ -425,6 +425,7 @@ outline:
         matchTags: [graphql]
 
       - id: industry_sector
+        intlId: industry_sector_graphql   
         template: multiple
         allowother: true
         options:
