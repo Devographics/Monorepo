@@ -3,21 +3,31 @@ import React from "react";
 import Head from "next/head";
 import { computeHeadTags } from "./computeHeadTags";
 import { publicConfig } from "~/config/public";
-import { SurveyDocument } from "@devographics/core-models";
+import { SurveyDocument, SurveySection } from "@devographics/core-models";
 import { isAbsoluteUrl } from "~/core/utils/isAbsoluteUrl";
 import { getSurveyImageUrl } from "~/surveys/getSurveyImageUrl";
+import { getSurveyTitle, getSectionKey } from "~/modules/surveys/getters";
 
-const SurveyHeadTags = ({ survey }: { survey: SurveyDocument }) => {
+const SurveyHeadTags = ({
+  survey,
+  section,
+}: {
+  survey: SurveyDocument;
+  section?: SurveySection;
+}) => {
   const { name, year, socialImageUrl, faviconUrl } = survey;
   const intl = useIntlContext();
 
   let finalImageUrl = socialImageUrl || getSurveyImageUrl(survey);
 
+  const sectionTitle = section && intl.formatMessage({ id: getSectionKey(section) });
+  const title = getSurveyTitle({ survey, sectionTitle });
+
   return (
     <Head>
       {/** TODO: some props are probably missing but Vulcan components are not yet typed */}
       {computeHeadTags({
-        title: `${name} ${year}`,
+        title,
         description: intl.formatMessage(
           { id: "general.take_survey" },
           { name, year }

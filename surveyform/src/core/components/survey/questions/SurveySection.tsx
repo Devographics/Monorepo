@@ -46,7 +46,7 @@ const SurveySection = () => {
     <EntitiesProvider surveyId={survey.surveyId}>
       <div className="survey-section-wrapper">
         <SurveyMessage survey={survey} />
-        <SurveyHeadTags survey={survey} />
+        <SurveyHeadTags survey={survey} section={section} />
         <SurveySectionContents survey={survey} {...sectionProps} />
       </div>
     </EntitiesProvider>

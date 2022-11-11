@@ -2,6 +2,7 @@ import surveys from "~/surveys";
 import type {
   SurveyDocument,
   ResponseDocument,
+  SurveySection,
 } from "@devographics/core-models";
 
 export const getSurveyFromResponse = (response: ResponseDocument) =>
@@ -48,3 +49,21 @@ export const getSurveyPath = ({
   const path = pathSegments.join("/");
   return path;
 };
+
+export const getSurveyTitle = ({
+  survey,
+  sectionTitle,
+}: {
+  survey: SurveyDocument;
+  sectionTitle?: string;
+}) => {
+  const { name, year } = survey;
+  let title = `${name} ${year}`;
+  if (sectionTitle) {
+    title += `: ${sectionTitle}`;
+  }
+  return title;
+};
+
+export const getSectionKey = (section: SurveySection, keyType = "title") =>
+  `sections.${section.intlId || section.id}.${keyType}`;

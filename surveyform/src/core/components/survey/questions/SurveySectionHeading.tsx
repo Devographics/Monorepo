@@ -1,5 +1,6 @@
 import React from "react";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
+import { getSectionKey } from "~/modules/surveys/getters";
 
 const SurveySectionHeading = ({ section, sectionNumber, survey }) => {
   const { id, intlId } = section;
@@ -12,14 +13,14 @@ const SurveySectionHeading = ({ section, sectionNumber, survey }) => {
         </span>
         <FormattedMessage
           className="section-title-label"
-          id={`sections.${intlId || id}.title`}
+          id={getSectionKey(section, 'title')}
           defaultMessage={id}
           values={{ ...survey }}
         />
       </h2>
       <p className="section-description">
         <FormattedMessage
-          id={`sections.${intlId || id}.description`}
+          id={getSectionKey(section, 'description')}
           defaultMessage={id}
           values={{ ...survey }}
         />
