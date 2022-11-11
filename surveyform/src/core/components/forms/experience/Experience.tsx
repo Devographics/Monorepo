@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import Form from "react-bootstrap/Form";
+import { Form } from "react-bootstrap";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 // import { isOtherValue, removeOtherMarker, addOtherMarker } from './Checkboxgroup';
 import {

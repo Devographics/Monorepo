@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Form from "react-bootstrap/Form";
+import { Form } from "react-bootstrap";
 import isEmpty from "lodash/isEmpty.js";
 import {
   isOtherValue,

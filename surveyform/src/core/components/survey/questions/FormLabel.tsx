@@ -1,5 +1,5 @@
 import React from "react";
-import Form from "react-bootstrap/Form";
+import { Form } from "react-bootstrap";
 import EntityLabel, { EntityLabelProps } from "../../common/EntityLabel";
 import { useIntlContext } from "@vulcanjs/react-i18n";
 import { Entity } from "@devographics/core-models";

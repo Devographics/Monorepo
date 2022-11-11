@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Form from "react-bootstrap/Form";
+import { Form } from "react-bootstrap";
 import without from "lodash/without.js";
 import uniq from "lodash/uniq.js";
 import take from "lodash/take.js";

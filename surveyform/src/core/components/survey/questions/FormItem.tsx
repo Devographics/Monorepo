@@ -5,7 +5,7 @@ Layout for a single form item
 */
 
 import React from "react";
-import Form from "react-bootstrap/Form";
+import { Form } from "react-bootstrap";
 import { FormDescription, FormDescriptionProps } from "./FormDescription";
 import { FormLabel, FormLabelProps } from "./FormLabel";
 import { FormInputLoading } from "./FormInputLoading";
@@ -37,14 +37,16 @@ export const FormItem = (props: FormItemProps) => {
     intlKeys = [],
     questionId,
     showDescription = true,
-    noteIntlId: noteIntlId_
+    noteIntlId: noteIntlId_,
   } = props;
 
   const { data, loading: entitiesLoading, error } = useEntities();
   const { entities } = data;
   const entity = entities?.find((e) => e.id === questionId);
 
-  const description = showDescription && (intlDescription || entity?.descriptionHtml || entity?.description);
+  const description =
+    showDescription &&
+    (intlDescription || entity?.descriptionHtml || entity?.description);
 
   const innerComponent = loading ? (
     <FormInputLoading loading={loading}>{children}</FormInputLoading>
@@ -53,12 +55,12 @@ export const FormItem = (props: FormItemProps) => {
   );
 
   const intl = useIntlContext();
-  const noteIntlId = noteIntlId_ || `${intlKeys[0]}.note`
+  const noteIntlId = noteIntlId_ || `${intlKeys[0]}.note`;
   const note = intl.formatMessage({ id: noteIntlId });
 
   return (
     <Form.Group controlId={path}>
-      <FormLabel {...props} entity={entity}/>
+      <FormLabel {...props} entity={entity} />
       <div className="form-item-contents">
         {description && <FormDescription description={description} />}
         <div className="form-item-input">

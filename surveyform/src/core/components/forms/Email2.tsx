@@ -7,7 +7,7 @@ import {
 } from "@vulcanjs/react-ui";
 import { FormCheck, FormControl } from "react-bootstrap";
 import isEmpty from "lodash/isEmpty.js";
-import Form from "react-bootstrap/Form";
+import { Form } from "react-bootstrap";
 import FormOptionLabel from "~/core/components/survey/questions/FormOptionLabel";
 
 const receiveNotificationsFieldName = "receive_notifications";

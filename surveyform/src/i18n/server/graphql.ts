@@ -1,9 +1,6 @@
 import { GraphQLResolveInfo } from "graphql";
-import {
-  getLocales,
-  getLocaleStrings,
-} from "./fetchLocalesRedis";
-import graphqlFields from "graphql-fields";
+import { getLocales, getLocaleStrings } from "./fetchLocalesRedis";
+
 /*
 
 Locales
