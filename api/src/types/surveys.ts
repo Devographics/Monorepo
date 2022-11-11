@@ -22,13 +22,9 @@ export type Survey = {
 }
 
 export type SurveyEdition = {
-    config: SurveyConfig;
-    questions: SurveySections[]
-}
-
-export type SurveyConfig = {
     surveyId: string
     credits: SurveyCredit[]
+    questions: SurveySections[]
 }
 
 export type SurveyCredit = {

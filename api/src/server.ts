@@ -8,13 +8,10 @@ import typeDefs from './type_defs/schema.graphql'
 import { RequestContext } from './types'
 import resolvers from './resolvers'
 import express from 'express'
-import { initEntities, cacheSurveysEntities } from './entities'
-import { initSurveys } from './surveys'
-import { initProjects } from './projects'
 import { analyzeTwitterFollowings } from './rpcs'
 // import { clearCache } from './caching'
 import { createClient } from 'redis'
-
+import { init } from './init'
 import path from 'path'
 
 import Sentry from '@sentry/node'
@@ -75,6 +72,8 @@ const start = async () => {
 
     const db = mongoClient.db(process.env.MONGO_DB_NAME)
 
+    const context = { db, redisClient }
+
     const server = new ApolloServer({
         typeDefs,
         resolvers: resolvers as any,
@@ -95,8 +94,7 @@ const start = async () => {
             // TODO: do this better with a custom header
             const isDebug = expressContext?.req?.rawHeaders?.includes('http://localhost:4001')
             return {
-                db,
-                redisClient,
+                ...context,
                 isDebug
             }
         }
@@ -124,9 +122,9 @@ const start = async () => {
         res.status(200).send('Analyzing…')
     })
 
-    app.get('/clear-cache', async function (req, res) {
+    app.get('/reinitialize', async function (req, res) {
         checkSecretKey(req)
-        // clearCache(db)
+        await init({ context })
         res.status(200).send('Cache cleared')
     })
 
@@ -134,20 +132,7 @@ const start = async () => {
 
     const port = process.env.PORT || 4000
 
-    const entities = await initEntities()
-
-    const surveys = await initSurveys()
-
-    await cacheSurveysEntities({
-        surveys,
-        entities,
-        context: {
-            db,
-            redisClient
-        }
-    })
-
-    await initProjects({ db })
+    await init({ context })
 
     const finishedAt = new Date()
 

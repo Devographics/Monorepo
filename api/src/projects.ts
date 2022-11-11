@@ -1,11 +1,12 @@
 import { ProjectMongooseModel } from '@devographics/core-models/server'
 import fetch from 'node-fetch'
+import { RequestContext } from './types'
 
 const formatId = (id: string) => id?.replaceAll('-', '_')
 
 const idFieldName = 'slug'
 
-export const initProjects = async (context: any) => {
+export const initProjects = async ({ context }: { context: RequestContext }) => {
     const { db } = context
     const projectsCollection = db.collection('projects')
 

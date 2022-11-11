@@ -319,7 +319,7 @@ const STORE_RAW_DATA = false
 Init locales by parsing them and then caching them
 
 **/
-export const initLocales = async (context: RequestContext) => {
+export const initLocales = async ({ context }: { context: RequestContext }) => {
     const startedAt = new Date()
     const allLocalesMetadata = []
     console.log(`// Initializing locales cache (Redis)…`)

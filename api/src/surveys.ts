@@ -11,8 +11,12 @@ let allSurveys: Survey[] = []
 const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
 
 // load locales if not yet loaded
-export const loadOrGetSurveys = async () => {
-    if (allSurveys.length === 0) {
+export const loadOrGetSurveys = async (
+    options: { forceReload?: boolean } = { forceReload: false }
+) => {
+    const { forceReload } = options
+
+    if (forceReload || allSurveys.length === 0) {
         allSurveys = await loadSurveys()
     }
     return allSurveys
@@ -154,7 +158,7 @@ export const loadSurveys = async () => {
 
 export const initSurveys = async () => {
     console.log('// initializing surveys')
-    const surveys = await loadOrGetSurveys()
+    const surveys = await loadOrGetSurveys({ forceReload: true })
     logToFile('surveys.json', surveys, { mode: 'overwrite' })
     return surveys
 }

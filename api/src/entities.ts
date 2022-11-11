@@ -19,8 +19,11 @@ import isEmpty from 'lodash/isEmpty.js'
 let entities: Entity[] = []
 
 // load locales if not yet loaded
-export const loadOrGetEntities = async () => {
-    if (entities.length === 0) {
+export const loadOrGetEntities = async (
+    options: { forceReload?: boolean } = { forceReload: false }
+) => {
+    const { forceReload } = options
+    if (forceReload || entities.length === 0) {
         entities = await loadEntities()
     }
     return await highlightEntitiesExampleCode(parseEntitiesMarkdown(entities))
@@ -144,7 +147,7 @@ export const loadEntities = async () => {
 
 export const initEntities = async () => {
     console.log('// initializing entities…')
-    const entities = await loadOrGetEntities()
+    const entities = await loadOrGetEntities({ forceReload: true })
     logToFile('entities.json', entities, { mode: 'overwrite' })
     return entities
 }
@@ -242,7 +245,7 @@ as if we were querying the API through GraphQL
 
 */
 // TODO: seems unnecessary to have to define this type?
-type EntityResolverKey = "github" | "mdn" | "twitter" | "caniuse" | "homepage" | "npm" | "company"
+type EntityResolverKey = 'github' | 'mdn' | 'twitter' | 'caniuse' | 'homepage' | 'npm' | 'company'
 
 const applyEntityResolvers = async (entity: Entity, context: RequestContext) => {
     const resolvers = entityResolvers.Entity

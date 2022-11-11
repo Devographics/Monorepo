@@ -15,8 +15,11 @@ import sanitizeHtml from 'sanitize-html'
 let entities: Entity[] = []
 
 // load locales if not yet loaded
-export const loadOrGetEntities = async () => {
-    if (entities.length === 0) {
+export const loadOrGetEntities = async (
+    options: { forceReload?: boolean } = { forceReload: false }
+) => {
+    const { forceReload } = options
+    if (forceReload || entities.length === 0) {
         entities = await loadEntities()
     }
     return await highlightEntitiesExampleCode(parseEntitiesMarkdown(entities))
@@ -140,7 +143,7 @@ export const loadEntities = async () => {
 
 export const initEntities = async () => {
     console.log('// initializing entities…')
-    const entities = await loadOrGetEntities()
+    const entities = await loadOrGetEntities({ forceReload: true })
     logToFile('entities.json', entities, { mode: 'overwrite' })
 }
 
