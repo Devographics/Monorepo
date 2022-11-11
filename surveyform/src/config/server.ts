@@ -9,7 +9,7 @@ import { publicConfig } from "./public";
 const checkServerConfig = () => {
   if (process.env.NODE_ENV === "production" && !process.env.REDIS_URL) {
     throw new Error(
-      "process.env.REDIS_URL is mandatory in production. If building locally, set this value in .env.production.local."
+      "process.env.REDIS_URL is mandatory in production.\n If building locally, set this value in .env.production.local or .env.test.local"
     );
   }
 };
