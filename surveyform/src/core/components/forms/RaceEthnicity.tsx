@@ -1,11 +1,10 @@
 import React from "react";
-import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
+import FormComponentCheckboxGroup from "~/core/components/forms/Checkboxgroup";
 
 const disallowedCountries = ["FR", "GF", "TF", "PF"];
 
 export const RaceEthnicity = (props) => {
-  const Components = useVulcanComponents();
   const { document, path } = props;
   const countryFieldPath = path.replace("race_ethnicity__choices", "country");
   const isDisabled =
@@ -21,7 +20,7 @@ export const RaceEthnicity = (props) => {
           <FormattedMessage id="user_info.race_ethnicity.not_allowed" />
         </div>
       )}
-      <Components.FormComponentCheckboxGroup {...props} />
+      <FormComponentCheckboxGroup {...props} />
     </div>
   );
 };
