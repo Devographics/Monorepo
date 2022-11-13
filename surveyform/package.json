@@ -132,7 +132,7 @@
     "js-yaml-loader": "^1.2.2",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
-    "mongodb": "4.9.0",
+    "mongodb": "4.11.0",
     "mongoose": "^6.7.2",
     "nanoid": "^3.3.4",
     "next": "13.0.1",
