@@ -17,6 +17,7 @@ const FormLayout = (props: any) => {
     survey,
     navLoading,
     setNavLoading,
+    readOnly,
   } = props
   const FormComponents = useVulcanComponents();
   return (
@@ -26,6 +27,7 @@ const FormLayout = (props: any) => {
         // response={response}
         navLoading={navLoading}
         setNavLoading={setNavLoading}
+        readOnly={readOnly}
         // Not actually used in SurveyNav
         //currentSectionNumber={sectionNumber}
       />

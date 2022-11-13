@@ -29,11 +29,13 @@ const SurveyNav = ({
   // response,
   navLoading,
   setNavLoading,
+  readOnly,
 }: {
   survey: SurveyType;
   // response?: any;
   navLoading?: boolean;
   setNavLoading?: any;
+  readOnly?: boolean;
 }) => {
   const formContext = useFormContext();
   const { getDocument, submitForm } = formContext;
@@ -51,7 +53,7 @@ const SurveyNav = ({
     null
   );
 
-  const overallCompletion = getCompletionPercentage(response)
+  const overallCompletion = !readOnly && response && getCompletionPercentage(response)
 
   useEffect(() => {
     const keyPressHandler = (e) => {
@@ -104,7 +106,7 @@ const SurveyNav = ({
           <h3 className="section-nav-toc">
             <FormattedMessage id="general.table_of_contents" />
           </h3>
-          <span className="section-nav-completion">{overallCompletion}%</span>
+          {overallCompletion && <span className="section-nav-completion">{overallCompletion}%</span>}
           </span>
           <span className="section-nav-toggle">{shown ? "▼" : "▶"}</span>
         </Components.Button>
@@ -123,6 +125,7 @@ const SurveyNav = ({
                 setCurrentFocusIndex={setCurrentFocusIndex}
                 submitForm={submitForm}
                 setNavLoading={setNavLoading}
+                readOnly={readOnly}
               />
             ))}
             {/* {response && <li>Overall: {getOverallCompletionPercentage(response)}%</li>} */}

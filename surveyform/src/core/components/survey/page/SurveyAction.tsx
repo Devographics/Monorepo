@@ -304,7 +304,7 @@ const SurveyLink = ({
     //<LinkContainer to={response.pagePath || getSurveyPath({ survey })}>
     //</LinkContainer>
     <Link
-      href={response.pagePath || getSurveyPath({ survey })}
+      href={response.pagePath || getSurveyPath({ survey, readOnly: true })}
       type="button"
       className="btn btn-primary"
     >

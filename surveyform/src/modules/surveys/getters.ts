@@ -20,12 +20,14 @@ export const getSurveyPath = ({
   response,
   home = false,
   page,
+  readOnly,
 }: {
   survey?: SurveyDocument | null;
   number?: any;
   response?: any;
   home?: boolean;
   page?: "thanks";
+  readOnly?: boolean;
 }) => {
   const survey = surveyArgument || getSurveyFromResponse(response);
   if (!survey) {
@@ -38,8 +40,13 @@ export const getSurveyPath = ({
   const pathSegments = [prefixSegment, slugSegment, yearSegment];
 
   if (!home) {
-    const responseSegment = (response && `${response._id}`) || "read-only";
-    pathSegments.push(responseSegment);
+    if (readOnly) {
+      const readOnlySegment = "read-only";
+      pathSegments.push(readOnlySegment);
+    } else {
+      const responseSegment = response && `${response._id}`;
+      pathSegments.push(responseSegment);
+    }
 
     if (page || number) {
       const suffixSegment = page || number;

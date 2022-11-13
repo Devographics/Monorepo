@@ -17,6 +17,7 @@ import React, { useState } from "react";
 import { getSurveyPath } from "~/modules/surveys/getters";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import { SurveyDocument } from "@devographics/core-models";
+import Link from "next/link";
 
 const FormSubmit = ({
   survey,
@@ -36,83 +37,60 @@ const FormSubmit = ({
   const { getDocument, submitForm } = formContext;
   const response = getDocument();
 
-  const router = useRouter();
+  const commonProps = {
+    readOnly,
+    prevLoading,
+    setPrevLoading,
+    nextLoading,
+    setNextLoading,
+    survey,
+    response,
+    sectionNumber,
+    submitForm,
+  };
 
-  const Components = useVulcanComponents();
   return (
     <div className={`form-submit form-section-nav form-section-nav-${variant}`}>
       <div className="form-submit-actions">
         {nextSection ? (
-          <Components.LoadingButton
-            // title={intl.formatMessage({ id: `sections.${nextSection.id}.title` })}
-            className="form-btn-next"
-            loading={nextLoading}
-            type="submit"
-            variant="primary"
-            onClick={async (e) => {
-              e.preventDefault();
-              setNextLoading(true);
-              await submitForm();
-              setNextLoading(false);
-              router.push(
-                getSurveyPath({ survey, response, number: sectionNumber + 1 })
-              );
-            }}
-          >
-            <span className="sr-only">
-              <FormattedMessage id="general.next_section" />
-            </span>
-            <FormattedMessage
-              id={`sections.${nextSection.intlId || nextSection.id}.title`}
-            />{" "}
-            <span aria-hidden>»</span>
-          </Components.LoadingButton>
-        ) : readOnly ? null : (
-          <Components.LoadingButton
-            // title={intl.formatMessage({ id: 'general.finish_survey' })}
-            className="form-btn-next form-btn-finish"
-            loading={nextLoading}
-            type="submit"
-            variant="primary"
-            onClick={async (e) => {
-              e.preventDefault();
-              setNextLoading(true);
-              await submitForm();
-              setNextLoading(false);
-              router.push(getSurveyPath({ survey, response, page: 'thanks' })
-              );
-            }}
-          >
-            <FormattedMessage id="general.finish_survey" />
-          </Components.LoadingButton>
+          <SubmitButton
+            {...commonProps}
+            type="next"
+            intlId={`sections.${nextSection.intlId || nextSection.id}.title`}
+            path={getSurveyPath({
+              readOnly,
+              survey,
+              response,
+              number: sectionNumber + 1,
+            })}
+          />
+        ) : (
+          <SubmitButton
+            {...commonProps}
+            type="next"
+            intlId="general.finish_survey"
+            path={getSurveyPath({
+              readOnly,
+              survey,
+              response,
+              page: "thanks",
+            })}
+          />
         )}
         {previousSection ? (
-          <Components.LoadingButton
-            // title={intl.formatMessage({ id: `sections.${previousSection.id}.title` })}
-            className="form-btn-prev"
-            loading={prevLoading}
-            type="submit"
-            variant="primary"
-            onClick={async (e) => {
-              e.preventDefault();
-              setPrevLoading(true);
-              await submitForm();
-              setPrevLoading(false);
-              router.push(
-                getSurveyPath({ survey, response, number: sectionNumber - 1 })
-              );
-            }}
-          >
-            <span className="sr-only">
-              <FormattedMessage id="general.previous_section" />
-            </span>
-            <span aria-hidden>«</span>{" "}
-            <FormattedMessage
-              id={`sections.${
-                previousSection.intlId || previousSection.id
-              }.title`}
-            />
-          </Components.LoadingButton>
+          <SubmitButton
+            {...commonProps}
+            type="previous"
+            intlId={`sections.${
+              previousSection.intlId || previousSection.id
+            }.title`}
+            path={getSurveyPath({
+              readOnly,
+              survey,
+              response,
+              number: sectionNumber - 1,
+            })}
+          />
         ) : (
           <div className="prev-placeholder" />
         )}
@@ -124,6 +102,67 @@ const FormSubmit = ({
         </div>
       )}
     </div>
+  );
+};
+
+const SubmitButton = (props) => {
+  const Components = useVulcanComponents();
+  const router = useRouter();
+
+  const {
+    intlId,
+    prevLoading,
+    setPrevLoading,
+    nextLoading,
+    setNextLoading,
+    path,
+    submitForm,
+    type,
+    readOnly,
+  } = props;
+
+  const loading = type === "next" ? nextLoading : prevLoading;
+  const setLoading = type === "next" ? setNextLoading : setPrevLoading;
+
+  const contents = (
+    <>
+      <span className="sr-only">
+        <FormattedMessage id={`general.${type}_section`} />
+      </span>
+      {type === "previous" ? (
+        <>
+          <span aria-hidden>«</span> <FormattedMessage id={intlId} />
+        </>
+      ) : (
+        <>
+          <FormattedMessage id={intlId} /> <span aria-hidden>»</span>
+        </>
+      )}
+    </>
+  );
+
+  return readOnly ? (
+    <Link className={`form-btn-${type}`} href={path}>
+      {contents}
+    </Link>
+  ) : (
+    <Components.LoadingButton
+      // title={intl.formatMessage({ id: `sections.${previousSection.id}.title` })}
+      className={`form-btn-${type}`}
+      type="submit"
+      loading={loading}
+      variant="primary"
+      onClick={async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        await submitForm();
+        setLoading(false);
+        router.push(path);
+      }}
+      {...props}
+    >
+      {contents}
+    </Components.LoadingButton>
   );
 };
 

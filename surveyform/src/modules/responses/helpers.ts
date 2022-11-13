@@ -242,12 +242,9 @@ export const getCompletionPercentage = (response: ResponseDocument) => {
   let completedCount = 0;
   let totalCount = 0;
   const survey = getSurveyFromResponse(response);
-  if (!survey)
-    throw new Error(
-      `Could not get survey from response ${
-        response && JSON.stringify(response)
-      }`
-    );
+  if (!survey){
+    return
+  }
   const parsedOutline = parseSurvey(survey).outline;
   parsedOutline.forEach((section) => {
     section.questions &&

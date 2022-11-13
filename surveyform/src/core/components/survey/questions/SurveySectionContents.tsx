@@ -165,7 +165,7 @@ const SurveySectionContentsInner = ({
         //   console.error(error);
         // }}
         warnUnsavedChanges={false}
-        // disabled={isDisabled}
+        disabled={readOnly}
       />
   );
 };

@@ -18,6 +18,7 @@ const SurveyNavItem = ({
   setCurrentFocusIndex,
   submitForm,
   setNavLoading,
+  readOnly,
 }: {
   survey: SurveyType;
   response?: ResponseDocument;
@@ -29,6 +30,7 @@ const SurveyNavItem = ({
   setCurrentTabindex: (index: number | null) => void;
   submitForm: () => void;
   setNavLoading: (navLoading: boolean) => void;
+  readOnly?: boolean;
 }) => {
   const router = useRouter();
   const textInput = useRef<any>(null);
@@ -57,16 +59,16 @@ const SurveyNavItem = ({
       {/** TODO: was a NavLink previously from bootstrap */}
       <Link
         //exact={true}
-        href={getSurveyPath({ survey, number, response })}
+        href={getSurveyPath({ survey, number, readOnly, response })}
         ref={textInput}
         tabIndex={currentTabindex === number ? 0 : -1}
-        onClick={handleClick}
         onFocus={() => {
           setCurrentFocusIndex(number);
         }}
         onBlur={() => {
           setCurrentFocusIndex(null);
         }}
+        {...(!readOnly && { onClick: handleClick })}
       >
         <FormattedMessage
           id={`sections.${section.intlId || section.id}.title`}

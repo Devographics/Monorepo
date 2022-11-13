@@ -14,49 +14,71 @@ import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import { publicConfig } from "~/config/public";
 import { getSurveyImageUrl } from "~/surveys/getSurveyImageUrl";
 import { EntitiesProvider } from "~/core/components/common/EntitiesContext";
+import Link from "next/link";
+import { ResponseDocument, SurveyDocument } from "@devographics/core-models";
 
 const Thanks = () => {
-  const { responseId, slug, year } = useSurveyResponseParams();
-
+  const { paramsReady, responseId, slug, year } = useSurveyResponseParams();
+  const readOnly = responseId === "read-only";
   const Components = useVulcanComponents();
-  const router = useRouter();
+
+  if (!paramsReady) {
+    return <Components.Loading />
+  }
+
   const survey = surveys.find(
     (s) => s.prettySlug === slug && s.year === Number(year)
   );
+
+  if (!survey) {
+    throw new Error("Could not find survey.");
+  }
+
+  const props = { survey };
+  return readOnly ? (
+    <ThanksInner {...props} readOnly={readOnly} />
+  ) : (
+    <ThanksWithResponse {...props} responseId={responseId} />
+  );
+};
+
+const ThanksWithResponse = ({
+  survey,
+  responseId,
+}: {
+  survey: SurveyDocument;
+  responseId: string;
+}) => {
+  const Components = useVulcanComponents();
 
   const data = useSingle({
     model: Response,
     fragment: survey && ResponseFragmentWithRanking(survey),
     input: { id: responseId },
   });
-  const { document: response, loading } = data;
+  const {
+    document,
+    loading,
+  }: { document: ResponseDocument; loading: boolean } = data;
 
   if (loading) {
     return <Components.Loading />;
   }
-  if (!response) {
-    return (
-      <div>
-        Could not find survey response document. Please reload, or if that
-        doesn’t work{" "}
-        <a
-          href={`${publicConfig.repoUrl}/issues/new?title=${encodeURIComponent(
-            "Thank you page not working"
-          )}`}
-        >
-          leave an issue
-        </a>
-        .
-      </div>
-    );
-  }
 
-  if (!survey) {
-    return <div>Could not find survey.</div>;
-  }
-  const { name } = survey;
+  return <ThanksInner survey={survey} response={document} />;
+};
 
+const ThanksInner = ({
+  survey,
+  response,
+  readOnly,
+}: {
+  survey: SurveyDocument;
+  response?: ResponseDocument;
+  readOnly?: boolean;
+}) => {
   const imageUrl = getSurveyImageUrl(survey);
+  const { name, year } = survey;
 
   return (
     <EntitiesProvider surveyId={survey.surveyId}>
@@ -70,30 +92,24 @@ const Thanks = () => {
             quality={100}
           />
         </h1>
-        <Score response={response} survey={survey} />
+        {response && <Score response={response} survey={survey} />}
         <div>
           <FormattedMessage id="general.thanks" />
         </div>
         <ShareSite survey={survey} />
         <div className="form-submit form-section-nav form-section-nav-bottom">
           <div className="form-submit-actions">
-            <Components.Button
+            <Link
               className="form-btn-prev"
-              type="submit"
-              variant="primary"
-              onClick={async (e) => {
-                e.preventDefault();
-                router.push(
-                  getSurveyPath({
-                    survey,
-                    response,
-                    number: survey.outline.length,
-                  })
-                );
-              }}
+              href={getSurveyPath({
+                survey,
+                response,
+                readOnly,
+                number: survey.outline.length,
+              })}
             >
               « <FormattedMessage id="general.back" />
-            </Components.Button>
+            </Link>
           </div>
         </div>
       </div>
