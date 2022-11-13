@@ -33,8 +33,8 @@ const SurveySectionReadOnly = () => {
   return (
     <EntitiesProvider surveyId={survey.surveyId}>
       <div className="survey-section-wrapper">
-        <SurveyMessage survey={survey} readOnly={true} />
-        <SurveyHeadTags survey={survey} section={section} readOnly={true} />
+        <SurveyMessage survey={survey} />
+        <SurveyHeadTags survey={survey} section={section} />
         <SurveySectionContents
           survey={survey}
           {...sectionProps}
