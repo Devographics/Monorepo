@@ -42,16 +42,16 @@ export const useLocaleData = (props: { currentUser?: any; locale?: any }) => {
     // will be used in priority
     locale: props.locale,
   });
-  console.debug(
-    "useLocaleData",
-    {
-      fromProps: props.locale,
-      fromCurrentUser: currentUser,
-      fromCookie: cookies[LOCALE_COOKIE_NAME],
-    },
-    "selected:",
-    init.id
-  );
+  // console.debug(
+  //   "useLocaleData",
+  //   {
+  //     fromProps: props.locale,
+  //     fromCurrentUser: currentUser,
+  //     fromCookie: cookies[LOCALE_COOKIE_NAME],
+  //   },
+  //   "selected:",
+  //   init.id
+  // );
   const queryResult = useQuery<{ locale: LocaleType }>(localeDataQuery, {
     variables: { localeId: init.id },
   });
