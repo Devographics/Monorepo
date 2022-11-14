@@ -57,6 +57,12 @@ const apiSchema: VulcanGraphqlSchemaServer = {
       fieldName: "responses", // TODO: not sure if actually mandatory when we reuse the same name
       typeName: "[Response]",
       resolver: async (user, args, { currentUser }) => {
+        if (!user?._id) {
+          captureMessage(
+            "Tried to fetch user responses but user has no _id or is not defined"
+          );
+          return null;
+        }
         // TODO: use a "querier" instead, that would
         // embed the document restriction directly, run callbacks etc.
         const responses = await ResponseConnector.find({
@@ -82,6 +88,7 @@ const apiSchema: VulcanGraphqlSchemaServer = {
 // For string ids
 import { nanoid } from "nanoid";
 import { createEmailHash } from "~/account/email/api/encryptEmail";
+import { captureMessage } from "@sentry/node";
 const schema: VulcanGraphqlSchemaServer = merge(
   {},
   clientSchema,
