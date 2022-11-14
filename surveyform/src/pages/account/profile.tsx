@@ -8,6 +8,7 @@ import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 const Profile = () => {
   const { user } = useUser({ redirectTo: routes.account.login.href });
   if (!user) return null; // will redirect
+  console.log(user)
   return (
     <PageLayout>
       <div className="contents-narrow account">
