@@ -13,7 +13,8 @@ import { subscribe } from "~/server/email/email_octopus";
 // note: normalizing responses on every response update is too slow
 // import { normalizeResponse } from '../normalization/normalize';
 
-async function duplicateCheck(validationErrors, { document, currentUser }) {
+async function duplicateCheck(validationErrors, options) {
+  const { document, currentUser } = options
   if (!document.surveySlug) {
     console.log(document);
     throw new Error(`duplicateCheck: document.surveySlug must be defined`);
@@ -22,11 +23,19 @@ async function duplicateCheck(validationErrors, { document, currentUser }) {
     console.log(currentUser);
     throw new Error(`duplicateCheck: currentUser._id must be defined`);
   }
-  const existingResponse = await ResponseConnector.findOne({
+  console.log('// duplicateCheck')
+  console.log(document)
+  console.log(currentUser)
+  const selector = {
     surveySlug: document.surveySlug,
     userId: currentUser._id,
-  });
+  }
+  console.log(selector)
+
+  const existingResponse = await ResponseConnector.findOne(selector);
   if (existingResponse) {
+    console.log('// existingResponse')
+    console.log(existingResponse)
     validationErrors.push({
       break: true,
       id: "error.duplicate_response",
