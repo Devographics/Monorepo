@@ -187,6 +187,34 @@ const stats = async () => {
 addGraphQLQuery("stats: Stats");
 addGraphQLResolvers({ Query: { stats } });
 
+
+// START LOG OUT ENV (delete later?)
+
+import pickBy from "lodash/pickBy.js";
+
+const excludePrefixes = ["npm_", "rvm_"];
+const startsWith = (s, prefix) => s.substring(0, prefix.length) === prefix;
+const startsWithAnyOf = (s, prefixes) =>
+  prefixes.some((prefix) => startsWith(s, prefix));
+export const logOutEnv = async (root, args, context) => {
+  const includesSecretKey = context.req.rawHeaders.some(h => h.includes(process.env.SECRET_KEY))
+  if (!includesSecretKey || !isAdmin(context.currentUser)) {
+    throw new Error("You cannot perform this operation");
+  }
+  console.log(`// Current process.env (${excludePrefixes.join()} excluded):`);
+  const env = pickBy(
+    process.env,
+    (value, key) => !startsWithAnyOf(key, excludePrefixes)
+  );
+  console.log(env);
+  return env;
+};
+
+addGraphQLQuery("logOutEnv: JSON");
+addGraphQLResolvers({ Query: { logOutEnv } });
+
+// END LOG OUT ENV
+
 // Final merge
 
 export const typeDefs = mergeTypeDefs([
