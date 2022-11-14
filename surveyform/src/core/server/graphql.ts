@@ -201,12 +201,14 @@ export const logOutEnv = async (root, args, context) => {
   if (!includesSecretKey || !isAdmin(context.currentUser)) {
     throw new Error("You cannot perform this operation");
   }
-  console.log(`// Current process.env (${excludePrefixes.join()} excluded):`);
   const env = pickBy(
     process.env,
     (value, key) => !startsWithAnyOf(key, excludePrefixes)
   );
-  console.log(env);
+  env.hashSaltStr =
+    process.env.HASH_SALT ||
+    process.env.ENCRYPTION_KEY;
+
   return env;
 };
 
