@@ -14,7 +14,7 @@ import { subscribe } from "~/server/email/email_octopus";
 // import { normalizeResponse } from '../normalization/normalize';
 
 async function duplicateCheck(validationErrors, options) {
-  const { document, currentUser } = options
+  const { document, currentUser } = options;
   if (!document.surveySlug) {
     console.log(document);
     throw new Error(`duplicateCheck: document.surveySlug must be defined`);
@@ -23,19 +23,22 @@ async function duplicateCheck(validationErrors, options) {
     console.log(currentUser);
     throw new Error(`duplicateCheck: currentUser._id must be defined`);
   }
-  console.log('// duplicateCheck')
-  console.log(document)
-  console.log(currentUser)
   const selector = {
     surveySlug: document.surveySlug,
     userId: currentUser._id,
-  }
-  console.log(selector)
+  };
 
-  const existingResponse = await ResponseConnector.findOne(selector);
+  // const existingResponse = await ResponseConnector.findOne(selector);
+  const existingResponse = await ResponseMongooseModel.findOne(selector);
+
   if (existingResponse) {
-    console.log('// existingResponse')
-    console.log(existingResponse)
+    console.log("// duplicateCheck");
+
+    console.log("// selector");
+    console.log(selector);
+
+    console.log("// existingResponse");
+    console.log(existingResponse);
     validationErrors.push({
       break: true,
       id: "error.duplicate_response",
