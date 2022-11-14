@@ -3,7 +3,6 @@ import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 // @see https://github.com/react-bootstrap/react-router-bootstrap
 // import { IndexLinkContainer } from "react-router-bootstrap";
-import LocaleSwitcher from "./LocaleSwitcher";
 import { isAdmin } from "@vulcanjs/permissions";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
 import Link from "next/link";
@@ -53,6 +52,10 @@ const adminNavContents: Array<NavItemDef> = [
     to: "/admin/normalization",
   },
   {
+    label: "Scripts",
+    to: "/admin/scripts",
+  },
+  {
     label: "Export",
     to: routes.admin.export.href,
   },
@@ -93,10 +96,6 @@ const Navigation = () => {
           </Nav>
         </Navbar.Collapse>
       </Navbar>
-
-      <div className="nav-item-locale">
-        <LocaleSwitcher />
-      </div>
     </div>
   );
 };

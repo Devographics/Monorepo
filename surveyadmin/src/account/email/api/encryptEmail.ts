@@ -6,12 +6,9 @@ import { v4 as uuidv4 } from "uuid";
  *
  * Creating Hash from Emails, not reversible
  */
-export const createEmailHash = (email) => {
-  const hashSaltStr =
-    process.env.HASH_SALT ||
-    //getSetting('hashSalt') ||
-    process.env.ENCRYPTION_KEY; //||
-  //getSetting('encriptionKey')
+export const createEmailHash = (email: string, providedHashSalt: string) => {
+  const hashSaltStr = providedHashSalt || process.env.ENCRYPTION_KEY;
+
   if (!hashSaltStr)
     throw new Error(`HASH_SALT/ENCRYPTION_KEY environment variable not set`);
 
@@ -40,7 +37,6 @@ export async function getUUID(emailHash, userId) {
       uuid: emailUuid,
     });
   }
- 
 }
 
 /**

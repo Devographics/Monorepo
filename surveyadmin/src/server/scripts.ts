@@ -9,7 +9,6 @@ import { fetchEntities } from "~/modules/entities/server";
 //} from "./migrations";
 import { ResponseMongooseModel } from "~/modules/responses/model.server";
 // import { NormalizedResponseMongooseModel } from "~/modules/normalized_responses/model.server";
-import { createEmailHash } from "~/account/email/api/encryptEmail";
 import { UserMongooseModel } from "~/core/models/user.server";
 import { connectToAppDb } from "~/lib/server/mongoose/connection";
 import { logToFile } from "@devographics/core-models/server";
@@ -17,6 +16,7 @@ import { logToFile } from "@devographics/core-models/server";
 import surveys from "~/surveys";
 import type { Field } from "@devographics/core-models";
 import { NormalizedResponseMongooseModel } from "~/admin/models/normalized_responses/model.server";
+import { createEmailHash } from "~/account/email/api/encryptEmail";
 
 import mongoose from "mongoose";
 const ObjectId = mongoose.Types.ObjectId;
@@ -374,7 +374,7 @@ export const fixChoicesChoices = async () => {
     console.log(result1);
 
     // rename user_info_temp.foo to user_info.foo.choices
-    const selector2 = { [`user_info_temp.${fieldName}`]: { $exists: true } }
+    const selector2 = { [`user_info_temp.${fieldName}`]: { $exists: true } };
     console.log("// selector2");
     console.log(selector2);
     const operation2 = {
@@ -399,3 +399,14 @@ export const fixChoicesChoices = async () => {
   console.log("// result3");
   console.log(result3);
 };
+
+
+// $unset: {
+//   services: 1,
+//   emails: 1,
+//   email: 1,
+//   displayName: 1,
+//   slug: 1,
+//   legacyHash: 1,
+//   legacyEmailHash: 1,
+// },

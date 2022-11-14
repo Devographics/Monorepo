@@ -32,6 +32,8 @@ import {
   localesResolver,
   surveyLocaleType,
 } from "~/i18n/server/graphql";
+import { scripts, runScript } from "./scripts";
+
 // import {
 //   surveysResolver,
 //   surveyType,
@@ -199,8 +201,19 @@ addGraphQLResolvers({ Query: { unnormalizedFields } });
 addGraphQLMutation(normalizeIdsTypeDefs);
 addGraphQLMutation(normalizeSurveyTypeDefs);
 addGraphQLMutation(getSurveyMetadataTypeDefs);
-addGraphQLResolvers({ Mutation: { normalizeIds, normalizeSurvey, getSurveyMetadata } });
+addGraphQLResolvers({
+  Mutation: { normalizeIds, normalizeSurvey, getSurveyMetadata },
+});
 
+/*
+
+Scripts
+
+*/
+addGraphQLQuery("scripts: [JSON]");
+addGraphQLMutation("runScript(id: String, scriptArgs: JSON): JSON");
+addGraphQLResolvers({ Mutation: { runScript } });
+addGraphQLResolvers({ Query: { scripts } });
 
 // Final merge
 
