@@ -14,6 +14,14 @@ import { subscribe } from "~/server/email/email_octopus";
 // import { normalizeResponse } from '../normalization/normalize';
 
 async function duplicateCheck(validationErrors, { document, currentUser }) {
+  if (!document.surveySlug) {
+    console.log(document);
+    throw new Error(`duplicateCheck: document.surveySlug must be defined`);
+  }
+  if (!currentUser._id) {
+    console.log(currentUser);
+    throw new Error(`duplicateCheck: currentUser._id must be defined`);
+  }
   const existingResponse = await ResponseConnector.findOne({
     surveySlug: document.surveySlug,
     userId: currentUser._id,
