@@ -190,30 +190,30 @@ addGraphQLResolvers({ Query: { stats } });
 
 // START LOG OUT ENV (delete later?)
 
-import pickBy from "lodash/pickBy.js";
+// import pickBy from "lodash/pickBy.js";
 
-const excludePrefixes = ["npm_", "rvm_"];
-const startsWith = (s, prefix) => s.substring(0, prefix.length) === prefix;
-const startsWithAnyOf = (s, prefixes) =>
-  prefixes.some((prefix) => startsWith(s, prefix));
-export const logOutEnv = async (root, args, context) => {
-  const includesSecretKey = context.req.rawHeaders.some(h => h.includes(process.env.SECRET_KEY))
-  if (!includesSecretKey || !isAdmin(context.currentUser)) {
-    throw new Error("You cannot perform this operation");
-  }
-  const env = pickBy(
-    process.env,
-    (value, key) => !startsWithAnyOf(key, excludePrefixes)
-  );
-  env.hashSaltStr =
-    process.env.HASH_SALT ||
-    process.env.ENCRYPTION_KEY;
+// const excludePrefixes = ["npm_", "rvm_"];
+// const startsWith = (s, prefix) => s.substring(0, prefix.length) === prefix;
+// const startsWithAnyOf = (s, prefixes) =>
+//   prefixes.some((prefix) => startsWith(s, prefix));
+// export const logOutEnv = async (root, args, context) => {
+//   const includesSecretKey = context.req.rawHeaders.some(h => h.includes(process.env.SECRET_KEY))
+//   if (!includesSecretKey || !isAdmin(context.currentUser)) {
+//     throw new Error("You cannot perform this operation");
+//   }
+//   const env = pickBy(
+//     process.env,
+//     (value, key) => !startsWithAnyOf(key, excludePrefixes)
+//   );
+//   env.hashSaltStr =
+//     process.env.HASH_SALT ||
+//     process.env.ENCRYPTION_KEY;
 
-  return env;
-};
+//   return env;
+// };
 
-addGraphQLQuery("logOutEnv: JSON");
-addGraphQLResolvers({ Query: { logOutEnv } });
+// addGraphQLQuery("logOutEnv: JSON");
+// addGraphQLResolvers({ Query: { logOutEnv } });
 
 // END LOG OUT ENV
 
