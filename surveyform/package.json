@@ -43,7 +43,7 @@
     "precombine:reports": "npm run copy:reports && rm -Rf .nyc_output && mkdir .nyc_output || true # intermediate script",
     "precopy:reports": "npm run mkdir:reports # intermediate script",
     "precoverage": "rm -rf .nyc_output || true # delete previous nyx instrumentation",
-    "prepare": "husky install || echo 'Husky command not installed or not working, are you running in production? You won't be protected when committing code",
+    "prepareX": "husky install || echo 'Husky command not installed or not working, are you running in production? You won't be protected when committing code",
     "detect-leaks": "docker run -v $(pwd):/path zricethezav/gitleaks:latest detect -v --source=\"/path\"",
     "pre-commit:gitleaks": "docker run -v $(pwd):/path zricethezav/gitleaks:latest protect -v  --source=\"/path\" --staged",
     "pre-commit": "echo 'Running pnpm pre-commit command' # Automatically run by husky on commit",
@@ -224,7 +224,7 @@
     "dotenv-cli": "^4.1.1",
     "eslint-config-next": "^13.0.3",
     "eslint-plugin-cypress": "2.11.1",
-    "husky": "^7.0.4",
+    "husky": "^8.0.2",
     "jest": "^26.6.3",
     "jest-transformer-mdx": "^2.2.0",
     "nyc": "^15.1.0",
@@ -233,6 +233,13 @@
     "smtp-tester": "^1.2.0",
     "start-server-and-test": "^1.14.0",
     "storybook-addon-next-router": "^3.1.1"
+  },
+  "peerDependencies": {
+    "@babel/preset-env": "^7.0.0",
+    "@storybook/preview-web": ">=6.4.0",
+    "require-from-string": "^2.0.2",
+    "@storybook/client-api": ">=6.4.0 <7.0.0",
+    "react-test-renderer": ">=16.9.0"
   },
   "packageManager": "pnpm@7.3.0",
   "pnpm": {
