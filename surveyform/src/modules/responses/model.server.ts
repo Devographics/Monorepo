@@ -35,12 +35,11 @@ async function duplicateCheck(validationErrors, options) {
 
   if (existingResponse) {
     console.log("// duplicateCheck");
-
     console.log("// selector");
     console.log(selector);
-
     console.log("// existingResponse");
     console.log(existingResponse);
+
     validationErrors.push({
       break: true,
       id: "error.duplicate_response",
