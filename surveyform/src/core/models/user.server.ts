@@ -18,7 +18,7 @@ import {
 } from "./user";
 import { hashPassword } from "~/account/passwordLogin/api";
 import { restrictDocuments } from "@vulcanjs/permissions";
-import { ResponseConnector } from "~/modules/responses/model.server";
+import { ResponseConnector, ResponseMongoCollection } from "~/modules/responses/model.server";
 import { Response } from "~/modules/responses";
 import mongoose from "mongoose";
 
@@ -65,9 +65,14 @@ const apiSchema: VulcanGraphqlSchemaServer = {
         }
         // TODO: use a "querier" instead, that would
         // embed the document restriction directly, run callbacks etc.
-        const responses = await ResponseConnector.find({
+        // const responses = await ResponseConnector.find({
+        //   userId: user._id,
+        // });
+        const Responses = ResponseMongoCollection()
+        const cursor = await Responses.find({
           userId: user._id,
-        });
+        })
+        const responses = await cursor.toArray();
         // TODO: update when migrating the Responses model
         /*
         await Responses.find({
