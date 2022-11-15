@@ -1,5 +1,5 @@
 {
-  "name": "@devographics/surveyform",
+  "name": "surveyform",
   "version": "0.6.3",
   "private": true,
   "scripts": {
