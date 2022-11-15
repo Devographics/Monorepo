@@ -15,6 +15,7 @@ import IconCommentDots from "~/core/components/icons/CommentDots";
 import { useIntlContext } from "@vulcanjs/react-i18n";
 import isEmpty from "lodash/isEmpty.js";
 import FormOptionLabel from "~/core/components/survey/questions/FormOptionLabel";
+import debounce from "lodash/debounce.js";
 
 interface ExperienceProps extends FormInputProps {
   showDescription: boolean;
@@ -197,6 +198,7 @@ const CommentInput = ({
   questionEntity,
   questionPath,
 }) => {
+  const [ localValue, setLocalValue ] = useState(value);
   const { getDocument, updateCurrentValues } = useFormContext();
   const Components = useVulcanComponents();
 
@@ -207,6 +209,19 @@ const CommentInput = ({
   const response = questionOptions?.find(
     (o) => o.value === questionValue
   )?.label;
+
+  const updateCurrentValuesDebounced = debounce(updateCurrentValues, 500);
+
+  const handleChange = (isDebounced = false) => (event) => {
+    let value = event.target.value;
+    setLocalValue(value)
+    const f = isDebounced ? updateCurrentValuesDebounced : updateCurrentValues
+    if (value === "") {
+      f({ [path]: null });
+    } else {
+      f({ [path]: value });
+    }
+  }
 
   return (
     <div className="comment-input">
@@ -225,15 +240,9 @@ const CommentInput = ({
       </p>
       <FormControl
         as="textarea"
-        onChange={(event) => {
-          let value = event.target.value;
-          if (value === "") {
-            updateCurrentValues({ [path]: null });
-          } else {
-            updateCurrentValues({ [path]: value });
-          }
-        }}
-        value={value}
+        onChange={handleChange(true)}
+        onBlur={handleChange(false)}
+        value={localValue}
         // ref={refFunction}
         // {...inputProperties}
       />

@@ -7,6 +7,7 @@ import Feature from "~/core/components/forms/experience/Feature";
 import Tool from "~/core/components/forms/experience/Tool";
 import Slider from "~/core/components/forms/Slider";
 import Select from "~/core/components/forms/Select";
+import Textarea from "~/core/components/forms/Textarea";
 import Checkboxgroup from "~/core/components/forms/Checkboxgroup";
 import Radiogroup from "~/core/components/forms/Radiogroup";
 import AutocompleteMultiple from "~/core/components/forms/AutocompleteMultiple";
@@ -24,6 +25,7 @@ const customComponents = {
   slider: Slider,
   select: Select,
   checkboxgroup: Checkboxgroup,
+  textarea: Textarea,
   radiogroup: Radiogroup,
   multiautocomplete: AutocompleteMultiple
 };
