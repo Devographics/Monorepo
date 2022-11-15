@@ -29,7 +29,9 @@ async function duplicateCheck(validationErrors, options) {
   };
 
   // const existingResponse = await ResponseConnector.findOne(selector);
-  const existingResponse = await ResponseMongooseModel.findOne(selector);
+  // const existingResponse = await ResponseMongooseModel.findOne(selector);
+  const Responses = ResponseMongoCollection()
+  const existingResponse = await Responses.findOne(selector);
 
   if (existingResponse) {
     console.log("// duplicateCheck");
