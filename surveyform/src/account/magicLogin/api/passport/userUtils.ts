@@ -152,3 +152,25 @@ export const findUserFromEmail = async (email: string) => {
     .exec();
   return users[0];
 };
+
+/**
+ * If a user doesn't yet have an updated emailHash2, generate it now
+ * @param user
+ * @param email
+ * @returns
+ */
+export const updateUserEmailHash = async (user, email) => {
+  const { _id, emailHash, emailHash2 } = user;
+  if (!emailHash2) {
+    const updatedEmailHash = createEmailHash(email, process.env.ENCRYPTION_KEY2)
+    await UserMongooseModel.updateOne(
+      { _id },
+      {
+        $set: {
+          emailHash1: emailHash,
+          emailHash2: updatedEmailHash,
+        },
+      }
+    );
+  }
+};
