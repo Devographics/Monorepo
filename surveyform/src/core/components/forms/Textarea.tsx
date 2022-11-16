@@ -19,7 +19,9 @@ export const FormComponentTextarea = ({
 
   const handleChange = (event)=> {
     setLocalValue(event.target.value);
-    onChange(event);
+    if (onChange) {
+      onChange(event);
+    }
   }
 
   const handleChangeDebounced = (event)=> {
