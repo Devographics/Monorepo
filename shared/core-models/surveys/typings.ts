@@ -81,6 +81,7 @@ export interface ParsedQuestion extends Pick<Field, "template"> {
   slug?: string;
   suffix?: string;
   matchTags?: Array<string>;
+  hasComment?: boolean;
 }
 
 export type SurveyQuestion = Field;
