@@ -1,10 +1,11 @@
 import gql from "graphql-tag";
 import { SurveyResponseFragment } from "~/modules/responses/fragments";
 import { useMutation } from "@apollo/client";
+import { getFragmentName} from '@vulcanjs/graphql'
 
 export const useSaveSurveyMutation = (survey) => {
   const fragment = SurveyResponseFragment(survey);
-  const fragmentName = fragment?.definitions?.[0]?.name?.value;
+  const fragmentName = getFragmentName(fragment);
   const mutation = gql`
   mutation saveSurvey($input: UpdateResponseInput) {
     saveSurvey(input: $input) {
