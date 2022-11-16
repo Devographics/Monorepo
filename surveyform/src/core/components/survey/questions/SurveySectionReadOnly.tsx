@@ -7,14 +7,7 @@ import SurveyHeadTags from "../SurveyHeadTags";
 import SurveyMessage from "../SurveyMessage";
 
 const SurveySectionReadOnly = () => {
-  let {
-    slug,
-    year,
-    sectionNumber = 1,
-    paramsReady,
-  } = useSurveyResponseParams();
-  // FIXME: for some reason, paramsReady is true during SSR??
-  if (!paramsReady) return null;
+  let { slug, year, sectionNumber = 1 } = useSurveyResponseParams();
 
   const survey = getSurvey(slug, year);
   if (!survey)

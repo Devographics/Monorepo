@@ -1,14 +1,9 @@
-import { useVulcanComponents } from "@vulcanjs/react-ui";
 import React from "react";
 import { useLocales } from "~/i18n/hooks/locales";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 
 const Translators = () => {
-  const Components = useVulcanComponents();
-  const { loading, locales = [] } = useLocales();
-  if (loading) {
-    return <Components.Loading />;
-  }
+  const { locales = [] } = useLocales();
 
   return (
     <div className="translators survey-page-block">
@@ -16,13 +11,11 @@ const Translators = () => {
         <FormattedMessage id="general.translation_help" />
       </h3>
       <div className="translators-locales">
-        {loading ? (
-          <Components.Loading />
-        ) : (
-          locales
-            .filter((l) => l.translators && l.translators.length > 0)
-            .map((l) => <LocaleItem key={l.id} locale={l} />)
-        )}
+        {locales
+          .filter((l) => l.translators && l.translators.length > 0)
+          .map((l) => (
+            <LocaleItem key={l.id} locale={l} />
+          ))}
       </div>
       <h4 className="translators-help">
         <a

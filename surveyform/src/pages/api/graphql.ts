@@ -11,10 +11,6 @@ import { buildApolloSchema, createDataSources } from "@vulcanjs/graphql/server";
 import corsOptions from "~/lib/server/cors";
 import { contextFromReq } from "~/lib/server/context";
 import models from "~/_vulcan/models.index.server";
-import { localesRegistry, stringsRegistry } from "~/i18n";
-
-// Custom graphql API from Vulcan
-import { graphql as i18nSchema } from "@vulcanjs/i18n/server";
 
 import {
   typeDefs as sojsTypeDefs,
@@ -57,16 +53,11 @@ const currentUserResolver = {
 const mergedSchema = {
   ...vulcanRawSchema,
   typeDefs: mergeTypeDefs([
-    i18nSchema.typeDefs,
     vulcanRawSchema.typeDefs,
     sojsTypeDefs,
     currentUserTypeDefs,
   ]),
   resolvers: mergeResolvers([
-    i18nSchema.makeResolvers({
-      StringsRegistry: stringsRegistry,
-      LocalesRegistry: localesRegistry,
-    }),
     vulcanRawSchema.resolvers,
     sojsResolvers,
     currentUserResolver,

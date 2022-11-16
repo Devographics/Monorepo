@@ -35,9 +35,6 @@ import { LocaleContextProvider } from "~/i18n/components/LocaleContext";
 //import "~/stylesheets/main.scss";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 
-// Various side effects (registering locales etc.)
-import "~/i18n";
-
 import { ErrorBoundary } from "~/core/components/error";
 import { getAppGraphqlUri } from "~/lib/graphql";
 import Layout from "~/core/components/common/Layout";
@@ -99,7 +96,7 @@ function VNApp({ Component, pageProps }: VNAppProps) {
       {getLayout(
         <ApolloProvider client={apolloClient}>
           <LocaleContextProvider
-            locale={locale}
+            locale={locale || "en-US"}
             localeStrings={localeStrings}
             currentUser={user}
           >

@@ -5,8 +5,7 @@ import { useRouter } from "next/router.js";
 import { useSurveyResponseParams } from "./hooks";
 
 const SurveySectionSwitcher = () => {
-  let { responseId, paramsReady } = useSurveyResponseParams();
-  if (!paramsReady) return null;
+  let { responseId } = useSurveyResponseParams();
   return responseId === "read-only" ? (
     <SurveySectionReadOnly />
   ) : (

@@ -6,25 +6,18 @@ import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { useSingle } from "@vulcanjs/react-hooks";
 import { Response } from "~/modules/responses";
 import { ResponseFragmentWithRanking } from "~/modules/responses/fragments";
-import { useRouter } from "next/router.js";
 import { useSurveyResponseParams } from "../survey/hooks";
 import surveys from "~/surveys";
 import Image from "next/image";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
-import { publicConfig } from "~/config/public";
 import { getSurveyImageUrl } from "~/surveys/getSurveyImageUrl";
 import { EntitiesProvider } from "~/core/components/common/EntitiesContext";
 import Link from "next/link";
 import { ResponseDocument, SurveyDocument } from "@devographics/core-models";
 
 const Thanks = () => {
-  const { paramsReady, responseId, slug, year } = useSurveyResponseParams();
+  const { responseId, slug, year } = useSurveyResponseParams();
   const readOnly = responseId === "read-only";
-  const Components = useVulcanComponents();
-
-  if (!paramsReady) {
-    return <Components.Loading />
-  }
 
   const survey = surveys.find(
     (s) => s.prettySlug === slug && s.year === Number(year)

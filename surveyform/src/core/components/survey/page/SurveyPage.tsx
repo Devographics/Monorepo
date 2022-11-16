@@ -26,15 +26,11 @@ interface SurveyPageWrapperProps {
   year?: string;
 }
 const SurveyPageWrapper = (props: SurveyPageWrapperProps) => {
-  const { paramsReady, slug, year } = useSurveyParams({
+  const { slug, year } = useSurveyParams({
     slug: props.slug,
     year: props.year,
   });
   //const intl = useIntlContext();
-
-  const Components = useVulcanComponents();
-  if (!paramsReady) return <Components.Loading />;
-
   // TODO: we could get it at page level as static props,
   // and use this function only as a fallback
   const survey = getSurvey(slug, year);

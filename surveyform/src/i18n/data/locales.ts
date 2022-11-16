@@ -2,7 +2,12 @@
  * We need a .js file until next.config.ts is supported,
  * as we use this list to configure locale redirections
  */
-export const localesDefs = [
+interface LocaleDef {
+  id: string;
+  label: string;
+  rtl?: boolean;
+}
+export const localesDefs: Array<LocaleDef> = [
   {
     id: "ca-ES",
     label: "Català",

@@ -5,13 +5,8 @@ import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import { useLocaleContext } from "~/i18n/components/LocaleContext";
 
 const LocaleSelector = () => {
-  const Components = useVulcanComponents();
-  const { loading, locales = [] } = useLocales();
+  const { locales = [] } = useLocales();
   const { setLocale } = useLocaleContext();
-
-  if (loading) {
-    return <Components.Loading />;
-  }
 
   return (
     <div className="locale-selector">

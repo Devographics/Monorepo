@@ -1,7 +1,7 @@
 // TODO: not working yet
 // import "~/stylesheets/main.scss";
 import { AppLayout } from "./AppLayout";
-import { getLocaleStrings } from "~/i18n/server/fetchLocalesRedis";
+import { getLocales, getLocaleStrings } from "~/i18n/server/fetchLocalesRedis";
 //import debug from "debug";
 const debugRootLayout = console.debug; //debug("dgs:rootlayout");
 
@@ -24,8 +24,11 @@ export default async function RootLayout({
 }) {
   const locale = params.lang; // getCurrentLocale();
   const localeWithStrings = locale ? await getLocaleStrings(locale) : undefined;
+  const locales = (await getLocales()) || undefined;
   // FIXME: the [lang] parameter seems to sometime be vercel.svg, favicon.ico = static files
-  debugRootLayout("Got locale", locale, localeWithStrings);
+  // TODO: we load waaaay too much strings
+  // we should load survey specific strings in another nested layout
+  //debugRootLayout("Got locale", locale, localeWithStrings);
   return (
     <html lang={params.lang}>
       {/*
@@ -34,7 +37,11 @@ export default async function RootLayout({
       */}
       <head />
       <body>
-        <AppLayout locale={locale} localeStrings={localeWithStrings}>
+        <AppLayout
+          locales={locales}
+          locale={locale}
+          localeStrings={localeWithStrings || undefined}
+        >
           {children}
         </AppLayout>
       </body>

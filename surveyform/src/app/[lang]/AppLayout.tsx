@@ -33,17 +33,16 @@ import { LocaleContextProvider } from "~/i18n/components/LocaleContext";
 
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 
-// Various side effects (registering locales etc.)
-import "~/i18n";
-
 import { ErrorBoundary } from "~/core/components/error";
 import { getAppGraphqlUri } from "~/lib/graphql";
 import Layout from "~/core/components/common/Layout";
+import type { LocaleDef } from "~/i18n/typings";
 
 export interface AppLayoutProps {
   /** Locale extracted from cookies server-side */
   locale: string;
-  localeStrings?: any;
+  localeStrings?: LocaleDef;
+  locales?: Array<LocaleDef>;
   initialApolloState?: any;
   // When on a specific survey
   // TODO: will be handled by a nested layout later on
@@ -53,8 +52,15 @@ export interface AppLayoutProps {
 }
 
 export function AppLayout(props: AppLayoutProps) {
-  const { children, initialApolloState, locale, localeStrings, slug, year } =
-    props;
+  const {
+    children,
+    initialApolloState,
+    locale,
+    locales,
+    localeStrings,
+    slug,
+    year,
+  } = props;
   const apolloClient = useApollo(initialApolloState, {
     graphqlUri: getAppGraphqlUri(/*origin*/),
     crossDomainGraphqlUri:
@@ -70,6 +76,7 @@ export function AppLayout(props: AppLayoutProps) {
       {
         <ApolloProvider client={apolloClient}>
           <LocaleContextProvider
+            locales={locales}
             locale={locale}
             localeStrings={localeStrings}
             currentUser={user}

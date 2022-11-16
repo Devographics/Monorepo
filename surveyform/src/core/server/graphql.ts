@@ -17,17 +17,6 @@ import {
   // entityType,
   // exampleType,
 } from "~/modules/entities/server/graphql";
-import {
-  localeResolver,
-  localesQueryTypeDef,
-  localesResolver,
-  surveyLocaleType,
-} from "~/i18n/server/graphql";
-// import {
-//   surveysResolver,
-//   surveyType,
-//   editionType,
-// } from "~/modules/surveys/server/graphql";
 
 const { mergeResolvers, mergeTypeDefs } = require("@graphql-tools/merge");
 // Simulate Vulcan Meteor global "addGraphQLSchema" etc.
@@ -99,11 +88,6 @@ const cacheStats = (root, args, { currentUser }) => {
 
 addGraphQLQuery("cacheStats: JSON");
 addGraphQLResolvers({ Query: { cacheStats } });
-
-addGraphQLSchema(surveyLocaleType);
-addGraphQLQuery(localesQueryTypeDef);
-addGraphQLResolvers({ Query: { locales: localesResolver } });
-addGraphQLResolvers({ Query: { locale: localeResolver } });
 
 const homepageType = `type Homepage {
   name: String
@@ -186,7 +170,6 @@ const stats = async () => {
 
 addGraphQLQuery("stats: Stats");
 addGraphQLResolvers({ Query: { stats } });
-
 
 // START LOG OUT ENV (delete later?)
 
