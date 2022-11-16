@@ -141,6 +141,14 @@ export const upgradeUser = async ({
  * @param email
  * @returns
  */
+// note: in case there are more than one users with the same emailHash, 
+// always use the most recent one
 export const findUserFromEmail = async (email: string) => {
-  return await UserMongooseModel.findOne({ emailHash: createEmailHash(email) });
+  const users = await UserMongooseModel.find({
+    emailHash: createEmailHash(email),
+  })
+    .sort({ createdAt: -1 })
+    .limit(1)
+    .exec();
+  return users[0];
 };
