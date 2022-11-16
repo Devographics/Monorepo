@@ -36,6 +36,7 @@ export const FormComponentTextarea = ({
         as="textarea"
         ref={refFunction}
         {...inputProperties}
+        // @ts-expect-error
         value={localValue}
         onChange={handleChangeDebounced}
         onBlur={handleChange}
