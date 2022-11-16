@@ -13,6 +13,7 @@ export const templates: {
   feature: () => ({
     input: "feature",
     suffix: "experience",
+    hasComment: true,
     options: [
       {
         value: "never_heard",
@@ -37,6 +38,7 @@ export const templates: {
     input: "tool",
     suffix: "experience",
     intlPrefix: "tools",
+    hasComment: true,
     options: [
       {
         value: "never_heard",

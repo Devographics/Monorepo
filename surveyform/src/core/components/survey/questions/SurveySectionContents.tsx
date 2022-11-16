@@ -23,6 +23,7 @@ import { liteFormComponents } from "@vulcanjs/react-ui-lite";
 import { bootstrapFormComponents } from "@vulcanjs/react-ui-bootstrap";
 import SurveySectionHeading from "~/core/components/survey/questions/SurveySectionHeading";
 import { SurveyResponseFragment } from "~/modules/responses/fragments";
+import { getCommentFieldName } from "~/modules/surveys/helpers";
 
 const SurveySectionContents = (props) => {
   const [prevLoading, setPrevLoading] = useState(false);
@@ -101,7 +102,7 @@ const SurveySectionContentsInner = ({
   // we need to tell SmartForm to accept the comment fields as valid fields too
   for (const f of fields) {
     if (f.includes("__experience")) {
-      fields.push(f.replace("__experience", "__comment"));
+      fields.push(getCommentFieldName(f));
     }
   }
 
