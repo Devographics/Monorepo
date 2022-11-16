@@ -1,4 +1,6 @@
 export * from './testScript'
 export * from './encryptEmail'
-export * from './migrateUserAccounts'
+export * from './updateLegacyAccountsHashes'
+export * from './findDuplicateAccounts'
+export * from './setMissingUUIDs'
 export * from './logOutEnv'

@@ -1,4 +1,4 @@
-@use 'sass:math';
+@use "sass:math";
 
 .debug-database,
 .admin-content {
@@ -43,12 +43,23 @@
   gap: $spacing/2;
 }
 
-.admin-script {
-  display: flex;
-  gap: math.div($spacing, 2);
-  align-items: center;
+.admin-scripts-table {
+  &,
+  tr {
+    border: 1px solid $border-color;
+  }
+  font-size: $smallish-font;
+  th {
+    background: $bg-color-lightest;
+  }
+  td,
+  th {
+    padding: 10px;
+  }
 }
-
+.admin-script-name {
+  @include font-bold;
+}
 
 .admin-args {
   display: flex;
@@ -73,5 +84,14 @@
   code {
     background: #efefef;
     color: $text-color-inverted-light;
+  }
+}
+
+.admin-script-result {
+  position: relative;
+  button {
+    position: absolute;
+    top: 2px;
+    right: 2px;
   }
 }

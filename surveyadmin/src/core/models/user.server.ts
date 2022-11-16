@@ -218,3 +218,13 @@ User.crud.connector = UserConnector;
 
 export const UserMongooseModel =
   UserConnector.getRawCollection() as mongoose.Model<UserWithEmailServer>;
+
+export const UserMongoCollection = () => {
+    if (!mongoose.connection.db) {
+      throw new Error(
+        "Trying to access Response mongo collection before Mongo/Mongoose is connected."
+      );
+    }
+    return mongoose.connection.db.collection<UserDocument>("users");
+  };
+  

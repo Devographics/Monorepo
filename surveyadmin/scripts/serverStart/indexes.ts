@@ -29,6 +29,7 @@ export const createIndexes = async () => {
     console.info("Adding indexes to distant database");
   }
 
+  const userCollection = mongoose.connection.db.collection("users");
   const responseCollection = mongoose.connection.db.collection("responses");
   const normalizedResponseCollection = mongoose.connection.db.collection(
     "normalized_responses"
@@ -43,6 +44,15 @@ export const createIndexes = async () => {
   const NormalizedResponseSchema = (NormalizedResponseConnector.getRawCollection() as Model<any>)
     .schema;
  */
+  await Promise.all(
+    (
+      [
+        { emailHash: 1 },
+      ] as const
+    ).map(async (idxDef) => {
+      await userCollection.createIndex(idxDef);
+    })
+  );
   await Promise.all(
     (
       [
