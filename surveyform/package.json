@@ -133,7 +133,7 @@
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
     "mongodb": "4.11.0",
-    "mongoose": "^6.7.2",
+    "mongoose": "6.5.4",
     "nanoid": "^3.3.4",
     "next": "13.0.1",
     "next-connect": "^0.9.1",
