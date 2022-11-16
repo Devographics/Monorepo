@@ -156,30 +156,30 @@ const SubmitButton = (props) => {
     error,
   } = useSaveSurveyMutation(survey);
 
-  return readOnly ? (
-    <Link className={`form-btn-${type}`} href={path}>
-      {contents}
-    </Link>
-  ) : (
-    <Components.LoadingButton
-      // title={intl.formatMessage({ id: `sections.${previousSection.id}.title` })}
-      className={`form-btn-${type}`}
-      type="submit"
-      loading={loading}
-      variant="primary"
-      onClick={async (e) => {
-        e.preventDefault();
-        setLoading(true);
-        await saveSurvey({
-          variables: { input: { id: document._id, data: currentValues } },
-        });
-        setLoading(false);
-        router.push(path);
-      }}
-      {...props}
-    >
-      {contents}
-    </Components.LoadingButton>
+  return (
+    <div className={`form-btn form-btn-${type}`}>
+      {readOnly ? (
+        <Link href={path}>{contents}</Link>
+      ) : (
+        <Components.LoadingButton
+          type="submit"
+          loading={loading}
+          variant="primary"
+          onClick={async (e) => {
+            e.preventDefault();
+            setLoading(true);
+            await saveSurvey({
+              variables: { input: { id: document._id, data: currentValues } },
+            });
+            setLoading(false);
+            router.push(path);
+          }}
+          {...props}
+        >
+          {contents}
+        </Components.LoadingButton>
+      )}
+    </div>
   );
 };
 

@@ -123,15 +123,18 @@
     display: flex;
     justify-content: space-between;
     .prev-placeholder,
-    button {
+    .form-btn {
       @include small-medium {
         flex-basis: 49%;
       }
       @include large {
         flex-basis: 35%;
       }
-      overflow: hidden;
-      text-overflow: ellipsis;
+      button {
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
     }
     div:first-child,
     button:first-child {
