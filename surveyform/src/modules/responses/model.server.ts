@@ -13,7 +13,7 @@ import { subscribe } from "~/server/email/email_octopus";
 // note: normalizing responses on every response update is too slow
 // import { normalizeResponse } from '../normalization/normalize';
 
-async function duplicateCheck(validationErrors, options) {
+export async function duplicateCheck(validationErrors, options) {
   const { document, currentUser } = options;
   if (!document.surveySlug) {
     console.log(document);

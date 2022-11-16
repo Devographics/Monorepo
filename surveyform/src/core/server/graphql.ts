@@ -23,6 +23,7 @@ import {
   localesResolver,
   surveyLocaleType,
 } from "~/i18n/server/graphql";
+import { startSurvey } from "~/modules/responses/server/graphql";
 // import {
 //   surveysResolver,
 //   surveyType,
@@ -187,6 +188,23 @@ const stats = async () => {
 addGraphQLQuery("stats: Stats");
 addGraphQLResolvers({ Query: { stats } });
 
+const startSurveyInputType = `input StartSurveyInput {
+  data: StartSurveyInputData
+}
+input StartSurveyInputData {
+  surveySlug: String
+  context: String
+  common__user_info__source: String
+  common__user_info__referrer: String
+  common__user_info__device: String
+  common__user_info__browser: String
+  common__user_info__version: String
+  common__user_info__os: String
+}
+`;
+addGraphQLSchema(startSurveyInputType);
+addGraphQLMutation("startSurvey(input: StartSurveyInput): ResponseMutationOutput");
+addGraphQLResolvers({ Mutation: { startSurvey } });
 
 // START LOG OUT ENV (delete later?)
 

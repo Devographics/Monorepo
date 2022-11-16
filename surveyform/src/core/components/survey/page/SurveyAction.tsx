@@ -33,6 +33,10 @@ import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 
 const duplicateResponseErrorId = "error.duplicate_response";
 
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 const useSurveyActionParams = ():
   | { paramsReady: false; source: undefined; referrer: undefined }
   | { paramsReady: true; source?: string; referrer?: string } => {
@@ -149,6 +153,10 @@ interface PrefilledData extends BrowserData {
   context;
   email?: string;
 }
+
+// const mutationName = "createResponse";
+const mutationName = "startSurvey";
+
 const SurveyAction = ({
   survey,
 }: //currentUser,
@@ -208,8 +216,8 @@ const SurveyAction = ({
       variant: "primary",
     },
     mutation: gql`
-    mutation createResponse($input: CreateResponseInput) {
-      createResponse(input: $input) {
+    mutation ${mutationName}($input: ${capitalizeFirstLetter(mutationName)}Input) {
+      ${mutationName}(input: $input) {
         ...${getFragmentName(surveyCreateResponseOutputFragment)}
       }
     }
@@ -227,10 +235,11 @@ const SurveyAction = ({
     successCallback:
       (result: // TODO: how to type this better? It's the return of a createMutation, we may have this type already in vulcan?
       {
-        data: { createResponse: { data: { pagePath: string } } };
+        data: { [mutationName]: { data: { pagePath: string } } };
       }) => {
-        //console.log("calling success cb");
-        router.push(get(result, "data.createResponse.data.pagePath"));
+        const pagePath = get(result, `data.${mutationName}.data.pagePath`);
+        console.log(`Redirecting to ${pagePath}…`);
+        router.push(pagePath);
       },
     errorCallback: (error) => {
       setErrors(getErrors(error));
