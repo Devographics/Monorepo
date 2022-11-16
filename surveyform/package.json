@@ -244,8 +244,6 @@
   "packageManager": "pnpm@7.3.0",
   "pnpm": {
     "overrides": {
-      "@types/react@>17": "^17.0.1",
-      "@types/react-dom@>17": "^17.0.1",
       "@apollo/client>ts-invariant": "0.10.3"
     }
   }
