@@ -4,11 +4,7 @@ import {
 } from "~/modules/responses/model.server";
 import { schema } from "~/modules/responses/schema.server";
 import { nanoid } from "nanoid";
-
-export const throwError = (...args) => {
-  console.error(...args);
-  throw new Error(JSON.stringify(args));
-};
+import { throwError } from './errors'
 
 // const ObjectID = require("mongodb").ObjectID;
 
@@ -39,7 +35,7 @@ export const startSurvey = async (root, args, context) => {
     const field = schema[fieldName];
     const { onCreate } = field;
     if (onCreate) {
-      document[fieldName] = onCreate({ currentUser, document, data: document, context });
+      document[fieldName] = await onCreate({ currentUser, document, data: document, context });
     }
   }
 

@@ -5,8 +5,9 @@ import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import type { SurveySection, SurveyType } from "@devographics/core-models";
 import { ResponseDocument } from "@devographics/core-models";
 import { getSectionCompletionPercentage } from "~/modules/responses/helpers";
-import { useVulcanComponents } from "@vulcanjs/react-ui";
+import { useVulcanComponents, useFormContext } from "@vulcanjs/react-ui";
 import { getSurveyPath } from "~/modules/surveys/getters";
+import { useSaveSurveyMutation } from "~/core/components/survey/questions/useSaveSurveyMutation";
 
 const SurveyNavItem = ({
   survey,
@@ -37,6 +38,17 @@ const SurveyNavItem = ({
   const completion = getSectionCompletionPercentage(section, response);
   const showCompletion = completion !== null && completion > 0;
 
+  const formContext = useFormContext();
+  const { getDocument, currentValues } = formContext;
+  const document = getDocument();
+
+  const {
+    saveSurvey,
+    data,
+    loading: saveSurveyLoading,
+    error,
+  } = useSaveSurveyMutation(survey);
+
   useEffect(() => {
     if (currentTabindex === number) {
       textInput.current?.focus();
@@ -49,7 +61,9 @@ const SurveyNavItem = ({
     setNavLoading(true);
     e.preventDefault();
     setShown(false);
-    await submitForm();
+    await saveSurvey({
+      variables: { input: { id: document._id, data: currentValues } },
+    });
     setNavLoading(false);
     router.push(getSurveyPath({ survey, response, number }));
   };

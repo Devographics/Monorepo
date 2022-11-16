@@ -216,7 +216,7 @@ const SurveyAction = ({
       variant: "primary",
     },
     mutation: gql`
-    mutation ${mutationName}($input: ${capitalizeFirstLetter(mutationName)}Input) {
+    mutation ${mutationName}($input: CreateResponseInput) {
       ${mutationName}(input: $input) {
         ...${getFragmentName(surveyCreateResponseOutputFragment)}
       }

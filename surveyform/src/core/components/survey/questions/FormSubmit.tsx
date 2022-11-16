@@ -18,6 +18,7 @@ import { getSurveyPath } from "~/modules/surveys/getters";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import { SurveyDocument } from "@devographics/core-models";
 import Link from "next/link";
+import { useSaveSurveyMutation } from "~/core/components/survey/questions/useSaveSurveyMutation";
 
 const FormSubmit = ({
   survey,
@@ -34,7 +35,7 @@ const FormSubmit = ({
   setNextLoading,
 }: { survey: SurveyDocument } & any) => {
   const formContext = useFormContext();
-  const { getDocument, submitForm } = formContext;
+  const { getDocument, submitForm, currentValues } = formContext;
   const response = getDocument();
 
   const commonProps = {
@@ -47,6 +48,8 @@ const FormSubmit = ({
     response,
     sectionNumber,
     submitForm,
+    getDocument,
+    currentValues,
   };
 
   return (
@@ -119,6 +122,9 @@ const SubmitButton = (props) => {
     submitForm,
     type,
     readOnly,
+    survey,
+    getDocument,
+    currentValues,
   } = props;
 
   const loading = type === "next" ? nextLoading : prevLoading;
@@ -141,6 +147,15 @@ const SubmitButton = (props) => {
     </>
   );
 
+  const document = getDocument();
+
+  const {
+    saveSurvey,
+    data,
+    loading: saveSurveyLoading,
+    error,
+  } = useSaveSurveyMutation(survey);
+
   return readOnly ? (
     <Link className={`form-btn-${type}`} href={path}>
       {contents}
@@ -155,7 +170,9 @@ const SubmitButton = (props) => {
       onClick={async (e) => {
         e.preventDefault();
         setLoading(true);
-        await submitForm();
+        await saveSurvey({
+          variables: { input: { id: document._id, data: currentValues } },
+        });
         setLoading(false);
         router.push(path);
       }}
