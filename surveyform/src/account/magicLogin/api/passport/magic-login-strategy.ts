@@ -13,6 +13,7 @@ import { UserType } from "~/core/models/user";
 import {
   createOrUpgradeUser,
   findUserFromEmail,
+  updateUserEmailHash,
   upgradeUser,
 } from "./userUtils";
 import { captureException } from "@sentry/nextjs";
@@ -56,6 +57,9 @@ async function sendMagicLink(
   // did not click the magic link
   // => this could enable a "temporary authentication" mode for new users to reduce friction in the future (we have to assess security yet)
   const foundUser = await findUserFromEmail(email);
+
+  await updateUserEmailHash(foundUser, email);
+
   const { anonymousId, prettySlug, year, locale } = req.body;
   if (!foundUser) {
     const user: {
@@ -177,6 +181,8 @@ async function verify(
       );
 
     const foundUser = await findUserFromEmail(email);
+
+    await updateUserEmailHash(foundUser, email);
 
     if (!foundUser) {
       const createdOrUpgradedUser = await createOrUpgradeUser({
