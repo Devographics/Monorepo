@@ -45,11 +45,7 @@ export const createIndexes = async () => {
     .schema;
  */
   await Promise.all(
-    (
-      [
-        { emailHash: 1 },
-      ] as const
-    ).map(async (idxDef) => {
+    ([{ emailHash: 1 }, { createdAt: 1 }] as const).map(async (idxDef) => {
       await userCollection.createIndex(idxDef);
     })
   );
