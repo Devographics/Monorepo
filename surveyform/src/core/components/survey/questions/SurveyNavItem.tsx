@@ -61,9 +61,10 @@ const SurveyNavItem = ({
     setNavLoading(true);
     e.preventDefault();
     setShown(false);
-    await saveSurvey({
-      variables: { input: { id: document._id, data: currentValues } },
-    });
+    await submitForm();
+    // await saveSurvey({
+    //   variables: { input: { id: document._id, data: currentValues } },
+    // });
     setNavLoading(false);
     router.push(getSurveyPath({ survey, response, number }));
   };
