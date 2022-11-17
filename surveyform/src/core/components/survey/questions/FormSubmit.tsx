@@ -168,10 +168,10 @@ const SubmitButton = (props) => {
           onClick={async (e) => {
             e.preventDefault();
             setLoading(true);
-            await submitForm();
-            // await saveSurvey({
-            //   variables: { input: { id: document._id, data: currentValues } },
-            // });
+            // await submitForm();
+            await saveSurvey({
+              variables: { input: { id: document._id, data: currentValues } },
+            });
             setLoading(false);
             router.push(path);
           }}

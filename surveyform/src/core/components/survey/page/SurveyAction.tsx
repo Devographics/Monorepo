@@ -155,8 +155,8 @@ interface PrefilledData extends BrowserData {
 }
 
 
-const mutationName = "createResponse";
-// const mutationName = "startSurvey";
+// const mutationName = "createResponse";
+const mutationName = "startSurvey";
 
 const SurveyAction = ({
   survey,
