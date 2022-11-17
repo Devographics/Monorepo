@@ -13,7 +13,7 @@ TODO
 */
 import { useVulcanComponents, useFormContext } from "@vulcanjs/react-ui";
 import { useRouter } from "next/router.js";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { getSurveyPath } from "~/modules/surveys/getters";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import { SurveyDocument } from "@devographics/core-models";
@@ -38,6 +38,22 @@ const FormSubmit = ({
   const { getDocument, submitForm, currentValues } = formContext;
   const response = getDocument();
 
+  const pathProps = { readOnly, survey, response };
+  const nextPath = nextSection
+    ? getSurveyPath({
+        ...pathProps,
+        number: sectionNumber + 1,
+      })
+    : getSurveyPath({
+        ...pathProps,
+        page: "thanks",
+      });
+
+  useEffect(() => {
+    // Prefetch the next page
+    router.prefetch(nextPath);
+  }, []);
+
   const commonProps = {
     readOnly,
     prevLoading,
@@ -60,24 +76,14 @@ const FormSubmit = ({
             {...commonProps}
             type="next"
             intlId={`sections.${nextSection.intlId || nextSection.id}.title`}
-            path={getSurveyPath({
-              readOnly,
-              survey,
-              response,
-              number: sectionNumber + 1,
-            })}
+            path={nextPath}
           />
         ) : (
           <SubmitButton
             {...commonProps}
             type="next"
             intlId="general.finish_survey"
-            path={getSurveyPath({
-              readOnly,
-              survey,
-              response,
-              page: "thanks",
-            })}
+            path={nextPath}
           />
         )}
         {previousSection ? (
@@ -88,9 +94,7 @@ const FormSubmit = ({
               previousSection.intlId || previousSection.id
             }.title`}
             path={getSurveyPath({
-              readOnly,
-              survey,
-              response,
+              ...pathProps,
               number: sectionNumber - 1,
             })}
           />
