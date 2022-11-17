@@ -58,8 +58,6 @@ async function sendMagicLink(
   // => this could enable a "temporary authentication" mode for new users to reduce friction in the future (we have to assess security yet)
   const foundUser = await findUserFromEmail(email);
 
-  await updateUserEmailHash(foundUser, email);
-
   const { anonymousId, prettySlug, year, locale } = req.body;
   if (!foundUser) {
     const user: {
@@ -82,6 +80,8 @@ async function sendMagicLink(
     }
     await createOrUpgradeUser(user);
   } else {
+    await updateUserEmailHash(foundUser, email);
+
     // add anonymous id if necessary (BUT DO NOT VERIFY)
     await upgradeUser({
       foundUser: foundUser as UserType,
@@ -182,8 +182,6 @@ async function verify(
 
     const foundUser = await findUserFromEmail(email);
 
-    await updateUserEmailHash(foundUser, email);
-
     if (!foundUser) {
       const createdOrUpgradedUser = await createOrUpgradeUser({
         email,
@@ -191,6 +189,8 @@ async function verify(
       });
       return cb(null, createdOrUpgradedUser);
     } else {
+      await updateUserEmailHash(foundUser, email);
+
       const upgradedUser = await upgradeUser({
         foundUser: foundUser as UserTypeServer,
         anonymousId,
