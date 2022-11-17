@@ -803,7 +803,7 @@ outline:
         template: others
 
       - id: industry_sector
-        intlId: industry_sector_js
+        intlId: usage.industry_sector_js
         template: multiple
         allowother: true
         options:
