@@ -34,6 +34,7 @@ const FormSubmit = ({
   nextLoading,
   setNextLoading,
 }: { survey: SurveyDocument } & any) => {
+  const router = useRouter()
   const formContext = useFormContext();
   const { getDocument, submitForm, currentValues } = formContext;
   const response = getDocument();
