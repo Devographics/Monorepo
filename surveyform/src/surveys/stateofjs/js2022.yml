@@ -19,6 +19,9 @@ bgColor: rgb(34, 36, 41)
 textColor: rgb(224, 228, 228)
 linkColor: rgb(65, 199, 199)
 hoverColor: rgb(254, 106, 106)
+emailOctopus:
+  listId: 463dc2a9-b2ff-11e8-a3c9-06b79b628af2
+
 tags: [js]
 credits:
   - id: mark_erikson

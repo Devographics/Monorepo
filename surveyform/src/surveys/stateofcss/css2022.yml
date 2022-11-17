@@ -30,6 +30,9 @@ linkColor: "#F95DB2"
 hoverColor: "#59df7f"
 tags: [css]
 contexts: [state_of_css]
+emailOctopus:
+  listId: ed0386c4-2f55-11e9-a3c9-06b79b628af2
+
 faq:
   - data_used_css2022
   - survey_design_css2022

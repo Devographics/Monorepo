@@ -1,4 +1,7 @@
-import { ResponseMongoCollection } from "~/modules/responses/model.server";
+import {
+  ResponseMongoCollection,
+  processEmailOnUpdate,
+} from "~/modules/responses/model.server";
 import { schema } from "~/modules/responses/schema.server";
 import { throwError } from "./errors";
 
@@ -42,6 +45,8 @@ export const saveSurvey = async (root, args, context) => {
       });
     }
   }
+
+  data = await processEmailOnUpdate(data, { document });
 
   // insert document
   const updatedDocument = await Responses.updateOne({ _id }, { $set: data });

@@ -16,14 +16,14 @@ export async function subscribe({ email, confirm = false, listId }) {
         process.env.NEXT_PUBLIC_NODE_ENV !== "production"
       ) {
         console.warn(
-          "EMAIL_OCTOPUS_API_KEY or LISTID not set, current NODE_ENV:",
+          "EMAIL_OCTOPUS_APIKEY or listId not set, current NODE_ENV:",
           process.env.NODE_ENV,
           process.env.NEXT_PUBLIC_NODE_ENV
         );
         return;
       } else {
         throw new Error(
-          "Octopus EMAIL_OCTOPUS_APIKEY and EMAIL_OCTOPUS_LISTID not set in production, can't subscribe user."
+          "Octopus EMAIL_OCTOPUS_APIKEY or listId not set in production, can't subscribe user."
         );
       }
     }
