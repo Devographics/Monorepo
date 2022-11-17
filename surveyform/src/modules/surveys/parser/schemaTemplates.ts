@@ -98,7 +98,8 @@ export const templates: {
     `,
     autocompleteOptions: {
       autocompletePropertyName: "name", // overridden by field definition above
-      queryResolverName: "entities", // overridden by field definition above
+      autocompleteQueryResolverName: "entities", // overridden by field definition above
+      labelsQueryResolverName: "entities", // overridden by field definition above
       fragmentName: "EntityFragment", // overridden by field definition above
       valuePropertyName: "id", // overridden by field definition above
     },

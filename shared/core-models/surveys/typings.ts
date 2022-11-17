@@ -60,7 +60,8 @@ export interface ParsedQuestion extends Pick<Field, "template"> {
     fragmentName?: string;
     valuePropertyName?: string;
     multi?: boolean;
-    queryResolverName?: string;
+    autocompleteQueryResolverName: string;
+    labelsQueryResolverName: string;
   };
   dynamicQuery?: () => any;
   /**
