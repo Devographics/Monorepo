@@ -35,9 +35,6 @@ export const schema: VulcanGraphqlSchemaServer = extendSchemaServer(
       },
     },
     updatedAt: {
-      onCreate: () => {
-        return new Date();
-      },
       onUpdate: () => {
         return new Date();
       },
