@@ -24,6 +24,7 @@ import {
   surveyLocaleType,
 } from "~/i18n/server/graphql";
 import { startSurvey, saveSurvey } from "~/modules/responses/server/graphql";
+import { projectsAutocomplete, projectsLabels } from "~/modules/projects/server/graphql";
 // import {
 //   surveysResolver,
 //   surveyType,
@@ -191,6 +192,11 @@ addGraphQLResolvers({ Query: { stats } });
 addGraphQLMutation("startSurvey(input: CreateResponseInput): ResponseMutationOutput");
 addGraphQLMutation("saveSurvey(input: UpdateResponseInput): ResponseMutationOutput");
 addGraphQLResolvers({ Mutation: { startSurvey, saveSurvey } });
+
+addGraphQLQuery("projectsAutocomplete(input: MultiProjectInput): MultiProjectOutput");
+addGraphQLQuery("projectsLabels(input: MultiProjectInput): MultiProjectOutput");
+addGraphQLResolvers({ Query: { projectsAutocomplete, projectsLabels } });
+
 
 // START LOG OUT ENV (delete later?)
 

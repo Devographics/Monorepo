@@ -60,7 +60,8 @@ export const templates: {
     },
     autocompleteOptions: {
       autocompletePropertyName: "name",
-      queryResolverName: "projects",
+      labelsQueryResolverName: "projectsLabels",
+      autocompleteQueryResolverName: "projectsAutocomplete",
       fragmentName: "ProjectFragment",
     },
   }),
