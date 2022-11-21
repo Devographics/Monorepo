@@ -226,7 +226,7 @@ export const FormComponentCheckboxGroup = ({
               setShowMore(true);
             }}
           >
-            Show More…
+            {intl.formatMessage({ id: "forms.more_options" })}…
           </Components.Button>
         )}
         {itemProperties.showOther && (
