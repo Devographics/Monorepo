@@ -239,10 +239,10 @@
         - id: writing_modes
           template: feature_experience
 
-        - id: george_francis
+        - id: david_east
           template: picks
           variables:
-            url: https://houdini.how/
+            url: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout/Subgrid
 
         - id: logical_properties
           template: feature_experience
@@ -341,10 +341,10 @@
         - id: overscroll_behavior
           template: feature_experience
 
-        - id: ahmad_shadeed
+        - id: bramus_van_damme
           template: picks
           variables:
-            url: https://www.miriamsuzanne.com/2021/05/02/container-queries/
+            url: https://developer.mozilla.org/en-US/docs/Web/CSS/:has
 
         - id: units_switcher_hint
           template: hint
@@ -369,10 +369,10 @@
         - id: line_clamp
           template: feature_experience
 
-        - id: cassidy_williams
+        - id: kevin_j_powell
           template: picks
           variables:
-            url: https://twitter.com/lynnandtonic
+            url: https://jhey.dev/
 
         - id: variable_fonts
           template: feature_experience
@@ -392,19 +392,15 @@
           template: feature_experience
         - id: prefers_color_scheme
           template: feature_experience
-        - id: josh_comeau
+
+        - id: samuel_kraft
           template: picks
           variables:
-            url: https://wattenberger.com/blog/css-percents
+            url: https://webkit.org/blog/13096/css-has-pseudo-class/
 
         - id: prefers_reduced_data
           template: feature_experience
           year: 2021
-
-        - id: stephanie_walter
-          template: picks
-          variables:
-            url: https://thinkdobecreate.com/
           
         - id: color_contrast
           template: feature_experience
@@ -437,10 +433,10 @@
           template: feature_experience
           year: 2021
 
-        - id: michelle_barker
+        - id: josh_comeau
           template: picks
           variables:
-            url: https://web.dev/building-a-color-scheme/
+            url: https://moderncss.dev/
 
         - id: has_selector
           template: feature_experience
@@ -461,10 +457,10 @@
         - id: variables
           template: feature_experience
 
-        - id: kevin_j_powell
+        - id: adam_argyle
           template: picks
           variables:
-            url: https://thinkdobecreate.com/
+            url: https://developer.chrome.com/blog/has-m105/
 
         - id: feature_support_queries
           template: feature_experience
@@ -535,10 +531,10 @@
 
     - template: tools_experience_marimekko
 
-    - id: manuel_matuzovic
+    - id: eric_w_bailey
       template: picks
       variables:
-        url: https://developer.mozilla.org/en-US/docs/Web/CSS/aspect-ratio
+        url: https://benmyers.dev/blog/semantic-selectors/
 
     - template: section_other_tools
 
@@ -587,10 +583,10 @@
 
     # - template: toolsUsageVariationsTemplate
     
-    - id: gift_egwuenu
+    - id: michelle_barker
       template: picks
       variables:
-        url: https://www.youtube.com/kepowob/videos
+        url: https://wpt.fyi/interop-2022
 
     - template: section_other_tools
 
@@ -655,6 +651,11 @@
             fieldId: tools_others
             options: { cutoff: 5 }
 
+    - id: kilian_valkhof
+      template: picks
+      variables:
+        url: https://wpt.fyi/interop-2022
+
     - id: utilities
       tabId: tabs.main_answers
       blockNamespace: tools_others  
@@ -670,10 +671,10 @@
             fieldId: tools_others
             options: { cutoff: 5 }
 
-    - id: eric_w_bailey
+    - id: gift_egwuenu
       template: picks
       variables:
-        url: https://www.miriamsuzanne.com/
+        url: https://web.dev/learn/css/
 
     - id: browsers
       tabId: tabs.main_answers
@@ -746,6 +747,11 @@
           variables:
             fieldId: usage
 
+    - id: sara_soueidan
+      template: picks
+      variables:
+        url: https://webkit.org/blog/13096/css-has-pseudo-class/
+
     - id: css_js_balance
       tabId: tabs.main_answers
       blockNamespace: usage
@@ -778,6 +784,11 @@
       template: multiple_options
       variables:
         fieldId: usage
+
+    - id: adam_wathan
+      template: picks
+      variables:
+        url: https://adamwathan.me/composing-the-uncomposable-with-css-variables/
 
     - id: state_of_the_web
       template: happiness
@@ -847,10 +858,10 @@
           variables:
             fieldId: resources
 
-    - id: samuel_kraft
+    - id: jen_simmons
       template: picks
       variables:
-        url: https://vanilla-extract.style/
+        url: https://webkit.org/blog/13096/css-has-pseudo-class/
 
     - id: podcasts
       blockNamespace: resources
@@ -877,6 +888,11 @@
       variables:
         options: { cutoff: 15 }
         fieldId: resources
+
+    - id: ahmad_shadeed
+      template: picks
+      variables:
+        url: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Container_Queries
 
     - id: other_surveys
       blockNamespace: resources
@@ -963,8 +979,8 @@
     - id: conclusion
       template: conclusion
       variables:
-        author: kilian_valkhof
-        entities: '"kilian_valkhof"'
+        author: lea_verou
+        entities: '"lea_verou"'
 
     - id: conclusion_newsletter
       blockType: NewsletterBlock
@@ -983,14 +999,14 @@
       wrapBlock: false
       disableExport: true
 
-- id: how_to_help
-  path: /how_to_help
-  blocks:
+# - id: how_to_help
+#   path: /how_to_help
+#   blocks:
 
-    - id: how_to_help_contents
-      blockType: HowToHelpBlock
-      wrapBlock: false
-      disableExport: true
+#     - id: how_to_help_contents
+#       blockType: HowToHelpBlock
+#       wrapBlock: false
+#       disableExport: true
 
 - id: support
   path: /support

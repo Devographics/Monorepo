@@ -55,7 +55,7 @@ const getDomain = url => {
 
 const BlockLink = ({ id, label, url, icon }) => {
     const Icon = icon
-    const label_ = id === 'homepage' ? getDomain(url) : label
+    const label_ = url && (id === 'homepage' ? getDomain(url) : label)
 
     if (!label_) {
         return null

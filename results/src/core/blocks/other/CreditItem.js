@@ -37,6 +37,7 @@ export default CreditItem
 
 const CreditItemDiv = styled.div`
     display: flex;
+    align-items: center;
 `
 
 const Avatar = styled.a`
@@ -54,12 +55,13 @@ const Avatar = styled.a`
 
 const Details = styled.div`
     position: relative;
-    top: -5px;
+    /* top: -5px; */
 `
 
 const Name = styled.h4`
     font-size: ${fontSize('large')};
     margin-bottom: 0px;
+    line-height: 1.3;
 `
 
 const Twitter = styled.div`

@@ -3,8 +3,10 @@ import styled from 'styled-components'
 import { mq, spacing, fontSize, secondaryFontMixin } from 'core/theme'
 import T from 'core/i18n/T'
 import CreditItem from 'core/blocks/other/CreditItem'
+import config from 'Config/config.yml'
 
 const ConclusionBlock = ({ block, data: entities }) => {
+    console.log(block, entities)
     const entity = entities && entities.find(e => e.id === block.variables.author)
     if (!entity) {
         return null
@@ -15,15 +17,19 @@ const ConclusionBlock = ({ block, data: entities }) => {
                 {/* <Title>
                     <T k="sections.conclusion.title" />
                 </Title> */}
-                <CreditItem id={block.variables.author} entity={entity} labelId="conclusion.bio" />
+                <CreditItem
+                    id={block.variables.author}
+                    entity={entity}
+                    labelId={`conclusion.${config.surveySlug}.bio`}
+                />
             </Heading>
-            <T k="sections.conclusion.description" md={true} />
+            <T k={`conclusion.${config.surveySlug}`} md={true} />
         </Conclusion>
     )
 }
 
 const Heading = styled.div`
-    margin-bottom: ${spacing()};
+    margin-bottom: ${spacing(2)};
 `
 
 const Title = styled.h2`
