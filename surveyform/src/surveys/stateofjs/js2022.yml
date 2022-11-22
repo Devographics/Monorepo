@@ -402,7 +402,7 @@ outline:
       - id: parcel
       - id: gulp
       - id: rollup
-      - id: browserify
+      - id: browserify # remove in 2023
       - id: tsc
       - id: rome
       - id: snowpack
@@ -1043,6 +1043,8 @@ outline:
           - id: the_primeagen # https://www.youtube.com/channel/UCW5YeuERMmlnqo4oq8vwUpg?app=desktop
           - id: jack_herrington # https://www.youtube.com/@jherr
           - id: midudev
+          - id: mayuko
+          - id: coding_garden
       - id: video_creators
         template: others
         matchTags: [video_creators, youtube, courses, people, sites, newsletters, socialmedia]
