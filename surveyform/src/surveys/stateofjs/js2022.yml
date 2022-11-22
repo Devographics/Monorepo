@@ -527,6 +527,7 @@ outline:
           - id: greensock
           - id: popmotion
           - id: framer_motion
+          - id: motion_one
       - id: graphics_animation
         year: 2022
         template: project
