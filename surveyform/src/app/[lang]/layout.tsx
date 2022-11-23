@@ -1,5 +1,5 @@
-// TODO: somehow not correctly imported, we should first get rid of styled-jsx specifics
-// and try again
+// TODO: weird issue, Webpack scss rule is broken here
+// if it still don't work just add a .scss loader manually
 // import "~/stylesheets/main.scss";
 import { AppLayout } from "./AppLayout";
 import { getLocales, getLocaleStrings } from "~/i18n/server/fetchLocalesRedis";

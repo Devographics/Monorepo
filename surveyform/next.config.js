@@ -64,12 +64,25 @@ const moduleExports = (phase, { defaultConfig }) => {
         test: /\.ya?ml$/,
         use: "js-yaml-loader",
       });
+
       config.experiments.topLevelAwait = true;
       return config;
     },
 
+    /*
+    Don't seem to be needed
     sassOptions: {
       includePaths: [path.join(__dirname, "src/stylesheets")],
+    },
+    */
+
+    images: {
+      remotePatterns: [
+        {
+          protocol: "https",
+          hostname: "devographics.github.io",
+        },
+      ],
     },
 
     // uncomment to support markdown
@@ -145,15 +158,6 @@ const moduleExports = (phase, { defaultConfig }) => {
     // Will disable source map upload
     disableServerWebpackPlugin: shouldDisableSentry,
     disableClientWebpackPlugin: shouldDisableSentry,
-  };
-
-  extendedConfig.images = {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "devographics.github.io",
-      },
-    ],
   };
 
   // Finally add relevant webpack configs/utils

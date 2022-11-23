@@ -15,12 +15,6 @@
   // 	],
   // 	"description": "Log output to console"
   // }
-  "style-jsx": {
-    "prefix": "style-jsx",
-    "scope": "typescriptreact,javascriptreact", // tsx, jsx
-    "body": ["<style jsx>{`\n\t$1\n`}</style>"],
-    "description": "Local Styled JSX tag"
-  },
   "Storybook story": {
     "scope": "typescriptreact",
     "prefix": "story",
