@@ -37,6 +37,7 @@ import { ErrorBoundary } from "~/core/components/error";
 import { getAppGraphqlUri } from "~/lib/graphql";
 import Layout from "~/core/components/common/Layout";
 import type { LocaleDef } from "~/i18n/typings";
+import { SSRProvider } from "react-bootstrap";
 
 export interface AppLayoutProps {
   /** Locale extracted from cookies server-side */
@@ -71,53 +72,55 @@ export function AppLayout(props: AppLayoutProps) {
   const { user } = useUser();
 
   return (
-    <ErrorBoundary proposeReload={true} proposeHomeRedirection={true}>
-      {/** TODO: this error boundary to display anything useful since it doesn't have i18n */}
-      {
-        <ApolloProvider client={apolloClient}>
-          <LocaleContextProvider
-            locales={locales}
-            locale={locale}
-            localeStrings={localeStrings}
-            currentUser={user}
-          >
-            <VulcanCurrentUserProvider
-              // @ts-ignore FIXME: weird error with groups
-              value={{
-                currentUser: user || null,
-                loading:
-                  false /* TODO: we don't get the loading information from useUser yet */,
-              }}
+    <SSRProvider>
+      <ErrorBoundary proposeReload={true} proposeHomeRedirection={true}>
+        {/** TODO: this error boundary to display anything useful since it doesn't have i18n */}
+        {
+          <ApolloProvider client={apolloClient}>
+            <LocaleContextProvider
+              locales={locales}
+              locale={locale}
+              localeStrings={localeStrings}
+              currentUser={user}
             >
-              <VulcanComponentsProvider
+              <VulcanCurrentUserProvider
+                // @ts-ignore FIXME: weird error with groups
                 value={{
-                  ...defaultCoreComponents,
-                  ...liteCoreComponents,
-                  Alert,
-                  // TODO: should not be needed, since we use Bootstrap Button instead,
-                  // but need double checking
-                  // Button,
-                  TooltipTrigger,
-                  Loading,
-                  ...bootstrapCoreComponents,
-                  // Keep the component here even if we don't use Components.FormattedMessage directly
-                  // This allows Vulcan components to depend on it
-                  FormattedMessage: FormattedMessage,
+                  currentUser: user || null,
+                  loading:
+                    false /* TODO: we don't get the loading information from useUser yet */,
                 }}
               >
-                <ErrorBoundary
-                  proposeReload={true}
-                  proposeHomeRedirection={true}
+                <VulcanComponentsProvider
+                  value={{
+                    ...defaultCoreComponents,
+                    ...liteCoreComponents,
+                    Alert,
+                    // TODO: should not be needed, since we use Bootstrap Button instead,
+                    // but need double checking
+                    // Button,
+                    TooltipTrigger,
+                    Loading,
+                    ...bootstrapCoreComponents,
+                    // Keep the component here even if we don't use Components.FormattedMessage directly
+                    // This allows Vulcan components to depend on it
+                    FormattedMessage: FormattedMessage,
+                  }}
                 >
-                  <Layout surveySlug={slug} surveyYear={year}>
-                    {children}
-                  </Layout>
-                </ErrorBoundary>
-              </VulcanComponentsProvider>
-            </VulcanCurrentUserProvider>
-          </LocaleContextProvider>
-        </ApolloProvider>
-      }
-    </ErrorBoundary>
+                  <ErrorBoundary
+                    proposeReload={true}
+                    proposeHomeRedirection={true}
+                  >
+                    <Layout surveySlug={slug} surveyYear={year}>
+                      {children}
+                    </Layout>
+                  </ErrorBoundary>
+                </VulcanComponentsProvider>
+              </VulcanCurrentUserProvider>
+            </LocaleContextProvider>
+          </ApolloProvider>
+        }
+      </ErrorBoundary>
+    </SSRProvider>
   );
 }
