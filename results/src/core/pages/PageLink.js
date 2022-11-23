@@ -15,10 +15,4 @@ const PageLink = ({ parentPage, page, children, className, activeClassName, onCl
     </Link>
 )
 
-PageLink.propTypes = {
-    page: PropTypes.shape({
-        path: PropTypes.string.isRequired
-    }).isRequired
-}
-
 export default PageLink

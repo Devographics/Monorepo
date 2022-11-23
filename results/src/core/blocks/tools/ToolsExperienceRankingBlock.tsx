@@ -18,30 +18,6 @@ import { getTableData } from 'core/helpers/datatables'
 
 import { MetricId, ALL_METRICS } from 'core/helpers/units'
 
-type ViewId = 'viz' | 'data'
-
-interface SwitcherProps {
-    setMetric: (metric: MetricId) => void
-    metric: MetricId
-}
-
-const Switcher = ({ setMetric, metric }: SwitcherProps) => {
-    return (
-        <ButtonGroup>
-            {ALL_METRICS.map(key => (
-                <Button
-                    key={key}
-                    size="small"
-                    className={`Button--${metric === key ? 'selected' : 'unselected'}`}
-                    onClick={() => setMetric(key)}
-                >
-                    <T k={`options.experience_ranking.${key}`} />
-                </Button>
-            ))}
-        </ButtonGroup>
-    )
-}
-
 export interface MetricBucket {
     year: number
     rank: number

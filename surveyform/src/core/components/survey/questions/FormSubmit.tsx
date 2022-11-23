@@ -13,11 +13,12 @@ TODO
 */
 import { useVulcanComponents, useFormContext } from "@vulcanjs/react-ui";
 import { useRouter } from "next/router.js";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { getSurveyPath } from "~/modules/surveys/getters";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import { SurveyDocument } from "@devographics/core-models";
 import Link from "next/link";
+import { useSaveSurveyMutation } from "~/core/components/survey/questions/useSaveSurveyMutation";
 
 const FormSubmit = ({
   survey,
@@ -33,9 +34,26 @@ const FormSubmit = ({
   nextLoading,
   setNextLoading,
 }: { survey: SurveyDocument } & any) => {
+  const router = useRouter()
   const formContext = useFormContext();
-  const { getDocument, submitForm } = formContext;
+  const { getDocument, submitForm, currentValues } = formContext;
   const response = getDocument();
+
+  const pathProps = { readOnly, survey, response };
+  const nextPath = nextSection
+    ? getSurveyPath({
+        ...pathProps,
+        number: sectionNumber + 1,
+      })
+    : getSurveyPath({
+        ...pathProps,
+        page: "thanks",
+      });
+
+  useEffect(() => {
+    // Prefetch the next page
+    router.prefetch(nextPath);
+  }, []);
 
   const commonProps = {
     readOnly,
@@ -47,6 +65,8 @@ const FormSubmit = ({
     response,
     sectionNumber,
     submitForm,
+    getDocument,
+    currentValues,
   };
 
   return (
@@ -57,24 +77,14 @@ const FormSubmit = ({
             {...commonProps}
             type="next"
             intlId={`sections.${nextSection.intlId || nextSection.id}.title`}
-            path={getSurveyPath({
-              readOnly,
-              survey,
-              response,
-              number: sectionNumber + 1,
-            })}
+            path={nextPath}
           />
         ) : (
           <SubmitButton
             {...commonProps}
             type="next"
             intlId="general.finish_survey"
-            path={getSurveyPath({
-              readOnly,
-              survey,
-              response,
-              page: "thanks",
-            })}
+            path={nextPath}
           />
         )}
         {previousSection ? (
@@ -85,9 +95,7 @@ const FormSubmit = ({
               previousSection.intlId || previousSection.id
             }.title`}
             path={getSurveyPath({
-              readOnly,
-              survey,
-              response,
+              ...pathProps,
               number: sectionNumber - 1,
             })}
           />
@@ -119,6 +127,9 @@ const SubmitButton = (props) => {
     submitForm,
     type,
     readOnly,
+    survey,
+    getDocument,
+    currentValues,
   } = props;
 
   const loading = type === "next" ? nextLoading : prevLoading;
@@ -141,28 +152,40 @@ const SubmitButton = (props) => {
     </>
   );
 
-  return readOnly ? (
-    <Link className={`form-btn-${type}`} href={path}>
-      {contents}
-    </Link>
-  ) : (
-    <Components.LoadingButton
-      // title={intl.formatMessage({ id: `sections.${previousSection.id}.title` })}
-      className={`form-btn-${type}`}
-      type="submit"
-      loading={loading}
-      variant="primary"
-      onClick={async (e) => {
-        e.preventDefault();
-        setLoading(true);
-        await submitForm();
-        setLoading(false);
-        router.push(path);
-      }}
-      {...props}
-    >
-      {contents}
-    </Components.LoadingButton>
+  const document = getDocument();
+
+  const {
+    saveSurvey,
+    data,
+    loading: saveSurveyLoading,
+    error,
+  } = useSaveSurveyMutation(survey);
+
+  return (
+    <div className={`form-btn form-btn-${type}`}>
+      {readOnly ? (
+        <Link href={path}>{contents}</Link>
+      ) : (
+        <Components.LoadingButton
+          type="submit"
+          loading={loading}
+          variant="primary"
+          onClick={async (e) => {
+            e.preventDefault();
+            setLoading(true);
+            // await submitForm();
+            await saveSurvey({
+              variables: { input: { id: document._id, data: currentValues } },
+            });
+            setLoading(false);
+            router.push(path);
+          }}
+          {...props}
+        >
+          {contents}
+        </Components.LoadingButton>
+      )}
+    </div>
   );
 };
 

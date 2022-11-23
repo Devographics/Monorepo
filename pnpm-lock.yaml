@@ -713,7 +713,7 @@ importers:
       moment: ^2.29.4
       mongodb: 4.11.0
       mongodb-memory-server: ^7.6.3
-      mongoose: ^6.7.2
+      mongoose: 6.5.4
       nanoid: ^3.3.4
       next: 13.0.1
       next-connect: ^0.9.1
@@ -782,14 +782,14 @@ importers:
       '@vulcanjs/i18n': 0.8.1-y.0_@apollo+client@3.7.1
       '@vulcanjs/mdx': 0.7.2-alpha.8
       '@vulcanjs/model': 0.7.2-alpha.8
-      '@vulcanjs/mongo': 0.7.2-alpha.8_wipfnzknbrvcf4jgsb2gpzieoy
-      '@vulcanjs/mongo-apollo': 0.8.1-y.0_xipnesbd3ugbahk5yutze3v24i
+      '@vulcanjs/mongo': 0.7.2-alpha.8_xnsbuxwofj3pgggbwmrypkfxiq
+      '@vulcanjs/mongo-apollo': 0.8.1-y.0_q36dt7p6g27ryr5htvfva364a4
       '@vulcanjs/permissions': 0.7.2-alpha.8_biqbaboplfbrettd7655fr4n2y
-      '@vulcanjs/react-hooks': 0.8.1-y.0_xipnesbd3ugbahk5yutze3v24i
+      '@vulcanjs/react-hooks': 0.8.1-y.0_q36dt7p6g27ryr5htvfva364a4
       '@vulcanjs/react-i18n': 0.8.1-y.0_62xnl4qpdiksvmumxipecras6a
-      '@vulcanjs/react-ui': 0.8.1-y.0_xipnesbd3ugbahk5yutze3v24i
+      '@vulcanjs/react-ui': 0.8.1-y.0_q36dt7p6g27ryr5htvfva364a4
       '@vulcanjs/react-ui-bootstrap': 0.8.1-y.0_2igjktsbarkymnu3p4w5ofa65i
-      '@vulcanjs/react-ui-lite': 0.8.1-y.0_wosfgf5ethjfvdrrlwy3vgeuz4
+      '@vulcanjs/react-ui-lite': 0.8.1-y.0_44nhizuml4y7m34vachz57tqsa
       '@vulcanjs/schema': 0.7.2-alpha.8
       '@vulcanjs/utils': 0.7.2-alpha.8
       apollo-server: 3.11.1_graphql@15.4.0
@@ -820,7 +820,7 @@ importers:
       lodash: 4.17.21
       moment: 2.29.4
       mongodb: 4.11.0
-      mongoose: 6.7.2
+      mongoose: 6.5.4
       nanoid: 3.3.4
       next: 13.0.1_vgii64pd2ccbnbx2v3ro5gbin4
       next-connect: 0.9.1
@@ -11863,7 +11863,7 @@ packages:
       - supports-color
     dev: false
 
-  /@vulcanjs/mongo-apollo/0.8.1-y.0_xipnesbd3ugbahk5yutze3v24i:
+  /@vulcanjs/mongo-apollo/0.8.1-y.0_q36dt7p6g27ryr5htvfva364a4:
     resolution: {integrity: sha512-FPCcREpWolHZRoFGSYjySe6q+HzbgLkn0oK3Arq8edKjYLQ19hUyQ2dA1cnCsuWR3oq5Bxa7/m50KknBqileWw==}
     peerDependencies:
       mongodb: '>= 3.6.2'
@@ -11871,12 +11871,12 @@ packages:
     dependencies:
       '@vulcanjs/crud': 0.7.2-alpha.8_biqbaboplfbrettd7655fr4n2y
       '@vulcanjs/graphql': 0.8.1-y.0_4fb2x37yrjlvj4nzivdqys6zmm
-      '@vulcanjs/mongo': 0.7.2-alpha.8_wipfnzknbrvcf4jgsb2gpzieoy
+      '@vulcanjs/mongo': 0.7.2-alpha.8_xnsbuxwofj3pgggbwmrypkfxiq
       '@vulcanjs/utils': 0.7.2-alpha.8
-      apollo-datasource-mongodb: 0.5.4_srp3jjdpjq34xxjtlcuqlt6fum
+      apollo-datasource-mongodb: 0.5.4_lpywtxzti74lkrz73qyo6fj5su
       graphql-objectid-scalar: 1.0.4_abakzeyrefapgsqnbu4mt3ygke
       mongodb: 4.11.0
-      mongoose: 6.7.2
+      mongoose: 6.5.4
     transitivePeerDependencies:
       - '@apollo/client'
       - apollo-server
@@ -11935,7 +11935,7 @@ packages:
       - supports-color
     dev: false
 
-  /@vulcanjs/mongo/0.7.2-alpha.8_wipfnzknbrvcf4jgsb2gpzieoy:
+  /@vulcanjs/mongo/0.7.2-alpha.8_xnsbuxwofj3pgggbwmrypkfxiq:
     resolution: {integrity: sha512-zUi7R1IDTlvEGq28SOZ+91/ZNsLmZpbsWT+3ggz2YfD/OI/smPtx4r386QKEdcWR4YRKfCmto5LubqcjJ4Znpg==}
     peerDependencies:
       mongodb: '>= 3.6.2'
@@ -11948,7 +11948,7 @@ packages:
       '@vulcanjs/utils': 0.7.2-alpha.8
       lodash: 4.17.21
       mongodb: 4.11.0
-      mongoose: 6.7.2
+      mongoose: 6.5.4
     optionalDependencies:
       mongodb-memory-server: 8.10.0
     transitivePeerDependencies:
@@ -12023,7 +12023,7 @@ packages:
       - supports-color
     dev: false
 
-  /@vulcanjs/react-hooks/0.8.1-y.0_xipnesbd3ugbahk5yutze3v24i:
+  /@vulcanjs/react-hooks/0.8.1-y.0_q36dt7p6g27ryr5htvfva364a4:
     resolution: {integrity: sha512-FiIe6d5vS31penLODHX8djQ89lZPjWJagMILrSfxjhA9T8xju3sx8qKElukB9j4tvsbu42axzrufusIxTidFGg==}
     peerDependencies:
       '@apollo/client': '>= 3.2.0'
@@ -12034,7 +12034,7 @@ packages:
       '@apollo/client': 3.7.1_ur6l4sgkudx3u5z6sjjtibwat4
       '@vulcanjs/crud': 0.7.2-alpha.8_biqbaboplfbrettd7655fr4n2y
       '@vulcanjs/graphql': 0.8.1-y.0_4fb2x37yrjlvj4nzivdqys6zmm
-      '@vulcanjs/mongo': 0.7.2-alpha.8_wipfnzknbrvcf4jgsb2gpzieoy
+      '@vulcanjs/mongo': 0.7.2-alpha.8_xnsbuxwofj3pgggbwmrypkfxiq
       debug: 4.3.4
       graphql: 15.4.0
       lodash: 4.17.21
@@ -12119,8 +12119,8 @@ packages:
       react-dom: ^17.0.1
     dependencies:
       '@apollo/client': 3.7.1_ur6l4sgkudx3u5z6sjjtibwat4
-      '@vulcanjs/react-ui': 0.8.1-y.0_xipnesbd3ugbahk5yutze3v24i
-      '@vulcanjs/react-ui-lite': 0.8.1-y.0_wosfgf5ethjfvdrrlwy3vgeuz4
+      '@vulcanjs/react-ui': 0.8.1-y.0_q36dt7p6g27ryr5htvfva364a4
+      '@vulcanjs/react-ui-lite': 0.8.1-y.0_44nhizuml4y7m34vachz57tqsa
       classnames: 2.3.2
       debug: 4.3.4
       graphql: 15.4.0
@@ -12168,7 +12168,7 @@ packages:
       - supports-color
     dev: false
 
-  /@vulcanjs/react-ui-lite/0.8.1-y.0_wosfgf5ethjfvdrrlwy3vgeuz4:
+  /@vulcanjs/react-ui-lite/0.8.1-y.0_44nhizuml4y7m34vachz57tqsa:
     resolution: {integrity: sha512-e5yGU7oSJC8V1JAoDn2MZG7LZPGNjPnUvB7n5ff6nDUExYwHB9N9ZXU5oeC70pKzLwwRtMAjBW1WTXJvTuevmw==}
     peerDependencies:
       '@apollo/client': ^3.5.5
@@ -12181,9 +12181,9 @@ packages:
       '@vulcanjs/i18n': 0.8.1-y.0_@apollo+client@3.7.1
       '@vulcanjs/model': 0.7.2-alpha.8
       '@vulcanjs/permissions': 0.7.2-alpha.8_biqbaboplfbrettd7655fr4n2y
-      '@vulcanjs/react-hooks': 0.8.1-y.0_xipnesbd3ugbahk5yutze3v24i
+      '@vulcanjs/react-hooks': 0.8.1-y.0_q36dt7p6g27ryr5htvfva364a4
       '@vulcanjs/react-i18n': 0.8.1-y.0_62xnl4qpdiksvmumxipecras6a
-      '@vulcanjs/react-ui': 0.8.1-y.0_xipnesbd3ugbahk5yutze3v24i
+      '@vulcanjs/react-ui': 0.8.1-y.0_q36dt7p6g27ryr5htvfva364a4
       '@vulcanjs/schema': 0.7.2-alpha.8
       '@vulcanjs/utils': 0.7.2-alpha.8
       classnames: 2.3.2
@@ -12236,7 +12236,7 @@ packages:
       - supports-color
     dev: false
 
-  /@vulcanjs/react-ui/0.8.1-y.0_xipnesbd3ugbahk5yutze3v24i:
+  /@vulcanjs/react-ui/0.8.1-y.0_q36dt7p6g27ryr5htvfva364a4:
     resolution: {integrity: sha512-ZGY70hStsar2CLUQisV295wXCDgtf7yBs+ghtu4R2vvBBcM4jdKpCjVpgYf3uyzrzkl0ye7U2Zz3NF872uMGvg==}
     peerDependencies:
       '@apollo/client': ^3.5.5
@@ -12250,7 +12250,7 @@ packages:
       '@vulcanjs/i18n': 0.8.1-y.0_@apollo+client@3.7.1
       '@vulcanjs/model': 0.7.2-alpha.8
       '@vulcanjs/permissions': 0.7.2-alpha.8_biqbaboplfbrettd7655fr4n2y
-      '@vulcanjs/react-hooks': 0.8.1-y.0_xipnesbd3ugbahk5yutze3v24i
+      '@vulcanjs/react-hooks': 0.8.1-y.0_q36dt7p6g27ryr5htvfva364a4
       '@vulcanjs/react-i18n': 0.8.1-y.0_62xnl4qpdiksvmumxipecras6a
       '@vulcanjs/schema': 0.7.2-alpha.8
       '@vulcanjs/utils': 0.7.2-alpha.8
@@ -12970,7 +12970,7 @@ packages:
       - graphql
     dev: false
 
-  /apollo-datasource-mongodb/0.5.4_srp3jjdpjq34xxjtlcuqlt6fum:
+  /apollo-datasource-mongodb/0.5.4_lpywtxzti74lkrz73qyo6fj5su:
     resolution: {integrity: sha512-XXbBoyBQ21kGp/oNUupAF5F7LK50Nt7FIRp0MclaabpeAkiBOkp2QtcYrfhehKoxI/wysCvY3IDedey7wSLWXA==}
     engines: {node: '>=8'}
     peerDependencies:
@@ -12982,7 +12982,7 @@ packages:
       apollo-server-errors: 2.5.0_graphql@15.4.0
       bson: 4.7.0
       dataloader: 1.4.0
-      mongoose: 6.7.2
+      mongoose: 6.5.4
     transitivePeerDependencies:
       - encoding
       - graphql
@@ -16564,6 +16564,7 @@ packages:
     dependencies:
       ms: 2.1.2
     dev: false
+    optional: true
 
   /debug/4.3.2:
     resolution: {integrity: sha512-mOp8wKcvj7XxC78zLgw/ZA+6TSgkoE2C/ienthhRD298T7UNwAg9diBpLRxC0mOezLl4B0xV7M0cCO6P/O0Xhw==}
@@ -16576,7 +16577,6 @@ packages:
     dependencies:
       ms: 2.1.2
     dev: false
-    optional: true
 
   /debug/4.3.4:
     resolution: {integrity: sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==}
@@ -19297,6 +19297,7 @@ packages:
     dependencies:
       debug: 4.3.1
     dev: false
+    optional: true
 
   /follow-redirects/1.15.2_debug@4.3.2:
     resolution: {integrity: sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==}
@@ -19309,7 +19310,6 @@ packages:
     dependencies:
       debug: 4.3.2
     dev: false
-    optional: true
 
   /for-each/0.3.3:
     resolution: {integrity: sha512-jqYfLp7mo9vIyQf8ykW2v7A+2N4QjeCeI5+Dz9XraiO1ign81wjiH7Fb9vSOWvQfNtmSa4H2RoQTrrXivdUZmw==}
@@ -20930,7 +20930,7 @@ packages:
     engines: {node: '>=8.0.0'}
     dependencies:
       eventemitter3: 4.0.7
-      follow-redirects: 1.15.2_debug@4.3.1
+      follow-redirects: 1.15.2_debug@4.3.2
       requires-port: 1.0.0
     transitivePeerDependencies:
       - debug
@@ -24625,6 +24625,18 @@ packages:
       - aws-crt
     dev: false
 
+  /mongodb/4.8.1:
+    resolution: {integrity: sha512-/NyiM3Ox9AwP5zrfT9TXjRKDJbXlLaUDQ9Rg//2lbg8D2A8GXV0VidYYnA/gfdK6uwbnL4FnAflH7FbGw3TS7w==}
+    engines: {node: '>=12.9.0'}
+    dependencies:
+      bson: 4.7.0
+      denque: 2.1.0
+      mongodb-connection-string-url: 2.5.4
+      socks: 2.7.1
+    optionalDependencies:
+      saslprep: 1.0.3
+    dev: false
+
   /mongodb/4.9.0:
     resolution: {integrity: sha512-tJJEFJz7OQTQPZeVHZJIeSOjMRqc5eSyXTt86vSQENEErpkiG7279tM/GT5AVZ7TgXNh9HQxoa2ZkbrANz5GQw==}
     engines: {node: '>=12.9.0'}
@@ -24637,24 +24649,23 @@ packages:
       saslprep: 1.0.3
     dev: false
 
-  /mongoose/6.7.1:
-    resolution: {integrity: sha512-qbagtqSyvIhUz4EWzXC00EA0DJHFrQwlzTlNGX5DjiESoJiPKqkEga1k9hviFKRFgBna+OlW54mkdi+0+AqxCw==}
+  /mongoose/6.5.4:
+    resolution: {integrity: sha512-8hKV+9baDa7fyWRADQcSN/c0/QQbnewA2D0xOqdFb7f1UGYAHk4YSMNu9Hu2bdRUfQbK/daFuqlcmI17j6/8eg==}
     engines: {node: '>=12.0.0'}
     dependencies:
       bson: 4.7.0
       kareem: 2.4.1
-      mongodb: 4.11.0
+      mongodb: 4.8.1
       mpath: 0.9.0
       mquery: 4.0.3
       ms: 2.1.3
-      sift: 16.0.1
+      sift: 16.0.0
     transitivePeerDependencies:
-      - aws-crt
       - supports-color
     dev: false
 
-  /mongoose/6.7.2:
-    resolution: {integrity: sha512-lrP2V5U1qhaf+z33fiIn7aYAZZ1fVDly+TkFRjTujNBF/FIHESATj2RbgAOSlWqv32fsZXkXejXzeVfjbv35Ow==}
+  /mongoose/6.7.1:
+    resolution: {integrity: sha512-qbagtqSyvIhUz4EWzXC00EA0DJHFrQwlzTlNGX5DjiESoJiPKqkEga1k9hviFKRFgBna+OlW54mkdi+0+AqxCw==}
     engines: {node: '>=12.0.0'}
     dependencies:
       bson: 4.7.0
@@ -27793,12 +27804,6 @@ packages:
   /react-dev-utils/11.0.4_a7xmpkungfd35is2c4kqy55h3i:
     resolution: {integrity: sha512-dx0LvIGHcOPtKbeiSUM4jqpBl3TcY7CDjZdfOIcKeznE7BWr9dg0iPG90G5yfVQ+p/rGNMXdbfStvzQZEVEi4A==}
     engines: {node: '>=10'}
-    peerDependencies:
-      typescript: '>=2.7'
-      webpack: '>=4'
-    peerDependenciesMeta:
-      typescript:
-        optional: true
     dependencies:
       '@babel/code-frame': 7.10.4
       address: 1.1.2
@@ -27828,7 +27833,9 @@ packages:
     transitivePeerDependencies:
       - eslint
       - supports-color
+      - typescript
       - vue-template-compiler
+      - webpack
     dev: false
 
   /react-docgen-typescript/2.2.2_typescript@4.3.5:
@@ -29800,6 +29807,10 @@ packages:
       call-bind: 1.0.2
       get-intrinsic: 1.1.3
       object-inspect: 1.12.2
+
+  /sift/16.0.0:
+    resolution: {integrity: sha512-ILTjdP2Mv9V1kIxWMXeMTIRbOBrqKc4JAXmFMnFq3fKeyQ2Qwa3Dw1ubcye3vR+Y6ofA0b9gNDr/y2t6eUeIzQ==}
+    dev: false
 
   /sift/16.0.1:
     resolution: {integrity: sha512-Wv6BjQ5zbhW7VFefWusVP33T/EM0vYikCaQ2qR8yULbsilAT8/wQaXvuQ3ptGLpoKx+lihJE3y2UTgKDyyNHZQ==}

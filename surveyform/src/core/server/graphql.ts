@@ -18,6 +18,12 @@ import {
   // exampleType,
 } from "~/modules/entities/server/graphql";
 
+import { startSurvey, saveSurvey } from "~/modules/responses/server/graphql";
+import {
+  projectsAutocomplete,
+  projectsLabels,
+} from "~/modules/projects/server/graphql";
+
 const { mergeResolvers, mergeTypeDefs } = require("@graphql-tools/merge");
 // Simulate Vulcan Meteor global "addGraphQLSchema" etc.
 const gqlObjectTypedefsRegistry: Array<string> = [];
@@ -170,6 +176,20 @@ const stats = async () => {
 
 addGraphQLQuery("stats: Stats");
 addGraphQLResolvers({ Query: { stats } });
+
+addGraphQLMutation(
+  "startSurvey(input: CreateResponseInput): ResponseMutationOutput"
+);
+addGraphQLMutation(
+  "saveSurvey(input: UpdateResponseInput): ResponseMutationOutput"
+);
+addGraphQLResolvers({ Mutation: { startSurvey, saveSurvey } });
+
+addGraphQLQuery(
+  "projectsAutocomplete(input: MultiProjectInput): MultiProjectOutput"
+);
+addGraphQLQuery("projectsLabels(input: MultiProjectInput): MultiProjectOutput");
+addGraphQLResolvers({ Query: { projectsAutocomplete, projectsLabels } });
 
 // START LOG OUT ENV (delete later?)
 

@@ -16,6 +16,7 @@ import { useIntlContext } from "@vulcanjs/react-i18n";
 import isEmpty from "lodash/isEmpty.js";
 import FormOptionLabel from "~/core/components/survey/questions/FormOptionLabel";
 import debounce from "lodash/debounce.js";
+import { getCommentFieldName } from "~/modules/surveys/helpers";
 
 interface ExperienceProps extends FormInputProps {
   showDescription: boolean;
@@ -33,7 +34,7 @@ export const Experience = (props: ExperienceProps) => {
   const Components = useVulcanComponents();
   const { isFirstQuestion, questionId } = itemProperties;
 
-  const commentPath = path.replace("__experience", "__comment");
+  const commentPath = getCommentFieldName(path);
   const commentValue = get(document, commentPath);
 
   const {

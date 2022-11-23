@@ -48,10 +48,8 @@ export const getSurveyPath = ({
       pathSegments.push(responseSegment);
     }
 
-    if (page || number) {
-      const suffixSegment = page || number;
-      pathSegments.push(suffixSegment);
-    }
+    const suffixSegment = page || number || 1;
+    pathSegments.push(suffixSegment);
   }
   const path = pathSegments.join("/");
   return path;

@@ -27,7 +27,7 @@ const Features = ({
       <div className="score-features-items">
         {limitedFeatures.map((feature, i) => (
           <FeatureItem
-            key={feature.id}
+            key={`${feature.id}_${i}`}
             feature={feature}
             showComma={i < limit - 1}
           />
@@ -52,7 +52,7 @@ const FeatureItem = ({ feature, showComma }) => {
           target: "_blank",
           rel: "norefferer",
         })}
-        dangerouslySetInnerHTML={{ __html: entity.name }}
+        dangerouslySetInnerHTML={{ __html: entity.nameClean || entity.name }}
       />
       {showComma && ", "}
       {/* <p className="score-feature-summary" dangerouslySetInnerHTML={{ __html: get(entity, 'mdn.summary') }} /> */}

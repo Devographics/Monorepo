@@ -11,7 +11,7 @@ import express from 'express'
 import { analyzeTwitterFollowings } from './rpcs'
 // import { clearCache } from './caching'
 import { createClient } from 'redis'
-import { init } from './init'
+import { initMemoryCache, initDbCache } from './init'
 import path from 'path'
 
 import Sentry from '@sentry/node'
@@ -124,7 +124,8 @@ const start = async () => {
 
     app.get('/reinitialize', async function (req, res) {
         checkSecretKey(req)
-        await init({ context })
+        const data = await initMemoryCache({ context })
+        await initDbCache({ context, data })
         res.status(200).send('Cache cleared')
     })
 
@@ -132,7 +133,11 @@ const start = async () => {
 
     const port = process.env.PORT || 4000
 
-    await init({ context })
+    const data = await initMemoryCache({ context })
+
+    if (process.env.INITIALIZE_CACHE_ON_STARTUP) {
+        await initDbCache({ context, data })
+    }
 
     const finishedAt = new Date()
 

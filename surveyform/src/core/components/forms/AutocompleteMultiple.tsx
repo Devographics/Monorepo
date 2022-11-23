@@ -58,20 +58,22 @@
    );
  
    // apply options function to data to get suggestions in { value, label } pairs
-   const autocompleteOptions = data && optionsFunction({ data });
- 
+   const autocompleteOptions = data && optionsFunction({ data }, 'autocomplete');
+
    // apply same function to loaded data; filter by current value to avoid displaying any
    // extra unwanted items if field-level data loading loaded too many items
    const selectedItems =
      queryData &&
-     optionsFunction({ data: queryData }).filter((d) =>
+     optionsFunction({ data: queryData }, 'labels').filter((d) =>
        (value as Array<any>)?.includes(d.value)
      );
  
-   // console.log(queryData)
-   // console.log(queryData && optionsFunction({ data: queryData }));
-   // console.log(value)
-   // console.log(selectedItems)
+  //  console.log(queryData)
+  //  console.log(queryData && optionsFunction({ data: queryData }));
+  //  console.log(value)
+  //  console.log(data)
+  //  console.log(autocompleteOptions)
+  //  console.log(selectedItems)
  
    return (
      <Components.FormItem

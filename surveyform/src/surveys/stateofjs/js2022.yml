@@ -6,11 +6,11 @@ topic: JavaScript
 createdAt: November 1, 2022
 prettySlug: state-of-js
 hashtag: StateOfJS
-shareUrl: https://stateofjs.com
+shareUrl: https://survey.devographics.com/survey/state-of-js/2022
 # resultsUrl: https://2022.stateofjs.com/
 name: "State of JavaScript"
 year: 2022
-status: 1 # preview/open/closed/hidden
+status: 2 # preview/open/closed/hidden
 imageUrl: https://devographics.github.io/surveys/state_of_js/2022/images/js2022.png
 faviconUrl: https://devographics.github.io/surveys/state_of_js/2022/images/js2022-favicon.svg
 socialImageUrl: https://devographics.github.io/surveys/state_of_js/2022/images/js2022-og.png
@@ -19,6 +19,9 @@ bgColor: rgb(34, 36, 41)
 textColor: rgb(224, 228, 228)
 linkColor: rgb(65, 199, 199)
 hoverColor: rgb(254, 106, 106)
+emailOctopus:
+  listId: 463dc2a9-b2ff-11e8-a3c9-06b79b628af2
+
 tags: [js]
 credits:
   - id: mark_erikson
@@ -399,7 +402,7 @@ outline:
       - id: parcel
       - id: gulp
       - id: rollup
-      - id: browserify
+      - id: browserify # remove in 2023
       - id: tsc
       - id: rome
       - id: snowpack
@@ -524,6 +527,7 @@ outline:
           - id: greensock
           - id: popmotion
           - id: framer_motion
+          - id: motion_one
       - id: graphics_animation
         year: 2022
         template: project
@@ -800,7 +804,7 @@ outline:
         template: others
 
       - id: industry_sector
-        intlId: industry_sector_js
+        intlId: usage.industry_sector_js
         template: multiple
         allowother: true
         options:
@@ -965,19 +969,22 @@ outline:
 
           - id: medium
           - id: devto
-          - id: css_tricks
+          - id: bestofjs
           - id: smashing_magazine
+          - id: js_weekly
+          - id: bytes
+          - id: node_weekly
           - id: codrops
           - id: sitepoint
-          - id: daily_js
           - id: echo_js
+          - id: css_tricks
           - id: front_end_front
           - id: frontend_horse
           - id: frontend_focus
-          - id: js_weekly
-          - id: bestofjs
           - id: alligator
-          - id: a_list_apart
+          - id: daily_js # remove in 2023?
+          - id: a_list_apart # remove in 2023?
+
       - id: blogs_news_magazines
         template: others
         matchTags: [courses, people, youtube, sites, newsletters, socialmedia]
@@ -1035,6 +1042,10 @@ outline:
           - id: coding_train # Daniel Shiffman https://www.youtube.com/user/shiffman?app=desktop
           - id: net_ninja # https://www.youtube.com/channel/UCW5YeuERMmlnqo4oq8vwUpg?app=desktop
           - id: the_primeagen # https://www.youtube.com/channel/UCW5YeuERMmlnqo4oq8vwUpg?app=desktop
+          - id: jack_herrington # https://www.youtube.com/@jherr
+          - id: midudev
+          - id: mayuko
+          - id: coding_garden
       - id: video_creators
         template: others
         matchTags: [video_creators, youtube, courses, people, sites, newsletters, socialmedia]

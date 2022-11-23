@@ -16,3 +16,5 @@ export const logOutEnv = async () => {
   console.log(env);
   return env;
 };
+
+logOutEnv.description = `Get a log of the current .env variables.`;

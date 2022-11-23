@@ -1,5 +1,5 @@
 import { useVulcanComponents } from "@vulcanjs/react-ui";
-import { useCurrentUserWithResponses } from "~/core/components/survey/page/SurveyAction";
+import { useCurrentUserWithResponses } from "~/core/components/survey/page/hooks";
 import Link from "next/link";
 import { statusesReverse } from "~/modules/constants";
 import orderBy from "lodash/orderBy.js";

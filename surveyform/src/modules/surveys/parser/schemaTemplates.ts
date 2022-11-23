@@ -13,6 +13,7 @@ export const templates: {
   feature: () => ({
     input: "feature",
     suffix: "experience",
+    hasComment: true,
     options: [
       {
         value: "never_heard",
@@ -37,6 +38,7 @@ export const templates: {
     input: "tool",
     suffix: "experience",
     intlPrefix: "tools",
+    hasComment: true,
     options: [
       {
         value: "never_heard",
@@ -58,7 +60,8 @@ export const templates: {
     },
     autocompleteOptions: {
       autocompletePropertyName: "name",
-      queryResolverName: "projects",
+      labelsQueryResolverName: "projectsLabels",
+      autocompleteQueryResolverName: "projectsAutocomplete",
       fragmentName: "ProjectFragment",
     },
   }),
@@ -95,7 +98,8 @@ export const templates: {
     `,
     autocompleteOptions: {
       autocompletePropertyName: "name", // overridden by field definition above
-      queryResolverName: "entities", // overridden by field definition above
+      autocompleteQueryResolverName: "entities", // overridden by field definition above
+      labelsQueryResolverName: "entities", // overridden by field definition above
       fragmentName: "EntityFragment", // overridden by field definition above
       valuePropertyName: "id", // overridden by field definition above
     },

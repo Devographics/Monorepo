@@ -5,15 +5,13 @@
 import { SurveyDocument } from "@devographics/core-models";
 import { getQuestionObject } from "./parser/parseSurvey";
 
+export const getCommentFieldName = fieldName => fieldName.replace("__experience", "__comment")
+
 export const getSurveyFieldNames = (survey: SurveyDocument) => {
-  let questionFieldName: Array<string> = [];
+  let questionFieldNames: Array<string> = [];
   survey.outline.forEach((section) => {
     section.questions &&
       section.questions.forEach((questionOrId) => {
-        if (Array.isArray(questionOrId)) {
-          // NOTE: from the typings, it seems that questions can be arrays? To be confirmed
-          throw new Error("Found an array of questions");
-        }
         const questionObject = getQuestionObject(questionOrId, section);
         /*
         const questionId = getQuestionId(
@@ -25,10 +23,13 @@ export const getSurveyFieldNames = (survey: SurveyDocument) => {
         if (!questionObject.fieldName) {
           return;
         }
-        questionFieldName.push(questionObject.fieldName);
+        questionFieldNames.push(questionObject.fieldName);
+        if (questionObject.hasComment) {
+          questionFieldNames.push(getCommentFieldName(questionObject.fieldName));
+        }
       });
   });
-  // remvoe dups (different suffix for same question)
-  const fieldNamesWithoutDups = [...new Set(questionFieldName).values()];
+  // remove dups (different suffix for same question)
+  const fieldNamesWithoutDups = [...new Set(questionFieldNames).values()];
   return fieldNamesWithoutDups;
 };

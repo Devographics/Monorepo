@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from "uuid";
  *
  * Creating Hash from Emails, not reversible
  */
-export const createEmailHash = (email: string, providedHashSalt: string) => {
+export const createEmailHash = (email: string, providedHashSalt?: string) => {
   const hashSaltStr = providedHashSalt || process.env.ENCRYPTION_KEY;
 
   if (!hashSaltStr)

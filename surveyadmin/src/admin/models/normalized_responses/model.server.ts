@@ -81,11 +81,16 @@ NormalizedResponse.crud.connector = NormalizedResponseConnector;
 export const NormalizedResponseMongooseModel =
   NormalizedResponseConnector.getRawCollection() as mongoose.Model<NormalizedResponseDocument>;
 // For direct Mongo access
-/*
-export const NormalizedResponseCollection = mongoose.connection.db.collection(
-  "normalized_responses"
-);
-*/
+
+export const NormalizedResponseMongoCollection = () => {
+  if (!mongoose.connection.db) {
+    throw new Error(
+      "Trying to access Response mongo collection before Mongo/Mongoose is connected."
+    );
+  }
+  return mongoose.connection.db.collection<ResponseDocument>("normalized_responses");
+};
+
 
 export interface NormalizedResponseDocument extends ResponseDocument {
   responseId: ResponseDocument["_id"];

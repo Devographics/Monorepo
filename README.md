@@ -52,6 +52,9 @@ For example, `apollo-server-express` depens on `apollo-server-core`. But if you 
 - Sentry for debugging: https://sentry.io/organizations/devographics
 
 - ScaleGrid for database hosting: https://scalegrid.io/
+11/2022: running on Mongo v4, be careful with compatibility matrix:
+https://www.mongodb.com/docs/drivers/node/current/compatibility/#mongodb-compatibility
+https://mongoosejs.com/docs/compatibility.html
 
 - Render.com for long running: APIs, admin form
 You can configure folders that are relevant for an app (eg "surveyadmin" & "shared") from the UI

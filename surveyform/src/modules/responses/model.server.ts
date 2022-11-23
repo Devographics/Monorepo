@@ -13,7 +13,7 @@ import { subscribe } from "~/server/email/email_octopus";
 // note: normalizing responses on every response update is too slow
 // import { normalizeResponse } from '../normalization/normalize';
 
-async function duplicateCheck(validationErrors, options) {
+export async function duplicateCheck(validationErrors, options) {
   const { document, currentUser } = options;
   if (!document.surveySlug) {
     console.log(document);
@@ -54,13 +54,14 @@ async function duplicateCheck(validationErrors, options) {
 const emailPlaceholder = "*****@*****";
 const emailFieldName = "email_temporary";
 
-async function processEmailOnUpdate(data, properties) {
+export async function processEmailOnUpdate(data, properties) {
   const { document } = properties;
   const { surveySlug, emailHash, isSubscribed } = document;
   const survey = surveyFromResponse(document);
   const listId = survey?.emailOctopus?.listId;
   const emailFieldPath = `${surveySlug}__user_info__${emailFieldName}`;
   const email = data[emailFieldPath];
+
   // if user has entered their email
   if (email && email !== emailPlaceholder) {
     // try to subscribe them to the email list

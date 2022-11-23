@@ -35,9 +35,6 @@ export const schema: VulcanGraphqlSchemaServer = extendSchemaServer(
       },
     },
     updatedAt: {
-      onCreate: () => {
-        return new Date();
-      },
       onUpdate: () => {
         return new Date();
       },
@@ -63,6 +60,9 @@ export const schema: VulcanGraphqlSchemaServer = extendSchemaServer(
       },
     },
     completion: {
+      onCreate: ({ document, data }) => {
+        return getCompletionPercentage({ ...document, ...data });
+      },
       onUpdate: ({ document, data }) => {
         return getCompletionPercentage({ ...document, ...data });
       },
@@ -73,6 +73,9 @@ export const schema: VulcanGraphqlSchemaServer = extendSchemaServer(
       },
     },
     locale: {
+      onCreate: async ({ document, context, currentUser }) => {
+        return (context as ApiContext).locale;
+      },
       onUpdate: async ({ document, context, currentUser }) => {
         return (context as ApiContext).locale;
         /*
