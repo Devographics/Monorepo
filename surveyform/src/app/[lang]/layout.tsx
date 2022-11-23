@@ -1,4 +1,5 @@
-// TODO: not working yet
+// TODO: somehow not correctly imported, we should first get rid of styled-jsx specifics
+// and try again
 // import "~/stylesheets/main.scss";
 import { AppLayout } from "./AppLayout";
 import { getLocales, getLocaleStrings } from "~/i18n/server/fetchLocalesRedis";
@@ -35,7 +36,6 @@ If this error still happens in a few months (2023) open an issue with repro at N
   }
   const localeWithStrings = locale ? await getLocaleStrings(locale) : undefined;
   const locales = (await getLocales()) || undefined;
-  // FIXME: the [lang] parameter seems to sometime be vercel.svg, favicon.ico = static files
   // TODO: we load waaaay too much strings
   // we should load survey specific strings in another nested layout
   //debugRootLayout("Got locale", locale, localeWithStrings);

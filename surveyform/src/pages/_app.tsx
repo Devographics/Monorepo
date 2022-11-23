@@ -1,3 +1,4 @@
+// import "~/stylesheets/main.scss";
 import { NextPage } from "next";
 import App, { AppContext, AppProps } from "next/app";
 import { ReactElement } from "react";

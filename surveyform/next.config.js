@@ -1,3 +1,4 @@
+const util = require("util");
 const { extendNextConfig } = require("./packages/@vulcanjs/next-config");
 // Use @next/mdx for a basic MDX support.
 // See the how Vulcan Next docs are setup with next-mdx-remote
@@ -6,28 +7,27 @@ const withMDX = require("@next/mdx")({ extension: /\.mdx?$/ });
 const withPkgInfo = require("./.vn/nextConfig/withPkgInfo");
 
 const flowRight = require("lodash/flowRight");
-const debug = require("debug")("vns:next");
+const debug = require("debug")("devographics:next");
 
 const { withSentryConfig } = require("@sentry/nextjs");
 
 // Pass the modules that are written directly in TS here
-const withTM = require('next-transpile-modules')(['@devographics/core-models']);
+const withTM = require("next-transpile-modules")(["@devographics/core-models"]);
 
-const path = require("path")
+const path = require("path");
 
 // @see https://nextjs.org/docs/api-reference/next.config.js/runtime-configuration
 const moduleExports = (phase, { defaultConfig }) => {
-  console.log("defaultConfig", defaultConfig)
-
+  console.log("defaultConfig", defaultConfig);
 
   /**
    * @type {import('next/dist/next-server/server/config').NextConfig}
    **/
   let nextConfig = {
     // NOTE: the doc is unclear about whether we should merge this default config or not
-    // ...defaultConfig,
+    ...defaultConfig,
     experimental: {
-      appDir: true
+      appDir: true,
     },
     // Disable linting during build => the linter may have optional dev dependencies
     // (eslint-plugin-cypress) that wont exist during prod build
@@ -48,18 +48,35 @@ const moduleExports = (phase, { defaultConfig }) => {
       NEXT_PUBLIC_IS_USING_DEMO_DATABASE: !!(process.env.MONGO_URI || "").match(
         /lbke\-demo/
       ),
-      NEXT_PUBLIC_IS_USING_LOCAL_DATABASE: !!(process.env.MONGO_URI || "").match(
-        /localhost/
-      ),
+      NEXT_PUBLIC_IS_USING_LOCAL_DATABASE: !!(
+        process.env.MONGO_URI || ""
+      ).match(/localhost/),
     },
-    sassOptions: {
-      includePaths: [path.join(__dirname, 'src/stylesheets')],
+    webpack: function (configArg, ...otherArgs) {
+      //console.log(util.inspect(configArg.module.rules, false, null, true));
+      //*** */ Yaml support
+      // run previously configured function!
+      const config = defaultConfig.webpack
+        ? defaultConfig.webpack(configArg, ...otherArgs)
+        : configArg;
+      // then extend
+      config.module.rules.push({
+        test: /\.ya?ml$/,
+        use: "js-yaml-loader",
+      });
+      config.experiments.topLevelAwait = true;
+      return config;
     },
 
+    sassOptions: {
+      includePaths: [path.join(__dirname, "src/stylesheets")],
+    },
 
     // uncomment to support markdown
     // pageExtensions:["js", "jsx", "md", "mdx", "ts", "tsx"];
   };
+
+  nextConfig = withTM(nextConfig);
   let extendedConfig = extendNextConfig(nextConfig);
 
   //*** */ Enable Webpack analyzer
@@ -71,21 +88,6 @@ const moduleExports = (phase, { defaultConfig }) => {
     });
     extendedConfig = withBundleAnalyzer(extendedConfig);
   }
-
-  //*** */ Yaml support
-  const currentWebpack = extendedConfig.webpack
-  extendedConfig.webpack = function (configArg, ...otherArgs) {
-    // run previously configured function!
-    const config = currentWebpack ? currentWebpack(configArg, ...otherArgs) : configArg
-    // then extend
-    config.module.rules.push({
-      test: /\.ya?ml$/,
-      use: "js-yaml-loader",
-    });
-    config.experiments.topLevelAwait = true;
-    return config;
-  };
-
 
   //*** Sentry
   /**
@@ -148,18 +150,17 @@ const moduleExports = (phase, { defaultConfig }) => {
   extendedConfig.images = {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'devographics.github.io',
+        protocol: "https",
+        hostname: "devographics.github.io",
       },
     ],
-  }
+  };
 
   // Finally add relevant webpack configs/utils
   extendedConfig = flowRight([
-    withTM,
     withPkgInfo,
     withMDX,
-    (config) => withSentryConfig(config, sentryWebpackPluginOptions),
+    //(config) => withSentryConfig(config, sentryWebpackPluginOptions),
     // add other wrappers here
   ])(extendedConfig);
 
