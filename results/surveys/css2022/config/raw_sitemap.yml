@@ -522,6 +522,8 @@
   blocks:
     - template: page_introduction
 
+    - template: tools_experience_linechart
+
     - template: tools_experience_ranking
 
     - id: rankings_modes_hint
@@ -574,6 +576,8 @@
   path: /css-in-js
   blocks:
     - template: page_introduction
+
+    - template: tools_experience_linechart
 
     - template: tools_experience_ranking
 

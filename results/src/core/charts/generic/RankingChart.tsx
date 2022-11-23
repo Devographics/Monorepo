@@ -67,10 +67,11 @@ const CustomPoint = (props: CustomPointProps) => {
 interface CustomTooltipProps {
     name: string
     color: string
+    getName: func
 }
 
-const CustomTooltip = ({ id, color }: CustomTooltipProps) => (
-    <BasicTooltip id={id} enableChip={true} color={color} />
+const CustomTooltip = ({ id, color, getName }: CustomTooltipProps) => (
+    <BasicTooltip id={getName(id)} enableChip={true} color={color} />
 )
 
 interface RankingChartProps {
@@ -79,6 +80,8 @@ interface RankingChartProps {
 
 export const RankingChart = ({ data }: RankingChartProps) => {
     const theme = useTheme()
+
+    const getName = (entityId: string) => data?.find(series => series.id === entityId)?.name
 
     return (
         <ResponsiveBump
@@ -123,7 +126,7 @@ export const RankingChart = ({ data }: RankingChartProps) => {
             inactivePointSize={0}
             inactivePointBorderWidth={2}
             // @ts-ignore
-            tooltip={({ serie }) => <CustomTooltip {...serie} />}
+            tooltip={({ serie }) => <CustomTooltip {...serie} getName={getName} />}
         />
     )
 }

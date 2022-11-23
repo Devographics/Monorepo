@@ -115,7 +115,7 @@ const ContainerInner = styled.tbody`
 
                 @media ${mq.large} {
                     // fit in as many columns as possible as long as they're wider than Npx
-                    grid-template-columns: repeat(auto-fit, minmax(100px, auto));
+                    grid-template-columns: repeat(auto-fit, minmax(140px, auto));
                     column-gap: ${spacing(0.85)};
                 }
             `

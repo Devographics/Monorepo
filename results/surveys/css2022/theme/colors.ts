@@ -18,6 +18,7 @@ const colors = {
     white: '#FFF6E6',
     yellowLight: '#FFF1C0',
     yellow: '#FFE589',
+    kaki: '#CCD133',
     grey: '#8B8085',
     greyLight: '#BBB2B6',
     greyLighter: '#DED1D7',
@@ -52,7 +53,9 @@ const distinct = [
     colors.olive,
     colors.skyblue,
     colors.purple,
-    colors.blueLighter
+    colors.blueLighter,
+    colors.greyTeal,
+    colors.kaki,
 ]
 
 const stateOfCSSThemeColors: DefaultTheme['colors'] = {

@@ -5,7 +5,7 @@ import { useI18n } from 'core/i18n/i18nContext'
 import { Block } from 'core/types/block'
 import { stripHtml } from 'core/helpers/stripHtml'
 
-const getColor = (colorRange, id) => {
+export const getColor = (colorRange, id) => {
     if (!colorRange) {
         return
     }
