@@ -1,6 +1,4 @@
-// import { useRouter } from "next/router.js";
 import { useSearchParams } from "next/navigation";
-import { useMounted } from "~/core/hooks/useMounted";
 
 export const useSurveyParams = (fromProps?: {
   slug?: string;

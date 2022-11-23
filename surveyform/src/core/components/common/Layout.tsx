@@ -7,7 +7,6 @@ import { getSurvey } from "~/modules/surveys/getters";
 import { KeydownContextProvider } from "./KeydownContext";
 import { useSurveyParams } from "../survey/hooks";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
-// import { useRouter } from "next/router";
 import { useSearchParams } from "next/navigation";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 

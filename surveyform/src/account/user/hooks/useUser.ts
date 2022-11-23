@@ -1,7 +1,7 @@
 // It won't reload if there are no remount => we need to find a way to mutate on login
 // @see https://github.com/vercel/next.js/discussions/19601
 import { useEffect } from "react";
-import { useRouter } from "next/router.js";
+import { usePathname, useRouter } from "next/navigation";
 import useSWR from "swr";
 import { UserType } from "~/core/models/user";
 import { apiRoutes } from "~/lib/apiRoutes";
@@ -36,6 +36,7 @@ export function useUser({
     fetcher
   );
   const router = useRouter();
+  const pathname = usePathname();
   const loading = !error && !data;
   const user = data?.user;
   const finished = Boolean(data);
@@ -51,9 +52,10 @@ export function useUser({
       // If user was expected to be admin, redirect if found but not admin
       (redirectIfNotAdmin && hasUser && !user?.isAdmin)
     ) {
-      const redirectUrl = rememberCurrentRoute
-        ? `${redirectTo}?from=${encodeURIComponent(router.pathname)}`
-        : redirectTo;
+      const redirectUrl =
+        rememberCurrentRoute && pathname
+          ? `${redirectTo}?from=${encodeURIComponent(pathname)}`
+          : redirectTo;
       router.push(redirectUrl);
     }
   }, [redirectTo, redirectIfFound, finished, hasUser]);

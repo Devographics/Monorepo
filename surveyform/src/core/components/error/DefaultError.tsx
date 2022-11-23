@@ -2,7 +2,7 @@ import React from "react";
 
 import { useIntlContext } from "@vulcanjs/react-i18n";
 // import routes from "~/config/routes";
-import { useRouter } from "next/router.js";
+import { useRouter } from "next/navigation";
 // import palette from "~/config/palette";
 // import { computeErrorI18nTokens } from "~/config/errors";
 // import { logout } from "~/services/AuthService";
@@ -12,32 +12,6 @@ import { useRouter } from "next/router.js";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { routes } from "~/lib/routes";
 import { LogoutButton } from "~/account/user/components";
-
-/*
-const useStyles = makeStyles({
-  content: {
-    height: "100%",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    color: palette.neutral[9],
-  },
-  buttonsWrapper: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    "& button": {
-      marginTop: "8px",
-      marginBottom: "4px",
-    },
-  },
-  tryReloadMessage: {
-    color: palette.primary.main,
-    fontWeight: 600,
-  },
-});
-*/
 
 // NOTE: this expects a latin language. Might need improvements/more reusability
 const addPointToSentence = (sentence?: string | null) => {

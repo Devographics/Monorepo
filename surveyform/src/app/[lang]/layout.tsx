@@ -8,6 +8,7 @@ const debugRootLayout = console.debug; //debug("dgs:rootlayout");
 //*** I18n redirections
 // @see https://nextjs.org/docs/advanced-features/i18n-routing
 import { locales } from "~/i18n/data/locales";
+import { notFound } from "next/navigation";
 
 export function generateStaticParams() {
   return locales.map((l) => ({ lang: l }));
@@ -23,6 +24,15 @@ export default async function RootLayout({
   };
 }) {
   const locale = params.lang; // getCurrentLocale();
+  if (locale.includes(".")) {
+    console.error(`Error: matched a file instead of a lang: ${locale}.
+This is a bug in current Next.js version (13.0.4, november 2022). 
+This means the file was not found,
+but instead of sending a 404,
+Next.js will fallback to trying to find a valid page path.
+If this error still happens in a few months (2023) open an issue with repro at Next.js.`);
+    notFound();
+  }
   const localeWithStrings = locale ? await getLocaleStrings(locale) : undefined;
   const locales = (await getLocales()) || undefined;
   // FIXME: the [lang] parameter seems to sometime be vercel.svg, favicon.ico = static files

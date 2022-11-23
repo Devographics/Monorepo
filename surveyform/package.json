@@ -135,7 +135,7 @@
     "mongodb": "4.11.0",
     "mongoose": "6.5.4",
     "nanoid": "^3.3.4",
-    "next": "13.0.1",
+    "next": "13.0.4",
     "next-connect": "^0.9.1",
     "next-sitemap": "^1.9.12",
     "node-cache": "^5.1.2",
@@ -236,10 +236,10 @@
   },
   "peerDependencies": {
     "@babel/preset-env": "^7.0.0",
-    "@storybook/preview-web": ">=6.4.0",
-    "require-from-string": "^2.0.2",
     "@storybook/client-api": ">=6.4.0 <7.0.0",
-    "react-test-renderer": ">=16.9.0"
+    "@storybook/preview-web": ">=6.4.0",
+    "react-test-renderer": ">=16.9.0",
+    "require-from-string": "^2.0.2"
   },
   "packageManager": "pnpm@7.3.0",
   "pnpm": {
