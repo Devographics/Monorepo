@@ -3,18 +3,12 @@ const { extendNextConfig } = require("./packages/@vulcanjs/next-config");
 // Use @next/mdx for a basic MDX support.
 // See the how Vulcan Next docs are setup with next-mdx-remote
 // which is more advanced (loading remote MD, supporting styling correctly etc.)
-const withMDX = require("@next/mdx")({ extension: /\.mdx?$/ });
 const withPkgInfo = require("./.vn/nextConfig/withPkgInfo");
 
 const flowRight = require("lodash/flowRight");
 const debug = require("debug")("devographics:next");
 
 const { withSentryConfig } = require("@sentry/nextjs");
-
-// Pass the modules that are written directly in TS here
-const withTM = require("next-transpile-modules")(["@devographics/core-models"]);
-
-const path = require("path");
 
 // @see https://nextjs.org/docs/api-reference/next.config.js/runtime-configuration
 const moduleExports = (phase, { defaultConfig }) => {
@@ -28,6 +22,7 @@ const moduleExports = (phase, { defaultConfig }) => {
     ...defaultConfig,
     experimental: {
       appDir: true,
+      transpilePackages: ["@devographics/core-models"],
     },
     // Disable linting during build => the linter may have optional dev dependencies
     // (eslint-plugin-cypress) that wont exist during prod build
@@ -89,7 +84,6 @@ const moduleExports = (phase, { defaultConfig }) => {
     // pageExtensions:["js", "jsx", "md", "mdx", "ts", "tsx"];
   };
 
-  nextConfig = withTM(nextConfig);
   let extendedConfig = extendNextConfig(nextConfig);
 
   //*** */ Enable Webpack analyzer
@@ -163,8 +157,8 @@ const moduleExports = (phase, { defaultConfig }) => {
   // Finally add relevant webpack configs/utils
   extendedConfig = flowRight([
     withPkgInfo,
-    withMDX,
-    //(config) => withSentryConfig(config, sentryWebpackPluginOptions),
+    //withMDX,
+    (config) => withSentryConfig(config, sentryWebpackPluginOptions),
     // add other wrappers here
   ])(extendedConfig);
 

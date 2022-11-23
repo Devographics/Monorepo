@@ -1,6 +1,6 @@
 // TODO: weird issue, Webpack scss rule is broken here
 // if it still don't work just add a .scss loader manually
-// import "~/stylesheets/main.scss";
+import "~/stylesheets/main.scss";
 import { AppLayout } from "./AppLayout";
 import { getLocales, getLocaleStrings } from "~/i18n/server/fetchLocalesRedis";
 //import debug from "debug";
