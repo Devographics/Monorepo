@@ -21,7 +21,8 @@ import { useCache } from '../caching'
 // }
 
 type CommentObject = {
-    comment: string
+    message: string
+    responseId: string
     year: number
     sentimentScore?: number
 }
@@ -31,7 +32,6 @@ const groupByYear = (allComments: CommentObject[]) => {
     return allYears.map(year => {
         const comments_raw = allComments
             .filter(c => c.year === year)
-            .map((c: CommentObject) => ({ comment: c.comment }))
         return {
             year,
             comments_raw,
@@ -64,10 +64,11 @@ export const getRawComments = async ({ survey, id, key, context, year }: GetRawC
     const selector = { survey: survey.survey, [key]: { $exists: true }, ...(year && { year }) }
     const cursor = await collection.find(selector).project({ year: 1, [key]: 1 })
 
-    let results = (await cursor.toArray()) as CommentObject[]
-    results = results.map(r => ({ year: r.year, comment: get(r, key) }))
+    const results = (await cursor.toArray())
+    const comments = results.map(r => ({ year: r.year, message: get(r, key), responseId: r._id })) as CommentObject[] 
     // results = await addSentimentAnalysis(results)
-    const resultsByYear = groupByYear(results)
+    const resultsByYear = groupByYear(comments)
+    console.log(JSON.stringify(results, null, 2))
     console.log(JSON.stringify(resultsByYear, null, 2))
 
     return year ? resultsByYear[0] : resultsByYear
