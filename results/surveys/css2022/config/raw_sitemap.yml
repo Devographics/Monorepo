@@ -424,7 +424,7 @@
 
 
     - id: selectors
-      slug: /selectors
+      path: /selectors
       blocks:
         - id: selectors
           template: page_introduction

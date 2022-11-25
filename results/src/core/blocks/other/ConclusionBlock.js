@@ -6,7 +6,6 @@ import CreditItem from 'core/blocks/other/CreditItem'
 import config from 'Config/config.yml'
 
 const ConclusionBlock = ({ block, data: entities }) => {
-    console.log(block, entities)
     const entity = entities && entities.find(e => e.id === block.variables.author)
     if (!entity) {
         return null

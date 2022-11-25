@@ -61,7 +61,7 @@ export const TabsWrapper = ({ block, pageData, blockIndex, withMargin = true }) 
         firstBlock = {
             ...firstBlock,
             entity: blockEntity,
-            title: blockEntity?.name,
+            title: blockEntity?.nameClean || blockEntity?.name,
             titleLink: blockEntity?.homepage?.url
         }
     }

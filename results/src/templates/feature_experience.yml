@@ -5,6 +5,7 @@ entityPath: dataAPI.survey.${id}.entity
 blockNamespace: features
 chartNamespace: features
 enableCustomization: true
+hasComments: true
 hasSponsor: true
 query: >
     dataAPI {
@@ -31,6 +32,11 @@ query: >
                     example {
                         language
                         code
+                    }
+                }
+                comments {
+                    year(year: ${currentYear}) {
+                        count
                     }
                 }
                 experience {

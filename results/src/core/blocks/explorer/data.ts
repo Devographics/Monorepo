@@ -22,13 +22,13 @@ export const getQuery = (queryTemplate: string, variables: any) => {
     return t(variables)
 }
 
-export const runQuery = async (url: string, query: string, queryName: string): Promise<any> => {
+export const runQuery = async (url: string, query: string, queryName: string, variables: any = {}): Promise<any> => {
     const startAt = new Date()
     const response = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-            query
+            query, variables
         })
     })
     const text = await response.text()

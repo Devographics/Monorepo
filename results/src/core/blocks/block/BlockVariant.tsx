@@ -1,4 +1,4 @@
-import React, { memo, PropsWithChildren } from 'react'
+import React, { memo, PropsWithChildren, ReactNode } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { mq, spacing } from 'core/theme'
@@ -14,6 +14,7 @@ import { ErrorBoundary } from 'core/blocks/block/BlockError'
 import { BlockVariantProps } from 'core/types'
 import { usePageContext } from 'core/helpers/pageContext'
 import CustomInputTrigger from 'core/blocks/block/CustomInputTrigger'
+import CommentsTrigger from 'core/blocks/block/CommentsTrigger'
 
 const BlockVariant = (props: PropsWithChildren<BlockVariantProps>) => {
     const context = usePageContext()
@@ -53,16 +54,25 @@ const BlockVariant = (props: PropsWithChildren<BlockVariantProps>) => {
                         <TabsRoot defaultValue="chart" orientation="vertical">
                             <SideArea className="Block__SideArea">
                                 <TabsList aria-label="tabs example">
-                                    <TabsTrigger value="chart">
+                                    <TabItem value="chart">
                                         <ChartIcon enableTooltip={true} labelId="tabs.chart" />
-                                    </TabsTrigger>
-                                    <TabsTrigger value="data">
+                                    </TabItem>
+                                    <TabItem value="data">
                                         <DataIcon enableTooltip={true} labelId="tabs.data" />
-                                    </TabsTrigger>
-                                    <TabsTrigger value="share">
+                                    </TabItem>
+                                    <TabItem value="share">
                                         <ShareIcon enableTooltip={true} labelId="tabs.share" />
-                                    </TabsTrigger>
-                                    {block.enableCustomization && <CustomInputTrigger {...props} />}
+                                    </TabItem>
+                                    {block.enableCustomization && (
+                                        <TabItem>
+                                            <CustomInputTrigger {...props} />
+                                        </TabItem>
+                                    )}
+                                    {block.hasComments && (
+                                        <TabItem>
+                                            <CommentsTrigger {...props} />
+                                        </TabItem>
+                                    )}
                                     {/* <TabsTrigger value="debug">
                                 <DebugIcon enableTooltip={true} labelId="tabs.debug" />
                             </TabsTrigger> */}
@@ -135,13 +145,9 @@ const TabsList = styled(Tabs.List)`
 
 const TabsTrigger = styled(Tabs.Trigger)`
     cursor: pointer;
-    padding: ${spacing(0.5)};
-    margin-top: ${spacing(0.25)};
-    border-radius: 3px 3px 0px 0;
+    padding: 0;
     border: none;
-    button {
-        display: block;
-    }
+    display: block;
     &[data-state='active'] {
         /* border: 1px dashed ${props => props.theme.colors.border}; */
         /* border-left: 0; */
@@ -150,7 +156,18 @@ const TabsTrigger = styled(Tabs.Trigger)`
     &[data-state='inactive'] {
         background: none;
     }
+`
 
+const TabsIcon = styled.div`
+    display: block;
+    cursor: pointer;
+    position: relative;
+`
+
+const TabWrapper = styled.div`
+    padding: ${spacing(0.5)};
+    margin-top: ${spacing(0.25)};
+    border-radius: 3px 3px 0px 0;
     @media ${mq.mediumLarge} {
         margin-top: 0;
         margin-left: -1px;
@@ -158,7 +175,24 @@ const TabsTrigger = styled(Tabs.Trigger)`
         margin-bottom: ${spacing()};
         padding-left: ${spacing()};
     }
+    &:has([data-state='active']) {
+        background: ${props => props.theme.colors.background};
+    }
 `
+
+type TabItemProps = {
+    children: ReactNode
+    value?: string
+}
+
+const TabItem = ({ children, value }: TabItemProps) => {
+    const TabInner = value ? TabsTrigger : TabsIcon
+    return (
+        <TabWrapper>
+            <TabInner value={value}>{children}</TabInner>
+        </TabWrapper>
+    )
+}
 
 const TabsRoot = styled(Tabs.Root)`
     display: flex;

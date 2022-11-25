@@ -71,9 +71,7 @@ const InputData = ({ block, closeModal }) => {
 const CustomInputTrigger = props => (
     <ModalTrigger
         trigger={
-            <TabsIcon>
                 <EditIcon enableTooltip={true} labelId="custom_data.customize" />
-            </TabsIcon>
         }
     >
         <InputData {...props} />
@@ -100,21 +98,6 @@ const DataTextArea = styled(TextArea)`
 `
 const GraphQLTextArea = styled(AutoSelectText)`
     flex: 1;
-`
-
-const TabsIcon = styled.div`
-    cursor: pointer;
-    padding: ${spacing(0.5)};
-    margin-top: ${spacing(0.25)};
-    border-radius: 3px 3px 0px 0;
-
-    @media ${mq.mediumLarge} {
-        margin-top: 0;
-        margin-left: -1px;
-        border-radius: 0 3px 3px 0;
-        margin-bottom: ${spacing()};
-        padding-left: ${spacing()};
-    }
 `
 
 const Error = styled.p`

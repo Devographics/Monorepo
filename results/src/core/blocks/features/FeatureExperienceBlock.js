@@ -52,6 +52,7 @@ const FeatureExperienceBlock = ({
             title={name}
             units={units}
             setUnits={setUnits}
+            originalData={data}
             data={allYears}
             block={{
                 ...block,
