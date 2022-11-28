@@ -128,6 +128,11 @@
         "webpack": "5.74.0"
     },
     "private": true,
+    "pnpm": {
+        "overrides": {
+            "graphql-compose": "<=9.0.9"
+        }
+    },
     "scripts": {
         "build": "gatsby build",
         "serve": "pnpm run build && gatsby serve",
