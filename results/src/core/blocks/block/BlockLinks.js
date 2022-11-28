@@ -22,9 +22,7 @@ const List = styled.ul`
     align-items: center;
     padding: 0;
     margin: 0;
-    @media ${mq.small} {
-        margin-top: ${spacing(0.5)};
-    }
+    margin-bottom: ${spacing()};
 `
 const Item = styled.li`
     margin-right: ${spacing(0.5)};

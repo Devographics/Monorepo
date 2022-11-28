@@ -103,7 +103,7 @@ const Wrapper = styled.section`
             margin-bottom: ${spacing(3)};
 
             @media ${mq.large} {
-                margin-bottom: ${spacing(6)};
+                margin-bottom: ${spacing(4)};
             }
         `}
 `

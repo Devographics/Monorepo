@@ -64,6 +64,8 @@
     - template: page_introduction
 
     - id: data_explorer
+      showTitle: false
+      chartOnly: true
       template: data_explorer
       variables:
         facet1: demographics/yearly_salary
@@ -239,18 +241,13 @@
         - id: writing_modes
           template: feature_experience
 
-        - id: david_east
-          template: picks
-          variables:
-            url: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout/Subgrid
+        - id: comments_hint
+          template: hint
 
         - id: logical_properties
           template: feature_experience
         - id: aspect_ratio
           template: feature_experience
-
-        - id: export_hint
-          template: hint
 
         - id: content_visibility
           template: feature_experience
@@ -261,6 +258,10 @@
           template: feature_experience
           year: 2021
 
+        - id: david_east
+          template: picks
+          variables:
+            url: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout/Subgrid
 
         - id: object_view_box
           template: feature_experience
@@ -289,7 +290,7 @@
         - id: backdrop_filter
           template: feature_experience
 
-        - id: share_hint
+        - id: export_hint
           template: hint
 
         - id: intrinsic_sizing
@@ -313,6 +314,9 @@
         - id: accent_color
           template: feature_experience
           year: 2021
+
+        - id: share_hint
+          template: hint
 
         - id: currentcolor
           template: feature_experience
@@ -523,8 +527,10 @@
     - template: page_introduction
 
     - template: tools_experience_linechart
-
-    - template: tools_experience_ranking
+      tabId: blocks.tools_experience_ranking.percentages
+      variants:
+        - template: tools_experience_ranking
+          tabId: blocks.tools_experience_ranking.rankings
 
     - id: rankings_modes_hint
       template: hint
@@ -641,6 +647,7 @@
       template: page_introduction
 
     - id: pre_post_processors
+      defaultUnits: count
       tabId: tabs.main_answers
       blockNamespace: tools_others  
       template: multiple_options
@@ -661,6 +668,7 @@
         url: https://wpt.fyi/interop-2022
 
     - id: utilities
+      defaultUnits: count
       tabId: tabs.main_answers
       blockNamespace: tools_others  
       template: multiple_options
@@ -681,6 +689,7 @@
         url: https://web.dev/learn/css/
 
     - id: browsers
+      defaultUnits: count
       tabId: tabs.main_answers
       blockNamespace: tools_others  
       template: multiple_options
@@ -703,6 +712,7 @@
       blockNamespace: tool_evaluation
       variables:
         fieldId: tools_others__tool_evaluation
+      # Note: disabled because of Nivo heatmap bug
       # variants: 
       #   - id: tool_evaluation_matchups
       #     tabId: tabs.bracket_matchups
@@ -766,28 +776,37 @@
         fieldId: usage
 
     - id: interoperability_features_freeform
+      defaultUnits: count
       blockNamespace: usage
       chartNamespace: features
       translateData: true
       template: multiple_options
+      isFreeform: true
       variables:
         fieldId: usage
+        options: { limit: 20, cutoff: 20 }
 
     - id: missing_features_freeform
+      defaultUnits: count
       blockNamespace: usage
       # chartNamespace: css_js_balance
       translateData: true
       template: multiple_options
+      isFreeform: true
       variables:
         fieldId: usage
+        options: { limit: 20, cutoff: 20 }
 
     - id: other_pain_points_freeform
+      defaultUnits: count
       blockNamespace: usage
       # chartNamespace: css_js_balance
       translateData: true
       template: multiple_options
+      isFreeform: true
       variables:
         fieldId: usage
+        options: { limit: 20, cutoff: 20 }
 
     - id: adam_wathan
       template: picks
@@ -810,6 +829,7 @@
     - template: page_introduction
 
     - id: first_steps
+      defaultUnits: count
       blockNamespace: resources
       chartNamespace: first_steps
       tabId: tabs.main_answers
@@ -829,6 +849,7 @@
             fieldId: resources
 
     - id: blogs_news_magazines
+      defaultUnits: count
       blockNamespace: resources
       chartNamespace: blogs_news_magazines
       tabId: tabs.main_answers
@@ -846,6 +867,7 @@
             fieldId: resources
 
     - id: sites_courses
+      defaultUnits: count
       blockNamespace: resources
       chartNamespace: sites_courses
       tabId: tabs.main_answers
@@ -868,6 +890,7 @@
         url: https://webkit.org/blog/13096/css-has-pseudo-class/
 
     - id: podcasts
+      defaultUnits: count
       blockNamespace: resources
       chartNamespace: podcasts
       tabId: tabs.main_answers
@@ -923,17 +946,27 @@
     - id: awards
       template: awards
       variables:
-        entities: '"comparison_functions","prefers_reduced_motion","grid","post_css","vanilla_extract","css_modules","stitches"'
+        entities: '"flexbox_gap","aspect_ratio","intrinsic_sizing","subgrid","nesting","at_container","css_modules","tailwind_css","vanilla_extract","arc","uno_css","open_props"'
       awards:
         - id: feature_adoption_delta_award
           template: award
           awards:
-            - id: comparison_functions
-              value: "+15.5%"
-            - id: prefers_reduced_motion
-              value: "+10.9%"
-            - id: grid
-              value: "+9.8%"
+            - id: flexbox_gap
+              value: "+25.4%"
+            - id: aspect_ratio
+              value: "+17.9%"
+            - id: intrinsic_sizing
+              value: "+13%"
+
+        - id: most_commented_featured_award
+          template: award
+          awards:
+            - id: subgrid
+              value: 126
+            - id: nesting
+              value: 60
+            - id: at_container
+              value: 50
 
         # - id: tool_usage_delta_award
         #   template: award
@@ -948,32 +981,32 @@
         - id: tool_satisfaction_award
           template: award
           awards:
-            - id: post_css
-              value: "91%"
-            - id: vanilla_extract
-              value: "87%"
             - id: css_modules
-              value: "86%"
-
-        - id: tool_interest_award
-          template: award
-          awards:
-            - id: css_modules
-              value: "74%"
+              value: "85.6%"
+            - id: tailwind_css
+              value: "79%"
             - id: vanilla_extract
-              value: "68%"
-            - id: stitches
-              value: "55%"
+              value: "78.8%"
 
-        # - id: most_write_ins_award
+        # - id: tool_interest_award
         #   template: award
         #   awards:
-        #     - id: phpstorm
-        #       value: "200"
-        #     - id: udemy
-        #       value: "159"
-        #     - id: frontendmasters
-        #       value: "112"
+        #     - id: css_modules
+        #       value: "74%"
+        #     - id: vanilla_extract
+        #       value: "68%"
+        #     - id: stitches
+        #       value: "55%"
+
+        - id: most_write_ins_award
+          template: award
+          awards:
+            - id: arc
+              value: 113
+            - id: uno_css
+              value: 105
+            - id: open_props
+              value: 68
 
 
 - id: conclusion

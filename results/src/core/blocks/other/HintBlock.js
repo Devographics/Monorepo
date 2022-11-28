@@ -12,11 +12,15 @@ const bufferPercent = buffer * 100
 const HintBlock = ({ block, data }) => {
     const { id } = block
 
-    const { ref: hintRef, inView, entry } = useInView({
+    const {
+        ref: hintRef,
+        inView,
+        entry
+    } = useInView({
         /* Optional options */
         rootMargin: `-${bufferPercent}% 0% -${bufferPercent}% 0%`,
         threshold: 0,
-        triggerOnce: true,
+        triggerOnce: true
     })
 
     return (
@@ -44,11 +48,13 @@ const HintBlock = ({ block, data }) => {
     )
 }
 
-const animate = (animation) => ({ animate }) =>
-    animate &&
-    css`
-        animation: ${animation} 1100ms cubic-bezier(0.25, 0.46, 0.45, 0.94) 0ms 1 forwards;
-    `
+const animate =
+    animation =>
+    ({ animate }) =>
+        animate &&
+        css`
+            animation: ${animation} 1100ms cubic-bezier(0.25, 0.46, 0.45, 0.94) 0ms 1 forwards;
+        `
 
 const spark = keyframes`
   0% {
@@ -97,11 +103,14 @@ const glow = keyframes`
 `
 
 HintBlock.propTypes = {
-    section: PropTypes.string,
+    section: PropTypes.string
 }
 
 const HintContainer = styled.div`
-    margin-bottom: ${spacing(2)};
+    margin-bottom: ${spacing(3)};
+    @media ${mq.large} {
+        margin-bottom: ${spacing(4)};
+    }
     background: ${color('backgroundAlt')};
     display: grid;
     column-gap: ${spacing()};

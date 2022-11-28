@@ -6,6 +6,7 @@ import { secondaryFontMixin, mq, spacing, fontSize } from 'core/theme'
 import { CommentIcon } from 'core/icons'
 import { runQuery } from 'core/blocks/explorer/data'
 import config from 'Config/config.yml'
+import newGithubIssueUrl from 'new-github-issue-url'
 
 type GetQueryProps = {
     id: string
@@ -76,50 +77,61 @@ const CommentsWrapper = props => {
             <p>
                 <T k="comments.description" />
             </p>
-            <div>{isLoading ? <div>Loading…</div> : <Comments comments={data} />}</div>
+            <div>{isLoading ? <div>Loading…</div> : <Comments comments={data} name={name} />}</div>
         </div>
     )
 }
 
-const Comments = ({ comments }) => {
+const Comments = ({ comments, name }) => {
     return (
-        <div>
+        <CommentsList>
             {comments?.map((comment, i) => (
-                <Comment key={i} {...comment} />
+                <Comment key={i} index={i} {...comment} name={name} />
             ))}
-        </div>
+        </CommentsList>
     )
 }
 
-const Comment = ({ message, responseId }) => {
+const getCommentReportUrl = ({ responseId, message, name }) => {
+    return newGithubIssueUrl({
+        user: 'devographics',
+        repo: 'surveys',
+        title: `[Comment Report] ${name} / ${responseId}`,
+        labels: ['reported comment'],
+        body: `Please explain below why you think this comment should be deleted. \n\n ### Reported Comment \n\n - question: ${name} \n - comment ID: ${responseId} \n - comment: \n\n > ${message} \n\n ### Your Report \n\n --explain why you're reporting this comment here--`
+    })
+}
+
+const Comment = ({ message, responseId, index, name }) => {
     return (
         <CommentItem>
             <CommentMessageWrapper>
                 <CommentQuote>“</CommentQuote>
+                <CommentIndex>#{index + 1}</CommentIndex>
                 <CommentMessage>{message}</CommentMessage>
             </CommentMessageWrapper>
-            <CommentReportLink href="#">
+            <CommentReportLink href={getCommentReportUrl({ responseId, message, name })}>
                 <T k="comments.report_abuse" />
             </CommentReportLink>
         </CommentItem>
     )
 }
 
-const CommentsTrigger = props => (
-    <ModalTrigger
-        trigger={
-            <span>
-                <CommentIcon enableTooltip={true} labelId="comments.comments" />
-                <CommentCount>{props?.originalData?.comments?.year?.count}</CommentCount>
-            </span>
-        }
-    >
-        <CommentsWrapper
-            {...props}
-            name={props?.originalData?.entity?.nameClean || props?.originalData?.entity?.name}
-        />
-    </ModalTrigger>
-)
+const CommentsTrigger = props => {
+    const entityName = props?.originalData?.entity?.nameClean || props?.originalData?.entity?.name
+    return (
+        <ModalTrigger
+            trigger={
+                <span>
+                    <CommentIcon enableTooltip={true} labelId="comments.comments" />
+                    <CommentCount>{props?.originalData?.comments?.year?.count}</CommentCount>
+                </span>
+            }
+        >
+            <CommentsWrapper {...props} name={entityName} />
+        </ModalTrigger>
+    )
+}
 
 const CommentCount = styled.span`
     display: block;
@@ -131,15 +143,33 @@ const CommentCount = styled.span`
     font-weight: bold;
 `
 
+const CommentsList = styled.div`
+    /* display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: ${spacing()};
+    row-gap: ${spacing()}; */
+`
+
 const CommentItem = styled.div`
     margin-bottom: ${spacing()};
 `
 
 const CommentMessageWrapper = styled.div`
-    border-radius: 3px;
+    border-radius: 5px;
     background: ${({ theme }) => theme.colors.backgroundAlt2};
     padding: ${spacing()};
     position: relative;
+`
+
+const CommentIndex = styled.div`
+    font-weight: bold;
+    font-size: 1.8rem;
+    position: absolute;
+    text-align: right;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 15px;
+    opacity: 0.1;
 `
 
 const CommentQuote = styled.div`
@@ -152,8 +182,7 @@ const CommentQuote = styled.div`
     ${secondaryFontMixin}
 `
 
-const CommentMessage = styled.div`
-`
+const CommentMessage = styled.div``
 
 const CommentReportLink = styled.a`
     font-size: 0.6rem;

@@ -71,7 +71,8 @@ const InputData = ({ block, closeModal }) => {
 const CustomInputTrigger = props => (
     <ModalTrigger
         trigger={
-                <EditIcon enableTooltip={true} labelId="custom_data.customize" />
+            <div>
+                <EditIcon enableTooltip={true} labelId="custom_data.customize" /></div>
         }
     >
         <InputData {...props} />

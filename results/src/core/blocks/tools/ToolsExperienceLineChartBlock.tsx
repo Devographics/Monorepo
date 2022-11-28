@@ -135,13 +135,6 @@ export const ToolsExperienceLineChartBlock = ({
             legends={legends}
             tables={[
                 getTableData({
-                    title: getString('table.rankings_table').t,
-                    data: tableData,
-                    valueKeys: ALL_METRICS.map(m => `${m}_rank`),
-                    years
-                }),
-                getTableData({
-                    title: getString('table.percentages_table').t,
                     data: tableData,
                     valueKeys: ALL_METRICS.map(m => `${m}_percentage`),
                     years

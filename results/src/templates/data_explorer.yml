@@ -2,6 +2,20 @@ blockType: DataExplorerBlock
 dataPath: "dataAPI.survey.explorer"
 hasSponsor: true
 query: >
+    internalAPI {
+        features: entities(ids: [${allFeaturesAsStrings}]) {
+            id
+            name
+            nameClean
+            nameHtml
+        }
+        tools: entities(ids: [${allToolsAsStrings}]) {
+            id
+            name
+            nameClean
+            nameHtml
+        }
+    }
     dataAPI {
         survey(survey: ${surveyType}) {
             explorer(

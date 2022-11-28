@@ -49,7 +49,7 @@ const Conclusion = styled.div`
     }
     .first-line {
         @media ${mq.mediumLarge} {
-            font-size: ${fontSize('largest')};
+            font-size: ${fontSize('largerer')};
         }
     }
 `

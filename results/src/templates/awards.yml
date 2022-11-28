@@ -6,6 +6,8 @@ query: >
         entities(ids: [${entities}]) {
             id
             name
+            nameHtml
+            nameClean
             homepage{
                 name
                 url

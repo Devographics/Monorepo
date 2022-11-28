@@ -38,7 +38,8 @@ const velocity = [
     '#FE79B4',
     '#FFA6CE',
     '#FFCEE4',
-    '#FFE3F0'
+    '#FFE3F0',
+    '#FFEFFF'
 ]
 
 const distinct = [

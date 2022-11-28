@@ -17,7 +17,7 @@ export const getSizeInKB = (obj: any) => {
 }
 
 export const getQuery = (queryTemplate: string, variables: any) => {
-    const query = queryTemplate.replace('dataAPI', 'query ExplorerQuery')
+    const query = queryTemplate.slice(queryTemplate.indexOf('dataAPI')).replace('dataAPI', 'query ExplorerQuery')
     const t = template(query)
     return t(variables)
 }

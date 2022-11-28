@@ -186,7 +186,7 @@ exports.runPageQueries = async ({ page, graphql, config }) => {
                     )
                     data = existingData
                 } else {
-                    logToFile(queryFileName, v.query.replace('dataAPI', 'query'), {
+                    logToFile(queryFileName, v.query.replace('internalAPI', 'query').replace('dataAPI', 'query'), {
                         mode: 'overwrite',
                         dirPath: queryDirPath
                     })

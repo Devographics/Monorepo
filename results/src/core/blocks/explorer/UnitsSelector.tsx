@@ -1,27 +1,28 @@
 import React from 'react'
 import styled from 'styled-components'
+import T from 'core/i18n/T'
 
 const UnitsSelector = ({ stateStuff }: { stateStuff: any }) => {
     const { unit, setUnit } = stateStuff
     return (
         <Wrapper_>
-          <UnitsSelector_>
-            <Button_
-                isSelected={unit === 'count'}
-                onClick={() => {
-                    setUnit('count')
-                }}
-            >
-                Count
-            </Button_>
-            <Button_
-                isSelected={unit === 'percentage'}
-                onClick={() => {
-                    setUnit('percentage')
-                }}
-            >
-                % of Row
-            </Button_>
+            <UnitsSelector_>
+                <Button_
+                    isSelected={unit === 'count'}
+                    onClick={() => {
+                        setUnit('count')
+                    }}
+                >
+                    <T k="explorer.units_count" />
+                </Button_>
+                <Button_
+                    isSelected={unit === 'percentage'}
+                    onClick={() => {
+                        setUnit('percentage')
+                    }}
+                >
+                    <T k="explorer.units_percent_of_row" />
+                </Button_>
             </UnitsSelector_>
         </Wrapper_>
     )
