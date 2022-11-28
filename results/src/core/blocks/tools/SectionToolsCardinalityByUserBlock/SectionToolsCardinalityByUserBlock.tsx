@@ -1,5 +1,5 @@
 import React, {useMemo, useState} from 'react'
-import { Pie } from '@nivo/pie'
+// import { Pie } from '@nivo/pie'
 // @ts-ignore
 import Block from 'core/blocks/block/BlockVariant'
 import { BlockContext } from 'core/blocks/types'
