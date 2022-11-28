@@ -11,7 +11,7 @@
         "apollo-server-plugin-response-cache": "^3.2.0",
         "dotenv": "^10.0.0",
         "express": "^4.17.1",
-        "graphql": "^15.6.1",
+        "graphql": "15.8.0",
         "highlight.js": "^11.6.0",
         "html-entities": "^2.3.3",
         "js-yaml": "^4.1.0",

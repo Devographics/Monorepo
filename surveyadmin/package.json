@@ -131,7 +131,7 @@
     "deepmerge": "^4.2.2",
     "express": "4.17.1",
     "express-rate-limit": "^6.4.0",
-    "graphql": "15.4.0",
+    "graphql": "15.8.0",
     "graphql-fields": "^2.0.3",
     "graphql-tag": "2.10.3",
     "gray-matter": "^4.0.2",
