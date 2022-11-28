@@ -67,6 +67,6 @@
         "typecheck": "tsc --noEmit --p ./tsconfig.json"
     },
     "engines": {
-        "node": "16.15.0"
+        "node": "18.10.0"
     }
 }

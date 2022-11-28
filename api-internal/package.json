@@ -65,6 +65,6 @@
         "start": "node dist/server.mjs"
     },
     "engines": {
-        "node": "16.15.0"
+        "node": "18.10.0"
     }
 }
