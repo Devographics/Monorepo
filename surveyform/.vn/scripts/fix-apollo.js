@@ -1,3 +1,11 @@
+// This is currently (11/2022) needed on Netlify 
+// because this patch breaks Gatsby install (result app)
+// but is needed for the Next.js (surveyform)
+// We can't prevent the script to run as all postinstall are run during a monorepo PNPM install
+if (process.env.IGNORE_APOLLO_PATCH) {
+  console.warn("IGNORING SURVEYFORM APOLLO CLIENT PATCH")
+  return
+}
 /**
  * To be used for subdependencies
  * (you can also explicitely install the subdependency to create
