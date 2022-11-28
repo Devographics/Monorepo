@@ -50,3 +50,5 @@ dist
 
 # Turborepo
 .turbo
+
+results/yarn.lock
