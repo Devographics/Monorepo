@@ -239,6 +239,10 @@ export const getDemographicsFacetPath = (facet: string) => {
             return 'locale'
         case 'knowledge_score':
             return 'knowledge_score'
+        case 'disability_status_others':
+            return 'disability_status.others.normalized'
+        case 'industry_sector_others':
+            return 'industry_sector.others.normalized'
         default:
             return `${facet}.choices`
     }

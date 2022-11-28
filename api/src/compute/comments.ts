@@ -68,8 +68,7 @@ export const getRawComments = async ({ survey, id, key, context, year }: GetRawC
     const comments = results.map(r => ({ year: r.year, message: get(r, key), responseId: r._id })) as CommentObject[] 
     // results = await addSentimentAnalysis(results)
     const resultsByYear = groupByYear(comments)
-    console.log(JSON.stringify(results, null, 2))
-    console.log(JSON.stringify(resultsByYear, null, 2))
+    // console.log(JSON.stringify(resultsByYear, null, 2))
 
     return year ? resultsByYear[0] : resultsByYear
 }

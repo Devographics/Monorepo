@@ -226,7 +226,11 @@ export const parseMarkdown = (stringFile: StringFile) => {
         // if markdown-parsed version of the string is different from original,
         // or original contains one or more HTML tags, add it as HTML
         if (tHtml !== s.t || containsTagRegex.test(s.t)) {
-            s.tHtml = sanitizeHtml(tHtml)
+            s.tHtml = sanitizeHtml(tHtml, {
+                allowedClasses: {
+                    '*': [ '*' ]
+                  }
+              })
             s.tClean = decode(
                 sanitizeHtml(tHtml, {
                     allowedTags: []
