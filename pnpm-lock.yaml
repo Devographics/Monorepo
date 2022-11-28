@@ -328,6 +328,7 @@ importers:
       gatsby-transformer-remark: ^5.24.0
       gatsby-transformer-yaml: ^4.24.0
       graphql: ^15.8.0
+      graphql-compose: ^9.0.10
       html-loader: ^3.1.2
       indent-string: ^5.0.0
       js-yaml: ^4.1.0
@@ -463,6 +464,7 @@ importers:
       eslint-plugin-react: 7.31.11_eslint@8.28.0
       gatsby-plugin-bundle-stats: 4.1.4_webpack@5.75.0
       graphql: 15.8.0
+      graphql-compose: 9.0.10_graphql@15.8.0
       prettier: 2.8.0
       react-is: 18.2.0
       webpack: 5.75.0
@@ -26222,7 +26224,6 @@ packages:
       graphql-type-json: 0.3.2_graphql@15.8.0
     transitivePeerDependencies:
       - graphql
-    dev: false
 
   /graphql-date/1.0.3:
     resolution: {integrity: sha512-qRcdjyenXGby5PMSn8GqDY/jNm5jb8FJ+DoKprvnDz2pcFGIwPmPFzRh+83cr+6QD/mHK4pVE06kR4JS/aVN/A==}
@@ -26346,7 +26347,6 @@ packages:
       graphql: '>=0.8.0'
     dependencies:
       graphql: 15.8.0
-    dev: false
 
   /graphql-voyager/1.0.0-rc.31_rhawgwtd32fz5c6il2hfnog6hq:
     resolution: {integrity: sha512-eCaFL8niR3DZo1LUcFV8txwR+MDVIQsrFPmFC7Zwab8UyH5x3SLhx3aDrt998RVJRmY5aFP4q79RY2F3QtGRqA==}
