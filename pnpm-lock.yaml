@@ -359,7 +359,7 @@ importers:
       twitter-api-v2: ^1.12.9
       typescript: ^4.9.3
       util: ^0.12.5
-      webpack: 5.74.0
+      webpack: 5.75.0
     dependencies:
       '@mdx-js/mdx': 2.1.5
       '@mdx-js/react': 2.1.5_react@18.0.0
@@ -399,16 +399,16 @@ importers:
       gatsby: 5.2.0_n5y7v22mz5bv34d5s5t44qlnlq
       gatsby-cli: 5.2.0
       gatsby-plugin-mdx: 5.2.0_frox2do64crxgindv5hpyuu3yi
-      gatsby-plugin-netlify: 5.0.1_wos43khovssufokmsacrw5jlxq
+      gatsby-plugin-netlify: 5.0.1_5clidoindq3tqvakl4or6imcby
       gatsby-plugin-pnpm: 1.2.10_gatsby@5.2.0
       gatsby-plugin-react-helmet: 6.2.0_ek3fqcyrhgzo2nhiew6ycgephe
-      gatsby-plugin-sass: 6.2.0_suliv7jliefkpw3el36dzaky4m
+      gatsby-plugin-sass: 6.2.0_h4sjlcehcq2bknqsz3pa7pizqq
       gatsby-plugin-styled-components: 6.2.0_6gkwl74cik3ygfd3puoweq6jki
       gatsby-source-filesystem: 5.2.0_gatsby@5.2.0
       gatsby-source-graphql: 5.2.0_kh3yasekfxaepbx4c5fonj4m4i
       gatsby-transformer-remark: 6.2.0_gatsby@5.2.0
       gatsby-transformer-yaml: 5.2.0_gatsby@5.2.0
-      html-loader: 3.1.2_webpack@5.74.0
+      html-loader: 3.1.2_webpack@5.75.0
       indent-string: 5.0.0
       js-yaml: 4.1.0
       json2csv: 5.0.7
@@ -450,18 +450,18 @@ importers:
       '@typescript-eslint/eslint-plugin': 5.36.2_czs5uoqkd3podpy6vgtsxfc7au
       '@typescript-eslint/parser': 5.45.0_hsf322ms6xhhd4b5ne6lb74y4a
       babel-eslint: 10.1.0_eslint@8.28.0
-      copy-webpack-plugin: 9.1.0_webpack@5.74.0
+      copy-webpack-plugin: 9.1.0_webpack@5.75.0
       eslint: 8.28.0
       eslint-config-prettier: 8.5.0_eslint@8.28.0
       eslint-config-react-app: 7.0.1_yspbsyjgxfdyvxgy4f533r543q
       eslint-plugin-import: 2.26.0_vbnhqcxlbs7ynbxw44hu2vq7eq
       eslint-plugin-react: 7.31.11_eslint@8.28.0
-      gatsby-plugin-bundle-stats: 4.1.4_webpack@5.74.0
+      gatsby-plugin-bundle-stats: 4.1.4_webpack@5.75.0
       graphql: 16.6.0
       graphql-compose: 9.0.10_graphql@16.6.0
       prettier: 2.8.0
       react-is: 18.2.0
-      webpack: 5.74.0
+      webpack: 5.75.0
 
   shared/core-models:
     specifiers:
@@ -18771,7 +18771,7 @@ packages:
       load-tsconfig: 0.2.3
     dev: true
 
-  /bundle-stats-webpack-plugin/4.1.4_webpack@5.74.0:
+  /bundle-stats-webpack-plugin/4.1.4_webpack@5.75.0:
     resolution: {integrity: sha512-vrmoLLcrgw8DOIFP96HysQwT4n4lkk5Lw65n6GEguGGmG2Sa68N1j4Je3CVAUO2rU/mWuslP6v9fwgi8mgFsVg==}
     engines: {node: '>= 14.0'}
     peerDependencies:
@@ -18781,7 +18781,7 @@ packages:
       '@bundle-stats/utils': 4.1.4_u45hcwzhjcjs2u74ik4wzqwolq
       core-js: 3.26.1
       lodash: 4.17.21
-      webpack: 5.74.0
+      webpack: 5.75.0
     dev: true
 
   /busboy/1.6.0:
@@ -20028,6 +20028,21 @@ packages:
       schema-utils: 3.1.1
       serialize-javascript: 6.0.0
       webpack: 5.74.0_vbceztasdfzb7jghsjfkkrkonm
+    dev: true
+
+  /copy-webpack-plugin/9.1.0_webpack@5.75.0:
+    resolution: {integrity: sha512-rxnR7PaGigJzhqETHGmAcxKnLZSR5u1Y3/bcIv/1FnqXedcL/E2ewK7ZCNrArJKCiSv8yVXhTqetJh8inDvfsA==}
+    engines: {node: '>= 12.13.0'}
+    peerDependencies:
+      webpack: ^5.1.0
+    dependencies:
+      fast-glob: 3.2.12
+      glob-parent: 6.0.2
+      globby: 11.1.0
+      normalize-path: 3.0.0
+      schema-utils: 3.1.1
+      serialize-javascript: 6.0.0
+      webpack: 5.75.0
     dev: true
 
   /core-assert/0.1.3:
@@ -25066,11 +25081,11 @@ packages:
       '@parcel/transformer-json': 2.6.2_@parcel+core@2.6.2
     dev: false
 
-  /gatsby-plugin-bundle-stats/4.1.4_webpack@5.74.0:
+  /gatsby-plugin-bundle-stats/4.1.4_webpack@5.75.0:
     resolution: {integrity: sha512-ry7+TLbUVUBHFWXzbAQ4OarvGBjMO+CLnZp4HuChmKPYHienzdxtIUJEEwCKK7h66SiQYRmoEIPYC+/jKbVMnA==}
     engines: {node: '>= 14.0'}
     dependencies:
-      bundle-stats-webpack-plugin: 4.1.4_webpack@5.74.0
+      bundle-stats-webpack-plugin: 4.1.4_webpack@5.75.0
     transitivePeerDependencies:
       - webpack
     dev: true
@@ -25113,7 +25128,7 @@ packages:
       - supports-color
     dev: false
 
-  /gatsby-plugin-netlify/5.0.1_wos43khovssufokmsacrw5jlxq:
+  /gatsby-plugin-netlify/5.0.1_5clidoindq3tqvakl4or6imcby:
     resolution: {integrity: sha512-siy/zX45fIEtfCApH3QkXG0u3mS0y/bf/J2mDMFOrfvhiyB35YDJfaWoRvon+UwJM4dYcMJY17sAnBaBfOQ9GA==}
     engines: {node: '>=12.13.0'}
     peerDependencies:
@@ -25125,7 +25140,7 @@ packages:
       gatsby-core-utils: 3.24.0
       kebab-hash: 0.1.2
       lodash.mergewith: 4.6.2
-      webpack-assets-manifest: 5.1.0_webpack@5.74.0
+      webpack-assets-manifest: 5.1.0_webpack@5.75.0
     transitivePeerDependencies:
       - webpack
     dev: false
@@ -25177,7 +25192,7 @@ packages:
       react-helmet: 6.1.0_react@18.0.0
     dev: false
 
-  /gatsby-plugin-sass/6.2.0_suliv7jliefkpw3el36dzaky4m:
+  /gatsby-plugin-sass/6.2.0_h4sjlcehcq2bknqsz3pa7pizqq:
     resolution: {integrity: sha512-4LkKKPckjDO+L6VEwxmH4mFsHLtEE2hr4+8usibVXl6PnBQc464mWMkSqu1a/lzJq1CCPU+L8HUTv6BqNlozAA==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
@@ -25188,7 +25203,7 @@ packages:
       gatsby: 5.2.0_n5y7v22mz5bv34d5s5t44qlnlq
       resolve-url-loader: 3.1.4
       sass: 1.56.1
-      sass-loader: 10.3.1_sass@1.56.1+webpack@5.74.0
+      sass-loader: 10.3.1_sass@1.56.1+webpack@5.75.0
     transitivePeerDependencies:
       - fibers
       - node-sass
@@ -26783,7 +26798,7 @@ packages:
     resolution: {integrity: sha512-RuMffC89BOWQoY0WKGpIhn5gX3iI54O6nRA0yC124NYVtzjmFWBIiFd8M0x+ZdX0P9R4lADg1mgP8C7PxGOWuQ==}
     dev: true
 
-  /html-loader/3.1.2_webpack@5.74.0:
+  /html-loader/3.1.2_webpack@5.75.0:
     resolution: {integrity: sha512-9WQlLiAV5N9fCna4MUmBW/ifaUbuFZ2r7IZmtXzhyfyi4zgPEjXsmsYCKs+yT873MzRj+f1WMjuAiPNA7C6Tcw==}
     engines: {node: '>= 12.13.0'}
     peerDependencies:
@@ -26791,7 +26806,7 @@ packages:
     dependencies:
       html-minifier-terser: 6.1.0
       parse5: 6.0.1
-      webpack: 5.74.0
+      webpack: 5.75.0
     dev: false
 
   /html-minifier-terser/5.1.1:
@@ -34155,7 +34170,7 @@ packages:
     dependencies:
       autoprefixer: 9.8.8
       browserslist: 4.21.4
-      caniuse-lite: 1.0.30001431
+      caniuse-lite: 1.0.30001434
       css-blank-pseudo: 0.1.4
       css-has-pseudo: 0.10.0
       css-prefers-color-scheme: 3.1.1
@@ -37094,7 +37109,7 @@ packages:
       suf-log: 2.5.3
     dev: true
 
-  /sass-loader/10.3.1_sass@1.56.1+webpack@5.74.0:
+  /sass-loader/10.3.1_sass@1.56.1+webpack@5.75.0:
     resolution: {integrity: sha512-y2aBdtYkbqorVavkC3fcJIUDGIegzDWPn3/LAFhsf3G+MzPKTJx37sROf5pXtUeggSVbNbmfj8TgRaSLMelXRA==}
     engines: {node: '>= 10.13.0'}
     peerDependencies:
@@ -37116,7 +37131,7 @@ packages:
       sass: 1.56.1
       schema-utils: 3.1.1
       semver: 7.3.8
-      webpack: 5.74.0
+      webpack: 5.75.0
     dev: false
 
   /sass-loader/10.3.1_webpack@4.44.2:
@@ -39079,7 +39094,7 @@ packages:
       schema-utils: 3.1.1
       serialize-javascript: 5.0.1
       source-map: 0.6.1
-      terser: 5.15.1
+      terser: 5.16.0
       webpack: 4.44.2
       webpack-sources: 1.4.3
     transitivePeerDependencies:
@@ -39099,7 +39114,7 @@ packages:
       schema-utils: 3.1.1
       serialize-javascript: 5.0.1
       source-map: 0.6.1
-      terser: 5.15.1
+      terser: 5.16.0
       webpack: 4.46.0
       webpack-sources: 1.4.3
     transitivePeerDependencies:
@@ -39186,17 +39201,6 @@ packages:
       acorn: 8.8.1
       commander: 2.20.3
       source-map: 0.6.1
-      source-map-support: 0.5.21
-    dev: false
-
-  /terser/5.15.1:
-    resolution: {integrity: sha512-K1faMUvpm/FBxjBXud0LWVAGxmvoPbZbfTCYbSgaaYQaIXI3/TdI7a7ZGA73Zrou6Q8Zmz3oeUTsp/dj+ag2Xw==}
-    engines: {node: '>=10'}
-    hasBin: true
-    dependencies:
-      '@jridgewell/source-map': 0.3.2
-      acorn: 8.8.1
-      commander: 2.20.3
       source-map-support: 0.5.21
     dev: false
 
@@ -40960,7 +40964,7 @@ packages:
     engines: {node: '>=12'}
     dev: false
 
-  /webpack-assets-manifest/5.1.0_webpack@5.74.0:
+  /webpack-assets-manifest/5.1.0_webpack@5.75.0:
     resolution: {integrity: sha512-kPuTMEjBrqZQVJ5M6yXNBCEdFbQQn7p+loNXt8NOeDFaAbsNFWqqwR0YL1mfG5LbwhK5FLXWXpuK3GuIIZ46rg==}
     engines: {node: '>=10.13.0'}
     peerDependencies:
@@ -40973,7 +40977,7 @@ packages:
       lodash.has: 4.5.2
       schema-utils: 3.1.1
       tapable: 2.2.1
-      webpack: 5.74.0
+      webpack: 5.75.0
     dev: false
 
   /webpack-bundle-analyzer/3.6.1:

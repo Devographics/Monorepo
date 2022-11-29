@@ -120,10 +120,7 @@
         "graphql-compose": "^9.0.10",
         "prettier": "^2.8.0",
         "react-is": "^18.2.0",
-        "webpack": "5.74.0"
-    },
-    "resolutions": {
-        "webpack": "5.74.0"
+        "webpack": "5.75.0"
     },
     "private": true,
     "scripts": {
