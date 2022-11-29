@@ -40,7 +40,7 @@ const config = {
     ],
 }
 
-if (true) {
+if (process.env.USE_PNPM === 'true') {
     // @see https://www.gatsbyjs.com/plugins/gatsby-plugin-pnpm/
     config.plugins.push('gatsby-plugin-pnpm')
 }
