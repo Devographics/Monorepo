@@ -320,9 +320,7 @@ outline:
       - id: vitest
         year: 2021
       - id: selenium
-        year: 2022
       - id: testcafe
-        year: 2022
       - id: testing
         intlId: tools.other_tools
         template: project
