@@ -93,7 +93,7 @@ const EntityItem = ({ entity }) => {
         return <span>missing entity</span>
     }
     const { name, homepage, mdn } = entity
-    const url = homepage.url || mdn?.url
+    const url = homepage?.url || mdn?.url
     return url ? <a href={url}>{name}</a> : <span>{name}</span>
 }
 
