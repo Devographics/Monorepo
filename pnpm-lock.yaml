@@ -265,7 +265,7 @@ importers:
       '@babel/eslint-parser': ^7.19.1
       '@babel/plugin-syntax-flow': ^7.18.6
       '@babel/plugin-transform-react-jsx': ^7.19.0
-      '@gatsbyjs/reach-router': ^1.3.9
+      '@gatsbyjs/reach-router': 2.0.0-v2.0.2
       '@graphql-tools/links': 8.3.9
       '@mdx-js/mdx': ^2.1.5
       '@mdx-js/react': ^2.1.5
@@ -362,7 +362,7 @@ importers:
       util: ^0.12.5
       webpack: 5.75.0
     dependencies:
-      '@gatsbyjs/reach-router': 1.3.9_zpnidt7m3osuk7shl3s4oenomq
+      '@gatsbyjs/reach-router': 2.0.0-v2.0.2_zpnidt7m3osuk7shl3s4oenomq
       '@mdx-js/mdx': 2.1.5
       '@mdx-js/react': 2.1.5_react@18.0.0
       '@nivo/bar': 0.80.0_wit5lygxvtdlomu7pbp2c4z3ha
@@ -6687,17 +6687,16 @@ packages:
       - '@parcel/core'
     dev: false
 
-  /@gatsbyjs/reach-router/1.3.9_zpnidt7m3osuk7shl3s4oenomq:
-    resolution: {integrity: sha512-/354IaUSM54xb7K/TxpLBJB94iEAJ3P82JD38T8bLnIDWF+uw8+W/82DKnQ7y24FJcKxtVmG43aiDLG88KSuYQ==}
+  /@gatsbyjs/reach-router/2.0.0-v2.0.2_zpnidt7m3osuk7shl3s4oenomq:
+    resolution: {integrity: sha512-sY/mOyxHFEJxjIS5vHH1cktkwDHHdadmgWNoqh3yYKcdGwQ9qZDzE4Po5FDhPsy+ZLWXBiR4F0x+JOGQKQ9Dgg==}
     peerDependencies:
-      react: 15.x || 16.x || 17.x || 18.x
-      react-dom: 15.x || 16.x || 17.x || 18.x
+      react: 18.x
+      react-dom: 18.x
     dependencies:
       invariant: 2.2.4
       prop-types: 15.8.1
       react: 18.0.0
       react-dom: 18.0.0_react@18.0.0
-      react-lifecycles-compat: 3.0.4
     dev: false
 
   /@gatsbyjs/reach-router/2.0.0-v2.0.3_zpnidt7m3osuk7shl3s4oenomq:
@@ -22779,7 +22778,7 @@ packages:
       eslint-import-resolver-webpack:
         optional: true
     dependencies:
-      '@typescript-eslint/parser': 4.33.0_77fvizpdb3y4icyeo2mf4eo7em
+      '@typescript-eslint/parser': 4.33.0_eslint@7.32.0
       debug: 3.2.7
       eslint: 7.32.0
       eslint-import-resolver-node: 0.3.6
@@ -22925,7 +22924,7 @@ packages:
       '@typescript-eslint/parser':
         optional: true
     dependencies:
-      '@typescript-eslint/parser': 4.33.0_77fvizpdb3y4icyeo2mf4eo7em
+      '@typescript-eslint/parser': 4.33.0_eslint@7.32.0
       array-includes: 3.1.6
       array.prototype.flat: 1.3.1
       debug: 2.6.9
