@@ -5,14 +5,46 @@ import { cronMiddleware } from "~/core/server/edge/cronMiddleware";
 
 import { getLocaleFromAcceptLanguage } from "~/i18n/server/localeDetection";
 import { LOCALE_COOKIE_NAME } from "./i18n/cookie";
-import { getClosestLocale } from "./i18n/data/locales";
+import { getClosestLocale, locales } from "./i18n/data/locales";
 
+function getFirstParam(pathname: string) {
+  if (!pathname) {
+    console.warn("Empty pathname")
+    return null
+  }
+  const segments = pathname.split("/")
+  if (segments.length < 2) {
+    return null
+  }
+  const firstParam = segments[1]
+  return firstParam
+}
+function getLang(pathname: string) {
+  const firstParam = getFirstParam(pathname)
+  if (!firstParam) return null
+  if (locales.includes(firstParam)) {
+    console.debug("path includes lang", pathname)
+    return firstParam
+  }
+  return null
+}
+function isApi(pathname: string) {
+  return getFirstParam(pathname) === "api"
+}
+
+function isFile(pathname: string) {
+  return pathname.includes(".") || getFirstParam(pathname) === "_next"
+}
 export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   // TODO: i18n redirection should happen for all paths
   //that do not start with a a valid locale
   // TODO: verify that the locale exists
-  if (pathname === "/") {
+  const lang = getLang(pathname)
+  const file = isFile(pathname)
+  const api = isApi(pathname)
+  const shouldLocalize = !api && !file
+  if (shouldLocalize && !lang) {
     const locale =
       getLocaleFromAcceptLanguage(request.headers.get("accept-language")) ||
       request.cookies.get(LOCALE_COOKIE_NAME)?.value;
@@ -23,7 +55,8 @@ export function middleware(request: NextRequest) {
       );
     }
     const url = request.nextUrl.clone();
-    url.pathname = "/" + validLocale;
+    console.debug("Will add locale", validLocale, "to", pathname)
+    url.pathname = "/" + validLocale + pathname;
     return NextResponse.redirect(url);
   }
   if (pathname.startsWith("/debug")) {
@@ -41,7 +74,7 @@ export function middleware(request: NextRequest) {
 
 // middleware will run only on those paths
 export const config = {
-  matcher: ["/", "/debug/:path*", "/api/crons/:path*"],
+  // matcher: ["/", "/debug/:path*", "/api/crons/:path*"],
   // we can't use variables here
   //...debugAreaMatcher, ...cronMatcher],
 };

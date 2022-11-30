@@ -128,6 +128,9 @@ const uniqueLocales = [
   ...new Set([...localeIds, ...countryIdsWithDups]).values(),
 ];
 
+/**
+ * All valid locales = locales listed explicitely + their country that can use region locale as fallback
+ */
 export const locales = uniqueLocales;
 
 export const defaultLocale = "en-US";
