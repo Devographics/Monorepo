@@ -1,3 +1,5 @@
+"use client";
+import { useUser } from "~/account/user/hooks";
 /**
  * Verify the magic token from the url, and then sets the actual auth token,
  * then redirect
@@ -62,11 +64,5 @@ export const MagicLoginCheckPage = () => {
     </p>
   );
 };
-
-import { getLocaleStaticProps } from "~/i18n/server/ssr";
-import { useUser } from "~/account/user/hooks";
-export async function getStaticProps(ctx) {
-  return getLocaleStaticProps(ctx);
-}
 
 export default MagicLoginCheckPage;

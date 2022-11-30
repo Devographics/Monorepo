@@ -1,13 +1,11 @@
+"use client";
 import { AnonymousLoginForm } from "~/account/anonymousLogin/components/AnonymousLogin";
 //import { isAnonymousAuthEnabled } from "~/account/anonymousLogin/lib";
 import { useUser } from "~/account/user/hooks";
-import { useIntlContext } from "@vulcanjs/react-i18n";
 import { StandaloneMagicLoginForm } from "~/account/magicLogin/components/StandaloneMagicLoginForm";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 
 const LoginOptions = () => {
-  const intl = useIntlContext();
-
   const { user } = useUser({ redirectTo: "/", redirectIfFound: true });
   //const redirectedFrom = router.query?.from as string;
   return user ? (

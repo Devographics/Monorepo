@@ -24,6 +24,7 @@ export default async function RootLayout({
     lang: string;
   };
 }) {
+  // locale fetching
   const locale = params.lang; // getCurrentLocale();
   if (locale.includes(".")) {
     console.error(`Error: matched a file instead of a lang: ${locale}.

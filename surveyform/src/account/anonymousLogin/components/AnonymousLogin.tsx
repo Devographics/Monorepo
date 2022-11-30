@@ -1,6 +1,6 @@
-// TODO: provide this component in Vulcan Next as well
+"use client";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useState, ReactNode } from "react";
 import { loginAnonymously } from "../lib";
 import { useSWRConfig } from "swr";

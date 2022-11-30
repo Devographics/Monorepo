@@ -1,10 +1,11 @@
-// TODO: provide this component in Vulcan Next as well
+"use client";
+
 import { useState, ReactNode, FormEventHandler } from "react";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { useIntlContext } from "@vulcanjs/react-i18n";
 import { sendMagicLoginEmail } from "../lib/sendMagicLoginEmail";
 import { useUser } from "~/account/user/hooks";
-import { useRouter } from "next/router";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useLocaleContext } from "~/i18n/components/LocaleContext";
 import { FormComponentEmail } from "./FormComponentEmail";
 
@@ -32,7 +33,7 @@ export const StandaloneMagicLoginForm = ({
   const { getLocale } = useLocaleContext();
 
   const locale = getLocale();
-  const { query } = router;
+  const params = useSearchParams();
 
   if (process.env.NEXT_PUBLIC_IS_USING_DEMO_DATABASE)
     return (
@@ -58,8 +59,8 @@ export const StandaloneMagicLoginForm = ({
       destination: email,
       // no need to wait for current user loading, because it's normally always faster than typing one's email and submitting
       anonymousId: user?._id,
-      prettySlug: query.slug,
-      year: query.year,
+      prettySlug: params.get("slug"),
+      year: params.get("year"),
       locale,
     };
 
