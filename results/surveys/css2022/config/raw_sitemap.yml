@@ -80,6 +80,8 @@
     - id: country
       template: demographics
       blockType: ParticipationByCountryBlock
+      variables:
+        options: { limit: 50, cutoff: 50}
 
     - id: locale
       template: demographics

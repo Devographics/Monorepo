@@ -85,22 +85,4 @@ const KnowledgeScoreBlock = ({ block, data }) => {
     )
 }
 
-KnowledgeScoreBlock.propTypes = {
-    block: PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        dataPath: PropTypes.string.isRequired,
-        bucketKeysName: PropTypes.oneOf(Object.keys(keys)),
-        showDescription: PropTypes.bool,
-        mode: PropTypes.oneOf(['absolute', 'relative']),
-        units: PropTypes.oneOf(['percentage', 'count']),
-    }).isRequired,
-    data: PropTypes.shape({
-        buckets: PropTypes.arrayOf(
-            PropTypes.shape({
-                id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-            })
-        ).isRequired,
-    }).isRequired,
-}
-
 export default memo(KnowledgeScoreBlock)

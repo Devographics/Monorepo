@@ -68,8 +68,9 @@ const BlockDescriptionContents = ({ block }) => {
                     md={enableDescriptionMarkdown}
                     fallback={null}
                     html={false}
-                />
-                {isFreeform && <T k="block.freeform" />}
+                    element="span"
+                />{' '}
+                {isFreeform && <T k="blocks.freeform" />}
             </Description>
         )
     }

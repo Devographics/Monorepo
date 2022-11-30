@@ -7,9 +7,11 @@ import { isPercentage } from 'core/helpers/units'
 const getLabel = (props, getString) => {
     const { id, bucketKeys, units, indexValue, data, i18nNamespace, shouldTranslate } = props
     const bucketKey = bucketKeys && bucketKeys.find(b => b.id === indexValue)
-    const { entity } = data
+    const { entity, label } = data
     const s = getString(`options.${i18nNamespace}.${indexValue}`)
-    if (bucketKey?.label) {
+    if (label) {
+        return label
+    } else if (bucketKey?.label) {
         return bucketKey.label
     } else if (shouldTranslate && !s.missing) {
         return s.t
@@ -25,7 +27,7 @@ const getLabel = (props, getString) => {
  * - HorizontalBarChart
  * - VerticalBarChart
  */
-const BarTooltip = props => {
+const BarTooltip = props => {    
     const { id, bucketKeys, units, indexValue, data, i18nNamespace, shouldTranslate } = props
     const { getString } = useI18n()
     const label = getLabel(props, getString)

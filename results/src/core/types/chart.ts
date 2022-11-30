@@ -25,4 +25,5 @@ export interface TickItemProps {
   entity: Entity
   tickRotation?: number
   description?: string
+  label?: string
 }

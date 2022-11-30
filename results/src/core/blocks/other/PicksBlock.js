@@ -23,6 +23,7 @@ const PicksBlock = ({ block, data: entity }) => {
                                 <span>
                                     <T k="picks.my_pick" />
                                 </span>
+                                {' '}
                                 <PickTitleLink href={url}>
                                     <T k={`picks.${pickId}.name`} />
                                 </PickTitleLink>

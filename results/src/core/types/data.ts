@@ -82,6 +82,7 @@ export interface DefaultBucketItem {
     percentage_all_facets?: number
 
     entity?: Entity
+    label?: string
 }
 
 export interface RatioBucketItem {
