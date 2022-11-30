@@ -50,7 +50,7 @@ const SponsorIconWrapper = styled(Button)`
         opacity: 1;
     }
     cursor: pointer;
-    span {
+    &>span {
         display: block;
         height: 100%;
         width: 100%;

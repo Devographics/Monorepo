@@ -26,6 +26,10 @@ const colors = {
     electricBlue: '#38D6FE',
     electricBlueDark: '#21B1D6',
     electricBlueDarker: '#129DC0',
+    electricBlueDarkerer: '#07657D',
+    electricBlueDarkest: '#224149',
+    electricBlueDarkestest: '#0C2B33',
+    electricBlueMuted1: '#314448',
 }
 
 const velocity = [
@@ -81,10 +85,10 @@ const distinct = [
 
 const stateOfCSSThemeColors: DefaultTheme['colors'] = {
     background: '#272325',
-    backgroundBackground: '#3E3036',
+    backgroundBackground: colors.electricBlueDarkest,
     backgroundForeground: colors.navyLighter,
-    backgroundAlt: '#3E3036',
-    backgroundAlt2: '#5F4C54',
+    backgroundAlt: '#314448',
+    backgroundAlt2: colors.electricBlueDarker,
     backgroundInverted: '#FFF6E6',
     backgroundInvertedAlt: '#E3D8C4',
     text: colors.white,
