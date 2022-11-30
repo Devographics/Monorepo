@@ -16,6 +16,7 @@ export type {
   SurveySection,
   SurveyStatus,
   SurveyStatusLabel,
+  SerializedSurveyDocument
 } from "./surveys/typings";
 
 export type { Entity } from "./entities/typings";

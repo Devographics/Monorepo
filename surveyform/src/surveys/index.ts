@@ -17,9 +17,9 @@ import graphql2022 from "./stateofgraphql/graphql2022.yml";
 import { parseSurvey } from "~/modules/surveys/parser/parseSurvey";
 
 // make sure array is properly sorted here
-import { SurveyType } from "@devographics/core-models";
+import { SurveyDocument } from "@devographics/core-models";
 
-export const surveys: Array<SurveyType> = [
+export const surveys: Array<SurveyDocument> = [
   // @ts-ignore
   js2022,
   // @ts-ignore
@@ -51,6 +51,6 @@ if (
  *
  * This version doesn't include templates and thus do not load any JSX code
  */
-const parsedSurveys: Array<SurveyType> = surveys.map(parseSurvey);
+const parsedSurveys: Array<SurveyDocument> = surveys.map(parseSurvey);
 
 export default parsedSurveys;

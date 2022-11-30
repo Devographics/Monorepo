@@ -1,4 +1,5 @@
 "use client";
+import { Loading } from "~/core/components/ui/Loading";
 import {
   VulcanComponentsProvider,
   VulcanCurrentUserProvider,
@@ -6,9 +7,6 @@ import {
 import { defaultCoreComponents } from "@vulcanjs/react-ui";
 import {
   Alert,
-  // Not needed, we bring our own
-  //FormattedMessage,
-  Loading,
   TooltipTrigger,
   liteCoreComponents,
 } from "@vulcanjs/react-ui-lite";

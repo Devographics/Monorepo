@@ -1,42 +1,32 @@
+"use client";
 import React from "react";
 // TODO: we need to enable accounts back
 // import { STATES } from "meteor/vulcan:accounts";
 // import AccountMessage from "../../users/AccountMessage";
 import SurveyAction from "./SurveyAction";
-import { getSurvey } from "~/modules/surveys/getters";
 import SurveyHeadTags from "../SurveyHeadTags";
 import SurveyMessage from "../SurveyMessage";
 import SurveyCredits from "../SurveyCredits";
 import Translators from "../../common/Translators";
 import Faq from "../../common/Faq";
 import Support from "../../common/Support";
-import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { useIntlContext } from "@vulcanjs/react-i18n";
-import { useRouter } from "next/router.js";
-import { useSurveyParams } from "../hooks";
 import LoginDialog from "~/account/LoginDialog";
 import { useUser } from "~/account/user/hooks";
 import Image from "next/image";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import { getSurveyImageUrl } from "~/surveys/getSurveyImageUrl";
 import { EntitiesProvider } from "~/core/components/common/EntitiesContext";
+import { Loading } from "~/core/components/ui/Loading";
+import { useSurvey } from "../SurveyContext/Provider";
 
 interface SurveyPageWrapperProps {
   slug?: string;
   year?: string;
 }
 const SurveyPageWrapper = (props: SurveyPageWrapperProps) => {
-  const { slug, year } = useSurveyParams({
-    slug: props.slug,
-    year: props.year,
-  });
-  //const intl = useIntlContext();
-  // TODO: we could get it at page level as static props,
-  // and use this function only as a fallback
-  const survey = getSurvey(slug, year);
-  // TODO: send a better message
-  if (!survey) throw new Error("Survey not found");
-  const { name, slug: surveySlug, resultsUrl } = survey;
+  const survey = useSurvey();
+  const { name, resultsUrl } = survey;
 
   const imageUrl = getSurveyImageUrl(survey);
 
@@ -61,7 +51,7 @@ const SurveyPageWrapper = (props: SurveyPageWrapperProps) => {
             height={400}
             priority={true}
             src={imageUrl}
-            alt={`${name} ${year}`}
+            alt={`${name} ${survey.year}`}
             quality={100}
           />
         </h1>
@@ -91,37 +81,9 @@ const SurveyIntro = ({ survey }) => {
   );
 };
 
-const useSurveyPageParams = ():
-  | { paramsReady: false; email: null }
-  | { paramsReady: true; email: string } => {
-  const router = useRouter();
-  const { isReady, isFallback, query } = router;
-  if (!isReady || isFallback) return { paramsReady: false, email: null };
-  const { email } = query;
-  return { paramsReady: true, email: email as string };
-};
-
 const SurveyMain = ({ survey }) => {
-  const Components = useVulcanComponents();
-  const intl = useIntlContext();
   const { user, loading: currentUserLoading } = useUser();
-
-  /*
-  Next.js already parse query params in "query" object
-  const location = useLocation();
-
-  const query = qs.parse(location.search, {
-    ignoreQueryPrefix: true,
-    decoder: (c) => c,
-  });
-  */
-  // TODO: check if this still work
-  const { paramsReady, email } = useSurveyPageParams();
-  if (currentUserLoading) return <Components.Loading />;
-  if (!paramsReady) return <Components.Loading />;
-
-  // TODO: it would be cleaner to do a redirection to a login page,
-  // from a middleware, so we can render this page statically yet make it private
+  if (currentUserLoading) return <Loading />;
   if (!user) {
     return <LoginDialog />;
   } else {

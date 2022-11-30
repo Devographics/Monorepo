@@ -157,7 +157,7 @@ export interface SurveyDocument {
  * Needed when getting a survey from SSR
  */
 export type SerializedSurveyDocument = Omit<
-  SurveyType,
+  SurveyDocument,
   "createdAt" | "updatedAt"
 > & {
   createdAt?: string;
