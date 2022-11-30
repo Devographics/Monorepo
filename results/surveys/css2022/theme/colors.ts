@@ -22,25 +22,45 @@ const colors = {
     grey: '#8B8085',
     greyLight: '#BBB2B6',
     greyLighter: '#DED1D7',
-    greyLightest: '#EADEE3'
+    greyLightest: '#EADEE3',
+    electricBlue: '#38D6FE',
+    electricBlueDark: '#21B1D6',
+    electricBlueDarker: '#129DC0',
 }
 
 const velocity = [
-    '#1734BF',
-    '#3633B7',
-    '#5432AE',
-    '#7331A6',
-    '#91319D',
-    '#B03095',
-    '#CE2F8C',
-    '#ED2E84',
-    '#FB549F',
-    '#FE79B4',
-    '#FFA6CE',
-    '#FFCEE4',
-    '#FFE3F0',
-    '#FFEFFF'
+    '#173E48',
+    '#064151',
+    '#074B5C',
+    '#07657D',
+    '#0F7C98',
+    '#129DC0',
+    '#21B1D6',
+    '#38D6FE',
+    '#67E0FF',
+    '#AEEFFF',
+    '#D3F6FF',
+    '#E5FFFA',
+    '#BCFFF3',
+    '#9FFFEE',
 ]
+
+// const velocity = [
+//     '#1734BF',
+//     '#3633B7',
+//     '#5432AE',
+//     '#7331A6',
+//     '#91319D',
+//     '#B03095',
+//     '#CE2F8C',
+//     '#ED2E84',
+//     '#FB549F',
+//     '#FE79B4',
+//     '#FFA6CE',
+//     '#FFCEE4',
+//     '#FFE3F0',
+//     '#FFEFFF'
+// ]
 
 const distinct = [
     colors.indigo,
@@ -71,7 +91,7 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
     textAlt: '#E3D8C4',
     textInverted: '#272325',
     textHighlight: colors.greenDark,
-    link: colors.pink,
+    link: colors.electricBlue,
     linkActive: '#5C63E0',
     contrast: '#0bdf67',
     border: '#FFF6E6',
@@ -79,12 +99,12 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
     lineChartDefaultColor: '#59DF7F',    
     no_answer: [colors.greyLight, colors.greyLightest],
     barChart: {
-        primary: colors.pink,
-        primaryGradient: [colors.pinkDark, colors.pink],
+        primary: colors.electricBlue,
+        primaryGradient: [colors.electricBlueDarker, colors.electricBlue],
         // secondary: colors.yellowLight,
         // secondaryGradient: [colors.yellow, colors.yellowLight],
-        secondary: colors.blue,
-        secondaryGradient: [colors.blue, colors.blueLight]
+        secondary: colors.pink,
+        secondaryGradient: [colors.pinkDark, colors.pink]
     },
     ranges: {
         tools: {

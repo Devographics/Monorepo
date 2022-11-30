@@ -205,9 +205,9 @@
       translateData: true
       variants:
         - id: disability_status_others
+          defaultUnits: count
           template: demographics
           blockType: HorizontalBarBlock
-          units: count
           translateData: true
 
     - id: user_info_resources
@@ -302,8 +302,10 @@
           template: feature_experience
           year: 2021
 
-        - items: [fm-svg]
+        - id: shapes_graphics_resources
+          items: [fm-svg]
           template: recommended_resources
+
     - id: colors
       path: /colors
       blocks:
@@ -364,6 +366,10 @@
           template: feature_experience
           year: 2021
 
+        - id: shapes_graphics_resources
+          items: [fm-animations-transitions]
+          template: recommended_resources
+          
     - id: typography
       path: /typography
       blocks:
@@ -428,7 +434,6 @@
         - items: [fm-accessibility]
           template: recommended_resources
 
-
     - id: selectors
       path: /selectors
       blocks:
@@ -451,7 +456,7 @@
           template: feature_experience
           year: 2022
 
-        - items: [fm-accessibility]
+        - items: [fm-html-css]
           template: recommended_resources
 
     - id: other_features
