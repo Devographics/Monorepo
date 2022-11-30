@@ -171,7 +171,7 @@ export async function computeDefaultTermAggregationByYear({
     const sort = options?.sort?.property ?? 'count'
     const order = convertOrder(options?.sort?.order ?? 'desc')
 
-    const { fieldName: facetId } = options.facet && getFacetSegments(options.facet) || {}
+    const { fieldName: facetId } = (options.facet && getFacetSegments(options.facet)) || {}
     const facetSort = options?.facetSort?.property ?? 'mean'
     const facetOrder = convertOrder(options?.facetSort?.order ?? 'desc')
     const facetValues = options.facet2keys || facetId && yamlKeys[facetId]
@@ -471,10 +471,17 @@ export async function sortBuckets(resultsByYears: ResultsByYear[], options: Sort
                     )
                 })
             } else {
+                // start with an alphabetical sort to ensure a stable
+                // sort even when multiple items have same count
+                facet.buckets = sortBy(facet.buckets, 'id')
                 // sort by sort/order
-                facet.buckets = sortBy(facet.buckets, sort)
                 if (order === -1) {
+                    // reverse first so that ids end up in right order when we reverse again
                     facet.buckets.reverse()
+                    facet.buckets = sortBy(facet.buckets, sort)
+                    facet.buckets.reverse()
+                } else {
+                    facet.buckets = sortBy(facet.buckets, sort)
                 }
             }
         }
@@ -492,10 +499,17 @@ export async function sortFacets(resultsByYears: ResultsByYear[], options: SortO
                 return stringValues.indexOf(a.id.toString()) - stringValues.indexOf(b.id.toString())
             })
         } else {
+            // start with an alphabetical sort to ensure a stable
+            // sort even when multiple items have same count
+            year.facets = sortBy(year.facets, 'id')
             // sort by sort/order
-            year.facets = sortBy(year.facets, sort)
             if (order === -1) {
+                // reverse first so that ids end up in right order when we reverse again
                 year.facets.reverse()
+                year.facets = sortBy(year.facets, sort)
+                year.facets.reverse()
+            } else {
+                year.facets = sortBy(year.facets, sort)
             }
         }
     }
