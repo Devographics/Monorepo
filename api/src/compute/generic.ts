@@ -164,6 +164,8 @@ export async function computeDefaultTermAggregationByYear({
         values = yamlKeys[fieldId]
     }
 
+    const hasValues = !isEmpty(values)
+
     const convertOrder = (order: 'asc' | 'desc') => (order === 'asc' ? 1 : -1)
 
     const sort = options?.sort?.property ?? 'count'
@@ -227,7 +229,7 @@ export async function computeDefaultTermAggregationByYear({
             )
         )
     }
-    if (values) {
+    if (hasValues) {
         await addMissingBucketValues(results, values)
     }
 
@@ -235,7 +237,7 @@ export async function computeDefaultTermAggregationByYear({
 
     await addCompletionCounts(results, totalRespondentsByYear, completionByYear)
 
-    if (!values) {
+    if (!hasValues) {
         // do not apply cutoff for aggregations that have predefined values,
         // as that might result in unexpectedly missing buckets
         await applyCutoff(results, cutoff)
@@ -246,13 +248,13 @@ export async function computeDefaultTermAggregationByYear({
 
     await sortBuckets(results, { sort, order, values })
 
-    if (!values) {
+    if (!hasValues) {
         // do not apply limits for aggregations that have predefined values,
         // as that might result in unexpectedly missing buckets
         await limitBuckets(results, limit)
     }
 
-    if (values) {
+    if (hasValues) {
         await addMeans(results, values)
     }
 

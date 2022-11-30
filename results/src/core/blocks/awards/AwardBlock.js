@@ -92,9 +92,9 @@ const EntityItem = ({ entity }) => {
     if (!entity) {
         return <span>missing entity</span>
     }
-    const { name, homepage, mdn } = entity
+    const { name, nameClean, homepage, mdn } = entity
     const url = homepage?.url || mdn?.url
-    return url ? <a href={url}>{name}</a> : <span>{name}</span>
+    return url ? <a href={url}>{nameClean || name}</a> : <span>{nameClean || name}</span>
 }
 
 AwardBlock.propTypes = {
