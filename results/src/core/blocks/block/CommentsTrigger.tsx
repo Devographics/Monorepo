@@ -169,7 +169,7 @@ const CommentIndex = styled.div`
     top: 50%;
     transform: translateY(-50%);
     right: 15px;
-    opacity: 0.1;
+    opacity: 0.15;
 `
 
 const CommentQuote = styled.div`
@@ -178,7 +178,7 @@ const CommentQuote = styled.div`
     top: 0px;
     left: 5px;
     line-height: 1;
-    opacity: 0.1;
+    opacity: 0.15;
     ${secondaryFontMixin}
 `
 

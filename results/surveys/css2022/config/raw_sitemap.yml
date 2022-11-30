@@ -970,7 +970,7 @@
           awards:
             - id: subgrid
               value: 126
-            - id: nesting
+            - id: css_nesting
               value: 60
             - id: at_container
               value: 50

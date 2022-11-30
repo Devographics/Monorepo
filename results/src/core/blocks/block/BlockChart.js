@@ -5,7 +5,7 @@ import BlockNote from 'core/blocks/block/BlockNote'
 import BlockLegends from 'core/blocks/block/BlockLegends'
 import { useI18n } from 'core/i18n/i18nContext'
 import { usePageContext } from 'core/helpers/pageContext'
-import { getBlockDescriptionKey } from 'core/helpers/blockHelpers'
+import { getBlockDescriptionKey, getBlockTitle } from 'core/helpers/blockHelpers'
 import T from 'core/i18n/T'
 import BlockFooter from 'core/blocks/block/BlockFooter'
 import BlockUnitsSelector from 'core/blocks/block/BlockUnitsSelector'
@@ -69,6 +69,7 @@ const BlockDescriptionContents = ({ block }) => {
                     fallback={null}
                     html={false}
                     element="span"
+                    values={{ name: getBlockTitle(block, context, translate)}}
                 />{' '}
                 {isFreeform && <T k="blocks.freeform" />}
             </Description>

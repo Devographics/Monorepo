@@ -16,13 +16,12 @@ const colors = {
     greenLight: '#73D49A',
     greenLighter: '#B6F4CF',
     white: '#FFF6E6',
-    yellowLight: '#FFF1C0',
-    yellow: '#FFE589',
     kaki: '#CCD133',
     grey: '#8B8085',
     greyLight: '#BBB2B6',
     greyLighter: '#DED1D7',
     greyLightest: '#EADEE3',
+    electricBlueLight: '#AEF0FF',
     electricBlue: '#38D6FE',
     electricBlueDark: '#21B1D6',
     electricBlueDarker: '#129DC0',
@@ -30,6 +29,19 @@ const colors = {
     electricBlueDarkest: '#224149',
     electricBlueDarkestest: '#0C2B33',
     electricBlueMuted1: '#314448',
+    orangeLight: '#FFBA53',
+    orange: '#EC9C23',
+    orangeDark: '#D98C18',
+    orangeDarker: '#BE780F',
+    yellowLight: '#FFF1C0',
+    yellow: '#FFE589',
+    yellowDark: '#ECCB55',
+    yellowDarker: '#D2AA19',
+    redDark: '#c3494e',
+    red: '#FE6A6A',
+    redLight: '#FF8686',
+    redLighter: '#FFA3A3',
+    redLightest: '#FFC2C2',
 }
 
 const velocity = [
@@ -88,7 +100,7 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
     backgroundBackground: colors.electricBlueDarkest,
     backgroundForeground: colors.navyLighter,
     backgroundAlt: '#314448',
-    backgroundAlt2: colors.electricBlueDarker,
+    backgroundAlt2: colors.electricBlueDarkerer,
     backgroundInverted: '#FFF6E6',
     backgroundInvertedAlt: '#E3D8C4',
     text: colors.white,
@@ -104,7 +116,7 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
     no_answer: [colors.greyLight, colors.greyLightest],
     barChart: {
         primary: colors.electricBlue,
-        primaryGradient: [colors.electricBlueDarker, colors.electricBlue],
+        primaryGradient: [colors.electricBlueDarkerer, colors.electricBlueDark],
         // secondary: colors.yellowLight,
         // secondaryGradient: [colors.yellow, colors.yellowLight],
         secondary: colors.pink,
@@ -112,10 +124,10 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
     },
     ranges: {
         tools: {
-            would_use: [colors.blue, colors.blueLight],
-            would_not_use: [colors.pink, colors.pinkLight],
-            interested: [colors.blueLighter, colors.blueLightest],
-            not_interested: [colors.pinkLighter, colors.pinkLightest],
+            would_use: [colors.electricBlueDarkerer, colors.electricBlueDarker],
+            would_not_use: [colors.red, colors.redLight],
+            interested: [colors.electricBlue, colors.electricBlueLight],
+            not_interested: [colors.redLighter, colors.redLightest],
             never_heard: [colors.greyLight, colors.greyLightest]
         },
         toolSections: {
@@ -132,8 +144,8 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
             css_frameworks: colors.pink
         },
         features: {
-            used: [colors.pink, colors.pinkLight],
-            heard: [colors.blue, colors.blueLight],
+            used: [colors.electricBlueDarker, colors.electricBlueDark],
+            heard: [colors.electricBlue, colors.electricBlueLight],
             never_heard: [colors.grey, colors.greyLight]
         },
         features_categories: {

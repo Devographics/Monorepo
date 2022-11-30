@@ -131,6 +131,7 @@ const Content = styled.div`
 
 const Inner = styled.div`
     overflow-y: auto;
+    overflow-x: hidden;
     width: 100%;
     @media ${mq.small} {
         padding: ${spacing()};

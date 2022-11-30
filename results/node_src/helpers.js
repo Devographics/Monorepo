@@ -99,6 +99,7 @@ exports.createBlockPages = (page, context, createPage, locales, buildInfo) => {
                     buildInfo.blockCount++
 
                     const blockPage = {
+                        // defer: true,
                         path: getLocalizedPath(blockVariant.path, locale),
                         component: path.resolve(`./src/core/share/ShareBlockTemplate.js`),
                         context: {
