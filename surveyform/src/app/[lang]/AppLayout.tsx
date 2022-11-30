@@ -40,7 +40,7 @@ import { SSRProvider } from "react-bootstrap";
 export interface AppLayoutProps {
   /** Locale extracted from cookies server-side */
   locale: string;
-  localeStrings?: LocaleDef;
+  localeStrings: LocaleDef;
   locales?: Array<LocaleDef>;
   initialApolloState?: any;
   // When on a specific survey
@@ -77,7 +77,7 @@ export function AppLayout(props: AppLayoutProps) {
           <ApolloProvider client={apolloClient}>
             <LocaleContextProvider
               locales={locales}
-              locale={locale}
+              localeId={locale}
               localeStrings={localeStrings}
               currentUser={user}
             >
@@ -102,7 +102,7 @@ export function AppLayout(props: AppLayoutProps) {
                     ...bootstrapCoreComponents,
                     // Keep the component here even if we don't use Components.FormattedMessage directly
                     // This allows Vulcan components to depend on it
-                    FormattedMessage: FormattedMessage,
+                    FormattedMessage,
                   }}
                 >
                   <ErrorBoundary

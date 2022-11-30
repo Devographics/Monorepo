@@ -19,6 +19,7 @@ export const serverConfig = {
   translationAPI: process.env.TRANSLATION_API!,
   mongoUrl: process.env.MONGO_URI,
   redisUrl: process.env.REDIS_URL || "redis://localhost:6379",
+  githubToken: process.env.GITHUB_TOKEN,
   // NOTE: each survey should try to use their own specific domain (see magic link auth)
   defaultMailFrom: process.env.MAIL_FROM || "login@devographics.com",
   // to avoid risks of typos, reuse those values
@@ -28,6 +29,9 @@ export const serverConfig = {
 };
 
 const checkServerConfig = () => {
+  if (!process.env.GITHUB_TOKEN) {
+    throw new Error("GITHUB_TOKEN is now necessary to get the survey files")
+  }
   if (serverConfig.isProd) {
     if (!process.env.REDIS_URL) {
       throw new Error(

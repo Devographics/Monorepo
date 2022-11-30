@@ -1,25 +1,10 @@
 "use client";
-// TODO: this was copied from Vulcan NPM, put it back there when fixed
 /**
- * In Vulcan Meteor, this is setup in packages/vulcan-core/lib/modules/components/App.jsx
+ * Legacy code from Vulcan, simplify if possible
  */
-/*
-import {
-  runCallbacks,
-  Routes,
-} from "meteor/vulcan:lib";
-*/
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { IntlProvider } from "@vulcanjs/react-i18n";
 import { IntlContext } from "./context";
-// TODO: some of those HOC might be useful eg withLocaleData?
-/*
-import withUpdate from "../containers/update.js";
-import withSiteData from "../containers/siteData.js";
-import { withApollo } from "@apollo/client/react/hoc";
-import moment from "moment";
-*/
-import merge from "lodash/merge.js";
 import { useRouter } from "next/navigation";
 import { useCookies } from "react-cookie";
 import { LOCALE_COOKIE_NAME } from "../cookie";
@@ -96,19 +81,11 @@ export const makeStringsRegistry = () => {
 };
 export type StringsRegistry = ReturnType<typeof makeStringsRegistry>;
 
-interface LocaleState {
-  id: string;
-  rtl?: boolean;
-  method?: any;
-  loading?: boolean;
-  strings?: any;
-}
 export const LocaleContextProvider = (props: {
   locales?: Array<LocaleDef>;
-  locale: string;
+  localeId: string;
   /** SSRed locale strings */
-  localeStrings?: LocaleDef;
-
+  localeStrings: LocaleDef;
   currentUser?: any;
   /** Will optional let you */
   updateUser?: any;
@@ -116,70 +93,23 @@ export const LocaleContextProvider = (props: {
   children: React.ReactNode;
 }) => {
   const [cookies, setCookie, removeCookie] = useCookies();
-  const {
-    currentUser,
-    locale: localeFromProps,
-    localeStrings: localeStringsFromProps,
-  } = props;
-  const locale = localesDefsMap[localeFromProps] || defaultLocale; //useLocaleData({ currentUser, locale: localeFromProps });
-  if (locale.id !== localeFromProps) {
+  const { localeId, localeStrings: localeStringsFromProps } = props;
+  const localeDef = localesDefsMap[localeId] || defaultLocale; //useLocaleData({ currentUser, locale: localeFromProps });
+  if (localeDef.id !== localeId) {
     captureException(
-      `${localeFromProps} doesn't exist, falling back to defaultLocale`
+      `${localeId} doesn't exist, falling back to defaultLocale`
     );
   }
   // get translation strings loaded dynamically
   // Use the server version in priority
   const loadedStrings = localeStringsFromProps; //  || locale?.data?.locale?.strings;
-  // get translation strings bundled statically
-  // @ts-ignore
-  const [state, setState] = useState<{
-    locale: LocaleState;
-    localeStrings?: any;
-  }>({
-    locale: {
-      // @ts-ignore
-      id: locale.id,
-      // @ts-ignore
-      rtl: locale.rtl ?? false,
-      // @ts-ignore
-      method: locale.method,
-      loading: false,
-      strings: merge({}, loadedStrings),
-    },
-  });
-
-  // Update state when we finish loading the locale
-  useEffect(() => {
-    if (!locale.loading) {
-      setState((currentState) => ({
-        ...currentState,
-        locale: {
-          // @ts-ignore
-          id: locale.id,
-          // @ts-ignore
-          rtl: locale.rtl ?? false,
-          // @ts-ignore
-          method: locale.method,
-          loading: false,
-          strings: merge({}, loadedStrings),
-        },
-      }));
-    }
-  }, [locale.loading, locale.id]);
-
-  /**
-   * Get the current locale id
-   */
-  const getLocaleId = () => {
-    return state.locale.id;
-  };
 
   const getLocaleDefs = () => {
     return props.locales || [];
   };
 
   const getLocale = () => {
-    return localesDefsMap[getLocaleId()];
+    return localeDef;
   };
 
   const router = useRouter();
@@ -194,38 +124,36 @@ export const LocaleContextProvider = (props: {
     setCookie(LOCALE_COOKIE_NAME, localeId, { path: "/" });
     // if user is logged in, change their `locale` profile property
     if (currentUser && updateUser) {
-      await updateUser({
-        selector: { documentId: currentUser._id },
-        data: { locale: localeId },
-      });
+      try {
+        await updateUser({
+          selector: { documentId: currentUser._id },
+          data: { locale: localeId },
+        });
+      } catch (err) {
+        console.error("Could not update user language");
+        captureException(err);
+      }
     }
     // TODO: it should be enough to update lang with the new cookie,
     // but we need to double-check
     router.refresh();
-    // TODO: how to handle moment
-    // moment.locale(localeId);
-    /*
-    TODO: not sure how it was used
-    if (hasIntlFields) {
-      client.resetStore();
-    }*/
   };
 
   const { children } = props;
-  const localeId = state.locale.id;
   //const LayoutComponent = currentRoute.layoutName ? Components[currentRoute.layoutName] : Components.Layout;
 
   const intlObject = {
     locale: localeId,
     key: localeId,
-    messages: state.locale.strings,
+    messages: loadedStrings,
   };
 
   // TODO: optimize with SSR
   // if (locale.loading) return <Components.Loading />;
   // keep IntlProvider for now for backwards compatibility with legacy Context API
   const stringsRegistry = makeStringsRegistry();
-  stringsRegistry.addStrings(localeId, state.localeStrings);
+  stringsRegistry.addStrings(localeId, loadedStrings.strings);
+  console.log("str", { stringsRegistry, localeId });
 
   return (
     <IntlProvider stringsRegistry={stringsRegistry} {...intlObject}>

@@ -97,7 +97,7 @@ function VNApp({ Component, pageProps }: VNAppProps) {
       {getLayout(
         <ApolloProvider client={apolloClient}>
           <LocaleContextProvider
-            locale={locale || "en-US"}
+            localeId={locale || "en-US"}
             localeStrings={localeStrings}
             currentUser={user}
           >

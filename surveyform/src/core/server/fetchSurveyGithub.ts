@@ -1,5 +1,6 @@
 import yaml from "js-yaml"
 import type { SerializedSurveyDocument } from "@devographics/core-models";
+import { serverConfig } from "~/config/server";
 
 const org = "devographics"
 const repo = "surveys"
@@ -25,16 +26,25 @@ async function githubYamlAsJson(res: Response) {
  * @param year 
  */
 export async function fetchSurveyGithub(slug: SerializedSurveyDocument["slug"], year: string) {
+    const githubAuthorization = `Bearer ${serverConfig.githubToken}`
     const safeSlug = slug?.replaceAll("-", "_")
     const folder = `${safeSlug}/${year}`
     const contentsRoot = `${apiRoot}/${org}/${repo}/contents/${folder}`
     const configUrl = `${contentsRoot}/config.yml`
-    const configRes = await fetch(configUrl)
+    const configRes = await fetch(configUrl, {
+        headers: {
+            "Authorization": githubAuthorization
+        }
+    })
     if (!configRes.ok) {
         console.debug("Fetched url", configUrl)
         throw new Error(`Cannot fetch survey config for slug "${slug}" and year "${year}, error ${configRes.status}"`)
     }
-    const questionsRes = await fetch(`${contentsRoot}/questions.yml`)
+    const questionsRes = await fetch(`${contentsRoot}/questions.yml`, {
+        headers: {
+            "Authorization": githubAuthorization
+        }
+    })
     if (!questionsRes.ok) {
         throw new Error(`Cannot fetch survey config for slug "${slug}" and year "${year}, error ${configRes.status}"`)
     }
