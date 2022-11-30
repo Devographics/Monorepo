@@ -83,7 +83,7 @@ const BlockTitle = ({
                     {/* <BlockTitleActionsWrapper>
                         <BlockTitleActions {...properties} />
                     </BlockTitleActionsWrapper> */}
-                    {entity && !isCapturing && <BlockLinks entity={entity} />}
+                    {/* {entity && !isCapturing && <BlockLinks entity={entity} />} */}
                 </LeftPart>
                 {/* <BlockTitleSwitcherWrapper>
                     <BlockTitleSwitcher {...properties} />

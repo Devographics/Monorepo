@@ -12,6 +12,7 @@ import Totals from './Totals'
 import UnitsSelector from './UnitsSelector'
 import { ExplorerData } from './types'
 import { addExtraCounts, getTotals } from './helpers'
+import { Entity } from 'core/types'
 
 /*
 
@@ -19,7 +20,7 @@ keys1: x-axis
 keys2: y-axis
 
 */
-const DataExplorer = ({ data, stateStuff }: { data: ExplorerData; stateStuff: any }) => {
+const DataExplorer = ({ data, stateStuff, entities }: { data: ExplorerData, stateStuff: any, entities: Entity[] }) => {
     const { keys1, keys2, all_years } = data
     const { isLoading, currentYear } = stateStuff
     const allYears = all_years.map(y => y.year)
@@ -45,8 +46,8 @@ const DataExplorer = ({ data, stateStuff }: { data: ExplorerData; stateStuff: an
             <Footer_>
                 <Stats facets={facets} />
                 <YearSelector allYears={allYears} stateStuff={stateStuff} />
-                <Selector axis="y" stateStuff={stateStuff} />
-                <Selector axis="x" stateStuff={stateStuff} />
+                <Selector axis="y" stateStuff={stateStuff} entities={entities} />
+                <Selector axis="x" stateStuff={stateStuff} entities={entities} />
                 <UnitsSelector {...commonProps} />
             </Footer_>
         </Wrapper>

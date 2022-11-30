@@ -16,7 +16,7 @@ const stringify = value => {
     return unquoted
 }
 
-// these two variables are used inside GraphQL arguments, 
+// these two variables are used inside GraphQL arguments,
 // so they need to be converted to strings
 const keysToStringify = ['options', 'filters']
 
@@ -52,6 +52,8 @@ const applyTemplate = (block, templateObject, parent) => {
         ...(parent ? { parentId: parent.id } : {}),
         ...(templateObject.defaultVariables || {}),
         ...globalVariables,
+        allFeaturesAsStrings: globalVariables.allFeatures.map(f => `"${f}"`).join(', '),
+        allToolsAsStrings: globalVariables.allTools.map(f => `"${f}"`).join(', '),
         id: block.id,
         fieldId: block.id,
         ...(block.variables || {}),
@@ -142,7 +144,7 @@ exports.pageFromConfig = async (page, pageIndex) => {
                     }
 
                     blockVariant.path = `${page.path}${blockVariant.id}/`
-                    
+
                     variants.push(blockVariant)
                 }
 

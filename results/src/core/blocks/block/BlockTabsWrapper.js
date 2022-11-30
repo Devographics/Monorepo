@@ -61,7 +61,7 @@ export const TabsWrapper = ({ block, pageData, blockIndex, withMargin = true }) 
         firstBlock = {
             ...firstBlock,
             entity: blockEntity,
-            title: blockEntity?.name,
+            title: blockEntity?.nameClean || blockEntity?.name,
             titleLink: blockEntity?.homepage?.url
         }
     }
@@ -103,7 +103,7 @@ const Wrapper = styled.section`
             margin-bottom: ${spacing(3)};
 
             @media ${mq.large} {
-                margin-bottom: ${spacing(6)};
+                margin-bottom: ${spacing(4)};
             }
         `}
 `

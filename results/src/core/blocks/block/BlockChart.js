@@ -10,17 +10,21 @@ import T from 'core/i18n/T'
 import BlockFooter from 'core/blocks/block/BlockFooter'
 import BlockUnitsSelector from 'core/blocks/block/BlockUnitsSelector'
 import EditInline from 'core/components/EditInline'
+import BlockLinks from 'core/blocks/block/BlockLinks'
 
 const BlockChart = props => {
     const { children, units, error, data, block = {}, legends, legendProps, modeProps } = props
-    const { legendPosition = 'top', showNote = true, customChart } = block
+    const { legendPosition = 'top', showNote = true, customChart, entity } = block
     const { translate } = useI18n()
+    const context = usePageContext()
+    const { isCapturing } = context
 
     const legendProps_ = { block, data, units, position: legendPosition, legends, ...legendProps }
 
     return (
         <div>
             <BlockDescriptionContents block={block} />
+            {entity && !isCapturing && <BlockLinks entity={entity} />}
             {legends && legendPosition === 'top' && <BlockLegends {...legendProps_} />}
             <div className="Block__Contents">
                 {error ? <div className="error">{error}</div> : children}
@@ -53,7 +57,7 @@ const BlockDescriptionContents = ({ block }) => {
     const { translate } = useI18n()
     const context = usePageContext()
 
-    const { description, enableDescriptionMarkdown = true } = block
+    const { description, enableDescriptionMarkdown = true, isFreeform } = block
     const key = `${getBlockDescriptionKey(block, context)}`
     if (description ?? translate(key, {}, null)) {
         return (
@@ -65,6 +69,7 @@ const BlockDescriptionContents = ({ block }) => {
                     fallback={null}
                     html={false}
                 />
+                {isFreeform && <T k="block.freeform" />}
             </Description>
         )
     }

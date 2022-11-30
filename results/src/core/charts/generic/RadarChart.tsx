@@ -6,7 +6,7 @@ import { useTheme } from 'styled-components'
 import { ResponsiveBump } from '@nivo/bump'
 import { BasicTooltip } from '@nivo/tooltip'
 
-import { ResponsiveRadar } from '@nivo/radar'
+// import { ResponsiveRadar } from '@nivo/radar'
 
 export interface RadarChartDatum {
     // year

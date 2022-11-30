@@ -43,10 +43,14 @@ const BlockSwitcher = ({ pageData, block, index, ...props }) => {
         )
     }
 
+    const blockEntity = block.entityPath && get(pageData, block.entityPath)
+
     const customChart = customData && (
         <BlockComponent
-            block={{ ...block, chartOnly: true }}
+            block={{ ...block, entity: blockEntity, chartOnly: true }}
+            pageData={pageData}
             data={customData}
+            entity={blockEntity}
             keys={blockKeys}
             index={index}
             {...props}
@@ -55,8 +59,10 @@ const BlockSwitcher = ({ pageData, block, index, ...props }) => {
 
     return (
         <BlockComponent
-            block={{ ...block, setCustomData, customData, customChart }}
+            block={{ ...block, entity: blockEntity, setCustomData, customData, customChart }}
+            pageData={pageData}
             data={blockData}
+            entity={blockEntity}
             keys={blockKeys}
             index={index}
             {...props}

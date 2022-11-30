@@ -17,18 +17,18 @@ export const getSizeInKB = (obj: any) => {
 }
 
 export const getQuery = (queryTemplate: string, variables: any) => {
-    const query = queryTemplate.replace('dataAPI', 'query ExplorerQuery')
+    const query = queryTemplate.slice(queryTemplate.indexOf('dataAPI')).replace('dataAPI', 'query ExplorerQuery')
     const t = template(query)
     return t(variables)
 }
 
-export const runQuery = async (url: string, query: string, queryName: string): Promise<any> => {
+export const runQuery = async (url: string, query: string, queryName: string, variables: any = {}): Promise<any> => {
     const startAt = new Date()
     const response = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-            query
+            query, variables
         })
     })
     const text = await response.text()

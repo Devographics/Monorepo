@@ -25,6 +25,8 @@ export interface Entity {
     id: string
     aliases?: string[]
     name: string
+    nameClean: string
+    nameHtml: string
     otherName: string
     twitterName: string
     category?: string

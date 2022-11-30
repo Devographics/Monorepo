@@ -4,13 +4,14 @@ import T from 'core/i18n/T'
 import styled from 'styled-components'
 import { mq, fontSize } from 'core/theme'
 import IntroLogo from 'Logo/IntroLogo'
+import config from 'Config/config.yml'
 
 const SurveyIntroBlock = () => (
     <>
         <IntroLogo />
         <div className="SurveyIntro">
             <Content className="SurveyIntro__Content">
-                <T k="sections.introduction.description" md={true} />
+                <T k={`introduction.${config.surveySlug}`} md={true} />
                 <IntroductionFooter />
             </Content>
         </div>
@@ -27,7 +28,6 @@ const Content = styled.div`
         p:first-child {
             @media ${mq.mediumLarge} {
                 max-width: 700px;
-                
             }
         }
     }

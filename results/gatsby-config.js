@@ -1,12 +1,10 @@
 require('dotenv').config()
 
-module.exports = {
+const config = {
     siteMetadata: {
         title: `Devographics Survey Results`,
     },
     plugins: [
-        // @see https://www.gatsbyjs.com/plugins/gatsby-plugin-pnpm/
-        'gatsby-plugin-pnpm',
         'gatsby-transformer-yaml',
         {
             resolve: 'gatsby-source-filesystem',
@@ -41,3 +39,10 @@ module.exports = {
         // `gatsby-plugin-webpack-bundle-analyser-v2`
     ],
 }
+
+if (process.env.USE_PNPM === 'true') {
+    // @see https://www.gatsbyjs.com/plugins/gatsby-plugin-pnpm/
+    config.plugins.push('gatsby-plugin-pnpm')
+}
+
+module.exports = config

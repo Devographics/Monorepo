@@ -89,9 +89,12 @@ const AwardBlock = ({ block, entities }) => {
 }
 
 const EntityItem = ({ entity }) => {
-    const { name, homepage, mdn } = entity
-    const url = homepage.url || mdn?.url
-    return url ? <a href={url}>{name}</a> : <span>{name}</span>
+    if (!entity) {
+        return <span>missing entity</span>
+    }
+    const { name, nameClean, homepage, mdn } = entity
+    const url = homepage?.url || mdn?.url
+    return url ? <a href={url}>{nameClean || name}</a> : <span>{nameClean || name}</span>
 }
 
 AwardBlock.propTypes = {

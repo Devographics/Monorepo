@@ -11,7 +11,7 @@
         "apollo-server-plugin-response-cache": "^3.7.0",
         "dotenv": "^10.0.0",
         "express": "^4.17.1",
-        "graphql": "^15.6.1",
+        "graphql": "16.6.0",
         "highlight.js": "^11.6.0",
         "js-yaml": "^4.1.0",
         "lodash": "^4.17.21",
@@ -57,7 +57,7 @@
     "scripts": {
         "clean": "rm -Rf ./dist",
         "build": "NODE_ENV=production tsup && cp -R public/ dist/",
-        "dev": "NODE_ENV=development tsup --watch ./src --watch ../../stateof-entities --watch ../../devographics-surveys --onSuccess='cp -R public/ dist/ && node ./dist/server.mjs'",
+        "dev": "NODE_ENV=development tsup --watch ./src --watch ../../stateof-entities --onSuccess='cp -R public/ dist/ && node ./dist/server.mjs'",
         "copy:public": "cp -R public/ dist/",
         "build:webpack": "NODE_ENV=production webpack --config webpack.production.js",
         "dev:webpack": "NODE_ENV=development webpack --config webpack.development.js",
@@ -67,6 +67,6 @@
         "typecheck": "tsc --noEmit --p ./tsconfig.json"
     },
     "engines": {
-        "node": "16.15.0"
+        "node": "18.10.0"
     }
 }

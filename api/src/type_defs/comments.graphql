@@ -3,7 +3,8 @@
 Comment
 """
 type Comment {
-    comment: String
+    message: String
+    responseId: String
     # sentimentScore: Float # not implemented yet
 }
 

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
 // import { mq, spacing, fontSize } from 'core/theme'
-// import T from 'core/i18n/T'
+import T from 'core/i18n/T'
 import DataExplorer from './DataExplorer'
 import BlockData from 'core/blocks/block/BlockData'
 import { ExplorerData } from './types'
@@ -14,14 +14,18 @@ import last from 'lodash/last'
 
 const DataExplorerBlock = ({
     block,
-    data: defaultData
+    data: defaultData,
+    pageData
 }: {
     block: BlockDefinition
     data: ExplorerData
+    pageData: any
 }) => {
     const context = usePageContext()
     const surveyType = context.config.slug
 
+    const entities = [].concat(pageData?.internalAPI?.features, pageData?.internalAPI?.tools)
+    
     const defaultFacet1 = block?.variables?.facet1
     const segments1 = getFacetSegments(defaultFacet1)
     const defaultFacet2 = block?.variables?.facet2
@@ -92,21 +96,9 @@ const DataExplorerBlock = ({
 
     return (
         <Wrapper>
-            <DataExplorer data={data} stateStuff={stateStuff} />
+            <DataExplorer data={data} stateStuff={stateStuff} entities={entities} />
             <BlockData block={{ id: `${xField}__${yField}`, query }} data={data} />
-            <div>
-                ### Chart Scale  <br/><br/>
-                
-                One dot represents 10 respondents. <br/><br/>
-                
-                ### Extra & Missing Respondents<br/><br/>
-                
-                If 50% of question respondents are right-handed, and there are 1000 CSS Grid users,
-                you'd expect to find 500 right-handed CSS Grid users. <br/><br/>
-                
-                Any deviation above or below that expected total is highlighted with either green dots (for extra respondents) or
-                empty red dots (for missing respondents).
-            </div>
+            <T k="explorer.details" html={true}/>
         </Wrapper>
     )
 }

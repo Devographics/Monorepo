@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, ReactNode } from 'react'
 import { useTheme } from 'styled-components'
 import styled from 'styled-components'
 import { mq, spacing, fontSize, color } from 'core/theme'
@@ -6,7 +6,13 @@ import Button from 'core/components/Button'
 import Modal from 'react-modal'
 import { useI18n } from 'core/i18n/i18nContext'
 
-const ModalTrigger = ({ label, trigger, children }) => {
+type ModalTriggerProps = {
+    label?: string
+    trigger: ReactNode
+    children: ReactNode
+}
+
+const ModalTrigger = ({ label, trigger, children }: ModalTriggerProps) => {
     const theme = useTheme()
     const [modalIsOpen, setIsOpen] = useState(false)
     const { translate } = useI18n()
