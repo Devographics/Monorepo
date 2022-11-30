@@ -2,7 +2,6 @@ import React from "react";
 import SurveySectionContents from "./SurveySectionContents";
 import { getSurvey } from "~/modules/surveys/getters";
 import { useSurveyResponseParams } from "../hooks";
-import { EntitiesProvider } from "~/core/components/common/EntitiesContext";
 import SurveyHeadTags from "../SurveyHeadTags";
 import SurveyMessage from "../SurveyMessage";
 
@@ -24,17 +23,15 @@ const SurveySectionReadOnly = () => {
     nextSection,
   };
   return (
-    <EntitiesProvider surveyId={survey.surveyId}>
-      <div className="survey-section-wrapper">
-        <SurveyMessage survey={survey} />
-        <SurveyHeadTags survey={survey} section={section} />
-        <SurveySectionContents
-          survey={survey}
-          {...sectionProps}
-          readOnly={true}
-        />
-      </div>
-    </EntitiesProvider>
+    <div className="survey-section-wrapper">
+      <SurveyMessage survey={survey} />
+      <SurveyHeadTags survey={survey} section={section} />
+      <SurveySectionContents
+        survey={survey}
+        {...sectionProps}
+        readOnly={true}
+      />
+    </div>
   );
 };
 

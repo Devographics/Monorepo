@@ -1,8 +1,12 @@
+import { captureException } from "@sentry/nextjs";
 import { notFound } from "next/navigation";
-import { SurveyContextProvider } from "~/core/components/survey/SurveyContext/Provider";
+import { EntitiesProvider } from "~/core/components/common/EntitiesContext";
+import { SurveyProvider } from "~/core/components/survey/SurveyContext/Provider";
 import { fetchSurveyGithub } from "~/core/server/fetchSurveyGithub";
+import { fetchEntitiesRedis } from "~/modules/entities/server/fetchEntitiesRedis";
 import surveys from "~/surveys";
 
+// revalidate survey/entities every 5 minutes
 const SURVEY_TIMEOUT_SECONDS = 5 * 60;
 export const revalidate = SURVEY_TIMEOUT_SECONDS;
 
@@ -31,7 +35,21 @@ export default async function SurveyLayout({
   if (!survey) {
     notFound();
   }
+  // NOTE: if fetch entities was based on survey slug
+  // we could run those queries in //
+  // (not useful in static mode though)
+  let entities = [];
+  try {
+    const redisEntities = await fetchEntitiesRedis(survey.surveyId);
+    if (!redisEntities) throw new Error("Entities not found in Redis");
+    entities = redisEntities;
+  } catch (err) {
+    captureException(err);
+  }
+
   return (
-    <SurveyContextProvider survey={survey}>{children}</SurveyContextProvider>
+    <SurveyProvider survey={survey}>
+      <EntitiesProvider entities={entities}>{children}</EntitiesProvider>
+    </SurveyProvider>
   );
 }

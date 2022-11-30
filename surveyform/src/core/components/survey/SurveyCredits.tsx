@@ -21,8 +21,7 @@ const SurveyCredits = ({ survey }) => {
 };
 
 const SurveyCreditItems = ({ survey }: { survey: SurveyType }) => {
-  const { data, loading, error } = useEntities();
-  const { entities } = data;
+  const entities = useEntities();
   return (
     <>
       {survey.credits

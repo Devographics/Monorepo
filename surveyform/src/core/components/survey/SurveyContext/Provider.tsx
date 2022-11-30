@@ -10,7 +10,7 @@ const SurveyContext = React.createContext<SurveyDocument | undefined>(
   undefined
 );
 
-export const SurveyContextProvider = ({
+export const SurveyProvider = ({
   survey,
   children,
 }: {

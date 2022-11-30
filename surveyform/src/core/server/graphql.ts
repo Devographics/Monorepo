@@ -11,12 +11,6 @@ import { nodeCache, promisesNodeCache } from "~/lib/server/caching";
 import { ResponseMongoCollection } from "~/modules/responses/model.server";
 import { isAdmin } from "@vulcanjs/permissions";
 import { SaveMongoCollection } from "@devographics/core-models/server";
-import {
-  entitiesResolver,
-  entitiesTypeDefs,
-  // entityType,
-  // exampleType,
-} from "~/modules/entities/server/graphql";
 
 import { startSurvey, saveSurvey } from "~/modules/responses/server/graphql";
 import {
@@ -109,11 +103,6 @@ const twitterType = `type Twitter {
 `;
 
 addGraphQLSchema(twitterType);
-
-// addGraphQLSchema(entityType);
-// addGraphQLSchema(exampleType);
-addGraphQLQuery(entitiesTypeDefs);
-addGraphQLResolvers({ Query: { entities: entitiesResolver } });
 
 // /*
 

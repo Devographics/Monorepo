@@ -40,8 +40,7 @@ export const FormItem = (props: FormItemProps) => {
     noteIntlId: noteIntlId_,
   } = props;
 
-  const { data, loading: entitiesLoading, error } = useEntities();
-  const { entities } = data;
+  const entities = useEntities();
   const entity = entities?.find((e) => e.id === questionId);
 
   // const description =

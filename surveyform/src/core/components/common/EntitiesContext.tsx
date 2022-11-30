@@ -1,3 +1,4 @@
+"use client";
 /**
  * Load entities only once top level to avoid multiple queries
  *
@@ -9,34 +10,31 @@
 import React, { useContext } from "react";
 
 import { Entity } from "@devographics/core-models";
-import { useEntitiesQuery } from "~/core/hooks/useEntitiesQuery";
 
-const EntitiesContext = React.createContext<{
-  data: { entities: Array<Entity> }; // use empty array even if loading to avoid crash if not waiting for loading
-  error?: Error;
-  loading?: boolean;
-}>({
-  loading: true,
-  data: { entities: [] },
-});
+const EntitiesContext = React.createContext<
+  Array<Entity> | undefined // use empty array even if loading to avoid crash if not waiting for loading
+>(undefined);
 
 export const EntitiesProvider = ({
   children,
-  surveyId,
+  entities,
 }: {
   children: any;
-  surveyId: string;
+  entities: Array<Entity>;
 }) => {
-  const res = useEntitiesQuery({ surveyId });
-  const { loading, error, data } = res;
-  const entities = data?.entities || [];
   return (
-    <EntitiesContext.Provider value={{ loading, error, data: { entities } }}>
+    <EntitiesContext.Provider value={entities}>
       {children}
     </EntitiesContext.Provider>
   );
 };
 
-export const useEntities = () => useContext(EntitiesContext);
+export const useEntities = () => {
+  const entities = useContext(EntitiesContext);
+  if (!entities) {
+    throw new Error("Entity context not initialized");
+  }
+  return entities;
+};
 
 export default EntitiesContext;

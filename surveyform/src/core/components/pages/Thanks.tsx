@@ -11,7 +11,6 @@ import surveys from "~/surveys";
 import Image from "next/image";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import { getSurveyImageUrl } from "~/surveys/getSurveyImageUrl";
-import { EntitiesProvider } from "~/core/components/common/EntitiesContext";
 import Link from "next/link";
 import { ResponseDocument, SurveyDocument } from "@devographics/core-models";
 
@@ -74,39 +73,37 @@ const ThanksInner = ({
   const { name, year } = survey;
 
   return (
-    <EntitiesProvider surveyId={survey.surveyId}>
-      <div className="contents-narrow thanks">
-        <h1 className="survey-image survey-image-small">
-          <Image
-            width={300}
-            height={200}
-            src={imageUrl}
-            alt={`${name} ${year}`}
-            quality={100}
-          />
-        </h1>
-        {response && <Score response={response} survey={survey} />}
-        <div>
-          <FormattedMessage id="general.thanks" />
-        </div>
-        <ShareSite survey={survey} />
-        <div className="form-submit form-section-nav form-section-nav-bottom">
-          <div className="form-submit-actions">
-            <Link
-              className="form-btn-prev"
-              href={getSurveyPath({
-                survey,
-                response,
-                readOnly,
-                number: survey.outline.length,
-              })}
-            >
-              « <FormattedMessage id="general.back" />
-            </Link>
-          </div>
+    <div className="contents-narrow thanks">
+      <h1 className="survey-image survey-image-small">
+        <Image
+          width={300}
+          height={200}
+          src={imageUrl}
+          alt={`${name} ${year}`}
+          quality={100}
+        />
+      </h1>
+      {response && <Score response={response} survey={survey} />}
+      <div>
+        <FormattedMessage id="general.thanks" />
+      </div>
+      <ShareSite survey={survey} />
+      <div className="form-submit form-section-nav form-section-nav-bottom">
+        <div className="form-submit-actions">
+          <Link
+            className="form-btn-prev"
+            href={getSurveyPath({
+              survey,
+              response,
+              readOnly,
+              number: survey.outline.length,
+            })}
+          >
+            « <FormattedMessage id="general.back" />
+          </Link>
         </div>
       </div>
-    </EntitiesProvider>
+    </div>
   );
 };
 

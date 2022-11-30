@@ -50,8 +50,7 @@ export const Experience = (props: ExperienceProps) => {
   // open the comment widget if there is already a comment
   const [showCommentInput, setShowCommentInput] = useState(!!commentValue);
 
-  const { data, loading, error } = useEntities();
-  const { entities } = data;
+  const entities = useEntities();
   const entity = entities?.find((e) => e.id === questionId);
 
   return (
@@ -199,7 +198,7 @@ const CommentInput = ({
   questionEntity,
   questionPath,
 }) => {
-  const [ localValue, setLocalValue ] = useState(value);
+  const [localValue, setLocalValue] = useState(value);
   const { getDocument, updateCurrentValues } = useFormContext();
   const Components = useVulcanComponents();
 
@@ -213,16 +212,20 @@ const CommentInput = ({
 
   const updateCurrentValuesDebounced = debounce(updateCurrentValues, 500);
 
-  const handleChange = (isDebounced = false) => (event) => {
-    let value = event.target.value;
-    setLocalValue(value)
-    const f = isDebounced ? updateCurrentValuesDebounced : updateCurrentValues
-    if (value === "") {
-      f({ [path]: null });
-    } else {
-      f({ [path]: value });
-    }
-  }
+  const handleChange =
+    (isDebounced = false) =>
+    (event) => {
+      let value = event.target.value;
+      setLocalValue(value);
+      const f = isDebounced
+        ? updateCurrentValuesDebounced
+        : updateCurrentValues;
+      if (value === "") {
+        f({ [path]: null });
+      } else {
+        f({ [path]: value });
+      }
+    };
 
   return (
     <div className="comment-input">

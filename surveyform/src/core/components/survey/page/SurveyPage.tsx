@@ -16,7 +16,6 @@ import { useUser } from "~/account/user/hooks";
 import Image from "next/image";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import { getSurveyImageUrl } from "~/surveys/getSurveyImageUrl";
-import { EntitiesProvider } from "~/core/components/common/EntitiesContext";
 import { Loading } from "~/core/components/ui/Loading";
 import { useSurvey } from "../SurveyContext/Provider";
 
@@ -32,38 +31,36 @@ const SurveyPageWrapper = (props: SurveyPageWrapperProps) => {
 
   // console.log(props)
   return (
-    <EntitiesProvider surveyId={survey.surveyId}>
-      <div className="survey-page contents-narrow">
-        <SurveyHeadTags survey={survey} />
-        <SurveyMessage survey={survey} />
+    <div className="survey-page contents-narrow">
+      <SurveyHeadTags survey={survey} />
+      <SurveyMessage survey={survey} />
 
-        {resultsUrl && (
-          <div className="survey-results">
-            <a href={resultsUrl} target="_blank" rel="noreferrer noopener">
-              <FormattedMessage id="general.survey_results" />
-            </a>
-          </div>
-        )}
-
-        <h1 className="survey-image">
-          <Image
-            width={600}
-            height={400}
-            priority={true}
-            src={imageUrl}
-            alt={`${name} ${survey.year}`}
-            quality={100}
-          />
-        </h1>
-        <div className="survey-page-block">
-          <SurveyMain survey={survey} />
+      {resultsUrl && (
+        <div className="survey-results">
+          <a href={resultsUrl} target="_blank" rel="noreferrer noopener">
+            <FormattedMessage id="general.survey_results" />
+          </a>
         </div>
-        <Faq survey={survey} />
-        {survey.credits && <SurveyCredits survey={survey} />}
-        <Translators />
-        <Support />
+      )}
+
+      <h1 className="survey-image">
+        <Image
+          width={600}
+          height={400}
+          priority={true}
+          src={imageUrl}
+          alt={`${name} ${survey.year}`}
+          quality={100}
+        />
+      </h1>
+      <div className="survey-page-block">
+        <SurveyMain survey={survey} />
       </div>
-    </EntitiesProvider>
+      <Faq survey={survey} />
+      {survey.credits && <SurveyCredits survey={survey} />}
+      <Translators />
+      <Support />
+    </div>
   );
 };
 

@@ -4,8 +4,6 @@ import SurveyHeadTags from "../SurveyHeadTags";
 import SurveyMessage from "../SurveyMessage";
 import { useSurveyResponseParams } from "../hooks";
 import surveys from "~/surveys";
-import { EntitiesProvider } from "~/core/components/common/EntitiesContext";
-import { getEntityIdsFromSurvey } from "~/modules/entities/helpers";
 
 const SurveySection = () => {
   let { responseId, sectionNumber = 1, slug, year } = useSurveyResponseParams();
@@ -33,13 +31,11 @@ const SurveySection = () => {
   };
 
   return (
-    <EntitiesProvider surveyId={survey.surveyId}>
-      <div className="survey-section-wrapper">
-        <SurveyMessage survey={survey} />
-        <SurveyHeadTags survey={survey} section={section} />
-        <SurveySectionContents survey={survey} {...sectionProps} />
-      </div>
-    </EntitiesProvider>
+    <div className="survey-section-wrapper">
+      <SurveyMessage survey={survey} />
+      <SurveyHeadTags survey={survey} section={section} />
+      <SurveySectionContents survey={survey} {...sectionProps} />
+    </div>
   );
 };
 

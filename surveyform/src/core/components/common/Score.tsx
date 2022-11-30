@@ -81,8 +81,7 @@ const Score = ({ response, survey }: { response: any; survey: SurveyType }) => {
     .map((f) => f.id)
     .filter((id) => !!id) as Array<string>;
 
-  const { data, loading: entitiesLoading, error } = useEntities();
-  const { entities } = data;
+  const entities = useEntities();
 
   // if (loading) return <Components.Loading />;
   // if (error) return <span>Could not load entities</span>;

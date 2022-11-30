@@ -40,9 +40,7 @@ export async function fetchSurveyGithub(slug: SerializedSurveyDocument["slug"], 
     }
     const surveyConfig = await githubYamlAsJson(configRes)
     const questionsConfig = await githubYamlAsJson(questionsRes)
-    console.debug({ surveyConfig, questionsConfig })
-
-    // convert to json
+    //console.debug({ surveyConfig, questionsConfig })
 
     const survey = {
         ...surveyConfig,
