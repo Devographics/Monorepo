@@ -20,7 +20,6 @@ export const Layout = ({
   surveySlug?: string;
   surveyYear?: string;
 }) => {
-  const Components = useVulcanComponents();
   //const router = useRouter();
   const query = useSearchParams();
   //const { query = {} } = router;

@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { useIntlContext } from "@vulcanjs/react-i18n";
 import { TranslatorWrapper, useTranslatorMode } from "./TranslatorWrapper";

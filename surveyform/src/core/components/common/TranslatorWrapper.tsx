@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState } from "react";
 import { useKeydownContext } from "./KeydownContext";
 import { useIntlContext } from "@vulcanjs/react-i18n";

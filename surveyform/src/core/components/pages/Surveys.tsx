@@ -69,11 +69,11 @@ const SurveyGroup = ({ status }) => {
 const Surveys = () => {
   return (
     <div className="surveys">
-      <LocaleSelector />
+      {/* FIXME won't load useLocaleContext correctly... <LocaleSelector />*/}
       <SurveyGroup status="open" />
       <SurveyGroup status="preview" />
       <SurveyGroup status="closed" />
-      <Translators />
+      {/*<Translators />*/}
     </div>
   );
 };
