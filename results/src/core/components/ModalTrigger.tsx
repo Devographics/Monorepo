@@ -8,11 +8,12 @@ import { useI18n } from 'core/i18n/i18nContext'
 
 type ModalTriggerProps = {
     label?: string
+    size?: string
     trigger: ReactNode
     children: ReactNode
 }
 
-const ModalTrigger = ({ label, trigger, children }: ModalTriggerProps) => {
+const ModalTrigger = ({ label, trigger, size = 'm', children }: ModalTriggerProps) => {
     const theme = useTheme()
     const [modalIsOpen, setIsOpen] = useState(false)
     const { translate } = useI18n()
@@ -64,7 +65,7 @@ const ModalTrigger = ({ label, trigger, children }: ModalTriggerProps) => {
                 className="ModalContent"
                 // overlayClassName="ModalOverlay"
             >
-                <Content>
+                <Content size={size}>
                     <ModalClose closeModal={closeModal} />
                     <Inner>{childrenComponent}</Inner>
                 </Content>
@@ -103,7 +104,18 @@ const Close = styled.button`
     }
 `
 
-const Content = styled.div`
+const getMaxWidth = size => {
+    switch (size) {
+        case 's':
+            return '600px'
+        case 'm':
+            return '950px'
+        case 'l':
+            return 'calc(100%-40px)'
+    }
+}
+
+const Content = styled.div<{ size: string }>`
     position: absolute;
     right: auto;
     bottom: auto;
@@ -116,16 +128,16 @@ const Content = styled.div`
     box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.75);
 
     @media ${mq.small} {
-        top: ${spacing(1.5)};
-        left: ${spacing(1.5)};
-        width: calc(100% - 60px);
+        top: ${spacing()};
+        left: ${spacing()};
+        width: calc(100% - 40px);
     }
     @media ${mq.mediumLarge} {
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
         width: calc(100% - 40px);
-        max-width: 950px;
+        max-width: ${({ size }) => getMaxWidth(size)};
     }
 `
 

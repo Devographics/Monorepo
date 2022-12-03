@@ -97,14 +97,16 @@ const distinct = [
 
 const stateOfCSSThemeColors: DefaultTheme['colors'] = {
     background: '#272325',
+    backgroundTrans: 'rgb(39, 35, 37, 0.3)',
     backgroundBackground: colors.electricBlueDarkest,
     backgroundForeground: colors.navyLighter,
     backgroundAlt: '#314448',
+    backgroundAltTrans: 'rgba(49, 68, 72, 0.4)',
     backgroundAlt2: colors.electricBlueDarkerer,
     backgroundInverted: '#FFF6E6',
     backgroundInvertedAlt: '#E3D8C4',
     text: colors.white,
-    textAlt: '#E3D8C4',
+    textAlt: 'rgba(255, 246, 229, 0.5)',
     textInverted: '#272325',
     textHighlight: colors.greenDark,
     link: colors.electricBlue,
