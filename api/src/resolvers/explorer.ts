@@ -38,9 +38,6 @@ export default {
             { year }: { year: number },
             context: RequestContext
         ) => {
-            console.log(`// explorer/year `)
-            console.log(facet1)
-            console.log(facet2)
             return computeTermAggregationSingleYearWithCache({
                 context,
                 survey,
@@ -49,6 +46,8 @@ export default {
                     ...options,
                     filters,
                     facet: facet2,
+                    facet1keys: getFacetKeys(facet1),
+                    facet2keys: getFacetKeys(facet2),
                     year
                 }
             })
