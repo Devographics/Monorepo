@@ -54,11 +54,8 @@ export const apiRoutes = {
   },
   responses: {
     single: {
-      href: ({ surveySlug }: { surveySlug: string }) => {
-        const base = new URL("/api/responses/single")
-        base.searchParams.set("surveySlug", surveySlug)
-        return base.toString()
-      }
+      href: ({ surveySlug }: { surveySlug: string }) => `/api/responses/single?surveySlug=${surveySlug}`
+
     }
   }
-};
+}
