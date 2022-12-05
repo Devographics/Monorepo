@@ -40,7 +40,7 @@ const BlockData = props => {
     )
 }
 
-const JSONExport = ({ block, data }) => {
+export const JSONExport = ({ block, data }) => {
     const isArray = Array.isArray(data)
 
     // try to remove entities data

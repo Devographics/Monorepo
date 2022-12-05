@@ -24,7 +24,7 @@ query: >
             ) {
                 keys1
                 keys2
-                all_years {
+                year(year: ${currentYear}) {
                   year
                   facets {
                       buckets {

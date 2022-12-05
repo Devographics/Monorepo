@@ -64,11 +64,13 @@ export const Text = ({
 
 export const getBucketLabel = args => {
     const { getString } = useI18n()
-    const { shouldTranslate, i18nNamespace, id, entity, shortenLabel = false } = args
+    const { shouldTranslate, i18nNamespace, id, entity, shortenLabel = false, label: providedLabel } = args
     let label
     const s = getString(`options.${i18nNamespace}.${id}`)
 
-    if (entity?.name) {
+    if (providedLabel) {
+        label = providedLabel
+    } else if (entity?.name) {
         label = entity.nameClean || entity.name
     } else if (shouldTranslate && !s.missing) {
         label = s.tClean || s.t
@@ -84,12 +86,12 @@ export const getBucketLabel = args => {
 export const TickItem = (tick: TickItemProps) => {
     const { getString } = useI18n()
 
-    const { x, y, value, shouldTranslate, i18nNamespace, entity, tickRotation } = tick
+    const { x, y, value, shouldTranslate, i18nNamespace, entity, tickRotation, label } = tick
 
     let link,
         description = tick.description
 
-    const label = getBucketLabel({ shouldTranslate, i18nNamespace, entity, id: tick.value })
+    const tickLabel = getBucketLabel({ shouldTranslate, i18nNamespace, entity, id: tick.value, label })
 
     if (entity) {
         const { homepage, github } = entity
@@ -103,7 +105,7 @@ export const TickItem = (tick: TickItemProps) => {
     }
 
     const textProps = {
-        label,
+        label: tickLabel,
         description,
         tickRotation
     }

@@ -41,6 +41,7 @@ export const getLeftMargin = ({ data, shouldTranslate, i18nNamespace }) => {
                 shouldTranslate,
                 i18nNamespace,
                 id: bucket.id,
+                label: bucket.label,
                 entity: bucket.entity,
                 shortenLabel: true
             })
@@ -132,6 +133,7 @@ const HorizontalBarChart = ({
                                 i18nNamespace={i18nNamespace}
                                 shouldTranslate={translateData}
                                 entity={buckets.find(b => b.id === tick.value)?.entity}
+                                label={buckets.find(b => b.id === tick.value)?.label}
                                 {...tick}
                             />
                         )

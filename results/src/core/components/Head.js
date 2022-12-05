@@ -42,7 +42,7 @@ const Head = () => {
             <Helmet defaultTitle={meta.fullTitle}>
                 <html lang="en" />
                 <title>{meta.title}</title>
-                <link rel="shortcut icon" href="/images/favicon.svg" />
+                <link rel="shortcut icon" href={context?.currentEdition?.faviconUrl} />
                 <meta name="theme-color" content={colors.link} />
                 <link rel="preconnect" href="https://fonts.googleapis.com" />
                 <link rel="preconnect" href="https://fonts.gstatic.com/" crossOrigin />

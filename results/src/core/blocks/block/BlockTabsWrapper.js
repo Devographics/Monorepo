@@ -18,7 +18,7 @@ const BlockHeader = styled.div`
     border-bottom: ${props => props.theme.border};
 `
 
-const TabsList = styled(Tabs.List)`
+export const TabsList = styled(Tabs.List)`
     display: flex;
     justify-content: flex-start;
     align-items: flex-end;
@@ -33,7 +33,7 @@ const TabsList = styled(Tabs.List)`
     }
 `
 
-const TabsTrigger = styled(Tabs.Trigger)`
+export const TabsTrigger = styled(Tabs.Trigger)`
     border: ${props => props.theme.border};
     background: ${props => props.theme.colors.background};
     /* border: 1px solid ${props => props.theme.colors.border}; */

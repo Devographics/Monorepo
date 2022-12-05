@@ -8,8 +8,11 @@ query: >
             name
             nameHtml
             nameClean
-            homepage{
+            homepage {
                 name
+                url
+            }
+            mdn {
                 url
             }
         }

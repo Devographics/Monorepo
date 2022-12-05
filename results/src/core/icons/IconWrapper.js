@@ -40,7 +40,7 @@ const Icon = styled.span`
 const IconWithHover = styled(Icon)`
     &:hover {
         svg {
-            path {
+            path, polygon {
                 fill: ${props => props.theme.colors.link};
             }
         }
@@ -53,18 +53,19 @@ const IconWrapper = ({
     labelId,
     label,
     children,
+    values,
     size
 }) => {
-    const { translate } = useI18n()
-    const label_ = label || translate(labelId)
+    const { getString } = useI18n()
+    const label_ = label || getString(labelId, { values })?.t
     const IconComponent = enableHover ? IconWithHover : Icon
     const icon = (
-        <IconComponent size={size}>
+        <IconComponent size={size} className="icon-wrapper">
             {children}
             <span className="sr-only">{label_}</span>
         </IconComponent>
     )
-    return enableTooltip ? <Tooltip trigger={icon} contents={<span>{label_}</span>} /> : icon
+    return enableTooltip && label_ ? <Tooltip trigger={icon} contents={<span>{label_}</span>} /> : icon
 }
 
 export default IconWrapper

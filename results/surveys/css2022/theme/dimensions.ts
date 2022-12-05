@@ -3,7 +3,7 @@ import { DefaultTheme } from 'styled-components'
 const stateOfCSSThemeDimensions: DefaultTheme['dimensions'] = {
     spacing: 20,
     sidebar: {
-        width: 270,
+        width: 240,
     },
 }
 

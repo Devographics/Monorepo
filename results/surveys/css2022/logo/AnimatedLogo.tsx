@@ -10,7 +10,7 @@ interface LogoProps {
 }
 
 export const Logo = ({ className, animated = true, showText = true, size = 'l' }: LogoProps) => (
-    <Wrapper aria-label="State of CSS 2021" className="soc-logo__wrapper">
+    <Wrapper aria-label="State of CSS 2022" className="soc-logo__wrapper">
         <SOCLogo
             className="soc-logo"
             xmlns="http://www.w3.org/2000/svg"
@@ -146,9 +146,9 @@ export const Logo = ({ className, animated = true, showText = true, size = 'l' }
                     y2="373.9864"
                     gradientUnits="userSpaceOnUse"
                 >
-                    <stop offset="0" stopColor="#9f0d63" />
-                    <stop offset="0.45611" stopColor="#6214ad" />
-                    <stop offset="1" stopColor="#1734bf" />
+                    <stop offset="0" stopColor="#14AD7F" />
+                    <stop offset="0.45611" stopColor="#0D859F" />
+                    <stop offset="1" stopColor="#1764BF" />
                 </linearGradient>
 
                 <linearGradient
@@ -159,10 +159,10 @@ export const Logo = ({ className, animated = true, showText = true, size = 'l' }
                     y2="0"
                     gradientUnits="objectBoundingBox"
                 >
-                    <stop offset="0" stopColor="#e2eea3" />
-                    <stop offset="0.3333" stopColor="#ea1c78" />
-                    <stop offset="0.6667" stopColor="#9f0d63" />
-                    <stop offset="1" stopColor="#41092e" />
+                    <stop offset="0" stopColor="#b2f1f3" />
+                    <stop offset="0.3333" stopColor="#2dc7eb" />
+                    <stop offset="0.6667" stopColor="#1375bb" />
+                    <stop offset="1" stopColor="#062f74" />
                 </linearGradient>
 
                 <linearGradient
@@ -488,10 +488,15 @@ export const Logo = ({ className, animated = true, showText = true, size = 'l' }
                     d="M400.27648,691.04287c-1.78418,0-2.90625.96875-2.90625,3.51856v3.82422h-5.30371v-3.4668c0-5.71191,2.85547-8.97559,8.36328-8.97559s8.36328,3.26368,8.36328,8.97559c0,11.21875-11.168,15.40039-11.168,21.26465a3.873,3.873,0,0,0,.05078.76465h10.60742v5.09961H392.06652V717.662c0-10.50488,11.11719-12.23828,11.11719-22.54C403.18371,691.91006,402.06163,691.04287,400.27648,691.04287Z"
                     style={{ '--t': '2' } as React.CSSProperties}
                 />
+                
                 <path
-                    d="M438.6798,690.83877c4.335,0,5.30371-2.09082,6.1709-4.4873h3.77343v35.69629h-5.60937V694.81631h-4.335Z"
+                    d="M 444.2765 691.0429 c -1.7842 0 -2.9063 0.9688 -2.9063 3.5186 v 3.8242 h -5.3037 v -3.4668 c 0 -5.7119 2.8555 -8.9756 8.3633 -8.9756 s 8.3633 3.2637 8.3633 8.9756 c 0 11.2188 -11.168 15.4004 -11.168 21.2646 a 3.873 3.873 0 0 0 0.0508 0.7647 h 10.6074 v 5.0996 H 436.0665 V 717.662 c 0 -10.5049 11.1172 -12.2383 11.1172 -22.54 C 447.1837 691.9101 446.0616 691.0429 444.2765 691.0429 Z"
                     style={{ '--t': '3' } as React.CSSProperties}
                 />
+                {/* <path
+                    d="M438.6798,690.83877c4.335,0,5.30371-2.09082,6.1709-4.4873h3.77343v35.69629h-5.60937V694.81631h-4.335Z"
+                    style={{ '--t': '3' } as React.CSSProperties}
+                /> */}
             </g>
         </SOCLogo>
     </Wrapper>
@@ -645,7 +650,7 @@ const SOCLogo = styled.svg`
     .soc-logo__css {
         --timeline-local-delay: calc(var(--timeline-anim-frame) * 0.75);
 
-        filter: drop-shadow(0 10px 30px #c61270);
+        filter: drop-shadow(0 10px 30px #062f74);
     }
 
     .soc-logo__quarter {

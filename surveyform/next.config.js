@@ -164,6 +164,23 @@ const moduleExports = (phase, { defaultConfig }) => {
 
   debug("Extended next config FINAL " + JSON.stringify(extendedConfig));
 
+  if (process.env.MAINTENANCE_MODE) {
+    extendedConfig.redirects = async () => {
+      return [
+        {
+          source: '/',
+          destination: '/maintenance',
+          permanent: false,
+        },
+        {
+          source: '/((?!maintenance|_next|api).*)',
+          destination: '/maintenance',
+          permanent: false,
+        },
+      ]
+    }
+  }
+
   return extendedConfig;
 };
 

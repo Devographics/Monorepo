@@ -40,7 +40,7 @@ const getNodeData = (feature, index) => {
         usage,
         unused_count: knowNotUsedBucket.count,
         usage_ratio: round((usage / awareness) * 100, 1),
-        name: feature.entity.name
+        name: feature?.entity?.nameClean || feature?.entity?.name
     }
 }
 

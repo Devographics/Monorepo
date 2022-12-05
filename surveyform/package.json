@@ -88,6 +88,7 @@
     "@sentry/nextjs": "^6.19.7",
     "@sentry/node": "^7.19.0",
     "@sentry/react": "^7.19.0",
+    "@vercel/analytics": "^0.1.5",
     "@vulcanjs/core": "0.7.2-alpha.8",
     "@vulcanjs/crud": "0.7.2-alpha.8",
     "@vulcanjs/graphql": "0.8.1-y.0",
