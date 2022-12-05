@@ -7,7 +7,27 @@ import { useKeydownContext } from 'core/helpers/keydownContext';
 const getGitHubSearchUrl = (k, localeId) =>
   `https://github.com/search?q=${k}+repo%3AStateOfJS%2Fstate-of-js-graphql-results-api+path%3A%2Fsrc%2Fi18n%2F${localeId}%2F+path%3A%2Fsrc%2Fi18n%2Fen-US%2F&type=Code&ref=advsearch&l=&l=`;
 
-const T = ({ t: override, k, values, md = false, html = false, isFallback, useShort = false, element }) => {
+interface TProps {
+  t?: string;
+  k: string;
+  values?: any;
+  md?: boolean;
+  html?: boolean;
+  isFallback?: boolean;
+  useShort?: boolean;
+  element?: string;
+}
+
+const T = ({
+  t: override,
+  k,
+  values,
+  md = false,
+  html = false,
+  isFallback = false,
+  useShort = false,
+  element,
+}: TProps) => {
   const { getString } = useI18n();
   const { modKeyDown } = useKeydownContext();
 

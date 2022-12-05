@@ -7,6 +7,8 @@ interface PageContextValue {
     isCapturing?: boolean
     chartSponsors?: any
     config?: any
+    currentSurvey?: any
+    currentEdition?: any
 }
 
 const pageContext = createContext({})

@@ -98,6 +98,7 @@ const distinct = [
 const stateOfCSSThemeColors: DefaultTheme['colors'] = {
     background: '#272325',
     backgroundTrans: 'rgb(39, 35, 37, 0.3)',
+    backgroundAlt3: '#2c3033',
     backgroundBackground: colors.electricBlueDarkest,
     backgroundForeground: colors.navyLighter,
     backgroundAlt: '#314448',

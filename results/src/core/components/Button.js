@@ -94,13 +94,21 @@ const Button = styled.button.attrs(
         cursor: default;
         pointer-events: none;
         border-style: solid;
+        .secondary-bg & {
+            background: ${color('backgroundAlt3')};
+        }
     }
 
     ${ButtonGroup} & {
+        white-space: nowrap;
+        &--active {
+            cursor: default;
+            pointer-events: none;
+        }
         @media ${mq.small} {
             width: 100%;
             flex-basis: 100%;
-            font-size: ${fontSize('smallest')};
+            /* font-size: ${fontSize('smallest')}; */
             &:first-child {
                 border-top-width: 1px;
             }
@@ -136,15 +144,6 @@ const Button = styled.button.attrs(
                 &:last-child {
                     border-right-color: ${color('hover')};
                 }
-            }
-        }
-    }
-
-    ${ButtonGroup} {
-        & {
-            &--active {
-                cursor: default;
-                pointer-events: none;
             }
         }
     }

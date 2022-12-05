@@ -10,7 +10,7 @@ const buffer = 0.2
 const bufferPercent = buffer * 100
 
 const HintBlock = ({ block, data }) => {
-    const { id } = block
+    const { id, variables = {} } = block
 
     const {
         ref: hintRef,
@@ -42,7 +42,7 @@ const HintBlock = ({ block, data }) => {
                 </HintBulbInner>
             </HintBulb>
             <HintContent>
-                <T k={`hints.${id}`} md={true} />
+                <T k={`hints.${id}`} md={true} values={variables}/>
             </HintContent>
         </HintContainer>
     )
