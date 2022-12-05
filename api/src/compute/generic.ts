@@ -162,7 +162,7 @@ export async function computeDefaultTermAggregationByYear({
         values = options.facet1keys
     } else if (yamlKeys[fieldId]) {
         values = yamlKeys[fieldId]
-    }
+    } 
 
     const hasValues = !isEmpty(values)
 
@@ -381,6 +381,8 @@ export async function addCompletionCounts(
             percentage_survey: ratioToPercentage(questionRespondents / totalRespondents)
         }
         for (let facet of yearObject.facets) {
+            // TODO: not accurate because it doesn't account for
+            // respondents who didn't answer the question
             const facetTotal = sumBy(facet.buckets, 'count')
             facet.completion = {
                 total: totalRespondents,
