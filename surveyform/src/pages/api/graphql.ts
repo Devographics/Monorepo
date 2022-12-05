@@ -74,9 +74,6 @@ const mergedSchema = {
 };
 const vulcanSchema = makeExecutableSchema(mergedSchema);
 
-const mongoUri = process.env.MONGO_URI;
-if (!mongoUri) throw new Error("MONGO_URI env variable is not defined");
-
 // Data sources avoid the N+1 problem in Mongo
 const createDataSourcesForModels = createDataSources(models);
 
