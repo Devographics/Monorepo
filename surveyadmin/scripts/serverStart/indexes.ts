@@ -9,10 +9,12 @@ MongoDB indexes for geographic search and performance
 // import type { Model } from "mongoose";
 import mongoose from "mongoose";
 import {
+  appDb,
   closeDbConnection,
   connectToAppDb,
   isDemoMongoUri,
   isLocalMongoUri,
+  publicReadonlyDb,
 } from "~/lib/server/mongoose/connection";
 
 //NOTE: mongo use "createIndex" but mongoose use "index"
@@ -29,9 +31,9 @@ export const createIndexes = async () => {
     console.info("Adding indexes to distant database");
   }
 
-  const userCollection = mongoose.connection.db.collection("users");
-  const responseCollection = mongoose.connection.db.collection("responses");
-  const normalizedResponseCollection = mongoose.connection.db.collection(
+  const userCollection = appDb.db.collection("users");
+  const responseCollection = appDb.db.collection("responses");
+  const normalizedResponseCollection = publicReadonlyDb.db.collection(
     "normalized_responses"
   );
   /**

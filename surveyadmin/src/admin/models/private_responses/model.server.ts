@@ -1,6 +1,7 @@
 import { createGraphqlModelServer } from "@vulcanjs/graphql/server";
 import { createMongooseConnector } from "@vulcanjs/mongo";
 import mongoose from "mongoose";
+import { appDb } from "~/lib/server/mongoose/connection";
 import { NormalizedResponseDocument } from "../normalized_responses/model.server";
 
 export const PrivateResponses = createGraphqlModelServer({
@@ -63,6 +64,7 @@ export const PrivateResponseMongooseModel =
 PrivateResponses.crud.connector =
   createMongooseConnector<PrivateResponseDocument>(PrivateResponses, {
     mongooseModel: PrivateResponseMongooseModel,
+    mongooseConnection: appDb
   });
 
 export default PrivateResponses;

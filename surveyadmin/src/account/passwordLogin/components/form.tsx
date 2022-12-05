@@ -20,7 +20,7 @@ const FormContents = ({ isLogin }) => (
     {isLogin && (
       <div className="forgottenPassword">
         <Link href={routes.account.forgottenPassword.href}>
-          <a>Forgot password?</a>
+          Forgot password?
         </Link>
       </div>
     )}
@@ -28,15 +28,13 @@ const FormContents = ({ isLogin }) => (
     <div className="submit">
       {isLogin ? (
         <>
-          <Link href={routes.account.signup.href}>
-            <a>I don't have an account</a>
-          </Link>
+          <Link href={routes.account.signup.href}>I don't have an account</Link>
           <button type="submit">Login</button>
         </>
       ) : (
         <>
           <Link href={routes.account.login.href}>
-            <a>I already have an account</a>
+            I already have an account
           </Link>
           <button type="submit">Signup</button>
         </>

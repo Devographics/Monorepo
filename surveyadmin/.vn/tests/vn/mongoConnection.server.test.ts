@@ -5,6 +5,8 @@
 import {
   connectToDb,
   closeDbConnection,
+  appDb,
+  publicReadonlyDb,
 } from "~/lib/server/mongoose/connection";
 import mongoose from "mongoose";
 
@@ -17,13 +19,14 @@ describe("api/middlewares/mongoConnection", () => {
     await closeDbConnection();
   });
   it("connects to mongo db", async () => {
-    await connectToDb(mongoUri).then(() => {
-      expect(mongoose.connection.readyState).toEqual(1);
+    await connectToDb(mongoUri, "appDb").then(() => {
+      expect(appDb.readyState).toEqual(1);
+      //expect(publicReadonlyDb.readyState).toEqual(1);
     });
   });
   it("connects only once if already connecting", async () => {
-    const promise = connectToDb(mongoUri); // you can define a .env.test to configure this
-    const newPromise = connectToDb(mongoUri); // you can define a .env.test to configure this
+    const promise = connectToDb(mongoUri, "appDb"); // you can define a .env.test to configure this
+    const newPromise = connectToDb(mongoUri, "appDb"); // you can define a .env.test to configure this
     expect(promise).toEqual(newPromise);
   });
 });
