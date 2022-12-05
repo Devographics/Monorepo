@@ -1,45 +1,32 @@
-import React from 'react'
-import styled from 'styled-components'
-import T from 'core/i18n/T'
+import React from 'react';
+import styled from 'styled-components';
+import T from 'core/i18n/T';
+import ButtonGroup from 'core/components/ButtonGroup';
+import Button from 'core/components/Button';
+import { COUNT_UNIT, PERCENTAGE_UNIT } from './constants';
+import { CommonProps, UnitType } from './types';
 
-const UnitsSelector = ({ stateStuff }: { stateStuff: any }) => {
-    const { unit, setUnit } = stateStuff
-    return (
-        <Wrapper_>
-            <UnitsSelector_>
-                <Button_
-                    isSelected={unit === 'count'}
-                    onClick={() => {
-                        setUnit('count')
-                    }}
-                >
-                    <T k="explorer.units_count" />
-                </Button_>
-                <Button_
-                    isSelected={unit === 'percentage'}
-                    onClick={() => {
-                        setUnit('percentage')
-                    }}
-                >
-                    <T k="explorer.units_percent_of_row" />
-                </Button_>
-            </UnitsSelector_>
-        </Wrapper_>
-    )
-}
+const UnitsSelector = ({ stateStuff }: CommonProps) => {
+  const { unit, setUnit } = stateStuff;
+  return (
+    <ButtonGroup>
+      <UnitButton currentUnit={unit} buttonUnit={COUNT_UNIT} setUnit={setUnit} />
+      <UnitButton currentUnit={unit} buttonUnit={PERCENTAGE_UNIT} setUnit={setUnit} />
+    </ButtonGroup>
+  );
+};
 
-const Wrapper_ = styled.div`
-    /* display: grid; */
-    /* place-items: center; */
-    padding: 20px;
-`
+const UnitButton = ({ currentUnit, buttonUnit, setUnit }: { currentUnit: UnitType; buttonUnit: UnitType; setUnit: any }) => (
+  <Button
+    size="small"
+    className={`Button--${currentUnit === buttonUnit ? 'selected' : 'unselected'}`}
+    isSelected={currentUnit === buttonUnit}
+    onClick={() => {
+      setUnit(buttonUnit);
+    }}
+  >
+    <T k={`explorer.units_${buttonUnit}`} />
+  </Button>
+);
 
-const UnitsSelector_ = styled.div`
-    display: flex;
-`
-
-const Button_ = styled.button<{ isSelected: boolean }>`
-    border: ${({ isSelected }) => (isSelected ? '2px solid white' : 'none')};
-`
-
-export default UnitsSelector
+export default UnitsSelector;

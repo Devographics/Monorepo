@@ -1,4 +1,6 @@
 import template from 'lodash/template'
+import { SUPPORT_MULTIPLE_YEARS } from './constants'
+import { ExplorerData } from './types'
 
 export const getFacetPath = (section: string, field: string) => `${section}/${field}`
 
@@ -16,7 +18,14 @@ export const getSizeInKB = (obj: any) => {
   return Math.round(bytes / 1000)
 }
 
-export const getQuery = (queryTemplate: string, variables: any) => {
+interface QueryVariables {
+    surveyType: string
+    facet1: string
+    facet2: string
+    currentYear: number
+}
+
+export const getQuery = (queryTemplate: string, variables: QueryVariables) => {
     const query = queryTemplate.slice(queryTemplate.indexOf('dataAPI')).replace('dataAPI', 'query ExplorerQuery')
     const t = template(query)
     return t(variables)
@@ -49,5 +58,15 @@ export const runQuery = async (url: string, query: string, queryName: string, va
         console.log(`// runQuery error (API_URL: ${url})`)
         console.log(text)
         throw new Error(error)
+    }
+}
+
+// if we only need to support a single year, wrap year object in array for consistency
+export const formatData = (originalData: ExplorerData) => {
+    if (SUPPORT_MULTIPLE_YEARS) {
+        return originalData
+    } else {
+        const { year, ...rest } = originalData
+        return {...rest, all_years: [year] }
     }
 }

@@ -1,3 +1,5 @@
+import { Entity } from 'core/types';
+
 export type Key = string
 
 export interface Completion {
@@ -13,6 +15,9 @@ export interface ExplorerDataBucket {
     fromCount?: number
     toCount?: number
     columnIndex?: number
+    percentage_facet: number
+    percentage_question: number
+    percentage_survey: number
 }
 export interface ExplorerDataFacet {
     buckets: ExplorerDataBucket[]
@@ -31,10 +36,17 @@ export interface ExplorerDataYear {
 export interface ExplorerData {
     keys1: Key[]
     keys2: Key[]
+    all_years?: ExplorerDataYear[]
+    year?: ExplorerDataYear
+}
+
+export interface ExplorerDataFormatted {
+    keys1: Key[]
+    keys2: Key[]
     all_years: ExplorerDataYear[]
 }
 
-export interface Dot {
+export interface DotTypeOld {
     i: number
     visible?: boolean
     x: number
@@ -54,9 +66,24 @@ export interface Total {
 }
 
 export interface CommonProps {
+    data: any
+    query: string
     facets: ExplorerDataFacet[]
     keys1: Key[]
     keys2: Key[]
-    totals1: Total[]
-    totals2: Total[]
+    xTotals: Total[]
+    yTotals: Total[]
+    totalCount: number
+    stateStuff: any;
+    entities: Entity[];
+    useMobileLayout: boolean
+}
+
+export type UnitType = 'count' | 'percentage'
+
+export type DotTypeEnum = 'normal' | 'extra' | 'missing'
+
+export interface DotType {
+    index?: number
+    type: DotTypeEnum
 }
