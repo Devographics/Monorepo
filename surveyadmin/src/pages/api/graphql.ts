@@ -8,7 +8,6 @@ import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-co
 
 import { buildApolloSchema, createDataSources } from "@vulcanjs/graphql/server";
 
-import mongoConnection from "~/lib/server/middlewares/mongoConnection";
 import corsOptions from "~/lib/server/cors";
 import { contextFromReq } from "~/lib/server/context";
 import models from "~/_vulcan/models.index.server";
@@ -34,6 +33,7 @@ const currentUserTypeDefs = `type Query {
  }`;
 
 import { localesRegistry, stringsRegistry } from "~/i18n";
+import { connectToAppDbMiddleware } from "~/lib/server/middlewares/mongoAppConnection";
 
 const currentUserResolver = {
   Query: {
@@ -90,6 +90,7 @@ const mergedSchema = {
 const vulcanSchema = makeExecutableSchema(mergedSchema); //vulcanRawSchema);
 
 const mongoUri = process.env.MONGO_URI;
+const mongoUrlPublic = process.env.MONGO_URI_PUBLIC_READONLY;
 if (!mongoUri) throw new Error("MONGO_URI env variable is not defined");
 
 const createDataSourcesForModels = createDataSources(models);
@@ -134,7 +135,7 @@ const gqlPath = "/api/graphql";
 app.use(gqlPath, cors(corsOptions));
 // init the db
 // TODO: we should probably use the "connectToAppDbMiddleware"?
-app.use(gqlPath, mongoConnection(mongoUri));
+app.use(gqlPath, connectToAppDbMiddleware);
 
 server.applyMiddleware({ app, path: "/api/graphql" });
 

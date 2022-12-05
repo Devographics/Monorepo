@@ -66,20 +66,16 @@ export const isDemoMongoUri = () => {
 export const connectToAppDb = async () => {
   const mongoUri = process.env.MONGO_URI;
   if (!mongoUri) throw new Error("MONGO_URI env variable is not defined");
+  const mongoUriPublic = process.env.MONGO_URI;
+  if (!mongoUriPublic) throw new Error("MONGO_URI_PUBLIC_READONLY env variable is not defined");
   const isLocalMongo = mongoUri.match(/localhost/);
   try {
-    await Promise.all([connectToDb(mongoUri, "appDb", {
-      // fail the seed early during development
-      // Do not seem to exist with mongoose 6?
-      //serverSelectionTimeoutMS: isLocalMongo ? 3000 : undefined,
-    }),
-    connectToDb(mongoUri, "publicReadonlyDb", {
-      // fail the seed early during development
-      // Do not seem to exist with mongoose 6?
-      //serverSelectionTimeoutMS: isLocalMongo ? 3000 : undefined,
-    })]);
+    await Promise.all([
+      connectToDb(mongoUri, "appDb", {}),
+      connectToDb(mongoUriPublic, "publicReadonlyDb", {})
+    ]);
   } catch (err) {
-    console.error(`\nCould not connect to Mongo database on URI ${mongoUri}.`);
+    console.error(`\nCould not connect to Mongo database on URI ${mongoUri} and/or ${mongoUriPublic}.`);
     if (isLocalMongo) {
       console.error("Did you forget to run 'yarn run start:mongo'?\n");
     }
