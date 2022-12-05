@@ -17,6 +17,7 @@ import {
   liteCoreComponents,
 } from "@vulcanjs/react-ui-lite";
 import { bootstrapCoreComponents } from "@vulcanjs/react-ui-bootstrap";
+import { Analytics } from '@vercel/analytics/react';
 
 import debug from "debug";
 
@@ -145,6 +146,7 @@ function VNApp({ Component, pageProps }: VNAppProps) {
                   >
                     {/** @ts-ignore */}
                     <Component {...pageProps} />
+                    <Analytics />
                   </Layout>
                 </ErrorBoundary>
               </VulcanComponentsProvider>

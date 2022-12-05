@@ -859,6 +859,7 @@ importers:
       '@types/react-dom': ^17.0.18
       '@types/shelljs': ^0.8.11
       '@types/unist': ^2.0.6
+      '@vercel/analytics': ^0.1.5
       '@vulcanjs/core': 0.7.2-alpha.8
       '@vulcanjs/crud': 0.7.2-alpha.8
       '@vulcanjs/graphql': 0.8.1-y.0
@@ -983,6 +984,7 @@ importers:
       '@sentry/nextjs': 6.19.7_xt6e5tqiytcgkxsxtroj6cqoqi
       '@sentry/node': 7.19.0
       '@sentry/react': 7.19.0_react@18.2.0
+      '@vercel/analytics': 0.1.5_react@18.2.0
       '@vulcanjs/core': 0.7.2-alpha.8
       '@vulcanjs/crud': 0.7.2-alpha.8_biqbaboplfbrettd7655fr4n2y
       '@vulcanjs/graphql': 0.8.1-y.0_eof2rsndd4y33yevt2fzmcqt7a
@@ -8266,8 +8268,8 @@ packages:
       '@mdx-js/loader': '>=0.15.0'
       '@mdx-js/react': '*'
     dependencies:
-      '@mdx-js/loader': 1.6.22_react@17.0.2
-      '@mdx-js/react': 1.6.22_react@17.0.2
+      '@mdx-js/loader': 1.6.22_react@18.2.0
+      '@mdx-js/react': 1.6.22_react@18.2.0
     dev: false
 
   /@next/plugin-storybook/12.3.3_next@12.3.3:
@@ -15374,6 +15376,14 @@ packages:
       '@typescript-eslint/types': 5.45.0
       eslint-visitor-keys: 3.3.0
 
+  /@vercel/analytics/0.1.5_react@18.2.0:
+    resolution: {integrity: sha512-/k9N8Ea3Yc5A52GlkjzUEbi2vE/izClrOf++ryBkxEfrZM/OZwtHkdNw/QExZ1h/B67RCZLK7bCOnKKrhG7gTg==}
+    peerDependencies:
+      react: ^16.8||^17||^18
+    dependencies:
+      react: 18.2.0
+    dev: false
+
   /@vercel/ncc/0.30.0:
     resolution: {integrity: sha512-16ePj2GkwjomvE0HLL5ny+d+sudOwvZNYW8vjpMh3cyWdFxoMI8KSQiolVxeHBULbU1C5mVxLK5nL9NtnnpIew==}
     hasBin: true
@@ -18858,7 +18868,7 @@ packages:
       mississippi: 3.0.0
       mkdirp: 0.5.6
       move-concurrently: 1.0.1
-      promise-inflight: 1.0.1_bluebird@3.7.2
+      promise-inflight: 1.0.1
       rimraf: 2.7.1
       ssri: 6.0.2
       unique-filename: 1.1.1
@@ -18882,7 +18892,7 @@ packages:
       minipass-pipeline: 1.2.4
       mkdirp: 1.0.4
       p-map: 4.0.0
-      promise-inflight: 1.0.1_bluebird@3.7.2
+      promise-inflight: 1.0.1
       rimraf: 3.0.2
       ssri: 8.0.1
       tar: 6.1.12
@@ -22747,7 +22757,7 @@ packages:
     dependencies:
       debug: 4.3.4
       eslint: 7.32.0
-      eslint-plugin-import: 2.26.0_k2fj7mtd2vnwiotnzv3dk5dwma
+      eslint-plugin-import: 2.26.0_ye22wsquyradrzcrqm2nyo3apa
       glob: 7.2.3
       is-glob: 4.0.3
       resolve: 1.22.1
@@ -34591,15 +34601,13 @@ packages:
     resolution: {integrity: sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==}
     engines: {node: '>=0.4.0'}
 
-  /promise-inflight/1.0.1_bluebird@3.7.2:
+  /promise-inflight/1.0.1:
     resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
     peerDependencies:
       bluebird: '*'
     peerDependenciesMeta:
       bluebird:
         optional: true
-    dependencies:
-      bluebird: 3.7.2
     dev: false
 
   /promise.allsettled/1.0.6:

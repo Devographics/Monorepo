@@ -89,6 +89,7 @@
     "@sentry/nextjs": "^6.19.7",
     "@sentry/node": "^7.19.0",
     "@sentry/react": "^7.19.0",
+    "@vercel/analytics": "^0.1.5",
     "@vulcanjs/core": "0.7.2-alpha.8",
     "@vulcanjs/crud": "0.7.2-alpha.8",
     "@vulcanjs/graphql": "0.8.1-y.0",
@@ -236,10 +237,10 @@
   },
   "peerDependencies": {
     "@babel/preset-env": "^7.0.0",
-    "@storybook/preview-web": ">=6.4.0",
-    "require-from-string": "^2.0.2",
     "@storybook/client-api": ">=6.4.0 <7.0.0",
-    "react-test-renderer": ">=16.9.0"
+    "@storybook/preview-web": ">=6.4.0",
+    "react-test-renderer": ">=16.9.0",
+    "require-from-string": "^2.0.2"
   },
   "packageManager": "pnpm@7.3.0",
   "pnpm": {
