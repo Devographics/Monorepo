@@ -6,15 +6,12 @@
 4. If there is an error during the mutation, show it
 
 */
-import React, { useEffect, useState } from "react";
-//import { LinkContainer } from "react-router-bootstrap";
-//import { Link } from "react-router-dom";
+import React, { useState } from "react";
 import Link from "next/link";
 import get from "lodash/get.js";
 import { getSurveyPath } from "~/modules/surveys/getters";
 import isEmpty from "lodash/isEmpty.js";
 import { statuses } from "~/modules/constants";
-import { useRouter } from "next/router.js";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { getErrors } from "@vulcanjs/core";
 import { SurveyType } from "@devographics/core-models";
@@ -23,10 +20,13 @@ import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import {
   useSurveyActionParams,
   useBrowserData,
-  useCurrentUserWithResponses,
   PrefilledData,
   useStartSurveyMutation,
 } from "./hooks";
+import { useRouter } from "next/navigation";
+import { useUser } from "~/account/user/hooks";
+import { useUserResponse } from "~/modules/responses/hooks";
+import { Loading } from "../../ui/Loading";
 
 const duplicateResponseErrorId = "error.duplicate_response";
 
@@ -46,19 +46,23 @@ const SurveyAction = ({
   survey: SurveyType;
   currentUser?: UserType;
 }) => {
-  //const isAdmin = checkIsAdmin(currentUser);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Array<any> | undefined>();
-  // TODO: what to do if params are not ready?
-
   const { slug, status, context } = survey;
-  // TODO: could be simplified by allowing to pass a fragment to useCurrentUser (we need "responses" which is a graphql only field)
-  const currentUser = useCurrentUserWithResponses();
-  const currentSurveyResponse = currentUser?.responses?.find(
-    (r) => r.surveySlug === slug
-  );
+  if (!slug) throw new Error("Slug not found in SurveyAction");
+  const { user, loading: userLoading, error: userError } = useUser();
+  const {
+    response,
+    loading: responseLoading,
+    error: responseError,
+  } = useUserResponse({ surveySlug: slug });
+  if (userLoading) return <Loading />;
+  if (userError) throw new Error(userError);
+  if (responseLoading) return <Loading />;
+  if (responseError) throw new Error(userError);
+  //const currentSurveyResponse = responses?.find((r) => r.surveySlug === slug);
 
-  const hasResponse = currentSurveyResponse && !isEmpty(currentSurveyResponse);
+  const hasResponse = response && !isEmpty(response);
 
   const parsedErrors = errors && errors.map(extractError);
 
@@ -80,7 +84,7 @@ const SurveyAction = ({
             survey={survey}
             loading={loading}
             setLoading={setLoading}
-            currentUser={currentUser}
+            currentUser={user}
             setErrors={setErrors}
           />
         );
@@ -89,7 +93,7 @@ const SurveyAction = ({
         return (
           <SurveyLink
             survey={survey}
-            response={currentSurveyResponse}
+            response={response}
             message="general.continue_survey"
           />
         );
@@ -100,7 +104,7 @@ const SurveyAction = ({
         <SurveyLink
           survey={survey}
           message="general.review_survey"
-          {...(hasResponse && { response: currentSurveyResponse })}
+          {...(hasResponse && { response })}
         />
       );
     }
@@ -115,7 +119,7 @@ const SurveyAction = ({
         <Errors
           survey={survey}
           parsedErrors={parsedErrors}
-          currentSurveyResponse={currentSurveyResponse}
+          currentSurveyResponse={response}
         />
       )}
     </div>
@@ -133,7 +137,7 @@ const SurveyStart = ({
   const router = useRouter();
   const { startSurvey, mutationName } = useStartSurveyMutation(survey);
   const Components = useVulcanComponents();
-  const { paramsReady, source, referrer } = useSurveyActionParams();
+  const { source, referrer } = useSurveyActionParams();
 
   // prefilled data
   let data: PrefilledData = {

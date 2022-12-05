@@ -52,4 +52,13 @@ export const apiRoutes = {
   admin: {
     dataExport: { href: "/api/admin/data-export" },
   },
+  responses: {
+    single: {
+      href: ({ surveySlug }: { surveySlug: string }) => {
+        const base = new URL("/api/responses/single")
+        base.searchParams.set("surveySlug", surveySlug)
+        return base.toString()
+      }
+    }
+  }
 };

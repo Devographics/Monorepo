@@ -7,9 +7,6 @@ import bowser from "bowser";
 // import { isAdmin as checkIsAdmin } from "@vulcanjs/permissions";
 import { useRouter } from "next/router.js";
 import gql from "graphql-tag";
-import { UserType } from "~/core/models/user";
-import { useQuery } from "@apollo/client";
-import { SurveyResponseFragment } from "~/modules/responses/fragments";
 import { useMutation } from "@apollo/client";
 import { getFragmentName } from "@vulcanjs/graphql";
 import { CreateResponseOutputFragment } from "~/modules/responses/fragments";
@@ -67,54 +64,6 @@ export const useBrowserData = (): BrowserData => {
     //}
   }, []);
   return browserData;
-};
-
-export const useCurrentUserWithResponses = () => {
-  const {
-    data: currentUserData,
-    loading: loadingCurrentUser,
-    error: any,
-  } = useQuery(
-    gql`
-      query getCurrentUser {
-        currentUser {
-          ...UsersCurrentSurveyAction
-          __typename
-        }
-      }
-
-      fragment UsersCurrentSurveyAction on User {
-        _id
-        username
-        createdAt
-        isAdmin
-        groups
-        responses {
-          _id
-          pagePath
-          surveySlug
-          completion
-          createdAt
-          survey {
-            slug
-            prettySlug
-            name
-            year
-            domain
-            status
-            imageUrl
-            faviconUrl
-            socialImageUrl
-            resultsUrl
-          }
-        }
-        __typename
-      }
-    `
-  );
-  const currentUser = currentUserData?.currentUser;
-  if (!currentUser) return null;
-  return currentUser as UserType;
 };
 
 export interface BrowserData {
