@@ -27,7 +27,10 @@ TWITTER_ACCESS_TOKEN_SECRET=***
 
 ## Running the App
 
+In `/api`: 
+
 ```
+pnpm install
 pnpm run dev
 pnpm run dev:clean # run without cache
 ```
