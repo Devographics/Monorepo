@@ -6,8 +6,11 @@ Create an `.env` file at the root of the `api` directory:
 
 ```
 # MongoDB connection string and database name
-MONGO_URI=mongodb+srv://user:***@server_name/public
+MONGO_URI=mongodb+srv://user:***@server/public
 MONGO_DB_NAME=public
+
+# Redis connection string
+REDIS_URL=rediss://user:***@server:6379
 ```
 
 Note: contact me (Sacha) on [Discord](https://discord.gg/zRDb35jfrt) if you need the actual values. 
