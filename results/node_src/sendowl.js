@@ -174,6 +174,9 @@ exports.getSendOwlData = async ({ flat, config }) => {
     if (!process.env.SENDOWL_API_KEY || !process.env.SENDOWL_SECRET) {
         return {}
     }
+    const useCache = process.env.USE_CACHE === 'false' ? false : true
+
+    console.log(`// 🦉 Getting SendOwl data… (useCache=${useCache})`)
 
     const { localPath, url } = getConfigLocations(config)
     const dataFileName = 'sendowl.json'
@@ -185,7 +188,7 @@ exports.getSendOwlData = async ({ flat, config }) => {
         baseUrl: url + '/' + dataDirName
     })
 
-    if (existingData) {
+    if (existingData && useCache) {
         return existingData
     } else {
         // get list of all chart variants that should have corresponding products

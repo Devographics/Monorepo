@@ -936,6 +936,7 @@
         url: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Container_Queries
 
     - id: other_surveys
+      defaultUnits: count
       blockNamespace: resources
       chartNamespace: podcasts
       tabId: tabs.main_answers
