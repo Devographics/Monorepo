@@ -24,3 +24,4 @@ tshirtDesignerLink: https://chriskirknielsen.com/
 baseUrl: http://localhost:9000
 sitemap: ../../../node_src/.logs/css2022/flat_sitemap_full_build.yml
 
+# bannerId: general.css2022.js2022_banner

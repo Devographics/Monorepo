@@ -833,6 +833,7 @@
         fieldId: state_of_css
 
 - id: resources
+  intlId: resources_css
   path: /resources
   blocks:
     - template: page_introduction

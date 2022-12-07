@@ -140,6 +140,7 @@ const NavContainer = styled.nav`
     @media ${mq.smallMedium} {
         align-items: center;
         overflow-y: scroll;
+        overscroll-behavior: none;
     }
 `
 
