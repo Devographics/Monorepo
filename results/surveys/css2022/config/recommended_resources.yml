@@ -1,3 +1,14 @@
+# Render
+
+- name: |
+    RenderATL: the largest tech conference with a dedicated Design & CSS track
+  id: renderatl
+  description: |
+    RenderATL is the ultimate three-day tech conference featuring 80+ expert speakers & workshops with tracks for Design/CSS, Web & Mobile Software Engineering, Product & Project Management, and Technical Leadership. 
+  url: http://www.renderatl.com/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofcss2022
+  image: /images/resources/renderatl.png
+  teacher: Atlanta, Georgia
+
 # Front End Masters
 
 - name: Frontend Masters

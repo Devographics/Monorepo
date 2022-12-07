@@ -31,14 +31,15 @@
       blockType: SurveyIntroBlock
       disableExport: true
       wrapBlock: false
+    - id: survey_sponsors
+      template: sponsors
+    - id: survey_partners
+      template: sponsors
+      blockType: PartnersBlock
     - id: survey_credits
       template: credits
     - id: survey_newsletter
       blockType: NewsletterBlock
-      disableExport: true
-      wrapBlock: false
-    - id: survey_sponsors
-      blockType: SponsorsBlock
       disableExport: true
       wrapBlock: false
     - id: survey_translators
@@ -66,6 +67,7 @@
     - id: data_explorer
       showTitle: false
       chartOnly: true
+      wrapBlock: false
       template: data_explorer
       variables:
         facet1: demographics/yearly_salary
@@ -853,6 +855,7 @@
           template: multiple_options
           translateData: true
           variables:
+            options: { cutoff: 10 }
             fieldId: resources
 
     - id: blogs_news_magazines
@@ -871,6 +874,7 @@
           tabId: tabs.other_answers
           template: multiple_options
           variables:
+            options: { cutoff: 10 }
             fieldId: resources
 
     - id: sites_courses
@@ -889,6 +893,7 @@
           tabId: tabs.other_answers
           template: multiple_options
           variables:
+            options: { cutoff: 10 }
             fieldId: resources
 
     - id: jen_simmons
@@ -912,6 +917,7 @@
           tabId: tabs.other_answers
           template: multiple_options
           variables:
+            options: { cutoff: 10 }
             fieldId: resources
 
     - id: people_others
@@ -943,7 +949,14 @@
           tabId: tabs.other_answers
           template: multiple_options
           variables:
+            options: { cutoff: 5 }
             fieldId: resources
+
+    - items: [renderatl]
+      template: recommended_resources
+      titleId: blocks.recommended_events
+      variables:
+        isEvent: true
 
 - id: awards
   path: /awards
@@ -1058,6 +1071,14 @@
   blocks:
     - id: support
       template: page_introduction
+
+- id: sponsor_finish
+  path: /sponsor-chart-finish
+  is_hidden: true
+  blocks:
+    - id: sponsor_finish
+      blockType: SponsorFinishBlock
+      wrapBlock: false
 
 - id: notfound
   titleId: notfound.title
