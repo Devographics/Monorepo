@@ -1,13 +1,16 @@
 import { useSearchParams } from "next/navigation";
+import { useResponse } from "./ResponseContext/ResponseProvider";
+import { useSurvey } from "./SurveyContext/Provider";
 
-export const useSurveyParams = (fromProps?: {
-  slug?: string;
-  year?: string;
-}): { slug: string; year: string } => {
-  const query = useSearchParams();
-  const slug = fromProps?.slug || query.get("slug");
-  const year = fromProps?.year || query.get("year");
-  return { slug: slug as string, year: year as string };
+export const useSurveyParams = (): { slug: string; year: string } => {
+  const survey = useSurvey()
+  if (!survey) {
+    throw new Error("Called useSurveyParams outside of survey page")
+  }
+  // TODO: we will need useParams instead, it's not yet released (07/12/2022)
+  const slug = survey.slug! // TODO: or prettySlug??
+  const year = survey.year + ""
+  return { slug, year };
 };
 
 /**
@@ -21,9 +24,10 @@ export const useSurveyResponseParams = (): {
   responseId: string;
   sectionNumber?: number;
 } => {
+  // TODO: we will need useParams instead, it's not yet released (07/12/2022)
   const rootParams = useSurveyParams(); // slug and year
   const query = useSearchParams();
-  const responseId = query.get("responseId");
+  const { id: responseId } = useResponse()
   const sectionNumber = query.get("sectionNumber");
   return {
     ...rootParams,

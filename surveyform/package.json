@@ -135,7 +135,7 @@
     "mongodb": "4.11.0",
     "mongoose": "6.5.4",
     "nanoid": "^3.3.4",
-    "next": "13.0.6",
+    "next": "13.0.5",
     "next-connect": "^0.9.1",
     "next-sitemap": "^1.9.12",
     "node-cache": "^5.1.2",
