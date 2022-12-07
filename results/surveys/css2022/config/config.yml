@@ -20,7 +20,8 @@ tshirtLink: https://cottonbureau.com/products/css-retro-vhs
 tshirtPrice: 29
 tshirtDesignerLink: https://chriskirknielsen.com/
 
-baseUrl: http://localhost:8001
-# baseUrl: http://localhost:9000/
-sitemap: ../../../node_src/.logs/flat_sitemap.yml
+# baseUrl: http://localhost:8001
+baseUrl: http://localhost:9000
+sitemap: ../../../node_src/.logs/css2022/flat_sitemap_full_build.yml
 
+# bannerId: general.css2022.js2022_banner

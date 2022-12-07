@@ -41,6 +41,7 @@ const SponsorsBlock = ({ data }) => {
 
 const Container = styled.div`
     margin-top: ${spacing(2)};
+    margin-bottom: ${spacing(2)};
 `
 
 const Header = styled.h3`

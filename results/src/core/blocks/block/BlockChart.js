@@ -14,7 +14,13 @@ import BlockLinks from 'core/blocks/block/BlockLinks'
 
 const BlockChart = props => {
     const { children, units, error, data, block = {}, legends, legendProps, modeProps } = props
-    const { legendPosition = 'top', showNote = true, customChart, entity } = block
+    const {
+        legendPosition = 'top',
+        switcherPosition = 'bottom',
+        showNote = true,
+        customChart,
+        entity
+    } = block
     const { translate } = useI18n()
     const context = usePageContext()
     const { isCapturing } = context
@@ -26,6 +32,11 @@ const BlockChart = props => {
             <BlockDescriptionContents block={block} />
             {entity && !isCapturing && <BlockLinks entity={entity} />}
             {legends && legendPosition === 'top' && <BlockLegends {...legendProps_} />}
+            {modeProps && switcherPosition === 'top' && (
+                <SwitcherWrapper>
+                    <BlockUnitsSelector {...modeProps} />
+                </SwitcherWrapper>
+            )}
             <div className="Block__Contents">
                 {error ? <div className="error">{error}</div> : children}
             </div>
@@ -42,7 +53,7 @@ const BlockChart = props => {
                 </div>
             )}
             {legends && legendPosition === 'bottom' && <BlockLegends {...legendProps_} />}
-            {modeProps && (
+            {modeProps && switcherPosition === 'bottom' && (
                 <SwitcherWrapper>
                     <BlockUnitsSelector {...modeProps} />
                 </SwitcherWrapper>
@@ -69,7 +80,7 @@ const BlockDescriptionContents = ({ block }) => {
                     fallback={null}
                     html={false}
                     element="span"
-                    values={{ name: getBlockTitle(block, context, translate)}}
+                    values={{ name: getBlockTitle(block, context, translate) }}
                 />{' '}
                 {isFreeform && <T k="blocks.freeform" />}
             </Description>

@@ -18,7 +18,8 @@ const trackClick = (id, resource, label) => {
 }
 
 const RecommendedResourcesBlock = ({ block, data }) => {
-    const { items: sponsors } = block
+    const { items: sponsors, variables = {} } = block
+    const { isEvent = false } = variables
 
     if (!sponsors) {
         return null

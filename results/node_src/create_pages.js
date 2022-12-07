@@ -114,7 +114,7 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
         translationContexts: config.translationContexts
     }
 
-    console.log(`// Building ${process.env.SURVEY}…`)
+    console.log(`// Building ${process.env.SURVEY}… (USE_FAST_BUILD = ${USE_FAST_BUILD})`)
 
     // if USE_FAST_BUILD is turned on only keep en-US and ru-RU locale to make build faster
     const localeIds = USE_FAST_BUILD ? ['en-US', 'ru-RU'] : []

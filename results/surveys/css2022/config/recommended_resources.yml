@@ -1,3 +1,19 @@
+# Render
+
+- name: |
+    RenderATL: the largest tech conference with a dedicated Design & CSS track
+  id: renderatl
+  description: |
+    Attend the ultimate three-day tech conference & cultural festival featuring Chris Coyier, 
+    Dantley Davis, Jina, and 80+ additional speakers & 
+    workshops with tracks for Design/CSS, Leadership & Entrepreneurship, 
+    Product & Project Management, Web/Mobile Software Engineering, and so much more! 
+    
+    Use code “StateOfCSS to receive $50 off each ticket!
+  url: http://www.renderatl.com/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofcss2022
+  image: /images/resources/renderatl.jpg
+  teacher: Atlanta, Georgia
+
 # Front End Masters
 
 - name: Frontend Masters
