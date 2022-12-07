@@ -1,5 +1,5 @@
+"use client";
 import React, { useEffect, useRef } from "react";
-import { useRouter } from "next/router.js";
 import Link from "next/link";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import type { SurveySection, SurveyType } from "@devographics/core-models";
@@ -8,6 +8,7 @@ import { getSectionCompletionPercentage } from "~/modules/responses/helpers";
 import { useVulcanComponents, useFormContext } from "@vulcanjs/react-ui";
 import { getSurveyPath } from "~/modules/surveys/getters";
 import { useSaveSurveyMutation } from "~/core/components/survey/questions/useSaveSurveyMutation";
+import { useRouter } from "next/navigation";
 
 const SurveyNavItem = ({
   survey,

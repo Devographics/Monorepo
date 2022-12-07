@@ -47,8 +47,20 @@ export default async function SurveyLayout({
     captureException(err);
   }
 
+  // Apply survey colors
+  const { bgColor, textColor, linkColor, hoverColor } = survey;
+  const style = `
+:root {
+  --bg-color: ${bgColor};
+  --text-color: ${textColor};
+  --link-color: ${linkColor};
+  --hover-color: ${hoverColor};
+}
+  `;
+
   return (
     <SurveyProvider survey={survey}>
+      <style dangerouslySetInnerHTML={{ __html: style }} />
       <EntitiesProvider entities={entities}>{children}</EntitiesProvider>
     </SurveyProvider>
   );

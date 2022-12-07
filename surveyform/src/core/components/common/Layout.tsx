@@ -6,7 +6,6 @@ import DevographicsBanner from "./DevographicsBanner";
 import { getSurvey } from "~/modules/surveys/getters";
 import { KeydownContextProvider } from "./KeydownContext";
 import { useSurveyParams } from "../survey/hooks";
-import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { useSearchParams } from "next/navigation";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 
@@ -37,34 +36,9 @@ export const Layout = ({
   }, []);
 
   // const { loading, data = {} } = useQuery(gql(entitiesQuery));
-
-  const { slug, year } = useSurveyParams({
-    slug: surveySlug,
-    year: surveyYear,
-  });
-  let style = "";
-
-  if (slug && year) {
-    const survey = getSurvey(slug, year);
-    if (survey) {
-      const { bgColor, textColor, linkColor, hoverColor } = survey;
-      style = `
-:root {
-  --bg-color: ${bgColor};
-  --text-color: ${textColor};
-  --link-color: ${linkColor};
-  --hover-color: ${hoverColor};
-}
-  `;
-    }
-  }
-  /*loading ? (
-    <Components.Loading />
-  ) :*/
   return (
     <KeydownContextProvider>
       <div className="wrapper" id="wrapper">
-        <style dangerouslySetInnerHTML={{ __html: style }} />
         <a href="#section-questions" className="skip">
           <FormattedMessage id="general.skip_to_content" />
         </a>

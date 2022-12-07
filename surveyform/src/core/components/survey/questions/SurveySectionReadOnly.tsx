@@ -1,16 +1,13 @@
 import React from "react";
 import SurveySectionContents from "./SurveySectionContents";
-import { getSurvey } from "~/modules/surveys/getters";
-import { useSurveyResponseParams } from "../hooks";
 import SurveyHeadTags from "../SurveyHeadTags";
 import SurveyMessage from "../SurveyMessage";
+import { useSurvey } from "../SurveyContext/Provider";
+import { useSection } from "../SectionContext/SectionProvider";
 
 const SurveySectionReadOnly = () => {
-  let { slug, year, sectionNumber = 1 } = useSurveyResponseParams();
-
-  const survey = getSurvey(slug, year);
-  if (!survey)
-    throw new Error(`Survey not found for slug ${slug} and year ${year}`);
+  const survey = useSurvey();
+  const sectionNumber = useSection();
   const surveyOutline = survey.outline;
   const sectionIndex = sectionNumber - 1;
   const section = surveyOutline[sectionIndex];

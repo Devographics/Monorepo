@@ -1,3 +1,4 @@
+"use client";
 /*
 
 1. Receive submitForm callback from SmartForm
@@ -12,13 +13,13 @@ TODO
 
 */
 import { useVulcanComponents, useFormContext } from "@vulcanjs/react-ui";
-import { useRouter } from "next/router.js";
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { getSurveyPath } from "~/modules/surveys/getters";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import { SurveyDocument } from "@devographics/core-models";
 import Link from "next/link";
 import { useSaveSurveyMutation } from "~/core/components/survey/questions/useSaveSurveyMutation";
+import { useRouter } from "next/navigation";
 
 const FormSubmit = ({
   survey,
@@ -34,7 +35,7 @@ const FormSubmit = ({
   nextLoading,
   setNextLoading,
 }: { survey: SurveyDocument } & any) => {
-  const router = useRouter()
+  const router = useRouter();
   const formContext = useFormContext();
   const { getDocument, submitForm, currentValues } = formContext;
   const response = getDocument();

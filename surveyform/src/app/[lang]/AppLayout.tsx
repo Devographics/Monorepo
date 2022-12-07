@@ -109,9 +109,7 @@ export function AppLayout(props: AppLayoutProps) {
                     proposeReload={true}
                     proposeHomeRedirection={true}
                   >
-                    <Layout surveySlug={slug} surveyYear={year}>
-                      {children}
-                    </Layout>
+                    <Layout>{children}</Layout>
                   </ErrorBoundary>
                 </VulcanComponentsProvider>
               </VulcanCurrentUserProvider>
