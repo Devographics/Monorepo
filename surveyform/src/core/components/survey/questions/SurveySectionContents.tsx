@@ -1,27 +1,20 @@
+"use client";
 import React, { useState } from "react";
-//import { statuses } from "~/modules/constants.js";
 import { FormItem } from "./FormItem";
 import FormSubmit from "./FormSubmit";
 import FormLayout from "./FormLayout";
-//import FormLabel from "./FormLabel";
-//import FormDescription from "./FormDescription";
 import FormOptionLabel from "./FormOptionLabel";
-//import { getSurveyPath } from "~/modules/surveys/helpers";
-import { canModifyResponse } from "~/modules/responses/helpers";
-import { useCreate } from "@vulcanjs/react-hooks";
 import {
   //  SmartForm,
   useVulcanComponents,
   VulcanComponentsProvider,
 } from "@vulcanjs/react-ui";
 import { ResponsePerSurvey } from "~/modules/responses/model";
-import { Save, SaveFragment } from "@devographics/core-models";
-import type { ParsedQuestion, SurveyType } from "@devographics/core-models";
+import type { SurveyType } from "@devographics/core-models";
 import { useUser } from "~/account/user/hooks";
 import { defaultFormComponents } from "@vulcanjs/react-ui";
 import { liteFormComponents } from "@vulcanjs/react-ui-lite";
 import { bootstrapFormComponents } from "@vulcanjs/react-ui-bootstrap";
-import SurveySectionHeading from "~/core/components/survey/questions/SurveySectionHeading";
 import { SurveyResponseFragment } from "~/modules/responses/fragments";
 import { getCommentFieldName } from "~/modules/surveys/helpers";
 
@@ -44,9 +37,13 @@ const SurveySectionContents = (props) => {
     ...loadingProps,
   };
 
-  const FormSubmitWrapper = (props) => <FormSubmit {...props} {...formSubmitProps} />;
+  const FormSubmitWrapper = (props) => (
+    <FormSubmit {...props} {...formSubmitProps} />
+  );
 
-  const FormLayoutWrapper = (props) => <FormLayout {...props} {...formSubmitProps} />;
+  const FormLayoutWrapper = (props) => (
+    <FormLayout {...props} {...formSubmitProps} />
+  );
 
   return (
     /** Components rendered below this ComponentsProvider
@@ -89,13 +86,6 @@ const SurveySectionContentsInner = ({
   readOnly?: boolean;
 }) => {
   const Components = useVulcanComponents();
-  const { user } = useUser();
-
-  // const [createSave, { data, loading, error }] = useCreate({
-  //   model: Save,
-  //   fragment: SaveFragment,
-  // });
-
   const questions = section.questions.filter((q) => !q.hidden);
   const fields = questions.map((question) => question.fieldName);
 
@@ -106,32 +96,20 @@ const SurveySectionContentsInner = ({
     }
   }
 
-  // const trackSave = ({ lastSavedAt, isError = false }) => {
-  //   const data = {
-  //     startedAt: lastSavedAt,
-  //     finishedAt: new Date(),
-  //     responseId,
-  //     isError,
-  //   };
-  //   createSave({ input: { data } });
-  // };
-
   const isLastSection = !nextSection;
 
-  // const isDisabled = !canModifyResponse(response, user);
-
   return (
-      <Components.SmartForm
-        documentId={responseId}
-        fields={fields}
-        model={ResponsePerSurvey[survey.slug!]}
-        // TODO: check those params in the smart form, they should accept DocumentNode and not only strings
-        // + the name should be retrieved using getFragmentName from the DocumentNode fragment
-        queryFragment={SurveyResponseFragment(survey)}
-        mutationFragment={SurveyResponseFragment(survey)}
-        //queryFragmentName="ResponseFragment"
-        //mutationFragmentName="ResponseFragment"
-        /*
+    <Components.SmartForm
+      documentId={responseId}
+      fields={fields}
+      model={ResponsePerSurvey[survey.slug!]}
+      // TODO: check those params in the smart form, they should accept DocumentNode and not only strings
+      // + the name should be retrieved using getFragmentName from the DocumentNode fragment
+      queryFragment={SurveyResponseFragment(survey)}
+      mutationFragment={SurveyResponseFragment(survey)}
+      //queryFragmentName="ResponseFragment"
+      //mutationFragmentName="ResponseFragment"
+      /*
           Instead, we use the context to pass new components
           However, we could reenable this prop as well for more flexbility
         components={{
@@ -142,32 +120,32 @@ const SurveySectionContentsInner = ({
           FormLabel,
           FormDescription,
         }}*/
-        // TODO: not all those props are correctly handled by the SmartForm
-        showDelete={false}
-        itemProperties={{
-          layout: "vertical",
-        }}
-        submitCallback={(data) => {
-          data.lastSavedAt = new Date();
-          if (isLastSection) {
-            data.isFinished = true;
-          }
-          return data;
-        }}
-        // successCallback={(result) => {
-        //   const { lastSavedAt } = result;
-        //   trackSave({ lastSavedAt, isError: false });
-        // }}
-        // errorCallback={(document, error) => {
-        //   if (document) {
-        //     const { lastSavedAt } = document;
-        //     trackSave({ lastSavedAt, isError: true });
-        //   }
-        //   console.error(error);
-        // }}
-        warnUnsavedChanges={false}
-        disabled={readOnly}
-      />
+      // TODO: not all those props are correctly handled by the SmartForm
+      showDelete={false}
+      itemProperties={{
+        layout: "vertical",
+      }}
+      submitCallback={(data) => {
+        data.lastSavedAt = new Date();
+        if (isLastSection) {
+          data.isFinished = true;
+        }
+        return data;
+      }}
+      // successCallback={(result) => {
+      //   const { lastSavedAt } = result;
+      //   trackSave({ lastSavedAt, isError: false });
+      // }}
+      // errorCallback={(document, error) => {
+      //   if (document) {
+      //     const { lastSavedAt } = document;
+      //     trackSave({ lastSavedAt, isError: true });
+      //   }
+      //   console.error(error);
+      // }}
+      warnUnsavedChanges={false}
+      disabled={readOnly}
+    />
   );
 };
 
