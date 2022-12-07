@@ -2,7 +2,7 @@ import { ResponseDocument, SurveyDocument } from "@devographics/core-models"
 import useSWR from "swr"
 import { apiRoutes } from "~/lib/apiRoutes"
 
-const basicFetcher = (url: string) => fetch(url)
+const basicFetcher = (url: string): any => fetch(url)
     .then((r) => r.json())
     .then((data) => {
         return { data };
@@ -13,8 +13,14 @@ const basicFetcher = (url: string) => fetch(url)
  */
 export const useUserResponse = (params: { surveySlug: SurveyDocument["surveyId"] }) => {
     const { surveySlug } = params || {}
-    const { data, error } = useSWR<ResponseDocument>(apiRoutes.responses.single.href({ surveySlug }),
+    const { data, error } = useSWR<ResponseDocument & { survey: SurveyDocument }>(apiRoutes.response.single.href({ surveySlug }),
         basicFetcher)
     const loading = !error && !data
     return { response: data, loading, error }
+}
+
+export const useUserResponses = () => {
+    const { data, error } = useSWR<Array<ResponseDocument & { survey: SurveyDocument }>>(apiRoutes.response.multi.href, basicFetcher)
+    const loading = !error && !data
+    return { responses: data, loading, error }
 }

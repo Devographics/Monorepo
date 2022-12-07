@@ -48,9 +48,10 @@ const SurveyAction = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Array<any> | undefined>();
-  const { slug, status, context } = survey;
+  const { slug, status } = survey;
   if (!slug) throw new Error("Slug not found in SurveyAction");
   const { user, loading: userLoading, error: userError } = useUser();
+  // TODO: fetch data during SSR instead?
   const {
     response,
     loading: responseLoading,
@@ -59,7 +60,7 @@ const SurveyAction = ({
   if (userLoading) return <Loading />;
   if (userError) throw new Error(userError);
   if (responseLoading) return <Loading />;
-  if (responseError) throw new Error(userError);
+  if (responseError) throw new Error(responseError);
   //const currentSurveyResponse = responses?.find((r) => r.surveySlug === slug);
 
   const hasResponse = response && !isEmpty(response);

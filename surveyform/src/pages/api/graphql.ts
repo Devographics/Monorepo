@@ -85,11 +85,11 @@ const server = new ApolloServer({
   plugins:
     process.env.NODE_ENV !== "production"
       ? [
-          ApolloServerPluginLandingPageGraphQLPlayground({
-            // @see https://www.apollographql.com/docs/apollo-server/api/plugin/landing-pages/#graphql-playground-landing-page
-            // options
-          }),
-        ]
+        ApolloServerPluginLandingPageGraphQLPlayground({
+          // @see https://www.apollographql.com/docs/apollo-server/api/plugin/landing-pages/#graphql-playground-landing-page
+          // options
+        }),
+      ]
       : [],
   // Important otherwie Apollo swallows errors
   formatError: (err) => {
@@ -97,8 +97,6 @@ const server = new ApolloServer({
     return err;
   },
 });
-
-await server.start();
 
 const app = express();
 app.set("trust proxy", true);
@@ -108,8 +106,11 @@ app.use(gqlPath, cors(corsOptions));
 // init the db
 // TODO: we should probably use the "connectToAppDbMiddleware"?
 app.use(gqlPath, connectToAppDbMiddleware);
-
-server.applyMiddleware({ app, path: "/api/graphql" });
+// FIXME: the first request might fail?
+(async () => {
+  await server.start();
+  server.applyMiddleware({ app, path: "/api/graphql" });
+})()
 
 export default app;
 

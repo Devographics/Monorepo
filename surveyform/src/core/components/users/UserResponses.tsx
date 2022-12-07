@@ -1,14 +1,24 @@
-import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { useCurrentUserWithResponses } from "~/core/components/survey/page/hooks";
 import Link from "next/link";
 import { statusesReverse } from "~/modules/constants";
 import orderBy from "lodash/orderBy.js";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
+import { useUser } from "~/account/user/hooks";
+import { useUserResponses } from "~/modules/responses/hooks";
+import { Loading } from "../ui/Loading";
 
-const UserResponses = ({ user }) => {
-  const Components = useVulcanComponents();
-  const currentUser = useCurrentUserWithResponses();
-  const responses = orderBy(currentUser?.responses, "createdAt", "desc");
+const UserResponses = () => {
+  const { user, loading: userLoading, error: userError } = useUser();
+  // TODO: fetch data during SSR instead?
+  const {
+    responses,
+    loading: responseLoading,
+    error: responseError,
+  } = useUserResponses();
+  if (userLoading) return <Loading />;
+  if (userError) throw new Error(userError);
+  if (responseLoading) return <Loading />;
+  if (responseError) throw new Error(userError);
   return (
     <div>
       <div>

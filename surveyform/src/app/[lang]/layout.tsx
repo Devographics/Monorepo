@@ -37,6 +37,9 @@ If this error still happens in a few months (2023) open an issue with repro at N
   }
   const localeWithStrings = locale ? await getLocaleStrings(locale) : undefined;
   const locales = (await getLocales()) || undefined;
+  if (!localeWithStrings) {
+    throw new Error("Could not load locales of id: " + locale);
+  }
   // TODO: we load waaaay too much strings
   // we should load survey specific strings in another nested layout
   //debugRootLayout("Got locale", locale, localeWithStrings);
@@ -51,7 +54,7 @@ If this error still happens in a few months (2023) open an issue with repro at N
         <AppLayout
           locales={locales}
           locale={locale}
-          localeStrings={localeWithStrings || undefined}
+          localeStrings={localeWithStrings}
         >
           {children}
         </AppLayout>

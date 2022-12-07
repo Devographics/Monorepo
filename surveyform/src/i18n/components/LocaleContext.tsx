@@ -153,7 +153,7 @@ export const LocaleContextProvider = (props: {
   // keep IntlProvider for now for backwards compatibility with legacy Context API
   const stringsRegistry = makeStringsRegistry();
   stringsRegistry.addStrings(localeId, loadedStrings.strings);
-  console.log("str", { stringsRegistry, localeId });
+  //console.log("str", { stringsRegistry, localeId });
 
   return (
     <IntlProvider stringsRegistry={stringsRegistry} {...intlObject}>

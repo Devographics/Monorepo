@@ -52,10 +52,12 @@ export const apiRoutes = {
   admin: {
     dataExport: { href: "/api/admin/data-export" },
   },
-  responses: {
+  response: {
     single: {
-      href: ({ surveySlug }: { surveySlug: string }) => `/api/responses/single?surveySlug=${surveySlug}`
-
+      href: ({ surveySlug }: { surveySlug: string }) => `/api/response/single?surveySlug=${surveySlug}`
+    },
+    multi: {
+      href: "/api/response/multi"
     }
   }
 }
