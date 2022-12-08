@@ -111,7 +111,7 @@ const countries = [
   "Jamaica",
   "Japan",
   "Jordan",
-  "Kazakstan",
+  "Kazakhstan",
   "Kenya",
   "Kiribati",
   `Korea, Democratic People's Republic Of`,
