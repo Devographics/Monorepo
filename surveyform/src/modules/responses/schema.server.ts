@@ -141,23 +141,25 @@ export const schema: VulcanGraphqlSchemaServer = extendSchemaServer(
         fieldName: "knowledgeRanking",
         typeName: "Int",
         resolver: async (response) => {
-          const { surveySlug, knowledgeScore } = response;
+          // TODO: check if this is messing with db perf? add indexes?
+          return 100
+          // const { surveySlug, knowledgeScore } = response;
 
-          const totalResults = await ResponseConnector.count({
-            surveySlug,
-            knowledgeScore: { $exists: true },
-          });
+          // const totalResults = await ResponseConnector.count({
+          //   surveySlug,
+          //   knowledgeScore: { $exists: true },
+          // });
 
-          const scoredAboveCount = await ResponseConnector.count({
-            surveySlug,
-            knowledgeScore: { $gt: knowledgeScore },
-          });
+          // const scoredAboveCount = await ResponseConnector.count({
+          //   surveySlug,
+          //   knowledgeScore: { $gt: knowledgeScore },
+          // });
 
-          const scoreAbovePercent = Math.max(
-            1,
-            Math.round((scoredAboveCount * 100) / totalResults)
-          );
-          return scoreAbovePercent;
+          // const scoreAbovePercent = Math.max(
+          //   1,
+          //   Math.round((scoredAboveCount * 100) / totalResults)
+          // );
+          // return scoreAbovePercent;
         },
       },
     },

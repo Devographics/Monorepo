@@ -64,7 +64,7 @@ const Score = ({ response, survey }: { response: any; survey: SurveyType }) => {
   const Components = useVulcanComponents();
   const containerRef = useRef<HTMLInputElement | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
-  const { knowledgeRanking } = response;
+  const { knowledgeRanking = 100 } = response;
   const { known, total, score, unknownFields } = getKnowledgeScore(
     response
     //survey
