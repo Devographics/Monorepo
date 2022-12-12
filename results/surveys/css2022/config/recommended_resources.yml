@@ -93,7 +93,7 @@
   id: fm-svg
   description: |
     In this course, you'll learn to create immersive graphics and make them alive with animations!
-  url: ?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2022
+  url: https://frontendmasters.com/courses/svg-essentials-animation/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2022
   image: https://static.frontendmasters.com/assets/teachers/drasner/thumb@2x.webp
   teacher: Sarah Drasner
   company: Netlify
