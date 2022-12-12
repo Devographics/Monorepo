@@ -53,7 +53,8 @@ export const createIndexes = async () => {
         { knowledgeScore: 1 },
         { createdAt: 1 },
         { updatedAt: 1 },
-        { surveySlug: 1 },
+        // compound index for knowledge score ranking
+        { surveySlug: 1, knowledgeScore: 1 },
       ] as const
     ).map(async (idxDef) => {
       await responseCollection.createIndex(idxDef);
