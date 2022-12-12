@@ -7,12 +7,10 @@ MongoDB indexes for geographic search and performance
 // import { ResponseConnector } from "~/modules/responses/model.server";
 // import { NormalizedResponseConnector } from "~/modules/normalized_responses/model.server";
 // import type { Model } from "mongoose";
-import mongoose from "mongoose";
 import {
   appDb,
   closeDbConnection,
   connectToAppDb,
-  isDemoMongoUri,
   isLocalMongoUri,
   publicReadonlyDb,
 } from "~/lib/server/mongoose/connection";
@@ -20,10 +18,6 @@ import {
 //NOTE: mongo use "createIndex" but mongoose use "index"
 // @see https://mongoosejs.com/docs/api/schema.html#schema_Schema-index
 export const createIndexes = async () => {
-  if (isDemoMongoUri()) {
-    console.warn("Using demo database, skip setting indexes");
-    return;
-  }
   await connectToAppDb();
   if (isLocalMongoUri()) {
     console.info("Adding index to local database");
@@ -59,6 +53,7 @@ export const createIndexes = async () => {
         { knowledgeScore: 1 },
         { createdAt: 1 },
         { updatedAt: 1 },
+        { surveySlug: 1 },
       ] as const
     ).map(async (idxDef) => {
       await responseCollection.createIndex(idxDef);

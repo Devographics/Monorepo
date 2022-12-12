@@ -22,7 +22,8 @@ export const serverConfig = {
    * Internal API for translations and entities
    */
   translationAPI: process.env.TRANSLATION_API!,
-  mongoUrl: process.env.MONGO_URI,
+  mongoUri: process.env.MONGO_URI,
+  publicReadonlyMongoUri: process.env.MONGO_URI_PUBLIC_READONLY,
   // NOTE: each survey should try to use their own specific domain (see magic link auth)
   defaultMailFrom: process.env.MAIL_FROM || "login@devographics.com",
 };

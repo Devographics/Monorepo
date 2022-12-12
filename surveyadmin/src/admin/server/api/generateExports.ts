@@ -97,12 +97,12 @@ function mongoExportCmd({
    * query: let's you filter with a custom query
    * fields: what fields will be included in the export
    * TODO: fields are probably not correct
-   * NOTE: if the db is already in the mongoUrl, no need to add the --db parameter
+   * NOTE: if the db is already in the mongoUri, no need to add the --db parameter
    * --db production \
    */
   const baseCmd = `
  mongoexport\
- --uri ${serverConfig.mongoUrl}\
+ --uri ${serverConfig.mongoUri}\
  --collection normalized_responses \
  --pretty\
  --query='{"surveySlug": "${surveySlug}"}' \
@@ -149,9 +149,8 @@ const makeFilePath = (
   const day = now.getDate().toString().padStart(2, "0");
   const timestamp = `${year}-${month}-${day}`;
 
-  const filename = `${surveySlug}${
-    addTimestamp ? "_" + timestamp : ""
-  }.${extension}`;
+  const filename = `${surveySlug}${addTimestamp ? "_" + timestamp : ""
+    }.${extension}`;
   return path.resolve("/tmp", filename);
 };
 

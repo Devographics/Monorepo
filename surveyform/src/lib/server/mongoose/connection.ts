@@ -60,15 +60,6 @@ export const isLocalMongoUri = () => {
   const isLocal = mongoUri.match(/localhost/);
   return isLocal;
 };
-export const isDemoMongoUri = () => {
-  const mongoUri = process.env.MONGO_URI;
-  if (!mongoUri) {
-    throw new Error(
-      "MONGO_URI env variable not defined. Is your .env file correctly loaded?"
-    );
-  }
-  return mongoUri.match(/lbke-demo/);
-};
 /**
  * Connect to the application main database
  *

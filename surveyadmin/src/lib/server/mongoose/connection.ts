@@ -1,5 +1,6 @@
 import { debugMongo } from "~/lib/debuggers";
 import mongoose, { Connection, ConnectOptions } from "mongoose";
+import { serverConfig } from "~/config/server";
 
 // Do not pass a URL yet, to avoid triggering the connection
 
@@ -48,25 +49,15 @@ export const isLocalMongoUri = () => {
   const isLocal = mongoUri.match(/localhost/);
   return isLocal;
 };
-export const isDemoMongoUri = () => {
-  const mongoUri = process.env.MONGO_URI;
-  if (!mongoUri) {
-    throw new Error(
-      "MONGO_URI env variable not defined. Is your .env file correctly loaded?"
-    );
-  }
-  return mongoUri.match(/lbke-demo/);
-};
 
 /**
- * Connect to the application main database
- *
- * Mongo URI is provided throught the MONGO_URI environment variable
+ * Connect to application main database and public read-only database for normalized responses
+ * 
  */
 export const connectToAppDb = async () => {
-  const mongoUri = process.env.MONGO_URI;
+  const mongoUri = serverConfig.mongoUri
   if (!mongoUri) throw new Error("MONGO_URI env variable is not defined");
-  const mongoUriPublic = process.env.MONGO_URI;
+  const mongoUriPublic = serverConfig.publicReadonlyMongoUri;
   if (!mongoUriPublic) throw new Error("MONGO_URI_PUBLIC_READONLY env variable is not defined");
   const isLocalMongo = mongoUri.match(/localhost/);
   try {
