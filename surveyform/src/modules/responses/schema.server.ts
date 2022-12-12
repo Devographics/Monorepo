@@ -142,6 +142,7 @@ export const schema: VulcanGraphqlSchemaServer = extendSchemaServer(
         typeName: "Int",
         resolver: async (response) => {
           // TODO: check if this is messing with db perf? add indexes?
+          // @see https://github.com/Devographics/Monorepo/issues/172
           return 100
           // const { surveySlug, knowledgeScore } = response;
 
