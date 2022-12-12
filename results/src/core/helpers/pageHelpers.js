@@ -40,7 +40,7 @@ export const getPageImageUrl = context => {
     if (block !== undefined) {
         imageUrl = getBlockImage(block, context)
     } else {
-        imageUrl = currentEdition.socialImageUrl
+        imageUrl = currentEdition?.socialImageUrl
     }
 
     return imageUrl

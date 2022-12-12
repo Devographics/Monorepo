@@ -10,8 +10,8 @@ const UnitsSelector = ({ stateStuff }: CommonProps) => {
   const { unit, setUnit } = stateStuff;
   return (
     <ButtonGroup>
-      <UnitButton currentUnit={unit} buttonUnit={COUNT_UNIT} setUnit={setUnit} />
       <UnitButton currentUnit={unit} buttonUnit={PERCENTAGE_UNIT} setUnit={setUnit} />
+      <UnitButton currentUnit={unit} buttonUnit={COUNT_UNIT} setUnit={setUnit} />
     </ButtonGroup>
   );
 };

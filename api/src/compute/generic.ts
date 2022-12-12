@@ -229,6 +229,9 @@ export async function computeDefaultTermAggregationByYear({
             )
         )
     }
+
+    await discardEmptyIds(results)
+
     if (hasValues) {
         await addMissingBucketValues(results, values)
     }
@@ -266,6 +269,21 @@ export async function computeDefaultTermAggregationByYear({
 
     return results
 }
+
+/*
+
+Discard any result where id is {}, "", [], etc. 
+
+*/
+async function discardEmptyIds(resultsByYears: ResultsByYear[]) {
+    for (let year of resultsByYears) {
+        year.facets = year.facets.filter(b => !isEmpty(b.id))
+        for (let facet of year.facets) {
+            facet.buckets = facet.buckets.filter(b => !isEmpty(b.id))
+        }
+    }
+}
+
 
 // add facet limits
 /* 

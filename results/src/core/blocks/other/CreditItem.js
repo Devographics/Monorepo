@@ -42,6 +42,7 @@ const CreditItemDiv = styled.div`
 
 const Avatar = styled.a`
     margin-right: ${spacing(0.5)};
+    flex-shrink: 0;
     overflow: hidden;
     border-radius: 100%;
     height: 60px;

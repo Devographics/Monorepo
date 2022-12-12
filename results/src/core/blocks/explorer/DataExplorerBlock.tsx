@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
-// import { mq, spacing, fontSize } from 'core/theme'
+import { mq, spacing, fontSize } from 'core/theme'
 import T from 'core/i18n/T';
 import DataExplorer from './DataExplorer';
 import { ExplorerData } from './types';
@@ -87,7 +87,7 @@ const DataExplorerBlock = ({
   const xAxisLabel = getQuestionLabel({ getString, sectionId: xSection, questionId: xField, entities });
   const yAxisLabel = getQuestionLabel({ getString, sectionId: ySection, questionId: yField, entities });
 
-  const useMobileLayout = width <= MOBILE_BREAKPOINT_WIDTH
+  const useMobileLayout = width <= MOBILE_BREAKPOINT_WIDTH;
 
   const stateStuff = {
     xSection,
@@ -146,7 +146,7 @@ const DataExplorerBlock = ({
     showCellCounts,
   };
   useEffect(() => {
-    if ('URLSearchParams' in window) {
+    if (typeof window !== 'undefined' && 'URLSearchParams' in window) {
       const searchParams = new URLSearchParams(window.location.search);
       for (const urlVariableName of Object.keys(urlVariables)) {
         searchParams.set(urlVariableName, urlVariables[urlVariableName]);
@@ -197,6 +197,9 @@ const DataExplorerBlock = ({
     <Wrapper_>
       <HintBlock block={{ id: 'data_explorer', variables: { issueLink: ISSUES_URL } }} />
       <DataExplorer query={query} data={data} stateStuff={stateStuff} entities={entities} />
+      <Details_>
+        <T k="explorer.extra_missing_respondents" html={true} md={true} />
+      </Details_>
       {/* <BlockSponsor block={block} /> */}
     </Wrapper_>
   );
@@ -204,8 +207,8 @@ const DataExplorerBlock = ({
 
 const Wrapper_ = styled.div``;
 
-const Footer_ = styled.div`
-  margin-top: 60px;
+const Details_ = styled.div`
+  margin-top: ${spacing(2)};
 `;
 
 export default DataExplorerBlock;

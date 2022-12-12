@@ -100,7 +100,7 @@ const Button = styled.button.attrs(
     }
 
     ${ButtonGroup} & {
-        white-space: nowrap;
+        /* white-space: nowrap; */
         &--active {
             cursor: default;
             pointer-events: none;

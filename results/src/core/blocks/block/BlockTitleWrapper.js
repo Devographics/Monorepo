@@ -26,7 +26,7 @@ const TitleBlock = ({ block, pageData, blockIndex, variantIndex }) => {
         block = {
             ...block,
             entity: blockEntity,
-            title: blockEntity.name,
+            title: blockEntity.nameClean || blockEntity.name,
             titleLink: blockEntity?.homepage?.url
         }
     }
