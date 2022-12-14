@@ -156,7 +156,11 @@ export const LocaleContextProvider = (props: {
   //console.log("str", { stringsRegistry, localeId });
 
   return (
-    <IntlProvider stringsRegistry={stringsRegistry} {...intlObject}>
+    <IntlProvider
+      stringsRegistry={stringsRegistry}
+      messages={intlObject.messages}
+      locale={intlObject.locale}
+    >
       <IntlContext.Provider value={intlObject}>
         <LocaleContext.Provider value={{ getLocale, setLocale, getLocaleDefs }}>
           <div className={`locale-${localeId}`}>{children}</div>

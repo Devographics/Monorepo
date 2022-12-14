@@ -8,19 +8,25 @@ const basicFetcher = (url: string): any => fetch(url)
         return { data };
     });
 
+interface ApiData<T = any> {
+    data: T
+}
+
+type ResponseWithSurvey = ResponseDocument & { survey: SurveyDocument }
+
 /**
  * Passing no surveySlug will get all responses for the user 
  */
 export const useUserResponse = (params: { surveySlug: SurveyDocument["surveyId"] }) => {
     const { surveySlug } = params || {}
-    const { data, error } = useSWR<ResponseDocument & { survey: SurveyDocument }>(apiRoutes.response.single.href({ surveySlug }),
+    const { data, error } = useSWR<ApiData<ResponseWithSurvey>>(apiRoutes.response.single.href({ surveySlug }),
         basicFetcher)
     const loading = !error && !data
-    return { response: data, loading, error }
+    return { response: data?.data, loading, error }
 }
 
 export const useUserResponses = () => {
-    const { data, error } = useSWR<Array<ResponseDocument & { survey: SurveyDocument }>>(apiRoutes.response.multi.href, basicFetcher)
+    const { data, error } = useSWR<ApiData<Array<ResponseWithSurvey>>>(apiRoutes.response.multi.href, basicFetcher)
     const loading = !error && !data
-    return { responses: data, loading, error }
+    return { responses: data?.data, loading, error }
 }

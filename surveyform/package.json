@@ -77,6 +77,8 @@
   },
   "dependencies": {
     "@apollo/client": "^3.7.1",
+    "@apollo/server": "^4.3.0",
+    "@as-integrations/next": "^1.2.0",
     "@devographics/core-models": "workspace:1.0.0",
     "@devographics/encrypt-email": "workspace:1.0.0",
     "@graphql-tools/merge": "^8.3.11",

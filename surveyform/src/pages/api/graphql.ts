@@ -106,8 +106,16 @@ app.use(gqlPath, cors(corsOptions));
 // init the db
 // TODO: we should probably use the "connectToAppDbMiddleware"?
 app.use(gqlPath, connectToAppDbMiddleware);
-// FIXME: the first request might fail?
-(async () => {
+
+let serverPromise: Promise<void> | undefined = undefined
+app.use(gqlPath, async function (req, res, next) {
+  if (!serverPromise) throw new Error("Got a first request before serverPromise was initialized")
+  console.debug("waiting apollo server start")
+  await serverPromise
+  console.debug("apollo server is started, will process request")
+  next()
+})
+serverPromise = (async () => {
   await server.start();
   server.applyMiddleware({ app, path: "/api/graphql" });
 })()

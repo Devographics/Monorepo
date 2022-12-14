@@ -1,30 +1,21 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 // for some reason this throws error?
 // TODO: do we need a dynamic require?
 import bowser from "bowser";
 // const bowser = require("bowser"); // CommonJS
 // import { isAdmin as checkIsAdmin } from "@vulcanjs/permissions";
-import { useRouter } from "next/router.js";
+import { useSearchParams } from "next/navigation";
 import gql from "graphql-tag";
 import { useMutation } from "@apollo/client";
 import { getFragmentName } from "@vulcanjs/graphql";
 import { CreateResponseOutputFragment } from "~/modules/responses/fragments";
 
-export const useSurveyActionParams = ():
-  | { paramsReady: false; source: undefined; referrer: undefined }
-  | { paramsReady: true; source?: string; referrer?: string } => {
-  const router = useRouter();
-  const { isReady, isFallback, query } = router;
-  if (!isReady || isFallback)
-    return { paramsReady: false, source: undefined, referrer: undefined };
-  const source = query.source || localStorage.getItem("source");
-  const referrer = query.referrer || localStorage.getItem("referrer");
-  const params = { paramsReady: true } as {
-    paramsReady: true;
-    source?: string;
-    referrer?: string;
-  };
+export const useSurveyActionParams = (): { source?: string; referrer?: string } => {
+  const query = useSearchParams()
+  const source = query.get("source") || localStorage.getItem("source");
+  const referrer = query.get("referrer") || localStorage.getItem("referrer");
+  const params: any = {}
   if (source) {
     params.source = source as string;
   }

@@ -3,7 +3,7 @@ import graphql2022 from "./stateofgraphql/graphql2022.yml";
 export const testSurvey = {
   ...graphql2022,
   status: 2,
-  name: "Graphql survey demo",
-  slug: "graphql_demo",
-  prettySlug: "graphql-survey-demo",
+  name: "Demo survey",
+  slug: "demo_survey",
+  prettySlug: "demo-survey",
 };
