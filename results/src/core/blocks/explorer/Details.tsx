@@ -48,7 +48,7 @@ const getSingleCellGrid = (options: {
 
 const Details = (props: DetailsProps) => {
   const { getString } = useI18n();
-  const { facet, keys1, keys2, entities, xIndex, yIndex, xTotals, yTotals, stateStuff, cellData } = props;
+  const { facet, keys1, keys2, entities, xIndex, yIndex, xTotals, yTotals, stateStuff, cellData, totalCount } = props;
   const [unit, setUnit] = useState(stateStuff.unit);
   const xKey = keys1[xIndex];
   const yKey = keys2[yIndex];
@@ -71,8 +71,8 @@ const Details = (props: DetailsProps) => {
     normalizedPercentage,
     normalizedPercentageDelta,
   } = cellData;
-  const xFieldLabel = getQuestionLabel({ getString, sectionId: xSection, questionId: xField, entities });
-  const yFieldLabel = getQuestionLabel({ getString, sectionId: ySection, questionId: yField, entities });
+  const xAxisLabel = getQuestionLabel({ getString, sectionId: xSection, questionId: xField, entities });
+  const yAxisLabel = getQuestionLabel({ getString, sectionId: ySection, questionId: yField, entities });
 
   const xAnswerLabel = getOptionLabel({ getString, sectionId: xSection, questionId: xField, optionId: xKey });
   const yAnswerLabel = getOptionLabel({ getString, sectionId: ySection, questionId: yField, optionId: yKey });
@@ -85,13 +85,17 @@ const Details = (props: DetailsProps) => {
     html: true,
     element: 'p',
     values: {
-      bucketPercentage,
-      bucketTotal,
-      xFieldLabel,
+      xAxisTotal: bucketTotal,
+      xAxisPercentage: Math.floor((bucketTotal * 100) / totalCount),
+      xAxisLabel,
       xAnswerLabel,
-      facetPercentageQuestion,
-      yFieldLabel,
+
+      yAxisTotal: yTotal,
+      yAxisPercentage: facetPercentageQuestion,
+      yAxisLabel,
       yAnswerLabel,
+
+      bucketPercentage,
       normalizedCount,
       bucketCount,
       normalizedCountDelta: Math.abs(normalizedCountDelta),
@@ -116,10 +120,19 @@ const Details = (props: DetailsProps) => {
         <DetailsExplanationHeading_>
           <T k={`explorer.${missingOrExtra}_respondents`} />
         </DetailsExplanationHeading_>
-        <T k={`explorer.${unit}_details.1`} {...tProps} />
-        <T k={`explorer.${unit}_details.2`} {...tProps} />
-        <T k={`explorer.${unit}_details.3`} {...tProps} />
-        <T k={`explorer.${unit}_details.4_${missingOrExtra}`} {...tProps} />
+        {unit === COUNT_UNIT ? (
+          <>
+            <T k={`explorer.${unit}_details.1`} {...tProps} />
+            <T k={`explorer.${unit}_details.2`} {...tProps} />
+            <T k={`explorer.${unit}_details.3`} {...tProps} />
+            <T k={`explorer.${unit}_details.4_${missingOrExtra}`} {...tProps} />
+          </>
+        ) : (
+          <>
+            <T k={`explorer.${unit}_details.1_${missingOrExtra}`} {...tProps} />
+            <T k={`explorer.${unit}_details.2_${missingOrExtra}`} {...tProps} />
+          </>
+        )}
       </DetailsExplanation_>
     </Details_>
   );

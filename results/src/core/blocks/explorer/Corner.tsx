@@ -36,7 +36,7 @@ const Corner_ = styled.div`
 
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 9;
   backdrop-filter: blur(2px);
   .details-grid & {
     position: static;
