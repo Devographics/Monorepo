@@ -14,15 +14,11 @@ export const useSurveyParams = (): { slug: string; year: string } => {
   return { slug, year };
 };
 
-/**
- * The "read-only" param will display the form in read-only mode
- *
- * TODO: typings are not great yet, to be improved
- */
-export const useSurveyResponseParams = (): {
+
+export const useSurveyResponseSectionParams = (): {
   slug: string;
   year: string;
-  responseId: string;
+  responseId: string | "read-only";
   sectionNumber?: number;
 } => {
   // TODO: we will need useParams instead, it's not yet released (07/12/2022)
@@ -33,5 +29,19 @@ export const useSurveyResponseParams = (): {
     ...rootParams,
     responseId: responseId as string,
     sectionNumber,
+  };
+};
+
+export const useSurveyResponseParams = (): {
+  slug: string;
+  year: string;
+  responseId: string | "read-only";
+} => {
+  // TODO: we will need useParams instead, it's not yet released (07/12/2022)
+  const rootParams = useSurveyParams(); // slug and year
+  const { id: responseId } = useResponse()
+  return {
+    ...rootParams,
+    responseId: responseId as string,
   };
 };

@@ -2,9 +2,8 @@
 import { ResponseDocument } from "@devographics/core-models";
 import React, { useContext } from "react";
 
-const ResponseContext = React.createContext<ResponseDocument | undefined>(
-  undefined
-);
+const ResponseContext =
+  React.createContext<ResponseDocument | undefined>(undefined);
 
 export const ResponseProvider = ({
   response,
@@ -20,6 +19,10 @@ export const ResponseProvider = ({
   );
 };
 
+/**
+ * Response id can be "read-only"
+ * @returns
+ */
 export const useResponse = () => {
   const context = useContext(ResponseContext);
   if (!context) {

@@ -41,11 +41,13 @@ const Features = ({
 const FeatureItem = ({ feature, showComma }) => {
   const { entity } = feature;
   const mdnUrl = get(entity, "mdn.url");
-  const TagName = mdnUrl ? "a" : "span";
+  const TagWrapper = mdnUrl
+    ? ({ children }) => <a>{children}</a>
+    : ({ children }) => <span>{children}</span>;
 
   return (
     <div className="score-feature">
-      <TagName
+      <TagWrapper
         className="score-feature-name"
         {...(mdnUrl && {
           href: mdnUrl,
