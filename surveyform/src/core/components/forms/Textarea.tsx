@@ -1,7 +1,9 @@
-import { FormInputProps, useVulcanComponents } from "@vulcanjs/react-ui";
+"use client";
+import { FormInputProps } from "@vulcanjs/react-ui";
 import React, { useState } from "react";
 import { FormControl } from "react-bootstrap";
-import debounce from 'lodash/debounce.js';
+import debounce from "lodash/debounce.js";
+import { FormItem } from "~/core/components/survey/questions/FormItem";
 
 export const FormComponentTextarea = ({
   path,
@@ -10,27 +12,25 @@ export const FormComponentTextarea = ({
   inputProperties = {},
   itemProperties = {},
 }: FormInputProps) => {
-  const { onChange, value } = inputProperties
-  const [ localValue, setLocalValue ] = useState(value);
-
-  const Components = useVulcanComponents();
+  const { onChange, value } = inputProperties;
+  const [localValue, setLocalValue] = useState(value);
 
   const onChangeDebounced = debounce(onChange, 500);
 
-  const handleChange = (event)=> {
+  const handleChange = (event) => {
     setLocalValue(event.target.value);
     if (onChange) {
       onChange(event);
     }
-  }
+  };
 
-  const handleChangeDebounced = (event)=> {
+  const handleChangeDebounced = (event) => {
     setLocalValue(event.target.value);
     onChangeDebounced(event);
-  }
+  };
 
   return (
-    <Components.FormItem path={path} label={label} {...itemProperties}>
+    <FormItem path={path} label={label} {...itemProperties}>
       <FormControl
         // @ts-expect-error
         as="textarea"
@@ -41,8 +41,8 @@ export const FormComponentTextarea = ({
         onChange={handleChangeDebounced}
         onBlur={handleChange}
       />
-    </Components.FormItem>
+    </FormItem>
   );
 };
 
-export default FormComponentTextarea
+export default FormComponentTextarea;

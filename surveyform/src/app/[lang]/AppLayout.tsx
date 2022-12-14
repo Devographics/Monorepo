@@ -1,15 +1,13 @@
 "use client";
 import { Loading } from "~/core/components/ui/Loading";
+import { Button } from "~/core/components/ui/Button";
+import { Alert } from "~/core/components/ui/Alert";
 import {
   VulcanComponentsProvider,
   VulcanCurrentUserProvider,
 } from "@vulcanjs/react-ui";
 import { defaultCoreComponents } from "@vulcanjs/react-ui";
-import {
-  Alert,
-  TooltipTrigger,
-  liteCoreComponents,
-} from "@vulcanjs/react-ui-lite";
+import { TooltipTrigger, liteCoreComponents } from "@vulcanjs/react-ui-lite";
 import { bootstrapCoreComponents } from "@vulcanjs/react-ui-bootstrap";
 
 import debug from "debug";
@@ -93,13 +91,14 @@ export function AppLayout(props: AppLayoutProps) {
                   value={{
                     ...defaultCoreComponents,
                     ...liteCoreComponents,
-                    Alert,
                     // TODO: should not be needed, since we use Bootstrap Button instead,
                     // but need double checking
                     // Button,
                     TooltipTrigger,
-                    Loading,
                     ...bootstrapCoreComponents,
+                    Loading,
+                    Button,
+                    Alert,
                     // Keep the component here even if we don't use Components.FormattedMessage directly
                     // This allows Vulcan components to depend on it
                     FormattedMessage,

@@ -57,7 +57,6 @@ const SurveyAction = ({
     loading: responseLoading,
     error: responseError,
   } = useUserResponse({ surveySlug: slug });
-  console.log("res", response, responseLoading, responseError);
   if (userLoading) return <Loading />;
   if (userError) throw new Error(userError);
   if (responseLoading) return <Loading />;

@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import sampleSize from "lodash/sampleSize.js";
 import isNil from "lodash/isNil.js";
@@ -6,6 +7,7 @@ import cloneDeep from "lodash/cloneDeep.js";
 import { useIntlContext } from "@vulcanjs/react-i18n";
 import { useFormContext, useVulcanComponents } from "@vulcanjs/react-ui";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
+import { FormItem } from "../survey/questions/FormItem";
 
 /*
 
@@ -150,7 +152,7 @@ const Bracket = (
   };
 
   return (
-    <Components.FormItem
+    <FormItem
       path={inputProperties.path}
       label={inputProperties.label}
       {...itemProperties}
@@ -159,7 +161,7 @@ const Bracket = (
         <BracketLegend {...props} />
         <BracketResults {...props} />
       </div>
-    </Components.FormItem>
+    </FormItem>
   );
 };
 

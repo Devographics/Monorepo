@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from "react";
 import { Form } from "react-bootstrap";
 import isEmpty from "lodash/isEmpty.js";
@@ -14,6 +15,7 @@ import {
 import FormOptionLabel from "~/core/components/survey/questions/FormOptionLabel";
 import FormOptionDescription from "~/core/components/survey/questions/FormOptionDescription";
 import { useIntlContext } from "@vulcanjs/react-i18n";
+import { FormItem } from "../survey/questions/FormItem";
 
 const OtherComponent = ({
   value,
@@ -100,7 +102,7 @@ export const FormComponentRadioGroup = ({
   } = inputProperties;
   const hasValue = value !== "";
   return (
-    <Components.FormItem
+    <FormItem
       path={/*inputProperties.*/ path}
       label={inputProperties.label}
       {...itemProperties}
@@ -156,7 +158,7 @@ export const FormComponentRadioGroup = ({
         );
       })}
       {itemProperties.showOther && <OtherComponent value={value} path={path} />}
-    </Components.FormItem>
+    </FormItem>
   );
 };
 

@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { useIntlContext } from "@vulcanjs/react-i18n";
 
@@ -20,7 +21,10 @@ export const Help = ({ intlKeys }) => {
   const intl = useIntlContext();
   const formattedMessage = getFormattedMessage(intlKeys, intl);
   return (
-    <div className="form-help" dangerouslySetInnerHTML={{__html: formattedMessage}}/>
+    <div
+      className="form-help"
+      dangerouslySetInnerHTML={{ __html: formattedMessage }}
+    />
   );
 };
 

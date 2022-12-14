@@ -1,14 +1,12 @@
+"use client";
 import React, { useState } from "react";
 import { useIntlContext } from "@vulcanjs/react-i18n";
-import {
-  FormInputProps,
-  useVulcanComponents,
-  useFormContext,
-} from "@vulcanjs/react-ui";
-import { FormCheck, FormControl } from "react-bootstrap";
+import { FormInputProps, useFormContext } from "@vulcanjs/react-ui";
+import { FormControl } from "react-bootstrap";
 import isEmpty from "lodash/isEmpty.js";
 import { Form } from "react-bootstrap";
 import FormOptionLabel from "~/core/components/survey/questions/FormOptionLabel";
+import { FormItem } from "../survey/questions/FormItem";
 
 const receiveNotificationsFieldName = "receive_notifications";
 
@@ -23,7 +21,6 @@ export const Email2 = ({
   const { questionId } = itemProperties;
   const checkboxPath = path.replace(questionId, receiveNotificationsFieldName);
   const checkboxValue = document[checkboxPath];
-  const Components = useVulcanComponents();
   const intl = useIntlContext();
   const [showEmail, setShowEmail] = useState(checkboxValue);
   const { updateCurrentValues } = useFormContext();
@@ -36,7 +33,7 @@ export const Email2 = ({
   const yesLabel = intl.formatMessage({ id: `options.${questionId}.yes` });
 
   return (
-    <Components.FormItem path={path} label={label} {...itemProperties}>
+    <FormItem path={path} label={label} {...itemProperties}>
       {/* <FormCheck
         name="show_email"
         label={intl.formatMessage({ id: `options.${questionId}.yes` })}
@@ -77,7 +74,7 @@ export const Email2 = ({
           />
         </div>
       )}
-    </Components.FormItem>
+    </FormItem>
   );
 };
 

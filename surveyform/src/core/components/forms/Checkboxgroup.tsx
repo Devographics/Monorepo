@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import { Form } from "react-bootstrap";
 import without from "lodash/without.js";
@@ -12,6 +13,8 @@ import {
 import FormOptionLabel from "~/core/components/survey/questions/FormOptionLabel";
 import FormOptionDescription from "~/core/components/survey/questions/FormOptionDescription";
 import { useIntlContext } from "@vulcanjs/react-i18n";
+import { Button } from "../ui/Button";
+import { FormItem } from "../survey/questions/FormItem";
 
 // this marker is used to identify "other" values
 export const otherMarker = "[other]";
@@ -161,7 +164,7 @@ export const FormComponentCheckboxGroup = ({
     : options;
 
   return (
-    <Components.FormItem path={path} label={label} {...itemProperties}>
+    <FormItem path={path} label={label} {...itemProperties}>
       <div className="form-item-options">
         {optionsToShow.map((option, i) => {
           const isChecked = value.includes(option.value);
@@ -220,20 +223,20 @@ export const FormComponentCheckboxGroup = ({
           );
         })}
         {useCutoff && !showMore && (
-          <Components.Button
+          <Button
             className="form-show-more"
             onClick={() => {
               setShowMore(true);
             }}
           >
             {intl.formatMessage({ id: "forms.more_options" })}…
-          </Components.Button>
+          </Button>
         )}
         {itemProperties.showOther && (
           <OtherComponent value={value} path={path} />
         )}
       </div>
-    </Components.FormItem>
+    </FormItem>
   );
 };
 

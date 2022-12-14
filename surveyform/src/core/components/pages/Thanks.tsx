@@ -1,8 +1,8 @@
+"use client";
 import React from "react";
 import ShareSite from "../share/ShareSite";
 import { getSurveyPath } from "~/modules/surveys/getters";
 import Score from "../common/Score";
-import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { useSingle } from "@vulcanjs/react-hooks";
 import { Response } from "~/modules/responses";
 import { ResponseFragmentWithRanking } from "~/modules/responses/fragments";
@@ -13,6 +13,7 @@ import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import { getSurveyImageUrl } from "~/surveys/getSurveyImageUrl";
 import Link from "next/link";
 import { ResponseDocument, SurveyDocument } from "@devographics/core-models";
+import { Loading } from "~/core/components/ui/Loading";
 
 const Thanks = () => {
   const { responseId, slug, year } = useSurveyResponseParams();
@@ -41,8 +42,6 @@ const ThanksWithResponse = ({
   survey: SurveyDocument;
   responseId: string;
 }) => {
-  const Components = useVulcanComponents();
-
   const data = useSingle({
     model: Response,
     fragment: survey && ResponseFragmentWithRanking(survey),
@@ -54,7 +53,7 @@ const ThanksWithResponse = ({
   }: { document: ResponseDocument; loading: boolean } = data;
 
   if (loading) {
-    return <Components.Loading />;
+    return <Loading />;
   }
 
   return <ThanksInner survey={survey} response={document} />;

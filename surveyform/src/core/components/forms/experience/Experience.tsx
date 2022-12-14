@@ -1,12 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
+"use client";
+import React, { useState, useRef } from "react";
+import { Overlay, Tooltip } from "react-bootstrap";
+import { FormItem } from "~/core/components/survey/questions/FormItem";
 import { Form } from "react-bootstrap";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 // import { isOtherValue, removeOtherMarker, addOtherMarker } from './Checkboxgroup';
-import {
-  FormInputProps,
-  useFormContext,
-  useVulcanComponents,
-} from "@vulcanjs/react-ui";
+import { FormInputProps, useFormContext } from "@vulcanjs/react-ui";
 import { useEntities } from "~/core/components/common/EntitiesContext";
 import { FormControl } from "react-bootstrap";
 import get from "lodash/get.js";
@@ -31,7 +30,6 @@ export const Experience = (props: ExperienceProps) => {
     document,
     showDescription,
   } = props;
-  const Components = useVulcanComponents();
   const { isFirstQuestion, questionId } = itemProperties;
 
   const commentPath = getCommentFieldName(path);
@@ -54,7 +52,7 @@ export const Experience = (props: ExperienceProps) => {
   const entity = entities?.find((e) => e.id === questionId);
 
   return (
-    <Components.FormItem
+    <FormItem
       path={/*inputProperties.*/ path}
       label={inputProperties.label}
       showDescription={showDescription}
@@ -120,12 +118,11 @@ export const Experience = (props: ExperienceProps) => {
           questionPath={path}
         />
       )}
-    </Components.FormItem>
+    </FormItem>
   );
 };
 
 const CodeExample = ({ language, code, codeHighlighted }) => {
-  const Components = useVulcanComponents();
   return (
     <div className="code-example">
       <h5 className="code-example-heading">
@@ -137,8 +134,6 @@ const CodeExample = ({ language, code, codeHighlighted }) => {
     </div>
   );
 };
-
-import { Overlay, Tooltip } from "react-bootstrap";
 
 const CommentTrigger = ({
   value,
@@ -200,7 +195,6 @@ const CommentInput = ({
 }) => {
   const [localValue, setLocalValue] = useState(value);
   const { getDocument, updateCurrentValues } = useFormContext();
-  const Components = useVulcanComponents();
 
   // if label has been translated, use that to override entity name
   const label =

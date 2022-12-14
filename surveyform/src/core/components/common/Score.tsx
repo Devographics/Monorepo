@@ -1,14 +1,15 @@
+"use client";
 import React, { useState, useRef } from "react";
 import { getKnowledgeScore } from "~/modules/responses/helpers";
 import get from "lodash/get.js";
 import CountUp from "react-countup";
 import Confetti from "react-confetti";
 import take from "lodash/take.js";
-import { useVulcanComponents } from "@vulcanjs/react-ui";
 import type { SurveyType } from "@devographics/core-models";
 import { useIntlContext } from "@vulcanjs/react-i18n";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import { useEntities } from "~/core/components/common/EntitiesContext";
+import { Button } from "~/core/components/ui/Button";
 
 const Features = ({
   features,
@@ -18,7 +19,6 @@ const Features = ({
   limit: any;
 }) => {
   const limitedFeatures = take(features, limit);
-  const Components = useVulcanComponents();
   return (
     <div className="score-features">
       <h4 className="score-features-heading">
@@ -61,7 +61,6 @@ const FeatureItem = ({ feature, showComma }) => {
 };
 const Score = ({ response, survey }: { response: any; survey: SurveyType }) => {
   const intl = useIntlContext();
-  const Components = useVulcanComponents();
   const containerRef = useRef<HTMLInputElement | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
   const { knowledgeRanking = 100 } = response;
@@ -76,10 +75,6 @@ const Score = ({ response, survey }: { response: any; survey: SurveyType }) => {
     { id: "thanks.share_score_message" },
     { score, name, shareUrl: `${shareUrl}?source=post_survey_share`, hashtag }
   );
-
-  const unknownFieldIds = unknownFields
-    .map((f) => f.id)
-    .filter((id) => !!id) as Array<string>;
 
   const entities = useEntities();
 
@@ -144,14 +139,14 @@ const Score = ({ response, survey }: { response: any; survey: SurveyType }) => {
           />
         </div>
         <div className="score-share">
-          <Components.Button
+          <Button
             target="_blank"
             href={`https://twitter.com/intent/tweet/?text=${encodeURIComponent(
               text
             )}`}
           >
             <FormattedMessage id="thanks.share_on_twitter" />
-          </Components.Button>
+          </Button>
         </div>
         {unknownFeatures.length > 0 && (
           <Features features={unknownFeatures} limit={10} />

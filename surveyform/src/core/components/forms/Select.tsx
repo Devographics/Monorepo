@@ -1,8 +1,10 @@
+"use client";
 import React from "react";
 import { useIntlContext } from "@vulcanjs/react-i18n";
-import { FormInputProps, useVulcanComponents } from "@vulcanjs/react-ui";
+import { FormInputProps } from "@vulcanjs/react-ui";
 import type { FormOption } from "@vulcanjs/react-ui";
 import { Form } from "react-bootstrap";
+import { FormItem } from "../survey/questions/FormItem";
 
 export const FormComponentSelect = ({
   path,
@@ -13,7 +15,6 @@ export const FormComponentSelect = ({
   datatype,
   options,
 }: FormInputProps<HTMLSelectElement>) => {
-  const Components = useVulcanComponents();
   const intl = useIntlContext();
   // depending on field type, empty value can be '' or null
   const emptyValue =
@@ -29,7 +30,7 @@ export const FormComponentSelect = ({
   // @ts-ignore
   const { options: deleteOptions, ...newInputProperties } = inputProperties;
   return (
-    <Components.FormItem
+    <FormItem
       path={path}
       label={inputProperties.label}
       name={inputProperties.name}
@@ -52,7 +53,7 @@ export const FormComponentSelect = ({
           </option>
         ))}
       </Form.Select>
-    </Components.FormItem>
+    </FormItem>
   );
 };
 
