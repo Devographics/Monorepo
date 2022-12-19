@@ -260,7 +260,7 @@ importers:
 
   results:
     specifiers:
-      '@apollo/client': 3.5.10
+      '@apollo/client': ^3.7.2
       '@babel/core': ^7.20.5
       '@babel/eslint-parser': ^7.19.1
       '@babel/plugin-syntax-flow': ^7.18.6
@@ -362,7 +362,6 @@ importers:
       util: ^0.12.5
       webpack: 5.75.0
     dependencies:
-      '@apollo/client': 3.5.10_eaf56y3pxtc2splfx7nlpttcra
       '@gatsbyjs/reach-router': 2.0.0-v2.0.2_zpnidt7m3osuk7shl3s4oenomq
       '@mdx-js/mdx': 2.1.5
       '@mdx-js/react': 2.1.5_react@18.0.0
@@ -443,11 +442,12 @@ importers:
       typescript: 4.9.3
       util: 0.12.5
     devDependencies:
+      '@apollo/client': 3.7.2_uolx6si5lofbwb2oqmft523czu
       '@babel/core': 7.20.5
       '@babel/eslint-parser': 7.19.1_ajivmgign6qnltueqq3ekylg5a
       '@babel/plugin-syntax-flow': 7.18.6_@babel+core@7.20.5
       '@babel/plugin-transform-react-jsx': 7.19.0_@babel+core@7.20.5
-      '@graphql-tools/links': 8.3.9_25rqli4nadlumwqn73g2rjvgtm
+      '@graphql-tools/links': 8.3.9_qyljuixjfow6vokwpa4ukudbla
       '@types/tinycolor2': 1.4.3
       '@typescript-eslint/eslint-plugin': 5.36.2_czs5uoqkd3podpy6vgtsxfc7au
       '@typescript-eslint/parser': 5.45.0_hsf322ms6xhhd4b5ne6lb74y4a
@@ -1168,36 +1168,6 @@ packages:
       '@jridgewell/gen-mapping': 0.1.1
       '@jridgewell/trace-mapping': 0.3.17
 
-  /@apollo/client/3.5.10_eaf56y3pxtc2splfx7nlpttcra:
-    resolution: {integrity: sha512-tL3iSpFe9Oldq7gYikZK1dcYxp1c01nlSwtsMz75382HcI6fvQXyFXUCJTTK3wgO2/ckaBvRGw7VqjFREdVoRw==}
-    peerDependencies:
-      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-      graphql-ws: ^5.5.5
-      react: ^16.8.0 || ^17.0.0
-      subscriptions-transport-ws: ^0.9.0 || ^0.11.0
-    peerDependenciesMeta:
-      graphql-ws:
-        optional: true
-      react:
-        optional: true
-      subscriptions-transport-ws:
-        optional: true
-    dependencies:
-      '@graphql-typed-document-node/core': 3.1.1_graphql@16.6.0
-      '@wry/context': 0.6.1
-      '@wry/equality': 0.5.3
-      '@wry/trie': 0.3.2
-      graphql: 16.6.0
-      graphql-tag: 2.12.6_graphql@16.6.0
-      hoist-non-react-statics: 3.3.2
-      optimism: 0.16.1
-      prop-types: 15.8.1
-      react: 18.0.0
-      symbol-observable: 4.0.0
-      ts-invariant: 0.9.4
-      tslib: 2.4.1
-      zen-observable-ts: 1.2.5
-
   /@apollo/client/3.7.1_4acpsgwrblrf7yma4ztoevvkgq:
     resolution: {integrity: sha512-xu5M/l7p9gT9Fx7nF3AQivp0XukjB7TM7tOd5wifIpI8RskYveL4I+rpTijzWrnqCPZabkbzJKH7WEAKdctt9w==}
     peerDependencies:
@@ -1304,7 +1274,6 @@ packages:
       ts-invariant: 0.10.3
       tslib: 2.4.1
       zen-observable-ts: 1.2.5
-    dev: false
 
   /@apollo/protobufjs/1.2.6:
     resolution: {integrity: sha512-Wqo1oSHNUj/jxmsVp4iR3I480p6qdqHikn38lKrFhfzcDJ7lwd7Ck7cHRl4JE81tWNArl77xhnG/OkZhxKBYOw==}
@@ -6941,24 +6910,6 @@ packages:
       - supports-color
     dev: false
 
-  /@graphql-tools/links/8.3.9_25rqli4nadlumwqn73g2rjvgtm:
-    resolution: {integrity: sha512-iCLPEaAFMK6/MJX3AeJ1v9lycH+sMJnDdXOX1wg9NmKcJuU0YOgOwPh9Vlq7HucVQ69rOQJZIZAL9vRcpSZlEg==}
-    peerDependencies:
-      '@apollo/client': ~3.2.5 || ~3.3.0 || ~3.4.0 || ~3.5.0 || ~3.6.0
-      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
-    dependencies:
-      '@apollo/client': 3.5.10_eaf56y3pxtc2splfx7nlpttcra
-      '@graphql-tools/delegate': 9.0.6_graphql@16.6.0
-      '@graphql-tools/utils': 8.12.0_graphql@16.6.0
-      apollo-upload-client: 17.0.0_25rqli4nadlumwqn73g2rjvgtm
-      form-data: 4.0.0
-      graphql: 16.6.0
-      node-fetch: 2.6.7
-      tslib: 2.4.1
-    transitivePeerDependencies:
-      - encoding
-    dev: true
-
   /@graphql-tools/links/8.3.9_qyljuixjfow6vokwpa4ukudbla:
     resolution: {integrity: sha512-iCLPEaAFMK6/MJX3AeJ1v9lycH+sMJnDdXOX1wg9NmKcJuU0YOgOwPh9Vlq7HucVQ69rOQJZIZAL9vRcpSZlEg==}
     peerDependencies:
@@ -6975,7 +6926,6 @@ packages:
       tslib: 2.4.1
     transitivePeerDependencies:
       - encoding
-    dev: false
 
   /@graphql-tools/load/7.8.6_graphql@16.6.0:
     resolution: {integrity: sha512-yFDM5hVhV0eOom3SGyc+mjL8FvEb+0PZTZ/OSc4zrs3m/ABiQFHm2ilhzNS+OsMCpOsfGl2kXguEdt86QPp60Q==}
@@ -16381,7 +16331,6 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       tslib: 2.4.1
-    dev: false
 
   /@wry/equality/0.5.3:
     resolution: {integrity: sha512-avR+UXdSrsF2v8vIqIgmeTY0UR91UT+IyablCyKe/uk22uOJ8fusKZnH9JH9e1/EtLeNJBtagNmL3eJdnOV53g==}
@@ -17003,18 +16952,6 @@ packages:
       - supports-color
     dev: false
 
-  /apollo-upload-client/17.0.0_25rqli4nadlumwqn73g2rjvgtm:
-    resolution: {integrity: sha512-pue33bWVbdlXAGFPkgz53TTmxVMrKeQr0mdRcftNY+PoHIdbGZD0hoaXHvO6OePJAkFz7OiCFUf98p1G/9+Ykw==}
-    engines: {node: ^12.22.0 || ^14.17.0 || >= 16.0.0}
-    peerDependencies:
-      '@apollo/client': ^3.0.0
-      graphql: 14 - 16
-    dependencies:
-      '@apollo/client': 3.5.10_eaf56y3pxtc2splfx7nlpttcra
-      extract-files: 11.0.0
-      graphql: 16.6.0
-    dev: true
-
   /apollo-upload-client/17.0.0_qyljuixjfow6vokwpa4ukudbla:
     resolution: {integrity: sha512-pue33bWVbdlXAGFPkgz53TTmxVMrKeQr0mdRcftNY+PoHIdbGZD0hoaXHvO6OePJAkFz7OiCFUf98p1G/9+Ykw==}
     engines: {node: ^12.22.0 || ^14.17.0 || >= 16.0.0}
@@ -17025,7 +16962,6 @@ packages:
       '@apollo/client': 3.7.2_uolx6si5lofbwb2oqmft523czu
       extract-files: 11.0.0
       graphql: 16.6.0
-    dev: false
 
   /app-root-dir/1.0.2:
     resolution: {integrity: sha512-jlpIfsOoNoafl92Sz//64uQHGSyMrD2vYG5d8o2a4qGvyNCvXur7bzIsWtAC/6flI2RYAp3kv8rsfBtaLm7w0g==}
@@ -35328,7 +35264,6 @@ packages:
       loose-envify: 1.4.0
       react: 18.0.0
       scheduler: 0.21.0
-    dev: false
 
   /react-dom/18.2.0_react@18.2.0:
     resolution: {integrity: sha512-6IMTriUmvsjHUjNtEDudZfuDQUoWXVxKHhlEGSk81n4YFS+r/Kl99wXiwlVXtPBtJenozv2P+hxDsw9eA7Xo6g==}
@@ -36793,7 +36728,6 @@ packages:
   /response-iterator/0.2.6:
     resolution: {integrity: sha512-pVzEEzrsg23Sh053rmDUvLSkGXluZio0qu8VT6ukrYuvtjVfCbDZH9d6PGXb8HZfzdNZt8feXv/jvUzlhRgLnw==}
     engines: {node: '>=0.8'}
-    dev: false
 
   /responselike/2.0.1:
     resolution: {integrity: sha512-4gl03wn3hj1HP3yzgdI7d3lCkF95F21Pz4BPGvKHinyQzALR5CapwC8yIi0Rh58DEMQ/SguC03wFj2k0M/mHhw==}
@@ -37221,7 +37155,6 @@ packages:
     resolution: {integrity: sha512-1r87x5fz9MXqswA2ERLo0EbOAU74DpIUO090gIasYTqlVoJeMcl+Z1Rg7WHz+qtPujhS/hGIt9kxZOYBV3faRQ==}
     dependencies:
       loose-envify: 1.4.0
-    dev: false
 
   /scheduler/0.23.0:
     resolution: {integrity: sha512-CtuThmgHNg7zIZWAXi3AsyIzA3n4xx7aNyjwC2VJldO2LMVDhFK+63xGqq6CsJH4rTAt6/M+N4GhZiDYPx9eUw==}
@@ -39556,13 +39489,6 @@ packages:
 
   /ts-invariant/0.10.3:
     resolution: {integrity: sha512-uivwYcQaxAucv1CzRp2n/QdYPo4ILf9VXgH19zEIjFx2EJufV16P0JtJVpYHy89DItG6Kwj2oIUjrcK5au+4tQ==}
-    engines: {node: '>=8'}
-    dependencies:
-      tslib: 2.4.1
-    dev: false
-
-  /ts-invariant/0.9.4:
-    resolution: {integrity: sha512-63jtX/ZSwnUNi/WhXjnK8kz4cHHpYS60AnmA6ixz17l7E12a5puCWFlNpkne5Rl0J8TBPVHpGjsj4fxs8ObVLQ==}
     engines: {node: '>=8'}
     dependencies:
       tslib: 2.4.1

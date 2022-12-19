@@ -100,7 +100,7 @@
         "util": "^0.12.5"
     },
     "devDependencies": {
-        "@apollo/client": "3.6.9",
+        "@apollo/client": "^3.7.2",
         "@babel/core": "^7.20.5",
         "@babel/eslint-parser": "^7.19.1",
         "@babel/plugin-syntax-flow": "^7.18.6",
