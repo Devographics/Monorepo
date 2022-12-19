@@ -260,7 +260,7 @@ importers:
 
   results:
     specifiers:
-      '@apollo/client': 3.6.9
+      '@apollo/client': 3.5.10
       '@babel/core': ^7.20.5
       '@babel/eslint-parser': ^7.19.1
       '@babel/plugin-syntax-flow': ^7.18.6
@@ -362,6 +362,7 @@ importers:
       util: ^0.12.5
       webpack: 5.75.0
     dependencies:
+      '@apollo/client': 3.5.10_eaf56y3pxtc2splfx7nlpttcra
       '@gatsbyjs/reach-router': 2.0.0-v2.0.2_zpnidt7m3osuk7shl3s4oenomq
       '@mdx-js/mdx': 2.1.5
       '@mdx-js/react': 2.1.5_react@18.0.0
@@ -442,12 +443,11 @@ importers:
       typescript: 4.9.3
       util: 0.12.5
     devDependencies:
-      '@apollo/client': 3.6.9_eaf56y3pxtc2splfx7nlpttcra
       '@babel/core': 7.20.5
       '@babel/eslint-parser': 7.19.1_ajivmgign6qnltueqq3ekylg5a
       '@babel/plugin-syntax-flow': 7.18.6_@babel+core@7.20.5
       '@babel/plugin-transform-react-jsx': 7.19.0_@babel+core@7.20.5
-      '@graphql-tools/links': 8.3.9_j5f4qhrwpy2nv6d24wvohvgylu
+      '@graphql-tools/links': 8.3.9_25rqli4nadlumwqn73g2rjvgtm
       '@types/tinycolor2': 1.4.3
       '@typescript-eslint/eslint-plugin': 5.36.2_czs5uoqkd3podpy6vgtsxfc7au
       '@typescript-eslint/parser': 5.45.0_hsf322ms6xhhd4b5ne6lb74y4a
@@ -1168,12 +1168,12 @@ packages:
       '@jridgewell/gen-mapping': 0.1.1
       '@jridgewell/trace-mapping': 0.3.17
 
-  /@apollo/client/3.6.9_eaf56y3pxtc2splfx7nlpttcra:
-    resolution: {integrity: sha512-Y1yu8qa2YeaCUBVuw08x8NHenFi0sw2I3KCu7Kw9mDSu86HmmtHJkCAifKVrN2iPgDTW/BbP3EpSV8/EQCcxZA==}
+  /@apollo/client/3.5.10_eaf56y3pxtc2splfx7nlpttcra:
+    resolution: {integrity: sha512-tL3iSpFe9Oldq7gYikZK1dcYxp1c01nlSwtsMz75382HcI6fvQXyFXUCJTTK3wgO2/ckaBvRGw7VqjFREdVoRw==}
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
       graphql-ws: ^5.5.5
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react: ^16.8.0 || ^17.0.0
       subscriptions-transport-ws: ^0.9.0 || ^0.11.0
     peerDependenciesMeta:
       graphql-ws:
@@ -1194,10 +1194,9 @@ packages:
       prop-types: 15.8.1
       react: 18.0.0
       symbol-observable: 4.0.0
-      ts-invariant: 0.10.3
+      ts-invariant: 0.9.4
       tslib: 2.4.1
       zen-observable-ts: 1.2.5
-    dev: true
 
   /@apollo/client/3.7.1_4acpsgwrblrf7yma4ztoevvkgq:
     resolution: {integrity: sha512-xu5M/l7p9gT9Fx7nF3AQivp0XukjB7TM7tOd5wifIpI8RskYveL4I+rpTijzWrnqCPZabkbzJKH7WEAKdctt9w==}
@@ -1271,8 +1270,8 @@ packages:
       zen-observable-ts: 1.2.5
     dev: false
 
-  /@apollo/client/3.7.1_uolx6si5lofbwb2oqmft523czu:
-    resolution: {integrity: sha512-xu5M/l7p9gT9Fx7nF3AQivp0XukjB7TM7tOd5wifIpI8RskYveL4I+rpTijzWrnqCPZabkbzJKH7WEAKdctt9w==}
+  /@apollo/client/3.7.2_uolx6si5lofbwb2oqmft523czu:
+    resolution: {integrity: sha512-ohAIpXl3mTa1Fd3GT/K37VwQJfTIuuJRp4aOlJ4q/hlx0Wxh+RqDrbn0awtVCOdhGDQN+CQQmVzIqFKn6GziXQ==}
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
       graphql-ws: ^5.5.5
@@ -6942,16 +6941,16 @@ packages:
       - supports-color
     dev: false
 
-  /@graphql-tools/links/8.3.9_j5f4qhrwpy2nv6d24wvohvgylu:
+  /@graphql-tools/links/8.3.9_25rqli4nadlumwqn73g2rjvgtm:
     resolution: {integrity: sha512-iCLPEaAFMK6/MJX3AeJ1v9lycH+sMJnDdXOX1wg9NmKcJuU0YOgOwPh9Vlq7HucVQ69rOQJZIZAL9vRcpSZlEg==}
     peerDependencies:
       '@apollo/client': ~3.2.5 || ~3.3.0 || ~3.4.0 || ~3.5.0 || ~3.6.0
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
-      '@apollo/client': 3.6.9_eaf56y3pxtc2splfx7nlpttcra
+      '@apollo/client': 3.5.10_eaf56y3pxtc2splfx7nlpttcra
       '@graphql-tools/delegate': 9.0.6_graphql@16.6.0
       '@graphql-tools/utils': 8.12.0_graphql@16.6.0
-      apollo-upload-client: 17.0.0_j5f4qhrwpy2nv6d24wvohvgylu
+      apollo-upload-client: 17.0.0_25rqli4nadlumwqn73g2rjvgtm
       form-data: 4.0.0
       graphql: 16.6.0
       node-fetch: 2.6.7
@@ -6960,16 +6959,16 @@ packages:
       - encoding
     dev: true
 
-  /@graphql-tools/links/8.3.9_vyimhitoszmgfhxzjgw5jdtad4:
+  /@graphql-tools/links/8.3.9_qyljuixjfow6vokwpa4ukudbla:
     resolution: {integrity: sha512-iCLPEaAFMK6/MJX3AeJ1v9lycH+sMJnDdXOX1wg9NmKcJuU0YOgOwPh9Vlq7HucVQ69rOQJZIZAL9vRcpSZlEg==}
     peerDependencies:
       '@apollo/client': ~3.2.5 || ~3.3.0 || ~3.4.0 || ~3.5.0 || ~3.6.0
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
-      '@apollo/client': 3.7.1_uolx6si5lofbwb2oqmft523czu
+      '@apollo/client': 3.7.2_uolx6si5lofbwb2oqmft523czu
       '@graphql-tools/delegate': 9.0.6_graphql@16.6.0
       '@graphql-tools/utils': 8.12.0_graphql@16.6.0
-      apollo-upload-client: 17.0.0_vyimhitoszmgfhxzjgw5jdtad4
+      apollo-upload-client: 17.0.0_qyljuixjfow6vokwpa4ukudbla
       form-data: 4.0.0
       graphql: 16.6.0
       node-fetch: 2.6.7
@@ -8268,8 +8267,8 @@ packages:
       '@mdx-js/loader': '>=0.15.0'
       '@mdx-js/react': '*'
     dependencies:
-      '@mdx-js/loader': 1.6.22_react@18.2.0
-      '@mdx-js/react': 1.6.22_react@18.2.0
+      '@mdx-js/loader': 1.6.22_react@17.0.2
+      '@mdx-js/react': 1.6.22_react@17.0.2
     dev: false
 
   /@next/plugin-storybook/12.3.3_next@12.3.3:
@@ -17004,26 +17003,26 @@ packages:
       - supports-color
     dev: false
 
-  /apollo-upload-client/17.0.0_j5f4qhrwpy2nv6d24wvohvgylu:
+  /apollo-upload-client/17.0.0_25rqli4nadlumwqn73g2rjvgtm:
     resolution: {integrity: sha512-pue33bWVbdlXAGFPkgz53TTmxVMrKeQr0mdRcftNY+PoHIdbGZD0hoaXHvO6OePJAkFz7OiCFUf98p1G/9+Ykw==}
     engines: {node: ^12.22.0 || ^14.17.0 || >= 16.0.0}
     peerDependencies:
       '@apollo/client': ^3.0.0
       graphql: 14 - 16
     dependencies:
-      '@apollo/client': 3.6.9_eaf56y3pxtc2splfx7nlpttcra
+      '@apollo/client': 3.5.10_eaf56y3pxtc2splfx7nlpttcra
       extract-files: 11.0.0
       graphql: 16.6.0
     dev: true
 
-  /apollo-upload-client/17.0.0_vyimhitoszmgfhxzjgw5jdtad4:
+  /apollo-upload-client/17.0.0_qyljuixjfow6vokwpa4ukudbla:
     resolution: {integrity: sha512-pue33bWVbdlXAGFPkgz53TTmxVMrKeQr0mdRcftNY+PoHIdbGZD0hoaXHvO6OePJAkFz7OiCFUf98p1G/9+Ykw==}
     engines: {node: ^12.22.0 || ^14.17.0 || >= 16.0.0}
     peerDependencies:
       '@apollo/client': ^3.0.0
       graphql: 14 - 16
     dependencies:
-      '@apollo/client': 3.7.1_uolx6si5lofbwb2oqmft523czu
+      '@apollo/client': 3.7.2_uolx6si5lofbwb2oqmft523czu
       extract-files: 11.0.0
       graphql: 16.6.0
     dev: false
@@ -18868,7 +18867,7 @@ packages:
       mississippi: 3.0.0
       mkdirp: 0.5.6
       move-concurrently: 1.0.1
-      promise-inflight: 1.0.1
+      promise-inflight: 1.0.1_bluebird@3.7.2
       rimraf: 2.7.1
       ssri: 6.0.2
       unique-filename: 1.1.1
@@ -18892,7 +18891,7 @@ packages:
       minipass-pipeline: 1.2.4
       mkdirp: 1.0.4
       p-map: 4.0.0
-      promise-inflight: 1.0.1
+      promise-inflight: 1.0.1_bluebird@3.7.2
       rimraf: 3.0.2
       ssri: 8.0.1
       tar: 6.1.12
@@ -22757,7 +22756,7 @@ packages:
     dependencies:
       debug: 4.3.4
       eslint: 7.32.0
-      eslint-plugin-import: 2.26.0_ye22wsquyradrzcrqm2nyo3apa
+      eslint-plugin-import: 2.26.0_k2fj7mtd2vnwiotnzv3dk5dwma
       glob: 7.2.3
       is-glob: 4.0.3
       resolve: 1.22.1
@@ -25351,9 +25350,9 @@ packages:
     peerDependencies:
       gatsby: ^5.0.0-next
     dependencies:
-      '@apollo/client': 3.7.1_uolx6si5lofbwb2oqmft523czu
+      '@apollo/client': 3.7.2_uolx6si5lofbwb2oqmft523czu
       '@babel/runtime': 7.20.6
-      '@graphql-tools/links': 8.3.9_vyimhitoszmgfhxzjgw5jdtad4
+      '@graphql-tools/links': 8.3.9_qyljuixjfow6vokwpa4ukudbla
       '@graphql-tools/utils': 8.12.0_graphql@16.6.0
       '@graphql-tools/wrap': 8.5.1_graphql@16.6.0
       dataloader: 2.1.0
@@ -34601,13 +34600,15 @@ packages:
     resolution: {integrity: sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==}
     engines: {node: '>=0.4.0'}
 
-  /promise-inflight/1.0.1:
+  /promise-inflight/1.0.1_bluebird@3.7.2:
     resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
     peerDependencies:
       bluebird: '*'
     peerDependenciesMeta:
       bluebird:
         optional: true
+    dependencies:
+      bluebird: 3.7.2
     dev: false
 
   /promise.allsettled/1.0.6:
@@ -39555,6 +39556,13 @@ packages:
 
   /ts-invariant/0.10.3:
     resolution: {integrity: sha512-uivwYcQaxAucv1CzRp2n/QdYPo4ILf9VXgH19zEIjFx2EJufV16P0JtJVpYHy89DItG6Kwj2oIUjrcK5au+4tQ==}
+    engines: {node: '>=8'}
+    dependencies:
+      tslib: 2.4.1
+    dev: false
+
+  /ts-invariant/0.9.4:
+    resolution: {integrity: sha512-63jtX/ZSwnUNi/WhXjnK8kz4cHHpYS60AnmA6ixz17l7E12a5puCWFlNpkne5Rl0J8TBPVHpGjsj4fxs8ObVLQ==}
     engines: {node: '>=8'}
     dependencies:
       tslib: 2.4.1
