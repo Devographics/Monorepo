@@ -10,7 +10,7 @@ shareUrl: https://survey.devographics.com/survey/state-of-js/2022
 # resultsUrl: https://2022.stateofjs.com/
 name: "State of JavaScript"
 year: 2022
-status: 2 # preview/open/closed/hidden
+status: 3 # preview/open/closed/hidden
 imageUrl: https://devographics.github.io/surveys/state_of_js/2022/images/js2022.png
 faviconUrl: https://devographics.github.io/surveys/state_of_js/2022/images/js2022-favicon.svg
 socialImageUrl: https://devographics.github.io/surveys/state_of_js/2022/images/js2022-og.png
