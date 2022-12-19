@@ -5,6 +5,5 @@
     },
     "dependencies": {
         "@vulcanjs/schema": "^0.7.1"
-    },
-    "packageManager": "pnpm@7.6.0"
+    }
 }
