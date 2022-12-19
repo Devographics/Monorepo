@@ -5,7 +5,6 @@ import { mq, spacing, fontSize, color } from 'core/theme'
 import BlockLegendsItem from './BlockLegendsItem'
 import { useBucketKeys, useLegends } from '../../helpers/useBucketKeys'
 
-
 const BlockLegends = ({
     legends = [],
     block,
@@ -22,7 +21,7 @@ const BlockLegends = ({
     units,
     position,
     useShortLabels = layout === 'horizontal',
-    current,
+    current
 }) => {
     const { id: blockId, bucketKeysName = blockId } = block
 
@@ -31,7 +30,13 @@ const BlockLegends = ({
     const rootStyle = { ...style }
 
     return (
-        <Container className="Block__Legends" style={rootStyle} layout={layout} withFrame={withFrame} position={position}>
+        <Container
+            className="Block__Legends"
+            style={rootStyle}
+            layout={layout}
+            withFrame={withFrame}
+            position={position}
+        >
             <ContainerInner layout={layout}>
                 {blockLegends.map(({ id, label, shortLabel, color }) => (
                     <BlockLegendsItem
@@ -48,7 +53,7 @@ const BlockLegends = ({
                         onMouseEnter={onMouseEnter}
                         onMouseLeave={onMouseLeave}
                         onClick={onClick}
-                        data={data && Array.isArray(data) && data.find((b) => b.id === id)}
+                        data={data && Array.isArray(data) && data.find(b => b.id === id)}
                         units={units}
                         layout={layout}
                     />
@@ -67,7 +72,7 @@ BlockLegends.propTypes = {
     chipStyle: PropTypes.object.isRequired,
     onMouseEnter: PropTypes.func,
     onMouseLeave: PropTypes.func,
-    onClick: PropTypes.func,
+    onClick: PropTypes.func
 }
 
 BlockLegends.defaultProps = {
@@ -76,17 +81,20 @@ BlockLegends.defaultProps = {
     style: {},
     itemStyle: {},
     chipStyle: {},
-    chipSize: 16,
+    chipSize: 16
 }
 
 const Container = styled.table`
+    .rawchartmode & {
+        display: none;
+    }
     font-size: ${fontSize('small')};
     /* margin-top: ${spacing()}; */
     margin-top: ${({ position }) => (position === 'bottom' ? spacing() : 0)};
     margin-bottom: ${({ position }) => (position === 'top' ? spacing() : 0)};
     width: 100%;
 
-    ${(props) => {
+    ${props => {
         if (props.withFrame) {
             return css`
                 border: 1px solid ${color('border')};
@@ -101,7 +109,7 @@ const Container = styled.table`
 `
 
 const ContainerInner = styled.tbody`
-    ${(props) => {
+    ${props => {
         if (props.layout === 'horizontal') {
             return css`
                 @media ${mq.mediumLarge} {

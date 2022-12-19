@@ -88,6 +88,8 @@ export const getPageSocialMeta = (context, translate, overrides = {}) => {
 export const mergePageContext = (pageContext, location, state) => {
     const isCapturing =
         location && location.search ? location.search.indexOf('capture') !== -1 : false
+    const isRawChartMode =
+        location && location.search ? location.search.indexOf('raw') !== -1 : false
     const isDebugEnabled =
         location && location.search ? location.search.indexOf('debug') !== -1 : false
 
@@ -101,6 +103,7 @@ export const mergePageContext = (pageContext, location, state) => {
         host,
         currentPath: location ? location.pathname : undefined,
         isCapturing,
+        isRawChartMode,
         isDebugEnabled,
         ...state
     }
