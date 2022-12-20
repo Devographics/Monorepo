@@ -1,3 +1,5 @@
+import GraphQLJSON, { GraphQLJSONObject } from 'graphql-type-json'
+
 import categories from './categories'
 import demographics from './demographics'
 import entities from './entities'
@@ -19,6 +21,8 @@ import brackets from './brackets'
 import explorer from './explorer'
 
 export default {
+    JSON: GraphQLJSON,
+    JSONObject: GraphQLJSONObject,
     ...surveys,
     ...totals,
     ...demographics,
@@ -37,5 +41,5 @@ export default {
     ...happiness,
     ...query,
     ...brackets,
-    ...explorer,
+    ...explorer
 }
