@@ -1,5 +1,6 @@
 import React from "react";
-import { gql } from "@apollo/client";
+import apolloClient from "@apollo/client";
+const { gql } = apolloClient;
 import qs from "qs";
 import { useRouter } from "next/router";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
