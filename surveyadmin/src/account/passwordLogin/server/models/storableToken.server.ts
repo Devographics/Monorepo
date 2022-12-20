@@ -10,6 +10,7 @@ import { nanoid } from "nanoid";
 import { VulcanSchema } from "@vulcanjs/schema";
 import { createModel } from "@vulcanjs/model";
 import { createMongooseConnector } from "@vulcanjs/mongo";
+import { appDb } from "~/lib/server/mongoose/connection";
 
 const schema: VulcanSchema = {
   _id: {
@@ -66,7 +67,10 @@ export const StorableToken = createModel({
 });
 
 export const StorableTokenConnector = createMongooseConnector<StorableTokenType>(
-  StorableToken
+  StorableToken,
+  {
+    mongooseConnection: appDb
+  }
 );
 
 // helpers

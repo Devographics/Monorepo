@@ -2,6 +2,7 @@ import type { VulcanDocument } from "@vulcanjs/schema";
 import { createGraphqlModelServer } from "@vulcanjs/graphql/server";
 import { createMongooseConnector } from "@vulcanjs/mongo";
 import mongoose from "mongoose";
+import { appDb } from "~/lib/server/mongoose/connection";
 
 export const EmailHash = createGraphqlModelServer({
   name: "EmailHashes",
@@ -59,6 +60,7 @@ export const EmailHashMongooseModel =
 
 EmailHash.crud.connector = createMongooseConnector(EmailHash, {
   mongooseModel: EmailHashMongooseModel,
+  mongooseConnection: appDb
 });
 
 export default EmailHash;

@@ -14,7 +14,7 @@ export const Footer = () => {
     <footer className="footer">
       <div className="footer-top">
         &copy; 2022 <a href="https://devographics.com/">Devographics</a> |{" "}
-        <Link href="/privacy-policy">
+        <Link href="/privacy-policy" passHref legacyBehavior>
           <a>
             <Components.FormattedMessage id="general.privacy_policy" />
           </a>
@@ -30,7 +30,7 @@ export const Footer = () => {
         |{" "}
         {!user && (
           <>
-            <Link href={routes.account.login.href}>Login</Link>
+            <Link href={routes.admin.login.href}>Login</Link>
           </>
         )}
         {user && (
@@ -40,7 +40,7 @@ export const Footer = () => {
         )}{" "}
         |{" "}
         <>
-          <Link href="/admin">Admin area</Link>
+          <Link href={routes.admin.home.href}>Admin area</Link>
         </>
       </div>
       <div className="footer-bottom">

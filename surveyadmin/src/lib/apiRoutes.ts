@@ -43,11 +43,6 @@ export const apiRoutes = {
         method: "POST",
       },
     },
-    anonymousLogin: {
-      login: {
-        href: "/api/account/anonymous-login/login",
-      },
-    },
   },
   admin: {
     dataExport: { href: "/api/admin/data-export" },

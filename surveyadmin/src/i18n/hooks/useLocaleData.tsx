@@ -1,6 +1,6 @@
 // TODO: this is a quick migration for state of js
-import { useQuery } from "@apollo/client";
-import gql from "graphql-tag";
+import apolloClient from "@apollo/client";
+const { useQuery, gql } = apolloClient
 import { initLocale, LocaleType } from "@vulcanjs/i18n";
 /*
 import { useCurrentUser } from "./currentUser";
