@@ -13,10 +13,10 @@ import { cronMiddleware, cronMatcher } from "~/core/server/edge/cronMiddleware";
 export function middleware(request: NextRequest) {
   // TODO: this condition should use the admin area matcher?
   const pathname = request.nextUrl.pathname;
-  if (pathname.startsWith("/admin")) {
-    console.log("Accessing admin area");
-    return adminLoginMiddleware(request);
-  }
+  // if (pathname.startsWith("/admin")) {
+  //   console.log("Accessing admin area");
+  //   return adminLoginMiddleware(request);
+  // }
   if (pathname.startsWith("/debug")) {
     console.log("Accessing debug area");
     return debugAccessMiddleware(request);

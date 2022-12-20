@@ -7,6 +7,7 @@ import {
 import { SurveyType } from "@devographics/core-models";
 import mongoose from "mongoose";
 import { nanoid } from "nanoid";
+import { publicReadonlyDb } from "~/lib/server/mongoose/connection";
 
 export const NormalizedResponse = createGraphqlModelServer({
   name: "Normalized_Response",
@@ -68,9 +69,9 @@ export const NormalizedResponse = createGraphqlModelServer({
 export const NormalizedResponseConnector =
   createMongooseConnector<NormalizedResponseDocument>(
     NormalizedResponse,
-
     {
       mongooseSchema: new mongoose.Schema({ _id: String }, { strict: false }),
+      mongooseConnection: publicReadonlyDb
     }
   );
 
@@ -83,12 +84,13 @@ export const NormalizedResponseMongooseModel =
 // For direct Mongo access
 
 export const NormalizedResponseMongoCollection = () => {
-  if (!mongoose.connection.db) {
+  // db = the mongo instance
+  if (!publicReadonlyDb.db) {
     throw new Error(
       "Trying to access Response mongo collection before Mongo/Mongoose is connected."
     );
   }
-  return mongoose.connection.db.collection<ResponseDocument>("normalized_responses");
+  return publicReadonlyDb.db.collection<ResponseDocument>("normalized_responses");
 };
 
 
