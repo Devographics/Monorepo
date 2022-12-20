@@ -32,7 +32,8 @@ export function reportWebVitals(metric) {
   debugPerf(metric); // The metric object ({ id, name, startTime, value, label }) is logged to the console
 }
 
-import { ApolloProvider } from "@apollo/client";
+import apolloClient from "@apollo/client";
+const { ApolloProvider } = apolloClient;
 import { useApollo } from "@vulcanjs/next-apollo";
 import { CacheProvider, EmotionCache } from "@emotion/react";
 import { useUser } from "~/account/user/hooks";

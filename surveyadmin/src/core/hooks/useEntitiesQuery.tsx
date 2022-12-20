@@ -1,4 +1,5 @@
-import { QueryHookOptions, useQuery } from "@apollo/client";
+import apolloClient from "@apollo/client";
+const { QueryHookOptions, useQuery } = apolloClient;
 import gql from "graphql-tag";
 import type { Entity } from "@devographics/core-models";
 const entitiesQuery = gql`

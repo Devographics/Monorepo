@@ -43,7 +43,7 @@
     "on:server:start": "node ./scripts/dist/onServerStart.mjs",
     "postcoverage": "npm run report:combined # combine jest and cypress coverage reports",
     "//postinstall": " # @see https://github.com/apollographql/apollo-feature-requests/issues/287",
-    "postinstall": "node ./.vn/scripts/fix-apollo.js",
+    "//postinstall2": "node ./.vn/scripts/fix-apollo.js",
     "prebuild": "pnpm run build:scripts",
     "precombine:reports": "npm run copy:reports && rm -Rf .nyc_output && mkdir .nyc_output || true # intermediate script",
     "precopy:reports": "npm run mkdir:reports # intermediate script",

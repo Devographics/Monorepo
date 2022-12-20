@@ -97,6 +97,9 @@ const SwitcherWrapper = styled.div`
 `
 
 const Description = styled.div`
+    .rawchartmode & {
+        display: none;
+    }
     margin-bottom: ${spacing(1)};
 
     p {

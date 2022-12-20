@@ -19,7 +19,6 @@
         "node": "^18.10.0"
     },
     "dependencies": {
-        "@gatsbyjs/reach-router": "2.0.0-v2.0.2",
         "@mdx-js/mdx": "^2.1.5",
         "@mdx-js/react": "^2.1.5",
         "@nivo/bar": "0.80.0",
@@ -100,7 +99,7 @@
         "util": "^0.12.5"
     },
     "devDependencies": {
-        "@apollo/client": "3.6.9",
+        "@apollo/client": "^3.7.2",
         "@babel/core": "^7.20.5",
         "@babel/eslint-parser": "^7.19.1",
         "@babel/plugin-syntax-flow": "^7.18.6",

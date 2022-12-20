@@ -107,6 +107,9 @@ BlockTitle.propTypes = {
 }
 
 const StyledBlockTitle = styled.div`
+    .rawchartmode & {
+        display: none;
+    }
     ${({ isCapturing }) =>
         isCapturing &&
         css`

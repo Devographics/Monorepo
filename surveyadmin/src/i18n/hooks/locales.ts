@@ -1,5 +1,5 @@
-import { useQuery } from "@apollo/client";
-import gql from "graphql-tag";
+import apolloClient from "@apollo/client";
+const { useQuery, gql } = apolloClient
 import { Locale } from "../typings";
 
 const localesQuery = gql`
