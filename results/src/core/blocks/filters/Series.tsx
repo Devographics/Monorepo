@@ -4,21 +4,19 @@ import styled from 'styled-components'
 import { mq, spacing } from 'core/theme'
 import Button from 'core/components/Button'
 import T from 'core/i18n/T'
-import { filters } from './constants'
 import difference from 'lodash/difference.js'
 import cloneDeep from 'lodash/cloneDeep.js'
 import { useKeys, getNewCondition } from './helpers'
 
 
-const Series = ({ series, block, index, stateStuff }) => {
+const Series = ({ filters, series, index, stateStuff }) => {
     const { conditions } = series
     const { setFiltersState } = stateStuff
 
     const keys = useKeys()
 
-    const filtersWithoutCurrentItem = filters.filter(f => f !== block.id)
     const filtersInUse = conditions.map(c => c.field)
-    const filtersNotInUse = difference(filtersWithoutCurrentItem, filtersInUse)
+    const filtersNotInUse = difference(filters, filtersInUse)
 
     const handleAddCondition = () => {
         setFiltersState(fState => {
@@ -58,11 +56,10 @@ const Series = ({ series, block, index, stateStuff }) => {
                         seriesIndex={index}
                         index={i}
                         condition={condition}
-                        filtersWithoutCurrentItem={filtersWithoutCurrentItem}
+                        filters={filters}
                         filtersInUse={filtersInUse}
                         filtersNotInUse={filtersNotInUse}
                         stateStuff={stateStuff}
-                        block={block}
                     />
                 ))}
             </Conditions_>

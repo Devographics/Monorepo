@@ -27,13 +27,14 @@ const DynamicDataLoader = ({ block, completion, defaultBuckets, children, series
                 throw new Error('GATSBY_DATA_API_URL env variable is not set')
             }
             const result = await runQuery(url, query, `${block.id}FiltersQuery`)
-            // console.log(result)
+            console.log(result)
 
             const [apiSegment, sectionSegment, fieldSegment, ...rest] = block.dataPath.split('.')
             const seriesData = result[sectionSegment][fieldSegment]
             const newBuckets = Object.values(seriesData).map(
-                seriesItem => seriesItem.year.facets[0].buckets
+                seriesItem => seriesItem?.year?.facets[0]?.buckets
             )
+            console.log(newBuckets)
             const mergedBuckets = mergeBuckets({
                 bucketsArrays: [defaultBuckets, ...newBuckets],
                 completion

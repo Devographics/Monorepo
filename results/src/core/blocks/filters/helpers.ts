@@ -1,6 +1,7 @@
 import { usePageContext } from 'core/helpers/pageContext'
 import { getGraphQLQuery } from 'core/blocks/block/BlockData'
 import { addNoAnswerBucket } from 'core/blocks/generic/VerticalBarBlock'
+import { getCountryName } from 'core/helpers/countries'
 
 export const useKeys = () => {
     const context = usePageContext()
@@ -60,7 +61,7 @@ multiple series (e.g. { count, count_1, percentage_question, percentage_question
 const fields = ['count', 'percentage_question', 'percentage_survey']
 export const mergeBuckets = ({ bucketsArrays, completion }) => {
     const [baseBucketsArray, ...otherBucketsArrays] = bucketsArrays
-    otherBucketsArrays.forEach((buckets, index) => {
+    otherBucketsArrays.forEach((buckets = [], index) => {
         // default series is series 1, first custom series is series 2, etc.
         const seriesIndex = index + 2
         // TODO: add this later
@@ -72,6 +73,12 @@ export const mergeBuckets = ({ bucketsArrays, completion }) => {
                 fields.forEach(field => {
                     bucket[`${field}__${seriesIndex}`] = otherSeriesBucket[field]
                 })
+            } else {
+                // series might have returned undefined;
+                // or else default buckets contains bucket items not in series buckets
+                fields.forEach(field => {
+                    bucket[`${field}__${seriesIndex}`] = 0
+                })
             }
         })
     })
@@ -81,4 +88,4 @@ export const mergeBuckets = ({ bucketsArrays, completion }) => {
 export const getFieldLabel = ({ getString, field }) => getString(`user_info.${field}`)?.t
 
 export const getValueLabel = ({ getString, field, value }) =>
-    getString(`options.${field}.${value}`)?.t
+    field === 'country' ? getCountryName(value) || value : getString(`options.${field}.${value}`)?.t

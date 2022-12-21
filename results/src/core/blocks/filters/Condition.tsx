@@ -13,7 +13,7 @@ const operators = ['eq', 'in', 'nin']
 const Condition = ({
     seriesIndex,
     index,
-    filtersWithoutCurrentItem,
+    filters,
     filtersInUse,
     filtersNotInUse,
     condition,
@@ -26,6 +26,7 @@ const Condition = ({
     const { getString } = useI18n()
 
     const keys = useKeys()
+
     const values = keys[field] || []
 
     const disabledList = filtersInUse.filter(fieldId => fieldId !== field)
@@ -40,14 +41,13 @@ const Condition = ({
 
     const segmentProps = { seriesIndex, conditionIndex: index, stateStuff, keys, field }
 
-
     return (
         <Condition_>
             <Segments_>
-                <ConditionSegment
+                <FieldSegment
                     {...segmentProps}
                     segmentId={'field'}
-                    options={filtersWithoutCurrentItem}
+                    options={filters}
                     value={field}
                     disabledList={disabledList}
                 />
@@ -59,7 +59,7 @@ const Condition = ({
                     options={operators}
                     value={operator}
                 /> */}
-                <ConditionSegment
+                <ValueSegment
                     {...segmentProps}
                     segmentId={'value'}
                     options={values}
@@ -77,7 +77,7 @@ const Condition = ({
     )
 }
 
-const ConditionSegment = ({
+const FieldSegment = ({
     seriesIndex,
     conditionIndex,
     stateStuff,
@@ -88,7 +88,7 @@ const ConditionSegment = ({
     field,
     disabledList = []
 }) => {
-    const { filtersState, setFiltersState } = stateStuff
+    const { setFiltersState } = stateStuff
     const { getString } = useI18n()
     return (
         <Label_>
@@ -99,12 +99,9 @@ const ConditionSegment = ({
                     setFiltersState(fState => {
                         const newState = cloneDeep(fState)
                         newState[seriesIndex].conditions[conditionIndex][segmentId] = value
-                        if (segmentId === 'field') {
-                            // if we're changing the field, also change the value
-                            const fieldId = value
-                            newState[seriesIndex].conditions[conditionIndex].value =
-                                keys[fieldId][0]
-                        }
+                        // if we're changing the field, also change the value
+                        const fieldId = value
+                        newState[seriesIndex].conditions[conditionIndex].value = keys[fieldId][0]
                         return newState
                     })
                 }}
@@ -113,17 +110,51 @@ const ConditionSegment = ({
                 <option value="" disabled>
                     {getString && getString('explorer.select_item')?.t}
                 </option>
-                {options.map(o => {
-                    const label =
-                        segmentId === 'field'
-                            ? getFieldLabel({ getString, field: o })
-                            : getValueLabel({ getString, field, value: o })
-                    return (
-                        <option key={o} value={o} disabled={disabledList.includes(o)}>
-                            {label}
-                        </option>
-                    )
-                })}
+                {options.map(o => (
+                    <option key={o} value={o} disabled={disabledList.includes(o)}>
+                        {getFieldLabel({ getString, field: o })}
+                    </option>
+                ))}
+            </select>
+        </Label_>
+    )
+}
+
+const ValueSegment = ({
+    seriesIndex,
+    conditionIndex,
+    stateStuff,
+    segmentId,
+    options,
+    value,
+    keys,
+    field
+}) => {
+    const { setFiltersState } = stateStuff
+    const { getString } = useI18n()
+    return (
+        <Label_>
+            {/* <span>{segmentId}</span> */}
+            <select
+                onChange={e => {
+                    const value = e.target.value
+                    setFiltersState(fState => {
+                        const newState = cloneDeep(fState)
+                        newState[seriesIndex].conditions[conditionIndex][segmentId] = value
+
+                        return newState
+                    })
+                }}
+                value={value}
+            >
+                <option value="" disabled>
+                    {getString && getString('explorer.select_item')?.t}
+                </option>
+                {options.map(o => (
+                    <option key={o} value={o}>
+                        {getValueLabel({ getString, field, value: o })}
+                    </option>
+                ))}
             </select>
         </Label_>
     )

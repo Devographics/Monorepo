@@ -10,45 +10,18 @@ import { maxSeriesCount, filters } from './constants'
 import { getBlockTitle } from 'core/helpers/blockHelpers'
 import { usePageContext } from 'core/helpers/pageContext'
 import { useI18n } from 'core/i18n/i18nContext'
+import isEmpty from 'lodash/isEmpty.js'
 
-const sampleFilters = [
-    {
-        conditions: [
-            {
-                field: 'gender',
-                operator: 'eq',
-                value: 'female'
-            }
-            // {
-            //     field: 'country',
-            //     operator: 'eq',
-            //     value: 'FRA'
-            // },
-        ]
-    }
-    // {
-    //     conditions: [
-    //         {
-    //             field: 'gender',
-    //             operator: 'eq',
-    //             value: 'non_binary'
-    //         },
-    //         // {
-    //         //     field: 'country',
-    //         //     operator: 'eq',
-    //         //     value: 'FRA'
-    //         // }
-    //     ]
-    // }
-]
-
-const Filters = ({ block, setSeries, closeModal }) => {
+const Filters = ({ block, series, setSeries, closeModal }) => {
     const keys = useKeys()
     const { translate } = useI18n()
     const context = usePageContext()
 
-    const emptySeries = getNewSeries({ filters, keys })
-    const [filtersState, setFiltersState] = useState([emptySeries])
+    const filtersWithoutCurrentItem = filters.filter(f => f !== block.id)
+
+    const emptySeries = getNewSeries({ filters: filtersWithoutCurrentItem, keys })
+    const initState = isEmpty(series) ? [emptySeries] : series
+    const [filtersState, setFiltersState] = useState(initState)
 
     const stateStuff = {
         filtersState,
@@ -80,16 +53,22 @@ const Filters = ({ block, setSeries, closeModal }) => {
             </FiltersTop_>
             <Series_>
                 {filtersState.map((series, index) => (
-                    <Series block={block} key={index} series={series} index={index} stateStuff={stateStuff} />
+                    <Series
+                        key={index}
+                        series={series}
+                        index={index}
+                        filters={filtersWithoutCurrentItem}
+                        stateStuff={stateStuff}
+                    />
                 ))}
             </Series_>
-            <FiltersBottom_>
-                {canAddSeries && (
+            {canAddSeries && (
+                <EmptySeries_>
                     <Button onClick={handleAddSeries}>
                         <T k="filters.series.add" />
                     </Button>
-                )}
-            </FiltersBottom_>
+                </EmptySeries_>
+            )}
 
             <Button onClick={handleSubmit}>
                 <T k="filters.submit" />
@@ -108,15 +87,19 @@ const Heading_ = styled.h3``
 
 const FiltersTop_ = styled.div``
 
-const FiltersBottom_ = styled.div`
-    display: flex;
-    justify-content: flex-end;
-`
 
 const Series_ = styled.div`
     display: flex;
     flex-direction: column;
     gap: ${spacing()};
+`
+
+const EmptySeries_ = styled.div`
+    display: grid;
+    place-items: center;
+    border: 1px dashed ${({ theme }) => theme.colors.border};
+    border-radius: 3px;
+    padding: ${spacing()};
 `
 
 export default Filters

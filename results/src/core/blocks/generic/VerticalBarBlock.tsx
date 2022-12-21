@@ -131,6 +131,7 @@ const VerticalBarBlock = ({
             completion={completion}
             data={data}
             block={block}
+            series={series}
             setSeries={setSeries}
             legendProps={{ layout: 'vertical' }}
             {...(legends.length > 0 ? { legends } : {})}
