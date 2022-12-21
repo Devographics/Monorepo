@@ -8,8 +8,12 @@ import difference from 'lodash/difference.js'
 import cloneDeep from 'lodash/cloneDeep.js'
 import { useKeys, getNewCondition } from './helpers'
 import { Condition_ } from './Condition'
+import { TrashIcon, DeleteIcon } from 'core/icons'
+import { useTheme } from 'styled-components'
 
 const Series = ({ filters, series, index, stateStuff }) => {
+    const theme = useTheme()
+
     const { conditions } = series
     const { setFiltersState } = stateStuff
 
@@ -39,15 +43,21 @@ const Series = ({ filters, series, index, stateStuff }) => {
 
     const canAddConditions = conditions.length < filters.length
 
+    const backgroundColor = theme.colors.barColors[index + 1].color
+
     return (
         <ActiveSeries_>
             <SeriesTop_>
                 <SeriesHeading_>
-                    <T k="filters.series.heading" values={{ index: index + 2 }} />
+                    <SeriesChip_ style={{ backgroundColor }} />
+                    <T k="filters.series.heading" values={{ index: index + 1 }} />
                 </SeriesHeading_>
-                <Button size="small" onClick={handleDeleteSeries}>
+                <DeleteSeries_ size="small" onClick={handleDeleteSeries}>
+                        <DeleteIcon labelId="filters.series.delete" />
+                    {/* <Button size="small" onClick={handleDeleteSeries}>
                     <T k="filters.series.delete" />
-                </Button>
+                </Button> */}
+                </DeleteSeries_>
             </SeriesTop_>
             <Conditions_>
                 {conditions.map((condition, i) => (
@@ -75,15 +85,33 @@ const Series = ({ filters, series, index, stateStuff }) => {
 }
 
 export const Series_ = styled.div`
-    border: 1px dashed ${({ theme }) => theme.colors.border};
+    border: 1px solid ${({ theme }) => theme.colors.borderAlt};
     border-radius: 3px;
     padding: ${spacing()};
+    position: relative;
+    background: ${({ theme }) => theme.colors.backgroundAlt};
 `
 
 const ActiveSeries_ = styled(Series_)`
     display: flex;
     flex-direction: column;
     gap: ${spacing()};
+`
+
+const DeleteSeries_ = styled(Button)`
+    position: absolute;
+    top: 20px;
+    right: 0px;
+    transform: translateX(50%);
+    aspect-ratio: 1/1;
+    border-radius: 100%;
+    background: ${({ theme }) => theme.colors.backgroundAlt};
+    border: 1px solid ${({ theme }) => theme.colors.borderAlt};
+`
+
+const SeriesChip_ = styled.div`
+    height: 16px;
+    width: 16px;
 `
 
 const SeriesTop_ = styled.div`
@@ -97,7 +125,11 @@ const EmptyCondition_ = styled(Condition_)`
     place-items: center;
 `
 
-const SeriesHeading_ = styled.h3``
+const SeriesHeading_ = styled.h3`
+    display: flex;
+    align-items: center;
+    gap: 5px;
+`
 
 const Conditions_ = styled.div`
     display: flex;

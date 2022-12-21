@@ -67,7 +67,7 @@ const Filters = ({ block, series, setSeries, closeModal }) => {
                 ))}
                 {canAddSeries && (
                     <EmptySeries_>
-                        <Button onClick={handleAddSeries}>
+                        <Button size="small" onClick={handleAddSeries}>
                             <T k="filters.series.add" />
                         </Button>
                     </EmptySeries_>
@@ -104,8 +104,6 @@ const SeriesList_ = styled.div`
 const EmptySeries_ = styled(Series_)`
     display: grid;
     place-items: center;
-    border: 1px dashed ${({ theme }) => theme.colors.border};
-    border-radius: 3px;
     padding: ${spacing()};
 `
 

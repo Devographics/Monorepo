@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { mq, spacing } from 'core/theme'
 import Button from 'core/components/Button'
 import T from 'core/i18n/T'
-import { TrashIcon, PlusIcon } from 'core/icons'
+import { DeleteIcon, TrashIcon, PlusIcon } from 'core/icons'
 import cloneDeep from 'lodash/cloneDeep.js'
 import { useKeys, getFieldLabel, getValueLabel } from './helpers'
 
@@ -66,9 +66,9 @@ const Condition = ({
                     value={value}
                 />
             </Segments_>
-            <Button size="small" onClick={handleDelete}>
-                <TrashIcon labelId="filters.condition.delete" />
-            </Button>
+            <DeleteCondition_ onClick={handleDelete}>
+                <DeleteIcon labelId="filters.condition.delete" />
+            </DeleteCondition_>
             <And_>
                 {/* <T k="filters.condition.and" /> */}
                 <PlusIcon />
@@ -93,7 +93,7 @@ const FieldSegment = ({
     return (
         <Label_>
             {/* <span>{segmentId}</span> */}
-            <select
+            <Select_
                 onChange={e => {
                     const value = e.target.value
                     setFiltersState(fState => {
@@ -115,7 +115,7 @@ const FieldSegment = ({
                         {getFieldLabel({ getString, field: o })}
                     </option>
                 ))}
-            </select>
+            </Select_>
         </Label_>
     )
 }
@@ -135,7 +135,7 @@ const ValueSegment = ({
     return (
         <Label_>
             {/* <span>{segmentId}</span> */}
-            <select
+            <Select_
                 onChange={e => {
                     const value = e.target.value
                     setFiltersState(fState => {
@@ -155,7 +155,7 @@ const ValueSegment = ({
                         {getValueLabel({ getString, field, value: o })}
                     </option>
                 ))}
-            </select>
+            </Select_>
         </Label_>
     )
 }
@@ -163,13 +163,29 @@ const ValueSegment = ({
 export const Condition_ = styled.div`
     background: ${({ theme }) => theme.colors.backgroundTrans};
     padding: ${spacing()};
-    border-radius: 3px;
+    border-radius: 10px;
     position: relative;
 `
 
 const ActiveCondition_ = styled(Condition_)`
     display: flex;
+    /* grid-template-columns: auto minmax(0, 1fr); */
+    gap: ${spacing()};
+
     justify-content: space-between;
+`
+
+const DeleteCondition_ = styled(Button)`
+    background: none;
+    border-color: ${({ theme }) => theme.colors.borderAlt};
+    /* border: 0; */
+    border-radius: 100%;
+    aspect-ratio: 1/1;
+    padding: 6px;
+    /* position: absolute;
+    top: 0px;
+    right: 0px;
+    transform: translateX(50%) translateY(50%); */
 `
 
 const And_ = styled.div`
@@ -197,6 +213,10 @@ const Segments_ = styled.div`
 const Label_ = styled.label`
     display: flex;
     gap: ${spacing(0.5)};
+`
+
+const Select_ = styled.select`
+    max-width: 300px;
 `
 
 export default Condition

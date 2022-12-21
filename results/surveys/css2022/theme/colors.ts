@@ -114,6 +114,7 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
     linkActive: '#5C63E0',
     contrast: '#0bdf67',
     border: '#FFF6E6',
+    borderAlt: 'rgba(255, 246, 229, 0.35)',
     heatmap: colors.pinkLight,
     lineChartDefaultColor: '#59DF7F',
     no_answer: [colors.greyLight, colors.greyLightest],
