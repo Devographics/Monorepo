@@ -42,7 +42,7 @@ const Condition = ({
     const segmentProps = { seriesIndex, conditionIndex: index, stateStuff, keys, field }
 
     return (
-        <Condition_>
+        <ActiveCondition_>
             <Segments_>
                 <FieldSegment
                     {...segmentProps}
@@ -73,7 +73,7 @@ const Condition = ({
                 {/* <T k="filters.condition.and" /> */}
                 <PlusIcon />
             </And_>
-        </Condition_>
+        </ActiveCondition_>
     )
 }
 
@@ -160,13 +160,16 @@ const ValueSegment = ({
     )
 }
 
-const Condition_ = styled.div`
-    display: flex;
-    justify-content: space-between;
+export const Condition_ = styled.div`
     background: ${({ theme }) => theme.colors.backgroundTrans};
     padding: ${spacing()};
     border-radius: 3px;
     position: relative;
+`
+
+const ActiveCondition_ = styled(Condition_)`
+    display: flex;
+    justify-content: space-between;
 `
 
 const And_ = styled.div`

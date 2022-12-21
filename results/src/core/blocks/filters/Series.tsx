@@ -7,7 +7,7 @@ import T from 'core/i18n/T'
 import difference from 'lodash/difference.js'
 import cloneDeep from 'lodash/cloneDeep.js'
 import { useKeys, getNewCondition } from './helpers'
-
+import { Condition_ } from './Condition'
 
 const Series = ({ filters, series, index, stateStuff }) => {
     const { conditions } = series
@@ -40,10 +40,10 @@ const Series = ({ filters, series, index, stateStuff }) => {
     const canAddConditions = conditions.length < filters.length
 
     return (
-        <Series_>
+        <ActiveSeries_>
             <SeriesTop_>
                 <SeriesHeading_>
-                    <T k="filters.series.heading" values={{ index: index + 1 }} />
+                    <T k="filters.series.heading" values={{ index: index + 2 }} />
                 </SeriesHeading_>
                 <Button size="small" onClick={handleDeleteSeries}>
                     <T k="filters.series.delete" />
@@ -62,21 +62,25 @@ const Series = ({ filters, series, index, stateStuff }) => {
                         stateStuff={stateStuff}
                     />
                 ))}
+                {canAddConditions && (
+                    <EmptyCondition_>
+                        <Button size="small" onClick={handleAddCondition}>
+                            <T k="filters.condition.add" />
+                        </Button>
+                    </EmptyCondition_>
+                )}
             </Conditions_>
-
-            <SeriesBottom_>
-                {canAddConditions && <Button onClick={handleAddCondition}>
-                    <T k="filters.condition.add" />
-                </Button>}
-            </SeriesBottom_>
-        </Series_>
+        </ActiveSeries_>
     )
 }
 
-const Series_ = styled.div`
+export const Series_ = styled.div`
     border: 1px dashed ${({ theme }) => theme.colors.border};
     border-radius: 3px;
     padding: ${spacing()};
+`
+
+const ActiveSeries_ = styled(Series_)`
     display: flex;
     flex-direction: column;
     gap: ${spacing()};
@@ -88,9 +92,9 @@ const SeriesTop_ = styled.div`
     align-items: center;
 `
 
-const SeriesBottom_ = styled.div`
-    display: flex;
-    justify-content: flex-end;
+const EmptyCondition_ = styled(Condition_)`
+    display: grid;
+    place-items: center;
 `
 
 const SeriesHeading_ = styled.h3``
