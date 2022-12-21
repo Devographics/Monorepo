@@ -112,6 +112,7 @@ const VerticalBarBlock = ({
     const { total } = completion
 
     const [series, setSeries] = useState([])
+    const [seriesCount, setSeriesCount] = useState(0)
     const [buckets, setBuckets] = useState(buckets_)
 
     const legends = getLegends({ theme, series, getString })
@@ -142,6 +143,8 @@ const VerticalBarBlock = ({
                 block={block}
                 series={series}
                 setBuckets={setBuckets}
+                setUnits={setUnits}
+                setSeriesCount={setSeriesCount}
             >
                 <ChartContainer fit={true}>
                     <VerticalBarChart
@@ -152,7 +155,7 @@ const VerticalBarBlock = ({
                         translateData={translateData}
                         mode={mode}
                         units={controlledUnits ?? units}
-                        seriesCount={series.length + 1}
+                        seriesCount={seriesCount + 1}
                         viewportWidth={width}
                         colorVariant={isCustom ? 'secondary' : 'primary'}
                     />

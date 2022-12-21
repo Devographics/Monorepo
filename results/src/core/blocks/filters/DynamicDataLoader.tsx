@@ -4,15 +4,13 @@ import { mergeBuckets, getFiltersQuery } from './helpers'
 import { runQuery } from 'core/blocks/explorer/data'
 import Loading from 'core/blocks/explorer/Loading'
 
-const DynamicDataLoader = ({ block, completion, defaultBuckets, children, series, setBuckets }) => {
+const DynamicDataLoader = ({ block, setSeriesCount, setUnits, completion, defaultBuckets, children, series, setBuckets }) => {
     const [isLoading, setIsLoading] = useState(false)
 
     const initialLoad = useRef(true)
 
     useEffect(() => {
-        console.log('// useEffect')
         if (initialLoad.current) {
-            console.log('// initial load, skipping useEffect…')
             initialLoad.current = false
             return
         }
@@ -27,20 +25,22 @@ const DynamicDataLoader = ({ block, completion, defaultBuckets, children, series
                 throw new Error('GATSBY_DATA_API_URL env variable is not set')
             }
             const result = await runQuery(url, query, `${block.id}FiltersQuery`)
-            console.log(result)
+            // console.log(result)
 
             const [apiSegment, sectionSegment, fieldSegment, ...rest] = block.dataPath.split('.')
             const seriesData = result[sectionSegment][fieldSegment]
             const newBuckets = Object.values(seriesData).map(
                 seriesItem => seriesItem?.year?.facets[0]?.buckets
             )
-            console.log(newBuckets)
             const mergedBuckets = mergeBuckets({
                 bucketsArrays: [defaultBuckets, ...newBuckets],
                 completion
             })
-            console.log(mergedBuckets)
+            // percentage_question is the only unit that lets us 
+            // meaningfully compare values across series
+            setUnits('percentage_question')
             setBuckets(mergedBuckets)
+            setSeriesCount(series.length)
             setIsLoading(false)
         }
 

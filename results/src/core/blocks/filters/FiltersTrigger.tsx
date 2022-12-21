@@ -12,7 +12,7 @@ const FiltersTrigger = props => (
     <ModalTrigger
         trigger={
             <div>
-                <FiltersIcon enableTooltip={true} labelId="custom_data.customize" />
+                <FiltersIcon enableTooltip={true} labelId="filters.compare_data" />
             </div>
         }
     >

@@ -99,12 +99,15 @@
       template: demographics
       blockType: KnowledgeScoreBlock
       translateData: true
+      hasFilters: true
       
     - id: age
       template: demographics
+      hasFilters: true
 
     - id: years_of_experience
       template: demographics
+      hasFilters: true
       variants:
         - id: years_of_experience_by_salary
           blockNamespace: user_info
@@ -117,12 +120,14 @@
 
     - id: company_size
       template: demographics
+      hasFilters: true
 
     - id: variants_hint
       template: hint
 
     - id: higher_education_degree
       template: demographics
+      hasFilters: true
       variants:
         - id: higher_education_degree_by_gender
           blockNamespace: user_info
@@ -135,6 +140,7 @@
 
     - id: yearly_salary
       template: demographics
+      hasFilters: true
       variants:
         - id: yearly_salary_by_gender
           blockNamespace: user_info
@@ -177,6 +183,7 @@
       
     - id: gender
       template: demographics
+      hasFilters: true
       variants:
         - id: gender_by_country
           blockNamespace: user_info

@@ -49,7 +49,7 @@ const Filters = ({ block, series, setSeries, closeModal }) => {
         <Filters_>
             <FiltersTop_>
                 <Heading_>
-                    <T k="filters.customize_chart" values={{ chartName }} />
+                    <T k="filters.compare_chart" values={{ chartName }} />
                 </Heading_>
                 <Description_>
                     <T k="filters.description" html={true} md={true} />
