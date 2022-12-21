@@ -60,6 +60,33 @@ race_ethnicity:
   - south_east_asian
   - not_listed
 
+industry_sector:
+  - ecommerce
+  - news_media
+  - healthcare
+  - finance
+  - programming_tools
+  - socialmedia
+  - marketing_tools
+  - education
+  - real_estate
+  - government
+  - entertainment
+  - consulting
+  - travel
+  - insurance
+  - logistics
+  - energy
+  - telecommunications
+  - student
+  - hospitality
+  - cyber_security
+  - construction
+  - automotive
+  - agriculture
+  - transport
+  - manufacturing
+
 tool:
   - would_use
   - would_not_use
