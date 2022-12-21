@@ -41,7 +41,7 @@ const colors = {
     red: '#FE6A6A',
     redLight: '#FF8686',
     redLighter: '#FFA3A3',
-    redLightest: '#FFC2C2',
+    redLightest: '#FFC2C2'
 }
 
 const velocity = [
@@ -58,7 +58,7 @@ const velocity = [
     '#D3F6FF',
     '#E5FFFA',
     '#BCFFF3',
-    '#9FFFEE',
+    '#9FFFEE'
 ]
 
 // const velocity = [
@@ -92,7 +92,7 @@ const distinct = [
     colors.purple,
     colors.blueLighter,
     colors.greyTeal,
-    colors.kaki,
+    colors.kaki
 ]
 
 const stateOfCSSThemeColors: DefaultTheme['colors'] = {
@@ -115,15 +115,25 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
     contrast: '#0bdf67',
     border: '#FFF6E6',
     heatmap: colors.pinkLight,
-    lineChartDefaultColor: '#59DF7F',    
+    lineChartDefaultColor: '#59DF7F',
     no_answer: [colors.greyLight, colors.greyLightest],
+    barColors: [
+        {
+            color: colors.electricBlue,
+            gradient: [colors.electricBlueDarkerer, colors.electricBlueDark]
+        },
+        { color: colors.pink, gradient: [colors.pinkDark, colors.pink] },
+        { color: colors.green, gradient: [colors.green, colors.greenLighter] },
+        { color: colors.yellow, gradient: [colors.yellowDark, colors.yellow] },
+        { color: colors.orange, gradient: [colors.orangeDarker, colors.orangeLight] }
+    ],
     barChart: {
         primary: colors.electricBlue,
         primaryGradient: [colors.electricBlueDarkerer, colors.electricBlueDark],
         // secondary: colors.yellowLight,
         // secondaryGradient: [colors.yellow, colors.yellowLight],
         secondary: colors.pink,
-        secondaryGradient: [colors.pinkDark, colors.pink]
+        secondaryGradient: [colors.pinkDark, colors.pink],
     },
     ranges: {
         tools: {

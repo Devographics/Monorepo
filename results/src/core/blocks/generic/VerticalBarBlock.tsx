@@ -10,11 +10,67 @@ import { useLegends } from 'core/helpers/useBucketKeys'
 import { FacetItem, BlockComponentProps, BlockUnits } from 'core/types'
 import { getTableData } from 'core/helpers/datatables'
 import sumBy from 'lodash/sumBy'
+import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
+import { useTheme } from 'styled-components'
+import { useI18n } from 'core/i18n/i18nContext'
+import { getFieldLabel, getValueLabel } from 'core/blocks/filters/helpers'
 
 export interface VerticalBarBlockProps extends BlockComponentProps {
     data: FacetItem
     controlledUnits: BlockUnits
     isCustom: boolean
+}
+
+export const addNoAnswerBucket = ({ buckets, completion }) => {
+    const countSum = sumBy(buckets, b => b.count)
+    const percentageSum = sumBy(buckets, b => b.percentage_survey)
+    const noAnswerBucket = {
+        id: 'no_answer',
+        count: completion.total - countSum,
+        percentage_question: 0,
+        percentage_survey: Math.round((100 - percentageSum) * 10) / 10
+    }
+    return [...buckets, noAnswerBucket]
+}
+
+const getLegends = ({ theme, series, getString }) => {
+    if (series.length === 0) {
+        return []
+    } else {
+        
+        const defaultLabel = getString('filters.legend.default')?.t
+        const defaultLegendItem = {
+            color: theme.colors.barColors[0].color,
+            gradientColors: theme.colors.barColors[0].gradient,
+            id: 'default',
+            label: defaultLabel,
+            shortLabel: defaultLabel
+        }
+
+        const seriesLegendItems = series.map((seriesItem, seriesIndex) => {
+            const label = seriesItem.conditions
+                .map(({ field, operator, value }) => {
+                    const fieldLabel = getFieldLabel({ getString, field })
+                    const valueLabel = getValueLabel({
+                        getString,
+                        field,
+                        value
+                    })
+                    return `${fieldLabel} = ${valueLabel}`
+                })
+                .join(', ')
+
+            const legendItem = {
+                color: theme.colors.barColors[seriesIndex + 1].color,
+                gradientColors: theme.colors.barColors[seriesIndex + 1].gradient,
+                id: `series_${seriesIndex}`,
+                label,
+                shortLabel: label
+            }
+            return legendItem
+        })
+        return [defaultLegendItem, ...seriesLegendItems]
+    }
 }
 
 const VerticalBarBlock = ({
@@ -24,6 +80,9 @@ const VerticalBarBlock = ({
     controlledUnits,
     isCustom
 }: VerticalBarBlockProps) => {
+    const theme = useTheme()
+    const { getString } = useI18n()
+
     if (!data) {
         throw new Error(`VerticalBarBlock: Missing data for block ${block.id}.`)
     }
@@ -41,24 +100,21 @@ const VerticalBarBlock = ({
 
     const [uncontrolledUnits, setUnits] = useState(defaultUnits)
     const units = controlledUnits || uncontrolledUnits
-    
+
     const addNoAnswer = units === 'percentage_survey'
     const bucketKeys = keys && useLegends(block, keys, undefined, addNoAnswer)
 
     const { facets, completion } = data
 
-    const countSum = sumBy(facets[0].buckets, b => b.count)
-    const percentageSum = sumBy(facets[0].buckets, b => b.percentage_survey)
-    const noAnswerBucket = {
-        id: 'no_answer',
-        count: completion.total - countSum,
-        percentage_question: 0,
-        percentage_survey: Math.round((100 - percentageSum)*10)/10
-    }
-
-    const buckets = addNoAnswer ? [...facets[0].buckets, noAnswerBucket] : facets[0].buckets
+    const buckets_ = addNoAnswer
+        ? addNoAnswerBucket({ buckets: facets[0].buckets, completion })
+        : facets[0].buckets
     const { total } = completion
 
+    const [series, setSeries] = useState([])
+    const [buckets, setBuckets] = useState(buckets_)
+
+    const legends = getLegends({ theme, series, getString })
 
     return (
         <BlockVariant
@@ -75,21 +131,32 @@ const VerticalBarBlock = ({
             completion={completion}
             data={data}
             block={block}
+            setSeries={setSeries}
             legendProps={{ layout: 'vertical' }}
+            {...(legends.length > 0 ? { legends } : {})}
         >
-            <ChartContainer fit={true}>
-                <VerticalBarChart
-                    bucketKeys={bucketKeys}
-                    total={total}
-                    buckets={buckets}
-                    i18nNamespace={chartNamespace}
-                    translateData={translateData}
-                    mode={mode}
-                    units={controlledUnits ?? units}
-                    viewportWidth={width}
-                    colorVariant={isCustom ? 'secondary' : 'primary'}
-                />
-            </ChartContainer>
+            <DynamicDataLoader
+                completion={completion}
+                defaultBuckets={buckets_}
+                block={block}
+                series={series}
+                setBuckets={setBuckets}
+            >
+                <ChartContainer fit={true}>
+                    <VerticalBarChart
+                        bucketKeys={bucketKeys}
+                        total={total}
+                        buckets={buckets}
+                        i18nNamespace={chartNamespace}
+                        translateData={translateData}
+                        mode={mode}
+                        units={controlledUnits ?? units}
+                        seriesCount={series.length + 1}
+                        viewportWidth={width}
+                        colorVariant={isCustom ? 'secondary' : 'primary'}
+                    />
+                </ChartContainer>
+            </DynamicDataLoader>
         </BlockVariant>
     )
 }
