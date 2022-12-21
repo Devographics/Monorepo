@@ -171,8 +171,8 @@ const ActiveCondition_ = styled(Condition_)`
     display: flex;
     /* grid-template-columns: auto minmax(0, 1fr); */
     gap: ${spacing()};
-
     justify-content: space-between;
+    align-items: center;
 `
 
 const DeleteCondition_ = styled(Button)`
@@ -203,20 +203,31 @@ const And_ = styled.div`
     }
 `
 
+const Actions_ = styled.div`
+    display: grid;
+    place-items: center;
+`
+
 const Operator_ = styled.div``
 
 const Segments_ = styled.div`
     display: flex;
     gap: ${spacing()};
+    @media ${mq.smallMedium} {
+        flex-direction: column;
+        align-items: center;
+        gap: ${spacing(0.5)};
+    }
 `
 
 const Label_ = styled.label`
-    display: flex;
-    gap: ${spacing(0.5)};
+    display: block;
+    width: 100%;
 `
 
 const Select_ = styled.select`
     max-width: 300px;
+    width: 100%;
 `
 
 export default Condition
