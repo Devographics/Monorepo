@@ -33,12 +33,15 @@ export const addNoAnswerBucket = ({ buckets, completion }) => {
     return [...buckets, noAnswerBucket]
 }
 
-const getLegends = ({ theme, series, getString }) => {
+const getLegends = ({ theme, series, getString, currentYear }) => {
     if (series.length === 0) {
         return []
     } else {
-        
-        const defaultLabel = getString('filters.legend.default')?.t
+        const showYears = series.some(s => s.year !== currentYear)
+
+        const defaultLabel = showYears
+            ? getString('filters.series.year', { values: { year: currentYear } })?.t
+            : getString('filters.legend.default')?.t
         const defaultLegendItem = {
             color: theme.colors.barColors[0].color,
             gradientColors: theme.colors.barColors[0].gradient,
@@ -48,17 +51,29 @@ const getLegends = ({ theme, series, getString }) => {
         }
 
         const seriesLegendItems = series.map((seriesItem, seriesIndex) => {
-            const label = seriesItem.conditions
-                .map(({ field, operator, value }) => {
-                    const fieldLabel = getFieldLabel({ getString, field })
-                    const valueLabel = getValueLabel({
-                        getString,
-                        field,
-                        value
+            let labelSegments = []
+            if (showYears) {
+                // if at least one series is showing a different year, add year to legend
+                labelSegments.push(
+                    getString('filters.series.year', { values: { year: seriesItem.year } })?.t
+                )
+            }
+            if (seriesItem.conditions.length > 0) {
+                // add conditions filters to legend
+                labelSegments = [
+                    ...labelSegments,
+                    seriesItem.conditions.map(({ field, operator, value }) => {
+                        const fieldLabel = getFieldLabel({ getString, field })
+                        const valueLabel = getValueLabel({
+                            getString,
+                            field,
+                            value
+                        })
+                        return `${fieldLabel} = ${valueLabel}`
                     })
-                    return `${fieldLabel} = ${valueLabel}`
-                })
-                .join(', ')
+                ]
+            }
+            const label = labelSegments.join(', ')
 
             const legendItem = {
                 color: theme.colors.barColors[seriesIndex + 1].color,
@@ -96,7 +111,8 @@ const VerticalBarBlock = ({
     } = block
 
     const context = usePageContext()
-    const { width } = context
+    const { width, currentEdition } = context
+    const { year: currentYear } = currentEdition
 
     const [uncontrolledUnits, setUnits] = useState(defaultUnits)
     const units = controlledUnits || uncontrolledUnits
@@ -111,11 +127,14 @@ const VerticalBarBlock = ({
         : facets[0].buckets
     const { total } = completion
 
+    // contains the filters that define the series
     const [series, setSeries] = useState([])
+    // how many series to display (only updated after data is loaded)
     const [seriesCount, setSeriesCount] = useState(0)
+    // data to pass to chart (only updated after data is loaded)
     const [buckets, setBuckets] = useState(buckets_)
 
-    const legends = getLegends({ theme, series, getString })
+    const legends = getLegends({ theme, series, getString, currentYear })
 
     return (
         <BlockVariant

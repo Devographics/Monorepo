@@ -17,16 +17,17 @@ const Filters = ({ block, series, setSeries, closeModal }) => {
     const keys = useKeys()
     const { translate } = useI18n()
     const context = usePageContext()
+    const { currentEdition } = context
 
     const filtersWithoutCurrentItem = filters.filter(f => f !== block.id)
 
-    const emptySeries = getNewSeries({ filters: filtersWithoutCurrentItem, keys })
+    const emptySeries = getNewSeries({ filters: filtersWithoutCurrentItem, keys, year: currentEdition.year })
     const initState = isEmpty(series) ? [] : series
     const [filtersState, setFiltersState] = useState(initState)
 
     const stateStuff = {
         filtersState,
-        setFiltersState
+        setFiltersState,
     }
 
     const handleAddSeries = () => {

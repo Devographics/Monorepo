@@ -141,7 +141,6 @@ const ValueSegment = ({
                     setFiltersState(fState => {
                         const newState = cloneDeep(fState)
                         newState[seriesIndex].conditions[conditionIndex][segmentId] = value
-
                         return newState
                     })
                 }}

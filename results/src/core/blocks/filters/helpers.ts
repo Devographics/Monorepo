@@ -15,13 +15,13 @@ export const getNewCondition = ({ filtersNotInUse, keys }) => {
     return { field, operator: 'eq', value: keys?.[field]?.[0] }
 }
 
-export const getNewSeries = ({ filters, keys }) => {
+export const getNewSeries = ({ filters, keys, year }) => {
     const filtersNotInUse = filters
-    return { conditions: [getNewCondition({ filtersNotInUse, keys })] }
+    return { year, conditions: [getNewCondition({ filtersNotInUse, keys })] }
 }
 
 // TODO: do this better without relying on magic character counts
-export const getFiltersQuery = ({ block, series = [] }) => {
+export const getFiltersQuery = ({ block, series = [], currentYear }) => {
     const query = getGraphQLQuery(block)
     const idIndex = query.indexOf(`${block.id}: `)
     const queryHeader = query.slice(0, idIndex)
@@ -46,9 +46,12 @@ export const getFiltersQuery = ({ block, series = [] }) => {
                         'filters: {}',
                         `filters: ${JSON.stringify(filterObject).replaceAll('"', '')}`
                     )
+                    .replace(`year: ${currentYear}`, `year: ${singleSeries.year}`)
             })
             .join('') +
         queryFooter
+        
+    // console.log(newQuery)
     return newQuery
 }
 

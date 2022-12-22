@@ -10,6 +10,7 @@ import { useKeys, getNewCondition } from './helpers'
 import { Condition_ } from './Condition'
 import { TrashIcon, DeleteIcon } from 'core/icons'
 import { useTheme } from 'styled-components'
+import YearSelector from './YearSelector'
 
 const Series = ({ filters, series, index, stateStuff }) => {
     const theme = useTheme()
@@ -51,6 +52,7 @@ const Series = ({ filters, series, index, stateStuff }) => {
                 <SeriesHeading_>
                     <SeriesChip_ style={{ backgroundColor }} />
                     <T k="filters.series.heading" values={{ index: index + 1 }} />
+                    <YearSelector seriesIndex={index} stateStuff={stateStuff} />
                 </SeriesHeading_>
                 <DeleteSeries_ size="small" onClick={handleDeleteSeries}>
                         <DeleteIcon labelId="filters.series.delete" />
@@ -128,7 +130,7 @@ const EmptyCondition_ = styled(Condition_)`
 const SeriesHeading_ = styled.h3`
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: ${spacing(0.5)};
 `
 
 const Conditions_ = styled.div`

@@ -3,9 +3,15 @@ import styled from 'styled-components'
 import { mergeBuckets, getFiltersQuery } from './helpers'
 import { runQuery } from 'core/blocks/explorer/data'
 import Loading from 'core/blocks/explorer/Loading'
+import { usePageContext } from 'core/helpers/pageContext'
 
 const DynamicDataLoader = ({ block, setSeriesCount, setUnits, completion, defaultBuckets, children, series, setBuckets }) => {
     const [isLoading, setIsLoading] = useState(false)
+
+    const context = usePageContext()
+    
+    const { currentEdition } = context
+    const { year } = currentEdition
 
     const initialLoad = useRef(true)
 
@@ -18,7 +24,7 @@ const DynamicDataLoader = ({ block, setSeriesCount, setUnits, completion, defaul
         const getData = async () => {
             setIsLoading(true)
 
-            const query = getFiltersQuery({ block, series })
+            const query = getFiltersQuery({ block, series, currentYear: year })
 
             const url = process.env.GATSBY_DATA_API_URL
             if (!url) {
