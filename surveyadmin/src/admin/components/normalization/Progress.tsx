@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
-import apolloClient from "@apollo/client";
-const { gql, useMutation } = apolloClient;
+import { gql, useMutation } from "@apollo/client";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { statuses } from "./Normalization";
 

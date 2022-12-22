@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router.js";
 import { surveysWithTemplates } from "~/surveys/withTemplates";
-import apolloClient from "@apollo/client";
-const { useQuery, gql } = apolloClient;
+import { useQuery, gql } from "@apollo/client";
 import Actions from "~/admin/components/normalization/Actions";
 import Progress from "~/admin/components/normalization/Progress";
 import Fields from "~/admin/components/normalization/Fields";

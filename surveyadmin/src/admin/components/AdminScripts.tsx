@@ -1,7 +1,6 @@
 import { useVulcanComponents } from "@vulcanjs/react-ui";
 import React, { useState } from "react";
-import apolloClient from "@apollo/client";
-const { useQuery } = apolloClient;
+import { useQuery } from "@apollo/client";
 import gql from "graphql-tag";
 import trim from "lodash/trim.js";
 

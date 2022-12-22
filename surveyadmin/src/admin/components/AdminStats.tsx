@@ -1,6 +1,5 @@
 import React from "react";
-import apolloClient from "@apollo/client";
-const { useQuery } = apolloClient;
+import { useQuery } from "@apollo/client";
 import gql from "graphql-tag";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
 

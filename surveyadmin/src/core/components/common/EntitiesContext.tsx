@@ -8,8 +8,8 @@
  */
 import React, { useContext } from "react";
 
-import apolloClient from "@apollo/client";
-const { gql, useQuery } = apolloClient;
+import { useQuery } from "@apollo/client";
+import gql from "graphql-tag";
 import { Entity } from "@devographics/core-models";
 
 const entitiesQuery = gql`
