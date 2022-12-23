@@ -6,7 +6,8 @@ import {
   getBulkOperation,
 } from "../normalization/helpers";
 import { UserType } from "~/core/models/user";
-import { ResponseAdminMongooseModel } from "@devographics/core-models/server";
+// import { ResponseAdminMongooseModel } from "@devographics/core-models/server";
+import { ResponseMongooseModel } from "~/modules/responses/model.server"
 import { getOrFetchEntities } from "~/modules/entities/server";
 import pick from "lodash/pick.js";
 import { NormalizedResponseMongooseModel } from "~/admin/models/normalized_responses/model.server";
@@ -34,7 +35,7 @@ export const normalizeIds = async (
 
   const { ids } = args;
   // TODO: use Response model and connector instead
-  const responses = await ResponseAdminMongooseModel.find({
+  const responses = await ResponseMongooseModel.find({
     _id: { $in: ids },
   });
   for (const document of responses) {
@@ -117,13 +118,13 @@ export const normalizeSurvey = async (
     errorCount: 0,
   };
 
-  const entities = await getOrFetchEntities();
+  const entities = await getOrFetchEntities({ forceLoad: true });
 
   // TODO: use Response model and connector instead
 
   // first, get all the responses we're going to operate on
   const selector = await getSelector(surveyId, fieldId, onlyUnnormalized);
-  const responses = await ResponseAdminMongooseModel.find(selector, null, {
+  const responses = await ResponseMongooseModel.find(selector, null, {
     sort: {
       createdAt: 1,
     },
@@ -256,7 +257,7 @@ export const getSurveyMetadata = async (
   const selector = await getSelector(surveyId, fieldId, onlyUnnormalized);
 
   // TODO: use Response model and connector instead
-  const responsesCount = await ResponseAdminMongooseModel.count(selector);
+  const responsesCount = await ResponseMongooseModel.count(selector);
   return { responsesCount };
 };
 

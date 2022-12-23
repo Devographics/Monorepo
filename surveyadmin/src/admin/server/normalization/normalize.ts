@@ -9,9 +9,9 @@ import {
   NormalizedResponseMongooseModel,
   NormalizedResponseDocument,
 } from "~/admin/models/normalized_responses/model.server";
-import { ResponseAdminMongooseModel } from "@devographics/core-models/server";
 import * as steps from "./steps";
 import get from "lodash/get.js";
+
 
 interface RegularField {
   fieldName: string;

@@ -12,7 +12,7 @@ const entitiesPromiseCacheKey = "entitiesPromise";
 /** Query sent to the translation API => load all entitites */
 const entitiesQuery = print(gql`
   query EntitiesQuery {
-    entities {
+    entities(isNormalization: true) {
       id
       name
       tags
@@ -63,18 +63,22 @@ export const getOrFetchEntities = async ({
   name,
   id,
   ids,
+  forceLoad,
 }: {
   tags?: any[];
   name?: any;
   id?: any;
   ids?: any[];
+  forceLoad?: boolean;
 } = {}) => {
   try {
-    let entities = await cachedPromise(
-      promisesNodeCache,
-      entitiesPromiseCacheKey,
-      ENTITIES_PROMISE_TTL_SECONDS
-    )(async () => await fetchEntities());
+    let entities = forceLoad
+      ? await fetchEntities()
+      : await cachedPromise(
+          promisesNodeCache,
+          entitiesPromiseCacheKey,
+          ENTITIES_PROMISE_TTL_SECONDS
+        )(async () => await fetchEntities());
 
     // const { tags, name, id, ids } = args;
 
