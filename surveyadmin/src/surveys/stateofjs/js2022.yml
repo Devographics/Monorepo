@@ -641,7 +641,7 @@ outline:
       - id: javascript_flavors
         year: 2021
         template: others
-        matchTags: [javascript_flavors, libraries]
+        matchTags: [javascript_flavors, languages, libraries]
 
       - id: non_js_languages
         template: multiple
@@ -1048,7 +1048,7 @@ outline:
           - id: coding_garden
       - id: video_creators
         template: others
-        matchTags: [video_creators, youtube, courses, people, sites, newsletters, socialmedia]
+        matchTags: [video_creators, people, youtube, courses, sites, newsletters, socialmedia]
 
       - id: podcasts
         template: multiple
@@ -1085,7 +1085,7 @@ outline:
       - id: people
         year: 2021
         template: others
-        matchTags: [people, youtube]
+        matchTags: [people, video_creators]
 
       - id: other_surveys
         template: multiple

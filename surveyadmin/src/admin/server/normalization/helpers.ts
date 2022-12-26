@@ -165,6 +165,9 @@ const extractTokens = async ({ value, rules, survey, field, verbose }) => {
     // add count to prevent infinite looping
     while (scanCompleted !== true && count < rulesLimit) {
       count++;
+      if (count === rulesLimit) {
+        console.warn(`// Reached rules limit of ${rulesLimit} while normalizing [${rawString}]`)
+      }
       if (
         context &&
         fieldId &&
@@ -296,6 +299,8 @@ three different fields (source field, referrer field, 'how did you hear' field)
 */
 export const normalizeSource = async (normResp, allRules, survey, verbose) => {
   const tags = [
+    "sources",
+    `sources_${survey.context}`,
     "sites",
     "podcasts",
     "youtube",
@@ -304,8 +309,6 @@ export const normalizeSource = async (normResp, allRules, survey, verbose) => {
     "people",
     "courses",
     "surveys",
-    "sources",
-    `sources_${survey.context}`,
   ];
 
   const rawSource = get(normResp, "user_info.sourcetag");
@@ -476,7 +479,7 @@ export const getSourceFields = (surveyId) => [
   `${surveyId}__user_info__how_did_user_find_out_about_the_survey`,
 ];
 
-const existsSelector = { $exists: true, $nin: ignoreValues }
+const existsSelector = { $exists: true, $nin: ignoreValues };
 
 // get mongo selector
 export const getSelector = async (surveyId, fieldId, onlyUnnormalized) => {
@@ -542,7 +545,9 @@ export const getUnnormalizedResponses = async (surveyId, fieldId) => {
       [rawFieldPath]: 1,
     },
     { lean: true }
-  ).exec();
+  )
+    .sort({ [rawFieldPath]: 1 })
+    .exec();
 
   return { responses, rawFieldPath, normalizedFieldPath };
 };
