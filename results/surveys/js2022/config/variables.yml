@@ -1,0 +1,227 @@
+surveyType: state_of_js
+
+# used for scatterplot chart
+totalCountRounded: 16000
+
+currentYear: 2022
+
+allFeatures:
+    - proxies
+    - promise_all_settled
+    - dynamic_import
+    - private_fields
+    - nullish_coalescing
+    - numeric_separators
+    - string_replace_all
+    - string_match_all
+    - logical_assignment
+    - promise_any
+    - array_at
+    - top_level_await
+    - temporal
+    - array_findlast
+    - error_cause
+    - object_hasown
+    - regexp_match_indices
+    - service_workers
+    - intl
+    - webgl
+    - web_animations
+    - webrtc
+    - web_speech
+    - websocket
+    - custom_elements
+    - shadow_dom
+    - page_visibility
+    - broadcast_channel
+    - geolocation
+    - file_system_access
+    - web_share
+    - webxr
+    - pwa
+    - wasm
+
+featuresCategories:
+    language:
+        - proxies
+        - promise_all_settled
+        - dynamic_import
+        - private_fields
+        - nullish_coalescing
+        - numeric_separators
+        - string_replace_all
+        - string_match_all
+        - logical_assignment
+        - promise_any
+        - array_at
+        - top_level_await
+        - temporal # 2022
+        - array_findlast # 2022
+        - error_cause # 2022
+        - object_hasown # 2022
+        - regexp_match_indices # 2022
+    browser_apis:
+        - service_workers
+        - intl
+        - webgl
+        - web_animations
+        - webrtc
+        - web_speech
+        - websocket
+        - custom_elements
+        - shadow_dom
+        - page_visibility
+        - broadcast_channel
+        - geolocation
+        - file_system_access
+        - web_share
+        - webxr
+    other_features:
+        - pwa
+        - wasm
+
+allTools:
+    # front_end_frameworks:
+    - react
+    - vuejs
+    - angular
+    - preact
+    - ember
+    - svelte
+    - alpinejs
+    - litelement
+    - stimulus
+    - solid # 2021
+    - qwik # 2022
+    - stencil # 2022
+    # rendering_frameworks:
+    - nextjs
+    - nuxt
+    - gatsby
+    - remix # 2021
+    - astro # 2021
+    - eleventy # 2021
+    - sveltekit # 2021
+    - docusaurus # 2022
+    # testing:
+    - jest
+    - mocha
+    - storybook
+    - cypress
+    - ava
+    - jasmine
+    - puppeteer
+    - testing_library
+    - playwright
+    - webdriverio
+    - vitest # 2021
+    - selenium # 2022
+    - testcafe # 2022
+    # mobile_desktop:
+    - electron
+    - reactnative
+    - nativeapps
+    - cordova
+    - ionic
+    - nwjs
+    - expo
+    - capacitor
+    - quasar
+    - tauri # 2021
+    - nativescript # 2022
+    # build_tools:
+    - webpack
+    - parcel
+    - gulp
+    - rollup
+    - browserify
+    - tsc
+    - rome
+    - snowpack
+    - swc
+    - esbuild
+    - vite # 2021
+    - wmr # 2021
+    - turbopack # 2022
+    # monorepo_tools:
+    - rush # 2021
+    - turborepo # 2021
+    - yarn_workspaces # 2021
+    - yalc # 2021
+    - lerna # 2021
+    - npm_workspaces # 2021
+    - pnpm # 2021
+    - nx # 2021
+
+toolsCategories:
+    front_end_frameworks:
+        - react
+        - vuejs
+        - angular
+        - preact
+        - ember
+        - svelte
+        - alpinejs
+        - litelement
+        - stimulus
+        - solid # 2021
+        - qwik # 2022
+        - stencil # 2022
+    rendering_frameworks:
+        - nextjs
+        - nuxt
+        - gatsby
+        - remix # 2021
+        - astro # 2021
+        - eleventy # 2021
+        - sveltekit # 2021
+        - docusaurus # 2022
+    testing:
+        - jest
+        - mocha
+        - storybook
+        - cypress
+        - ava
+        - jasmine
+        - puppeteer
+        - testing_library
+        - playwright
+        - webdriverio
+        - vitest # 2021
+        - selenium # 2022
+        - testcafe # 2022
+    mobile_desktop:
+        - electron
+        - reactnative
+        - nativeapps
+        - cordova
+        - ionic
+        - nwjs
+        - expo
+        - capacitor
+        - quasar
+        - tauri # 2021
+        - nativescript # 2022
+    build_tools:
+        - webpack
+        - parcel
+        - gulp
+        - rollup
+        - browserify
+        - tsc
+        - rome
+        - snowpack
+        - swc
+        - esbuild
+        - vite # 2021
+        - wmr # 2021
+        - turbopack # 2022
+    monorepo_tools:
+        - rush # 2021
+        - turborepo # 2021
+        - yarn_workspaces # 2021
+        - yalc # 2021
+        - lerna # 2021
+        - npm_workspaces # 2021
+        - pnpm # 2021
+        - nx # 2021
