@@ -301,6 +301,7 @@ export const normalizeSource = async (normResp, allRules, survey, verbose) => {
   const tags = [
     "sources",
     `sources_${survey.context}`,
+    "surveys",
     "sites",
     "podcasts",
     "youtube",
@@ -308,7 +309,6 @@ export const normalizeSource = async (normResp, allRules, survey, verbose) => {
     "newsletters",
     "people",
     "courses",
-    "surveys",
   ];
 
   const rawSource = get(normResp, "user_info.sourcetag");
