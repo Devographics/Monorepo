@@ -107,7 +107,7 @@ export const loadLocally = async () => {
 
     const entities: Entity[] = []
 
-    const entitiesDirPath = path.resolve(`../../stateof-entities/`)
+    const entitiesDirPath = path.resolve(`../../${process.env.ENTITIES_DIR}/`)
     const files = await readdir(entitiesDirPath)
     const yamlFiles = files.filter((f: String) => f.includes('.yml'))
 
@@ -150,14 +150,18 @@ export const initEntities = async () => {
 export const getEntities = async ({
     ids,
     tag,
-    tags
+    tags,
+    isNormalization = false
 }: {
     ids?: string[]
     tag?: string
     tags?: string[]
+    isNormalization?: boolean
 }) => {
     let entities = await loadOrGetEntities()
-    entities = entities.filter(e => !e.normalizationOnly)
+    if (!isNormalization) {
+        entities = entities.filter(e => !e.normalizationOnly)
+    }
     if (ids) {
         entities = entities.filter(e => ids.includes(e.id))
     }

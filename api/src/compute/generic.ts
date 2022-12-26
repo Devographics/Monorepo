@@ -162,7 +162,7 @@ export async function computeDefaultTermAggregationByYear({
         values = options.facet1keys
     } else if (yamlKeys[fieldId]) {
         values = yamlKeys[fieldId]
-    } 
+    }
 
     const hasValues = !isEmpty(values)
 
@@ -174,7 +174,7 @@ export async function computeDefaultTermAggregationByYear({
     const { fieldName: facetId } = (options.facet && getFacetSegments(options.facet)) || {}
     const facetSort = options?.facetSort?.property ?? 'mean'
     const facetOrder = convertOrder(options?.facetSort?.order ?? 'desc')
-    const facetValues = options.facet2keys || facetId && yamlKeys[facetId]
+    const facetValues = options.facet2keys || (facetId && yamlKeys[facetId])
 
     // console.log('// key')
     // console.log(key)
@@ -277,13 +277,12 @@ Discard any result where id is {}, "", [], etc.
 */
 async function discardEmptyIds(resultsByYears: ResultsByYear[]) {
     for (let year of resultsByYears) {
-        year.facets = year.facets.filter(b => !isEmpty(b.id))
+        year.facets = year.facets.filter(b => typeof b.id === 'number' || !isEmpty(b.id))
         for (let facet of year.facets) {
-            facet.buckets = facet.buckets.filter(b => !isEmpty(b.id))
+            facet.buckets = facet.buckets.filter(b => typeof b.id === 'number' || !isEmpty(b.id))
         }
     }
 }
-
 
 // add facet limits
 /* 

@@ -21,6 +21,10 @@ enum Contexts {
     state_of_js_2021_survey
     state_of_js_2021_results
 
+    state_of_js_2022
+    state_of_js_2022_survey
+    state_of_js_2022_results
+
     state_of_css
     state_of_css_2020
     state_of_css_2020_survey

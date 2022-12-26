@@ -97,7 +97,7 @@ export const loadLocally = async () => {
 
     const surveys: Survey[] = []
 
-    const surveysDirPath = path.resolve(`../../devographics-surveys/`)
+    const surveysDirPath = path.resolve(`../../${process.env.SURVEYS_DIR}/`)
     const surveysDirs = await readdir(surveysDirPath)
 
     // loop over dir contents and fetch raw yaml files

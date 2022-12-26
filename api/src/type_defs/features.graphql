@@ -20,6 +20,12 @@ enum FeatureID {
     promise_any # 2021
     array_at # 2021
     top_level_await # 2021
+    temporal # 2022
+    array_findlast # 2022
+    error_cause # 2022
+    object_hasown # 2022
+    regexp_match_indices # 2022
+    
     # JS data structures
     maps
     sets

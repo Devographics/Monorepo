@@ -9,6 +9,7 @@ enum HappinessID {
   mobile_desktop
   monorepo_tools
   state_of_js
+  rendering_frameworks
   # CSS
   pre_post_processors
   css_frameworks

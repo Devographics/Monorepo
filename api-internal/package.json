@@ -55,7 +55,7 @@
         "clean": "rm -Rf ./dist",
         "//build": "The 'cp' to copy public file must happen after tsup is done, not before",
         "build": "NODE_ENV=production tsup && cp -R public/ dist/",
-        "dev": "NODE_ENV=development tsup --watch ./src --watch ../../stateof-entities --watch ../../stateof-locales --onSuccess='cp -R public/ dist/ && node ./dist/server.mjs'",
+        "dev": "NODE_ENV=development tsup --watch ./src --watch ../../entities --watch ../../locales --onSuccess='cp -R public/ dist/ && node ./dist/server.mjs'",
         "copy:public": "cp -R public/ dist/",
         "build:webpack": "NODE_ENV=production webpack --config webpack.production.js",
         "dev:webpack": "NODE_ENV=development webpack --config webpack.development.js",
