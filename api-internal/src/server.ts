@@ -15,7 +15,8 @@ import Sentry from '@sentry/node'
 
 import { rootDir } from './rootDir'
 import { appSettings } from './settings'
-import { init } from './init'
+import { initMemoryCache } from './init'
+import { watchFiles } from './watch'
 
 //import Tracing from '@sentry/tracing'
 
@@ -108,7 +109,12 @@ const start = async () => {
 
     const port = process.env.PORT || 4020
 
-    await init({ context })
+    await initMemoryCache({ context })
+
+    await watchFiles({ context, config: {
+        locales: process.env.LOCALES_DIR,
+        entities: process.env.ENTITIES_DIR
+    } })
 
     app.listen({ port: port }, () =>
         console.log(`🚀 Server ready at http://localhost:${port}${server.graphqlPath}`)

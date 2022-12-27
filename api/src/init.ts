@@ -1,13 +1,32 @@
 import { initEntities, cacheSurveysEntities } from './entities'
 import { initSurveys } from './surveys'
 import { initProjects } from './projects'
-import { RequestContext } from './types'
+import { RequestContext, WatchedItem } from './types'
 
-export const initMemoryCache = async ({ context }: { context: RequestContext }) => {
-    console.log('// Initializing in-memory cache…')
-    const entities = await initEntities()
-    const surveys = await initSurveys()
-    return { entities, surveys }
+type InitFunctionsType = {
+    [k in WatchedItem]?: any
+}
+
+const initFunctions: InitFunctionsType = {
+    entities: initEntities,
+    surveys: initSurveys
+}
+
+export const initMemoryCache = async ({
+    context,
+    initList = ['entities', 'surveys']
+}: {
+    context: RequestContext
+    initList?: WatchedItem[]
+}) => {
+    console.log(`// Initializing in-memory cache for ${initList.join(', ')}…`)
+    const data: any = {}
+    for (const initFunctionName of initList) {
+        const f = initFunctions[initFunctionName]
+        const result = await f({ context })
+        data[initFunctionName] = result
+    }
+    return data
 }
 
 export const initDbCache = async ({ context, data }: { context: RequestContext; data: any }) => {

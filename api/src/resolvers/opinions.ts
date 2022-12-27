@@ -1,4 +1,4 @@
-import { getDynamicResolvers } from '../helpers'
+import { getDynamicResolvers, getOtherKey } from '../helpers'
 import { computeOpinionByYear } from '../compute/opinions'
 import { useCache } from '../caching'
 import { RequestContext, SurveyConfig } from '../types'
@@ -34,7 +34,8 @@ export default {
             return allYears.find((yearItem: YearAggregations) => yearItem.year === year)
         }
     },
-    OtherOpinions: getDynamicResolvers(id => `opinions_others.${id}.others.normalized`, {
-        sort: { property: 'id', order: 'asc' }
-    })
+    // OtherOpinions: getDynamicResolvers(id => `opinions_others.${id}.others.normalized`, {
+    //     sort: { property: 'id', order: 'asc' }
+    // }),
+    OtherOpinions: getDynamicResolvers(id => `opinions.${getOtherKey(id)}`)
 }

@@ -8,6 +8,8 @@ export interface RequestContext {
     isDebug?: Boolean
 }
 
+export type WatchedItem =  "locales" | "entities" | "surveys"
+
 export * from './entity'
 export * from './github'
 export * from './locale'
