@@ -111,10 +111,15 @@ const start = async () => {
 
     await initMemoryCache({ context })
 
-    await watchFiles({ context, config: {
-        locales: process.env.LOCALES_DIR,
-        entities: process.env.ENTITIES_DIR
-    } })
+    if (process.env.LOAD_DATA === 'local') {
+        await watchFiles({
+            context,
+            config: {
+                locales: process.env.LOCALES_DIR,
+                entities: process.env.ENTITIES_DIR
+            }
+        })
+    }
 
     app.listen({ port: port }, () =>
         console.log(`🚀 Server ready at http://localhost:${port}${server.graphqlPath}`)

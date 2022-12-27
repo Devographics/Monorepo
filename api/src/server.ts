@@ -135,18 +135,22 @@ const start = async () => {
 
     const port = process.env.PORT || 4000
 
-
     const data = await initMemoryCache({ context })
 
     // if (process.env.INITIALIZE_CACHE_ON_STARTUP) {
     //     await initDbCache({ context, data })
     // }
 
-    await watchFiles({ context, config: {
-        entities: process.env.ENTITIES_DIR,
-        surveys: process.env.SURVEYS_DIR
-    } })
-
+    if (process.env.LOAD_DATA === 'local') {
+        await watchFiles({
+            context,
+            config: {
+                entities: process.env.ENTITIES_DIR,
+                surveys: process.env.SURVEYS_DIR
+            }
+        })
+    }
+    
     const finishedAt = new Date()
 
     app.listen({ port: port }, () =>

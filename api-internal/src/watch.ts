@@ -4,7 +4,7 @@ import chokidar from 'chokidar'
 import path from 'path'
 
 type Config = {
-    [K in WatchedItem]: string
+    [K in WatchedItem]?: string
 }
 
 const ignored = [/(^|[\/\\])\../, /(.*).png/, /(.*).svg/, /(.*).json/, /(.*).graphql/, /(.*).md/]
