@@ -87,11 +87,13 @@ type ResponseDocument = any;
 import mongoose from "mongoose";
 import { captureException } from "@sentry/nextjs";
 import { surveyFromResponse } from "./helpers";
+import { appDb } from "~/lib/server/mongoose/connection";
 // Using Vulcan (limited to CRUD operations)
 export const ResponseConnector = createMongooseConnector<ResponseDocument>(
   Response,
   {
     mongooseSchema: new mongoose.Schema({ _id: String }, { strict: false }),
+    mongooseConnection: appDb
   }
 );
 Response.crud.connector = ResponseConnector;
@@ -106,10 +108,10 @@ export const ResponseMongooseModel =
  * that's why it's a function
  */
 export const ResponseMongoCollection = () => {
-  if (!mongoose.connection.db) {
+  if (!appDb.db) {
     throw new Error(
       "Trying to access Response mongo collection before Mongo/Mongoose is connected."
     );
   }
-  return mongoose.connection.db.collection<ResponseDocument>("responses");
+  return appDb.db.collection<ResponseDocument>("responses");
 };

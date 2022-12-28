@@ -5,6 +5,7 @@ const config = {
         title: `Devographics Survey Results`,
     },
     plugins: [
+        'gatsby-plugin-pnpm',
         'gatsby-transformer-yaml',
         {
             resolve: 'gatsby-source-filesystem',
@@ -38,11 +39,6 @@ const config = {
         // `gatsby-plugin-perf-budgets`,
         // `gatsby-plugin-webpack-bundle-analyser-v2`
     ],
-}
-
-if (process.env.USE_PNPM === 'true') {
-    // @see https://www.gatsbyjs.com/plugins/gatsby-plugin-pnpm/
-    config.plugins.push('gatsby-plugin-pnpm')
 }
 
 module.exports = config

@@ -29,15 +29,18 @@ BlockNote.propTypes = {
         title: PropTypes.node,
         titleId: PropTypes.string,
         description: PropTypes.node,
-        descriptionId: PropTypes.string,
-    }).isRequired,
+        descriptionId: PropTypes.string
+    }).isRequired
 }
 
 const Note = styled.div`
-    background: ${(props) => props.theme.colors.backgroundAlt};
+    .rawchartmode & {
+        display: none;
+    }
+    background: ${props => props.theme.colors.backgroundAlt};
     padding: ${spacing()};
     margin-top: ${spacing(2)};
-    font-size: ${(props) => props.theme.typography.size.small};
+    font-size: ${props => props.theme.typography.size.small};
     p,
     ul,
     ol {

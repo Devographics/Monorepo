@@ -103,7 +103,7 @@ export const loadAllLocally = async (localesToLoad: LocaleMetaData[]): Promise<L
 
         const [owner, repo] = localeMetaData.repo.split('/')
 
-        const localeDirPath = path.resolve(`../../stateof-locales/${repo}`)
+        const localeDirPath = path.resolve(`../../${process.env.LOCALES_DIR}/${repo}`)
         const files = await readdir(localeDirPath)
         const yamlFiles = files.filter((f: String) => f.includes('.yml'))
 

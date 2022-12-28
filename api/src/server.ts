@@ -19,6 +19,8 @@ import Sentry from '@sentry/node'
 import { rootDir } from './rootDir'
 import { appSettings } from './settings'
 
+import { watchFiles } from './watch'
+
 //import Tracing from '@sentry/tracing'
 
 const app = express()
@@ -135,10 +137,20 @@ const start = async () => {
 
     const data = await initMemoryCache({ context })
 
-    if (process.env.INITIALIZE_CACHE_ON_STARTUP) {
-        await initDbCache({ context, data })
-    }
+    // if (process.env.INITIALIZE_CACHE_ON_STARTUP) {
+    //     await initDbCache({ context, data })
+    // }
 
+    if (process.env.LOAD_DATA === 'local') {
+        await watchFiles({
+            context,
+            config: {
+                entities: process.env.ENTITIES_DIR,
+                surveys: process.env.SURVEYS_DIR
+            }
+        })
+    }
+    
     const finishedAt = new Date()
 
     app.listen({ port: port }, () =>

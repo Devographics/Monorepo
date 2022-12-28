@@ -68,6 +68,7 @@ const getAllSurveysQuery = () => {
 return `
 query {
     dataAPI {
+        metadata
         allSurveys {
             name
             slug
@@ -161,6 +162,7 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
     const allSurveysQuery = getAllSurveysQuery()
     const allSurveysResults = await graphql(`${allSurveysQuery}`)
     const allSurveys = allSurveysResults.data.dataAPI.allSurveys
+    const metadata =  allSurveysResults.data.dataAPI.metadata
     const currentSurvey = allSurveys.find(s => 
         s.editions.some(e => e.surveyId === surveyId)
     )
@@ -193,6 +195,7 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
                 component: path.resolve(`./src/core/pages/PageTemplate.js`),
                 context: {
                     ...context,
+                    metadata,
                     locales: cleanLocales,
                     locale,
                     localeId: locale.id,

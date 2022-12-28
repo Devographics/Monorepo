@@ -105,7 +105,7 @@ const NavItem = ({ to, label, id }) => {
   return (
     <Nav.Item>
       {/*<IndexLinkContainer to={to}>*/}
-      <Link href={to} passHref>
+      <Link href={to} passHref legacyBehavior={true}>
         <Nav.Link>
           {label ? label : <Components.FormattedMessage id={id} />}
         </Nav.Link>

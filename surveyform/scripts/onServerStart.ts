@@ -3,7 +3,7 @@
  */
 import nextEnv from "@next/env";
 const { loadEnvConfig } = nextEnv;
-import { createIndexes } from "./serverStart/indexes";
+import { checkIndexes } from "./serverStart/checkIndexes";
 import runSeed from "~/lib/server/runSeed";
 
 // Top level await will be available in Node 17
@@ -16,7 +16,7 @@ async function run() {
   );
 
   // 2. Run relevant scripts
-  await createIndexes();
+  await checkIndexes();
 
   // 3. In dev, run seed
   await runSeed();

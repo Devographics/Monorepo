@@ -141,7 +141,7 @@ exports.getExistingData = async ({ dataFileName, dataFilePath, baseUrl }) => {
 }
 
 exports.getConfigLocations = config => ({
-    localPath: `./../../devographics-surveys/${config.slug}/${config.year}`,
+    localPath: `./../../surveys/${config.slug}/${config.year}`,
     url: `https://devographics.github.io/surveys/${config.slug}/${config.year}`
 })
 

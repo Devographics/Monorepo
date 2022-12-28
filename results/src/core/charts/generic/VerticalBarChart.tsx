@@ -56,6 +56,10 @@ export interface VerticalBarChartProps extends ChartComponentProps {
     buckets: BucketItem[]
 }
 
+const getKeys = (units, seriesCount) => {
+    return [...Array(seriesCount)].map((x, i) => (i === 0 ? units : `${units}__${i + 1}`))
+}
+
 const VerticalBarChart = ({
     viewportWidth,
     className,
@@ -65,6 +69,7 @@ const VerticalBarChart = ({
     translateData,
     mode,
     units,
+    seriesCount,
     chartProps,
     colorVariant = 'primary',
     buckets
@@ -91,8 +96,9 @@ const VerticalBarChart = ({
         <div style={{ height: 260 }} className={`VerticalBarChart ${className}`}>
             <ResponsiveBar
                 data={buckets}
+                groupMode="grouped"
                 indexBy="id"
-                keys={[units]}
+                keys={getKeys(units, seriesCount)}
                 maxValue={maxValue}
                 margin={getMargins(viewportWidth)}
                 padding={0.4}
@@ -104,6 +110,7 @@ const VerticalBarChart = ({
                 enableGridX={false}
                 gridYValues={ticks}
                 enableGridY={true}
+                innerPadding={4}
                 axisLeft={{
                     format: formatValue,
                     tickValues: ticks
@@ -142,6 +149,38 @@ const VerticalBarChart = ({
                         ]
                     },
                     {
+                        id: `secondaryGradientVertical`,
+                        type: 'linearGradient',
+                        colors: [
+                            { offset: 0, color: theme.colors.barColors[1].gradient[1] },
+                            { offset: 100, color: theme.colors.barColors[1].gradient[0] }
+                        ]
+                    },
+                    {
+                        id: `thirdGradientVertical`,
+                        type: 'linearGradient',
+                        colors: [
+                            { offset: 0, color: theme.colors.barColors[2].gradient[1] },
+                            { offset: 100, color: theme.colors.barColors[2].gradient[0] }
+                        ]
+                    },
+                    {
+                        id: `fourthGradientVertical`,
+                        type: 'linearGradient',
+                        colors: [
+                            { offset: 0, color: theme.colors.barColors[3].gradient[1] },
+                            { offset: 100, color: theme.colors.barColors[3].gradient[0] }
+                        ]
+                    },
+                    {
+                        id: `fifthGradientVertical`,
+                        type: 'linearGradient',
+                        colors: [
+                            { offset: 0, color: theme.colors.barColors[4].gradient[1] },
+                            { offset: 100, color: theme.colors.barColors[4].gradient[0] }
+                        ]
+                    },
+                    {
                         id: `noAnswerGradientVertical`,
                         type: 'linearGradient',
                         colors: [
@@ -154,6 +193,30 @@ const VerticalBarChart = ({
                     {
                         match: d => d.data.indexValue === 'no_answer',
                         id: `noAnswerGradientVertical`
+                    },
+                    {
+                        match: d => {
+                            return d.key.includes('__2')
+                        },
+                        id: `secondaryGradientVertical`
+                    },
+                    {
+                        match: d => {
+                            return d.key.includes('__3')
+                        },
+                        id: `thirdGradientVertical`
+                    },
+                    {
+                        match: d => {
+                            return d.key.includes('__4')
+                        },
+                        id: `fourthGradientVertical`
+                    },
+                    {
+                        match: d => {
+                            return d.key.includes('__5')
+                        },
+                        id: `fifthGradientVertical`
                     },
                     { match: '*', id: `${colorVariant}GradientVertical` }
                 ]}

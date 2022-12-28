@@ -111,7 +111,7 @@ export const loadLocally = async () => {
 
     const entities: Entity[] = []
 
-    const entitiesDirPath = path.resolve(`../../stateof-entities/`)
+    const entitiesDirPath = path.resolve(`../../${process.env.ENTITIES_DIR}/`)
     const files = await readdir(entitiesDirPath)
     const yamlFiles = files.filter((f: String) => f.includes('.yml'))
 
@@ -211,6 +211,12 @@ export const cacheSurveysEntities = async ({
     context: RequestContext
 }) => {
     console.log(`// Initializing entities cache (Redis)…`)
+    for (let e of entities) {
+        e = await applyEntityResolvers(e, context)
+    }
+    setCache(getAllEntitiesCacheKey(), entities, context)
+    console.log(`-> Cached ${entities.length} entities (${getAllEntitiesCacheKey()})`)
+
     for (const survey of surveys) {
         for (const edition of survey.editions) {
             const surveyId = edition?.surveyId
@@ -223,9 +229,6 @@ export const cacheSurveysEntities = async ({
                     return fieldsToKeep
                 })
 
-            for (let e of editionEntities) {
-                e = await applyEntityResolvers(e, context)
-            }
             if (editionEntities.length > 0) {
                 setCache(getSurveyEditionEntitiesCacheKey({ surveyId }), editionEntities, context)
                 console.log(
@@ -284,3 +287,5 @@ export const extractEntityIds = (edition: SurveyEdition) => {
 
 export const getSurveyEditionEntitiesCacheKey = ({ surveyId }: { surveyId: string }) =>
     `entities_${surveyId}`
+
+export const getAllEntitiesCacheKey = () => `entities_all`

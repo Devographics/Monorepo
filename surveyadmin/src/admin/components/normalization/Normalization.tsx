@@ -8,7 +8,7 @@ import Fields from "~/admin/components/normalization/Fields";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { allFields } from "./Actions";
 
-export const defaultSegmentSize = 200;
+export const defaultSegmentSize = 500;
 
 const unnormalizedFieldsQuery = gql`
   query UnnormalizedFieldsQuery($surveyId: String, $fieldId: String) {

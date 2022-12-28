@@ -125,7 +125,10 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
         // secondary: colors.yellowLight,
         // secondaryGradient: [colors.yellow, colors.yellowLight],
         secondary: colors.purple,
-        secondaryGradient: [colors.purple, colors.purpleLighter]
+        secondaryGradient: [colors.purple, colors.purpleLighter],
+        thirdGradient: [colors.green, colors.greenLighter],
+        fourthGradient: [colors.yellowDark, colors.yellow],
+        fifthGradient: [colors.orangerDarker, colors.orangeLight],
     },
     no_answer: [colors.greyLight, colors.greyLightest],
     ranges: {

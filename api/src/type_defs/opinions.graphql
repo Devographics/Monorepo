@@ -64,6 +64,11 @@ enum OtherOpinionsID {
     browser_interoperability_features
     css_pain_points
     js_pain_points
+
+    top_js_pain_points
+    top_js_pain_points_others
+    top_currently_missing_from_js
+    top_currently_missing_from_js_others
 }
 
 type YearOtherOpinions {

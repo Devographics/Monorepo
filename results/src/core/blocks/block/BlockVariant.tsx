@@ -15,6 +15,7 @@ import { BlockVariantProps } from 'core/types'
 import { usePageContext } from 'core/helpers/pageContext'
 import CustomInputTrigger from 'core/blocks/block/CustomInputTrigger'
 import CommentsTrigger from 'core/blocks/block/CommentsTrigger'
+import FiltersTrigger from 'core/blocks/filters/FiltersTrigger'
 
 const BlockVariant = (props: PropsWithChildren<BlockVariantProps>) => {
     const context = usePageContext()
@@ -71,6 +72,11 @@ const BlockVariant = (props: PropsWithChildren<BlockVariantProps>) => {
                                     {block.hasComments && (
                                         <TabItem>
                                             <CommentsTrigger {...props} />
+                                        </TabItem>
+                                    )}
+                                    {block.hasFilters && (
+                                        <TabItem>
+                                            <FiltersTrigger {...props} />
                                         </TabItem>
                                     )}
                                     {/* <TabsTrigger value="debug">

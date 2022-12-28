@@ -3,7 +3,7 @@
  */
 import nextEnv from "@next/env";
 const { loadEnvConfig } = nextEnv;
-import { createIndexes } from "./serverStart/indexes";
+import { createIndexes } from "./serverStart/createIndexes";
 import { onStartup } from "./serverStart/startup";
 import runSeed from "~/lib/server/runSeed";
 
@@ -11,7 +11,7 @@ import runSeed from "~/lib/server/runSeed";
 async function run() {
   // 1. Load env config
   await loadEnvConfig(process.env.PWD!, process.env.NODE_ENV === "development");
-  console.log(
+  console.info(
     "Loaded env variables, NEXT_PUBLIC_NODE_ENV",
     process.env.NEXT_PUBLIC_NODE_ENV
   );

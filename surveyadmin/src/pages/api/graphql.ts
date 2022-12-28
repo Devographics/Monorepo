@@ -8,7 +8,6 @@ import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-co
 
 import { buildApolloSchema, createDataSources } from "@vulcanjs/graphql/server";
 
-import mongoConnection from "~/lib/server/middlewares/mongoConnection";
 import corsOptions from "~/lib/server/cors";
 import { contextFromReq } from "~/lib/server/context";
 import models from "~/_vulcan/models.index.server";
@@ -34,6 +33,7 @@ const currentUserTypeDefs = `type Query {
  }`;
 
 import { localesRegistry, stringsRegistry } from "~/i18n";
+import { connectToAppDbMiddleware } from "~/lib/server/middlewares/mongoAppConnection";
 
 const currentUserResolver = {
   Query: {
@@ -89,50 +89,8 @@ const mergedSchema = {
 };
 const vulcanSchema = makeExecutableSchema(mergedSchema); //vulcanRawSchema);
 
-/**
- * Example custom Apollo server, written by hand
- */
-/*
-const typeDefs = gql`
-  type Query {
-    restaurants: [Restaurant]
-  }
-  type Restaurant {
-    _id: ID!
-    name: String
-  }
-`;
-const resolvers = {
-  Query: {
-    // Demo with mongoose
-    // Expected the database to be setup with the demo "restaurant" API from mongoose
-    async restaurants() {
-      try {
-        const db = mongoose.connection;
-        const restaurants = db.collection("restaurants");
-        // @ts-ignore
-        const resultsCursor = (await restaurants.find(null, null)).limit(5);
-        const results = await resultsCursor.toArray();
-        return results;
-      } catch (err) {
-        console.log("Could not fetch restaurants", err);
-        throw err;
-      }
-    },
-  },
-};
-*/
-/*
-const customSchema = makeExecutableSchema({
-  typeDefs: sojsTypeDefs,
-  resolvers: sojsResolvers,
-});
-*/
-// NOTE: schema stitching can cause a bad developer experience with errors
-// And it means that both schema must be executable
-//const mergedSchema = vulcanSchema; //mergeSchemas({ schemas: [vulcanSchema, customSchema] });
-
 const mongoUri = process.env.MONGO_URI;
+const mongoUrlPublic = process.env.MONGO_URI_PUBLIC_READONLY;
 if (!mongoUri) throw new Error("MONGO_URI env variable is not defined");
 
 const createDataSourcesForModels = createDataSources(models);
@@ -154,11 +112,11 @@ const server = new ApolloServer({
   plugins:
     process.env.NODE_ENV !== "production"
       ? [
-          ApolloServerPluginLandingPageGraphQLPlayground({
-            // @see https://www.apollographql.com/docs/apollo-server/api/plugin/landing-pages/#graphql-playground-landing-page
-            // options
-          }),
-        ]
+        ApolloServerPluginLandingPageGraphQLPlayground({
+          // @see https://www.apollographql.com/docs/apollo-server/api/plugin/landing-pages/#graphql-playground-landing-page
+          // options
+        }),
+      ]
       : [],
   formatError: (err) => {
     console.error(err);
@@ -177,7 +135,7 @@ const gqlPath = "/api/graphql";
 app.use(gqlPath, cors(corsOptions));
 // init the db
 // TODO: we should probably use the "connectToAppDbMiddleware"?
-app.use(gqlPath, mongoConnection(mongoUri));
+app.use(gqlPath, connectToAppDbMiddleware);
 
 server.applyMiddleware({ app, path: "/api/graphql" });
 

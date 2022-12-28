@@ -6,8 +6,8 @@
 
 import { publicConfig } from "./public";
 
-const mongoUrl = process.env.MONGO_URI;
-if (!mongoUrl) throw new Error("MONGO_URI env variable is not defined");
+const mongoUri = process.env.MONGO_URI;
+if (!mongoUri) throw new Error("MONGO_URI env variable is not defined");
 
 export const serverConfig = {
   // reexpose public variables for consistency
@@ -20,7 +20,7 @@ export const serverConfig = {
    * Internal API for translations and entities
    */
   translationAPI: process.env.TRANSLATION_API!,
-  mongoUrl,
+  mongoUri,
   redisUrl: process.env.REDIS_URL || "redis://localhost:6379",
   githubToken: process.env.GITHUB_TOKEN,
   // NOTE: each survey should try to use their own specific domain (see magic link auth)

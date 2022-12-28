@@ -10,6 +10,8 @@ enum ResourcesID {
     people_others
     other_surveys
     other_surveys_others
+    video_creators
+    video_creators_others
 }
 
 type YearResources {

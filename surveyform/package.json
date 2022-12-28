@@ -39,7 +39,7 @@
     "postbuild": "next-sitemap --config vulcan-next-sitemap.js",
     "postcoverage": "npm run report:combined # combine jest and cypress coverage reports",
     "//postinstall": " # @see https://github.com/apollographql/apollo-feature-requests/issues/287",
-    "postinstall": "pnpm run build:scripts && node ./.vn/scripts/fix-apollo.js",
+    "//postinstall2": "pnpm run build:scripts && node ./.vn/scripts/fix-apollo.js",
     "precombine:reports": "npm run copy:reports && rm -Rf .nyc_output && mkdir .nyc_output || true # intermediate script",
     "precopy:reports": "npm run mkdir:reports # intermediate script",
     "precoverage": "rm -rf .nyc_output || true # delete previous nyx instrumentation",

@@ -25,7 +25,8 @@ beforeAll(async () => {
   // const dbName = await mongod.getDbName();
   // Connect mongoose client
   //await mongoose.connect(mongoUri);
-  await connectToDb(mongoUri);
+  await connectToDb(mongoUri, "appDb");
+  await connectToDb(mongoUri, "publicReadonlyDb");
 
   // TODO: spin up the Next server as well USING THE LOCAL MONGO_URI
 });
