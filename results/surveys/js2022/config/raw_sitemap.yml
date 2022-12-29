@@ -105,9 +105,11 @@
       hasFilters: true
       
     - id: age
+      hasFilters: true
       template: demographics
 
     - id: years_of_experience
+      hasFilters: true
       template: demographics
       variants:
         - id: years_of_experience_by_salary
@@ -120,12 +122,14 @@
             options: {facetSort: {order: ___asc___, property: mean}, facetMinCount: 100}
 
     - id: company_size
+      hasFilters: true
       template: demographics
 
     - id: variants_hint
       template: hint
 
     - id: higher_education_degree
+      hasFilters: true
       template: demographics
       variants:
         - id: higher_education_degree_by_gender
@@ -138,6 +142,7 @@
             options: {facetSort: {order: ___asc___, property: mean}, facetMinCount: 100}
 
     - id: yearly_salary
+      hasFilters: true
       template: demographics
       variants:
         - id: yearly_salary_by_gender
@@ -181,6 +186,7 @@
         options: {limit: 20}
       
     - id: gender
+      hasFilters: true
       template: demographics
       variants:
         - id: gender_by_country
@@ -217,6 +223,8 @@
           blockType: HorizontalBarBlock
           units: count
           translateData: true
+          variables:
+            options: {cutoff: 10}
 
     # - id: user_info_resources
     #   items: [fm-homepage]
@@ -424,7 +432,11 @@
       blocks:
         - template: page_introduction
 
-        - template: tools_experience_ranking
+        - template: tools_experience_linechart
+          tabId: blocks.tools_experience_ranking.percentages
+          variants:
+            - template: tools_experience_ranking
+              tabId: blocks.tools_experience_ranking.rankings
 
         - template: tools_section_streams
 
@@ -481,7 +493,11 @@
       blocks:
         - template: page_introduction
 
-        - template: tools_experience_ranking
+        - template: tools_experience_linechart
+          tabId: blocks.tools_experience_ranking.percentages
+          variants:
+            - template: tools_experience_ranking
+              tabId: blocks.tools_experience_ranking.rankings
 
         - template: tools_section_streams
 
@@ -536,7 +552,11 @@
       blocks:
         - template: page_introduction
 
-        - template: tools_experience_ranking
+        - template: tools_experience_linechart
+          tabId: blocks.tools_experience_ranking.percentages
+          variants:
+            - template: tools_experience_ranking
+              tabId: blocks.tools_experience_ranking.rankings
 
         - template: tools_section_streams
 
@@ -598,7 +618,11 @@
       blocks:
         - template: page_introduction
 
-        - template: tools_experience_ranking
+        - template: tools_experience_linechart
+          tabId: blocks.tools_experience_ranking.percentages
+          variants:
+            - template: tools_experience_ranking
+              tabId: blocks.tools_experience_ranking.rankings
 
         - template: tools_section_streams
 
@@ -654,7 +678,11 @@
       blocks:
         - template: page_introduction
 
-        - template: tools_experience_ranking
+        - template: tools_experience_linechart
+          tabId: blocks.tools_experience_ranking.percentages
+          variants:
+            - template: tools_experience_ranking
+              tabId: blocks.tools_experience_ranking.rankings
 
         - template: tools_section_streams
 
@@ -715,7 +743,11 @@
       blocks:
         - template: page_introduction
 
-        - template: tools_experience_ranking
+        - template: tools_experience_linechart
+          tabId: blocks.tools_experience_ranking.percentages
+          variants:
+            - template: tools_experience_ranking
+              tabId: blocks.tools_experience_ranking.rankings
 
         - template: tools_section_streams
 
@@ -961,7 +993,7 @@
       template: recommended_resources
 
 - id: usage
-  intlId: usage_css
+  intlId: usage_js
   path: /usage
   blocks:
     - template: page_introduction
@@ -1207,9 +1239,9 @@
       tabId: tabs.main_answers
       template: multiple_options
       variables:
-        fieldId: opinions
+        fieldId: opinions_others
       variants:
-        - id: top_js_pain_points_others
+        - id: top_js_pain_points
           defaultUnits: count
           blockNamespace: opinions
           chartNamespace: top_js_pain_points
@@ -1226,9 +1258,9 @@
       tabId: tabs.main_answers
       template: multiple_options
       variables:
-        fieldId: opinions
+        fieldId: opinions_others
       variants:
-        - id: top_currently_missing_from_js_others
+        - id: top_currently_missing_from_js
           defaultUnits: count
           blockNamespace: opinions
           chartNamespace: top_currently_missing_from_js

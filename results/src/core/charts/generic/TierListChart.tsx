@@ -13,7 +13,8 @@ const customImages = {
     reactnative: 'png',
     lerna: 'png',
     cordova: 'jpg',
-    vuejs: 'svg'
+    vuejs: 'svg',
+    pnpm: 'svg'
 }
 
 export interface TierItemData extends ToolsExperienceToolData {

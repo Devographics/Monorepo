@@ -1,26 +1,52 @@
 import { DefaultTheme } from 'styled-components'
 import colors_ from 'core/theme/colors'
 
+
 const colors = {
     ...colors_,
+    tealDarkest: '#167387',
+    tealDarker: '#2594AC',
+    tealDark: '#2EB1CE',
+    teal: '#47CFED',
+    tealLight: '#6BDAF2',
+    tealLighter: '#92E4F6',
+    tealLightest: '#BFF4FF',
     pinkDark: '#9D0E66',
     pink: '#ef4e88',
     pinkLight: '#FE79B4',
     pinkLighter: '#FFADD2',
     pinkLightest: '#FFCEE4',
+    redDark: '#c3494e',
+    red: '#FE6A6A',
+    redLight: '#FF8686',
+    redLighter: '#FFA3A3',
+    redLightest: '#FFC2C2',
     blue: '#3633B7',
     blueLight: '#775CE0',
     blueLighter: '#B0AEEF',
     blueLightest: '#D0CFF9',
+    purpleDarkest: '#3E1A4D',
+    purpleDarker: '#532566',
+    purpleDark: '#6D3385',
+    purple: '#8D4CA8',
+    purpleLight: '#A964C6',
+    purpleLighter: '#C185DA',
+    purpleLightest: '#D5A7E8',
+    purpleLightester: '#EFDCF8',
     green: '#4BC77D',
     greenLight: '#73D49A',
     greenLighter: '#B6F4CF',
     white: '#FFF6E6',
-    kaki: '#CCD133',
+    yellowLight: '#FFF1C0',
+    yellow: '#FFE589',
+    greyDarker: '#303435',
+    greyDark: '#4E5557',
     grey: '#8B8085',
     greyLight: '#BBB2B6',
     greyLighter: '#DED1D7',
     greyLightest: '#EADEE3',
+
+    kaki: '#CCD133',
     electricBlueLight: '#AEF0FF',
     electricBlue: '#38D6FE',
     electricBlueDark: '#21B1D6',
@@ -33,15 +59,8 @@ const colors = {
     orange: '#EC9C23',
     orangeDark: '#D98C18',
     orangeDarker: '#BE780F',
-    yellowLight: '#FFF1C0',
-    yellow: '#FFE589',
     yellowDark: '#ECCB55',
     yellowDarker: '#D2AA19',
-    redDark: '#c3494e',
-    red: '#FE6A6A',
-    redLight: '#FF8686',
-    redLighter: '#FFA3A3',
-    redLightest: '#FFC2C2'
 }
 
 const velocity = [
@@ -60,6 +79,22 @@ const velocity = [
     '#BCFFF3',
     '#9FFFEE'
 ]
+
+const arrowsVelocity = [
+    colors.purple,
+    colors.purpleLight,
+    colors.purpleLighter,
+    colors.purpleLightest,
+    colors.tealLightest,
+    colors.tealLighter,
+    colors.tealLight,
+    colors.teal,
+    colors.tealDark,
+    colors.tealDarker,
+    colors.tealDarkest,
+]
+
+const tiers = [colors.red, '#ffc38a', '#feff8e', '#c3ff89']
 
 // const velocity = [
 //     '#1734BF',
@@ -145,17 +180,12 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
             never_heard: [colors.greyLight, colors.greyLightest]
         },
         toolSections: {
-            javascript_flavors: colors.indigo,
-            front_end_frameworks: colors.pink,
-            datalayer: colors.red,
-            back_end_frameworks: colors.purple,
+            front_end_frameworks: colors.pinkLight,
+            rendering_frameworks: colors.purple,
             testing: colors.orange,
-            build_tools: colors.yellow,
+            build_tools: colors.teal,
             mobile_desktop: colors.green,
-            other_tools: colors.blue,
-            css_in_js: colors.blue,
-            pre_post_processors: colors.yellow,
-            css_frameworks: colors.pink
+            monorepo_tools: colors.navyLighter
         },
         features: {
             used: [colors.electricBlueDarker, colors.electricBlueDark],
@@ -163,15 +193,9 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
             never_heard: [colors.grey, colors.greyLight]
         },
         features_categories: {
-            layout: colors.indigo,
-            shapes_graphics: colors.pink,
-            interactions: colors.red,
-            typography: colors.purple,
-            animations_transforms: colors.orange,
-            other_features: colors.green,
-            colors: colors.orange,
-            selectors: colors.aqua,
-            accessibility: colors.yellow
+            language: colors.purple,
+            browser_apis: colors.pink,
+            other_features: colors.green
         },
         features_simplified: {
             know_it: '#ACFFC3',
@@ -242,7 +266,9 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
         colors.pinkLight,
         colors.pink
     ],
-    velocity
+    velocity,
+    arrowsVelocity,
+    tiers
 }
 
 export default stateOfCSSThemeColors

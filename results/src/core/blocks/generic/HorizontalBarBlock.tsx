@@ -14,7 +14,7 @@ const HorizontalBarBlock = ({ block, data, controlledUnits, isCustom }: Horizont
     const {
         id,
         mode = 'relative',
-        defaultUnits = 'percentage_survey',
+        defaultUnits = 'count',
         translateData,
         chartNamespace = block.blockNamespace ?? block.id,
         colorVariant,

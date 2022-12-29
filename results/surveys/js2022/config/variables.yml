@@ -1,7 +1,7 @@
 surveyType: state_of_js
 
 # used for scatterplot chart
-totalCountRounded: 16000
+totalCountRounded: 40000 # actual count 39471
 
 currentYear: 2022
 
@@ -90,7 +90,6 @@ allTools:
     - svelte
     - alpinejs
     - litelement
-    - stimulus
     - solid # 2021
     - qwik # 2022
     - stencil # 2022
@@ -163,7 +162,6 @@ toolsCategories:
         - svelte
         - alpinejs
         - litelement
-        - stimulus
         - solid # 2021
         - qwik # 2022
         - stencil # 2022
