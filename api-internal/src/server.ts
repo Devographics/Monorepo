@@ -101,7 +101,7 @@ const start = async () => {
 
     app.get('/reinitialize', async function (req, res) {
         checkSecretKey(req)
-        await init({ context })
+        await initMemoryCache({ context })
         res.status(200).send('Cache cleared')
     })
 
@@ -109,7 +109,7 @@ const start = async () => {
 
     const port = process.env.PORT || 4020
 
-    await initMemoryCache({ context })
+    const { entities } = await initMemoryCache({ context })
 
     if (process.env.LOAD_DATA === 'local') {
         await watchFiles({
