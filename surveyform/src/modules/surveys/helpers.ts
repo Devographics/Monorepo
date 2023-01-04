@@ -2,12 +2,12 @@
  * Do NOT import all surveys, these helpers works at survey level
  * This avoid bundling all surveys in a page
  */
-import { SurveyDocument } from "@devographics/core-models";
+import { SerializedSurveyDocument, SurveyDocument } from "@devographics/core-models";
 import { getQuestionObject } from "./parser/parseSurvey";
 
 export const getCommentFieldName = fieldName => fieldName.replace("__experience", "__comment")
 
-export const getSurveyFieldNames = (survey: SurveyDocument) => {
+export const getSurveyFieldNames = (survey: SerializedSurveyDocument | SurveyDocument) => {
   let questionFieldNames: Array<string> = [];
   survey.outline.forEach((section) => {
     section.questions &&

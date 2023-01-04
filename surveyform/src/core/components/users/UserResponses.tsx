@@ -1,11 +1,10 @@
-import { useCurrentUserWithResponses } from "~/core/components/survey/page/hooks";
 import Link from "next/link";
 import { statusesReverse } from "~/modules/constants";
-import orderBy from "lodash/orderBy.js";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import { useUser } from "~/account/user/hooks";
 import { useUserResponses } from "~/modules/responses/hooks";
 import { Loading } from "../ui/Loading";
+import { SerializedSurveyDocument } from "@devographics/core-models";
 
 const UserResponses = () => {
   const { user, loading: userLoading, error: userError } = useUser();
@@ -28,6 +27,7 @@ const UserResponses = () => {
         <ul className="user-responses-list">
           {responses &&
             responses.map((response) => (
+              // @ts-ignore Not sure if we should use Date or string
               <ResponseItem key={response._id} {...response} />
             ))}
         </ul>
@@ -44,13 +44,24 @@ const UserResponses = () => {
   );
 };
 
-const ResponseItem = ({ createdAt, pagePath, completion = 0, survey }) => {
-  const Components = useVulcanComponents();
-
+const ResponseItem = ({
+  createdAt,
+  pagePath,
+  completion = 0,
+  survey,
+}: {
+  createdAt?: string | null;
+  pagePath: string;
+  completion?: number;
+  survey?: SerializedSurveyDocument;
+}) => {
   if (!survey) {
     return null;
   }
   const { status, name, year, resultsUrl } = survey;
+  if (typeof status === "undefined") {
+    throw new Error("Survey status is not defined, can't display response");
+  }
 
   const surveyStatus = statusesReverse[status];
   return (
@@ -66,7 +77,8 @@ const ResponseItem = ({ createdAt, pagePath, completion = 0, survey }) => {
       <div className="response-item-details">
         <FormattedMessage
           id="response.details"
-          values={{ startedAt: createdAt.substr(0, 10), completion }}
+          // TODO: not sure if createdAt is a string or Date here
+          values={{ startedAt: createdAt?.substr(0, 10), completion }}
         />{" "}
         {resultsUrl && (
           <a href={resultsUrl}>

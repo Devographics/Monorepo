@@ -7,16 +7,16 @@ import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import { getSurveyImageUrl } from "~/surveys/getSurveyImageUrl";
 import Link from "next/link";
 import { ResponseDocument, SurveyDocument } from "@devographics/core-models";
+import { useSurvey } from "../survey/SurveyContext/Provider";
 
 export const Thanks = ({
-  survey,
   response,
   readOnly,
 }: {
-  survey: SurveyDocument;
   response?: ResponseDocument;
   readOnly?: boolean;
 }) => {
+  const survey = useSurvey();
   const imageUrl = getSurveyImageUrl(survey);
   const { name, year } = survey;
 

@@ -1,22 +1,14 @@
 {
   "name": "@devographics/react-hooks",
-  "version": "0.8.1",
+  "version": "1.0.0",
   "description": "Connect to an existing Vulcan backend using hooks",
-  "main": "./dist/index.js",
-  "files": [
-    "dist/"
-  ],
+  "main": "./index.ts",
   "type": "module",
   "exports": {
-    ".": "./dist/index.js"
+    ".": "./index.ts"
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build:tsup": "tsup --external graphql --external graphql-tag",
-    "build:types": "tsc --emitDeclarationOnly --declaration --project tsconfig.build.json ",
-    "build": "yarn run build:tsup"
-  },
-  "author": "",
+  "scripts": {},
+  "author": "Devographics",
   "license": "MIT",
   "dependencies": {
     "@vulcanjs/crud": "^0.7.2-alpha.8",

@@ -4,15 +4,20 @@ import { ResponseFragmentWithRanking } from "~/modules/responses/fragments";
 import { serverConfig } from "~/config/server";
 import { buildSingleQuery } from "@devographics/react-hooks";
 import React from "react";
-import surveys from "~/surveys";
 
-import { ResponseDocument, SurveyDocument } from "@devographics/core-models";
+import {
+  ResponseDocument,
+  SerializedSurveyDocument,
+} from "@devographics/core-models";
+import { print } from "graphql";
+import { fetchSurveyGithub } from "~/core/server/fetchSurveyGithub";
+import { notFound } from "next/navigation";
 
 async function getResponseWithRanking({
   responseId,
   survey,
 }: {
-  survey: SurveyDocument;
+  survey: SerializedSurveyDocument;
   responseId: string;
 }) {
   // TODO: get from the database directly, the graphql call is just for convenience
@@ -33,7 +38,7 @@ async function getResponseWithRanking({
       headers,
       // TODO: this query doesn't consider the survey slug
       body: JSON.stringify({
-        query,
+        query: print(query),
         variables: {
           input: { id: responseId },
         },
@@ -66,20 +71,17 @@ export const ThanksPage = async ({
   };
 }) => {
   const readOnly = responseId === "read-only";
-
-  const survey = surveys.find(
-    (s) => s.prettySlug === slug && s.year === Number(year)
-  );
-
+  // NOTE: Next.js 13 automatically deduplicate request
+  // it's ok to fetch data again here after fetching in the layout
+  const survey = await fetchSurveyGithub(slug, year);
   if (!survey) {
-    throw new Error("Could not find survey.");
+    notFound();
   }
-
   if (readOnly) {
-    return <Thanks survey={survey} readOnly={readOnly} />;
+    return <Thanks readOnly={readOnly} />;
   }
   const response = await getResponseWithRanking({ responseId, survey });
-  return <Thanks survey={survey} response={response} />;
+  return <Thanks response={response} />;
 };
 
 export default ThanksPage;

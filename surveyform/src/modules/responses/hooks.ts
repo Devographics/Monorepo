@@ -1,4 +1,4 @@
-import { ResponseDocument, SurveyDocument } from "@devographics/core-models"
+import { ResponseDocument, SerializedSurveyDocument, SurveyDocument } from "@devographics/core-models"
 import useSWR from "swr"
 import { apiRoutes } from "~/lib/apiRoutes"
 
@@ -12,7 +12,7 @@ interface ApiData<T = any> {
     data: T
 }
 
-type ResponseWithSurvey = ResponseDocument & { survey: SurveyDocument }
+type ResponseWithSurvey = Required<ResponseDocument> & { survey: SurveyDocument }
 
 /**
  * Passing no surveySlug will get all responses for the user 
