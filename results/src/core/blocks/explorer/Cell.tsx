@@ -93,22 +93,26 @@ const Cell_ = styled.div`
 
 const CellCount_ = styled.div`
   position: absolute;
-  top: 0px;
-  bottom: 0px;
-  left: 0px;
-  right: 0px;
+  top: 8px;
+  bottom: 8px;
+  left: 8px;
+  right: 8px;
   display: grid;
-  place-items: center;
+  place-items: end end;
+  /* display: flex; */
+  /* align-items: flex-end; */
+  /* justify-contents: flex-end; */
 `;
 
 const CellCountInner_ = styled.div`
   opacity: 0.2;
+  line-height: 1;
   /* font-weight: ${fontWeight('bold')}; */
   @media ${mq.small} {
     font-size: 1rem;
   }
   @media ${mq.mediumLarge} {
-    font-size: 2rem;
+    font-size: 1.2rem;
   }
 `;
 

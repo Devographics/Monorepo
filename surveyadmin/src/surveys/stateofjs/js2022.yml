@@ -886,6 +886,7 @@ outline:
         year: 2021
         # template: bracket
         template: top_n
+        sectionSlug: opinions_others
         options:
           - id: state_management
           - id: architecture
@@ -906,6 +907,7 @@ outline:
         year: 2021
         # template: bracket
         template: top_n
+        sectionSlug: opinions_others
         options:
           - id: static_typing
           - id: standard_library

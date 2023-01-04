@@ -2,6 +2,7 @@ import { usePageContext } from 'core/helpers/pageContext'
 import { getGraphQLQuery } from 'core/blocks/block/BlockData'
 import { addNoAnswerBucket } from 'core/blocks/generic/VerticalBarBlock'
 import { getCountryName } from 'core/helpers/countries'
+import cloneDeep from 'lodash/cloneDeep.js'
 
 export const useKeys = () => {
     const context = usePageContext()
@@ -64,12 +65,13 @@ multiple series (e.g. { count, count_1, percentage_question, percentage_question
 const fields = ['count', 'percentage_question', 'percentage_survey']
 export const mergeBuckets = ({ bucketsArrays, completion }) => {
     const [baseBucketsArray, ...otherBucketsArrays] = bucketsArrays
+    const mergedBuckets = cloneDeep(baseBucketsArray)
     otherBucketsArrays.forEach((buckets = [], index) => {
         // default series is series 1, first custom series is series 2, etc.
         const seriesIndex = index + 2
         // TODO: add this later
         // const bucketsWithNoAnswerBucket = addNoAnswerBucket({ buckets, completion })
-        baseBucketsArray.forEach(bucket => {
+        mergedBuckets.forEach(bucket => {
             const { id } = bucket
             const otherSeriesBucket = buckets.find(b => b.id === id)
             if (otherSeriesBucket) {
@@ -85,7 +87,7 @@ export const mergeBuckets = ({ bucketsArrays, completion }) => {
             }
         })
     })
-    return baseBucketsArray
+    return mergedBuckets
 }
 
 export const getFieldLabel = ({ getString, field }) => getString(`user_info.${field}`)?.t

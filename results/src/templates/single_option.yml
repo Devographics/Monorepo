@@ -1,7 +1,7 @@
 blockType: VerticalBarBlock
 dataPath: "dataAPI.survey.${id}.year"
 keysPath: "dataAPI.survey.${id}.keys"
-enableCustomization: true
+# enableCustomization: true
 hasSponsor: true
 query: >
     dataAPI {

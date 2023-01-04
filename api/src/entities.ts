@@ -200,6 +200,9 @@ export const getEntity = async ({ id }: { id: string | number }) => {
 
 Cache all the entities needed by a survey form
 
+Note: entities should already have all resolvers applied to them
+before being passed to cacheSurveysEntities()
+
 */
 export const cacheSurveysEntities = async ({
     surveys,
@@ -211,9 +214,6 @@ export const cacheSurveysEntities = async ({
     context: RequestContext
 }) => {
     console.log(`// Initializing entities cache (Redis)…`)
-    for (let e of entities) {
-        e = await applyEntityResolvers(e, context)
-    }
     setCache(getAllEntitiesCacheKey(), entities, context)
     console.log(`-> Cached ${entities.length} entities (${getAllEntitiesCacheKey()})`)
 
@@ -250,7 +250,7 @@ as if we were querying the API through GraphQL
 // TODO: seems unnecessary to have to define this type?
 type EntityResolverKey = 'github' | 'mdn' | 'twitter' | 'caniuse' | 'homepage' | 'npm' | 'company'
 
-const applyEntityResolvers = async (entity: Entity, context: RequestContext) => {
+export const applyEntityResolvers = async (entity: Entity, context: RequestContext) => {
     const resolvers = entityResolvers.Entity
     for (const resolverKey in resolvers) {
         const resolver = resolvers[resolverKey as EntityResolverKey]

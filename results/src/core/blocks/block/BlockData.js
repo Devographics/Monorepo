@@ -13,32 +13,39 @@ const BlockData = props => {
     return (
         <>
             <ExportWrapper>
-                <ModalTrigger
-                    trigger={
-                        <ExportButton className="ExportButton" size="small">
-                            <T k="export.export_json" />
-                            {/* <ExportIcon /> */}
-                        </ExportButton>
-                    }
-                >
-                    <JSONExport {...props} />
-                </ModalTrigger>
-
-                <ModalTrigger
-                    trigger={
-                        <ExportButton className="ExportButton" size="small">
-                            <T k="export.export_graphql" />
-                            {/* <ExportIcon /> */}
-                        </ExportButton>
-                    }
-                >
-                    <GraphQLExport {...props} />
-                </ModalTrigger>
+                <JSONTrigger {...props} />
+                <GraphQLTrigger {...props} />
             </ExportWrapper>
             <Table {...props} />
         </>
     )
 }
+
+export const JSONTrigger = props => (
+    <ModalTrigger
+        trigger={
+            <ExportButton className="ExportButton" size="small" {...props.buttonProps}>
+                <T k="export.export_json" />
+                {/* <ExportIcon /> */}
+            </ExportButton>
+        }
+    >
+        <JSONExport {...props} />
+    </ModalTrigger>
+)
+
+export const GraphQLTrigger = props => (
+    <ModalTrigger
+        trigger={
+            <ExportButton className="ExportButton" size="small" {...props.buttonProps}>
+                <T k="export.export_graphql" />
+                {/* <ExportIcon /> */}
+            </ExportButton>
+        }
+    >
+        <GraphQLExport {...props} />
+    </ModalTrigger>
+)
 
 export const JSONExport = ({ block, data }) => {
     const isArray = Array.isArray(data)
@@ -70,10 +77,10 @@ ${trimmedQuery}
     return graphQLExport
 }
 
-export const GraphQLExport = ({ block }) => {
+export const GraphQLExport = ({ block, query }) => {
     return (
         <div>
-            <AutoSelectText value={getGraphQLQuery(block)} />
+            <AutoSelectText value={query || getGraphQLQuery(block)} />
             <Message>
                 <T k={'export.graphql'} html={true} />
             </Message>
@@ -88,7 +95,7 @@ const ExportWrapper = styled.div`
     gap: ${spacing(0.5)};
 `
 
-const ExportButton = styled(Button)`
+export const ExportButton = styled(Button)`
     display: inline;
     margin: 0;
 `

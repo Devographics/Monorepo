@@ -11,7 +11,7 @@ import express from 'express'
 import { analyzeTwitterFollowings } from './rpcs'
 // import { clearCache } from './caching'
 import { createClient } from 'redis'
-import { initMemoryCache, initDbCache } from './init'
+import { initMemoryCache, reinitialize } from './init'
 import path from 'path'
 
 import Sentry from '@sentry/node'
@@ -20,6 +20,7 @@ import { rootDir } from './rootDir'
 import { appSettings } from './settings'
 
 import { watchFiles } from './watch'
+import { cacheAvatars } from './avatars'
 
 //import Tracing from '@sentry/tracing'
 
@@ -126,8 +127,13 @@ const start = async () => {
 
     app.get('/reinitialize', async function (req, res) {
         checkSecretKey(req)
-        const data = await initMemoryCache({ context })
-        await initDbCache({ context, data })
+        await reinitialize({ context })
+        res.status(200).send('Cache cleared')
+    })
+
+    app.get('/cache-avatars', async function (req, res) {
+        checkSecretKey(req)
+        await cacheAvatars({ context })
         res.status(200).send('Cache cleared')
     })
 
@@ -135,7 +141,7 @@ const start = async () => {
 
     const port = process.env.PORT || 4000
 
-    const data = await initMemoryCache({ context })
+    const data = await initMemoryCache({ context, initList: ['entities', 'surveys'] })
 
     // if (process.env.INITIALIZE_CACHE_ON_STARTUP) {
     //     await initDbCache({ context, data })
@@ -150,7 +156,7 @@ const start = async () => {
             }
         })
     }
-    
+
     const finishedAt = new Date()
 
     app.listen({ port: port }, () =>

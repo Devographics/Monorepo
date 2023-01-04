@@ -7,7 +7,7 @@ keysPath: dataAPI.survey.${id}_experience.experience.keys
 entityPath: dataAPI.survey.${id}_experience.entity
 bucketKeysName: tools
 hidden: true
-enableCustomization: true
+# enableCustomization: true
 hasComments: true
 hasSponsor: true
 query: >

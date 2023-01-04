@@ -4,7 +4,7 @@ keysPath: "dataAPI.survey.demographics.${id}.keys"
 defaultUnits: percentage_survey
 blockNamespace: user_info
 chartNamespace: ${id}
-enableCustomization: true
+# enableCustomization: true
 hasSponsor: true
 query: >
     dataAPI {

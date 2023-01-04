@@ -5,13 +5,15 @@ import T from 'core/i18n/T'
 import { mq, spacing, fontSize } from 'core/theme'
 import Button from 'core/components/Button'
 import cloneDeep from 'lodash/cloneDeep.js'
-import { useKeys, getNewSeries } from './helpers'
+import { useKeys, getNewSeries, getFiltersQuery } from './helpers'
 import { maxSeriesCount, filters } from './constants'
 import { getBlockTitle } from 'core/helpers/blockHelpers'
 import { usePageContext } from 'core/helpers/pageContext'
 import { useI18n } from 'core/i18n/i18nContext'
 import isEmpty from 'lodash/isEmpty.js'
 import { Series_ } from './Series'
+import { ExportButton, GraphQLExport, GraphQLTrigger } from 'core/blocks/block/BlockData'
+import ModalTrigger from 'core/components/ModalTrigger'
 
 const Filters = ({ block, series, setSeries, closeModal }) => {
     const keys = useKeys()
@@ -21,13 +23,17 @@ const Filters = ({ block, series, setSeries, closeModal }) => {
 
     const filtersWithoutCurrentItem = filters.filter(f => f !== block.id)
 
-    const emptySeries = getNewSeries({ filters: filtersWithoutCurrentItem, keys, year: currentEdition.year })
+    const emptySeries = getNewSeries({
+        filters: filtersWithoutCurrentItem,
+        keys,
+        year: currentEdition.year
+    })
     const initState = isEmpty(series) ? [] : series
     const [filtersState, setFiltersState] = useState(initState)
 
     const stateStuff = {
         filtersState,
-        setFiltersState,
+        setFiltersState
     }
 
     const handleAddSeries = () => {
@@ -76,6 +82,15 @@ const Filters = ({ block, series, setSeries, closeModal }) => {
             </SeriesList_>
 
             <FiltersBottom_>
+                <GraphQLTrigger
+                    block={block}
+                    query={getFiltersQuery({
+                        block,
+                        series: filtersState,
+                        currentYear: currentEdition.year
+                    })}
+                    buttonProps={{variant: 'link'}}
+                />
                 <Button onClick={handleSubmit}>
                     <T k="filters.submit" />
                 </Button>
@@ -110,7 +125,12 @@ const EmptySeries_ = styled(Series_)`
 
 const FiltersBottom_ = styled.div`
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
+`
+
+const ExportButton_ = styled(Button)`
+    display: inline;
+    margin: 0;
 `
 
 export default Filters

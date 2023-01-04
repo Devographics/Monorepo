@@ -33,7 +33,7 @@ export const addNoAnswerBucket = ({ buckets, completion }) => {
     return [...buckets, noAnswerBucket]
 }
 
-const getLegends = ({ theme, series, getString, currentYear }) => {
+export const getLegends = ({ theme, series, getString, currentYear }) => {
     if (series.length === 0) {
         return []
     } else {

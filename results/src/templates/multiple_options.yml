@@ -1,6 +1,6 @@
 blockType: HorizontalBarBlock
 dataPath: "dataAPI.survey.${id}.year"
-enableCustomization: true
+# enableCustomization: true
 hasSponsor: true
 query: >
     dataAPI {

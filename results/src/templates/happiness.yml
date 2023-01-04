@@ -7,7 +7,7 @@ keysPath: "dataAPI.survey.${fieldId}_happiness.keys"
 showDescription: false
 blockNamespace: happiness
 chartNamespace: happiness
-enableCustomization: true
+# enableCustomization: true
 hasSponsor: true
 query: >
     dataAPI {

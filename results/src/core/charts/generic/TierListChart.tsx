@@ -13,7 +13,8 @@ const customImages = {
     reactnative: 'png',
     lerna: 'png',
     cordova: 'jpg',
-    vuejs: 'svg'
+    vuejs: 'svg',
+    pnpm: 'svg'
 }
 
 export interface TierItemData extends ToolsExperienceToolData {
@@ -162,7 +163,7 @@ const TierItem = ({
     currentCategory
 }: TierItemProps) => {
     const imageSrc = customImages[id]
-        ? `/images/logos/${id}.${customImages[id]}`
+        ? `https://assets.devographics.com/projects/${id}.${customImages[id]}`
         : `https://bestofjs.org/logos/${id}.svg`
 
     const isHighlighted = currentCategory ? currentCategory === categoryId : true
