@@ -22,8 +22,8 @@ const moduleExports = (phase, { defaultConfig }) => {
     ...defaultConfig,
     experimental: {
       appDir: true,
-      transpilePackages: ["@devographics/core-models"],
     },
+    transpilePackages: ["@devographics/core-models", "@devographics/react-hooks"],
     // Disable linting during build => the linter may have optional dev dependencies
     // (eslint-plugin-cypress) that wont exist during prod build
     // You should lint manually only

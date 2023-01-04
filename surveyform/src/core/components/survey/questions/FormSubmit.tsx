@@ -12,7 +12,7 @@ TODO
 @see packages/react-ui/components/form/FormSubmit.tsx
 
 */
-import { useVulcanComponents, useFormContext } from "@vulcanjs/react-ui";
+import { useFormContext } from "@vulcanjs/react-ui";
 import React, { useEffect } from "react";
 import { getSurveyPath } from "~/modules/surveys/getters";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
@@ -20,6 +20,7 @@ import { SurveyDocument } from "@devographics/core-models";
 import Link from "next/link";
 import { useSaveSurveyMutation } from "~/core/components/survey/questions/useSaveSurveyMutation";
 import { useRouter } from "next/navigation";
+import { LoadingButton } from "~/core/components/ui/LoadingButton";
 
 const FormSubmit = ({
   survey,
@@ -115,7 +116,6 @@ const FormSubmit = ({
 };
 
 const SubmitButton = (props) => {
-  const Components = useVulcanComponents();
   const router = useRouter();
 
   const {
@@ -167,7 +167,7 @@ const SubmitButton = (props) => {
       {readOnly ? (
         <Link href={path}>{contents}</Link>
       ) : (
-        <Components.LoadingButton
+        <LoadingButton
           type="submit"
           loading={loading}
           variant="primary"
@@ -181,10 +181,10 @@ const SubmitButton = (props) => {
             setLoading(false);
             router.push(path);
           }}
-          {...props}
+          //{...props}
         >
           {contents}
-        </Components.LoadingButton>
+        </LoadingButton>
       )}
     </div>
   );
