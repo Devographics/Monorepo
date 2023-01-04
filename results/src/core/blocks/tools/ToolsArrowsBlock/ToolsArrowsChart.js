@@ -12,6 +12,7 @@ import styled, { ThemeContext, useTheme } from 'styled-components'
 import labelOffsets from './toolsArrowsLabelOffsets.js'
 import { getVelocity, getVelocityColor, getVelocityColorScale } from './helpers.js'
 import { Delaunay } from 'd3-delaunay'
+import compact from 'lodash/compact.js'
 
 const { toolsCategories } = variables
 
@@ -73,12 +74,10 @@ export const ToolsArrowsChart = ({ data, activeCategory }) => {
         toolNames[tool.id] = tool?.entity?.name
     })
 
-    const items = useMemo(
+    let items = useMemo(
         () =>
             data.map((tool) => {
                 const allYears = get(tool, 'experience.all_years', [])
-                console.log(tool)
-                console.log(allYears)
                 return allYears?.map(({ year, facets }) => {
                     const points = facets[0].buckets.map(({ id, percentage_question }) =>
                         conditionDiffs[id].map((d) => d * percentage_question)
@@ -89,14 +88,16 @@ export const ToolsArrowsChart = ({ data, activeCategory }) => {
         [data]
     )
 
+    items = compact(items)
+
     const scales = useMemo(() => {
-        const xExtent = extent(flatten(items).map((d) => d[0]))
+        const xExtent = extent(flatten(items).map((d) => d?.[0]))
         const maxAbsX = max(xExtent.map(Math.abs))
         const xScale = scaleLinear()
             .domain([-maxAbsX, maxAbsX])
             .range([20, dms.width - 20])
 
-        const yExtent = extent(flatten(items).map((d) => d[1]))
+        const yExtent = extent(flatten(items).map((d) => d?.[1]))
         const maxAbsY = max(yExtent.map(Math.abs))
         const yScale = scaleLinear()
             .domain([-maxAbsY, maxAbsY])
