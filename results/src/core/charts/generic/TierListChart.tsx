@@ -163,7 +163,7 @@ const TierItem = ({
     currentCategory
 }: TierItemProps) => {
     const imageSrc = customImages[id]
-        ? `/images/logos/${id}.${customImages[id]}`
+        ? `https://assets.devographics.com/projects/${id}.${customImages[id]}`
         : `https://bestofjs.org/logos/${id}.svg`
 
     const isHighlighted = currentCategory ? currentCategory === categoryId : true

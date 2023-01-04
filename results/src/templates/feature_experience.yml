@@ -4,7 +4,7 @@ keysPath: "dataAPI.survey.${id}.experience.keys"
 entityPath: dataAPI.survey.${id}.entity
 blockNamespace: features
 chartNamespace: features
-enableCustomization: true
+# enableCustomization: true
 hasComments: true
 hasSponsor: true
 query: >

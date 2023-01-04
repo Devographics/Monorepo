@@ -5,11 +5,23 @@ import { runQuery } from 'core/blocks/explorer/data'
 import Loading from 'core/blocks/explorer/Loading'
 import { usePageContext } from 'core/helpers/pageContext'
 
-const DynamicDataLoader = ({ block, setSeriesCount, setUnits, completion, defaultBuckets, children, series, setBuckets }) => {
+const doNothing = a => a
+
+const DynamicDataLoader = ({
+    block,
+    processBuckets = doNothing,
+    setSeriesCount,
+    setUnits,
+    completion,
+    defaultBuckets,
+    children,
+    series,
+    setBuckets
+}) => {
     const [isLoading, setIsLoading] = useState(false)
 
     const context = usePageContext()
-    
+
     const { currentEdition } = context
     const { year } = currentEdition
 
@@ -38,11 +50,21 @@ const DynamicDataLoader = ({ block, setSeriesCount, setUnits, completion, defaul
             const newBuckets = Object.values(seriesData).map(
                 seriesItem => seriesItem?.year?.facets[0]?.buckets
             )
+
+            /*
+
+            In case buckets have a processing function applied (for example to merge them into
+            fewer buckets), apply it now to the new buckets
+
+            */
+            const bucketsArrays = [defaultBuckets, ...newBuckets.map(processBuckets)]
+
             const mergedBuckets = mergeBuckets({
-                bucketsArrays: [defaultBuckets, ...newBuckets],
+                bucketsArrays,
                 completion
             })
-            // percentage_question is the only unit that lets us 
+
+            // percentage_question is the only unit that lets us
             // meaningfully compare values across series
             setUnits('percentage_question')
             setBuckets(mergedBuckets)

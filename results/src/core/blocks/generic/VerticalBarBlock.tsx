@@ -33,7 +33,7 @@ export const addNoAnswerBucket = ({ buckets, completion }) => {
     return [...buckets, noAnswerBucket]
 }
 
-const getLegends = ({ theme, series, getString, currentYear }) => {
+export const getLegends = ({ theme, series, getString, currentYear }) => {
     if (series.length === 0) {
         return []
     } else {
@@ -98,8 +98,6 @@ const VerticalBarBlock = ({
     const theme = useTheme()
     const { getString } = useI18n()
 
-    console.log(block.id)
-    console.log(JSON.stringify(data, null, 2))
     if (!data) {
         throw new Error(`VerticalBarBlock: Missing data for block ${block.id}.`)
     }
@@ -129,7 +127,6 @@ const VerticalBarBlock = ({
         : facets[0].buckets
     const { total } = completion
 
-    console.log(buckets_)
     // contains the filters that define the series
     const [series, setSeries] = useState([])
     // how many series to display (only updated after data is loaded)

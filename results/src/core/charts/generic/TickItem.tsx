@@ -68,6 +68,14 @@ export const getBucketLabel = args => {
     let label
     const s = getString(`options.${i18nNamespace}.${id}`)
 
+    console.log('////')
+    console.log(i18nNamespace)
+    console.log(id)
+    console.log(s)
+    console.log(providedLabel)
+    console.log(entity)
+    console.log(shouldTranslate)
+
     if (providedLabel) {
         label = providedLabel
     } else if (entity?.name) {

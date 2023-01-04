@@ -702,7 +702,7 @@
 - name: United Arab Emirates
   alpha-3: ARE
   country-code: '784'
-- name: United Kingdom of Great Britain and Northern Ireland
+- name: United Kingdom
   alpha-3: GBR
   country-code: '826'
 - name: United States of America
@@ -720,7 +720,7 @@
 - name: Vanuatu
   alpha-3: VUT
   country-code: '548'
-- name: Venezuela (Bolivarian Republic of)
+- name: Venezuela
   alpha-3: VEN
   country-code: '862'
 - name: Viet Nam

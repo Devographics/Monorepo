@@ -61,24 +61,57 @@ const colors = {
     orangeDarker: '#BE780F',
     yellowDark: '#ECCB55',
     yellowDarker: '#D2AA19',
+
+    blueGreenLightest: '#C9FFF2',
+    blueGreenLighter: '#A1FFE8',
+    blueGreenLight: '#75FBDA',
+    blueGreen: '#51F2CB',
+    blueGreenDark: '#34E1B7',
+    blueGreenDarker: '#23D2A8',
+    blueGreenDarkest: '#16AF8A',
+
+    lilacLighter: '#E9DCFF',
+    lilacLight: '#DCC7FF',
+    lilac: '#BD95FF',
+    lilacDark: '#B896EF',
+    lilacDarker: '#A17AE0',
+    lilacDarkerer: '#8A69BE',
+    lilacDarkest: '#70559A',
 }
 
 const velocity = [
-    '#173E48',
-    '#064151',
-    '#074B5C',
-    '#07657D',
-    '#0F7C98',
-    '#129DC0',
-    '#21B1D6',
-    '#38D6FE',
-    '#67E0FF',
-    '#AEEFFF',
-    '#D3F6FF',
-    '#E5FFFA',
-    '#BCFFF3',
-    '#9FFFEE'
+    '#44168E',
+    '#491D90',
+    '#6532B7',
+    '#A17AE0',
+    '#AD84EF',
+    '#CAAAFF',
+    '#DCC7FF',
+    '#E9DCFF',
+    '#F8DCFF',
+    '#FFB5F3',
+    '#F494E5',
+    '#F176DD',
+    '#EF55D6',
+    '#DE35C3'
 ]
+
+// const velocity = [
+//     '#06513F',
+//     '#087258',
+//     '#0C8C6D',
+//     '#16AF8A',
+//     '#23D2A8',
+//     '#34E1B7',
+//     '#51F2CB',
+//     '#75FBDA',
+//     '#A1FFE8',
+//     '#C9FFF2',
+//     '#D3F6FF',
+//     '#AFF1FF',
+//     '#7AE6FE',
+//     '#48DEFF'
+// ]
 
 const arrowsVelocity = [
     colors.purple,
@@ -95,23 +128,6 @@ const arrowsVelocity = [
 ]
 
 const tiers = [colors.red, '#ffc38a', '#feff8e', '#c3ff89']
-
-// const velocity = [
-//     '#1734BF',
-//     '#3633B7',
-//     '#5432AE',
-//     '#7331A6',
-//     '#91319D',
-//     '#B03095',
-//     '#CE2F8C',
-//     '#ED2E84',
-//     '#FB549F',
-//     '#FE79B4',
-//     '#FFA6CE',
-//     '#FFCEE4',
-//     '#FFE3F0',
-//     '#FFEFFF'
-// ]
 
 const distinct = [
     colors.indigo,
@@ -130,22 +146,22 @@ const distinct = [
     colors.kaki
 ]
 
-const stateOfCSSThemeColors: DefaultTheme['colors'] = {
+const stateOfJSThemeColors: DefaultTheme['colors'] = {
     background: '#272325',
     backgroundTrans: 'rgb(39, 35, 37, 0.3)',
-    backgroundAlt3: '#2c3033',
-    backgroundBackground: colors.electricBlueDarkest,
+    backgroundAlt3: '#27242E',
+    backgroundBackground: '#3A3444',
     backgroundForeground: colors.navyLighter,
-    backgroundAlt: '#314448',
+    backgroundAlt: '#3A3444',
     backgroundAltTrans: 'rgba(49, 68, 72, 0.4)',
-    backgroundAlt2: colors.electricBlueDarkerer,
+    backgroundAlt2: colors.lilacDarkest,
     backgroundInverted: '#FFF6E6',
     backgroundInvertedAlt: '#E3D8C4',
     text: colors.white,
     textAlt: 'rgba(255, 246, 229, 0.5)',
     textInverted: '#272325',
     textHighlight: colors.greenDark,
-    link: colors.electricBlue,
+    link: colors.lilac,
     linkActive: '#5C63E0',
     contrast: '#0bdf67',
     border: '#FFF6E6',
@@ -155,8 +171,8 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
     no_answer: [colors.greyLight, colors.greyLightest],
     barColors: [
         {
-            color: colors.electricBlue,
-            gradient: [colors.electricBlueDarkerer, colors.electricBlueDark]
+            color: colors.lilacDark,
+            gradient: [colors.lilacDarkerer, colors.lilacDark]
         },
         { color: colors.pink, gradient: [colors.pinkDark, colors.pink] },
         { color: colors.green, gradient: [colors.green, colors.greenLighter] },
@@ -164,8 +180,8 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
         { color: colors.orange, gradient: [colors.orangeDarker, colors.orangeLight] }
     ],
     barChart: {
-        primary: colors.electricBlue,
-        primaryGradient: [colors.electricBlueDarkerer, colors.electricBlueDark],
+        primary: colors.lilacDark,
+        primaryGradient: [colors.lilacDarkerer, colors.lilacDark],
         // secondary: colors.yellowLight,
         // secondaryGradient: [colors.yellow, colors.yellowLight],
         secondary: colors.pink,
@@ -173,9 +189,9 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
     },
     ranges: {
         tools: {
-            would_use: [colors.electricBlueDarkerer, colors.electricBlueDarker],
+            would_use: [colors.lilacDarkerer, colors.lilacDark],
             would_not_use: [colors.red, colors.redLight],
-            interested: [colors.electricBlue, colors.electricBlueLight],
+            interested: [colors.lilac, colors.lilacLight],
             not_interested: [colors.redLighter, colors.redLightest],
             never_heard: [colors.greyLight, colors.greyLightest]
         },
@@ -188,8 +204,8 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
             monorepo_tools: colors.navyLighter
         },
         features: {
-            used: [colors.electricBlueDarker, colors.electricBlueDark],
-            heard: [colors.electricBlue, colors.electricBlueLight],
+            used: [colors.lilacDarkest, colors.lilacDarkerer],
+            heard: [colors.lilacDark, colors.lilac],
             never_heard: [colors.grey, colors.greyLight]
         },
         features_categories: {
@@ -271,4 +287,4 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
     tiers
 }
 
-export default stateOfCSSThemeColors
+export default stateOfJSThemeColors
