@@ -26,6 +26,10 @@ export const SurveyProvider = ({
   );
 };
 
+/**
+ *
+ * @returns The survey definition WITHOUT REACT COMPONENTS
+ */
 export const useSurvey = () => {
   const context = useContext(SurveyContext);
   if (!context) {

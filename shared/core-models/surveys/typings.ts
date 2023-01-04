@@ -142,10 +142,21 @@ export interface SurveyDocument {
   domain?: string;
   tags?: string[];
   emailOctopus: EOConfig;
+  colors: {
+    primary: string;
+    secondary: string;
+    text: string;
+    background: string;
+    backgroundSecondary: string;
+  }
   // style
+  /** @deprecated old syntax*/
   bgColor: string;
+  /** @deprecated old syntax*/
   textColor: string;
+  /** @deprecated old syntax*/
   linkColor: string;
+  /** @deprecated old syntax*/
   hoverColor: string;
   //
   shareUrl: string;

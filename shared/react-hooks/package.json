@@ -1,5 +1,5 @@
 {
-  "name": "@vulcanjs/react-hooks",
+  "name": "@devographics/react-hooks",
   "version": "0.8.1",
   "description": "Connect to an existing Vulcan backend using hooks",
   "main": "./dist/index.js",

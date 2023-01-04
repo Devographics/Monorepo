@@ -3,23 +3,19 @@ import SurveySectionContents from "./SurveySectionContents";
 import SurveyHeadTags from "../SurveyHeadTags";
 import SurveyMessage from "../SurveyMessage";
 import { useSurveyResponseSectionParams } from "../hooks";
-import surveys from "~/surveys";
+import { useSurvey } from "../SurveyContext/Provider";
 
 const SurveySection = () => {
-  let {
-    responseId,
-    sectionNumber = 1,
-    slug,
-    year,
-  } = useSurveyResponseSectionParams();
-  // TODO: use a "SurveyContext" that is populated at layout level with the
-  // current survey, and use "useCurrentSurvey"
-  // This needs to wait for the incoming layout update of Next.js
-  const survey = surveys.find(
-    (s) => s.prettySlug === slug && s.year === Number(year)
-  );
-
-  if (!survey) throw new Error(`Survey with slug ${slug} not found`);
+  let { responseId, sectionNumber = 1 } = useSurveyResponseSectionParams();
+  const survey = useSurvey();
+  // CODE to get the React components too:
+  // import surveys from "~/surveys";
+  //const survey = surveys.find(
+  //  (s) =>
+  //    s.prettySlug === surveyDefinition.slug &&
+  //    s.year === Number(surveyDefinition.year)
+  //);
+  //if (!survey) throw new Error(`Survey with slug ${slug} not found`);
 
   const surveyOutline = survey.outline;
   const sectionIndex = sectionNumber - 1;

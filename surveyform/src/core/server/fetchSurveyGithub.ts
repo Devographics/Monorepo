@@ -28,9 +28,11 @@ async function githubYamlAsJson(res: Response) {
 export async function fetchSurveyGithub(slug: SerializedSurveyDocument["slug"], year: string) {
     const githubAuthorization = `Bearer ${serverConfig.githubToken}`
     const safeSlug = slug?.replaceAll("-", "_")
-    const folder = `${safeSlug}/${year}`
-    const contentsRoot = `${apiRoot}/${org}/${repo}/contents/${folder}`
-    const configUrl = `${contentsRoot}/config.yml`
+    const surveyFolder = `${safeSlug}`
+    const yearlyFolder = `${surveyFolder}/${year}`
+    const contentsRoot = `${apiRoot}/${org}/${repo}/contents`
+    const configUrl = `${contentsRoot}/${yearlyFolder}/config.yml`
+    const commonConfigUrl = `${contentsRoot}/${surveyFolder}/config.yml`
     const configRes = await fetch(configUrl, {
         headers: {
             "Authorization": githubAuthorization
@@ -38,21 +40,32 @@ export async function fetchSurveyGithub(slug: SerializedSurveyDocument["slug"], 
     })
     if (!configRes.ok) {
         console.debug("Fetched url", configUrl)
-        throw new Error(`Cannot fetch survey config for slug "${slug}" and year "${year}, error ${configRes.status}"`)
+        throw new Error(`Cannot fetch survey config for slug "${slug}" and year "${year}", error ${configRes.status}"`)
     }
-    const questionsRes = await fetch(`${contentsRoot}/questions.yml`, {
+    const questionsRes = await fetch(`${contentsRoot}/${yearlyFolder}/questions.yml`, {
         headers: {
             "Authorization": githubAuthorization
         }
     })
     if (!questionsRes.ok) {
-        throw new Error(`Cannot fetch survey config for slug "${slug}" and year "${year}, error ${configRes.status}"`)
+        throw new Error(`Cannot fetch survey questions for slug "${slug}" and year "${year}, error ${configRes.status}"`)
+    }
+    const commonConfigRes = await fetch(commonConfigUrl, {
+        headers: {
+            "Authorization": githubAuthorization
+        }
+
+    })
+    if (!commonConfigRes.ok) {
+        console.warn("No common config for survey", slug)
     }
     const surveyConfig = await githubYamlAsJson(configRes)
     const questionsConfig = await githubYamlAsJson(questionsRes)
+    const commonConfig = commonConfigRes ? await githubYamlAsJson(commonConfigRes) : {}
     //console.debug({ surveyConfig, questionsConfig })
 
     const survey = {
+        ...commonConfig,
         ...surveyConfig,
         outline: questionsConfig
     } as SerializedSurveyDocument

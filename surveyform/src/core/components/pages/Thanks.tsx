@@ -1,65 +1,14 @@
 "use client";
-import React from "react";
 import ShareSite from "../share/ShareSite";
 import { getSurveyPath } from "~/modules/surveys/getters";
 import Score from "../common/Score";
-import { useSingle } from "@vulcanjs/react-hooks";
-import { Response } from "~/modules/responses";
-import { ResponseFragmentWithRanking } from "~/modules/responses/fragments";
-import { useSurveyResponseParams } from "../survey/hooks";
-import surveys from "~/surveys";
 import Image from "next/image";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import { getSurveyImageUrl } from "~/surveys/getSurveyImageUrl";
 import Link from "next/link";
 import { ResponseDocument, SurveyDocument } from "@devographics/core-models";
-import { Loading } from "~/core/components/ui/Loading";
 
-const Thanks = () => {
-  const { responseId, slug, year } = useSurveyResponseParams();
-  const readOnly = responseId === "read-only";
-
-  const survey = surveys.find(
-    (s) => s.prettySlug === slug && s.year === Number(year)
-  );
-
-  if (!survey) {
-    throw new Error("Could not find survey.");
-  }
-
-  const props = { survey };
-  return readOnly ? (
-    <ThanksInner {...props} readOnly={readOnly} />
-  ) : (
-    <ThanksWithResponse {...props} responseId={responseId} />
-  );
-};
-
-const ThanksWithResponse = ({
-  survey,
-  responseId,
-}: {
-  survey: SurveyDocument;
-  responseId: string;
-}) => {
-  const data = useSingle({
-    model: Response,
-    fragment: survey && ResponseFragmentWithRanking(survey),
-    input: { id: responseId },
-  });
-  const {
-    document,
-    loading,
-  }: { document: ResponseDocument; loading: boolean } = data;
-
-  if (loading) {
-    return <Loading />;
-  }
-
-  return <ThanksInner survey={survey} response={document} />;
-};
-
-const ThanksInner = ({
+export const Thanks = ({
   survey,
   response,
   readOnly,

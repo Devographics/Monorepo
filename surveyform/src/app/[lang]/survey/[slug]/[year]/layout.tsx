@@ -48,13 +48,13 @@ export default async function SurveyLayout({
   }
 
   // Apply survey colors
-  const { bgColor, textColor, linkColor, hoverColor } = survey;
+  const { colors } = survey;
   const style = `
 :root {
-  --bg-color: ${bgColor};
-  --text-color: ${textColor};
-  --link-color: ${linkColor};
-  --hover-color: ${hoverColor};
+  --bg-color: ${/*bgColor*/ colors.background};
+  --text-color: ${/*textColor*/ colors.text};
+  --link-color: ${/*linkColor*/ colors.primary};
+  --hover-color: ${/*hoverColor*/ colors.secondary};
 }
   `;
 
