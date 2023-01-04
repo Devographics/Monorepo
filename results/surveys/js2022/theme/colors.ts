@@ -75,8 +75,10 @@ const colors = {
     lilac: '#BD95FF',
     lilacDark: '#B896EF',
     lilacDarker: '#A17AE0',
-    lilacDarkerer: '#8A69BE',
-    lilacDarkest: '#70559A',
+    lilacDarkerer: '#815CBF',
+    lilacDarkest: '#6A499D',
+    lilacDarkest2: '#604B81',
+    lilacDarkest3: '#503E6A',
 }
 
 const velocity = [
@@ -154,7 +156,7 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
     backgroundForeground: colors.navyLighter,
     backgroundAlt: '#3A3444',
     backgroundAltTrans: 'rgba(49, 68, 72, 0.4)',
-    backgroundAlt2: colors.lilacDarkest,
+    backgroundAlt2: colors.lilacDarkest2,
     backgroundInverted: '#FFF6E6',
     backgroundInvertedAlt: '#E3D8C4',
     text: colors.white,
