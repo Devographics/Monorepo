@@ -140,9 +140,16 @@
   
 # Render
 
-- name: Front-end engineering. Web3. Fresh vibes. 
+- name: |
+    RenderATL: the largest tech conference with a dedicated Web & Mobile Software Engineering track
+  
   id: renderatl
-  description: RenderATL is the four-day software engineering conference & music festival with 50+ expert speakers in tech covering upcoming and current best software engineering practices, web3, engineering leadership, accessibility practices, and more.
+  description: |
+    Attend the ultimate three-day tech conference & cultural festival featuring Sarah Drasner,  Mark Techson, Scott Toliniski, 
+    Charlie Gerard, and 80+ additional speakers & workshops with tracks for Design/CSS,
+    Leadership & Entrepreneurship, Product & Project Management, Web/Mobile Software Engineering, 
+    and so much more! Use code “StateOfJS to receive $50 off each ticket! 
+    
   url: http://www.renderatl.com/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
   image: /images/resources/render.png
   teacher: Atlanta, Georgia
