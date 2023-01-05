@@ -764,10 +764,10 @@
           variables:
             limit: 5
 
-        # - id: sara_vieira
-        #   template: picks
-        #   variables:
-        #     url: https://twitter.com/0xca0a
+        - id: ryan_carniato
+          template: picks
+          variables:
+            url: https://astro.build/
 
         - template: happiness
           variables:
@@ -823,10 +823,10 @@
             fieldId: tools_others
             options: { limit: 15 }
 
-    # - id: mark_erikson
-    #   template: picks
-    #   variables:
-    #     url: https://twitter.com/ryancarniato
+    - id: theo_browne
+      template: picks
+      variables:
+        url: https://trpc.io/
 
     - id: date_management
       year: 2022
@@ -1379,8 +1379,8 @@
     - id: conclusion
       template: conclusion
       variables:
-        author: shawn_wang
-        entities: '"shawn_wang"'
+        author: sarah_drasner
+        entities: '"sarah_drasner"'
 
     - id: conclusion_newsletter
       blockType: NewsletterBlock
