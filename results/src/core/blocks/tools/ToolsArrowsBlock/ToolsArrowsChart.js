@@ -13,6 +13,7 @@ import labelOffsets from './toolsArrowsLabelOffsets.js'
 import { getVelocity, getVelocityColor, getVelocityColorScale } from './helpers.js'
 import { Delaunay } from 'd3-delaunay'
 import compact from 'lodash/compact.js'
+import round from 'lodash/round.js'
 
 const { toolsCategories } = variables
 
@@ -82,7 +83,7 @@ export const ToolsArrowsChart = ({ data, activeCategory }) => {
                     const points = facets[0].buckets.map(({ id, percentage_question }) =>
                         conditionDiffs[id].map((d) => d * percentage_question)
                     )
-                    return [sum(points.map((d) => d[0])), sum(points.map((d) => d[1])), year]
+                    return [round(sum(points.map((d) => d[0])),3), round(sum(points.map((d) => d[1])),3), year, tool.id]
                 })}
             ),
         [data]

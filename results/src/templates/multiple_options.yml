@@ -38,6 +38,8 @@ query: >
                                 github {
                                     url
                                 }
+                                twitterName
+                                mastodonName
                             }
                         }
                     }

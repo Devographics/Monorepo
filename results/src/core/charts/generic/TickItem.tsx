@@ -19,12 +19,14 @@ export const Text = ({
     label,
     description,
     tickRotation,
+    index,
     i18nNamespace
 }: {
     hasLink: boolean
     label: string
     description: string
     tickRotation?: number
+    index?: number
     i18nNamespace?: string
 }) => {
     if (!label) {
@@ -52,10 +54,12 @@ export const Text = ({
 
     const component = <text {...textProps}>{shortLabel ?? label}</text>
 
+    const textContents = `#${index}: ${description ?? label}`
+
     return (
         <TooltipComponent
             trigger={component}
-            contents={description ?? label}
+            contents={textContents}
             asChild={true}
             clickable={hasLink}
         />
@@ -67,14 +71,6 @@ export const getBucketLabel = args => {
     const { shouldTranslate, i18nNamespace, id, entity, shortenLabel = false, label: providedLabel } = args
     let label
     const s = getString(`options.${i18nNamespace}.${id}`)
-
-    console.log('////')
-    console.log(i18nNamespace)
-    console.log(id)
-    console.log(s)
-    console.log(providedLabel)
-    console.log(entity)
-    console.log(shouldTranslate)
 
     if (providedLabel) {
         label = providedLabel
@@ -94,7 +90,7 @@ export const getBucketLabel = args => {
 export const TickItem = (tick: TickItemProps) => {
     const { getString } = useI18n()
 
-    const { x, y, value, shouldTranslate, i18nNamespace, entity, tickRotation, label } = tick
+    const { x, y, value, shouldTranslate, i18nNamespace, entity, tickRotation, label, itemCount, tickIndex } = tick
 
     let link,
         description = tick.description
@@ -112,10 +108,13 @@ export const TickItem = (tick: TickItemProps) => {
         }
     }
 
+    const index = itemCount - tickIndex
+
     const textProps = {
         label: tickLabel,
         description,
-        tickRotation
+        tickRotation,
+        index,
     }
 
     return (

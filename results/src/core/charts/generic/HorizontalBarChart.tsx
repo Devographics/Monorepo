@@ -166,6 +166,7 @@ const HorizontalBarChart = ({
                                 shouldTranslate={translateData}
                                 entity={buckets.find(b => b.id === tick.value)?.entity}
                                 label={buckets.find(b => b.id === tick.value)?.label}
+                                itemCount={buckets.length}
                                 {...tick}
                             />
                         )
