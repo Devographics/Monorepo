@@ -24,6 +24,8 @@ type Entity {
 
     apiOnly: Boolean
 
+    mastodonName: String
+
     twitterName: String
     twitter: Twitter
 
