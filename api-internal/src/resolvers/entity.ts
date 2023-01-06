@@ -1,8 +1,10 @@
-import { GitHub, Entity, RequestContext } from '../types'
+import { Entity } from '@devographics/core-models'
+import { GitHub, RequestContext } from '../types'
 import projects from '../data/bestofjs.yml'
 import { fetchMdnResource, fetchTwitterUser } from '../external_apis'
 import { useCache } from '../caching'
 import { getEntity } from '../entities'
+import compact from 'lodash/compact.js'
 
 const getSimulatedGithub = (id: string): GitHub | null => {
     const project = projects.find((p: Entity) => p.id === id)
@@ -66,7 +68,7 @@ export default {
                 funcOptions: { twitterName: entity.twitterName }
             })
 
-            return twitter
+            return { ...twitter, url: `https://twitter.com/${entity.twitterName}` }
         },
         homepage: async (entity: Entity, args: any, context: RequestContext) => {
             const { homepage } = entity
@@ -86,6 +88,15 @@ export default {
         company: async (entity: Entity, args: any, context: RequestContext) => {
             const company = entity.companyName && getEntity({ id: entity.companyName })
             return company
+        },
+        mastodon: async (entity: Entity, args: any, context: RequestContext) => {
+            if (!entity || !entity.mastodonName) {
+                return
+            }
+            const username = entity.mastodonName
+            const [userName, server] = compact(username.split('@'))
+            const url = `https://${server}/@${userName}`
+            return { username, url }
         }
     }
 }

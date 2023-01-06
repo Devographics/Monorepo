@@ -24,6 +24,9 @@ type Entity {
 
     apiOnly: Boolean
 
+    mastodonName: String
+    mastodon: Mastodon
+
     twitterName: String
     twitter: Twitter
 
@@ -46,6 +49,15 @@ Homepage Info
 """
 type Homepage {
     name: String
+    url: String
+}
+
+
+"""
+Mastodon Info
+"""
+type Mastodon {
+    username: String
     url: String
 }
 
