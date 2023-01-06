@@ -1,6 +1,8 @@
 type Twitter {
     url: String
+    # deprecated
     userName: String
+    name: String
     avatarUrl: String
     id: ID
     description: String

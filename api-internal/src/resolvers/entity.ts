@@ -58,17 +58,31 @@ export default {
                 return
             }
         },
-        twitter: async (entity: Entity, args: any, context: RequestContext) => {
+        twitter: async (entity: Entity, args: any, context: RequestContext, info: any) => {
             if (!entity || !entity.twitterName) {
                 return
             }
-            const twitter = await useCache({
-                func: fetchTwitterUser,
-                context,
-                funcOptions: { twitterName: entity.twitterName }
-            })
 
-            return { ...twitter, url: `https://twitter.com/${entity.twitterName}` }
+            // find out which fields on the twitter object are being queried for
+            const queriedFields = info?.fieldNodes?.[0]?.selectionSet?.selections.map(
+                field => field?.name?.value
+            )
+            // figure out if the request includes API fields (e.g. any field besides url and name)
+            const hasAPIFields = queriedFields.some(f => !['url', 'name'].includes(f))
+
+            const twitterAPIData = hasAPIFields
+                ? await useCache({
+                      func: fetchTwitterUser,
+                      context,
+                      funcOptions: { twitterName: entity.twitterName }
+                  })
+                : {}
+
+            return {
+                ...twitterAPIData,
+                name: entity.twitterName,
+                url: `https://twitter.com/${entity.twitterName}`
+            }
         },
         homepage: async (entity: Entity, args: any, context: RequestContext) => {
             const { homepage } = entity
@@ -93,10 +107,34 @@ export default {
             if (!entity || !entity.mastodonName) {
                 return
             }
-            const username = entity.mastodonName
-            const [userName, server] = compact(username.split('@'))
+            const name = entity.mastodonName
+            const [userName, server] = compact(name.split('@'))
             const url = `https://${server}/@${userName}`
-            return { username, url }
+            return { name, url }
+        },
+        youtube: async (entity: Entity, args: any, context: RequestContext) => {
+            const url =
+                entity?.youtubeUrl ||
+                (entity?.homepage?.includes('youtube') ? entity?.homepage : null)
+            if (url) {
+                return { url }
+            } else {
+                return
+            }
+        },
+        twitch: async (entity: Entity, args: any, context: RequestContext) => {
+            if (!entity) {
+                return
+            }
+            const { twitchName, homepage } = entity
+            const url =
+                (twitchName && `https://www.twitch.tv/${twitchName}`) ||
+                (entity?.homepage?.includes('twitch') && entity.homepage)
+            if (url) {
+                return { name: twitchName, url }
+            } else {
+                return
+            }
         }
     }
 }
