@@ -22,8 +22,18 @@ export interface Entity {
   caniuse?: any
   mdn?: any
 
+  mastodonName: string
+  mastodon: any
+
   twitterName: string
   twitter: any
+
+  twitchName: string
+  twitch: any
+
+  youtubeName: string
+  youtubeUrl: string
+  youtube: any
 
   companyName?: string
   company?: Entity
