@@ -742,6 +742,10 @@
           template: tool_experience
           year: 2022
  
+        - id: build_tools_resources
+          items: [fm-web-components]
+          template: recommended_resources
+
     - id: monorepo_tools
       path: /monorepo-tools
       blocks:
@@ -802,6 +806,10 @@
           template: tool_experience
           year: 2021
 
+        - id: monorepo_resources
+          items: [fm-fullstack-app-next, fm-servers-node-js]
+          template: recommended_resources
+          
 - id: tools_others
   path: /other-tools
   blocks:
@@ -1079,6 +1087,10 @@
             fieldId: usage
             options: { limit: 15 }
 
+    - id: usage_resources
+      items: [fm-algorithms, fm-js-patterns]
+      template: recommended_resources
+
 - id: resources
   path: /resources
   blocks:
@@ -1147,6 +1159,7 @@
     #     url: https://vitejs.dev/
 
     - id: video_creators
+      # blockType: PeopleBlock
       blockNamespace: resources
       chartNamespace: video_creators
       tabId: tabs.main_answers
@@ -1155,6 +1168,7 @@
         fieldId: resources
       variants:
         - id: video_creators_others
+          # blockType: PeopleBlock
           defaultUnits: count
           blockNamespace: resources
           chartNamespace: video_creators
@@ -1187,6 +1201,7 @@
       blockNamespace: resources
       chartNamespace: people
       template: multiple_options
+      blockType: PeopleBlock
       variables:
         options: { limit: 40 }
         fieldId: resources
@@ -1231,10 +1246,10 @@
     - id: js_ecosystem_changing_to_fast
       template: opinion
 
-    # - id: alyssa_nicoll
-    #   template: picks
-    #   variables:
-    #     url: https://www.twitch.tv/broccodev
+    - id: sebastien_lorber
+      template: picks
+      variables:
+        url: https://www.remotion.dev/
 
     - id: top_js_pain_points
       translateData: true
@@ -1288,8 +1303,8 @@
       variables:
         fieldId: state_of_js
 
-    - id: tools_others_resources
-      items: [fm-javascript]
+    - id: opinions.k_resources
+      items: [fm-javascript, fm-js-fundamentals]
       template: recommended_resources
 
 - id: awards

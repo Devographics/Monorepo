@@ -117,17 +117,17 @@ const velocity = [
 ]
 
 const arrowsVelocity = [
-    colors.purple,
-    colors.purpleLight,
-    colors.purpleLighter,
-    colors.purpleLightest,
-    colors.tealLightest,
-    colors.tealLighter,
-    colors.tealLight,
-    colors.teal,
-    colors.tealDark,
-    colors.tealDarker,
-    colors.tealDarkest,
+    '#AD84EF',
+    '#CAAAFF',
+    '#DCC7FF',
+    '#E9DCFF',
+    '#C9FFF2',
+    '#A1FFE8',
+    '#75FBDA',
+    '#51F2CB',
+    '#34E1B7',
+    '#23D2A8',
+    '#16AF8A',
 ]
 
 const tiers = [colors.red, '#ffc38a', '#feff8e', '#c3ff89']

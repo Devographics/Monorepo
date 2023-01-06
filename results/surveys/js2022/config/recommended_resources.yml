@@ -2,11 +2,11 @@
 
 - name: Write Professional, Modern JavaScript
   id: fm-javascript
-  description: From JavaScript foundations, all the way to Hardcore Functional JavaScript, find out how far you can go with your JavaScript abilities!
-  url: https://frontendmasters.com/learn/javascript/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
-  image: https://static.frontendmasters.com/assets/teachers/gandolfo/thumb.webp
-  teacher: Bianca Gandolfo
-  company: Thumbtack
+  description: Take your first steps into the wide world of JavaScript and walk away with the core skills needed to become a professional JavaScript programmer!
+  url:  https://frontendmasters.com/courses/javascript-first-steps/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
+  image: https://static.frontendmasters.com/assets/teachers/vakil/thumb@2x.webp
+  teacher: Anjana Vakil
+  company: Software Engineer & Educator
 
 - name: 'JavaScript: The New Hard Parts'
   id: fm-javascript-new-hard-parts
@@ -57,10 +57,10 @@
   teacher: Sarah Drasner
   company: Google
   
-- name: API Design in Node.js, v3
-  id: fm-api-design-nodejs-v3
-  description: Design and build APIs in Node.js from the ground up! You'll plan your routes and model data for real-world applications. 
-  url: https://frontendmasters.com/courses/api-design-nodejs-v3/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
+- name: API Design in Node.js, v4
+  id: fm-api-design-nodejs-v4
+  description: Design and build APIs in Node.js from the ground up! You'll plan your routes and model data for real-world applications using Express, Prisma, and TypeScript.
+  url: https://frontendmasters.com/courses/api-design-nodejs-v4/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
   image: https://static.frontendmasters.com/assets/teachers/moss/thumb@2x.webp
   teacher: Scott Moss
   company: Netflix
@@ -129,6 +129,65 @@
   teacher: Kent C. Dodds
   company: Remix
   
+- name: The Last Algorithms Course You'll Need
+  id: fm-algorithms
+  description: |
+    You'll learn big o time complexity, fundamental data structures like arrays, lists, trees, graphs, and maps, and searching and sorting algorithms.
+  url: https://frontendmasters.com/courses/algorithms/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
+  image: https://static.frontendmasters.com/assets/teachers/theprimeagen/thumb@2x.webp
+  teacher: ThePrimeagen
+  company: Netflix
+  
+- name: Build a Fullstack App from Scratch (feat Next.js)
+  id: fm-fullstack-app-next
+  description: |
+    You’ll build a music app with features like playlists, audio player, shuffle, and more! Use a modern stack of tools: React, Next.js, Typescript, and Postgres. 
+  url: https://frontendmasters.com/courses/fullstack-app-next/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
+  image: https://static.frontendmasters.com/assets/teachers/moss/thumb@2x.webp
+  teacher: Scott Moss
+  company: Netflix
+  
+  
+- name: A Tour of JavaScript & React Patterns
+  id: fm-js-patterns
+  description: |
+    You’ll get an overview of more traditional design patterns with JavaScript, such as the Singleton and Proxy patterns. Then see React patterns such as the Hooks and Higher Order Component patterns.
+  url: https://frontendmasters.com/courses/tour-js-patterns/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
+  image: https://static.frontendmasters.com/assets/teachers/hallie/thumb@2x.webp
+  teacher: Lydia Hallie
+  # company: 
+  
+  
+- name: Web Components
+  id: fm-web-components
+  description: |
+    Learn where to find excellent Web Components to build web apps. You’ll also learn how to create your own custom components using JavaScript and libraries like Lit that will help you make them faster!
+  url: https://frontendmasters.com/courses/web-components/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
+  image: https://static.frontendmasters.com/assets/teachers/rupert/thumb@2x.webp
+  teacher: Dave Rupert
+  company: Paravel
+  
+  
+- name: The Hard Parts of Servers & Node.js
+  id: fm-servers-node-js
+  description: |
+    In this course you’ll go under the hood of Node.js in two contrasting ways - by understanding how to develop servers from intuitive first-principles (HTTP, TCP/IP, Ports, Loopback, SSH) and by understanding the JavaScript features that make up Node.
+  url: https://frontendmasters.com/courses/servers-node-js/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
+  image: https://static.frontendmasters.com/assets/teachers/sentance/thumb@2x.webp
+  teacher: Will Sentance
+  company: Codesmith
+  
+  
+- name: The Hard Parts of Functional JavaScript
+  id: fm-js-fundamentals
+  description: |
+    You’ll learn how to wield and manipulate functions to develop more readable, maintainable and manageable codebases. You’ll go under the hood of powerful techniques like: Higher Order Functions, Function Composition, Pure Functions, and Immutability of State.
+  url: https://frontendmasters.com/courses/functional-js-fundamentals/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
+  image: https://static.frontendmasters.com/assets/teachers/sentance/thumb@2x.webp
+  teacher: Will Sentance
+  company: Codesmith
+  
+
 # Reacthathon
 
 - name: Reactathon returns in-person this May

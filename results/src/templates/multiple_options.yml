@@ -29,6 +29,7 @@ query: >
                             percentage_question
                             percentage_survey
                             entity {
+                                id
                                 name
                                 nameClean
                                 nameHtml
@@ -36,10 +37,29 @@ query: >
                                     url
                                 }
                                 github {
+                                    name
                                     url
                                 }
-                                twitterName
-                                mastodonName
+                                twitter {
+                                    name
+                                    url
+                                }
+                                mastodon {
+                                    name
+                                    url
+                                }
+                                npm {
+                                    name
+                                    url
+                                }
+                                youtube {
+                                    name
+                                    url
+                                }
+                                twitch {
+                                    name
+                                    url
+                                }
                             }
                         }
                     }
