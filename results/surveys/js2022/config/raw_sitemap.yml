@@ -524,7 +524,7 @@
             fieldId: rendering_frameworks
 
         - id: rendering_frameworks_resources
-          items: [fm-react, fm-vue]
+          items: [fm-fullstack-app-next, fm-servers-node-js]
           template: recommended_resources
 
         - id: nextjs
@@ -806,9 +806,9 @@
           template: tool_experience
           year: 2021
 
-        - id: monorepo_resources
-          items: [fm-fullstack-app-next, fm-servers-node-js]
-          template: recommended_resources
+        # - id: monorepo_resources
+        #   items: [fm-fullstack-app-next, fm-servers-node-js]
+        #   template: recommended_resources
           
 - id: tools_others
   path: /other-tools
