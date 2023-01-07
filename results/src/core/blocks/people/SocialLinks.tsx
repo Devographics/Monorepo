@@ -12,7 +12,10 @@ import {
 import { spacing, mq, fontSize } from 'core/theme'
 
 export const socialLinks = [
-    // { name: 'homepage', icon: LinkIcon },
+    { 
+        name: 'homepage', 
+        icon: LinkIcon 
+    },
     {
         name: 'github',
         icon: GitHubIcon
@@ -65,6 +68,7 @@ const LinkItem = ({ name, url, icon: Icon, index }) => (
 const SocialLinks_ = styled.div`
     display: flex;
     gap: ${spacing()};
+    align-items: center;
 `
 
 export default SocialLinks

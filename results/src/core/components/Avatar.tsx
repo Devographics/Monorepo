@@ -4,8 +4,8 @@ import styled from 'styled-components'
 
 const getUrl = entity => entity?.homepage?.url || entity?.twitter?.url
 
-const Avatar = ({ entity }) => (
-    <Avatar_ href={getUrl(entity)}>
+const Avatar = ({ entity, size = 60 }) => (
+    <Avatar_ href={getUrl(entity)} size={size}>
         <img src={`https://assets.devographics.com/avatars/${entity.id}.jpg`} alt={entity.name} />
     </Avatar_>
 )
@@ -16,8 +16,8 @@ const Avatar_ = styled.a`
     /* flex-shrink: 0; */
     overflow: hidden;
     border-radius: 100%;
-    height: 60px;
-    width: 60px;
+    height: ${({ size }) => size}px;
+    width: ${({ size }) => size}px;
     img {
         display: block;
         height: 100%;
