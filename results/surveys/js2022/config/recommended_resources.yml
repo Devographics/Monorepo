@@ -181,12 +181,21 @@
 - name: The Hard Parts of Functional JavaScript
   id: fm-js-fundamentals
   description: |
-    You’ll learn how to wield and manipulate functions to develop more readable, maintainable and manageable codebases. You’ll go under the hood of powerful techniques like: Higher Order Functions, Function Composition, Pure Functions, and Immutability of State.
+    You’ll learn how to wield and manipulate functions to develop more readable, maintainable and manageable codebases. Learn about techniques like: Higher Order Functions, Function Composition, Pure Functions, and Immutability.
   url: https://frontendmasters.com/courses/functional-js-fundamentals/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
   image: https://static.frontendmasters.com/assets/teachers/sentance/thumb@2x.webp
   teacher: Will Sentance
   company: Codesmith
   
+# Road to React
+
+- name: Road to React
+  id: road-to-react
+  description: |
+    The Road to React is used by universities and bootcamps to teach about React. With its annual editions since 2017, it is the most read React book with 75.000+ readers. While each chapter teaches a new fundamental lesson, students create a React app from the ground to production.
+  url: https://www.roadtoreact.com/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
+  image: /images/resources/road_to_react.png
+  teacher: Robin Wieruch
 
 # Reacthathon
 

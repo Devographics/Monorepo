@@ -387,7 +387,7 @@
           year: 2021
 
         - id: browser_apis_resources
-          items: [fm-service-workers]
+          items: [fm-service-workers, fm-web-components]
           template: recommended_resources
 
     - id: other_features
@@ -708,10 +708,6 @@
           variables:
             fieldId: build_tools
 
-        - id: build_tools_resources
-          items: [fm-webpack]
-          template: recommended_resources
-
         - id: webpack
           template: tool_experience
         - id: parcel
@@ -743,7 +739,7 @@
           year: 2022
  
         - id: build_tools_resources
-          items: [fm-web-components]
+          items: [fm-webpack]
           template: recommended_resources
 
     - id: monorepo_tools
@@ -1315,7 +1311,7 @@
     - id: awards
       template: awards
       variables:
-        entities: '"top_level_await","array_at","string_replace_all","vite","vitest","pnpm","vite","vitest","testing_library","turbopack","turborepo","astro","fnm","azure_functions","private_fields","proxies","nullish_coalescing","most_commented_tool_award","react","angular","storybook"'
+        entities: '"top_level_await","array_at","string_replace_all","vite","vitest","pnpm","vite","vitest","testing_library","turbopack","turborepo","astro","fnm","azure_functions","private_fields","proxies","nullish_coalescing","react","angular","storybook"'
       awards:
         - id: feature_adoption_delta_award
           template: award
@@ -1386,6 +1382,10 @@
               value: 47
             - id: storybook
               value: 42
+
+    - id: awards_resources
+      items: [road-to-react]
+      template: recommended_resources
 
 - id: conclusion
   path: /conclusion
