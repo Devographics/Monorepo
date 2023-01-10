@@ -209,14 +209,12 @@
 # Render
 
 - name: |
-    RenderATL: the largest tech conference with a dedicated Web & Mobile Software Engineering track
-  
+    RenderATL: Javascript’s Favorite Event 
   id: renderatl
   description: |
-    Attend the ultimate three-day tech conference & cultural festival featuring Sarah Drasner,  Mark Techson, Scott Toliniski, 
-    Charlie Gerard, and 80+ additional speakers & workshops with tracks for Design/CSS,
-    Leadership & Entrepreneurship, Product & Project Management, Web/Mobile Software Engineering, 
-    and so much more! Use code “StateOfJS” to receive $50 off each ticket! 
+    Join us for three days of presentations & workshops focused on Front-End Engineering 
+    featuring Sarah Drasner, Mark Techson, Chris Coyier, Scott Toliniski, Charlie Gerard, 
+    and 80+ additional speakers. Use promo code “StateOfJS” to receive $50 off each ticket! 
     
   url: http://www.renderatl.com/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
   image: /images/resources/renderatl-stacked.png
