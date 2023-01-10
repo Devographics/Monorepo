@@ -43,7 +43,7 @@ const PicksBlock = ({ block, data: entity }) => {
                         <PickImage>
                             <div>
                                 <a
-                                    href={twitter.url}
+                                    href={twitter?.url}
                                     style={{
                                         backgroundImage: `url(https://assets.devographics.com/avatars/${entity.id}.jpg)`
                                     }}
