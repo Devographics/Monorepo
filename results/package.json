@@ -90,6 +90,7 @@
         "react-markdown": "^7.1.2",
         "react-modal": "^3.16.1",
         "react-tabs": "^3.2.3",
+        "redis": "^4.2.0",
         "rehype-raw": "^6.1.1",
         "remove-markdown": "^0.3.0",
         "sass": "^1.56.1",

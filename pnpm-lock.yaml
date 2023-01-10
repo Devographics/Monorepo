@@ -320,6 +320,7 @@ importers:
       react-markdown: ^7.1.2
       react-modal: ^3.16.1
       react-tabs: ^3.2.3
+      redis: ^4.2.0
       rehype-raw: ^6.1.1
       remove-markdown: ^0.3.0
       sass: ^1.56.1
@@ -401,6 +402,7 @@ importers:
       react-markdown: 7.1.2_kx5muofkyzg6xl5sre3s32j3vy
       react-modal: 3.16.1_zpnidt7m3osuk7shl3s4oenomq
       react-tabs: 3.2.3_react@18.0.0
+      redis: 4.4.0
       rehype-raw: 6.1.1
       remove-markdown: 0.3.0
       sass: 1.56.1

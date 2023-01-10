@@ -1,4 +1,4 @@
-translationContexts: [homepage, common, results, how_to_help, state_of_js, state_of_js_2022]
+translationContexts: [homepage, common, results, state_of_js, state_of_js_2022]
 socialMediaImage: social/state-of-js-2022-logo-social.png
 hashtag: '#StateOfJS'
 surveySlug: js2022
