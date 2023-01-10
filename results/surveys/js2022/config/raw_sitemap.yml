@@ -963,10 +963,10 @@
             fieldId: tools_others
             options: { limit: 10 }
 
-    # - id: kent_c_dodds
-    #   template: picks
-    #   variables:
-    #     url: https://fly.io/
+    - id: ben_holmes
+      template: picks
+      variables:
+        url: https://github.com/colinhacks/zod
       
     - id: non_js_languages
       tabId: tabs.main_answers
@@ -1153,10 +1153,10 @@
             fieldId: resources
             options: { limit: 15 }
 
-    # - id: miguel_angel_duran
-    #   template: picks
-    #   variables:
-    #     url: https://vitejs.dev/
+    - id: tyler_mcginnis
+      template: picks
+      variables:
+        url: https://tanstack.com/
 
     - id: video_creators
       # blockType: PeopleBlock
@@ -1203,7 +1203,7 @@
       template: multiple_options
       blockType: PeopleBlock
       variables:
-        options: { limit: 40 }
+        options: { limit: 50 }
         fieldId: resources
 
     - id: other_surveys

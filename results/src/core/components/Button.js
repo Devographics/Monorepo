@@ -49,6 +49,9 @@ const Button = styled.button.attrs(
                     border-style: solid;
                     border-color: ${color('link')};
                     color: ${color('link')};
+                    svg {
+                        color: ${color('link')} !important;
+                    }
                 }
                 // sizing
                 ${props => {

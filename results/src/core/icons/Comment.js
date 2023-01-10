@@ -10,7 +10,7 @@ export const CommentIcon = props => (
             height="32"
             fill="none"
             strokeWidth="1.5"
-            color="white"
+            color="currentColor"
             viewBox="0 0 24 24"
         >
             <path

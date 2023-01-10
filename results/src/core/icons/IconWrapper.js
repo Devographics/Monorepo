@@ -42,10 +42,7 @@ const Icon = styled.span`
 const IconWithHover = styled(Icon)`
     &:hover {
         svg {
-            path,
-            polygon {
-                fill: ${props => props.theme.colors.link};
-            }
+            color: ${props => props.theme.colors.link};
         }
     }
 `
