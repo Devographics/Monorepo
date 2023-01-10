@@ -6,7 +6,7 @@
   url:  https://frontendmasters.com/courses/javascript-first-steps/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
   image: https://static.frontendmasters.com/assets/teachers/vakil/thumb@2x.webp
   teacher: Anjana Vakil
-  company: Software Engineer & Educator
+  # company: Software Engineer & Educator
 
 - name: 'JavaScript: The New Hard Parts'
   id: fm-javascript-new-hard-parts
