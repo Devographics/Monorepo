@@ -55,7 +55,7 @@ const PicksBlock = ({ block, data: entity }) => {
                         </PickImage>
                         <PickCredit>
                             <PickName>
-                                <a href={twitter.url}>{fullName}</a>
+                                <a href={twitter?.url}>{fullName}</a>
                             </PickName>
                             <PickBio>
                                 <T k={`picks.${pickId}.bio`} md={true} />
