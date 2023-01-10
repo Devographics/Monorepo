@@ -157,6 +157,7 @@ const Index_ = styled.div`
 
 const Bar_ = styled.div`
     background: rgba(255, 255, 255, 0.05);
+    background: ${({ theme }) => theme.colors.backgroundAlt};
     position: absolute;
     z-index: 1;
     top: 0;

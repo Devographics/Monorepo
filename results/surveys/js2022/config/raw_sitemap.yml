@@ -87,14 +87,14 @@
       template: demographics
       blockType: ParticipationByCountryBlock
       variables:
-        options: { limit: 50, cutoff: 50}
+        options: { limit: 20 }
 
     - id: locale
       template: demographics
       blockType: HorizontalBarBlock
       translateData: true
       variables:
-        options: {cutoff: 20}
+        options: { cutoff: 20 }
 
     - id: hint_hint
       template: hint
@@ -229,9 +229,9 @@
           variables:
             options: {cutoff: 10}
 
-    - id: user_info_resources
-      items: [fm-homepage]
-      template: recommended_resources
+    # - id: user_info_resources
+    #   items: [fm-homepage]
+    #   template: recommended_resources
 
 - id: features
   path: /features
