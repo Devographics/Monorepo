@@ -87,8 +87,13 @@ export default {
             }
         },
         homepage: async (entity: Entity, args: any, context: RequestContext) => {
-            const { homepage } = entity
-            return homepage ? { name: entity.homepage, url: entity.homepage } : null
+            return entity.homepage && { url: entity.homepage }
+        },
+        blog: async (entity: Entity, args: any, context: RequestContext) => {
+            return entity.blog && { url: entity.blog }
+        },
+        rss: async (entity: Entity, args: any, context: RequestContext) => {
+            return entity.rss && { url: entity.rss }
         },
         caniuse: async (entity: Entity, args: any, context: RequestContext) => {
             const { caniuse } = entity

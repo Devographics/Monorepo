@@ -36,8 +36,8 @@ type Entity {
     twitchName: String
     twitch: Twitch
     
-    blog: String
-    rss: String
+    blog: Blog
+    rss: RSS
 
     related: [Entity]
 
@@ -65,8 +65,6 @@ type Mastodon {
     name: String
     url: String
 }
-
-
 
 """
 YouTube Info
@@ -100,6 +98,19 @@ type NPM {
     url: String
 }
 
+"""
+Blog Info
+"""
+type Blog {
+    url: String
+}
+
+"""
+RSS Info
+"""
+type RSS {
+    url: String
+}
 
 """
 Example Info
