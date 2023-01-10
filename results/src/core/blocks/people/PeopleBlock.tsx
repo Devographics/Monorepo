@@ -167,6 +167,7 @@ const Bar_ = styled.div`
 
 const BarInner_ = styled.div`
     background: rgba(255, 255, 255, 0.05);
+    background: ${({ theme }) => theme.colors.backgroundAlt};
     height: 100%;
 `
 
