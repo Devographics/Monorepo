@@ -12,8 +12,6 @@ import get from "lodash/get.js";
 import { getSurveyPath } from "~/modules/surveys/getters";
 import isEmpty from "lodash/isEmpty.js";
 import { statuses } from "~/modules/constants";
-import { useVulcanComponents } from "@vulcanjs/react-ui";
-import { getErrors } from "@vulcanjs/core";
 import { SurveyType } from "@devographics/core-models";
 import { UserType } from "~/core/models/user";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
@@ -21,23 +19,16 @@ import {
   useSurveyActionParams,
   useBrowserData,
   PrefilledData,
-  useStartSurveyMutation,
+  startSurvey,
+  ErrorObject,
 } from "./hooks";
 import { useRouter } from "next/navigation";
 import { useUser } from "~/account/user/hooks";
 import { useUserResponse } from "~/modules/responses/hooks";
-import { Loading } from "../../ui/Loading";
+import { Loading } from "~/core/components/ui/Loading";
+import { LoadingButton } from "~/core/components/ui/LoadingButton";
 
 const duplicateResponseErrorId = "error.duplicate_response";
-
-const extractError = (rawError: any) => {
-  try {
-    const errorObject = JSON.parse(rawError.message);
-    return errorObject[0]?.data?.errors[0];
-  } catch (error) {
-    return { id: "app.unknown_error" };
-  }
-};
 
 const SurveyAction = ({
   survey,
@@ -47,7 +38,8 @@ const SurveyAction = ({
   currentUser?: UserType;
 }) => {
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState<Array<any> | undefined>();
+  const [errors, setErrors] =
+    useState<Array<ErrorObject | Error> | undefined>();
   const { slug, status } = survey;
   if (!slug) throw new Error(`Slug not found in SurveyAction`);
   const { user, loading: userLoading, error: userError } = useUser();
@@ -65,11 +57,14 @@ const SurveyAction = ({
 
   const hasResponse = response && !isEmpty(response);
 
-  const parsedErrors = errors && errors.map(extractError);
+  const parsedErrors: Array<ErrorObject> | undefined = errors?.map((e) =>
+    "id" in e ? e : { id: "app.unknown_error" }
+  );
 
   // hide action button if there is already a duplicate response
-  const hideAction =
-    parsedErrors && parsedErrors.some((e) => e.id === duplicateResponseErrorId);
+  const hideAction = parsedErrors?.some(
+    (e) => e.id === duplicateResponseErrorId
+  );
 
   const isAvailable =
     status &&
@@ -136,8 +131,6 @@ const SurveyStart = ({
 }) => {
   const { slug, status, context } = survey;
   const router = useRouter();
-  const { startSurvey, mutationName } = useStartSurveyMutation(survey);
-  const Components = useVulcanComponents();
   const { source, referrer } = useSurveyActionParams();
 
   // prefilled data
@@ -167,24 +160,31 @@ const SurveyStart = ({
       e.preventDefault();
       setLoading(true);
       try {
-        const result = await startSurvey({
-          variables: { input: { data } },
-        });
-        // no need to stop spinner because it'll disappear when we change page
-        // setLoading(false);
-        console.log(result);
-        const pagePath = get(result, `data.${mutationName}.data.pagePath`);
-        console.log(`Redirecting to ${pagePath}…`);
-        router.push(pagePath);
+        // TODO: we might want to use an Error boundary and a Suspense to handle loading and errors
+        const result = await startSurvey(survey, data);
+        console.log("result", result);
+        if (result.error) {
+          setErrors([result.error]);
+        } else {
+          // no need to stop spinner because it'll disappear when we change page
+          // setLoading(false);
+          console.log("start survey result", result);
+          const pagePath = get(result, `data.startSurvey.data.pagePath`);
+          console.log(`Redirecting to ${pagePath}…`);
+          router.push(pagePath);
+        }
       } catch (error) {
-        setErrors(getErrors(error));
+        // TODO: this is expecting a graphql syntax for errors,
+        // need to be updated
+        setErrors([error]);
+        //setErrors(getErrors(error));
       }
     },
   };
   return (
-    <Components.LoadingButton {...loadingButtonProps}>
+    <LoadingButton {...loadingButtonProps}>
       <FormattedMessage id="general.start_survey" />
-    </Components.LoadingButton>
+    </LoadingButton>
   );
 };
 

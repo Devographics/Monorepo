@@ -1,3 +1,5 @@
+import { SurveyDocument } from "@devographics/core-models";
+
 /**
  * NOTE: this is SHARED code not API only, we use this in the frontend as well
  */
@@ -58,6 +60,9 @@ export const apiRoutes = {
     },
     multi: {
       href: "/api/response/multi"
+    },
+    startSurvey: {
+      href: ({ slug, year }: Required<Pick<SurveyDocument, "slug" | "year">>) => `/api/response/start-survey?surveySlug=${slug}&surveyYear=${year}`
     }
   }
 }
