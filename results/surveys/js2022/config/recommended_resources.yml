@@ -192,7 +192,7 @@
 - name: Road to React
   id: road-to-react
   description: |
-    The Road to React is used by universities and bootcamps to teach about React. With its annual editions since 2017, it is the most read React book with 75.000+ readers. While each chapter teaches a new fundamental lesson, students create a React app from the ground to production.
+    The Road to React is used by universities, bootcamps and self-taught developers to learn about React.js. With its annual editions since 2017, it is the most read React book with 75.000+ readers. While each chapter teaches a new fundamental lesson, students learn how to create a React project from the zero to production.
   url: https://www.roadtoreact.com/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
   image: /images/resources/road_to_react.png
   teacher: Robin Wieruch
