@@ -1,6 +1,6 @@
+"use client";
 import { captureException, captureMessage } from "@sentry/nextjs";
 import { useState } from "react";
-import { ErrorBoundary } from "~/core/components/error";
 
 const SentryPage = () => {
   const [showBadComponent, setShowBadComponent] = useState(false);
@@ -60,10 +60,5 @@ const SentryPage = () => {
     </div>
   );
 };
-
-import { getLocaleStaticProps } from "~/i18n/server/ssr";
-export async function getStaticProps(ctx) {
-  return getLocaleStaticProps(ctx);
-}
 
 export default SentryPage;

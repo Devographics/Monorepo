@@ -53,7 +53,7 @@ const useMagicLoginCheck = () => {
     error,
   };
 };
-export const MagicLoginCheckPage = () => {
+const MagicLoginCheckPage = () => {
   const Components = useVulcanComponents();
   const { loading, error } = useMagicLoginCheck();
   if (loading) return <Components.Loading />;

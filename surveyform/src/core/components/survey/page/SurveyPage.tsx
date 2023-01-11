@@ -19,11 +19,7 @@ import { getSurveyImageUrl } from "~/surveys/getSurveyImageUrl";
 import { Loading } from "~/core/components/ui/Loading";
 import { useSurvey } from "../SurveyContext/Provider";
 
-interface SurveyPageWrapperProps {
-  slug?: string;
-  year?: string;
-}
-const SurveyPageWrapper = (props: SurveyPageWrapperProps) => {
+const SurveyPageWrapper = () => {
   const survey = useSurvey();
   const { name, resultsUrl } = survey;
 

@@ -1,11 +1,11 @@
+"use client";
 import React, { useState } from "react";
 import { useRouter } from "next/router.js";
 import type { SurveyDocument } from "@devographics/core-models";
 import { useIntlContext } from "@vulcanjs/react-i18n";
-import { useVulcanComponents } from "@vulcanjs/react-ui";
-import { useEntitiesQuery } from "~/core/hooks/useEntitiesQuery";
 import { convertSurveyToMarkdown } from "~/modules/surveys/outlineExport";
 import surveys from "~/surveys";
+import { useEntities } from "../common/EntitiesContext";
 
 const useCurrentSurvey = () => {
   const router = useRouter();
@@ -17,15 +17,8 @@ const useCurrentSurvey = () => {
   return { survey, slug, year };
 };
 const SurveyExport = () => {
-  const Components = useVulcanComponents();
   // TODO: filter for the current survey only, but we need a tag to do so
-  const { data, loading, error } = useEntitiesQuery();
   const { survey, slug, year } = useCurrentSurvey();
-
-  if (loading) return <Components.Loading />;
-  if (error) return <span>Could not load entities</span>;
-  if (!data) return <span>No entities found</span>;
-
   if (!survey) {
     return (
       <div>
@@ -44,16 +37,9 @@ export const SurveyMarkdownOutline = ({
   survey: SurveyDocument;
 }) => {
   const [showFieldName, setShowFieldName] = useState<boolean>(false);
-  const Components = useVulcanComponents();
   const intl = useIntlContext();
   // TODO: filter for the current survey only, but we need a tag to do so
-  const { data, loading, error } = useEntitiesQuery();
-
-  if (loading) return <Components.Loading />;
-  if (error) return <span>Could not load entities</span>;
-  if (!data) return <span>No entities found</span>;
-  const { entities } = data;
-
+  const entities = useEntities();
   return (
     <div className="survey-section-wrapper">
       <div>

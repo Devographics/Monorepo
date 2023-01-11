@@ -1,10 +1,5 @@
 import { SectionProvider } from "~/core/components/survey/SectionContext/SectionProvider";
 
-// TODO: this should not be needed in the first place,
-// we want this page to be dynamic
-export async function generateStaticParams() {
-  return [];
-}
 export default async function WithSectionLayout({
   children,
   params,

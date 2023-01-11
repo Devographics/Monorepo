@@ -11,9 +11,12 @@ const debugRootLayout = console.debug; //debug("dgs:rootlayout");
 import { locales } from "~/i18n/data/locales";
 import { notFound } from "next/navigation";
 
-export function generateStaticParams() {
-  return locales.map((l) => ({ lang: l }));
-}
+// TODO: not yet compatible with having dynamic pages down the tree
+// we may have to call generateStaticParams in each static page instead
+// @see https://github.com/vercel/next.js/issues/44712
+// export function generateStaticParams() {
+//   return locales.map((l) => ({ lang: l }));
+// }
 
 export default async function RootLayout({
   children,

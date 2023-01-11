@@ -13,8 +13,6 @@ const getCurrentLocale = () => {
   // TODO: this means using dynamic rendering
   // use segmented rendering instead
   // this seems to be what Next.js team plans for next release
-  const hs = [...headers().entries()];
-  debugRootLayout("Rendering RootLayout, got headers:", hs);
   const localeFromAcceptLanguage = getLocaleFromAcceptLanguage(
     headers().get("accept-language")
   );

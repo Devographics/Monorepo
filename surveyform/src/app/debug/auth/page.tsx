@@ -1,6 +1,6 @@
 import { AnonymousLoginForm } from "~/account/anonymousLogin/components/AnonymousLogin";
 import { StandaloneMagicLoginForm } from "~/account/magicLogin/components/StandaloneMagicLoginForm";
-export const AuthDebugPage = () => {
+const AuthDebugPage = () => {
   return (
     <div>
       <StandaloneMagicLoginForm />
@@ -12,10 +12,5 @@ export const AuthDebugPage = () => {
     </div>
   );
 };
-
-import { getLocaleStaticProps } from "~/i18n/server/ssr";
-export async function getStaticProps(ctx) {
-  return getLocaleStaticProps(ctx);
-}
 
 export default AuthDebugPage;

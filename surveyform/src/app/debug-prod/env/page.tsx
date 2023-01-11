@@ -34,7 +34,7 @@ const getEnv = async () => {
   return data;
 };
 
-export const EnvDebugPage = async () => {
+const EnvDebugPage = async () => {
   const data = await getEnv();
   return (
     <div>

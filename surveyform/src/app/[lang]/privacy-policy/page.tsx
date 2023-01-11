@@ -1,6 +1,6 @@
 import PrivacyPolicy from "~/core/components/pages/PrivacyPolicy";
 
-export const PrivacyPolicyPage = () => {
+const PrivacyPolicyPage = () => {
   return <PrivacyPolicy />;
 };
 

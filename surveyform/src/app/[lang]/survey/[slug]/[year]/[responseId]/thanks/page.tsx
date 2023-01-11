@@ -61,7 +61,7 @@ async function getResponseWithRanking({
   }
 }
 
-export const ThanksPage = async ({
+const ThanksPage = async ({
   params: { responseId, slug, year },
 }: {
   params: {
