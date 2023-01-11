@@ -1,7 +1,7 @@
 import React from 'react'
-import IconWrapper from './IconWrapper.js'
+import IconWrapper from './IconWrapper'
 
-export const LinkIcon = props => (
+export const DotsIcon = props => (
     <IconWrapper {...props}>
         <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -14,8 +14,9 @@ export const LinkIcon = props => (
             strokeLinecap="butt"
             strokeLinejoin="round"
         >
-            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+            <circle cx="12" cy="12" r="1"></circle>
+            <circle cx="19" cy="12" r="1"></circle>
+            <circle cx="5" cy="12" r="1"></circle>
         </svg>
     </IconWrapper>
 )

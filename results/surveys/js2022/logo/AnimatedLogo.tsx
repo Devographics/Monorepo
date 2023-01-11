@@ -174,12 +174,12 @@ export const Logo = ({ className, animated = true, showText = true, size = 'l' }
                     y2="288.11"
                     gradientUnits="userSpaceOnUse"
                 >
-                    <stop offset="0" stopColor="#74e8ff" />
-                    <stop offset=".2" stopColor="#4ddeff" />
-                    <stop offset=".4" stopColor="#1dd2df" />
-                    <stop offset=".6" stopColor="#1d7086" />
-                    <stop offset=".8" stopColor="#2b8da8" />
-                    <stop offset="1" stopColor="#213c9f" />
+                    <stop offset="0" stopColor="#FFB5F3" />
+                    <stop offset=".2" stopColor="#DCC7FF" />
+                    <stop offset=".4" stopColor="#A17AE0" />
+                    <stop offset=".6" stopColor="#6A499D" />
+                    <stop offset=".8" stopColor="#604B81" />
+                    <stop offset="1" stopColor="#503E6A" />
                 </linearGradient>
                 <linearGradient
                     id="e6bd5b83-99bd-4869-840a-045660b63aaa"

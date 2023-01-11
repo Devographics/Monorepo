@@ -42,9 +42,10 @@
       disableExport: true
       wrapBlock: false
     - id: survey_sponsors
-      blockType: SponsorsBlock
-      disableExport: true
-      wrapBlock: false
+      template: sponsors
+    - id: survey_partners
+      template: sponsors
+      blockType: PartnersBlock
     - id: survey_translators
       blockType: TranslatorsBlock
       disableExport: true
@@ -87,14 +88,14 @@
       template: demographics
       blockType: ParticipationByCountryBlock
       variables:
-        options: { limit: 50, cutoff: 50}
+        options: { limit: 20 }
 
     - id: locale
       template: demographics
       blockType: HorizontalBarBlock
       translateData: true
       variables:
-        options: {cutoff: 20}
+        options: { cutoff: 20 }
 
     - id: hint_hint
       template: hint
@@ -229,9 +230,9 @@
           variables:
             options: {cutoff: 10}
 
-    - id: user_info_resources
-      items: [fm-homepage]
-      template: recommended_resources
+    # - id: user_info_resources
+    #   items: [fm-homepage]
+    #   template: recommended_resources
 
 - id: features
   path: /features
@@ -387,7 +388,7 @@
           year: 2021
 
         - id: browser_apis_resources
-          items: [fm-service-workers]
+          items: [fm-service-workers, fm-web-components]
           template: recommended_resources
 
     - id: other_features
@@ -524,7 +525,7 @@
             fieldId: rendering_frameworks
 
         - id: rendering_frameworks_resources
-          items: [fm-react, fm-vue]
+          items: [fm-fullstack-app-next, fm-servers-node-js]
           template: recommended_resources
 
         - id: nextjs
@@ -708,10 +709,6 @@
           variables:
             fieldId: build_tools
 
-        - id: build_tools_resources
-          items: [fm-webpack]
-          template: recommended_resources
-
         - id: webpack
           template: tool_experience
         - id: parcel
@@ -742,6 +739,10 @@
           template: tool_experience
           year: 2022
  
+        - id: build_tools_resources
+          items: [fm-webpack]
+          template: recommended_resources
+
     - id: monorepo_tools
       path: /monorepo-tools
       blocks:
@@ -764,10 +765,10 @@
           variables:
             limit: 5
 
-        # - id: sara_vieira
-        #   template: picks
-        #   variables:
-        #     url: https://twitter.com/0xca0a
+        - id: ryan_carniato
+          template: picks
+          variables:
+            url: https://astro.build/
 
         - template: happiness
           variables:
@@ -802,6 +803,10 @@
           template: tool_experience
           year: 2021
 
+        # - id: monorepo_resources
+        #   items: [fm-fullstack-app-next, fm-servers-node-js]
+        #   template: recommended_resources
+          
 - id: tools_others
   path: /other-tools
   blocks:
@@ -823,10 +828,10 @@
             fieldId: tools_others
             options: { limit: 15 }
 
-    # - id: mark_erikson
-    #   template: picks
-    #   variables:
-    #     url: https://twitter.com/ryancarniato
+    - id: theo_browne
+      template: picks
+      variables:
+        url: https://trpc.io/
 
     - id: date_management
       year: 2022
@@ -955,10 +960,10 @@
             fieldId: tools_others
             options: { limit: 10 }
 
-    # - id: kent_c_dodds
-    #   template: picks
-    #   variables:
-    #     url: https://fly.io/
+    - id: ben_holmes
+      template: picks
+      variables:
+        url: https://github.com/colinhacks/zod
       
     - id: non_js_languages
       tabId: tabs.main_answers
@@ -1079,6 +1084,10 @@
             fieldId: usage
             options: { limit: 15 }
 
+    - id: usage_resources
+      items: [fm-algorithms, fm-js-patterns]
+      template: recommended_resources
+
 - id: resources
   path: /resources
   blocks:
@@ -1103,6 +1112,11 @@
           variables:
             fieldId: resources
             options: { limit: 10 }
+
+    - id: shaundai_person
+      template: picks
+      variables:
+        url: https://sarahdrasnerdesign.com/
 
     - id: blogs_news_magazines
       blockNamespace: resources
@@ -1141,12 +1155,13 @@
             fieldId: resources
             options: { limit: 15 }
 
-    # - id: miguel_angel_duran
-    #   template: picks
-    #   variables:
-    #     url: https://vitejs.dev/
+    - id: tyler_mcginnis
+      template: picks
+      variables:
+        url: https://tanstack.com/
 
     - id: video_creators
+      # blockType: PeopleBlock
       blockNamespace: resources
       chartNamespace: video_creators
       tabId: tabs.main_answers
@@ -1155,6 +1170,7 @@
         fieldId: resources
       variants:
         - id: video_creators_others
+          # blockType: PeopleBlock
           defaultUnits: count
           blockNamespace: resources
           chartNamespace: video_creators
@@ -1187,8 +1203,9 @@
       blockNamespace: resources
       chartNamespace: people
       template: multiple_options
+      blockType: PeopleBlock
       variables:
-        options: { limit: 40 }
+        options: { limit: 50 }
         fieldId: resources
 
     - id: other_surveys
@@ -1231,10 +1248,10 @@
     - id: js_ecosystem_changing_to_fast
       template: opinion
 
-    # - id: alyssa_nicoll
-    #   template: picks
-    #   variables:
-    #     url: https://www.twitch.tv/broccodev
+    - id: sebastien_lorber
+      template: picks
+      variables:
+        url: https://www.remotion.dev/
 
     - id: top_js_pain_points
       translateData: true
@@ -1288,8 +1305,8 @@
       variables:
         fieldId: state_of_js
 
-    - id: tools_others_resources
-      items: [fm-javascript]
+    - id: opinions.k_resources
+      items: [fm-javascript, fm-js-fundamentals]
       template: recommended_resources
 
 - id: awards
@@ -1300,7 +1317,7 @@
     - id: awards
       template: awards
       variables:
-        entities: '"top_level_await","array_at","string_replace_all","vite","vitest","pnpm","vite","vitest","testing_library","turbopack","turborepo","astro","fnm","azure_functions","private_fields","proxies","nullish_coalescing","most_commented_tool_award","react","angular","storybook"'
+        entities: '"top_level_await","array_at","string_replace_all","vite","vitest","pnpm","vite","vitest","testing_library","turbopack","turborepo","astro","fnm","azure_functions","private_fields","proxies","nullish_coalescing","react","angular","storybook"'
       awards:
         - id: feature_adoption_delta_award
           template: award
@@ -1372,6 +1389,10 @@
             - id: storybook
               value: 42
 
+    - id: awards_resources
+      items: [road-to-react]
+      template: recommended_resources
+
 - id: conclusion
   path: /conclusion
   blocks:
@@ -1379,8 +1400,8 @@
     - id: conclusion
       template: conclusion
       variables:
-        author: shawn_wang
-        entities: '"shawn_wang"'
+        author: sarah_drasner
+        entities: '"sarah_drasner"'
 
     - id: conclusion_newsletter
       blockType: NewsletterBlock

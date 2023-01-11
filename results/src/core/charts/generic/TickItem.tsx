@@ -1,8 +1,11 @@
 import React, { memo, useMemo } from 'react'
 import { ChartComponentProps, BlockUnits, BucketItem, BlockLegend, TickItemProps } from 'core/types'
-import { useTheme } from 'styled-components'
+import styled, { useTheme } from 'styled-components'
 import { useI18n } from 'core/i18n/i18nContext'
 import TooltipComponent from 'core/components/Tooltip'
+import { CloseIcon, DotsIcon } from 'core/icons'
+import TickItemLinks, { getSocialLinks } from 'core/charts/generic/TickItemLinks'
+import Popover from 'core/components/Popover2'
 
 const labelMaxLength = 20
 
@@ -14,17 +17,21 @@ const shorten = (label: string) => {
     }
 }
 
+const getTextOffset = () => 10
+
 export const Text = ({
     hasLink = false,
     label,
     description,
     tickRotation,
+    index,
     i18nNamespace
 }: {
     hasLink: boolean
     label: string
     description: string
     tickRotation?: number
+    index?: number
     i18nNamespace?: string
 }) => {
     if (!label) {
@@ -35,7 +42,7 @@ export const Text = ({
     const shortLabel = shortenLabel ? shorten(label) : label
 
     const textProps = {
-        transform: 'translate(-10,0) rotate(0)',
+        transform: `translate(-${getTextOffset()},0) rotate(0)`,
         dominantBaseline: 'central',
         textAnchor: 'end',
         style: {
@@ -52,10 +59,12 @@ export const Text = ({
 
     const component = <text {...textProps}>{shortLabel ?? label}</text>
 
+    const textContents = `#${index}: ${description ?? label}`
+
     return (
         <TooltipComponent
             trigger={component}
-            contents={description ?? label}
+            contents={textContents}
             asChild={true}
             clickable={hasLink}
         />
@@ -64,17 +73,16 @@ export const Text = ({
 
 export const getBucketLabel = args => {
     const { getString } = useI18n()
-    const { shouldTranslate, i18nNamespace, id, entity, shortenLabel = false, label: providedLabel } = args
+    const {
+        shouldTranslate,
+        i18nNamespace,
+        id,
+        entity,
+        shortenLabel = false,
+        label: providedLabel
+    } = args
     let label
     const s = getString(`options.${i18nNamespace}.${id}`)
-
-    console.log('////')
-    console.log(i18nNamespace)
-    console.log(id)
-    console.log(s)
-    console.log(providedLabel)
-    console.log(entity)
-    console.log(shouldTranslate)
 
     if (providedLabel) {
         label = providedLabel
@@ -94,12 +102,29 @@ export const getBucketLabel = args => {
 export const TickItem = (tick: TickItemProps) => {
     const { getString } = useI18n()
 
-    const { x, y, value, shouldTranslate, i18nNamespace, entity, tickRotation, label } = tick
+    const {
+        x,
+        y,
+        value,
+        shouldTranslate,
+        i18nNamespace,
+        entity,
+        tickRotation,
+        label,
+        itemCount,
+        tickIndex
+    } = tick
 
     let link,
         description = tick.description
 
-    const tickLabel = getBucketLabel({ shouldTranslate, i18nNamespace, entity, id: tick.value, label })
+    const tickLabel = getBucketLabel({
+        shouldTranslate,
+        i18nNamespace,
+        entity,
+        id: tick.value,
+        label
+    })
 
     if (entity) {
         const { homepage, github } = entity
@@ -112,11 +137,16 @@ export const TickItem = (tick: TickItemProps) => {
         }
     }
 
+    const index = itemCount - tickIndex
+
     const textProps = {
         label: tickLabel,
         description,
-        tickRotation
+        tickRotation,
+        index
     }
+
+    const showLinks = entity && getSocialLinks(entity).length > 0
 
     return (
         <g transform={`translate(${x},${y})`}>
@@ -127,8 +157,22 @@ export const TickItem = (tick: TickItemProps) => {
             ) : (
                 <Text hasLink={false} {...textProps} />
             )}
+            {/* {entity ? (
+                <Popover trigger={<Text hasLink={false} {...textProps} />}>
+                    <TickItemLinks entity={entity} />
+                </Popover>
+            ) : (
+                <Text hasLink={false} {...textProps} />
+            )} */}
+            {/* {showLinks && (
+                <g transform={`translate(-${getTextOffset() + 10},0)`}>
+                    <TickItemLinks entity={entity} />
+                </g>
+            )} */}
         </g>
     )
 }
+
+const ShowMore_ = styled.g``
 
 export default TickItem

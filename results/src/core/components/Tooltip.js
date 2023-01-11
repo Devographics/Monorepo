@@ -9,6 +9,7 @@ const Content = styled(Tooltip.Content)`
     font-size: ${fontSize('small')};
     padding: ${spacing(0.3)} ${spacing(0.6)};
     border: 1px solid ${props => props.theme.colors.border};
+    z-index: 100;
     p:last-child {
         margin: 0;
     }

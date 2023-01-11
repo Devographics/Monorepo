@@ -251,6 +251,7 @@ importers:
       '@radix-ui/react-accordion': ^1.0.1
       '@radix-ui/react-dialog': ^1.0.2
       '@radix-ui/react-dropdown-menu': ^1.0.0
+      '@radix-ui/react-popover': ^1.0.2
       '@radix-ui/react-tabs': ^1.0.1
       '@radix-ui/react-tooltip': ^1.0.2
       '@react-spring/web': 9.3.1
@@ -319,6 +320,7 @@ importers:
       react-markdown: ^7.1.2
       react-modal: ^3.16.1
       react-tabs: ^3.2.3
+      redis: ^4.2.0
       rehype-raw: ^6.1.1
       remove-markdown: ^0.3.0
       sass: ^1.56.1
@@ -346,6 +348,7 @@ importers:
       '@radix-ui/react-accordion': 1.0.1_zpnidt7m3osuk7shl3s4oenomq
       '@radix-ui/react-dialog': 1.0.2_25ff7bqoctye6lhukt6vbcye7q
       '@radix-ui/react-dropdown-menu': 1.0.0_25ff7bqoctye6lhukt6vbcye7q
+      '@radix-ui/react-popover': 1.0.2_25ff7bqoctye6lhukt6vbcye7q
       '@radix-ui/react-tabs': 1.0.1_zpnidt7m3osuk7shl3s4oenomq
       '@radix-ui/react-tooltip': 1.0.2_25ff7bqoctye6lhukt6vbcye7q
       '@react-spring/web': 9.3.1_zpnidt7m3osuk7shl3s4oenomq
@@ -399,6 +402,7 @@ importers:
       react-markdown: 7.1.2_kx5muofkyzg6xl5sre3s32j3vy
       react-modal: 3.16.1_zpnidt7m3osuk7shl3s4oenomq
       react-tabs: 3.2.3_react@18.0.0
+      redis: 4.4.0
       rehype-raw: 6.1.1
       remove-markdown: 0.3.0
       sass: 1.56.1
@@ -11354,6 +11358,34 @@ packages:
       react: 18.0.0
       react-dom: 18.0.0_react@18.0.0
       react-remove-scroll: 2.5.4_kx5muofkyzg6xl5sre3s32j3vy
+    transitivePeerDependencies:
+      - '@types/react'
+    dev: false
+
+  /@radix-ui/react-popover/1.0.2_25ff7bqoctye6lhukt6vbcye7q:
+    resolution: {integrity: sha512-4tqZEl9w95R5mlZ/sFdgBnfhCBOEPepLIurBA5kt/qaAhldJ1tNQd0ngr0ET0AHbPotT4mwxMPr7a+MA/wbK0g==}
+    peerDependencies:
+      react: ^16.8 || ^17.0 || ^18.0
+      react-dom: ^16.8 || ^17.0 || ^18.0
+    dependencies:
+      '@babel/runtime': 7.20.6
+      '@radix-ui/primitive': 1.0.0
+      '@radix-ui/react-compose-refs': 1.0.0_react@18.0.0
+      '@radix-ui/react-context': 1.0.0_react@18.0.0
+      '@radix-ui/react-dismissable-layer': 1.0.2_zpnidt7m3osuk7shl3s4oenomq
+      '@radix-ui/react-focus-guards': 1.0.0_react@18.0.0
+      '@radix-ui/react-focus-scope': 1.0.1_zpnidt7m3osuk7shl3s4oenomq
+      '@radix-ui/react-id': 1.0.0_react@18.0.0
+      '@radix-ui/react-popper': 1.0.1_25ff7bqoctye6lhukt6vbcye7q
+      '@radix-ui/react-portal': 1.0.1_zpnidt7m3osuk7shl3s4oenomq
+      '@radix-ui/react-presence': 1.0.0_zpnidt7m3osuk7shl3s4oenomq
+      '@radix-ui/react-primitive': 1.0.1_zpnidt7m3osuk7shl3s4oenomq
+      '@radix-ui/react-slot': 1.0.1_react@18.0.0
+      '@radix-ui/react-use-controllable-state': 1.0.0_react@18.0.0
+      aria-hidden: 1.2.2_kx5muofkyzg6xl5sre3s32j3vy
+      react: 18.0.0
+      react-dom: 18.0.0_react@18.0.0
+      react-remove-scroll: 2.5.5_kx5muofkyzg6xl5sre3s32j3vy
     transitivePeerDependencies:
       - '@types/react'
     dev: false
@@ -24493,7 +24525,7 @@ packages:
       eslint-import-resolver-webpack:
         optional: true
     dependencies:
-      '@typescript-eslint/parser': 4.33.0_eslint@7.32.0
+      '@typescript-eslint/parser': 4.33.0_77fvizpdb3y4icyeo2mf4eo7em
       debug: 3.2.7
       eslint: 7.32.0
       eslint-import-resolver-node: 0.3.6
@@ -24671,7 +24703,7 @@ packages:
       '@typescript-eslint/parser':
         optional: true
     dependencies:
-      '@typescript-eslint/parser': 4.33.0_eslint@7.32.0
+      '@typescript-eslint/parser': 4.33.0_77fvizpdb3y4icyeo2mf4eo7em
       array-includes: 3.1.6
       array.prototype.flat: 1.3.1
       debug: 2.6.9

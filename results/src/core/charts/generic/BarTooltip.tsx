@@ -27,7 +27,7 @@ const getLabel = (props, getString) => {
  * - HorizontalBarChart
  * - VerticalBarChart
  */
-const BarTooltip = props => {    
+const BarTooltip = props => {
     const { id, bucketKeys, units, indexValue, data, i18nNamespace, shouldTranslate } = props
     const { getString } = useI18n()
     const label = getLabel(props, getString)

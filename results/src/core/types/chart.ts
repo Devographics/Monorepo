@@ -26,4 +26,6 @@ export interface TickItemProps {
   tickRotation?: number
   description?: string
   label?: string
+  itemCount?: number
+  tickIndex?: number
 }

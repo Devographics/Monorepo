@@ -75,56 +75,59 @@ const colors = {
     lilac: '#BD95FF',
     lilacDark: '#B896EF',
     lilacDarker: '#A17AE0',
-    lilacDarkerer: '#8A69BE',
-    lilacDarkest: '#70559A',
+    lilacDarkerer: '#815CBF',
+    lilacDarkest: '#6A499D',
+    lilacDarkest2: '#604B81',
+    lilacDarkest3: '#503E6A',
+    lilacDarkest4: '#3A3444',
 }
 
+// const velocity = [
+//     '#44168E',
+//     '#491D90',
+//     '#6532B7',
+//     '#A17AE0',
+//     '#AD84EF',
+//     '#CAAAFF',
+//     '#DCC7FF',
+//     '#E9DCFF',
+//     '#F8DCFF',
+//     '#FFB5F3',
+//     '#F494E5',
+//     '#F176DD',
+//     '#EF55D6',
+//     '#DE35C3'
+// ]
+
 const velocity = [
-    '#44168E',
-    '#491D90',
-    '#6532B7',
-    '#A17AE0',
+    '#06513F',
+    '#087258',
+    '#0C8C6D',
+    '#16AF8A',
+    '#23D2A8',
+    '#34E1B7',
+    '#51F2CB',
+    '#75FBDA',
+    '#A1FFE8',
+    '#C9FFF2',
+    '#E9DCFF',
+    '#DCC7FF',
+    '#CAAAFF',
+    '#AD84EF',
+]
+
+const arrowsVelocity = [
     '#AD84EF',
     '#CAAAFF',
     '#DCC7FF',
     '#E9DCFF',
-    '#F8DCFF',
-    '#FFB5F3',
-    '#F494E5',
-    '#F176DD',
-    '#EF55D6',
-    '#DE35C3'
-]
-
-// const velocity = [
-//     '#06513F',
-//     '#087258',
-//     '#0C8C6D',
-//     '#16AF8A',
-//     '#23D2A8',
-//     '#34E1B7',
-//     '#51F2CB',
-//     '#75FBDA',
-//     '#A1FFE8',
-//     '#C9FFF2',
-//     '#D3F6FF',
-//     '#AFF1FF',
-//     '#7AE6FE',
-//     '#48DEFF'
-// ]
-
-const arrowsVelocity = [
-    colors.purple,
-    colors.purpleLight,
-    colors.purpleLighter,
-    colors.purpleLightest,
-    colors.tealLightest,
-    colors.tealLighter,
-    colors.tealLight,
-    colors.teal,
-    colors.tealDark,
-    colors.tealDarker,
-    colors.tealDarkest,
+    '#C9FFF2',
+    '#A1FFE8',
+    '#75FBDA',
+    '#51F2CB',
+    '#34E1B7',
+    '#23D2A8',
+    '#16AF8A',
 ]
 
 const tiers = [colors.red, '#ffc38a', '#feff8e', '#c3ff89']
@@ -150,18 +153,18 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
     background: '#272325',
     backgroundTrans: 'rgb(39, 35, 37, 0.3)',
     backgroundAlt3: '#27242E',
-    backgroundBackground: '#3A3444',
+    backgroundBackground: colors.lilacDarkest4,
     backgroundForeground: colors.navyLighter,
-    backgroundAlt: '#3A3444',
+    backgroundAlt: colors.lilacDarkest4,
     backgroundAltTrans: 'rgba(49, 68, 72, 0.4)',
-    backgroundAlt2: colors.lilacDarkest,
+    backgroundAlt2: colors.lilacDarkest2,
     backgroundInverted: '#FFF6E6',
     backgroundInvertedAlt: '#E3D8C4',
     text: colors.white,
     textAlt: 'rgba(255, 246, 229, 0.5)',
     textInverted: '#272325',
     textHighlight: colors.greenDark,
-    link: colors.lilac,
+    link: colors.blueGreen,
     linkActive: '#5C63E0',
     contrast: '#0bdf67',
     border: '#FFF6E6',
@@ -171,8 +174,8 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
     no_answer: [colors.greyLight, colors.greyLightest],
     barColors: [
         {
-            color: colors.lilacDark,
-            gradient: [colors.lilacDarkerer, colors.lilacDark]
+            color: colors.blueGreenDark,
+            gradient: [colors.blueGreenDarker, colors.blueGreenDark]
         },
         { color: colors.pink, gradient: [colors.pinkDark, colors.pink] },
         { color: colors.green, gradient: [colors.green, colors.greenLighter] },
@@ -180,8 +183,8 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
         { color: colors.orange, gradient: [colors.orangeDarker, colors.orangeLight] }
     ],
     barChart: {
-        primary: colors.lilacDark,
-        primaryGradient: [colors.lilacDarkerer, colors.lilacDark],
+        primary: colors.blueGreenDark,
+        primaryGradient: [colors.blueGreenDarker, colors.blueGreenDark],
         // secondary: colors.yellowLight,
         // secondaryGradient: [colors.yellow, colors.yellowLight],
         secondary: colors.pink,
@@ -189,9 +192,9 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
     },
     ranges: {
         tools: {
-            would_use: [colors.lilacDarkerer, colors.lilacDark],
+            would_use: [colors.blueGreenDarker, colors.blueGreenDark],
             would_not_use: [colors.red, colors.redLight],
-            interested: [colors.lilac, colors.lilacLight],
+            interested: [colors.blueGreen, colors.blueGreenLight],
             not_interested: [colors.redLighter, colors.redLightest],
             never_heard: [colors.greyLight, colors.greyLightest]
         },

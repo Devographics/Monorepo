@@ -13,8 +13,8 @@ query: >
             }
             twitterName
             twitter {
-                avatarUrl
-                userName
+                name
+                url
             }
         }
     }

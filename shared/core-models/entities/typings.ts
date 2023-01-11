@@ -9,6 +9,8 @@ export interface Entity {
   nameClean?: string
   nameHtml?: string
   homepage?: Resource
+  blog?: Resource
+  rss?: Resource
   category?: string
   description?: string
   descriptionClean?: string
@@ -22,8 +24,18 @@ export interface Entity {
   caniuse?: any
   mdn?: any
 
+  mastodonName: string
+  mastodon: any
+
   twitterName: string
   twitter: any
+
+  twitchName: string
+  twitch: any
+
+  youtubeName: string
+  youtubeUrl: string
+  youtube: any
 
   companyName?: string
   company?: Entity
@@ -33,7 +45,7 @@ export interface Entity {
 }
 
 export interface Resource {
-  name: string;
+  name?: string;
   url: string;
 }
 

@@ -9,9 +9,10 @@ import { useBarChart } from 'core/charts/hooks'
 import BarTooltip from 'core/charts/generic/BarTooltip'
 import HorizontalBarStripes from './HorizontalBarStripes'
 import { isPercentage } from 'core/helpers/units'
-import { ChartComponentProps, BucketItem } from 'core/types'
+import { ChartComponentProps, BucketItem, BlockUnits } from 'core/types'
 import TickItem, { getBucketLabel } from 'core/charts/generic/TickItem'
 import maxBy from 'lodash/maxBy'
+import ChartLabel from 'core/components/ChartLabel'
 
 export const margin = {
     top: 40,
@@ -54,6 +55,35 @@ export const getLeftMargin = ({ data, shouldTranslate, i18nNamespace }) => {
     }
 }
 
+
+const getLabelsLayer = (units: BlockUnits) => (props: any) => {
+    // adjust settings according to dimensions
+    let fontSize = 13
+    let rotation = 0
+    if (props.width < 600) {
+        fontSize = 11
+        rotation = -90
+    }
+
+    return props.bars.map((bar: any) => {
+        const label = isPercentage(units) ? `${bar.data.value}%` : bar.data.value
+
+        return (
+            <ChartLabel
+                key={bar.key}
+                label={label}
+                transform={`translate(${bar.x + bar.width / 2},${
+                    bar.y + bar.height / 2
+                }) rotate(${rotation})`}
+                fontSize={fontSize}
+                style={{
+                    pointerEvents: 'none'
+                }}
+            />
+        )
+    })
+}
+
 const HorizontalBarChart = ({
     buckets,
     total,
@@ -93,6 +123,8 @@ const HorizontalBarChart = ({
 
     const colors = [theme.colors.barChart[colorVariant]]
     const gradientColors = theme.colors.barChart[`${colorVariant}Gradient`]
+
+    const labelsLayer = useMemo(() => getLabelsLayer(units), [units])
 
     return (
         <div style={{ height: buckets.length * baseSize + 80 }}>
@@ -134,6 +166,7 @@ const HorizontalBarChart = ({
                                 shouldTranslate={translateData}
                                 entity={buckets.find(b => b.id === tick.value)?.entity}
                                 label={buckets.find(b => b.id === tick.value)?.label}
+                                itemCount={buckets.length}
                                 {...tick}
                             />
                         )
@@ -151,7 +184,8 @@ const HorizontalBarChart = ({
                     layerProps => <HorizontalBarStripes {...layerProps} />,
                     'grid',
                     'axes',
-                    'bars'
+                    'bars',
+                    labelsLayer
                 ]}
                 defs={[
                     {

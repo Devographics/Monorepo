@@ -5,6 +5,8 @@ import fs from 'fs'
 import fetch from 'node-fetch'
 import { loadOrGetEntities, applyEntityResolvers } from './entities'
 import sharp from 'sharp'
+import { fetchTwitterUser } from './external_apis'
+import { useCache } from './caching'
 
 const services = { twitter: { fieldName: 'avatarUrl' } }
 
@@ -54,7 +56,17 @@ export const cacheAvatars = async ({ context }: { context: RequestContext }) => 
         // const avatarFileExists = allExtensionsExist.includes(true)
         const avatarFileExists = await fileExists(`${avatarFilePath}.jpg`)
         if (!avatarFileExists) {
-            const entityWithResolvers = await applyEntityResolvers(entity, context)
+
+            // method 1: apply resolvers
+            // const entityWithResolvers = await applyEntityResolvers(entity, context)
+
+            // method 2: manually add twitter API data to entity
+            const twitter = await useCache({
+                func: fetchTwitterUser,
+                context,
+                funcOptions: { twitterName: entity.twitterName }
+            })
+            const entityWithResolvers = { ...entity, twitter }
 
             for (const serviceName of Object.keys(services)) {
                 const service = services[serviceName]
