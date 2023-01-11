@@ -1113,6 +1113,11 @@
             fieldId: resources
             options: { limit: 10 }
 
+    - id: shaundai_person
+      template: picks
+      variables:
+        url: https://sarahdrasnerdesign.com/
+
     - id: blogs_news_magazines
       blockNamespace: resources
       chartNamespace: blogs_news_magazines
