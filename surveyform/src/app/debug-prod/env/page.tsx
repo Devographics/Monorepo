@@ -35,6 +35,7 @@ const getEnv = async () => {
 };
 
 const EnvDebugPage = async () => {
+  return "Env query not activated";
   const data = await getEnv();
   return (
     <div>
