@@ -37,9 +37,18 @@ function isFile(pathname: string) {
 }
 export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
-  // TODO: i18n redirection should happen for all paths
-  //that do not start with a a valid locale
-  // TODO: verify that the locale exists
+
+  if (pathname.startsWith("/debug")) {
+    // TODO: can we run Sentry in an edge middleware?
+    console.log("Accessing debug area");
+    return debugAccessMiddleware(request);
+  }
+
+  if (pathname.startsWith("/api/crons")) {
+    console.log("Accessing crons");
+    return cronMiddleware(request);
+  }
+
   const lang = getLang(pathname)
   const file = isFile(pathname)
   const api = isApi(pathname)
@@ -58,15 +67,6 @@ export function middleware(request: NextRequest) {
     console.debug("Will add locale", validLocale, "to", pathname)
     url.pathname = "/" + validLocale + pathname;
     return NextResponse.redirect(url);
-  }
-  if (pathname.startsWith("/debug")) {
-    // TODO: can we run Sentry in an edge middleware?
-    console.log("Accessing debug area");
-    return debugAccessMiddleware(request);
-  }
-  if (pathname.startsWith("/api/crons")) {
-    console.log("Accessing crons");
-    return cronMiddleware(request);
   }
 
   return NextResponse.next();

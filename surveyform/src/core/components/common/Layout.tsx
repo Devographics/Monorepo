@@ -35,7 +35,6 @@ export const Layout = ({
     }
   }, []);
 
-  // const { loading, data = {} } = useQuery(gql(entitiesQuery));
   return (
     <KeydownContextProvider>
       <div className="wrapper" id="wrapper">
