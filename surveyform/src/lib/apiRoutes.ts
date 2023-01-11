@@ -63,6 +63,9 @@ export const apiRoutes = {
     },
     startSurvey: {
       href: ({ slug, year }: Required<Pick<SurveyDocument, "slug" | "year">>) => `/api/response/start-survey?surveySlug=${slug}&surveyYear=${year}`
+    },
+    saveSurvey: {
+      href: ({ slug, year }: Required<Pick<SurveyDocument, "slug" | "year">>) => `/api/response/save-survey?surveySlug=${slug}&surveyYear=${year}`
     }
   }
 }

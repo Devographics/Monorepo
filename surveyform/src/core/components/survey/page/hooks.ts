@@ -70,16 +70,25 @@ export interface PrefilledData extends BrowserData {
   email?: string;
 }
 
-// const mutationName = "createResponse";
-export const mutationName = "startSurvey";
-
 export interface ErrorObject {
   id: string;
 }
-/**
- * TODO: in case of error, we have a weird HTML response
- * is it related to a Next.js update?
- */
+// TODO: POST calls are not using hooks per se
+// they could benefit from a refactor after we write a few ones
+
+// transform the graphql error to make it readable
+// TODO: improve the backend to avoid this step
+// @see start-survey endpoint for the rawError structure
+const extractErrorObject = (rawError): ErrorObject | null => {
+  if (!rawError) return null
+  try {
+    const errorObject = JSON.parse(rawError.message);
+    return errorObject[0]?.data?.errors[0];
+  } catch (error) {
+    return { id: "app.unknown_error" };
+  }
+};
+
 export async function startSurvey(survey: SurveyDocument | SerializedSurveyDocument, data: any) {
   // TODO: this should also invalidate the "getCurrentUser" query
   // we should figure how to do so using SWR, maybe in the code that calls startSurvey?
@@ -96,41 +105,30 @@ export async function startSurvey(survey: SurveyDocument | SerializedSurveyDocum
     console.error(await fetchRes.text())
     throw new Error("Could not start survey, request failed")
   }
-  // transform the graphql error to make it readable
-  // TODO: improve the backend to avoid this step
-  // @see start-survey endpoint for the rawError structure
-  const extractErrorObject = (rawError): ErrorObject | null => {
-    if (!rawError) return null
-    try {
-      const errorObject = JSON.parse(rawError.message);
-      return errorObject[0]?.data?.errors[0];
-    } catch (error) {
-      return { id: "app.unknown_error" };
-    }
-  };
   // data/errors is typical of graphql endpoints
   const res: { data?: any, errors?: Array<any> } = await fetchRes.json()
   const errorObject = extractErrorObject(res?.errors?.[0])
   return { data: res.data, error: errorObject }
 }
-/*
-Old mutation, now generated in the backend
-export const useStartSurveyMutation = (survey) => {
-  const surveyCreateResponseOutputFragment =
-    CreateResponseOutputFragment(survey);
 
-  const mutation = gql`
-  mutation ${mutationName}($input: CreateResponseInput) {
-    ${mutationName}(input: $input) {
-      ...${getFragmentName(surveyCreateResponseOutputFragment)}
-    }
+export async function saveSurvey(survey: SurveyDocument | SerializedSurveyDocument, data: any) {
+  // TODO: this should also invalidate the "getCurrentUser" query
+  // we should figure how to do so using SWR, maybe in the code that calls startSurvey?
+  const fetchRes = await fetch(
+    apiRoutes.response.saveSurvey.href({ slug: survey.slug!, year: survey.year! }), {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
   }
-  ${surveyCreateResponseOutputFragment}
-  `;
-
-  const [startSurvey, { data, loading, error }] = useMutation(mutation, {
-    refetchQueries: ["getCurrentUser"],
-  });
-  return { startSurvey, data, loading, error, mutationName };
-};
-*/
+  )
+  if (!fetchRes.ok) {
+    console.error(await fetchRes.text())
+    throw new Error("Could not start survey, request failed")
+  }
+  // data/errors is typical of graphql endpoints
+  const res: { data?: any, errors?: Array<any> } = await fetchRes.json()
+  const errorObject = extractErrorObject(res?.errors?.[0])
+  return { data: res.data, error: errorObject }
+}

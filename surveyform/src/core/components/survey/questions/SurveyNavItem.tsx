@@ -7,8 +7,9 @@ import { ResponseDocument } from "@devographics/core-models";
 import { getSectionCompletionPercentage } from "~/modules/responses/helpers";
 import { useVulcanComponents, useFormContext } from "@vulcanjs/react-ui";
 import { getSurveyPath } from "~/modules/surveys/getters";
-import { useSaveSurveyMutation } from "~/core/components/survey/questions/useSaveSurveyMutation";
 import { useRouter } from "next/navigation";
+import { saveSurvey } from "../page/hooks";
+import { captureException } from "@sentry/nextjs";
 
 const SurveyNavItem = ({
   survey,
@@ -43,13 +44,6 @@ const SurveyNavItem = ({
   const { getDocument, currentValues } = formContext;
   const document = getDocument();
 
-  const {
-    saveSurvey,
-    data,
-    loading: saveSurveyLoading,
-    error,
-  } = useSaveSurveyMutation(survey);
-
   useEffect(() => {
     if (currentTabindex === number) {
       textInput.current?.focus();
@@ -63,9 +57,14 @@ const SurveyNavItem = ({
     e.preventDefault();
     setShown(false);
     // await submitForm();
-    await saveSurvey({
-      variables: { input: { id: document._id, data: currentValues } },
+    const res = await saveSurvey(survey, {
+      id: document._id,
+      data: currentValues,
     });
+    if (res.error) {
+      console.error(res.error);
+      captureException(res.error);
+    }
     setNavLoading(false);
     router.push(getSurveyPath({ survey, response, number }));
   };

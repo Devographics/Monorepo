@@ -18,9 +18,10 @@ import { getSurveyPath } from "~/modules/surveys/getters";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import { SurveyDocument } from "@devographics/core-models";
 import Link from "next/link";
-import { useSaveSurveyMutation } from "~/core/components/survey/questions/useSaveSurveyMutation";
 import { useRouter } from "next/navigation";
 import { LoadingButton } from "~/core/components/ui/LoadingButton";
+import { saveSurvey } from "../page/hooks";
+import { captureException } from "@sentry/nextjs";
 
 const FormSubmit = ({
   survey,
@@ -155,13 +156,6 @@ const SubmitButton = (props) => {
 
   const document = getDocument();
 
-  const {
-    saveSurvey,
-    data,
-    loading: saveSurveyLoading,
-    error,
-  } = useSaveSurveyMutation(survey);
-
   return (
     <div className={`form-btn form-btn-${type}`}>
       {readOnly ? (
@@ -175,9 +169,14 @@ const SubmitButton = (props) => {
             e.preventDefault();
             setLoading(true);
             // await submitForm();
-            await saveSurvey({
-              variables: { input: { id: document._id, data: currentValues } },
+            const res = await saveSurvey(survey, {
+              id: document._id,
+              data: currentValues,
             });
+            if (res.error) {
+              console.error(res.error);
+              captureException(res.error);
+            }
             setLoading(false);
             router.push(path);
           }}
