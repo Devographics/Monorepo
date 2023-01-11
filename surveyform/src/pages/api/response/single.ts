@@ -71,8 +71,8 @@ export default async function responseHandler(req: NextApiRequest, res: NextApiR
     console.log("GOT DATA FROM GRAPHQL CALL", data)
     // TODO: filter during call to db already
     const responses: Array<ResponseDocument & { survey: SurveyDocument }> = data?.data?.currentUser?.responses
-    const surveyResponse = responses.find((r) => r.surveySlug === req.query["slug"]) || null;
-    console.log("response", surveyResponse)
+    const surveyResponse = responses.find((r) => r.surveySlug === surveySlug) || null;
+    console.log("response", surveyResponse, responses)
     return res.status(200).json(surveyResponse)
   } catch (err) {
     console.error("GraphQL fetch error", err)

@@ -75,7 +75,7 @@ export const SurveyResponseFragment = (survey: SerializedSurveyDocument | Survey
   const surveySpecificFragmentName = `SurveySpecificFields_${survey.slug}`;
   const surveySpecificFields = getSurveyFieldNames(survey);
   if (surveySpecificFields.length > 0) {
-    console.log("name", responseSpecificFragmentName, surveySpecificFragmentName, surveySpecificFields)
+    //console.log("name", responseSpecificFragmentName, surveySpecificFragmentName, surveySpecificFields)
     return gql`
   fragment ${responseSpecificFragmentName} on Response {
     _id
