@@ -168,7 +168,7 @@ const Bar_ = styled.div`
 
 const BarInner_ = styled.div`
     background: rgba(255, 255, 255, 0.05);
-    background: ${({ theme }) => theme.colors.backgroundAlt};
+    /* background: ${({ theme }) => theme.colors.backgroundAlt}; */
     height: 100%;
 `
 
@@ -215,7 +215,7 @@ const Person_ = styled.div`
     }
     @media ${mq.mediumLarge} {
         display: grid;
-        grid-template-columns: 2fr 1fr;
+        grid-template-columns: 1fr 1fr;
         align-items: center;
     }
 `
