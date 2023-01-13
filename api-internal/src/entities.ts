@@ -174,25 +174,33 @@ export const getEntities = async ({
     return entities
 }
 
-// Look up entities by id, name, or aliases (case-insensitive)
-export const getEntity = async ({ id }: { id: string | number }) => {
+export const findEntity = (id: string, entities: Entity[]) =>
+    entities.find(e => {
+        return (
+            (e.id && e.id.toLowerCase() === id) ||
+            (e.id && e.id.toLowerCase().replace(/\-/g, '_') === id) ||
+            (e.name && e.name.toLowerCase() === id)
+        )
+    })
 
+export const getEntity = async ({ id }: { id: string | number }) => {
     if (!id || typeof id !== 'string') {
         return
     }
 
     const entities = await getEntities({})
 
-    const lowerCaseId = id.toLowerCase()
-    // some entities are only for normalization and should not be made available through API
-    const entity = entities
-        .find(e => {
-            return (
-                (e.id && e.id.toLowerCase() === lowerCaseId) ||
-                (e.id && e.id.toLowerCase().replace(/\-/g, '_') === lowerCaseId) ||
-                (e.name && e.name.toLowerCase() === lowerCaseId)
-            )
-        })
+    const entity = findEntity(id.toLowerCase(), entities)
 
-    return entity
+    if (!entity) {
+        return
+    }
+    
+    if (entity.belongsTo) {
+        // if entity A belongs to another entity B, extend B with A and return the result
+        const ownerEntity = findEntity(entity.belongsTo, entities)
+        return { ...ownerEntity, ...entity }
+    } else {
+        return entity
+    }
 }
