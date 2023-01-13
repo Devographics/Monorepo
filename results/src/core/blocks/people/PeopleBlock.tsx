@@ -70,7 +70,7 @@ Only keep items that appear at least once (i.e. have a URL) for any of the entit
 */
 export const getRelevantServices = allEntities => {
     return services.filter(({ name }) => {
-        return allEntities.some(e => e[name]?.url)
+        return allEntities.some(e => e?.[name]?.url)
     })
 }
 
