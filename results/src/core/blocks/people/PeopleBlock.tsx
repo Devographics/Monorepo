@@ -8,9 +8,70 @@ import Avatar from 'core/components/Avatar'
 import SocialLinks from 'core/blocks/people/SocialLinks'
 import { spacing, mq, fontSize } from 'core/theme'
 import T from 'core/i18n/T'
+import {
+    LinkIcon,
+    NpmIcon,
+    TwitterIcon,
+    GitHubIcon,
+    MastodonIcon,
+    YouTubeIcon,
+    TwitchIcon,
+    RSSIcon,
+    BlogIcon
+} from 'core/icons'
 
 export interface PeopleBlockProps extends BlockComponentProps {
     data: ResultsByYear
+}
+
+export const services = [
+    {
+        name: 'twitter',
+        icon: TwitterIcon
+    },
+    {
+        name: 'homepage',
+        icon: LinkIcon
+    },
+    {
+        name: 'blog',
+        icon: BlogIcon
+    },
+    {
+        name: 'rss',
+        icon: RSSIcon
+    },
+    {
+        name: 'github',
+        icon: GitHubIcon
+    },
+    {
+        name: 'npm',
+        icon: NpmIcon
+    },
+    {
+        name: 'mastodon',
+        icon: MastodonIcon
+    },
+    {
+        name: 'youtube',
+        icon: YouTubeIcon
+    },
+    {
+        name: 'twitch',
+        icon: TwitchIcon
+    }
+]
+
+/*
+
+Only keep items that appear at least once (i.e. have a URL) for any of the entities in this question
+
+*/
+export const getRelevantServices = allEntities => {
+    return services.filter(({ name }) => {
+        return allEntities.some(e => e[name]?.url)
+    })
 }
 
 const PeopleBlock = ({ block, data, controlledUnits, isCustom }: PeopleBlockProps) => {
@@ -28,6 +89,9 @@ const PeopleBlock = ({ block, data, controlledUnits, isCustom }: PeopleBlockProp
     const { facets, completion } = data
     const buckets = facets[0].buckets
     const { total } = completion
+
+    const allEntities = buckets.map(b => b.entity)
+    const services = getRelevantServices(allEntities)
 
     return (
         <Block
@@ -64,6 +128,7 @@ const PeopleBlock = ({ block, data, controlledUnits, isCustom }: PeopleBlockProp
                         index={index}
                         maxCount={buckets[0].count}
                         units={units}
+                        services={services}
                     />
                 ))}
             </List_>
@@ -79,7 +144,8 @@ const PeopleItem = ({
     id,
     percentage_survey,
     percentage_question,
-    units
+    units,
+    services,
 }) => {
     if (!entity) {
         return <div>no entity found for id {id}</div>
@@ -115,7 +181,7 @@ const PeopleItem = ({
                 <Person_>
                     <Name_>{entity.name}</Name_>
                     <Links_>
-                        <SocialLinks entity={entity} />
+                        <SocialLinks entity={entity} services={services} />
                     </Links_>
                 </Person_>
                 <Count_>{getNumber()}</Count_>

@@ -929,6 +929,7 @@
             fieldId: resources
 
     - id: people_others
+      blockType: PeopleBlock
       defaultUnits: count
       blockNamespace: resources
       chartNamespace: people
