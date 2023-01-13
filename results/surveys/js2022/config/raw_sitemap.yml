@@ -1161,7 +1161,7 @@
         url: https://tanstack.com/
 
     - id: video_creators
-      # blockType: PeopleBlock
+      blockType: PeopleBlock
       blockNamespace: resources
       chartNamespace: video_creators
       tabId: tabs.main_answers
@@ -1170,7 +1170,7 @@
         fieldId: resources
       variants:
         - id: video_creators_others
-          # blockType: PeopleBlock
+          blockType: PeopleBlock
           defaultUnits: count
           blockNamespace: resources
           chartNamespace: video_creators

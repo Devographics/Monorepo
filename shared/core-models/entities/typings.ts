@@ -5,6 +5,7 @@
 
 export interface Entity {
   id: string
+  belongsTo?: string
   name: string
   nameClean?: string
   nameHtml?: string
