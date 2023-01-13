@@ -60,6 +60,13 @@ race_ethnicity:
   - south_east_asian
   - not_listed
 
+disability_status:
+  - visual_impairments
+  - hearing_impairments
+  - mobility_impairments
+  - cognitive_impairments
+  - not_listed
+
 industry_sector:
   - ecommerce
   - news_media
