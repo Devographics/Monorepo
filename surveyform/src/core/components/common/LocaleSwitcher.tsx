@@ -1,15 +1,14 @@
 import React from "react";
 import { useLocales } from "~/i18n/hooks/locales";
-import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { useLocaleContext } from "~/i18n/components/LocaleContext";
+import { Dropdown } from "~/core/components/ui/Dropdown";
 
 const LocaleSwitcher = () => {
-  const Components = useVulcanComponents();
   const { locales = [] } = useLocales();
   const { getLocale, setLocale } = useLocaleContext();
   const currentLocale = getLocale();
   return (
-    <Components.Dropdown
+    <Dropdown
       buttonProps={{
         variant: "default",
       }}

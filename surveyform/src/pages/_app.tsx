@@ -14,11 +14,10 @@ import {
   // Not needed, we bring our own
   //FormattedMessage,
   Loading,
-  TooltipTrigger,
   liteCoreComponents,
 } from "@vulcanjs/react-ui-lite";
 import { bootstrapCoreComponents } from "@vulcanjs/react-ui-bootstrap";
-import { Analytics } from '@vercel/analytics/react';
+import { Analytics } from "@vercel/analytics/react";
 
 import debug from "debug";
 
@@ -118,7 +117,6 @@ function VNApp({ Component, pageProps }: VNAppProps) {
                   // TODO: should not be needed, since we use Bootstrap Button instead,
                   // but need double checking
                   // Button,
-                  TooltipTrigger,
                   Loading,
                   ...bootstrapCoreComponents,
                   // Keep the component here even if we don't use Components.FormattedMessage directly

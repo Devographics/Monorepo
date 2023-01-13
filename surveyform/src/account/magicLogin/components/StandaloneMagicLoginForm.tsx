@@ -1,13 +1,13 @@
 "use client";
 
 import { useState, ReactNode, FormEventHandler } from "react";
-import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { useIntlContext } from "@vulcanjs/react-i18n";
 import { sendMagicLoginEmail } from "../lib/sendMagicLoginEmail";
 import { useUser } from "~/account/user/hooks";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useLocaleContext } from "~/i18n/components/LocaleContext";
 import { FormComponentEmail } from "./FormComponentEmail";
+import { Button } from "~/core/components/ui/Button";
 
 /**
  * With passwordless approach, there is no signup step,
@@ -20,7 +20,6 @@ export const StandaloneMagicLoginForm = ({
 }: {
   label?: string | ReactNode;
 }) => {
-  const router = useRouter();
   const intl = useIntlContext();
   const placeholder = intl.formatMessage({ id: `accounts.your_email` });
   const [errorMsg, setErrorMsg] = useState("");
@@ -108,8 +107,6 @@ const MagicLinkLoginForm = ({
   label?: string | ReactNode;
   placeholder?: string;
 }) => {
-  const Components = useVulcanComponents();
-
   return (
     <form onSubmit={onSubmit} className="magic-link-login-form">
       {/* <span>Your Email</span> */}
@@ -125,7 +122,7 @@ const MagicLinkLoginForm = ({
         name="email"
       />
       <div className="submit">
-        <Components.Button type="submit">{label}</Components.Button>
+        <Button type="submit">{label}</Button>
       </div>
 
       {errorMessage && <div className="error magic-error">{errorMessage}</div>}

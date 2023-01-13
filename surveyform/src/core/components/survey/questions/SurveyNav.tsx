@@ -9,7 +9,7 @@ TODO
 - Simplify this by using already-parsed with getQuestionObject() outline
 
 */
-import { useVulcanComponents, useFormContext } from "@vulcanjs/react-ui";
+import { useFormContext } from "@vulcanjs/react-ui";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import { getSurveyPath } from "~/modules/surveys/getters";
@@ -18,6 +18,8 @@ import surveys from "~/surveys";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import SurveyNavItem from "~/core/components/survey/questions/SurveyNavItem";
 import { getCompletionPercentage } from "~/modules/responses/helpers";
+import { Button } from "~/core/components/ui/Button";
+import { Loading } from "../../ui/Loading";
 
 // TODO
 // const getOverallCompletionPercentage = (response) => {
@@ -42,18 +44,17 @@ const SurveyNav = ({
 
   const response = getDocument();
 
-  const Components = useVulcanComponents();
   const outline = surveys.find((o) => o.slug === survey.slug)?.outline;
   if (!outline)
     throw new Error(`Survey or outline not found for slug ${survey.slug}`);
 
   const [shown, setShown] = useState(false);
   const [currentTabindex, setCurrentTabindex] = useState<number | null>(null);
-  const [currentFocusIndex, setCurrentFocusIndex] = useState<number | null>(
-    null
-  );
+  const [currentFocusIndex, setCurrentFocusIndex] =
+    useState<number | null>(null);
 
-  const overallCompletion = !readOnly && response && getCompletionPercentage(response)
+  const overallCompletion =
+    !readOnly && response && getCompletionPercentage(response);
 
   useEffect(() => {
     const keyPressHandler = (e) => {
@@ -96,20 +97,24 @@ const SurveyNav = ({
             {survey.name} {survey.year}
           </Link>
         </h2>
-        <Components.Button
+        <Button
           className="section-nav-head"
           onClick={(e) => {
             setShown(!shown);
           }}
         >
           <span className="section-nav-head-left">
-          <h3 className="section-nav-toc">
-            <FormattedMessage id="general.table_of_contents" />
-          </h3>
-          {overallCompletion && <span className="section-nav-completion">{overallCompletion}%</span>}
+            <h3 className="section-nav-toc">
+              <FormattedMessage id="general.table_of_contents" />
+            </h3>
+            {overallCompletion && (
+              <span className="section-nav-completion">
+                {overallCompletion}%
+              </span>
+            )}
           </span>
           <span className="section-nav-toggle">{shown ? "▼" : "▶"}</span>
-        </Components.Button>
+        </Button>
         <div className="section-nav-contents">
           <ul>
             {outline.map((section, i) => (
@@ -136,7 +141,7 @@ const SurveyNav = ({
         </div>
         {navLoading && (
           <div className="section-nav-loading">
-            <Components.Loading />
+            <Loading />
           </div>
         )}
       </div>

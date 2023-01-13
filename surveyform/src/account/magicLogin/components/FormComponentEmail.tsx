@@ -1,6 +1,6 @@
-import type { FormInputProps } from "@vulcanjs/react-ui";
 import React from "react";
 import { FormControl } from "react-bootstrap";
+import { FormInputProps } from "~/core/components/forms/typings";
 
 export const LoginFormItem = ({
   label,

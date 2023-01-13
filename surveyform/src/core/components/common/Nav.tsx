@@ -4,8 +4,6 @@ import Nav from "react-bootstrap/Nav";
 // @see https://github.com/react-bootstrap/react-router-bootstrap
 // import { IndexLinkContainer } from "react-router-bootstrap";
 import LocaleSwitcher from "./LocaleSwitcher";
-import { isAdmin } from "@vulcanjs/permissions";
-import { useVulcanComponents } from "@vulcanjs/react-ui";
 import Link from "next/link";
 import { routes } from "~/lib/routes";
 import { useUser } from "~/account/user/hooks";
@@ -31,7 +29,6 @@ const loggedInNavContents: Array<NavItemDef> = [
 ];
 
 const Navigation = () => {
-  const Components = useVulcanComponents();
   const { user } = useUser();
   let navItems = navContents;
   if (user) {

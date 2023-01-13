@@ -7,13 +7,13 @@ import { useUser } from "~/account/user/hooks";
  * NOTE: this could be an API route as well, but a web page let's us have a nicer
  * UI in case of error.
  */
-import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { useState, useEffect } from "react";
 import { useMagicToken } from "~/account/magicLogin/hooks";
 import { verifyMagicToken } from "~/account/magicLogin/lib";
 import { routes } from "~/lib/routes";
 
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
+import { Loading } from "~/core/components/ui/Loading";
 
 const useMagicLoginCheck = () => {
   const [loading, setLoading] = useState(false);
@@ -54,9 +54,8 @@ const useMagicLoginCheck = () => {
   };
 };
 const MagicLoginCheckPage = () => {
-  const Components = useVulcanComponents();
   const { loading, error } = useMagicLoginCheck();
-  if (loading) return <Components.Loading />;
+  if (loading) return <Loading />;
   if (error) return <p>Error: {error.message}</p>;
   return (
     <p>

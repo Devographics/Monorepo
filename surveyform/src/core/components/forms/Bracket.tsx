@@ -5,9 +5,11 @@ import isNil from "lodash/isNil.js";
 import isEmpty from "lodash/isEmpty.js";
 import cloneDeep from "lodash/cloneDeep.js";
 import { useIntlContext } from "@vulcanjs/react-i18n";
-import { useFormContext, useVulcanComponents } from "@vulcanjs/react-ui";
+import { useFormContext } from "@vulcanjs/react-ui";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import { FormItem } from "../survey/questions/FormItem";
+import { TooltipTrigger } from "~/core/components/ui/TooltipTrigger";
+import { Button } from "~/core/components/ui/Button";
 
 /*
 
@@ -92,7 +94,6 @@ const Bracket = (
     path,
   } /* FormInputProps*/ /** TODO The props are those of a Vulcan custom form input */
 ) => {
-  const Components = useVulcanComponents();
   const { updateCurrentValues } = useFormContext();
   const { value } = inputProperties;
   const [results, setResults] = useState(
@@ -173,7 +174,6 @@ Sub Components
 
 // bracket legend
 const BracketLegend = ({ options }) => {
-  const Components = useVulcanComponents();
   return (
     <table className="bracket-legend">
       <tbody>
@@ -213,7 +213,6 @@ const BracketResults = (props) => {
 const BracketMatchGroup = (props) => {
   const { matchIndexes, ...rest } = props;
   const { results, isOverallWinner, level } = rest;
-  const Components = useVulcanComponents();
   return (
     <div
       className={`bracket-matchgroup bracket-matchgroup-level${level} bracket-matchgroup-${
@@ -243,7 +242,6 @@ const BracketMatchGroup = (props) => {
 
 // bracket pair; or single winner
 const BracketMatch = (props) => {
-  const Components = useVulcanComponents();
   const { options, result, index, isOverallWinner = false } = props;
   const [p1Index, p2Index, winnerIndex] = result;
   const p1 = options[p1Index];
@@ -353,20 +351,19 @@ const BracketItem = (props) => {
 
 // wrap an item with a description or not based on its availability
 const WrapWithDescriptionTooltip = ({ player, children }) => {
-  const Components = useVulcanComponents();
   const intl = useIntlContext();
   const description =
     player && intl.formatMessage({ id: `${player.intlId}.description` });
 
   //return children;
   return description ? (
-    <Components.TooltipTrigger
+    <TooltipTrigger
       trigger={<div className="bracket-item-tooltip-trigger">{children}</div>}
     >
       <div className="bracket-item-details" aria-hidden="true">
         {description}
       </div>
-    </Components.TooltipTrigger>
+    </TooltipTrigger>
   ) : (
     children
   );
@@ -383,7 +380,6 @@ const BracketItemButton = (props) => {
     result,
     canCancel,
   } = props;
-  const Components = useVulcanComponents();
   return (
     <div className="bracket-item-button-wrapper">
       <WrapWithDescriptionTooltip player={player}>
@@ -427,9 +423,8 @@ const BracketItemCancel = ({
   isOverallWinner,
   cancelMatch,
 }: BracketItemCancelProps) => {
-  const Components = useVulcanComponents();
   return (
-    <Components.TooltipTrigger
+    <TooltipTrigger
       trigger={
         <button
           className="bracket-item-cancel"
@@ -450,7 +445,7 @@ const BracketItemCancel = ({
       <div className="bracket-item-details" aria-hidden="true">
         <FormattedMessage id="bracket.cancel" />
       </div>
-    </Components.TooltipTrigger>
+    </TooltipTrigger>
   );
 };
 
@@ -482,7 +477,6 @@ const BracketItemOverallWinner = (
   } & BracketItemCancelProps
 ) => {
   const { player, canCancel } = props;
-  const Components = useVulcanComponents();
   return (
     <div className="bracket-item-button-wrapper">
       <WrapWithDescriptionTooltip player={player}>
@@ -500,22 +494,20 @@ const BracketItemOverallWinner = (
 
 // start over (not used)
 export const BracketStartOver = ({ startOver }: { startOver: () => void }) => {
-  const Components = useVulcanComponents();
   return (
-    <Components.Button
+    <Button
       className="bracket-startover"
       onClick={() => {
         startOver();
       }}
     >
       <FormattedMessage id="bracket.start_over" />
-    </Components.Button>
+    </Button>
   );
 };
 
 // empty bracket result item
 const EmptyBracketItem = ({ classnames }: { classnames: Array<string> }) => {
-  const Components = useVulcanComponents();
   return (
     <div className={[...classnames, "bracket-item-empty"].join(" ")}>
       <div className="bracket-item-inner">

@@ -11,7 +11,6 @@ import {
 } from "@vulcanjs/react-ui";
 import { ResponsePerSurvey } from "~/modules/responses/model";
 import type { SurveyType } from "@devographics/core-models";
-import { useUser } from "~/account/user/hooks";
 import { defaultFormComponents } from "@vulcanjs/react-ui";
 import { liteFormComponents } from "@vulcanjs/react-ui-lite";
 import { bootstrapFormComponents } from "@vulcanjs/react-ui-bootstrap";

@@ -5,7 +5,7 @@ import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import type { SurveySection, SurveyType } from "@devographics/core-models";
 import { ResponseDocument } from "@devographics/core-models";
 import { getSectionCompletionPercentage } from "~/modules/responses/helpers";
-import { useVulcanComponents, useFormContext } from "@vulcanjs/react-ui";
+import { useFormContext } from "@vulcanjs/react-ui";
 import { getSurveyPath } from "~/modules/surveys/getters";
 import { useRouter } from "next/navigation";
 import { saveSurvey } from "../page/hooks";
@@ -49,8 +49,6 @@ const SurveyNavItem = ({
       textInput.current?.focus();
     }
   }, [currentTabindex]);
-
-  const Components = useVulcanComponents();
 
   const handleClick = async (e) => {
     setNavLoading(true);

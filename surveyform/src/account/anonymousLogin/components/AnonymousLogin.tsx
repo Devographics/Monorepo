@@ -1,10 +1,10 @@
 "use client";
-import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { useRouter } from "next/navigation";
 import { useState, ReactNode } from "react";
 import { loginAnonymously } from "../lib";
 import { useSWRConfig } from "swr";
 import { apiRoutes } from "~/lib/apiRoutes";
+import { Button } from "~/core/components/ui/Button";
 
 /**
  * Will update all "useUser" hooks
@@ -26,7 +26,6 @@ export const AnonymousLoginForm = ({
   successRedirection?: string;
   label?: string | ReactNode;
 }) => {
-  const Components = useVulcanComponents();
   const [errorMsg, setErrorMsg] = useState("");
   const router = useRouter();
   const refreshUser = useRefreshUser();
@@ -55,9 +54,7 @@ export const AnonymousLoginForm = ({
     <>
       <div className="anonymous-login">
         {/*<Form isLogin errorMessage={errorMsg} onSubmit={handleSubmit} />*/}
-        <Components.Button onClick={() => loginAnonymouslyOnClick()}>
-          {label}
-        </Components.Button>
+        <Button onClick={() => loginAnonymouslyOnClick()}>{label}</Button>
         {errorMsg && <p className="error">{errorMsg}</p>}
       </div>
     </>
