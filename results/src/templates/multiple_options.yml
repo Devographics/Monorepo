@@ -30,6 +30,7 @@ query: >
                             percentage_survey
                             entity {
                                 id
+                                belongsTo
                                 name
                                 nameClean
                                 nameHtml

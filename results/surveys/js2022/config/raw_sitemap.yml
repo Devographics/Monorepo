@@ -230,9 +230,9 @@
           variables:
             options: {cutoff: 10}
 
-    # - id: user_info_resources
-    #   items: [fm-homepage]
-    #   template: recommended_resources
+    - id: user_info_resources
+      items: [renderatl]
+      template: recommended_resources
 
 - id: features
   path: /features
@@ -324,7 +324,7 @@
           year: 2022
 
         - id: language_resources
-          items: [fm-javascript-new-hard-parts]
+          items: [fm-javascript-hard-parts-v2]
           template: recommended_resources
 
 
@@ -740,7 +740,7 @@
           year: 2022
  
         - id: build_tools_resources
-          items: [fm-webpack]
+          items: [fm-xstate]
           template: recommended_resources
 
     - id: monorepo_tools
@@ -1161,7 +1161,7 @@
         url: https://tanstack.com/
 
     - id: video_creators
-      # blockType: PeopleBlock
+      blockType: PeopleBlock
       blockNamespace: resources
       chartNamespace: video_creators
       tabId: tabs.main_answers
@@ -1170,7 +1170,7 @@
         fieldId: resources
       variants:
         - id: video_creators_others
-          # blockType: PeopleBlock
+          blockType: PeopleBlock
           defaultUnits: count
           blockNamespace: resources
           chartNamespace: video_creators
@@ -1228,7 +1228,7 @@
             fieldId: resources
 
     - id: resources_resources
-      items: [renderatl]
+      items: [reactathon]
       template: recommended_resources
 
 - id: opinions

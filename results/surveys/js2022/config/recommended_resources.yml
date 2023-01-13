@@ -8,11 +8,12 @@
   teacher: Anjana Vakil
   # company: Software Engineer & Educator
 
-- name: 'JavaScript: The New Hard Parts'
-  id: fm-javascript-new-hard-parts
+- name: |
+    JavaScript: The Hard Parts, v2
+  id: fm-javascript-hard-parts-v2
   description: >
-    In this course, you will develop an intuitive understanding of the new features of JavaScript in ES6+: iterators, generators, promises, and async/await. 
-  url: https://frontendmasters.com/courses/javascript-new-hard-parts/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
+    Combining mental models of JavaScript's inner workings and hands-on programming challenges, this course will give you a solid understanding of callbacks and higher-order functions, closure, asynchronous JavaScript, and object-oriented JavaScript.
+  url: https://frontendmasters.com/courses/javascript-hard-parts-v2/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
   image: https://static.frontendmasters.com/assets/teachers/sentance/thumb@2x.webp
   teacher: Will Sentance
   company: Codesmith
@@ -53,9 +54,9 @@
   id: fm-vue
   description: Learn fundamental concepts in Vue, such as directives, methods, and computed watchers. You’ll learn Vue’s reactivity system and the new Composition API in Vue 3.
   url: https://frontendmasters.com/learn/vue/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
-  image: https://static.frontendmasters.com/assets/teachers/drasner/thumb.webp
-  teacher: Sarah Drasner
-  company: Google
+  image: https://static.frontendmasters.com/assets/teachers/hong/thumb.webp
+  teacher: Ben Hong
+  company: Netlify
   
 - name: API Design in Node.js, v4
   id: fm-api-design-nodejs-v4
@@ -129,7 +130,8 @@
   teacher: Kent C. Dodds
   company: Remix
   
-- name: The Last Algorithms Course You'll Need
+- name: |
+    [Free] The Last Algorithms Course You'll Need
   id: fm-algorithms
   description: |
     You'll learn big o time complexity, fundamental data structures like arrays, lists, trees, graphs, and maps, and searching and sorting algorithms.
@@ -147,7 +149,6 @@
   teacher: Scott Moss
   company: Netflix
   
-  
 - name: A Tour of JavaScript & React Patterns
   id: fm-js-patterns
   description: |
@@ -156,7 +157,6 @@
   image: https://static.frontendmasters.com/assets/teachers/hallie/thumb@2x.webp
   teacher: Lydia Hallie
   # company: 
-  
   
 - name: Web Components
   id: fm-web-components
@@ -167,7 +167,6 @@
   teacher: Dave Rupert
   company: Paravel
   
-  
 - name: The Hard Parts of Servers & Node.js
   id: fm-servers-node-js
   description: |
@@ -176,7 +175,6 @@
   image: https://static.frontendmasters.com/assets/teachers/sentance/thumb@2x.webp
   teacher: Will Sentance
   company: Codesmith
-  
   
 - name: The Hard Parts of Functional JavaScript
   id: fm-js-fundamentals
@@ -187,24 +185,34 @@
   teacher: Will Sentance
   company: Codesmith
   
+- name: State Machines in JavaScript with XState, v2
+  id: fm-xstate
+  description: |
+    Learn to model your app with clear and robust app logic with state machines and statecharts. You'll build state machines without any libraries in pure JavaScript, then use XState to take advantage of a wide variety of other features.
+  url: https://frontendmasters.com/courses/xstate-v2/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
+  image: https://static.frontendmasters.com/assets/teachers/khourshid/thumb@2x.webp
+  teacher: David Khourshid
+  company: Microsoft
+
 # Road to React
 
 - name: Road to React
   id: road-to-react
   description: |
-    The Road to React is used by universities and bootcamps to teach about React. With its annual editions since 2017, it is the most read React book with 75.000+ readers. While each chapter teaches a new fundamental lesson, students create a React app from the ground to production.
+    The Road to React is used by universities, bootcamps and self-taught developers to learn about React.js. With its annual editions since 2017, it is the most read React book with 75.000+ readers. While each chapter teaches a new fundamental lesson, students learn how to create a React project from the zero to production.
   url: https://www.roadtoreact.com/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
   image: /images/resources/road_to_react.png
   teacher: Robin Wieruch
 
 # Reacthathon
 
-- name: Reactathon returns in-person this May
+- name: Reactathon returns in San Francisco May 2 - 3!
   id: reactathon
-  description: Join Lee Robinson, Jenn Creighton, Wes Bos, & more at the largest React conference in the US. Now with a full day of talks on Serverless! Fully-outdoors, fully-vaxxed, fully-tested. Reactathon.com 
-  url: https://www.reactathon.com/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
-  image: https://pbs.twimg.com/profile_images/1483184990141632513/0PyJ5KIo_400x400.jpg
-  teacher: Berkeley, CA
+  description: |
+    Join 400+ frontend React devs in the beautiful Pacific Heights & Japantown neighborhoods of San Francisco for 2 days of  fun & talks from speakers including Theo Browne, Wes Bos, Tanner Linsley, & more! Use discount code "SOJS" for an exclusive 40% off the ticket price! 
+  url: https://ti.to/real-world-react/reactathon-2023
+  image: /images/resources/reactathon.png
+  teacher: San Francisco, CA
   
 # Render
 
@@ -219,3 +227,30 @@
   url: http://www.renderatl.com/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
   image: /images/resources/renderatl-stacked.png
   teacher: Atlanta, Georgia
+  
+# - name: 
+#   id: 
+#   description: |
+
+#   url: ?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
+#   image: 
+#   teacher: 
+#   company: 
+  
+# - name: 
+#   id: 
+#   description: |
+
+#   url: ?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
+#   image: 
+#   teacher: 
+#   company: 
+  
+# - name: 
+#   id: 
+#   description: |
+
+#   url: ?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
+#   image: 
+#   teacher: 
+#   company: 

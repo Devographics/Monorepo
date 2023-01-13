@@ -2,6 +2,7 @@
 import HorizontalBarBlock from 'core/blocks/generic/HorizontalBarBlock'
 import VerticalBarBlock from 'core/blocks/generic/VerticalBarBlock'
 import HeatmapBlock from 'core/blocks/generic/HeatmapBlock'
+import PeopleBlock from 'core/blocks/people/PeopleBlock'
 
 // other
 import TextBlock from 'core/blocks/other/TextBlock'
@@ -77,7 +78,8 @@ const blockRegistry = {
     HorizontalBarBlock,
     VerticalBarBlock,
     HeatmapBlock,
-
+    PeopleBlock,
+    
     // other
     PageIntroductionBlock,
     TextBlock,
