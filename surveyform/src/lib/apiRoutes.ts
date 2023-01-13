@@ -4,6 +4,11 @@ import { SurveyDocument } from "@devographics/core-models";
  * NOTE: this is SHARED code not API only, we use this in the frontend as well
  */
 export const apiRoutes = {
+  /** @deprecated try to move graphql calls to backend only */
+  graphql: {
+    href: "/api/graphql",
+    method: "POST"
+  },
   account: {
     // POST
     signup: {

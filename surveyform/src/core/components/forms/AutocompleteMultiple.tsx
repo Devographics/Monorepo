@@ -15,14 +15,35 @@ import React, { useState } from "react";
 // We don't auto-expand queries in Vulcan NPM, since we don't use the registry pattern
 // anymore. Instead, provide the right fragments directly, using composition with string templates.
 //import { expandQueryFragments } from "meteor/vulcan:core";
-import { useLazyQuery } from "@apollo/client";
 import gql from "graphql-tag";
 import type { FormInputProps } from "@vulcanjs/react-ui";
 import { useFormContext } from "@vulcanjs/react-ui";
 import { Alert } from "~/core/components/ui/Alert";
 import { FormItem } from "../survey/questions/FormItem";
+import useSWR from "swr";
+import { apiRoutes } from "~/lib/apiRoutes";
+import { DocumentNode, print } from "graphql";
 
+/**
+ * @example useSWR([yourGraphqlQuery, yourGraphqlVariables])
+ * @param param0
+ */
+function graphqlFetcher([query, variables]: [DocumentNode, any]) {
+  return fetch(apiRoutes.graphql.href, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ query: print(query), variables }),
+  }).then((res) => res.json());
+}
 export interface AutocompleteMultipleProps extends FormInputProps {}
+
+// TODO: move the autocomplete query creation logic to server
+// @see https://swr.vercel.app/docs/arguments
+const useAutocomplete = (autocompleteQuery, autocompleteVariables) =>
+  useSWR<any>([autocompleteQuery, autocompleteVariables], graphqlFetcher);
+
 export const AutocompleteMultiple = (props: AutocompleteMultipleProps) => {
   // TODO: some props are now comming from the context
   const {
@@ -51,12 +72,15 @@ export const AutocompleteMultiple = (props: AutocompleteMultipleProps) => {
   // get component's autocomplete query and use it to load autocomplete suggestions
   // note: we use useLazyQuery because
   // we don't want to trigger the query until the user has actually typed in something
-  const [loadAutocompleteOptions, { loading, error, data }] = useLazyQuery(
-    gql(/*expandQueryFragments(*/ autocompleteQuery() /*)*/),
+  const { data, error } = useAutocomplete(
+    queryString &&
+      //const [loadAutocompleteOptions, { loading, error, data }] = useLazyQuery(
+      gql(/*expandQueryFragments(*/ autocompleteQuery() /*)*/),
     {
-      variables: { queryString },
+      queryString,
     }
   );
+  const loading = !data && !error;
 
   // apply options function to data to get suggestions in { value, label } pairs
   const autocompleteOptions = data && optionsFunction({ data }, "autocomplete");
@@ -100,7 +124,6 @@ export const AutocompleteMultiple = (props: AutocompleteMultipleProps) => {
         ref={refFunction}
         onSearch={(queryString) => {
           setQueryString(queryString);
-          loadAutocompleteOptions();
         }}
         isLoading={loading}
         selected={selectedItems}

@@ -34,6 +34,7 @@ import { getAppGraphqlUri } from "~/lib/graphql";
 import Layout from "~/core/components/common/Layout";
 import type { LocaleDef } from "~/i18n/typings";
 import { SSRProvider } from "react-bootstrap";
+import { SWRConfig } from "swr";
 
 export interface AppLayoutProps {
   /** Locale extracted from cookies server-side */
@@ -73,46 +74,54 @@ export function AppLayout(props: AppLayoutProps) {
         {/** TODO: this error boundary to display anything useful since it doesn't have i18n */}
         {
           <ApolloProvider client={apolloClient}>
-            <LocaleContextProvider
-              locales={locales}
-              localeId={locale}
-              localeStrings={localeStrings}
-              currentUser={user}
+            <SWRConfig
+              value={{
+                // basic global fetcher
+                fetcher: (resource, init) =>
+                  fetch(resource, init).then((res) => res.json()),
+              }}
             >
-              <VulcanCurrentUserProvider
-                // @ts-ignore FIXME: weird error with groups
-                value={{
-                  currentUser: user || null,
-                  loading:
-                    false /* TODO: we don't get the loading information from useUser yet */,
-                }}
+              <LocaleContextProvider
+                locales={locales}
+                localeId={locale}
+                localeStrings={localeStrings}
+                currentUser={user}
               >
-                <VulcanComponentsProvider
+                <VulcanCurrentUserProvider
+                  // @ts-ignore FIXME: weird error with groups
                   value={{
-                    ...defaultCoreComponents,
-                    ...liteCoreComponents,
-                    // TODO: should not be needed, since we use Bootstrap Button instead,
-                    // but need double checking
-                    // Button,
-                    TooltipTrigger,
-                    ...bootstrapCoreComponents,
-                    Loading,
-                    Button,
-                    Alert,
-                    // Keep the component here even if we don't use Components.FormattedMessage directly
-                    // This allows Vulcan components to depend on it
-                    FormattedMessage,
+                    currentUser: user || null,
+                    loading:
+                      false /* TODO: we don't get the loading information from useUser yet */,
                   }}
                 >
-                  <ErrorBoundary
-                    proposeReload={true}
-                    proposeHomeRedirection={true}
+                  <VulcanComponentsProvider
+                    value={{
+                      ...defaultCoreComponents,
+                      ...liteCoreComponents,
+                      // TODO: should not be needed, since we use Bootstrap Button instead,
+                      // but need double checking
+                      // Button,
+                      TooltipTrigger,
+                      ...bootstrapCoreComponents,
+                      Loading,
+                      Button,
+                      Alert,
+                      // Keep the component here even if we don't use Components.FormattedMessage directly
+                      // This allows Vulcan components to depend on it
+                      FormattedMessage,
+                    }}
                   >
-                    <Layout>{children}</Layout>
-                  </ErrorBoundary>
-                </VulcanComponentsProvider>
-              </VulcanCurrentUserProvider>
-            </LocaleContextProvider>
+                    <ErrorBoundary
+                      proposeReload={true}
+                      proposeHomeRedirection={true}
+                    >
+                      <Layout>{children}</Layout>
+                    </ErrorBoundary>
+                  </VulcanComponentsProvider>
+                </VulcanCurrentUserProvider>
+              </LocaleContextProvider>
+            </SWRConfig>
           </ApolloProvider>
         }
       </ErrorBoundary>

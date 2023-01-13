@@ -1,55 +1,6 @@
 import get from "lodash/get.js";
-import { capitalize } from "@vulcanjs/utils";
+import { autocompleteQueryTemplate, fieldDynamicQueryTemplate } from "./autocompleteGraphql";
 
-/*
-
-Field-specific data loading query template for a dynamic array of item IDs
-
-(example: `categoriesIds` where $value is ['foo123', 'bar456'])
-
-*/
-export const fieldDynamicQueryTemplate = ({
-  labelsQueryResolverName,
-  autocompletePropertyName,
-}) =>
-  `query FormComponentDynamic${capitalize(labelsQueryResolverName)}Query($value: [String!]) {
-    ${labelsQueryResolverName}(input: { 
-      filter: {  _id: { _in: $value } },
-      sort: { ${autocompletePropertyName}: asc }
-    }){
-      results{
-        _id
-        ${autocompletePropertyName}
-      }
-    }
-  }
-`;
-
-/*
-
-Query template for loading a list of autocomplete suggestions
-
-*/
-export const autocompleteQueryTemplate = ({
-  autocompleteQueryResolverName,
-  autocompletePropertyName,
-}) => `
-  query Autocomplete${capitalize(autocompleteQueryResolverName)}Query($queryString: String) {
-    ${autocompleteQueryResolverName}(
-      input: {
-        filter: {
-          ${autocompletePropertyName}: { _like: $queryString }
-        },
-        limit: 20
-      }
-    ){
-      results{
-        _id
-        ${autocompletePropertyName}
-      }
-    }
-  }
-`;
 
 // note: the following decorator function is called both for autocomplete and autocompletemultiple
 // We already have set simpl schema typings yet we have a weird error message
@@ -100,6 +51,9 @@ export const makeAutocomplete = (
     valuePropertyName,
     fragmentName,
   };
+
+  // TODO: instead, create new REST endpoints that implement these queries
+  // and encapsulate the underlying graphql logic
 
   // define query to load extra data for input values
   // to load only some items based on a key
