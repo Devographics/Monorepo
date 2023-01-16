@@ -5,26 +5,38 @@ import ChartContainer from 'core/charts/ChartContainer'
 import HorizontalBarChart from 'core/charts/generic/HorizontalBarChart'
 import { getTableData } from 'core/helpers/datatables'
 import { ResultsByYear, BlockComponentProps } from 'core/types'
+import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
 
 export interface HorizontalBarBlockProps extends BlockComponentProps {
     data: ResultsByYear
 }
 
-const HorizontalBarBlock = ({ block, data, controlledUnits, isCustom }: HorizontalBarBlockProps) => {
+const HorizontalBarBlock = ({
+    block,
+    data,
+    controlledUnits,
+    isCustom
+}: HorizontalBarBlockProps) => {
     const {
         id,
         mode = 'relative',
         defaultUnits = 'count',
         translateData,
         chartNamespace = block.blockNamespace ?? block.id,
-        colorVariant,
+        colorVariant
     } = block
+
 
     const [units, setUnits] = useState(defaultUnits)
 
     const { facets, completion } = data
     const buckets = facets[0].buckets
     const { total } = completion
+
+    // contains the filters that define the series
+    const [chartFilters, setChartFilters] = useState([])
+    // how many series to display (only updated after data is loaded)
+    const [seriesCount, setSeriesCount] = useState(0)
 
     return (
         <Block
@@ -36,23 +48,37 @@ const HorizontalBarBlock = ({ block, data, controlledUnits, isCustom }: Horizont
                     data: buckets,
                     valueKeys: ['percentage_survey', 'percentage_question', 'count'],
                     translateData,
-                    i18nNamespace: chartNamespace,
-                }),
+                    i18nNamespace: chartNamespace
+                })
             ]}
             block={block}
             completion={completion}
+            chartFilters={chartFilters}
+            setChartFilters={setChartFilters}
         >
-            <ChartContainer fit={false}>
-                <HorizontalBarChart
-                    total={total}
-                    buckets={buckets}
-                    i18nNamespace={chartNamespace}
-                    translateData={translateData}
-                    mode={mode}
-                    units={controlledUnits ?? units}
-                    colorVariant={isCustom ? 'secondary': 'primary'}
-                />
-            </ChartContainer>
+            <DynamicDataLoader
+                completion={completion}
+                defaultBuckets={buckets}
+                block={block}
+                chartFilters={chartFilters}
+                setUnits={setUnits}
+                seriesCount={seriesCount + 1}
+                setSeriesCount={setSeriesCount}
+                mode="multiple"
+                layout="grid"
+            >
+                <ChartContainer fit={false}>
+                    <HorizontalBarChart
+                        total={total}
+                        buckets={buckets}
+                        i18nNamespace={chartNamespace}
+                        translateData={translateData}
+                        mode={mode}
+                        units={controlledUnits ?? units}
+                        colorVariant={isCustom ? 'secondary' : 'primary'}
+                    />
+                </ChartContainer>
+            </DynamicDataLoader>
         </Block>
     )
 }
@@ -65,7 +91,7 @@ HorizontalBarBlock.propTypes = {
         translateData: PropTypes.bool,
         mode: PropTypes.oneOf(['absolute', 'relative']),
         defaultUnits: PropTypes.oneOf(['percentage_survey', 'percentage_question', 'count']),
-        colorVariant: PropTypes.oneOf(['primary', 'secondary']),
+        colorVariant: PropTypes.oneOf(['primary', 'secondary'])
     }).isRequired,
     data: PropTypes.shape({
         facets: PropTypes.arrayOf(

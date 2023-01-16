@@ -21,19 +21,17 @@ export const getNewSeries = ({ filters, keys, year }) => {
     return { year, conditions: [getNewCondition({ filtersNotInUse, keys })] }
 }
 
-// TODO: do this better without relying on magic character counts
-export const getFiltersQuery = ({ block, series = [], currentYear }) => {
+const startMarker = '# fragmentStart'
+const endMarker = '# fragmentEnd'
+
+export const getFiltersQuery = ({ block, chartFilters = [], currentYear }) => {
     const query = getGraphQLQuery(block)
-    const idIndex = query.indexOf(`${block.id}: `)
-    const queryHeader = query.slice(0, idIndex)
-    const queryContents = query.slice(idIndex, query.length - 10)
-    const queryFooter = `
-        }
-    }
-}`
+    const queryHeader = query.slice(0, query.indexOf(startMarker))
+    const queryContents = query.slice(query.indexOf(startMarker) + startMarker.length, query.indexOf(endMarker))
+    const queryFooter = query.slice(query.indexOf(endMarker) + endMarker.length)
     const newQuery =
         queryHeader +
-        series
+        chartFilters
             .map((singleSeries, seriesIndex) => {
                 // {gender: {eq: male}, company_size: {eq: range_1}}
                 const filterObject = {}
@@ -41,8 +39,10 @@ export const getFiltersQuery = ({ block, series = [], currentYear }) => {
                     const { field, operator, value } = condition
                     filterObject[field] = { [operator]: value }
                 })
+                const seriesName = `${block.id}_${seriesIndex + 1}`
                 return queryContents
-                    .replace(`${block.id}: `, `${block.id}_${seriesIndex + 1}: `)
+                    .replace('[seriesName]', seriesName)
+                    .replace(`${block.id}: `, `${seriesName}: `)
                     .replace(
                         'filters: {}',
                         `filters: ${JSON.stringify(filterObject).replaceAll('"', '')}`
@@ -51,7 +51,7 @@ export const getFiltersQuery = ({ block, series = [], currentYear }) => {
             })
             .join('') +
         queryFooter
-        
+
     // console.log(newQuery)
     return newQuery
 }
@@ -63,7 +63,7 @@ multiple series (e.g. { count, count_1, percentage_question, percentage_question
 
 */
 const fields = ['count', 'percentage_question', 'percentage_survey']
-export const mergeBuckets = ({ bucketsArrays, completion }) => {
+export const combineBuckets = ({ bucketsArrays, completion }) => {
     const [baseBucketsArray, ...otherBucketsArrays] = bucketsArrays
     const mergedBuckets = cloneDeep(baseBucketsArray)
     otherBucketsArrays.forEach((buckets = [], index) => {
@@ -94,3 +94,68 @@ export const getFieldLabel = ({ getString, field }) => getString(`user_info.${fi
 
 export const getValueLabel = ({ getString, field, value }) =>
     field === 'country' ? getCountryName(value) || value : getString(`options.${field}.${value}`)?.t
+
+export const getLegends = ({
+    theme,
+    chartFilters,
+    getString,
+    currentYear
+}: {
+    theme: any
+    chartFilters: any
+    getString: any
+    currentYear: number
+}) => {
+    if (!chartFilters || chartFilters.length === 0) {
+        return []
+    } else {
+        const showYears = chartFilters.some(s => s.year !== currentYear)
+
+        const defaultLabel = showYears
+            ? getString('filters.series.year', { values: { year: currentYear } })?.t
+            : getString('filters.legend.default')?.t
+        const defaultLegendItem = {
+            color: theme.colors.barColors[0].color,
+            gradientColors: theme.colors.barColors[0].gradient,
+            id: 'default',
+            label: defaultLabel,
+            shortLabel: defaultLabel
+        }
+
+        const seriesLegendItems = chartFilters.map((seriesItem, seriesIndex) => {
+            let labelSegments = []
+            if (showYears) {
+                // if at least one series is showing a different year, add year to legend
+                labelSegments.push(
+                    getString('filters.series.year', { values: { year: seriesItem.year } })?.t
+                )
+            }
+            if (seriesItem.conditions.length > 0) {
+                // add conditions filters to legend
+                labelSegments = [
+                    ...labelSegments,
+                    seriesItem.conditions.map(({ field, operator, value }) => {
+                        const fieldLabel = getFieldLabel({ getString, field })
+                        const valueLabel = getValueLabel({
+                            getString,
+                            field,
+                            value
+                        })
+                        return `${fieldLabel} = ${valueLabel}`
+                    })
+                ]
+            }
+            const label = labelSegments.join(', ')
+
+            const legendItem = {
+                color: theme.colors.barColors[seriesIndex + 1].color,
+                gradientColors: theme.colors.barColors[seriesIndex + 1].gradient,
+                id: `series_${seriesIndex}`,
+                label,
+                shortLabel: label
+            }
+            return legendItem
+        })
+        return [defaultLegendItem, ...seriesLegendItems]
+    }
+}

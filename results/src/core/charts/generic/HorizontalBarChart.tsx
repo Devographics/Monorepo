@@ -27,10 +27,17 @@ const barSizes = {
     l: 50
 }
 
+type BarColor = {
+    id: string
+    color: string
+    gradient: string[]
+}
+
 export interface HorizontalBarChartProps extends ChartComponentProps {
     total: number
     buckets: BucketItem[]
     size: keyof typeof barSizes
+    barColor: BarColor
 }
 
 const marginCoeff = 9
@@ -54,7 +61,6 @@ export const getLeftMargin = ({ data, shouldTranslate, i18nNamespace }) => {
         return margin.left
     }
 }
-
 
 const getLabelsLayer = (units: BlockUnits) => (props: any) => {
     // adjust settings according to dimensions
@@ -94,7 +100,8 @@ const HorizontalBarChart = ({
     chartProps,
     colorVariant = 'primary',
     size = 'm',
-    colorMappings
+    colorMappings,
+    barColor: barColor_
 }: HorizontalBarChartProps) => {
     const theme = useTheme()
     const { translate } = useI18n()
@@ -117,14 +124,33 @@ const HorizontalBarChart = ({
         [buckets]
     )
 
+    const defaultBarColor = theme.colors.barColors[0]
+    const barColor = barColor_ || defaultBarColor
+
     const baseSize = barSizes[size]
 
     const left = getLeftMargin({ data, shouldTranslate: translateData, i18nNamespace })
 
-    const colors = [theme.colors.barChart[colorVariant]]
-    const gradientColors = theme.colors.barChart[`${colorVariant}Gradient`]
+    const colors = [barColor.color]
 
     const labelsLayer = useMemo(() => getLabelsLayer(units), [units])
+
+    const colorDefId = `${barColor.id}GradientHorizontal`
+
+    const colorDefs = [
+        {
+            id: colorDefId,
+            type: 'linearGradient',
+            x1: 0,
+            y1: 1,
+            x2: 1,
+            y2: 1,
+            colors: [
+                { offset: 0, color: barColor.gradient[0] },
+                { offset: 100, color: barColor.gradient[1] }
+            ]
+        }
+    ]
 
     return (
         <div style={{ height: buckets.length * baseSize + 80 }}>
@@ -187,21 +213,8 @@ const HorizontalBarChart = ({
                     'bars',
                     labelsLayer
                 ]}
-                defs={[
-                    {
-                        id: `${colorVariant}GradientHorizontal`,
-                        type: 'linearGradient',
-                        x1: 0,
-                        y1: 1,
-                        x2: 1,
-                        y2: 1,
-                        colors: [
-                            { offset: 0, color: gradientColors[0] },
-                            { offset: 100, color: gradientColors[1] }
-                        ],
-                    }
-                ]}
-                fill={[{ match: '*', id: `${colorVariant}GradientHorizontal` }]}
+                defs={colorDefs}
+                fill={[{ match: '*', id: colorDefId }]}
                 {...chartProps}
             />
         </div>
@@ -224,4 +237,4 @@ HorizontalBarChart.propTypes = {
     colorVariant: PropTypes.oneOf(['primary', 'secondary'])
 }
 
-export default memo(HorizontalBarChart)
+export default HorizontalBarChart

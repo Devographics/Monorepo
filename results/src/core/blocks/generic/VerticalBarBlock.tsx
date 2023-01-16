@@ -13,7 +13,7 @@ import sumBy from 'lodash/sumBy'
 import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
 import { useTheme } from 'styled-components'
 import { useI18n } from 'core/i18n/i18nContext'
-import { getFieldLabel, getValueLabel } from 'core/blocks/filters/helpers'
+import { getLegends } from 'core/blocks/filters/helpers'
 
 export interface VerticalBarBlockProps extends BlockComponentProps {
     data: FacetItem
@@ -33,60 +33,6 @@ export const addNoAnswerBucket = ({ buckets, completion }) => {
     return [...buckets, noAnswerBucket]
 }
 
-export const getLegends = ({ theme, series, getString, currentYear }) => {
-    if (series.length === 0) {
-        return []
-    } else {
-        const showYears = series.some(s => s.year !== currentYear)
-
-        const defaultLabel = showYears
-            ? getString('filters.series.year', { values: { year: currentYear } })?.t
-            : getString('filters.legend.default')?.t
-        const defaultLegendItem = {
-            color: theme.colors.barColors[0].color,
-            gradientColors: theme.colors.barColors[0].gradient,
-            id: 'default',
-            label: defaultLabel,
-            shortLabel: defaultLabel
-        }
-
-        const seriesLegendItems = series.map((seriesItem, seriesIndex) => {
-            let labelSegments = []
-            if (showYears) {
-                // if at least one series is showing a different year, add year to legend
-                labelSegments.push(
-                    getString('filters.series.year', { values: { year: seriesItem.year } })?.t
-                )
-            }
-            if (seriesItem.conditions.length > 0) {
-                // add conditions filters to legend
-                labelSegments = [
-                    ...labelSegments,
-                    seriesItem.conditions.map(({ field, operator, value }) => {
-                        const fieldLabel = getFieldLabel({ getString, field })
-                        const valueLabel = getValueLabel({
-                            getString,
-                            field,
-                            value
-                        })
-                        return `${fieldLabel} = ${valueLabel}`
-                    })
-                ]
-            }
-            const label = labelSegments.join(', ')
-
-            const legendItem = {
-                color: theme.colors.barColors[seriesIndex + 1].color,
-                gradientColors: theme.colors.barColors[seriesIndex + 1].gradient,
-                id: `series_${seriesIndex}`,
-                label,
-                shortLabel: label
-            }
-            return legendItem
-        })
-        return [defaultLegendItem, ...seriesLegendItems]
-    }
-}
 
 const VerticalBarBlock = ({
     block,
@@ -122,19 +68,15 @@ const VerticalBarBlock = ({
 
     const { facets, completion } = data
 
-    const buckets_ = addNoAnswer
+    const buckets = addNoAnswer
         ? addNoAnswerBucket({ buckets: facets[0].buckets, completion })
         : facets[0].buckets
     const { total } = completion
 
     // contains the filters that define the series
-    const [series, setSeries] = useState([])
-    // how many series to display (only updated after data is loaded)
-    const [seriesCount, setSeriesCount] = useState(0)
-    // data to pass to chart (only updated after data is loaded)
-    const [buckets, setBuckets] = useState(buckets_)
+    const [chartFilters, setChartFilters] = useState([])
 
-    const legends = getLegends({ theme, series, getString, currentYear })
+    const legends = getLegends({ theme, chartFilters, getString, currentYear })
 
     return (
         <BlockVariant
@@ -151,19 +93,18 @@ const VerticalBarBlock = ({
             completion={completion}
             data={data}
             block={block}
-            series={series}
-            setSeries={setSeries}
+            series={chartFilters}
+            setChartFilters={setChartFilters}
             legendProps={{ layout: 'vertical' }}
             {...(legends.length > 0 ? { legends } : {})}
         >
             <DynamicDataLoader
                 completion={completion}
-                defaultBuckets={buckets_}
+                defaultBuckets={buckets}
                 block={block}
-                series={series}
-                setBuckets={setBuckets}
+                chartFilters={chartFilters}
                 setUnits={setUnits}
-                setSeriesCount={setSeriesCount}
+                mode="combine"
             >
                 <ChartContainer fit={true}>
                     <VerticalBarChart
@@ -174,7 +115,6 @@ const VerticalBarBlock = ({
                         translateData={translateData}
                         mode={mode}
                         units={controlledUnits ?? units}
-                        seriesCount={seriesCount + 1}
                         viewportWidth={width}
                         colorVariant={isCustom ? 'secondary' : 'primary'}
                     />

@@ -181,6 +181,7 @@
         #     options: {facetSort: {order: ___desc___, property: mean}, facetMinCount: 100}
 
     - id: source
+      hasFilters: true
       template: source
       blockType: HorizontalBarBlock
       dataFunction: cleanUpSources
@@ -201,6 +202,7 @@
             options: {facetSort: {order: ___desc___, property: mean}, limit: 11, facetMinCount: 100}
 
     - id: race_ethnicity
+      hasFilters: true
       defaultUnits: count
       template: demographics
       blockType: HorizontalBarBlock
@@ -216,6 +218,7 @@
             options: {facetSort: {order: ___asc___, property: mean}, limit: 11, facetMinCount: 100}
 
     - id: disability_status
+      hasFilters: true
       defaultUnits: count
       template: demographics
       blockType: HorizontalBarBlock
@@ -1094,6 +1097,7 @@
     - template: page_introduction
 
     - id: first_steps
+      hasFilters: true
       blockNamespace: resources
       chartNamespace: first_steps
       tabId: tabs.main_answers
@@ -1119,6 +1123,7 @@
         url: https://sarahdrasnerdesign.com/
 
     - id: blogs_news_magazines
+      hasFilters: true
       blockNamespace: resources
       chartNamespace: blogs_news_magazines
       tabId: tabs.main_answers
@@ -1138,6 +1143,7 @@
             options: { limit: 15 }
 
     - id: sites_courses
+      hasFilters: true
       blockNamespace: resources
       chartNamespace: sites_courses
       tabId: tabs.main_answers
@@ -1181,6 +1187,7 @@
             options: { limit: 15 }
 
     - id: podcasts
+      hasFilters: true
       blockNamespace: resources
       chartNamespace: podcasts
       tabId: tabs.main_answers
@@ -1209,6 +1216,7 @@
         fieldId: resources
 
     - id: other_surveys
+      hasFilters: true
       defaultUnits: count
       blockNamespace: resources
       chartNamespace: other_surveys

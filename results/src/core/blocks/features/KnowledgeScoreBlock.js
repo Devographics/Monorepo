@@ -10,7 +10,7 @@ import sumBy from 'lodash/sumBy'
 import T from 'core/i18n/T'
 import { getTableData } from 'core/helpers/datatables'
 import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
-import { getLegends } from 'core/blocks/generic/VerticalBarBlock'
+import { getLegends } from 'core/blocks/filters/helpers'
 import { useTheme } from 'styled-components'
 import { useI18n } from 'core/i18n/i18nContext'
 
@@ -63,13 +63,13 @@ const KnowledgeScoreBlock = ({ block, data }) => {
     buckets_ = getChartData(buckets_)
 
     // contains the filters that define the series
-    const [series, setSeries] = useState([])
+    const [chartFilters, setChartFilters] = useState([])
     // how many series to display (only updated after data is loaded)
     const [seriesCount, setSeriesCount] = useState(0)
     // data to pass to chart (only updated after data is loaded)
     const [buckets, setBuckets] = useState(buckets_)
 
-    const legends = getLegends({ theme, series, getString, currentYear })
+    const legends = getLegends({ theme, series: chartFilters, getString, currentYear })
 
     return (
         <Block
@@ -84,15 +84,15 @@ const KnowledgeScoreBlock = ({ block, data }) => {
             completion={completion}
             data={data}
             block={block}
-            series={series}
-            setSeries={setSeries}
+            series={chartFilters}
+            setChartFilters={setChartFilters}
             {...(legends.length > 0 ? { legends } : {})}
         >
             <DynamicDataLoader
                 completion={completion}
                 defaultBuckets={buckets_}
                 block={block}
-                series={series}
+                series={chartFilters}
                 setBuckets={setBuckets}
                 setUnits={setUnits}
                 setSeriesCount={setSeriesCount}

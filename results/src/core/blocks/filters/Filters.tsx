@@ -15,7 +15,7 @@ import { Series_ } from './Series'
 import { ExportButton, GraphQLExport, GraphQLTrigger } from 'core/blocks/block/BlockData'
 import ModalTrigger from 'core/components/ModalTrigger'
 
-const Filters = ({ block, series, setSeries, closeModal }) => {
+const Filters = ({ block, chartFilters, setChartFilters, closeModal }) => {
     const keys = useKeys()
     const { translate } = useI18n()
     const context = usePageContext()
@@ -28,7 +28,7 @@ const Filters = ({ block, series, setSeries, closeModal }) => {
         keys,
         year: currentEdition.year
     })
-    const initState = isEmpty(series) ? [] : series
+    const initState = isEmpty(chartFilters) ? [] : chartFilters
     const [filtersState, setFiltersState] = useState(initState)
 
     const stateStuff = {
@@ -44,7 +44,7 @@ const Filters = ({ block, series, setSeries, closeModal }) => {
     }
 
     const handleSubmit = () => {
-        setSeries(filtersState)
+        setChartFilters(filtersState)
         closeModal()
     }
 
@@ -86,7 +86,7 @@ const Filters = ({ block, series, setSeries, closeModal }) => {
                     block={block}
                     query={getFiltersQuery({
                         block,
-                        series: filtersState,
+                        chartFilters: filtersState,
                         currentYear: currentEdition.year
                     })}
                     buttonProps={{variant: 'link'}}

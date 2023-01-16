@@ -5,6 +5,7 @@ hasSponsor: true
 query: >
     dataAPI {
         survey(survey: ${surveyType}) {
+            # fragmentStart
             ${id}: ${fieldId}(id: ${id}, filters: ${filters}, options: ${options}) {
                 id
                 year(year: ${currentYear}) {
@@ -72,5 +73,6 @@ query: >
                     }
                 }
             }
+            # fragmentEnd
         }
     }
