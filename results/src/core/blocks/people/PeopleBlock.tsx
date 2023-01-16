@@ -20,7 +20,7 @@ import {
     BlogIcon
 } from 'core/icons'
 import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
-import { initFilters } from 'core/blocks/filters/helpers'
+import { getInitFilters } from 'core/blocks/filters/helpers'
 
 export interface PeopleBlockProps extends BlockComponentProps {
     data: ResultsByYear
@@ -96,7 +96,7 @@ const PeopleBlock = ({ block, data, controlledUnits, isCustom }: PeopleBlockProp
     const services = getRelevantServices(allEntities)
 
     // contains the filters that define the series
-    const [chartFilters, setChartFilters] = useState(initFilters)
+    const [chartFilters, setChartFilters] = useState(getInitFilters({ mode: 'multiple' }))
 
     return (
         <Block
@@ -121,7 +121,6 @@ const PeopleBlock = ({ block, data, controlledUnits, isCustom }: PeopleBlockProp
                 defaultBuckets={buckets}
                 block={block}
                 chartFilters={chartFilters}
-                mode="multiple"
                 layout="grid"
             >
                 <PeopleChart buckets={buckets} units={units} />

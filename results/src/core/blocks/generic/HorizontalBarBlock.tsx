@@ -6,7 +6,7 @@ import HorizontalBarChart from 'core/charts/generic/HorizontalBarChart'
 import { getTableData } from 'core/helpers/datatables'
 import { ResultsByYear, BlockComponentProps } from 'core/types'
 import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
-import { initFilters } from 'core/blocks/filters/helpers'
+import { getInitFilters } from 'core/blocks/filters/helpers'
 
 export interface HorizontalBarBlockProps extends BlockComponentProps {
     data: ResultsByYear
@@ -35,7 +35,7 @@ const HorizontalBarBlock = ({
     const { total } = completion
 
     // contains the filters that define the series
-    const [chartFilters, setChartFilters] = useState(initFilters)
+    const [chartFilters, setChartFilters] = useState(getInitFilters({ mode: 'multiple' }))
 
     return (
         <Block
@@ -60,7 +60,6 @@ const HorizontalBarBlock = ({
                 defaultBuckets={buckets}
                 block={block}
                 chartFilters={chartFilters}
-                mode="multiple"
                 layout="grid"
             >
                 <ChartContainer fit={false}>

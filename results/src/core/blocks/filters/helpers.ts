@@ -165,9 +165,17 @@ export const getLegends = ({
     }
 }
 
-export const initFilters = {
+type InitFiltersOptions = {
+    showDefaultSeries?: boolean
+    allowModeSwitch?: boolean
+    mode?: 'combine' | 'multiple'
+}
+
+export const getInitFilters = (initOptions?: InitFiltersOptions) => ({
     options: {
-        showDefaultSeries: true
+        showDefaultSeries: true,
+        allowModeSwitch: false,
+        ...initOptions
     },
     filters: []
-}
+})

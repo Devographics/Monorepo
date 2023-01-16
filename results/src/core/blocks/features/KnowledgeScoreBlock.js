@@ -13,13 +13,13 @@ import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
 import { getLegends } from 'core/blocks/filters/helpers'
 import { useTheme } from 'styled-components'
 import { useI18n } from 'core/i18n/i18nContext'
-import { initFilters } from 'core/blocks/filters/helpers'
+import { getInitFilters } from 'core/blocks/filters/helpers'
 
 const groupBy = 10
 
 const getLabel = n => `${n * groupBy}-${(n + 1) * groupBy}%`
 
-const getChartData = (buckets) => {
+const getChartData = buckets => {
     return range(0, 100 / groupBy).map(n => {
         const selectedBuckets = buckets.filter(b => b.id >= n * groupBy && b.id < (n + 1) * groupBy)
         return {
@@ -64,7 +64,7 @@ const KnowledgeScoreBlock = ({ block, data }) => {
     buckets = getChartData(buckets)
 
     // contains the filters that define the series
-    const [chartFilters, setChartFilters] = useState(initFilters)
+    const [chartFilters, setChartFilters] = useState(getInitFilters({ mode: 'combine' }))
 
     const legends = getLegends({ theme, chartFilters, getString, currentYear })
 

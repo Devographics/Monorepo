@@ -5,7 +5,7 @@ import T from 'core/i18n/T'
 import { mq, spacing, fontSize } from 'core/theme'
 import Button from 'core/components/Button'
 import cloneDeep from 'lodash/cloneDeep.js'
-import { useKeys, getNewSeries, getFiltersQuery, initFilters } from './helpers'
+import { useKeys, getNewSeries, getFiltersQuery, getInitFilters } from './helpers'
 import { maxSeriesCount, filters } from './constants'
 import { getBlockTitle } from 'core/helpers/blockHelpers'
 import { usePageContext } from 'core/helpers/pageContext'
@@ -14,8 +14,9 @@ import isEmpty from 'lodash/isEmpty.js'
 import { Series_ } from './Series'
 import { ExportButton, GraphQLExport, GraphQLTrigger } from 'core/blocks/block/BlockData'
 import ModalTrigger from 'core/components/ModalTrigger'
+import Presets from './Presets'
 
-const Filters = ({ block, chartFilters, setChartFilters, closeModal }) => {
+const FiltersPanel = ({ block, chartFilters, setChartFilters, closeModal }) => {
     const keys = useKeys()
     const { translate } = useI18n()
     const context = usePageContext()
@@ -28,7 +29,7 @@ const Filters = ({ block, chartFilters, setChartFilters, closeModal }) => {
         keys,
         year: currentEdition.year
     })
-    const initState = isEmpty(chartFilters) ? initFilters : chartFilters
+    const initState = isEmpty(chartFilters) ? getInitFilters() : chartFilters
     const [filtersState, setFiltersState] = useState(initState)
 
     const stateStuff = {
@@ -63,8 +64,9 @@ const Filters = ({ block, chartFilters, setChartFilters, closeModal }) => {
                     <T k="filters.description" html={true} md={true} />
                 </Description_>
             </FiltersTop_>
+            <Presets filtersState={filtersState} setFiltersState={setFiltersState} />
             <SeriesList_>
-                <DefaultSeries filtersState={filtersState} setFiltersState={setFiltersState} />
+                <Options filtersState={filtersState} setFiltersState={setFiltersState} />
                 {filtersState.filters.map((series, index) => (
                     <Series
                         key={index}
@@ -101,25 +103,74 @@ const Filters = ({ block, chartFilters, setChartFilters, closeModal }) => {
     )
 }
 
-const DefaultSeries = ({ filtersState, setFiltersState }) => (
-    <Series_>
-        <label>
-            <input
-                checked={filtersState.options.showDefaultSeries}
-                type="checkbox"
-                onChange={(e) => {
-                    setFiltersState(fState => {
-                        const newState = cloneDeep(fState)
-                        newState.options.showDefaultSeries = !fState.options.showDefaultSeries
-                        return newState
-                    })
-                }}
-            />
-            {' '}
-            <T k="filters.series.show_default" />
-        </label>
-    </Series_>
+const Options = ({ filtersState, setFiltersState }) => (
+    <Options_>
+        <Option_>
+            <label>
+                <input
+                    checked={filtersState.options.showDefaultSeries}
+                    type="checkbox"
+                    onChange={e => {
+                        setFiltersState(fState => {
+                            const newState = cloneDeep(fState)
+                            newState.options.showDefaultSeries = !fState.options.showDefaultSeries
+                            return newState
+                        })
+                    }}
+                />{' '}
+                <T k="filters.series.show_default" />
+            </label>
+        </Option_>
+        {filtersState.options.allowModeSwitch && (
+            <Option_>
+                <label>
+                    <input
+                        name="mode"
+                        value="multiple"
+                        checked={(filtersState.options.mode === 'multiple')}
+                        type="radio"
+                        onChange={e => {
+                            setFiltersState(fState => {
+                                const newState = cloneDeep(fState)
+                                newState.options.mode = 'multiple'
+                                return newState
+                            })
+                        }}
+                    />{' '}
+                    <T k="filters.series.mode_multiple" />
+                </label>
+                <label>
+                    <input
+                        name="mode"
+                        value="combined"
+                        checked={(filtersState.options.mode === 'combined')}
+                        type="radio"
+                        onChange={e => {
+                            setFiltersState(fState => {
+                                const newState = cloneDeep(fState)
+                                newState.options.mode = 'combined'
+                                return newState
+                            })
+                        }}
+                    />{' '}
+                    <T k="filters.series.mode_combined" />
+                </label>
+            </Option_>
+        )}
+    </Options_>
 )
+
+const Options_ = styled(Series_)`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+`
+
+const Option_ = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: ${spacing(0.5)};
+`
 
 const Filters_ = styled.div`
     display: flex;
@@ -129,7 +180,11 @@ const Filters_ = styled.div`
 
 const Heading_ = styled.h3``
 
-const Description_ = styled.div``
+const Description_ = styled.div`
+    p:last-child {
+        margin: 0;
+    }
+`
 
 const FiltersTop_ = styled.div``
 
@@ -155,4 +210,4 @@ const ExportButton_ = styled(Button)`
     margin: 0;
 `
 
-export default Filters
+export default FiltersPanel

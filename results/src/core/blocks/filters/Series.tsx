@@ -16,7 +16,8 @@ const Series = ({ filters, series, index, stateStuff }) => {
     const theme = useTheme()
 
     const { conditions } = series
-    const { setFiltersState } = stateStuff
+    const { filtersState, setFiltersState } = stateStuff
+    const showDefaultSeries = filtersState.options.showDefaultSeries
 
     const keys = useKeys()
 
@@ -44,7 +45,8 @@ const Series = ({ filters, series, index, stateStuff }) => {
 
     const canAddConditions = conditions.length < filters.length
 
-    const backgroundColor = theme.colors.barColors[index + 1].color
+    const barColorIndex = showDefaultSeries ? index + 1 : index
+    const backgroundColor = theme.colors.barColors[barColorIndex].color
 
     return (
         <ActiveSeries_>

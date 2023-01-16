@@ -9,6 +9,8 @@ import { getLegends } from 'core/blocks/filters/helpers'
 import { useTheme } from 'styled-components'
 import { useI18n } from 'core/i18n/i18nContext'
 import Tooltip from 'core/components/Tooltip'
+import T from 'core/i18n/T'
+import isEmpty from 'lodash/isEmpty'
 
 const doNothing = a => a
 
@@ -41,7 +43,6 @@ type DynamicDataLoaderProps = {
     children: ReactNode
     chartFilters: any
     setBuckets: Dispatch<SetStateAction<any>>
-    mode: 'combine' | 'multiple'
     layout: 'grid' | 'column'
 }
 
@@ -54,7 +55,6 @@ const DynamicDataLoader = ({
     children,
     chartFilters,
     setBuckets,
-    mode = 'combine',
     layout = 'column'
 }: DynamicDataLoaderProps) => {
     const theme = useTheme()
@@ -76,7 +76,7 @@ const DynamicDataLoader = ({
     const { year } = currentEdition
 
     const { options = {} } = chartFilters
-    const { showDefaultSeries = true } = options
+    const { showDefaultSeries = true, mode = 'multiple' } = options
 
     const legends = getLegends({
         theme,
@@ -175,10 +175,14 @@ const DynamicDataLoader = ({
                             />
                         )}
                         <Contents_>
-                            {React.cloneElement(children, {
-                                buckets,
-                                barColor: theme.colors.barColors[i]
-                            })}
+                            {isEmpty(buckets) ? (
+                                <EmptySeries />
+                            ) : (
+                                React.cloneElement(children, {
+                                    buckets,
+                                    barColor: theme.colors.barColors[i]
+                                })
+                            )}
                         </Contents_>
                         {isLoading && <Loading />}
                     </GridItem_>
@@ -196,6 +200,19 @@ const DynamicDataLoader = ({
         )
     }
 }
+
+const EmptySeries = () => (
+    <EmptySeries_>
+        <T k="filters.series.no_data" />
+    </EmptySeries_>
+)
+
+const EmptySeries_ = styled.div`
+    background: ${({ theme }) => theme.colors.backgroundAlt};
+    display: grid;
+    place-items: center;
+    height: 100%;
+`
 
 const Wrapper_ = styled.div`
     position: relative;
@@ -219,6 +236,9 @@ const GridWrapper_ = styled.div`
 const GridItem_ = styled.div`
     position: relative;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: ${spacing()};
 `
 
 const Legend_ = styled.h4`
@@ -229,8 +249,11 @@ const Legend_ = styled.h4`
     white-space: nowrap;
     width: 100%;
     font-size: ${fontSize('small')};
+    margin: 0;
 `
 
-const Contents_ = styled.div``
+const Contents_ = styled.div`
+    flex: 1;
+`
 
 export default DynamicDataLoader

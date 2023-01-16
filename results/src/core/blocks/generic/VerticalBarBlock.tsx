@@ -13,7 +13,7 @@ import sumBy from 'lodash/sumBy'
 import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
 import { useTheme } from 'styled-components'
 import { useI18n } from 'core/i18n/i18nContext'
-import { getLegends, initFilters } from 'core/blocks/filters/helpers'
+import { getLegends, getInitFilters } from 'core/blocks/filters/helpers'
 
 export interface VerticalBarBlockProps extends BlockComponentProps {
     data: FacetItem
@@ -32,7 +32,6 @@ export const addNoAnswerBucket = ({ buckets, completion }) => {
     }
     return [...buckets, noAnswerBucket]
 }
-
 
 const VerticalBarBlock = ({
     block,
@@ -74,9 +73,15 @@ const VerticalBarBlock = ({
     const { total } = completion
 
     // contains the filters that define the series
-    const [chartFilters, setChartFilters] = useState(initFilters)
+    const [chartFilters, setChartFilters] = useState(getInitFilters({ mode: 'combine' }))
 
-    const legends = getLegends({ theme, chartFilters, getString, currentYear, showDefaultSeries: chartFilters.options.showDefaultSeries })
+    const legends = getLegends({
+        theme,
+        chartFilters,
+        getString,
+        currentYear,
+        showDefaultSeries: chartFilters.options.showDefaultSeries
+    })
 
     return (
         <BlockVariant
@@ -104,7 +109,6 @@ const VerticalBarBlock = ({
                 block={block}
                 chartFilters={chartFilters}
                 setUnits={setUnits}
-                mode="combine"
             >
                 <ChartContainer fit={true}>
                     <VerticalBarChart
@@ -113,7 +117,6 @@ const VerticalBarBlock = ({
                         buckets={buckets}
                         i18nNamespace={chartNamespace}
                         translateData={translateData}
-                        mode={mode}
                         units={controlledUnits ?? units}
                         viewportWidth={width}
                         colorVariant={isCustom ? 'secondary' : 'primary'}
