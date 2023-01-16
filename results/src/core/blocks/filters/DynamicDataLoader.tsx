@@ -35,8 +35,6 @@ const getSeriesItemBuckets = seriesItem => seriesItem?.year?.facets[0]?.buckets
 type DynamicDataLoaderProps = {
     block: any
     processBuckets: Function
-    seriesCount: number
-    setSeriesCount: Dispatch<SetStateAction<number>>
     setUnits: Dispatch<SetStateAction<number>>
     completion: any
     defaultBuckets: any
@@ -50,8 +48,6 @@ type DynamicDataLoaderProps = {
 const DynamicDataLoader = ({
     block,
     processBuckets = doNothing,
-    seriesCount,
-    setSeriesCount,
     setUnits,
     completion,
     defaultBuckets,
@@ -66,14 +62,29 @@ const DynamicDataLoader = ({
 
     const [isLoading, setIsLoading] = useState(false)
     const defaultSeries = { name: 'default', buckets: defaultBuckets }
+
+    // combined mode: single series with a combined bucket
     const [combinedBuckets, setCombinedBuckets] = useState(defaultBuckets)
+    // keep track of how many series are displayed within the combined bucket
+    const [seriesCount, setSeriesCount] = useState(1)
+
+    // multiple mode: multiple series with normal buckets
     const [series, setSeries] = useState([defaultSeries])
 
     const context = usePageContext()
     const { currentEdition } = context
     const { year } = currentEdition
 
-    const legends = getLegends({ theme, chartFilters, getString, currentYear: year })
+    const { options = {} } = chartFilters
+    const { showDefaultSeries = true } = options
+
+    const legends = getLegends({
+        theme,
+        chartFilters,
+        getString,
+        currentYear: year,
+        showDefaultSeries
+    })
 
     const initialLoad = useRef(true)
 
@@ -110,26 +121,31 @@ const DynamicDataLoader = ({
                 fewer buckets), apply it now to the new buckets
 
                 */
-                const bucketsArrays = [defaultBuckets, ...newBuckets.map(processBuckets)]
+                const bucketsArrays = [
+                    ...(showDefaultSeries ? [defaultBuckets] : []),
+                    ...newBuckets.map(processBuckets)
+                ]
 
                 const combinedBuckets = combineBuckets({
                     bucketsArrays,
                     completion
                 })
+                console.log(bucketsArrays)
+                console.log(combinedBuckets)
 
                 // percentage_question is the only unit that lets us
                 // meaningfully compare values across series
                 setUnits('percentage_question')
                 setCombinedBuckets(combinedBuckets)
-                setSeriesCount(series.length)
+                setSeriesCount(showDefaultSeries ? series.length + 1 : series.length)
             } else {
                 /*
 
-                Display multiple series as multiple side-by-side charts
+                Display multiple series as multiple side-by-side "small multiples" charts
 
                 */
                 const allSeries = [
-                    defaultSeries,
+                    ...(showDefaultSeries ? [defaultSeries] : []),
                     ...Object.keys(seriesData).map(name => ({
                         name,
                         buckets: getSeriesItemBuckets(seriesData[name])
@@ -140,7 +156,7 @@ const DynamicDataLoader = ({
             setIsLoading(false)
         }
 
-        if (chartFilters.length > 0) {
+        if (chartFilters?.filters?.length > 0) {
             getData()
         }
     }, [chartFilters])
@@ -160,7 +176,12 @@ const DynamicDataLoader = ({
                                 contents={<span>{legends[i]?.label}</span>}
                             />
                         )}
-                        <Contents_>{React.cloneElement(children, { buckets, barColor: theme.colors.barColors[i] })}</Contents_>
+                        <Contents_>
+                            {React.cloneElement(children, {
+                                buckets,
+                                barColor: theme.colors.barColors[i]
+                            })}
+                        </Contents_>
                         {isLoading && <Loading />}
                     </GridItem_>
                 ))}
@@ -170,7 +191,7 @@ const DynamicDataLoader = ({
         return (
             <Wrapper_>
                 <Contents_>
-                    {React.cloneElement(children, { combinedBuckets, seriesCount })}
+                    {React.cloneElement(children, { buckets: combinedBuckets, seriesCount })}
                 </Contents_>
                 {isLoading && <Loading />}
             </Wrapper_>

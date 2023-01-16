@@ -13,7 +13,7 @@ import sumBy from 'lodash/sumBy'
 import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
 import { useTheme } from 'styled-components'
 import { useI18n } from 'core/i18n/i18nContext'
-import { getLegends } from 'core/blocks/filters/helpers'
+import { getLegends, initFilters } from 'core/blocks/filters/helpers'
 
 export interface VerticalBarBlockProps extends BlockComponentProps {
     data: FacetItem
@@ -74,9 +74,9 @@ const VerticalBarBlock = ({
     const { total } = completion
 
     // contains the filters that define the series
-    const [chartFilters, setChartFilters] = useState([])
+    const [chartFilters, setChartFilters] = useState(initFilters)
 
-    const legends = getLegends({ theme, chartFilters, getString, currentYear })
+    const legends = getLegends({ theme, chartFilters, getString, currentYear, showDefaultSeries: chartFilters.options.showDefaultSeries })
 
     return (
         <BlockVariant
@@ -93,7 +93,7 @@ const VerticalBarBlock = ({
             completion={completion}
             data={data}
             block={block}
-            series={chartFilters}
+            chartFilters={chartFilters}
             setChartFilters={setChartFilters}
             legendProps={{ layout: 'vertical' }}
             {...(legends.length > 0 ? { legends } : {})}

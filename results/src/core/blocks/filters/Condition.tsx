@@ -34,7 +34,7 @@ const Condition = ({
     const handleDelete = () => {
         setFiltersState(fState => {
             const newState = cloneDeep(fState)
-            newState[seriesIndex].conditions.splice(index, 1)
+            newState.filters[seriesIndex].conditions.splice(index, 1)
             return newState
         })
     }
@@ -98,10 +98,10 @@ const FieldSegment = ({
                     const value = e.target.value
                     setFiltersState(fState => {
                         const newState = cloneDeep(fState)
-                        newState[seriesIndex].conditions[conditionIndex][segmentId] = value
+                        newState.filters[seriesIndex].conditions[conditionIndex][segmentId] = value
                         // if we're changing the field, also change the value
                         const fieldId = value
-                        newState[seriesIndex].conditions[conditionIndex].value = keys[fieldId][0]
+                        newState.filters[seriesIndex].conditions[conditionIndex].value = keys[fieldId][0]
                         return newState
                     })
                 }}
@@ -140,7 +140,7 @@ const ValueSegment = ({
                     const value = e.target.value
                     setFiltersState(fState => {
                         const newState = cloneDeep(fState)
-                        newState[seriesIndex].conditions[conditionIndex][segmentId] = value
+                        newState.filters[seriesIndex].conditions[conditionIndex][segmentId] = value
                         return newState
                     })
                 }}

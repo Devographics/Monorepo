@@ -26,7 +26,7 @@ const Series = ({ filters, series, index, stateStuff }) => {
     const handleAddCondition = () => {
         setFiltersState(fState => {
             const newState = cloneDeep(fState)
-            newState[index].conditions = [
+            newState.filters[index].conditions = [
                 ...series.conditions,
                 getNewCondition({ filtersNotInUse, keys })
             ]
@@ -37,7 +37,7 @@ const Series = ({ filters, series, index, stateStuff }) => {
     const handleDeleteSeries = () => {
         setFiltersState(fState => {
             const newState = cloneDeep(fState)
-            newState.splice(index, 1)
+            newState.filters.splice(index, 1)
             return newState
         })
     }

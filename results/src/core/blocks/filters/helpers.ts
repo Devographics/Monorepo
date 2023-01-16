@@ -27,11 +27,14 @@ const endMarker = '# fragmentEnd'
 export const getFiltersQuery = ({ block, chartFilters = [], currentYear }) => {
     const query = getGraphQLQuery(block)
     const queryHeader = query.slice(0, query.indexOf(startMarker))
-    const queryContents = query.slice(query.indexOf(startMarker) + startMarker.length, query.indexOf(endMarker))
+    const queryContents = query.slice(
+        query.indexOf(startMarker) + startMarker.length,
+        query.indexOf(endMarker)
+    )
     const queryFooter = query.slice(query.indexOf(endMarker) + endMarker.length)
     const newQuery =
         queryHeader +
-        chartFilters
+        chartFilters.filters
             .map((singleSeries, seriesIndex) => {
                 // {gender: {eq: male}, company_size: {eq: range_1}}
                 const filterObject = {}
@@ -41,7 +44,6 @@ export const getFiltersQuery = ({ block, chartFilters = [], currentYear }) => {
                 })
                 const seriesName = `${block.id}_${seriesIndex + 1}`
                 return queryContents
-                    .replace('[seriesName]', seriesName)
                     .replace(`${block.id}: `, `${seriesName}: `)
                     .replace(
                         'filters: {}',
@@ -99,17 +101,19 @@ export const getLegends = ({
     theme,
     chartFilters,
     getString,
-    currentYear
+    currentYear,
+    showDefaultSeries
 }: {
     theme: any
     chartFilters: any
     getString: any
     currentYear: number
+    showDefaultSeries: boolean
 }) => {
-    if (!chartFilters || chartFilters.length === 0) {
+    if (!chartFilters.filters || chartFilters.filters.length === 0) {
         return []
     } else {
-        const showYears = chartFilters.some(s => s.year !== currentYear)
+        const showYears = chartFilters.filters.some(s => s.year !== currentYear)
 
         const defaultLabel = showYears
             ? getString('filters.series.year', { values: { year: currentYear } })?.t
@@ -122,7 +126,7 @@ export const getLegends = ({
             shortLabel: defaultLabel
         }
 
-        const seriesLegendItems = chartFilters.map((seriesItem, seriesIndex) => {
+        const seriesLegendItems = chartFilters.filters.map((seriesItem, seriesIndex) => {
             let labelSegments = []
             if (showYears) {
                 // if at least one series is showing a different year, add year to legend
@@ -156,6 +160,13 @@ export const getLegends = ({
             }
             return legendItem
         })
-        return [defaultLegendItem, ...seriesLegendItems]
+        return [...(showDefaultSeries ? [defaultLegendItem] : []), ...seriesLegendItems]
     }
+}
+
+export const initFilters = {
+    options: {
+        showDefaultSeries: true
+    },
+    filters: []
 }

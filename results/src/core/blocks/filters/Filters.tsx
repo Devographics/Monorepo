@@ -5,7 +5,7 @@ import T from 'core/i18n/T'
 import { mq, spacing, fontSize } from 'core/theme'
 import Button from 'core/components/Button'
 import cloneDeep from 'lodash/cloneDeep.js'
-import { useKeys, getNewSeries, getFiltersQuery } from './helpers'
+import { useKeys, getNewSeries, getFiltersQuery, initFilters } from './helpers'
 import { maxSeriesCount, filters } from './constants'
 import { getBlockTitle } from 'core/helpers/blockHelpers'
 import { usePageContext } from 'core/helpers/pageContext'
@@ -28,7 +28,7 @@ const Filters = ({ block, chartFilters, setChartFilters, closeModal }) => {
         keys,
         year: currentEdition.year
     })
-    const initState = isEmpty(chartFilters) ? [] : chartFilters
+    const initState = isEmpty(chartFilters) ? initFilters : chartFilters
     const [filtersState, setFiltersState] = useState(initState)
 
     const stateStuff = {
@@ -39,7 +39,8 @@ const Filters = ({ block, chartFilters, setChartFilters, closeModal }) => {
     const handleAddSeries = () => {
         setFiltersState(fState => {
             const newState = cloneDeep(fState)
-            return [...newState, emptySeries]
+            newState.filters = [...newState.filters, emptySeries]
+            return newState
         })
     }
 
@@ -48,7 +49,7 @@ const Filters = ({ block, chartFilters, setChartFilters, closeModal }) => {
         closeModal()
     }
 
-    const canAddSeries = filtersState.length < maxSeriesCount
+    const canAddSeries = filtersState.filters.length < maxSeriesCount
 
     const chartName = getBlockTitle(block, context, translate)
 
@@ -63,7 +64,8 @@ const Filters = ({ block, chartFilters, setChartFilters, closeModal }) => {
                 </Description_>
             </FiltersTop_>
             <SeriesList_>
-                {filtersState.map((series, index) => (
+                <DefaultSeries filtersState={filtersState} setFiltersState={setFiltersState} />
+                {filtersState.filters.map((series, index) => (
                     <Series
                         key={index}
                         series={series}
@@ -89,7 +91,7 @@ const Filters = ({ block, chartFilters, setChartFilters, closeModal }) => {
                         chartFilters: filtersState,
                         currentYear: currentEdition.year
                     })}
-                    buttonProps={{variant: 'link'}}
+                    buttonProps={{ variant: 'link' }}
                 />
                 <Button onClick={handleSubmit}>
                     <T k="filters.submit" />
@@ -98,6 +100,26 @@ const Filters = ({ block, chartFilters, setChartFilters, closeModal }) => {
         </Filters_>
     )
 }
+
+const DefaultSeries = ({ filtersState, setFiltersState }) => (
+    <Series_>
+        <label>
+            <input
+                checked={filtersState.options.showDefaultSeries}
+                type="checkbox"
+                onChange={(e) => {
+                    setFiltersState(fState => {
+                        const newState = cloneDeep(fState)
+                        newState.options.showDefaultSeries = !fState.options.showDefaultSeries
+                        return newState
+                    })
+                }}
+            />
+            {' '}
+            <T k="filters.series.show_default" />
+        </label>
+    </Series_>
+)
 
 const Filters_ = styled.div`
     display: flex;
