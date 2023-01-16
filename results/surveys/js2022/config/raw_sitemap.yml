@@ -84,6 +84,7 @@
     - template: page_introduction
 
     - id: country
+      hasFilters: true
       # defaultUnits: count
       template: demographics
       blockType: ParticipationByCountryBlock
@@ -91,6 +92,7 @@
         options: { limit: 20 }
 
     - id: locale
+      hasFilters: true
       template: demographics
       blockType: HorizontalBarBlock
       translateData: true
@@ -101,10 +103,10 @@
       template: hint
 
     - id: completion_stats
+      hasFilters: true
       template: demographics
       blockType: KnowledgeScoreBlock
       translateData: true
-      hasFilters: true
       
     - id: age
       hasFilters: true

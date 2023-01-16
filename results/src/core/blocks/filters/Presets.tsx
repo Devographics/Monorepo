@@ -119,7 +119,12 @@ const Preset = ({ preset, setFiltersState }) => (
     <Preset_
         size="small"
         onClick={() => {
-            setFiltersState(preset)
+            setFiltersState(fState => {
+                return {
+                    options: { ...fState.options, ...preset.options },
+                    filters: preset.filters
+                }
+            })
         }}
     >
         <T k={`filters.presets.${preset.name}`} />
