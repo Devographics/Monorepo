@@ -184,8 +184,8 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
         },
         {
             id: 'barColor3',
-            color: colors.green,
-            gradient: [colors.green, colors.greenLighter]
+            color: colors.purple,
+            gradient: [colors.purple, colors.purpleLighter]
         },
         {
             id: 'barColor4',

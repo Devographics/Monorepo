@@ -54,6 +54,7 @@ const getAxisLabels = (v: any, legends: BlockLegend[]) => {
 export interface VerticalBarChartProps extends ChartComponentProps {
     total: number
     buckets: BucketItem[]
+    seriesCount: number
 }
 
 const getKeys = (units, seriesCount) => {

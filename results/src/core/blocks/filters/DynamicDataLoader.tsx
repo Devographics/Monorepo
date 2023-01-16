@@ -130,14 +130,12 @@ const DynamicDataLoader = ({
                     bucketsArrays,
                     completion
                 })
-                console.log(bucketsArrays)
-                console.log(combinedBuckets)
 
                 // percentage_question is the only unit that lets us
                 // meaningfully compare values across series
                 setUnits('percentage_question')
                 setCombinedBuckets(combinedBuckets)
-                setSeriesCount(showDefaultSeries ? series.length + 1 : series.length)
+                setSeriesCount(showDefaultSeries ? newBuckets.length + 1 : newBuckets.length)
             } else {
                 /*
 

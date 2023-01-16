@@ -151,9 +151,10 @@ export const getLegends = ({
             }
             const label = labelSegments.join(', ')
 
+            const barColorIndex = showDefaultSeries ? seriesIndex + 1 : seriesIndex
             const legendItem = {
-                color: theme.colors.barColors[seriesIndex + 1].color,
-                gradientColors: theme.colors.barColors[seriesIndex + 1].gradient,
+                color: theme.colors.barColors[barColorIndex].color,
+                gradientColors: theme.colors.barColors[barColorIndex].gradient,
                 id: `series_${seriesIndex}`,
                 label,
                 shortLabel: label
