@@ -23,11 +23,9 @@ const Condition = ({
     const { field = defaultField, operator, value } = condition
     const { setFiltersState } = stateStuff
 
-    const { getString } = useI18n()
+    const allChartsKeys = useKeys()
 
-    const keys = useKeys()
-
-    const values = keys[field] || []
+    const values = allChartsKeys[field] || []
 
     const disabledList = filtersInUse.filter(fieldId => fieldId !== field)
 
@@ -39,7 +37,7 @@ const Condition = ({
         })
     }
 
-    const segmentProps = { seriesIndex, conditionIndex: index, stateStuff, keys, field }
+    const segmentProps = { seriesIndex, conditionIndex: index, stateStuff, keys: allChartsKeys, field }
 
     return (
         <ActiveCondition_>

@@ -13,7 +13,8 @@ import sumBy from 'lodash/sumBy'
 import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
 import { useTheme } from 'styled-components'
 import { useI18n } from 'core/i18n/i18nContext'
-import { getLegends, getInitFilters } from 'core/blocks/filters/helpers'
+import { useFilterLegends, getInitFilters } from 'core/blocks/filters/helpers'
+import { BEHAVIOR_COMBINED } from 'core/blocks/filters/constants'
 
 export interface VerticalBarBlockProps extends BlockComponentProps {
     data: FacetItem
@@ -43,6 +44,8 @@ const VerticalBarBlock = ({
     const theme = useTheme()
     const { getString } = useI18n()
 
+
+
     if (!data) {
         throw new Error(`VerticalBarBlock: Missing data for block ${block.id}.`)
     }
@@ -59,6 +62,7 @@ const VerticalBarBlock = ({
     const { width, currentEdition } = context
     const { year: currentYear } = currentEdition
 
+    
     const [uncontrolledUnits, setUnits] = useState(defaultUnits)
     const units = controlledUnits || uncontrolledUnits
 
@@ -73,12 +77,10 @@ const VerticalBarBlock = ({
     const { total } = completion
 
     // contains the filters that define the series
-    const [chartFilters, setChartFilters] = useState(getInitFilters({ mode: 'combine' }))
+    const [chartFilters, setChartFilters] = useState(getInitFilters({ behavior: BEHAVIOR_COMBINED }))
 
-    const legends = getLegends({
-        theme,
+    const legends = useFilterLegends({
         chartFilters,
-        getString,
         currentYear,
         showDefaultSeries: chartFilters.options.showDefaultSeries
     })

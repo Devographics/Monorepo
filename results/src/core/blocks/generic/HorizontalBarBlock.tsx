@@ -6,7 +6,9 @@ import HorizontalBarChart from 'core/charts/generic/HorizontalBarChart'
 import { getTableData } from 'core/helpers/datatables'
 import { ResultsByYear, BlockComponentProps } from 'core/types'
 import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
-import { getInitFilters } from 'core/blocks/filters/helpers'
+import { BEHAVIOR_MULTIPLE } from 'core/blocks/filters/constants'
+import { useFilterLegends, getInitFilters } from 'core/blocks/filters/helpers'
+import { defaultOptions } from 'core/blocks/block/BlockUnitsSelector'
 
 export interface HorizontalBarBlockProps extends BlockComponentProps {
     data: ResultsByYear
@@ -35,12 +37,17 @@ const HorizontalBarBlock = ({
     const { total } = completion
 
     // contains the filters that define the series
-    const [chartFilters, setChartFilters] = useState(getInitFilters({ mode: 'multiple' }))
+    const [chartFilters, setChartFilters] = useState(getInitFilters({ behavior: BEHAVIOR_MULTIPLE }))
+
+    const legends = useFilterLegends({
+        chartFilters,
+    })
 
     return (
         <Block
             units={controlledUnits ?? units}
             setUnits={setUnits}
+            unitsOptions={chartFilters.facet ? ['percentage_bucket', 'count'] : defaultOptions}
             data={data}
             tables={[
                 getTableData({
@@ -54,6 +61,8 @@ const HorizontalBarBlock = ({
             completion={completion}
             chartFilters={chartFilters}
             setChartFilters={setChartFilters}
+            legendProps={{ layout: 'vertical' }}
+            {...(legends.length > 0 ? { legends } : {})}
         >
             <DynamicDataLoader
                 completion={completion}
@@ -71,6 +80,7 @@ const HorizontalBarBlock = ({
                         mode={mode}
                         units={controlledUnits ?? units}
                         colorVariant={isCustom ? 'secondary' : 'primary'}
+                        facet={chartFilters.facet}
                     />
                 </ChartContainer>
             </DynamicDataLoader>

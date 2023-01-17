@@ -19,7 +19,7 @@ const Series = ({ filters, series, index, stateStuff }) => {
     const { filtersState, setFiltersState } = stateStuff
     const showDefaultSeries = filtersState.options.showDefaultSeries
 
-    const keys = useKeys()
+    const allChartsKeys = useKeys()
 
     const filtersInUse = conditions.map(c => c.field)
     const filtersNotInUse = difference(filters, filtersInUse)
@@ -29,7 +29,7 @@ const Series = ({ filters, series, index, stateStuff }) => {
             const newState = cloneDeep(fState)
             newState.filters[index].conditions = [
                 ...series.conditions,
-                getNewCondition({ filtersNotInUse, keys })
+                getNewCondition({ filtersNotInUse, keys: allChartsKeys })
             ]
             return newState
         })

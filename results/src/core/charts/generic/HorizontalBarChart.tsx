@@ -5,7 +5,6 @@ import sortBy from 'lodash/sortBy'
 import round from 'lodash/round'
 import { ResponsiveBar } from '@nivo/bar'
 import { useI18n } from 'core/i18n/i18nContext'
-import { useBarChart } from 'core/charts/hooks'
 import BarTooltip from 'core/charts/generic/BarTooltip'
 import HorizontalBarStripes from './HorizontalBarStripes'
 import { isPercentage } from 'core/helpers/units'
@@ -13,6 +12,8 @@ import { ChartComponentProps, BucketItem, BlockUnits } from 'core/types'
 import TickItem, { getBucketLabel } from 'core/charts/generic/TickItem'
 import maxBy from 'lodash/maxBy'
 import ChartLabel from 'core/components/ChartLabel'
+import { useKeys } from 'core/blocks/filters/helpers'
+import { useBarChart, useColorDefs, useColorFills, HORIZONTAL } from 'core/charts/hooks'
 
 export const margin = {
     top: 40,
@@ -38,6 +39,7 @@ export interface HorizontalBarChartProps extends ChartComponentProps {
     buckets: BucketItem[]
     size: keyof typeof barSizes
     barColor: BarColor
+    facet?: string
 }
 
 const marginCoeff = 9
@@ -90,6 +92,21 @@ const getLabelsLayer = (units: BlockUnits) => (props: any) => {
     })
 }
 
+/*
+
+When no facet is specified, key is e.g. [count]
+
+If "gender" facet is specified, keys are e.g. ['count__male', 'count__female', ...]
+
+*/
+const getKeys = ({ units, facet, allChartKeys }) => {
+    if (facet) {
+        return allChartKeys[facet].map(key => `${units}__${key}`)
+    } else {
+        return [units]
+    }
+}
+
 const HorizontalBarChart = ({
     buckets,
     total,
@@ -101,10 +118,18 @@ const HorizontalBarChart = ({
     colorVariant = 'primary',
     size = 'm',
     colorMappings,
-    barColor: barColor_
+    barColor: barColor_,
+    gridIndex = 1,
+    facet
 }: HorizontalBarChartProps) => {
     const theme = useTheme()
     const { translate } = useI18n()
+
+    const allChartKeys = useKeys()
+    const keys = getKeys({ units, facet, allChartKeys })
+
+    const colorDefs = useColorDefs({ orientation: HORIZONTAL })
+    const colorFills = useColorFills({ defaultColorIndex: gridIndex, keys, orientation: HORIZONTAL })
 
     const { formatTick, formatValue, maxValue } = useBarChart({
         buckets,
@@ -114,6 +139,9 @@ const HorizontalBarChart = ({
         mode,
         units
     })
+
+    console.log('// maxValue')
+    console.log(maxValue)
 
     const data = useMemo(
         () =>
@@ -135,29 +163,29 @@ const HorizontalBarChart = ({
 
     const labelsLayer = useMemo(() => getLabelsLayer(units), [units])
 
-    const colorDefId = `${barColor.id}GradientHorizontal`
+    // const colorDefId = `${barColor.id}GradientHorizontal`
 
-    const colorDefs = [
-        {
-            id: colorDefId,
-            type: 'linearGradient',
-            x1: 0,
-            y1: 1,
-            x2: 1,
-            y2: 1,
-            colors: [
-                { offset: 0, color: barColor.gradient[0] },
-                { offset: 100, color: barColor.gradient[1] }
-            ]
-        }
-    ]
+    // const colorDefs = [
+    //     {
+    //         id: colorDefId,
+    //         type: 'linearGradient',
+    //         x1: 0,
+    //         y1: 1,
+    //         x2: 1,
+    //         y2: 1,
+    //         colors: [
+    //             { offset: 0, color: barColor.gradient[0] },
+    //             { offset: 100, color: barColor.gradient[1] }
+    //         ]
+    //     }
+    // ]
 
     return (
         <div style={{ height: buckets.length * baseSize + 80 }}>
             <ResponsiveBar
                 layout="horizontal"
                 margin={{ ...margin, left }}
-                keys={[units]}
+                keys={keys}
                 data={data}
                 maxValue={maxValue}
                 theme={theme.charts}
@@ -214,7 +242,7 @@ const HorizontalBarChart = ({
                     labelsLayer
                 ]}
                 defs={colorDefs}
-                fill={[{ match: '*', id: colorDefId }]}
+                fill={colorFills}
                 {...chartProps}
             />
         </div>

@@ -3,12 +3,11 @@ import PropTypes from 'prop-types'
 import { useTheme } from 'styled-components'
 import { ResponsiveBar } from '@nivo/bar'
 import { useI18n } from 'core/i18n/i18nContext'
-import { useBarChart } from 'core/charts/hooks'
+import { useBarChart, useColorDefs, useColorFills } from 'core/charts/hooks'
 import BarTooltip from './BarTooltip'
 import ChartLabel from 'core/components/ChartLabel'
 import { isPercentage } from 'core/helpers/units'
 import { ChartComponentProps, BlockUnits, BucketItem, BlockLegend } from 'core/types'
-
 const breakpoint = 600
 
 const getMargins = (viewportWidth: number) => ({
@@ -73,9 +72,12 @@ const VerticalBarChart = ({
     seriesCount,
     chartProps,
     colorVariant = 'primary',
-    buckets
+    buckets,
+    gridIndex = 1,
 }: VerticalBarChartProps) => {
     const theme = useTheme()
+    const colorDefs = useColorDefs()
+    const colorFills = useColorFills({ defaultColorIndex: gridIndex })
     const { translate } = useI18n()
 
     const { formatValue, maxValue, ticks } = useBarChart({
@@ -90,8 +92,6 @@ const VerticalBarChart = ({
     const labelsLayer = useMemo(() => getLabelsLayer(units), [units])
 
     const colors = [theme.colors.barChart[colorVariant]]
-    const gradientColors = theme.colors.barChart[`${colorVariant}Gradient`]
-    const noAnswerColors = theme.colors.no_answer
 
     return (
         <div style={{ height: 260 }} className={`VerticalBarChart ${className}`}>
@@ -140,87 +140,8 @@ const VerticalBarChart = ({
                     />
                 )}
                 layers={['grid', 'axes', 'bars', labelsLayer]}
-                defs={[
-                    {
-                        id: `${colorVariant}GradientVertical`,
-                        type: 'linearGradient',
-                        colors: [
-                            { offset: 0, color: gradientColors[1] },
-                            { offset: 100, color: gradientColors[0] }
-                        ]
-                    },
-                    {
-                        id: `secondaryGradientVertical`,
-                        type: 'linearGradient',
-                        colors: [
-                            { offset: 0, color: theme.colors.barColors[1].gradient[1] },
-                            { offset: 100, color: theme.colors.barColors[1].gradient[0] }
-                        ]
-                    },
-                    {
-                        id: `thirdGradientVertical`,
-                        type: 'linearGradient',
-                        colors: [
-                            { offset: 0, color: theme.colors.barColors[2].gradient[1] },
-                            { offset: 100, color: theme.colors.barColors[2].gradient[0] }
-                        ]
-                    },
-                    {
-                        id: `fourthGradientVertical`,
-                        type: 'linearGradient',
-                        colors: [
-                            { offset: 0, color: theme.colors.barColors[3].gradient[1] },
-                            { offset: 100, color: theme.colors.barColors[3].gradient[0] }
-                        ]
-                    },
-                    {
-                        id: `fifthGradientVertical`,
-                        type: 'linearGradient',
-                        colors: [
-                            { offset: 0, color: theme.colors.barColors[4].gradient[1] },
-                            { offset: 100, color: theme.colors.barColors[4].gradient[0] }
-                        ]
-                    },
-                    {
-                        id: `noAnswerGradientVertical`,
-                        type: 'linearGradient',
-                        colors: [
-                            { offset: 0, color: noAnswerColors[1] },
-                            { offset: 100, color: noAnswerColors[0] }
-                        ]
-                    }
-                ]}
-                fill={[
-                    {
-                        match: d => d.data.indexValue === 'no_answer',
-                        id: `noAnswerGradientVertical`
-                    },
-                    {
-                        match: d => {
-                            return d.key.includes('__2')
-                        },
-                        id: `secondaryGradientVertical`
-                    },
-                    {
-                        match: d => {
-                            return d.key.includes('__3')
-                        },
-                        id: `thirdGradientVertical`
-                    },
-                    {
-                        match: d => {
-                            return d.key.includes('__4')
-                        },
-                        id: `fourthGradientVertical`
-                    },
-                    {
-                        match: d => {
-                            return d.key.includes('__5')
-                        },
-                        id: `fifthGradientVertical`
-                    },
-                    { match: '*', id: `${colorVariant}GradientVertical` }
-                ]}
+                defs={colorDefs}
+                fill={colorFills}
                 {...chartProps}
             />
         </div>

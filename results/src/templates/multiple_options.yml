@@ -6,7 +6,7 @@ query: >
     dataAPI {
         survey(survey: ${surveyType}) {
             # fragmentStart
-            ${id}: ${fieldId}(id: ${id}, filters: ${filters}, options: ${options}) {
+            ${id}: ${fieldId}(id: ${id}, filters: ${filters}, options: ${options}, facet: null) {
                 id
                 year(year: ${currentYear}) {
                     year

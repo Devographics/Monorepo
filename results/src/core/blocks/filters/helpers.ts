@@ -3,7 +3,19 @@ import { getGraphQLQuery } from 'core/blocks/block/BlockData'
 import { addNoAnswerBucket } from 'core/blocks/generic/VerticalBarBlock'
 import { getCountryName } from 'core/helpers/countries'
 import cloneDeep from 'lodash/cloneDeep.js'
+import isEmpty from 'lodash/isEmpty'
+import { CustomizationDefinition, CustomizationOptions } from './types'
+import { BlockDefinition } from 'core/types'
+import { MODE_FACET, MODE_FILTERS } from './constants'
+import { useI18n } from 'core/i18n/i18nContext'
+import { useTheme } from 'styled-components'
+import round from 'lodash/round'
 
+/*
+
+Get keys (['range_work_for_free', 'range_0_10', 'range_10_30', ...]) for all chart types
+
+*/
 export const useKeys = () => {
     const context = usePageContext()
     const { metadata } = context
@@ -24,7 +36,16 @@ export const getNewSeries = ({ filters, keys, year }) => {
 const startMarker = '# fragmentStart'
 const endMarker = '# fragmentEnd'
 
-export const getFiltersQuery = ({ block, chartFilters = [], currentYear }) => {
+export const getFiltersQuery = ({
+    block,
+    chartFilters = {},
+    currentYear
+}: {
+    block: BlockDefinition
+    chartFilters: CustomizationDefinition
+    currentYear: number
+}) => {
+    let queryBody
     const query = getGraphQLQuery(block)
     const queryHeader = query.slice(0, query.indexOf(startMarker))
     const queryContents = query.slice(
@@ -32,9 +53,8 @@ export const getFiltersQuery = ({ block, chartFilters = [], currentYear }) => {
         query.indexOf(endMarker)
     )
     const queryFooter = query.slice(query.indexOf(endMarker) + endMarker.length)
-    const newQuery =
-        queryHeader +
-        chartFilters.filters
+    if (chartFilters.options.mode === MODE_FILTERS) {
+        queryBody = chartFilters.filters
             .map((singleSeries, seriesIndex) => {
                 // {gender: {eq: male}, company_size: {eq: range_1}}
                 const filterObject = {}
@@ -51,12 +71,17 @@ export const getFiltersQuery = ({ block, chartFilters = [], currentYear }) => {
                     )
                     .replace(`year: ${currentYear}`, `year: ${singleSeries.year}`)
             })
-            .join('') +
-        queryFooter
+            .join('')
+    } else if (chartFilters.options.mode === MODE_FACET) {
+        queryBody = queryContents.replace('facet: null', `facet: ${chartFilters.facet}`)
+    }
+    const newQuery = queryHeader + queryBody + queryFooter
 
     // console.log(newQuery)
     return newQuery
 }
+
+const fields = ['count', 'percentage_question', 'percentage_survey']
 
 /*
 
@@ -64,7 +89,6 @@ Take multiple buckets arrays and merge them into a array with
 multiple series (e.g. { count, count_1, percentage_question, percentage_question_1, etc. })
 
 */
-const fields = ['count', 'percentage_question', 'percentage_survey']
 export const combineBuckets = ({ bucketsArrays, completion }) => {
     const [baseBucketsArray, ...otherBucketsArrays] = bucketsArrays
     const mergedBuckets = cloneDeep(baseBucketsArray)
@@ -92,89 +116,176 @@ export const combineBuckets = ({ bucketsArrays, completion }) => {
     return mergedBuckets
 }
 
+/*
+
+Take an array of facets of the shape:
+
+facets: [
+    {
+        id: "male"
+        buckets: [
+            {
+                id: "syntaxfm",
+                count: 1234,
+                // ...
+            },
+            {
+                id: "jsparty",
+                count: 1234,
+                // ...
+            },
+            // ...
+        ]
+    },
+    {
+        id: "female"
+        buckets: [
+            {
+                id: "syntaxfm",
+                count: 1234,
+                // ...
+            },
+            {
+                id: "jsparty",
+                count: 1234,
+                // ...
+            },
+            // ...
+        ]
+    }
+]
+
+And "invert" it into:
+
+buckets: [
+    {
+        id: "syntaxfm",
+        count: 1234,
+        count__male: 923
+        count__female: 123
+        // ...
+    },
+    {
+        id: "jsparty",
+        count: 1234,
+        count__male: 923
+        count__female: 123
+        // ...
+    },
+    // ...
+]
+    
+*/
+export const invertFacets = ({ facets, defaultBuckets }) => {
+    const newBuckets = cloneDeep(defaultBuckets)
+    facets.forEach(facet => {
+        facet.buckets.forEach(facetBucket => {
+            const baseBucket = newBuckets.find(b => b.id === facetBucket.id)
+            fields.forEach(field => {
+                baseBucket[`${field}__${facet.id}`] = facetBucket[field]
+            })
+            baseBucket[`percentage_bucket__${facet.id}`] = round(
+                (facetBucket.count * 100) / baseBucket.count,
+                2
+            )
+        })
+    })
+    return newBuckets
+}
+
 export const getFieldLabel = ({ getString, field }) => getString(`user_info.${field}`)?.t
 
 export const getValueLabel = ({ getString, field, value }) =>
     field === 'country' ? getCountryName(value) || value : getString(`options.${field}.${value}`)?.t
 
-export const getLegends = ({
-    theme,
+export const useFilterLegends = ({
     chartFilters,
-    getString,
     currentYear,
     showDefaultSeries
 }: {
-    theme: any
     chartFilters: any
-    getString: any
-    currentYear: number
-    showDefaultSeries: boolean
+    currentYear?: number
+    showDefaultSeries?: boolean
 }) => {
-    if (!chartFilters.filters || chartFilters.filters.length === 0) {
-        return []
-    } else {
-        const showYears = chartFilters.filters.some(s => s.year !== currentYear)
+    const allChartKeys = useKeys()
+    const theme = useTheme()
+    const { getString } = useI18n()
 
-        const defaultLabel = showYears
-            ? getString('filters.series.year', { values: { year: currentYear } })?.t
-            : getString('filters.legend.default')?.t
-        const defaultLegendItem = {
-            color: theme.colors.barColors[0].color,
-            gradientColors: theme.colors.barColors[0].gradient,
-            id: 'default',
-            label: defaultLabel,
-            shortLabel: defaultLabel
-        }
+    if (chartFilters.options.mode === MODE_FILTERS) {
+        if (!chartFilters.filters || chartFilters.filters.length === 0) {
+            return []
+        } else {
+            const showYears = chartFilters.filters.some(s => s.year !== currentYear)
 
-        const seriesLegendItems = chartFilters.filters.map((seriesItem, seriesIndex) => {
-            let labelSegments = []
-            if (showYears) {
-                // if at least one series is showing a different year, add year to legend
-                labelSegments.push(
-                    getString('filters.series.year', { values: { year: seriesItem.year } })?.t
-                )
+            const defaultLabel = showYears
+                ? getString('filters.series.year', { values: { year: currentYear } })?.t
+                : getString('filters.legend.default')?.t
+            const defaultLegendItem = {
+                color: theme.colors.barColors[0].color,
+                gradientColors: theme.colors.barColors[0].gradient,
+                id: 'default',
+                label: defaultLabel,
+                shortLabel: defaultLabel
             }
-            if (seriesItem.conditions.length > 0) {
-                // add conditions filters to legend
-                labelSegments = [
-                    ...labelSegments,
-                    seriesItem.conditions.map(({ field, operator, value }) => {
-                        const fieldLabel = getFieldLabel({ getString, field })
-                        const valueLabel = getValueLabel({
-                            getString,
-                            field,
-                            value
+
+            const seriesLegendItems = chartFilters.filters.map((seriesItem, seriesIndex) => {
+                let labelSegments = []
+                if (showYears) {
+                    // if at least one series is showing a different year, add year to legend
+                    labelSegments.push(
+                        getString('filters.series.year', { values: { year: seriesItem.year } })?.t
+                    )
+                }
+                if (seriesItem.conditions.length > 0) {
+                    // add conditions filters to legend
+                    labelSegments = [
+                        ...labelSegments,
+                        seriesItem.conditions.map(({ field, operator, value }) => {
+                            const fieldLabel = getFieldLabel({ getString, field })
+                            const valueLabel = getValueLabel({
+                                getString,
+                                field,
+                                value
+                            })
+                            return `${fieldLabel} = ${valueLabel}`
                         })
-                        return `${fieldLabel} = ${valueLabel}`
-                    })
-                ]
-            }
-            const label = labelSegments.join(', ')
+                    ]
+                }
+                const label = labelSegments.join(', ')
 
-            const barColorIndex = showDefaultSeries ? seriesIndex + 1 : seriesIndex
-            const legendItem = {
-                color: theme.colors.barColors[barColorIndex].color,
-                gradientColors: theme.colors.barColors[barColorIndex].gradient,
-                id: `series_${seriesIndex}`,
+                const barColorIndex = showDefaultSeries ? seriesIndex + 1 : seriesIndex
+                const legendItem = {
+                    color: theme.colors.barColors[barColorIndex].color,
+                    gradientColors: theme.colors.barColors[barColorIndex].gradient,
+                    id: `series_${seriesIndex}`,
+                    label,
+                    shortLabel: label
+                }
+                return legendItem
+            })
+            return [...(showDefaultSeries ? [defaultLegendItem] : []), ...seriesLegendItems]
+        }
+    } else if (chartFilters.options.mode === MODE_FACET) {
+        return allChartKeys[chartFilters.facet].map((key, index) => {
+            const label = getString(`options.${chartFilters.facet}.${key}`)?.t
+            return {
+                color: theme.colors.barColors[index].color,
+                gradientColors: theme.colors.barColors[index].gradient,
+                id: `series_${key}`,
                 label,
                 shortLabel: label
             }
-            return legendItem
         })
-        return [...(showDefaultSeries ? [defaultLegendItem] : []), ...seriesLegendItems]
+    } else {
+        return []
     }
 }
 
-type InitFiltersOptions = {
-    showDefaultSeries?: boolean
-    allowModeSwitch?: boolean
-    mode?: 'combine' | 'multiple'
-}
-
-export const getInitFilters = (initOptions?: InitFiltersOptions) => ({
+export const getInitFilters = (initOptions?: CustomizationOptions) => ({
     options: {
         showDefaultSeries: true,
         allowModeSwitch: false,
+        mode: MODE_FILTERS,
         ...initOptions
     },
     filters: []

@@ -1,0 +1,24 @@
+export type CustomizationDefinition = {
+    options: CustomizationOptions
+    filters: CustomizationFilters[]
+    facet: string
+}
+
+export type CustomizationOptions = {
+    name?: string
+    showDefaultSeries?: boolean
+    allowModeSwitch?: boolean
+    behavior?: 'combined' | 'multiple'
+    mode?: 'filters' | 'facet'
+}
+
+export type CustomizationFilters = {
+    year: number
+    conditions: CustomizationFiltersCondition[]
+}
+
+export type CustomizationFiltersCondition = {
+    field: string
+    operator: string
+    value: string
+}

@@ -1,16 +1,17 @@
 import React, { useState, useEffect, useRef, ReactNode, Dispatch, SetStateAction } from 'react'
 import styled, { css } from 'styled-components'
-import { combineBuckets, getFiltersQuery } from './helpers'
+import { combineBuckets, getFiltersQuery, invertFacets, useFilterLegends } from './helpers'
 import { runQuery } from 'core/blocks/explorer/data'
 import Loading from 'core/blocks/explorer/Loading'
 import { usePageContext } from 'core/helpers/pageContext'
 import { spacing, mq, fontSize } from 'core/theme'
-import { getLegends } from 'core/blocks/filters/helpers'
 import { useTheme } from 'styled-components'
 import { useI18n } from 'core/i18n/i18nContext'
 import Tooltip from 'core/components/Tooltip'
 import T from 'core/i18n/T'
 import isEmpty from 'lodash/isEmpty'
+import { BEHAVIOR_COMBINED, BEHAVIOR_MULTIPLE, MODE_FACET, MODE_FILTERS } from './constants'
+import { CustomizationDefinition } from './types'
 
 const doNothing = a => a
 
@@ -41,7 +42,7 @@ type DynamicDataLoaderProps = {
     completion: any
     defaultBuckets: any
     children: ReactNode
-    chartFilters: any
+    chartFilters: CustomizationDefinition
     setBuckets: Dispatch<SetStateAction<any>>
     layout: 'grid' | 'column'
 }
@@ -63,12 +64,12 @@ const DynamicDataLoader = ({
     const [isLoading, setIsLoading] = useState(false)
     const defaultSeries = { name: 'default', buckets: defaultBuckets }
 
-    // combined mode: single series with a combined bucket
+    // combined behavior: single series with a combined bucket
     const [combinedBuckets, setCombinedBuckets] = useState(defaultBuckets)
     // keep track of how many series are displayed within the combined bucket
     const [seriesCount, setSeriesCount] = useState(1)
 
-    // multiple mode: multiple series with normal buckets
+    // multiple behavior: multiple series with normal buckets
     const [series, setSeries] = useState([defaultSeries])
 
     const context = usePageContext()
@@ -76,12 +77,10 @@ const DynamicDataLoader = ({
     const { year } = currentEdition
 
     const { options = {} } = chartFilters
-    const { showDefaultSeries = true, mode = 'multiple' } = options
+    const { showDefaultSeries = true, behavior = BEHAVIOR_MULTIPLE, mode = MODE_FILTERS } = options
 
-    const legends = getLegends({
-        theme,
+    const legends = useFilterLegends({
         chartFilters,
-        getString,
         currentYear: year,
         showDefaultSeries
     })
@@ -107,59 +106,81 @@ const DynamicDataLoader = ({
 
             const seriesData = getSeriesData(result, block.dataPath)
 
-            if (mode === 'combine') {
-                /*
+            if (mode === MODE_FILTERS) {
+                if (behavior === BEHAVIOR_COMBINED) {
+                    /*
 
                 Combine multiple series into a single chart
 
                 */
-                const newBuckets = Object.values(seriesData).map(getSeriesItemBuckets)
+                    const newBuckets = Object.values(seriesData).map(getSeriesItemBuckets)
 
-                /*
+                    /*
 
                 In case buckets have a processing function applied (for example to merge them into
                 fewer buckets), apply it now to the new buckets
 
                 */
-                const bucketsArrays = [
-                    ...(showDefaultSeries ? [defaultBuckets] : []),
-                    ...newBuckets.map(processBuckets)
-                ]
+                    const bucketsArrays = [
+                        ...(showDefaultSeries ? [defaultBuckets] : []),
+                        ...newBuckets.map(processBuckets)
+                    ]
 
-                const combinedBuckets = combineBuckets({
-                    bucketsArrays,
-                    completion
-                })
+                    const combinedBuckets = combineBuckets({
+                        bucketsArrays,
+                        completion
+                    })
 
-                // percentage_question is the only unit that lets us
-                // meaningfully compare values across series
-                setUnits('percentage_question')
-                setCombinedBuckets(combinedBuckets)
-                setSeriesCount(showDefaultSeries ? newBuckets.length + 1 : newBuckets.length)
-            } else {
-                /*
+                    // percentage_question is the only unit that lets us
+                    // meaningfully compare values across series
+                    setUnits('percentage_question')
+                    setCombinedBuckets(combinedBuckets)
+                    setSeriesCount(showDefaultSeries ? newBuckets.length + 1 : newBuckets.length)
+                } else {
+                    /*
 
                 Display multiple series as multiple side-by-side "small multiples" charts
 
                 */
-                const allSeries = [
-                    ...(showDefaultSeries ? [defaultSeries] : []),
-                    ...Object.keys(seriesData).map(name => ({
-                        name,
-                        buckets: getSeriesItemBuckets(seriesData[name])
-                    }))
-                ]
-                setSeries(allSeries)
+                    const allSeries = [
+                        ...(showDefaultSeries ? [defaultSeries] : []),
+                        ...Object.keys(seriesData).map(name => ({
+                            name,
+                            buckets: getSeriesItemBuckets(seriesData[name])
+                        }))
+                    ]
+                    setSeries(allSeries)
+                }
+            } else if (mode === MODE_FACET) {
+                // console.log('// MODE_FACET')
+                // console.log(block.id)
+                // console.log(seriesData)
+                const facets = seriesData[block.id]?.year?.facets
+                // console.log(facets)
+                // console.log(defaultBuckets)
+                const invertedFacetsBuckets = invertFacets({ facets, defaultBuckets })
+                // console.log(invertedFacetsBuckets)
+                setUnits('percentage_bucket')
+                setCombinedBuckets(invertedFacetsBuckets)
             }
             setIsLoading(false)
         }
 
-        if (chartFilters?.filters?.length > 0) {
+        if (chartFilters?.filters?.length > 0 || !isEmpty(chartFilters.facet)) {
             getData()
         }
     }, [chartFilters])
 
-    if (mode === 'multiple') {
+    if (behavior === BEHAVIOR_COMBINED || mode === MODE_FACET) {
+        return (
+            <Wrapper_>
+                <Contents_>
+                    {React.cloneElement(children, { buckets: combinedBuckets, seriesCount })}
+                </Contents_>
+                {isLoading && <Loading />}
+            </Wrapper_>
+        )
+    } else {
         return (
             <GridWrapper_ layout={layout}>
                 {series.map(({ name, buckets }, i) => (
@@ -180,7 +201,7 @@ const DynamicDataLoader = ({
                             ) : (
                                 React.cloneElement(children, {
                                     buckets,
-                                    barColor: theme.colors.barColors[i]
+                                    gridIndex: i
                                 })
                             )}
                         </Contents_>
@@ -188,15 +209,6 @@ const DynamicDataLoader = ({
                     </GridItem_>
                 ))}
             </GridWrapper_>
-        )
-    } else {
-        return (
-            <Wrapper_>
-                <Contents_>
-                    {React.cloneElement(children, { buckets: combinedBuckets, seriesCount })}
-                </Contents_>
-                {isLoading && <Loading />}
-            </Wrapper_>
         )
     }
 }
