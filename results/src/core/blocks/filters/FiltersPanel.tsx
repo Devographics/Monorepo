@@ -47,28 +47,10 @@ const FiltersPanel = ({ block, chartFilters, setChartFilters, closeModal }) => {
             </Heading_>
             <Tabs.Root defaultValue={filtersState.options.mode} orientation="horizontal">
                 <TabsList aria-label="tabs example">
-                    <TabsTrigger_
-                        value={MODE_FILTERS}
-                        onClick={() => {
-                            setFiltersState(fState => {
-                                const newState = cloneDeep(fState)
-                                newState.options.mode = MODE_FILTERS
-                                return newState
-                            })
-                        }}
-                    >
+                    <TabsTrigger_ value={MODE_FILTERS}>
                         <T k="filters.filters_mode" />
                     </TabsTrigger_>
-                    <TabsTrigger_
-                        value={MODE_FACET}
-                        onClick={() => {
-                            setFiltersState(fState => {
-                                const newState = cloneDeep(fState)
-                                newState.options.mode = MODE_FACET
-                                return newState
-                            })
-                        }}
-                    >
+                    <TabsTrigger_ value={MODE_FACET}>
                         <T k="filters.facets_mode" />
                     </TabsTrigger_>
                 </TabsList>

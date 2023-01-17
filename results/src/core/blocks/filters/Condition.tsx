@@ -6,7 +6,8 @@ import Button from 'core/components/Button'
 import T from 'core/i18n/T'
 import { DeleteIcon, TrashIcon, PlusIcon } from 'core/icons'
 import cloneDeep from 'lodash/cloneDeep.js'
-import { useKeys, getFieldLabel, getValueLabel } from './helpers'
+import { getFieldLabel, getValueLabel } from './helpers'
+import { useAllChartsKeys } from 'core/charts/hooks'
 
 const operators = ['eq', 'in', 'nin']
 
@@ -23,7 +24,7 @@ const Condition = ({
     const { field = defaultField, operator, value } = condition
     const { setFiltersState } = stateStuff
 
-    const allChartsKeys = useKeys()
+    const allChartsKeys = useAllChartsKeys()
 
     const values = allChartsKeys[field] || []
 

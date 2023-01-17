@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Series from './Series'
 import styled from 'styled-components'
 import T from 'core/i18n/T'
@@ -6,17 +6,17 @@ import { mq, spacing, fontSize } from 'core/theme'
 import Button from 'core/components/Button'
 import cloneDeep from 'lodash/cloneDeep.js'
 import { getNewSeries } from './helpers'
-import { maxSeriesCount, availableFilters } from './constants'
+import { maxSeriesCount, availableFilters, MODE_FILTERS } from './constants'
 import { usePageContext } from 'core/helpers/pageContext'
 import { useI18n } from 'core/i18n/i18nContext'
 import { Series_ } from './Series'
 import Presets from './Presets'
 import Options from './Options'
-import { useKeys } from './helpers'
+import { useAllChartsKeys } from 'core/charts/hooks'
 
 const FiltersSelection = ({ chartName, block, stateStuff }) => {
     const context = usePageContext()
-    const allChartsKeys = useKeys()
+    const allChartsKeys = useAllChartsKeys()
     const { currentEdition } = context
     const { filtersState, setFiltersState } = stateStuff
 
@@ -28,6 +28,15 @@ const FiltersSelection = ({ chartName, block, stateStuff }) => {
         filters: filtersWithoutCurrentItem,
         keys: allChartsKeys,
         year: currentEdition.year
+    })
+
+    // whenever this panel is loaded, set mode to filters
+    useEffect(() => {
+        setFiltersState(fState => {
+            const newState = cloneDeep(fState)
+            newState.options.mode = MODE_FILTERS
+            return newState
+        })
     })
 
     const handleAddSeries = () => {

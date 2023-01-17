@@ -12,8 +12,7 @@ import { ChartComponentProps, BucketItem, BlockUnits } from 'core/types'
 import TickItem, { getBucketLabel } from 'core/charts/generic/TickItem'
 import maxBy from 'lodash/maxBy'
 import ChartLabel from 'core/components/ChartLabel'
-import { useKeys } from 'core/blocks/filters/helpers'
-import { useBarChart, useColorDefs, useColorFills, HORIZONTAL } from 'core/charts/hooks'
+import { useBarChart, useColorDefs, useColorFills, useChartKeys, HORIZONTAL } from 'core/charts/hooks'
 
 export const margin = {
     top: 40,
@@ -92,21 +91,6 @@ const getLabelsLayer = (units: BlockUnits) => (props: any) => {
     })
 }
 
-/*
-
-When no facet is specified, key is e.g. [count]
-
-If "gender" facet is specified, keys are e.g. ['count__male', 'count__female', ...]
-
-*/
-const getKeys = ({ units, facet, allChartKeys }) => {
-    if (facet) {
-        return allChartKeys[facet].map(key => `${units}__${key}`)
-    } else {
-        return [units]
-    }
-}
-
 const HorizontalBarChart = ({
     buckets,
     total,
@@ -125,8 +109,7 @@ const HorizontalBarChart = ({
     const theme = useTheme()
     const { translate } = useI18n()
 
-    const allChartKeys = useKeys()
-    const keys = getKeys({ units, facet, allChartKeys })
+    const keys = useChartKeys({ units, facet })
 
     const colorDefs = useColorDefs({ orientation: HORIZONTAL })
     const colorFills = useColorFills({ defaultColorIndex: gridIndex, keys, orientation: HORIZONTAL })
@@ -139,9 +122,6 @@ const HorizontalBarChart = ({
         mode,
         units
     })
-
-    console.log('// maxValue')
-    console.log(maxValue)
 
     const data = useMemo(
         () =>

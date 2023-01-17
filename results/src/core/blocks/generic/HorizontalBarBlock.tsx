@@ -69,6 +69,7 @@ const HorizontalBarBlock = ({
                 defaultBuckets={buckets}
                 block={block}
                 chartFilters={chartFilters}
+                setUnits={setUnits}
                 layout="grid"
             >
                 <ChartContainer fit={false}>

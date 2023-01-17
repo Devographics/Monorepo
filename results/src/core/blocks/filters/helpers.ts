@@ -1,4 +1,3 @@
-import { usePageContext } from 'core/helpers/pageContext'
 import { getGraphQLQuery } from 'core/blocks/block/BlockData'
 import { addNoAnswerBucket } from 'core/blocks/generic/VerticalBarBlock'
 import { getCountryName } from 'core/helpers/countries'
@@ -10,18 +9,7 @@ import { MODE_FACET, MODE_FILTERS } from './constants'
 import { useI18n } from 'core/i18n/i18nContext'
 import { useTheme } from 'styled-components'
 import round from 'lodash/round'
-
-/*
-
-Get keys (['range_work_for_free', 'range_0_10', 'range_10_30', ...]) for all chart types
-
-*/
-export const useKeys = () => {
-    const context = usePageContext()
-    const { metadata } = context
-    const { keys } = metadata
-    return keys
-}
+import { useAllChartsKeys } from 'core/charts/hooks'
 
 export const getNewCondition = ({ filtersNotInUse, keys }) => {
     const field = filtersNotInUse[0]
@@ -207,7 +195,7 @@ export const useFilterLegends = ({
     currentYear?: number
     showDefaultSeries?: boolean
 }) => {
-    const allChartKeys = useKeys()
+    const allChartKeys = useAllChartsKeys()
     const theme = useTheme()
     const { getString } = useI18n()
 

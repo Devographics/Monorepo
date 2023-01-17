@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { useTheme } from 'styled-components'
 import { ResponsiveBar } from '@nivo/bar'
 import { useI18n } from 'core/i18n/i18nContext'
-import { useBarChart, useColorDefs, useColorFills } from 'core/charts/hooks'
+import { useBarChart, useColorDefs, useColorFills, useChartKeys } from 'core/charts/hooks'
 import BarTooltip from './BarTooltip'
 import ChartLabel from 'core/components/ChartLabel'
 import { isPercentage } from 'core/helpers/units'
@@ -56,10 +56,6 @@ export interface VerticalBarChartProps extends ChartComponentProps {
     seriesCount: number
 }
 
-const getKeys = (units, seriesCount) => {
-    return [...Array(seriesCount)].map((x, i) => (i === 0 ? units : `${units}__${i + 1}`))
-}
-
 const VerticalBarChart = ({
     viewportWidth,
     className,
@@ -74,11 +70,20 @@ const VerticalBarChart = ({
     colorVariant = 'primary',
     buckets,
     gridIndex = 1,
+    groupMode='grouped',
+    facet,
 }: VerticalBarChartProps) => {
     const theme = useTheme()
+
+    const keys = useChartKeys({units, facet, seriesCount})
+
     const colorDefs = useColorDefs()
-    const colorFills = useColorFills({ defaultColorIndex: gridIndex })
+    const colorFills = useColorFills({ defaultColorIndex: gridIndex, keys })
     const { translate } = useI18n()
+
+    console.log(facet)
+    console.log(colorDefs)
+    console.log(colorFills)
 
     const { formatValue, maxValue, ticks } = useBarChart({
         buckets,
@@ -89,6 +94,7 @@ const VerticalBarChart = ({
         units
     })
 
+
     const labelsLayer = useMemo(() => getLabelsLayer(units), [units])
 
     const colors = [theme.colors.barChart[colorVariant]]
@@ -97,9 +103,9 @@ const VerticalBarChart = ({
         <div style={{ height: 260 }} className={`VerticalBarChart ${className}`}>
             <ResponsiveBar
                 data={buckets}
-                groupMode="grouped"
+                groupMode={groupMode}
                 indexBy="id"
-                keys={getKeys(units, seriesCount)}
+                keys={keys}
                 maxValue={maxValue}
                 margin={getMargins(viewportWidth)}
                 padding={0.4}

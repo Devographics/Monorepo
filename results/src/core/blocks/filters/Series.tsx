@@ -6,11 +6,12 @@ import Button from 'core/components/Button'
 import T from 'core/i18n/T'
 import difference from 'lodash/difference.js'
 import cloneDeep from 'lodash/cloneDeep.js'
-import { useKeys, getNewCondition } from './helpers'
+import { getNewCondition } from './helpers'
 import { Condition_ } from './Condition'
 import { TrashIcon, DeleteIcon } from 'core/icons'
 import { useTheme } from 'styled-components'
 import YearSelector from './YearSelector'
+import { useAllChartsKeys } from 'core/charts/hooks'
 
 const Series = ({ filters, series, index, stateStuff }) => {
     const theme = useTheme()
@@ -19,7 +20,7 @@ const Series = ({ filters, series, index, stateStuff }) => {
     const { filtersState, setFiltersState } = stateStuff
     const showDefaultSeries = filtersState.options.showDefaultSeries
 
-    const allChartsKeys = useKeys()
+    const allChartsKeys = useAllChartsKeys()
 
     const filtersInUse = conditions.map(c => c.field)
     const filtersNotInUse = difference(filters, filtersInUse)

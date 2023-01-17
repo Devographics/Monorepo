@@ -10,7 +10,7 @@ import sumBy from 'lodash/sumBy'
 import T from 'core/i18n/T'
 import { getTableData } from 'core/helpers/datatables'
 import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
-import { getLegends } from 'core/blocks/filters/helpers'
+import { useFilterLegends } from 'core/blocks/filters/helpers'
 import { useTheme } from 'styled-components'
 import { useI18n } from 'core/i18n/i18nContext'
 import { getInitFilters } from 'core/blocks/filters/helpers'
@@ -67,7 +67,7 @@ const KnowledgeScoreBlock = ({ block, data }) => {
     // contains the filters that define the series
     const [chartFilters, setChartFilters] = useState(getInitFilters({ behavior: BEHAVIOR_COMBINED }))
 
-    const legends = getLegends({ theme, chartFilters, getString, currentYear })
+    const legends = useFilterLegends({ chartFilters, currentYear })
 
     return (
         <Block

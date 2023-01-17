@@ -172,10 +172,16 @@ const DynamicDataLoader = ({
     }, [chartFilters])
 
     if (behavior === BEHAVIOR_COMBINED || mode === MODE_FACET) {
+        const groupMode = mode === MODE_FACET ? 'stacked' : 'grouped'
         return (
             <Wrapper_>
                 <Contents_>
-                    {React.cloneElement(children, { buckets: combinedBuckets, seriesCount })}
+                    {React.cloneElement(children, {
+                        buckets: combinedBuckets,
+                        seriesCount,
+                        groupMode,
+                        facet: chartFilters.facet
+                    })}
                 </Contents_>
                 {isLoading && <Loading />}
             </Wrapper_>

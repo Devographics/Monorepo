@@ -11,10 +11,9 @@ import { FacetItem, BlockComponentProps, BlockUnits } from 'core/types'
 import { getTableData } from 'core/helpers/datatables'
 import sumBy from 'lodash/sumBy'
 import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
-import { useTheme } from 'styled-components'
-import { useI18n } from 'core/i18n/i18nContext'
 import { useFilterLegends, getInitFilters } from 'core/blocks/filters/helpers'
 import { BEHAVIOR_COMBINED } from 'core/blocks/filters/constants'
+import { defaultOptions } from 'core/blocks/block/BlockUnitsSelector'
 
 export interface VerticalBarBlockProps extends BlockComponentProps {
     data: FacetItem
@@ -41,10 +40,6 @@ const VerticalBarBlock = ({
     controlledUnits,
     isCustom
 }: VerticalBarBlockProps) => {
-    const theme = useTheme()
-    const { getString } = useI18n()
-
-
 
     if (!data) {
         throw new Error(`VerticalBarBlock: Missing data for block ${block.id}.`)
@@ -100,6 +95,7 @@ const VerticalBarBlock = ({
             completion={completion}
             data={data}
             block={block}
+            unitsOptions={chartFilters.facet ? ['percentage_bucket', 'count'] : defaultOptions}
             chartFilters={chartFilters}
             setChartFilters={setChartFilters}
             legendProps={{ layout: 'vertical' }}

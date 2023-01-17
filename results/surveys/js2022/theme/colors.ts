@@ -45,6 +45,7 @@ const colors = {
     greyLighter: '#DED1D7',
     greyLightest: '#EADEE3',
 
+    kakiDark: '#9ca033',
     kaki: '#CCD133',
     electricBlueLight: '#AEF0FF',
     electricBlue: '#38D6FE',
@@ -196,6 +197,31 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
             id: 'barColor5',
             color: colors.orange,
             gradient: [colors.orangeDarker, colors.orangeLight]
+        },
+        {
+            id: 'barColor6',
+            color: colors.olive,
+            gradient: [colors.oliveDark, colors.olive]
+        },
+        {
+            id: 'barColor7',
+            color: colors.aqua,
+            gradient: [colors.aquaDark, colors.aqua]
+        },
+        {
+            id: 'barColor8',
+            color: colors.red,
+            gradient: [colors.redDark, colors.red]
+        },
+        {
+            id: 'barColor9',
+            color: colors.skyBlue,
+            gradient: [colors.skyBlueDark, colors.skyBlue]
+        },
+        {
+            id: 'barColor10',
+            color: colors.kaki,
+            gradient: [colors.kakiDark, colors.kaki]
         }
     ],
     barChart: {
