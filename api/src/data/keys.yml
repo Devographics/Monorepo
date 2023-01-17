@@ -163,3 +163,15 @@ usage_type:
   - student
   - hobby
   - professionally
+
+facets:
+  - gender
+  - race_ethnicity
+  - yearly_salary
+  - industry_sector
+  - disability_status
+  - company_size
+  - years_of_experience
+  - higher_education_degree
+  - source
+  - country
