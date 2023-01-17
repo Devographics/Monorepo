@@ -38,17 +38,22 @@ export const getGenericPipeline = (pipelineProps: PipelineProps) => {
         },
         // { $count: 'questionRespondents' },
         {
+            $set: {
+                [`${facetPath}`]: { $cond: [ { $not: [`$${facetPath}`] }, "noAnswer", `$${facetPath}` ] }
+            }
+        },
+        {
             $unwind: {
                 path: `$${key}`
             }
         },
         ...(facetPath
             ? [
-                  {
-                      $unwind: {
-                          path: `$${facetPath}`
-                      }
-                  }
+                  // {
+                  //     $unwind: {
+                  //         path: `$${facetPath}`
+                  //     }
+                  // }
               ]
             : []),
         {
