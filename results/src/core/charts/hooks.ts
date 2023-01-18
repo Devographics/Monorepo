@@ -221,7 +221,7 @@ If "gender" facet is specified, keys are e.g. ['count__male', 'count__female', .
 export const useChartKeys = ({
     units,
     facet,
-    seriesCount = 0,
+    seriesCount,
     showDefaultSeries = true,
 }: {
     units: BlockUnits
@@ -232,11 +232,13 @@ export const useChartKeys = ({
     const allChartKeys = useAllChartsKeys()
     if (facet) {
         return allChartKeys[facet].map(key => `${units}__${key}`)
-    } else {
+    } else if (seriesCount) {
         if (showDefaultSeries) {
             return [...Array(seriesCount + 1)].map((x, i) => (i === 0 ? units : `${units}__${i + 1}`))
         } else {
             return [...Array(seriesCount)].map((x, i) => (`${units}__${i + 1}`))
         }
+    } else {
+        return [units]
     }
 }
