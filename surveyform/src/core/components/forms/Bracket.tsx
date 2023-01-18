@@ -5,7 +5,7 @@ import isNil from "lodash/isNil.js";
 import isEmpty from "lodash/isEmpty.js";
 import cloneDeep from "lodash/cloneDeep.js";
 import { useIntlContext } from "@vulcanjs/react-i18n";
-import { useFormContext } from "@vulcanjs/react-ui";
+import { useFormContext } from "@devographics/react-form";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import { FormItem } from "../survey/questions/FormItem";
 import { TooltipTrigger } from "~/core/components/ui/TooltipTrigger";

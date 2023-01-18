@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useIntlContext } from "@vulcanjs/react-i18n";
-import { FormInputProps, useFormContext } from "@vulcanjs/react-ui";
+import { FormInputProps, useFormContext } from "@devographics/react-form";
 import { FormControl } from "react-bootstrap";
 import isEmpty from "lodash/isEmpty.js";
 import { Form } from "react-bootstrap";

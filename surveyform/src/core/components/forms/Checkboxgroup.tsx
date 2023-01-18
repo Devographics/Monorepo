@@ -5,16 +5,13 @@ import without from "lodash/without.js";
 import uniq from "lodash/uniq.js";
 import take from "lodash/take.js";
 import isEmpty from "lodash/isEmpty.js";
-import {
-  FormInputProps,
-  useFormContext,
-  useVulcanComponents,
-} from "@vulcanjs/react-ui";
+import { FormInputProps, useFormContext } from "@devographics/react-form";
 import FormOptionLabel from "~/core/components/survey/questions/FormOptionLabel";
 import FormOptionDescription from "~/core/components/survey/questions/FormOptionDescription";
 import { useIntlContext } from "@vulcanjs/react-i18n";
 import { Button } from "../ui/Button";
 import { FormItem } from "../survey/questions/FormItem";
+import { FormComponentText } from "./Default";
 
 // this marker is used to identify "other" values
 export const otherMarker = "[other]";
@@ -37,7 +34,6 @@ export const removeOtherValue = (a) => {
 
 const OtherComponent = ({ value, path }) => {
   const { updateCurrentValues } = useFormContext();
-  const Components = useVulcanComponents();
 
   const otherValue = removeOtherMarker(value.find(isOtherValue));
   // get copy of checkbox group values with "other" value removed
@@ -92,7 +88,7 @@ const OtherComponent = ({ value, path }) => {
         }}
       />
       {showOther && (
-        <Components.FormComponentText
+        <FormComponentText
           inputProperties={textFieldInputProperties}
           itemProperties={textFieldItemProperties}
         />
@@ -117,7 +113,6 @@ export const FormComponentCheckboxGroup = ({
   const intl = useIntlContext();
   const [showMore, setShowMore] = useState(false);
   const { updateCurrentValues } = useFormContext();
-  const Components = useVulcanComponents();
 
   const {
     // @ts-expect-error

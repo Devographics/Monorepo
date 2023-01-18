@@ -458,6 +458,53 @@ importers:
   shared/encrypt-email:
     specifiers: {}
 
+  shared/i18n:
+    specifiers:
+      '@vulcanjs/schema': ^0.7.2-alpha.8
+      '@vulcanjs/utils': ^0.7.2-alpha.8
+      prop-types: ^15.7.2
+      simpl-schema: ^1.12.0
+    dependencies:
+      '@vulcanjs/schema': 0.7.2-alpha.8
+      '@vulcanjs/utils': 0.7.2-alpha.8
+      prop-types: 15.8.1
+      simpl-schema: 1.13.1
+
+  shared/react-form:
+    specifiers:
+      '@devographics/i18n': workspace:*
+      '@devographics/react-hooks': workspace:*
+      '@devographics/react-i18n': workspace:*
+      '@types/lodash': ^4.14.168
+      '@types/underscore': ^1.11.1
+      '@vulcanjs/core': ^0.7.2-alpha.8
+      '@vulcanjs/graphql': ^0.8.1-y.0
+      '@vulcanjs/model': ^0.7.2-alpha.8
+      '@vulcanjs/permissions': ^0.7.2-alpha.8
+      '@vulcanjs/schema': ^0.7.2-alpha.8
+      '@vulcanjs/utils': ^0.7.2-alpha.8
+      classnames: ^2.3.1
+      debug: ^4.3.1
+      lodash: ^4.17.21
+      simpl-schema: ^1.12.0
+    dependencies:
+      '@devographics/i18n': link:../i18n
+      '@devographics/react-hooks': link:../react-hooks
+      '@devographics/react-i18n': link:../react-i18n
+      '@vulcanjs/core': 0.7.2-alpha.8
+      '@vulcanjs/graphql': 0.8.1-y.0
+      '@vulcanjs/model': 0.7.2-alpha.8
+      '@vulcanjs/permissions': 0.7.2-alpha.8
+      '@vulcanjs/schema': 0.7.2-alpha.8
+      '@vulcanjs/utils': 0.7.2-alpha.8
+      classnames: 2.3.2
+      debug: 4.3.4
+      lodash: 4.17.21
+      simpl-schema: 1.13.1
+    devDependencies:
+      '@types/lodash': 4.14.190
+      '@types/underscore': 1.11.4
+
   shared/react-hooks:
     specifiers:
       '@testing-library/react-hooks': ^3.4.1
@@ -486,6 +533,16 @@ importers:
       mock-apollo-client: 1.2.1
       react-test-renderer: 16.14.0
       urql: 3.0.3
+
+  shared/react-i18n:
+    specifiers:
+      '@vulcanjs/i18n': ^0.8.1-y.0
+      '@vulcanjs/utils': ^0.7.2-alpha.8
+      prop-types: ^15.7.2
+    dependencies:
+      '@vulcanjs/i18n': 0.8.1-y.0
+      '@vulcanjs/utils': 0.7.2-alpha.8
+      prop-types: 15.8.1
 
   surveyadmin:
     specifiers:
@@ -823,6 +880,7 @@ importers:
       '@cypress/webpack-preprocessor': ^5.15.5
       '@devographics/core-models': workspace:1.0.0
       '@devographics/encrypt-email': workspace:1.0.0
+      '@devographics/react-form': workspace:1.0.0
       '@devographics/react-hooks': workspace:1.0.0
       '@graphql-tools/merge': ^8.3.11
       '@graphql-tools/schema': ^8.5.1
@@ -870,11 +928,7 @@ importers:
       '@vulcanjs/mongo': 0.7.2-alpha.8
       '@vulcanjs/mongo-apollo': 0.8.1-y.0
       '@vulcanjs/permissions': 0.7.2-alpha.8
-      '@vulcanjs/react-hooks': 0.8.1-y.0
       '@vulcanjs/react-i18n': 0.8.1-y.0
-      '@vulcanjs/react-ui': 0.8.1-y.0
-      '@vulcanjs/react-ui-bootstrap': 0.8.1-y.0
-      '@vulcanjs/react-ui-lite': 0.8.1-y.0
       '@vulcanjs/schema': 0.7.2-alpha.8
       '@vulcanjs/utils': 0.7.2-alpha.8
       apollo-server: ^3.11.1
@@ -975,6 +1029,7 @@ importers:
       '@as-integrations/next': 1.2.0_cnigt2tbzejtorbjssaeavpcfe
       '@devographics/core-models': link:../shared/core-models
       '@devographics/encrypt-email': link:../shared/encrypt-email
+      '@devographics/react-form': link:../shared/react-form
       '@devographics/react-hooks': link:../shared/react-hooks
       '@graphql-tools/merge': 8.3.11_graphql@16.6.0
       '@graphql-tools/schema': 8.5.1_graphql@16.6.0
@@ -995,11 +1050,7 @@ importers:
       '@vulcanjs/mongo': 0.7.2-alpha.8_xnsbuxwofj3pgggbwmrypkfxiq
       '@vulcanjs/mongo-apollo': 0.8.1-y.0_w2qp7amqur4dhe5m7w27h2k7ya
       '@vulcanjs/permissions': 0.7.2-alpha.8_biqbaboplfbrettd7655fr4n2y
-      '@vulcanjs/react-hooks': 0.8.1-y.0_w2qp7amqur4dhe5m7w27h2k7ya
       '@vulcanjs/react-i18n': 0.8.1-y.0_62xnl4qpdiksvmumxipecras6a
-      '@vulcanjs/react-ui': 0.8.1-y.0_w2qp7amqur4dhe5m7w27h2k7ya
-      '@vulcanjs/react-ui-bootstrap': 0.8.1-y.0_pztpfekzhih5lkl26s7723mfoe
-      '@vulcanjs/react-ui-lite': 0.8.1-y.0_hxvrhwocrkbfzrhvgvanbvjuuu
       '@vulcanjs/schema': 0.7.2-alpha.8
       '@vulcanjs/utils': 0.7.2-alpha.8
       apollo-server: 3.11.1_graphql@16.6.0
@@ -15282,7 +15333,6 @@ packages:
 
   /@types/lodash/4.14.190:
     resolution: {integrity: sha512-5iJ3FBJBvQHQ8sFhEhJfjUP+G+LalhavTkYyrAYqz5MEJG+erSv0k9KJLb6q7++17Lafk1scaTIFXcMJlwK8Mw==}
-    dev: false
 
   /@types/long/4.0.2:
     resolution: {integrity: sha512-MqTGEo5bj5t157U6fA/BiDynNkn0YknVdh48CMPkTSpFTVmvao5UQmm7uEF6xBEo7qIMAlY/JSleYaE6VOdpaA==}
@@ -15607,6 +15657,10 @@ packages:
     dependencies:
       source-map: 0.6.1
     dev: false
+
+  /@types/underscore/1.11.4:
+    resolution: {integrity: sha512-uO4CD2ELOjw8tasUrAhvnn2W4A0ZECOvMjCivJr4gA9pGgjv+qxKWY9GLTMVEK8ej85BxQOocUyE7hImmSQYcg==}
+    dev: true
 
   /@types/unist/2.0.6:
     resolution: {integrity: sha512-PBjIUxZHOuj0R15/xuwJYjFi+KZdNFrehocChv4g5hu6aFroHue8m0lBP0POdK2nKzbw0cgV1mws8+V/JAcEkQ==}
@@ -16759,30 +16813,6 @@ packages:
       - supports-color
     dev: false
 
-  /@vulcanjs/mongo/0.8.1_xnsbuxwofj3pgggbwmrypkfxiq:
-    resolution: {integrity: sha512-sUHduVMSmjg3pOstZC84jBHLci2ZRRpZ8pUW2z2IWgTWsKoreYRmZ5eextNr49e+rfxFXzvyESo1gnEBjDSopQ==}
-    peerDependencies:
-      mongodb: '>= 3.6.2'
-      mongoose: '>= 6.2'
-    dependencies:
-      '@vulcanjs/crud': 0.7.2-alpha.8_biqbaboplfbrettd7655fr4n2y
-      '@vulcanjs/model': 0.7.2-alpha.8
-      '@vulcanjs/permissions': 0.7.2-alpha.8_biqbaboplfbrettd7655fr4n2y
-      '@vulcanjs/schema': 0.7.2-alpha.8
-      '@vulcanjs/utils': 0.7.2-alpha.8
-      lodash: 4.17.21
-      mongodb: 4.11.0
-      mongoose: 6.5.4
-    optionalDependencies:
-      mongodb-memory-server: 8.10.2
-    transitivePeerDependencies:
-      - aws-crt
-      - encoding
-      - react
-      - react-dom
-      - supports-color
-    dev: false
-
   /@vulcanjs/permissions/0.7.1:
     resolution: {integrity: sha512-u338e9tMVP2V7XXur1KwqzT0WqUnA8oHR97PeTY5U0lSN7cl6DKkVJt7gKEjJT1+0a5IhY+d8tmna+gtmJpveA==}
     peerDependencies:
@@ -16818,33 +16848,6 @@ packages:
       react-dom: 18.2.0_react@18.2.0
     dev: false
 
-  /@vulcanjs/react-hooks/0.8.1-y.0_w2qp7amqur4dhe5m7w27h2k7ya:
-    resolution: {integrity: sha512-FiIe6d5vS31penLODHX8djQ89lZPjWJagMILrSfxjhA9T8xju3sx8qKElukB9j4tvsbu42axzrufusIxTidFGg==}
-    peerDependencies:
-      '@apollo/client': '>= 3.2.0'
-      graphql: ^15.5.0
-      react: ^17.0.1
-      react-dom: ^17.0.1
-    dependencies:
-      '@apollo/client': 3.7.1_gdcq4dv6opitr3wbfwyjmanyra
-      '@vulcanjs/crud': 0.7.2-alpha.8_biqbaboplfbrettd7655fr4n2y
-      '@vulcanjs/graphql': 0.8.1-y.0_eof2rsndd4y33yevt2fzmcqt7a
-      '@vulcanjs/mongo': 0.7.2-alpha.8_xnsbuxwofj3pgggbwmrypkfxiq
-      debug: 4.3.4
-      graphql: 16.6.0
-      lodash: 4.17.21
-      mingo: 3.1.0
-      react: 18.2.0
-      react-dom: 18.2.0_react@18.2.0
-    transitivePeerDependencies:
-      - apollo-server
-      - aws-crt
-      - encoding
-      - mongodb
-      - mongoose
-      - supports-color
-    dev: false
-
   /@vulcanjs/react-hooks/0.8.1_4neeqb4rhx6sibgt43eikra72m:
     resolution: {integrity: sha512-nkAJha298/V7Ekh0EGwb4ZawUdFaljvL6nwYLqCgRRoCwIX7XwPr71uEbOSBZExfmfS1TGUgh0G/VVS4t9fbcQ==}
     peerDependencies:
@@ -16857,33 +16860,6 @@ packages:
       '@vulcanjs/crud': 0.7.2-alpha.8_biqbaboplfbrettd7655fr4n2y
       '@vulcanjs/graphql': 0.8.1-y.0_eof2rsndd4y33yevt2fzmcqt7a
       '@vulcanjs/mongo': 0.8.1_fbta7zxnlib62z2eo4ad3a5zwi
-      debug: 4.3.4
-      graphql: 16.6.0
-      lodash: 4.17.21
-      mingo: 3.1.0
-      react: 18.2.0
-      react-dom: 18.2.0_react@18.2.0
-    transitivePeerDependencies:
-      - apollo-server
-      - aws-crt
-      - encoding
-      - mongodb
-      - mongoose
-      - supports-color
-    dev: false
-
-  /@vulcanjs/react-hooks/0.8.1_w2qp7amqur4dhe5m7w27h2k7ya:
-    resolution: {integrity: sha512-nkAJha298/V7Ekh0EGwb4ZawUdFaljvL6nwYLqCgRRoCwIX7XwPr71uEbOSBZExfmfS1TGUgh0G/VVS4t9fbcQ==}
-    peerDependencies:
-      '@apollo/client': '>= 3.2.0'
-      graphql: ^15.5.0
-      react: ^17.0.1
-      react-dom: ^17.0.1
-    dependencies:
-      '@apollo/client': 3.7.1_gdcq4dv6opitr3wbfwyjmanyra
-      '@vulcanjs/crud': 0.7.2-alpha.8_biqbaboplfbrettd7655fr4n2y
-      '@vulcanjs/graphql': 0.8.1-y.0_eof2rsndd4y33yevt2fzmcqt7a
-      '@vulcanjs/mongo': 0.8.1_xnsbuxwofj3pgggbwmrypkfxiq
       debug: 4.3.4
       graphql: 16.6.0
       lodash: 4.17.21
@@ -16915,32 +16891,6 @@ packages:
       - supports-color
     dev: false
 
-  /@vulcanjs/react-ui-bootstrap/0.8.1-y.0_pztpfekzhih5lkl26s7723mfoe:
-    resolution: {integrity: sha512-cmuVQ9q4udWjcm0q+nWXTGnRg53KgRFJ6Hx1g5T/2wAsur42EImDbwZkKv3CE0pKwOQIHHs89QvFIjWIbENiJA==}
-    peerDependencies:
-      '@apollo/client': ^3.5.5
-      '@vulcanjs/react-ui': '*'
-      '@vulcanjs/react-ui-lite': '*'
-      graphql: ^15.5.0
-      react: ^17.0.1
-      react-dom: ^17.0.1
-    dependencies:
-      '@apollo/client': 3.7.1_gdcq4dv6opitr3wbfwyjmanyra
-      '@vulcanjs/react-ui': 0.8.1-y.0_w2qp7amqur4dhe5m7w27h2k7ya
-      '@vulcanjs/react-ui-lite': 0.8.1-y.0_hxvrhwocrkbfzrhvgvanbvjuuu
-      classnames: 2.3.2
-      debug: 4.3.4
-      graphql: 16.6.0
-      lodash: 4.17.21
-      react: 18.2.0
-      react-bootstrap: 2.6.0_4c3rps5tc2yowtcrqid3cuwlea
-      react-bootstrap-typeahead: 6.0.0_biqbaboplfbrettd7655fr4n2y
-      react-dom: 18.2.0_react@18.2.0
-    transitivePeerDependencies:
-      - '@types/react'
-      - supports-color
-    dev: false
-
   /@vulcanjs/react-ui-bootstrap/0.8.1-y.0_ypm5clbdcgj3kqbd7dpe4bhavi:
     resolution: {integrity: sha512-cmuVQ9q4udWjcm0q+nWXTGnRg53KgRFJ6Hx1g5T/2wAsur42EImDbwZkKv3CE0pKwOQIHHs89QvFIjWIbENiJA==}
     peerDependencies:
@@ -16964,40 +16914,6 @@ packages:
       react-dom: 18.2.0_react@18.2.0
     transitivePeerDependencies:
       - '@types/react'
-      - supports-color
-    dev: false
-
-  /@vulcanjs/react-ui-lite/0.8.1-y.0_hxvrhwocrkbfzrhvgvanbvjuuu:
-    resolution: {integrity: sha512-e5yGU7oSJC8V1JAoDn2MZG7LZPGNjPnUvB7n5ff6nDUExYwHB9N9ZXU5oeC70pKzLwwRtMAjBW1WTXJvTuevmw==}
-    peerDependencies:
-      '@apollo/client': ^3.5.5
-      moment: ^2.29.1
-      react: ^17.0.1
-      react-dom: ^17.0.1
-    dependencies:
-      '@apollo/client': 3.7.1_gdcq4dv6opitr3wbfwyjmanyra
-      '@vulcanjs/graphql': 0.8.1-y.0_eof2rsndd4y33yevt2fzmcqt7a
-      '@vulcanjs/i18n': 0.8.1-y.0_@apollo+client@3.7.1
-      '@vulcanjs/model': 0.7.2-alpha.8
-      '@vulcanjs/permissions': 0.7.2-alpha.8_biqbaboplfbrettd7655fr4n2y
-      '@vulcanjs/react-hooks': 0.8.1_w2qp7amqur4dhe5m7w27h2k7ya
-      '@vulcanjs/react-i18n': 0.8.1-y.0_62xnl4qpdiksvmumxipecras6a
-      '@vulcanjs/react-ui': 0.8.1-y.0_w2qp7amqur4dhe5m7w27h2k7ya
-      '@vulcanjs/schema': 0.7.2-alpha.8
-      '@vulcanjs/utils': 0.7.2-alpha.8
-      classnames: 2.3.2
-      debug: 4.3.4
-      lodash: 4.17.21
-      moment: 2.29.4
-      react: 18.2.0
-      react-dom: 18.2.0_react@18.2.0
-    transitivePeerDependencies:
-      - apollo-server
-      - aws-crt
-      - encoding
-      - graphql
-      - mongodb
-      - mongoose
       - supports-color
     dev: false
 
@@ -17030,40 +16946,6 @@ packages:
       - aws-crt
       - encoding
       - graphql
-      - mongodb
-      - mongoose
-      - supports-color
-    dev: false
-
-  /@vulcanjs/react-ui/0.8.1-y.0_w2qp7amqur4dhe5m7w27h2k7ya:
-    resolution: {integrity: sha512-ZGY70hStsar2CLUQisV295wXCDgtf7yBs+ghtu4R2vvBBcM4jdKpCjVpgYf3uyzrzkl0ye7U2Zz3NF872uMGvg==}
-    peerDependencies:
-      '@apollo/client': ^3.5.5
-      graphql: ^15.5.0
-      react: ^17.0.1
-      react-dom: ^17.0.1
-    dependencies:
-      '@apollo/client': 3.7.1_gdcq4dv6opitr3wbfwyjmanyra
-      '@vulcanjs/core': 0.7.2-alpha.8
-      '@vulcanjs/graphql': 0.8.1-y.0_eof2rsndd4y33yevt2fzmcqt7a
-      '@vulcanjs/i18n': 0.8.1-y.0_@apollo+client@3.7.1
-      '@vulcanjs/model': 0.7.2-alpha.8
-      '@vulcanjs/permissions': 0.7.2-alpha.8_biqbaboplfbrettd7655fr4n2y
-      '@vulcanjs/react-hooks': 0.8.1_w2qp7amqur4dhe5m7w27h2k7ya
-      '@vulcanjs/react-i18n': 0.8.1-y.0_62xnl4qpdiksvmumxipecras6a
-      '@vulcanjs/schema': 0.7.2-alpha.8
-      '@vulcanjs/utils': 0.7.2-alpha.8
-      classnames: 2.3.2
-      debug: 4.3.4
-      graphql: 16.6.0
-      lodash: 4.17.21
-      react: 18.2.0
-      react-dom: 18.2.0_react@18.2.0
-      simpl-schema: 1.13.1
-    transitivePeerDependencies:
-      - apollo-server
-      - aws-crt
-      - encoding
       - mongodb
       - mongoose
       - supports-color

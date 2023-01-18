@@ -7,22 +7,18 @@ import {
   removeOtherMarker,
   addOtherMarker,
 } from "./Checkboxgroup";
-import {
-  FormInputProps,
-  useFormContext,
-  useVulcanComponents,
-} from "@vulcanjs/react-ui";
+import { FormInputProps, useFormContext } from "@devographics/react-form";
 import FormOptionLabel from "~/core/components/survey/questions/FormOptionLabel";
 import FormOptionDescription from "~/core/components/survey/questions/FormOptionDescription";
 import { useIntlContext } from "@vulcanjs/react-i18n";
 import { FormItem } from "../survey/questions/FormItem";
+import { FormComponentText } from "./Default";
 
 const OtherComponent = ({
   value,
   path,
 }: Pick<FormInputProps, "path" | "value">) => {
   const { updateCurrentValues } = useFormContext();
-  const Components = useVulcanComponents();
   const otherValue = removeOtherMarker(value);
 
   // keep track of whether "other" field is shown or not
@@ -73,7 +69,7 @@ const OtherComponent = ({
         }}
       />
       {showOther && (
-        <Components.FormComponentText
+        <FormComponentText
           inputProperties={textFieldInputProperties}
           itemProperties={textFieldItemProperties}
         />
@@ -90,8 +86,6 @@ export const FormComponentRadioGroup = ({
 }: FormInputProps) => {
   const intl = useIntlContext();
 
-  const Components = useVulcanComponents();
-  const { updateCurrentValues } = useFormContext();
   const {
     // @ts-expect-error
     options = [],

@@ -1,9 +1,7 @@
-import { useVulcanComponents } from "@vulcanjs/react-ui";
 import React from "react";
+import { Loading } from "~/core/components/ui/Loading";
 
 export const FormInputLoading = ({ loading, children }) => {
-  const Components = useVulcanComponents();
-
   return (
     <div
       className={`form-input-loading form-input-loading-${
@@ -13,7 +11,7 @@ export const FormInputLoading = ({ loading, children }) => {
       <div className="form-input-loading-inner">{children}</div>
       {loading && (
         <div className="form-input-loading-loader">
-          <Components.Loading />
+          <Loading />
         </div>
       )}
     </div>

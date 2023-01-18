@@ -2,13 +2,7 @@
 import { Loading } from "~/core/components/ui/Loading";
 import { Button } from "~/core/components/ui/Button";
 import { Alert } from "~/core/components/ui/Alert";
-import {
-  VulcanComponentsProvider,
-  VulcanCurrentUserProvider,
-} from "@vulcanjs/react-ui";
-import { defaultCoreComponents } from "@vulcanjs/react-ui";
-import { TooltipTrigger, liteCoreComponents } from "@vulcanjs/react-ui-lite";
-import { bootstrapCoreComponents } from "@vulcanjs/react-ui-bootstrap";
+import { VulcanCurrentUserProvider } from "@devographics/react-form";
 
 import debug from "debug";
 
@@ -95,30 +89,12 @@ export function AppLayout(props: AppLayoutProps) {
                       false /* TODO: we don't get the loading information from useUser yet */,
                   }}
                 >
-                  <VulcanComponentsProvider
-                    value={{
-                      ...defaultCoreComponents,
-                      ...liteCoreComponents,
-                      // TODO: should not be needed, since we use Bootstrap Button instead,
-                      // but need double checking
-                      // Button,
-                      TooltipTrigger,
-                      ...bootstrapCoreComponents,
-                      Loading,
-                      Button,
-                      Alert,
-                      // Keep the component here even if we don't use Components.FormattedMessage directly
-                      // This allows Vulcan components to depend on it
-                      FormattedMessage,
-                    }}
+                  <ErrorBoundary
+                    proposeReload={true}
+                    proposeHomeRedirection={true}
                   >
-                    <ErrorBoundary
-                      proposeReload={true}
-                      proposeHomeRedirection={true}
-                    >
-                      <Layout>{children}</Layout>
-                    </ErrorBoundary>
-                  </VulcanComponentsProvider>
+                    <Layout>{children}</Layout>
+                  </ErrorBoundary>
                 </VulcanCurrentUserProvider>
               </LocaleContextProvider>
             </SWRConfig>

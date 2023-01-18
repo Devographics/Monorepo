@@ -4,19 +4,7 @@ import App, { AppContext, AppProps } from "next/app";
 import { ReactElement } from "react";
 
 import Head from "next/head";
-import {
-  VulcanComponentsProvider,
-  VulcanCurrentUserProvider,
-} from "@vulcanjs/react-ui";
-import { defaultCoreComponents } from "@vulcanjs/react-ui";
-import {
-  Alert,
-  // Not needed, we bring our own
-  //FormattedMessage,
-  Loading,
-  liteCoreComponents,
-} from "@vulcanjs/react-ui-lite";
-import { bootstrapCoreComponents } from "@vulcanjs/react-ui-bootstrap";
+import { VulcanCurrentUserProvider } from "@devographics/react-form";
 import { Analytics } from "@vercel/analytics/react";
 
 import debug from "debug";
@@ -109,43 +97,24 @@ function VNApp({ Component, pageProps }: VNAppProps) {
                   false /* TODO: we don't get the loading information from useUser yet */,
               }}
             >
-              <VulcanComponentsProvider
-                value={{
-                  ...defaultCoreComponents,
-                  ...liteCoreComponents,
-                  Alert,
-                  // TODO: should not be needed, since we use Bootstrap Button instead,
-                  // but need double checking
-                  // Button,
-                  Loading,
-                  ...bootstrapCoreComponents,
-                  // Keep the component here even if we don't use Components.FormattedMessage directly
-                  // This allows Vulcan components to depend on it
-                  FormattedMessage: FormattedMessage,
-                }}
-              >
-                <Head>
-                  <title>Devographics Surveys</title>
-                  <meta
-                    name="viewport"
-                    content="minimum-scale=1, initial-scale=1, width=device-width"
-                  />
-                  <Favicons />
-                </Head>
-                <ErrorBoundary
-                  proposeReload={true}
-                  proposeHomeRedirection={true}
+              <Head>
+                <title>Devographics Surveys</title>
+                <meta
+                  name="viewport"
+                  content="minimum-scale=1, initial-scale=1, width=device-width"
+                />
+                <Favicons />
+              </Head>
+              <ErrorBoundary proposeReload={true} proposeHomeRedirection={true}>
+                <Layout
+                  surveySlug={pageProps?.slug}
+                  surveyYear={pageProps?.year}
                 >
-                  <Layout
-                    surveySlug={pageProps?.slug}
-                    surveyYear={pageProps?.year}
-                  >
-                    {/** @ts-ignore */}
-                    <Component {...pageProps} />
-                    <Analytics />
-                  </Layout>
-                </ErrorBoundary>
-              </VulcanComponentsProvider>
+                  {/** @ts-ignore */}
+                  <Component {...pageProps} />
+                  <Analytics />
+                </Layout>
+              </ErrorBoundary>
             </VulcanCurrentUserProvider>
           </LocaleContextProvider>
         </ApolloProvider>

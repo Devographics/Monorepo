@@ -1,0 +1,43 @@
+{
+  "name": "@devographics/i18n",
+  "version": "1.0.0",
+  "description": "Vulcan i18n helpers",
+  "main": "./dist/index.js",
+  "files": [
+    "dist/"
+  ],
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.js",
+    "./server": "./dist/server/index.js"
+  },
+  "types": "./dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "server": [
+        "./dist/server/index.d.ts"
+      ]
+    }
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:tsup": "tsup",
+    "build:types": "tsc --emitDeclarationOnly --declaration --project tsconfig.build.json ",
+    "build": "yarn run build:tsup"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@vulcanjs/schema": "^0.7.2-alpha.8",
+    "@vulcanjs/utils": "^0.7.2-alpha.8",
+    "prop-types": "^15.7.2",
+    "simpl-schema": "^1.12.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "@apollo/client": "^3.5.5"
+  },
+  "gitHead": "672e9ed494ded98361abe47132899d3f825d6d23"
+}

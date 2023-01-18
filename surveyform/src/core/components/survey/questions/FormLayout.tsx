@@ -1,7 +1,9 @@
 import React from "react";
-import { useVulcanComponents } from "@vulcanjs/react-ui";
 import SurveySectionHeading from "~/core/components/survey/questions/SurveySectionHeading";
 import SurveyNav from "~/core/components/survey/questions/SurveyNav";
+import FormSubmit from "./FormSubmit";
+import { FormErrors } from "./FormErrors";
+import { FormElement } from "./FormElement";
 
 const FormLayout = (props: any) => {
   const {
@@ -18,8 +20,7 @@ const FormLayout = (props: any) => {
     navLoading,
     setNavLoading,
     readOnly,
-  } = props
-  const FormComponents = useVulcanComponents();
+  } = props;
   return (
     <div className="survey-section">
       <SurveyNav
@@ -38,20 +39,14 @@ const FormLayout = (props: any) => {
             sectionNumber={sectionNumber}
             survey={survey}
           />
-          <FormComponents.FormElement {...formProps}>
+          <FormElement {...formProps}>
             {" "}
             {/* <FormComponents.FormSubmit {...submitProps} showMessage={false} variant="top"/> */}
-            <FormComponents.FormErrors {...commonProps} {...errorProps} />
+            <FormErrors {...commonProps} {...errorProps} />
             {children}
-            {repeatErrors && (
-              <FormComponents.FormErrors {...commonProps} {...errorProps} />
-            )}
-            <FormComponents.FormSubmit
-              {...commonProps}
-              {...submitProps}
-              variant="bottom"
-            />
-          </FormComponents.FormElement>
+            {repeatErrors && <FormErrors {...commonProps} {...errorProps} />}
+            <FormSubmit {...commonProps} {...submitProps} variant="bottom" />
+          </FormElement>
         </div>
       </div>
     </div>

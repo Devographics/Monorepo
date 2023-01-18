@@ -14,7 +14,7 @@
 // import { getSurveyPath } from "~/modules/surveys/getters";
 // import isEmpty from "lodash/isEmpty.js";
 // import { statuses } from "~/modules/constants";
-// import { useVulcanComponents } from "@vulcanjs/react-ui";
+// import { useVulcanComponents } from "@devographics/react-form";
 // import { useRouter } from "next/router.js";
 // import gql from "graphql-tag";
 // import { getFragmentName } from "@vulcanjs/graphql";

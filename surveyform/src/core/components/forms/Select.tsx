@@ -1,8 +1,7 @@
 "use client";
 import React from "react";
 import { useIntlContext } from "@vulcanjs/react-i18n";
-import { FormInputProps } from "@vulcanjs/react-ui";
-import type { FormOption } from "@vulcanjs/react-ui";
+import type { FormInputProps, FormOption } from "@devographics/react-form";
 import { Form } from "react-bootstrap";
 import { FormItem } from "../survey/questions/FormItem";
 

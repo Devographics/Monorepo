@@ -1,5 +1,5 @@
 "use client";
-import { FormInputProps } from "@vulcanjs/react-ui";
+import type { FormInputProps } from "@devographics/react-form";
 import React, { useState } from "react";
 import { FormControl } from "react-bootstrap";
 import debounce from "lodash/debounce.js";

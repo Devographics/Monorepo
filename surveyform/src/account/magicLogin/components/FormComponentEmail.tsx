@@ -20,7 +20,7 @@ export const LoginFormItem = ({
 };
 
 /**
- * Inspired by @vulcanjs/react-ui-bootstrap FormComponentEmail
+ * Inspired by FormComponentEmail
  * that is used in the SmartForm
  */
 export const FormComponentEmail = ({

@@ -6,7 +6,7 @@ import { Button, ButtonProps } from "../Button";
 export default {
   component: Button,
   // @see https://github.com/storybookjs/storybook/issues/15534
-  title: "react-ui-bootstrap/Button",
+  title: "Button",
   decorators: [
     (Story) => (
       // Replace by VulcanComponents if you need them

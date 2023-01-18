@@ -8,12 +8,10 @@ import {
   //  SmartForm,
   useVulcanComponents,
   VulcanComponentsProvider,
-} from "@vulcanjs/react-ui";
+} from "@devographics/react-form";
 import { ResponsePerSurvey } from "~/modules/responses/model";
 import type { SurveyType } from "@devographics/core-models";
-import { defaultFormComponents } from "@vulcanjs/react-ui";
-import { liteFormComponents } from "@vulcanjs/react-ui-lite";
-import { bootstrapFormComponents } from "@vulcanjs/react-ui-bootstrap";
+import { defaultFormComponents } from "@devographics/react-form";
 import { SurveyResponseFragment } from "~/modules/responses/fragments";
 import { getCommentFieldName } from "~/modules/surveys/helpers";
 
@@ -50,9 +48,6 @@ const SurveySectionContents = (props) => {
      */
     <VulcanComponentsProvider
       value={{
-        ...defaultFormComponents,
-        ...liteFormComponents,
-        ...bootstrapFormComponents,
         FormItem,
         FormLayout: FormLayoutWrapper,
         FormSubmit: FormSubmitWrapper,

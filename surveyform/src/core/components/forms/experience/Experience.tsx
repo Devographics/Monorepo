@@ -5,7 +5,7 @@ import { FormItem } from "~/core/components/survey/questions/FormItem";
 import { Form } from "react-bootstrap";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 // import { isOtherValue, removeOtherMarker, addOtherMarker } from './Checkboxgroup';
-import { FormInputProps, useFormContext } from "@vulcanjs/react-ui";
+import { FormInputProps, useFormContext } from "@devographics/react-form";
 import { useEntities } from "~/core/components/common/EntitiesContext";
 import { FormControl } from "react-bootstrap";
 import get from "lodash/get.js";

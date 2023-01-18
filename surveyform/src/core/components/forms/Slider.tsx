@@ -1,12 +1,9 @@
 "use client";
 import React from "react";
 import { FormCheck } from "react-bootstrap";
-import {
-  FormInputProps,
-  useFormContext,
-  useVulcanComponents,
-} from "@vulcanjs/react-ui";
+import type { FormInputProps } from "@devographics/react-form";
 import { FormItem } from "../survey/questions/FormItem";
+import FormOptionLabel from "../survey/questions/FormOptionLabel";
 
 export const Slider = ({
   refFunction,
@@ -15,8 +12,6 @@ export const Slider = ({
   itemProperties = {},
   intlKeys,
 }: FormInputProps) => {
-  const Components = useVulcanComponents();
-  const { updateCurrentValues } = useFormContext();
   // @ts-expect-error
   const { options = [], value, ...otherInputProperties } = inputProperties;
   const hasValue = value !== "";
@@ -50,9 +45,7 @@ export const Slider = ({
                   layout="elementOnly"
                   type="radio"
                   // @ts-ignore
-                  label={
-                    hasLabel && <Components.FormOptionLabel option={option} />
-                  }
+                  label={hasLabel && <FormOptionLabel option={option} />}
                   value={option.value}
                   name={path}
                   id={`${path}.${i}`}

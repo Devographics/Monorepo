@@ -9,7 +9,7 @@ TODO
 - Simplify this by using already-parsed with getQuestionObject() outline
 
 */
-import { useFormContext } from "@vulcanjs/react-ui";
+import { useFormContext } from "@devographics/react-form";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import { getSurveyPath } from "~/modules/surveys/getters";
@@ -50,8 +50,9 @@ const SurveyNav = ({
 
   const [shown, setShown] = useState(false);
   const [currentTabindex, setCurrentTabindex] = useState<number | null>(null);
-  const [currentFocusIndex, setCurrentFocusIndex] =
-    useState<number | null>(null);
+  const [currentFocusIndex, setCurrentFocusIndex] = useState<number | null>(
+    null
+  );
 
   const overallCompletion =
     !readOnly && response && getCompletionPercentage(response);
@@ -128,6 +129,7 @@ const SurveyNav = ({
                 currentTabindex={currentTabindex}
                 setCurrentTabindex={setCurrentTabindex}
                 setCurrentFocusIndex={setCurrentFocusIndex}
+                // @ts-expect-error Don't know why submitForm has type "Function"
                 submitForm={submitForm}
                 setNavLoading={setNavLoading}
                 readOnly={readOnly}

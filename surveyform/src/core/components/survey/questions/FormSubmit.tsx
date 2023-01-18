@@ -9,10 +9,8 @@ TODO
 
 - Refactor to make DRYer
 
-@see packages/react-ui/components/form/FormSubmit.tsx
-
 */
-import { useFormContext } from "@vulcanjs/react-ui";
+import { useFormContext } from "@devographics/react-form";
 import React, { useEffect } from "react";
 import { getSurveyPath } from "~/modules/surveys/getters";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
