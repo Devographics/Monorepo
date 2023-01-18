@@ -84,6 +84,7 @@
     - template: page_introduction
 
     - id: country
+      hasFilters: true
       # defaultUnits: count
       template: demographics
       blockType: ParticipationByCountryBlock
@@ -91,6 +92,7 @@
         options: { limit: 20 }
 
     - id: locale
+      hasFilters: true
       template: demographics
       blockType: HorizontalBarBlock
       translateData: true
@@ -101,10 +103,10 @@
       template: hint
 
     - id: completion_stats
+      hasFilters: true
       template: demographics
       blockType: KnowledgeScoreBlock
       translateData: true
-      hasFilters: true
       
     - id: age
       hasFilters: true
@@ -181,6 +183,7 @@
         #     options: {facetSort: {order: ___desc___, property: mean}, facetMinCount: 100}
 
     - id: source
+      hasFilters: true
       template: source
       blockType: HorizontalBarBlock
       dataFunction: cleanUpSources
@@ -201,6 +204,7 @@
             options: {facetSort: {order: ___desc___, property: mean}, limit: 11, facetMinCount: 100}
 
     - id: race_ethnicity
+      hasFilters: true
       defaultUnits: count
       template: demographics
       blockType: HorizontalBarBlock
@@ -216,6 +220,7 @@
             options: {facetSort: {order: ___asc___, property: mean}, limit: 11, facetMinCount: 100}
 
     - id: disability_status
+      hasFilters: true
       defaultUnits: count
       template: demographics
       blockType: HorizontalBarBlock
@@ -1094,6 +1099,7 @@
     - template: page_introduction
 
     - id: first_steps
+      hasFilters: true
       blockNamespace: resources
       chartNamespace: first_steps
       tabId: tabs.main_answers
@@ -1119,6 +1125,7 @@
         url: https://sarahdrasnerdesign.com/
 
     - id: blogs_news_magazines
+      hasFilters: true
       blockNamespace: resources
       chartNamespace: blogs_news_magazines
       tabId: tabs.main_answers
@@ -1138,6 +1145,7 @@
             options: { limit: 15 }
 
     - id: sites_courses
+      hasFilters: true
       blockNamespace: resources
       chartNamespace: sites_courses
       tabId: tabs.main_answers
@@ -1161,6 +1169,7 @@
         url: https://tanstack.com/
 
     - id: video_creators
+      # hasFilters: true
       blockType: PeopleBlock
       blockNamespace: resources
       chartNamespace: video_creators
@@ -1181,6 +1190,7 @@
             options: { limit: 15 }
 
     - id: podcasts
+      hasFilters: true
       blockNamespace: resources
       chartNamespace: podcasts
       tabId: tabs.main_answers
@@ -1199,6 +1209,7 @@
             options: { limit: 15 }
 
     - id: people_others
+      # hasFilters: true
       defaultUnits: count
       blockNamespace: resources
       chartNamespace: people
@@ -1209,6 +1220,7 @@
         fieldId: resources
 
     - id: other_surveys
+      hasFilters: true
       defaultUnits: count
       blockNamespace: resources
       chartNamespace: other_surveys

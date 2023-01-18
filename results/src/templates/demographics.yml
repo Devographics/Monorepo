@@ -10,6 +10,7 @@ query: >
     dataAPI {
         survey(survey: ${surveyType}) {
             demographics {
+                # fragmentStart
                 ${id}: ${fieldId}(filters: ${filters}, options: ${options}, facet: ${facet}) {
                     keys
                     year(year: ${currentYear}) {
@@ -37,6 +38,7 @@ query: >
                         }
                     }
                 }
+                # fragmentEnd
             }
         }
     }

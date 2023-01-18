@@ -1,7 +1,6 @@
 import { DefaultTheme } from 'styled-components'
 import colors_ from 'core/theme/colors'
 
-
 const colors = {
     ...colors_,
     tealDarkest: '#167387',
@@ -46,6 +45,7 @@ const colors = {
     greyLighter: '#DED1D7',
     greyLightest: '#EADEE3',
 
+    kakiDark: '#9ca033',
     kaki: '#CCD133',
     electricBlueLight: '#AEF0FF',
     electricBlue: '#38D6FE',
@@ -79,7 +79,7 @@ const colors = {
     lilacDarkest: '#6A499D',
     lilacDarkest2: '#604B81',
     lilacDarkest3: '#503E6A',
-    lilacDarkest4: '#3A3444',
+    lilacDarkest4: '#3A3444'
 }
 
 // const velocity = [
@@ -113,7 +113,7 @@ const velocity = [
     '#E9DCFF',
     '#DCC7FF',
     '#CAAAFF',
-    '#AD84EF',
+    '#AD84EF'
 ]
 
 const arrowsVelocity = [
@@ -127,7 +127,7 @@ const arrowsVelocity = [
     '#51F2CB',
     '#34E1B7',
     '#23D2A8',
-    '#16AF8A',
+    '#16AF8A'
 ]
 
 const tiers = [colors.red, '#ffc38a', '#feff8e', '#c3ff89']
@@ -174,13 +174,60 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
     no_answer: [colors.greyLight, colors.greyLightest],
     barColors: [
         {
+            id: 'barColor1',
             color: colors.blueGreenDark,
             gradient: [colors.blueGreenDarker, colors.blueGreenDark]
         },
-        { color: colors.pink, gradient: [colors.pinkDark, colors.pink] },
-        { color: colors.green, gradient: [colors.green, colors.greenLighter] },
-        { color: colors.yellow, gradient: [colors.yellowDark, colors.yellow] },
-        { color: colors.orange, gradient: [colors.orangeDarker, colors.orangeLight] }
+        {
+            id: 'barColor2',
+            color: colors.pink,
+            gradient: [colors.pinkDark, colors.pink]
+        },
+        {
+            id: 'barColor3',
+            color: colors.purple,
+            gradient: [colors.purple, colors.purpleLighter]
+        },
+        {
+            id: 'barColor4',
+            color: colors.yellow,
+            gradient: [colors.yellowDark, colors.yellow]
+        },
+        {
+            id: 'barColor5',
+            color: colors.orange,
+            gradient: [colors.orangeDarker, colors.orangeLight]
+        },
+        {
+            id: 'barColor6',
+            color: colors.olive,
+            gradient: [colors.oliveDark, colors.olive]
+        },
+        {
+            id: 'barColor7',
+            color: colors.aqua,
+            gradient: [colors.aquaDark, colors.aqua]
+        },
+        {
+            id: 'barColor8',
+            color: colors.red,
+            gradient: [colors.redDark, colors.red]
+        },
+        {
+            id: 'barColor9',
+            color: colors.skyblue,
+            gradient: [colors.skyblueDark, colors.skyblue]
+        },
+        {
+            id: 'barColor10',
+            color: colors.kaki,
+            gradient: [colors.kakiDark, colors.kaki]
+        },
+        {
+            id: 'barColor11',
+            color: colors.green,
+            gradient: [colors.greenDark, colors.green]
+        }
     ],
     barChart: {
         primary: colors.blueGreenDark,
@@ -188,7 +235,7 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
         // secondary: colors.yellowLight,
         // secondaryGradient: [colors.yellow, colors.yellowLight],
         secondary: colors.pink,
-        secondaryGradient: [colors.pinkDark, colors.pink],
+        secondaryGradient: [colors.pinkDark, colors.pink]
     },
     ranges: {
         tools: {

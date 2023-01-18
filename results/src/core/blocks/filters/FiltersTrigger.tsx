@@ -6,7 +6,7 @@ import T from 'core/i18n/T'
 import { mq, spacing, fontSize } from 'core/theme'
 import { FiltersIcon } from 'core/icons'
 import isEmpty from 'lodash/isEmpty'
-import Filters from './Filters'
+import FiltersPanel from './FiltersPanel'
 
 const FiltersTrigger = props => (
     <ModalTrigger
@@ -16,7 +16,7 @@ const FiltersTrigger = props => (
             </div>
         }
     >
-        <Filters {...props} />
+        <FiltersPanel {...props} />
     </ModalTrigger>
 )
 

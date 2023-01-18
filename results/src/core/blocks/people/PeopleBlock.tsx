@@ -19,6 +19,9 @@ import {
     RSSIcon,
     BlogIcon
 } from 'core/icons'
+import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
+import { getInitFilters } from 'core/blocks/filters/helpers'
+import { BEHAVIOR_MULTIPLE } from 'core/blocks/filters/constants'
 
 export interface PeopleBlockProps extends BlockComponentProps {
     data: ResultsByYear
@@ -93,6 +96,9 @@ const PeopleBlock = ({ block, data, controlledUnits, isCustom }: PeopleBlockProp
     const allEntities = buckets.map(b => b.entity)
     const services = getRelevantServices(allEntities)
 
+    // contains the filters that define the series
+    const [chartFilters, setChartFilters] = useState(getInitFilters({ behavior: BEHAVIOR_MULTIPLE }))
+
     return (
         <Block
             units={controlledUnits ?? units}
@@ -108,33 +114,49 @@ const PeopleBlock = ({ block, data, controlledUnits, isCustom }: PeopleBlockProp
             ]}
             block={block}
             completion={completion}
+            chartFilters={chartFilters}
+            setChartFilters={setChartFilters}
         >
-            <Heading_>
-                <HName_>
-                    <T k="blocks.people.name" />
-                </HName_>
-                {/* <HLinks_>
-                    <T k="blocks.people.social_links" />
-                </HLinks_> */}
-                <HResponses_>
-                    <T k="blocks.people.responses" />
-                </HResponses_>
-            </Heading_>
-            <List_>
-                {buckets.map((b, index) => (
-                    <PeopleItem
-                        key={b.id}
-                        {...b}
-                        index={index}
-                        maxCount={buckets[0].count}
-                        units={units}
-                        services={services}
-                    />
-                ))}
-            </List_>
+            <DynamicDataLoader
+                completion={completion}
+                defaultBuckets={buckets}
+                block={block}
+                chartFilters={chartFilters}
+                layout="grid"
+            >
+                <PeopleChart buckets={buckets} units={units} />
+            </DynamicDataLoader>
         </Block>
     )
 }
+
+const PeopleChart = ({ buckets, units }) => (
+    <Chart_>
+        <Heading_>
+            <HName_>
+                <T k="blocks.people.name" />
+            </HName_>
+            {/* <HLinks_>
+<T k="blocks.people.social_links" />
+</HLinks_> */}
+            <HResponses_>
+                <T k="blocks.people.responses" />
+            </HResponses_>
+        </Heading_>
+        <List_>
+            {buckets.map((b, index) => (
+                <PeopleItem
+                    key={b.id}
+                    {...b}
+                    index={index}
+                    maxCount={buckets[0].count}
+                    units={units}
+                    services={services}
+                />
+            ))}
+        </List_>
+    </Chart_>
+)
 
 const PeopleItem = ({
     index,
@@ -145,7 +167,7 @@ const PeopleItem = ({
     percentage_survey,
     percentage_question,
     units,
-    services,
+    services
 }) => {
     if (!entity) {
         return <div>no entity found for id {id}</div>
@@ -189,6 +211,8 @@ const PeopleItem = ({
         </Item_>
     )
 }
+
+const Chart_ = styled.div``
 
 const List_ = styled.div`
     display: grid;

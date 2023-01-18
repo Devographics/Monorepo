@@ -10,15 +10,17 @@ import sumBy from 'lodash/sumBy'
 import T from 'core/i18n/T'
 import { getTableData } from 'core/helpers/datatables'
 import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
-import { getLegends } from 'core/blocks/generic/VerticalBarBlock'
+import { useFilterLegends } from 'core/blocks/filters/helpers'
 import { useTheme } from 'styled-components'
 import { useI18n } from 'core/i18n/i18nContext'
+import { getInitFilters } from 'core/blocks/filters/helpers'
+import { BEHAVIOR_COMBINED } from 'core/blocks/filters/constants'
 
 const groupBy = 10
 
 const getLabel = n => `${n * groupBy}-${(n + 1) * groupBy}%`
 
-const getChartData = (buckets) => {
+const getChartData = buckets => {
     return range(0, 100 / groupBy).map(n => {
         const selectedBuckets = buckets.filter(b => b.id >= n * groupBy && b.id < (n + 1) * groupBy)
         return {
@@ -59,17 +61,13 @@ const KnowledgeScoreBlock = ({ block, data }) => {
         shortLabel: getLabel(n)
     }))
 
-    let buckets_ = data.facets[0].buckets
-    buckets_ = getChartData(buckets_)
+    let buckets = data.facets[0].buckets
+    buckets = getChartData(buckets)
 
     // contains the filters that define the series
-    const [series, setSeries] = useState([])
-    // how many series to display (only updated after data is loaded)
-    const [seriesCount, setSeriesCount] = useState(0)
-    // data to pass to chart (only updated after data is loaded)
-    const [buckets, setBuckets] = useState(buckets_)
+    const [chartFilters, setChartFilters] = useState(getInitFilters({ behavior: BEHAVIOR_COMBINED }))
 
-    const legends = getLegends({ theme, series, getString, currentYear })
+    const legends = useFilterLegends({ chartFilters, currentYear })
 
     return (
         <Block
@@ -84,18 +82,16 @@ const KnowledgeScoreBlock = ({ block, data }) => {
             completion={completion}
             data={data}
             block={block}
-            series={series}
-            setSeries={setSeries}
+            chartFilters={chartFilters}
+            setChartFilters={setChartFilters}
             {...(legends.length > 0 ? { legends } : {})}
         >
             <DynamicDataLoader
                 completion={completion}
-                defaultBuckets={buckets_}
+                defaultBuckets={buckets}
                 block={block}
-                series={series}
-                setBuckets={setBuckets}
+                chartFilters={chartFilters}
                 setUnits={setUnits}
-                setSeriesCount={setSeriesCount}
                 processBuckets={getChartData}
             >
                 <ChartContainer fit={true}>
@@ -107,7 +103,6 @@ const KnowledgeScoreBlock = ({ block, data }) => {
                         translateData={false}
                         mode={mode}
                         units={units}
-                        seriesCount={seriesCount + 1}
                         viewportWidth={width}
                     />
                 </ChartContainer>
