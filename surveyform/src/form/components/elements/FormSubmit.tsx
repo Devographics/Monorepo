@@ -1,15 +1,4 @@
 "use client";
-/*
-
-1. Receive submitForm callback from SmartForm
-2. Call it on click
-3. Once form has submitted, redirect to prev/next section
-
-TODO
-
-- Refactor to make DRYer
-
-*/
 import { useFormContext } from "@devographics/react-form";
 import React, { useEffect } from "react";
 import { getSurveyPath } from "~/modules/surveys/getters";
@@ -37,7 +26,7 @@ const FormSubmit = ({
 }: { survey: SurveyDocument } & any) => {
   const router = useRouter();
   const formContext = useFormContext();
-  const { getDocument, submitForm, currentValues } = formContext;
+  const { getDocument, currentValues } = formContext;
   const response = getDocument();
 
   const pathProps = { readOnly, survey, response };
@@ -65,7 +54,6 @@ const FormSubmit = ({
     survey,
     response,
     sectionNumber,
-    submitForm,
     getDocument,
     currentValues,
   };
@@ -114,7 +102,20 @@ const FormSubmit = ({
   );
 };
 
-const SubmitButton = (props) => {
+const SubmitButton = (props: {
+  intlId: string;
+  prevLoading: boolean;
+  setPrevLoading: any;
+  nextLoading: boolean;
+  setNextLoading: boolean;
+  path: string;
+  type: any;
+  readOnly: boolean;
+  survey: any;
+  // TODO: get from form contenxt?
+  getDocument: any;
+  currentValues: any;
+}) => {
   const router = useRouter();
 
   const {
@@ -124,7 +125,6 @@ const SubmitButton = (props) => {
     nextLoading,
     setNextLoading,
     path,
-    submitForm,
     type,
     readOnly,
     survey,
@@ -166,7 +166,6 @@ const SubmitButton = (props) => {
           onClick={async (e) => {
             e.preventDefault();
             setLoading(true);
-            // await submitForm();
             const res = await saveSurvey(survey, {
               id: document._id,
               data: currentValues,

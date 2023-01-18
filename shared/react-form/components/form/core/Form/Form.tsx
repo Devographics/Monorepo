@@ -13,7 +13,7 @@ This component expects:
 */
 
 import React, { useEffect, useRef, useState } from "react";
-import { runCallbacks, getErrors } from "@vulcanjs/core";
+import { getErrors } from "@vulcanjs/core";
 import { useIntlContext } from "@vulcanjs/react-i18n";
 import { removeProperty } from "@vulcanjs/utils";
 import _filter from "lodash/filter.js";
@@ -31,9 +31,6 @@ import set from "lodash/set.js";
 import unset from "lodash/unset.js";
 import update from "lodash/update.js";
 import without from "lodash/without.js";
-import isEmpty from "lodash/isEmpty.js";
-//import type { FormLayoutProps } from "../../elements/FormLayout";
-//import type { FormSubmitProps } from "../../elements/FormSubmit";
 
 import {
   convertSchema,
@@ -42,38 +39,18 @@ import {
 } from "../../utils/schema_utils";
 import { isEmptyValue } from "../../utils/utils";
 import { getParentPath } from "../../utils/path_utils";
-// import withCollectionProps from "./withCollectionProps";
 import { FormContext } from "../FormContext";
-import { getFieldGroups, getFieldNames, getLabel } from "./fields";
+import { getFieldGroups, getLabel } from "./fields";
 import { isNotSameDocument } from "./utils";
 import { useWarnOnUnsaved } from "../../hooks/useWarnOnUnsaved";
 
 import type { FormType } from "../../typings";
-import {
-  CreateDocumentResult,
-  FormProps,
-  FormState,
-  UpdateDocumentResult,
-} from "./typings";
-// import { MutationResult } from "@apollo/client";
+import { FormProps, FormState } from "./typings";
 import { useVulcanComponents } from "../../../VulcanComponents/Consumer";
 import { useSubmitCallbacks } from "./hooks";
 
 const NEW_FORM_TYPE = "new";
 const EDIT_FORM_TYPE = "edit";
-
-// props that should trigger a form reset
-const RESET_PROPS = [
-  "model",
-  // "collection",
-  // "collectionName",
-  "document",
-  "schema",
-  "currentUser",
-  "fields",
-  "removeFields",
-  "prefilledProps", // TODO: prefilledProps should be merged instead?
-];
 
 const compactParent = (object, path) => {
   const parentPath = getParentPath(path);
@@ -187,12 +164,6 @@ const getChildrenProps = (
   const formProps = {
     className: `${docClassName} ${docClassName}-${modelName}`,
     id: id,
-    // It's the form element responsibility to get submitForm from context
-    // onSubmit: this.submitForm(formType),
-    // TODO: update to useRef
-    //ref: (e) => {
-    //  this.form = e;
-    //},
   };
 
   const formGroupProps = (group) => ({
@@ -251,76 +222,8 @@ const FormWarnUnsaved = ({
   return <>{children}</>;
 };
 
-/*
-
-  Like getDocument, but cross-reference with getFieldNames()
-  to only return fields that actually need to be submitted
-
-  Also remove any deleted values.
-
-  */
-const getData = (
-  customArgs,
-  props: FormProps,
-  state: Pick<FormState, "currentDocument" | "deletedValues">,
-  // previously from "this" object
-  { submitFormCallbacks, form }: any
-) => {
-  const { currentDocument } = state;
-  const { model, prefilledProps } = props;
-  // we want to keep prefilled data even for hidden/removed fields
-  let data = prefilledProps || {};
-
-  // omit prefilled props for nested fields
-  data = omitBy(data, (value, key) => key.endsWith(".$"));
-
-  const args = {
-    schema: model.schema,
-    excludeRemovedFields: false,
-    excludeHiddenFields: false,
-    replaceIntlFields: true,
-    addExtraFields: false,
-    ...customArgs,
-  };
-
-  // only keep relevant fields
-  // for intl fields, make sure we look in foo_intl and not foo
-  const fields = getFieldNames(props, currentDocument, args);
-  data = { ...data, ...pick(currentDocument, ...fields) };
-
-  // compact deleted values
-  state.deletedValues.forEach((path) => {
-    if (path.includes(".")) {
-      /*
-
-        If deleted field is a nested field, nested array, or nested array item, try to compact its parent array
-
-        - Nested field: 'address.city'
-        - Nested array: 'addresses.1'
-        - Nested array item: 'addresses.1.city'
-
-        */
-      compactParent(data, path);
-    }
-  });
-
-  // run data object through submitForm callbacks
-  data = runCallbacks({
-    callbacks: submitFormCallbacks,
-    iterator: data,
-    args: [
-      {
-        /*form: this*/
-      },
-    ],
-  });
-
-  return data;
-};
-
 export const Form = (props: FormProps) => {
-  const { initCallback, createDocument, updateDocument, deleteDocument } =
-    props;
+  const { initCallback, deleteDocument } = props;
   const initialState = getInitialStateFromProps(props);
   const { schema, originalSchema, flatSchema, initialDocument } = initialState;
   const isFirstRender = useRef(true);
@@ -331,22 +234,10 @@ export const Form = (props: FormProps) => {
     }
     if (initCallback) initCallback(initialState.currentDocument);
   }, [initCallback]);
-  const defaultProps = {
-    layout: "horizontal",
-    prefilledProps: {},
-    repeatErrors: false,
-    showRemove: true,
-    showDelete: true,
-  };
-  const allProps = { ...defaultProps, ...props };
-  const defaultValues = {};
   const intl = useIntlContext();
 
-  const { callbacks, addToFailureForm, addToSubmitForm, addToSuccessForm } =
+  const { addToFailureForm, addToSubmitForm, addToSuccessForm } =
     useSubmitCallbacks();
-
-  const { submitFormCallbacks, successFormCallbacks, failureFormCallbacks } =
-    callbacks;
 
   // --------------------------------------------------------------------- //
   // ------------------------------- Errors ------------------------------ //
@@ -403,46 +294,6 @@ export const Form = (props: FormProps) => {
   */
 
   const [currentValues, setCurrentValues] = useState<Object>({});
-
-  const submitFormContext = async (event /*newValues*/) => {
-    /*
-    TODO: previously this callback was updating the current values with new values after this call
-    Need to check how this worked in Vulcan initially
-    setCurrentValues((prevCurrentValues) => ({
-      ...prevCurrentValues,
-      ...newValues,
-    }));
-    */
-    // TODO: previously, this was using a callback from setCurrentValues
-    // this needs to be rearchitectured to work without, will need some check
-    // https://stackoverflow.com/questions/56247433/how-to-use-setstate-callback-on-react-hooks
-    await submitForm(event);
-  };
-
-  // --------------------------------------------------------------------- //
-  // ------------------------------ Lifecycle ---------------------------- //
-  // --------------------------------------------------------------------- //
-
-  /*
-
-  When props change, reinitialize the form  state
-  Triggered only for data related props (collection, document, currentUser etc.)
-
-  @see https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html
-
-  */
-  /*
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    const needReset = !!RESET_PROPS.find(
-      (prop) => !isEqual(this.props[prop], nextProps[prop])
-    );
-    if (needReset) {
-      const newState = getInitialStateFromProps(nextProps);
-      this.setState(newState);
-      if (nextProps.initCallback)
-        nextProps.initCallback(newState.currentDocument);
-    }
-  }*/
 
   const [currentDocument, setCurrentDocument] = useState<{
     title?: string;
@@ -552,188 +403,7 @@ export const Form = (props: FormProps) => {
     setDisabled(false);
   };
 
-  const newMutationSuccessCallback = function <TModel = Object>(
-    result: CreateDocumentResult<TModel>
-  ) {
-    mutationSuccessCallback(result, NEW_FORM_TYPE);
-  };
-
-  const editMutationSuccessCallback = function <TModel = Object>(
-    result: UpdateDocumentResult<TModel>
-  ) {
-    mutationSuccessCallback(result, EDIT_FORM_TYPE);
-  };
-
   const formRef = useRef(null);
-  const mutationSuccessCallback = function <TModel = Object>(
-    // must be called only on valid results
-    result: CreateDocumentResult<TModel>,
-    mutationType: FormType
-  ) {
-    // TODO: use a reducer
-    setDisabled(false);
-    setSuccess(true);
-    // for new mutation, run refetch function if it exists
-    // TODO: the create mutation should already return the freshest value, do we really need that?
-    // instead we might want to update currentResult with the result of the creation
-    if (mutationType === NEW_FORM_TYPE) refetchForm();
-    let { document } = result;
-
-    // call the clear form method (i.e. trigger setState) only if the form has not been unmounted
-    // (we are in an async callback, everything can happen!)
-    // TODO: this should rely on a ref
-    if (formRef.current) {
-      clearForm({
-        document: mutationType === EDIT_FORM_TYPE ? document : undefined,
-      });
-    }
-
-    // run document through mutation success callbacks
-    document = runCallbacks({
-      callbacks: successFormCallbacks,
-      iterator: document,
-      args: [{ form: formRef.current }],
-    });
-
-    // run success callback if it exists
-    if (props.successCallback) props.successCallback(document, { form: this });
-  };
-
-  // catch graphql errors
-  const mutationErrorCallback = (document, error) => {
-    setDisabled(false);
-
-    // eslint-disable-next-line no-console
-    console.error("// graphQL Error");
-    // eslint-disable-next-line no-console
-    console.error(error);
-
-    // run mutation failure callbacks on error, we do not allow the callbacks to change the error
-    runCallbacks({
-      callbacks: failureFormCallbacks,
-      iterator: error,
-      args: [{ error, form: formRef.current }],
-    });
-
-    if (!isEmpty(error)) {
-      // add error to state
-      throwError(error);
-    }
-
-    // run error callback if it exists
-    if (props.errorCallback)
-      props.errorCallback(document, error, { form: this });
-
-    // scroll back up to show error messages
-    // TODO: migrate this to scroll on top of the form
-    //Utils.scrollIntoView(".flash-message");
-  };
-
-  const getSubmitData = () => {
-    // complete the data with values from custom components
-    // note: it follows the same logic as SmartForm's getDocument method
-    let data = getData(
-      { replaceIntlFields: true, addExtraFields: false, mutableFields },
-      props,
-      {
-        currentDocument,
-        deletedValues,
-      },
-      { form: formRef.current, submitFormCallbacks }
-    );
-
-    // if there's a submit callback, run it
-    if (props.submitCallback) {
-      data = props.submitCallback(data) || data;
-    }
-    return data;
-  };
-  /** 
-
-  Submit form handler
-
-  On success/failure, will call the relevant callbacks
-
-  */
-  const submitFormCreate = async (event?: Event) => {
-    event && event.preventDefault();
-    event && event.stopPropagation();
-    const { contextName } = props;
-    // if form is disabled (there is already a submit handler running) don't do anything
-    if (disabled) {
-      return;
-    }
-    // clear errors and disable form while it's submitting
-    setErrors([]);
-    setDisabled(true);
-
-    const data = getSubmitData();
-
-    // create document form
-    try {
-      const result = await createDocument({
-        input: {
-          data,
-          contextName,
-        },
-      });
-      if (result.errors?.length) {
-        // TODO: previously got from meta, we could have more than 1 error
-        mutationErrorCallback(document, result.errors[0]);
-      } else {
-        newMutationSuccessCallback(result);
-      }
-    } catch (error) {
-      mutationErrorCallback(document, error);
-    }
-  };
-  /** 
-
-  Submit form handler
-
-  On success/failure, will call the relevant callbacks
-
-  */
-  const submitFormUpdate = async (event?: Event) => {
-    event && event.preventDefault();
-    event && event.stopPropagation();
-
-    const { contextName } = props;
-
-    // if form is disabled (there is already a submit handler running) don't do anything
-    if (disabled) {
-      return;
-    }
-
-    // clear errors and disable form while it's submitting
-    setErrors([]);
-    setDisabled(true);
-
-    // complete the data with values from custom components
-    // note: it follows the same logic as SmartForm's getDocument method
-    const data = getSubmitData();
-
-    // update document form
-    try {
-      const documentId = currentDocument._id;
-      const result = await updateDocument({
-        input: {
-          id: documentId,
-          data,
-          contextName,
-        },
-      });
-      // TODO: handle more than 1 error
-      if (result.errors?.length) {
-        mutationErrorCallback(document, result.errors[0]);
-      } else {
-        editMutationSuccessCallback(result);
-      }
-    } catch (error) {
-      mutationErrorCallback(document, error);
-    }
-  };
-
   /*
 
   Delete document handler
@@ -778,16 +448,6 @@ export const Form = (props: FormProps) => {
 
   const formType: FormType = document ? EDIT_FORM_TYPE : NEW_FORM_TYPE;
 
-  /** 
-
-  Submit form handler
-
-  On success/failure, will call the relevant callbacks
-
-  */
-  const submitForm =
-    formType === NEW_FORM_TYPE ? submitFormCreate : submitFormUpdate;
-
   // Fields computation
   const mutableFields =
     formType === EDIT_FORM_TYPE
@@ -819,9 +479,6 @@ export const Form = (props: FormProps) => {
           clearForm,
           refetchForm,
           isChanged,
-          submitForm: submitFormContext, //Change in name because we already have a function
-          // called submitForm, but no reason for the user to know
-          // about that
           addToDeletedValues: addToDeletedValues,
           updateCurrentValues: updateCurrentValues,
           getDocument: () => currentDocument,
@@ -860,11 +517,5 @@ export const Form = (props: FormProps) => {
     </FormWarnUnsaved>
   );
 };
-
-// Mutation that yield a success result
-type SuccessfulMutationResult<TData = Object> =
-  /*MutationResult<TData>*/ any & {
-    data: TData;
-  };
 
 export default Form;

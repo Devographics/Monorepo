@@ -84,7 +84,6 @@ export interface FormComponentInnerProps extends FormComponentProps {
   itemProperties?: any;
   description?: string;
   loading?: boolean;
-  submitForm: any;
   // formComponents: PossibleVulcanComponents;
   intlKeys?: any;
   inputClassName: any;

@@ -145,20 +145,9 @@ export interface FormProps<TModel = { [key in string]: any }>
   removeSuccessCallback?: (document) => void;
 
   /*A callback called a every change or blur event inside the form.*/
-  changeCallback: (currentDocument) => void;
+  changeCallback?: (currentDocument) => void;
 
-  // mutations from container
-  // => replace the "onSubmit" of a normal form
-  /**
-   * The result is usually extracted from a graphql mutation
-   * But we have a simplified abstracted API, so we could also use the Form without graphql
-   */
-  createDocument: <TModel = any>(
-    createVars: CreateVariables
-  ) => Promise<CreateDocumentResult<TModel>>;
-  updateDocument: <TModel = any>(
-    vars: UpdateVariables
-  ) => Promise<UpdateDocumentResult<TModel>>;
+  loading: boolean;
   deleteDocument: (vars: DeleteVariables) => Promise<void>;
   // Other results from the Apollo query => should be ignored, in order to avoid dependency to graphql in the Form
   // instead the container is responsible for passing errors and stuff
@@ -166,14 +155,4 @@ export interface FormProps<TModel = { [key in string]: any }>
   // updateDocumentMeta?: { error?: any };
   // EXPERIMENTAL: allowing to manually set the form children
   children?: React.ReactNode;
-}
-
-export interface CreateDocumentResult<TDocument = any> {
-  document: TDocument;
-  errors: Array<any>;
-}
-
-export interface UpdateDocumentResult<TDocument = any> {
-  document: TDocument;
-  errors: Array<any>;
 }

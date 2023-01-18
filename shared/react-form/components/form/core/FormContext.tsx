@@ -12,10 +12,6 @@ interface FormContextValue extends AddSubmitCallbacks {
   initialDocument: object;
   isChanged: boolean;
   refetchForm: Function;
-  // TODO: we deprecate this, it doesn't make sense to allow a child to setState this way
-  // setFormState: Function;
-  // FIXME: this type doesn't work, it doesn't necessarily have the event + it has to be defined
-  submitForm: (evt?: any) => Promise<void>; //React.HTMLAttributes<HTMLFormElement>["onSubmit"];
   throwError: Function;
   updateCurrentValues: Function;
   disabled: boolean;

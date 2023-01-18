@@ -9,13 +9,6 @@ import {
   VulcanComponentsProvider,
 } from "@devographics/react-form";
 
-// TODO: instead, compose with Form stories
-const defaultFormProps = {
-  changeCallback: () => {},
-  createDocument: () => {},
-  updateDocument: () => {},
-  deleteDocument: () => {},
-};
 export default {
   component: FormNestedArray,
   title: "FormNestedArray", //TODO: why we need this?

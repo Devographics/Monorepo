@@ -4,22 +4,12 @@ import type { DocumentNode } from "graphql";
 
 import { Form, getFormFragments } from "@devographics/react-form";
 import { VulcanGraphqlModel, getFragmentName } from "@vulcanjs/graphql";
-import type {
-  CreateVariables,
-  UpdateVariables,
-  DeleteVariables,
-} from "@vulcanjs/crud";
-import { capitalize } from "@vulcanjs/utils";
+import type { DeleteVariables } from "@vulcanjs/crud";
 // TODO: replace by direct calls to CRUD operations for a response
 import { createClient } from "@urql/core";
 import { getAppGraphqlUri } from "~/lib/graphql";
 import { Provider as UrqlProvider } from "urql";
-import {
-  useSingle,
-  useCreate,
-  useUpdate,
-  useDelete,
-} from "@devographics/react-hooks";
+import { useSingle, useDelete } from "@devographics/react-hooks";
 import { debugVulcan } from "@vulcanjs/utils";
 import { VulcanUser } from "@vulcanjs/permissions";
 // Be careful to import from the Consumer!
@@ -172,29 +162,14 @@ export const FormContainer = (props: FormContainerProps) => {
     model,
     documentId,
     slug,
-    fields,
-    addFields,
     currentUser: currentUserFromProps,
     loadingCurrentUser: loadingCurrentUserFromProps,
   } = props;
   const { schema } = model;
   // if a document is being passed, this is an edit form
   const isEdit = documentId || slug;
-  const selector = {
-    documentId,
-    slug,
-  };
   const formType = isEdit ? "edit" : "new";
 
-  // get query & mutation fragments from props or else default to same as generatedFragment
-  //return {
-  //  queryFragment,
-  //  mutationFragment,
-  //};
-  //}
-
-  const prefix = `${model.name}${capitalize(formType)}`;
-  // props to pass on to child component (i.e. <Form />)
   const childProps = {
     formType,
     schema,
@@ -248,8 +223,6 @@ export const FormContainer = (props: FormContainerProps) => {
     );
   }
   // TODO: pass the creation functions down to the Form
-  const [createDocument] = useCreate(mutationOptions);
-  const [updateDocument] = useUpdate(mutationOptions);
   const [deleteDocument] = useDelete(mutationOptions);
 
   const {
@@ -297,24 +270,6 @@ export const FormContainer = (props: FormContainerProps) => {
   if (mutationType === "new" && refetch) refetch();
   */
 
-  const createAndReturnDocument = async (variables: CreateVariables) => {
-    const result = await createDocument(variables);
-    const { error, document } = result;
-    return {
-      document,
-      error,
-    };
-  };
-  const updateAndReturnDocument = async (variables: UpdateVariables) => {
-    const result = await updateDocument(variables);
-    // @ts-expect-error Not sure how error are handled now
-    const { error, document } = result;
-    return {
-      document,
-      error,
-    };
-  };
-
   const deleteDocumentAndRefetch = async (variables: DeleteVariables) => {
     await deleteDocument(variables as any);
   };
@@ -325,11 +280,7 @@ export const FormContainer = (props: FormContainerProps) => {
   return (
     <Form
       document={document}
-      loading={loading || loadingCurrentUser}
-      // @ts-expect-error
-      createDocument={createAndReturnDocument /*createDocument*/}
-      // @ts-expect-error
-      updateDocument={updateAndReturnDocument}
+      loading={!!(loading || loadingCurrentUser)}
       deleteDocument={deleteDocumentAndRefetch}
       refetch={refetch}
       currentUser={currentUser}

@@ -40,7 +40,7 @@ const SurveyNav = ({
   readOnly?: boolean;
 }) => {
   const formContext = useFormContext();
-  const { getDocument, submitForm } = formContext;
+  const { getDocument } = formContext;
 
   const response = getDocument();
 
@@ -129,7 +129,6 @@ const SurveyNav = ({
                 currentTabindex={currentTabindex}
                 setCurrentTabindex={setCurrentTabindex}
                 setCurrentFocusIndex={setCurrentFocusIndex}
-                submitForm={submitForm}
                 setNavLoading={setNavLoading}
                 readOnly={readOnly}
               />

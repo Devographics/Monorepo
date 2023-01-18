@@ -36,23 +36,6 @@ import { VulcanModel } from "@vulcanjs/model";
 
 /*
 
-  Get a field's intl keys (useful for debugging)
-
-  */
-const getModelIntlKeys = (
-  model: VulcanModel,
-  flatSchema: any,
-  fieldName: string
-) => {
-  return getIntlKeys({
-    fieldName: fieldName,
-    modelName: model.name,
-    schema: flatSchema,
-  });
-};
-
-/*
-
    Get a field's label
 
    */
@@ -283,11 +266,11 @@ const initField = (
     field[prop] =
       typeof property === "function"
         ? property.call(fieldSchema, {
-            ...props,
-            fieldName,
-            document,
-            intl: context,
-          })
+          ...props,
+          fieldName,
+          document,
+          intl: context,
+        })
         : property;
   }
 

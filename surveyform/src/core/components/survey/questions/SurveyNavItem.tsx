@@ -19,7 +19,6 @@ const SurveyNavItem = ({
   setShown,
   currentTabindex,
   setCurrentFocusIndex,
-  submitForm,
   setNavLoading,
   readOnly,
 }: {
@@ -31,7 +30,6 @@ const SurveyNavItem = ({
   currentTabindex?: number | null;
   setCurrentFocusIndex: (index: number | null) => void;
   setCurrentTabindex: (index: number | null) => void;
-  submitForm: () => void;
   setNavLoading: (navLoading: boolean) => void;
   readOnly?: boolean;
 }) => {
@@ -54,7 +52,6 @@ const SurveyNavItem = ({
     setNavLoading(true);
     e.preventDefault();
     setShown(false);
-    // await submitForm();
     const res = await saveSurvey(survey, {
       id: document._id,
       data: currentValues,

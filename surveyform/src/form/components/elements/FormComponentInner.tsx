@@ -59,7 +59,6 @@ export const FormComponentInner = (props: FormComponentInnerProps) => {
       help,
       description,
       loading,
-      submitForm,
       formComponents,
       intlKeys,
     } = props;
@@ -80,14 +79,6 @@ export const FormComponentInner = (props: FormComponentInnerProps) => {
             handleChange(inputValue);
           }
         },
-        /*
-        TODO: check if this creates regression
-        onKeyPress: (event) => {
-          if (event.key === "Enter" && inputType !== "textarea") {
-            submitForm();
-          }
-        },
-        */
       },
 
       itemProperties: {
