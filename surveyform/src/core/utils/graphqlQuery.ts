@@ -3,7 +3,7 @@ import { apiRoutes } from "~/lib/apiRoutes";
 
 /**
  * @example useSWR([yourGraphqlQuery, yourGraphqlVariables])
- * @param param0
+ * @param null if the request is skipped
  */
 export function graphqlFetcher([query, variables]: [DocumentNode, any]) {
     return fetch(apiRoutes.graphql.href, {
@@ -12,5 +12,7 @@ export function graphqlFetcher([query, variables]: [DocumentNode, any]) {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({ query: print(query), variables }),
-    }).then((res) => res.json())
+    }).then((res) => {
+        return res.json()
+    })
 }

@@ -1,11 +1,12 @@
 import React from "react";
 import SurveySectionHeading from "~/core/components/survey/questions/SurveySectionHeading";
 import SurveyNav from "~/core/components/survey/questions/SurveyNav";
-import FormSubmit from "./FormSubmit";
 import { FormErrors } from "./FormErrors";
 import { FormElement } from "./FormElement";
+import { useVulcanComponents } from "@devographics/react-form";
 
 const FormLayout = (props: any) => {
+  const FormComponents = useVulcanComponents();
   const {
     commonProps,
     formProps,
@@ -45,7 +46,16 @@ const FormLayout = (props: any) => {
             <FormErrors {...commonProps} {...errorProps} />
             {children}
             {repeatErrors && <FormErrors {...commonProps} {...errorProps} />}
-            <FormSubmit {...commonProps} {...submitProps} variant="bottom" />
+            {/**
+             * TODO: we pass this component from SurveySectionContents to tune the props
+             * Hence the context
+             * There is probably  a cleaner way?
+             */}
+            <FormComponents.FormSubmit
+              {...commonProps}
+              {...submitProps}
+              variant="bottom"
+            />
           </FormElement>
         </div>
       </div>

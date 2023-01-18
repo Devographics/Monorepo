@@ -452,6 +452,11 @@ export const Form = (props: FormProps) => {
           disabled,
         }}
       >
+        {/**
+         * TODO: we pass this component from SurveySectionContents to tune the props
+         * Hence the need for using components context
+         * There is probably  a cleaner way?
+         */}
         <FormComponents.FormLayout {...formLayoutProps}>
           {getFieldGroups(
             props,
