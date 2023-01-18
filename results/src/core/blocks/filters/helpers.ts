@@ -5,7 +5,7 @@ import cloneDeep from 'lodash/cloneDeep.js'
 import isEmpty from 'lodash/isEmpty'
 import { CustomizationDefinition, CustomizationOptions } from './types'
 import { BlockDefinition } from 'core/types'
-import { MODE_FACET, MODE_FILTERS } from './constants'
+import { MODE_DEFAULT, MODE_FACET, MODE_FILTERS } from './constants'
 import { useI18n } from 'core/i18n/i18nContext'
 import { useTheme } from 'styled-components'
 import round from 'lodash/round'
@@ -77,12 +77,11 @@ Take multiple buckets arrays and merge them into a array with
 multiple series (e.g. { count, count_1, percentage_question, percentage_question_1, etc. })
 
 */
-export const combineBuckets = ({ bucketsArrays, completion }) => {
-    const [baseBucketsArray, ...otherBucketsArrays] = bucketsArrays
-    const mergedBuckets = cloneDeep(baseBucketsArray)
+export const combineBuckets = ({ defaultBuckets, otherBucketsArrays, completion }) => {
+    const mergedBuckets = cloneDeep(defaultBuckets)
     otherBucketsArrays.forEach((buckets = [], index) => {
-        // default series is series 1, first custom series is series 2, etc.
-        const seriesIndex = index + 2
+        // default series is series 0, first custom series is series 1, etc.
+        const seriesIndex = index + 1
         // TODO: add this later
         // const bucketsWithNoAnswerBucket = addNoAnswerBucket({ buckets, completion })
         mergedBuckets.forEach(bucket => {
@@ -189,16 +188,18 @@ export const getValueLabel = ({ getString, field, value }) =>
 export const useFilterLegends = ({
     chartFilters,
     currentYear,
-    showDefaultSeries
+    showDefaultSeries,
+    reverse = false
 }: {
     chartFilters: any
     currentYear?: number
     showDefaultSeries?: boolean
+    reverse?: boolean
 }) => {
     const allChartKeys = useAllChartsKeys()
     const theme = useTheme()
     const { getString } = useI18n()
-
+    let results
     if (chartFilters.options.mode === MODE_FILTERS) {
         if (!chartFilters.filters || chartFilters.filters.length === 0) {
             return []
@@ -241,7 +242,7 @@ export const useFilterLegends = ({
                 }
                 const label = labelSegments.join(', ')
 
-                const barColorIndex = showDefaultSeries ? seriesIndex + 1 : seriesIndex
+                const barColorIndex = seriesIndex + 1
                 const legendItem = {
                     color: theme.colors.barColors[barColorIndex].color,
                     gradientColors: theme.colors.barColors[barColorIndex].gradient,
@@ -251,29 +252,30 @@ export const useFilterLegends = ({
                 }
                 return legendItem
             })
-            return [...(showDefaultSeries ? [defaultLegendItem] : []), ...seriesLegendItems]
+            results = [...(showDefaultSeries ? [defaultLegendItem] : []), ...seriesLegendItems]
         }
     } else if (chartFilters.options.mode === MODE_FACET) {
-        return allChartKeys[chartFilters.facet].map((key, index) => {
+        results = allChartKeys[chartFilters.facet].map((key, index) => {
             const label = getString(`options.${chartFilters.facet}.${key}`)?.t
             return {
-                color: theme.colors.barColors[index].color,
-                gradientColors: theme.colors.barColors[index].gradient,
+                color: theme.colors.barColors[index + 1].color,
+                gradientColors: theme.colors.barColors[index + 1].gradient,
                 id: `series_${key}`,
                 label,
                 shortLabel: label
             }
         })
     } else {
-        return []
+        results = []
     }
+    return reverse ? [...results].reverse() : results
 }
 
 export const getInitFilters = (initOptions?: CustomizationOptions) => ({
     options: {
         showDefaultSeries: true,
         allowModeSwitch: false,
-        mode: MODE_FILTERS,
+        mode: MODE_DEFAULT,
         ...initOptions
     },
     filters: []

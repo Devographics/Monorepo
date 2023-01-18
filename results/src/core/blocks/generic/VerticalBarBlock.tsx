@@ -77,7 +77,8 @@ const VerticalBarBlock = ({
     const legends = useFilterLegends({
         chartFilters,
         currentYear,
-        showDefaultSeries: chartFilters.options.showDefaultSeries
+        showDefaultSeries: chartFilters.options.showDefaultSeries,
+        reverse: true
     })
 
     return (

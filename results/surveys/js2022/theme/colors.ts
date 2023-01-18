@@ -215,13 +215,18 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
         },
         {
             id: 'barColor9',
-            color: colors.skyBlue,
-            gradient: [colors.skyBlueDark, colors.skyBlue]
+            color: colors.skyblue,
+            gradient: [colors.skyblueDark, colors.skyblue]
         },
         {
             id: 'barColor10',
             color: colors.kaki,
             gradient: [colors.kakiDark, colors.kaki]
+        },
+        {
+            id: 'barColor11',
+            color: colors.green,
+            gradient: [colors.greenDark, colors.green]
         }
     ],
     barChart: {

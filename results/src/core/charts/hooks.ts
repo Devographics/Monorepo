@@ -8,6 +8,11 @@ import { BlockMode, BlockUnits } from 'core/types'
 import { useTheme } from 'styled-components'
 import { usePageContext } from 'core/helpers/pageContext'
 import isEmpty from 'lodash/isEmpty'
+import {
+    CHART_MODE_GRID,
+    CHART_MODE_STACKED,
+    CHART_MODE_GROUPED
+} from 'core/blocks/filters/constants'
 
 const getMode = (units: Units, mode: Mode) => {
     if (units === 'percentage_survey' || units === 'percentage_bucket') {
@@ -85,13 +90,11 @@ const horizontalDefs = {
 export const HORIZONTAL = 'Horizontal'
 export const VERTICAL = 'Vertical'
 
-type UseColorOptions = {
+type UseColorDefsOptions = {
     orientation?: 'Vertical' | 'Horizontal'
-    defaultColorIndex?: number
-    keys?: string[]
 }
 
-export const useColorDefs = (options: UseColorOptions = {}) => {
+export const useColorDefs = (options: UseColorDefsOptions = {}) => {
     const { orientation = VERTICAL } = options
     const theme = useTheme()
     const colors = theme.colors.barColors.map((barColor, i) => ({
@@ -116,40 +119,82 @@ export const useColorDefs = (options: UseColorOptions = {}) => {
     return [...colors, noAnswerGradient]
 }
 
-export const useColorFills = (options: UseColorOptions = {}) => {
+type UseColorFillsOptions = {
+    orientation?: 'Vertical' | 'Horizontal'
+    defaultColorIndex?: number
+    keys?: string[]
+    facet?: string
+    gridIndex?: number
+    chartDisplayMode: 'grid' | 'grouped' | 'stacked'
+}
+
+/*
+
+chartKeys are e.g. 
+
+['percentage_bucket__male', 'percentage_bucket__female', 'percentage_bucket__non_binary', etc. ]
+
+*/
+export const useColorFills = (options: UseColorFillsOptions = {}) => {
     const theme = useTheme()
-    const { orientation = VERTICAL, defaultColorIndex = 1, keys } = options
-    /*
-
-    This will match keys of the type count__1, count__2, etc.
-    as well as keys of the type count__male, count__female, etc.
-
-    */
-    const numberedFills = theme.colors.barColors.map((x, i) => ({
-        match: d => {
-            const seriesNumberMatch = d.key.includes(`__${i + 1}`)
-            // key will follow unit__facet.bucket pattern, e.g. percentage_bucket__range_1_5.range_less_than_1
-            const [facetKey, bucketKey] = d.key.split('.')
-            const facetMatch = keys && facetKey === keys[i]
-            return seriesNumberMatch || facetMatch
-        },
-        id: `Gradient${orientation}${i + 1}`
-    }))
-
+    const { chartDisplayMode, orientation = VERTICAL, gridIndex = 0, keys: chartKeys = [] } = options
+    
     const noAnswerFill = {
         match: d => d.data.indexValue === 'no_answer',
         id: `Gradient${orientation}NoAnswer`
     }
 
-    /*
+    switch (chartDisplayMode) {
+        case CHART_MODE_GRID: {
+            /* 
+            
+            Part of a grid of other charts, make all bars the same color based on grid index
+            Note: we add 2 to 0-based index to skip Gradient[Horizontal/Vertical]1, which is reserved for
+            default series
 
-    Note: "defaultColorIndex" lets you force a specific bar color to use, 
-    useful for small multiple views
+            */
+            return [noAnswerFill, { match: '*', id: `Gradient${orientation}${gridIndex + 2}` }]
+        }
+        case CHART_MODE_STACKED: {
+            /*
 
-    */
-    const defaultFill = { match: '*', id: `Gradient${orientation}${defaultColorIndex}` }
+            This will match keys of the type count__male, count__female, etc.
 
-    return [...numberedFills, noAnswerFill, defaultFill]
+            */
+            const facetFills = chartKeys.map((keyName, i) => ({
+                match: d => {
+                    // key will follow "unit__facet.bucket" pattern, e.g. "percentage_bucket__range_1_5.range_less_than_1"
+                    const [facetKey, bucketKey] = d.key.split('.')
+                    return facetKey === keyName
+                },
+                id: `Gradient${orientation}${i + 2}`
+            }))
+            return [noAnswerFill, ...facetFills]
+        }
+        case CHART_MODE_GROUPED: {
+            /*
+
+            This will match keys of the type count__1, count__2, etc.
+
+            */
+            const numberedSeriesFills = theme.colors.barColors.map((x, i) => ({
+                match: d => {
+                    return d.key.includes(`__${i + 1}`)
+                },
+                id: `Gradient${orientation}${i + 2}`
+            }))
+            return [noAnswerFill, ...numberedSeriesFills]
+        }
+        default: {
+            /*
+
+            This will match everything else for all the "normal" charts
+
+            */
+            const defaultFill = { match: '*', id: `Gradient${orientation}1` }
+            return [noAnswerFill, defaultFill]
+        }
+    }
 }
 
 /*
@@ -176,16 +221,22 @@ If "gender" facet is specified, keys are e.g. ['count__male', 'count__female', .
 export const useChartKeys = ({
     units,
     facet,
-    seriesCount
+    seriesCount = 0,
+    showDefaultSeries = true,
 }: {
     units: BlockUnits
     facet?: string
     seriesCount?: number
+    showDefaultSeries?: boolean
 }) => {
     const allChartKeys = useAllChartsKeys()
     if (facet) {
         return allChartKeys[facet].map(key => `${units}__${key}`)
     } else {
-        return [...Array(seriesCount)].map((x, i) => (i === 0 ? units : `${units}__${i + 1}`))
+        if (showDefaultSeries) {
+            return [...Array(seriesCount + 1)].map((x, i) => (i === 0 ? units : `${units}__${i + 1}`))
+        } else {
+            return [...Array(seriesCount)].map((x, i) => (`${units}__${i + 1}`))
+        }
     }
 }

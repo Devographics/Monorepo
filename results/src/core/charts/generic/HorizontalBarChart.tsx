@@ -13,6 +13,7 @@ import TickItem, { getBucketLabel } from 'core/charts/generic/TickItem'
 import maxBy from 'lodash/maxBy'
 import ChartLabel from 'core/components/ChartLabel'
 import { useBarChart, useColorDefs, useColorFills, useChartKeys, HORIZONTAL } from 'core/charts/hooks'
+import { CHART_MODE_DEFAULT } from 'core/blocks/filters/constants'
 
 export const margin = {
     top: 40,
@@ -103,17 +104,23 @@ const HorizontalBarChart = ({
     size = 'm',
     colorMappings,
     barColor: barColor_,
-    gridIndex = 1,
-    facet
+    gridIndex,
+    facet,
+    chartDisplayMode = CHART_MODE_DEFAULT,
+    showDefaultSeries,
 }: HorizontalBarChartProps) => {
     const theme = useTheme()
     const { translate } = useI18n()
 
-    const keys = useChartKeys({ units, facet })
+    const keys = useChartKeys({ units, facet, showDefaultSeries })
 
     const colorDefs = useColorDefs({ orientation: HORIZONTAL })
-    const colorFills = useColorFills({ defaultColorIndex: gridIndex, keys, orientation: HORIZONTAL })
+    const colorFills = useColorFills({ chartDisplayMode, gridIndex, keys, orientation: HORIZONTAL, facet })
 
+    // console.log(chartDisplayMode)
+    // console.log(colorDefs)
+    // console.log(colorFills)
+    
     const { formatTick, formatValue, maxValue } = useBarChart({
         buckets,
         total,

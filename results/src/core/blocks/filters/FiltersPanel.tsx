@@ -13,7 +13,7 @@ import * as Tabs from '@radix-ui/react-tabs'
 import { TabsList, TabsTrigger } from 'core/blocks/block/BlockTabsWrapper'
 import FacetSelection from './FacetSelection'
 import FiltersSelection from './FiltersSelection'
-import { MODE_FACET, MODE_FILTERS } from './constants'
+import { MODE_DEFAULT, MODE_FACET, MODE_FILTERS } from './constants'
 import cloneDeep from 'lodash/cloneDeep'
 
 const FiltersPanel = ({ block, chartFilters, setChartFilters, closeModal }) => {
@@ -40,12 +40,15 @@ const FiltersPanel = ({ block, chartFilters, setChartFilters, closeModal }) => {
         }
     }
 
+    // if mode is set to "default" then open Filters tab
+    const defaultTab = filtersState.options.mode === MODE_DEFAULT ? MODE_FILTERS : filtersState.options.mode
+
     return (
         <Filters_>
             <Heading_>
                 <T k="filters.compare_chart" values={{ chartName }} />
             </Heading_>
-            <Tabs.Root defaultValue={filtersState.options.mode} orientation="horizontal">
+            <Tabs.Root defaultValue={defaultTab} orientation="horizontal">
                 <TabsList aria-label="tabs example">
                     <TabsTrigger_ value={MODE_FILTERS}>
                         <T k="filters.filters_mode" />

@@ -10,8 +10,19 @@ import { useI18n } from 'core/i18n/i18nContext'
 import Tooltip from 'core/components/Tooltip'
 import T from 'core/i18n/T'
 import isEmpty from 'lodash/isEmpty'
-import { BEHAVIOR_COMBINED, BEHAVIOR_MULTIPLE, MODE_FACET, MODE_FILTERS } from './constants'
+import {
+    BEHAVIOR_COMBINED,
+    BEHAVIOR_MULTIPLE,
+    MODE_FACET,
+    MODE_FILTERS,
+    MODE_DEFAULT,
+    CHART_MODE_GRID,
+    CHART_MODE_STACKED,
+    CHART_MODE_GROUPED,
+    CHART_MODE_DEFAULT
+} from './constants'
 import { CustomizationDefinition } from './types'
+import WrapperGrid from './WrapperGrid'
 
 const doNothing = a => a
 
@@ -121,13 +132,10 @@ const DynamicDataLoader = ({
                 fewer buckets), apply it now to the new buckets
 
                 */
-                    const bucketsArrays = [
-                        ...(showDefaultSeries ? [defaultBuckets] : []),
-                        ...newBuckets.map(processBuckets)
-                    ]
 
                     const combinedBuckets = combineBuckets({
-                        bucketsArrays,
+                        defaultBuckets,
+                        otherBucketsArrays: newBuckets.map(processBuckets),
                         completion
                     })
 
@@ -135,7 +143,7 @@ const DynamicDataLoader = ({
                     // meaningfully compare values across series
                     setUnits('percentage_question')
                     setCombinedBuckets(combinedBuckets)
-                    setSeriesCount(showDefaultSeries ? newBuckets.length + 1 : newBuckets.length)
+                    setSeriesCount(newBuckets.length)
                 } else {
                     /*
 
@@ -152,14 +160,8 @@ const DynamicDataLoader = ({
                     setSeries(allSeries)
                 }
             } else if (mode === MODE_FACET) {
-                // console.log('// MODE_FACET')
-                // console.log(block.id)
-                // console.log(seriesData)
                 const facets = seriesData[block.id]?.year?.facets
-                // console.log(facets)
-                // console.log(defaultBuckets)
                 const invertedFacetsBuckets = invertFacets({ facets, defaultBuckets })
-                // console.log(invertedFacetsBuckets)
                 setUnits('percentage_bucket')
                 setCombinedBuckets(invertedFacetsBuckets)
             }
@@ -171,103 +173,56 @@ const DynamicDataLoader = ({
         }
     }, [chartFilters])
 
-    if (behavior === BEHAVIOR_COMBINED || mode === MODE_FACET) {
-        const groupMode = mode === MODE_FACET ? 'stacked' : 'grouped'
+    if (mode === MODE_FACET || (mode === MODE_FILTERS && behavior === BEHAVIOR_COMBINED)) {
+        const chartDisplayMode = mode === MODE_FACET ? CHART_MODE_STACKED : CHART_MODE_GROUPED
         return (
-            <Wrapper_>
-                <Contents_>
-                    {React.cloneElement(children, {
-                        buckets: combinedBuckets,
-                        seriesCount,
-                        groupMode,
-                        facet: chartFilters.facet
-                    })}
-                </Contents_>
-                {isLoading && <Loading />}
-            </Wrapper_>
+            <SingleWrapper
+                buckets={combinedBuckets}
+                seriesCount={seriesCount}
+                chartDisplayMode={chartDisplayMode}
+                facet={chartFilters.facet}
+                isLoading={isLoading}
+                showDefaultSeries={showDefaultSeries}
+            >
+                {children}
+            </SingleWrapper>
+        )
+    } else if (mode === MODE_FILTERS && behavior === BEHAVIOR_MULTIPLE) {
+        return (
+            <WrapperGrid
+                layout={layout}
+                series={series}
+                legends={legends}
+                isLoading={isLoading}
+                showDefaultSeries={showDefaultSeries}
+            >
+                {children}
+            </WrapperGrid>
         )
     } else {
-        return (
-            <GridWrapper_ layout={layout}>
-                {series.map(({ name, buckets }, i) => (
-                    <GridItem_ key={name}>
-                        {legends && legends.length > 0 && (
-                            <Tooltip
-                                trigger={
-                                    <Legend_>
-                                        <span>{legends[i]?.label}</span>
-                                    </Legend_>
-                                }
-                                contents={<span>{legends[i]?.label}</span>}
-                            />
-                        )}
-                        <Contents_>
-                            {isEmpty(buckets) ? (
-                                <EmptySeries />
-                            ) : (
-                                React.cloneElement(children, {
-                                    buckets,
-                                    gridIndex: i
-                                })
-                            )}
-                        </Contents_>
-                        {isLoading && <Loading />}
-                    </GridItem_>
-                ))}
-            </GridWrapper_>
-        )
+        return React.cloneElement(children, {
+            chartDisplayMode: CHART_MODE_DEFAULT
+        })
     }
 }
 
-const EmptySeries = () => (
-    <EmptySeries_>
-        <T k="filters.series.no_data" />
-    </EmptySeries_>
+const SingleWrapper = ({ children, buckets, seriesCount, chartDisplayMode, facet, isLoading, showDefaultSeries }) => (
+    <Wrapper_>
+        <Contents_>
+            {React.cloneElement(children, {
+                buckets,
+                seriesCount,
+                chartDisplayMode,
+                facet,
+                showDefaultSeries,
+            })}
+        </Contents_>
+        {isLoading && <Loading />}
+    </Wrapper_>
 )
-
-const EmptySeries_ = styled.div`
-    background: ${({ theme }) => theme.colors.backgroundAlt};
-    display: grid;
-    place-items: center;
-    height: 100%;
-`
 
 const Wrapper_ = styled.div`
     position: relative;
-`
-
-const GridWrapper_ = styled.div`
-    ${({ layout }) =>
-        layout === 'grid'
-            ? css`
-                  display: grid;
-                  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-                  gap: ${spacing(2)};
-              `
-            : css`
-                  display: flexbox;
-                  flex-direction: column;
-                  gap: ${spacing()};
-              `}
-`
-
-const GridItem_ = styled.div`
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    gap: ${spacing()};
-`
-
-const Legend_ = styled.h4`
-    background: ${({ theme }) => theme.colors.backgroundAlt};
-    padding: ${spacing(0.25)} ${spacing(0.5)};
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    width: 100%;
-    font-size: ${fontSize('small')};
-    margin: 0;
 `
 
 const Contents_ = styled.div`

@@ -8,6 +8,7 @@ import BarTooltip from './BarTooltip'
 import ChartLabel from 'core/components/ChartLabel'
 import { isPercentage } from 'core/helpers/units'
 import { ChartComponentProps, BlockUnits, BucketItem, BlockLegend } from 'core/types'
+import { CHART_MODE_DEFAULT } from 'core/blocks/filters/constants'
 const breakpoint = 600
 
 const getMargins = (viewportWidth: number) => ({
@@ -70,20 +71,22 @@ const VerticalBarChart = ({
     colorVariant = 'primary',
     buckets,
     gridIndex = 1,
-    groupMode='grouped',
+    chartDisplayMode = CHART_MODE_DEFAULT,
     facet,
+    showDefaultSeries,
 }: VerticalBarChartProps) => {
     const theme = useTheme()
 
-    const keys = useChartKeys({units, facet, seriesCount})
+    const keys = useChartKeys({ units, facet, seriesCount, showDefaultSeries })
 
     const colorDefs = useColorDefs()
-    const colorFills = useColorFills({ defaultColorIndex: gridIndex, keys })
-    const { translate } = useI18n()
+    const colorFills = useColorFills({ chartDisplayMode, gridIndex, keys, facet })
 
-    console.log(facet)
-    console.log(colorDefs)
-    console.log(colorFills)
+    // console.log(chartDisplayMode)
+    // console.log(colorDefs)
+    // console.log(colorFills)
+
+    const { translate } = useI18n()
 
     const { formatValue, maxValue, ticks } = useBarChart({
         buckets,
@@ -94,7 +97,6 @@ const VerticalBarChart = ({
         units
     })
 
-
     const labelsLayer = useMemo(() => getLabelsLayer(units), [units])
 
     const colors = [theme.colors.barChart[colorVariant]]
@@ -103,7 +105,7 @@ const VerticalBarChart = ({
         <div style={{ height: 260 }} className={`VerticalBarChart ${className}`}>
             <ResponsiveBar
                 data={buckets}
-                groupMode={groupMode}
+                groupMode={chartDisplayMode}
                 indexBy="id"
                 keys={keys}
                 maxValue={maxValue}
@@ -142,6 +144,7 @@ const VerticalBarChart = ({
                         bucketKeys={bucketKeys}
                         i18nNamespace={i18nNamespace}
                         shouldTranslate={translateData}
+                        facet={facet}
                         {...barProps}
                     />
                 )}
