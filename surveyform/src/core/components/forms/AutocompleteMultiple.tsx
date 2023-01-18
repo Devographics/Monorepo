@@ -20,23 +20,9 @@ import { useFormContext } from "@devographics/react-form";
 import { Alert } from "~/core/components/ui/Alert";
 import { FormItem } from "../survey/questions/FormItem";
 import useSWR from "swr";
-import { apiRoutes } from "~/lib/apiRoutes";
-import { DocumentNode, print } from "graphql";
 import { FormInputProps } from "./typings";
+import { graphqlFetcher } from "~/core/utils/graphqlQuery";
 
-/**
- * @example useSWR([yourGraphqlQuery, yourGraphqlVariables])
- * @param param0
- */
-function graphqlFetcher([query, variables]: [DocumentNode, any]) {
-  return fetch(apiRoutes.graphql.href, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ query: print(query), variables }),
-  }).then((res) => res.json());
-}
 export interface AutocompleteMultipleProps extends FormInputProps {}
 
 // TODO: move the autocomplete query creation logic to server

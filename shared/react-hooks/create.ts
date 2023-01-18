@@ -27,23 +27,17 @@
 // */
 
 import { useMutation, UseMutationState } from "urql";
-import gql from "graphql-tag";
 
 import { filterFunction } from "@vulcanjs/mongo/client";
-import {
-  createClientTemplate,
-  getModelFragment,
-  Fragment,
-} from "@vulcanjs/graphql";
 
 import { multiQueryUpdater, ComputeNewDataFunc } from "./multiQueryUpdater";
 import { VulcanMutationHookOptions } from "./typings";
 
 import { addToData, matchSelector } from "./cacheUpdate";
 import { CreateVariables } from "@vulcanjs/crud"; // TODO: we should depend only on client code
+import { buildCreateQuery } from "@devographics/graphql-query"
 
 import debug from "debug";
-import { VulcanGraphqlModel } from "@vulcanjs/graphql";
 const debugApollo = debug("vn:apollo");
 /**
  * Compute the new list after a create mutation
@@ -83,31 +77,6 @@ export const computeNewDataAfterCreate: ComputeNewDataFunc = async ({
 const multiQueryUpdaterAfterCreate = multiQueryUpdater(
   computeNewDataAfterCreate
 );
-
-export const buildCreateQuery = ({
-  model,
-  fragmentName,
-  fragment,
-}: {
-  model: VulcanGraphqlModel;
-  /**
-   * @deprecated Prefer passing a fragment using gql tag, name will be computed automatically
-   */
-  fragmentName?: string;
-  fragment?: Fragment;
-}) => {
-  const { typeName } = model.graphql;
-  const { finalFragment, finalFragmentName } = getModelFragment({
-    model,
-    fragment,
-    fragmentName,
-  });
-  const query = gql`
-    ${createClientTemplate({ typeName, fragmentName: finalFragmentName })}
-    ${finalFragment}
-  `;
-  return query;
-};
 
 // Add data into the resolverName
 const buildResult = <TModel = any>(

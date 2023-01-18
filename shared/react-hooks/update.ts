@@ -28,48 +28,11 @@
 // */
 
 import { useMutation, UseMutationState } from "urql";
-import gql from "graphql-tag";
-
-import {
-  Fragment,
-  getModelFragment,
-  updateClientTemplate,
-} from "@vulcanjs/graphql";
-
-import { multiQueryUpdater, ComputeNewDataFunc } from "./multiQueryUpdater";
 // import { computeQueryVariables } from "./variables";
-import { computeNewDataAfterCreate } from "./create";
 import type { VulcanMutationHookOptions } from "./typings";
-import type { VulcanGraphqlModel } from "@vulcanjs/graphql"; // TODO: import client code only
 import type { UpdateVariables } from "@vulcanjs/crud";
+import { buildUpdateQuery } from "@devographics/graphql-query"
 
-// We can reuse the same function to compute the new list after an element update
-const computeNewDataAfterUpdate: ComputeNewDataFunc = computeNewDataAfterCreate;
-
-const multiQueryUpdaterAfterUpdate = multiQueryUpdater(
-  computeNewDataAfterUpdate
-);
-
-export const buildUpdateQuery = ({
-  model,
-  fragmentName,
-  fragment,
-}: {
-  model: VulcanGraphqlModel;
-  fragmentName?: string;
-  fragment?: Fragment;
-}) => {
-  const { typeName } = model.graphql;
-  const { finalFragment, finalFragmentName } = getModelFragment({
-    model,
-    fragment,
-    fragmentName,
-  });
-  return gql`
-    ${updateClientTemplate({ typeName, fragmentName: finalFragmentName })}
-    ${finalFragment}
-  `;
-};
 
 // Options of the hook
 interface UseUpdateOptions<TModel = any>

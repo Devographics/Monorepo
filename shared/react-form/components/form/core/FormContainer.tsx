@@ -42,8 +42,8 @@ import React, { useRef } from "react";
 // Utils,
 // getFragment,
 //"meteor/vulcan:core";
-import { DocumentNode } from "@apollo/client";
 import gql from "graphql-tag";
+import type { DocumentNode } from "graphql";
 
 import getFormFragments from "../utils/formFragments";
 // import { VulcanModel } from "@vulcanjs/model";
@@ -59,9 +59,8 @@ import {
   useCreate,
   useUpdate,
   useDelete,
-  UseSingleOptions,
-} from "@vulcanjs/react-hooks";
-import { FetchResult } from "@apollo/client";
+} from "@devographics/react-hooks";
+//import { FetchResult } from "@apollo/client";
 // import { FormType } from "./typings";
 import { debugVulcan } from "@vulcanjs/utils";
 import { VulcanUser } from "@vulcanjs/permissions";
@@ -70,19 +69,6 @@ import { PassedDownFormProps } from "./Form/typings";
 import { useVulcanComponents } from "../../VulcanComponents/Consumer";
 import { useVulcanCurrentUser } from "../../VulcanCurrentUser";
 const debugForm = debugVulcan("form");
-
-// Mutation that yield a success result
-type SuccessfulFetchResult<TData = Object> = FetchResult<TData> & {
-  data: TData;
-};
-/**
- * Typeguared to allow considering the request as successful
- */
-const isSuccessful = function <T = any>(
-  result: FetchResult<T> | undefined
-): result is SuccessfulFetchResult<T> {
-  return !!result?.data;
-};
 
 export interface FormContainerProps extends PassedDownFormProps {
   model: VulcanGraphqlModel;
@@ -251,7 +237,7 @@ export const FormContainer = (props: FormContainerProps) => {
     fragmentName: mutationFragmentName,
   };
 
-  const queryOptions: UseSingleOptions<any> = {
+  const queryOptions: any /*UseSingleOptions<any>*/ = {
     model,
     // TODO: what this option does?
     // queryName: `${prefix}FormQuery`,
@@ -270,6 +256,7 @@ export const FormContainer = (props: FormContainerProps) => {
       skip: formType === "new",
     },
   };
+  // @ts-expect-error TODO handle loading, refetch
   const { data, document, loading, refetch } = useSingle(queryOptions);
   if (formType !== "new") {
     debugForm(
@@ -334,18 +321,19 @@ export const FormContainer = (props: FormContainerProps) => {
 
   const createAndReturnDocument = async (variables: CreateVariables) => {
     const result = await createDocument(variables);
-    const { errors, document } = result;
+    const { error, document } = result;
     return {
       document,
-      errors,
+      error,
     };
   };
   const updateAndReturnDocument = async (variables: UpdateVariables) => {
     const result = await updateDocument(variables);
-    const { errors, document } = result;
+    // @ts-expect-error Not sure how error are handled now
+    const { error, document } = result;
     return {
       document,
-      errors,
+      error,
     };
   };
 

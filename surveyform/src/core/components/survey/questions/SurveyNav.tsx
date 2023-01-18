@@ -129,7 +129,6 @@ const SurveyNav = ({
                 currentTabindex={currentTabindex}
                 setCurrentTabindex={setCurrentTabindex}
                 setCurrentFocusIndex={setCurrentFocusIndex}
-                // @ts-expect-error Don't know why submitForm has type "Function"
                 submitForm={submitForm}
                 setNavLoading={setNavLoading}
                 readOnly={readOnly}

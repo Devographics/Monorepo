@@ -1,5 +1,5 @@
 {
-  "name": "@devographics/react-hooks",
+  "name": "@devographics/graphql-query",
   "version": "1.0.0",
   "description": "Connect to an existing Vulcan backend using hooks",
   "main": "./index.ts",
@@ -11,7 +11,6 @@
   "author": "Devographics",
   "license": "MIT",
   "dependencies": {
-    "@devographics/graphql-query": "workspace:*",
     "@vulcanjs/crud": "^0.7.2-alpha.8",
     "@vulcanjs/graphql": "^0.8.1-y.0",
     "@vulcanjs/mongo": "^0.8.1",

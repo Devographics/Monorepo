@@ -18,10 +18,10 @@ Example Usage
 */
 import React, { useState } from "react";
 import { DocumentNode } from "graphql";
-import { MutationHookOptions, useMutation } from "@apollo/client";
 import gql from "graphql-tag";
+import { useMutation } from "urql";
 import { useVulcanComponents } from "../VulcanComponents/Consumer";
-import { LoadingButtonProps } from "./LoadingButton";
+import type { LoadingButtonProps } from "./LoadingButton";
 // import withMutation from '../containers/registeredMutation';
 
 // TODO:
@@ -52,7 +52,7 @@ export interface MutationButtonProps {
    * mutationOptions: { refetchQueries:["hello"]}
    * and the mutation is provided via the new "mutation" prop
    */
-  mutationOptions?: MutationHookOptions;
+  mutationOptions?: any; //MutationHookOptions;
   /**
    * @example
     mutation: gql`
@@ -63,16 +63,18 @@ export interface MutationButtonProps {
    */
   mutation: string | DocumentNode;
   /** Variables passed to the mutation (NOTE: we can't pass other options at the moment) */
-  mutationArguments?: MutationHookOptions<any>["variables"];
+  mutationArguments?: any; //MutationHookOptions<any>["variables"];
   /** Callback run before submitting. Can optionnaly return mutationArguments that will override current ones. */
   submitCallback?: (
-    mutationArgumentsFromProps: MutationHookOptions<any>["variables"]
+    mutationArgumentsFromProps: any //MutationHookOptions<any>["variables"]
   ) =>
     | void
-    | { mutationArguments: MutationHookOptions<any>["variables"] }
-    | Promise<void | {
-      mutationArguments: MutationHookOptions<any>["variables"];
-    }>;
+    | any //{ mutationArguments: any,// MutationHookOptions<any>["variables"] }
+    | Promise<
+        void | any /*{
+      mutationArguments: any//MutationHookOptions<any>["variables"];
+    }*/
+      >;
   successCallback?: (res: any) => void | Promise<void>;
   errorCallback?: (err: any) => void | Promise<void>;
   /** Now isolated into their own object to avoid needed to explicitely pick/omit */
@@ -98,7 +100,7 @@ export const MutationButton = (props: MutationButtonProps) => {
           ${mutation}
         `
       : mutation;
-  const [mutationFunc] = useMutation(mutationAsNode);
+  const [mutationRes, mutationFunc] = useMutation(mutationAsNode);
 
   const handleClick = async (e) => {
     e.preventDefault();

@@ -2,7 +2,7 @@ import Thanks from "~/core/components/pages/Thanks";
 import { Response } from "~/modules/responses";
 import { ResponseFragmentWithRanking } from "~/modules/responses/fragments";
 import { serverConfig } from "~/config/server";
-import { buildSingleQuery } from "@devographics/react-hooks";
+import { buildSingleQuery } from "@devographics/graphql-query";
 import React from "react";
 
 import {

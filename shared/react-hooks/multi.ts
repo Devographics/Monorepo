@@ -19,8 +19,8 @@ import {
   MultiInput,
   multiQuery,
 } from "@vulcanjs/graphql";
-import merge from "lodash/merge.js";
 import get from "lodash/get.js";
+import { buildMultiQueryOptions } from "@devographics/graphql-query";
 
 // default query input object
 const defaultInput = {
@@ -40,62 +40,6 @@ const getInitialPaginationInput = (options, props) => {
     limit,
   };
   return paginationInput;
-};
-
-/**
- * Build the graphQL query options
- * @param {*} options
- * @param {*} state
- * @param {*} props
- */
-export const buildMultiQueryOptions = <TModel, TData>(
-  options: Partial<UseMultiOptions<TModel, TData, MultiVariables>>,
-  paginationInput: any = {},
-  props
-): Partial<UseQueryArgs<MultiVariables, TData>> => {
-  // let pollInterval: number | null = null;
-  let {
-    input: optionsInput,
-    // generic graphQL options
-    queryOptions = {},
-  } = options;
-  // pollInterval = options.pollInterval ?? 20000; // nullish coalescing will keep the value 0, to deactivate polling explicitely
-
-  // get dynamic input from props
-  const { input: propsInput = {} } = props;
-
-  // merge static and dynamic inputs
-  const input = merge({}, optionsInput, propsInput);
-
-  // if this is the SSR process, set pollInterval to null
-  // see https://github.com/apollographql/apollo-client/issues/1704#issuecomment-322995855
-  // pollInterval = typeof window === "undefined" ? null : pollInterval;
-
-  // get input from options, then props, then pagination
-  // TODO: should be done during the merge with lodash
-  const mergedInput: MultiInput = {
-    ...defaultInput,
-    ...options.input,
-    ...input,
-    ...paginationInput,
-  };
-
-  const graphQLOptions: Partial<UseQueryArgs<MultiVariables, TData>> = {
-    variables: {
-      input: mergedInput,
-    },
-    // TODO: not sure how to poll with urql
-    // note: pollInterval can be set to 0 to disable polling (20s by default)
-    // pollInterval: pollInterval ?? undefined,
-  };
-
-  // see https://www.apollographql.com/docs/react/features/error-handling/#error-policies
-  // queryOptions.errorPolicy = "all";
-
-  return {
-    ...graphQLOptions,
-    ...queryOptions, // allow overriding options
-  };
 };
 
 /**
@@ -200,7 +144,7 @@ interface UseMultiOptions<TModel, TData, TVariables>
   fragment?: string | DocumentNode;
   fragmentName?: string;
   extraQueries?: string; // Get more data alongside the objects
-  queryOptions?: UseQueryArgs<TVariables, TData>;
+  queryOptions?: any;//UseQueryArgs<TVariables, TData>;
 } // & useQuery options?
 
 export interface MultiQueryResult<TModel = any, TData = any>

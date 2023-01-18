@@ -45,7 +45,7 @@
     "@types/underscore": "^1.11.1"
   },
   "peerDependencies": {
-    "@apollo/client": "^3.5.5",
+    "urql": ">=3.0.3",
     "graphql": "^15.5.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1"

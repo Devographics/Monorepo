@@ -55,7 +55,7 @@ import {
   FormState,
   UpdateDocumentResult,
 } from "./typings";
-import { MutationResult } from "@apollo/client";
+// import { MutationResult } from "@apollo/client";
 import { useVulcanComponents } from "../../../VulcanComponents/Consumer";
 import { useSubmitCallbacks } from "./hooks";
 
@@ -862,16 +862,9 @@ export const Form = (props: FormProps) => {
 };
 
 // Mutation that yield a success result
-type SuccessfulMutationResult<TData = Object> = MutationResult<TData> & {
-  data: TData;
-};
-/**
- * Typeguared to allow considering the request as successful
- */
-const isSuccessful = function <T = any>(
-  result: MutationResult<T> | undefined
-): result is SuccessfulMutationResult<T> {
-  return !!result?.data;
-};
+type SuccessfulMutationResult<TData = Object> =
+  /*MutationResult<TData>*/ any & {
+    data: TData;
+  };
 
 export default Form;

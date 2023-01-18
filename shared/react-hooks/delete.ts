@@ -34,30 +34,10 @@ import {
   getModelFragment,
   VulcanGraphqlModel,
 } from "@vulcanjs/graphql";
+import { buildDeleteQuery} from "@devographics/graphql-query"
 import { removeFromData } from "./cacheUpdate";
 import { computeQueryVariables } from "./variables";
 import { VulcanMutationHookOptions } from "./typings";
-
-export const buildDeleteQuery = ({
-  model,
-  fragment,
-  fragmentName,
-}: {
-  model: VulcanGraphqlModel;
-  fragmentName?: string;
-  fragment?: Fragment;
-}) => {
-  const { typeName } = model.graphql;
-  const { finalFragment, finalFragmentName } = getModelFragment({
-    model,
-    fragment,
-    fragmentName,
-  });
-  return gql`
-    ${deleteClientTemplate({ typeName, fragmentName: finalFragmentName })}
-    ${finalFragment}
-  `;
-};
 
 import { multiQueryUpdater, ComputeNewDataFunc } from "./multiQueryUpdater";
 import { DeleteVariables } from "@vulcanjs/crud";
