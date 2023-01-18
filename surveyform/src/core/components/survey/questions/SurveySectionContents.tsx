@@ -119,19 +119,6 @@ const SurveySectionContentsInner = ({
       // + the name should be retrieved using getFragmentName from the DocumentNode fragment
       queryFragment={SurveyResponseFragment(survey)}
       mutationFragment={SurveyResponseFragment(survey)}
-      //queryFragmentName="ResponseFragment"
-      //mutationFragmentName="ResponseFragment"
-      /*
-          Instead, we use the context to pass new components
-          However, we could reenable this prop as well for more flexbility
-        components={{
-          FormItem,
-          FormLayout,
-          FormSubmit: FormSubmitWrapper,
-          FormOptionLabel,
-          FormLabel,
-          FormDescription,
-        }}*/
       // TODO: not all those props are correctly handled by the SmartForm
       showDelete={false}
       itemProperties={{

@@ -9,7 +9,7 @@ import type { DeleteVariables } from "@vulcanjs/crud";
 import { createClient } from "@urql/core";
 import { getAppGraphqlUri } from "~/lib/graphql";
 import { Provider as UrqlProvider } from "urql";
-import { useSingle, useDelete } from "@devographics/react-hooks";
+import { useSingle } from "@devographics/react-hooks";
 import { debugVulcan } from "@vulcanjs/utils";
 import { VulcanUser } from "@vulcanjs/permissions";
 // Be careful to import from the Consumer!
@@ -222,8 +222,6 @@ export const FormContainer = (props: FormContainerProps) => {
       loading
     );
   }
-  // TODO: pass the creation functions down to the Form
-  const [deleteDocument] = useDelete(mutationOptions);
 
   const {
     currentUser: currentUserFromContext,
@@ -238,42 +236,6 @@ export const FormContainer = (props: FormContainerProps) => {
     ? loadingCurrentUserFromProps
     : loadingCurrentUserFromContext;
 
-  // callbacks
-  /*
-  const formRef = useRef(null);
-  const newMutationSuccessCallback = function <TData = Object>(
-    result: SuccessfulFetchResult<TData>
-  ) {
-    getDocumentFromResult(result, "new");
-  };
-  const editMutationSuccessCallback = function <TData = Object>(
-    result: SuccessfulFetchResult<TData>
-  ) {
-    getDocumentFromResult(result, "edit");
-  };
-  */
-
-  /*
-  The create hook already creates a document prop in a more stable way
-  const getDocumentFromResult = function <TData = Object>(
-    // must be called only on valid results
-    result: SuccessfulFetchResult<TData> | undefined
-  ) {
-    if (!result) return undefined;
-    // TODO: quite risky... we should have a better way to get the document
-    let document = result.data[Object.keys(result.data)[0]].data; // document is always on first property
-
-    return document;
-  };*/
-  // for new mutation, run refetch function if it exists
-  /*
-  if (mutationType === "new" && refetch) refetch();
-  */
-
-  const deleteDocumentAndRefetch = async (variables: DeleteVariables) => {
-    await deleteDocument(variables as any);
-  };
-
   if (isEdit && loading) {
     return <Loading />;
   }
@@ -281,7 +243,6 @@ export const FormContainer = (props: FormContainerProps) => {
     <Form
       document={document}
       loading={!!(loading || loadingCurrentUser)}
-      deleteDocument={deleteDocumentAndRefetch}
       refetch={refetch}
       currentUser={currentUser}
       {...childProps}

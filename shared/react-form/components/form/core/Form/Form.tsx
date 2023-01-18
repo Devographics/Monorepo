@@ -25,7 +25,6 @@ import mapValues from "lodash/mapValues.js";
 import merge from "lodash/merge.js";
 import omit from "lodash/omit.js";
 import omitBy from "lodash/omitBy.js";
-import pick from "lodash/pick.js";
 import pickBy from "lodash/pickBy.js";
 import set from "lodash/set.js";
 import unset from "lodash/unset.js";
@@ -121,9 +120,7 @@ const getInitialStateFromProps = (nextProps: FormProps): FormState => {
 const getChildrenProps = (
   props: FormProps,
   state: Pick<FormState, "disabled" | "currentDocument">,
-  options: { formType: FormType },
-  // TODO: that belongs to the context instead
-  callbacks: { deleteDocument: Function }
+  options: { formType: FormType }
 ): {
   formLayoutProps: any; //FormLayoutProps;
   formGroupProps: Function;
@@ -148,7 +145,6 @@ const getChildrenProps = (
   } = props;
   const { disabled, currentDocument } = state;
   const { formType } = options;
-  const { deleteDocument } = callbacks;
   const commonProps = {
     document: currentDocument,
     formType,
@@ -182,13 +178,6 @@ const getChildrenProps = (
     cancelCallback,
     revertCallback,
     document: currentDocument,
-    // TODO: should probably be passed through context
-    deleteDocument:
-      (formType === EDIT_FORM_TYPE &&
-        showRemove &&
-        showDelete &&
-        deleteDocument) ||
-      null,
   };
 
   const formLayoutProps = {
@@ -223,7 +212,7 @@ const FormWarnUnsaved = ({
 };
 
 export const Form = (props: FormProps) => {
-  const { initCallback, deleteDocument } = props;
+  const { initCallback } = props;
   const initialState = getInitialStateFromProps(props);
   const { schema, originalSchema, flatSchema, initialDocument } = initialState;
   const isFirstRender = useRef(true);
@@ -403,37 +392,6 @@ export const Form = (props: FormProps) => {
     setDisabled(false);
   };
 
-  const formRef = useRef(null);
-  /*
-
-  Delete document handler
-
-  */
-  const deleteDocumentWithConfirm = () => {
-    const document = currentDocument;
-    const documentId = props.document._id;
-    const documentTitle = document.title || document.name || "";
-
-    const deleteDocumentConfirm = intl.formatMessage(
-      { id: "forms.delete_confirm" },
-      { title: documentTitle }
-    );
-
-    if (window.confirm(deleteDocumentConfirm)) {
-      deleteDocument({ input: { id: documentId } })
-        .then((mutationResult) => {
-          // the mutation result looks like {data:{collectionRemove: null}} if succeeded
-          if (props.removeSuccessCallback)
-            props.removeSuccessCallback({ documentId, documentTitle });
-          refetchForm();
-        })
-        .catch((error) => {
-          // eslint-disable-next-line no-console
-          console.log(error);
-        });
-    }
-  };
-
   // --------------------------------------------------------------------- //
   // ------------------------- Props to Pass ----------------------------- //
   // --------------------------------------------------------------------- //
@@ -459,9 +417,6 @@ export const Form = (props: FormProps) => {
     { disabled, currentDocument },
     {
       formType,
-    },
-    {
-      deleteDocument: deleteDocumentWithConfirm,
     }
   );
   const isChanged = isNotSameDocument(initialDocument, currentDocument);

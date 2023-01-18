@@ -148,7 +148,6 @@ export interface FormProps<TModel = { [key in string]: any }>
   changeCallback?: (currentDocument) => void;
 
   loading: boolean;
-  deleteDocument: (vars: DeleteVariables) => Promise<void>;
   // Other results from the Apollo query => should be ignored, in order to avoid dependency to graphql in the Form
   // instead the container is responsible for passing errors and stuff
   // createDocumentMeta?: { error?: any };
