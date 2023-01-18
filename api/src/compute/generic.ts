@@ -28,6 +28,8 @@ import yamlKeys from '../data/keys.yml'
 import isEmpty from 'lodash/isEmpty.js'
 import { getFacetSegments } from '../helpers'
 
+export const NO_ANSWER = 'no_answer'
+
 export interface TermAggregationOptions {
     // filter aggregations
     filters?: Filters
@@ -400,7 +402,7 @@ export async function addCompletionCounts(
         for (let facet of yearObject.facets) {
             // TODO: not accurate because it doesn't account for
             // respondents who didn't answer the question
-            const facetTotal = sumBy(facet.buckets, 'count')
+            const facetTotal = sumBy(facet.buckets.filter(b => b.id !== NO_ANSWER), 'count')
             facet.completion = {
                 total: totalRespondents,
                 count: facetTotal,

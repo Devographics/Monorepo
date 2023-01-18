@@ -1,5 +1,6 @@
 import { generateFiltersQuery } from '../filters'
 import { getFacetPath } from '../helpers'
+import { NO_ANSWER } from './generic'
 
 export type PipelineProps = {
     survey: string
@@ -37,14 +38,14 @@ export const getGenericPipeline = (pipelineProps: PipelineProps) => {
         },
         {
             $set: {
-                [`${key}`]: { $cond: [ { $not: [`$${key}`] }, "no_answer", `$${key}` ] }
+                [`${key}`]: { $cond: [ { $not: [`$${key}`] }, NO_ANSWER, `$${key}` ] }
             }
         },
         ...(facetPath
             ? [
                 {
                     $set: {
-                        [`${facetPath}`]: { $cond: [ { $not: [`$${facetPath}`] }, "no_answer", `$${facetPath}` ] }
+                        [`${facetPath}`]: { $cond: [ { $not: [`$${facetPath}`] }, NO_ANSWER, `$${facetPath}` ] }
                     }
                 }
               ]
