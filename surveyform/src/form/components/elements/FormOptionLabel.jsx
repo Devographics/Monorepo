@@ -1,5 +1,5 @@
 import React from 'react';
-import EntityLabel from '../../common/EntityLabel';
+import EntityLabel from '~/core/components/common/EntityLabel';
 
 const FormOptionLabel = ({ option }) => {
   const { label, id, intlId, value } = option;

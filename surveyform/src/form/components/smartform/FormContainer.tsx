@@ -1,52 +1,8 @@
-/*
-
-FormContainer aka SmartForm
-
-Changes compared to Vulcan Meteor:
-
-- previously was named FormWrapper
-- accepts a model instead of collection
-- no queryFragmentName (resp. mutation name), instead you need to pass the fragment explicitely
-
-Technically, this is a GraphqlSmartForm, while Form.tsx is the more
-generic SmartForm, or a "ModelForm".
-
-
----
-
-Generate the appropriate fragment for the current form, then
-wrap the main Form component with the necessary HoCs while passing
-them the fragment.
-
-This component is itself wrapped with:
-
-- withCurrentUser
-- withApollo (used to access the Apollo client for form pre-population)
-
-And wraps the Form component with:
-
-- withNew
-
-Or:
-
-- withSingle
-- withUpdate
-- withDelete
-
-(When wrapping with withSingle, withUpdate, and withDelete, a special Loader
-component is also added to wait for withSingle's loading prop to be false)
-
-*/
-import React, { useRef } from "react";
-// import // withCurrentUser,
-// Utils,
-// getFragment,
-//"meteor/vulcan:core";
+import React from "react";
 import gql from "graphql-tag";
 import type { DocumentNode } from "graphql";
 
-import getFormFragments from "@devographics/react-form/components/form/utils/formFragments";
-// import { VulcanModel } from "@vulcanjs/model";
+import { Form, getFormFragments } from "@devographics/react-form";
 import { VulcanGraphqlModel, getFragmentName } from "@vulcanjs/graphql";
 import type {
   CreateVariables,
@@ -64,14 +20,14 @@ import {
   useUpdate,
   useDelete,
 } from "@devographics/react-hooks";
-//import { FetchResult } from "@apollo/client";
-// import { FormType } from "./typings";
 import { debugVulcan } from "@vulcanjs/utils";
 import { VulcanUser } from "@vulcanjs/permissions";
-import { PassedDownFormProps } from "@devographics/react-form/components/form/core/Form/typings";
 // Be careful to import from the Consumer!
-import { useVulcanComponents } from "@devographics/react-form/components/VulcanComponents/Consumer";
-import { useVulcanCurrentUser } from "@devographics/react-form/components/VulcanCurrentUser";
+import {
+  PassedDownFormProps,
+  useVulcanCurrentUser,
+} from "@devographics/react-form";
+import { Loading } from "~/core/components/ui/Loading";
 const debugForm = debugVulcan("form");
 
 export interface FormContainerProps extends PassedDownFormProps {
@@ -229,7 +185,6 @@ export const FormContainer = (props: FormContainerProps) => {
     slug,
   };
   const formType = isEdit ? "edit" : "new";
-  const VulcanComponents = useVulcanComponents();
 
   // get query & mutation fragments from props or else default to same as generatedFragment
   //return {
@@ -279,7 +234,7 @@ export const FormContainer = (props: FormContainerProps) => {
       skip: formType === "new",
     },
   };
-  console.log("useSingle queryOptions", useSingle);
+  console.log("useSingle queryOptions", queryOptions);
   const { data, document, loading, refetch } = useSingle(queryOptions);
   if (formType !== "new") {
     debugForm(
@@ -365,13 +320,15 @@ export const FormContainer = (props: FormContainerProps) => {
   };
 
   if (isEdit && loading) {
-    return <VulcanComponents.Loading />;
+    return <Loading />;
   }
   return (
-    <VulcanComponents.Form
+    <Form
       document={document}
       loading={loading || loadingCurrentUser}
+      // @ts-expect-error
       createDocument={createAndReturnDocument /*createDocument*/}
+      // @ts-expect-error
       updateDocument={updateAndReturnDocument}
       deleteDocument={deleteDocumentAndRefetch}
       refetch={refetch}

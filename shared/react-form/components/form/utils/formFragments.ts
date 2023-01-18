@@ -114,12 +114,12 @@ const getSchemaFragment = ({
     providedFieldNames ||
     (options.isMutation
       ? getMutationFieldNames({
-          queryFieldNames: getQueryFieldNames({ schema, options }),
-          readableFieldNames: getFragmentFieldNames({
-            schema,
-            options: { onlyViewable: true },
-          }),
-        })
+        queryFieldNames: getQueryFieldNames({ schema, options }),
+        readableFieldNames: getFragmentFieldNames({
+          schema,
+          options: { onlyViewable: true },
+        }),
+      })
       : getQueryFieldNames({ schema, options }));
 
   const childFragments =
@@ -144,7 +144,7 @@ const getSchemaFragment = ({
 /**
  * Generate query and mutation fragments for forms, dynamically  based on the selected fields
  */
-const getFormFragments = ({
+export const getFormFragments = ({
   formType = "new",
   model,
   fields, // restrict on certain fields
@@ -267,5 +267,3 @@ const getFormFragments = ({
     extraQueries,
   };
 };
-
-export default getFormFragments;
