@@ -5,13 +5,15 @@ import sortBy from 'lodash/sortBy'
 import round from 'lodash/round'
 import { ResponsiveBar } from '@nivo/bar'
 import { useI18n } from 'core/i18n/i18nContext'
-import { useBarChart } from 'core/charts/hooks'
 import BarTooltip from 'core/charts/generic/BarTooltip'
 import HorizontalBarStripes from './HorizontalBarStripes'
 import { isPercentage } from 'core/helpers/units'
-import { ChartComponentProps, BucketItem } from 'core/types'
+import { ChartComponentProps, BucketItem, BlockUnits } from 'core/types'
 import TickItem, { getBucketLabel } from 'core/charts/generic/TickItem'
 import maxBy from 'lodash/maxBy'
+import ChartLabel from 'core/components/ChartLabel'
+import { useBarChart, useColorDefs, useColorFills, useChartKeys, HORIZONTAL } from 'core/charts/hooks'
+import { CHART_MODE_DEFAULT } from 'core/blocks/filters/constants'
 
 export const margin = {
     top: 40,
@@ -26,10 +28,18 @@ const barSizes = {
     l: 50
 }
 
+type BarColor = {
+    id: string
+    color: string
+    gradient: string[]
+}
+
 export interface HorizontalBarChartProps extends ChartComponentProps {
     total: number
     buckets: BucketItem[]
     size: keyof typeof barSizes
+    barColor: BarColor
+    facet?: string
 }
 
 const marginCoeff = 9
@@ -54,6 +64,34 @@ export const getLeftMargin = ({ data, shouldTranslate, i18nNamespace }) => {
     }
 }
 
+const getLabelsLayer = (units: BlockUnits) => (props: any) => {
+    // adjust settings according to dimensions
+    let fontSize = 13
+    let rotation = 0
+    if (props.width < 600) {
+        fontSize = 11
+        rotation = -90
+    }
+
+    return props.bars.map((bar: any) => {
+        const label = isPercentage(units) ? `${bar.data.value}%` : bar.data.value
+
+        return (
+            <ChartLabel
+                key={bar.key}
+                label={label}
+                transform={`translate(${bar.x + bar.width / 2},${
+                    bar.y + bar.height / 2
+                }) rotate(${rotation})`}
+                fontSize={fontSize}
+                style={{
+                    pointerEvents: 'none'
+                }}
+            />
+        )
+    })
+}
+
 const HorizontalBarChart = ({
     buckets,
     total,
@@ -64,11 +102,27 @@ const HorizontalBarChart = ({
     chartProps,
     colorVariant = 'primary',
     size = 'm',
-    colorMappings
+    colorMappings,
+    barColor: barColor_,
+    gridIndex,
+    facet,
+    chartDisplayMode = CHART_MODE_DEFAULT,
+    showDefaultSeries,
 }: HorizontalBarChartProps) => {
     const theme = useTheme()
     const { translate } = useI18n()
 
+    const keys = useChartKeys({ units, facet, showDefaultSeries })
+
+    const colorDefs = useColorDefs({ orientation: HORIZONTAL })
+    const colorFills = useColorFills({ chartDisplayMode, gridIndex, keys, orientation: HORIZONTAL, facet })
+
+    console.log(chartDisplayMode)
+    console.log(showDefaultSeries)
+    console.log(keys)
+    console.log(colorDefs)
+    console.log(colorFills)
+    
     const { formatTick, formatValue, maxValue } = useBarChart({
         buckets,
         total,
@@ -87,19 +141,40 @@ const HorizontalBarChart = ({
         [buckets]
     )
 
+    const defaultBarColor = theme.colors.barColors[0]
+    const barColor = barColor_ || defaultBarColor
+
     const baseSize = barSizes[size]
 
     const left = getLeftMargin({ data, shouldTranslate: translateData, i18nNamespace })
 
-    const colors = [theme.colors.barChart[colorVariant]]
-    const gradientColors = theme.colors.barChart[`${colorVariant}Gradient`]
+    const colors = [barColor.color]
+
+    const labelsLayer = useMemo(() => getLabelsLayer(units), [units])
+
+    // const colorDefId = `${barColor.id}GradientHorizontal`
+
+    // const colorDefs = [
+    //     {
+    //         id: colorDefId,
+    //         type: 'linearGradient',
+    //         x1: 0,
+    //         y1: 1,
+    //         x2: 1,
+    //         y2: 1,
+    //         colors: [
+    //             { offset: 0, color: barColor.gradient[0] },
+    //             { offset: 100, color: barColor.gradient[1] }
+    //         ]
+    //     }
+    // ]
 
     return (
         <div style={{ height: buckets.length * baseSize + 80 }}>
             <ResponsiveBar
                 layout="horizontal"
                 margin={{ ...margin, left }}
-                keys={[units]}
+                keys={keys}
                 data={data}
                 maxValue={maxValue}
                 theme={theme.charts}
@@ -134,6 +209,7 @@ const HorizontalBarChart = ({
                                 shouldTranslate={translateData}
                                 entity={buckets.find(b => b.id === tick.value)?.entity}
                                 label={buckets.find(b => b.id === tick.value)?.label}
+                                itemCount={buckets.length}
                                 {...tick}
                             />
                         )
@@ -151,23 +227,11 @@ const HorizontalBarChart = ({
                     layerProps => <HorizontalBarStripes {...layerProps} />,
                     'grid',
                     'axes',
-                    'bars'
+                    'bars',
+                    labelsLayer
                 ]}
-                defs={[
-                    {
-                        id: `${colorVariant}GradientHorizontal`,
-                        type: 'linearGradient',
-                        x1: 0,
-                        y1: 1,
-                        x2: 1,
-                        y2: 1,
-                        colors: [
-                            { offset: 0, color: gradientColors[0] },
-                            { offset: 100, color: gradientColors[1] }
-                        ],
-                    }
-                ]}
-                fill={[{ match: '*', id: `${colorVariant}GradientHorizontal` }]}
+                defs={colorDefs}
+                fill={colorFills}
                 {...chartProps}
             />
         </div>
@@ -190,4 +254,4 @@ HorizontalBarChart.propTypes = {
     colorVariant: PropTypes.oneOf(['primary', 'secondary'])
 }
 
-export default memo(HorizontalBarChart)
+export default HorizontalBarChart

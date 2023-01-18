@@ -179,6 +179,8 @@ const AxisTotal_ = styled.div`
     width: 16px;
     svg {
       color: ${({ theme }) => theme.colors.textAlt};
+      height: 100%;
+      width: 100%;
     }
   }
 `;

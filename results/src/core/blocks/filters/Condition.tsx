@@ -6,7 +6,8 @@ import Button from 'core/components/Button'
 import T from 'core/i18n/T'
 import { DeleteIcon, TrashIcon, PlusIcon } from 'core/icons'
 import cloneDeep from 'lodash/cloneDeep.js'
-import { useKeys, getFieldLabel, getValueLabel } from './helpers'
+import { getFieldLabel, getValueLabel } from './helpers'
+import { useAllChartsKeys } from 'core/charts/hooks'
 
 const operators = ['eq', 'in', 'nin']
 
@@ -23,23 +24,21 @@ const Condition = ({
     const { field = defaultField, operator, value } = condition
     const { setFiltersState } = stateStuff
 
-    const { getString } = useI18n()
+    const allChartsKeys = useAllChartsKeys()
 
-    const keys = useKeys()
-
-    const values = keys[field] || []
+    const values = allChartsKeys[field] || []
 
     const disabledList = filtersInUse.filter(fieldId => fieldId !== field)
 
     const handleDelete = () => {
         setFiltersState(fState => {
             const newState = cloneDeep(fState)
-            newState[seriesIndex].conditions.splice(index, 1)
+            newState.filters[seriesIndex].conditions.splice(index, 1)
             return newState
         })
     }
 
-    const segmentProps = { seriesIndex, conditionIndex: index, stateStuff, keys, field }
+    const segmentProps = { seriesIndex, conditionIndex: index, stateStuff, keys: allChartsKeys, field }
 
     return (
         <ActiveCondition_>
@@ -98,10 +97,10 @@ const FieldSegment = ({
                     const value = e.target.value
                     setFiltersState(fState => {
                         const newState = cloneDeep(fState)
-                        newState[seriesIndex].conditions[conditionIndex][segmentId] = value
+                        newState.filters[seriesIndex].conditions[conditionIndex][segmentId] = value
                         // if we're changing the field, also change the value
                         const fieldId = value
-                        newState[seriesIndex].conditions[conditionIndex].value = keys[fieldId][0]
+                        newState.filters[seriesIndex].conditions[conditionIndex].value = keys[fieldId][0]
                         return newState
                     })
                 }}
@@ -140,7 +139,7 @@ const ValueSegment = ({
                     const value = e.target.value
                     setFiltersState(fState => {
                         const newState = cloneDeep(fState)
-                        newState[seriesIndex].conditions[conditionIndex][segmentId] = value
+                        newState.filters[seriesIndex].conditions[conditionIndex][segmentId] = value
                         return newState
                     })
                 }}

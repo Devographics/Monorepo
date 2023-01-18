@@ -9,27 +9,33 @@ import range from 'lodash/range'
 import sumBy from 'lodash/sumBy'
 import T from 'core/i18n/T'
 import { getTableData } from 'core/helpers/datatables'
+import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
+import { useFilterLegends } from 'core/blocks/filters/helpers'
+import { useTheme } from 'styled-components'
+import { useI18n } from 'core/i18n/i18nContext'
+import { getInitFilters } from 'core/blocks/filters/helpers'
+import { BEHAVIOR_COMBINED } from 'core/blocks/filters/constants'
 
 const groupBy = 10
 
-const getLabel = (n) => `${n * groupBy}-${(n + 1) * groupBy}%`
+const getLabel = n => `${n * groupBy}-${(n + 1) * groupBy}%`
 
-const getChartData = ({ data }) => {
-    const buckets = data.facets[0].buckets
-    return range(0, 100 / groupBy).map((n) => {
-        const selectedBuckets = buckets.filter(
-            (b) => b.id >= n * groupBy && b.id < (n + 1) * groupBy
-        )
+const getChartData = buckets => {
+    return range(0, 100 / groupBy).map(n => {
+        const selectedBuckets = buckets.filter(b => b.id >= n * groupBy && b.id < (n + 1) * groupBy)
         return {
             id: getLabel(n),
             count: sumBy(selectedBuckets, 'count'),
             percentage_survey: Math.round(100 * sumBy(selectedBuckets, 'percentage_survey')) / 100,
-            percentage_question: Math.round(100 * sumBy(selectedBuckets, 'percentage_question')) / 100,
+            percentage_question:
+                Math.round(100 * sumBy(selectedBuckets, 'percentage_question')) / 100
         }
     })
 }
 
 const KnowledgeScoreBlock = ({ block, data }) => {
+    const theme = useTheme()
+    const { getString } = useI18n()
     if (!data) {
         throw new Error(
             `KnowledgeScoreBlock: Missing data for block ${block.id}, page data is undefined`
@@ -39,48 +45,68 @@ const KnowledgeScoreBlock = ({ block, data }) => {
         id,
         mode = 'relative',
         units: defaultUnits = 'percentage_survey',
-        i18nNamespace,
+        i18nNamespace
     } = block
 
     const context = usePageContext()
-    const { width } = context
+    const { width, currentEdition } = context
+    const { year: currentYear } = currentEdition
 
     const [units, setUnits] = useState(defaultUnits)
-    
 
     const { total, completion } = data
 
-    const bucketKeys = range(0, 100 / groupBy).map((n) => ({
+    const bucketKeys = range(0, 100 / groupBy).map(n => ({
         id: getLabel(n),
-        shortLabel: getLabel(n),
+        shortLabel: getLabel(n)
     }))
 
-    const groupedBuckets = getChartData({ data })
+    let buckets = data.facets[0].buckets
+    buckets = getChartData(buckets)
+
+    // contains the filters that define the series
+    const [chartFilters, setChartFilters] = useState(getInitFilters({ behavior: BEHAVIOR_COMBINED }))
+
+    const legends = useFilterLegends({ chartFilters, currentYear })
 
     return (
         <Block
-            tables={[getTableData({
-                legends: bucketKeys,
-                data: groupedBuckets,
-            })]}
+            tables={[
+                getTableData({
+                    legends: bucketKeys,
+                    data: buckets
+                })
+            ]}
             units={units}
             setUnits={setUnits}
             completion={completion}
             data={data}
             block={block}
+            chartFilters={chartFilters}
+            setChartFilters={setChartFilters}
+            {...(legends.length > 0 ? { legends } : {})}
         >
-            <ChartContainer fit={true}>
-                <VerticalBarChart
-                    bucketKeys={bucketKeys}
-                    total={total}
-                    buckets={groupedBuckets}
-                    i18nNamespace={i18nNamespace || id}
-                    translateData={false}
-                    mode={mode}
-                    units={units}
-                    viewportWidth={width}
-                />
-            </ChartContainer>
+            <DynamicDataLoader
+                completion={completion}
+                defaultBuckets={buckets}
+                block={block}
+                chartFilters={chartFilters}
+                setUnits={setUnits}
+                processBuckets={getChartData}
+            >
+                <ChartContainer fit={true}>
+                    <VerticalBarChart
+                        bucketKeys={bucketKeys}
+                        total={total}
+                        buckets={buckets}
+                        i18nNamespace={i18nNamespace || id}
+                        translateData={false}
+                        mode={mode}
+                        units={units}
+                        viewportWidth={width}
+                    />
+                </ChartContainer>
+            </DynamicDataLoader>
         </Block>
     )
 }

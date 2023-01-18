@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 
-export type BlockUnits = 'count' | 'percentage_survey' | 'percentage_question' | 'percentage_facet'
+export type BlockUnits = 'count' | 'percentage_survey' | 'percentage_question' | 'percentage_facet' | 'percentage_bucket'
 export type BlockRatioUnits = 'satisfaction_percentage' | 'interest_percentage' | 'awareness_percentage' | 'usage_percentage'
 export type BlockSetUnits = React.Dispatch<React.SetStateAction<string>>
 export type BlockMode = 'absolute' | 'relative'

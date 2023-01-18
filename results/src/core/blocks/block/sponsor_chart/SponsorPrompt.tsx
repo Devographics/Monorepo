@@ -19,7 +19,7 @@ const SponsorPrompt = ({ product, block }) => (
     <ModalTrigger
       trigger={
         <SponsorIconWrapper>
-          <SponsorIcon enableTooltip={true} labelId="sponsor.sponsor_button" />
+          <SponsorIcon size="small" enableTooltip={true} labelId="sponsor.sponsor_button" />
         </SponsorIconWrapper>
       }
     >
@@ -39,17 +39,12 @@ const SponsorIconWrapper = styled(Button)`
   place-items: center;
   /* padding: 4px; */
   margin-left: ${spacing(0.5)};
-  padding: 3px;
+  padding: 0px;
   opacity: 0.4;
   &:hover {
     opacity: 1;
   }
   cursor: pointer;
-  & > span {
-    display: block;
-    height: 100%;
-    width: 100%;
-  }
   svg {
     color: ${({ theme }) => theme.colors.border};
   }

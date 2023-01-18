@@ -6,19 +6,21 @@ import Button from 'core/components/Button'
 import T from 'core/i18n/T'
 import difference from 'lodash/difference.js'
 import cloneDeep from 'lodash/cloneDeep.js'
-import { useKeys, getNewCondition } from './helpers'
+import { getNewCondition } from './helpers'
 import { Condition_ } from './Condition'
 import { TrashIcon, DeleteIcon } from 'core/icons'
 import { useTheme } from 'styled-components'
 import YearSelector from './YearSelector'
+import { useAllChartsKeys } from 'core/charts/hooks'
 
 const Series = ({ filters, series, index, stateStuff }) => {
     const theme = useTheme()
 
     const { conditions } = series
-    const { setFiltersState } = stateStuff
+    const { filtersState, setFiltersState } = stateStuff
+    const showDefaultSeries = filtersState.options.showDefaultSeries
 
-    const keys = useKeys()
+    const allChartsKeys = useAllChartsKeys()
 
     const filtersInUse = conditions.map(c => c.field)
     const filtersNotInUse = difference(filters, filtersInUse)
@@ -26,9 +28,9 @@ const Series = ({ filters, series, index, stateStuff }) => {
     const handleAddCondition = () => {
         setFiltersState(fState => {
             const newState = cloneDeep(fState)
-            newState[index].conditions = [
+            newState.filters[index].conditions = [
                 ...series.conditions,
-                getNewCondition({ filtersNotInUse, keys })
+                getNewCondition({ filtersNotInUse, keys: allChartsKeys })
             ]
             return newState
         })
@@ -37,14 +39,15 @@ const Series = ({ filters, series, index, stateStuff }) => {
     const handleDeleteSeries = () => {
         setFiltersState(fState => {
             const newState = cloneDeep(fState)
-            newState.splice(index, 1)
+            newState.filters.splice(index, 1)
             return newState
         })
     }
 
     const canAddConditions = conditions.length < filters.length
 
-    const backgroundColor = theme.colors.barColors[index + 1].color
+    const barColorIndex = showDefaultSeries ? index + 1 : index
+    const backgroundColor = theme.colors.barColors[barColorIndex].color
 
     return (
         <ActiveSeries_>

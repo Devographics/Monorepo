@@ -1,7 +1,7 @@
 import React from 'react'
 import IconWrapper from './IconWrapper.js'
 
-export const MDN = ({ props }) => (
+export const MDNIcon = ({ props }) => (
     <IconWrapper {...props}>
         <svg
             xmlns="http://www.w3.org/2000/svg"

@@ -42,9 +42,10 @@
       disableExport: true
       wrapBlock: false
     - id: survey_sponsors
-      blockType: SponsorsBlock
-      disableExport: true
-      wrapBlock: false
+      template: sponsors
+    - id: survey_partners
+      template: sponsors
+      blockType: PartnersBlock
     - id: survey_translators
       blockType: TranslatorsBlock
       disableExport: true
@@ -83,26 +84,29 @@
     - template: page_introduction
 
     - id: country
+      hasFilters: true
+      # defaultUnits: count
       template: demographics
       blockType: ParticipationByCountryBlock
       variables:
-        options: { limit: 50, cutoff: 50}
+        options: { limit: 20 }
 
     - id: locale
+      hasFilters: true
       template: demographics
       blockType: HorizontalBarBlock
       translateData: true
       variables:
-        options: {cutoff: 20}
+        options: { cutoff: 20 }
 
     - id: hint_hint
       template: hint
 
     - id: completion_stats
+      hasFilters: true
       template: demographics
       blockType: KnowledgeScoreBlock
       translateData: true
-      hasFilters: true
       
     - id: age
       hasFilters: true
@@ -161,24 +165,25 @@
             fieldId: yearly_salary
             facetId: country
             options: {facetSort: {order: ___desc___, property: mean}, facetMinCount: 100}
-        - id: yearly_salary_by_degree
-          blockNamespace: user_info
-          tabId: tabs.by_degree
-          template: by_facet
-          variables:  
-            fieldId: yearly_salary
-            facetId: higher_education_degree
-            options: {facetSort: {order: ___desc___, property: mean}, facetMinCount: 100}
-        - id: yearly_salary_by_experience
-          blockNamespace: user_info
-          tabId: tabs.by_experience
-          template: by_facet
-          variables:  
-            fieldId: yearly_salary
-            facetId: years_of_experience
-            options: {facetSort: {order: ___desc___, property: mean}, facetMinCount: 100}
+        # - id: yearly_salary_by_degree
+        #   blockNamespace: user_info
+        #   tabId: tabs.by_degree
+        #   template: by_facet
+        #   variables:  
+        #     fieldId: yearly_salary
+        #     facetId: higher_education_degree
+        #     options: {facetSort: {order: ___desc___, property: mean}, facetMinCount: 100}
+        # - id: yearly_salary_by_experience
+        #   blockNamespace: user_info
+        #   tabId: tabs.by_experience
+        #   template: by_facet
+        #   variables:  
+        #     fieldId: yearly_salary
+        #     facetId: years_of_experience
+        #     options: {facetSort: {order: ___desc___, property: mean}, facetMinCount: 100}
 
     - id: source
+      hasFilters: true
       template: source
       blockType: HorizontalBarBlock
       dataFunction: cleanUpSources
@@ -199,6 +204,8 @@
             options: {facetSort: {order: ___desc___, property: mean}, limit: 11, facetMinCount: 100}
 
     - id: race_ethnicity
+      hasFilters: true
+      defaultUnits: count
       template: demographics
       blockType: HorizontalBarBlock
       translateData: true
@@ -213,6 +220,8 @@
             options: {facetSort: {order: ___asc___, property: mean}, limit: 11, facetMinCount: 100}
 
     - id: disability_status
+      hasFilters: true
+      defaultUnits: count
       template: demographics
       blockType: HorizontalBarBlock
       translateData: true
@@ -226,9 +235,9 @@
           variables:
             options: {cutoff: 10}
 
-    # - id: user_info_resources
-    #   items: [fm-homepage]
-    #   template: recommended_resources
+    - id: user_info_resources
+      items: [renderatl]
+      template: recommended_resources
 
 - id: features
   path: /features
@@ -242,6 +251,7 @@
       template: demographics
       blockNamespace: features
       blockType: KnowledgeScoreBlock
+      hasFilters: true
 
     - id: features_resources
       items: [fm-javascript]
@@ -265,10 +275,10 @@
         - id: nullish_coalescing
           template: feature_experience
 
-        - id: scott_tolinski
+        - id: lee_robinson
           template: picks
           variables:
-            url: https://kit.svelte.dev/
+            url: https://svelte.dev/blog/announcing-sveltekit-1.0
 
         - id: export_hint
           template: hint
@@ -286,10 +296,10 @@
           template: feature_experience
           year: 2021
 
-        - id: michael_jackson
+        - id: miguel_angel_duran
           template: picks
           variables:
-            url: https://esbuild.github.io/
+            url: https://astro.build/
 
         - id: promise_any
           template: feature_experience
@@ -319,7 +329,7 @@
           year: 2022
 
         - id: language_resources
-          items: [fm-javascript-new-hard-parts]
+          items: [fm-javascript-hard-parts-v2]
           template: recommended_resources
 
 
@@ -340,10 +350,10 @@
         - id: webrtc
           template: feature_experience
 
-        - id: david_khourshid
+        - id: josh_comeau
           template: picks
           variables:
-            url: https://remix.run/
+            url: https://sandpack.codesandbox.io/
 
         - id: web_speech
           template: feature_experience
@@ -370,10 +380,10 @@
           template: feature_experience
           year: 2021
 
-        - id: wes_bos
+        - id: kathryn_grayson_nanz
           template: picks
           variables:
-            url: https://github.com/tc39/proposals
+            url: https://beta.reactjs.org/
 
         - id: web_share
           template: feature_experience
@@ -383,7 +393,7 @@
           year: 2021
 
         - id: browser_apis_resources
-          items: [fm-service-workers]
+          items: [fm-service-workers, fm-web-components]
           template: recommended_resources
 
     - id: other_features
@@ -396,10 +406,10 @@
       - id: units_switcher_hint
         template: hint
 
-      - id: tejas_kumar
+      - id: rich_harris
         template: picks
         variables:
-          url: https://twitter.com/timer150
+          url: https://github.com/tc39/proposal-type-annotations
 
       - id: wasm
         template: feature_experience
@@ -510,17 +520,17 @@
           variables:
             limit: 10
 
-        - id: lee_robinson
+        - id: cassidy_williams
           template: picks
           variables:
-            url: https://kit.svelte.dev/
+            url: https://twitter.com/mooeypoo
 
         - template: happiness
           variables:
             fieldId: rendering_frameworks
 
         - id: rendering_frameworks_resources
-          items: [fm-react, fm-vue]
+          items: [fm-fullstack-app-next, fm-servers-node-js]
           template: recommended_resources
 
         - id: nextjs
@@ -569,10 +579,10 @@
           variables:
             limit: 10
 
-        - id: ben_ilegbodu
+        - id: charlie_gerard
           template: picks
           variables:
-            url: https://twitter.com/leeerob
+            url: https://www.withdiode.com/
 
         - template: happiness
           variables:
@@ -635,10 +645,10 @@
           variables:
             limit: 5
 
-        - id: shawn_wang
+        - id: alba_silvente
           template: picks
           variables:
-            url: https://supabase.com/
+            url: https://arisa-fukuzaki.dev/
 
         - template: happiness
           variables:
@@ -695,18 +705,14 @@
           variables:
             limit: 5
 
-        - id: sarah_drasner
+        - id: matt_pocock
           template: picks
           variables:
-            url: https://twitter.com/pkozlowski_os
+            url: https://github.com/statelyai/xstate
 
         - template: happiness
           variables:
             fieldId: build_tools
-
-        - id: build_tools_resources
-          items: [fm-webpack]
-          template: recommended_resources
 
         - id: webpack
           template: tool_experience
@@ -738,6 +744,10 @@
           template: tool_experience
           year: 2022
  
+        - id: build_tools_resources
+          items: [fm-xstate]
+          template: recommended_resources
+
     - id: monorepo_tools
       path: /monorepo-tools
       blocks:
@@ -760,10 +770,10 @@
           variables:
             limit: 5
 
-        - id: sara_vieira
+        - id: ryan_carniato
           template: picks
           variables:
-            url: https://twitter.com/0xca0a
+            url: https://astro.build/
 
         - template: happiness
           variables:
@@ -798,6 +808,10 @@
           template: tool_experience
           year: 2021
 
+        # - id: monorepo_resources
+        #   items: [fm-fullstack-app-next, fm-servers-node-js]
+        #   template: recommended_resources
+          
 - id: tools_others
   path: /other-tools
   blocks:
@@ -819,10 +833,10 @@
             fieldId: tools_others
             options: { limit: 15 }
 
-    - id: mark_erikson
+    - id: theo_browne
       template: picks
       variables:
-        url: https://twitter.com/ryancarniato
+        url: https://trpc.io/
 
     - id: date_management
       year: 2022
@@ -838,7 +852,7 @@
           defaultUnits: count
           variables:
             fieldId: tools_others
-            options: { limit: 15 }
+            options: { limit: 5 }
 
     - id: data_visualization
       year: 2022
@@ -854,7 +868,7 @@
           defaultUnits: count
           variables:
             fieldId: tools_others
-            options: { limit: 15 }
+            options: { limit: 5 }
 
     - id: data_fetching
       year: 2022
@@ -870,7 +884,7 @@
           defaultUnits: count
           variables:
             fieldId: tools_others
-            options: { limit: 15 }
+            options: { limit: 10 }
 
     - id: backend_frameworks
       year: 2022
@@ -886,7 +900,7 @@
           defaultUnits: count
           variables:
             fieldId: tools_others
-            options: { limit: 15 }
+            options: { limit: 10 }
 
     - id: utilities
       tabId: tabs.main_answers
@@ -901,7 +915,7 @@
           defaultUnits: count
           variables:
             fieldId: tools_others
-            options: { limit: 15 }
+            options: { limit: 10 }
 
     - id: sharing_hint
       template: hint
@@ -919,7 +933,7 @@
           defaultUnits: count
           variables:
             fieldId: tools_others
-            options: { limit: 15 }
+            options: { limit: 10 }
 
     - id: edge_runtimes
       tabId: tabs.main_answers
@@ -934,7 +948,7 @@
           defaultUnits: count
           variables:
             fieldId: tools_others
-            options: { limit: 15 }
+            options: { limit: 10 }
 
     - id: javascript_flavors
       tabId: tabs.main_answers
@@ -949,12 +963,12 @@
           defaultUnits: count
           variables:
             fieldId: tools_others
-            options: { limit: 15 }
+            options: { limit: 10 }
 
-    - id: kent_c_dodds
+    - id: ben_holmes
       template: picks
       variables:
-        url: https://fly.io/
+        url: https://github.com/colinhacks/zod
       
     - id: non_js_languages
       tabId: tabs.main_answers
@@ -1007,9 +1021,8 @@
       variables:
         fieldId: usage
 
-
     - id: usage_type
-      blockNamespace: environments
+      blockNamespace: usage
       chartNamespace: usage_type
       translateData: true
       template: single_option
@@ -1018,7 +1031,7 @@
 
     - id: what_do_you_use_js_for
       tabId: tabs.main_answers
-      blockNamespace: environments
+      blockNamespace: usage
       chartNamespace: what_do_you_use_js_for
       translateData: true
       template: multiple_options
@@ -1027,14 +1040,15 @@
       variants: 
         - id: what_do_you_use_js_for_others
           defaultUnits: count
-          blockNamespace: environments
+          blockNamespace: usage
           tabId: tabs.other_answers
           chartNamespace: what_do_you_use_js_for
           translateData: true
           template: multiple_options
           variables:
             fieldId: usage
-
+            options: { limit: 10 }
+            
     - id: industry_sector
       blockNamespace: usage
       chartNamespace: industry_sector
@@ -1075,12 +1089,17 @@
             fieldId: usage
             options: { limit: 15 }
 
+    - id: usage_resources
+      items: [fm-algorithms, fm-js-patterns]
+      template: recommended_resources
+
 - id: resources
   path: /resources
   blocks:
     - template: page_introduction
 
     - id: first_steps
+      hasFilters: true
       blockNamespace: resources
       chartNamespace: first_steps
       tabId: tabs.main_answers
@@ -1098,9 +1117,15 @@
           translateData: true
           variables:
             fieldId: resources
-            options: { limit: 15 }
+            options: { limit: 10 }
+
+    - id: shaundai_person
+      template: picks
+      variables:
+        url: https://sarahdrasnerdesign.com/
 
     - id: blogs_news_magazines
+      hasFilters: true
       blockNamespace: resources
       chartNamespace: blogs_news_magazines
       tabId: tabs.main_answers
@@ -1120,6 +1145,7 @@
             options: { limit: 15 }
 
     - id: sites_courses
+      hasFilters: true
       blockNamespace: resources
       chartNamespace: sites_courses
       tabId: tabs.main_answers
@@ -1137,12 +1163,14 @@
             fieldId: resources
             options: { limit: 15 }
 
-    - id: miguel_angel_duran
+    - id: tyler_mcginnis
       template: picks
       variables:
-        url: https://vitejs.dev/
+        url: https://tanstack.com/
 
     - id: video_creators
+      hasFilters: true
+      blockType: PeopleBlock
       blockNamespace: resources
       chartNamespace: video_creators
       tabId: tabs.main_answers
@@ -1151,6 +1179,7 @@
         fieldId: resources
       variants:
         - id: video_creators_others
+          blockType: PeopleBlock
           defaultUnits: count
           blockNamespace: resources
           chartNamespace: video_creators
@@ -1161,6 +1190,7 @@
             options: { limit: 15 }
 
     - id: podcasts
+      hasFilters: true
       blockNamespace: resources
       chartNamespace: podcasts
       tabId: tabs.main_answers
@@ -1179,15 +1209,18 @@
             options: { limit: 15 }
 
     - id: people_others
+      hasFilters: true
       defaultUnits: count
       blockNamespace: resources
       chartNamespace: people
       template: multiple_options
+      blockType: PeopleBlock
       variables:
-        options: { limit: 25 }
+        options: { limit: 50 }
         fieldId: resources
 
     - id: other_surveys
+      hasFilters: true
       defaultUnits: count
       blockNamespace: resources
       chartNamespace: other_surveys
@@ -1207,7 +1240,7 @@
             fieldId: resources
 
     - id: resources_resources
-      items: [reactathon, renderatl]
+      items: [reactathon]
       template: recommended_resources
 
 - id: opinions
@@ -1227,21 +1260,23 @@
     - id: js_ecosystem_changing_to_fast
       template: opinion
 
-    - id: alyssa_nicoll
+    - id: sebastien_lorber
       template: picks
       variables:
-        url: https://www.twitch.tv/broccodev
+        url: https://www.remotion.dev/
 
     - id: top_js_pain_points
+      translateData: true
       defaultUnits: count
-      blockNamespace: resources
+      blockNamespace: opinions
       chartNamespace: top_js_pain_points
       tabId: tabs.main_answers
       template: multiple_options
       variables:
         fieldId: opinions_others
       variants:
-        - id: top_js_pain_points
+        - id: top_js_pain_points_others
+          translateData: true
           defaultUnits: count
           blockNamespace: opinions
           chartNamespace: top_js_pain_points
@@ -1252,15 +1287,17 @@
             fieldId: opinions_others
 
     - id: top_currently_missing_from_js
+      translateData: true
       defaultUnits: count
-      blockNamespace: resources
+      blockNamespace: opinions
       chartNamespace: top_currently_missing_from_js
       tabId: tabs.main_answers
       template: multiple_options
       variables:
         fieldId: opinions_others
       variants:
-        - id: top_currently_missing_from_js
+        - id: top_currently_missing_from_js_others
+          translateData: true
           defaultUnits: count
           blockNamespace: opinions
           chartNamespace: top_currently_missing_from_js
@@ -1280,8 +1317,8 @@
       variables:
         fieldId: state_of_js
 
-    - id: tools_others_resources
-      items: [fm-javascript]
+    - id: opinions.k_resources
+      items: [fm-javascript, fm-js-fundamentals]
       template: recommended_resources
 
 - id: awards
@@ -1292,58 +1329,81 @@
     - id: awards
       template: awards
       variables:
-        entities: '"nullish_coalescing","optional_chaining","private_fields","esbuild","tsc","testing_library","vite","vitest","elm","stencil","platzi"'
+        entities: '"top_level_await","array_at","string_replace_all","vite","vitest","pnpm","vite","vitest","testing_library","turbopack","turborepo","astro","fnm","azure_functions","private_fields","proxies","nullish_coalescing","react","angular","storybook"'
       awards:
         - id: feature_adoption_delta_award
           template: award
           awards:
-            - id: nullish_coalescing
-              value: "+21.8%"
-            - id: optional_chaining
-              value: "+19%"
-            - id: private_fields
-              value: "+9.5%"
+            - id: top_level_await
+              value: "+26.4%"
+            - id: array_at
+              value: "+14.2%"
+            - id: string_replace_all
+              value: "+9.6%"
 
         - id: tool_usage_delta_award
           template: award
           awards:
-            - id: esbuild
-              value: "+20.1%"
-            - id: tsc
-              value: "+17.3%"
-            - id: testing_library
-              value: "+8.3%"
+            - id: vite
+              value: "+18.8%"
+            - id: vitest
+              value: "+11.1%"
+            - id: pnpm
+              value: "+8.4%"
 
         - id: tool_satisfaction_award
           template: award
           awards:
             - id: vite
-              value: "97.4%"
+              value: "98%"
+            - id: vitest
+              value: "97%"
             - id: testing_library
-              value: "96.3%"
-            - id: esbuild
-              value: "96.2%"
+              value: "95%"
 
         - id: tool_interest_award
           template: award
           awards:
             - id: vite
-              value: "83%"
-            - id: vitest
-              value: "81.8%"
-            - id: esbuild
-              value: "80.4%"
+              value: "81%"
+            - id: turbopack
+              value: "80%"
+            - id: turborepo
+              value: "77%"
 
         - id: most_write_ins_award
           template: award
           awards:
-            - id: elm
-              value: "124"
-            - id: stencil
-              value: "104"
-            - id: platzi
-              value: "100"
+            - id: astro
+              value: "402"
+            - id: fnm
+              value: "338"
+            - id: azure_functions
+              value: "234"
 
+        - id: most_commented_feature_award
+          template: award
+          awards:
+            - id: private_fields
+              value: 102
+            - id: proxies
+              value: 71
+            - id: nullish_coalescing
+              value: 66
+
+        - id: most_commented_tool_award
+          template: award
+          awards:
+            - id: react
+              value: 66
+            - id: angular
+              value: 47
+            - id: storybook
+              value: 42
+
+    - id: awards_resources
+      items: [road-to-react]
+      template: recommended_resources
 
 - id: conclusion
   path: /conclusion
@@ -1352,8 +1412,8 @@
     - id: conclusion
       template: conclusion
       variables:
-        author: shawn_wang
-        entities: '"shawn_wang"'
+        author: sarah_drasner
+        entities: '"sarah_drasner"'
 
     - id: conclusion_newsletter
       blockType: NewsletterBlock

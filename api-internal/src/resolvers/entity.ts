@@ -1,8 +1,10 @@
-import { GitHub, Entity, RequestContext } from '../types'
+import { Entity } from '@devographics/core-models'
+import { GitHub, RequestContext } from '../types'
 import projects from '../data/bestofjs.yml'
 import { fetchMdnResource, fetchTwitterUser } from '../external_apis'
 import { useCache } from '../caching'
 import { getEntity } from '../entities'
+import compact from 'lodash/compact.js'
 
 const getSimulatedGithub = (id: string): GitHub | null => {
     const project = projects.find((p: Entity) => p.id === id)
@@ -56,21 +58,40 @@ export default {
                 return
             }
         },
-        twitter: async (entity: Entity, args: any, context: RequestContext) => {
+        twitter: async (entity: Entity, args: any, context: RequestContext, info: any) => {
             if (!entity || !entity.twitterName) {
                 return
             }
-            const twitter = await useCache({
-                func: fetchTwitterUser,
-                context,
-                funcOptions: { twitterName: entity.twitterName }
-            })
 
-            return twitter
+            // find out which fields on the twitter object are being queried for
+            const queriedFields = info?.fieldNodes?.[0]?.selectionSet?.selections.map(
+                field => field?.name?.value
+            )
+            // figure out if the request includes API fields (e.g. any field besides url and name)
+            const hasAPIFields = queriedFields.some(f => !['url', 'name'].includes(f))
+
+            const twitterAPIData = hasAPIFields
+                ? await useCache({
+                      func: fetchTwitterUser,
+                      context,
+                      funcOptions: { twitterName: entity.twitterName }
+                  })
+                : {}
+
+            return {
+                ...twitterAPIData,
+                name: entity.twitterName,
+                url: `https://twitter.com/${entity.twitterName}`
+            }
         },
         homepage: async (entity: Entity, args: any, context: RequestContext) => {
-            const { homepage } = entity
-            return homepage ? { name: entity.homepage, url: entity.homepage } : null
+            return entity.homepage && { url: entity.homepage }
+        },
+        blog: async (entity: Entity, args: any, context: RequestContext) => {
+            return entity.blog && { url: entity.blog }
+        },
+        rss: async (entity: Entity, args: any, context: RequestContext) => {
+            return entity.rss && { url: entity.rss }
         },
         caniuse: async (entity: Entity, args: any, context: RequestContext) => {
             const { caniuse } = entity
@@ -86,6 +107,39 @@ export default {
         company: async (entity: Entity, args: any, context: RequestContext) => {
             const company = entity.companyName && getEntity({ id: entity.companyName })
             return company
+        },
+        mastodon: async (entity: Entity, args: any, context: RequestContext) => {
+            if (!entity || !entity.mastodonName) {
+                return
+            }
+            const name = entity.mastodonName
+            const [userName, server] = compact(name.split('@'))
+            const url = `https://${server}/@${userName}`
+            return { name, url }
+        },
+        youtube: async (entity: Entity, args: any, context: RequestContext) => {
+            const url =
+                entity?.youtubeUrl ||
+                (entity?.homepage?.includes('youtube') ? entity?.homepage : null)
+            if (url) {
+                return { url }
+            } else {
+                return
+            }
+        },
+        twitch: async (entity: Entity, args: any, context: RequestContext) => {
+            if (!entity) {
+                return
+            }
+            const { twitchName, homepage } = entity
+            const url =
+                (twitchName && `https://www.twitch.tv/${twitchName}`) ||
+                (entity?.homepage?.includes('twitch') && entity.homepage)
+            if (url) {
+                return { name: twitchName, url }
+            } else {
+                return
+            }
         }
     }
 }

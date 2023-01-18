@@ -15,7 +15,7 @@ const UnitButton = ({ units, current, onChange, i18nNamespace = 'chart_units' })
     </Button>
 )
 
-const defaultOptions = ['percentage_survey', 'percentage_question', 'count']
+export const defaultOptions = ['percentage_survey', 'percentage_question', 'count']
 
 const BlockUnitsSelector = ({ units, onChange, options = defaultOptions, i18nNamespace }) => {
     return (

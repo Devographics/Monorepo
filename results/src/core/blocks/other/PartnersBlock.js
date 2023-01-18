@@ -1,24 +1,25 @@
 import React from 'react'
 import styled from 'styled-components'
-import Link from 'core/components/LocaleLink'
-import { useI18n } from 'core/i18n/i18nContext'
 import { mq, spacing, fontSize } from 'core/theme'
 import T from 'core/i18n/T'
-import config from 'Config/config.yml'
+import { usePageContext } from 'core/helpers/pageContext'
 
-const SponsorsBlock = ({ data }) => {
-    const { slug, year } = config
-    const survey = data?.find(s => s.slug === slug)
-    const edition = survey?.editions?.find(e => e.year === year)
-    const sponsors = edition?.partners
-    const { translate } = useI18n()
+const PartnersBlock = ({ data }) => {
+    const context = usePageContext()
+    const { currentSurvey, currentEdition } = context
 
-    return sponsors && sponsors.length > 0 ? (
+    const survey = data?.find(s => s.slug === currentSurvey.slug)
+    const edition = survey?.editions?.find(e => e.year === currentEdition.year)
+    const partners = edition?.partners
+
+    return partners && partners.length > 0 ? (
         <>
             <Container>
-                <Header>{translate('sponsors.with_support_from')}</Header>
+                <Header>
+                    <T k="sponsors.with_support_from" />
+                </Header>
                 <SponsorList className="Sponsor__list">
-                    {sponsors.map(({ name, imageUrl, url, id }) => (
+                    {partners.map(({ name, imageUrl, url, id }) => (
                         <Sponsor className={`Sponsor Sponsor--${id}`} key={name}>
                             <SponsorLogo>
                                 <a href={url} title={name}>
@@ -32,9 +33,6 @@ const SponsorsBlock = ({ data }) => {
                     ))}
                 </SponsorList>
             </Container>
-            {/* <Support className="Sponsors__Support">
-                <Link to="/support">{translate('sponsors.become_partner')}</Link>
-            </Support> */}
         </>
     ) : null
 }
@@ -73,7 +71,6 @@ const Sponsor = styled.div`
 `
 
 const SponsorLogo = styled.div`
-
     display: grid;
     place-items: center;
 
@@ -106,4 +103,4 @@ const Support = styled.div`
     font-size: ${fontSize('smallish')};
 `
 
-export default SponsorsBlock
+export default PartnersBlock

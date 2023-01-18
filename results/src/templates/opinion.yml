@@ -3,7 +3,7 @@ dataPath: "dataAPI.survey.${id}.all_years"
 keysPath: "dataAPI.survey.${id}.keys"
 translateData: true
 blockNamespace: opinions
-enableCustomization: true
+# enableCustomization: true
 hasSponsor: true
 query: >
     dataAPI {
