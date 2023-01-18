@@ -21,6 +21,8 @@ import {
   utils,
 } from "@devographics/react-form";
 import { FormComponentProps } from "../../forms/typings";
+import { FormComponentLoader } from "./FormComponentLoader";
+import { FormComponentInner } from "./FormComponentInner";
 
 const getCharacterCounts = (value: any, max: number) => {
   const characterCount: number = value && value.length ? value.length : 0;
@@ -403,12 +405,12 @@ export const FormComponent = (props: FormComponentProps) => {
     fciProps.options = options(fciProps);
   }
 
-  const fci = <FormComponents.FormComponentInner {...fciProps} />;
+  // @ts-ignore
+  const fci = <FormComponentInner {...fciProps} />;
 
   return query ? (
-    <FormComponents.FormComponentLoader {...fciProps}>
-      {fci}
-    </FormComponents.FormComponentLoader>
+    // @ts-ignore
+    <FormComponentLoader {...fciProps}>{fci}</FormComponentLoader>
   ) : (
     fci
   );

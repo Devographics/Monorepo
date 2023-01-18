@@ -21,6 +21,7 @@ import { LoadingButton } from "../../ui/LoadingButton";
 import { TooltipTrigger } from "../../ui/TooltipTrigger";
 import { getAppGraphqlUri } from "~/lib/graphql";
 import { Loading } from "../../ui/Loading";
+import FormGroup from "./FormGroup";
 
 const crossDomainGraphqlUri =
   !!process.env.NEXT_PUBLIC_CROSS_DOMAIN_GRAPHQL_URI || false;
@@ -75,6 +76,9 @@ const SurveySectionContents = (props) => {
           // needed by FormContainer
           Loading: Loading,
           Form: Form,
+          // needed by Form
+          FormGroup: FormGroup,
+          // Needed by FormComponent
           // Form items
           FormItem,
           FormLayout: FormLayoutWrapper,
