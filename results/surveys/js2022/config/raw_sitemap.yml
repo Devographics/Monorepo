@@ -1169,7 +1169,7 @@
         url: https://tanstack.com/
 
     - id: video_creators
-      hasFilters: true
+      # hasFilters: true
       blockType: PeopleBlock
       blockNamespace: resources
       chartNamespace: video_creators
@@ -1209,7 +1209,7 @@
             options: { limit: 15 }
 
     - id: people_others
-      hasFilters: true
+      # hasFilters: true
       defaultUnits: count
       blockNamespace: resources
       chartNamespace: people
