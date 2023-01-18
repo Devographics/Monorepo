@@ -23,7 +23,6 @@ export const getGenericPipeline = (pipelineProps: PipelineProps) => {
 
     const match: any = {
         survey,
-        [key]: { $nin: [null, '', [], {}] },
         ...generateFiltersQuery(filters)
     }
 
@@ -39,21 +38,16 @@ export const getGenericPipeline = (pipelineProps: PipelineProps) => {
         // { $count: 'questionRespondents' },
         {
             $set: {
-                [`${facetPath}`]: { $cond: [ { $not: [`$${facetPath}`] }, "noAnswer", `$${facetPath}` ] }
-            }
-        },
-        {
-            $unwind: {
-                path: `$${key}`
+                [`${key}`]: { $cond: [ { $not: [`$${key}`] }, "no_answer", `$${key}` ] }
             }
         },
         ...(facetPath
             ? [
-                  // {
-                  //     $unwind: {
-                  //         path: `$${facetPath}`
-                  //     }
-                  // }
+                {
+                    $set: {
+                        [`${facetPath}`]: { $cond: [ { $not: [`$${facetPath}`] }, "no_answer", `$${facetPath}` ] }
+                    }
+                }
               ]
             : []),
         {
