@@ -61,6 +61,13 @@ race_ethnicity:
   - south_east_asian
   - not_listed
 
+disability_status:
+  - visual_impairments
+  - hearing_impairments
+  - mobility_impairments
+  - cognitive_impairments
+  - not_listed
+
 industry_sector:
   - ecommerce
   - news_media
@@ -141,3 +148,31 @@ css_js_balance:
   - 6
   - 7
   - 8
+
+js_ts_balance: 
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+
+usage_type:
+  - student
+  - hobby
+  - professionally
+
+facets:
+  - gender
+  - race_ethnicity
+  - yearly_salary
+  - industry_sector
+  - disability_status
+  - company_size
+  - years_of_experience
+  - higher_education_degree
+  - source
+  - country

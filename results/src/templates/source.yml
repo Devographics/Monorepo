@@ -8,7 +8,8 @@ query: >
     dataAPI {
         survey(survey: ${surveyType}) {
             demographics {
-                ${id} (filters: ${filters}, options: ${options}, facet: ${facet}){
+                # fragmentStart
+                ${id}: ${id} (filters: ${filters}, options: ${options}, facet: ${facet}){
                     year(year: ${currentYear}) {
                         year
                         completion {
@@ -45,6 +46,7 @@ query: >
                         }
                     }
                 }
+                # fragmentEnd
             }
         }
     }

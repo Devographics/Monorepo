@@ -5,20 +5,30 @@ import ChartContainer from 'core/charts/ChartContainer'
 import HorizontalBarChart from 'core/charts/generic/HorizontalBarChart'
 import { getTableData } from 'core/helpers/datatables'
 import { ResultsByYear, BlockComponentProps } from 'core/types'
+import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
+import { BEHAVIOR_MULTIPLE } from 'core/blocks/filters/constants'
+import { useFilterLegends, getInitFilters } from 'core/blocks/filters/helpers'
+import { defaultOptions } from 'core/blocks/block/BlockUnitsSelector'
 
 export interface HorizontalBarBlockProps extends BlockComponentProps {
     data: ResultsByYear
 }
 
-const HorizontalBarBlock = ({ block, data, controlledUnits, isCustom }: HorizontalBarBlockProps) => {
+const HorizontalBarBlock = ({
+    block,
+    data,
+    controlledUnits,
+    isCustom
+}: HorizontalBarBlockProps) => {
     const {
         id,
         mode = 'relative',
         defaultUnits = 'count',
         translateData,
         chartNamespace = block.blockNamespace ?? block.id,
-        colorVariant,
+        colorVariant
     } = block
+
 
     const [units, setUnits] = useState(defaultUnits)
 
@@ -26,33 +36,55 @@ const HorizontalBarBlock = ({ block, data, controlledUnits, isCustom }: Horizont
     const buckets = facets[0].buckets
     const { total } = completion
 
+    // contains the filters that define the series
+    const [chartFilters, setChartFilters] = useState(getInitFilters({ behavior: BEHAVIOR_MULTIPLE }))
+
+    const legends = useFilterLegends({
+        chartFilters,
+    })
+
     return (
         <Block
             units={controlledUnits ?? units}
             setUnits={setUnits}
+            unitsOptions={chartFilters.facet ? ['percentage_bucket', 'count'] : defaultOptions}
             data={data}
             tables={[
                 getTableData({
                     data: buckets,
                     valueKeys: ['percentage_survey', 'percentage_question', 'count'],
                     translateData,
-                    i18nNamespace: chartNamespace,
-                }),
+                    i18nNamespace: chartNamespace
+                })
             ]}
             block={block}
             completion={completion}
+            chartFilters={chartFilters}
+            setChartFilters={setChartFilters}
+            legendProps={{ layout: 'vertical' }}
+            {...(legends.length > 0 ? { legends } : {})}
         >
-            <ChartContainer fit={false}>
-                <HorizontalBarChart
-                    total={total}
-                    buckets={buckets}
-                    i18nNamespace={chartNamespace}
-                    translateData={translateData}
-                    mode={mode}
-                    units={controlledUnits ?? units}
-                    colorVariant={isCustom ? 'secondary': 'primary'}
-                />
-            </ChartContainer>
+            <DynamicDataLoader
+                completion={completion}
+                defaultBuckets={buckets}
+                block={block}
+                chartFilters={chartFilters}
+                setUnits={setUnits}
+                layout="grid"
+            >
+                <ChartContainer fit={false}>
+                    <HorizontalBarChart
+                        total={total}
+                        buckets={buckets}
+                        i18nNamespace={chartNamespace}
+                        translateData={translateData}
+                        mode={mode}
+                        units={controlledUnits ?? units}
+                        colorVariant={isCustom ? 'secondary' : 'primary'}
+                        facet={chartFilters.facet}
+                    />
+                </ChartContainer>
+            </DynamicDataLoader>
         </Block>
     )
 }
@@ -65,7 +97,7 @@ HorizontalBarBlock.propTypes = {
         translateData: PropTypes.bool,
         mode: PropTypes.oneOf(['absolute', 'relative']),
         defaultUnits: PropTypes.oneOf(['percentage_survey', 'percentage_question', 'count']),
-        colorVariant: PropTypes.oneOf(['primary', 'secondary']),
+        colorVariant: PropTypes.oneOf(['primary', 'secondary'])
     }).isRequired,
     data: PropTypes.shape({
         facets: PropTypes.arrayOf(

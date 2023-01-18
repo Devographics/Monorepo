@@ -8,7 +8,7 @@ import T from 'core/i18n/T'
 const PicksBlock = ({ block, data: entity }) => {
     const { id: pickId, variables } = block
     const { url } = variables
-    const { name: fullName, twitter, twitterName } = entity
+    const { name: fullName, twitter } = entity
 
     return (
         <PicksContainer className="Block">
@@ -43,9 +43,9 @@ const PicksBlock = ({ block, data: entity }) => {
                         <PickImage>
                             <div>
                                 <a
-                                    href={`https://twitter.com/${twitterName}`}
+                                    href={twitter?.url}
                                     style={{
-                                        backgroundImage: `url(${twitter?.avatarUrl})`
+                                        backgroundImage: `url(https://assets.devographics.com/avatars/${entity.id}.jpg)`
                                     }}
                                     title={fullName}
                                 >
@@ -55,7 +55,7 @@ const PicksBlock = ({ block, data: entity }) => {
                         </PickImage>
                         <PickCredit>
                             <PickName>
-                                <a href={`https://twitter.com/${twitterName}`}>{fullName}</a>
+                                <a href={twitter?.url}>{fullName}</a>
                             </PickName>
                             <PickBio>
                                 <T k={`picks.${pickId}.bio`} md={true} />

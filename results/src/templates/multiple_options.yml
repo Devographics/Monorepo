@@ -1,11 +1,12 @@
 blockType: HorizontalBarBlock
 dataPath: "dataAPI.survey.${id}.year"
-enableCustomization: true
+# enableCustomization: true
 hasSponsor: true
 query: >
     dataAPI {
         survey(survey: ${surveyType}) {
-            ${id}: ${fieldId}(id: ${id}, filters: ${filters}, options: ${options}) {
+            # fragmentStart
+            ${id}: ${fieldId}(id: ${id}, filters: ${filters}, options: ${options}, facet: null) {
                 id
                 year(year: ${currentYear}) {
                     year
@@ -29,6 +30,8 @@ query: >
                             percentage_question
                             percentage_survey
                             entity {
+                                id
+                                belongsTo
                                 name
                                 nameClean
                                 nameHtml
@@ -36,6 +39,33 @@ query: >
                                     url
                                 }
                                 github {
+                                    name
+                                    url
+                                }
+                                twitter {
+                                    name
+                                    url
+                                }
+                                mastodon {
+                                    name
+                                    url
+                                }
+                                npm {
+                                    name
+                                    url
+                                }
+                                youtube {
+                                    name
+                                    url
+                                }
+                                twitch {
+                                    name
+                                    url
+                                }
+                                rss {
+                                    url
+                                }
+                                blog {
                                     url
                                 }
                             }
@@ -43,5 +73,6 @@ query: >
                     }
                 }
             }
+            # fragmentEnd
         }
     }

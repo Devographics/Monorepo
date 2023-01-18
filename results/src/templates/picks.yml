@@ -13,12 +13,9 @@ query: >
       }
       name
       nameClean
-      twitterName
       twitter {
-        userName
-        avatarUrl
-        id
-        description
+        name
+        url
       }
     }
   }

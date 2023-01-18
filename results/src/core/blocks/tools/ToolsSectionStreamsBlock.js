@@ -109,8 +109,8 @@ const Stream = ({ toolData, current, units, keys, legends }) => {
     )
 }
 
-const minCols = 4
-const maxCols = 5
+const minCols = 3
+const maxCols = 4
 const getColNumber = count => {
     // calculate number of items on the last line for 3, 4, or 5 columns
     // note: we give modulo 0 a higher "score" of 999

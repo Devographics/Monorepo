@@ -49,9 +49,13 @@ export default {
   orangeLight: '#ffa958',
   orangeLighter: '#fdbd81',
 
+  yellowDark: '#afa81f',
   yellow: '#fbf34c',
+  skyblueDark: '#1372ad',
   skyblue: '#1ea0f2',
+  oliveDark: '#3c7920',
   olive: '#599E38',
+  aquaDark: '#1d847d',
   aqua: '#3ABBB3',
   indigo: '#4861EC',
 

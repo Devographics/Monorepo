@@ -3,7 +3,7 @@ import IconWrapper from './IconWrapper.js'
 
 export const CodeIcon = props => (
     <IconWrapper {...props}>
-        <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+        <svg width="32" height="32" fill="none" viewBox="0 0 24 24">
             <rect
                 width="14.5"
                 height="14.5"

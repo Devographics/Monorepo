@@ -2,7 +2,7 @@ titleId: blocks.features_overview
 blockType: FeaturesOverviewBlock
 dataPath: "dataAPI.survey.${id}"
 keysPath: "dataAPI.survey.${id}.0.experience.keys"
-enableCustomization: true
+# enableCustomization: true
 hasSponsor: true
 query: >
     dataAPI {

@@ -6,11 +6,11 @@ export const CommentIcon = props => (
         <svg
             className="icon-comment"
             xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
+            width="32"
+            height="32"
             fill="none"
             strokeWidth="1.5"
-            color="white"
+            color="currentColor"
             viewBox="0 0 24 24"
         >
             <path

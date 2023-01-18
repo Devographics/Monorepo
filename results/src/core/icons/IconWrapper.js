@@ -7,6 +7,8 @@ const getIconSize = ({ size = 'medium' }) => {
     switch (size) {
         case 'small':
             return '16px'
+        case 'petite':
+            return '18px'
         case 'medium':
             return '24px'
         case 'large':
@@ -27,8 +29,8 @@ const Icon = styled.span`
         }
     `}
     svg {
-        height: 100%;
-        width: 100%;
+        height: ${getIconSize};
+        width: ${getIconSize};
         display: block;
         color: ${props => props.theme.colors.text};
         /* path, circle {
@@ -40,9 +42,7 @@ const Icon = styled.span`
 const IconWithHover = styled(Icon)`
     &:hover {
         svg {
-            path, polygon {
-                fill: ${props => props.theme.colors.link};
-            }
+            color: ${props => props.theme.colors.link};
         }
     }
 `
@@ -54,18 +54,29 @@ const IconWrapper = ({
     label,
     children,
     values,
+    inSVG = false,
     size
 }) => {
     const { getString } = useI18n()
     const label_ = label || getString(labelId, { values })?.t
+
     const IconComponent = enableHover ? IconWithHover : Icon
-    const icon = (
+    const icon = inSVG ? (
+        <g>
+            {children}
+            {/* <text className="sr-only">{label_}</text> */}
+        </g>
+    ) : (
         <IconComponent size={size} className="icon-wrapper">
             {children}
             <span className="sr-only">{label_}</span>
         </IconComponent>
     )
-    return enableTooltip && label_ ? <Tooltip trigger={icon} contents={<span>{label_}</span>} /> : icon
+    return enableTooltip && label_ ? (
+        <Tooltip trigger={icon} contents={<span>{label_}</span>} />
+    ) : (
+        icon
+    )
 }
 
 export default IconWrapper

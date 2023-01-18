@@ -19,11 +19,11 @@ const YearSelector = ({ seriesIndex, stateStuff }) => {
                     const value = e.target.value
                     setFiltersState(fState => {
                       const newState = cloneDeep(fState)
-                      newState[seriesIndex].year = Number(value)
+                      newState.filters[seriesIndex].year = Number(value)
                       return newState
                     })
                 }}
-                value={filtersState[seriesIndex].year}
+                value={filtersState.filters[seriesIndex].year}
             >
                 {years.map(year => (
                     <option key={year} value={year}>

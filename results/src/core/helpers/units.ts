@@ -13,7 +13,8 @@ export const percentageUnits = [
     'interested_percentage',
     'percentage_question',
     'percentage_facet',
-    'percentage_survey'
+    'percentage_survey',
+    'percentage_bucket'
 ]
 
 export const isPercentage = (units: string) => percentageUnits.includes(units)

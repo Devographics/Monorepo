@@ -1,7 +1,6 @@
 import { DefaultTheme } from 'styled-components'
 import colors_ from 'core/theme/colors'
 
-
 const colors = {
     ...colors_,
     tealDarkest: '#167387',
@@ -46,6 +45,7 @@ const colors = {
     greyLighter: '#DED1D7',
     greyLightest: '#EADEE3',
 
+    kakiDark: '#9ca033',
     kaki: '#CCD133',
     electricBlueLight: '#AEF0FF',
     electricBlue: '#38D6FE',
@@ -61,57 +61,76 @@ const colors = {
     orangeDarker: '#BE780F',
     yellowDark: '#ECCB55',
     yellowDarker: '#D2AA19',
+
+    blueGreenLightest: '#C9FFF2',
+    blueGreenLighter: '#A1FFE8',
+    blueGreenLight: '#75FBDA',
+    blueGreen: '#51F2CB',
+    blueGreenDark: '#34E1B7',
+    blueGreenDarker: '#23D2A8',
+    blueGreenDarkest: '#16AF8A',
+
+    lilacLighter: '#E9DCFF',
+    lilacLight: '#DCC7FF',
+    lilac: '#BD95FF',
+    lilacDark: '#B896EF',
+    lilacDarker: '#A17AE0',
+    lilacDarkerer: '#815CBF',
+    lilacDarkest: '#6A499D',
+    lilacDarkest2: '#604B81',
+    lilacDarkest3: '#503E6A',
+    lilacDarkest4: '#3A3444'
 }
 
+// const velocity = [
+//     '#44168E',
+//     '#491D90',
+//     '#6532B7',
+//     '#A17AE0',
+//     '#AD84EF',
+//     '#CAAAFF',
+//     '#DCC7FF',
+//     '#E9DCFF',
+//     '#F8DCFF',
+//     '#FFB5F3',
+//     '#F494E5',
+//     '#F176DD',
+//     '#EF55D6',
+//     '#DE35C3'
+// ]
+
 const velocity = [
-    '#173E48',
-    '#064151',
-    '#074B5C',
-    '#07657D',
-    '#0F7C98',
-    '#129DC0',
-    '#21B1D6',
-    '#38D6FE',
-    '#67E0FF',
-    '#AEEFFF',
-    '#D3F6FF',
-    '#E5FFFA',
-    '#BCFFF3',
-    '#9FFFEE'
+    '#06513F',
+    '#087258',
+    '#0C8C6D',
+    '#16AF8A',
+    '#23D2A8',
+    '#34E1B7',
+    '#51F2CB',
+    '#75FBDA',
+    '#A1FFE8',
+    '#C9FFF2',
+    '#E9DCFF',
+    '#DCC7FF',
+    '#CAAAFF',
+    '#AD84EF'
 ]
 
 const arrowsVelocity = [
-    colors.purple,
-    colors.purpleLight,
-    colors.purpleLighter,
-    colors.purpleLightest,
-    colors.tealLightest,
-    colors.tealLighter,
-    colors.tealLight,
-    colors.teal,
-    colors.tealDark,
-    colors.tealDarker,
-    colors.tealDarkest,
+    '#AD84EF',
+    '#CAAAFF',
+    '#DCC7FF',
+    '#E9DCFF',
+    '#C9FFF2',
+    '#A1FFE8',
+    '#75FBDA',
+    '#51F2CB',
+    '#34E1B7',
+    '#23D2A8',
+    '#16AF8A'
 ]
 
 const tiers = [colors.red, '#ffc38a', '#feff8e', '#c3ff89']
-
-// const velocity = [
-//     '#1734BF',
-//     '#3633B7',
-//     '#5432AE',
-//     '#7331A6',
-//     '#91319D',
-//     '#B03095',
-//     '#CE2F8C',
-//     '#ED2E84',
-//     '#FB549F',
-//     '#FE79B4',
-//     '#FFA6CE',
-//     '#FFCEE4',
-//     '#FFE3F0',
-//     '#FFEFFF'
-// ]
 
 const distinct = [
     colors.indigo,
@@ -130,22 +149,22 @@ const distinct = [
     colors.kaki
 ]
 
-const stateOfCSSThemeColors: DefaultTheme['colors'] = {
+const stateOfJSThemeColors: DefaultTheme['colors'] = {
     background: '#272325',
     backgroundTrans: 'rgb(39, 35, 37, 0.3)',
-    backgroundAlt3: '#2c3033',
-    backgroundBackground: colors.electricBlueDarkest,
+    backgroundAlt3: '#27242E',
+    backgroundBackground: colors.lilacDarkest4,
     backgroundForeground: colors.navyLighter,
-    backgroundAlt: '#314448',
+    backgroundAlt: colors.lilacDarkest4,
     backgroundAltTrans: 'rgba(49, 68, 72, 0.4)',
-    backgroundAlt2: colors.electricBlueDarkerer,
+    backgroundAlt2: colors.lilacDarkest2,
     backgroundInverted: '#FFF6E6',
     backgroundInvertedAlt: '#E3D8C4',
     text: colors.white,
     textAlt: 'rgba(255, 246, 229, 0.5)',
     textInverted: '#272325',
     textHighlight: colors.greenDark,
-    link: colors.electricBlue,
+    link: colors.blueGreen,
     linkActive: '#5C63E0',
     contrast: '#0bdf67',
     border: '#FFF6E6',
@@ -155,27 +174,74 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
     no_answer: [colors.greyLight, colors.greyLightest],
     barColors: [
         {
-            color: colors.electricBlue,
-            gradient: [colors.electricBlueDarkerer, colors.electricBlueDark]
+            id: 'barColor1',
+            color: colors.blueGreenDark,
+            gradient: [colors.blueGreenDarker, colors.blueGreenDark]
         },
-        { color: colors.pink, gradient: [colors.pinkDark, colors.pink] },
-        { color: colors.green, gradient: [colors.green, colors.greenLighter] },
-        { color: colors.yellow, gradient: [colors.yellowDark, colors.yellow] },
-        { color: colors.orange, gradient: [colors.orangeDarker, colors.orangeLight] }
+        {
+            id: 'barColor2',
+            color: colors.pink,
+            gradient: [colors.pinkDark, colors.pink]
+        },
+        {
+            id: 'barColor3',
+            color: colors.purple,
+            gradient: [colors.purple, colors.purpleLighter]
+        },
+        {
+            id: 'barColor4',
+            color: colors.yellow,
+            gradient: [colors.yellowDark, colors.yellow]
+        },
+        {
+            id: 'barColor5',
+            color: colors.orange,
+            gradient: [colors.orangeDarker, colors.orangeLight]
+        },
+        {
+            id: 'barColor6',
+            color: colors.olive,
+            gradient: [colors.oliveDark, colors.olive]
+        },
+        {
+            id: 'barColor7',
+            color: colors.aqua,
+            gradient: [colors.aquaDark, colors.aqua]
+        },
+        {
+            id: 'barColor8',
+            color: colors.red,
+            gradient: [colors.redDark, colors.red]
+        },
+        {
+            id: 'barColor9',
+            color: colors.skyblue,
+            gradient: [colors.skyblueDark, colors.skyblue]
+        },
+        {
+            id: 'barColor10',
+            color: colors.kaki,
+            gradient: [colors.kakiDark, colors.kaki]
+        },
+        {
+            id: 'barColor11',
+            color: colors.green,
+            gradient: [colors.greenDark, colors.green]
+        }
     ],
     barChart: {
-        primary: colors.electricBlue,
-        primaryGradient: [colors.electricBlueDarkerer, colors.electricBlueDark],
+        primary: colors.blueGreenDark,
+        primaryGradient: [colors.blueGreenDarker, colors.blueGreenDark],
         // secondary: colors.yellowLight,
         // secondaryGradient: [colors.yellow, colors.yellowLight],
         secondary: colors.pink,
-        secondaryGradient: [colors.pinkDark, colors.pink],
+        secondaryGradient: [colors.pinkDark, colors.pink]
     },
     ranges: {
         tools: {
-            would_use: [colors.electricBlueDarkerer, colors.electricBlueDarker],
+            would_use: [colors.blueGreenDarker, colors.blueGreenDark],
             would_not_use: [colors.red, colors.redLight],
-            interested: [colors.electricBlue, colors.electricBlueLight],
+            interested: [colors.blueGreen, colors.blueGreenLight],
             not_interested: [colors.redLighter, colors.redLightest],
             never_heard: [colors.greyLight, colors.greyLightest]
         },
@@ -188,8 +254,8 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
             monorepo_tools: colors.navyLighter
         },
         features: {
-            used: [colors.electricBlueDarker, colors.electricBlueDark],
-            heard: [colors.electricBlue, colors.electricBlueLight],
+            used: [colors.lilacDarkest, colors.lilacDarkerer],
+            heard: [colors.lilacDark, colors.lilac],
             never_heard: [colors.grey, colors.greyLight]
         },
         features_categories: {
@@ -271,4 +337,4 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
     tiers
 }
 
-export default stateOfCSSThemeColors
+export default stateOfJSThemeColors

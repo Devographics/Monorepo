@@ -4,15 +4,15 @@ import { mq, spacing, fontSize } from 'core/theme'
 import T from 'core/i18n/T'
 
 import { TwitterIcon } from 'core/icons/Twitter'
-import { MDN, Npm } from 'core/icons'
+import { MDNIcon, NpmIcon } from 'core/icons'
 import Button from 'core/components/Button'
 
 const links = [
     { id: 'caniuse', label: 'CanIUse', icon: TwitterIcon },
-    { id: 'mdn', label: 'MDN', icon: MDN },
+    { id: 'mdn', label: 'MDN', icon: MDNIcon },
     { id: 'homepage', label: 'Homepage', icon: TwitterIcon },
     { id: 'github', label: 'GitHub', icon: TwitterIcon },
-    { id: 'npm', label: 'NPM', icon: Npm }
+    { id: 'npm', label: 'NPM', icon: NpmIcon }
 ]
 
 const List = styled.ul`

@@ -929,6 +929,7 @@
             fieldId: resources
 
     - id: people_others
+      blockType: PeopleBlock
       defaultUnits: count
       blockNamespace: resources
       chartNamespace: people
@@ -987,7 +988,7 @@
             - id: intrinsic_sizing
               value: "+13%"
 
-        - id: most_commented_featured_award
+        - id: most_commented_feature_award
           template: award
           awards:
             - id: subgrid
