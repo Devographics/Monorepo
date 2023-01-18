@@ -9,7 +9,6 @@ age:
   - range_more_than_65
 
 years_of_experience:
-  - no_answer
   - range_less_than_1
   - range_1_2
   - range_2_5
