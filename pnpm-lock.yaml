@@ -502,7 +502,6 @@ importers:
   shared/react-form:
     specifiers:
       '@devographics/i18n': workspace:*
-      '@devographics/react-hooks': workspace:*
       '@devographics/react-i18n': workspace:*
       '@types/lodash': ^4.14.168
       '@types/underscore': ^1.11.1
@@ -518,7 +517,6 @@ importers:
       simpl-schema: ^1.12.0
     dependencies:
       '@devographics/i18n': link:../i18n
-      '@devographics/react-hooks': link:../react-hooks
       '@devographics/react-i18n': link:../react-i18n
       '@vulcanjs/core': 0.7.2-alpha.8
       '@vulcanjs/graphql': 0.8.1-y.0
@@ -912,6 +910,7 @@ importers:
       '@devographics/encrypt-email': workspace:1.0.0
       '@devographics/graphql-query': workspace:1.0.0
       '@devographics/react-form': workspace:1.0.0
+      '@devographics/react-hooks': workspace:1.0.0
       '@graphql-tools/merge': ^8.3.11
       '@graphql-tools/schema': ^8.5.1
       '@hapi/iron': 6.0.0
@@ -1062,6 +1061,7 @@ importers:
       '@devographics/encrypt-email': link:../shared/encrypt-email
       '@devographics/graphql-query': link:../shared/graphql-query
       '@devographics/react-form': link:../shared/react-form
+      '@devographics/react-hooks': link:../shared/react-hooks
       '@graphql-tools/merge': 8.3.11_graphql@16.6.0
       '@graphql-tools/schema': 8.5.1_graphql@16.6.0
       '@hapi/iron': 6.0.0
@@ -14694,7 +14694,7 @@ packages:
     dependencies:
       '@storybook/addons': 6.5.15_biqbaboplfbrettd7655fr4n2y
       '@storybook/csf': 0.0.2--canary.87bc651.0
-      '@storybook/react': 6.5.15_4ayaodwl4tdjxmupq4t2wb56py
+      '@storybook/react': 6.5.15_uafvwfe64wqc75obcxlllm6lxq
       react: 18.2.0
     dev: false
     optional: true
@@ -14959,7 +14959,6 @@ packages:
       '@babel/runtime': 7.20.6
       '@types/testing-library__react-hooks': 3.4.1
       react: 18.2.0
-    dev: false
     optional: true
 
   /@testing-library/react/10.4.9_biqbaboplfbrettd7655fr4n2y:
@@ -18501,7 +18500,7 @@ packages:
   /axios/0.21.4_debug@4.3.1:
     resolution: {integrity: sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==}
     dependencies:
-      follow-redirects: 1.15.2_debug@4.3.4
+      follow-redirects: 1.15.2_debug@4.3.1
     transitivePeerDependencies:
       - debug
     dev: false
@@ -19891,7 +19890,7 @@ packages:
       minipass-pipeline: 1.2.4
       mkdirp: 1.0.4
       p-map: 4.0.0
-      promise-inflight: 1.0.1
+      promise-inflight: 1.0.1_bluebird@3.7.2
       rimraf: 3.0.2
       ssri: 8.0.1
       tar: 6.1.13
@@ -25489,6 +25488,19 @@ packages:
       readable-stream: 2.3.7
     dev: false
 
+  /follow-redirects/1.15.2_debug@4.3.1:
+    resolution: {integrity: sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==}
+    engines: {node: '>=4.0'}
+    peerDependencies:
+      debug: '*'
+    peerDependenciesMeta:
+      debug:
+        optional: true
+    dependencies:
+      debug: 4.3.1
+    dev: false
+    optional: true
+
   /follow-redirects/1.15.2_debug@4.3.4:
     resolution: {integrity: sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==}
     engines: {node: '>=4.0'}
@@ -25498,7 +25510,7 @@ packages:
       debug:
         optional: true
     dependencies:
-      debug: 4.3.4
+      debug: 4.3.4_supports-color@6.1.0
     dev: false
 
   /for-each/0.3.3:
@@ -32779,7 +32791,7 @@ packages:
     dependencies:
       '@corex/deepmerge': 2.6.148
       minimist: 1.2.6
-      next: 13.1.1_vgii64pd2ccbnbx2v3ro5gbin4
+      next: 13.1.1_e6en2gkdnbspgmiqkggoqbxjgy
     dev: false
 
   /next-tick/1.1.0:
@@ -35599,15 +35611,6 @@ packages:
   /progress/2.0.3:
     resolution: {integrity: sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==}
     engines: {node: '>=0.4.0'}
-
-  /promise-inflight/1.0.1:
-    resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
-    peerDependencies:
-      bluebird: '*'
-    peerDependenciesMeta:
-      bluebird:
-        optional: true
-    dev: false
 
   /promise-inflight/1.0.1_bluebird@3.7.2:
     resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
@@ -38950,7 +38953,7 @@ packages:
     dependencies:
       '@storybook/addon-actions': 6.5.15_biqbaboplfbrettd7655fr4n2y
       '@storybook/addons': 6.5.15_biqbaboplfbrettd7655fr4n2y
-      next: 13.1.1_vgii64pd2ccbnbx2v3ro5gbin4
+      next: 13.1.1_e6en2gkdnbspgmiqkggoqbxjgy
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       tslib: 2.4.1

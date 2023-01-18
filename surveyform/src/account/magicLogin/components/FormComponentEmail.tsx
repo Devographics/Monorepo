@@ -1,6 +1,6 @@
 import React from "react";
 import { FormControl } from "react-bootstrap";
-import { FormInputProps } from "~/core/components/forms/typings";
+import { FormInputProps } from "~/form/typings";
 
 export const LoginFormItem = ({
   label,

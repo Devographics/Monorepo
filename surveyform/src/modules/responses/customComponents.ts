@@ -1,16 +1,16 @@
-import RaceEthnicity from "~/core/components/forms/RaceEthnicity";
-import Email2 from "~/core/components/forms/Email2";
-import Hidden from "~/core/components/forms/Hidden";
-import { Help } from "~/core/components/forms/Help";
-import Bracket from "~/core/components/forms/Bracket";
-import Feature from "~/core/components/forms/experience/Feature";
-import Tool from "~/core/components/forms/experience/Tool";
-import Slider from "~/core/components/forms/Slider";
-import Select from "~/core/components/forms/Select";
-import Textarea from "~/core/components/forms/Textarea";
-import Checkboxgroup from "~/core/components/forms/Checkboxgroup";
-import Radiogroup from "~/core/components/forms/Radiogroup";
-import AutocompleteMultiple from "~/core/components/forms/AutocompleteMultiple";
+import RaceEthnicity from "~/form/components/inputs/RaceEthnicity";
+import Email2 from "~/form/components/inputs//Email2";
+import Hidden from "~/form/components/inputs/Hidden";
+import { Help } from "~/form/components/inputs/Help";
+import Bracket from "~/form/components/inputs/Bracket";
+import Feature from "~/form/components/inputs/experience/Feature";
+import Tool from "~/form/components/inputs/experience/Tool";
+import Slider from "~/form/components/inputs/Slider";
+import Select from "~/form/components/inputs/Select";
+import Textarea from "~/form/components/inputs/Textarea";
+import Checkboxgroup from "~/form/components/inputs/Checkboxgroup";
+import Radiogroup from "~/form/components/inputs/Radiogroup";
+import AutocompleteMultiple from "~/form/components/inputs/AutocompleteMultiple";
 import { makeAutocomplete } from "~/core/utils/autocomplete";
 import type { ParsedQuestion } from "@devographics/core-models";
 
@@ -49,13 +49,13 @@ export const addComponentToQuestionObject = (
   if (customComponent) {
     question = { ...questionObject, input: customComponent };
   }
-  
+
   if (question.autocompleteOptions) {
     question = makeAutocomplete(
       question,
       question.autocompleteOptions
     );
   }
-  
+
   return question;
 };

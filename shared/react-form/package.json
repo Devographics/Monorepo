@@ -31,7 +31,6 @@
     "@devographics/i18n": "workspace:*",
     "@vulcanjs/model": "^0.7.2-alpha.8",
     "@vulcanjs/permissions": "^0.7.2-alpha.8",
-    "@devographics/react-hooks": "workspace:*",
     "@devographics/react-i18n": "workspace:*",
     "@vulcanjs/schema": "^0.7.2-alpha.8",
     "@vulcanjs/utils": "^0.7.2-alpha.8",

@@ -15,7 +15,8 @@ import {
   //OperationVariables,
   useQuery,
   UseQueryState,
-  UseQueryArgs
+  UseQueryArgs,
+  UseQueryResponse
   // QueryResult,
   // QueryHookOptions,
 } from "urql";
@@ -60,7 +61,7 @@ const buildQueryOptions = <TData = any, TVariables = any>(
 const buildSingleResult = <TModel = any, TData = any>(
   options: UseSingleOptions<TModel>,
   { fragmentName, fragment, resolverName },
-  queryResult: UseQueryState<TData>
+  [queryResult, reexecuteQuery]: UseQueryResponse<any, any>,
 ): SingleResult<TData> => {
   const { /* ownProps, */ data, error } = queryResult;
   const result = {
@@ -74,13 +75,19 @@ const buildSingleResult = <TModel = any, TData = any>(
     // eslint-disable-next-line no-console
     console.log(error);
   }
-  return result;
+  const refetch = () => {
+    // Refetch the query and skip the cache
+    reexecuteQuery({ requestPolicy: 'network-only' });
+  };
+  return { ...result, refetch, loading: result.fetching };
 };
 
 interface SingleResult<TModel = any, TData = any> extends UseQueryState<TData> {
   fragmentName: string;
   fragment: string;
   document: TModel; // shortcut to get the document
+  refetch: () => void;
+  loading: boolean
 }
 export interface UseSingleOptions<TModel, TData = any, TVariables = any> {
   model: VulcanGraphqlModel;
@@ -116,11 +123,11 @@ export const useSingle = <TModel = any, TData = any>(
     extraQueries,
   });
 
-  const [queryResult] = useQuery<TData>({ query, ...buildQueryOptions(options, props) });
+  const [queryResult, reexecuteQuery] = useQuery<TData>({ query, ...buildQueryOptions(options, props) });
   const result = buildSingleResult<TModel>(
     options,
     { fragment, fragmentName, resolverName },
-    queryResult
+    [queryResult, reexecuteQuery]
   );
   return result;
 };

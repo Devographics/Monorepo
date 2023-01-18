@@ -1,38 +1,25 @@
 "use client";
-import { Provider as UrqlProvider } from "urql";
-import { createClient } from "@urql/core";
 import React, { useState } from "react";
-import { FormItem } from "./FormItem";
-import FormSubmit from "./FormSubmit";
-import FormLayout from "./FormLayout";
-import FormOptionLabel from "./FormOptionLabel";
+// TODO: let the FormContainer directly get those components
+import { FormItem } from "~/form/components/elements/FormItem";
+import FormSubmit from "~/form/components/elements/FormSubmit";
+import FormLayout from "~/form/components/elements/FormLayout";
+import FormOptionLabel from "~/form/components/elements/FormOptionLabel";
+import FormGroup from "~/form/components/elements/FormGroup";
 import {
   Form,
   MutationButton,
-  SmartForm,
   VulcanComponentsProvider,
 } from "@devographics/react-form";
 import { ResponsePerSurvey } from "~/modules/responses/model";
 import type { SurveyType } from "@devographics/core-models";
 import { SurveyResponseFragment } from "~/modules/responses/fragments";
 import { getCommentFieldName } from "~/modules/surveys/helpers";
-import { Button } from "../../ui/Button";
-import { LoadingButton } from "../../ui/LoadingButton";
-import { TooltipTrigger } from "../../ui/TooltipTrigger";
-import { getAppGraphqlUri } from "~/lib/graphql";
-import { Loading } from "../../ui/Loading";
-import FormGroup from "./FormGroup";
-
-const crossDomainGraphqlUri =
-  !!process.env.NEXT_PUBLIC_CROSS_DOMAIN_GRAPHQL_URI || false;
-// @see packages/@vulcanjs/next-apollo/apolloClient.ts if more options are needed
-// eg for auth
-const urqlClient = createClient({
-  url: getAppGraphqlUri(),
-  fetchOptions: {
-    credentials: crossDomainGraphqlUri ? "include" : "same-origin",
-  },
-});
+import { Button } from "~/core/components/ui/Button";
+import { LoadingButton } from "~/core/components/ui/LoadingButton";
+import { TooltipTrigger } from "~/core/components/ui/TooltipTrigger";
+import { Loading } from "~/core/components/ui/Loading";
+import { SmartForm } from "~/form/components/smartform/FormContainer";
 
 const SurveySectionContents = (props) => {
   const [prevLoading, setPrevLoading] = useState(false);
@@ -64,34 +51,33 @@ const SurveySectionContents = (props) => {
   return (
     /** Components rendered below this ComponentsProvider * can use the
       "Components.Form*" components + URQL hooks*/
-    <UrqlProvider value={urqlClient}>
-      <VulcanComponentsProvider
-        value={{
-          // needed by MutationButton
-          Button: Button,
-          LoadingButton: LoadingButton,
-          TooltipTrigger: TooltipTrigger,
-          // MutationButton
-          MutationButton: MutationButton,
-          // needed by FormContainer
-          Loading: Loading,
-          Form: Form,
-          // needed by Form
-          FormGroup: FormGroup,
-          // Needed by FormComponent
-          // Form items
-          FormItem,
-          FormLayout: FormLayoutWrapper,
-          FormSubmit: FormSubmitWrapper,
-          FormOptionLabel,
-          // TODO: the SmartForm do not allow to configure those 2 yet
-          // FormLabel,
-          // FormDescription,
-        }}
-      >
-        <SurveySectionContentsInner {...props} {...loadingProps} />
-      </VulcanComponentsProvider>
-    </UrqlProvider>
+    // TODO: move this setup in FormContainer directly
+    <VulcanComponentsProvider
+      value={{
+        // needed by MutationButton
+        Button: Button,
+        LoadingButton: LoadingButton,
+        TooltipTrigger: TooltipTrigger,
+        // MutationButton
+        MutationButton: MutationButton,
+        // needed by FormContainer
+        Loading: Loading,
+        Form: Form,
+        // needed by Form
+        FormGroup: FormGroup,
+        // Needed by FormComponent
+        // Form items
+        FormItem,
+        FormLayout: FormLayoutWrapper,
+        FormSubmit: FormSubmitWrapper,
+        FormOptionLabel,
+        // TODO: the SmartForm do not allow to configure those 2 yet
+        // FormLabel,
+        // FormDescription,
+      }}
+    >
+      <SurveySectionContentsInner {...props} {...loadingProps} />
+    </VulcanComponentsProvider>
   );
 };
 
