@@ -12,7 +12,7 @@ import { getTableData } from 'core/helpers/datatables'
 import sumBy from 'lodash/sumBy'
 import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
 import { useFilterLegends, getInitFilters } from 'core/blocks/filters/helpers'
-import { BEHAVIOR_COMBINED } from 'core/blocks/filters/constants'
+import { BEHAVIOR_COMBINED, MODE_FACET } from 'core/blocks/filters/constants'
 import { defaultOptions } from 'core/blocks/block/BlockUnitsSelector'
 
 export interface VerticalBarBlockProps extends BlockComponentProps {
@@ -78,7 +78,7 @@ const VerticalBarBlock = ({
         chartFilters,
         currentYear,
         showDefaultSeries: chartFilters.options.showDefaultSeries,
-        reverse: true
+        reverse: chartFilters.options.mode === MODE_FACET
     })
 
     return (

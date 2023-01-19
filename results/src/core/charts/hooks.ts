@@ -41,6 +41,25 @@ const getMaxValue = (units: Units, mode: Mode, buckets: BucketItem[], total: num
     }
 }
 
+/*
+
+Get a color item and loop over the array if index is bigger than length
+
+For example with 10 availabe colors: 
+
+Variant 1 = barColor 1
+Variant 2 = barColor 2
+...
+Variant 10 = barColor 10
+Variant 11 = barColor 1 // start over
+
+*/
+export const getVariantBarColorItem = (barColors, variantIndex) => {
+    const numberOfVariantColors = barColors.length
+    const barColorIndex = variantIndex % numberOfVariantColors
+    return barColors[barColorIndex]
+}
+
 export const useBarChart = ({
     buckets,
     total,
@@ -111,12 +130,23 @@ export const useColorDefs = (options: UseColorDefsOptions = {}) => {
         id: `Gradient${orientation}NoAnswer`,
         type: 'linearGradient',
         colors: [
-            { offset: 0, color: theme.colors.no_answer[1] },
-            { offset: 100, color: theme.colors.no_answer[0] }
+            { offset: 0, color: theme.colors.barColorNoAnswer.gradient[1] },
+            { offset: 100, color: theme.colors.barColorNoAnswer.gradient[0] }
         ],
         ...(orientation === HORIZONTAL ? horizontalDefs : {})
     }
-    return [...colors, noAnswerGradient]
+
+    const defaultGradient = {
+        id: `Gradient${orientation}Default`,
+        type: 'linearGradient',
+        colors: [
+            { offset: 0, color: theme.colors.barColorDefault.gradient[1] },
+            { offset: 100, color: theme.colors.barColorDefault.gradient[0] }
+        ],
+        ...(orientation === HORIZONTAL ? horizontalDefs : {})
+    }
+
+    return [...colors, defaultGradient, noAnswerGradient]
 }
 
 type UseColorFillsOptions = {
@@ -137,8 +167,13 @@ chartKeys are e.g.
 */
 export const useColorFills = (options: UseColorFillsOptions = {}) => {
     const theme = useTheme()
-    const { chartDisplayMode, orientation = VERTICAL, gridIndex = 0, keys: chartKeys = [] } = options
-    
+    const {
+        chartDisplayMode,
+        orientation = VERTICAL,
+        gridIndex = 0,
+        keys: chartKeys = []
+    } = options
+
     const noAnswerFill = {
         match: d => d.data.indexValue === 'no_answer',
         id: `Gradient${orientation}NoAnswer`
@@ -149,11 +184,9 @@ export const useColorFills = (options: UseColorFillsOptions = {}) => {
             /* 
             
             Part of a grid of other charts, make all bars the same color based on grid index
-            Note: we add 2 to 0-based index to skip Gradient[Horizontal/Vertical]1, which is reserved for
-            default series
 
             */
-            return [noAnswerFill, { match: '*', id: `Gradient${orientation}${gridIndex + 2}` }]
+            return [noAnswerFill, { match: '*', id: `Gradient${orientation}${gridIndex + 1}` }]
         }
         case CHART_MODE_STACKED: {
             /*
@@ -181,7 +214,7 @@ export const useColorFills = (options: UseColorFillsOptions = {}) => {
                 match: d => {
                     return d.key.includes(`__${i + 1}`)
                 },
-                id: `Gradient${orientation}${i + 2}`
+                id: `Gradient${orientation}${i + 1}`
             }))
             return [noAnswerFill, ...numberedSeriesFills]
         }
@@ -191,7 +224,7 @@ export const useColorFills = (options: UseColorFillsOptions = {}) => {
             This will match everything else for all the "normal" charts
 
             */
-            const defaultFill = { match: '*', id: `Gradient${orientation}1` }
+            const defaultFill = { match: '*', id: `Gradient${orientation}Default` }
             return [noAnswerFill, defaultFill]
         }
     }
@@ -222,7 +255,7 @@ export const useChartKeys = ({
     units,
     facet,
     seriesCount,
-    showDefaultSeries = true,
+    showDefaultSeries = true
 }: {
     units: BlockUnits
     facet?: string
@@ -234,9 +267,11 @@ export const useChartKeys = ({
         return allChartKeys[facet].map(key => `${units}__${key}`)
     } else if (seriesCount) {
         if (showDefaultSeries) {
-            return [...Array(seriesCount + 1)].map((x, i) => (i === 0 ? units : `${units}__${i + 1}`))
+            return [...Array(seriesCount + 1)].map((x, i) =>
+                i === 0 ? units : `${units}__${i + 1}`
+            )
         } else {
-            return [...Array(seriesCount)].map((x, i) => (`${units}__${i + 1}`))
+            return [...Array(seriesCount)].map((x, i) => `${units}__${i + 1}`)
         }
     } else {
         return [units]

@@ -1,4 +1,5 @@
 blockType: VerticalBarBlock
+hasFilters: true
 dataPath: "dataAPI.survey.${id}.year"
 keysPath: "dataAPI.survey.${id}.keys"
 # enableCustomization: true

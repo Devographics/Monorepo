@@ -10,7 +10,7 @@ import { useAllChartsKeys } from 'core/charts/hooks'
 import { MODE_FACET } from './constants'
 
 // disable facets with too many segments
-const disabledFacets = ['source', 'country']
+const disabledFacets = ['source', 'country', 'industry_sector']
 
 const FacetSelection = ({ chartName, stateStuff, block }) => {
     const { getString } = useI18n()

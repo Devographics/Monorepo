@@ -117,11 +117,11 @@ const HorizontalBarChart = ({
     const colorDefs = useColorDefs({ orientation: HORIZONTAL })
     const colorFills = useColorFills({ chartDisplayMode, gridIndex, keys, orientation: HORIZONTAL, facet })
 
-    console.log(chartDisplayMode)
-    console.log(showDefaultSeries)
-    console.log(keys)
-    console.log(colorDefs)
-    console.log(colorFills)
+    // console.log(chartDisplayMode)
+    // console.log(showDefaultSeries)
+    // console.log(keys)
+    // console.log(colorDefs)
+    // console.log(colorFills)
     
     const { formatTick, formatValue, maxValue } = useBarChart({
         buckets,

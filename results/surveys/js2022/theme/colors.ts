@@ -172,11 +172,12 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
     heatmap: colors.pinkLight,
     lineChartDefaultColor: '#59DF7F',
     no_answer: [colors.greyLight, colors.greyLightest],
+    // bar colors for variants when using filters and (especially) facets
     barColors: [
         {
             id: 'barColor1',
-            color: colors.blueGreenDark,
-            gradient: [colors.blueGreenDarker, colors.blueGreenDark]
+            color: colors.purple,
+            gradient: [colors.purple, colors.purpleLighter]
         },
         {
             id: 'barColor2',
@@ -185,23 +186,23 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
         },
         {
             id: 'barColor3',
-            color: colors.purple,
-            gradient: [colors.purple, colors.purpleLighter]
-        },
-        {
-            id: 'barColor4',
             color: colors.yellow,
             gradient: [colors.yellowDark, colors.yellow]
         },
         {
+            id: 'barColor4',
+            color: colors.greyTeal,
+            gradient: [colors.greyTeal, colors.greyTealLight]
+        },
+        {
             id: 'barColor5',
-            color: colors.orange,
-            gradient: [colors.orangeDarker, colors.orangeLight]
+            color: colors.olive,
+            gradient: [colors.oliveDark, colors.olive]
         },
         {
             id: 'barColor6',
-            color: colors.olive,
-            gradient: [colors.oliveDark, colors.olive]
+            color: colors.orange,
+            gradient: [colors.orangeDarker, colors.orangeLight]
         },
         {
             id: 'barColor7',
@@ -229,6 +230,16 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
             gradient: [colors.greenDark, colors.green]
         }
     ],
+    barColorDefault: {
+        id: 'barColorDefault',
+        color: colors.blueGreenDark,
+        gradient: [colors.blueGreenDark, colors.blueGreenDark]
+    },
+    barColorNoAnswer: {
+        id: 'barColorNoAnswer',
+        color: colors.greyLight,
+        gradient: [colors.greyLight, colors.greyLightest]
+    },
     barChart: {
         primary: colors.blueGreenDark,
         primaryGradient: [colors.blueGreenDarker, colors.blueGreenDark],
