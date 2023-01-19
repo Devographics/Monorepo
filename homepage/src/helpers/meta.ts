@@ -7,7 +7,7 @@ export const getMeta = ({ survey, locale, lastEdition }) => {
     const getString = getStringTranslator(locale)
 
     const description = getString(`general.${slug}.description`)?.t
-    const title = name
+    const title = getString(`general.${slug}.title`, {}, name)?.t
     const url = `https://${domain}`
 
     const meta = [

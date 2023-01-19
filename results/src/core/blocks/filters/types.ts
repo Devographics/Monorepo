@@ -1,7 +1,7 @@
 export type CustomizationDefinition = {
     options: CustomizationOptions
-    filters: CustomizationFilters[]
-    facet: string
+    filters?: CustomizationFilters[]
+    facet?: string
 }
 
 export type CustomizationOptions = {
@@ -9,7 +9,7 @@ export type CustomizationOptions = {
     showDefaultSeries?: boolean
     allowModeSwitch?: boolean
     behavior?: 'combined' | 'multiple'
-    mode?: 'filters' | 'facet'
+    mode?: 'filters' | 'facet' | 'default'
 }
 
 export type CustomizationFilters = {

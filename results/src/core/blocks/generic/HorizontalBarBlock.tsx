@@ -9,6 +9,7 @@ import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
 import { BEHAVIOR_MULTIPLE } from 'core/blocks/filters/constants'
 import { useFilterLegends, getInitFilters } from 'core/blocks/filters/helpers'
 import { defaultOptions } from 'core/blocks/block/BlockUnitsSelector'
+import { useAllChartsOptions } from 'core/charts/hooks'
 
 export interface HorizontalBarBlockProps extends BlockComponentProps {
     data: ResultsByYear
@@ -29,7 +30,6 @@ const HorizontalBarBlock = ({
         colorVariant
     } = block
 
-
     const [units, setUnits] = useState(defaultUnits)
 
     const { facets, completion } = data
@@ -37,17 +37,31 @@ const HorizontalBarBlock = ({
     const { total } = completion
 
     // contains the filters that define the series
-    const [chartFilters, setChartFilters] = useState(getInitFilters({ behavior: BEHAVIOR_MULTIPLE }))
+    const [chartFilters, setChartFilters] = useState(
+        getInitFilters({ behavior: BEHAVIOR_MULTIPLE })
+    )
 
     const legends = useFilterLegends({
-        chartFilters,
+        chartFilters
     })
+
+    const allChartOptions = useAllChartsOptions()
+    let unitsOptions = defaultOptions
+    if (chartFilters.facet) {
+        // if filtering by facet, use special units
+        unitsOptions = ['percentage_bucket', 'count']
+        const facetOptions = allChartOptions[chartFilters.facet]
+        // if this facet can be quantified numerically and has averages, add that as unit too
+        if (typeof facetOptions[0].average !== 'undefined') {
+            unitsOptions.push('average')
+        }
+    }
 
     return (
         <Block
             units={controlledUnits ?? units}
             setUnits={setUnits}
-            unitsOptions={chartFilters.facet ? ['percentage_bucket', 'count'] : defaultOptions}
+            unitsOptions={unitsOptions}
             data={data}
             tables={[
                 getTableData({

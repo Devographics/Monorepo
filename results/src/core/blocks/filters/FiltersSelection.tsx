@@ -12,11 +12,11 @@ import { useI18n } from 'core/i18n/i18nContext'
 import { Series_ } from './Series'
 import Presets from './Presets'
 import Options from './Options'
-import { useAllChartsKeys } from 'core/charts/hooks'
+import { useAllChartsOptionsIdsOnly } from 'core/charts/hooks'
 
 const FiltersSelection = ({ chartName, block, stateStuff }) => {
     const context = usePageContext()
-    const allChartsKeys = useAllChartsKeys()
+    const allChartsKeys = useAllChartsOptionsIdsOnly()
     const { currentEdition } = context
     const { filtersState, setFiltersState } = stateStuff
 

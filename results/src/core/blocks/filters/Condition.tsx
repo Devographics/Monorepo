@@ -7,7 +7,7 @@ import T from 'core/i18n/T'
 import { DeleteIcon, TrashIcon, PlusIcon } from 'core/icons'
 import cloneDeep from 'lodash/cloneDeep.js'
 import { getFieldLabel, getValueLabel } from './helpers'
-import { useAllChartsKeys } from 'core/charts/hooks'
+import { useChartOptionsIdsOnly } from 'core/charts/hooks'
 
 const operators = ['eq', 'in', 'nin']
 
@@ -100,7 +100,7 @@ const FieldSegment = ({
                         newState.filters[seriesIndex].conditions[conditionIndex][segmentId] = value
                         // if we're changing the field, also change the value
                         const fieldId = value
-                        newState.filters[seriesIndex].conditions[conditionIndex].value = keys[fieldId][0]
+                        newState.filters[seriesIndex].conditions[conditionIndex].value = keys[fieldId][0].id
                         return newState
                     })
                 }}

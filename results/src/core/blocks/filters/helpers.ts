@@ -9,7 +9,9 @@ import { MODE_DEFAULT, MODE_FACET, MODE_FILTERS } from './constants'
 import { useI18n } from 'core/i18n/i18nContext'
 import { useTheme } from 'styled-components'
 import round from 'lodash/round'
-import { useAllChartsKeys, getVariantBarColorItem } from 'core/charts/hooks'
+import { useAllChartsOptionsIdsOnly, getVariantBarColorItem } from 'core/charts/hooks'
+import sumBy from 'lodash/sumBy'
+import roundBy from 'lodash/roundBy'
 
 export const getNewCondition = ({ filtersNotInUse, keys }) => {
     const field = filtersNotInUse[0]
@@ -69,7 +71,7 @@ export const getFiltersQuery = ({
     return newQuery
 }
 
-const fields = ['count', 'percentage_question', 'percentage_survey']
+const baseUnits = ['count', 'percentage_question', 'percentage_survey']
 
 /*
 
@@ -88,13 +90,13 @@ export const combineBuckets = ({ defaultBuckets, otherBucketsArrays, completion 
             const { id } = bucket
             const otherSeriesBucket = buckets.find(b => b.id === id)
             if (otherSeriesBucket) {
-                fields.forEach(field => {
+                baseUnits.forEach(field => {
                     bucket[`${field}__${seriesIndex}`] = otherSeriesBucket[field]
                 })
             } else {
                 // series might have returned undefined;
                 // or else default buckets contains bucket items not in series buckets
-                fields.forEach(field => {
+                baseUnits.forEach(field => {
                     bucket[`${field}__${seriesIndex}`] = 0
                 })
             }
@@ -161,14 +163,22 @@ buckets: [
     },
     // ...
 ]
-    
+
+NOTE: this could be avoided by inverting the API query itself
+
 */
-export const invertFacets = ({ facets, defaultBuckets }) => {
+export const invertFacets = ({ facets, defaultBuckets, allChartOptions }) => {
     const newBuckets = cloneDeep(defaultBuckets)
     facets.forEach(facet => {
         facet.buckets.forEach(facetBucket => {
             const baseBucket = newBuckets.find(b => b.id === facetBucket.id)
-            fields.forEach(field => {
+            if (!baseBucket) {
+                console.warn(
+                    `Could not find bucket id ${facetBucket.id} while processing facet id ${facet.id}`
+                )
+                return
+            }
+            baseUnits.forEach(field => {
                 baseBucket[`${field}__${facet.id}`] = facetBucket[field]
             })
             baseBucket[`percentage_bucket__${facet.id}`] = round(
@@ -180,11 +190,27 @@ export const invertFacets = ({ facets, defaultBuckets }) => {
     return newBuckets
 }
 
+export const calculateAverages = ({ buckets, facet, allChartOptions }) => {
+    const facetOptions = allChartOptions[facet]
+    if (facetOptions && typeof facetOptions[0].average !== 'undefined') {
+        buckets.forEach(bucket => {
+            if (bucket.id === 'no_answer') {
+                return
+            }
+            const averageValue =
+                sumBy(facetOptions, ({ id, average }) => {
+                    return average * bucket[`count__${id}`]
+                }) / bucket.count
+            bucket.average = Math.round(averageValue)
+        })
+    }
+    return buckets
+}
+
 export const getFieldLabel = ({ getString, field }) => getString(`user_info.${field}`)?.t
 
 export const getValueLabel = ({ getString, field, value }) =>
     field === 'country' ? getCountryName(value) || value : getString(`options.${field}.${value}`)?.t
-
 
 export const useFilterLegends = ({
     chartFilters,
@@ -197,7 +223,7 @@ export const useFilterLegends = ({
     showDefaultSeries?: boolean
     reverse?: boolean
 }) => {
-    const allChartKeys = useAllChartsKeys()
+    const allChartKeys = useAllChartsOptionsIdsOnly()
     const theme = useTheme()
     const { getString } = useI18n()
     const barColors = theme.colors.barColors
@@ -275,7 +301,7 @@ export const useFilterLegends = ({
     return reverse ? [...results].reverse() : results
 }
 
-export const getInitFilters = (initOptions?: CustomizationOptions) => ({
+export const getInitFilters = (initOptions?: CustomizationOptions): CustomizationDefinition => ({
     options: {
         showDefaultSeries: true,
         allowModeSwitch: false,

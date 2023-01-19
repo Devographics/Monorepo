@@ -3,7 +3,7 @@ import ceil from 'lodash/ceil'
 // @ts-ignore
 import { useI18n } from 'core/i18n/i18nContext'
 import { Units, Mode, isPercentage } from 'core/helpers/units'
-import { BucketItem } from 'core/types/data'
+import { BucketItem, ChartOptionDefinition } from 'core/types/data'
 import { BlockMode, BlockUnits } from 'core/types'
 import { useTheme } from 'styled-components'
 import { usePageContext } from 'core/helpers/pageContext'
@@ -23,7 +23,9 @@ const getMode = (units: Units, mode: Mode) => {
 }
 
 const getMaxValue = (units: Units, mode: Mode, buckets: BucketItem[], total: number) => {
-    if (isPercentage(units)) {
+    if (units === 'average') {
+        return Math.max(...buckets.map(b => b[units]))
+    } else if (isPercentage(units)) {
         if (getMode(units, mode) === 'absolute') {
             return 100
         } else {
@@ -232,15 +234,33 @@ export const useColorFills = (options: UseColorFillsOptions = {}) => {
 
 /*
 
-Get keys (['range_work_for_free', 'range_0_10', 'range_10_30', ...]) for all chart types
+Get options keys ([{ id: 'range_work_for_free' }, { id: 'range_0_10' }, { id: 'range_10_30' }, ...]) for all chart types
 
 */
-export const useAllChartsKeys = () => {
+
+export const useAllChartsOptions = () => {
     const context = usePageContext()
     const { metadata } = context
     const { keys } = metadata
     return keys
 }
+
+export const useAllChartsOptionsIdsOnly = () => {
+    const options = {}
+    const allOptions = useAllChartsOptions()
+    for (const option in allOptions) {
+        options[option] = allOptions[option].map(o => o.id)
+    }
+    return options
+}
+
+export const useChartOptions = (fieldId: string): ChartOptionDefinition[] => {
+    const options = useAllChartsOptions()
+    return options[fieldId]
+}
+
+export const useChartOptionsIdsOnly = (fieldId: string): string[] =>
+    useChartOptions(fieldId).map(o => o.id)
 
 /*
 
@@ -262,9 +282,13 @@ export const useChartKeys = ({
     seriesCount?: number
     showDefaultSeries?: boolean
 }) => {
-    const allChartKeys = useAllChartsKeys()
+    const allChartKeys = useAllChartsOptionsIdsOnly()
     if (facet) {
-        return allChartKeys[facet].map(key => `${units}__${key}`)
+        if (units === 'average') {
+            return ['average']
+        } else {
+            return allChartKeys[facet].map(key => `${units}__${key}`)
+        }
     } else if (seriesCount) {
         if (showDefaultSeries) {
             return [...Array(seriesCount + 1)].map((x, i) =>

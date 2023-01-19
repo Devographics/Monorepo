@@ -14,6 +14,7 @@ import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
 import { useFilterLegends, getInitFilters } from 'core/blocks/filters/helpers'
 import { BEHAVIOR_COMBINED, MODE_FACET } from 'core/blocks/filters/constants'
 import { defaultOptions } from 'core/blocks/block/BlockUnitsSelector'
+import { useAllChartsOptions } from 'core/charts/hooks'
 
 export interface VerticalBarBlockProps extends BlockComponentProps {
     data: FacetItem
@@ -81,6 +82,18 @@ const VerticalBarBlock = ({
         reverse: chartFilters.options.mode === MODE_FACET
     })
 
+    const allChartOptions = useAllChartsOptions()
+    let unitsOptions = defaultOptions
+    if (chartFilters.facet) {
+        // if filtering by facet, use special units
+        unitsOptions = ['percentage_bucket', 'count']
+        const facetOptions = allChartOptions[chartFilters.facet]
+        // if this facet can be quantified numerically and has averages, add that as unit too
+        if (typeof facetOptions[0].average !== 'undefined') {
+            unitsOptions.push('average')
+        }
+    }
+
     return (
         <BlockVariant
             tables={[
@@ -96,7 +109,7 @@ const VerticalBarBlock = ({
             completion={completion}
             data={data}
             block={block}
-            unitsOptions={chartFilters.facet ? ['percentage_bucket', 'count'] : defaultOptions}
+            unitsOptions={unitsOptions}
             chartFilters={chartFilters}
             setChartFilters={setChartFilters}
             legendProps={{ layout: 'vertical' }}
