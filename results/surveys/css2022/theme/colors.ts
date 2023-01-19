@@ -118,16 +118,74 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
     heatmap: colors.pinkLight,
     lineChartDefaultColor: '#59DF7F',
     no_answer: [colors.greyLight, colors.greyLightest],
+    // bar colors for variants when using filters and (especially) facets
     barColors: [
         {
-            color: colors.electricBlue,
-            gradient: [colors.electricBlueDarkerer, colors.electricBlueDark]
+            id: 'barColor1',
+            color: colors.purple,
+            gradient: [colors.purple, colors.purpleLighter]
         },
-        { color: colors.pink, gradient: [colors.pinkDark, colors.pink] },
-        { color: colors.green, gradient: [colors.green, colors.greenLighter] },
-        { color: colors.yellow, gradient: [colors.yellowDark, colors.yellow] },
-        { color: colors.orange, gradient: [colors.orangeDarker, colors.orangeLight] }
+        {
+            id: 'barColor2',
+            color: colors.pink,
+            gradient: [colors.pinkDark, colors.pink]
+        },
+        {
+            id: 'barColor3',
+            color: colors.yellow,
+            gradient: [colors.yellowDark, colors.yellow]
+        },
+        {
+            id: 'barColor4',
+            color: colors.greyTeal,
+            gradient: [colors.greyTeal, colors.greyTealLight]
+        },
+        {
+            id: 'barColor5',
+            color: colors.olive,
+            gradient: [colors.oliveDark, colors.olive]
+        },
+        {
+            id: 'barColor6',
+            color: colors.orange,
+            gradient: [colors.orangeDarker, colors.orangeLight]
+        },
+        {
+            id: 'barColor7',
+            color: colors.aqua,
+            gradient: [colors.aquaDark, colors.aqua]
+        },
+        {
+            id: 'barColor8',
+            color: colors.red,
+            gradient: [colors.redDark, colors.red]
+        },
+        {
+            id: 'barColor9',
+            color: colors.skyblue,
+            gradient: [colors.skyblueDark, colors.skyblue]
+        },
+        {
+            id: 'barColor10',
+            color: colors.kaki,
+            gradient: [colors.kakiDark, colors.kaki]
+        },
+        {
+            id: 'barColor11',
+            color: colors.green,
+            gradient: [colors.greenDark, colors.green]
+        }
     ],
+    barColorDefault: {
+        id: 'barColorDefault',
+        color: colors.blueGreenDark,
+        gradient: [colors.blueGreenDark, colors.blueGreenDark]
+    },
+    barColorNoAnswer: {
+        id: 'barColorNoAnswer',
+        color: colors.greyLight,
+        gradient: [colors.greyLight, colors.greyLightest]
+    },
     barChart: {
         primary: colors.electricBlue,
         primaryGradient: [colors.electricBlueDarkerer, colors.electricBlueDark],
