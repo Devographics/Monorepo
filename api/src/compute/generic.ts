@@ -177,14 +177,14 @@ export async function computeDefaultTermAggregationByYear({
     const facetOrder = convertOrder(options?.facetSort?.order ?? 'desc')
     const facetValues = options.facet2keys || (facetId && getChartKeys(facetId))
 
-    console.log('// key')
-    console.log(key)
-    console.log('// options')
-    console.log(options)
-    console.log('// values')
-    console.log(values)
-    console.log('// facetValues')
-    console.log(facetValues)
+    // console.log('// key')
+    // console.log(key)
+    // console.log('// options')
+    // console.log(options)
+    // console.log('// values')
+    // console.log(values)
+    // console.log('// facetValues')
+    // console.log(facetValues)
 
     const match: any = {
         survey: survey.survey,
