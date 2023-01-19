@@ -12,6 +12,18 @@ import { loadOrGetEntities } from './entities'
 import { TermAggregationOptions, AggregationFunction } from './compute/generic'
 import yamlKeys from './data/keys.yml'
 
+export const getAllKeys = () => {
+    const keys = {}
+    for (let k in yamlKeys) {
+        keys[k] = yamlKeys[k].map(k => (typeof k === 'object' ? k.id : k))
+    }
+    return keys
+}
+
+export const getChartKeys = (field: string) => {
+    return getAllKeys()[field]
+}
+
 /**
  * Return either e.g. other_tools.browsers.choices or other_tools.browsers.others.normalized
  */
@@ -129,7 +141,7 @@ export const getDynamicResolversWithKeys = (
     aggregationFunction?: AggregationFunction
 ) => {
     const keysFunction = async ({ id }: ResolverDynamicConfig) => {
-        return yamlKeys[id] || []
+        return getChartKeys(id) || []
     }
     return {
         keys: keysFunction,
@@ -213,15 +225,15 @@ export const getFacetKeys = (facet: string) => {
     const { sectionName, fieldName } = getFacetSegments(facet)
     switch (sectionName) {
         case 'features':
-            keys = yamlKeys.feature
+            keys = getChartKeys('feature')
             break
 
         case 'tools':
-            keys = yamlKeys.tool
+            keys = getChartKeys('tool')
             break
 
         default:
-            keys = yamlKeys[fieldName]
+            keys = getChartKeys(fieldName)
             break
     }
     return keys

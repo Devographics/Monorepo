@@ -1,5 +1,5 @@
 import { getEntity } from '../entities'
-import keys from '../data/keys.yml'
+import { getChartKeys } from '../helpers'
 import { RequestContext, ResolverDynamicConfig } from '../types'
 import {
     computeTermAggregationAllYearsWithCache,
@@ -9,7 +9,7 @@ import {
 
 export default {
     FeatureExperience: {
-        keys: () => keys.feature,
+        keys: () => getChartKeys('feature'),
         all_years: async (
             { survey, id, filters, options, facet }: ResolverDynamicConfig,
             args: any,

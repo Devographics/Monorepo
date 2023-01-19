@@ -4,7 +4,7 @@ import { Filters } from '../filters'
 import { useCache } from '../caching'
 import { computeParticipationByYear } from '../compute'
 import { getDemographicsResolverFunctions } from '../helpers'
-import keys from '../data/keys.yml'
+import { getChartKeys } from '../helpers'
 import range from 'lodash/range.js'
 
 const computeParticipation = async (
@@ -48,31 +48,31 @@ export default {
     }),
     Source: getDemographicsResolverFunctions(),
 
-    Gender: getDemographicsResolverFunctions({ cutoff: 1, keys: keys.gender }),
+    Gender: getDemographicsResolverFunctions({ cutoff: 1, keys: getChartKeys('gender') }),
 
     RaceEthnicity: getDemographicsResolverFunctions({
         cutoff: 1,
-        keys: keys.race_ethnicity
+        keys: getChartKeys('race_ethnicity')
     }),
 
-    Age: getDemographicsResolverFunctions({ limit: 100, cutoff: 1, keys: keys.age }),
+    Age: getDemographicsResolverFunctions({ limit: 100, cutoff: 1, keys: getChartKeys('age') }),
 
     Salary: getDemographicsResolverFunctions({
         limit: 100,
         cutoff: 1,
-        keys: keys.yearly_salary
+        keys: getChartKeys('yearly_salary')
     }),
 
     CompanySize: getDemographicsResolverFunctions({
         limit: 100,
         cutoff: 1,
-        keys: keys.company_size
+        keys: getChartKeys('company_size')
     }),
 
     WorkExperience: getDemographicsResolverFunctions({
         limit: 100,
         cutoff: 1,
-        keys: keys.years_of_experience
+        keys: getChartKeys('years_of_experience')
     }),
 
     JobTitle: getDemographicsResolverFunctions({
@@ -91,7 +91,7 @@ export default {
 
     HigherEducationDegree: getDemographicsResolverFunctions({
         cutoff: 1,
-        keys: keys.higher_education_degree
+        keys: getChartKeys('higher_education_degree')
     }),
 
     DisabilityStatus: getDemographicsResolverFunctions({

@@ -4,7 +4,7 @@ import { useCache } from '../caching'
 import { RequestContext, SurveyConfig } from '../types'
 import { Filters } from '../filters'
 import { YearAggregations } from '../compute/generic'
-import keys from '../data/keys.yml'
+import { getChartKeys } from '../helpers'
 
 interface OpinionConfig {
     survey: SurveyConfig
@@ -14,7 +14,7 @@ interface OpinionConfig {
 
 export default {
     Opinion: {
-        keys: () => keys.opinions,
+        keys: () => getChartKeys('opinions'),
         all_years: async (
             { survey, id, filters }: OpinionConfig,
             args: any,

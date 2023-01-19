@@ -1,39 +1,68 @@
 age:
-  - range_less_than_10
-  - range_10_18
-  - range_18_24
-  - range_25_34
-  - range_35_44
-  - range_45_54
-  - range_55_64
-  - range_more_than_65
+  - id: range_less_than_10
+    average: 10
+  - id: range_10_18
+    average: 14
+  - id: range_18_24 # treated as 19_24
+    average: 21
+  - id: range_25_34 # treated as 3_5
+    average: 30
+  - id: range_35_44
+    average: 40
+  - id: range_45_54
+    average: 50
+  - id: range_55_64
+    average: 60
+  - id: range_more_than_65
+    average: 65
 
 years_of_experience:
-  - range_less_than_1
-  - range_1_2
-  - range_2_5
-  - range_5_10
-  - range_10_20
-  - range_more_than_20
+  - id: range_less_than_1
+    average: 1
+  - id: range_1_2
+    average: 2
+  - id: range_2_5 # treated as 3_5
+    average: 4
+  - id: range_5_10 # treated as 6_10
+    average: 8
+  - id: range_10_20 # treated as 11_20
+    average: 15
+  - id: range_more_than_20
+    average: 20
 
 company_size:
-  - range_1
-  - range_1_5
-  - range_5_10
-  - range_10_20
-  - range_20_50
-  - range_50_100
-  - range_100_1000
-  - range_more_than_1000
+  - id: range_1
+    average: 1
+  - id: range_1_5
+    average: 3
+  - id: range_5_10
+    average: 7
+  - id: range_10_20
+    average: 15
+  - id: range_20_50
+    average: 35
+  - id: range_50_100
+    average: 75
+  - id: range_100_1000
+    average: 550
+  - id: range_more_than_1000
+    average: 1000
 
 yearly_salary:
-  - range_work_for_free
-  - range_0_10
-  - range_10_30
-  - range_30_50
-  - range_50_100
-  - range_100_200
-  - range_more_than_200
+  - id: range_work_for_free
+    average: 0
+  - id: range_0_10
+    average: 5000
+  - id: range_10_30
+    average: 15000
+  - id: range_30_50
+    average: 40000
+  - id: range_50_100
+    average: 75000
+  - id: range_100_200
+    average: 150000
+  - id: range_more_than_200
+    average: 200000
 
 higher_education_degree:
   - no_degree
@@ -175,3 +204,4 @@ facets:
   - higher_education_degree
   - source
   - country
+  - age
