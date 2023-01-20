@@ -1,129 +1,124 @@
+- id: am-ET
+  label: አማርኛ
+  translators: ['ephy-bayru']
+
 - id: ar-EG
   label: اَلْعَرَبِيَّةُ
   translators: ['YoussefMo7amed']
-  repo: StateOfJS/locale-ar-EG
 
 - id: ca-ES
   label: Català
   translators: ['socunanena']
-  repo: StateOfJS/locale-ca-ES
 
 - id: cs-CZ
   label: Česky
   translators: ['adamkudrna']
-  repo: StateOfJS/locale-cs-CZ
 
 - id: de-DE
   label: Deutsch
   translators: ['abaldeweg', 'Theiaz']
-  repo: StateOfJS/locale-de-DE
+
+- id: el-GR
+  label: Ελληνικά
+  translators: ['kormic', 'ipapoutsidis']
 
 - id: en-US
   label: English
   translators: []
-  repo: StateOfJS/locale-en-US
 
 - id: es-ES
   label: Español
   translators: [timbergus, ezakto, fransyrcc]
-  repo: StateOfJS/locale-es-ES
 
 - id: fa-IR
   label: فارسی
-  translators: ['fghamsary']
-  repo: StateOfJS/locale-fa-IR
+  translators: ['fghamsary', 'ASafaeirad', 'erfan-goodarzi', 'mhdi-nzari']
 
 - id: fr-FR
   label: Français
-  translators: ['arnauddrain', 'AvocadoVenom']
-  repo: StateOfJS/locale-fr-FR
+  translators: ['arnauddrain', 'AvocadoVenom', 'dragonis41']
 
 - id: gl-ES
   label: Galego
   translators: [nunhes]
-  repo: StateOfJS/locale-gl-ES
 
 - id: hi-IN
   label: Hindi
   translators: ['srk1195','jaideepghosh']
-  repo: StateOfJS/locale-hi-IN
+
+- id: hr-HR
+  label: Hrvatski
+  translators: ['ilevak']
+
+- id: hu-HU
+  label: Hrvatski
+  translators: ['punkah', 'b3nk3']
+
+- id: id-ID
+  label: Hrvatski
+  translators: ['ervinismu', 'algustionesa', 'KingSit3']
 
 - id: it-IT
   label: Italiano
   translators: ['polettoweb', 'alfiofederico']
-  repo: StateOfJS/locale-it-IT
-
-- id: pt-PT
-  label: Português
-  translators: ['danisal']
-  repo: StateOfJS/locale-pt-PT
-
-- id: pt-BR
-  label: Português (Brasil)
-  translators: ['the-physicist', 'thiagoloal', 'willmustafa']
-  repo: StateOfJS/locale-pt-BR
-
-- id: ru-RU
-  label: Русский
-  translators: ['lex111', 'Omhet', 'shramkoweb']
-  repo: StateOfJS/locale-ru-RU
-
-- id: ua-UA
-  label: Українська
-  translators: ['shramkoweb']
-  repo: StateOfJS/locale-ua-UA
-
-- id: sv-SE
-  label: Svenska
-  translators: ['m-hagberg']
-  repo: StateOfJS/locale-sv-SE
-
-- id: tr-TR
-  label: Türkçe
-  translators: ['berkayyildiz']
-  repo: StateOfJS/locale-tr-TR
-
-- id: id-ID
-  label: Indonesia
-  translators: [ervinismu]
-  repo: StateOfJS/locale-id-ID
-
-- id: 'zh-Hans'
-  label: 简体中文
-  translators: ['TIOvOIT', 'scarsu', 'shadowings-zy', 'littleee', 'donaldxdonald']
-  repo: StateOfJS/locale-zh-Hans
-
-- id: 'zh-Hant'
-  label: 正體中文
-  translators: ['ymcheung', 'mingjunlu']
-  repo: StateOfJS/locale-zh-Hant
 
 - id: ja-JP
   label: 日本語
   translators: ['myakura', 'Spice-Z']
-  repo: StateOfJS/locale-ja-JP
-
-- id: pl-PL
-  label: Polski
-  translators: ['luk-str']
-  repo: StateOfJS/locale-pl-PL
 
 - id: ko-KR
   label: 한국어
   translators: ['eterv']
-  repo: StateOfJS/locale-ko-KR
-
+  
 - id: nl-NL
   label: Nederlands
   translators: ['MaxAltena', 'NielsKersic']
-  repo: StateOfJS/locale-nl-NL
+
+- id: pl-PL
+  label: Polski
+  translators: ['luk-str']
+
+- id: pt-BR
+  label: Português (Brasil)
+  translators: ['the-physicist', 'thiagoloal', 'willmustafa']
+
+- id: pt-PT
+  label: Português
+  translators: ['danisal']
 
 - id: ro-RO
   label: Română
   translators: ['magdaavram']
-  repo: StateOfJS/locale-ro-RO
 
-- id: hu-HU
-  label: Magyar
-  translators: ['b3nk3', 'punkah']
-  repo: StateOfJS/locale-hu-HU
+- id: ru-RU
+  label: Русский
+  translators: ['lex111', 'Omhet', 'shramkoweb']
+
+- id: sk-SK
+  label: Slɔʋentʂina
+  translators: []
+
+- id: sv-SE
+  label: Svenska
+  translators: ['m-hagberg']
+
+- id: tr-TR
+  label: Türkçe
+  translators: ['berkayyildiz']
+
+- id: ua-UA
+  label: Українська
+  translators: ['shramkoweb']
+
+- id: vi-VN
+  label: Tiếng Việt
+  translators: ['ducdongmg']
+
+- id: 'zh-Hans'
+  label: 简体中文
+  translators: ['TIOvOIT', 'scarsu', 'shadowings-zy', 'littleee', 'donaldxdonald']
+
+- id: 'zh-Hant'
+  label: 正體中文
+  translators: ['ymcheung', 'mingjunlu']
+

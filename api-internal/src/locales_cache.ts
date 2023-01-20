@@ -50,9 +50,10 @@ export const loadAllFromGitHub = async (
     for (const localeMetaData of localesToLoad) {
         const localeRawData: LocaleRawData = { id: localeMetaData.id, stringFiles: [] }
         i++
-        console.log(`-> loading repo ${localeMetaData.repo} (${i}/${localesToLoad.length})`)
+        const owner = 'devographics'
+        const repo = `locale-${localeMetaData.id}`
+        console.log(`-> loading repo ${owner}/${repo} (${i}/${localesToLoad.length})`)
 
-        const [owner, repo] = localeMetaData.repo.split('/')
         const options = {
             owner,
             repo,
@@ -97,13 +98,10 @@ export const loadAllLocally = async (localesToLoad: LocaleMetaData[]): Promise<L
     for (const localeMetaData of localesToLoad) {
         const localeRawData: LocaleRawData = { id: localeMetaData.id, stringFiles: [] }
         i++
-        console.log(
-            `-> loading directory ${localeMetaData.repo} locally (${i}/${localesToLoad.length})`
-        )
+        const localeDirName = `locale-${localeMetaData.id}`
+        console.log(`-> loading directory ${localeDirName} locally (${i}/${localesToLoad.length})`)
 
-        const [owner, repo] = localeMetaData.repo.split('/')
-
-        const localeDirPath = path.resolve(`../../${process.env.LOCALES_DIR}/${repo}`)
+        const localeDirPath = path.resolve(`../../${process.env.LOCALES_DIR}/${localeDirName}`)
         const files = await readdir(localeDirPath)
         const yamlFiles = files.filter((f: String) => f.includes('.yml'))
 
@@ -134,9 +132,7 @@ Load the YAML file containing metadata for all locales
 
 */
 export const getLocalesYAML = () => {
-    // only keep locales which have a repo defined
-    const localesWithRepos = localesYAML.filter((locale: Locale) => !!locale.repo)
-    return localesWithRepos
+    return localesYAML
 }
 
 /*
@@ -158,7 +154,11 @@ export const loadLocales = async (localeIds?: string[]): Promise<LocaleRawData[]
     const localesToLoad = localeIds
         ? allLocales.filter((locale: LocaleMetaData) => localeIds.includes(locale.id))
         : allLocales
-    console.log(`// loading locales… (${localesToLoad.map((l: LocaleMetaData) => l.id).join(',')})`)
+    console.log(
+        `// loading ${localesToLoad.length} locales… (${localesToLoad
+            .map((l: LocaleMetaData) => l.id)
+            .join(',')})`
+    )
     const locales =
         appSettings.loadLocalesMode === 'local'
             ? await loadAllLocally(localesToLoad)
@@ -230,9 +230,9 @@ export const parseMarkdown = (stringFile: StringFile) => {
         if (tHtml !== s.t || containsTagRegex.test(s.t)) {
             s.tHtml = sanitizeHtml(tHtml, {
                 allowedClasses: {
-                    '*': [ '*' ]
-                  }
-              })
+                    '*': ['*']
+                }
+            })
             s.tClean = decode(
                 sanitizeHtml(tHtml, {
                     allowedTags: []
