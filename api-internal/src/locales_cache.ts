@@ -293,10 +293,12 @@ export const computeMetaData = (
     const totalCount = allStrings.length
     const translatedCount = totalCount - untranslatedKeys.length
     const completion = isEn ? 100 : Math.round((translatedCount * 100) / totalCount)
+    const repo = `devographics/locale-${locale.id}`
     const dynamicData = {
         totalCount,
         translatedCount,
-        completion
+        completion,
+        repo
     }
     const yamlData = getLocaleYAML(locale.id)
     return { ...dynamicData, ...yamlData }
