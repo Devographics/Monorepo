@@ -9,7 +9,7 @@ import { MODE_DEFAULT, MODE_FACET, MODE_FILTERS } from './constants'
 import { useI18n } from 'core/i18n/i18nContext'
 import { useTheme } from 'styled-components'
 import round from 'lodash/round'
-import { useAllChartsOptions, getVariantBarColorItem } from 'core/charts/hooks'
+import { useAllChartsOptions, getVariantBarColorItem, velocityFacets } from 'core/charts/hooks'
 import sumBy from 'lodash/sumBy'
 import roundBy from 'lodash/roundBy'
 
@@ -236,7 +236,7 @@ export const useFilterLegends = ({
     chartFilters,
     currentYear,
     showDefaultSeries,
-    reverse = false
+    reverse = false,
 }: {
     chartFilters: any
     currentYear?: number
@@ -245,8 +245,8 @@ export const useFilterLegends = ({
 }) => {
     const allChartsOptions = useAllChartsOptions()
     const theme = useTheme()
+    const { colors } = theme
     const { getString } = useI18n()
-    const barColors = theme.colors.barColors
     let results
     if (chartFilters.options.mode === MODE_FILTERS) {
         if (!chartFilters.filters || chartFilters.filters.length === 0) {
@@ -258,8 +258,8 @@ export const useFilterLegends = ({
                 ? getString('filters.series.year', { values: { year: currentYear } })?.t
                 : getString('filters.legend.default')?.t
             const defaultLegendItem = {
-                color: theme.colors.barColorDefault.color,
-                gradientColors: theme.colors.barColorDefault.gradient,
+                color: colors.barColorDefault.color,
+                gradientColors: colors.barColorDefault.gradient,
                 id: 'default',
                 label: defaultLabel,
                 shortLabel: defaultLabel
@@ -291,7 +291,7 @@ export const useFilterLegends = ({
                 }
                 const label = labelSegments.join(', ')
 
-                const barColorItem = getVariantBarColorItem(barColors, seriesIndex)
+                const barColorItem = getVariantBarColorItem(colors, seriesIndex, null)
 
                 const legendItem = {
                     color: barColorItem.color,
@@ -307,7 +307,7 @@ export const useFilterLegends = ({
     } else if (chartFilters.options.mode === MODE_FACET) {
         results = allChartsOptions[chartFilters.facet].map(({ id }, index) => {
             const label = getString(`options.${chartFilters.facet}.${id}`)?.t
-            const barColorItem = getVariantBarColorItem(barColors, index + 1)
+            const barColorItem = getVariantBarColorItem(colors, index + 1, chartFilters.facet)
             return {
                 color: barColorItem.color,
                 gradientColors: barColorItem.gradient,

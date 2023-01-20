@@ -57,10 +57,15 @@ Variant 10 = barColor 10
 Variant 11 = barColor 1 // start over
 
 */
-export const getVariantBarColorItem = (barColors, variantIndex) => {
-    const numberOfVariantColors = barColors.length
-    const barColorIndex = variantIndex % numberOfVariantColors
-    return barColors[barColorIndex]
+export const getVariantBarColorItem = (colors, variantIndex, facet) => {
+    const {velocityBarColors, barColors} = colors
+    if (velocityFacets.includes(facet)) {
+        return velocityBarColors[variantIndex]
+    } else {
+        const numberOfVariantColors = barColors.length
+        const barColorIndex = variantIndex % numberOfVariantColors
+        return barColors[barColorIndex]
+    }
 }
 
 export const useBarChart = ({
@@ -119,7 +124,8 @@ type UseColorDefsOptions = {
 export const useColorDefs = (options: UseColorDefsOptions = {}) => {
     const { orientation = VERTICAL } = options
     const theme = useTheme()
-    const colors = theme.colors.barColors.map((barColor, i) => ({
+    const { colors } = theme
+    const barColors = colors.barColors.map((barColor, i) => ({
         id: `Gradient${orientation}${i + 1}`,
         type: 'linearGradient',
         colors: [
@@ -129,12 +135,22 @@ export const useColorDefs = (options: UseColorDefsOptions = {}) => {
         ...(orientation === HORIZONTAL ? horizontalDefs : {})
     }))
 
+    const velocity = colors.velocityBarColors.map((barColor, i) => ({
+        id: `Velocity${orientation}${i + 1}`,
+        type: 'linearGradient',
+        colors: [
+            { offset: 0, color: barColor.gradient[1] },
+            { offset: 100, color: barColor.gradient[0] }
+        ],
+        ...(orientation === HORIZONTAL ? horizontalDefs : {})
+    }))
+    
     const noAnswerGradient = {
         id: `Gradient${orientation}NoAnswer`,
         type: 'linearGradient',
         colors: [
-            { offset: 0, color: theme.colors.barColorNoAnswer.gradient[1] },
-            { offset: 100, color: theme.colors.barColorNoAnswer.gradient[0] }
+            { offset: 0, color: colors.barColorNoAnswer.gradient[1] },
+            { offset: 100, color: colors.barColorNoAnswer.gradient[0] }
         ],
         ...(orientation === HORIZONTAL ? horizontalDefs : {})
     }
@@ -143,13 +159,13 @@ export const useColorDefs = (options: UseColorDefsOptions = {}) => {
         id: `Gradient${orientation}Default`,
         type: 'linearGradient',
         colors: [
-            { offset: 0, color: theme.colors.barColorDefault.gradient[1] },
-            { offset: 100, color: theme.colors.barColorDefault.gradient[0] }
+            { offset: 0, color: colors.barColorDefault.gradient[1] },
+            { offset: 100, color: colors.barColorDefault.gradient[0] }
         ],
         ...(orientation === HORIZONTAL ? horizontalDefs : {})
     }
 
-    return [...colors, defaultGradient, noAnswerGradient]
+    return [...barColors, ...velocity, defaultGradient, noAnswerGradient]
 }
 
 type UseColorFillsOptions = {
@@ -168,13 +184,16 @@ chartKeys are e.g.
 ['percentage_bucket__male', 'percentage_bucket__female', 'percentage_bucket__non_binary', etc. ]
 
 */
+export const velocityFacets = ['yearly_salary', 'company_size', 'years_of_experience', 'age']
+
 export const useColorFills = (options: UseColorFillsOptions = {}) => {
     const theme = useTheme()
     const {
         chartDisplayMode,
         orientation = VERTICAL,
         gridIndex = 0,
-        keys: chartKeys = []
+        keys: chartKeys = [],
+        facet
     } = options
 
     const noAnswerFill = {
@@ -197,13 +216,14 @@ export const useColorFills = (options: UseColorFillsOptions = {}) => {
             This will match keys of the type count__male, count__female, etc.
 
             */
+            const prefix = velocityFacets.includes(facet) ? 'Velocity' : 'Gradient'
             const facetFills = chartKeys.map((keyName, i) => ({
                 match: d => {
                     // key will follow "unit__facet.bucket" pattern, e.g. "percentage_bucket__range_1_5.range_less_than_1"
                     const [facetKey, bucketKey] = d.key.split('.')
                     return facetKey === keyName
                 },
-                id: `Gradient${orientation}${i + 2}`
+                id: `${prefix}${orientation}${i + 2}`
             }))
             return [noAnswerFill, ...facetFills]
         }
@@ -292,9 +312,7 @@ export const useChartKeys = ({
         }
     } else if (seriesCount) {
         if (showDefaultSeries) {
-            return [...Array(seriesCount + 1)].map((x, i) =>
-                i === 0 ? units : `${units}__${i}`
-            )
+            return [...Array(seriesCount + 1)].map((x, i) => (i === 0 ? units : `${units}__${i}`))
         } else {
             return [...Array(seriesCount)].map((x, i) => `${units}__${i + 1}`)
         }

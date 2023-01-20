@@ -172,6 +172,11 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
     heatmap: colors.pinkLight,
     lineChartDefaultColor: '#59DF7F',
     no_answer: [colors.greyLight, colors.greyLightest],
+    velocityBarColors: velocity.map((color, i) => ({
+        id: `velocityColor${i}`,
+        color,
+        gradient: [velocity[i], velocity[i + 3]]
+    })),
     // bar colors for variants when using filters and (especially) facets
     barColors: [
         {
