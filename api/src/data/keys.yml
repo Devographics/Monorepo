@@ -193,6 +193,44 @@ usage_type:
   - hobby
   - professionally
 
+# this ideally shouldn't be hardcoded but for now this is easier than dynamically loading that data into
+# the Filters UI
+source: 
+  - state_of_js_survey
+  - twitter
+  - google
+  - youtube
+  - fireship
+  - angular_community
+  - js_weekly
+  - reddit
+  - scrimba
+  - linkedin
+  - work
+  - word_of_mouth
+  - duckduckgo
+  - slack
+  - discord
+  - codrops
+  - microsoft_teams
+  - devto
+  - state_of_css_survey
+  - mastodon
+
+filters: 
+  - gender
+  - race_ethnicity
+  - yearly_salary
+  - industry_sector
+  - disability_status
+  - company_size
+  - years_of_experience
+  - higher_education_degree
+  - source
+  - country
+  - age
+  - locale
+
 facets:
   - gender
   - race_ethnicity
@@ -205,3 +243,4 @@ facets:
   - source
   - country
   - age
+  - locale

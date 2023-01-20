@@ -10,8 +10,8 @@ export default {
         survey: (parent: any, { survey }: { survey: SurveyType }) => ({
             survey
         }),
-        metadata: () => {
-            return getMetaData()
+        metadata: async (parent, args, context) => {
+            return await getMetaData({ context })
         }
     }
 }
