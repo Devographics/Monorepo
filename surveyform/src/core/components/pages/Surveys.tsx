@@ -1,6 +1,5 @@
 import React from "react";
-import surveys from "~/surveys";
-import { getSurveyPath } from "~/modules/surveys/getters";
+import { getSurveyPath } from "~/modules/surveys/helpers";
 import Link from "next/link";
 import { statuses } from "~/modules/constants";
 import LocaleSelector from "~/core/components/common/LocaleSelector";
@@ -8,12 +7,11 @@ import Translators from "~/core/components/common/Translators";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import Image from "next/image";
 import { getSurveyImageUrl } from "~/surveys/getSurveyImageUrl";
-import { SurveyDocument } from "@devographics/core-models";
+import type { SurveyDescription } from "~/surveys/list";
 
-const SurveyItem = ({ survey }: { survey: SurveyDocument }) => {
+const SurveyItem = ({ survey }: { survey: SurveyDescription }) => {
   const { name, year, status } = survey;
   const imageUrl = getSurveyImageUrl(survey);
-  //const Components = useVulcanComponents();
   return (
     <div>
       <div className="survey-item">
@@ -46,7 +44,14 @@ const SurveyItem = ({ survey }: { survey: SurveyDocument }) => {
   );
 };
 
-const SurveyGroup = ({ status }) => {
+const SurveyGroup = ({
+  surveys,
+  status,
+}: {
+  surveys: Array<SurveyDescription>;
+  status: string;
+}) => {
+  if (!status) throw new Error("SurveyGroup must receive a defined status");
   const filteredSurveys = surveys.filter((s) => s.status === statuses[status]);
   return (
     <div className="surveys-group">
@@ -66,13 +71,13 @@ const SurveyGroup = ({ status }) => {
   );
 };
 
-const Surveys = () => {
+const Surveys = ({ surveys }: { surveys: Array<SurveyDescription> }) => {
   return (
     <div className="surveys">
       {/* FIXME won't load useLocaleContext correctly... <LocaleSelector />*/}
-      <SurveyGroup status="open" />
-      <SurveyGroup status="preview" />
-      <SurveyGroup status="closed" />
+      <SurveyGroup surveys={surveys} status={"open"} />
+      <SurveyGroup surveys={surveys} status={"preview"} />
+      <SurveyGroup surveys={surveys} status={"closed"} />
       {/*<Translators />*/}
     </div>
   );

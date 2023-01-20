@@ -1,7 +1,6 @@
 "use client";
 import { useFormContext } from "@devographics/react-form";
 import React, { useEffect } from "react";
-import { getSurveyPath } from "~/modules/surveys/getters";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import { SurveyDocument } from "@devographics/core-models";
 import Link from "next/link";
@@ -9,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { LoadingButton } from "~/core/components/ui/LoadingButton";
 import { captureException } from "@sentry/nextjs";
 import { saveSurvey } from "~/core/components/survey/page/hooks";
+import { getSurveyPath } from "~/modules/surveys/helpers";
 
 const FormSubmit = ({
   survey,

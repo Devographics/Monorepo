@@ -1,6 +1,6 @@
 "use client";
 import ShareSite from "../share/ShareSite";
-import { getSurveyPath } from "~/modules/surveys/getters";
+import { getSurveyPath } from "~/modules/surveys/helpers";
 import Score from "../common/Score";
 import Image from "next/image";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";

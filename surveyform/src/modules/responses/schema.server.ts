@@ -5,8 +5,7 @@ import { getCompletionPercentage, getKnowledgeScore } from "./helpers";
 import { VulcanGraphqlSchemaServer } from "@vulcanjs/graphql/server";
 import { schema as schemaCommon } from "./schema";
 
-import { getSurveyPath } from "~/modules/surveys/getters";
-import { ResponseConnector } from "~/modules/responses/model.server";
+import { getSurveyDescriptionFromResponse, getSurveyPath } from "~/modules/surveys/helpers";
 import { extendSchemaServer } from "@devographics/core-models";
 
 import { nanoid } from "nanoid";
@@ -99,9 +98,6 @@ export const schema: VulcanGraphqlSchemaServer = extendSchemaServer(
       },
     },
 
-    // previously in API schema
-    // TODO: syntax is probably wrong
-
     pagePath: {
       type: String,
       canRead: ["owners"],
@@ -109,7 +105,11 @@ export const schema: VulcanGraphqlSchemaServer = extendSchemaServer(
       resolveAs: {
         fieldName: "pagePath",
         type: "String",
-        resolver: async (response) => getSurveyPath({ response }),
+        resolver: async (response) => {
+          const surveyDescription = await getSurveyDescriptionFromResponse(response)
+          console.log("resolve survey", surveyDescription?.slug)
+          return getSurveyPath({ survey: surveyDescription, response })
+        },
       },
     },
 

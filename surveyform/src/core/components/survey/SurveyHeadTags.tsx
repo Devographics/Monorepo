@@ -6,7 +6,7 @@ import { computeHeadTags } from "./computeHeadTags";
 import { publicConfig } from "~/config/public";
 import { SurveyDocument, SurveySection } from "@devographics/core-models";
 import { getSurveyImageUrl } from "~/surveys/getSurveyImageUrl";
-import { getSurveyTitle, getSectionKey } from "~/modules/surveys/getters";
+import { getSectionKey, getSurveyTitle } from "~/modules/surveys/helpers";
 
 const SurveyHeadTags = ({
   survey,

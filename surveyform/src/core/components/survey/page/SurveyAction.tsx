@@ -9,7 +9,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import get from "lodash/get.js";
-import { getSurveyPath } from "~/modules/surveys/getters";
 import isEmpty from "lodash/isEmpty.js";
 import { statuses } from "~/modules/constants";
 import { SurveyType } from "@devographics/core-models";
@@ -27,6 +26,7 @@ import { useUser } from "~/account/user/hooks";
 import { useUserResponse } from "~/modules/responses/hooks";
 import { Loading } from "~/core/components/ui/Loading";
 import { LoadingButton } from "~/core/components/ui/LoadingButton";
+import { getSurveyPath } from "~/modules/surveys/helpers";
 
 const duplicateResponseErrorId = "error.duplicate_response";
 
@@ -38,8 +38,9 @@ const SurveyAction = ({
   currentUser?: UserType;
 }) => {
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] =
-    useState<Array<ErrorObject | Error> | undefined>();
+  const [errors, setErrors] = useState<
+    Array<ErrorObject | Error> | undefined
+  >();
   const { slug, status } = survey;
   if (!slug) throw new Error(`Slug not found in SurveyAction`);
   const { user, loading: userLoading, error: userError } = useUser();
@@ -162,7 +163,6 @@ const SurveyStart = ({
       try {
         // TODO: we might want to use an Error boundary and a Suspense to handle loading and errors
         const result = await startSurvey(survey, data);
-        console.log("result", result);
         if (result.error) {
           setErrors([result.error]);
         } else {

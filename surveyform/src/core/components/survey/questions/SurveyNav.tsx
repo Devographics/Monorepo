@@ -12,7 +12,7 @@ TODO
 import { useFormContext } from "@devographics/react-form";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
-import { getSurveyPath } from "~/modules/surveys/getters";
+import { getSurveyPath } from "~/modules/surveys/helpers";
 import type { SurveyType } from "@devographics/core-models";
 import surveys from "~/surveys";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
