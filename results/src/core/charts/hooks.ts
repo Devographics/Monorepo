@@ -244,6 +244,15 @@ export const useColorFills = (options: UseColorFillsOptions = {}) => {
 
             */
             const prefix = velocityFacets.includes(facet) ? 'Velocity' : 'Gradient'
+
+            const averageFill = {
+                match: d => {
+                    // key will follow "unit__facet.bucket" pattern, e.g. "percentage_bucket__range_1_5.range_less_than_1"
+                    const [facetKey, bucketKey] = d.key.split('.')
+                    return facetKey === 'average'},
+                id: `Gradient${orientation}1`
+            }
+
             const facetFills = chartKeys.map((keyName, i) => ({
                 match: d => {
                     // key will follow "unit__facet.bucket" pattern, e.g. "percentage_bucket__range_1_5.range_less_than_1"
@@ -252,7 +261,8 @@ export const useColorFills = (options: UseColorFillsOptions = {}) => {
                 },
                 id: `${prefix}${orientation}${i + 2}`
             }))
-            return [noAnswerFill, ...facetFills]
+
+            return [noAnswerFill, averageFill, ...facetFills]
         }
         case CHART_MODE_GROUPED: {
             /*

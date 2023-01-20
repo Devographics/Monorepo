@@ -110,10 +110,14 @@ const velocity = [
     '#75FBDA',
     '#A1FFE8',
     '#C9FFF2',
+    '#c9f7ff',
+    '#d7e7fe',
     '#E9DCFF',
     '#DCC7FF',
     '#CAAAFF',
-    '#AD84EF'
+    '#AD84EF',
+    '#8e5ddb',
+    '#6b36bf'
 ]
 
 const arrowsVelocity = [
@@ -174,8 +178,8 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
     no_answer: [colors.greyLight, colors.greyLightest],
     velocityBarColors: velocity.map((color, i) => ({
         id: `velocityColor${i}`,
-        color,
-        gradient: [velocity[i], velocity[i + 3]]
+        color: velocity[i * 2],
+        gradient: [velocity[i * 2+1], velocity[i * 2]]
     })),
     // bar colors for variants when using filters and (especially) facets
     barColors: [

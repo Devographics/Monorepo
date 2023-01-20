@@ -175,10 +175,10 @@ export const invertFacets = ({ facets, defaultBuckets }) => {
         facet.buckets.forEach(facetBucket => {
             const baseBucket = newBuckets.find(b => b.id === facetBucket.id)
             if (!baseBucket) {
-                console.log(
+                console.warn(
                     `Could not find bucket id ${facetBucket.id} while processing facet id ${facet.id}`
                 )
-                console.log(facetBucket)
+                console.warn(facetBucket)
                 return
             }
             baseUnits.forEach(field => {
