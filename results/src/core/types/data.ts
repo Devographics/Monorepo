@@ -132,3 +132,13 @@ export interface FacetCompletion {
     // percentage of respondents compared to the total number of participants
     percentage_survey: number
 }
+
+/*
+
+An option for a chart
+
+*/
+export interface ChartOptionDefinition {
+    id: string
+    average?: number
+}

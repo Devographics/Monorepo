@@ -2,6 +2,7 @@ blockType: HorizontalBarBlock
 dataPath: "dataAPI.survey.${id}.year"
 # enableCustomization: true
 hasSponsor: true
+hasFilters: true
 query: >
     dataAPI {
         survey(survey: ${surveyType}) {

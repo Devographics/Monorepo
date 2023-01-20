@@ -11,5 +11,7 @@ enum Facet {
     higher_education_degree
     source
     country
+    age
+    locale
 
 }

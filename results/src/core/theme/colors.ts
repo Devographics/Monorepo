@@ -8,8 +8,9 @@ export default {
   greyDarkish: '#2a2d33',
   greyDarker: '#1E252E',
 
-  greyTeal: '#a3cacd',
   greyTealDark: '#789B9D',
+  greyTeal: '#a3cacd',
+  greyTealLight: '#bdedf1',
 
   blueLighter: '#B2BBEE',
   blueLight: '#808EE1',

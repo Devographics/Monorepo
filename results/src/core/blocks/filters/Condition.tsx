@@ -7,7 +7,7 @@ import T from 'core/i18n/T'
 import { DeleteIcon, TrashIcon, PlusIcon } from 'core/icons'
 import cloneDeep from 'lodash/cloneDeep.js'
 import { getFieldLabel, getValueLabel } from './helpers'
-import { useAllChartsKeys } from 'core/charts/hooks'
+import { useAllChartsOptions } from 'core/charts/hooks'
 
 const operators = ['eq', 'in', 'nin']
 
@@ -24,9 +24,9 @@ const Condition = ({
     const { field = defaultField, operator, value } = condition
     const { setFiltersState } = stateStuff
 
-    const allChartsKeys = useAllChartsKeys()
+    const allChartsOptions = useAllChartsOptions()
 
-    const values = allChartsKeys[field] || []
+    const values = allChartsOptions[field] || []
 
     const disabledList = filtersInUse.filter(fieldId => fieldId !== field)
 
@@ -38,7 +38,7 @@ const Condition = ({
         })
     }
 
-    const segmentProps = { seriesIndex, conditionIndex: index, stateStuff, keys: allChartsKeys, field }
+    const segmentProps = { seriesIndex, conditionIndex: index, stateStuff, allChartsOptions, field }
 
     return (
         <ActiveCondition_>
@@ -83,7 +83,7 @@ const FieldSegment = ({
     segmentId,
     options,
     value,
-    keys,
+    allChartsOptions,
     field,
     disabledList = []
 }) => {
@@ -100,7 +100,8 @@ const FieldSegment = ({
                         newState.filters[seriesIndex].conditions[conditionIndex][segmentId] = value
                         // if we're changing the field, also change the value
                         const fieldId = value
-                        newState.filters[seriesIndex].conditions[conditionIndex].value = keys[fieldId][0]
+                        newState.filters[seriesIndex].conditions[conditionIndex].value =
+                            allChartsOptions?.[fieldId]?.[0]?.id
                         return newState
                     })
                 }}
@@ -126,11 +127,12 @@ const ValueSegment = ({
     segmentId,
     options,
     value,
-    keys,
-    field
+    field,
+    allChartsOptions
 }) => {
     const { setFiltersState } = stateStuff
     const { getString } = useI18n()
+
     return (
         <Label_>
             {/* <span>{segmentId}</span> */}
@@ -148,9 +150,9 @@ const ValueSegment = ({
                 <option value="" disabled>
                     {getString && getString('explorer.select_item')?.t}
                 </option>
-                {options.map(o => (
-                    <option key={o} value={o}>
-                        {getValueLabel({ getString, field, value: o })}
+                {options.map(({ id, entity, label }) => (
+                    <option key={id} value={id}>
+                        {getValueLabel({ getString, field, value: id, allChartsOptions })}
                     </option>
                 ))}
             </Select_>

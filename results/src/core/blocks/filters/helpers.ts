@@ -5,11 +5,13 @@ import cloneDeep from 'lodash/cloneDeep.js'
 import isEmpty from 'lodash/isEmpty'
 import { CustomizationDefinition, CustomizationOptions } from './types'
 import { BlockDefinition } from 'core/types'
-import { MODE_DEFAULT, MODE_FACET, MODE_FILTERS } from './constants'
+import { MODE_DEFAULT, MODE_FACET, MODE_FILTERS, START_MARKER, END_MARKER } from './constants'
 import { useI18n } from 'core/i18n/i18nContext'
 import { useTheme } from 'styled-components'
 import round from 'lodash/round'
-import { useAllChartsKeys } from 'core/charts/hooks'
+import { useAllChartsOptions, getVariantBarColorItem } from 'core/charts/hooks'
+import sumBy from 'lodash/sumBy'
+import roundBy from 'lodash/roundBy'
 
 export const getNewCondition = ({ filtersNotInUse, keys }) => {
     const field = filtersNotInUse[0]
@@ -21,9 +23,11 @@ export const getNewSeries = ({ filters, keys, year }) => {
     return { year, conditions: [getNewCondition({ filtersNotInUse, keys })] }
 }
 
-const startMarker = '# fragmentStart'
-const endMarker = '# fragmentEnd'
+/*
 
+Generate query used for filtering
+
+*/
 export const getFiltersQuery = ({
     block,
     chartFilters = {},
@@ -35,12 +39,12 @@ export const getFiltersQuery = ({
 }) => {
     let queryBody
     const query = getGraphQLQuery(block)
-    const queryHeader = query.slice(0, query.indexOf(startMarker))
+    const queryHeader = query.slice(0, query.indexOf(START_MARKER))
     const queryContents = query.slice(
-        query.indexOf(startMarker) + startMarker.length,
-        query.indexOf(endMarker)
+        query.indexOf(START_MARKER) + START_MARKER.length,
+        query.indexOf(END_MARKER)
     )
-    const queryFooter = query.slice(query.indexOf(endMarker) + endMarker.length)
+    const queryFooter = query.slice(query.indexOf(END_MARKER) + END_MARKER.length)
     if (chartFilters.options.mode === MODE_FILTERS) {
         queryBody = chartFilters.filters
             .map((singleSeries, seriesIndex) => {
@@ -69,7 +73,7 @@ export const getFiltersQuery = ({
     return newQuery
 }
 
-const fields = ['count', 'percentage_question', 'percentage_survey']
+const baseUnits = ['count', 'percentage_question', 'percentage_survey']
 
 /*
 
@@ -88,13 +92,13 @@ export const combineBuckets = ({ defaultBuckets, otherBucketsArrays, completion 
             const { id } = bucket
             const otherSeriesBucket = buckets.find(b => b.id === id)
             if (otherSeriesBucket) {
-                fields.forEach(field => {
+                baseUnits.forEach(field => {
                     bucket[`${field}__${seriesIndex}`] = otherSeriesBucket[field]
                 })
             } else {
                 // series might have returned undefined;
                 // or else default buckets contains bucket items not in series buckets
-                fields.forEach(field => {
+                baseUnits.forEach(field => {
                     bucket[`${field}__${seriesIndex}`] = 0
                 })
             }
@@ -161,14 +165,23 @@ buckets: [
     },
     // ...
 ]
-    
+
+NOTE: this could be avoided by inverting the API query itself
+
 */
 export const invertFacets = ({ facets, defaultBuckets }) => {
     const newBuckets = cloneDeep(defaultBuckets)
     facets.forEach(facet => {
         facet.buckets.forEach(facetBucket => {
             const baseBucket = newBuckets.find(b => b.id === facetBucket.id)
-            fields.forEach(field => {
+            if (!baseBucket) {
+                console.warn(
+                    `Could not find bucket id ${facetBucket.id} while processing facet id ${facet.id}`
+                )
+                console.warn(facetBucket)
+                return
+            }
+            baseUnits.forEach(field => {
                 baseBucket[`${field}__${facet.id}`] = facetBucket[field]
             })
             baseBucket[`percentage_bucket__${facet.id}`] = round(
@@ -180,24 +193,81 @@ export const invertFacets = ({ facets, defaultBuckets }) => {
     return newBuckets
 }
 
+/*
+
+Calculate facet averages
+
+*/
+export const calculateAverages = ({ buckets, facet, allChartsOptions }) => {
+    const facetOptions = allChartsOptions[facet]
+    if (facetOptions && typeof facetOptions[0].average !== 'undefined') {
+        buckets.forEach(bucket => {
+            if (bucket.id === 'no_answer') {
+                return
+            }
+            const averageValue =
+                sumBy(facetOptions, ({ id, average }) => {
+                    const facetCount = bucket[`count__${id}`] || 0
+                    return average * facetCount
+                }) / bucket.count
+            bucket.average = Math.round(averageValue)
+        })
+    }
+    return buckets
+}
+
+/*
+
+Get label for field
+
+*/
 export const getFieldLabel = ({ getString, field }) => getString(`user_info.${field}`)?.t
 
-export const getValueLabel = ({ getString, field, value }) =>
-    field === 'country' ? getCountryName(value) || value : getString(`options.${field}.${value}`)?.t
+/*
 
+Get label for a field value (age range, country name, source name, locale label, etc.)
+
+*/
+export const getValueLabel = ({ getString, field, value, allChartsOptions }) => {
+    switch (field) {
+        case 'country': {
+            return getCountryName(value) || value
+        }
+        case 'source': {
+            const source = allChartsOptions.source.find(s => s.id === value)
+            return source?.entity?.name || value
+        }
+        case 'locale': {
+            const locale = allChartsOptions.locale.find(l => l.id === value)
+            const fallback = locale.label
+            return getString(`options.${field}.${value}`, {}, fallback)?.t
+        }
+        default: {
+            const fallback = value
+            return getString(`options.${field}.${value}`, {}, fallback)?.t
+        }
+    }
+}
+
+/*
+
+Generate the legends used when filtering is enabled
+
+*/
 export const useFilterLegends = ({
     chartFilters,
     currentYear,
     showDefaultSeries,
-    reverse = false
+    reverse = false,
 }: {
     chartFilters: any
     currentYear?: number
     showDefaultSeries?: boolean
     reverse?: boolean
 }) => {
-    const allChartKeys = useAllChartsKeys()
+    const allChartsOptions = useAllChartsOptions()
     const theme = useTheme()
+    const { colors } = theme
     const { getString } = useI18n()
     let results
     if (chartFilters.options.mode === MODE_FILTERS) {
@@ -210,8 +280,8 @@ export const useFilterLegends = ({
                 ? getString('filters.series.year', { values: { year: currentYear } })?.t
                 : getString('filters.legend.default')?.t
             const defaultLegendItem = {
-                color: theme.colors.barColors[0].color,
-                gradientColors: theme.colors.barColors[0].gradient,
+                color: colors.barColorDefault.color,
+                gradientColors: colors.barColorDefault.gradient,
                 id: 'default',
                 label: defaultLabel,
                 shortLabel: defaultLabel
@@ -234,7 +304,8 @@ export const useFilterLegends = ({
                             const valueLabel = getValueLabel({
                                 getString,
                                 field,
-                                value
+                                value,
+                                allChartsOptions
                             })
                             return `${fieldLabel} = ${valueLabel}`
                         })
@@ -242,10 +313,11 @@ export const useFilterLegends = ({
                 }
                 const label = labelSegments.join(', ')
 
-                const barColorIndex = seriesIndex + 1
+                const barColorItem = getVariantBarColorItem(colors, seriesIndex, null)
+
                 const legendItem = {
-                    color: theme.colors.barColors[barColorIndex].color,
-                    gradientColors: theme.colors.barColors[barColorIndex].gradient,
+                    color: barColorItem.color,
+                    gradientColors: barColorItem.gradient,
                     id: `series_${seriesIndex}`,
                     label,
                     shortLabel: label
@@ -255,12 +327,18 @@ export const useFilterLegends = ({
             results = [...(showDefaultSeries ? [defaultLegendItem] : []), ...seriesLegendItems]
         }
     } else if (chartFilters.options.mode === MODE_FACET) {
-        results = allChartKeys[chartFilters.facet].map((key, index) => {
-            const label = getString(`options.${chartFilters.facet}.${key}`)?.t
+        results = allChartsOptions[chartFilters.facet].map(({ id }, index) => {
+            const label = getValueLabel({
+                getString,
+                field: chartFilters.facet,
+                value: id,
+                allChartsOptions
+            })
+            const barColorItem = getVariantBarColorItem(colors, index + 1, chartFilters.facet)
             return {
-                color: theme.colors.barColors[index + 1].color,
-                gradientColors: theme.colors.barColors[index + 1].gradient,
-                id: `series_${key}`,
+                color: barColorItem.color,
+                gradientColors: barColorItem.gradient,
+                id: `series_${id}`,
                 label,
                 shortLabel: label
             }
@@ -271,7 +349,12 @@ export const useFilterLegends = ({
     return reverse ? [...results].reverse() : results
 }
 
-export const getInitFilters = (initOptions?: CustomizationOptions) => ({
+/*
+
+Initialize the chart customization filter state
+
+*/
+export const getInitFilters = (initOptions?: CustomizationOptions): CustomizationDefinition => ({
     options: {
         showDefaultSeries: true,
         allowModeSwitch: false,

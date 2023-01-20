@@ -157,23 +157,4 @@ const VerticalBarChart = ({
     )
 }
 
-VerticalBarChart.propTypes = {
-    total: PropTypes.number,
-    buckets: PropTypes.arrayOf(
-        PropTypes.shape({
-            id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-            count: PropTypes.number.isRequired,
-            percentage: PropTypes.number
-        })
-    ).isRequired,
-    i18nNamespace: PropTypes.string.isRequired,
-    translateData: PropTypes.bool.isRequired,
-    mode: PropTypes.oneOf(['absolute', 'relative']).isRequired,
-    units: PropTypes.oneOf(['percentage_survey', 'percentage_question', 'count']).isRequired,
-    colorVariant: PropTypes.oneOf(['primary', 'secondary'])
-}
-VerticalBarChart.defaultProps = {
-    translateData: true
-}
-
 export default memo(VerticalBarChart)

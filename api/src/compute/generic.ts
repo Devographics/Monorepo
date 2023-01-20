@@ -24,7 +24,7 @@ import take from 'lodash/take.js'
 import round from 'lodash/round.js'
 import { count } from 'console'
 import difference from 'lodash/difference.js'
-import yamlKeys from '../data/keys.yml'
+import { getChartKeys } from '../helpers'
 import isEmpty from 'lodash/isEmpty.js'
 import { getFacetSegments } from '../helpers'
 
@@ -154,14 +154,15 @@ export async function computeDefaultTermAggregationByYear({
 
     // if values (keys) are not passed as options, look in globally defined yaml keys
     let values
+
     if (options.keysFunction) {
         values = await options.keysFunction({ id: fieldId, survey })
     } else if (options.keys) {
         values = options.keys
     } else if (options.facet1keys) {
         values = options.facet1keys
-    } else if (yamlKeys[fieldId]) {
-        values = yamlKeys[fieldId]
+    } else if (getChartKeys(fieldId)) {
+        values = getChartKeys(fieldId)
     }
 
     const hasValues = !isEmpty(values)
@@ -174,7 +175,7 @@ export async function computeDefaultTermAggregationByYear({
     const { fieldName: facetId } = (options.facet && getFacetSegments(options.facet)) || {}
     const facetSort = options?.facetSort?.property ?? 'mean'
     const facetOrder = convertOrder(options?.facetSort?.order ?? 'desc')
-    const facetValues = options.facet2keys || (facetId && yamlKeys[facetId])
+    const facetValues = options.facet2keys || (facetId && getChartKeys(facetId))
 
     // console.log('// key')
     // console.log(key)

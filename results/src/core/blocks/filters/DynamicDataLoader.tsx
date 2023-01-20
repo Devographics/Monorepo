@@ -1,28 +1,25 @@
 import React, { useState, useEffect, useRef, ReactNode, Dispatch, SetStateAction } from 'react'
-import styled, { css } from 'styled-components'
-import { combineBuckets, getFiltersQuery, invertFacets, useFilterLegends } from './helpers'
+import styled from 'styled-components'
+import { combineBuckets, getFiltersQuery, invertFacets, useFilterLegends, calculateAverages } from './helpers'
 import { runQuery } from 'core/blocks/explorer/data'
 import Loading from 'core/blocks/explorer/Loading'
 import { usePageContext } from 'core/helpers/pageContext'
-import { spacing, mq, fontSize } from 'core/theme'
+// import { spacing, mq, fontSize } from 'core/theme'
 import { useTheme } from 'styled-components'
 import { useI18n } from 'core/i18n/i18nContext'
-import Tooltip from 'core/components/Tooltip'
-import T from 'core/i18n/T'
 import isEmpty from 'lodash/isEmpty'
 import {
     BEHAVIOR_COMBINED,
     BEHAVIOR_MULTIPLE,
     MODE_FACET,
     MODE_FILTERS,
-    MODE_DEFAULT,
-    CHART_MODE_GRID,
     CHART_MODE_STACKED,
     CHART_MODE_GROUPED,
     CHART_MODE_DEFAULT
 } from './constants'
 import { CustomizationDefinition } from './types'
 import WrapperGrid from './WrapperGrid'
+import { useAllChartsOptions } from 'core/charts/hooks'
 
 const doNothing = a => a
 
@@ -98,6 +95,8 @@ const DynamicDataLoader = ({
 
     const initialLoad = useRef(true)
 
+    const allChartsOptions = useAllChartsOptions()
+
     useEffect(() => {
         if (initialLoad.current) {
             initialLoad.current = false
@@ -161,9 +160,10 @@ const DynamicDataLoader = ({
                 }
             } else if (mode === MODE_FACET) {
                 const facets = seriesData[block.id]?.year?.facets
-                const invertedFacetsBuckets = invertFacets({ facets, defaultBuckets })
+                const invertedFacetsBuckets = invertFacets({ facets, defaultBuckets, allChartsOptions })
+                const invertedFacetsBucketsWithAverages = calculateAverages({ buckets: invertedFacetsBuckets, allChartsOptions, facet: chartFilters.facet})
                 setUnits('percentage_bucket')
-                setCombinedBuckets(invertedFacetsBuckets)
+                setCombinedBuckets(invertedFacetsBucketsWithAverages)
             }
             setIsLoading(false)
         }

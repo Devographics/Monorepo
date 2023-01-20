@@ -3,7 +3,7 @@ import { useCache } from '../caching'
 import { RequestContext, SurveyConfig } from '../types'
 import { Filters } from '../filters'
 import { YearAggregations } from '../compute/generic'
-import keys from '../data/keys.yml'
+import { getChartKeys } from '../helpers'
 
 interface HappinessConfig {
     survey: SurveyConfig
@@ -13,7 +13,7 @@ interface HappinessConfig {
 
 export default {
     Happiness: {
-        keys: () => keys.happiness,
+        keys: () => getChartKeys('happiness'),
         all_years: async (
             { survey, id, filters }: HappinessConfig,
             args: any,

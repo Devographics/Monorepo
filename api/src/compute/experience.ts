@@ -6,7 +6,7 @@ import { Db } from 'mongodb'
 import config from '../config'
 import { ratioToPercentage, appendCompletionToYearlyResults } from './common'
 import { getEntity } from '../entities'
-import keys from '../data/keys.yml'
+import { getChartKeys } from '../helpers'
 import { YearCompletion, SurveyConfig, RequestContext } from '../types'
 import { Filters, generateFiltersQuery } from '../filters'
 import { computeCompletionByYear } from './completion'
@@ -357,6 +357,6 @@ export async function computeToolExperienceTransitions<ToolID extends string = s
 
     return {
         ...yearlyTransitions,
-        keys: keys.tool
+        keys: getChartKeys('tool')
     }
 }

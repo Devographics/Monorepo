@@ -6,15 +6,15 @@ import { FiltersTop_, Heading_, Description_, Wrapper_ } from './FiltersSelectio
 import { Options_, Option_ } from './Options'
 import { useI18n } from 'core/i18n/i18nContext'
 import cloneDeep from 'lodash/cloneDeep'
-import { useAllChartsKeys } from 'core/charts/hooks'
+import { useAllChartsOptionsIdsOnly } from 'core/charts/hooks'
 import { MODE_FACET } from './constants'
 
 // disable facets with too many segments
-const disabledFacets = ['source', 'country']
+const disabledFacets = ['source', 'country', 'industry_sector']
 
 const FacetSelection = ({ chartName, stateStuff, block }) => {
     const { getString } = useI18n()
-    const allChartsKeys = useAllChartsKeys()
+    const allChartsKeys = useAllChartsOptionsIdsOnly()
     const { facets } = allChartsKeys
     const { filtersState, setFiltersState } = stateStuff
     const enabledFacets = facets.filter(f => !disabledFacets.includes(f))

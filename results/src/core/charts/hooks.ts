@@ -3,17 +3,30 @@ import ceil from 'lodash/ceil'
 // @ts-ignore
 import { useI18n } from 'core/i18n/i18nContext'
 import { Units, Mode, isPercentage } from 'core/helpers/units'
-import { BucketItem } from 'core/types/data'
+import { BucketItem, ChartOptionDefinition } from 'core/types/data'
 import { BlockMode, BlockUnits } from 'core/types'
 import { useTheme } from 'styled-components'
 import { usePageContext } from 'core/helpers/pageContext'
 import isEmpty from 'lodash/isEmpty'
+import round from 'lodash/round'
 import {
     CHART_MODE_GRID,
     CHART_MODE_STACKED,
     CHART_MODE_GROUPED
 } from 'core/blocks/filters/constants'
 
+/*
+
+Which facets should use a velocity color scale
+
+*/
+export const velocityFacets = ['yearly_salary', 'company_size', 'years_of_experience', 'age']
+
+/*
+
+Switch between absolute (chart always has same max value) and relative (chart adapts to data) modes
+
+*/
 const getMode = (units: Units, mode: Mode) => {
     if (units === 'percentage_survey' || units === 'percentage_bucket') {
         return 'absolute'
@@ -22,8 +35,15 @@ const getMode = (units: Units, mode: Mode) => {
     }
 }
 
+/*
+
+Get chart's max value
+
+*/
 const getMaxValue = (units: Units, mode: Mode, buckets: BucketItem[], total: number) => {
-    if (isPercentage(units)) {
+    if (units === 'average') {
+        return Math.max(...buckets.map(b => b[units]))
+    } else if (isPercentage(units)) {
         if (getMode(units, mode) === 'absolute') {
             return 100
         } else {
@@ -41,6 +61,35 @@ const getMaxValue = (units: Units, mode: Mode, buckets: BucketItem[], total: num
     }
 }
 
+/*
+
+Get a color item and loop over the array if index is bigger than length
+
+For example with 10 availabe colors: 
+
+Variant 1 = barColor 1
+Variant 2 = barColor 2
+...
+Variant 10 = barColor 10
+Variant 11 = barColor 1 // start over
+
+*/
+export const getVariantBarColorItem = (colors, variantIndex, facet) => {
+    const {velocityBarColors, barColors} = colors
+    if (velocityFacets.includes(facet)) {
+        return velocityBarColors[variantIndex]
+    } else {
+        const numberOfVariantColors = barColors.length
+        const barColorIndex = variantIndex % numberOfVariantColors
+        return barColors[barColorIndex]
+    }
+}
+
+/*
+
+Get various parameters for bar chart
+
+*/
 export const useBarChart = ({
     buckets,
     total,
@@ -94,11 +143,27 @@ type UseColorDefsOptions = {
     orientation?: 'Vertical' | 'Horizontal'
 }
 
+/*
+
+Generate list of all possible bar fills
+
+*/
 export const useColorDefs = (options: UseColorDefsOptions = {}) => {
     const { orientation = VERTICAL } = options
     const theme = useTheme()
-    const colors = theme.colors.barColors.map((barColor, i) => ({
+    const { colors } = theme
+    const barColors = colors.barColors.map((barColor, i) => ({
         id: `Gradient${orientation}${i + 1}`,
+        type: 'linearGradient',
+        colors: [
+            { offset: 0, color: barColor.gradient[1] },
+            { offset: 100, color: barColor.gradient[0] }
+        ],
+        ...(orientation === HORIZONTAL ? horizontalDefs : {})
+    }))
+
+    const velocity = colors.velocityBarColors.map((barColor, i) => ({
+        id: `Velocity${orientation}${i + 1}`,
         type: 'linearGradient',
         colors: [
             { offset: 0, color: barColor.gradient[1] },
@@ -111,12 +176,23 @@ export const useColorDefs = (options: UseColorDefsOptions = {}) => {
         id: `Gradient${orientation}NoAnswer`,
         type: 'linearGradient',
         colors: [
-            { offset: 0, color: theme.colors.no_answer[1] },
-            { offset: 100, color: theme.colors.no_answer[0] }
+            { offset: 0, color: colors.barColorNoAnswer.gradient[1] },
+            { offset: 100, color: colors.barColorNoAnswer.gradient[0] }
         ],
         ...(orientation === HORIZONTAL ? horizontalDefs : {})
     }
-    return [...colors, noAnswerGradient]
+
+    const defaultGradient = {
+        id: `Gradient${orientation}Default`,
+        type: 'linearGradient',
+        colors: [
+            { offset: 0, color: colors.barColorDefault.gradient[1] },
+            { offset: 100, color: colors.barColorDefault.gradient[0] }
+        ],
+        ...(orientation === HORIZONTAL ? horizontalDefs : {})
+    }
+
+    return [...barColors, ...velocity, defaultGradient, noAnswerGradient]
 }
 
 type UseColorFillsOptions = {
@@ -130,6 +206,8 @@ type UseColorFillsOptions = {
 
 /*
 
+Generate list of fills used by current chart along with matching functions
+
 chartKeys are e.g. 
 
 ['percentage_bucket__male', 'percentage_bucket__female', 'percentage_bucket__non_binary', etc. ]
@@ -137,8 +215,14 @@ chartKeys are e.g.
 */
 export const useColorFills = (options: UseColorFillsOptions = {}) => {
     const theme = useTheme()
-    const { chartDisplayMode, orientation = VERTICAL, gridIndex = 0, keys: chartKeys = [] } = options
-    
+    const {
+        chartDisplayMode,
+        orientation = VERTICAL,
+        gridIndex = 0,
+        keys: chartKeys = [],
+        facet
+    } = options
+
     const noAnswerFill = {
         match: d => d.data.indexValue === 'no_answer',
         id: `Gradient${orientation}NoAnswer`
@@ -149,11 +233,9 @@ export const useColorFills = (options: UseColorFillsOptions = {}) => {
             /* 
             
             Part of a grid of other charts, make all bars the same color based on grid index
-            Note: we add 2 to 0-based index to skip Gradient[Horizontal/Vertical]1, which is reserved for
-            default series
 
             */
-            return [noAnswerFill, { match: '*', id: `Gradient${orientation}${gridIndex + 2}` }]
+            return [noAnswerFill, { match: '*', id: `Gradient${orientation}${gridIndex + 1}` }]
         }
         case CHART_MODE_STACKED: {
             /*
@@ -161,15 +243,26 @@ export const useColorFills = (options: UseColorFillsOptions = {}) => {
             This will match keys of the type count__male, count__female, etc.
 
             */
+            const prefix = velocityFacets.includes(facet) ? 'Velocity' : 'Gradient'
+
+            const averageFill = {
+                match: d => {
+                    // key will follow "unit__facet.bucket" pattern, e.g. "percentage_bucket__range_1_5.range_less_than_1"
+                    const [facetKey, bucketKey] = d.key.split('.')
+                    return facetKey === 'average'},
+                id: `Gradient${orientation}1`
+            }
+
             const facetFills = chartKeys.map((keyName, i) => ({
                 match: d => {
                     // key will follow "unit__facet.bucket" pattern, e.g. "percentage_bucket__range_1_5.range_less_than_1"
                     const [facetKey, bucketKey] = d.key.split('.')
                     return facetKey === keyName
                 },
-                id: `Gradient${orientation}${i + 2}`
+                id: `${prefix}${orientation}${i + 2}`
             }))
-            return [noAnswerFill, ...facetFills]
+
+            return [noAnswerFill, averageFill, ...facetFills]
         }
         case CHART_MODE_GROUPED: {
             /*
@@ -181,7 +274,7 @@ export const useColorFills = (options: UseColorFillsOptions = {}) => {
                 match: d => {
                     return d.key.includes(`__${i + 1}`)
                 },
-                id: `Gradient${orientation}${i + 2}`
+                id: `Gradient${orientation}${i + 1}`
             }))
             return [noAnswerFill, ...numberedSeriesFills]
         }
@@ -191,7 +284,7 @@ export const useColorFills = (options: UseColorFillsOptions = {}) => {
             This will match everything else for all the "normal" charts
 
             */
-            const defaultFill = { match: '*', id: `Gradient${orientation}1` }
+            const defaultFill = { match: '*', id: `Gradient${orientation}Default` }
             return [noAnswerFill, defaultFill]
         }
     }
@@ -199,17 +292,36 @@ export const useColorFills = (options: UseColorFillsOptions = {}) => {
 
 /*
 
-Get keys (['range_work_for_free', 'range_0_10', 'range_10_30', ...]) for all chart types
+Get options keys ([{ id: 'range_work_for_free' }, { id: 'range_0_10' }, { id: 'range_10_30' }, ...]) for all chart types
 
 */
-export const useAllChartsKeys = () => {
+export const useAllChartsOptions = () => {
     const context = usePageContext()
     const { metadata } = context
     const { keys } = metadata
     return keys
 }
 
+export const useAllChartsOptionsIdsOnly = () => {
+    const options = {}
+    const allOptions = useAllChartsOptions()
+    for (const option in allOptions) {
+        options[option] = allOptions[option].map(o => o.id)
+    }
+    return options
+}
+
+export const useChartOptions = (fieldId: string): ChartOptionDefinition[] => {
+    const options = useAllChartsOptions()
+    return options[fieldId]
+}
+
+export const useChartOptionsIdsOnly = (fieldId: string): string[] =>
+    useChartOptions(fieldId).map(o => o.id)
+
 /*
+
+Get list of keys (units) used by current chart
 
 When no facet is specified, key is e.g. [count]
 
@@ -222,23 +334,49 @@ export const useChartKeys = ({
     units,
     facet,
     seriesCount,
-    showDefaultSeries = true,
+    showDefaultSeries = true
 }: {
     units: BlockUnits
     facet?: string
     seriesCount?: number
     showDefaultSeries?: boolean
 }) => {
-    const allChartKeys = useAllChartsKeys()
+    const allChartKeys = useAllChartsOptionsIdsOnly()
     if (facet) {
-        return allChartKeys[facet].map(key => `${units}__${key}`)
+        if (units === 'average') {
+            return ['average']
+        } else {
+            return allChartKeys[facet].map(key => `${units}__${key}`)
+        }
     } else if (seriesCount) {
         if (showDefaultSeries) {
-            return [...Array(seriesCount + 1)].map((x, i) => (i === 0 ? units : `${units}__${i + 1}`))
+            return [...Array(seriesCount + 1)].map((x, i) => (i === 0 ? units : `${units}__${i}`))
         } else {
-            return [...Array(seriesCount)].map((x, i) => (`${units}__${i + 1}`))
+            return [...Array(seriesCount)].map((x, i) => `${units}__${i + 1}`)
         }
     } else {
         return [units]
+    }
+}
+
+
+/*
+
+How to format chart labels
+
+*/
+const formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: 0
+})
+
+export const useChartLabelTransformer = ({ units, facet }) => {
+    if (isPercentage(units)) {
+        return d => `${round(d.value, 1)}%`
+    } else if (units === 'average' && facet === 'yearly_salary') {
+        return d => formatter.format(d.value)
+    } else {
+        return d => d.value
     }
 }

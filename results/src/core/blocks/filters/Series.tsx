@@ -11,7 +11,7 @@ import { Condition_ } from './Condition'
 import { TrashIcon, DeleteIcon } from 'core/icons'
 import { useTheme } from 'styled-components'
 import YearSelector from './YearSelector'
-import { useAllChartsKeys } from 'core/charts/hooks'
+import { useAllChartsOptionsIdsOnly } from 'core/charts/hooks'
 
 const Series = ({ filters, series, index, stateStuff }) => {
     const theme = useTheme()
@@ -20,7 +20,7 @@ const Series = ({ filters, series, index, stateStuff }) => {
     const { filtersState, setFiltersState } = stateStuff
     const showDefaultSeries = filtersState.options.showDefaultSeries
 
-    const allChartsKeys = useAllChartsKeys()
+    const allChartsKeys = useAllChartsOptionsIdsOnly()
 
     const filtersInUse = conditions.map(c => c.field)
     const filtersNotInUse = difference(filters, filtersInUse)

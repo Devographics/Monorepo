@@ -1,15 +1,3 @@
-
-export const availableFilters = [
-  'company_size',
-  'country',
-  'gender',
-  'industry_sector',
-  'race_ethnicity',
-  // 'source',
-  'yearly_salary',
-  'years_of_experience'
-]
-
 export const maxSeriesCount = 4
 
 export const BEHAVIOR_COMBINED = 'combined'
@@ -23,3 +11,6 @@ export const CHART_MODE_GRID = 'grid'
 export const CHART_MODE_STACKED = 'stacked'
 export const CHART_MODE_GROUPED = 'grouped'
 export const CHART_MODE_DEFAULT = 'default'
+
+export const START_MARKER = '# fragmentStart'
+export const END_MARKER = '# fragmentEnd'

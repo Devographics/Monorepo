@@ -6,22 +6,24 @@ import { mq, spacing, fontSize } from 'core/theme'
 import Button from 'core/components/Button'
 import cloneDeep from 'lodash/cloneDeep.js'
 import { getNewSeries } from './helpers'
-import { maxSeriesCount, availableFilters, MODE_FILTERS } from './constants'
+import { maxSeriesCount, MODE_FILTERS } from './constants'
 import { usePageContext } from 'core/helpers/pageContext'
 import { useI18n } from 'core/i18n/i18nContext'
 import { Series_ } from './Series'
 import Presets from './Presets'
 import Options from './Options'
-import { useAllChartsKeys } from 'core/charts/hooks'
+import { useAllChartsOptionsIdsOnly } from 'core/charts/hooks'
 
 const FiltersSelection = ({ chartName, block, stateStuff }) => {
     const context = usePageContext()
-    const allChartsKeys = useAllChartsKeys()
+    const allChartsKeys = useAllChartsOptionsIdsOnly()
     const { currentEdition } = context
     const { filtersState, setFiltersState } = stateStuff
 
     const canAddSeries = filtersState.filters.length < maxSeriesCount
 
+    const availableFilters = allChartsKeys.filters
+    
     const filtersWithoutCurrentItem = availableFilters.filter(f => f !== block.id)
 
     const emptySeries = getNewSeries({
