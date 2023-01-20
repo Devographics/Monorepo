@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useRouter } from "next/router.js";
 import type { SurveyDocument } from "@devographics/core-models";
 import { useIntlContext } from "@vulcanjs/react-i18n";
-import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { useEntitiesQuery } from "~/core/hooks/useEntitiesQuery";
 import { convertSurveyToMarkdown } from "~/modules/surveys/outlineExport";
 import { surveysWithTemplates } from "~/surveys/withTemplates";
@@ -45,7 +44,6 @@ export const SurveyMarkdownOutline = ({
   survey: SurveyDocument;
 }) => {
   const [showFieldName, setShowFieldName] = useState<boolean>(false);
-  const Components = useVulcanComponents();
   const intl = useIntlContext();
   // TODO: filter for the current survey only, but we need a tag to do so
   const { data, loading, error } = useEntitiesQuery();

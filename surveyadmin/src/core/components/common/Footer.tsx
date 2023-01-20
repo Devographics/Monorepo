@@ -1,13 +1,10 @@
-import { useVulcanComponents } from "@vulcanjs/react-ui";
 import React from "react";
 import Link from "next/link";
 import { useUser } from "~/account/user/hooks";
 import { routes } from "~/lib/routes";
 import { LogoutButton } from "~/account/user/components/LogoutButton";
-import Image from "next/image";
 
 export const Footer = () => {
-  const Components = useVulcanComponents();
   const { user } = useUser();
 
   return (

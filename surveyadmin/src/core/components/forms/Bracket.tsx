@@ -4,9 +4,13 @@ import isNil from "lodash/isNil.js";
 import isEmpty from "lodash/isEmpty.js";
 import cloneDeep from "lodash/cloneDeep.js";
 import { useIntlContext } from "@vulcanjs/react-i18n";
-import { useFormContext, useVulcanComponents } from "@vulcanjs/react-ui";
 import { FormattedMessage } from "../common/FormattedMessage";
 import { Button } from "../ui/Button";
+
+const Components = {
+  // TODO: use tooltip trigger from bootstrap
+  TooltipTrigger: ({ children }) => <div>{children}</div>,
+};
 
 /*
 
@@ -172,7 +176,6 @@ Sub Components
 
 // bracket legend
 const BracketLegend = ({ options }) => {
-  const Components = useVulcanComponents();
   return (
     <table className="bracket-legend">
       <tbody>
@@ -242,7 +245,6 @@ const BracketMatchGroup = (props) => {
 
 // bracket pair; or single winner
 const BracketMatch = (props) => {
-  const Components = useVulcanComponents();
   const { options, result, index, isOverallWinner = false } = props;
   const [p1Index, p2Index, winnerIndex] = result;
   const p1 = options[p1Index];
@@ -352,7 +354,6 @@ const BracketItem = (props) => {
 
 // wrap an item with a description or not based on its availability
 const WrapWithDescriptionTooltip = ({ player, children }) => {
-  const Components = useVulcanComponents();
   const intl = useIntlContext();
   const description =
     player && intl.formatMessage({ id: `${player.intlId}.description` });
@@ -382,7 +383,6 @@ const BracketItemButton = (props) => {
     result,
     canCancel,
   } = props;
-  const Components = useVulcanComponents();
   return (
     <div className="bracket-item-button-wrapper">
       <WrapWithDescriptionTooltip player={player}>
@@ -426,7 +426,6 @@ const BracketItemCancel = ({
   isOverallWinner,
   cancelMatch,
 }: BracketItemCancelProps) => {
-  const Components = useVulcanComponents();
   return (
     <Components.TooltipTrigger
       trigger={
@@ -481,7 +480,6 @@ const BracketItemOverallWinner = (
   } & BracketItemCancelProps
 ) => {
   const { player, canCancel } = props;
-  const Components = useVulcanComponents();
   return (
     <div className="bracket-item-button-wrapper">
       <WrapWithDescriptionTooltip player={player}>
@@ -499,7 +497,6 @@ const BracketItemOverallWinner = (
 
 // start over (not used)
 export const BracketStartOver = ({ startOver }: { startOver: () => void }) => {
-  const Components = useVulcanComponents();
   return (
     <Button
       className="bracket-startover"
@@ -514,7 +511,6 @@ export const BracketStartOver = ({ startOver }: { startOver: () => void }) => {
 
 // empty bracket result item
 const EmptyBracketItem = ({ classnames }: { classnames: Array<string> }) => {
-  const Components = useVulcanComponents();
   return (
     <div className={[...classnames, "bracket-item-empty"].join(" ")}>
       <div className="bracket-item-inner">

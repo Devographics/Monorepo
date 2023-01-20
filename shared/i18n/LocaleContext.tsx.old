@@ -18,7 +18,6 @@ import withCurrentUser from "../containers/currentUser.js";
 import withUpdate from "../containers/update.js";
 import withSiteData from "../containers/siteData.js";
 import withLocaleData from "../containers/localeData.js";
-import { withApollo } from "@apollo/client/react/hoc";
 import moment from "moment";
 import { Switch, Route } from "react-router-dom";
 import { withRouter } from "react-router";

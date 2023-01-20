@@ -129,20 +129,6 @@ const useFormDocument = (
   };
 };
 
-/*
-urql example not working
-const crossDomainGraphqlUri =
-  !!process.env.NEXT_PUBLIC_CROSS_DOMAIN_GRAPHQL_URI || false;
-// @see packages/@vulcanjs/next-apollo/apolloClient.ts if more options are needed
-// eg for auth
-const urqlClient = createClient({
-  url: getAppGraphqlUri(),
-  fetchOptions: {
-    credentials: crossDomainGraphqlUri ? "include" : "same-origin",
-  },
-});
-*/
-
 export const FormContainer = (props: FormContainerProps) => {
   return (
     // TODO: add VulcanComponents here

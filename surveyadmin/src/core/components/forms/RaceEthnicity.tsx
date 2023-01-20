@@ -1,14 +1,13 @@
 import React from "react";
-import ReactMarkdown from "react-markdown";
-import rehypeRaw from "rehype-raw";
-import { useIntlContext } from "@vulcanjs/react-i18n";
-import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { FormattedMessage } from "../common/FormattedMessage";
 
 const disallowedCountries = ["FR", "GF", "TF", "PF"];
 
+const Components = {
+  FormComponentCheckboxGroup: () =><div>todo</div>},
+};
+
 export const RaceEthnicity = (props) => {
-  const Components = useVulcanComponents();
   const { document, path } = props;
   const countryFieldPath = path.replace("race_ethnicity__choices", "country");
   const isDisabled =

@@ -583,7 +583,6 @@ importers:
 
   surveyadmin:
     specifiers:
-      '@apollo/client': ^3.5.10
       '@babel/core': ^7.10.2
       '@cypress/code-coverage': ^3.8.1
       '@cypress/webpack-preprocessor': ^5.4.1
@@ -644,11 +643,7 @@ importers:
       '@vulcanjs/mongo': 0.8.1
       '@vulcanjs/mongo-apollo': 0.8.1
       '@vulcanjs/permissions': 0.7.2-alpha.8
-      '@vulcanjs/react-hooks': 0.8.1
       '@vulcanjs/react-i18n': 0.8.1-y.0
-      '@vulcanjs/react-ui': ^0.8.1
-      '@vulcanjs/react-ui-bootstrap': 0.8.1-y.0
-      '@vulcanjs/react-ui-lite': ^0.8.1
       '@vulcanjs/schema': 0.7.2-alpha.8
       '@vulcanjs/utils': 0.7.2-alpha.8
       apollo-server: '3'
@@ -745,7 +740,6 @@ importers:
       webpack: '5'
       yalc: ^1.0.0-pre.53
     dependencies:
-      '@apollo/client': 3.7.1_gdcq4dv6opitr3wbfwyjmanyra
       '@devographics/core-models': link:../shared/core-models
       '@devographics/encrypt-email': link:../shared/encrypt-email
       '@devographics/swr-graphql': link:../shared/swr-graphql
@@ -767,18 +761,14 @@ importers:
       '@sentry/react': 7.17.4_react@18.2.0
       '@vulcanjs/core': 0.7.2-alpha.8
       '@vulcanjs/crud': 0.7.2-alpha.8_biqbaboplfbrettd7655fr4n2y
-      '@vulcanjs/graphql': 0.8.1-y.0_eof2rsndd4y33yevt2fzmcqt7a
-      '@vulcanjs/i18n': 0.8.1-y.0_@apollo+client@3.7.1
+      '@vulcanjs/graphql': 0.8.1-y.0_d5rxnovlc3juxvfb3ez34dftf4
+      '@vulcanjs/i18n': 0.8.1-y.0
       '@vulcanjs/mdx': 0.7.2-alpha.8
       '@vulcanjs/model': 0.7.2-alpha.8
       '@vulcanjs/mongo': 0.8.1_fbta7zxnlib62z2eo4ad3a5zwi
-      '@vulcanjs/mongo-apollo': 0.8.1_4neeqb4rhx6sibgt43eikra72m
+      '@vulcanjs/mongo-apollo': 0.8.1_kce3vlkaamzijypd5kaovjga64
       '@vulcanjs/permissions': 0.7.2-alpha.8_biqbaboplfbrettd7655fr4n2y
-      '@vulcanjs/react-hooks': 0.8.1_4neeqb4rhx6sibgt43eikra72m
-      '@vulcanjs/react-i18n': 0.8.1-y.0_62xnl4qpdiksvmumxipecras6a
-      '@vulcanjs/react-ui': 0.8.1_4neeqb4rhx6sibgt43eikra72m
-      '@vulcanjs/react-ui-bootstrap': 0.8.1-y.0_ypm5clbdcgj3kqbd7dpe4bhavi
-      '@vulcanjs/react-ui-lite': 0.8.1_txxvbajzkp2hl6xijwsn5r2lte
+      '@vulcanjs/react-i18n': 0.8.1-y.0_react@18.2.0
       '@vulcanjs/schema': 0.7.2-alpha.8
       '@vulcanjs/utils': 0.7.2-alpha.8
       apollo-server: 3.11.1_graphql@16.6.0
@@ -1059,7 +1049,6 @@ importers:
       ts-loader: ^7.0.5
       tsup: ^6.4.0
       typescript: ^4.8.4
-      urql: 3.0.3
       uuid: ^8.3.2
       webpack: ^5.75.0
       yalc: ^1.0.0-pre.53
@@ -1152,7 +1141,6 @@ importers:
       sass: 1.56.1
       simpl-schema: 1.13.1
       swr: 2.0.1_react@18.2.0
-      urql: 3.0.3_onqnqwb3ubg5opvemcqf7c2qhy
       uuid: 8.3.2
     optionalDependencies:
       '@cypress/code-coverage': 3.10.0_lecfltkoigeqyymi5kjvq4my4q
@@ -1265,42 +1253,6 @@ packages:
       graphql: 14.x || 15.x || 16.x
     dependencies:
       graphql: 16.6.0
-    dev: false
-
-  /@apollo/client/3.7.1_gdcq4dv6opitr3wbfwyjmanyra:
-    resolution: {integrity: sha512-xu5M/l7p9gT9Fx7nF3AQivp0XukjB7TM7tOd5wifIpI8RskYveL4I+rpTijzWrnqCPZabkbzJKH7WEAKdctt9w==}
-    peerDependencies:
-      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-      graphql-ws: ^5.5.5
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0
-      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-      subscriptions-transport-ws: ^0.9.0 || ^0.11.0
-    peerDependenciesMeta:
-      graphql-ws:
-        optional: true
-      react:
-        optional: true
-      react-dom:
-        optional: true
-      subscriptions-transport-ws:
-        optional: true
-    dependencies:
-      '@graphql-typed-document-node/core': 3.1.1_graphql@16.6.0
-      '@wry/context': 0.7.0
-      '@wry/equality': 0.5.3
-      '@wry/trie': 0.3.2
-      graphql: 16.6.0
-      graphql-tag: 2.12.6_graphql@16.6.0
-      hoist-non-react-statics: 3.3.2
-      optimism: 0.16.1
-      prop-types: 15.8.1
-      react: 18.2.0
-      react-dom: 18.2.0_react@18.2.0
-      response-iterator: 0.2.6
-      symbol-observable: 4.0.0
-      ts-invariant: 0.10.3
-      tslib: 2.4.1
-      zen-observable-ts: 1.2.5
     dev: false
 
   /@apollo/client/3.7.3_uolx6si5lofbwb2oqmft523czu:
@@ -11918,15 +11870,6 @@ packages:
       react: 18.2.0
     dev: false
 
-  /@react-aria/ssr/3.4.1_react@18.2.0:
-    resolution: {integrity: sha512-NmhoilMDyIfQiOSdQgxpVH2tC2u85Y0mVijtBNbI9kcDYLEiW/r6vKYVKtkyU+C4qobXhGMPfZ70PTc0lysSVA==}
-    peerDependencies:
-      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
-    dependencies:
-      '@swc/helpers': 0.4.14
-      react: 18.2.0
-    dev: false
-
   /@react-spring/animated/9.3.2_react@18.0.0:
     resolution: {integrity: sha512-pBvKydRHbTzuyaeHtxGIOvnskZxGo/S5/YK1rtYm88b9NQZuZa95Rgd3O0muFL+99nvBMBL8cvQGD0UJmsqQsg==}
     peerDependencies:
@@ -12101,25 +12044,6 @@ packages:
       '@babel/runtime': 7.20.6
       '@popperjs/core': 2.11.6
       '@react-aria/ssr': 3.3.0_react@18.2.0
-      '@restart/hooks': 0.4.7_react@18.2.0
-      '@types/warning': 3.0.0
-      dequal: 2.0.3
-      dom-helpers: 5.2.1
-      react: 18.2.0
-      react-dom: 18.2.0_react@18.2.0
-      uncontrollable: 7.2.1_react@18.2.0
-      warning: 4.0.3
-    dev: false
-
-  /@restart/ui/1.5.2_biqbaboplfbrettd7655fr4n2y:
-    resolution: {integrity: sha512-9LgjGBXo3p/hwwCxGZY2ZZIcwRy1xYl3kMzZy2NBIOhEip8iDHA3SIZ3PuK2Ta/Nl5vVMcvUmpYJdx/a0tGkdw==}
-    peerDependencies:
-      react: '>=16.14.0'
-      react-dom: '>=16.14.0'
-    dependencies:
-      '@babel/runtime': 7.20.7
-      '@popperjs/core': 2.11.6
-      '@react-aria/ssr': 3.4.1_react@18.2.0
       '@restart/hooks': 0.4.7_react@18.2.0
       '@types/warning': 3.0.0
       dequal: 2.0.3
@@ -13680,7 +13604,7 @@ packages:
       qs: 6.11.0
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
-      regenerator-runtime: 0.13.11
+      regenerator-runtime: 0.13.10
       ts-dedent: 2.2.0
       typescript: 4.8.4
       unfetch: 4.2.0
@@ -13718,7 +13642,7 @@ packages:
       qs: 6.11.0
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
-      regenerator-runtime: 0.13.11
+      regenerator-runtime: 0.13.10
       ts-dedent: 2.2.0
       typescript: 4.8.4
       unfetch: 4.2.0
@@ -13927,13 +13851,13 @@ packages:
       globby: 11.1.0
       ip: 2.0.0
       lodash: 4.17.21
-      node-fetch: 2.6.7
+      node-fetch: 2.6.8
       open: 8.4.0
       pretty-hrtime: 1.0.3
       prompts: 2.4.2
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
-      regenerator-runtime: 0.13.11
+      regenerator-runtime: 0.13.10
       serve-favicon: 2.5.0
       slash: 3.0.0
       telejson: 6.0.8
@@ -14211,12 +14135,12 @@ packages:
       find-up: 5.0.0
       fs-extra: 9.1.0
       html-webpack-plugin: 4.5.2_webpack@4.46.0
-      node-fetch: 2.6.7
+      node-fetch: 2.6.8
       pnp-webpack-plugin: 1.6.4_typescript@4.8.4
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       read-pkg-up: 7.0.1
-      regenerator-runtime: 0.13.11
+      regenerator-runtime: 0.13.10
       resolve-from: 5.0.0
       style-loader: 1.3.0_webpack@4.46.0
       telejson: 6.0.8
@@ -14814,7 +14738,7 @@ packages:
       isomorphic-unfetch: 3.1.0
       nanoid: 3.3.4
       read-pkg-up: 7.0.1
-      regenerator-runtime: 0.13.11
+      regenerator-runtime: 0.13.10
     transitivePeerDependencies:
       - encoding
       - eslint
@@ -15127,7 +15051,6 @@ packages:
 
   /@testing-library/react-hooks/3.7.0_react@18.2.0:
     resolution: {integrity: sha512-TwfbY6BWtWIHitjT05sbllyLIProcysC0dF0q1bbDa7OHLC6A6rJOYJwZ13hzfz3O4RtOuInmprBozJRyyo7/g==}
-    requiresBuild: true
     peerDependencies:
       react: '>=16.9.0'
       react-test-renderer: '>=16.9.0'
@@ -15135,7 +15058,6 @@ packages:
       '@babel/runtime': 7.20.7
       '@types/testing-library__react-hooks': 3.4.1
       react: 18.2.0
-    dev: false
     optional: true
 
   /@testing-library/react/10.4.9_biqbaboplfbrettd7655fr4n2y:
@@ -16623,15 +16545,6 @@ packages:
       wonka: 6.1.2
     dev: true
 
-  /@urql/core/3.1.1_graphql@16.6.0:
-    resolution: {integrity: sha512-Mnxtq4I4QeFJsgs7Iytw+HyhiGxISR6qtyk66c9tipozLZ6QVxrCiUPF2HY4BxNIabaxcp+rivadvm8NAnXj4Q==}
-    peerDependencies:
-      graphql: ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
-    dependencies:
-      graphql: 16.6.0
-      wonka: 6.1.2
-    dev: false
-
   /@vercel/analytics/0.1.5_react@18.2.0:
     resolution: {integrity: sha512-/k9N8Ea3Yc5A52GlkjzUEbi2vE/izClrOf++ryBkxEfrZM/OZwtHkdNw/QExZ1h/B67RCZLK7bCOnKKrhG7gTg==}
     peerDependencies:
@@ -16834,39 +16747,6 @@ packages:
       - supports-color
     dev: false
 
-  /@vulcanjs/graphql/0.8.1-y.0_eof2rsndd4y33yevt2fzmcqt7a:
-    resolution: {integrity: sha512-KovmJfUv5cNIkEwwWs3phXdvhzICrtFsai5MQXvIjKgJwiNGRHqOMB+D8CH8XVAuigE4Gv0aOilzE+EgAR2aPw==}
-    peerDependencies:
-      '@apollo/client': ^3.5.5
-      apollo-server: ^2.18.2
-      graphql: ^16.2.0
-      react: ^17.0.1
-    dependencies:
-      '@apollo/client': 3.7.1_gdcq4dv6opitr3wbfwyjmanyra
-      '@vulcanjs/crud': 0.7.2-alpha.8_biqbaboplfbrettd7655fr4n2y
-      '@vulcanjs/i18n': 0.8.1-y.0_@apollo+client@3.7.1
-      '@vulcanjs/model': 0.7.2-alpha.8
-      '@vulcanjs/permissions': 0.7.2-alpha.8_biqbaboplfbrettd7655fr4n2y
-      '@vulcanjs/schema': 0.7.2-alpha.8
-      '@vulcanjs/utils': 0.7.2-alpha.8
-      apollo-datasource: 3.3.2
-      apollo-server: 3.11.1_graphql@16.6.0
-      debug: 4.3.4
-      deepmerge: 4.2.2
-      graphql: 16.6.0
-      graphql-date: 1.0.3_graphql@16.6.0
-      graphql-type-json: 0.3.2_graphql@16.6.0
-      lodash: 4.17.21
-      moment-timezone: 0.5.40
-      react: 18.2.0
-    optionalDependencies:
-      msw: 0.35.0
-    transitivePeerDependencies:
-      - encoding
-      - react-dom
-      - supports-color
-    dev: false
-
   /@vulcanjs/i18n/0.7.1_moment@2.29.4:
     resolution: {integrity: sha512-8gQdgBISAj+UCrMvvgXSpRGEv4PnyjIEzaOy+9/k9YCEPVTKpzaWJzYlfu3Le91DPFJh3j+85/atih+o/XHbzw==}
     peerDependencies:
@@ -16887,21 +16767,6 @@ packages:
     peerDependencies:
       '@apollo/client': ^3.5.5
     dependencies:
-      '@vulcanjs/schema': 0.7.2-alpha.8
-      '@vulcanjs/utils': 0.7.2-alpha.8
-      prop-types: 15.8.1
-      simpl-schema: 1.13.1
-    transitivePeerDependencies:
-      - encoding
-      - supports-color
-    dev: false
-
-  /@vulcanjs/i18n/0.8.1-y.0_@apollo+client@3.7.1:
-    resolution: {integrity: sha512-vVaG2IqOB89gMArhgs0gpQLZ6XRR8619ACvTJbruWvTZIqeq69qR13NW2apkC+epkXaFMIz7A8m1e8a9X3H1XA==}
-    peerDependencies:
-      '@apollo/client': ^3.5.5
-    dependencies:
-      '@apollo/client': 3.7.1_gdcq4dv6opitr3wbfwyjmanyra
       '@vulcanjs/schema': 0.7.2-alpha.8
       '@vulcanjs/utils': 0.7.2-alpha.8
       prop-types: 15.8.1
@@ -16954,14 +16819,14 @@ packages:
       - supports-color
     dev: false
 
-  /@vulcanjs/mongo-apollo/0.8.1_4neeqb4rhx6sibgt43eikra72m:
+  /@vulcanjs/mongo-apollo/0.8.1_kce3vlkaamzijypd5kaovjga64:
     resolution: {integrity: sha512-O1h3Y2Y9N9qyMNJ/hz6Ba2xj4WU9dEtWod5K23cXfJVzsLBwENeL2tKrVYJ7QMK9ZbmRpT0mtue4OdtR3RnQ9g==}
     peerDependencies:
       mongodb: '>= 3.6.2'
       mongoose: '>= 6.2'
     dependencies:
       '@vulcanjs/crud': 0.7.2-alpha.8_biqbaboplfbrettd7655fr4n2y
-      '@vulcanjs/graphql': 0.8.1-y.0_eof2rsndd4y33yevt2fzmcqt7a
+      '@vulcanjs/graphql': 0.8.1-y.0_d5rxnovlc3juxvfb3ez34dftf4
       '@vulcanjs/mongo': 0.8.1_fbta7zxnlib62z2eo4ad3a5zwi
       '@vulcanjs/utils': 0.7.2-alpha.8
       apollo-datasource-mongodb: 0.5.4_7g7spk322yia62taxdff3dtov4
@@ -16992,7 +16857,7 @@ packages:
       lodash: 4.17.21
       mongoose: 6.7.1
     optionalDependencies:
-      mongodb-memory-server: 8.11.2
+      mongodb-memory-server: 8.11.3
     transitivePeerDependencies:
       - aws-crt
       - encoding
@@ -17017,7 +16882,7 @@ packages:
       mongodb: 4.11.0
       mongoose: 6.5.4
     optionalDependencies:
-      mongodb-memory-server: 8.11.2
+      mongodb-memory-server: 8.11.3
     transitivePeerDependencies:
       - aws-crt
       - encoding
@@ -17039,7 +16904,7 @@ packages:
       '@vulcanjs/utils': 0.7.2-alpha.8
       lodash: 4.17.21
     optionalDependencies:
-      mongodb-memory-server: 8.11.2
+      mongodb-memory-server: 8.11.3
     transitivePeerDependencies:
       - aws-crt
       - encoding
@@ -17106,49 +16971,6 @@ packages:
       react-dom: 18.2.0_react@18.2.0
     dev: false
 
-  /@vulcanjs/react-hooks/0.8.1_4neeqb4rhx6sibgt43eikra72m:
-    resolution: {integrity: sha512-nkAJha298/V7Ekh0EGwb4ZawUdFaljvL6nwYLqCgRRoCwIX7XwPr71uEbOSBZExfmfS1TGUgh0G/VVS4t9fbcQ==}
-    peerDependencies:
-      '@apollo/client': '>= 3.2.0'
-      graphql: ^15.5.0
-      react: ^17.0.1
-      react-dom: ^17.0.1
-    dependencies:
-      '@apollo/client': 3.7.1_gdcq4dv6opitr3wbfwyjmanyra
-      '@vulcanjs/crud': 0.7.2-alpha.8_biqbaboplfbrettd7655fr4n2y
-      '@vulcanjs/graphql': 0.8.1-y.0_eof2rsndd4y33yevt2fzmcqt7a
-      '@vulcanjs/mongo': 0.8.1_fbta7zxnlib62z2eo4ad3a5zwi
-      debug: 4.3.4
-      graphql: 16.6.0
-      lodash: 4.17.21
-      mingo: 3.1.0
-      react: 18.2.0
-      react-dom: 18.2.0_react@18.2.0
-    transitivePeerDependencies:
-      - apollo-server
-      - aws-crt
-      - encoding
-      - mongodb
-      - mongoose
-      - supports-color
-    dev: false
-
-  /@vulcanjs/react-i18n/0.8.1-y.0_62xnl4qpdiksvmumxipecras6a:
-    resolution: {integrity: sha512-Sp3EH0EGX5rcJklKWXhrqGVL6Aaa1ICq+1mTZC9mm83wt/WbXZRQyhqEX63beuXNbbQUM2Pq/W8WR2BTD+YRNQ==}
-    peerDependencies:
-      '@apollo/client': ^3.5.5
-      react: ^17.0.1
-    dependencies:
-      '@apollo/client': 3.7.1_gdcq4dv6opitr3wbfwyjmanyra
-      '@vulcanjs/i18n': 0.8.1-y.0_@apollo+client@3.7.1
-      '@vulcanjs/utils': 0.7.2-alpha.8
-      prop-types: 15.8.1
-      react: 18.2.0
-    transitivePeerDependencies:
-      - encoding
-      - supports-color
-    dev: false
-
   /@vulcanjs/react-i18n/0.8.1-y.0_react@18.2.0:
     resolution: {integrity: sha512-Sp3EH0EGX5rcJklKWXhrqGVL6Aaa1ICq+1mTZC9mm83wt/WbXZRQyhqEX63beuXNbbQUM2Pq/W8WR2BTD+YRNQ==}
     peerDependencies:
@@ -17161,100 +16983,6 @@ packages:
       react: 18.2.0
     transitivePeerDependencies:
       - encoding
-      - supports-color
-    dev: false
-
-  /@vulcanjs/react-ui-bootstrap/0.8.1-y.0_ypm5clbdcgj3kqbd7dpe4bhavi:
-    resolution: {integrity: sha512-cmuVQ9q4udWjcm0q+nWXTGnRg53KgRFJ6Hx1g5T/2wAsur42EImDbwZkKv3CE0pKwOQIHHs89QvFIjWIbENiJA==}
-    peerDependencies:
-      '@apollo/client': ^3.5.5
-      '@vulcanjs/react-ui': '*'
-      '@vulcanjs/react-ui-lite': '*'
-      graphql: ^15.5.0
-      react: ^17.0.1
-      react-dom: ^17.0.1
-    dependencies:
-      '@apollo/client': 3.7.1_gdcq4dv6opitr3wbfwyjmanyra
-      '@vulcanjs/react-ui': 0.8.1_4neeqb4rhx6sibgt43eikra72m
-      '@vulcanjs/react-ui-lite': 0.8.1_txxvbajzkp2hl6xijwsn5r2lte
-      classnames: 2.3.2
-      debug: 4.3.4
-      graphql: 16.6.0
-      lodash: 4.17.21
-      react: 18.2.0
-      react-bootstrap: 2.7.0_4c3rps5tc2yowtcrqid3cuwlea
-      react-bootstrap-typeahead: 6.0.0_biqbaboplfbrettd7655fr4n2y
-      react-dom: 18.2.0_react@18.2.0
-    transitivePeerDependencies:
-      - '@types/react'
-      - supports-color
-    dev: false
-
-  /@vulcanjs/react-ui-lite/0.8.1_txxvbajzkp2hl6xijwsn5r2lte:
-    resolution: {integrity: sha512-rZeSWClFP1f9SM/hBORx3qECC+UYtnljWS2hP0+/IFrHigwd4As1HxB6uTpal/Ov+GC5Q6Eqv4Tq1p90EMsK5Q==}
-    peerDependencies:
-      '@apollo/client': ^3.5.5
-      moment: ^2.29.1
-      react: ^17.0.1
-      react-dom: ^17.0.1
-    dependencies:
-      '@apollo/client': 3.7.1_gdcq4dv6opitr3wbfwyjmanyra
-      '@vulcanjs/graphql': 0.8.1-y.0_eof2rsndd4y33yevt2fzmcqt7a
-      '@vulcanjs/i18n': 0.8.1-y.0_@apollo+client@3.7.1
-      '@vulcanjs/model': 0.7.2-alpha.8
-      '@vulcanjs/permissions': 0.7.2-alpha.8_biqbaboplfbrettd7655fr4n2y
-      '@vulcanjs/react-hooks': 0.8.1_4neeqb4rhx6sibgt43eikra72m
-      '@vulcanjs/react-i18n': 0.8.1-y.0_62xnl4qpdiksvmumxipecras6a
-      '@vulcanjs/react-ui': 0.8.1_4neeqb4rhx6sibgt43eikra72m
-      '@vulcanjs/schema': 0.7.2-alpha.8
-      '@vulcanjs/utils': 0.7.2-alpha.8
-      classnames: 2.3.2
-      debug: 4.3.4
-      lodash: 4.17.21
-      moment: 2.29.4
-      react: 18.2.0
-      react-dom: 18.2.0_react@18.2.0
-    transitivePeerDependencies:
-      - apollo-server
-      - aws-crt
-      - encoding
-      - graphql
-      - mongodb
-      - mongoose
-      - supports-color
-    dev: false
-
-  /@vulcanjs/react-ui/0.8.1_4neeqb4rhx6sibgt43eikra72m:
-    resolution: {integrity: sha512-q5jMLpN1pbHnboF2WPycoDXkJQeaoTs+PMx9hOIqyezcHFoCYTCrgsc6u30k6rEsGcnsZ+lknP577j3LMXwIyQ==}
-    peerDependencies:
-      '@apollo/client': ^3.5.5
-      graphql: ^15.5.0
-      react: ^17.0.1
-      react-dom: ^17.0.1
-    dependencies:
-      '@apollo/client': 3.7.1_gdcq4dv6opitr3wbfwyjmanyra
-      '@vulcanjs/core': 0.7.2-alpha.8
-      '@vulcanjs/graphql': 0.8.1-y.0_eof2rsndd4y33yevt2fzmcqt7a
-      '@vulcanjs/i18n': 0.8.1-y.0_@apollo+client@3.7.1
-      '@vulcanjs/model': 0.7.2-alpha.8
-      '@vulcanjs/permissions': 0.7.2-alpha.8_biqbaboplfbrettd7655fr4n2y
-      '@vulcanjs/react-hooks': 0.8.1_4neeqb4rhx6sibgt43eikra72m
-      '@vulcanjs/react-i18n': 0.8.1-y.0_62xnl4qpdiksvmumxipecras6a
-      '@vulcanjs/schema': 0.7.2-alpha.8
-      '@vulcanjs/utils': 0.7.2-alpha.8
-      classnames: 2.3.2
-      debug: 4.3.4
-      graphql: 16.6.0
-      lodash: 4.17.21
-      react: 18.2.0
-      react-dom: 18.2.0_react@18.2.0
-      simpl-schema: 1.13.1
-    transitivePeerDependencies:
-      - apollo-server
-      - aws-crt
-      - encoding
-      - mongodb
-      - mongoose
       - supports-color
     dev: false
 
@@ -17914,7 +17642,7 @@ packages:
       apollo-datasource: 0.3.1
       apollo-server-caching: 0.3.1
       apollo-server-errors: 2.5.0_graphql@16.6.0
-      bson: 4.7.0
+      bson: 4.7.2
       dataloader: 1.4.0
       mongoose: 6.5.4
     transitivePeerDependencies:
@@ -18685,7 +18413,7 @@ packages:
   /axios/0.21.4_debug@4.3.1:
     resolution: {integrity: sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==}
     dependencies:
-      follow-redirects: 1.15.2_debug@4.3.4
+      follow-redirects: 1.15.2_debug@4.3.1
     transitivePeerDependencies:
       - debug
     dev: false
@@ -20058,7 +19786,7 @@ packages:
       mississippi: 3.0.0
       mkdirp: 0.5.6
       move-concurrently: 1.0.1
-      promise-inflight: 1.0.1
+      promise-inflight: 1.0.1_bluebird@3.7.2
       rimraf: 2.7.1
       ssri: 6.0.2
       unique-filename: 1.1.1
@@ -20082,7 +19810,7 @@ packages:
       minipass-pipeline: 1.2.4
       mkdirp: 1.0.4
       p-map: 4.0.0
-      promise-inflight: 1.0.1
+      promise-inflight: 1.0.1_bluebird@3.7.2
       rimraf: 3.0.2
       ssri: 8.0.1
       tar: 6.1.13
@@ -25701,6 +25429,19 @@ packages:
       readable-stream: 2.3.7
     dev: false
 
+  /follow-redirects/1.15.2_debug@4.3.1:
+    resolution: {integrity: sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==}
+    engines: {node: '>=4.0'}
+    peerDependencies:
+      debug: '*'
+    peerDependenciesMeta:
+      debug:
+        optional: true
+    dependencies:
+      debug: 4.3.1
+    dev: false
+    optional: true
+
   /follow-redirects/1.15.2_debug@4.3.4:
     resolution: {integrity: sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==}
     engines: {node: '>=4.0'}
@@ -25710,7 +25451,7 @@ packages:
       debug:
         optional: true
     dependencies:
-      debug: 4.3.4
+      debug: 4.3.4_supports-color@6.1.0
     dev: false
 
   /for-each/0.3.3:
@@ -32537,12 +32278,6 @@ packages:
       moment: 2.29.4
     dev: false
 
-  /moment-timezone/0.5.40:
-    resolution: {integrity: sha512-tWfmNkRYmBkPJz5mr9GVDn9vRlVZOTe6yqY92rFxiOdWXbjaR0+9LwQnZGGuNR63X456NqmEkbskte8tWL5ePg==}
-    dependencies:
-      moment: 2.29.4
-    dev: false
-
   /moment/2.29.4:
     resolution: {integrity: sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==}
     dev: false
@@ -32597,32 +32332,6 @@ packages:
       - supports-color
     dev: true
 
-  /mongodb-memory-server-core/8.11.2:
-    resolution: {integrity: sha512-6ZdyaDNZFE9tktocBGWgzbPeS9X10SWOKdlMRRyVGWosLeIe6e9NQrK/wf7LryBoOWE7JuZC5f0dcM5K4RCwMQ==}
-    engines: {node: '>=12.22.0'}
-    dependencies:
-      '@types/tmp': 0.2.3
-      async-mutex: 0.3.2
-      camelcase: 6.3.0
-      debug: 4.3.4
-      find-cache-dir: 3.3.2
-      get-port: 5.1.1
-      https-proxy-agent: 5.0.1
-      md5-file: 5.0.0
-      mongodb: 4.13.0
-      new-find-package-json: 2.0.0
-      semver: 7.3.8
-      tar-stream: 2.2.0
-      tmp: 0.2.1
-      tslib: 2.4.1
-      uuid: 9.0.0
-      yauzl: 2.10.0
-    transitivePeerDependencies:
-      - aws-crt
-      - supports-color
-    dev: false
-    optional: true
-
   /mongodb-memory-server-core/8.11.3:
     resolution: {integrity: sha512-DObY45GHxM3O2/6WeRVxiZhoYLnp3vNjrRpq2WdvwNIzatC86Ac28vgqnILTbPD5w58/Fr97kCNBTAC4YL5YzA==}
     engines: {node: '>=12.22.0'}
@@ -32665,19 +32374,6 @@ packages:
       - snappy
       - supports-color
     dev: true
-
-  /mongodb-memory-server/8.11.2:
-    resolution: {integrity: sha512-fjNdN/kwgWnnUnPUT90311vC83sRKQ3C0mpbF5kcKS2CKYxRkWEZLOd0MuGKtQmFHryvnXOPDqAGKKx9G1cIrw==}
-    engines: {node: '>=12.22.0'}
-    requiresBuild: true
-    dependencies:
-      mongodb-memory-server-core: 8.11.2
-      tslib: 2.4.1
-    transitivePeerDependencies:
-      - aws-crt
-      - supports-color
-    dev: false
-    optional: true
 
   /mongodb-memory-server/8.11.3:
     resolution: {integrity: sha512-DCD2kByVpdSrShgBZjdSDKesF1gyFSDi2RN8I7m/1ZJ6RFdkZyMWfofsQzHiTJ/WoqXLadWJljgg0LPNz31FWg==}
@@ -33081,7 +32777,7 @@ packages:
     dependencies:
       '@corex/deepmerge': 2.6.148
       minimist: 1.2.6
-      next: 13.1.1_e6en2gkdnbspgmiqkggoqbxjgy
+      next: 13.1.1_vgii64pd2ccbnbx2v3ro5gbin4
     dev: false
 
   /next-sitemap/1.9.12_next@13.1.3:
@@ -33106,51 +32802,6 @@ packages:
     dependencies:
       enhanced-resolve: 5.12.0
     dev: true
-
-  /next/13.1.1_e6en2gkdnbspgmiqkggoqbxjgy:
-    resolution: {integrity: sha512-R5eBAaIa3X7LJeYvv1bMdGnAVF4fVToEjim7MkflceFPuANY3YyvFxXee/A+acrSYwYPvOvf7f6v/BM/48ea5w==}
-    engines: {node: '>=14.6.0'}
-    hasBin: true
-    peerDependencies:
-      fibers: '>= 3.1.0'
-      node-sass: ^6.0.0 || ^7.0.0
-      react: ^18.2.0
-      react-dom: ^18.2.0
-      sass: ^1.3.0
-    peerDependenciesMeta:
-      fibers:
-        optional: true
-      node-sass:
-        optional: true
-      sass:
-        optional: true
-    dependencies:
-      '@next/env': 13.1.1
-      '@swc/helpers': 0.4.14
-      caniuse-lite: 1.0.30001436
-      postcss: 8.4.14
-      react: 18.2.0
-      react-dom: 18.2.0_react@18.2.0
-      sass: 1.56.0
-      styled-jsx: 5.1.1_3lzqd2prgnu7gkxqqdmtvzna5u
-    optionalDependencies:
-      '@next/swc-android-arm-eabi': 13.1.1
-      '@next/swc-android-arm64': 13.1.1
-      '@next/swc-darwin-arm64': 13.1.1
-      '@next/swc-darwin-x64': 13.1.1
-      '@next/swc-freebsd-x64': 13.1.1
-      '@next/swc-linux-arm-gnueabihf': 13.1.1
-      '@next/swc-linux-arm64-gnu': 13.1.1
-      '@next/swc-linux-arm64-musl': 13.1.1
-      '@next/swc-linux-x64-gnu': 13.1.1
-      '@next/swc-linux-x64-musl': 13.1.1
-      '@next/swc-win32-arm64-msvc': 13.1.1
-      '@next/swc-win32-ia32-msvc': 13.1.1
-      '@next/swc-win32-x64-msvc': 13.1.1
-    transitivePeerDependencies:
-      - '@babel/core'
-      - babel-plugin-macros
-    dev: false
 
   /next/13.1.1_vgii64pd2ccbnbx2v3ro5gbin4:
     resolution: {integrity: sha512-R5eBAaIa3X7LJeYvv1bMdGnAVF4fVToEjim7MkflceFPuANY3YyvFxXee/A+acrSYwYPvOvf7f6v/BM/48ea5w==}
@@ -35974,13 +35625,15 @@ packages:
     resolution: {integrity: sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==}
     engines: {node: '>=0.4.0'}
 
-  /promise-inflight/1.0.1:
+  /promise-inflight/1.0.1_bluebird@3.7.2:
     resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
     peerDependencies:
       bluebird: '*'
     peerDependenciesMeta:
       bluebird:
         optional: true
+    dependencies:
+      bluebird: 3.7.2
     dev: false
 
   /promise.allsettled/1.0.6:
@@ -36392,33 +36045,6 @@ packages:
       '@babel/runtime': 7.20.1
       '@restart/hooks': 0.4.7_react@18.2.0
       '@restart/ui': 1.4.1_biqbaboplfbrettd7655fr4n2y
-      '@types/react': 17.0.52
-      '@types/react-transition-group': 4.4.5
-      classnames: 2.3.2
-      dom-helpers: 5.2.1
-      invariant: 2.2.4
-      prop-types: 15.8.1
-      prop-types-extra: 1.1.1_react@18.2.0
-      react: 18.2.0
-      react-dom: 18.2.0_react@18.2.0
-      react-transition-group: 4.4.5_biqbaboplfbrettd7655fr4n2y
-      uncontrollable: 7.2.1_react@18.2.0
-      warning: 4.0.3
-    dev: false
-
-  /react-bootstrap/2.7.0_4c3rps5tc2yowtcrqid3cuwlea:
-    resolution: {integrity: sha512-Jcrn6aUuRVBeSB6dzKODKZU1TONOdhAxu0IDm4Sv74SJUm98dMdhSotF2SNvFEADANoR+stV+7TK6SNX1wWu5w==}
-    peerDependencies:
-      '@types/react': '>=16.14.8'
-      react: '>=16.14.0'
-      react-dom: '>=16.14.0'
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
-    dependencies:
-      '@babel/runtime': 7.20.7
-      '@restart/hooks': 0.4.7_react@18.2.0
-      '@restart/ui': 1.5.2_biqbaboplfbrettd7655fr4n2y
       '@types/react': 17.0.52
       '@types/react-transition-group': 4.4.5
       classnames: 2.3.2
@@ -39345,7 +38971,7 @@ packages:
     dependencies:
       '@storybook/addon-actions': 6.5.15_biqbaboplfbrettd7655fr4n2y
       '@storybook/addons': 6.5.15_biqbaboplfbrettd7655fr4n2y
-      next: 13.1.1_e6en2gkdnbspgmiqkggoqbxjgy
+      next: 13.1.1_vgii64pd2ccbnbx2v3ro5gbin4
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       tslib: 2.4.1
@@ -41595,18 +41221,6 @@ packages:
       wonka: 6.1.2
     dev: true
 
-  /urql/3.0.3_onqnqwb3ubg5opvemcqf7c2qhy:
-    resolution: {integrity: sha512-aVUAMRLdc5AOk239DxgXt6ZxTl/fEmjr7oyU5OGo8uvpqu42FkeJErzd2qBzhAQ3DyusoZIbqbBLPlnKo/yy2A==}
-    peerDependencies:
-      graphql: ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
-      react: '>= 16.8.0'
-    dependencies:
-      '@urql/core': 3.1.1_graphql@16.6.0
-      graphql: 16.6.0
-      react: 18.2.0
-      wonka: 6.1.2
-    dev: false
-
   /use-callback-ref/1.3.0_kx5muofkyzg6xl5sre3s32j3vy:
     resolution: {integrity: sha512-3FT9PRuRdbB9HfXhEq35u4oZkvpJ5kuYbpqhCfmiZyReuRgpnhDlbr2ZEnnuS0RrJAPn6l23xjFg9kpDM+Ms7w==}
     engines: {node: '>=10'}
@@ -42675,6 +42289,7 @@ packages:
 
   /wonka/6.1.2:
     resolution: {integrity: sha512-zNrXPMccg/7OEp9tSfFkMgTvhhowqasiSHdJ3eCZolXxVTV/aT6HUTofoZk9gwRbGoFey/Nss3JaZKUMKMbofg==}
+    dev: true
 
   /word-wrap/1.2.3:
     resolution: {integrity: sha512-Hz/mrNwitNRh/HUAtM/VT/5VH+ygD6DV7mYKZAtHOrbs8U7lvPS6xf7EJKMF0uW1KJCl0H701g3ZGus+muE5vQ==}

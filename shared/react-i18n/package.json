@@ -32,7 +32,6 @@
     "access": "public"
   },
   "peerDependencies": {
-    "@apollo/client": "^3.5.5",
     "react": "^17.0.1"
   },
   "gitHead": "672e9ed494ded98361abe47132899d3f825d6d23"

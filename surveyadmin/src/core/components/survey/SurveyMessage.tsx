@@ -1,4 +1,3 @@
-import { useVulcanComponents } from "@vulcanjs/react-ui";
 import React from "react";
 import { statuses } from "~/modules/constants";
 import { FormattedMessage } from "../common/FormattedMessage";

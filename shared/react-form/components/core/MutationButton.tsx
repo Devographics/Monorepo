@@ -19,6 +19,7 @@ Example Usage
 import React, { useState } from "react";
 import { DocumentNode } from "graphql";
 import gql from "graphql-tag";
+// TODO: user our custom SWR hook instead
 import { useMutation } from "urql";
 import { useVulcanComponents } from "../VulcanComponents/Consumer";
 import type { LoadingButtonProps } from "./LoadingButton";

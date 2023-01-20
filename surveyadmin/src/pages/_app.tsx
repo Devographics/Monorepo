@@ -8,7 +8,6 @@ import { createEmotionCache } from "@vulcanjs/next-mui";
 import { MuiThemeProvider } from "~/core/components/providers";
 
 import Head from "next/head";
-import { VulcanCurrentUserProvider } from "@vulcanjs/react-ui";
 
 import debug from "debug";
 
@@ -18,8 +17,6 @@ export function reportWebVitals(metric) {
   debugPerf(metric); // The metric object ({ id, name, startTime, value, label }) is logged to the console
 }
 
-import { ApolloProvider } from "@apollo/client";
-import { useApollo } from "@vulcanjs/next-apollo";
 import { CacheProvider, EmotionCache } from "@emotion/react";
 import { useUser } from "~/account/user/hooks";
 
@@ -83,11 +80,6 @@ function VNApp({
   pageProps,
   emotionCache = clientSideEmotionCache,
 }: VNAppProps) {
-  const apolloClient = useApollo(pageProps.initialApolloState, {
-    graphqlUri: getAppGraphqlUri(/*origin*/),
-    crossDomainGraphqlUri:
-      !!process.env.NEXT_PUBLIC_CROSS_DOMAIN_GRAPHQL_URI || false,
-  }); // you can also easily setup ApolloProvider on a per-page basis
   // Use the layout defined at the page level, if available
   // @see https://nextjs.org/docs/basic-features/layouts
   const { user } = useUser();
@@ -100,98 +92,43 @@ function VNApp({
     <ErrorBoundary proposeReload={true} proposeHomeRedirection={true}>
       {/** TODO: this error boundary to display anything useful since it doesn't have i18n */}
       {getLayout(
-        <ApolloProvider client={apolloClient}>
-          <CacheProvider value={emotionCache}>
-            <DefaultLocaleContextProvider>
-              <LocaleContextProvider
-                locale={locale}
-                localeStrings={localeStrings}
-                currentUser={user}
-              >
-                <VulcanCurrentUserProvider
-                  // @ts-ignore FIXME: weird error with groups
-                  value={{
-                    currentUser: user || null,
-                    loading:
-                      false /* TODO: we don't get the loading information from useUser yet */,
-                  }}
+        <CacheProvider value={emotionCache}>
+          <DefaultLocaleContextProvider>
+            <LocaleContextProvider
+              locale={locale}
+              localeStrings={localeStrings}
+              currentUser={user}
+            >
+              <Head>
+                <title>State of JS</title>
+                <meta
+                  name="viewport"
+                  content="minimum-scale=1, initial-scale=1, width=device-width"
+                />
+                <Favicons />
+              </Head>
+              {/** Provide MUI theme but also mui utilities like CSS baseline, StyledEngineProvider... */}
+              <MuiThemeProvider>
+                {/** This ErrorBoundary have Mui theming + i18n + Vulcan components */}
+                <ErrorBoundary
+                  proposeReload={true}
+                  proposeHomeRedirection={true}
                 >
-                  <Head>
-                    <title>State of JS</title>
-                    <meta
-                      name="viewport"
-                      content="minimum-scale=1, initial-scale=1, width=device-width"
-                    />
-                    <Favicons />
-                  </Head>
-                  {/** Provide MUI theme but also mui utilities like CSS baseline, StyledEngineProvider... */}
-                  <MuiThemeProvider>
-                    {/** This ErrorBoundary have Mui theming + i18n + Vulcan components */}
-                    <ErrorBoundary
-                      proposeReload={true}
-                      proposeHomeRedirection={true}
-                    >
-                      <Layout
-                        surveySlug={pageProps?.slug}
-                        surveyYear={pageProps?.year}
-                      >
-                        {/** @ts-ignore */}
-                        <Component {...pageProps} />
-                      </Layout>
-                    </ErrorBoundary>
-                  </MuiThemeProvider>
-                </VulcanCurrentUserProvider>
-              </LocaleContextProvider>
-            </DefaultLocaleContextProvider>
-          </CacheProvider>
-        </ApolloProvider>
+                  <Layout
+                    surveySlug={pageProps?.slug}
+                    surveyYear={pageProps?.year}
+                  >
+                    {/** @ts-ignore */}
+                    <Component {...pageProps} />
+                  </Layout>
+                </ErrorBoundary>
+              </MuiThemeProvider>
+            </LocaleContextProvider>
+          </DefaultLocaleContextProvider>
+        </CacheProvider>
       )}
     </ErrorBoundary>
   );
 }
 
-// Only uncomment this method if you have blocking data requirements for
-// every single page in your application. This disables the ability to
-// perform automatic static optimization, causing every page in your app to
-// be server-side rendered.
-/*
-VNApp.getInitialProps = async (appContext: AppContext) => {
-  // NOTE: in Vercel this is also equal to https://VERCEL_URL
-  const origin = appContext.ctx.req?.headers.origin;
-  // calls page's `getInitialProps` and fills `appProps.pageProps`
-  const appProps = await App.getInitialProps(appContext);
-  // get the right locale for current user based on cookies
-  const req = appContext.ctx.req;
-  // Not SSR context (SSG or client-side call)
-  if (!req) {
-    return { ...appProps };
-  }
-  // SSR
-  const localeId = getLocaleFromReq(req);
-  if (!localeId) {
-    return { ...appProps };
-  }
-  try {
-    // TODO: if the locale id is not known (eg try zz-ZZ)
-    // we should try to fetch english instead
-    const localeWithStrings = await getLocaleStringsCached(localeId, origin);
-    return {
-      ...appProps,
-      locale: localeId,
-      localeStrings: localeWithStrings?.strings,
-    };
-  } catch (err) {
-    console.warn("Could not get locales", localeId, err);
-  }
-  return {
-    ...appProps,
-    locale: localeId,
-    origin,
-  };
-};
-*/
-
-// TODO: we currently mix our own custom i18n system with next-i18n which
-// is setup as a default in Vulcan Next
-// Don't remove until all translations are moved to our own system
 export default VNApp;
