@@ -1,4 +1,5 @@
 id: "${parentId}_happiness"
+hasFilters: true
 titleId: "happiness.${fieldId}"
 # blockType: HappinessBlock
 blockType: VerticalBarBlock

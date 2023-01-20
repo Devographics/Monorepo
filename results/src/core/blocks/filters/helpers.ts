@@ -167,7 +167,7 @@ buckets: [
 NOTE: this could be avoided by inverting the API query itself
 
 */
-export const invertFacets = ({ facets, defaultBuckets, allChartOptions }) => {
+export const invertFacets = ({ facets, defaultBuckets }) => {
     const newBuckets = cloneDeep(defaultBuckets)
     facets.forEach(facet => {
         facet.buckets.forEach(facetBucket => {
@@ -191,8 +191,8 @@ export const invertFacets = ({ facets, defaultBuckets, allChartOptions }) => {
     return newBuckets
 }
 
-export const calculateAverages = ({ buckets, facet, allChartOptions }) => {
-    const facetOptions = allChartOptions[facet]
+export const calculateAverages = ({ buckets, facet, allChartsOptions }) => {
+    const facetOptions = allChartsOptions[facet]
     if (facetOptions && typeof facetOptions[0].average !== 'undefined') {
         buckets.forEach(bucket => {
             if (bucket.id === 'no_answer') {
@@ -305,7 +305,7 @@ export const useFilterLegends = ({
             results = [...(showDefaultSeries ? [defaultLegendItem] : []), ...seriesLegendItems]
         }
     } else if (chartFilters.options.mode === MODE_FACET) {
-        results = allChartOptions[chartFilters.facet].map(({ id }, index) => {
+        results = allChartsOptions[chartFilters.facet].map(({ id }, index) => {
             const label = getString(`options.${chartFilters.facet}.${id}`)?.t
             const barColorItem = getVariantBarColorItem(barColors, index + 1)
             return {

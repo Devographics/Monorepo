@@ -1,4 +1,5 @@
 id: ${parentId}_others
+hasFilters: true
 titleId: blocks.category_other_tools
 blockType: HorizontalBarBlock
 defaultUnits: count

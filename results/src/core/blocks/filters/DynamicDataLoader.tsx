@@ -95,7 +95,7 @@ const DynamicDataLoader = ({
 
     const initialLoad = useRef(true)
 
-    const allChartOptions = useAllChartsOptions()
+    const allChartsOptions = useAllChartsOptions()
 
     useEffect(() => {
         if (initialLoad.current) {
@@ -142,8 +142,6 @@ const DynamicDataLoader = ({
                     // meaningfully compare values across series
                     setUnits('percentage_question')
                     setCombinedBuckets(combinedBuckets)
-                    console.log('// combinedBuckets')
-                    console.log(combinedBuckets)
                     setSeriesCount(newBuckets.length)
                 } else {
                     /*
@@ -162,8 +160,8 @@ const DynamicDataLoader = ({
                 }
             } else if (mode === MODE_FACET) {
                 const facets = seriesData[block.id]?.year?.facets
-                const invertedFacetsBuckets = invertFacets({ facets, defaultBuckets, allChartOptions })
-                const invertedFacetsBucketsWithAverages = calculateAverages({ buckets: invertedFacetsBuckets, allChartOptions, facet: chartFilters.facet})
+                const invertedFacetsBuckets = invertFacets({ facets, defaultBuckets, allChartsOptions })
+                const invertedFacetsBucketsWithAverages = calculateAverages({ buckets: invertedFacetsBuckets, allChartsOptions, facet: chartFilters.facet})
                 setUnits('percentage_bucket')
                 setCombinedBuckets(invertedFacetsBucketsWithAverages)
             }
