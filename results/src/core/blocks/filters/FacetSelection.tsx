@@ -13,9 +13,9 @@ import { MODE_FACET } from './constants'
 const disabledFacets = ['source', 'country', 'industry_sector']
 
 const FacetSelection = ({ chartName, stateStuff, block }) => {
+    const { getString } = useI18n()
     const allChartsKeys = useAllChartsOptionsIdsOnly()
     const { facets } = allChartsKeys
-    console.log(allChartsKeys)
     const { filtersState, setFiltersState } = stateStuff
     const enabledFacets = facets.filter(f => !disabledFacets.includes(f))
 
@@ -35,43 +35,32 @@ const FacetSelection = ({ chartName, stateStuff, block }) => {
                     <T k="filters.facets.description" html={true} md={true} />
                 </Description_>
             </FiltersTop_>
-            <Options
-                filtersState={filtersState}
-                setFilterState={setFiltersState}
-                enabledFacets={enabledFacets}
-            />
+            <Options_>
+                <Option_>
+                    <label>
+                        <T k="filters.facet" />{' '}
+                        <select
+                            onChange={e => {
+                                const value = e.target.value
+                                setFiltersState(fState => {
+                                    const newState = cloneDeep(fState)
+                                    newState.facet = value
+                                    return newState
+                                })
+                            }}
+                            value={filtersState.facet}
+                        >
+                            <option>{getString('filters.facet.select')?.t}</option>
+                            {enabledFacets.map(f => (
+                                <option key={f} value={f} disabled={f === block.id}>
+                                    {getString(`user_info.${f}`)?.t}
+                                </option>
+                            ))}
+                        </select>
+                    </label>
+                </Option_>
+            </Options_>
         </Wrapper_>
-    )
-}
-
-const Options = ({ filtersState, setFiltersState, enabledFacets }) => {
-    const { getString } = useI18n()
-    return (
-        <Options_>
-            <Option_>
-                <label>
-                    <T k="filters.facet" />{' '}
-                    <select
-                        onChange={e => {
-                            const value = e.target.value
-                            setFiltersState(fState => {
-                                const newState = cloneDeep(fState)
-                                newState.facet = value
-                                return newState
-                            })
-                        }}
-                        value={filtersState.facet}
-                    >
-                        <option>{getString('filters.facet.select')?.t}</option>
-                        {enabledFacets.map(f => (
-                            <option key={f} value={f} disabled={f === block.id}>
-                                {getString(`user_info.${f}`)?.t}
-                            </option>
-                        ))}
-                    </select>
-                </label>
-            </Option_>
-        </Options_>
     )
 }
 

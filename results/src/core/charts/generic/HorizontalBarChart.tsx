@@ -12,7 +12,14 @@ import { ChartComponentProps, BucketItem, BlockUnits } from 'core/types'
 import TickItem, { getBucketLabel } from 'core/charts/generic/TickItem'
 import maxBy from 'lodash/maxBy'
 import ChartLabel from 'core/components/ChartLabel'
-import { useBarChart, useColorDefs, useColorFills, useChartKeys, HORIZONTAL } from 'core/charts/hooks'
+import {
+    useBarChart,
+    useColorDefs,
+    useColorFills,
+    useChartKeys,
+    useChartLabelTransformer,
+    HORIZONTAL
+} from 'core/charts/hooks'
 import { CHART_MODE_DEFAULT } from 'core/blocks/filters/constants'
 
 export const margin = {
@@ -64,7 +71,7 @@ export const getLeftMargin = ({ data, shouldTranslate, i18nNamespace }) => {
     }
 }
 
-const getLabelsLayer = (units: BlockUnits) => (props: any) => {
+const getLabelsLayer = labelTransformer => (props: any) => {
     // adjust settings according to dimensions
     let fontSize = 13
     let rotation = 0
@@ -74,8 +81,7 @@ const getLabelsLayer = (units: BlockUnits) => (props: any) => {
     }
 
     return props.bars.map((bar: any) => {
-        const label = isPercentage(units) ? `${bar.data.value}%` : bar.data.value
-
+        const label = labelTransformer(bar.data)
         return (
             <ChartLabel
                 key={bar.key}
@@ -107,7 +113,7 @@ const HorizontalBarChart = ({
     gridIndex,
     facet,
     chartDisplayMode = CHART_MODE_DEFAULT,
-    showDefaultSeries,
+    showDefaultSeries
 }: HorizontalBarChartProps) => {
     const theme = useTheme()
     const { translate } = useI18n()
@@ -115,14 +121,20 @@ const HorizontalBarChart = ({
     const keys = useChartKeys({ units, facet, showDefaultSeries })
 
     const colorDefs = useColorDefs({ orientation: HORIZONTAL })
-    const colorFills = useColorFills({ chartDisplayMode, gridIndex, keys, orientation: HORIZONTAL, facet })
+    const colorFills = useColorFills({
+        chartDisplayMode,
+        gridIndex,
+        keys,
+        orientation: HORIZONTAL,
+        facet
+    })
 
     // console.log(chartDisplayMode)
     // console.log(showDefaultSeries)
     // console.log(keys)
     // console.log(colorDefs)
     // console.log(colorFills)
-    
+
     const { formatTick, formatValue, maxValue } = useBarChart({
         buckets,
         total,
@@ -150,24 +162,9 @@ const HorizontalBarChart = ({
 
     const colors = [barColor.color]
 
-    const labelsLayer = useMemo(() => getLabelsLayer(units), [units])
+    const labelTransformer = useChartLabelTransformer({ units, facet })
 
-    // const colorDefId = `${barColor.id}GradientHorizontal`
-
-    // const colorDefs = [
-    //     {
-    //         id: colorDefId,
-    //         type: 'linearGradient',
-    //         x1: 0,
-    //         y1: 1,
-    //         x2: 1,
-    //         y2: 1,
-    //         colors: [
-    //             { offset: 0, color: barColor.gradient[0] },
-    //             { offset: 100, color: barColor.gradient[1] }
-    //         ]
-    //     }
-    // ]
+    const labelsLayer = useMemo(() => getLabelsLayer(labelTransformer), [units, facet])
 
     return (
         <div style={{ height: buckets.length * baseSize + 80 }}>
@@ -181,7 +178,7 @@ const HorizontalBarChart = ({
                 enableGridX={true}
                 enableGridY={false}
                 enableLabel={true}
-                label={d => (isPercentage(units) ? `${round(d.value, 1)}%` : d.value)}
+                label={labelTransformer}
                 labelTextColor={theme.colors.text}
                 labelSkipWidth={40}
                 colors={colors}
