@@ -15,6 +15,18 @@ import {
     CHART_MODE_GROUPED
 } from 'core/blocks/filters/constants'
 
+/*
+
+Which facets should use a velocity color scale
+
+*/
+export const velocityFacets = ['yearly_salary', 'company_size', 'years_of_experience', 'age']
+
+/*
+
+Switch between absolute (chart always has same max value) and relative (chart adapts to data) modes
+
+*/
 const getMode = (units: Units, mode: Mode) => {
     if (units === 'percentage_survey' || units === 'percentage_bucket') {
         return 'absolute'
@@ -23,6 +35,11 @@ const getMode = (units: Units, mode: Mode) => {
     }
 }
 
+/*
+
+Get chart's max value
+
+*/
 const getMaxValue = (units: Units, mode: Mode, buckets: BucketItem[], total: number) => {
     if (units === 'average') {
         return Math.max(...buckets.map(b => b[units]))
@@ -68,6 +85,11 @@ export const getVariantBarColorItem = (colors, variantIndex, facet) => {
     }
 }
 
+/*
+
+Get various parameters for bar chart
+
+*/
 export const useBarChart = ({
     buckets,
     total,
@@ -121,6 +143,11 @@ type UseColorDefsOptions = {
     orientation?: 'Vertical' | 'Horizontal'
 }
 
+/*
+
+Generate list of all possible bar fills
+
+*/
 export const useColorDefs = (options: UseColorDefsOptions = {}) => {
     const { orientation = VERTICAL } = options
     const theme = useTheme()
@@ -144,7 +171,7 @@ export const useColorDefs = (options: UseColorDefsOptions = {}) => {
         ],
         ...(orientation === HORIZONTAL ? horizontalDefs : {})
     }))
-    
+
     const noAnswerGradient = {
         id: `Gradient${orientation}NoAnswer`,
         type: 'linearGradient',
@@ -179,13 +206,13 @@ type UseColorFillsOptions = {
 
 /*
 
+Generate list of fills used by current chart along with matching functions
+
 chartKeys are e.g. 
 
 ['percentage_bucket__male', 'percentage_bucket__female', 'percentage_bucket__non_binary', etc. ]
 
 */
-export const velocityFacets = ['yearly_salary', 'company_size', 'years_of_experience', 'age']
-
 export const useColorFills = (options: UseColorFillsOptions = {}) => {
     const theme = useTheme()
     const {
@@ -258,7 +285,6 @@ export const useColorFills = (options: UseColorFillsOptions = {}) => {
 Get options keys ([{ id: 'range_work_for_free' }, { id: 'range_0_10' }, { id: 'range_10_30' }, ...]) for all chart types
 
 */
-
 export const useAllChartsOptions = () => {
     const context = usePageContext()
     const { metadata } = context
@@ -284,6 +310,8 @@ export const useChartOptionsIdsOnly = (fieldId: string): string[] =>
     useChartOptions(fieldId).map(o => o.id)
 
 /*
+
+Get list of keys (units) used by current chart
 
 When no facet is specified, key is e.g. [count]
 
@@ -321,6 +349,12 @@ export const useChartKeys = ({
     }
 }
 
+
+/*
+
+How to format chart labels
+
+*/
 const formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',

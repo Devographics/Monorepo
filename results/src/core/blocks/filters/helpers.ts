@@ -5,11 +5,11 @@ import cloneDeep from 'lodash/cloneDeep.js'
 import isEmpty from 'lodash/isEmpty'
 import { CustomizationDefinition, CustomizationOptions } from './types'
 import { BlockDefinition } from 'core/types'
-import { MODE_DEFAULT, MODE_FACET, MODE_FILTERS } from './constants'
+import { MODE_DEFAULT, MODE_FACET, MODE_FILTERS, START_MARKER, END_MARKER } from './constants'
 import { useI18n } from 'core/i18n/i18nContext'
 import { useTheme } from 'styled-components'
 import round from 'lodash/round'
-import { useAllChartsOptions, getVariantBarColorItem, velocityFacets } from 'core/charts/hooks'
+import { useAllChartsOptions, getVariantBarColorItem } from 'core/charts/hooks'
 import sumBy from 'lodash/sumBy'
 import roundBy from 'lodash/roundBy'
 
@@ -23,9 +23,11 @@ export const getNewSeries = ({ filters, keys, year }) => {
     return { year, conditions: [getNewCondition({ filtersNotInUse, keys })] }
 }
 
-const startMarker = '# fragmentStart'
-const endMarker = '# fragmentEnd'
+/*
 
+Generate query used for filtering
+
+*/
 export const getFiltersQuery = ({
     block,
     chartFilters = {},
@@ -37,12 +39,12 @@ export const getFiltersQuery = ({
 }) => {
     let queryBody
     const query = getGraphQLQuery(block)
-    const queryHeader = query.slice(0, query.indexOf(startMarker))
+    const queryHeader = query.slice(0, query.indexOf(START_MARKER))
     const queryContents = query.slice(
-        query.indexOf(startMarker) + startMarker.length,
-        query.indexOf(endMarker)
+        query.indexOf(START_MARKER) + START_MARKER.length,
+        query.indexOf(END_MARKER)
     )
-    const queryFooter = query.slice(query.indexOf(endMarker) + endMarker.length)
+    const queryFooter = query.slice(query.indexOf(END_MARKER) + END_MARKER.length)
     if (chartFilters.options.mode === MODE_FILTERS) {
         queryBody = chartFilters.filters
             .map((singleSeries, seriesIndex) => {
@@ -191,6 +193,11 @@ export const invertFacets = ({ facets, defaultBuckets }) => {
     return newBuckets
 }
 
+/*
+
+Calculate facet averages
+
+*/
 export const calculateAverages = ({ buckets, facet, allChartsOptions }) => {
     const facetOptions = allChartsOptions[facet]
     if (facetOptions && typeof facetOptions[0].average !== 'undefined') {
@@ -209,8 +216,18 @@ export const calculateAverages = ({ buckets, facet, allChartsOptions }) => {
     return buckets
 }
 
+/*
+
+Get label for field
+
+*/
 export const getFieldLabel = ({ getString, field }) => getString(`user_info.${field}`)?.t
 
+/*
+
+Get label for a field value (age range, country name, source name, locale label, etc.)
+
+*/
 export const getValueLabel = ({ getString, field, value, allChartsOptions }) => {
     switch (field) {
         case 'country': {
@@ -232,6 +249,11 @@ export const getValueLabel = ({ getString, field, value, allChartsOptions }) => 
     }
 }
 
+/*
+
+Generate the legends used when filtering is enabled
+
+*/
 export const useFilterLegends = ({
     chartFilters,
     currentYear,
@@ -306,7 +328,12 @@ export const useFilterLegends = ({
         }
     } else if (chartFilters.options.mode === MODE_FACET) {
         results = allChartsOptions[chartFilters.facet].map(({ id }, index) => {
-            const label = getString(`options.${chartFilters.facet}.${id}`)?.t
+            const label = getValueLabel({
+                getString,
+                field: chartFilters.facet,
+                value: id,
+                allChartsOptions
+            })
             const barColorItem = getVariantBarColorItem(colors, index + 1, chartFilters.facet)
             return {
                 color: barColorItem.color,
@@ -322,6 +349,11 @@ export const useFilterLegends = ({
     return reverse ? [...results].reverse() : results
 }
 
+/*
+
+Initialize the chart customization filter state
+
+*/
 export const getInitFilters = (initOptions?: CustomizationOptions): CustomizationDefinition => ({
     options: {
         showDefaultSeries: true,

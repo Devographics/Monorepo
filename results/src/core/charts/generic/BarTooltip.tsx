@@ -53,16 +53,4 @@ const BarTooltip = props => {
     )
 }
 
-BarTooltip.propTypes = {
-    indexValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    data: PropTypes.shape({
-        percentage_survey: PropTypes.number,
-        percentage_question: PropTypes.number,
-        count: PropTypes.number.isRequired
-    }).isRequired,
-    units: PropTypes.string.isRequired,
-    i18nNamespace: PropTypes.string.isRequired,
-    shouldTranslate: PropTypes.bool.isRequired
-}
-
 export default memo(BarTooltip)
