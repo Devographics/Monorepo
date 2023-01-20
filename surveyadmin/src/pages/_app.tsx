@@ -1,3 +1,4 @@
+"use client";
 import { NextPage } from "next";
 import App, { AppContext, AppProps } from "next/app";
 import { ReactElement } from "react";
@@ -7,22 +8,7 @@ import { createEmotionCache } from "@vulcanjs/next-mui";
 import { MuiThemeProvider } from "~/core/components/providers";
 
 import Head from "next/head";
-import {
-  VulcanComponentsProvider,
-  VulcanCurrentUserProvider,
-} from "@vulcanjs/react-ui";
-import {
-  defaultCoreComponents,
-  defaultFormComponents,
-} from "@vulcanjs/react-ui";
-import {
-  liteCoreComponents,
-  liteFormComponents,
-} from "@vulcanjs/react-ui-lite";
-import {
-  bootstrapCoreComponents,
-  bootstrapFormComponents,
-} from "@vulcanjs/react-ui-bootstrap";
+import { VulcanCurrentUserProvider } from "@vulcanjs/react-ui";
 
 import debug from "debug";
 
@@ -43,7 +29,6 @@ import { LocaleContextProvider } from "~/i18n/components/LocaleContext";
 import { DefaultLocaleContextProvider } from "~/core/components/common/DefaultLocaleContext";
 
 import "~/stylesheets/main.scss";
-import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 
 // Various side effects (registering locales etc.)
 import "~/i18n";

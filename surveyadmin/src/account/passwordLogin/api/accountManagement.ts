@@ -63,7 +63,7 @@ export const authenticate = (
 
 // For legacy password check
 import bcrypt from "bcrypt";
-import { findUserFromEmail } from "~/account/magicLogin/api/passport/userUtils";
+import { findUserFromEmail } from "./userUtils";
 /**
  * Check that the provided password is the user's password
  * @param user
@@ -79,8 +79,7 @@ export const checkPasswordForUser = (
    */
   if (!(user.salt && user.hash)) {
     console.warn(
-      `User ${
-        user && JSON.stringify(user)
+      `User ${user && JSON.stringify(user)
       } has no salt/hash. Coming from Meteor? Will try to use legacy Meteor password, until the user changes their password.`
     );
     const storedHashedPassword = (user as any)?.services?.password?.bcrypt;
