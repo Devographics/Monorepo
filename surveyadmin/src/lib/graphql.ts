@@ -1,3 +1,4 @@
+import { createSwrGraphqlClient } from "@devographics/swr-graphql"
 /**
  * Get grahql URI, based on either an absolute or relative URI
  */
@@ -28,3 +29,5 @@ export const getAppGraphqlUri = (
     return "http://localhost:3000/api/graphql";
   }
 };
+
+export const { useQuery, useMutation } = createSwrGraphqlClient(getAppGraphqlUri())

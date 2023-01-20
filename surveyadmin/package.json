@@ -84,6 +84,7 @@
     "@apollo/client": "^3.5.10",
     "@devographics/core-models": "workspace:*",
     "@devographics/encrypt-email": "workspace:*",
+    "@devographics/swr-graphql": "workspace:*",
     "@emotion/cache": "^11.4.0",
     "@emotion/react": "^11.4.1",
     "@emotion/server": "^11.4.0",

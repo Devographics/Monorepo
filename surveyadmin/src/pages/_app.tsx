@@ -131,42 +131,30 @@ function VNApp({
                       false /* TODO: we don't get the loading information from useUser yet */,
                   }}
                 >
-                  <VulcanComponentsProvider
-                    value={{
-                      ...defaultCoreComponents,
-                      ...defaultFormComponents,
-                      ...liteCoreComponents,
-                      ...liteFormComponents,
-                      ...bootstrapCoreComponents,
-                      ...bootstrapFormComponents,
-                      FormattedMessage: FormattedMessage,
-                    }}
-                  >
-                    <Head>
-                      <title>State of JS</title>
-                      <meta
-                        name="viewport"
-                        content="minimum-scale=1, initial-scale=1, width=device-width"
-                      />
-                      <Favicons />
-                    </Head>
-                    {/** Provide MUI theme but also mui utilities like CSS baseline, StyledEngineProvider... */}
-                    <MuiThemeProvider>
-                      {/** This ErrorBoundary have Mui theming + i18n + Vulcan components */}
-                      <ErrorBoundary
-                        proposeReload={true}
-                        proposeHomeRedirection={true}
+                  <Head>
+                    <title>State of JS</title>
+                    <meta
+                      name="viewport"
+                      content="minimum-scale=1, initial-scale=1, width=device-width"
+                    />
+                    <Favicons />
+                  </Head>
+                  {/** Provide MUI theme but also mui utilities like CSS baseline, StyledEngineProvider... */}
+                  <MuiThemeProvider>
+                    {/** This ErrorBoundary have Mui theming + i18n + Vulcan components */}
+                    <ErrorBoundary
+                      proposeReload={true}
+                      proposeHomeRedirection={true}
+                    >
+                      <Layout
+                        surveySlug={pageProps?.slug}
+                        surveyYear={pageProps?.year}
                       >
-                        <Layout
-                          surveySlug={pageProps?.slug}
-                          surveyYear={pageProps?.year}
-                        >
-                          {/** @ts-ignore */}
-                          <Component {...pageProps} />
-                        </Layout>
-                      </ErrorBoundary>
-                    </MuiThemeProvider>
-                  </VulcanComponentsProvider>
+                        {/** @ts-ignore */}
+                        <Component {...pageProps} />
+                      </Layout>
+                    </ErrorBoundary>
+                  </MuiThemeProvider>
                 </VulcanCurrentUserProvider>
               </LocaleContextProvider>
             </DefaultLocaleContextProvider>

@@ -80,7 +80,7 @@
     "@as-integrations/next": "^1.2.0",
     "@devographics/core-models": "workspace:1.0.0",
     "@devographics/encrypt-email": "workspace:1.0.0",
-    "@devographics/graphql-query": "workspace:1.0.0",
+    "@devographics/crud": "workspace:1.0.0",
     "@devographics/react-form": "workspace:1.0.0",
     "@devographics/react-hooks": "workspace:1.0.0",
     "@graphql-tools/merge": "^8.3.11",

@@ -5,7 +5,7 @@ import type { DocumentNode } from "graphql";
 import { Form, getFormFragments } from "@devographics/react-form";
 import { VulcanGraphqlModel, getFragmentName } from "@vulcanjs/graphql";
 // TODO: replace by direct calls to CRUD operations for a response
-import { buildSingleQuery } from "@devographics/graphql-query";
+import { buildSingleQuery } from "@devographics/crud";
 import { VulcanUser } from "@vulcanjs/permissions";
 // Be careful to import from the Consumer!
 import {

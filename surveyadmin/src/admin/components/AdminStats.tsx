@@ -1,7 +1,8 @@
 import React from "react";
-import { useQuery } from "@apollo/client";
 import gql from "graphql-tag";
-import { useVulcanComponents } from "@vulcanjs/react-ui";
+import { useQuery } from "~/lib/graphql";
+import { Loading } from "~/core/components/ui/Loading";
+import { MutationButton } from "~/core/components/ui/MutationButton";
 
 const statsQuery = `query StatsQuery {
   stats {
@@ -24,10 +25,9 @@ function downloadObjectAsJson(exportObj, exportName) {
 }
 
 const AdminStats = () => {
-  const Components = useVulcanComponents();
   const { loading, data = {} } = useQuery(gql(statsQuery));
   if (loading) {
-    return <Components.Loading />;
+    return <Loading />;
   }
   console.log("data", data);
   return (
@@ -37,7 +37,7 @@ const AdminStats = () => {
          * 
          * 
          * 
-        <Components.MutationButton
+        <MutationButton
           label="Get User Data"
           mutationOptions={{
             name: "getUserData",
@@ -54,7 +54,7 @@ const AdminStats = () => {
             downloadObjectAsJson(data, `${data.email}_data`);
           }}
         />
-        <Components.MutationButton
+        <MutationButton
           label="Purge User Data"
           mutationOptions={{
             name: "purgeUserData",
@@ -82,7 +82,7 @@ const AdminStats = () => {
       <h1>TODO: CARD COMPONENT NOT YET REENABLED</h1>
       <h3>
         <span>Cache Stats</span>
-        <Components.MutationButton
+        <MutationButton
           label="Clear Cache"
           //mutationOptions={{
           //  name: "clearCache",

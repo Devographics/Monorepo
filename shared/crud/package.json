@@ -1,5 +1,5 @@
 {
-  "name": "@devographics/graphql-query",
+  "name": "@devographics/crud",
   "version": "1.0.0",
   "description": "Connect to an existing Vulcan backend using hooks",
   "main": "./index.ts",

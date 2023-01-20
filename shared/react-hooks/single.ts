@@ -8,7 +8,7 @@ import {
   SingleInput,
   Fragment,
 } from "@vulcanjs/graphql";
-import { buildSingleQuery } from "@devographics/graphql-query";
+import { buildSingleQuery } from "@devographics/crud";
 
 import { computeQueryVariables } from "./variables";
 import {

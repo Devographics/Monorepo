@@ -3,6 +3,7 @@ import { routes } from "~/lib/routes";
 import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { apiRoutes } from "~/lib/apiRoutes";
 import React from "react";
+import { Button } from "~/core/components/ui/Button";
 
 export const LogoutButton = ({
   component,
@@ -10,7 +11,7 @@ export const LogoutButton = ({
   component?: React.ComponentType<any> | React.ElementType<any>;
 }) => {
   const Components = useVulcanComponents();
-  const LinkOrButton = component || Components.Button;
+  const LinkOrButton = component || Button;
   const { user } = useUser();
   if (!user) return null;
   return (

@@ -12,20 +12,12 @@ const Profile = () => {
   return (
     <PageLayout>
       <div className="contents-narrow account">
-        <p>
-          {user.authMode === "anonymous" && (
-            <Components.FormattedMessage id="accounts.logged_in_as_guest" />
-          )}
-        </p>
         {
           // Legacy password mode
           (!user.authMode || user.authMode === "password") && (
             <ChangePasswordForm user={user} />
           )
         }
-        <p>
-          <Components.FormattedMessage id="accounts.questions" html={true} />
-        </p>
         <p>
           <LogoutButton />
         </p>

@@ -1,10 +1,11 @@
 import React from "react";
-import { gql } from "@apollo/client";
 import qs from "qs";
 import { useRouter } from "next/router";
-import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { surveysWithTemplates } from "~/surveys/withTemplates";
 import Options from "./Options";
+import gql from "graphql-tag";
+import { MutationButton } from "~/core/components/ui/MutationButton";
+import Dropdown from "~/core/components/ui/Dropdown";
 
 export const allFields = { id: "all_fields", label: "All Fields" };
 
@@ -21,7 +22,6 @@ const Actions = (props) => {
     initializeSegments,
     segmentSize,
   } = props;
-  const Components = useVulcanComponents();
   const router = useRouter();
 
   const surveySlug = surveyId;
@@ -32,7 +32,7 @@ const Actions = (props) => {
   return (
     <div className="normalization-actions">
       <div className="primary">
-        <Components.Dropdown
+        <Dropdown
           label={surveySlug}
           menuItems={surveysWithTemplates.map((survey) => ({
             label: survey.slug,
@@ -50,7 +50,7 @@ const Actions = (props) => {
           }))}
         />{" "}
         &gt;{" "}
-        <Components.Dropdown
+        <Dropdown
           label={fieldId}
           menuItems={fields.map((field) => ({
             label: field.id,
@@ -68,7 +68,7 @@ const Actions = (props) => {
           }))}
         />{" "}
         &gt;{" "}
-        <Components.MutationButton
+        <MutationButton
           label={`Renormalize ${survey.slug}/${
             isAllFields ? allFields.id : fieldId
           }`}
@@ -99,7 +99,7 @@ const Actions = (props) => {
         <Options {...props} />
       </div>
       <div className="secondary">
-        <Components.MutationButton
+        <MutationButton
           label="Renormalize Responses"
           /*
           mutationOptions={{

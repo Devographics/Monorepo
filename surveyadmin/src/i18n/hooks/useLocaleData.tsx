@@ -1,5 +1,4 @@
 // TODO: this is a quick migration for state of js
-import { useQuery } from "@apollo/client";
 import gql from "graphql-tag";
 import { initLocale, LocaleType } from "@vulcanjs/i18n";
 /*
@@ -8,6 +7,7 @@ import { useCurrentUser } from "./currentUser";
 import { useCookies } from "react-cookie";
 import { Locales } from "~/i18n";
 import { LOCALE_COOKIE_NAME } from "../cookie";
+import { useQuery } from "~/lib/graphql";
 
 /** 
 

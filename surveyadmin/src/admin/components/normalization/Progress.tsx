@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
-import { gql, useMutation } from "@apollo/client";
-import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { statuses } from "./Normalization";
+import gql from "graphql-tag";
+import { useMutation } from "~/lib/graphql";
+import { Loading } from "~/core/components/ui/Loading";
 
 const Progress = (props) => {
   const {
@@ -105,23 +106,9 @@ const SegmentInProgress = ({
   updateSegments,
   segmentSize,
 }) => {
-  const Components = useVulcanComponents();
   const surveyId = survey.slug;
 
-  const [mutateFunction, { data, loading, error }] = useMutation(
-    normalizeSurveyMutation,
-    {
-      onCompleted: (data) => {
-        const doneCount = startFrom + data?.normalizeSurvey?.count;
-        updateSegments({
-          doneCount,
-          doneSegmentIndex: segmentIndex,
-          doneSegmentData: data?.normalizeSurvey,
-          segmentSize,
-        });
-      },
-    }
-  );
+  const mutateFunction = useMutation(normalizeSurveyMutation);
 
   useEffect(() => {
     if (enabled) {
@@ -132,13 +119,19 @@ const SegmentInProgress = ({
 
       */
       mutateFunction({
-        variables: {
-          surveyId,
-          fieldId: isAllFields ? null : fieldId,
-          startFrom: onlyUnnormalized ? 0 : startFrom,
-          limit: segmentSize,
-          onlyUnnormalized,
-        },
+        surveyId,
+        fieldId: isAllFields ? null : fieldId,
+        startFrom: onlyUnnormalized ? 0 : startFrom,
+        limit: segmentSize,
+        onlyUnnormalized,
+      }).then((data) => {
+        const doneCount = startFrom + data?.normalizeSurvey?.count;
+        updateSegments({
+          doneCount,
+          doneSegmentIndex: segmentIndex,
+          doneSegmentData: data?.normalizeSurvey,
+          segmentSize,
+        });
       });
     }
   }, [segmentIndex, enabled]);
@@ -146,7 +139,7 @@ const SegmentInProgress = ({
   return (
     <div>
       Normalizing {startFrom}/{responsesCount} responses…{" "}
-      {enabled ? <Components.Loading /> : <span>Paused</span>}
+      {enabled ? <Loading /> : <span>Paused</span>}
     </div>
   );
 };

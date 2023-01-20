@@ -20,7 +20,7 @@ import {
   multiQuery,
 } from "@vulcanjs/graphql";
 import get from "lodash/get.js";
-import { buildMultiQueryOptions } from "@devographics/graphql-query";
+import { buildMultiQueryOptions } from "@devographics/crud";
 
 // default query input object
 const defaultInput = {

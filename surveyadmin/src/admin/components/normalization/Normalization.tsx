@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router.js";
 import { surveysWithTemplates } from "~/surveys/withTemplates";
-import { useQuery, gql } from "@apollo/client";
 import Actions from "~/admin/components/normalization/Actions";
 import Progress from "~/admin/components/normalization/Progress";
 import Fields from "~/admin/components/normalization/Fields";
-import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { allFields } from "./Actions";
+import { useQuery } from "~/lib/graphql";
+import gql from "graphql-tag";
+import { Loading } from "~/core/components/ui/Loading";
 
 export const defaultSegmentSize = 500;
 
@@ -68,11 +69,10 @@ export const getSegments = ({ responsesCount, segmentSize }): Segment[] => {
 };
 
 const NormalizationWrapper = () => {
-  const Components = useVulcanComponents();
   const { surveySlug: surveyId, fieldId, paramsReady } = usePageParams();
 
   if (!paramsReady) {
-    return <Components.Loading />;
+    return <Loading />;
   }
 
   const survey = surveysWithTemplates.find((s) => s.slug === surveyId);

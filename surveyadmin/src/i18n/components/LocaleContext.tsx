@@ -18,7 +18,6 @@ import withCurrentUser from "../containers/currentUser.js";
 import withUpdate from "../containers/update.js";
 import withSiteData from "../containers/siteData.js";
 import withLocaleData from "../containers/localeData.js";
-import { withApollo } from "@apollo/client/react/hoc";
 import moment from "moment";
 import { Switch, Route } from "react-router-dom";
 import { withRouter } from "react-router";
@@ -230,17 +229,12 @@ export const LocaleContextProvider = (props: {
 
   const { children } = props;
   const localeId = state.locale.id;
-  //const LayoutComponent = currentRoute.layoutName ? Components[currentRoute.layoutName] : Components.Layout;
-
   const intlObject = {
     locale: localeId,
     key: localeId,
     messages: state.locale.strings,
   };
 
-  // TODO: optimize with SSR
-  // if (locale.loading) return <Components.Loading />;
-  // keep IntlProvider for now for backwards compatibility with legacy Context API
   return (
     <IntlProvider stringsRegistry={stringsRegistry} {...intlObject}>
       <IntlContext.Provider value={intlObject}>

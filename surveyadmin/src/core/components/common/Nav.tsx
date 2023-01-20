@@ -4,10 +4,10 @@ import Nav from "react-bootstrap/Nav";
 // @see https://github.com/react-bootstrap/react-router-bootstrap
 // import { IndexLinkContainer } from "react-router-bootstrap";
 import { isAdmin } from "@vulcanjs/permissions";
-import { useVulcanComponents } from "@vulcanjs/react-ui";
 import Link from "next/link";
 import { routes } from "~/lib/routes";
 import { useUser } from "~/account/user/hooks";
+import { FormattedMessage } from "./FormattedMessage";
 
 interface NavItemDef {
   id?: string;
@@ -66,7 +66,6 @@ const adminNavContents: Array<NavItemDef> = [
 ];
 
 const Navigation = () => {
-  const Components = useVulcanComponents();
   const { user } = useUser();
   let navItems = navContents;
   if (user) {
@@ -84,7 +83,7 @@ const Navigation = () => {
         aria-labelledby="global-nav"
       >
         <p className="hidden" id="global-nav">
-          <Components.FormattedMessage id={"general.global_nav"} />
+          <FormattedMessage id={"general.global_nav"} />
         </p>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
@@ -101,14 +100,11 @@ const Navigation = () => {
 };
 
 const NavItem = ({ to, label, id }) => {
-  const Components = useVulcanComponents();
   return (
     <Nav.Item>
       {/*<IndexLinkContainer to={to}>*/}
       <Link href={to} passHref legacyBehavior={true}>
-        <Nav.Link>
-          {label ? label : <Components.FormattedMessage id={id} />}
-        </Nav.Link>
+        <Nav.Link>{label ? label : <FormattedMessage id={id} />}</Nav.Link>
       </Link>
       {/*</IndexLinkContainer>*/}
     </Nav.Item>
