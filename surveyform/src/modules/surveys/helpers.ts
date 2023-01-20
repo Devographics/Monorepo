@@ -62,6 +62,7 @@ export const getSurveyPath = ({
     return "";
   }
   const { year, prettySlug } = survey;
+  console.log("SURVEY year", { year, prettySlug }, response)
   const prefixSegment = "/survey";
   const slugSegment = prettySlug;
   const yearSegment = year;
