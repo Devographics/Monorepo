@@ -293,7 +293,7 @@ export const useChartKeys = ({
     } else if (seriesCount) {
         if (showDefaultSeries) {
             return [...Array(seriesCount + 1)].map((x, i) =>
-                i === 0 ? units : `${units}__${i + 1}`
+                i === 0 ? units : `${units}__${i}`
             )
         } else {
             return [...Array(seriesCount)].map((x, i) => `${units}__${i + 1}`)
@@ -313,7 +313,6 @@ export const useChartLabelTransformer = ({ units, facet }) => {
     if (isPercentage(units)) {
         return d => `${round(d.value, 1)}%`
     } else if (units === 'average' && facet === 'yearly_salary') {
-        console.log('// yearly_salary')
         return d => formatter.format(d.value)
     } else {
         return d => d.value

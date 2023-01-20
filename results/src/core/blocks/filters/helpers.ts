@@ -9,7 +9,7 @@ import { MODE_DEFAULT, MODE_FACET, MODE_FILTERS } from './constants'
 import { useI18n } from 'core/i18n/i18nContext'
 import { useTheme } from 'styled-components'
 import round from 'lodash/round'
-import { useAllChartsOptionsIdsOnly, getVariantBarColorItem } from 'core/charts/hooks'
+import { useAllChartsOptions, getVariantBarColorItem } from 'core/charts/hooks'
 import sumBy from 'lodash/sumBy'
 import roundBy from 'lodash/roundBy'
 
@@ -173,9 +173,10 @@ export const invertFacets = ({ facets, defaultBuckets, allChartOptions }) => {
         facet.buckets.forEach(facetBucket => {
             const baseBucket = newBuckets.find(b => b.id === facetBucket.id)
             if (!baseBucket) {
-                console.warn(
+                console.log(
                     `Could not find bucket id ${facetBucket.id} while processing facet id ${facet.id}`
                 )
+                console.log(facetBucket)
                 return
             }
             baseUnits.forEach(field => {
@@ -199,7 +200,8 @@ export const calculateAverages = ({ buckets, facet, allChartOptions }) => {
             }
             const averageValue =
                 sumBy(facetOptions, ({ id, average }) => {
-                    return average * bucket[`count__${id}`]
+                    const facetCount = bucket[`count__${id}`] || 0
+                    return average * facetCount
                 }) / bucket.count
             bucket.average = Math.round(averageValue)
         })
@@ -209,8 +211,26 @@ export const calculateAverages = ({ buckets, facet, allChartOptions }) => {
 
 export const getFieldLabel = ({ getString, field }) => getString(`user_info.${field}`)?.t
 
-export const getValueLabel = ({ getString, field, value }) =>
-    field === 'country' ? getCountryName(value) || value : getString(`options.${field}.${value}`)?.t
+export const getValueLabel = ({ getString, field, value, allChartsOptions }) => {
+    switch (field) {
+        case 'country': {
+            return getCountryName(value) || value
+        }
+        case 'source': {
+            const source = allChartsOptions.source.find(s => s.id === value)
+            return source?.entity?.name || value
+        }
+        case 'locale': {
+            const locale = allChartsOptions.locale.find(l => l.id === value)
+            const fallback = locale.label
+            return getString(`options.${field}.${value}`, {}, fallback)?.t
+        }
+        default: {
+            const fallback = value
+            return getString(`options.${field}.${value}`, {}, fallback)?.t
+        }
+    }
+}
 
 export const useFilterLegends = ({
     chartFilters,
@@ -223,7 +243,7 @@ export const useFilterLegends = ({
     showDefaultSeries?: boolean
     reverse?: boolean
 }) => {
-    const allChartKeys = useAllChartsOptionsIdsOnly()
+    const allChartsOptions = useAllChartsOptions()
     const theme = useTheme()
     const { getString } = useI18n()
     const barColors = theme.colors.barColors
@@ -238,8 +258,8 @@ export const useFilterLegends = ({
                 ? getString('filters.series.year', { values: { year: currentYear } })?.t
                 : getString('filters.legend.default')?.t
             const defaultLegendItem = {
-                color: barColors[0].color,
-                gradientColors: barColors[0].gradient,
+                color: theme.colors.barColorDefault.color,
+                gradientColors: theme.colors.barColorDefault.gradient,
                 id: 'default',
                 label: defaultLabel,
                 shortLabel: defaultLabel
@@ -262,7 +282,8 @@ export const useFilterLegends = ({
                             const valueLabel = getValueLabel({
                                 getString,
                                 field,
-                                value
+                                value,
+                                allChartsOptions
                             })
                             return `${fieldLabel} = ${valueLabel}`
                         })
@@ -284,13 +305,13 @@ export const useFilterLegends = ({
             results = [...(showDefaultSeries ? [defaultLegendItem] : []), ...seriesLegendItems]
         }
     } else if (chartFilters.options.mode === MODE_FACET) {
-        results = allChartKeys[chartFilters.facet].map((key, index) => {
-            const label = getString(`options.${chartFilters.facet}.${key}`)?.t
+        results = allChartOptions[chartFilters.facet].map(({ id }, index) => {
+            const label = getString(`options.${chartFilters.facet}.${id}`)?.t
             const barColorItem = getVariantBarColorItem(barColors, index + 1)
             return {
                 color: barColorItem.color,
                 gradientColors: barColorItem.gradient,
-                id: `series_${key}`,
+                id: `series_${id}`,
                 label,
                 shortLabel: label
             }
