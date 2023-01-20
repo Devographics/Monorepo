@@ -12,5 +12,6 @@ enum Facet {
     source
     country
     age
+    locale
 
 }

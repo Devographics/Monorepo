@@ -41,6 +41,30 @@ input YearsOfExperienceFilter {
 }
 
 input SourceFilter {
+    eq: SourceID
+    in: [SourceID]
+    nin: [SourceID]
+}
+
+input DisabilityStatusFilter {
+    eq: DisabilityStatusID
+    in: [DisabilityStatusID]
+    nin: [DisabilityStatusID]
+}
+
+input HigherEducationDegreeFilter {
+    eq: HigherEducationDegreeID
+    in: [HigherEducationDegreeID]
+    nin: [HigherEducationDegreeID]
+}
+
+input AgeFilter {
+    eq: AgeRange
+    in: [AgeRange]
+    nin: [AgeRange]
+}
+
+input LocaleFilter {
     eq: String
     in: [String]
     nin: [String]
@@ -48,11 +72,15 @@ input SourceFilter {
 
 input Filters {
     gender: GenderFilter
-    country: CountryFilter
     race_ethnicity: RaceEthnicityFilter
     yearly_salary: YearlySalaryRangeFilter
+    industry_sector: IndustrySectorFilter
+    disability_status: DisabilityStatusFilter
     company_size: CompanySizeFilter
     years_of_experience: YearsOfExperienceFilter
+    higher_education_degree: HigherEducationDegreeFilter
     source: SourceFilter
-    industry_sector: IndustrySectorFilter
+    country: CountryFilter
+    age: AgeFilter
+    locale: LocaleFilter
 }
