@@ -136,3 +136,37 @@ enum SourceID {
   state_of_css_survey
   mastodon
 }
+
+enum LocaleID {
+    am_ET
+    ar_EG
+    ca_ES
+    cs_CZ
+    de_DE
+    el_GR
+    en_US
+    es_ES
+    fa_IR
+    fr_FR
+    gl_ES
+    hi_IN
+    hr_HR
+    hu_HU
+    id_ID
+    it_IT
+    ja_JP
+    ko_KR
+    nl_NL
+    pl_PL
+    pt_BR
+    pt_PT
+    ro_RO
+    ru_RU
+    sk_SK
+    sv_SE
+    tr_TR
+    ua_UA
+    vi_VN
+    zh_Hans
+    zh_Hant
+}

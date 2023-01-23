@@ -65,9 +65,9 @@ input AgeFilter {
 }
 
 input LocaleFilter {
-    eq: String
-    in: [String]
-    nin: [String]
+    eq: LocaleID
+    in: [LocaleID]
+    nin: [LocaleID]
 }
 
 input Filters {
