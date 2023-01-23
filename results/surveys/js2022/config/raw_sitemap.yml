@@ -1152,8 +1152,26 @@
       variables:
         url: https://tanstack.com/
 
+    - id: podcasts
+      blockNamespace: resources
+      chartNamespace: podcasts
+      tabId: tabs.main_answers
+      template: multiple_options
+      variables:
+        fieldId: resources
+      variants:
+        - id: podcasts_others
+          defaultUnits: count
+          blockNamespace: resources
+          chartNamespace: podcasts
+          tabId: tabs.other_answers
+          template: multiple_options
+          variables:
+            fieldId: resources
+            options: { limit: 15 }
+
     - id: video_creators
-      filters: []
+      filters: [filters]
       blockType: PeopleBlock
       blockNamespace: resources
       chartNamespace: video_creators
@@ -1173,26 +1191,8 @@
             fieldId: resources
             options: { limit: 15 }
 
-    - id: podcasts
-      blockNamespace: resources
-      chartNamespace: podcasts
-      tabId: tabs.main_answers
-      template: multiple_options
-      variables:
-        fieldId: resources
-      variants:
-        - id: podcasts_others
-          defaultUnits: count
-          blockNamespace: resources
-          chartNamespace: podcasts
-          tabId: tabs.other_answers
-          template: multiple_options
-          variables:
-            fieldId: resources
-            options: { limit: 15 }
-
     - id: people_others
-      filters: []
+      filters: [filters]
       defaultUnits: count
       blockNamespace: resources
       chartNamespace: people
