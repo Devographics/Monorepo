@@ -216,7 +216,7 @@ const ValueSegmentArray = ({
     options,
     value,
     field,
-    allChartsOptions,
+    allChartsOptions
 }) => {
     const { setFiltersState } = stateStuff
     const { getString } = useI18n()
@@ -398,10 +398,10 @@ const DeleteValue_ = styled(Button)`
     padding: 2px;
     height: 24px;
     width: 24px;
-    .icon-wrapper, svg {
-    height: 18px;
-    width: 18px;
-
+    .icon-wrapper,
+    svg {
+        height: 18px;
+        width: 18px;
     }
 `
 

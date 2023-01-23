@@ -1,4 +1,4 @@
-import React, { useState, Dispatch, SetStateAction } from 'react';
+import React, { useState, Dispatch, SetStateAction } from 'react'
 import styled from 'styled-components'
 import T from 'core/i18n/T'
 import { mq, spacing, fontSize } from 'core/theme'
@@ -16,6 +16,7 @@ import FiltersSelection from './FiltersSelection'
 import { MODE_DEFAULT, MODE_FACET, MODE_FILTERS } from './constants'
 import cloneDeep from 'lodash/cloneDeep'
 import { BlockDefinition } from 'core/types'
+import { useStickyState } from './helpers'
 
 type FiltersPanelPropsType = {
     block: BlockDefinition
@@ -39,6 +40,8 @@ const FiltersPanel = ({
     const initState = isEmpty(chartFilters) ? getInitFilters() : chartFilters
     const [filtersState, setFiltersState] = useState(initState)
 
+    const [customPresets, setCustomPresets] = useStickyState([], 'filters_panel_presets')
+
     const handleSubmit = () => {
         setChartFilters(filtersState)
         closeModal()
@@ -49,7 +52,9 @@ const FiltersPanel = ({
         block,
         stateStuff: {
             filtersState,
-            setFiltersState
+            setFiltersState,
+            customPresets,
+            setCustomPresets
         }
     }
 

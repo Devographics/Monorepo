@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { getGraphQLQuery } from 'core/blocks/block/BlockData'
 import { addNoAnswerBucket } from 'core/blocks/generic/VerticalBarBlock'
 import { getCountryName } from 'core/helpers/countries'
@@ -385,3 +386,23 @@ export const getInitFilters = (initOptions?: CustomizationOptions): Customizatio
     },
     filters: []
 })
+
+/*
+
+Persist state in localStorage
+
+https://www.joshwcomeau.com/react/persisting-react-state-in-localstorage/
+
+ */
+export function useStickyState(defaultValue: any, key: string) {
+    const [value, setValue] = useState(() => {
+      const stickyValue = window.localStorage.getItem(key);
+      return stickyValue !== null
+        ? JSON.parse(stickyValue)
+        : defaultValue;
+    });
+    useEffect(() => {
+      window.localStorage.setItem(key, JSON.stringify(value));
+    }, [key, value]);
+    return [value, setValue];
+  }
