@@ -101,6 +101,34 @@ const presetsArray = [
                 ]
             }
         ]
+    },
+    {
+        name: 'salary_top_bottom',
+        options: {
+            showDefaultSeries: false,
+        },
+        filters: [
+            {
+                year: 2022,
+                conditions: [
+                    {
+                        field: 'yearly_salary',
+                        operator: 'in',
+                        value: ['range_work_for_free', 'range_0_10', 'range_10_30', 'range_30_50']
+                    }
+                ]
+            },
+            {
+                year: 2022,
+                conditions: [
+                    {
+                        field: 'yearly_salary',
+                        operator: 'in',
+                        value: ['range_50_100', 'range_100_200', 'range_more_than_200']
+                    }
+                ]
+            }
+        ]
     }
 ]
 

@@ -50,7 +50,7 @@ const GridWrapper_ = styled.div`
                   gap: ${spacing(2)};
               `
             : css`
-                  display: flexbox;
+                  display: flex;
                   flex-direction: column;
                   gap: ${spacing()};
               `}

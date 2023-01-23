@@ -49,8 +49,7 @@ const KnowledgeScoreBlock = ({ block, data }) => {
     } = block
 
     const context = usePageContext()
-    const { width, currentEdition } = context
-    const { year: currentYear } = currentEdition
+    const { width } = context
 
     const [units, setUnits] = useState(defaultUnits)
 
@@ -67,7 +66,7 @@ const KnowledgeScoreBlock = ({ block, data }) => {
     // contains the filters that define the series
     const [chartFilters, setChartFilters] = useState(getInitFilters({ behavior: BEHAVIOR_COMBINED }))
 
-    const legends = useFilterLegends({ chartFilters, currentYear })
+    const legends = useFilterLegends({ chartFilters })
 
     return (
         <Block

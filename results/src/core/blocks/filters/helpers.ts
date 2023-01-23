@@ -318,12 +318,17 @@ export const useFilterLegends = (props: { chartFilters: any }) => {
                         seriesItem.conditions.map(({ field, operator, value }) => {
                             const fieldLabel = getFieldLabel({ getString, field })
                             const operatorLabel = getOperatorLabel({ getString, operator })
-                            const valueLabel = getValueLabel({
-                                getString,
-                                field,
-                                value,
-                                allChartsOptions
-                            })
+                            const valueArray = Array.isArray(value) ? value : [value]
+                            const valueLabel = valueArray
+                                .map(valueString =>
+                                    getValueLabel({
+                                        getString,
+                                        field,
+                                        value: valueString,
+                                        allChartsOptions
+                                    })
+                                )
+                                .join(', ')
                             return `${fieldLabel} ${operatorLabel} ${valueLabel}`
                         })
                     ]
