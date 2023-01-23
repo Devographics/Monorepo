@@ -52,7 +52,9 @@ export const getFiltersQuery = ({
                 const filterObject = {}
                 singleSeries.conditions.forEach(condition => {
                     const { field, operator, value } = condition
-                    filterObject[field] = { [operator]: value }
+                    // transform e.g. es-ES into es_ES
+                    const cleanValue = value.replaceAll('-', '_')
+                    filterObject[field] = { [operator]: cleanValue }
                 })
                 const seriesName = `${block.id}_${seriesIndex + 1}`
                 return queryContents

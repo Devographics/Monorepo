@@ -42,7 +42,7 @@ export interface FiltersQuery {
     'user_info.age.choices'?: FilterQuery<string>
     'user_info.disability_status.choices'?: FilterQuery<string>
     'user_info.higher_education_degree.choices'?: FilterQuery<string>
-    'user_info.locale.choices'?: FilterQuery<string>
+    'user_info.locale'?: FilterQuery<string>
     'user_info.source.normalized'?: FilterQuery<string>
 }
 
@@ -89,16 +89,22 @@ export const generateFiltersQuery = (filters?: Filters): FiltersQuery => {
             match['user_info.industry_sector.choices'] = mapFilter<string>(filters.industry_sector)
         }
         if (filters.disability_status !== undefined) {
-            match['user_info.disability_status.choices'] = mapFilter<string>(filters.disability_status)
+            match['user_info.disability_status.choices'] = mapFilter<string>(
+                filters.disability_status
+            )
         }
         if (filters.company_size !== undefined) {
             match['user_info.company_size.choices'] = mapFilter<string>(filters.company_size)
         }
         if (filters.years_of_experience !== undefined) {
-            match['user_info.years_of_experience.choices'] = mapFilter<string>(filters.years_of_experience)
+            match['user_info.years_of_experience.choices'] = mapFilter<string>(
+                filters.years_of_experience
+            )
         }
         if (filters.higher_education_degree !== undefined) {
-            match['user_info.higher_education_degree.choices'] = mapFilter<string>(filters.higher_education_degree)
+            match['user_info.higher_education_degree.choices'] = mapFilter<string>(
+                filters.higher_education_degree
+            )
         }
         if (filters.source !== undefined) {
             match['user_info.source.normalized'] = mapFilter<string>(filters.source)
@@ -110,7 +116,21 @@ export const generateFiltersQuery = (filters?: Filters): FiltersQuery => {
             match['user_info.age.choices'] = mapFilter<string>(filters.age)
         }
         if (filters.locale !== undefined) {
-            match['user_info.locale.choices'] = mapFilter<string>(filters.locale)
+            /*
+
+            Note: this logic is only needed because the current system only supports enums
+            as filters, not strings (for compatibility with the filtering UI)
+
+            */
+            const cleanedUpFilters = {}
+            const cleanUp = s => s.replace('_', '-')
+            Object.keys(filters.locale).forEach(k => {
+                const filterValues = filters.locale[k]
+                cleanedUpFilters[k] = Array.isArray(filterValues)
+                    ? filterValues.map(cleanUp)
+                    : cleanUp(filterValues)
+            })
+            match['user_info.locale'] = mapFilter<string>(cleanedUpFilters)
         }
     }
 

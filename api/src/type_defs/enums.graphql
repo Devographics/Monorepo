@@ -137,6 +137,7 @@ enum SourceID {
   mastodon
 }
 
+# note: in DB, locales are named with - not _
 enum LocaleID {
     am_ET
     ar_EG
