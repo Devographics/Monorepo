@@ -11,9 +11,13 @@ const getLabel = (props, getString) => {
     const s = getString(`options.${i18nNamespace}.${indexValue}`)
     let facetLabel = ''
     if (facet) {
-        const [units, facetBucketId] = id.split('__')
-        const s2 = getString(`options.${facet}.${facetBucketId}`, {}, `${facet}: ${facetBucketId}`)
-        facetLabel = `, ${s2.t}`
+        if (units === 'average') {
+            facetLabel = `, ${getString('chart_units.average')?.t}`
+        } else {
+            const [units, facetBucketId] = id.split('__')
+            const s2 = getString(`options.${facet}.${facetBucketId}`, {}, `${facet}: ${facetBucketId}`)
+            facetLabel = `, ${s2.t}`
+        }
     }
 
     if (label) {

@@ -123,7 +123,7 @@ export const useBarChart = ({
 
     const tickCount = 6
 
-    const ticks = Array.from({ length: tickCount }, (_, i) =>
+    const ticks = Array.from({ length: tickCount }, (x, i) =>
         Math.round((i * maxValue) / (tickCount - 1))
     )
 

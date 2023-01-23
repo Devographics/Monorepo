@@ -115,22 +115,24 @@ const DynamicDataLoader = ({
             const result = await runQuery(url, query, `${block.id}FiltersQuery`)
 
             const seriesData = getSeriesData(result, block.dataPath)
+            // console.log('// seriesData')
+            // console.log(seriesData)
 
             if (mode === MODE_FILTERS) {
                 if (behavior === BEHAVIOR_COMBINED) {
                     /*
 
-                Combine multiple series into a single chart
+                    Combine multiple series into a single chart
 
-                */
+                    */
                     const newBuckets = Object.values(seriesData).map(getSeriesItemBuckets)
 
                     /*
 
-                In case buckets have a processing function applied (for example to merge them into
-                fewer buckets), apply it now to the new buckets
+                    In case buckets have a processing function applied (for example to merge them into
+                    fewer buckets), apply it now to the new buckets
 
-                */
+                    */
 
                     const combinedBuckets = combineBuckets({
                         defaultBuckets,
@@ -140,15 +142,17 @@ const DynamicDataLoader = ({
 
                     // percentage_question is the only unit that lets us
                     // meaningfully compare values across series
-                    setUnits('percentage_question')
+                    if (setUnits) {
+                        setUnits('percentage_question')
+                    }
                     setCombinedBuckets(combinedBuckets)
                     setSeriesCount(newBuckets.length)
                 } else {
                     /*
 
-                Display multiple series as multiple side-by-side "small multiples" charts
+                    Display multiple series as multiple side-by-side "small multiples" charts
 
-                */
+                    */
                     const allSeries = [
                         ...(showDefaultSeries ? [defaultSeries] : []),
                         ...Object.keys(seriesData).map(name => ({
@@ -156,6 +160,8 @@ const DynamicDataLoader = ({
                             buckets: getSeriesItemBuckets(seriesData[name])
                         }))
                     ]
+                    // console.log('// allSeries')
+                    // console.log(allSeries)
                     setSeries(allSeries)
                 }
             } else if (mode === MODE_FACET) {

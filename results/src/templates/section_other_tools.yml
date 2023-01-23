@@ -1,5 +1,5 @@
 id: ${parentId}_others
-hasFilters: true
+filters: [filters, facet]
 titleId: blocks.category_other_tools
 blockType: HorizontalBarBlock
 defaultUnits: count

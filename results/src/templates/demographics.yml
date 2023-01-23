@@ -6,7 +6,7 @@ blockNamespace: user_info
 chartNamespace: ${id}
 # enableCustomization: true
 hasSponsor: true
-hasFilters: true
+filters: [filters, facet]
 query: >
     dataAPI {
         survey(survey: ${surveyType}) {

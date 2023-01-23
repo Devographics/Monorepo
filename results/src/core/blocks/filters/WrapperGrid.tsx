@@ -5,6 +5,7 @@ import { spacing, mq, fontSize } from 'core/theme'
 import Tooltip from 'core/components/Tooltip'
 import isEmpty from 'lodash/isEmpty'
 import { CHART_MODE_GRID } from './constants'
+import T from 'core/i18n/T'
 
 const WrapperGrid = ({ layout, series, legends, children, isLoading, showDefaultSeries }) => (
     <GridWrapper_ layout={layout}>

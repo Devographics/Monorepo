@@ -1,5 +1,5 @@
 id: "${parentId}_happiness"
-hasFilters: true
+filters: [filters, facet]
 titleId: "happiness.${fieldId}"
 # blockType: HappinessBlock
 blockType: VerticalBarBlock

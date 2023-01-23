@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components'
 import T from 'core/i18n/T'
 import { mq, spacing, fontSize } from 'core/theme'
@@ -15,8 +15,21 @@ import FacetSelection from './FacetSelection'
 import FiltersSelection from './FiltersSelection'
 import { MODE_DEFAULT, MODE_FACET, MODE_FILTERS } from './constants'
 import cloneDeep from 'lodash/cloneDeep'
+import { BlockDefinition } from 'core/types'
 
-const FiltersPanel = ({ block, chartFilters, setChartFilters, closeModal }) => {
+type FiltersPanelPropsType = {
+    block: BlockDefinition
+    chartFilters: any
+    setChartFilters: Dispatch<SetStateAction<any>>
+    closeModal: Function
+}
+
+const FiltersPanel = ({
+    block,
+    chartFilters,
+    setChartFilters,
+    closeModal
+}: FiltersPanelPropsType) => {
     const { translate } = useI18n()
     const context = usePageContext()
     const { currentEdition } = context
@@ -41,7 +54,14 @@ const FiltersPanel = ({ block, chartFilters, setChartFilters, closeModal }) => {
     }
 
     // if mode is set to "default" then open Filters tab
-    const defaultTab = filtersState.options.mode === MODE_DEFAULT ? MODE_FILTERS : filtersState.options.mode
+    const defaultTab =
+        filtersState.options.mode === MODE_DEFAULT ? MODE_FILTERS : filtersState.options.mode
+
+    const { filters = [] } = block
+    const tabConfig = {
+        filters: { mode: MODE_FILTERS, component: FiltersSelection },
+        facet: { mode: MODE_FACET, component: FacetSelection }
+    }
 
     return (
         <Filters_>
@@ -50,19 +70,20 @@ const FiltersPanel = ({ block, chartFilters, setChartFilters, closeModal }) => {
             </Heading_>
             <Tabs.Root defaultValue={defaultTab} orientation="horizontal">
                 <TabsList aria-label="tabs example">
-                    <TabsTrigger_ value={MODE_FILTERS}>
-                        <T k="filters.filters_mode" />
-                    </TabsTrigger_>
-                    <TabsTrigger_ value={MODE_FACET}>
-                        <T k="filters.facets_mode" />
-                    </TabsTrigger_>
+                    {filters.map(f => (
+                        <TabsTrigger_ key={f} value={tabConfig[f].mode}>
+                            <T k={`filters.${f}_mode`} />
+                        </TabsTrigger_>
+                    ))}
                 </TabsList>
-                <Tab_ value={MODE_FILTERS}>
-                    <FiltersSelection {...props} />
-                </Tab_>
-                <Tab_ value={MODE_FACET}>
-                    <FacetSelection {...props} />
-                </Tab_>
+                {filters.map(f => {
+                    const Component = tabConfig[f].component
+                    return (
+                        <Tab_ key={f} value={tabConfig[f].mode}>
+                            <Component {...props} />
+                        </Tab_>
+                    )
+                })}
             </Tabs.Root>
 
             <FiltersBottom_>

@@ -84,7 +84,7 @@
     - template: page_introduction
 
     - id: country
-      hasFilters: false
+      filters: [filters]
       # defaultUnits: count
       template: demographics
       blockType: ParticipationByCountryBlock
@@ -176,9 +176,7 @@
         #     options: {facetSort: {order: ___desc___, property: mean}, facetMinCount: 100}
 
     - id: source
-      hasFilters: true
       template: source
-      blockType: HorizontalBarBlock
       dataFunction: cleanUpSources
       variables:
         options: {limit: 20}
@@ -1155,7 +1153,7 @@
         url: https://tanstack.com/
 
     - id: video_creators
-      hasFilters: false
+      filters: []
       blockType: PeopleBlock
       blockNamespace: resources
       chartNamespace: video_creators
@@ -1194,7 +1192,7 @@
             options: { limit: 15 }
 
     - id: people_others
-      hasFilters: false
+      filters: []
       defaultUnits: count
       blockNamespace: resources
       chartNamespace: people

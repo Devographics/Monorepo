@@ -1,17 +1,19 @@
 id: "${parentId}_experience_linechart"
+# filters: [filters]
 blockType: ToolsExperienceLineChartBlock
 titleId: blocks.tools_experience_linechart
 descriptionId: blocks.tools_experience_linechart.description
 noteId: blocks.tools_experience_linechart.note
-dataPath: "dataAPI.survey.${parentId}_linechart"
+dataPath: "dataAPI.survey.${parentId}_experience_linechart"
 hasSponsor: true
 query: >
     dataAPI {
         survey(survey: ${surveyType}) {
-            ${parentId}_linechart: tools_rankings(ids: [${toolsCategories[parentId]}]) {
+            # fragmentStart
+            ${parentId}_experience_linechart: tools_rankings(ids: [${toolsCategories[parentId]}]) {
                 ids
                 years
-                experience {
+                experience(filters: {}) {
                     id
                     entity {
                         name
@@ -40,5 +42,6 @@ query: >
                     }
                 }
             }
+            # fragmentEnd
         }
     }
