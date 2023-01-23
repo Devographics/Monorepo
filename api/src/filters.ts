@@ -14,6 +14,10 @@ export interface Filters {
     industry_sector?: Filter<string>
     yearly_salary?: Filter<string>
     company_size?: Filter<string>
+    age?: Filter<string>
+    locale?: Filter<string>
+    disability_status?: Filter<string>
+    higher_education_degree?: Filter<string>
     years_of_experience?: Filter<string>
     source?: Filter<string>
 }
@@ -35,6 +39,10 @@ export interface FiltersQuery {
     'user_info.company_size.choices'?: FilterQuery<string>
     'user_info.yearly_salary.choices'?: FilterQuery<string>
     'user_info.years_of_experience.choices'?: FilterQuery<string>
+    'user_info.age.choices'?: FilterQuery<string>
+    'user_info.disability_status.choices'?: FilterQuery<string>
+    'user_info.higher_education_degree.choices'?: FilterQuery<string>
+    'user_info.locale.choices'?: FilterQuery<string>
     'user_info.source.normalized'?: FilterQuery<string>
 }
 
@@ -71,26 +79,38 @@ export const generateFiltersQuery = (filters?: Filters): FiltersQuery => {
         if (filters.gender !== undefined) {
             match['user_info.gender.choices'] = mapFilter<string>(filters.gender)
         }
-        if (filters.country !== undefined) {
-            match['user_info.country_alpha3'] = mapFilter<string>(filters.country)
-        }
         if (filters.race_ethnicity !== undefined) {
             match['user_info.race_ethnicity.choices'] = mapFilter<string>(filters.race_ethnicity)
-        }
-        if (filters.industry_sector !== undefined) {
-            match['user_info.industry_sector.choices'] = mapFilter<string>(filters.industry_sector)
-        }
-        if (filters.company_size !== undefined) {
-            match['user_info.company_size.choices'] = mapFilter<string>(filters.company_size)
         }
         if (filters.yearly_salary !== undefined) {
             match['user_info.yearly_salary.choices'] = mapFilter<string>(filters.yearly_salary)
         }
+        if (filters.industry_sector !== undefined) {
+            match['user_info.industry_sector.choices'] = mapFilter<string>(filters.industry_sector)
+        }
+        if (filters.disability_status !== undefined) {
+            match['user_info.disability_status.choices'] = mapFilter<string>(filters.disability_status)
+        }
+        if (filters.company_size !== undefined) {
+            match['user_info.company_size.choices'] = mapFilter<string>(filters.company_size)
+        }
         if (filters.years_of_experience !== undefined) {
             match['user_info.years_of_experience.choices'] = mapFilter<string>(filters.years_of_experience)
         }
+        if (filters.higher_education_degree !== undefined) {
+            match['user_info.higher_education_degree.choices'] = mapFilter<string>(filters.higher_education_degree)
+        }
         if (filters.source !== undefined) {
             match['user_info.source.normalized'] = mapFilter<string>(filters.source)
+        }
+        if (filters.country !== undefined) {
+            match['user_info.country_alpha3'] = mapFilter<string>(filters.country)
+        }
+        if (filters.age !== undefined) {
+            match['user_info.age.choices'] = mapFilter<string>(filters.age)
+        }
+        if (filters.locale !== undefined) {
+            match['user_info.locale.choices'] = mapFilter<string>(filters.locale)
         }
     }
 
