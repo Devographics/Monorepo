@@ -41,7 +41,6 @@ const VerticalBarBlock = ({
     controlledUnits,
     isCustom
 }: VerticalBarBlockProps) => {
-
     if (!data) {
         throw new Error(`VerticalBarBlock: Missing data for block ${block.id}.`)
     }
@@ -58,7 +57,6 @@ const VerticalBarBlock = ({
     const { width, currentEdition } = context
     const { year: currentYear } = currentEdition
 
-    
     const [uncontrolledUnits, setUnits] = useState(defaultUnits)
     const units = controlledUnits || uncontrolledUnits
 
@@ -73,13 +71,12 @@ const VerticalBarBlock = ({
     const { total } = completion
 
     // contains the filters that define the series
-    const [chartFilters, setChartFilters] = useState(getInitFilters({ behavior: BEHAVIOR_COMBINED }))
+    const [chartFilters, setChartFilters] = useState(
+        getInitFilters({ behavior: BEHAVIOR_COMBINED })
+    )
 
     const legends = useFilterLegends({
-        chartFilters,
-        currentYear,
-        showDefaultSeries: chartFilters.options.showDefaultSeries,
-        reverse: chartFilters.options.mode === MODE_FACET
+        chartFilters
     })
 
     const allChartsOptions = useAllChartsOptions()

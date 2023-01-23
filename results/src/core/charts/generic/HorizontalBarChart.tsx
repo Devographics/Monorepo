@@ -126,7 +126,8 @@ const HorizontalBarChart = ({
         gridIndex,
         keys,
         orientation: HORIZONTAL,
-        facet
+        facet,
+        showDefaultSeries
     })
 
     // console.log(chartDisplayMode)

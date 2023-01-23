@@ -75,7 +75,7 @@ Variant 11 = barColor 1 // start over
 
 */
 export const getVariantBarColorItem = (colors, variantIndex, facet) => {
-    const {velocityBarColors, barColors} = colors
+    const { velocityBarColors, barColors } = colors
     if (velocityFacets.includes(facet)) {
         return velocityBarColors[variantIndex]
     } else {
@@ -202,6 +202,7 @@ type UseColorFillsOptions = {
     facet?: string
     gridIndex?: number
     chartDisplayMode: 'grid' | 'grouped' | 'stacked'
+    showDefaultSeries?: boolean
 }
 
 /*
@@ -220,7 +221,8 @@ export const useColorFills = (options: UseColorFillsOptions = {}) => {
         orientation = VERTICAL,
         gridIndex = 0,
         keys: chartKeys = [],
-        facet
+        facet,
+        showDefaultSeries
     } = options
 
     const noAnswerFill = {
@@ -235,7 +237,12 @@ export const useColorFills = (options: UseColorFillsOptions = {}) => {
             Part of a grid of other charts, make all bars the same color based on grid index
 
             */
-            return [noAnswerFill, { match: '*', id: `Gradient${orientation}${gridIndex + 1}` }]
+            const isDefault = gridIndex === 0 && showDefaultSeries
+            const gridIndexOffset = showDefaultSeries ? 0 : 1
+            const id = isDefault
+                ? `Gradient${orientation}Default`
+                : `Gradient${orientation}${gridIndex + gridIndexOffset}`
+            return [noAnswerFill, { match: '*', id }]
         }
         case CHART_MODE_STACKED: {
             /*
@@ -249,7 +256,8 @@ export const useColorFills = (options: UseColorFillsOptions = {}) => {
                 match: d => {
                     // key will follow "unit__facet.bucket" pattern, e.g. "percentage_bucket__range_1_5.range_less_than_1"
                     const [facetKey, bucketKey] = d.key.split('.')
-                    return facetKey === 'average'},
+                    return facetKey === 'average'
+                },
                 id: `Gradient${orientation}1`
             }
 
@@ -358,7 +366,6 @@ export const useChartKeys = ({
         return [units]
     }
 }
-
 
 /*
 

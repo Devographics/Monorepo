@@ -12,6 +12,7 @@ import round from 'lodash/round'
 import { useAllChartsOptions, getVariantBarColorItem } from 'core/charts/hooks'
 import sumBy from 'lodash/sumBy'
 import roundBy from 'lodash/roundBy'
+import { usePageContext } from 'core/helpers/pageContext'
 
 export const getNewCondition = ({ filtersNotInUse, keys }) => {
     const field = filtersNotInUse[0]
@@ -44,7 +45,7 @@ export const getFiltersQuery = ({
         query.indexOf(START_MARKER) + START_MARKER.length,
         query.indexOf(END_MARKER)
     )
-    
+
     const cleanUpValue = s => s.replaceAll('-', '_')
 
     const queryFooter = query.slice(query.indexOf(END_MARKER) + END_MARKER.length)
@@ -56,7 +57,9 @@ export const getFiltersQuery = ({
                 singleSeries.conditions.forEach(condition => {
                     const { field, operator, value } = condition
                     // transform e.g. es-ES into es_ES
-                    const cleanValue = Array.isArray(value) ? value.map(cleanUpValue) : cleanUpValue(value)
+                    const cleanValue = Array.isArray(value)
+                        ? value.map(cleanUpValue)
+                        : cleanUpValue(value)
                     filterObject[field] = { [operator]: cleanValue }
                 })
                 const seriesName = `${block.id}_${seriesIndex + 1}`
@@ -228,13 +231,13 @@ Get label for field
 */
 export const getFieldLabel = ({ getString, field }) => getString(`user_info.${field}`)?.t
 
-
 /*
 
 Get label for operator
 
 */
-export const getOperatorLabel = ({ getString, operator }) => getString(`filters.operators.${operator}`, {}, operator)?.t
+export const getOperatorLabel = ({ getString, operator }) =>
+    getString(`filters.operators.${operator}`, {}, operator)?.t
 
 /*
 
@@ -267,17 +270,17 @@ export const getValueLabel = ({ getString, field, value, allChartsOptions }) => 
 Generate the legends used when filtering is enabled
 
 */
-export const useFilterLegends = ({
-    chartFilters,
-    currentYear,
-    showDefaultSeries,
-    reverse = false,
-}: {
-    chartFilters: any
-    currentYear?: number
-    showDefaultSeries?: boolean
-    reverse?: boolean
-}) => {
+export const useFilterLegends = (props: { chartFilters: any }) => {
+    const context = usePageContext()
+    const { currentEdition } = context
+    const { year: currentYear } = currentEdition
+
+    const { chartFilters } = props
+    const { options } = chartFilters
+    const { showDefaultSeries, mode } = options
+
+    const reverse = mode === MODE_FACET
+
     const allChartsOptions = useAllChartsOptions()
     const theme = useTheme()
     const { colors } = theme
@@ -332,7 +335,7 @@ export const useFilterLegends = ({
                 const legendItem = {
                     color: barColorItem.color,
                     gradientColors: barColorItem.gradient,
-                    id: `series_${seriesIndex}`,
+                    id: `series_${seriesIndex + 1}`,
                     label,
                     shortLabel: label
                 }

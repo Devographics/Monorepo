@@ -89,8 +89,6 @@ const DynamicDataLoader = ({
 
     const legends = useFilterLegends({
         chartFilters,
-        currentYear: year,
-        showDefaultSeries
     })
 
     const initialLoad = useRef(true)
