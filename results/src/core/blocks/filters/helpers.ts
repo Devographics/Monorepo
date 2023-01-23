@@ -44,6 +44,9 @@ export const getFiltersQuery = ({
         query.indexOf(START_MARKER) + START_MARKER.length,
         query.indexOf(END_MARKER)
     )
+    
+    const cleanUpValue = s => s.replaceAll('-', '_')
+
     const queryFooter = query.slice(query.indexOf(END_MARKER) + END_MARKER.length)
     if (chartFilters.options.mode === MODE_FILTERS) {
         queryBody = chartFilters.filters
@@ -53,7 +56,7 @@ export const getFiltersQuery = ({
                 singleSeries.conditions.forEach(condition => {
                     const { field, operator, value } = condition
                     // transform e.g. es-ES into es_ES
-                    const cleanValue = value.replaceAll('-', '_')
+                    const cleanValue = Array.isArray(value) ? value.map(cleanUpValue) : cleanUpValue(value)
                     filterObject[field] = { [operator]: cleanValue }
                 })
                 const seriesName = `${block.id}_${seriesIndex + 1}`
@@ -225,6 +228,14 @@ Get label for field
 */
 export const getFieldLabel = ({ getString, field }) => getString(`user_info.${field}`)?.t
 
+
+/*
+
+Get label for operator
+
+*/
+export const getOperatorLabel = ({ getString, operator }) => getString(`filters.operators.${operator}`, {}, operator)?.t
+
 /*
 
 Get label for a field value (age range, country name, source name, locale label, etc.)
@@ -303,13 +314,14 @@ export const useFilterLegends = ({
                         ...labelSegments,
                         seriesItem.conditions.map(({ field, operator, value }) => {
                             const fieldLabel = getFieldLabel({ getString, field })
+                            const operatorLabel = getOperatorLabel({ getString, operator })
                             const valueLabel = getValueLabel({
                                 getString,
                                 field,
                                 value,
                                 allChartsOptions
                             })
-                            return `${fieldLabel} = ${valueLabel}`
+                            return `${fieldLabel} ${operatorLabel} ${valueLabel}`
                         })
                     ]
                 }
