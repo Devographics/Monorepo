@@ -112,6 +112,8 @@ const DeleteSeries_ = styled(Button)`
     border-radius: 100%;
     background: ${({ theme }) => theme.colors.backgroundAlt};
     border: 1px solid ${({ theme }) => theme.colors.borderAlt};
+    display: grid;
+    place-items: center;
 `
 
 const SeriesChip_ = styled.div`
