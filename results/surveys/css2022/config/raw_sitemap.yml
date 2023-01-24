@@ -829,13 +829,11 @@
       variables:
         url: https://adamwathan.me/composing-the-uncomposable-with-css-variables/
 
-    - id: state_of_the_web
-      template: happiness
+    - template: happiness
       variables:
         fieldId: state_of_the_web
 
-    - id: state_of_css
-      template: happiness
+    - template: happiness
       variables:
         fieldId: state_of_css
 

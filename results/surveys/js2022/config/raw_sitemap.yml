@@ -1289,13 +1289,11 @@
             options: { cutoff: 5 }
             fieldId: opinions_others
 
-    - id: state_of_the_web
-      template: happiness
+    - template: happiness
       variables:
         fieldId: state_of_the_web
 
-    - id: state_of_js
-      template: happiness
+    - template: happiness
       variables:
         fieldId: state_of_js
 
