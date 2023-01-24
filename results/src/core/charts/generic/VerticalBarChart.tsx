@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { useTheme } from 'styled-components'
 import { ResponsiveBar } from '@nivo/bar'
 import { useI18n } from 'core/i18n/i18nContext'
-import { useBarChart, useColorDefs, useColorFills, useChartKeys } from 'core/charts/hooks'
+import { useBarChart, useColorDefs, useColorFills, useChartKeys, useChartLabelFormatter } from 'core/charts/hooks'
 import BarTooltip from './BarTooltip'
 import ChartLabel from 'core/components/ChartLabel'
 import { isPercentage } from 'core/helpers/units'
@@ -18,7 +18,7 @@ const getMargins = (viewportWidth: number) => ({
     left: 40
 })
 
-const getLabelsLayer = (units: BlockUnits) => (props: any) => {
+const getLabelsLayer = labelTransformer => (props: any) => {
     // adjust settings according to dimensions
     let fontSize = 13
     let rotation = 0
@@ -28,7 +28,7 @@ const getLabelsLayer = (units: BlockUnits) => (props: any) => {
     }
 
     return props.bars.map((bar: any) => {
-        const label = isPercentage(units) ? `${bar.data.value}%` : bar.data.value
+        const label = labelTransformer(bar.data)
 
         return (
             <ChartLabel
@@ -97,7 +97,9 @@ const VerticalBarChart = ({
         units
     })
 
-    const labelsLayer = useMemo(() => getLabelsLayer(units), [units])
+    const labelFormatter = useChartLabelFormatter({ units, facet })
+
+    const labelsLayer = useMemo(() => getLabelsLayer(labelFormatter), [units, facet])
 
     const colors = [theme.colors.barChart[colorVariant]]
 

@@ -212,6 +212,7 @@ export const calculateAverages = ({ buckets, facet, allChartsOptions }) => {
     if (facetOptions && typeof facetOptions[0].average !== 'undefined') {
         buckets.forEach(bucket => {
             if (bucket.id === 'no_answer') {
+                bucket.average = 0
                 return
             }
             const averageValue =

@@ -378,7 +378,7 @@ const formatter = new Intl.NumberFormat('en-US', {
     maximumFractionDigits: 0
 })
 
-export const useChartLabelTransformer = ({ units, facet }) => {
+export const useChartLabelFormatter = ({ units, facet }) => {
     if (isPercentage(units)) {
         return d => `${round(d.value, 1)}%`
     } else if (units === 'average' && facet === 'yearly_salary') {

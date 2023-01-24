@@ -70,9 +70,18 @@ const FiltersPanel = ({
 
     return (
         <Filters_>
-            <Heading_>
-                <T k="filters.compare_chart" values={{ chartName }} />
-            </Heading_>
+            <FiltersTop_>
+                <Heading_>
+                    <T k="filters.compare_chart" values={{ chartName }} />
+                </Heading_>
+                <a
+                    href="https://github.com/Devographics/docs/blob/main/results/filters.md"
+                    target="_blank"
+                    rel="nofollow noreferrer"
+                >
+                    <T k="filters.docs" />
+                </a>
+            </FiltersTop_>
             <Tabs.Root defaultValue={defaultTab} orientation="horizontal">
                 <TabsList aria-label="tabs example">
                     {filters.map(f => (
@@ -109,7 +118,16 @@ const FiltersPanel = ({
     )
 }
 
-export const Heading_ = styled.h3``
+export const FiltersTop_ = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: ${spacing()};
+`
+
+export const Heading_ = styled.h3`
+    margin: 0;
+`
 
 export const TabsTrigger_ = styled(Tabs.Trigger)`
     border: ${props => props.theme.border};

@@ -17,7 +17,7 @@ import {
     useColorDefs,
     useColorFills,
     useChartKeys,
-    useChartLabelTransformer,
+    useChartLabelFormatter,
     HORIZONTAL
 } from 'core/charts/hooks'
 import { CHART_MODE_DEFAULT } from 'core/blocks/filters/constants'
@@ -163,9 +163,9 @@ const HorizontalBarChart = ({
 
     const colors = [barColor.color]
 
-    const labelTransformer = useChartLabelTransformer({ units, facet })
+    const labelFormatter = useChartLabelFormatter({ units, facet })
 
-    const labelsLayer = useMemo(() => getLabelsLayer(labelTransformer), [units, facet])
+    const labelsLayer = useMemo(() => getLabelsLayer(labelFormatter), [units, facet])
 
     return (
         <div style={{ height: buckets.length * baseSize + 80 }}>
@@ -178,10 +178,7 @@ const HorizontalBarChart = ({
                 theme={theme.charts}
                 enableGridX={true}
                 enableGridY={false}
-                enableLabel={true}
-                label={labelTransformer}
-                labelTextColor={theme.colors.text}
-                labelSkipWidth={40}
+                enableLabel={false}
                 colors={colors}
                 padding={0.4}
                 borderRadius={1}
