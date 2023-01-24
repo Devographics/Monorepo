@@ -10,229 +10,233 @@ import { getFieldLabel, getOperatorLabel, getValueLabel } from './helpers'
 import { OPERATORS } from './constants'
 
 export const FieldSegment = ({
-  seriesIndex,
-  conditionIndex,
-  stateStuff,
-  options,
-  value,
-  allChartsOptions,
-  field,
-  disabledList = []
+    seriesIndex,
+    conditionIndex,
+    stateStuff,
+    options,
+    value,
+    allChartsOptions,
+    field,
+    disabledList = []
 }) => {
-  const { setFiltersState } = stateStuff
-  const { getString } = useI18n()
-  return (
-      <Label_>
-          {/* <span>{segmentId}</span> */}
-          <Select_
-              onChange={e => {
-                  const fieldValue = e.target.value
-                  setFiltersState(fState => {
-                      const newState = cloneDeep(fState)
-                      newState.filters[seriesIndex].conditions[conditionIndex].field = fieldValue
-                      // if we're changing the field, also change the value
-                      const fieldId = fieldValue
-                      newState.filters[seriesIndex].conditions[conditionIndex].value =
-                          allChartsOptions?.[fieldId]?.[0]?.id
-                      return newState
-                  })
-              }}
-              value={value}
-          >
-              <option value="" disabled>
-                  {getString && getString('explorer.select_item')?.t}
-              </option>
-              {options.map(o => (
-                  <option key={o} value={o} disabled={disabledList.includes(o)}>
-                      {getFieldLabel({ getString, field: o })}
-                  </option>
-              ))}
-          </Select_>
-      </Label_>
-  )
+    const { setFiltersState } = stateStuff
+    const { getString } = useI18n()
+    return (
+        <Label_>
+            {/* <span>{segmentId}</span> */}
+            <Select_
+                onChange={e => {
+                    const fieldValue = e.target.value
+                    setFiltersState(fState => {
+                        const newState = cloneDeep(fState)
+                        newState.filters[seriesIndex].conditions[conditionIndex].field = fieldValue
+                        // if we're changing the field, also change the value
+                        const fieldId = fieldValue
+                        const currentValue =
+                            newState.filters[seriesIndex].conditions[conditionIndex].value
+                        const newValue = allChartsOptions?.[fieldId]?.[0]?.id
+                        // if current value is an array, make sure new value is an array too
+                        newState.filters[seriesIndex].conditions[conditionIndex].value =
+                            Array.isArray(currentValue) ? [newValue] : newValue
+
+                        return newState
+                    })
+                }}
+                value={value}
+            >
+                <option value="" disabled>
+                    {getString && getString('explorer.select_item')?.t}
+                </option>
+                {options.map(o => (
+                    <option key={o} value={o} disabled={disabledList.includes(o)}>
+                        {getFieldLabel({ getString, field: o })}
+                    </option>
+                ))}
+            </Select_>
+        </Label_>
+    )
 }
 
 export const OperatorSegment = ({ seriesIndex, conditionIndex, stateStuff, value }) => {
-  const { setFiltersState } = stateStuff
-  const { getString } = useI18n()
-  return (
-      <Label_>
-          {/* <span>{segmentId}</span> */}
-          <Select_
-              onChange={e => {
-                  const operatorValue = e.target.value
-                  setFiltersState(fState => {
-                      const newState = cloneDeep(fState)
-                      newState.filters[seriesIndex].conditions[conditionIndex].operator =
-                          operatorValue
-                      // if we're changing the operator, also check if we need to change the value
-                      const currentValue =
-                          newState.filters[seriesIndex].conditions[conditionIndex].value
-                      const fieldIsArray = ['in', 'nin'].includes(operatorValue)
-                      const valueIsArray = Array.isArray(currentValue)
-                      if (fieldIsArray && !valueIsArray) {
-                          // we're switching to an array and current value is *not* an array
-                          newState.filters[seriesIndex].conditions[conditionIndex].value = [
-                              currentValue
-                          ]
-                      } else if (!fieldIsArray && valueIsArray) {
-                          // we're switching to a string and current value *is* an array
-                          newState.filters[seriesIndex].conditions[conditionIndex].value =
-                              currentValue[0]
-                      }
-                      return newState
-                  })
-              }}
-              value={value}
-          >
-              <option value="" disabled>
-                  {getString && getString('explorer.select_item')?.t}
-              </option>
-              {OPERATORS.map(operator => (
-                  <option key={operator} value={operator}>
-                      {getOperatorLabel({ getString, operator })}
-                  </option>
-              ))}
-          </Select_>
-      </Label_>
-  )
+    const { setFiltersState } = stateStuff
+    const { getString } = useI18n()
+    return (
+        <Label_>
+            {/* <span>{segmentId}</span> */}
+            <Select_
+                onChange={e => {
+                    const operatorValue = e.target.value
+                    setFiltersState(fState => {
+                        const newState = cloneDeep(fState)
+                        newState.filters[seriesIndex].conditions[conditionIndex].operator =
+                            operatorValue
+                        // if we're changing the operator, also check if we need to change the value
+                        const currentValue =
+                            newState.filters[seriesIndex].conditions[conditionIndex].value
+                        const fieldIsArray = ['in', 'nin'].includes(operatorValue)
+                        const valueIsArray = Array.isArray(currentValue)
+                        if (fieldIsArray && !valueIsArray) {
+                            // we're switching to an array and current value is *not* an array
+                            newState.filters[seriesIndex].conditions[conditionIndex].value = [
+                                currentValue
+                            ]
+                        } else if (!fieldIsArray && valueIsArray) {
+                            // we're switching to a string and current value *is* an array
+                            newState.filters[seriesIndex].conditions[conditionIndex].value =
+                                currentValue[0]
+                        }
+                        return newState
+                    })
+                }}
+                value={value}
+            >
+                <option value="" disabled>
+                    {getString && getString('explorer.select_item')?.t}
+                </option>
+                {OPERATORS.map(operator => (
+                    <option key={operator} value={operator}>
+                        {getOperatorLabel({ getString, operator })}
+                    </option>
+                ))}
+            </Select_>
+        </Label_>
+    )
 }
 
 export const ValueSegment = props => {
-  const isArray = ['in', 'nin'].includes(props.operator)
-  return isArray ? <ValueSegmentArray {...props} /> : <ValueSegmentField {...props} />
+    const isArray = ['in', 'nin'].includes(props.operator)
+    return isArray ? <ValueSegmentArray {...props} /> : <ValueSegmentField {...props} />
 }
 
 const ValueSegmentField = ({
-  seriesIndex,
-  conditionIndex,
-  stateStuff,
-  options,
-  value,
-  field,
-  allChartsOptions,
-  operator
+    seriesIndex,
+    conditionIndex,
+    stateStuff,
+    options,
+    value,
+    field,
+    allChartsOptions,
+    operator
 }) => {
-  const { setFiltersState } = stateStuff
-  const { getString } = useI18n()
+    const { setFiltersState } = stateStuff
+    const { getString } = useI18n()
 
-  return (
-      <Label_>
-          {/* <span>{segmentId}</span> */}
-          <Select_
-              onChange={e => {
-                  const value = e.target.value
-                  setFiltersState(fState => {
-                      const newState = cloneDeep(fState)
-                      newState.filters[seriesIndex].conditions[conditionIndex].value = value
-                      return newState
-                  })
-              }}
-              value={value}
-          >
-              <option value="" disabled>
-                  {getString && getString('explorer.select_item')?.t}
-              </option>
-              {options.map(({ id, entity, label }) => (
-                  <option key={id} value={id}>
-                      {getValueLabel({ getString, field, value: id, allChartsOptions })}
-                  </option>
-              ))}
-          </Select_>
-      </Label_>
-  )
+    return (
+        <Label_>
+            {/* <span>{segmentId}</span> */}
+            <Select_
+                onChange={e => {
+                    const value = e.target.value
+                    setFiltersState(fState => {
+                        const newState = cloneDeep(fState)
+                        newState.filters[seriesIndex].conditions[conditionIndex].value = value
+                        return newState
+                    })
+                }}
+                value={value}
+            >
+                <option value="" disabled>
+                    {getString && getString('explorer.select_item')?.t}
+                </option>
+                {options.map(({ id, entity, label }) => (
+                    <option key={id} value={id}>
+                        {getValueLabel({ getString, field, value: id, allChartsOptions })}
+                    </option>
+                ))}
+            </Select_>
+        </Label_>
+    )
 }
 
 const ValueSegmentArray = ({
-  seriesIndex,
-  conditionIndex,
-  stateStuff,
-  options,
-  value,
-  field,
-  allChartsOptions
+    seriesIndex,
+    conditionIndex,
+    stateStuff,
+    options,
+    value,
+    field,
+    allChartsOptions
 }) => {
-  const { setFiltersState } = stateStuff
-  const { getString } = useI18n()
+    const { setFiltersState } = stateStuff
+    const { getString } = useI18n()
 
-  const canAddNewValue = options.length > value.length
+    const canAddNewValue = options.length > value.length
 
-  const handleDeleteValue = valueIndex => {
-      setFiltersState(fState => {
-          const newState = cloneDeep(fState)
-          newState.filters[seriesIndex].conditions[conditionIndex].value.splice(valueIndex, 1)
-          return newState
-      })
-  }
+    const handleDeleteValue = valueIndex => {
+        setFiltersState(fState => {
+            const newState = cloneDeep(fState)
+            newState.filters[seriesIndex].conditions[conditionIndex].value.splice(valueIndex, 1)
+            return newState
+        })
+    }
 
-  const handleAddValue = () => {
-      setFiltersState(fState => {
-          const newState = cloneDeep(fState)
-          const currentValue = newState.filters[seriesIndex].conditions[conditionIndex].value
-          const newValue = options.find(({ id }) => !value.includes(id))?.id
-          newState.filters[seriesIndex].conditions[conditionIndex].value = [
-              ...currentValue,
-              newValue
-          ]
-          return newState
-      })
-  }
+    const handleAddValue = () => {
+        setFiltersState(fState => {
+            const newState = cloneDeep(fState)
+            const currentValue = newState.filters[seriesIndex].conditions[conditionIndex].value
+            const newValue = options.find(({ id }) => !value.includes(id))?.id
+            newState.filters[seriesIndex].conditions[conditionIndex].value = [
+                ...currentValue,
+                newValue
+            ]
+            return newState
+        })
+    }
 
-  return (
-      <Values_>
-          {value.map((value, valueIndex) => (
-              <Value_ key={value}>
-                  <Label_>
-                      {/* <span>{segmentId}</span> */}
-                      <Select_
-                          onChange={e => {
-                              const value = e.target.value
-                              setFiltersState(fState => {
-                                  const newState = cloneDeep(fState)
-                                  newState.filters[seriesIndex].conditions[conditionIndex].value[
-                                      valueIndex
-                                  ] = value
-                                  return newState
-                              })
-                          }}
-                          value={value}
-                      >
-                          <option value="" disabled>
-                              {getString && getString('explorer.select_item')?.t}
-                          </option>
-                          {options.map(({ id, entity, label }) => (
-                              <option key={id} value={id}>
-                                  {getValueLabel({
-                                      getString,
-                                      field,
-                                      value: id,
-                                      allChartsOptions
-                                  })}
-                              </option>
-                          ))}
-                      </Select_>
-                  </Label_>
+    return (
+        <Values_>
+            {value.map((value, valueIndex) => (
+                <Value_ key={value}>
+                    <Label_>
+                        {/* <span>{segmentId}</span> */}
+                        <Select_
+                            onChange={e => {
+                                const value = e.target.value
+                                setFiltersState(fState => {
+                                    const newState = cloneDeep(fState)
+                                    newState.filters[seriesIndex].conditions[conditionIndex].value[
+                                        valueIndex
+                                    ] = value
+                                    return newState
+                                })
+                            }}
+                            value={value}
+                        >
+                            <option value="" disabled>
+                                {getString && getString('explorer.select_item')?.t}
+                            </option>
+                            {options.map(({ id, entity, label }) => (
+                                <option key={id} value={id}>
+                                    {getValueLabel({
+                                        getString,
+                                        field,
+                                        value: id,
+                                        allChartsOptions
+                                    })}
+                                </option>
+                            ))}
+                        </Select_>
+                    </Label_>
 
-                  <DeleteValue_
-                      onClick={() => {
-                          handleDeleteValue(valueIndex)
-                      }}
-                  >
-                      <DeleteIcon labelId="filters.value.delete" />
-                  </DeleteValue_>
-              </Value_>
-          ))}
-          {canAddNewValue && (
-              <AddValueWrapper_>
-                  <AddValue_ onClick={handleAddValue}>
-                      <PlusIcon labelId="filters.value.add" />
-                  </AddValue_>
-              </AddValueWrapper_>
-          )}
-      </Values_>
-  )
+                    <DeleteValue_
+                        onClick={() => {
+                            handleDeleteValue(valueIndex)
+                        }}
+                    >
+                        <DeleteIcon labelId="filters.value.delete" />
+                    </DeleteValue_>
+                </Value_>
+            ))}
+            {canAddNewValue && (
+                <AddValueWrapper_>
+                    <AddValue_ onClick={handleAddValue}>
+                        <PlusIcon labelId="filters.value.add" />
+                    </AddValue_>
+                </AddValueWrapper_>
+            )}
+        </Values_>
+    )
 }
-
 
 export const Condition_ = styled.div`
     background: ${({ theme }) => theme.colors.backgroundTrans};
@@ -263,7 +267,6 @@ const Value_ = styled.div`
 `
 
 const AddValueWrapper_ = styled.div``
-
 
 const AddDeleteValue_ = styled(Button)`
     background: none;

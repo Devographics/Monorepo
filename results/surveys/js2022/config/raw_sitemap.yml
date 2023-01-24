@@ -84,7 +84,7 @@
     - template: page_introduction
 
     - id: country
-      filters: [filters]
+      filters: []
       # defaultUnits: count
       template: demographics
       blockType: ParticipationByCountryBlock
