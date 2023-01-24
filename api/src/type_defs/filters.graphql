@@ -12,14 +12,14 @@ input CountryFilter {
 
 input RaceEthnicityFilter {
     eq: RaceEthnicityID
-    # in: [RaceEthnicityID]
-    # nin: [RaceEthnicityID]
+    in: [RaceEthnicityID]
+    nin: [RaceEthnicityID]
 }
 
 input IndustrySectorFilter {
     eq: IndustrySectorID
-    # in: [IndustrySectorID]
-    # nin: [IndustrySectorID]
+    in: [IndustrySectorID]
+    nin: [IndustrySectorID]
 }
 
 input YearlySalaryRangeFilter {
