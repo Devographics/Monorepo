@@ -115,26 +115,34 @@ enum FeatureExperienceID {
 
 # maybe shouldn't be an enum? but easier this way for now
 enum SourceID {
-  state_of_js_survey
-  twitter
-  google
-  youtube
-  fireship
-  angular_community
-  js_weekly
-  reddit
-  scrimba
-  linkedin
-  work
-  word_of_mouth
-  duckduckgo
-  slack
-  discord
-  codrops
-  microsoft_teams
-  devto
-  state_of_css_survey
-  mastodon
+    state_of_js_survey
+    twitter
+    google
+    youtube
+    fireship
+    angular_community
+    js_weekly
+    reddit
+    scrimba
+    linkedin
+    work
+    word_of_mouth
+    duckduckgo
+    slack
+    discord
+    codrops
+    microsoft_teams
+    devto
+    state_of_css_survey
+    mastodon
+    kevin_j_powell
+    css_tricks
+    lea_verou
+    smashing_magazine
+    hn
+    mozilla
+    web_standards_ru
+    sidebar
 }
 
 # note: in DB, locales are named with - not _
