@@ -1,26 +1,53 @@
 import { DefaultTheme } from 'styled-components'
 import colors_ from 'core/theme/colors'
 
+
 const colors = {
     ...colors_,
+    tealDarkest: '#167387',
+    tealDarker: '#2594AC',
+    tealDark: '#2EB1CE',
+    teal: '#47CFED',
+    tealLight: '#6BDAF2',
+    tealLighter: '#92E4F6',
+    tealLightest: '#BFF4FF',
     pinkDark: '#9D0E66',
     pink: '#ef4e88',
     pinkLight: '#FE79B4',
     pinkLighter: '#FFADD2',
     pinkLightest: '#FFCEE4',
+    redDark: '#c3494e',
+    red: '#FE6A6A',
+    redLight: '#FF8686',
+    redLighter: '#FFA3A3',
+    redLightest: '#FFC2C2',
     blue: '#3633B7',
     blueLight: '#775CE0',
     blueLighter: '#B0AEEF',
     blueLightest: '#D0CFF9',
+    purpleDarkest: '#3E1A4D',
+    purpleDarker: '#532566',
+    purpleDark: '#6D3385',
+    purple: '#8D4CA8',
+    purpleLight: '#A964C6',
+    purpleLighter: '#C185DA',
+    purpleLightest: '#D5A7E8',
+    purpleLightester: '#EFDCF8',
     green: '#4BC77D',
     greenLight: '#73D49A',
     greenLighter: '#B6F4CF',
     white: '#FFF6E6',
-    kaki: '#CCD133',
+    yellowLight: '#FFF1C0',
+    yellow: '#FFE589',
+    greyDarker: '#303435',
+    greyDark: '#4E5557',
     grey: '#8B8085',
     greyLight: '#BBB2B6',
     greyLighter: '#DED1D7',
     greyLightest: '#EADEE3',
+
+    kakiDark: '#9ca033',
+    kaki: '#CCD133',
     electricBlueLight: '#AEF0FF',
     electricBlue: '#38D6FE',
     electricBlueDark: '#21B1D6',
@@ -33,16 +60,29 @@ const colors = {
     orange: '#EC9C23',
     orangeDark: '#D98C18',
     orangeDarker: '#BE780F',
-    yellowLight: '#FFF1C0',
-    yellow: '#FFE589',
     yellowDark: '#ECCB55',
     yellowDarker: '#D2AA19',
-    redDark: '#c3494e',
-    red: '#FE6A6A',
-    redLight: '#FF8686',
-    redLighter: '#FFA3A3',
-    redLightest: '#FFC2C2'
+
+    blueGreenLightest: '#C9FFF2',
+    blueGreenLighter: '#A1FFE8',
+    blueGreenLight: '#75FBDA',
+    blueGreen: '#51F2CB',
+    blueGreenDark: '#34E1B7',
+    blueGreenDarker: '#23D2A8',
+    blueGreenDarkest: '#16AF8A',
+
+    lilacLighter: '#E9DCFF',
+    lilacLight: '#DCC7FF',
+    lilac: '#BD95FF',
+    lilacDark: '#B896EF',
+    lilacDarker: '#A17AE0',
+    lilacDarkerer: '#815CBF',
+    lilacDarkest: '#6A499D',
+    lilacDarkest2: '#604B81',
+    lilacDarkest3: '#503E6A',
+    lilacDarkest4: '#3A3444'
 }
+
 
 const velocity = [
     '#173E48',
@@ -118,6 +158,11 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
     heatmap: colors.pinkLight,
     lineChartDefaultColor: '#59DF7F',
     no_answer: [colors.greyLight, colors.greyLightest],
+    velocityBarColors: velocity.map((color, i) => ({
+        id: `velocityColor${i}`,
+        color: velocity[i * 2],
+        gradient: [velocity[i * 2+1], velocity[i * 2]]
+    })),
     // bar colors for variants when using filters and (especially) facets
     barColors: [
         {
@@ -178,8 +223,8 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
     ],
     barColorDefault: {
         id: 'barColorDefault',
-        color: colors.blueGreenDark,
-        gradient: [colors.blueGreenDark, colors.blueGreenDark]
+        color: colors.electricBlue,
+        gradient: [colors.electricBlueDarkerer, colors.electricBlueDark]
     },
     barColorNoAnswer: {
         id: 'barColorNoAnswer',
