@@ -2,20 +2,20 @@ import React, { useContext } from "react";
 import { AddSubmitCallbacks } from "./Form/hooks";
 
 interface FormContextValue extends AddSubmitCallbacks {
-  clearForm: Function;
-  clearFieldErrors: Function;
+  clearForm: any;
+  clearFieldErrors: any;
   currentValues: object;
   deletedValues: Array<any>;
   errors: Array<any>;
-  getDocument: Function;
+  getDocument: any;
   getLabel: (fieldName: string, fieldLocale?: string) => string;
   initialDocument: object;
   isChanged: boolean;
-  refetchForm: Function;
-  throwError: Function;
-  updateCurrentValues: Function;
+  refetchForm: any;
+  throwError: any;
+  updateCurrentValues: any;
   disabled: boolean;
-  addToDeletedValues: Function;
+  addToDeletedValues: any;
 }
 
 export const FormContext = React.createContext<FormContextValue | undefined>(
