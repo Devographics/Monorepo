@@ -14,7 +14,6 @@ import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import { getSurveyPath } from "~/surveys/helpers";
 import type { SurveyType } from "@devographics/core-models";
-import surveys from "~/surveys";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import SurveyNavItem from "~/surveys/components/questions/SurveyNavItem";
 import { getCompletionPercentage } from "~/responses/helpers";
@@ -44,7 +43,7 @@ const SurveyNav = ({
 
   const response = getDocument();
 
-  const outline = surveys.find((o) => o.slug === survey.slug)?.outline;
+  const outline = survey.outline; //surveys.find((o) => o.slug === survey.slug)?.outline;
   if (!outline)
     throw new Error(`Survey or outline not found for slug ${survey.slug}`);
 

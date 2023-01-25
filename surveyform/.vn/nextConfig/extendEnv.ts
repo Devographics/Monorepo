@@ -33,9 +33,6 @@ module.exports = ({ defaultConfig }) => {
   extendedConfig = extendNextConfig(defaultConfig);
 
   extendedConfig.env = {
-    NEXT_PUBLIC_IS_USING_DEMO_DATABASE: !!(process.env.MONGO_URI || "").match(
-      /lbke\-demo/
-    ),
     NEXT_PUBLIC_IS_USING_LOCAL_DATABASE: !!(process.env.MONGO_URI || "").match(
       /localhost/
     ),

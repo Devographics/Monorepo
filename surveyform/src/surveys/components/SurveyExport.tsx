@@ -1,34 +1,14 @@
 "use client";
 import React, { useState } from "react";
-import { useRouter } from "next/router.js";
 import type { SurveyDocument } from "@devographics/core-models";
 import { useIntlContext } from "@vulcanjs/react-i18n";
 import { convertSurveyToMarkdown } from "~/surveys/outlineExport";
-import surveys from "~/surveys";
 import { useEntities } from "~/core/components/common/EntitiesContext";
+import { useSurvey } from "./SurveyContext/Provider";
 
-const useCurrentSurvey = () => {
-  const router = useRouter();
-  const { query } = router;
-  const { slug, year } = query;
-  const survey = surveys.find(
-    (s) => s.prettySlug === slug && Number(s.year) === Number(year)
-  );
-  return { survey, slug, year };
-};
 const SurveyExport = () => {
-  // TODO: filter for the current survey only, but we need a tag to do so
-  const { survey, slug, year } = useCurrentSurvey();
-  if (!survey) {
-    return (
-      <div>
-        Survey with slug <strong>{slug}</strong> and year{" "}
-        <strong>{year}</strong> not found
-      </div>
-    );
-  } else {
-    return <SurveyMarkdownOutline survey={survey} />;
-  }
+  const survey = useSurvey();
+  return <SurveyMarkdownOutline survey={survey} />;
 };
 
 export const SurveyMarkdownOutline = ({

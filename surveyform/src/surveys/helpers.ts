@@ -37,11 +37,6 @@ export const getSurveyFieldNames = (survey: SerializedSurveyDocument | SurveyDoc
 };
 
 
-export const getSurveyDescriptionFromResponse = async (response: ResponseDocument): Promise<SurveyDescription | undefined> => {
-  const surveys = await fetchSurveysListGithub()
-  return surveys.find((s) => s.slug === response.surveySlug);
-}
-
 export const getSurveyPath = ({
   survey,
   number,

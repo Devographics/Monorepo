@@ -5,11 +5,18 @@ import { getCompletionPercentage, getKnowledgeScore } from "./helpers";
 import { VulcanGraphqlSchemaServer } from "@vulcanjs/graphql/server";
 import { schema as schemaCommon } from "./schema";
 
-import { getSurveyDescriptionFromResponse, getSurveyPath } from "~/surveys/helpers";
-import { extendSchemaServer } from "@devographics/core-models";
+import { getSurveyPath } from "~/surveys/helpers";
+import { extendSchemaServer, ResponseDocument } from "@devographics/core-models";
 
 import { nanoid } from "nanoid";
 import { ApiContext } from "~/lib/server/context";
+import { fetchSurveysListGithub } from "~/surveys/server/fetch";
+import { SurveyDescription } from "~/surveys/typings";
+
+const getSurveyDescriptionFromResponse = async (response: ResponseDocument): Promise<SurveyDescription | undefined> => {
+  const surveys = await fetchSurveysListGithub()
+  return surveys.find((s) => s.slug === response.surveySlug);
+}
 
 export const schema: VulcanGraphqlSchemaServer = extendSchemaServer(
   schemaCommon,
@@ -107,7 +114,6 @@ export const schema: VulcanGraphqlSchemaServer = extendSchemaServer(
         type: "String",
         resolver: async (response) => {
           const surveyDescription = await getSurveyDescriptionFromResponse(response)
-          console.log("resolve survey", surveyDescription?.slug)
           return getSurveyPath({ survey: surveyDescription, response })
         },
       },

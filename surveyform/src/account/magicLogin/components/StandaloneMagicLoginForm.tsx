@@ -34,14 +34,6 @@ export const StandaloneMagicLoginForm = ({
   const locale = getLocale();
   const params = useSearchParams();
 
-  if (process.env.NEXT_PUBLIC_IS_USING_DEMO_DATABASE)
-    return (
-      <p>
-        CAN'T LOGIN you are using Vulcan Next demo database, please set
-        MONGO_URI env variable to your own database.
-      </p>
-    );
-
   async function handleSubmit(e) {
     e.preventDefault();
     resetMessages();
