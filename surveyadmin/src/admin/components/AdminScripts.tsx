@@ -19,10 +19,6 @@ const runScriptMutation = gql`
 
 const AdminScripts = () => {
   const { loading, data = {}, error } = useQuery(scriptsQuery);
-  console.log("scripts data", data, loading, error);
-  if (!data.scripts) {
-    return <div>No data</div>;
-  }
   if (loading) {
     return <Loading />;
   }

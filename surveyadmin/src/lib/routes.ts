@@ -37,6 +37,9 @@ export const routes = {
     home: {
       href: "/admin",
     },
+    normalization: {
+      href: "/admin/normalization",
+    },
     login: {
       href: "/admin/login",
     },

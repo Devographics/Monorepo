@@ -193,7 +193,7 @@ const FormContainerInner = (props: FormContainerProps) => {
       },
     }
   );
-  console.log("FORM DATA", data);
+  console.log("FORM DATA", data, document);
   // const { data, document, loading, refetch } = useSingle(queryOptions);
   if (formType !== "new") {
     console.debug(
