@@ -5,8 +5,6 @@
   "scripts": {
     "build-storybook": "build-storybook",
     "build:docker": "docker build -f ./.vn/docker/vn.production.dockerfile -t vulcan-next .",
-    "//old-build:scripts": "./.vn/scripts/build-scripts.sh",
-    "//build:scripts": "tsup-node --treeshake",
     "build:scripts": "tsup --treeshake",
     "build:static": "# Next Export is not compatible with i18n, this feature is now deactivated in Vulcan Next. See https://github.com/VulcanJS/vulcan-next/issues/98 #next build && next export",
     "build:storybook": "rm -Rf storybook-static && build-storybook -s ./public # TODO: we shouldn't need to remove, but Storybook 6.1 has a small bug and can't remove existing build automatically",
@@ -72,8 +70,7 @@
     "upgrade:vulcan": "pnpm up '@vulcanjs/*' --latest && pnpm run postinstall",
     "typecheck-watch": "tsc --noEmit --p src/tsconfig.json -w",
     "//typecheck": " # in case of error with @vulcanjs/* package, check that src/types (eg simpl-schema) are up-to-date with vulcan-npm",
-    "typecheck": "tsc --noEmit --p src/tsconfig.json",
-    "update-link-vulcan": "yalc update"
+    "typecheck": "tsc --noEmit --p src/tsconfig.json"
   },
   "dependencies": {
     "@apollo/server": "^4.3.0",
