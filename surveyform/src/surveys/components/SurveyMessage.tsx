@@ -1,5 +1,5 @@
 import React from "react";
-import { statuses } from "~/modules/constants";
+import { statuses } from "~/surveys/constants";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 
 const SurveyMessage = ({ survey }) => {

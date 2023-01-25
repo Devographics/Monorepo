@@ -1,7 +1,7 @@
 import React from "react";
 import { getSurveyPath } from "~/surveys/helpers";
 import Link from "next/link";
-import { statuses } from "~/modules/constants";
+import { statuses } from "~/surveys/constants";
 import LocaleSelector from "~/core/components/common/LocaleSelector";
 import Translators from "~/core/components/common/Translators";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";

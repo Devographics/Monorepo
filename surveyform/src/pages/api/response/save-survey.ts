@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { serverConfig } from '~/config/server'
 import { print } from 'graphql'
 import { gqlHeaders } from "~/core/server/graphqlBff";
-import { SurveyResponseFragment } from "~/modules/responses/fragments";
+import { SurveyResponseFragment } from "~/responses/fragments";
 import { getFragmentName } from "~/core/server/graphqlUtils";
 import { fetchSurveyGithub } from "~/surveys/server/fetch";
 

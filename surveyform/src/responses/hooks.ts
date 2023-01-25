@@ -1,4 +1,4 @@
-import { ResponseDocument, SerializedSurveyDocument, SurveyDocument } from "@devographics/core-models"
+import { ResponseDocument, SurveyDocument } from "@devographics/core-models"
 import useSWR from "swr"
 import { apiRoutes } from "~/lib/apiRoutes"
 

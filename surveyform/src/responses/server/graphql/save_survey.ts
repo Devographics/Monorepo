@@ -1,8 +1,8 @@
 import {
   ResponseMongoCollection,
   processEmailOnUpdate,
-} from "~/modules/responses/model.server";
-import { schema } from "~/modules/responses/schema.server";
+} from "~/responses/model.server";
+import { schema } from "~/responses/schema.server";
 import { throwError } from "./errors";
 
 export const saveSurvey = async (root, args, context) => {

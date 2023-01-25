@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 import { getFragmentName } from "@vulcanjs/graphql";
-import { CreateResponseOutputFragment } from "~/modules/responses/fragments";
+import { CreateResponseOutputFragment } from "~/responses/fragments";
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 import { serverConfig } from '~/config/server'

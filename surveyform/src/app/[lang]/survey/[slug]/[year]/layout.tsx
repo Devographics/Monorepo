@@ -1,8 +1,8 @@
 import { captureException } from "@sentry/nextjs";
 import { notFound } from "next/navigation";
 import { EntitiesProvider } from "~/core/components/common/EntitiesContext";
+import { fetchEntitiesRedis } from "~/core/server/fetchEntitiesRedis";
 import { SurveyProvider } from "~/surveys/components/SurveyContext/Provider";
-import { fetchEntitiesRedis } from "~/modules/entities/server/fetchEntitiesRedis";
 import { fetchSurveyGithub } from "~/surveys/server/fetch";
 
 // revalidate survey/entities every 5 minutes

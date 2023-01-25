@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useRef } from "react";
-import { getKnowledgeScore } from "~/modules/responses/helpers";
+import { getKnowledgeScore } from "~/responses/helpers";
 import get from "lodash/get.js";
 import CountUp from "react-countup";
 import Confetti from "react-confetti";

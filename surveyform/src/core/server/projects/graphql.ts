@@ -1,4 +1,4 @@
-import { ProjectsMongoCollection } from "~/modules/projects/model.server";
+import { ProjectsMongoCollection } from "./model.server";
 
 /*
 

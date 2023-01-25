@@ -17,7 +17,7 @@ import type { SurveyType } from "@devographics/core-models";
 import surveys from "~/surveys";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import SurveyNavItem from "~/surveys/components/questions/SurveyNavItem";
-import { getCompletionPercentage } from "~/modules/responses/helpers";
+import { getCompletionPercentage } from "~/responses/helpers";
 import { Button } from "~/core/components/ui/Button";
 import { Loading } from "~/core/components/ui/Loading";
 

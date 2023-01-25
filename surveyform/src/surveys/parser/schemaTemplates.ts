@@ -2,7 +2,7 @@ import type {
   FieldTemplateId,
   ParsedQuestion,
 } from "@devographics/core-models";
-import countriesOptions from "~/modules/countriesOptions";
+import countriesOptions from "./countriesOptions";
 
 export const templates: {
   [templateName in FieldTemplateId]: (

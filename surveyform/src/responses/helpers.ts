@@ -13,7 +13,7 @@ import {
   SurveyType,
 } from "@devographics/core-models";
 import surveys from "~/surveys";
-import { statuses } from "../constants";
+import { statuses } from "~/surveys/constants";
 
 //import { data } from "autoprefixer";
 import { ResponseDocument } from "@devographics/core-models";

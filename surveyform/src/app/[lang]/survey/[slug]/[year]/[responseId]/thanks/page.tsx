@@ -1,6 +1,6 @@
 import Thanks from "~/core/components/pages/Thanks";
-import { Response } from "~/modules/responses";
-import { ResponseFragmentWithRanking } from "~/modules/responses/fragments";
+import { Response } from "~/responses";
+import { ResponseFragmentWithRanking } from "~/responses/fragments";
 import { serverConfig } from "~/config/server";
 import { buildSingleQuery } from "@devographics/crud";
 import React from "react";

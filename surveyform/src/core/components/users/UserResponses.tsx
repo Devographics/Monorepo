@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { statusesReverse } from "~/modules/constants";
+import { statusesReverse } from "~/surveys/constants";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import { useUser } from "~/account/user/hooks";
-import { useUserResponses } from "~/modules/responses/hooks";
+import { useUserResponses } from "~/responses/hooks";
 import { Loading } from "../ui/Loading";
 import { SerializedSurveyDocument } from "@devographics/core-models";
 

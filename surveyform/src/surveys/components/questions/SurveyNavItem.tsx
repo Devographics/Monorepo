@@ -4,7 +4,7 @@ import Link from "next/link";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import type { SurveySection, SurveyType } from "@devographics/core-models";
 import { ResponseDocument } from "@devographics/core-models";
-import { getSectionCompletionPercentage } from "~/modules/responses/helpers";
+import { getSectionCompletionPercentage } from "~/responses/helpers";
 import { useFormContext } from "@devographics/react-form";
 import { getSurveyPath } from "~/surveys/helpers";
 import { useRouter } from "next/navigation";

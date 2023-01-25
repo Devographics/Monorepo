@@ -10,7 +10,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import get from "lodash/get.js";
 import isEmpty from "lodash/isEmpty.js";
-import { statuses } from "~/modules/constants";
+import { statuses } from "~/surveys/constants";
 import { SurveyType } from "@devographics/core-models";
 import { UserType } from "~/core/models/user";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
@@ -23,7 +23,7 @@ import {
 } from "./hooks";
 import { useRouter } from "next/navigation";
 import { useUser } from "~/account/user/hooks";
-import { useUserResponse } from "~/modules/responses/hooks";
+import { useUserResponse } from "~/responses/hooks";
 import { Loading } from "~/core/components/ui/Loading";
 import { LoadingButton } from "~/core/components/ui/LoadingButton";
 import { getSurveyPath } from "~/surveys/helpers";

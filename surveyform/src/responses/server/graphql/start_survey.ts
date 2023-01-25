@@ -1,8 +1,8 @@
 import {
   duplicateCheck,
   ResponseMongoCollection,
-} from "~/modules/responses/model.server";
-import { schema } from "~/modules/responses/schema.server";
+} from "~/responses/model.server";
+import { schema } from "~/responses/schema.server";
 import { nanoid } from "nanoid";
 import { throwError } from './errors'
 

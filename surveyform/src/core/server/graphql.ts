@@ -8,15 +8,15 @@ import { nodeCache, promisesNodeCache } from "~/lib/server/caching";
 //import Responses from "../modules/responses/collection";
 //import NormalizedResponses from "../modules/normalized_responses/collection";
 
-import { ResponseMongoCollection } from "~/modules/responses/model.server";
+import { ResponseMongoCollection } from "~/responses/model.server";
 import { isAdmin } from "@vulcanjs/permissions";
 import { SaveMongoCollection } from "@devographics/core-models/server";
 
-import { startSurvey, saveSurvey } from "~/modules/responses/server/graphql";
+import { startSurvey, saveSurvey } from "~/responses/server/graphql";
 import {
   projectsAutocomplete,
   projectsLabels,
-} from "~/modules/projects/server/graphql";
+} from "./projects/graphql";
 
 const { mergeResolvers, mergeTypeDefs } = require("@graphql-tools/merge");
 // Simulate Vulcan Meteor global "addGraphQLSchema" etc.

@@ -1,6 +1,6 @@
 // Export all your SERVER-ONLY models here
 // Please do not remove the User model, which is necessary for auth
-import { Response } from "~/modules/responses/model.server";
+import { Response } from "~/responses/model.server";
 import { Save } from "@devographics/core-models/server";
 import { User } from "~/core/models/user.server";
 import { Project } from "@devographics/core-models/server";
