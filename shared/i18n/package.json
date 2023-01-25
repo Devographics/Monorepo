@@ -2,28 +2,10 @@
   "name": "@devographics/i18n",
   "version": "1.0.0",
   "description": "Vulcan i18n helpers",
-  "main": "./dist/index.js",
-  "files": [
-    "dist/"
-  ],
+  "main": "./index.ts",
   "type": "module",
-  "exports": {
-    ".": "./dist/index.js",
-    "./server": "./dist/server/index.js"
-  },
-  "types": "./dist/index.d.ts",
-  "typesVersions": {
-    "*": {
-      "server": [
-        "./dist/server/index.d.ts"
-      ]
-    }
-  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build:tsup": "tsup",
-    "build:types": "tsc --emitDeclarationOnly --declaration --project tsconfig.build.json ",
-    "build": "yarn run build:tsup"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "MIT",

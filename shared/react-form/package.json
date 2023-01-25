@@ -9,19 +9,8 @@
     ".": "./index.ts",
     "./testing": "./testing.ts"
   },
-  "types": "./dist/index.d.ts",
-  "typesVersions": {
-    "*": {
-      "testing": [
-        "./dist/testing.d.ts"
-      ]
-    }
-  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "yarn run build:tsup",
-    "build:tsup": "tsup",
-    "build:types": "tsc --emitDeclarationOnly --declaration --project tsconfig.build.json "
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "MIT",

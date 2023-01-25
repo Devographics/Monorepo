@@ -2,24 +2,10 @@
   "name": "@devographics/react-i18n",
   "version": "1.0.0",
   "description": "Vulcan i18n React components",
-  "main": "./dist/index.js",
-  "files": [
-    "dist/"
-  ],
+  "main": "./dist/index.ts",
   "type": "module",
-  "exports": {
-    ".": "./dist/index.js"
-  },
-  "types": "./dist/index.d.ts",
-  "typesVersions": {
-    "*": {}
-  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build:webpack": "yarn run build:common && yarn run build:server",
-    "build:tsup": "tsup",
-    "build:types": "tsc --emitDeclarationOnly --declaration --project tsconfig.build.json ",
-    "build": "yarn run build:tsup"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "MIT",
