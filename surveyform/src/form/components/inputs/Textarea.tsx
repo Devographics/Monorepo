@@ -1,17 +1,19 @@
 "use client";
-import type { FormInputProps } from "@devographics/react-form";
+// import type { FormInputProps } from "@devographics/react-form";
 import React, { useState } from "react";
 import { FormControl } from "react-bootstrap";
 import debounce from "lodash/debounce.js";
 import { FormItem } from "~/form/components/elements/FormItem";
 
-export const FormComponentTextarea = ({
-  path,
-  label,
-  refFunction,
-  inputProperties = {},
-  itemProperties = {},
-}: FormInputProps) => {
+export const FormComponentTextarea = (
+  {
+    path,
+    label,
+    refFunction,
+    inputProperties = {},
+    itemProperties = {},
+  }: any /*FormInputProps*/
+) => {
   const { onChange, value } = inputProperties;
   const [localValue, setLocalValue] = useState(value);
 
@@ -32,11 +34,11 @@ export const FormComponentTextarea = ({
   return (
     <FormItem path={path} label={label} {...itemProperties}>
       <FormControl
-        // @ts-expect-error
+        // @ts-ignore
         as="textarea"
         ref={refFunction}
         {...inputProperties}
-        // @ts-expect-error
+        // @ts-ignore
         value={localValue}
         onChange={handleChangeDebounced}
         onBlur={handleChange}
