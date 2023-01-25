@@ -112,14 +112,18 @@ const useFormDocument = (
   variables: any
 ) => {
   const skip = formType === "new";
-  console.log("Calling useFormDocument", { skip, variables });
-  const rawRes = useSWR<any>(skip ? null : [query, variables], graphqlFetcher);
+  // console.log("Calling useFormDocument", { skip, variables });
+  const rawRes = useSWR<{ data: any }>(
+    skip ? null : [query, variables],
+    graphqlFetcher
+  );
   if (rawRes.error) {
     console.error("Error while fetching form document", rawRes.error);
   }
   return {
     ...rawRes,
-    document: rawRes.data?.response,
+    data: rawRes?.data?.data,
+    document: rawRes.data?.data?.response?.result,
     loading: !rawRes.error && !rawRes.data,
     // TODO: not sure if we strictly need refetching
     // it's hard to implement with SWR and GraphQL, wait for moving to REST
@@ -175,7 +179,7 @@ const FormContainerInner = (props: FormContainerProps) => {
       skip: formType === "new",
     },
   };
-  console.log("useSingle queryOptions", queryOptions);
+  // console.log("useSingle queryOptions", queryOptions);
   // TODO: finish the "get-section" endpoint to turn into a REST endpoint
   // instead of using graphql
   const query = buildSingleQuery({
@@ -183,7 +187,7 @@ const FormContainerInner = (props: FormContainerProps) => {
     fragment: queryFragment,
     fragmentName: queryFragmentName,
   });
-  const { data, document, loading, refetch } = useFormDocument(
+  const { /*data,*/ document, loading, refetch } = useFormDocument(
     formType,
     query,
     {
@@ -193,9 +197,9 @@ const FormContainerInner = (props: FormContainerProps) => {
       },
     }
   );
-  console.log("FORM DATA", data, document);
+  // console.log("FORM DATA", data, document);
   // const { data, document, loading, refetch } = useSingle(queryOptions);
-  if (formType !== "new") {
+  /*if (formType !== "new") {
     console.debug(
       "useSingle result",
       "data",
@@ -207,7 +211,7 @@ const FormContainerInner = (props: FormContainerProps) => {
     );
   } else {
     console.debug("new");
-  }
+  }*/
 
   const {
     currentUser: currentUserFromContext,
