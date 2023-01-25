@@ -14,7 +14,7 @@ import type {
 } from "@devographics/core-models";
 import { logToFile } from "@devographics/core-models/server";
 import { getOrFetchEntities } from "~/modules/entities/server";
-import { getSurveyBySlug } from "~/surveys/helpers";
+import { getSurveyBySlug } from "~/modules/surveys/helpers";
 import { NormalizedResponseMongooseModel } from "~/admin/models/normalized_responses/model.server";
 
 export const getFieldSegments = (field: Field) => {

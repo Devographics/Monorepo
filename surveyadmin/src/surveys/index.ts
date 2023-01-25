@@ -14,7 +14,7 @@ import js2022 from "./stateofjs/js2022.yml";
 
 import graphql2022 from "./stateofgraphql/graphql2022.yml";
 
-import { parseSurvey } from "~/surveys/parser/parseSurvey";
+import { parseSurvey } from "~/modules/surveys/parser/parseSurvey";
 
 // make sure array is properly sorted here
 import { SurveyType } from "@devographics/core-models";

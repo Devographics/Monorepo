@@ -20,7 +20,7 @@ import { ResponseDocument } from "@devographics/core-models";
 import { isAdmin } from "@vulcanjs/permissions";
 import { VulcanGraphqlFieldSchema } from "@vulcanjs/graphql";
 import SimpleSchema from "simpl-schema";
-import { getQuestionObject } from "~/surveys/parser/parseSurvey";
+import { getQuestionObject } from "~/modules/surveys/parser/parseSurvey";
 
 // Previously it lived in Vulcan NPM, but that's something you'd want to control more
 // precisely at app level

@@ -3,9 +3,9 @@ import { useRouter } from "next/router.js";
 import type { SurveyDocument } from "@devographics/core-models";
 import { useIntlContext } from "@vulcanjs/react-i18n";
 import { useEntitiesQuery } from "~/core/hooks/useEntitiesQuery";
-import { convertSurveyToMarkdown } from "~/surveys/outlineExport";
 import { surveysWithTemplates } from "~/surveys/withTemplates";
 import { Loading } from "../ui/Loading";
+import { convertSurveyToMarkdown } from "~/modules/surveys/outlineExport";
 const surveys = surveysWithTemplates;
 
 const useCurrentSurvey = () => {
