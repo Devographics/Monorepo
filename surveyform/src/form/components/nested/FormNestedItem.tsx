@@ -3,6 +3,7 @@ import { useIntlContext } from "@vulcanjs/react-i18n";
 import { Button } from "~/core/components/ui/Button";
 import FormComponent from "../elements/FormComponent";
 import { IconRemove } from "./FormNestedArray";
+import { FormComponentProps } from "~/form/typings";
 
 export const FormNestedItemLayout = ({ content, removeButton }) => (
   <div className="form-nested-item">
@@ -19,17 +20,25 @@ export const FormNestedItemLayout = ({ content, removeButton }) => (
   </div>
 );
 
+export interface FormNestedItemProps extends FormComponentProps {
+  nestedFields: Array<{ name: string } & any>;
+  name: string;
+  path: string;
+  removeItem: (name: string) => void;
+  itemIndex: any;
+  hideRemove?: boolean;
+  label: string;
+}
 export const FormNestedItem = ({
   nestedFields,
   name,
   path,
   removeItem,
   itemIndex,
-  formComponents,
   hideRemove,
   label,
   ...props
-}) => {
+}: FormNestedItemProps) => {
   const intl = useIntlContext();
   const isArray = typeof itemIndex !== "undefined";
   return (

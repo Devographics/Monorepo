@@ -117,10 +117,8 @@ export const checkPasswordForUser = (
  */
 export async function findUserByCredentials({
   email,
-  password,
 }: {
   email: string;
-  password: string;
 }): Promise<UserTypeServer | null> {
   // Here you should lookup for the user in your DB and compare the password:
   //

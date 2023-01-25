@@ -1,7 +1,7 @@
 import React from "react";
 import _omit from "lodash/omit.js";
 import { useFormContext } from "@devographics/react-form";
-import { FormNestedItem } from "./FormNestedItem";
+import { FormNestedItem, FormNestedItemProps } from "./FormNestedItem";
 import { FieldErrors } from "../elements/FieldErrors";
 
 // Replaceable layout
@@ -32,7 +32,7 @@ export const FormNestedObject = (props: FormNestedObjectProps) => {
     "input",
     "inputProperties",
     "nestedInput"
-  );
+  ) as FormNestedItemProps;
   const { errors } = useFormContext();
   // only keep errors specific to the nested array (and not its subfields)
   const nestedObjectErrors = errors.filter(
