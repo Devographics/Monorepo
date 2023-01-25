@@ -30,7 +30,7 @@ export const SurveyProvider = ({
  *
  * @returns The survey definition WITHOUT REACT COMPONENTS
  */
-export const useSurvey = () => {
+export const useSurvey = (): SurveyDocument => {
   const context = useContext(SurveyContext);
   if (!context) {
     throw new Error("Called useSurvey before setting SurveyProvider context");

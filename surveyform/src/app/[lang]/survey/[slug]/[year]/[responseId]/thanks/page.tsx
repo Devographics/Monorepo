@@ -10,8 +10,8 @@ import {
   SerializedSurveyDocument,
 } from "@devographics/core-models";
 import { print } from "graphql";
-import { fetchSurveyGithub } from "~/core/server/fetchSurveyGithub";
 import { notFound } from "next/navigation";
+import { fetchSurveyGithub } from "~/modules/surveys/server/fetch";
 
 async function getResponseWithRanking({
   responseId,

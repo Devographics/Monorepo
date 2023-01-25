@@ -101,6 +101,9 @@ export const loadAllLocally = async (localesToLoad: LocaleMetaData[]): Promise<L
         const localeDirName = `locale-${localeMetaData.id}`
         console.log(`-> loading directory ${localeDirName} locally (${i}/${localesToLoad.length})`)
 
+        if (!process.env.LOCALES_DIR) {
+            throw new Error("LOCALES_DIR not set")
+        }
         const localeDirPath = path.resolve(`../../${process.env.LOCALES_DIR}/${localeDirName}`)
         const files = await readdir(localeDirPath)
         const yamlFiles = files.filter((f: String) => f.includes('.yml'))
@@ -312,8 +315,8 @@ export const computeUntranslatedKeys = (
     const untranslatedKeys = isEn
         ? []
         : allStrings
-              .filter((s: TranslationStringObject) => s.isFallback)
-              .map((s: TranslationStringObject) => s.key)
+            .filter((s: TranslationStringObject) => s.isFallback)
+            .map((s: TranslationStringObject) => s.key)
     return untranslatedKeys
 }
 

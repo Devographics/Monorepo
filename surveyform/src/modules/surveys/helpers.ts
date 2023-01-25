@@ -3,8 +3,9 @@
  * This avoid bundling all surveys in a page
  */
 import { ResponseDocument, SerializedSurveyDocument, SurveyDocument, SurveySection } from "@devographics/core-models";
-import { fetchSurveysList, SurveyDescription } from "~/surveys/list";
 import { getQuestionObject } from "./parser/parseSurvey";
+import { fetchSurveysListGithub } from "./server/fetch";
+import { SurveyDescription } from "./typings";
 
 export const getCommentFieldName = fieldName => fieldName.replace("__experience", "__comment")
 
@@ -37,7 +38,7 @@ export const getSurveyFieldNames = (survey: SerializedSurveyDocument | SurveyDoc
 
 
 export const getSurveyDescriptionFromResponse = async (response: ResponseDocument): Promise<SurveyDescription | undefined> => {
-  const surveys = await fetchSurveysList()
+  const surveys = await fetchSurveysListGithub()
   return surveys.find((s) => s.slug === response.surveySlug);
 }
 

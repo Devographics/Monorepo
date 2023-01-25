@@ -105,6 +105,8 @@ export interface SurveyDocument {
   /**
    * MUST NOT INCLUDE "-" use underscore instead "_"
    * Because dashes are not allowed as i18n token
+   * 
+   * Should match the folder path on github surveys repository
    */
   slug?: string;
   /**

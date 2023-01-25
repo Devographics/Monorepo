@@ -1,7 +1,8 @@
 import Surveys from "~/core/components/pages/Surveys";
-import { fetchSurveysList } from "~/surveys/list";
+import { fetchSurveysListGithub } from "~/modules/surveys/server/fetch";
+
 const IndexPage = async () => {
-  const surveys = await fetchSurveysList();
+  const surveys = await fetchSurveysListGithub();
   return <Surveys surveys={surveys} />;
 };
 

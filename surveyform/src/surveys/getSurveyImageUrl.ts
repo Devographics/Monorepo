@@ -1,5 +1,5 @@
 import { isAbsoluteUrl } from "~/core/utils/isAbsoluteUrl";
-import type { SurveyDescription } from "./list";
+import { SurveyDescription } from "~/modules/surveys/typings";
 
 /**
  * Get the main survey image,

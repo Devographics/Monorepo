@@ -76,7 +76,10 @@ const moduleExports = (phase, { defaultConfig }) => {
         {
           protocol: "https",
           hostname: "devographics.github.io",
-        },
+        }, {
+          protocol: "https",
+          hostname: "static.devographics.com"
+        }
       ],
     },
 

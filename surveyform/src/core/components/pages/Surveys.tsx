@@ -7,7 +7,7 @@ import Translators from "~/core/components/common/Translators";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import Image from "next/image";
 import { getSurveyImageUrl } from "~/surveys/getSurveyImageUrl";
-import type { SurveyDescription } from "~/surveys/list";
+import { SurveyDescription } from "~/modules/surveys/typings";
 
 const SurveyItem = ({ survey }: { survey: SurveyDescription }) => {
   const { name, year, status } = survey;
