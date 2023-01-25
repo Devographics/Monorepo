@@ -221,6 +221,7 @@ export const getQuestionSchema = (
     };
   }
 
+  // @ts-ignore
   return questionSchema;
 };
 
