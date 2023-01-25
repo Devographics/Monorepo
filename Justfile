@@ -24,11 +24,11 @@ dbs:
     cd {{justfile_directory()}} && pnpm exec concurrently --prefix-colors "bgRed,bgGreen" \
     --names "redis,mongo" "just redis" "just mongo";
 
-# Create local build
+# (nx experiment) Create local build
 # Don't forget to run Redis and Mongo dbs
-build:
-    pnpm exec nx run-many --target=build
-    cd {{justfile()}}/result yarn run build;
+# build:
+#     pnpm exec nx run-many --target=build
+#     cd {{justfile()}}/result yarn run build;
 
 default:
     @just --list --justfile {{justfile()}}
