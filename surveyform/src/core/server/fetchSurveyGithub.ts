@@ -64,7 +64,9 @@ export async function fetchSurveyGithub(slug: SerializedSurveyDocument["slug"], 
     const commonConfig = commonConfigRes ? await githubYamlAsJson(commonConfigRes) : {}
     //console.debug({ surveyConfig, questionsConfig })
 
+    // @ts-ignore
     const survey = {
+        // @ts-ignore
         ...commonConfig,
         ...surveyConfig,
         // url friendly slug
