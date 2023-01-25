@@ -49,6 +49,7 @@ export const FormIntl = (props: FormIntlProps) => {
     <FormIntlLayout>
       {Locales.map((locale, i) => (
         <FormIntlItemLayout key={locale.id} locale={locale}>
+          {/** @ts-ignore */}
           <FormComponent
             // @ts-ignore
             {...properties}
