@@ -130,7 +130,9 @@ export const FormNestedArray = (props: FormNestedArrayProps) => {
             visibleItemIndex={visibleItemIndex}
             path={path}
           >
+            {/** @ts-ignore */}
             <FormNestedItem
+              // @ts-ignore
               {...properties}
               itemIndex={i}
               visibleItemIndex={visibleItemIndex}

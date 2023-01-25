@@ -25,12 +25,21 @@ export function encryptSession(session: UserType) {
  * => it let's the backend check for user existence in the database
  * @param req
  */
-export async function getSession(
+export async function getSessionFromReq(
   req: NextApiRequest | Request
 ): Promise<UserType> {
   const token = getTokenCookie(req);
+  return getSessionFromToken(token)
+}
+
+
+/**
+ * @param token 
+ */
+export async function getSessionFromToken(token) {
   const TOKEN_SECRET = getTokenSecret();
   return token && Iron.unseal(token, TOKEN_SECRET!, Iron.defaults);
+
 }
 
 export async function decryptToken(token: string) {

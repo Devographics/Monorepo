@@ -22,6 +22,7 @@ export const routes = {
     },
     login: {
       href: "/account/login",
+      from: (currentUrl: string) => `/account/login?from=${encodeURIComponent(currentUrl)}`
     },
     signup: {
       href: "/account/signup",

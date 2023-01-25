@@ -1,11 +1,11 @@
-import { getSession } from "~/account/user/api";
+import { getSessionFromReq } from "~/account/user/api";
 import { UserMongooseModel } from "~/core/models/user.server";
 import { connectToAppDb } from "~/lib/server/mongoose/connection";
 import { apiWrapper } from "~/lib/server/sentry";
 
 async function user(req, res) {
   await connectToAppDb();
-  const session = await getSession(req);
+  const session = await getSessionFromReq(req);
   // Get fresh data about the user
   const user = session?._id
     ? (await UserMongooseModel.findById(session._id))?.toObject()

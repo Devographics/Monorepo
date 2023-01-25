@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import { routes } from "~/lib/routes";
 import { LogoutButton } from "~/account/user/components";
 import { Button } from "~/core/components/ui/Button";
+import classes from "./DefaultError.module.scss";
 
 // NOTE: this expects a latin language. Might need improvements/more reusability
 const addPointToSentence = (sentence?: string | null) => {
@@ -85,18 +86,18 @@ export const DefaultErrorDisplay = ({
     title || (titleI18nToken ? t(titleI18nToken) : defaultErrorTitle);
 
   return (
-    <div /*className={classes.content}*/ style={{ flexDirection: "column" }}>
+    <div className={classes.wrapper}>
       {/*<WarningIcon fontSize="large" />*/}
       <h2>
         {errorTitle}
         {error?.name && <span> {}</span>}
       </h2>
       <p>
-        <span>{addPointToSentence(errorMessage)}</span>{" "}
+        <span>Error message: {addPointToSentence(errorMessage)}</span>{" "}
         <span>{t("error.message_sent_to_technical_team")}</span>
       </p>
       {hasButtons && (
-        <div /*className={classes.buttonsWrapper}*/>
+        <div className={classes.buttonsWrapper}>
           {proposeReload && (
             <>
               <p /*className={classes.tryReloadMessage}*/>
