@@ -6,11 +6,7 @@ import FormSubmit from "~/form/components/elements/FormSubmit";
 import FormLayout from "~/form/components/elements/FormLayout";
 import FormOptionLabel from "~/form/components/elements/FormOptionLabel";
 import FormGroup from "~/form/components/elements/FormGroup";
-import {
-  Form,
-  MutationButton,
-  VulcanComponentsProvider,
-} from "@devographics/react-form";
+import { Form, VulcanComponentsProvider } from "@devographics/react-form";
 import { ResponsePerSurvey } from "~/modules/responses/model";
 import type { SurveyType } from "@devographics/core-models";
 import { SurveyResponseFragment } from "~/modules/responses/fragments";
@@ -54,12 +50,9 @@ const SurveySectionContents = (props) => {
     // TODO: move this setup in FormContainer directly
     <VulcanComponentsProvider
       value={{
-        // needed by MutationButton
         Button: Button,
         LoadingButton: LoadingButton,
         TooltipTrigger: TooltipTrigger,
-        // MutationButton
-        MutationButton: MutationButton,
         // needed by FormContainer
         Loading: Loading,
         Form: Form,

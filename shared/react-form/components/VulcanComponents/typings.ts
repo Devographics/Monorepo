@@ -1,93 +1,5 @@
 import React from "react";
 
-// Creating a dependency with the raw
-// implemention is actually a bad idea
-// An "any" type is acceptable as long as we
-// do expose reusable hooks and
-// enough typings for common things, such as
-// "FormInputProps" or useFormContext, typings for some events and so on
-/*
- import type { FormSubmitProps } from "../form/elements";
- import type { ButtonProps } from "../core/Button";
- */
-// We keep this import because it barely have any HTML, you are
-// not supposed to restyle it in each package
-// import type { MutationButtonProps } from "../MutationButton";
-// datatable
-/*
-import type {
-  Datatable,
-  DatatableAbove,
-  DatatableAboveLayout,
-  DatatableAboveLeft,
-  DatatableAboveRight,
-  DatatableAboveSearchInput,
-  DatatableLayout,
-} from "../Datatable/Datatable";
-import type {
-  DatatableContents,
-  DatatableContentsBodyLayout,
-  DatatableContentsHeadLayout,
-  DatatableContentsInnerLayout,
-  DatatableContentsLayout,
-  DatatableContentsMoreLayout,
-  DatatableEmpty,
-  DatatableLoadMoreButton,
-  DatatableTitle,
-} from "../Datatable/DatatableContents";
-import type {
-  DatatableHeader,
-  DatatableHeaderCellLayout,
-} from "../Datatable/DatatableHeader";
-import type {
-  DatatableRow,
-  DatatableRowLayout,
-} from "../Datatable/DatatableRow";
-import type {
-  DatatableCell,
-  DatatableCellLayout,
-  DatatableDefaultCell,
-} from "../Datatable/DatatableCell";
-import type {
-  DatatableFilter,
-  DatatableFilterBooleans,
-  DatatableFilterCheckboxes,
-  DatatableFilterContents,
-  DatatableFilterContentsWithData,
-  DatatableFilterDates,
-  DatatableFilterNumbers,
-} from "../Datatable/DatatableFilter";
-import type { DatatableSorter } from "../Datatable/DatatableSorter";
-import type { DatatableSelect } from "../Datatable/DatatableSelect";
-import type { DatatableSubmitSelected } from "../Datatable/DatatableSubmitSelected";
-import type { EditButton, EditForm } from "../Datatable/others/EditButton";
-import type { NewButton, NewForm } from "../Datatable/others/NewButton";
-import type { DeleteButton } from "../Datatable/others/DeleteButton";
-*/
-//import type { BootstrapModal as Modal } from "../bootstrap/Modal";
-// Cell
-/*
-import type { CardItemSwitcher } from "../cell/CardItem";
-import type {
-  CardItemRelationItem,
-  DefaultCell,
-  UserCell,
-} from "../cell/CardItemRelationItem";
-import type { CardItemArray } from "../cell/CardItemArray";
-import type { CardItemDate } from "../cell/CardItemDate";
-import type { CardItemDefault } from "../cell/CardItemDefault";
-import type { CardItemHTML } from "../cell/CardItemHTML";
-import type { CardItemImage } from "../cell/CardItemImage";
-import type { CardItemNumber } from "../cell/CardItemNumber";
-import type { CardItemObject } from "../cell/CardItemObject";
-import type { CardItemRelationHasMany } from "../cell/CardItemRelationHasMany";
-import type { CardItemRelationHasOne } from "../cell/CardItemRelationHasOne";
-import type { CardItemString } from "../cell/CardItemString";
-import type { CardItemURL } from "../cell/CardItemURL";
-*/
-//import type { ModalTrigger } from "../bootstrap/ModalTrigger";
-//import type { FormOptionLabelProps } from "../form/inputs/FormOptionLabel";
-
 export interface PossibleCoreComponents {
   Loading: any;
   FormattedMessage: any;
@@ -95,7 +7,6 @@ export interface PossibleCoreComponents {
   Button: any; //React.ComponentType<ButtonProps>;
   Icon: any;
   // TODO: define props more precisely
-  MutationButton: any; //React.ComponentType<MutationButtonProps>;
   LoadingButton: React.ComponentType<any>;
   // Previously from Bootstrap and Mui
   TooltipTrigger: React.ComponentType<any>;
