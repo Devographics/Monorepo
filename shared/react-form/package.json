@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Vulcan UI components for React",
   "main": "./index.ts",
+  "types": "./index.ts",
   "sideEffects": false,
   "type": "module",
   "exports": {

@@ -12,7 +12,7 @@ export const FormIntlItemLayout = ({ locale, children }) => (
   <div className={`form-intl-${locale.id}`}>{children}</div>
 );
 
-interface FormIntlProps {
+interface FormIntlProps /* extends FormComponentProps */ {
   path: string;
   name: string;
   // TODO: this should probably be provided by i18n context instead
@@ -50,6 +50,7 @@ export const FormIntl = (props: FormIntlProps) => {
       {Locales.map((locale, i) => (
         <FormIntlItemLayout key={locale.id} locale={locale}>
           <FormComponent
+            // @ts-ignore
             {...properties}
             label={getLabel(name, locale.id)}
             path={getLocalePath(i)}
