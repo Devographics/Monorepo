@@ -1,5 +1,5 @@
-id: "${parentId}_happiness"
-hasFilters: true
+id: "${fieldId}_happiness"
+filters: [filters, facet]
 titleId: "happiness.${fieldId}"
 # blockType: HappinessBlock
 blockType: VerticalBarBlock
@@ -13,7 +13,8 @@ hasSponsor: true
 query: >
     dataAPI {
         survey(survey: ${surveyType}) {
-            ${fieldId}_happiness: happiness(id: ${fieldId}) {
+            # fragmentStart
+            ${fieldId}_happiness: happiness(id: ${fieldId}, filters: ${filters}, facet: null) {
                 keys
                 year(year: ${currentYear}) {
                     year
@@ -41,5 +42,6 @@ query: >
                     }
                 }
             }
+            # fragmentEnd
         }
     }

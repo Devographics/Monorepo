@@ -236,7 +236,7 @@ type Survey {
     """
     Happiness data, either for a specific category or more generally
     """
-    happiness(id: HappinessID!, filters: Filters): Happiness
+    happiness(id: HappinessID!, filters: Filters, facet: Facet): Happiness
     """
     Brackets
     """

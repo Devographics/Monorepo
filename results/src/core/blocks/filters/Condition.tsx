@@ -1,15 +1,11 @@
 import React from 'react'
-import { useI18n } from 'core/i18n/i18nContext'
 import styled from 'styled-components'
 import { mq, spacing } from 'core/theme'
 import Button from 'core/components/Button'
-import T from 'core/i18n/T'
 import { DeleteIcon, TrashIcon, PlusIcon } from 'core/icons'
 import cloneDeep from 'lodash/cloneDeep.js'
-import { getFieldLabel, getValueLabel } from './helpers'
 import { useAllChartsOptions } from 'core/charts/hooks'
-
-const operators = ['eq', 'in', 'nin']
+import { FieldSegment, ValueSegment, OperatorSegment } from './ConditionSegments'
 
 const Condition = ({
     seriesIndex,
@@ -45,12 +41,12 @@ const Condition = ({
             <Segments_>
                 <FieldSegment
                     {...segmentProps}
-                    segmentId={'field'}
                     options={filters}
                     value={field}
                     disabledList={disabledList}
                 />
-                <Operator_>=</Operator_>
+                <OperatorSegment {...segmentProps} value={operator} />
+                {/* <Operator_>=</Operator_> */}
                 {/* TODO: support arrays with `in` and `nin`, for now only use `=` */}
                 {/* <ConditionSegment
                     {...segmentProps}
@@ -60,132 +56,54 @@ const Condition = ({
                 /> */}
                 <ValueSegment
                     {...segmentProps}
-                    segmentId={'value'}
+                    operator={operator}
                     options={values}
                     value={value}
                 />
             </Segments_>
-            <DeleteCondition_ onClick={handleDelete}>
-                <DeleteIcon labelId="filters.condition.delete" />
-            </DeleteCondition_>
+            <DeleteWrapper_>
+                <DeleteCondition_ onClick={handleDelete}>
+                    <DeleteIcon labelId="filters.condition.delete" />
+                </DeleteCondition_>
+            </DeleteWrapper_>
             <And_>
                 {/* <T k="filters.condition.and" /> */}
-                <PlusIcon />
+                <PlusIcon enableHover={false} />
             </And_>
         </ActiveCondition_>
     )
 }
 
-const FieldSegment = ({
-    seriesIndex,
-    conditionIndex,
-    stateStuff,
-    segmentId,
-    options,
-    value,
-    allChartsOptions,
-    field,
-    disabledList = []
-}) => {
-    const { setFiltersState } = stateStuff
-    const { getString } = useI18n()
-    return (
-        <Label_>
-            {/* <span>{segmentId}</span> */}
-            <Select_
-                onChange={e => {
-                    const value = e.target.value
-                    setFiltersState(fState => {
-                        const newState = cloneDeep(fState)
-                        newState.filters[seriesIndex].conditions[conditionIndex][segmentId] = value
-                        // if we're changing the field, also change the value
-                        const fieldId = value
-                        newState.filters[seriesIndex].conditions[conditionIndex].value =
-                            allChartsOptions?.[fieldId]?.[0]?.id
-                        return newState
-                    })
-                }}
-                value={value}
-            >
-                <option value="" disabled>
-                    {getString && getString('explorer.select_item')?.t}
-                </option>
-                {options.map(o => (
-                    <option key={o} value={o} disabled={disabledList.includes(o)}>
-                        {getFieldLabel({ getString, field: o })}
-                    </option>
-                ))}
-            </Select_>
-        </Label_>
-    )
-}
-
-const ValueSegment = ({
-    seriesIndex,
-    conditionIndex,
-    stateStuff,
-    segmentId,
-    options,
-    value,
-    field,
-    allChartsOptions
-}) => {
-    const { setFiltersState } = stateStuff
-    const { getString } = useI18n()
-
-    return (
-        <Label_>
-            {/* <span>{segmentId}</span> */}
-            <Select_
-                onChange={e => {
-                    const value = e.target.value
-                    setFiltersState(fState => {
-                        const newState = cloneDeep(fState)
-                        newState.filters[seriesIndex].conditions[conditionIndex][segmentId] = value
-                        return newState
-                    })
-                }}
-                value={value}
-            >
-                <option value="" disabled>
-                    {getString && getString('explorer.select_item')?.t}
-                </option>
-                {options.map(({ id, entity, label }) => (
-                    <option key={id} value={id}>
-                        {getValueLabel({ getString, field, value: id, allChartsOptions })}
-                    </option>
-                ))}
-            </Select_>
-        </Label_>
-    )
-}
-
 export const Condition_ = styled.div`
     background: ${({ theme }) => theme.colors.backgroundTrans};
-    padding: ${spacing()};
     border-radius: 10px;
     position: relative;
+`
+
+const DeleteWrapper_ = styled.div`
+    border-left: 1px dashed ${({ theme }) => theme.colors.borderAlt};
+    padding: 0 ${spacing()};
+    display: flex;
+    align-items: center;
 `
 
 const ActiveCondition_ = styled(Condition_)`
     display: flex;
     /* grid-template-columns: auto minmax(0, 1fr); */
-    gap: ${spacing()};
+    /* gap: ${spacing()}; */
     justify-content: space-between;
-    align-items: center;
+    /* align-items: center; */
 `
 
 const DeleteCondition_ = styled(Button)`
     background: none;
     border-color: ${({ theme }) => theme.colors.borderAlt};
-    /* border: 0; */
     border-radius: 100%;
     aspect-ratio: 1/1;
-    padding: 6px;
-    /* position: absolute;
-    top: 0px;
-    right: 0px;
-    transform: translateX(50%) translateY(50%); */
+    padding: 0px;
+    display: grid;
+    place-items: center;
+    width: 32px;
 `
 
 const And_ = styled.div`
@@ -203,31 +121,18 @@ const And_ = styled.div`
     }
 `
 
-const Actions_ = styled.div`
-    display: grid;
-    place-items: center;
-`
-
-const Operator_ = styled.div``
-
 const Segments_ = styled.div`
-    display: flex;
-    gap: ${spacing()};
+    padding: ${spacing()};
+    /* display: flex;
+    gap: ${spacing()}; */
+    display: grid;
+    grid-auto-columns: minmax(0, 1fr);
+    grid-auto-flow: column;
+    column-gap: ${spacing()};
     @media ${mq.smallMedium} {
         flex-direction: column;
         align-items: center;
         gap: ${spacing(0.5)};
     }
 `
-
-const Label_ = styled.label`
-    display: block;
-    width: 100%;
-`
-
-const Select_ = styled.select`
-    max-width: 300px;
-    width: 100%;
-`
-
 export default Condition

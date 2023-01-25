@@ -84,7 +84,7 @@
     - template: page_introduction
 
     - id: country
-      hasFilters: false
+      filters: []
       # defaultUnits: count
       template: demographics
       blockType: ParticipationByCountryBlock
@@ -176,9 +176,7 @@
         #     options: {facetSort: {order: ___desc___, property: mean}, facetMinCount: 100}
 
     - id: source
-      hasFilters: true
       template: source
-      blockType: HorizontalBarBlock
       dataFunction: cleanUpSources
       variables:
         options: {limit: 20}
@@ -1154,8 +1152,26 @@
       variables:
         url: https://tanstack.com/
 
+    - id: podcasts
+      blockNamespace: resources
+      chartNamespace: podcasts
+      tabId: tabs.main_answers
+      template: multiple_options
+      variables:
+        fieldId: resources
+      variants:
+        - id: podcasts_others
+          defaultUnits: count
+          blockNamespace: resources
+          chartNamespace: podcasts
+          tabId: tabs.other_answers
+          template: multiple_options
+          variables:
+            fieldId: resources
+            options: { limit: 15 }
+
     - id: video_creators
-      hasFilters: false
+      filters: [filters]
       blockType: PeopleBlock
       blockNamespace: resources
       chartNamespace: video_creators
@@ -1175,26 +1191,8 @@
             fieldId: resources
             options: { limit: 15 }
 
-    - id: podcasts
-      blockNamespace: resources
-      chartNamespace: podcasts
-      tabId: tabs.main_answers
-      template: multiple_options
-      variables:
-        fieldId: resources
-      variants:
-        - id: podcasts_others
-          defaultUnits: count
-          blockNamespace: resources
-          chartNamespace: podcasts
-          tabId: tabs.other_answers
-          template: multiple_options
-          variables:
-            fieldId: resources
-            options: { limit: 15 }
-
     - id: people_others
-      hasFilters: false
+      filters: [filters]
       defaultUnits: count
       blockNamespace: resources
       chartNamespace: people
@@ -1291,13 +1289,11 @@
             options: { cutoff: 5 }
             fieldId: opinions_others
 
-    - id: state_of_the_web
-      template: happiness
+    - template: happiness
       variables:
         fieldId: state_of_the_web
 
-    - id: state_of_js
-      template: happiness
+    - template: happiness
       variables:
         fieldId: state_of_js
 

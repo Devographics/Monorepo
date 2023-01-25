@@ -46,8 +46,7 @@ const Series = ({ filters, series, index, stateStuff }) => {
 
     const canAddConditions = conditions.length < filters.length
 
-    const barColorIndex = showDefaultSeries ? index + 1 : index
-    const backgroundColor = theme.colors.barColors[barColorIndex].color
+    const backgroundColor = theme.colors.barColors[index].color
 
     return (
         <ActiveSeries_>
@@ -112,6 +111,8 @@ const DeleteSeries_ = styled(Button)`
     border-radius: 100%;
     background: ${({ theme }) => theme.colors.backgroundAlt};
     border: 1px solid ${({ theme }) => theme.colors.borderAlt};
+    display: grid;
+    place-items: center;
 `
 
 const SeriesChip_ = styled.div`
@@ -128,6 +129,7 @@ const SeriesTop_ = styled.div`
 const EmptyCondition_ = styled(Condition_)`
     display: grid;
     place-items: center;
+    padding: ${spacing()};
 `
 
 const SeriesHeading_ = styled.h3`

@@ -216,7 +216,15 @@ source:
   - devto
   - state_of_css_survey
   - mastodon
-
+  - kevin_j_powell
+  - css_tricks
+  - lea_verou
+  - smashing_magazine
+  - hn
+  - mozilla
+  - web_standards_ru
+  - sidebar
+  
 filters: 
   - gender
   - race_ethnicity

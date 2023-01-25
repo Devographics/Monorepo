@@ -9,7 +9,7 @@ const Content = styled(Tooltip.Content)`
     font-size: ${fontSize('small')};
     padding: ${spacing(0.3)} ${spacing(0.6)};
     border: 1px solid ${props => props.theme.colors.border};
-    z-index: 100;
+    z-index: 10000;
     p:last-child {
         margin: 0;
     }
@@ -42,7 +42,7 @@ const Arrow = styled(Tooltip.Arrow)`
 
 const Tip = ({ trigger, contents, asChild = true, clickable = false }) => (
     <Tooltip.Provider>
-        <Tooltip.Root delayDuration={200}>
+        <Tooltip.Root delayDuration={100}>
             <Trigger asChild={asChild} $clickable={clickable}>
                 {trigger}
             </Trigger>

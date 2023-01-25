@@ -55,7 +55,7 @@ const FiltersSelection = ({ chartName, block, stateStuff }) => {
                     <T k="filters.filters.description" html={true} md={true} />
                 </Description_>
             </FiltersTop_>
-            <Presets setFiltersState={setFiltersState} />
+            <Presets stateStuff={stateStuff} />
             <SeriesList_>
                 <Options filtersState={filtersState} setFiltersState={setFiltersState} />
                 {filtersState.filters.map((series, index) => (

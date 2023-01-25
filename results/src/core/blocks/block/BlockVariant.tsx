@@ -74,7 +74,7 @@ const BlockVariant = (props: PropsWithChildren<BlockVariantProps>) => {
                                             <CommentsTrigger {...props} />
                                         </TabItem>
                                     )}
-                                    {block.hasFilters && (
+                                    {block.filters && block.filters.length > 0 && (
                                         <TabItem>
                                             <FiltersTrigger {...props} />
                                         </TabItem>

@@ -55,7 +55,7 @@
   translators: ['punkah', 'b3nk3']
 
 - id: id-ID
-  label: Hrvatski
+  label: Indonesia
   translators: ['ervinismu', 'algustionesa', 'KingSit3']
 
 - id: it-IT
@@ -68,7 +68,7 @@
 
 - id: ko-KR
   label: 한국어
-  translators: ['eterv']
+  translators: ['eterv', 'icepeng']
   
 - id: nl-NL
   label: Nederlands

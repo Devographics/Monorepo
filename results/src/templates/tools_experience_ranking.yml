@@ -1,4 +1,5 @@
 id: "${parentId}_experience_ranking"
+# filters: [filters]
 blockType: ToolsExperienceRankingBlock
 titleId: blocks.tools_experience_ranking
 descriptionId: blocks.tools_experience_ranking.description
@@ -8,10 +9,11 @@ hasSponsor: true
 query: >
     dataAPI {
         survey(survey: ${surveyType}) {
+            # fragmentStart
             ${parentId}_rankings: tools_rankings(ids: [${toolsCategories[parentId]}]) {
                 ids
                 years
-                experience {
+                experience(filters: {}) {
                     id
                     entity {
                         name
@@ -40,5 +42,6 @@ query: >
                     }
                 }
             }
+            # fragmentEnd
         }
     }

@@ -18,6 +18,7 @@ export interface BlockDefinition {
     tabId?: string
     titleId?: string
     blockName?: string
+    filters?: FilterType[]
 
     // config
     mode?: BlockMode
@@ -39,6 +40,8 @@ export interface BlockDefinition {
     translateData?: boolean
     hasSponsor?: boolean
 }
+
+type FilterType = 'filters' | 'facets'
 
 export interface BlockVariantProps {
     id: string

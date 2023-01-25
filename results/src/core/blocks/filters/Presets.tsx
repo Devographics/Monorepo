@@ -4,6 +4,8 @@ import Button from 'core/components/Button'
 import T from 'core/i18n/T'
 import { mq, spacing, fontSize } from 'core/theme'
 import cloneDeep from 'lodash/cloneDeep.js'
+import { DeleteIcon } from 'core/icons'
+import { useI18n } from 'core/i18n/i18nContext'
 
 const presetsArray = [
     {
@@ -64,76 +66,150 @@ const presetsArray = [
             }
         ]
     },
-    {
-        name: 'top_countries',
-        options: {
-            showDefaultSeries: false
-        },
-        filters: [
-            {
-                year: 2022,
-                conditions: [
-                    {
-                        field: 'country',
-                        operator: 'eq',
-                        value: 'USA'
-                    }
-                ]
-            },
-            {
-                year: 2022,
-                conditions: [
-                    {
-                        field: 'country',
-                        operator: 'eq',
-                        value: 'DEU'
-                    }
-                ]
-            },
-            {
-                year: 2022,
-                conditions: [
-                    {
-                        field: 'country',
-                        operator: 'eq',
-                        value: 'FRA'
-                    }
-                ]
-            }
-        ]
-    }
+    // {
+    //     name: 'top_countries',
+    //     options: {
+    //         showDefaultSeries: false
+    //     },
+    //     filters: [
+    //         {
+    //             year: 2022,
+    //             conditions: [
+    //                 {
+    //                     field: 'country',
+    //                     operator: 'eq',
+    //                     value: 'USA'
+    //                 }
+    //             ]
+    //         },
+    //         {
+    //             year: 2022,
+    //             conditions: [
+    //                 {
+    //                     field: 'country',
+    //                     operator: 'eq',
+    //                     value: 'DEU'
+    //                 }
+    //             ]
+    //         },
+    //         {
+    //             year: 2022,
+    //             conditions: [
+    //                 {
+    //                     field: 'country',
+    //                     operator: 'eq',
+    //                     value: 'FRA'
+    //                 }
+    //             ]
+    //         }
+    //     ]
+    // },
+    // {
+    //     name: 'salary_top_bottom',
+    //     options: {
+    //         showDefaultSeries: false
+    //     },
+    //     filters: [
+    //         {
+    //             year: 2022,
+    //             conditions: [
+    //                 {
+    //                     field: 'yearly_salary',
+    //                     operator: 'in',
+    //                     value: ['range_work_for_free', 'range_0_10', 'range_10_30', 'range_30_50']
+    //                 }
+    //             ]
+    //         },
+    //         {
+    //             year: 2022,
+    //             conditions: [
+    //                 {
+    //                     field: 'yearly_salary',
+    //                     operator: 'in',
+    //                     value: ['range_50_100', 'range_100_200', 'range_more_than_200']
+    //                 }
+    //             ]
+    //         }
+    //     ]
+    // }
 ]
 
-const Presets = ({ setFiltersState }) => (
-    <Presets_>
-        <Label_>
-            <T k="filters.presets.title" />
-        </Label_>
-        {presetsArray.map(preset => (
-            <Preset key={preset.name} preset={preset} setFiltersState={setFiltersState} />
-        ))}
-    </Presets_>
-)
+const Presets = ({ stateStuff }) => {
+    const { customPresets, setCustomPresets, filtersState, setFiltersState } = stateStuff
+    const { getString } = useI18n()
 
-const Preset = ({ preset, setFiltersState }) => (
-    <Preset_
-        size="small"
-        onClick={() => {
-            setFiltersState(fState => {
-                return {
-                    options: { ...fState.options, ...preset.options },
-                    filters: preset.filters
-                }
-            })
-        }}
-    >
-        <T k={`filters.presets.${preset.name}`} />
-    </Preset_>
-)
+    return (
+        <Presets_>
+            <Label_>
+                <T k="filters.presets.title" />
+            </Label_>
+            {presetsArray.map(preset => (
+                <Preset key={preset.name} preset={preset} setFiltersState={setFiltersState} />
+            ))}
+            {customPresets.map(preset => (
+                <Preset
+                    key={preset.name}
+                    preset={preset}
+                    setFiltersState={setFiltersState}
+                    isCustom={true}
+                    setCustomPresets={setCustomPresets}
+                />
+            ))}
+            <SavePreset_
+                size="small"
+                onClick={() => {
+                    const name = prompt(getString('filters.presets.enter_name')?.t)
+                    setCustomPresets(presets => {
+                        return [...presets, { ...filtersState, name }]
+                    })
+                }}
+            >
+                <T k="filters.presets.save" />
+            </SavePreset_>
+        </Presets_>
+    )
+}
+
+const Preset = ({ preset, setCustomPresets, setFiltersState, isCustom }) => {
+    const handleDelete = () => {
+        setCustomPresets(presets => {
+            const newPresets = presets.filter(p => p.name !== preset.name)
+            return newPresets
+        })
+    }
+    return (
+        <PresetWrapper_>
+            <Preset_
+                size="small"
+                onClick={() => {
+                    setFiltersState(fState => {
+                        return {
+                            options: { ...fState.options, ...preset.options },
+                            filters: preset.filters
+                        }
+                    })
+                }}
+            >
+                {isCustom ? preset.name : <T k={`filters.presets.${preset.name}`} />}
+            </Preset_>
+            {isCustom && (
+                <DeletePreset_ onClick={handleDelete} size="small">
+                    <DeleteIcon labelId="filters.condition.delete" />
+                </DeletePreset_>
+            )}
+        </PresetWrapper_>
+    )
+}
 
 const Presets_ = styled.div`
     display: flex;
     gap: ${spacing()};
+`
+
+const PresetWrapper_ = styled.div`
+    display: flex;
+    align-items: center;
+    gap: ${spacing(0.5)};
 `
 
 const Label_ = styled.div``
@@ -142,4 +218,22 @@ const Preset_ = styled(Button)`
     border-radius: 20px;
 `
 
+const SavePreset_ = styled(Button)`
+    border-radius: 20px;
+`
+
+const DeletePreset_ = styled(Button)`
+    background: none;
+    border-color: ${({ theme }) => theme.colors.borderAlt};
+    border-radius: 100%;
+    aspect-ratio: 1/1;
+    padding: 2px;
+    height: 24px;
+    width: 24px;
+    .icon-wrapper,
+    svg {
+        height: 18px;
+        width: 18px;
+    }
+`
 export default Presets
