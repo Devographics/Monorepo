@@ -68,6 +68,7 @@ export async function fetchSurveyGithub(slug: SerializedSurveyDocument["slug"], 
     const survey = {
         // @ts-ignore
         ...commonConfig,
+        // @ts-ignore
         ...surveyConfig,
         // url friendly slug
         prettySlug: safeSlug,// slug,//safeSlug,
