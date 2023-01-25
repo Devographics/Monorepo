@@ -5,7 +5,7 @@ import { getCompletionPercentage, getKnowledgeScore } from "./helpers";
 import { VulcanGraphqlSchemaServer } from "@vulcanjs/graphql/server";
 import { schema as schemaCommon } from "./schema";
 
-import { getSurveyDescriptionFromResponse, getSurveyPath } from "~/modules/surveys/helpers";
+import { getSurveyDescriptionFromResponse, getSurveyPath } from "~/surveys/helpers";
 import { extendSchemaServer } from "@devographics/core-models";
 
 import { nanoid } from "nanoid";

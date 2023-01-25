@@ -14,7 +14,7 @@ import type {
 } from "@devographics/core-models";
 import { logToFile } from "@devographics/core-models/server";
 import { getOrFetchEntities } from "~/modules/entities/server";
-import { getSurveyBySlug } from "~/modules/surveys/helpers";
+import { getSurveyBySlug } from "~/surveys/helpers";
 import { NormalizedResponseMongooseModel } from "~/admin/models/normalized_responses/model.server";
 
 export const getFieldSegments = (field: Field) => {
@@ -555,16 +555,16 @@ export const getUnnormalizedResponses = async (surveyId, fieldId) => {
 export const getBulkOperation = (selector, modifier, isReplace) =>
   isReplace
     ? {
-        replaceOne: {
-          filter: selector,
-          replacement: modifier,
-          upsert: true,
-        },
-      }
+      replaceOne: {
+        filter: selector,
+        replacement: modifier,
+        upsert: true,
+      },
+    }
     : {
-        updateMany: {
-          filter: selector,
-          update: modifier,
-          upsert: false,
-        },
-      };
+      updateMany: {
+        filter: selector,
+        update: modifier,
+        upsert: false,
+      },
+    };

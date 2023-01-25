@@ -12,14 +12,14 @@ TODO
 import { useFormContext } from "@devographics/react-form";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
-import { getSurveyPath } from "~/modules/surveys/helpers";
+import { getSurveyPath } from "~/surveys/helpers";
 import type { SurveyType } from "@devographics/core-models";
 import surveys from "~/surveys";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
-import SurveyNavItem from "~/core/components/survey/questions/SurveyNavItem";
+import SurveyNavItem from "~/surveys/components/questions/SurveyNavItem";
 import { getCompletionPercentage } from "~/modules/responses/helpers";
 import { Button } from "~/core/components/ui/Button";
-import { Loading } from "../../ui/Loading";
+import { Loading } from "~/core/components/ui/Loading";
 
 // TODO
 // const getOverallCompletionPercentage = (response) => {

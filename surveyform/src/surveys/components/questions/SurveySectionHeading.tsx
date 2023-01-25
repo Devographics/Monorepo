@@ -1,6 +1,6 @@
 import React from "react";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
-import { getSectionKey } from "~/modules/surveys/helpers";
+import { getSectionKey } from "~/surveys/helpers";
 
 const SurveySectionHeading = ({ section, sectionNumber, survey }) => {
   const { id, intlId } = section;

@@ -3,22 +3,11 @@ import Footer from "./Footer";
 import Header from "./Header";
 import DevographicsBanner from "./DevographicsBanner";
 // import { useParams } from "react-router-dom";
-import { getSurvey } from "~/modules/surveys/getters";
 import { KeydownContextProvider } from "./KeydownContext";
-import { useSurveyParams } from "../survey/hooks";
 import { useSearchParams } from "next/navigation";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 
-export const Layout = ({
-  children,
-  surveySlug,
-  surveyYear,
-}: {
-  children: any;
-  // Form SSR
-  surveySlug?: string;
-  surveyYear?: string;
-}) => {
+export const Layout = ({ children }: { children: any }) => {
   //const router = useRouter();
   const query = useSearchParams();
   //const { query = {} } = router;

@@ -5,7 +5,7 @@ import { VulcanGraphqlSchema } from "@vulcanjs/graphql";
 import {
   getQuestionId,
   getQuestionObject,
-} from "~/modules/surveys/parser/parseSurvey";
+} from "~/surveys/parser/parseSurvey";
 import cloneDeep from "lodash/cloneDeep.js";
 // import { addComponentToQuestionObject } from "~/modules/responses/customComponents";
 import { VulcanFieldSchema } from "@vulcanjs/schema";

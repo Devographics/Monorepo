@@ -1,4 +1,4 @@
-import SurveyPageComponent from "~/core/components/survey/page/SurveyPage";
+import SurveyPageComponent from "~/surveys/components/page/SurveyPage";
 
 interface SurveyPageServerProps {
   slug?: string;

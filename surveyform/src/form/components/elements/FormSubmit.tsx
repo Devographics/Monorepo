@@ -7,8 +7,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { LoadingButton } from "~/core/components/ui/LoadingButton";
 import { captureException } from "@sentry/nextjs";
-import { saveSurvey } from "~/core/components/survey/page/hooks";
-import { getSurveyPath } from "~/modules/surveys/helpers";
+import { saveSurvey } from "~/surveys/components/page/hooks";
+import { getSurveyPath } from "~/surveys/helpers";
 
 const FormSubmit = ({
   survey,

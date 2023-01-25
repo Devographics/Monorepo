@@ -6,7 +6,7 @@ import type { SurveySection, SurveyType } from "@devographics/core-models";
 import { ResponseDocument } from "@devographics/core-models";
 import { getSectionCompletionPercentage } from "~/modules/responses/helpers";
 import { useFormContext } from "@devographics/react-form";
-import { getSurveyPath } from "~/modules/surveys/helpers";
+import { getSurveyPath } from "~/surveys/helpers";
 import { useRouter } from "next/navigation";
 import { saveSurvey } from "../page/hooks";
 import { captureException } from "@sentry/nextjs";

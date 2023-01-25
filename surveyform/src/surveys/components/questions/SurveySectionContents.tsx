@@ -10,7 +10,7 @@ import { Form, VulcanComponentsProvider } from "@devographics/react-form";
 import { ResponsePerSurvey } from "~/modules/responses/model";
 import type { SurveyType } from "@devographics/core-models";
 import { SurveyResponseFragment } from "~/modules/responses/fragments";
-import { getCommentFieldName } from "~/modules/surveys/helpers";
+import { getCommentFieldName } from "~/surveys/helpers";
 import { Button } from "~/core/components/ui/Button";
 import { LoadingButton } from "~/core/components/ui/LoadingButton";
 import { TooltipTrigger } from "~/core/components/ui/TooltipTrigger";

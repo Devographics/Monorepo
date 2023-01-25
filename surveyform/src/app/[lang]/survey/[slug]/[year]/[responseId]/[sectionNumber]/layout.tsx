@@ -1,4 +1,4 @@
-import { SectionProvider } from "~/core/components/survey/SectionContext/SectionProvider";
+import { SectionProvider } from "~/surveys/components/SectionContext/SectionProvider";
 
 export default async function WithSectionLayout({
   children,

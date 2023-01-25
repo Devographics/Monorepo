@@ -1,14 +1,14 @@
-import countriesOptions from "../../countriesOptions";
 import type {
   FieldTemplateId,
   ParsedQuestion,
 } from "@devographics/core-models";
+import countriesOptions from "~/modules/countriesOptions";
 
 export const templates: {
   [templateName in FieldTemplateId]: (
     questionObject: any
   ) => // TODO: is this type VulcanGraphqlFieldSchema or smth intermediate like "QuestionObject"?
-  Partial<ParsedQuestion>;
+    Partial<ParsedQuestion>;
 } = {
   feature: () => ({
     input: "feature",

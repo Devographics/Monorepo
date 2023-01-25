@@ -12,7 +12,7 @@ import { ResponseMongooseModel } from "~/modules/responses/model.server";
 import { UserMongooseModel } from "~/core/models/user.server";
 import { connectToAppDb } from "~/lib/server/mongoose/connection";
 import { logToFile } from "@devographics/core-models/server";
-// import { getSurveyBySlug } from "~/modules/surveys/helpers";
+// import { getSurveyBySlug } from "~/surveys/helpers";
 import surveys from "~/surveys";
 import type { Field } from "@devographics/core-models";
 import { NormalizedResponseMongooseModel } from "~/admin/models/normalized_responses/model.server";

@@ -15,7 +15,7 @@ import IconCommentDots from "~/core/components/icons/CommentDots";
 import { useIntlContext } from "@vulcanjs/react-i18n";
 import isEmpty from "lodash/isEmpty.js";
 import debounce from "lodash/debounce.js";
-import { getCommentFieldName } from "~/modules/surveys/helpers";
+import { getCommentFieldName } from "~/surveys/helpers";
 
 interface ExperienceProps extends FormInputProps {
   showDescription: boolean;

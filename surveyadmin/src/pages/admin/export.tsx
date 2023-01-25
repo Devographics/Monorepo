@@ -1,8 +1,8 @@
 import React, { useReducer, useRef, useState } from "react";
 import { ExportOptions, ExportOptionsStr } from "~/admin/models/export";
-import { SurveyMarkdownOutline } from "~/core/components/survey/SurveyExport";
+import { SurveyMarkdownOutline } from "~/surveys/components/SurveyExport";
 import { apiRoutes } from "~/lib/apiRoutes";
-import { getSurveyBySlug } from "~/modules/surveys/helpers";
+import { getSurveyBySlug } from "~/surveys/helpers";
 import { surveys } from "~/surveys";
 
 /**

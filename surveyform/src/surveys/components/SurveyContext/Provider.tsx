@@ -4,7 +4,7 @@ import {
   SurveyDocument,
 } from "@devographics/core-models/surveys/typings";
 import React, { useContext } from "react";
-import { parseSurvey } from "~/modules/surveys/parser/parseSurvey";
+import { parseSurvey } from "~/surveys/parser/parseSurvey";
 
 const SurveyContext = React.createContext<SurveyDocument | undefined>(
   undefined

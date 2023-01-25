@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { ResponseProvider } from "~/core/components/survey/ResponseContext/ResponseProvider";
+import { ResponseProvider } from "~/surveys/components/ResponseContext/ResponseProvider";
 import { routes } from "~/lib/routes";
 import { getCurrentUser } from "./getCurrentUser";
 

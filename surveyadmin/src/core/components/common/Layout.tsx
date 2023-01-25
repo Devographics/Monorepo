@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import Footer from "./Footer";
 import Header from "./Header";
 // import { useParams } from "react-router-dom";
-import { getSurvey } from "~/modules/surveys/helpers";
+import { getSurvey } from "~/surveys/helpers";
 import { KeydownContextProvider } from "./KeydownContext";
 import { useSurveyParams } from "../survey/hooks";
 import { useRouter } from "next/router";

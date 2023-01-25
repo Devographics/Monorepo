@@ -3,7 +3,7 @@
 import { SerializedSurveyDocument, SurveyDocument } from "@devographics/core-models";
 import { getFragmentName } from "@vulcanjs/graphql";
 import gql from "graphql-tag";
-import { getSurveyFieldNames } from "../surveys/helpers";
+import { getSurveyFieldNames } from "~/surveys/helpers";
 import { Response } from "./model";
 
 const ResponsesDefaultFragment = gql`

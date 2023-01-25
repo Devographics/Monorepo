@@ -1,4 +1,4 @@
-import SurveySectionSwitcher from "~/core/components/survey/SurveySectionSwitcher";
+import SurveySectionSwitcher from "~/surveys/components/SurveySectionSwitcher";
 
 const SurveyFromResponseIdPage = () => {
   return <SurveySectionSwitcher />;

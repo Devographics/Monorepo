@@ -3,7 +3,7 @@ import { useRouter } from "next/router.js";
 import type { SurveyDocument } from "@devographics/core-models";
 import { useIntlContext } from "@vulcanjs/react-i18n";
 import { useEntitiesQuery } from "~/core/hooks/useEntitiesQuery";
-import { convertSurveyToMarkdown } from "~/modules/surveys/outlineExport";
+import { convertSurveyToMarkdown } from "~/surveys/outlineExport";
 import { surveysWithTemplates } from "~/surveys/withTemplates";
 import { Loading } from "../ui/Loading";
 const surveys = surveysWithTemplates;

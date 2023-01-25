@@ -4,7 +4,7 @@ import {
   getSurveyFieldById,
 } from "./helpers";
 import { getOrFetchEntities } from "~/modules/entities/server";
-import { getSurveyBySlug } from "~/modules/surveys/helpers";
+import { getSurveyBySlug } from "~/surveys/helpers";
 import {
   NormalizedResponseMongooseModel,
   NormalizedResponseDocument,

@@ -1,6 +1,6 @@
 import React from "react";
-import SurveySectionHeading from "~/core/components/survey/questions/SurveySectionHeading";
-import SurveyNav from "~/core/components/survey/questions/SurveyNav";
+import SurveySectionHeading from "~/surveys/components/questions/SurveySectionHeading";
+import SurveyNav from "~/surveys/components/questions/SurveyNav";
 import { FormErrors } from "./FormErrors";
 import { FormElement } from "./FormElement";
 import { useVulcanComponents } from "@devographics/react-form";

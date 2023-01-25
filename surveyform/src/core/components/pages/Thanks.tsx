@@ -1,13 +1,13 @@
 "use client";
 import ShareSite from "../share/ShareSite";
-import { getSurveyPath } from "~/modules/surveys/helpers";
+import { getSurveyPath } from "~/surveys/helpers";
 import Score from "../common/Score";
 import Image from "next/image";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import { getSurveyImageUrl } from "~/surveys/getSurveyImageUrl";
 import Link from "next/link";
 import { ResponseDocument } from "@devographics/core-models";
-import { useSurvey } from "../survey/SurveyContext/Provider";
+import { useSurvey } from "~/surveys/components/SurveyContext/Provider";
 
 export const Thanks = ({
   response,

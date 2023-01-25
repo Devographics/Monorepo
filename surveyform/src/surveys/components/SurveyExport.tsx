@@ -3,9 +3,9 @@ import React, { useState } from "react";
 import { useRouter } from "next/router.js";
 import type { SurveyDocument } from "@devographics/core-models";
 import { useIntlContext } from "@vulcanjs/react-i18n";
-import { convertSurveyToMarkdown } from "~/modules/surveys/outlineExport";
+import { convertSurveyToMarkdown } from "~/surveys/outlineExport";
 import surveys from "~/surveys";
-import { useEntities } from "../common/EntitiesContext";
+import { useEntities } from "~/core/components/common/EntitiesContext";
 
 const useCurrentSurvey = () => {
   const router = useRouter();

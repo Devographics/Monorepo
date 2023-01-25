@@ -1,5 +1,5 @@
 import React from "react";
-import { getSurveyPath } from "~/modules/surveys/helpers";
+import { getSurveyPath } from "~/surveys/helpers";
 import Link from "next/link";
 import { statuses } from "~/modules/constants";
 import LocaleSelector from "~/core/components/common/LocaleSelector";
@@ -7,7 +7,7 @@ import Translators from "~/core/components/common/Translators";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import Image from "next/image";
 import { getSurveyImageUrl } from "~/surveys/getSurveyImageUrl";
-import { SurveyDescription } from "~/modules/surveys/typings";
+import { SurveyDescription } from "~/surveys/typings";
 
 const SurveyItem = ({ survey }: { survey: SurveyDescription }) => {
   const { name, year, status } = survey;

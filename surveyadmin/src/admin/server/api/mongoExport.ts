@@ -3,7 +3,7 @@ import fs from "fs";
 const fsPromises = fs.promises;
 import path from "path";
 import { captureMessage } from "@sentry/nextjs";
-import { getSurveyBySlug } from "~/modules/surveys/helpers";
+import { getSurveyBySlug } from "~/surveys/helpers";
 import { ExportOptions } from "~/admin/models/export";
 import { generateExportsZip } from "./generateExports";
 

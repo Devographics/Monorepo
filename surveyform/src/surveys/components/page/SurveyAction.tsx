@@ -26,7 +26,7 @@ import { useUser } from "~/account/user/hooks";
 import { useUserResponse } from "~/modules/responses/hooks";
 import { Loading } from "~/core/components/ui/Loading";
 import { LoadingButton } from "~/core/components/ui/LoadingButton";
-import { getSurveyPath } from "~/modules/surveys/helpers";
+import { getSurveyPath } from "~/surveys/helpers";
 
 const duplicateResponseErrorId = "error.duplicate_response";
 
