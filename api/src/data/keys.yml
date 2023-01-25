@@ -76,6 +76,7 @@ gender:
   - non_binary
   - not_listed
 
+
 race_ethnicity:
   # - biracial
   - black_african
@@ -135,14 +136,14 @@ feature:
   - heard
   - used
 
-happiness: 
+happiness:
   - 0
   - 1
   - 2
   - 3
   - 4
 
-opinions: 
+opinions:
   - 0
   - 1
   - 2
@@ -161,12 +162,12 @@ graphql_experience:
   - range_3_5
   - range_6_10
 
-code_generation_type: 
+code_generation_type:
   - code_first
   - schema_first
   - database_first
 
-css_js_balance: 
+css_js_balance:
   - 0
   - 1
   - 2
