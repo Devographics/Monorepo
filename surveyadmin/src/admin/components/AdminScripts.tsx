@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import gql from "graphql-tag";
 import { useQuery } from "~/lib/graphql";
@@ -17,7 +18,11 @@ const runScriptMutation = gql`
 `;
 
 const AdminScripts = () => {
-  const { loading, data = {} } = useQuery(scriptsQuery);
+  const { loading, data = {}, error } = useQuery(scriptsQuery);
+  console.log("scripts data", data, loading, error);
+  if (!data.scripts) {
+    return <div>No data</div>;
+  }
   if (loading) {
     return <Loading />;
   }
@@ -26,11 +31,13 @@ const AdminScripts = () => {
       <h3>Scripts</h3>
       <table className="admin-scripts-table">
         <thead>
-          <th>Script</th>
-          <th>Description</th>
-          <th>Arguments</th>
-          <th>Actions</th>
-          <th>Done</th>
+          <tr>
+            <th>Script</th>
+            <th>Description</th>
+            <th>Arguments</th>
+            <th>Actions</th>
+            <th>Done</th>
+          </tr>
         </thead>
         <tbody>
           {data.scripts.map((script) => (
@@ -43,8 +50,7 @@ const AdminScripts = () => {
 };
 
 const Script = ({ id, description, args, done }) => {
-  const Components = useVulcanComponents();
-  const [result, setResult] = useState();
+  const [result, setResult] = useState<any | undefined>();
   const [scriptArgs, setScriptArgs] = useState({});
 
   return (
@@ -87,7 +93,7 @@ const Script = ({ id, description, args, done }) => {
             <div className="admin-script-result">
               <button
                 onClick={() => {
-                  setResult(null);
+                  setResult(undefined);
                 }}
               >
                 X

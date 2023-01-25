@@ -1,4 +1,6 @@
 "use client";
+// we don't need SSR for the admin area
+import NoSSR from "react-no-ssr";
 import { NextPage } from "next";
 import App, { AppContext, AppProps } from "next/app";
 import { ReactElement } from "react";
@@ -89,45 +91,47 @@ function VNApp({
   const { locale, localeStrings } = pageProps;
 
   return (
-    <ErrorBoundary proposeReload={true} proposeHomeRedirection={true}>
-      {/** TODO: this error boundary to display anything useful since it doesn't have i18n */}
-      {getLayout(
-        <CacheProvider value={emotionCache}>
-          <DefaultLocaleContextProvider>
-            <LocaleContextProvider
-              locale={locale}
-              localeStrings={localeStrings}
-              currentUser={user}
-            >
-              <Head>
-                <title>State of JS</title>
-                <meta
-                  name="viewport"
-                  content="minimum-scale=1, initial-scale=1, width=device-width"
-                />
-                <Favicons />
-              </Head>
-              {/** Provide MUI theme but also mui utilities like CSS baseline, StyledEngineProvider... */}
-              <MuiThemeProvider>
-                {/** This ErrorBoundary have Mui theming + i18n + Vulcan components */}
-                <ErrorBoundary
-                  proposeReload={true}
-                  proposeHomeRedirection={true}
-                >
-                  <Layout
-                    surveySlug={pageProps?.slug}
-                    surveyYear={pageProps?.year}
+    <NoSSR>
+      <ErrorBoundary proposeReload={true} proposeHomeRedirection={true}>
+        {/** TODO: this error boundary to display anything useful since it doesn't have i18n */}
+        {getLayout(
+          <CacheProvider value={emotionCache}>
+            <DefaultLocaleContextProvider>
+              <LocaleContextProvider
+                locale={locale}
+                localeStrings={localeStrings}
+                currentUser={user}
+              >
+                <Head>
+                  <title>State of JS</title>
+                  <meta
+                    name="viewport"
+                    content="minimum-scale=1, initial-scale=1, width=device-width"
+                  />
+                  <Favicons />
+                </Head>
+                {/** Provide MUI theme but also mui utilities like CSS baseline, StyledEngineProvider... */}
+                <MuiThemeProvider>
+                  {/** This ErrorBoundary have Mui theming + i18n + Vulcan components */}
+                  <ErrorBoundary
+                    proposeReload={true}
+                    proposeHomeRedirection={true}
                   >
-                    {/** @ts-ignore */}
-                    <Component {...pageProps} />
-                  </Layout>
-                </ErrorBoundary>
-              </MuiThemeProvider>
-            </LocaleContextProvider>
-          </DefaultLocaleContextProvider>
-        </CacheProvider>
-      )}
-    </ErrorBoundary>
+                    <Layout
+                      surveySlug={pageProps?.slug}
+                      surveyYear={pageProps?.year}
+                    >
+                      {/** @ts-ignore */}
+                      <Component {...pageProps} />
+                    </Layout>
+                  </ErrorBoundary>
+                </MuiThemeProvider>
+              </LocaleContextProvider>
+            </DefaultLocaleContextProvider>
+          </CacheProvider>
+        )}
+      </ErrorBoundary>
+    </NoSSR>
   );
 }
 

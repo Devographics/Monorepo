@@ -161,6 +161,7 @@
     "react-hook-form": "4.9.8",
     "react-i18next": "^11.5.0",
     "react-markdown": "^7.1.1",
+    "react-no-ssr": "^1.1.0",
     "react-spring": "^8.0.27",
     "rehype-raw": "^6.1.0",
     "sanitize-html": "^2.6.1",

@@ -43,6 +43,9 @@ export const routes = {
     export: {
       href: "/admin/export",
     },
+    scripts: {
+      href: "/admin/scripts"
+    }
   },
   // state of js
   survey: {

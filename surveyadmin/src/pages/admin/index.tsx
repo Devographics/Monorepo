@@ -21,10 +21,11 @@ const AdminPage = () => {
         <Link href="/admin/normalization">Normalize</Link>
       </div>
       <div>
+        <Link href={routes.admin.scripts.href}>Scripts</Link>
+      </div>
+      <div>
         <Link href={routes.admin.export.href}>Export normalized responses</Link>
       </div>
-      <p>/!\ This is experimental</p>
-      <Link href="/admin/crud">Manage your data</Link>
     </PageLayout>
   );
 };

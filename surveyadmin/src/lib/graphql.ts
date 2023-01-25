@@ -10,7 +10,7 @@ export const getAppGraphqlUri = (
   originFromReq?: string
 ) => {
   const uriFromEnv =
-    process.env.NEXT_PUBLIC_GRAPHQL_URI ?? "http://localhost:3000/api/graphql";
+    process.env.NEXT_PUBLIC_GRAPHQL_URI ?? "http://localhost:3020/api/graphql";
   const isAbsolute = uriFromEnv.startsWith("http");
   if (isAbsolute) return uriFromEnv;
   const origin =
@@ -26,7 +26,7 @@ export const getAppGraphqlUri = (
     if (process.env.NEXT_PUBLIC_VERCEL_URL) {
       return `https://${process.env.NEXT_PUBLIC_VERCEL_URL}${uriFromEnv}`;
     }
-    return "http://localhost:3000/api/graphql";
+    return "http://localhost:3020/api/graphql";
   }
 };
 
