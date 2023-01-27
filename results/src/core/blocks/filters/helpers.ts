@@ -50,6 +50,7 @@ export const getFiltersQuery = ({
     const cleanUpValue = s => s.replaceAll('-', '_')
 
     const queryFooter = query.slice(query.indexOf(END_MARKER) + END_MARKER.length)
+
     if (chartFilters.options.mode === MODE_FILTERS) {
         queryBody = chartFilters.filters
             .map((singleSeries, seriesIndex) => {
@@ -75,6 +76,21 @@ export const getFiltersQuery = ({
             .join('')
     } else if (chartFilters.options.mode === MODE_FACET) {
         queryBody = queryContents.replace('facet: null', `facet: ${chartFilters.facet}`)
+
+        if (block?.variables?.fixedIds) {
+            /*
+
+            Because facets are obtained in a "reversed" structure from the API, in some cases
+            (e.g. countries) we need to fix the ids to ensure each facet contains the same items. 
+            
+            TODO: return proper structure from API and delete this step
+
+            */
+            const fixedIdsFilter = `{ ids: { in: [${block?.variables?.fixedIds
+                .map(id => `"${id}"`)
+                .join()}] } }`
+            queryBody = queryBody.replace('filters: {}', `filters: ${fixedIdsFilter}`)
+        }
     }
     const newQuery = queryHeader + queryBody + queryFooter
 

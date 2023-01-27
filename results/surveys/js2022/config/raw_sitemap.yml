@@ -84,12 +84,12 @@
     - template: page_introduction
 
     - id: country
-      filters: []
       # defaultUnits: count
       template: demographics
       blockType: ParticipationByCountryBlock
       variables:
         options: { limit: 20 }
+        fixedIds: ["USA", "DEU", "FRA", "GBR", "IND", "CAN", "POL", "BRA", "ESP", "NLD", "RUS", "AUS", "SWE", "ITA", "UKR", "CZE", "NOR", "CHN", "BEL", "MEX"]
 
     - id: locale
       template: demographics

@@ -64,7 +64,7 @@ const DynamicDataLoader = ({
     children,
     chartFilters,
     setBuckets,
-    layout = 'column'
+    layout = 'column',
 }: DynamicDataLoaderProps) => {
     const theme = useTheme()
     const { getString } = useI18n()
@@ -134,7 +134,7 @@ const DynamicDataLoader = ({
 
                     const combinedBuckets = combineBuckets({
                         defaultBuckets,
-                        otherBucketsArrays: newBuckets.map(processBuckets),
+                        otherBucketsArrays: processBuckets(newBuckets),
                         completion
                     })
 
@@ -155,7 +155,7 @@ const DynamicDataLoader = ({
                         ...(showDefaultSeries ? [defaultSeries] : []),
                         ...Object.keys(seriesData).map(name => ({
                             name,
-                            buckets: getSeriesItemBuckets(seriesData[name])
+                            buckets: processBuckets(getSeriesItemBuckets(seriesData[name]))
                         }))
                     ]
                     // console.log('// allSeries')
@@ -167,7 +167,7 @@ const DynamicDataLoader = ({
                 const invertedFacetsBuckets = invertFacets({ facets, defaultBuckets, allChartsOptions })
                 const invertedFacetsBucketsWithAverages = calculateAverages({ buckets: invertedFacetsBuckets, allChartsOptions, facet: chartFilters.facet})
                 setUnits('percentage_bucket')
-                setCombinedBuckets(invertedFacetsBucketsWithAverages)
+                setCombinedBuckets(processBuckets(invertedFacetsBucketsWithAverages))
             }
             setIsLoading(false)
         }
