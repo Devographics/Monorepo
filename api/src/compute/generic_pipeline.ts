@@ -13,7 +13,6 @@ export type PipelineProps = {
     cutoff?: number
 }
 
-
 // generate an aggregation pipeline for all years, or
 // optionally restrict it to a specific year of data
 export const getGenericPipeline = (pipelineProps: PipelineProps) => {
@@ -24,7 +23,7 @@ export const getGenericPipeline = (pipelineProps: PipelineProps) => {
     const match: any = {
         survey,
         [key]: { $nin: [null, '', [], {}] },
-        ...generateFiltersQuery(filters)
+        ...generateFiltersQuery({ filters, key })
     }
 
     // if year is passed, restrict aggregation to specific year

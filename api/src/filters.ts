@@ -20,6 +20,7 @@ export interface Filters {
     higher_education_degree?: Filter<string>
     years_of_experience?: Filter<string>
     source?: Filter<string>
+    ids?: Filter<string>
 }
 
 export interface FilterQuery<T> {
@@ -73,9 +74,12 @@ const mapFilter = <T>(filter: Filter<T>): FilterQuery<T> => {
 /**
  * Generate a MongoDB $match query from filters object.
  */
-export const generateFiltersQuery = (filters?: Filters): FiltersQuery => {
+export const generateFiltersQuery = ({ filters, key }: { filters?: Filters, key: string }): FiltersQuery => {
     const match: FiltersQuery = {}
     if (filters !== undefined) {
+        if (filters.ids !== undefined) {
+            match[key] = mapFilter<string>(filters.ids)
+        }
         if (filters.gender !== undefined) {
             match['user_info.gender.choices'] = mapFilter<string>(filters.gender)
         }

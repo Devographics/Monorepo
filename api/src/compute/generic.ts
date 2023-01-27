@@ -189,7 +189,7 @@ export async function computeDefaultTermAggregationByYear({
     const match: any = {
         survey: survey.survey,
         [key]: { $nin: [null, '', [], {}] },
-        ...generateFiltersQuery(filters)
+        ...generateFiltersQuery({ filters, key })
     }
     // if year is passed, restrict aggregation to specific year
     if (year) {

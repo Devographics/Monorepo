@@ -80,7 +80,7 @@ export async function winsAggregationFunction({
     const match: any = {
         survey: survey.survey,
         [key]: { $nin: [null, '', []] },
-        ...generateFiltersQuery(filters)
+        ...generateFiltersQuery({ filters, key })
     }
     // if year is passed, restrict aggregation to specific year
     // NOTE: for now year is always specified
@@ -159,7 +159,7 @@ export async function matchupsAggregationFunction({
     const match: any = {
         survey: survey.survey,
         [key]: { $nin: [null, '', []] },
-        ...generateFiltersQuery(filters)
+        ...generateFiltersQuery({ filters, key })
     }
 
     // if year is passed, restrict aggregation to specific year

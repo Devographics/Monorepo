@@ -89,7 +89,7 @@ export async function computeExperienceOverYears({
     const match = {
         survey: survey.survey,
         [path]: { $nin: [null, ''] },
-        ...generateFiltersQuery(filters)
+        ...generateFiltersQuery({ filters, key })
     }
 
     const results = await collection
@@ -304,7 +304,6 @@ export async function computeToolsExperienceRanking({
             }, {})
         })
     }
-
 
     return byTool
 }

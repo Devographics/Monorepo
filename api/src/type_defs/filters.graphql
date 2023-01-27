@@ -70,7 +70,15 @@ input LocaleFilter {
     nin: [LocaleID]
 }
 
+
+input IdsFilter {
+    eq: String
+    in: [String]
+    nin: [String]
+}
+
 input Filters {
+    ids: IdsFilter
     gender: GenderFilter
     race_ethnicity: RaceEthnicityFilter
     yearly_salary: YearlySalaryRangeFilter
