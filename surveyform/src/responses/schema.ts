@@ -1,5 +1,3 @@
-import surveys from "~/surveys";
-
 import { getQuestionSchema } from "./helpers";
 import { VulcanGraphqlSchema } from "@vulcanjs/graphql";
 import {
@@ -9,8 +7,11 @@ import {
 import cloneDeep from "lodash/cloneDeep.js";
 import { addComponentToQuestionObject } from "./customComponents";
 import { VulcanFieldSchema } from "@vulcanjs/schema";
+import { SerializedSurveyDocument, SurveyDocument } from "@devographics/core-models";
 
-export const schema: VulcanGraphqlSchema = {
+let schemaIsReady = false
+
+const schema: VulcanGraphqlSchema = {
   // default properties
 
   _id: {
@@ -119,10 +120,12 @@ export const schema: VulcanGraphqlSchema = {
     canRead: ["owners", "admins"],
     canCreate: ["members"],
     canUpdate: ["admins"],
+    /*
     options: surveys.map(({ slug }) => ({
       value: slug,
       label: slug,
     })),
+    */
   },
   isNormalized: {
     type: Boolean,
@@ -230,6 +233,12 @@ export const schema: VulcanGraphqlSchema = {
   // },
 };
 
+// global schema, useful server-side
+export function getSchema() {
+  if (!schemaIsReady) throw new Error("Calling get response schema before schema is ready")
+  return schema
+}
+
 /**
  *
  *
@@ -239,7 +248,12 @@ export const schema: VulcanGraphqlSchema = {
 /**
  * Have one schema per survey
  */
-export const schemaPerSurvey: { [slug: string]: VulcanGraphqlSchema } = {};
+const schemaPerSurvey: { [slug: string]: VulcanGraphqlSchema } = {};
+
+export function getSchemaPerSurvey(surveySlug: string) {
+  if (!schemaIsReady) throw new Error("Cannot get schema for survey " + surveySlug)
+  return schemaPerSurvey[surveySlug]
+}
 
 export const getCommentSchema = () => ({
   type: String,
@@ -250,11 +264,59 @@ export const getCommentSchema = () => ({
   canUpdate: ["owners", "admins"],
 });
 
-const coreSchema = cloneDeep(schema) as VulcanGraphqlSchema;
-surveys.forEach((survey) => {
-  if (survey.slug) {
-    schemaPerSurvey[survey.slug] = cloneDeep(coreSchema);
-  }
+export async function initResponseSchema(surveys: Array<SurveyDocument>) {
+  schemaIsReady = true
+  const coreSchema = cloneDeep(schema) as VulcanGraphqlSchema;
+  surveys.forEach((survey) => {
+    if (survey.slug) {
+      schemaPerSurvey[survey.slug] = cloneDeep(coreSchema);
+    }
+    survey.outline.forEach((section) => {
+      section.questions &&
+        section.questions.forEach((questionOrId) => {
+          //i++;
+          if (Array.isArray(questionOrId)) {
+            // NOTE: from the typings, it seems that questions can be arrays? To be confirmed
+            throw new Error("Found an array of questions");
+          }
+          let questionObject = getQuestionObject(questionOrId, section);
+          questionObject = addComponentToQuestionObject(questionObject);
+          const questionSchema = getQuestionSchema(
+            questionObject,
+            section,
+            survey
+          );
+
+          const questionId = getQuestionId(survey, section, questionObject);
+          schema[questionId] = questionSchema;
+          if (survey.slug) {
+            schemaPerSurvey[survey.slug][questionId] = questionSchema;
+          }
+
+          if (questionObject.suffix === "experience") {
+            const commentSchema = addComponentToQuestionObject(
+              getCommentSchema()
+            ) as VulcanFieldSchema<any>;
+            const commentQuestionId = getQuestionId(survey, section, {
+              ...questionObject,
+              suffix: "comment",
+            });
+            schema[commentQuestionId] = commentSchema;
+            if (survey.slug) {
+              schemaPerSurvey[survey.slug][commentQuestionId] = commentSchema;
+            }
+          }
+        });
+    });
+  });
+}
+
+
+
+// generate schema on the fly, used only in frontend for survey specific pages at the moment
+export function getSurveyResponseSchema(survey: SurveyDocument | SerializedSurveyDocument) {
+  const coreSchema = cloneDeep(schema) as VulcanGraphqlSchema;
+  const surveyResponseSchema = cloneDeep(coreSchema);
   survey.outline.forEach((section) => {
     section.questions &&
       section.questions.forEach((questionOrId) => {
@@ -272,10 +334,7 @@ surveys.forEach((survey) => {
         );
 
         const questionId = getQuestionId(survey, section, questionObject);
-        schema[questionId] = questionSchema;
-        if (survey.slug) {
-          schemaPerSurvey[survey.slug][questionId] = questionSchema;
-        }
+        surveyResponseSchema[questionId] = questionSchema;
 
         if (questionObject.suffix === "experience") {
           const commentSchema = addComponentToQuestionObject(
@@ -285,13 +344,10 @@ surveys.forEach((survey) => {
             ...questionObject,
             suffix: "comment",
           });
-          schema[commentQuestionId] = commentSchema;
-          if (survey.slug) {
-            schemaPerSurvey[survey.slug][commentQuestionId] = commentSchema;
-          }
+          surveyResponseSchema[commentQuestionId] = commentSchema;
         }
       });
   });
-});
+  return surveyResponseSchema
+}
 
-export default schema;

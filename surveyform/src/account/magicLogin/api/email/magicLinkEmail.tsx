@@ -3,8 +3,6 @@
  */
 
 import { localMailTransport } from "~/lib/server/mail/transports";
-import surveys from "~/surveys";
-import { SurveyType } from "@devographics/core-models";
 
 /**
  * Email will be rendered using React Dom server rendering (renderToStaticMarkup())
@@ -12,6 +10,8 @@ import { SurveyType } from "@devographics/core-models";
  * @see https://reactjs.org/docs/react-dom-server.html
  */
 import Mail from "nodemailer/lib/mailer";
+import { fetchSurveyContextGithub } from "~/surveys/server/fetch";
+import { SurveySharedContext } from "@devographics/core-models/surveys/typings";
 
 const MagicLinkHtml = ({
   magicLink,
@@ -19,7 +19,7 @@ const MagicLinkHtml = ({
   locale,
 }: {
   magicLink: string;
-  survey?: SurveyType;
+  survey?: SurveySharedContext;
   locale?: String;
 }) =>
   `<h3>${survey?.name}</h3>
@@ -31,7 +31,7 @@ export const magicLinkEmailParameters = ({
   locale,
 }: {
   magicLink: string;
-  survey?: SurveyType;
+  survey?: SurveySharedContext;
   locale?: String;
 }): Partial<Mail.Options> => {
   return {
@@ -57,10 +57,8 @@ export const sendMagicLinkEmail = async ({
   locale: string;
   //token: string;
 }) => {
-  const survey = surveys.find(
-    (s) => s.context === prettySlug.replace(/-/g, "_")
-  );
-
+  const slug = prettySlug.replace(/-/g, "_");
+  const survey = await fetchSurveyContextGithub(slug);
   const from =
     survey && survey.domain && `${survey.name} <login@mail.${survey.domain}>`;
 

@@ -67,7 +67,15 @@ const SurveyCreditItem = ({
         </h4>
         {company && (
           <p className="survey-credits-item-company">
-            <a href={company?.homepage?.url}>{company.name}</a>
+            <a
+              href={
+                typeof company?.homepage === "string"
+                  ? company.homepage
+                  : company.homepage?.url
+              }
+            >
+              {company.name}
+            </a>
           </p>
         )}
         {/* <p className="survey-credits-item-twitter">

@@ -7,7 +7,7 @@ import FormLayout from "~/form/components/elements/FormLayout";
 import FormOptionLabel from "~/form/components/elements/FormOptionLabel";
 import FormGroup from "~/form/components/elements/FormGroup";
 import { Form, VulcanComponentsProvider } from "@devographics/react-form";
-import { ResponsePerSurvey } from "~/responses/model";
+import { getSurveyResponseModel } from "~/responses/model";
 import type { SurveyType } from "@devographics/core-models";
 import { SurveyResponseFragment } from "~/responses/fragments";
 import { getCommentFieldName } from "~/surveys/helpers";
@@ -107,7 +107,7 @@ const SurveySectionContentsInner = ({
     <SmartForm
       documentId={responseId}
       fields={fields}
-      model={ResponsePerSurvey[survey.slug!]}
+      model={getSurveyResponseModel(survey)}
       // TODO: check those params in the smart form, they should accept DocumentNode and not only strings
       // + the name should be retrieved using getFragmentName from the DocumentNode fragment
       queryFragment={SurveyResponseFragment(survey)}

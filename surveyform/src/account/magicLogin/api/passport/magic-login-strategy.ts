@@ -3,7 +3,7 @@ import MagicLoginStrategy from "passport-magic-login";
 import { getTokenSecret } from "~/account/user/api/session";
 import { sendMagicLinkEmail } from "../email/magicLinkEmail";
 
-import { UserMongooseModel, UserTypeServer } from "~/core/models/user.server";
+import { UserTypeServer } from "~/core/models/user.server";
 
 import debug from "debug";
 import { routes } from "~/lib/routes";
@@ -16,7 +16,6 @@ import {
   updateUserEmailHash,
   upgradeUser,
 } from "./userUtils";
-import { captureException } from "@sentry/nextjs";
 const debugMagic = debug("stateof:magiclink");
 
 /**

@@ -98,26 +98,53 @@ export interface EOConfig {
   listId: string;
 }
 
-export interface SurveyDocument {
-  surveyId: string;
+/**
+ * Values that do not depend on the survey year
+ * 
+ * Used for magic link emails
+ */
+export interface SurveySharedContext {
+  /**
+   * In previous survey: was equal to the survey id eg "js2022"
+   * 
+   * Now: equal to the survey context with "_" eg "state_of_js"
+   * 
+   * => use as survey context coupled with year
+   * => DO NOT use as unique survey id
+   */
+  slug: string;
+  /**
+   * Slug with "dashes", used as the survey relative URL
+   * state-of-js
+   * Does NOT include the year
+   */
+  prettySlug?: string;
+  /**
+   * Name without the year
+   */
+  name?: string;
+  domain?: string;
+}
+
+export interface SurveyDocument extends SurveySharedContext {
   createdAt?: Date;
   updatedAt?: Date;
   /**
-   * MUST NOT INCLUDE "-" use underscore instead "_"
-   * Because dashes are not allowed as i18n token
-   * 
-   * Should match the folder path on github surveys repository
+   * Slug with underscores
+   * state_of_js
+   * Used as pathname on github
+   * Does NOT include the year
+   * @deprecated
    */
-  slug?: string;
+  context?: string;
   /**
-   * Slug with "dashes", used as the survey relative URL
+   * Same as slug
+   * @example js2022
    */
-  prettySlug?: string;
-  name?: string;
+  surveyId: string;
   year?: number;
   status?: SurveyStatus;
   outline: Array<SurveySection>;
-  context?: any;
   /**
    * Home page URL. May be big!
    * 
@@ -141,7 +168,6 @@ export interface SurveyDocument {
   socialImageUrl?: string;
 
   credits?: any;
-  domain?: string;
   tags?: string[];
   emailOctopus: EOConfig;
   colors: {

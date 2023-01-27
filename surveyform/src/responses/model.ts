@@ -1,14 +1,66 @@
-import schema, { schemaPerSurvey } from "./schema";
-import { canModifyResponse } from "./helpers";
+import { SerializedSurveyDocument, SurveyDocument } from "@devographics/core-models";
 import {
   createGraphqlModel,
   CreateGraphqlModelOptionsShared,
 } from "@vulcanjs/graphql";
+import { getSchema, getSchemaPerSurvey, getSurveyResponseSchema, initResponseSchema } from "./schema";
 
 const name = "Response";
-export const modelDef: CreateGraphqlModelOptionsShared = {
+
+let isResponseModelReady = false
+let Response
+export const getResponseModel = () => {
+  if (!isResponseModelReady) throw new Error("Response model not ready")
+  return Response
+};
+export const getModelDef = () => {
+  const modelDef: CreateGraphqlModelOptionsShared = {
+    name,
+    schema: getSchema(),
+    graphql: {
+      typeName: name,
+      multiTypeName: "Responses",
+      defaultFragmentOptions: {
+        // Some fields might be named "js_features_intl"
+        // because they literally talk about _intl
+        // we don't want them in the default fragment
+        // TODO: we should probably provide our own default fragment
+        // without survey fields anyway
+        noIntlFields: true,
+      },
+    },
+    permissions: {
+      canRead: ["owners", "admins"],
+      canCreate: ["members"],
+      // canUpdate: ['owners', 'admins'],
+      canUpdate: ({ user, document: response }) => {
+        if (typeof window === "undefined") {
+          const canModifyResponse = require("./server/permissions").canModifyReponse
+          return canModifyResponse(response, user);
+        } else {
+          // client side
+          return user?.isAdmin || user?._id === response?.userId
+        }
+      },
+      canDelete: ["admins"],
+    },
+  };
+  return modelDef
+}
+export function initReponseModel(surveys: Array<SurveyDocument>) {
+  initResponseSchema(surveys)
+  return createGraphqlModel(getModelDef())
+}
+
+/**
+ * Newer version: have one Response model per survey, generated on the fly
+ *
+ * NOTE: do NOT register in api/graphql, the main model with all fields is still preferred for now.
+ * This model is used only to generate forms at this point
+ */
+export const getSurveyResponseModel = (survey: SurveyDocument) => createGraphqlModel({
   name,
-  schema,
+  schema: getSurveyResponseSchema(survey),
   graphql: {
     typeName: name,
     multiTypeName: "Responses",
@@ -21,76 +73,11 @@ export const modelDef: CreateGraphqlModelOptionsShared = {
       noIntlFields: true,
     },
   },
+  // NOTE: save_survey actually handles the permissions
   permissions: {
     canRead: ["owners", "admins"],
     canCreate: ["members"],
-    // canUpdate: ['owners', 'admins'],
-    canUpdate: ({ user, document: response }) => {
-      return canModifyResponse(response, user);
-    },
+    canUpdate: ['owners', 'admins'],
     canDelete: ["admins"],
   },
-};
-export const Response = createGraphqlModel(modelDef);
-
-/**
- * Newer version: have one Response model per survey
- *
- * NOTE: do NOT register in api/graphql, the main model with all fields is still preferred for now.
- * This model is used only to generate forms at this point
- */
-export const ResponsePerSurvey = Object.entries(schemaPerSurvey).reduce(
-  (result, [surveySlug, responseSchema]) => ({
-    ...result,
-    [surveySlug]: createGraphqlModel({
-      name,
-      schema: responseSchema,
-      graphql: {
-        typeName: name,
-        multiTypeName: "Responses",
-        defaultFragmentOptions: {
-          // Some fields might be named "js_features_intl"
-          // because they literally talk about _intl
-          // we don't want them in the default fragment
-          // TODO: we should probably provide our own default fragment
-          // without survey fields anyway
-          noIntlFields: true,
-        },
-      },
-      permissions: {
-        canRead: ["owners", "admins"],
-        canCreate: ["members"],
-        // canUpdate: ['owners', 'admins'],
-        canUpdate: ({ user, document: response }) => {
-          return canModifyResponse(response, user);
-        },
-        canDelete: ["admins"],
-      },
-    }),
-  }),
-  {}
-);
-// console.log("RESPONSE SCHEMA", Response.schema);
-/*
-export const Responses = createCollection({
-  collectionName: "Responses",
-
-  typeName: "Response",
-
-  schema,
-
-  permissions: {
-    canRead: ["owners", "admins"],
-    canCreate: ["members"],
-    // canUpdate: ['owners', 'admins'],
-    canUpdate: ({ user, document: response }) => {
-      return canModifyResponse(response, user);
-    },
-    canDelete: ["admins"],
-  },
-});
-
-export default Responses;
-
-
-*/
+})

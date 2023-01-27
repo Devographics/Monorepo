@@ -2,9 +2,8 @@
  * Do NOT import all surveys, these helpers works at survey level
  * This avoid bundling all surveys in a page
  */
-import { ResponseDocument, SerializedSurveyDocument, SurveyDocument, SurveySection } from "@devographics/core-models";
+import { SerializedSurveyDocument, SurveyDocument, SurveySection } from "@devographics/core-models";
 import { getQuestionObject } from "./parser/parseSurvey";
-import { fetchSurveysListGithub } from "./server/fetch";
 import { SurveyDescription } from "./typings";
 
 export const getCommentFieldName = fieldName => fieldName.replace("__experience", "__comment")

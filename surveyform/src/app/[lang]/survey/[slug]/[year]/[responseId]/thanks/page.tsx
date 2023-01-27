@@ -1,5 +1,5 @@
 import Thanks from "~/core/components/pages/Thanks";
-import { Response } from "~/responses";
+import { getSurveyResponseModel } from "~/responses";
 import { ResponseFragmentWithRanking } from "~/responses/fragments";
 import { serverConfig } from "~/config/server";
 import { buildSingleQuery } from "@devographics/crud";
@@ -22,7 +22,8 @@ async function getResponseWithRanking({
 }) {
   // TODO: get from the database directly, the graphql call is just for convenience
   const query = buildSingleQuery({
-    model: Response,
+    // @ts-ignore
+    model: getSurveyResponseModel(survey),
     fragment: survey && ResponseFragmentWithRanking(survey),
   });
   try {

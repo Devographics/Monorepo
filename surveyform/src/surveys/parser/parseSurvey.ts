@@ -2,6 +2,7 @@ import type {
   SurveyDocument,
   Field,
   SurveySection,
+  SerializedSurveyDocument,
 } from "@devographics/core-models";
 import { addTemplateToQuestionObject } from "./addTemplateToSurvey";
 
@@ -58,7 +59,7 @@ to every question
 /!\ Will NOT add components, so that it can be reused in scripts
 
 */
-export const parseSurvey = (survey: SurveyDocument) => {
+export const parseSurvey = (survey: SurveyDocument | SerializedSurveyDocument): SurveyDocument => {
   let i = 0;
   const parsedSurvey = { ...survey, createdAt: survey.createdAt ? new Date(survey.createdAt) : undefined };
   parsedSurvey.outline = survey.outline.map((section) => {
@@ -74,5 +75,6 @@ export const parseSurvey = (survey: SurveyDocument) => {
       questions,
     } as SurveySection;
   });
+  // @ts-ignore
   return parsedSurvey;
 };
