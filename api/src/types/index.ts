@@ -26,7 +26,7 @@ export interface RequestContext {
     isDebug?: Boolean
 }
 
-export type WatchedItem =  "locales" | "entities" | "surveys"
+export type WatchedItem =  "locales" | "entities" | "surveys" | "projects"
 
 export interface SurveyConfig {
     survey: SurveyType

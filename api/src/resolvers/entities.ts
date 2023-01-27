@@ -25,7 +25,6 @@ const getSimulatedGithub = (id: string): GitHub | null => {
     }
 }
 
-
 export default {
     Entity: {
         github: async ({ id }: { id: string }) => {
@@ -70,7 +69,7 @@ export default {
                 field => field?.name?.value
             )
             // figure out if the request includes API fields (e.g. any field besides url and name)
-            const hasAPIFields = queriedFields.some(f => !['url', 'name'].includes(f))
+            const hasAPIFields = queriedFields && queriedFields.some(f => !['url', 'name'].includes(f))
 
             const twitterAPIData = hasAPIFields
                 ? await useCache({
@@ -120,9 +119,13 @@ export default {
             return { name, url }
         },
         youtube: async (entity: Entity, args: any, context: RequestContext) => {
+            if (!entity) {
+                return
+            }
+            const { youtubeUrl, homepage } = entity
             const url =
-                entity?.youtubeUrl ||
-                (entity?.homepage?.includes('youtube') ? entity?.homepage : null)
+                youtubeUrl ||
+                (typeof homepage === 'string' && homepage.includes('youtube') ? homepage : null)
             if (url) {
                 return { url }
             } else {
@@ -136,7 +139,7 @@ export default {
             const { twitchName, homepage } = entity
             const url =
                 (twitchName && `https://www.twitch.tv/${twitchName}`) ||
-                (entity?.homepage?.includes('twitch') && entity.homepage)
+                (typeof homepage === 'string' && homepage?.includes('twitch') ? homepage : null)
             if (url) {
                 return { name: twitchName, url }
             } else {

@@ -20,6 +20,7 @@ export type SurveySlug =
 
 // todo: generate this from GraphQL?
 export type Survey = {
+    name: string
     editions: SurveyEdition[]
 }
 

@@ -9,7 +9,7 @@ export interface Entity {
   name: string
   nameClean?: string
   nameHtml?: string
-  homepage?: Resource
+  homepage?: Resource | string
   blog?: Resource
   rss?: Resource
   category?: string

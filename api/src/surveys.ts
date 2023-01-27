@@ -1,10 +1,11 @@
-import { Survey } from './types'
+import { RequestContext, Survey, SurveyEdition } from './types'
 import { Octokit } from '@octokit/core'
 import fetch from 'node-fetch'
 import yaml from 'js-yaml'
 import { readdir, readFile, lstat } from 'fs/promises'
 import { logToFile } from './debug'
 import path from 'path'
+import { setCache } from './caching'
 
 let allSurveys: Survey[] = []
 
@@ -190,5 +191,46 @@ export const getSurveys = async () => {
 
 //     return entity
 // }
+
+export const cacheSurveys = async ({
+    surveys,
+    // entities,
+    context
+}: {
+    surveys: Survey[]
+    // entities: Entity[]
+    context: RequestContext
+}) => {
+    console.log(`// Initializing surveys cache (Redis)…`)
+    
+    setCache(getAllSurveysCacheKey(), surveys, context)
+    
+    const surveysWithoutOutlines = surveys.map(({ editions, ...surveyRest }) => {
+        const editionsWithoutOutlines = editions.map(({ questions, ...editionRest }) => editionRest)
+        return { ...surveyRest, editions: editionsWithoutOutlines }
+    })
+    setCache(getAllSurveysMetadataCacheKey(), surveysWithoutOutlines, context)
+    
+    for (const survey of surveys) {
+        const { editions, ...rest } = survey
+        for (const edition of editions) {
+            const item = { ...edition, survey: rest }
+            setCache(getSurveyCacheKey({ survey, edition }), item, context)
+        }
+    }
+    console.log(`-> Cached ${surveys.length} surveys (${surveys.map(s => s.name).join()})`)
+}
+
+export const getAllSurveysCacheKey = () => `surveys_all`
+
+export const getAllSurveysMetadataCacheKey = () => `surveys_all_metadata`
+
+export const getSurveyCacheKey = ({
+    survey,
+    edition
+}: {
+    survey?: Survey
+    edition?: SurveyEdition
+}) => `surveys_${edition.surveyId}`
 
 export default allSurveys

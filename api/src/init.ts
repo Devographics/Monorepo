@@ -3,7 +3,7 @@ import { initSurveys } from './surveys'
 import { initProjects } from './projects'
 import { RequestContext, WatchedItem } from './types'
 import { applyEntityResolvers } from './entities'
-import { cacheAvatars } from './avatars'
+import { cacheSurveys } from './surveys'
 
 type InitFunctionsType = {
     [k in WatchedItem]?: any
@@ -14,13 +14,14 @@ const initFunctions: InitFunctionsType = {
     surveys: initSurveys
 }
 
-export const initMemoryCache = async ({
-    context,
-    initList
-}: {
+interface InitProps {
     context: RequestContext
-    initList: WatchedItem[]
-}) => {
+    initList?: WatchedItem[]
+}
+
+const defaultInitList: WatchedItem[] = ['entities', 'surveys', 'projects']
+
+export const initMemoryCache = async ({ context, initList = defaultInitList }: InitProps) => {
     console.log(`// Initializing in-memory cache for ${initList.join(', ')}…`)
     const data: any = {}
     for (const initFunctionName of initList) {
@@ -31,26 +32,40 @@ export const initMemoryCache = async ({
     return data
 }
 
-export const initDbCache = async ({ context, data }: { context: RequestContext; data: any }) => {
-    console.log('// Initializing db cache…')
-    const { surveys, entities } = data
-    await cacheSurveysEntities({
-        surveys,
-        entities,
-        context
-    })
-
-    await initProjects({ context })
+interface InitDbCacheProps extends InitProps {
+    data: any
 }
 
-export const reinitialize = async ({ context }: { context: RequestContext }) => {
-    console.log('// reinitialize')
-    const data = await initMemoryCache({ context, initList: ['entities', 'surveys'] })
-    const { entities } = data
-
-    for (let e of entities) {
-        e = await applyEntityResolvers(e, context)
+export const initDbCache = async ({
+    context,
+    data,
+    initList = defaultInitList
+}: InitDbCacheProps) => {
+    console.log(`// Initializing db cache… (${initList.join()})`)
+    const { surveys, entities } = data
+    if (initList.includes('entities')) {
+        const { entities } = data
+        for (let e of entities) {
+            e = await applyEntityResolvers(e, context)
+        }
+        await cacheSurveysEntities({
+            surveys,
+            entities,
+            context
+        })
     }
+    if (initList.includes('surveys')) {
+        await cacheSurveys({
+            surveys,
+            context
+        })
+    }
+    if (initList.includes('projects')) {
+        await initProjects({ context })
+    }
+}
 
-    await initDbCache({ context, data })
+export const reinitialize = async ({ context, initList = defaultInitList }: InitProps) => {
+    const data = await initMemoryCache({ context, initList })
+    await initDbCache({ context, data, initList })
 }

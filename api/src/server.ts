@@ -131,6 +131,18 @@ const start = async () => {
         res.status(200).send('Cache cleared')
     })
 
+    app.get('/reinitialize-surveys', async function (req, res) {
+        checkSecretKey(req)
+        await reinitialize({ context, initList: ['surveys'] })
+        res.status(200).send('Cache cleared')
+    })
+
+    app.get('/reinitialize-entities', async function (req, res) {
+        checkSecretKey(req)
+        await reinitialize({ context, initList: ['entities'] })
+        res.status(200).send('Cache cleared')
+    })
+
     app.get('/cache-avatars', async function (req, res) {
         checkSecretKey(req)
         await cacheAvatars({ context })
