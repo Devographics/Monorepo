@@ -9,26 +9,14 @@ import {
   DefaultErrorProps,
 } from "~/core/components/error/DefaultError";
 
-/*
-const DefaultError = ({
-  message,
-}: {
-  message: string;
-  proposeReload?: boolean;
-  onReload?: any;
-}) => {
-  return <span>{message}</span>;
-};
-*/
-
 export type ErrorBoundaryFallbackComponent = React.ComponentType<{
   error?: Error;
   statusCode?: number;
 }>;
 interface ErrorBoundaryProps
   extends Pick<
-  DefaultErrorProps,
-  "proposeReload" | "proposeHomeRedirection" | "proposeLoginRedirection"
+    DefaultErrorProps,
+    "proposeReload" | "proposeHomeRedirection" | "proposeLoginRedirection"
   > {
   onError?: (error: Error, info: { componentStack: string }) => void;
   resetFunction?: (reset: () => void) => void;

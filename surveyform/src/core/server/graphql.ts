@@ -8,28 +8,15 @@ import { nodeCache, promisesNodeCache } from "~/lib/server/caching";
 //import Responses from "../modules/responses/collection";
 //import NormalizedResponses from "../modules/normalized_responses/collection";
 
-import { ResponseMongoCollection } from "~/modules/responses/model.server";
+import { ResponseMongoCollection } from "~/responses/model.server";
 import { isAdmin } from "@vulcanjs/permissions";
 import { SaveMongoCollection } from "@devographics/core-models/server";
+
+import { startSurvey, saveSurvey } from "~/responses/server/graphql";
 import {
-  entitiesResolver,
-  entitiesTypeDefs,
-  // entityType,
-  // exampleType,
-} from "~/modules/entities/server/graphql";
-import {
-  localeResolver,
-  localesQueryTypeDef,
-  localesResolver,
-  surveyLocaleType,
-} from "~/i18n/server/graphql";
-import { startSurvey, saveSurvey } from "~/modules/responses/server/graphql";
-import { projectsAutocomplete, projectsLabels } from "~/modules/projects/server/graphql";
-// import {
-//   surveysResolver,
-//   surveyType,
-//   editionType,
-// } from "~/modules/surveys/server/graphql";
+  projectsAutocomplete,
+  projectsLabels,
+} from "./projects/graphql";
 
 const { mergeResolvers, mergeTypeDefs } = require("@graphql-tools/merge");
 // Simulate Vulcan Meteor global "addGraphQLSchema" etc.
@@ -102,11 +89,6 @@ const cacheStats = (root, args, { currentUser }) => {
 addGraphQLQuery("cacheStats: JSON");
 addGraphQLResolvers({ Query: { cacheStats } });
 
-addGraphQLSchema(surveyLocaleType);
-addGraphQLQuery(localesQueryTypeDef);
-addGraphQLResolvers({ Query: { locales: localesResolver } });
-addGraphQLResolvers({ Query: { locale: localeResolver } });
-
 const homepageType = `type Homepage {
   name: String
   url: String
@@ -121,11 +103,6 @@ const twitterType = `type Twitter {
 `;
 
 addGraphQLSchema(twitterType);
-
-// addGraphQLSchema(entityType);
-// addGraphQLSchema(exampleType);
-addGraphQLQuery(entitiesTypeDefs);
-addGraphQLResolvers({ Query: { entities: entitiesResolver } });
 
 // /*
 
@@ -189,14 +166,19 @@ const stats = async () => {
 addGraphQLQuery("stats: Stats");
 addGraphQLResolvers({ Query: { stats } });
 
-addGraphQLMutation("startSurvey(input: CreateResponseInput): ResponseMutationOutput");
-addGraphQLMutation("saveSurvey(input: UpdateResponseInput): ResponseMutationOutput");
+addGraphQLMutation(
+  "startSurvey(input: CreateResponseInput): ResponseMutationOutput"
+);
+addGraphQLMutation(
+  "saveSurvey(input: UpdateResponseInput): ResponseMutationOutput"
+);
 addGraphQLResolvers({ Mutation: { startSurvey, saveSurvey } });
 
-addGraphQLQuery("projectsAutocomplete(input: MultiProjectInput): MultiProjectOutput");
+addGraphQLQuery(
+  "projectsAutocomplete(input: MultiProjectInput): MultiProjectOutput"
+);
 addGraphQLQuery("projectsLabels(input: MultiProjectInput): MultiProjectOutput");
 addGraphQLResolvers({ Query: { projectsAutocomplete, projectsLabels } });
-
 
 // START LOG OUT ENV (delete later?)
 

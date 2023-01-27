@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import get from "lodash/get.js";
-import { useVulcanComponents } from "@vulcanjs/react-ui";
+import { Loading } from "~/core/components/ui/Loading";
 
 const Fields = ({
   survey,
@@ -8,8 +8,6 @@ const Fields = ({
   unnormalizedFieldsLoading,
   unnormalizedFieldsData,
 }) => {
-  const Components = useVulcanComponents();
-
   const [showIds, setShowIds] = useState(true);
 
   // useEffect(()=> {
@@ -20,7 +18,7 @@ const Fields = ({
   if (unnormalizedFieldsLoading) {
     return (
       <div>
-        Loading… <Components.Loading />
+        Loading… <Loading />
       </div>
     );
   }

@@ -105,6 +105,8 @@ export interface SurveyDocument {
   /**
    * MUST NOT INCLUDE "-" use underscore instead "_"
    * Because dashes are not allowed as i18n token
+   * 
+   * Should match the folder path on github surveys repository
    */
   slug?: string;
   /**
@@ -142,10 +144,21 @@ export interface SurveyDocument {
   domain?: string;
   tags?: string[];
   emailOctopus: EOConfig;
+  colors: {
+    primary: string;
+    secondary: string;
+    text: string;
+    background: string;
+    backgroundSecondary: string;
+  }
   // style
+  /** @deprecated old syntax*/
   bgColor: string;
+  /** @deprecated old syntax*/
   textColor: string;
+  /** @deprecated old syntax*/
   linkColor: string;
+  /** @deprecated old syntax*/
   hoverColor: string;
   //
   shareUrl: string;
@@ -157,7 +170,7 @@ export interface SurveyDocument {
  * Needed when getting a survey from SSR
  */
 export type SerializedSurveyDocument = Omit<
-  SurveyType,
+  SurveyDocument,
   "createdAt" | "updatedAt"
 > & {
   createdAt?: string;

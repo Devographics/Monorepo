@@ -7,7 +7,7 @@ import rehypeRaw from 'rehype-raw';
 const AccountMessage = (props, { intl }) => (
   <div className="message account-message">
     <h3>
-      <Components.FormattedMessage id="general.why_create_account" />
+      <FormattedMessage id="general.why_create_account" />
     </h3>
 
     <ReactMarkdown rehypePlugins={[rehypeRaw]}>

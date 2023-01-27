@@ -13,7 +13,7 @@ const debug = require("debug")("vns:next");
 const { withSentryConfig } = require("@sentry/nextjs");
 
 // Pass the modules that are written directly in TS here
-const withTM = require('next-transpile-modules')(['@devographics/core-models']);
+const withTM = require('next-transpile-modules')(['@devographics/core-models', '@devographics/swr-graphql']);
 
 
 // @see https://nextjs.org/docs/api-reference/next.config.js/runtime-configuration

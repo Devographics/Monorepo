@@ -79,8 +79,7 @@ export const checkPasswordForUser = (
    */
   if (!(user.salt && user.hash)) {
     console.warn(
-      `User ${
-        user && JSON.stringify(user)
+      `User ${user && JSON.stringify(user)
       } has no salt/hash. Coming from Meteor? Will try to use legacy Meteor password, until the user changes their password.`
     );
     const storedHashedPassword = (user as any)?.services?.password?.bcrypt;
@@ -110,7 +109,7 @@ export const checkPasswordForUser = (
 };
 /**
  * Find an user during authentication
- * Return null if not found/password mismatch
+ * Return null if not found
  *
  * @deprecated Now we use magic link auth
  * If this is used again, please be careful that we now need an email has
@@ -118,28 +117,15 @@ export const checkPasswordForUser = (
  */
 export async function findUserByCredentials({
   email,
-  password,
 }: {
   email: string;
-  password: string;
 }): Promise<UserTypeServer | null> {
   // Here you should lookup for the user in your DB and compare the password:
   //
   const user = await findUserFromEmail(email);
-
-  // NOTE: we should NEVER differentiate the return type depending on whether the email is found or the password is mismatching
+  // NOTE: we should not differentiate the return type depending on whether the email is found or the password is mismatching
   // otherwise attacker could guess whether an user has an account or not in the application
   if (!user) {
-    return null;
-  }
-  // const user = await DB.findUser(...)
-  if (user.authMode && user.authMode !== "password") {
-    throw new Error(
-      "Cannot check password for user authenticated with passwordless"
-    );
-  }
-  const passwordsMatch = checkPasswordForUser(user, password);
-  if (!passwordsMatch) {
     return null;
   }
   return user;

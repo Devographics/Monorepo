@@ -23,35 +23,14 @@ export type UserDocument = VulcanDocument & {
   isVerified?: boolean;
   groups: Array<string>;
 } & (
-    | {
-        /**
-         * Legacy password based auth
-         */
-        authMode: undefined | "password";
-        emailHash: string;
-      }
     | { authMode: "anonymous"; emailHash?: undefined }
     | {
-        authMode: "passwordless";
-        emailHash: string;
-      }
+      authMode: "passwordless";
+      emailHash: string;
+    }
   );
 
 export type UserType = UserDocument; //UserWithEmailDocument | AnonymousUserDocument;
-
-/**
- * @deprecated
- */
-const passwordAuthSchema: VulcanGraphqlSchema = {
-  // Temporary field, used only in the frontend, must be deleted on mutations
-  password: {
-    type: String,
-    optional: false,
-    canRead: [],
-    canCreate: ["guests"],
-    canUpdate: ["owners"],
-  },
-};
 
 /**
  * Previously for password auth, but still relevant for magic link auth
@@ -184,7 +163,6 @@ export const schema: VulcanGraphqlSchema = {
     canUpdate: [],
     canCreate: [],
   },
-  ...passwordAuthSchema,
   ...emailVerificationSchema,
   ...meteorLegacySchema,
   ...stateOfSchema,

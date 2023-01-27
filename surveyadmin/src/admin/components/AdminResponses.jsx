@@ -1,10 +1,14 @@
-import { useVulcanComponents } from "@vulcanjs/react-ui";
 import React from "react";
 import { responseHelpers } from "@devographics/core-models";
-const { getResponseData }= responseHelpers
+const { getResponseData } = responseHelpers
+
+const Components = {
+  ModalTrigger: ({ children }) => <div>{children}</div>,
+  Card: ({ document }) => <div>{JSON.stringfy(document || {})}</div>,
+  Datatable: () => <div>Datatable TODO</div>
+}
 
 const ResponseData = ({ document }) => {
-  const Components = useVulcanComponents();
   return (
     <Components.ModalTrigger label="Raw Data" size="xl">
       <Components.Card document={getResponseData(document)} />
@@ -13,7 +17,6 @@ const ResponseData = ({ document }) => {
 };
 
 const NormalizedData = ({ document }) => {
-  const Components = useVulcanComponents();
   return document.normalizedResponse ? (
     <Components.ModalTrigger label="Norm. Data" size="xl">
       <Components.Card document={document.normalizedResponse} />
@@ -24,7 +27,6 @@ const NormalizedData = ({ document }) => {
 const Completion = ({ document }) => <span>{document.completion}%</span>;
 
 const User = ({ document }) => {
-  const Components = useVulcanComponents();
   return (
     <Components.ModalTrigger label={document.user.displayName} size="xl">
       <Components.Card document={document.user} />
@@ -33,7 +35,6 @@ const User = ({ document }) => {
 };
 
 const AdminResponses = () => {
-  const Components = useVulcanComponents();
   return (
     <div className="admin-responses admin-content">
       <Components.Datatable

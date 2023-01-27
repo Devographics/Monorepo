@@ -1,18 +1,20 @@
+"use client";
 import React from "react";
 import { useIntlContext } from "@vulcanjs/react-i18n";
 import { TranslatorWrapper, useTranslatorMode } from "./TranslatorWrapper";
 
+export interface FormattedMessageProps {
+  id: string;
+  values?: any;
+  defaultMessage?: string;
+  className?: string;
+}
 export const FormattedMessage = ({
   id,
   values,
   defaultMessage = "",
   className = "",
-}: {
-  id: string;
-  values?: any;
-  defaultMessage?: string;
-  className?: string;
-}) => {
+}: FormattedMessageProps) => {
   const intl = useIntlContext();
   const translatorMode = useTranslatorMode();
 

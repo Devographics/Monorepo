@@ -4,7 +4,7 @@ MongoDB indexes for geographic search and performance
 
 */
 
-// import { ResponseConnector } from "~/modules/responses/model.server";
+// import { ResponseConnector } from "~/responses/model.server";
 // import { NormalizedResponseConnector } from "~/modules/normalized_responses/model.server";
 // import type { Model } from "mongoose";
 import mongoose from "mongoose";

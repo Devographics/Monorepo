@@ -1,7 +1,14 @@
+import { SurveyDocument } from "@devographics/core-models";
+
 /**
  * NOTE: this is SHARED code not API only, we use this in the frontend as well
  */
 export const apiRoutes = {
+  /** @deprecated try to move graphql calls to backend only */
+  graphql: {
+    href: "/api/graphql",
+    method: "POST"
+  },
   account: {
     // POST
     signup: {
@@ -52,4 +59,18 @@ export const apiRoutes = {
   admin: {
     dataExport: { href: "/api/admin/data-export" },
   },
-};
+  response: {
+    single: {
+      href: ({ surveySlug }: { surveySlug: string }) => `/api/response/single?surveySlug=${surveySlug}`
+    },
+    multi: {
+      href: "/api/response/multi"
+    },
+    startSurvey: {
+      href: ({ slug, year }: Required<Pick<SurveyDocument, "slug" | "year">>) => `/api/response/start-survey?surveySlug=${slug}&surveyYear=${year}`
+    },
+    saveSurvey: {
+      href: ({ slug, year }: Required<Pick<SurveyDocument, "slug" | "year">>) => `/api/response/save-survey?surveySlug=${slug}&surveyYear=${year}`
+    }
+  }
+}

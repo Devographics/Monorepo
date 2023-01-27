@@ -1,11 +1,8 @@
-import type { FormInputProps } from "@vulcanjs/react-ui";
 import React from "react";
 import { FormControl } from "react-bootstrap";
+import { FormInputProps } from "~/form/typings";
 
-/**
- * Inspired by @vulcanjs/react-ui-lite FormItem
- */
-export const FormItem = ({
+export const LoginFormItem = ({
   label,
   name,
   children,
@@ -23,7 +20,7 @@ export const FormItem = ({
 };
 
 /**
- * Inspired by @vulcanjs/react-ui-bootstrap FormComponentEmail
+ * Inspired by FormComponentEmail
  * that is used in the SmartForm
  */
 export const FormComponentEmail = ({
@@ -36,7 +33,7 @@ export const FormComponentEmail = ({
 }: Partial<FormInputProps>) => {
   return (
     // passing the name is important to get the right label
-    <FormItem path={path} label={label} name={name} {...itemProperties}>
+    <LoginFormItem path={path} label={label} name={name} {...itemProperties}>
       {/** @ts-ignore the "as" prop is problematic */}
       <FormControl
         name={name}
@@ -45,6 +42,6 @@ export const FormComponentEmail = ({
         ref={refFunction}
         type="email"
       />
-    </FormItem>
+    </LoginFormItem>
   );
 };

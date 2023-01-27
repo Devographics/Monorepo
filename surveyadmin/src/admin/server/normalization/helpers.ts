@@ -555,16 +555,16 @@ export const getUnnormalizedResponses = async (surveyId, fieldId) => {
 export const getBulkOperation = (selector, modifier, isReplace) =>
   isReplace
     ? {
-        replaceOne: {
-          filter: selector,
-          replacement: modifier,
-          upsert: true,
-        },
-      }
+      replaceOne: {
+        filter: selector,
+        replacement: modifier,
+        upsert: true,
+      },
+    }
     : {
-        updateMany: {
-          filter: selector,
-          update: modifier,
-          upsert: false,
-        },
-      };
+      updateMany: {
+        filter: selector,
+        update: modifier,
+        upsert: false,
+      },
+    };

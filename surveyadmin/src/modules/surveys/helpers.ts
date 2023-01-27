@@ -1,9 +1,6 @@
 import surveys from "~/surveys";
 import type { SurveyType, ResponseDocument } from "@devographics/core-models";
 
-export const getSurveyFromResponse = (response: ResponseDocument) =>
-  surveys.find((s) => s.slug === response.surveySlug);
-
 export const getSurvey = (prettySlug, year) =>
   surveys.find((s) => s.prettySlug === prettySlug && s.year === parseInt(year));
 
@@ -21,7 +18,7 @@ export const getSurveyPath = ({
   response?: any;
   home?: boolean;
 }) => {
-  const survey = surveyArgument || getSurveyFromResponse(response);
+  const survey = surveyArgument
   if (!survey) {
     return "";
   }

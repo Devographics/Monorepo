@@ -1,5 +1,5 @@
 import { UserMongooseModel, UserTypeServer } from "~/core/models/user.server";
-import { getSession } from "~/account/user/api";
+import { getSessionFromReq } from "~/account/user/api";
 import type { NextApiRequest } from "next";
 import type { Request } from "express";
 
@@ -9,7 +9,7 @@ interface UserContext {
 }
 
 const userFromReq = async (req: Request | NextApiRequest) => {
-  const session = await getSession(req);
+  const session = await getSessionFromReq(req);
   if (!session?._id) return null;
   // Refetch the user from db in order to get the freshest data
   // NOTE: State of app is using "string" _id for legacy reason,

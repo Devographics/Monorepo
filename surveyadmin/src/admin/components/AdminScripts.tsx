@@ -1,8 +1,9 @@
-import { useVulcanComponents } from "@vulcanjs/react-ui";
+"use client";
 import React, { useState } from "react";
-import { useQuery } from "@apollo/client";
 import gql from "graphql-tag";
-import trim from "lodash/trim.js";
+import { useQuery } from "~/lib/graphql";
+import { Loading } from "~/core/components/ui/Loading";
+import { MutationButton } from "~/core/components/ui/MutationButton";
 
 const scriptsQuery = gql`
   query ScriptsQuery {
@@ -17,21 +18,22 @@ const runScriptMutation = gql`
 `;
 
 const AdminScripts = () => {
-  const Components = useVulcanComponents();
-  const { loading, data = {} } = useQuery(scriptsQuery);
+  const { loading, data = {}, error } = useQuery(scriptsQuery);
   if (loading) {
-    return <Components.Loading />;
+    return <Loading />;
   }
   return (
     <div className="admin-scripts admin-content">
       <h3>Scripts</h3>
       <table className="admin-scripts-table">
         <thead>
-          <th>Script</th>
-          <th>Description</th>
-          <th>Arguments</th>
-          <th>Actions</th>
-          <th>Done</th>
+          <tr>
+            <th>Script</th>
+            <th>Description</th>
+            <th>Arguments</th>
+            <th>Actions</th>
+            <th>Done</th>
+          </tr>
         </thead>
         <tbody>
           {data.scripts.map((script) => (
@@ -44,8 +46,7 @@ const AdminScripts = () => {
 };
 
 const Script = ({ id, description, args, done }) => {
-  const Components = useVulcanComponents();
-  const [result, setResult] = useState();
+  const [result, setResult] = useState<any | undefined>();
   const [scriptArgs, setScriptArgs] = useState({});
 
   return (
@@ -70,7 +71,7 @@ const Script = ({ id, description, args, done }) => {
           )}
         </td>
         <td>
-          <Components.MutationButton
+          <MutationButton
             label="Run"
             mutation={runScriptMutation}
             mutationArguments={{ id, scriptArgs }}
@@ -84,11 +85,11 @@ const Script = ({ id, description, args, done }) => {
       </tr>
       {result && (
         <tr>
-          <td colSpan="5">
+          <td colSpan={5}>
             <div className="admin-script-result">
               <button
                 onClick={() => {
-                  setResult(null);
+                  setResult(undefined);
                 }}
               >
                 X

@@ -2,42 +2,17 @@ import React from "react";
 
 import { useIntlContext } from "@vulcanjs/react-i18n";
 // import routes from "~/config/routes";
-import { useRouter } from "next/router.js";
+import { useRouter } from "next/navigation";
 // import palette from "~/config/palette";
 // import { computeErrorI18nTokens } from "~/config/errors";
 // import { logout } from "~/services/AuthService";
 // import { useCurrentUserContext } from "~/core/components/account";
 // import { isUserServiceUnavailable } from "~/core/components/account/CurrentUserProvider";
 // import { getAccessToken } from "~/services/AuthService";
-import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { routes } from "~/lib/routes";
 import { LogoutButton } from "~/account/user/components";
-
-/*
-const useStyles = makeStyles({
-  content: {
-    height: "100%",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    color: palette.neutral[9],
-  },
-  buttonsWrapper: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    "& button": {
-      marginTop: "8px",
-      marginBottom: "4px",
-    },
-  },
-  tryReloadMessage: {
-    color: palette.primary.main,
-    fontWeight: 600,
-  },
-});
-*/
+import { Button } from "~/core/components/ui/Button";
+import classes from "./DefaultError.module.scss";
 
 // NOTE: this expects a latin language. Might need improvements/more reusability
 const addPointToSentence = (sentence?: string | null) => {
@@ -89,7 +64,6 @@ export const DefaultErrorDisplay = ({
   const t = (token) => {
     return formatMessage({ id: token });
   };
-  const Components = useVulcanComponents();
   const router = useRouter();
 
   // const hasAccessToken = !!getAccessToken();
@@ -112,25 +86,25 @@ export const DefaultErrorDisplay = ({
     title || (titleI18nToken ? t(titleI18nToken) : defaultErrorTitle);
 
   return (
-    <div /*className={classes.content}*/ style={{ flexDirection: "column" }}>
+    <div className={classes.wrapper}>
       {/*<WarningIcon fontSize="large" />*/}
       <h2>
         {errorTitle}
         {error?.name && <span> {}</span>}
       </h2>
       <p>
-        <span>{addPointToSentence(errorMessage)}</span>{" "}
+        <span>Error message: {addPointToSentence(errorMessage)}</span>{" "}
         <span>{t("error.message_sent_to_technical_team")}</span>
       </p>
       {hasButtons && (
-        <div /*className={classes.buttonsWrapper}*/>
+        <div className={classes.buttonsWrapper}>
           {proposeReload && (
             <>
               <p /*className={classes.tryReloadMessage}*/>
                 {" "}
                 {t("error.try_reloading_the_page") || "Try reloading the page"}
               </p>
-              <Components.Button
+              <Button
                 //color="primary"
                 //variant="outlined"
                 onClick={() => {
@@ -142,28 +116,28 @@ export const DefaultErrorDisplay = ({
                 }}
               >
                 {t("error.retry") || "Reload"}
-              </Components.Button>
+              </Button>
             </>
           )}
           {proposeHomeRedirection && (
-            <Components.Button
+            <Button
               //variant="outlined"
               onClick={() => {
                 router.push(routes.home.href);
               }}
             >
               {t("error.redirect_to_home") || "Back to home"}
-            </Components.Button>
+            </Button>
           )}
           {proposeLoginRedirection && (
-            <Components.Button
+            <Button
               //variant="outlined"
               onClick={() => {
                 router.push(routes.home.href);
               }}
             >
               {t("error.redirect_to_login") || "Go to login"}
-            </Components.Button>
+            </Button>
           )}
           {shouldProposeLogout && <LogoutButton />}
         </div>

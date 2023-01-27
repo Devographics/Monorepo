@@ -1,16 +1,12 @@
 import React, { useState } from "react";
-import ReactMarkdown from "react-markdown";
-import rehypeRaw from "rehype-raw";
 import { useIntlContext } from "@vulcanjs/react-i18n";
-import {
-  FormInputProps,
-  useVulcanComponents,
-  useFormContext,
-} from "@vulcanjs/react-ui";
 import { FormCheck, FormControl } from "react-bootstrap";
 import isEmpty from "lodash/isEmpty.js";
 
 const receiveNotificationsFieldName = "receive_notifications";
+const Components = {
+  FormItem: () => <div>FormItem TODO</div>,
+};
 
 export const Email2 = ({
   document,
@@ -19,14 +15,14 @@ export const Email2 = ({
   refFunction,
   inputProperties = {},
   itemProperties = {},
-}: FormInputProps) => {
+}: any) => {
   const { questionId } = itemProperties;
   const checkboxPath = path.replace(questionId, receiveNotificationsFieldName);
   const checkboxValue = document[checkboxPath];
-  const Components = useVulcanComponents();
   const intl = useIntlContext();
   const [showEmail, setShowEmail] = useState(checkboxValue);
-  const { updateCurrentValues } = useFormContext();
+  //const { updateCurrentValues } = useFormContext();
+  const updateCurrentValues = console.log;
 
   const email = localStorage && localStorage.getItem("email");
   if (email && isEmpty(inputProperties.value)) {

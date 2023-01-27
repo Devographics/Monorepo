@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router.js";
 import { surveysWithTemplates } from "~/surveys/withTemplates";
-import { useQuery, gql } from "@apollo/client";
 import Actions from "~/admin/components/normalization/Actions";
 import Progress from "~/admin/components/normalization/Progress";
 import Fields from "~/admin/components/normalization/Fields";
-import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { allFields } from "./Actions";
+import { useQuery } from "~/lib/graphql";
+import gql from "graphql-tag";
+import { Loading } from "~/core/components/ui/Loading";
+import Link from "next/link";
+import { routes } from "~/lib/routes";
 
 export const defaultSegmentSize = 500;
 
@@ -68,11 +71,28 @@ export const getSegments = ({ responsesCount, segmentSize }): Segment[] => {
 };
 
 const NormalizationWrapper = () => {
-  const Components = useVulcanComponents();
   const { surveySlug: surveyId, fieldId, paramsReady } = usePageParams();
+  if (!surveyId) {
+    return (
+      <div>
+        <h2>No survey slug provided in URL</h2>
+        <h3>Available surveys:</h3>
+        <ul>
+          {surveysWithTemplates.map((survey) => {
+            const normalizeUrl = `${routes.admin.normalization.href}/?surveySlug=${survey.slug}`;
+            return (
+              <li key={survey.slug}>
+                <Link href={normalizeUrl}>{survey.slug}</Link>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    );
+  }
 
   if (!paramsReady) {
-    return <Components.Loading />;
+    return <Loading />;
   }
 
   const survey = surveysWithTemplates.find((s) => s.slug === surveyId);

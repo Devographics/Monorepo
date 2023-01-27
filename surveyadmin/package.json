@@ -42,8 +42,6 @@
     "mongo": "pnpm run start:mongo",
     "on:server:start": "node ./scripts/dist/onServerStart.mjs",
     "postcoverage": "npm run report:combined # combine jest and cypress coverage reports",
-    "//postinstall": " # @see https://github.com/apollographql/apollo-feature-requests/issues/287",
-    "//postinstall2": "node ./.vn/scripts/fix-apollo.js",
     "prebuild": "pnpm run build:scripts",
     "precombine:reports": "npm run copy:reports && rm -Rf .nyc_output && mkdir .nyc_output || true # intermediate script",
     "precopy:reports": "npm run mkdir:reports # intermediate script",
@@ -74,16 +72,16 @@
     "test:unit": "jest --testPathIgnorePatterns=tests/vn",
     "test:vn": "jest --testPathPattern=tests/vn # run tests for Vulcan Next itself, eg scripts (long) ",
     "test": "npm run test:unit && npm run test:e2e",
-    "upgrade:vulcan": "pnpm up '@vulcanjs/*' --latest && pnpm run postinstall",
+    "upgrade:vulcan": "pnpm up '@vulcanjs/*' --latest",
     "typecheck-watch": "tsc --noEmit --p src/tsconfig.json -w",
     "//typecheck": " # in case of error with @vulcanjs/* package, check that src/types (eg simpl-schema) are up-to-date with vulcan-npm",
     "typecheck": "tsc --noEmit --p src/tsconfig.json",
     "update-link-vulcan": "yalc update"
   },
   "dependencies": {
-    "@apollo/client": "^3.5.10",
     "@devographics/core-models": "workspace:*",
     "@devographics/encrypt-email": "workspace:*",
+    "@devographics/swr-graphql": "workspace:*",
     "@emotion/cache": "^11.4.0",
     "@emotion/react": "^11.4.1",
     "@emotion/server": "^11.4.0",
@@ -109,11 +107,7 @@
     "@vulcanjs/mongo": "0.8.1",
     "@vulcanjs/mongo-apollo": "0.8.1",
     "@vulcanjs/permissions": "0.7.2-alpha.8",
-    "@vulcanjs/react-hooks": "0.8.1",
     "@vulcanjs/react-i18n": "0.8.1-y.0",
-    "@vulcanjs/react-ui": "^0.8.1",
-    "@vulcanjs/react-ui-bootstrap": "0.8.1-y.0",
-    "@vulcanjs/react-ui-lite": "^0.8.1",
     "@vulcanjs/schema": "0.7.2-alpha.8",
     "@vulcanjs/utils": "0.7.2-alpha.8",
     "apollo-server": "3",
@@ -144,7 +138,7 @@
     "moment": "^2.29.4",
     "mongoose": "^6.4.5",
     "nanoid": "^3.1.25",
-    "next": "^13.0.6",
+    "next": "^13.1.3",
     "next-connect": "^0.9.1",
     "next-sitemap": "^1.4.17",
     "node-cache": "^5.1.2",
@@ -167,6 +161,7 @@
     "react-hook-form": "4.9.8",
     "react-i18next": "^11.5.0",
     "react-markdown": "^7.1.1",
+    "react-no-ssr": "^1.1.0",
     "react-spring": "^8.0.27",
     "rehype-raw": "^6.1.0",
     "sanitize-html": "^2.6.1",
@@ -250,8 +245,7 @@
   "pnpm": {
     "overrides": {
       "@types/react@>17": "^17.0.1",
-      "@types/react-dom@>17": "^17.0.1",
-      "@apollo/client>ts-invariant": "0.10.3"
+      "@types/react-dom@>17": "^17.0.1"
     }
   }
 }

@@ -1,4 +1,3 @@
-import { useVulcanComponents } from "@vulcanjs/react-ui";
 import React from "react";
 import { Entity } from "@devographics/core-models";
 import { useEntities } from "~/core/components/common/EntitiesContext";
@@ -20,15 +19,8 @@ interface EntityLabelDefinition {
 }
 export interface EntityLabelProps extends EntityLabelDefinition, StringLabel {}
 
-const EntityLabel = ({
-  id,
-  intlId,
-  label,
-  fallback,
-}: EntityLabelProps) => {
-
-  const { data, loading: entitiesLoading, error } = useEntities();
-  const { entities } = data;
+const EntityLabel = ({ id, intlId, label, fallback }: EntityLabelProps) => {
+  const entities = useEntities();
   const entity = entities?.find((e) => e.id === id);
 
   // string label

@@ -1,5 +1,6 @@
 import { debugMongo } from "~/lib/debuggers";
 import mongoose, { ConnectOptions } from "mongoose";
+import { serverConfig } from "~/config/server";
 
 // Based on https://github.com/vercel/next.js/blob/canary/examples/with-mongodb/util/mongodb.js
 // We need to globally cache Mongoose connection promise so that it's reused by all calls to connectToDb
@@ -66,8 +67,7 @@ export const isLocalMongoUri = () => {
  * Mongo URI is provided throught the MONGO_URI environment variable
  */
 export const connectToAppDb = async () => {
-  const mongoUri = process.env.MONGO_URI;
-  if (!mongoUri) throw new Error("MONGO_URI env variable is not defined");
+  const mongoUri = serverConfig.mongoUri
   const isLocalMongo = mongoUri.match(/localhost/);
   try {
     await connectToDb(mongoUri, {

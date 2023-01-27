@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { useRouter } from "next/router.js";
 import type { SurveyDocument } from "@devographics/core-models";
 import { useIntlContext } from "@vulcanjs/react-i18n";
-import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { useEntitiesQuery } from "~/core/hooks/useEntitiesQuery";
-import { convertSurveyToMarkdown } from "~/modules/surveys/outlineExport";
 import { surveysWithTemplates } from "~/surveys/withTemplates";
+import { Loading } from "../ui/Loading";
+import { convertSurveyToMarkdown } from "~/modules/surveys/outlineExport";
 const surveys = surveysWithTemplates;
 
 const useCurrentSurvey = () => {
@@ -18,12 +18,11 @@ const useCurrentSurvey = () => {
   return { survey, slug, year };
 };
 const SurveyExport = () => {
-  const Components = useVulcanComponents();
   // TODO: filter for the current survey only, but we need a tag to do so
   const { data, loading, error } = useEntitiesQuery();
   const { survey, slug, year } = useCurrentSurvey();
 
-  if (loading) return <Components.Loading />;
+  if (loading) return <Loading />;
   if (error) return <span>Could not load entities</span>;
   if (!data) return <span>No entities found</span>;
 
@@ -45,12 +44,11 @@ export const SurveyMarkdownOutline = ({
   survey: SurveyDocument;
 }) => {
   const [showFieldName, setShowFieldName] = useState<boolean>(false);
-  const Components = useVulcanComponents();
   const intl = useIntlContext();
   // TODO: filter for the current survey only, but we need a tag to do so
   const { data, loading, error } = useEntitiesQuery();
 
-  if (loading) return <Components.Loading />;
+  if (loading) return <Loading />;
   if (error) return <span>Could not load entities</span>;
   if (!data) return <span>No entities found</span>;
   const { entities } = data;

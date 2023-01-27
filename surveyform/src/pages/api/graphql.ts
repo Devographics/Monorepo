@@ -11,10 +11,6 @@ import { buildApolloSchema, createDataSources } from "@vulcanjs/graphql/server";
 import corsOptions from "~/lib/server/cors";
 import { contextFromReq } from "~/lib/server/context";
 import models from "~/_vulcan/models.index.server";
-import { localesRegistry, stringsRegistry } from "~/i18n";
-
-// Custom graphql API from Vulcan
-import { graphql as i18nSchema } from "@vulcanjs/i18n/server";
 
 import {
   typeDefs as sojsTypeDefs,
@@ -57,16 +53,11 @@ const currentUserResolver = {
 const mergedSchema = {
   ...vulcanRawSchema,
   typeDefs: mergeTypeDefs([
-    i18nSchema.typeDefs,
     vulcanRawSchema.typeDefs,
     sojsTypeDefs,
     currentUserTypeDefs,
   ]),
   resolvers: mergeResolvers([
-    i18nSchema.makeResolvers({
-      StringsRegistry: stringsRegistry,
-      LocalesRegistry: localesRegistry,
-    }),
     vulcanRawSchema.resolvers,
     sojsResolvers,
     currentUserResolver,
@@ -94,11 +85,11 @@ const server = new ApolloServer({
   plugins:
     process.env.NODE_ENV !== "production"
       ? [
-          ApolloServerPluginLandingPageGraphQLPlayground({
-            // @see https://www.apollographql.com/docs/apollo-server/api/plugin/landing-pages/#graphql-playground-landing-page
-            // options
-          }),
-        ]
+        ApolloServerPluginLandingPageGraphQLPlayground({
+          // @see https://www.apollographql.com/docs/apollo-server/api/plugin/landing-pages/#graphql-playground-landing-page
+          // options
+        }),
+      ]
       : [],
   // Important otherwie Apollo swallows errors
   formatError: (err) => {
@@ -106,8 +97,6 @@ const server = new ApolloServer({
     return err;
   },
 });
-
-await server.start();
 
 const app = express();
 app.set("trust proxy", true);
@@ -118,7 +107,18 @@ app.use(gqlPath, cors(corsOptions));
 // TODO: we should probably use the "connectToAppDbMiddleware"?
 app.use(gqlPath, connectToAppDbMiddleware);
 
-server.applyMiddleware({ app, path: "/api/graphql" });
+let serverPromise: Promise<void> | undefined = undefined
+app.use(gqlPath, async function (req, res, next) {
+  if (!serverPromise) throw new Error("Got a first request before serverPromise was initialized")
+  console.debug("waiting apollo server start")
+  await serverPromise
+  console.debug("apollo server is started, will process request")
+  next()
+})
+serverPromise = (async () => {
+  await server.start();
+  server.applyMiddleware({ app, path: "/api/graphql" });
+})()
 
 export default app;
 

@@ -3,7 +3,7 @@ import React from "react";
 export interface IntlContextType {
   locale: string;
   key: string;
-  messages: Array<any>;
+  messages: any//Array<any>;
 }
 export const IntlContext = React.createContext<IntlContextType>({
   locale: "",

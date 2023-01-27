@@ -1,12 +1,13 @@
-// TODO: provide this component in Vulcan Next as well
+"use client";
+
 import { useState, ReactNode, FormEventHandler } from "react";
-import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { useIntlContext } from "@vulcanjs/react-i18n";
 import { sendMagicLoginEmail } from "../lib/sendMagicLoginEmail";
 import { useUser } from "~/account/user/hooks";
-import { useRouter } from "next/router";
+import { useSearchParams } from "next/navigation";
 import { useLocaleContext } from "~/i18n/components/LocaleContext";
 import { FormComponentEmail } from "./FormComponentEmail";
+import { Button } from "~/core/components/ui/Button";
 
 /**
  * With passwordless approach, there is no signup step,
@@ -19,7 +20,6 @@ export const StandaloneMagicLoginForm = ({
 }: {
   label?: string | ReactNode;
 }) => {
-  const router = useRouter();
   const intl = useIntlContext();
   const placeholder = intl.formatMessage({ id: `accounts.your_email` });
   const [errorMsg, setErrorMsg] = useState("");
@@ -32,15 +32,7 @@ export const StandaloneMagicLoginForm = ({
   const { getLocale } = useLocaleContext();
 
   const locale = getLocale();
-  const { query } = router;
-
-  if (process.env.NEXT_PUBLIC_IS_USING_DEMO_DATABASE)
-    return (
-      <p>
-        CAN'T LOGIN you are using Vulcan Next demo database, please set
-        MONGO_URI env variable to your own database.
-      </p>
-    );
+  const params = useSearchParams();
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -58,8 +50,8 @@ export const StandaloneMagicLoginForm = ({
       destination: email,
       // no need to wait for current user loading, because it's normally always faster than typing one's email and submitting
       anonymousId: user?._id,
-      prettySlug: query.slug,
-      year: query.year,
+      prettySlug: params.get("slug"),
+      year: params.get("year"),
       locale,
     };
 
@@ -107,8 +99,6 @@ const MagicLinkLoginForm = ({
   label?: string | ReactNode;
   placeholder?: string;
 }) => {
-  const Components = useVulcanComponents();
-  
   return (
     <form onSubmit={onSubmit} className="magic-link-login-form">
       {/* <span>Your Email</span> */}
@@ -124,56 +114,13 @@ const MagicLinkLoginForm = ({
         name="email"
       />
       <div className="submit">
-        <Components.Button type="submit">{label}</Components.Button>
+        <Button type="submit">{label}</Button>
       </div>
 
       {errorMessage && <div className="error magic-error">{errorMessage}</div>}
       {successMessage && (
         <div className="success magic-success">{successMessage}</div>
       )}
-
-      <style jsx>{`
-        form,
-        label {
-          display: flex;
-          flex-flow: column;
-        }
-        label > span {
-          font-weight: 600;
-        }
-        /* input {
-          padding: 8px;
-          margin: 0.3rem 0 1rem;
-          border: 1px solid #ccc;
-          border-radius: 4px;
-        } */
-        .submit {
-          display: flex;
-          justify-content: flex-end;
-          align-items: center;
-          justify-content: space-between;
-        }
-        .submit > a {
-          text-decoration: none;
-        }
-        .submit > button {
-          padding: 0.5rem 1rem;
-          cursor: pointer;
-          background: #fff;
-          border: 1px solid #ccc;
-          border-radius: 4px;
-        }
-        .submit > button:hover {
-          border-color: #888;
-        }
-        .forgottenPassword {
-          margin: 0 0rem 0.2rem;
-        }
-        .error {
-          color: red;
-          margin: 1rem 0 0;
-        }
-      `}</style>
     </form>
   );
 };

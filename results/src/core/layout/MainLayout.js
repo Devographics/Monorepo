@@ -7,7 +7,7 @@ import colors from 'core/theme/colors'
 import classNames from 'classnames'
 import Hamburger from 'core/components/Hamburger'
 import { useI18n } from 'core/i18n/i18nContext'
-import SurveyBanner from 'core/components/SurveyBanner'
+import SurveyBanner from 'surveys/componentsBanner'
 
 const MainLayout = ({
     context,

@@ -1,48 +1,90 @@
-const { locales } = require("./src/i18n/data/locales");
+const util = require("util");
 const { extendNextConfig } = require("./packages/@vulcanjs/next-config");
 // Use @next/mdx for a basic MDX support.
 // See the how Vulcan Next docs are setup with next-mdx-remote
 // which is more advanced (loading remote MD, supporting styling correctly etc.)
-const withMDX = require("@next/mdx")({ extension: /\.mdx?$/ });
 const withPkgInfo = require("./.vn/nextConfig/withPkgInfo");
 
 const flowRight = require("lodash/flowRight");
-const debug = require("debug")("vns:next");
+const debug = require("debug")("devographics:next");
 
 const { withSentryConfig } = require("@sentry/nextjs");
 
-// Pass the modules that are written directly in TS here
-const withTM = require('next-transpile-modules')(['@devographics/core-models']);
-
-
 // @see https://nextjs.org/docs/api-reference/next.config.js/runtime-configuration
 const moduleExports = (phase, { defaultConfig }) => {
+  console.log("defaultConfig", defaultConfig);
+
   /**
    * @type {import('next/dist/next-server/server/config').NextConfig}
    **/
-  let extendedConfig;
-  extendedConfig = extendNextConfig(defaultConfig);
+  let nextConfig = {
+    // NOTE: the doc is unclear about whether we should merge this default config or not
+    ...defaultConfig,
+    experimental: {
+      appDir: true,
+    },
+    transpilePackages: ["@devographics/core-models", "@devographics/react-hooks", "@devographics/react-form"],
+    // Disable linting during build => the linter may have optional dev dependencies
+    // (eslint-plugin-cypress) that wont exist during prod build
+    // You should lint manually only
+    eslint: {
+      // Warning: This allows production builds to successfully complete even if
+      // your project has ESLint errors.
+      ignoreDuringBuilds: true,
+    },
+    /*
+    i18n: {
+      locales: uniqueLocales,
+      // It won't be prefixed
+      defaultLocale: "en-US", //-US",
 
-  //*** I18n redirections
-  // @see https://nextjs.org/docs/advanced-features/i18n-routing
-  const localeIds = locales.map((l) => l.id);
-  const countryIds = localeIds.map((l) => l.slice(0, 2));
-  const uniqueLocales = [...new Set([...localeIds, ...countryIds]).values()];
-  extendedConfig.i18n = {
-    locales: uniqueLocales,
-    // It won't be prefixed
-    defaultLocale: "en-US", //-US",
+    },*/
+    env: {
+      NEXT_PUBLIC_IS_USING_LOCAL_DATABASE: !!(
+        process.env.MONGO_URI || ""
+      ).match(/localhost/),
+    },
+    webpack: function (configArg, ...otherArgs) {
+      //console.log(util.inspect(configArg.module.rules, false, null, true));
+      //*** */ Yaml support
+      // run previously configured function!
+      const config = defaultConfig.webpack
+        ? defaultConfig.webpack(configArg, ...otherArgs)
+        : configArg;
+      // then extend
+      config.module.rules.push({
+        test: /\.ya?ml$/,
+        use: "js-yaml-loader",
+      });
+
+      config.experiments.topLevelAwait = true;
+      return config;
+    },
+
+    /*
+    Don't seem to be needed
+    sassOptions: {
+      includePaths: [path.join(__dirname, "src/stylesheets")],
+    },
+    */
+
+    images: {
+      remotePatterns: [
+        {
+          protocol: "https",
+          hostname: "devographics.github.io",
+        }, {
+          protocol: "https",
+          hostname: "static.devographics.com"
+        }
+      ],
+    },
+
+    // uncomment to support markdown
+    // pageExtensions:["js", "jsx", "md", "mdx", "ts", "tsx"];
   };
 
-  //*** Env variables (TODO: move to config)
-  extendedConfig.env = {
-    NEXT_PUBLIC_IS_USING_DEMO_DATABASE: !!(process.env.MONGO_URI || "").match(
-      /lbke\-demo/
-    ),
-    NEXT_PUBLIC_IS_USING_LOCAL_DATABASE: !!(process.env.MONGO_URI || "").match(
-      /localhost/
-    ),
-  };
+  let extendedConfig = extendNextConfig(nextConfig);
 
   //*** */ Enable Webpack analyzer
   if (process.env.ANALYZE) {
@@ -53,32 +95,6 @@ const moduleExports = (phase, { defaultConfig }) => {
     });
     extendedConfig = withBundleAnalyzer(extendedConfig);
   }
-
-  //*** */ Yaml support
-  const currentWebpack = extendedConfig.webpack
-  extendedConfig.webpack = function (configArg, ...otherArgs) {
-    // run previously configured function!
-    const config = currentWebpack ? currentWebpack(configArg, ...otherArgs) : configArg
-    // then extend
-    config.module.rules.push({
-      test: /\.ya?ml$/,
-      use: "js-yaml-loader",
-    });
-    config.experiments.topLevelAwait = true;
-    return config;
-  };
-
-  // Disable linting during build => the linter may have optional dev dependencies
-  // (eslint-plugin-cypress) that wont exist during prod build
-  // You should lint manually only
-  extendedConfig.eslint = {
-    // Warning: This allows production builds to successfully complete even if
-    // your project has ESLint errors.
-    ignoreDuringBuilds: true,
-  };
-
-  // To support markdown import
-  extendedConfig.pageExtensions = ["js", "jsx", "md", "mdx", "ts", "tsx"];
 
   //*** Sentry
   /**
@@ -138,20 +154,10 @@ const moduleExports = (phase, { defaultConfig }) => {
     disableClientWebpackPlugin: shouldDisableSentry,
   };
 
-  extendedConfig.images = {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'devographics.github.io',
-      },
-    ],
-  }
-
   // Finally add relevant webpack configs/utils
   extendedConfig = flowRight([
-    withTM,
     withPkgInfo,
-    withMDX,
+    //withMDX,
     (config) => withSentryConfig(config, sentryWebpackPluginOptions),
     // add other wrappers here
   ])(extendedConfig);

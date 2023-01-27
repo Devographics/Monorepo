@@ -59,8 +59,15 @@ export const i18nPropsFromCtx = (
   };
 };
 
-export const getLocaleFromAcceptLanguage = (req: IncomingMessage) => {
-  const acceptLanguage = req?.headers?.["accept-language"];
+/**
+ * TO be used in API routes for instance
+ * @param req
+ * @returns
+ */
+export const getReqAcceptLanguage = (req: IncomingMessage) => {
+  return req?.headers?.["accept-language"];
+};
+export const getLocaleFromAcceptLanguage = (acceptLanguage?: string | null) => {
   if (!acceptLanguage) return undefined;
   // Accept-Language: fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7
   // Or fr,en_US;q=0.8
@@ -70,13 +77,17 @@ export const getLocaleFromAcceptLanguage = (req: IncomingMessage) => {
   return locale;
 };
 
-export const getLocaleFromCookie = (req: IncomingMessage) => {
-  // Try to get from cookies
-  if (!req?.headers?.cookie) {
-    // Try to get from accept language
-    return undefined;
-  }
-  const cookieHeader = req.headers.cookie;
+export const getReqCookies = (req: IncomingMessage) => {
+  return req?.headers?.cookie;
+};
+/**
+ * @deprecated We can get cookie directly in middleware or server component,
+ * no need to parse the header
+ * @param cookieHeader
+ * @returns
+ */
+export const getLocaleFromCookie = (cookieHeader?: string | null) => {
+  if (!cookieHeader) return undefined;
   // foo=1;bar=hello
   const cookies = cookieHeader.split(";").map((c) => c.trim().split("="));
   const localeCookie = cookies.find(([cookieName, cookieValue]) => {
@@ -107,9 +118,9 @@ export const getLocaleFromCookie = (req: IncomingMessage) => {
  * @returns
  */
 export const getLocaleFromReq = (req: IncomingMessage) => {
-  const fromCookie = getLocaleFromCookie(req);
+  const fromCookie = getLocaleFromCookie(getReqAcceptLanguage(req));
   if (fromCookie) return fromCookie;
-  const fromAcceptLanguage = getLocaleFromAcceptLanguage(req);
+  const fromAcceptLanguage = getLocaleFromAcceptLanguage(getReqCookies(req));
   if (fromAcceptLanguage) return fromAcceptLanguage;
   return undefined;
 };

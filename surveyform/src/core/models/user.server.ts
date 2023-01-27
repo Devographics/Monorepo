@@ -18,8 +18,8 @@ import {
 } from "./user";
 import { hashPassword } from "~/account/passwordLogin/api";
 import { restrictDocuments } from "@vulcanjs/permissions";
-import { ResponseConnector, ResponseMongoCollection } from "~/modules/responses/model.server";
-import { Response } from "~/modules/responses";
+import { ResponseConnector, ResponseMongoCollection } from "~/responses/model.server";
+import { Response } from "~/responses";
 import mongoose from "mongoose";
 
 /**
@@ -44,7 +44,7 @@ const guaranteeOwnership = (data) => {
 };
 
 // Previously in Users API schema
-//import Responses from "~/modules/responses/collection";
+//import Responses from "~/responses/collection";
 //import Users from "meteor/vulcan:users";
 
 const apiSchema: VulcanGraphqlSchemaServer = {

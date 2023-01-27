@@ -1,4 +1,4 @@
-import { useRouter } from "next/router.js";
+import { useSearchParams } from "next/navigation";
 
 /**
  * Get the token from the magic link
@@ -7,19 +7,19 @@ import { useRouter } from "next/router.js";
  * @returns
  */
 export const useMagicToken = () => {
-  const router = useRouter();
-  const { isReady, query } = router;
-  if (!isReady) return { token: null };
-  if (!query.token) throw new Error("No magic token found in query params.");
-  if (Array.isArray(query.token))
+  const params = useSearchParams()
+  const token = params.get("token")
+  const from = params.get("from")
+  if (!token) throw new Error("No magic token found in query params.");
+  if (Array.isArray(token))
     throw new Error("Found more than one token in query params.");
 
-  if (query.from && Array.isArray(query.from)) {
+  if (from && Array.isArray(from)) {
     console.warn("Found more than one redirection router in query params.");
   }
   return {
-    token: query.token,
+    token: token,
     // the magic link may have a redirection
-    from: query.from && !Array.isArray(query.from) ? query.from : undefined,
-  };
+    from: from && !Array.isArray(from) ? from : undefined,
+  }
 };

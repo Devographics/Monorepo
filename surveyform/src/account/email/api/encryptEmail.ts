@@ -1,12 +1,12 @@
 import crypto from "crypto";
-import { EmailHashMongooseModel } from "~/modules/email_hashes/model.server";
 import { v4 as uuidv4 } from "uuid";
+import { EmailHashMongooseModel } from "~/account/email_hashes/model.server";
 
 /**
  *
  * Creating Hash from Emails, not reversible
  */
- export const createEmailHash = (email: string, providedHashSalt?: string) => {
+export const createEmailHash = (email: string, providedHashSalt?: string) => {
   const hashSaltStr = providedHashSalt || process.env.ENCRYPTION_KEY;
   if (!hashSaltStr)
     throw new Error(`HASH_SALT/ENCRYPTION_KEY environment variable not set`);
@@ -37,7 +37,7 @@ export async function getUUID(emailHash, userId) {
       uuid: emailUuid,
     });
   }
- 
+
 }
 
 /**

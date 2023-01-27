@@ -104,6 +104,9 @@ export const loadFromGitHub = async () => {
 // when developing locally, load from local files
 export const loadLocally = async () => {
     console.log(`-> loading entities locally`)
+    if (!process.env.ENTITIES_DIR) {
+        throw new Error("ENTITIES_DIR not set, can't load entities locally")
+    }
 
     const entities: Entity[] = []
 
@@ -195,7 +198,7 @@ export const getEntity = async ({ id }: { id: string | number }) => {
     if (!entity) {
         return
     }
-    
+
     if (entity.belongsTo) {
         // if entity A belongs to another entity B, extend B with A and return the result
         const ownerEntity = findEntity(entity.belongsTo, entities)

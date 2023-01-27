@@ -3,6 +3,7 @@ export interface ResponseDocument extends VulcanDocument {
   name?: string;
   year?: number;
   surveySlug?: string;
+  pagePath?: string;
 }
 
 /**

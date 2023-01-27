@@ -38,7 +38,7 @@ import { scripts, runScript } from "./scripts";
 //   surveysResolver,
 //   surveyType,
 //   editionType,
-// } from "~/modules/surveys/server/graphql";
+// } from "~/surveys/server/graphql";
 
 const { mergeResolvers, mergeTypeDefs } = require("@graphql-tools/merge");
 // Simulate Vulcan Meteor global "addGraphQLSchema" etc.

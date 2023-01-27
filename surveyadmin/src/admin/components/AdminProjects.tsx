@@ -1,16 +1,12 @@
-import {
-  useVulcanComponents,
-  VulcanComponentsProvider,
-  defaultDatatableComponents,
-} from "@vulcanjs/react-ui";
 import React from "react";
 import { Project } from "@devographics/core-models/server";
 
 const AdminProjects = () => {
-  const Components = useVulcanComponents();
-
   return (
     <div className="admin-projects admin-content">
+      {/**
+       *  TODO: create a normal table with relevant gql query
+       * 
       <VulcanComponentsProvider
         value={{
           ...defaultDatatableComponents,
@@ -31,6 +27,8 @@ const AdminProjects = () => {
           push={console.warn}
         />
       </VulcanComponentsProvider>
+
+       */}
     </div>
   );
 };
