@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react'
 import { BlockContext } from 'core/blocks/types'
 // @ts-ignore
-import Block from 'core/blocks/block/BlockVariant'
+import BlockVariant from 'core/blocks/block/BlockVariant'
 // @ts-ignore
 import ChartContainer from 'core/charts/ChartContainer'
 import { LineChart } from 'core/charts/generic/LineChart'
@@ -18,6 +18,11 @@ import { getTableData } from 'core/helpers/datatables'
 import { useLegends } from 'core/helpers/useBucketKeys'
 import { useTheme } from 'styled-components'
 import styled, { css } from 'styled-components'
+import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
+import { useFilterLegends, getInitFilters } from 'core/blocks/filters/helpers'
+import { BEHAVIOR_COMBINED, MODE_FACET } from 'core/blocks/filters/constants'
+import { defaultOptions } from 'core/blocks/block/BlockUnitsSelector'
+import { useAllChartsOptions } from 'core/charts/hooks'
 
 import { MetricId, ALL_METRICS } from 'core/helpers/units'
 
@@ -53,7 +58,7 @@ export interface ToolsExperienceRankingBlockProps {
     titleProps: any
 }
 
-const getChartData = ({ data, controlledMetric }: { data: ToolData[]; controlledMetric: any }) => {
+const processBlockData = (data: ToolData[], { controlledMetric }: { controlledMetric: any }) => {
     return useMemo(
         () =>
             data.map(tool => {
@@ -80,13 +85,12 @@ export const ToolsExperienceLineChartBlock = ({
 }: ToolsExperienceRankingBlockProps) => {
     const [current, setCurrent] = useState()
     const [metric, setMetric] = useState<MetricId>('satisfaction')
-    const { getString } = useI18n()
     const theme = useTheme()
 
     const controlledMetric = triggerId || metric
 
     const { years, experience } = data
-    const chartData: RankingChartSerie[] = getChartData({ data: experience, controlledMetric })
+    const chartData: RankingChartSerie[] = processBlockData(experience, { controlledMetric })
 
     const legends = data.ids.map((id, i) => {
         const label = experience?.find(e => e.id === id)?.entity?.name
@@ -110,8 +114,19 @@ export const ToolsExperienceLineChartBlock = ({
         return cellData
     })
 
+    // contains the filters that define the series
+    const [chartFilters, setChartFilters] = useState(
+        getInitFilters({ behavior: BEHAVIOR_COMBINED })
+    )
+
+    // const legends = useFilterLegends({
+    //     chartFilters,
+    //     currentYear,
+    //     showDefaultSeries: chartFilters.options.showDefaultSeries
+    // })
+
     return (
-        <Block
+        <BlockVariant
             block={block}
             // titleProps={{ switcher: <Switcher setMetric={setMetric} metric={controlledMetric} /> }}
             data={data}
@@ -140,13 +155,23 @@ export const ToolsExperienceLineChartBlock = ({
                     years
                 })
             ]}
+            chartFilters={chartFilters}
+            setChartFilters={setChartFilters}
         >
-            <ChartContainer height={experience.length * 30 + 80} minWidth={800}>
-                <LineChartWrapper current={current} currentColor={currentColor}>
-                    <LineChart data={chartData} />
-                </LineChartWrapper>
-            </ChartContainer>
-        </Block>
+            <DynamicDataLoader
+                defaultBuckets={chartData}
+                block={block}
+                chartFilters={chartFilters}
+                processBlockData={processBlockData}
+                processBlockDataOptions={{ controlledMetric }}
+            >
+                <ChartContainer height={experience.length * 30 + 80} minWidth={800}>
+                    <LineChartWrapper current={current} currentColor={currentColor}>
+                        <LineChart buckets={chartData} />
+                    </LineChartWrapper>
+                </ChartContainer>
+            </DynamicDataLoader>
+        </BlockVariant>
     )
 }
 
@@ -156,14 +181,14 @@ const LineChartWrapper = styled.div`
     ${({ theme, current, currentColor }) =>
         current &&
         css`
-            path:not([stroke="${currentColor}"]),
-            circle:not([stroke="${currentColor}"]) {
+            path:not([stroke='${currentColor}']),
+            circle:not([stroke='${currentColor}']) {
                 opacity: 0.3;
                 /* stroke: ${theme.colors.text}; */
             }
 
-            path[stroke="${currentColor}"],
-            circle[stroke="${currentColor}"] {
+            path[stroke='${currentColor}'],
+            circle[stroke='${currentColor}'] {
                 opacity: 1;
                 stroke-width: 5;
             }

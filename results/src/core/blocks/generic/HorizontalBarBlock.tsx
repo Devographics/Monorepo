@@ -15,6 +15,13 @@ export interface HorizontalBarBlockProps extends BlockComponentProps {
     data: ResultsByYear
 }
 
+/*
+
+Feed in data used by block and get out data usable by chart
+
+*/
+const processBlockData = (data) => data?.facets[0]?.buckets
+
 const HorizontalBarBlock = ({
     block,
     data,
@@ -33,7 +40,7 @@ const HorizontalBarBlock = ({
     const [units, setUnits] = useState(defaultUnits)
 
     const { facets, completion } = data
-    const buckets = facets[0].buckets
+    const buckets = processBlockData(data)
     const { total } = completion
 
     // contains the filters that define the series
@@ -85,6 +92,7 @@ const HorizontalBarBlock = ({
                 chartFilters={chartFilters}
                 setUnits={setUnits}
                 layout="grid"
+                processBlockData={processBlockData}
             >
                 <ChartContainer fit={false}>
                     <HorizontalBarChart

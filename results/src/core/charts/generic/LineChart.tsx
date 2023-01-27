@@ -88,10 +88,10 @@ const CustomTooltip = (props: CustomTooltipProps) => {
 }
 
 interface RankingChartProps {
-    data: RankingChartSerie[]
+    buckets: RankingChartSerie[]
 }
 
-export const LineChart = ({ data }: RankingChartProps) => {
+export const LineChart = ({ buckets: data }: RankingChartProps) => {
     const theme = useTheme()
     // const { getString } = useI18n()
 

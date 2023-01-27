@@ -1,6 +1,12 @@
 import React, { useState, useEffect, useRef, ReactNode, Dispatch, SetStateAction } from 'react'
 import styled from 'styled-components'
-import { combineBuckets, getFiltersQuery, invertFacets, useFilterLegends, calculateAverages } from './helpers'
+import {
+    combineBuckets,
+    getFiltersQuery,
+    invertFacets,
+    useFilterLegends,
+    calculateAverages
+} from './helpers'
 import { runQuery } from 'core/blocks/explorer/data'
 import Loading from 'core/blocks/explorer/Loading'
 import { usePageContext } from 'core/helpers/pageContext'
@@ -20,11 +26,13 @@ import {
 import { CustomizationDefinition } from './types'
 import WrapperGrid from './WrapperGrid'
 import { useAllChartsOptions } from 'core/charts/hooks'
+import { BlockDefinition } from 'core/types'
+import get from 'lodash/get'
 
 const doNothing = a => a
 
-const getSeriesData = (result: any, path: string) => {
-    // example paths: "dataAPI.survey.demographics.${id}.year" or "dataAPI.survey.${id}.year"
+const getSeriesData = ({ result, path }: { result: any; path: string }) => {
+    // example paths: "dataAPI.survey.demographics.yearly_salary1.year" or "dataAPI.survey.podcasts2.year"
     const pathSegments = path.split('.')
     const [apiSegment, surveySegment, sectionSegment, ...rest] = pathSegments
     if (path.includes('demographics')) {
@@ -45,7 +53,8 @@ const getSeriesItemBuckets = seriesItem => seriesItem?.year?.facets[0]?.buckets
 
 type DynamicDataLoaderProps = {
     block: any
-    processBuckets: Function
+    processBlockData: Function
+    processBlockDataOptions: any
     setUnits: Dispatch<SetStateAction<number>>
     completion: any
     defaultBuckets: any
@@ -57,14 +66,15 @@ type DynamicDataLoaderProps = {
 
 const DynamicDataLoader = ({
     block,
-    processBuckets = doNothing,
+    processBlockData = doNothing,
+    processBlockDataOptions = {},
     setUnits,
     completion,
     defaultBuckets,
     children,
     chartFilters,
     setBuckets,
-    layout = 'column',
+    layout = 'column'
 }: DynamicDataLoaderProps) => {
     const theme = useTheme()
     const { getString } = useI18n()
@@ -88,7 +98,7 @@ const DynamicDataLoader = ({
     const { showDefaultSeries = true, behavior = BEHAVIOR_MULTIPLE, mode = MODE_FILTERS } = options
 
     const legends = useFilterLegends({
-        chartFilters,
+        chartFilters
     })
 
     const initialLoad = useRef(true)
@@ -104,7 +114,11 @@ const DynamicDataLoader = ({
         const getData = async () => {
             setIsLoading(true)
 
-            const query = getFiltersQuery({ block, chartFilters, currentYear: year })
+            const { query, seriesNames } = getFiltersQuery({
+                block,
+                chartFilters,
+                currentYear: year
+            })
 
             const url = process.env.GATSBY_DATA_API_URL
             if (!url) {
@@ -112,18 +126,27 @@ const DynamicDataLoader = ({
             }
             const result = await runQuery(url, query, `${block.id}FiltersQuery`)
 
-            const seriesData = getSeriesData(result, block.dataPath)
-            // console.log('// seriesData')
-            // console.log(seriesData)
+            console.log('// result')
+            console.log(result)
+
+            const dataPath = block.dataPath.replace('dataAPI.', '')
 
             if (mode === MODE_FILTERS) {
+                // apply dataPath to get block data for each series
+                const seriesBlockData = seriesNames.map(seriesName =>
+                    get(result, dataPath.replace(block.id, seriesName))
+                )
+                // apply processBlockData to get chart data (buckets) for each series
+                const seriesChartData = seriesBlockData.map(blockData =>
+                    processBlockData(blockData, processBlockDataOptions)
+                )
+
                 if (behavior === BEHAVIOR_COMBINED) {
                     /*
 
                     Combine multiple series into a single chart
 
                     */
-                    const newBuckets = Object.values(seriesData).map(getSeriesItemBuckets)
 
                     /*
 
@@ -134,7 +157,7 @@ const DynamicDataLoader = ({
 
                     const combinedBuckets = combineBuckets({
                         defaultBuckets,
-                        otherBucketsArrays: processBuckets(newBuckets),
+                        otherBucketsArrays: seriesChartData,
                         completion
                     })
 
@@ -144,7 +167,7 @@ const DynamicDataLoader = ({
                         setUnits('percentage_question')
                     }
                     setCombinedBuckets(combinedBuckets)
-                    setSeriesCount(newBuckets.length)
+                    setSeriesCount(seriesChartData.length)
                 } else {
                     /*
 
@@ -153,21 +176,29 @@ const DynamicDataLoader = ({
                     */
                     const allSeries = [
                         ...(showDefaultSeries ? [defaultSeries] : []),
-                        ...Object.keys(seriesData).map(name => ({
+                        ...seriesNames.map((name, i) => ({
                             name,
-                            buckets: processBuckets(getSeriesItemBuckets(seriesData[name]))
+                            buckets: seriesChartData[i]
                         }))
                     ]
-                    // console.log('// allSeries')
-                    // console.log(allSeries)
                     setSeries(allSeries)
                 }
             } else if (mode === MODE_FACET) {
-                const facets = seriesData[block.id]?.year?.facets
-                const invertedFacetsBuckets = invertFacets({ facets, defaultBuckets, allChartsOptions })
-                const invertedFacetsBucketsWithAverages = calculateAverages({ buckets: invertedFacetsBuckets, allChartsOptions, facet: chartFilters.facet})
+                // apply dataPath to get block data for each series
+                const blockData = get(result, dataPath)
+                const facets = blockData?.facets
+
+                const invertedFacetsBuckets = invertFacets({
+                    facets,
+                    defaultBuckets
+                })
+                const invertedFacetsBucketsWithAverages = calculateAverages({
+                    buckets: invertedFacetsBuckets,
+                    allChartsOptions,
+                    facet: chartFilters.facet
+                })
                 setUnits('percentage_bucket')
-                setCombinedBuckets(processBuckets(invertedFacetsBucketsWithAverages))
+                setCombinedBuckets(invertedFacetsBucketsWithAverages)
             }
             setIsLoading(false)
         }
@@ -210,7 +241,15 @@ const DynamicDataLoader = ({
     }
 }
 
-const SingleWrapper = ({ children, buckets, seriesCount, chartDisplayMode, facet, isLoading, showDefaultSeries }) => (
+const SingleWrapper = ({
+    children,
+    buckets,
+    seriesCount,
+    chartDisplayMode,
+    facet,
+    isLoading,
+    showDefaultSeries
+}) => (
     <Wrapper_>
         <Contents_>
             {React.cloneElement(children, {
@@ -218,7 +257,7 @@ const SingleWrapper = ({ children, buckets, seriesCount, chartDisplayMode, facet
                 seriesCount,
                 chartDisplayMode,
                 facet,
-                showDefaultSeries,
+                showDefaultSeries
             })}
         </Contents_>
         {isLoading && <Loading />}

@@ -7,20 +7,22 @@ import VerticalBarChart from 'core/charts/generic/VerticalBarChart'
 import { usePageContext } from 'core/helpers/pageContext'
 import { useLegends } from 'core/helpers/useBucketKeys'
 // import T from 'core/i18n/T'
-import { FacetItem, BlockComponentProps, BlockUnits } from 'core/types'
+import { ResultsByYear, BlockComponentProps, BlockUnits } from 'core/types'
 import { getTableData } from 'core/helpers/datatables'
 import sumBy from 'lodash/sumBy'
 import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
 import { useFilterLegends, getInitFilters } from 'core/blocks/filters/helpers'
-import { BEHAVIOR_COMBINED, MODE_FACET } from 'core/blocks/filters/constants'
+import { BEHAVIOR_COMBINED } from 'core/blocks/filters/constants'
 import { defaultOptions } from 'core/blocks/block/BlockUnitsSelector'
 import { useAllChartsOptions } from 'core/charts/hooks'
 
 export interface VerticalBarBlockProps extends BlockComponentProps {
-    data: FacetItem
+    data: ResultsByYear
     controlledUnits: BlockUnits
     isCustom: boolean
 }
+
+const processBlockData = (data: ResultsByYear) => data?.facets[0]?.buckets
 
 export const addNoAnswerBucket = ({ buckets, completion }) => {
     const countSum = sumBy(buckets, b => b.count)
@@ -63,11 +65,12 @@ const VerticalBarBlock = ({
     const addNoAnswer = units === 'percentage_survey'
     const bucketKeys = keys && useLegends(block, keys, undefined, addNoAnswer)
 
-    const { facets, completion } = data
+    const { completion } = data
 
+    const buckets_ = processBlockData(data)
     const buckets = addNoAnswer
-        ? addNoAnswerBucket({ buckets: facets[0].buckets, completion })
-        : facets[0].buckets
+        ? addNoAnswerBucket({ buckets: buckets_, completion })
+        : buckets_
     const { total } = completion
 
     // contains the filters that define the series
@@ -118,6 +121,7 @@ const VerticalBarBlock = ({
                 block={block}
                 chartFilters={chartFilters}
                 setUnits={setUnits}
+                processBlockData={processBlockData}
             >
                 <ChartContainer fit={true}>
                     <VerticalBarChart

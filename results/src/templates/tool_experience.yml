@@ -1,4 +1,5 @@
 blockType: ToolExperienceBlock
+filters: [filters]
 titleId: blocks.tool_experience
 descriptionId: blocks.tool_experience.description
 noteId: blocks.tool_experience.note

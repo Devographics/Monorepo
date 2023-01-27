@@ -14,6 +14,7 @@ import { useAllChartsOptions, getVariantBarColorItem } from 'core/charts/hooks'
 import sumBy from 'lodash/sumBy'
 import roundBy from 'lodash/roundBy'
 import { usePageContext } from 'core/helpers/pageContext'
+import { CustomizationFiltersCondition } from './types'
 
 export const getNewCondition = ({ filtersNotInUse, keys }) => {
     const field = filtersNotInUse[0]
@@ -23,6 +24,28 @@ export const getNewCondition = ({ filtersNotInUse, keys }) => {
 export const getNewSeries = ({ filters, keys, year }) => {
     const filtersNotInUse = filters
     return { year, conditions: [getNewCondition({ filtersNotInUse, keys })] }
+}
+
+/*
+
+Get a series' name based on its filters
+
+NOT USED
+
+*/
+const getSeriesName = ({
+    block,
+    year,
+    conditions
+}: {
+    block: BlockDefinition
+    year: number
+    conditions: CustomizationFiltersCondition
+}) => {
+    const suffix = conditions.map(
+        ({ field, operator, value }) => `${field}__${operator}__${value.toString()}`
+    )
+    return `${block.id}___${year}___${suffix}`
 }
 
 /*
@@ -47,6 +70,8 @@ export const getFiltersQuery = ({
         query.indexOf(END_MARKER)
     )
 
+    const seriesNames = []
+
     const cleanUpValue = s => s.replaceAll('-', '_')
 
     const queryFooter = query.slice(query.indexOf(END_MARKER) + END_MARKER.length)
@@ -55,21 +80,22 @@ export const getFiltersQuery = ({
         queryBody = chartFilters.filters
             .map((singleSeries, seriesIndex) => {
                 // {gender: {eq: male}, company_size: {eq: range_1}}
-                const filterObject = {}
+                const filtersObject = {}
                 singleSeries.conditions.forEach(condition => {
                     const { field, operator, value } = condition
                     // transform e.g. es-ES into es_ES
                     const cleanValue = Array.isArray(value)
                         ? value.map(cleanUpValue)
                         : cleanUpValue(value)
-                    filterObject[field] = { [operator]: cleanValue }
+                    filtersObject[field] = { [operator]: cleanValue }
                 })
                 const seriesName = `${block.id}_${seriesIndex + 1}`
+                seriesNames.push(seriesName)
                 return queryContents
                     .replace(`${block.id}: `, `${seriesName}: `)
                     .replace(
                         'filters: {}',
-                        `filters: ${JSON.stringify(filterObject).replaceAll('"', '')}`
+                        `filters: ${JSON.stringify(filtersObject).replaceAll('"', '')}`
                     )
                     .replace(`year: ${currentYear}`, `year: ${singleSeries.year}`)
             })
@@ -95,7 +121,7 @@ export const getFiltersQuery = ({
     const newQuery = queryHeader + queryBody + queryFooter
 
     // console.log(newQuery)
-    return newQuery
+    return { query: newQuery, seriesNames }
 }
 
 const baseUnits = ['count', 'percentage_question', 'percentage_survey']

@@ -107,7 +107,7 @@ const FiltersPanel = ({
                         block,
                         chartFilters: filtersState,
                         currentYear: currentEdition.year
-                    })}
+                    })?.query}
                     buttonProps={{ variant: 'link' }}
                 />
                 <Button onClick={handleSubmit}>

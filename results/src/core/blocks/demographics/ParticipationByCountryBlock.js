@@ -12,8 +12,8 @@ import { useFilterLegends, getInitFilters } from 'core/blocks/filters/helpers'
 import { defaultOptions } from 'core/blocks/block/BlockUnitsSelector'
 import { useAllChartsOptions } from 'core/charts/hooks'
 
-const processBuckets = (buckets) => {
-    return buckets && buckets.map(b => ({ ...b, label: getCountryName(b.id) }))
+const processBlockData = (data) => {
+    return data && data.map(b => ({ ...b, label: getCountryName(b.id) }))
 }
 
 const ParticipationByCountryBlock = ({
@@ -62,7 +62,7 @@ const ParticipationByCountryBlock = ({
         <Block
             tables={[
                 getTableData({
-                    data: processBuckets(buckets)
+                    data: processBlockData(buckets)
                 })
             ]}
             units={units}
@@ -83,7 +83,7 @@ const ParticipationByCountryBlock = ({
                 chartFilters={chartFilters}
                 setUnits={setUnits}
                 layout="grid"
-                processBuckets={processBuckets}
+                processBlockData={processBlockData}
             >
                 <ChartContainer fit={false}>
                     <HorizontalBarChart
@@ -92,7 +92,7 @@ const ParticipationByCountryBlock = ({
                         translateData={translateData}
                         mode={mode}
                         units={units}
-                        buckets={processBuckets(buckets)}
+                        buckets={processBlockData(buckets)}
                         facet={chartFilters.facet}
                     />
                 </ChartContainer>

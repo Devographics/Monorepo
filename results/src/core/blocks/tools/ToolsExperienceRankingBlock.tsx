@@ -50,7 +50,7 @@ export interface ToolsExperienceRankingBlockProps {
     titleProps: any
 }
 
-const getChartData = ({ data, controlledMetric }: { data: ToolData[]; controlledMetric: any }) => {
+const processBlockData = (data: ToolData[], { controlledMetric }: { controlledMetric: any }) => {
     return useMemo(
         () =>
             data.map(tool => {
@@ -81,7 +81,7 @@ export const ToolsExperienceRankingBlock = ({
     const controlledMetric = triggerId || metric
 
     const { years, experience } = data
-    const chartData: RankingChartSerie[] = getChartData({ data: experience, controlledMetric })
+    const chartData: RankingChartSerie[] = processBlockData(experience, { controlledMetric })
 
     const tableData = experience.map(tool => {
         const cellData = { label: tool?.entity?.name }
