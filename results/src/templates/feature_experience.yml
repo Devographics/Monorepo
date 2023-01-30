@@ -11,6 +11,7 @@ hasSponsor: true
 query: >
     dataAPI {
         survey(survey: ${surveyType}) {
+            # fragmentStart
             ${id}: feature(id: ${id}) {
                 id
                 entity {
@@ -40,7 +41,7 @@ query: >
                         count
                     }
                 }
-                experience {
+                experience(filters: {}) {
                     keys
                     all_years {
                         year
@@ -62,5 +63,6 @@ query: >
                     }
                 }
             }
+            # fragmentEnd
         }
     }

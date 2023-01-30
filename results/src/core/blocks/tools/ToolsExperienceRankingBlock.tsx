@@ -15,8 +15,10 @@ import T from 'core/i18n/T'
 // @ts-ignore
 import { useI18n } from 'core/i18n/i18nContext'
 import { getTableData } from 'core/helpers/datatables'
-
+import { BEHAVIOR_MULTIPLE } from 'core/blocks/filters/constants'
 import { MetricId, ALL_METRICS } from 'core/helpers/units'
+import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
+import { getInitFilters } from 'core/blocks/filters/helpers'
 
 export interface MetricBucket {
     year: number
@@ -50,24 +52,24 @@ export interface ToolsExperienceRankingBlockProps {
     titleProps: any
 }
 
-const processBlockData = (data: ToolData[], { controlledMetric }: { controlledMetric: any }) => {
-    return useMemo(
-        () =>
-            data.map(tool => {
+const processBlockData = (
+    data: ToolsExperienceRankingBlockData,
+    options: { controlledMetric: any }
+) => {
+    const { controlledMetric } = options
+    return data?.experience?.map(tool => {
+        return {
+            id: tool.id,
+            name: tool?.entity?.name,
+            data: tool[controlledMetric]?.map(bucket => {
                 return {
-                    id: tool.id,
-                    name: tool?.entity?.name,
-                    data: tool[controlledMetric]?.map(bucket => {
-                        return {
-                            x: bucket.year,
-                            y: bucket.rank,
-                            percentage_question: bucket.percentage_question
-                        }
-                    })
+                    x: bucket.year,
+                    y: bucket.rank,
+                    percentage_question: bucket.percentage_question
                 }
-            }),
-        [data, controlledMetric]
-    )
+            })
+        }
+    })
 }
 
 export const ToolsExperienceRankingBlock = ({
@@ -81,7 +83,7 @@ export const ToolsExperienceRankingBlock = ({
     const controlledMetric = triggerId || metric
 
     const { years, experience } = data
-    const chartData: RankingChartSerie[] = processBlockData(experience, { controlledMetric })
+    const chartData: RankingChartSerie[] = processBlockData(data, { controlledMetric })
 
     const tableData = experience.map(tool => {
         const cellData = { label: tool?.entity?.name }
@@ -97,6 +99,11 @@ export const ToolsExperienceRankingBlock = ({
         })
         return cellData
     })
+
+    // contains the filters that define the series
+    const [chartFilters, setChartFilters] = useState(
+        getInitFilters({ behavior: BEHAVIOR_MULTIPLE, enableYearSelect: false })
+    )
 
     return (
         <Block
@@ -116,10 +123,23 @@ export const ToolsExperienceRankingBlock = ({
                     years
                 })
             ]}
+            chartFilters={chartFilters}
+            setChartFilters={setChartFilters}
         >
-            <ChartContainer height={experience.length * 50 + 80} minWidth={800}>
-                <RankingChart data={chartData} />
-            </ChartContainer>
+            <DynamicDataLoader
+                defaultBuckets={data}
+                block={block}
+                chartFilters={chartFilters}
+                layout="grid"
+            >
+                <ChartContainer height={experience.length * 50 + 80}>
+                    <RankingChart
+                        buckets={data}
+                        processBlockData={processBlockData}
+                        processBlockDataOptions={{ controlledMetric }}
+                    />
+                </ChartContainer>
+            </DynamicDataLoader>
         </Block>
     )
 }

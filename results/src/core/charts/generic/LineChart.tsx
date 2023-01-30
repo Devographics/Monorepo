@@ -89,18 +89,28 @@ const CustomTooltip = (props: CustomTooltipProps) => {
 
 interface RankingChartProps {
     buckets: RankingChartSerie[]
+    processBlockData: Function
+    processBlockDataOptions: any
 }
 
-export const LineChart = ({ buckets: data }: RankingChartProps) => {
+/*
+
+Note: when displaying mulitple series via DynamicDataLoader
+we need to call processBlockData() again whenever the metric changes, 
+which will not happen unless we call it from within the chart
+
+*/
+export const LineChart = ({ buckets: unprocessedData, processBlockData, processBlockDataOptions }: RankingChartProps) => {
+    const buckets = processBlockData(unprocessedData, processBlockDataOptions)
     const theme = useTheme()
     // const { getString } = useI18n()
 
-    const getName = (entityId: string) => data?.find(series => series.id === entityId)?.name
+    const getName = (entityId: string) => buckets?.find(series => series.id === entityId)?.name
 
     // console.log(theme)
     return (
         <ResponsiveLine
-            data={data}
+            data={buckets}
             margin={{ top: 40, right: 40, bottom: 40, left: 40 }}
             colors={theme.colors.distinct}
             theme={theme.charts}

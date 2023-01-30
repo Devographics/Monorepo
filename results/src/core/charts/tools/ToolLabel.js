@@ -17,11 +17,10 @@ const ToolLabel = ({ id, entity }) => {
 
     return (
         <ModalTrigger
+            size="l"
             trigger={
                 <span className="ToolLabel">
-                    <LabelLink >
-                        {name}
-                    </LabelLink>
+                    <LabelLink>{name}</LabelLink>
                 </span>
             }
             label={name}
@@ -37,7 +36,14 @@ const ToolLabelModal = ({ id, closeComponent }) => {
     // unhide variants
     const variants = block.variants.map(b => ({ ...b, hidden: false }))
     // const blockData = get(pageContext.pageData, block.variants[0].dataPath)
-    return <BlockWrapper withMargin={false} block={{ ...block, variants }} pageData={pageContext.pageData} index={0} />
+    return (
+        <BlockWrapper
+            withMargin={false}
+            block={{ ...block, variants }}
+            pageData={pageContext.pageData}
+            index={0}
+        />
+    )
 
     // return <ToolExperienceBlock block={block} data={blockData} closeComponent={closeComponent}/>
 }

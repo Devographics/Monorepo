@@ -10,10 +10,18 @@ import { useLegends } from 'core/helpers/useBucketKeys'
 import { mq, spacing } from 'core/theme'
 import { useI18n } from 'core/i18n/i18nContext'
 import { getTableData, groupDataByYears } from 'core/helpers/datatables'
+import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
+import { getInitFilters } from 'core/blocks/filters/helpers'
+import { BEHAVIOR_MULTIPLE } from 'core/blocks/filters/constants'
 
 // convert relative links into absolute MDN links
 const parseMDNLinks = content =>
     content.replace(new RegExp(`href="/`, 'g'), `href="https://developer.mozilla.org/`)
+
+const processBlockData = data => {
+    const allYears = get(data, 'experience.all_years', [])
+    return allYears.map(year => ({ year: year.year, buckets: year.facets[0].buckets }))
+}
 
 const FeatureExperienceBlock = ({
     block,
@@ -37,7 +45,12 @@ const FeatureExperienceBlock = ({
     // only show descriptions for english version
     const description = locale.id === 'en-US' && mdn && parseMDNLinks(mdn.summary)
 
-    const isLastYear = year => allYears.findIndex(y => y.year === year.year) === allYears.length - 1
+    const buckets = processBlockData(data)
+
+    // contains the filters that define the series
+    const [chartFilters, setChartFilters] = useState(
+        getInitFilters({ behavior: BEHAVIOR_MULTIPLE, enableYearSelect: false })
+    )
 
     return (
         <Block
@@ -61,35 +74,59 @@ const FeatureExperienceBlock = ({
                 description,
                 enableDescriptionMarkdown: false
             }}
+            chartFilters={chartFilters}
+            setChartFilters={setChartFilters}
         >
-            <dl>
-                {allYears.map(year => (
-                    <Row key={year.year}>
-                        <RowYear>{year.year}</RowYear>
-                        <RowChart className="FeatureExperienceBlock__RowChart">
-                            <ChartContainer
-                                height={isLastYear(year) ? 40 : 40}
-                                fit={true}
-                                className="FeatureChart"
-                            >
-                                <GaugeBarChart
-                                    keys={keys}
-                                    buckets={year.facets[0].buckets}
-                                    colorMapping={bucketKeys}
-                                    units={units}
-                                    applyEmptyPatternTo="never_heard"
-                                    i18nNamespace={chartNamespace}
-                                    showProgression={isLastYear(year)}
-                                />
-                            </ChartContainer>
-                        </RowChart>
-                    </Row>
-                ))}
-            </dl>
+            <DynamicDataLoader
+                defaultBuckets={buckets}
+                block={block}
+                chartFilters={chartFilters}
+                layout="grid"
+                processBlockData={processBlockData}
+                processBlockDataOptions={{}}
+            >
+                <FeatureExperienceChart
+                    keys={keys}
+                    buckets={buckets}
+                    bucketKeys={bucketKeys}
+                    units={units}
+                    chartNamespace={chartNamespace}
+                />
+            </DynamicDataLoader>
         </Block>
     )
 }
 
+const FeatureExperienceChart = ({ buckets: years, keys, bucketKeys, units, chartNamespace }) => {
+    const isLastYear = year => years.findIndex(y => y.year === year) === years.length - 1
+
+    return (
+        <dl>
+            {years.map(year => (
+                <Row key={year.year}>
+                    <RowYear>{year.year}</RowYear>
+                    <RowChart className="FeatureExperienceBlock__RowChart">
+                        <ChartContainer
+                            height={isLastYear(year.year) ? 40 : 40}
+                            fit={true}
+                            className="FeatureChart"
+                        >
+                            <GaugeBarChart
+                                keys={keys}
+                                buckets={year.buckets}
+                                colorMapping={bucketKeys}
+                                units={units}
+                                applyEmptyPatternTo="never_heard"
+                                i18nNamespace={chartNamespace}
+                                showProgression={isLastYear(year.year)}
+                            />
+                        </ChartContainer>
+                    </RowChart>
+                </Row>
+            ))}
+        </dl>
+    )
+}
 const Row = styled.div`
     display: grid;
     grid-template-columns: auto 1fr;
@@ -106,7 +143,9 @@ const RowChart = styled.dd`
     margin: 0;
 
     @media ${mq.smallMedium} {
-      max-width: calc(100vw - 40px - 30px - 20px); /* total width - page padding - year width - gap */
+        max-width: calc(
+            100vw - 40px - 30px - 20px
+        ); /* total width - page padding - year width - gap */
     }
 `
 

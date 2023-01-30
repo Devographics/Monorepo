@@ -7,7 +7,7 @@ const YearSelector = ({ seriesIndex, stateStuff }) => {
     const { filtersState, setFiltersState } = stateStuff
 
     const context = usePageContext()
-    const { currentSurvey } = context
+    const { currentSurvey, currentEdition } = context
     const { editions } = currentSurvey
     const years = editions.map(e => e.year)
 
@@ -23,7 +23,7 @@ const YearSelector = ({ seriesIndex, stateStuff }) => {
                       return newState
                     })
                 }}
-                value={filtersState.filters[seriesIndex].year}
+                value={filtersState.filters[seriesIndex].year || currentEdition.year}
             >
                 {years.map(year => (
                     <option key={year} value={year}>

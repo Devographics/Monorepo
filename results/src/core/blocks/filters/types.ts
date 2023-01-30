@@ -8,6 +8,7 @@ export type CustomizationOptions = {
     name?: string
     showDefaultSeries?: boolean
     allowModeSwitch?: boolean
+    enableYearSelect?: boolean
     behavior?: 'combined' | 'multiple'
     mode?: 'filters' | 'facet' | 'default'
 }

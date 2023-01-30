@@ -9,7 +9,7 @@ import { isPercentage } from 'core/helpers/units'
 import { BlockUnits } from 'core/types'
 
 interface ExperienceByYearBarChartProps {
-    data: any[]
+    buckets: any[]
     bucketKeys: {
         id: string
         label: string
@@ -20,7 +20,7 @@ interface ExperienceByYearBarChartProps {
 }
 
 const YearLabelsLayer = ({
-    data,
+    data
 }: {
     data: {
         id: string | number
@@ -32,7 +32,7 @@ const YearLabelsLayer = ({
 
     return (
         <>
-            {data.map((datum) => (
+            {data.map(datum => (
                 <text
                     key={`${datum.id}`}
                     x={-16}
@@ -41,7 +41,7 @@ const YearLabelsLayer = ({
                     dy={5}
                     fill={theme.colors.text}
                     style={{
-                        fontWeight: 800,
+                        fontWeight: 800
                     }}
                 >
                     {datum.id}
@@ -52,7 +52,7 @@ const YearLabelsLayer = ({
 }
 
 const ValuesLayer = ({
-    bars,
+    bars
 }: {
     bars: {
         key: string
@@ -63,33 +63,33 @@ const ValuesLayer = ({
         formattedValue: string | number
     }[]
 }) => {
-    const filteredBars = useMemo(() => bars.filter((bar) => bar.width >= 32), [bars])
+    const filteredBars = useMemo(() => bars.filter(bar => bar.width >= 32), [bars])
 
     const { animate, config: springConfig } = useMotionConfig()
     const transition = useTransition(filteredBars, {
-        key: (bar) => bar.key,
-        initial: (bar) => ({
+        key: bar => bar.key,
+        initial: bar => ({
             opacity: 1,
-            transform: `translate(${bar.x + bar.width / 2},${bar.y + bar.height / 2})`,
+            transform: `translate(${bar.x + bar.width / 2},${bar.y + bar.height / 2})`
         }),
-        from: (bar) => ({
+        from: bar => ({
             opacity: 0,
-            transform: `translate(${bar.x + bar.width / 2},${bar.y + bar.height / 2})`,
+            transform: `translate(${bar.x + bar.width / 2},${bar.y + bar.height / 2})`
         }),
-        enter: (bar) => ({
+        enter: bar => ({
             opacity: 1,
-            transform: `translate(${bar.x + bar.width / 2},${bar.y + bar.height / 2})`,
+            transform: `translate(${bar.x + bar.width / 2},${bar.y + bar.height / 2})`
         }),
-        update: (bar) => ({
+        update: bar => ({
             opacity: 1,
-            transform: `translate(${bar.x + bar.width / 2},${bar.y + bar.height / 2})`,
+            transform: `translate(${bar.x + bar.width / 2},${bar.y + bar.height / 2})`
         }),
-        leave: (bar) => ({
+        leave: bar => ({
             opacity: 0,
-            transform: `translate(${bar.x + bar.width / 2},${bar.y + bar.height / 2})`,
+            transform: `translate(${bar.x + bar.width / 2},${bar.y + bar.height / 2})`
         }),
         immediate: !animate,
-        config: springConfig,
+        config: springConfig
     })
 
     return (
@@ -103,34 +103,28 @@ const ValuesLayer = ({
     )
 }
 
-export const ExperienceByYearBarChart = ({
-    data,
-    bucketKeys,
-    units,
-    spacing,
-}: ExperienceByYearBarChartProps) => {
+export const ExperienceByYearBarChart = (props: ExperienceByYearBarChartProps) => {
     const theme = useTheme()
-
+    const { buckets, bucketKeys, units, spacing } = props
     const { dimensions, colors } = useMemo(
         () => ({
-            dimensions: bucketKeys.map((key) => ({
+            dimensions: bucketKeys.map(key => ({
                 id: key.label,
-                value: `${key.id}.${units}`,
+                value: `${key.id}.${units}`
             })),
-            colors: bucketKeys.map((key) => key.color),
+            colors: bucketKeys.map(key => key.color)
         }),
         [bucketKeys, units]
     )
 
-    const valueFormat =
-        isPercentage(units)
-            ? (value: number) => `${Math.round(value * 100) / 100}%`
-            : (value: number) => value
+    const valueFormat = isPercentage(units)
+        ? (value: number) => `${Math.round(value * 100) / 100}%`
+        : (value: number) => value
 
     return (
         <ResponsiveMarimekko
             innerPadding={spacing}
-            data={data}
+            data={buckets}
             id="year"
             value="thickness"
             valueFormat={valueFormat as any}

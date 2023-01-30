@@ -137,9 +137,15 @@ const DynamicDataLoader = ({
                     get(result, dataPath.replace(block.id, seriesName))
                 )
                 // apply processBlockData to get chart data (buckets) for each series
-                const seriesChartData = seriesBlockData.map(blockData =>
-                    processBlockData(blockData, processBlockDataOptions)
+                const seriesChartData = seriesBlockData.map((blockData, i) =>
+                    processBlockData(blockData, {
+                        ...processBlockDataOptions,
+                        seriesName: seriesNames[i]
+                    })
                 )
+                // console.log('// DynamicDataLoader')
+                // console.log(seriesBlockData)
+                // console.log(seriesChartData)
 
                 if (behavior === BEHAVIOR_COMBINED) {
                     /*

@@ -3,9 +3,9 @@ filters: [filters]
 titleId: blocks.tool_experience
 descriptionId: blocks.tool_experience.description
 noteId: blocks.tool_experience.note
-dataPath: dataAPI.survey.${id}_experience
-keysPath: dataAPI.survey.${id}_experience.experience.keys
-entityPath: dataAPI.survey.${id}_experience.entity
+dataPath: dataAPI.survey.${id}
+keysPath: dataAPI.survey.${id}.experience.keys
+entityPath: dataAPI.survey.${id}.entity
 bucketKeysName: tools
 hidden: true
 # enableCustomization: true
@@ -14,7 +14,8 @@ hasSponsor: true
 query: >
     dataAPI {
         survey(survey: ${surveyType}) {
-            ${id}_experience: tool(id: ${id}) {
+            # fragmentStart
+            ${id}: tool(id: ${id}) {
                 id
                 entity {
                     name
@@ -38,7 +39,7 @@ query: >
                         count
                     }
                 }
-                experience {
+                experience(filters: {}, facet: null) {
                     keys
                     all_years {
                         year
@@ -59,5 +60,6 @@ query: >
                     }
                 }
             }
+            # fragmentEnd
         }
     }

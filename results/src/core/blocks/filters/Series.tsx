@@ -18,6 +18,8 @@ const Series = ({ filters, series, index, stateStuff }) => {
 
     const { conditions } = series
     const { filtersState, setFiltersState } = stateStuff
+    const { options } = filtersState
+    const { enableYearSelect } = options
     const showDefaultSeries = filtersState.options.showDefaultSeries
 
     const allChartsKeys = useAllChartsOptionsIdsOnly()
@@ -54,7 +56,7 @@ const Series = ({ filters, series, index, stateStuff }) => {
                 <SeriesHeading_>
                     <SeriesChip_ style={{ backgroundColor }} />
                     <T k="filters.series.heading" values={{ index: index + 1 }} />
-                    <YearSelector seriesIndex={index} stateStuff={stateStuff} />
+                    {enableYearSelect && <YearSelector seriesIndex={index} stateStuff={stateStuff} />}
                 </SeriesHeading_>
                 <DeleteSeries_ size="small" onClick={handleDeleteSeries}>
                         <DeleteIcon labelId="filters.series.delete" />

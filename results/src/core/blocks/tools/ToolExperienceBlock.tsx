@@ -14,6 +14,9 @@ import { ExperienceByYearBarChart } from 'core/charts/generic/ExperienceByYearBa
 // @ts-ignore
 import { useI18n } from 'core/i18n/i18nContext'
 import { groupDataByYears, getTableData } from 'core/helpers/datatables'
+import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
+import { getInitFilters } from 'core/blocks/filters/helpers'
+import { BEHAVIOR_MULTIPLE } from 'core/blocks/filters/constants'
 
 const BAR_THICKNESS = 28
 const BAR_SPACING = 16
@@ -26,34 +29,30 @@ interface ToolExperienceBlockProps {
     closeComponent: any
 }
 
-const getChartData = ({ data, bucketKeys }) => {
+const processBlockData = (data, { bucketKeys }) => {
     const allYears = data.experience.all_years
-    return useMemo(
-        () =>
-            allYears.map((yearExperience, index) => {
-                const yearData: ToolExperienceBucket[] = bucketKeys.map((key: { id: string }) => {
-                    const matchingBucket = yearExperience.facets[0].buckets.find(
-                        bucket => bucket.id === key.id
-                    )
-                    return (
-                        matchingBucket || {
-                            id: key.id,
-                            count: 0,
-                            percentage: 0
-                        }
-                    )
-                })
-
-                const isLastYear = index === allYears.length - 1
-
-                return {
-                    year: yearExperience.year,
-                    ...keyBy(yearData, 'id'),
-                    thickness: isLastYear ? 2 : 1
+    return allYears.map((yearExperience, index) => {
+        const yearData: ToolExperienceBucket[] = bucketKeys.map((key: { id: string }) => {
+            const matchingBucket = yearExperience.facets[0].buckets.find(
+                bucket => bucket.id === key.id
+            )
+            return (
+                matchingBucket || {
+                    id: key.id,
+                    count: 0,
+                    percentage: 0
                 }
-            }),
-        [data, bucketKeys]
-    )
+            )
+        })
+
+        const isLastYear = index === allYears.length - 1
+
+        return {
+            year: yearExperience.year,
+            ...keyBy(yearData, 'id'),
+            thickness: isLastYear ? 2 : 1
+        }
+    })
 }
 
 export const ToolExperienceBlock = ({
@@ -81,13 +80,18 @@ export const ToolExperienceBlock = ({
     const allYears = data.experience.all_years
     const completion = allYears[allYears.length - 1]?.completion
 
-    const normalizedData = getChartData({ data, bucketKeys })
+    const normalizedData = processBlockData(data, { bucketKeys })
 
     if (allYears.length === 0) {
         return <div>no data</div>
     }
 
     const chartHeight = (allYears.length - 1) * (BAR_THICKNESS + BAR_SPACING) + BAR_THICKNESS * 2
+
+    // contains the filters that define the series
+    const [chartFilters, setChartFilters] = useState(
+        getInitFilters({ behavior: BEHAVIOR_MULTIPLE, enableYearSelect: false })
+    )
 
     return (
         <Block
@@ -108,15 +112,26 @@ export const ToolExperienceBlock = ({
                 })
             ]}
             completion={completion}
+            chartFilters={chartFilters}
+            setChartFilters={setChartFilters}
         >
-            <ChartContainer height={chartHeight} fit>
-                <ExperienceByYearBarChart
-                    data={normalizedData}
-                    bucketKeys={bucketKeys}
-                    units={units}
-                    spacing={BAR_SPACING}
-                />
-            </ChartContainer>
+            <DynamicDataLoader
+                defaultBuckets={normalizedData}
+                block={block}
+                chartFilters={chartFilters}
+                layout="grid"
+                processBlockData={processBlockData}
+                processBlockDataOptions={{ bucketKeys }}
+            >
+                <ChartContainer height={chartHeight} fit>
+                    <ExperienceByYearBarChart
+                        buckets={normalizedData}
+                        bucketKeys={bucketKeys}
+                        units={units}
+                        spacing={BAR_SPACING}
+                    />
+                </ChartContainer>
+            </DynamicDataLoader>
         </Block>
     )
 }

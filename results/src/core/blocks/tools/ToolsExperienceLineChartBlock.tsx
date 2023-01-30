@@ -19,11 +19,9 @@ import { useLegends } from 'core/helpers/useBucketKeys'
 import { useTheme } from 'styled-components'
 import styled, { css } from 'styled-components'
 import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
-import { useFilterLegends, getInitFilters } from 'core/blocks/filters/helpers'
-import { BEHAVIOR_COMBINED, MODE_FACET } from 'core/blocks/filters/constants'
-import { defaultOptions } from 'core/blocks/block/BlockUnitsSelector'
-import { useAllChartsOptions } from 'core/charts/hooks'
-
+import { getInitFilters } from 'core/blocks/filters/helpers'
+import { BEHAVIOR_MULTIPLE } from 'core/blocks/filters/constants'
+import { RankingChartSerie } from 'core/charts/generic/RankingChart'
 import { MetricId, ALL_METRICS } from 'core/helpers/units'
 
 export interface MetricBucket {
@@ -58,24 +56,30 @@ export interface ToolsExperienceRankingBlockProps {
     titleProps: any
 }
 
-const processBlockData = (data: ToolData[], { controlledMetric }: { controlledMetric: any }) => {
-    return useMemo(
-        () =>
-            data.map(tool => {
-                return {
-                    id: tool.id,
-                    name: tool?.entity?.name,
-                    data: tool[controlledMetric]?.map(bucket => {
-                        return {
-                            x: bucket.year,
-                            y: bucket.percentage_question,
-                            percentage_question: bucket.percentage_question
-                        }
-                    })
+const processBlockData = (
+    data: ToolsExperienceRankingBlockData,
+    options: { controlledMetric: any }
+) => {
+    const { controlledMetric } = options
+    const buckets = data?.experience?.map(tool => {
+        return {
+            id: tool.id,
+            name: tool?.entity?.name,
+            data: tool[controlledMetric]?.map((bucket, index) => {
+                const datapoint = {
+                    x: bucket.year,
+                    y: bucket.percentage_question,
+                    percentage_question: bucket.percentage_question
                 }
-            }),
-        [data, controlledMetric]
-    )
+                // add all metrics to datapoint for ease of debugging
+                ALL_METRICS.forEach(metric => {
+                    datapoint[`${metric}_percentage`] = tool[metric][index].percentage_question
+                })
+                return datapoint
+            })
+        }
+    })
+    return buckets
 }
 
 export const ToolsExperienceLineChartBlock = ({
@@ -90,7 +94,7 @@ export const ToolsExperienceLineChartBlock = ({
     const controlledMetric = triggerId || metric
 
     const { years, experience } = data
-    const chartData: RankingChartSerie[] = processBlockData(experience, { controlledMetric })
+    const chartData: RankingChartSerie[] = processBlockData(data, { controlledMetric })
 
     const legends = data.ids.map((id, i) => {
         const label = experience?.find(e => e.id === id)?.entity?.name
@@ -116,14 +120,8 @@ export const ToolsExperienceLineChartBlock = ({
 
     // contains the filters that define the series
     const [chartFilters, setChartFilters] = useState(
-        getInitFilters({ behavior: BEHAVIOR_COMBINED })
+        getInitFilters({ behavior: BEHAVIOR_MULTIPLE, enableYearSelect: false })
     )
-
-    // const legends = useFilterLegends({
-    //     chartFilters,
-    //     currentYear,
-    //     showDefaultSeries: chartFilters.options.showDefaultSeries
-    // })
 
     return (
         <BlockVariant
@@ -159,15 +157,18 @@ export const ToolsExperienceLineChartBlock = ({
             setChartFilters={setChartFilters}
         >
             <DynamicDataLoader
-                defaultBuckets={chartData}
+                defaultBuckets={data}
                 block={block}
                 chartFilters={chartFilters}
-                processBlockData={processBlockData}
-                processBlockDataOptions={{ controlledMetric }}
+                layout="grid"
             >
-                <ChartContainer height={experience.length * 30 + 80} minWidth={800}>
+                <ChartContainer height={experience.length * 30 + 80}>
                     <LineChartWrapper current={current} currentColor={currentColor}>
-                        <LineChart buckets={chartData} />
+                        <LineChart
+                            buckets={data}
+                            processBlockData={processBlockData}
+                            processBlockDataOptions={{ controlledMetric }}
+                        />
                     </LineChartWrapper>
                 </ChartContainer>
             </DynamicDataLoader>
@@ -175,7 +176,13 @@ export const ToolsExperienceLineChartBlock = ({
     )
 }
 
-const LineChartWrapper = styled.div`
+const LineChartWrapper = ({ current, currentColor, children, ...otherProps }) => (
+    <LineChartWrapper_ current={current} currentColor={currentColor}>
+        {React.cloneElement(children, otherProps)}
+    </LineChartWrapper_>
+)
+
+const LineChartWrapper_ = styled.div`
     width: 100%;
     height: 100%;
     ${({ theme, current, currentColor }) =>

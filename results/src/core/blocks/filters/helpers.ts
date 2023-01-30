@@ -62,10 +62,12 @@ export const getFiltersQuery = ({
     chartFilters: CustomizationDefinition
     currentYear: number
 }) => {
+    const { options = {}, filters, facet } = chartFilters
+    const { enableYearSelect, mode } = options
     let queryBody
     const query = getGraphQLQuery(block)
     const queryHeader = query.slice(0, query.indexOf(START_MARKER))
-    const queryContents = query.slice(
+    const queryFragment = query.slice(
         query.indexOf(START_MARKER) + START_MARKER.length,
         query.indexOf(END_MARKER)
     )
@@ -76,8 +78,8 @@ export const getFiltersQuery = ({
 
     const queryFooter = query.slice(query.indexOf(END_MARKER) + END_MARKER.length)
 
-    if (chartFilters.options.mode === MODE_FILTERS) {
-        queryBody = chartFilters.filters
+    if (mode === MODE_FILTERS) {
+        queryBody = filters
             .map((singleSeries, seriesIndex) => {
                 // {gender: {eq: male}, company_size: {eq: range_1}}
                 const filtersObject = {}
@@ -91,17 +93,23 @@ export const getFiltersQuery = ({
                 })
                 const seriesName = `${block.id}_${seriesIndex + 1}`
                 seriesNames.push(seriesName)
-                return queryContents
+                let queryContents = queryFragment
                     .replace(`${block.id}: `, `${seriesName}: `)
                     .replace(
                         'filters: {}',
                         `filters: ${JSON.stringify(filtersObject).replaceAll('"', '')}`
                     )
-                    .replace(`year: ${currentYear}`, `year: ${singleSeries.year}`)
+                if (enableYearSelect && singleSeries.year) {
+                    queryContents = queryContents.replace(
+                        `year: ${currentYear}`,
+                        `year: ${singleSeries.year}`
+                    )
+                }
+                return queryContents
             })
             .join('')
-    } else if (chartFilters.options.mode === MODE_FACET) {
-        queryBody = queryContents.replace('facet: null', `facet: ${chartFilters.facet}`)
+    } else if (mode === MODE_FACET) {
+        queryBody = queryContents.replace('facet: null', `facet: ${facet}`)
 
         if (block?.variables?.fixedIds) {
             /*
@@ -334,7 +342,7 @@ export const useFilterLegends = (props: { chartFilters: any }) => {
         if (!chartFilters.filters || chartFilters.filters.length === 0) {
             return []
         } else {
-            const showYears = chartFilters.filters.some(s => s.year !== currentYear)
+            const showYears = chartFilters.options.enableYearSelect && chartFilters.filters.some(s => s.year !== currentYear)
 
             const defaultLabel = showYears
                 ? getString('filters.series.year', { values: { year: currentYear } })?.t

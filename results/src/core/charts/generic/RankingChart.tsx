@@ -75,17 +75,21 @@ const CustomTooltip = ({ id, color, getName }: CustomTooltipProps) => (
 )
 
 interface RankingChartProps {
-    data: RankingChartSerie[]
+    buckets: RankingChartSerie[]
+    processBlockData: Function
+    processBlockDataOptions: any
 }
 
-export const RankingChart = ({ data }: RankingChartProps) => {
+export const RankingChart = ({ buckets: unprocessedData, processBlockData, processBlockDataOptions }: RankingChartProps) => {
+    const buckets = processBlockData(unprocessedData, processBlockDataOptions)
+
     const theme = useTheme()
 
-    const getName = (entityId: string) => data?.find(series => series.id === entityId)?.name
+    const getName = (entityId: string) => buckets?.find(series => series.id === entityId)?.name
 
     return (
         <ResponsiveBump
-            data={data}
+            data={buckets}
             margin={{ top: 40, right: 150, bottom: 40, left: 150 }}
             colors={theme.colors.distinct}
             // @ts-ignore

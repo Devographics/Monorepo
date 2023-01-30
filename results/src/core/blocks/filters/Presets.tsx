@@ -35,7 +35,6 @@ const presetsArray = [
         },
         filters: [
             {
-                year: 2022,
                 conditions: [
                     {
                         field: 'gender',
@@ -45,7 +44,6 @@ const presetsArray = [
                 ]
             },
             {
-                year: 2022,
                 conditions: [
                     {
                         field: 'gender',
@@ -55,7 +53,6 @@ const presetsArray = [
                 ]
             },
             {
-                year: 2022,
                 conditions: [
                     {
                         field: 'gender',
@@ -104,34 +101,58 @@ const presetsArray = [
     //         }
     //     ]
     // },
-    // {
-    //     name: 'salary_top_bottom',
-    //     options: {
-    //         showDefaultSeries: false
-    //     },
-    //     filters: [
-    //         {
-    //             year: 2022,
-    //             conditions: [
-    //                 {
-    //                     field: 'yearly_salary',
-    //                     operator: 'in',
-    //                     value: ['range_work_for_free', 'range_0_10', 'range_10_30', 'range_30_50']
-    //                 }
-    //             ]
-    //         },
-    //         {
-    //             year: 2022,
-    //             conditions: [
-    //                 {
-    //                     field: 'yearly_salary',
-    //                     operator: 'in',
-    //                     value: ['range_50_100', 'range_100_200', 'range_more_than_200']
-    //                 }
-    //             ]
-    //         }
-    //     ]
-    // }
+    {
+        name: 'salary_low_high',
+        options: {
+            showDefaultSeries: false
+        },
+        filters: [
+            {
+                conditions: [
+                    {
+                        field: 'yearly_salary',
+                        operator: 'in',
+                        value: ['range_work_for_free', 'range_0_10', 'range_10_30', 'range_30_50']
+                    }
+                ]
+            },
+            {
+                conditions: [
+                    {
+                        field: 'yearly_salary',
+                        operator: 'in',
+                        value: ['range_50_100', 'range_100_200', 'range_more_than_200']
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        name: 'experience_low_high',
+        options: {
+            showDefaultSeries: false
+        },
+        filters: [
+            {
+                conditions: [
+                    {
+                        field: 'years_of_experience',
+                        operator: 'in',
+                        value: ['range_less_than_1', 'range_1_2', 'range_2_5']
+                    }
+                ]
+            },
+            {
+                conditions: [
+                    {
+                        field: 'years_of_experience',
+                        operator: 'in',
+                        value: ['range_5_10', 'range_10_20', 'range_more_than_20']
+                    }
+                ]
+            }
+        ]
+    }
 ]
 
 const Presets = ({ stateStuff }) => {
