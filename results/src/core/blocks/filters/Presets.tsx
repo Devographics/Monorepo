@@ -7,153 +7,165 @@ import cloneDeep from 'lodash/cloneDeep.js'
 import { DeleteIcon } from 'core/icons'
 import { useI18n } from 'core/i18n/i18nContext'
 
-const presetsArray = [
-    {
-        name: 'previous_years',
-        options: {
-            showDefaultSeries: false
+const getPresetsArray = options => {
+    const { enableYearSelect } = options
+    return [
+        ...(enableYearSelect
+            ? [
+                  {
+                      name: 'previous_years',
+                      options: {
+                          showDefaultSeries: false
+                      },
+                      filters: [
+                          {
+                              year: 2020,
+                              conditions: []
+                          },
+                          {
+                              year: 2021,
+                              conditions: []
+                          },
+                          {
+                              year: 2022,
+                              conditions: []
+                          }
+                      ]
+                  }
+              ]
+            : []),
+        {
+            name: 'gender',
+            options: {
+                showDefaultSeries: false
+            },
+            filters: [
+                {
+                    conditions: [
+                        {
+                            field: 'gender',
+                            operator: 'eq',
+                            value: 'male'
+                        }
+                    ]
+                },
+                {
+                    conditions: [
+                        {
+                            field: 'gender',
+                            operator: 'eq',
+                            value: 'female'
+                        }
+                    ]
+                },
+                {
+                    conditions: [
+                        {
+                            field: 'gender',
+                            operator: 'eq',
+                            value: 'non_binary'
+                        }
+                    ]
+                }
+            ]
         },
-        filters: [
-            {
-                year: 2020,
-                conditions: []
+        // {
+        //     name: 'top_countries',
+        //     options: {
+        //         showDefaultSeries: false
+        //     },
+        //     filters: [
+        //         {
+        //             year: 2022,
+        //             conditions: [
+        //                 {
+        //                     field: 'country',
+        //                     operator: 'eq',
+        //                     value: 'USA'
+        //                 }
+        //             ]
+        //         },
+        //         {
+        //             year: 2022,
+        //             conditions: [
+        //                 {
+        //                     field: 'country',
+        //                     operator: 'eq',
+        //                     value: 'DEU'
+        //                 }
+        //             ]
+        //         },
+        //         {
+        //             year: 2022,
+        //             conditions: [
+        //                 {
+        //                     field: 'country',
+        //                     operator: 'eq',
+        //                     value: 'FRA'
+        //                 }
+        //             ]
+        //         }
+        //     ]
+        // },
+        {
+            name: 'salary_low_high',
+            options: {
+                showDefaultSeries: false
             },
-            {
-                year: 2021,
-                conditions: []
-            },
-            {
-                year: 2022,
-                conditions: []
-            }
-        ]
-    },
-    {
-        name: 'gender',
-        options: {
-            showDefaultSeries: false
+            filters: [
+                {
+                    conditions: [
+                        {
+                            field: 'yearly_salary',
+                            operator: 'in',
+                            value: [
+                                'range_work_for_free',
+                                'range_0_10',
+                                'range_10_30',
+                                'range_30_50'
+                            ]
+                        }
+                    ]
+                },
+                {
+                    conditions: [
+                        {
+                            field: 'yearly_salary',
+                            operator: 'in',
+                            value: ['range_50_100', 'range_100_200', 'range_more_than_200']
+                        }
+                    ]
+                }
+            ]
         },
-        filters: [
-            {
-                conditions: [
-                    {
-                        field: 'gender',
-                        operator: 'eq',
-                        value: 'male'
-                    }
-                ]
+        {
+            name: 'experience_low_high',
+            options: {
+                showDefaultSeries: false
             },
-            {
-                conditions: [
-                    {
-                        field: 'gender',
-                        operator: 'eq',
-                        value: 'female'
-                    }
-                ]
-            },
-            {
-                conditions: [
-                    {
-                        field: 'gender',
-                        operator: 'eq',
-                        value: 'non_binary'
-                    }
-                ]
-            }
-        ]
-    },
-    // {
-    //     name: 'top_countries',
-    //     options: {
-    //         showDefaultSeries: false
-    //     },
-    //     filters: [
-    //         {
-    //             year: 2022,
-    //             conditions: [
-    //                 {
-    //                     field: 'country',
-    //                     operator: 'eq',
-    //                     value: 'USA'
-    //                 }
-    //             ]
-    //         },
-    //         {
-    //             year: 2022,
-    //             conditions: [
-    //                 {
-    //                     field: 'country',
-    //                     operator: 'eq',
-    //                     value: 'DEU'
-    //                 }
-    //             ]
-    //         },
-    //         {
-    //             year: 2022,
-    //             conditions: [
-    //                 {
-    //                     field: 'country',
-    //                     operator: 'eq',
-    //                     value: 'FRA'
-    //                 }
-    //             ]
-    //         }
-    //     ]
-    // },
-    {
-        name: 'salary_low_high',
-        options: {
-            showDefaultSeries: false
-        },
-        filters: [
-            {
-                conditions: [
-                    {
-                        field: 'yearly_salary',
-                        operator: 'in',
-                        value: ['range_work_for_free', 'range_0_10', 'range_10_30', 'range_30_50']
-                    }
-                ]
-            },
-            {
-                conditions: [
-                    {
-                        field: 'yearly_salary',
-                        operator: 'in',
-                        value: ['range_50_100', 'range_100_200', 'range_more_than_200']
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        name: 'experience_low_high',
-        options: {
-            showDefaultSeries: false
-        },
-        filters: [
-            {
-                conditions: [
-                    {
-                        field: 'years_of_experience',
-                        operator: 'in',
-                        value: ['range_less_than_1', 'range_1_2', 'range_2_5']
-                    }
-                ]
-            },
-            {
-                conditions: [
-                    {
-                        field: 'years_of_experience',
-                        operator: 'in',
-                        value: ['range_5_10', 'range_10_20', 'range_more_than_20']
-                    }
-                ]
-            }
-        ]
-    }
-]
+            filters: [
+                {
+                    conditions: [
+                        {
+                            field: 'years_of_experience',
+                            operator: 'in',
+                            value: ['range_less_than_1', 'range_1_2', 'range_2_5']
+                        }
+                    ]
+                },
+                {
+                    conditions: [
+                        {
+                            field: 'years_of_experience',
+                            operator: 'in',
+                            value: ['range_5_10', 'range_10_20', 'range_more_than_20']
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
 
 const Presets = ({ stateStuff }) => {
     const { customPresets, setCustomPresets, filtersState, setFiltersState } = stateStuff
@@ -164,7 +176,7 @@ const Presets = ({ stateStuff }) => {
             <Label_>
                 <T k="filters.presets.title" />
             </Label_>
-            {presetsArray.map(preset => (
+            {getPresetsArray(filtersState.options).map(preset => (
                 <Preset key={preset.name} preset={preset} setFiltersState={setFiltersState} />
             ))}
             {customPresets.map(preset => (
@@ -177,6 +189,7 @@ const Presets = ({ stateStuff }) => {
                 />
             ))}
             <SavePreset_
+                variant="link"
                 size="small"
                 onClick={() => {
                     const name = prompt(getString('filters.presets.enter_name')?.t)
@@ -225,6 +238,7 @@ const Preset = ({ preset, setCustomPresets, setFiltersState, isCustom }) => {
 const Presets_ = styled.div`
     display: flex;
     gap: ${spacing()};
+    flex-wrap: wrap;
 `
 
 const PresetWrapper_ = styled.div`
@@ -237,10 +251,12 @@ const Label_ = styled.div``
 
 const Preset_ = styled(Button)`
     border-radius: 20px;
+    white-space: nowrap;
 `
 
 const SavePreset_ = styled(Button)`
     border-radius: 20px;
+    font-size: ${fontSize('small')};
 `
 
 const DeletePreset_ = styled(Button)`

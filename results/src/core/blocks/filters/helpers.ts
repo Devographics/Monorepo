@@ -432,6 +432,7 @@ export const getInitFilters = (initOptions?: CustomizationOptions): Customizatio
     options: {
         showDefaultSeries: true,
         allowModeSwitch: false,
+        enableYearSelect: true,
         mode: MODE_DEFAULT,
         ...initOptions
     },
