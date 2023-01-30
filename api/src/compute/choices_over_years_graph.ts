@@ -26,7 +26,7 @@ export async function computeChoicesOverYearsGraph({
             }>
         }>([
             {
-                $match: generateFiltersQuery({ filters, key })
+                $match: generateFiltersQuery({ filters })
             },
             // only extract the fields we're interested in
             {

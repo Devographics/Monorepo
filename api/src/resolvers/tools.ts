@@ -12,8 +12,8 @@ import {
 export default {
     ToolsRankings: {
         years: async (
-            { survey, ids, filters }: { survey: SurveyConfig; ids: string[]; filters?: Filters },
-            args: any,
+            { survey, ids }: { survey: SurveyConfig; ids: string[]; filters?: Filters },
+            { filters }: { filters?: Filters },
             context: RequestContext
         ) =>
             useCache({
@@ -22,8 +22,8 @@ export default {
                 funcOptions: { survey, tools: ids, filters }
             }),
         experience: async (
-            { survey, ids, filters }: { survey: SurveyConfig; ids: string[]; filters?: Filters },
-            args: any,
+            { survey, ids }: { survey: SurveyConfig; ids: string[] },
+            { filters }: { filters?: Filters },
             context: RequestContext
         ) =>
             useCache({

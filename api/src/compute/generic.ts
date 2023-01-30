@@ -214,16 +214,16 @@ export async function computeDefaultTermAggregationByYear({
         survey: survey.survey
     }
 
-    let results = (await collection
-        .aggregate(getGenericPipeline(pipelineProps))
-        .toArray()) as ResultsByYear[]
+    const pipeline = getGenericPipeline(pipelineProps)
+
+    let results = (await collection.aggregate(pipeline).toArray()) as ResultsByYear[]
 
     if (isDebug) {
         console.log(
             inspect(
                 {
                     match,
-                    sampleAggregationPipeline: getGenericPipeline(pipelineProps),
+                    pipeline,
                     results
                 },
                 { colors: true, depth: null }
