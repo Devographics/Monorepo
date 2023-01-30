@@ -5,7 +5,7 @@ import get from "lodash/get.js";
 import CountUp from "react-countup";
 import Confetti from "react-confetti";
 import take from "lodash/take.js";
-import type { SurveyType } from "@devographics/core-models";
+import type { SurveyDocument, SurveyType } from "@devographics/core-models";
 import { useIntlContext } from "@vulcanjs/react-i18n";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import { useEntities } from "~/core/components/common/EntitiesContext";
@@ -61,14 +61,20 @@ const FeatureItem = ({ feature, showComma }) => {
     </div>
   );
 };
-const Score = ({ response, survey }: { response: any; survey: SurveyType }) => {
+const Score = ({
+  response,
+  survey,
+}: {
+  response: any;
+  survey: SurveyDocument;
+}) => {
   const intl = useIntlContext();
   const containerRef = useRef<HTMLInputElement | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
   const { knowledgeRanking = 100 } = response;
   const { known, total, score, unknownFields } = getKnowledgeScore(
-    response
-    //survey
+    response,
+    survey
   );
   const knowledgeRankingFromTop = knowledgeRanking;
   const { name, shareUrl, hashtag } = survey;

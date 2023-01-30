@@ -10,9 +10,9 @@ import { Connector } from "@vulcanjs/crud/server";
 import { createMongooseConnector } from "@vulcanjs/mongo";
 import { Request } from "express";
 import debug from "debug";
-import models from "~/_vulcan/models.index.server";
 import { getLocaleFromReq } from "~/i18n/server/localeDetection";
 import { userContextFromReq } from "./userContext";
+import { getServerModels } from "~/_vulcan/models.index.server";
 // import mongoose from "mongoose";
 const debugGraphqlContext = debug("vn:graphql:context");
 
@@ -50,9 +50,9 @@ const createContextForModels = (
 };
 
 // TODO: isolate context creation code like we do in Vulcan + initialize the currentUser too
-export const contextBase = {
-  ...createContextForModels(models),
-};
+export const contextBase = async () => ({
+  ...createContextForModels(await getServerModels()),
+});
 
 interface LocaleApiContext {
   locale?: string;
@@ -66,8 +66,9 @@ export const contextFromReq = async (req: Request) => {
   // TODO
   const userContext = await userContextFromReq(req);
   const localeContext = await localeContextFromReq(req);
+  const base = await contextBase()
   const context = {
-    ...contextBase,
+    ...base,
     ...userContext,
     ...localeContext,
     // add HTTP request to context
@@ -82,4 +83,4 @@ export const contextFromReq = async (req: Request) => {
  * API context used by graphql also includes req object,
  * currentUser, etc.
  */
-export interface ApiContext extends LocaleApiContext {}
+export interface ApiContext extends LocaleApiContext { }

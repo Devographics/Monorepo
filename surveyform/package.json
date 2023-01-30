@@ -76,8 +76,8 @@
     "@apollo/server": "^4.3.0",
     "@as-integrations/next": "^1.2.0",
     "@devographics/core-models": "workspace:1.0.0",
-    "@devographics/encrypt-email": "workspace:1.0.0",
     "@devographics/crud": "workspace:1.0.0",
+    "@devographics/encrypt-email": "workspace:1.0.0",
     "@devographics/react-form": "workspace:1.0.0",
     "@devographics/react-hooks": "workspace:1.0.0",
     "@graphql-tools/merge": "^8.3.11",
@@ -159,6 +159,7 @@
     "rehype-raw": "^6.1.1",
     "sanitize-html": "^2.7.3",
     "sass": "^1.56.1",
+    "server-only": "^0.0.1",
     "simpl-schema": "^1.13.1",
     "swr": "^2.0.1",
     "uuid": "^8.3.2"

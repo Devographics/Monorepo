@@ -3,15 +3,14 @@ import {
   createGraphqlModelServer,
   mergeModelDefinitionServer,
 } from "@vulcanjs/graphql/server";
-import { modelDef as modelDefCommon } from "./model";
-import { schema as schemaServer } from "./schema.server";
 import { createMongooseConnector } from "@vulcanjs/mongo";
 import { subscribe } from "~/server/email/email_octopus";
-//import { createEmailHash } from "~/account/email/api/encryptEmail";
-
-// import { updateElasticSearchOnCreate, updateElasticSearchOnUpdate } from '../elasticsearch/index';
-// note: normalizing responses on every response update is too slow
-// import { normalizeResponse } from '../normalization/normalize';
+import mongoose from "mongoose";
+import { captureException } from "@sentry/nextjs";
+import { fetchSurveyFromId, } from "~/surveys/server/fetch";
+import { ResponseDocument, SerializedSurveyDocument, SurveyDocument } from "@devographics/core-models";
+import { getModelDef, initReponseModel } from "./model";
+import { getServerSchema } from "./schema.server";
 
 export async function duplicateCheck(validationErrors, options) {
   const { document, currentUser } = options;
@@ -54,10 +53,14 @@ export async function duplicateCheck(validationErrors, options) {
 const emailPlaceholder = "*****@*****";
 const emailFieldName = "email_temporary";
 
+
 export async function processEmailOnUpdate(data, properties) {
-  const { document } = properties;
-  const { surveySlug, emailHash, isSubscribed } = document;
-  const survey = surveyFromResponse(document);
+  const { document } = properties
+  const { _id, surveySlug, emailHash, isSubscribed
+  } = document as ResponseDocument;
+  if (!surveySlug) throw new Error(`Response ${_id} has no surveySlug`)
+
+  const survey = await fetchSurveyFromId(surveySlug)
   const listId = survey?.emailOctopus?.listId;
   const emailFieldPath = `${surveySlug}__user_info__${emailFieldName}`;
   const email = data[emailFieldPath];
@@ -88,9 +91,9 @@ export async function processEmailOnUpdate(data, properties) {
   return data;
 }
 
-export const modelDef: CreateGraphqlModelOptionsServer =
-  mergeModelDefinitionServer(modelDefCommon, {
-    schema: schemaServer,
+export const getModelDefServer = (): CreateGraphqlModelOptionsServer => {
+  return mergeModelDefinitionServer(getModelDef(), {
+    schema: getServerSchema(),
     graphql: {
       callbacks: {
         create: {
@@ -101,25 +104,41 @@ export const modelDef: CreateGraphqlModelOptionsServer =
         },
       },
     },
+    // NOTE: save_survey actually handles the permissions
+    permissions: {
+      canRead: ["owners", "admins"],
+      canCreate: ["members"],
+      // NOTE: save survey also check if the response can be updated
+      // TODO: drop Vulcan system here
+      canUpdate: ["owners", "admins"],
+      canDelete: ["admins"],
+    },
   });
+}
 
-export const Response = createGraphqlModelServer(modelDef);
+let ResponseModel
+export const getResponseModel = () => {
+  return ResponseModel
+};
+export const initResponseModelServer = (surveys: Array<SurveyDocument>) => {
+  initReponseModel(surveys)
+  ResponseModel = createGraphqlModelServer(getModelDefServer())
+}
 
-type ResponseDocument = any;
-import mongoose from "mongoose";
-import { captureException } from "@sentry/nextjs";
-import { surveyFromResponse } from "./helpers";
+let ResponseConnector
 // Using Vulcan (limited to CRUD operations)
-export const ResponseConnector = createMongooseConnector<ResponseDocument>(
-  Response,
-  {
-    mongooseSchema: new mongoose.Schema({ _id: String }, { strict: false }),
-  }
-);
-Response.crud.connector = ResponseConnector;
+export const initResponseConnector = () => {
+  ResponseConnector = createMongooseConnector<ResponseDocument>(
+    ResponseModel,
+    {
+      mongooseSchema: new mongoose.Schema({ _id: String }, { strict: false }),
+    }
+  );
+  ResponseModel.crud.connector = ResponseConnector;
+}
 
 // Using Mongoose (advised)
-export const ResponseMongooseModel =
+export const ResponseMongooseModel = () =>
   ResponseConnector.getRawCollection() as mongoose.Model<ResponseDocument>;
 
 /**

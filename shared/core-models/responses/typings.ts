@@ -1,9 +1,10 @@
+import { SurveyDocument } from "@devographics/core-models/surveys/typings";
 import { VulcanDocument } from "@vulcanjs/schema";
 export interface ResponseDocument extends VulcanDocument {
   name?: string;
   year?: number;
-  surveySlug?: string;
   pagePath?: string;
+  surveySlug?: SurveyDocument["surveyId"];
 }
 
 /**

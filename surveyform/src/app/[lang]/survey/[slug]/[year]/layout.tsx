@@ -33,8 +33,6 @@ export default async function SurveyLayout({
   params: { slug: string; year: string };
 }) {
   const { slug, year } = params;
-  //const survey = getSurvey(slug, year);
-  // First experiment getting the survey from github
   const survey = await fetchSurveyGithub(slug, year);
   if (!survey) {
     notFound();

@@ -1,7 +1,7 @@
 /**
  * Test various types of inputs
  */
-import { testSurvey } from "~/surveys/testSurvey";
+import { testSurvey } from "../../fixtures/testSurvey";
 import { routes } from "~/lib/routes";
 // Set to english (NOTE: this won't work in before.ts)
 import { LOCALE_COOKIE_NAME } from "~/i18n/cookie";

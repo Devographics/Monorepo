@@ -1,5 +1,7 @@
 /**
  * Extends user.ts with server-side logic
+ * 
+ * TODO: is this still used??
  */
 import merge from "lodash/merge.js";
 
@@ -16,10 +18,8 @@ import {
   UserType as UserTypeShared,
   NewUserDocument,
 } from "./user";
-import { hashPassword } from "~/account/passwordLogin/api";
 import { restrictDocuments } from "@vulcanjs/permissions";
-import { ResponseConnector, ResponseMongoCollection } from "~/responses/model.server";
-import { Response } from "~/responses";
+import { ResponseMongoCollection } from "~/responses/model.server";
 import mongoose from "mongoose";
 
 /**
@@ -73,17 +73,17 @@ const apiSchema: VulcanGraphqlSchemaServer = {
           userId: user._id,
         })
         const responses = await cursor.toArray();
-        // TODO: update when migrating the Responses model
+
+        // TODO: it's currently hard to access the server model this way
+        // There are no user sensitive fields in users' own responses anyway
+        // only a few internal fields
+        const restrictedResponses = responses
         /*
-        await Responses.find({
-          userId: user._id,
-        }).fetch();
-        */
         const restrictedResponses = restrictDocuments({
           user: currentUser, //user,
           model: Response,
           documents: responses,
-        });
+        */
         return restrictedResponses;
       },
     },

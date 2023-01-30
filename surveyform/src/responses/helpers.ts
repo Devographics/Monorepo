@@ -9,15 +9,14 @@ import {
   Field,
   FieldTemplateId,
   ParsedQuestion,
+  SerializedSurveyDocument,
+  SurveyDocument,
   SurveySection,
   SurveyType,
 } from "@devographics/core-models";
-import surveys from "~/surveys";
-import { statuses } from "~/surveys/constants";
 
 //import { data } from "autoprefixer";
 import { ResponseDocument } from "@devographics/core-models";
-import { isAdmin } from "@vulcanjs/permissions";
 import { VulcanGraphqlFieldSchema } from "@vulcanjs/graphql";
 import SimpleSchema from "simpl-schema";
 import {
@@ -26,7 +25,6 @@ import {
   parseSurvey,
 } from "~/surveys/parser/parseSurvey";
 import { captureException } from "@sentry/nextjs";
-import { getSurveyFromResponse } from "~/surveys/getters";
 
 // Previously it lived in Vulcan NPM, but that's something you'd want to control more
 // precisely at app level
@@ -167,7 +165,7 @@ export const generateIntlId = (questionObject, section, survey) => {
 export const getQuestionSchema = (
   questionObject: ParsedQuestion,
   section,
-  survey: SurveyType
+  survey: SurveyDocument | SerializedSurveyDocument
 ): VulcanGraphqlFieldSchema => {
   const {
     id,
@@ -237,13 +235,9 @@ export const ignoredFieldTypes: Array<FieldTemplateId> = [
   "project",
 ];
 
-export const getCompletionPercentage = (response: ResponseDocument) => {
+export const getCompletionPercentage = (response: ResponseDocument, survey: SerializedSurveyDocument | SurveyDocument) => {
   let completedCount = 0;
   let totalCount = 0;
-  const survey = getSurveyFromResponse(response);
-  if (!survey) {
-    return
-  }
   const parsedOutline = parseSurvey(survey).outline;
   parsedOutline.forEach((section) => {
     section.questions &&
@@ -264,15 +258,6 @@ export const getCompletionPercentage = (response: ResponseDocument) => {
   });
   const completion = Math.round((completedCount * 100) / totalCount);
   return completion;
-};
-
-export const surveyFromResponse = (response: ResponseDocument) => {
-  const survey = surveys.find((s) => s.slug === response.surveySlug);
-  if (!survey)
-    throw new Error(
-      `Survery with slug ${response.surverySlug} not found for response of _id ${response._id}`
-    );
-  return survey;
 };
 
 /**
@@ -326,8 +311,7 @@ export const getSectionCompletionPercentage = (
 Calculate CSS features knowledge score
 
 */
-export const getKnowledgeScore = (response: ResponseDocument) => {
-  const survey = surveyFromResponse(response);
+export const getKnowledgeScore = (response: ResponseDocument, survey: SurveyDocument | SerializedSurveyDocument) => {
   const featureSections = survey.outline.filter(
     (section) => section.slug === "features"
   );
@@ -352,28 +336,4 @@ export const getKnowledgeScore = (response: ResponseDocument) => {
     score: Math.round((known * 100) / total),
     unknownFields,
   };
-};
-
-export const canModifyResponse = (response, user) => {
-  if (!response || !user) {
-    return false;
-  }
-  const survey = surveyFromResponse(response);
-
-  // admins can modify any survey; users can modify their own surveys
-  const isAdminOrOwner = isAdmin(user) || user._id === response.userId;
-
-  switch (survey.status) {
-    case statuses.preview:
-      return isAdminOrOwner;
-    case statuses.open:
-      return isAdminOrOwner;
-    case statuses.closed:
-      // nobody can modify closed survey
-      return false;
-    case statuses.hidden:
-      return isAdminOrOwner;
-    default:
-      throw new Error(`Unknown survery status ${survey.status}`);
-  }
 };

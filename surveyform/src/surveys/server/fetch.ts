@@ -1,3 +1,4 @@
+//import "server-only"
 // TODO: this will systematically call github API
 // we should cache the result somewhere
 // for instance in a place dedicated to the survey form on Redis
@@ -6,6 +7,7 @@ import yaml from "js-yaml"
 import { serverConfig } from "~/config/server";
 import { SurveyDescription } from "../typings";
 import orderBy from "lodash/orderBy.js"
+import { SurveySharedContext } from "@devographics/core-models/surveys/typings";
 
 const org = "devographics"
 const repo = "surveys"
@@ -50,9 +52,10 @@ async function fetchGithub(url) {
  * /!\ this is different from the github folder path, we need to replace "-" by "_"
  * @param year 
  */
-export async function fetchSurveyGithub(slug: SerializedSurveyDocument["slug"], year: string): Promise<SerializedSurveyDocument> {
-    const safeSlug = slug?.replaceAll("-", "_")
-    const surveyFolder = `${safeSlug}`
+export async function fetchSurveyGithub(prettySlug: SerializedSurveyDocument["prettySlug"], year: string): Promise<SerializedSurveyDocument> {
+    // TODO: find a cleaner way to convert prettySLug to slug => do this before calling this function
+    const slug = prettySlug?.replaceAll("-", "_")
+    const surveyFolder = `${slug}`
     const yearlyFolder = `${surveyFolder}/${year}`
 
     const configUrl = `${contentsRoot}/${yearlyFolder}/config.yml`
@@ -61,15 +64,15 @@ export async function fetchSurveyGithub(slug: SerializedSurveyDocument["slug"], 
     const configRes = await fetchGithub(configUrl)
     if (!configRes.ok) {
         console.debug("Fetched url", configUrl)
-        throw new Error(`Cannot fetch survey config for slug "${slug}" and year "${year}", error ${configRes.status}"`)
+        throw new Error(`Cannot fetch survey config for slug "${prettySlug}" and year "${year}", error ${configRes.status}"`)
     }
     const questionsRes = await fetchGithub(`${contentsRoot}/${yearlyFolder}/questions.yml`)
     if (!questionsRes.ok) {
-        throw new Error(`Cannot fetch survey questions for slug "${slug}" and year "${year}, error ${configRes.status}"`)
+        throw new Error(`Cannot fetch survey questions for slug "${prettySlug}" and year "${year}, error ${configRes.status}"`)
     }
     const commonConfigRes = await fetchGithub(commonConfigUrl)
     if (!commonConfigRes.ok) {
-        console.warn("No common config for survey", slug)
+        console.warn("No common config for survey", prettySlug)
     }
     const surveyConfig = await yamlAsJson(await githubContent(configRes))
     const questionsConfig = await yamlAsJson(await githubContent(questionsRes))
@@ -82,8 +85,7 @@ export async function fetchSurveyGithub(slug: SerializedSurveyDocument["slug"], 
         ...commonConfig,
         // @ts-ignore
         ...surveyConfig,
-        // url friendly slug
-        prettySlug: safeSlug,// slug,//safeSlug,
+        prettySlug,
         outline: questionsConfig
     }
     return survey
@@ -177,4 +179,21 @@ export const fetchSurveysListGithub = async (): Promise<Array<SurveyDescription>
                            prettySlug: "demo-survey",
                                imageUrl: "https://devographics.github.io/surveys/state_of_graphql/2022/images/graphql2022.png"
        }*/
+}
+
+// prettySlug is the one from the URL
+export async function fetchSurveyContextGithub(slug: SurveySharedContext["slug"]): Promise<SurveySharedContext> {
+    const surveyContextRes = await fetchGithub(`${contentsRoot}/${slug}/config.yml`)
+    const surveyContext = yamlAsJson(await githubBody(surveyContextRes))
+    return surveyContext
+}
+
+export async function fetchSurveyFromId(surveyId: SurveyDocument["surveyId"]) {
+    const surveyList = await fetchSurveysListGithub()
+    const surveyDescription = surveyList.find(s => s.surveyId)
+    if (!surveyDescription) {
+        throw new Error(`No survey with surveyId ${surveyId}`)
+    }
+    const survey = await fetchSurveyGithub(surveyDescription.slug, surveyDescription.year + "")
+    return survey
 }
