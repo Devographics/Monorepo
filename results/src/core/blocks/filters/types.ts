@@ -4,13 +4,14 @@ export type CustomizationDefinition = {
     facet?: string
 }
 
+export type SupportedMode = 'grid' | 'combined' | 'facet' | 'default'
+
 export type CustomizationOptions = {
     name?: string
     showDefaultSeries?: boolean
-    allowModeSwitch?: boolean
     enableYearSelect?: boolean
-    behavior?: 'combined' | 'multiple'
-    mode?: 'filters' | 'facet' | 'default'
+    mode?: SupportedMode
+    supportedModes?: SupportedMode[]
 }
 
 export type CustomizationFilters = {

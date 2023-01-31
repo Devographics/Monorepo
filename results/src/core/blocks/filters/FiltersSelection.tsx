@@ -6,7 +6,7 @@ import { mq, spacing, fontSize } from 'core/theme'
 import Button from 'core/components/Button'
 import cloneDeep from 'lodash/cloneDeep.js'
 import { getNewSeries } from './helpers'
-import { maxSeriesCount, MODE_FILTERS } from './constants'
+import { maxSeriesCount, MODE_GRID } from './constants'
 import { usePageContext } from 'core/helpers/pageContext'
 import { useI18n } from 'core/i18n/i18nContext'
 import { Series_ } from './Series'
@@ -36,7 +36,7 @@ const FiltersSelection = ({ chartName, block, stateStuff }) => {
     useEffect(() => {
         setFiltersState(fState => {
             const newState = cloneDeep(fState)
-            newState.options.mode = MODE_FILTERS
+            newState.options.mode = MODE_GRID
             return newState
         })
     })

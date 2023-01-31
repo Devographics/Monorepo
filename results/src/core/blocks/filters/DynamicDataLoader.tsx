@@ -15,10 +15,9 @@ import { useTheme } from 'styled-components'
 import { useI18n } from 'core/i18n/i18nContext'
 import isEmpty from 'lodash/isEmpty'
 import {
-    BEHAVIOR_COMBINED,
-    BEHAVIOR_MULTIPLE,
     MODE_FACET,
-    MODE_FILTERS,
+    MODE_COMBINED,
+    MODE_GRID,
     CHART_MODE_STACKED,
     CHART_MODE_GROUPED,
     CHART_MODE_DEFAULT
@@ -95,7 +94,7 @@ const DynamicDataLoader = ({
     const { year } = currentEdition
 
     const { options = {} } = chartFilters
-    const { showDefaultSeries = true, behavior = BEHAVIOR_MULTIPLE, mode = MODE_FILTERS } = options
+    const { showDefaultSeries = true, mode } = options
 
     const legends = useFilterLegends({
         chartFilters
@@ -131,7 +130,7 @@ const DynamicDataLoader = ({
 
             const dataPath = block.dataPath.replace('dataAPI.', '')
 
-            if (mode === MODE_FILTERS) {
+            if (mode === MODE_GRID || mode === MODE_COMBINED) {
                 // apply dataPath to get block data for each series
                 const seriesBlockData = seriesNames.map(seriesName =>
                     get(result, dataPath.replace(block.id, seriesName))
@@ -147,7 +146,7 @@ const DynamicDataLoader = ({
                 // console.log(seriesBlockData)
                 // console.log(seriesChartData)
 
-                if (behavior === BEHAVIOR_COMBINED) {
+                if (mode === MODE_COMBINED) {
                     /*
 
                     Combine multiple series into a single chart
@@ -214,7 +213,7 @@ const DynamicDataLoader = ({
         }
     }, [chartFilters])
 
-    if (mode === MODE_FACET || (mode === MODE_FILTERS && behavior === BEHAVIOR_COMBINED)) {
+    if (mode === MODE_FACET || mode === MODE_COMBINED) {
         const chartDisplayMode = mode === MODE_FACET ? CHART_MODE_STACKED : CHART_MODE_GROUPED
         return (
             <SingleWrapper
@@ -228,7 +227,7 @@ const DynamicDataLoader = ({
                 {children}
             </SingleWrapper>
         )
-    } else if (mode === MODE_FILTERS && behavior === BEHAVIOR_MULTIPLE) {
+    } else if (mode === MODE_GRID) {
         return (
             <WrapperGrid
                 layout={layout}

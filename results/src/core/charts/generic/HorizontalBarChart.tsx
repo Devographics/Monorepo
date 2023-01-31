@@ -75,10 +75,10 @@ const getLabelsLayer = labelTransformer => (props: any) => {
     // adjust settings according to dimensions
     let fontSize = 13
     let rotation = 0
-    if (props.width < 600) {
-        fontSize = 11
-        rotation = -90
-    }
+    // if (props.width < 600) {
+    //     fontSize = 11
+    //     rotation = -90
+    // }
 
     return props.bars.map((bar: any) => {
         const label = labelTransformer(bar.data)

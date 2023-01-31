@@ -1,5 +1,4 @@
 id: "${parentId}_experience_marimekko"
-# filters: [filters]
 blockType: ToolsExperienceMarimekkoBlock
 titleId: blocks.tools_experience_marimekko
 descriptionId: blocks.tools_experience_marimekko.description

@@ -6,7 +6,7 @@ import HorizontalBarChart from 'core/charts/generic/HorizontalBarChart'
 import { getTableData } from 'core/helpers/datatables'
 import { ResultsByYear, BlockComponentProps } from 'core/types'
 import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
-import { BEHAVIOR_MULTIPLE } from 'core/blocks/filters/constants'
+import { MODE_GRID, MODE_FACET } from 'core/blocks/filters/constants'
 import { useFilterLegends, getInitFilters } from 'core/blocks/filters/helpers'
 import { defaultOptions } from 'core/blocks/block/BlockUnitsSelector'
 import { useAllChartsOptions } from 'core/charts/hooks'
@@ -20,7 +20,7 @@ export interface HorizontalBarBlockProps extends BlockComponentProps {
 Feed in data used by block and get out data usable by chart
 
 */
-const processBlockData = (data) => data?.facets[0]?.buckets
+const processBlockData = data => data?.facets[0]?.buckets
 
 const HorizontalBarBlock = ({
     block,
@@ -45,7 +45,7 @@ const HorizontalBarBlock = ({
 
     // contains the filters that define the series
     const [chartFilters, setChartFilters] = useState(
-        getInitFilters({ behavior: BEHAVIOR_MULTIPLE })
+        getInitFilters({ supportedModes: [MODE_GRID, MODE_FACET] })
     )
 
     const legends = useFilterLegends({

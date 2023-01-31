@@ -16,7 +16,7 @@ import { useI18n } from 'core/i18n/i18nContext'
 import { groupDataByYears, getTableData } from 'core/helpers/datatables'
 import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
 import { getInitFilters } from 'core/blocks/filters/helpers'
-import { BEHAVIOR_MULTIPLE } from 'core/blocks/filters/constants'
+import { MODE_GRID } from 'core/blocks/filters/constants'
 
 const BAR_THICKNESS = 28
 const BAR_SPACING = 16
@@ -90,7 +90,7 @@ export const ToolExperienceBlock = ({
 
     // contains the filters that define the series
     const [chartFilters, setChartFilters] = useState(
-        getInitFilters({ behavior: BEHAVIOR_MULTIPLE, enableYearSelect: false })
+        getInitFilters({ supportedModes: [MODE_GRID], enableYearSelect: false })
     )
 
     return (

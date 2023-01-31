@@ -1,5 +1,4 @@
 id: "${parentId}_experience_linechart"
-filters: [filters]
 blockType: ToolsExperienceLineChartBlock
 titleId: blocks.tools_experience_linechart
 descriptionId: blocks.tools_experience_linechart.description

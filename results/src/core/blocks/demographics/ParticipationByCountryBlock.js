@@ -7,7 +7,7 @@ import { getTableData } from 'core/helpers/datatables'
 import { getCountryName } from 'core/helpers/countries'
 import HorizontalBarChart from 'core/charts/generic/HorizontalBarChart'
 import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
-import { BEHAVIOR_MULTIPLE } from 'core/blocks/filters/constants'
+import { MODE_GRID } from 'core/blocks/filters/constants'
 import { useFilterLegends, getInitFilters } from 'core/blocks/filters/helpers'
 import { defaultOptions } from 'core/blocks/block/BlockUnitsSelector'
 import { useAllChartsOptions } from 'core/charts/hooks'
@@ -38,7 +38,7 @@ const ParticipationByCountryBlock = ({
 
     // contains the filters that define the series
     const [chartFilters, setChartFilters] = useState(
-        getInitFilters({ behavior: BEHAVIOR_MULTIPLE })
+        getInitFilters({ supportedModes: [MODE_GRID] })
     )
 
     const legends = useFilterLegends({

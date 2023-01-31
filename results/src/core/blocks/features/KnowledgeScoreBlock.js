@@ -14,7 +14,7 @@ import { useFilterLegends } from 'core/blocks/filters/helpers'
 import { useTheme } from 'styled-components'
 import { useI18n } from 'core/i18n/i18nContext'
 import { getInitFilters } from 'core/blocks/filters/helpers'
-import { BEHAVIOR_COMBINED } from 'core/blocks/filters/constants'
+import { MODE_COMBINED } from 'core/blocks/filters/constants'
 
 const groupBy = 10
 
@@ -64,7 +64,7 @@ const KnowledgeScoreBlock = ({ block, data }) => {
     buckets = getChartData(buckets)
 
     // contains the filters that define the series
-    const [chartFilters, setChartFilters] = useState(getInitFilters({ behavior: BEHAVIOR_COMBINED }))
+    const [chartFilters, setChartFilters] = useState(getInitFilters({ supportedModes: [MODE_COMBINED] }))
 
     const legends = useFilterLegends({ chartFilters })
 

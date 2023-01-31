@@ -12,7 +12,7 @@ import { getTableData } from 'core/helpers/datatables'
 import sumBy from 'lodash/sumBy'
 import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
 import { useFilterLegends, getInitFilters } from 'core/blocks/filters/helpers'
-import { BEHAVIOR_COMBINED } from 'core/blocks/filters/constants'
+import { MODE_COMBINED } from 'core/blocks/filters/constants'
 import { defaultOptions } from 'core/blocks/block/BlockUnitsSelector'
 import { useAllChartsOptions } from 'core/charts/hooks'
 
@@ -75,7 +75,7 @@ const VerticalBarBlock = ({
 
     // contains the filters that define the series
     const [chartFilters, setChartFilters] = useState(
-        getInitFilters({ behavior: BEHAVIOR_COMBINED })
+        getInitFilters({ supportedModes: [MODE_COMBINED] })
     )
 
     const legends = useFilterLegends({

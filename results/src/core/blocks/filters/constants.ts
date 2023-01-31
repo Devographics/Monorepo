@@ -1,9 +1,7 @@
 export const maxSeriesCount = 4
 
-export const BEHAVIOR_COMBINED = 'combined'
-export const BEHAVIOR_MULTIPLE = 'multiple'
-
-export const MODE_FILTERS = 'filters'
+export const MODE_COMBINED = 'combined'
+export const MODE_GRID = 'grid'
 export const MODE_FACET = 'facet'
 export const MODE_DEFAULT = 'default'
 

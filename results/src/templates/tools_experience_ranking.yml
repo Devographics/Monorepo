@@ -1,5 +1,4 @@
 id: "${parentId}_experience_ranking"
-filters: [filters]
 blockType: ToolsExperienceRankingBlock
 titleId: blocks.tools_experience_ranking
 descriptionId: blocks.tools_experience_ranking.description

@@ -4,7 +4,6 @@ titleId: user_info.${id}
 descriptionId: user_info.${id}.description
 noteId: user_info.${id}.note
 hasSponsor: true
-filters: [filters, facet]
 query: >
     dataAPI {
         survey(survey: ${surveyType}) {

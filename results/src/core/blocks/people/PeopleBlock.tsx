@@ -21,7 +21,7 @@ import {
 } from 'core/icons'
 import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
 import { getInitFilters } from 'core/blocks/filters/helpers'
-import { BEHAVIOR_MULTIPLE } from 'core/blocks/filters/constants'
+import { MODE_GRID } from 'core/blocks/filters/constants'
 
 export interface PeopleBlockProps extends BlockComponentProps {
     data: ResultsByYear
@@ -99,7 +99,7 @@ const PeopleBlock = ({ block, data, controlledUnits, isCustom }: PeopleBlockProp
 
     // contains the filters that define the series
     const [chartFilters, setChartFilters] = useState(
-        getInitFilters({ behavior: BEHAVIOR_MULTIPLE })
+        getInitFilters({ supportedModes: [MODE_GRID] })
     )
 
     return (

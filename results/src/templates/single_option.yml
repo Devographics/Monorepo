@@ -1,5 +1,4 @@
 blockType: VerticalBarBlock
-filters: [filters, facet]
 dataPath: "dataAPI.survey.${id}.year"
 keysPath: "dataAPI.survey.${id}.keys"
 # enableCustomization: true

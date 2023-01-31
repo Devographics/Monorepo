@@ -13,7 +13,7 @@ import * as Tabs from '@radix-ui/react-tabs'
 import { TabsList, TabsTrigger } from 'core/blocks/block/BlockTabsWrapper'
 import FacetSelection from './FacetSelection'
 import FiltersSelection from './FiltersSelection'
-import { MODE_DEFAULT, MODE_FACET, MODE_FILTERS } from './constants'
+import { MODE_DEFAULT, MODE_FACET, MODE_COMBINED, MODE_GRID } from './constants'
 import cloneDeep from 'lodash/cloneDeep'
 import { BlockDefinition } from 'core/types'
 import { useStickyState } from './helpers'
@@ -60,13 +60,16 @@ const FiltersPanel = ({
 
     // if mode is set to "default" then open Filters tab
     const defaultTab =
-        filtersState.options.mode === MODE_DEFAULT ? MODE_FILTERS : filtersState.options.mode
+        filtersState.options.mode === MODE_DEFAULT ? MODE_GRID : filtersState.options.mode
 
-    const { filters = [] } = block
-    const tabConfig = {
-        filters: { mode: MODE_FILTERS, component: FiltersSelection },
-        facet: { mode: MODE_FACET, component: FacetSelection }
-    }
+    const supportedModes = filtersState.options.supportedModes
+
+    const tabConfig = [
+        { mode: MODE_COMBINED, component: FiltersSelection },
+        { mode: MODE_GRID, component: FiltersSelection },
+        { mode: MODE_FACET, component: FacetSelection }
+    ]
+    const tabs = tabConfig.filter(tab => supportedModes.includes(tab.mode))
 
     return (
         <Filters_>
@@ -84,16 +87,16 @@ const FiltersPanel = ({
             </FiltersTop_>
             <Tabs.Root defaultValue={defaultTab} orientation="horizontal">
                 <TabsList aria-label="tabs example">
-                    {filters.map(f => (
-                        <TabsTrigger_ key={f} value={tabConfig[f].mode}>
-                            <T k={`filters.${f}_mode`} />
+                    {tabs.map(tab => (
+                        <TabsTrigger_ key={tab.mode} value={tab.mode}>
+                            <T k={`filters.${tab.mode}_mode`} />
                         </TabsTrigger_>
                     ))}
                 </TabsList>
-                {filters.map(f => {
-                    const Component = tabConfig[f].component
+                {tabs.map(tab => {
+                    const Component = tab.component
                     return (
-                        <Tab_ key={f} value={tabConfig[f].mode}>
+                        <Tab_ key={tab.mode} value={tab.mode}>
                             <Component {...props} />
                         </Tab_>
                     )
@@ -103,11 +106,13 @@ const FiltersPanel = ({
             <FiltersBottom_>
                 <GraphQLTrigger
                     block={block}
-                    query={getFiltersQuery({
-                        block,
-                        chartFilters: filtersState,
-                        currentYear: currentEdition.year
-                    })?.query}
+                    query={
+                        getFiltersQuery({
+                            block,
+                            chartFilters: filtersState,
+                            currentYear: currentEdition.year
+                        })?.query
+                    }
                     buttonProps={{ variant: 'link' }}
                 />
                 <Button onClick={handleSubmit}>

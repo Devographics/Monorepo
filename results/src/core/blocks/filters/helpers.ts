@@ -6,7 +6,14 @@ import cloneDeep from 'lodash/cloneDeep.js'
 import isEmpty from 'lodash/isEmpty'
 import { CustomizationDefinition, CustomizationOptions } from './types'
 import { BlockDefinition } from 'core/types'
-import { MODE_DEFAULT, MODE_FACET, MODE_FILTERS, START_MARKER, END_MARKER } from './constants'
+import {
+    MODE_DEFAULT,
+    MODE_FACET,
+    MODE_GRID,
+    MODE_COMBINED,
+    START_MARKER,
+    END_MARKER
+} from './constants'
 import { useI18n } from 'core/i18n/i18nContext'
 import { useTheme } from 'styled-components'
 import round from 'lodash/round'
@@ -55,7 +62,7 @@ Generate query used for filtering
 */
 export const getFiltersQuery = ({
     block,
-    chartFilters = {},
+    chartFilters = { options: {} },
     currentYear
 }: {
     block: BlockDefinition
@@ -72,13 +79,13 @@ export const getFiltersQuery = ({
         query.indexOf(END_MARKER)
     )
 
-    const seriesNames = []
+    const seriesNames: string[] = []
 
     const cleanUpValue = s => s.replaceAll('-', '_')
 
     const queryFooter = query.slice(query.indexOf(END_MARKER) + END_MARKER.length)
 
-    if (mode === MODE_FILTERS) {
+    if (mode === MODE_GRID || mode === MODE_COMBINED) {
         queryBody = filters
             .map((singleSeries, seriesIndex) => {
                 // {gender: {eq: male}, company_size: {eq: range_1}}
@@ -93,23 +100,23 @@ export const getFiltersQuery = ({
                 })
                 const seriesName = `${block.id}_${seriesIndex + 1}`
                 seriesNames.push(seriesName)
-                let queryContents = queryFragment
+                let seriesFragment = queryFragment
                     .replace(`${block.id}: `, `${seriesName}: `)
                     .replace(
                         'filters: {}',
                         `filters: ${JSON.stringify(filtersObject).replaceAll('"', '')}`
                     )
                 if (enableYearSelect && singleSeries.year) {
-                    queryContents = queryContents.replace(
+                    seriesFragment = seriesFragment.replace(
                         `year: ${currentYear}`,
                         `year: ${singleSeries.year}`
                     )
                 }
-                return queryContents
+                return seriesFragment
             })
             .join('')
     } else if (mode === MODE_FACET) {
-        queryBody = queryContents.replace('facet: null', `facet: ${facet}`)
+        queryBody = queryFragment.replace('facet: null', `facet: ${facet}`)
 
         if (block?.variables?.fixedIds) {
             /*
@@ -338,11 +345,13 @@ export const useFilterLegends = (props: { chartFilters: any }) => {
     const { colors } = theme
     const { getString } = useI18n()
     let results
-    if (chartFilters.options.mode === MODE_FILTERS) {
+    if (chartFilters.options.mode === MODE_GRID || chartFilters.options.mode === MODE_COMBINED) {
         if (!chartFilters.filters || chartFilters.filters.length === 0) {
             return []
         } else {
-            const showYears = chartFilters.options.enableYearSelect && chartFilters.filters.some(s => s.year && s.year !== currentYear)
+            const showYears =
+                chartFilters.options.enableYearSelect &&
+                chartFilters.filters.some(s => s.year && s.year !== currentYear)
 
             const defaultLabel = showYears
                 ? getString('filters.series.year', { values: { year: currentYear } })?.t
