@@ -77,6 +77,7 @@ export const getRelevantServices = allEntities => {
     })
 }
 
+const processBlockData = data => data.facets[0].buckets
 const PeopleBlock = ({ block, data, controlledUnits, isCustom }: PeopleBlockProps) => {
     const {
         id,
@@ -90,14 +91,16 @@ const PeopleBlock = ({ block, data, controlledUnits, isCustom }: PeopleBlockProp
     const [units, setUnits] = useState(defaultUnits)
 
     const { facets, completion } = data
-    const buckets = facets[0].buckets
+    const buckets = processBlockData(data)
     const { total } = completion
 
     const allEntities = buckets.map(b => b.entity)
     const services = getRelevantServices(allEntities)
 
     // contains the filters that define the series
-    const [chartFilters, setChartFilters] = useState(getInitFilters({ behavior: BEHAVIOR_MULTIPLE }))
+    const [chartFilters, setChartFilters] = useState(
+        getInitFilters({ behavior: BEHAVIOR_MULTIPLE })
+    )
 
     return (
         <Block
@@ -123,6 +126,7 @@ const PeopleBlock = ({ block, data, controlledUnits, isCustom }: PeopleBlockProp
                 block={block}
                 chartFilters={chartFilters}
                 layout="grid"
+                processBlockData={processBlockData}
             >
                 <PeopleChart buckets={buckets} units={units} />
             </DynamicDataLoader>

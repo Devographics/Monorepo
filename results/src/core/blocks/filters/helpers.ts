@@ -342,7 +342,7 @@ export const useFilterLegends = (props: { chartFilters: any }) => {
         if (!chartFilters.filters || chartFilters.filters.length === 0) {
             return []
         } else {
-            const showYears = chartFilters.options.enableYearSelect && chartFilters.filters.some(s => s.year !== currentYear)
+            const showYears = chartFilters.options.enableYearSelect && chartFilters.filters.some(s => s.year && s.year !== currentYear)
 
             const defaultLabel = showYears
                 ? getString('filters.series.year', { values: { year: currentYear } })?.t
