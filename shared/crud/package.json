@@ -16,8 +16,7 @@
     "@vulcanjs/mongo": "^0.8.1",
     "debug": "^4.3.1",
     "graphql-tag": "^2.12.6",
-    "lodash": "^4.17.20",
-    "mingo": "^3.0.6"
+    "lodash": "^4.17.20"
   },
   "peerDependencies": {
     "graphql": "^15.5.0",
