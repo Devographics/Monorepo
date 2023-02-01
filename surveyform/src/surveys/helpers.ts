@@ -41,7 +41,6 @@ export const getSurveyPath = ({
   response,
   home = false,
   page,
-  readOnly,
 }: {
   // we only need basic info about the survey
   survey?: SurveyEditionDescription;
@@ -49,7 +48,6 @@ export const getSurveyPath = ({
   response?: any;
   home?: boolean;
   page?: "thanks";
-  readOnly?: boolean;
 }) => {
   if (!survey) {
     console.warn("Survey not passed as props, will use empty path")
@@ -61,6 +59,8 @@ export const getSurveyPath = ({
   const slugSegment = prettySlug;
   const yearSegment = year;
   const pathSegments = [prefixSegment, slugSegment, yearSegment];
+
+  const readOnly = !survey.status || ![1, 2].includes(survey.status)
 
   if (!home) {
     if (readOnly) {
