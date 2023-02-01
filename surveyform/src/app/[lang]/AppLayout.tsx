@@ -35,6 +35,7 @@ export function AppLayout(props: AppLayoutProps) {
   const { user } = useUser();
   return (
     <SSRProvider>
+      {/** @ts-ignore */}
       <ErrorBoundary proposeReload={true} proposeHomeRedirection={true}>
         {/** TODO: this error boundary to display anything useful since it doesn't have i18n */}
         {
@@ -58,6 +59,7 @@ export function AppLayout(props: AppLayoutProps) {
                     false /* TODO: we don't get the loading information from useUser yet */,
                 }}
               >
+                {/** @ts-ignore */}
                 <ErrorBoundary
                   proposeReload={true}
                   proposeHomeRedirection={true}

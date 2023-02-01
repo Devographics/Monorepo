@@ -3,7 +3,7 @@ import { Form } from "react-bootstrap";
 import EntityLabel, {
   EntityLabelProps,
 } from "~/core/components/common/EntityLabel";
-import { useIntlContext } from "@vulcanjs/react-i18n";
+import { useIntlContext } from "@devographics/react-i18n";
 import { Entity } from "@devographics/core-models";
 
 export interface FormLabelProps {

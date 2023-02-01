@@ -9,7 +9,7 @@ import {
 } from "meteor/vulcan:lib";
 */
 import React, { useContext, useEffect, useState } from "react";
-import { IntlProvider } from "@vulcanjs/react-i18n";
+import { IntlProvider } from "@devographics/react-i18n";
 import { IntlContext } from "./context";
 import { getLocale as getRegisteredLocale, stringsRegistry } from "~/i18n";
 // TODO: some of those HOC might be useful eg withLocaleData?

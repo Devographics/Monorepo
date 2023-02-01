@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router.js";
 import type { SurveyEdition } from "@devographics/core-models";
-import { useIntlContext } from "@vulcanjs/react-i18n";
+import { useIntlContext } from "@devographics/react-i18n";
 import { useEntitiesQuery } from "~/core/hooks/useEntitiesQuery";
 import { surveysWithTemplates } from "~/surveys/withTemplates";
 import { Loading } from "../ui/Loading";

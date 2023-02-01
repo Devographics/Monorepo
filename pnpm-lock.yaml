@@ -509,6 +509,7 @@ importers:
       '@devographics/i18n': workspace:*
       '@devographics/react-i18n': workspace:*
       '@types/lodash': ^4.14.168
+      '@types/react': ^18.0.27
       '@types/underscore': ^1.11.1
       '@vulcanjs/core': ^0.7.2-alpha.8
       '@vulcanjs/graphql': ^0.8.1-y.0
@@ -519,14 +520,16 @@ importers:
       classnames: ^2.3.1
       debug: ^4.3.1
       lodash: ^4.17.21
+      react: ^18.2.0
+      react-dom: ^18.2.0
       simpl-schema: ^1.12.0
     dependencies:
       '@devographics/i18n': link:../i18n
       '@devographics/react-i18n': link:../react-i18n
       '@vulcanjs/core': 0.7.2-alpha.8
-      '@vulcanjs/graphql': 0.8.1-y.0
+      '@vulcanjs/graphql': 0.8.1-y.0_biqbaboplfbrettd7655fr4n2y
       '@vulcanjs/model': 0.7.2-alpha.8
-      '@vulcanjs/permissions': 0.7.2-alpha.8
+      '@vulcanjs/permissions': 0.7.2-alpha.8_biqbaboplfbrettd7655fr4n2y
       '@vulcanjs/schema': 0.7.2-alpha.8
       '@vulcanjs/utils': 0.7.2-alpha.8
       classnames: 2.3.2
@@ -535,7 +538,10 @@ importers:
       simpl-schema: 1.13.1
     devDependencies:
       '@types/lodash': 4.14.190
+      '@types/react': 18.0.27
       '@types/underscore': 1.11.4
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
 
   shared/react-hooks:
     specifiers:
@@ -570,13 +576,11 @@ importers:
 
   shared/react-i18n:
     specifiers:
-      '@vulcanjs/i18n': ^0.8.1-y.0
-      '@vulcanjs/utils': ^0.7.2-alpha.8
-      prop-types: ^15.7.2
-    dependencies:
-      '@vulcanjs/i18n': 0.8.1-y.0
-      '@vulcanjs/utils': 0.7.2-alpha.8
-      prop-types: 15.8.1
+      '@types/react': ^18.0.27
+      react: ^17.0.1
+    devDependencies:
+      '@types/react': 18.0.27
+      react: 17.0.2
 
   shared/swr-graphql:
     specifiers:
@@ -593,6 +597,7 @@ importers:
       '@cypress/webpack-preprocessor': ^5.4.1
       '@devographics/core-models': workspace:*
       '@devographics/encrypt-email': workspace:*
+      '@devographics/react-i18n': workspace:*
       '@devographics/swr-graphql': workspace:*
       '@emotion/cache': ^11.4.0
       '@emotion/react': ^11.4.1
@@ -635,7 +640,6 @@ importers:
       '@vulcanjs/mongo': 0.8.1
       '@vulcanjs/mongo-apollo': 0.8.1
       '@vulcanjs/permissions': 0.7.2-alpha.8
-      '@vulcanjs/react-i18n': 0.8.1-y.0
       '@vulcanjs/schema': 0.7.2-alpha.8
       '@vulcanjs/utils': 0.7.2-alpha.8
       apollo-server: '3'
@@ -731,6 +735,7 @@ importers:
     dependencies:
       '@devographics/core-models': link:../shared/core-models
       '@devographics/encrypt-email': link:../shared/encrypt-email
+      '@devographics/react-i18n': link:../shared/react-i18n
       '@devographics/swr-graphql': link:../shared/swr-graphql
       '@emotion/cache': 11.10.5
       '@emotion/react': 11.10.5_o6ntltqfajvexhrk54q5jkivku
@@ -757,7 +762,6 @@ importers:
       '@vulcanjs/mongo': 0.8.1_fbta7zxnlib62z2eo4ad3a5zwi
       '@vulcanjs/mongo-apollo': 0.8.1_kce3vlkaamzijypd5kaovjga64
       '@vulcanjs/permissions': 0.7.2-alpha.8_biqbaboplfbrettd7655fr4n2y
-      '@vulcanjs/react-i18n': 0.8.1-y.0_react@18.2.0
       '@vulcanjs/schema': 0.7.2-alpha.8
       '@vulcanjs/utils': 0.7.2-alpha.8
       apollo-server: 3.11.1_graphql@16.6.0
@@ -884,6 +888,7 @@ importers:
       '@devographics/encrypt-email': workspace:1.0.0
       '@devographics/react-form': workspace:1.0.0
       '@devographics/react-hooks': workspace:1.0.0
+      '@devographics/react-i18n': workspace:1.0.0
       '@graphql-tools/merge': ^8.3.11
       '@graphql-tools/schema': ^8.5.1
       '@hapi/iron': 6.0.0
@@ -916,8 +921,8 @@ importers:
       '@types/jest': ^25.2.3
       '@types/node': ^13.13.52
       '@types/nodemailer': ^6.4.6
-      '@types/react': ^17.0.52
-      '@types/react-dom': ^17.0.18
+      '@types/react': ^18.0.27
+      '@types/react-dom': ^18.0.10
       '@types/shelljs': ^0.8.11
       '@types/unist': ^2.0.6
       '@vercel/analytics': ^0.1.5
@@ -930,7 +935,6 @@ importers:
       '@vulcanjs/mongo': 0.7.2-alpha.8
       '@vulcanjs/mongo-apollo': 0.8.1-y.0
       '@vulcanjs/permissions': 0.7.2-alpha.8
-      '@vulcanjs/react-i18n': 0.8.1-y.0
       '@vulcanjs/schema': 0.7.2-alpha.8
       '@vulcanjs/utils': 0.7.2-alpha.8
       apollo-server: ^3.11.1
@@ -1035,6 +1039,7 @@ importers:
       '@devographics/encrypt-email': link:../shared/encrypt-email
       '@devographics/react-form': link:../shared/react-form
       '@devographics/react-hooks': link:../shared/react-hooks
+      '@devographics/react-i18n': link:../shared/react-i18n
       '@graphql-tools/merge': 8.3.11_graphql@16.6.0
       '@graphql-tools/schema': 8.5.1_graphql@16.6.0
       '@hapi/iron': 6.0.0
@@ -1054,7 +1059,6 @@ importers:
       '@vulcanjs/mongo': 0.7.2-alpha.8_xnsbuxwofj3pgggbwmrypkfxiq
       '@vulcanjs/mongo-apollo': 0.8.1-y.0_7knmkd6npiixzfvctsgni4rlvu
       '@vulcanjs/permissions': 0.7.2-alpha.8_biqbaboplfbrettd7655fr4n2y
-      '@vulcanjs/react-i18n': 0.8.1-y.0_react@18.2.0
       '@vulcanjs/schema': 0.7.2-alpha.8
       '@vulcanjs/utils': 0.7.2-alpha.8
       apollo-server: 3.11.1_graphql@16.6.0
@@ -1102,7 +1106,7 @@ importers:
       qs: 6.11.0
       querystring: 0.2.1
       react: 18.2.0
-      react-bootstrap: 2.6.0_4c3rps5tc2yowtcrqid3cuwlea
+      react-bootstrap: 2.6.0_5ndqzdd6t4rivxsukjv3i3ak2q
       react-bootstrap-typeahead: 6.0.0_biqbaboplfbrettd7655fr4n2y
       react-confetti: 6.1.0_react@18.2.0
       react-cookie: 4.1.1_react@18.2.0
@@ -1110,7 +1114,7 @@ importers:
       react-dom: 18.2.0_react@18.2.0
       react-hook-form: 4.9.8_react@18.2.0
       react-i18next: 11.18.6_mli2zofuvcyhaucufkrum27ewe
-      react-markdown: 7.1.2_dsvndo4wjx7umk5x4kyqypffly
+      react-markdown: 7.1.2_3stiutgnnbnfnf3uowm5cip22i
       react-spring: 8.0.27_biqbaboplfbrettd7655fr4n2y
       rehype-raw: 6.1.1
       sanitize-html: 2.7.3
@@ -1162,8 +1166,8 @@ importers:
       '@types/hast': 2.3.4
       '@types/node': 13.13.52
       '@types/nodemailer': 6.4.6
-      '@types/react': 17.0.52
-      '@types/react-dom': 17.0.18
+      '@types/react': 18.0.27
+      '@types/react-dom': 18.0.10
       '@types/shelljs': 0.8.11
       '@types/unist': 2.0.6
       babel-loader: 8.3.0_npabyccmuonwo2rku4k53xo3hi
@@ -14101,7 +14105,6 @@ packages:
       '@babel/runtime': 7.20.7
       '@types/testing-library__react-hooks': 3.4.1
       react: 18.2.0
-    dev: false
     optional: true
 
   /@testing-library/react/10.4.9_biqbaboplfbrettd7655fr4n2y:
@@ -14235,7 +14238,7 @@ packages:
     dependencies:
       '@types/http-cache-semantics': 4.0.1
       '@types/keyv': 3.1.4
-      '@types/node': 18.11.9
+      '@types/node': 18.11.18
       '@types/responselike': 1.0.0
     dev: false
 
@@ -14371,7 +14374,7 @@ packages:
     resolution: {integrity: sha512-ATA/xrS7CZ3A2WCPVY4eKdNpybq56zqlTirnHhhyOztZM/lPxJzusOBI3BsaXbu6FrUluqzvMlI4sZ6BDYMlMg==}
     dependencies:
       '@types/minimatch': 5.1.2
-      '@types/node': 18.11.9
+      '@types/node': 18.11.18
     dev: false
 
   /@types/glob/7.2.0:
@@ -14501,7 +14504,7 @@ packages:
   /@types/keyv/3.1.4:
     resolution: {integrity: sha512-BQ5aZNSCpj7D6K2ksrRCTmKRLEpnPvWDiLPfoGyhZ++8YtiK9d/3DBKPJgry359X/P1PfruyYwvnvwFjuEiEIg==}
     dependencies:
-      '@types/node': 18.11.9
+      '@types/node': 18.11.18
     dev: false
 
   /@types/lodash/4.14.184:
@@ -14546,7 +14549,7 @@ packages:
   /@types/mkdirp/0.5.2:
     resolution: {integrity: sha512-U5icWpv7YnZYGsN4/cmh3WD2onMY0aJIiTE6+51TwJCttdHvtCYmkBNOobHlXwrJRL0nkH9jH4kD+1FAdMN4Tg==}
     dependencies:
-      '@types/node': 18.11.9
+      '@types/node': 18.11.18
     dev: false
 
   /@types/mongodb/3.6.20:
@@ -14666,6 +14669,12 @@ packages:
       '@types/react': 17.0.52
     dev: true
 
+  /@types/react-dom/18.0.10:
+    resolution: {integrity: sha512-E42GW/JA4Qv15wQdqJq8DL4JhNpB3prJgjgapN3qJT9K2zO5IIAQh4VXvCEDupoqAwnz0cY4RlXeC/ajX5SFHg==}
+    dependencies:
+      '@types/react': 18.0.27
+    dev: true
+
   /@types/react-dom/18.0.8:
     resolution: {integrity: sha512-C3GYO0HLaOkk9dDAz3Dl4sbe4AKUGTCfFIZsz3n/82dPNN8Du533HzKatDxeUYWu24wJgMP1xICqkWk1YOLOIw==}
     dependencies:
@@ -14715,6 +14724,13 @@ packages:
       '@types/scheduler': 0.16.2
       csstype: 3.1.1
 
+  /@types/react/18.0.27:
+    resolution: {integrity: sha512-3vtRKHgVxu3Jp9t718R9BuzoD4NcQ8YJ5XRzsSKxNDiDonD2MXIT1TmSkenxuCycZJoQT5d2vE8LwWJxBC1gmA==}
+    dependencies:
+      '@types/prop-types': 15.7.5
+      '@types/scheduler': 0.16.2
+      csstype: 3.1.1
+
   /@types/resolve/0.0.8:
     resolution: {integrity: sha512-auApPaJf3NPfe18hSoJkp8EbZzer2ISk7o8mCC3M9he/a04+gbMF97NkpD2S8riMGvm4BMRI59/SZQSaLTKpsQ==}
     dependencies:
@@ -14728,14 +14744,14 @@ packages:
   /@types/responselike/1.0.0:
     resolution: {integrity: sha512-85Y2BjiufFzaMIlvJDvTTB8Fxl2xfLo4HgmHzVBz08w4wDePCTjYw66PdrolO0kzli3yam/YCgRufyo1DdQVTA==}
     dependencies:
-      '@types/node': 18.11.9
+      '@types/node': 18.11.18
     dev: false
 
   /@types/rimraf/2.0.5:
     resolution: {integrity: sha512-YyP+VfeaqAyFmXoTh3HChxOQMyjByRMsHU7kc5KOJkSlXudhMhQIALbYV7rHh/l8d2lX3VUQzprrcAgWdRuU8g==}
     dependencies:
       '@types/glob': 8.0.0
-      '@types/node': 18.11.9
+      '@types/node': 18.11.18
     dev: false
 
   /@types/sanitize-html/2.6.2:
@@ -14769,7 +14785,7 @@ packages:
     resolution: {integrity: sha512-EhO29617AIBqxoVtpd1qdBanWpspk/kD2B6qTFRJ31Q23Rdf+DNU1xlHSwtqvwq1vgOqBwq1i38SX+HGCymIQg==}
     requiresBuild: true
     dependencies:
-      '@types/node': 18.11.9
+      '@types/node': 18.11.18
     dev: false
 
   /@types/shelljs/0.8.11:
@@ -15706,6 +15722,36 @@ packages:
       - supports-color
     dev: false
 
+  /@vulcanjs/graphql/0.8.1-y.0_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-KovmJfUv5cNIkEwwWs3phXdvhzICrtFsai5MQXvIjKgJwiNGRHqOMB+D8CH8XVAuigE4Gv0aOilzE+EgAR2aPw==}
+    peerDependencies:
+      '@apollo/client': ^3.5.5
+      apollo-server: ^2.18.2
+      graphql: ^16.2.0
+      react: ^17.0.1
+    dependencies:
+      '@vulcanjs/crud': 0.7.2-alpha.8_biqbaboplfbrettd7655fr4n2y
+      '@vulcanjs/i18n': 0.8.1-y.0
+      '@vulcanjs/model': 0.7.2-alpha.8
+      '@vulcanjs/permissions': 0.7.2-alpha.8_biqbaboplfbrettd7655fr4n2y
+      '@vulcanjs/schema': 0.7.2-alpha.8
+      '@vulcanjs/utils': 0.7.2-alpha.8
+      apollo-datasource: 3.3.2
+      debug: 4.3.4
+      deepmerge: 4.2.2
+      graphql-date: 1.0.3
+      graphql-type-json: 0.3.2
+      lodash: 4.17.21
+      moment-timezone: 0.5.38
+      react: 18.2.0
+    optionalDependencies:
+      msw: 0.35.0
+    transitivePeerDependencies:
+      - encoding
+      - react-dom
+      - supports-color
+    dev: false
+
   /@vulcanjs/graphql/0.8.1-y.0_d5rxnovlc3juxvfb3ez34dftf4:
     resolution: {integrity: sha512-KovmJfUv5cNIkEwwWs3phXdvhzICrtFsai5MQXvIjKgJwiNGRHqOMB+D8CH8XVAuigE4Gv0aOilzE+EgAR2aPw==}
     peerDependencies:
@@ -15960,21 +16006,6 @@ packages:
       lodash: 4.17.21
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
-    dev: false
-
-  /@vulcanjs/react-i18n/0.8.1-y.0_react@18.2.0:
-    resolution: {integrity: sha512-Sp3EH0EGX5rcJklKWXhrqGVL6Aaa1ICq+1mTZC9mm83wt/WbXZRQyhqEX63beuXNbbQUM2Pq/W8WR2BTD+YRNQ==}
-    peerDependencies:
-      '@apollo/client': ^3.5.5
-      react: ^17.0.1
-    dependencies:
-      '@vulcanjs/i18n': 0.8.1-y.0
-      '@vulcanjs/utils': 0.7.2-alpha.8
-      prop-types: 15.8.1
-      react: 18.2.0
-    transitivePeerDependencies:
-      - encoding
-      - supports-color
     dev: false
 
   /@vulcanjs/schema/0.7.1:
@@ -17404,7 +17435,7 @@ packages:
   /axios/0.21.4_debug@4.3.1:
     resolution: {integrity: sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==}
     dependencies:
-      follow-redirects: 1.15.2_debug@4.3.4
+      follow-redirects: 1.15.2_debug@4.3.1
     transitivePeerDependencies:
       - debug
     dev: false
@@ -18797,7 +18828,7 @@ packages:
       minipass-pipeline: 1.2.4
       mkdirp: 1.0.4
       p-map: 4.0.0
-      promise-inflight: 1.0.1
+      promise-inflight: 1.0.1_bluebird@3.7.2
       rimraf: 3.0.2
       ssri: 8.0.1
       tar: 6.1.13
@@ -24366,6 +24397,19 @@ packages:
       readable-stream: 2.3.7
     dev: false
 
+  /follow-redirects/1.15.2_debug@4.3.1:
+    resolution: {integrity: sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==}
+    engines: {node: '>=4.0'}
+    peerDependencies:
+      debug: '*'
+    peerDependenciesMeta:
+      debug:
+        optional: true
+    dependencies:
+      debug: 4.3.1
+    dev: false
+    optional: true
+
   /follow-redirects/1.15.2_debug@4.3.4:
     resolution: {integrity: sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==}
     engines: {node: '>=4.0'}
@@ -24375,7 +24419,7 @@ packages:
       debug:
         optional: true
     dependencies:
-      debug: 4.3.4
+      debug: 4.3.4_supports-color@6.1.0
     dev: false
 
   /for-each/0.3.3:
@@ -34469,15 +34513,6 @@ packages:
     resolution: {integrity: sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==}
     engines: {node: '>=0.4.0'}
 
-  /promise-inflight/1.0.1:
-    resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
-    peerDependencies:
-      bluebird: '*'
-    peerDependenciesMeta:
-      bluebird:
-        optional: true
-    dev: false
-
   /promise-inflight/1.0.1_bluebird@3.7.2:
     resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
     peerDependencies:
@@ -34909,6 +34944,33 @@ packages:
       warning: 4.0.3
     dev: false
 
+  /react-bootstrap/2.6.0_5ndqzdd6t4rivxsukjv3i3ak2q:
+    resolution: {integrity: sha512-WnDgN6PR8WZKo2Og5J8EafFi4BsABjc96lNuMNfksrgiPDCw18/woWQCNhAeHFZQWTQ/PijkOrQ9ncTWwO//AA==}
+    peerDependencies:
+      '@types/react': '>=16.14.8'
+      react: '>=16.14.0'
+      react-dom: '>=16.14.0'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.20.1
+      '@restart/hooks': 0.4.7_react@18.2.0
+      '@restart/ui': 1.4.1_biqbaboplfbrettd7655fr4n2y
+      '@types/react': 18.0.27
+      '@types/react-transition-group': 4.4.5
+      classnames: 2.3.2
+      dom-helpers: 5.2.1
+      invariant: 2.2.4
+      prop-types: 15.8.1
+      prop-types-extra: 1.1.1_react@18.2.0
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      react-transition-group: 4.4.5_biqbaboplfbrettd7655fr4n2y
+      uncontrollable: 7.2.1_react@18.2.0
+      warning: 4.0.3
+    dev: false
+
   /react-confetti/6.1.0_react@18.0.0:
     resolution: {integrity: sha512-7Ypx4vz0+g8ECVxr88W9zhcQpbeujJAVqL14ZnXJ3I23mOI9/oBVTQ3dkJhUmB0D6XOtCZEM6N0Gm9PMngkORw==}
     engines: {node: '>=10.18'}
@@ -35194,6 +35256,32 @@ packages:
 
   /react-lifecycles-compat/3.0.4:
     resolution: {integrity: sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==}
+
+  /react-markdown/7.1.2_3stiutgnnbnfnf3uowm5cip22i:
+    resolution: {integrity: sha512-ibMcc0EbfmbwApqJD8AUr0yls8BSrKzIbHaUsPidQljxToCqFh34nwtu3CXNEItcVJNzpjDHrhK8A+MAh2JW3A==}
+    peerDependencies:
+      '@types/react': '>=16'
+      react: '>=16'
+    dependencies:
+      '@types/hast': 2.3.4
+      '@types/react': 18.0.27
+      '@types/unist': 2.0.6
+      comma-separated-tokens: 2.0.3
+      hast-util-whitespace: 2.0.0
+      prop-types: 15.8.1
+      property-information: 6.2.0
+      react: 18.2.0
+      react-is: 17.0.2
+      remark-parse: 10.0.1
+      remark-rehype: 9.1.0
+      space-separated-tokens: 2.0.2
+      style-to-object: 0.3.0
+      unified: 10.1.2
+      unist-util-visit: 4.1.1
+      vfile: 5.3.6
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
 
   /react-markdown/7.1.2_dsvndo4wjx7umk5x4kyqypffly:
     resolution: {integrity: sha512-ibMcc0EbfmbwApqJD8AUr0yls8BSrKzIbHaUsPidQljxToCqFh34nwtu3CXNEItcVJNzpjDHrhK8A+MAh2JW3A==}
@@ -35586,6 +35674,14 @@ packages:
       prop-types: 15.8.1
     dev: false
     optional: true
+
+  /react/17.0.2:
+    resolution: {integrity: sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA==}
+    engines: {node: '>=0.10.0'}
+    dependencies:
+      loose-envify: 1.4.0
+      object-assign: 4.1.1
+    dev: true
 
   /react/18.0.0:
     resolution: {integrity: sha512-x+VL6wbT4JRVPm7EGxXhZ8w8LTROaxPXOqhlGyVSrv0sB1jkyFGgXxJ8LVoPRLvPR6/CIZGFmfzqUa2NYeMr2A==}

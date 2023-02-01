@@ -7246,9 +7246,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vulcanjs/react-i18n@npm:^0.6.10":
+"@devographics/react-i18n@npm:^0.6.10":
   version: 0.6.10
-  resolution: "@vulcanjs/react-i18n@npm:0.6.10"
+  resolution: "@devographics/react-i18n@npm:0.6.10"
   dependencies:
     "@vulcanjs/i18n": ^0.6.10
     "@vulcanjs/utils": ^0.6.10
@@ -7289,7 +7289,7 @@ __metadata:
     "@vulcanjs/model": ^0.6.10
     "@vulcanjs/permissions": ^0.6.10
     "@vulcanjs/react-hooks": ^0.6.10
-    "@vulcanjs/react-i18n": ^0.6.10
+    "@devographics/react-i18n": ^0.6.10
     "@vulcanjs/react-ui": ^0.6.10
     "@vulcanjs/schema": ^0.6.7
     "@vulcanjs/utils": ^0.6.10
@@ -7315,7 +7315,7 @@ __metadata:
     "@vulcanjs/model": ^0.6.10
     "@vulcanjs/permissions": ^0.6.10
     "@vulcanjs/react-hooks": ^0.6.10
-    "@vulcanjs/react-i18n": ^0.6.10
+    "@devographics/react-i18n": ^0.6.10
     "@vulcanjs/schema": ^0.6.7
     "@vulcanjs/utils": ^0.6.10
     classnames: ^2.3.1

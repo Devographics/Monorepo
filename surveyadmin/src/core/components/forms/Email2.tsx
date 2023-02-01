@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useIntlContext } from "@vulcanjs/react-i18n";
+import { useIntlContext } from "@devographics/react-i18n";
 import { FormCheck, FormControl } from "react-bootstrap";
 import isEmpty from "lodash/isEmpty.js";
 

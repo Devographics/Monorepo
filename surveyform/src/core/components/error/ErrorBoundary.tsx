@@ -18,6 +18,7 @@ interface ErrorBoundaryProps
     DefaultErrorProps,
     "proposeReload" | "proposeHomeRedirection" | "proposeLoginRedirection"
   > {
+  children: React.ReactNode;
   onError?: (error: Error, info: { componentStack: string }) => void;
   resetFunction?: (reset: () => void) => void;
   fallbackComponent?: ErrorBoundaryFallbackComponent; // TODO: more precisely it must be a component that accepts optional error and statusCode as props
@@ -58,6 +59,7 @@ export class ErrorBoundary extends React.Component<
     const { fallbackComponent: FallbackComponent } = this.props;
     if (error !== null) {
       return FallbackComponent ? (
+        // @ts-ignore
         <FallbackComponent error={error} />
       ) : (
         <DefaultErrorDisplay

@@ -22,7 +22,7 @@ import {
   getIntlLabel,
 } from "@vulcanjs/i18n";
 
-import { IntlProviderContextValue } from "@vulcanjs/react-i18n";
+import { IntlProviderContextValue } from "@devographics/react-i18n";
 import map from "lodash/map.js";
 import sortBy from "lodash/sortBy.js";
 import uniqBy from "lodash/uniqBy.js";

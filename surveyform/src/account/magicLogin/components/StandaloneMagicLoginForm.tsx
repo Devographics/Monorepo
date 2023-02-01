@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, ReactNode, FormEventHandler } from "react";
-import { useIntlContext } from "@vulcanjs/react-i18n";
+import { useIntlContext } from "@devographics/react-i18n";
 import { sendMagicLoginEmail } from "../lib/sendMagicLoginEmail";
 import { useUser } from "~/account/user/hooks";
 import { useSearchParams } from "next/navigation";

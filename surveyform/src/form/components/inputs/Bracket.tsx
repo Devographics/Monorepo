@@ -4,7 +4,7 @@ import sampleSize from "lodash/sampleSize.js";
 import isNil from "lodash/isNil.js";
 import isEmpty from "lodash/isEmpty.js";
 import cloneDeep from "lodash/cloneDeep.js";
-import { useIntlContext } from "@vulcanjs/react-i18n";
+import { useIntlContext } from "@devographics/react-i18n";
 import { useFormContext } from "@devographics/react-form";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import { FormItem } from "~/form/components/elements/FormItem";

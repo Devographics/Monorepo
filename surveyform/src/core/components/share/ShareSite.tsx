@@ -3,12 +3,12 @@ import ShareTwitter from "./ShareTwitter";
 import ShareEmail from "./ShareEmail";
 import ShareFacebook from "./ShareFacebook";
 import ShareLinkedIn from "./ShareLinkedIn";
-import { useIntlContext } from "@vulcanjs/react-i18n";
+import { useIntlContext } from "@devographics/react-i18n";
 
 const ShareSite = ({ survey }) => {
   const intl = useIntlContext();
   const { name, year, hashtag, shareUrl } = survey;
-  const link = `${shareUrl}?source=post_survey_share`
+  const link = `${shareUrl}?source=post_survey_share`;
   const surveyName = `${name} ${year}`;
   const values = { surveyName, link };
   const title = intl.formatMessage({ id: "general.share_subject" }, values);

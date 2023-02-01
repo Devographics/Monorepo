@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import type { SurveyEdition } from "@devographics/core-models";
-import { useIntlContext } from "@vulcanjs/react-i18n";
+import { useIntlContext } from "@devographics/react-i18n";
 import { convertSurveyToMarkdown } from "~/surveys/outlineExport";
 import { useEntities } from "~/core/components/common/EntitiesContext";
 import { useSurvey } from "./SurveyContext/Provider";

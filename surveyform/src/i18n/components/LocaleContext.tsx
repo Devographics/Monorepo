@@ -1,10 +1,12 @@
 "use client";
 /**
- * Legacy code from Vulcan, simplify if possible
+ * Context to handle locales
+ *
+ * TODO: merge this code with the i18n provider
+ * to have a single unified API
  */
 import React, { useContext } from "react";
-import { IntlProvider } from "@vulcanjs/react-i18n";
-import { IntlContext } from "./context";
+import { IntlProvider } from "@devographics/react-i18n";
 import { useRouter } from "next/navigation";
 import { useCookies } from "react-cookie";
 import { LOCALE_COOKIE_NAME } from "../cookie";
@@ -163,11 +165,9 @@ export const LocaleContextProvider = (props: {
       messages={intlObject.messages}
       locale={intlObject.locale}
     >
-      <IntlContext.Provider value={intlObject}>
-        <LocaleContext.Provider value={{ getLocale, setLocale, getLocaleDefs }}>
-          <div className={`locale-${localeId}`}>{children}</div>
-        </LocaleContext.Provider>
-      </IntlContext.Provider>
+      <LocaleContext.Provider value={{ getLocale, setLocale, getLocaleDefs }}>
+        <div className={`locale-${localeId}`}>{children}</div>
+      </LocaleContext.Provider>
     </IntlProvider>
   );
 };

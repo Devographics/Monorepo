@@ -1,5 +1,5 @@
 "use client";
-import { useIntlContext } from "@vulcanjs/react-i18n";
+import { useIntlContext } from "@devographics/react-i18n";
 import React from "react";
 import Head from "next/head";
 import { computeHeadTags } from "./computeHeadTags";

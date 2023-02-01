@@ -1,6 +1,6 @@
 import { useUser } from "~/account/user/hooks";
 import { routes } from "~/lib/routes";
-import { useIntlContext } from "@vulcanjs/react-i18n";
+import { useIntlContext } from "@devographics/react-i18n";
 import { apiRoutes } from "~/lib/apiRoutes";
 import React from "react";
 import { Button } from "~/core/components/ui/Button";
@@ -11,7 +11,7 @@ export const LogoutButton = ({
   component?: React.ComponentType<any> | React.ElementType<any>;
 }) => {
   const intl = useIntlContext();
-  const LinkOrButton = component || Button;
+  const LinkOrButton = (component || Button) as React.ComponentType<any>;
   const { user } = useUser();
   if (!user) return null;
   return (

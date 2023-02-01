@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useKeydownContext } from "./KeydownContext";
-import { useIntlContext } from "@vulcanjs/react-i18n";
+import { useIntlContext } from "@devographics/react-i18n";
 
 const githubOrg = "Devographics";
 const localeRepoName = (localeId: string) => `locale-${localeId}`;
