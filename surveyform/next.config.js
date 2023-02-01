@@ -1,4 +1,4 @@
-const util = require("util");
+//const util = require("util");
 const { extendNextConfig } = require("./packages/@vulcanjs/next-config");
 // Use @next/mdx for a basic MDX support.
 // See the how Vulcan Next docs are setup with next-mdx-remote

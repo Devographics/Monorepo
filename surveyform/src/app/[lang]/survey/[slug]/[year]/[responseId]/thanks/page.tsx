@@ -8,7 +8,7 @@ import React from "react";
 import { ResponseDocument, SurveyEdition } from "@devographics/core-models";
 import { print } from "graphql";
 import { notFound } from "next/navigation";
-import { fetchSurveyGithub } from "@devographics/core-models/server";
+import { fetchSurvey } from "@devographics/core-models/server";
 
 async function getResponseWithRanking({
   responseId,
@@ -71,7 +71,7 @@ const ThanksPage = async ({
   const readOnly = responseId === "read-only";
   // NOTE: Next.js 13 automatically deduplicate request
   // it's ok to fetch data again here after fetching in the layout
-  const survey = await fetchSurveyGithub(slug, year);
+  const survey = await fetchSurvey(slug, year);
   if (!survey) {
     notFound();
   }

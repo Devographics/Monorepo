@@ -5,7 +5,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 
 import { serverConfig } from '~/config/server'
 import { print } from 'graphql'
-import { fetchSurveyGithub } from "@devographics/core-models/server";
+import { fetchSurvey } from "@devographics/core-models/server";
 
 export default async function responseStartSurveyHandler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== "POST") {
@@ -15,7 +15,7 @@ export default async function responseStartSurveyHandler(req: NextApiRequest, re
     if (!surveySlug) throw new Error("No survey slug, can't start survey")
     const surveyYear = req.query["surveyYear"] as string
     if (!surveyYear) throw new Error("No survey year, can't start survey")
-    const survey = await fetchSurveyGithub(surveySlug, surveyYear)
+    const survey = await fetchSurvey(surveySlug, surveyYear)
 
 
     // TODO: this code used to be a client-side graphql query

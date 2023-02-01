@@ -1,5 +1,6 @@
 // @see api/src/surveys.ts
 // TODO: try to factor the code
+// TODO: create/use a Redis alternative too
 
 //import "server-only"
 // TODO: this will systematically call github API
@@ -16,6 +17,8 @@ const repo = "surveys"
 // @see https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28#get-repository-content
 const contentsRoot = `${ghApiReposRoot}/${org}/${repo}/contents`
 
+// Utils
+
 async function githubBody(res: Response) {
     const body = await res.json()
     if (!body) {
@@ -23,6 +26,7 @@ async function githubBody(res: Response) {
     }
     return body
 }
+// content of a directory
 async function githubContent(res: Response) {
     const content = (await githubBody(res))?.content
     if (!content) {
@@ -35,7 +39,6 @@ function yamlAsJson(content: any) {
     const json = yaml.load(decoded)
     return json
 }
-
 async function fetchGithub(url) {
     const githubAuthorization = `Bearer ${process.env.GITHUB_TOKEN}`
     return fetch(url, {
@@ -188,7 +191,7 @@ export async function fetchSurveyContextGithub(slug: SurveySharedContext["slug"]
     return surveyContext
 }
 
-export async function fetchSurveyFromId(surveyId: SurveyEdition["surveyId"]) {
+export async function fetchSurveyFromIdGithub(surveyId: SurveyEdition["surveyId"]) {
     const surveyList = await fetchSurveysListGithub()
     const surveyDescription = surveyList.find(s => s.surveyId)
     if (!surveyDescription) {

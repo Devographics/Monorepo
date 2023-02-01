@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { EntitiesProvider } from "~/core/components/common/EntitiesContext";
 import { fetchEntitiesRedis } from "~/core/server/fetchEntitiesRedis";
 import { SurveyProvider } from "~/surveys/components/SurveyContext/Provider";
-import { fetchSurveyGithub } from "@devographics/core-models/server";
+import { fetchSurvey } from "@devographics/core-models/server";
 
 // revalidate survey/entities every 5 minutes
 const SURVEY_TIMEOUT_SECONDS = 5 * 60;
@@ -33,7 +33,7 @@ export default async function SurveyLayout({
   params: { slug: string; year: string };
 }) {
   const { slug, year } = params;
-  const survey = await fetchSurveyGithub(slug, year);
+  const survey = await fetchSurvey(slug, year);
   if (!survey) {
     notFound();
   }

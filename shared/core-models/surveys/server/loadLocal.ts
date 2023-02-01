@@ -2,9 +2,12 @@
 // devographics/surveys
 //
 // @see api/src/surveys.ts
+
+// @ts-ignore fs/promises is not systematically found, 
+// this file is perhaps not transpiled as a server package
 import { readdir, readFile, lstat } from 'fs/promises'
 import path from "path"
-import { SurveyEditions } from "surveys/typings"
+import { SurveyEditions } from "@devographics/core-models"
 import yaml from "js-yaml"
 
 // Surveys may have been cloned from github, only keep valid files
