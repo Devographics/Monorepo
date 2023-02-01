@@ -467,8 +467,7 @@ export const Form = (props: FormProps) => {
               originalSchema,
             },
             intl,
-            mutableFields,
-            intl.formatMessage
+            mutableFields
           ).map((group, i) => (
             <FormComponents.FormGroup key={i} {...formGroupProps(group)} />
           ))}

@@ -13,19 +13,19 @@ export function reportWebVitals(metric) {
 
 import { useUser } from "~/account/user/hooks";
 
-import { LocaleContextProvider } from "~/i18n/components/LocaleContext";
+import { LocaleContextProvider } from "~/i18n/context/LocaleContext";
 
 import { ErrorBoundary } from "~/core/components/error";
 import Layout from "~/core/components/common/Layout";
-import type { LocaleDef } from "~/i18n/typings";
+import type { LocaleDef, LocaleDefWithStrings } from "~/i18n/typings";
 import { SSRProvider } from "react-bootstrap";
 import { SWRConfig } from "swr";
 
 export interface AppLayoutProps {
   /** Locale extracted from cookies server-side */
   localeId: string;
-  localeStrings: LocaleDef;
-  locales?: Array<LocaleDef>;
+  localeStrings: LocaleDefWithStrings;
+  locales: Array<LocaleDef>;
   // When on a specific survey
   children: React.ReactNode;
 }

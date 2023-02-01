@@ -12,9 +12,8 @@ const debugRootLayout = console.debug; //debug("dgs:rootlayout");
 
 //*** I18n redirections
 // @see https://nextjs.org/docs/advanced-features/i18n-routing
-import { locales } from "~/i18n/data/locales";
+//import { locales } from "~/i18n/data/locales";
 import { notFound } from "next/navigation";
-import { LocaleContextProvider } from "~/i18n/components/LocaleContext";
 
 // TODO: not yet compatible with having dynamic pages down the tree
 // we may have to call generateStaticParams in each static page instead
@@ -51,7 +50,7 @@ If this error still happens in a few months (2023) open an issue with repro at N
     throw new Error("Could not load locales of id: " + locale);
   }
   // locales lists
-  const locales = (await getLocales()) || undefined;
+  const locales = (await getLocales()) || [];
 
   // TODO: we load waaaay too much strings
   // we should load survey specific strings in another nested layout
