@@ -51,6 +51,13 @@ async function fetchGithubJson<T = any>(url: string): Promise<T> {
     const body = await githubBody(await fetchGithub(url))
     if (body?.message?.match(/API rate limit/)) {
         console.error(body)
+        // log rate limit response
+        fetchGithubJson("https://api.github.com/rate_limit").then((limit) => {
+            console.error(
+                "limited until (in GMT timezone):",
+                new Date(limit?.rate?.reset * 1000).toISOString(),
+                limit,)
+        }).catch(console.error)
         throw new Error("Hitting GitHub API rate limit, can't fetch: " + url)
     }
     return body
