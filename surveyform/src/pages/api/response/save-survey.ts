@@ -18,6 +18,10 @@ export default async function responseStartSurveyHandler(req: NextApiRequest, re
     if (!surveyYear) throw new Error("No survey year, can't start survey")
     const survey = await fetchSurvey(surveySlug, surveyYear)
 
+    if (!survey.status || ![1, 2].includes(survey.status)) {
+        throw new Error("Can't edit closed survey response")
+    }
+
 
     // TODO: this code used to be a client-side graphql query
     // we reuse the same call temporarily to facilitate moving out of graphql
