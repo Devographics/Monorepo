@@ -18,7 +18,7 @@ export type SurveySlug =
     | 'js2021'
     | 'js2022'
 
-// todo: generate this from GraphQL?
+// TODO: unify with shared "SurveyEditions"
 export type Survey = {
     name: string
     editions: SurveyEdition[]

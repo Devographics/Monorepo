@@ -4,7 +4,7 @@
 // @see api/src/surveys.ts
 import { readdir, readFile, lstat } from 'fs/promises'
 import path from "path"
-import { SurveyEdition, SurveyEditions } from "surveys/typings"
+import { SurveyEditions } from "surveys/typings"
 import yaml from "js-yaml"
 
 // Surveys may have been cloned from github, only keep valid files
@@ -19,7 +19,7 @@ const excludeDirs = ['.git', '.DS_Store']
  * the SurveyEditions structure comes from /api
  * But the surveyform expect either a specific survey, or a list of survey generic description
  */
-export const loadLocally = async (): Promise<Array<SurveyEditions>> => {
+export const loadSurveysLocally = async (): Promise<Array<SurveyEditions>> => {
     const surveysDirPath = path.resolve(path.join(__dirname, `../../${process.env.SURVEYS_DIR}/`))
     console.log(`-> loading surveys locally at path ${surveysDirPath}`)
     const surveys: Array<SurveyEditions> = []

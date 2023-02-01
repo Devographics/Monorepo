@@ -13,6 +13,7 @@ export type {
   ParsedQuestion,
   SurveyEdition,
   SurveyEditionDescription,
+  SurveyEditions,
   SurveySharedContext,
   SurveySection,
   SurveyStatus,
