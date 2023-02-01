@@ -1,1 +1,2 @@
-export * from "./lib/modules/Provider";
+export * from "./Provider";
+export * from "./stringsRegistry"

@@ -1,7 +1,6 @@
 import React from "react";
 import { Story, Meta } from "@storybook/react";
-import { IntlProvider } from "@devographics/react-i18n";
-import { makeStringsRegistry } from "@vulcanjs/i18n";
+import { IntlContextProvider, StringsRegistry } from "@devographics/react-i18n";
 import { action, actions } from "@storybook/addon-actions";
 import { FormNestedArray, FormNestedArrayProps } from "../FormNestedArray";
 import {
@@ -16,10 +15,9 @@ export default {
     (Story) => (
       // TODO: improve this
       <VulcanComponentsProvider>
-        <IntlProvider
-          stringsRegistry={makeStringsRegistry()}
-          locale="fr"
-          messages={[]}
+        <IntlContextProvider
+          stringsRegistry={new StringsRegistry("STORYBOOK")}
+          localeId="fr"
         >
           {/** NOTE: if you want to force a "currentValues", you need to wrap the component
            * with a new FormContext directly at the story level */}
@@ -32,7 +30,7 @@ export default {
           >
             <Story />
           </FormContext.Provider>
-        </IntlProvider>
+        </IntlContextProvider>
       </VulcanComponentsProvider>
     ),
   ],

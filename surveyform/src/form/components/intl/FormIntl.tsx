@@ -2,7 +2,6 @@ import React from "react";
 import omit from "lodash/omit.js";
 import { useFormContext } from "@devographics/react-form";
 import FormComponent from "../elements/FormComponent";
-//import type { LocaleType } from "@vulcanjs/i18n";
 
 // const Locales: Array<{ id: string }> = []; // ?? might need to get this from context
 export const FormIntlLayout = ({ children }) => (

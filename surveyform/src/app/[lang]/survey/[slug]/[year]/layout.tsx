@@ -9,7 +9,7 @@ import {
   getLocales,
   i18nCommonContexts,
 } from "~/i18n/server/fetchLocalesRedis";
-import { LocaleContextProvider } from "~/i18n/components/LocaleContext";
+import { LocaleContextProvider } from "~/i18n/context/LocaleContext";
 
 // revalidate survey/entities every 5 minutes
 const SURVEY_TIMEOUT_SECONDS = 5 * 60;
@@ -73,7 +73,7 @@ If this error still happens in a few months (2023) open an issue with repro at N
     );
   }
   // locales lists
-  const locales = (await getLocales()) || undefined;
+  const locales = (await getLocales()) || [];
 
   // NOTE: if fetch entities was based on survey slug
   // we could run those queries in //

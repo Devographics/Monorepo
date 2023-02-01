@@ -1,11 +1,10 @@
 "use client";
 import React from "react";
-import { useLocales } from "~/i18n/hooks/locales";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
-import { useLocaleContext } from "~/i18n/components/LocaleContext";
+import { useLocaleContext } from "~/i18n/context/LocaleContext";
 
 const LocaleSelector = () => {
-  const { locales = [] } = useLocales();
+  const { locales } = useLocaleContext();
   const { setLocale } = useLocaleContext();
 
   return (

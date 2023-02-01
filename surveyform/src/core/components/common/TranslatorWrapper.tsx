@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useKeydownContext } from "./KeydownContext";
 import { useIntlContext } from "@devographics/react-i18n";
+import { useLocaleContext } from "~/i18n/context/LocaleContext";
 
 const githubOrg = "Devographics";
 const localeRepoName = (localeId: string) => `locale-${localeId}`;
@@ -53,6 +54,7 @@ export const TranslatorWrapper = ({
   message: string;
   children: React.ReactNode;
 }) => {
+  const { localeId } = useLocaleContext();
   const intl = useIntlContext();
   // modKey = cmd or alt
   const { modKeyDown } = useKeydownContext();
@@ -62,7 +64,7 @@ export const TranslatorWrapper = ({
     // note: `fallback` here denotes whether a string is itself a fallback for a missing string
     e.preventDefault();
     e.stopPropagation();
-    window.open(getGitHubSearchUrl(id, intl.locale));
+    window.open(getGitHubSearchUrl(id, localeId));
   };
 
   const title = shouldRedirectToTranslation

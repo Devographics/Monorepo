@@ -94,7 +94,6 @@
     "@vulcanjs/core": "0.7.2-alpha.8",
     "@vulcanjs/crud": "0.7.2-alpha.8",
     "@vulcanjs/graphql": "0.8.1-y.0",
-    "@vulcanjs/i18n": "0.8.1-y.0",
     "@vulcanjs/mdx": "0.7.2-alpha.8",
     "@vulcanjs/model": "0.7.2-alpha.8",
     "@vulcanjs/mongo": "0.7.2-alpha.8",

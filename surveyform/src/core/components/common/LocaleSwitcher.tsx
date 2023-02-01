@@ -1,12 +1,10 @@
 import React from "react";
-import { useLocales } from "~/i18n/hooks/locales";
-import { useLocaleContext } from "~/i18n/components/LocaleContext";
+import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { Dropdown } from "~/core/components/ui/Dropdown";
 
 const LocaleSwitcher = () => {
-  const { locales = [] } = useLocales();
-  const { getLocale, setLocale } = useLocaleContext();
-  const currentLocale = getLocale();
+  const { locales = [] } = useLocaleContext();
+  const { locale: currentLocale, setLocale } = useLocaleContext();
   return (
     <Dropdown
       buttonProps={{

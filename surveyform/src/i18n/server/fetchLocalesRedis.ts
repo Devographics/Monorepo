@@ -8,7 +8,7 @@ import {
   promisesNodeCache,
   nodeCache,
 } from "~/lib/server/caching";
-import { LocaleDef } from "../typings";
+import { LocaleDef, LocaleDefWithStrings } from "../typings";
 import { measureTime } from "~/lib/server/utils";
 import { getRedisClient } from "~/lib/server/redis";
 
@@ -179,7 +179,7 @@ export const fetchLocaleStrings = async (variables: LocaleStringsVariables) => {
     //console.debug("Got locale", locale.id);
     // Convert strings array to a map (and cache the result)
     const convertedLocaleCacheKey = ["convertedLocale", locale.id].join("/");
-    let convertedLocale = nodeCache.get<LocaleDef>(convertedLocaleCacheKey);
+    let convertedLocale = nodeCache.get<LocaleDefWithStrings>(convertedLocaleCacheKey);
     if (convertedLocale) return convertedLocale;
     const convertedStrings = {};
     locale.strings &&
@@ -193,8 +193,9 @@ export const fetchLocaleStrings = async (variables: LocaleStringsVariables) => {
       LOCALES_TTL_SECONDS
     );
     console.timeEnd(label)
-    return convertedLocale as LocaleDef;
+    return convertedLocale as LocaleDefWithStrings;
     // return locale as Locale;
+
   }
   // locale not found
   console.timeEnd(label)

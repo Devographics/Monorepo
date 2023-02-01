@@ -1,1 +1,0 @@
-export { IntlProvider } from "./Provider";
