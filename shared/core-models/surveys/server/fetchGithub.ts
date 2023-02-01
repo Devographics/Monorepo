@@ -39,13 +39,21 @@ function yamlAsJson<T = any>(content: any): T {
     const json = yaml.load(decoded)
     return json as T
 }
-async function fetchGithub(url) {
+async function fetchGithub(url: string): Promise<Response> {
     const githubAuthorization = `Bearer ${process.env.GITHUB_TOKEN}`
     return fetch(url, {
         headers: {
             "Authorization": githubAuthorization
         }
     })
+}
+async function fetchGithubJson<T = any>(url: string): Promise<T> {
+    const body = await githubBody(await fetchGithub(url))
+    if (body?.message?.match(/API rate limit/)) {
+        console.error(body)
+        throw new Error("Hitting GitHub API rate limit, can't fetch: " + url)
+    }
+    return body
 }
 
 /// One survey + questions
@@ -142,8 +150,8 @@ const yearThreshold = 2019
 
 async function fetchRecentYearsFolder(surveySlug: SurveyEdition["slug"]) {
     const surveyPath = `${contentsRoot}/${surveySlug}`
-    const yearsRes = await fetchGithub(surveyPath)
-    const recentYearsFolders = (await githubBody(yearsRes) as Array<GhFileOrDir>)
+    const yearsFolders = await fetchGithubJson<Array<GhFileOrDir>>(surveyPath)
+    const recentYearsFolders = yearsFolders
         .filter(isDir)
         .filter(dir => {
             const year = parseInt(dir.name)
@@ -156,8 +164,9 @@ async function fetchRecentYearsFolder(surveySlug: SurveyEdition["slug"]) {
 }
 
 export const fetchSurveysListGithub = async (): Promise<Array<SurveyEditionDescription>> => {
-    const contentRes = await fetchGithub(contentsRoot)
-    const surveysFolders = (await githubBody(contentRes) as Array<GhFileOrDir>)
+    const content = await fetchGithubJson<Array<GhFileOrDir>>(contentsRoot)
+    console.log("content", content)
+    const surveysFolders = content
         .filter(fileOrDir => fileOrDir.type === "dir")
 
     let surveys: Array<SurveyEdition> = []

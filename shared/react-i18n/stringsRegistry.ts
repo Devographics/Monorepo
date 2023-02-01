@@ -26,6 +26,14 @@ export class StringsRegistry {
             ...strings,
         };
     }
+    // fill from  a parent registry
+    mergeTokens(sr: StringsRegistry) {
+        Object.entries(sr.Strings).forEach(
+            ([localeId, tokens]) => {
+                this.addStrings(localeId, tokens)
+            }
+        )
+    }
     /**
      * Get a specific translation
      * @param param0 

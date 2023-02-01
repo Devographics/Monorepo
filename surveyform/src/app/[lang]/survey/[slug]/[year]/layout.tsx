@@ -56,16 +56,17 @@ If this error still happens in a few months (2023) open an issue with repro at N
     notFound();
   }
   const i18nContexts = [
-    // TODO: the common contexts should already have been fetched by the root layout
-    // merge React context instead here
-    ...i18nCommonContexts,
+    // We expect the root layout to load the common contexts
+    // and define a LocaleContextProvider
+    // => generic strings and survey specific will be merged automatically
+    //...i18nCommonContexts,
     // TODO: get this "survey context" value more reliably
     survey.prettySlug!.replace("-", "_"),
     survey.prettySlug!.replace("-", "_") + "_" + year,
   ];
   const localeWithStrings = await fetchLocaleStrings({
     localeId: locale,
-    contexts: i18nCommonContexts,
+    contexts: i18nContexts,
   });
   if (!localeWithStrings) {
     throw new Error(
