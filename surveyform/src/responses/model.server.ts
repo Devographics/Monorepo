@@ -8,7 +8,7 @@ import { subscribe } from "~/server/email/email_octopus";
 import mongoose from "mongoose";
 import { captureException } from "@sentry/nextjs";
 import { fetchSurveyFromId, } from "@devographics/core-models/server";
-import { ResponseDocument, SerializedSurveyDocument, SurveyDocument } from "@devographics/core-models";
+import { ResponseDocument, SurveyEdition } from "@devographics/core-models";
 import { getModelDef, initReponseModel } from "./model";
 import { getServerSchema } from "./schema.server";
 
@@ -120,7 +120,7 @@ let ResponseModel
 export const getResponseModel = () => {
   return ResponseModel
 };
-export const initResponseModelServer = (surveys: Array<SurveyDocument>) => {
+export const initResponseModelServer = (surveys: Array<SurveyEdition>) => {
   initReponseModel(surveys)
   ResponseModel = createGraphqlModelServer(getModelDefServer())
 }

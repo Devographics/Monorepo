@@ -1,5 +1,5 @@
 import { isAbsoluteUrl } from "~/core/utils/isAbsoluteUrl";
-import { SurveyDescription } from "~/surveys/typings";
+import { SurveyEditionDescription } from "@devographics/core-models";
 
 /**
  * Get the main survey image,
@@ -8,7 +8,7 @@ import { SurveyDescription } from "~/surveys/typings";
  * @param survey 
  * @returns A relative or absolute URL of the main survey image
  */
-export const getSurveyImageUrl = (survey: SurveyDescription) => {
+export const getSurveyImageUrl = (survey: SurveyEditionDescription) => {
     const { imageUrl } = survey;
     if (!imageUrl) throw new Error(`Survey with prettySlug ${survey.prettySlug} has no imageUrl`)
     let finalImageUrl = isAbsoluteUrl(imageUrl)

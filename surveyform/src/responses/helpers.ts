@@ -9,10 +9,8 @@ import {
   Field,
   FieldTemplateId,
   ParsedQuestion,
-  SerializedSurveyDocument,
-  SurveyDocument,
   SurveySection,
-  SurveyType,
+  SurveyEdition,
 } from "@devographics/core-models";
 
 //import { data } from "autoprefixer";
@@ -165,7 +163,7 @@ export const generateIntlId = (questionObject, section, survey) => {
 export const getQuestionSchema = (
   questionObject: ParsedQuestion,
   section,
-  survey: SurveyDocument | SerializedSurveyDocument
+  survey: SurveyEdition | SurveyEdition
 ): VulcanGraphqlFieldSchema => {
   const {
     id,
@@ -235,7 +233,7 @@ export const ignoredFieldTypes: Array<FieldTemplateId> = [
   "project",
 ];
 
-export const getCompletionPercentage = (response: ResponseDocument, survey: SerializedSurveyDocument | SurveyDocument) => {
+export const getCompletionPercentage = (response: ResponseDocument, survey: SurveyEdition | SurveyEdition) => {
   let completedCount = 0;
   let totalCount = 0;
   const parsedOutline = parseSurvey(survey).outline;
@@ -311,7 +309,7 @@ export const getSectionCompletionPercentage = (
 Calculate CSS features knowledge score
 
 */
-export const getKnowledgeScore = (response: ResponseDocument, survey: SurveyDocument | SerializedSurveyDocument) => {
+export const getKnowledgeScore = (response: ResponseDocument, survey: SurveyEdition | SurveyEdition) => {
   const featureSections = survey.outline.filter(
     (section) => section.slug === "features"
   );

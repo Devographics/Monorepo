@@ -5,10 +5,7 @@ import { serverConfig } from "~/config/server";
 import { buildSingleQuery } from "@devographics/crud";
 import React from "react";
 
-import {
-  ResponseDocument,
-  SerializedSurveyDocument,
-} from "@devographics/core-models";
+import { ResponseDocument, SurveyEdition } from "@devographics/core-models";
 import { print } from "graphql";
 import { notFound } from "next/navigation";
 import { fetchSurveyGithub } from "@devographics/core-models/server";
@@ -17,7 +14,7 @@ async function getResponseWithRanking({
   responseId,
   survey,
 }: {
-  survey: SerializedSurveyDocument;
+  survey: SurveyEdition;
   responseId: string;
 }) {
   // TODO: get from the database directly, the graphql call is just for convenience

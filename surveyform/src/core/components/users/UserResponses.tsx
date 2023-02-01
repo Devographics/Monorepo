@@ -4,7 +4,7 @@ import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import { useUser } from "~/account/user/hooks";
 import { useUserResponses } from "~/responses/hooks";
 import { Loading } from "../ui/Loading";
-import { SerializedSurveyDocument } from "@devographics/core-models";
+import { SurveyEdition } from "@devographics/core-models";
 
 const UserResponses = () => {
   const { user, loading: userLoading, error: userError } = useUser();
@@ -53,7 +53,7 @@ const ResponseItem = ({
   createdAt?: string | null;
   pagePath: string;
   completion?: number;
-  survey?: SerializedSurveyDocument;
+  survey?: SurveyEdition;
 }) => {
   if (!survey) {
     return null;

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router.js";
-import type { SurveyDocument } from "@devographics/core-models";
+import type { SurveyEdition } from "@devographics/core-models";
 import { useIntlContext } from "@vulcanjs/react-i18n";
 import { useEntitiesQuery } from "~/core/hooks/useEntitiesQuery";
 import { surveysWithTemplates } from "~/surveys/withTemplates";
@@ -41,7 +41,7 @@ const SurveyExport = () => {
 export const SurveyMarkdownOutline = ({
   survey,
 }: {
-  survey: SurveyDocument;
+  survey: SurveyEdition;
 }) => {
   const [showFieldName, setShowFieldName] = useState<boolean>(false);
   const intl = useIntlContext();

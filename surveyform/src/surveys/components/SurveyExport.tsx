@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import type { SurveyDocument } from "@devographics/core-models";
+import type { SurveyEdition } from "@devographics/core-models";
 import { useIntlContext } from "@vulcanjs/react-i18n";
 import { convertSurveyToMarkdown } from "~/surveys/outlineExport";
 import { useEntities } from "~/core/components/common/EntitiesContext";
@@ -14,7 +14,7 @@ const SurveyExport = () => {
 export const SurveyMarkdownOutline = ({
   survey,
 }: {
-  survey: SurveyDocument;
+  survey: SurveyEdition;
 }) => {
   const [showFieldName, setShowFieldName] = useState<boolean>(false);
   const intl = useIntlContext();

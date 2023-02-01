@@ -2,7 +2,7 @@
 import React, { useEffect, useRef } from "react";
 import Link from "next/link";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
-import type { SurveySection, SurveyType } from "@devographics/core-models";
+import type { SurveySection, SurveyEdition } from "@devographics/core-models";
 import { ResponseDocument } from "@devographics/core-models";
 import { getSectionCompletionPercentage } from "~/responses/helpers";
 import { useFormContext } from "@devographics/react-form";
@@ -22,7 +22,7 @@ const SurveyNavItem = ({
   setNavLoading,
   readOnly,
 }: {
-  survey: SurveyType;
+  survey: SurveyEdition;
   response?: ResponseDocument;
   section: SurveySection;
   number: any;

@@ -4,7 +4,7 @@ import {
   ResponseAdmin,
   ResponseDocument,
 } from "@devographics/core-models/server";
-import { SurveyType } from "@devographics/core-models";
+import { SurveyEdition } from "@devographics/core-models";
 import mongoose from "mongoose";
 import { nanoid } from "nanoid";
 import { publicReadonlyDb } from "~/lib/server/mongoose/connection";
@@ -97,8 +97,8 @@ export const NormalizedResponseMongoCollection = () => {
 export interface NormalizedResponseDocument extends ResponseDocument {
   responseId: ResponseDocument["_id"];
   generatedAt: Date;
-  survey: SurveyType["context"];
-  year: SurveyType["year"];
+  survey: SurveyEdition["context"];
+  year: SurveyEdition["year"];
   user_info: {
     country?: string;
     // Here, we store only PUBLIC data

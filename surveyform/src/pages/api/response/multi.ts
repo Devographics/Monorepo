@@ -3,24 +3,24 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import gql from "graphql-tag"
 import { serverConfig } from '~/config/server'
 import { print } from 'graphql'
-import { ResponseDocument, SurveyDocument } from '@devographics/core-models'
+import { ResponseDocument, SurveyEdition } from '@devographics/core-models'
 
 export default async function responseHandler(req: NextApiRequest, res: NextApiResponse) {
-    // TODO: this code used to be a client-side graphql query
-    // we reuse the same call temporarily to facilitate moving out of graphql
-    const headers = {
-        ...req.headers,
-        "content-type": "application/json"
-    }
-    delete headers.connection
-    const response = await fetch(serverConfig.appUrl + "/api/graphql", {
-        method: "POST",
-        // @ts-ignore
-        headers: req.headers,
-        // TODO: this query doesn't consider the survey slug
-        body: JSON.stringify(
-            {
-                query: print(gql`
+  // TODO: this code used to be a client-side graphql query
+  // we reuse the same call temporarily to facilitate moving out of graphql
+  const headers = {
+    ...req.headers,
+    "content-type": "application/json"
+  }
+  delete headers.connection
+  const response = await fetch(serverConfig.appUrl + "/api/graphql", {
+    method: "POST",
+    // @ts-ignore
+    headers: req.headers,
+    // TODO: this query doesn't consider the survey slug
+    body: JSON.stringify(
+      {
+        query: print(gql`
       query getCurrentUser {
         currentUser {
           ...UsersCurrentSurveyAction
@@ -56,11 +56,11 @@ export default async function responseHandler(req: NextApiRequest, res: NextApiR
         __typename
       }
     `)
-            }
-        )
-    })
-    const data = await response.json()
-    console.log("GOT DATA FROM GRAPHQL CALL", data)
-    const responses: Array<ResponseDocument & { survey: SurveyDocument }> = data?.data?.currentUser?.responses || []
-    res.status(200).json(responses)
+      }
+    )
+  })
+  const data = await response.json()
+  console.log("GOT DATA FROM GRAPHQL CALL", data)
+  const responses: Array<ResponseDocument & { survey: SurveyEdition }> = data?.data?.currentUser?.responses || []
+  res.status(200).json(responses)
 }

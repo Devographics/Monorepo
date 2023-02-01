@@ -7,7 +7,7 @@ import bowser from "bowser";
 // import { isAdmin as checkIsAdmin } from "@vulcanjs/permissions";
 import { useSearchParams } from "next/navigation";
 import { apiRoutes } from "~/lib/apiRoutes";
-import { SerializedSurveyDocument, SurveyDocument } from "@devographics/core-models";
+import { SurveyEdition } from "@devographics/core-models";
 
 export const useSurveyActionParams = (): { source?: string; referrer?: string } => {
   const query = useSearchParams()
@@ -89,7 +89,7 @@ const extractErrorObject = (rawError): ErrorObject | null => {
   }
 };
 
-export async function startSurvey(survey: SurveyDocument | SerializedSurveyDocument, data: any) {
+export async function startSurvey(survey: SurveyEdition | SurveyEdition, data: any) {
   // TODO: this should also invalidate the "getCurrentUser" query
   // we should figure how to do so using SWR, maybe in the code that calls startSurvey?
   const fetchRes = await fetch(
@@ -111,7 +111,7 @@ export async function startSurvey(survey: SurveyDocument | SerializedSurveyDocum
   return { data: res.data, error: errorObject }
 }
 
-export async function saveSurvey(survey: SurveyDocument | SerializedSurveyDocument, data: any) {
+export async function saveSurvey(survey: SurveyEdition | SurveyEdition, data: any) {
   // TODO: this should also invalidate the "getCurrentUser" query
   // we should figure how to do so using SWR, maybe in the code that calls startSurvey?
   const fetchRes = await fetch(

@@ -7,7 +7,7 @@ import {
 import cloneDeep from "lodash/cloneDeep.js";
 import { addComponentToQuestionObject } from "./customComponents";
 import { VulcanFieldSchema } from "@vulcanjs/schema";
-import { SerializedSurveyDocument, SurveyDocument } from "@devographics/core-models";
+import { SurveyEdition } from "@devographics/core-models";
 
 let schemaIsReady = false
 
@@ -264,7 +264,7 @@ export const getCommentSchema = () => ({
   canUpdate: ["owners", "admins"],
 });
 
-export async function initResponseSchema(surveys: Array<SurveyDocument>) {
+export async function initResponseSchema(surveys: Array<SurveyEdition>) {
   schemaIsReady = true
   const coreSchema = cloneDeep(schema) as VulcanGraphqlSchema;
   surveys.forEach((survey) => {
@@ -314,7 +314,7 @@ export async function initResponseSchema(surveys: Array<SurveyDocument>) {
 
 
 // generate schema on the fly, used only in frontend for survey specific pages at the moment
-export function getSurveyResponseSchema(survey: SurveyDocument | SerializedSurveyDocument) {
+export function getSurveyResponseSchema(survey: SurveyEdition | SurveyEdition) {
   const coreSchema = cloneDeep(schema) as VulcanGraphqlSchema;
   const surveyResponseSchema = cloneDeep(coreSchema);
   survey.outline.forEach((section) => {

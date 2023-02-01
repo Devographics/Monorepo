@@ -5,9 +5,8 @@
 // TODO: this will systematically call github API
 // we should cache the result somewhere
 // for instance in a place dedicated to the survey form on Redis
-import { SurveyDocument, SurveySharedContext } from "../typings";
 import yaml from "js-yaml"
-import { SurveyDescription } from "../typings";
+import { SurveyEdition, SurveyEditionDescription, SurveySharedContext } from "../typings";
 import orderBy from "lodash/orderBy.js"
 
 const ghApiReposRoot = "https://api.github.com/repos"
@@ -53,7 +52,7 @@ async function fetchGithub(url) {
  * /!\ this is different from the github folder path, we need to replace "-" by "_"
  * @param year 
  */
-export async function fetchSurveyGithub(prettySlug: SurveyDocument["prettySlug"], year: string): Promise<SurveyDocument> {
+export async function fetchSurveyGithub(prettySlug: SurveyEdition["prettySlug"], year: string): Promise<SurveyEdition> {
     // TODO: find a cleaner way to convert prettySLug to slug => do this before calling this function
     const slug = prettySlug?.replaceAll("-", "_")
     const surveyFolder = `${slug}`
@@ -100,7 +99,7 @@ export async function fetchSurveyGithub(prettySlug: SurveyDocument["prettySlug"]
  * @param year 
  * @returns 
  */
-async function fetchSurveyDescription(surveyFolder: string, year: string): Promise<SurveyDocument> {
+async function fetchSurveyDescription(surveyFolder: string, year: string): Promise<SurveyEdition> {
     const yearlyFolder = `${surveyFolder}/${year}`
     const configUrl = `${contentsRoot}/${yearlyFolder}/config.yml`
     const commonConfigUrl = `${contentsRoot}/${surveyFolder}/config.yml`
@@ -138,7 +137,7 @@ const isDir = (fileOrDir: GhFileOrDir) => fileOrDir.type === "dir"
 
 const yearThreshold = 2019
 
-async function fetchRecentYearsFolder(surveySlug: SurveyDocument["slug"]) {
+async function fetchRecentYearsFolder(surveySlug: SurveyEdition["slug"]) {
     const surveyPath = `${contentsRoot}/${surveySlug}`
     const yearsRes = await fetchGithub(surveyPath)
     const recentYearsFolders = (await githubBody(yearsRes) as Array<GhFileOrDir>)
@@ -153,12 +152,12 @@ async function fetchRecentYearsFolder(surveySlug: SurveyDocument["slug"]) {
 
 }
 
-export const fetchSurveysListGithub = async (): Promise<Array<SurveyDescription>> => {
+export const fetchSurveysListGithub = async (): Promise<Array<SurveyEditionDescription>> => {
     const contentRes = await fetchGithub(contentsRoot)
     const surveysFolders = (await githubBody(contentRes) as Array<GhFileOrDir>)
         .filter(fileOrDir => fileOrDir.type === "dir")
 
-    let surveys: Array<SurveyDocument> = []
+    let surveys: Array<SurveyEdition> = []
     for (const surveyFolder of surveysFolders) {
         const recentYearsFolders = await fetchRecentYearsFolder(surveyFolder.name)
         for (const yearFolder of recentYearsFolders) {
@@ -189,7 +188,7 @@ export async function fetchSurveyContextGithub(slug: SurveySharedContext["slug"]
     return surveyContext
 }
 
-export async function fetchSurveyFromId(surveyId: SurveyDocument["surveyId"]) {
+export async function fetchSurveyFromId(surveyId: SurveyEdition["surveyId"]) {
     const surveyList = await fetchSurveysListGithub()
     const surveyDescription = surveyList.find(s => s.surveyId)
     if (!surveyDescription) {

@@ -10,7 +10,7 @@ import {
   FieldTemplateId,
   ParsedQuestion,
   SurveySection,
-  SurveyType,
+  SurveyEdition,
 } from "@devographics/core-models";
 import surveys from "~/surveys";
 import { statuses } from "../constants";
@@ -161,7 +161,7 @@ export const generateIntlId = (questionObject, section, survey) => {
 export const getQuestionSchema = (
   questionObject: ParsedQuestion,
   section,
-  survey: SurveyType
+  survey: SurveyEdition
 ): VulcanGraphqlFieldSchema => {
   const {
     id,

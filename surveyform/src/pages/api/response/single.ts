@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import gql from "graphql-tag"
 import { serverConfig } from '~/config/server'
 import { print } from 'graphql'
-import { ResponseDocument, SurveyDocument } from '@devographics/core-models'
+import { ResponseDocument, SurveyEdition } from '@devographics/core-models'
 
 export default async function responseHandler(req: NextApiRequest, res: NextApiResponse) {
   const surveySlug = req.query["surveySlug"]
@@ -70,7 +70,7 @@ export default async function responseHandler(req: NextApiRequest, res: NextApiR
     const data = await gqlRes.json()
     console.log("GOT DATA FROM GRAPHQL CALL", data)
     // TODO: filter during call to db already
-    const responses: Array<ResponseDocument & { survey: SurveyDocument }> = data?.data?.currentUser?.responses
+    const responses: Array<ResponseDocument & { survey: SurveyEdition }> = data?.data?.currentUser?.responses
     const surveyResponse = responses.find((r) => r.surveySlug === surveySlug) || null;
     console.log("response", surveyResponse, responses)
     return res.status(200).json(surveyResponse)

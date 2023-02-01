@@ -2,7 +2,7 @@
 import { useFormContext } from "@devographics/react-form";
 import React, { useEffect } from "react";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
-import { SurveyDocument } from "@devographics/core-models";
+import { SurveyEdition } from "@devographics/core-models";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { LoadingButton } from "~/core/components/ui/LoadingButton";
@@ -23,7 +23,7 @@ const FormSubmit = ({
   setPrevLoading,
   nextLoading,
   setNextLoading,
-}: { survey: SurveyDocument } & any) => {
+}: { survey: SurveyEdition } & any) => {
   const router = useRouter();
   const formContext = useFormContext();
   const { getDocument, currentValues } = formContext;

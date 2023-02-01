@@ -11,7 +11,7 @@ import { localMailTransport } from "~/lib/server/mail/transports";
  */
 import Mail from "nodemailer/lib/mailer";
 import { fetchSurveyContextGithub } from "@devographics/core-models/server";
-import { SurveySharedContext } from "@devographics/core-models/surveys/typings";
+import { SurveySharedContext } from "@devographics/core-models";
 
 const MagicLinkHtml = ({
   magicLink,
