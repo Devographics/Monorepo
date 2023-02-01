@@ -6,7 +6,7 @@ import { Project } from "@devographics/core-models/server";
 // Add default connectors and dataSources creators for models that may miss some
 // @see https://www.apollographql.com/docs/apollo-server/data/data-sources
 import { addDefaultMongoConnector } from "@vulcanjs/mongo-apollo/server";
-import { fetchSurveyFromId, fetchSurveysListGithub } from "~/surveys/server/fetch";
+import { fetchSurveyFromId, fetchSurveysListGithub } from "@devographics/core-models/server";
 import { getResponseModel, initResponseModelServer } from "~/responses/model.server"; import { VulcanGraphqlModelServer } from "@vulcanjs/graphql/server";
 
 let models: Array<VulcanGraphqlModelServer> = []

@@ -11,7 +11,7 @@ import {
 } from "@devographics/core-models";
 import { print } from "graphql";
 import { notFound } from "next/navigation";
-import { fetchSurveyGithub } from "~/surveys/server/fetch";
+import { fetchSurveyGithub } from "@devographics/core-models/server";
 
 async function getResponseWithRanking({
   responseId,

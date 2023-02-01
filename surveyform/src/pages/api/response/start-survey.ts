@@ -5,7 +5,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 
 import { serverConfig } from '~/config/server'
 import { print } from 'graphql'
-import { fetchSurveyGithub } from "~/surveys/server/fetch";
+import { fetchSurveyGithub } from "@devographics/core-models/server";
 
 export default async function responseStartSurveyHandler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== "POST") {

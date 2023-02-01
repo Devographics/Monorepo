@@ -1,19 +1,21 @@
+// @see api/src/surveys.ts
+// TODO: try to factor the code
+
 //import "server-only"
 // TODO: this will systematically call github API
 // we should cache the result somewhere
 // for instance in a place dedicated to the survey form on Redis
-import { SurveyDocument, SerializedSurveyDocument } from "@devographics/core-models";
+import { SurveyDocument, SurveySharedContext } from "../typings";
 import yaml from "js-yaml"
-import { serverConfig } from "~/config/server";
 import { SurveyDescription } from "../typings";
 import orderBy from "lodash/orderBy.js"
-import { SurveySharedContext } from "@devographics/core-models/surveys/typings";
+
+const ghApiReposRoot = "https://api.github.com/repos"
 
 const org = "devographics"
 const repo = "surveys"
-const reposRoot = "https://api.github.com/repos"
 // @see https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28#get-repository-content
-const contentsRoot = `${reposRoot}/${org}/${repo}/contents`
+const contentsRoot = `${ghApiReposRoot}/${org}/${repo}/contents`
 
 async function githubBody(res: Response) {
     const body = await res.json()
@@ -35,9 +37,8 @@ function yamlAsJson(content: any) {
     return json
 }
 
-// I don't trust SDKs forget about using octokit :(
 async function fetchGithub(url) {
-    const githubAuthorization = `Bearer ${serverConfig.githubToken}`
+    const githubAuthorization = `Bearer ${process.env.GITHUB_TOKEN}`
     return fetch(url, {
         headers: {
             "Authorization": githubAuthorization
@@ -52,7 +53,7 @@ async function fetchGithub(url) {
  * /!\ this is different from the github folder path, we need to replace "-" by "_"
  * @param year 
  */
-export async function fetchSurveyGithub(prettySlug: SerializedSurveyDocument["prettySlug"], year: string): Promise<SerializedSurveyDocument> {
+export async function fetchSurveyGithub(prettySlug: SurveyDocument["prettySlug"], year: string): Promise<SurveyDocument> {
     // TODO: find a cleaner way to convert prettySLug to slug => do this before calling this function
     const slug = prettySlug?.replaceAll("-", "_")
     const surveyFolder = `${slug}`
@@ -99,7 +100,7 @@ export async function fetchSurveyGithub(prettySlug: SerializedSurveyDocument["pr
  * @param year 
  * @returns 
  */
-async function fetchSurveyDescription(surveyFolder: string, year: string): Promise<SerializedSurveyDocument> {
+async function fetchSurveyDescription(surveyFolder: string, year: string): Promise<SurveyDocument> {
     const yearlyFolder = `${surveyFolder}/${year}`
     const configUrl = `${contentsRoot}/${yearlyFolder}/config.yml`
     const commonConfigUrl = `${contentsRoot}/${surveyFolder}/config.yml`
@@ -157,7 +158,7 @@ export const fetchSurveysListGithub = async (): Promise<Array<SurveyDescription>
     const surveysFolders = (await githubBody(contentRes) as Array<GhFileOrDir>)
         .filter(fileOrDir => fileOrDir.type === "dir")
 
-    let surveys: Array<SerializedSurveyDocument> = []
+    let surveys: Array<SurveyDocument> = []
     for (const surveyFolder of surveysFolders) {
         const recentYearsFolders = await fetchRecentYearsFolder(surveyFolder.name)
         for (const yearFolder of recentYearsFolders) {

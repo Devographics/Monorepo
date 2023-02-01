@@ -1,3 +1,5 @@
+export * from "./surveys/server/fetchGithub"
+
 export { Save, SaveMongoCollection } from "./saves/model.server";
 
 export {

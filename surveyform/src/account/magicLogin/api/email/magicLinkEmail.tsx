@@ -10,7 +10,7 @@ import { localMailTransport } from "~/lib/server/mail/transports";
  * @see https://reactjs.org/docs/react-dom-server.html
  */
 import Mail from "nodemailer/lib/mailer";
-import { fetchSurveyContextGithub } from "~/surveys/server/fetch";
+import { fetchSurveyContextGithub } from "@devographics/core-models/server";
 import { SurveySharedContext } from "@devographics/core-models/surveys/typings";
 
 const MagicLinkHtml = ({

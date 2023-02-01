@@ -127,8 +127,8 @@ export interface SurveySharedContext {
 }
 
 export interface SurveyDocument extends SurveySharedContext {
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt?: string;
+  updatedAt?: string;
   /**
    * Slug with underscores
    * state_of_js
@@ -192,21 +192,22 @@ export interface SurveyDocument extends SurveySharedContext {
   resultsUrl: string;
 }
 
-/**
- * Needed when getting a survey from SSR
- */
-export type SerializedSurveyDocument = Omit<
+export type FullSurveyDocument = Omit<
   SurveyDocument,
   "createdAt" | "updatedAt"
 > & {
-  createdAt?: string;
-  updatedAt?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 };
 
 /**
- * Survey as stored in the database
+ * @deprecated Use SurveyDocument
  */
 export type SurveyType = SurveyDocument
+/**
+ * @deprecated Use SurveyDocument
+ */
+export type SerializedSurveyDocument = SurveyDocument
 
 /**
  * 1 preview
@@ -216,3 +217,10 @@ export type SurveyType = SurveyDocument
  */
 export type SurveyStatus = 1 | 2 | 3 | 4;
 export type SurveyStatusLabel = "preview" | "open" | "closed" | "hidden";
+
+
+/**
+ * Survey main fields, used to list all surveys
+ */
+export type SurveyDescription = Pick<SurveyDocument,
+  "surveyId" | "name" | "status" | "prettySlug" | "slug" | "year" | "imageUrl">

@@ -1,5 +1,5 @@
 import Surveys from "~/core/components/pages/Surveys";
-import { fetchSurveysListGithub } from "~/surveys/server/fetch";
+import { fetchSurveysListGithub } from "@devographics/core-models/server";
 
 const IndexPage = async () => {
   const surveys = await fetchSurveysListGithub();

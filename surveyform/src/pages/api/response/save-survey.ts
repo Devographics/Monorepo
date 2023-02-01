@@ -5,7 +5,7 @@ import { print } from 'graphql'
 import { gqlHeaders } from "~/core/server/graphqlBff";
 import { SurveyResponseFragment } from "~/responses/fragments";
 import { getFragmentName } from "~/core/server/graphqlUtils";
-import { fetchSurveyGithub } from "~/surveys/server/fetch";
+import { fetchSurveyGithub } from "@devographics/core-models/server";
 
 
 export default async function responseStartSurveyHandler(req: NextApiRequest, res: NextApiResponse) {

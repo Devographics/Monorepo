@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { EntitiesProvider } from "~/core/components/common/EntitiesContext";
 import { fetchEntitiesRedis } from "~/core/server/fetchEntitiesRedis";
 import { SurveyProvider } from "~/surveys/components/SurveyContext/Provider";
-import { fetchSurveyGithub } from "~/surveys/server/fetch";
+import { fetchSurveyGithub } from "@devographics/core-models/server";
 
 // revalidate survey/entities every 5 minutes
 const SURVEY_TIMEOUT_SECONDS = 5 * 60;
