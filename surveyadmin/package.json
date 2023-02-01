@@ -181,7 +181,6 @@
     "esbuild-plugin-yaml": "^0.0.1",
     "esbuild-runner": "^2.2.1",
     "eslint": "^7.32.0",
-    "eslint-plugin-storybook": "^0.5.11",
     "graphql-voyager": "^1.0.0-rc.31",
     "husky": "^7.0.4",
     "mongodb-memory-server": "^7.3.6",

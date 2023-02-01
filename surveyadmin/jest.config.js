@@ -15,9 +15,7 @@ const commonConfig = {
   testPathIgnorePatterns: [
     "/node_modules/",
     "/cypress/",
-    "/storybook/",
     "/.next/",
-    "/stories/",
   ],
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
@@ -193,9 +191,6 @@ module.exports = {
     "!**/*.stor{y,ies}.{js,ts,jsx,tsx}",
     "!**/node_modules/**",
     "!**/cypress/**",
-    "!**/.storybook/**",
-    "!**/stories/**",
-    "!**/storybook-static/**",
     "!jest.config.js",
     "!**/out/**",
     "!**/dist/**",
