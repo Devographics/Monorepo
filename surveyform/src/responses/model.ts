@@ -3,7 +3,7 @@ import {
   createGraphqlModel,
   CreateGraphqlModelOptionsShared,
 } from "@vulcanjs/graphql";
-import { getSchema, getSchemaPerSurvey, getSurveyResponseSchema, initResponseSchema } from "./schema";
+import { getSchema, getSurveyResponseSchema, initResponseSchema } from "./schema";
 
 const name = "Response";
 
@@ -32,16 +32,7 @@ export const getModelDef = () => {
     permissions: {
       canRead: ["owners", "admins"],
       canCreate: ["members"],
-      // canUpdate: ['owners', 'admins'],
-      canUpdate: ({ user, document: response }) => {
-        if (typeof window === "undefined") {
-          const canModifyResponse = require("./server/permissions").canModifyReponse
-          return canModifyResponse(response, user);
-        } else {
-          // client side
-          return user?.isAdmin || user?._id === response?.userId
-        }
-      },
+      canUpdate: ['owners', 'admins'],
       canDelete: ["admins"],
     },
   };
