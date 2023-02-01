@@ -1,4 +1,4 @@
-import { SurveyEdition, SurveyEditionDescription, SurveySharedContext } from "@devographics/core-models";
+import { SurveyEdition, SurveyEditionDescription, SurveySharedContext } from "../typings";
 import NodeCache from 'node-cache'
 import {
     fetchSurveyContextGithub,

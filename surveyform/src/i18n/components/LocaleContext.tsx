@@ -11,6 +11,7 @@ import { LOCALE_COOKIE_NAME } from "../cookie";
 import { localesDefsMap, defaultLocale } from "~/i18n/data/locales";
 import { captureException } from "@sentry/nextjs";
 import { LocaleDef } from "../typings";
+import { useUser } from "~/account/user/hooks";
 
 interface LocaleContextType {
   setLocale: any;
@@ -86,12 +87,13 @@ export const LocaleContextProvider = (props: {
   localeId: string;
   /** SSRed locale strings */
   localeStrings: LocaleDef;
-  currentUser?: any;
   /** Will optional let you */
   updateUser?: any;
   client?: any;
   children: React.ReactNode;
 }) => {
+  const { user } = useUser();
+
   const [cookies, setCookie, removeCookie] = useCookies();
   const { localeId, localeStrings: localeStringsFromProps } = props;
   const localeDef = localesDefsMap[localeId] || defaultLocale; //useLocaleData({ currentUser, locale: localeFromProps });
@@ -119,14 +121,14 @@ export const LocaleContextProvider = (props: {
   const setLocale = async (localeId: string) => {
     // TODO: see how it's implemented in incoming versions of Next 13+
     //if (!localeObject) throw new Error(`Locale not found for id ${localeId}`);
-    const { updateUser, /*client,*/ currentUser } = props;
+    const { updateUser /*client,*/ } = props;
     removeCookie(LOCALE_COOKIE_NAME, { path: "/" });
     setCookie(LOCALE_COOKIE_NAME, localeId, { path: "/" });
     // if user is logged in, change their `locale` profile property
-    if (currentUser && updateUser) {
+    if (user && updateUser) {
       try {
         await updateUser({
-          selector: { documentId: currentUser._id },
+          selector: { documentId: user._id },
           data: { locale: localeId },
         });
       } catch (err) {

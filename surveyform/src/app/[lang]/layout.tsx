@@ -2,7 +2,11 @@
 // if it still don't work just add a .scss loader manually
 import "~/stylesheets/main.scss";
 import { AppLayout } from "./AppLayout";
-import { getLocales, getLocaleStrings } from "~/i18n/server/fetchLocalesRedis";
+import {
+  getLocales,
+  fetchLocaleStrings,
+  i18nCommonContexts,
+} from "~/i18n/server/fetchLocalesRedis";
 //import debug from "debug";
 const debugRootLayout = console.debug; //debug("dgs:rootlayout");
 
@@ -10,6 +14,7 @@ const debugRootLayout = console.debug; //debug("dgs:rootlayout");
 // @see https://nextjs.org/docs/advanced-features/i18n-routing
 import { locales } from "~/i18n/data/locales";
 import { notFound } from "next/navigation";
+import { LocaleContextProvider } from "~/i18n/components/LocaleContext";
 
 // TODO: not yet compatible with having dynamic pages down the tree
 // we may have to call generateStaticParams in each static page instead
@@ -38,11 +43,16 @@ Next.js will fallback to trying to find a valid page path.
 If this error still happens in a few months (2023) open an issue with repro at Next.js.`);
     notFound();
   }
-  const localeWithStrings = locale ? await getLocaleStrings(locale) : undefined;
-  const locales = (await getLocales()) || undefined;
+  const localeWithStrings = await fetchLocaleStrings({
+    localeId: locale,
+    contexts: i18nCommonContexts,
+  });
   if (!localeWithStrings) {
     throw new Error("Could not load locales of id: " + locale);
   }
+  // locales lists
+  const locales = (await getLocales()) || undefined;
+
   // TODO: we load waaaay too much strings
   // we should load survey specific strings in another nested layout
   //debugRootLayout("Got locale", locale, localeWithStrings);
@@ -56,7 +66,7 @@ If this error still happens in a few months (2023) open an issue with repro at N
       <body>
         <AppLayout
           locales={locales}
-          locale={locale}
+          localeId={locale}
           localeStrings={localeWithStrings}
         >
           {children}

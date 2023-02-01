@@ -110,7 +110,15 @@ export const getModelDefServer = (): CreateGraphqlModelOptionsServer => {
       canCreate: ["members"],
       // NOTE: save survey also check if the response can be updated
       // TODO: drop Vulcan system here
-      canUpdate: ["owners", "admins"],
+      canUpdate: ({ user, document: response }) => {
+        if (typeof window === "undefined") {
+          const canModifyResponse = require("./server/permissions").canModifyReponse
+          return canModifyResponse(response, user);
+        } else {
+          // client side
+          return user?.isAdmin || user?._id === response?.userId
+        }
+      },
       canDelete: ["admins"],
     },
   });

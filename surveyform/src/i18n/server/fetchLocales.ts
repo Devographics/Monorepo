@@ -1,3 +1,4 @@
+// DEPRECATED
 /**
  * Get locale from the translation API from the monorepo
  */
@@ -236,38 +237,6 @@ const findBestMatchingLocaleId = (
   return countryLocaleId;
 };
 
-export const getLocaleStrings = async (localeId: string) => {
-  // Step 1: check that there is a locale for this id or try to find a close one
-  // NOTE: normally this call costs nothing thanks to the cache system
-  //const locales = await getLocales();
-  //let existingLocaleId: string | undefined;
-  /*
-  if (!locales) {
-    captureException(
-      new Error(
-        "Cannot get list of locales when fetching locale strings, can't verify if the locale exists."
-      )
-    );
-  } else {
-    existingLocaleId = findBestMatchingLocaleId(locales, localeId);
-  }
-  */
-
-  /*
-  if (!localeId) {
-    captureException(
-      `Trying to get strings for locale ${localeId}, but we don't have any translation for this locale or this country. Will fallback to en-US`
-    );
-   localeId = "en-US";
-  }*/
-
-  try {
-    return await fetchLocaleStrings({ localeId });
-  } catch (err) {
-    captureException(err);
-    return undefined;
-  }
-};
 
 // OLD DEPRECATED VERSION
 // It will fetch all locales with all strings
@@ -402,27 +371,4 @@ export const getLocaleWithStrings = async (localeId: string) => {
     (l) => l.id.slice(0, 2) === localeId.slice(0, 2)
   );
   return countryLocale || null;
-};
-
-/**
- * Get only one locale, with cache
- * @param localeId
- * @param origin
- * @returns
- */
-export const getLocaleStringsCached = async (
-  localeId: string,
-  origin?: string
-) => {
-  const localeCacheKey = `locale[${localeId}]`;
-  const localeWithStrings = nodeCache.get<ReturnType<any>>(localeCacheKey);
-  if (localeWithStrings) {
-    //console.info("Cache hit for locale", localeId)
-    return localeWithStrings;
-  }
-  const res = await getLocaleWithStrings(localeId); //getLocaleStrings(localeId);
-
-  //const localeWithStringsFromServer = resApollo?.data?.locale;
-  nodeCache.set(localeCacheKey, res, 10 * 60);
-  return res;
 };

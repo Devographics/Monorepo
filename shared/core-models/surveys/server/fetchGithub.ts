@@ -34,10 +34,10 @@ async function githubContent(res: Response) {
     }
     return content
 }
-function yamlAsJson(content: any) {
-    const decoded = atob(content)
+function yamlAsJson<T = any>(content: any): T {
+    const decoded = Buffer.from(content, "base64").toString()
     const json = yaml.load(decoded)
-    return json
+    return json as T
 }
 async function fetchGithub(url) {
     const githubAuthorization = `Bearer ${process.env.GITHUB_TOKEN}`
@@ -187,7 +187,7 @@ export const fetchSurveysListGithub = async (): Promise<Array<SurveyEditionDescr
 // prettySlug is the one from the URL
 export async function fetchSurveyContextGithub(slug: SurveySharedContext["slug"]): Promise<SurveySharedContext> {
     const surveyContextRes = await fetchGithub(`${contentsRoot}/${slug}/config.yml`)
-    const surveyContext = yamlAsJson(await githubBody(surveyContextRes))
+    const surveyContext = yamlAsJson<SurveySharedContext>(await githubBody(surveyContextRes))
     return surveyContext
 }
 

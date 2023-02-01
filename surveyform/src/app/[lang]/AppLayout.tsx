@@ -23,7 +23,7 @@ import { SWRConfig } from "swr";
 
 export interface AppLayoutProps {
   /** Locale extracted from cookies server-side */
-  locale: string;
+  localeId: string;
   localeStrings: LocaleDef;
   locales?: Array<LocaleDef>;
   // When on a specific survey
@@ -31,7 +31,7 @@ export interface AppLayoutProps {
 }
 
 export function AppLayout(props: AppLayoutProps) {
-  const { children, locale, locales, localeStrings } = props;
+  const { children, localeId, locales, localeStrings } = props;
   const { user } = useUser();
   return (
     <SSRProvider>
@@ -47,9 +47,8 @@ export function AppLayout(props: AppLayoutProps) {
           >
             <LocaleContextProvider
               locales={locales}
-              localeId={locale}
+              localeId={localeId}
               localeStrings={localeStrings}
-              currentUser={user}
             >
               <VulcanCurrentUserProvider
                 // @ts-ignore FIXME: weird error with groups

@@ -7,7 +7,7 @@
 // this file is perhaps not transpiled as a server package
 import { readdir, readFile, lstat } from 'fs/promises'
 import path from "path"
-import { SurveyEditions } from "@devographics/core-models"
+import { SurveyEditions } from "../typings"
 import yaml from "js-yaml"
 
 // Surveys may have been cloned from github, only keep valid files
