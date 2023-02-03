@@ -10,6 +10,7 @@ import fetch from "node-fetch";
 import { serverConfig } from "~/config/server";
 import { Locale, RawLocale } from "../typings";
 import { getFragmentName } from "@vulcanjs/graphql";
+import { nodeCache } from "~/lib/server/caching";
 
 const disableAPICache = false; //getSetting("disableAPICache", false);
 const translationAPI = serverConfig.translationAPI; //getSetting("translationAPI");

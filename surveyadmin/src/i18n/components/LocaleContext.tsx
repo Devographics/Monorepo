@@ -9,7 +9,7 @@ import {
 } from "meteor/vulcan:lib";
 */
 import React, { useContext, useEffect, useState } from "react";
-import { IntlProvider } from "@devographics/react-i18n";
+import { IntlContextProvider } from "@devographics/react-i18n";
 import { IntlContext } from "./context";
 import { getLocale as getRegisteredLocale, stringsRegistry } from "~/i18n";
 // TODO: some of those HOC might be useful eg withLocaleData?
@@ -236,13 +236,13 @@ export const LocaleContextProvider = (props: {
   };
 
   return (
-    <IntlProvider stringsRegistry={stringsRegistry} {...intlObject}>
+    <IntlContextProvider stringsRegistry={stringsRegistry} {...intlObject}>
       <IntlContext.Provider value={intlObject}>
         <LocaleContext.Provider value={{ getLocale, setLocale }}>
           <div className={`locale-${localeId}`}>{children}</div>
         </LocaleContext.Provider>
       </IntlContext.Provider>
-    </IntlProvider>
+    </IntlContextProvider>
   );
 };
 

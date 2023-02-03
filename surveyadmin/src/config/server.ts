@@ -5,10 +5,13 @@
  */
 
 import pkg from "@next/env";
-const loadEnvConfig = pkg.loadEnvConfig
+// hack to support ESM scripts
+if (pkg) {
+  const loadEnvConfig = pkg?.loadEnvConfig
+  loadEnvConfig(process.env.PWD!, process.env.NODE_ENV === "development");
+}
+
 import { publicConfig } from "./public";
-// guarantee that next env variables are loaded
-loadEnvConfig(process.env.PWD!, process.env.NODE_ENV === "development");
 
 /**
  * @see https://vercel.com/docs/concepts/projects/environment-variables
