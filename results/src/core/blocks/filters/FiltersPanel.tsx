@@ -58,11 +58,11 @@ const FiltersPanel = ({
         }
     }
 
-    // if mode is set to "default" then open Filters tab
-    const defaultTab =
-        filtersState.options.mode === MODE_DEFAULT ? MODE_GRID : filtersState.options.mode
-
     const supportedModes = filtersState.options.supportedModes
+
+    // if mode is set to "default" then open first supported filter tab
+    const defaultTab =
+        filtersState.options.mode === MODE_DEFAULT ? supportedModes[0] : filtersState.options.mode
 
     const tabConfig = [
         { mode: MODE_COMBINED, component: FiltersSelection },
