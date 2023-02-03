@@ -1,7 +1,7 @@
 import { getSession } from "~/account/user/api";
 import { UserMongooseModel } from "~/core/models/user.server";
 import { connectToAppDb } from "~/lib/server/mongoose/connection";
-import { apiWrapper } from "~/lib/server/sentry";
+
 
 async function user(req, res) {
   await connectToAppDb();
@@ -20,4 +20,4 @@ async function user(req, res) {
   res.status(200).json({ user: user || null });
 }
 
-export default apiWrapper(user);
+export default user;

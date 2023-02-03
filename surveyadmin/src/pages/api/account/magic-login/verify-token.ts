@@ -4,7 +4,7 @@
 import passport from "passport";
 import nextConnect from "next-connect";
 import { NextApiRequest, NextApiResponse } from "next";
-import { apiWrapper } from "~/lib/server/sentry";
+
 
 import { magicLinkStrategy } from "~/account/magicLogin/api/passport/magic-login-strategy";
 import { setToken } from "../middlewares/setToken";
@@ -42,4 +42,4 @@ const login = nextConnect<NextApiRequest, NextApiResponse>()
     }
   );
 
-export default apiWrapper(login);
+export default login;

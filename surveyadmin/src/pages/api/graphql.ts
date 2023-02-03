@@ -11,7 +11,6 @@ import { buildApolloSchema, createDataSources } from "@vulcanjs/graphql/server";
 import corsOptions from "~/lib/server/cors";
 import { contextFromReq } from "~/lib/server/context";
 import models from "~/_vulcan/models.index.server";
-//import { apiWrapper } from "~/lib/server/sentry";
 
 // Custom graphql API from StateOfJS
 import {

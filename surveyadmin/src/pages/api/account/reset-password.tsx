@@ -9,7 +9,6 @@ import {
 
 import { contextFromReq } from "~/lib/server/context";
 import { sendResetPasswordSuccessEmail } from "~/account/passwordLogin/api/emails";
-import { apiWrapper } from "~/lib/server/sentry";
 import { connectToAppDb } from "~/lib/server/mongoose/connection";
 
 interface ResetPasswordBody {
@@ -62,4 +61,4 @@ async function changePassword(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-export default apiWrapper(changePassword);
+export default changePassword;

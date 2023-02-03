@@ -1,7 +1,6 @@
 import passport from "passport";
 import nextConnect from "next-connect";
 import { NextApiRequest, NextApiResponse } from "next";
-import { apiWrapper } from "~/lib/server/sentry";
 
 import { localStrategy } from "~/account/passwordLogin/api/passport/password-local";
 import { authenticate } from "~/account/passwordLogin/api";
@@ -40,4 +39,4 @@ const login = nextConnect<NextApiRequest, NextApiResponse>()
     }
   );
 
-export default apiWrapper(login);
+export default login

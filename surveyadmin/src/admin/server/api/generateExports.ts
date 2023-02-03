@@ -1,7 +1,6 @@
 import { exec } from "child_process";
 import path from "path";
 import { serverConfig } from "~/config/server";
-import { captureMessage } from "@sentry/nextjs";
 import type { SurveyEdition } from "@devographics/core-models";
 
 type SupportedFormat = "json" | "csv";
@@ -190,7 +189,6 @@ async function generateMongoExport({
   console.log("Start running mongo export with command:", cmd);
   await execAsPromise(cmd);
   console.log("Export successfully created", filePath);
-  captureMessage(`Export succesfully created in ${filePath}`);
   return filePath;
 }
 

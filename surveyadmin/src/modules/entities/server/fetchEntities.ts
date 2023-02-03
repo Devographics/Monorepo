@@ -2,7 +2,6 @@ import { serverConfig } from "~/config/server";
 import sortBy from "lodash/sortBy.js";
 import fetch from "node-fetch";
 import get from "lodash/get.js";
-import { cachedPromise, promisesNodeCache } from "~/lib/server/caching";
 import { print } from "graphql/language/printer.js";
 import gql from "graphql-tag";
 import { Entity } from "@devographics/core-models/entities/typings";
@@ -72,14 +71,7 @@ export const getOrFetchEntities = async ({
   forceLoad?: boolean;
 } = {}) => {
   try {
-    let entities = forceLoad
-      ? await fetchEntities()
-      : await cachedPromise(
-          promisesNodeCache,
-          entitiesPromiseCacheKey,
-          ENTITIES_PROMISE_TTL_SECONDS
-        )(async () => await fetchEntities());
-
+    let entities = await fetchEntities()
     // const { tags, name, id, ids } = args;
 
     if (tags) {

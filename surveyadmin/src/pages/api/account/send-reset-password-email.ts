@@ -8,7 +8,7 @@ import { sendResetPasswordEmail } from "~/account/passwordLogin/api/emails";
 import { routes } from "~/lib/routes";
 import { getRootUrl } from "~/lib/server/utils";
 import { UserMongooseModel } from "~/core/models/user.server";
-import { apiWrapper } from "~/lib/server/sentry";
+
 
 interface SendResetPasswordEmailBody {
   email?: string;
@@ -83,9 +83,8 @@ const sendResetPasswordEmailEndpoint = nextConnect<
         kind: "resetPassword",
       });
       // TODO: put the app URL here, maybe imported from src/pages/vn/debug/about.tsx but it doesn't seems complete right now
-      const resetUrl = `${getRootUrl(req)}${
-        routes.account.resetPassword.href
-      }/${token}`;
+      const resetUrl = `${getRootUrl(req)}${routes.account.resetPassword.href
+        }/${token}`;
 
       // send the mail
       await sendResetPasswordEmail({ email, resetUrl });
@@ -98,4 +97,4 @@ const sendResetPasswordEmailEndpoint = nextConnect<
   }
 );
 
-export default apiWrapper(sendResetPasswordEmailEndpoint);
+export default sendResetPasswordEmailEndpoint;

@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { apiWrapper } from "~/lib/server/sentry";
+
 import nextConnect from "next-connect";
 import { connectToAppDbMiddleware } from "~/lib/server/middlewares/mongoAppConnection";
 import { contextFromReq } from "~/lib/server/context";

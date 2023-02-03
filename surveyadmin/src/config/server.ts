@@ -4,7 +4,11 @@
  * TODO: add joi validation, add more values to avoid loading "process.env" everywhere in the app
  */
 
+import pkg from "@next/env";
+const loadEnvConfig = pkg.loadEnvConfig
 import { publicConfig } from "./public";
+// guarantee that next env variables are loaded
+loadEnvConfig(process.env.PWD!, process.env.NODE_ENV === "development");
 
 /**
  * @see https://vercel.com/docs/concepts/projects/environment-variables

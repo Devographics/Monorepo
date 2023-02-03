@@ -2,7 +2,6 @@ import { Request } from "express";
 import { updateMutator } from "@vulcanjs/graphql/server";
 import { NextApiRequest, NextApiResponse } from "next";
 import { User } from "~/core/models/user.server";
-import { apiWrapper } from "~/lib/server/sentry";
 import { contextFromReq } from "~/lib/server/context";
 import { sendChangePasswordSuccessEmail } from "~/account/passwordLogin/api/emails";
 import { checkPasswordForUser } from "~/account/passwordLogin/api";
@@ -71,4 +70,4 @@ async function changePassword(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-export default apiWrapper(changePassword);
+export default changePassword
