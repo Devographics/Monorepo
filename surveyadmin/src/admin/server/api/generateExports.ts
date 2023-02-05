@@ -102,7 +102,7 @@ function mongoExportCmd({
    */
   const baseCmd = `
  mongoexport\
- --uri ${serverConfig.mongoUri}\
+ --uri ${serverConfig.publicReadonlyMongoUri}\
  --collection normalized_responses \
  --pretty\
  --query='{"surveySlug": "${surveySlug}"}' \
@@ -187,7 +187,7 @@ async function generateMongoExport({
     survey,
     format,
   });
-  console.log("Start running mongo export with command:", cmd);
+  console.log("Start running mongo export with command:", cmd.replace(/\/\/(.*?)@/, '//username:password@'));
   await execAsPromise(cmd);
   console.log("Export successfully created", filePath);
   captureMessage(`Export succesfully created in ${filePath}`);
