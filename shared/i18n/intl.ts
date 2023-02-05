@@ -1,4 +1,3 @@
-// TODO: may need an update based on Vulcan packages/vulcan-lib/lib/modules/intl.js
 import { camelToSpaces } from "@vulcanjs/utils";
 import SimpleSchema from "simpl-schema";
 import {
@@ -8,7 +7,7 @@ import {
 } from "@vulcanjs/schema";
 
 // Locales
-export const defaultLocale = "en"; //getSetting('locale', 'en');
+export const defaultLocale = "en";
 
 export interface LocaleType {
   id: string;
@@ -29,53 +28,7 @@ export interface LocaleType {
 // Mutable global object are deprecated => they don't work
 // if you have multiple occurrences of the package and should be avoided
 
-/**
- * Create and manage a stateful registry of locales
- * @returns
- */
-export const makeLocalesRegistry = () => {
-  const Locales: Array<LocaleType> = [];
-
-  const registerLocale = (locale) => {
-    Locales.push(locale);
-  };
-
-  const getLocale = (localeId: string) => {
-    // TODO: not very reliable, can't find per country when region is not exactly the same
-    return Locales.find(
-      (locale) => locale.id.toLowerCase() === localeId.toLowerCase()
-    );
-  };
-  return { registerLocale, getLocale, Locales };
-};
-export type LocalesRegistry = ReturnType<typeof makeLocalesRegistry>;
-
 //
-/*
-
-Helper to detect current browser locale
-
-*/
-export const detectLocale = () => {
-  let lang;
-
-  if (typeof navigator === "undefined") {
-    return null;
-  }
-
-  if (navigator.languages && navigator.languages.length) {
-    // latest versions of Chrome and Firefox set this correctly
-    lang = navigator.languages[0];
-  } else if ((navigator as any).userLanguage) {
-    // IE only
-    lang = (navigator as any).userLanguage;
-  } else {
-    // latest versions of Chrome, Firefox, and Safari set this correctly
-    lang = navigator.language;
-  }
-
-  return lang;
-};
 
 /*
 
@@ -110,137 +63,6 @@ export const getValidLocale =
     return null;
   };
 
-/*
-
-Figure out the correct locale to use based on the current user, cookies,
-and browser settings
-
-*/
-export const initLocale =
-  (Locales: Array<LocaleType>) =>
-  ({
-    currentUser = {},
-    cookies = {},
-    locale,
-  }: {
-    currentUser?: any;
-    /**
-     * Read the cookie directly
-     * @deprecated Pass the "locale" directly
-     */
-    cookies?: { locale?: string };
-    /** Already known locale */
-    locale?: any;
-  }): LocaleType => {
-    let userLocaleId = "";
-    let localeMethod = "";
-    const detectedLocale = detectLocale();
-
-    if (locale) {
-      // 1. locale is passed from AppGenerator through SSR process
-      userLocaleId = locale;
-      localeMethod = "SSR";
-    } else if (cookies.locale) {
-      // 2. look for a cookie
-      userLocaleId = cookies.locale;
-      localeMethod = "cookie";
-    } else if (currentUser && currentUser.locale) {
-      // 3. if user is logged in, check for their preferred locale
-      userLocaleId = currentUser.locale;
-      localeMethod = "user";
-    } else if (detectedLocale) {
-      // 4. else, check for browser settings
-      userLocaleId = detectedLocale;
-      localeMethod = "browser";
-    }
-
-    /*
-
-  NOTE: locale fallback doesn't work anymore because we can now load locales dynamically
-  and Strings[userLocale] will then be empty
-
-  */
-    // if user locale is available, use it; else compare first two chars
-    // of user locale with first two chars of available locales
-    // const availableLocales = Object.keys(Strings);
-    // const availableLocale = Strings[userLocale] ? userLocale : availableLocales.find(locale => locale.slice(0, 2) === userLocale.slice(0, 2));
-
-    const validLocale = getValidLocale(Locales)(userLocaleId);
-
-    // 4. if user-defined locale is available, use it; else default to setting or `en-US`
-    if (validLocale) {
-      return {
-        id: validLocale.id,
-        originalId: userLocaleId,
-        method: localeMethod,
-      };
-    } else {
-      return {
-        id: "en-US", //getSetting("locale", "en-US"),
-        originalId: userLocaleId,
-        method: "setting",
-      };
-    }
-  };
-
-/**
- * Registry of strings for all locales
- * @returns
- */
-export const makeStringsRegistry = () => {
-  const Strings = {};
-  const addStrings = (language, strings) => {
-    if (typeof Strings[language] === "undefined") {
-      Strings[language] = {};
-    }
-    Strings[language] = {
-      ...Strings[language],
-      ...strings,
-    };
-  };
-
-  const getString = ({ id, values, defaultMessage, messages, locale }: any) => {
-    let message = "";
-
-    if (messages && messages[id]) {
-      // first, look in messages object passed through arguments
-      // note: if defined, messages should also contain Strings[locale]
-      message = messages[id];
-    } else if (Strings[locale] && Strings[locale][id]) {
-      message = Strings[locale][id];
-    } else if (Strings[defaultLocale] && Strings[defaultLocale][id]) {
-      // debug(`\x1b[32m>> INTL: No string found for id "${id}" in locale "${locale}", using defaultLocale "${defaultLocale}".\x1b[0m`);
-      message = Strings[defaultLocale] && Strings[defaultLocale][id];
-    } else if (defaultMessage) {
-      // debug(`\x1b[32m>> INTL: No string found for id "${id}" in locale "${locale}", using default message "${defaultMessage}".\x1b[0m`);
-      message = defaultMessage;
-    }
-
-    if (values && typeof values === "object") {
-      Object.keys(values).forEach((key) => {
-        // note: see replaceAll definition in vulcan:lib/utils
-        message = (message as any).replaceAll(`{${key}}`, values[key]); // TODO: false positive on replaceAll not existing in TS
-      });
-    }
-    return message;
-  };
-
-  const getStrings = (localeId) => {
-    return Strings[localeId];
-  };
-  return { Strings, addStrings, getString, getStrings };
-};
-export type StringsRegistry = ReturnType<typeof makeStringsRegistry>;
-
-// domains
-export const DomainsRegistry = () => {
-  const Domains = {};
-  const registerDomain = (locale, domain) => {
-    Domains[domain] = locale;
-  };
-  return { Domains, registerDomain };
-};
-
 // Helpers
 /*
 
@@ -249,7 +71,6 @@ Note: look into simplifying this
 
 */
 export const isIntlField = (fieldSchema) => !!fieldSchema.intl;
-
 /*
 
 Look for type name in a few different places

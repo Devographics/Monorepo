@@ -7,9 +7,9 @@ import Translators from "~/core/components/common/Translators";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import Image from "next/image";
 import { getSurveyImageUrl } from "~/surveys/getSurveyImageUrl";
-import { SurveyDescription } from "~/surveys/typings";
+import { SurveyEditionDescription } from "@devographics/core-models";
 
-const SurveyItem = ({ survey }: { survey: SurveyDescription }) => {
+const SurveyItem = ({ survey }: { survey: SurveyEditionDescription }) => {
   const { name, year, status } = survey;
   const imageUrl = getSurveyImageUrl(survey);
   return (
@@ -48,7 +48,7 @@ const SurveyGroup = ({
   surveys,
   status,
 }: {
-  surveys: Array<SurveyDescription>;
+  surveys: Array<SurveyEditionDescription>;
   status: string;
 }) => {
   if (!status) throw new Error("SurveyGroup must receive a defined status");
@@ -71,7 +71,7 @@ const SurveyGroup = ({
   );
 };
 
-const Surveys = ({ surveys }: { surveys: Array<SurveyDescription> }) => {
+const Surveys = ({ surveys }: { surveys: Array<SurveyEditionDescription> }) => {
   return (
     <div className="surveys">
       {/* FIXME won't load useLocaleContext correctly... <LocaleSelector />*/}

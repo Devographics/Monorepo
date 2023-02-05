@@ -6,7 +6,7 @@ import {
   StorableTokenConnector,
   hashToken,
 } from "~/account/passwordLogin/server";
-import { apiWrapper } from "~/lib/server/sentry";
+
 
 import { contextFromReq } from "~/lib/server/context";
 import { connectToAppDb } from "~/lib/server/mongoose/connection";
@@ -63,4 +63,4 @@ async function verifyEmail(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-export default apiWrapper(verifyEmail);
+export default verifyEmail;

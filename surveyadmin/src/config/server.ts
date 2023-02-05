@@ -4,6 +4,13 @@
  * TODO: add joi validation, add more values to avoid loading "process.env" everywhere in the app
  */
 
+import pkg from "@next/env";
+// hack to support ESM scripts
+if (pkg) {
+  const loadEnvConfig = pkg?.loadEnvConfig
+  loadEnvConfig(process.env.PWD!, process.env.NODE_ENV === "development");
+}
+
 import { publicConfig } from "./public";
 
 /**

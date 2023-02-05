@@ -4,7 +4,7 @@ import React from "react";
 //
 //import Button from "@mui/material/Button";
 //import makeStyles from "~/lib/mui/makeStyles";
-import { useIntlContext } from "@vulcanjs/react-i18n";
+import { useIntlContext } from "@devographics/react-i18n";
 // import routes from "~/config/routes";
 import { useRouter } from "next/router.js";
 import { routes } from "~/lib/routes";

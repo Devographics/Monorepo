@@ -1,4 +1,4 @@
-import type { SurveyDocument, Field, SurveySection } from "../surveys/typings";
+import type { SurveyEdition, Field, SurveySection } from "../surveys/typings";
 
 // build question object from outline
 export const getQuestionObject = (
@@ -49,7 +49,7 @@ to every question
 /!\ Will NOT add templates, so that it can be reused in scripts
 
 */
-export const parseSurvey = (survey: SurveyDocument) => {
+export const parseSurvey = (survey: SurveyEdition) => {
   let i = 0;
   const parsedSurvey = { ...survey, createdAt: new Date(survey.createdAt) };
   parsedSurvey.outline = survey.outline.map((section) => {

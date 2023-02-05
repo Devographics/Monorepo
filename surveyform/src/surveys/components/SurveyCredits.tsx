@@ -1,6 +1,6 @@
 import React from "react";
 import { Entity } from "@devographics/core-models";
-import type { SurveyType } from "@devographics/core-models";
+import type { SurveyEdition } from "@devographics/core-models";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import { useEntities } from "~/core/components/common/EntitiesContext";
 
@@ -20,7 +20,7 @@ const SurveyCredits = ({ survey }) => {
   );
 };
 
-const SurveyCreditItems = ({ survey }: { survey: SurveyType }) => {
+const SurveyCreditItems = ({ survey }: { survey: SurveyEdition }) => {
   const entities = useEntities();
   return (
     <>

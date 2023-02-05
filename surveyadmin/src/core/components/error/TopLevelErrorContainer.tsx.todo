@@ -7,7 +7,7 @@ import React from "react";
 
 // import NotFound from "./NotFound";
 import DefaultError from "./DefaultError";
-import { useIntlContext } from "@vulcanjs/react-i18n";
+import { useIntlContext } from "@devographics/react-i18n";
 
 /*
 const useStyles = makeStyles({

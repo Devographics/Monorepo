@@ -1,4 +1,4 @@
-import { SerializedSurveyDocument, SurveyDocument } from "@devographics/core-models";
+import { SurveyEdition } from "@devographics/core-models";
 import { getFragmentName } from "@vulcanjs/graphql";
 import gql from "graphql-tag";
 import { getSurveyFieldNames } from "~/surveys/helpers";
@@ -31,7 +31,7 @@ export const LightweightResponseFragment = gql`
   }
 `;
 
-export const SurveyResponseFragment = (survey: SerializedSurveyDocument | SurveyDocument) => {
+export const SurveyResponseFragment = (survey: SurveyEdition | SurveyEdition) => {
   const responseSpecificFragmentName = `SurveyResponseFragment_${survey.slug}`;
   const surveySpecificFragmentName = `SurveySpecificFields_${survey.slug}`;
   const surveySpecificFields = getSurveyFieldNames(survey);
@@ -92,7 +92,7 @@ export const SurveyResponseFragment = (survey: SerializedSurveyDocument | Survey
 }
 
 //registerFragment(/* GraphQL */
-export const ResponseFragmentWithRanking = (survey: SerializedSurveyDocument | SurveyDocument) => {
+export const ResponseFragmentWithRanking = (survey: SurveyEdition | SurveyEdition) => {
   const srf = SurveyResponseFragment(survey)
   return gql`
   fragment ResponseFragmentWithRanking on Response {
@@ -102,7 +102,7 @@ export const ResponseFragmentWithRanking = (survey: SerializedSurveyDocument | S
   ${srf}
 `}
 
-export const CreateResponseOutputFragment = (survey: SerializedSurveyDocument | SurveyDocument) => {
+export const CreateResponseOutputFragment = (survey: SurveyEdition | SurveyEdition) => {
   const surveySpecificFragment = SurveyResponseFragment(survey);
   return gql`
   fragment CreateResponseOutputFragment on ResponseMutationOutput {

@@ -10,8 +10,8 @@ import { localMailTransport } from "~/lib/server/mail/transports";
  * @see https://reactjs.org/docs/react-dom-server.html
  */
 import Mail from "nodemailer/lib/mailer";
-import { fetchSurveyContextGithub } from "~/surveys/server/fetch";
-import { SurveySharedContext } from "@devographics/core-models/surveys/typings";
+import { fetchSurveyContext } from "@devographics/core-models/server";
+import { SurveySharedContext } from "@devographics/core-models";
 
 const MagicLinkHtml = ({
   magicLink,
@@ -58,7 +58,7 @@ export const sendMagicLinkEmail = async ({
   //token: string;
 }) => {
   const slug = prettySlug.replace(/-/g, "_");
-  const survey = await fetchSurveyContextGithub(slug);
+  const survey = await fetchSurveyContext(slug);
   const from =
     survey && survey.domain && `${survey.name} <login@mail.${survey.domain}>`;
 

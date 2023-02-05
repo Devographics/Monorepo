@@ -1,8 +1,7 @@
 import { exec } from "child_process";
 import path from "path";
 import { serverConfig } from "~/config/server";
-import { captureMessage } from "@sentry/nextjs";
-import type { SurveyDocument } from "@devographics/core-models";
+import type { SurveyEdition } from "@devographics/core-models";
 
 type SupportedFormat = "json" | "csv";
 
@@ -48,7 +47,7 @@ const userNestedFields = [
  * Keep to false for JSON export.
  * @returns
  */
-function extractSurveyFields(survey: SurveyDocument, flat?: boolean) {
+function extractSurveyFields(survey: SurveyEdition, flat?: boolean) {
   const userInfoFields = !flat ? ["user_info"] : userNestedFields;
   let surveyOutlineFields;
   // Currently, a field path is "outlineId.questionId" (or slug). Sections are
@@ -89,7 +88,7 @@ function mongoExportCmd({
   format,
 }: {
   filePath: string;
-  survey: SurveyDocument;
+  survey: SurveyEdition;
   format: SupportedFormat;
 }) {
   const surveySlug = survey.slug!;
@@ -162,7 +161,7 @@ async function generateMongoExport({
   survey,
 }: {
   format: "json" | "csv";
-  survey: SurveyDocument;
+  survey: SurveyEdition;
 }) {
   const surveySlug = survey.slug!;
   // run the export
@@ -182,6 +181,7 @@ async function generateMongoExport({
     }
   }
 
+  // DON'T LOG THIS COMMAND, it contains db auth info!
   const cmd = mongoExportCmd({
     filePath,
     survey,
@@ -190,11 +190,10 @@ async function generateMongoExport({
   console.log("Start running mongo export with command:", cmd.replace(/\/\/(.*?)@/, '//username:password@'));
   await execAsPromise(cmd);
   console.log("Export successfully created", filePath);
-  captureMessage(`Export succesfully created in ${filePath}`);
   return filePath;
 }
 
-export async function generateExportsZip(survey: SurveyDocument) {
+export async function generateExportsZip(survey: SurveyEdition) {
   const surveySlug = survey.slug!;
   let filePaths: Array<string> = [];
   const jsonFilePath = await generateMongoExport({

@@ -10,7 +10,7 @@ import { FormDescription, FormDescriptionProps } from "./FormDescription";
 import { FormLabel, FormLabelProps } from "./FormLabel";
 import { FormInputLoading } from "./FormInputLoading";
 import FormNote from "./FormNote";
-import { useIntlContext } from "@vulcanjs/react-i18n";
+import { useIntlContext } from "@devographics/react-i18n";
 import { useEntities } from "~/core/components/common/EntitiesContext";
 
 export interface FormItemProps

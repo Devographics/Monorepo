@@ -1,6 +1,6 @@
 import React from "react";
 
-import { useIntlContext } from "@vulcanjs/react-i18n";
+import { useIntlContext } from "@devographics/react-i18n";
 // import routes from "~/config/routes";
 import { useRouter } from "next/navigation";
 // import palette from "~/config/palette";

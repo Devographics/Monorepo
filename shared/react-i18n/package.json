@@ -2,22 +2,19 @@
   "name": "@devographics/react-i18n",
   "version": "1.0.0",
   "description": "Vulcan i18n React components",
-  "main": "./dist/index.ts",
+  "main": "./index.ts",
+  "types": "./index.ts",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "MIT",
-  "dependencies": {
-    "@vulcanjs/i18n": "^0.8.1-y.0",
-    "@vulcanjs/utils": "^0.7.2-alpha.8",
-    "prop-types": "^15.7.2"
-  },
   "publishConfig": {
     "access": "public"
   },
-  "peerDependencies": {
+  "devDependencies": {
+    "@types/react": "^18.0.27",
     "react": "^17.0.1"
   },
   "gitHead": "672e9ed494ded98361abe47132899d3f825d6d23"

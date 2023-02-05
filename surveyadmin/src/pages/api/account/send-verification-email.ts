@@ -6,7 +6,7 @@
  * first email
  */
 import { NextApiRequest, NextApiResponse } from "next";
-import { apiWrapper } from "~/lib/server/sentry";
+
 
 // TODO: factor the context creation so we can reuse it for graphql and REST endpoints
 import {
@@ -81,4 +81,4 @@ const sendVerificationEmail = nextConnect<
   }
 );
 
-export default apiWrapper(sendVerificationEmail);
+export default sendVerificationEmail;

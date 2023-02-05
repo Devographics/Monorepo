@@ -1,4 +1,4 @@
-import { ResponseDocument, SurveyDocument } from "@devographics/core-models"
+import { ResponseDocument, SurveyEdition } from "@devographics/core-models"
 import useSWR from "swr"
 import { apiRoutes } from "~/lib/apiRoutes"
 
@@ -12,12 +12,12 @@ interface ApiData<T = any> {
     data: T
 }
 
-type ResponseWithSurvey = Required<ResponseDocument> & { survey: SurveyDocument }
+type ResponseWithSurvey = Required<ResponseDocument> & { survey: SurveyEdition }
 
 /**
  * Passing no surveySlug will get all responses for the user 
  */
-export const useUserResponse = (params: { surveySlug: SurveyDocument["surveyId"] }) => {
+export const useUserResponse = (params: { surveySlug: SurveyEdition["surveyId"] }) => {
     const { surveySlug } = params || {}
     const { data, error } = useSWR<ApiData<ResponseWithSurvey>>(apiRoutes.response.single.href({ surveySlug }),
         basicFetcher)

@@ -13,28 +13,29 @@ export function reportWebVitals(metric) {
 
 import { useUser } from "~/account/user/hooks";
 
-import { LocaleContextProvider } from "~/i18n/components/LocaleContext";
+import { LocaleContextProvider } from "~/i18n/context/LocaleContext";
 
 import { ErrorBoundary } from "~/core/components/error";
 import Layout from "~/core/components/common/Layout";
-import type { LocaleDef } from "~/i18n/typings";
+import type { LocaleDef, LocaleDefWithStrings } from "~/i18n/typings";
 import { SSRProvider } from "react-bootstrap";
 import { SWRConfig } from "swr";
 
 export interface AppLayoutProps {
   /** Locale extracted from cookies server-side */
-  locale: string;
-  localeStrings: LocaleDef;
-  locales?: Array<LocaleDef>;
+  localeId: string;
+  localeStrings: LocaleDefWithStrings;
+  locales: Array<LocaleDef>;
   // When on a specific survey
   children: React.ReactNode;
 }
 
 export function AppLayout(props: AppLayoutProps) {
-  const { children, locale, locales, localeStrings } = props;
+  const { children, localeId, locales, localeStrings } = props;
   const { user } = useUser();
   return (
     <SSRProvider>
+      {/** @ts-ignore */}
       <ErrorBoundary proposeReload={true} proposeHomeRedirection={true}>
         {/** TODO: this error boundary to display anything useful since it doesn't have i18n */}
         {
@@ -47,9 +48,8 @@ export function AppLayout(props: AppLayoutProps) {
           >
             <LocaleContextProvider
               locales={locales}
-              localeId={locale}
+              localeId={localeId}
               localeStrings={localeStrings}
-              currentUser={user}
             >
               <VulcanCurrentUserProvider
                 // @ts-ignore FIXME: weird error with groups
@@ -59,6 +59,7 @@ export function AppLayout(props: AppLayoutProps) {
                     false /* TODO: we don't get the loading information from useUser yet */,
                 }}
               >
+                {/** @ts-ignore */}
                 <ErrorBoundary
                   proposeReload={true}
                   proposeHomeRedirection={true}

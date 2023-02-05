@@ -1,5 +1,5 @@
 import React from "react";
-import { useIntlContext } from "@vulcanjs/react-i18n";
+import { useIntlContext } from "@devographics/react-i18n";
 import { Button } from "~/core/components/ui/Button";
 import FormComponent from "../elements/FormComponent";
 import { IconRemove } from "./FormNestedArray";

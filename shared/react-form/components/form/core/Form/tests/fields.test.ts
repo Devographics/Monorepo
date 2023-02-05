@@ -3,12 +3,6 @@ import { getLabel } from "../fields";
 
 describe("getLabel", () => {
   const common = {
-    formatDate: () => "",
-    formatTime: () => "",
-    formatRelative: () => "",
-    formatNumber: () => "",
-    formatPlural: () => "",
-    formatHTMLMessage: () => "",
     now: Date.now(),
     locale: "en",
   };

@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, ReactNode, FormEventHandler } from "react";
-import { useIntlContext } from "@vulcanjs/react-i18n";
+import { useIntlContext } from "@devographics/react-i18n";
 import { sendMagicLoginEmail } from "../lib/sendMagicLoginEmail";
 import { useUser } from "~/account/user/hooks";
 import { useSearchParams } from "next/navigation";
-import { useLocaleContext } from "~/i18n/components/LocaleContext";
+import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { FormComponentEmail } from "./FormComponentEmail";
 import { Button } from "~/core/components/ui/Button";
 
@@ -29,9 +29,8 @@ export const StandaloneMagicLoginForm = ({
     if (successMsg) setErrorMsg("");
   };
   const { user } = useUser();
-  const { getLocale } = useLocaleContext();
+  const { locale } = useLocaleContext();
 
-  const locale = getLocale();
   const params = useSearchParams();
 
   async function handleSubmit(e) {

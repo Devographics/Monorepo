@@ -2,7 +2,6 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import fs from "fs";
 const fsPromises = fs.promises;
 import path from "path";
-import { captureMessage } from "@sentry/nextjs";
 import { getSurveyBySlug } from "~/modules/surveys/helpers";
 import { ExportOptions } from "~/admin/models/export";
 import { generateExportsZip } from "./generateExports";
@@ -12,7 +11,7 @@ export async function mongoExportMiddleware(
   res: NextApiResponse
 ) {
   // We log exports so they never go unnoticed
-  captureMessage(`Started an export with options ${JSON.stringify(req.query)}`);
+  console.log(`Started an export with options ${JSON.stringify(req.query)}`);
   // parse options
   const surveySlug = req.query["surveySlug"];
   if (typeof surveySlug !== "string") {

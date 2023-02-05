@@ -29,9 +29,14 @@
     "@vulcanjs/graphql": "^0.7.1",
     "@vulcanjs/mongo": "^0.7.1",
     "graphql-tag": "^2.12.6",
+    "js-yaml": "^4.1.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
     "mongoose": "^6.7.1",
-    "nanoid": "^3.1.25"
+    "nanoid": "^3.1.25",
+    "node-cache": "^5.1.2"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.18"
   }
 }

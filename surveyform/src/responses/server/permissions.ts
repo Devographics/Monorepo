@@ -1,7 +1,7 @@
 import { ResponseDocument } from "@devographics/core-models";
 import { UserDocument } from "~/core/models/user";
 import { statuses } from "~/surveys/constants";
-import { fetchSurveyFromId } from "~/surveys/server/fetch";
+import { fetchSurveyFromId } from "@devographics/core-models/server";
 
 export const canModifyResponse = async (response: ResponseDocument, user: UserDocument) => {
     if (!response || !user) {

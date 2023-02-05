@@ -10,7 +10,7 @@ import {
 import { FormInputProps, useFormContext } from "@devographics/react-form";
 import FormOptionLabel from "~/form/components/elements/FormOptionLabel";
 import FormOptionDescription from "~/form/components/elements/FormOptionDescription";
-import { useIntlContext } from "@vulcanjs/react-i18n";
+import { useIntlContext } from "@devographics/react-i18n";
 import { FormItem } from "~/form/components/elements/FormItem";
 import { FormComponentText } from "./Default";
 

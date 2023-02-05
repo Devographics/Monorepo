@@ -8,7 +8,7 @@ import FormOptionLabel from "~/form/components/elements/FormOptionLabel";
 import FormGroup from "~/form/components/elements/FormGroup";
 import { Form, VulcanComponentsProvider } from "@devographics/react-form";
 import { getSurveyResponseModel } from "~/responses/model";
-import type { SurveyType } from "@devographics/core-models";
+import type { SurveyEdition } from "@devographics/core-models";
 import { SurveyResponseFragment } from "~/responses/fragments";
 import { getCommentFieldName } from "~/surveys/helpers";
 import { Button } from "~/core/components/ui/Button";
@@ -83,7 +83,7 @@ const SurveySectionContentsInner = ({
   nextSection,
   readOnly,
 }: {
-  survey: SurveyType;
+  survey: SurveyEdition;
   sectionNumber?: number;
   section?: any;
   responseId?: string;

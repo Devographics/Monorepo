@@ -1,23 +1,22 @@
 /**
- * Get locale from the translation API from the monorepo
+ * Get locale from Redis
+ * (Redis is filled via the api in monorepo)
  */
-// cache for translation API request
-// must be defined top-level to get the same cache for all requests
 import { captureException } from "@sentry/nextjs";
 import {
   cachedPromise,
   promisesNodeCache,
   nodeCache,
 } from "~/lib/server/caching";
-import { Locale } from "../typings";
+import { LocaleDef, LocaleDefWithStrings } from "../typings";
 import { measureTime } from "~/lib/server/utils";
 import { getRedisClient } from "~/lib/server/redis";
 
-const commonContexts = ["common", "surveys", "accounts"];
+export const i18nCommonContexts = ["common", "surveys", "accounts"];
 // TODO: move this elsewhere, maybe in surveys config?
-const surveyContexts = ["state_of_css", "state_of_js", "state_of_graphql"];
+// const surveyContexts = ["state_of_css", "state_of_js", "state_of_graphql"];
 // TODO: we should query only relevant strings per survey ideally
-const contexts = [...commonContexts, ...surveyContexts];
+//const contexts = [...i18nCommonContexts, ...surveyContexts];
 
 // TODO: move to monorepo common code
 export const getLocaleParsedContextCacheKey = ({
@@ -25,6 +24,13 @@ export const getLocaleParsedContextCacheKey = ({
   context,
 }: {
   localeId: string;
+  /**
+   * @example
+   * surveys, common, accounts -> generic strings
+   * state_of_js -> all strings for the survey
+   * state_of_js_2022 -> specific year
+   * results -> not used in surveyform
+   */
   context: string;
 }) => `locale_${localeId}_${context}_parsed`;
 export const getAllLocalesMetadataCacheKey = () =>
@@ -111,7 +117,7 @@ const fetchLocales = async () => {
 
   if (locales) {
     return locales as Array<
-      Pick<Locale, "id" | "completion" | "label" | "translators">
+      Pick<LocaleDef, "id" | "completion" | "label" | "translators">
     >;
   }
   return null;
@@ -136,7 +142,7 @@ export const getLocales = async () => {
 const localePromiseKey = (id: string) => ["localePromise", id].join("/");
 
 interface LocaleStringsVariables {
-  contexts?: Array<string>;
+  contexts: Array<string>;
   localeId: string;
 }
 
@@ -149,11 +155,12 @@ interface LocaleStringsVariables {
  * Next.js will use the country locale if there is no region local
  * @example (full process) Next redirects fr-CA to fr, and we return fr-FR locale from server
  *
- * TODO: handle survey context
  * @param localeId
  * @returns
  */
-const fetchLocaleStrings = async (variables: LocaleStringsVariables) => {
+export const fetchLocaleStrings = async (variables: LocaleStringsVariables) => {
+  const label = `locales_${variables.localeId}_${variables.contexts}`
+  console.time(label)
   //console.debug("Fetching locale", variables.localeId);
   const cached = cachedPromise(
     promisesNodeCache,
@@ -161,7 +168,6 @@ const fetchLocaleStrings = async (variables: LocaleStringsVariables) => {
     LOCALES_TTL_SECONDS
   );
   const queryVariables = {
-    contexts,
     /** Will use en-US strings if language is not yet covered, this is the default */
     enableFallbacks: true,
     ...variables,
@@ -173,7 +179,7 @@ const fetchLocaleStrings = async (variables: LocaleStringsVariables) => {
     //console.debug("Got locale", locale.id);
     // Convert strings array to a map (and cache the result)
     const convertedLocaleCacheKey = ["convertedLocale", locale.id].join("/");
-    let convertedLocale = nodeCache.get<Locale>(convertedLocaleCacheKey);
+    let convertedLocale = nodeCache.get<LocaleDefWithStrings>(convertedLocaleCacheKey);
     if (convertedLocale) return convertedLocale;
     const convertedStrings = {};
     locale.strings &&
@@ -186,18 +192,12 @@ const fetchLocaleStrings = async (variables: LocaleStringsVariables) => {
       convertedLocale,
       LOCALES_TTL_SECONDS
     );
-    return convertedLocale as Locale;
+    console.timeEnd(label)
+    return convertedLocale as LocaleDefWithStrings;
     // return locale as Locale;
+
   }
   // locale not found
+  console.timeEnd(label)
   return null;
-};
-
-export const getLocaleStrings = async (localeId: string) => {
-  try {
-    return await fetchLocaleStrings({ localeId });
-  } catch (err) {
-    captureException(err);
-    return undefined;
-  }
 };

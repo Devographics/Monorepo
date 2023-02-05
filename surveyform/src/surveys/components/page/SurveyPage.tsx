@@ -10,7 +10,7 @@ import SurveyCredits from "../SurveyCredits";
 import Translators from "~/core/components/common/Translators";
 import Faq from "~/core/components/common/Faq";
 import Support from "~/core/components/common/Support";
-import { useIntlContext } from "@vulcanjs/react-i18n";
+import { useIntlContext } from "@devographics/react-i18n";
 import LoginDialog from "~/account/LoginDialog";
 import { useUser } from "~/account/user/hooks";
 import Image from "next/image";

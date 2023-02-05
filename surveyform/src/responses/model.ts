@@ -1,9 +1,9 @@
-import { SerializedSurveyDocument, SurveyDocument } from "@devographics/core-models";
+import { SurveyEdition } from "@devographics/core-models";
 import {
   createGraphqlModel,
   CreateGraphqlModelOptionsShared,
 } from "@vulcanjs/graphql";
-import { getSchema, getSchemaPerSurvey, getSurveyResponseSchema, initResponseSchema } from "./schema";
+import { getSchema, getSurveyResponseSchema, initResponseSchema } from "./schema";
 
 const name = "Response";
 
@@ -32,22 +32,13 @@ export const getModelDef = () => {
     permissions: {
       canRead: ["owners", "admins"],
       canCreate: ["members"],
-      // canUpdate: ['owners', 'admins'],
-      canUpdate: ({ user, document: response }) => {
-        if (typeof window === "undefined") {
-          const canModifyResponse = require("./server/permissions").canModifyReponse
-          return canModifyResponse(response, user);
-        } else {
-          // client side
-          return user?.isAdmin || user?._id === response?.userId
-        }
-      },
+      canUpdate: ['owners', 'admins'],
       canDelete: ["admins"],
     },
   };
   return modelDef
 }
-export function initReponseModel(surveys: Array<SurveyDocument>) {
+export function initReponseModel(surveys: Array<SurveyEdition>) {
   initResponseSchema(surveys)
   return createGraphqlModel(getModelDef())
 }
@@ -58,7 +49,7 @@ export function initReponseModel(surveys: Array<SurveyDocument>) {
  * NOTE: do NOT register in api/graphql, the main model with all fields is still preferred for now.
  * This model is used only to generate forms at this point
  */
-export const getSurveyResponseModel = (survey: SurveyDocument) => createGraphqlModel({
+export const getSurveyResponseModel = (survey: SurveyEdition) => createGraphqlModel({
   name,
   schema: getSurveyResponseSchema(survey),
   graphql: {

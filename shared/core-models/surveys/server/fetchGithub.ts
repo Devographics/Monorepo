@@ -1,19 +1,23 @@
+// @see api/src/surveys.ts
+// TODO: try to factor the code
+// TODO: create/use a Redis alternative too
+
 //import "server-only"
 // TODO: this will systematically call github API
 // we should cache the result somewhere
 // for instance in a place dedicated to the survey form on Redis
-import { SurveyDocument, SerializedSurveyDocument } from "@devographics/core-models";
 import yaml from "js-yaml"
-import { serverConfig } from "~/config/server";
-import { SurveyDescription } from "../typings";
+import { SurveyEdition, SurveyEditionDescription, SurveySharedContext } from "../typings";
 import orderBy from "lodash/orderBy.js"
-import { SurveySharedContext } from "@devographics/core-models/surveys/typings";
+
+const ghApiReposRoot = "https://api.github.com/repos"
 
 const org = "devographics"
 const repo = "surveys"
-const reposRoot = "https://api.github.com/repos"
 // @see https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28#get-repository-content
-const contentsRoot = `${reposRoot}/${org}/${repo}/contents`
+const contentsRoot = `${ghApiReposRoot}/${org}/${repo}/contents`
+
+// Utils
 
 async function githubBody(res: Response) {
     const body = await res.json()
@@ -22,6 +26,7 @@ async function githubBody(res: Response) {
     }
     return body
 }
+// content of a directory
 async function githubContent(res: Response) {
     const content = (await githubBody(res))?.content
     if (!content) {
@@ -29,20 +34,33 @@ async function githubContent(res: Response) {
     }
     return content
 }
-function yamlAsJson(content: any) {
-    const decoded = atob(content)
+function yamlAsJson<T = any>(content: any): T {
+    const decoded = Buffer.from(content, "base64").toString()
     const json = yaml.load(decoded)
-    return json
+    return json as T
 }
-
-// I don't trust SDKs forget about using octokit :(
-async function fetchGithub(url) {
-    const githubAuthorization = `Bearer ${serverConfig.githubToken}`
+async function fetchGithub(url: string): Promise<Response> {
+    const githubAuthorization = `Bearer ${process.env.GITHUB_TOKEN}`
     return fetch(url, {
         headers: {
             "Authorization": githubAuthorization
         }
     })
+}
+async function fetchGithubJson<T = any>(url: string): Promise<T> {
+    const body = await githubBody(await fetchGithub(url))
+    if (body?.message?.match(/API rate limit/)) {
+        console.error(body)
+        // log rate limit response
+        fetchGithubJson("https://api.github.com/rate_limit").then((limit) => {
+            console.error(
+                "limited until (in GMT timezone):",
+                new Date(limit?.rate?.reset * 1000).toISOString(),
+                limit,)
+        }).catch(console.error)
+        throw new Error("Hitting GitHub API rate limit, can't fetch: " + url)
+    }
+    return body
 }
 
 /// One survey + questions
@@ -52,7 +70,7 @@ async function fetchGithub(url) {
  * /!\ this is different from the github folder path, we need to replace "-" by "_"
  * @param year 
  */
-export async function fetchSurveyGithub(prettySlug: SerializedSurveyDocument["prettySlug"], year: string): Promise<SerializedSurveyDocument> {
+export async function fetchSurveyGithub(prettySlug: SurveyEdition["prettySlug"], year: string): Promise<SurveyEdition> {
     // TODO: find a cleaner way to convert prettySLug to slug => do this before calling this function
     const slug = prettySlug?.replaceAll("-", "_")
     const surveyFolder = `${slug}`
@@ -99,7 +117,7 @@ export async function fetchSurveyGithub(prettySlug: SerializedSurveyDocument["pr
  * @param year 
  * @returns 
  */
-async function fetchSurveyDescription(surveyFolder: string, year: string): Promise<SerializedSurveyDocument> {
+async function fetchSurveyDescription(surveyFolder: string, year: string): Promise<SurveyEdition> {
     const yearlyFolder = `${surveyFolder}/${year}`
     const configUrl = `${contentsRoot}/${yearlyFolder}/config.yml`
     const commonConfigUrl = `${contentsRoot}/${surveyFolder}/config.yml`
@@ -137,10 +155,10 @@ const isDir = (fileOrDir: GhFileOrDir) => fileOrDir.type === "dir"
 
 const yearThreshold = 2019
 
-async function fetchRecentYearsFolder(surveySlug: SurveyDocument["slug"]) {
+async function fetchRecentYearsFolder(surveySlug: SurveyEdition["slug"]) {
     const surveyPath = `${contentsRoot}/${surveySlug}`
-    const yearsRes = await fetchGithub(surveyPath)
-    const recentYearsFolders = (await githubBody(yearsRes) as Array<GhFileOrDir>)
+    const yearsFolders = await fetchGithubJson<Array<GhFileOrDir>>(surveyPath)
+    const recentYearsFolders = yearsFolders
         .filter(isDir)
         .filter(dir => {
             const year = parseInt(dir.name)
@@ -152,12 +170,13 @@ async function fetchRecentYearsFolder(surveySlug: SurveyDocument["slug"]) {
 
 }
 
-export const fetchSurveysListGithub = async (): Promise<Array<SurveyDescription>> => {
-    const contentRes = await fetchGithub(contentsRoot)
-    const surveysFolders = (await githubBody(contentRes) as Array<GhFileOrDir>)
+export const fetchSurveysListGithub = async (): Promise<Array<SurveyEditionDescription>> => {
+    const content = await fetchGithubJson<Array<GhFileOrDir>>(contentsRoot)
+    console.log("content", content)
+    const surveysFolders = content
         .filter(fileOrDir => fileOrDir.type === "dir")
 
-    let surveys: Array<SerializedSurveyDocument> = []
+    let surveys: Array<SurveyEdition> = []
     for (const surveyFolder of surveysFolders) {
         const recentYearsFolders = await fetchRecentYearsFolder(surveyFolder.name)
         for (const yearFolder of recentYearsFolders) {
@@ -184,11 +203,11 @@ export const fetchSurveysListGithub = async (): Promise<Array<SurveyDescription>
 // prettySlug is the one from the URL
 export async function fetchSurveyContextGithub(slug: SurveySharedContext["slug"]): Promise<SurveySharedContext> {
     const surveyContextRes = await fetchGithub(`${contentsRoot}/${slug}/config.yml`)
-    const surveyContext = yamlAsJson(await githubBody(surveyContextRes))
+    const surveyContext = yamlAsJson<SurveySharedContext>(await githubBody(surveyContextRes))
     return surveyContext
 }
 
-export async function fetchSurveyFromId(surveyId: SurveyDocument["surveyId"]) {
+export async function fetchSurveyFromIdGithub(surveyId: SurveyEdition["surveyId"]) {
     const surveyList = await fetchSurveysListGithub()
     const surveyDescription = surveyList.find(s => s.surveyId)
     if (!surveyDescription) {

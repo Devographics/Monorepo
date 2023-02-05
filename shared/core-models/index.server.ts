@@ -1,3 +1,6 @@
+export * from "./surveys/server/fetchSurveys"
+export * from "./surveys/server/loadLocal"
+
 export { Save, SaveMongoCollection } from "./saves/model.server";
 
 export {

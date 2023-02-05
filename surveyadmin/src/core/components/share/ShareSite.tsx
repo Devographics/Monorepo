@@ -3,7 +3,7 @@ import ShareTwitter from "./ShareTwitter";
 import ShareEmail from "./ShareEmail";
 import ShareFacebook from "./ShareFacebook";
 import ShareLinkedIn from "./ShareLinkedIn";
-import { useIntlContext } from "@vulcanjs/react-i18n";
+import { useIntlContext } from "@devographics/react-i18n";
 
 const ShareSite = ({ survey }) => {
   const intl = useIntlContext();

@@ -1,9 +1,9 @@
 import React from "react";
-import { useLocales } from "~/i18n/hooks/locales";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
+import { useLocaleContext } from "~/i18n/context/LocaleContext";
 
 const Translators = () => {
-  const { locales = [] } = useLocales();
+  const { locales } = useLocaleContext();
 
   return (
     <div className="translators survey-page-block">

@@ -11,8 +11,6 @@
 ./node_modules/.bin/yalc link @vulcanjs/core
 ./node_modules/.bin/yalc link @vulcanjs/crud
 ./node_modules/.bin/yalc link @vulcanjs/graphql
-./node_modules/.bin/yalc link @vulcanjs/i18n
-./node_modules/.bin/yalc link @vulcanjs/mdx
 ./node_modules/.bin/yalc link @vulcanjs/model
 ./node_modules/.bin/yalc link @vulcanjs/mongo
 ./node_modules/.bin/yalc link @vulcanjs/multi-env-demo

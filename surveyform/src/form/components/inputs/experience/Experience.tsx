@@ -12,7 +12,7 @@ import { FormControl } from "react-bootstrap";
 import get from "lodash/get.js";
 import IconComment from "~/core/components/icons/Comment";
 import IconCommentDots from "~/core/components/icons/CommentDots";
-import { useIntlContext } from "@vulcanjs/react-i18n";
+import { useIntlContext } from "@devographics/react-i18n";
 import isEmpty from "lodash/isEmpty.js";
 import debounce from "lodash/debounce.js";
 import { getCommentFieldName } from "~/surveys/helpers";

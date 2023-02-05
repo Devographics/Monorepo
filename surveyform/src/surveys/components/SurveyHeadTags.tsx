@@ -1,10 +1,10 @@
 "use client";
-import { useIntlContext } from "@vulcanjs/react-i18n";
+import { useIntlContext } from "@devographics/react-i18n";
 import React from "react";
 import Head from "next/head";
 import { computeHeadTags } from "./computeHeadTags";
 import { publicConfig } from "~/config/public";
-import { SurveyDocument, SurveySection } from "@devographics/core-models";
+import { SurveyEdition, SurveySection } from "@devographics/core-models";
 import { getSurveyImageUrl } from "~/surveys/getSurveyImageUrl";
 import { getSectionKey, getSurveyTitle } from "~/surveys/helpers";
 
@@ -12,7 +12,7 @@ const SurveyHeadTags = ({
   survey,
   section,
 }: {
-  survey: SurveyDocument;
+  survey: SurveyEdition;
   section?: SurveySection;
 }) => {
   const { name, year, socialImageUrl, faviconUrl } = survey;

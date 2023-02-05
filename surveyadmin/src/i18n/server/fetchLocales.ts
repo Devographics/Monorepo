@@ -3,19 +3,14 @@
  */
 // cache for translation API request
 // must be defined top-level to get the same cache for all requests
-import { captureException } from "@sentry/nextjs";
 import { print } from "graphql/language/printer.js";
 import gql from "graphql-tag";
 import get from "lodash/get.js";
 import fetch from "node-fetch";
 import { serverConfig } from "~/config/server";
-import {
-  cachedPromise,
-  promisesNodeCache,
-  nodeCache,
-} from "~/lib/server/caching";
 import { Locale, RawLocale } from "../typings";
 import { getFragmentName } from "@vulcanjs/graphql";
+import { nodeCache } from "~/lib/server/caching";
 
 const disableAPICache = false; //getSetting("disableAPICache", false);
 const translationAPI = serverConfig.translationAPI; //getSetting("translationAPI");
@@ -98,7 +93,6 @@ const fetchTranslationApi = async (query: string, variables?: any) => {
 
 // LOCALES LIST
 
-const localesPromiseKey = "localesPromise";
 const LOCALES_TTL_SECONDS = 15 * 60; // 1 request per 15 minutes
 /**
  * Fetch locales WITHOUT strings
@@ -111,17 +105,10 @@ const LOCALES_TTL_SECONDS = 15 * 60; // 1 request per 15 minutes
  * @returns
  */
 const fetchLocales = async (variables?: { contexts?: Array<String> }) => {
-  const cached = cachedPromise(
-    promisesNodeCache,
-    localesPromiseKey,
-    LOCALES_TTL_SECONDS
-  );
-  const json = await cached(() =>
-    fetchTranslationApi(localesQuery, {
-      contexts,
-      ...(variables || {}),
-    })
-  );
+  const json = await fetchTranslationApi(localesQuery, {
+    contexts,
+    ...(variables || {}),
+  })
   const locales = get(json, "data.locales");
   if (locales) {
     return locales as Array<
@@ -140,7 +127,7 @@ export const getLocales = async () => {
   try {
     return await fetchLocales();
   } catch (err) {
-    captureException(err);
+    console.error(err)
     return undefined;
   }
 };
@@ -165,20 +152,12 @@ const fetchLocaleStrings = async (variables: {
   contexts?: Array<string>;
   localeId: string;
 }) => {
-  //console.debug("Fetching locale", variables.localeId);
-  const cached = cachedPromise(
-    promisesNodeCache,
-    localePromiseKey(variables.localeId),
-    LOCALES_TTL_SECONDS
-  );
-  const json = await cached(() =>
-    fetchTranslationApi(localeStringsQuery, {
-      contexts,
-      /** Will use en-US strings if language is not yet covered, this is the default */
-      enableFallbacks: true,
-      ...variables,
-    })
-  );
+  const json = await fetchTranslationApi(localeStringsQuery, {
+    contexts,
+    /** Will use en-US strings if language is not yet covered, this is the default */
+    enableFallbacks: true,
+    ...variables,
+  })
   const locale = get(json, "data.locale") as RawLocale | undefined | null;
   if (locale) {
     //console.debug("Got locale", locale.id);
@@ -202,31 +181,6 @@ const fetchLocaleStrings = async (variables: {
   }
   // locale not found
   return null;
-};
-
-/**
- * Will fallback to a locale for the same country if the exact region is not found
- *
- * /!\ The translation API already does it for us so it's not currently used
- * @param locales
- * @param localeId
- * @returns
- */
-const findBestMatchingLocaleId = (
-  locales: Array<Pick<Locale, "id">>,
-  localeId: string
-) => {
-  const exactLocaleId = locales?.find(
-    (l) => l.id.toLowerCase() === localeId.toLowerCase()
-  )?.id;
-  // 2 scenarios: your locale have a region like fr-FR and we cover this region
-  // or your locale only have a country like fr and we cover this country
-  if (exactLocaleId) return exactLocaleId;
-  // If you have "fr" or "fr-BE" but we only have "fr-FR", it will use "fr-FR", the first matching translation for this country
-  const countryLocaleId = locales.find(
-    (l) => l.id.slice(0, 2).toLowerCase() === localeId.slice(0, 2).toLowerCase()
-  )?.id;
-  return countryLocaleId;
 };
 
 export const getLocaleStrings = async (localeId: string) => {
@@ -257,7 +211,7 @@ export const getLocaleStrings = async (localeId: string) => {
   try {
     return await fetchLocaleStrings({ localeId });
   } catch (err) {
-    captureException(err);
+    console.error(err);
     return undefined;
   }
 };

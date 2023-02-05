@@ -59,7 +59,3 @@ reports/
 .yalc
 yalc.lock
 .yalc/
-
-# Storybook
-build-storybook.log
-storybook-static

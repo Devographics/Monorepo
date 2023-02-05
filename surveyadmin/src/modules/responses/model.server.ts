@@ -48,7 +48,6 @@ async function processEmailOnUpdate(data, properties) {
         subscribe({ email, listId });
       } catch (error) {
         // We do not hard fail on subscription error, just log to Sentry
-        captureException(error);
         console.error(error);
       }
       data["isSubscribed"] = true;
@@ -85,7 +84,6 @@ export const Response = createGraphqlModelServer(modelDef);
 
 type ResponseDocument = any;
 import mongoose from "mongoose";
-import { captureException } from "@sentry/nextjs";
 import { surveyFromResponse } from "./helpers";
 import { appDb } from "~/lib/server/mongoose/connection";
 // Using Vulcan (limited to CRUD operations)

@@ -7,8 +7,8 @@ import { createMongooseConnector } from "@vulcanjs/mongo";
 import { subscribe } from "~/server/email/email_octopus";
 import mongoose from "mongoose";
 import { captureException } from "@sentry/nextjs";
-import { fetchSurveyFromId, } from "~/surveys/server/fetch";
-import { ResponseDocument, SerializedSurveyDocument, SurveyDocument } from "@devographics/core-models";
+import { fetchSurveyFromId, } from "@devographics/core-models/server";
+import { ResponseDocument, SurveyEdition } from "@devographics/core-models";
 import { getModelDef, initReponseModel } from "./model";
 import { getServerSchema } from "./schema.server";
 
@@ -110,7 +110,15 @@ export const getModelDefServer = (): CreateGraphqlModelOptionsServer => {
       canCreate: ["members"],
       // NOTE: save survey also check if the response can be updated
       // TODO: drop Vulcan system here
-      canUpdate: ["owners", "admins"],
+      canUpdate: ({ user, document: response }) => {
+        if (typeof window === "undefined") {
+          const canModifyResponse = require("./server/permissions").canModifyReponse
+          return canModifyResponse(response, user);
+        } else {
+          // client side
+          return user?.isAdmin || user?._id === response?.userId
+        }
+      },
       canDelete: ["admins"],
     },
   });
@@ -120,7 +128,7 @@ let ResponseModel
 export const getResponseModel = () => {
   return ResponseModel
 };
-export const initResponseModelServer = (surveys: Array<SurveyDocument>) => {
+export const initResponseModelServer = (surveys: Array<SurveyEdition>) => {
   initReponseModel(surveys)
   ResponseModel = createGraphqlModelServer(getModelDefServer())
 }

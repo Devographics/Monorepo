@@ -1,8 +1,5 @@
 import React from "react";
 
-import { Extras } from "@sentry/types";
-
-import { captureException } from "@sentry/nextjs";
 // import { captureException } from "~/services/SentryService";
 import {
   DefaultErrorDisplay,
@@ -27,8 +24,8 @@ export type ErrorBoundaryFallbackComponent = React.ComponentType<{
 }>;
 interface ErrorBoundaryProps
   extends Pick<
-  DefaultErrorProps,
-  "proposeReload" | "proposeHomeRedirection" | "proposeLoginRedirection"
+    DefaultErrorProps,
+    "proposeReload" | "proposeHomeRedirection" | "proposeLoginRedirection"
   > {
   onError?: (error: Error, info: { componentStack: string }) => void;
   resetFunction?: (reset: () => void) => void;
@@ -62,7 +59,7 @@ export class ErrorBoundary extends React.Component<
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    captureException(error, { extra: errorInfo as unknown as Extras });
+    console.error(error);
   }
 
   render() {

@@ -1,5 +1,5 @@
 import surveys from "~/surveys";
-import type { SurveyType, ResponseDocument } from "@devographics/core-models";
+import type { SurveyEdition, ResponseDocument } from "@devographics/core-models";
 
 export const getSurvey = (prettySlug, year) =>
   surveys.find((s) => s.prettySlug === prettySlug && s.year === parseInt(year));
@@ -13,7 +13,7 @@ export const getSurveyPath = ({
   response,
   home = false,
 }: {
-  survey?: SurveyType | null;
+  survey?: SurveyEdition | null;
   number?: any;
   response?: any;
   home?: boolean;

@@ -5,8 +5,8 @@ import get from "lodash/get.js";
 import CountUp from "react-countup";
 import Confetti from "react-confetti";
 import take from "lodash/take.js";
-import type { SurveyDocument, SurveyType } from "@devographics/core-models";
-import { useIntlContext } from "@vulcanjs/react-i18n";
+import type { SurveyEdition } from "@devographics/core-models";
+import { useIntlContext } from "@devographics/react-i18n";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import { useEntities } from "~/core/components/common/EntitiesContext";
 import { Button } from "~/core/components/ui/Button";
@@ -66,7 +66,7 @@ const Score = ({
   survey,
 }: {
   response: any;
-  survey: SurveyDocument;
+  survey: SurveyEdition;
 }) => {
   const intl = useIntlContext();
   const containerRef = useRef<HTMLInputElement | null>(null);

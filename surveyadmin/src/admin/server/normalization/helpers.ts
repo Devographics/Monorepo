@@ -8,7 +8,7 @@ import isEmpty from "lodash/isEmpty.js";
 import type { Entity } from "@devographics/core-models";
 import type {
   Field,
-  SurveyType,
+  SurveyEdition,
   SurveyQuestion,
   ParsedQuestion,
 } from "@devographics/core-models";
@@ -265,7 +265,7 @@ export const normalize = async ({
   value: any;
   allRules: Array<any>;
   tags?: Array<string>;
-  survey?: SurveyType;
+  survey?: SurveyEdition;
   field?: SurveyQuestion;
   verbose?: boolean;
 }) => {

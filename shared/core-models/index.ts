@@ -7,16 +7,17 @@ export type { ResponseDocument } from "./responses/typings";
 export * as responseHelpers from "./responses/helpers";
 
 export type {
-  SurveyType,
   SurveyQuestion,
   Field,
   FieldTemplateId,
   ParsedQuestion,
-  SurveyDocument,
+  SurveyEdition,
+  SurveyEditionDescription,
+  SurveyEditions,
+  SurveySharedContext,
   SurveySection,
   SurveyStatus,
   SurveyStatusLabel,
-  SerializedSurveyDocument
 } from "./surveys/typings";
 
 export type { Entity } from "./entities/typings";

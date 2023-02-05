@@ -100,7 +100,6 @@ export interface EOConfig {
 
 /**
  * Values that do not depend on the survey year
- * 
  * Used for magic link emails
  */
 export interface SurveySharedContext {
@@ -126,9 +125,12 @@ export interface SurveySharedContext {
   domain?: string;
 }
 
-export interface SurveyDocument extends SurveySharedContext {
-  createdAt?: Date;
-  updatedAt?: Date;
+/**
+ * Fields that are specific to one edition (=1 year) of a survey
+ */
+interface SurveyEditionSpecifics {
+  createdAt?: string;
+  updatedAt?: string;
   /**
    * Slug with underscores
    * state_of_js
@@ -193,20 +195,36 @@ export interface SurveyDocument extends SurveySharedContext {
 }
 
 /**
- * Needed when getting a survey from SSR
+ * A survey edition
+ * With common info, edition specific info, and questions
  */
-export type SerializedSurveyDocument = Omit<
-  SurveyDocument,
-  "createdAt" | "updatedAt"
-> & {
-  createdAt?: string;
-  updatedAt?: string;
-};
+export type SurveyEdition = SurveySharedContext & SurveyEditionSpecifics
+
+export type SurveyEditionDescription = Pick<SurveyEdition,
+  "surveyId" | "name" | "status" | "prettySlug" | "slug" | "year" | "imageUrl">
+
 
 /**
- * Survey as stored in the database
+ * A survey with all it's editions
+ * Structure used in "/api"
+ * NOTE: this structure is big and only meant for intermediate usage
+ * eg loading all surveys before displaying a specific one
+ * 
+ * When we want to list surveys => only need the descriptions of each
+ * Or to display a specific surveys => only need one edition (=1 year)
  */
-export type SurveyType = SurveyDocument
+export interface SurveyEditions extends SurveySharedContext {
+  editions: Array<SurveyEditionSpecifics>
+}
+
+
+export type HydratedSurveyEdition = Omit<
+  SurveyEdition,
+  "createdAt" | "updatedAt"
+> & {
+  createdAt?: Date;
+  updatedAt?: Date;
+};
 
 /**
  * 1 preview
@@ -216,3 +234,4 @@ export type SurveyType = SurveyDocument
  */
 export type SurveyStatus = 1 | 2 | 3 | 4;
 export type SurveyStatusLabel = "preview" | "open" | "closed" | "hidden";
+

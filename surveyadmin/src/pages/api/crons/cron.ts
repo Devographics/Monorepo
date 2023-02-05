@@ -4,7 +4,7 @@ import moment from "moment";
 import { normalizeJob } from "~/admin/server/normalization/cronjob";
 import { getEntitiesData } from "~/admin/server/normalization/helpers";
 // import { exportEmailsJob } from "~/server/users/cronjob";
-import { apiWrapper } from "~/lib/server/sentry";
+
 
 const runCrons = process.env.RUN_CRONS; //getSetting("runCrons", false);
 
@@ -46,4 +46,4 @@ async function handler(req, res) {
 // );
 //
 
-export default apiWrapper(handler);
+export default handler;

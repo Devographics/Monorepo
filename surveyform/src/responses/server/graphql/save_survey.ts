@@ -3,7 +3,7 @@ import {
   processEmailOnUpdate,
 } from "~/responses/model.server";
 import { getSurveyResponseSchema } from "~/responses/schema";
-import { fetchSurveyFromId } from "~/surveys/server/fetch";
+import { fetchSurveyFromId } from "@devographics/core-models/server";
 import { canModifyResponse } from "../permissions";
 import { throwError } from "./errors";
 

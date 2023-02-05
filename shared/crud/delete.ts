@@ -33,7 +33,6 @@ import {
   getModelFragment,
   VulcanGraphqlModel,
 } from "@vulcanjs/graphql";
-import { removeFromData } from "./cacheUpdate";
 
 export const buildDeleteQuery = ({
   model,
@@ -54,25 +53,4 @@ export const buildDeleteQuery = ({
     ${deleteClientTemplate({ typeName, fragmentName: finalFragmentName })}
     ${finalFragment}
   `;
-};
-
-import { multiQueryUpdater, ComputeNewDataFunc } from "./multiQueryUpdater";
-import { DeleteVariables } from "@vulcanjs/crud";
-
-/**
- * Compute new list for removed elements
- * @param param0
- */
-const computeNewDataAfterDelete: ComputeNewDataFunc = ({
-  queryResult,
-  multiResolverName,
-  mutatedDocument,
-}) => {
-  const removedDoc = mutatedDocument;
-  const newData = removeFromData({
-    queryResult,
-    multiResolverName,
-    document: removedDoc,
-  });
-  return newData;
 };

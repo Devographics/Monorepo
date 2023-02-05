@@ -16,7 +16,7 @@ import {
 import { getRootUrl } from "~/lib/server/utils";
 import { routes } from "~/lib/routes";
 import { debugAccount } from "~/lib/debuggers";
-import { apiWrapper } from "~/lib/server/sentry";
+
 
 type SignupBody = Pick<UserTypeServer, "email" | "password">;
 
@@ -109,4 +109,4 @@ const signup = nextConnect<NextApiRequest, NextApiResponse>().post(
   }
 );
 
-export default apiWrapper(signup);
+export default signup;

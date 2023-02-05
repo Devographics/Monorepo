@@ -2,13 +2,12 @@
  * Do NOT import all surveys, these helpers works at survey level
  * This avoid bundling all surveys in a page
  */
-import { SerializedSurveyDocument, SurveyDocument, SurveySection } from "@devographics/core-models";
+import { SurveyEdition, SurveySection, SurveyEditionDescription } from "@devographics/core-models";
 import { getQuestionObject } from "./parser/parseSurvey";
-import { SurveyDescription } from "./typings";
 
 export const getCommentFieldName = fieldName => fieldName.replace("__experience", "__comment")
 
-export const getSurveyFieldNames = (survey: SerializedSurveyDocument | SurveyDocument) => {
+export const getSurveyFieldNames = (survey: SurveyEdition | SurveyEdition) => {
   let questionFieldNames: Array<string> = [];
   survey.outline.forEach((section) => {
     section.questions &&
@@ -42,15 +41,15 @@ export const getSurveyPath = ({
   response,
   home = false,
   page,
-  readOnly,
+  readOnly: forceReadOnly
 }: {
   // we only need basic info about the survey
-  survey?: SurveyDescription;
+  survey?: SurveyEditionDescription;
   number?: any;
   response?: any;
   home?: boolean;
   page?: "thanks";
-  readOnly?: boolean;
+  readOnly?: boolean
 }) => {
   if (!survey) {
     console.warn("Survey not passed as props, will use empty path")
@@ -62,6 +61,8 @@ export const getSurveyPath = ({
   const slugSegment = prettySlug;
   const yearSegment = year;
   const pathSegments = [prefixSegment, slugSegment, yearSegment];
+
+  const readOnly = forceReadOnly || !survey.status || ![1, 2].includes(survey.status)
 
   if (!home) {
     if (readOnly) {
@@ -83,7 +84,7 @@ export const getSurveyTitle = ({
   survey,
   sectionTitle,
 }: {
-  survey: SurveyDocument;
+  survey: SurveyEdition;
   sectionTitle?: string;
 }) => {
   const { name, year } = survey;

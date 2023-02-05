@@ -20,9 +20,9 @@ import {
   formatLabel,
   getIntlKeys,
   getIntlLabel,
-} from "@vulcanjs/i18n";
+} from "@devographics/i18n";
 
-import { IntlProviderContextValue } from "@vulcanjs/react-i18n";
+import { IntlContextValue } from "@devographics/react-i18n";
 import map from "lodash/map.js";
 import sortBy from "lodash/sortBy.js";
 import uniqBy from "lodash/uniqBy.js";
@@ -42,7 +42,7 @@ import { VulcanModel } from "@vulcanjs/model";
 export const getLabel = (
   model: VulcanModel,
   flatSchema: any,
-  context: IntlProviderContextValue,
+  context: IntlContextValue,
   fieldName: string,
   fieldLocale?: string
 ) => {
@@ -438,9 +438,8 @@ type FormSchemaState = Pick<
 export const getFieldGroups = (
   props: FormProps,
   state: FormSchemaState,
-  context: IntlProviderContextValue,
+  context: IntlContextValue,
   mutableFields: Array<string>,
-  formatMessage: any
 ) => {
   const { schema, currentDocument } = state;
   // build fields array by iterating over the list of field names

@@ -13,7 +13,7 @@ import { useFormContext } from "@devographics/react-form";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import { getSurveyPath } from "~/surveys/helpers";
-import type { SurveyType } from "@devographics/core-models";
+import type { SurveyEdition } from "@devographics/core-models";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import SurveyNavItem from "~/surveys/components/questions/SurveyNavItem";
 import { getCompletionPercentage } from "~/responses/helpers";
@@ -32,7 +32,7 @@ const SurveyNav = ({
   setNavLoading,
   readOnly,
 }: {
-  survey: SurveyType;
+  survey: SurveyEdition;
   // response?: any;
   navLoading?: boolean;
   setNavLoading?: any;

@@ -11,7 +11,7 @@ import Link from "next/link";
 import get from "lodash/get.js";
 import isEmpty from "lodash/isEmpty.js";
 import { statuses } from "~/surveys/constants";
-import { SurveyType } from "@devographics/core-models";
+import { SurveyEdition } from "@devographics/core-models";
 import { UserType } from "~/core/models/user";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import {
@@ -34,7 +34,7 @@ const SurveyAction = ({
   survey,
 }: //currentUser,
 {
-  survey: SurveyType;
+  survey: SurveyEdition;
   currentUser?: UserType;
 }) => {
   const [loading, setLoading] = useState(false);
@@ -198,7 +198,7 @@ const SurveyLink = ({
   response = {},
   message,
 }: {
-  survey: SurveyType;
+  survey: SurveyEdition;
   response?: { pagePath?: string };
   message: string;
 }) => {

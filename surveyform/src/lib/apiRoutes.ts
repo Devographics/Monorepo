@@ -1,4 +1,4 @@
-import { SurveyDocument } from "@devographics/core-models";
+import { SurveyEdition } from "@devographics/core-models";
 
 /**
  * NOTE: this is SHARED code not API only, we use this in the frontend as well
@@ -67,10 +67,10 @@ export const apiRoutes = {
       href: "/api/response/multi"
     },
     startSurvey: {
-      href: ({ slug, year }: Required<Pick<SurveyDocument, "slug" | "year">>) => `/api/response/start-survey?surveySlug=${slug}&surveyYear=${year}`
+      href: ({ slug, year }: Required<Pick<SurveyEdition, "slug" | "year">>) => `/api/response/start-survey?surveySlug=${slug}&surveyYear=${year}`
     },
     saveSurvey: {
-      href: ({ slug, year }: Required<Pick<SurveyDocument, "slug" | "year">>) => `/api/response/save-survey?surveySlug=${slug}&surveyYear=${year}`
+      href: ({ slug, year }: Required<Pick<SurveyEdition, "slug" | "year">>) => `/api/response/save-survey?surveySlug=${slug}&surveyYear=${year}`
     }
   }
 }
