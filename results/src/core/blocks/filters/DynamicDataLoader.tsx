@@ -105,7 +105,7 @@ const DynamicDataLoader = ({
     const allChartsOptions = useAllChartsOptions()
 
     useEffect(() => {
-        if (initialLoad.current) {
+        if (initialLoad.current && !chartFilters.queryOnLoad) {
             initialLoad.current = false
             return
         }

@@ -16,7 +16,8 @@ import FiltersSelection from './FiltersSelection'
 import { MODE_DEFAULT, MODE_FACET, MODE_COMBINED, MODE_GRID } from './constants'
 import cloneDeep from 'lodash/cloneDeep'
 import { BlockDefinition } from 'core/types'
-import { useStickyState } from './helpers'
+import { useStickyState, getFiltersLink } from './helpers'
+import { CheckIcon } from 'core/icons'
 
 type FiltersPanelPropsType = {
     block: BlockDefinition
@@ -71,6 +72,8 @@ const FiltersPanel = ({
     ]
     const tabs = tabConfig.filter(tab => supportedModes.includes(tab.mode))
 
+    const filtersLink = getFiltersLink({ block, context, filtersState })
+
     return (
         <Filters_>
             <FiltersTop_>
@@ -97,29 +100,63 @@ const FiltersPanel = ({
                     const Component = tab.component
                     return (
                         <Tab_ key={tab.mode} value={tab.mode}>
-                            <Component {...props} />
+                            <Component {...props} mode={tab.mode} />
                         </Tab_>
                     )
                 })}
             </Tabs.Root>
 
             <FiltersBottom_>
-                <GraphQLTrigger
-                    block={block}
-                    query={
-                        getFiltersQuery({
-                            block,
-                            chartFilters: filtersState,
-                            currentYear: currentEdition.year
-                        })?.query
-                    }
-                    buttonProps={{ variant: 'link' }}
-                />
+                <FooterLeft_>
+                    <GraphQLTrigger
+                        block={block}
+                        query={
+                            getFiltersQuery({
+                                block,
+                                chartFilters: filtersState,
+                                currentYear: currentEdition.year
+                            })?.query
+                        }
+                        buttonProps={{ variant: 'link' }}
+                    />
+                    <CopyLink link={filtersLink} />
+                </FooterLeft_>
                 <Button onClick={handleSubmit}>
                     <T k="filters.submit" />
                 </Button>
             </FiltersBottom_>
         </Filters_>
+    )
+}
+
+const CopyLink = ({ link }) => {
+    const [isCopied, setIsCopied] = useState(false)
+
+    // This is the function we wrote earlier
+    async function copyTextToClipboard(text) {
+        if ('clipboard' in navigator) {
+            return await navigator.clipboard.writeText(text)
+        } else {
+            return document.execCommand('copy', true, text)
+        }
+    }
+
+    // onClick handler function for the copy button
+    const handleCopyClick = async e => {
+        e.preventDefault()
+        // Asynchronously call copyTextToClipboard
+        await copyTextToClipboard(link)
+        setIsCopied(true)
+        setTimeout(() => {
+            setIsCopied(false)
+        }, 1500)
+    }
+
+    return (
+        <CopyLink_ href={link} onClick={handleCopyClick}>
+            <T k="filters.copy_link" />
+            {isCopied && <CheckIcon />}
+        </CopyLink_>
     )
 }
 
@@ -167,6 +204,18 @@ const Filters_ = styled.div`
 const FiltersBottom_ = styled.div`
     display: flex;
     justify-content: space-between;
+`
+
+const FooterLeft_ = styled.div`
+    display: flex;
+    gap: ${spacing()};
+    align-items: center;
+`
+
+const CopyLink_ = styled.a`
+    display: flex;
+    gap: ${spacing(0.25)};
+    align-items: center;
 `
 
 export default FiltersPanel

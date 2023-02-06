@@ -7,7 +7,7 @@ import { getTableData } from 'core/helpers/datatables'
 import { ResultsByYear, BlockComponentProps } from 'core/types'
 import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
 import { MODE_GRID, MODE_FACET } from 'core/blocks/filters/constants'
-import { useFilterLegends, getInitFilters } from 'core/blocks/filters/helpers'
+import { useChartFilters } from 'core/blocks/filters/helpers'
 import { defaultOptions } from 'core/blocks/block/BlockUnitsSelector'
 import { useAllChartsOptions } from 'core/charts/hooks'
 
@@ -43,14 +43,7 @@ const HorizontalBarBlock = ({
     const buckets = processBlockData(data)
     const { total } = completion
 
-    // contains the filters that define the series
-    const [chartFilters, setChartFilters] = useState(
-        getInitFilters({ supportedModes: [MODE_GRID, MODE_FACET] })
-    )
-
-    const legends = useFilterLegends({
-        chartFilters
-    })
+    const { chartFilters, setChartFilters, legends } = useChartFilters({ block, options: { supportedModes: [MODE_GRID, MODE_FACET] }})
 
     const allChartsOptions = useAllChartsOptions()
     let unitsOptions = defaultOptions

@@ -22,6 +22,7 @@ import sumBy from 'lodash/sumBy'
 import roundBy from 'lodash/roundBy'
 import { usePageContext } from 'core/helpers/pageContext'
 import { CustomizationFiltersCondition } from './types'
+import { getBlockLink } from 'core/helpers/blockHelpers'
 
 export const getNewCondition = ({ filtersNotInUse, keys }) => {
     const field = filtersNotInUse[0]
@@ -437,16 +438,39 @@ export const useFilterLegends = (props: { chartFilters: any }) => {
 Initialize the chart customization filter state
 
 */
-export const getInitFilters = (initOptions?: CustomizationOptions): CustomizationDefinition => ({
+export const getInitFilters = (initOptions: CustomizationOptions): CustomizationDefinition => ({
     options: {
         showDefaultSeries: true,
-        allowModeSwitch: false,
         enableYearSelect: true,
-        mode: MODE_DEFAULT,
+        mode: initOptions.supportedModes[0],
+        queryOnLoad: false,
         ...initOptions
     },
     filters: []
 })
+
+
+/*
+
+Hook to initialize chart filters
+
+*/
+export const useChartFilters = ({ block, options } : { block: BlockDefinition, options: CustomizationOptions }) => {
+    const search = new URLSearchParams(location.search)
+    const queryParams = Object.fromEntries(search.entries())
+    const urlFilters = queryParams.filters && JSON.parse(atob(queryParams.filters))
+    const loadFiltersFromUrl = urlFilters && block.id === queryParams.blockId
+
+    // contains the filters that define the series
+    const [chartFilters, setChartFilters] = useState(
+        loadFiltersFromUrl ? { ...urlFilters, queryOnLoad: true } : getInitFilters(options)
+    )
+
+    const legends = useFilterLegends({
+        chartFilters
+    })
+    return {chartFilters, setChartFilters, legends}
+}
 
 /*
 
@@ -464,4 +488,19 @@ export function useStickyState(defaultValue: any, key: string) {
         window.localStorage.setItem(key, JSON.stringify(value))
     }, [key, value])
     return [value, setValue]
+}
+
+export const getFiltersLink = ({
+    block,
+    context,
+    filtersState
+}: {
+    block: BlockDefinition
+    context: any
+    filtersState: any
+}) => {
+    const encodedParams = btoa(JSON.stringify(filtersState))
+    const params = { filters: encodedParams, blockId: block.id }
+    const link = getBlockLink({ block, context, params, useRedirect: false })
+    return link
 }

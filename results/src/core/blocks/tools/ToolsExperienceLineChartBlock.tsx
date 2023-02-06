@@ -19,7 +19,7 @@ import { useLegends } from 'core/helpers/useBucketKeys'
 import { useTheme } from 'styled-components'
 import styled, { css } from 'styled-components'
 import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
-import { getInitFilters } from 'core/blocks/filters/helpers'
+import { useChartFilters } from 'core/blocks/filters/helpers'
 import { MODE_GRID } from 'core/blocks/filters/constants'
 import { RankingChartSerie } from 'core/charts/generic/RankingChart'
 import { MetricId, ALL_METRICS } from 'core/helpers/units'
@@ -118,10 +118,7 @@ export const ToolsExperienceLineChartBlock = ({
         return cellData
     })
 
-    // contains the filters that define the series
-    const [chartFilters, setChartFilters] = useState(
-        getInitFilters({ supportedModes: [MODE_GRID], enableYearSelect: false })
-    )
+    const { chartFilters, setChartFilters } = useChartFilters({ block, options: { supportedModes: [MODE_GRID], enableYearSelect: false }})
 
     return (
         <BlockVariant

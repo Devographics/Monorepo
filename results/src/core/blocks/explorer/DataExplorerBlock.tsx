@@ -145,9 +145,9 @@ const DataExplorerBlock = ({
     }, [useMobileLayout])
     /*
 
-  Update URL query parameters when state changes
+    Update URL query parameters when state changes
 
-  */
+    */
     const urlVariables = {
         xField,
         yField,

@@ -18,7 +18,7 @@ import { getTableData } from 'core/helpers/datatables'
 import { MODE_GRID } from 'core/blocks/filters/constants'
 import { MetricId, ALL_METRICS } from 'core/helpers/units'
 import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
-import { getInitFilters } from 'core/blocks/filters/helpers'
+import { useChartFilters } from 'core/blocks/filters/helpers'
 
 export interface MetricBucket {
     year: number
@@ -100,10 +100,7 @@ export const ToolsExperienceRankingBlock = ({
         return cellData
     })
 
-    // contains the filters that define the series
-    const [chartFilters, setChartFilters] = useState(
-        getInitFilters({ supportedModes: [MODE_GRID], enableYearSelect: false })
-    )
+    const { chartFilters, setChartFilters } = useChartFilters({ block, options: { supportedModes: [MODE_GRID], enableYearSelect: false }})
 
     return (
         <Block

@@ -10,10 +10,9 @@ import sumBy from 'lodash/sumBy'
 import T from 'core/i18n/T'
 import { getTableData } from 'core/helpers/datatables'
 import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
-import { useFilterLegends } from 'core/blocks/filters/helpers'
 import { useTheme } from 'styled-components'
 import { useI18n } from 'core/i18n/i18nContext'
-import { getInitFilters } from 'core/blocks/filters/helpers'
+import { useChartFilters } from 'core/blocks/filters/helpers'
 import { MODE_COMBINED } from 'core/blocks/filters/constants'
 
 const groupBy = 10
@@ -63,10 +62,7 @@ const KnowledgeScoreBlock = ({ block, data }) => {
     let buckets = data.facets[0].buckets
     buckets = getChartData(buckets)
 
-    // contains the filters that define the series
-    const [chartFilters, setChartFilters] = useState(getInitFilters({ supportedModes: [MODE_COMBINED] }))
-
-    const legends = useFilterLegends({ chartFilters })
+    const { chartFilters, setChartFilters, legends } = useChartFilters({block, options: { supportedModes: [MODE_COMBINED] }})
 
     return (
         <Block

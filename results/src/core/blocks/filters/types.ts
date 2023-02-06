@@ -11,7 +11,8 @@ export type CustomizationOptions = {
     showDefaultSeries?: boolean
     enableYearSelect?: boolean
     mode?: SupportedMode
-    supportedModes?: SupportedMode[]
+    supportedModes: SupportedMode[]
+    queryOnLoad?: boolean
 }
 
 export type CustomizationFilters = {

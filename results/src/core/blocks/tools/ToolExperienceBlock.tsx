@@ -15,7 +15,7 @@ import { ExperienceByYearBarChart } from 'core/charts/generic/ExperienceByYearBa
 import { useI18n } from 'core/i18n/i18nContext'
 import { groupDataByYears, getTableData } from 'core/helpers/datatables'
 import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
-import { getInitFilters } from 'core/blocks/filters/helpers'
+import { useChartFilters } from 'core/blocks/filters/helpers'
 import { MODE_GRID } from 'core/blocks/filters/constants'
 
 const BAR_THICKNESS = 28
@@ -88,10 +88,7 @@ export const ToolExperienceBlock = ({
 
     const chartHeight = (allYears.length - 1) * (BAR_THICKNESS + BAR_SPACING) + BAR_THICKNESS * 2
 
-    // contains the filters that define the series
-    const [chartFilters, setChartFilters] = useState(
-        getInitFilters({ supportedModes: [MODE_GRID], enableYearSelect: false })
-    )
+    const { chartFilters, setChartFilters, legends } = useChartFilters({ block, options: { supportedModes: [MODE_GRID], enableYearSelect: false }})
 
     return (
         <Block

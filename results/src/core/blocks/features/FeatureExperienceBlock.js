@@ -11,7 +11,7 @@ import { mq, spacing } from 'core/theme'
 import { useI18n } from 'core/i18n/i18nContext'
 import { getTableData, groupDataByYears } from 'core/helpers/datatables'
 import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
-import { getInitFilters } from 'core/blocks/filters/helpers'
+import { useChartFilters } from 'core/blocks/filters/helpers'
 import { MODE_GRID } from 'core/blocks/filters/constants'
 
 // convert relative links into absolute MDN links
@@ -47,10 +47,7 @@ const FeatureExperienceBlock = ({
 
     const buckets = processBlockData(data)
 
-    // contains the filters that define the series
-    const [chartFilters, setChartFilters] = useState(
-        getInitFilters({ supportedModes: [MODE_GRID], enableYearSelect: false })
-    )
+    const { chartFilters, setChartFilters } = useChartFilters({block, options: { supportedModes: [MODE_GRID], enableYearSelect: false }})
 
     return (
         <Block

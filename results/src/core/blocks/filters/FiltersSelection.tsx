@@ -14,7 +14,7 @@ import Presets from './Presets'
 import Options from './Options'
 import { useAllChartsOptionsIdsOnly } from 'core/charts/hooks'
 
-const FiltersSelection = ({ chartName, block, stateStuff }) => {
+const FiltersSelection = ({ chartName, block, stateStuff, mode = MODE_GRID }) => {
     const context = usePageContext()
     const allChartsKeys = useAllChartsOptionsIdsOnly()
     const { currentEdition } = context
@@ -33,13 +33,13 @@ const FiltersSelection = ({ chartName, block, stateStuff }) => {
     })
 
     // whenever this panel is loaded, set mode to filters
-    useEffect(() => {
-        setFiltersState(fState => {
-            const newState = cloneDeep(fState)
-            newState.options.mode = MODE_GRID
-            return newState
-        })
-    })
+    // useEffect(() => {
+    //     setFiltersState(fState => {
+    //         const newState = cloneDeep(fState)
+    //         newState.options.mode = mode
+    //         return newState
+    //     })
+    // })
 
     const handleAddSeries = () => {
         setFiltersState(fState => {

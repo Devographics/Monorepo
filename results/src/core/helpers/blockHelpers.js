@@ -5,7 +5,7 @@ const { siteTitle, capturesUrl, hashtag, year } = config
 
 export const replaceOthers = s => s?.replace('_others', '.others')
 
-export const getBlockKey = (block) => {
+export const getBlockKey = block => {
     const namespace = block.blockNamespace ?? 'blocks'
     const blockId = replaceOthers(block?.intlId || block?.id)
     return `${namespace}.${blockId}`
@@ -37,12 +37,23 @@ export const getBlockImage = (block, context) => {
     return `${capturesUrl}${get(context, 'locale.path')}/${block.id}.png`
 }
 
-export const getBlockMeta = (block, context, translate, title) => {
+export const getBlockLink = ({ block, context, params, useRedirect = true }) => {
     const { id } = block
-    let path = `${context.currentPath}/${id}`
+    const paramsString = new URLSearchParams(params).toString()
+
+    let path = useRedirect
+        ? `${context.currentPath}/${id}?${paramsString}`
+        : `${context.currentPath}/?${paramsString}#${id}`
+        
     // remove any double slashes
     path = path.replaceAll('//', '/')
     const link = `${context.host}${path}`
+    return link
+}
+
+export const getBlockMeta = (block, context, translate, title) => {
+    const { id } = block
+    const link = getBlockLink({ block, context })
 
     const trackingId = `${context.currentPath}${id}`.replace(/^\//, '')
 
@@ -57,17 +68,17 @@ export const getBlockMeta = (block, context, translate, title) => {
         link,
         hashtag,
         year,
-        siteTitle,
+        siteTitle
     }
 
     const twitterText = translate('share.block.twitter_text', {
-        values,
+        values
     })
     const emailSubject = translate('share.block.subject', {
-        values,
+        values
     })
     const emailBody = translate('share.block.body', {
-        values,
+        values
     })
 
     return {
@@ -78,16 +89,16 @@ export const getBlockMeta = (block, context, translate, title) => {
         twitterText,
         emailSubject,
         emailBody,
-        imageUrl,
+        imageUrl
     }
 }
 
-export const getAllBlocks = (sitemap) => {
+export const getAllBlocks = sitemap => {
     let allBlocks = []
-    sitemap.contents.forEach((page) => {
+    sitemap.contents.forEach(page => {
         allBlocks = [...allBlocks, ...page.blocks]
         if (page.children) {
-            page.children.forEach((page) => {
+            page.children.forEach(page => {
                 allBlocks = [...allBlocks, ...page.blocks]
             })
         }

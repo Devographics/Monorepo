@@ -11,7 +11,7 @@ import { ResultsByYear, BlockComponentProps, BlockUnits } from 'core/types'
 import { getTableData } from 'core/helpers/datatables'
 import sumBy from 'lodash/sumBy'
 import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
-import { useFilterLegends, getInitFilters } from 'core/blocks/filters/helpers'
+import { useChartFilters } from 'core/blocks/filters/helpers'
 import { MODE_COMBINED } from 'core/blocks/filters/constants'
 import { defaultOptions } from 'core/blocks/block/BlockUnitsSelector'
 import { useAllChartsOptions } from 'core/charts/hooks'
@@ -73,14 +73,8 @@ const VerticalBarBlock = ({
         : buckets_
     const { total } = completion
 
-    // contains the filters that define the series
-    const [chartFilters, setChartFilters] = useState(
-        getInitFilters({ supportedModes: [MODE_COMBINED] })
-    )
+    const {chartFilters, setChartFilters, legends } = useChartFilters({block, options: { supportedModes: [MODE_COMBINED] }})
 
-    const legends = useFilterLegends({
-        chartFilters
-    })
 
     const allChartsOptions = useAllChartsOptions()
     let unitsOptions = defaultOptions

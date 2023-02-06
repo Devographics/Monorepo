@@ -20,7 +20,7 @@ import {
     BlogIcon
 } from 'core/icons'
 import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
-import { getInitFilters } from 'core/blocks/filters/helpers'
+import { useChartFilters } from 'core/blocks/filters/helpers'
 import { MODE_GRID } from 'core/blocks/filters/constants'
 
 export interface PeopleBlockProps extends BlockComponentProps {
@@ -97,10 +97,7 @@ const PeopleBlock = ({ block, data, controlledUnits, isCustom }: PeopleBlockProp
     const allEntities = buckets.map(b => b.entity)
     const services = getRelevantServices(allEntities)
 
-    // contains the filters that define the series
-    const [chartFilters, setChartFilters] = useState(
-        getInitFilters({ supportedModes: [MODE_GRID] })
-    )
+    const { chartFilters, setChartFilters, legends } = useChartFilters({ block, options: { supportedModes: [MODE_GRID] }})
 
     return (
         <Block
