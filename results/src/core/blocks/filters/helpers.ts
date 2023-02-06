@@ -449,17 +449,26 @@ export const getInitFilters = (initOptions: CustomizationOptions): Customization
     filters: []
 })
 
-
 /*
 
 Hook to initialize chart filters
 
 */
-export const useChartFilters = ({ block, options } : { block: BlockDefinition, options: CustomizationOptions }) => {
-    const search = new URLSearchParams(location.search)
-    const queryParams = Object.fromEntries(search.entries())
-    const urlFilters = queryParams.filters && JSON.parse(atob(queryParams.filters))
-    const loadFiltersFromUrl = urlFilters && block.id === queryParams.blockId
+export const useChartFilters = ({
+    block,
+    options
+}: {
+    block: BlockDefinition
+    options: CustomizationOptions
+}) => {
+
+    let loadFiltersFromUrl = false, urlFilters = {}
+    if (typeof location !== 'undefined') {
+        const search = new URLSearchParams(location.search)
+        const queryParams = Object.fromEntries(search.entries())
+        urlFilters = queryParams.filters && JSON.parse(atob(queryParams.filters))
+        loadFiltersFromUrl = urlFilters && block.id === queryParams.blockId
+    }
 
     // contains the filters that define the series
     const [chartFilters, setChartFilters] = useState(
@@ -469,7 +478,7 @@ export const useChartFilters = ({ block, options } : { block: BlockDefinition, o
     const legends = useFilterLegends({
         chartFilters
     })
-    return {chartFilters, setChartFilters, legends}
+    return { chartFilters, setChartFilters, legends }
 }
 
 /*
