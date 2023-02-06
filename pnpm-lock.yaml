@@ -683,7 +683,6 @@ importers:
       nanoid: ^3.1.25
       next: ^13.1.3
       next-connect: ^0.9.1
-      next-sitemap: ^1.4.17
       next-transpile-modules: ^10.0.0
       node-cache: ^5.1.2
       node-fetch: ^3.2.10
@@ -787,7 +786,6 @@ importers:
       nanoid: 3.3.4
       next: 13.1.3_e6en2gkdnbspgmiqkggoqbxjgy
       next-connect: 0.9.1
-      next-sitemap: 1.9.12_next@13.1.3
       node-cache: 5.1.2
       node-fetch: 3.2.10
       nodemailer: 6.8.0
@@ -818,8 +816,8 @@ importers:
       swr: 0.4.2_react@18.2.0
       uuid: 8.3.2
     optionalDependencies:
-      '@cypress/code-coverage': 3.10.0_vxqx7o2dpurloosbs2fcxxukay
-      '@cypress/webpack-preprocessor': 5.16.1_sxluycrbh2ibjdswrlihudugbu
+      '@cypress/code-coverage': 3.10.0_jm3zfnor3dejdgoaolv43yzg3m
+      '@cypress/webpack-preprocessor': 5.16.1_vqwn22oqs42olud44fk6wru6ge
       '@istanbuljs/nyc-config-typescript': 1.0.2_nyc@15.1.0
       '@next/bundle-analyzer': 9.5.5
       '@testing-library/cypress': 8.0.7_cypress@9.7.0
@@ -1114,8 +1112,8 @@ importers:
       swr: 2.0.1_react@18.2.0
       uuid: 8.3.2
     optionalDependencies:
-      '@cypress/code-coverage': 3.10.0_lecfltkoigeqyymi5kjvq4my4q
-      '@cypress/webpack-preprocessor': 5.16.1_aikxx7qthjd6qyffp3hiuzihje
+      '@cypress/code-coverage': 3.10.0_turfhogldrikcioipbk5hfzw7e
+      '@cypress/webpack-preprocessor': 5.16.1_d6q2nshjt33dyke7ap5qrde5mq
       '@istanbuljs/nyc-config-typescript': 1.0.2_nyc@15.1.0
       '@next/bundle-analyzer': 12.3.4
       '@storybook/addon-a11y': 6.5.15_biqbaboplfbrettd7655fr4n2y
@@ -7779,13 +7777,13 @@ packages:
     resolution: {integrity: sha512-ij4wRiunFfaJxjB0BdrYHIH8FxBJpOwNPhhAcunlmPdXudL1WQV1qoP9un6JsEBAgQH+7UXyyjh0g7jTxXK6tg==}
     dev: false
 
-  /@cypress/code-coverage/3.10.0_lecfltkoigeqyymi5kjvq4my4q:
+  /@cypress/code-coverage/3.10.0_jm3zfnor3dejdgoaolv43yzg3m:
     resolution: {integrity: sha512-K5pW2KPpK4vKMXqxd6vuzo6m9BNgpAv1LcrrtmqAtOJ1RGoEILXYZVost0L6Q+V01NyY7n7jXIIfS7LR3nP6YA==}
     requiresBuild: true
     peerDependencies:
       cypress: '*'
     dependencies:
-      '@cypress/webpack-preprocessor': 5.16.1_aikxx7qthjd6qyffp3hiuzihje
+      '@cypress/webpack-preprocessor': 5.16.1_vqwn22oqs42olud44fk6wru6ge
       chalk: 4.1.2
       cypress: 9.7.0
       dayjs: 1.10.7
@@ -7796,6 +7794,7 @@ packages:
       js-yaml: 3.14.1
       nyc: 15.1.0
     transitivePeerDependencies:
+      - '@babel/core'
       - '@babel/preset-env'
       - babel-loader
       - supports-color
@@ -7803,13 +7802,13 @@ packages:
     dev: false
     optional: true
 
-  /@cypress/code-coverage/3.10.0_vxqx7o2dpurloosbs2fcxxukay:
+  /@cypress/code-coverage/3.10.0_turfhogldrikcioipbk5hfzw7e:
     resolution: {integrity: sha512-K5pW2KPpK4vKMXqxd6vuzo6m9BNgpAv1LcrrtmqAtOJ1RGoEILXYZVost0L6Q+V01NyY7n7jXIIfS7LR3nP6YA==}
     requiresBuild: true
     peerDependencies:
       cypress: '*'
     dependencies:
-      '@cypress/webpack-preprocessor': 5.16.1_sxluycrbh2ibjdswrlihudugbu
+      '@cypress/webpack-preprocessor': 5.16.1_d6q2nshjt33dyke7ap5qrde5mq
       chalk: 4.1.2
       cypress: 9.7.0
       dayjs: 1.10.7
@@ -7820,6 +7819,7 @@ packages:
       js-yaml: 3.14.1
       nyc: 15.1.0
     transitivePeerDependencies:
+      - '@babel/core'
       - '@babel/preset-env'
       - babel-loader
       - supports-color
@@ -7852,14 +7852,15 @@ packages:
     dev: false
     optional: true
 
-  /@cypress/webpack-preprocessor/5.16.1_aikxx7qthjd6qyffp3hiuzihje:
+  /@cypress/webpack-preprocessor/5.16.1_d6q2nshjt33dyke7ap5qrde5mq:
     resolution: {integrity: sha512-KZ6xdQmPd0YocbxDJc7l3Ov53eYmkWLCkpbMQSVIWSTZMjzK96V8GG7tGSg9TGUEeYCZitDli8NijvoXCRJU7g==}
     peerDependencies:
+      '@babel/core': ^7.0.1
       '@babel/preset-env': ^7.0.0
       babel-loader: ^8.0.2
       webpack: ^4 || ^5
     dependencies:
-      '@babel/core': 7.20.7
+      '@babel/core': 7.20.2
       '@babel/generator': 7.20.7
       '@babel/parser': 7.13.0
       '@babel/traverse': 7.20.10
@@ -7878,14 +7879,15 @@ packages:
     dev: false
     optional: true
 
-  /@cypress/webpack-preprocessor/5.16.1_sxluycrbh2ibjdswrlihudugbu:
+  /@cypress/webpack-preprocessor/5.16.1_vqwn22oqs42olud44fk6wru6ge:
     resolution: {integrity: sha512-KZ6xdQmPd0YocbxDJc7l3Ov53eYmkWLCkpbMQSVIWSTZMjzK96V8GG7tGSg9TGUEeYCZitDli8NijvoXCRJU7g==}
     peerDependencies:
+      '@babel/core': ^7.0.1
       '@babel/preset-env': ^7.0.0
       babel-loader: ^8.0.2
       webpack: ^4 || ^5
     dependencies:
-      '@babel/core': 7.20.7
+      '@babel/core': 7.20.2
       '@babel/generator': 7.20.7
       '@babel/parser': 7.13.0
       '@babel/traverse': 7.20.10
@@ -24346,7 +24348,7 @@ packages:
       debug:
         optional: true
     dependencies:
-      debug: 4.3.4_supports-color@6.1.0
+      debug: 4.3.4
     dev: false
 
   /for-each/0.3.3:
@@ -31651,18 +31653,6 @@ packages:
       next: 13.1.1_vgii64pd2ccbnbx2v3ro5gbin4
     dev: false
 
-  /next-sitemap/1.9.12_next@13.1.3:
-    resolution: {integrity: sha512-kHXf4ZNAGLJyK16HbjzE5X9JlKwXtxW+9J4dh3oT7LSbU/+3bN+VqWjNw/776Otbanf7EJsvl51oQ78qQW5XBQ==}
-    engines: {node: '>=14'}
-    hasBin: true
-    peerDependencies:
-      next: '*'
-    dependencies:
-      '@corex/deepmerge': 2.6.148
-      minimist: 1.2.6
-      next: 13.1.3_e6en2gkdnbspgmiqkggoqbxjgy
-    dev: false
-
   /next-tick/1.1.0:
     resolution: {integrity: sha512-CXdUiJembsNjuToQvxayPZF9Vqht7hewsvy2sOWafLvi2awflj9mOC6bHIg50orX8IJvWKY9wYQ/zB2kogPslQ==}
     dev: false
@@ -34914,6 +34904,12 @@ packages:
   /react-dev-utils/11.0.4_a7xmpkungfd35is2c4kqy55h3i:
     resolution: {integrity: sha512-dx0LvIGHcOPtKbeiSUM4jqpBl3TcY7CDjZdfOIcKeznE7BWr9dg0iPG90G5yfVQ+p/rGNMXdbfStvzQZEVEi4A==}
     engines: {node: '>=10'}
+    peerDependencies:
+      typescript: '>=2.7'
+      webpack: '>=4'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
     dependencies:
       '@babel/code-frame': 7.10.4
       address: 1.1.2
@@ -34943,14 +34939,18 @@ packages:
     transitivePeerDependencies:
       - eslint
       - supports-color
-      - typescript
       - vue-template-compiler
-      - webpack
     dev: false
 
   /react-dev-utils/12.0.1_5cls54yhub2wqfkrovxqeaw2om:
     resolution: {integrity: sha512-84Ivxmr17KjUupyqzFode6xKhjwuEJDROWKJy/BthkL7Wn6NJ8h4WE6k/exAv6ImS+0oZLRRW5j/aINMHyeGeQ==}
     engines: {node: '>=14'}
+    peerDependencies:
+      typescript: '>=2.7'
+      webpack: '>=4'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
     dependencies:
       '@babel/code-frame': 7.18.6
       address: 1.1.2
@@ -34981,9 +34981,7 @@ packages:
     transitivePeerDependencies:
       - eslint
       - supports-color
-      - typescript
       - vue-template-compiler
-      - webpack
     dev: false
 
   /react-docgen-typescript/2.2.2_typescript@4.8.4:
