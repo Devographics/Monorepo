@@ -442,7 +442,7 @@ export const getInitFilters = (initOptions: CustomizationOptions): Customization
     options: {
         showDefaultSeries: true,
         enableYearSelect: true,
-        mode: initOptions.supportedModes[0],
+        mode: MODE_DEFAULT,
         queryOnLoad: false,
         ...initOptions
     },

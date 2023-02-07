@@ -12,7 +12,7 @@ import { getTableData } from 'core/helpers/datatables'
 import sumBy from 'lodash/sumBy'
 import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
 import { useChartFilters } from 'core/blocks/filters/helpers'
-import { MODE_COMBINED } from 'core/blocks/filters/constants'
+import { MODE_COMBINED, MODE_FACET } from 'core/blocks/filters/constants'
 import { defaultOptions } from 'core/blocks/block/BlockUnitsSelector'
 import { useAllChartsOptions } from 'core/charts/hooks'
 
@@ -73,7 +73,7 @@ const VerticalBarBlock = ({
         : buckets_
     const { total } = completion
 
-    const {chartFilters, setChartFilters, legends } = useChartFilters({block, options: { supportedModes: [MODE_COMBINED] }})
+    const {chartFilters, setChartFilters, legends } = useChartFilters({block, options: { supportedModes: [MODE_COMBINED, MODE_FACET] }})
 
 
     const allChartsOptions = useAllChartsOptions()
