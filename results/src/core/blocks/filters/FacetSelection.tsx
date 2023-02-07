@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import T from 'core/i18n/T'
 import { mq, spacing, fontSize } from 'core/theme'
@@ -18,15 +18,6 @@ const FacetSelection = ({ chartName, stateStuff, block }) => {
     const { facets } = allChartsKeys
     const { filtersState, setFiltersState } = stateStuff
     const enabledFacets = facets.filter(f => !disabledFacets.includes(f))
-
-    // whenever this panel is loaded, set mode to facet
-    useEffect(() => {
-        setFiltersState(fState => {
-            const newState = cloneDeep(fState)
-            newState.options.mode = MODE_FACET
-            return newState
-        })
-    })
 
     return (
         <Wrapper_>

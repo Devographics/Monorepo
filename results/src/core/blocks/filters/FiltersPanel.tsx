@@ -1,4 +1,4 @@
-import React, { useState, Dispatch, SetStateAction } from 'react'
+import React, { useState, Dispatch, SetStateAction, useEffect } from 'react'
 import styled from 'styled-components'
 import T from 'core/i18n/T'
 import { mq, spacing, fontSize } from 'core/theme'
@@ -61,9 +61,21 @@ const FiltersPanel = ({
 
     const supportedModes = filtersState.options.supportedModes
 
+    
     // if mode is set to "default" then open first supported filter tab
-    const defaultTab =
+    const currentMode =
         filtersState.options.mode === MODE_DEFAULT ? supportedModes[0] : filtersState.options.mode
+
+    // whenever this panel is loaded without a mode specified, set mode to currentMode
+    useEffect(() => {
+        if (filtersState.options.mode === MODE_DEFAULT) {
+            setFiltersState(fState => {
+                const newState = cloneDeep(fState)
+                newState.options.mode = currentMode
+                return newState
+            })
+        }
+    }, [])
 
     const tabConfig = [
         { mode: MODE_COMBINED, component: FiltersSelection },
@@ -73,6 +85,14 @@ const FiltersPanel = ({
     const tabs = tabConfig.filter(tab => supportedModes.includes(tab.mode))
 
     const filtersLink = getFiltersLink({ block, context, filtersState })
+
+    const handleTabChange = (tab: string) => {
+        setFiltersState((fState: any) => {
+            const newState = cloneDeep(fState)
+            newState.options.mode = tab
+            return newState
+        })
+    }
 
     return (
         <Filters_>
@@ -88,7 +108,11 @@ const FiltersPanel = ({
                     <T k="filters.docs" />
                 </a>
             </FiltersTop_>
-            <Tabs.Root defaultValue={defaultTab} orientation="horizontal">
+            <Tabs.Root
+                defaultValue={currentMode}
+                orientation="horizontal"
+                onValueChange={handleTabChange}
+            >
                 <TabsList aria-label="tabs example">
                     {tabs.map(tab => (
                         <TabsTrigger_ key={tab.mode} value={tab.mode}>

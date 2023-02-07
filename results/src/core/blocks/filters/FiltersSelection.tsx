@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import Series from './Series'
 import styled from 'styled-components'
 import T from 'core/i18n/T'
@@ -31,15 +31,6 @@ const FiltersSelection = ({ chartName, block, stateStuff, mode = MODE_GRID }) =>
         keys: allChartsKeys,
         year: currentEdition.year
     })
-
-    // whenever this panel is loaded, set mode to filters
-    // useEffect(() => {
-    //     setFiltersState(fState => {
-    //         const newState = cloneDeep(fState)
-    //         newState.options.mode = mode
-    //         return newState
-    //     })
-    // })
 
     const handleAddSeries = () => {
         setFiltersState(fState => {
