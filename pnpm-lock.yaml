@@ -180,6 +180,7 @@ importers:
       '@testing-library/jest-dom': ^5.16.5
       '@testing-library/react': ^13.3.0
       '@testing-library/user-event': ^14.4.3
+      dotenv: ^10.0.0
       graphiql: ^1.11.5
       graphiql-explorer: ^0.9.0
       graphql: ^16.6.0
@@ -192,6 +193,7 @@ importers:
       '@testing-library/jest-dom': 5.16.5
       '@testing-library/react': 13.4.0_biqbaboplfbrettd7655fr4n2y
       '@testing-library/user-event': 14.4.3
+      dotenv: 10.0.0
       graphiql: 1.11.5_xe4twbeoqswbn2uas4ov5melbq
       graphiql-explorer: 0.9.0_gdcq4dv6opitr3wbfwyjmanyra
       graphql: 16.6.0
@@ -14046,6 +14048,7 @@ packages:
       '@babel/runtime': 7.20.7
       '@types/testing-library__react-hooks': 3.4.1
       react: 18.2.0
+    dev: false
     optional: true
 
   /@testing-library/react/10.4.9_biqbaboplfbrettd7655fr4n2y:
@@ -24348,7 +24351,7 @@ packages:
       debug:
         optional: true
     dependencies:
-      debug: 4.3.4
+      debug: 4.3.4_supports-color@6.1.0
     dev: false
 
   /for-each/0.3.3:
