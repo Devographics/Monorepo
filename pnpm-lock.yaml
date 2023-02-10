@@ -450,6 +450,7 @@ importers:
       '@vulcanjs/graphql': ^0.7.1
       '@vulcanjs/mongo': ^0.7.1
       graphql-tag: ^2.12.6
+      ioredis: ^5.2.4
       js-yaml: ^4.1.0
       lodash: ^4.17.21
       moment: ^2.29.4
@@ -461,6 +462,7 @@ importers:
       '@vulcanjs/graphql': 0.7.1_moment@2.29.4
       '@vulcanjs/mongo': 0.7.1_6zw25q2yhthnzz66c6os22ggrm
       graphql-tag: 2.12.6
+      ioredis: 5.2.4
       js-yaml: 4.1.0
       lodash: 4.17.21
       moment: 2.29.4
@@ -14063,6 +14065,7 @@ packages:
       '@babel/runtime': 7.20.7
       '@types/testing-library__react-hooks': 3.4.1
       react: 18.2.0
+    dev: false
     optional: true
 
   /@testing-library/react/10.4.9_biqbaboplfbrettd7655fr4n2y:

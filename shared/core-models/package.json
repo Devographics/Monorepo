@@ -29,6 +29,7 @@
     "@vulcanjs/graphql": "^0.7.1",
     "@vulcanjs/mongo": "^0.7.1",
     "graphql-tag": "^2.12.6",
+    "ioredis": "^5.2.4",
     "js-yaml": "^4.1.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
