@@ -1,5 +1,5 @@
 "use client";
-import { SurveyEdition } from "@devographics/core-models/surveys/typings";
+import { SurveyEdition } from "@devographics/core-models";
 import React, { useContext } from "react";
 import { parseSurvey } from "~/surveys/parser/parseSurvey";
 

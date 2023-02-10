@@ -94,6 +94,7 @@ export const loadFromGitHub = async () => {
 export const loadSurveys = async () => {
     console.log('// loading surveys')
 
+    // @ts-ignore
     const surveys: Survey[] =
         process.env.LOAD_DATA === 'local' ? await loadSurveysLocally() : await loadFromGitHub()
     console.log(`// done loading ${surveys.length} surveys`)
