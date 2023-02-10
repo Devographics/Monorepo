@@ -11,7 +11,7 @@ import intersection from "lodash/intersection.js";
 //import unset from "lodash/unset.js";
 //import cloneDeep from "lodash/cloneDeep.js";
 import isEqual from "lodash/isEqual.js";
-import { FieldPermissions, GroupName, PermissionDefinition, PermissionDocument, PermissionUser } from "./typings";
+import { FieldPermissions, PermissionGroup, PermissionDefinition, PermissionDocument, PermissionUser } from "./typings";
 
 /**
  * Any user, connected or not
@@ -20,20 +20,20 @@ export const anyoneGroup = "anyone";
 /**
  * Visitors that are NOT connected
  */
-export const visitorsGroup = "visitors";
+export const visitorGroup = "visitor";
 /**
  * Any connected user
  */
-export const membersGroup = "members";
+export const memberGroup = "member";
 /**
  * Admins
  */
-export const adminsGroup = "admins";
+export const adminGroup = "admin";
 /**
  * User that owns the current document
  * (document.userId is equal to currentUser._id)
  */
-export const ownersGroup = "owners";
+export const ownerGroup = "owner";
 
 ////////////////////
 // Helpers        //
@@ -47,12 +47,12 @@ export const ownersGroup = "owners";
 export const getGroups = (
   user: PermissionUser | null | undefined,
   document?: PermissionDocument | null | undefined
-): Array<GroupName> => {
+): Array<PermissionGroup> => {
   let userGroups = [
     anyoneGroup,
   ];
   if (user) {
-    userGroups.push(membersGroup);
+    userGroups.push(memberGroup);
     if (document && owns(user, document)) {
       userGroups.push("owners");
     }
@@ -61,10 +61,10 @@ export const getGroups = (
       userGroups = userGroups.concat(user.groups);
     }
     if (isAdmin(user)) {
-      userGroups.push(adminsGroup);
+      userGroups.push(adminGroup);
     }
   } else {
-    userGroups.push(visitorsGroup);
+    userGroups.push(visitorGroup);
   }
 
   return userGroups;
@@ -77,12 +77,20 @@ export const getGroups = (
  */
 export const isMemberOf = (
   user: PermissionUser | null | undefined,
-  groupOrGroups: Array<GroupName> | GroupName,
+  groupOrGroups: Array<PermissionGroup> | PermissionGroup,
   document?: PermissionDocument | null
 ) => {
   const groups = Array.isArray(groupOrGroups) ? groupOrGroups : [groupOrGroups];
   return intersection(getGroups(user, document), groups).length > 0;
 };
+
+/**
+ * Alias for isMemberOf if you want to translate roles into actions
+ * @example 
+ * const canDoThing = ["admin", "moderator"]
+ * canDoAction(user, canDoThing, document)
+ */
+export const canDo = isMemberOf
 
 /**
  * @summary Check if a user owns a document

@@ -1,19 +1,20 @@
 /**
- * TODO: handle this in @vulcanjs/graphql package instead? Or /permissions
+ * Default groups available in permissions package
+ * You can also create your own custom groups by using plain strings
  */
-export type GroupName =
+export type PermissionGroup =
   /** Literally anyone, logged in or not */
   | "anyone"
   /**
    * Not logged in users (excluding members)
    */
-  | "visitors"
+  | "visitor"
   /** Logged in users */
-  | "members"
+  | "member"
   /** User whose _id matches the document userId special field */
-  | "owners"
+  | "owner"
   /** Users with isAdmin set to true */
-  | "admins"
+  | "admin"
   | string;
 
 /**
@@ -24,7 +25,7 @@ export type GroupName =
  */
 export interface PermissionUser {
   // minimal fields for the User model
-  groups: Array<GroupName>;
+  groups: Array<PermissionGroup>;
   isAdmin?: boolean;
   _id?: string;
 }

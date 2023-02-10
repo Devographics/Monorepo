@@ -1,3 +1,4 @@
+const BREAK // temporary break until we finalize this handler
 import gql from "graphql-tag";
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { serverConfig } from '~/config/server'
@@ -6,8 +7,7 @@ import { gqlHeaders } from "~/core/server/graphqlBff";
 import { SurveyResponseFragment } from "~/responses/fragments";
 import { getFragmentName } from "~/core/server/graphqlUtils";
 import { fetchSurvey } from "@devographics/core-models/server";
-import { userFromReq } from "~/lib/server/context/userContext";
-
+// import { userFromReq } from "~/lib/server/context/userContext";
 
 export default async function saveSurveyResponseHandler(req: NextApiRequest, res: NextApiResponse) {
     // method
@@ -19,17 +19,7 @@ export default async function saveSurveyResponseHandler(req: NextApiRequest, res
     if (!surveySlug) throw new Error("No survey slug, can't start survey")
     const surveyYear = req.query["surveyYear"] as string
     if (!surveyYear) throw new Error("No survey year, can't start survey")
-
-    // TODO: try to reuse the permission logic across different endpoints
-    // permissions
-    const currentUser = userFromReq(req)
-
     const survey = await fetchSurvey(surveySlug, surveyYear)
-
-    if (!survey.status || ![1, 2].includes(survey.status)) {
-        throw new Error("Can't edit closed survey response")
-    }
-
 
     // TODO: this code used to be a client-side graphql query
     // we reuse the same call temporarily to facilitate moving out of graphql
