@@ -1,0 +1,24 @@
+{
+  "name": "@devographics/permissions",
+  "version": "1.0.0",
+  "description": "Permissions",
+  "main": "./index.ts",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:tsup": "tsup",
+    "build": "yarn run build:tsup",
+    "build:types": "tsc --emitDeclarationOnly --declaration --project tsconfig.build.json "
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "lodash": "^4.17.21"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.168"
+  }
+}

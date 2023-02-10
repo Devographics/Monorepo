@@ -81,6 +81,7 @@
     "@devographics/react-form": "workspace:1.0.0",
     "@devographics/react-hooks": "workspace:1.0.0",
     "@devographics/react-i18n": "workspace:1.0.0",
+    "@devographics/permissions": "workspace:1.0.0",
     "@graphql-tools/merge": "^8.3.11",
     "@graphql-tools/schema": "^8.5.1",
     "@hapi/iron": "6.0.0",

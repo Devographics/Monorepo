@@ -512,6 +512,15 @@ importers:
       prop-types: 15.8.1
       simpl-schema: 1.13.1
 
+  shared/permissions:
+    specifiers:
+      '@types/lodash': ^4.14.168
+      lodash: ^4.17.21
+    dependencies:
+      lodash: 4.17.21
+    devDependencies:
+      '@types/lodash': 4.14.190
+
   shared/react-form:
     specifiers:
       '@devographics/i18n': workspace:*
@@ -826,8 +835,8 @@ importers:
       swr: 0.4.2_react@18.2.0
       uuid: 8.3.2
     optionalDependencies:
-      '@cypress/code-coverage': 3.10.0_jm3zfnor3dejdgoaolv43yzg3m
-      '@cypress/webpack-preprocessor': 5.16.1_vqwn22oqs42olud44fk6wru6ge
+      '@cypress/code-coverage': 3.10.0_vxqx7o2dpurloosbs2fcxxukay
+      '@cypress/webpack-preprocessor': 5.16.1_sxluycrbh2ibjdswrlihudugbu
       '@istanbuljs/nyc-config-typescript': 1.0.2_nyc@15.1.0
       '@next/bundle-analyzer': 9.5.5
       '@testing-library/cypress': 8.0.7_cypress@9.7.0
@@ -886,6 +895,7 @@ importers:
       '@devographics/core-models': workspace:1.0.0
       '@devographics/crud': workspace:1.0.0
       '@devographics/encrypt-email': workspace:1.0.0
+      '@devographics/permissions': workspace:1.0.0
       '@devographics/react-form': workspace:1.0.0
       '@devographics/react-hooks': workspace:1.0.0
       '@devographics/react-i18n': workspace:1.0.0
@@ -1036,6 +1046,7 @@ importers:
       '@devographics/core-models': link:../shared/core-models
       '@devographics/crud': link:../shared/crud
       '@devographics/encrypt-email': link:../shared/encrypt-email
+      '@devographics/permissions': link:../shared/permissions
       '@devographics/react-form': link:../shared/react-form
       '@devographics/react-hooks': link:../shared/react-hooks
       '@devographics/react-i18n': link:../shared/react-i18n
@@ -1122,8 +1133,8 @@ importers:
       swr: 2.0.1_react@18.2.0
       uuid: 8.3.2
     optionalDependencies:
-      '@cypress/code-coverage': 3.10.0_turfhogldrikcioipbk5hfzw7e
-      '@cypress/webpack-preprocessor': 5.16.1_d6q2nshjt33dyke7ap5qrde5mq
+      '@cypress/code-coverage': 3.10.0_lecfltkoigeqyymi5kjvq4my4q
+      '@cypress/webpack-preprocessor': 5.16.1_aikxx7qthjd6qyffp3hiuzihje
       '@istanbuljs/nyc-config-typescript': 1.0.2_nyc@15.1.0
       '@next/bundle-analyzer': 12.3.4
       '@storybook/addon-a11y': 6.5.15_biqbaboplfbrettd7655fr4n2y
@@ -7787,13 +7798,13 @@ packages:
     resolution: {integrity: sha512-ij4wRiunFfaJxjB0BdrYHIH8FxBJpOwNPhhAcunlmPdXudL1WQV1qoP9un6JsEBAgQH+7UXyyjh0g7jTxXK6tg==}
     dev: false
 
-  /@cypress/code-coverage/3.10.0_jm3zfnor3dejdgoaolv43yzg3m:
+  /@cypress/code-coverage/3.10.0_lecfltkoigeqyymi5kjvq4my4q:
     resolution: {integrity: sha512-K5pW2KPpK4vKMXqxd6vuzo6m9BNgpAv1LcrrtmqAtOJ1RGoEILXYZVost0L6Q+V01NyY7n7jXIIfS7LR3nP6YA==}
     requiresBuild: true
     peerDependencies:
       cypress: '*'
     dependencies:
-      '@cypress/webpack-preprocessor': 5.16.1_vqwn22oqs42olud44fk6wru6ge
+      '@cypress/webpack-preprocessor': 5.16.1_aikxx7qthjd6qyffp3hiuzihje
       chalk: 4.1.2
       cypress: 9.7.0
       dayjs: 1.10.7
@@ -7804,7 +7815,6 @@ packages:
       js-yaml: 3.14.1
       nyc: 15.1.0
     transitivePeerDependencies:
-      - '@babel/core'
       - '@babel/preset-env'
       - babel-loader
       - supports-color
@@ -7812,13 +7822,13 @@ packages:
     dev: false
     optional: true
 
-  /@cypress/code-coverage/3.10.0_turfhogldrikcioipbk5hfzw7e:
+  /@cypress/code-coverage/3.10.0_vxqx7o2dpurloosbs2fcxxukay:
     resolution: {integrity: sha512-K5pW2KPpK4vKMXqxd6vuzo6m9BNgpAv1LcrrtmqAtOJ1RGoEILXYZVost0L6Q+V01NyY7n7jXIIfS7LR3nP6YA==}
     requiresBuild: true
     peerDependencies:
       cypress: '*'
     dependencies:
-      '@cypress/webpack-preprocessor': 5.16.1_d6q2nshjt33dyke7ap5qrde5mq
+      '@cypress/webpack-preprocessor': 5.16.1_sxluycrbh2ibjdswrlihudugbu
       chalk: 4.1.2
       cypress: 9.7.0
       dayjs: 1.10.7
@@ -7829,7 +7839,6 @@ packages:
       js-yaml: 3.14.1
       nyc: 15.1.0
     transitivePeerDependencies:
-      - '@babel/core'
       - '@babel/preset-env'
       - babel-loader
       - supports-color
@@ -7862,15 +7871,14 @@ packages:
     dev: false
     optional: true
 
-  /@cypress/webpack-preprocessor/5.16.1_d6q2nshjt33dyke7ap5qrde5mq:
+  /@cypress/webpack-preprocessor/5.16.1_aikxx7qthjd6qyffp3hiuzihje:
     resolution: {integrity: sha512-KZ6xdQmPd0YocbxDJc7l3Ov53eYmkWLCkpbMQSVIWSTZMjzK96V8GG7tGSg9TGUEeYCZitDli8NijvoXCRJU7g==}
     peerDependencies:
-      '@babel/core': ^7.0.1
       '@babel/preset-env': ^7.0.0
       babel-loader: ^8.0.2
       webpack: ^4 || ^5
     dependencies:
-      '@babel/core': 7.20.2
+      '@babel/core': 7.20.7
       '@babel/generator': 7.20.7
       '@babel/parser': 7.13.0
       '@babel/traverse': 7.20.10
@@ -7889,15 +7897,14 @@ packages:
     dev: false
     optional: true
 
-  /@cypress/webpack-preprocessor/5.16.1_vqwn22oqs42olud44fk6wru6ge:
+  /@cypress/webpack-preprocessor/5.16.1_sxluycrbh2ibjdswrlihudugbu:
     resolution: {integrity: sha512-KZ6xdQmPd0YocbxDJc7l3Ov53eYmkWLCkpbMQSVIWSTZMjzK96V8GG7tGSg9TGUEeYCZitDli8NijvoXCRJU7g==}
     peerDependencies:
-      '@babel/core': ^7.0.1
       '@babel/preset-env': ^7.0.0
       babel-loader: ^8.0.2
       webpack: ^4 || ^5
     dependencies:
-      '@babel/core': 7.20.2
+      '@babel/core': 7.20.7
       '@babel/generator': 7.20.7
       '@babel/parser': 7.13.0
       '@babel/traverse': 7.20.10
@@ -14056,7 +14063,6 @@ packages:
       '@babel/runtime': 7.20.7
       '@types/testing-library__react-hooks': 3.4.1
       react: 18.2.0
-    dev: false
     optional: true
 
   /@testing-library/react/10.4.9_biqbaboplfbrettd7655fr4n2y:
@@ -14159,13 +14165,13 @@ packages:
   /@types/babel__generator/7.6.4:
     resolution: {integrity: sha512-tFkciB9j2K755yrTALxD44McOrk+gfpIpvC3sxHjRawj6PfnQxrse4Clq5y/Rq+G3mrBurMax/lG8Qn2t9mSsg==}
     dependencies:
-      '@babel/types': 7.20.5
+      '@babel/types': 7.20.7
 
   /@types/babel__template/7.4.1:
     resolution: {integrity: sha512-azBFKemX6kMg5Io+/rdGT0dkGreboUVR0Cdm3fz9QJWpaQGJRQXl7C+6hOTCZcMll7KFyEQpgbYI2lHdsS4U7g==}
     dependencies:
-      '@babel/parser': 7.20.5
-      '@babel/types': 7.20.5
+      '@babel/parser': 7.20.7
+      '@babel/types': 7.20.7
 
   /@types/babel__traverse/7.18.2:
     resolution: {integrity: sha512-FcFaxOr2V5KZCviw1TnutEMVUVsGt4D2hP1TAfXZAMKuHYW3xQhe3jTxNPWutgCJ3/X1c5yX8ZoGVEItxKbwBg==}
@@ -34994,12 +35000,6 @@ packages:
   /react-dev-utils/11.0.4_a7xmpkungfd35is2c4kqy55h3i:
     resolution: {integrity: sha512-dx0LvIGHcOPtKbeiSUM4jqpBl3TcY7CDjZdfOIcKeznE7BWr9dg0iPG90G5yfVQ+p/rGNMXdbfStvzQZEVEi4A==}
     engines: {node: '>=10'}
-    peerDependencies:
-      typescript: '>=2.7'
-      webpack: '>=4'
-    peerDependenciesMeta:
-      typescript:
-        optional: true
     dependencies:
       '@babel/code-frame': 7.10.4
       address: 1.1.2
@@ -35029,18 +35029,14 @@ packages:
     transitivePeerDependencies:
       - eslint
       - supports-color
+      - typescript
       - vue-template-compiler
+      - webpack
     dev: false
 
   /react-dev-utils/12.0.1_5cls54yhub2wqfkrovxqeaw2om:
     resolution: {integrity: sha512-84Ivxmr17KjUupyqzFode6xKhjwuEJDROWKJy/BthkL7Wn6NJ8h4WE6k/exAv6ImS+0oZLRRW5j/aINMHyeGeQ==}
     engines: {node: '>=14'}
-    peerDependencies:
-      typescript: '>=2.7'
-      webpack: '>=4'
-    peerDependenciesMeta:
-      typescript:
-        optional: true
     dependencies:
       '@babel/code-frame': 7.18.6
       address: 1.1.2
@@ -35071,7 +35067,9 @@ packages:
     transitivePeerDependencies:
       - eslint
       - supports-color
+      - typescript
       - vue-template-compiler
+      - webpack
     dev: false
 
   /react-docgen-typescript/2.2.2_typescript@4.8.4:

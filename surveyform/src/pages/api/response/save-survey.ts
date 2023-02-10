@@ -6,16 +6,24 @@ import { gqlHeaders } from "~/core/server/graphqlBff";
 import { SurveyResponseFragment } from "~/responses/fragments";
 import { getFragmentName } from "~/core/server/graphqlUtils";
 import { fetchSurvey } from "@devographics/core-models/server";
+import { userFromReq } from "~/lib/server/context/userContext";
 
 
-export default async function responseStartSurveyHandler(req: NextApiRequest, res: NextApiResponse) {
+export default async function saveSurveyResponseHandler(req: NextApiRequest, res: NextApiResponse) {
+    // method
     if (req.method !== "POST") {
         return res.status(405)
     }
+    // parameters
     const surveySlug = req.query["surveySlug"] as string
     if (!surveySlug) throw new Error("No survey slug, can't start survey")
     const surveyYear = req.query["surveyYear"] as string
     if (!surveyYear) throw new Error("No survey year, can't start survey")
+
+    // TODO: try to reuse the permission logic across different endpoints
+    // permissions
+    const currentUser = userFromReq(req)
+
     const survey = await fetchSurvey(surveySlug, surveyYear)
 
     if (!survey.status || ![1, 2].includes(survey.status)) {
