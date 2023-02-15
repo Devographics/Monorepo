@@ -2,10 +2,10 @@ import { RequestContext, Survey, SurveyEdition } from './types'
 import { Octokit } from '@octokit/core'
 import fetch from 'node-fetch'
 import yaml from 'js-yaml'
+import { readdir, readFile, lstat } from 'fs/promises'
 import { logToFile } from './debug'
+import path from 'path'
 import { setCache } from './caching'
-
-// import { loadSurveysLocally } from "@devographics/core-models/server"
 
 let allSurveys: Survey[] = []
 
@@ -58,7 +58,7 @@ export const loadFromGitHub = async () => {
         if (file.type === 'dir') {
             console.log(`// Loading survey ${file.name}…`)
             const editions: any[] = []
-            let editionConfigYaml: any = {}
+            let editionConfigYaml = {}
             const surveyDirContents = await listGitHubFiles(file.path)
 
             for (const file2 of surveyDirContents) {
@@ -90,12 +90,68 @@ export const loadFromGitHub = async () => {
     return surveys
 }
 
+const excludeDirs = ['.git', '.DS_Store']
+
+// when developing locally, load from local files
+export const loadLocally = async () => {
+    console.log(`-> loading surveys locally`)
+
+    const surveys: Survey[] = []
+
+    const surveysDirPath = path.resolve(`../../${process.env.SURVEYS_DIR}/`)
+    const surveysDirs = await readdir(surveysDirPath)
+
+    // loop over dir contents and fetch raw yaml files
+    for (const surveyDirName of surveysDirs) {
+        const editions = []
+        const surveyDirPath = surveysDirPath + '/' + surveyDirName
+        const stat = await lstat(surveyDirPath)
+        if (!excludeDirs.includes(surveyDirName) && stat.isDirectory()) {
+            console.log(`// Loading survey ${surveyDirName}…`)
+
+            const surveyConfigContents = await readFile(surveyDirPath + '/config.yml', 'utf8')
+            const surveyConfigYaml: any = yaml.load(surveyConfigContents)
+            const editionsDirs = await readdir(surveyDirPath)
+
+            for (const editionDirName of editionsDirs) {
+                const editionDirPath = `${surveyDirPath}/${editionDirName}`
+                const stat = await lstat(editionDirPath)
+                if (!excludeDirs.includes(editionDirName) && stat.isDirectory()) {
+                    console.log(`    -> Edition ${editionDirName}…`)
+                    let edition
+                    try {
+                        const editionConfigContents = await readFile(
+                            editionDirPath + '/config.yml',
+                            'utf8'
+                        )
+                        const editionConfigYaml: any = yaml.load(editionConfigContents)
+                        edition = editionConfigYaml
+                    } catch (error) {}
+                    try {
+                        const editionQuestionsContents = await readFile(
+                            editionDirPath + '/questions.yml',
+                            'utf8'
+                        )
+                        const editionQuestionsYaml: any = yaml.load(editionQuestionsContents)
+                        edition.questions = editionQuestionsYaml
+                    } catch (error) {}
+                    editions.push(edition)
+                }
+            }
+
+            const survey = { ...surveyConfigYaml, editions }
+            surveys.push(survey)
+        }
+    }
+    return surveys
+}
+
 // load locales contents through GitHub API or locally
 export const loadSurveys = async () => {
     console.log('// loading surveys')
 
     const surveys: Survey[] =
-        process.env.LOAD_DATA === 'local' ? await loadFromGitHub() : await loadFromGitHub()
+        process.env.LOAD_DATA === 'local' ? await loadLocally() : await loadFromGitHub()
     console.log(`// done loading ${surveys.length} surveys`)
 
     return surveys
@@ -146,15 +202,15 @@ export const cacheSurveys = async ({
     context: RequestContext
 }) => {
     console.log(`// Initializing surveys cache (Redis)…`)
-
+    
     setCache(getAllSurveysCacheKey(), surveys, context)
-
+    
     const surveysWithoutOutlines = surveys.map(({ editions, ...surveyRest }) => {
         const editionsWithoutOutlines = editions.map(({ questions, ...editionRest }) => editionRest)
         return { ...surveyRest, editions: editionsWithoutOutlines }
     })
     setCache(getAllSurveysMetadataCacheKey(), surveysWithoutOutlines, context)
-
+    
     for (const survey of surveys) {
         const { editions, ...rest } = survey
         for (const edition of editions) {

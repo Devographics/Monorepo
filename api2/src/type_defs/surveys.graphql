@@ -1,0 +1,249 @@
+#import "./enums.graphql"
+#import "./completion.graphql"
+#import "./facets.graphql"
+#import "./options.graphql"
+#import "./filters.graphql"
+#import "./categories.graphql"
+#import "./demographics.graphql"
+#import "./countries.graphql"
+#import "./entity.graphql"
+#import "./features.graphql"
+#import "./features_others.graphql"
+#import "./github.graphql"
+#import "./twitter.graphql"
+#import "./matrices.graphql"
+#import "./mdn.graphql"
+#import "./opinions.graphql"
+#import "./resources.graphql"
+#import "./tools.graphql"
+#import "./tools_others.graphql"
+#import "./tools_cardinality_by_user.graphql"
+#import "./translations.graphql"
+#import "./environments.graphql"
+#import "./proficiency.graphql"
+#import "./totals.graphql"
+#import "./happiness.graphql"
+#import "./bracket.graphql"
+#import "./usage.graphql"
+#import "./comments.graphql"
+#import "./explorer.graphql"
+
+enum SurveyType {
+    state_of_js
+    state_of_css
+    state_of_graphql
+}
+
+
+"""
+All surveys
+"""
+
+type SurveyItem {
+    slug: String
+    hashtag: String
+    name: String
+    domain: String
+    editions: [SurveyEditionConfig]
+    data: SurveyData
+    emailOctopus: EmailOctopusConfig
+    partners: [SurveySponsorsItem]
+}
+
+type EmailOctopusConfig {
+    listId: String
+}
+
+type SurveyData {
+    foo: String
+    # todo
+}
+
+type SurveyEditionConfig {
+    """
+    Unique identifier (usually survey name + year)
+    """
+    surveyId: String
+    """
+    When the survey edition started
+    """
+    startedAt: String
+    """
+    When the survey edition closed
+    """
+    endedAt: String
+    """
+    Year
+    """
+    year: Int
+    """
+    Status (preview/open/closed/hidden)
+    """
+    status: Int
+    """
+    URL of the survey results, once they're published
+    """
+    resultsUrl: String
+    """
+    URL of the survey questions
+    """
+    questionsUrl: String
+    """
+    Main survey hero image
+    """
+    imageUrl: String
+    """
+    Image used for social media sharing meta tag
+    """
+    socialImageUrl: String
+    """
+    Favicon
+    """
+    faviconUrl: String
+    """
+    Survey color scheme
+    """
+    colors: SurveyEditionColors
+    """
+    Which entity tags to load
+    """
+    tags: [String]
+    """
+    Credits
+    """
+    credits: [SurveyCreditsItem]
+    """
+    Sponsors
+    """
+    sponsors: [SurveySponsorsItem]
+    """
+    Partners
+    """
+    partners: [SurveySponsorsItem]
+}
+
+type SurveyEditionColors {
+    primary: String
+    secondary: String
+    text: String
+    background: String
+    backgroundSecondary: String
+}
+
+type SurveyCreditsItem {
+    id: String
+    role: String
+    entity: Entity
+}
+
+type SurveySponsorsItem {
+    id: String
+    name: String
+    url: String
+    imageUrl: String
+}
+
+"""
+A survey
+"""
+type Survey {
+    """
+    The survey's name
+    """
+    surveyName: SurveyType
+    """
+    Total responses
+    """
+    totals(filters: Filters): Totals
+    """
+    Experience results for a specific tool
+    """
+    tool(id: ToolID!): Tool
+    """
+    Experience results for a range of tools
+    """
+    tools(ids: [ToolID]): [Tool]
+    """
+    Other tools (browsers, editors, etc.)
+    """
+    tools_others(id: OtherToolsID!, filters: Filters, options: Options, facet: Facet): OtherTools
+    """
+    Rankings (awareness, interest, satisfaction) for a range of tools
+    """
+    tools_rankings(ids: [ToolID]!): ToolsRankings
+    """
+    Cardinality By User (by-users tool count breakdown for a specific set of tools and specific criteria)
+    """
+    tools_cardinality_by_user(
+        year: Int!,
+        ids: [ToolID]!,
+        experienceId: ToolExperienceID!
+    ): [ToolsCardinalityByUser]
+    """
+    Usage results for a specific feature
+    """
+    feature(id: FeatureID!): Feature
+    """
+    Usage results for a range of features
+    """
+    features(ids: [FeatureID]): [Feature]
+    """
+    Choice based features
+    """
+    features_others(id: OtherFeaturesID!, filters: Filters, options: Options, facet: Facet): OtherFeatures
+    """
+    Demographics data (gender, company size, salary, etc.)
+    """
+    demographics: Demographics
+    """
+    Opinions data
+    """
+    opinion(id: OpinionID!, filters: Filters, options: Options, facet: Facet): Opinion
+    """
+    Opinions data
+    """
+    opinions_others(id: OtherOpinionsID!, filters: Filters, options: Options, facet: Facet): OtherOpinions
+    """
+    Resources (sites, blogs, podcasts, etc.)
+    """
+    resources(id: ResourcesID!, filters: Filters, options: Options, facet: Facet): Resources
+    """
+    Usage (questions about people's usage)
+    """
+    usage(id: UsageID!, filters: Filters, options: Options, facet: Facet): Usage
+    """
+    Data about a specific tool category
+    """
+    category(id: CategoryID!): Category
+    """
+    Matrices data (used for cross-referencing heatmap charts)
+    """
+    matrices: Matrices
+    """
+    Environments data, for those based on multiple choices,
+    such as browsers, form factors... Only contain predifined
+    choices, freeform answers are stored in `environmentsOthers`.
+    """
+    environments(id: EnvironmentID!, filters: Filters, options: Options, facet: Facet): Environments
+    """
+    Environments data, for those based on rating, such as css for emails...
+    """
+    environments_ratings(id: EnvironmentID!, filters: Filters): EnvironmentsRatings
+    """
+    Proficiency data, such as backend proficiency, javascript...
+    """
+    proficiency(id: ProficiencyID!, filters: Filters): Proficiency
+    """
+    Happiness data, either for a specific category or more generally
+    """
+    happiness(id: HappinessID!, filters: Filters, facet: Facet): Happiness
+    """
+    Brackets
+    """
+    bracket_wins(id: BracketID!, filters: Filters, options: Options): BracketWins
+    bracket_matchups(id: BracketID!, filters: Filters, options: Options): BracketMatchups
+    """
+    Explorer
+    """
+    explorer(facet1: String, facet2: String): ExplorerExperience
+}

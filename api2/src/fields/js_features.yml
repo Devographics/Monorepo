@@ -1,0 +1,69 @@
+template: features
+fields:
+    - id: proxies
+
+    - id: promise_all_settled
+
+    - id: dynamic_import
+
+    - id: private_fields
+
+    - id: nullish_coalescing
+
+    - id: numeric_separators
+
+    - id: string_replace_all
+
+    - id: string_match_all
+
+    - id: logical_assignment
+
+    - id: promise_any
+
+    - id: array_at
+
+    - id: top_level_await
+
+    - id: temporal
+
+    - id: array_findlast
+
+    - id: error_cause
+
+    - id: object_hasown
+
+    - id: regexp_match_indices
+
+    - id: service_workers
+
+    - id: intl
+
+    - id: webgl
+
+    - id: web_animations
+
+    - id: webrtc
+
+    - id: web_speech
+
+    - id: websocket
+
+    - id: custom_elements
+
+    - id: shadow_dom
+
+    - id: page_visibility
+
+    - id: broadcast_channel
+
+    - id: geolocation
+
+    - id: file_system_access
+
+    - id: web_share
+
+    - id: webxr
+
+    - id: pwa
+
+    - id: wasm

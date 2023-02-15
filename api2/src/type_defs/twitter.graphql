@@ -1,0 +1,17 @@
+type Twitter {
+    url: String
+    # deprecated
+    userName: String
+    name: String
+    avatarUrl: String
+    id: ID
+    description: String
+    publicMetrics: TwittterPublicMetrics
+}
+
+type TwittterPublicMetrics {
+    followers: Int
+    following: Int
+    tweet: Int
+    listed: Int
+}

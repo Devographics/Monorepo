@@ -1,0 +1,10 @@
+type GitHub {
+    name: String
+    full_name: String
+    description: String
+    url: String
+    stars: Int
+    forks: Int
+    opened_issues: Int
+    homepage: String
+}

@@ -1,0 +1,181 @@
+enum AgeRange {
+    range_less_than_10
+    range_10_18
+    range_18_24
+    range_25_34
+    range_35_44
+    range_45_54
+    range_55_64
+    range_more_than_65
+}
+
+enum GenderID {
+    male
+    female
+    prefer_not_to_say
+    non_binary
+    not_listed
+}
+
+enum RaceEthnicityID {
+    biracial
+    black_african
+    east_asian
+    hispanic_latin
+    middle_eastern
+    multiracial
+    native_american_islander_australian
+    south_asian
+    white_european
+    south_east_asian
+    not_listed
+}
+
+enum SalaryRange {
+    range_work_for_free
+    range_0_10
+    range_10_30
+    range_30_50
+    range_50_100
+    range_100_200
+    range_more_than_200
+}
+enum CompanySizeRange {
+    range_1
+    range_1_5
+    range_5_10
+    range_10_20
+    range_20_50
+    range_50_100
+    range_100_1000
+    range_more_than_1000
+}
+
+enum WorkExperienceRange {
+    range_less_than_1
+    range_1_2
+    range_2_5
+    range_5_10
+    range_10_20
+    range_more_than_20
+}
+
+enum JobTitleID {
+    full_stack_developer
+    front_end_developer
+    web_developer
+    back_end_developer
+    web_designer
+    ui_designer
+    ux_designer
+    cto
+}
+
+enum IndustrySectorID {
+    ecommerce
+    news_media
+    healthcare
+    finance
+    programming_tools
+    socialmedia
+    marketing_tools
+    education
+    real_estate
+    entertainment
+    government
+    consulting
+}
+
+enum HigherEducationDegreeID {
+    no_degree
+    yes_related
+    yes_unrelated
+}
+enum DisabilityStatusID {
+    visual_impairments
+    hearing_impairments
+    mobility_impairments
+    cognitive_impairments
+    not_listed
+}
+
+enum ToolExperienceID {
+    would_use
+    would_not_use
+    interested
+    not_interested
+    never_heard
+}
+
+enum FeatureExperienceID {
+    never_heard
+    heard
+    used
+}
+
+# maybe shouldn't be an enum? but easier this way for now
+enum SourceID {
+    state_of_js_survey
+    twitter
+    google
+    youtube
+    fireship
+    angular_community
+    js_weekly
+    reddit
+    scrimba
+    linkedin
+    work
+    word_of_mouth
+    duckduckgo
+    slack
+    discord
+    codrops
+    microsoft_teams
+    devto
+    state_of_css_survey
+    mastodon
+    kevin_j_powell
+    css_tricks
+    lea_verou
+    smashing_magazine
+    hn
+    mozilla
+    web_standards_ru
+    sidebar
+}
+
+# note: in DB, locales are named with - not _
+enum LocaleID {
+    am_ET
+    ar_EG
+    ca_ES
+    cs_CZ
+    de_DE
+    el_GR
+    en_US
+    es_ES
+    fa_IR
+    fr_FR
+    gl_ES
+    hi_IN
+    hr_HR
+    hu_HU
+    id_ID
+    it_IT
+    ja_JP
+    ko_KR
+    nl_NL
+    pl_PL
+    pt_BR
+    pt_PT
+    ro_RO
+    ru_RU
+    sk_SK
+    sv_SE
+    tr_TR
+    ua_UA
+    vi_VN
+    zh_Hans
+    zh_Hant
+}

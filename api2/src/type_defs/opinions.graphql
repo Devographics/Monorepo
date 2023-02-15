@@ -1,0 +1,84 @@
+"""
+Opinions
+"""
+
+enum OpinionID {
+    js_moving_in_right_direction
+    building_js_apps_overly_complex
+    js_over_used_online
+    enjoy_building_js_apps
+    would_like_js_to_be_main_lang
+    js_ecosystem_changing_to_fast
+
+    css_easy_to_learn
+    css_evolving_slowly
+    utility_classes_to_be_avoided
+    selector_nesting_to_be_avoided
+    css_is_programming_language
+    enjoy_writing_css
+}
+
+type OpinionBucket {
+    id: Int
+    count: Int
+    percentage_question: Float
+    percentage_survey: Float
+    percentage_facet: Float
+}
+
+type OpinionFacet {
+    type: Facet
+    id: String
+    buckets: [OpinionBucket]
+    completion: FacetCompletion
+}
+
+type YearOpinion {
+    year: Int
+    """
+    Mean opinion score for the year, please note that despite the
+    opinion indices starts at 0, the average is computed from 1.
+    """
+    mean: Float
+    completion: YearCompletion
+    facets: [OpinionFacet]
+}
+
+type Opinion {
+    id: OpinionID!
+    all_years: [YearOpinion]
+    year(year: Int!): YearOpinion
+    keys: [Int]
+}
+
+"""
+Other Opinions
+"""
+
+enum OtherOpinionsID {
+    # backwards compatibility
+    missing_from_js
+
+    currently_missing_from_css
+    currently_missing_from_js
+    browser_interoperability_features
+    css_pain_points
+    js_pain_points
+
+    top_js_pain_points
+    top_js_pain_points_others
+    top_currently_missing_from_js
+    top_currently_missing_from_js_others
+}
+
+type YearOtherOpinions {
+    year: Int
+    completion: YearCompletion
+    facets: [EntityFacet]
+}
+
+type OtherOpinions {
+    id: OtherOpinionsID!
+    all_years: [YearOtherOpinions]
+    year(year: Int!): YearOtherOpinions
+}

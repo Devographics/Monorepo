@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "target": "es2021",
+    "moduleResolution": "Node",
+    "module": "ES2020",
+    "lib": [
+      "es7",
+      "es2019",
+      "es2021"
+    ],
+    "outDir": "dist",
+    "rootDir": "src",
+    "removeComments": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "noImplicitAny": true
+  },
+  "files": [
+    "file_types.d.ts"
+  ],
+  "exclude": [
+    "/node_modules/"
+  ],
+  "include": [
+    "src/**/*"
+  ]
+}

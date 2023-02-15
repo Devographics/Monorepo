@@ -1,0 +1,53 @@
+#importXXX "./surveys.graphql"
+
+#import "./entity.graphql"
+#import "./completion.graphql"
+#import "./mdn.graphql"
+#import "./twitter.graphql"
+#import "./github.graphql"
+
+scalar JSON
+scalar JSONObject
+
+enum Facet {
+    default
+
+    gender
+    race_ethnicity
+    yearly_salary
+    industry_sector
+    disability_status
+    company_size
+    years_of_experience
+    higher_education_degree
+    source
+    country
+    age
+    locale
+}
+
+type YearData {
+    year: Int
+    completion: YearCompletion
+    facets: [EntityFacet]
+}
+
+type Query {
+    foo: JSON
+}
+
+# type Query {
+#     """
+#     Data for a specific survey.
+#     """
+#     survey(survey: SurveyType!): Survey
+#     """
+#     All surveys.
+#     """
+#     allSurveys: [SurveyItem]
+#     """
+#     Meta information about the API
+#     """
+#     metadata: JSON
+
+# }

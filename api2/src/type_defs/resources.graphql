@@ -1,0 +1,27 @@
+enum ResourcesID {
+    blogs_news_magazines
+    blogs_news_magazines_others
+    sites_courses
+    sites_courses_others
+    podcasts
+    podcasts_others
+    first_steps
+    first_steps_others
+    people_others
+    other_surveys
+    other_surveys_others
+    video_creators
+    video_creators_others
+}
+
+type YearResources {
+    year: Int
+    completion: YearCompletion
+    facets: [EntityFacet]
+}
+
+type Resources {
+    id: ResourcesID!
+    all_years: [YearResources]
+    year(year: Int!): YearResources
+}

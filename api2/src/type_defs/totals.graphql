@@ -1,0 +1,4 @@
+type Totals {
+    all_years: Int
+    year(year: Int!): Int
+}

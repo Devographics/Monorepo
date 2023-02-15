@@ -1,0 +1,41 @@
+fields:
+
+    - id: libraries
+
+    - id: libraries_others
+
+    - id: date_management
+
+    - id: date_management_others
+
+    - id: data_visualization
+
+    - id: data_visualization_others
+
+    - id: data_fetching
+
+    - id: data_fetching_others
+
+    - id: backend_frameworks
+
+    - id: backend_frameworks_others
+
+    - id: utilities
+
+    - id: utilities_others
+
+    - id: runtimes
+
+    - id: runtimes_others
+
+    - id: edge_runtimes
+
+    - id: edge_runtimes_others
+
+    - id: javascript_flavors
+
+    - id: javascript_flavors_others
+
+    - id: non_js_languages
+
+    - id: non_js_languages_others

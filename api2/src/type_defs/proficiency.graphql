@@ -1,0 +1,25 @@
+enum ProficiencyID {
+    backend_proficiency
+    javascript_proficiency
+    css_proficiency
+}
+
+type ProficiencyBucket {
+    id: Int
+    count: Int
+    percentage_question: Float
+    percentage_survey: Float
+    percentage_facet: Float
+}
+
+type YearProficiency {
+    year: Int
+    completion: YearCompletion
+    buckets: [ProficiencyBucket]
+}
+
+type Proficiency {
+    id: ProficiencyID!
+    all_years: [YearProficiency]
+    year(year: Int!): YearProficiency
+}

@@ -1,0 +1,43 @@
+fields:
+
+    - id: first_steps
+      path: resources.first_steps.choices
+
+    - id: first_steps_others
+      path: resources.first_steps.others.normalized
+
+    - id: blogs_news_magazines
+      path: resources.blogs_news_magazines.choices
+
+    - id: blogs_news_magazines_others
+      path: resources.blogs_news_magazines.others.normalized
+
+    - id: sites_courses
+      path: resources.sites_courses.choices
+
+    - id: sites_courses_others
+      path: resources.sites_courses.others.normalized
+
+    - id: podcasts
+      path: resources.podcasts.choices
+
+    - id: podcasts_others
+      path: resources.podcasts.others.normalized
+
+    - id: video_creators
+      path: resources.video_creators.choices
+
+    - id: video_creators_others
+      path: resources.video_creators.others.normalized
+
+    - id: people
+      path: resources.people.choices
+
+    - id: people_others
+      path: resources.people.others.normalized
+
+    - id: other_surveys
+      path: resources.other_surveys.choices
+
+    - id: other_surveys_others
+      path: resources.other_surveys.others.normalized

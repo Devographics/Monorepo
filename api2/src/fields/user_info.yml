@@ -1,0 +1,128 @@
+fields:
+    # Demographics
+
+    - id: country
+      path: user_info.country_alpha3
+
+    - id: locale
+      path: user_info.locale
+
+    - id: completion_stats
+      path: user_info.completion
+
+    - id: age
+      optionsTypeName: AgeRange
+      options:
+          - id: range_less_than_10
+            average: 10
+          - id: range_10_18
+            average: 14
+          - id: range_18_24 # treated as 19_24
+            average: 21
+          - id: range_25_34 # treated as 3_5
+            average: 30
+          - id: range_35_44
+            average: 40
+          - id: range_45_54
+            average: 50
+          - id: range_55_64
+            average: 60
+          - id: range_more_than_65
+            average: 65
+
+    - id: years_of_experience
+      optionsTypeName: WorkExperienceRange
+      options:
+          - id: range_less_than_1
+            average: 1
+          - id: range_1_2
+            average: 2
+          - id: range_2_5 # treated as 3_5
+            average: 4
+          - id: range_5_10 # treated as 6_10
+            average: 8
+          - id: range_10_20 # treated as 11_20
+            average: 15
+          - id: range_more_than_20
+            average: 20
+
+    - id: company_size
+      optionsTypeName: CompanySizeRange
+      options:
+          - id: range_1
+            average: 1
+          - id: range_1_5
+            average: 3
+          - id: range_5_10
+            average: 7
+          - id: range_10_20
+            average: 15
+          - id: range_20_50
+            average: 35
+          - id: range_50_100
+            average: 75
+          - id: range_100_1000
+            average: 550
+          - id: range_more_than_1000
+            average: 1000
+
+    - id: higher_education_degree
+      options:
+          - id: no_degree
+          - id: yes_related
+          - id: yes_unrelated
+
+    - id: yearly_salary
+      optionsTypeName: SalaryRange
+      options:
+          - id: range_work_for_free
+            average: 0
+          - id: range_0_10
+            average: 5000
+          - id: range_10_30
+            average: 15000
+          - id: range_30_50
+            average: 40000
+          - id: range_50_100
+            average: 75000
+          - id: range_100_200
+            average: 150000
+          - id: range_more_than_200
+            average: 200000
+
+    - id: source
+      path: user_info.source.normalized
+
+    - id: gender
+      options:
+          - id: male
+          - id: female
+          - id: non_binary
+          - id: not_listed
+
+    - id: race_ethnicity
+      options:
+          - id: black_african
+          - id: east_asian
+          - id: hispanic_latin
+          - id: middle_eastern
+          - id: multiracial
+          - id: native_american_islander_australian
+          - id: south_asian
+          - id: white_european
+          - id: south_east_asian
+          - id: not_listed
+
+    - id: disability_status
+      options:
+          - id: visual_impairments
+          - id: hearing_impairments
+          - id: mobility_impairments
+          - id: cognitive_impairments
+          - id: not_listed
+
+    - id: disability_status_others
+      path: user_info.disability_status.others.normalized
+
+    - id: knowledge_score
+      path: user_info.knowledge_score

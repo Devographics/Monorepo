@@ -1,0 +1,406 @@
+
+# Demographics
+
+- id: country
+  template: demographics
+  path: user_info.country_alpha3
+
+- id: locale
+  template: demographics
+  path: user_info.locale
+
+- id: completion_stats
+  template: demographics
+  path: user_info.completion
+
+- id: age
+  template: demographics
+  options: 
+    - id: range_less_than_10
+      average: 10
+    - id: range_10_18
+      average: 14
+    - id: range_18_24 # treated as 19_24
+      average: 21
+    - id: range_25_34 # treated as 3_5
+      average: 30
+    - id: range_35_44
+      average: 40
+    - id: range_45_54
+      average: 50
+    - id: range_55_64
+      average: 60
+    - id: range_more_than_65
+      average: 65
+
+- id: years_of_experience
+  template: demographics
+
+- id: company_size
+  template: demographics
+
+- id: higher_education_degree
+  template: demographics
+  
+- id: yearly_salary
+  template: demographics
+  
+- id: source
+  template: demographics
+  path: user_info.source.normalized
+
+- id: gender
+  template: demographics
+
+- id: race_ethnicity
+  template: demographics
+
+- id: disability_status
+  template: demographics
+
+- id: disability_status_others
+  template: demographics
+  path: user_info.disability_status.others.normalized
+
+- id: knowledge_score
+  template: demographics
+  path: user_info.knowledge_score
+
+- id: industry_sector
+  path: usage.industry_sector.choices
+  options:
+    - ecommerce
+    - news_media
+    - healthcare
+    - finance
+    - programming_tools
+    - socialmedia
+    - marketing_tools
+    - education
+    - real_estate
+    - government
+    - entertainment
+    - consulting
+    - travel
+    - insurance
+    - logistics
+    - energy
+    - telecommunications
+    - student
+    - hospitality
+    - cyber_security
+    - construction
+    - automotive
+    - agriculture
+    - transport
+    - manufacturing
+    
+# Features
+
+- id: proxies
+  template: features
+
+- id: promise_all_settled
+  template: features
+
+- id: dynamic_import
+  template: features
+
+- id: private_fields
+  template: features
+
+- id: nullish_coalescing
+  template: features
+
+- id: numeric_separators
+  template: features
+
+- id: string_replace_all
+  template: features
+
+- id: string_match_all
+  template: features
+
+- id: logical_assignment
+  template: features
+
+- id: promise_any
+  template: features
+
+- id: array_at
+  template: features
+
+- id: top_level_await
+  template: features
+
+- id: temporal
+  template: features
+
+- id: array_findlast
+  template: features
+
+- id: error_cause
+  template: features
+
+- id: object_hasown
+  template: features
+
+- id: regexp_match_indices
+  template: features
+
+- id: service_workers
+  template: features
+
+- id: intl
+  template: features
+
+- id: webgl
+  template: features
+
+- id: web_animations
+  template: features
+
+- id: webrtc
+  template: features
+
+- id: web_speech
+  template: features
+
+- id: websocket
+  template: features
+
+- id: custom_elements
+  template: features
+
+- id: shadow_dom
+  template: features
+
+- id: page_visibility
+  template: features
+
+- id: broadcast_channel
+  template: features
+
+- id: geolocation
+  template: features
+
+- id: file_system_access
+  template: features
+
+- id: web_share
+  template: features
+
+- id: webxr
+  template: features
+
+- id: pwa
+  template: features
+
+- id: wasm
+  template: features
+
+# Tools
+
+# front_end_frameworks:
+
+- id: react
+  template: tools
+  
+- id: vuejs
+  template: tools
+
+- id: angular
+  template: tools
+
+- id: preact
+  template: tools
+
+- id: ember
+  template: tools
+
+- id: svelte
+  template: tools
+
+- id: alpinejs
+  template: tools
+
+- id: litelement
+  template: tools
+
+- id: solid # 2021
+  template: tools
+
+- id: qwik # 2022
+  template: tools
+
+- id: stencil # 2022
+  template: tools
+
+# rendering_frameworks:
+
+- id: nextjs
+  template: tools
+
+- id: nuxt
+  template: tools
+
+- id: gatsby
+  template: tools
+
+- id: remix # 2021
+  template: tools
+
+- id: astro # 2021
+  template: tools
+
+- id: eleventy # 2021
+  template: tools
+
+- id: sveltekit # 2021
+  template: tools
+
+- id: docusaurus # 2022
+  template: tools
+
+# testing:
+
+- id: jest
+  template: tools
+
+- id: mocha
+  template: tools
+
+- id: storybook
+  template: tools
+
+- id: cypress
+  template: tools
+
+- id: ava
+  template: tools
+
+- id: jasmine
+  template: tools
+
+- id: puppeteer
+  template: tools
+
+- id: testing_library
+  template: tools
+
+- id: playwright
+  template: tools
+
+- id: webdriverio
+  template: tools
+
+- id: vitest # 2021
+  template: tools
+
+- id: selenium # 2022
+  template: tools
+
+- id: testcafe # 2022
+  template: tools
+
+# mobile_desktop:
+
+- id: electron
+  template: tools
+
+- id: reactnative
+  template: tools
+
+- id: nativeapps
+  template: tools
+
+- id: cordova
+  template: tools
+
+- id: ionic
+  template: tools
+
+- id: nwjs
+  template: tools
+
+- id: expo
+  template: tools
+
+- id: capacitor
+  template: tools
+
+- id: quasar
+  template: tools
+
+- id: tauri # 2021
+  template: tools
+
+- id: nativescript # 2022
+  template: tools
+
+# build_tools:
+
+- id: webpack
+  template: tools
+
+- id: parcel
+  template: tools
+
+- id: gulp
+  template: tools
+
+- id: rollup
+  template: tools
+
+- id: browserify
+  template: tools
+
+- id: tsc
+  template: tools
+
+- id: rome
+  template: tools
+
+- id: snowpack
+  template: tools
+
+- id: swc
+  template: tools
+
+- id: esbuild
+  template: tools
+
+- id: vite # 2021
+  template: tools
+
+- id: wmr # 2021
+  template: tools
+
+- id: turbopack # 2022
+  template: tools
+
+# monorepo_tools:
+
+- id: rush # 2021
+  template: tools
+
+- id: turborepo # 2021
+  template: tools
+
+- id: yarn_workspaces # 2021
+  template: tools
+
+- id: yalc # 2021
+  template: tools
+
+- id: lerna # 2021
+  template: tools
+
+- id: npm_workspaces # 2021
+  template: tools
+
+- id: pnpm # 2021
+  template: tools
+
+- id: nx # 2021
+  template: tools

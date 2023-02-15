@@ -1,0 +1,52 @@
+enum EnvironmentID {
+    # choices based
+    browsers
+    browsers_others
+    form_factors
+    form_factors_others
+    accessibility_features
+    accessibility_features_others
+    what_do_you_use_css_for
+    what_do_you_use_css_for_others
+    # rating based
+    css_for_print
+    css_for_email
+}
+
+type YearEnvironments {
+    year: Int
+    completion: YearCompletion
+    facets: [EntityFacet]
+}
+
+"""
+An environment, based on multiple choices (e.g. browsers, form factors, etc.)
+"""
+type Environments {
+    id: EnvironmentID!
+    year(year: Int!): YearEnvironments
+    all_years: [YearEnvironments]
+}
+
+type EnvironmentRatingBucket {
+    id: Int
+    count: Int
+    percentage_question: Float
+    percentage_survey: Float
+    percentage_facet: Float
+}
+
+type YearEnvironmentsRatings {
+    year: Int
+    completion: YearCompletion
+    buckets: [EnvironmentRatingBucket]
+}
+
+"""
+An environment-based rating (e.g. css for emails, css for print, etc.)
+"""
+type EnvironmentsRatings {
+    id: EnvironmentID!
+    year(year: Int!): YearEnvironmentsRatings
+    all_years: [YearEnvironmentsRatings]
+}
