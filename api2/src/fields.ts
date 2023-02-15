@@ -3,6 +3,7 @@ import { applyTemplate } from './templates'
 import { AllFields, Field, Option } from './types'
 import uniq from 'lodash/uniq.js'
 import { logToFile } from './debug'
+import { loadOrGetSurveys } from './surveys'
 
 const graphqlize = (str: string) => capitalizeFirstLetter(snakeToCamel(str))
 
@@ -28,9 +29,46 @@ type Edition = any
 type Section = any
 type Question = any
 
-export const getGraphQLTypeForField = (fieldDefinitions: Field[], fieldId: string) => {
-    const field = fieldDefinitions.find(field => field.id === fieldId)
-    return (field && field.fieldTypeName) || graphqlize(fieldId)
+export const getGraphQLTypeForField = ({
+    survey,
+    edition,
+    question
+}: {
+    survey: Survey
+    edition: Edition
+    question: Question
+}) => {
+    return question.fieldTypeName || graphqlize(edition.surveyId) + graphqlize(question.id)
+}
+
+export const generateTypeDefs = async () => {
+    const fieldDefinitions = loadFieldDefinitions()
+    const surveys = await loadOrGetSurveys()
+    const { typeObjects: surveysTypeObjects } = await generateSurveysTypeDefs({
+        fieldDefinitions,
+        surveys
+    })
+
+    const surveysTypeDefs = surveysTypeObjects.map(o => o.typeDef)
+
+    // const { typeDefs: otherTypeDefs } = await generateOtherTypeDefs({
+    //     fieldDefinitions,
+    //     questionsDictionary
+    // })
+
+    // await logToFile('questionsDictionary.yml', questionsDictionary, {
+    //     mode: 'overwrite'
+    // })
+    // await logToFile('types.graphql', otherTypeDefs.join('\n\n'), { mode: 'overwrite' })
+    await logToFile('surveys.graphql', surveysTypeDefs.join('\n\n'), { mode: 'overwrite' })
+
+    const allTypeDefs = surveysTypeDefs
+    return allTypeDefs.join('\n\n')
+}
+
+type TypeObject = {
+    typeName: string
+    typeDef: string
 }
 
 export const generateSurveysTypeDefs = async ({
@@ -40,112 +78,91 @@ export const generateSurveysTypeDefs = async ({
     fieldDefinitions: Field[]
     surveys: Survey[]
 }) => {
-    const typeDefs = []
+    let typeObjects = []
 
     // store all options for all fields contained in survey question outlines
-    const questionsDictionary: Question[] = []
+    // const allQuestions: Question[] = []
 
     // type for all surveys
-    typeDefs.push(generateSurveysType({ surveys }))
+    typeObjects.push(generateSurveysType({ surveys }))
 
     for (const survey of surveys) {
         // type for a single kind of survey (state of js, state of css, etc.)
-        typeDefs.push(generateSurveyType({ survey }))
+        typeObjects.push(generateSurveyType({ survey }))
 
-        for (const surveyEdition of survey.editions) {
+        for (const edition of survey.editions) {
             // type for all editions of a survey
-            typeDefs.push(generateEditionType({ survey, surveyEdition }))
+            typeObjects.push(generateEditionType({ survey, edition }))
 
-            if (surveyEdition.questions) {
-                for (const section of surveyEdition.questions) {
-                    // type for all sections of a survey edition
-                    typeDefs.push(
-                        generateSectionType({ survey, surveyEdition, section, fieldDefinitions })
-                    )
-
+            if (edition.questions) {
+                for (const section of edition.questions) {
+                    const sectionQuestionObjects = []
                     for (const question of section.questions) {
-                        if (question.options) {
-                            // add current edition to all question options items
-                            const questionOptionsWithEdition = question.options.map(
-                                (o: Option) => ({ ...o, editions: [surveyEdition.surveyId] })
-                            )
-                            const existingQuestionIndex = questionsDictionary.findIndex(
-                                (q: Question) => q.id === question.id
-                            )
-                            const existingQuestion = questionsDictionary[existingQuestionIndex]
-                            if (existingQuestion?.options) {
-                                const mergedOptions = mergeOptions(
-                                    existingQuestion?.options,
-                                    questionOptionsWithEdition
-                                )
-                                questionsDictionary[existingQuestionIndex] = {
-                                    id: question.id,
-                                    options: mergedOptions
-                                }
-                            } else {
-                                questionsDictionary.push({
-                                    id: question.id,
-                                    options: questionOptionsWithEdition
-                                })
-                            }
+                        // extend question with canonical question definition
+                        const questionObject = getQuestionObject({
+                            survey,
+                            edition,
+                            question,
+                            fieldDefinitions
+                        })
+                        sectionQuestionObjects.push(questionObject)
+
+                        // extend question object with question definition, if it exists
+
+                        let questionTypeObjects = []
+
+                        const existingTypeDef = typeObjects.find(
+                            t => t.typeName === questionObject.fieldTypeName
+                        )
+
+                        if (!existingTypeDef) {
+                            questionTypeObjects = generateQuestionTypeDefs({
+                                question: questionObject
+                            })
+                            typeObjects = [...typeObjects, ...questionTypeObjects]
                         }
                     }
+
+                    // type for all sections of a survey edition
+                    typeObjects.push(
+                        generateSectionType({
+                            survey,
+                            edition,
+                            section: { ...section, questions: sectionQuestionObjects }
+                        })
+                    )
                 }
             }
         }
     }
-    await logToFile('questionsDictionary.yml', questionsDictionary, {
-        mode: 'overwrite'
-    })
 
-    return typeDefs.join('\n\n')
+    return { typeObjects }
 }
 
-export const generateTypeDefs = async ({
-    fieldDefinitions,
-    surveys
-}: {
-    fieldDefinitions: Field[]
-    surveys: any[]
-}) => {
-    const generatedTypes: string[] = []
-    const typeDefs = []
-    for (const field of fieldDefinitions) {
-        const typeNameRoot = field.fieldTypeName || graphqlize(field.id)
-        const {
-            id,
-            options,
-            optionsAreNumeric,
-            optionsTypeName = typeNameRoot + 'ID',
-            filterTypeName = typeNameRoot + 'Filter'
-        } = field
+export const generateQuestionTypeDefs = ({ question }: { question: Field }) => {
+    const typeObjects = []
+    const typeNameRoot = question.fieldTypeName || graphqlize(question.id)
+    const {
+        options,
+        optionsAreNumeric,
+        optionsTypeName = typeNameRoot + 'ID',
+        filterTypeName = typeNameRoot + 'Filter'
+    } = question
 
-        // options
-        if (options) {
-            if (!generatedTypes.includes(typeNameRoot)) {
-                generatedTypes.push(typeNameRoot)
-                typeDefs.push(generateFieldType({ typeName: typeNameRoot, optionsTypeName }))
-            }
-            if (!generatedTypes.includes(optionsTypeName)) {
-                generatedTypes.push(optionsTypeName)
-                typeDefs.push(
-                    generateEnumType({ typeName: optionsTypeName, options, optionsAreNumeric })
-                )
-            }
-            if (!generatedTypes.includes(filterTypeName)) {
-                generatedTypes.push(filterTypeName)
-                typeDefs.push(generateFilterType({ typeName: filterTypeName, optionsTypeName }))
-            }
-        } else {
-            if (!generatedTypes.includes(typeNameRoot)) {
-                generatedTypes.push(typeNameRoot)
-                typeDefs.push(generateFieldType({ typeName: typeNameRoot }))
-            }
-        }
+    if (options) {
+        typeObjects.push(generateFieldType({ typeName: typeNameRoot, optionsTypeName }))
+        typeObjects.push(generateFilterType({ typeName: filterTypeName, optionsTypeName }))
+        typeObjects.push(
+            generateEnumType({ typeName: optionsTypeName, options, optionsAreNumeric })
+        )
+    } else {
+        // no options
+        typeObjects.push(generateFieldType({ typeName: typeNameRoot }))
     }
-    return typeDefs.join('\n\n')
+    return typeObjects
 }
 
+export const generateOptionsTypeDef = () => {}
 /*
 
 Sample output:
@@ -168,9 +185,12 @@ export const generateEnumType = ({
     options: Option[]
     optionsAreNumeric: boolean
 }) => {
-    return `enum ${typeName} {
+    return {
+        typeName,
+        typeDef: `enum ${typeName} {
     ${options.map(i => (optionsAreNumeric ? `value_${i.id}` : i.id)).join('\n    ')}
 }`
+    }
 }
 
 /*
@@ -191,11 +211,14 @@ export const generateFilterType = ({
     typeName: string
     optionsTypeName: string
 }) => {
-    return `input ${typeName} {
+    return {
+        typeName,
+        typeDef: `input ${typeName} {
     eq: ${optionsTypeName}
     in: [${optionsTypeName}]
     nin: [${optionsTypeName}]
 }`
+    }
 }
 
 /*
@@ -216,10 +239,13 @@ export const generateFieldType = ({
     typeName: string
     optionsTypeName?: string
 }) => {
-    return `type ${typeName} {
+    return {
+        typeName,
+        typeDef: `type ${typeName} {
     all_years: [YearData]
     year(year: Int!): YearData${optionsTypeName ? `\n    keys: [${optionsTypeName}]` : ''}
 }`
+    }
 }
 
 /*
@@ -234,11 +260,14 @@ type Surveys {
 }
 */
 export const generateSurveysType = ({ surveys }: { surveys: Survey[] }) => {
-    return `type Surveys {
+    return {
+        typeName: 'Surveys',
+        typeDef: `type Surveys {
     ${surveys
         .map((survey: Survey) => `${survey.slug}: ${graphqlize(survey.slug)}Survey`)
         .join('\n    ')}
 }`
+    }
 }
 
 /*
@@ -257,7 +286,10 @@ type StateOfJsSurvey {
 
 */
 export const generateSurveyType = ({ survey }: { survey: Survey }) => {
-    return `type ${graphqlize(survey.slug)}Survey {
+    const typeName = graphqlize(survey.slug)
+    return {
+        typeName,
+        typeDef: `type ${typeName}Survey {
     ${survey.editions
         .map(
             (surveyEdition: Edition) =>
@@ -265,6 +297,7 @@ export const generateSurveyType = ({ survey }: { survey: Survey }) => {
         )
         .join('\n    ')}
 }`
+    }
 }
 
 /*
@@ -283,20 +316,17 @@ type StateOfJs2021Edition {
 }
 
 */
-export const generateEditionType = ({
-    survey,
-    surveyEdition
-}: {
-    survey: Survey
-    surveyEdition: Edition
-}) => {
-    return `type ${graphqlize(survey.slug)}${surveyEdition.year}Edition {
+export const generateEditionType = ({ survey, edition }: { survey: Survey; edition: Edition }) => {
+    const typeName = `${graphqlize(survey.slug)}${edition.year}Edition`
+    return {
+        typeName,
+        typeDef: `type ${typeName} {
   ${
-      surveyEdition.questions
-          ? surveyEdition.questions
+      edition.questions
+          ? edition.questions
                 .map(
                     (section: Section) =>
-                        `${section.id}: ${graphqlize(survey.slug)}${surveyEdition.year}${graphqlize(
+                        `${section.id}: ${graphqlize(survey.slug)}${edition.year}${graphqlize(
                             section.id
                         )}Section`
                 )
@@ -304,6 +334,7 @@ export const generateEditionType = ({
           : 'empty: Boolean'
   }
 }`
+    }
 }
 
 /*
@@ -325,24 +356,30 @@ type StateOfJs2021UserInfoSection {
 */
 export const generateSectionType = ({
     survey,
-    surveyEdition,
-    section,
-    fieldDefinitions
+    edition,
+    section
 }: {
     survey: Survey
-    surveyEdition: Edition
+    edition: Edition
     section: Section
-    fieldDefinitions: Field[]
 }) => {
-    return `type ${graphqlize(survey.slug)}${surveyEdition.year}${graphqlize(section.id)}Section {
+    const typeName = `${graphqlize(survey.slug)}${edition.year}${graphqlize(section.id)}Section`
+    return {
+        typeName,
+        typeDef: `type ${typeName} {
 ${section.questions
     .filter((q: Question) => q.includeInApi !== false)
     .map(
         (question: Question) =>
-            `${question.id}: ${getGraphQLTypeForField(fieldDefinitions, question.id)}`
+            `${question.id}: ${getGraphQLTypeForField({
+                survey,
+                edition: edition,
+                question
+            })}`
     )
     .join('\n    ')}
 }`
+    }
 }
 
 /*
@@ -389,4 +426,41 @@ export const mergeOptions = (options1: Option[], options2: Option[]) => {
         }
     })
     return options
+}
+
+/*
+
+Take a question from the outline and extend it
+with canonical definition from the API YAMLs, if 
+it exists
+
+*/
+export const getQuestionObject = ({
+    survey,
+    edition,
+    question,
+    fieldDefinitions
+}: {
+    survey: Survey
+    edition: Edition
+    question: Question
+    fieldDefinitions: Question[]
+}) => {
+    const questionDefinition = fieldDefinitions.find(q => q.id === question.id)
+    let questionObject: Question
+    if (questionDefinition) {
+        questionObject = {
+            fieldTypeName: graphqlize(question.id),
+            ...question,
+            ...questionDefinition
+        }
+    } else {
+        const fieldTypeName = getGraphQLTypeForField({
+            survey,
+            edition,
+            question
+        })
+        questionObject = { ...question, fieldTypeName }
+    }
+    return questionObject
 }

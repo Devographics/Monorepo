@@ -3,203 +3,175 @@ fields:
     # front_end_frameworks:
 
     - id: react
-      template: tools
 
     - id: vuejs
-      template: tools
 
     - id: angular
-      template: tools
 
     - id: preact
-      template: tools
 
     - id: ember
-      template: tools
 
     - id: svelte
-      template: tools
 
     - id: alpinejs
-      template: tools
 
     - id: litelement
-      template: tools
 
     - id: solid # 2021
-      template: tools
 
     - id: qwik # 2022
-      template: tools
 
     - id: stencil # 2022
-      template: tools
+
+    - id: front_end_frameworks_prenormalized
+      template: project
+
+    - id: front_end_frameworks_happiness
+      template: happiness
 
     # rendering_frameworks:
 
     - id: nextjs
-      template: tools
 
     - id: nuxt
-      template: tools
 
     - id: gatsby
-      template: tools
 
     - id: remix # 2021
-      template: tools
 
     - id: astro # 2021
-      template: tools
 
     - id: eleventy # 2021
-      template: tools
 
     - id: sveltekit # 2021
-      template: tools
 
     - id: docusaurus # 2022
-      template: tools
+
+    - id: rendering_frameworks_prenormalized
+      template: project
+
+    - id: rendering_frameworks_happiness
+      template: happiness
 
     # testing:
 
     - id: jest
-      template: tools
 
     - id: mocha
-      template: tools
 
     - id: storybook
-      template: tools
 
     - id: cypress
-      template: tools
 
     - id: ava
-      template: tools
 
     - id: jasmine
-      template: tools
 
     - id: puppeteer
-      template: tools
 
     - id: testing_library
-      template: tools
 
     - id: playwright
-      template: tools
 
     - id: webdriverio
-      template: tools
 
     - id: vitest # 2021
-      template: tools
 
     - id: selenium # 2022
-      template: tools
 
     - id: testcafe # 2022
-      template: tools
+
+    - id: testing_prenormalized
+      template: project
+
+    - id: testing_happiness
+      template: happiness
 
     # mobile_desktop:
 
     - id: electron
-      template: tools
 
     - id: reactnative
-      template: tools
 
     - id: nativeapps
-      template: tools
 
     - id: cordova
-      template: tools
 
     - id: ionic
-      template: tools
 
     - id: nwjs
-      template: tools
 
     - id: expo
-      template: tools
 
     - id: capacitor
-      template: tools
 
     - id: quasar
-      template: tools
 
     - id: tauri # 2021
-      template: tools
 
     - id: nativescript # 2022
-      template: tools
+
+    - id: mobile_desktop_prenormalized
+      template: project
+
+    - id: mobile_desktop_happiness
+      template: happiness
 
     # build_tools:
 
     - id: webpack
-      template: tools
 
     - id: parcel
-      template: tools
 
     - id: gulp
-      template: tools
 
     - id: rollup
-      template: tools
 
     - id: browserify
-      template: tools
 
     - id: tsc
-      template: tools
 
     - id: rome
-      template: tools
 
     - id: snowpack
-      template: tools
 
     - id: swc
-      template: tools
 
     - id: esbuild
-      template: tools
 
     - id: vite # 2021
-      template: tools
 
     - id: wmr # 2021
-      template: tools
 
     - id: turbopack # 2022
-      template: tools
+
+    - id: build_tools_prenormalized
+      template: project
+
+    - id: build_tools_happiness
+      template: happiness
 
     # monorepo_tools:
 
     - id: rush # 2021
-      template: tools
 
     - id: turborepo # 2021
-      template: tools
 
     - id: yarn_workspaces # 2021
-      template: tools
 
     - id: yalc # 2021
-      template: tools
 
     - id: lerna # 2021
-      template: tools
 
     - id: npm_workspaces # 2021
-      template: tools
 
     - id: pnpm # 2021
-      template: tools
 
     - id: nx # 2021
-      template: tools
+
+    - id: monorepo_tools_prenormalized
+      template: project
+
+    - id: monorepo_tools_happiness
+      template: happiness

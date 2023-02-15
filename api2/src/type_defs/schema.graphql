@@ -33,7 +33,7 @@ type YearData {
 }
 
 type Query {
-    foo: JSON
+    surveys: Surveys
 }
 
 # type Query {

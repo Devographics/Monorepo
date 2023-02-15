@@ -1,0 +1,51 @@
+template: tools
+fields:
+    # graphql_servers:
+    - id: apollo_server
+    - id: yoga
+    - id: graphql_js
+    - id: helix
+    - id: express_graphql
+    - id: mercurius
+    - id: dgs
+    - id: graphql_dotnet
+    - id: absinthe
+    - id: graphql_go
+    # graphql_clients:
+    - id: apollo_client
+    - id: urql
+    - id: react_query
+    - id: relay
+    - id: apollo_ios
+    - id: swift_graphql
+    - id: apollo_kotlin
+    - id: graphql_hooks
+    - id: graphql_request
+    - id: no_client
+    # api_generators:
+    - id: postgraphile
+    - id: hasura
+    - id: graphcms
+    - id: datocms
+    - id: sanity
+    - id: wpgraphql
+    - id: wundergraph
+    - id: fauna
+    - id: dgraph
+    - id: graphql_editor
+    - id: strapi
+    - id: appsync
+    - id: contentful
+    - id: graphene
+    - id: graphql_mesh
+    # schema_builders:
+    - id: nexus
+    - id: typegraphql
+    - id: pothos
+    - id: strawberry
+    - id: sangria
+    - id: graphql_java
+    - id: gqlgen
+    - id: graphql_zeus
+    - id: genql
+    - id: graphql_code_generator

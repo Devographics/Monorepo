@@ -22,13 +22,11 @@ import { appSettings } from './helpers/settings'
 import { watchFiles } from './helpers/watch'
 import { cacheAvatars } from './avatars'
 
-import { loadOrGetSurveys } from './surveys'
-
 import { logToFile } from './debug'
 
 //import Tracing from '@sentry/tracing'
 
-import { loadFieldDefinitions, generateTypeDefs, generateSurveysTypeDefs } from './fields'
+import { generateTypeDefs } from './fields'
 
 const app = express()
 
@@ -83,18 +81,7 @@ const start = async () => {
 
     const context = { db, redisClient }
 
-    const fieldDefinitions = loadFieldDefinitions()
-    const surveys = await loadOrGetSurveys()
-    const generatedTypeDefs = await generateTypeDefs({ fieldDefinitions, surveys })
-    const surveysTypeDefs = await generateSurveysTypeDefs({ fieldDefinitions, surveys })
-    // console.log('// generatedTypeDefs')
-    // console.log(generatedTypeDefs)
-
-    // console.log('// surveysTypeDefs')
-    // console.log(surveysTypeDefs)
-
-    await logToFile('types.graphql', generatedTypeDefs, { mode: 'overwrite' })
-    await logToFile('surveys.graphql', surveysTypeDefs, { mode: 'overwrite' })
+    const generatedTypeDefs = await generateTypeDefs()
 
     const server = new ApolloServer({
         typeDefs: [defaultTypeDefs, generatedTypeDefs],

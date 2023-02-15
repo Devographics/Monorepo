@@ -20,7 +20,7 @@ export const loadOrGetSurveys = async (
     if (forceReload || allSurveys.length === 0) {
         allSurveys = await loadSurveys()
     }
-    return allSurveys
+    return allSurveys.filter(s => s.slug !== 'demo_survey')
 }
 
 const options = {
