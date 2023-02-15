@@ -3,6 +3,7 @@ packages:
     - 'shared/*'
     # API
     - 'api'
+    - 'api2'
     - 'api-internal'
     # Webapps
     - 'surveyform'
