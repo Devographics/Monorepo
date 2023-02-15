@@ -5,6 +5,12 @@ import { Options } from '../options'
 
 export * from './fields'
 
+export type Survey = any
+export type Edition = any
+export type Section = any
+export type Question = any
+export type Template = any
+
 export type Facet =
     | 'default'
     | 'gender'
@@ -18,7 +24,6 @@ export type Facet =
     | 'source'
     | 'country'
 
-
 /**
  * This context is injected in each and every requests.
  */
@@ -28,7 +33,7 @@ export interface RequestContext {
     isDebug?: Boolean
 }
 
-export type WatchedItem =  "locales" | "entities" | "surveys" | "projects"
+export type WatchedItem = 'locales' | 'entities' | 'surveys' | 'projects'
 
 export interface SurveyConfig {
     survey: SurveyType

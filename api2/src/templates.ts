@@ -1,4 +1,4 @@
-import { Field, Section } from './types'
+import { Field, Section, Question, Survey, Edition } from './types'
 import { TOOLS_OPTIONS, FEATURES_OPTIONS } from './constants'
 import { capitalize } from './helpers/utilities'
 
@@ -16,12 +16,27 @@ export const defaultTemplate = (field: Field, section: Section): Field => {
     return fieldDefinition
 }
 
+type TemplateArguments = {
+    survey: Survey
+    edition: Edition
+    section: Section
+    question: Question
+}
+
+const defaultTemplateFunction = ({ question, section }: TemplateArguments) => ({
+    path: `${section.id}.${question.id}`
+})
+
+const doNotInclude = () => ({
+    includeInApi: false
+})
+
 export const templates = {
     // demographics: {
     //   path: (id:string) => `user_info.${id}.${getSuffix(id)}`
     // },
-    features: ({ id }: { id: string }) => ({
-        path: `features.${id}.choices`,
+    feature: ({ question }: TemplateArguments) => ({
+        path: `features.${question.id}.choices`,
         options: FEATURES_OPTIONS.map(id => ({
             id
         })),
@@ -29,15 +44,44 @@ export const templates = {
         filterTypeName: 'FeatureExperienceFilter',
         optionsTypeName: 'FeatureExperienceID'
     }),
-    tools: ({ id }: { id: string }) => ({
-        path: `tools.${id}.choices`,
+    tool: ({ question }: TemplateArguments) => ({
+        path: `tools.${question.id}.choices`,
         options: TOOLS_OPTIONS.map(id => ({
             id
         })),
         fieldTypeName: 'Tool',
         filterTypeName: 'ToolExperienceFilter',
         optionsTypeName: 'ToolExperienceID'
-    })
+    }),
+    multiple: ({ question, section }: TemplateArguments) => ({
+        path: `${section.id}.${question.id}.choices`
+    }),
+    single: ({ question, section }: TemplateArguments) => ({
+        path: `${section.id}.${question.id}.choices`
+    }),
+    others: ({ question, section }: TemplateArguments) => ({
+        path: `${section.id}.${question.id.replace('_others', '.others')}.normalized`
+    }),
+    happiness: ({ question, section }: TemplateArguments) => ({
+        path: `${section.id}.${question.id.replace('_happiness', '.happiness')}`
+    }),
+    project: ({ question, section }: TemplateArguments) => ({
+        path: `${section.id}.${question.id.replace('_prenormalized', '.others')}.normalized`
+    }),
+
+    opinion: defaultTemplateFunction,
+    bracket: defaultTemplateFunction,
+    text: defaultTemplateFunction,
+    longtext: defaultTemplateFunction,
+    slider: defaultTemplateFunction,
+    race_ethnicity: defaultTemplateFunction,
+    country: defaultTemplateFunction,
+    top_n: defaultTemplateFunction,
+
+    email2: doNotInclude,
+    receive_notifications: doNotInclude,
+    help: doNotInclude
+
     // resources: {
     //   path: (id:string) => `resources.${id}.${getSuffix(id)}`
     // },
