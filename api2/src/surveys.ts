@@ -77,7 +77,7 @@ export const loadFromGitHub = async () => {
                         } else if (file3.name === 'questions.yml') {
                             // found config.yml for edition
                             const editionQuestionsYaml = await getGitHubYamlFile(file3.download_url)
-                            edition = { ...edition, questions: editionQuestionsYaml }
+                            edition = { ...edition, sections: editionQuestionsYaml }
                         }
                     }
                     editions.push(edition)
@@ -133,7 +133,7 @@ export const loadLocally = async () => {
                             'utf8'
                         )
                         const editionQuestionsYaml: any = yaml.load(editionQuestionsContents)
-                        edition.questions = editionQuestionsYaml
+                        edition.sections = editionQuestionsYaml
                     } catch (error) {}
                     editions.push(edition)
                 }
@@ -206,7 +206,7 @@ export const cacheSurveys = async ({
     setCache(getAllSurveysCacheKey(), surveys, context)
 
     const surveysWithoutOutlines = surveys.map(({ editions, ...surveyRest }) => {
-        const editionsWithoutOutlines = editions.map(({ questions, ...editionRest }) => editionRest)
+        const editionsWithoutOutlines = editions.map(({ sections, ...editionRest }) => editionRest)
         return { ...surveyRest, editions: editionsWithoutOutlines }
     })
     setCache(getAllSurveysMetadataCacheKey(), surveysWithoutOutlines, context)

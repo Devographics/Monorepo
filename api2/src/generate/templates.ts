@@ -1,27 +1,9 @@
-import { Field, Section, Question, Survey, Edition } from '../types'
+import { TemplateArguments } from './types'
 import { TOOLS_OPTIONS, FEATURES_OPTIONS } from '../constants'
-import { capitalize } from '../helpers/utilities'
 
 const isFreeformField = (id: string) => ['_others', '_freeform'].some(s => id.includes(s))
 
 const getSuffix = (id: string) => (isFreeformField(id) ? 'others.normalized' : 'choices')
-
-const defaultGetPath = (id: string, section: string) => `${section}.${id}.${getSuffix(id)}`
-
-export const defaultTemplate = (field: Field, section: Section): Field => {
-    const { id, options } = field
-    const fieldDefinition = {
-        path: `${section.id}.${id}.${getSuffix(id)}`
-    } as Field
-    return fieldDefinition
-}
-
-type TemplateArguments = {
-    survey: Survey
-    edition: Edition
-    section: Section
-    question: Question
-}
 
 const defaultTemplateFunction = ({ question, section }: TemplateArguments) => ({
     path: `${section.id}.${question.id}`
@@ -32,9 +14,6 @@ const doNotInclude = () => ({
 })
 
 export const templates = {
-    // demographics: {
-    //   path: (id:string) => `user_info.${id}.${getSuffix(id)}`
-    // },
     feature: ({ question }: TemplateArguments) => ({
         path: `features.${question.id}.choices`,
         options: FEATURES_OPTIONS.map(id => ({
@@ -93,16 +72,4 @@ export const templates = {
     // opinions: {
     //   path: (id:string) => `opinions.${id}.${getSuffix(id)}`
     // }
-}
-
-export const getTemplate = (field: Field, section: Section) => {
-    const templateName = field.templateName || section.template
-    const template = templates[templateName] || defaultTemplate
-    return template
-}
-
-export const applyTemplate = (field: Field, section: Section) => {
-    const template = getTemplate(field, section)
-    const fieldWithTemplate = template(field, section)
-    return { ...fieldWithTemplate, ...field, sectionId: section.id }
 }

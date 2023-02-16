@@ -1,10 +1,6 @@
 import { Option } from '../types'
 import { graphqlize } from './helpers'
-
-type Survey = any
-type Edition = any
-type Section = any
-type Question = any
+import { Survey, Edition, Section, QuestionObject } from './types'
 
 /*
 
@@ -22,7 +18,7 @@ export const generateSurveysType = ({ surveys }: { surveys: Survey[] }) => {
         typeName: 'Surveys',
         typeDef: `type Surveys {
     ${surveys
-        .map((survey: Survey) => `${survey.slug}: ${graphqlize(survey.slug)}Survey`)
+        .map((survey: Survey) => `${survey.id}: ${graphqlize(survey.id)}Survey`)
         .join('\n    ')}
 }`
     }
@@ -44,15 +40,12 @@ type StateOfJsSurvey {
 
 */
 export const generateSurveyType = ({ survey }: { survey: Survey }) => {
-    const typeName = graphqlize(survey.slug)
+    const typeName = graphqlize(survey.id)
     return {
         typeName,
         typeDef: `type ${typeName}Survey {
     ${survey.editions
-        .map(
-            (surveyEdition: Edition) =>
-                `year_${surveyEdition.year}: ${graphqlize(survey.slug)}${surveyEdition.year}Edition`
-        )
+        .map((edition: Edition) => `${edition.id}: ${graphqlize(edition.id)}Edition`)
         .join('\n    ')}
 }`
     }
@@ -72,11 +65,11 @@ enum StateOfJsEditionID {
 */
 export const generateSurveyEditionsEnumType = ({ survey }: { survey: Survey }) => {
     const { editions } = survey
-    const typeName = `${graphqlize(survey.slug)}EditionID`
+    const typeName = `${graphqlize(survey.id)}EditionID`
     return {
         typeName,
         typeDef: `enum ${typeName} {
-    ${editions.map(e => e.surveyId).join('\n    ')}
+    ${editions.map((e: Edition) => e.id).join('\n    ')}
 }`
     }
 }
@@ -98,22 +91,20 @@ type StateOfJs2021Edition {
 
 */
 export const generateEditionType = ({ survey, edition }: { survey: Survey; edition: Edition }) => {
-    const typeName = `${graphqlize(survey.slug)}${edition.year}Edition`
+    const typeName = `${graphqlize(edition.id)}Edition`
     return {
         typeName,
         typeDef: `type ${typeName} {
-  ${
-      edition.questions
-          ? edition.questions
-                .map(
-                    (section: Section) =>
-                        `${section.id}: ${graphqlize(survey.slug)}${edition.year}${graphqlize(
-                            section.id
-                        )}Section`
-                )
-                .join('\n    ')
-          : 'empty: Boolean'
-  }
+    ${
+        edition.sections
+            ? edition.sections
+                  .map(
+                      (section: Section) =>
+                          `${section.id}: ${graphqlize(edition.id)}${graphqlize(section.id)}Section`
+                  )
+                  .join('\n    ')
+            : 'empty: Boolean'
+    }
 }`
     }
 }
@@ -122,7 +113,7 @@ export const generateEditionType = ({ survey, edition }: { survey: Survey; editi
 
 Sample output: 
 
-type StateOfJs2021UserInfoSection {
+type Js2021UserInfoSection {
     age: Age
     years_of_experience: YearsOfExperience
     company_size: CompanySize
@@ -136,22 +127,22 @@ type StateOfJs2021UserInfoSection {
 
 */
 export const generateSectionType = ({
-    survey,
     edition,
-    section
+    section,
+    questions
 }: {
-    survey: Survey
     edition: Edition
     section: Section
+    questions: QuestionObject[]
 }) => {
-    const typeName = `${graphqlize(survey.slug)}${edition.year}${graphqlize(section.id)}Section`
+    const typeName = `${graphqlize(edition.id)}${graphqlize(section.id)}Section`
     return {
         typeName,
         typeDef: `type ${typeName} {
-${section.questions
-    .filter((q: Question) => q.includeInApi !== false)
-    .map((question: Question) => `${question.id}: ${question.fieldTypeName}`)
-    .join('\n    ')}
+    ${questions
+        .filter((q: QuestionObject) => q.includeInApi !== false)
+        .map((question: QuestionObject) => `${question.id}: ${question.fieldTypeName}`)
+        .join('\n    ')}
 }`
     }
 }
@@ -167,7 +158,7 @@ type DisabilityStatus {
 }
 
 */
-export const generateFieldType = ({ question }: { question: Question }) => {
+export const generateFieldType = ({ question }: { question: QuestionObject }) => {
     const { fieldTypeName, optionTypeName, options } = question
     return {
         typeName: fieldTypeName,
@@ -189,7 +180,7 @@ input DisabilityStatusFilter {
 }
 
 */
-export const generateFilterType = ({ question }: { question: Question }) => {
+export const generateFilterType = ({ question }: { question: QuestionObject }) => {
     const { filterTypeName, enumTypeName } = question
     return {
         typeName: filterTypeName,
@@ -211,9 +202,9 @@ type DisabilityStatusOption {
 }
 
 */
-export const generateOptionType = ({ question }: { question: Question }) => {
+export const generateOptionType = ({ question }: { question: QuestionObject }) => {
     const { optionTypeName, enumTypeName, surveyId, options } = question
-    const optionsHaveAverage = options.some((o: Option) => typeof o.average !== 'undefined')
+    const optionsHaveAverage = options?.some((o: Option) => typeof o.average !== 'undefined')
     return {
         typeName: optionTypeName,
         typeDef: `type ${optionTypeName} {
@@ -236,12 +227,12 @@ enum DisabilityStatusID {
 }
 
 */
-export const generateEnumType = ({ question }: { question: Question }) => {
+export const generateEnumType = ({ question }: { question: QuestionObject }) => {
     const { enumTypeName, options, optionsAreNumeric } = question
     return {
         typeName: enumTypeName,
         typeDef: `enum ${enumTypeName} {
-    ${options.map((o: Option) => (optionsAreNumeric ? `value_${o.id}` : o.id)).join('\n    ')}
+    ${options?.map((o: Option) => (optionsAreNumeric ? `value_${o.id}` : o.id)).join('\n    ')}
 }`
     }
 }
