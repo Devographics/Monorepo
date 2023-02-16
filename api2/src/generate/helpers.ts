@@ -1,6 +1,6 @@
 import { Survey, Edition, Section, Question, Field, Option } from '../types'
 import globalQuestions from './global_questions.yml'
-import { templates } from './templates'
+import { templates } from './question_templates'
 import uniq from 'lodash/uniq.js'
 
 export const graphqlize = (str: string) => capitalizeFirstLetter(snakeToCamel(str))
