@@ -1,6 +1,6 @@
-import { Field, Section, Question, Survey, Edition } from './types'
-import { TOOLS_OPTIONS, FEATURES_OPTIONS } from './constants'
-import { capitalize } from './helpers/utilities'
+import { Field, Section, Question, Survey, Edition } from '../types'
+import { TOOLS_OPTIONS, FEATURES_OPTIONS } from '../constants'
+import { capitalize } from '../helpers/utilities'
 
 const isFreeformField = (id: string) => ['_others', '_freeform'].some(s => id.includes(s))
 
@@ -42,7 +42,8 @@ export const templates = {
         })),
         fieldTypeName: 'Feature',
         filterTypeName: 'FeatureExperienceFilter',
-        optionsTypeName: 'FeatureExperienceID'
+        optionTypeName: 'FeatureExperienceOption',
+        enumTypeName: 'FeatureExperienceID'
     }),
     tool: ({ question }: TemplateArguments) => ({
         path: `tools.${question.id}.choices`,
@@ -51,7 +52,8 @@ export const templates = {
         })),
         fieldTypeName: 'Tool',
         filterTypeName: 'ToolExperienceFilter',
-        optionsTypeName: 'ToolExperienceID'
+        optionTypeName: 'ToolExperienceOption',
+        enumTypeName: 'ToolExperienceID'
     }),
     multiple: ({ question, section }: TemplateArguments) => ({
         path: `${section.id}.${question.id}.choices`

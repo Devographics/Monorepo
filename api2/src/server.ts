@@ -26,7 +26,7 @@ import { logToFile } from './debug'
 
 //import Tracing from '@sentry/tracing'
 
-import { generateTypeDefs } from './fields'
+import { generateTypeDefs } from './generate/generate'
 
 const app = express()
 

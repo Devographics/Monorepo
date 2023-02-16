@@ -1,96 +1,10 @@
-import { Option } from './types'
-import { graphqlize, getGraphQLTypeForField } from './fields'
+import { Option } from '../types'
+import { graphqlize } from './helpers'
 
 type Survey = any
 type Edition = any
 type Section = any
 type Question = any
-
-export const generateOptionsType = () => {}
-/*
-
-Sample output:
-
-enum DisabilityStatusID {
-    visual_impairments
-    hearing_impairments
-    mobility_impairments
-    cognitive_impairments
-    not_listed
-}
-
-*/
-export const generateEnumType = ({
-    typeName,
-    options,
-    optionsAreNumeric
-}: {
-    typeName: string
-    options: Option[]
-    optionsAreNumeric: boolean
-}) => {
-    return {
-        typeName,
-        typeDef: `enum ${typeName} {
-    ${options.map(i => (optionsAreNumeric ? `value_${i.id}` : i.id)).join('\n    ')}
-}`
-    }
-}
-
-/*
-
-Sample output: 
-
-input DisabilityStatusFilter {
-    eq: DisabilityStatusID
-    in: [DisabilityStatusID]
-    nin: [DisabilityStatusID]
-}
-
-*/
-export const generateFilterType = ({
-    typeName,
-    optionsTypeName
-}: {
-    typeName: string
-    optionsTypeName: string
-}) => {
-    return {
-        typeName,
-        typeDef: `input ${typeName} {
-    eq: ${optionsTypeName}
-    in: [${optionsTypeName}]
-    nin: [${optionsTypeName}]
-}`
-    }
-}
-
-/*
-
-Sample output:
-
-type DisabilityStatus {
-    all_years: [YearData]
-    year(year: Int!): YearData
-    keys: [DisabilityStatusID]
-}
-
-*/
-export const generateFieldType = ({
-    typeName,
-    optionsTypeName
-}: {
-    typeName: string
-    optionsTypeName?: string
-}) => {
-    return {
-        typeName,
-        typeDef: `type ${typeName} {
-    all_years: [YearData]
-    year(year: Int!): YearData${optionsTypeName ? `\n    keys: [${optionsTypeName}]` : ''}
-}`
-    }
-}
 
 /*
 
@@ -140,6 +54,29 @@ export const generateSurveyType = ({ survey }: { survey: Survey }) => {
                 `year_${surveyEdition.year}: ${graphqlize(survey.slug)}${surveyEdition.year}Edition`
         )
         .join('\n    ')}
+}`
+    }
+}
+
+/*
+
+Sample output:
+
+enum StateOfJsEditionID {
+    js2020
+    js2021
+    js2022
+    js2023
+}
+
+*/
+export const generateSurveyEditionsEnumType = ({ survey }: { survey: Survey }) => {
+    const { editions } = survey
+    const typeName = `${graphqlize(survey.slug)}EditionID`
+    return {
+        typeName,
+        typeDef: `enum ${typeName} {
+    ${editions.map(e => e.surveyId).join('\n    ')}
 }`
     }
 }
@@ -213,15 +150,98 @@ export const generateSectionType = ({
         typeDef: `type ${typeName} {
 ${section.questions
     .filter((q: Question) => q.includeInApi !== false)
-    .map(
-        (question: Question) =>
-            `${question.id}: ${getGraphQLTypeForField({
-                survey,
-                edition: edition,
-                question
-            })}`
-    )
+    .map((question: Question) => `${question.id}: ${question.fieldTypeName}`)
     .join('\n    ')}
+}`
+    }
+}
+
+/*
+
+Sample output:
+
+type DisabilityStatus {
+    all_years: [YearData]
+    year(year: Int!): YearData
+    options: [DisabilityStatusOptions]
+}
+
+*/
+export const generateFieldType = ({ question }: { question: Question }) => {
+    const { fieldTypeName, optionTypeName, options } = question
+    return {
+        typeName: fieldTypeName,
+        typeDef: `type ${fieldTypeName} {
+    all_years: [YearData]
+    year(year: Int!): YearData${options ? `\n    options: [${optionTypeName}]` : ''}
+}`
+    }
+}
+
+/*
+
+Sample output: 
+
+input DisabilityStatusFilter {
+    eq: DisabilityStatusID
+    in: [DisabilityStatusID]
+    nin: [DisabilityStatusID]
+}
+
+*/
+export const generateFilterType = ({ question }: { question: Question }) => {
+    const { filterTypeName, enumTypeName } = question
+    return {
+        typeName: filterTypeName,
+        typeDef: `input ${filterTypeName} {
+    eq: ${enumTypeName}
+    in: [${enumTypeName}]
+    nin: [${enumTypeName}]
+}`
+    }
+}
+
+/*
+
+Sample output:
+
+type DisabilityStatusOption {
+    id: DisabilityStatusID
+    editions: [StateOfJsEditionID]
+}
+
+*/
+export const generateOptionType = ({ question }: { question: Question }) => {
+    const { optionTypeName, enumTypeName, surveyId, options } = question
+    const optionsHaveAverage = options.some((o: Option) => typeof o.average !== 'undefined')
+    return {
+        typeName: optionTypeName,
+        typeDef: `type ${optionTypeName} {
+    id: ${enumTypeName}
+    editions: [${graphqlize(surveyId)}EditionID]${optionsHaveAverage ? '\n    average: Float' : ''}
+}`
+    }
+}
+
+/*
+
+Sample output:
+
+enum DisabilityStatusID {
+    visual_impairments
+    hearing_impairments
+    mobility_impairments
+    cognitive_impairments
+    not_listed
+}
+
+*/
+export const generateEnumType = ({ question }: { question: Question }) => {
+    const { enumTypeName, options, optionsAreNumeric } = question
+    return {
+        typeName: enumTypeName,
+        typeDef: `enum ${enumTypeName} {
+    ${options.map((o: Option) => (optionsAreNumeric ? `value_${o.id}` : o.id)).join('\n    ')}
 }`
     }
 }
