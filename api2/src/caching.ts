@@ -73,7 +73,7 @@ export const useCache = async <F extends DynamicComputeCall>(options: {
             verb = 'using cache'
             value = existingResult
         } else {
-            verb = 'computing and caching result'
+            verb = 'computed and cached result'
             value = await func(funcOptionsWithContext)
             if (value) {
                 // in case previous cached entry exists, delete it
@@ -81,7 +81,7 @@ export const useCache = async <F extends DynamicComputeCall>(options: {
             }
         }
     } else {
-        verb = 'computing result'
+        verb = 'computed result'
         value = await func(funcOptionsWithContext)
     }
     const finishedAt = new Date()
@@ -120,7 +120,7 @@ export const setCache = async (key: string, value: any, context: RequestContext)
 }
 
 // export const clearCache = async (db: Db) => {
-    // const collection = db.collection(config.mongo.cache_collection)
-    // const result = await collection.deleteMany({})
-    // return result
+// const collection = db.collection(config.mongo.cache_collection)
+// const result = await collection.deleteMany({})
+// return result
 // }

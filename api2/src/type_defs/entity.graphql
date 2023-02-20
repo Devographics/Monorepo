@@ -120,11 +120,11 @@ type Example {
     codeHighlighted: String
 }
 
-"""
-A facet associated with a set of entities.
-"""
+# """
+# A facet associated with a set of entities.
+# """
 type EntityFacet {
-    type: Facet
+    type: String
     id: String
     buckets: [EntityBucket]
     entity: Entity

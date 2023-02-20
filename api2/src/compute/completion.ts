@@ -1,4 +1,3 @@
-import { Db } from 'mongodb'
 import config from '../config'
 import keyBy from 'lodash/keyBy.js'
 import { RequestContext } from '../types'

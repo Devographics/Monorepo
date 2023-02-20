@@ -74,11 +74,17 @@ const mapFilter = <T>(filter: Filter<T>): FilterQuery<T> => {
 /**
  * Generate a MongoDB $match query from filters object.
  */
-export const generateFiltersQuery = ({ filters, key }: { filters?: Filters, key?: string }): FiltersQuery => {
+export const generateFiltersQuery = ({
+    filters,
+    dbPath
+}: {
+    filters?: Filters
+    dbPath?: string
+}): FiltersQuery => {
     const match: FiltersQuery = {}
     if (filters !== undefined) {
-        if (filters.ids !== undefined && key) {
-            match[key] = mapFilter<string>(filters.ids)
+        if (filters.ids !== undefined && dbPath) {
+            match[dbPath] = mapFilter<string>(filters.ids)
         }
         if (filters.gender !== undefined) {
             match['user_info.gender.choices'] = mapFilter<string>(filters.gender)

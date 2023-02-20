@@ -1,6 +1,8 @@
 import { Survey, Edition, Section, QuestionObject } from './types'
 import { TypeObject, ResolverType } from './types'
 import { getPath, getSectionQuestionObjects } from './helpers'
+import { genericComputeFunction } from '../compute'
+import { useCache, computeKey } from '../caching'
 
 export const generateResolvers = async ({
     surveys,
@@ -106,28 +108,9 @@ export const generateResolvers = async ({
 
                     for (const questionObject of sectionQuestionObjects) {
                         resolvers[questionObject.fieldTypeName] = {
-                            all_years: getAllYearsResolver({
-                                survey,
-                                edition,
-                                section,
-                                question: questionObject
-                            }),
-                            year: getYearResolver({
-                                survey,
-                                edition,
-                                section,
-                                question: questionObject
-                            })
+                            all_years: getAllYearsResolver(),
+                            year: getYearResolver()
                         }
-                        // if (questionTypeObject) {
-
-                        // }
-                        // const questionObject = questionObjects({
-                        //     survey,
-                        //     edition,
-                        //     section,
-                        //     question
-                        // })
                     }
                 }
             }
@@ -193,40 +176,67 @@ const getQuestionResolver =
     }): ResolverType =>
     (root, args, context, info) => {
         console.log('// question resolver')
-        return question
+        const { filters, options, facet } = args
+
+        return {
+            survey,
+            edition,
+            section,
+            question,
+            computeOptions: {
+                filters,
+                options,
+                facet
+            }
+        }
     }
 
-const getAllYearsResolver =
-    ({
-        survey,
-        edition,
-        section,
-        question
-    }: {
-        survey: Survey
-        edition: Edition
-        section: Section
-        question: QuestionObject
-    }): ResolverType =>
-    (root, args, context, info) => {
-        console.log('// getAllYearsResolver')
-        return []
-    }
+const getAllYearsResolver = (): ResolverType => (root, args, context, info) => {
+    console.log('// getAllYearsResolver')
+    const { survey, edition, section, question, computeOptions } = root
+    return useCache({
+        key: computeKey(genericComputeFunction, {
+            surveyId: survey.id,
+            editionId: edition.id,
+            sectionId: section.id,
+            questionId: question.id,
+            ...computeOptions
+        }),
+        func: genericComputeFunction,
+        context,
+        funcOptions: {
+            survey,
+            edition,
+            section,
+            question,
+            context,
+            options: computeOptions
+        }
+    })
+}
 
-const getYearResolver =
-    ({
-        survey,
-        edition,
-        section,
-        question
-    }: {
-        survey: Survey
-        edition: Edition
-        section: Section
-        question: QuestionObject
-    }): ResolverType =>
-    (root, args, context, info) => {
-        console.log('// getYearResolver')
-        console.log(args)
-        return {}
-    }
+const getYearResolver = (): ResolverType => (root, args, context, info) => {
+    console.log('// getYearResolver')
+    const { survey, edition, section, question, computeOptions } = root
+    const { year } = args
+    return useCache({
+        key: computeKey(genericComputeFunction, {
+            surveyId: survey.id,
+            editionId: edition.id,
+            sectionId: section.id,
+            questionId: question.id,
+            ...computeOptions,
+            year
+        }),
+        func: genericComputeFunction,
+        context,
+        funcOptions: {
+            survey,
+            edition,
+            section,
+            question,
+            context,
+            options: { ...computeOptions, year }
+        }
+    })
+}

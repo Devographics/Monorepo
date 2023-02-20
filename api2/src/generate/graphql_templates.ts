@@ -1,6 +1,6 @@
 import { Option } from '../types'
 import { graphqlize } from './helpers'
-import { Survey, Edition, Section, QuestionObject } from './types'
+import { Survey, Edition, Section, QuestionObject, TypeObject } from './types'
 
 /*
 
@@ -135,24 +135,23 @@ export const generateEditionType = ({
 Sample output: 
 
 type Js2021UserInfoSection {
-    age: Age
-    years_of_experience: YearsOfExperience
-    company_size: CompanySize
-    yearly_salary: YearlySalary
-    higher_education_degree: HigherEducationDegree
-    country: Country
-    gender: Gender
-    race_ethnicity: RaceEthnicity
-    disability_status: DisabilityStatus
+    age(filters: Filters, options: Options, facet: Facet): Age
+    years_of_experience(filters: Filters, options: Options, facet: Facet): YearsOfExperience
+    company_size(filters: Filters, options: Options, facet: Facet): CompanySize
+    yearly_salary(filters: Filters, options: Options, facet: Facet): YearlySalary
+    higher_education_degree(filters: Filters, options: Options, facet: Facet): HigherEducationDegree
+    # etc.
 }
 
 */
 export const generateSectionType = ({
+    survey,
     edition,
     section,
     questions,
     path
 }: {
+    survey: Survey
     edition: Edition
     section: Section
     questions: QuestionObject[]
@@ -164,7 +163,11 @@ export const generateSectionType = ({
         typeName,
         typeDef: `type ${typeName} {
     ${questions
-        .map((question: QuestionObject) => `${question.id}: ${question.fieldTypeName}`)
+        .map((question: QuestionObject) => {
+            const filtersTypeName = graphqlize(survey.id) + 'Filters'
+            const facetsTypeName = graphqlize(survey.id) + 'Facets'
+            return `${question.id}(filters: ${filtersTypeName}, options: Options, facet: ${facetsTypeName}): ${question.fieldTypeName}`
+        })
         .join('\n    ')}
 }`
     }
@@ -207,6 +210,9 @@ export const generateFilterType = ({ question }: { question: QuestionObject }) =
     const { filterTypeName, enumTypeName } = question
     return {
         typeName: filterTypeName,
+        typeType: 'filter',
+        surveyId: question.surveyId,
+        questionId: question.id,
         typeDef: `input ${filterTypeName} {
     eq: ${enumTypeName}
     in: [${enumTypeName}]
@@ -230,6 +236,7 @@ export const generateOptionType = ({ question }: { question: QuestionObject }) =
     const optionsHaveAverage = options?.some((o: Option) => typeof o.average !== 'undefined')
     return {
         typeName: optionTypeName,
+        typeType: 'option',
         typeDef: `type ${optionTypeName} {
     id: ${enumTypeName}
     editions: [${graphqlize(surveyId)}EditionID]${optionsHaveAverage ? '\n    average: Float' : ''}
@@ -254,8 +261,83 @@ export const generateEnumType = ({ question }: { question: QuestionObject }) => 
     const { enumTypeName, options, optionsAreNumeric } = question
     return {
         typeName: enumTypeName,
+        typeType: 'enum',
         typeDef: `enum ${enumTypeName} {
     ${options?.map((o: Option) => (optionsAreNumeric ? `value_${o.id}` : o.id)).join('\n    ')}
+}`
+    }
+}
+
+/*
+
+Sample output: 
+
+
+input StateOfJsFilters {
+    language__proxies: FeatureExperienceFilter
+    language__promise_all_settled: FeatureExperienceFilter
+    language__dynamic_import: FeatureExperienceFilter
+    language__nullish_coalescing: FeatureExperienceFilter
+    language__optional_chaining: FeatureExperienceFilter
+    # etc.
+}
+
+Note: when a question appears in different sections in different editions, 
+use the most recent section. 
+
+*/
+export const generateFiltersType = ({
+    survey,
+    questionObjects
+}: {
+    survey: Survey
+    questionObjects: QuestionObject[]
+}) => {
+    const typeName = graphqlize(survey.id) + 'Filters'
+    return {
+        typeName,
+        typeDef: `input ${typeName} {
+    ${questionObjects
+        .filter(q => q.filterTypeName && q.surveyId === survey.id)
+        .map(q => `${q.sectionIds.at(-1)}__${q.id}: ${q.filterTypeName}`)
+        .join('\n    ')}
+}`
+    }
+}
+
+/*
+
+Sample output: 
+
+enum StateOfJsFacets {
+    language__proxies
+    language__promise_all_settled
+    language__dynamic_import
+    language__nullish_coalescing
+    language__optional_chaining
+    language__private_fields
+    # etc.
+}
+
+Note: when a question appears in different sections in different editions, 
+use the most recent section. 
+
+*/
+export const generateFacetsType = ({
+    survey,
+    questionObjects
+}: {
+    survey: Survey
+    questionObjects: QuestionObject[]
+}) => {
+    const typeName = graphqlize(survey.id) + 'Facets'
+    const questionObjectsWithFilters = questionObjects.filter(
+        q => typeof q.filterTypeName !== 'undefined' && q.surveyId === survey.id
+    )
+    return {
+        typeName,
+        typeDef: `enum ${typeName} {
+    ${questionObjectsWithFilters.map(q => `${q.sectionIds.at(-1)}__${q.id}`).join('\n    ')}
 }`
     }
 }

@@ -7,7 +7,12 @@ import {
     mergeOptions,
     getPath
 } from './helpers'
-import { generateSurveysTypeObjects, generateQuestionsTypeObjects } from './typedefs'
+import {
+    generateSurveysTypeObjects,
+    generateQuestionsTypeObjects,
+    generateFiltersTypeObjects,
+    generateFacetsTypeObjects
+} from './typedefs'
 import uniq from 'lodash/uniq.js'
 
 export const generateTypeObjects = async ({
@@ -25,7 +30,20 @@ export const generateTypeObjects = async ({
     const questionsTypeObjects = await generateQuestionsTypeObjects({
         questionObjects
     })
-    const allTypeObjects = [...surveysTypeObjects, ...questionsTypeObjects]
+    const filtersTypeObjects = generateFiltersTypeObjects({
+        surveys,
+        questionObjects
+    })
+    const facetsTypeObjects = generateFacetsTypeObjects({
+        surveys,
+        questionObjects
+    })
+    const allTypeObjects = [
+        ...surveysTypeObjects,
+        ...questionsTypeObjects,
+        ...filtersTypeObjects,
+        ...facetsTypeObjects
+    ]
     return allTypeObjects
 }
 
@@ -111,14 +129,19 @@ export const getQuestionObject = ({
         ...question,
 
         fieldTypeName,
-        optionTypeName: fieldTypeName + 'Option',
-        enumTypeName: fieldTypeName + 'ID',
-        filterTypeName: fieldTypeName + 'Filter',
 
         sectionIds: [section.id], // a question can belong to more than one section in different editions
         surveyId: survey.id,
-        editions,
-        paths: [getPath({ survey, edition, section, question })]
+        editions
+    }
+
+    if (question.options) {
+        questionObject = {
+            ...questionObject,
+            optionTypeName: fieldTypeName + 'Option',
+            enumTypeName: fieldTypeName + 'ID',
+            filterTypeName: fieldTypeName + 'Filter'
+        }
     }
 
     // 2. if a global question definition exists, extend question with it
@@ -153,14 +176,11 @@ export const mergeQuestionObjects = (q1: QuestionObject, q2: QuestionObject) => 
 
     const sectionIds = uniq([...(q1.sectionIds || []), ...(q2.sectionIds || [])])
 
-    const paths = uniq([...(q1.paths || []), ...(q2.paths || [])])
-
     return {
         ...q1,
         ...q2,
         sectionIds,
         editions,
-        paths,
         ...(newOptions ? { options: newOptions } : {})
     }
 }

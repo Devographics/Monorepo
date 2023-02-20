@@ -1,5 +1,4 @@
 import orderBy from 'lodash/orderBy.js'
-import { Db } from 'mongodb'
 import config from '../config'
 import { RequestContext, SurveyConfig, YearParticipation } from '../types'
 import { Filters } from '../filters'

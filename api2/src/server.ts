@@ -121,7 +121,7 @@ const start = async () => {
         },
         context: (expressContext): RequestContext => {
             // TODO: do this better with a custom header
-            const isDebug = expressContext?.req?.rawHeaders?.includes('http://localhost:4001')
+            const isDebug = expressContext?.req?.rawHeaders?.includes('http://localhost:4031')
             return {
                 ...context,
                 isDebug

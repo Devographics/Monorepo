@@ -1,4 +1,3 @@
-import { Db } from 'mongodb'
 import { getParticipationByYearMap } from './demographics'
 import { YearCompletion, SurveyConfig, RequestContext } from '../types'
 
@@ -25,9 +24,7 @@ export const appendCompletionToYearlyResults = async <
     context: RequestContext,
     survey: SurveyConfig,
     yearlyResults: T[]
-): Promise<Array<
-    Omit<T, 'completion'> & { completion: YearCompletion }
->> => {
+): Promise<Array<Omit<T, 'completion'> & { completion: YearCompletion }>> => {
     const totalRespondentsByYear = await getParticipationByYearMap(context, survey)
 
     return yearlyResults.map(yearlyResult => {

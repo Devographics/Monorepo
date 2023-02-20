@@ -15,7 +15,7 @@ const doNotInclude = () => ({
 
 export const templates = {
     feature: ({ question }: TemplateArguments) => ({
-        dbPath: `features.${question.id}.choices`,
+        dbPath: `features.${question.id}.experience`,
         options: FEATURES_OPTIONS.map(id => ({
             id
         })),
@@ -25,7 +25,7 @@ export const templates = {
         enumTypeName: 'FeatureExperienceID'
     }),
     tool: ({ question }: TemplateArguments) => ({
-        dbPath: `tools.${question.id}.choices`,
+        dbPath: `tools.${question.id}.experience`,
         options: TOOLS_OPTIONS.map(id => ({
             id
         })),

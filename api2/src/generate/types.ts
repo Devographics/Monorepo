@@ -1,7 +1,10 @@
 export type TypeObject = {
     typeName: string
     typeDef: string
-    path: string
+    typeType: string
+    path?: string
+    surveyId: string
+    questionId: string
 }
 
 export type TemplateArguments = {
@@ -35,7 +38,7 @@ export type Question = {
 }
 
 export interface QuestionObject extends Question {
-    sectionIds?: string[]
+    sectionIds: string[]
     dbPath: string
     includeInApi?: boolean
 
@@ -45,9 +48,9 @@ export interface QuestionObject extends Question {
 
     isGlobal?: boolean
     fieldTypeName: string
-    filterTypeName: string
-    optionTypeName: string
-    enumTypeName: string
+    filterTypeName?: string
+    optionTypeName?: string
+    enumTypeName?: string
 }
 
 export type Option = {

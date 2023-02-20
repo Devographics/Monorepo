@@ -7,7 +7,9 @@ import {
     generateEditionType,
     generateSectionType,
     generateFieldType,
-    generateSurveyEditionsEnumType
+    generateSurveyEditionsEnumType,
+    generateFiltersType,
+    generateFacetsType
 } from './graphql_templates'
 import { Survey, QuestionObject, TypeObject } from './types'
 import { getPath, getSectionQuestionObjects } from './helpers'
@@ -59,6 +61,7 @@ export const generateSurveysTypeObjects = async ({
                     // type for all sections of a survey edition
                     typeObjects.push(
                         generateSectionType({
+                            survey,
                             edition,
                             section,
                             questions: sectionQuestionObjects,
@@ -109,4 +112,24 @@ export const generateQuestionsTypeObjects = async ({
         }
     }
     return typeObjects
+}
+
+export const generateFiltersTypeObjects = ({
+    surveys,
+    questionObjects
+}: {
+    surveys: Survey[]
+    questionObjects: QuestionObject[]
+}) => {
+    return surveys.map(survey => generateFiltersType({ survey, questionObjects }))
+}
+
+export const generateFacetsTypeObjects = ({
+    surveys,
+    questionObjects
+}: {
+    surveys: Survey[]
+    questionObjects: QuestionObject[]
+}) => {
+    return surveys.map(survey => generateFacetsType({ survey, questionObjects }))
 }

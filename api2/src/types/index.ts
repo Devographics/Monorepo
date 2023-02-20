@@ -32,6 +32,7 @@ export interface RequestContext {
 export type WatchedItem = 'locales' | 'entities' | 'surveys' | 'projects'
 
 export interface SurveyConfig {
+    id: string
     survey: SurveyType
 }
 

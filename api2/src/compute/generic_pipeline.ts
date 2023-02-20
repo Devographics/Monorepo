@@ -3,9 +3,9 @@ import { getFacetPath } from '../helpers'
 
 export type PipelineProps = {
     survey: string
-    key: string
+    dbPath: string
     facet?: string
-    fieldId: string
+    questionId: string
     year?: number
     filters?: any
     limit: number
@@ -16,14 +16,14 @@ export type PipelineProps = {
 // generate an aggregation pipeline for all years, or
 // optionally restrict it to a specific year of data
 export const getGenericPipeline = (pipelineProps: PipelineProps) => {
-    const { survey, filters, key, facet, fieldId, year, limit, cutoff = 1 } = pipelineProps
+    const { survey, filters, dbPath, facet, questionId, year, limit, cutoff = 1 } = pipelineProps
 
     const facetPath = facet && getFacetPath(facet)
 
     const match: any = {
         survey,
-        [key]: { $nin: [null, '', [], {}] },
-        ...generateFiltersQuery({ filters, key })
+        [dbPath]: { $nin: [null, '', [], {}] },
+        ...generateFiltersQuery({ filters, dbPath })
     }
 
     // if year is passed, restrict aggregation to specific year
@@ -38,7 +38,7 @@ export const getGenericPipeline = (pipelineProps: PipelineProps) => {
         // { $count: 'questionRespondents' },
         {
             $unwind: {
-                path: `$${key}`
+                path: `$${dbPath}`
             }
         },
         ...(facetPath
@@ -55,7 +55,7 @@ export const getGenericPipeline = (pipelineProps: PipelineProps) => {
                 _id: {
                     year: '$year',
                     ...(facet && { [facet]: `$${facetPath}` }),
-                    [fieldId]: `$${key}`
+                    [questionId]: `$${dbPath}`
                 },
                 count: {
                     $sum: 1
@@ -70,7 +70,7 @@ export const getGenericPipeline = (pipelineProps: PipelineProps) => {
                 },
                 buckets: {
                     $push: {
-                        id: `$_id.${fieldId}`,
+                        id: `$_id.${questionId}`,
                         count: '$count'
                     }
                 }

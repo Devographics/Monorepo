@@ -30,21 +30,24 @@ type EditionMetadata {
     social_image_url: String
 }
 
-enum Facet {
-    default
+input Options {
+    limit: Int
+    cutoff: Int
+    sort: SortSpecifier
+    facetSort: SortSpecifier
+    facetLimit: Int
+    facetMinPercent: Float
+    facetMinCount: Int
+}
 
-    gender
-    race_ethnicity
-    yearly_salary
-    industry_sector
-    disability_status
-    company_size
-    years_of_experience
-    higher_education_degree
-    source
-    country
-    age
-    locale
+input SortSpecifier {
+    property: String
+    order: SortOrder
+}
+
+enum SortOrder {
+    asc
+    desc
 }
 
 type YearData {
@@ -54,21 +57,12 @@ type YearData {
 }
 
 type Query {
+    """
+    All surveys
+    """
     surveys: Surveys
+    """
+    Meta information about the API
+    """
+    _metadata: JSON
 }
-
-# type Query {
-#     """
-#     Data for a specific survey.
-#     """
-#     survey(survey: SurveyType!): Survey
-#     """
-#     All surveys.
-#     """
-#     allSurveys: [SurveyItem]
-#     """
-#     Meta information about the API
-#     """
-#     metadata: JSON
-
-# }
