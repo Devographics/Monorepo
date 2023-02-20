@@ -127,9 +127,7 @@ export const getQuestionObject = ({
 
     let questionObject: QuestionObject = {
         ...question,
-
         fieldTypeName,
-
         sectionIds: [section.id], // a question can belong to more than one section in different editions
         surveyId: survey.id,
         editions

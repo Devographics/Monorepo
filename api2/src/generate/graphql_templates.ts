@@ -188,6 +188,7 @@ export const generateFieldType = ({ question }: { question: QuestionObject }) =>
     const { fieldTypeName, optionTypeName, options } = question
     return {
         typeName: fieldTypeName,
+        typeType: 'question',
         typeDef: `type ${fieldTypeName} {
     all_years: [YearData]
     year(year: Int!): YearData${options ? `\n    options: [${optionTypeName}]` : ''}
@@ -208,6 +209,7 @@ input DisabilityStatusFilter {
 */
 export const generateFilterType = ({ question }: { question: QuestionObject }) => {
     const { filterTypeName, enumTypeName } = question
+    if (!filterTypeName) return
     return {
         typeName: filterTypeName,
         typeType: 'filter',
@@ -233,6 +235,7 @@ type DisabilityStatusOption {
 */
 export const generateOptionType = ({ question }: { question: QuestionObject }) => {
     const { optionTypeName, enumTypeName, surveyId, options } = question
+    if (!optionTypeName) return
     const optionsHaveAverage = options?.some((o: Option) => typeof o.average !== 'undefined')
     return {
         typeName: optionTypeName,
@@ -259,6 +262,7 @@ enum DisabilityStatusID {
 */
 export const generateEnumType = ({ question }: { question: QuestionObject }) => {
     const { enumTypeName, options, optionsAreNumeric } = question
+    if (!enumTypeName) return
     return {
         typeName: enumTypeName,
         typeType: 'enum',

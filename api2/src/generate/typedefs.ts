@@ -96,13 +96,16 @@ export const generateQuestionsTypeObjects = async ({
                 typeObjects.push(generateFieldType({ question }))
             }
             if (!typeObjects.find(t => t.typeName === filterTypeName)) {
-                typeObjects.push(generateFilterType({ question }))
+                const filterType = generateFilterType({ question })
+                filterType && typeObjects.push(filterType)
             }
             if (!typeObjects.find(t => t.typeName === optionTypeName)) {
-                typeObjects.push(generateOptionType({ question }))
+                const optionType = generateOptionType({ question })
+                optionType && typeObjects.push(optionType)
             }
             if (!typeObjects.find(t => t.typeName === enumTypeName)) {
-                typeObjects.push(generateEnumType({ question }))
+                const enumType = generateEnumType({ question })
+                enumType && typeObjects.push(enumType)
             }
         } else {
             // no options

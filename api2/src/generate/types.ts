@@ -3,8 +3,8 @@ export type TypeObject = {
     typeDef: string
     typeType: string
     path?: string
-    surveyId: string
-    questionId: string
+    // surveyId?: string
+    // questionId?: string
 }
 
 export type TemplateArguments = {
@@ -39,7 +39,7 @@ export type Question = {
 
 export interface QuestionObject extends Question {
     sectionIds: string[]
-    dbPath: string
+    dbPath?: string
     includeInApi?: boolean
 
     editions?: string[]

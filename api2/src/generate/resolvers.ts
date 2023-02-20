@@ -108,7 +108,7 @@ export const generateResolvers = async ({
 
                     for (const questionObject of sectionQuestionObjects) {
                         resolvers[questionObject.fieldTypeName] = {
-                            all_years: getAllYearsResolver(),
+                            all_years: getYearsResolver(),
                             year: getYearResolver()
                         }
                     }
@@ -191,35 +191,11 @@ const getQuestionResolver =
         }
     }
 
-const getAllYearsResolver = (): ResolverType => (root, args, context, info) => {
+const getYearsResolver = (): ResolverType => async (root, args, context, info) => {
     console.log('// getAllYearsResolver')
     const { survey, edition, section, question, computeOptions } = root
-    return useCache({
-        key: computeKey(genericComputeFunction, {
-            surveyId: survey.id,
-            editionId: edition.id,
-            sectionId: section.id,
-            questionId: question.id,
-            ...computeOptions
-        }),
-        func: genericComputeFunction,
-        context,
-        funcOptions: {
-            survey,
-            edition,
-            section,
-            question,
-            context,
-            options: computeOptions
-        }
-    })
-}
-
-const getYearResolver = (): ResolverType => (root, args, context, info) => {
-    console.log('// getYearResolver')
-    const { survey, edition, section, question, computeOptions } = root
     const { year } = args
-    return useCache({
+    return await useCache({
         key: computeKey(genericComputeFunction, {
             surveyId: survey.id,
             editionId: edition.id,
@@ -239,4 +215,11 @@ const getYearResolver = (): ResolverType => (root, args, context, info) => {
             options: { ...computeOptions, year }
         }
     })
+}
+
+const getYearResolver = (): ResolverType => async (root, args, context, info) => {
+    console.log('// getYearResolver')
+    const allYearsResolver = getYearsResolver()
+    const result = await allYearsResolver(root, args, context, info)
+    return result[0]
 }
