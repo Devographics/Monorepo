@@ -6,13 +6,13 @@ const responseCachePlugin = (responseCachePluginPkg as any).default
 
 import defaultTypeDefs from './type_defs/schema.graphql'
 import { RequestContext } from './types'
-import resolvers from './resolvers'
 import express from 'express'
 import { analyzeTwitterFollowings } from './rpcs'
 // import { clearCache } from './caching'
 import { createClient } from 'redis'
 import { initMemoryCache, reinitialize } from './init'
 import path from 'path'
+import GraphQLJSON, { GraphQLJSONObject } from 'graphql-type-json'
 
 import Sentry from '@sentry/node'
 
@@ -23,10 +23,12 @@ import { watchFiles } from './helpers/watch'
 import { cacheAvatars } from './avatars'
 
 import { logToFile } from './debug'
+import { loadOrGetSurveys } from './surveys'
 
 //import Tracing from '@sentry/tracing'
 
-import { generateTypeDefs } from './generate/generate'
+import { generateTypeObjects, getQuestionObjects } from './generate/generate'
+import { generateResolvers } from './generate/resolvers'
 
 const app = express()
 
@@ -81,11 +83,29 @@ const start = async () => {
 
     const context = { db, redisClient }
 
-    const generatedTypeDefs = await generateTypeDefs()
+    const surveys = await loadOrGetSurveys()
+    const questionObjects = getQuestionObjects({ surveys })
+
+    const typeObjects = await generateTypeObjects({ surveys, questionObjects })
+    const allTypeDefsString = typeObjects.map(t => t.typeDef).join('\n\n')
+
+    await logToFile('typeDefs.yml', typeObjects, { mode: 'overwrite' })
+    await logToFile('typeDefs.graphql', allTypeDefsString, { mode: 'overwrite' })
+
+    const defaultResolvers = {
+        JSON: GraphQLJSON,
+        JSONObject: GraphQLJSONObject
+    }
+    const generatedResolvers = await generateResolvers({
+        surveys,
+        questionObjects,
+        typeObjects
+    })
+    const resolvers = { ...defaultResolvers, ...generatedResolvers }
 
     const server = new ApolloServer({
-        typeDefs: [defaultTypeDefs, generatedTypeDefs],
-        // resolvers: resolvers as any,
+        typeDefs: [defaultTypeDefs, allTypeDefsString],
+        resolvers,
         debug: isDev,
         // tracing: isDev,
         // cacheControl: true,

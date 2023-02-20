@@ -1,4 +1,4 @@
-import { Survey, Edition, Section, Question, Field, Option } from '../types'
+import { Survey, Edition, Section, Question, QuestionObject, Option } from './types'
 import globalQuestions from './global_questions.yml'
 import { templates } from './question_templates'
 import uniq from 'lodash/uniq.js'
@@ -81,4 +81,46 @@ export const applyQuestionTemplate = (options: {
         console.log(`// template ${template} not found!`)
         return { ...question, template }
     }
+}
+
+export const getPath = ({
+    survey,
+    edition,
+    section,
+    question,
+    suffix
+}: {
+    survey?: Survey
+    edition?: Edition
+    section?: Section
+    question?: Question
+    suffix?: string
+}) => {
+    const pathSegments = ['root']
+    const segments = [survey, edition, section, question]
+    segments.forEach(segment => {
+        if (segment) {
+            pathSegments.push(segment.id)
+        }
+    })
+    return pathSegments.join('.')
+}
+
+export const getSectionQuestionObjects = ({
+    section,
+    edition,
+    questionObjects
+}: {
+    section: Section
+    edition: Edition
+    questionObjects: QuestionObject[]
+}) => {
+    return questionObjects.filter(
+        q =>
+            q.sectionIds &&
+            q.sectionIds.includes(section.id) &&
+            q.editions &&
+            q.editions.includes(edition.id) &&
+            q.includeInApi !== false
+    )
 }

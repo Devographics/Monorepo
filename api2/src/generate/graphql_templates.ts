@@ -7,14 +7,16 @@ import { Survey, Edition, Section, QuestionObject } from './types'
 Sample output:
 
 type Surveys {
+    metadata: SurveyMetadata
     demo_survey: DemoSurveySurvey
     state_of_css: StateOfCssSurvey
     state_of_graphql: StateOfGraphqlSurvey
     state_of_js: StateOfJsSurvey
 }
 */
-export const generateSurveysType = ({ surveys }: { surveys: Survey[] }) => {
+export const generateSurveysType = ({ surveys, path }: { surveys: Survey[]; path: string }) => {
     return {
+        path,
         typeName: 'Surveys',
         typeDef: `type Surveys {
     ${surveys
@@ -39,11 +41,13 @@ type StateOfJsSurvey {
 }
 
 */
-export const generateSurveyType = ({ survey }: { survey: Survey }) => {
-    const typeName = graphqlize(survey.id)
+export const generateSurveyType = ({ survey, path }: { survey: Survey; path: string }) => {
+    const typeName = graphqlize(survey.id) + 'Survey'
     return {
+        path,
         typeName,
-        typeDef: `type ${typeName}Survey {
+        typeDef: `type ${typeName} {
+    _metadata: SurveyMetadata
     ${survey.editions
         .map((edition: Edition) => `${edition.id}: ${graphqlize(edition.id)}Edition`)
         .join('\n    ')}
@@ -63,10 +67,17 @@ enum StateOfJsEditionID {
 }
 
 */
-export const generateSurveyEditionsEnumType = ({ survey }: { survey: Survey }) => {
+export const generateSurveyEditionsEnumType = ({
+    survey,
+    path
+}: {
+    survey: Survey
+    path: string
+}) => {
     const { editions } = survey
     const typeName = `${graphqlize(survey.id)}EditionID`
     return {
+        path,
         typeName,
         typeDef: `enum ${typeName} {
     ${editions.map((e: Edition) => e.id).join('\n    ')}
@@ -90,11 +101,21 @@ type StateOfJs2021Edition {
 }
 
 */
-export const generateEditionType = ({ survey, edition }: { survey: Survey; edition: Edition }) => {
+export const generateEditionType = ({
+    survey,
+    edition,
+    path
+}: {
+    survey: Survey
+    edition: Edition
+    path: string
+}) => {
     const typeName = `${graphqlize(edition.id)}Edition`
     return {
+        path,
         typeName,
         typeDef: `type ${typeName} {
+    _metadata: EditionMetadata
     ${
         edition.sections
             ? edition.sections
@@ -129,18 +150,20 @@ type Js2021UserInfoSection {
 export const generateSectionType = ({
     edition,
     section,
-    questions
+    questions,
+    path
 }: {
     edition: Edition
     section: Section
     questions: QuestionObject[]
+    path: string
 }) => {
     const typeName = `${graphqlize(edition.id)}${graphqlize(section.id)}Section`
     return {
+        path,
         typeName,
         typeDef: `type ${typeName} {
     ${questions
-        .filter((q: QuestionObject) => q.includeInApi !== false)
         .map((question: QuestionObject) => `${question.id}: ${question.fieldTypeName}`)
         .join('\n    ')}
 }`

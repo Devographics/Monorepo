@@ -5,10 +5,6 @@ import { Options } from '../options'
 
 export * from './fields'
 
-export type Survey = any
-export type Edition = any
-export type Section = any
-export type Question = any
 export type Template = any
 
 export type Facet =

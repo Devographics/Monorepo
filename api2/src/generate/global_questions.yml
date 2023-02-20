@@ -1,13 +1,13 @@
 # Demographics
 
 - id: country
-  path: user_info.country_alpha3
+  dbPath: user_info.country_alpha3
 
 - id: locale
-  path: user_info.locale
+  dbPath: user_info.locale
 
 - id: completion_stats
-  path: user_info.completion
+  dbPath: user_info.completion
 
 - id: age
   optionsTypeName: AgeRange
@@ -90,7 +90,7 @@
         average: 200000
 
 - id: source
-  path: user_info.source.normalized
+  dbPath: user_info.source.normalized
 
 - id: gender
   options:
@@ -121,7 +121,7 @@
       - id: not_listed
 
 - id: disability_status_others
-  path: user_info.disability_status.others.normalized
+  dbPath: user_info.disability_status.others.normalized
 
 - id: knowledge_score
-  path: user_info.knowledge_score
+  dbPath: user_info.knowledge_score

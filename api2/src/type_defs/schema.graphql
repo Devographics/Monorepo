@@ -9,6 +9,27 @@
 scalar JSON
 scalar JSONObject
 
+type SurveyMetadata {
+    id: String
+    name: String
+    domain: String
+}
+
+type EditionMetadata {
+    id: String
+    year: Int
+    status: Int
+
+    started_at: String
+    ended_at: String
+
+    questions_url: String
+    results_url: String
+    image_url: String
+    favicon_url: String
+    social_image_url: String
+}
+
 enum Facet {
     default
 

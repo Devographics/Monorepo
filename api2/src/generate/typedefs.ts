@@ -1,4 +1,3 @@
-import { Survey, Edition, Section, Question, Field, Option } from '../types'
 import {
     generateOptionType,
     generateEnumType,
@@ -10,7 +9,8 @@ import {
     generateFieldType,
     generateSurveyEditionsEnumType
 } from './graphql_templates'
-import { TypeObject } from './types'
+import { Survey, QuestionObject, TypeObject } from './types'
+import { getPath, getSectionQuestionObjects } from './helpers'
 
 /*
 
@@ -22,7 +22,7 @@ export const generateSurveysTypeObjects = async ({
     questionObjects
 }: {
     surveys: Survey[]
-    questionObjects: Question[]
+    questionObjects: QuestionObject[]
 }) => {
     let typeObjects = []
 
@@ -30,31 +30,39 @@ export const generateSurveysTypeObjects = async ({
     // const allQuestions: Question[] = []
 
     // type for all surveys
-    typeObjects.push(generateSurveysType({ surveys }))
+    let path = getPath({})
+    typeObjects.push(generateSurveysType({ surveys, path }))
 
     for (const survey of surveys) {
+        path = getPath({ survey })
         // type for a single kind of survey (state of js, state of css, etc.)
-        typeObjects.push(generateSurveyType({ survey }))
-        typeObjects.push(generateSurveyEditionsEnumType({ survey }))
+        typeObjects.push(generateSurveyType({ survey, path }))
+        typeObjects.push(generateSurveyEditionsEnumType({ survey, path }))
 
         for (const edition of survey.editions) {
+            path = getPath({ survey, edition })
             // type for all editions of a survey
-            typeObjects.push(generateEditionType({ survey, edition }))
+            typeObjects.push(generateEditionType({ survey, edition, path }))
 
             if (edition.sections) {
                 for (const section of edition.sections) {
+                    path = getPath({ survey, edition, section })
+
                     // make sure to get "rich" questions from questionObjects
                     // and not "raw" questions from edition.questions
-                    const sectionQuestionObjects = questionObjects.filter(
-                        q => q.sectionId === section.id && q.editions.includes(edition.surveyId)
-                    )
+                    const sectionQuestionObjects = getSectionQuestionObjects({
+                        section,
+                        edition,
+                        questionObjects
+                    })
 
                     // type for all sections of a survey edition
                     typeObjects.push(
                         generateSectionType({
                             edition,
                             section,
-                            questions: sectionQuestionObjects
+                            questions: sectionQuestionObjects,
+                            path
                         })
                     )
                 }
@@ -73,7 +81,7 @@ Generate typeDefs corresponding to all questions
 export const generateQuestionsTypeObjects = async ({
     questionObjects
 }: {
-    questionObjects: Question[]
+    questionObjects: QuestionObject[]
 }) => {
     const typeObjects: TypeObject[] = []
 

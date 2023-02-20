@@ -6,7 +6,7 @@ const isFreeformField = (id: string) => ['_others', '_freeform'].some(s => id.in
 const getSuffix = (id: string) => (isFreeformField(id) ? 'others.normalized' : 'choices')
 
 const defaultTemplateFunction = ({ question, section }: TemplateArguments) => ({
-    path: `${section.id}.${question.id}`
+    dbPath: `${section.id}.${question.id}`
 })
 
 const doNotInclude = () => ({
@@ -15,7 +15,7 @@ const doNotInclude = () => ({
 
 export const templates = {
     feature: ({ question }: TemplateArguments) => ({
-        path: `features.${question.id}.choices`,
+        dbPath: `features.${question.id}.choices`,
         options: FEATURES_OPTIONS.map(id => ({
             id
         })),
@@ -25,7 +25,7 @@ export const templates = {
         enumTypeName: 'FeatureExperienceID'
     }),
     tool: ({ question }: TemplateArguments) => ({
-        path: `tools.${question.id}.choices`,
+        dbPath: `tools.${question.id}.choices`,
         options: TOOLS_OPTIONS.map(id => ({
             id
         })),
@@ -35,19 +35,19 @@ export const templates = {
         enumTypeName: 'ToolExperienceID'
     }),
     multiple: ({ question, section }: TemplateArguments) => ({
-        path: `${section.id}.${question.id}.choices`
+        dbPath: `${section.id}.${question.id}.choices`
     }),
     single: ({ question, section }: TemplateArguments) => ({
-        path: `${section.id}.${question.id}.choices`
+        dbPath: `${section.id}.${question.id}.choices`
     }),
     others: ({ question, section }: TemplateArguments) => ({
-        path: `${section.id}.${question.id.replace('_others', '.others')}.normalized`
+        dbPath: `${section.id}.${question.id.replace('_others', '.others')}.normalized`
     }),
     happiness: ({ question, section }: TemplateArguments) => ({
-        path: `${section.id}.${question.id.replace('_happiness', '.happiness')}`
+        dbPath: `${section.id}.${question.id.replace('_happiness', '.happiness')}`
     }),
     project: ({ question, section }: TemplateArguments) => ({
-        path: `${section.id}.${question.id.replace('_prenormalized', '.others')}.normalized`
+        dbPath: `${section.id}.${question.id.replace('_prenormalized', '.others')}.normalized`
     }),
 
     opinion: defaultTemplateFunction,
@@ -64,12 +64,12 @@ export const templates = {
     help: doNotInclude
 
     // resources: {
-    //   path: (id:string) => `resources.${id}.${getSuffix(id)}`
+    //   dbPath:(id:string) => `resources.${id}.${getSuffix(id)}`
     // },
     // usage: {
-    //   path: (id:string) => `usage.${id}.${getSuffix(id)}`
+    //   dbPath:(id:string) => `usage.${id}.${getSuffix(id)}`
     // },
     // opinions: {
-    //   path: (id:string) => `opinions.${id}.${getSuffix(id)}`
+    //   dbPath:(id:string) => `opinions.${id}.${getSuffix(id)}`
     // }
 }

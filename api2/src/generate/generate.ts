@@ -1,31 +1,32 @@
-import { Survey, Edition, Section, Question, Field, Option } from '../types'
+import { Survey, Edition, Section, Question, QuestionObject, Option } from './types'
 import { logToFile } from '../debug'
-import { loadOrGetSurveys } from '../surveys'
-import { graphqlize, getGlobalQuestions, applyQuestionTemplate, mergeOptions } from './helpers'
+import {
+    graphqlize,
+    getGlobalQuestions,
+    applyQuestionTemplate,
+    mergeOptions,
+    getPath
+} from './helpers'
 import { generateSurveysTypeObjects, generateQuestionsTypeObjects } from './typedefs'
+import uniq from 'lodash/uniq.js'
 
-export const generateTypeDefs = async () => {
-    const surveys = await loadOrGetSurveys()
-
-    const questionObjects = getQuestionObjects({ surveys })
+export const generateTypeObjects = async ({
+    surveys,
+    questionObjects
+}: {
+    surveys: Survey[]
+    questionObjects: QuestionObject[]
+}) => {
     await logToFile('questionObjects.yml', questionObjects, { mode: 'overwrite' })
-
     const surveysTypeObjects = await generateSurveysTypeObjects({
         surveys,
         questionObjects
     })
-    const surveysTypeDefs = surveysTypeObjects.map(o => o.typeDef)
-
     const questionsTypeObjects = await generateQuestionsTypeObjects({
         questionObjects
     })
-    const questionTypeDefs = questionsTypeObjects.map(o => o.typeDef)
-
-    const allTypeDefs = [...surveysTypeDefs, ...questionTypeDefs]
-    const allTypeDefsString = allTypeDefs.join('\n\n')
-    await logToFile('typeDefs.graphql', allTypeDefsString, { mode: 'overwrite' })
-
-    return allTypeDefsString
+    const allTypeObjects = [...surveysTypeObjects, ...questionsTypeObjects]
+    return allTypeObjects
 }
 
 /*
@@ -44,10 +45,10 @@ at the level of the entire list.
 
 */
 export const getQuestionObjects = ({ surveys }: { surveys: Survey[] }) => {
-    let allQuestionObjects: Question[] = []
+    let allQuestionObjects: QuestionObject[] = []
 
     for (const survey of surveys) {
-        const surveyQuestionObjects: Question[] = []
+        const surveyQuestionObjects: QuestionObject[] = []
 
         for (const edition of survey.editions) {
             if (edition.sections) {
@@ -66,20 +67,8 @@ export const getQuestionObjects = ({ surveys }: { surveys: Survey[] }) => {
                             surveyQuestionObjects[existingQuestionObjectIndex]
 
                         if (existingQuestionObject) {
-                            const newOptions = mergeOptions(
-                                existingQuestionObject.options,
-                                questionObject.options
-                            )
-                            const editions = [
-                                ...existingQuestionObject.editions,
-                                ...questionObject.editions
-                            ]
-                            surveyQuestionObjects[existingQuestionObjectIndex] = {
-                                ...existingQuestionObject,
-                                ...questionObject,
-                                editions,
-                                ...(newOptions ? { options: newOptions } : {})
-                            }
+                            surveyQuestionObjects[existingQuestionObjectIndex] =
+                                mergeQuestionObjects(existingQuestionObject, questionObject)
                         } else {
                             surveyQuestionObjects.push(questionObject)
                         }
@@ -96,11 +85,10 @@ export const getQuestionObjects = ({ surveys }: { surveys: Survey[] }) => {
 
 Take a question from the outline and
 
-1) initialize questioObject (add editions, etc.)
-2) add types
-3) extend it with global question definition if it exists
-4) apply template if it exists
-5) add editions field to options if they exist
+1) initialize questioObject (add editions, etc.) and add types
+2) extend it with global question definition if it exists
+3) apply template if it exists
+4) add editions field to options if they exist
 
 */
 export const getQuestionObject = ({
@@ -116,22 +104,21 @@ export const getQuestionObject = ({
 }) => {
     const editions = [edition.id]
 
-    // 1. initialize questionObject
-    let questionObject: Question = {
-        ...question,
-        sectionId: section.id,
-        surveyId: survey.slug,
-        editions
-    }
+    // 1. initialize questionObject and add types
+    const fieldTypeName = graphqlize(survey.id) + graphqlize(question.id)
 
-    // 2. add types
-    const fieldTypeName = graphqlize(survey.slug) + graphqlize(question.id)
-    questionObject = {
+    let questionObject: QuestionObject = {
+        ...question,
+
         fieldTypeName,
         optionTypeName: fieldTypeName + 'Option',
         enumTypeName: fieldTypeName + 'ID',
         filterTypeName: fieldTypeName + 'Filter',
-        ...questionObject
+
+        sectionIds: [section.id], // a question can belong to more than one section in different editions
+        surveyId: survey.id,
+        editions,
+        paths: [getPath({ survey, edition, section, question })]
     }
 
     // 2. if a global question definition exists, extend question with it
@@ -157,4 +144,23 @@ export const getQuestionObject = ({
     }
 
     return questionObject
+}
+
+export const mergeQuestionObjects = (q1: QuestionObject, q2: QuestionObject) => {
+    const newOptions = q1.options && q2.options && mergeOptions(q1.options, q2.options)
+
+    const editions = uniq([...(q1?.editions || []), ...(q2?.editions || [])])
+
+    const sectionIds = uniq([...(q1.sectionIds || []), ...(q2.sectionIds || [])])
+
+    const paths = uniq([...(q1.paths || []), ...(q2.paths || [])])
+
+    return {
+        ...q1,
+        ...q2,
+        sectionIds,
+        editions,
+        paths,
+        ...(newOptions ? { options: newOptions } : {})
+    }
 }
