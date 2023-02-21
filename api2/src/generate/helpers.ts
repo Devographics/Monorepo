@@ -77,12 +77,15 @@ export const applyQuestionTemplate = (options: {
     const { survey, edition, section, question } = options
     const template = question.template || section.template
 
-    const templateFunction = templates[template]
-    if (templateFunction) {
-        return { ...question, template, ...templateFunction(options) }
-    } else {
-        console.log(`// template ${template} not found!`)
-        return { ...question, template }
+    if (template) {
+        const templateFunction = templates[template]
+        if (templateFunction) {
+            return { ...question, template, ...templateFunction(options) }
+        } else {
+            console.log(`// template ${template} not found!`)
+            console.log(question)
+            return { ...question, template }
+        }
     }
 }
 

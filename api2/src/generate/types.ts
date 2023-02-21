@@ -23,6 +23,7 @@ export type Edition = {
     id: string
     sections: Section[]
     apiSections: ApiSection[]
+    year: number
 }
 
 export type Section = {
@@ -56,6 +57,9 @@ export interface QuestionObject extends Question {
     editions?: string[]
 
     surveyId: string
+    typeDef?: string
+
+    resolverMap: any
 
     isGlobal?: boolean
     fieldTypeName: string

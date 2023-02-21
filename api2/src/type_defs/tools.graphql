@@ -1,0 +1,29 @@
+# """
+# Contains various rankings for a set of tools.
+# """
+# type ToolsRankings {
+#     ids: [String]!
+#     years: [Int]
+#     experience(filters: Filters): [ToolExperienceRanking]
+# }
+
+"""
+Used to represent the ranking of a tool compared to others
+for awareness/interest and stisfaction.
+"""
+type ToolExperienceRanking {
+    id: String
+    entity: Entity
+    awareness: [ToolExperienceRankingYearMetric]
+    usage: [ToolExperienceRankingYearMetric]
+    interest: [ToolExperienceRankingYearMetric]
+    satisfaction: [ToolExperienceRankingYearMetric]
+}
+
+type ToolExperienceRankingYearMetric {
+    year: Int
+    rank: Int
+    percentage_question: Float
+    percentage_survey: Float
+    percentage_facet: Float
+}

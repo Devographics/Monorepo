@@ -108,10 +108,8 @@ export const generateResolvers = async ({
                     }
 
                     for (const questionObject of sectionQuestionObjects) {
-                        resolvers[questionObject.fieldTypeName] = {
-                            all_years: getYearsResolver(),
-                            year: getYearResolver()
-                        }
+                        resolvers[questionObject.fieldTypeName] =
+                            questionObject.resolverMap || defaultResolverMap
                     }
                 }
             }
@@ -192,7 +190,7 @@ const getQuestionResolver =
         }
     }
 
-const getYearsResolver = (): ResolverType => async (root, args, context, info) => {
+export const yearsResolver: ResolverType = async (root, args, context, info) => {
     console.log('// getAllYearsResolver')
     const { survey, edition, section, question, computeOptions } = root
     const { year } = args
@@ -218,9 +216,13 @@ const getYearsResolver = (): ResolverType => async (root, args, context, info) =
     })
 }
 
-const getYearResolver = (): ResolverType => async (root, args, context, info) => {
+export const yearResolver: ResolverType = async (root, args, context, info) => {
     console.log('// getYearResolver')
-    const allYearsResolver = getYearsResolver()
-    const result = await allYearsResolver(root, args, context, info)
+    const result = await yearsResolver(root, args, context, info)
     return result[0]
+}
+
+export const defaultResolverMap = {
+    all_years: yearsResolver,
+    year: yearResolver
 }

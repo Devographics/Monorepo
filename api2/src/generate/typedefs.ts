@@ -93,12 +93,18 @@ export const generateQuestionsTypeObjects = async ({
     const typeObjects: TypeObject[] = []
 
     for (const question of questionObjects) {
-        const { options, fieldTypeName, optionTypeName, enumTypeName, filterTypeName } = question
+        const { options, fieldTypeName, optionTypeName, enumTypeName, filterTypeName, typeDef } =
+            question
 
-        if (options) {
+        if (typeDef) {
+            typeObjects.push({ typeName: fieldTypeName, typeDef, typeType: 'field' })
+        } else {
             if (!typeObjects.find(t => t.typeName === fieldTypeName)) {
                 typeObjects.push(generateFieldType({ question }))
             }
+        }
+
+        if (options) {
             if (!typeObjects.find(t => t.typeName === filterTypeName)) {
                 const filterType = generateFilterType({ question })
                 filterType && typeObjects.push(filterType)
@@ -110,11 +116,6 @@ export const generateQuestionsTypeObjects = async ({
             if (!typeObjects.find(t => t.typeName === enumTypeName)) {
                 const enumType = generateEnumType({ question })
                 enumType && typeObjects.push(enumType)
-            }
-        } else {
-            // no options
-            if (!typeObjects.find(t => t.typeName === fieldTypeName)) {
-                typeObjects.push(generateFieldType({ question }))
             }
         }
     }

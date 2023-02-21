@@ -25,7 +25,7 @@ export const logToFile = async (fileName: string, object: any, options: any = {}
         contents = object
     } else {
         if (fileName.includes('.yml') || fileName.includes('.yaml')) {
-            contents = yaml.dump(object, { noRefs: true })
+            contents = yaml.dump(object, { noRefs: true, skipInvalid: true })
         } else {
             contents = JSON.stringify(object, null, 2)
         }

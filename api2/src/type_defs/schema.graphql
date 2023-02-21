@@ -5,6 +5,7 @@
 #import "./mdn.graphql"
 #import "./twitter.graphql"
 #import "./github.graphql"
+#import "./tools.graphql"
 
 scalar JSON
 scalar JSONObject
