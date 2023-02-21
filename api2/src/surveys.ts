@@ -78,6 +78,10 @@ export const loadFromGitHub = async () => {
                             // found config.yml for edition
                             const editionQuestionsYaml = await getGitHubYamlFile(file3.download_url)
                             edition = { ...edition, sections: editionQuestionsYaml }
+                        } else if (file3.name === 'api.yml') {
+                            // found api.yml for edition
+                            const editionApiYaml = await getGitHubYamlFile(file3.download_url)
+                            edition = { ...edition, apiSections: editionApiYaml }
                         }
                     }
                     editions.push(edition)
@@ -134,6 +138,14 @@ export const loadLocally = async () => {
                         )
                         const editionQuestionsYaml: any = yaml.load(editionQuestionsContents)
                         edition.sections = editionQuestionsYaml
+                    } catch (error) {}
+                    try {
+                        const editionApiContents = await readFile(
+                            editionDirPath + '/api.yml',
+                            'utf8'
+                        )
+                        const editionApiYaml: any = yaml.load(editionApiContents)
+                        edition.apiSections = editionApiYaml
                     } catch (error) {}
                     editions.push(edition)
                 }

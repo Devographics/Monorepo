@@ -84,6 +84,7 @@ export const generateResolvers = async ({
                     // make sure to get "rich" questions from questionObjects
                     // and not "raw" questions from edition.questions
                     const sectionQuestionObjects = getSectionQuestionObjects({
+                        survey,
                         section,
                         edition,
                         questionObjects

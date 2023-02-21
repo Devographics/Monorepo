@@ -59,6 +59,30 @@ export const templates = {
     country: defaultTemplateFunction,
     top_n: defaultTemplateFunction,
 
+    locale: () => ({ id: 'locale' }),
+    source: () => ({ id: 'source' }),
+    completion_stats: () => ({ id: 'completion_stats' }),
+
+    tools_arrows: () => ({ id: 'tools_arrows' }),
+    tier_list: () => ({ id: 'tier_list' }),
+    scatterplot_overview: () => ({ id: 'scatterplot_overview' }),
+
+    features_overview: () => ({ id: 'features_overview' }),
+    knowledge_score: () => ({ id: 'knowledge_score' }),
+
+    tools_experience_linechart: ({ section }: TemplateArguments) => ({
+        id: `${section.id}_tools_experience_linechart`
+    }),
+    tools_experience_ranking: ({ section }: TemplateArguments) => ({
+        id: `${section.id}_tools_experience_ranking`
+    }),
+    tools_section_streams: ({ section }: TemplateArguments) => ({
+        id: `${section.id}_tools_section_streams`
+    }),
+    tools_experience_marimekko: ({ section }: TemplateArguments) => ({
+        id: `${section.id}_tools_experience_marimekko`
+    }),
+
     email2: doNotInclude,
     receive_notifications: doNotInclude,
     help: doNotInclude

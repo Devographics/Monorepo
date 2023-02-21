@@ -21,7 +21,7 @@ export async function computeParticipationByYear({
         .aggregate([
             {
                 $match: {
-                    survey: survey.survey
+                    survey: survey.id
                 }
             },
             {
@@ -50,7 +50,6 @@ export async function getParticipationByYearMap(
     [key: number]: number
 }> {
     const buckets = await computeParticipationByYear({ context, survey })
-
     return buckets.reduce((acc, bucket) => {
         return {
             ...acc,

@@ -1,5 +1,5 @@
 import { Option } from '../types'
-import { graphqlize } from './helpers'
+import { graphqlize, mergeSections } from './helpers'
 import { Survey, Edition, Section, QuestionObject, TypeObject } from './types'
 
 /*
@@ -111,14 +111,16 @@ export const generateEditionType = ({
     path: string
 }) => {
     const typeName = `${graphqlize(edition.id)}Edition`
+    const allSections = mergeSections(edition.sections, edition.apiSections)
+
     return {
         path,
         typeName,
         typeDef: `type ${typeName} {
     _metadata: EditionMetadata
     ${
-        edition.sections
-            ? edition.sections
+        allSections.length > 0
+            ? allSections
                   .map(
                       (section: Section) =>
                           `${section.id}: ${graphqlize(edition.id)}${graphqlize(section.id)}Section`

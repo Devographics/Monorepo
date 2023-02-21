@@ -12,7 +12,8 @@ import {
     generateFacetsType
 } from './graphql_templates'
 import { Survey, QuestionObject, TypeObject } from './types'
-import { getPath, getSectionQuestionObjects } from './helpers'
+import { getPath, getSectionQuestionObjects, mergeSections } from './helpers'
+import isEmpty from 'lodash/isEmpty.js'
 
 /*
 
@@ -46,13 +47,16 @@ export const generateSurveysTypeObjects = async ({
             // type for all editions of a survey
             typeObjects.push(generateEditionType({ survey, edition, path }))
 
-            if (edition.sections) {
-                for (const section of edition.sections) {
+            const allSections = mergeSections(edition.sections, edition.apiSections)
+
+            if (!isEmpty(allSections)) {
+                for (const section of allSections) {
                     path = getPath({ survey, edition, section })
 
                     // make sure to get "rich" questions from questionObjects
                     // and not "raw" questions from edition.questions
                     const sectionQuestionObjects = getSectionQuestionObjects({
+                        survey,
                         section,
                         edition,
                         questionObjects

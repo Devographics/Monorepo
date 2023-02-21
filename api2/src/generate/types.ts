@@ -22,11 +22,22 @@ export type Survey = {
 export type Edition = {
     id: string
     sections: Section[]
+    apiSections: ApiSection[]
 }
 
 export type Section = {
     id: string
     questions: Question[]
+    template?: string
+}
+
+export type ApiSection = {
+    id: string
+    questions: ApiQuestion[]
+}
+
+export type ApiQuestion = {
+    id: string
     template?: string
 }
 
@@ -39,7 +50,7 @@ export type Question = {
 
 export interface QuestionObject extends Question {
     sectionIds: string[]
-    dbPath?: string
+    dbPath: string
     includeInApi?: boolean
 
     editions?: string[]

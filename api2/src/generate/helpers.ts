@@ -1,13 +1,16 @@
-import { Survey, Edition, Section, Question, QuestionObject, Option } from './types'
+import { Survey, Edition, Section, ApiSection, Question, QuestionObject, Option } from './types'
 import globalQuestions from './global_questions.yml'
 import { templates } from './question_templates'
 import uniq from 'lodash/uniq.js'
+import { getQuestionObject } from './generate'
 
 export const graphqlize = (str: string) => capitalizeFirstLetter(snakeToCamel(str))
 
-export const capitalizeFirstLetter = (str: string) => str.charAt(0).toUpperCase() + str.slice(1)
+export const capitalizeFirstLetter = (str: string) =>
+    str && str.charAt(0).toUpperCase() + str.slice(1)
 
 export const snakeToCamel = (str: string) =>
+    str &&
     str
         .toLowerCase()
         .replace(/([-_][a-z])/g, group => group.toUpperCase().replace('-', '').replace('_', ''))
@@ -107,15 +110,17 @@ export const getPath = ({
 }
 
 export const getSectionQuestionObjects = ({
+    survey,
     section,
     edition,
     questionObjects
 }: {
+    survey: Survey
     section: Section
     edition: Edition
     questionObjects: QuestionObject[]
 }) => {
-    return questionObjects.filter(
+    const results = questionObjects.filter(
         q =>
             q.sectionIds &&
             q.sectionIds.includes(section.id) &&
@@ -123,4 +128,52 @@ export const getSectionQuestionObjects = ({
             q.editions.includes(edition.id) &&
             q.includeInApi !== false
     )
+    return results
+}
+
+/*
+
+Merge
+
+[
+    { id: user_info, questions: [a, b, c]}
+]
+
+And
+
+
+[
+    { id: user_info, questions: [d, e, f]},
+    { id: resources, questions: [x, y, z]}
+]
+
+Into
+
+
+[
+    { id: user_info, questions: [a, b, c, d, e, f]}
+    { id: resources, questions: [x, y, z]}
+]
+
+*/
+export const mergeSections = (
+    sections1: Section[] | ApiSection[] = [],
+    sections2: Section[] | ApiSection[] = []
+) => {
+    const sections = [...sections1]
+    for (const section of sections2) {
+        const existingSectionIndex = sections.findIndex(s => s.id === section.id)
+        const existingSection = sections[existingSectionIndex]
+        if (existingSection) {
+            const mergedSection = {
+                ...existingSection,
+                ...section,
+                questions: [...existingSection.questions, ...section.questions]
+            }
+            sections[existingSectionIndex] = mergedSection
+        } else {
+            sections.push(section)
+        }
+    }
+    return sections
 }

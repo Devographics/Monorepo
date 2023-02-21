@@ -5,7 +5,8 @@ import {
     getGlobalQuestions,
     applyQuestionTemplate,
     mergeOptions,
-    getPath
+    getPath,
+    mergeSections
 } from './helpers'
 import {
     generateSurveysTypeObjects,
@@ -69,8 +70,10 @@ export const getQuestionObjects = ({ surveys }: { surveys: Survey[] }) => {
         const surveyQuestionObjects: QuestionObject[] = []
 
         for (const edition of survey.editions) {
-            if (edition.sections) {
-                for (const section of edition.sections) {
+            const allSections = mergeSections(edition.sections, edition.apiSections)
+
+            if (allSections) {
+                for (const section of allSections) {
                     for (const question of section.questions) {
                         const questionObject = getQuestionObject({
                             survey,
@@ -101,12 +104,14 @@ export const getQuestionObjects = ({ surveys }: { surveys: Survey[] }) => {
 
 /*
 
-Take a question from the outline and
+Take a question from the outline and convert it into a "rich" question object
 
-1) initialize questioObject (add editions, etc.) and add types
-2) extend it with global question definition if it exists
-3) apply template if it exists
-4) add editions field to options if they exist
+Override priority (lower = higher priority): 
+
+- defaults
+- template output
+- global definition
+- outline definition
 
 */
 export const getQuestionObject = ({
@@ -120,43 +125,47 @@ export const getQuestionObject = ({
     section: Section
     question: Question
 }) => {
-    const editions = [edition.id]
+    // apply template
+    const templateObject = applyQuestionTemplate({
+        survey,
+        edition,
+        section,
+        question
+    })
 
-    // 1. initialize questionObject and add types
-    const fieldTypeName = graphqlize(survey.id) + graphqlize(question.id)
+    const questionId = question.id || templateObject.id
+    // initialize defaults
+    const fieldTypeName = graphqlize(survey.id) + graphqlize(questionId)
 
-    let questionObject: QuestionObject = {
-        ...question,
+    const defaultObject = {
         fieldTypeName,
         sectionIds: [section.id], // a question can belong to more than one section in different editions
         surveyId: survey.id,
-        editions
+        editions: [edition.id],
+        ...(question.options
+            ? {
+                  optionTypeName: fieldTypeName + 'Option',
+                  enumTypeName: fieldTypeName + 'ID',
+                  filterTypeName: fieldTypeName + 'Filter'
+              }
+            : {})
     }
 
-    if (question.options) {
-        questionObject = {
-            ...questionObject,
-            optionTypeName: fieldTypeName + 'Option',
-            enumTypeName: fieldTypeName + 'ID',
-            filterTypeName: fieldTypeName + 'Filter'
-        }
-    }
-
-    // 2. if a global question definition exists, extend question with it
+    // if a global question definition exists, extend question with it
     const globalQuestions = getGlobalQuestions()
-    const globalQuestionDefinition = globalQuestions.find(q => q.id === question.id)
-    if (globalQuestionDefinition) {
-        questionObject = {
-            ...questionObject,
-            ...globalQuestionDefinition,
-            isGlobal: true
-        }
+    const globalQuestionDefinition = globalQuestions.find(q => q.id === questionId)
+    const globalObject = globalQuestionDefinition
+        ? { ...globalQuestionDefinition, isGlobal: true }
+        : {}
+
+    const questionObject = {
+        ...defaultObject,
+        ...templateObject,
+        ...globalObject,
+        ...question
     }
 
-    // 3. apply question template
-    questionObject = applyQuestionTemplate({ survey, edition, section, question: questionObject })
-
-    // 4. add editions field to options
+    // add editions field to options
     if (questionObject.options) {
         questionObject.options = questionObject.options.map((o: Option) => ({
             ...o,

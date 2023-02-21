@@ -83,10 +83,13 @@ export async function genericComputeFunction({
     console.log('// facetValues')
     console.log(facetValues)
 
-    const match: any = {
+    let match: any = {
         survey: survey.id,
-        [dbPath]: { $nin: [null, '', [], {}] },
-        ...generateFiltersQuery({ filters, dbPath })
+        [dbPath]: { $nin: [null, '', [], {}] }
+    }
+    if (filters) {
+        const filtersQuery = await generateFiltersQuery({ filters, dbPath })
+        match = { ...match, ...filtersQuery }
     }
     // if year is passed, restrict aggregation to specific year
     if (year) {
@@ -111,7 +114,7 @@ export async function genericComputeFunction({
         survey: survey.id
     }
 
-    const pipeline = getGenericPipeline(pipelineProps)
+    const pipeline = await getGenericPipeline(pipelineProps)
 
     let results = (await collection.aggregate(pipeline).toArray()) as ResultsByYear[]
 

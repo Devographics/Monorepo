@@ -15,15 +15,19 @@ export type PipelineProps = {
 
 // generate an aggregation pipeline for all years, or
 // optionally restrict it to a specific year of data
-export const getGenericPipeline = (pipelineProps: PipelineProps) => {
+export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
     const { survey, filters, dbPath, facet, questionId, year, limit, cutoff = 1 } = pipelineProps
 
     const facetPath = facet && getFacetPath(facet)
 
-    const match: any = {
+    let match: any = {
         survey,
-        [dbPath]: { $nin: [null, '', [], {}] },
-        ...generateFiltersQuery({ filters, dbPath })
+        [dbPath]: { $nin: [null, '', [], {}] }
+    }
+
+    if (filters) {
+        const filtersQuery = await generateFiltersQuery({ filters, dbPath })
+        match = { ...match, ...filtersQuery }
     }
 
     // if year is passed, restrict aggregation to specific year
