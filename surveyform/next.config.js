@@ -12,7 +12,6 @@ const { withSentryConfig } = require("@sentry/nextjs");
 
 // @see https://nextjs.org/docs/api-reference/next.config.js/runtime-configuration
 const moduleExports = (phase, { defaultConfig }) => {
-  console.log("defaultConfig", defaultConfig);
 
   /**
    * @type {import('next/dist/next-server/server/config').NextConfig}
