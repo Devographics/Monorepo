@@ -6,6 +6,7 @@
 #import "./twitter.graphql"
 #import "./github.graphql"
 #import "./tools.graphql"
+#import "./features.graphql"
 #import "./comments.graphql"
 
 scalar JSON

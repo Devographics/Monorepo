@@ -93,27 +93,36 @@ export const generateQuestionsTypeObjects = async ({
     const typeObjects: TypeObject[] = []
 
     for (const question of questionObjects) {
-        const { options, fieldTypeName, optionTypeName, enumTypeName, filterTypeName, typeDef } =
-            question
+        const {
+            options,
+            fieldTypeName,
+            optionTypeName,
+            autogenerateOptionType = true,
+            enumTypeName,
+            autogenerateEnumType = true,
+            filterTypeName,
+            autogenerateFilterType = true,
+            typeDef
+        } = question
 
-        if (typeDef) {
-            typeObjects.push({ typeName: fieldTypeName, typeDef, typeType: 'field' })
-        } else {
-            if (!typeObjects.find(t => t.typeName === fieldTypeName)) {
+        if (!typeObjects.find(t => t.typeName === fieldTypeName)) {
+            if (typeDef) {
+                typeObjects.push({ typeName: fieldTypeName, typeDef, typeType: 'field' })
+            } else {
                 typeObjects.push(generateFieldType({ question }))
             }
         }
 
         if (options) {
-            if (!typeObjects.find(t => t.typeName === filterTypeName)) {
+            if (autogenerateFilterType && !typeObjects.find(t => t.typeName === filterTypeName)) {
                 const filterType = generateFilterType({ question })
                 filterType && typeObjects.push(filterType)
             }
-            if (!typeObjects.find(t => t.typeName === optionTypeName)) {
+            if (autogenerateOptionType && !typeObjects.find(t => t.typeName === optionTypeName)) {
                 const optionType = generateOptionType({ question })
                 optionType && typeObjects.push(optionType)
             }
-            if (!typeObjects.find(t => t.typeName === enumTypeName)) {
+            if (autogenerateEnumType && !typeObjects.find(t => t.typeName === enumTypeName)) {
                 const enumType = generateEnumType({ question })
                 enumType && typeObjects.push(enumType)
             }

@@ -18,7 +18,7 @@ export const section_tools: TemplateFunction = ({ survey, edition, section }) =>
     years: [Int]
     data(filters: ${getFiltersTypeName(survey.id)},  options: Options, facet: ${getFacetsTypeName(
             survey.id
-        )}): [Tool]
+        )}): [${graphqlize(survey.id)}Tool]
 }`,
         resolverMap: getResolverMap({ survey, items })
     }

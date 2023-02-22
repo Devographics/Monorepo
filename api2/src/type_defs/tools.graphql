@@ -27,3 +27,17 @@ type ToolExperienceRankingYearMetric {
     percentage_survey: Float
     percentage_facet: Float
 }
+
+input ToolFilters {
+    eq: ToolExperienceID
+    in: [ToolExperienceID]
+    nin: [ToolExperienceID]
+}
+
+enum ToolExperienceID {
+    would_use
+    would_not_use
+    interested
+    not_interested
+    never_heard
+}
