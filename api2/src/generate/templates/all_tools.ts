@@ -1,22 +1,14 @@
 import { QuestionObject, TemplateFunction } from '../types'
-import { graphqlize } from '../helpers'
+import { graphqlize, getSectionItems } from '../helpers'
 import { getFiltersTypeName, getFacetsTypeName } from '../graphql_templates'
-import { getQuestionObject } from '../generate'
+import { getResolverMap } from './all_features'
 
 export const all_tools: TemplateFunction = ({ survey, edition, section }) => {
-    const fieldTypeName = `${graphqlize(survey.id)}${graphqlize(section.id)}AllItems`
-    let editionTools: QuestionObject[] = []
-    for (const section of edition.sections.filter(s => s.template === 'tool')) {
-        // in any given section, the tools will be the questions which don't have a template defined
-        editionTools = [
-            ...editionTools,
-            ...section.questions
-                .filter(q => typeof q.template === 'undefined')
-                .map(question => getQuestionObject({ survey, edition, section, question }))
-        ]
+    const fieldTypeName = `${graphqlize(survey.id)}${graphqlize(edition.id)}AllItems`
+    let items: QuestionObject[] = []
+    for (const section of edition.sections.filter(s => s.template === 'feature')) {
+        items = [...items, ...getSectionItems({ survey, edition, section })]
     }
-    console.log('// editionTools')
-    console.log(editionTools.map(t => t.id))
     return {
         id: `all_items`,
         fieldTypeName,
@@ -27,17 +19,6 @@ export const all_tools: TemplateFunction = ({ survey, edition, section }) => {
             survey.id
         )}): [Tool]
 }`,
-        resolverMap: {
-            data: async (parent, args, context, info) => {
-                return editionTools.map(question => ({ ...parent, question }))
-            },
-            ids: () => {
-                console.log('// ids')
-                return editionTools.map(q => q.id)
-            },
-            years: () => {
-                return survey.editions.map(e => e.year)
-            }
-        }
+        resolverMap: getResolverMap({ survey, items })
     }
 }

@@ -180,3 +180,17 @@ export const mergeSections = (
     }
     return sections
 }
+
+// in any given section, the features will be the questions which don't have a template defined
+export const getSectionItems = ({
+    survey,
+    edition,
+    section
+}: {
+    survey: Survey
+    edition: Edition
+    section: Section
+}) =>
+    section.questions
+        .filter(q => typeof q.template === 'undefined')
+        .map(question => getQuestionObject({ survey, edition, section, question }))

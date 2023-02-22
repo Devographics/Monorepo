@@ -1,3 +1,5 @@
+// note: not currently exposed
+
 import { TemplateFunction } from '../types'
 import { graphqlize, getSectionItems } from '../helpers'
 import { getFiltersTypeName, getFacetsTypeName } from '../graphql_templates'
@@ -6,8 +8,7 @@ import { getResolverMap } from './all_features'
 export const section_tools: TemplateFunction = ({ survey, edition, section }) => {
     const fieldTypeName = `${graphqlize(survey.id)}${graphqlize(edition.id)}${graphqlize(
         section.id
-    )}AllTools`
-
+    )}AllFeatures`
     const items = getSectionItems({ survey, edition, section })
 
     return {
@@ -18,7 +19,7 @@ export const section_tools: TemplateFunction = ({ survey, edition, section }) =>
     years: [Int]
     data(filters: ${getFiltersTypeName(survey.id)},  options: Options, facet: ${getFacetsTypeName(
             survey.id
-        )}): [Tool]
+        )}): [Feature]
 }`,
         resolverMap: getResolverMap({ survey, items })
     }
