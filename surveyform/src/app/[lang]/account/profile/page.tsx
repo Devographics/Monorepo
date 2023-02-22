@@ -15,7 +15,7 @@ const Profile = () => {
           <FormattedMessage id="accounts.logged_in_as_guest" />
         )}
       </p>
-      <UserResponses />
+      {user.authMode !== "anonymous" && <UserResponses />}
       <p>
         <FormattedMessage id="accounts.questions" />
       </p>
