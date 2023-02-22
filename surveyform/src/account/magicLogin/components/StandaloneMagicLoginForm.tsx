@@ -5,7 +5,6 @@ import { useIntlContext } from "@devographics/react-i18n";
 import { sendMagicLoginEmail } from "../lib/sendMagicLoginEmail";
 import { useUser } from "~/account/user/hooks";
 import { useSearchParams } from "next/navigation";
-console.log("USE", useSearchParams);
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { FormComponentEmail } from "./FormComponentEmail";
 import { Button } from "~/core/components/ui/Button";
