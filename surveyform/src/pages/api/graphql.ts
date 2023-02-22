@@ -17,6 +17,7 @@ import {
 } from "~/core/server/graphql";
 import { connectToAppDbMiddleware } from "~/lib/server/middlewares/mongoAppConnection";
 import { getServerModels } from "~/_vulcan/models.index.server";
+import { connectToRedisMiddleware } from "~/lib/server/redis";
 
 // Temporary resolver for "currentUser", for faster migration
 const currentUserTypeDefs = `type Query { 
@@ -115,6 +116,7 @@ app.use(gqlPath, cors(corsOptions));
 // init the db
 // TODO: we should probably use the "connectToAppDbMiddleware"?
 app.use(gqlPath, connectToAppDbMiddleware);
+app.use(gqlPath, connectToRedisMiddleware);
 
 let serverPromise: Promise<void> | undefined = undefined
 app.use(gqlPath, async function (req, res, next) {

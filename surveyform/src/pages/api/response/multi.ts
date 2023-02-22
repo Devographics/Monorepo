@@ -4,8 +4,12 @@ import gql from "graphql-tag"
 import { serverConfig } from '~/config/server'
 import { print } from 'graphql'
 import { ResponseDocument, SurveyEdition } from '@devographics/core-models'
+import { connectToAppDb } from '~/lib/server/mongoose/connection'
+import { connectToRedis } from '~/lib/server/redis'
 
 export default async function responseHandler(req: NextApiRequest, res: NextApiResponse) {
+  await connectToAppDb()
+  connectToRedis()
   // TODO: this code used to be a client-side graphql query
   // we reuse the same call temporarily to facilitate moving out of graphql
   const headers = {

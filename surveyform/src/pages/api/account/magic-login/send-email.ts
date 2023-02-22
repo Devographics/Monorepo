@@ -22,6 +22,7 @@ const checkBody = (req, res, next) => {
 
 // Prevent spam
 import rateLimit from "express-rate-limit";
+import { connectToRedisMiddleware } from "~/lib/server/redis";
 const limiter = rateLimit({
   windowMs: 10 * 60 * 1000, // 10 minutes
   max: 10, // 10 request max for a key
@@ -40,10 +41,12 @@ interface MagicLoginSendEmailReqBody {
 }
 // NOTE: adding NextApiRequest, NextApiResponse is required to get the right typings in next-connect
 // this is the normal behaviour
+// TODO: get rid of nextConnect if possible
 const login = nextConnect<NextApiRequest, NextApiResponse>().post(
   checkBody,
   limiter,
   connectToAppDbMiddleware,
+  connectToRedisMiddleware,
   magicLinkStrategy.send
 );
 

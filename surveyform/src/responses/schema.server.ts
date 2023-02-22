@@ -9,7 +9,7 @@ import { extendSchemaServer, ResponseDocument } from "@devographics/core-models"
 
 import { nanoid } from "nanoid";
 import { ApiContext } from "~/lib/server/context";
-import { fetchSurveyFromId, fetchSurveysList } from "@devographics/core-models/server";
+import { fetchSurveyFromId, fetchSurveysList, initRedis } from "@devographics/core-models/server";
 import { SurveyEditionDescription } from "@devographics/core-models";
 
 const getSurveyDescriptionFromResponse = async (response: ResponseDocument): Promise<SurveyEditionDescription | undefined> => {

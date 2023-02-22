@@ -10,13 +10,13 @@ import {
   fetchLocaleStrings,
   i18nCommonContexts,
 } from "~/i18n/server/fetchLocalesRedis";
-//import debug from "debug";
-const debugRootLayout = console.debug; //debug("dgs:rootlayout");
 
 //*** I18n redirections
 // @see https://nextjs.org/docs/advanced-features/i18n-routing
 //import { locales } from "~/i18n/data/locales";
 import { notFound } from "next/navigation";
+import { initRedis } from "@devographics/core-models/server";
+import { serverConfig } from "~/config/server";
 
 // TODO: not yet compatible with having dynamic pages down the tree
 // we may have to call generateStaticParams in each static page instead
@@ -34,6 +34,8 @@ export default async function RootLayout({
     lang: string;
   };
 }) {
+  // TODO: it seems we need to call this initialization code on all relevant pages/layouts
+  initRedis(serverConfig.redisUrl);
   // locale fetching
   const locale = params.lang; // getCurrentLocale();
   if (locale.includes(".")) {

@@ -6,11 +6,16 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { serverConfig } from '~/config/server'
 import { print } from 'graphql'
 import { fetchSurvey } from "@devographics/core-models/server";
+import { connectToAppDb } from "~/lib/server/mongoose/connection";
+import { connectToRedis } from "~/lib/server/redis";
 
 export default async function responseStartSurveyHandler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== "POST") {
         return res.status(405)
     }
+    await connectToAppDb()
+    connectToRedis()
+
     const surveySlug = req.query["surveySlug"] as string
     if (!surveySlug) throw new Error("No survey slug, can't start survey")
     const surveyYear = req.query["surveyYear"] as string

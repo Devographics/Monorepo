@@ -1,6 +1,6 @@
+import { getRedisClient } from "@devographics/core-models/server";
 import { cachedPromise, promisesNodeCache } from "~/lib/server/caching";
 import { measureTime } from "~/lib/server/utils";
-import { getRedisClient } from "~/lib/server/redis";
 
 export const getEntitiesCacheKey = () => `entities_all`;
 

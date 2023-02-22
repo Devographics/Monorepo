@@ -7,7 +7,7 @@ import { createMongooseConnector } from "@vulcanjs/mongo";
 import { subscribe } from "~/server/email/email_octopus";
 import mongoose from "mongoose";
 import { captureException } from "@sentry/nextjs";
-import { fetchSurveyFromId, } from "@devographics/core-models/server";
+import { fetchSurveyFromId } from "@devographics/core-models/server";
 import { ResponseDocument, SurveyEdition } from "@devographics/core-models";
 import { getModelDef, initReponseModel } from "./model";
 import { getServerSchema } from "./schema.server";

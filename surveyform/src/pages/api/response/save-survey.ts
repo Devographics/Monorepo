@@ -1,4 +1,3 @@
-const BREAK // temporary break until we finalize this handler
 import gql from "graphql-tag";
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { serverConfig } from '~/config/server'
@@ -6,10 +5,14 @@ import { print } from 'graphql'
 import { gqlHeaders } from "~/core/server/graphqlBff";
 import { SurveyResponseFragment } from "~/responses/fragments";
 import { getFragmentName } from "~/core/server/graphqlUtils";
-import { fetchSurvey } from "@devographics/core-models/server";
+import { fetchSurvey, initRedis } from "@devographics/core-models/server";
+import { connectToAppDb } from "~/lib/server/mongoose/connection";
+import { connectToRedis } from "~/lib/server/redis";
 // import { userFromReq } from "~/lib/server/context/userContext";
 
 export default async function saveSurveyResponseHandler(req: NextApiRequest, res: NextApiResponse) {
+    await connectToAppDb()
+    connectToRedis()
     // method
     if (req.method !== "POST") {
         return res.status(405)

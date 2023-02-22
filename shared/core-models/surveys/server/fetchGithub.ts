@@ -206,13 +206,3 @@ export async function fetchSurveyContextGithub(slug: SurveySharedContext["slug"]
     const surveyContext = yamlAsJson<SurveySharedContext>(await githubBody(surveyContextRes))
     return surveyContext
 }
-
-export async function fetchSurveyFromIdGithub(surveyId: SurveyEdition["surveyId"]) {
-    const surveyList = await fetchSurveysListGithub()
-    const surveyDescription = surveyList.find(s => s.surveyId)
-    if (!surveyDescription) {
-        throw new Error(`No survey with surveyId ${surveyId}`)
-    }
-    const survey = await fetchSurveyGithub(surveyDescription.slug, surveyDescription.year + "")
-    return survey
-}
