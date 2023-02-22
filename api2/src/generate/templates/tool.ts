@@ -1,11 +1,12 @@
 import { TemplateFunction } from '../types'
 import { TOOLS_OPTIONS } from '../../constants'
-import { graphqlize } from '../helpers'
 import {
+    idResolverFunction,
     commentsResolverFunction,
     responsesResolverFunction,
     entityResolverFunction
 } from '../resolvers'
+import { getFiltersTypeName, getFacetsTypeName } from '../graphql_templates'
 
 export const tool: TemplateFunction = ({ survey, question }) => ({
     dbPath: `tools.${question.id}.experience`,
@@ -15,11 +16,15 @@ export const tool: TemplateFunction = ({ survey, question }) => ({
     })),
     fieldTypeName: 'Tool',
     typeDef: `type Tool {
+    id: String
     comments: ItemComments
     entity: Entity
-    responses(filters: ${graphqlize(survey.id)}Filters): Responses
+    responses(filters: ${getFiltersTypeName(
+        survey.id
+    )},  options: Options, facet: ${getFacetsTypeName(survey.id)}): Responses
 }`,
     resolverMap: {
+        id: idResolverFunction,
         comments: commentsResolverFunction,
         responses: responsesResolverFunction,
         entity: entityResolverFunction

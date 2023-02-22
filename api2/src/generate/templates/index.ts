@@ -8,9 +8,10 @@ export * from './happiness'
 export * from './feature'
 export * from './tool'
 
-export * from './all_tools_responses'
-export * from './section_tools_responses'
-export * from './section_tools_responses_ratios'
+export * from './all_features'
+
+export * from './all_tools'
+export * from './section_tools'
+export * from './section_tools_ratios'
 
 export * from './knowledge_score'
-export * from './features_overview'

@@ -74,6 +74,9 @@ export async function genericComputeFunction({
     const facetOrder = convertOrder(options?.facetSort?.order ?? 'desc')
     const facetValues = options.facet2keys || (facetId && getChartKeys(facetId))
 
+    console.log('// outline path')
+    console.log(survey.id, edition.id, section.id, question.id)
+    console.log(question)
     console.log('// dbPath')
     console.log(dbPath)
     console.log('// options')

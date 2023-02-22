@@ -108,7 +108,7 @@ export interface ResolverMap {
     [key: string]: ResolverType | ResolverMap
 }
 
-export type ResolverRoot = {
+export type ResolverParent = {
     survey: Survey
     edition: Edition
     section: Section
@@ -128,7 +128,7 @@ export type ComputeOptions = {
 }
 
 export type ResolverType = (
-    root: ResolverRoot,
+    parent: ResolverParent,
     args: any,
     context: RequestContext,
     info: any

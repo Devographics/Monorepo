@@ -5,7 +5,6 @@ import {
     getGlobalQuestions,
     applyQuestionTemplate,
     mergeOptions,
-    getPath,
     mergeSections
 } from './helpers'
 import {

@@ -1,6 +1,6 @@
 import { Survey, Edition, Section, QuestionObject } from './types'
 import { TypeObject, ResolverType, ResolverMap } from './types'
-import { getPath, getSectionQuestionObjects } from './helpers'
+import { getPath, getSectionQuestionObjects, mergeSections } from './helpers'
 import { genericComputeFunction } from '../compute'
 import { useCache, computeKey } from '../caching'
 import { getRawCommentsWithCache } from '../compute/comments'
@@ -57,30 +57,33 @@ export const generateResolvers = async ({
         }
 
         for (const edition of survey.editions) {
-            // generate resolver map for each edition field (i.e. each edition section)
-            const editionTypeObject = typeObjects.find(t => t.path === getPath({ survey, edition }))
-            if (editionTypeObject) {
-                const editionFieldsResolvers = Object.fromEntries(
-                    edition?.sections?.map((section: Section) => {
-                        return [
-                            section.id,
-                            getSectionResolver({
-                                survey,
-                                edition,
-                                section
-                            })
-                        ]
-                    }) || []
+            const allSections = mergeSections(edition.sections, edition.apiSections)
+            if (allSections.length > 0) {
+                // generate resolver map for each edition field (i.e. each edition section)
+                const editionTypeObject = typeObjects.find(
+                    t => t.path === getPath({ survey, edition })
                 )
+                if (editionTypeObject) {
+                    const editionFieldsResolvers = Object.fromEntries(
+                        allSections.map((section: Section) => {
+                            return [
+                                section.id,
+                                getSectionResolver({
+                                    survey,
+                                    edition,
+                                    section
+                                })
+                            ]
+                        }) || []
+                    )
 
-                resolvers[editionTypeObject.typeName] = {
-                    _metadata: getEditionMetadataResolver({ survey, edition }),
-                    ...(edition.sections ? editionFieldsResolvers : {})
+                    resolvers[editionTypeObject.typeName] = {
+                        _metadata: getEditionMetadataResolver({ survey, edition }),
+                        ...(edition.sections ? editionFieldsResolvers : {})
+                    }
                 }
-            }
 
-            if (edition.sections) {
-                for (const section of edition.sections) {
+                for (const section of allSections) {
                     // generate resolvers for each section
                     const sectionTypeObject = typeObjects.find(
                         t => t.path === getPath({ survey, edition, section })
@@ -127,27 +130,27 @@ export const generateResolvers = async ({
 
 const getSurveyResolver =
     ({ survey }: { survey: Survey }): ResolverType =>
-    (root, args, context, info) => {
+    (parent, args, context, info) => {
         console.log('// survey resolver')
         return survey
     }
 
 const getSurveyMetadataResolver =
     ({ survey }: { survey: Survey }): ResolverType =>
-    (root, args, context, info) => {
+    (parent, args, context, info) => {
         console.log('// survey metadata resolver')
         return survey
     }
 const getEditionResolver =
     ({ survey, edition }: { survey: Survey; edition: Edition }): ResolverType =>
-    (root, args, context, info) => {
+    (parent, args, context, info) => {
         console.log('// edition resolver')
         return edition
     }
 
 const getEditionMetadataResolver =
     ({ survey, edition }: { survey: Survey; edition: Edition }): ResolverType =>
-    (root, args, context, info) => {
+    (parent, args, context, info) => {
         console.log('// edition metadata resolver')
         return edition
     }
@@ -162,7 +165,7 @@ const getSectionResolver =
         edition: Edition
         section: Section
     }): ResolverType =>
-    (root, args, context, info) => {
+    (parent, args, context, info) => {
         console.log('// section resolver')
         return section
     }
@@ -179,7 +182,7 @@ const getQuestionResolver =
         section: Section
         question: QuestionObject
     }): ResolverType =>
-    (root, args, context, info) => {
+    (parent, args, context, info) => {
         console.log('// question resolver')
         const { filters, options, facet } = args
 
@@ -203,14 +206,15 @@ Responses
 */
 
 // empty pass-through resolver
-export const responsesResolverFunction: ResolverType = root => {
+export const responsesResolverFunction: ResolverType = parent => {
     console.log('// responses resolver')
-    return root
+    return parent
 }
 
-export const yearsResolver: ResolverType = async (root, args, context, info) => {
+export const yearsResolver: ResolverType = async (parent, args, context, info) => {
     console.log('// yearsResolver')
-    const { survey, edition, section, question, computeOptions } = root
+    console.log(parent)
+    const { survey, edition, section, question, computeOptions } = parent
     const { year } = args
     return await useCache({
         key: computeKey(genericComputeFunction, {
@@ -234,9 +238,9 @@ export const yearsResolver: ResolverType = async (root, args, context, info) => 
     })
 }
 
-export const yearResolver: ResolverType = async (root, args, context, info) => {
+export const yearResolver: ResolverType = async (parent, args, context, info) => {
     console.log('// yearResolver')
-    const result = await yearsResolver(root, args, context, info)
+    const result = await yearsResolver(parent, args, context, info)
     return result[0]
 }
 
@@ -251,9 +255,9 @@ Comments
 
 */
 // empty pass-through resolver
-export const commentsResolverFunction: ResolverType = root => {
+export const commentsResolverFunction: ResolverType = parent => {
     console.log('// comments resolver')
-    return root
+    return parent
 }
 export const commentsResolverMap: ResolverMap = {
     all_years: async ({ survey, question }, {}, context) =>
@@ -273,7 +277,9 @@ export const commentsResolverMap: ResolverMap = {
 
 /*
 
-Entities
+Other Resolvers
 
 */
 export const entityResolverFunction: ResolverType = ({ question }) => getEntity({ id: question.id })
+
+export const idResolverFunction: ResolverType = ({ question }) => question.id

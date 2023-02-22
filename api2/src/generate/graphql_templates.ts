@@ -184,16 +184,19 @@ type DisabilityStatus {
 }
 
 */
+export const getFiltersTypeName = (surveyId: string) => graphqlize(surveyId) + 'Filters'
+export const getFacetsTypeName = (surveyId: string) => graphqlize(surveyId) + 'Facets'
+
 export const generateFieldType = ({ question }: { question: QuestionObject }) => {
     const { fieldTypeName, optionTypeName, options } = question
 
-    const filtersTypeName = graphqlize(question.surveyId) + 'Filters'
-    const facetsTypeName = graphqlize(question.surveyId) + 'Facets'
     return {
         typeName: fieldTypeName,
         typeType: 'question',
         typeDef: `type ${fieldTypeName} {
-    responses(filters: ${filtersTypeName}, options: Options, facet: ${facetsTypeName}): Responses${
+    responses(filters: ${getFiltersTypeName(
+        question.surveyId
+    )}, options: Options, facet: ${getFacetsTypeName(question.surveyId)}): Responses${
             options ? `\n    options: [${optionTypeName}]` : ''
         }
 }`
@@ -301,7 +304,7 @@ export const generateFiltersType = ({
     survey: Survey
     questionObjects: QuestionObject[]
 }) => {
-    const typeName = graphqlize(survey.id) + 'Filters'
+    const typeName = getFiltersTypeName(survey.id)
     return {
         typeName,
         typeDef: `input ${typeName} {
@@ -338,7 +341,7 @@ export const generateFacetsType = ({
     survey: Survey
     questionObjects: QuestionObject[]
 }) => {
-    const typeName = graphqlize(survey.id) + 'Facets'
+    const typeName = getFacetsTypeName(survey.id)
     const questionObjectsWithFilters = questionObjects.filter(
         q => typeof q.filterTypeName !== 'undefined' && q.surveyId === survey.id
     )
