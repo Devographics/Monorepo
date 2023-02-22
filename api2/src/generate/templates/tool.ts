@@ -3,7 +3,7 @@ import { TOOLS_OPTIONS } from '../../constants'
 import { graphqlize } from '../helpers'
 import {
     commentsResolverFunction,
-    experienceResolverFunction,
+    responsesResolverFunction,
     entityResolverFunction
 } from '../resolvers'
 
@@ -15,13 +15,13 @@ export const tool: TemplateFunction = ({ survey, question }) => ({
     })),
     fieldTypeName: 'Tool',
     typeDef: `type Tool {
-        comments: ItemComments
-        entity: Entity
-        experience(filters: ${graphqlize(survey.id)}Filters): Experience
-    }`,
+    comments: ItemComments
+    entity: Entity
+    responses(filters: ${graphqlize(survey.id)}Filters): Responses
+}`,
     resolverMap: {
         comments: commentsResolverFunction,
-        experience: experienceResolverFunction,
+        responses: responsesResolverFunction,
         entity: entityResolverFunction
     }
 })

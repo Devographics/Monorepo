@@ -2,7 +2,7 @@ import { TemplateFunction } from '../types'
 import { FEATURES_OPTIONS } from '../../constants'
 import { graphqlize } from '../helpers'
 import {
-    experienceResolverFunction,
+    responsesResolverFunction,
     commentsResolverFunction,
     entityResolverFunction
 } from '../resolvers'
@@ -17,11 +17,11 @@ export const feature: TemplateFunction = ({ survey, question }) => ({
     typeDef: `type Feature {
     comments: ItemComments
     entity: Entity
-    experience(filters: ${graphqlize(survey.id)}Filters): Experience
+    responses(filters: ${graphqlize(survey.id)}Filters): Responses
 }`,
     resolverMap: {
         comments: commentsResolverFunction,
-        experience: experienceResolverFunction,
+        responses: responsesResolverFunction,
         entity: entityResolverFunction
     }
 })

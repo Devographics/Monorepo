@@ -52,7 +52,7 @@ enum SortOrder {
     desc
 }
 
-type Experience {
+type Responses {
     all_years: [YearData]
     year(year: Int!): YearData
 }

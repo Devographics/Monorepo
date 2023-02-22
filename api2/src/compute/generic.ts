@@ -1,6 +1,6 @@
 import { inspect } from 'util'
 import config from '../config'
-import { SurveyConfig, RequestContext } from '../types'
+import { RequestContext } from '../types'
 import { generateFiltersQuery } from '../filters'
 import { getParticipationByYearMap } from './demographics'
 import { getGenericPipeline } from './generic_pipeline'
@@ -8,7 +8,7 @@ import { computeCompletionByYear } from './completion'
 import { getChartKeys } from '../helpers'
 import isEmpty from 'lodash/isEmpty.js'
 import { getFacetSegments } from '../helpers'
-import { Edition, Section, QuestionObject } from '../generate/types'
+import { Survey, Edition, Section, QuestionObject } from '../generate/types'
 
 import { TermAggregationOptions, ResultsByYear } from './types'
 
@@ -35,7 +35,7 @@ export async function genericComputeFunction({
     options = {}
 }: {
     context: RequestContext
-    survey: SurveyConfig
+    survey: Survey
     edition: Edition
     section: Section
     question: QuestionObject

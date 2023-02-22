@@ -137,11 +137,11 @@ export const generateEditionType = ({
 Sample output: 
 
 type Js2021UserInfoSection {
-    age(filters: Filters, options: Options, facet: Facet): Age
-    years_of_experience(filters: Filters, options: Options, facet: Facet): YearsOfExperience
-    company_size(filters: Filters, options: Options, facet: Facet): CompanySize
-    yearly_salary(filters: Filters, options: Options, facet: Facet): YearlySalary
-    higher_education_degree(filters: Filters, options: Options, facet: Facet): HigherEducationDegree
+    age: StateOfJsAge
+    years_of_experience: StateOfJsYearsOfExperience
+    company_size: StateOfJsCompanySize
+    yearly_salary: StateOfJsYearlySalary
+    higher_education_degree: StateOfJsHigherEducationDegree
     # etc.
 }
 
@@ -166,9 +166,7 @@ export const generateSectionType = ({
         typeDef: `type ${typeName} {
     ${questions
         .map((question: QuestionObject) => {
-            const filtersTypeName = graphqlize(survey.id) + 'Filters'
-            const facetsTypeName = graphqlize(survey.id) + 'Facets'
-            return `${question.id}(filters: ${filtersTypeName}, options: Options, facet: ${facetsTypeName}): ${question.fieldTypeName}`
+            return `${question.id}: ${question.fieldTypeName}`
         })
         .join('\n    ')}
 }`
@@ -188,11 +186,16 @@ type DisabilityStatus {
 */
 export const generateFieldType = ({ question }: { question: QuestionObject }) => {
     const { fieldTypeName, optionTypeName, options } = question
+
+    const filtersTypeName = graphqlize(question.surveyId) + 'Filters'
+    const facetsTypeName = graphqlize(question.surveyId) + 'Facets'
     return {
         typeName: fieldTypeName,
         typeType: 'question',
         typeDef: `type ${fieldTypeName} {
-    experience: Experience${options ? `\n    options: [${optionTypeName}]` : ''}
+    responses(filters: ${filtersTypeName}, options: Options, facet: ${facetsTypeName}): Responses${
+            options ? `\n    options: [${optionTypeName}]` : ''
+        }
 }`
     }
 }
@@ -279,11 +282,11 @@ Sample output:
 
 
 input StateOfJsFilters {
-    language__proxies: FeatureExperienceFilter
-    language__promise_all_settled: FeatureExperienceFilter
-    language__dynamic_import: FeatureExperienceFilter
-    language__nullish_coalescing: FeatureExperienceFilter
-    language__optional_chaining: FeatureExperienceFilter
+    language__proxies: FeatureFilter
+    language__promise_all_settled: FeatureFilter
+    language__dynamic_import: FeatureFilter
+    language__nullish_coalescing: FeatureFilter
+    language__optional_chaining: FeatureFilter
     # etc.
 }
 

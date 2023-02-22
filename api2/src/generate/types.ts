@@ -113,7 +113,18 @@ export type ResolverRoot = {
     edition: Edition
     section: Section
     question: QuestionObject
-    computeOptions: any
+    computeOptions: ComputeOptions
+}
+
+export type ComputeOptions = {
+    filters: any
+    cutoff: number
+    limit: number
+    year: number
+    facet: string
+    facetLimit: number
+    facetMinPercent: number
+    facetMinCount: number
 }
 
 export type ResolverType = (

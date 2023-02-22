@@ -30,7 +30,7 @@ export const generateResolvers = async ({
     const resolvers = {
         Query: { surveys: () => surveys },
         Surveys: surveysFieldsResolvers,
-        Experience: experienceResolverMap,
+        Responses: responsesResolverMap,
         ItemComments: commentsResolverMap
         // Entity: ({ question }) => getEntity({ id: question.id })
     } as any
@@ -114,7 +114,7 @@ export const generateResolvers = async ({
 
                     for (const questionObject of sectionQuestionObjects) {
                         resolvers[questionObject.fieldTypeName] = questionObject.resolverMap || {
-                            experience: experienceResolverFunction
+                            responses: responsesResolverFunction
                         }
                     }
                 }
@@ -198,13 +198,13 @@ const getQuestionResolver =
 
 /*
 
-Experience 
+Responses 
 
 */
 
 // empty pass-through resolver
-export const experienceResolverFunction: ResolverType = root => {
-    console.log('// experience resolver')
+export const responsesResolverFunction: ResolverType = root => {
+    console.log('// responses resolver')
     return root
 }
 
@@ -240,7 +240,7 @@ export const yearResolver: ResolverType = async (root, args, context, info) => {
     return result[0]
 }
 
-export const experienceResolverMap: ResolverMap = {
+export const responsesResolverMap: ResolverMap = {
     all_years: yearsResolver,
     year: yearResolver
 }
