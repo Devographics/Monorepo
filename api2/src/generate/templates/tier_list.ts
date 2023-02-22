@@ -1,3 +1,3 @@
-import { TemplateArguments } from '../types'
+import { TemplateFunction } from '../types'
 
-export const tier_list = ({ question, section }: TemplateArguments) => ({ id: 'tier_list' })
+export const tier_list: TemplateFunction = ({ question, section }) => ({ id: 'tier_list' })

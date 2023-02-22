@@ -192,8 +192,7 @@ export const generateFieldType = ({ question }: { question: QuestionObject }) =>
         typeName: fieldTypeName,
         typeType: 'question',
         typeDef: `type ${fieldTypeName} {
-    all_years: [YearData]
-    year(year: Int!): YearData${options ? `\n    options: [${optionTypeName}]` : ''}
+    experience: Experience${options ? `\n    options: [${optionTypeName}]` : ''}
 }`
     }
 }

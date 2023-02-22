@@ -1,5 +1,5 @@
-import { TemplateArguments } from '../types'
+import { TemplateFunction } from '../types'
 
-export const happiness = ({ question, section }: TemplateArguments) => ({
+export const happiness: TemplateFunction = ({ question, section }) => ({
     dbPath: `${section.id}.${question.id.replace('_happiness', '.happiness')}`
 })

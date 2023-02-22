@@ -1,8 +1,10 @@
 import { Survey, Edition, Section, QuestionObject } from './types'
-import { TypeObject, ResolverType } from './types'
+import { TypeObject, ResolverType, ResolverMap } from './types'
 import { getPath, getSectionQuestionObjects } from './helpers'
 import { genericComputeFunction } from '../compute'
 import { useCache, computeKey } from '../caching'
+import { getRawCommentsWithCache } from '../compute/comments'
+import { getEntity } from '../entities'
 
 export const generateResolvers = async ({
     surveys,
@@ -27,7 +29,10 @@ export const generateResolvers = async ({
 
     const resolvers = {
         Query: { surveys: () => surveys },
-        Surveys: surveysFieldsResolvers
+        Surveys: surveysFieldsResolvers,
+        Experience: experienceResolverMap,
+        ItemComments: commentsResolverMap
+        // Entity: ({ question }) => getEntity({ id: question.id })
     } as any
 
     for (const survey of surveys) {
@@ -108,8 +113,9 @@ export const generateResolvers = async ({
                     }
 
                     for (const questionObject of sectionQuestionObjects) {
-                        resolvers[questionObject.fieldTypeName] =
-                            questionObject.resolverMap || defaultResolverMap
+                        resolvers[questionObject.fieldTypeName] = questionObject.resolverMap || {
+                            experience: experienceResolverFunction
+                        }
                     }
                 }
             }
@@ -135,7 +141,7 @@ const getSurveyMetadataResolver =
 const getEditionResolver =
     ({ survey, edition }: { survey: Survey; edition: Edition }): ResolverType =>
     (root, args, context, info) => {
-        console.log('// editionresolver')
+        console.log('// edition resolver')
         return edition
     }
 
@@ -190,8 +196,20 @@ const getQuestionResolver =
         }
     }
 
+/*
+
+Experience 
+
+*/
+
+// empty pass-through resolver
+export const experienceResolverFunction: ResolverType = root => {
+    console.log('// experience resolver')
+    return root
+}
+
 export const yearsResolver: ResolverType = async (root, args, context, info) => {
-    console.log('// getAllYearsResolver')
+    console.log('// yearsResolver')
     const { survey, edition, section, question, computeOptions } = root
     const { year } = args
     return await useCache({
@@ -217,12 +235,45 @@ export const yearsResolver: ResolverType = async (root, args, context, info) => 
 }
 
 export const yearResolver: ResolverType = async (root, args, context, info) => {
-    console.log('// getYearResolver')
+    console.log('// yearResolver')
     const result = await yearsResolver(root, args, context, info)
     return result[0]
 }
 
-export const defaultResolverMap = {
+export const experienceResolverMap: ResolverMap = {
     all_years: yearsResolver,
     year: yearResolver
 }
+
+/*
+
+Comments
+
+*/
+// empty pass-through resolver
+export const commentsResolverFunction: ResolverType = root => {
+    console.log('// comments resolver')
+    return root
+}
+export const commentsResolverMap: ResolverMap = {
+    all_years: async ({ survey, question }, {}, context) =>
+        await getRawCommentsWithCache({
+            survey,
+            question,
+            context
+        }),
+    year: async ({ survey, question }, { year }: { year: number }, context) =>
+        await getRawCommentsWithCache({
+            survey,
+            question,
+            year,
+            context
+        })
+}
+
+/*
+
+Entities
+
+*/
+export const entityResolverFunction: ResolverType = ({ question }) => getEntity({ id: question.id })

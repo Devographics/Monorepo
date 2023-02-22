@@ -1,5 +1,5 @@
-import { TemplateArguments } from '../types'
+import { TemplateFunction } from '../types'
 
-export const tools_section_streams = ({ section }: TemplateArguments) => ({
+export const tools_section_streams: TemplateFunction = ({ section }) => ({
     id: `${section.id}_tools_section_streams`
 })

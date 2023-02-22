@@ -1,5 +1,5 @@
-import { TemplateArguments } from '../types'
+import { TemplateFunction } from '../types'
 
-export const scatterplot_overview = ({ question, section }: TemplateArguments) => ({
+export const scatterplot_overview: TemplateFunction = ({ question, section }) => ({
     id: 'scatterplot_overview'
 })

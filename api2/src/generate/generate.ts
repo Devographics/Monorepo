@@ -141,14 +141,7 @@ export const getQuestionObject = ({
         fieldTypeName,
         sectionIds: [section.id], // a question can belong to more than one section in different editions
         surveyId: survey.id,
-        editions: [edition.id],
-        ...(question.options
-            ? {
-                  optionTypeName: fieldTypeName + 'Option',
-                  enumTypeName: fieldTypeName + 'ID',
-                  filterTypeName: fieldTypeName + 'Filter'
-              }
-            : {})
+        editions: [edition.id]
     }
 
     // if a global question definition exists, extend question with it
@@ -163,6 +156,18 @@ export const getQuestionObject = ({
         ...templateObject,
         ...globalObject,
         ...question
+    }
+
+    if (questionObject.options) {
+        if (!questionObject.optionTypeName) {
+            questionObject.optionTypeName = fieldTypeName + 'Option'
+        }
+        if (!questionObject.enumTypeName) {
+            questionObject.enumTypeName = fieldTypeName + 'ID'
+        }
+        if (!questionObject.filterTypeName) {
+            questionObject.filterTypeName = fieldTypeName + 'Filter'
+        }
     }
 
     // add editions field to options

@@ -1,3 +1,3 @@
-import { TemplateArguments } from '../types'
+import { TemplateFunction } from '../types'
 
-export const tools_arrows = ({ question, section }: TemplateArguments) => ({ id: 'tools_arrows' })
+export const tools_arrows: TemplateFunction = ({ question, section }) => ({ id: 'tools_arrows' })

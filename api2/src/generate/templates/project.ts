@@ -1,5 +1,5 @@
-import { TemplateArguments } from '../types'
+import { TemplateFunction } from '../types'
 
-export const project = ({ question, section }: TemplateArguments) => ({
+export const project: TemplateFunction = ({ question, section }) => ({
     dbPath: `${section.id}.${question.id.replace('_prenormalized', '.others')}.normalized`
 })

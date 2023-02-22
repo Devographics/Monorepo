@@ -1,3 +1,5 @@
+import { RequestContext } from '../types'
+
 export type TypeObject = {
     typeName: string
     typeDef: string
@@ -13,6 +15,8 @@ export type TemplateArguments = {
     section: Section
     question: Question
 }
+
+export type TemplateFunction = (arg0: TemplateArguments) => QuestionTemplateOutput
 
 export type Survey = {
     id: string
@@ -49,9 +53,35 @@ export type Question = {
     template?: string
 }
 
+export interface QuestionTemplateOutput {
+    id?: string
+    options?: Option[]
+    optionsAreNumeric?: boolean
+    template?: string
+
+    sectionIds?: string[]
+    dbPath?: string
+    dbPathComments?: string
+    includeInApi?: boolean
+
+    editions?: string[]
+
+    surveyId?: string
+    typeDef?: string
+
+    resolverMap?: ResolverMap
+
+    isGlobal?: boolean
+    fieldTypeName?: string
+    filterTypeName?: string
+    optionTypeName?: string
+    enumTypeName?: string
+}
+
 export interface QuestionObject extends Question {
     sectionIds: string[]
     dbPath: string
+    dbPathComments?: string
     includeInApi?: boolean
 
     editions?: string[]
@@ -59,7 +89,7 @@ export interface QuestionObject extends Question {
     surveyId: string
     typeDef?: string
 
-    resolverMap: any
+    resolverMap?: ResolverMap
 
     isGlobal?: boolean
     fieldTypeName: string
@@ -70,8 +100,25 @@ export interface QuestionObject extends Question {
 
 export type Option = {
     id: string
-    editions: string[]
-    average: number
+    editions?: string[]
+    average?: number
 }
 
-export type ResolverType = (root?: any, args?: any, context?: any, info?: any) => any
+export interface ResolverMap {
+    [key: string]: ResolverType | ResolverMap
+}
+
+export type ResolverRoot = {
+    survey: Survey
+    edition: Edition
+    section: Section
+    question: QuestionObject
+    computeOptions: any
+}
+
+export type ResolverType = (
+    root: ResolverRoot,
+    args: any,
+    context: RequestContext,
+    info: any
+) => any

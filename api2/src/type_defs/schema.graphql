@@ -6,6 +6,7 @@
 #import "./twitter.graphql"
 #import "./github.graphql"
 #import "./tools.graphql"
+#import "./comments.graphql"
 
 scalar JSON
 scalar JSONObject
@@ -49,6 +50,11 @@ input SortSpecifier {
 enum SortOrder {
     asc
     desc
+}
+
+type Experience {
+    all_years: [YearData]
+    year(year: Int!): YearData
 }
 
 type YearData {
