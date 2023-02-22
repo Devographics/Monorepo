@@ -1,11 +1,8 @@
-// @see api/src/surveys.ts
-// TODO: try to factor the code
-// TODO: create/use a Redis alternative too
+/**
+ * Get results from GitHub, the source of truth for survey definitions
+ * And transform them in the right shape expected by surveyform
+ */
 
-//import "server-only"
-// TODO: this will systematically call github API
-// we should cache the result somewhere
-// for instance in a place dedicated to the survey form on Redis
 import yaml from "js-yaml"
 import { SurveyEdition, SurveyEditionDescription, SurveySharedContext } from "../typings";
 import orderBy from "lodash/orderBy.js"
@@ -71,8 +68,9 @@ async function fetchGithubJson<T = any>(url: string): Promise<T> {
  * @param year 
  */
 export async function fetchSurveyGithub(prettySlug: SurveyEdition["prettySlug"], year: string): Promise<SurveyEdition> {
+    if (!prettySlug) throw new Error("Called fetchSurveyGithub without a prettySlug")
     // TODO: find a cleaner way to convert prettySLug to slug => do this before calling this function
-    const slug = prettySlug?.replaceAll("-", "_")
+    const slug = prettySlug.replaceAll("-", "_")
     const surveyFolder = `${slug}`
     const yearlyFolder = `${surveyFolder}/${year}`
 
@@ -103,7 +101,11 @@ export async function fetchSurveyGithub(prettySlug: SurveyEdition["prettySlug"],
         ...commonConfig,
         // @ts-ignore
         ...surveyConfig,
-        prettySlug,
+        // TODO: most survey don't seem to have a prettySlug anymore,
+        // this concept exists only in the surveyform
+        // TODO: this function is sometimes called with a prettySlug that already contains underscore
+        // while prettySlug is expected to contain dashes only
+        prettySlug: prettySlug.replaceAll("_", "-"),
         outline: questionsConfig
     }
     return survey
@@ -133,7 +135,7 @@ async function fetchSurveyDescription(surveyFolder: string, year: string): Promi
         // @ts-ignore
         ...surveyConfig,
         // url friendly slug
-        prettySlug: surveyFolder,// slug,//safeSlug,
+        prettySlug: surveyFolder.replaceAll("_", "-"),// slug,//safeSlug,
     }
     return survey
 }

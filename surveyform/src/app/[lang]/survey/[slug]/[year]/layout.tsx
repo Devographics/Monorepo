@@ -58,6 +58,7 @@ Next.js will fallback to trying to find a valid page path.
 If this error still happens in a few months (2023) open an issue with repro at Next.js.`);
     notFound();
   }
+  const localeSlug = survey.prettySlug!.replaceAll("-", "_");
   const i18nContexts =
     survey.prettySlug !== "demo-survey"
       ? [
@@ -66,8 +67,8 @@ If this error still happens in a few months (2023) open an issue with repro at N
           // => generic strings and survey specific will be merged automatically
           //...i18nCommonContexts,
           // TODO: get this "survey context" value more reliably
-          survey.prettySlug!.replace("-", "_"),
-          survey.prettySlug!.replace("-", "_") + "_" + year,
+          localeSlug,
+          localeSlug + "_" + year,
         ]
       : // TODO for local testing, we don't have tokens for demo_survey yet
         ["state_of_graphql", "state_of_graphql_2022"];
