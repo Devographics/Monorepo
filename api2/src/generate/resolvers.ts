@@ -216,7 +216,7 @@ export const yearsResolver: ResolverType = async (parent, args, context, info) =
     console.log(parent)
     const { survey, edition, section, question, computeOptions } = parent
     const { year } = args
-    return await useCache({
+    let result = await useCache({
         key: computeKey(genericComputeFunction, {
             surveyId: survey.id,
             editionId: edition.id,
@@ -236,6 +236,10 @@ export const yearsResolver: ResolverType = async (parent, args, context, info) =
             options: { ...computeOptions, year }
         }
     })
+    if (question.transformFunction) {
+        result = question.transformFunction(parent, result, context)
+    }
+    return result
 }
 
 export const yearResolver: ResolverType = async (parent, args, context, info) => {

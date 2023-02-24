@@ -125,3 +125,29 @@
 
 - id: knowledge_score
   dbPath: user_info.knowledge_score
+
+- id: js_ts_balance
+  optionsAreNumeric: true
+  options:
+      - id: 0
+      - id: 1
+      - id: 2
+      - id: 3
+      - id: 4
+      - id: 5
+      - id: 6
+      - id: 7
+      - id: 8
+
+- id: css_js_balance
+  optionsAreNumeric: true
+  options:
+      - id: 0
+      - id: 1
+      - id: 2
+      - id: 3
+      - id: 4
+      - id: 5
+      - id: 6
+      - id: 7
+      - id: 8

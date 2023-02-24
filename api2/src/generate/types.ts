@@ -1,3 +1,4 @@
+import { Entity } from '@devographics/core-models'
 import { RequestContext } from '../types'
 
 export type TypeObject = {
@@ -92,10 +93,13 @@ export interface QuestionObject extends Question {
     resolverMap?: ResolverMap
 
     isGlobal?: boolean
+
     fieldTypeName: string
     filterTypeName?: string
     optionTypeName?: string
     enumTypeName?: string
+
+    transformFunction?: TransformFunction
 }
 
 export type Option = {
@@ -132,4 +136,49 @@ export type ResolverType = (
     args: any,
     context: RequestContext,
     info: any
+) => any
+
+export type YearData = {
+    year: number
+    completion: YearCompletion
+    facets: Facet[]
+}
+
+export interface YearCompletion {
+    count: number
+    percentage_survey: number
+    total: number
+}
+
+export interface Facet {
+    id: string | number
+    mean: number
+    type: string
+    completion: FacetCompletion
+    buckets: Bucket[]
+    entity: Entity
+}
+
+export interface FacetCompletion extends YearCompletion {
+    percentage_question: number
+}
+
+export interface Bucket {
+    count: number
+    id: string
+    count_all_facets?: number
+    percentage_all_facets?: number
+    percentage_facet?: number
+    percentage_question: number
+    percentage_survey: number
+    completion?: BucketCompletion
+    entity?: Entity
+}
+
+export interface BucketCompletion extends FacetCompletion {}
+
+export type TransformFunction = (
+    parent: ResolverParent,
+    data: YearData[],
+    context: RequestContext
 ) => any

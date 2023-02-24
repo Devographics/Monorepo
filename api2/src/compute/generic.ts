@@ -8,9 +8,9 @@ import { computeCompletionByYear } from './completion'
 import { getChartKeys } from '../helpers'
 import isEmpty from 'lodash/isEmpty.js'
 import { getFacetSegments } from '../helpers'
-import { Survey, Edition, Section, QuestionObject } from '../generate/types'
+import { Survey, Edition, Section, QuestionObject, YearData } from '../generate/types'
 
-import { TermAggregationOptions, ResultsByYear } from './types'
+import { TermAggregationOptions } from './types'
 
 import {
     discardEmptyIds,
@@ -119,7 +119,7 @@ export async function genericComputeFunction({
 
     const pipeline = await getGenericPipeline(pipelineProps)
 
-    let results = (await collection.aggregate(pipeline).toArray()) as ResultsByYear[]
+    let results = (await collection.aggregate(pipeline).toArray()) as YearData[]
 
     if (isDebug) {
         console.log(

@@ -1,7 +1,8 @@
 import orderBy from 'lodash/orderBy.js'
 import config from '../config'
-import { RequestContext, SurveyConfig, YearParticipation } from '../types'
+import { RequestContext, YearParticipation } from '../types'
 import { Filters } from '../filters'
+import { Survey } from '../generate/types'
 
 export async function computeParticipationByYear({
     context,
@@ -10,7 +11,7 @@ export async function computeParticipationByYear({
     year
 }: {
     context: RequestContext
-    survey: SurveyConfig
+    survey: Survey
     filters?: Filters
     year?: number
 }): Promise<YearParticipation[]> {
@@ -45,7 +46,7 @@ export async function computeParticipationByYear({
 
 export async function getParticipationByYearMap(
     context: RequestContext,
-    survey: SurveyConfig
+    survey: Survey
 ): Promise<{
     [key: number]: number
 }> {
