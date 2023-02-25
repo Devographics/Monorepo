@@ -194,3 +194,6 @@ export const getSectionItems = ({
     section.questions
         .filter(q => typeof q.template === 'undefined')
         .map(question => getQuestionObject({ survey, edition, section, question }))
+
+export const formatNumericOptions = (options: Option[]) =>
+    options.map(option => ({ ...option, id: `value_${option.id}` }))

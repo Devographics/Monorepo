@@ -32,14 +32,14 @@ export async function genericComputeFunction({
     edition,
     section,
     question,
-    options = {}
+    parameters = {}
 }: {
     context: RequestContext
     survey: Survey
     edition: Edition
     section: Section
     question: QuestionObject
-    options: TermAggregationOptions
+    parameters: TermAggregationOptions
 }) {
     const { db, isDebug } = context
     const collection = db.collection(config.mongo.normalized_collection)
@@ -57,34 +57,33 @@ export async function genericComputeFunction({
         facetLimit,
         facetMinPercent,
         facetMinCount
-    }: TermAggregationOptions = options
+    }: TermAggregationOptions = parameters
 
-    // if values (keys) are not passed as options, look in globally defined yaml keys
-    const values = question.options && question.options.map(o => o.id)
+    const options = question.options && question.options.map(o => o.id)
 
-    const hasValues = values && !isEmpty(values)
+    const hasValues = options && !isEmpty(options)
 
     const convertOrder = (order: 'asc' | 'desc') => (order === 'asc' ? 1 : -1)
 
-    const sort = options?.sort?.property ?? 'count'
-    const order = convertOrder(options?.sort?.order ?? 'desc')
+    const sort = parameters?.sort?.property ?? 'count'
+    const order = convertOrder(parameters?.sort?.order ?? 'desc')
 
-    const { fieldName: facetId } = (options.facet && getFacetSegments(options.facet)) || {}
-    const facetSort = options?.facetSort?.property ?? 'mean'
-    const facetOrder = convertOrder(options?.facetSort?.order ?? 'desc')
-    const facetValues = options.facet2keys || (facetId && getChartKeys(facetId))
+    const { fieldName: facetId } = (parameters.facet && getFacetSegments(parameters.facet)) || {}
+    const facetSort = parameters?.facetSort?.property ?? 'mean'
+    const facetOrder = convertOrder(parameters?.facetSort?.order ?? 'desc')
+    const facetOptions = parameters.facet2keys || (facetId && getChartKeys(facetId))
 
     console.log('// outline path')
     console.log(survey.id, edition.id, section.id, question.id)
     console.log(question)
     console.log('// dbPath')
     console.log(dbPath)
+    console.log('// parameters')
+    console.log(parameters)
     console.log('// options')
     console.log(options)
-    console.log('// values')
-    console.log(values)
-    console.log('// facetValues')
-    console.log(facetValues)
+    console.log('// facetOptions')
+    console.log(facetOptions)
 
     let match: any = {
         survey: survey.id,
@@ -137,7 +136,7 @@ export async function genericComputeFunction({
     await discardEmptyIds(results)
 
     if (hasValues) {
-        await addMissingBucketValues(results, values)
+        await addMissingBucketValues(results, options)
     }
 
     await addEntities(results)
@@ -153,7 +152,7 @@ export async function genericComputeFunction({
 
     // await addDeltas(results)
 
-    await sortBuckets(results, { sort, order, values })
+    await sortBuckets(results, { sort, order, options })
 
     if (!hasValues) {
         // do not apply limits for aggregations that have predefined values,
@@ -162,10 +161,10 @@ export async function genericComputeFunction({
     }
 
     if (hasValues) {
-        await addMeans(results, values)
+        await addMeans(results, options)
     }
 
-    await sortFacets(results, { sort: facetSort, order: facetOrder, values: facetValues })
+    await sortFacets(results, { sort: facetSort, order: facetOrder, options: facetOptions })
 
     await limitFacets(results, { facetLimit, facetMinPercent, facetMinCount })
 

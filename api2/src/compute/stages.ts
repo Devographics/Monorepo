@@ -210,25 +210,29 @@ export async function addDeltas(resultsByYears: ResultsByYear[]) {
     // })
 }
 
-interface SortOptions {
+interface SortParameters {
     sort: string
     order: 1 | -1
-    values?: string[] | number[]
+    options?: string[] | number[]
 }
-export async function sortBuckets(resultsByYears: ResultsByYear[], options: SortOptions) {
-    const { sort, order, values } = options
+export async function sortBuckets(resultsByYears: ResultsByYear[], parameters: SortParameters) {
+    console.log('// sortBuckets')
+    console.log(parameters)
+    const { sort, order, options } = parameters
     for (let year of resultsByYears) {
         for (let facet of year.facets) {
-            if (values && !isEmpty(values)) {
-                // if values are specified, sort by values
-                facet.buckets = [...facet.buckets].sort((a, b) => {
-                    // make sure everything is a string to avoid type mismatches
-                    const stringValues = values.map(v => v.toString())
-                    return (
-                        stringValues.indexOf(a.id.toString()) -
-                        stringValues.indexOf(b.id.toString())
-                    )
-                })
+            if (sort === 'options') {
+                if (options && !isEmpty(options)) {
+                    // if values are specified, sort by values
+                    facet.buckets = [...facet.buckets].sort((a, b) => {
+                        // make sure everything is a string to avoid type mismatches
+                        const stringValues = options.map(v => v.toString())
+                        return (
+                            stringValues.indexOf(a.id.toString()) -
+                            stringValues.indexOf(b.id.toString())
+                        )
+                    })
+                }
             } else {
                 // start with an alphabetical sort to ensure a stable
                 // sort even when multiple items have same count
@@ -247,14 +251,14 @@ export async function sortBuckets(resultsByYears: ResultsByYear[], options: Sort
     }
 }
 
-export async function sortFacets(resultsByYears: ResultsByYear[], options: SortOptions) {
-    const { sort, order, values } = options
+export async function sortFacets(resultsByYears: ResultsByYear[], parameters: SortParameters) {
+    const { sort, order, options } = parameters
     for (let year of resultsByYears) {
-        if (values && !isEmpty(values)) {
+        if (options && !isEmpty(options)) {
             // if values are specified, sort by values
             year.facets = [...year.facets].sort((a, b) => {
                 // make sure everything is a string to avoid type mismatches
-                const stringValues = values.map(v => v.toString())
+                const stringValues = options.map(v => v.toString())
                 return stringValues.indexOf(a.id.toString()) - stringValues.indexOf(b.id.toString())
             })
         } else {

@@ -37,9 +37,11 @@ export const all_features: TemplateFunction = ({ survey, edition, section }) => 
         typeDef: `type ${fieldTypeName} {
     ids: [String]
     years: [Int]
-    data(filters: ${getFiltersTypeName(survey.id)},  options: Options, facet: ${getFacetsTypeName(
+    data(filters: ${getFiltersTypeName(
+        survey.id
+    )},  parameters: Parameters, facet: ${getFacetsTypeName(survey.id)}): [${graphqlize(
             survey.id
-        )}): [${graphqlize(survey.id)}Feature]
+        )}Feature]
 }`,
         resolverMap: getResolverMap({ survey, items })
     }

@@ -1,6 +1,14 @@
-import { Survey, Edition, Section, QuestionObject } from './types'
-import { TypeObject, ResolverType, ResolverMap } from './types'
-import { getPath, getSectionQuestionObjects, mergeSections } from './helpers'
+import {
+    Survey,
+    Edition,
+    Section,
+    QuestionObject,
+    Option,
+    TypeObject,
+    ResolverType,
+    ResolverMap
+} from './types'
+import { getPath, getSectionQuestionObjects, mergeSections, formatNumericOptions } from './helpers'
 import { genericComputeFunction } from '../compute'
 import { useCache, computeKey } from '../caching'
 import { getRawCommentsWithCache } from '../compute/comments'
@@ -184,19 +192,26 @@ const getQuestionResolver =
     }): ResolverType =>
     (parent, args, context, info) => {
         console.log('// question resolver')
-        const { filters, options, facet } = args
+        const { filters, parameters, facet } = args
 
-        return {
+        const result: any = {
             survey,
             edition,
             section,
             question,
             computeOptions: {
                 filters,
-                options,
+                parameters,
                 facet
             }
         }
+        if (question.options) {
+            const questionOptions: Option[] = question.optionsAreNumeric
+                ? formatNumericOptions(question.options)
+                : question.options
+            result.options = questionOptions
+        }
+        return result
     }
 
 /*
@@ -213,7 +228,6 @@ export const responsesResolverFunction: ResolverType = parent => {
 
 export const yearsResolver: ResolverType = async (parent, args, context, info) => {
     console.log('// yearsResolver')
-    console.log(parent)
     const { survey, edition, section, question, computeOptions } = parent
     const { year } = args
     let result = await useCache({
@@ -233,7 +247,7 @@ export const yearsResolver: ResolverType = async (parent, args, context, info) =
             section,
             question,
             context,
-            options: { ...computeOptions, year }
+            parameters: { ...computeOptions, year }
         }
     })
     if (question.transformFunction) {

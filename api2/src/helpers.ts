@@ -178,7 +178,7 @@ export const getChartKeys = (field: string) => {
 //     const resolvers: any = {}
 //     demographicsFields.forEach(field => {
 //         resolvers[field] = (
-//             args: { filters: Filters; options: Options; facet: Facet },
+//             args: { filters: Filters; parameters: Parameters; facet: Facet },
 //             context: RequestContext,
 //             info: any
 //         ) => {

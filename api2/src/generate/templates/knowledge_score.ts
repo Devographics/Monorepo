@@ -38,5 +38,6 @@ const transformFunction: TransformFunction = (
 
 export const knowledge_score: TemplateFunction = ({ question, section }) => ({
     id: 'knowledge_score',
+    dbPath: 'user_info.knowledge_score',
     transformFunction
 })

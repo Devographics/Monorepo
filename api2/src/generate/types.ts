@@ -51,6 +51,7 @@ export type Question = {
     id: string
     options?: Option[]
     optionsAreNumeric?: boolean
+    defaultSort?: string
     template?: string
 }
 

@@ -28,7 +28,7 @@ export const tool: TemplateFunction = ({ survey, question }) => {
     entity: Entity
     responses(filters: ${getFiltersTypeName(
         survey.id
-    )},  options: Options, facet: ${getFacetsTypeName(survey.id)}): Responses
+    )},  parameters: Parameters, facet: ${getFacetsTypeName(survey.id)}): Responses
 }`,
         resolverMap: {
             id: idResolverFunction,

@@ -11,6 +11,7 @@
 
 - id: age
   optionsTypeName: AgeRange
+  defaultSort: options
   options:
       - id: range_less_than_10
         average: 10
@@ -30,6 +31,7 @@
         average: 65
 
 - id: years_of_experience
+  defaultSort: options
   optionsTypeName: WorkExperienceRange
   options:
       - id: range_less_than_1
@@ -46,6 +48,7 @@
         average: 20
 
 - id: company_size
+  defaultSort: options
   optionsTypeName: CompanySizeRange
   options:
       - id: range_1
@@ -72,6 +75,7 @@
       - id: yes_unrelated
 
 - id: yearly_salary
+  defaultSort: options
   optionsTypeName: SalaryRange
   options:
       - id: range_work_for_free
@@ -88,9 +92,6 @@
         average: 150000
       - id: range_more_than_200
         average: 200000
-
-- id: source
-  dbPath: user_info.source.normalized
 
 - id: gender
   options:
@@ -122,32 +123,3 @@
 
 - id: disability_status_others
   dbPath: user_info.disability_status.others.normalized
-
-- id: knowledge_score
-  dbPath: user_info.knowledge_score
-
-- id: js_ts_balance
-  optionsAreNumeric: true
-  options:
-      - id: 0
-      - id: 1
-      - id: 2
-      - id: 3
-      - id: 4
-      - id: 5
-      - id: 6
-      - id: 7
-      - id: 8
-
-- id: css_js_balance
-  optionsAreNumeric: true
-  options:
-      - id: 0
-      - id: 1
-      - id: 2
-      - id: 3
-      - id: 4
-      - id: 5
-      - id: 6
-      - id: 7
-      - id: 8

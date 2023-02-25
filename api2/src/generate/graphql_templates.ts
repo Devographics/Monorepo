@@ -1,5 +1,5 @@
 import { Option } from '../types'
-import { graphqlize, mergeSections } from './helpers'
+import { graphqlize, mergeSections, formatNumericOptions } from './helpers'
 import { Survey, Edition, Section, QuestionObject, TypeObject } from './types'
 
 /*
@@ -196,7 +196,7 @@ export const generateFieldType = ({ question }: { question: QuestionObject }) =>
         typeDef: `type ${fieldTypeName} {
     responses(filters: ${getFiltersTypeName(
         question.surveyId
-    )}, options: Options, facet: ${getFacetsTypeName(question.surveyId)}): Responses${
+    )}, parameters: Parameters, facet: ${getFacetsTypeName(question.surveyId)}): Responses${
             options ? `\n    options: [${optionTypeName}]` : ''
         }
 }`
@@ -269,12 +269,13 @@ enum DisabilityStatusID {
 */
 export const generateEnumType = ({ question }: { question: QuestionObject }) => {
     const { enumTypeName, options, optionsAreNumeric } = question
-    if (!enumTypeName) return
+    if (!enumTypeName || !options) return
+    const formattedOptions = optionsAreNumeric ? formatNumericOptions(options) : options
     return {
         typeName: enumTypeName,
         typeType: 'enum',
         typeDef: `enum ${enumTypeName} {
-    ${options?.map((o: Option) => (optionsAreNumeric ? `value_${o.id}` : o.id)).join('\n    ')}
+    ${formattedOptions.map(o => o.id).join('\n    ')}
 }`
     }
 }

@@ -33,7 +33,7 @@ type EditionMetadata {
     social_image_url: String
 }
 
-input Options {
+input Parameters {
     limit: Int
     cutoff: Int
     sort: SortSpecifier
