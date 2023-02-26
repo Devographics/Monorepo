@@ -1,5 +1,5 @@
 import { Survey, ParsedQuestion } from '../../generate/types'
-import { getFacetsTypeName } from './generateFieldType'
+import { getFacetsTypeName } from '../../generate/helpers'
 
 /*
 

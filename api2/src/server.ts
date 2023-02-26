@@ -4,7 +4,7 @@ import { MongoClient } from 'mongodb'
 import responseCachePluginPkg from 'apollo-server-plugin-response-cache'
 const responseCachePlugin = (responseCachePluginPkg as any).default
 
-import defaultTypeDefs from './type_defs/schema.graphql'
+import defaultTypeDefs from './graphql/typedefs/schema.graphql'
 import { RequestContext } from './types'
 import express from 'express'
 import { analyzeTwitterFollowings } from './rpcs'
