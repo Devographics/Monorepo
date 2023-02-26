@@ -1,11 +1,11 @@
-import { QuestionObject, TemplateFunction } from '../types'
+import { ParsedQuestion, TemplateFunction } from '../types'
 import { graphqlize, getSectionItems } from '../helpers'
 import { getFiltersTypeName, getFacetsTypeName } from '../graphql_templates'
-import { getResolverMap } from './all_features'
+import { getToolsFeaturesResolverMap } from '../resolvers'
 
 export const all_tools: TemplateFunction = ({ survey, edition, section }) => {
     const fieldTypeName = `${graphqlize(survey.id)}${graphqlize(edition.id)}AllItems`
-    let items: QuestionObject[] = []
+    let items: ParsedQuestion[] = []
     for (const section of edition.sections.filter(s => s.template === 'feature')) {
         items = [...items, ...getSectionItems({ survey, edition, section })]
     }
@@ -21,6 +21,6 @@ export const all_tools: TemplateFunction = ({ survey, edition, section }) => {
             survey.id
         )}Tool]
 }`,
-        resolverMap: getResolverMap({ survey, items })
+        resolverMap: getToolsFeaturesResolverMap({ survey, items })
     }
 }

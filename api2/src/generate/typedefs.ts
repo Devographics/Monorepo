@@ -11,8 +11,8 @@ import {
     generateFiltersType,
     generateFacetsType
 } from './graphql_templates'
-import { Survey, QuestionObject, TypeObject } from './types'
-import { getPath, getSectionQuestionObjects, mergeSections } from './helpers'
+import { ParsedSurvey, ParsedQuestion, TypeObject } from './types'
+import { getPath, mergeSections } from './helpers'
 import isEmpty from 'lodash/isEmpty.js'
 
 /*
@@ -20,13 +20,7 @@ import isEmpty from 'lodash/isEmpty.js'
 Generate typeDefs corresponding to survey arborescence
 
 */
-export const generateSurveysTypeObjects = async ({
-    surveys,
-    questionObjects
-}: {
-    surveys: Survey[]
-    questionObjects: QuestionObject[]
-}) => {
+export const generateSurveysTypeObjects = async ({ surveys }: { surveys: ParsedSurvey[] }) => {
     let typeObjects = []
 
     // store all options for all fields contained in survey question outlines
@@ -47,20 +41,9 @@ export const generateSurveysTypeObjects = async ({
             // type for all editions of a survey
             typeObjects.push(generateEditionType({ survey, edition, path }))
 
-            const allSections = mergeSections(edition.sections, edition.apiSections)
-
-            if (!isEmpty(allSections)) {
-                for (const section of allSections) {
+            if (!isEmpty(edition.sections)) {
+                for (const section of edition.sections) {
                     path = getPath({ survey, edition, section })
-
-                    // make sure to get "rich" questions from questionObjects
-                    // and not "raw" questions from edition.questions
-                    const sectionQuestionObjects = getSectionQuestionObjects({
-                        survey,
-                        section,
-                        edition,
-                        questionObjects
-                    })
 
                     // type for all sections of a survey edition
                     typeObjects.push(
@@ -68,7 +51,7 @@ export const generateSurveysTypeObjects = async ({
                             survey,
                             edition,
                             section,
-                            questions: sectionQuestionObjects,
+                            questions: section.questions,
                             path
                         })
                     )
@@ -88,7 +71,7 @@ Generate typeDefs corresponding to all questions
 export const generateQuestionsTypeObjects = async ({
     questionObjects
 }: {
-    questionObjects: QuestionObject[]
+    questionObjects: ParsedQuestion[]
 }) => {
     const typeObjects: TypeObject[] = []
 
@@ -105,7 +88,7 @@ export const generateQuestionsTypeObjects = async ({
             typeDef
         } = question
 
-        if (!typeObjects.find(t => t.typeName === fieldTypeName)) {
+        if (fieldTypeName && !typeObjects.find(t => t.typeName === fieldTypeName)) {
             if (typeDef) {
                 typeObjects.push({ typeName: fieldTypeName, typeDef, typeType: 'field' })
             } else {
@@ -135,8 +118,8 @@ export const generateFiltersTypeObjects = ({
     surveys,
     questionObjects
 }: {
-    surveys: Survey[]
-    questionObjects: QuestionObject[]
+    surveys: ParsedSurvey[]
+    questionObjects: ParsedQuestion[]
 }) => {
     return surveys.map(survey => generateFiltersType({ survey, questionObjects }))
 }
@@ -145,8 +128,8 @@ export const generateFacetsTypeObjects = ({
     surveys,
     questionObjects
 }: {
-    surveys: Survey[]
-    questionObjects: QuestionObject[]
+    surveys: ParsedSurvey[]
+    questionObjects: ParsedQuestion[]
 }) => {
     return surveys.map(survey => generateFacetsType({ survey, questionObjects }))
 }

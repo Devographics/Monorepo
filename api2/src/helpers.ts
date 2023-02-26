@@ -20,9 +20,10 @@
 //     return keys
 // }
 
-// export const getChartKeys = (field: string) => {
-//     return getAllKeys()[field]
-// }
+export const getChartKeys = (field: string) => {
+    return []
+    // return getAllKeys()[field]
+}
 
 // /**
 //  * Return either e.g. other_tools.browsers.choices or other_tools.browsers.others.normalized

@@ -8,7 +8,7 @@ import { computeCompletionByYear } from './completion'
 import { getChartKeys } from '../helpers'
 import isEmpty from 'lodash/isEmpty.js'
 import { getFacetSegments } from '../helpers'
-import { Survey, Edition, Section, QuestionObject, YearData } from '../generate/types'
+import { Survey, Edition, Section, ParsedQuestion, YearData } from '../generate/types'
 
 import { TermAggregationOptions } from './types'
 
@@ -38,7 +38,7 @@ export async function genericComputeFunction({
     survey: Survey
     edition: Edition
     section: Section
-    question: QuestionObject
+    question: ParsedQuestion
     parameters: TermAggregationOptions
 }) {
     const { db, isDebug } = context

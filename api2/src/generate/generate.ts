@@ -1,11 +1,22 @@
-import { Survey, Edition, Section, Question, QuestionObject, Option } from './types'
+import {
+    ParsedSurvey,
+    Survey,
+    Edition,
+    Section,
+    Question,
+    ParsedSection,
+    ParsedQuestion,
+    Option,
+    TypeObject
+} from './types'
 import { logToFile } from '../helpers/debug'
 import {
     graphqlize,
     getGlobalQuestions,
     applyQuestionTemplate,
     mergeOptions,
-    mergeSections
+    mergeSections,
+    getSectionQuestionObjects
 } from './helpers'
 import {
     generateSurveysTypeObjects,
@@ -15,17 +26,40 @@ import {
 } from './typedefs'
 import uniq from 'lodash/uniq.js'
 
-export const generateTypeObjects = async ({
+/*
+
+Parse surveys and generate a "rich" version of the outline tree
+
+*/
+export const parseSurveys = ({
     surveys,
     questionObjects
 }: {
     surveys: Survey[]
-    questionObjects: QuestionObject[]
-}) => {
+    questionObjects: ParsedQuestion[]
+}): ParsedSurvey[] => {
+    for (const survey of surveys) {
+        for (const edition of survey.editions) {
+            const allSections = mergeSections(edition.sections, edition.apiSections)
+            edition.sections = allSections
+            for (const section of edition.sections) {
+                section.questions = getSectionQuestionObjects({ edition, section, questionObjects })
+            }
+        }
+    }
+    return surveys as ParsedSurvey[]
+}
+
+export const generateTypeObjects = async ({
+    surveys,
+    questionObjects
+}: {
+    surveys: ParsedSurvey[]
+    questionObjects: ParsedQuestion[]
+}): Promise<TypeObject[]> => {
     await logToFile('questionObjects.yml', questionObjects, { mode: 'overwrite' })
     const surveysTypeObjects = await generateSurveysTypeObjects({
-        surveys,
-        questionObjects
+        surveys
     })
     const questionsTypeObjects = await generateQuestionsTypeObjects({
         questionObjects
@@ -63,10 +97,10 @@ at the level of the entire list.
 
 */
 export const getQuestionObjects = ({ surveys }: { surveys: Survey[] }) => {
-    let allQuestionObjects: QuestionObject[] = []
+    let allQuestionObjects: ParsedQuestion[] = []
 
     for (const survey of surveys) {
-        const surveyQuestionObjects: QuestionObject[] = []
+        const surveyQuestionObjects: ParsedQuestion[] = []
 
         for (const edition of survey.editions) {
             const allSections = mergeSections(edition.sections, edition.apiSections)
@@ -123,7 +157,7 @@ export const getQuestionObject = ({
     edition: Edition
     section: Section
     question: Question
-}) => {
+}): ParsedQuestion => {
     // apply template
     const templateObject = applyQuestionTemplate({
         survey,
@@ -150,7 +184,7 @@ export const getQuestionObject = ({
         ? { ...globalQuestionDefinition, isGlobal: true }
         : {}
 
-    const questionObject = {
+    const questionObject: ParsedQuestion = {
         ...defaultObject,
         ...templateObject,
         ...globalObject,
@@ -180,7 +214,7 @@ export const getQuestionObject = ({
     return questionObject
 }
 
-export const mergeQuestionObjects = (q1: QuestionObject, q2: QuestionObject) => {
+export const mergeQuestionObjects = (q1: ParsedQuestion, q2: ParsedQuestion) => {
     const newOptions = q1.options && q2.options && mergeOptions(q1.options, q2.options)
 
     const editions = uniq([...(q1?.editions || []), ...(q2?.editions || [])])

@@ -1,4 +1,17 @@
-import { Survey, Edition, Section, ApiSection, Question, QuestionObject, Option } from './types'
+import {
+    Survey,
+    Edition,
+    Section,
+    ApiSection,
+    Question,
+    ParsedSurvey,
+    ParsedEdition,
+    ParsedSection,
+    ParsedQuestion,
+    Option,
+    QuestionTemplateOutput,
+    TemplatesDictionnary
+} from './types'
 import globalQuestions from './global_questions.yml'
 import { templates } from './question_templates'
 import uniq from 'lodash/uniq.js'
@@ -73,20 +86,22 @@ export const applyQuestionTemplate = (options: {
     edition: Edition
     section: Section
     question: Question
-}) => {
+}): QuestionTemplateOutput => {
     const { survey, edition, section, question } = options
     const template = question.template || section.template
-
+    const id = question.id || 'placeholder'
+    let output = { ...question, id }
     if (template) {
         const templateFunction = templates[template]
         if (templateFunction) {
-            return { ...question, template, ...templateFunction(options) }
+            output = { ...output, template, ...templateFunction(options) }
         } else {
             console.log(`// template ${template} not found!`)
             console.log(question)
-            return { ...question, template }
+            output = { ...output, template }
         }
     }
+    return output
 }
 
 export const getPath = ({
@@ -105,7 +120,7 @@ export const getPath = ({
     const pathSegments = ['root']
     const segments = [survey, edition, section, question]
     segments.forEach(segment => {
-        if (segment) {
+        if (segment?.id) {
             pathSegments.push(segment.id)
         }
     })
@@ -113,15 +128,13 @@ export const getPath = ({
 }
 
 export const getSectionQuestionObjects = ({
-    survey,
-    section,
     edition,
+    section,
     questionObjects
 }: {
-    survey: Survey
-    section: Section
     edition: Edition
-    questionObjects: QuestionObject[]
+    section: Section
+    questionObjects: ParsedQuestion[]
 }) => {
     const results = questionObjects.filter(
         q =>
@@ -160,8 +173,8 @@ Into
 
 */
 export const mergeSections = (
-    sections1: Section[] | ApiSection[] = [],
-    sections2: Section[] | ApiSection[] = []
+    sections1: Section[] | ParsedSection[] = [],
+    sections2: Section[] | ParsedSection[] = []
 ) => {
     const sections = [...sections1]
     for (const section of sections2) {
@@ -187,9 +200,9 @@ export const getSectionItems = ({
     edition,
     section
 }: {
-    survey: Survey
-    edition: Edition
-    section: Section
+    survey: Survey | ParsedSurvey
+    edition: Edition | ParsedEdition
+    section: Section | ParsedSection
 }) =>
     section.questions
         .filter(q => typeof q.template === 'undefined')

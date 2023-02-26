@@ -1,11 +1,12 @@
 import * as allTemplates from './templates'
 const { defaultTemplateFunction } = allTemplates
+import { TemplatesDictionnary } from './types'
 
 const doNotInclude = () => ({
     includeInApi: false
 })
 
-export const templates = {
+export const templates: TemplatesDictionnary = {
     ...allTemplates,
 
     race_ethnicity: allTemplates.multiple,

@@ -61,7 +61,55 @@ type Responses {
 type YearData {
     year: Int
     completion: YearCompletion
-    facets: [EntityFacet]
+    buckets: [Bucket]
+}
+
+"""
+A data bucket
+"""
+type Bucket {
+    id: String
+    """
+    Respondent count
+    """
+    count: Int
+    """
+    Percentage relative to question respondents
+    """
+    percentage_question: Float
+    """
+    Percentage relative to survey respondents
+    """
+    percentage_survey: Float
+    """
+    Percentage relative to question respondents in facet
+    """
+    percentage_facet: Float
+    """
+    Count of respondents in all facets (same as default/null facet)
+    """
+    count_all_facets: Int
+    """
+    Percentage relative to question respondents in all facets (same as default/null faces)
+    """
+    percentage_all_facets: Float
+    """
+    Entity associated with the current bucket
+    """
+    entity: Entity
+    """
+    An array of bucket facets, when bucket is faceted
+    """
+    facets: [BucketFacet]
+}
+
+"""
+A facet associated with a set of entities.
+"""
+type BucketFacet {
+    facetId: String
+    facetValue: String
+    buckets: [Bucket]
 }
 
 type Query {

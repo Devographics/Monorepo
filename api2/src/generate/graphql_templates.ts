@@ -1,6 +1,6 @@
 import { Option } from '../types'
 import { graphqlize, mergeSections, formatNumericOptions } from './helpers'
-import { Survey, Edition, Section, QuestionObject, TypeObject } from './types'
+import { Survey, Edition, Section, ParsedQuestion, TypeObject } from './types'
 
 /*
 
@@ -156,7 +156,7 @@ export const generateSectionType = ({
     survey: Survey
     edition: Edition
     section: Section
-    questions: QuestionObject[]
+    questions: ParsedQuestion[]
     path: string
 }) => {
     const typeName = `${graphqlize(edition.id)}${graphqlize(section.id)}Section`
@@ -165,7 +165,7 @@ export const generateSectionType = ({
         typeName,
         typeDef: `type ${typeName} {
     ${questions
-        .map((question: QuestionObject) => {
+        .map((question: ParsedQuestion) => {
             return `${question.id}: ${question.fieldTypeName}`
         })
         .join('\n    ')}
@@ -187,7 +187,7 @@ type DisabilityStatus {
 export const getFiltersTypeName = (surveyId: string) => graphqlize(surveyId) + 'Filters'
 export const getFacetsTypeName = (surveyId: string) => graphqlize(surveyId) + 'Facets'
 
-export const generateFieldType = ({ question }: { question: QuestionObject }) => {
+export const generateFieldType = ({ question }: { question: ParsedQuestion }) => {
     const { fieldTypeName, optionTypeName, options } = question
 
     return {
@@ -214,7 +214,7 @@ input DisabilityStatusFilter {
 }
 
 */
-export const generateFilterType = ({ question }: { question: QuestionObject }) => {
+export const generateFilterType = ({ question }: { question: ParsedQuestion }) => {
     const { filterTypeName, enumTypeName } = question
     if (!filterTypeName) return
     return {
@@ -240,7 +240,7 @@ type DisabilityStatusOption {
 }
 
 */
-export const generateOptionType = ({ question }: { question: QuestionObject }) => {
+export const generateOptionType = ({ question }: { question: ParsedQuestion }) => {
     const { optionTypeName, enumTypeName, surveyId, options } = question
     if (!optionTypeName) return
     const optionsHaveAverage = options?.some((o: Option) => typeof o.average !== 'undefined')
@@ -267,7 +267,7 @@ enum DisabilityStatusID {
 }
 
 */
-export const generateEnumType = ({ question }: { question: QuestionObject }) => {
+export const generateEnumType = ({ question }: { question: ParsedQuestion }) => {
     const { enumTypeName, options, optionsAreNumeric } = question
     if (!enumTypeName || !options) return
     const formattedOptions = optionsAreNumeric ? formatNumericOptions(options) : options
@@ -303,7 +303,7 @@ export const generateFiltersType = ({
     questionObjects
 }: {
     survey: Survey
-    questionObjects: QuestionObject[]
+    questionObjects: ParsedQuestion[]
 }) => {
     const typeName = getFiltersTypeName(survey.id)
     return {
@@ -340,7 +340,7 @@ export const generateFacetsType = ({
     questionObjects
 }: {
     survey: Survey
-    questionObjects: QuestionObject[]
+    questionObjects: ParsedQuestion[]
 }) => {
     const typeName = getFacetsTypeName(survey.id)
     const questionObjectsWithFilters = questionObjects.filter(

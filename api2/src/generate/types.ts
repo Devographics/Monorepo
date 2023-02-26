@@ -4,7 +4,7 @@ import { RequestContext } from '../types'
 export type TypeObject = {
     typeName: string
     typeDef: string
-    typeType: string
+    typeType?: string
     path?: string
     // surveyId?: string
     // questionId?: string
@@ -18,6 +18,11 @@ export type TemplateArguments = {
 }
 
 export type TemplateFunction = (arg0: TemplateArguments) => QuestionTemplateOutput
+export type NullTemplate = (arg0: TemplateArguments) => { includeInApi: boolean }
+
+export interface TemplatesDictionnary {
+    [index: string]: TemplateFunction | NullTemplate
+}
 
 export interface SurveyConfig {
     id: string
@@ -26,18 +31,28 @@ export interface SurveyConfig {
 export interface Survey extends SurveyConfig {
     editions: Edition[]
 }
+export interface ParsedSurvey extends Omit<Survey, 'editions'> {
+    editions: ParsedEdition[]
+}
 
 export type Edition = {
     id: string
     sections: Section[]
-    apiSections: ApiSection[]
+    apiSections: Section[]
     year: number
+}
+export interface ParsedEdition extends Omit<Edition, 'sections' | 'apiSections'> {
+    sections: ParsedSection[]
+    apiSections: ParsedSection[]
 }
 
 export type Section = {
     id: string
     questions: Question[]
     template?: string
+}
+export interface ParsedSection extends Omit<Section, 'questions'> {
+    questions: ParsedQuestion[]
 }
 
 export type ApiSection = {
@@ -51,47 +66,33 @@ export type ApiQuestion = {
 }
 
 export type Question = {
-    id: string
+    id?: string
     options?: Option[]
     optionsAreNumeric?: boolean
     defaultSort?: string
     template?: string
+
+    autogenerateOptionType?: boolean
+    autogenerateEnumType?: boolean
+    autogenerateFilterType?: boolean
 }
 
-export interface QuestionTemplateOutput {
-    id?: string
-    options?: Option[]
-    optionsAreNumeric?: boolean
-    template?: string
+export interface QuestionTemplateOutput extends Omit<Question, 'id'> {
+    id: string
+}
 
-    sectionIds?: string[]
+export interface ParsedQuestion extends Omit<Question, 'id'> {
+    id: string
+
+    sectionIds: string[]
     dbPath?: string
     dbPathComments?: string
     includeInApi?: boolean
 
     editions?: string[]
 
-    surveyId?: string
-    typeDef?: string
-
-    resolverMap?: ResolverMap
-
-    isGlobal?: boolean
-    fieldTypeName?: string
-    filterTypeName?: string
-    optionTypeName?: string
-    enumTypeName?: string
-}
-
-export interface QuestionObject extends Question {
-    sectionIds: string[]
-    dbPath: string
-    dbPathComments?: string
-    includeInApi?: boolean
-
-    editions?: string[]
-
     surveyId: string
+
     typeDef?: string
 
     resolverMap?: ResolverMap
@@ -120,7 +121,7 @@ export type ResolverParent = {
     survey: Survey
     edition: Edition
     section: Section
-    question: QuestionObject
+    question: ParsedQuestion
     computeOptions: ComputeOptions
 }
 

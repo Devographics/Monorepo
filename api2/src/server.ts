@@ -27,7 +27,7 @@ import { loadOrGetSurveys } from './load/surveys'
 
 //import Tracing from '@sentry/tracing'
 
-import { generateTypeObjects, getQuestionObjects } from './generate/generate'
+import { generateTypeObjects, getQuestionObjects, parseSurveys } from './generate/generate'
 import { generateResolvers } from './generate/resolvers'
 
 const app = express()
@@ -86,7 +86,9 @@ const start = async () => {
     const surveys = await loadOrGetSurveys()
     const questionObjects = getQuestionObjects({ surveys })
 
-    const typeObjects = await generateTypeObjects({ surveys, questionObjects })
+    const parsedSurveys = parseSurveys({ surveys, questionObjects })
+
+    const typeObjects = await generateTypeObjects({ surveys: parsedSurveys, questionObjects })
     const allTypeDefsString = typeObjects.map(t => t.typeDef).join('\n\n')
 
     await logToFile('typeDefs.yml', typeObjects, { mode: 'overwrite' })
@@ -97,8 +99,7 @@ const start = async () => {
         JSONObject: GraphQLJSONObject
     }
     const generatedResolvers = await generateResolvers({
-        surveys,
-        questionObjects,
+        surveys: parsedSurveys,
         typeObjects
     })
     const resolvers = { ...defaultResolvers, ...generatedResolvers }

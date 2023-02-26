@@ -1,14 +1,16 @@
 import {
+    ParsedSurvey,
     Survey,
     Edition,
     Section,
-    QuestionObject,
+    ParsedQuestion,
+    ParsedSection,
     Option,
     TypeObject,
     ResolverType,
     ResolverMap
 } from './types'
-import { getPath, getSectionQuestionObjects, mergeSections, formatNumericOptions } from './helpers'
+import { getPath, mergeSections, formatNumericOptions } from './helpers'
 import { genericComputeFunction } from '../compute'
 import { useCache, computeKey } from '../helpers/caching'
 import { getRawCommentsWithCache } from '../compute/comments'
@@ -16,11 +18,9 @@ import { getEntity } from '../load/entities'
 
 export const generateResolvers = async ({
     surveys,
-    questionObjects,
     typeObjects
 }: {
-    surveys: Survey[]
-    questionObjects: QuestionObject[]
+    surveys: ParsedSurvey[]
     typeObjects: TypeObject[]
 }) => {
     // generate resolver map for root survey fields (i.e. each survey)
@@ -65,15 +65,14 @@ export const generateResolvers = async ({
         }
 
         for (const edition of survey.editions) {
-            const allSections = mergeSections(edition.sections, edition.apiSections)
-            if (allSections.length > 0) {
+            if (edition.sections.length > 0) {
                 // generate resolver map for each edition field (i.e. each edition section)
                 const editionTypeObject = typeObjects.find(
                     t => t.path === getPath({ survey, edition })
                 )
                 if (editionTypeObject) {
                     const editionFieldsResolvers = Object.fromEntries(
-                        allSections.map((section: Section) => {
+                        edition.sections.map((section: Section) => {
                             return [
                                 section.id,
                                 getSectionResolver({
@@ -91,25 +90,16 @@ export const generateResolvers = async ({
                     }
                 }
 
-                for (const section of allSections) {
+                for (const section of edition.sections) {
                     // generate resolvers for each section
                     const sectionTypeObject = typeObjects.find(
                         t => t.path === getPath({ survey, edition, section })
                     )
 
-                    // make sure to get "rich" questions from questionObjects
-                    // and not "raw" questions from edition.questions
-                    const sectionQuestionObjects = getSectionQuestionObjects({
-                        survey,
-                        section,
-                        edition,
-                        questionObjects
-                    })
-
                     if (sectionTypeObject) {
                         // generate resolver map for each section field (i.e. each section question)
                         resolvers[sectionTypeObject.typeName] = Object.fromEntries(
-                            sectionQuestionObjects.map(questionObject => {
+                            section.questions.map(questionObject => {
                                 return [
                                     questionObject.id,
                                     getQuestionResolver({
@@ -123,9 +113,12 @@ export const generateResolvers = async ({
                         )
                     }
 
-                    for (const questionObject of sectionQuestionObjects) {
-                        resolvers[questionObject.fieldTypeName] = questionObject.resolverMap || {
-                            responses: responsesResolverFunction
+                    for (const questionObject of section.questions) {
+                        if (questionObject.fieldTypeName) {
+                            resolvers[questionObject.fieldTypeName] =
+                                questionObject.resolverMap || {
+                                    responses: responsesResolverFunction
+                                }
                         }
                     }
                 }
@@ -188,7 +181,7 @@ const getQuestionResolver =
         survey: Survey
         edition: Edition
         section: Section
-        question: QuestionObject
+        question: ParsedQuestion
     }): ResolverType =>
     (parent, args, context, info) => {
         console.log('// question resolver')
@@ -301,3 +294,26 @@ Other Resolvers
 export const entityResolverFunction: ResolverType = ({ question }) => getEntity({ id: question.id })
 
 export const idResolverFunction: ResolverType = ({ question }) => question.id
+
+/*
+
+Resolver map used for all_features, all_tools, section_features, section_tools
+
+*/
+export const getToolsFeaturesResolverMap = ({
+    survey,
+    items
+}: {
+    survey: Survey
+    items: ParsedQuestion[]
+}): ResolverMap => ({
+    data: async (parent, args, context, info) => {
+        return items.map(question => ({ ...parent, question }))
+    },
+    ids: () => {
+        return items.map(q => q.id)
+    },
+    years: () => {
+        return survey.editions.map(e => e.year)
+    }
+})

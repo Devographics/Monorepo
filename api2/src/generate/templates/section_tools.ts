@@ -1,7 +1,7 @@
 import { TemplateFunction } from '../types'
 import { graphqlize, getSectionItems } from '../helpers'
 import { getFiltersTypeName, getFacetsTypeName } from '../graphql_templates'
-import { getResolverMap } from './all_features'
+import { getToolsFeaturesResolverMap } from '../resolvers'
 
 export const section_tools: TemplateFunction = ({ survey, edition, section }) => {
     const fieldTypeName = `${graphqlize(survey.id)}${graphqlize(edition.id)}${graphqlize(
@@ -22,6 +22,6 @@ export const section_tools: TemplateFunction = ({ survey, edition, section }) =>
             survey.id
         )}Tool]
 }`,
-        resolverMap: getResolverMap({ survey, items })
+        resolverMap: getToolsFeaturesResolverMap({ survey, items })
     }
 }

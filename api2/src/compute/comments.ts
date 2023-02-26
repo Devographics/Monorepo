@@ -3,7 +3,7 @@ import config from '../config'
 import get from 'lodash/get.js'
 import uniq from 'lodash/uniq.js'
 import { useCache } from '../helpers/caching'
-import { Survey, QuestionObject } from '../generate/types'
+import { Survey, ParsedQuestion } from '../generate/types'
 
 // note currently working because of "Dynamic require of "util" is not supported" error
 
@@ -42,7 +42,7 @@ const groupByYear = (allComments: CommentObject[]) => {
 
 interface GetRawCommentsOptions {
     survey: Survey
-    question: QuestionObject
+    question: ParsedQuestion
     context: RequestContext
     year?: number
 }
