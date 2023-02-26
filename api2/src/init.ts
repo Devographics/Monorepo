@@ -1,9 +1,9 @@
-import { initEntities, cacheSurveysEntities } from './entities'
-import { initSurveys } from './surveys'
+import { initEntities, cacheSurveysEntities } from './load/entities'
+import { initSurveys } from './load/surveys'
 import { initProjects } from './projects'
 import { RequestContext, WatchedItem } from './types'
-import { applyEntityResolvers } from './entities'
-import { cacheSurveys } from './surveys'
+import { applyEntityResolvers } from './load/entities'
+import { cacheSurveys } from './load/surveys'
 
 type InitFunctionsType = {
     [k in WatchedItem]?: any

@@ -3,10 +3,10 @@ import get from 'lodash/get.js'
 import path from 'path'
 import fs from 'fs'
 import fetch from 'node-fetch'
-import { loadOrGetEntities, findEntity, applyEntityResolvers } from './entities'
+import { loadOrGetEntities, findEntity, applyEntityResolvers } from './load/entities'
 import sharp from 'sharp'
 import { fetchTwitterUser } from './external_apis'
-import { useCache } from './caching'
+import { useCache } from './helpers/caching'
 import { Entity } from '@devographics/core-models'
 
 const services = { twitter: { fieldName: 'avatarUrl' } }

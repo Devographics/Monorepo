@@ -1,36 +1,37 @@
 import { Entity } from '@devographics/core-models'
 import { GitHub, RequestContext } from '../types'
-import projects from '../data/bestofjs.yml'
+// import projects from '../data/bestofjs.yml'
 import { fetchMdnResource, fetchTwitterUser } from '../external_apis'
-import { useCache } from '../caching'
-import { getEntity } from '../entities'
+import { useCache } from '../helpers/caching'
+import { getEntity } from '../load/entities'
 import compact from 'lodash/compact.js'
 
-const getSimulatedGithub = (id: string): GitHub | null => {
-    const project = projects.find((p: Entity) => p.id === id)
+// const getSimulatedGithub = (id: string): GitHub | null => {
+//     const project = projects.find((p: Entity) => p.id === id)
 
-    if (project !== undefined) {
-        const { name, description, github, stars, homepage } = project
+//     if (project !== undefined) {
+//         const { name, description, github, stars, homepage } = project
 
-        return {
-            id,
-            name,
-            description,
-            url: `https://github.com/${github}`,
-            stars,
-            homepage
-        }
-    } else {
-        return null
-    }
-}
+//         return {
+//             id,
+//             name,
+//             description,
+//             url: `https://github.com/${github}`,
+//             stars,
+//             homepage
+//         }
+//     } else {
+//         return null
+//     }
+// }
 
 export default {
     Entity: {
         github: async ({ id }: { id: string }) => {
             // note: for now just get local data from projects.yml
             // instead of actually querying github
-            return getSimulatedGithub(id)
+            // return getSimulatedGithub(id)
+            return {}
             // const projectObject = projects.find(p => p.id === entity.id)
             // return {
             //     ...projectObject

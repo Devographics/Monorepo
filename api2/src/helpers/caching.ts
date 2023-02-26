@@ -1,9 +1,9 @@
 // import { Db } from 'mongodb'
 // import config from './config'
-import { RequestContext } from './types'
+import { RequestContext } from '../types'
 
 import NodeCache from 'node-cache'
-import { appSettings } from './helpers/settings'
+import { appSettings } from './settings'
 const nodeCache = new NodeCache()
 
 type DynamicComputeCall = (...args: any[]) => Promise<any>

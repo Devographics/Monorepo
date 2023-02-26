@@ -1,11 +1,12 @@
-import { RequestContext, Survey, SurveyEdition } from './types'
+import { SurveyConfig, Survey, Edition } from '../generate/types'
+import { RequestContext } from '../types'
 import { Octokit } from '@octokit/core'
 import fetch from 'node-fetch'
 import yaml from 'js-yaml'
 import { readdir, readFile, lstat } from 'fs/promises'
-import { logToFile } from './debug'
+import { logToFile } from '../helpers/debug'
 import path from 'path'
-import { setCache } from './caching'
+import { setCache } from '../helpers/caching'
 
 let allSurveys: Survey[] = []
 
@@ -20,7 +21,7 @@ export const loadOrGetSurveys = async (
     if (forceReload || allSurveys.length === 0) {
         allSurveys = await loadSurveys()
     }
-    return allSurveys.filter(s => s.slug !== 'demo_survey')
+    return allSurveys.filter(s => s.id !== 'demo_survey')
 }
 
 const options = {
@@ -58,13 +59,13 @@ export const loadFromGitHub = async () => {
         if (file.type === 'dir') {
             console.log(`// Loading survey ${file.name}…`)
             const editions: any[] = []
-            let editionConfigYaml = {}
+            let surveyConfigYaml: SurveyConfig = { id: 'default' }
             const surveyDirContents = await listGitHubFiles(file.path)
 
             for (const file2 of surveyDirContents) {
                 if (file2.name === 'config.yml') {
                     // found config.yml for survey
-                    editionConfigYaml = await getGitHubYamlFile(file2.download_url)
+                    surveyConfigYaml = await getGitHubYamlFile(file2.download_url)
                 } else if (file2.type === 'dir') {
                     console.log(`    -> Edition ${file2.name}…`)
                     const editionsDirContents = await listGitHubFiles(file2.path)
@@ -87,7 +88,7 @@ export const loadFromGitHub = async () => {
                     editions.push(edition)
                 }
             }
-            const survey = { ...editionConfigYaml, editions }
+            const survey = { ...surveyConfigYaml, editions }
             surveys.push(survey)
         }
     }
@@ -227,22 +228,16 @@ export const cacheSurveys = async ({
         const { editions, ...rest } = survey
         for (const edition of editions) {
             const item = { ...edition, survey: rest }
-            setCache(getSurveyCacheKey({ survey, edition }), item, context)
+            setCache(getEditionCacheKey({ edition }), item, context)
         }
     }
-    console.log(`-> Cached ${surveys.length} surveys (${surveys.map(s => s.name).join()})`)
+    console.log(`-> Cached ${surveys.length} surveys (${surveys.map(s => s.id).join()})`)
 }
 
 export const getAllSurveysCacheKey = () => `surveys_all`
 
 export const getAllSurveysMetadataCacheKey = () => `surveys_all_metadata`
 
-export const getSurveyCacheKey = ({
-    survey,
-    edition
-}: {
-    survey?: Survey
-    edition?: SurveyEdition
-}) => `surveys_${edition.surveyId}`
+export const getEditionCacheKey = ({ edition }: { edition: Edition }) => `surveys_${edition.id}`
 
 export default allSurveys

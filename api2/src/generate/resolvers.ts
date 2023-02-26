@@ -10,9 +10,9 @@ import {
 } from './types'
 import { getPath, getSectionQuestionObjects, mergeSections, formatNumericOptions } from './helpers'
 import { genericComputeFunction } from '../compute'
-import { useCache, computeKey } from '../caching'
+import { useCache, computeKey } from '../helpers/caching'
 import { getRawCommentsWithCache } from '../compute/comments'
-import { getEntity } from '../entities'
+import { getEntity } from '../load/entities'
 
 export const generateResolvers = async ({
     surveys,

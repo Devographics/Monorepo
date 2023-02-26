@@ -1,5 +1,5 @@
 import { Survey, Edition, Section, Question, QuestionObject, Option } from './types'
-import { logToFile } from '../debug'
+import { logToFile } from '../helpers/debug'
 import {
     graphqlize,
     getGlobalQuestions,

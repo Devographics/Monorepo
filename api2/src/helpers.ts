@@ -10,19 +10,19 @@
 // import { Options } from './options'
 // import { loadOrGetEntities } from './entities'
 // import { TermAggregationOptions, AggregationFunction } from './compute/generic'
-import yamlKeys from './data/keys.yml'
+// import yamlKeys from './data/keys.yml'
 
-export const getAllKeys = () => {
-    const keys = {}
-    for (let k in yamlKeys) {
-        keys[k] = yamlKeys[k].map(k => (typeof k === 'object' ? k.id : k))
-    }
-    return keys
-}
+// export const getAllKeys = () => {
+//     const keys = {}
+//     for (let k in yamlKeys) {
+//         keys[k] = yamlKeys[k].map(k => (typeof k === 'object' ? k.id : k))
+//     }
+//     return keys
+// }
 
-export const getChartKeys = (field: string) => {
-    return getAllKeys()[field]
-}
+// export const getChartKeys = (field: string) => {
+//     return getAllKeys()[field]
+// }
 
 // /**
 //  * Return either e.g. other_tools.browsers.choices or other_tools.browsers.others.normalized

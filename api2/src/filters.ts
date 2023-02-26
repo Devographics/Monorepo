@@ -1,4 +1,4 @@
-import { loadOrGetSurveys } from './surveys'
+import { loadOrGetSurveys } from './load/surveys'
 import { getQuestionObjects } from './generate/generate'
 
 export interface Filter<T> {

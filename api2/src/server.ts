@@ -22,8 +22,8 @@ import { appSettings } from './helpers/settings'
 import { watchFiles } from './helpers/watch'
 import { cacheAvatars } from './avatars'
 
-import { logToFile } from './debug'
-import { loadOrGetSurveys } from './surveys'
+import { logToFile } from './helpers/debug'
+import { loadOrGetSurveys } from './load/surveys'
 
 //import Tracing from '@sentry/tracing'
 

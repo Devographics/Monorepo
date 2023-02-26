@@ -5,15 +5,15 @@ import fetch from 'node-fetch'
 import yaml from 'js-yaml'
 import { readdir, readFile } from 'fs/promises'
 import last from 'lodash/last.js'
-import { logToFile } from './debug'
+import { logToFile } from '../helpers/debug'
 import path from 'path'
 import marked from 'marked'
 import hljs from 'highlight.js/lib/common'
-import { appSettings } from './helpers/settings'
+import { appSettings } from '../helpers/settings'
 import sanitizeHtml from 'sanitize-html'
-import { RequestContext, Survey, SurveyEdition } from './types'
-import { setCache } from './caching'
-import entityResolvers from './resolvers/entities'
+import { RequestContext, Survey, SurveyEdition } from '../types'
+import { setCache } from '../helpers/caching'
+import entityResolvers from '../resolvers/entities'
 import isEmpty from 'lodash/isEmpty.js'
 
 let entities: Entity[] = []
@@ -196,7 +196,7 @@ export const getEntity = async ({ id }: { id: string | number }) => {
     if (!entity) {
         return
     }
-    
+
     if (entity.belongsTo) {
         // if entity A belongs to another entity B, extend B with A and return the result
         const ownerEntity = findEntity(entity.belongsTo, entities)

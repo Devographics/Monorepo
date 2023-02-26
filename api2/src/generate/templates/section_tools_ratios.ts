@@ -1,6 +1,6 @@
 import { TemplateFunction, ResolverMap, Survey, Section } from '../types'
 import { graphqlize } from '../helpers'
-import { useCache } from '../../caching'
+import { useCache } from '../../helpers/caching'
 import { computeToolsExperienceRanking } from '../../compute/experience'
 
 export const section_tools_ratios: TemplateFunction = ({ survey, section }) => {

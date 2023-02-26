@@ -19,8 +19,11 @@ export type TemplateArguments = {
 
 export type TemplateFunction = (arg0: TemplateArguments) => QuestionTemplateOutput
 
-export type Survey = {
+export interface SurveyConfig {
     id: string
+}
+
+export interface Survey extends SurveyConfig {
     editions: Edition[]
 }
 
