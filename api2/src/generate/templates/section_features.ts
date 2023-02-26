@@ -2,7 +2,7 @@
 
 import { TemplateFunction } from '../types'
 import { graphqlize, getSectionItems } from '../helpers'
-import { getFiltersTypeName, getFacetsTypeName } from '../graphql_templates'
+import { getFiltersTypeName, getFacetsTypeName } from '../helpers'
 import { getToolsFeaturesResolverMap } from '../resolvers'
 
 export const section_tools: TemplateFunction = ({ survey, edition, section }) => {

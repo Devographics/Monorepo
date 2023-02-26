@@ -6,7 +6,7 @@ import {
     responsesResolverFunction,
     entityResolverFunction
 } from '../resolvers'
-import { getFiltersTypeName, getFacetsTypeName } from '../graphql_templates'
+import { getFiltersTypeName, getFacetsTypeName } from '../helpers'
 import { graphqlize } from '../helpers'
 
 export const tool: TemplateFunction = ({ survey, question }) => {

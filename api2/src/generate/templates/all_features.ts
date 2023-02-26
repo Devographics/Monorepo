@@ -1,6 +1,6 @@
 import { ParsedQuestion, TemplateFunction, ResolverMap, Survey } from '../types'
 import { getSectionItems, graphqlize } from '../helpers'
-import { getFiltersTypeName, getFacetsTypeName } from '../graphql_templates'
+import { getFiltersTypeName, getFacetsTypeName } from '../helpers'
 import { getToolsFeaturesResolverMap } from '../resolvers'
 
 export const all_features: TemplateFunction = ({ survey, edition, section }) => {

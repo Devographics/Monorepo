@@ -12,7 +12,21 @@
         "experimentalDecorators": true,
         "noImplicitAny": true
     },
-    "files": ["file_types.d.ts", "./src/generate/graphqlize.ts"],
+    "files": [
+        "file_types.d.ts",
+        "./src/generate/graphqlize.ts",
+        "./src/graphql/templates/generateSurveysType.ts",
+        "./src/graphql/templates/generateSurveyType.ts",
+        "./src/graphql/templates/generateSurveyEditionsEnumType.ts",
+        "./src/graphql/templates/generateEditionType.ts",
+        "./src/graphql/templates/generateSectionType.ts",
+        "src/graphql/templates/generateFieldType.ts",
+        "./src/graphql/templates/generateFilterType.ts",
+        "./src/graphql/templates/generateOptionType.ts",
+        "./src/graphql/templates/generateEnumType.ts",
+        "./src/graphql/templates/generateFiltersType.ts",
+        "./src/graphql/templates/generateFacetsType.ts"
+    ],
     "exclude": ["/node_modules/"],
     "include": ["src/**/*"]
 }

@@ -1,16 +1,16 @@
 import {
-    generateOptionType,
-    generateEnumType,
-    generateFilterType,
-    generateSurveysType,
-    generateSurveyType,
-    generateEditionType,
-    generateSectionType,
-    generateFieldType,
-    generateSurveyEditionsEnumType,
+    generateFacetsType,
     generateFiltersType,
-    generateFacetsType
-} from './graphql_templates'
+    generateEnumType,
+    generateOptionType,
+    generateFilterType,
+    generateFieldType,
+    generateSectionType,
+    generateEditionType,
+    generateSurveyEditionsEnumType,
+    generateSurveyType,
+    generateSurveysType
+} from '../graphql/templates/index'
 import { ParsedSurvey, ParsedQuestion, TypeObject } from './types'
 import { getPath, mergeSections } from './helpers'
 import isEmpty from 'lodash/isEmpty.js'

@@ -210,3 +210,6 @@ export const getSectionItems = ({
 
 export const formatNumericOptions = (options: Option[]) =>
     options.map(option => ({ ...option, id: `value_${option.id}` }))
+
+export const getFiltersTypeName = (surveyId: string) => graphqlize(surveyId) + 'Filters'
+export const getFacetsTypeName = (surveyId: string) => graphqlize(surveyId) + 'Facets'
