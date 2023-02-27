@@ -20,7 +20,7 @@ import { rootDir } from './rootDir'
 import { appSettings } from './helpers/settings'
 
 import { watchFiles } from './helpers/watch'
-import { cacheAvatars } from './avatars'
+// import { cacheAvatars } from './avatars'
 
 import { logToFile } from './helpers/debug'
 import { loadOrGetSurveys } from './load/surveys'
@@ -29,6 +29,8 @@ import { loadOrGetSurveys } from './load/surveys'
 
 import { generateTypeObjects, getQuestionObjects, parseSurveys } from './generate/generate'
 import { generateResolvers } from './generate/resolvers'
+
+import { loadOrGetEntities } from './load/entities'
 
 const app = express()
 
@@ -81,6 +83,7 @@ const start = async () => {
 
     const db = mongoClient.db(process.env.MONGO_DB_NAME)
 
+    const entities = await loadOrGetEntities({})
     const context = { db, redisClient }
 
     const surveys = await loadOrGetSurveys()
@@ -91,6 +94,7 @@ const start = async () => {
     const typeObjects = await generateTypeObjects({ surveys: parsedSurveys, questionObjects })
     const allTypeDefsString = typeObjects.map(t => t.typeDef).join('\n\n')
 
+    await logToFile('questionObjects.yml', questionObjects, { mode: 'overwrite' })
     await logToFile('typeDefs.yml', typeObjects, { mode: 'overwrite' })
     await logToFile('typeDefs.graphql', allTypeDefsString, { mode: 'overwrite' })
 

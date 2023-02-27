@@ -12,6 +12,8 @@ import { graphqlize } from '../helpers'
 export const feature: TemplateFunction = ({ survey, question }) => {
     const fieldTypeName = `${graphqlize(survey.id)}Feature`
     return {
+        ...question,
+        id: question.id || 'placeholder',
         dbPath: `features.${question.id}.experience`,
         dbPathComments: `features.${question.id}.comment`,
         options: FEATURES_OPTIONS.map(id => ({

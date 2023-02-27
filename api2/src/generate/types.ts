@@ -40,7 +40,13 @@ export type Edition = {
     sections: Section[]
     apiSections: Section[]
     year: number
+    credits: Credit[]
 }
+
+export type Credit = {
+    id: string
+}
+
 export interface ParsedEdition extends Omit<Edition, 'sections' | 'apiSections'> {
     sections: ParsedSection[]
     apiSections: ParsedSection[]
@@ -66,11 +72,12 @@ export type ApiQuestion = {
 }
 
 export type Question = {
+    template: string
+
     id?: string
     options?: Option[]
     optionsAreNumeric?: boolean
     defaultSort?: string
-    template?: string
 
     autogenerateOptionType?: boolean
     autogenerateEnumType?: boolean
@@ -118,9 +125,9 @@ export interface ResolverMap {
 }
 
 export type ResolverParent = {
-    survey: Survey
-    edition: Edition
-    section: Section
+    survey: ParsedSurvey
+    edition: ParsedEdition
+    section: ParsedSection
     question: ParsedQuestion
     computeOptions: ComputeOptions
 }

@@ -1,5 +1,6 @@
 import {
     ParsedSurvey,
+    ParsedEdition,
     Survey,
     Edition,
     Section,
@@ -14,7 +15,10 @@ import { getPath, mergeSections, formatNumericOptions } from './helpers'
 import { genericComputeFunction } from '../compute'
 import { useCache, computeKey } from '../helpers/caching'
 import { getRawCommentsWithCache } from '../compute/comments'
-import { getEntity } from '../load/entities'
+import { getEntity, getEntities } from '../load/entities'
+import omit from 'lodash/omit.js'
+import pick from 'lodash/pick.js'
+import { entityResolverMap } from '../resolvers/entities'
 
 export const generateResolvers = async ({
     surveys,
@@ -25,7 +29,7 @@ export const generateResolvers = async ({
 }) => {
     // generate resolver map for root survey fields (i.e. each survey)
     const surveysFieldsResolvers = Object.fromEntries(
-        surveys.map((survey: Survey) => {
+        surveys.map(survey => {
             return [
                 survey.id,
                 getSurveyResolver({
@@ -39,14 +43,14 @@ export const generateResolvers = async ({
         Query: { surveys: () => surveys },
         Surveys: surveysFieldsResolvers,
         Responses: responsesResolverMap,
-        ItemComments: commentsResolverMap
-        // Entity: ({ question }) => getEntity({ id: question.id })
+        ItemComments: commentsResolverMap,
+        Entity: entityResolverMap
     } as any
 
     for (const survey of surveys) {
         // generate resolver map for each survey field (i.e. each survey edition)
         const surveyFieldsResolvers = Object.fromEntries(
-            survey.editions.map((edition: Edition) => {
+            survey.editions.map(edition => {
                 return [
                     edition.id,
                     getEditionResolver({
@@ -130,30 +134,65 @@ export const generateResolvers = async ({
 }
 
 const getSurveyResolver =
-    ({ survey }: { survey: Survey }): ResolverType =>
+    ({ survey }: { survey: ParsedSurvey }): ResolverType =>
     (parent, args, context, info) => {
         console.log('// survey resolver')
         return survey
     }
 
 const getSurveyMetadataResolver =
-    ({ survey }: { survey: Survey }): ResolverType =>
+    ({ survey }: { survey: ParsedSurvey }): ResolverType =>
     (parent, args, context, info) => {
         console.log('// survey metadata resolver')
         return survey
     }
 const getEditionResolver =
-    ({ survey, edition }: { survey: Survey; edition: Edition }): ResolverType =>
+    ({ survey, edition }: { survey: ParsedSurvey; edition: ParsedEdition }): ResolverType =>
     (parent, args, context, info) => {
         console.log('// edition resolver')
         return edition
     }
 
 const getEditionMetadataResolver =
-    ({ survey, edition }: { survey: Survey; edition: Edition }): ResolverType =>
-    (parent, args, context, info) => {
+    ({ survey, edition }: { survey: ParsedSurvey; edition: ParsedEdition }): ResolverType =>
+    async (parent, args, context, info) => {
         console.log('// edition metadata resolver')
-        return edition
+        const sections = edition.sections.map(section => ({
+            ...section,
+            questions: section.questions
+                .filter(question => question?.editions?.includes(edition.id))
+                .map(async question => {
+                    const pickProperties = [
+                        'id',
+                        'intlId',
+                        'template',
+                        'dbPath',
+                        'dbPathComments',
+                        'options'
+                    ]
+                    const cleanQuestion = {
+                        ...pick(question, pickProperties),
+                        entity: getEntity({ id: question.id, context })
+                    }
+                    const optionEntities = await getEntities({
+                        ids: question.options?.map(o => o.id),
+                        context
+                    })
+
+                    const options = question.options
+                        ?.filter(o => o.editions?.includes(edition.id))
+                        .map(option => ({
+                            ...omit(option, 'editions'),
+                            entity: optionEntities.find(o => o.id === option.id)
+                        }))
+                    // avoid repeating the options for feature and tool questions
+                    // since there's so many of them
+                    return ['feature', 'tool'].includes(question.template)
+                        ? cleanQuestion
+                        : { ...cleanQuestion, options }
+                })
+        }))
+        return { ...edition, sections }
     }
 
 const getSectionResolver =
@@ -183,7 +222,7 @@ const getQuestionResolver =
         section: Section
         question: ParsedQuestion
     }): ResolverType =>
-    (parent, args, context, info) => {
+    async (parent, args, context, info) => {
         console.log('// question resolver')
         const { filters, parameters, facet } = args
 
@@ -202,7 +241,16 @@ const getQuestionResolver =
             const questionOptions: Option[] = question.optionsAreNumeric
                 ? formatNumericOptions(question.options)
                 : question.options
-            result.options = questionOptions
+
+            const optionEntities = await getEntities({
+                ids: questionOptions.map(o => o.id),
+                context
+            })
+
+            result.options = questionOptions.map(option => ({
+                ...option,
+                entity: optionEntities.find(o => o.id === option.id)
+            }))
         }
         return result
     }
@@ -291,7 +339,8 @@ export const commentsResolverMap: ResolverMap = {
 Other Resolvers
 
 */
-export const entityResolverFunction: ResolverType = ({ question }) => getEntity({ id: question.id })
+export const entityResolverFunction: ResolverType = ({ question }, args, context) =>
+    getEntity({ id: question.id, context })
 
 export const idResolverFunction: ResolverType = ({ question }) => question.id
 

@@ -1,3 +1,75 @@
+state_of_graphql:
+    graphql2022:
+        - id: unknown
+        - id: stateofjs
+        - id: stateofgraphql
+        - id: twitter
+        - id: work
+        - id: facebook
+        - id: reddit_graphql
+        - id: codrops
+        - id: apollo
+        - id: slack
+        - id: meteor_community
+        - id: google
+        - id: discord
+        - id: graphile_discord
+        - id: prisma_slack
+        - id: state_of_js_email
+        - id: duckduckgo
+        - id: word_of_mouth
+        - id: stateofcss
+        - id: graphql_wtf
+state_of_css:
+    css2021:
+        - id: twitter
+        - id: google
+        - id: youtube
+        - id: work
+        - id: reddit
+        - id: stateofcss
+        - id: web_standards_ru
+        - id: sidebar
+        - id: codrops
+        - id: kevin_j_powell
+        - id: css_weekly
+        - id: css_tricks
+        - id: stateofjs
+        - id: frontend_focus
+        - id: telegram
+        - id: facebook
+        - id: slack
+        - id: front_end_front
+        - id: devto
+        - id: linkedin
+        - id: jen_simmons
+        - id: js_weekly
+        - id: sara_soueidan
+    css2022:
+        - id: state_of_css_survey
+        - id: kevin_j_powell
+        - id: twitter
+        - id: css_tricks
+        - id: stateofjs
+        - id: google
+        - id: lea_verou
+        - id: smashing_magazine
+        - id: work
+        - id: codrops
+        - id: youtube
+        - id: hn
+        - id: mozilla
+        - id: slack
+        - id: microsoft_teams
+        - id: web_standards_ru
+        - id: sidebar
+        - id: linkedin
+        - id: reddit
+        - id: duckduckgo
+        - id: front_end_front
+        - id: una_kravets
+        - id: frontend_focus
+        - id: levelup
 state_of_js:
     js2021:
         - id: twitter

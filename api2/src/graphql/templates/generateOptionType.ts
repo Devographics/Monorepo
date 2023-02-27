@@ -22,6 +22,7 @@ export const generateOptionType = ({ question }: { question: ParsedQuestion }) =
         typeType: 'option',
         typeDef: `type ${optionTypeName} {
     id: ${enumTypeName}
+    entity: Entity
     editions: [${graphqlize(surveyId)}EditionID]${optionsHaveAverage ? '\n    average: Float' : ''}
 }`
     }

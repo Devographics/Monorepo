@@ -4,12 +4,10 @@ import {
     Edition,
     Section,
     Question,
-    ParsedSection,
     ParsedQuestion,
     Option,
     TypeObject
 } from './types'
-import { logToFile } from '../helpers/debug'
 import {
     graphqlize,
     getGlobalQuestions,
@@ -57,7 +55,6 @@ export const generateTypeObjects = async ({
     surveys: ParsedSurvey[]
     questionObjects: ParsedQuestion[]
 }): Promise<TypeObject[]> => {
-    await logToFile('questionObjects.yml', questionObjects, { mode: 'overwrite' })
     const surveysTypeObjects = await generateSurveysTypeObjects({
         surveys
     })
@@ -187,8 +184,8 @@ export const getQuestionObject = ({
     const questionObject: ParsedQuestion = {
         ...defaultObject,
         ...templateObject,
-        ...globalObject,
-        ...question
+        ...question,
+        ...globalObject
     }
 
     if (questionObject.options) {

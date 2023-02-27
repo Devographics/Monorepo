@@ -10,6 +10,7 @@ type Entity {
     nameClean: String
     nameHtml: String
     otherName: String
+    homepageUrl: String
     homepage: Homepage
     category: String
     github: GitHub

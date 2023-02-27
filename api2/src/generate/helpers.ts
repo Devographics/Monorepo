@@ -2,17 +2,15 @@ import {
     Survey,
     Edition,
     Section,
-    ApiSection,
     Question,
     ParsedSurvey,
     ParsedEdition,
     ParsedSection,
     ParsedQuestion,
     Option,
-    QuestionTemplateOutput,
-    TemplatesDictionnary
+    QuestionTemplateOutput
 } from './types'
-import globalQuestions from './global_questions.yml'
+import globalQuestions from '../data/global_questions.yml'
 import { templates } from './question_templates'
 import uniq from 'lodash/uniq.js'
 import { getQuestionObject } from './generate'

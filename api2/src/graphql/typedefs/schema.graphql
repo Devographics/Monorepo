@@ -31,6 +31,29 @@ type EditionMetadata {
     image_url: String
     favicon_url: String
     social_image_url: String
+
+    sections: [SectionMetadata]
+}
+
+type SectionMetadata {
+    id: String
+    questions: [QuestionMetadata]
+}
+
+type QuestionMetadata {
+    id: String
+    intlId: String
+    template: String
+    dbPath: String
+    dbPathComments: String
+    options: [OptionsMetadata]
+    entity: Entity
+}
+
+type OptionsMetadata {
+    id: String
+    average: Float
+    entity: Entity
 }
 
 input Parameters {

@@ -1,6 +1,6 @@
 import { initEntities, cacheSurveysEntities } from './load/entities'
 import { initSurveys } from './load/surveys'
-import { initProjects } from './projects'
+import { initProjects } from './load/projects'
 import { RequestContext, WatchedItem } from './types'
 import { applyEntityResolvers } from './load/entities'
 import { cacheSurveys } from './load/surveys'

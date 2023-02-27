@@ -20,4 +20,4 @@ export type {
   SurveyStatusLabel,
 } from "./surveys/typings";
 
-export type { Entity } from "./entities/typings";
+export type { EntityResolvedFields, Entity } from "./entities/typings";

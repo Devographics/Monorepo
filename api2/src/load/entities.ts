@@ -1,5 +1,5 @@
 // import { Entity } from './types'
-import { Entity } from '@devographics/core-models'
+import { EntityResolvedFields, Entity } from '@devographics/core-models'
 import { Octokit } from '@octokit/core'
 import fetch from 'node-fetch'
 import yaml from 'js-yaml'
@@ -11,22 +11,29 @@ import marked from 'marked'
 import hljs from 'highlight.js/lib/common'
 import { appSettings } from '../helpers/settings'
 import sanitizeHtml from 'sanitize-html'
-import { RequestContext, Survey, SurveyEdition } from '../types'
+import { RequestContext } from '../types'
+import { ParsedSurvey, ParsedEdition, ResolverMap } from '../generate/types'
 import { setCache } from '../helpers/caching'
-import entityResolvers from '../resolvers/entities'
+import { EntityResolverMap, entityResolverMap } from '../resolvers/entities'
 import isEmpty from 'lodash/isEmpty.js'
 
-let entities: Entity[] = []
+let Entities: Entity[] = []
 
-// load locales if not yet loaded
+// load entities if not yet loaded
 export const loadOrGetEntities = async (
-    options: { forceReload?: boolean } = { forceReload: false }
+    options: { forceReload?: boolean } = { forceReload: false },
+    context?: RequestContext
 ) => {
     const { forceReload } = options
-    if (forceReload || entities.length === 0) {
-        entities = await loadEntities()
+
+    if (forceReload || Entities.length === 0) {
+        Entities = await loadEntities()
+        Entities = await highlightEntitiesExampleCode(parseEntitiesMarkdown(Entities))
+        if (context) {
+            context.entities = Entities
+        }
     }
-    return await highlightEntitiesExampleCode(parseEntitiesMarkdown(entities))
+    return Entities
 }
 
 type MarkdownFields = 'name' | 'description'
@@ -145,9 +152,9 @@ export const loadEntities = async () => {
     return entities
 }
 
-export const initEntities = async () => {
+export const initEntities = async (context: RequestContext) => {
     console.log('// initializing entities…')
-    const entities = await loadOrGetEntities({ forceReload: true })
+    const entities = await loadOrGetEntities({ forceReload: true }, context)
     logToFile('entities.json', entities, { mode: 'overwrite' })
     return entities
 }
@@ -155,13 +162,16 @@ export const initEntities = async () => {
 export const getEntities = async ({
     ids,
     tag,
-    tags
+    tags,
+    context
 }: {
     ids?: string[]
     tag?: string
     tags?: string[]
+    context: RequestContext
 }) => {
-    let entities = await loadOrGetEntities()
+    let entities = await loadOrGetEntities({}, context)
+
     entities = entities.filter(e => !e.normalizationOnly)
     if (ids) {
         entities = entities.filter(e => ids.includes(e.id))
@@ -184,12 +194,18 @@ export const findEntity = (id: string, entities: Entity[]) =>
         )
     })
 
-export const getEntity = async ({ id }: { id: string | number }) => {
+export const getEntity = async ({
+    id,
+    context
+}: {
+    id: string | number
+    context: RequestContext
+}) => {
     if (!id || typeof id !== 'string') {
         return
     }
 
-    const entities = await getEntities({})
+    const entities = await getEntities({ context })
 
     const entity = findEntity(id.toLowerCase(), entities)
 
@@ -219,7 +235,7 @@ export const cacheSurveysEntities = async ({
     entities,
     context
 }: {
-    surveys: Survey[]
+    surveys: ParsedSurvey[]
     entities: Entity[]
     context: RequestContext
 }) => {
@@ -229,7 +245,7 @@ export const cacheSurveysEntities = async ({
 
     for (const survey of surveys) {
         for (const edition of survey.editions) {
-            const surveyId = edition?.surveyId
+            const editionId = edition?.id
             const entityIds = extractEntityIds(edition)
             const editionEntities = entities
                 .filter(e => entityIds.includes(e.id))
@@ -240,11 +256,11 @@ export const cacheSurveysEntities = async ({
                 })
 
             if (editionEntities.length > 0) {
-                setCache(getSurveyEditionEntitiesCacheKey({ surveyId }), editionEntities, context)
+                setCache(getSurveyEditionEntitiesCacheKey({ editionId }), editionEntities, context)
                 console.log(
                     `-> Cached ${
                         editionEntities.length
-                    } entities (${getSurveyEditionEntitiesCacheKey({ surveyId })})`
+                    } entities (${getSurveyEditionEntitiesCacheKey({ editionId })})`
                 )
             }
         }
@@ -257,16 +273,15 @@ Apply GraphQL resolvers for Entity type to end up with the same object
 as if we were querying the API through GraphQL
 
 */
-// TODO: seems unnecessary to have to define this type?
-type EntityResolverKey = 'github' | 'mdn' | 'twitter' | 'caniuse' | 'homepage' | 'npm' | 'company'
+
+type ResolverKey = keyof EntityResolverMap
 
 export const applyEntityResolvers = async (entity: Entity, context: RequestContext) => {
-    const resolvers = entityResolvers.Entity
-    for (const resolverKey in resolvers) {
-        const resolver = resolvers[resolverKey as EntityResolverKey]
-        const resolvedValue = await resolver(entity, null, context)
+    for (const resolverKey in entityResolverMap) {
+        const resolver = entityResolverMap[resolverKey as ResolverKey]
+        const resolvedValue = resolver && (await resolver(entity, null, context, {}))
         if (!isEmpty(resolvedValue)) {
-            entity[resolverKey as EntityResolverKey] = resolvedValue
+            entity[resolverKey as ResolverKey] = resolvedValue
         }
     }
     return entity
@@ -277,13 +292,13 @@ export const applyEntityResolvers = async (entity: Entity, context: RequestConte
 For a given survey questions outline, extract all mentioned entities
 
 */
-export const extractEntityIds = (edition: SurveyEdition) => {
+export const extractEntityIds = (edition: ParsedEdition) => {
     let entityIds: string[] = []
     if (edition.credits) {
         entityIds = [...entityIds, ...edition.credits.map(c => c.id)]
     }
-    if (edition.questions && !isEmpty(edition.questions)) {
-        for (const section of edition.questions) {
+    if (edition.sections && !isEmpty(edition.sections)) {
+        for (const section of edition.sections) {
             for (const question of section.questions) {
                 entityIds.push(question.id)
                 if (question.options) {
@@ -295,7 +310,7 @@ export const extractEntityIds = (edition: SurveyEdition) => {
     return entityIds
 }
 
-export const getSurveyEditionEntitiesCacheKey = ({ surveyId }: { surveyId: string }) =>
-    `entities_${surveyId}`
+export const getSurveyEditionEntitiesCacheKey = ({ editionId }: { editionId: string }) =>
+    `entities_${editionId}`
 
 export const getAllEntitiesCacheKey = () => `entities_all`
