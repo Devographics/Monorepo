@@ -23,8 +23,8 @@ export const generateResponsesType = ({ survey, path }: { survey: ParsedSurvey; 
         path,
         typeName,
         typeDef: `type ${typeName} {
-    all_years: [YearData]
-    year(year: ${getEditionsEnumTypeName(survey.id)}!): YearData
+    all_editions: [EditionData]
+    edition(editionId: ${getEditionsEnumTypeName(survey.id)}!): EditionData
 }`
     }
 }

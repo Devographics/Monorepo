@@ -1,5 +1,5 @@
 import { YearCompletion } from './index'
-import { Entity } from "@devographics/core-models";
+import { Entity } from '@devographics/core-models'
 
 export interface ToolExperienceBucket {
     id: string
@@ -14,8 +14,9 @@ export interface ToolAwarenessUsageInterestSatisfaction {
     satisfaction: number
 }
 
-export interface ToolYearExperience {
+export interface ToolEditionExperience {
     year: number
+    editionId: string
     total: number
     completion: YearCompletion
     buckets: ToolExperienceBucket[]
@@ -23,8 +24,8 @@ export interface ToolYearExperience {
 }
 
 export interface ToolExperience {
-    all_years: ToolYearExperience[]
-    year: ToolYearExperience
+    all_editions: ToolEditionExperience[]
+    edition: ToolEditionExperience
 }
 
 export interface Tool {

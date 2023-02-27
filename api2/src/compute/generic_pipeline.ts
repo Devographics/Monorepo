@@ -1,12 +1,12 @@
 import { generateFiltersQuery } from '../filters'
-import { getFacetPath } from '../helpers'
+import { ParsedQuestion } from '../types'
 
 export type PipelineProps = {
     survey: string
     dbPath: string
-    facet?: string
+    facetQuestion?: ParsedQuestion
     questionId: string
-    year?: number
+    editionId?: string
     filters?: any
     limit: number
     match?: any
@@ -16,9 +16,18 @@ export type PipelineProps = {
 // generate an aggregation pipeline for all years, or
 // optionally restrict it to a specific year of data
 export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
-    const { survey, filters, dbPath, facet, questionId, year, limit, cutoff = 1 } = pipelineProps
+    const {
+        survey,
+        filters,
+        dbPath,
+        facetQuestion,
+        questionId,
+        editionId,
+        limit,
+        cutoff = 1
+    } = pipelineProps
 
-    const facetPath = facet && getFacetPath(facet)
+    const facetPath = facetQuestion?.dbPath
 
     let match: any = {
         survey,
@@ -31,8 +40,8 @@ export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
     }
 
     // if year is passed, restrict aggregation to specific year
-    if (year) {
-        match.surveySlug = year
+    if (editionId) {
+        match.surveySlug = editionId
     }
 
     const pipeline: any[] = [
@@ -57,8 +66,8 @@ export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
         {
             $group: {
                 _id: {
-                    year: '$year',
-                    ...(facet && { [facet]: `$${facetPath}` }),
+                    editionId: '$surveySlug',
+                    ...(facetQuestion && { [facetQuestion.id]: `$${facetPath}` }),
                     [questionId]: `$${dbPath}`
                 },
                 count: {
@@ -69,8 +78,8 @@ export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
         {
             $group: {
                 _id: {
-                    year: '$_id.year',
-                    ...(facet && { [facet]: `$_id.${facet}` })
+                    editionId: '$_id.editionId',
+                    ...(facetQuestion && { [facetQuestion.id]: `$_id.${facetQuestion.id}` })
                 },
                 buckets: {
                     $push: {
@@ -83,12 +92,12 @@ export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
         {
             $group: {
                 _id: {
-                    year: '$_id.year'
+                    editionId: '$_id.editionId'
                 },
                 facets: {
                     $push: {
-                        type: facet ?? 'default',
-                        id: facet ? `$_id.${facet}` : 'default',
+                        type: facetQuestion?.id ?? 'default',
+                        id: facetQuestion ? `$_id.${facetQuestion.id}` : 'default',
                         count: '$count',
                         buckets: '$buckets'
                     }
@@ -98,11 +107,11 @@ export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
         {
             $project: {
                 _id: 0,
-                year: `$_id.year`,
+                editionId: `$_id.editionId`,
                 facets: 1
             }
         },
-        { $sort: { year: 1 } }
+        { $sort: { editionId: 1 } }
     ]
 
     // if (cutoff) {

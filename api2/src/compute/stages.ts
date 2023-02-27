@@ -216,8 +216,6 @@ interface SortParameters {
     options?: string[] | number[]
 }
 export async function sortBuckets(resultsByYears: ResultsByYear[], parameters: SortParameters) {
-    console.log('// sortBuckets')
-    console.log(parameters)
     const { sort, order, options } = parameters
     for (let year of resultsByYears) {
         for (let facet of year.facets) {

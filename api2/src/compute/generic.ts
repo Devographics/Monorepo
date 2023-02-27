@@ -14,7 +14,7 @@ import {
     Edition,
     Section,
     ParsedQuestion,
-    YearData
+    EditionDataLegacy
 } from '../types'
 
 import {
@@ -37,6 +37,7 @@ export async function genericComputeFunction({
     edition,
     section,
     question,
+    questionObjects,
     parameters = {}
 }: {
     context: RequestContext
@@ -44,8 +45,10 @@ export async function genericComputeFunction({
     edition: Edition
     section: Section
     question: ParsedQuestion
+    questionObjects: ParsedQuestion[]
     parameters: GenericComputeParameters
 }) {
+    let facetQuestion, facetOptions
     const { db, isDebug } = context
     const collection = db.collection(config.mongo.normalized_collection)
 
@@ -55,7 +58,7 @@ export async function genericComputeFunction({
         filters,
         cutoff = 1,
         limit = 50,
-        year,
+        editionId,
         facet,
         facetLimit,
         facetMinPercent,
@@ -71,22 +74,27 @@ export async function genericComputeFunction({
     const sort = parameters?.sort?.property ?? 'count'
     const order = convertOrder(parameters?.sort?.order ?? 'desc')
 
-    const { fieldName: facetId } = (parameters.facet && getFacetSegments(parameters.facet)) || {}
     const facetSort = parameters?.facetSort?.property ?? 'mean'
     const facetOrder = convertOrder(parameters?.facetSort?.order ?? 'desc')
-    const facetOptions = parameters.facet2keys || (facetId && getChartKeys(facetId))
 
     console.log('// outline path')
     console.log(survey.id, edition.id, section.id, question.id)
-    console.log(question)
     console.log('// dbPath')
     console.log(dbPath)
     console.log('// parameters')
     console.log(parameters)
     console.log('// options')
     console.log(options)
-    console.log('// facetOptions')
-    console.log(facetOptions)
+
+    if (facet) {
+        let [sectionId, facetId] = facet?.split('__')
+        facetQuestion = questionObjects.find(q => q.id === facetId && q.surveyId === survey.id)
+        facetOptions = facetQuestion?.options?.map(o => o.id)
+        console.log('// facetQuestion')
+        console.log(facetQuestion)
+        console.log('// facetOptions')
+        console.log(facetOptions)
+    }
 
     if (!dbPath) {
         throw new Error(`No dbPath found for question id ${question.id}`)
@@ -100,9 +108,9 @@ export async function genericComputeFunction({
         const filtersQuery = await generateFiltersQuery({ filters, dbPath })
         match = { ...match, ...filtersQuery }
     }
-    // if year is passed, restrict aggregation to specific year
-    if (year) {
-        match.surveySlug = year
+    // if edition is passed, restrict aggregation to specific edition
+    if (editionId) {
+        match.surveySlug = editionId
     }
 
     // TODO: merge these counts into the main aggregation pipeline if possible
@@ -113,10 +121,10 @@ export async function genericComputeFunction({
 
     const pipelineProps = {
         match,
-        facet,
+        facetQuestion,
         questionId: question.id,
         dbPath,
-        year,
+        editionId,
         limit,
         filters,
         cutoff,
@@ -125,7 +133,7 @@ export async function genericComputeFunction({
 
     const pipeline = await getGenericPipeline(pipelineProps)
 
-    let results = (await collection.aggregate(pipeline).toArray()) as YearData[]
+    let results = (await collection.aggregate(pipeline).toArray()) as EditionDataLegacy[]
 
     if (isDebug) {
         console.log(
@@ -175,7 +183,16 @@ export async function genericComputeFunction({
 
     await limitFacets(results, { facetLimit, facetMinPercent, facetMinCount })
 
-    // console.log(JSON.stringify(results, undefined, 2))
+    if (!facet) {
+        // if no facet is specified, move default buckets down one level
+        results = results.map(editionData => {
+            const { facets, ...rest } = editionData
+            console.log('// editionData')
+            console.log(editionData)
+            return { ...rest, buckets: results[0].facets[0].buckets }
+        })
+    }
+    console.log(JSON.stringify(results, undefined, 2))
 
     return results
 }

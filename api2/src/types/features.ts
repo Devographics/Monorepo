@@ -8,8 +8,9 @@ export interface FeatureBucket {
     percentage: number
 }
 
-export interface YearFeature {
+export interface EditionFeature {
     year: number
+    editionId: string
     total: number
     completion: YearCompletion
     buckets: FeatureBucket[]
@@ -22,8 +23,8 @@ export interface FeatureExperienceBucket {
 }
 
 export interface FeatureExperience {
-    all_years: YearFeature[]
-    year: YearFeature
+    all_editions: EditionFeature[]
+    edition: EditionFeature
 }
 
 export interface Feature {

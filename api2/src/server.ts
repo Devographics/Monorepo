@@ -104,6 +104,7 @@ const start = async () => {
     }
     const generatedResolvers = await generateResolvers({
         surveys: parsedSurveys,
+        questionObjects,
         typeObjects
     })
     const resolvers = { ...defaultResolvers, ...generatedResolvers }

@@ -124,23 +124,23 @@ export interface ResolverMap {
     [key: string]: ResolverType | ResolverMap
 }
 
-export type ResolverParent = {
+export interface ResolverParent {
     survey: ParsedSurvey
     edition: ParsedEdition
     section: ParsedSection
     question: ParsedQuestion
-    computeOptions: ComputeOptions
+    questionObjects: ParsedQuestion[]
+    responseArguments?: ResponseArguments
 }
 
-export type ComputeOptions = {
+export interface QuestionResolverParent extends ResolverParent {
+    options?: Option[]
+}
+
+export type ResponseArguments = {
     filters: any
-    cutoff: number
-    limit: number
-    year: number
     facet: string
-    facetLimit: number
-    facetMinPercent: number
-    facetMinCount: number
+    parameters: any
 }
 
 export type ResolverType = (
@@ -150,10 +150,15 @@ export type ResolverType = (
     info: any
 ) => any
 
-export type YearData = {
+export interface EditionData  {
+    id: string
     year: number
     completion: YearCompletion
-    facets: Facet[]
+    buckets: Bucket[]
+}
+
+export interface EditionDataLegacy extends EditionData {
+    facets?: any
 }
 
 export interface YearCompletion {
@@ -165,14 +170,14 @@ export interface YearCompletion {
     percentage_survey: number
 }
 
-export interface Facet {
-    id: string | number
-    mean: number
-    type: string
-    completion: FacetCompletion
-    buckets: Bucket[]
-    entity: Entity
-}
+// export interface Facet {
+//     id: string | number
+//     mean: number
+//     type: string
+//     completion: FacetCompletion
+//     buckets: Bucket[]
+//     entity: Entity
+// }
 
 export interface FacetCompletion extends YearCompletion {
     // percentage of respondents compared to the total number of participants
@@ -189,12 +194,19 @@ export interface Bucket {
     percentage_survey: number
     completion?: BucketCompletion
     entity?: Entity
+    facets: BucketFacet[]
+}
+
+type BucketFacet {
+    facetId: String
+    facetValue: String
+    buckets: Bucket[]
 }
 
 export interface BucketCompletion extends FacetCompletion {}
 
 export type TransformFunction = (
     parent: ResolverParent,
-    data: YearData[],
+    data: EditionData[],
     context: RequestContext
 ) => any

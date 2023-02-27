@@ -76,8 +76,9 @@ enum SortOrder {
     desc
 }
 
-type YearData {
+type EditionData {
     year: Int
+    editionId: String
     completion: YearCompletion
     buckets: [Bucket]
 }

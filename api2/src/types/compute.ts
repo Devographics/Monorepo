@@ -10,7 +10,7 @@ export interface GenericComputeParameters {
     // order?: -1 | 1
     sort?: SortSpecifier
     facetSort?: SortSpecifier
-    year?: number
+    editionId?: string
     keys?: string[]
     // keysFunction?: (arg0: ResolverDynamicConfig) => Promise<string[]>
     facet?: string

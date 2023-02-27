@@ -44,7 +44,7 @@ interface GetRawCommentsOptions {
     survey: Survey
     question: ParsedQuestion
     context: RequestContext
-    year?: number
+    editionId?: string
 }
 
 export const getRawCommentsWithCache = async (options: GetRawCommentsOptions) => {
@@ -54,7 +54,7 @@ export const getRawCommentsWithCache = async (options: GetRawCommentsOptions) =>
         context,
         funcOptions,
         key: `${options.survey.id}.${options.question.id}.${
-            options.year ? options.year : 'all_years'
+            options.editionId ? options.editionId : 'all_editions'
         }.comments`
     })
 }

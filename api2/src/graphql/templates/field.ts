@@ -5,8 +5,8 @@ import { getFiltersTypeName, getFacetsTypeName, graphqlize } from '../../generat
 Sample output:
 
 type DisabilityStatus {
-    all_years: [YearData]
-    year(year: Int!): YearData
+    all_editions: [EditionData]
+    edition(editionId: StateOfJsEditionID!): EditionData
     options: [DisabilityStatusOptions]
 }
 

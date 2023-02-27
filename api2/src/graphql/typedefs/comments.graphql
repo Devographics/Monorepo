@@ -20,6 +20,6 @@ type YearComments {
 Comments
 """
 type ItemComments {
-    all_years: [YearComments]
-    year(year: Int!): YearComments
+    all_editions: [YearComments]
+    edition(editionId: String!): YearComments
 }

@@ -67,7 +67,7 @@ export const getChartKeys = (field: string) => {
 //     aggregationFunction?: AggregationFunction
 // ) => ({
 //     keys: async () => options.keys || [],
-//     all_years: async (
+//     all_editions: async (
 //         { fieldName, survey, filters, options: queryOptions, facet }: DemographicsResolverConfig,
 //         args: any,
 //         context: RequestContext
@@ -104,7 +104,7 @@ export const getChartKeys = (field: string) => {
 //     options: TermAggregationOptions = {},
 //     aggregationFunction?: AggregationFunction
 // ) => ({
-//     all_years: async (
+//     all_editions: async (
 //         { survey, id, filters, options: queryOptions, facet }: ResolverDynamicConfig,
 //         args: any,
 //         context: RequestContext
@@ -202,23 +202,6 @@ export const getFacetSegments = (facet: string) => {
         ? facet.split('/')
         : ['demographics', facet]
     return { sectionName, fieldName }
-}
-
-export const getFacetPath = (facet: string) => {
-    // if facet contains "/" assume it's of the format "section/field"
-    // else default to treating it as a demographics facet
-    const { sectionName, fieldName } = getFacetSegments(facet)
-    switch (sectionName) {
-        case 'demographics':
-            return getDemographicsFieldPath(fieldName)
-        case 'features':
-        case 'tools':
-            return `${sectionName}.${fieldName}.experience`
-        case 'resources':
-        case 'tools_others':
-        default:
-            return `${sectionName}.${fieldName}.choices`
-    }
 }
 
 // export const getFacetKeys = (facet: string) => {

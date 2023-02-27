@@ -9,7 +9,9 @@ import {
     Option,
     TypeObject,
     ResolverType,
-    ResolverMap
+    ResolverMap,
+    ResolverParent,
+    QuestionResolverParent
 } from '../types/surveys'
 import { getPath, mergeSections, formatNumericOptions } from './helpers'
 import { genericComputeFunction } from '../compute'
@@ -23,9 +25,11 @@ import { getResponseTypeName } from '../graphql/templates/responses'
 
 export const generateResolvers = async ({
     surveys,
+    questionObjects,
     typeObjects
 }: {
     surveys: ParsedSurvey[]
+    questionObjects: ParsedQuestion[]
     typeObjects: TypeObject[]
 }) => {
     // generate resolver map for root survey fields (i.e. each survey)
@@ -112,7 +116,8 @@ export const generateResolvers = async ({
                                         survey,
                                         edition,
                                         section,
-                                        question: questionObject
+                                        question: questionObject,
+                                        questionObjects
                                     })
                                 ]
                             })
@@ -213,31 +218,16 @@ const getSectionResolver =
     }
 
 const getQuestionResolver =
-    ({
-        survey,
-        edition,
-        section,
-        question
-    }: {
-        survey: Survey
-        edition: Edition
-        section: Section
-        question: ParsedQuestion
-    }): ResolverType =>
+    ({ survey, edition, section, question, questionObjects }: ResolverParent): ResolverType =>
     async (parent, args, context, info) => {
         console.log('// question resolver')
-        const { filters, parameters, facet } = args
 
-        const result: any = {
+        const result: QuestionResolverParent = {
             survey,
             edition,
             section,
             question,
-            computeOptions: {
-                filters,
-                parameters,
-                facet
-            }
+            questionObjects
         }
         if (question.options) {
             const questionOptions: Option[] = question.optionsAreNumeric
@@ -263,15 +253,20 @@ Responses
 
 */
 
-// empty pass-through resolver
-export const responsesResolverFunction: ResolverType = parent => {
+export const responsesResolverFunction: ResolverType = async (parent, args, context, info) => {
     console.log('// responses resolver')
-    return parent
+    const { filters, parameters, facet } = args
+    const responseArguments = {
+        filters,
+        parameters,
+        facet
+    }
+    return { ...parent, responseArguments }
 }
 
-export const yearsResolver: ResolverType = async (parent, args, context, info) => {
-    console.log('// yearsResolver')
-    const { survey, edition, section, question, computeOptions } = parent
+export const allEditionsResolver: ResolverType = async (parent, args, context, info) => {
+    console.log('// allEditionsResolver')
+    const { survey, edition, section, question, responseArguments, questionObjects } = parent
     const { year } = args
     let result = await useCache({
         key: computeKey(genericComputeFunction, {
@@ -279,7 +274,7 @@ export const yearsResolver: ResolverType = async (parent, args, context, info) =
             editionId: edition.id,
             sectionId: section.id,
             questionId: question.id,
-            ...computeOptions,
+            ...responseArguments,
             year
         }),
         func: genericComputeFunction,
@@ -290,7 +285,8 @@ export const yearsResolver: ResolverType = async (parent, args, context, info) =
             section,
             question,
             context,
-            parameters: { ...computeOptions, year }
+            questionObjects,
+            parameters: { ...responseArguments, year }
         }
     })
     if (question.transformFunction) {
@@ -299,15 +295,15 @@ export const yearsResolver: ResolverType = async (parent, args, context, info) =
     return result
 }
 
-export const yearResolver: ResolverType = async (parent, args, context, info) => {
-    console.log('// yearResolver')
-    const result = await yearsResolver(parent, args, context, info)
+export const singleEditionResolver: ResolverType = async (parent, args, context, info) => {
+    console.log('// singleEditionResolver')
+    const result = await allEditionsResolver(parent, args, context, info)
     return result[0]
 }
 
 export const responsesResolverMap: ResolverMap = {
-    all_years: yearsResolver,
-    year: yearResolver
+    all_editions: allEditionsResolver,
+    edition: singleEditionResolver
 }
 
 /*
@@ -321,17 +317,17 @@ export const commentsResolverFunction: ResolverType = parent => {
     return parent
 }
 export const commentsResolverMap: ResolverMap = {
-    all_years: async ({ survey, question }, {}, context) =>
+    all_editions: async ({ survey, question }, {}, context) =>
         await getRawCommentsWithCache({
             survey,
             question,
             context
         }),
-    year: async ({ survey, question }, { year }: { year: number }, context) =>
+    edition: async ({ survey, question }, { editionId }: { editionId: string }, context) =>
         await getRawCommentsWithCache({
             survey,
             question,
-            year,
+            editionId,
             context
         })
 }
