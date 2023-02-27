@@ -1,5 +1,5 @@
 import { graphqlize, mergeSections } from '../../generate/helpers'
-import { Survey, Edition, Section } from '../../generate/types'
+import { Survey, Edition, Section } from '../../types/surveys'
 
 /*
 

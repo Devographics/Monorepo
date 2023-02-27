@@ -1,4 +1,4 @@
-import { TemplateFunction } from '../types'
+import { TemplateFunction } from '../../types/surveys'
 import { FEATURES_OPTIONS } from '../../constants'
 import {
     idResolverFunction,
@@ -8,6 +8,7 @@ import {
 } from '../resolvers'
 import { getFiltersTypeName, getFacetsTypeName } from '../helpers'
 import { graphqlize } from '../helpers'
+import { getResponseTypeName } from '../../graphql/templates/responses'
 
 export const feature: TemplateFunction = ({ survey, question }) => {
     const fieldTypeName = `${graphqlize(survey.id)}Feature`
@@ -30,7 +31,9 @@ export const feature: TemplateFunction = ({ survey, question }) => {
     entity: Entity
     responses(filters: ${getFiltersTypeName(
         survey.id
-    )},  parameters: Parameters, facet: ${getFacetsTypeName(survey.id)}): Responses
+    )},  parameters: Parameters, facet: ${getFacetsTypeName(survey.id)}): ${getResponseTypeName(
+            survey.id
+        )}
 }`,
         resolverMap: {
             id: idResolverFunction,

@@ -1,4 +1,4 @@
-import { Survey, ParsedQuestion } from '../../generate/types'
+import { Survey, ParsedQuestion } from '../../types/surveys'
 import { getFacetsTypeName } from '../../generate/helpers'
 
 /*

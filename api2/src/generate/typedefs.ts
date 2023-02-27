@@ -9,9 +9,10 @@ import {
     generateEditionType,
     generateSurveyEditionsEnumType,
     generateSurveyType,
-    generateSurveysType
+    generateSurveysType,
+    generateResponsesType
 } from '../graphql/templates/index'
-import { ParsedSurvey, ParsedQuestion, TypeObject } from './types'
+import { ParsedSurvey, ParsedQuestion, TypeObject } from '../types/surveys'
 import { getPath, mergeSections } from './helpers'
 import isEmpty from 'lodash/isEmpty.js'
 
@@ -35,6 +36,7 @@ export const generateSurveysTypeObjects = async ({ surveys }: { surveys: ParsedS
         // type for a single kind of survey (state of js, state of css, etc.)
         typeObjects.push(generateSurveyType({ survey, path }))
         typeObjects.push(generateSurveyEditionsEnumType({ survey, path }))
+        typeObjects.push(generateResponsesType({ survey, path }))
 
         for (const edition of survey.editions) {
             path = getPath({ survey, edition })

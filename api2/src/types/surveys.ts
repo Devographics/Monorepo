@@ -1,5 +1,5 @@
 import { Entity } from '@devographics/core-models'
-import { RequestContext } from '../types'
+import { RequestContext } from '.'
 
 export type TypeObject = {
     typeName: string
@@ -157,9 +157,12 @@ export type YearData = {
 }
 
 export interface YearCompletion {
-    count: number
-    percentage_survey: number
+    // total number of participants
     total: number
+    // current number of respondents
+    count: number
+    // percentage of respondents compared to the total number of participants
+    percentage_survey: number
 }
 
 export interface Facet {
@@ -172,6 +175,7 @@ export interface Facet {
 }
 
 export interface FacetCompletion extends YearCompletion {
+    // percentage of respondents compared to the total number of participants
     percentage_question: number
 }
 

@@ -7,7 +7,7 @@ import {
     ParsedQuestion,
     Option,
     TypeObject
-} from './types'
+} from '../types/surveys'
 import {
     graphqlize,
     getGlobalQuestions,

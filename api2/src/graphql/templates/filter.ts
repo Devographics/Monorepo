@@ -1,4 +1,4 @@
-import { ParsedQuestion } from '../../generate/types'
+import { ParsedQuestion } from '../../types/surveys'
 
 /*
 

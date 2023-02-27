@@ -15,17 +15,17 @@
     "files": [
         "file_types.d.ts",
         "./src/generate/graphqlize.ts",
-        "./src/graphql/templates/generateSurveysType.ts",
-        "./src/graphql/templates/generateSurveyType.ts",
-        "./src/graphql/templates/generateSurveyEditionsEnumType.ts",
-        "./src/graphql/templates/generateEditionType.ts",
-        "./src/graphql/templates/generateSectionType.ts",
-        "src/graphql/templates/generateFieldType.ts",
-        "./src/graphql/templates/generateFilterType.ts",
-        "./src/graphql/templates/generateOptionType.ts",
-        "./src/graphql/templates/generateEnumType.ts",
-        "./src/graphql/templates/generateFiltersType.ts",
-        "./src/graphql/templates/generateFacetsType.ts"
+        "src/graphql/templates/surveys.ts",
+        "src/graphql/templates/survey.ts",
+        "src/graphql/templates/editions_enum.ts",
+        "src/graphql/templates/edition.ts",
+        "src/graphql/templates/section.ts",
+        "src/graphql/templates/field.ts",
+        "src/graphql/templates/filter.ts",
+        "src/graphql/templates/option.ts",
+        "src/graphql/templates/enum.ts",
+        "src/graphql/templates/filters.ts",
+        "src/graphql/templates/facets.ts"
     ],
     "exclude": ["/node_modules/"],
     "include": ["src/**/*"]

@@ -1,4 +1,4 @@
-import { TemplateFunction } from '../types'
+import { TemplateFunction } from '../../types/surveys'
 import { graphqlize, getSectionItems } from '../helpers'
 import { getFiltersTypeName, getFacetsTypeName } from '../helpers'
 import { getToolsFeaturesResolverMap } from '../resolvers'

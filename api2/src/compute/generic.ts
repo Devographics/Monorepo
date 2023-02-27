@@ -1,6 +1,5 @@
 import { inspect } from 'util'
 import config from '../config'
-import { RequestContext } from '../types'
 import { generateFiltersQuery } from '../filters'
 import { getParticipationByYearMap } from './demographics'
 import { getGenericPipeline } from './generic_pipeline'
@@ -8,9 +7,15 @@ import { computeCompletionByYear } from './completion'
 import { getChartKeys } from '../helpers'
 import isEmpty from 'lodash/isEmpty.js'
 import { getFacetSegments } from '../helpers'
-import { Survey, Edition, Section, ParsedQuestion, YearData } from '../generate/types'
-
-import { TermAggregationOptions } from './types'
+import {
+    RequestContext,
+    GenericComputeParameters,
+    Survey,
+    Edition,
+    Section,
+    ParsedQuestion,
+    YearData
+} from '../types'
 
 import {
     discardEmptyIds,
@@ -39,7 +44,7 @@ export async function genericComputeFunction({
     edition: Edition
     section: Section
     question: ParsedQuestion
-    parameters: TermAggregationOptions
+    parameters: GenericComputeParameters
 }) {
     const { db, isDebug } = context
     const collection = db.collection(config.mongo.normalized_collection)
@@ -48,8 +53,6 @@ export async function genericComputeFunction({
 
     const {
         filters,
-        // sort = 'count',
-        // order = -1,
         cutoff = 1,
         limit = 50,
         year,
@@ -57,7 +60,7 @@ export async function genericComputeFunction({
         facetLimit,
         facetMinPercent,
         facetMinCount
-    }: TermAggregationOptions = parameters
+    } = parameters
 
     const options = question.options && question.options.map(o => o.id)
 
@@ -85,6 +88,10 @@ export async function genericComputeFunction({
     console.log('// facetOptions')
     console.log(facetOptions)
 
+    if (!dbPath) {
+        throw new Error(`No dbPath found for question id ${question.id}`)
+    }
+
     let match: any = {
         survey: survey.id,
         [dbPath]: { $nin: [null, '', [], {}] }
@@ -95,7 +102,7 @@ export async function genericComputeFunction({
     }
     // if year is passed, restrict aggregation to specific year
     if (year) {
-        match.year = year
+        match.surveySlug = year
     }
 
     // TODO: merge these counts into the main aggregation pipeline if possible

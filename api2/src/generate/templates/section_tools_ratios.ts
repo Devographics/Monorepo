@@ -1,4 +1,4 @@
-import { TemplateFunction, ResolverMap, Survey, Section } from '../types'
+import { TemplateFunction, ResolverMap, Survey, Section } from '../../types/surveys'
 import { graphqlize } from '../helpers'
 import { useCache } from '../../helpers/caching'
 import { computeToolsExperienceRanking } from '../../compute/experience'

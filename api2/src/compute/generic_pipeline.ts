@@ -32,7 +32,7 @@ export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
 
     // if year is passed, restrict aggregation to specific year
     if (year) {
-        match.year = year
+        match.surveySlug = year
     }
 
     const pipeline: any[] = [

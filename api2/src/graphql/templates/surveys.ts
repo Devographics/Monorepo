@@ -1,5 +1,5 @@
 import { graphqlize } from '../../generate/helpers'
-import { Survey } from '../../generate/types'
+import { Survey } from '../../types/surveys'
 
 /*
 

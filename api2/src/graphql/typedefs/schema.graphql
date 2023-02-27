@@ -76,11 +76,6 @@ enum SortOrder {
     desc
 }
 
-type Responses {
-    all_years: [YearData]
-    year(year: Int!): YearData
-}
-
 type YearData {
     year: Int
     completion: YearCompletion

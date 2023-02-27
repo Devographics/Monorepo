@@ -1,6 +1,6 @@
 import { Option } from '../../types'
 import { graphqlize } from '../../generate/helpers'
-import { ParsedQuestion } from '../../generate/types'
+import { ParsedQuestion } from '../../types/surveys'
 
 /*
 

@@ -1,6 +1,6 @@
 import * as allTemplates from './templates/index'
 const { defaultTemplateFunction } = allTemplates
-import { TemplatesDictionnary } from './types'
+import { TemplatesDictionnary } from '../types/surveys'
 
 const doNotInclude = () => ({
     includeInApi: false

@@ -1,4 +1,4 @@
-import { ParsedQuestion, TemplateFunction, ResolverMap, Survey } from '../types'
+import { ParsedQuestion, TemplateFunction, ResolverMap, Survey } from '../../types/surveys'
 import { getSectionItems, graphqlize } from '../helpers'
 import { getFiltersTypeName, getFacetsTypeName } from '../helpers'
 import { getToolsFeaturesResolverMap } from '../resolvers'

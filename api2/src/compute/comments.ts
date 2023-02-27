@@ -3,7 +3,7 @@ import config from '../config'
 import get from 'lodash/get.js'
 import uniq from 'lodash/uniq.js'
 import { useCache } from '../helpers/caching'
-import { Survey, ParsedQuestion } from '../generate/types'
+import { Survey, ParsedQuestion } from '../types/surveys'
 
 // note currently working because of "Dynamic require of "util" is not supported" error
 

@@ -1,5 +1,5 @@
 import { graphqlize } from '../../generate/helpers'
-import { Survey, Edition } from '../../generate/types'
+import { Survey, Edition } from '../../types/surveys'
 
 /*
 
@@ -14,6 +14,8 @@ enum StateOfJsEditionID {
 
 */
 
+export const getEditionsEnumTypeName = (surveyId: string) => `${graphqlize(surveyId)}EditionID`
+
 export const generateSurveyEditionsEnumType = ({
     survey,
     path
@@ -22,7 +24,7 @@ export const generateSurveyEditionsEnumType = ({
     path: string
 }) => {
     const { editions } = survey
-    const typeName = `${graphqlize(survey.id)}EditionID`
+    const typeName = getEditionsEnumTypeName(survey.id)
     return {
         path,
         typeName,

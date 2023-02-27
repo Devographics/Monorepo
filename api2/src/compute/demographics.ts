@@ -2,7 +2,7 @@ import orderBy from 'lodash/orderBy.js'
 import config from '../config'
 import { RequestContext, YearParticipation } from '../types'
 import { Filters } from '../filters'
-import { Survey } from '../generate/types'
+import { Survey } from '../types/surveys'
 
 export async function computeParticipationByYear({
     context,

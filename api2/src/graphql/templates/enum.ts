@@ -1,5 +1,5 @@
 import { formatNumericOptions } from '../../generate/helpers'
-import { ParsedQuestion } from '../../generate/types'
+import { ParsedQuestion } from '../../types/surveys'
 
 /*
 

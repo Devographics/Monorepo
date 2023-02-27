@@ -10,7 +10,7 @@ import {
     TypeObject,
     ResolverType,
     ResolverMap
-} from './types'
+} from '../types/surveys'
 import { getPath, mergeSections, formatNumericOptions } from './helpers'
 import { genericComputeFunction } from '../compute'
 import { useCache, computeKey } from '../helpers/caching'
@@ -19,6 +19,7 @@ import { getEntity, getEntities } from '../load/entities'
 import omit from 'lodash/omit.js'
 import pick from 'lodash/pick.js'
 import { entityResolverMap } from '../resolvers/entities'
+import { getResponseTypeName } from '../graphql/templates/responses'
 
 export const generateResolvers = async ({
     surveys,
@@ -42,12 +43,13 @@ export const generateResolvers = async ({
     const resolvers = {
         Query: { surveys: () => surveys },
         Surveys: surveysFieldsResolvers,
-        Responses: responsesResolverMap,
         ItemComments: commentsResolverMap,
         Entity: entityResolverMap
     } as any
 
     for (const survey of surveys) {
+        resolvers[getResponseTypeName(survey.id)] = responsesResolverMap
+
         // generate resolver map for each survey field (i.e. each survey edition)
         const surveyFieldsResolvers = Object.fromEntries(
             survey.editions.map(edition => {

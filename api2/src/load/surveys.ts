@@ -1,4 +1,4 @@
-import { SurveyConfig, Survey, Edition } from '../generate/types'
+import { SurveyConfig, Survey, Edition } from '../types/surveys'
 import { RequestContext } from '../types'
 import { Octokit } from '@octokit/core'
 import fetch from 'node-fetch'

@@ -1,4 +1,4 @@
-import { TemplateFunction } from '../types'
+import { TemplateFunction } from '../../types/surveys'
 import sources from '../../data/sources.yml'
 
 export const source: TemplateFunction = ({ survey, edition, question, section }) => {

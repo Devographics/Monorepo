@@ -1,5 +1,5 @@
-import { ParsedQuestion } from '../../generate/types'
-import { getFiltersTypeName, getFacetsTypeName } from '../../generate/helpers'
+import { ParsedQuestion } from '../../types/surveys'
+import { getFiltersTypeName, getFacetsTypeName, graphqlize } from '../../generate/helpers'
 /*
 
 Sample output:
@@ -21,9 +21,9 @@ export const generateFieldType = ({ question }: { question: ParsedQuestion }) =>
         typeDef: `type ${fieldTypeName} {
     responses(filters: ${getFiltersTypeName(
         question.surveyId
-    )}, parameters: Parameters, facet: ${getFacetsTypeName(question.surveyId)}): Responses${
-            options ? `\n    options: [${optionTypeName}]` : ''
-        }
+    )}, parameters: Parameters, facet: ${getFacetsTypeName(question.surveyId)}): ${graphqlize(
+            question.surveyId
+        )}Responses${options ? `\n    options: [${optionTypeName}]` : ''}
 }`
     }
 }

@@ -1,4 +1,4 @@
-import { TemplateFunction, TransformFunction } from '../types'
+import { TemplateFunction, TransformFunction } from '../../types/surveys'
 import range from 'lodash/range.js'
 import sumBy from 'lodash/sumBy.js'
 

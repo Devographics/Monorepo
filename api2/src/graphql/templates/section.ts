@@ -1,5 +1,5 @@
 import { graphqlize } from '../../generate/helpers'
-import { Survey, Edition, Section, ParsedQuestion } from '../../generate/types'
+import { Survey, Edition, Section, ParsedQuestion } from '../../types/surveys'
 
 /*
 

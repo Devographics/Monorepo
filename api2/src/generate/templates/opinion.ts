@@ -1,4 +1,4 @@
-import { TemplateFunction } from '../types'
+import { TemplateFunction } from '../../types/surveys'
 
 export const opinion: TemplateFunction = ({ question, section }) => ({
     dbPath: `${section.id}.${question.id}`,

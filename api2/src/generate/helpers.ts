@@ -9,7 +9,7 @@ import {
     ParsedQuestion,
     Option,
     QuestionTemplateOutput
-} from './types'
+} from '../types/surveys'
 import globalQuestions from '../data/global_questions.yml'
 import { templates } from './question_templates'
 import uniq from 'lodash/uniq.js'

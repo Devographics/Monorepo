@@ -1,4 +1,4 @@
-import { ResultsByYear, FacetItem } from './types'
+import { ResultsByYear, FacetItem } from '../types/compute'
 import { ratioToPercentage } from './common'
 import { getEntity } from '../load/entities'
 import sortBy from 'lodash/sortBy.js'

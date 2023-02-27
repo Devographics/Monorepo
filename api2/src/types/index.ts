@@ -1,10 +1,5 @@
 import { Db } from 'mongodb'
-// import { SurveyType } from './surveys'
-import { Filters } from '../filters'
-// import { Options } from '../options'
 import { Entity } from '@devographics/core-models'
-
-export * from './fields'
 
 export type Template = any
 
@@ -38,24 +33,12 @@ export interface SurveyConfig {
     // survey: SurveyType
 }
 
-// export interface ResolverStaticConfig {
-//     survey: SurveyConfig
-//     filters?: Filters
-// }
-
-// export interface ResolverDynamicConfig {
-//     survey: SurveyConfig
-//     id: string
-//     filters?: Filters
-//     options?: Options
-//     facet?: Facet
-// }
-
 export * from './demographics'
 export * from './entity'
 export * from './features'
 export * from './github'
-export * from './schema'
-// export * from './surveys'
+export * from './surveys'
 export * from './tools'
 export * from './locale'
+export * from './compute'
+export * from './filters'
