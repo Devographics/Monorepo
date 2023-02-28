@@ -1,4 +1,4 @@
-import { ResultsByYear, FacetItem } from '../types/compute'
+import { EditionDataLegacy, ComputeAxisParameters } from '../types'
 import { ratioToPercentage } from './common'
 import { getEntity } from '../load/entities'
 import sortBy from 'lodash/sortBy.js'
@@ -15,8 +15,8 @@ import isEmpty from 'lodash/isEmpty.js'
 Discard any result where id is {}, "", [], etc. 
 
 */
-export async function discardEmptyIds(resultsByYears: ResultsByYear[]) {
-    for (let year of resultsByYears) {
+export async function discardEmptyIds(resultsByEdition: EditionDataLegacy[]) {
+    for (let year of resultsByEdition) {
         year.facets = year.facets.filter(b => typeof b.id === 'number' || !isEmpty(b.id))
         for (let facet of year.facets) {
             facet.buckets = facet.buckets.filter(b => typeof b.id === 'number' || !isEmpty(b.id))
@@ -24,8 +24,9 @@ export async function discardEmptyIds(resultsByYears: ResultsByYear[]) {
     }
 }
 
-// add facet limits
 /* 
+
+Add facet limits
 
 For example, when faceting salary by countries we might want to only
 keep the top 10 countries; or discard any countries with less than X
@@ -33,35 +34,31 @@ respondents or representing less than Y% of respondents
 
 */
 export async function limitFacets(
-    resultsByYears: ResultsByYear[],
-    {
-        facetLimit,
-        facetMinPercent,
-        facetMinCount
-    }: { facetLimit?: number; facetMinPercent?: number; facetMinCount?: number }
+    resultsByEdition: EditionDataLegacy[],
+    { limit, cutoffPercent, cutoff }: ComputeAxisParameters
 ) {
-    for (let year of resultsByYears) {
+    for (let year of resultsByEdition) {
         // if a minimum question percentage/count is specified, filter out
         // any facets that represent less than that
-        if (facetMinPercent || facetMinCount) {
+        if (cutoffPercent || cutoff) {
             year.facets = year.facets.filter(f => {
-                const abovePercent = facetMinPercent
-                    ? f.completion.percentage_question > facetMinPercent
+                const abovePercent = cutoffPercent
+                    ? f.completion.percentage_question > cutoffPercent
                     : true
-                const aboveCount = facetMinCount ? f.completion.count > facetMinCount : true
+                const aboveCount = cutoff ? f.completion.count > cutoff : true
                 return abovePercent && aboveCount
             })
         }
         // if a max number of facets is specified, limit list to that
-        if (facetLimit) {
-            year.facets = take(year.facets, facetLimit)
+        if (limit) {
+            year.facets = take(year.facets, limit)
         }
     }
 }
 
 // add means
-export async function addMeans(resultsByYears: ResultsByYear[], values: string[] | number[]) {
-    for (let year of resultsByYears) {
+export async function addMeans(resultsByEdition: EditionDataLegacy[], values: string[] | number[]) {
+    for (let year of resultsByEdition) {
         for (let facet of year.facets) {
             let totalValue = 0
             let totalCount = 0
@@ -79,8 +76,11 @@ export async function addMeans(resultsByYears: ResultsByYear[], values: string[]
 
 // if aggregation has values defined, set any missing value to 0
 // so that all buckets have the same shape
-export async function addMissingBucketValues(resultsByYears: ResultsByYear[], values: string[]) {
-    for (let year of resultsByYears) {
+export async function addMissingBucketValues(
+    resultsByEdition: EditionDataLegacy[],
+    values: string[]
+) {
+    for (let year of resultsByEdition) {
         for (let facet of year.facets) {
             const existingValues = facet.buckets.map(b => b.id)
             const missingValues = difference(
@@ -104,8 +104,8 @@ export async function addMissingBucketValues(resultsByYears: ResultsByYear[], va
 }
 
 // add entities to facet and bucket items if applicable
-export async function addEntities(resultsByYears: ResultsByYear[]) {
-    for (let year of resultsByYears) {
+export async function addEntities(resultsByEdition: EditionDataLegacy[]) {
+    for (let year of resultsByEdition) {
         for (let facet of year.facets) {
             const facetEntity = await getEntity(facet)
             if (facetEntity) {
@@ -123,13 +123,13 @@ export async function addEntities(resultsByYears: ResultsByYear[]) {
 
 // add completion counts for each year and facet
 export async function addCompletionCounts(
-    resultsByYears: ResultsByYear[],
+    resultsByEdition: EditionDataLegacy[],
     totalRespondentsByYear: {
         [key: number]: number
     },
     completionByYear: Record<number, CompletionResult>
 ) {
-    for (let yearObject of resultsByYears) {
+    for (let yearObject of resultsByEdition) {
         const totalRespondents = totalRespondentsByYear[yearObject.year] ?? 0
         const questionRespondents = completionByYear[yearObject.year]?.total ?? 0
         yearObject.completion = {
@@ -152,8 +152,8 @@ export async function addCompletionCounts(
 }
 
 // apply bucket cutoff
-export async function applyCutoff(resultsByYears: ResultsByYear[], cutoff: number = 1) {
-    for (let year of resultsByYears) {
+export async function applyCutoff(resultsByEdition: EditionDataLegacy[], cutoff: number = 1) {
+    for (let year of resultsByEdition) {
         for (let facet of year.facets) {
             facet.buckets = facet.buckets.filter(bucket => bucket.count >= cutoff)
         }
@@ -161,8 +161,8 @@ export async function applyCutoff(resultsByYears: ResultsByYear[], cutoff: numbe
 }
 
 // apply bucket limit
-export async function limitBuckets(resultsByYears: ResultsByYear[], limit: number = 1000) {
-    for (let year of resultsByYears) {
+export async function limitBuckets(resultsByEdition: EditionDataLegacy[], limit: number = 1000) {
+    for (let year of resultsByEdition) {
         for (let facet of year.facets) {
             facet.buckets = take(facet.buckets, limit)
         }
@@ -170,8 +170,8 @@ export async function limitBuckets(resultsByYears: ResultsByYear[], limit: numbe
 }
 
 // add percentages relative to question respondents and survey respondents
-export async function addPercentages(resultsByYears: ResultsByYear[]) {
-    for (let year of resultsByYears) {
+export async function addPercentages(resultsByEdition: EditionDataLegacy[]) {
+    for (let year of resultsByEdition) {
         for (let facet of year.facets) {
             for (let bucket of facet.buckets) {
                 bucket.percentage_survey = ratioToPercentage(bucket.count / year.completion.total)
@@ -193,7 +193,7 @@ export async function addPercentages(resultsByYears: ResultsByYear[]) {
 }
 
 // TODO ? or else remove this
-export async function addDeltas(resultsByYears: ResultsByYear[]) {
+export async function addDeltas(resultsByEdition: EditionDataLegacy[]) {
     // // compute deltas
     // resultsWithPercentages.forEach((year, i) => {
     //     const previousYear = resultsByYear[i - 1]
@@ -215,9 +215,12 @@ interface SortParameters {
     order: 1 | -1
     options?: string[] | number[]
 }
-export async function sortBuckets(resultsByYears: ResultsByYear[], parameters: SortParameters) {
+export async function sortBuckets(
+    resultsByEdition: EditionDataLegacy[],
+    parameters: ComputeAxisParameters
+) {
     const { sort, order, options } = parameters
-    for (let year of resultsByYears) {
+    for (let year of resultsByEdition) {
         for (let facet of year.facets) {
             if (sort === 'options') {
                 if (options && !isEmpty(options)) {
@@ -249,9 +252,12 @@ export async function sortBuckets(resultsByYears: ResultsByYear[], parameters: S
     }
 }
 
-export async function sortFacets(resultsByYears: ResultsByYear[], parameters: SortParameters) {
+export async function sortFacets(
+    resultsByEdition: EditionDataLegacy[],
+    parameters: ComputeAxisParameters
+) {
     const { sort, order, options } = parameters
-    for (let year of resultsByYears) {
+    for (let year of resultsByEdition) {
         if (options && !isEmpty(options)) {
             // if values are specified, sort by values
             year.facets = [...year.facets].sort((a, b) => {

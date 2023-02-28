@@ -62,8 +62,8 @@ input Parameters {
     sort: SortSpecifier
     facetSort: SortSpecifier
     facetLimit: Int
-    facetMinPercent: Float
-    facetMinCount: Int
+    facetCutoff: Int
+    facetCutoffPercent: Float
 }
 
 input SortSpecifier {
@@ -119,16 +119,7 @@ type Bucket {
     """
     An array of bucket facets, when bucket is faceted
     """
-    facets: [BucketFacet]
-}
-
-"""
-A facet associated with a set of entities.
-"""
-type BucketFacet {
-    facetId: String
-    facetValue: String
-    buckets: [Bucket]
+    facetBuckets: [Bucket]
 }
 
 type Query {

@@ -14,7 +14,8 @@ import {
     Edition,
     Section,
     ParsedQuestion,
-    EditionDataLegacy
+    EditionDataLegacy,
+    ComputeAxisParameters
 } from '../types'
 
 import {
@@ -30,6 +31,8 @@ import {
     sortFacets,
     limitFacets
 } from './stages'
+
+const convertOrder = (order: 'asc' | 'desc') => (order === 'asc' ? 1 : -1)
 
 export async function genericComputeFunction({
     context,
@@ -48,7 +51,8 @@ export async function genericComputeFunction({
     questionObjects: ParsedQuestion[]
     parameters: GenericComputeParameters
 }) {
-    let facetQuestion, facetOptions
+    let axis1: ComputeAxisParameters,
+        axis2: ComputeAxisParameters | null = null
     const { db, isDebug } = context
     const collection = db.collection(config.mongo.normalized_collection)
 
@@ -57,44 +61,70 @@ export async function genericComputeFunction({
     const {
         filters,
         cutoff = 1,
+        cutoffPercent,
         limit = 50,
-        editionId,
+        selectedEditionId,
         facet,
         facetLimit,
-        facetMinPercent,
-        facetMinCount
+        facetCutoff,
+        facetCutoffPercent
     } = parameters
 
     const options = question.options && question.options.map(o => o.id)
 
-    const hasValues = options && !isEmpty(options)
+    /*
 
-    const convertOrder = (order: 'asc' | 'desc') => (order === 'asc' ? 1 : -1)
+    Axis 1
 
-    const sort = parameters?.sort?.property ?? 'count'
-    const order = convertOrder(parameters?.sort?.order ?? 'desc')
+    */
+    axis1 = {
+        question,
+        sort: parameters?.sort?.property ?? 'count',
+        order: convertOrder(parameters?.sort?.order ?? 'desc'),
+        cutoff,
+        limit
+    }
+    if (options) {
+        axis1.options = options
+    }
 
-    const facetSort = parameters?.facetSort?.property ?? 'mean'
-    const facetOrder = convertOrder(parameters?.facetSort?.order ?? 'desc')
+    /*
 
-    console.log('// outline path')
-    console.log(survey.id, edition.id, section.id, question.id)
-    console.log('// dbPath')
-    console.log(dbPath)
-    console.log('// parameters')
-    console.log(parameters)
-    console.log('// options')
-    console.log(options)
+    Axis 2
 
+    
+    */
     if (facet) {
         let [sectionId, facetId] = facet?.split('__')
-        facetQuestion = questionObjects.find(q => q.id === facetId && q.surveyId === survey.id)
-        facetOptions = facetQuestion?.options?.map(o => o.id)
-        console.log('// facetQuestion')
-        console.log(facetQuestion)
-        console.log('// facetOptions')
-        console.log(facetOptions)
+        const facetQuestion = questionObjects.find(
+            q => q.id === facetId && q.surveyId === survey.id
+        )
+        if (facetQuestion) {
+            axis2 = {
+                question: facetQuestion,
+                sort: parameters?.facetSort?.property ?? 'mean',
+                order: convertOrder(parameters?.facetSort?.order ?? 'desc'),
+                cutoff: facetCutoff,
+                cutoffPercent: facetCutoffPercent,
+                limit: facetLimit
+            }
+            const facetOptions = facetQuestion?.options?.map(o => o.id)
+            if (facetOptions) {
+                axis2.options = facetOptions
+            }
+            // switch both axes in order to get a better result object structure
+            const temp = axis1
+            axis1 = axis2
+            axis2 = temp
+        }
     }
+
+    console.log('// parameters')
+    console.log(parameters)
+    console.log('// axis1')
+    console.log(axis1)
+    console.log('// axis2')
+    console.log(axis2)
 
     if (!dbPath) {
         throw new Error(`No dbPath found for question id ${question.id}`)
@@ -109,8 +139,8 @@ export async function genericComputeFunction({
         match = { ...match, ...filtersQuery }
     }
     // if edition is passed, restrict aggregation to specific edition
-    if (editionId) {
-        match.surveySlug = editionId
+    if (selectedEditionId) {
+        match.surveySlug = selectedEditionId
     }
 
     // TODO: merge these counts into the main aggregation pipeline if possible
@@ -120,15 +150,11 @@ export async function genericComputeFunction({
     // console.log(match)
 
     const pipelineProps = {
-        match,
-        facetQuestion,
-        questionId: question.id,
-        dbPath,
-        editionId,
-        limit,
+        surveyId: survey.id,
+        selectedEditionId,
         filters,
-        cutoff,
-        survey: survey.id
+        axis1,
+        axis2
     }
 
     const pipeline = await getGenericPipeline(pipelineProps)
@@ -148,50 +174,50 @@ export async function genericComputeFunction({
         )
     }
 
-    await discardEmptyIds(results)
+    // await discardEmptyIds(results)
 
-    if (hasValues) {
-        await addMissingBucketValues(results, options)
+    if (axis1.options) {
+        // await addMissingBucketValues(results, axis1.options)
     }
 
-    await addEntities(results)
+    // await addEntities(results)
 
-    await addCompletionCounts(results, totalRespondentsByYear, completionByYear)
+    // await addCompletionCounts(results, totalRespondentsByYear, completionByYear)
 
-    if (!hasValues) {
+    if (!axis1.options) {
         // do not apply cutoff for aggregations that have predefined values,
         // as that might result in unexpectedly missing buckets
-        await applyCutoff(results, cutoff)
+        // await applyCutoff(results, cutoff)
     }
-    await addPercentages(results)
+    // await addPercentages(results)
 
-    // await addDeltas(results)
+    //// await addDeltas(results)
 
-    await sortBuckets(results, { sort, order, options })
+    // await sortBuckets(results, axis1)
 
-    if (!hasValues) {
+    if (!axis1.options) {
         // do not apply limits for aggregations that have predefined values,
         // as that might result in unexpectedly missing buckets
-        await limitBuckets(results, limit)
+        // await limitBuckets(results, limit)
     }
 
-    if (hasValues) {
-        await addMeans(results, options)
+    if (axis1.options) {
+        // await addMeans(results, axis1.options)
     }
 
-    await sortFacets(results, { sort: facetSort, order: facetOrder, options: facetOptions })
-
-    await limitFacets(results, { facetLimit, facetMinPercent, facetMinCount })
+    if (axis2) {
+        // await sortFacets(results, axis2)
+        // await limitFacets(results, axis2)
+    }
 
     if (!facet) {
         // if no facet is specified, move default buckets down one level
         results = results.map(editionData => {
             const { facets, ...rest } = editionData
-            console.log('// editionData')
-            console.log(editionData)
             return { ...rest, buckets: results[0].facets[0].buckets }
         })
     }
+    console.log('// results')
     console.log(JSON.stringify(results, undefined, 2))
 
     return results
