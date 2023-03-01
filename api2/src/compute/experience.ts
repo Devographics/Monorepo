@@ -2,7 +2,6 @@ import orderBy from 'lodash/orderBy.js'
 import sumBy from 'lodash/sumBy.js'
 import sortBy from 'lodash/sortBy.js'
 import uniq from 'lodash/uniq.js'
-import { Db } from 'mongodb'
 import config from '../config'
 import { ratioToPercentage, appendCompletionToYearlyResults } from './common'
 import { getEntity } from '../load/entities'
@@ -123,7 +122,7 @@ export async function computeExperienceOverYears({
         )
     }
 
-    const completionByYear = await computeCompletionByYear(context, match)
+    const completionByYear = await computeCompletionByYear({ context, match })
 
     // group by years and add counts
     const experienceByYear = orderBy(
@@ -218,12 +217,13 @@ export async function computeExperienceOverYears({
         }
     })
 
+    // not sure if needed?
     return appendCompletionToYearlyResults(context, survey, experienceByYear)
 }
 
 const metrics = ['awareness', 'usage', 'interest', 'satisfaction']
 
-export async function computeToolsExperienceRanking({
+export async function computeToolsExperienceRatios({
     context,
     survey,
     tools,

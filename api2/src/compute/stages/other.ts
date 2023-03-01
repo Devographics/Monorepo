@@ -89,9 +89,9 @@ export async function addMissingItems(
                 const existingBucketItem = editionData.buckets.find(
                     bucket => bucket.id === option1.id
                 )
-                if (existingBucketItem) {
+                if (existingBucketItem && axis2?.question?.options) {
                     // check facet buckets
-                    for (const option2 of axis1.question.options) {
+                    for (const option2 of axis2.question.options) {
                         const existingFacetBucketItem = existingBucketItem.facetBuckets?.find(
                             bucket => bucket.id === option2.id
                         )

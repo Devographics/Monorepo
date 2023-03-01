@@ -24,7 +24,6 @@ import {
     addEntities,
     addCompletionCounts,
     addPercentages,
-    // addMeans,
     sortData,
     limitData,
     cutoffData
@@ -200,10 +199,6 @@ export async function genericComputeFunction({
         await sortData(results, axis1)
         await limitData(results, axis1)
         await cutoffData(results, axis1)
-    }
-
-    if (axis1.options) {
-        // await addMeans(results, axis1.options)
     }
 
     console.log('// results final')

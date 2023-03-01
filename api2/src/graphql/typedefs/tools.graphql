@@ -24,8 +24,6 @@ type ToolExperienceRankingYearMetric {
     year: Int
     rank: Int
     percentage_question: Float
-    percentage_survey: Float
-    percentage_facet: Float
 }
 
 input ToolFilters {
