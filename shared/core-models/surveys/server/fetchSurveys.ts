@@ -66,7 +66,9 @@ export const fetchSurveysList = async (): Promise<Array<SurveyEditionDescription
             return ghSurveys
         }
     )
-    if (!["development", "test"].includes(process.env.NODE_ENV!)) {
+    // NOTE: we cannot systematically override "NODE_ENV" with test,
+    // so we have to use a custom node_env variable NEXT_PUBLIC_NODE_ENV
+    if (process.env.NODE_ENV !== "development" && process.env.NEXT_PUBLIC_NODE_ENV !== "test") {
         surveys = surveys.filter(s => s.slug !== "demo_survey")
     }
     const sorted = orderBy(surveys, ["year", "slug"], ["desc", "asc"])
