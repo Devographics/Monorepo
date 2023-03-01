@@ -35,7 +35,7 @@ export default async function RootLayout({
   };
 }) {
   // TODO: it seems we need to call this initialization code on all relevant pages/layouts
-  initRedis(serverConfig.redisUrl);
+  initRedis(serverConfig().redisUrl);
   // locale fetching
   const locale = params.lang; // getCurrentLocale();
   if (locale.includes(".")) {

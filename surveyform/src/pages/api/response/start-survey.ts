@@ -44,7 +44,7 @@ export default async function responseStartSurveyHandler(req: NextApiRequest, re
         delete headers.connection
         delete headers["content-length"]
 
-        const gqlRes = await fetch(serverConfig.appUrl + "/api/graphql", {
+        const gqlRes = await fetch(serverConfig().appUrl + "/api/graphql", {
             method: "POST",
             // @ts-ignore
             headers,

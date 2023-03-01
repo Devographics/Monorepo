@@ -8,7 +8,7 @@ import { serverConfig } from "~/config/server";
  * TODO: we might want a dedicated @devographics/redis package
  */
 export function connectToRedis() {
-  initRedis(serverConfig.redisUrl)
+  initRedis(serverConfig().redisUrl)
 }
 
 /**

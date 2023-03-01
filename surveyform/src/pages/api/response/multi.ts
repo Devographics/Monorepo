@@ -17,7 +17,7 @@ export default async function responseHandler(req: NextApiRequest, res: NextApiR
     "content-type": "application/json"
   }
   delete headers.connection
-  const response = await fetch(serverConfig.appUrl + "/api/graphql", {
+  const response = await fetch(serverConfig().appUrl + "/api/graphql", {
     method: "POST",
     // @ts-ignore
     headers: req.headers,

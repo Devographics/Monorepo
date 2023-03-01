@@ -6,46 +6,51 @@
 
 import { publicConfig } from "./public";
 
-const mongoUri = process.env.MONGO_URI;
-if (!mongoUri) throw new Error("MONGO_URI env variable is not defined");
 
-export const serverConfig = {
-  // reexpose public variables for consistency
-  ...publicConfig,
-  /**
-   * Auth
-   */
-  tokenSecret: process.env.TOKEN_SECRET,
-  /**
-   * Internal API for translations and entities
-   */
-  translationAPI: process.env.TRANSLATION_API!,
-  mongoUri,
-  redisUrl: process.env.REDIS_URL || "redis://localhost:6379",
-  githubToken: process.env.GITHUB_TOKEN,
-  // NOTE: each survey should try to use their own specific domain (see magic link auth)
-  defaultMailFrom: process.env.MAIL_FROM || "login@devographics.com",
-  // to avoid risks of typos, reuse those values
-  isDev: process.env.NODE_ENV === "development",
-  isProd: process.env.NODE_ENV === "production",
-  isTest: process.env.NODE_ENV === "test",
+export function serverConfig() {
+  checkServerConfig()
+  return {
+    // reexpose public variables for consistency
+    ...publicConfig,
+    /**
+     * Auth
+     */
+    tokenSecret: process.env.TOKEN_SECRET,
+    /**
+     * Internal API for translations and entities
+     */
+    translationAPI: process.env.TRANSLATION_API!,
+    mongoUri: process.env.MONGO_URI!,
+    redisUrl: process.env.REDIS_URL || "redis://localhost:6379",
+    githubToken: process.env.GITHUB_TOKEN,
+    // NOTE: each survey should try to use their own specific domain (see magic link auth)
+    defaultMailFrom: process.env.MAIL_FROM || "login@devographics.com",
+    // to avoid risks of typos, reuse those values
+    isDev: process.env.NODE_ENV === "development",
+    isProd: process.env.NODE_ENV === "production",
+    isTest: process.env.NODE_ENV === "test",
+  }
 };
 
-const checkServerConfig = () => {
+/**
+ * Wrapping into a function calls allow use to load env variable manually
+ * in scripts that reuse this code outside of Next
+ */
+export function checkServerConfig() {
+  const mongoUri = process.env.MONGO_URI;
+  if (!mongoUri) throw new Error("MONGO_URI env variable is not defined");
   if (!process.env.GITHUB_TOKEN) {
     throw new Error("GITHUB_TOKEN is now necessary to get the survey files")
   }
-  if (serverConfig.isProd) {
+  if (process.env.NODE_ENV === "production") {
     if (!process.env.REDIS_URL) {
       throw new Error(
         "process.env.REDIS_URL is mandatory in production.\n If building locally, set this value in .env.production.local or .env.test.local"
       );
     }
-    if (!serverConfig.tokenSecret) {
+    if (!process.env.TOKEN_SECRET) {
       throw new Error("process.env.TOKEN_SECRET not set");
     }
   } else {
   }
 };
-
-checkServerConfig();

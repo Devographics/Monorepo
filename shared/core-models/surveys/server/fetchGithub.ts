@@ -5,7 +5,6 @@
 
 import yaml from "js-yaml"
 import { SurveyEdition, SurveyEditionDescription, SurveySharedContext } from "../typings";
-import orderBy from "lodash/orderBy.js"
 
 const ghApiReposRoot = "https://api.github.com/repos"
 
@@ -187,11 +186,7 @@ export const fetchSurveysListGithub = async (): Promise<Array<SurveyEditionDescr
             surveys.push(survey)
         }
     }
-    if (process.env.NODE_ENV !== "development") {
-        surveys = surveys.filter(s => s.slug !== "demo_survey")
-    }
-    const sorted = orderBy(surveys, ["year", "slug"], ["desc", "asc"])
-    return sorted
+    return surveys
     /*   {
            status: 2,
                name: "Demo survey",

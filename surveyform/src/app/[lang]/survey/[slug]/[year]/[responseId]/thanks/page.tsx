@@ -1,9 +1,8 @@
 import Thanks from "~/core/components/pages/Thanks";
-import { getSurveyResponseModel } from "~/responses";
+import { getSurveyResponseModel } from "~/responses/model.client";
 import { ResponseFragmentWithRanking } from "~/responses/fragments";
 import { serverConfig } from "~/config/server";
 import { buildSingleQuery } from "@devographics/crud";
-import React from "react";
 
 import { ResponseDocument, SurveyEdition } from "@devographics/core-models";
 import { print } from "graphql";
@@ -30,7 +29,7 @@ async function getResponseWithRanking({
       "content-type": "application/json",
     };
     //delete headers.connection
-    const gqlRes = await fetch(serverConfig.appUrl + "/api/graphql", {
+    const gqlRes = await fetch(serverConfig().appUrl + "/api/graphql", {
       method: "POST",
       // @ts-ignore
       headers,
@@ -72,7 +71,7 @@ const ThanksPage = async ({
   // NOTE: Next.js 13 automatically deduplicate request
   // it's ok to fetch data again here after fetching in the layout
   // TODO: it seems we need to call this initialization code on all relevant pages/layouts
-  initRedis(serverConfig.redisUrl);
+  initRedis(serverConfig().redisUrl);
   const survey = await fetchSurvey(slug, year);
   if (!survey) {
     notFound();

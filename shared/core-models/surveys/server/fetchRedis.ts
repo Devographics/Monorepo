@@ -4,7 +4,6 @@
 // All methods will return null if data are not in the cache
 // => use either a local or a github load when it happen
 import { SurveyEdition, SurveyEditionDescription, SurveySharedContext } from "../typings";
-import orderBy from "lodash/orderBy.js"
 import { getRedisClient } from "./redis";
 
 // This TTL can be long (multiple hours) since we can manually invalidate Redis cache if needed
@@ -60,12 +59,7 @@ const surveyListKey = `surveyform_surveys_descriptions`
 
 export const fetchSurveysListRedis = async (): Promise<Array<SurveyEditionDescription> | null> => {
     let surveys = await fetchJson<Array<SurveyEditionDescription>>(surveyListKey)
-    if (!surveys) return null
-    if (process.env.NODE_ENV !== "development") {
-        surveys = surveys.filter(s => s.slug !== "demo_survey")
-    }
-    const sorted = orderBy(surveys, ["year", "slug"], ["desc", "asc"])
-    return sorted
+    return surveys
 }
 export const storeSurveysListRedis = storeRedis(surveyListKey)
 

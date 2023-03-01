@@ -39,7 +39,7 @@ export default async function SurveyLayout({
   params: { slug: string; year: string; lang: string };
 }) {
   // TODO: it seems we need to call this initialization code on all relevant pages/layouts
-  initRedis(serverConfig.redisUrl);
+  initRedis(serverConfig().redisUrl);
 
   const { slug, year } = params;
   const survey = await fetchSurvey(slug, year);

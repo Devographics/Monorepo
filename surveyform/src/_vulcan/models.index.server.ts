@@ -13,7 +13,7 @@ import { serverConfig } from "~/config/server";
 let models: Array<VulcanGraphqlModelServer> = []
 export const getServerModels = async () => {
     if (models.length) return models
-    initRedis(serverConfig.redisUrl);
+    initRedis(serverConfig().redisUrl);
     const surveys = await Promise.all((await fetchSurveysList()).map(sd => fetchSurveyFromId(sd.surveyId)))
     // @ts-ignore
     initResponseModelServer(surveys)

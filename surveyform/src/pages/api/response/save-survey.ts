@@ -42,7 +42,7 @@ export default async function saveSurveyResponseHandler(req: NextApiRequest, res
 
         // TODO: this hack let's us call the existing graphql API until we rewrite the server without graphql
         const headers = gqlHeaders(req)
-        const gqlRes = await fetch(serverConfig.appUrl + "/api/graphql", {
+        const gqlRes = await fetch(serverConfig().appUrl + "/api/graphql", {
             method: "POST",
             // @ts-ignore
             headers,

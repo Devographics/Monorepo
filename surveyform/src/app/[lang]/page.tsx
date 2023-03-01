@@ -4,7 +4,7 @@ import { serverConfig } from "~/config/server";
 
 const IndexPage = async () => {
   // TODO: it seems we need to call this initialization code on all relevant pages/layouts
-  initRedis(serverConfig.redisUrl);
+  initRedis(serverConfig().redisUrl);
   const surveys = await fetchSurveysList();
   return <Surveys surveys={surveys} />;
 };

@@ -6,7 +6,7 @@ import { nanoid } from "nanoid";
 import { throwError } from './errors'
 import { ResponseDocument } from "@devographics/core-models";
 import { fetchSurveyFromId } from "@devographics/core-models/server";
-import { getSurveyResponseSchema } from "~/responses/schema";
+import { getSurveyResponseSchema } from "~/responses/schema.server";
 
 /**
  * Create a new response for the survey

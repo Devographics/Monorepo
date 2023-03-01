@@ -1,7 +1,10 @@
 import {
+  createGraphqlModel,
   CreateGraphqlModelOptionsServer,
+  CreateGraphqlModelOptionsShared,
   createGraphqlModelServer,
   mergeModelDefinitionServer,
+  VulcanGraphqlModelServer,
 } from "@vulcanjs/graphql/server";
 import { createMongooseConnector } from "@vulcanjs/mongo";
 import { subscribe } from "~/server/email/email_octopus";
@@ -9,8 +12,8 @@ import mongoose from "mongoose";
 import { captureException } from "@sentry/nextjs";
 import { fetchSurveyFromId } from "@devographics/core-models/server";
 import { ResponseDocument, SurveyEdition } from "@devographics/core-models";
-import { getModelDef, initReponseModel } from "./model";
-import { getServerSchema } from "./schema.server";
+import { getSchema, getServerSchema, initResponseSchema } from "./schema.server";
+
 
 export async function duplicateCheck(validationErrors, options) {
   const { document, currentUser } = options;
@@ -124,10 +127,47 @@ export const getModelDefServer = (): CreateGraphqlModelOptionsServer => {
   });
 }
 
-let ResponseModel
+let ResponseModel: VulcanGraphqlModelServer
+//let isResponseModelReady = false
 export const getResponseModel = () => {
+  // if (!isResponseModelReady) throw new Error("Response model not ready")
   return ResponseModel
 };
+
+
+const name = "Response";
+
+export function getModelDef() {
+  const modelDef: CreateGraphqlModelOptionsShared = {
+    name,
+    schema: getSchema(),
+    graphql: {
+      typeName: name,
+      multiTypeName: "Responses",
+      defaultFragmentOptions: {
+        // Some fields might be named "js_features_intl"
+        // because they literally talk about _intl
+        // we don't want them in the default fragment
+        // TODO: we should probably provide our own default fragment
+        // without survey fields anyway
+        noIntlFields: true,
+      },
+    },
+    permissions: {
+      canRead: ["owners", "admins"],
+      canCreate: ["members"],
+      canUpdate: ['owners', 'admins'],
+      canDelete: ["admins"],
+    },
+  };
+  return modelDef
+}
+
+// TODO: unused client-side??
+function initReponseModel(surveys: Array<SurveyEdition>) {
+  initResponseSchema(surveys)
+  return createGraphqlModel(getModelDef())
+}
 export const initResponseModelServer = (surveys: Array<SurveyEdition>) => {
   initReponseModel(surveys)
   ResponseModel = createGraphqlModelServer(getModelDefServer())

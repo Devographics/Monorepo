@@ -10,6 +10,7 @@ import {
     fetchSurveyGithub, fetchSurveysListGithub
 } from "./fetchGithub";
 import { fetchSurveyContextRedis, fetchSurveyRedis, fetchSurveysListRedis, storeSurveyContextRedis, storeSurveyRedis, storeSurveysListRedis } from "./fetchRedis";
+import orderBy from "lodash/orderBy.js"
 
 const surveysCache = new NodeCache({
     // This TTL must stay short, because we manually invalidate this cache
@@ -53,7 +54,7 @@ export async function fetchSurvey(prettySlug: SurveyEdition["prettySlug"], year:
 
 export const fetchSurveysList = async (): Promise<Array<SurveyEditionDescription>> => {
     const key = "surveys_description_list"
-    return await fromSurveysCache(
+    let surveys = await fromSurveysCache(
         key,
         async () => {
             const redisSurveys = await fetchSurveysListRedis()
@@ -65,6 +66,11 @@ export const fetchSurveysList = async (): Promise<Array<SurveyEditionDescription
             return ghSurveys
         }
     )
+    if (process.env.NODE_ENV !== "development") {
+        surveys = surveys.filter(s => s.slug !== "demo_survey")
+    }
+    const sorted = orderBy(surveys, ["year", "slug"], ["desc", "asc"])
+    return sorted
 }
 
 export async function fetchSurveyFromId(surveyId: SurveyEdition["surveyId"]) {
