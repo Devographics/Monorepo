@@ -160,7 +160,6 @@ interface LocaleStringsVariables {
  */
 export const fetchLocaleStrings = async (variables: LocaleStringsVariables) => {
   const label = `locales_${variables.localeId}_${variables.contexts}`
-  console.time(label)
   //console.debug("Fetching locale", variables.localeId);
   const cached = cachedPromise(
     promisesNodeCache,
@@ -192,7 +191,6 @@ export const fetchLocaleStrings = async (variables: LocaleStringsVariables) => {
       convertedLocale,
       LOCALES_TTL_SECONDS
     );
-    console.timeEnd(label)
     return convertedLocale as LocaleDefWithStrings;
     // return locale as Locale;
 
