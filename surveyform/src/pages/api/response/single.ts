@@ -74,7 +74,7 @@ export default async function singleResponseHandler(req: NextApiRequest, res: Ne
     const data = await gqlRes.json()
     console.log("GOT DATA FROM GRAPHQL CALL", data)
     // TODO: filter during call to db already
-    const responses: Array<ResponseDocument & { survey: SurveyEdition }> = data?.data?.currentUser?.responses
+    const responses: Array<ResponseDocument & { survey: SurveyEdition }> = data?.data?.currentUser?.responses || []
     const surveyResponse = responses.find((r) => r.surveySlug === surveySlug) || null;
     console.log("response", surveyResponse, responses)
     return res.status(200).json(surveyResponse)
