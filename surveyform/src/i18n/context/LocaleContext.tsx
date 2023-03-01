@@ -56,26 +56,25 @@ export const LocaleContextProvider = (props: {
   /**
    * Switch to another locale, reload data accordingly
    */
-  async function setLocale(localeId: string): Promise<void> {
+  async function setLocale(newLocaleId: string): Promise<void> {
     // TODO: see how it's implemented in incoming versions of Next 13+
     //if (!localeObject) throw new Error(`Locale not found for id ${localeId}`);
     const { updateUser } = props;
     removeCookie(LOCALE_COOKIE_NAME, { path: "/" });
-    setCookie(LOCALE_COOKIE_NAME, localeId, { path: "/" });
+    setCookie(LOCALE_COOKIE_NAME, newLocaleId, { path: "/" });
     // if user is logged in, change their `locale` profile property
     if (user && updateUser) {
       try {
         await updateUser({
           selector: { documentId: user._id },
-          data: { locale: localeId },
+          data: { locale: newLocaleId },
         });
       } catch (err) {
         console.error("Could not update user language");
         captureException(err);
       }
     }
-    // TODO: it should be enough to update lang with the new cookie,
-    // but we need to double-check
+    // the middleware will rerun and redirect user to right locale
     router.refresh();
   }
 
