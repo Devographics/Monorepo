@@ -4,9 +4,6 @@ import { generateFiltersQuery } from '../filters'
 import { computeParticipationByYear } from './demographics'
 import { getGenericPipeline } from './generic_pipeline'
 import { computeCompletionByYear } from './completion'
-import { getChartKeys } from '../helpers'
-import isEmpty from 'lodash/isEmpty.js'
-import { getFacetSegments } from '../helpers'
 import {
     RequestContext,
     GenericComputeArguments,
@@ -21,7 +18,9 @@ import {
 
 import {
     discardEmptyIds,
-    // addMissingBucketValues,
+    addDefaultBucketCounts,
+    moveFacetBucketsToDefaultBuckets,
+    addMissingItems,
     addEntities,
     addCompletionCounts,
     addPercentages,
@@ -171,36 +170,33 @@ export async function genericComputeFunction({
         )
     }
 
-    if (!facet) {
+    if (!axis2) {
+        // TODO: get rid of this by rewriting the mongo aggregation
         // if no facet is specified, move default buckets down one level
-        results = results.map(editionData => {
-            const { buckets, ...rest } = editionData
-            return { ...rest, buckets: results[0].buckets[0].facetBuckets }
-        })
+        await moveFacetBucketsToDefaultBuckets(results)
     }
-
-    console.log('// results 1')
-    console.log(JSON.stringify(results, undefined, 2))
 
     await discardEmptyIds(results)
 
-    if (axis1.options) {
-        // await addMissingBucketValues(results, axis1.options)
-    }
-
     await addEntities(results, context)
+
+    if (axis2) {
+        await addDefaultBucketCounts(results)
+    }
 
     await addCompletionCounts(results, totalRespondentsByYear, completionByYear)
 
     await addPercentages(results)
 
-    //// await addDeltas(results)
+    // await addDeltas(results)
 
     if (axis2) {
+        await addMissingItems(results, axis2, axis1)
         await sortData(results, axis2, axis1)
         await limitData(results, axis2, axis1)
         await cutoffData(results, axis2, axis1)
     } else {
+        await addMissingItems(results, axis1)
         await sortData(results, axis1)
         await limitData(results, axis1)
         await cutoffData(results, axis1)
@@ -215,87 +211,3 @@ export async function genericComputeFunction({
 
     return results
 }
-
-// export async function computeTermAggregationAllYears(funcOptions: {
-//     context: RequestContext
-//     survey: SurveyConfig
-//     key: string
-//     options: TermAggregationOptions
-//     aggregationFunction?: AggregationFunction
-// }) {
-//     const { aggregationFunction = computeDefaultTermAggregationByYear, ...options } = funcOptions
-//     return aggregationFunction(options)
-// }
-
-// export async function computeTermAggregationAllYearsWithCache({
-//     context,
-//     survey,
-//     key,
-//     options = {},
-//     aggregationFunction
-// }: {
-//     context: RequestContext
-//     survey: SurveyConfig
-//     key: string
-//     options: TermAggregationOptions
-//     aggregationFunction?: AggregationFunction
-// }) {
-//     return useCache({
-//         func: computeTermAggregationAllYears,
-//         context,
-//         funcOptions: {
-//             survey,
-//             key,
-//             options,
-//             aggregationFunction
-//         }
-//     })
-// }
-
-// export async function computeTermAggregationSingleYear({
-//     context,
-//     survey,
-//     key,
-//     options,
-//     aggregationFunction
-// }: {
-//     context: RequestContext
-//     survey: SurveyConfig
-//     key: string
-//     options: TermAggregationOptions
-//     aggregationFunction?: AggregationFunction
-// }) {
-//     const allYears = await computeTermAggregationAllYears({
-//         context,
-//         survey,
-//         key,
-//         options,
-//         aggregationFunction
-//     })
-//     return allYears[0]
-// }
-
-// export async function computeTermAggregationSingleYearWithCache({
-//     context,
-//     survey,
-//     key,
-//     options,
-//     aggregationFunction
-// }: {
-//     context: RequestContext
-//     survey: SurveyConfig
-//     key: string
-//     options: TermAggregationOptions
-//     aggregationFunction?: AggregationFunction
-// }) {
-//     return useCache({
-//         func: computeTermAggregationSingleYear,
-//         context,
-//         funcOptions: {
-//             survey,
-//             key,
-//             options,
-//             aggregationFunction
-//         }
-//     })
-// }

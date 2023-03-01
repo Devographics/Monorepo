@@ -185,15 +185,15 @@ export interface FacetCompletion extends YearCompletion {
 export interface Bucket {
     count: number
     id: string
-    count_all_facets?: number
-    percentage_all_facets?: number
     percentage_facet?: number
     percentage_question: number
     percentage_survey: number
     completion?: BucketCompletion
     entity?: Entity
-    facetBuckets: Bucket[]
+    facetBuckets: FacetBucket[]
 }
+
+export interface FacetBucket extends Omit<Bucket, 'facetBuckets'> {}
 
 export interface BucketCompletion extends FacetCompletion {}
 

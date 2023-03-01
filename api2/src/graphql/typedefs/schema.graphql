@@ -136,14 +136,6 @@ type FacetBucket {
     """
     percentage_facet: Float
     """
-    Count of respondents in all facets (same as default/null facet)
-    """
-    count_all_facets: Int
-    """
-    Percentage relative to question respondents in all facets (same as default/null faces)
-    """
-    percentage_all_facets: Float
-    """
     Entity associated with the current bucket
     """
     entity: Entity
