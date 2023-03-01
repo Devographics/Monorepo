@@ -1,13 +1,9 @@
 //**** API TESTS
 // TODO: those tests should be replaced by tests against API routes when this is more mature in Next (no need to use a browser here)
-import {
-  sendMagicLoginEmail,
-  verifyMagicToken,
-} from "~/account/magicLogin/lib";
-import { loginAnonymously } from "~/account/anonymousLogin/lib";
-import { magicLinkRegex } from "../../helpers/magicLogin";
 import { apiRoutes } from "~/lib/apiRoutes";
-import { testSurvey } from "cypress/fixtures/testSurvey";
+import { testSurvey } from "../../fixtures/testSurvey";
+
+const test = it
 
 // Must be seeded in the db
 const TEST_USER_EMAIL = "test@devographics.com";

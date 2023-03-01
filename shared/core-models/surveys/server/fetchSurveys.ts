@@ -66,7 +66,7 @@ export const fetchSurveysList = async (): Promise<Array<SurveyEditionDescription
             return ghSurveys
         }
     )
-    if (process.env.NODE_ENV !== "development") {
+    if (!["development", "test"].includes(process.env.NODE_ENV!)) {
         surveys = surveys.filter(s => s.slug !== "demo_survey")
     }
     const sorted = orderBy(surveys, ["year", "slug"], ["desc", "asc"])
