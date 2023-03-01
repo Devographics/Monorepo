@@ -72,8 +72,8 @@ export const getData = async (): Promise<HomepageData> => {
         locales.push(localeWithStrings.locale)
     }
     // filter out the demo survey
-    const surveys = allSurveysData?.surveys.filter(s => s.slug !== "demo_survey")
-    const data = { ...allSurveysData, surveys, locales }
+    const allSurveys = allSurveysData?.allSurveys?.filter(s => s.slug !== "demo_survey") || []
+    const data = { allSurveys, locales }
     return data
 }
 
