@@ -1,16 +1,19 @@
 import config from '../config'
-import keyBy from 'lodash/keyBy.js'
 import { RequestContext } from '../types'
+import { inspect } from 'util'
 
 export interface CompletionResult {
-    year: number
+    editionId: string
     total: number
 }
 
-export async function computeCompletionByYear(
-    context: RequestContext,
+export async function computeCompletionByYear({
+    context,
+    match
+}: {
+    context: RequestContext
     match: any
-): Promise<Record<number, CompletionResult>> {
+}): Promise<CompletionResult[]> {
     const { db } = context
     const collection = db.collection(config.mongo.normalized_collection)
 
@@ -20,7 +23,7 @@ export async function computeCompletionByYear(
         },
         {
             $group: {
-                _id: { year: '$year' },
+                _id: { editionId: '$surveySlug' },
                 total: {
                     $sum: 1
                 }
@@ -28,7 +31,7 @@ export async function computeCompletionByYear(
         },
         {
             $project: {
-                year: '$_id.year',
+                editionId: '$_id.editionId',
                 total: 1
             }
         }
@@ -38,15 +41,16 @@ export async function computeCompletionByYear(
         .aggregate(aggregationPipeline)
         .toArray()) as CompletionResult[]
 
+    // console.log('// computeCompletionByYear')
     // console.log(
     //     inspect(
     //         {
     //             aggregationPipeline,
-    //             completionResults,
+    //             completionResults
     //         },
     //         { colors: true, depth: null }
     //     )
     // )
 
-    return keyBy(completionResults, 'year')
+    return completionResults
 }

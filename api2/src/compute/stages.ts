@@ -1,4 +1,12 @@
-import { EditionDataLegacy, ComputeAxisParameters } from '../types'
+import {
+    EditionData,
+    ComputeAxisParameters,
+    RequestContext,
+    SortProperty,
+    SortOrder,
+    SortOrderNumeric,
+    Bucket
+} from '../types'
 import { ratioToPercentage } from './common'
 import { getEntity } from '../load/entities'
 import sortBy from 'lodash/sortBy.js'
@@ -15,11 +23,17 @@ import isEmpty from 'lodash/isEmpty.js'
 Discard any result where id is {}, "", [], etc. 
 
 */
-export async function discardEmptyIds(resultsByEdition: EditionDataLegacy[]) {
-    for (let year of resultsByEdition) {
-        year.facets = year.facets.filter(b => typeof b.id === 'number' || !isEmpty(b.id))
-        for (let facet of year.facets) {
-            facet.buckets = facet.buckets.filter(b => typeof b.id === 'number' || !isEmpty(b.id))
+export async function discardEmptyIds(resultsByEdition: EditionData[]) {
+    for (let editionData of resultsByEdition) {
+        editionData.buckets = editionData.buckets.filter(
+            b => typeof b.id === 'number' || !isEmpty(b.id)
+        )
+        for (let bucket of editionData.buckets) {
+            if (bucket.facetBuckets) {
+                bucket.facetBuckets = bucket.facetBuckets.filter(
+                    b => typeof b.id === 'number' || !isEmpty(b.id)
+                )
+            }
         }
     }
 }
@@ -34,7 +48,7 @@ respondents or representing less than Y% of respondents
 
 */
 export async function limitFacets(
-    resultsByEdition: EditionDataLegacy[],
+    resultsByEdition: EditionData[],
     { limit, cutoffPercent, cutoff }: ComputeAxisParameters
 ) {
     for (let year of resultsByEdition) {
@@ -57,7 +71,7 @@ export async function limitFacets(
 }
 
 // add means
-export async function addMeans(resultsByEdition: EditionDataLegacy[], values: string[] | number[]) {
+export async function addMeans(resultsByEdition: EditionData[], values: string[] | number[]) {
     for (let year of resultsByEdition) {
         for (let facet of year.facets) {
             let totalValue = 0
@@ -74,17 +88,15 @@ export async function addMeans(resultsByEdition: EditionDataLegacy[], values: st
     }
 }
 
-// if aggregation has values defined, set any missing value to 0
+// TODO
+// if aggregation has options defined, set any missing value to 0
 // so that all buckets have the same shape
-export async function addMissingBucketValues(
-    resultsByEdition: EditionDataLegacy[],
-    values: string[]
-) {
-    for (let year of resultsByEdition) {
-        for (let facet of year.facets) {
-            const existingValues = facet.buckets.map(b => b.id)
+export async function addMissingBucketValues(resultsByEdition: EditionData[], options: string[]) {
+    for (let editionData of resultsByEdition) {
+        for (let bucket of editionData.buckets) {
+            const existingValues = bucket.facetBuckets.map(b => b.id)
             const missingValues = difference(
-                values.map(i => i.toString()),
+                options.map(i => i.toString()),
                 existingValues.map(i => i.toString())
             )
             missingValues.forEach(id => {
@@ -97,24 +109,26 @@ export async function addMissingBucketValues(
                     count_all_facets: 0,
                     percentage_all_facets: 0
                 }
-                facet.buckets.push(zeroBucketItem)
+                bucket.facetBuckets.push(zeroBucketItem)
             })
         }
     }
 }
 
 // add entities to facet and bucket items if applicable
-export async function addEntities(resultsByEdition: EditionDataLegacy[]) {
-    for (let year of resultsByEdition) {
-        for (let facet of year.facets) {
-            const facetEntity = await getEntity(facet)
-            if (facetEntity) {
-                facet.entity = facetEntity
+export async function addEntities(resultsByEdition: EditionData[], context: RequestContext) {
+    for (let editionData of resultsByEdition) {
+        for (let bucket of editionData.buckets) {
+            const bucketEntity = await getEntity({ id: bucket.id, context })
+            if (bucketEntity) {
+                bucket.entity = bucketEntity
             }
-            for (let bucket of facet.buckets) {
-                const bucketEntity = await getEntity(bucket)
-                if (bucketEntity) {
-                    bucket.entity = bucketEntity
+            if (bucket.facetBuckets) {
+                for (let facetBucket of bucket.facetBuckets) {
+                    const facetBucketsEntity = await getEntity({ id: facetBucket.id })
+                    if (facetBucketsEntity) {
+                        facetBucket.entity = facetBucketsEntity
+                    }
                 }
             }
         }
@@ -123,7 +137,7 @@ export async function addEntities(resultsByEdition: EditionDataLegacy[]) {
 
 // add completion counts for each year and facet
 export async function addCompletionCounts(
-    resultsByEdition: EditionDataLegacy[],
+    resultsByEdition: EditionData[],
     totalRespondentsByYear: {
         [key: number]: number
     },
@@ -152,7 +166,7 @@ export async function addCompletionCounts(
 }
 
 // apply bucket cutoff
-export async function applyCutoff(resultsByEdition: EditionDataLegacy[], cutoff: number = 1) {
+export async function applyCutoff(resultsByEdition: EditionData[], cutoff: number = 1) {
     for (let year of resultsByEdition) {
         for (let facet of year.facets) {
             facet.buckets = facet.buckets.filter(bucket => bucket.count >= cutoff)
@@ -161,7 +175,7 @@ export async function applyCutoff(resultsByEdition: EditionDataLegacy[], cutoff:
 }
 
 // apply bucket limit
-export async function limitBuckets(resultsByEdition: EditionDataLegacy[], limit: number = 1000) {
+export async function limitBuckets(resultsByEdition: EditionData[], limit: number = 1000) {
     for (let year of resultsByEdition) {
         for (let facet of year.facets) {
             facet.buckets = take(facet.buckets, limit)
@@ -170,7 +184,7 @@ export async function limitBuckets(resultsByEdition: EditionDataLegacy[], limit:
 }
 
 // add percentages relative to question respondents and survey respondents
-export async function addPercentages(resultsByEdition: EditionDataLegacy[]) {
+export async function addPercentages(resultsByEdition: EditionData[]) {
     for (let year of resultsByEdition) {
         for (let facet of year.facets) {
             for (let bucket of facet.buckets) {
@@ -193,7 +207,7 @@ export async function addPercentages(resultsByEdition: EditionDataLegacy[]) {
 }
 
 // TODO ? or else remove this
-export async function addDeltas(resultsByEdition: EditionDataLegacy[]) {
+export async function addDeltas(resultsByEdition: EditionData[]) {
     // // compute deltas
     // resultsWithPercentages.forEach((year, i) => {
     //     const previousYear = resultsByYear[i - 1]
@@ -210,73 +224,62 @@ export async function addDeltas(resultsByEdition: EditionDataLegacy[]) {
     // })
 }
 
-interface SortParameters {
-    sort: string
-    order: 1 | -1
-    options?: string[] | number[]
-}
-export async function sortBuckets(
-    resultsByEdition: EditionDataLegacy[],
-    parameters: ComputeAxisParameters
-) {
-    const { sort, order, options } = parameters
-    for (let year of resultsByEdition) {
-        for (let facet of year.facets) {
-            if (sort === 'options') {
-                if (options && !isEmpty(options)) {
-                    // if values are specified, sort by values
-                    facet.buckets = [...facet.buckets].sort((a, b) => {
-                        // make sure everything is a string to avoid type mismatches
-                        const stringValues = options.map(v => v.toString())
-                        return (
-                            stringValues.indexOf(a.id.toString()) -
-                            stringValues.indexOf(b.id.toString())
-                        )
-                    })
-                }
-            } else {
-                // start with an alphabetical sort to ensure a stable
-                // sort even when multiple items have same count
-                facet.buckets = sortBy(facet.buckets, 'id')
-                // sort by sort/order
-                if (order === -1) {
-                    // reverse first so that ids end up in right order when we reverse again
-                    facet.buckets.reverse()
-                    facet.buckets = sortBy(facet.buckets, sort)
-                    facet.buckets.reverse()
-                } else {
-                    facet.buckets = sortBy(facet.buckets, sort)
-                }
-            }
-        }
-    }
-}
-
-export async function sortFacets(
-    resultsByEdition: EditionDataLegacy[],
-    parameters: ComputeAxisParameters
-) {
-    const { sort, order, options } = parameters
-    for (let year of resultsByEdition) {
+export function sortBuckets(buckets: Bucket[], axis: ComputeAxisParameters) {
+    const { sort, order, options } = axis
+    let sortedBuckets = [...buckets]
+    if (sort === 'options') {
         if (options && !isEmpty(options)) {
             // if values are specified, sort by values
-            year.facets = [...year.facets].sort((a, b) => {
-                // make sure everything is a string to avoid type mismatches
-                const stringValues = options.map(v => v.toString())
-                return stringValues.indexOf(a.id.toString()) - stringValues.indexOf(b.id.toString())
-            })
-        } else {
-            // start with an alphabetical sort to ensure a stable
-            // sort even when multiple items have same count
-            year.facets = sortBy(year.facets, 'id')
-            // sort by sort/order
-            if (order === -1) {
-                // reverse first so that ids end up in right order when we reverse again
-                year.facets.reverse()
-                year.facets = sortBy(year.facets, sort)
-                year.facets.reverse()
-            } else {
-                year.facets = sortBy(year.facets, sort)
+            sortedBuckets = sortByOptions(sortedBuckets, options)
+        }
+    } else {
+        sortedBuckets = sortByProperty(sortedBuckets, sort, order)
+    }
+    return sortedBuckets
+}
+
+export function sortByOptions(buckets: Bucket[], options: string[]) {
+    return [...buckets].sort((a, b) => {
+        // make sure everything is a string to avoid type mismatches
+        const stringValues = options.map(v => v.toString())
+        return stringValues.indexOf(a.id.toString()) - stringValues.indexOf(b.id.toString())
+    })
+}
+
+export function sortByProperty(
+    buckets: Bucket[],
+    sortProperty: SortProperty,
+    sortOrder: SortOrderNumeric
+) {
+    let sortedBuckets = [...buckets]
+    // start with an alphabetical sort to ensure a stable
+    // sort even when multiple items have same count
+    sortedBuckets = sortBy(sortedBuckets, 'id')
+    // sort by sort/order
+    if (sortOrder === -1) {
+        // reverse first so that ids end up in right order when we reverse again
+        sortedBuckets.reverse()
+        sortedBuckets = sortBy(sortedBuckets, sortProperty)
+        sortedBuckets.reverse()
+    } else {
+        sortedBuckets = sortBy(sortedBuckets, sortProperty)
+    }
+    return sortedBuckets
+}
+
+export async function sortData(
+    resultsByEdition: EditionData[],
+    axis1: ComputeAxisParameters,
+    axis2?: ComputeAxisParameters
+) {
+    for (let editionData of resultsByEdition) {
+        // first, sort regular buckets
+        editionData.buckets = sortBuckets(editionData.buckets, axis1)
+
+        if (axis2) {
+            // then, sort facetBuckets if they exist
+            for (let bucket of editionData.buckets) {
+                bucket.facetBuckets = sortBuckets(bucket.facetBuckets, axis2)
             }
         }
     }

@@ -24,7 +24,7 @@ export const generateResponsesType = ({ survey, path }: { survey: ParsedSurvey; 
         typeName,
         typeDef: `type ${typeName} {
     all_editions: [EditionData]
-    edition(editionId: ${getEditionsEnumTypeName(survey.id)}!): EditionData
+    current_edition: EditionData
 }`
     }
 }

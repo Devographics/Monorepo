@@ -33,6 +33,8 @@ export const generateFiltersType = ({
         typeDef: `input ${typeName} {
     ${questionObjects
         .filter(q => q.filterTypeName && q.surveyId === survey.id)
+        .sort((q1, q2) => q1.sectionIds.at(-1)?.localeCompare(q2.sectionIds.at(-1) ?? '') ?? 0)
+        .sort((q1, q2) => q1.sectionIndex - q2.sectionIndex)
         .map(q => `${q.sectionIds.at(-1)}__${q.id}: ${q.filterTypeName}`)
         .join('\n    ')}
 }`

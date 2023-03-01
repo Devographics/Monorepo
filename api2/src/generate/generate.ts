@@ -170,6 +170,7 @@ export const getQuestionObject = ({
     const defaultObject = {
         fieldTypeName,
         sectionIds: [section.id], // a question can belong to more than one section in different editions
+        sectionIndex: edition.sections.findIndex(s => s.id === section.id), // just a simple way to group questions together when belonging to same section
         surveyId: survey.id,
         editions: [edition.id]
     }

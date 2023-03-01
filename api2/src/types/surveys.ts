@@ -54,6 +54,7 @@ export interface ParsedEdition extends Omit<Edition, 'sections' | 'apiSections'>
 
 export type Section = {
     id: string
+    slug: string // TODO: maybe get rid of this?
     questions: Question[]
     template?: string
 }
@@ -92,6 +93,7 @@ export interface ParsedQuestion extends Omit<Question, 'id'> {
     id: string
 
     sectionIds: string[]
+    sectionIndex: number
     dbPath?: string
     dbPathComments?: string
     includeInApi?: boolean
@@ -150,15 +152,11 @@ export type ResolverType = (
     info: any
 ) => any
 
-export interface EditionData  {
-    id: string
+export interface EditionData {
+    editionId: string
     year: number
     completion: YearCompletion
     buckets: Bucket[]
-}
-
-export interface EditionDataLegacy extends EditionData {
-    facets?: any
 }
 
 export interface YearCompletion {
@@ -194,13 +192,7 @@ export interface Bucket {
     percentage_survey: number
     completion?: BucketCompletion
     entity?: Entity
-    facets: BucketFacet[]
-}
-
-type BucketFacet {
-    facetId: String
-    facetValue: String
-    buckets: Bucket[]
+    facetBuckets: Bucket[]
 }
 
 export interface BucketCompletion extends FacetCompletion {}

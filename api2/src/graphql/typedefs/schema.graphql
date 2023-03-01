@@ -57,18 +57,25 @@ type OptionsMetadata {
 }
 
 input Parameters {
-    limit: Int
+    limit: Int = 50
     cutoff: Int
     sort: SortSpecifier
     facetSort: SortSpecifier
-    facetLimit: Int
+    facetLimit: Int = 50
     facetCutoff: Int
     facetCutoffPercent: Float
 }
 
 input SortSpecifier {
-    property: String
+    property: SortProperty
     order: SortOrder
+}
+
+enum SortProperty {
+    options
+    count
+    percent
+    id
 }
 
 enum SortOrder {
@@ -101,6 +108,30 @@ type Bucket {
     """
     percentage_survey: Float
     """
+    Entity associated with the current bucket
+    """
+    entity: Entity
+    """
+    An array of bucket facets, when bucket is faceted
+    """
+    facetBuckets: [FacetBucket]
+}
+
+type FacetBucket {
+    id: String
+    """
+    Respondent count
+    """
+    count: Int
+    """
+    Percentage relative to question respondents
+    """
+    percentage_question: Float
+    """
+    Percentage relative to survey respondents
+    """
+    percentage_survey: Float
+    """
     Percentage relative to question respondents in facet
     """
     percentage_facet: Float
@@ -116,10 +147,6 @@ type Bucket {
     Entity associated with the current bucket
     """
     entity: Entity
-    """
-    An array of bucket facets, when bucket is faceted
-    """
-    facetBuckets: [Bucket]
 }
 
 type Query {

@@ -6,8 +6,8 @@ import { Db } from 'mongodb'
 import config from '../config'
 import { ratioToPercentage, appendCompletionToYearlyResults } from './common'
 import { getEntity } from '../load/entities'
-import { YearCompletion, SurveyConfig, RequestContext } from '../types'
-import { Filters, generateFiltersQuery } from '../filters'
+import { YearCompletion, Survey, RequestContext, Filters } from '../types'
+import { generateFiltersQuery } from '../filters'
 import { computeCompletionByYear } from './completion'
 // import { computeYearlyTransitions, YearlyTransitionsResult } from './yearly_transitions'
 import { inspect } from 'util'
@@ -66,7 +66,7 @@ export async function computeExperienceOverYears({
     filters
 }: {
     context: RequestContext
-    survey: SurveyConfig
+    survey: Survey
     tool: string
     filters?: Filters
 }) {
@@ -230,7 +230,7 @@ export async function computeToolsExperienceRanking({
     filters
 }: {
     context: RequestContext
-    survey: SurveyConfig
+    survey: Survey
     tools: string[]
     filters?: Filters
 }) {

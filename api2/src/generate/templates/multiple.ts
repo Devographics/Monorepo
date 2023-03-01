@@ -1,5 +1,7 @@
 import { TemplateFunction } from '../../types/surveys'
 
 export const multiple: TemplateFunction = ({ question, section }) => ({
-    dbPath: `${section.id}.${question.id}.choices`
+    id: 'placeholder',
+    ...question,
+    dbPath: `${section.slug || section.id}.${question.id}.choices`
 })

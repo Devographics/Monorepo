@@ -168,7 +168,7 @@ export const getEntities = async ({
     ids?: string[]
     tag?: string
     tags?: string[]
-    context: RequestContext
+    context?: RequestContext
 }) => {
     let entities = await loadOrGetEntities({}, context)
 
@@ -199,7 +199,7 @@ export const getEntity = async ({
     context
 }: {
     id: string | number
-    context: RequestContext
+    context?: RequestContext
 }) => {
     if (!id || typeof id !== 'string') {
         return

@@ -1,18 +1,21 @@
 import { ParsedQuestion } from './surveys'
 import { Filters } from './filters'
 
-export interface GenericComputeParameters {
-    // filter aggregations
+export interface GenericComputeArguments {
     filters?: Filters
-    sort?: SortSpecifier
-    facetSort?: SortSpecifier
-    selectedEditionId?: string
-    facet?: string
+    parameters: GenericComputeParameters
+    facet: string
+    selectedEditionId: string
+}
+
+export interface GenericComputeParameters {
     // bucket
+    sort?: SortSpecifier
     limit?: number
     cutoff?: number
     cutoffPercent?: number
     // facet
+    facetSort?: SortSpecifier
     facetLimit?: number
     facetCutoff?: number
     facetCutoffPercent?: number
@@ -20,15 +23,20 @@ export interface GenericComputeParameters {
 
 export interface ComputeAxisParameters {
     question: ParsedQuestion
-    sort: string
-    order: number
-    cutoff?: number
-    limit?: number
+    sort: SortProperty
+    order: SortOrderNumeric
+    cutoff: number
+    limit: number
     cutoffPercent?: number
     options?: string[]
 }
 
 export interface SortSpecifier {
-    property: string
-    order: 'asc' | 'desc'
+    property: SortProperty
+    order: SortOrder
 }
+
+export type SortProperty = 'options' | 'count' | 'percent' | 'id'
+
+export type SortOrder = 'asc' | 'desc'
+export type SortOrderNumeric = 1 | -1

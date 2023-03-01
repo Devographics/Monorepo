@@ -1,5 +1,5 @@
-import { getParticipationByYearMap } from './demographics'
-import { YearCompletion, SurveyConfig, RequestContext } from '../types'
+import { computeParticipationByYear } from './demographics'
+import { YearCompletion, Survey, RequestContext } from '../types'
 
 /**
  * Convert a ratio to percentage, applying a predefined rounding.
@@ -22,16 +22,16 @@ export const appendCompletionToYearlyResults = async <
     T extends { year: number; total: number; completion: Pick<YearCompletion, 'count'> }
 >(
     context: RequestContext,
-    survey: SurveyConfig,
+    survey: Survey,
     yearlyResults: T[]
 ): Promise<Array<Omit<T, 'completion'> & { completion: YearCompletion }>> => {
-    const totalRespondentsByYear = await getParticipationByYearMap(context, survey)
+    const totalRespondentsByYear = await computeParticipationByYear({ context, survey })
 
     return yearlyResults.map(yearlyResult => {
         return {
             ...yearlyResult,
             completion: {
-                total: totalRespondentsByYear[yearlyResult.year],
+                total: totalRespondentsByYear.find(e => e.editionId === yearlyResult.id)?.count,
                 count: yearlyResult.completion.count,
                 percentage_survey: ratioToPercentage(
                     yearlyResult.completion.count / totalRespondentsByYear[yearlyResult.year]

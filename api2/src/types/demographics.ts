@@ -1,6 +1,6 @@
 export interface EditionParticipation {
     editionId: string
-    participants: number
+    total: number
 }
 
 export interface Participation {

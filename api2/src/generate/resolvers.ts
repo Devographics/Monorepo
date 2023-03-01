@@ -267,7 +267,7 @@ export const responsesResolverFunction: ResolverType = async (parent, args, cont
 export const allEditionsResolver: ResolverType = async (parent, args, context, info) => {
     console.log('// allEditionsResolver')
     const { survey, edition, section, question, responseArguments, questionObjects } = parent
-    const { editionId: selectedEditionId } = args
+    const { selectedEditionId } = args
     let result = await useCache({
         key: computeKey(genericComputeFunction, {
             surveyId: survey.id,
@@ -286,7 +286,7 @@ export const allEditionsResolver: ResolverType = async (parent, args, context, i
             question,
             context,
             questionObjects,
-            parameters: { ...responseArguments, selectedEditionId }
+            computeArguments: { ...responseArguments, selectedEditionId }
         }
     })
     if (question.transformFunction) {
@@ -295,15 +295,20 @@ export const allEditionsResolver: ResolverType = async (parent, args, context, i
     return result
 }
 
-export const singleEditionResolver: ResolverType = async (parent, args, context, info) => {
-    console.log('// singleEditionResolver')
-    const result = await allEditionsResolver(parent, args, context, info)
+export const currentEditionResolver: ResolverType = async (parent, args, context, info) => {
+    console.log('// currentEditionResolver')
+    const result = await allEditionsResolver(
+        parent,
+        { selectedEditionId: parent.edition.id },
+        context,
+        info
+    )
     return result[0]
 }
 
 export const responsesResolverMap: ResolverMap = {
     all_editions: allEditionsResolver,
-    edition: singleEditionResolver
+    current_edition: currentEditionResolver
 }
 
 /*
