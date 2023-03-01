@@ -55,7 +55,7 @@ function localize(request: NextRequest): NextResponse {
   const validLocale = getClosestLocale(locale);
   if (validLocale !== locale) {
     console.warn(
-      `Locale ${locale} is not yet supported, falling back to ${locale}`
+      `In middleware, locale ${locale} is not yet supported, falling back to ${locale}`
     );
   }
   // add or replace locale

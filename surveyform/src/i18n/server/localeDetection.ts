@@ -33,9 +33,10 @@ export const getLocaleFromAcceptLanguage = (acceptLanguage?: string | null) => {
   if (!acceptLanguage) return undefined;
   // Accept-Language: fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7
   // Or fr,en_US;q=0.8
+  // Or fr-CA;q=0.8
   // This header has a weird syntax if we want a full parser
   // here we keep only the first value
-  const locale = acceptLanguage.split(",")[0]; //.slice(0, 5);
+  const locale = acceptLanguage.split(";")[0].split(",")[0]; //.slice(0, 5);
   return locale;
 };
 
