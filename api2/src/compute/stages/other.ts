@@ -89,14 +89,16 @@ export async function addMissingItems(
                 const existingBucketItem = editionData.buckets.find(
                     bucket => bucket.id === option1.id
                 )
-                if (existingBucketItem && axis2?.question?.options) {
-                    // check facet buckets
-                    for (const option2 of axis2.question.options) {
-                        const existingFacetBucketItem = existingBucketItem.facetBuckets?.find(
-                            bucket => bucket.id === option2.id
-                        )
-                        if (!existingFacetBucketItem) {
-                            existingBucketItem.facetBuckets?.push(getZeroBucketItem(option2.id))
+                if (existingBucketItem) {
+                    if (axis2?.question?.options) {
+                        // check facet buckets
+                        for (const option2 of axis2.question.options) {
+                            const existingFacetBucketItem = existingBucketItem.facetBuckets?.find(
+                                bucket => bucket.id === option2.id
+                            )
+                            if (!existingFacetBucketItem) {
+                                existingBucketItem.facetBuckets?.push(getZeroBucketItem(option2.id))
+                            }
                         }
                     }
                 } else {
