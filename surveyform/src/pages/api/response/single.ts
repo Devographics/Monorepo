@@ -7,7 +7,7 @@ import { ResponseDocument, SurveyEdition } from '@devographics/core-models'
 import { connectToAppDb } from '~/lib/server/mongoose/connection'
 import { connectToRedis } from '~/lib/server/redis'
 
-export default async function responseHandler(req: NextApiRequest, res: NextApiResponse) {
+export default async function singleResponseHandler(req: NextApiRequest, res: NextApiResponse) {
   await connectToAppDb()
   connectToRedis()
   const surveySlug = req.query["surveySlug"]

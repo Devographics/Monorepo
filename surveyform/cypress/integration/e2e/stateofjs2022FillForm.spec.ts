@@ -49,7 +49,7 @@ test("Access state of 2022, signup, start filling form", () => {
 
   // Click a radio button
   getQuestionBlock(
-    /Custom Directives|graphql_demo__features__custom_directives__experience/i
+    /Custom Directives|demo_survey__features__custom_directives__experience/i
   ).within(() => {
     // "Used" radio
     // TODO: doesn't work with regex it seems
@@ -63,7 +63,7 @@ test("Access state of 2022, signup, start filling form", () => {
   // Click a checkboxgroup
   getLinkToSection(/Usage|sections\.usage\.title/i).click();
   cy.findByRole("heading", {
-    name: /API Types|graphql_demo__usage__api_type__choices/i,
+    name: /API Types|demo_survey__usage__api_type__choices/i,
   })
     .parent()
     .within(() => {
@@ -77,7 +77,7 @@ test("Access state of 2022, signup, start filling form", () => {
   // Click a bracket
   // Be careful not to match "Others GraphQL strong points", that's why we need a ^ and a $
   getQuestionBlock(
-    /^GraphQL Strong Points|graphql_demo__usage__graphql_strong_points$/i
+    /^GraphQL Strong Points|demo_survey__usage__graphql_strong_points$/i
   ).within(() => {
     // TODO: order is random so hard to test, we would need more
     // logic to find siblings

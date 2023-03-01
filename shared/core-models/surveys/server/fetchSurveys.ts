@@ -41,7 +41,7 @@ export async function fetchSurvey(prettySlug: SurveyEdition["prettySlug"], year:
                 console.debug("redis cache hit", prettySlug, year)
                 return redisSurvey
             }
-            console.debug("redis cache miss, fetching from github")
+            console.debug("redis cache miss,", prettySlug, year, "fetching from github")
             const ghSurvey = await fetchSurveyGithub(prettySlug, year)
             // store in Redis in the background
             storeSurveyRedis(prettySlug, year)(ghSurvey).catch(err => {
@@ -83,7 +83,10 @@ export async function fetchSurveyFromId(surveyId: SurveyEdition["surveyId"]) {
     if (!surveyDescription) {
         throw new Error(`No survey with surveyId ${surveyId}`)
     }
-    const survey = await fetchSurvey(surveyDescription.slug, surveyDescription.year + "")
+    // state_of_js
+    // be careful with older suveys that use "context" not slug
+    const slug = surveyDescription.context || surveyDescription.slug
+    const survey = await fetchSurvey(slug, surveyDescription.year + "")
     return survey
 }
 
