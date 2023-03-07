@@ -25,7 +25,7 @@ const debugMagic = debug("stateof:magiclink");
  * @returns
  */
 const computeMagicLink = (req: Request, href: string) => {
-  const magicLinkUrl = new URL(`${serverConfig.appUrl}${href}`);
+  const magicLinkUrl = new URL(`${serverConfig().appUrl}${href}`);
   const from = req.query?.from;
   if (from && typeof from === "string") {
     magicLinkUrl.searchParams.set("from", from);

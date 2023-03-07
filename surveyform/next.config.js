@@ -12,7 +12,6 @@ const { withSentryConfig } = require("@sentry/nextjs");
 
 // @see https://nextjs.org/docs/api-reference/next.config.js/runtime-configuration
 const moduleExports = (phase, { defaultConfig }) => {
-  console.log("defaultConfig", defaultConfig);
 
   /**
    * @type {import('next/dist/next-server/server/config').NextConfig}
@@ -23,7 +22,7 @@ const moduleExports = (phase, { defaultConfig }) => {
     experimental: {
       appDir: true,
     },
-    transpilePackages: ["@devographics/core-models", "@devographics/react-hooks", "@devographics/react-form"],
+    transpilePackages: ["@devographics/permissions", "@devographics/core-models", "@devographics/react-hooks", "@devographics/react-form"],
     // Disable linting during build => the linter may have optional dev dependencies
     // (eslint-plugin-cypress) that wont exist during prod build
     // You should lint manually only

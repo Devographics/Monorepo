@@ -67,7 +67,7 @@ export const isLocalMongoUri = () => {
  * Mongo URI is provided throught the MONGO_URI environment variable
  */
 export const connectToAppDb = async () => {
-  const mongoUri = serverConfig.mongoUri
+  const mongoUri = serverConfig().mongoUri
   const isLocalMongo = mongoUri.match(/localhost/);
   try {
     await connectToDb(mongoUri, {

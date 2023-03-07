@@ -8,8 +8,8 @@ const corsWhitelist = parseEnvVariableArray(
 );
 
 // Automatically add appUrl and vercel url
-if (serverConfig.appUrl) {
-  corsWhitelist.push(serverConfig.appUrl);
+if (serverConfig().appUrl) {
+  corsWhitelist.push(serverConfig().appUrl);
 }
 if (process.env.VERCEL_URL) {
   corsWhitelist.push(`https://${process.env.VERCEL_URL}`);

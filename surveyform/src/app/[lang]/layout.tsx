@@ -1,4 +1,4 @@
-const BREAK; // TODO: current build is broken,
+//const BREAK; // TODO: current build is broken,
 // so this prevents new deploy until I test it out next week
 
 // TODO: weird issue, Webpack scss rule is broken here
@@ -10,13 +10,13 @@ import {
   fetchLocaleStrings,
   i18nCommonContexts,
 } from "~/i18n/server/fetchLocalesRedis";
-//import debug from "debug";
-const debugRootLayout = console.debug; //debug("dgs:rootlayout");
 
 //*** I18n redirections
 // @see https://nextjs.org/docs/advanced-features/i18n-routing
 //import { locales } from "~/i18n/data/locales";
 import { notFound } from "next/navigation";
+import { initRedis } from "@devographics/core-models/server";
+import { serverConfig } from "~/config/server";
 
 // TODO: not yet compatible with having dynamic pages down the tree
 // we may have to call generateStaticParams in each static page instead
@@ -34,16 +34,22 @@ export default async function RootLayout({
     lang: string;
   };
 }) {
+  // TODO: it seems we need to call this initialization code on all relevant pages/layouts
+  initRedis(serverConfig().redisUrl);
   // locale fetching
   const locale = params.lang; // getCurrentLocale();
   if (locale.includes(".")) {
-    console.error(`Error: matched a file instead of a lang: ${locale}.
-This is a bug in current Next.js version (13.0.4, november 2022). 
-This means the file was not found,
-but instead of sending a 404,
-Next.js will fallback to trying to find a valid page path.
-If this error still happens in a few months (2023) open an issue with repro at Next.js.`);
+    console.warn(
+      `Error: matched a file instead of a lang: ${locale}. This happens when the file is not found.`
+    );
     notFound();
+  }
+  if (locale === "[lang]" || locale === "%5Blang%5D") {
+    console.warn(
+      "Trying to render with param lang literally set to '[lang]'." +
+        "This issue has appeared in Next 13.1.0+ (fev 2023)."
+    );
+    return <></>;
   }
   const localeWithStrings = await fetchLocaleStrings({
     localeId: locale,

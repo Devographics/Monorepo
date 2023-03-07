@@ -1,6 +1,6 @@
+import { getRedisClient } from "@devographics/core-models/server";
 import { cachedPromise, promisesNodeCache } from "~/lib/server/caching";
 import { measureTime } from "~/lib/server/utils";
-import { getRedisClient } from "~/lib/server/redis";
 
 export const getEntitiesCacheKey = () => `entities_all`;
 
@@ -11,7 +11,7 @@ export const getSurveyEditionEntitiesCacheKey = ({
 }) => `entities_${surveyId}`;
 
 export const fetchEntitiesRedis = async (surveyId) => {
-  const redisClient = await getRedisClient();
+  const redisClient = getRedisClient();
   const key = getSurveyEditionEntitiesCacheKey({ surveyId });
   const value = await measureTime(async () => {
     return await redisClient.get(key);

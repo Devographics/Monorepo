@@ -2,7 +2,7 @@
 import { useFormContext } from "@devographics/react-form";
 import React, { useEffect } from "react";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
-import { SurveyEdition } from "@devographics/core-models";
+import { SurveyEdition, SurveySection } from "@devographics/core-models";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { LoadingButton } from "~/core/components/ui/LoadingButton";
@@ -23,7 +23,11 @@ const FormSubmit = ({
   setPrevLoading,
   nextLoading,
   setNextLoading,
-}: { survey: SurveyEdition } & any) => {
+}: {
+  survey: SurveyEdition;
+  nextSection?: SurveySection;
+  prevSection?: SurveySection;
+} & any) => {
   const router = useRouter();
   const formContext = useFormContext();
   const { getDocument, currentValues } = formContext;
@@ -135,6 +139,7 @@ const SubmitButton = (props: {
   const loading = type === "next" ? nextLoading : prevLoading;
   const setLoading = type === "next" ? setNextLoading : setPrevLoading;
 
+  const sectionName = <FormattedMessage id={intlId} defaultMessage={intlId} />;
   const contents = (
     <>
       <span className="sr-only">
@@ -142,11 +147,11 @@ const SubmitButton = (props: {
       </span>
       {type === "previous" ? (
         <>
-          <span aria-hidden>«</span> <FormattedMessage id={intlId} />
+          <span aria-hidden>«</span> {sectionName}
         </>
       ) : (
         <>
-          <FormattedMessage id={intlId} /> <span aria-hidden>»</span>
+          {sectionName} <span aria-hidden>»</span>
         </>
       )}
     </>
@@ -160,6 +165,7 @@ const SubmitButton = (props: {
         <Link href={path}>{contents}</Link>
       ) : (
         <LoadingButton
+          title={path}
           type="submit"
           loading={loading}
           variant="primary"

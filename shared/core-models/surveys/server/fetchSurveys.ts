@@ -1,30 +1,33 @@
+/**
+ * 1) get from in-memory cache if available (short TTL because it can't be emptied)
+ * 2) get from Redis if available (longer TTL, can be invalidated/updated easily)
+ * 3) get from Github in last resort
+ */
 import { SurveyEdition, SurveyEditionDescription, SurveySharedContext } from "../typings";
 import NodeCache from 'node-cache'
 import {
     fetchSurveyContextGithub,
-    fetchSurveyFromIdGithub,
     fetchSurveyGithub, fetchSurveysListGithub
 } from "./fetchGithub";
+import { fetchSurveyContextRedis, fetchSurveyRedis, fetchSurveysListRedis, storeSurveyContextRedis, storeSurveyRedis, storeSurveysListRedis } from "./fetchRedis";
+import orderBy from "lodash/orderBy.js"
 
 const surveysCache = new NodeCache({
-    // TODO: make configurable
+    // This TTL must stay short, because we manually invalidate this cache
     stdTTL: 5 * 60, // in seconds
     // needed for caching promises
     useClones: false
 })
 
-async function fromSurveysCache<T = any>(key: string, func: () => Promise<T>) {
-    console.time(key);
+async function fromSurveysCache<T = any>(key: string, fetchFunc: () => Promise<T>) {
     if (surveysCache.has(key)) {
-        console.debug("cache hit", key)
+        console.debug("in-memory cache hit", key)
         const res = await surveysCache.get<Promise<T>>(key)!
-        console.timeEnd(key)
         return res
     }
-    console.debug("cache miss", key)
-    const promise = func()
+    console.debug("in-memory cache miss", key)
+    const promise = fetchFunc()
     surveysCache.set(key, promise)
-    console.timeEnd(key)
     return await promise
 }
 
@@ -32,24 +35,59 @@ export async function fetchSurvey(prettySlug: SurveyEdition["prettySlug"], year:
     const key = `survey_${prettySlug}_promise`
     return await fromSurveysCache(
         key,
-        () => fetchSurveyGithub(prettySlug, year)
+        async () => {
+            const redisSurvey = await fetchSurveyRedis(prettySlug, year)
+            if (redisSurvey) {
+                console.debug("redis cache hit", prettySlug, year)
+                return redisSurvey
+            }
+            console.debug("redis cache miss,", prettySlug, year, "fetching from github")
+            const ghSurvey = await fetchSurveyGithub(prettySlug, year)
+            // store in Redis in the background
+            storeSurveyRedis(prettySlug, year)(ghSurvey).catch(err => {
+                console.error("couldn't store survey in Redis", err)
+            })
+            return ghSurvey
+        }
     )
 }
 
 export const fetchSurveysList = async (): Promise<Array<SurveyEditionDescription>> => {
     const key = "surveys_description_list"
-    return await fromSurveysCache(
+    let surveys = await fromSurveysCache(
         key,
-        () => fetchSurveysListGithub()
+        async () => {
+            const redisSurveys = await fetchSurveysListRedis()
+            if (redisSurveys) {
+                return redisSurveys
+            }
+            const ghSurveys = await fetchSurveysListGithub()
+            storeSurveysListRedis(ghSurveys)
+            return ghSurveys
+        }
     )
+    // NOTE: we cannot systematically override "NODE_ENV" with test,
+    // so we have to use a custom node_env variable NEXT_PUBLIC_NODE_ENV
+    if (process.env.NODE_ENV !== "development" && process.env.NEXT_PUBLIC_NODE_ENV !== "test") {
+        surveys = surveys.filter(s => s.slug !== "demo_survey")
+    }
+    const sorted = orderBy(surveys, ["year", "slug"], ["desc", "asc"])
+    return sorted
 }
 
 export async function fetchSurveyFromId(surveyId: SurveyEdition["surveyId"]) {
-    const key = `survey_from_id_${surveyId}`
-    return await fromSurveysCache(
-        key,
-        () => fetchSurveyFromIdGithub(surveyId)
-    )
+    // no need to cache this functions, 
+    // because it is derived from other functions that are themselves cached
+    const surveyList = await fetchSurveysList()
+    const surveyDescription = surveyList.find(s => s.surveyId)
+    if (!surveyDescription) {
+        throw new Error(`No survey with surveyId ${surveyId}`)
+    }
+    // state_of_js
+    // be careful with older suveys that use "context" not slug
+    const slug = surveyDescription.context || surveyDescription.slug
+    const survey = await fetchSurvey(slug, surveyDescription.year + "")
+    return survey
 }
 
 
@@ -57,6 +95,14 @@ export async function fetchSurveyContext(slug: SurveySharedContext["slug"]): Pro
     const key = `survey_context_${slug}`
     return await fromSurveysCache(
         key,
-        () => fetchSurveyContextGithub(slug)
+        async () => {
+            const redisSurvey = await fetchSurveyContextRedis(slug)
+            if (redisSurvey) {
+                return redisSurvey
+            }
+            const ghSurvey = await fetchSurveyContextGithub(slug)
+            storeSurveyContextRedis(slug)(ghSurvey)
+            return ghSurvey
+        }
     )
 }

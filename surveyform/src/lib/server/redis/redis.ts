@@ -1,23 +1,21 @@
-import { captureMessage } from "@sentry/node";
+import { initRedis } from "@devographics/core-models/server";
+import { captureMessage, init } from "@sentry/node";
 import Redis from "ioredis";
 import { serverConfig } from "~/config/server";
 
-captureMessage("Creating a connection to Redis");
-const redis = new Redis(serverConfig.redisUrl);
+/**
+ * Create a Redis connection needed for shared code
+ * TODO: we might want a dedicated @devographics/redis package
+ */
+export function connectToRedis() {
+  initRedis(serverConfig().redisUrl)
+}
 
-export const getRedisClient = () => {
-  return redis;
+/**
+ * Middleware version for legacy next-connect
+ */
+export const connectToRedisMiddleware = (req, res, next) => {
+  connectToRedis()
+  return next();
 };
 
-// TODO: only do once
-/*
-Syntax with "node-redis"
-=> trickier because of the need to manage connection
-export const getRedisClient = async () => {
-  const redisClient = createClient({
-    url: process.env.REDIS_URL,
-  });
-  await redisClient.connect();
-  return redisClient;
-};
-*/

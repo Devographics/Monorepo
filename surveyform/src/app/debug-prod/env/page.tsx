@@ -17,7 +17,7 @@ const getEnv = async () => {
     //...req.headers,
     "content-type": "application/json",
   };
-  const gqlRes = await fetch(serverConfig.appUrl + "/api/graphql", {
+  const gqlRes = await fetch(serverConfig().appUrl + "/api/graphql", {
     method: "POST",
     // @ts-ignore
     headers,

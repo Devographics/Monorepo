@@ -8,6 +8,25 @@ To use a shared package in your app:
 - If the shared code is not bundled, eg written in pure TypeScript, include it in the app bundle.
 In Next.js this is done via [next-transpile-modules](https://www.npmjs.com/package/next-transpile-modules) in next.config.js
 
+## Other git repositories
+
+APIs may depend on GitHub repository. 
+
+To avoid calling the GitHub API systematically, you can download the repositories locally. This is relevant for `api-internal` for instance.
+
+Expected folder structure:
+```
+devographics
+|_ monorepo
+|_ locales
+# here load all locale repos: https://github.com/orgs/Devographics/repositories?language=&q=locale&sort=&type=all
+|____locale-fr-FR
+|____....
+# here load surveys yaml: https://github.com/Devographics/surveys
+|_surveys
+```
+
+The script "./scripts/listLocaleRepos.mjs" can help to get the list of commands to run.
 
 ## Run scripts with Just
 
@@ -47,9 +66,6 @@ For example, `apollo-server-express` depens on `apollo-server-core`. But if you 
 
 ## Services
 
-- Apollo Studio for graqphl debugging: https://studio.apollographql.com/
-
-- Sentry for debugging: https://sentry.io/organizations/devographics
 
 - ScaleGrid for database hosting: https://scalegrid.io/
 11/2022: running on Mongo v4, be careful with compatibility matrix:
@@ -65,4 +81,12 @@ Admin area: https://surveyadmin.onrender.com
 You can configure folders that are relevant for an app (eg "surveyform" & "shared") via "vercel.json"
 @see https://vercel.com/guides/how-do-i-use-the-ignored-build-step-field-on-vercel
 
+- Netlify for homepage and result pages: https://www.netlify.com/
+
 - Stellate for graphql caching: https://stellate.co/
+
+- Apollo Studio for graqphl debugging: https://studio.apollographql.com/
+
+- Sentry for debugging: https://sentry.io/organizations/devographics
+
+- Logtail as the log drain for Vercel: https://logtail.com/team/61764/sources

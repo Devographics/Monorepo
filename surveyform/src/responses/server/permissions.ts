@@ -2,6 +2,7 @@ import { ResponseDocument } from "@devographics/core-models";
 import { UserDocument } from "~/core/models/user";
 import { statuses } from "~/surveys/constants";
 import { fetchSurveyFromId } from "@devographics/core-models/server";
+import { isAdmin, owns } from "@devographics/permissions";
 
 export const canModifyResponse = async (response: ResponseDocument, user: UserDocument) => {
     if (!response || !user) {
@@ -12,7 +13,7 @@ export const canModifyResponse = async (response: ResponseDocument, user: UserDo
     }
     const survey = await fetchSurveyFromId(response.surveySlug);
     // admins can modify any survey; users can modify their own surveys
-    const isAdminOrOwner = user.isAdmin || user._id === response.userId;
+    const isAdminOrOwner = isAdmin(user) || owns(user, response)
 
     switch (survey.status) {
         case statuses.preview:

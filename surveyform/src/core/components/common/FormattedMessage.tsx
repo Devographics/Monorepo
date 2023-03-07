@@ -12,9 +12,12 @@ export interface FormattedMessageProps {
 export const FormattedMessage = ({
   id,
   values,
-  defaultMessage = "",
+  defaultMessage,
   className = "",
 }: FormattedMessageProps) => {
+  // Using the id as default message can be useful for tests,
+  // if you don't want to display the id in prod, at least leave it in NODE_ENV="development" and NEXT_PUBLIC_NODE_ENV="test"
+  defaultMessage = defaultMessage || id;
   const intl = useIntlContext();
   const translatorMode = useTranslatorMode();
 

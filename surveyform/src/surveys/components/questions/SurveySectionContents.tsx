@@ -7,7 +7,7 @@ import FormLayout from "~/form/components/elements/FormLayout";
 import FormOptionLabel from "~/form/components/elements/FormOptionLabel";
 import FormGroup from "~/form/components/elements/FormGroup";
 import { Form, VulcanComponentsProvider } from "@devographics/react-form";
-import { getSurveyResponseModel } from "~/responses/model";
+import { getSurveyResponseModel } from "~/responses/model.client";
 import type { SurveyEdition } from "@devographics/core-models";
 import { SurveyResponseFragment } from "~/responses/fragments";
 import { getCommentFieldName } from "~/surveys/helpers";

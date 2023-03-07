@@ -41,15 +41,16 @@ const SurveyAction = ({
   const [errors, setErrors] = useState<
     Array<ErrorObject | Error> | undefined
   >();
-  const { slug, status } = survey;
-  if (!slug) throw new Error(`Slug not found in SurveyAction`);
+  const { slug, context, status } = survey;
+  if (!(slug || context))
+    throw new Error(`Slug or context not found in SurveyAction`);
   const { user, loading: userLoading, error: userError } = useUser();
   // TODO: fetch data during SSR instead?
   const {
     response,
     loading: responseLoading,
     error: responseError,
-  } = useUserResponse({ surveySlug: slug });
+  } = useUserResponse({ surveySlug: context || slug });
   if (userLoading) return <Loading />;
   if (userError) throw new Error(userError);
   if (responseLoading) return <Loading />;

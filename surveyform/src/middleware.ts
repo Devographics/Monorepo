@@ -35,6 +35,46 @@ function isApi(pathname: string) {
 function isFile(pathname: string) {
   return pathname.includes(".") || getFirstParam(pathname) === "_next"
 }
+
+
+function localize(request: NextRequest): NextResponse {
+  const langFromPath = getLang(request.nextUrl.pathname)
+  /**
+   * Priorities:
+   * 1. locale cookie
+   * 2. lang already in URL
+   * 3. accept-language header
+   *
+   * User can change locale cookie via the locale selector menu
+   */
+  const locale = request.cookies.get(LOCALE_COOKIE_NAME)?.value ||
+    langFromPath ||
+    getLocaleFromAcceptLanguage(request.headers.get("accept-language")) ||
+    "en-US"
+  // get the closest valid locale
+  const validLocale = getClosestLocale(locale);
+  if (validLocale !== locale) {
+    console.warn(
+      `In middleware, locale ${locale} is not yet supported, falling back to ${locale}`
+    );
+  }
+  // add or replace locale
+  let url = request.nextUrl.clone();
+  if (langFromPath && validLocale != langFromPath) {
+    console.debug("Will replace locale", langFromPath, "by", validLocale, "in", url.pathname)
+    // replace locale
+    url.pathname = url.pathname.replace(langFromPath, validLocale)
+  } else if (!langFromPath) {
+    console.debug("Will add locale", validLocale, "to", url.pathname)
+    // add locale
+    url.pathname = "/" + validLocale + url.pathname;
+  } else {
+    // nothing to do 
+    return NextResponse.next()
+  }
+  return NextResponse.redirect(url);
+}
+
 export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
@@ -49,24 +89,11 @@ export function middleware(request: NextRequest) {
     return cronMiddleware(request);
   }
 
-  const lang = getLang(pathname)
   const file = isFile(pathname)
   const api = isApi(pathname)
   const shouldLocalize = !api && !file
-  if (shouldLocalize && !lang) {
-    const locale =
-      getLocaleFromAcceptLanguage(request.headers.get("accept-language")) ||
-      request.cookies.get(LOCALE_COOKIE_NAME)?.value;
-    const validLocale = getClosestLocale(locale);
-    if (validLocale !== locale) {
-      console.warn(
-        `Locale ${locale} is not yet supported, falling back to ${locale}`
-      );
-    }
-    const url = request.nextUrl.clone();
-    console.debug("Will add locale", validLocale, "to", pathname)
-    url.pathname = "/" + validLocale + pathname;
-    return NextResponse.redirect(url);
+  if (shouldLocalize) {
+    return localize(request)
   }
 
   return NextResponse.next();

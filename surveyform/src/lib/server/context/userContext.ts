@@ -8,7 +8,7 @@ interface UserContext {
   currentUser?: UserTypeServer;
 }
 
-const userFromReq = async (req: Request | NextApiRequest) => {
+export const userFromReq = async (req: Request | NextApiRequest) => {
   const session = await getSessionFromReq(req);
   if (!session?._id) return null;
   // Refetch the user from db in order to get the freshest data

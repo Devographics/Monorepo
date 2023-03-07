@@ -3,13 +3,13 @@ import { notFound } from "next/navigation";
 import { EntitiesProvider } from "~/core/components/common/EntitiesContext";
 import { fetchEntitiesRedis } from "~/core/server/fetchEntitiesRedis";
 import { SurveyProvider } from "~/surveys/components/SurveyContext/Provider";
-import { fetchSurvey } from "@devographics/core-models/server";
+import { fetchSurvey, initRedis } from "@devographics/core-models/server";
 import {
   fetchLocaleStrings,
   getLocales,
-  i18nCommonContexts,
 } from "~/i18n/server/fetchLocalesRedis";
 import { LocaleContextProvider } from "~/i18n/context/LocaleContext";
+import { serverConfig } from "~/config/server";
 
 // revalidate survey/entities every 5 minutes
 const SURVEY_TIMEOUT_SECONDS = 5 * 60;
@@ -38,6 +38,9 @@ export default async function SurveyLayout({
   children: React.ReactNode;
   params: { slug: string; year: string; lang: string };
 }) {
+  // TODO: it seems we need to call this initialization code on all relevant pages/layouts
+  initRedis(serverConfig().redisUrl);
+
   const { slug, year } = params;
   const survey = await fetchSurvey(slug, year);
   if (!survey) {
@@ -55,6 +58,7 @@ Next.js will fallback to trying to find a valid page path.
 If this error still happens in a few months (2023) open an issue with repro at Next.js.`);
     notFound();
   }
+  const localeSlug = survey.prettySlug!.replaceAll("-", "_");
   const i18nContexts =
     survey.prettySlug !== "demo-survey"
       ? [
@@ -63,8 +67,8 @@ If this error still happens in a few months (2023) open an issue with repro at N
           // => generic strings and survey specific will be merged automatically
           //...i18nCommonContexts,
           // TODO: get this "survey context" value more reliably
-          survey.prettySlug!.replace("-", "_"),
-          survey.prettySlug!.replace("-", "_") + "_" + year,
+          localeSlug,
+          localeSlug + "_" + year,
         ]
       : // TODO for local testing, we don't have tokens for demo_survey yet
         ["state_of_graphql", "state_of_graphql_2022"];

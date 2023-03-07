@@ -201,7 +201,10 @@ interface SurveyEditionSpecifics {
 export type SurveyEdition = SurveySharedContext & SurveyEditionSpecifics
 
 export type SurveyEditionDescription = Pick<SurveyEdition,
-  "surveyId" | "name" | "status" | "prettySlug" | "slug" | "year" | "imageUrl">
+  "surveyId" | "name" | "status" | "prettySlug" | "slug" | "year" | "imageUrl"
+  // in older surveys, "context" is state_of_js and slug is "js2022"
+  // while in newer surveys slug is "state_of_js"
+  | "context">
 
 
 /**
