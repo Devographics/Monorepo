@@ -994,7 +994,6 @@ importers:
       '@graphql-tools/merge': ^8.3.11
       '@graphql-tools/schema': ^8.5.1
       '@hapi/iron': 6.0.0
-      '@istanbuljs/nyc-config-typescript': ^1.0.2
       '@mdx-js/loader': ^1.6.22
       '@mdx-js/react': ^1.6.22
       '@next/bundle-analyzer': ^12.3.3
@@ -1045,7 +1044,6 @@ importers:
       babel-jest: 26.0.1
       babel-loader: ^8.3.0
       babel-plugin-import: ^1.13.5
-      babel-plugin-istanbul: 6.0.0
       bcrypt: ^5.1.0
       bowser: ^2.11.0
       chalk: ^4.1.2
@@ -1090,7 +1088,6 @@ importers:
       node-cache: ^5.1.2
       node-fetch: ^3.3.0
       nodemailer: ^6.8.0
-      nyc: ^15.1.0
       passport: ^0.4.1
       passport-local: 1.0.0
       passport-magic-login: ^1.2.0
@@ -1164,7 +1161,6 @@ importers:
       apollo-server-core: 3.11.1_graphql@16.6.0
       apollo-server-express: 3.11.1_p7hh2zom2mmpwc6saiaaeoh4nq
       babel-jest: 26.0.1_@babel+core@7.20.2
-      babel-plugin-istanbul: 6.0.0
       bcrypt: 5.1.0
       bowser: 2.11.0
       clsx: 1.2.1
@@ -1224,7 +1220,6 @@ importers:
     optionalDependencies:
       '@cypress/code-coverage': 3.10.0_turfhogldrikcioipbk5hfzw7e
       '@cypress/webpack-preprocessor': 5.17.0_d6q2nshjt33dyke7ap5qrde5mq
-      '@istanbuljs/nyc-config-typescript': 1.0.2_nyc@15.1.0
       '@next/bundle-analyzer': 12.3.4
       '@storybook/addon-a11y': 6.5.16_biqbaboplfbrettd7655fr4n2y
       '@storybook/addon-actions': 6.5.16_biqbaboplfbrettd7655fr4n2y
@@ -1251,7 +1246,6 @@ importers:
       eslint-plugin-cypress: 2.11.1_eslint@7.32.0
       jest: 26.6.3
       jest-transformer-mdx: 2.2.0_babel-jest@26.0.1
-      nyc: 15.1.0
       serve: 11.3.2
       shelljs: 0.8.5
       smtp-tester: 1.2.0
@@ -15396,7 +15390,6 @@ packages:
       '@babel/runtime': 7.20.7
       '@types/testing-library__react-hooks': 3.4.1
       react: 18.2.0
-    dev: false
     optional: true
 
   /@testing-library/react/10.4.9_biqbaboplfbrettd7655fr4n2y:
@@ -26209,7 +26202,7 @@ packages:
       debug:
         optional: true
     dependencies:
-      debug: 4.3.4
+      debug: 4.3.4_supports-color@6.1.0
     dev: false
 
   /for-each/0.3.3:
@@ -36720,12 +36713,6 @@ packages:
   /react-dev-utils/11.0.4_a7xmpkungfd35is2c4kqy55h3i:
     resolution: {integrity: sha512-dx0LvIGHcOPtKbeiSUM4jqpBl3TcY7CDjZdfOIcKeznE7BWr9dg0iPG90G5yfVQ+p/rGNMXdbfStvzQZEVEi4A==}
     engines: {node: '>=10'}
-    peerDependencies:
-      typescript: '>=2.7'
-      webpack: '>=4'
-    peerDependenciesMeta:
-      typescript:
-        optional: true
     dependencies:
       '@babel/code-frame': 7.10.4
       address: 1.1.2
@@ -36755,18 +36742,14 @@ packages:
     transitivePeerDependencies:
       - eslint
       - supports-color
+      - typescript
       - vue-template-compiler
+      - webpack
     dev: false
 
   /react-dev-utils/12.0.1_5cls54yhub2wqfkrovxqeaw2om:
     resolution: {integrity: sha512-84Ivxmr17KjUupyqzFode6xKhjwuEJDROWKJy/BthkL7Wn6NJ8h4WE6k/exAv6ImS+0oZLRRW5j/aINMHyeGeQ==}
     engines: {node: '>=14'}
-    peerDependencies:
-      typescript: '>=2.7'
-      webpack: '>=4'
-    peerDependenciesMeta:
-      typescript:
-        optional: true
     dependencies:
       '@babel/code-frame': 7.18.6
       address: 1.1.2
@@ -36797,7 +36780,9 @@ packages:
     transitivePeerDependencies:
       - eslint
       - supports-color
+      - typescript
       - vue-template-compiler
+      - webpack
     dev: false
 
   /react-docgen-typescript/2.2.2_typescript@4.8.4:
