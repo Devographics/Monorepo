@@ -1,3 +1,7 @@
+/**
+ * TODO: unify with shared types in
+ * shared/core-models/surveys/typings.ts
+ */
 import { Entity } from '@devographics/core-models'
 import { RequestContext } from '.'
 
@@ -193,9 +197,9 @@ export interface Bucket {
     facetBuckets: FacetBucket[]
 }
 
-export interface FacetBucket extends Omit<Bucket, 'facetBuckets'> {}
+export interface FacetBucket extends Omit<Bucket, 'facetBuckets'> { }
 
-export interface BucketCompletion extends FacetCompletion {}
+export interface BucketCompletion extends FacetCompletion { }
 
 export type TransformFunction = (
     parent: ResolverParent,
