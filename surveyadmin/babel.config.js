@@ -1,24 +1,4 @@
 const plugins = [
-  // @see https://mui.com/guides/minimizing-bundle-size/
-  [
-    "babel-plugin-import",
-    {
-      libraryName: "@mui/material",
-      libraryDirectory: "",
-      camel2DashComponentName: false,
-    },
-    "core",
-  ],
-  [
-    "babel-plugin-import",
-    {
-      libraryName: "@mui/icons-material",
-      libraryDirectory: "",
-      camel2DashComponentName: false,
-    },
-    "icons",
-  ],
-  // @see https://github.com/ant-design/babel-plugin-import
   [
     "babel-plugin-import",
     {
@@ -28,34 +8,6 @@ const plugins = [
     },
   ],
 ];
-
-// We need babel for code instrumentation
-const enableCoverage = process.env.COVERAGE && process.env.COVERAGE !== "false";
-if (enableCoverage) {
-  const debug = require("debug")("coverage");
-  debug("Enabling istanbul plugin in babel"); // eslint-disable-line no-console
-  plugins.push("istanbul");
-}
-
-// Add support of styled components
-/*
-plugins.push([
-  "styled-components",
-  {
-    ssr: true,
-    displayName: true,
-    preprocess: false,
-  },
-]);
-*/
-
-// // Fixe for pragmaFrag issue @see https://github.com/vercel/next.js/issues/11230
-// plugins.push([
-//   "@babel/plugin-transform-react-jsx",
-//   {
-//     runtime: "classic",
-//   },
-// ]);
 
 module.exports = {
   // we also need next/babel preset to work with Next

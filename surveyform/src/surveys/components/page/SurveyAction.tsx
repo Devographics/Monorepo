@@ -6,7 +6,7 @@
 4. If there is an error during the mutation, show it
 
 */
-import React, { useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import get from "lodash/get.js";
 import isEmpty from "lodash/isEmpty.js";
@@ -26,7 +26,7 @@ import { useUser } from "~/account/user/hooks";
 import { useUserResponse } from "~/responses/hooks";
 import { Loading } from "~/core/components/ui/Loading";
 import { LoadingButton } from "~/core/components/ui/LoadingButton";
-import { getSurveyPath } from "~/surveys/helpers";
+import { getSurveySectionPath } from "~/surveys/helpers";
 
 const duplicateResponseErrorId = "error.duplicate_response";
 
@@ -209,7 +209,10 @@ const SurveyLink = ({
     //<LinkContainer to={response.pagePath || getSurveyPath({ survey })}>
     //</LinkContainer>
     <Link
-      href={response.pagePath || getSurveyPath({ survey, readOnly: true })}
+      href={
+        response.pagePath ||
+        getSurveySectionPath({ survey, forceReadOnly: true })
+      }
       type="button"
       className="btn btn-primary"
     >
@@ -240,7 +243,7 @@ const ErrorItem = ({ survey, error, response }) => {
       <FormattedMessage id={id} />{" "}
       {id === duplicateResponseErrorId && (
         <Link
-          href={getSurveyPath({
+          href={getSurveySectionPath({
             survey,
             response: { _id: properties.responseId },
           })}

@@ -2,7 +2,7 @@
  * Do NOT import all surveys, these helpers works at survey level
  * This avoid bundling all surveys in a page
  */
-import { SurveyEdition, SurveySection, SurveyEditionDescription } from "@devographics/core-models";
+import { SurveyEdition, SurveySection, SurveyEditionDescription, ResponseDocument } from "@devographics/core-models";
 import { getQuestionObject } from "./parser/parseSurvey";
 
 export const getCommentFieldName = fieldName => fieldName.replace("__experience", "__comment")
@@ -35,49 +35,50 @@ export const getSurveyFieldNames = (survey: SurveyEdition | SurveyEdition) => {
 };
 
 
-export const getSurveyPath = ({
-  survey,
-  number,
-  response,
-  home = false,
-  page,
-  readOnly: forceReadOnly
-}: {
-  // we only need basic info about the survey
-  survey?: SurveyEditionDescription;
-  number?: any;
-  response?: any;
-  home?: boolean;
-  page?: "thanks";
-  readOnly?: boolean
-}) => {
-  if (!survey) {
-    console.warn("Survey not passed as props, will use empty path")
-    return "";
-  }
+function getSurveyPathSegments(survey: SurveyEditionDescription): Array<string> {
   const { year, prettySlug } = survey;
   // console.log("SURVEY year", { year, prettySlug }, response)
   const prefixSegment = "/survey";
-  const slugSegment = prettySlug;
-  const yearSegment = year;
+  const slugSegment = prettySlug!;
+  const yearSegment = year! + "";
   const pathSegments = [prefixSegment, slugSegment, yearSegment];
+  return pathSegments
+}
+// survey home
+export function getSurveyHomePath(survey: SurveyEditionDescription) {
+  return getSurveyPathSegments(survey).join("/")
+}
 
+export function getReadOnlyPath({ survey }: { survey: SurveyEditionDescription }) {
+}
+// specific section path for the form
+export function getSurveySectionPath(
+  props
+    : {
+      // we only need basic info about the survey
+      survey: SurveyEditionDescription;
+      // forceReadOnly (no response needed in this case)
+      forceReadOnly?: boolean
+      // section
+      response?: ResponseDocument;
+      number?: any;
+      page?: "thanks";
+    }) {
+  const { survey, forceReadOnly, response, page, number } = props
+  const pathSegments = getSurveyPathSegments(survey)
+  // survey home
   const readOnly = forceReadOnly || !survey.status || ![1, 2].includes(survey.status)
-
-  if (!home) {
-    if (readOnly) {
-      const readOnlySegment = "read-only";
-      pathSegments.push(readOnlySegment);
-    } else {
-      const responseSegment = response && `${response._id}`;
-      pathSegments.push(responseSegment);
-    }
-
-    const suffixSegment = page || number || 1;
-    pathSegments.push(suffixSegment);
+  if (readOnly) {
+    const readOnlySegment = "read-only";
+    pathSegments.push(readOnlySegment);
+  } else {
+    const responseSegment = response?.id || response?._id//response && `${response._id}`;
+    pathSegments.push(responseSegment);
   }
+  const suffixSegment = page || number || 1;
+  pathSegments.push(suffixSegment);
   const path = pathSegments.join("/");
-  return path;
+  return path
 };
 
 export const getSurveyTitle = ({

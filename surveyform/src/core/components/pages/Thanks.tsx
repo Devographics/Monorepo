@@ -1,6 +1,6 @@
 "use client";
 import ShareSite from "../share/ShareSite";
-import { getSurveyPath } from "~/surveys/helpers";
+import { getSurveySectionPath } from "~/surveys/helpers";
 import Score from "../common/Score";
 import Image from "next/image";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
@@ -40,10 +40,10 @@ export const Thanks = ({
         <div className="form-submit-actions">
           <Link
             className="form-btn-prev"
-            href={getSurveyPath({
+            href={getSurveySectionPath({
               survey,
               response,
-              readOnly,
+              forceReadOnly: readOnly,
               number: survey.outline.length,
             })}
           >

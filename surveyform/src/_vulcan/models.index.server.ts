@@ -10,11 +10,13 @@ import { fetchSurveyFromId, fetchSurveysList } from "@devographics/core-models/s
 import { getResponseModel, initResponseModelServer } from "~/responses/model.server"; import { VulcanGraphqlModelServer } from "@vulcanjs/graphql/server";
 import { serverConfig } from "~/config/server";
 
+
 let models: Array<VulcanGraphqlModelServer> = []
 export const getServerModels = async () => {
     if (models.length) return models
     initRedis(serverConfig().redisUrl);
-    const surveys = await Promise.all((await fetchSurveysList()).map(sd => fetchSurveyFromId(sd.surveyId)))
+    const isDevOrTest = serverConfig().isTest || serverConfig().isDev
+    const surveys = await Promise.all((await fetchSurveysList(isDevOrTest)).map(sd => fetchSurveyFromId(sd.surveyId)))
     // @ts-ignore
     initResponseModelServer(surveys)
     models = [User, Save, Project, getResponseModel()]

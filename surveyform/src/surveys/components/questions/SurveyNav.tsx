@@ -11,8 +11,8 @@ TODO
 */
 import { useFormContext } from "@devographics/react-form";
 import Link from "next/link";
-import React, { useState, useEffect } from "react";
-import { getSurveyPath } from "~/surveys/helpers";
+import { useState, useEffect } from "react";
+import { getSurveyHomePath } from "~/surveys/helpers";
 import type { SurveyEdition } from "@devographics/core-models";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import SurveyNavItem from "~/surveys/components/questions/SurveyNavItem";
@@ -93,7 +93,7 @@ const SurveyNav = ({
     >
       <div className="section-nav-inner">
         <h2 className="section-nav-heading">
-          <Link href={getSurveyPath({ survey, home: true })}>
+          <Link href={getSurveyHomePath(survey)}>
             {survey.name} {survey.year}
           </Link>
         </h2>

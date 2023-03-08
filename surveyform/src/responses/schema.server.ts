@@ -5,7 +5,7 @@ import { VulcanGraphqlSchemaServer } from "@vulcanjs/graphql/server";
 import { VulcanGraphqlSchema } from "@vulcanjs/graphql";
 import { getCommentSchema, schema } from "./schema";
 
-import { getSurveyPath } from "~/surveys/helpers";
+import { getSurveySectionPath } from "~/surveys/helpers";
 import { extendSchemaServer, ResponseDocument, SurveyEdition } from "@devographics/core-models";
 
 import { nanoid } from "nanoid";
@@ -15,10 +15,12 @@ import { SurveyEditionDescription } from "@devographics/core-models";
 import cloneDeep from "lodash/cloneDeep.js";
 import { getQuestionId, getQuestionObject } from "~/surveys/parser/parseSurvey";
 import { VulcanFieldSchema } from "@vulcanjs/schema";
+import { serverConfig } from "~/config/server";
 
 
 const getSurveyDescriptionFromResponse = async (response: ResponseDocument): Promise<SurveyEditionDescription | undefined> => {
-  const surveys = await fetchSurveysList()
+  const isDevOrTest = serverConfig().isDev || serverConfig().isTest;
+  const surveys = await fetchSurveysList(isDevOrTest)
   return surveys.find((s) => s.slug === response.surveySlug);
 }
 
@@ -127,7 +129,8 @@ export const getServerSchema = (): VulcanGraphqlSchemaServer => {
           type: "String",
           resolver: async (response) => {
             const surveyDescription = await getSurveyDescriptionFromResponse(response)
-            return getSurveyPath({ survey: surveyDescription, response })
+            if (!surveyDescription) return null
+            return getSurveySectionPath({ survey: surveyDescription, response })
           },
         },
       },

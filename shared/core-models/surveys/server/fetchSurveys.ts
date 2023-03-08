@@ -52,7 +52,7 @@ export async function fetchSurvey(prettySlug: SurveyEdition["prettySlug"], year:
     )
 }
 
-export const fetchSurveysList = async (): Promise<Array<SurveyEditionDescription>> => {
+export const fetchSurveysList = async (keepDemo?: boolean): Promise<Array<SurveyEditionDescription>> => {
     const key = "surveys_description_list"
     let surveys = await fromSurveysCache(
         key,
@@ -68,7 +68,8 @@ export const fetchSurveysList = async (): Promise<Array<SurveyEditionDescription
     )
     // NOTE: we cannot systematically override "NODE_ENV" with test,
     // so we have to use a custom node_env variable NEXT_PUBLIC_NODE_ENV
-    if (process.env.NODE_ENV !== "development" && process.env.NEXT_PUBLIC_NODE_ENV !== "test") {
+    console.log("ENV", process.env.NODE_ENV, process.env.NEXT_PUBLIC_NODE_ENV)
+    if (!keepDemo) {
         surveys = surveys.filter(s => s.slug !== "demo_survey")
     }
     const sorted = orderBy(surveys, ["year", "slug"], ["desc", "asc"])

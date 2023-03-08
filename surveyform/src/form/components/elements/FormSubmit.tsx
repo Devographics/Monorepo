@@ -8,7 +8,8 @@ import { useRouter } from "next/navigation";
 import { LoadingButton } from "~/core/components/ui/LoadingButton";
 import { captureException } from "@sentry/nextjs";
 import { saveSurvey } from "~/surveys/components/page/hooks";
-import { getSurveyPath } from "~/surveys/helpers";
+import { getSurveySectionPath } from "~/surveys/helpers";
+import { useResponse } from "~/surveys/components/ResponseContext/ResponseProvider";
 
 const FormSubmit = ({
   survey,
@@ -31,15 +32,15 @@ const FormSubmit = ({
   const router = useRouter();
   const formContext = useFormContext();
   const { getDocument, currentValues } = formContext;
-  const response = getDocument();
+  const response = useResponse();
 
   const pathProps = { readOnly, survey, response };
   const nextPath = nextSection
-    ? getSurveyPath({
+    ? getSurveySectionPath({
         ...pathProps,
         number: sectionNumber + 1,
       })
-    : getSurveyPath({
+    : getSurveySectionPath({
         ...pathProps,
         page: "thanks",
       });
@@ -87,7 +88,7 @@ const FormSubmit = ({
             intlId={`sections.${
               previousSection.intlId || previousSection.id
             }.title`}
-            path={getSurveyPath({
+            path={getSurveySectionPath({
               ...pathProps,
               number: sectionNumber - 1,
             })}
