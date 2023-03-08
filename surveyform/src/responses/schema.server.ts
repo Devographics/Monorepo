@@ -193,6 +193,17 @@ export const getServerSchema = (): VulcanGraphqlSchemaServer => {
   );
 }
 
+/**
+ * Functions that gets a safe unique id per survey edition,
+ * taking legacy fields into account
+ * @param survey 
+ * @returns js2022, graphql2022, css2022 etc.
+ */
+function getSurveyEditionId(survey: SurveyEdition) {
+  // js2022 etc.
+  const surveyEditionId = survey.id || survey.surveyId || survey.slug
+  return surveyEditionId
+}
 
 let schemaIsReady = false
 // global schema, useful server-side
@@ -206,8 +217,9 @@ export async function initResponseSchema(surveys: Array<SurveyEdition>) {
   schemaIsReady = true
   const coreSchema = cloneDeep(schema) as VulcanGraphqlSchema;
   surveys.forEach((survey) => {
-    if (survey.slug) {
-      schemaPerSurvey[survey.slug] = cloneDeep(coreSchema);
+    const surveyEditionId = getSurveyEditionId(survey)
+    if (surveyEditionId) {
+      schemaPerSurvey[surveyEditionId] = cloneDeep(coreSchema);
     }
     survey.outline.forEach((section) => {
       section.questions &&
@@ -227,8 +239,8 @@ export async function initResponseSchema(surveys: Array<SurveyEdition>) {
 
           const questionId = getQuestionId(survey, section, questionObject);
           schema[questionId] = questionSchema;
-          if (survey.slug) {
-            schemaPerSurvey[survey.slug][questionId] = questionSchema;
+          if (surveyEditionId) {
+            schemaPerSurvey[surveyEditionId][questionId] = questionSchema;
           }
 
           if (questionObject.suffix === "experience") {
@@ -239,8 +251,8 @@ export async function initResponseSchema(surveys: Array<SurveyEdition>) {
               suffix: "comment",
             });
             schema[commentQuestionId] = commentSchema;
-            if (survey.slug) {
-              schemaPerSurvey[survey.slug][commentQuestionId] = commentSchema;
+            if (surveyEditionId) {
+              schemaPerSurvey[surveyEditionId][commentQuestionId] = commentSchema;
             }
           }
         });

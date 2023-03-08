@@ -80,7 +80,7 @@ export async function fetchSurveyFromId(surveyId: SurveyEdition["surveyId"]) {
     // no need to cache this functions, 
     // because it is derived from other functions that are themselves cached
     const surveyList = await fetchSurveysList()
-    const surveyDescription = surveyList.find(s => s.surveyId)
+    const surveyDescription = surveyList.find(s => s.surveyId === surveyId)
     if (!surveyDescription) {
         throw new Error(`No survey with surveyId ${surveyId}`)
     }

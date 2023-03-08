@@ -16,11 +16,14 @@ export const getServerModels = async () => {
     if (models.length) return models
     initRedis(serverConfig().redisUrl);
     const isDevOrTest = serverConfig().isTest || serverConfig().isDev
-    const surveys = await Promise.all((await fetchSurveysList(isDevOrTest)).map(sd => fetchSurveyFromId(sd.surveyId)))
+    const surveyList = await fetchSurveysList(isDevOrTest)
+    const surveys = await Promise.all(surveyList.map(sd => {
+        return fetchSurveyFromId(sd.surveyId)
+    }))
     // @ts-ignore
     initResponseModelServer(surveys)
     models = [User, Save, Project, getResponseModel()]
-    addDefaultMongoConnector(await models);
+    addDefaultMongoConnector(models);
     return models
 };
 
