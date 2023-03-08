@@ -72,7 +72,10 @@ export function getSurveySectionPath(
     const readOnlySegment = "read-only";
     pathSegments.push(readOnlySegment);
   } else {
-    const responseSegment = response?.id || response?._id//response && `${response._id}`;
+    if (!response) throw new Error("Undefined response")
+    const responseSegment = response.id || response._id
+    console.debug(response, response.id, response._id, response.id || response._id)
+    if (!responseSegment) throw new Error("Response object has no id or _id. We may have failed to load your response from server.")
     pathSegments.push(responseSegment);
   }
   const suffixSegment = page || number || 1;
