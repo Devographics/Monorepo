@@ -13,7 +13,7 @@ import { ApiContext } from "~/lib/server/context";
 import { fetchSurveyFromId, fetchSurveysList } from "@devographics/core-models/server";
 import { SurveyEditionDescription } from "@devographics/core-models";
 import cloneDeep from "lodash/cloneDeep.js";
-import { getQuestionId, getQuestionObject } from "~/surveys/parser/parseSurvey";
+import { getQuestionId, getQuestionObject, getSurveyEditionId } from "~/surveys/parser/parseSurvey";
 import { VulcanFieldSchema } from "@vulcanjs/schema";
 import { serverConfig } from "~/config/server";
 
@@ -193,17 +193,6 @@ export const getServerSchema = (): VulcanGraphqlSchemaServer => {
   );
 }
 
-/**
- * Functions that gets a safe unique id per survey edition,
- * taking legacy fields into account
- * @param survey 
- * @returns js2022, graphql2022, css2022 etc.
- */
-function getSurveyEditionId(survey: SurveyEdition) {
-  // js2022 etc.
-  const surveyEditionId = survey.id || survey.surveyId || survey.slug
-  return surveyEditionId
-}
 
 let schemaIsReady = false
 // global schema, useful server-side

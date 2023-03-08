@@ -33,6 +33,17 @@ export const getQuestionObject = (
   return addTemplateToQuestionObject(questionObject, section);
 };
 
+/**
+ * Functions that gets a safe unique id per survey edition,
+ * taking legacy fields into account
+ * @param survey 
+ * @returns js2022, graphql2022, css2022 etc.
+ */
+export function getSurveyEditionId(survey: SurveyEdition) {
+  // js2022 etc.
+  const surveyEditionId = survey.id || survey.surveyId || survey.slug
+  return surveyEditionId
+}
 /** 
 Note: section's slug can be overriden by the question
 
@@ -41,9 +52,10 @@ Get question unique id, to be used in the schema
 /!\ different from the graphql field names
 
 */
-export const getQuestionId = (survey, section, question) => {
+export const getQuestionId = (survey: SurveyEdition, section, question) => {
+  const surveyEditionId = getSurveyEditionId(survey)
   const sectionSlug = question.sectionSlug || section.slug || section.id;
-  let fieldName = survey.slug + "__" + sectionSlug + "__" + question.id;
+  let fieldName = surveyEditionId + "__" + sectionSlug + "__" + question.id;
   if (question.suffix) {
     fieldName += `__${question.suffix}`;
   }

@@ -76,13 +76,14 @@ export const fetchSurveysList = async (keepDemo?: boolean): Promise<Array<Survey
     return sorted
 }
 
-export async function fetchSurveyFromId(surveyId: SurveyEdition["surveyId"]) {
+export async function fetchSurveyFromId(surveyEditionId: SurveyEdition["surveyId"]) {
     // no need to cache this functions, 
     // because it is derived from other functions that are themselves cached
-    const surveyList = await fetchSurveysList()
-    const surveyDescription = surveyList.find(s => s.surveyId === surveyId)
+    // (always get demo survey here, we filter afterward)
+    const surveyList = await fetchSurveysList(true)
+    const surveyDescription = surveyList.find(s => s.surveyId === surveyEditionId)
     if (!surveyDescription) {
-        throw new Error(`No survey with surveyId ${surveyId}`)
+        throw new Error(`No survey with surveyId ${surveyEditionId}`)
     }
     // state_of_js
     // be careful with older suveys that use "context" not slug
