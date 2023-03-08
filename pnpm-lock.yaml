@@ -782,6 +782,7 @@ importers:
       i18next: ^19.4.5
       i18next-browser-languagedetector: ^4.2.0
       i18next-http-backend: ^1.0.15
+      ioredis: ^5.2.4
       jest: ^26.0.1
       jest-transformer-mdx: ^2.2.0
       js-yaml: ^4.1.0
@@ -888,6 +889,7 @@ importers:
       i18next: 19.9.2
       i18next-browser-languagedetector: 4.3.1
       i18next-http-backend: 1.4.5
+      ioredis: 5.2.4
       js-yaml: 4.1.0
       js-yaml-loader: 1.2.2
       lodash: 4.17.21
@@ -15394,6 +15396,7 @@ packages:
       '@babel/runtime': 7.20.7
       '@types/testing-library__react-hooks': 3.4.1
       react: 18.2.0
+    dev: false
     optional: true
 
   /@testing-library/react/10.4.9_biqbaboplfbrettd7655fr4n2y:
@@ -26206,7 +26209,7 @@ packages:
       debug:
         optional: true
     dependencies:
-      debug: 4.3.4_supports-color@6.1.0
+      debug: 4.3.4
     dev: false
 
   /for-each/0.3.3:
