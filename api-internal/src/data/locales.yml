@@ -68,7 +68,7 @@
 
 - id: ko-KR
   label: 한국어
-  translators: ['eterv', 'icepeng']
+  translators: ['eterv', 'icepeng', 'Jcurver']
   
 - id: nl-NL
   label: Nederlands
