@@ -2,6 +2,8 @@
  * 1) get from in-memory cache if available (short TTL because it can't be emptied)
  * 2) get from Redis if available (longer TTL, can be invalidated/updated easily)
  * 3) get from Github in last resort
+ * 
+ * TODO: add "surveyId" and "surveyEditionId" to the merged object?
  */
 import { SurveyEdition, SurveyEditionDescription, SurveySharedContext } from "../typings";
 import NodeCache from 'node-cache'

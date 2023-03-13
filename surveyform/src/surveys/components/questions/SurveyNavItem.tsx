@@ -8,8 +8,8 @@ import { getSectionCompletionPercentage } from "~/responses/helpers";
 import { useFormContext } from "@devographics/react-form";
 import { getSurveySectionPath } from "~/surveys/helpers";
 import { useRouter } from "next/navigation";
-import { saveSurvey } from "../page/hooks";
 import { captureException } from "@sentry/nextjs";
+import { saveSurvey } from "../page/services";
 
 const SurveyNavItem = ({
   survey,

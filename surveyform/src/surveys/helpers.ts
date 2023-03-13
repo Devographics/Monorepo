@@ -60,7 +60,8 @@ export function getSurveySectionPath(
       // forceReadOnly (no response needed in this case)
       forceReadOnly?: boolean
       // section
-      response?: ResponseDocument;
+      // TODO: why sometimes we have "id" vs "_id"? (_id coming from Mongo, id from Vulcan probably)
+      response?: Partial<Pick<ResponseDocument, "_id" | "id">>;
       number?: any;
       page?: "thanks";
     }) {

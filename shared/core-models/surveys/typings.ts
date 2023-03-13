@@ -109,6 +109,7 @@ export interface EOConfig {
 export interface SurveySharedContext {
   /**
    * In newer surveys, replace slugs/prettySlug/context
+   * = surveyId
    * @example state_of_js
    */
   id: string;
@@ -140,6 +141,8 @@ export interface SurveySharedContext {
 interface SurveyEditionSpecifics {
   /**
    * In newer surveys, id = id of the unique edition
+   * = surveyEditionId
+   * 
    * @example js2022
    * /!\ when merging survey context and edition, we might want to
    * be careful to keep both id, ideally by isolating edition in its field:
@@ -215,7 +218,7 @@ interface SurveyEditionSpecifics {
  * A survey edition
  * With common info, edition specific info, and questions
  */
-export type SurveyEdition = SurveySharedContext & SurveyEditionSpecifics
+export type SurveyEdition = SurveySharedContext & SurveyEditionSpecifics & { surveyId: SurveySharedContext["id"], surveyEditionId: SurveyEdition["id"] }
 
 export type SurveyEditionDescription = Pick<SurveyEdition,
   "surveyId" | "name" | "status" | "prettySlug" | "slug" | "year" | "imageUrl"

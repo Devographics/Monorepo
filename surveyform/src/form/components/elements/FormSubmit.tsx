@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { LoadingButton } from "~/core/components/ui/LoadingButton";
 import { captureException } from "@sentry/nextjs";
-import { saveSurvey } from "~/surveys/components/page/hooks";
+import { saveSurvey } from "~/surveys/components/page/services";
 import { getSurveySectionPath } from "~/surveys/helpers";
 import { useResponse } from "~/surveys/components/ResponseContext/ResponseProvider";
 

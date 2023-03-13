@@ -14,19 +14,15 @@ import { statuses } from "~/surveys/constants";
 import { SurveyEdition } from "@devographics/core-models";
 import { UserType } from "~/core/models/user";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
-import {
-  useSurveyActionParams,
-  useBrowserData,
-  PrefilledData,
-  startSurvey,
-  ErrorObject,
-} from "./hooks";
+import { useSurveyActionParams, useBrowserData, PrefilledData } from "./hooks";
 import { useRouter } from "next/navigation";
 import { useUser } from "~/account/user/hooks";
 import { useUserResponse } from "~/responses/hooks";
 import { Loading } from "~/core/components/ui/Loading";
 import { LoadingButton } from "~/core/components/ui/LoadingButton";
 import { getSurveySectionPath } from "~/surveys/helpers";
+import { getSurveyEditionId } from "~/surveys/parser/parseSurvey";
+import { ErrorObject, startSurvey } from "./services";
 
 const duplicateResponseErrorId = "error.duplicate_response";
 
@@ -130,15 +126,20 @@ const SurveyStart = ({
   setLoading,
   currentUser,
   setErrors,
+}: {
+  survey: SurveyEdition;
+  loading: boolean;
+  setLoading: any;
+  currentUser: any;
+  setErrors: any;
 }) => {
-  const { slug, status, context } = survey;
   const router = useRouter();
   const { source, referrer } = useSurveyActionParams();
 
   // prefilled data
   let data: PrefilledData = {
-    surveySlug: slug,
-    context,
+    surveyEditionId: getSurveyEditionId(survey),
+    surveyId: survey.context!,
     email: currentUser?.email,
     common__user_info__source: source,
     common__user_info__referrer: referrer,
@@ -245,6 +246,7 @@ const ErrorItem = ({ survey, error, response }) => {
         <Link
           href={getSurveySectionPath({
             survey,
+            // @ts-ignore
             response: { _id: properties.responseId },
           })}
         >
