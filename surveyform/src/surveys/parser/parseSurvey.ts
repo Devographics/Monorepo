@@ -40,8 +40,9 @@ export const getQuestionObject = (
  * @returns js2022, graphql2022, css2022 etc.
  */
 export function getSurveyEditionId(survey: SurveyEdition) {
+  //console.log("survey", survey)
   // js2022 etc.
-  const surveyEditionId = survey.surveyEditionId || survey.id || survey.surveyId || survey.slug
+  const surveyEditionId = survey.surveyEditionId || survey.surveyId || survey.id || survey.slug
   return surveyEditionId
 }
 /**

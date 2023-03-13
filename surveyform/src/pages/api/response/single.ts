@@ -11,7 +11,9 @@ export default async function singleResponseHandler(req: NextApiRequest, res: Ne
   await connectToAppDb()
   connectToRedis()
   const surveyEditionId = req.query["surveyEditionId"]
-  if (!surveyEditionId) throw new Error("No survey slug, can't get response")
+  if (!surveyEditionId) {
+    return res.status(400).json({ error: "Missing surveyEditionId" })
+  }
   // TODO: this code used to be a client-side graphql query
   // we reuse the same call temporarily to facilitate moving out of graphql
   try {

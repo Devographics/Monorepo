@@ -94,7 +94,7 @@ export async function fetchSurveyFromId(surveyEditionId: SurveyEdition["surveyEd
     // because it is derived from other functions that are themselves cached
     // (always get demo survey here, we filter afterward)
     const surveyList = await fetchSurveysList(true)
-    const surveyDescription = surveyList.find(s => getSurveyEditionId(survey) === surveyEditionId)
+    const surveyDescription = surveyList.find(s => s.surveyEditionId === surveyEditionId)
     if (!surveyDescription) {
         throw new Error(`No survey with surveyId ${surveyEditionId}`)
     }
