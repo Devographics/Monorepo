@@ -167,6 +167,7 @@ const SurveyStart = ({
         const result = await startSurvey(survey, data);
         if (result.error) {
           setErrors([result.error]);
+          setLoading(false);
         } else {
           // no need to stop spinner because it'll disappear when we change page
           // setLoading(false);
@@ -179,7 +180,10 @@ const SurveyStart = ({
         // TODO: this is expecting a graphql syntax for errors,
         // need to be updated
         setErrors([error]);
+        setLoading(false);
         //setErrors(getErrors(error));
+      } finally {
+        setLoading(false);
       }
     },
   };

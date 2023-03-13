@@ -97,6 +97,7 @@ export const schema: VulcanGraphqlSchema = {
     canCreate: ["members"],
     canUpdate: ["admins"],
   },
+  // @depreacted Prefer surveyId
   context: {
     type: String,
     optional: true,
@@ -104,18 +105,29 @@ export const schema: VulcanGraphqlSchema = {
     canCreate: ["members"],
     canUpdate: ["admins"],
   },
+  // @deprecated Prefer surveyEditionId
   surveySlug: {
     type: String,
     optional: true,
     canRead: ["owners", "admins"],
     canCreate: ["members"],
     canUpdate: ["admins"],
-    /*
-    options: surveys.map(({ slug }) => ({
-      value: slug,
-      label: slug,
-    })),
-    */
+  },
+  // state_of_js
+  surveyId: {
+    type: String,
+    optional: true,
+    canRead: ["owners", "admins"],
+    canCreate: ["members"],
+    canUpdate: ["admins"],
+  },
+  // js2022
+  surveyEditionId: {
+    type: String,
+    optional: true,
+    canRead: ["owners", "admins"],
+    canCreate: ["members"],
+    canUpdate: ["admins"],
   },
   isNormalized: {
     type: Boolean,

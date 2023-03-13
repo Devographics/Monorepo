@@ -41,7 +41,7 @@ export const getQuestionObject = (
  */
 export function getSurveyEditionId(survey: SurveyEdition) {
   // js2022 etc.
-  const surveyEditionId = survey.id || survey.surveyId || survey.slug
+  const surveyEditionId = survey.id || survey.surveyEditionId || survey.surveyId || survey.slug
   return surveyEditionId
 }
 /** 
