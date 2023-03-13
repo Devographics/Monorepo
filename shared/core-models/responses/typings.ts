@@ -8,8 +8,14 @@ export interface ResponseDocument extends VulcanDocument {
    * @deprecated Use surveyEditionId instead
    */
   surveySlug?: SurveyEdition["surveyEditionId"];
+  /**
+   * js2022
+   */
   surveyEditionId?: string,
-  surveyId?: string,
+  /**
+   * state_of_js
+   */
+  surveyContextId?: string,
 }
 
 /**

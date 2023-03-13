@@ -89,7 +89,7 @@ If this error still happens in a few months (2023) open an issue with repro at N
   // (not useful in static mode though)
   let entities = [];
   try {
-    const redisEntities = await fetchEntitiesRedis(survey.surveyId);
+    const redisEntities = await fetchEntitiesRedis(survey.surveyEditionId);
     if (!redisEntities) throw new Error("Entities not found in Redis");
     entities = redisEntities;
   } catch (err) {

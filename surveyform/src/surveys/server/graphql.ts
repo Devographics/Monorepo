@@ -26,7 +26,9 @@ export const surveyType = `type Survey {
 
 }`;
 
+// TODO: deprecate ambiguous surveyId in favour of surveyContextId or surveyEditionId (or id if erelevant)
 export const editionType = `type SurveyEdition {
+  id: String
   surveyId: String
   createdAt: Date
   year: Number
@@ -45,7 +47,9 @@ const surveysQuery = `query SurveysQuery{
     name
     slug
     editions {
+      id
       surveyId
+      surveyEditionId
       createdAt
       year
       status

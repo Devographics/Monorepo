@@ -6,6 +6,7 @@ import bowser from "bowser";
 // const bowser = require("bowser"); // CommonJS
 // import { isAdmin as checkIsAdmin } from "@vulcanjs/permissions";
 import { useSearchParams } from "next/navigation";
+import { SurveyEdition } from "@devographics/core-models";
 
 export const useSurveyActionParams = (): { source?: string; referrer?: string } => {
   const query = useSearchParams()
@@ -62,18 +63,6 @@ export interface BrowserData {
   common__user_info__os?: string;
 }
 
-export interface PrefilledData extends BrowserData {
-  /**
-   * js2022
-   * @deprecated use surveyEditionId
-   */
-  surveySlug?: string;
-  /**
-   * state_of_js
-   * @deprecated use surveyId
-   */
-  context?: string;
-  surveyEditionId: string;
-  surveyId: string;
+export interface PrefilledData extends BrowserData, Pick<SurveyEdition, "surveyContextId" | "surveyEditionId"> {
   email?: string;
 }

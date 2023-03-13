@@ -18,7 +18,7 @@ export const getServerModels = async () => {
     const isDevOrTest = serverConfig().isTest || serverConfig().isDev
     const surveyList = await fetchSurveysList(isDevOrTest)
     const surveys = await Promise.all(surveyList.map(sd => {
-        return fetchSurveyFromId(sd.surveyId)
+        return fetchSurveyFromId(sd.surveyEditionId)
     }))
     // @ts-ignore
     initResponseModelServer(surveys)

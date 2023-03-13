@@ -41,8 +41,18 @@ export const getQuestionObject = (
  */
 export function getSurveyEditionId(survey: SurveyEdition) {
   // js2022 etc.
-  const surveyEditionId = survey.id || survey.surveyEditionId || survey.surveyId || survey.slug
+  const surveyEditionId = survey.surveyEditionId || survey.id || survey.surveyId || survey.slug
   return surveyEditionId
+}
+/**
+ * state_of_js
+ * @param survey 
+ * @returns 
+ */
+export function getSurveyContextId(survey: SurveyEdition) {
+  // state_of_js
+  const surveyContextId = survey.surveyContextId || survey.context
+  return surveyContextId!
 }
 /** 
 Note: section's slug can be overriden by the question

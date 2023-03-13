@@ -21,7 +21,10 @@ import { useUserResponse } from "~/responses/hooks";
 import { Loading } from "~/core/components/ui/Loading";
 import { LoadingButton } from "~/core/components/ui/LoadingButton";
 import { getSurveySectionPath } from "~/surveys/helpers";
-import { getSurveyEditionId } from "~/surveys/parser/parseSurvey";
+import {
+  getSurveyContextId,
+  getSurveyEditionId,
+} from "~/surveys/parser/parseSurvey";
 import { ErrorObject, startSurvey } from "./services";
 
 const duplicateResponseErrorId = "error.duplicate_response";
@@ -37,8 +40,8 @@ const SurveyAction = ({
   const [errors, setErrors] = useState<
     Array<ErrorObject | Error> | undefined
   >();
-  const { slug, context, status } = survey;
-  if (!(slug || context))
+  const { status } = survey;
+  if (!getSurveyEditionId(survey))
     throw new Error(`Slug or context not found in SurveyAction`);
   const { user, loading: userLoading, error: userError } = useUser();
   // TODO: fetch data during SSR instead?
@@ -46,7 +49,7 @@ const SurveyAction = ({
     response,
     loading: responseLoading,
     error: responseError,
-  } = useUserResponse({ surveySlug: context || slug });
+  } = useUserResponse({ surveyEditionId: getSurveyEditionId(survey) });
   if (userLoading) return <Loading />;
   if (userError) throw new Error(userError);
   if (responseLoading) return <Loading />;
@@ -139,7 +142,7 @@ const SurveyStart = ({
   // prefilled data
   let data: PrefilledData = {
     surveyEditionId: getSurveyEditionId(survey),
-    surveyId: survey.context!,
+    surveyContextId: getSurveyContextId(survey),
     email: currentUser?.email,
     common__user_info__source: source,
     common__user_info__referrer: referrer,

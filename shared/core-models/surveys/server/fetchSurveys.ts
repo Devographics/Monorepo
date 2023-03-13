@@ -3,7 +3,7 @@
  * 2) get from Redis if available (longer TTL, can be invalidated/updated easily)
  * 3) get from Github in last resort
  * 
- * TODO: add "surveyId" and "surveyEditionId" to the merged object?
+ * TODO: add "surveyId" and "surveyEditionId" to the merged object here, instead of in fetchGithub
  */
 import { SurveyEdition, SurveyEditionDescription, SurveySharedContext } from "../typings";
 import NodeCache from 'node-cache'
@@ -78,12 +78,23 @@ export const fetchSurveysList = async (keepDemo?: boolean): Promise<Array<Survey
     return sorted
 }
 
-export async function fetchSurveyFromId(surveyEditionId: SurveyEdition["surveyId"]) {
+/**
+ * Functions that gets a safe unique id per survey edition,
+ * taking legacy fields into account
+ * @param survey 
+ * @returns js2022, graphql2022, css2022 etc.
+ */
+export function getSurveyEditionId(survey: SurveyEdition) {
+    // js2022 etc.
+    const surveyEditionId = survey.surveyEditionId || survey.id || survey.surveyId || survey.slug
+    return surveyEditionId
+}
+export async function fetchSurveyFromId(surveyEditionId: SurveyEdition["surveyEditionId"]) {
     // no need to cache this functions, 
     // because it is derived from other functions that are themselves cached
     // (always get demo survey here, we filter afterward)
     const surveyList = await fetchSurveysList(true)
-    const surveyDescription = surveyList.find(s => s.surveyId === surveyEditionId)
+    const surveyDescription = surveyList.find(s => getSurveyEditionId(survey) === surveyEditionId)
     if (!surveyDescription) {
         throw new Error(`No survey with surveyId ${surveyEditionId}`)
     }

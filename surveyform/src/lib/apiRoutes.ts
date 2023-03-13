@@ -61,7 +61,7 @@ export const apiRoutes = {
   },
   response: {
     single: {
-      href: ({ surveySlug }: { surveySlug: string }) => `/api/response/single?surveySlug=${surveySlug}`
+      href: ({ surveyEditionId }: { surveyEditionId: string }) => `/api/response/single?surveySlug=${surveyEditionId}`
     },
     multi: {
       href: "/api/response/multi"

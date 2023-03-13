@@ -106,8 +106,8 @@ export async function fetchSurveyGithub(prettySlug: SurveyEdition["prettySlug"],
         // while prettySlug is expected to contain dashes only
         prettySlug: prettySlug.replaceAll("_", "-"),
         outline: questionsConfig,
-        // TODO: new fields, check they are defined on GitHub
-        surveyId: commonConfig.id,
+        // TODO: merge the fields later than there, so that we don't have to update Redis cache everytime
+        surveyContextId: commonConfig.id,
         surveyEditionId: surveyConfig.id,
     }
     return survey

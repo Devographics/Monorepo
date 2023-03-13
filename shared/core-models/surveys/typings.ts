@@ -109,7 +109,7 @@ export interface EOConfig {
 export interface SurveySharedContext {
   /**
    * In newer surveys, replace slugs/prettySlug/context
-   * = surveyId
+   * = surveyContextId when merged
    * @example state_of_js
    */
   id: string;
@@ -141,7 +141,7 @@ export interface SurveySharedContext {
 interface SurveyEditionSpecifics {
   /**
    * In newer surveys, id = id of the unique edition
-   * = surveyEditionId
+   * = surveyEditionId when merged
    * 
    * @example js2022
    * /!\ when merging survey context and edition, we might want to
@@ -152,14 +152,15 @@ interface SurveyEditionSpecifics {
   createdAt?: string;
   updatedAt?: string;
   /**
+   * @deprecated
    * Slug with underscores
    * state_of_js
    * Used as pathname on github
    * Does NOT include the year
-   * @deprecated
    */
   context?: string;
   /**
+   * @deprecated use id
    * Same as slug
    * @example js2022
    */
@@ -218,10 +219,10 @@ interface SurveyEditionSpecifics {
  * A survey edition
  * With common info, edition specific info, and questions
  */
-export type SurveyEdition = SurveySharedContext & SurveyEditionSpecifics & { surveyId: SurveySharedContext["id"], surveyEditionId: SurveyEdition["id"] }
+export type SurveyEdition = SurveySharedContext & SurveyEditionSpecifics & { surveyContextId: SurveySharedContext["id"], surveyEditionId: SurveyEdition["id"] }
 
-export type SurveyEditionDescription = Pick<SurveyEdition,
-  "surveyId" | "name" | "status" | "prettySlug" | "slug" | "year" | "imageUrl"
+export type SurveyEditionDescription = Pick<SurveyEdition, "id" | "surveyContextId" | "surveyEditionId"
+  | "name" | "status" | "prettySlug" | "slug" | "year" | "imageUrl"
   // in older surveys, "context" is state_of_js and slug is "js2022"
   // while in newer surveys slug is "state_of_js"
   | "context">

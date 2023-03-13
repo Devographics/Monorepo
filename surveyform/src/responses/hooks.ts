@@ -17,9 +17,9 @@ type ResponseWithSurvey = Required<ResponseDocument> & { survey: SurveyEdition }
 /**
  * Passing no surveySlug will get all responses for the user 
  */
-export const useUserResponse = (params: { surveySlug: SurveyEdition["surveyId"] }) => {
-    const { surveySlug } = params || {}
-    const { data, error } = useSWR<ApiData<ResponseWithSurvey>>(apiRoutes.response.single.href({ surveySlug }),
+export const useUserResponse = (params: { surveyEditionId: SurveyEdition["surveyEditionId"] }) => {
+    const { surveyEditionId } = params || {}
+    const { data, error } = useSWR<ApiData<ResponseWithSurvey>>(apiRoutes.response.single.href({ surveyEditionId }),
         basicFetcher)
     const loading = !error && !data
     return { response: data?.data, loading, error }
