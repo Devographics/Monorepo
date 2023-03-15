@@ -1,7 +1,7 @@
 import React from 'react'
 import styled, { useTheme } from 'styled-components'
 import { mq, spacing, fontSize, fontWeight } from 'core/theme'
-import { ToolsExperienceToolData } from 'core/survey_api/tools'
+import { ToolsExperienceToolData } from 'core/types/survey_api/tools'
 import { ToolsSectionId } from 'core/bucket_keys'
 
 const customImages = {
@@ -62,8 +62,7 @@ export const TierListChart = ({ data, total, currentCategory }: TierListProps) =
     )
 }
 
-const Table = styled.div`
-`
+const Table = styled.div``
 
 const Tier = ({
     letter,
@@ -144,7 +143,7 @@ const TierItems = styled.div`
 
 const TierItemsInner = styled.div`
     display: grid;
-    grid-template-columns: repeat( auto-fit, minmax(60px, 90px));
+    grid-template-columns: repeat(auto-fit, minmax(60px, 90px));
     /* display: flex; */
     /* flex-wrap: wrap; */
     /* justify-content: top; */
@@ -213,8 +212,8 @@ const ColorWrapper = styled.div`
 `
 
 const ImageWrapper = styled.div`
-width: 100%;
-aspect-ratio: 1 / 1;
+    width: 100%;
+    aspect-ratio: 1 / 1;
     padding: 7px;
     @media ${mq.small} {
         padding: 1px;

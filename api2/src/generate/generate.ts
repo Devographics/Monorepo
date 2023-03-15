@@ -4,7 +4,7 @@ import {
     Edition,
     Section,
     Question,
-    ParsedQuestion,
+    ParsedQuestionExt,
     Option,
     TypeObject
 } from '../types/surveys'
@@ -34,7 +34,7 @@ export const parseSurveys = ({
     questionObjects
 }: {
     surveys: Survey[]
-    questionObjects: ParsedQuestion[]
+    questionObjects: ParsedQuestionExt[]
 }): ParsedSurvey[] => {
     for (const survey of surveys) {
         for (const edition of survey.editions) {
@@ -53,7 +53,7 @@ export const generateTypeObjects = async ({
     questionObjects
 }: {
     surveys: ParsedSurvey[]
-    questionObjects: ParsedQuestion[]
+    questionObjects: ParsedQuestionExt[]
 }): Promise<TypeObject[]> => {
     const surveysTypeObjects = await generateSurveysTypeObjects({
         surveys
@@ -94,10 +94,10 @@ at the level of the entire list.
 
 */
 export const getQuestionObjects = ({ surveys }: { surveys: Survey[] }) => {
-    let allQuestionObjects: ParsedQuestion[] = []
+    let allQuestionObjects: ParsedQuestionExt[] = []
 
     for (const survey of surveys) {
-        const surveyQuestionObjects: ParsedQuestion[] = []
+        const surveyQuestionObjects: ParsedQuestionExt[] = []
 
         for (const edition of survey.editions) {
             const allSections = mergeSections(edition.sections, edition.apiSections)
@@ -154,7 +154,7 @@ export const getQuestionObject = ({
     edition: Edition
     section: Section
     question: Question
-}): ParsedQuestion => {
+}): ParsedQuestionExt => {
     // apply template
     const templateObject = applyQuestionTemplate({
         survey,
@@ -182,7 +182,7 @@ export const getQuestionObject = ({
         ? { ...globalQuestionDefinition, isGlobal: true }
         : {}
 
-    const questionObject: ParsedQuestion = {
+    const questionObject: ParsedQuestionExt = {
         ...defaultObject,
         ...templateObject,
         ...question,
@@ -212,7 +212,7 @@ export const getQuestionObject = ({
     return questionObject
 }
 
-export const mergeQuestionObjects = (q1: ParsedQuestion, q2: ParsedQuestion) => {
+export const mergeQuestionObjects = (q1: ParsedQuestionExt, q2: ParsedQuestionExt) => {
     const newOptions = q1.options && q2.options && mergeOptions(q1.options, q2.options)
 
     const editions = uniq([...(q1?.editions || []), ...(q2?.editions || [])])

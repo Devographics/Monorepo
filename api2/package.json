@@ -30,6 +30,7 @@
         "twitter-api-v2": "^1.5.2"
     },
     "devDependencies": {
+        "@devographics/types": "workspace:*",
         "@luckycatfactory/esbuild-graphql-loader": "^3.7.0",
         "@types/js-yaml": "^4.0.3",
         "@types/lodash": "^4.14.175",

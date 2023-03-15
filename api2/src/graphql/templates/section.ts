@@ -1,5 +1,5 @@
 import { graphqlize } from '../../generate/helpers'
-import { Survey, Edition, Section, ParsedQuestion } from '../../types/surveys'
+import { Survey, Edition, Section, ParsedQuestionExt } from '../../types/surveys'
 
 /*
 
@@ -26,7 +26,7 @@ export const generateSectionType = ({
     survey: Survey
     edition: Edition
     section: Section
-    questions: ParsedQuestion[]
+    questions: ParsedQuestionExt[]
     path: string
 }) => {
     const typeName = `${graphqlize(edition.id)}${graphqlize(section.id)}Section`
@@ -35,7 +35,7 @@ export const generateSectionType = ({
         typeName,
         typeDef: `type ${typeName} {
     ${questions
-        .map((question: ParsedQuestion) => {
+        .map((question: ParsedQuestionExt) => {
             return `${question.id}: ${question.fieldTypeName}`
         })
         .join('\n    ')}

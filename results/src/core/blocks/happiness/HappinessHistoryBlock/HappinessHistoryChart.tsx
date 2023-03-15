@@ -1,11 +1,11 @@
 import React, { useMemo } from 'react'
 import { useTheme } from 'styled-components'
 import { ResponsiveLine } from '@nivo/line'
-import { HappinessYearMean } from 'core/survey_api/happiness'
+import { HappinessYearMean } from 'core/types/survey_api/happiness'
 
 const horizontalAxis = {
     tickSize: 10,
-    tickPadding: 6,
+    tickPadding: 6
 }
 
 const verticalAxis = {
@@ -27,19 +27,19 @@ const verticalAxis = {
                 {text}
             </text>
         )
-    },
+    }
 }
 
 const MARGIN = {
     top: 40,
     right: 60,
     bottom: 40,
-    left: 60,
+    left: 60
 }
 const Y_SCALE = {
     type: 'linear',
     min: 1,
-    max: 5,
+    max: 5
 }
 const GRID_Y_VALUES = [1, 3, 5]
 
@@ -54,11 +54,11 @@ export const HappinessHistoryChart = ({ data }: HappinessHistoryChartProps) => {
         return [
             {
                 id: 'happiness',
-                data: data.map((year) => ({
+                data: data.map(year => ({
                     x: year.year,
-                    y: year.mean,
-                })),
-            },
+                    y: year.mean
+                }))
+            }
         ]
     }, [data])
 
@@ -71,13 +71,13 @@ export const HappinessHistoryChart = ({ data }: HappinessHistoryChartProps) => {
                     fontFamily: theme.typography.fontFamily,
                     fontWeight: 600,
                     fontSize: 12,
-                    fill: theme.colors.text,
-                },
-            },
+                    fill: theme.colors.text
+                }
+            }
         }),
         [theme]
     )
-    
+
     return (
         <div style={{ height: 240 }}>
             <ResponsiveLine

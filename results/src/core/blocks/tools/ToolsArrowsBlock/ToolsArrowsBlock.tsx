@@ -11,14 +11,14 @@ import { BlockContext } from 'core/blocks/types'
 import { ToolsArrowsToolData } from './types'
 import { ToolsArrowsChart } from './ToolsArrowsChart.js'
 import get from 'lodash/get'
-import { ToolsExperienceToolData } from 'core/survey_api/tools'
+import { ToolsExperienceToolData } from 'core/types/survey_api/tools'
 
 /**
  * Convert raw API data to be compatible with tools arrows chart.
  */
 const useNormalizedData = (rawData: ToolsExperienceToolData[]): ToolsArrowsToolData[] =>
     useMemo(() => {
-        let data: ToolsArrowsToolData[] = rawData.map((tool) => {
+        let data: ToolsArrowsToolData[] = rawData.map(tool => {
             return {}
         })
 
@@ -40,14 +40,11 @@ interface ToolsArrowsBlockProps {
 export const ToolsArrowsBlock = ({ block, data, triggerId = null }: ToolsArrowsBlockProps) => {
     // const normalizedData = useNormalizedData(data)
     const controlledCurrent = triggerId
-    
+
     return (
-        <Block
-            block={block}
-            data={data}
-        >
+        <Block block={block} data={data}>
             <ChartContainer vscroll={false}>
-                <ToolsArrowsChart data={data} current={controlledCurrent} activeCategory="all"/>
+                <ToolsArrowsChart data={data} current={controlledCurrent} activeCategory="all" />
             </ChartContainer>
         </Block>
     )

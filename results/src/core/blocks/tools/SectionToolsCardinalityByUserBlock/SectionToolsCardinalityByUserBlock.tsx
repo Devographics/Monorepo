@@ -1,9 +1,9 @@
-import React, {useMemo, useState} from 'react'
+import React, { useMemo, useState } from 'react'
 // import { Pie } from '@nivo/pie'
 // @ts-ignore
 import Block from 'core/blocks/block/BlockVariant'
 import { BlockContext } from 'core/blocks/types'
-import { ToolsCardinalityByUserBucket } from 'core/survey_api/tools'
+import { ToolsCardinalityByUserBucket } from 'core/types/survey_api/tools'
 
 interface SectionToolsCardinalityByUserBlockProps {
     block: BlockContext<
@@ -17,27 +17,22 @@ interface SectionToolsCardinalityByUserBlockProps {
 export const SectionToolsCardinalityByUserBlock = ({
     block,
     data,
-    units: defaultUnits = 'percentage',
+    units: defaultUnits = 'percentage'
 }: SectionToolsCardinalityByUserBlockProps) => {
     const [units, setUnits] = useState(defaultUnits)
-    
 
     // exclude datums with a percentage lower than 1
-    const filteredData = useMemo(() => data.filter(datum => datum.percentage >= 1).reverse(), [data])
+    const filteredData = useMemo(
+        () => data.filter(datum => datum.percentage >= 1).reverse(),
+        [data]
+    )
 
     return (
-        <Block
-            
-             
-            units={units}
-            setUnits={setUnits}
-            block={block}
-            data={data}
-        >
+        <Block units={units} setUnits={setUnits} block={block} data={data}>
             <Pie
                 data={filteredData.map(datum => ({
                     id: datum.cardinality,
-                    value: datum.count,
+                    value: datum.count
                 }))}
                 height={400}
                 width={400}
@@ -49,7 +44,7 @@ export const SectionToolsCardinalityByUserBlock = ({
                     top: 40,
                     right: 40,
                     bottom: 40,
-                    left: 40,
+                    left: 40
                 }}
             />
         </Block>

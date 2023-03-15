@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react'
 import keyBy from 'lodash/keyBy'
 import { BlockContext } from 'core/blocks/types'
-import { ToolAllYearsExperience, ToolExperienceBucket } from 'core/survey_api/tools'
+import { ToolAllYearsExperience, ToolExperienceBucket } from 'core/types/survey_api/tools'
 // @ts-ignore
 import Block from 'core/blocks/block/BlockVariant'
 // @ts-ignore
@@ -88,7 +88,10 @@ export const ToolExperienceBlock = ({
 
     const chartHeight = (allYears.length - 1) * (BAR_THICKNESS + BAR_SPACING) + BAR_THICKNESS * 2
 
-    const { chartFilters, setChartFilters, legends } = useChartFilters({ block, options: { supportedModes: [MODE_GRID], enableYearSelect: false }})
+    const { chartFilters, setChartFilters, legends } = useChartFilters({
+        block,
+        options: { supportedModes: [MODE_GRID], enableYearSelect: false }
+    })
 
     return (
         <Block

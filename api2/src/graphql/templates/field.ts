@@ -1,4 +1,4 @@
-import { ParsedQuestion } from '../../types/surveys'
+import { ParsedQuestionExt } from '../../types/surveys'
 import { getFiltersTypeName, getFacetsTypeName, graphqlize } from '../../generate/helpers'
 /*
 
@@ -12,7 +12,7 @@ type DisabilityStatus {
 
 */
 
-export const generateFieldType = ({ question }: { question: ParsedQuestion }) => {
+export const generateFieldType = ({ question }: { question: ParsedQuestionExt }) => {
     const { fieldTypeName, optionTypeName, options } = question
 
     return {

@@ -7,7 +7,7 @@ import ChartContainer from 'core/charts/ChartContainer'
 import variables from 'Config/variables.yml'
 import sortBy from 'lodash/sortBy'
 import { ToolsSectionId } from 'core/bucket_keys'
-import { ToolsExperienceToolData } from 'core/survey_api/tools'
+import { ToolsExperienceToolData } from 'core/types/survey_api/tools'
 import { BlockContext } from 'core/blocks/types'
 
 interface TierListBlockProps {

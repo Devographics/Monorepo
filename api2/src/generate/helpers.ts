@@ -6,7 +6,7 @@ import {
     ParsedSurvey,
     ParsedEdition,
     ParsedSection,
-    ParsedQuestion,
+    ParsedQuestionExt,
     Option,
     QuestionTemplateOutput
 } from '../types/surveys'
@@ -132,7 +132,7 @@ export const getSectionQuestionObjects = ({
 }: {
     edition: Edition
     section: Section
-    questionObjects: ParsedQuestion[]
+    questionObjects: ParsedQuestionExt[]
 }) => {
     const results = questionObjects.filter(
         q =>

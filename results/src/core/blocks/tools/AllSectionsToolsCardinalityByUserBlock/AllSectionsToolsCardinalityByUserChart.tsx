@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { ToolsCardinalityByUserBucket } from 'core/survey_api/tools'
+import { ToolsCardinalityByUserBucket } from 'core/types/survey_api/tools'
 // @ts-ignore
 import { spacing, mq } from 'core/theme'
 import { SectionItem } from './SectionItem'
@@ -8,7 +8,7 @@ import { SectionItem } from './SectionItem'
 export const AllSectionsToolsCardinalityByUserChart = ({
     data,
     units,
-    maxNumberOfTools,
+    maxNumberOfTools
 }: {
     data: {
         sectionId: string
@@ -18,7 +18,7 @@ export const AllSectionsToolsCardinalityByUserChart = ({
     maxNumberOfTools: number
 }) => (
     <GridContainer>
-        {data.map((section) => (
+        {data.map(section => (
             <SectionItem
                 key={section.sectionId}
                 sectionId={section.sectionId}

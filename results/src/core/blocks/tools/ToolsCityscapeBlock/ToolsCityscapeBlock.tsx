@@ -5,7 +5,7 @@ import { BlockContext } from 'core/blocks/types'
 // @ts-ignore
 import variables from 'Config/variables.yml'
 import { ToolsCityscapeChart } from './ToolsCityscapeChart'
-import { ToolsExperienceToolData, ToolExperienceBucket } from 'core/survey_api/tools'
+import { ToolsExperienceToolData, ToolExperienceBucket } from 'core/types/survey_api/tools'
 import { useTheme } from 'styled-components'
 import { Entity } from 'core/types'
 import sortBy from 'lodash/sortBy'
@@ -47,7 +47,7 @@ export interface CityscapeLayerData {
 }
 
 const getCategory = (id: string, theme: any) => {
-    const categoryId = Object.keys(toolsCategories).find((categoryId) =>
+    const categoryId = Object.keys(toolsCategories).find(categoryId =>
         toolsCategories[categoryId].includes(id)
     )
     const color = categoryId ? theme.colors.ranges.toolSections[categoryId] : 'red'
@@ -59,7 +59,7 @@ const findBucket = (buckets: ToolExperienceBucket[], id: string) =>
     buckets.find((b: ToolExperienceBucket) => b.id === id) || { count: 0, percentage: 0 }
 
 const getChartData = (data: ToolsExperienceToolData[], theme: any): CityscapeToolData[] => {
-    return data.map((tool) => {
+    return data.map(tool => {
         const { id, entity, experience } = tool
         const buckets = experience.year.buckets
         const { categoryId, color } = getCategory(id, theme)
@@ -70,10 +70,10 @@ const getChartData = (data: ToolsExperienceToolData[], theme: any): CityscapeToo
 }
 
 const groupByCategory = (data: CityscapeToolData[]): CityscapeCategoryData[] =>
-    Object.keys(toolsCategories).map((id) => {
+    Object.keys(toolsCategories).map(id => {
         return {
             id,
-            layers: computeLayers(data.filter((tool) => tool.categoryId === id)),
+            layers: computeLayers(data.filter(tool => tool.categoryId === id))
         }
     })
 
@@ -136,24 +136,23 @@ const computeLayers = (data: CityscapeToolData[]): CityscapeLayerData[] => {
     let layerDistribution = getLayerDistribution(totalCount)
     return layerDistribution.map((count, i) => ({
         layer: i,
-        items: getLayerItems(sortedData, layerDistribution, i),
+        items: getLayerItems(sortedData, layerDistribution, i)
     }))
 }
 
 export const ToolsCityscapeBlock = ({
     block,
     data,
-    units: defaultUnits = 'percentage',
+    units: defaultUnits = 'percentage'
 }: ToolsCityscapeBlockProps) => {
     const theme = useTheme()
 
     const [units, setUnits] = useState(defaultUnits)
-    
 
     const chartData = getChartData(data, theme)
 
     const chartDataAllCategories: CityscapeCategoryData[] = [
-        { id: 'all_categories', layers: computeLayers(chartData) },
+        { id: 'all_categories', layers: computeLayers(chartData) }
     ]
 
     const chartDataByCategory = groupByCategory(chartData)
@@ -162,14 +161,7 @@ export const ToolsCityscapeBlock = ({
     // console.log(chartDataByCategory)
 
     return (
-        <Block
-            
-            
-            units={units}
-            setUnits={setUnits}
-            block={block}
-            data={data}
-        >
+        <Block units={units} setUnits={setUnits} block={block} data={data}>
             <ToolsCityscapeChart data={chartDataByCategory} units={units} />
         </Block>
     )

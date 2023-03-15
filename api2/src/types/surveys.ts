@@ -1,9 +1,18 @@
-/**
- * TODO: unify with shared types in
- * shared/core-models/surveys/typings.ts
- */
-import { Entity } from '@devographics/core-models'
 import { RequestContext } from '.'
+
+import {
+    Survey,
+    Edition,
+    Section,
+    Question,
+    QuestionTemplateOutput,
+    ParsedSurvey,
+    ParsedEdition,
+    ParsedSection,
+    ParsedQuestion,
+    Option,
+    EditionData
+} from '@devographics/types'
 
 export type TypeObject = {
     typeName: string
@@ -28,104 +37,6 @@ export interface TemplatesDictionnary {
     [index: string]: TemplateFunction | NullTemplate
 }
 
-export interface SurveyConfig {
-    id: string
-}
-
-export interface Survey extends SurveyConfig {
-    editions: Edition[]
-}
-export interface ParsedSurvey extends Omit<Survey, 'editions'> {
-    editions: ParsedEdition[]
-}
-
-export type Edition = {
-    id: string
-    sections: Section[]
-    apiSections: Section[]
-    year: number
-    credits: Credit[]
-}
-
-export type Credit = {
-    id: string
-}
-
-export interface ParsedEdition extends Omit<Edition, 'sections' | 'apiSections'> {
-    sections: ParsedSection[]
-    apiSections: ParsedSection[]
-}
-
-export type Section = {
-    id: string
-    slug: string // TODO: maybe get rid of this?
-    questions: Question[]
-    template?: string
-}
-export interface ParsedSection extends Omit<Section, 'questions'> {
-    questions: ParsedQuestion[]
-}
-
-export type ApiSection = {
-    id: string
-    questions: ApiQuestion[]
-}
-
-export type ApiQuestion = {
-    id: string
-    template?: string
-}
-
-export type Question = {
-    template: string
-
-    id?: string
-    options?: Option[]
-    optionsAreNumeric?: boolean
-    defaultSort?: string
-
-    autogenerateOptionType?: boolean
-    autogenerateEnumType?: boolean
-    autogenerateFilterType?: boolean
-}
-
-export interface QuestionTemplateOutput extends Omit<Question, 'id'> {
-    id: string
-}
-
-export interface ParsedQuestion extends Omit<Question, 'id'> {
-    id: string
-
-    sectionIds: string[]
-    sectionIndex: number
-    dbPath?: string
-    dbPathComments?: string
-    includeInApi?: boolean
-
-    editions?: string[]
-
-    surveyId: string
-
-    typeDef?: string
-
-    resolverMap?: ResolverMap
-
-    isGlobal?: boolean
-
-    fieldTypeName: string
-    filterTypeName?: string
-    optionTypeName?: string
-    enumTypeName?: string
-
-    transformFunction?: TransformFunction
-}
-
-export type Option = {
-    id: string
-    editions?: string[]
-    average?: number
-}
-
 export interface ResolverMap {
     [key: string]: ResolverType | ResolverMap
 }
@@ -134,8 +45,8 @@ export interface ResolverParent {
     survey: ParsedSurvey
     edition: ParsedEdition
     section: ParsedSection
-    question: ParsedQuestion
-    questionObjects: ParsedQuestion[]
+    question: ParsedQuestionExt
+    questionObjects: ParsedQuestionExt[]
     responseArguments?: ResponseArguments
 }
 
@@ -156,53 +67,28 @@ export type ResolverType = (
     info: any
 ) => any
 
-export interface EditionData {
-    editionId: string
-    year: number
-    completion: YearCompletion
-    buckets: Bucket[]
-}
-
-export interface YearCompletion {
-    // total number of participants
-    total: number
-    // current number of respondents
-    count: number
-    // percentage of respondents compared to the total number of participants
-    percentage_survey: number
-}
-
-// export interface Facet {
-//     id: string | number
-//     mean: number
-//     type: string
-//     completion: FacetCompletion
-//     buckets: Bucket[]
-//     entity: Entity
-// }
-
-export interface FacetCompletion extends YearCompletion {
-    // percentage of respondents compared to the total number of participants
-    percentage_question: number
-}
-
-export interface Bucket {
-    count: number
-    id: string
-    percentage_facet?: number
-    percentage_question: number
-    percentage_survey: number
-    completion?: BucketCompletion
-    entity?: Entity
-    facetBuckets: FacetBucket[]
-}
-
-export interface FacetBucket extends Omit<Bucket, 'facetBuckets'> { }
-
-export interface BucketCompletion extends FacetCompletion { }
-
 export type TransformFunction = (
     parent: ResolverParent,
     data: EditionData[],
     context: RequestContext
 ) => any
+
+// ParsedQuestion extended with API-specific fields
+export interface ParsedQuestionExt extends ParsedQuestion {
+    resolverMap?: ResolverMap
+    transformFunction?: TransformFunction
+}
+
+export {
+    Survey,
+    Edition,
+    Section,
+    Question,
+    QuestionTemplateOutput,
+    ParsedSurvey,
+    ParsedEdition,
+    ParsedSection,
+    ParsedQuestion,
+    Option,
+    EditionData
+} from '@devographics/types'

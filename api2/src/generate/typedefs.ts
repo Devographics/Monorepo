@@ -12,7 +12,7 @@ import {
     generateSurveysType,
     generateResponsesType
 } from '../graphql/templates/index'
-import { ParsedSurvey, ParsedQuestion, TypeObject } from '../types/surveys'
+import { ParsedSurvey, ParsedQuestionExt, TypeObject } from '../types/surveys'
 import { getPath, mergeSections } from './helpers'
 import isEmpty from 'lodash/isEmpty.js'
 
@@ -73,7 +73,7 @@ Generate typeDefs corresponding to all questions
 export const generateQuestionsTypeObjects = async ({
     questionObjects
 }: {
-    questionObjects: ParsedQuestion[]
+    questionObjects: ParsedQuestionExt[]
 }) => {
     const typeObjects: TypeObject[] = []
 
@@ -121,7 +121,7 @@ export const generateFiltersTypeObjects = ({
     questionObjects
 }: {
     surveys: ParsedSurvey[]
-    questionObjects: ParsedQuestion[]
+    questionObjects: ParsedQuestionExt[]
 }) => {
     return surveys.map(survey => generateFiltersType({ survey, questionObjects }))
 }
@@ -131,7 +131,7 @@ export const generateFacetsTypeObjects = ({
     questionObjects
 }: {
     surveys: ParsedSurvey[]
-    questionObjects: ParsedQuestion[]
+    questionObjects: ParsedQuestionExt[]
 }) => {
     return surveys.map(survey => generateFacetsType({ survey, questionObjects }))
 }

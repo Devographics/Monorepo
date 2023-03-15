@@ -3,7 +3,7 @@ import { range, maxBy } from 'lodash'
 // @ts-ignore
 import Block from 'core/blocks/block/BlockVariant'
 import { BlockContext } from 'core/blocks/types'
-import { ToolsCardinalityByUserBucket } from 'core/survey_api/tools'
+import { ToolsCardinalityByUserBucket } from 'core/types/survey_api/tools'
 // @ts-ignore
 import variables from 'Config/variables.yml'
 import { AllSectionsToolsCardinalityByUserChart } from './AllSectionsToolsCardinalityByUserChart'
@@ -79,7 +79,7 @@ export const AllSectionsToolsCardinalityByUserBlock = ({
             // setUnits={setUnits}
             block={{
                 ...block,
-                blockName: 'all_sections_tools_cardinality_by_user',
+                blockName: 'all_sections_tools_cardinality_by_user'
             }}
             tables={chartData.map(({ sectionId, data }) =>
                 getTableData({

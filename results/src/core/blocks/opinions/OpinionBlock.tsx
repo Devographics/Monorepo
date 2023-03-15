@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react'
 import { BlockContext } from 'core/blocks/types'
-import { OpinionBucket, OpinionAllYearsData } from 'core/survey_api/opinions'
+import { OpinionBucket, OpinionAllYearsData } from 'core/types/survey_api/opinions'
 // @ts-ignore
 import Block from 'core/blocks/block/BlockVariant'
 // @ts-ignore
@@ -24,14 +24,12 @@ interface OpinionBlockProps {
     keys: string[]
 }
 
-
-
 export const OpinionBlock = ({
     block,
     data,
     keys,
     units: defaultUnits = 'percentage_question',
-    translateData = true,
+    translateData = true
 }: OpinionBlockProps) => {
     const { id } = block
     const [units, setUnits] = useState(defaultUnits)
@@ -45,11 +43,11 @@ export const OpinionBlock = ({
     // fix potentially undefined buckets
     const normalizedData = useMemo(
         () =>
-            data.map((yearData) => ({
+            data.map(yearData => ({
                 ...yearData,
                 buckets: bucketKeys.map(({ id }) => {
                     const matchingBucket = yearData.facets[0].buckets.find(
-                        (bucket) => bucket.id === id
+                        bucket => bucket.id === id
                     )
                     if (matchingBucket) {
                         return matchingBucket
@@ -58,14 +56,14 @@ export const OpinionBlock = ({
                     return {
                         id,
                         count: 0,
-                        percentage: 0,
+                        percentage: 0
                     }
-                }),
+                })
             })),
         [data, bucketKeys]
     )
 
-    const years = data.map((y) => y.year)
+    const years = data.map(y => y.year)
     const tableData = groupDataByYears({ keys, data })
 
     return (
@@ -74,7 +72,7 @@ export const OpinionBlock = ({
             setUnits={setUnits}
             block={{
                 ...block,
-                bucketKeysName: OPINION_BUCKET_KEYS_ID,
+                bucketKeysName: OPINION_BUCKET_KEYS_ID
             }}
             legends={bucketKeys}
             data={data}
@@ -84,18 +82,18 @@ export const OpinionBlock = ({
                 },
                 onMouseLeave: () => {
                     setCurrent(null)
-                },
+                }
             }}
             tables={[
                 getTableData({
                     data: tableData,
-                    years,
-                }),
+                    years
+                })
             ]}
         >
             <ChartContainer height={300} fit={true}>
                 <StreamChart
-                    colorScale={bucketKeys.map((key) => key.color)}
+                    colorScale={bucketKeys.map(key => key.color)}
                     current={current}
                     // for opinions only having one year of data, we duplicate the year's data
                     // to be able to use the stream chart.
@@ -105,7 +103,7 @@ export const OpinionBlock = ({
                             : normalizedData
                     }
                     bucketKeys={bucketKeys}
-                    keys={bucketKeys.map((key) => key.id)}
+                    keys={bucketKeys.map(key => key.id)}
                     units={units}
                     applyEmptyPatternTo={2}
                     i18nNamespace="opinions"

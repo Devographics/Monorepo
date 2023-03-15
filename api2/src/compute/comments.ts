@@ -3,7 +3,7 @@ import config from '../config'
 import get from 'lodash/get.js'
 import uniq from 'lodash/uniq.js'
 import { useCache } from '../helpers/caching'
-import { Survey, ParsedQuestion } from '../types/surveys'
+import { Survey, ParsedQuestionExt } from '../types/surveys'
 
 // note currently working because of "Dynamic require of "util" is not supported" error
 
@@ -24,16 +24,16 @@ import { Survey, ParsedQuestion } from '../types/surveys'
 type CommentObject = {
     message: string
     responseId: string
-    year: number
+    editionId: string
     sentimentScore?: number
 }
 
-const groupByYear = (allComments: CommentObject[]) => {
-    const allYears = uniq(allComments.map((c: CommentObject) => c.year))
-    return allYears.map(year => {
-        const comments_raw = allComments.filter(c => c.year === year)
+const groupByEdition = (allComments: CommentObject[]) => {
+    const allEditions = uniq(allComments.map((c: CommentObject) => c.editionId))
+    return allEditions.map(editionId => {
+        const comments_raw = allComments.filter(c => c.editionId === editionId)
         return {
-            year,
+            editionId,
             comments_raw,
             count: comments_raw.length
         }
@@ -42,7 +42,7 @@ const groupByYear = (allComments: CommentObject[]) => {
 
 interface GetRawCommentsOptions {
     survey: Survey
-    question: ParsedQuestion
+    question: ParsedQuestionExt
     context: RequestContext
     editionId?: string
 }
@@ -63,12 +63,12 @@ export const getRawComments = async ({
     survey,
     question,
     context,
-    year
+    editionId
 }: GetRawCommentsOptions) => {
     console.log('// getRawComments')
     console.log(survey)
     console.log(question)
-    console.log(year)
+    console.log(editionId)
 
     const { db, isDebug } = context
     const collection = db.collection(config.mongo.normalized_collection)
@@ -78,20 +78,24 @@ export const getRawComments = async ({
         throw new Error(`Could not find comments dbPath for question ${survey.id}/${question.id}`)
     }
 
-    const selector = { survey: survey.id, [dbPath]: { $exists: true }, ...(year && { year }) }
-    const cursor = await collection.find(selector).project({ year: 1, [dbPath]: 1 })
+    const selector = {
+        survey: survey.id,
+        [dbPath]: { $exists: true },
+        ...(editionId && { surveySlug: editionId })
+    }
+    const cursor = await collection.find(selector).project({ surveySlug: 1, [dbPath]: 1 })
 
     const results = await cursor.toArray()
     console.log(selector)
     console.log(results)
     const comments = results.map(r => ({
-        year: r.year,
+        editionId: r.surveySlug,
         message: get(r, dbPath),
         responseId: r._id
     })) as CommentObject[]
     // results = await addSentimentAnalysis(results)
-    const resultsByYear = groupByYear(comments)
+    const resultsByEdition = groupByEdition(comments)
     // console.log(JSON.stringify(resultsByYear, null, 2))
 
-    return year ? resultsByYear[0] : resultsByYear
+    return editionId ? resultsByEdition[0] : resultsByEdition
 }

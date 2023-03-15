@@ -10,7 +10,7 @@ import {
     Survey,
     Edition,
     Section,
-    ParsedQuestion,
+    ParsedQuestionExt,
     EditionData,
     ComputeAxisParameters,
     SortProperty
@@ -44,8 +44,8 @@ export async function genericComputeFunction({
     survey: Survey
     edition: Edition
     section: Section
-    question: ParsedQuestion
-    questionObjects: ParsedQuestion[]
+    question: ParsedQuestionExt
+    questionObjects: ParsedQuestionExt[]
     computeArguments: GenericComputeArguments
 }) {
     let axis1: ComputeAxisParameters,

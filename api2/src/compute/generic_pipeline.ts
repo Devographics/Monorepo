@@ -1,5 +1,5 @@
 import { generateFiltersQuery } from '../filters'
-import { ParsedQuestion, ComputeAxisParameters } from '../types'
+import { ComputeAxisParameters } from '../types'
 
 export type PipelineProps = {
     surveyId: string

@@ -3,7 +3,7 @@ import { maxBy } from 'lodash'
 import styled, { css } from 'styled-components'
 // @ts-ignore
 import { format } from 'd3-format'
-import { ToolsCardinalityByUserBucket } from 'core/survey_api/tools'
+import { ToolsCardinalityByUserBucket } from 'core/types/survey_api/tools'
 // @ts-ignore
 import { fontSize, fontWeight, spacing, mq } from 'core/theme'
 // @ts-ignore
@@ -40,7 +40,7 @@ export const SectionItem = ({
         maxCount = maxBucket.count
     }
 
-    const totalPercentage = round(sumBy(data, 'percentage_survey'),2)
+    const totalPercentage = round(sumBy(data, 'percentage_survey'), 2)
 
     return (
         <SectionContainer>
