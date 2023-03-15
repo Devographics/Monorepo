@@ -23,6 +23,7 @@ import {
 import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
 import { useChartFilters } from 'core/blocks/filters/helpers'
 import { MODE_GRID } from 'core/blocks/filters/constants'
+import { useEntities } from 'core/helpers/entities'
 
 export interface PeopleBlockProps extends BlockComponentProps {
     data: EditionData
@@ -93,8 +94,11 @@ const PeopleBlock = ({ block, data, controlledUnits, isCustom }: PeopleBlockProp
     const { buckets, completion } = data
     const { total } = completion
 
-    const allEntities = buckets.map(b => b.entity)
-    const services = getRelevantServices(allEntities)
+    const bucketEntities = buckets.map(b => b.entity).filter(b => !!b)
+    const allEntities = useEntities()
+    const entities = bucketEntities.length > 0 ? bucketEntities : allEntities
+
+    const services = getRelevantServices(entities)
 
     const { chartFilters, setChartFilters, legends } = useChartFilters({
         block,
@@ -126,13 +130,13 @@ const PeopleBlock = ({ block, data, controlledUnits, isCustom }: PeopleBlockProp
                 chartFilters={chartFilters}
                 layout="grid"
             >
-                <PeopleChart buckets={buckets} units={units} />
+                <PeopleChart buckets={buckets} units={units} entities={entities} />
             </DynamicDataLoader>
         </Block>
     )
 }
 
-const PeopleChart = ({ buckets, units }) => (
+const PeopleChart = ({ buckets, units, entities }) => (
     <Chart_>
         <Heading_>
             <HName_>
@@ -154,6 +158,7 @@ const PeopleChart = ({ buckets, units }) => (
                     maxCount={buckets[0].count}
                     units={units}
                     services={services}
+                    entity={entities.find(e => e.id === b.id)}
                 />
             ))}
         </List_>

@@ -85,6 +85,9 @@ export async function addMissingItems(
 ) {
     for (let editionData of resultsByEdition) {
         if (axis1.question.options) {
+            console.log('// addMissingItems')
+            console.log(axis1.question.options)
+            console.log(editionData.buckets)
             for (const option1 of axis1.question.options) {
                 const existingBucketItem = editionData.buckets.find(
                     bucket => bucket.id === option1.id

@@ -1003,92 +1003,92 @@
       - id: tools_others_resources
         items: [fm-typescript, fm-node-js]
         template: recommended_resources
-# - id: usage
-#   intlId: usage_js
-#   path: /usage
-#   blocks:
-#     - template: page_introduction
+- id: usage
+  intlId: usage_js
+  path: /usage
+  blocks:
+      - template: page_introduction
 
-#     - id: js_ts_balance
-#       tabId: tabs.main_answers
-#       blockNamespace: usage
-#       chartNamespace: js_ts_balance
-#       translateData: true
-#       template: single_option
-#       variables:
-#         fieldId: usage
+      - id: js_ts_balance
+        tabId: tabs.main_answers
+        blockNamespace: usage
+        chartNamespace: js_ts_balance
+        translateData: true
+        template: single_option
+        variables:
+            fieldId: usage
 
-#     - id: usage_type
-#       blockNamespace: usage
-#       chartNamespace: usage_type
-#       translateData: true
-#       template: single_option
-#       variables:
-#         fieldId: usage
+      - id: usage_type
+        blockNamespace: usage
+        chartNamespace: usage_type
+        translateData: true
+        template: single_option
+        variables:
+            fieldId: usage
 
-#     - id: what_do_you_use_js_for
-#       tabId: tabs.main_answers
-#       blockNamespace: usage
-#       chartNamespace: what_do_you_use_js_for
-#       translateData: true
-#       template: multiple_options
-#       variables:
-#         fieldId: usage
-#       variants:
-#         - id: what_do_you_use_js_for_others
-#           defaultUnits: count
-#           blockNamespace: usage
-#           tabId: tabs.other_answers
-#           chartNamespace: what_do_you_use_js_for
-#           translateData: true
-#           template: multiple_options
-#           variables:
-#             fieldId: usage
-#             parameters: { limit: 10 }
+      - id: what_do_you_use_js_for
+        tabId: tabs.main_answers
+        blockNamespace: usage
+        chartNamespace: what_do_you_use_js_for
+        translateData: true
+        template: multiple_options
+        variables:
+            fieldId: usage
+        variants:
+            - id: what_do_you_use_js_for_others
+              defaultUnits: count
+              blockNamespace: usage
+              tabId: tabs.other_answers
+              chartNamespace: what_do_you_use_js_for
+              translateData: true
+              template: multiple_options
+              variables:
+                  fieldId: usage
+                  parameters: { limit: 10 }
 
-#     - id: industry_sector
-#       blockNamespace: usage
-#       chartNamespace: industry_sector
-#       tabId: tabs.main_answers
-#       template: multiple_options
-#       translateData: true
-#       variables:
-#         fieldId: usage
-#       variants:
-#         - id: industry_sector_others
-#           defaultUnits: count
-#           blockNamespace: usage
-#           chartNamespace: industry_sector
-#           tabId: tabs.other_answers
-#           template: multiple_options
-#           translateData: true
-#           variables:
-#             fieldId: usage
-#             parameters: { limit: 15 }
+      - id: industry_sector
+        blockNamespace: usage
+        chartNamespace: industry_sector
+        tabId: tabs.main_answers
+        template: multiple_options
+        translateData: true
+        variables:
+            fieldId: usage
+        variants:
+            - id: industry_sector_others
+              defaultUnits: count
+              blockNamespace: usage
+              chartNamespace: industry_sector
+              tabId: tabs.other_answers
+              template: multiple_options
+              translateData: true
+              variables:
+                  fieldId: usage
+                  parameters: { limit: 15 }
 
-#     - id: js_app_patterns
-#       blockNamespace: usage
-#       chartNamespace: js_app_patterns
-#       tabId: tabs.main_answers
-#       template: multiple_options
-#       translateData: true
-#       variables:
-#         fieldId: usage
-#       variants:
-#         - id: js_app_patterns_others
-#           defaultUnits: count
-#           blockNamespace: usage
-#           chartNamespace: js_app_patterns
-#           tabId: tabs.other_answers
-#           template: multiple_options
-#           translateData: true
-#           variables:
-#             fieldId: usage
-#             parameters: { limit: 15 }
+      - id: js_app_patterns
+        blockNamespace: usage
+        chartNamespace: js_app_patterns
+        tabId: tabs.main_answers
+        template: multiple_options
+        translateData: true
+        variables:
+            fieldId: usage
+        variants:
+            - id: js_app_patterns_others
+              defaultUnits: count
+              blockNamespace: usage
+              chartNamespace: js_app_patterns
+              tabId: tabs.other_answers
+              template: multiple_options
+              translateData: true
+              variables:
+                  fieldId: usage
+                  parameters: { limit: 15 }
 
-#     - id: usage_resources
-#       items: [fm-algorithms, fm-js-patterns]
-#       template: recommended_resources
+      - id: usage_resources
+        items: [fm-algorithms, fm-js-patterns]
+        template: recommended_resources
 
 - id: resources
   path: /resources
@@ -1109,7 +1109,7 @@
               blockNamespace: resources
               chartNamespace: first_steps
               tabId: tabs.other_answers
-              template: multiple_options
+              template: multiple_options_freeform
               translateData: true
               variables:
                   fieldId: resources
@@ -1134,7 +1134,7 @@
               blockNamespace: resources
               chartNamespace: blogs_news_magazines
               tabId: tabs.other_answers
-              template: multiple_options
+              template: multiple_options_freeform
               variables:
                   fieldId: resources
                   parameters: { limit: 15 }
@@ -1152,7 +1152,7 @@
               blockNamespace: resources
               chartNamespace: sites_courses
               tabId: tabs.other_answers
-              template: multiple_options
+              template: multiple_options_freeform
               variables:
                   fieldId: resources
                   parameters: { limit: 15 }
@@ -1175,7 +1175,7 @@
               blockNamespace: resources
               chartNamespace: podcasts
               tabId: tabs.other_answers
-              template: multiple_options
+              template: multiple_options_freeform
               variables:
                   fieldId: resources
                   parameters: { limit: 15 }
@@ -1196,7 +1196,7 @@
               blockNamespace: resources
               chartNamespace: video_creators
               tabId: tabs.other_answers
-              template: multiple_options
+              template: multiple_options_freeform
               variables:
                   fieldId: resources
                   parameters: { limit: 15 }
@@ -1206,7 +1206,7 @@
         defaultUnits: count
         blockNamespace: resources
         chartNamespace: people
-        template: multiple_options
+        template: multiple_options_freeform
         blockType: PeopleBlock
         variables:
             parameters: { limit: 50 }
@@ -1226,7 +1226,7 @@
               blockNamespace: resources
               chartNamespace: other_surveys
               tabId: tabs.other_answers
-              template: multiple_options
+              template: multiple_options_freeform
               variables:
                   parameters: { cutoff: 5 }
                   fieldId: resources

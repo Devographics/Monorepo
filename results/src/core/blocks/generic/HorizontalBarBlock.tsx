@@ -33,6 +33,9 @@ const HorizontalBarBlock = ({
 
     const [units, setUnits] = useState(defaultUnits)
 
+    if (!data) {
+        throw Error(`No data found for block ${block.id}`)
+    }
     const { buckets, completion } = data
     const { total } = completion
 
@@ -97,29 +100,6 @@ const HorizontalBarBlock = ({
             </DynamicDataLoader>
         </Block>
     )
-}
-
-HorizontalBarBlock.propTypes = {
-    block: PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        dataPath: PropTypes.string.isRequired,
-        showDescription: PropTypes.bool,
-        translateData: PropTypes.bool,
-        mode: PropTypes.oneOf(['absolute', 'relative']),
-        defaultUnits: PropTypes.oneOf(['percentage_survey', 'percentage_question', 'count']),
-        colorVariant: PropTypes.oneOf(['primary', 'secondary'])
-    }).isRequired,
-    data: PropTypes.shape({
-        facets: PropTypes.arrayOf(
-            PropTypes.shape({
-                buckets: PropTypes.arrayOf(
-                    PropTypes.shape({
-                        id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
-                    })
-                ).isRequired
-            })
-        ).isRequired
-    }).isRequired
 }
 
 export default memo(HorizontalBarBlock)

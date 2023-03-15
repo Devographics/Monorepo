@@ -56,7 +56,6 @@ const VerticalBarBlock = ({
     } = block
 
     const context = usePageContext()
-    console.log(context)
     const { width, currentEdition } = context
     const { year: currentYear } = currentEdition
 
@@ -66,6 +65,8 @@ const VerticalBarBlock = ({
     const addNoAnswer = units === 'percentage_survey'
 
     const chartOptions = useOptions(block.id)
+    console.log(block.id)
+    console.log(chartOptions)
     const bucketKeys = chartOptions && useLegends(block, chartOptions, undefined, addNoAnswer)
 
     const { completion } = data

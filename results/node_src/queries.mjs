@@ -37,6 +37,40 @@ query {
 `
 }
 
+const entityFragment = `entity {
+    name
+    nameHtml
+    nameClean
+    id
+    homepage {
+      url
+    }
+    youtube {
+      url
+    }
+    twitter {
+      url
+    }
+    twitch {
+      url
+    }
+    rss {
+      url
+    }
+    blog { 
+        url
+    }
+    mastodon {
+        url
+    }
+    github {
+        url
+    }
+    npm {
+        url
+    }
+}`
+
 export const getMetadataQuery = ({ surveyId, editionId }) => {
     return `
 query {
@@ -70,12 +104,7 @@ query {
                                 nameHtml
                             }
                             options {
-                                entity {
-                                    id
-                                    name
-                                    nameClean
-                                    nameHtml
-                                }
+                                ${entityFragment}
                                 id
                             }
                             id
@@ -90,10 +119,19 @@ query {
 }
 
 const unquote = s => s.replace(/"([^"]+)":/g, '$1:')
-export const getDefaultQueryBody = ({ surveyId, editionId, sectionId, questionId, parameters }) => {
+
+export const getDefaultQueryBody = ({
+    surveyId,
+    editionId,
+    sectionId,
+    questionId,
+    parameters,
+    addEntities = false
+}) => {
     const parametersString = parameters
         ? `(parameters: ${unquote(JSON.stringify(parameters))})`
         : ''
+
     return `
 surveys {
   ${surveyId} {
@@ -112,6 +150,7 @@ surveys {
                 id
                 percentage_question
                 percentage_survey
+                ${addEntities ? entityFragment : ''}
               }
             }
           }

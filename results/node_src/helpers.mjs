@@ -197,17 +197,13 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId }) => 
                         editionId,
                         sectionId: page.id,
                         questionId: v.id,
-                        parameters: v?.variables?.parameters
+                        parameters: v?.variables?.parameters,
+                        addEntities: v.addEntities
                     }
 
                     const query = v.query
                         ? wrapWithQuery(`${upperFirst(cleanIdString(v.id))}Query`, v.query)
-                        : getDefaultQuery({
-                              surveyId,
-                              editionId,
-                              sectionId: page.id,
-                              questionId: b.id
-                          })
+                        : getDefaultQuery(queryOptions)
 
                     if (query.includes('dataAPI')) {
                         // only log out queries to dataAPI, not to internalAPI

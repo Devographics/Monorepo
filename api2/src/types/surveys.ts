@@ -11,7 +11,8 @@ import {
     ParsedSection,
     ParsedQuestion,
     Option,
-    EditionData
+    EditionData,
+    Bucket
 } from '@devographics/types'
 
 export type TypeObject = {
@@ -90,5 +91,6 @@ export {
     ParsedSection,
     ParsedQuestion,
     Option,
-    EditionData
+    EditionData,
+    Bucket
 } from '@devographics/types'

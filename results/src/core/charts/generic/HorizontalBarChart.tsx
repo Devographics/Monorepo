@@ -119,7 +119,8 @@ const HorizontalBarChart = ({
     const theme = useTheme()
     const { translate } = useI18n()
 
-    const entities = useEntities()
+    const bucketEntities = buckets.map(b => b.entity).filter(b => !!b)
+    const entities = bucketEntities.length > 0 ? bucketEntities : useEntities()
 
     const keys = useChartKeys({ units, facet, showDefaultSeries })
 
