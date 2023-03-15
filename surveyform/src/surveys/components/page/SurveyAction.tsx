@@ -6,7 +6,7 @@
 4. If there is an error during the mutation, show it
 
 */
-import React, { useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import get from "lodash/get.js";
 import isEmpty from "lodash/isEmpty.js";
@@ -14,19 +14,18 @@ import { statuses } from "~/surveys/constants";
 import { SurveyEdition } from "@devographics/core-models";
 import { UserType } from "~/core/models/user";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
-import {
-  useSurveyActionParams,
-  useBrowserData,
-  PrefilledData,
-  startSurvey,
-  ErrorObject,
-} from "./hooks";
+import { useSurveyActionParams, useBrowserData, PrefilledData } from "./hooks";
 import { useRouter } from "next/navigation";
 import { useUser } from "~/account/user/hooks";
 import { useUserResponse } from "~/responses/hooks";
 import { Loading } from "~/core/components/ui/Loading";
 import { LoadingButton } from "~/core/components/ui/LoadingButton";
-import { getSurveyPath } from "~/surveys/helpers";
+import { getSurveySectionPath } from "~/surveys/helpers";
+import {
+  getSurveyContextId,
+  getSurveyEditionId,
+} from "~/surveys/parser/parseSurvey";
+import { ErrorObject, startSurvey } from "./services";
 
 const duplicateResponseErrorId = "error.duplicate_response";
 
@@ -41,8 +40,8 @@ const SurveyAction = ({
   const [errors, setErrors] = useState<
     Array<ErrorObject | Error> | undefined
   >();
-  const { slug, context, status } = survey;
-  if (!(slug || context))
+  const { status } = survey;
+  if (!getSurveyEditionId(survey))
     throw new Error(`Slug or context not found in SurveyAction`);
   const { user, loading: userLoading, error: userError } = useUser();
   // TODO: fetch data during SSR instead?
@@ -50,7 +49,7 @@ const SurveyAction = ({
     response,
     loading: responseLoading,
     error: responseError,
-  } = useUserResponse({ surveySlug: context || slug });
+  } = useUserResponse({ surveyEditionId: getSurveyEditionId(survey) });
   if (userLoading) return <Loading />;
   if (userError) throw new Error(userError);
   if (responseLoading) return <Loading />;
@@ -130,15 +129,20 @@ const SurveyStart = ({
   setLoading,
   currentUser,
   setErrors,
+}: {
+  survey: SurveyEdition;
+  loading: boolean;
+  setLoading: any;
+  currentUser: any;
+  setErrors: any;
 }) => {
-  const { slug, status, context } = survey;
   const router = useRouter();
   const { source, referrer } = useSurveyActionParams();
 
   // prefilled data
   let data: PrefilledData = {
-    surveySlug: slug,
-    context,
+    surveyEditionId: getSurveyEditionId(survey),
+    surveyContextId: getSurveyContextId(survey),
     email: currentUser?.email,
     common__user_info__source: source,
     common__user_info__referrer: referrer,
@@ -166,6 +170,7 @@ const SurveyStart = ({
         const result = await startSurvey(survey, data);
         if (result.error) {
           setErrors([result.error]);
+          setLoading(false);
         } else {
           // no need to stop spinner because it'll disappear when we change page
           // setLoading(false);
@@ -178,7 +183,10 @@ const SurveyStart = ({
         // TODO: this is expecting a graphql syntax for errors,
         // need to be updated
         setErrors([error]);
+        setLoading(false);
         //setErrors(getErrors(error));
+      } finally {
+        setLoading(false);
       }
     },
   };
@@ -209,7 +217,10 @@ const SurveyLink = ({
     //<LinkContainer to={response.pagePath || getSurveyPath({ survey })}>
     //</LinkContainer>
     <Link
-      href={response.pagePath || getSurveyPath({ survey, readOnly: true })}
+      href={
+        response.pagePath ||
+        getSurveySectionPath({ survey, forceReadOnly: true })
+      }
       type="button"
       className="btn btn-primary"
     >
@@ -240,8 +251,9 @@ const ErrorItem = ({ survey, error, response }) => {
       <FormattedMessage id={id} />{" "}
       {id === duplicateResponseErrorId && (
         <Link
-          href={getSurveyPath({
+          href={getSurveySectionPath({
             survey,
+            // @ts-ignore
             response: { _id: properties.responseId },
           })}
         >

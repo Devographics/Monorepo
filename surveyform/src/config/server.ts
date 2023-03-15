@@ -28,7 +28,8 @@ export function serverConfig() {
     // to avoid risks of typos, reuse those values
     isDev: process.env.NODE_ENV === "development",
     isProd: process.env.NODE_ENV === "production",
-    isTest: process.env.NODE_ENV === "test",
+    // for non standard envs, NODE_ENV cannot always be overriden, so we need to check NEXT_PUBLIC_NODE_ENV
+    isTest: process.env.NODE_ENV === "test" || process.env.NEXT_PUBLIC_NODE_ENV === "test",
   }
 };
 

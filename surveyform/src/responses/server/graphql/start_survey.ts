@@ -20,8 +20,9 @@ export const startSurvey = async (root, args, context) => {
   const data = args?.input?.data;
   let document = data as ResponseDocument;
 
-  if (!document.surveySlug) throw new Error("Cannot create a response without a surveySlug")
-  const survey = await fetchSurveyFromId(document.surveySlug);
+  if (!document.surveyEditionId) throw new Error("Cannot create a response without a surveyEditionId")
+  const { surveyEditionId, surveyContextId } = document
+  const survey = await fetchSurveyFromId(surveyEditionId);
 
   // run duplicate responses check
   const validationErrors = await duplicateCheck([], { document, currentUser });
@@ -35,6 +36,8 @@ export const startSurvey = async (root, args, context) => {
   // add userId and _id
   document = {
     ...document,
+    surveyEditionId,
+    surveyContextId,
     userId: currentUser._id,
     // _id: ObjectID().valueOf(), // also works
     _id: nanoid(),

@@ -6,10 +6,10 @@ import type { SurveySection, SurveyEdition } from "@devographics/core-models";
 import { ResponseDocument } from "@devographics/core-models";
 import { getSectionCompletionPercentage } from "~/responses/helpers";
 import { useFormContext } from "@devographics/react-form";
-import { getSurveyPath } from "~/surveys/helpers";
+import { getSurveySectionPath } from "~/surveys/helpers";
 import { useRouter } from "next/navigation";
-import { saveSurvey } from "../page/hooks";
 import { captureException } from "@sentry/nextjs";
+import { saveSurvey } from "../page/services";
 
 const SurveyNavItem = ({
   survey,
@@ -23,7 +23,7 @@ const SurveyNavItem = ({
   readOnly,
 }: {
   survey: SurveyEdition;
-  response?: ResponseDocument;
+  response: ResponseDocument;
   section: SurveySection;
   number: any;
   setShown: (boolean) => void;
@@ -61,7 +61,7 @@ const SurveyNavItem = ({
       captureException(res.error);
     }
     setNavLoading(false);
-    router.push(getSurveyPath({ survey, response, number }));
+    router.push(getSurveySectionPath({ survey, response, number }));
   };
 
   return (
@@ -69,7 +69,12 @@ const SurveyNavItem = ({
       {/** TODO: was a NavLink previously from bootstrap */}
       <Link
         //exact={true}
-        href={getSurveyPath({ survey, number, readOnly, response })}
+        href={getSurveySectionPath({
+          survey,
+          number,
+          forceReadOnly: readOnly,
+          response,
+        })}
         ref={textInput}
         tabIndex={currentTabindex === number ? 0 : -1}
         onFocus={() => {

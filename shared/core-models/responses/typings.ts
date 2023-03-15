@@ -4,7 +4,18 @@ export interface ResponseDocument extends VulcanDocument {
   name?: string;
   year?: number;
   pagePath?: string;
-  surveySlug?: SurveyEdition["surveyId"];
+  /**
+   * @deprecated Use surveyEditionId instead
+   */
+  surveySlug?: SurveyEdition["surveyEditionId"];
+  /**
+   * js2022
+   */
+  surveyEditionId?: string,
+  /**
+   * state_of_js
+   */
+  surveyContextId?: string,
 }
 
 /**

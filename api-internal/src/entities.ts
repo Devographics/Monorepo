@@ -138,7 +138,7 @@ export const loadEntities = async () => {
     console.log('// loading entities')
 
     const entities: Entity[] =
-        appSettings.loadLocalesMode === 'local' ? await loadLocally() : await loadFromGitHub()
+        appSettings.loadEntitiesMode === 'local' ? await loadLocally() : await loadFromGitHub()
     console.log('// done loading entities')
 
     return entities

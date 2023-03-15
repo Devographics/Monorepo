@@ -69,14 +69,3 @@ export async function fetchSurveyContextRedis(slug: SurveySharedContext["slug"])
     return surveyContext
 }
 export const storeSurveyContextRedis = (...args: Parameters<typeof surveyContextKey>) => storeRedis(surveyContextKey(...args))
-
-export async function fetchSurveyFromIdRedis(surveyId: SurveyEdition["surveyId"]) {
-    const surveyList = await fetchSurveysListRedis()
-    if (!surveyList) return null
-    const surveyDescription = surveyList.find(s => s.surveyId)
-    if (!surveyDescription) {
-        throw new Error(`No survey with surveyId ${surveyId}`)
-    }
-    const survey = await fetchSurveyRedis(surveyDescription.slug, surveyDescription.year + "")
-    return survey
-}

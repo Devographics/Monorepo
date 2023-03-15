@@ -1,21 +1,22 @@
 # Monorepo
 
-## Shared packages
+## Initial setup and run
 
-To use a shared package in your app:
-- Add a workspace dependency: "@devographics/core-models":"workspace:*"
-- When deploying, configure the host to load the whole monorepo (eg on Vercel)
-- If the shared code is not bundled, eg written in pure TypeScript, include it in the app bundle.
-In Next.js this is done via [next-transpile-modules](https://www.npmjs.com/package/next-transpile-modules) in next.config.js
+To run the "surveyform":
+- `just dbs` will run Mongo and Redis (via Docker)
+- `cd api-internal && pnpm run dev` will run the internal API that serves locales and entities
+- `cd surveyform && pnpm run dev` will run the surveyform (surveyadmin works similarly)
 
-## Other git repositories
+Sections below explain how to properly setup relevant toolings and folders.
+
+### Other git repositories to clone
 
 APIs may depend on GitHub repository. 
 
 To avoid calling the GitHub API systematically, you can download the repositories locally. This is relevant for `api-internal` for instance.
 
 Expected folder structure:
-```
+```sh
 devographics
 |_ monorepo
 |_ locales
@@ -27,6 +28,15 @@ devographics
 ```
 
 The script "./scripts/listLocaleRepos.mjs" can help to get the list of commands to run.
+
+## Shared packages
+
+To use a shared package in your app:
+- Add a workspace dependency: "@devographics/core-models":"workspace:*"
+- When deploying, configure the host to load the whole monorepo (eg on Vercel)
+- If the shared code is not bundled, eg written in pure TypeScript, include it in the app bundle.
+In Next.js this is done via [next-transpile-modules](https://www.npmjs.com/package/next-transpile-modules) in next.config.js
+
 
 ## Run scripts with Just
 

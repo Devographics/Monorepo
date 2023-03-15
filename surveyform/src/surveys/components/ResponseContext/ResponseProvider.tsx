@@ -2,8 +2,9 @@
 import { ResponseDocument } from "@devographics/core-models";
 import React, { useContext } from "react";
 
-const ResponseContext =
-  React.createContext<ResponseDocument | undefined>(undefined);
+const ResponseContext = React.createContext<ResponseDocument | undefined>(
+  undefined
+);
 
 export const ResponseProvider = ({
   response,

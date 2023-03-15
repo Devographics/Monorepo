@@ -10,8 +10,10 @@ import { connectToRedis } from '~/lib/server/redis'
 export default async function singleResponseHandler(req: NextApiRequest, res: NextApiResponse) {
   await connectToAppDb()
   connectToRedis()
-  const surveySlug = req.query["surveySlug"]
-  if (!surveySlug) throw new Error("No survey slug, can't get response")
+  const surveyEditionId = req.query["surveyEditionId"]
+  if (!surveyEditionId) {
+    return res.status(400).json({ error: "Missing surveyEditionId" })
+  }
   // TODO: this code used to be a client-side graphql query
   // we reuse the same call temporarily to facilitate moving out of graphql
   try {
@@ -45,7 +47,7 @@ export default async function singleResponseHandler(req: NextApiRequest, res: Ne
         responses {
           _id
           pagePath
-          surveySlug
+          surveyEditionId
           completion
           createdAt
           survey {
@@ -75,7 +77,7 @@ export default async function singleResponseHandler(req: NextApiRequest, res: Ne
     console.log("GOT DATA FROM GRAPHQL CALL", data)
     // TODO: filter during call to db already
     const responses: Array<ResponseDocument & { survey: SurveyEdition }> = data?.data?.currentUser?.responses || []
-    const surveyResponse = responses.find((r) => r.surveySlug === surveySlug) || null;
+    const surveyResponse = responses.find((r) => r.surveyEditionId === surveyEditionId) || null;
     console.log("response", surveyResponse, responses)
     return res.status(200).json(surveyResponse)
   } catch (err) {

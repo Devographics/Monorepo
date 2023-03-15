@@ -61,16 +61,16 @@ export const apiRoutes = {
   },
   response: {
     single: {
-      href: ({ surveySlug }: { surveySlug: string }) => `/api/response/single?surveySlug=${surveySlug}`
+      href: ({ surveyEditionId }: { surveyEditionId: string }) => `/api/response/single?surveyEditionId=${surveyEditionId}`
     },
     multi: {
       href: "/api/response/multi"
     },
     startSurvey: {
-      href: ({ slug, year }: Required<Pick<SurveyEdition, "slug" | "year">>) => `/api/response/start-survey?surveySlug=${slug}&surveyYear=${year}`
+      href: ({ surveyContextId, year }: Required<Pick<SurveyEdition, "surveyContextId" | "year">>) => `/api/response/start-survey?surveyContextId=${surveyContextId}&surveyYear=${year}`
     },
     saveSurvey: {
-      href: ({ slug, year }: Required<Pick<SurveyEdition, "slug" | "year">>) => `/api/response/save-survey?surveySlug=${slug}&surveyYear=${year}`
+      href: ({ surveyContextId, year }: Required<Pick<SurveyEdition, "surveyContextId" | "year">>) => `/api/response/save-survey?surveyContextId=${surveyContextId}&surveyYear=${year}`
     }
   }
 }

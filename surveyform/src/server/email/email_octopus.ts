@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 
 import fetch from "node-fetch";
+import { serverConfig } from "~/config/server";
 
 const apiKey = process.env.EMAIL_OCTOPUS_APIKEY;
 
@@ -10,10 +11,8 @@ const apiKey = process.env.EMAIL_OCTOPUS_APIKEY;
 export async function subscribe({ email, confirm = false, listId }) {
   try {
     if (!(apiKey && listId)) {
-      // FIXME: NODE_ENV should be test in test but it is still production
       if (
-        process.env.NODE_ENV !== "production" ||
-        process.env.NEXT_PUBLIC_NODE_ENV !== "production"
+        !serverConfig().isProd
       ) {
         console.warn(
           "EMAIL_OCTOPUS_APIKEY or listId not set, current NODE_ENV:",

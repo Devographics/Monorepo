@@ -52,7 +52,7 @@ async function fetchGithubJson<T = any>(url: string): Promise<T> {
             console.error(
                 "limited until (in GMT timezone):",
                 new Date(limit?.rate?.reset * 1000).toISOString(),
-                limit,)
+                limit)
         }).catch(console.error)
         throw new Error("Hitting GitHub API rate limit, can't fetch: " + url)
     }
@@ -105,7 +105,10 @@ export async function fetchSurveyGithub(prettySlug: SurveyEdition["prettySlug"],
         // TODO: this function is sometimes called with a prettySlug that already contains underscore
         // while prettySlug is expected to contain dashes only
         prettySlug: prettySlug.replaceAll("_", "-"),
-        outline: questionsConfig
+        outline: questionsConfig,
+        // TODO: merge the fields later than there, so that we don't have to update Redis cache everytime
+        surveyContextId: commonConfig.id,
+        surveyEditionId: surveyConfig.id,
     }
     return survey
 }

@@ -23,7 +23,7 @@ function getLang(pathname: string) {
   const firstParam = getFirstParam(pathname)
   if (!firstParam) return null
   if (locales.includes(firstParam)) {
-    console.debug("path includes lang", pathname)
+    //console.debug("path includes lang", pathname)
     return firstParam
   }
   return null
@@ -61,11 +61,11 @@ function localize(request: NextRequest): NextResponse {
   // add or replace locale
   let url = request.nextUrl.clone();
   if (langFromPath && validLocale != langFromPath) {
-    console.debug("Will replace locale", langFromPath, "by", validLocale, "in", url.pathname)
+    // console.debug("Will replace locale", langFromPath, "by", validLocale, "in", url.pathname)
     // replace locale
     url.pathname = url.pathname.replace(langFromPath, validLocale)
   } else if (!langFromPath) {
-    console.debug("Will add locale", validLocale, "to", url.pathname)
+    //console.debug("Will add locale", validLocale, "to", url.pathname)
     // add locale
     url.pathname = "/" + validLocale + url.pathname;
   } else {

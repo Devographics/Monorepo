@@ -2,6 +2,8 @@
  * 1) get from in-memory cache if available (short TTL because it can't be emptied)
  * 2) get from Redis if available (longer TTL, can be invalidated/updated easily)
  * 3) get from Github in last resort
+ * 
+ * TODO: add "surveyId" and "surveyEditionId" to the merged object here, instead of in fetchGithub
  */
 import { SurveyEdition, SurveyEditionDescription, SurveySharedContext } from "../typings";
 import NodeCache from 'node-cache'
@@ -52,7 +54,7 @@ export async function fetchSurvey(prettySlug: SurveyEdition["prettySlug"], year:
     )
 }
 
-export const fetchSurveysList = async (): Promise<Array<SurveyEditionDescription>> => {
+export const fetchSurveysList = async (keepDemo?: boolean): Promise<Array<SurveyEditionDescription>> => {
     const key = "surveys_description_list"
     let surveys = await fromSurveysCache(
         key,
@@ -68,20 +70,33 @@ export const fetchSurveysList = async (): Promise<Array<SurveyEditionDescription
     )
     // NOTE: we cannot systematically override "NODE_ENV" with test,
     // so we have to use a custom node_env variable NEXT_PUBLIC_NODE_ENV
-    if (process.env.NODE_ENV !== "development" && process.env.NEXT_PUBLIC_NODE_ENV !== "test") {
+    console.log("ENV", process.env.NODE_ENV, process.env.NEXT_PUBLIC_NODE_ENV)
+    if (!keepDemo) {
         surveys = surveys.filter(s => s.slug !== "demo_survey")
     }
     const sorted = orderBy(surveys, ["year", "slug"], ["desc", "asc"])
     return sorted
 }
 
-export async function fetchSurveyFromId(surveyId: SurveyEdition["surveyId"]) {
+/**
+ * Functions that gets a safe unique id per survey edition,
+ * taking legacy fields into account
+ * @param survey 
+ * @returns js2022, graphql2022, css2022 etc.
+ */
+export function getSurveyEditionId(survey: SurveyEdition) {
+    // js2022 etc.
+    const surveyEditionId = survey.surveyEditionId || survey.id || survey.surveyId || survey.slug
+    return surveyEditionId
+}
+export async function fetchSurveyFromId(surveyEditionId: SurveyEdition["surveyEditionId"]) {
     // no need to cache this functions, 
     // because it is derived from other functions that are themselves cached
-    const surveyList = await fetchSurveysList()
-    const surveyDescription = surveyList.find(s => s.surveyId)
+    // (always get demo survey here, we filter afterward)
+    const surveyList = await fetchSurveysList(true)
+    const surveyDescription = surveyList.find(s => s.surveyEditionId === surveyEditionId)
     if (!surveyDescription) {
-        throw new Error(`No survey with surveyId ${surveyId}`)
+        throw new Error(`No survey with surveyId ${surveyEditionId}`)
     }
     // state_of_js
     // be careful with older suveys that use "context" not slug

@@ -1,3 +1,7 @@
+/**
+ * @see api2/src/types/surveys.ts for most up to date types used in API v2
+ * Here are the shared types currently used in the surveyform/surveyadmin
+ */
 export type FieldTemplateId =
   | "email"
   | "text"
@@ -104,6 +108,12 @@ export interface EOConfig {
  */
 export interface SurveySharedContext {
   /**
+   * In newer surveys, replace slugs/prettySlug/context
+   * = surveyContextId when merged
+   * @example state_of_js
+   */
+  id: string;
+  /**
    * In previous survey: was equal to the survey id eg "js2022"
    * 
    * Now: equal to the survey context with "_" eg "state_of_js"
@@ -129,17 +139,28 @@ export interface SurveySharedContext {
  * Fields that are specific to one edition (=1 year) of a survey
  */
 interface SurveyEditionSpecifics {
+  /**
+   * In newer surveys, id = id of the unique edition
+   * = surveyEditionId when merged
+   * 
+   * @example js2022
+   * /!\ when merging survey context and edition, we might want to
+   * be careful to keep both id, ideally by isolating edition in its field:
+   * {context: SurveyContext, edition: SurveyEdition }
+   */
+  id: string;
   createdAt?: string;
   updatedAt?: string;
   /**
+   * @deprecated
    * Slug with underscores
    * state_of_js
    * Used as pathname on github
    * Does NOT include the year
-   * @deprecated
    */
   context?: string;
   /**
+   * @deprecated use id
    * Same as slug
    * @example js2022
    */
@@ -198,10 +219,10 @@ interface SurveyEditionSpecifics {
  * A survey edition
  * With common info, edition specific info, and questions
  */
-export type SurveyEdition = SurveySharedContext & SurveyEditionSpecifics
+export type SurveyEdition = SurveySharedContext & SurveyEditionSpecifics & { surveyContextId: SurveySharedContext["id"], surveyEditionId: SurveyEdition["id"] }
 
-export type SurveyEditionDescription = Pick<SurveyEdition,
-  "surveyId" | "name" | "status" | "prettySlug" | "slug" | "year" | "imageUrl"
+export type SurveyEditionDescription = Pick<SurveyEdition, "id" | "surveyContextId" | "surveyEditionId"
+  | "name" | "status" | "prettySlug" | "slug" | "year" | "imageUrl"
   // in older surveys, "context" is state_of_js and slug is "js2022"
   // while in newer surveys slug is "state_of_js"
   | "context">

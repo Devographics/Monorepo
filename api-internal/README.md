@@ -29,6 +29,8 @@ TWITTER_ACCESS_TOKEN_SECRET=***
 # Whether to load locales and entities data from GitHub or from a local directory
 # local | undefined
 LOAD_LOCALES=local
+# if you have "/devographics/monorepo/api-internal", will look for "/devographics/locales"
+LOCALES_DIR="locales"
 # local | undefined
 LOAD_ENTITIES=local
 
