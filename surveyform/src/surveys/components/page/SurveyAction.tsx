@@ -175,7 +175,9 @@ const SurveyStart = ({
           // no need to stop spinner because it'll disappear when we change page
           // setLoading(false);
           console.log("start survey result", result);
-          const pagePath = get(result, `data.startSurvey.data.pagePath`);
+          const pagePath =
+            get(result, `data.startSurvey.data.pagePath`) ||
+            getSurveySectionPath({ survey, response: result.data, number: 1 });
           console.log(`Redirecting to ${pagePath}…`);
           router.push(pagePath);
         }

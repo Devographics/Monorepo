@@ -17,9 +17,14 @@ export default async function responseStartSurveyHandler(req: NextApiRequest, re
     connectToRedis()
 
     const surveyContextId = req.query["surveyContextId"] as string
-    if (!surveyContextId) throw new Error("No survey slug, can't start survey")
+    if (!surveyContextId) {
+        return res.status(400).send("No survey slug, can't start survey")
+    }
     const surveyYear = req.query["surveyYear"] as string
-    if (!surveyYear) throw new Error("No survey year, can't start survey")
+    if (!surveyYear) {
+        return res.status(400).send("No survey year, can't start survey")
+    }
+
     const survey = await fetchSurvey(surveyContextId, surveyYear)
 
 
@@ -61,7 +66,7 @@ export default async function responseStartSurveyHandler(req: NextApiRequest, re
         })
         if (!gqlRes.ok) {
             console.error("Response text:", await gqlRes.text())
-            throw new Error("Error during startSurvey")
+            res.status(400).send("Error during startSurvey")
         }
         const gqlJson: {
             data?: any,
@@ -78,7 +83,7 @@ export default async function responseStartSurveyHandler(req: NextApiRequest, re
                 locations: Array<{ column: number, line: number }>
             }>
         } = await gqlRes.json()
-        console.log("startSurvey result", gqlJson)
+        console.log("startSurvey result", JSON.stringify(gqlJson))
         return res.status(200).json(gqlJson)
     } catch (err) {
         console.error("GraphQL fetch error", err)

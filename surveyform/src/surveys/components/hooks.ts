@@ -3,7 +3,13 @@ import { useResponse } from "./ResponseContext/ResponseProvider";
 import { useSection } from "./SectionContext/SectionProvider";
 import { useSurvey } from "./SurveyContext/Provider";
 
-export const useSurveyParams = (): { slug: string; year: string } => {
+export const useSurveyParams = (): {
+  slug: string;
+  year: string,
+  // TODO: use those id instead of slug/year whenever possible
+  // (= all the time except when building actual URL)
+  surveyEditionId: string, surveyContextId: string
+} => {
   const survey = useSurvey()
   if (!survey) {
     throw new Error("Called useSurveyParams outside of survey page")
@@ -11,7 +17,7 @@ export const useSurveyParams = (): { slug: string; year: string } => {
   // TODO: we will need useParams instead, it's not yet released (07/12/2022)
   const slug = survey.surveyContextId.replaceAll("_", "-")
   const year = survey.year + ""
-  return { slug, year };
+  return { slug, year, surveyContextId: survey.surveyContextId, surveyEditionId: survey.surveyEditionId };
 };
 
 

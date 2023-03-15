@@ -20,6 +20,10 @@ import { serverConfig } from "~/config/server";
 
 const getSurveyDescriptionFromResponse = async (response: ResponseDocument): Promise<SurveyEditionDescription | undefined> => {
   const isDevOrTest = serverConfig().isDev || serverConfig().isTest;
+  if (response.surveyEditionId) {
+    return await fetchSurveyFromId(response.surveyEditionId)
+  }
+  // using legacy slug
   const surveys = await fetchSurveysList(isDevOrTest)
   return surveys.find((s) => s.slug === response.surveySlug);
 }

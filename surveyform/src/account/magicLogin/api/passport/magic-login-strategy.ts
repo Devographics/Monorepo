@@ -75,6 +75,7 @@ async function sendMagicLink(
         surveyContextId,
         // @deprecated
         surveySlug: surveyContextId.replaceAll("_", "-"),
+        // TODO: find the surveyEditionId instead if possible
         surveyYear: year,
       };
     }
