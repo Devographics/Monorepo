@@ -7,7 +7,7 @@ import { SurveyEdition, SurveyEditionDescription, SurveySharedContext } from "..
 import { getRedisClient } from "./redis";
 
 // This TTL can be long (multiple hours) since we can manually invalidate Redis cache if needed
-const TTL_SECONDS = 60 * 60 * 6
+const TTL_SECONDS = 60 * 60 * 2
 
 function storeRedis(key: string) {
     return async function <T = any>(val: T extends Promise<unknown> ? never : T): Promise<boolean> {
