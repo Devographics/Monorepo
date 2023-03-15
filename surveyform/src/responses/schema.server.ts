@@ -149,10 +149,12 @@ export const getServerSchema = (): VulcanGraphqlSchemaServer => {
           typeName: "Survey",
           // TODO: use a relation instead
           resolver: async (response, args, context) => {
-            if (!response.surveySlug) {
-              throw new Error(`Can't get response survey, response ${response._id} has no surveySlug`)
+            // surveySlug is legacy
+            const surveyEditionId = response.surveyEditionId || response.surveySlug
+            if (!response.surveyEditionId) {
+              throw new Error(`Can't get response survey, response ${response._id} has no surveyEditionId (or legacy surveySlug)`)
             }
-            return await fetchSurveyFromId(response.surveySlug)
+            return await fetchSurveyFromId(surveyEditionId)
           },
         },
       },
