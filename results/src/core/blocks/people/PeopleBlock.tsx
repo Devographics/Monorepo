@@ -2,7 +2,8 @@ import React, { useState } from 'react'
 import Block from 'core/blocks/block/BlockVariant'
 import HorizontalBarChart from 'core/charts/generic/HorizontalBarChart'
 import { getTableData } from 'core/helpers/datatables'
-import { ResultsByYear, BlockComponentProps } from 'core/types'
+import { BlockComponentProps } from 'core/types'
+import { EditionData } from '@devographics/types'
 import styled from 'styled-components'
 import Avatar from 'core/components/Avatar'
 import SocialLinks from 'core/blocks/people/SocialLinks'
@@ -24,7 +25,7 @@ import { useChartFilters } from 'core/blocks/filters/helpers'
 import { MODE_GRID } from 'core/blocks/filters/constants'
 
 export interface PeopleBlockProps extends BlockComponentProps {
-    data: ResultsByYear
+    data: EditionData
 }
 
 export const services = [
@@ -97,7 +98,10 @@ const PeopleBlock = ({ block, data, controlledUnits, isCustom }: PeopleBlockProp
     const allEntities = buckets.map(b => b.entity)
     const services = getRelevantServices(allEntities)
 
-    const { chartFilters, setChartFilters, legends } = useChartFilters({ block, options: { supportedModes: [MODE_GRID] }})
+    const { chartFilters, setChartFilters, legends } = useChartFilters({
+        block,
+        options: { supportedModes: [MODE_GRID] }
+    })
 
     return (
         <Block

@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import capitalize from 'lodash/capitalize.js'
 
 export const getLocalesQuery = (localeIds, contexts, loadStrings = true) => {
     const args = []
@@ -87,35 +87,40 @@ query {
 }`
 }
 
-export const getDefaultQuery = ({ surveyId, editionId, sectionId, questionId }) => `
-query ${editionId}${_.capitalize(questionId)}Query {
-  dataAPI {
-    surveys {
-      ${surveyId} {
-        ${editionId} {
-          ${sectionId} {
-            ${questionId} {
-              id
-              responses {
-                current_edition {
-                  completion {
-                    count
-                    percentage_survey
-                    total
-                  }
-                  editionId
-                  buckets {
-                    count
-                    id
-                    percentage_question
-                    percentage_survey
-                  }
-                }
+export const getDefaultQueryBody = ({ surveyId, editionId, sectionId, questionId }) => `
+surveys {
+  ${surveyId} {
+    ${editionId} {
+      ${sectionId} {
+        ${questionId} {
+          responses {
+            current_edition {
+              completion {
+                count
+                percentage_survey
+                total
+              }
+              buckets {
+                count
+                id
+                percentage_question
+                percentage_survey
               }
             }
           }
         }
       }
     }
+  }
+}
+`
+
+export const getDefaultQueryName = options =>
+    `${options.editionId}${capitalize(options.questionId)}Query`
+
+export const getDefaultQuery = options => `
+query ${getDefaultQueryName(options)} {
+  dataAPI {
+      ${getDefaultQueryBody(options)}
   }
 }`

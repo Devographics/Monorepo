@@ -7,7 +7,8 @@ import VerticalBarChart from 'core/charts/generic/VerticalBarChart'
 import { usePageContext } from 'core/helpers/pageContext'
 import { useLegends } from 'core/helpers/useBucketKeys'
 // import T from 'core/i18n/T'
-import { ResultsByYear, BlockComponentProps, BlockUnits } from 'core/types'
+import { BlockComponentProps, BlockUnits } from 'core/types'
+import { EditionData } from '@devographics/types'
 import { getTableData } from 'core/helpers/datatables'
 import sumBy from 'lodash/sumBy'
 import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
@@ -17,12 +18,10 @@ import { defaultOptions } from 'core/blocks/block/BlockUnitsSelector'
 import { useAllChartsOptions } from 'core/charts/hooks'
 
 export interface VerticalBarBlockProps extends BlockComponentProps {
-    data: ResultsByYear
+    data: EditionData
     controlledUnits: BlockUnits
     isCustom: boolean
 }
-
-const processBlockData = (data: ResultsByYear) => data?.facets[0]?.buckets
 
 export const addNoAnswerBucket = ({ buckets, completion }) => {
     const countSum = sumBy(buckets, b => b.count)
@@ -67,14 +66,14 @@ const VerticalBarBlock = ({
 
     const { completion } = data
 
-    const buckets_ = processBlockData(data)
-    const buckets = addNoAnswer
-        ? addNoAnswerBucket({ buckets: buckets_, completion })
-        : buckets_
+    const buckets_ = data.buckets
+    const buckets = addNoAnswer ? addNoAnswerBucket({ buckets: buckets_, completion }) : buckets_
     const { total } = completion
 
-    const {chartFilters, setChartFilters, legends } = useChartFilters({block, options: { supportedModes: [MODE_COMBINED, MODE_FACET] }})
-
+    const { chartFilters, setChartFilters, legends } = useChartFilters({
+        block,
+        options: { supportedModes: [MODE_COMBINED, MODE_FACET] }
+    })
 
     const allChartsOptions = useAllChartsOptions()
     let unitsOptions = defaultOptions
@@ -115,7 +114,6 @@ const VerticalBarBlock = ({
                 block={block}
                 chartFilters={chartFilters}
                 setUnits={setUnits}
-                processBlockData={processBlockData}
             >
                 <ChartContainer fit={true}>
                     <VerticalBarChart

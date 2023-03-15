@@ -8,7 +8,7 @@ import fetch from 'node-fetch'
 import yaml from 'js-yaml'
 import { TwitterApi } from 'twitter-api-v2'
 import { logToFile } from './log_to_file.mjs'
-import { getDefaultQuery } from './queries.mjs'
+import { getDefaultQuery, getDefaultQueryName, getDefaultQueryBody } from './queries.mjs'
 import { fileURLToPath } from 'url'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -192,31 +192,36 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId }) => 
                     )
                     data = existingData
                 } else {
-                    const query =
-                        v.query ||
-                        getDefaultQuery({
-                            surveyId,
-                            editionId,
-                            sectionId: page.id,
-                            questionId: b.id
-                        })
+                    // const query =
+                    //     wrapWithQuery(`${upperFirst(cleanIdString(v.id))}Query`, v.query) ||
+                    //     getDefaultQuery({
+                    //         surveyId,
+                    //         editionId,
+                    //         sectionId: page.id,
+                    //         questionId: b.id
+                    //     })
 
-                    logToFile(
-                        queryFileName,
-                        query.replace('internalAPI', 'query').replace('dataAPI', 'query'),
-                        {
-                            mode: 'overwrite',
-                            dirPath: queryDirPath,
-                            editionId
-                        }
-                    )
+                    const queryOptions = {
+                        surveyId,
+                        editionId,
+                        sectionId: page.id,
+                        questionId: b.id
+                    }
+                    const query = getDefaultQuery(queryOptions)
 
-                    const queryName = upperFirst(cleanIdString(v.id))
-                    const wrappedQuery = wrapWithQuery(`${queryName}Query`, query)
+                    const queryLog = `query ${getDefaultQueryName(
+                        queryOptions
+                    )} {  ${getDefaultQueryBody(queryOptions)}}`
+
+                    logToFile(queryFileName, queryLog, {
+                        mode: 'overwrite',
+                        dirPath: queryDirPath,
+                        editionId
+                    })
 
                     const result = await graphql(
                         `
-                            ${wrappedQuery}
+                            ${query}
                         `
                     )
                     data = result.data

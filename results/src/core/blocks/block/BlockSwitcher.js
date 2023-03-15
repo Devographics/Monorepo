@@ -8,18 +8,25 @@ import Block from 'core/blocks/block/BlockVariant'
 import get from 'lodash/get'
 import { usePageContext } from 'core/helpers/pageContext'
 import { BlockError } from 'core/blocks/block/BlockError'
-import dataFunctions from 'core/data_functions/index'
+
+const getDefaultDataPath = (surveyId, editionId, sectionId, questionId) =>
+    `dataAPI.surveys.${surveyId}.${editionId}.${sectionId}.${questionId}.responses.current_edition`
 
 const BlockSwitcher = ({ pageData, block, index, ...props }) => {
-    let blockData = block.dataPath && get(pageData, block.dataPath)
-    if (block.dataFunction) {
-        const dataFunction = dataFunctions[block.dataFunction]
-        blockData = dataFunction(blockData)
-    }
+    const pageContext = usePageContext()
+
+    const { currentSurvey, currentEdition } = pageContext
+    const dataPath =
+        block.dataPath ||
+        getDefaultDataPath(currentSurvey.id, currentEdition.id, pageContext.id, block.id)
+
+    console.log(dataPath)
+    let blockData = dataPath && get(pageData, dataPath)
+    console.log(blockData)
+
     const [customData, setCustomData] = useState()
 
     let blockKeys = block.keysPath && get(pageData, block.keysPath)
-    const pageContext = usePageContext()
     const { id, blockType, hidden } = block
     if (!blockRegistry[blockType]) {
         return (

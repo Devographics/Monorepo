@@ -12,7 +12,7 @@ import { useChartFilters } from 'core/blocks/filters/helpers'
 import { defaultOptions } from 'core/blocks/block/BlockUnitsSelector'
 import { useAllChartsOptions } from 'core/charts/hooks'
 
-const processBlockData = (data) => {
+const processBlockData = data => {
     return data && data.map(b => ({ ...b, label: getCountryName(b.id) }))
 }
 
@@ -29,14 +29,15 @@ const ParticipationByCountryBlock = ({
         chartNamespace = block.blockNamespace ?? block.id
     } = block
 
-    const { completion } = data
+    const { completion, buckets } = data
     const { total } = completion
 
     const [units, setUnits] = useState(defaultUnits)
 
-    const buckets = data.facets[0].buckets
-
-    const { chartFilters, setChartFilters, legends } = useChartFilters({block, options: { supportedModes: [MODE_GRID] }})
+    const { chartFilters, setChartFilters, legends } = useChartFilters({
+        block,
+        options: { supportedModes: [MODE_GRID] }
+    })
 
     const allChartsOptions = useAllChartsOptions()
 

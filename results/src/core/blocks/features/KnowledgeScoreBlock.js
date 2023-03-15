@@ -59,10 +59,13 @@ const KnowledgeScoreBlock = ({ block, data }) => {
         shortLabel: getLabel(n)
     }))
 
-    let buckets = data.facets[0].buckets
+    let buckets = data.buckets
     buckets = getChartData(buckets)
 
-    const { chartFilters, setChartFilters, legends } = useChartFilters({block, options: { supportedModes: [MODE_COMBINED] }})
+    const { chartFilters, setChartFilters, legends } = useChartFilters({
+        block,
+        options: { supportedModes: [MODE_COMBINED] }
+    })
 
     return (
         <Block

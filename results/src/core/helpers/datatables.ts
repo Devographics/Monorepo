@@ -1,4 +1,6 @@
-import { Entity, BlockUnits, BlockLegend, BucketItem, ResultsByYear } from 'core/types'
+import { Entity, BlockUnits, BlockLegend, BucketItem } from 'core/types'
+import { EditionData } from '@devographics/types'
+
 import { isPercentage } from 'core/helpers/units'
 import get from 'lodash/get'
 
@@ -90,7 +92,7 @@ export const getTableData = (params: TableParams): TableData => {
 
     const rows = data.map(row => {
         if (!row) {
-            return 
+            return
         }
         const firstColumn: TableDataCell = {
             id: 'label',
@@ -103,7 +105,8 @@ export const getTableData = (params: TableParams): TableData => {
 
         valueKeys.forEach(key => {
             const valueKey = typeof key === 'object' ? key.id : key
-            const valueIsPercentage = typeof key === 'object' ? key.isPercentage : isPercentage(valueKey)
+            const valueIsPercentage =
+                typeof key === 'object' ? key.isPercentage : isPercentage(valueKey)
             columns.push({
                 id: valueKey,
                 value: getValue(row, valueKey),
@@ -122,7 +125,7 @@ export const groupDataByYears = ({
     data = [],
     valueKeys = defaultValueKeys
 }: {
-    data: ResultsByYear[]
+    data: EditionData[]
     valueKeys?: string[] | TableHeading[]
     keys: string[]
 }) => {
@@ -148,7 +151,7 @@ export const getBucketValue = ({
     key,
     valueKey
 }: {
-    data: ResultsByYear[]
+    data: EditionData[]
     year: number
     key: number | string
     valueKey: BlockUnits

@@ -104,12 +104,6 @@ export interface FacetItem {
     completion: FacetCompletion
 }
 
-export interface ResultsByYear {
-  year: number
-  facets: FacetItem[]
-  completion: YearCompletion
-}
-
 /**
  * Used to represent survey question completion.
  */

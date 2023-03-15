@@ -4,7 +4,8 @@ import Block from 'core/blocks/block/BlockVariant'
 import ChartContainer from 'core/charts/ChartContainer'
 import HorizontalBarChart from 'core/charts/generic/HorizontalBarChart'
 import { getTableData } from 'core/helpers/datatables'
-import { ResultsByYear, BlockComponentProps } from 'core/types'
+import { BlockComponentProps } from 'core/types'
+import { EditionData } from '@devographics/types'
 import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
 import { MODE_GRID, MODE_FACET } from 'core/blocks/filters/constants'
 import { useChartFilters } from 'core/blocks/filters/helpers'
@@ -12,15 +13,8 @@ import { defaultOptions } from 'core/blocks/block/BlockUnitsSelector'
 import { useAllChartsOptions } from 'core/charts/hooks'
 
 export interface HorizontalBarBlockProps extends BlockComponentProps {
-    data: ResultsByYear
+    data: EditionData
 }
-
-/*
-
-Feed in data used by block and get out data usable by chart
-
-*/
-const processBlockData = data => data?.facets[0]?.buckets
 
 const HorizontalBarBlock = ({
     block,
@@ -39,11 +33,13 @@ const HorizontalBarBlock = ({
 
     const [units, setUnits] = useState(defaultUnits)
 
-    const { facets, completion } = data
-    const buckets = processBlockData(data)
+    const { buckets, completion } = data
     const { total } = completion
 
-    const { chartFilters, setChartFilters, legends } = useChartFilters({ block, options: { supportedModes: [MODE_GRID, MODE_FACET] }})
+    const { chartFilters, setChartFilters, legends } = useChartFilters({
+        block,
+        options: { supportedModes: [MODE_GRID, MODE_FACET] }
+    })
 
     const allChartsOptions = useAllChartsOptions()
     let unitsOptions = defaultOptions
@@ -85,7 +81,6 @@ const HorizontalBarBlock = ({
                 chartFilters={chartFilters}
                 setUnits={setUnits}
                 layout="grid"
-                processBlockData={processBlockData}
             >
                 <ChartContainer fit={false}>
                     <HorizontalBarChart
