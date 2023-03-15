@@ -114,11 +114,15 @@ export const loadFromGitHub = async () => {
 
 // when developing locally, load from local files
 export const loadLocally = async () => {
-    console.log(`-> loading entities locally`)
-
     const entities: Entity[] = []
 
+    if (!process.env.ENTITIES_DIR) {
+        throw new Error('ENTITIES_DIR env variable not defined')
+    }
     const entitiesDirPath = path.resolve(`../../${process.env.ENTITIES_DIR}/`)
+
+    console.log(`-> loading entities locally (${entitiesDirPath})`)
+
     const files = await readdir(entitiesDirPath)
     const yamlFiles = files.filter((f: String) => f.includes('.yml'))
 

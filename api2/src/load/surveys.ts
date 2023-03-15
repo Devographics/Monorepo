@@ -99,11 +99,15 @@ const excludeDirs = ['.git', '.DS_Store']
 
 // when developing locally, load from local files
 export const loadLocally = async () => {
-    console.log(`-> loading surveys locally`)
-
     const surveys: Survey[] = []
 
+    if (!process.env.SURVEYS_DIR) {
+        throw new Error('SURVEYS_DIR env variable not defined')
+    }
     const surveysDirPath = path.resolve(`../../${process.env.SURVEYS_DIR}/`)
+
+    console.log(`-> loading surveys locally (${surveysDirPath})`)
+
     const surveysDirs = await readdir(surveysDirPath)
 
     // loop over dir contents and fetch raw yaml files
