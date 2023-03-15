@@ -39,17 +39,16 @@ async function fetchJson<T = any>(key: string): Promise<T | null> {
 
 const prefix = "surveyform"
 
-const surveyKey = (prettySlug: SurveyEdition["prettySlug"], year: string) => `${prefix}_survey_${prettySlug}_${year}`
-
-const surveyContextKey = (slug: SurveySharedContext["slug"]) => `${prefix}_surveycontext_${slug}`
+const surveyKey = (surveyContextId: string, year: string) => `${prefix}_survey_${surveyContextId}_${year}`
+const surveyContextKey = (surveyContextId: string) => `${prefix}_surveycontext_${surveyContextId}`
 
 /**
  * @param slug Slug of the survey from URL
  * /!\ this is different from the github folder path, we need to replace "-" by "_"
  * @param year 
  */
-export async function fetchSurveyRedis(prettySlug: SurveyEdition["prettySlug"], year: string): Promise<SurveyEdition | null> {
-    const survey = fetchJson<SurveyEdition>(surveyKey(prettySlug, year))
+export async function fetchSurveyRedis(surveyContextId: SurveyEdition["surveyContextId"], year: string): Promise<SurveyEdition | null> {
+    const survey = fetchJson<SurveyEdition>(surveyKey(surveyContextId, year))
     return survey
 }
 export const storeSurveyRedis = (...args: Parameters<typeof surveyKey>) => storeRedis(surveyKey(...args))
@@ -63,9 +62,8 @@ export const fetchSurveysListRedis = async (): Promise<Array<SurveyEditionDescri
 }
 export const storeSurveysListRedis = storeRedis(surveyListKey)
 
-// prettySlug is the one from the URL
-export async function fetchSurveyContextRedis(slug: SurveySharedContext["slug"]): Promise<SurveySharedContext> {
-    const surveyContext = await fetchJson(surveyContextKey(slug))
+export async function fetchSurveyContextRedis(surveyContextId: SurveySharedContext["id"]): Promise<SurveySharedContext> {
+    const surveyContext = await fetchJson(surveyContextKey(surveyContextId))
     return surveyContext
 }
 export const storeSurveyContextRedis = (...args: Parameters<typeof surveyContextKey>) => storeRedis(surveyContextKey(...args))

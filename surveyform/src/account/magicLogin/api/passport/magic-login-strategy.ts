@@ -16,7 +16,6 @@ import {
   updateUserEmailHash,
   upgradeUser,
 } from "./userUtils";
-const debugMagic = debug("stateof:magiclink");
 
 /**
  * Compute the full magic link, with redirection parameter
@@ -57,7 +56,7 @@ async function sendMagicLink(
   // => this could enable a "temporary authentication" mode for new users to reduce friction in the future (we have to assess security yet)
   const foundUser = await findUserFromEmail(email);
 
-  const { anonymousId, prettySlug, year, locale } = req.body;
+  const { anonymousId, surveyContextId, year, locale } = req.body;
   if (!foundUser) {
     const user: {
       email: string;
@@ -71,9 +70,11 @@ async function sendMagicLink(
       isVerified: false,
     };
 
-    if (prettySlug || year) {
+    if (surveyContextId || year) {
       user.meta = {
-        surveySlug: prettySlug,
+        surveyContextId,
+        // @deprecated
+        surveySlug: surveyContextId.replaceAll("_", "-"),
         surveyYear: year,
       };
     }
@@ -94,7 +95,7 @@ async function sendMagicLink(
     email,
     // href = /callbackUrl?token=<the magic token>
     magicLink,
-    prettySlug,
+    surveyContextId,
     locale,
   });
   /*
@@ -104,29 +105,6 @@ async function sendMagicLink(
       });
       */
 }
-
-/*
-@see https://github.com/StateOfJS/StateOfJS-next2/issues/3
-This would allow a temporary access without clicking the magic link in some scnearios
-However this is not secure (someone could use your email and get your data until you verify your account)
-const getTemporaryUserMiddleware = (req, res, next) => {
-  const { email } = req.body;
-  if (!email) {
-    return res.status(400).end();
-  }
-  UserMongooseModel.findOne({ email }).then((userResult) => {
-    const user = userResult?.toObject();
-    if (!user) {
-      return res.status(401).end();
-    }
-    if (user.isVerified) {
-      // If user is already verified, they have to click the magic link
-      // Otherwise it would allow anyone to connect to their account
-      return res.status(401).end()
-    }
-  });
-};
-*/
 
 /**
  * Find the user and create it if it doesn't exist yet

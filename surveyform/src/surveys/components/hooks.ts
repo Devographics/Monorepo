@@ -9,7 +9,7 @@ export const useSurveyParams = (): { slug: string; year: string } => {
     throw new Error("Called useSurveyParams outside of survey page")
   }
   // TODO: we will need useParams instead, it's not yet released (07/12/2022)
-  const slug = survey.prettySlug! // TODO: or prettySlug??
+  const slug = survey.surveyContextId.replaceAll("_", "-")
   const year = survey.year + ""
   return { slug, year };
 };

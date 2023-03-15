@@ -21,7 +21,7 @@ export const revalidate = SURVEY_TIMEOUT_SECONDS;
 /*
 export async function generateStaticParams() {
   return surveys.map((s) => ({
-    slug: s.prettySlug,
+    slug: s.surveyContextId.replaceAll("_", "-"),
     year: String(s.year),
   }));
 }*/
@@ -42,7 +42,8 @@ export default async function SurveyLayout({
   initRedis(serverConfig().redisUrl);
 
   const { slug, year } = params;
-  const survey = await fetchSurvey(slug, year);
+  const surveyContextId = slug.replaceAll("-", "_");
+  const survey = await fetchSurvey(surveyContextId, year);
   if (!survey) {
     notFound();
   }
@@ -58,15 +59,14 @@ Next.js will fallback to trying to find a valid page path.
 If this error still happens in a few months (2023) open an issue with repro at Next.js.`);
     notFound();
   }
-  const localeSlug = survey.prettySlug!.replaceAll("-", "_");
+  const localeSlug = surveyContextId;
   const i18nContexts =
-    survey.prettySlug !== "demo-survey"
+    surveyContextId !== "demo_survey"
       ? [
           // We expect the root layout to load the common contexts
           // and define a LocaleContextProvider
           // => generic strings and survey specific will be merged automatically
           //...i18nCommonContexts,
-          // TODO: get this "survey context" value more reliably
           localeSlug,
           localeSlug + "_" + year,
         ]

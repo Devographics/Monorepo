@@ -22,7 +22,6 @@ async function githubBody(res: Response) {
     }
     return body
 }
-// content of a directory
 async function githubContent(res: Response) {
     const content = (await githubBody(res))?.content
     if (!content) {
@@ -59,18 +58,10 @@ async function fetchGithubJson<T = any>(url: string): Promise<T> {
     return body
 }
 
-/// One survey + questions
+// Surveys
 
-/**
- * @param slug Slug of the survey from URL
- * /!\ this is different from the github folder path, we need to replace "-" by "_"
- * @param year 
- */
-export async function fetchSurveyGithub(prettySlug: SurveyEdition["prettySlug"], year: string): Promise<SurveyEdition> {
-    if (!prettySlug) throw new Error("Called fetchSurveyGithub without a prettySlug")
-    // TODO: find a cleaner way to convert prettySLug to slug => do this before calling this function
-    const slug = prettySlug.replaceAll("-", "_")
-    const surveyFolder = `${slug}`
+export async function fetchSurveyGithub(surveyContextId: string, year: string): Promise<SurveyEdition> {
+    const surveyFolder = `${surveyContextId}`
     const yearlyFolder = `${surveyFolder}/${year}`
 
     const configUrl = `${contentsRoot}/${yearlyFolder}/config.yml`
@@ -79,32 +70,24 @@ export async function fetchSurveyGithub(prettySlug: SurveyEdition["prettySlug"],
     const configRes = await fetchGithub(configUrl)
     if (!configRes.ok) {
         console.debug("Fetched url", configUrl)
-        throw new Error(`Cannot fetch survey config for slug "${prettySlug}" and year "${year}", error ${configRes.status}"`)
+        throw new Error(`Cannot fetch survey config for survey context "${surveyContextId}" and year "${year}", error ${configRes.status}"`)
     }
     const questionsRes = await fetchGithub(`${contentsRoot}/${yearlyFolder}/questions.yml`)
     if (!questionsRes.ok) {
-        throw new Error(`Cannot fetch survey questions for slug "${prettySlug}" and year "${year}, error ${configRes.status}"`)
+        throw new Error(`Cannot fetch survey questions for survey context "${surveyContextId}" and year "${year}, error ${configRes.status}"`)
     }
     const commonConfigRes = await fetchGithub(commonConfigUrl)
     if (!commonConfigRes.ok) {
-        console.warn("No common config for survey", prettySlug)
+        console.warn("No common config for survey", surveyContextId)
     }
     const surveyConfig = await yamlAsJson(await githubContent(configRes))
     const questionsConfig = await yamlAsJson(await githubContent(questionsRes))
     const commonConfig = commonConfigRes ? await yamlAsJson(await githubContent(commonConfigRes)) : {}
     //console.debug({ surveyConfig, questionsConfig })
 
-    // @ts-ignore
     const survey = {
-        // @ts-ignore
         ...commonConfig,
-        // @ts-ignore
         ...surveyConfig,
-        // TODO: most survey don't seem to have a prettySlug anymore,
-        // this concept exists only in the surveyform
-        // TODO: this function is sometimes called with a prettySlug that already contains underscore
-        // while prettySlug is expected to contain dashes only
-        prettySlug: prettySlug.replaceAll("_", "-"),
         outline: questionsConfig,
         // TODO: merge the fields later than there, so that we don't have to update Redis cache everytime
         surveyContextId: commonConfig.id,
@@ -113,11 +96,9 @@ export async function fetchSurveyGithub(prettySlug: SurveyEdition["prettySlug"],
     return survey
 }
 
-/// Surveys list
-
 /**
  * Get the survey description, but not the questions
- * @param name Name on github /!\ this is different from the slug
+ * @param surveyFolder = surveyContextId state_of_js with underscores
  * @param year 
  * @returns 
  */
@@ -136,12 +117,11 @@ async function fetchSurveyDescription(surveyFolder: string, year: string): Promi
         ...commonConfig,
         // @ts-ignore
         ...surveyConfig,
-        // url friendly slug
-        prettySlug: surveyFolder.replaceAll("_", "-"),// slug,//safeSlug,
+        surveyContextId: commonConfig.id,
+        surveyEditionId: surveyConfig.id,
     }
     return survey
 }
-
 
 
 interface GhFileOrDir {
@@ -159,8 +139,11 @@ const isDir = (fileOrDir: GhFileOrDir) => fileOrDir.type === "dir"
 
 const yearThreshold = 2019
 
-async function fetchRecentYearsFolder(surveySlug: SurveyEdition["slug"]) {
-    const surveyPath = `${contentsRoot}/${surveySlug}`
+/**
+ * @param surveyContextId state_of_js
+ */
+async function fetchRecentYearsFolder(surveyContextId: string) {
+    const surveyPath = `${contentsRoot}/${surveyContextId}`
     const yearsFolders = await fetchGithubJson<Array<GhFileOrDir>>(surveyPath)
     const recentYearsFolders = yearsFolders
         .filter(isDir)
@@ -190,19 +173,13 @@ export const fetchSurveysListGithub = async (): Promise<Array<SurveyEditionDescr
         }
     }
     return surveys
-    /*   {
-           status: 2,
-               name: "Demo survey",
-                   year: 2022,
-                       slug: "demo_survey",
-                           prettySlug: "demo-survey",
-                               imageUrl: "https://devographics.github.io/surveys/state_of_graphql/2022/images/graphql2022.png"
-       }*/
 }
 
-// prettySlug is the one from the URL
-export async function fetchSurveyContextGithub(slug: SurveySharedContext["slug"]): Promise<SurveySharedContext> {
-    const surveyContextRes = await fetchGithub(`${contentsRoot}/${slug}/config.yml`)
+/**
+ * @param surveyContextId state_of_js
+ */
+export async function fetchSurveyContextGithub(surveyContextId: string): Promise<SurveySharedContext> {
+    const surveyContextRes = await fetchGithub(`${contentsRoot}/${surveyContextId}/config.yml`)
     const surveyContext = yamlAsJson<SurveySharedContext>(await githubBody(surveyContextRes))
     return surveyContext
 }

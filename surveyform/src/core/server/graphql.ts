@@ -38,6 +38,7 @@ Survey Type
 const surveyType = `type Survey {
   slug: String
   domain: String
+  surveyContextId: String
   prettySlug: String
   name: String 
   year: Float 

@@ -124,8 +124,8 @@ export interface SurveySharedContext {
   slug: string;
   /**
    * Slug with "dashes", used as the survey relative URL
-   * state-of-js
-   * Does NOT include the year
+   * = surveyContextId where _ are replaced by -
+   * @example state-of-js
    */
   prettySlug?: string;
   /**
@@ -221,7 +221,10 @@ interface SurveyEditionSpecifics {
  */
 export type SurveyEdition = SurveySharedContext & SurveyEditionSpecifics & { surveyContextId: SurveySharedContext["id"], surveyEditionId: SurveyEdition["id"] }
 
-export type SurveyEditionDescription = Pick<SurveyEdition, "id" | "surveyContextId" | "surveyEditionId"
+export type SurveyEditionDescription = Pick<SurveyEdition,
+  "id" // = surveyEditionId
+  | "surveyContextId"
+  | "surveyEditionId"
   | "name" | "status" | "prettySlug" | "slug" | "year" | "imageUrl"
   // in older surveys, "context" is state_of_js and slug is "js2022"
   // while in newer surveys slug is "state_of_js"

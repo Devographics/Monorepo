@@ -11,7 +11,7 @@ export default function SurveyPage({
 }) {
   return (
     <SurveyPageComponent /*NOTE: currently it's a client component 
-  so it gets the survey via client context slug={slug} year={year}*/
+  so it gets the survey via client context instead of props*/
     />
   );
 }

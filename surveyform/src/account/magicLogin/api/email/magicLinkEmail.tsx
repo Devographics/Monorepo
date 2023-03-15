@@ -47,18 +47,17 @@ const defaultSlug = "state-of-js";
 export const sendMagicLinkEmail = async ({
   email,
   magicLink,
-  prettySlug = defaultSlug,
+  surveyContextId,
   locale,
 }: //token,
 {
   email: string;
   magicLink: string;
-  prettySlug: string;
+  surveyContextId: string;
   locale: string;
   //token: string;
 }) => {
-  const slug = prettySlug.replace(/-/g, "_");
-  const survey = await fetchSurveyContext(slug);
+  const survey = await fetchSurveyContext(surveyContextId);
   const from =
     survey && survey.domain && `${survey.name} <login@mail.${survey.domain}>`;
 

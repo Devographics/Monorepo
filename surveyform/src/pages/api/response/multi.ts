@@ -46,6 +46,7 @@ export default async function responseHandler(req: NextApiRequest, res: NextApiR
           createdAt
           survey {
             slug
+            surveyContextId
             prettySlug
             name
             year

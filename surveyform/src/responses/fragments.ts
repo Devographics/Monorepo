@@ -26,6 +26,7 @@ export const LightweightResponseFragment = gql`
       year
       status
       slug
+      surveyContextId
       prettySlug
     }
   }
@@ -54,6 +55,7 @@ export const SurveyResponseFragment = (survey: SurveyEdition | SurveyEdition) =>
       year
       status
       slug
+      surveyContextId
       prettySlug
     }
     surveySlug
@@ -83,6 +85,7 @@ export const SurveyResponseFragment = (survey: SurveyEdition | SurveyEdition) =>
         year
         status
         slug
+        surveyContextId
         prettySlug
       }
       surveySlug

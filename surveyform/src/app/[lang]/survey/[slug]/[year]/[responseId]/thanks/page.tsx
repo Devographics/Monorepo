@@ -72,7 +72,8 @@ const ThanksPage = async ({
   // it's ok to fetch data again here after fetching in the layout
   // TODO: it seems we need to call this initialization code on all relevant pages/layouts
   initRedis(serverConfig().redisUrl);
-  const survey = await fetchSurvey(slug, year);
+  const surveyContextId = slug.replaceAll("-", "_");
+  const survey = await fetchSurvey(surveyContextId, year);
   if (!survey) {
     notFound();
   }

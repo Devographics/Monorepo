@@ -45,11 +45,16 @@ export const StandaloneMagicLoginForm = ({
 
     localStorage && localStorage.setItem("email", email);
 
+    const surveyContextSlug = params.get("slug");
+    if (!surveyContextSlug) {
+      throw new Error("No slug param");
+    }
+    const surveyContextId = surveyContextSlug.replaceAll("-", "_");
+
     const body = {
       destination: email,
-      // no need to wait for current user loading, because it's normally always faster than typing one's email and submitting
       anonymousId: user?._id,
-      prettySlug: params.get("slug"),
+      surveyContextId,
       year: params.get("year"),
       locale,
     };
@@ -100,7 +105,6 @@ const MagicLinkLoginForm = ({
 }) => {
   return (
     <form onSubmit={onSubmit} className="magic-link-login-form">
-      {/* <span>Your Email</span> */}
       <FormComponentEmail
         inputProperties={{
           placeholder,

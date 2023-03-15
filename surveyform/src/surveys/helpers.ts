@@ -36,10 +36,9 @@ export const getSurveyFieldNames = (survey: SurveyEdition | SurveyEdition) => {
 
 
 function getSurveyPathSegments(survey: SurveyEditionDescription): Array<string> {
-  const { year, prettySlug } = survey;
-  // console.log("SURVEY year", { year, prettySlug }, response)
+  const { year, surveyContextId } = survey;
   const prefixSegment = "/survey";
-  const slugSegment = prettySlug!;
+  const slugSegment = surveyContextId.replaceAll("_", "-");
   const yearSegment = year! + "";
   const pathSegments = [prefixSegment, slugSegment, yearSegment];
   return pathSegments

@@ -18,11 +18,11 @@ export default async function saveSurveyResponseHandler(req: NextApiRequest, res
         return res.status(405)
     }
     // parameters
-    const surveySlug = req.query["surveySlug"] as string
-    if (!surveySlug) throw new Error("No survey slug, can't start survey")
+    const surveyContextId = req.query["surveyContextId"] as string
+    if (!surveyContextId) throw new Error("No survey slug, can't start survey")
     const surveyYear = req.query["surveyYear"] as string
     if (!surveyYear) throw new Error("No survey year, can't start survey")
-    const survey = await fetchSurvey(surveySlug, surveyYear)
+    const survey = await fetchSurvey(surveyContextId, surveyYear)
 
     // TODO: this code used to be a client-side graphql query
     // we reuse the same call temporarily to facilitate moving out of graphql
