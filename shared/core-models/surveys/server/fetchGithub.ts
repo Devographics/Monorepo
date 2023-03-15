@@ -5,6 +5,7 @@
 
 import yaml from "js-yaml"
 import { SurveyEdition, SurveyEditionDescription, SurveySharedContext } from "../typings";
+import { fetchSurveysList, getSurveyEditionId } from "./fetchSurveys";
 
 const ghApiReposRoot = "https://api.github.com/repos"
 
@@ -58,11 +59,19 @@ async function fetchGithubJson<T = any>(url: string): Promise<T> {
     return body
 }
 
+async function getEditionFolder(surveyContextId: string, year: string) {
+    const list = await fetchSurveysList(true)
+    const survey = list.find(s => s.surveyContextId === surveyContextId && "" + s.year === year)
+    if (!survey) throw new Error(`Can't find survey ${surveyContextId} ${year}`)
+    return survey.surveyEditionId
+}
+
 // Surveys
 
 export async function fetchSurveyGithub(surveyContextId: string, year: string): Promise<SurveyEdition> {
     const surveyFolder = `${surveyContextId}`
-    const yearlyFolder = `${surveyFolder}/${year}`
+    const editionFolder = await getEditionFolder(surveyContextId, year)
+    const yearlyFolder = `${surveyFolder}/${editionFolder}`
 
     const configUrl = `${contentsRoot}/${yearlyFolder}/config.yml`
     const commonConfigUrl = `${contentsRoot}/${surveyFolder}/config.yml`
@@ -102,10 +111,10 @@ export async function fetchSurveyGithub(surveyContextId: string, year: string): 
  * @param year 
  * @returns 
  */
-async function fetchSurveyDescription(surveyFolder: string, year: string): Promise<SurveyEdition> {
-    const yearlyFolder = `${surveyFolder}/${year}`
+async function fetchSurveyDescription(surveyContextId: string, surveyEditionId: string): Promise<SurveyEdition> {
+    const yearlyFolder = `${surveyContextId}/${surveyEditionId}`
     const configUrl = `${contentsRoot}/${yearlyFolder}/config.yml`
-    const commonConfigUrl = `${contentsRoot}/${surveyFolder}/config.yml`
+    const commonConfigUrl = `${contentsRoot}/${surveyContextId}/config.yml`
 
     const configRes = await fetchGithub(configUrl)
     const commonConfigRes = await fetchGithub(commonConfigUrl)
@@ -118,7 +127,7 @@ async function fetchSurveyDescription(surveyFolder: string, year: string): Promi
         // @ts-ignore
         ...surveyConfig,
         surveyContextId: commonConfig.id,
-        surveyEditionId: surveyConfig.id,
+        surveyEditionId: getSurveyEditionId(surveyConfig),
     }
     return survey
 }
@@ -142,18 +151,12 @@ const yearThreshold = 2019
 /**
  * @param surveyContextId state_of_js
  */
-async function fetchRecentYearsFolder(surveyContextId: string) {
+async function fetchEditionFolders(surveyContextId: string) {
     const surveyPath = `${contentsRoot}/${surveyContextId}`
     const yearsFolders = await fetchGithubJson<Array<GhFileOrDir>>(surveyPath)
-    const recentYearsFolders = yearsFolders
+    const editionFolders = yearsFolders
         .filter(isDir)
-        .filter(dir => {
-            //const year = parseInt(dir.name)
-            //if (isNaN(year)) return false
-            //if (year < yearThreshold) return false
-            return true
-        })
-    return recentYearsFolders
+    return editionFolders
 
 }
 
@@ -164,10 +167,10 @@ export const fetchSurveysListGithub = async (): Promise<Array<SurveyEditionDescr
 
     let surveys: Array<SurveyEdition> = []
     for (const surveyFolder of surveysFolders) {
-        const recentYearsFolders = await fetchRecentYearsFolder(surveyFolder.name)
-        for (const yearFolder of recentYearsFolders) {
+        const editionFolders = await fetchEditionFolders(surveyFolder.name)
+        for (const editionFolder of editionFolders) {
             // TODO: we load too much data here
-            const survey = await fetchSurveyDescription(surveyFolder.name, yearFolder.name)
+            const survey = await fetchSurveyDescription(surveyFolder.name, editionFolder.name)
             if (survey?.year && survey.year >= yearThreshold) {
                 surveys.push(survey)
             }
