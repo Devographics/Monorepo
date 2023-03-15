@@ -20,9 +20,7 @@ const BlockSwitcher = ({ pageData, block, index, ...props }) => {
         block.dataPath ||
         getDefaultDataPath(currentSurvey.id, currentEdition.id, pageContext.id, block.id)
 
-    console.log(dataPath)
     let blockData = dataPath && get(pageData, dataPath)
-    console.log(blockData)
 
     const [customData, setCustomData] = useState()
 

@@ -28,16 +28,12 @@ export interface ParsedQuestion extends Omit<Question, 'id'> {
 
     typeDef?: string
 
-    // resolverMap?: ResolverMap
-
     isGlobal?: boolean
 
     fieldTypeName: string
     filterTypeName?: string
     optionTypeName?: string
     enumTypeName?: string
-
-    // transformFunction?: TransformFunction
 }
 
 export interface QuestionTemplateOutput extends Omit<Question, 'id'> {

@@ -64,15 +64,17 @@ query {
                             id
                             questions {
                             entity {
+                                id
                                 name
                                 nameClean
                                 nameHtml
                             }
                             options {
                                 entity {
-                                name
-                                nameClean
-                                nameHtml
+                                    id
+                                    name
+                                    nameClean
+                                    nameHtml
                                 }
                                 id
                             }
@@ -87,13 +89,18 @@ query {
 }`
 }
 
-export const getDefaultQueryBody = ({ surveyId, editionId, sectionId, questionId }) => `
+const unquote = s => s.replace(/"([^"]+)":/g, '$1:')
+export const getDefaultQueryBody = ({ surveyId, editionId, sectionId, questionId, parameters }) => {
+    const parametersString = parameters
+        ? `(parameters: ${unquote(JSON.stringify(parameters))})`
+        : ''
+    return `
 surveys {
   ${surveyId} {
     ${editionId} {
       ${sectionId} {
         ${questionId} {
-          responses {
+          responses${parametersString} {
             current_edition {
               completion {
                 count
@@ -114,6 +121,7 @@ surveys {
   }
 }
 `
+}
 
 export const getDefaultQueryName = options =>
     `${options.editionId}${capitalize(options.questionId)}Query`

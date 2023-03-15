@@ -21,6 +21,7 @@ import {
     HORIZONTAL
 } from 'core/charts/hooks'
 import { CHART_MODE_DEFAULT } from 'core/blocks/filters/constants'
+import { useEntities } from 'core/helpers/entities'
 
 export const margin = {
     top: 40,
@@ -118,6 +119,8 @@ const HorizontalBarChart = ({
     const theme = useTheme()
     const { translate } = useI18n()
 
+    const entities = useEntities()
+
     const keys = useChartKeys({ units, facet, showDefaultSeries })
 
     const colorDefs = useColorDefs({ orientation: HORIZONTAL })
@@ -202,7 +205,7 @@ const HorizontalBarChart = ({
                             <TickItem
                                 i18nNamespace={i18nNamespace}
                                 shouldTranslate={translateData}
-                                entity={buckets.find(b => b.id === tick.value)?.entity}
+                                entity={entities.find(e => e?.id === tick.value)}
                                 label={buckets.find(b => b.id === tick.value)?.label}
                                 itemCount={buckets.length}
                                 {...tick}
@@ -231,22 +234,6 @@ const HorizontalBarChart = ({
             />
         </div>
     )
-}
-
-HorizontalBarChart.propTypes = {
-    total: PropTypes.number.isRequired,
-    buckets: PropTypes.arrayOf(
-        PropTypes.shape({
-            id: PropTypes.string.isRequired,
-            count: PropTypes.number.isRequired,
-            percentage: PropTypes.number
-        })
-    ),
-    i18nNamespace: PropTypes.string.isRequired,
-    translateData: PropTypes.bool,
-    mode: PropTypes.oneOf(['absolute', 'relative']).isRequired,
-    units: PropTypes.oneOf(['count', 'percentage', 'percentage_survey']).isRequired,
-    colorVariant: PropTypes.oneOf(['primary', 'secondary'])
 }
 
 export default HorizontalBarChart

@@ -88,37 +88,14 @@
         template: demographics
         blockType: ParticipationByCountryBlock
         variables:
-            options: { limit: 20 }
-            fixedIds:
-                [
-                    'USA',
-                    'DEU',
-                    'FRA',
-                    'GBR',
-                    'IND',
-                    'CAN',
-                    'POL',
-                    'BRA',
-                    'ESP',
-                    'NLD',
-                    'RUS',
-                    'AUS',
-                    'SWE',
-                    'ITA',
-                    'UKR',
-                    'CZE',
-                    'NOR',
-                    'CHN',
-                    'BEL',
-                    'MEX'
-                ]
+            parameters: { limit: 20 }
 
       - id: locale
         template: demographics
         blockType: HorizontalBarBlock
         translateData: true
         variables:
-            options: { cutoff: 20 }
+            parameters: { cutoff: 20 }
 
       - id: hint_hint
         template: hint
@@ -141,7 +118,8 @@
               variables:
                   fieldId: years_of_experience
                   facetId: yearly_salary
-                  options: { facetSort: { order: ___asc___, property: mean }, facetMinCount: 100 }
+                  parameters:
+                      { facetSort: { order: ___asc___, property: mean }, facetMinCount: 100 }
 
       - id: company_size
         template: demographics
@@ -159,7 +137,8 @@
               variables:
                   fieldId: higher_education_degree
                   facetId: gender
-                  options: { facetSort: { order: ___asc___, property: mean }, facetMinCount: 100 }
+                  parameters:
+                      { facetSort: { order: ___asc___, property: mean }, facetMinCount: 100 }
 
       - id: yearly_salary
         template: demographics
@@ -171,7 +150,8 @@
               variables:
                   fieldId: yearly_salary
                   facetId: gender
-                  options: { facetSort: { order: ___desc___, property: mean }, facetMinCount: 100 }
+                  parameters:
+                      { facetSort: { order: ___desc___, property: mean }, facetMinCount: 100 }
             - id: yearly_salary_by_country
               blockNamespace: user_info
               tabId: tabs.by_country
@@ -179,7 +159,8 @@
               variables:
                   fieldId: yearly_salary
                   facetId: country
-                  options: { facetSort: { order: ___desc___, property: mean }, facetMinCount: 100 }
+                  parameters:
+                      { facetSort: { order: ___desc___, property: mean }, facetMinCount: 100 }
             # - id: yearly_salary_by_degree
             #   blockNamespace: user_info
             #   tabId: tabs.by_degree
@@ -187,7 +168,7 @@
             #   variables:
             #     fieldId: yearly_salary
             #     facetId: higher_education_degree
-            #     options: {facetSort: {order: ___desc___, property: mean}, facetMinCount: 100}
+            #     parameters: {facetSort: {order: ___desc___, property: mean}, facetMinCount: 100}
             # - id: yearly_salary_by_experience
             #   blockNamespace: user_info
             #   tabId: tabs.by_experience
@@ -195,13 +176,12 @@
             #   variables:
             #     fieldId: yearly_salary
             #     facetId: years_of_experience
-            #     options: {facetSort: {order: ___desc___, property: mean}, facetMinCount: 100}
+            #     parameters: {facetSort: {order: ___desc___, property: mean}, facetMinCount: 100}
 
       - id: source
-        template: source
-        dataFunction: cleanUpSources
+        template: demographics
         variables:
-            options: { limit: 20 }
+            parameters: { limit: 20 }
 
       - id: gender
         template: demographics
@@ -213,7 +193,7 @@
               variables:
                   fieldId: gender
                   facetId: country
-                  options:
+                  parameters:
                       {
                           facetSort: { order: ___desc___, property: mean },
                           limit: 11,
@@ -233,7 +213,7 @@
               variables:
                   fieldId: race_ethnicity
                   facetId: years_of_experience
-                  options:
+                  parameters:
                       {
                           facetSort: { order: ___asc___, property: mean },
                           limit: 11,
@@ -253,7 +233,7 @@
               units: count
               translateData: true
               variables:
-                  options: { cutoff: 10 }
+                  parameters: { cutoff: 10 }
 
       - id: user_info_resources
         items: [renderatl]
@@ -849,7 +829,7 @@
       #               defaultUnits: count
       #               variables:
       #                   fieldId: tools_others
-      #                   options: { limit: 15 }
+      #                   parameters: { limit: 15 }
 
       #       - id: theo_browne
       #         template: picks
@@ -870,7 +850,7 @@
       #               defaultUnits: count
       #               variables:
       #                   fieldId: tools_others
-      #                   options: { limit: 5 }
+      #                   parameters: { limit: 5 }
 
       #       - id: data_visualization
       #         year: 2022
@@ -886,7 +866,7 @@
       #               defaultUnits: count
       #               variables:
       #                   fieldId: tools_others
-      #                   options: { limit: 5 }
+      #                   parameters: { limit: 5 }
 
       #       - id: data_fetching
       #         year: 2022
@@ -902,7 +882,7 @@
       #               defaultUnits: count
       #               variables:
       #                   fieldId: tools_others
-      #                   options: { limit: 10 }
+      #                   parameters: { limit: 10 }
 
       #       - id: backend_frameworks
       #         year: 2022
@@ -918,7 +898,7 @@
       #               defaultUnits: count
       #               variables:
       #                   fieldId: tools_others
-      #                   options: { limit: 10 }
+      #                   parameters: { limit: 10 }
 
       #       - id: utilities
       #         tabId: tabs.main_answers
@@ -933,7 +913,7 @@
       #               defaultUnits: count
       #               variables:
       #                   fieldId: tools_others
-      #                   options: { limit: 10 }
+      #                   parameters: { limit: 10 }
 
       #       - id: sharing_hint
       #         template: hint
@@ -951,7 +931,7 @@
       #               defaultUnits: count
       #               variables:
       #                   fieldId: tools_others
-      #                   options: { limit: 10 }
+      #                   parameters: { limit: 10 }
 
       #       - id: edge_runtimes
       #         tabId: tabs.main_answers
@@ -966,7 +946,7 @@
       #               defaultUnits: count
       #               variables:
       #                   fieldId: tools_others
-      #                   options: { limit: 10 }
+      #                   parameters: { limit: 10 }
 
       #       - id: javascript_flavors
       #         tabId: tabs.main_answers
@@ -981,7 +961,7 @@
       #               defaultUnits: count
       #               variables:
       #                   fieldId: tools_others
-      #                   options: { limit: 10 }
+      #                   parameters: { limit: 10 }
 
       #       - id: ben_holmes
       #         template: picks
@@ -1001,7 +981,7 @@
       #               defaultUnits: count
       #               variables:
       #                   fieldId: tools_others
-      #                   options: { limit: 15 }
+      #                   parameters: { limit: 15 }
 
       # - id: bracket_hint
       #   template: hint
@@ -1064,7 +1044,7 @@
 #           template: multiple_options
 #           variables:
 #             fieldId: usage
-#             options: { limit: 10 }
+#             parameters: { limit: 10 }
 
 #     - id: industry_sector
 #       blockNamespace: usage
@@ -1084,7 +1064,7 @@
 #           translateData: true
 #           variables:
 #             fieldId: usage
-#             options: { limit: 15 }
+#             parameters: { limit: 15 }
 
 #     - id: js_app_patterns
 #       blockNamespace: usage
@@ -1104,157 +1084,156 @@
 #           translateData: true
 #           variables:
 #             fieldId: usage
-#             options: { limit: 15 }
+#             parameters: { limit: 15 }
 
 #     - id: usage_resources
 #       items: [fm-algorithms, fm-js-patterns]
 #       template: recommended_resources
 
-# - id: resources
-#   path: /resources
-#   blocks:
-#     - template: page_introduction
+- id: resources
+  path: /resources
+  blocks:
+      - template: page_introduction
 
-#     - id: first_steps
-#       blockNamespace: resources
-#       chartNamespace: first_steps
-#       tabId: tabs.main_answers
-#       template: multiple_options
-#       translateData: true
-#       variables:
-#         fieldId: resources
-#       variants:
-#         - id: first_steps_others
-#           defaultUnits: count
-#           blockNamespace: resources
-#           chartNamespace: first_steps
-#           tabId: tabs.other_answers
-#           template: multiple_options
-#           translateData: true
-#           variables:
-#             fieldId: resources
-#             options: { limit: 10 }
+      - id: first_steps
+        blockNamespace: resources
+        chartNamespace: first_steps
+        tabId: tabs.main_answers
+        template: multiple_options
+        translateData: true
+        variables:
+            fieldId: resources
+        variants:
+            - id: first_steps_others
+              defaultUnits: count
+              blockNamespace: resources
+              chartNamespace: first_steps
+              tabId: tabs.other_answers
+              template: multiple_options
+              translateData: true
+              variables:
+                  fieldId: resources
+                  parameters: { limit: 10 }
 
-#     - id: shaundai_person
-#       template: picks
-#       variables:
-#         url: https://sarahdrasnerdesign.com/
+      - id: shaundai_person
+        template: picks
+        variables:
+            url: https://sarahdrasnerdesign.com/
 
-#     - id: blogs_news_magazines
-#       blockNamespace: resources
-#       chartNamespace: blogs_news_magazines
-#       tabId: tabs.main_answers
-#       template: multiple_options
-#       dataFunction: removePersonalBlogs
-#       variables:
-#         fieldId: resources
-#       variants:
-#         - id: blogs_news_magazines_others
-#           defaultUnits: count
-#           blockNamespace: resources
-#           chartNamespace: blogs_news_magazines
-#           tabId: tabs.other_answers
-#           template: multiple_options
-#           variables:
-#             fieldId: resources
-#             options: { limit: 15 }
+      - id: blogs_news_magazines
+        blockNamespace: resources
+        chartNamespace: blogs_news_magazines
+        tabId: tabs.main_answers
+        template: multiple_options
+        dataFunction: removePersonalBlogs
+        variables:
+            fieldId: resources
+        variants:
+            - id: blogs_news_magazines_others
+              defaultUnits: count
+              blockNamespace: resources
+              chartNamespace: blogs_news_magazines
+              tabId: tabs.other_answers
+              template: multiple_options
+              variables:
+                  fieldId: resources
+                  parameters: { limit: 15 }
 
-#     - id: sites_courses
-#       blockNamespace: resources
-#       chartNamespace: sites_courses
-#       tabId: tabs.main_answers
-#       template: multiple_options
-#       variables:
-#         fieldId: resources
-#       variants:
-#         - id: sites_courses_others
-#           defaultUnits: count
-#           blockNamespace: resources
-#           chartNamespace: sites_courses
-#           tabId: tabs.other_answers
-#           template: multiple_options
-#           variables:
-#             fieldId: resources
-#             options: { limit: 15 }
+      - id: sites_courses
+        blockNamespace: resources
+        chartNamespace: sites_courses
+        tabId: tabs.main_answers
+        template: multiple_options
+        variables:
+            fieldId: resources
+        variants:
+            - id: sites_courses_others
+              defaultUnits: count
+              blockNamespace: resources
+              chartNamespace: sites_courses
+              tabId: tabs.other_answers
+              template: multiple_options
+              variables:
+                  fieldId: resources
+                  parameters: { limit: 15 }
 
-#     - id: tyler_mcginnis
-#       template: picks
-#       variables:
-#         url: https://tanstack.com/
+      - id: tyler_mcginnis
+        template: picks
+        variables:
+            url: https://tanstack.com/
 
-#     - id: podcasts
-#       blockNamespace: resources
-#       chartNamespace: podcasts
-#       tabId: tabs.main_answers
-#       template: multiple_options
-#       variables:
-#         fieldId: resources
-#       variants:
-#         - id: podcasts_others
-#           defaultUnits: count
-#           blockNamespace: resources
-#           chartNamespace: podcasts
-#           tabId: tabs.other_answers
-#           template: multiple_options
-#           variables:
-#             fieldId: resources
-#             options: { limit: 15 }
+      - id: podcasts
+        blockNamespace: resources
+        chartNamespace: podcasts
+        tabId: tabs.main_answers
+        template: multiple_options
+        variables:
+            fieldId: resources
+        variants:
+            - id: podcasts_others
+              defaultUnits: count
+              blockNamespace: resources
+              chartNamespace: podcasts
+              tabId: tabs.other_answers
+              template: multiple_options
+              variables:
+                  fieldId: resources
+                  parameters: { limit: 15 }
 
-#     - id: video_creators
-#       filters: [filters]
-#       blockType: PeopleBlock
-#       blockNamespace: resources
-#       chartNamespace: video_creators
-#       tabId: tabs.main_answers
-#       template: multiple_options
-#       variables:
-#         fieldId: resources
-#       variants:
-#         - id: video_creators_others
-#           blockType: PeopleBlock
-#           defaultUnits: count
-#           blockNamespace: resources
-#           chartNamespace: video_creators
-#           tabId: tabs.other_answers
-#           template: multiple_options
-#           variables:
-#             fieldId: resources
-#             options: { limit: 15 }
+      - id: video_creators
+        filters: [filters]
+        blockType: PeopleBlock
+        blockNamespace: resources
+        chartNamespace: video_creators
+        tabId: tabs.main_answers
+        template: multiple_options
+        variables:
+            fieldId: resources
+        variants:
+            - id: video_creators_others
+              blockType: PeopleBlock
+              defaultUnits: count
+              blockNamespace: resources
+              chartNamespace: video_creators
+              tabId: tabs.other_answers
+              template: multiple_options
+              variables:
+                  fieldId: resources
+                  parameters: { limit: 15 }
 
-#     - id: people_others
-#       filters: [filters]
-#       defaultUnits: count
-#       blockNamespace: resources
-#       chartNamespace: people
-#       template: multiple_options
-#       blockType: PeopleBlock
-#       variables:
-#         options: { limit: 50 }
-#         fieldId: resources
+      - id: people_others
+        filters: [filters]
+        defaultUnits: count
+        blockNamespace: resources
+        chartNamespace: people
+        template: multiple_options
+        blockType: PeopleBlock
+        variables:
+            parameters: { limit: 50 }
+            fieldId: resources
 
-#     - id: other_surveys
-#       defaultUnits: count
-#       blockNamespace: resources
-#       chartNamespace: other_surveys
-#       tabId: tabs.main_answers
-#       template: multiple_options
-#       variables:
-#         fieldId: resources
-#       variants:
-#         - id: other_surveys_others
-#           defaultUnits: count
-#           blockNamespace: resources
-#           chartNamespace: other_surveys
-#           tabId: tabs.other_answers
-#           template: multiple_options
-#           variables:
-#             options: { cutoff: 5 }
-#             fieldId: resources
+      - id: other_surveys
+        defaultUnits: count
+        blockNamespace: resources
+        chartNamespace: other_surveys
+        tabId: tabs.main_answers
+        template: multiple_options
+        variables:
+            fieldId: resources
+        variants:
+            - id: other_surveys_others
+              defaultUnits: count
+              blockNamespace: resources
+              chartNamespace: other_surveys
+              tabId: tabs.other_answers
+              template: multiple_options
+              variables:
+                  parameters: { cutoff: 5 }
+                  fieldId: resources
 
-#     - id: resources_resources
-#       items: [reactathon]
-#       template: recommended_resources
-
+      - id: resources_resources
+        items: [reactathon]
+        template: recommended_resources
 # - id: opinions
 #   path: /opinions
 #   blocks:
@@ -1295,7 +1274,7 @@
 #           tabId: tabs.other_answers
 #           template: multiple_options
 #           variables:
-#             options: { cutoff: 5 }
+#             parameters: { cutoff: 5 }
 #             fieldId: opinions_others
 
 #     - id: top_currently_missing_from_js
@@ -1316,7 +1295,7 @@
 #           tabId: tabs.other_answers
 #           template: multiple_options
 #           variables:
-#             options: { cutoff: 5 }
+#             parameters: { cutoff: 5 }
 #             fieldId: opinions_others
 
 #     - template: happiness
@@ -1441,15 +1420,6 @@
 #       blockType: AboutBlock
 #       wrapBlock: false
 #       disableExport: true
-
-# # - id: how_to_help
-# #   path: /how_to_help
-# #   blocks:
-
-# #     - id: how_to_help_contents
-# #       blockType: HowToHelpBlock
-# #       wrapBlock: false
-# #       disableExport: true
 
 # - id: support
 #   path: /support

@@ -6,6 +6,7 @@ import ChartContainer from 'core/charts/ChartContainer'
 import VerticalBarChart from 'core/charts/generic/VerticalBarChart'
 import { usePageContext } from 'core/helpers/pageContext'
 import { useLegends } from 'core/helpers/useBucketKeys'
+import { useOptions } from 'core/helpers/options'
 // import T from 'core/i18n/T'
 import { BlockComponentProps, BlockUnits } from 'core/types'
 import { EditionData } from '@devographics/types'
@@ -55,6 +56,7 @@ const VerticalBarBlock = ({
     } = block
 
     const context = usePageContext()
+    console.log(context)
     const { width, currentEdition } = context
     const { year: currentYear } = currentEdition
 
@@ -62,7 +64,9 @@ const VerticalBarBlock = ({
     const units = controlledUnits || uncontrolledUnits
 
     const addNoAnswer = units === 'percentage_survey'
-    const bucketKeys = keys && useLegends(block, keys, undefined, addNoAnswer)
+
+    const chartOptions = useOptions(block.id)
+    const bucketKeys = chartOptions && useLegends(block, chartOptions, undefined, addNoAnswer)
 
     const { completion } = data
 

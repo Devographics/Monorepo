@@ -192,32 +192,35 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId }) => 
                     )
                     data = existingData
                 } else {
-                    // const query =
-                    //     wrapWithQuery(`${upperFirst(cleanIdString(v.id))}Query`, v.query) ||
-                    //     getDefaultQuery({
-                    //         surveyId,
-                    //         editionId,
-                    //         sectionId: page.id,
-                    //         questionId: b.id
-                    //     })
-
                     const queryOptions = {
                         surveyId,
                         editionId,
                         sectionId: page.id,
-                        questionId: b.id
+                        questionId: v.id,
+                        parameters: v?.variables?.parameters
                     }
-                    const query = getDefaultQuery(queryOptions)
 
-                    const queryLog = `query ${getDefaultQueryName(
-                        queryOptions
-                    )} {  ${getDefaultQueryBody(queryOptions)}}`
+                    const query = v.query
+                        ? wrapWithQuery(`${upperFirst(cleanIdString(v.id))}Query`, v.query)
+                        : getDefaultQuery({
+                              surveyId,
+                              editionId,
+                              sectionId: page.id,
+                              questionId: b.id
+                          })
 
-                    logToFile(queryFileName, queryLog, {
-                        mode: 'overwrite',
-                        dirPath: queryDirPath,
-                        editionId
-                    })
+                    if (query.includes('dataAPI')) {
+                        // only log out queries to dataAPI, not to internalAPI
+                        const queryLog = `query ${getDefaultQueryName(
+                            queryOptions
+                        )} {  ${getDefaultQueryBody(queryOptions)}}`
+
+                        logToFile(queryFileName, queryLog, {
+                            mode: 'overwrite',
+                            dirPath: queryDirPath,
+                            editionId
+                        })
+                    }
 
                     const result = await graphql(
                         `

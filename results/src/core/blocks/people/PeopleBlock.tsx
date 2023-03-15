@@ -78,7 +78,6 @@ export const getRelevantServices = allEntities => {
     })
 }
 
-const processBlockData = data => data.facets[0].buckets
 const PeopleBlock = ({ block, data, controlledUnits, isCustom }: PeopleBlockProps) => {
     const {
         id,
@@ -91,8 +90,7 @@ const PeopleBlock = ({ block, data, controlledUnits, isCustom }: PeopleBlockProp
 
     const [units, setUnits] = useState(defaultUnits)
 
-    const { facets, completion } = data
-    const buckets = processBlockData(data)
+    const { buckets, completion } = data
     const { total } = completion
 
     const allEntities = buckets.map(b => b.entity)
@@ -127,7 +125,6 @@ const PeopleBlock = ({ block, data, controlledUnits, isCustom }: PeopleBlockProp
                 block={block}
                 chartFilters={chartFilters}
                 layout="grid"
-                processBlockData={processBlockData}
             >
                 <PeopleChart buckets={buckets} units={units} />
             </DynamicDataLoader>
