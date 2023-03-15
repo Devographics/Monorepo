@@ -68,7 +68,6 @@ export const fetchSurveysList = async (keepDemo?: boolean): Promise<Array<Survey
     )
     // NOTE: we cannot systematically override "NODE_ENV" with test,
     // so we have to use a custom node_env variable NEXT_PUBLIC_NODE_ENV
-    console.log("ENV", process.env.NODE_ENV, process.env.NEXT_PUBLIC_NODE_ENV)
     if (!keepDemo) {
         surveys = surveys.filter(s => s.surveyContextId !== "demo_survey")
     }

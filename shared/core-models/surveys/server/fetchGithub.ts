@@ -148,9 +148,9 @@ async function fetchRecentYearsFolder(surveyContextId: string) {
     const recentYearsFolders = yearsFolders
         .filter(isDir)
         .filter(dir => {
-            const year = parseInt(dir.name)
-            if (isNaN(year)) return false
-            if (year < yearThreshold) return false
+            //const year = parseInt(dir.name)
+            //if (isNaN(year)) return false
+            //if (year < yearThreshold) return false
             return true
         })
     return recentYearsFolders
@@ -159,7 +159,6 @@ async function fetchRecentYearsFolder(surveyContextId: string) {
 
 export const fetchSurveysListGithub = async (): Promise<Array<SurveyEditionDescription>> => {
     const content = await fetchGithubJson<Array<GhFileOrDir>>(contentsRoot)
-    console.log("content", content)
     const surveysFolders = content
         .filter(fileOrDir => fileOrDir.type === "dir")
 
@@ -169,7 +168,9 @@ export const fetchSurveysListGithub = async (): Promise<Array<SurveyEditionDescr
         for (const yearFolder of recentYearsFolders) {
             // TODO: we load too much data here
             const survey = await fetchSurveyDescription(surveyFolder.name, yearFolder.name)
-            surveys.push(survey)
+            if (survey?.year && survey.year >= yearThreshold) {
+                surveys.push(survey)
+            }
         }
     }
     return surveys
