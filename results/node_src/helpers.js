@@ -8,6 +8,7 @@ const fetch = require('node-fetch')
 const yaml = require('js-yaml')
 const { TwitterApi } = require('twitter-api-v2')
 const { logToFile } = require('./log_to_file.js')
+const { getDefaultQuery } = require('./queries.js')
 
 const fsPromises = fs.promises
 /*
@@ -140,9 +141,9 @@ exports.getExistingData = async ({ dataFileName, dataFilePath, baseUrl }) => {
     return data
 }
 
-exports.getConfigLocations = config => ({
-    localPath: `./../../surveys/${config.slug}/${config.year}`,
-    url: `https://devographics.github.io/surveys/${config.slug}/${config.year}`
+exports.getDataLocations = (surveyId, editionId) => ({
+    localPath: `./../../surveys/${surveyId}/${editionId}`,
+    url: `https://devographics.github.io/surveys/${surveyId}/${editionId}`
 })
 
 /*
@@ -150,12 +151,12 @@ exports.getConfigLocations = config => ({
 Try loading data from disk or GitHub, or else run queries for *each block* in a page
 
 */
-exports.runPageQueries = async ({ page, graphql, config }) => {
+exports.runPageQueries = async ({ page, graphql, surveyId, editionId }) => {
     const startedAt = new Date()
     const useCache = process.env.USE_CACHE === 'false' ? false : true
     console.log(`// Running GraphQL queries for page ${page.id}… (useCache=${useCache})`)
 
-    const paths = exports.getConfigLocations(config)
+    const paths = exports.getDataLocations(surveyId, editionId)
 
     const basePath = paths.localPath + '/results'
     const baseUrl = paths.url + '/results'
@@ -164,7 +165,7 @@ exports.runPageQueries = async ({ page, graphql, config }) => {
 
     for (const b of page.blocks) {
         for (const v of b.variants) {
-            if (v.query) {
+            if (v.query || v.loadData) {
                 let data
 
                 const dataDirPath = path.resolve(`${basePath}/data`)
@@ -187,13 +188,26 @@ exports.runPageQueries = async ({ page, graphql, config }) => {
                     )
                     data = existingData
                 } else {
-                    logToFile(queryFileName, v.query.replace('internalAPI', 'query').replace('dataAPI', 'query'), {
-                        mode: 'overwrite',
-                        dirPath: queryDirPath
-                    })
+                    const query =
+                        v.query ||
+                        getDefaultQuery({
+                            surveyId,
+                            editionId,
+                            sectionId: page.id,
+                            questionId: b.id
+                        })
+
+                    logToFile(
+                        queryFileName,
+                        query.replace('internalAPI', 'query').replace('dataAPI', 'query'),
+                        {
+                            mode: 'overwrite',
+                            dirPath: queryDirPath
+                        }
+                    )
 
                     const queryName = _.upperFirst(exports.cleanIdString(v.id))
-                    const wrappedQuery = exports.wrapWithQuery(`${queryName}Query`, v.query)
+                    const wrappedQuery = exports.wrapWithQuery(`${queryName}Query`, query)
 
                     const result = await graphql(
                         `
@@ -217,9 +231,9 @@ exports.runPageQueries = async ({ page, graphql, config }) => {
     const pageQueryName = exports.cleanIdString(page.id)
 
     logToFile(
-        `${config.slug}__${pageQueryName}.json`,
+        `${editionId}__${pageQueryName}.json`,
         { data: pageData, duration },
-        { mode: 'overwrite', subDir: 'data', surveyId: config.surveyId }
+        { mode: 'overwrite', subDir: 'data', editionId }
     )
 
     console.log(`-> Done in ${duration}ms`)

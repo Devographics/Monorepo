@@ -19,6 +19,7 @@
         "node": "^18.10.0"
     },
     "dependencies": {
+        "@devographics/types": "workspace:^1.0.0",
         "@mdx-js/mdx": "^2.1.5",
         "@mdx-js/react": "^2.1.5",
         "@nivo/bar": "0.80.0",

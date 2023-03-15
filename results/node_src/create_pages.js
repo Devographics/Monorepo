@@ -12,7 +12,8 @@ const fs = require('fs')
 const _ = require('lodash')
 const path = require('path')
 const { logToFile } = require('./log_to_file.js')
-const { createClient } = require('redis')
+const { getMetadataQuery, getDefaultQuery } = require('./queries.js')
+const { getLocalesRedis } = require('./locales.js')
 
 const USE_FAST_BUILD = process.env.FAST_BUILD === 'true'
 
@@ -32,147 +33,9 @@ const config = {
     surveyId: process.env.SURVEY
 }
 
-const getLocalesQuery = (localeIds, contexts, loadStrings = true) => {
-    const args = []
-    if (localeIds.length > 0) {
-        args.push(`localeIds: [${localeIds.map(id => `"${id}"`).join(',')}]`)
-    }
-    if (contexts.length > 0) {
-        args.push(`contexts: [${contexts.join(', ')}]`)
-    }
-
-    const argumentsString = args.length > 0 ? `(${args.join(', ')})` : ''
-
-    return `
-query {
-    internalAPI {
-        locales${argumentsString} {
-            completion
-            id
-            label
-            ${
-                loadStrings
-                    ? `strings {
-                key
-                t
-                tHtml
-                tClean
-                context
-                isFallback
-            }`
-                    : ''
-            }
-            translators
-        }
-    }
-}
-`
-}
-
-const getAllSurveysQuery = () => {
-    return `
-query {
-    dataAPI {
-        metadata
-        allSurveys {
-            name
-            slug
-            editions {
-                surveyId
-                year
-                faviconUrl
-                socialImageUrl
-                colors {
-                    primary
-                    secondary
-                    text
-                    background
-                    backgroundSecondary
-                }
-                endedAt
-                imageUrl
-                questionsUrl
-                resultsUrl
-                startedAt
-                status
-                tags
-            }
-            domain
-            hashtag
-            emailOctopus {
-                listId
-            }
-        }
-    }
-}`
-}
-
-const getLocalesGraphQL = async ({ localeIds, graphql, contexts, surveyId }) => {
-
-    const localesQuery = getLocalesQuery(localeIds, contexts)
-    logToFile('localesQuery.graphql', localesQuery, {
-        mode: 'overwrite',
-        surveyId
-    })
-
-    const localesResults = await graphql(
-        `
-            ${localesQuery}
-        `
-    )
-    logToFile('localesResults.json', localesResults, {
-        mode: 'overwrite',
-        surveyId
-    })
-    const locales = localesResults.data.internalAPI.locales
-
-    return locales
-}
-
-const getLocalesRedis = async ({ localeIds, contexts, surveyId }) => {
-    const redisClient = createClient({
-        url: process.env.REDIS_URL
-    })
-
-    redisClient.on('error', err => console.log('Redis Client Error', err))
-
-    await redisClient.connect()
-
-    const localesRaw = await redisClient.get('locale_all_locales_metadata')
-    let locales = JSON.parse(localesRaw)
-
-    if (localeIds && localeIds.length > 0) {
-        locales = locales.filter(({ id }) => localeIds.includes(id))
-    }
-
-    logToFile('localesMetadataRedis.json', locales, {
-        mode: 'overwrite',
-        surveyId
-    })
-
-    for (const locale of locales) {
-        let localeStrings = []
-
-        for (const context of contexts) {
-            const key = `locale_${locale.id}_${context}_parsed`
-            const dataRaw = await redisClient.get(key)
-            const data = JSON.parse(dataRaw)
-            const strings = data.strings
-            localeStrings = [...localeStrings, ...strings]
-        }
-        locale.strings = localeStrings
-    }
-
-    logToFile('localesResultsRedis.json', locales, {
-        mode: 'overwrite',
-        surveyId
-    })
-
-    return locales
-}
-
 exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createRedirect } }) => {
-    const surveyId = process.env.SURVEY
+    const surveyId = process.env.SURVEYID
+    const editionId = process.env.EDITIONID
 
     const buildInfo = {
         USE_FAST_BUILD,
@@ -213,7 +76,6 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
         surveyId
     })
 
-
     buildInfo.localeCount = locales.length
 
     const cleanLocales = getCleanLocales(locales)
@@ -234,16 +96,16 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
         surveyId
     })
 
-    const allSurveysQuery = getAllSurveysQuery()
-    const allSurveysResults = await graphql(
+    const metadataQuery = getMetadataQuery({ surveyId, editionId })
+    const metadataResults = await graphql(
         `
-            ${allSurveysQuery}
+            ${metadataQuery}
         `
     )
-    const allSurveys = allSurveysResults.data.dataAPI.allSurveys
-    const metadata = allSurveysResults.data.dataAPI.metadata
-    const currentSurvey = allSurveys.find(s => s.editions.some(e => e.surveyId === surveyId))
-    const currentEdition = currentSurvey.editions.find(e => e.surveyId === surveyId)
+    const metadataData = metadataResults?.data?.dataAPI
+    const metadata = []
+    const currentSurvey = metadataData[surveyId]._metadata
+    const currentEdition = metadataData[surveyId][editionId]._metadata
 
     const chartSponsors = await getSendOwlData({ flat, config })
 
@@ -253,7 +115,7 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
 
         try {
             // pageData = await runPageQuery({ page, graphql })
-            pageData = await runPageQueries({ page, graphql, config })
+            pageData = await runPageQueries({ page, graphql, surveyId, editionId })
         } catch (error) {
             console.log(`// GraphQL error for page ${page.id}`)
             console.log(page)

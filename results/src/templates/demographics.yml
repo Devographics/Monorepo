@@ -1,44 +1,6 @@
 blockType: VerticalBarBlock
-dataPath: "dataAPI.survey.demographics.${id}.year"
-keysPath: "dataAPI.survey.demographics.${id}.keys"
 defaultUnits: percentage_survey
 blockNamespace: user_info
 chartNamespace: ${id}
-# enableCustomization: true
 hasSponsor: true
-query: >
-    dataAPI {
-        survey(survey: ${surveyType}) {
-            demographics {
-                # fragmentStart
-                ${id}: ${fieldId}(filters: ${filters}, options: ${options}, facet: ${facet}) {
-                    keys
-                    year(year: ${currentYear}) {
-                        year
-                        completion {
-                            total
-                            percentage_survey
-                            count
-                        }
-                        facets {
-                            id
-                            type
-                            completion {
-                                total
-                                percentage_question
-                                percentage_survey
-                                count
-                            }
-                            buckets {
-                                id
-                                count
-                                percentage_question
-                                percentage_survey
-                            }
-                        }
-                    }
-                }
-                # fragmentEnd
-            }
-        }
-    }
+loadData: true

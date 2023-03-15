@@ -1,4 +1,9 @@
-const { sleep, getTwitterUser, getConfigLocations, getExistingData } = require('./helpers.js')
+const {
+    sleep,
+    getTwitterUser,
+    getDataLocations: getConfigLocations,
+    getExistingData
+} = require('./helpers.js')
 const fetch = require('node-fetch')
 const _ = require('lodash')
 const FormData = require('form-data')
