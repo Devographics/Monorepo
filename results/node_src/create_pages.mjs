@@ -1,39 +1,46 @@
-const { computeSitemap } = require('./sitemap.js')
-const {
+import { computeSitemap } from './sitemap.mjs'
+import {
     getPageContext,
     getLocalizedPath,
     getCleanLocales,
     createBlockPages,
     runPageQueries
-} = require('./helpers.js')
-const { getSendOwlData } = require('./sendowl.js')
-const yaml = require('js-yaml')
-const fs = require('fs')
-const _ = require('lodash')
-const path = require('path')
-const { logToFile } = require('./log_to_file.js')
-const { getMetadataQuery, getDefaultQuery } = require('./queries.js')
-const { getLocalesRedis } = require('./locales.js')
+} from './helpers.mjs'
+import { getSendOwlData } from './sendowl.mjs'
+import yaml from 'js-yaml'
+import fs from 'fs'
+import path from 'path'
+import { logToFile } from './log_to_file.mjs'
+import { getMetadataQuery } from './queries.mjs'
+import { getLocalesRedis } from './locales.mjs'
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+
+const __dirname = path.dirname(__filename)
 
 const USE_FAST_BUILD = process.env.FAST_BUILD === 'true'
 
 const rawSitemap = yaml.load(
     fs.readFileSync(
-        path.resolve(__dirname, `../surveys/${process.env.SURVEY}/config/raw_sitemap.yml`),
+        path.resolve(__dirname, `../surveys/${process.env.EDITIONID}/config/raw_sitemap.yml`),
         'utf8'
     )
 )
 const config = {
     ...yaml.load(
         fs.readFileSync(
-            path.resolve(__dirname, `../surveys/${process.env.SURVEY}/config/config.yml`),
+            path.resolve(__dirname, `../surveys/${process.env.EDITIONID}/config/config.yml`),
             'utf8'
         )
     ),
-    surveyId: process.env.SURVEY
+    editionId: process.env.EDITIONID
 }
 
-exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createRedirect } }) => {
+export const createPagesSingleLoop = async ({
+    graphql,
+    actions: { createPage, createRedirect }
+}) => {
     const surveyId = process.env.SURVEYID
     const editionId = process.env.EDITIONID
 
@@ -47,7 +54,7 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
         translationContexts: config.translationContexts
     }
 
-    console.log(`// Building ${process.env.SURVEY}… (USE_FAST_BUILD = ${USE_FAST_BUILD})`)
+    console.log(`// Building ${surveyId}/${editionId}… (USE_FAST_BUILD = ${USE_FAST_BUILD})`)
 
     // if USE_FAST_BUILD is turned on only keep en-US and ru-RU locale to make build faster
     const localeIds = USE_FAST_BUILD ? ['en-US', 'ru-RU'] : []
@@ -73,7 +80,7 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
     const locales = await getLocalesRedis({
         localeIds,
         contexts: config.translationContexts,
-        surveyId
+        editionId
     })
 
     buildInfo.localeCount = locales.length
@@ -84,7 +91,7 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
         logToFile(`${locale.id}.json`, locale, {
             mode: 'overwrite',
             subDir: 'locales',
-            surveyId
+            editionId
         })
     })
 
@@ -93,21 +100,32 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
     const flatSitemap = { locales: cleanLocales, contents: flat }
     logToFile('flat_sitemap.yml', yaml.dump(flatSitemap, { noRefs: true }), {
         mode: 'overwrite',
-        surveyId
+        editionId
     })
 
     const metadataQuery = getMetadataQuery({ surveyId, editionId })
+
+    logToFile('metadataQuery.graphql', metadataQuery, {
+        mode: 'overwrite',
+        editionId
+    })
+
     const metadataResults = await graphql(
         `
             ${metadataQuery}
         `
     )
     const metadataData = metadataResults?.data?.dataAPI
+    logToFile('metadataData.json', metadataData, {
+        mode: 'overwrite',
+        editionId
+    })
     const metadata = []
-    const currentSurvey = metadataData[surveyId]._metadata
-    const currentEdition = metadataData[surveyId][editionId]._metadata
+    const currentSurvey = metadataData.surveys[surveyId]._metadata
+    const currentEdition = metadataData.surveys[surveyId][editionId]._metadata
 
-    const chartSponsors = await getSendOwlData({ flat, config })
+    const siteUrl = currentEdition.results_url
+    const chartSponsors = await getSendOwlData({ flat, surveyId, editionId, siteUrl })
 
     for (const page of flat) {
         let pageData = {}
@@ -169,6 +187,6 @@ exports.createPagesSingleLoop = async ({ graphql, actions: { createPage, createR
     }
     logToFile('build.yml', yaml.dump(buildInfo, { noRefs: true }), {
         mode: 'overwrite',
-        surveyId
+        editionId
     })
 }

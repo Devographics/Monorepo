@@ -1,13 +1,8 @@
-const {
-    sleep,
-    getTwitterUser,
-    getDataLocations: getConfigLocations,
-    getExistingData
-} = require('./helpers.js')
-const fetch = require('node-fetch')
-const _ = require('lodash')
-const FormData = require('form-data')
-const { logToFile } = require('./log_to_file.js')
+import { sleep, getTwitterUser, getDataLocations, getExistingData } from './helpers.mjs'
+import fetch from 'node-fetch'
+import _ from 'lodash'
+import FormData from 'form-data'
+import { logToFile } from './log_to_file.mjs'
 
 // `https://opensheet.elk.sh/${process.env.GDOCS_SPREADSHEET}/Public%20Data`
 
@@ -56,30 +51,28 @@ const fetchUntilNoMore = async (url, options) => {
     return allData
 }
 
-const getProducts = async ({ config }) => {
-    const { surveyId } = config
+const getProducts = async ({ editionId }) => {
     // get products
     const productsData = await fetchUntilNoMore(
         `${sendOwlAPIUrl}/v1/products/`,
         getSendOwlOptions()
     )
     let productsDataClean = productsData.map(({ product }) => ({
-        surveyId: product.name.split('___')[0],
+        editionId: product.name.split('___')[0],
         chartId: product.name,
         productId: product.id,
         instant_buy_url: product.instant_buy_url,
         add_to_cart_url: product.add_to_cart_url,
         sales_page_url: product.sales_page_url
     }))
-    productsDataClean = productsDataClean.filter(p => p.surveyId === surveyId)
-    logToFile('products.json', productsData, { ...logOptions, surveyId })
-    logToFile('product_clean.json', productsDataClean, { ...logOptions, surveyId })
+    productsDataClean = productsDataClean.filter(p => p.editionId === editionId)
+    logToFile('products.json', productsData, { ...logOptions, editionId })
+    logToFile('product_clean.json', productsDataClean, { ...logOptions, editionId })
 
     return productsDataClean
 }
 
-const getOrders = async ({ products, config }) => {
-    const { surveyId } = config
+const getOrders = async ({ products, editionId }) => {
     // get orders
     const orders = []
     let ordersData = await fetchUntilNoMore(`${sendOwlAPIUrl}/v1_3/orders/`, getSendOwlOptions())
@@ -97,7 +90,7 @@ const getOrders = async ({ products, config }) => {
             // if order does not correspond to a real product just ignore it
             if (product && cart_item.quantity > 0) {
                 // only add products that belongs to current survey
-                if (product.chartId.split('___')[0] === surveyId) {
+                if (product.chartId.split('___')[0] === editionId) {
                     orders.push({
                         orderId: order.id,
                         chartId: product.chartId,
@@ -119,21 +112,20 @@ const getOrders = async ({ products, config }) => {
             }
         }
     }
-    logToFile('orders.json', ordersData, { ...logOptions, surveyId })
-    logToFile('orders_clean.json', orders, { ...logOptions, surveyId })
+    logToFile('orders.json', ordersData, { ...logOptions, editionId })
+    logToFile('orders_clean.json', orders, { ...logOptions, editionId })
 
     return orders
 }
 
 const maxProductsToCreateInOneGo = 100
-const createMissingProducts = async ({ products, chartVariants, config }) => {
+const createMissingProducts = async ({ products, chartVariants, editionId, siteUrl }) => {
     console.log(`// Found ${chartVariants.length} chart variants, checking for missing products…`)
     const newProducts = []
-    const { surveyId } = config
     let i = 0
     // create any missing products
     for (const variant of chartVariants) {
-        const chartId = `${config.surveySlug}___${variant.id}`
+        const chartId = `${editionId}___${variant.id}`
         const existingProduct = products.find(order => order.chartId === chartId)
         if (!existingProduct && i < maxProductsToCreateInOneGo) {
             console.log(`// No product found for ${chartId}, creating…`)
@@ -142,7 +134,7 @@ const createMissingProducts = async ({ products, chartVariants, config }) => {
             formData.append('product[product_type]', 'digital')
             formData.append(
                 'product[self_hosted_url]',
-                `${config.siteUrl}/sponsor-chart-finish?chartId=${chartId}`
+                `${siteUrl}/sponsor-chart-finish?chartId=${chartId}`
             )
             formData.append('product[price]', '10.00')
             formData.append('product[sales_limit]', 1)
@@ -158,7 +150,7 @@ const createMissingProducts = async ({ products, chartVariants, config }) => {
             logToFile('created_products.json', createProductData, {
                 mode: 'append',
                 subDir: 'chart_sponsors',
-                surveyId
+                editionId
             })
 
             // add newly created product to list of all products
@@ -175,7 +167,8 @@ const createMissingProducts = async ({ products, chartVariants, config }) => {
     }
     return newProducts
 }
-exports.getSendOwlData = async ({ flat, config }) => {
+
+export const getSendOwlData = async ({ flat, surveyId, editionId, siteUrl }) => {
     if (!process.env.SENDOWL_API_KEY || !process.env.SENDOWL_SECRET) {
         return {}
     }
@@ -183,7 +176,7 @@ exports.getSendOwlData = async ({ flat, config }) => {
 
     console.log(`// 🦉 Getting SendOwl data… (useCache=${useCache})`)
 
-    const { localPath, url } = getConfigLocations(config)
+    const { localPath, url } = getDataLocations(surveyId, editionId)
     const dataFileName = 'sendowl.json'
     const dataDirName = 'results/chart_sponsorships'
     const dataDirPath = localPath + '/' + dataDirName
@@ -208,9 +201,14 @@ exports.getSendOwlData = async ({ flat, config }) => {
             }
         }
 
-        const products = await getProducts({ config })
-        const orders = await getOrders({ products, config })
-        const newProducts = await createMissingProducts({ products, chartVariants, config })
+        const products = await getProducts({ editionId })
+        const orders = await getOrders({ products, editionId })
+        const newProducts = await createMissingProducts({
+            products,
+            chartVariants,
+            siteUrl,
+            editionId
+        })
         const allProducts = [...products, ...newProducts]
 
         const data = { products: allProducts, orders }

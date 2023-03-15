@@ -1,4 +1,4 @@
-const _ = require('lodash')
+import _ from 'lodash'
 
 export const getLocalesQuery = (localeIds, contexts, loadStrings = true) => {
     const args = []
@@ -41,41 +41,43 @@ export const getMetadataQuery = ({ surveyId, editionId }) => {
     return `
 query {
     dataAPI {
-        ${surveyId} {
-            _metadata {
-                domain
-                id
-                name
-            }
-            ${editionId} {
+        surveys {
+            ${surveyId} {
                 _metadata {
+                    domain
                     id
-                    year
-                    status
-                    started_at
-                    ended_at
-                    questions_url
-                    results_url
-                    image_url
-                    favicon_url
-                    social_image_url
-                    sections {
+                    name
+                }
+                ${editionId} {
+                    _metadata {
                         id
-                        questions {
-                        entity {
-                            name
-                            nameClean
-                            nameHtml
-                        }
-                        options {
+                        year
+                        status
+                        started_at
+                        ended_at
+                        questions_url
+                        results_url
+                        image_url
+                        favicon_url
+                        social_image_url
+                        sections {
+                            id
+                            questions {
                             entity {
-                            name
-                            nameClean
-                            nameHtml
+                                name
+                                nameClean
+                                nameHtml
+                            }
+                            options {
+                                entity {
+                                name
+                                nameClean
+                                nameHtml
+                                }
+                                id
                             }
                             id
-                        }
-                        id
+                            }
                         }
                     }
                 }
@@ -87,6 +89,7 @@ query {
 
 export const getDefaultQuery = ({ surveyId, editionId, sectionId, questionId }) => `
 query ${editionId}${_.capitalize(questionId)}Query {
+  dataAPI {
     surveys {
       ${surveyId} {
         ${editionId} {
@@ -114,4 +117,5 @@ query ${editionId}${_.capitalize(questionId)}Query {
         }
       }
     }
-  }`
+  }
+}`

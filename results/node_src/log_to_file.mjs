@@ -1,12 +1,17 @@
-const path = require('path')
-const fs = require('fs')
+import path from 'path'
+import fs from 'fs'
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+
+const __dirname = path.dirname(__filename)
 
 /*
 
 Log to file
 
 */
-exports.logToFile = async (fileName, object, options = {}) => {
+export const logToFile = async (fileName, object, options = {}) => {
     try {
         if (process.env.NODE_ENV !== 'production') {
             const { mode = 'append', timestamp = false, subDir, dirPath, editionId } = options

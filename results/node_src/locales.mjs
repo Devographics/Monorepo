@@ -1,12 +1,12 @@
-const { getLocalesQuery } = require('./queries.js')
-const { logToFile } = require('./log_to_file.js')
-const { createClient } = require('redis')
+import { getLocalesQuery } from './queries.mjs'
+import { logToFile } from './log_to_file.mjs'
+import { createClient } from 'redis'
 
-export const getLocalesGraphQL = async ({ localeIds, graphql, contexts, surveyId }) => {
+export const getLocalesGraphQL = async ({ localeIds, graphql, contexts, editionId }) => {
     const localesQuery = getLocalesQuery(localeIds, contexts)
     logToFile('localesQuery.graphql', localesQuery, {
         mode: 'overwrite',
-        surveyId
+        editionId
     })
 
     const localesResults = await graphql(
@@ -16,14 +16,14 @@ export const getLocalesGraphQL = async ({ localeIds, graphql, contexts, surveyId
     )
     logToFile('localesResults.json', localesResults, {
         mode: 'overwrite',
-        surveyId
+        editionId
     })
     const locales = localesResults.data.internalAPI.locales
 
     return locales
 }
 
-export const getLocalesRedis = async ({ localeIds, contexts, surveyId }) => {
+export const getLocalesRedis = async ({ localeIds, contexts, editionId }) => {
     const redisClient = createClient({
         url: process.env.REDIS_URL
     })
@@ -41,7 +41,7 @@ export const getLocalesRedis = async ({ localeIds, contexts, surveyId }) => {
 
     logToFile('localesMetadataRedis.json', locales, {
         mode: 'overwrite',
-        surveyId
+        editionId
     })
 
     for (const locale of locales) {
@@ -59,7 +59,7 @@ export const getLocalesRedis = async ({ localeIds, contexts, surveyId }) => {
 
     logToFile('localesResultsRedis.json', locales, {
         mode: 'overwrite',
-        surveyId
+        editionId
     })
 
     return locales

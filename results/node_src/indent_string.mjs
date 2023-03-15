@@ -1,4 +1,4 @@
-function indentString(string, count = 1, options = {}) {
+export function indentString(string, count = 1, options = {}) {
     const { indent = ' ', includeEmptyLines = false } = options
 
     if (typeof string !== 'string') {
@@ -27,5 +27,3 @@ function indentString(string, count = 1, options = {}) {
 
     return string.replace(regex, indent.repeat(count))
 }
-
-exports.indentString = indentString

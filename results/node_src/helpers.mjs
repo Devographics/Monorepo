@@ -1,14 +1,19 @@
-const { omit } = require('lodash')
-const { indentString } = require('./indent_string.js')
-// const indentString = require('indent-string')
-const _ = require('lodash')
-const path = require('path')
-const fs = require('fs')
-const fetch = require('node-fetch')
-const yaml = require('js-yaml')
-const { TwitterApi } = require('twitter-api-v2')
-const { logToFile } = require('./log_to_file.js')
-const { getDefaultQuery } = require('./queries.js')
+import omit from 'lodash/omit.js'
+import { indentString } from './indent_string.mjs'
+import upperFirst from 'lodash/upperFirst.js'
+import merge from 'lodash/merge.js'
+import path from 'path'
+import fs from 'fs'
+import fetch from 'node-fetch'
+import yaml from 'js-yaml'
+import { TwitterApi } from 'twitter-api-v2'
+import { logToFile } from './log_to_file.mjs'
+import { getDefaultQuery } from './queries.mjs'
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+
+const __dirname = path.dirname(__filename)
 
 const fsPromises = fs.promises
 /*
@@ -16,8 +21,7 @@ const fsPromises = fs.promises
 Get the localized version of a page path
 
 */
-const getLocalizedPath = (path, locale) => (locale ? `/${locale.id}${path}` : path)
-exports.getLocalizedPath = getLocalizedPath
+export const getLocalizedPath = (path, locale) => (locale ? `/${locale.id}${path}` : path)
 
 /*
 
@@ -26,15 +30,15 @@ Get locales without the strings, to avoid loading every locale's dictionnary in 
 Also add paths
 
 */
-const getCleanLocales = locales => locales.map(l => ({ path: `/${l.id}`, ...omit(l, ['strings']) }))
-exports.getCleanLocales = getCleanLocales
+export const getCleanLocales = locales =>
+    locales.map(l => ({ path: `/${l.id}`, ...omit(l, ['strings']) }))
 
 /*
 
 Get a page's context
 
 */
-exports.getPageContext = page => {
+export const getPageContext = page => {
     const context = omit(page, ['path', 'children'])
     context.basePath = page.path
 
@@ -49,14 +53,14 @@ exports.getPageContext = page => {
 Clean ID string
 
 */
-exports.cleanIdString = id => id.replace(new RegExp('-', 'g'), '_')
+export const cleanIdString = id => id.replace(new RegExp('-', 'g'), '_')
 
 /*
 
 Wrap query contents with query FooQuery {...}
 
 */
-exports.wrapWithQuery = (queryName, queryContents) => `query ${queryName} {
+export const wrapWithQuery = (queryName, queryContents) => `query ${queryName} {
   ${indentString(queryContents, 4)}
   }`
 
@@ -65,7 +69,7 @@ exports.wrapWithQuery = (queryName, queryContents) => `query ${queryName} {
 Load a template yml file
 
 */
-exports.loadTemplate = async name => {
+export const loadTemplate = async name => {
     const templatePath = `${path.join(__dirname, '../')}src/templates/${name}.yml`
     try {
         const data = await fsPromises.readFile(templatePath, 'utf8')
@@ -83,7 +87,7 @@ exports.loadTemplate = async name => {
 Create individual pages for each block (for social media meta tags)
 
 */
-exports.createBlockPages = (page, context, createPage, locales, buildInfo) => {
+export const createBlockPages = (page, context, createPage, locales, buildInfo) => {
     const blocks = page.blocks
     if (!Array.isArray(blocks) || blocks.length === 0) {
         return
@@ -123,7 +127,7 @@ exports.createBlockPages = (page, context, createPage, locales, buildInfo) => {
 Get a file from the disk or from GitHub
 
 */
-exports.getExistingData = async ({ dataFileName, dataFilePath, baseUrl }) => {
+export const getExistingData = async ({ dataFileName, dataFilePath, baseUrl }) => {
     let contents, data
     if (process.env.JSON_CACHE_TYPE === 'local') {
         if (fs.existsSync(dataFilePath)) {
@@ -141,7 +145,7 @@ exports.getExistingData = async ({ dataFileName, dataFilePath, baseUrl }) => {
     return data
 }
 
-exports.getDataLocations = (surveyId, editionId) => ({
+export const getDataLocations = (surveyId, editionId) => ({
     localPath: `./../../surveys/${surveyId}/${editionId}`,
     url: `https://devographics.github.io/surveys/${surveyId}/${editionId}`
 })
@@ -151,12 +155,12 @@ exports.getDataLocations = (surveyId, editionId) => ({
 Try loading data from disk or GitHub, or else run queries for *each block* in a page
 
 */
-exports.runPageQueries = async ({ page, graphql, surveyId, editionId }) => {
+export const runPageQueries = async ({ page, graphql, surveyId, editionId }) => {
     const startedAt = new Date()
     const useCache = process.env.USE_CACHE === 'false' ? false : true
     console.log(`// Running GraphQL queries for page ${page.id}… (useCache=${useCache})`)
 
-    const paths = exports.getDataLocations(surveyId, editionId)
+    const paths = getDataLocations(surveyId, editionId)
 
     const basePath = paths.localPath + '/results'
     const baseUrl = paths.url + '/results'
@@ -175,7 +179,7 @@ exports.runPageQueries = async ({ page, graphql, surveyId, editionId }) => {
                 const queryFileName = `${page.id}__${v.id}.graphql`
                 const queryFilePath = `${queryDirPath}/${queryFileName}`
 
-                const existingData = await exports.getExistingData({
+                const existingData = await getExistingData({
                     dataFileName,
                     dataFilePath,
                     baseUrl
@@ -202,12 +206,13 @@ exports.runPageQueries = async ({ page, graphql, surveyId, editionId }) => {
                         query.replace('internalAPI', 'query').replace('dataAPI', 'query'),
                         {
                             mode: 'overwrite',
-                            dirPath: queryDirPath
+                            dirPath: queryDirPath,
+                            editionId
                         }
                     )
 
-                    const queryName = _.upperFirst(exports.cleanIdString(v.id))
-                    const wrappedQuery = exports.wrapWithQuery(`${queryName}Query`, query)
+                    const queryName = upperFirst(cleanIdString(v.id))
+                    const wrappedQuery = wrapWithQuery(`${queryName}Query`, query)
 
                     const result = await graphql(
                         `
@@ -218,17 +223,18 @@ exports.runPageQueries = async ({ page, graphql, surveyId, editionId }) => {
 
                     logToFile(dataFileName, data, {
                         mode: 'overwrite',
-                        dirPath: dataDirPath
+                        dirPath: dataDirPath,
+                        editionId
                     })
                 }
-                pageData = _.merge(pageData, data)
+                pageData = merge(pageData, data)
             }
         }
     }
 
     const finishedAt = new Date()
     const duration = finishedAt.getTime() - startedAt.getTime()
-    const pageQueryName = exports.cleanIdString(page.id)
+    const pageQueryName = cleanIdString(page.id)
 
     logToFile(
         `${editionId}__${pageQueryName}.json`,
@@ -246,7 +252,7 @@ const twitterClient = new TwitterApi(process.env.TWITTER_BEARER_TOKEN || '')
 // Tell typescript it's a readonly app
 const roClient = twitterClient.readOnly
 
-exports.getTwitterUser = async twitterName => {
+export const getTwitterUser = async twitterName => {
     try {
         const data = await roClient.v2.userByUsername(twitterName, {
             'user.fields': ['public_metrics', 'profile_image_url', 'description']
@@ -264,7 +270,7 @@ exports.getTwitterUser = async twitterName => {
     }
 }
 
-exports.sleep = ms => {
+export const sleep = ms => {
     return new Promise(resolve => {
         setTimeout(resolve, ms)
     })

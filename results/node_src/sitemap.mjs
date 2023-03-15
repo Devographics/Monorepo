@@ -1,11 +1,12 @@
-const fs = require('fs')
-const { findIndex, findLastIndex, omit, template } = require('lodash')
-const yaml = require('js-yaml')
-const { loadTemplate } = require('./helpers.js')
+import fs from 'fs'
+import findIndex from 'lodash/findIndex.js'
+import findLastIndex from 'lodash/findLastIndex.js'
+import omit from 'lodash/omit.js'
+import template from 'lodash/template.js'
+import yaml from 'js-yaml'
+import { loadTemplate } from './helpers.mjs'
 
-const globalVariables = yaml.load(
-    fs.readFileSync(`./surveys/${process.env.SURVEY}/config/variables.yml`, 'utf8')
-)
+const globalVariables = {}
 
 const stringify = value => {
     const json = JSON.stringify(value)
@@ -52,8 +53,8 @@ const applyTemplate = (block, templateObject, parent) => {
         ...(parent ? { parentId: parent.id } : {}),
         ...(templateObject.defaultVariables || {}),
         ...globalVariables,
-        allFeaturesAsStrings: globalVariables.allFeatures.map(f => `"${f}"`).join(', '),
-        allToolsAsStrings: globalVariables.allTools.map(f => `"${f}"`).join(', '),
+        allFeaturesAsStrings: globalVariables?.allFeatures?.map(f => `"${f}"`).join(', '),
+        allToolsAsStrings: globalVariables?.allTools?.map(f => `"${f}"`).join(', '),
         id: block.id,
         fieldId: block.id,
         ...(block.variables || {}),
@@ -82,7 +83,7 @@ const flattenSitemap = (stack, pages, parent, pageIndex) => {
     })
 }
 
-exports.pageFromConfig = async (page, pageIndex) => {
+export const pageFromConfig = async (page, pageIndex) => {
     try {
         const { parent } = page
 
@@ -162,7 +163,7 @@ exports.pageFromConfig = async (page, pageIndex) => {
 
 let computedSitemap = null
 
-exports.computeSitemap = async rawSitemap => {
+export const computeSitemap = async rawSitemap => {
     if (computedSitemap !== null) {
         return computedSitemap
     }
@@ -174,7 +175,7 @@ exports.computeSitemap = async rawSitemap => {
     flattenSitemap(stack, rawSitemap, undefined, 0)
 
     stack.flat = await Promise.all(
-        stack.flat.map((page, pageIndex) => exports.pageFromConfig(page, pageIndex))
+        stack.flat.map((page, pageIndex) => pageFromConfig(page, pageIndex))
     )
 
     // assign prev/next page using flat pages
