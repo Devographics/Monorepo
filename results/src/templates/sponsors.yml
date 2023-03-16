@@ -1,29 +1,3 @@
 blockType: SponsorsBlock
 disableExport: true
 wrapBlock: false
-dataPath: "dataAPI.all_sponsors"
-# note: this currently gets *all* sponsors for *all* surveys. in the future, 
-# add an endpoint to get metadata for a *single* survey and use it instead
-query: >
-    dataAPI {
-        all_sponsors: allSurveys {
-            name
-            slug
-            editions {
-                year
-                surveyId
-                sponsors {
-                    id
-                    name
-                    url
-                    imageUrl
-                }
-                partners {
-                    id
-                    name
-                    url
-                    imageUrl
-                }
-            }
-        }
-    }

@@ -10,7 +10,6 @@ export const getAllQuestions = (edition: Edition) => {
 export const useOptions = (questionId: string) => {
     const context = usePageContext()
     const { currentEdition } = context
-    console.log(currentEdition)
     const allQuestions = getAllQuestions(currentEdition)
     const question = allQuestions.find((q: Question) => q.id === questionId)
     if (!question) {

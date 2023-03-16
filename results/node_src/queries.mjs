@@ -81,19 +81,34 @@ query {
                     domain
                     id
                     name
+                    partners {
+                      name
+                      url
+                      imageUrl
+                    }
                 }
                 ${editionId} {
                     _metadata {
                         id
                         year
                         status
-                        started_at
-                        ended_at
-                        questions_url
-                        results_url
-                        image_url
-                        favicon_url
-                        social_image_url
+                        startedAt
+                        endedAt
+                        questionsUrl
+                        resultsUrl
+                        imageUrl
+                        faviconUrl
+                        socialImageUrl
+                        sponsors {
+                          id
+                          name
+                          url
+                          imageUrl
+                        }
+                        credits {
+                          id
+                          role
+                        }
                         sections {
                             id
                             questions {
@@ -118,6 +133,9 @@ query {
 }`
 }
 
+const allEditionsFragment = `editionId
+  year`
+
 const unquote = s => s.replace(/"([^"]+)":/g, '$1:')
 
 export const getDefaultQueryBody = ({
@@ -125,12 +143,16 @@ export const getDefaultQueryBody = ({
     editionId,
     sectionId,
     questionId,
-    parameters,
-    addEntities = false
+    parameters = {},
+    addEntities = false,
+    allEditions = false
 }) => {
-    const parametersString = parameters
-        ? `(parameters: ${unquote(JSON.stringify(parameters))})`
-        : ''
+    const enableCache = process.env.USE_CACHE === 'false' ? false : true
+
+    const params = { ...parameters, enableCache }
+    const parametersString = `(parameters: ${unquote(JSON.stringify(params))})`
+
+    const editionType = allEditions ? 'all_editions' : 'current_edition'
 
     return `
 surveys {
@@ -139,7 +161,8 @@ surveys {
       ${sectionId} {
         ${questionId} {
           responses${parametersString} {
-            current_edition {
+            ${editionType} {
+              ${allEditions ? allEditionsFragment : ''}
               completion {
                 count
                 percentage_survey

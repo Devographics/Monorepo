@@ -90,6 +90,7 @@ const StreamChart = ({
         }
         return color
     }
+    const chartData = getChartData(data, units)
 
     return (
         <div style={{ height }}>
@@ -103,7 +104,7 @@ const StreamChart = ({
                 curve="monotoneX"
                 margin={margin}
                 keys={keys}
-                data={getChartData(data, units)}
+                data={chartData}
                 enableGridX={false}
                 enableGridY={false}
                 axisLeft={null}
@@ -138,7 +139,7 @@ const StreamChart = ({
                         { offset: 100, color: gradientColors[1] }
                     ]
                 }))}
-                fill={bucketKeys.map(({ id }) => ({ match: {id }, id}))}
+                fill={bucketKeys.map(({ id }) => ({ match: { id }, id }))}
             />
         </div>
     )

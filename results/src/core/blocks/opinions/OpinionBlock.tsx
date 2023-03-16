@@ -14,14 +14,17 @@ import { useI18n } from 'core/i18n/i18nContext'
 import { TableBucketItem, getTableData, groupDataByYears } from 'core/helpers/datatables'
 import { BlockUnits, ResultsByYear } from 'core/types'
 import { isPercentage } from 'core/helpers/units'
+import { EditionData } from '@devographics/types'
+import { useOptions } from 'core/helpers/options'
 
 const OPINION_BUCKET_KEYS_ID = 'opinions'
 
 interface OpinionBlockProps {
     block: BlockContext<'opinionTemplate', 'OpinionBlock'>
-    data: OpinionAllYearsData
+    data: EditionData[]
     units: 'percentage_survey' | 'percentage_question' | 'count'
     keys: string[]
+    translateData: boolean
 }
 
 export const OpinionBlock = ({
@@ -38,33 +41,12 @@ export const OpinionBlock = ({
 
     const { translate } = useI18n()
 
-    const bucketKeys = useLegends(block, keys, 'opinions')
+    const chartOptions = useOptions(block.id)
+    const bucketKeys = useLegends(block, chartOptions, 'opinions')
 
-    // fix potentially undefined buckets
-    const normalizedData = useMemo(
-        () =>
-            data.map(yearData => ({
-                ...yearData,
-                buckets: bucketKeys.map(({ id }) => {
-                    const matchingBucket = yearData.facets[0].buckets.find(
-                        bucket => bucket.id === id
-                    )
-                    if (matchingBucket) {
-                        return matchingBucket
-                    }
-
-                    return {
-                        id,
-                        count: 0,
-                        percentage: 0
-                    }
-                })
-            })),
-        [data, bucketKeys]
-    )
-
-    const years = data.map(y => y.year)
-    const tableData = groupDataByYears({ keys, data })
+    const years = data.map(edition => edition.year)
+    const allBuckets = data
+    const tableData = groupDataByYears({ keys, data: allBuckets })
 
     return (
         <Block
@@ -97,11 +79,7 @@ export const OpinionBlock = ({
                     current={current}
                     // for opinions only having one year of data, we duplicate the year's data
                     // to be able to use the stream chart.
-                    data={
-                        normalizedData.length === 1
-                            ? [normalizedData[0], normalizedData[0]]
-                            : normalizedData
-                    }
+                    data={allBuckets.length === 1 ? [allBuckets[0], allBuckets[0]] : allBuckets}
                     bucketKeys={bucketKeys}
                     keys={bucketKeys.map(key => key.id)}
                     units={units}

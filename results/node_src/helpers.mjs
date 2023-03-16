@@ -172,11 +172,11 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId }) => 
             if (v.query || v.loadData) {
                 let data
 
-                const dataDirPath = path.resolve(`${basePath}/data`)
-                const dataFileName = `${page.id}__${v.id}.json`
+                const dataDirPath = path.resolve(`${basePath}/data/${page.id}`)
+                const dataFileName = `${v.id}.json`
                 const dataFilePath = `${dataDirPath}/${dataFileName}`
-                const queryDirPath = path.resolve(`${basePath}/queries`)
-                const queryFileName = `${page.id}__${v.id}.graphql`
+                const queryDirPath = path.resolve(`${basePath}/queries/${page.id}`)
+                const queryFileName = `${v.id}.graphql`
                 const queryFilePath = `${queryDirPath}/${queryFileName}`
 
                 const existingData = await getExistingData({
@@ -198,7 +198,8 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId }) => 
                         sectionId: page.id,
                         questionId: v.id,
                         parameters: v?.variables?.parameters,
-                        addEntities: v.addEntities
+                        addEntities: v.addEntities,
+                        allEditions: v.allEditions
                     }
 
                     const query = v.query

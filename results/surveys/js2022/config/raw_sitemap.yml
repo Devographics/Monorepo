@@ -23,44 +23,44 @@
 # - translateData: whether to try and translate
 # - variables: block variables (compiled during sitemap generation)
 
-# - id: introduction
-#   path: /
-#   showTitle: false
-#   blocks:
-#     # - id: survey_livestream
-#     #   blockType: LivestreamBlock
-#     #   disableExport: true
-#     #   wrapBlock: false
-#     - id: survey_intro
-#       blockType: SurveyIntroBlock
-#       disableExport: true
-#       wrapBlock: false
-#     - id: survey_credits
-#       template: credits
-#     - id: survey_newsletter
-#       blockType: NewsletterBlock
-#       disableExport: true
-#       wrapBlock: false
-#     - id: survey_sponsors
-#       template: sponsors
-#     - id: survey_partners
-#       template: sponsors
-#       blockType: PartnersBlock
-#     - id: survey_translators
-#       blockType: TranslatorsBlock
-#       disableExport: true
-#       wrapBlock: false
+- id: introduction
+  path: /
+  showTitle: false
+  blocks:
+      # - id: survey_livestream
+      #   blockType: LivestreamBlock
+      #   disableExport: true
+      #   wrapBlock: false
+      - id: survey_intro
+        blockType: SurveyIntroBlock
+        disableExport: true
+        wrapBlock: false
+      - id: survey_credits
+        template: credits
+      - id: survey_newsletter
+        blockType: NewsletterBlock
+        disableExport: true
+        wrapBlock: false
+      - id: survey_sponsors
+        template: sponsors
+      - id: survey_partners
+        template: sponsors
+        blockType: PartnersBlock
+      - id: survey_translators
+        blockType: TranslatorsBlock
+        disableExport: true
+        wrapBlock: false
 
-# - id: tshirt
-#   path: /tshirt
-#   showTitle: false
-#   blocks:
-#     - id: tshirt_intro
-#       template: page_introduction
-#     - id: tshirt_block
-#       blockType: TshirtBlock
-#       wrapBlock: false
-#       disableExport: true
+- id: tshirt
+  path: /tshirt
+  showTitle: false
+  blocks:
+      - id: tshirt_intro
+        template: page_introduction
+      - id: tshirt_block
+        blockType: TshirtBlock
+        wrapBlock: false
+        disableExport: true
 
 # - id: data_explorer
 #   titleId: sections.data_explorer.title
@@ -1234,82 +1234,81 @@
       - id: resources_resources
         items: [reactathon]
         template: recommended_resources
-# - id: opinions
-#   path: /opinions
-#   blocks:
-#     - template: page_introduction
+- id: opinions
+  path: /opinions
+  blocks:
+      - template: page_introduction
 
-#     - id: js_moving_in_right_direction
-#       template: opinion
+      - id: js_moving_in_right_direction
+        template: opinion
 
-#     - id: building_js_apps_overly_complex
-#       template: opinion
+      - id: building_js_apps_overly_complex
+        template: opinion
 
-#     - id: tshirt_hint
-#       template: hint
+      - id: tshirt_hint
+        template: hint
 
-#     - id: js_ecosystem_changing_to_fast
-#       template: opinion
+      - id: js_ecosystem_changing_to_fast
+        template: opinion
 
-#     - id: sebastien_lorber
-#       template: picks
-#       variables:
-#         url: https://www.remotion.dev/
+      - id: sebastien_lorber
+        template: picks
+        variables:
+            url: https://www.remotion.dev/
 
-#     - id: top_js_pain_points
-#       translateData: true
-#       defaultUnits: count
-#       blockNamespace: opinions
-#       chartNamespace: top_js_pain_points
-#       tabId: tabs.main_answers
-#       template: multiple_options
-#       variables:
-#         fieldId: opinions_others
-#       variants:
-#         - id: top_js_pain_points_others
-#           translateData: true
-#           defaultUnits: count
-#           blockNamespace: opinions
-#           chartNamespace: top_js_pain_points
-#           tabId: tabs.other_answers
-#           template: multiple_options
-#           variables:
-#             parameters: { cutoff: 5 }
-#             fieldId: opinions_others
+      - id: top_js_pain_points
+        translateData: true
+        defaultUnits: count
+        blockNamespace: opinions
+        chartNamespace: top_js_pain_points
+        tabId: tabs.main_answers
+        template: multiple_options
+        variables:
+            fieldId: opinions_others
+        variants:
+            - id: top_js_pain_points_others
+              translateData: true
+              defaultUnits: count
+              blockNamespace: opinions
+              chartNamespace: top_js_pain_points
+              tabId: tabs.other_answers
+              template: multiple_options_freeform
+              variables:
+                  parameters: { cutoff: 5 }
+                  fieldId: opinions_others
 
-#     - id: top_currently_missing_from_js
-#       translateData: true
-#       defaultUnits: count
-#       blockNamespace: opinions
-#       chartNamespace: top_currently_missing_from_js
-#       tabId: tabs.main_answers
-#       template: multiple_options
-#       variables:
-#         fieldId: opinions_others
-#       variants:
-#         - id: top_currently_missing_from_js_others
-#           translateData: true
-#           defaultUnits: count
-#           blockNamespace: opinions
-#           chartNamespace: top_currently_missing_from_js
-#           tabId: tabs.other_answers
-#           template: multiple_options
-#           variables:
-#             parameters: { cutoff: 5 }
-#             fieldId: opinions_others
+      - id: top_currently_missing_from_js
+        translateData: true
+        defaultUnits: count
+        blockNamespace: opinions
+        chartNamespace: top_currently_missing_from_js
+        tabId: tabs.main_answers
+        template: multiple_options
+        variables:
+            fieldId: opinions_others
+        variants:
+            - id: top_currently_missing_from_js_others
+              translateData: true
+              defaultUnits: count
+              blockNamespace: opinions
+              chartNamespace: top_currently_missing_from_js
+              tabId: tabs.other_answers
+              template: multiple_options_freeform
+              variables:
+                  parameters: { cutoff: 5 }
+                  fieldId: opinions_others
 
-#     - template: happiness
-#       variables:
-#         fieldId: state_of_the_web
+      - template: happiness
+        variables:
+            fieldId: state_of_the_web
 
-#     - template: happiness
-#       variables:
-#         fieldId: state_of_js
+      - template: happiness
+        variables:
+            fieldId: state_of_js
 
-#     - id: opinions.k_resources
-#       items: [fm-javascript, fm-js-fundamentals]
-#       template: recommended_resources
-
+      - id: opinions.k_resources
+        items: [fm-javascript, fm-js-fundamentals]
+        template: recommended_resources
 # - id: awards
 #   path: /awards
 #   blocks:

@@ -3,12 +3,12 @@ import { spacing, mq } from 'core/theme'
 import styled from 'styled-components'
 import T from 'core/i18n/T'
 import CreditItem from 'core/blocks/other/CreditItem'
-import config from 'Config/config.yml'
+import { usePageContext } from 'core/helpers/pageContext'
 
-const CreditsBlock = ({ data }) => {
-    const { slug, year } = config
-    const survey = data?.find(s => s.slug === slug)
-    const edition = survey?.editions?.find(e => e.year === year)
+const CreditsBlock = () => {
+    const context = usePageContext()
+    const { currentEdition } = context
+    const edition = currentEdition._metadata
     const credits = edition?.credits
     return credits && credits.length > 0 ? (
         <Credits>
