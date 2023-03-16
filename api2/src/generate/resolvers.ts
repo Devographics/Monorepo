@@ -1,5 +1,5 @@
 import {
-    ParsedSurvey,
+    ParsedSurveyExt,
     ParsedEdition,
     Survey,
     Edition,
@@ -28,7 +28,7 @@ export const generateResolvers = async ({
     questionObjects,
     typeObjects
 }: {
-    surveys: ParsedSurvey[]
+    surveys: ParsedSurveyExt[]
     questionObjects: ParsedQuestionExt[]
     typeObjects: TypeObject[]
 }) => {
@@ -141,27 +141,27 @@ export const generateResolvers = async ({
 }
 
 const getSurveyResolver =
-    ({ survey }: { survey: ParsedSurvey }): ResolverType =>
+    ({ survey }: { survey: ParsedSurveyExt }): ResolverType =>
     (parent, args, context, info) => {
         console.log('// survey resolver')
         return survey
     }
 
 const getSurveyMetadataResolver =
-    ({ survey }: { survey: ParsedSurvey }): ResolverType =>
+    ({ survey }: { survey: ParsedSurveyExt }): ResolverType =>
     (parent, args, context, info) => {
         console.log('// survey metadata resolver')
         return survey
     }
 const getEditionResolver =
-    ({ survey, edition }: { survey: ParsedSurvey; edition: ParsedEdition }): ResolverType =>
+    ({ survey, edition }: { survey: ParsedSurveyExt; edition: ParsedEdition }): ResolverType =>
     (parent, args, context, info) => {
         console.log('// edition resolver')
         return edition
     }
 
 const getEditionMetadataResolver =
-    ({ survey, edition }: { survey: ParsedSurvey; edition: ParsedEdition }): ResolverType =>
+    ({ survey, edition }: { survey: ParsedSurveyExt; edition: ParsedEdition }): ResolverType =>
     async (parent, args, context, info) => {
         console.log('// edition metadata resolver')
         const sections = edition.sections.map(section => ({
@@ -267,7 +267,20 @@ export const responsesResolverFunction: ResolverType = async (parent, args, cont
 export const allEditionsResolver: ResolverType = async (parent, args, context, info) => {
     console.log('// allEditionsResolver')
     const { survey, edition, section, question, responseArguments, questionObjects } = parent
+    const { parameters = {} } = responseArguments || {}
+    const { enableCache = true } = parameters
+
     const { selectedEditionId } = args
+    const funcOptions = {
+        survey,
+        edition,
+        section,
+        question,
+        context,
+        questionObjects,
+        computeArguments: { ...responseArguments, selectedEditionId }
+    }
+
     let result = await useCache({
         key: computeKey(genericComputeFunction, {
             surveyId: survey.id,
@@ -279,16 +292,10 @@ export const allEditionsResolver: ResolverType = async (parent, args, context, i
         }),
         func: genericComputeFunction,
         context,
-        funcOptions: {
-            survey,
-            edition,
-            section,
-            question,
-            context,
-            questionObjects,
-            computeArguments: { ...responseArguments, selectedEditionId }
-        }
+        funcOptions,
+        enableCache
     })
+
     if (question.transformFunction) {
         result = question.transformFunction(parent, result, context)
     }

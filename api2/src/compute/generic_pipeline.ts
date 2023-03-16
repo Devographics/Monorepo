@@ -33,7 +33,7 @@ export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
 
     // if year is passed, restrict aggregation to specific year
     if (selectedEditionId) {
-        match.surveySlug = selectedEditionId
+        match.editionId = selectedEditionId
     }
 
     const pipeline: any[] = [
@@ -58,7 +58,7 @@ export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
         {
             $group: {
                 _id: {
-                    editionId: '$surveySlug',
+                    editionId: '$editionId',
                     ...(axis2 && { [axis2.question.id]: `$${axis2DbPath}` }),
                     [axis1.question.id]: `$${axis1DbPath}`
                 },

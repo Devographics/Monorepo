@@ -1,4 +1,4 @@
-import { ComputeAxisParameters, EditionData, Bucket, FacetBucket } from '../../types'
+import { ComputeAxisParameters, EditionData, Bucket, FacetBucket, Survey } from '../../types'
 import isEmpty from 'lodash/isEmpty.js'
 import sumBy from 'lodash/sumBy.js'
 import difference from 'lodash/difference.js'
@@ -85,12 +85,9 @@ export async function addMissingItems(
 ) {
     for (let editionData of resultsByEdition) {
         if (axis1.question.options) {
-            console.log('// addMissingItems')
-            console.log(axis1.question.options)
-            console.log(editionData.buckets)
             for (const option1 of axis1.question.options) {
                 const existingBucketItem = editionData.buckets.find(
-                    bucket => bucket.id === option1.id
+                    bucket => String(bucket.id) === String(option1.id)
                 )
                 if (existingBucketItem) {
                     if (axis2?.question?.options) {
@@ -110,6 +107,26 @@ export async function addMissingItems(
             }
         }
     }
+}
+
+export async function addEditionYears(resultsByEdition: EditionData[], survey: Survey) {
+    for (let editionData of resultsByEdition) {
+        const edition = survey.editions.find(e => e.id === editionData.editionId)
+        if (edition) {
+            editionData.year = edition.year
+        }
+    }
+}
+
+/*
+
+Some results do not have an edition assigned to them, so remove them for now
+
+Note: not needed if db is properly cleaned up
+
+*/
+export async function removeEmptyEditions(resultsByEdition: EditionData[]) {
+    return resultsByEdition.filter(editionData => editionData.editionId !== null)
 }
 
 // TODO

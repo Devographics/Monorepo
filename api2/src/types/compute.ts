@@ -3,9 +3,9 @@ import { Filters } from './filters'
 
 export interface GenericComputeArguments {
     filters?: Filters
-    parameters: GenericComputeParameters
-    facet: string
-    selectedEditionId: string
+    parameters?: GenericComputeParameters
+    facet?: string
+    selectedEditionId?: string
 }
 
 export interface GenericComputeParameters {
@@ -19,6 +19,7 @@ export interface GenericComputeParameters {
     facetLimit?: number
     facetCutoff?: number
     facetCutoffPercent?: number
+    enableCache?: boolean
 }
 
 export interface ComputeAxisParameters {

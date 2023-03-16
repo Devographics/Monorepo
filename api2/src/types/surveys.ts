@@ -12,6 +12,7 @@ import {
     ParsedQuestion,
     Option,
     EditionData,
+    FacetBucket,
     Bucket
 } from '@devographics/types'
 
@@ -75,6 +76,21 @@ export type TransformFunction = (
 ) => any
 
 // ParsedQuestion extended with API-specific fields
+export interface ParsedSurveyExt extends Omit<ParsedSurvey, 'editions'> {
+    editions: ParsedEditionExt[]
+}
+
+// ParsedQuestion extended with API-specific fields
+export interface ParsedEditionExt extends Omit<ParsedEdition, 'sections'> {
+    sections: ParsedSectionExt[]
+}
+
+// ParsedQuestion extended with API-specific fields
+export interface ParsedSectionExt extends Omit<ParsedSection, 'questions'> {
+    questions: ParsedQuestionExt[]
+}
+
+// ParsedQuestion extended with API-specific fields
 export interface ParsedQuestionExt extends ParsedQuestion {
     resolverMap?: ResolverMap
     transformFunction?: TransformFunction
@@ -92,5 +108,6 @@ export {
     ParsedQuestion,
     Option,
     EditionData,
+    FacetBucket,
     Bucket
 } from '@devographics/types'

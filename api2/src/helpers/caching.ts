@@ -51,6 +51,7 @@ export const useCache = async <F extends DynamicComputeCall>(options: {
     funcOptions?: any
     // args?: ArgumentTypes<F>
     key?: string
+    enableCache?: boolean
 }): Promise<ResultType<F>> => {
     const startedAt = new Date()
     const { func, context, key: providedKey, funcOptions = {} } = options
@@ -62,7 +63,7 @@ export const useCache = async <F extends DynamicComputeCall>(options: {
     // always pass context to cached function just in case it's needed
     const funcOptionsWithContext = { ...funcOptions, context }
 
-    const enableCache = !disableCache && !isDebug
+    const { enableCache = !disableCache && !isDebug } = options
 
     const settings = { isDebug, disableCache, cacheType }
     const settingsLogs = JSON.stringify(settings)

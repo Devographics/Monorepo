@@ -26,7 +26,9 @@ import {
     addPercentages,
     sortData,
     limitData,
-    cutoffData
+    cutoffData,
+    addEditionYears,
+    removeEmptyEditions
 } from './stages/index'
 
 const convertOrder = (order: 'asc' | 'desc') => (order === 'asc' ? 1 : -1)
@@ -137,7 +139,7 @@ export async function genericComputeFunction({
     }
     // if edition is passed, restrict aggregation to specific edition
     if (selectedEditionId) {
-        match.surveySlug = selectedEditionId
+        match.editionId = selectedEditionId
     }
 
     // TODO: merge these counts into the main aggregation pipeline if possible
@@ -188,6 +190,8 @@ export async function genericComputeFunction({
     await addPercentages(results)
 
     // await addDeltas(results)
+
+    await addEditionYears(results, survey)
 
     if (axis2) {
         await addMissingItems(results, axis2, axis1)
