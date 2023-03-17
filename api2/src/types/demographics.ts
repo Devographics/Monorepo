@@ -4,6 +4,6 @@ export interface EditionParticipation {
 }
 
 export interface Participation {
-    all_editions: EditionParticipation[]
+    allEditions: EditionParticipation[]
     edition: EditionParticipation
 }

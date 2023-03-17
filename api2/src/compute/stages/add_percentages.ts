@@ -8,14 +8,14 @@ const computeBucketsWithPercentages = (
 ) => {
     const bucketsWithPercentages = buckets.map(bucket => {
         const bucketWithPercentages = { ...bucket }
-        bucketWithPercentages.percentage_survey = ratioToPercentage(
+        bucketWithPercentages.percentageSurvey = ratioToPercentage(
             bucket.count / editionData.completion.total
         )
-        bucketWithPercentages.percentage_question = ratioToPercentage(
+        bucketWithPercentages.percentageQuestion = ratioToPercentage(
             bucket.count / editionData.completion.count
         )
         if (parentBucket) {
-            bucketWithPercentages.percentage_facet = ratioToPercentage(
+            bucketWithPercentages.percentageFacet = ratioToPercentage(
                 bucketWithPercentages.count / parentBucket.count
             )
         }

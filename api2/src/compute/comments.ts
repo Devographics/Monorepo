@@ -31,11 +31,11 @@ type CommentObject = {
 const groupByEdition = (allComments: CommentObject[]) => {
     const allEditions = uniq(allComments.map((c: CommentObject) => c.editionId))
     return allEditions.map(editionId => {
-        const comments_raw = allComments.filter(c => c.editionId === editionId)
+        const commentsRaw = allComments.filter(c => c.editionId === editionId)
         return {
             editionId,
-            comments_raw,
-            count: comments_raw.length
+            commentsRaw,
+            count: commentsRaw.length
         }
     })
 }
@@ -54,7 +54,7 @@ export const getRawCommentsWithCache = async (options: GetRawCommentsOptions) =>
         context,
         funcOptions,
         key: `${options.survey.id}.${options.question.id}.${
-            options.editionId ? options.editionId : 'all_editions'
+            options.editionId ? options.editionId : 'allEditions'
         }.comments`
     })
 }

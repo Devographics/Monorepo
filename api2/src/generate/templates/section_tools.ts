@@ -11,7 +11,7 @@ export const section_tools: TemplateFunction = ({ survey, edition, section }) =>
     const items = getSectionItems({ survey, edition, section })
 
     return {
-        id: `${section.id}_all_items`,
+        id: `${section.id}_allItems`,
         fieldTypeName,
         typeDef: `type ${fieldTypeName} {
     ids: [String]

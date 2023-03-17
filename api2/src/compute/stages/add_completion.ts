@@ -18,7 +18,7 @@ export async function addCompletionCounts(
         editionData.completion = {
             total: totalRespondents,
             count: questionRespondents,
-            percentage_survey: ratioToPercentage(questionRespondents / totalRespondents)
+            percentageSurvey: ratioToPercentage(questionRespondents / totalRespondents)
         }
         // TODO: this is probably not needed anymore?
         // for (let bucket of editionData.buckets) {
@@ -28,8 +28,8 @@ export async function addCompletionCounts(
         //     bucket.completion = {
         //         total: totalRespondents,
         //         count,
-        //         percentage_question: ratioToPercentage(count / questionRespondents),
-        //         percentage_survey: ratioToPercentage(count / totalRespondents)
+        //         percentageQuestion: ratioToPercentage(count / questionRespondents),
+        //         percentageSurvey: ratioToPercentage(count / totalRespondents)
         //     }
         // }
     }

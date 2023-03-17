@@ -8,18 +8,18 @@ type Comment {
 }
 
 """
-Comments for a specific year
+Comments for a specific edition
 """
-type YearComments {
+type EditionComments {
     year: Int
     count: Int
-    comments_raw: [Comment]
+    commentsRaw: [Comment]
 }
 
 """
 Comments
 """
 type ItemComments {
-    all_editions: [YearComments]
-    current_edition: YearComments
+    allEditions: [EditionComments]
+    currentEdition: EditionComments
 }

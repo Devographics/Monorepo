@@ -1,6 +1,5 @@
 import { graphqlize } from '../../generate/helpers'
 import { ParsedSurvey } from '../../types/surveys'
-import { getEditionsEnumTypeName } from './editions_enum'
 
 /*
 
@@ -23,8 +22,8 @@ export const generateResponsesType = ({ survey, path }: { survey: ParsedSurvey; 
         path,
         typeName,
         typeDef: `type ${typeName} {
-    all_editions: [EditionData]
-    current_edition: EditionData
+    allEditions: [EditionData]
+    currentEdition: EditionData
 }`
     }
 }

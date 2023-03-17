@@ -120,11 +120,11 @@ type Bucket {
     """
     Percentage relative to question respondents
     """
-    percentage_question: Float
+    percentageQuestion: Float
     """
     Percentage relative to survey respondents
     """
-    percentage_survey: Float
+    percentageSurvey: Float
     """
     Entity associated with the current bucket
     """
@@ -144,15 +144,15 @@ type FacetBucket {
     """
     Percentage relative to question respondents
     """
-    percentage_question: Float
+    percentageQuestion: Float
     """
     Percentage relative to survey respondents
     """
-    percentage_survey: Float
+    percentageSurvey: Float
     """
     Percentage relative to question respondents in facet
     """
-    percentage_facet: Float
+    percentageFacet: Float
     """
     Entity associated with the current bucket
     """

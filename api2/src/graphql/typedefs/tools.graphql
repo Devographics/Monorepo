@@ -23,7 +23,7 @@ type ToolExperienceRanking {
 type ToolExperienceRankingYearMetric {
     year: Int
     rank: Int
-    percentage_question: Float
+    percentageQuestion: Float
 }
 
 input ToolFilters {

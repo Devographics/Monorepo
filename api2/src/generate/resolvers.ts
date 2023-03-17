@@ -314,8 +314,8 @@ export const currentEditionResolver: ResolverType = async (parent, args, context
 }
 
 export const responsesResolverMap: ResolverMap = {
-    all_editions: allEditionsResolver,
-    current_edition: currentEditionResolver
+    allEditions: allEditionsResolver,
+    currentEdition: currentEditionResolver
 }
 
 /*
@@ -329,13 +329,13 @@ export const commentsResolverFunction: ResolverType = parent => {
     return parent
 }
 export const commentsResolverMap: ResolverMap = {
-    all_editions: async ({ survey, question }, {}, context) =>
+    allEditions: async ({ survey, question }, {}, context) =>
         await getRawCommentsWithCache({
             survey,
             question,
             context
         }),
-    current_edition: async ({ survey, edition, question }, context) =>
+    currentEdition: async ({ survey, edition, question }, context) =>
         await getRawCommentsWithCache({
             survey,
             question,

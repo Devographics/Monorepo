@@ -5,7 +5,7 @@ import { getFiltersTypeName, getFacetsTypeName, graphqlize } from '../../generat
 Sample output:
 
 type DisabilityStatus {
-    all_editions: [EditionData]
+    allEditions: [EditionData]
     edition(editionId: StateOfJsEditionID!): EditionData
     options: [DisabilityStatusOptions]
 }

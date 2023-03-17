@@ -10,7 +10,7 @@ export const all_tools: TemplateFunction = ({ survey, edition, section }) => {
         items = [...items, ...getSectionItems({ survey, edition, section })]
     }
     return {
-        id: `all_items`,
+        id: `allItems`,
         fieldTypeName,
         typeDef: `type ${fieldTypeName} {
     ids: [String]

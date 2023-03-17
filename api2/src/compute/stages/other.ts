@@ -63,9 +63,9 @@ so that all buckets have the same shape
 */
 const zeroBucketItem = {
     count: 0,
-    percentage_question: 0,
-    percentage_facet: 0,
-    percentage_survey: 0
+    percentageQuestion: 0,
+    percentageFacet: 0,
+    percentageSurvey: 0
 }
 const getZeroBucketItem = (id: string, facetAxis?: ComputeAxisParameters) => ({
     ...zeroBucketItem,
