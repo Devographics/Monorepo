@@ -13,6 +13,7 @@ import { getTableData, groupDataByYears } from 'core/helpers/datatables'
 import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
 import { useChartFilters } from 'core/blocks/filters/helpers'
 import { MODE_GRID } from 'core/blocks/filters/constants'
+import { useOptions } from 'core/helpers/options'
 
 // convert relative links into absolute MDN links
 const parseMDNLinks = content =>
@@ -26,28 +27,32 @@ const processBlockData = data => {
 const FeatureExperienceBlock = ({
     block,
     keys,
-    data,
+    data: questionData,
     chartNamespace = 'features',
-    units: defaultUnits = 'percentage_question'
+    units: defaultUnits = 'percentageQuestion'
 }) => {
     const [units, setUnits] = useState(defaultUnits)
-
+    const data = questionData.responses.allEditions
     const context = usePageContext()
     const { locale } = context
     const { name, mdn } = data
     const { translate } = useI18n()
 
-    const allYears = get(data, 'experience.all_years', [])
+    const allYears = data
 
-    const bucketKeys = useLegends(block, keys)
+    const chartOptions = useOptions(block.id)
+    const bucketKeys = useLegends(block, chartOptions)
 
     const mdnLink = mdn && `https://developer.mozilla.org${mdn.url}`
     // only show descriptions for english version
     const description = locale.id === 'en-US' && mdn && parseMDNLinks(mdn.summary)
 
-    const buckets = processBlockData(data)
+    const buckets = data
 
-    const { chartFilters, setChartFilters } = useChartFilters({block, options: { supportedModes: [MODE_GRID], enableYearSelect: false }})
+    const { chartFilters, setChartFilters } = useChartFilters({
+        block,
+        options: { supportedModes: [MODE_GRID], enableYearSelect: false }
+    })
 
     return (
         <Block
@@ -83,7 +88,7 @@ const FeatureExperienceBlock = ({
                 processBlockDataOptions={{}}
             >
                 <FeatureExperienceChart
-                    keys={keys}
+                    keys={chartOptions}
                     buckets={buckets}
                     bucketKeys={bucketKeys}
                     units={units}

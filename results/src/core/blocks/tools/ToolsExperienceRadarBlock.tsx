@@ -24,7 +24,7 @@ const ALL_METRICS: MetricId[] = ['satisfaction', 'interest', 'usage', 'awareness
 interface MetricBucket {
     year: number
     rank: number
-    percentage_question: number
+    percentageQuestion: number
 }
 
 interface ToolData extends Record<MetricId, MetricBucket[]> {
@@ -51,15 +51,15 @@ interface ToolsExperienceRankingBlockProps {
 
 const getChartData = ({ data }: { data: ToolData[] }) => {
     return useMemo(() => {
-      const chartData = ALL_METRICS.map(id => ({ id }))
-      // const metricsData = Object.fromEntries(ALL_METRICS.map(metric => [metric, {}]));
-      data.forEach(tool => {
-        ALL_METRICS.forEach(metric => {
-          const metricItem = chartData.find(item => item.id === metric)
-          metricItem[tool.id] = tool[metric][0].percentage_question
+        const chartData = ALL_METRICS.map(id => ({ id }))
+        // const metricsData = Object.fromEntries(ALL_METRICS.map(metric => [metric, {}]));
+        data.forEach(tool => {
+            ALL_METRICS.forEach(metric => {
+                const metricItem = chartData.find(item => item.id === metric)
+                metricItem[tool.id] = tool[metric][0].percentageQuestion
+            })
         })
-      })
-      return chartData
+        return chartData
     }, [data])
 }
 
@@ -83,7 +83,7 @@ export const ToolsExperienceRadarBlock = ({
     //     ALL_METRICS.forEach(metric => {
     //         cellData[`${metric}_percentage`] = tool[metric]?.map(y => ({
     //             year: y.year,
-    //             value: y.percentage_question
+    //             value: y.percentageQuestion
     //         }))
     //         cellData[`${metric}_rank`] = tool[metric]?.map(y => ({
     //             year: y.year,

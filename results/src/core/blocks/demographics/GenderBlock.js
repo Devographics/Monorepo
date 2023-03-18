@@ -9,16 +9,16 @@ import { useI18n } from 'core/i18n/i18nContext'
 import T from 'core/i18n/T'
 
 const GenderBlock = ({ block, data }) => {
-    const { units: defaultUnits = 'percentage_survey' } = block
+    const { units: defaultUnits = 'percentageSurvey' } = block
     const [units, setUnits] = useState(defaultUnits)
-    
+
     const theme = useTheme()
 
     const colorMapping = useMemo(
         () =>
-            keys.gender.keys.map((item) => ({
+            keys.gender.keys.map(item => ({
                 ...item,
-                color: theme.colors.ranges.gender[item.id],
+                color: theme.colors.ranges.gender[item.id]
             })),
         [theme]
     )
@@ -26,24 +26,36 @@ const GenderBlock = ({ block, data }) => {
     const { translate } = useI18n()
 
     return (
-        <Block 
-          units={units}
-          setUnits={setUnits}
-          data={data.buckets}
-          block={block}
-          tables={[{
-            headings: [{id: 'label', label: <T k='table.label' />}, {id: 'percentage', label: <T k='table.percentage' />}, {id: 'count', label: <T k='table.count' />}],
-            rows: data.buckets.map((bucket) => ([{
-              id: 'label',
-              label: translate(keys.gender.keys.find((key) => key.id === bucket.id)?.label),
-            }, {
-              id: 'percentage',
-              label: `${bucket.percentage}%`,
-            }, {
-              id: 'count',
-              label: bucket.count,
-            }]))
-          }]}
+        <Block
+            units={units}
+            setUnits={setUnits}
+            data={data.buckets}
+            block={block}
+            tables={[
+                {
+                    headings: [
+                        { id: 'label', label: <T k="table.label" /> },
+                        { id: 'percentage', label: <T k="table.percentage" /> },
+                        { id: 'count', label: <T k="table.count" /> }
+                    ],
+                    rows: data.buckets.map(bucket => [
+                        {
+                            id: 'label',
+                            label: translate(
+                                keys.gender.keys.find(key => key.id === bucket.id)?.label
+                            )
+                        },
+                        {
+                            id: 'percentage',
+                            label: `${bucket.percentage}%`
+                        },
+                        {
+                            id: 'count',
+                            label: bucket.count
+                        }
+                    ])
+                }
+            ]}
         >
             <ChartContainer height={200} fit={true}>
                 <GaugeBarChart
@@ -59,15 +71,15 @@ const GenderBlock = ({ block, data }) => {
 
 GenderBlock.propTypes = {
     block: PropTypes.shape({
-        id: PropTypes.string.isRequired,
+        id: PropTypes.string.isRequired
     }).isRequired,
     data: PropTypes.shape({
         buckets: PropTypes.arrayOf(
             PropTypes.shape({
-                id: PropTypes.string.isRequired,
+                id: PropTypes.string.isRequired
             })
-        ).isRequired,
-    }).isRequired,
+        ).isRequired
+    }).isRequired
 }
 
 export default memo(GenderBlock)

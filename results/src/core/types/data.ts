@@ -70,11 +70,11 @@ export interface DefaultBucketItem {
     count: number
 
     // percentage relative to the number of respondents in the survey
-    percentage_survey: number
+    percentageSurvey: number
     // percentage relative to the number of question respondents
-    percentage_question: number
+    percentageQuestion: number
     // percentage relative to the number of respondents in the facet
-    percentage_facet?: number
+    percentageFacet?: number
 
     // count when no facet is selected
     count_all_facets?: number
@@ -113,7 +113,7 @@ export interface YearCompletion {
     // current number of respondents
     count: number
     // percentage of respondents compared to the total number of participants
-    percentage_survey: number
+    percentageSurvey: number
 }
 
 export interface FacetCompletion {
@@ -122,9 +122,9 @@ export interface FacetCompletion {
     // current number of respondents
     count: number
     // percentage of respondents compared to the total number of participants
-    percentage_question: number
+    percentageQuestion: number
     // percentage of respondents compared to the total number of participants
-    percentage_survey: number
+    percentageSurvey: number
 }
 
 /*

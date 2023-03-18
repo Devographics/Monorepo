@@ -32,7 +32,7 @@ const ByFacetBlock = ({ block, data, keys }) => {
     const {
         id,
         mode = 'relative',
-        defaultUnits = 'percentage_facet',
+        defaultUnits = 'percentageFacet',
         translateData = true,
         colorVariant,
         variables
@@ -127,9 +127,7 @@ const Facet = ({ facet, colorMapping, keys, fieldId, facetId }) => {
                 ) : (
                     <div>
                         {/* {facet.mean} */}
-                        <FacetName>
-                            {getLabel(facetId, facet)}
-                        </FacetName>
+                        <FacetName>{getLabel(facetId, facet)}</FacetName>
                         <FacetStats>
                             <T
                                 k="charts.facet_responses"
@@ -142,7 +140,7 @@ const Facet = ({ facet, colorMapping, keys, fieldId, facetId }) => {
             <ChartContainer height={40} fit={true}>
                 <GaugeBarChart
                     keys={keys}
-                    units="percentage_facet"
+                    units="percentageFacet"
                     buckets={facet.buckets}
                     colorMapping={colorMapping}
                     i18nNamespace={fieldId}

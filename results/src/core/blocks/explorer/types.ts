@@ -1,11 +1,11 @@
-import { Entity } from 'core/types';
+import { Entity } from 'core/types'
 
 export type Key = string
 
 export interface Completion {
     count: number
-    percentage_survey: number
-    percentage_question: number
+    percentageSurvey: number
+    percentageQuestion: number
 }
 
 export interface ExplorerDataBucket {
@@ -15,9 +15,9 @@ export interface ExplorerDataBucket {
     fromCount?: number
     toCount?: number
     columnIndex?: number
-    percentage_facet: number
-    percentage_question: number
-    percentage_survey: number
+    percentageFacet: number
+    percentageQuestion: number
+    percentageSurvey: number
 }
 export interface ExplorerDataFacet {
     buckets: ExplorerDataBucket[]
@@ -74,8 +74,8 @@ export interface CommonProps {
     xTotals: Total[]
     yTotals: Total[]
     totalCount: number
-    stateStuff: any;
-    entities: Entity[];
+    stateStuff: any
+    entities: Entity[]
     useMobileLayout: boolean
 }
 

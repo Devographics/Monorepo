@@ -1,5 +1,5 @@
 blockType: HorizontalBarBlock
-dataPath: "dataAPI.survey.demographics.${id}.year"
+dataPath: 'dataAPI.survey.demographics.${id}.year'
 titleId: user_info.${id}
 descriptionId: user_info.${id}.description
 noteId: user_info.${id}.note
@@ -14,7 +14,7 @@ query: >
                         year
                         completion {
                             total
-                            percentage_survey
+                            percentageSurvey
                             count
                         }
                         facets {
@@ -22,15 +22,15 @@ query: >
                             type
                             completion {
                                 total
-                                percentage_question
-                                percentage_survey
+                                percentageQuestion
+                                percentageSurvey
                                 count
                             }
                             buckets {
                                 id
                                 count
-                                percentage_question
-                                percentage_survey
+                                percentageQuestion
+                                percentageSurvey
                                 entity {
                                     name
                                     nameClean

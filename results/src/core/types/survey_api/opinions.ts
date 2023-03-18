@@ -3,9 +3,9 @@ import { FacetCompletion, YearCompletion } from 'core/types'
 export interface OpinionBucket {
     id: 0 | 1 | 2 | 3 | 4
     count: number
-    percentage_survey: number
-    percentage_question: number
-    percentage_facet: number
+    percentageSurvey: number
+    percentageQuestion: number
+    percentageFacet: number
 }
 
 export interface OpinionYearFacet {

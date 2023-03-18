@@ -84,9 +84,9 @@ const GaugeBarChart = ({
                     ...acc,
                     [bucket.id]: bucket[units],
                     [`${bucket.id}_count`]: bucket.count,
-                    [`${bucket.id}_percentage_survey`]: bucket.percentage_survey,
-                    [`${bucket.id}_percentage_question`]: bucket.percentage_question,
-                    [`${bucket.id}_percentage_facet`]: bucket.percentage_facet,
+                    [`${bucket.id}_percentageSurvey`]: bucket.percentageSurvey,
+                    [`${bucket.id}_percentageQuestion`]: bucket.percentageQuestion,
+                    [`${bucket.id}_percentageFacet`]: bucket.percentageFacet,
                     [`${bucket.id}_countDelta`]: bucket.countDelta,
                     [`${bucket.id}_percentageDelta`]: bucket.percentageDelta
                 }
@@ -161,7 +161,7 @@ const GaugeBarChart = ({
                     { offset: 100, color: gradientColors?.[1] }
                 ]
             }))}
-            fill={colorMapping.map(({ id }) => ({ match: {id }, id}))}
+            fill={colorMapping.map(({ id }) => ({ match: { id }, id }))}
         />
     )
 }
@@ -171,9 +171,9 @@ GaugeBarChart.propTypes = {
         PropTypes.shape({
             id: PropTypes.string.isRequired,
             count: PropTypes.number.isRequired,
-            percentage_survey: PropTypes.number,
-            percentage_question: PropTypes.number,
-            percentage_facet: PropTypes.number
+            percentageSurvey: PropTypes.number,
+            percentageQuestion: PropTypes.number,
+            percentageFacet: PropTypes.number
         }).isRequired
     ).isRequired,
     colorMapping: PropTypes.arrayOf(
@@ -182,12 +182,7 @@ GaugeBarChart.propTypes = {
             color: PropTypes.string.isRequired
         })
     ).isRequired,
-    units: PropTypes.oneOf([
-        'count',
-        'percentage_facet',
-        'percentage_survey',
-        'percentage_question'
-    ]),
+    units: PropTypes.oneOf(['count', 'percentageFacet', 'percentageSurvey', 'percentageQuestion']),
     applyEmptyPatternTo: PropTypes.string,
     i18nNamespace: PropTypes.string.isRequired
 }

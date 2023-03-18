@@ -70,7 +70,7 @@ const BracketMatchupsBlock = ({ block, data }: HorizontalBarBlockProps) => {
                     valueKeys: keys?.map(k => ({
                         id: `${k}___percentage`,
                         labelId: `options.${chartNamespace}.${k}`,
-                        isPercentage: true,
+                        isPercentage: true
                     })),
                     translateData,
                     i18nNamespace: chartNamespace
@@ -98,18 +98,21 @@ const BracketMatchupsBlock = ({ block, data }: HorizontalBarBlockProps) => {
                     theme={{
                         tooltip: {
                             container: {
-                                color: 'rgb(39, 35, 37)',
-                            },
-                        },
+                                color: 'rgb(39, 35, 37)'
+                            }
+                        }
                     }}
                     // colors="PRGn"
                     minValue={0}
                     maxValue={100}
                     margin={{ top: 130, right: 80, bottom: 60, left: 160 }}
                     label={(rowData, cellId) => {
-                        return !rowData[cellId] ? '-' : isPercentage(units) ? `${round(rowData[cellId], 1)}%` : rowData[cellId]
-                      }
-                    }
+                        return !rowData[cellId]
+                            ? '-'
+                            : isPercentage(units)
+                            ? `${round(rowData[cellId], 1)}%`
+                            : rowData[cellId]
+                    }}
                     forceSquare={true}
                     axisTop={{
                         // orient: 'top',
@@ -181,7 +184,7 @@ BracketMatchupsBlock.propTypes = {
         showDescription: PropTypes.bool,
         translateData: PropTypes.bool,
         mode: PropTypes.oneOf(['absolute', 'relative']),
-        defaultUnits: PropTypes.oneOf(['percentage_survey', 'percentage_question', 'count']),
+        defaultUnits: PropTypes.oneOf(['percentageSurvey', 'percentageQuestion', 'count']),
         colorVariant: PropTypes.oneOf(['primary', 'secondary'])
     }).isRequired,
     data: PropTypes.shape({

@@ -16,7 +16,7 @@ const margin = {
     top: 40,
     right: 20,
     bottom: 50,
-    left: 200,
+    left: 200
 }
 
 const Text = ({ hasLink = false, label }) => {
@@ -32,7 +32,7 @@ const Text = ({ hasLink = false, label }) => {
             style={{
                 fill: hasLink ? theme.colors.link : theme.colors.text,
                 fontSize: 14,
-                fontFamily: theme.typography.fontFamily,
+                fontFamily: theme.typography.fontFamily
             }}
         >
             <title>{label}</title>
@@ -41,7 +41,7 @@ const Text = ({ hasLink = false, label }) => {
     )
 }
 
-const TickItem = (tick) => {
+const TickItem = tick => {
     const { translate } = useI18n()
 
     const { x, y, value, shouldTranslate, i18nNamespace, entity } = tick
@@ -86,7 +86,7 @@ const HorizontalStackedBarChart = ({
     mode,
     units,
     chartProps,
-    colorVariant = 'primary',
+    colorVariant = 'primary'
 }) => {
     const theme = useTheme()
     const { translate } = useI18n()
@@ -97,11 +97,11 @@ const HorizontalStackedBarChart = ({
         i18nNamespace,
         shouldTranslate: translateData,
         mode,
-        units,
+        units
     })
 
     const data = sortBy(
-        buckets.map((bucket) => ({ ...bucket })),
+        buckets.map(bucket => ({ ...bucket })),
         'count'
     )
 
@@ -117,7 +117,7 @@ const HorizontalStackedBarChart = ({
                 enableGridX={true}
                 enableGridY={false}
                 enableLabel={true}
-                label={(d) => (isPercentage(units) ? `${round(d.value, 1)}%` : d.value)}
+                label={d => (isPercentage(units) ? `${round(d.value, 1)}%` : d.value)}
                 labelTextColor={theme.colors.text}
                 labelSkipWidth={40}
                 colors={[theme.colors.barChart[colorVariant]]}
@@ -125,31 +125,31 @@ const HorizontalStackedBarChart = ({
                 borderRadius={1}
                 axisTop={{
                     tickValues: 5,
-                    format: formatValue,
+                    format: formatValue
                 }}
                 axisBottom={{
                     tickValues: 5,
                     format: formatValue,
                     legend: translate(`charts.axis_legends.users_${units}`),
                     legendPosition: 'middle',
-                    legendOffset: 40,
+                    legendOffset: 40
                 }}
                 axisLeft={{
                     format: formatTick,
                     tickSize: 0,
                     tickPadding: 10,
-                    renderTick: (tick) => {
+                    renderTick: tick => {
                         return (
                             <TickItem
                                 i18nNamespace={i18nNamespace}
                                 shouldTranslate={translateData}
-                                entity={buckets.find((b) => b.id === tick.value)?.entity}
+                                entity={buckets.find(b => b.id === tick.value)?.entity}
                                 {...tick}
                             />
                         )
-                    },
+                    }
                 }}
-                tooltip={(barProps) => (
+                tooltip={barProps => (
                     <BarTooltip
                         units={units}
                         i18nNamespace={i18nNamespace}
@@ -158,10 +158,10 @@ const HorizontalStackedBarChart = ({
                     />
                 )}
                 layers={[
-                    (layerProps) => <HorizontalBarStripes {...layerProps} />,
+                    layerProps => <HorizontalBarStripes {...layerProps} />,
                     'grid',
                     'axes',
-                    'bars',
+                    'bars'
                 ]}
                 {...chartProps}
             />
@@ -175,14 +175,14 @@ HorizontalStackedBarChart.propTypes = {
         PropTypes.shape({
             id: PropTypes.string.isRequired,
             count: PropTypes.number.isRequired,
-            percentage: PropTypes.number,
+            percentage: PropTypes.number
         })
     ),
     i18nNamespace: PropTypes.string.isRequired,
     translateData: PropTypes.bool,
     mode: PropTypes.oneOf(['absolute', 'relative']).isRequired,
-    units: PropTypes.oneOf(['count', 'percentage', 'percentage_survey']).isRequired,
-    colorVariant: PropTypes.oneOf(['primary', 'secondary']),
+    units: PropTypes.oneOf(['count', 'percentage', 'percentageSurvey']).isRequired,
+    colorVariant: PropTypes.oneOf(['primary', 'secondary'])
 }
 
 export default memo(HorizontalStackedBarChart)

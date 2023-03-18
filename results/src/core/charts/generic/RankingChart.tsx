@@ -13,7 +13,7 @@ export interface RankingChartDatum {
     y: number
     // percentage attached to a specific year
     // used to compute the rank
-    percentage_question: number
+    percentageQuestion: number
 }
 
 export interface RankingChartSerie {
@@ -57,7 +57,7 @@ const CustomPoint = (props: CustomPointProps) => {
             />
             {!isInactive && (
                 <text textAnchor="middle" y={4} fill={theme.colors.text} fontSize="11px">
-                    {Math.round(data?.percentage_question)}%
+                    {Math.round(data?.percentageQuestion)}%
                 </text>
             )}
         </animated.g>
@@ -80,7 +80,11 @@ interface RankingChartProps {
     processBlockDataOptions: any
 }
 
-export const RankingChart = ({ buckets: unprocessedData, processBlockData, processBlockDataOptions }: RankingChartProps) => {
+export const RankingChart = ({
+    buckets: unprocessedData,
+    processBlockData,
+    processBlockDataOptions
+}: RankingChartProps) => {
     const buckets = processBlockData(unprocessedData, processBlockDataOptions)
 
     const theme = useTheme()

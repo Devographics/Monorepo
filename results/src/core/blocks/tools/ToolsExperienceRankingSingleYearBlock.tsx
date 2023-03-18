@@ -45,7 +45,7 @@ const getChartData = (
             entity
         }
         ALL_METRICS.forEach(metric => {
-            dataPoint[`${metric}_percentage`] = item[metric][0]['percentage_question']
+            dataPoint[`${metric}_percentage`] = item[metric][0]['percentageQuestion']
         })
         return dataPoint
     })

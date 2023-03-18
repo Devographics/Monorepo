@@ -166,10 +166,10 @@ const DynamicDataLoader = ({
                         completion
                     })
 
-                    // percentage_question is the only unit that lets us
+                    // percentageQuestion is the only unit that lets us
                     // meaningfully compare values across series
                     if (setUnits) {
-                        setUnits('percentage_question')
+                        setUnits('percentageQuestion')
                     }
                     setCombinedBuckets(combinedBuckets)
                     setSeriesCount(seriesChartData.length)

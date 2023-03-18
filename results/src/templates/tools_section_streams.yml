@@ -1,10 +1,10 @@
-id: "${parentId}_section_streams"
+id: '${parentId}_section_streams'
 titleId: blocks.tools_section_streams
 descriptionId: blocks.tools_section_streams.description
 noteId: blocks.tools_section_streams.note
 blockType: ToolsSectionStreamsBlock
-dataPath: "dataAPI.survey.${parentId}_streams"
-keysPath: "dataAPI.survey.${parentId}_streams.0.experience.keys"
+dataPath: 'dataAPI.survey.${parentId}_streams'
+keysPath: 'dataAPI.survey.${parentId}_streams.0.experience.keys'
 bucketKeysName: tools
 hasSponsor: true
 query: >
@@ -30,14 +30,14 @@ query: >
                         completion {
                             total
                             count
-                            percentage_survey
+                            percentageSurvey
                         }
                         facets {
                             buckets {
                                 id
                                 count
-                                percentage_question
-                                percentage_survey
+                                percentageQuestion
+                                percentageSurvey
                             }
                         }
                     }

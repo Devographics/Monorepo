@@ -25,8 +25,15 @@ export const getBlockTitleKey = (block, page) => block.titleId || `${getBlockKey
 export const getBlockDescriptionKey = (block, page) =>
     block.descriptionId || `${getBlockKey(block, page)}.description`
 
-export const getBlockTitle = (block, page, translate) => {
-    return block.title || translate(getBlockTitleKey(block, page))
+export const getBlockTitle = (block, page, translate, entities) => {
+    const entity = entities?.find(e => e.id === block.id)
+    const translation = translate(
+        getBlockTitleKey(block, page),
+        {},
+        entity?.nameClean || entity?.name
+    )
+    const title = block.title || translation
+    return title
 }
 
 export const getBlockDescription = (block, page, translate) => {
@@ -44,7 +51,7 @@ export const getBlockLink = ({ block, context, params, useRedirect = true }) => 
     let path = useRedirect
         ? `${context.currentPath}/${id}?${paramsString}`
         : `${context.currentPath}/?${paramsString}#${id}`
-        
+
     // remove any double slashes
     path = path.replaceAll('//', '/')
     const link = `${context.host}${path}`

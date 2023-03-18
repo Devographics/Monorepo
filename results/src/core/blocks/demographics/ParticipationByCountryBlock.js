@@ -18,10 +18,12 @@ const processBlockData = data => {
 
 const ParticipationByCountryBlock = ({
     block,
-    data,
+    data: questionData,
     triggerId,
-    units: defaultUnits = 'percentage_survey'
+    units: defaultUnits = 'percentageSurvey'
 }) => {
+    const chartData = questionData?.responses?.currentEdition
+
     const {
         id,
         mode = 'relative',
@@ -29,7 +31,7 @@ const ParticipationByCountryBlock = ({
         chartNamespace = block.blockNamespace ?? block.id
     } = block
 
-    const { completion, buckets } = data
+    const { completion, buckets } = chartData
     const { total } = completion
 
     const [units, setUnits] = useState(defaultUnits)
@@ -62,9 +64,9 @@ const ParticipationByCountryBlock = ({
             units={units}
             setUnits={setUnits}
             unitsOptions={unitsOptions}
-            data={data}
+            data={chartData}
             block={block}
-            completion={data.completion}
+            completion={chartData.completion}
             chartFilters={chartFilters}
             setChartFilters={setChartFilters}
             legendProps={{ layout: 'vertical' }}
@@ -98,27 +100,6 @@ const ParticipationByCountryBlock = ({
       </ChartContainer> */}
         </Block>
     )
-}
-
-ParticipationByCountryBlock.propTypes = {
-    block: PropTypes.shape({
-        id: PropTypes.string.isRequired
-    }).isRequired,
-    data: PropTypes.shape({
-        completion: PropTypes.shape({
-            count: PropTypes.number.isRequired,
-            percentage_survey: PropTypes.number.isRequired
-        }).isRequired,
-        facets: PropTypes.arrayOf(
-            PropTypes.shape({
-                buckets: PropTypes.arrayOf(
-                    PropTypes.shape({
-                        id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
-                    })
-                ).isRequired
-            })
-        ).isRequired
-    }).isRequired
 }
 
 export default memo(ParticipationByCountryBlock)

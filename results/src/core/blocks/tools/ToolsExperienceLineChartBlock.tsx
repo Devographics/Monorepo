@@ -27,7 +27,7 @@ import { MetricId, ALL_METRICS } from 'core/helpers/units'
 export interface MetricBucket {
     year: number
     rank: number
-    percentage_question: number
+    percentageQuestion: number
 }
 
 export interface ToolData extends Record<MetricId, MetricBucket[]> {
@@ -68,12 +68,12 @@ const processBlockData = (
             data: tool[controlledMetric]?.map((bucket, index) => {
                 const datapoint = {
                     x: bucket.year,
-                    y: bucket.percentage_question,
-                    percentage_question: bucket.percentage_question
+                    y: bucket.percentageQuestion,
+                    percentageQuestion: bucket.percentageQuestion
                 }
                 // add all metrics to datapoint for ease of debugging
                 ALL_METRICS.forEach(metric => {
-                    datapoint[`${metric}_percentage`] = tool[metric][index].percentage_question
+                    datapoint[`${metric}_percentage`] = tool[metric][index].percentageQuestion
                 })
                 return datapoint
             })
@@ -108,7 +108,7 @@ export const ToolsExperienceLineChartBlock = ({
         ALL_METRICS.forEach(metric => {
             cellData[`${metric}_percentage`] = tool[metric]?.map(y => ({
                 year: y.year,
-                value: y.percentage_question
+                value: y.percentageQuestion
             }))
             cellData[`${metric}_rank`] = tool[metric]?.map(y => ({
                 year: y.year,
@@ -118,7 +118,10 @@ export const ToolsExperienceLineChartBlock = ({
         return cellData
     })
 
-    const { chartFilters, setChartFilters } = useChartFilters({ block, options: { supportedModes: [MODE_GRID], enableYearSelect: false }})
+    const { chartFilters, setChartFilters } = useChartFilters({
+        block,
+        options: { supportedModes: [MODE_GRID], enableYearSelect: false }
+    })
 
     return (
         <BlockVariant

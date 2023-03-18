@@ -25,11 +25,11 @@ const gradientLineWidthScale = scaleLinear().domain([1, 0]).range([7, 3]).clamp(
 export const ToolsArrowsChart = ({ data, activeCategory }) => {
     const theme = useTheme()
 
-    const getColor = (id) => theme.colors.ranges.toolSections[id]
+    const getColor = id => theme.colors.ranges.toolSections[id]
 
     let toolToCategoryMap = {}
     map(toolsCategories, (tools, category) => {
-        tools.forEach((tool) => {
+        tools.forEach(tool => {
             toolToCategoryMap[tool] = category
         })
     })
@@ -61,7 +61,7 @@ export const ToolsArrowsChart = ({ data, activeCategory }) => {
 
         return {
             width,
-            height,
+            height
         }
     }, [windowWidth, windowHeight])
 
@@ -69,36 +69,41 @@ export const ToolsArrowsChart = ({ data, activeCategory }) => {
         typeof navigator !== 'undefined' &&
         navigator.userAgent.toLowerCase().indexOf('firefox') > -1
 
-    const tools = data.map((d) => d.id)
+    const tools = data.map(d => d.id)
     let toolNames = {}
-    data.forEach((tool) => {
+    data.forEach(tool => {
         toolNames[tool.id] = tool?.entity?.name
     })
 
     let items = useMemo(
         () =>
-            data.map((tool) => {
+            data.map(tool => {
                 const allYears = get(tool, 'experience.all_years', [])
                 return allYears?.map(({ year, facets }) => {
-                    const points = facets[0].buckets.map(({ id, percentage_question }) =>
-                        conditionDiffs[id].map((d) => d * percentage_question)
+                    const points = facets[0].buckets.map(({ id, percentageQuestion }) =>
+                        conditionDiffs[id].map(d => d * percentageQuestion)
                     )
-                    return [round(sum(points.map((d) => d[0])),3), round(sum(points.map((d) => d[1])),3), year, tool.id]
-                })}
-            ),
+                    return [
+                        round(sum(points.map(d => d[0])), 3),
+                        round(sum(points.map(d => d[1])), 3),
+                        year,
+                        tool.id
+                    ]
+                })
+            }),
         [data]
     )
 
     items = compact(items)
 
     const scales = useMemo(() => {
-        const xExtent = extent(flatten(items).map((d) => d?.[0]))
+        const xExtent = extent(flatten(items).map(d => d?.[0]))
         const maxAbsX = max(xExtent.map(Math.abs))
         const xScale = scaleLinear()
             .domain([-maxAbsX, maxAbsX])
             .range([20, dms.width - 20])
 
-        const yExtent = extent(flatten(items).map((d) => d?.[1]))
+        const yExtent = extent(flatten(items).map(d => d?.[1]))
         const maxAbsY = max(yExtent.map(Math.abs))
         const yScale = scaleLinear()
             .domain([-maxAbsY, maxAbsY])
@@ -106,7 +111,7 @@ export const ToolsArrowsChart = ({ data, activeCategory }) => {
 
         return {
             x: xScale,
-            y: yScale,
+            y: yScale
         }
     }, [items, dms])
 
@@ -135,23 +140,21 @@ export const ToolsArrowsChart = ({ data, activeCategory }) => {
                         y,
                         color,
                         points,
-                        velocity,
+                        velocity
                     }
                 },
                 [items]
             )
-            .filter((d) => d)
+            .filter(d => d)
     }, [dms, items])
 
-    const delaunay = useMemo(
-        () =>
-            Delaunay.from(
-                labels || [],
-                ({ x }) => x,
-                ({ y }) => y
-            )
+    const delaunay = useMemo(() =>
+        Delaunay.from(
+            labels || [],
+            ({ x }) => x,
+            ({ y }) => y
+        )
     )
-
 
     const draw = () => {
         if (!canvasElement.current) return
@@ -214,7 +217,7 @@ export const ToolsArrowsChart = ({ data, activeCategory }) => {
     }
     useEffect(draw, [hoveredTool, labels, dms])
 
-    const onMouseMove = (e) => {
+    const onMouseMove = e => {
         if (!canvasElement.current) {
             setHoveredTool(null)
             return
@@ -258,11 +261,8 @@ export const ToolsArrowsChart = ({ data, activeCategory }) => {
                         x2={dms.width / 2}
                         y2={dms.height}
                     />
-                    <text
-                      className="hide_visually"
-                      x={-9999999}
-                      y={-9999999}>
-                       {translate('charts.tools_arrows.x_axis')}
+                    <text className="hide_visually" x={-9999999} y={-9999999}>
+                        {translate('charts.tools_arrows.x_axis')}
                     </text>
                     <text className="ToolsArrowsChart__axis__label" y={dms.height / 2 - 10}>
                         {translate('charts.tools_arrows.negative_opinion')}
@@ -272,15 +272,12 @@ export const ToolsArrowsChart = ({ data, activeCategory }) => {
                         x={dms.width}
                         y={dms.height / 2 - 10}
                         style={{
-                            textAnchor: 'end',
+                            textAnchor: 'end'
                         }}
                     >
                         {translate('charts.tools_arrows.positive_opinion')}
                     </text>
-                    <text
-                      className="hide_visually"
-                      x={-9999999}
-                      y={-9999999}>
+                    <text className="hide_visually" x={-9999999} y={-9999999}>
                         {translate('charts.tools_arrows.y_axis')}
                     </text>
                     <text
@@ -288,7 +285,7 @@ export const ToolsArrowsChart = ({ data, activeCategory }) => {
                         x={dms.width / 2}
                         y={10}
                         style={{
-                            textAnchor: 'middle',
+                            textAnchor: 'middle'
                         }}
                     >
                         {translate('charts.tools_arrows.have_used')}
@@ -298,7 +295,7 @@ export const ToolsArrowsChart = ({ data, activeCategory }) => {
                         x={dms.width / 2}
                         y={dms.height - 10}
                         style={{
-                            textAnchor: 'middle',
+                            textAnchor: 'middle'
                         }}
                     >
                         {translate('charts.tools_arrows.have_not_used')}
@@ -313,109 +310,121 @@ export const ToolsArrowsChart = ({ data, activeCategory }) => {
                 />
 
                 <svg className="ToolsArrowsChart__svg" height={dms.height} width={dms.width}>
-                    {labels.map(({ tool, toolName, category, x, y, color, points, velocity }, i) => {
-                        return (
-                            <g
-                                key={i}
-                                className={`ToolsArrowsChart__tool ToolsArrowsChart__tool--is-${
-                                    activeCategory !== 'all' && activeCategory !== category
-                                        ? 'hidden'
-                                        : activeCategory === category
-                                        ? 'active'
-                                        : !hoveredTool
-                                        ? 'normal'
-                                        : hoveredTool.tool === tool
-                                        ? 'hovering'
-                                        : 'hovering-other'
-                                }`}
-                            >
-                                <text
-                                  className="ToolsArrowsChart__label-background" // border around text
-                                  x={x} 
-                                  y={y}
-                                  aria-hidden="true" // Avoid being read twice by screen readers
+                    {labels.map(
+                        ({ tool, toolName, category, x, y, color, points, velocity }, i) => {
+                            return (
+                                <g
+                                    key={i}
+                                    className={`ToolsArrowsChart__tool ToolsArrowsChart__tool--is-${
+                                        activeCategory !== 'all' && activeCategory !== category
+                                            ? 'hidden'
+                                            : activeCategory === category
+                                            ? 'active'
+                                            : !hoveredTool
+                                            ? 'normal'
+                                            : hoveredTool.tool === tool
+                                            ? 'hovering'
+                                            : 'hovering-other'
+                                    }`}
                                 >
-                                    {toolName}
-                                </text>
-                                <text
-                                    className="ToolsArrowsChart__label"
-                                    fill={color}
-                                    x={x}
-                                    y={y}
-                                    aria-hidden="true" // Avoid being read twice by screen readers
-                                >
-                                    {toolName}
-                                </text>
-                                <text
-                                    className="hide_visually"
-                                    x={-9999999}
-                                    y={-9999999}>
-                                    {toolName}. {
-                                        translate('charts.tools_arrows.velocity')}: {
-                                            parseInt(velocity * 100) / 100
-                                        }. {velocity < 0 
-                                            ? translate('charts.tools_arrows.velocity_positive') 
-                                            : translate('charts.tools_arrows.velocity_negative')
-                                    }.
-                                </text>
+                                    <text
+                                        className="ToolsArrowsChart__label-background" // border around text
+                                        x={x}
+                                        y={y}
+                                        aria-hidden="true" // Avoid being read twice by screen readers
+                                    >
+                                        {toolName}
+                                    </text>
+                                    <text
+                                        className="ToolsArrowsChart__label"
+                                        fill={color}
+                                        x={x}
+                                        y={y}
+                                        aria-hidden="true" // Avoid being read twice by screen readers
+                                    >
+                                        {toolName}
+                                    </text>
+                                    <text className="hide_visually" x={-9999999} y={-9999999}>
+                                        {toolName}. {translate('charts.tools_arrows.velocity')}:{' '}
+                                        {parseInt(velocity * 100) / 100}.{' '}
+                                        {velocity < 0
+                                            ? translate('charts.tools_arrows.velocity_positive')
+                                            : translate('charts.tools_arrows.velocity_negative')}
+                                        .
+                                    </text>
 
-                                {points.map(([x, y, year], i) => {
-                                    const isFirstLabelToTheRight =
-                                        scales.x(x) > dms.width * 0.9 ||
-                                        labelsToTheRight.indexOf(tool) !== -1
+                                    {points.map(([x, y, year], i) => {
+                                        const isFirstLabelToTheRight =
+                                            scales.x(x) > dms.width * 0.9 ||
+                                            labelsToTheRight.indexOf(tool) !== -1
 
-                                    const showLabel = true //hoveredTool && hoveredTool.tool === tool
+                                        const showLabel = true //hoveredTool && hoveredTool.tool === tool
 
-                                    return (
-                                        <Fragment key={i}>
-                                            {showLabel && (
-                                                <g>
-                                                  <text
-                                                    className="ToolsArrowsChart__year"
-                                                    x={
-                                                        scales.x(x) +
-                                                        10 * (isFirstLabelToTheRight ? -1 : 1)
-                                                    }
-                                                    y={scales.y(y) + 5}
-                                                    style={{
-                                                        textAnchor: isFirstLabelToTheRight
-                                                            ? 'end'
-                                                            : 'start',
-                                                    }}
-                                                    aria-hidden="true"
-                                                  >
-                                                      {year}
-                                                  </text>
-                                                  <text 
-                                                      x={-99999999}
-                                                      y={-99999999}
-                                                      className="hide_visually">
-                                                      {tool}, {year}: 
-                                                      {x < 0 
-                                                          ? translate('charts.tools_arrows.opinions_negative') 
-                                                          : translate('charts.tools_arrows.opinions_positive')
-                                                      } ({parseInt(x * 100) / 100}%), 
-                                                      {y < 0 
-                                                          ? translate('charts.tools_arrows.usage_low') 
-                                                          : translate('charts.tools_arrows.usage_high')
-                                                      } ({parseInt(y * 100) / 100}%)
-                                                  </text>
-                                                </g>
-                                            )}
-                                            
-                                            {showLabel && <circle
-                                                className="ToolsArrowsChart__year"
-                                                cx={scales.x(x)}
-                                                cy={scales.y(y)}
-                                                r="4"
-                                                fill="white"
-                                            />}
-                                        </Fragment>
-                                    )
-                                })}
-                            </g>
-                        )
-                    })}
+                                        return (
+                                            <Fragment key={i}>
+                                                {showLabel && (
+                                                    <g>
+                                                        <text
+                                                            className="ToolsArrowsChart__year"
+                                                            x={
+                                                                scales.x(x) +
+                                                                10 *
+                                                                    (isFirstLabelToTheRight
+                                                                        ? -1
+                                                                        : 1)
+                                                            }
+                                                            y={scales.y(y) + 5}
+                                                            style={{
+                                                                textAnchor: isFirstLabelToTheRight
+                                                                    ? 'end'
+                                                                    : 'start'
+                                                            }}
+                                                            aria-hidden="true"
+                                                        >
+                                                            {year}
+                                                        </text>
+                                                        <text
+                                                            x={-99999999}
+                                                            y={-99999999}
+                                                            className="hide_visually"
+                                                        >
+                                                            {tool}, {year}:
+                                                            {x < 0
+                                                                ? translate(
+                                                                      'charts.tools_arrows.opinions_negative'
+                                                                  )
+                                                                : translate(
+                                                                      'charts.tools_arrows.opinions_positive'
+                                                                  )}{' '}
+                                                            ({parseInt(x * 100) / 100}%),
+                                                            {y < 0
+                                                                ? translate(
+                                                                      'charts.tools_arrows.usage_low'
+                                                                  )
+                                                                : translate(
+                                                                      'charts.tools_arrows.usage_high'
+                                                                  )}{' '}
+                                                            ({parseInt(y * 100) / 100}%)
+                                                        </text>
+                                                    </g>
+                                                )}
+
+                                                {showLabel && (
+                                                    <circle
+                                                        className="ToolsArrowsChart__year"
+                                                        cx={scales.x(x)}
+                                                        cy={scales.y(y)}
+                                                        r="4"
+                                                        fill="white"
+                                                    />
+                                                )}
+                                            </Fragment>
+                                        )
+                                    })}
+                                </g>
+                            )
+                        }
+                    )}
                     <rect
                         className="ToolsArrowsChart__listener"
                         width={dms.width}
@@ -425,31 +434,32 @@ export const ToolsArrowsChart = ({ data, activeCategory }) => {
                 </svg>
             </div>
             <div className="legend">
-                <p className="hide_visually">
-                    {translate('charts.tools_arrows.legend')}
-                </p>
-                <p 
-                    className="legend_label right" 
+                <p className="hide_visually">{translate('charts.tools_arrows.legend')}</p>
+                <p
+                    className="legend_label right"
                     style={{
-                        borderColor: getVelocityColor(100, theme), 
+                        borderColor: getVelocityColor(100, theme),
                         color: theme.colors.highVelocity,
                         fontWeight: 'bold'
                     }}
                 >
                     {translate('charts.tools_arrows.popularity_positive')}
                 </p>
-                <div 
-                  className="legend_colors"
-                  style={{
-                      backgroundImage: `linear-gradient(90deg, ${getVelocityColor(-100, theme)}, ${getVelocityColor(0, theme)}, ${getVelocityColor(100, theme)})`,
-                      borderLeftColor: getVelocityColor(-80, theme),
-                      borderRightColor: getVelocityColor(90, theme)
-                  }}
-                ></div>
-                <p 
-                    className="legend_label left" 
+                <div
+                    className="legend_colors"
                     style={{
-                        borderColor: getVelocityColor(-80, theme), 
+                        backgroundImage: `linear-gradient(90deg, ${getVelocityColor(
+                            -100,
+                            theme
+                        )}, ${getVelocityColor(0, theme)}, ${getVelocityColor(100, theme)})`,
+                        borderLeftColor: getVelocityColor(-80, theme),
+                        borderRightColor: getVelocityColor(90, theme)
+                    }}
+                ></div>
+                <p
+                    className="legend_label left"
+                    style={{
+                        borderColor: getVelocityColor(-80, theme),
                         color: theme.colors.lowVelocity,
                         fontWeight: 'bold'
                     }}
@@ -473,7 +483,7 @@ const conditionDiffs = {
     not_interested: [-1, -1],
     interested: [1, -1],
     would_not_use: [-1, 1],
-    would_use: [1, 1],
+    would_use: [1, 1]
 }
 
 function useWindowWidth() {
@@ -527,5 +537,5 @@ const labelsToTheRight = [
     'electron',
     'nextjs',
     'vuejs',
-    'cypress',
+    'cypress'
 ]

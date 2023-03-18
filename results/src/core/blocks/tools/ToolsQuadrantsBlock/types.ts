@@ -18,18 +18,20 @@ export interface ToolsQuadrantsApiDatum {
         keys: ToolExperienceId[]
         year: {
             completion: YearCompletion
-            facets: [{
-                buckets: {
-                    id: ToolExperienceId
-                    // number of respondents who chose this option
-                    // for this year.
-                    count: number
-                    // percentage against people who answered this question
-                    percentage_question: number
-                    // percentage against people overall survey participants
-                    percentage_survey: number
-                }[]
-            }]
+            facets: [
+                {
+                    buckets: {
+                        id: ToolExperienceId
+                        // number of respondents who chose this option
+                        // for this year.
+                        count: number
+                        // percentage against people who answered this question
+                        percentageQuestion: number
+                        // percentage against people overall survey participants
+                        percentageSurvey: number
+                    }[]
+                }
+            ]
         }
     }
 }

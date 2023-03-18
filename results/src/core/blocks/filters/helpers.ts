@@ -140,12 +140,12 @@ export const getFiltersQuery = ({
     return { query: newQuery, seriesNames }
 }
 
-const baseUnits = ['count', 'percentage_question', 'percentage_survey']
+const baseUnits = ['count', 'percentageQuestion', 'percentageSurvey']
 
 /*
 
 Take multiple buckets arrays and merge them into a array with
-multiple series (e.g. { count, count_1, percentage_question, percentage_question_1, etc. })
+multiple series (e.g. { count, count_1, percentageQuestion, percentageQuestion_1, etc. })
 
 */
 export const combineBuckets = ({ defaultBuckets, otherBucketsArrays, completion }) => {
@@ -461,8 +461,8 @@ export const useChartFilters = ({
     block: BlockDefinition
     options: CustomizationOptions
 }) => {
-
-    let loadFiltersFromUrl = false, urlFilters = {}
+    let loadFiltersFromUrl = false,
+        urlFilters = {}
     if (typeof location !== 'undefined') {
         const search = new URLSearchParams(location.search)
         const queryParams = Object.fromEntries(search.entries())

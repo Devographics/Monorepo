@@ -14,7 +14,7 @@ export const AllSectionsToolsCardinalityByUserChart = ({
         sectionId: string
         data: ToolsCardinalityByUserBucket[]
     }[]
-    units: 'percentage_survey' | 'count'
+    units: 'percentageSurvey' | 'count'
     maxNumberOfTools: number
 }) => (
     <GridContainer>

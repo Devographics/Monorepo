@@ -10,11 +10,11 @@ export interface TableBucketItem {
     label?: string
     count?: number | TableBucketYearValue[]
     displayAsPercentage?: boolean
-    percentage_survey?: number | TableBucketYearValue[]
+    percentageSurvey?: number | TableBucketYearValue[]
     // percentage relative to the number of question respondents
-    percentage_question?: number | TableBucketYearValue[]
+    percentageQuestion?: number | TableBucketYearValue[]
     // percentage relative to the number of respondents in the facet
-    percentage_facet?: number | TableBucketYearValue[]
+    percentageFacet?: number | TableBucketYearValue[]
 }
 
 export interface TableBucketYearValue {
@@ -71,7 +71,7 @@ const getValue = (row: TableBucketItem, units: BlockUnits) => {
     return value
 }
 
-const defaultValueKeys: BlockUnits[] = ['percentage_survey', 'percentage_question', 'count']
+const defaultValueKeys: BlockUnits[] = ['percentageSurvey', 'percentageQuestion', 'count']
 
 export const getTableData = (params: TableParams): TableData => {
     const {

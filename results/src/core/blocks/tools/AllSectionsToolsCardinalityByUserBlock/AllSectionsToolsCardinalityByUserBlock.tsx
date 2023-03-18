@@ -18,7 +18,7 @@ interface AllSectionsToolsCardinalityByUserBlockProps {
         'SectionToolsCardinalityByUserBlock'
     >
     data: Record<string, ToolsCardinalityByUserBucket[]>
-    units?: 'percentage_survey' | 'count'
+    units?: 'percentageSurvey' | 'count'
 }
 
 const getChartData = (data: AllSectionsToolsCardinalityByUserBlockProps['data']) => {
@@ -40,7 +40,7 @@ const getChartData = (data: AllSectionsToolsCardinalityByUserBlockProps['data'])
                 return {
                     cardinality,
                     count: 0,
-                    percentage_survey: 0
+                    percentageSurvey: 0
                 }
             })
 
@@ -63,7 +63,7 @@ const getChartData = (data: AllSectionsToolsCardinalityByUserBlockProps['data'])
 export const AllSectionsToolsCardinalityByUserBlock = ({
     block,
     data,
-    defaultUnits = 'percentage_survey'
+    defaultUnits = 'percentageSurvey'
 }: AllSectionsToolsCardinalityByUserBlockProps) => {
     // const [units, setUnits] = useState(defaultUnits)
     const units = defaultUnits
@@ -85,7 +85,7 @@ export const AllSectionsToolsCardinalityByUserBlock = ({
                 getTableData({
                     title: getString(`sections.${sectionId}.title`)?.t,
                     data: data.map(item => ({ ...item, label: item.cardinality })).reverse(),
-                    valueKeys: ['count', 'percentage_survey']
+                    valueKeys: ['count', 'percentageSurvey']
                 })
             )}
             data={data}

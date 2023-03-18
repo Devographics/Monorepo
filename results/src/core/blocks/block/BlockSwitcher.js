@@ -9,10 +9,13 @@ import get from 'lodash/get'
 import { usePageContext } from 'core/helpers/pageContext'
 import { BlockError } from 'core/blocks/block/BlockError'
 
+// const getDefaultDataPath = ({ survey, edition, section, question }) =>
+//     `dataAPI.surveys.${survey.id}.${edition.id}.${section.id}.${question.id}.responses.${
+//         question.allEditions ? 'all_editions' : 'current_edition'
+//     }`
+
 const getDefaultDataPath = ({ survey, edition, section, question }) =>
-    `dataAPI.surveys.${survey.id}.${edition.id}.${section.id}.${question.id}.responses.${
-        question.allEditions ? 'all_editions' : 'current_edition'
-    }`
+    `dataAPI.surveys.${survey.id}.${edition.id}.${section.id}.${question.id}`
 
 const BlockSwitcher = ({ pageData, block, index, ...props }) => {
     const pageContext = usePageContext()
@@ -28,7 +31,10 @@ const BlockSwitcher = ({ pageData, block, index, ...props }) => {
         })
 
     let blockData = dataPath && get(pageData, dataPath)
-
+    // console.log(block.id)
+    // console.log(pageData)
+    // console.log(dataPath)
+    // console.log(blockData)
     const [customData, setCustomData] = useState()
 
     let blockKeys = block.keysPath && get(pageData, block.keysPath)

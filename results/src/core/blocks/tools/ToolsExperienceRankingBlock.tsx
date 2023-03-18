@@ -23,7 +23,7 @@ import { useChartFilters } from 'core/blocks/filters/helpers'
 export interface MetricBucket {
     year: number
     rank: number
-    percentage_question: number
+    percentageQuestion: number
 }
 
 export interface ToolData extends Record<MetricId, MetricBucket[]> {
@@ -65,7 +65,7 @@ const processBlockData = (
                 return {
                     x: bucket.year,
                     y: bucket.rank,
-                    percentage_question: bucket.percentage_question
+                    percentageQuestion: bucket.percentageQuestion
                 }
             })
         }
@@ -90,7 +90,7 @@ export const ToolsExperienceRankingBlock = ({
         ALL_METRICS.forEach(metric => {
             cellData[`${metric}_percentage`] = tool[metric]?.map(y => ({
                 year: y.year,
-                value: y.percentage_question
+                value: y.percentageQuestion
             }))
             cellData[`${metric}_rank`] = tool[metric]?.map(y => ({
                 year: y.year,
@@ -100,7 +100,10 @@ export const ToolsExperienceRankingBlock = ({
         return cellData
     })
 
-    const { chartFilters, setChartFilters } = useChartFilters({ block, options: { supportedModes: [MODE_GRID], enableYearSelect: false }})
+    const { chartFilters, setChartFilters } = useChartFilters({
+        block,
+        options: { supportedModes: [MODE_GRID], enableYearSelect: false }
+    })
 
     return (
         <Block

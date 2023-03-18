@@ -14,7 +14,7 @@ export interface RankingChartDatum {
     y: number
     // percentage attached to a specific year
     // used to compute the rank
-    percentage_question: number
+    percentageQuestion: number
 }
 
 export interface RankingChartSerie {
@@ -40,7 +40,7 @@ const CustomPoint = props => {
     // console.log(props)
 
     const { datum, size, color, borderColor, borderWidth } = props
-    const { x, y, percentage_question } = datum
+    const { x, y, percentageQuestion } = datum
     const theme = useTheme()
 
     const transition = useSpring({
@@ -62,7 +62,7 @@ const CustomPoint = props => {
             />
             {!isInactive && (
                 <text textAnchor="middle" y={4} fill={theme.colors.text} fontSize="11px">
-                    {Math.round(percentage_question)}%
+                    {Math.round(percentageQuestion)}%
                 </text>
             )}
         </animated.g>
@@ -77,10 +77,10 @@ interface CustomTooltipProps {
 const CustomTooltip = (props: CustomTooltipProps) => {
     const { point, getName } = props
     const { id, color, borderColor, data, serieColor, serieId, x, y, index } = point
-    const { x: year, percentage_question } = data
+    const { x: year, percentageQuestion } = data
     return (
         <BasicTooltip
-            id={`${getName(serieId)}: ${percentage_question}% (${year})`}
+            id={`${getName(serieId)}: ${percentageQuestion}% (${year})`}
             enableChip={true}
             color={serieColor}
         />
@@ -100,7 +100,11 @@ we need to call processBlockData() again whenever the metric changes,
 which will not happen unless we call it from within the chart
 
 */
-export const LineChart = ({ buckets: unprocessedData, processBlockData, processBlockDataOptions }: RankingChartProps) => {
+export const LineChart = ({
+    buckets: unprocessedData,
+    processBlockData,
+    processBlockDataOptions
+}: RankingChartProps) => {
     const buckets = processBlockData(unprocessedData, processBlockDataOptions)
     const theme = useTheme()
     // const { getString } = useI18n()

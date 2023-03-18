@@ -17,7 +17,7 @@ const ToolsSectionStreamsBlock = ({
     data,
     keys,
     triggerId,
-    units: defaultUnits = 'percentage_question'
+    units: defaultUnits = 'percentageQuestion'
 }) => {
     const [units, setUnits] = useState(defaultUnits)
 

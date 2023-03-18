@@ -169,7 +169,7 @@ BracketWinsBlock.propTypes = {
         showDescription: PropTypes.bool,
         translateData: PropTypes.bool,
         mode: PropTypes.oneOf(['absolute', 'relative']),
-        defaultUnits: PropTypes.oneOf(['percentage_survey', 'percentage_question', 'count']),
+        defaultUnits: PropTypes.oneOf(['percentageSurvey', 'percentageQuestion', 'count']),
         colorVariant: PropTypes.oneOf(['primary', 'secondary'])
     }).isRequired,
     data: PropTypes.shape({

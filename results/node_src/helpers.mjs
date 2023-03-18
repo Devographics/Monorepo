@@ -1,5 +1,4 @@
 import omit from 'lodash/omit.js'
-import { indentString } from './indent_string.mjs'
 import upperFirst from 'lodash/upperFirst.js'
 import merge from 'lodash/merge.js'
 import path from 'path'
@@ -8,7 +7,7 @@ import fetch from 'node-fetch'
 import yaml from 'js-yaml'
 import { TwitterApi } from 'twitter-api-v2'
 import { logToFile } from './log_to_file.mjs'
-import { getDefaultQuery, getDefaultQueryName, getDefaultQueryBody } from './queries.mjs'
+import { getDefaultQuery, getQueryName, wrapQuery, cleanQuery } from './queries.mjs'
 import { fileURLToPath } from 'url'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -47,22 +46,6 @@ export const getPageContext = page => {
         ...page.data
     }
 }
-
-/*
-
-Clean ID string
-
-*/
-export const cleanIdString = id => id.replace(new RegExp('-', 'g'), '_')
-
-/*
-
-Wrap query contents with query FooQuery {...}
-
-*/
-export const wrapWithQuery = (queryName, queryContents) => `query ${queryName} {
-  ${indentString(queryContents, 4)}
-  }`
 
 /*
 
@@ -192,26 +175,23 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId }) => 
                     )
                     data = existingData
                 } else {
+                    const questionId = v.id
+                    const queryName = getQueryName({ editionId, questionId })
                     const queryOptions = {
                         surveyId,
                         editionId,
                         sectionId: page.id,
-                        questionId: v.id,
+                        questionId,
                         parameters: v?.variables?.parameters,
                         addEntities: v.addEntities,
                         allEditions: v.allEditions
                     }
 
-                    const query = v.query
-                        ? wrapWithQuery(`${upperFirst(cleanIdString(v.id))}Query`, v.query)
-                        : getDefaultQuery(queryOptions)
+                    const queryContents = v.query ? v.query : getDefaultQuery(queryOptions)
+                    const query = wrapQuery({ queryName, queryContents })
 
                     if (query.includes('dataAPI')) {
-                        // only log out queries to dataAPI, not to internalAPI
-                        const queryLog = `query ${getDefaultQueryName(
-                            queryOptions
-                        )} {  ${getDefaultQueryBody(queryOptions)}}`
-
+                        const queryLog = cleanQuery(query)
                         logToFile(queryFileName, queryLog, {
                             mode: 'overwrite',
                             dirPath: queryDirPath,
@@ -219,11 +199,7 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId }) => 
                         })
                     }
 
-                    const result = await graphql(
-                        `
-                            ${query}
-                        `
-                    )
+                    const result = await graphql(query)
                     data = result.data
 
                     logToFile(dataFileName, data, {
@@ -239,13 +215,6 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId }) => 
 
     const finishedAt = new Date()
     const duration = finishedAt.getTime() - startedAt.getTime()
-    const pageQueryName = cleanIdString(page.id)
-
-    logToFile(
-        `${editionId}__${pageQueryName}.json`,
-        { data: pageData, duration },
-        { mode: 'overwrite', subDir: 'data', editionId }
-    )
 
     console.log(`-> Done in ${duration}ms`)
     return pageData

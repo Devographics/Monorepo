@@ -1,4 +1,5 @@
-import capitalize from 'lodash/capitalize.js'
+import camelCase from 'lodash/camelCase.js'
+import { indentString } from './indent_string.mjs'
 
 export const getLocalesQuery = (localeIds, contexts, loadStrings = true) => {
     const args = []
@@ -82,9 +83,9 @@ query {
                     id
                     name
                     partners {
-                      name
-                      url
-                      imageUrl
+                        name
+                        url
+                        imageUrl
                     }
                 }
                 ${editionId} {
@@ -100,29 +101,30 @@ query {
                         faviconUrl
                         socialImageUrl
                         sponsors {
-                          id
-                          name
-                          url
-                          imageUrl
+                            id
+                            name
+                            url
+                            imageUrl
                         }
                         credits {
-                          id
-                          role
+                            id
+                            role
                         }
                         sections {
                             id
                             questions {
-                            entity {
                                 id
-                                name
-                                nameClean
-                                nameHtml
-                            }
-                            options {
-                                ${entityFragment}
-                                id
-                            }
-                            id
+                                template
+                                entity {
+                                    id
+                                    name
+                                    nameClean
+                                    nameHtml
+                                }
+                                options {
+                                    ${entityFragment}
+                                    id
+                                }
                             }
                         }
                     }
@@ -138,7 +140,7 @@ const allEditionsFragment = `editionId
 
 const unquote = s => s.replace(/"([^"]+)":/g, '$1:')
 
-export const getDefaultQueryBody = ({
+export const getDefaultQuery = ({
     surveyId,
     editionId,
     sectionId,
@@ -152,28 +154,30 @@ export const getDefaultQueryBody = ({
     const params = { ...parameters, enableCache }
     const parametersString = `(parameters: ${unquote(JSON.stringify(params))})`
 
-    const editionType = allEditions ? 'all_editions' : 'current_edition'
+    const editionType = allEditions ? 'allEditions' : 'currentEdition'
 
     return `
-surveys {
-  ${surveyId} {
-    ${editionId} {
-      ${sectionId} {
-        ${questionId} {
-          responses${parametersString} {
-            ${editionType} {
-              ${allEditions ? allEditionsFragment : ''}
-              completion {
-                count
-                percentage_survey
-                total
-              }
-              buckets {
-                count
-                id
-                percentage_question
-                percentage_survey
-                ${addEntities ? entityFragment : ''}
+dataAPI {
+  surveys {
+    ${surveyId} {
+      ${editionId} {
+        ${sectionId} {
+          ${questionId} {
+            responses${parametersString} {
+              ${editionType} {
+                ${allEditions ? allEditionsFragment : ''}
+                completion {
+                  count
+                  percentageSurvey
+                  total
+                }
+                buckets {
+                  count
+                  id
+                  percentageQuestion
+                  percentageSurvey
+                  ${addEntities ? entityFragment : ''}
+                }
               }
             }
           }
@@ -185,12 +189,29 @@ surveys {
 `
 }
 
-export const getDefaultQueryName = options =>
-    `${options.editionId}${capitalize(options.questionId)}Query`
+export const getQueryName = ({ editionId, questionId }) =>
+    `${camelCase(editionId)}${camelCase(questionId)}Query`
 
-export const getDefaultQuery = options => `
-query ${getDefaultQueryName(options)} {
-  dataAPI {
-      ${getDefaultQueryBody(options)}
-  }
+/*
+
+Wrap query contents with query FooQuery {...}
+
+*/
+export const wrapQuery = ({ queryName, queryContents }) => `query ${queryName} {
+   ${indentString(queryContents, 4)}
 }`
+
+/*
+
+Remove "dataAPI" part
+
+*/
+const removeLast = (str, char) => {
+    const lastIndex = str.lastIndexOf(char)
+    return str.substring(0, lastIndex) + str.substring(lastIndex + 1)
+}
+
+export const cleanQuery = query => {
+    const cleanQuery = removeLast(query.replace('dataAPI {', ''), '}')
+    return cleanQuery
+}

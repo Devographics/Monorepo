@@ -14,26 +14,31 @@ import { useI18n } from 'core/i18n/i18nContext'
 import { TableBucketItem, getTableData, groupDataByYears } from 'core/helpers/datatables'
 import { BlockUnits, ResultsByYear } from 'core/types'
 import { isPercentage } from 'core/helpers/units'
-import { EditionData } from '@devographics/types'
+import { QuestionData } from '@devographics/types'
 import { useOptions } from 'core/helpers/options'
 
 const OPINION_BUCKET_KEYS_ID = 'opinions'
 
 interface OpinionBlockProps {
     block: BlockContext<'opinionTemplate', 'OpinionBlock'>
-    data: EditionData[]
-    units: 'percentage_survey' | 'percentage_question' | 'count'
+    data: QuestionData
+    units: 'percentageSurvey' | 'percentageQuestion' | 'count'
     keys: string[]
     translateData: boolean
 }
 
 export const OpinionBlock = ({
     block,
-    data,
+    data: blockData,
     keys,
-    units: defaultUnits = 'percentage_question',
+    units: defaultUnits = 'percentageQuestion',
     translateData = true
 }: OpinionBlockProps) => {
+    const chartData = blockData?.responses?.allEditions
+    if (!chartData) {
+        throw Error(`No data found for block ${block.id}`)
+    }
+
     const { id } = block
     const [units, setUnits] = useState(defaultUnits)
 
@@ -44,8 +49,8 @@ export const OpinionBlock = ({
     const chartOptions = useOptions(block.id)
     const bucketKeys = useLegends(block, chartOptions, 'opinions')
 
-    const years = data.map(edition => edition.year)
-    const allBuckets = data
+    const years = chartData.map(edition => edition.year)
+    const allBuckets = chartData
     const tableData = groupDataByYears({ keys, data: allBuckets })
 
     return (
@@ -57,7 +62,7 @@ export const OpinionBlock = ({
                 bucketKeysName: OPINION_BUCKET_KEYS_ID
             }}
             legends={bucketKeys}
-            data={data}
+            data={chartData}
             legendProps={{
                 onMouseEnter: ({ id }: { id: OpinionBucket['id'] }) => {
                     setCurrent(id)

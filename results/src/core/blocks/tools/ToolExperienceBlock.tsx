@@ -25,7 +25,7 @@ interface ToolExperienceBlockProps {
     block: BlockContext<'toolExperienceTemplate', 'ToolExperienceBlock', { toolIds: string }>
     data: ToolAllYearsExperience
     keys: string[]
-    units?: 'percentage_survey' | 'percentage_question' | 'count'
+    units?: 'percentageSurvey' | 'percentageQuestion' | 'count'
     closeComponent: any
 }
 
@@ -59,7 +59,7 @@ export const ToolExperienceBlock = ({
     block,
     keys,
     data,
-    units: defaultUnits = 'percentage_question',
+    units: defaultUnits = 'percentageQuestion',
     closeComponent
 }: ToolExperienceBlockProps) => {
     const context = usePageContext()

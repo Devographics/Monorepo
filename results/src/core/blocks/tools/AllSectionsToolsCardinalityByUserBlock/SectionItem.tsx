@@ -20,7 +20,7 @@ export const SectionItem = ({
 }: {
     sectionId: string
     data: ToolsCardinalityByUserBucket[]
-    units: 'percentage_survey' | 'count'
+    units: 'percentageSurvey' | 'count'
     maxNumberOfTools: number
 }) => {
     const { translate } = useI18n()
@@ -30,7 +30,7 @@ export const SectionItem = ({
         return (bucket: ToolsCardinalityByUserBucket) => {
             return units === 'count'
                 ? formatter(bucket.count)
-                : `${formatter(bucket.percentage_survey)}%`
+                : `${formatter(bucket.percentageSurvey)}%`
         }
     }, [units])
 
@@ -40,7 +40,7 @@ export const SectionItem = ({
         maxCount = maxBucket.count
     }
 
-    const totalPercentage = round(sumBy(data, 'percentage_survey'), 2)
+    const totalPercentage = round(sumBy(data, 'percentageSurvey'), 2)
 
     return (
         <SectionContainer>
@@ -70,7 +70,7 @@ export const SectionItem = ({
                                 <CellsWrapper />
                                 <InnerBar
                                     style={{
-                                        width: `${bucket.percentage_survey}%`
+                                        width: `${bucket.percentageSurvey}%`
                                     }}
                                 />
                                 {isMax && (

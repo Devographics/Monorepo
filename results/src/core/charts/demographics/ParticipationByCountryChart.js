@@ -6,10 +6,10 @@ import countries from 'data/geo/world_countries'
 import { isPercentage } from 'core/helpers/units'
 import { BasicTooltip } from '@nivo/tooltip'
 
-const features = countries.features.map((feature) => {
+const features = countries.features.map(feature => {
     return {
         ...feature,
-        id: feature.id,
+        id: feature.id
     }
 })
 
@@ -24,8 +24,8 @@ const chartLegends = [
         itemHeight: 18,
         itemDirection: 'left-to-right',
         symbolSize: 18,
-        justify: true,
-    },
+        justify: true
+    }
 ]
 
 const ParticipationByCountryTooltip = ({ feature }) => {
@@ -35,7 +35,9 @@ const ParticipationByCountryTooltip = ({ feature }) => {
             id={feature.properties.name}
             color={feature.color}
             enableChip={true}
-            value={`${feature?.data?.percentage_survey?.toFixed(1)}% (${Math.round(feature?.data?.count)})`}
+            value={`${feature?.data?.percentageSurvey?.toFixed(1)}% (${Math.round(
+                feature?.data?.count
+            )})`}
         />
     )
 }
@@ -44,13 +46,13 @@ const ParticipationByCountryChart = ({ units, data }) => {
     const theme = useTheme()
 
     const mergedTheme = {
-        ...theme.charts,
+        ...theme.charts
         // background: theme.colors.backgroundAlt,
     }
 
     const colorRange = theme.colors.countries
 
-    const valueFormat = isPercentage(units) ? (v) => `${v.toFixed(1)}%` : (v) => Math.round(v)
+    const valueFormat = isPercentage(units) ? v => `${v.toFixed(1)}%` : v => Math.round(v)
 
     return (
         <ResponsiveChoroplethCanvas
@@ -75,14 +77,14 @@ const ParticipationByCountryChart = ({ units, data }) => {
 }
 
 ParticipationByCountryChart.propTypes = {
-    units: PropTypes.oneOf(['count', 'percentage_survey', 'percentage_question']).isRequired,
+    units: PropTypes.oneOf(['count', 'percentageSurvey', 'percentageQuestion']).isRequired,
     data: PropTypes.arrayOf(
         PropTypes.shape({
             id: PropTypes.string.isRequired,
             count: PropTypes.number.isRequired,
-            percentage_survey: PropTypes.number.isRequired,
+            percentageSurvey: PropTypes.number.isRequired
         })
-    ).isRequired,
+    ).isRequired
 }
 
 export default memo(ParticipationByCountryChart)

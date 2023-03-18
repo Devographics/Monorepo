@@ -28,7 +28,7 @@ Switch between absolute (chart always has same max value) and relative (chart ad
 
 */
 const getMode = (units: Units, mode: Mode) => {
-    if (units === 'percentage_survey' || units === 'percentage_bucket') {
+    if (units === 'percentageSurvey' || units === 'percentage_bucket') {
         return 'absolute'
     } else {
         return 'relative'

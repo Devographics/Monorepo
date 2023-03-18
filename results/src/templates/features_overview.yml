@@ -1,49 +1,29 @@
 titleId: blocks.features_overview
 blockType: FeaturesOverviewBlock
-dataPath: "dataAPI.survey.${id}"
-keysPath: "dataAPI.survey.${id}.0.experience.keys"
+# dataPath: "dataAPI.survey.${id}"
+# keysPath: "dataAPI.survey.${id}.0.experience.keys"
 # enableCustomization: true
 hasSponsor: true
+loadData: true
 query: >
     dataAPI {
-        survey(survey: ${surveyType}) {
-            ${id}: features(ids: [${allFeatures}]) {
-                id
-                entity {
-                    name
-                    nameClean
-                    nameHtml
-                    homepage {
-                        url
-                    }
-                    caniuse {
-                        name
-                        url
-                    }
-                    mdn {
-                        locale
-                        url
-                        title
-                        summary
-                    }
-                }
-                experience{
-                    keys
-                    year(year: ${currentYear}) {
-                        year
-                        completion {
-                            total
-                            count
-                            percentage_survey
-                        }
-                        facets{
-                            type
-                            id
-                            buckets {
+        surveys {
+            ${surveyId} {
+                ${editionId} {
+                    features {
+                        features_overview: allItems {
+                            data {
                                 id
-                                count
-                                percentage_question
-                                percentage_survey
+                                responses {
+                                    currentEdition {
+                                        buckets {
+                                            id
+                                            percentageQuestion
+                                            percentageSurvey
+                                            count
+                                        }
+                                    }
+                                }
                             }
                         }
                     }

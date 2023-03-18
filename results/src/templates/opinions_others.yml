@@ -1,6 +1,6 @@
-titleId: "opinions_others.${id}.others"
+titleId: 'opinions_others.${id}.others'
 blockType: HorizontalBarBlock
-dataPath: "dataAPI.survey.${id}.year"
+dataPath: 'dataAPI.survey.${id}.year'
 query: >
     dataAPI {
         survey(survey: ${surveyType}) {
@@ -11,22 +11,22 @@ query: >
                     completion {
                         total
                         count
-                        percentage_survey
+                        percentageSurvey
                     }
                     facets {
                         id
                         type
                         completion {
                             total
-                            percentage_question
-                            percentage_survey
+                            percentageQuestion
+                            percentageSurvey
                             count
                         }
                         buckets {
                             id
                             count
-                            percentage_question
-                            percentage_survey
+                            percentageQuestion
+                            percentageSurvey
                             entity {
                                 name
                                 nameClean

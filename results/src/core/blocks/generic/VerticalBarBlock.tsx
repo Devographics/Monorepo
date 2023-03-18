@@ -9,7 +9,7 @@ import { useLegends } from 'core/helpers/useBucketKeys'
 import { useOptions } from 'core/helpers/options'
 // import T from 'core/i18n/T'
 import { BlockComponentProps, BlockUnits } from 'core/types'
-import { EditionData } from '@devographics/types'
+import { QuestionData, EditionData } from '@devographics/types'
 import { getTableData } from 'core/helpers/datatables'
 import sumBy from 'lodash/sumBy'
 import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
@@ -19,37 +19,39 @@ import { defaultOptions } from 'core/blocks/block/BlockUnitsSelector'
 import { useAllChartsOptions } from 'core/charts/hooks'
 
 export interface VerticalBarBlockProps extends BlockComponentProps {
-    data: EditionData
+    data: QuestionData
     controlledUnits: BlockUnits
     isCustom: boolean
 }
 
 export const addNoAnswerBucket = ({ buckets, completion }) => {
     const countSum = sumBy(buckets, b => b.count)
-    const percentageSum = sumBy(buckets, b => b.percentage_survey)
+    const percentageSum = sumBy(buckets, b => b.percentageSurvey)
     const noAnswerBucket = {
         id: 'no_answer',
         count: completion.total - countSum,
-        percentage_question: 0,
-        percentage_survey: Math.round((100 - percentageSum) * 10) / 10
+        percentageQuestion: 0,
+        percentageSurvey: Math.round((100 - percentageSum) * 10) / 10
     }
     return [...buckets, noAnswerBucket]
 }
 
 const VerticalBarBlock = ({
     block,
-    data,
-    keys,
+    data: blockData,
     controlledUnits,
     isCustom
 }: VerticalBarBlockProps) => {
-    if (!data) {
-        throw new Error(`VerticalBarBlock: Missing data for block ${block.id}.`)
+    const chartData = blockData?.responses?.currentEdition
+
+    if (!chartData) {
+        throw new Error(`VerticalBarBlock: Missing chart data for block ${block.id}.`)
     }
+
     const {
         // id,
         mode = 'relative',
-        defaultUnits = 'percentage_survey',
+        defaultUnits = 'percentageSurvey',
         translateData,
         chartNamespace = block.blockNamespace ?? block.id,
         colorVariant
@@ -62,14 +64,14 @@ const VerticalBarBlock = ({
     const [uncontrolledUnits, setUnits] = useState(defaultUnits)
     const units = controlledUnits || uncontrolledUnits
 
-    const addNoAnswer = units === 'percentage_survey'
+    const addNoAnswer = units === 'percentageSurvey'
 
     const chartOptions = useOptions(block.id)
     const bucketKeys = chartOptions && useLegends(block, chartOptions, undefined, addNoAnswer)
 
-    const { completion } = data
+    const { completion } = chartData
 
-    const buckets_ = data.buckets
+    const buckets_ = chartData.buckets
     const buckets = addNoAnswer ? addNoAnswerBucket({ buckets: buckets_, completion }) : buckets_
     const { total } = completion
 
@@ -96,14 +98,14 @@ const VerticalBarBlock = ({
                 getTableData({
                     legends: bucketKeys,
                     data: buckets,
-                    valueKeys: ['percentage_survey', 'percentage_question', 'count'],
+                    valueKeys: ['percentageSurvey', 'percentageQuestion', 'count'],
                     translateData
                 })
             ]}
             units={controlledUnits ?? units}
             setUnits={setUnits}
             completion={completion}
-            data={data}
+            data={chartData}
             block={block}
             unitsOptions={unitsOptions}
             chartFilters={chartFilters}

@@ -10,14 +10,14 @@ import ChartContainer from 'core/charts/ChartContainer'
 import variables from 'Config/variables.yml'
 import { getTableData } from 'core/helpers/datatables'
 import { useLegends } from 'core/helpers/useBucketKeys'
+import { usePageContext } from 'core/helpers/pageContext'
 
 const modes = ['grouped', 'awareness_rank', 'usage_rank' /*'usage_ratio_rank'*/]
 
-const getNodeData = (feature, index) => {
-    const buckets = get(feature, 'experience.year.facets.0.buckets')
-
+const getNodeData = (question, questionData, index) => {
+    const buckets = get(questionData, 'responses.currentEdition.buckets')
     if (!buckets) {
-        throw new Error(`Feature “${feature.id}” does not have any data associated.`)
+        throw new Error(`Feature “${questionData.id}” does not have any data associated.`)
     }
 
     let usageBucket = buckets.find(b => b.id === 'used')
@@ -34,13 +34,15 @@ const getNodeData = (feature, index) => {
     const awareness = usage + knowNotUsedBucket.count
 
     return {
+        ...question,
+        ...questionData,
         index,
-        id: feature.id,
+        id: questionData.id,
         awareness,
         usage,
         unused_count: knowNotUsedBucket.count,
         usage_ratio: round((usage / awareness) * 100, 1),
-        name: feature?.entity?.nameClean || feature?.entity?.name
+        name: question?.entity?.nameClean || question?.entity?.name
     }
 }
 
@@ -57,20 +59,31 @@ const addRanks = features => {
     return featuresWithRanks
 }
 
-const getChartData = (data, translate) => {
-    const categories = variables.featuresCategories
-    const sectionIds = Object.keys(categories)
-    const allNodes = data.map((feature, index) => getNodeData(feature, index))
+const getChartData = (data, translate, edition) => {
+    const featureSections = edition.sections.filter(s =>
+        s.questions.some(q => q.template === 'feature')
+    )
+    const allQuestions = featureSections
+        .map(s => s.questions.map(q => ({ ...q, sectionId: s.id })))
+        .flat()
+    const allNodes = allQuestions.map((q, i) =>
+        getNodeData(
+            q,
+            data.find(questionData => questionData.id === q.id),
+            i
+        )
+    )
     const allNodesWithRanks = addRanks(allNodes)
-    const sections = sectionIds.map(sectionId => {
-        const sectionFeatures = categories[sectionId]
-        let features = allNodesWithRanks.filter(f => sectionFeatures.includes(f.id))
+
+    const sections = featureSections.map(section => {
+        const sectionId = section.id
+        const features = allNodesWithRanks.filter(n => n.sectionId === sectionId)
 
         return features.length
             ? {
                   id: sectionId,
                   isSection: true,
-                  children: features.map(f => ({ ...f, sectionId })),
+                  children: features,
                   name: translate(`sections.${sectionId}.title`)
               }
             : null
@@ -82,12 +95,12 @@ const getChartData = (data, translate) => {
     }
 }
 
-const FeaturesOverviewBlock = ({ block, data, triggerId, controlledMode }) => {
+const FeaturesOverviewBlock = ({ block, data: blockData, triggerId, controlledMode }) => {
     const { translate } = useI18n()
-
+    const { currentEdition } = usePageContext()
     const chartData = useMemo(
-        () => getChartData(data, translate),
-        [data, translate]
+        () => getChartData(blockData.data, translate, currentEdition),
+        [blockData, translate, currentEdition]
     )
 
     const categories = chartData.children
@@ -115,7 +128,7 @@ const FeaturesOverviewBlock = ({ block, data, triggerId, controlledMode }) => {
                 bucketKeysName: 'features_simplified'
             }}
             legends={legends}
-            data={data}
+            data={chartData}
             className="FeaturesOverviewBlock"
             tables={categories.map(category =>
                 getTableData({

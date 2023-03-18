@@ -12,10 +12,16 @@ import BlockCompletionIndicator from 'core/blocks/block/BlockCompletionIndicator
 import { getBlockMeta, getBlockTitleKey, getBlockTitle } from 'core/helpers/blockHelpers'
 import BlockLinks from 'core/blocks/block/BlockLinks'
 import BlockSponsor from 'core/blocks/block/sponsor_chart/BlockSponsor'
+import { useEntities } from 'core/helpers/entities'
 
 const BlockTitleContents = ({ block, context }) => {
     const { translate } = useI18n()
-    return <Title dangerouslySetInnerHTML={{ __html: getBlockTitle(block, context, translate) }} />
+    const entities = useEntities()
+    return (
+        <Title
+            dangerouslySetInnerHTML={{ __html: getBlockTitle(block, context, translate, entities) }}
+        />
+    )
 }
 
 const Title = styled.span``
@@ -42,7 +48,8 @@ const BlockTitle = ({
 
     const { translate } = useI18n()
 
-    const blockTitle = getBlockTitle(block, context, translate)
+    const entities = useEntities()
+    const blockTitle = getBlockTitle(block, context, translate, entities)
 
     const properties = {
         context,

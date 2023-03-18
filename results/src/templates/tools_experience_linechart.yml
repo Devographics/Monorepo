@@ -1,9 +1,9 @@
-id: "${parentId}_experience_linechart"
+id: '${parentId}_experience_linechart'
 blockType: ToolsExperienceLineChartBlock
 titleId: blocks.tools_experience_linechart
 descriptionId: blocks.tools_experience_linechart.description
 noteId: blocks.tools_experience_linechart.note
-dataPath: "dataAPI.survey.${parentId}_experience_linechart"
+dataPath: 'dataAPI.survey.${parentId}_experience_linechart'
 hasSponsor: true
 query: >
     dataAPI {
@@ -22,22 +22,22 @@ query: >
                     usage {
                         year
                         rank
-                        percentage_question
+                        percentageQuestion
                     }
                     awareness {
                         year
                         rank
-                        percentage_question
+                        percentageQuestion
                     }
                     interest {
                         year
                         rank
-                        percentage_question
+                        percentageQuestion
                     }
                     satisfaction {
                         year
                         rank
-                        percentage_question
+                        percentageQuestion
                     }
                 }
             }

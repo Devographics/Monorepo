@@ -1,7 +1,7 @@
 titleId: sections.${categoryId}.title
 blockType: MultiFeaturesExperienceBlock
-dataPath: "dataAPI.survey.${id}"
-keysPath: "dataAPI.survey.${id}.0.experience.keys"
+dataPath: 'dataAPI.survey.${id}'
+keysPath: 'dataAPI.survey.${id}.0.experience.keys'
 blockNamespace: features
 chartNamespace: features
 # enableCustomization: true
@@ -40,7 +40,7 @@ query: >
                         completion {
                             total
                             count
-                            percentage_survey
+                            percentageSurvey
                         }
                         facets{
                             type
@@ -48,8 +48,8 @@ query: >
                             buckets {
                                 id
                                 count
-                                percentage_question
-                                percentage_survey
+                                percentageQuestion
+                                percentageSurvey
                             }
                         }
                     }

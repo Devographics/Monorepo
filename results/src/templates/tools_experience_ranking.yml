@@ -1,9 +1,9 @@
-id: "${parentId}_experience_ranking"
+id: '${parentId}_experience_ranking'
 blockType: ToolsExperienceRankingBlock
 titleId: blocks.tools_experience_ranking
 descriptionId: blocks.tools_experience_ranking.description
 noteId: blocks.tools_experience_ranking.note
-dataPath: "dataAPI.survey.${parentId}_experience_ranking"
+dataPath: 'dataAPI.survey.${parentId}_experience_ranking'
 hasSponsor: true
 query: >
     dataAPI {
@@ -22,22 +22,22 @@ query: >
                     usage {
                         year
                         rank
-                        percentage_question
+                        percentageQuestion
                     }
                     awareness {
                         year
                         rank
-                        percentage_question
+                        percentageQuestion
                     }
                     interest {
                         year
                         rank
-                        percentage_question
+                        percentageQuestion
                     }
                     satisfaction {
                         year
                         rank
-                        percentage_question
+                        percentageQuestion
                     }
                 }
             }

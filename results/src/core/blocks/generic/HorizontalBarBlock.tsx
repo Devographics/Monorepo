@@ -5,7 +5,7 @@ import ChartContainer from 'core/charts/ChartContainer'
 import HorizontalBarChart from 'core/charts/generic/HorizontalBarChart'
 import { getTableData } from 'core/helpers/datatables'
 import { BlockComponentProps } from 'core/types'
-import { EditionData } from '@devographics/types'
+import { QuestionData } from '@devographics/types'
 import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
 import { MODE_GRID, MODE_FACET } from 'core/blocks/filters/constants'
 import { useChartFilters } from 'core/blocks/filters/helpers'
@@ -13,15 +13,20 @@ import { defaultOptions } from 'core/blocks/block/BlockUnitsSelector'
 import { useAllChartsOptions } from 'core/charts/hooks'
 
 export interface HorizontalBarBlockProps extends BlockComponentProps {
-    data: EditionData
+    data: QuestionData
 }
 
 const HorizontalBarBlock = ({
     block,
-    data,
+    data: questionData,
     controlledUnits,
     isCustom
 }: HorizontalBarBlockProps) => {
+    const chartData = questionData?.responses?.currentEdition
+    if (!chartData) {
+        throw Error(`No data found for block ${block.id}`)
+    }
+
     const {
         id,
         mode = 'relative',
@@ -33,10 +38,7 @@ const HorizontalBarBlock = ({
 
     const [units, setUnits] = useState(defaultUnits)
 
-    if (!data) {
-        throw Error(`No data found for block ${block.id}`)
-    }
-    const { buckets, completion } = data
+    const { buckets, completion } = chartData
     const { total } = completion
 
     const { chartFilters, setChartFilters, legends } = useChartFilters({
@@ -61,11 +63,11 @@ const HorizontalBarBlock = ({
             units={controlledUnits ?? units}
             setUnits={setUnits}
             unitsOptions={unitsOptions}
-            data={data}
+            data={chartData}
             tables={[
                 getTableData({
                     data: buckets,
-                    valueKeys: ['percentage_survey', 'percentage_question', 'count'],
+                    valueKeys: ['percentageSurvey', 'percentageQuestion', 'count'],
                     translateData,
                     i18nNamespace: chartNamespace
                 })

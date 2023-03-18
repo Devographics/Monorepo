@@ -180,6 +180,7 @@
 
       - id: source
         template: demographics
+        blockType: HorizontalBarBlock
         variables:
             parameters: { limit: 20 }
 
@@ -239,182 +240,181 @@
         items: [renderatl]
         template: recommended_resources
 
-      # - id: features
-      #   path: /features
-      #   blocks:
-      #     - template: page_introduction
+- id: features
+  path: /features
+  blocks:
+      - template: page_introduction
 
-      #     - id: features_overview
-      #       template: features_overview
+      - id: features_overview
+        template: features_overview
 
-      #     - id: knowledge_score
-      #       template: demographics
-      #       blockNamespace: features
-      #       blockType: KnowledgeScoreBlock
+      - id: knowledge_score
+        template: demographics
+        blockNamespace: features
+        blockType: KnowledgeScoreBlock
 
-      #     - id: features_resources
-      #       items: [fm-javascript]
-      #       template: recommended_resources
+      - id: features_resources
+        items: [fm-javascript]
+        template: recommended_resources
 
-      #   children:
-      #     - id: language
-      #       path: /language
-      #       blocks:
-      #         - id: language
-      #           template: page_introduction
+  children:
+      - id: language
+        path: /language
+        blocks:
+            - id: language
+              template: page_introduction
 
-      #         - id: proxies
-      #           template: feature_experience
-      #         - id: promise_all_settled
-      #           template: feature_experience
-      #         - id: dynamic_import
-      #           template: feature_experience
-      #         - id: private_fields
-      #           template: feature_experience
-      #         - id: nullish_coalescing
-      #           template: feature_experience
+            - id: proxies
+              template: feature_experience
+            - id: promise_all_settled
+              template: feature_experience
+            - id: dynamic_import
+              template: feature_experience
+            - id: private_fields
+              template: feature_experience
+            - id: nullish_coalescing
+              template: feature_experience
 
-      #         - id: lee_robinson
-      #           template: picks
-      #           variables:
-      #             url: https://svelte.dev/blog/announcing-sveltekit-1.0
+            - id: lee_robinson
+              template: picks
+              variables:
+                  url: https://svelte.dev/blog/announcing-sveltekit-1.0
 
-      #         - id: export_hint
-      #           template: hint
+            - id: export_hint
+              template: hint
 
-      #         - id: numeric_separators
-      #           template: feature_experience
-      #           year: 2021
-      #         - id: string_replace_all
-      #           template: feature_experience
-      #           year: 2021
-      #         - id: string_match_all
-      #           template: feature_experience
-      #           year: 2021
-      #         - id: logical_assignment
-      #           template: feature_experience
-      #           year: 2021
+            - id: numeric_separators
+              template: feature_experience
+              year: 2021
+            - id: string_replace_all
+              template: feature_experience
+              year: 2021
+            - id: string_match_all
+              template: feature_experience
+              year: 2021
+            - id: logical_assignment
+              template: feature_experience
+              year: 2021
 
-      #         - id: miguel_angel_duran
-      #           template: picks
-      #           variables:
-      #             url: https://astro.build/
+            - id: miguel_angel_duran
+              template: picks
+              variables:
+                  url: https://astro.build/
 
-      #         - id: promise_any
-      #           template: feature_experience
-      #           year: 2021
-      #         - id: array_at
-      #           template: feature_experience
-      #           year: 2021
-      #         - id: top_level_await
-      #           template: feature_experience
-      #           year: 2021
+            - id: promise_any
+              template: feature_experience
+              year: 2021
+            - id: array_at
+              template: feature_experience
+              year: 2021
+            - id: top_level_await
+              template: feature_experience
+              year: 2021
 
-      #         # new in 2022
-      #         - id: temporal
-      #           template: feature_experience
-      #           year: 2022
-      #         - id: array_findlast
-      #           template: feature_experience
-      #           year: 2022
-      #         - id: error_cause
-      #           template: feature_experience
-      #           year: 2022
-      #         - id: object_hasown
-      #           template: feature_experience
-      #           year: 2022
-      #         - id: regexp_match_indices
-      #           template: feature_experience
-      #           year: 2022
+            # new in 2022
+            - id: temporal
+              template: feature_experience
+              year: 2022
+            - id: array_findlast
+              template: feature_experience
+              year: 2022
+            - id: error_cause
+              template: feature_experience
+              year: 2022
+            - id: object_hasown
+              template: feature_experience
+              year: 2022
+            - id: regexp_match_indices
+              template: feature_experience
+              year: 2022
 
-      #         - id: language_resources
-      #           items: [fm-javascript-hard-parts-v2]
-      #           template: recommended_resources
+            - id: language_resources
+              items: [fm-javascript-hard-parts-v2]
+              template: recommended_resources
 
-      #     - id: browser_apis
-      #       path: /browser-apis
-      #       blocks:
-      #         - id: browser_apis
-      #           template: page_introduction
+      - id: browser_apis
+        path: /browser-apis
+        blocks:
+            - id: browser_apis
+              template: page_introduction
 
-      #         - id: service_workers
-      #           template: feature_experience
-      #         - id: intl
-      #           template: feature_experience
-      #         - id: webgl
-      #           template: feature_experience
-      #         - id: web_animations
-      #           template: feature_experience
-      #         - id: webrtc
-      #           template: feature_experience
+            - id: service_workers
+              template: feature_experience
+            - id: intl
+              template: feature_experience
+            - id: webgl
+              template: feature_experience
+            - id: web_animations
+              template: feature_experience
+            - id: webrtc
+              template: feature_experience
 
-      #         - id: josh_comeau
-      #           template: picks
-      #           variables:
-      #             url: https://sandpack.codesandbox.io/
+            - id: josh_comeau
+              template: picks
+              variables:
+                  url: https://sandpack.codesandbox.io/
 
-      #         - id: web_speech
-      #           template: feature_experience
-      #         - id: websocket
-      #           template: feature_experience
-      #         - id: custom_elements
-      #           template: feature_experience
-      #         - id: shadow_dom
-      #           template: feature_experience
+            - id: web_speech
+              template: feature_experience
+            - id: websocket
+              template: feature_experience
+            - id: custom_elements
+              template: feature_experience
+            - id: shadow_dom
+              template: feature_experience
 
-      #         - id: share_hint
-      #           template: hint
+            - id: share_hint
+              template: hint
 
-      #         - id: page_visibility
-      #           template: feature_experience
-      #           year: 2021
-      #         - id: broadcast_channel
-      #           template: feature_experience
-      #           year: 2021
-      #         - id: geolocation
-      #           template: feature_experience
-      #           year: 2021
-      #         - id: file_system_access
-      #           template: feature_experience
-      #           year: 2021
+            - id: page_visibility
+              template: feature_experience
+              year: 2021
+            - id: broadcast_channel
+              template: feature_experience
+              year: 2021
+            - id: geolocation
+              template: feature_experience
+              year: 2021
+            - id: file_system_access
+              template: feature_experience
+              year: 2021
 
-      #         - id: kathryn_grayson_nanz
-      #           template: picks
-      #           variables:
-      #             url: https://beta.reactjs.org/
+            - id: kathryn_grayson_nanz
+              template: picks
+              variables:
+                  url: https://beta.reactjs.org/
 
-      #         - id: web_share
-      #           template: feature_experience
-      #           year: 2021
-      #         - id: webxr
-      #           template: feature_experience
-      #           year: 2021
+            - id: web_share
+              template: feature_experience
+              year: 2021
+            - id: webxr
+              template: feature_experience
+              year: 2021
 
-      #         - id: browser_apis_resources
-      #           items: [fm-service-workers, fm-web-components]
-      #           template: recommended_resources
+            - id: browser_apis_resources
+              items: [fm-service-workers, fm-web-components]
+              template: recommended_resources
 
-      #     - id: other_features
-      #       path: /other-features
-      #       blocks:
+      - id: other_features
+        path: /other-features
+        blocks:
+            - id: pwa
+              template: feature_experience
 
-      #       - id: pwa
-      #         template: feature_experience
+            - id: units_switcher_hint
+              template: hint
 
-      #       - id: units_switcher_hint
-      #         template: hint
+            - id: rich_harris
+              template: picks
+              variables:
+                  url: https://github.com/tc39/proposal-type-annotations
 
-      #       - id: rich_harris
-      #         template: picks
-      #         variables:
-      #           url: https://github.com/tc39/proposal-type-annotations
+            - id: wasm
+              template: feature_experience
 
-      #       - id: wasm
-      #         template: feature_experience
-
-      #       - id: browser_apis_resources
-      #         items: [fm-web-assembly, fm-pwas]
-      #         template: recommended_resources
+            - id: browser_apis_resources
+              items: [fm-web-assembly, fm-pwas]
+              template: recommended_resources
 
       # - id: libraries
       #   path: /libraries
@@ -1000,9 +1000,9 @@
       #         fieldId: tools_others__tool_evaluation
       #       template: bracket_matchups
 
-      - id: tools_others_resources
-        items: [fm-typescript, fm-node-js]
-        template: recommended_resources
+      # - id: tools_others_resources
+      #   items: [fm-typescript, fm-node-js]
+      #   template: recommended_resources
 - id: usage
   intlId: usage_js
   path: /usage

@@ -195,15 +195,15 @@ export const getCellData = (options: {
     // total count for current facet (row total)
     const facetTotal = facet.completion.count
     // what percentage of question respondents are represented by this facet
-    const facetPercentageQuestion = facet.completion.percentage_question
+    const facetPercentageQuestion = facet.completion.percentageQuestion
     // what percentage of survey respondents are represented by this facet
     // note: we probably don't want to use this here because all totals used already
     // discount people who didn't answer the question
-    const facetPercentageSurvey = facet.completion.percentage_survey
+    const facetPercentageSurvey = facet.completion.percentageSurvey
     // count for current bucket (cell)
     const bucketCount = bucket.count
     // percentage of bucket relative to current facet (row)
-    const bucketPercentageFacet = bucket.percentage_facet
+    const bucketPercentageFacet = bucket.percentageFacet
     // count that you would expect based solely on total respondents for this bucket overall,
     // divided by percentage of question respondents in this facet
     const normalizedCount = Math.floor((bucketTotal * facetPercentageQuestion) / 100)
@@ -285,14 +285,14 @@ export const getCellDots = ({
         })
     } else {
         // find the right bucket for the current cell based on its xIndex (column index)
-        const percentCount = Math.max(normalizedPercentage, bucket.percentage_facet)
+        const percentCount = Math.max(normalizedPercentage, bucket.percentageFacet)
         const dotCount = Math.floor(percentCount / percentsPerDot)
         return [...Array(dotCount)].map((x, index) => {
             const percentsInDot = index * percentsPerDot
             let type
-            if (percentsInDot <= bucket.percentage_facet && percentsInDot <= normalizedPercentage) {
+            if (percentsInDot <= bucket.percentageFacet && percentsInDot <= normalizedPercentage) {
                 type = 'normal'
-            } else if (percentsInDot <= bucket.percentage_facet) {
+            } else if (percentsInDot <= bucket.percentageFacet) {
                 type = 'extra'
             } else if (percentsInDot <= normalizedPercentage) {
                 type = 'missing'

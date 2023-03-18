@@ -1,5 +1,5 @@
 blockType: BracketMatchupsBlock
-dataPath: "dataAPI.survey.${id}.year.facets.0"
+dataPath: 'dataAPI.survey.${id}.year.facets.0'
 hasSponsor: true
 query: >
     dataAPI {
@@ -11,14 +11,14 @@ query: >
                     completion {
                         total
                         count
-                        percentage_survey
+                        percentageSurvey
                     }
                     facets {
                         completion {
                             total
                             count
-                            percentage_survey
-                            percentage_question
+                            percentageSurvey
+                            percentageQuestion
                         }
                         buckets {
                             id

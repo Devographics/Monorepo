@@ -2,8 +2,8 @@ blockType: ToolsTierListBlock
 titleId: blocks.tools_tier_list
 descriptionId: blocks.tools_tier_list.description
 noteId: blocks.tools_tier_list.note
-dataPath: "dataAPI.survey.${id}"
-keysPath: "dataAPI.survey.${id}.experience.keys"
+dataPath: 'dataAPI.survey.${id}'
+keysPath: 'dataAPI.survey.${id}.experience.keys'
 hasSponsor: true
 query: >
     dataAPI {
@@ -28,14 +28,14 @@ query: >
                             buckets{
                                 id
                                 count
-                                percentage_question
-                                percentage_survey
+                                percentageQuestion
+                                percentageSurvey
                             }
                         }
                         completion {
                             count
                             total
-                            percentage_survey
+                            percentageSurvey
                         }
                     }
                 }

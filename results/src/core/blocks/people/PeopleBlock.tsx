@@ -3,7 +3,7 @@ import Block from 'core/blocks/block/BlockVariant'
 import HorizontalBarChart from 'core/charts/generic/HorizontalBarChart'
 import { getTableData } from 'core/helpers/datatables'
 import { BlockComponentProps } from 'core/types'
-import { EditionData } from '@devographics/types'
+import { QuestionData } from '@devographics/types'
 import styled from 'styled-components'
 import Avatar from 'core/components/Avatar'
 import SocialLinks from 'core/blocks/people/SocialLinks'
@@ -26,7 +26,7 @@ import { MODE_GRID } from 'core/blocks/filters/constants'
 import { useEntities } from 'core/helpers/entities'
 
 export interface PeopleBlockProps extends BlockComponentProps {
-    data: EditionData
+    data: QuestionData
 }
 
 export const services = [
@@ -79,7 +79,16 @@ export const getRelevantServices = allEntities => {
     })
 }
 
-const PeopleBlock = ({ block, data, controlledUnits, isCustom }: PeopleBlockProps) => {
+const PeopleBlock = ({
+    block,
+    data: questionData,
+    controlledUnits,
+    isCustom
+}: PeopleBlockProps) => {
+    const chartData = questionData?.responses?.currentEdition
+    if (!chartData) {
+        throw Error(`No data found for block ${block.id}`)
+    }
     const {
         id,
         mode = 'relative',
@@ -91,7 +100,7 @@ const PeopleBlock = ({ block, data, controlledUnits, isCustom }: PeopleBlockProp
 
     const [units, setUnits] = useState(defaultUnits)
 
-    const { buckets, completion } = data
+    const { buckets, completion } = chartData
     const { total } = completion
 
     const bucketEntities = buckets.map(b => b.entity).filter(b => !!b)
@@ -109,11 +118,11 @@ const PeopleBlock = ({ block, data, controlledUnits, isCustom }: PeopleBlockProp
         <Block
             units={controlledUnits ?? units}
             setUnits={setUnits}
-            data={data}
+            data={chartData}
             tables={[
                 getTableData({
                     data: buckets,
-                    valueKeys: ['percentage_survey', 'percentage_question', 'count'],
+                    valueKeys: ['percentageSurvey', 'percentageQuestion', 'count'],
                     translateData,
                     i18nNamespace: chartNamespace
                 })
@@ -171,8 +180,8 @@ const PeopleItem = ({
     maxCount,
     entity,
     id,
-    percentage_survey,
-    percentage_question,
+    percentageSurvey,
+    percentageQuestion,
     units,
     services
 }) => {
@@ -184,11 +193,11 @@ const PeopleItem = ({
 
     const getNumber = () => {
         switch (units) {
-            case 'percentage_question':
-                return percentage_question + '%'
+            case 'percentageQuestion':
+                return percentageQuestion + '%'
 
-            case 'percentage_survey':
-                return percentage_survey + '%'
+            case 'percentageSurvey':
+                return percentageSurvey + '%'
 
             case 'count':
             default:

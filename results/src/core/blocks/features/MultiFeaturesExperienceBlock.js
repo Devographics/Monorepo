@@ -24,7 +24,7 @@ const MultiFeaturesExperienceBlock = ({
     keys,
     data,
     chartNamespace = 'features',
-    units: defaultUnits = 'percentage_question'
+    units: defaultUnits = 'percentageQuestion'
 }) => {
     const [units, setUnits] = useState(defaultUnits)
 

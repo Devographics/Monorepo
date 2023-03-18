@@ -15,7 +15,7 @@ export interface RadarChartDatum {
     y: number
     // percentage attached to a specific year
     // used to compute the rank
-    percentage_question: number
+    percentageQuestion: number
 }
 
 export interface RadarChartSerie {
@@ -31,48 +31,47 @@ const CustomTooltip = ({ name, color }: CustomTooltipProps) => (
 export const RadarChart = ({ data, keys }: RankingChartProps) => {
     const theme = useTheme()
 
-
     const getLayerColor = (props: any) => {
         console.log(props)
     }
 
     return (
-    <ResponsiveRadar
-        data={data}
-        keys={keys}
-        indexBy="id"
-        valueFormat=">-.2f"
-        margin={{ top: 70, right: 80, bottom: 40, left: 80 }}
-        borderColor={{ from: 'color' }}
-        gridLabelOffset={36}
-        dotSize={10}
-        dotColor={{ theme: 'background' }}
-        dotBorderWidth={2}
-        colors={{ scheme: 'category10' }}
-        fillOpacity={0.5}
-        blendMode="screen"
-        motionConfig="wobbly"
-        legends={[
-            {
-                anchor: 'top-left',
-                direction: 'column',
-                translateX: -50,
-                translateY: -40,
-                itemWidth: 80,
-                itemHeight: 20,
-                itemTextColor: '#999',
-                symbolSize: 12,
-                symbolShape: 'circle',
-                effects: [
-                    {
-                        on: 'hover',
-                        style: {
-                            itemTextColor: '#000'
+        <ResponsiveRadar
+            data={data}
+            keys={keys}
+            indexBy="id"
+            valueFormat=">-.2f"
+            margin={{ top: 70, right: 80, bottom: 40, left: 80 }}
+            borderColor={{ from: 'color' }}
+            gridLabelOffset={36}
+            dotSize={10}
+            dotColor={{ theme: 'background' }}
+            dotBorderWidth={2}
+            colors={{ scheme: 'category10' }}
+            fillOpacity={0.5}
+            blendMode="screen"
+            motionConfig="wobbly"
+            legends={[
+                {
+                    anchor: 'top-left',
+                    direction: 'column',
+                    translateX: -50,
+                    translateY: -40,
+                    itemWidth: 80,
+                    itemHeight: 20,
+                    itemTextColor: '#999',
+                    symbolSize: 12,
+                    symbolShape: 'circle',
+                    effects: [
+                        {
+                            on: 'hover',
+                            style: {
+                                itemTextColor: '#000'
+                            }
                         }
-                    }
-                ]
-            }
-        ]}
-    />
+                    ]
+                }
+            ]}
+        />
     )
 }

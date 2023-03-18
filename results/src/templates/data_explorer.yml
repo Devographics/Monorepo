@@ -1,5 +1,5 @@
 blockType: DataExplorerBlock
-dataPath: "dataAPI.survey.explorer"
+dataPath: 'dataAPI.survey.explorer'
 hasSponsor: true
 query: >
     internalAPI {
@@ -30,15 +30,15 @@ query: >
                       buckets {
                           id
                           count
-                          percentage_question
-                          percentage_survey
-                          percentage_facet
+                          percentageQuestion
+                          percentageSurvey
+                          percentageFacet
                       }
                       completion {
                           total
                           count
-                          percentage_question
-                          percentage_survey
+                          percentageQuestion
+                          percentageSurvey
                       }
                       id
                       type

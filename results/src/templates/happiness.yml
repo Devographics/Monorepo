@@ -22,22 +22,22 @@ loadData: true
 #                     completion {
 #                         total
 #                         count
-#                         percentage_survey
+#                         percentageSurvey
 #                     }
 #                     facets {
 #                         id
 #                         type
 #                         completion {
 #                             total
-#                             percentage_question
-#                             percentage_survey
+#                             percentageQuestion
+#                             percentageSurvey
 #                             count
 #                         }
 #                         buckets {
 #                             id
 #                             count
-#                             percentage_question
-#                             percentage_survey
+#                             percentageQuestion
+#                             percentageSurvey
 #                         }
 #                     }
 #                 }

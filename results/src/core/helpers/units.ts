@@ -11,9 +11,9 @@ export const percentageUnits = [
     'not_interested_percentage',
     'would_use_percentage',
     'interested_percentage',
-    'percentage_question',
-    'percentage_facet',
-    'percentage_survey',
+    'percentageQuestion',
+    'percentageFacet',
+    'percentageSurvey',
     'percentage_bucket'
 ]
 

@@ -16,18 +16,18 @@ query MyQuery {
             ${question.id} {
               id
               responses {
-                current_edition {
+                currentEdition {
                   completion {
                     count
-                    percentage_survey
+                    percentageSurvey
                     total
                   }
                   editionId
                   buckets {
                     count
                     id
-                    percentage_question
-                    percentage_survey
+                    percentageQuestion
+                    percentageSurvey
                   }
                 }
               }

@@ -1,10 +1,10 @@
-id: "${parentId}_experience_marimekko"
+id: '${parentId}_experience_marimekko'
 blockType: ToolsExperienceMarimekkoBlock
 titleId: blocks.tools_experience_marimekko
 descriptionId: blocks.tools_experience_marimekko.description
 noteId: blocks.tools_experience_marimekko.note
-dataPath: "dataAPI.survey.${parentId}_marimekko"
-keysPath: "dataAPI.survey.${parentId}_marimekko.0.experience.keys"
+dataPath: 'dataAPI.survey.${parentId}_marimekko'
+keysPath: 'dataAPI.survey.${parentId}_marimekko.0.experience.keys'
 bucketKeysName: tools
 hasSponsor: true
 query: >
@@ -25,14 +25,14 @@ query: >
                         completion {
                             total
                             count
-                            percentage_survey
+                            percentageSurvey
                         }
                         facets {
                             buckets {
                                 id
                                 count
-                                percentage_survey
-                                percentage_question
+                                percentageSurvey
+                                percentageQuestion
                             }
                         }
                     }

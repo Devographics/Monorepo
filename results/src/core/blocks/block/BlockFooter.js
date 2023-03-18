@@ -37,7 +37,7 @@ const BlockFooter = ({ unitsOptions, completion, units, setUnits }) => {
                         k="chart_units.respondents"
                         values={{
                             count: completion?.count,
-                            percentage: completion?.percentage_survey
+                            percentage: completion?.percentageSurvey
                         }}
                     />
                 </Respondents>

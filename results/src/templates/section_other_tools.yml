@@ -2,7 +2,7 @@ id: ${parentId}_others
 titleId: blocks.category_other_tools
 blockType: HorizontalBarBlock
 defaultUnits: count
-dataPath: "dataAPI.survey.${parentId}_others.year"
+dataPath: 'dataAPI.survey.${parentId}_others.year'
 hasSponsor: true
 defaultVariables:
     limit: 20
@@ -16,22 +16,22 @@ query: >
                     completion {
                         total
                         count
-                        percentage_survey
+                        percentageSurvey
                     }
                     facets {
                         id
                         type
                         completion {
                             total
-                            percentage_question
-                            percentage_survey
+                            percentageQuestion
+                            percentageSurvey
                             count
                         }
                         buckets{
                             id
                             count
-                            percentage_question
-                            percentage_survey
+                            percentageQuestion
+                            percentageSurvey
                             entity {
                                 name
                                 nameClean

@@ -17,7 +17,7 @@ query: >
             ) {
                 cardinality
                 count
-                percentage_survey
+                percentageSurvey
             }
             graphql_clients: tools_cardinality_by_user(
                 year: ${currentYear},
@@ -26,7 +26,7 @@ query: >
             ) {
                 cardinality
                 count
-                percentage_survey
+                percentageSurvey
             }
             api_generators: tools_cardinality_by_user(
                 year: ${currentYear},
@@ -35,7 +35,7 @@ query: >
             ) {
                 cardinality
                 count
-                percentage_survey
+                percentageSurvey
             }
             schema_builders: tools_cardinality_by_user(
                 year: ${currentYear},
@@ -44,7 +44,7 @@ query: >
             ) {
                 cardinality
                 count
-                percentage_survey
+                percentageSurvey
             }
         }
     }
