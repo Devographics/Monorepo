@@ -4,14 +4,14 @@ import sumBy from 'lodash/sumBy.js'
 
 const groupBy = 10
 
-const getId = (n: number) => `${n * groupBy}-${(n + 1) * groupBy}%`
+const getId = (n: number) => `range_${n * groupBy}_${(n + 1) * groupBy}`
 
 /*
 
 Group results into 10% buckets
 
 */
-const transformFunction: TransformFunction = (
+export const transformFunction: TransformFunction = (
     { survey, edition, section, question },
     data,
     context
@@ -35,9 +35,16 @@ const transformFunction: TransformFunction = (
     return data
 }
 
+export const getOptions = () =>
+    range(0, 100 / groupBy).map(n => ({
+        id: getId(n),
+        average: n * groupBy + groupBy / 2
+    }))
+
 export const knowledge_score: TemplateFunction = ({ question, section }) => ({
     ...question,
     id: 'knowledge_score',
     dbPath: 'user_info.knowledge_score',
+    options: getOptions(),
     transformFunction
 })

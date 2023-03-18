@@ -17,5 +17,6 @@ export * from './all_tools'
 export * from './section_tools'
 export * from './section_tools_ratios'
 
+export * from './completion_stats'
 export * from './knowledge_score'
 export * from './source'
