@@ -13,12 +13,7 @@ import { measureTime } from "~/lib/server/utils";
 import { getRedisClient } from "@devographics/core-models/server";
 
 export const i18nCommonContexts = ["common", "surveys", "accounts"];
-// TODO: move this elsewhere, maybe in surveys config?
-// const surveyContexts = ["state_of_css", "state_of_js", "state_of_graphql"];
-// TODO: we should query only relevant strings per survey ideally
-//const contexts = [...i18nCommonContexts, ...surveyContexts];
 
-// TODO: move to monorepo common code
 export const getLocaleParsedContextCacheKey = ({
   localeId,
   context,
@@ -139,7 +134,7 @@ export const getLocales = async () => {
 
 // ONE LOCALE WITH STRINGS
 
-const localePromiseKey = (id: string) => ["localePromise", id].join("/");
+const localePromiseKey = (id: string, contexts: Array<string>) => ["localePromise", id, ...contexts].join("/");
 
 interface LocaleStringsVariables {
   contexts: Array<string>;
@@ -163,7 +158,7 @@ export const fetchLocaleStrings = async (variables: LocaleStringsVariables) => {
   //console.debug("Fetching locale", variables.localeId);
   const cached = cachedPromise(
     promisesNodeCache,
-    localePromiseKey(variables.localeId),
+    localePromiseKey(variables.localeId, variables.contexts || []),
     LOCALES_TTL_SECONDS
   );
   const queryVariables = {

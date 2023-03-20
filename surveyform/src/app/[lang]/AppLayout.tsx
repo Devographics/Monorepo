@@ -51,7 +51,6 @@ export function AppLayout(props: AppLayoutProps) {
               locales={locales}
               localeId={localeId}
               localeStrings={localeStrings}
-              contexts={i18nCommonContexts}
             >
               <VulcanCurrentUserProvider
                 // @ts-ignore FIXME: weird error with groups

@@ -40,7 +40,8 @@ export const LocaleContextProvider = (props: {
   /** Optionally store the selected locale */
   updateUser?: any;
   children: React.ReactNode;
-  contexts: Array<string>;
+  /** Context to add to the default ones */
+  contexts?: Array<string>;
 }) => {
   const { user } = useUser();
   const [cookies, setCookie, removeCookie] = useCookies();
