@@ -8,6 +8,7 @@ import { ResponseDocument, SurveyEdition } from "@devographics/core-models";
 import { print } from "graphql";
 import { notFound } from "next/navigation";
 import { fetchSurvey, initRedis } from "@devographics/core-models/server";
+import { getSurveyFromUrl } from "~/app/[lang]/survey/getSurvey";
 
 async function getResponseWithRanking({
   responseId,
@@ -72,8 +73,7 @@ const ThanksPage = async ({
   // it's ok to fetch data again here after fetching in the layout
   // TODO: it seems we need to call this initialization code on all relevant pages/layouts
   initRedis(serverConfig().redisUrl);
-  const surveyContextId = slug.replaceAll("-", "_");
-  const survey = await fetchSurvey(surveyContextId, year);
+  const survey = await getSurveyFromUrl(slug, year);
   if (!survey) {
     notFound();
   }

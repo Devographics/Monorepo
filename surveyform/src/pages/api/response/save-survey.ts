@@ -18,11 +18,11 @@ export default async function saveSurveyResponseHandler(req: NextApiRequest, res
         return res.status(405)
     }
     // parameters
-    const surveyContextId = req.query["surveyContextId"] as string
-    if (!surveyContextId) throw new Error("No survey slug, can't start survey")
-    const surveyYear = req.query["surveyYear"] as string
-    if (!surveyYear) throw new Error("No survey year, can't start survey")
-    const survey = await fetchSurvey(surveyContextId, surveyYear)
+    const surveyId = req.query["surveyId"] as string
+    if (!surveyId) throw new Error("No survey slug, can't start survey")
+    const editionId = req.query["editionId"] as string
+    if (!editionId) throw new Error("No survey editionId, can't start survey")
+    const survey = await fetchSurvey(surveyId, editionId)
 
     // TODO: this code used to be a client-side graphql query
     // we reuse the same call temporarily to facilitate moving out of graphql
@@ -57,7 +57,7 @@ export default async function saveSurveyResponseHandler(req: NextApiRequest, res
         })
         if (!gqlRes.ok) {
             console.error("Response text:", await gqlRes.text())
-            throw new Error("Error during saveSurvey")
+            return res.status(500).send({ error: "Error during saveSurvey" })
         }
         const gqlJson: {
             data?: any,

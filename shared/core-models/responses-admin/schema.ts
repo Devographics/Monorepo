@@ -103,7 +103,22 @@ export const schema: VulcanGraphqlSchema = {
     canCreate: ["members"],
     canUpdate: ["admins"],
   },
+  // @deprecated use editionId or surveyId
   surveySlug: {
+    type: String,
+    optional: true,
+    canRead: ["owners", "admins"],
+    canCreate: ["members"],
+    canUpdate: ["admins"],
+  },
+  editionId: {
+    type: String,
+    optional: true,
+    canRead: ["owners", "admins"],
+    canCreate: ["members"],
+    canUpdate: ["admins"],
+  },
+  surveyId: {
     type: String,
     optional: true,
     canRead: ["owners", "admins"],

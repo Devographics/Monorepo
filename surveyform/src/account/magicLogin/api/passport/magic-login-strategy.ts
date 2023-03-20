@@ -5,7 +5,6 @@ import { sendMagicLinkEmail } from "../email/magicLinkEmail";
 
 import { UserTypeServer } from "~/core/models/user.server";
 
-import debug from "debug";
 import { routes } from "~/lib/routes";
 import { serverConfig } from "~/config/server";
 import type { Request } from "express";
@@ -56,7 +55,7 @@ async function sendMagicLink(
   // => this could enable a "temporary authentication" mode for new users to reduce friction in the future (we have to assess security yet)
   const foundUser = await findUserFromEmail(email);
 
-  const { anonymousId, surveyContextId, year, locale } = req.body;
+  const { anonymousId, surveyId, editionId, year, locale } = req.body;
   if (!foundUser) {
     const user: {
       email: string;
@@ -70,12 +69,13 @@ async function sendMagicLink(
       isVerified: false,
     };
 
-    if (surveyContextId || year) {
+    if (surveyId || editionId) {
       user.meta = {
-        surveyContextId,
-        // @deprecated
-        surveySlug: surveyContextId.replaceAll("_", "-"),
-        // TODO: find the surveyEditionId instead if possible
+        surveyId,
+        editionId,
+        // @deprecated, use surveyId
+        surveySlug: surveyId?.replaceAll("_", "-"),
+        // @deprecated, use editionId
         surveyYear: year,
       };
     }
@@ -96,7 +96,7 @@ async function sendMagicLink(
     email,
     // href = /callbackUrl?token=<the magic token>
     magicLink,
-    surveyContextId,
+    surveyId,
     locale,
   });
   /*

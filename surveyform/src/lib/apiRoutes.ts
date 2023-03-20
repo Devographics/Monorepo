@@ -1,5 +1,3 @@
-import { SurveyEdition } from "@devographics/core-models";
-
 /**
  * NOTE: this is SHARED code not API only, we use this in the frontend as well
  */
@@ -61,16 +59,16 @@ export const apiRoutes = {
   },
   response: {
     single: {
-      href: ({ surveyEditionId }: { surveyEditionId: string }) => `/api/response/single?surveyEditionId=${surveyEditionId}`
+      href: ({ editionId }: { editionId: string }) => `/api/response/single?editionId=${editionId}`
     },
     multi: {
       href: "/api/response/multi"
     },
     startSurvey: {
-      href: ({ surveyContextId, year }: Required<Pick<SurveyEdition, "surveyContextId" | "year">>) => `/api/response/start-survey?surveyContextId=${surveyContextId}&surveyYear=${year}`
+      href: ({ surveyId, editionId }: { surveyId: string, editionId: string }) => `/api/response/start-survey?surveyId=${surveyId}&editionId=${editionId}`
     },
     saveSurvey: {
-      href: ({ surveyContextId, year }: Required<Pick<SurveyEdition, "surveyContextId" | "year">>) => `/api/response/save-survey?surveyContextId=${surveyContextId}&surveyYear=${year}`
+      href: ({ surveyId, editionId }: { surveyId: string, editionId: string }) => `/api/response/save-survey?surveyId=${surveyId}&editionId=${editionId}`
     }
   }
 }

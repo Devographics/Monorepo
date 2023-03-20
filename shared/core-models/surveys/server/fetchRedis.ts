@@ -39,8 +39,8 @@ async function fetchJson<T = any>(key: string): Promise<T | null> {
 
 const prefix = "surveyform"
 
-const surveyKey = (surveyContextId: string, editionId: string) => `${prefix}_survey_${surveyContextId}_${editionId}`
-const surveyContextKey = (surveyContextId: string) => `${prefix}_surveycontext_${surveyContextId}`
+const surveyKey = (surveyId: string, editionId: string) => `${prefix}_survey_${surveyId}_${editionId}`
+const surveyContextKey = (surveyId: string) => `${prefix}_surveycontext_${surveyId}`
 
 /**
  * 
@@ -48,7 +48,7 @@ const surveyContextKey = (surveyContextId: string) => `${prefix}_surveycontext_$
  * @param editionId css2019
  * @returns 
  */
-export async function fetchSurveyRedis(contextId: SurveyEdition["surveyContextId"], editionId: string): Promise<SurveyEdition | null> {
+export async function fetchSurveyRedis(contextId: SurveyEdition["surveyId"], editionId: string): Promise<SurveyEdition | null> {
     const survey = fetchJson<SurveyEdition>(surveyKey(contextId, editionId))
     return survey
 }
@@ -63,8 +63,8 @@ export const fetchSurveysListRedis = async (): Promise<Array<SurveyEditionDescri
 }
 export const storeSurveysListRedis = storeRedis(surveyListKey)
 
-export async function fetchSurveyContextRedis(surveyContextId: SurveySharedContext["id"]): Promise<SurveySharedContext> {
-    const surveyContext = await fetchJson(surveyContextKey(surveyContextId))
+export async function fetchSurveyContextRedis(surveyId: SurveySharedContext["id"]): Promise<SurveySharedContext> {
+    const surveyContext = await fetchJson(surveyContextKey(surveyId))
     return surveyContext
 }
 export const storeSurveyContextRedis = (...args: Parameters<typeof surveyContextKey>) => storeRedis(surveyContextKey(...args))

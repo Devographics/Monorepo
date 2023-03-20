@@ -63,6 +63,6 @@ export interface BrowserData {
   common__user_info__os?: string;
 }
 
-export interface PrefilledData extends BrowserData, Pick<SurveyEdition, "surveyContextId" | "surveyEditionId"> {
+export interface PrefilledData extends BrowserData, Pick<SurveyEdition, "surveyId" | "editionId"> {
   email?: string;
 }

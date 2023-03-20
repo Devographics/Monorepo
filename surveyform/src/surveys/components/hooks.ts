@@ -8,16 +8,16 @@ export const useSurveyParams = (): {
   year: string,
   // TODO: use those id instead of slug/year whenever possible
   // (= all the time except when building actual URL)
-  surveyEditionId: string, surveyContextId: string
+  editionId: string, surveyId: string
 } => {
   const survey = useSurvey()
   if (!survey) {
     throw new Error("Called useSurveyParams outside of survey page")
   }
   // TODO: we will need useParams instead, it's not yet released (07/12/2022)
-  const slug = survey.surveyContextId.replaceAll("_", "-")
+  const slug = survey.surveyId.replaceAll("_", "-")
   const year = survey.year + ""
-  return { slug, year, surveyContextId: survey.surveyContextId, surveyEditionId: survey.surveyEditionId };
+  return { slug, year, surveyId: survey.surveyId, editionId: survey.editionId };
 };
 
 

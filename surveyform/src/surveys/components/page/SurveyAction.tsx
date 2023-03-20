@@ -49,7 +49,7 @@ const SurveyAction = ({
     response,
     loading: responseLoading,
     error: responseError,
-  } = useUserResponse({ surveyEditionId: getSurveyEditionId(survey) });
+  } = useUserResponse({ editionId: getSurveyEditionId(survey) });
   if (userLoading) return <Loading />;
   if (userError) throw new Error(userError);
   if (responseLoading) return <Loading />;
@@ -141,8 +141,8 @@ const SurveyStart = ({
 
   // prefilled data
   let data: PrefilledData = {
-    surveyEditionId: getSurveyEditionId(survey),
-    surveyContextId: getSurveyContextId(survey),
+    editionId: getSurveyEditionId(survey),
+    surveyId: getSurveyContextId(survey),
     email: currentUser?.email,
     common__user_info__source: source,
     common__user_info__referrer: referrer,

@@ -26,7 +26,8 @@ export const LightweightResponseFragment = gql`
       year
       status
       slug
-      surveyContextId
+      surveyId
+      editionId
       prettySlug
     }
   }
@@ -55,8 +56,7 @@ export const SurveyResponseFragment = (survey: SurveyEdition | SurveyEdition) =>
       year
       status
       slug
-      surveyContextId
-      prettySlug
+      surveyId
     }
     surveySlug
     ...${surveySpecificFragmentName}
@@ -84,11 +84,12 @@ export const SurveyResponseFragment = (survey: SurveyEdition | SurveyEdition) =>
         name
         year
         status
-        slug
-        surveyContextId
-        prettySlug
+        surveyId
+        editionId
       }
       surveySlug
+      editionId
+      surveyId
     }
   `
   };

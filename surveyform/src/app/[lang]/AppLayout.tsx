@@ -20,6 +20,7 @@ import Layout from "~/core/components/common/Layout";
 import type { LocaleDef, LocaleDefWithStrings } from "~/i18n/typings";
 import { SSRProvider } from "react-bootstrap";
 import { SWRConfig } from "swr";
+import { i18nCommonContexts } from "~/i18n/server/fetchLocalesRedis";
 
 export interface AppLayoutProps {
   /** Locale extracted from cookies server-side */
@@ -50,6 +51,7 @@ export function AppLayout(props: AppLayoutProps) {
               locales={locales}
               localeId={localeId}
               localeStrings={localeStrings}
+              contexts={i18nCommonContexts}
             >
               <VulcanCurrentUserProvider
                 // @ts-ignore FIXME: weird error with groups

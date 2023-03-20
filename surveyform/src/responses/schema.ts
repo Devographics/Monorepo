@@ -105,7 +105,7 @@ export const schema: VulcanGraphqlSchema = {
     canCreate: ["members"],
     canUpdate: ["admins"],
   },
-  // @deprecated Prefer surveyEditionId
+  // @deprecated Prefer editionId
   surveySlug: {
     type: String,
     optional: true,
@@ -113,8 +113,7 @@ export const schema: VulcanGraphqlSchema = {
     canCreate: ["members"],
     canUpdate: ["admins"],
   },
-  // @deprecated use surveyContextId
-  // state_of_js
+  // state_of_js (in old surveys, it was sometimes the editionId, but not anymore)
   surveyId: {
     type: String,
     optional: true,
@@ -122,16 +121,8 @@ export const schema: VulcanGraphqlSchema = {
     canCreate: ["members"],
     canUpdate: ["admins"],
   },
-  // state_of_js
-  surveyContextId: {
-    type: String,
-    optional: true,
-    canRead: ["owners", "admins"],
-    canCreate: ["members"],
-    canUpdate: ["admins"],
-  },
   // js2022
-  surveyEditionId: {
+  editionId: {
     type: String,
     optional: true,
     canRead: ["owners", "admins"],

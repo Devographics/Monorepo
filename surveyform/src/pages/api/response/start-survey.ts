@@ -16,16 +16,16 @@ export default async function responseStartSurveyHandler(req: NextApiRequest, re
     await connectToAppDb()
     connectToRedis()
 
-    const surveyContextId = req.query["surveyContextId"] as string
-    if (!surveyContextId) {
-        return res.status(400).send("No survey slug, can't start survey")
+    const surveyId = req.query["surveyId"] as string
+    if (!surveyId) {
+        return res.status(400).send({ error: "No survey id, can't start survey" })
     }
-    const surveyYear = req.query["surveyYear"] as string
-    if (!surveyYear) {
-        return res.status(400).send("No survey year, can't start survey")
+    const editionId = req.query["editionId"] as string
+    if (!editionId) {
+        return res.status(400).send({ error: "No survey edition id, can't start survey" })
     }
 
-    const survey = await fetchSurvey(surveyContextId, surveyYear)
+    const survey = await fetchSurvey(surveyId, editionId)
 
 
     // TODO: this code used to be a client-side graphql query
@@ -66,7 +66,7 @@ export default async function responseStartSurveyHandler(req: NextApiRequest, re
         })
         if (!gqlRes.ok) {
             console.error("Response text:", await gqlRes.text())
-            res.status(400).send("Error during startSurvey")
+            return res.status(500).send("Error during startSurvey")
         }
         const gqlJson: {
             data?: any,

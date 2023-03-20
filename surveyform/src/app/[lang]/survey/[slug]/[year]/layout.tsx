@@ -14,6 +14,7 @@ import {
 } from "~/i18n/server/fetchLocalesRedis";
 import { LocaleContextProvider } from "~/i18n/context/LocaleContext";
 import { serverConfig } from "~/config/server";
+import { getSurveyFromUrl } from "../../getSurvey";
 
 // revalidate survey/entities every 5 minutes
 const SURVEY_TIMEOUT_SECONDS = 5 * 60;
@@ -25,7 +26,7 @@ export const revalidate = SURVEY_TIMEOUT_SECONDS;
 /*
 export async function generateStaticParams() {
   return surveys.map((s) => ({
-    slug: s.surveyContextId.replaceAll("_", "-"),
+    slug: s.surveyId.replaceAll("_", "-"),
     year: String(s.year),
   }));
 }*/
@@ -46,15 +47,8 @@ export default async function SurveyLayout({
   initRedis(serverConfig().redisUrl);
 
   const { slug, year } = params;
-  let survey;
-  try {
-    const surveyDesc = await fetchSurveyDescriptionFromUrl(slug, year);
-    survey = await fetchSurvey(
-      surveyDesc.surveyContextId,
-      surveyDesc.surveyEditionId
-    );
-  } catch (err) {
-    console.error("Could not load survey", slug, year, "error:", err);
+  const survey = await getSurveyFromUrl(slug, year);
+  if (!survey) {
     notFound();
   }
 
@@ -69,7 +63,7 @@ Next.js will fallback to trying to find a valid page path.
 If this error still happens in a few months (2023) open an issue with repro at Next.js.`);
     notFound();
   }
-  const localeSlug = survey.surveyContextId;
+  const localeSlug = survey.surveyId;
   const i18nContexts =
     localeSlug !== "demo_survey"
       ? [
@@ -99,7 +93,7 @@ If this error still happens in a few months (2023) open an issue with repro at N
   // (not useful in static mode though)
   let entities = [];
   try {
-    const redisEntities = await fetchEntitiesRedis(survey.surveyEditionId);
+    const redisEntities = await fetchEntitiesRedis(survey.editionId);
     if (!redisEntities) throw new Error("Entities not found in Redis");
     entities = redisEntities;
   } catch (err) {
@@ -125,6 +119,7 @@ If this error still happens in a few months (2023) open an issue with repro at N
           locales={locales}
           localeId={locale}
           localeStrings={localeWithStrings}
+          contexts={i18nContexts}
         >
           {children}
         </LocaleContextProvider>

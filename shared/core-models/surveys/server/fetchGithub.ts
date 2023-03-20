@@ -3,7 +3,7 @@
  * And transform them in the right shape expected by surveyform
  */
 
-import { getSurveyEditionId } from "@devographics/core-models/surveys/shared";
+import { getSurveyEditionId } from "../shared";
 import yaml from "js-yaml"
 import { SurveyEdition, SurveyEditionDescription, SurveySharedContext } from "../typings";
 
@@ -64,12 +64,12 @@ async function fetchGithubJson<T = any>(url: string): Promise<T> {
 
 /**
  * Will throw if survey is not found/can't call github
- * @param surveyContextId 
+ * @param surveyId 
  * @param editionId 
  * @returns 
  */
-export async function fetchSurveyGithub(surveyContextId: string, editionId: string): Promise<SurveyEdition> {
-    const surveyFolder = `${surveyContextId}`
+export async function fetchSurveyGithub(surveyId: string, editionId: string): Promise<SurveyEdition> {
+    const surveyFolder = `${surveyId}`
     const editionFolder = editionId
     const yearlyFolder = `${surveyFolder}/${editionFolder}`
 
@@ -79,15 +79,15 @@ export async function fetchSurveyGithub(surveyContextId: string, editionId: stri
     const configRes = await fetchGithub(configUrl)
     if (!configRes.ok) {
         console.debug("Fetched url", configUrl)
-        throw new Error(`Cannot fetch survey config for survey context "${surveyContextId}" and editionId "${editionId}", error ${configRes.status}"`)
+        throw new Error(`Cannot fetch survey config for survey context "${surveyId}" and editionId "${editionId}", error ${configRes.status}"`)
     }
     const questionsRes = await fetchGithub(`${contentsRoot}/${yearlyFolder}/questions.yml`)
     if (!questionsRes.ok) {
-        throw new Error(`Cannot fetch survey questions for survey context "${surveyContextId}" and editionId "${editionId}, error ${configRes.status}"`)
+        throw new Error(`Cannot fetch survey questions for survey context "${surveyId}" and editionId "${editionId}, error ${configRes.status}"`)
     }
     const commonConfigRes = await fetchGithub(commonConfigUrl)
     if (!commonConfigRes.ok) {
-        console.warn("No common config for survey", surveyContextId)
+        console.warn("No common config for survey", surveyId)
     }
     const surveyConfig = await yamlAsJson(await githubContent(configRes))
     const questionsConfig = await yamlAsJson(await githubContent(questionsRes))
@@ -98,9 +98,8 @@ export async function fetchSurveyGithub(surveyContextId: string, editionId: stri
         ...commonConfig,
         ...surveyConfig,
         outline: questionsConfig,
-        // TODO: merge the fields later than there, so that we don't have to update Redis cache everytime
-        surveyContextId: commonConfig.id,
-        surveyEditionId: surveyConfig.id,
+        surveyId: commonConfig.id,
+        editionId: surveyConfig.id,
     }
     return survey
 }
@@ -108,10 +107,10 @@ export async function fetchSurveyGithub(surveyContextId: string, editionId: stri
 /**
  * Get the survey description, but not the questions
  */
-async function fetchSurveyDescription(surveyContextId: string, surveyEditionId: string): Promise<SurveyEdition> {
-    const yearlyFolder = `${surveyContextId}/${surveyEditionId}`
+async function fetchSurveyDescription(surveyId: string, editionId: string): Promise<SurveyEdition> {
+    const yearlyFolder = `${surveyId}/${editionId}`
     const configUrl = `${contentsRoot}/${yearlyFolder}/config.yml`
-    const commonConfigUrl = `${contentsRoot}/${surveyContextId}/config.yml`
+    const commonConfigUrl = `${contentsRoot}/${surveyId}/config.yml`
 
     const configRes = await fetchGithub(configUrl)
     const commonConfigRes = await fetchGithub(commonConfigUrl)
@@ -123,8 +122,8 @@ async function fetchSurveyDescription(surveyContextId: string, surveyEditionId: 
         ...commonConfig,
         // @ts-ignore
         ...surveyConfig,
-        surveyContextId: commonConfig.id,
-        surveyEditionId: getSurveyEditionId(surveyConfig),
+        surveyId: commonConfig.id,
+        editionId: getSurveyEditionId(surveyConfig),
     }
     return survey
 }
@@ -146,10 +145,10 @@ const isDir = (fileOrDir: GhFileOrDir) => fileOrDir.type === "dir"
 const yearThreshold = 2019
 
 /**
- * @param surveyContextId state_of_js
+ * @param surveyId state_of_js
  */
-async function fetchEditionFolders(surveyContextId: string) {
-    const surveyPath = `${contentsRoot}/${surveyContextId}`
+async function fetchEditionFolders(surveyId: string) {
+    const surveyPath = `${contentsRoot}/${surveyId}`
     const yearsFolders = await fetchGithubJson<Array<GhFileOrDir>>(surveyPath)
     const editionFolders = yearsFolders
         .filter(isDir)
@@ -177,10 +176,10 @@ export const fetchSurveysListGithub = async (): Promise<Array<SurveyEditionDescr
 }
 
 /**
- * @param surveyContextId state_of_js
+ * @param surveyId state_of_js
  */
-export async function fetchSurveyContextGithub(surveyContextId: string): Promise<SurveySharedContext> {
-    const surveyContextRes = await fetchGithub(`${contentsRoot}/${surveyContextId}/config.yml`)
+export async function fetchSurveyContextGithub(surveyId: string): Promise<SurveySharedContext> {
+    const surveyContextRes = await fetchGithub(`${contentsRoot}/${surveyId}/config.yml`)
     const surveyContext = yamlAsJson<SurveySharedContext>(await githubBody(surveyContextRes))
     return surveyContext
 }

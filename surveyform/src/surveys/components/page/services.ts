@@ -24,7 +24,7 @@ export async function startSurvey(survey: SurveyEdition | SurveyEdition, data: a
     // TODO: this should also invalidate the "getCurrentUser" query
     // we should figure how to do so using SWR, maybe in the code that calls startSurvey?
     const fetchRes = await fetch(
-        apiRoutes.response.startSurvey.href({ surveyContextId: getSurveyContextId(survey), year: survey.year! }), {
+        apiRoutes.response.startSurvey.href({ surveyId: survey.surveyId, editionId: survey.editionId! }), {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -46,7 +46,7 @@ export async function saveSurvey(survey: SurveyEdition | SurveyEdition, data: an
     // TODO: this should also invalidate the "getCurrentUser" query
     // we should figure how to do so using SWR, maybe in the code that calls startSurvey?
     const fetchRes = await fetch(
-        apiRoutes.response.saveSurvey.href({ surveyContextId: getSurveyContextId(survey), year: survey.year! }), {
+        apiRoutes.response.saveSurvey.href({ surveyId: survey.surveyId, editionId: survey.editionId! }), {
         method: "POST",
         headers: {
             "Content-Type": "application/json"

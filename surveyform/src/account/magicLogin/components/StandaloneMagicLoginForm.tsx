@@ -8,6 +8,7 @@ import { useSearchParams } from "next/navigation";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { FormComponentEmail } from "./FormComponentEmail";
 import { Button } from "~/core/components/ui/Button";
+import { useSurveyParams } from "~/surveys/components/hooks";
 
 /**
  * With passwordless approach, there is no signup step,
@@ -21,6 +22,7 @@ export const StandaloneMagicLoginForm = ({
   label?: string | ReactNode;
 }) => {
   const intl = useIntlContext();
+  const { surveyId, editionId } = useSurveyParams();
   const placeholder = intl.formatMessage({ id: `accounts.your_email` });
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
@@ -45,17 +47,11 @@ export const StandaloneMagicLoginForm = ({
 
     localStorage && localStorage.setItem("email", email);
 
-    const surveyContextSlug = params.get("slug");
-    if (!surveyContextSlug) {
-      throw new Error("No slug param");
-    }
-    const surveyContextId = surveyContextSlug.replaceAll("-", "_");
-
     const body = {
       destination: email,
       anonymousId: user?._id,
-      surveyContextId,
-      year: params.get("year"),
+      surveyId,
+      editionId,
       locale,
     };
 

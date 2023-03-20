@@ -15,11 +15,11 @@ import { ResponseDocument, SurveyEdition } from "@devographics/core-models";
 import { getSchema, getServerSchema, initResponseSchema } from "./schema.server";
 
 function getReponseEditionId(response: ResponseDocument) {
-  const surveyEditionId = response.surveyEditionId || response.surveySlug
-  if (!surveyEditionId) {
-    throw new Error(`response.surveyEditionId (or legacy surveySlug) must be defined`);
+  const editionId = response.editionId || response.surveySlug
+  if (!editionId) {
+    throw new Error(`response.editionId (or legacy surveySlug) must be defined`);
   }
-  return surveyEditionId
+  return editionId
 }
 
 /**
@@ -33,12 +33,12 @@ export async function duplicateCheck(validationErrors, options: {
   currentUser: any
 }) {
   const { document, currentUser } = options;
-  const surveyEditionId = getReponseEditionId(document)
+  const editionId = getReponseEditionId(document)
   if (!currentUser._id) {
     throw new Error(`duplicateCheck: currentUser._id must be defined`);
   }
   const selector = {
-    surveyEditionId,
+    editionId,
     userId: currentUser._id,
   };
 
@@ -73,11 +73,11 @@ export async function processEmailOnUpdate(data, properties) {
   const { document } = properties
   const { isSubscribed
   } = document as ResponseDocument;
-  const surveyEditionId = getReponseEditionId(document)
+  const editionId = getReponseEditionId(document)
 
-  const survey = await fetchSurveyFromId(surveyEditionId)
+  const survey = await fetchSurveyFromId(editionId)
   const listId = survey?.emailOctopus?.listId;
-  const emailFieldPath = `${surveyEditionId}__user_info__${emailFieldName}`;
+  const emailFieldPath = `${editionId}__user_info__${emailFieldName}`;
   const email = data[emailFieldPath];
 
   // if user has entered their email

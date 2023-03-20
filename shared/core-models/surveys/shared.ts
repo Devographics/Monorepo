@@ -8,9 +8,9 @@ import type { SurveyEdition } from "./typings"
  */
 export function getSurveyEditionId(survey: SurveyEdition) {
     // js2022 etc.
-    const surveyEditionId = survey.surveyEditionId || survey.id || survey.surveyId || survey.slug
-    return surveyEditionId
+    const editionId = survey.editionId || survey.id || survey.surveyId || survey.slug
+    return editionId
 }
 export function getSurveyPrettySlug(survey: SurveyEdition) {
-    return survey.surveyContextId.replaceAll("_", "-")
+    return survey.surveyId.replaceAll("_", "-")
 }

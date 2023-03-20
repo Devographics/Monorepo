@@ -7,7 +7,7 @@ export const sendMagicLoginEmail = async (
     destination: string;
     /** We can create an unverified account as soon as we send the email */
     anonymousId?: string;
-    surveyContextId?: string;
+    surveyId?: string;
     locale?: string;
   } & any
 ) => {
