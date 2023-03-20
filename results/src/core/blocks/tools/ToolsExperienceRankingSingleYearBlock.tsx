@@ -3,7 +3,7 @@ import Block from 'core/blocks/block/BlockVariant'
 import ChartContainer from 'core/charts/ChartContainer'
 import HorizontalBarChart, { margin, getLeftMargin } from 'core/charts/generic/HorizontalBarChart'
 import { getTableData } from 'core/helpers/datatables'
-import { RatioBucketItem, BlockRatioUnits } from 'core/types'
+import { RatioBucketItem, BlockRatioUnits } from '@types/index'
 import sortBy from 'lodash/sortBy'
 import { useBarChart } from 'core/charts/hooks'
 import {

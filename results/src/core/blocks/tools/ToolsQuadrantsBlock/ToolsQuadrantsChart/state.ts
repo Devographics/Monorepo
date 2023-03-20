@@ -23,7 +23,7 @@ export const useToolsQuadrantsChartContext = () => useContext(ToolsQuadrantsChar
 export const useToolsQuadrantsChart = ({
     metric,
     currentCategory,
-    setCurrentCategory,
+    setCurrentCategory
 }: {
     metric: ToolsQuadrantsMetric
     currentCategory: ToolsSectionId | null
@@ -35,12 +35,15 @@ export const useToolsQuadrantsChart = ({
     // used to zoom on a specific quadrant, `null` means no zoom
     const [zoomedQuadrantIndex, setZoomedQuadrantIndex] = useState<number | null>(null)
 
-    const toggleQuadrantZoom = useCallback((quadrantIndex: number) => {
-        setZoomedQuadrantIndex(current => {
-            if (quadrantIndex === current) return null
-            return quadrantIndex
-        })
-    }, [setZoomedQuadrantIndex])
+    const toggleQuadrantZoom = useCallback(
+        (quadrantIndex: number) => {
+            setZoomedQuadrantIndex(current => {
+                if (quadrantIndex === current) return null
+                return quadrantIndex
+            })
+        },
+        [setZoomedQuadrantIndex]
+    )
 
     const { xScale, yScale } = useMemo(() => {
         let _xScale: {
@@ -60,54 +63,57 @@ export const useToolsQuadrantsChart = ({
             _xScale = {
                 type: 'linear',
                 min: zoomedQuadrantConfig.xZoomRange[0],
-                max: zoomedQuadrantConfig.xZoomRange[1],
+                max: zoomedQuadrantConfig.xZoomRange[1]
             }
             _yScale = {
                 type: 'linear',
                 min: zoomedQuadrantConfig.yZoomRange[0],
-                max: zoomedQuadrantConfig.yZoomRange[1],
+                max: zoomedQuadrantConfig.yZoomRange[1]
             }
         } else {
             // using default full scales
             _xScale = {
                 type: 'linear',
                 min: baseScales.xRange[0],
-                max: baseScales.xRange[1],
+                max: baseScales.xRange[1]
             }
             _yScale = {
                 type: 'linear',
                 min: baseScales.yRange[0],
-                max: baseScales.yRange[1],
+                max: baseScales.yRange[1]
             }
         }
 
         return {
             xScale: _xScale,
-            yScale: _yScale,
+            yScale: _yScale
         }
     }, [zoomedQuadrantIndex])
 
-    const context: ToolsQuadrantsChartContextData = useMemo(() => ({
-        metric,
-        currentCategory,
-        setCurrentCategory,
-        currentTool,
-        setCurrentTool,
-        zoomedQuadrantIndex,
-        toggleQuadrantZoom,
-    }), [
-        metric,
-        currentCategory,
-        setCurrentCategory,
-        currentTool,
-        setCurrentTool,
-        zoomedQuadrantIndex,
-        toggleQuadrantZoom,
-    ])
+    const context: ToolsQuadrantsChartContextData = useMemo(
+        () => ({
+            metric,
+            currentCategory,
+            setCurrentCategory,
+            currentTool,
+            setCurrentTool,
+            zoomedQuadrantIndex,
+            toggleQuadrantZoom
+        }),
+        [
+            metric,
+            currentCategory,
+            setCurrentCategory,
+            currentTool,
+            setCurrentTool,
+            zoomedQuadrantIndex,
+            toggleQuadrantZoom
+        ]
+    )
 
     return {
         xScale,
         yScale,
-        context,
+        context
     }
 }

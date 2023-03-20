@@ -95,12 +95,12 @@ export const createPagesSingleLoop = async ({
         })
     })
 
-    const globalVariables = {
+    const editionVariables = {
         surveyId,
         editionId
     }
 
-    const { flat } = await computeSitemap(rawSitemap, globalVariables)
+    const { flat } = await computeSitemap(rawSitemap, editionVariables)
 
     const flatSitemap = { locales: cleanLocales, contents: flat }
     logToFile('flat_sitemap.yml', yaml.dump(flatSitemap, { noRefs: true }), {

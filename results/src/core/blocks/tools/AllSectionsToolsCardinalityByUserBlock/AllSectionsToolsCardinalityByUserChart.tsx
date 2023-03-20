@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { ToolsCardinalityByUserBucket } from 'core/types/survey_api/tools'
+import { ToolsCardinalityByUserBucket } from '@types/survey_api/tools'
 // @ts-ignore
 import { spacing, mq } from 'core/theme'
 import { SectionItem } from './SectionItem'

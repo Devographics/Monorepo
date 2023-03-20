@@ -2,20 +2,20 @@ blockType: PicksBlock
 blockNamespace: picks
 wrapBlock: false
 disableExport: true
-dataPath: "internalAPI.entity_${id}"
+dataPath: 'internalAPI.entity_${questionId}'
 query: >
-  internalAPI {
-    entity_${id}: entity(id: "${id}") {
-      id
-      homepage {
+    internalAPI {
+      entity_${questionId}: entity(id: "${questionId}") {
+        id
+        homepage {
+          name
+          url
+        }
         name
-        url
-      }
-      name
-      nameClean
-      twitter {
-        name
-        url
+        nameClean
+        twitter {
+          name
+          url
+        }
       }
     }
-  }

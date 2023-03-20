@@ -16,11 +16,7 @@ const BlockTitleContents = ({ block, context }) => {
     }
 }
 
-const BlockTitle = ({
-    isShareable,
-    values,
-    block,
-}) => {
+const BlockTitle = ({ isShareable, values, block }) => {
     const [showOptions, setShowOptions] = useState(false)
     const context = usePageContext()
     const { translate } = useI18n()

@@ -40,11 +40,11 @@ const Pagination = ({ toggleSidebar, showSidebar, closeSidebar, pagination }) =>
 }
 
 Pagination.defaultProps = {
-    toggleSidebar: PropTypes.func.isRequired,
+    toggleSidebar: PropTypes.func.isRequired
 }
 
 const Container = styled.div`
-    border-bottom: ${(props) => props.theme.separationBorder};
+    border-bottom: ${props => props.theme.separationBorder};
     z-index: 10;
     position: relative;
     display: grid;
@@ -55,8 +55,8 @@ const Container = styled.div`
         grid-template-columns: 1fr 0px 1fr;
 
         > *:first-child {
-            border-left: ${(props) => props.theme.separationBorder};
-            border-right: ${(props) => props.theme.separationBorder};
+            border-left: ${props => props.theme.separationBorder};
+            border-right: ${props => props.theme.separationBorder};
         }
     }
 `
@@ -65,17 +65,17 @@ const MiddleContent = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    border-left: ${(props) => props.theme.separationBorder};
-    border-right: ${(props) => props.theme.separationBorder};
+    border-left: ${props => props.theme.separationBorder};
+    border-right: ${props => props.theme.separationBorder};
 
     @media ${mq.smallMedium} {
-      border-left: none;
-      border-right: none;
+        border-left: none;
+        border-right: none;
     }
 `
 
 const SidebarToggle = styled.button`
-    background: ${(props) => props.theme.colors.background};
+    background: ${props => props.theme.colors.background};
     padding: 0 ${spacing(0.5)};
     cursor: pointer;
     border: 0;
@@ -85,7 +85,7 @@ const SidebarToggle = styled.button`
     height: 100%;
 
     &:hover {
-        background: ${(props) => props.theme.colors.backgroundAlt};
+        background: ${props => props.theme.colors.backgroundAlt};
     }
 
     &:focus {

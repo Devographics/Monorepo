@@ -1,16 +1,11 @@
-titleId: blocks.features_overview
-blockType: FeaturesOverviewBlock
-# dataPath: "dataAPI.survey.${questionId}"
-# keysPath: "dataAPI.survey.${questionId}.0.experience.keys"
-# enableCustomization: true
-hasSponsor: true
+hidden: true
 query: >
     dataAPI {
         surveys {
             ${surveyId} {
                 ${editionId} {
-                    features {
-                        features_overview: allItems {
+                    libraries {
+                        allItems {
                             data {
                                 id
                                 responses(parameters: { ENABLE_CACHE_PLACEHOLDER }) {

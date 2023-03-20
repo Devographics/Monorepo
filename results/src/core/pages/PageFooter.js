@@ -103,19 +103,19 @@ const FooterLink = styled(Button)`
 `
 
 const PreviousLink = styled(FooterLink)`
-  flex:1 1 min-content;
+    flex: 1 1 min-content;
 
-  @media ${mq.mediumLarge} {
-    flex:0 1 max-content;
-  }
+    @media ${mq.mediumLarge} {
+        flex: 0 1 max-content;
+    }
 `
 
 const NextLink = styled(FooterLink)`
-  flex:1 1 min-content;
+    flex: 1 1 min-content;
 
-  @media ${mq.mediumLarge} {
-    flex:0 1 max-content;
-  }
+    @media ${mq.mediumLarge} {
+        flex: 0 1 max-content;
+    }
 `
 
 const LinkLabel = styled.span`

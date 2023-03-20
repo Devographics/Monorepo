@@ -23,7 +23,7 @@ const PageMetaDebug = ({ overrides = {} }) => {
 
         return {
             ...acc,
-            [key]: meta.content,
+            [key]: meta.content
         }
     }, {})
 

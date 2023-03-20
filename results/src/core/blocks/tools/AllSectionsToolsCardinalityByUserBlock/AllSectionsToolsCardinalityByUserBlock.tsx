@@ -3,7 +3,7 @@ import { range, maxBy } from 'lodash'
 // @ts-ignore
 import Block from 'core/blocks/block/BlockVariant'
 import { BlockContext } from 'core/blocks/types'
-import { ToolsCardinalityByUserBucket } from 'core/types/survey_api/tools'
+import { ToolsCardinalityByUserBucket } from '@types/survey_api/tools'
 // @ts-ignore
 import variables from 'Config/variables.yml'
 import { AllSectionsToolsCardinalityByUserChart } from './AllSectionsToolsCardinalityByUserChart'

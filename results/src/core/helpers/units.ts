@@ -1,4 +1,4 @@
-import { BlockUnits } from 'core/types'
+import { BlockUnits } from '@types/index'
 
 export const percentageUnits = [
     'percentage',

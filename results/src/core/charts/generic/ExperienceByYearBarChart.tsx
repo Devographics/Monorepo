@@ -6,7 +6,7 @@ import { ResponsiveMarimekko } from '@nivo/marimekko'
 // @ts-ignore
 import ChartLabel from 'core/components/ChartLabel'
 import { isPercentage } from 'core/helpers/units'
-import { BlockUnits } from 'core/types'
+import { BlockUnits } from '@types/index'
 
 interface ExperienceByYearBarChartProps {
     buckets: any[]

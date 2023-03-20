@@ -48,7 +48,7 @@ const PeriodicElement = ({ className, name = '', symbol, number, size, path, x, 
 
 PeriodicElement.propTypes = {
     name: PropTypes.string,
-    symbol: PropTypes.string.isRequired,
+    symbol: PropTypes.string.isRequired
 }
 
 const Frame = styled.rect`

@@ -14,16 +14,12 @@ const EssayLayout = ({ props }) => {
 }
 
 const PageContent = styled.main`
-  max-width: 800px;
-  margin: 0 auto;
+    max-width: 800px;
+    margin: 0 auto;
 `
 
-const Page = styled.div`
-    
-`
+const Page = styled.div``
 
-const PageMain = styled.main`
-    
-`
+const PageMain = styled.main``
 
 export default EssayLayout

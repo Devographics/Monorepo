@@ -5,7 +5,7 @@ import { BlockContext } from 'core/blocks/types'
 import Block from 'core/blocks/block/BlockVariant'
 import { UsageVariationsChart } from 'core/charts/generic/UsageVariationsChart'
 import { keys } from 'core/bucket_keys'
-import { ToolsExperienceMatrices } from 'core/types/survey_api/matrices'
+import { ToolsExperienceMatrices } from '@types/survey_api/matrices'
 import { DimensionId } from './types'
 import { Switcher } from './Switcher'
 

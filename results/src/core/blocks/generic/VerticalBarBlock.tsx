@@ -4,11 +4,10 @@ import { keys } from 'core/bucket_keys'
 import BlockVariant from 'core/blocks/block/BlockVariant'
 import ChartContainer from 'core/charts/ChartContainer'
 import VerticalBarChart from 'core/charts/generic/VerticalBarChart'
-import { usePageContext } from 'core/helpers/pageContext'
 import { useLegends } from 'core/helpers/useBucketKeys'
 import { useOptions } from 'core/helpers/options'
 // import T from 'core/i18n/T'
-import { BlockComponentProps, BlockUnits } from 'core/types'
+import { BlockComponentProps, BlockUnits } from '@types/index'
 import { QuestionData, EditionData } from '@devographics/types'
 import { getTableData } from 'core/helpers/datatables'
 import sumBy from 'lodash/sumBy'
@@ -40,7 +39,8 @@ const VerticalBarBlock = ({
     block,
     data: blockData,
     controlledUnits,
-    isCustom
+    isCustom,
+    context
 }: VerticalBarBlockProps) => {
     const chartData = blockData?.responses?.currentEdition
 
@@ -57,7 +57,6 @@ const VerticalBarBlock = ({
         colorVariant
     } = block
 
-    const context = usePageContext()
     const { width, currentEdition } = context
     const { year: currentYear } = currentEdition
 
@@ -69,6 +68,8 @@ const VerticalBarBlock = ({
     const chartOptions = useOptions(block.id)
     const bucketKeys = chartOptions && useLegends(block, chartOptions, undefined, addNoAnswer)
 
+    console.log(block.id)
+    console.log(bucketKeys)
     const { completion } = chartData
 
     const buckets_ = chartData.buckets

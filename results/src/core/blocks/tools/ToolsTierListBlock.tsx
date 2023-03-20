@@ -4,18 +4,15 @@ import Block from 'core/blocks/block/BlockVariant'
 import TierListChart, { TierItemData } from 'core/charts/generic/TierListChart'
 import { useI18n } from 'core/i18n/i18nContext'
 import ChartContainer from 'core/charts/ChartContainer'
-import variables from 'Config/variables.yml'
 import sortBy from 'lodash/sortBy'
 import { ToolsSectionId } from 'core/bucket_keys'
-import { ToolsExperienceToolData } from 'core/types/survey_api/tools'
+import { ToolsExperienceToolData } from '@types/survey_api/tools'
 import { BlockContext } from 'core/blocks/types'
 
 interface TierListBlockProps {
     block: BlockContext<'toolsTierListTemplate', 'ToolsTierListBlock', { toolIds: string }, any>
     data: ToolsExperienceToolData[]
 }
-
-const { toolsCategories } = variables
 
 // minimum user percentage of total respondents to consider for tier list
 const cutoffPercentage = 10
@@ -64,7 +61,7 @@ const getChartData = (data: ToolsExperienceToolData[], theme: any) => {
     return sortedData
 }
 
-const TierListBlock = ({ block, data }: TierListBlockProps) => {
+const TierListBlock = ({ block, data, context }: TierListBlockProps) => {
     const { translate } = useI18n()
     const theme = useTheme()
 

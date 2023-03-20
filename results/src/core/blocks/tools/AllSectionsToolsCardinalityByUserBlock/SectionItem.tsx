@@ -3,7 +3,7 @@ import { maxBy } from 'lodash'
 import styled, { css } from 'styled-components'
 // @ts-ignore
 import { format } from 'd3-format'
-import { ToolsCardinalityByUserBucket } from 'core/types/survey_api/tools'
+import { ToolsCardinalityByUserBucket } from '@types/survey_api/tools'
 // @ts-ignore
 import { fontSize, fontWeight, spacing, mq } from 'core/theme'
 // @ts-ignore

@@ -1,34 +1,62 @@
 blockType: ToolsArrowsBlock
-dataPath: 'dataAPI.survey.${id}'
-keysPath: 'dataAPI.survey.${id}.0.experience.keys'
+dataPath: 'dataAPI.surveys.${surveyId}.${editionId}.libraries.allItems.data'
+# dataPath: 'dataAPI.survey.${questionId}'
+# keysPath: 'dataAPI.survey.${questionId}.0.experience.keys'
 titleId: blocks.tools_arrows
 descriptionId: blocks.tools_arrows.description
 noteId: blocks.tools_arrows.note
 hasSponsor: true
-query: >
-    dataAPI {
-        survey(survey: ${surveyType}) {
-            ${id}: tools(ids: [${allTools}]) {
-                id
-                entity {
-                    name
-                    nameClean
-                    nameHtml
-                    description
-                    id
-                }
-                experience {
-                    keys
-                    all_years {
-                        year
-                        facets {
-                            buckets {
-                                percentageQuestion
-                                id
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+# query: >
+#     dataAPI {
+#         surveys {
+#             ${surveyId} {
+#                 ${editionId} {
+#                     features {
+#                         tools_arrows: allItems {
+#                             data {
+#                                 id
+#                                 responses(parameters: { ENABLE_CACHE_PLACEHOLDER }) {
+#                                     currentEdition {
+#                                         buckets {
+#                                             id
+#                                             percentageQuestion
+#                                             percentageSurvey
+#                                             count
+#                                         }
+#                                     }
+#                                 }
+#                             }
+#                         }
+#                     }
+#                 }
+#             }
+#         }
+#     }
+
+# query: >
+#     dataAPI {
+#         survey(survey: ${surveyId}) {
+#             ${questionId}: tools(ids: [${allTools}]) {
+#                 id
+#                 entity {
+#                     name
+#                     nameClean
+#                     nameHtml
+#                     description
+#                     id
+#                 }
+#                 experience {
+#                     keys
+#                     all_years {
+#                         year
+#                         facets {
+#                             buckets {
+#                                 percentageQuestion
+#                                 id
+#                             }
+#                         }
+#                     }
+#                 }
+#             }
+#         }
+#     }

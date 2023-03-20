@@ -19,6 +19,7 @@
         "baseUrl": "./",
         "paths": {
             "core/*": ["./src/core/*"],
+            "@types/*": ["./src/core/types/*"],
             "@templates/*": ["./src/templates/*"]
         }
     }

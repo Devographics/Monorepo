@@ -1,5 +1,11 @@
 import React, { memo, useMemo } from 'react'
-import { ChartComponentProps, BlockUnits, BucketItem, BlockLegend, TickItemProps } from 'core/types'
+import {
+    ChartComponentProps,
+    BlockUnits,
+    BucketItem,
+    BlockLegend,
+    TickItemProps
+} from '@types/index'
 import styled, { useTheme } from 'styled-components'
 import { useI18n } from 'core/i18n/i18nContext'
 import TooltipComponent from 'core/components/Tooltip'

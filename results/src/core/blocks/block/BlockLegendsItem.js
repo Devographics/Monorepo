@@ -112,7 +112,7 @@ const Container = styled.tr`
     cursor: default;
     display: flex;
     align-items: center;
-    
+
     &:last-child {
         margin-bottom: 0;
     }

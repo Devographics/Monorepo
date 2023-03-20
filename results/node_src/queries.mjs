@@ -149,10 +149,7 @@ export const getDefaultQuery = ({
     addEntities = false,
     allEditions = false
 }) => {
-    const enableCache = process.env.USE_CACHE === 'false' ? false : true
-
-    const params = { ...parameters, enableCache }
-    const parametersString = `(parameters: ${unquote(JSON.stringify(params))})`
+    const parametersString = `(parameters: ${unquote(JSON.stringify(parameters))})`
 
     const editionType = allEditions ? 'allEditions' : 'currentEdition'
 
@@ -214,4 +211,43 @@ const removeLast = (str, char) => {
 export const cleanQuery = query => {
     const cleanQuery = removeLast(query.replace('dataAPI {', ''), '}')
     return cleanQuery
+}
+
+const enableCachePlaceholder = 'ENABLE_CACHE_PLACEHOLDER'
+
+/*
+
+Get query by either
+
+A) using query defined in block template definition
+
+or 
+
+B) generating a default query
+
+*/
+export const getQuery = ({ query: blockTemplateQuery, queryOptions, isLog = false }) => {
+    const { editionId, questionId } = queryOptions
+    const queryName = getQueryName({ editionId, questionId })
+
+    const enableCache = process.env.USE_CACHE === 'false' ? false : true
+    let queryContents
+    if (blockTemplateQuery) {
+        queryContents = blockTemplateQuery
+        if (isLog) {
+            queryContents = queryContents.replace(enableCachePlaceholder, '')
+        } else {
+            queryContents = queryContents.replace(
+                enableCachePlaceholder,
+                `enableCache: ${enableCache.toString()}`
+            )
+        }
+    } else {
+        if (!isLog) {
+            queryOptions.parameters.enableCache = enableCache
+        }
+        queryContents = getDefaultQuery(queryOptions)
+    }
+    const wrappedQuery = wrapQuery({ queryName, queryContents })
+    return wrappedQuery
 }

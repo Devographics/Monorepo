@@ -15,7 +15,7 @@ import FacetSelection from './FacetSelection'
 import FiltersSelection from './FiltersSelection'
 import { MODE_DEFAULT, MODE_FACET, MODE_COMBINED, MODE_GRID } from './constants'
 import cloneDeep from 'lodash/cloneDeep'
-import { BlockDefinition } from 'core/types'
+import { BlockDefinition } from '@types/index'
 import { useStickyState, getFiltersLink } from './helpers'
 import { CheckIcon } from 'core/icons'
 
@@ -61,7 +61,6 @@ const FiltersPanel = ({
 
     const supportedModes = filtersState.options.supportedModes
 
-    
     // if mode is set to "default" then open first supported filter tab
     const currentMode =
         filtersState.options.mode === MODE_DEFAULT ? supportedModes[0] : filtersState.options.mode

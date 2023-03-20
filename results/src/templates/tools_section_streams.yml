@@ -1,47 +1,47 @@
-id: '${parentId}_section_streams'
+id: '${sectionId}_section_streams'
 titleId: blocks.tools_section_streams
 descriptionId: blocks.tools_section_streams.description
 noteId: blocks.tools_section_streams.note
 blockType: ToolsSectionStreamsBlock
-dataPath: 'dataAPI.survey.${parentId}_streams'
-keysPath: 'dataAPI.survey.${parentId}_streams.0.experience.keys'
+dataPath: 'dataAPI.survey.${sectionId}_streams'
+keysPath: 'dataAPI.survey.${sectionId}_streams.0.experience.keys'
 bucketKeysName: tools
 hasSponsor: true
-query: >
-    dataAPI {
-        survey(survey: ${surveyType}) {
-            ${parentId}_streams: tools(ids: [${toolsCategories[parentId]}]) {
-                id
-                entity {
-                    name
-                    nameClean
-                    nameHtml
-                    homepage {
-                        url
-                    }
-                    github {
-                        url
-                    }
-                }
-                experience {
-                    keys
-                    all_years {
-                        year
-                        completion {
-                            total
-                            count
-                            percentageSurvey
-                        }
-                        facets {
-                            buckets {
-                                id
-                                count
-                                percentageQuestion
-                                percentageSurvey
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+# query: >
+#     dataAPI {
+#         survey(survey: ${surveyId}) {
+#             ${sectionId}_streams: tools(ids: [${toolsCategories[parentId]}]) {
+#                 id
+#                 entity {
+#                     name
+#                     nameClean
+#                     nameHtml
+#                     homepage {
+#                         url
+#                     }
+#                     github {
+#                         url
+#                     }
+#                 }
+#                 experience {
+#                     keys
+#                     all_years {
+#                         year
+#                         completion {
+#                             total
+#                             count
+#                             percentageSurvey
+#                         }
+#                         facets {
+#                             buckets {
+#                                 id
+#                                 count
+#                                 percentageQuestion
+#                                 percentageSurvey
+#                             }
+#                         }
+#                     }
+#                 }
+#             }
+#         }
+#     }

@@ -25,7 +25,7 @@ import {
 import { CustomizationDefinition } from './types'
 import WrapperGrid from './WrapperGrid'
 import { useAllChartsOptions } from 'core/charts/hooks'
-import { BlockDefinition } from 'core/types'
+import { BlockDefinition } from '@types/index'
 import get from 'lodash/get'
 
 const doNothing = a => a

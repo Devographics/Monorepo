@@ -5,7 +5,7 @@ import { getCountryName } from 'core/helpers/countries'
 import cloneDeep from 'lodash/cloneDeep.js'
 import isEmpty from 'lodash/isEmpty'
 import { CustomizationDefinition, CustomizationOptions } from './types'
-import { BlockDefinition } from 'core/types'
+import { BlockDefinition } from '@types/index'
 import {
     MODE_DEFAULT,
     MODE_FACET,

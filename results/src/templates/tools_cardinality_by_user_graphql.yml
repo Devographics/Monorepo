@@ -2,49 +2,48 @@ blockType: AllSectionsToolsCardinalityByUserBlock
 dataPath: dataAPI.cardinality
 bucketKeysName: tools
 hasSponsor: true
-
 # this chart's query is quite repetitive, in order to be able
 # to generate it in a more dynamic way, we would have
 # to support loops.
 
-query: >
-    dataAPI {
-        cardinality: survey(survey: ${surveyType}) {
-            graphql_servers: tools_cardinality_by_user(
-                year: ${currentYear},
-                ids: [${toolsCategories.graphql_servers}],
-                experienceId: would_use
-            ) {
-                cardinality
-                count
-                percentageSurvey
-            }
-            graphql_clients: tools_cardinality_by_user(
-                year: ${currentYear},
-                ids: [${toolsCategories.graphql_clients}],
-                experienceId: would_use
-            ) {
-                cardinality
-                count
-                percentageSurvey
-            }
-            api_generators: tools_cardinality_by_user(
-                year: ${currentYear},
-                ids: [${toolsCategories.api_generators}],
-                experienceId: would_use
-            ) {
-                cardinality
-                count
-                percentageSurvey
-            }
-            schema_builders: tools_cardinality_by_user(
-                year: ${currentYear},
-                ids: [${toolsCategories.schema_builders}],
-                experienceId: would_use
-            ) {
-                cardinality
-                count
-                percentageSurvey
-            }
-        }
-    }
+# query: >
+#     dataAPI {
+#         cardinality: survey(survey: ${surveyId}) {
+#             graphql_servers: tools_cardinality_by_user(
+#                 year: ${currentYear},
+#                 ids: [${toolsCategories.graphql_servers}],
+#                 experienceId: would_use
+#             ) {
+#                 cardinality
+#                 count
+#                 percentageSurvey
+#             }
+#             graphql_clients: tools_cardinality_by_user(
+#                 year: ${currentYear},
+#                 ids: [${toolsCategories.graphql_clients}],
+#                 experienceId: would_use
+#             ) {
+#                 cardinality
+#                 count
+#                 percentageSurvey
+#             }
+#             api_generators: tools_cardinality_by_user(
+#                 year: ${currentYear},
+#                 ids: [${toolsCategories.api_generators}],
+#                 experienceId: would_use
+#             ) {
+#                 cardinality
+#                 count
+#                 percentageSurvey
+#             }
+#             schema_builders: tools_cardinality_by_user(
+#                 year: ${currentYear},
+#                 ids: [${toolsCategories.schema_builders}],
+#                 experienceId: would_use
+#             ) {
+#                 cardinality
+#                 count
+#                 percentageSurvey
+#             }
+#         }
+#     }

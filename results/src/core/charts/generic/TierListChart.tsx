@@ -1,7 +1,7 @@
 import React from 'react'
 import styled, { useTheme } from 'styled-components'
 import { mq, spacing, fontSize, fontWeight } from 'core/theme'
-import { ToolsExperienceToolData } from 'core/types/survey_api/tools'
+import { ToolsExperienceToolData } from '@types/survey_api/tools'
 import { ToolsSectionId } from 'core/bucket_keys'
 
 const customImages = {

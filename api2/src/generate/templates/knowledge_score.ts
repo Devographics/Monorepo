@@ -4,7 +4,9 @@ import sumBy from 'lodash/sumBy.js'
 
 const groupBy = 10
 
-const getId = (n: number) => `range_${n * groupBy}_${(n + 1) * groupBy}`
+const getBounds = (n: number) => [n === 0 ? 0 : n * groupBy + 1, (n + 1) * groupBy]
+
+const getId = (n: number) => `range_${getBounds(n)[0]}_${getBounds(n)[1]}`
 
 /*
 
@@ -18,8 +20,9 @@ export const transformFunction: TransformFunction = (
 ) => {
     data.forEach(editionData => {
         editionData.buckets = range(0, 100 / groupBy).map(n => {
+            const [lowerBound, upperBound] = getBounds(n)
             const selectedBuckets = editionData.buckets.filter(
-                b => Number(b.id) >= n * groupBy && Number(b.id) < (n + 1) * groupBy
+                b => Number(b.id) >= lowerBound && Number(b.id) < upperBound
             )
             return {
                 id: getId(n),

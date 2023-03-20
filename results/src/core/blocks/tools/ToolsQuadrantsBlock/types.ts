@@ -1,6 +1,6 @@
 import { ScatterPlotLayerProps } from '@nivo/scatterplot'
 import { ToolExperienceId, ToolsSectionId } from 'core/bucket_keys'
-import { Entity, YearCompletion } from 'core/types'
+import { Entity, YearCompletion } from '@types/index'
 import { BlockContext } from 'core/blocks/types'
 
 export type ToolsQuadrantsBlockData = BlockContext<

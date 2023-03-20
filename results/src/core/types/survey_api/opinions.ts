@@ -1,4 +1,4 @@
-import { FacetCompletion, YearCompletion } from 'core/types'
+import { FacetCompletion, YearCompletion } from '@types/index'
 
 export interface OpinionBucket {
     id: 0 | 1 | 2 | 3 | 4

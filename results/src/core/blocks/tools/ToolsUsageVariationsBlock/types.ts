@@ -1,4 +1,4 @@
-import { allMatrixDimensionIds, MatrixDimensionId } from 'core/types/survey_api/matrices'
+import { allMatrixDimensionIds, MatrixDimensionId } from '@types/survey_api/matrices'
 
 export type DimensionId = Exclude<MatrixDimensionId, 'source'>
 

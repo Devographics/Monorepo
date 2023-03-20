@@ -19,11 +19,11 @@ const gradientLineWidthScale = scaleLinear().domain([0, 30]).range([11, 9]).clam
 export const ToolsArrowsChart = ({ data, activeCategory }) => {
     const theme = useTheme()
 
-    const getColor = (id) => theme.colors.ranges.toolSections[id]
+    const getColor = id => theme.colors.ranges.toolSections[id]
 
     let toolToCategoryMap = {}
     map(toolsCategories, (tools, category) => {
-        tools.forEach((tool) => {
+        tools.forEach(tool => {
             toolToCategoryMap[tool] = category
         })
     })
@@ -57,7 +57,7 @@ export const ToolsArrowsChart = ({ data, activeCategory }) => {
 
         return {
             width,
-            height,
+            height
         }
     }, [/* windowWidth, */ windowHeight])
 
@@ -65,33 +65,33 @@ export const ToolsArrowsChart = ({ data, activeCategory }) => {
         typeof navigator !== 'undefined' &&
         navigator.userAgent.toLowerCase().indexOf('firefox') > -1
 
-    const tools = data.map((d) => d.id)
+    const tools = data.map(d => d.id)
     let toolNames = {}
-    data.forEach((tool) => {
+    data.forEach(tool => {
         toolNames[tool.id] = tool.entity.name
     })
 
     const points = useMemo(
         () =>
-            data.map((tool) =>
+            data.map(tool =>
                 get(tool, 'experience.all_years', []).map(({ buckets }) => {
                     const points = buckets.map(({ id, percentage }) =>
-                        conditionDiffs[id].map((d) => d * percentage)
+                        conditionDiffs[id].map(d => d * percentage)
                     )
-                    return [sum(points.map((d) => d[0])), sum(points.map((d) => d[1]))]
+                    return [sum(points.map(d => d[0])), sum(points.map(d => d[1]))]
                 })
             ),
         [data]
     )
 
     const scales = useMemo(() => {
-        const xExtent = extent(flatten(points).map((d) => d[0]))
+        const xExtent = extent(flatten(points).map(d => d[0]))
         const maxAbsX = max(xExtent.map(Math.abs))
         const xScale = scaleLinear()
             .domain([-maxAbsX, maxAbsX])
             .range([20, dms.width - 20])
 
-        const yExtent = extent(flatten(points).map((d) => d[1]))
+        const yExtent = extent(flatten(points).map(d => d[1]))
         const maxAbsY = max(yExtent.map(Math.abs))
         const yScale = scaleLinear()
             .domain([-maxAbsY, maxAbsY])
@@ -99,7 +99,7 @@ export const ToolsArrowsChart = ({ data, activeCategory }) => {
 
         return {
             x: xScale,
-            y: yScale,
+            y: yScale
         }
     }, [points, dms])
 
@@ -115,7 +115,7 @@ export const ToolsArrowsChart = ({ data, activeCategory }) => {
         }
 
         // draw lines
-        points.forEach((points) => {
+        points.forEach(points => {
             const tool = tools[i]
             const toolName = toolNames[tool]
             const category = toolToCategoryMap[tool]
@@ -207,7 +207,7 @@ export const ToolsArrowsChart = ({ data, activeCategory }) => {
                     x={dms.width}
                     y={dms.height / 2 - 10}
                     style={{
-                        textAnchor: 'end',
+                        textAnchor: 'end'
                     }}
                 >
                     {translate('toolExperience.positive_opinion.extrashort')}
@@ -217,7 +217,7 @@ export const ToolsArrowsChart = ({ data, activeCategory }) => {
                     x={dms.width / 2}
                     y={10}
                     style={{
-                        textAnchor: 'middle',
+                        textAnchor: 'middle'
                     }}
                 >
                     {translate('toolExperience.have_used.extrashort')}
@@ -227,7 +227,7 @@ export const ToolsArrowsChart = ({ data, activeCategory }) => {
                     x={dms.width / 2}
                     y={dms.height - 10}
                     style={{
-                        textAnchor: 'middle',
+                        textAnchor: 'middle'
                     }}
                 >
                     {translate('toolExperience.have_not_used.extrashort')}
@@ -426,7 +426,7 @@ const conditionDiffs = {
     not_interested: [-1, -1],
     interested: [1, -1],
     would_not_use: [-1, 1],
-    would_use: [1, 1],
+    would_use: [1, 1]
 }
 
 /*
@@ -480,5 +480,5 @@ const labelsToTheRight = [
     'electron',
     'nextjs',
     'vuejs',
-    'cypress',
+    'cypress'
 ]

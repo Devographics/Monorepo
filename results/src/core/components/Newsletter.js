@@ -3,7 +3,6 @@ import { useI18n } from 'core/i18n/i18nContext'
 import T from 'core/i18n/T'
 import { usePageContext } from 'core/helpers/pageContext'
 
-
 const getEOConfig = listId => ({
     emailOctopusUrl: `https://emailoctopus.com/lists/${listId}/members/embedded/1.3/add`,
     emailOctopusSiteKey: '6LdYsmsUAAAAAPXVTt-ovRsPIJ_IVhvYBBhGvRV6',

@@ -34,7 +34,6 @@ const KnowledgeScoreBlock = ({ block, data: questionData }) => {
         id: getLabel(n),
         shortLabel: getLabel(n)
     }))
-    console.log(bucketKeys)
     let buckets = data.buckets
 
     const { chartFilters, setChartFilters, legends } = useChartFilters({

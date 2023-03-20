@@ -12,7 +12,7 @@ hasSponsor: true
 loadData: true
 # query: >
 #     dataAPI {
-#         survey(survey: ${surveyType}) {
+#         survey(survey: ${surveyId}) {
 #             # fragmentStart
 #             ${fieldId}_happiness: happiness(id: ${fieldId}, filters: ${filters}, facet: null) {
 #                 keys

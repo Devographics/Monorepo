@@ -42,7 +42,7 @@ const HintBlock = ({ block, data }) => {
                 </HintBulbInner>
             </HintBulb>
             <HintContent>
-                <T k={`hints.${id}`} md={true} values={variables}/>
+                <T k={`hints.${id}`} md={true} values={variables} />
             </HintContent>
         </HintContainer>
     )

@@ -1,4 +1,4 @@
-import { Entity } from 'core/types'
+import { Entity } from '@types/index'
 
 export type Key = string
 

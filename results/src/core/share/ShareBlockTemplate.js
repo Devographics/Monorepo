@@ -16,13 +16,13 @@ const ShareBlockTemplate = () => {
     const context = mergePageContext(pageContext, location)
 
     const blockTitle = getBlockTitle(block, context, translate, {
-        format: 'full',
+        format: 'full'
     })
     const blockDescription = getBlockDescription(context.block, context, translate, {
-        isMarkdownEnabled: false,
+        isMarkdownEnabled: false
     })
     const overrides = {
-        title: `${config.siteTitle}: ${blockTitle} ${config.hashtag}`,
+        title: `${config.siteTitle}: ${blockTitle} ${config.hashtag}`
     }
     if (blockDescription) {
         overrides.description = blockDescription

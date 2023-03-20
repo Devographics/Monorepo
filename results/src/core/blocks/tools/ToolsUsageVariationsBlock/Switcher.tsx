@@ -9,7 +9,7 @@ import { allDimensionIds, DimensionId } from './types'
 
 export const Switcher = ({
     setDimension,
-    dimension,
+    dimension
 }: {
     setDimension: (dimension: DimensionId) => void
     dimension: DimensionId
@@ -18,7 +18,7 @@ export const Switcher = ({
 
     return (
         <ButtonGroup>
-            {allDimensionIds.map((dimensionId) => (
+            {allDimensionIds.map(dimensionId => (
                 <Button
                     key={dimensionId}
                     size="small"

@@ -1,4 +1,4 @@
-id: ${parentId}_introduction
+id: ${sectionId}_introduction
 blockType: PageIntroductionBlock
 wrapBlock: false
 disableExport: true

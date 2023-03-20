@@ -17,7 +17,7 @@ query: >
         }
     }
     dataAPI {
-        survey(survey: ${surveyType}) {
+        survey(survey: ${surveyId}) {
             explorer(
                 facet1: "${facet1}"
                 facet2: "${facet2}"

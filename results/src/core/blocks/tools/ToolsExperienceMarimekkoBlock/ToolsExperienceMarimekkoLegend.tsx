@@ -22,7 +22,7 @@ export const ToolsExperienceMarimekkoLegend = ({ colors }: ToolsExperienceMarime
             width: ITEM_WIDTH,
             fill: colors.not_interested[0],
             label: [ITEM_WIDTH * 0.25, 30],
-            labelAnchor: 'end',
+            labelAnchor: 'end'
         },
         {
             id: translate('options.tools.would_not_use.short'),
@@ -30,7 +30,7 @@ export const ToolsExperienceMarimekkoLegend = ({ colors }: ToolsExperienceMarime
             width: ITEM_WIDTH,
             fill: colors.would_not_use[0],
             label: [ITEM_WIDTH * 0.25, 12],
-            labelAnchor: 'end',
+            labelAnchor: 'end'
         },
         {
             id: translate('options.tools.would_use.short'),
@@ -38,7 +38,7 @@ export const ToolsExperienceMarimekkoLegend = ({ colors }: ToolsExperienceMarime
             width: ITEM_WIDTH,
             fill: colors.would_use[0],
             label: [ITEM_WIDTH * 3.75, 12],
-            labelAnchor: 'start',
+            labelAnchor: 'start'
         },
         {
             id: translate('options.tools.interested.short'),
@@ -46,12 +46,12 @@ export const ToolsExperienceMarimekkoLegend = ({ colors }: ToolsExperienceMarime
             width: ITEM_WIDTH,
             fill: colors.interested[0],
             label: [ITEM_WIDTH * 3.75, 30],
-            labelAnchor: 'start',
-        },
+            labelAnchor: 'start'
+        }
     ]
 
     let x = 0
-    items.forEach((item) => {
+    items.forEach(item => {
         item.x = x
         x += item.width
     })
@@ -59,7 +59,7 @@ export const ToolsExperienceMarimekkoLegend = ({ colors }: ToolsExperienceMarime
 
     return (
         <g transform={`translate(${ITEM_WIDTH * -2}, 0)`}>
-            {items.map((item) => (
+            {items.map(item => (
                 <rect
                     key={item.id}
                     x={item.x}
@@ -68,7 +68,7 @@ export const ToolsExperienceMarimekkoLegend = ({ colors }: ToolsExperienceMarime
                     fill={item.fill}
                 />
             ))}
-            {items.map((item) => (
+            {items.map(item => (
                 <Fragment key={item.id}>
                     <path
                         fill="none"

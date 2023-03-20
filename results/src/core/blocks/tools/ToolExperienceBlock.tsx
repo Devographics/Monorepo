@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react'
 import keyBy from 'lodash/keyBy'
 import { BlockContext } from 'core/blocks/types'
-import { ToolAllYearsExperience, ToolExperienceBucket } from 'core/types/survey_api/tools'
+import { ToolAllYearsExperience, ToolExperienceBucket } from '@types/survey_api/tools'
 // @ts-ignore
 import Block from 'core/blocks/block/BlockVariant'
 // @ts-ignore

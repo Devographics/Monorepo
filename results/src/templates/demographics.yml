@@ -1,6 +1,6 @@
 blockType: VerticalBarBlock
 defaultUnits: percentageSurvey
 blockNamespace: user_info
-chartNamespace: ${id}
+chartNamespace: ${questionId}
 hasSponsor: true
 loadData: true

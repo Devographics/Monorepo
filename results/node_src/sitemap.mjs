@@ -41,20 +41,12 @@ const injectVariables = (yamlObject, variables, templateName) => {
     }
 }
 
-const applyTemplate = (block, templateObject, parent, globalVariables) => {
+const applyTemplate = ({ block, templateObject, blockVariables = {}, contextVariables = {} }) => {
     // defines all available variables to be injected
     // at build time in the GraphQL queries
     const variables = {
-        // filters: {}, // this wil be injected into the GraphQL query, so it should be a string
-        // options: {}, // this wil be injected into the GraphQL query, so it should be a string
-        // facet: 'null',
-        ...globalVariables,
-        ...(parent ? { parentId: parent.id } : {}),
-        ...(templateObject.defaultVariables || {}),
-        id: block.id,
-        // fieldId: block.id,
-        ...(block.variables || {}),
-        ...(block.pageVariables || {})
+        ...blockVariables,
+        ...contextVariables
     }
 
     const populatedTemplate = injectVariables(templateObject, variables, templateObject.name)
@@ -79,7 +71,7 @@ const flattenSitemap = (stack, pages, parent, pageIndex) => {
     })
 }
 
-export const pageFromConfig = async (page, pageIndex, globalVariables) => {
+export const pageFromConfig = async (page, pageIndex, editionVariables) => {
     try {
         const { parent } = page
 
@@ -112,6 +104,11 @@ export const pageFromConfig = async (page, pageIndex, globalVariables) => {
                 const variants = []
 
                 for (let blockVariant of blockVariants) {
+                    const contextVariables = {
+                        ...editionVariables,
+                        sectionId: page.id,
+                        questionId: blockVariant.id
+                    }
                     // if template has been provided, apply it
 
                     // if block has variables, inject them based on current page and global variables
@@ -120,13 +117,18 @@ export const pageFromConfig = async (page, pageIndex, globalVariables) => {
                     }
 
                     // also pass page variables to block so it can inherit them
-                    if (page.variables) {
-                        blockVariant.pageVariables = injectVariables(page.variables, page)
-                    }
+                    // if (page.variables) {
+                    //     blockVariant.pageVariables = injectVariables(page.variables, page)
+                    // }
 
                     if (blockVariant.template) {
-                        const template = await loadTemplate(blockVariant.template)
-                        blockVariant = applyTemplate(blockVariant, template, page, globalVariables)
+                        const templateObject = await loadTemplate(blockVariant.template)
+                        blockVariant = applyTemplate({
+                            block: blockVariant,
+                            templateObject,
+                            blockVariables: blockVariant.variables,
+                            contextVariables
+                        })
                     }
 
                     // if block type is missing, get it from parent
@@ -153,7 +155,7 @@ export const pageFromConfig = async (page, pageIndex, globalVariables) => {
 
 let computedSitemap = null
 
-export const computeSitemap = async (rawSitemap, globalVariables) => {
+export const computeSitemap = async (rawSitemap, editionVariables) => {
     if (computedSitemap !== null) {
         return computedSitemap
     }
@@ -165,7 +167,7 @@ export const computeSitemap = async (rawSitemap, globalVariables) => {
     flattenSitemap(stack, rawSitemap, undefined, 0)
 
     stack.flat = await Promise.all(
-        stack.flat.map((page, pageIndex) => pageFromConfig(page, pageIndex, globalVariables))
+        stack.flat.map((page, pageIndex) => pageFromConfig(page, pageIndex, editionVariables))
     )
 
     // assign prev/next page using flat pages

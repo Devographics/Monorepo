@@ -67,7 +67,7 @@ const Export = ({ closeComponent, block, data, title }) => {
 
     // try to remove entities data
     const cleanedData = isArray
-        ? data.map((row) => {
+        ? data.map(row => {
               const { entity, ...rest } = row
               return rest
           })
@@ -115,7 +115,7 @@ const Text = ({ value }) => {
 }
 
 BlockExport.propTypes = {
-    id: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired
 }
 
 const ExportContents = styled.div`
@@ -131,18 +131,17 @@ const ExportContents = styled.div`
         flex-direction: column;
         justify-content: flex-start;
 
-        .react-tabs__tab{
-          &:not(.react-tabs__tab-panel--selected) {
-            &:hover,
-            &:focus {
-              text-decoration: underline;
+        .react-tabs__tab {
+            &:not(.react-tabs__tab-panel--selected) {
+                &:hover,
+                &:focus {
+                    text-decoration: underline;
+                }
             }
-          }
-          &:focus {
-            border: 2px solid ${({theme}) => theme.colors.text};
-          }
+            &:focus {
+                border: 2px solid ${({ theme }) => theme.colors.text};
+            }
         }
-
     }
     .react-tabs__tab-panel--selected {
         flex: 1;

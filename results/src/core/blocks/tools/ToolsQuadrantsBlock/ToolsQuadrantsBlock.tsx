@@ -11,7 +11,7 @@ const ENABLE_METRIC_SWITCH = false
 export const ToolsQuadrantsBlock = ({
     block,
     data,
-    triggerId,
+    triggerId
 }: {
     block: ToolsQuadrantsBlockData
     data: ToolsQuadrantsApiDatum[]
@@ -19,12 +19,15 @@ export const ToolsQuadrantsBlock = ({
     triggerId?: ToolsSectionId
 }) => {
     const [metric, setMetric] = useState<ToolsQuadrantsMetric>('satisfaction')
-    const modeProps = useMemo(() => ({
-        units: metric,
-        options: ['satisfaction', 'interest'],
-        onChange: setMetric,
-        i18nNamespace: 'options.experience_ranking',
-    }), [metric, setMetric])
+    const modeProps = useMemo(
+        () => ({
+            units: metric,
+            options: ['satisfaction', 'interest'],
+            onChange: setMetric,
+            i18nNamespace: 'options.experience_ranking'
+        }),
+        [metric, setMetric]
+    )
 
     const chartData = useChartData(data, metric)
     const tabularData = useTabularData(data, metric)
@@ -32,18 +35,23 @@ export const ToolsQuadrantsBlock = ({
     const [currentCategory, setCurrentCategory] = useState<ToolsSectionId | null>(null)
     const controlledCurrentCategory = triggerId || currentCategory
 
-    const chartClassName = controlledCurrentCategory ? `ToolsScatterplotChart--${controlledCurrentCategory}` : ''
+    const chartClassName = controlledCurrentCategory
+        ? `ToolsScatterplotChart--${controlledCurrentCategory}`
+        : ''
 
     const legends = useChartLegends()
-    const legendProps = useMemo(() => ({
-        legends,
-        onMouseEnter: ({ id }: { id: string }) => {
-            setCurrentCategory(id.replace('toolCategories.', '') as ToolsSectionId)
-        },
-        onMouseLeave: () => {
-            setCurrentCategory(null)
-        },
-    }), [legends, setCurrentCategory])
+    const legendProps = useMemo(
+        () => ({
+            legends,
+            onMouseEnter: ({ id }: { id: string }) => {
+                setCurrentCategory(id.replace('toolCategories.', '') as ToolsSectionId)
+            },
+            onMouseLeave: () => {
+                setCurrentCategory(null)
+            }
+        }),
+        [legends, setCurrentCategory]
+    )
 
     return (
         <Block

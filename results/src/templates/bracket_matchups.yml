@@ -1,35 +1,35 @@
 blockType: BracketMatchupsBlock
-dataPath: 'dataAPI.survey.${id}.year.facets.0'
+dataPath: 'dataAPI.survey.${questionId}.year.facets.0'
 hasSponsor: true
-query: >
-    dataAPI {
-        survey(survey: ${surveyType}) {
-            ${id}: bracket_matchups(id: ${fieldId}, filters: ${filters}, options: ${options}) {
-                id
-                year(year: ${currentYear}) {
-                    year
-                    completion {
-                        total
-                        count
-                        percentageSurvey
-                    }
-                    facets {
-                        completion {
-                            total
-                            count
-                            percentageSurvey
-                            percentageQuestion
-                        }
-                        buckets {
-                            id
-                            matchups {
-                                id
-                                count
-                                percentage
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+# query: >
+#     dataAPI {
+#         survey(survey: ${surveyId}) {
+#             ${questionId}: bracket_matchups(id: ${fieldId}, filters: ${filters}, options: ${options}) {
+#                 id
+#                 year(year: ${currentYear}) {
+#                     year
+#                     completion {
+#                         total
+#                         count
+#                         percentageSurvey
+#                     }
+#                     facets {
+#                         completion {
+#                             total
+#                             count
+#                             percentageSurvey
+#                             percentageQuestion
+#                         }
+#                         buckets {
+#                             id
+#                             matchups {
+#                                 id
+#                                 count
+#                                 percentage
+#                             }
+#                         }
+#                     }
+#                 }
+#             }
+#         }
+#     }

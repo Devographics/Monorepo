@@ -1,4 +1,4 @@
-import { Entity, BlockUnits, BlockLegend, BucketItem } from 'core/types'
+import { Entity, BlockUnits, BlockLegend, BucketItem } from '@types/index'
 import { EditionData } from '@devographics/types'
 
 import { isPercentage } from 'core/helpers/units'

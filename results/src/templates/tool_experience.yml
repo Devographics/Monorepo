@@ -2,11 +2,11 @@ blockType: ToolExperienceBlock
 titleId: blocks.tool_experience
 descriptionId: blocks.tool_experience.description
 noteId: blocks.tool_experience.note
-# dataPath: dataAPI.survey.${id}
-# keysPath: dataAPI.survey.${id}.experience.keys
-# entityPath: dataAPI.survey.${id}.entity
+# dataPath: dataAPI.survey.${questionId}
+# keysPath: dataAPI.survey.${questionId}.experience.keys
+# entityPath: dataAPI.survey.${questionId}.entity
 bucketKeysName: tools
-hidden: true
+# hidden: true
 # enableCustomization: true
 hasComments: true
 hasSponsor: true
@@ -14,9 +14,9 @@ loadData: true
 allEditions: true
 # query: >
 #     dataAPI {
-#         survey(survey: ${surveyType}) {
+#         survey(survey: ${surveyId}) {
 #             # fragmentStart
-#             ${id}: tool(id: ${id}) {
+#             ${questionId}: tool(id: ${questionId}) {
 #                 id
 #                 entity {
 #                     name

@@ -1,7 +1,7 @@
 blockType: FeatureExperienceBlock
-# dataPath: "dataAPI.survey.${id}"
-# keysPath: "dataAPI.survey.${id}.experience.keys"
-# entityPath: dataAPI.survey.${id}.entity
+# dataPath: "dataAPI.survey.${questionId}"
+# keysPath: "dataAPI.survey.${questionId}.experience.keys"
+# entityPath: dataAPI.survey.${questionId}.entity
 blockNamespace: features
 chartNamespace: features
 # enableCustomization: true
@@ -11,9 +11,9 @@ loadData: true
 allEditions: true
 # query: >
 #     dataAPI {
-#         survey(survey: ${surveyType}) {
+#         survey(survey: ${surveyId}) {
 #             # fragmentStart
-#             ${id}: feature(id: ${id}) {
+#             ${questionId}: feature(id: ${questionId}) {
 #                 id
 #                 entity {
 #                     name

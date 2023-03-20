@@ -12,7 +12,7 @@ import {
     ToolsQuadrantsMetric,
     ToolsQuadrantsApiDatum,
     ToolsQuadrantsChartToolData,
-    ToolsQuadrantsChartToolsCategoryData,
+    ToolsQuadrantsChartToolsCategoryData
 } from './types'
 
 const { toolsCategories } = variables
@@ -24,7 +24,10 @@ const extractToolData = (
     metric: ToolsQuadrantsMetric
 ): ToolsQuadrantsChartToolData | null => {
     const { id, entity, experience } = tool
-    const buckets: ToolsQuadrantsApiDatum['experience']['year']['facets'][0]['buckets'] = get(experience, 'year.facets[0].buckets')
+    const buckets: ToolsQuadrantsApiDatum['experience']['year']['facets'][0]['buckets'] = get(
+        experience,
+        'year.facets[0].buckets'
+    )
     const total: number = get(experience, 'year.completion.total')
 
     // if the tool doesn't have experience data, abort
@@ -42,7 +45,7 @@ const extractToolData = (
         interested: getCount('interested'),
         not_interested: getCount('not_interested'),
         would_use: getCount('would_use'),
-        would_not_use: getCount('would_not_use'),
+        would_not_use: getCount('would_not_use')
     }
 
     const totals = {
@@ -62,7 +65,7 @@ const extractToolData = (
     const percentages = {
         satisfaction: getPercentage('would_use'),
         interest: getPercentage('interested'),
-        awareness: 100 - getPercentage('never_heard'),
+        awareness: 100 - getPercentage('never_heard')
     }
 
     // note: we use the same x (nb of users) for all metrics to stay consistent
@@ -73,7 +76,7 @@ const extractToolData = (
         satisfaction_percentage: percentages?.satisfaction,
         interest_percentage: percentages?.interest,
         x: totals?.usage,
-        y: percentages[metric],
+        y: percentages[metric]
     }
 }
 
@@ -106,7 +109,7 @@ export const useChartData = (
                           id: toolsSectionId as ToolsSectionId,
                           name: translate!(`page.${toolsSectionId}`),
                           color,
-                          data: compact(categoryData),
+                          data: compact(categoryData)
                       }
                     : null
             })
@@ -122,21 +125,26 @@ export const useChartLegends = () => {
     const { translate } = useI18n()
     const theme = useTheme()
 
-    return useMemo(() => Object.keys(toolsCategories).map(toolsSectionId => ({
-        id: `toolCategories.${toolsSectionId}`,
-        label: translate!(`sections.${toolsSectionId}.title`),
-        keyLabel: `${translate!(`sections.${toolsSectionId}.title`)}:`,
-        color: theme.colors.ranges.toolSections[toolsSectionId as ToolsSectionId]
-    })), [translate])
+    return useMemo(
+        () =>
+            Object.keys(toolsCategories).map(toolsSectionId => ({
+                id: `toolCategories.${toolsSectionId}`,
+                label: translate!(`sections.${toolsSectionId}.title`),
+                keyLabel: `${translate!(`sections.${toolsSectionId}.title`)}:`,
+                color: theme.colors.ranges.toolSections[toolsSectionId as ToolsSectionId]
+            })),
+        [translate]
+    )
 }
 
-export const useTabularData = (
-    data: ToolsQuadrantsApiDatum[],
-    metric: ToolsQuadrantsMetric
-) => useMemo(() => {
-    return [getTableData({
-        data: data.map(tool => extractToolData(tool, metric))
-            .filter(tool => tool !== null) as ToolsQuadrantsChartToolData[],
-        valueKeys: ['usage_count', 'satisfaction_percentage', 'interest_percentage']
-    })]
-}, [data, metric])
+export const useTabularData = (data: ToolsQuadrantsApiDatum[], metric: ToolsQuadrantsMetric) =>
+    useMemo(() => {
+        return [
+            getTableData({
+                data: data
+                    .map(tool => extractToolData(tool, metric))
+                    .filter(tool => tool !== null) as ToolsQuadrantsChartToolData[],
+                valueKeys: ['usage_count', 'satisfaction_percentage', 'interest_percentage']
+            })
+        ]
+    }, [data, metric])

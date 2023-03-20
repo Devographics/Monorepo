@@ -1,4 +1,5 @@
 import React, { FC } from 'react'
+import { PageContextValue } from '@types/context'
 
 export type BlockUnits =
     | 'count'
@@ -18,6 +19,7 @@ export type BlockMode = 'absolute' | 'relative'
 export interface BlockComponentProps {
     block: BlockDefinition
     keys?: string[]
+    context: PageContextValue
     // 'data' property is defined by each specific block
 }
 

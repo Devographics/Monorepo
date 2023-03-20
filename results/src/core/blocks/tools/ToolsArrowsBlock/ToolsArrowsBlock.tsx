@@ -11,7 +11,7 @@ import { BlockContext } from 'core/blocks/types'
 import { ToolsArrowsToolData } from './types'
 import { ToolsArrowsChart } from './ToolsArrowsChart.js'
 import get from 'lodash/get'
-import { ToolsExperienceToolData } from 'core/types/survey_api/tools'
+import { ToolsExperienceToolData } from '@types/survey_api/tools'
 
 /**
  * Convert raw API data to be compatible with tools arrows chart.

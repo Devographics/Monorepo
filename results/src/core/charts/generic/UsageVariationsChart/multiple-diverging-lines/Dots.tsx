@@ -54,9 +54,9 @@ export const Dots = ({ data, itemHeight, i18nNamespace }: DotsProps) => {
                             x: point.x,
                             y: y + point.y,
                             color: datum.color,
-                            data: point.data,
+                            data: point.data
                         }
-                    }),
+                    })
                 ]
             }, [] as DotData[]),
         [data, itemHeight]
@@ -74,44 +74,44 @@ export const Dots = ({ data, itemHeight, i18nNamespace }: DotsProps) => {
             radius: number
         }
     >(dotsData, {
-        key: (dot) => dot.key,
-        initial: (dot) => ({
+        key: dot => dot.key,
+        initial: dot => ({
             x: dot.x,
             y: dot.y,
             color: dot.color,
             opacity: 1,
-            radius: 4,
+            radius: 4
         }),
-        from: (dot) => ({
+        from: dot => ({
             x: dot.x,
             y: dot.y,
             color: dot.color,
             opacity: 0,
-            radius: 0,
+            radius: 0
         }),
-        enter: (dot) => ({
+        enter: dot => ({
             x: dot.x,
             y: dot.y,
             color: dot.color,
             opacity: 1,
-            radius: 4,
+            radius: 4
         }),
-        update: (dot) => ({
+        update: dot => ({
             x: dot.x,
             y: dot.y,
             color: dot.color,
             opacity: 1,
-            radius: 4,
+            radius: 4
         }),
-        leave: (dot) => ({
+        leave: dot => ({
             x: dot.x,
             y: dot.y,
             color: dot.color,
             opacity: 0,
-            radius: 0,
+            radius: 0
         }),
         config: springConfig,
-        immediate: !animate,
+        immediate: !animate
     })
 
     const { showTooltipFromEvent, hideTooltip } = useTooltip()
@@ -126,14 +126,14 @@ export const Dots = ({ data, itemHeight, i18nNamespace }: DotsProps) => {
                     key={dot.key}
                     cx={style.x}
                     cy={style.y}
-                    r={to(style.radius, (radius) => Math.max(radius, 0))}
+                    r={to(style.radius, radius => Math.max(radius, 0))}
                     fill={theme.colors.background}
                     stroke={style.color}
                     strokeWidth={2}
-                    onMouseEnter={(event) => {
+                    onMouseEnter={event => {
                         onMouseEnter(event, dot)
                     }}
-                    onMouseMove={(event) => {
+                    onMouseMove={event => {
                         onMouseEnter(event, dot)
                     }}
                     onMouseLeave={hideTooltip}

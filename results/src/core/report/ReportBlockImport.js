@@ -9,7 +9,7 @@ import ReportBlockTitle from 'core/report/ReportBlockTitle'
 const BlockImport = ({ id, children, size = 's', title }) => {
     const [triggerId, setTriggerId] = useState()
     const pageContext = usePageContext()
-    const block = allBlocks.find((b) => b.id === id && b.isReport)
+    const block = allBlocks.find(b => b.id === id && b.isReport)
 
     if (!block) {
         return <div>Missing block {id}</div>
@@ -24,8 +24,8 @@ const BlockImport = ({ id, children, size = 's', title }) => {
         height: '100%',
         title,
         overrides: {
-            BlockTitle: ReportBlockTitle,
-        },
+            BlockTitle: ReportBlockTitle
+        }
     }
 
     const childrenWithExtraProp = React.Children.map(children, (child, index) =>
@@ -33,7 +33,7 @@ const BlockImport = ({ id, children, size = 's', title }) => {
             triggerId,
             setTriggerId,
             isFirst: index === 0,
-            isLast: index === children.length - 1,
+            isLast: index === children.length - 1
         })
     )
 

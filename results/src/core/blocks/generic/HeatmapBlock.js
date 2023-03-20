@@ -34,8 +34,8 @@ HeatmapBlock.propTypes = {
         id: PropTypes.string.isRequired,
         variables: PropTypes.shape({
             subject: PropTypes.oneOf(['tools', 'features']).isRequired,
-            heatmapId: PropTypes.string.isRequired,
-        }).isRequired,
+            heatmapId: PropTypes.string.isRequired
+        }).isRequired
     }).isRequired,
     data: PropTypes.shape({
         year: PropTypes.number.isRequired,
@@ -47,12 +47,12 @@ HeatmapBlock.propTypes = {
                     PropTypes.shape({
                         range: PropTypes.string.isRequired,
                         count: PropTypes.number.isRequired,
-                        percentage: PropTypes.number.isRequired,
+                        percentage: PropTypes.number.isRequired
                     })
-                ).isRequired,
+                ).isRequired
             })
-        ).isRequired,
-    }),
+        ).isRequired
+    })
 }
 
 export default memo(HeatmapBlock)

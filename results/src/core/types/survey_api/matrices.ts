@@ -1,4 +1,4 @@
-import { Entity } from 'core/types'
+import { Entity } from '@types/index'
 
 export const allToolMatrixExperienceIds = [
     'would_use',
@@ -6,7 +6,7 @@ export const allToolMatrixExperienceIds = [
     'interested',
     'not_interested',
     'never_heard',
-    'usage',
+    'usage'
 ] as const
 export type ToolMatrixExperienceId = typeof allToolMatrixExperienceIds[number]
 
@@ -14,7 +14,7 @@ export const allMatrixDimensionIds = [
     'years_of_experience',
     'yearly_salary',
     'company_size',
-    'source',
+    'source'
 ] as const
 export type MatrixDimensionId = typeof allMatrixDimensionIds[number]
 

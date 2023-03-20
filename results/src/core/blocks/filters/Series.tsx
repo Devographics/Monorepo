@@ -56,10 +56,12 @@ const Series = ({ filters, series, index, stateStuff }) => {
                 <SeriesHeading_>
                     <SeriesChip_ style={{ backgroundColor }} />
                     <T k="filters.series.heading" values={{ index: index + 1 }} />
-                    {enableYearSelect && <YearSelector seriesIndex={index} stateStuff={stateStuff} />}
+                    {enableYearSelect && (
+                        <YearSelector seriesIndex={index} stateStuff={stateStuff} />
+                    )}
                 </SeriesHeading_>
                 <DeleteSeries_ size="small" onClick={handleDeleteSeries}>
-                        <DeleteIcon labelId="filters.series.delete" />
+                    <DeleteIcon labelId="filters.series.delete" />
                     {/* <Button size="small" onClick={handleDeleteSeries}>
                     <T k="filters.series.delete" />
                 </Button> */}

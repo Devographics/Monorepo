@@ -3,11 +3,17 @@ import PropTypes from 'prop-types'
 import { useTheme } from 'styled-components'
 import { ResponsiveBar } from '@nivo/bar'
 import { useI18n } from 'core/i18n/i18nContext'
-import { useBarChart, useColorDefs, useColorFills, useChartKeys, useChartLabelFormatter } from 'core/charts/hooks'
+import {
+    useBarChart,
+    useColorDefs,
+    useColorFills,
+    useChartKeys,
+    useChartLabelFormatter
+} from 'core/charts/hooks'
 import BarTooltip from './BarTooltip'
 import ChartLabel from 'core/components/ChartLabel'
 import { isPercentage } from 'core/helpers/units'
-import { ChartComponentProps, BlockUnits, BucketItem, BlockLegend } from 'core/types'
+import { ChartComponentProps, BlockUnits, BucketItem, BlockLegend } from '@types/index'
 import { CHART_MODE_DEFAULT } from 'core/blocks/filters/constants'
 const breakpoint = 600
 
@@ -73,7 +79,7 @@ const VerticalBarChart = ({
     gridIndex = 1,
     chartDisplayMode = CHART_MODE_DEFAULT,
     facet,
-    showDefaultSeries,
+    showDefaultSeries
 }: VerticalBarChartProps) => {
     const theme = useTheme()
 

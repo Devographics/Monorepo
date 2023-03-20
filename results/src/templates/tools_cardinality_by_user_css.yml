@@ -2,39 +2,38 @@ blockType: AllSectionsToolsCardinalityByUserBlock
 dataPath: dataAPI.cardinality
 bucketKeysName: tools
 hasSponsor: true
-
 # this chart's query is quite repetitive, in order to be able
 # to generate it in a more dynamic way, we would have
 # to support loops.
-query: >
-    dataAPI {
-        cardinality: survey(survey: ${surveyType}) {
-            pre_post_processors: tools_cardinality_by_user(
-                year: ${currentYear},
-                ids: [${toolsCategories.pre_post_processors}],
-                experienceId: would_use
-            ) {
-                cardinality
-                count
-                percentageSurvey
-            }
-            css_frameworks: tools_cardinality_by_user(
-                year: ${currentYear},
-                ids: [${toolsCategories.css_frameworks}],
-                experienceId: would_use
-            ) {
-                cardinality
-                count
-                percentageSurvey
-            }
-            css_in_js: tools_cardinality_by_user(
-                year: ${currentYear},
-                ids: [${toolsCategories.css_in_js}],
-                experienceId: would_use
-            ) {
-                cardinality
-                count
-                percentageSurvey
-            }
-        }
-    }
+# query: >
+#     dataAPI {
+#         cardinality: survey(survey: ${surveyId}) {
+#             pre_post_processors: tools_cardinality_by_user(
+#                 year: ${currentYear},
+#                 ids: [${toolsCategories.pre_post_processors}],
+#                 experienceId: would_use
+#             ) {
+#                 cardinality
+#                 count
+#                 percentageSurvey
+#             }
+#             css_frameworks: tools_cardinality_by_user(
+#                 year: ${currentYear},
+#                 ids: [${toolsCategories.css_frameworks}],
+#                 experienceId: would_use
+#             ) {
+#                 cardinality
+#                 count
+#                 percentageSurvey
+#             }
+#             css_in_js: tools_cardinality_by_user(
+#                 year: ${currentYear},
+#                 ids: [${toolsCategories.css_in_js}],
+#                 experienceId: would_use
+#             ) {
+#                 cardinality
+#                 count
+#                 percentageSurvey
+#             }
+#         }
+#     }

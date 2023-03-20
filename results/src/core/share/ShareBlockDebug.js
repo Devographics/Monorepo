@@ -17,7 +17,7 @@ const ShareBlockDebug = ({ block }) => {
 }
 
 ShareBlockDebug.propTypes = {
-    block: PropTypes.object.isRequired,
+    block: PropTypes.object.isRequired
 }
 
 export default ShareBlockDebug

@@ -16,7 +16,7 @@ const ToolExperienceGraphBlock = ({ block, data }) => {
     const toolName = data.entity.name
     const title = translate(`block.title.${block.blockName}`, { values: { name: toolName } })
     const description = translate(`block.description.${block.blockName}`, {
-        values: { name: toolName },
+        values: { name: toolName }
     })
 
     return (
@@ -24,7 +24,7 @@ const ToolExperienceGraphBlock = ({ block, data }) => {
             block={{
                 ...block,
                 title,
-                description,
+                description
             }}
             data={data}
         >
@@ -39,29 +39,29 @@ ToolExperienceGraphBlock.propTypes = {
     block: PropTypes.shape({
         id: PropTypes.string.isRequired,
         blockName: PropTypes.string.isRequired,
-        dataPath: PropTypes.string.isRequired,
+        dataPath: PropTypes.string.isRequired
     }).isRequired,
     data: PropTypes.shape({
         entity: PropTypes.shape({
-            name: PropTypes.string.isRequired,
+            name: PropTypes.string.isRequired
         }).isRequired,
         experienceGraph: PropTypes.shape({
             nodes: PropTypes.arrayOf(
                 PropTypes.shape({
                     id: PropTypes.string.isRequired,
                     year: PropTypes.number.isRequired,
-                    experience: PropTypes.string.isRequired,
+                    experience: PropTypes.string.isRequired
                 })
             ).isRequired,
             links: PropTypes.arrayOf(
                 PropTypes.shape({
                     source: PropTypes.string.isRequired,
                     target: PropTypes.string.isRequired,
-                    count: PropTypes.number.isRequired,
+                    count: PropTypes.number.isRequired
                 })
-            ).isRequired,
-        }).isRequired,
-    }).isRequired,
+            ).isRequired
+        }).isRequired
+    }).isRequired
 }
 
 export default ToolExperienceGraphBlock

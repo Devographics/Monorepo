@@ -19,7 +19,7 @@ export const Legend = ({ size }: RangesDeltaJoyPlotLegendProps) => {
         [1, 1],
         [2, 0],
         [3, -1],
-        [4, 0],
+        [4, 0]
     ]
 
     const legendXScale = scalePoint<number>()
@@ -28,7 +28,7 @@ export const Legend = ({ size }: RangesDeltaJoyPlotLegendProps) => {
 
     const legendYScale = scaleLinear<number>().domain([-1, 1]).range([size, -size])
 
-    const interpolatedLegendPoints: [number, number][] = legendPoints.map((point) => {
+    const interpolatedLegendPoints: [number, number][] = legendPoints.map(point => {
         return [legendXScale(point[0]) as number, legendYScale(point[1])]
     })
 
@@ -45,7 +45,7 @@ export const Legend = ({ size }: RangesDeltaJoyPlotLegendProps) => {
                 dy={3}
                 style={{
                     fill: theme.colors.text,
-                    fontSize: 11,
+                    fontSize: 11
                 }}
                 textAnchor="end"
             >
@@ -74,7 +74,7 @@ export const Legend = ({ size }: RangesDeltaJoyPlotLegendProps) => {
                         dy={3}
                         style={{
                             fill: theme.colors.text,
-                            fontSize: 11,
+                            fontSize: 11
                         }}
                     >
                         {translate(`charts.ranges_multiple_diverging_lines.positive_offset`)}
@@ -89,7 +89,7 @@ export const Legend = ({ size }: RangesDeltaJoyPlotLegendProps) => {
                         textAnchor="end"
                         style={{
                             fill: theme.colors.text,
-                            fontSize: 11,
+                            fontSize: 11
                         }}
                     >
                         {translate(`charts.ranges_multiple_diverging_lines.negative_offset`)}

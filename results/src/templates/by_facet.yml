@@ -2,52 +2,52 @@ blockType: ByFacetBlock
 dataPath: 'dataAPI.survey.demographics'
 keysPath: 'dataAPI.survey.demographics.${fieldId}_all_${facetId}.keys'
 defaultUnits: percentageSurvey
-query: >
-    dataAPI {
-      survey(survey: ${surveyType}) {
-        demographics {
-          ${fieldId}_all_${facetId}: ${fieldId}(filters: {}, options: {}, facet: null) {
-            keys
-            year(year: ${currentYear}) {
-              year
-              facets {
-                id
-                type
-                mean
-                buckets {
-                  id
-                  count
-                  percentageQuestion
-                  percentageSurvey
-                  percentageFacet
-                }
-              }
-            }
-          }
-          ${fieldId}_by_${facetId}: ${fieldId}(filters: {}, options: ${options}, facet: ${facetId}) {
-            keys
-            year(year: ${currentYear}) {
-              year
-              facets {
-                id
-                type
-                mean
-                completion {
-                  count
-                  percentageQuestion
-                  percentageSurvey
-                  total
-                }
-                buckets {
-                  id
-                  count
-                  percentageQuestion
-                  percentageSurvey
-                  percentageFacet
-                }
-              }
-            }
-          }
-        }
-      }
-    }
+# query: >
+#     dataAPI {
+#       survey(survey: ${surveyId}) {
+#         demographics {
+#           ${fieldId}_all_${facetId}: ${fieldId}(filters: {}, options: {}, facet: null) {
+#             keys
+#             year(year: ${currentYear}) {
+#               year
+#               facets {
+#                 id
+#                 type
+#                 mean
+#                 buckets {
+#                   id
+#                   count
+#                   percentageQuestion
+#                   percentageSurvey
+#                   percentageFacet
+#                 }
+#               }
+#             }
+#           }
+#           ${fieldId}_by_${facetId}: ${fieldId}(filters: {}, options: ${options}, facet: ${facetId}) {
+#             keys
+#             year(year: ${currentYear}) {
+#               year
+#               facets {
+#                 id
+#                 type
+#                 mean
+#                 completion {
+#                   count
+#                   percentageQuestion
+#                   percentageSurvey
+#                   total
+#                 }
+#                 buckets {
+#                   id
+#                   count
+#                   percentageQuestion
+#                   percentageSurvey
+#                   percentageFacet
+#                 }
+#               }
+#             }
+#           }
+#         }
+#       }
+#     }

@@ -6,7 +6,7 @@ import { getBlockMeta } from 'core/helpers/blockHelpers'
 import { usePageContext } from 'core/helpers/pageContext'
 import { spacing } from 'core/theme'
 
-import { BlockComponentProps, FacetItem } from 'core/types'
+import { BlockComponentProps, FacetItem } from '@types/index'
 
 export interface BlockDebugProps extends BlockComponentProps {
     // should this be optional?

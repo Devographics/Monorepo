@@ -9,7 +9,7 @@ import { LineChart } from 'core/charts/generic/LineChart'
 import ButtonGroup from 'core/components/ButtonGroup'
 // @ts-ignore
 import Button from 'core/components/Button'
-import { Entity } from 'core/types'
+import { Entity } from '@types/index'
 // @ts-ignore
 import T from 'core/i18n/T'
 // @ts-ignore

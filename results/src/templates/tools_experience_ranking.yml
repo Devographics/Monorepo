@@ -1,46 +1,43 @@
-id: '${parentId}_experience_ranking'
+id: '${sectionId}_experience_ranking'
 blockType: ToolsExperienceRankingBlock
 titleId: blocks.tools_experience_ranking
 descriptionId: blocks.tools_experience_ranking.description
 noteId: blocks.tools_experience_ranking.note
-dataPath: 'dataAPI.survey.${parentId}_experience_ranking'
+# dataPath: 'dataAPI.survey.${sectionId}_experience_ranking'
 hasSponsor: true
 query: >
     dataAPI {
-        survey(survey: ${surveyType}) {
-            # fragmentStart
-            ${parentId}_experience_ranking: tools_rankings(ids: [${toolsCategories[parentId]}]) {
-                ids
-                years
-                experience(filters: {}) {
-                    id
-                    entity {
-                        name
-                        nameClean
-                        nameHtml
-                    }
-                    usage {
-                        year
-                        rank
-                        percentageQuestion
-                    }
-                    awareness {
-                        year
-                        rank
-                        percentageQuestion
-                    }
-                    interest {
-                        year
-                        rank
-                        percentageQuestion
-                    }
-                    satisfaction {
-                        year
-                        rank
-                        percentageQuestion
+        surveys {
+            ${surveyId} {
+                ${editionId} {
+                    ${sectionId} {
+                        ${sectionId}_ratios {
+                            data {
+                                id
+                                usage {
+                                    year
+                                    rank
+                                    percentageQuestion
+                                }
+                                awareness {
+                                    year
+                                    rank
+                                    percentageQuestion
+                                }
+                                interest {
+                                    year
+                                    rank
+                                    percentageQuestion
+                                }
+                                satisfaction {
+                                    year
+                                    rank
+                                    percentageQuestion
+                                }
+                            }
+                        }
                     }
                 }
             }
-            # fragmentEnd
         }
     }

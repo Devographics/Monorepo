@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 // @ts-ignore
 import Block from 'core/blocks/block/BlockVariant'
 import { BlockContext } from 'core/blocks/types'
-import { HappinessYearMean } from 'core/types/survey_api/happiness'
+import { HappinessYearMean } from '@types/survey_api/happiness'
 import { HappinessHistoryChart } from './HappinessHistoryChart'
 // @ts-ignore
 import { useI18n } from 'core/i18n/i18nContext'

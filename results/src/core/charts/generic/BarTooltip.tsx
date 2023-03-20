@@ -15,7 +15,11 @@ const getLabel = (props, getString) => {
             facetLabel = `, ${getString('chart_units.average')?.t}`
         } else {
             const [units, facetBucketId] = id.split('__')
-            const s2 = getString(`options.${facet}.${facetBucketId}`, {}, `${facet}: ${facetBucketId}`)
+            const s2 = getString(
+                `options.${facet}.${facetBucketId}`,
+                {},
+                `${facet}: ${facetBucketId}`
+            )
             facetLabel = `, ${s2.t}`
         }
     }

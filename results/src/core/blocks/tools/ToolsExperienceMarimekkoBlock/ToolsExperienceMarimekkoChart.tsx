@@ -56,7 +56,7 @@ const ToolsLabels = ({ data }: CustomLayerProps<ToolsExperienceMarimekkoToolData
             {data.map(datum => (
                 <g key={datum.id} transform={`translate(-160, ${datum.y})`}>
                     <foreignObject style={{ overflow: 'visible' }} width="1" height="1">
-                        <ToolLabel id={datum.id} data={datum} entity={datum?.data?.tool}/>
+                        <ToolLabel id={datum.id} data={datum} entity={datum?.data?.tool} />
                     </foreignObject>
                 </g>
             ))}

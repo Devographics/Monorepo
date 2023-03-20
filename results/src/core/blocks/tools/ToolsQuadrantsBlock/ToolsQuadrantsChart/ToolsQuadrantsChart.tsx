@@ -3,7 +3,11 @@ import { useTheme } from 'styled-components'
 import { ResponsiveScatterPlot } from '@nivo/scatterplot'
 import { useI18n } from 'core/i18n/i18nContext'
 import { ToolsSectionId } from 'core/bucket_keys'
-import { ToolsQuadrantsMetric, ToolsQuadrantsChartToolsCategoryData, ToolsQuadrantsChartToolData } from '../types'
+import {
+    ToolsQuadrantsMetric,
+    ToolsQuadrantsChartToolsCategoryData,
+    ToolsQuadrantsChartToolData
+} from '../types'
 import { staticProps } from './config'
 import { ToolsQuadrantsChartContextProvider, useToolsQuadrantsChart } from './state'
 import { Quadrants } from './Quadrants'
@@ -20,13 +24,7 @@ interface ToolsScatterPlotProps {
 
 // Custom chart layers, layers expressed as strings
 // correspond to nivo default layers.
-const layers = [
-    Quadrants,
-    'grid' as const,
-    'axes' as const,
-    Nodes,
-    Crosshair,
-]
+const layers = [Quadrants, 'grid' as const, 'axes' as const, Nodes, Crosshair]
 
 /**
  * This chart classifies tools into 4 categories (quadrants)
@@ -65,32 +63,38 @@ export const ToolsQuadrantsChart = ({
     metric,
     currentCategory,
     setCurrentCategory,
-    className,
+    className
 }: ToolsScatterPlotProps) => {
     const { xScale, yScale, context } = useToolsQuadrantsChart({
         metric,
         currentCategory,
-        setCurrentCategory,
+        setCurrentCategory
     })
 
     const theme = useTheme()
-    const getColor = useCallback(({ serieId }: { serieId: string | number }) =>
-        theme.colors.ranges.toolSections[serieId as ToolsSectionId], [theme])
+    const getColor = useCallback(
+        ({ serieId }: { serieId: string | number }) =>
+            theme.colors.ranges.toolSections[serieId as ToolsSectionId],
+        [theme]
+    )
 
     const { translate } = useI18n()
-    const axes = useMemo(() => ({
-        left: {
-            legend: translate!(`charts.axis_legends.${metric}_percentage`),
-            legendPosition: 'middle' as const,
-            legendOffset: -60,
-            format: staticProps.formatPercentage,
-        },
-        bottom: {
-            legend: translate!('charts.axis_legends.users_count'),
-            legendPosition: 'middle' as const,
-            legendOffset: 46,
-        },
-    }), [translate, metric])
+    const axes = useMemo(
+        () => ({
+            left: {
+                legend: translate!(`charts.axis_legends.${metric}_percentage`),
+                legendPosition: 'middle' as const,
+                legendOffset: -60,
+                format: staticProps.formatPercentage
+            },
+            bottom: {
+                legend: translate!('charts.axis_legends.users_count'),
+                legendPosition: 'middle' as const,
+                legendOffset: 46
+            }
+        }),
+        [translate, metric]
+    )
 
     // reset the current category & tool when leaving the chart
     const handleChartLeave = useCallback(() => {

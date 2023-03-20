@@ -57,11 +57,11 @@ const normalizeChartData = (
 ) => {
     const dimensionKeys = keys[dimension].keys
 
-    const normalizedData = data[dimension].year.buckets.map((bucket) => {
+    const normalizedData = data[dimension].year.buckets.map(bucket => {
         const normalizedDatum: any = {
-            tool: bucket.id,
+            tool: bucket.id
         }
-        bucket.ranges.forEach((range) => {
+        bucket.ranges.forEach(range => {
             normalizedDatum[range.range] = range.percentage
         })
 
@@ -70,7 +70,7 @@ const normalizeChartData = (
 
     return {
         dimensionKeys,
-        normalizedData,
+        normalizedData
     }
 }
 
@@ -90,7 +90,7 @@ const CELL_WIDTH = 80
 const CELL_HEIGHT = 54
 const MARGIN = {
     top: 80,
-    left: 120,
+    left: 120
 }
 
 const Switcher = ({ setDimension, dimension }) => {
@@ -98,7 +98,7 @@ const Switcher = ({ setDimension, dimension }) => {
 
     return (
         <ButtonGroup>
-            {['years_of_experience', 'yearly_salary', 'company_size'].map((key) => (
+            {['years_of_experience', 'yearly_salary', 'company_size'].map(key => (
                 <Button
                     key={key}
                     size="small"
@@ -116,16 +116,17 @@ const Switcher = ({ setDimension, dimension }) => {
 const ToolsMatricesBlock = (props: ToolsMatricesBlockProps) => {
     const theme = useTheme()
 
-    const toolIds = useMemo(() => props.block.pageVariables.toolIds.split(','), [
-        props.block.pageVariables,
-    ])
+    const toolIds = useMemo(
+        () => props.block.pageVariables.toolIds.split(','),
+        [props.block.pageVariables]
+    )
 
     const [dimension, setDimension] = useState<ToolsMatrixDimension>('years_of_experience')
     const { normalizedData, dimensionKeys } = normalizeChartData(toolIds, props.data, dimension)
 
     const { translate } = useI18n()
     const getRangeTick = (range: string) => {
-        const key = dimensionKeys.find((k) => k.id === range)
+        const key = dimensionKeys.find(k => k.id === range)
         if (!key) {
             console.error(`no key for ${range} (${dimension})`)
             return ''
@@ -140,7 +141,7 @@ const ToolsMatricesBlock = (props: ToolsMatricesBlockProps) => {
         <Block
             block={props.block}
             titleProps={{
-                switcher: <Switcher setDimension={setDimension} dimension={dimension} />,
+                switcher: <Switcher setDimension={setDimension} dimension={dimension} />
             }}
             data={props.data}
         >
@@ -151,7 +152,7 @@ const ToolsMatricesBlock = (props: ToolsMatricesBlockProps) => {
                     height={height}
                     margin={MARGIN}
                     data={normalizedData}
-                    keys={dimensionKeys.map((key) => key.id)}
+                    keys={dimensionKeys.map(key => key.id)}
                     indexBy="tool"
                     theme={theme.charts}
                     enableGridX
@@ -160,7 +161,7 @@ const ToolsMatricesBlock = (props: ToolsMatricesBlockProps) => {
                     animate={false}
                     cellShape="rect"
                     axisTop={{
-                        format: getRangeTick,
+                        format: getRangeTick
                     }}
                 />
             </ChartContainer>

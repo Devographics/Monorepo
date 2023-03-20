@@ -7,7 +7,7 @@ import ToolsSectionOverviewChart from 'core/charts/tools/ToolsSectionOverviewCha
 
 const ToolsSectionOverviewBlock = ({ block, data, units: defaultUnits = 'percentage' }) => {
     const [units, setUnits] = useState(defaultUnits)
-    
+
     const [current, setCurrent] = useState(null)
     const { id, bucketKeysName = id } = block
 
@@ -18,7 +18,7 @@ const ToolsSectionOverviewBlock = ({ block, data, units: defaultUnits = 'percent
     // exclude tools having no aggregations available,
     // typically happens for previous years when new tools
     // were added.
-    const filteredData = data.filter((datum) => {
+    const filteredData = data.filter(datum => {
         if (datum.experience.year === null) {
             console.info(`[ToolsSectionOverviewBlock] no data available for tool: ${datum.id}`)
             return false
@@ -29,14 +29,12 @@ const ToolsSectionOverviewBlock = ({ block, data, units: defaultUnits = 'percent
 
     return (
         <Block
-            
-            
             units={units}
             setUnits={setUnits}
             block={{
                 ...block,
                 title,
-                description,
+                description
             }}
             data={data}
             legendProps={{
@@ -45,7 +43,7 @@ const ToolsSectionOverviewBlock = ({ block, data, units: defaultUnits = 'percent
                 },
                 onMouseLeave: () => {
                     setCurrent(null)
-                },
+                }
             }}
         >
             <ChartContainer height={400}>
@@ -62,13 +60,13 @@ const ToolsSectionOverviewBlock = ({ block, data, units: defaultUnits = 'percent
 
 ToolsSectionOverviewBlock.propTypes = {
     block: PropTypes.shape({
-        id: PropTypes.string.isRequired,
+        id: PropTypes.string.isRequired
     }).isRequired,
     data: PropTypes.arrayOf(
         PropTypes.shape({
             id: PropTypes.string.isRequired,
             entity: PropTypes.shape({
-                name: PropTypes.string.isRequired,
+                name: PropTypes.string.isRequired
             }).isRequired,
             experience: PropTypes.shape({
                 year: PropTypes.shape({
@@ -76,13 +74,13 @@ ToolsSectionOverviewBlock.propTypes = {
                         PropTypes.shape({
                             id: PropTypes.string.isRequired,
                             count: PropTypes.number.isRequired,
-                            percentage: PropTypes.number.isRequired,
+                            percentage: PropTypes.number.isRequired
                         })
-                    ).isRequired,
-                }).isRequired,
-            }),
+                    ).isRequired
+                }).isRequired
+            })
         })
-    ).isRequired,
+    ).isRequired
 }
 
 export default ToolsSectionOverviewBlock

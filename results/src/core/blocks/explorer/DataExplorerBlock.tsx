@@ -8,7 +8,7 @@ import { ExplorerData } from './types'
 import dataExplorerTemplate from '../../../templates/data_explorer.yml'
 import { usePageContext } from 'core/helpers/pageContext'
 import { getFacetPath, getFacetSegments, getQuery, runQuery, formatData } from './data'
-import { BlockDefinition } from 'core/types'
+import { BlockDefinition } from '@types/index'
 import last from 'lodash/last'
 import BlockSponsor from 'core/blocks/block/sponsor_chart/BlockSponsor'
 import {

@@ -1,5 +1,4 @@
 import omit from 'lodash/omit.js'
-import upperFirst from 'lodash/upperFirst.js'
 import merge from 'lodash/merge.js'
 import path from 'path'
 import fs from 'fs'
@@ -7,7 +6,7 @@ import fetch from 'node-fetch'
 import yaml from 'js-yaml'
 import { TwitterApi } from 'twitter-api-v2'
 import { logToFile } from './log_to_file.mjs'
-import { getDefaultQuery, getQueryName, wrapQuery, cleanQuery } from './queries.mjs'
+import { getQuery } from './queries.mjs'
 import { fileURLToPath } from 'url'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -176,22 +175,20 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId }) => 
                     data = existingData
                 } else {
                     const questionId = v.id
-                    const queryName = getQueryName({ editionId, questionId })
                     const queryOptions = {
                         surveyId,
                         editionId,
                         sectionId: page.id,
                         questionId,
-                        parameters: v?.variables?.parameters,
+                        parameters: v?.variables?.parameters || {},
                         addEntities: v.addEntities,
                         allEditions: v.allEditions
                     }
 
-                    const queryContents = v.query ? v.query : getDefaultQuery(queryOptions)
-                    const query = wrapQuery({ queryName, queryContents })
+                    const query = getQuery({ query: v.query, queryOptions, isLog: false })
 
                     if (query.includes('dataAPI')) {
-                        const queryLog = cleanQuery(query)
+                        const queryLog = getQuery({ query: v.query, queryOptions, isLog: true })
                         logToFile(queryFileName, queryLog, {
                             mode: 'overwrite',
                             dirPath: queryDirPath,

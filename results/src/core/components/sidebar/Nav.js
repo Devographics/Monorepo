@@ -1,5 +1,5 @@
 import React from 'react'
-import { useMatch } from "@reach/router"
+import { useMatch } from '@reach/router'
 import get from 'lodash/get'
 import styled, { css } from 'styled-components'
 import sitemap from 'Config/raw_sitemap.yml'
@@ -10,17 +10,17 @@ import LanguageSwitcher from 'core/i18n/LanguageSwitcher'
 import { getPageLabelKey } from 'core/helpers/pageHelpers'
 import T from 'core/i18n/T'
 
-const filteredNav = sitemap?.filter((page) => !page.is_hidden) ?? []
+const filteredNav = sitemap?.filter(page => !page.is_hidden) ?? []
 
 const StyledPageLink = styled(PageLink)`
     display: flex;
     white-space: nowrap;
     margin: 0 0 ${spacing(0.33)} 0;
-    font-size: ${(props) =>
+    font-size: ${props =>
         props.depth > 0
             ? props.theme.typography.size.smallish
             : props.theme.typography.size.medium};
-    font-weight: ${(props) => (props.depth === 0 ? 800 : 400)};
+    font-weight: ${props => (props.depth === 0 ? 800 : 400)};
 
     /* & > span {
 
@@ -40,8 +40,8 @@ const StyledPageLink = styled(PageLink)`
             max-width: 100%;
             display: inline-block;
         }
-        margin-left: ${(props) => (props.depth > 0 ? spacing() : 0)};
-        ${(props) => {
+        margin-left: ${props => (props.depth > 0 ? spacing() : 0)};
+        ${props => {
             if (props.isHidden) {
                 return css`
                     display: none;
@@ -62,11 +62,11 @@ const StyledPageLink = styled(PageLink)`
         }
     }
 
-    ${(props) =>
+    ${props =>
         fancyLinkMixin({
             color: props.depth === 0 ? props.theme.colors.link : props.theme.colors.text,
             // activeColor: props.theme.colors.linkActive,
-            activeColor: props.theme.colors.text,
+            activeColor: props.theme.colors.text
         })}
 `
 
@@ -82,7 +82,7 @@ const NavItem = ({ page, parentPage, currentPath, closeSidebar, isHidden = false
     return (
         <>
             <StyledPageLink
-                className={match ? "_is-active" : undefined}
+                className={match ? '_is-active' : undefined}
                 onClick={closeSidebar}
                 page={page}
                 depth={depth}
@@ -93,7 +93,7 @@ const NavItem = ({ page, parentPage, currentPath, closeSidebar, isHidden = false
             </StyledPageLink>
             {hasChildren && (
                 <>
-                    {page.children.map((childPage) => (
+                    {page.children.map(childPage => (
                         <NavItem
                             key={childPage.id}
                             parentPage={page}

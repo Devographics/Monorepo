@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { useTheme } from 'styled-components'
 import { keys } from 'core/bucket_keys'
 import { useI18n } from 'core/i18n/i18nContext'
-import { Block } from 'core/types/block'
+import { Block } from '@types/block'
 import { stripHtml } from 'core/helpers/stripHtml'
 
 export const getColor = (colorRange, id) => {

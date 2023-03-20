@@ -23,7 +23,7 @@ const FiltersSelection = ({ chartName, block, stateStuff, mode = MODE_GRID }) =>
     const canAddSeries = filtersState.filters.length < maxSeriesCount
 
     const availableFilters = allChartsKeys.filters
-    
+
     const filtersWithoutCurrentItem = availableFilters.filter(f => f !== block.id)
 
     const emptySeries = getNewSeries({

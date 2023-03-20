@@ -4,7 +4,7 @@ import {
     layerCount,
     CityscapeToolData,
     CityscapeLayerData,
-    CityscapeCategoryData,
+    CityscapeCategoryData
 } from './ToolsCityscapeBlock'
 // @ts-ignore
 import { spacing, mq, fontSize } from 'core/theme'
@@ -15,7 +15,7 @@ import { darken, transparentize } from 'polished'
 export const ToolsCityscapeChart = ({ data }: { data: CityscapeCategoryData[] }) => {
     return (
         <Container>
-            {data.map((category) => (
+            {data.map(category => (
                 <ToolCategory {...category} key={category.id} />
             ))}
         </Container>
@@ -33,7 +33,7 @@ const Container = styled.div`
 const ToolCategory = ({ id, layers }: CityscapeCategoryData) => (
     <Category>
         {id}
-        {layers.map((layer) => (
+        {layers.map(layer => (
             <ToolLayer {...layer} key={layer.layer} />
         ))}
     </Category>
@@ -41,7 +41,6 @@ const ToolCategory = ({ id, layers }: CityscapeCategoryData) => (
 const Category = styled.div`
     position: relative;
     flex: 1;
-    
 `
 const ToolLayer = ({ layer, items }: CityscapeLayerData) => (
     <Layer layer={layer}>
@@ -71,9 +70,6 @@ const ToolItem = ({ layer, tool, x }: { layer: number; tool: CityscapeToolData; 
     </ToolBar>
 )
 
-
-
-
 const minBuildingWidth = 50
 const minBuildingHeight = 100
 const horizontalOffset = 10
@@ -98,7 +94,7 @@ const ToolBar = styled.div`
     `}
     margin-right: 5px;
 
-    box-shadow: 3px 3px 2px rgba(0,0,0,0.4);
+    box-shadow: 3px 3px 2px rgba(0, 0, 0, 0.4);
     overflow: hidden;
     position: relative;
 `

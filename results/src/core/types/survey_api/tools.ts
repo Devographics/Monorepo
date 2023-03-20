@@ -1,5 +1,5 @@
-import { Entity } from 'core/types'
-import { YearCompletion } from 'core/types/data'
+import { Entity } from '@types/index'
+import { YearCompletion } from '@types/data'
 
 export interface ToolExperienceBucket {
     id: string

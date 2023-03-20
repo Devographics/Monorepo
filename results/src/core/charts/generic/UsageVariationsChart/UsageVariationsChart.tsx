@@ -27,7 +27,7 @@ export const UsageVariationsChart = ({
     data,
     margin,
     keys,
-    i18nNamespace,
+    i18nNamespace
 }: UsageVariationsChartProps) => {
     const theme = useTheme()
     const { translate } = useI18n()
@@ -51,7 +51,7 @@ export const UsageVariationsChart = ({
                 format: translateTick,
                 legend: translate(`charts.axis_legends.${i18nNamespace}`),
                 legendPosition: 'middle',
-                legendOffset: -46,
+                legendOffset: -46
             }}
         />
     )

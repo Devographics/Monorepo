@@ -54,7 +54,15 @@ const MemoIndicator = memo(Indicator)
  * - Expand: force a 600px or props width
  */
 const ChartContainer = (props: PropsWithChildren<ChartContainerProps>) => {
-    const { children, height, minWidth = 400, fit = false, className = '', vscroll = false, ...otherProps } = props
+    const {
+        children,
+        height,
+        minWidth = 400,
+        fit = false,
+        className = '',
+        vscroll = false,
+        ...otherProps
+    } = props
     return (
         <ChartContainerOuter className={`ChartContainerOuter ${className}`} style={{ height }}>
             <Container className="ChartContainer" style={{ height }}>

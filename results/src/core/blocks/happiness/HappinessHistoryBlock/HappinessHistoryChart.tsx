@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import { useTheme } from 'styled-components'
 import { ResponsiveLine } from '@nivo/line'
-import { HappinessYearMean } from 'core/types/survey_api/happiness'
+import { HappinessYearMean } from '@types/survey_api/happiness'
 
 const horizontalAxis = {
     tickSize: 10,
