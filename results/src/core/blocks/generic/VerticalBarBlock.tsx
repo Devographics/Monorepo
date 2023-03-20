@@ -68,8 +68,6 @@ const VerticalBarBlock = ({
     const chartOptions = useOptions(block.id)
     const bucketKeys = chartOptions && useLegends(block, chartOptions, undefined, addNoAnswer)
 
-    console.log(block.id)
-    console.log(bucketKeys)
     const { completion } = chartData
 
     const buckets_ = chartData.buckets
@@ -136,30 +134,6 @@ const VerticalBarBlock = ({
             </DynamicDataLoader>
         </BlockVariant>
     )
-}
-
-VerticalBarBlock.propTypes = {
-    block: PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        dataPath: PropTypes.string.isRequired,
-        bucketKeysName: PropTypes.oneOf(Object.keys(keys)),
-        showDescription: PropTypes.bool,
-        mode: PropTypes.oneOf(['absolute', 'relative']),
-        units: PropTypes.oneOf(['percentage', 'count']),
-        view: PropTypes.oneOf(['data', 'viz']),
-        colorVariant: PropTypes.oneOf(['primary', 'secondary'])
-    }).isRequired,
-    data: PropTypes.shape({
-        facets: PropTypes.arrayOf(
-            PropTypes.shape({
-                buckets: PropTypes.arrayOf(
-                    PropTypes.shape({
-                        id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
-                    })
-                ).isRequired
-            })
-        ).isRequired
-    }).isRequired
 }
 
 export default memo(VerticalBarBlock)

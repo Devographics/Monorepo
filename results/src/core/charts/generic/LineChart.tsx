@@ -1,11 +1,10 @@
-// @ts-ignore
 import React from 'react'
-// @ts-ignore
 import { useSpring, animated } from '@react-spring/web'
 import { useTheme } from 'styled-components'
 import { ResponsiveBump } from '@nivo/bump'
 import { BasicTooltip } from '@nivo/tooltip'
 import { ResponsiveLine } from '@nivo/line'
+import { ToolRatiosQuestionData } from '@devographics/types'
 
 export interface RankingChartDatum {
     // year
@@ -88,7 +87,7 @@ const CustomTooltip = (props: CustomTooltipProps) => {
 }
 
 interface RankingChartProps {
-    buckets: RankingChartSerie[]
+    buckets: ToolRatiosQuestionData
     processBlockData: Function
     processBlockDataOptions: any
 }
@@ -106,6 +105,7 @@ export const LineChart = ({
     processBlockDataOptions
 }: RankingChartProps) => {
     const buckets = processBlockData(unprocessedData, processBlockDataOptions)
+
     const theme = useTheme()
     // const { getString } = useI18n()
 

@@ -11,8 +11,9 @@ query: >
             ${surveyId} {
                 ${editionId} {
                     ${sectionId} {
-                        ${sectionId}_ratios {
-                            data {
+                        ${sectionId}_experience_linechart: ${sectionId}_ratios {
+                            years
+                            items {
                                 id
                                 usage {
                                     year

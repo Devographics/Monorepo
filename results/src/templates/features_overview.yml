@@ -1,8 +1,5 @@
 titleId: blocks.features_overview
 blockType: FeaturesOverviewBlock
-# dataPath: "dataAPI.survey.${questionId}"
-# keysPath: "dataAPI.survey.${questionId}.0.experience.keys"
-# enableCustomization: true
 hasSponsor: true
 query: >
     dataAPI {
@@ -11,7 +8,7 @@ query: >
                 ${editionId} {
                     features {
                         features_overview: allItems {
-                            data {
+                            items {
                                 id
                                 responses(parameters: { ENABLE_CACHE_PLACEHOLDER }) {
                                     currentEdition {

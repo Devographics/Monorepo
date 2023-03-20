@@ -6,7 +6,7 @@ query: >
                 ${editionId} {
                     libraries {
                         allItems {
-                            data {
+                            items {
                                 id
                                 responses(parameters: { ENABLE_CACHE_PLACEHOLDER }) {
                                     currentEdition {

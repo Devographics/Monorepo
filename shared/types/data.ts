@@ -84,3 +84,29 @@ export interface Bucket {
 export interface FacetBucket extends Omit<Bucket, 'facetBuckets'> {}
 
 export interface BucketCompletion extends FacetCompletion {}
+
+/*
+
+Ratios
+
+*/
+export interface ToolRatiosQuestionData {
+    items: ToolRatiosItemData[]
+    ids: string[]
+    years: number[]
+}
+
+export interface ToolRatiosItemData extends QuestionData {
+    entity: Entity
+    awareness: [ToolRatiosItemEditionData]
+    usage: [ToolRatiosItemEditionData]
+    interest: [ToolRatiosItemEditionData]
+    satisfaction: [ToolRatiosItemEditionData]
+}
+
+export interface ToolRatiosItemEditionData {
+    year: number
+    editionId: string
+    rank: number
+    percentageQuestion: number
+}

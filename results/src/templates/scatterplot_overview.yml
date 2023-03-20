@@ -2,44 +2,5 @@ blockType: ToolsScatterplotBlock
 titleId: blocks.tools_quadrant
 descriptionId: blocks.tools_quadrant.description
 noteId: blocks.tools_quadrant.note
-dataPath: 'dataAPI.surveys.${surveyId}.${editionId}.libraries.allItems.data'
-# dataPath: 'dataAPI.survey.${questionId}'
-# keysPath: 'dataAPI.survey.${questionId}.experience.keys'
+dataPath: 'dataAPI.surveys.${surveyId}.${editionId}.libraries.allItems.items'
 hasSponsor: true
-# query: >
-#     dataAPI {
-#         survey(survey: ${surveyId}) {
-#               ${questionId}: tools(ids: [${allTools}]) {
-#                 id
-#                 entity {
-#                     name
-#                     nameClean
-#                     nameHtml
-#                     homepage {
-#                         url
-#                     }
-#                     github {
-#                         url
-#                     }
-#                 }
-#                 experience {
-#                     keys
-#                     year(year:${currentYear}) {
-#                         facets {
-#                             buckets{
-#                                 id
-#                                 count
-#                                 percentageQuestion
-#                                 percentageSurvey
-#                             }
-#                         }
-#                         completion {
-#                             count
-#                             total
-#                             percentageSurvey
-#                         }
-#                     }
-#                 }
-#             }
-#         }
-#     }

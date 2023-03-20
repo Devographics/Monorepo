@@ -1,3 +1,4 @@
+import { EditionMetadata, SurveyMetadata } from '@devographics/types'
 import { Locale } from './i18n'
 
 export interface PageContextValue {
@@ -6,6 +7,6 @@ export interface PageContextValue {
     isCapturing?: boolean
     chartSponsors?: any
     config?: any
-    currentSurvey?: any
-    currentEdition?: any
+    currentSurvey: SurveyMetadata
+    currentEdition: EditionMetadata
 }
