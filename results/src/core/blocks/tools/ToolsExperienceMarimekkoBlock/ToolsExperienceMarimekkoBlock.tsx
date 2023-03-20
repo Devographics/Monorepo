@@ -91,6 +91,7 @@ export const ToolsExperienceMarimekkoBlock = ({
     keys,
     triggerId = null
 }: ToolsExperienceMarimekkoBlockProps) => {
+    return <div>foo</div>
     const normalizedData = getChartData({ data })
 
     // make the height relative to the number of tools

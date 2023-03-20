@@ -3,10 +3,44 @@ blockType: ToolsExperienceMarimekkoBlock
 titleId: blocks.tools_experience_marimekko
 descriptionId: blocks.tools_experience_marimekko.description
 noteId: blocks.tools_experience_marimekko.note
-dataPath: 'dataAPI.survey.${sectionId}_marimekko'
-keysPath: 'dataAPI.survey.${sectionId}_marimekko.0.experience.keys'
+# dataPath: 'dataAPI.survey.${sectionId}_marimekko'
+# keysPath: 'dataAPI.survey.${sectionId}_marimekko.0.experience.keys'
 bucketKeysName: tools
 hasSponsor: true
+query: >
+    dataAPI {
+        surveys {
+            ${surveyId} {
+                ${editionId} {
+                    ${sectionId} {
+                        ${sectionId}_experience_marimekko: ${sectionId}_allItems {
+                            items {
+                                id
+                                responses(parameters: { ENABLE_CACHE_PLACEHOLDER }) {
+                                    currentEdition {
+                                        editionId
+                                        year
+                                        buckets {
+                                            id
+                                            percentageQuestion
+                                            percentageSurvey
+                                            count
+                                        }
+                                        completion {
+                                            count
+                                            percentageSurvey
+                                            total
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 # query: >
 #     dataAPI {
 #         survey(survey: ${surveyId}) {

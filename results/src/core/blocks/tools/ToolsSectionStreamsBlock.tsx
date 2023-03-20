@@ -1,5 +1,4 @@
-import React, { useState, useMemo } from 'react'
-import PropTypes from 'prop-types'
+import React, { useState } from 'react'
 import Block from 'core/blocks/block/BlockVariant'
 import StreamChart from 'core/charts/generic/StreamChart'
 import { useBucketKeys } from 'core/helpers/useBucketKeys'
@@ -11,36 +10,50 @@ import ToolLabel from 'core/charts/tools/ToolLabel'
 import { useI18n } from 'core/i18n/i18nContext'
 import { useLegends } from '../../helpers/useBucketKeys'
 import { groupDataByYears, getTableData } from 'core/helpers/datatables'
+import { BlockComponentProps } from 'core/types'
+import { SectionAllToolsData, ToolQuestionData } from '@devographics/types'
+import { useOptions } from 'core/helpers/options'
+import { TOOLS_OPTIONS } from '@devographics/constants'
 
+interface ToolsSectionStreamsBlockProps extends BlockComponentProps {
+    data: SectionAllToolsData
+}
 const ToolsSectionStreamsBlock = ({
     block,
     data,
-    keys,
     triggerId,
     units: defaultUnits = 'percentageQuestion'
-}) => {
+}: ToolsSectionStreamsBlockProps) => {
     const [units, setUnits] = useState(defaultUnits)
-
     const [current, setCurrent] = useState(null)
     const { translate } = useI18n()
 
-    const legends = useLegends(block, keys, 'tools')
+    const chartOptions = TOOLS_OPTIONS
+    const legends = useLegends(block, chartOptions, 'tools')
+    console.log(block)
+    console.log(chartOptions)
+    console.log(legends)
 
-    const filteredData = data.filter(toolData => toolData.experience.all_years.length > 1)
+    const filteredData = data.items.filter(item => item.responses.allEditions.length > 1)
+    console.log(data)
+    console.log(filteredData)
 
     const controlledCurrent = triggerId || current
 
     return (
         <Block
-            tables={filteredData.map(tool =>
-                getTableData({
-                    title: tool?.entity?.name,
-                    data: groupDataByYears({ keys, data: tool.experience.all_years }),
-                    years: tool.experience.all_years.map(y => y.year),
-                    translateData: true,
-                    i18nNamespace: 'tools'
-                })
-            )}
+            // tables={filteredData.map(tool =>
+            //     getTableData({
+            //         title: tool?.entity?.name,
+            //         data: groupDataByYears({
+            //             keys: chartOptions,
+            //             data: tool.responses.allEditions
+            //         }),
+            //         years: tool.responses.allEditions.map(y => y.year),
+            //         translateData: true,
+            //         i18nNamespace: 'tools'
+            //     })
+            // )}
             units={units}
             setUnits={setUnits}
             block={{
@@ -61,15 +74,15 @@ const ToolsSectionStreamsBlock = ({
             }}
         >
             <GridContainer count={filteredData.length}>
-                {filteredData.map(toolData => {
+                {filteredData.map(itemData => {
                     return (
                         <Stream
-                            key={toolData.id}
-                            toolData={toolData}
+                            key={itemData.id}
+                            itemData={itemData}
                             current={controlledCurrent}
                             units={units}
                             legends={legends}
-                            keys={keys}
+                            keys={chartOptions}
                         />
                     )
                 })}
@@ -78,10 +91,14 @@ const ToolsSectionStreamsBlock = ({
     )
 }
 
-const Stream = ({ toolData, current, units, keys, legends }) => {
-    const chartData = toolData.experience.all_years.map(year => ({
-        year: year.year,
-        buckets: year.facets[0].buckets
+interface StreamProps {
+    itemData: ToolQuestionData
+}
+
+const Stream = ({ itemData, current, units, keys, legends }: StreamProps) => {
+    const chartData = itemData.responses.allEditions.map(edition => ({
+        year: edition.year,
+        buckets: edition.buckets
     }))
     const colors = legends.map(key => key.color)
 
@@ -103,7 +120,7 @@ const Stream = ({ toolData, current, units, keys, legends }) => {
                 height={160}
             />
             <StreamTitle>
-                <ToolLabel id={toolData.id} entity={toolData.entity} />
+                <ToolLabel id={itemData.id} entity={itemData.entity} />
             </StreamTitle>
         </StreamItem>
     )
@@ -148,30 +165,5 @@ const StreamTitle = styled.h4`
     font-size: ${fontSize('smallish')};
     margin-bottom: 0;
 `
-
-ToolsSectionStreamsBlock.propTypes = {
-    block: PropTypes.shape({
-        id: PropTypes.string.isRequired
-    }).isRequired,
-    data: PropTypes.arrayOf(
-        PropTypes.shape({
-            id: PropTypes.string.isRequired,
-            entity: PropTypes.shape({
-                name: PropTypes.string.isRequired
-            }).isRequired,
-            experience: PropTypes.shape({
-                year: PropTypes.shape({
-                    buckets: PropTypes.arrayOf(
-                        PropTypes.shape({
-                            id: PropTypes.string.isRequired,
-                            count: PropTypes.number.isRequired,
-                            percentage: PropTypes.number.isRequired
-                        })
-                    ).isRequired
-                })
-            })
-        })
-    ).isRequired
-}
 
 export default ToolsSectionStreamsBlock

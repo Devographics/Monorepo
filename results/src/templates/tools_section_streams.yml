@@ -3,10 +3,44 @@ titleId: blocks.tools_section_streams
 descriptionId: blocks.tools_section_streams.description
 noteId: blocks.tools_section_streams.note
 blockType: ToolsSectionStreamsBlock
-dataPath: 'dataAPI.survey.${sectionId}_streams'
-keysPath: 'dataAPI.survey.${sectionId}_streams.0.experience.keys'
+# dataPath: 'dataAPI.survey.${sectionId}_streams'
+# keysPath: 'dataAPI.survey.${sectionId}_streams.0.experience.keys'
 bucketKeysName: tools
 hasSponsor: true
+query: >
+    dataAPI {
+        surveys {
+            ${surveyId} {
+                ${editionId} {
+                    ${sectionId} {
+                        ${sectionId}_section_streams: ${sectionId}_allItems {
+                            items {
+                                id
+                                responses(parameters: { ENABLE_CACHE_PLACEHOLDER }) {
+                                    allEditions {
+                                        editionId
+                                        year
+                                        buckets {
+                                            id
+                                            percentageQuestion
+                                            percentageSurvey
+                                            count
+                                        }
+                                        completion {
+                                            count
+                                            percentageSurvey
+                                            total
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 # query: >
 #     dataAPI {
 #         survey(survey: ${surveyId}) {
