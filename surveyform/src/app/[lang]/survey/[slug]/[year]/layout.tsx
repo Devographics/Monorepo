@@ -3,7 +3,11 @@ import { notFound } from "next/navigation";
 import { EntitiesProvider } from "~/core/components/common/EntitiesContext";
 import { fetchEntitiesRedis } from "~/core/server/fetchEntitiesRedis";
 import { SurveyProvider } from "~/surveys/components/SurveyContext/Provider";
-import { fetchSurvey, initRedis } from "@devographics/core-models/server";
+import {
+  fetchSurvey,
+  fetchSurveyDescriptionFromUrl,
+  initRedis,
+} from "@devographics/core-models/server";
 import {
   fetchLocaleStrings,
   getLocales,
@@ -42,9 +46,15 @@ export default async function SurveyLayout({
   initRedis(serverConfig().redisUrl);
 
   const { slug, year } = params;
-  const surveyContextId = slug.replaceAll("-", "_");
-  const survey = await fetchSurvey(surveyContextId, year);
-  if (!survey) {
+  let survey;
+  try {
+    const surveyDesc = await fetchSurveyDescriptionFromUrl(slug, year);
+    survey = await fetchSurvey(
+      surveyDesc.surveyContextId,
+      surveyDesc.surveyEditionId
+    );
+  } catch (err) {
+    console.error("Could not load survey", slug, year, "error:", err);
     notFound();
   }
 
@@ -59,9 +69,9 @@ Next.js will fallback to trying to find a valid page path.
 If this error still happens in a few months (2023) open an issue with repro at Next.js.`);
     notFound();
   }
-  const localeSlug = surveyContextId;
+  const localeSlug = survey.surveyContextId;
   const i18nContexts =
-    surveyContextId !== "demo_survey"
+    localeSlug !== "demo_survey"
       ? [
           // We expect the root layout to load the common contexts
           // and define a LocaleContextProvider

@@ -31,20 +31,35 @@ async function fromSurveysCache<T = any>(key: string, fetchFunc: () => Promise<T
     return await promise
 }
 
-export async function fetchSurvey(surveyContextId: SurveyEdition["surveyContextId"], year: string): Promise<SurveyEdition> {
-    const key = `survey_${surveyContextId}_promise`
+
+/**
+ * 
+ * @param surveyContextId The survey context but with dashes "state-of-css"
+ * @param year The year usually present in a survey clean URL "2019"
+ * @returns Survey with surveyId "state_of_css" and editionId "css2019"
+ */
+export async function fetchSurveyDescriptionFromUrl(slug: string, year: string) {
+    const contextId = slug.replaceAll("-", "_")
+    const list = await fetchSurveysList(true)
+    const survey = list.find(s => s.surveyContextId === contextId && "" + s.year === year)
+    if (!survey) throw new Error(`Can't find survey ${contextId} ${year}`)
+    return survey
+}
+
+export async function fetchSurvey(contextId: SurveyEdition["surveyContextId"], editionId: string): Promise<SurveyEdition> {
+    const key = `survey_${contextId}_promise`
     return await fromSurveysCache(
         key,
         async () => {
-            const redisSurvey = await fetchSurveyRedis(surveyContextId, year)
+            const redisSurvey = await fetchSurveyRedis(contextId, editionId)
             if (redisSurvey) {
-                console.debug("redis cache hit", surveyContextId, year)
+                console.debug("redis cache hit", contextId, editionId)
                 return redisSurvey
             }
-            console.debug("redis cache miss,", surveyContextId, year, "fetching from github")
-            const ghSurvey = await fetchSurveyGithub(surveyContextId, year)
+            console.debug("redis cache miss,", contextId, editionId, "fetching from github")
+            const ghSurvey = await fetchSurveyGithub(contextId, editionId)
             // store in Redis in the background
-            storeSurveyRedis(surveyContextId, year)(ghSurvey).catch(err => {
+            storeSurveyRedis(contextId, editionId)(ghSurvey).catch(err => {
                 console.error("couldn't store survey in Redis", err)
             })
             return ghSurvey
@@ -76,20 +91,6 @@ export const fetchSurveysList = async (keepDemo?: boolean): Promise<Array<Survey
     return sorted
 }
 
-/**
- * Functions that gets a safe unique id per survey edition,
- * taking legacy fields into account
- * @param survey 
- * @returns js2022, graphql2022, css2022 etc.
- */
-export function getSurveyEditionId(survey: SurveyEdition) {
-    // js2022 etc.
-    const surveyEditionId = survey.surveyEditionId || survey.id || survey.surveyId || survey.slug
-    return surveyEditionId
-}
-export function getSurveyPrettySlug(survey: SurveyEdition) {
-    return survey.surveyContextId.replaceAll("_", "-")
-}
 export async function fetchSurveyFromId(surveyEditionId: SurveyEdition["surveyEditionId"]) {
     // no need to cache this functions, 
     // because it is derived from other functions that are themselves cached

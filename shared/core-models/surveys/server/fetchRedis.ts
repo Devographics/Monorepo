@@ -39,16 +39,17 @@ async function fetchJson<T = any>(key: string): Promise<T | null> {
 
 const prefix = "surveyform"
 
-const surveyKey = (surveyContextId: string, year: string) => `${prefix}_survey_${surveyContextId}_${year}`
+const surveyKey = (surveyContextId: string, editionId: string) => `${prefix}_survey_${surveyContextId}_${editionId}`
 const surveyContextKey = (surveyContextId: string) => `${prefix}_surveycontext_${surveyContextId}`
 
 /**
- * @param slug Slug of the survey from URL
- * /!\ this is different from the github folder path, we need to replace "-" by "_"
- * @param year 
+ * 
+ * @param contextId state_of_css
+ * @param editionId css2019
+ * @returns 
  */
-export async function fetchSurveyRedis(surveyContextId: SurveyEdition["surveyContextId"], year: string): Promise<SurveyEdition | null> {
-    const survey = fetchJson<SurveyEdition>(surveyKey(surveyContextId, year))
+export async function fetchSurveyRedis(contextId: SurveyEdition["surveyContextId"], editionId: string): Promise<SurveyEdition | null> {
+    const survey = fetchJson<SurveyEdition>(surveyKey(contextId, editionId))
     return survey
 }
 export const storeSurveyRedis = (...args: Parameters<typeof surveyKey>) => storeRedis(surveyKey(...args))
