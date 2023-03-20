@@ -19,7 +19,6 @@ export interface ToolQuestionData extends QuestionData {
     comments: ItemComments
     entity: Entity
     responses: ResponseData
-    options: OptionData[]
 }
 
 export interface FeatureQuestionData extends ToolQuestionData {}
@@ -41,8 +40,8 @@ export interface Comment {
 }
 
 export interface ResponseData {
-    allEditions?: [EditionData]
-    currentEdition?: EditionData
+    allEditions: [EditionData]
+    currentEdition: EditionData
 }
 
 export interface EditionData {
@@ -109,4 +108,15 @@ export interface ToolRatiosItemEditionData {
     editionId: string
     rank: number
     percentageQuestion: number
+}
+
+/*
+
+All tools in a section
+
+*/
+export interface SectionAllToolsData {
+    items: ToolQuestionData[]
+    ids: string[]
+    years: number[]
 }

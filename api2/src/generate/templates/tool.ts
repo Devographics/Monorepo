@@ -1,5 +1,4 @@
 import { TemplateFunction } from '../../types/surveys'
-import { TOOLS_OPTIONS } from '../../constants'
 import {
     idResolverFunction,
     commentsResolverFunction,
@@ -9,6 +8,7 @@ import {
 import { getFiltersTypeName, getFacetsTypeName } from '../helpers'
 import { graphqlize } from '../helpers'
 import { getResponseTypeName } from '../../graphql/templates/responses'
+import { TOOLS_OPTIONS } from '@devographics/constants'
 
 export const tool: TemplateFunction = ({ survey, question }) => {
     const fieldTypeName = `${graphqlize(survey.id)}Tool`

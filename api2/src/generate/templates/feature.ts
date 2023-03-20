@@ -1,5 +1,5 @@
 import { TemplateFunction } from '../../types/surveys'
-import { FEATURES_OPTIONS } from '../../constants'
+import { FEATURES_OPTIONS } from '@devographics/constants'
 import {
     idResolverFunction,
     responsesResolverFunction,
