@@ -3,49 +3,61 @@ import { scaleLinear } from 'd3-scale'
 import map from 'lodash/map'
 import flatten from 'lodash/flatten'
 import { extent, max, sum } from 'd3-array'
-import variables from 'Config/variables.yml'
-import offsets from './toolsArrowsLabelOffsets.js'
+import offsets from './toolsArrowsLabelOffsets'
 import { useI18n } from 'core/i18n/i18nContext'
 import './ToolsArrowsChart.scss'
 import get from 'lodash/get'
 import styled, { ThemeContext, useTheme } from 'styled-components'
-import labelOffsets from './toolsArrowsLabelOffsets.js'
-import { getVelocity, getVelocityColor, getVelocityColorScale } from './helpers.js'
+import { getVelocity, getVelocityColor, getVelocityColorScale } from './helpers'
 import { Delaunay } from 'd3-delaunay'
 import compact from 'lodash/compact.js'
 import round from 'lodash/round.js'
-
-const { toolsCategories } = variables
+import { SectionMetadata, ToolQuestionData } from '@devographics/types'
+import { useToolSections, getQuestionSectionId } from 'core/helpers/metadata'
+import { usePageContext } from 'core/helpers/pageContext'
+import { useEntities } from 'core/helpers/entities'
 
 // hide any item with less than n years of data
 const minimumYearCount = 2
 
 const gradientLineWidthScale = scaleLinear().domain([1, 0]).range([7, 3]).clamp(true)
 
-export const ToolsArrowsChart = ({ data, activeCategory }) => {
+interface ToolMap {
+    [key: string]: string
+}
+
+interface ColorMap {
+    [key: string]: string
+}
+
+interface ColorScales {
+    [key: string]: any
+}
+export const ToolsArrowsChart = ({
+    data,
+    activeCategory
+}: {
+    data: ToolQuestionData[]
+    activeCategory: string
+}) => {
+    const context = usePageContext()
+    const { currentEdition } = context
+    const { translate } = useI18n()
+    const allEntities = useEntities()
     const theme = useTheme()
+    const toolSections = useToolSections()
+    const getColor = (id: string) => theme.colors.ranges.toolSections[id]
 
-    const getColor = id => theme.colors.ranges.toolSections[id]
-
-    let toolToCategoryMap = {}
-    map(toolsCategories, (tools, category) => {
-        tools.forEach(tool => {
-            toolToCategoryMap[tool] = category
-        })
-    })
-
-    let categoryColorMap = {}
-    let categoryColorScales = {}
-    map(toolsCategories, (tools, category) => {
-        const color = getColor(category)
-        categoryColorMap[category] = color
-        categoryColorScales[category] = scaleLinear()
+    const categoryColorMap: ColorMap = {}
+    const categoryColorScales: ColorScales = {}
+    toolSections.forEach((section: SectionMetadata) => {
+        const color = getColor(section.id)
+        categoryColorMap[section.id] = color
+        categoryColorScales[section.id] = scaleLinear()
             .domain([0, 30])
             .range([color, '#303652'])
             .clamp(true)
     })
-
-    const { translate } = useI18n()
 
     const [hoveredTool, setHoveredTool] = useState(null)
     const windowWidth = useWindowWidth()
@@ -65,29 +77,24 @@ export const ToolsArrowsChart = ({ data, activeCategory }) => {
         }
     }, [windowWidth, windowHeight])
 
-    var isFirefox =
-        typeof navigator !== 'undefined' &&
-        navigator.userAgent.toLowerCase().indexOf('firefox') > -1
-
-    const tools = data.map(d => d.id)
-    let toolNames = {}
+    const toolNames: ToolMap = {}
     data.forEach(tool => {
-        toolNames[tool.id] = tool?.entity?.name
+        const entity = allEntities.find(e => e.id === tool.id)
+        toolNames[tool.id] = entity?.nameClean || entity?.name || tool.id
     })
 
     let items = useMemo(
         () =>
-            data.map(tool => {
-                const allYears = get(tool, 'experience.all_years', [])
-                return allYears?.map(({ year, facets }) => {
-                    const points = facets[0].buckets.map(({ id, percentageQuestion }) =>
+            data.map(toolQuestionData => {
+                return toolQuestionData.responses?.allEditions?.map(({ year, buckets }) => {
+                    const points = buckets.map(({ id, percentageQuestion }) =>
                         conditionDiffs[id].map(d => d * percentageQuestion)
                     )
                     return [
                         round(sum(points.map(d => d[0])), 3),
                         round(sum(points.map(d => d[1])), 3),
                         year,
-                        tool.id
+                        toolQuestionData.id
                     ]
                 })
             }),
@@ -119,15 +126,15 @@ export const ToolsArrowsChart = ({ data, activeCategory }) => {
         return items
             .map(
                 (points, i) => {
-                    const tool = tools[i]
-                    const toolName = toolNames[tool]
-                    const category = toolToCategoryMap[tool]
+                    const tool: ToolQuestionData = data[i]
+                    const toolName = toolNames[tool.id]
+                    const category = getQuestionSectionId(tool.id, currentEdition)
                     if (!points.length || points.length < minimumYearCount) return null
 
                     const thisYearPoint = points.slice(-1)[0]
 
-                    const x = scales.x(thisYearPoint[0]) + ((offsets[tools[i]] || {}).x || 0)
-                    const y = scales.y(thisYearPoint[1]) + ((offsets[tools[i]] || {}).y || 0)
+                    const x = scales.x(thisYearPoint[0]) + ((offsets[tool.id] || {}).x || 0)
+                    const y = scales.y(thisYearPoint[1]) + ((offsets[tool.id] || {}).y || 0)
 
                     const velocity = getVelocity(points)
                     const color = getVelocityColor(velocity, theme)
@@ -177,9 +184,9 @@ export const ToolsArrowsChart = ({ data, activeCategory }) => {
 
         // draw lines
         items.forEach((points, i) => {
-            const tool = tools[i]
-            const toolName = toolNames[tool]
-            const category = toolToCategoryMap[tool]
+            const tool: ToolQuestionData = data[i]
+            const toolName = toolNames[tool.id]
+            const category = getQuestionSectionId(tool.id, currentEdition)
             if (!points.length) return null
             if (activeCategory !== 'all' && activeCategory !== category) return null
 
@@ -388,7 +395,7 @@ export const ToolsArrowsChart = ({ data, activeCategory }) => {
                                                             y={-99999999}
                                                             className="hide_visually"
                                                         >
-                                                            {tool}, {year}:
+                                                            {tool.id}, {year}:
                                                             {x < 0
                                                                 ? translate(
                                                                       'charts.tools_arrows.opinions_negative'
@@ -471,14 +478,14 @@ export const ToolsArrowsChart = ({ data, activeCategory }) => {
     )
 }
 
-ToolsArrowsChart.propTypes = {
-    // ...
-}
-
 export default ToolsArrowsChart
 
+interface ConditionDiffsType {
+    [key: string]: (0 | 1 | -1)[]
+}
+
 // each response has an associated value for the [x, y] axes
-const conditionDiffs = {
+const conditionDiffs: ConditionDiffsType = {
     never_heard: [0, -1],
     not_interested: [-1, -1],
     interested: [1, -1],

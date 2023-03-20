@@ -2,22 +2,29 @@ import React, { useMemo, useState } from 'react'
 import Block from 'core/blocks/block/BlockVariant'
 import ChartContainer from 'core/charts/ChartContainer'
 import { ToolsSectionId } from 'core/bucket_keys'
-import { ToolsQuadrantsBlockData, ToolsQuadrantsApiDatum, ToolsQuadrantsMetric } from './types'
-import { useChartData, useChartLegends, useTabularData } from './hooks'
-import { ToolsQuadrantsChart } from './ToolsQuadrantsChart'
+import { ToolsScatterplotBlockData, ToolsQuadrantsMetric } from './types'
+import { useChartData, useTabularData } from './hooks'
+import { ToolsQuadrantsChart } from './ToolsScatterplotChart'
+import { ToolQuestionData, SectionMetadata } from '@devographics/types'
+import { useToolSections } from 'core/helpers/metadata'
+import { useI18n } from 'core/i18n/i18nContext'
+import { useTheme } from 'styled-components'
 
 const ENABLE_METRIC_SWITCH = false
 
-export const ToolsQuadrantsBlock = ({
+export const ToolsScatterplotBlock = ({
     block,
     data,
     triggerId
 }: {
-    block: ToolsQuadrantsBlockData
-    data: ToolsQuadrantsApiDatum[]
+    block: ToolsScatterplotBlockData
+    data: ToolQuestionData[]
     // used for the report, to control which category is highlighted
     triggerId?: ToolsSectionId
 }) => {
+    const { translate } = useI18n()
+    const theme = useTheme()
+    const toolSections = useToolSections()
     const [metric, setMetric] = useState<ToolsQuadrantsMetric>('satisfaction')
     const modeProps = useMemo(
         () => ({
@@ -39,7 +46,13 @@ export const ToolsQuadrantsBlock = ({
         ? `ToolsScatterplotChart--${controlledCurrentCategory}`
         : ''
 
-    const legends = useChartLegends()
+    const legends = toolSections.map((section: SectionMetadata) => ({
+        id: `toolCategories.${section.id}`,
+        label: translate(`sections.${section.id}.title`),
+        keyLabel: `${translate(`sections.${section.id}.title`)}:`,
+        color: theme.colors.ranges.toolSections[section.id]
+    }))
+
     const legendProps = useMemo(
         () => ({
             legends,

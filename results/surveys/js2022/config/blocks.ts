@@ -45,7 +45,7 @@ import ToolExperienceBlock from 'core/blocks/tools/ToolExperienceBlock'
 import ToolsSectionStreamsBlock from 'core/blocks/tools/ToolsSectionStreamsBlock'
 import { ToolsExperienceRankingBlock } from 'core/blocks/tools/ToolsExperienceRankingBlock'
 import { ToolsExperienceRadarBlock } from 'core/blocks/tools/ToolsExperienceRadarBlock'
-import { ToolsQuadrantsBlock } from 'core/blocks/tools/ToolsQuadrantsBlock'
+import { ToolsScatterplotBlock } from 'core/blocks/tools/ToolsScatterplotBlock'
 import { ToolsArrowsBlock } from 'core/blocks/tools/ToolsArrowsBlock'
 import { ToolsExperienceMarimekkoBlock } from 'core/blocks/tools/ToolsExperienceMarimekkoBlock'
 import { SectionToolsCardinalityByUserBlock } from 'core/blocks/tools/SectionToolsCardinalityByUserBlock'
@@ -99,10 +99,10 @@ const blockRegistry = {
     SponsorFinishBlock,
     LivestreamBlock,
     // ReportBlock,
-    
+
     // explorer
     DataExplorerBlock,
-    
+
     // demographics
     ParticipationByCountryBlock,
     GenderBlock,
@@ -119,7 +119,7 @@ const blockRegistry = {
     ToolExperienceBlock,
     ToolsSectionStreamsBlock,
     ToolsExperienceRankingBlock,
-    ToolsScatterplotBlock: ToolsQuadrantsBlock,
+    ToolsScatterplotBlock,
     ToolsExperienceMarimekkoBlock,
     SectionToolsCardinalityByUserBlock,
     AllSectionsToolsCardinalityByUserBlock,
@@ -141,7 +141,7 @@ const blockRegistry = {
     HappinessHistoryBlock,
 
     // opinions
-    OpinionBlock,
+    OpinionBlock
 }
 
 export default blockRegistry

@@ -1,11 +1,45 @@
 blockType: ToolsArrowsBlock
-dataPath: 'dataAPI.surveys.${surveyId}.${editionId}.libraries.allItems.data'
+# dataPath: 'dataAPI.surveys.${surveyId}.${editionId}.libraries.allItems.data'
 # dataPath: 'dataAPI.survey.${questionId}'
 # keysPath: 'dataAPI.survey.${questionId}.0.experience.keys'
 titleId: blocks.tools_arrows
 descriptionId: blocks.tools_arrows.description
 noteId: blocks.tools_arrows.note
 hasSponsor: true
+query: >
+    dataAPI {
+        surveys {
+            ${surveyId} {
+                ${editionId} {
+                    libraries {
+                        ${questionId}: allItems {
+                            data {
+                                id
+                                responses(parameters: { ENABLE_CACHE_PLACEHOLDER }) {
+                                    allEditions {
+                                        year
+                                        editionId
+                                        buckets {
+                                            id
+                                            percentageQuestion
+                                            percentageSurvey
+                                            count
+                                        }
+                                        completion {
+                                            count
+                                            percentageSurvey
+                                            total
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 # query: >
 #     dataAPI {
 #         surveys {

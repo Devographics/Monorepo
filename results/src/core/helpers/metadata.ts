@@ -1,3 +1,4 @@
+import { EditionMetadata, SectionMetadata } from '@devographics/types'
 import { usePageContext } from './pageContext'
 
 export const useToolSections = () => {
@@ -16,4 +17,8 @@ export const useFeatureSections = () => {
         s.questions.some(q => q.template === 'feature')
     )
     return featureSections
+}
+
+export const getQuestionSectionId = (id: string, currentEdition: EditionMetadata) => {
+    return currentEdition.sections.find(section => section.questions.find(q => q.id === id))
 }

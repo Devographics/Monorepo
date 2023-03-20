@@ -3,7 +3,7 @@ import { ToolExperienceId, ToolsSectionId } from 'core/bucket_keys'
 import { Entity, YearCompletion } from '@types/index'
 import { BlockContext } from 'core/blocks/types'
 
-export type ToolsQuadrantsBlockData = BlockContext<
+export type ToolsScatterplotBlockData = BlockContext<
     'scatterplot_overview',
     'ToolsScatterplotBlock',
     never,

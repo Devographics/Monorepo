@@ -19,7 +19,7 @@ const useQuadrants = (xScale: ChartLayerProps['xScale'], yScale: ChartLayerProps
                 width: xScale(quadrantsConfig[0].xRange[1]) - xScale(quadrantsConfig[0].xRange[0]),
                 height: yScale(quadrantsConfig[0].yRange[1]) - yScale(quadrantsConfig[0].yRange[0]),
                 color: theme.colors.background,
-                label: translate!(`options.quadrant.${quadrantLabels[metric][0]}`)
+                label: translate(`options.quadrant.${quadrantLabels[metric][0]}`)
             },
             {
                 x: xScale(quadrantsConfig[1].xRange[0]),
@@ -27,7 +27,7 @@ const useQuadrants = (xScale: ChartLayerProps['xScale'], yScale: ChartLayerProps
                 width: xScale(quadrantsConfig[1].xRange[1]) - xScale(quadrantsConfig[1].xRange[0]),
                 height: yScale(quadrantsConfig[1].yRange[1]) - yScale(quadrantsConfig[1].yRange[0]),
                 color: theme.colors.backgroundForeground,
-                label: translate!(`options.quadrant.${quadrantLabels[metric][1]}`)
+                label: translate(`options.quadrant.${quadrantLabels[metric][1]}`)
             },
             {
                 x: xScale(quadrantsConfig[2].xRange[0]),
@@ -35,7 +35,7 @@ const useQuadrants = (xScale: ChartLayerProps['xScale'], yScale: ChartLayerProps
                 width: xScale(quadrantsConfig[2].xRange[1]) - xScale(quadrantsConfig[2].xRange[0]),
                 height: yScale(quadrantsConfig[2].yRange[1]) - yScale(quadrantsConfig[2].yRange[0]),
                 color: theme.colors.backgroundBackground,
-                label: translate!(`options.quadrant.${quadrantLabels[metric][2]}`)
+                label: translate(`options.quadrant.${quadrantLabels[metric][2]}`)
             },
             {
                 x: xScale(quadrantsConfig[3].xRange[0]),
@@ -43,7 +43,7 @@ const useQuadrants = (xScale: ChartLayerProps['xScale'], yScale: ChartLayerProps
                 width: xScale(quadrantsConfig[3].xRange[1]) - xScale(quadrantsConfig[3].xRange[0]),
                 height: yScale(quadrantsConfig[3].yRange[1]) - yScale(quadrantsConfig[3].yRange[0]),
                 color: theme.colors.background,
-                label: translate!(`options.quadrant.${quadrantLabels[metric][3]}`)
+                label: translate(`options.quadrant.${quadrantLabels[metric][3]}`)
             }
         ],
         [xScale, yScale, theme, translate, metric]

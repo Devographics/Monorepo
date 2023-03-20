@@ -2,33 +2,28 @@ import { useMemo } from 'react'
 import { useTheme } from 'styled-components'
 import compact from 'lodash/compact'
 import round from 'lodash/round'
-import get from 'lodash/get'
-// @ts-ignore: we don't have typings for the variables
-import variables from 'Config/variables.yml'
 import { useI18n } from 'core/i18n/i18nContext'
 import { ToolExperienceId, ToolsSectionId } from 'core/bucket_keys'
 import { getTableData } from 'core/helpers/datatables'
 import {
     ToolsQuadrantsMetric,
-    ToolsQuadrantsApiDatum,
     ToolsQuadrantsChartToolData,
     ToolsQuadrantsChartToolsCategoryData
 } from './types'
-
-const { toolsCategories } = variables
+import { ToolQuestionData, SectionMetadata, Entity } from '@devographics/types'
+import { useToolSections } from 'core/helpers/metadata'
+import { useEntities } from 'core/helpers/entities'
 
 const toPercentage = (value: number) => round(value * 100, 2)
 
 const extractToolData = (
-    tool: ToolsQuadrantsApiDatum,
-    metric: ToolsQuadrantsMetric
+    tool: ToolQuestionData,
+    metric: ToolsQuadrantsMetric,
+    entities: Entity[]
 ): ToolsQuadrantsChartToolData | null => {
-    const { id, entity, experience } = tool
-    const buckets: ToolsQuadrantsApiDatum['experience']['year']['facets'][0]['buckets'] = get(
-        experience,
-        'year.facets[0].buckets'
-    )
-    const total: number = get(experience, 'year.completion.total')
+    const { id, responses } = tool
+    const buckets = responses.currentEdition?.buckets
+    const total = responses.currentEdition?.completion.total
 
     // if the tool doesn't have experience data, abort
     if (!buckets) return null
@@ -68,6 +63,12 @@ const extractToolData = (
         awareness: 100 - getPercentage('never_heard')
     }
 
+    const entity = entities.find(e => e.id === id)
+
+    if (!entity) {
+        throw new Error(`Could not find entity for tool id ${id}`)
+    }
+
     // note: we use the same x (nb of users) for all metrics to stay consistent
     return {
         id,
@@ -85,66 +86,48 @@ const extractToolData = (
  * with the ScatterPlot chart.
  */
 export const useChartData = (
-    data: ToolsQuadrantsApiDatum[],
+    data: ToolQuestionData[],
     metric: ToolsQuadrantsMetric
 ): ToolsQuadrantsChartToolsCategoryData[] => {
     const { translate } = useI18n()
     const theme = useTheme()
+    const toolSections = useToolSections()
+    const allEntities = useEntities()
+    const allTools = toolSections.map((section: SectionMetadata) => {
+        const toolsSectionId = section.id
+        const toolsIds = section.questions.map(q => q.id)
 
+        const categoryTools = data.filter(toolData => toolsIds.includes(toolData.id))
+        const categoryData =
+            categoryTools &&
+            categoryTools.map(toolData => extractToolData(toolData, metric, allEntities))
+
+        const color = theme.colors.ranges.toolSections[toolsSectionId as ToolsSectionId]
+
+        // filter out categories without data
+        return categoryData.length > 0
+            ? {
+                  id: toolsSectionId as ToolsSectionId,
+                  name: translate(`page.${toolsSectionId}`),
+                  color,
+                  data: compact(categoryData)
+              }
+            : null
+    })
+
+    return compact(allTools)
+}
+
+export const useTabularData = (data: ToolQuestionData[], metric: ToolsQuadrantsMetric) => {
+    const allEntities = useEntities()
     return useMemo(() => {
-        const allTools = Object.keys(toolsCategories)
-            .filter(toolsSectionId => !toolsSectionId.includes('abridged'))
-            .map(toolsSectionId => {
-                const toolsIds = toolsCategories[toolsSectionId]
-
-                const categoryTools = data.filter(tool => toolsIds.includes(tool.id))
-                const categoryData =
-                    categoryTools && categoryTools.map(tool => extractToolData(tool, metric))
-
-                const color = theme.colors.ranges.toolSections[toolsSectionId as ToolsSectionId]
-
-                // filter out categories without data
-                return categoryData.length > 0
-                    ? {
-                          id: toolsSectionId as ToolsSectionId,
-                          name: translate!(`page.${toolsSectionId}`),
-                          color,
-                          data: compact(categoryData)
-                      }
-                    : null
-            })
-
-        return compact(allTools)
-    }, [translate, theme, metric])
-}
-
-/**
- * Generate legends for the chart, legends being tools categories.
- */
-export const useChartLegends = () => {
-    const { translate } = useI18n()
-    const theme = useTheme()
-
-    return useMemo(
-        () =>
-            Object.keys(toolsCategories).map(toolsSectionId => ({
-                id: `toolCategories.${toolsSectionId}`,
-                label: translate!(`sections.${toolsSectionId}.title`),
-                keyLabel: `${translate!(`sections.${toolsSectionId}.title`)}:`,
-                color: theme.colors.ranges.toolSections[toolsSectionId as ToolsSectionId]
-            })),
-        [translate]
-    )
-}
-
-export const useTabularData = (data: ToolsQuadrantsApiDatum[], metric: ToolsQuadrantsMetric) =>
-    useMemo(() => {
         return [
             getTableData({
                 data: data
-                    .map(tool => extractToolData(tool, metric))
+                    .map(tool => extractToolData(tool, metric, allEntities))
                     .filter(tool => tool !== null) as ToolsQuadrantsChartToolData[],
                 valueKeys: ['usage_count', 'satisfaction_percentage', 'interest_percentage']
             })
         ]
     }, [data, metric])
+}

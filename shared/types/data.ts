@@ -3,11 +3,26 @@ import { Option } from './outlines'
 
 export interface QuestionData {
     id: string
+}
+
+export interface OptionsQuestionData extends QuestionData {
+    options: OptionData[]
+    responses: ResponseData
+}
+
+export interface FreeformQuestionData extends QuestionData {
+    responses: ResponseData
+}
+
+export interface ToolQuestionData extends QuestionData {
+    id: string
     comments: ItemComments
     entity: Entity
     responses: ResponseData
     options: OptionData[]
 }
+
+export interface FeatureQuestionData extends ToolQuestionData {}
 
 export interface ItemComments {
     allEditions: EditionComments[]

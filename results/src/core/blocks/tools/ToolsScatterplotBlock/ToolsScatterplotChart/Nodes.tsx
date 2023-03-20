@@ -1,25 +1,15 @@
 import React, { useMemo } from 'react'
-import { useTransition } from '@react-spring/web'
+import { useTransition, SpringValues } from '@react-spring/web'
 import { useMotionConfig } from '@nivo/core'
-// @ts-ignore: we don't have typings for the variables
-import variables from 'Config/variables.yml'
 import { ChartLayerProps, NodeData, NodeAnimatedProps } from '../types'
 import { Node } from './Node'
 import { useToolsQuadrantsChartContext } from './state'
+import { useToolSections } from 'core/helpers/metadata'
+import { QuestionMetadata, SectionMetadata } from '@devographics/types'
 
-const { toolsCategories } = variables
-
-export const Nodes = ({
-    nodes: _nodes,
-    innerWidth,
-    innerHeight,
-}: ChartLayerProps) => {
-    const {
-        currentCategory,
-        currentTool,
-        zoomedQuadrantIndex,
-    } = useToolsQuadrantsChartContext()
-
+export const Nodes = ({ nodes: _nodes, innerWidth, innerHeight }: ChartLayerProps) => {
+    const { currentCategory, currentTool, zoomedQuadrantIndex } = useToolsQuadrantsChartContext()
+    const toolSections = useToolSections()
     const nodes: NodeData[] = useMemo(() => {
         const hasCurrentCategory = currentCategory !== null
         const hasCurrentTool = currentTool !== null
@@ -28,10 +18,14 @@ export const Nodes = ({
         return _nodes.map(node => {
             let opacity = 1
             if (hasCurrentTool) {
-                opacity = currentTool === node.data.id ? 1 : .2
+                opacity = currentTool === node.data.id ? 1 : 0.2
             }
             if (hasCurrentCategory) {
-                opacity = toolsCategories[currentCategory].includes(node.data.id) ? 1 : .2
+                opacity = toolSections
+                    .find((s: SectionMetadata) => s.id === currentCategory)
+                    .questions.find((q: QuestionMetadata) => q.id === node.data.id)
+                    ? 1
+                    : 0.2
             }
 
             const isHover = hasCurrentTool && currentTool === node.data.id
@@ -45,47 +39,43 @@ export const Nodes = ({
                 color: node.color,
                 opacity,
                 isHover: hasCurrentTool && currentTool === node.data.id,
-                labelOpacity: (hasZoom || isHover) ? 1 : 0,
+                labelOpacity: hasZoom || isHover ? 1 : 0,
                 labelOffset: isHover ? 16 : 0,
-                labelBackgroundOpacity: isHover ? 1 : 0,
+                labelBackgroundOpacity: isHover ? 1 : 0
             }
         })
     }, [_nodes, currentCategory, currentTool, zoomedQuadrantIndex])
 
     const { animate, config: springConfig } = useMotionConfig()
     const transitions = useTransition<NodeData, NodeAnimatedProps>(nodes, {
-        keys: node => node.id,
-        from: node => ({
+        keys: (node: NodeData) => node.id,
+        from: (node: NodeData) => ({
             x: node.x,
             y: node.y,
             opacity: node.opacity,
             labelOpacity: node.labelOpacity,
             labelOffset: node.labelOffset,
-            labelBackgroundOpacity: node.labelBackgroundOpacity,
+            labelBackgroundOpacity: node.labelBackgroundOpacity
         }),
-        update: node => ({
+        update: (node: NodeData) => ({
             x: node.x,
             y: node.y,
             opacity: node.opacity,
             labelOpacity: node.labelOpacity,
             labelOffset: node.labelOffset,
-            labelBackgroundOpacity: node.labelBackgroundOpacity,
+            labelBackgroundOpacity: node.labelBackgroundOpacity
         }),
         config: springConfig,
-        immediate: !animate,
+        immediate: !animate
     })
 
     return (
         <>
             <mask id="quadrantsNodesMask">
-                <rect
-                    width={innerWidth}
-                    height={innerHeight}
-                    fill="white"
-                />
+                <rect width={innerWidth} height={innerHeight} fill="white" />
             </mask>
             <g mask="url(#quadrantsNodesMask)">
-                {transitions((transition, node) => (
+                {transitions((transition: SpringValues<NodeAnimatedProps>, node: NodeData) => (
                     <Node
                         key={node.id}
                         id={node.id}

@@ -25,7 +25,7 @@ export const Quadrant = ({
     width,
     height,
     isZoomed,
-    toggleZoom,
+    toggleZoom
 }: QuadrantProps) => {
     const [isHover, setIsHover] = useState(false)
 
@@ -51,14 +51,17 @@ export const Quadrant = ({
         height,
         textX: x + width / 2,
         textY: y + height / 2,
-        strokeOpacity: isHover ? .4 : 0,
+        strokeOpacity: isHover ? 0.4 : 0,
         config: springConfig,
-        immediate: !animate,
+        immediate: !animate
     })
 
-    const backgroundStyle = useMemo(() => ({
-        cursor: isZoomed ? 'zoom-out' : 'zoom-in',
-    }), [isZoomed])
+    const backgroundStyle = useMemo(
+        () => ({
+            cursor: isZoomed ? 'zoom-out' : 'zoom-in'
+        }),
+        [isZoomed]
+    )
 
     return (
         <>
@@ -74,10 +77,16 @@ export const Quadrant = ({
                 style={backgroundStyle}
             />
             <QuadrantOutline
-                x={to([transition.x], (x) => x + staticProps.quadrantBorder / 2)}
-                y={to([transition.y], (y) => y + staticProps.quadrantBorder / 2)}
-                width={to([transition.width], (width) => width - staticProps.quadrantBorder)}
-                height={to([transition.height], (height) => height - staticProps.quadrantBorder)}
+                x={to([transition.x], (x: number) => x + staticProps.quadrantBorder / 2)}
+                y={to([transition.y], (y: number) => y + staticProps.quadrantBorder / 2)}
+                width={to(
+                    [transition.width],
+                    (width: number) => width - staticProps.quadrantBorder
+                )}
+                height={to(
+                    [transition.height],
+                    (height: number) => height - staticProps.quadrantBorder
+                )}
                 fillOpacity={0}
                 stroke={theme.colors.border}
                 strokeWidth={staticProps.quadrantBorder}
@@ -100,8 +109,8 @@ const QuadrantOutline = styled(animated.rect)`
 `
 
 const QuadrantLabel = styled(animated.text)`
-    color: #E3D8C4;
-    fill: #E3D8C4;
+    color: #e3d8c4;
+    fill: #e3d8c4;
     text-transform: uppercase;
     letter-spacing: 3px;
     opacity: 0.75;
