@@ -4,24 +4,25 @@
 # type ToolsRankings {
 #     ids: [String]!
 #     years: [Int]
-#     experience(filters: Filters): [ToolExperienceRanking]
+#     experience(filters: Filters): [ToolRatios]
 # }
 
 """
 Used to represent the ranking of a tool compared to others
 for awareness/interest and stisfaction.
 """
-type ToolExperienceRanking {
+type ToolRatiosItemData {
     id: String
     entity: Entity
-    awareness: [ToolExperienceRankingYearMetric]
-    usage: [ToolExperienceRankingYearMetric]
-    interest: [ToolExperienceRankingYearMetric]
-    satisfaction: [ToolExperienceRankingYearMetric]
+    awareness: [ToolRatiosItemEditionData]
+    usage: [ToolRatiosItemEditionData]
+    interest: [ToolRatiosItemEditionData]
+    satisfaction: [ToolRatiosItemEditionData]
 }
 
-type ToolExperienceRankingYearMetric {
+type ToolRatiosItemEditionData {
     year: Int
+    editionId: String
     rank: Int
     percentageQuestion: Float
 }

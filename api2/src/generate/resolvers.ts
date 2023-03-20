@@ -366,7 +366,7 @@ export const getToolsFeaturesResolverMap = ({
     survey: Survey
     items: ParsedQuestionExt[]
 }): ResolverMap => ({
-    data: async (parent, args, context, info) => {
+    items: async (parent, args, context, info) => {
         return items.map(question => ({ ...parent, question }))
     },
     ids: () => {

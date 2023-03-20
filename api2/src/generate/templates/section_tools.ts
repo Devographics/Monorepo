@@ -16,7 +16,7 @@ export const section_tools: TemplateFunction = ({ survey, edition, section }) =>
         typeDef: `type ${fieldTypeName} {
     ids: [String]
     years: [Int]
-    data(filters: ${getFiltersTypeName(
+    items(filters: ${getFiltersTypeName(
         survey.id
     )},  parameters: Parameters, facet: ${getFacetsTypeName(survey.id)}): [${graphqlize(
             survey.id

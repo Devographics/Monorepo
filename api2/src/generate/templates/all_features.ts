@@ -16,7 +16,7 @@ export const all_features: TemplateFunction = ({ survey, edition, section, quest
         typeDef: `type ${fieldTypeName} {
     ids: [String]
     years: [Int]
-    data(filters: ${getFiltersTypeName(
+    items(filters: ${getFiltersTypeName(
         survey.id
     )},  parameters: Parameters, facet: ${getFacetsTypeName(survey.id)}): [${graphqlize(
             survey.id
