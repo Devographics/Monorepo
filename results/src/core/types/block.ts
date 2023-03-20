@@ -56,11 +56,11 @@ export interface BlockDefinition {
 type FilterType = 'filters' | 'facets'
 
 export interface BlockVariantProps {
-    id: string
-    className: string
-    units: BlockUnits
-    setUnits: BlockSetUnits
-    unitsOptions: BlockUnits[] | string[]
+    id?: string
+    className?: string
+    units?: BlockUnits
+    setUnits?: BlockSetUnits
+    unitsOptions?: BlockUnits[] | string[]
     block: BlockDefinition
     // error,
     // data,

@@ -13,3 +13,8 @@ export const useEntities = () => {
     const allEntities = [...questionsEntities, ...optionsEntities].filter(e => !!e)
     return allEntities
 }
+
+export const useEntity = (id: string) => {
+    const allEntities = useEntities()
+    return allEntities.find(e => e.id === id)
+}

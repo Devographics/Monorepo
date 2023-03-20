@@ -16,6 +16,11 @@ query: >
                                             percentageSurvey
                                             count
                                         }
+                                        completion {
+                                            count
+                                            percentageSurvey
+                                            total
+                                        }
                                     }
                                 }
                             }

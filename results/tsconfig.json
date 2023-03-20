@@ -4,7 +4,10 @@
     "compilerOptions": {
         /** For PNPM to work correctly with TypeScript and React*/
         "preserveSymlinks": true,
-        "target": "es5",
+        "target": "es2021",
+        "moduleResolution": "Node",
+        "module": "ES2020",
+        "lib": ["es7", "es2019", "es2021"],
         "jsx": "react",
         "skipLibCheck": true,
         "allowSyntheticDefaultImports": true,

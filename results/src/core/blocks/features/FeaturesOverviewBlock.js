@@ -11,6 +11,7 @@ import variables from 'Config/variables.yml'
 import { getTableData } from 'core/helpers/datatables'
 import { useLegends } from 'core/helpers/useBucketKeys'
 import { usePageContext } from 'core/helpers/pageContext'
+import { useFeatureSections } from 'core/helpers/metadata'
 
 const modes = ['grouped', 'awareness_rank', 'usage_rank' /*'usage_ratio_rank'*/]
 
@@ -59,10 +60,9 @@ const addRanks = features => {
     return featuresWithRanks
 }
 
-const getChartData = (data, translate, edition) => {
-    const featureSections = edition.sections.filter(s =>
-        s.questions.some(q => q.template === 'feature')
-    )
+const useChartData = (data, translate) => {
+    const featureSections = useFeatureSections()
+
     const allQuestions = featureSections
         .map(s => s.questions.map(q => ({ ...q, sectionId: s.id })))
         .flat()
@@ -97,11 +97,7 @@ const getChartData = (data, translate, edition) => {
 
 const FeaturesOverviewBlock = ({ block, data: blockData, triggerId, controlledMode }) => {
     const { translate } = useI18n()
-    const { currentEdition } = usePageContext()
-    const chartData = useMemo(
-        () => getChartData(blockData.data, translate, currentEdition),
-        [blockData, translate, currentEdition]
-    )
+    const chartData = useMemo(() => useChartData(blockData.data, translate), [blockData, translate])
 
     const categories = chartData.children
     const legends = useLegends(

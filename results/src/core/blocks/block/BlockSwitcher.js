@@ -31,10 +31,10 @@ const BlockSwitcher = ({ pageData, block, index, ...props }) => {
         })
 
     let blockData = dataPath && get(pageData, dataPath)
-    console.log(block)
-    console.log(pageData)
-    console.log(dataPath)
-    console.log(blockData)
+    // console.log(block)
+    // console.log(pageData)
+    // console.log(dataPath)
+    // console.log(blockData)
     const [customData, setCustomData] = useState()
 
     let blockKeys = block.keysPath && get(pageData, block.keysPath)

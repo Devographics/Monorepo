@@ -1,10 +1,13 @@
 import React from 'react'
 import styled, { useTheme } from 'styled-components'
 import { mq, spacing, fontSize, fontWeight } from 'core/theme'
-import { ToolsExperienceToolData } from '@types/survey_api/tools'
-import { ToolsSectionId } from 'core/bucket_keys'
+import { useEntity } from 'core/helpers/entities'
+import { QuestionData } from '@devographics/types'
 
-const customImages = {
+interface CustomImagesList {
+    [key: string]: 'png' | 'svg' | 'jpg'
+}
+const customImages: CustomImagesList = {
     testing_library: 'png',
     tsc: 'svg',
     npm_workspaces: 'svg',
@@ -18,27 +21,31 @@ const customImages = {
     selenium: 'png'
 }
 
-export interface TierItemData extends ToolsExperienceToolData {
+type ToolsSectionId = string
+
+export interface TierItemData extends QuestionData {
     satisfactionRatio: number
     userCount: number
     color: string
-    total: number
-    categoryId?: ToolsSectionId
+    total?: number
+    sectionId?: ToolsSectionId
 }
 
 export interface TierListProps {
-    data: TierProps[]
-    total: number
+    data: TierData[]
     currentCategory: ToolsSectionId | null
 }
 
-export interface TierProps {
+export interface TierData {
     letter: string
     lowerBound: number
     upperBound: number
     items: TierItemData[]
     index: number
-    total: number
+    // total: number
+}
+
+export interface TierProps extends TierData {
     currentCategory: ToolsSectionId | null
 }
 
@@ -46,17 +53,11 @@ export interface TierItemProps extends TierItemData {
     currentCategory: ToolsSectionId | null
 }
 
-export const TierListChart = ({ data, total, currentCategory }: TierListProps) => {
+export const TierListChart = ({ data, currentCategory }: TierListProps) => {
     return (
         <Table>
             {data.map((tier, index) => (
-                <Tier
-                    {...tier}
-                    key={tier.letter}
-                    index={index}
-                    total={total}
-                    currentCategory={currentCategory}
-                />
+                <Tier {...tier} key={tier.letter} index={index} currentCategory={currentCategory} />
             ))}
         </Table>
     )
@@ -64,15 +65,7 @@ export const TierListChart = ({ data, total, currentCategory }: TierListProps) =
 
 const Table = styled.div``
 
-const Tier = ({
-    letter,
-    items,
-    lowerBound,
-    upperBound,
-    index,
-    total,
-    currentCategory
-}: TierProps) => {
+const Tier = ({ letter, items, lowerBound, upperBound, index, currentCategory }: TierProps) => {
     const theme = useTheme()
     const color = theme.colors.tiers[index]
     return (
@@ -85,12 +78,7 @@ const Tier = ({
             <TierItems>
                 <TierItemsInner>
                     {items.map(item => (
-                        <TierItem
-                            {...item}
-                            key={item.id}
-                            total={total}
-                            currentCategory={currentCategory}
-                        />
+                        <TierItem {...item} key={item.id} currentCategory={currentCategory} />
                     ))}
                 </TierItemsInner>
             </TierItems>
@@ -154,20 +142,19 @@ const TierItemsInner = styled.div`
 
 const TierItem = ({
     id,
-    entity,
+    entity: entityProp,
     satisfactionRatio,
-    userCount,
     color,
-    total,
-    categoryId,
+    sectionId,
     currentCategory
 }: TierItemProps) => {
     const imageSrc = customImages[id]
         ? `https://assets.devographics.com/projects/${id}.${customImages[id]}`
         : `https://bestofjs.org/logos/${id}.svg`
 
-    const isHighlighted = currentCategory ? currentCategory === categoryId : true
+    const isHighlighted = currentCategory ? currentCategory === sectionId : true
 
+    const entity = entityProp || useEntity(id)
     return (
         <Link color={color} isHighlighted={isHighlighted}>
             <ColorWrapper color={color}>

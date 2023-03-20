@@ -1,17 +1,18 @@
 import React, { useState, useMemo } from 'react'
 import { useTheme } from 'styled-components'
 import Block from 'core/blocks/block/BlockVariant'
-import TierListChart, { TierItemData } from 'core/charts/generic/TierListChart'
+import TierListChart, { TierItemData, TierData } from 'core/charts/generic/TierListChart'
 import { useI18n } from 'core/i18n/i18nContext'
 import ChartContainer from 'core/charts/ChartContainer'
-import sortBy from 'lodash/sortBy'
-import { ToolsSectionId } from 'core/bucket_keys'
-import { ToolsExperienceToolData } from '@types/survey_api/tools'
+import sortBy from 'lodash/sortBy.js'
 import { BlockContext } from 'core/blocks/types'
+import { QuestionData, SectionMetadata } from '@devographics/types'
+import { useToolSections } from 'core/helpers/metadata'
+import { BlockComponentProps } from 'core/types/block'
 
-interface TierListBlockProps {
+interface TierListBlockProps extends BlockComponentProps {
     block: BlockContext<'toolsTierListTemplate', 'ToolsTierListBlock', { toolIds: string }, any>
-    data: ToolsExperienceToolData[]
+    data: QuestionData[]
 }
 
 // minimum user percentage of total respondents to consider for tier list
@@ -27,29 +28,43 @@ const tiers = [
 
 /*
 
-Parse data and convert it into a format compatible with the Scatterplot chart
+Parse data and convert it into a format compatible with the TierList chart
 
 */
-const getChartData = (data: ToolsExperienceToolData[], theme: any) => {
-    let sortedData = tiers.map(tier => ({ ...tier, items: [] as TierItemData[] }))
+const getChartData = (
+    data: QuestionData[],
+    theme: any,
+    toolsSections: SectionMetadata[]
+): TierData[] => {
+    let sortedData = tiers.map((tier, index) => ({ ...tier, index, items: [] as TierItemData[] }))
     // remove native apps for this chart
     data = data.filter(tool => tool.id !== 'nativeapps')
     data.forEach(tool => {
-        const total = tool?.experience?.year?.completion?.total
-        const buckets = tool?.experience?.year?.facets[0].buckets
+        const total = tool?.responses?.currentEdition?.completion?.total || 0
+        const buckets = tool?.responses?.currentEdition?.buckets
         const wouldUseCount = buckets?.find(b => b.id === 'would_use')?.count || 0
         const wouldNotUseCount = buckets?.find(b => b.id === 'would_not_use')?.count || 0
         const userCount = wouldUseCount + wouldNotUseCount
         const cutoff = Math.round((total * cutoffPercentage) / 100)
         const satisfactionRatio = Math.round((wouldUseCount / userCount) * 100)
-        const categoryId = Object.keys(toolsCategories).find(categoryId =>
-            toolsCategories[categoryId].includes(tool.id)
+        const section = toolsSections.find((section: SectionMetadata) =>
+            section.questions.find(q => q.id === tool.id)
         )
-        const color = categoryId ? theme.colors.ranges.toolSections[categoryId] : '#cccccc'
+        if (!section) {
+            throw Error(`Could not find section for tool id ${tool.id}`)
+        }
+        const sectionId = section.id
+        const color = sectionId ? theme.colors.ranges.toolSections[sectionId] : '#cccccc'
         if (userCount >= cutoff) {
             sortedData.forEach(tier => {
                 if (satisfactionRatio >= tier.lowerBound && satisfactionRatio <= tier.upperBound) {
-                    tier.items.push({ ...tool, userCount, satisfactionRatio, color, categoryId })
+                    tier.items.push({
+                        ...tool,
+                        userCount,
+                        satisfactionRatio,
+                        color,
+                        sectionId
+                    })
                 }
             })
         }
@@ -61,28 +76,27 @@ const getChartData = (data: ToolsExperienceToolData[], theme: any) => {
     return sortedData
 }
 
-const TierListBlock = ({ block, data, context }: TierListBlockProps) => {
+const TierListBlock = ({ block, data }: TierListBlockProps) => {
     const { translate } = useI18n()
     const theme = useTheme()
 
-    const chartData = getChartData(data, theme)
+    const toolsSections = useToolSections()
+    const chartData = getChartData(data, theme, toolsSections)
 
-    const total = data[0].experience?.year?.completion?.total
-
-    const legends = Object.keys(toolsCategories).map(keyId => ({
-        id: `toolCategories.${keyId}`,
-        label: translate(`sections.${keyId}.title`),
-        keyLabel: `${translate(`sections.${keyId}.title`)}:`,
-        color: theme.colors.ranges.toolSections[keyId]
+    const legends = toolsSections.map(({ id }: SectionMetadata) => ({
+        id: `toolCategories.${id}`,
+        label: translate(`sections.${id}.title`),
+        keyLabel: `${translate(`sections.${id}.title`)}:`,
+        color: theme.colors.ranges.toolSections[id]
     }))
 
-    const [currentCategory, setCurrentCategory] = useState<ToolsSectionId | null>(null)
+    const [currentCategory, setCurrentCategory] = useState<string | null>(null)
 
     const legendProps = useMemo(
         () => ({
             legends,
             onMouseEnter: ({ id }: { id: string }) => {
-                setCurrentCategory(id.replace('toolCategories.', '') as ToolsSectionId)
+                setCurrentCategory(id.replace('toolCategories.', ''))
             },
             onMouseLeave: () => {
                 setCurrentCategory(null)
@@ -106,7 +120,7 @@ const TierListBlock = ({ block, data, context }: TierListBlockProps) => {
             block={block}
         >
             <ChartContainer vscroll={true} fit={true}>
-                <TierListChart data={chartData} total={total} currentCategory={currentCategory} />
+                <TierListChart data={chartData} currentCategory={currentCategory} />
             </ChartContainer>
         </Block>
     )

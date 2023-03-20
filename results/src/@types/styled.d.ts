@@ -43,6 +43,7 @@ declare module 'styled-components' {
             }
         }
         colors: {
+            tiers: string[]
             background: string
             backgroundBackground: string
             backgroundForeground: string
@@ -68,11 +69,11 @@ declare module 'styled-components' {
                 secondaryGradient: [string, string]
             }
             ranges: {
-                tools: Record<ToolExperienceId, string>
-                toolSections: Record<ToolsSectionId, string>
-                features: Record<FeatureExperienceId, string>
-                features_categories: Record<FeaturesSectionId, string>
-                features_simplified: Record<SimplifiedFeatureExperienceId, string>
+                tools: Record<string>
+                toolSections: Record<string>
+                features: Record<string>
+                features_categories: Record<string>
+                features_simplified: Record<string>
                 gender: Record<GenderId, string>
                 opinions: {
                     4: string
