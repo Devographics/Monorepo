@@ -135,7 +135,6 @@ export const getLocales = async () => {
 // ONE LOCALE WITH STRINGS
 
 const localePromiseKey = (id: string, contexts: Array<string>) => {
-  console.log("PROMISE KEY", ["localePromise", id, ...contexts].join("/"))
   return ["localePromise", id, ...contexts].join("/")
 };
 

@@ -1052,7 +1052,7 @@ importers:
       cookie: ^0.5.0
       cors: ^2.8.5
       cross-env: 7.0.2
-      cypress: 9.7.0
+      cypress: 12.8.1
       debug: 4.3.4
       deepmerge: ^4.2.2
       dotenv-cli: ^4.1.1
@@ -1212,7 +1212,7 @@ importers:
       swr: 2.0.1_react@18.2.0
       uuid: 8.3.2
     optionalDependencies:
-      '@cypress/code-coverage': 3.10.0_turfhogldrikcioipbk5hfzw7e
+      '@cypress/code-coverage': 3.10.0_dcui76wmq5uvjlggvsj22ieol4
       '@cypress/webpack-preprocessor': 5.17.0_d6q2nshjt33dyke7ap5qrde5mq
       '@next/bundle-analyzer': 12.3.4
       '@storybook/addon-a11y': 6.5.16_biqbaboplfbrettd7655fr4n2y
@@ -1227,14 +1227,14 @@ importers:
       '@storybook/manager-webpack5': 6.5.16_wzv44ue3jifb5vf7ib2elqfzjm
       '@storybook/react': 6.5.16_nzwgever3tbuderkkvk7nrojhi
       '@storybook/testing-react': 1.3.0_46ltk7oqn6ktuow374ohweefte
-      '@testing-library/cypress': 8.0.7_cypress@9.7.0
+      '@testing-library/cypress': 8.0.7_cypress@12.8.1
       '@testing-library/jest-dom': 5.16.5
       '@testing-library/react': 10.4.9_biqbaboplfbrettd7655fr4n2y
       '@testing-library/react-hooks': 3.7.0_react@18.2.0
       '@types/jest': 25.2.3
       auto-changelog: 2.4.0
       chromatic: 5.10.2_@babel+core@7.20.2
-      cypress: 9.7.0
+      cypress: 12.8.1
       dotenv-cli: 4.1.1
       eslint-config-next: 13.2.4_jeuwjvsopuo23ctsjsevxmvjsi
       eslint-plugin-cypress: 2.11.1_eslint@7.32.0
@@ -9884,15 +9884,15 @@ packages:
     resolution: {integrity: sha512-ij4wRiunFfaJxjB0BdrYHIH8FxBJpOwNPhhAcunlmPdXudL1WQV1qoP9un6JsEBAgQH+7UXyyjh0g7jTxXK6tg==}
     dev: false
 
-  /@cypress/code-coverage/3.10.0_jm3zfnor3dejdgoaolv43yzg3m:
+  /@cypress/code-coverage/3.10.0_dcui76wmq5uvjlggvsj22ieol4:
     resolution: {integrity: sha512-K5pW2KPpK4vKMXqxd6vuzo6m9BNgpAv1LcrrtmqAtOJ1RGoEILXYZVost0L6Q+V01NyY7n7jXIIfS7LR3nP6YA==}
     requiresBuild: true
     peerDependencies:
       cypress: '*'
     dependencies:
-      '@cypress/webpack-preprocessor': 5.17.0_vqwn22oqs42olud44fk6wru6ge
+      '@cypress/webpack-preprocessor': 5.17.0_d6q2nshjt33dyke7ap5qrde5mq
       chalk: 4.1.2
-      cypress: 9.7.0
+      cypress: 12.8.1
       dayjs: 1.10.7
       debug: 4.3.4
       execa: 4.1.0
@@ -9909,13 +9909,13 @@ packages:
     dev: false
     optional: true
 
-  /@cypress/code-coverage/3.10.0_turfhogldrikcioipbk5hfzw7e:
+  /@cypress/code-coverage/3.10.0_jm3zfnor3dejdgoaolv43yzg3m:
     resolution: {integrity: sha512-K5pW2KPpK4vKMXqxd6vuzo6m9BNgpAv1LcrrtmqAtOJ1RGoEILXYZVost0L6Q+V01NyY7n7jXIIfS7LR3nP6YA==}
     requiresBuild: true
     peerDependencies:
       cypress: '*'
     dependencies:
-      '@cypress/webpack-preprocessor': 5.17.0_d6q2nshjt33dyke7ap5qrde5mq
+      '@cypress/webpack-preprocessor': 5.17.0_vqwn22oqs42olud44fk6wru6ge
       chalk: 4.1.2
       cypress: 9.7.0
       dayjs: 1.10.7
@@ -9952,6 +9952,31 @@ packages:
       mime-types: 2.1.35
       performance-now: 2.1.0
       qs: 6.5.3
+      safe-buffer: 5.2.1
+      tough-cookie: 2.5.0
+      tunnel-agent: 0.6.0
+      uuid: 8.3.2
+    dev: false
+    optional: true
+
+  /@cypress/request/2.88.11:
+    resolution: {integrity: sha512-M83/wfQ1EkspjkE2lNWNV5ui2Cv7UCv1swW1DqljahbzLVWltcsexQh8jYtuS/vzFXP+HySntGM83ZXA9fn17w==}
+    engines: {node: '>= 6'}
+    dependencies:
+      aws-sign2: 0.7.0
+      aws4: 1.12.0
+      caseless: 0.12.0
+      combined-stream: 1.0.8
+      extend: 3.0.2
+      forever-agent: 0.6.1
+      form-data: 2.3.3
+      http-signature: 1.3.6
+      is-typedarray: 1.0.0
+      isstream: 0.1.2
+      json-stringify-safe: 5.0.1
+      mime-types: 2.1.35
+      performance-now: 2.1.0
+      qs: 6.10.4
       safe-buffer: 5.2.1
       tough-cookie: 2.5.0
       tunnel-agent: 0.6.0
@@ -16059,6 +16084,19 @@ packages:
       defer-to-connect: 2.0.1
     dev: false
 
+  /@testing-library/cypress/8.0.7_cypress@12.8.1:
+    resolution: {integrity: sha512-3HTV725rOS+YHve/gD9coZp/UcPK5xhr4H0GMnq/ni6USdtzVtSOG9WBFtd8rYnrXk8rrGD+0toRFYouJNIG0Q==}
+    engines: {node: '>=12', npm: '>=6'}
+    requiresBuild: true
+    peerDependencies:
+      cypress: ^2.1.0 || ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0 || ^11.0.0
+    dependencies:
+      '@babel/runtime': 7.20.1
+      '@testing-library/dom': 8.19.0
+      cypress: 12.8.1
+    dev: false
+    optional: true
+
   /@testing-library/cypress/8.0.7_cypress@9.7.0:
     resolution: {integrity: sha512-3HTV725rOS+YHve/gD9coZp/UcPK5xhr4H0GMnq/ni6USdtzVtSOG9WBFtd8rYnrXk8rrGD+0toRFYouJNIG0Q==}
     engines: {node: '>=12', npm: '>=6'}
@@ -16627,6 +16665,11 @@ packages:
     resolution: {integrity: sha512-qelS/Ra6sacc4loe/3MSjXNL1dNQ/GjxNHVzuChwMfmk7HuycRLVQN2qNY3XahK+fZc5E2szqQSKUyAF0E+2bg==}
     dev: false
 
+  /@types/node/14.18.40:
+    resolution: {integrity: sha512-pGteXO/JQX7wPxGR8lyT+doqjMa7XvlVowwrDwLfX92k5SdLkk4cwC7CYSLBxrenw/R5oQwKioVIak7ZgplM3g==}
+    dev: false
+    optional: true
+
   /@types/node/16.11.57:
     resolution: {integrity: sha512-diBb5AE2V8h9Fs9zEDtBwSeLvIACng/aAkdZ3ujMV+cGuIQ9Nc/V+wQqurk9HJp8ni5roBxQHW21z/ZYbGDivg==}
 
@@ -16801,7 +16844,7 @@ packages:
   /@types/set-cookie-parser/2.4.2:
     resolution: {integrity: sha512-fBZgytwhYAUkj/jC/FAV4RQ5EerRup1YQsXQCh8rZfiHkc4UahC192oH0smGwsXol3cL3A5oETuAHeQHmhXM4w==}
     dependencies:
-      '@types/node': 18.11.9
+      '@types/node': 18.11.18
     dev: false
     optional: true
 
@@ -16863,7 +16906,7 @@ packages:
   /@types/through/0.0.30:
     resolution: {integrity: sha512-FvnCJljyxhPM3gkRgWmxmDZyAQSiBQQWLI0A0VFL0K7W1oRUrPJSqNO0NvTnLkBcotdlp3lKvaT0JrnyRDkzOg==}
     dependencies:
-      '@types/node': 18.11.9
+      '@types/node': 18.11.18
     dev: false
     optional: true
 
@@ -19694,6 +19737,11 @@ packages:
     dev: false
     optional: true
 
+  /aws4/1.12.0:
+    resolution: {integrity: sha512-NmWvPnx0F1SfrQbYwOi7OeaNGokp9XhzNioJ/CSBs8Qa4vxug81mhJEAVZwxXuBmYB5KDRfMq/F3RR0BIU7sWg==}
+    dev: false
+    optional: true
+
   /axe-core/4.5.1:
     resolution: {integrity: sha512-1exVbW0X1O/HSr/WMwnaweyqcWOgZgLiVxdLG34pvSQk4NlYQr9OUy0JLwuhFfuVNQzzqgH57eYzkFBCb3bIsQ==}
     engines: {node: '>=4'}
@@ -21667,6 +21715,13 @@ packages:
 
   /ci-info/3.5.0:
     resolution: {integrity: sha512-yH4RezKOGlOhxkmhbeNuC4eYZKAUsEaGtBuBzDDP1eFUKiccDWzBABxBfOx31IDwDIXMTxWuwAxUGModvkbuVw==}
+    dev: true
+
+  /ci-info/3.8.0:
+    resolution: {integrity: sha512-eXTggHWSooYhq49F2opQhuHWgzucfF2YgODK4e1566GQs5BIfP30B0oenwBJHfWxAs2fyPB1s7Mg949zLf61Yw==}
+    engines: {node: '>=8'}
+    dev: false
+    optional: true
 
   /cipher-base/1.0.4:
     resolution: {integrity: sha512-Kkht5ye6ZGmwv40uUDZztayT2ThLQGfnj/T71N/XzeZeo3nf8foyW7zGTsPYkEya3m5f3cAypH+qe7YOrM1U2Q==}
@@ -22960,6 +23015,57 @@ packages:
     resolution: {integrity: sha512-NJGVKPS81XejHcLhaLJS7plab0fK3slPh11mESeeDq2W4ZI5kUKK/LRRdVDvjJseojbPB7ZwjnyOybg3Igea/A==}
     dev: false
 
+  /cypress/12.8.1:
+    resolution: {integrity: sha512-lIFbKdaSYAOarNLHNFa2aPZu6YSF+8UY4VRXMxJrFUnk6RvfG0AWsZ7/qle/aIz30TNUD4aOihz2ZgS4vuQVSA==}
+    engines: {node: ^14.0.0 || ^16.0.0 || >=18.0.0}
+    hasBin: true
+    requiresBuild: true
+    dependencies:
+      '@cypress/request': 2.88.11
+      '@cypress/xvfb': 1.2.4_supports-color@8.1.1
+      '@types/node': 14.18.40
+      '@types/sinonjs__fake-timers': 8.1.1
+      '@types/sizzle': 2.3.3
+      arch: 2.2.0
+      blob-util: 2.0.2
+      bluebird: 3.7.2
+      buffer: 5.7.1
+      cachedir: 2.3.0
+      chalk: 4.1.2
+      check-more-types: 2.24.0
+      cli-cursor: 3.1.0
+      cli-table3: 0.6.3
+      commander: 5.1.0
+      common-tags: 1.8.2
+      dayjs: 1.11.7
+      debug: 4.3.4_supports-color@8.1.1
+      enquirer: 2.3.6
+      eventemitter2: 6.4.7
+      execa: 4.1.0
+      executable: 4.1.1
+      extract-zip: 2.0.1_supports-color@8.1.1
+      figures: 3.2.0
+      fs-extra: 9.1.0
+      getos: 3.2.1
+      is-ci: 3.0.1
+      is-installed-globally: 0.4.0
+      lazy-ass: 1.6.0
+      listr2: 3.14.0_enquirer@2.3.6
+      lodash: 4.17.21
+      log-symbols: 4.1.0
+      minimist: 1.2.8
+      ospath: 1.2.2
+      pretty-bytes: 5.6.0
+      proxy-from-env: 1.0.0
+      request-progress: 3.0.0
+      semver: 7.3.8
+      supports-color: 8.1.1
+      tmp: 0.2.1
+      untildify: 4.0.0
+      yauzl: 2.10.0
+    dev: false
+    optional: true
+
   /cypress/9.7.0:
     resolution: {integrity: sha512-+1EE1nuuuwIt/N1KXRR2iWHU+OiIt7H28jJDyyI4tiUftId/DrXYEwoDa5+kH2pki1zxnA0r6HrUGHV5eLbF5Q==}
     engines: {node: '>=12.0.0'}
@@ -23222,6 +23328,11 @@ packages:
 
   /dayjs/1.11.6:
     resolution: {integrity: sha512-zZbY5giJAinCG+7AGaw0wIhNZ6J8AhWuSXKvuc1KAyMiRsvGQWqh4L+MomvhdAYjN+lqvVCMq1I41e3YHvXkyQ==}
+    dev: false
+    optional: true
+
+  /dayjs/1.11.7:
+    resolution: {integrity: sha512-+Yw9U6YO5TQohxLcIkrXBeY73WP3ejHWVvx8XCk3gxvQDCTEmS48ZrSZCKciI7Bhl/uCMyxYtE9UqRILmFphkQ==}
     dev: false
     optional: true
 
@@ -26095,6 +26206,11 @@ packages:
     dev: false
     optional: true
 
+  /eventemitter2/6.4.7:
+    resolution: {integrity: sha512-tYUSVOGeQPKt/eC1ABfhHy5Xd96N3oIijJvN3O9+TsC28T5V9yX9oEfEK5faP0EFSNVOG97qtAS68GBrQB2hDg==}
+    dev: false
+    optional: true
+
   /eventemitter2/6.4.9:
     resolution: {integrity: sha512-JEPTiaOt9f04oa6NOkc4aH+nVp5I3wEjpHbIPqfgCdD5v5bUzy7xQqwcVO2aDQgOWhI28da57HksMrzK9HlRxg==}
     dev: false
@@ -27244,7 +27360,7 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       at-least-node: 1.0.0
-      graceful-fs: 4.2.10
+      graceful-fs: 4.2.11
       jsonfile: 6.1.0
       universalify: 2.0.0
 
@@ -29989,7 +30105,7 @@ packages:
     resolution: {integrity: sha512-ZYvCgrefwqoQ6yTyYUbQu64HsITZ3NfKX1lzaEYdkTDcfKzzCI/wthRRYKkdjHKFVgNiXKAKm65Zo1pk2as/QQ==}
     hasBin: true
     dependencies:
-      ci-info: 3.5.0
+      ci-info: 3.8.0
     dev: false
     optional: true
 
@@ -37229,6 +37345,14 @@ packages:
       side-channel: 1.0.4
     dev: false
 
+  /qs/6.10.4:
+    resolution: {integrity: sha512-OQiU+C+Ds5qiH91qh/mg0w+8nwQuLjM4F4M/PbmhDOoYehPh+Fb0bDjtR1sOvy7YKxvj28Y/M0PhP5uVX0kB+g==}
+    engines: {node: '>=0.6'}
+    dependencies:
+      side-channel: 1.0.4
+    dev: false
+    optional: true
+
   /qs/6.11.0:
     resolution: {integrity: sha512-MvjoMCJwEarSbUYk5O+nmoSzSutSsTwF85zcHPQ9OrlFoZOYIjaqBAJIqIXjptyD5vThxGq52Xu/MaJzRkIk4Q==}
     engines: {node: '>=0.6'}
@@ -37397,7 +37521,7 @@ packages:
     dependencies:
       deep-extend: 0.6.0
       ini: 1.3.8
-      minimist: 1.2.7
+      minimist: 1.2.8
       strip-json-comments: 2.0.1
     dev: false
 
@@ -41564,7 +41688,7 @@ packages:
     engines: {node: '>=0.8'}
     dependencies:
       psl: 1.9.0
-      punycode: 2.1.1
+      punycode: 2.3.0
     dev: false
     optional: true
 
