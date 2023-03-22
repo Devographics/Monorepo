@@ -83,16 +83,22 @@ export async function addMissingItems(
     axis1: ComputeAxisParameters,
     axis2?: ComputeAxisParameters
 ) {
-    for (let editionData of resultsByEdition) {
+    for (const editionData of resultsByEdition) {
+        const { editionId, buckets } = editionData
+
         if (axis1.question.options) {
-            for (const option1 of axis1.question.options) {
-                const existingBucketItem = editionData.buckets.find(
+            const options1 = axis1.question.options.filter(o => o.editions?.includes(editionId))
+            for (const option1 of options1) {
+                const existingBucketItem = buckets.find(
                     bucket => String(bucket.id) === String(option1.id)
                 )
                 if (existingBucketItem) {
                     if (axis2?.question?.options) {
+                        const options2 = axis2?.question?.options.filter(o =>
+                            o.editions?.includes(editionId)
+                        )
                         // check facet buckets
-                        for (const option2 of axis2.question.options) {
+                        for (const option2 of options2) {
                             const existingFacetBucketItem = existingBucketItem.facetBuckets?.find(
                                 bucket => bucket.id === option2.id
                             )
@@ -102,7 +108,7 @@ export async function addMissingItems(
                         }
                     }
                 } else {
-                    editionData.buckets.push(getZeroBucketItem(option1.id, axis2))
+                    buckets.push(getZeroBucketItem(option1.id, axis2))
                 }
             }
         }
