@@ -1,7 +1,4 @@
-import {
-  Button as BootstrapButton,
-  ButtonProps as BootstrapButtonProps,
-} from "react-bootstrap";
+import BootstrapButton from "react-bootstrap/Button";
 
-export type ButtonProps = BootstrapButtonProps;
+export type ButtonProps = any; //BootstrapButtonProps;
 export const Button = (props) => <BootstrapButton {...props} />;

@@ -1,4 +1,5 @@
-import React, { useContext } from "react";
+"use client";
+import { createContext, useContext } from "react";
 import { AddSubmitCallbacks } from "./Form/hooks";
 
 interface FormContextValue extends AddSubmitCallbacks {
@@ -18,7 +19,7 @@ interface FormContextValue extends AddSubmitCallbacks {
   addToDeletedValues: any;
 }
 
-export const FormContext = React.createContext<FormContextValue | undefined>(
+export const FormContext = createContext<FormContextValue | undefined>(
   undefined
 );
 

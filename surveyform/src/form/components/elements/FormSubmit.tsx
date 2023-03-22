@@ -1,6 +1,6 @@
 "use client";
 import { useFormContext } from "@devographics/react-form";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import { SurveyEdition, SurveySection } from "@devographics/core-models";
 import Link from "next/link";

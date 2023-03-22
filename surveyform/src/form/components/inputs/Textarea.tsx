@@ -1,7 +1,7 @@
 "use client";
 // import type { FormInputProps } from "@devographics/react-form";
-import React, { useState } from "react";
-import { FormControl } from "react-bootstrap";
+import { useState } from "react";
+import FormControl from "react-bootstrap/FormControl";
 import debounce from "lodash/debounce.js";
 import { FormItem } from "~/form/components/elements/FormItem";
 

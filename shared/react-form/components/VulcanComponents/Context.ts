@@ -1,4 +1,4 @@
-import React from "react";
+import { createContext } from "react";
 import type { PossibleVulcanComponents } from "./typings";
 import { Dummy } from "./Dummy";
 
@@ -16,7 +16,7 @@ const dummyHandler = {
 // We need this to shut TypeScript up
 // You should use the Provider to get the right default values
 export const VulcanComponentsContext =
-  React.createContext<PossibleVulcanComponents>(
+  createContext<PossibleVulcanComponents>(
     // @ts-ignore
     new Proxy(
       {

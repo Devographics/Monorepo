@@ -1,3 +1,4 @@
+"use client";
 /*
 
 1. Show list of sections

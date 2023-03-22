@@ -1,4 +1,4 @@
-import React from "react";
+"use client";
 import SurveySectionHeading from "~/surveys/components/questions/SurveySectionHeading";
 import SurveyNav from "~/surveys/components/questions/SurveyNav";
 import { FormErrors } from "./FormErrors";

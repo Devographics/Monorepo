@@ -1,5 +1,4 @@
-import React from "react";
-import { Alert as BootstrapAlert } from "react-bootstrap";
+import BootstrapAlert from "react-bootstrap/Alert";
 
 export const Alert = ({ children, variant = "danger", ...rest }) => (
   <BootstrapAlert variant={variant} {...rest}>

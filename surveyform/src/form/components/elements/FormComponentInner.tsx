@@ -1,7 +1,7 @@
-import React from "react";
+"use client";
 import { useIntlContext } from "@devographics/react-i18n";
 import { uiUtils, FormInputProps } from "@devographics/react-form";
-import cslx, { clsx } from "clsx";
+import { clsx } from "clsx";
 const { whitelistInputProps } = uiUtils;
 /*
 import {

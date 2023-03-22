@@ -1,7 +1,7 @@
 "use client";
-import React, { useContext } from "react";
+import React, { createContext, useContext } from "react";
 
-const SectionContext = React.createContext<number | undefined>(undefined);
+const SectionContext = createContext<number | undefined>(undefined);
 
 export const SectionProvider = ({
   section,

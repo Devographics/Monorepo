@@ -1,3 +1,4 @@
+"use client";
 /**
  * TODO: rename "FieldComponent" to clarify
  * Change compared to Meteor:

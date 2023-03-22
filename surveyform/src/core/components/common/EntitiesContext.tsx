@@ -7,11 +7,11 @@
  * @param param0
  * @returns
  */
-import React, { useContext } from "react";
+import { createContext, useContext } from "react";
 
 import { Entity } from "@devographics/core-models";
 
-const EntitiesContext = React.createContext<
+const EntitiesContext = createContext<
   Array<Entity> | undefined // use empty array even if loading to avoid crash if not waiting for loading
 >(undefined);
 

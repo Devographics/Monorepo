@@ -1,4 +1,5 @@
-import React, { useEffect, useState, createContext, useContext } from "react";
+"use client";
+import { useEffect, useState, createContext, useContext } from "react";
 
 const keydownContext = createContext<{ modKeyDown?: boolean }>({});
 

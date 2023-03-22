@@ -1,4 +1,3 @@
-import React from "react";
 import { Story, Meta } from "@storybook/react";
 import { IntlContextProvider, StringsRegistry } from "@devographics/react-i18n";
 import { action, actions } from "@storybook/addon-actions";

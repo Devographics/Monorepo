@@ -4,8 +4,7 @@ Layout for a single form item
 
 */
 
-import React from "react";
-import { Form } from "react-bootstrap";
+import Form from "react-bootstrap/Form";
 import { FormDescription, FormDescriptionProps } from "./FormDescription";
 import { FormLabel, FormLabelProps } from "./FormLabel";
 import { FormInputLoading } from "./FormInputLoading";

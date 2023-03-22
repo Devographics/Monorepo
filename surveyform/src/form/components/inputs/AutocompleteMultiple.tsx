@@ -11,7 +11,7 @@
  * NOTE: currently we don't load react-boostrap css
  */
 import { AsyncTypeahead } from "react-bootstrap-typeahead"; // ES2015
-import React, { useState } from "react";
+import { useState } from "react";
 // We don't auto-expand queries in Vulcan NPM, since we don't use the registry pattern
 // anymore. Instead, provide the right fragments directly, using composition with string templates.
 //import { expandQueryFragments } from "meteor/vulcan:core";

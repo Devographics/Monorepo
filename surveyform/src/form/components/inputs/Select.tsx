@@ -2,7 +2,8 @@
 import React from "react";
 import { useIntlContext } from "@devographics/react-i18n";
 import type { FormInputProps, FormOption } from "@devographics/react-form";
-import { Form } from "react-bootstrap";
+import Form from "react-bootstrap/Form";
+
 import { FormItem } from "~/form/components/elements/FormItem";
 
 export const FormComponentSelect = ({

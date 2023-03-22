@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import type { SurveySection, SurveyEdition } from "@devographics/core-models";

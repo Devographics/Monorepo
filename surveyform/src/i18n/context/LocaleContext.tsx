@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext } from "react";
+import React, { createContext, useContext } from "react";
 import { IntlContextProvider, StringsRegistry } from "@devographics/react-i18n";
 import { useRouter } from "next/navigation";
 import { useCookies } from "react-cookie";
@@ -24,8 +24,7 @@ const dummyContext: LocaleContextValue = {
   },
 };
 
-export const LocaleContext =
-  React.createContext<LocaleContextValue>(dummyContext);
+export const LocaleContext = createContext<LocaleContextValue>(dummyContext);
 
 export const useSetLocale = (updateUser?: any) => {
   const { user } = useUser();
