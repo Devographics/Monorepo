@@ -134,7 +134,10 @@ export const getLocales = async () => {
 
 // ONE LOCALE WITH STRINGS
 
-const localePromiseKey = (id: string, contexts: Array<string>) => ["localePromise", id, ...contexts].join("/");
+const localePromiseKey = (id: string, contexts: Array<string>) => {
+  console.log("PROMISE KEY", ["localePromise", id, ...contexts].join("/"))
+  return ["localePromise", id, ...contexts].join("/")
+};
 
 interface LocaleStringsVariables {
   contexts: Array<string>;
@@ -153,12 +156,14 @@ interface LocaleStringsVariables {
  * @param localeId
  * @returns
  */
-export const fetchLocaleStrings = async (variables: LocaleStringsVariables) => {
+export async function fetchLocaleStrings(variables: LocaleStringsVariables) {
   const label = `locales_${variables.localeId}_${variables.contexts}`
+  // Be careful to include contexts (= fetched locales) in this cache key
+  const cacheKey = localePromiseKey(variables.localeId, variables.contexts || [])
   //console.debug("Fetching locale", variables.localeId);
   const cached = cachedPromise(
     promisesNodeCache,
-    localePromiseKey(variables.localeId, variables.contexts || []),
+    cacheKey,
     LOCALES_TTL_SECONDS
   );
   const queryVariables = {
@@ -170,11 +175,11 @@ export const fetchLocaleStrings = async (variables: LocaleStringsVariables) => {
   const locale = await cached(() => fetchLocaleStringsRedis(queryVariables));
 
   if (locale) {
-    //console.debug("Got locale", locale.id);
     // Convert strings array to a map (and cache the result)
-    const convertedLocaleCacheKey = ["convertedLocale", locale.id].join("/");
+    const convertedLocaleCacheKey = "convertedLocale/" + cacheKey
     let convertedLocale = nodeCache.get<LocaleDefWithStrings>(convertedLocaleCacheKey);
     if (convertedLocale) return convertedLocale;
+
     const convertedStrings = {};
     locale.strings &&
       locale.strings.forEach(({ key, t, tHtml }) => {
@@ -187,8 +192,6 @@ export const fetchLocaleStrings = async (variables: LocaleStringsVariables) => {
       LOCALES_TTL_SECONDS
     );
     return convertedLocale as LocaleDefWithStrings;
-    // return locale as Locale;
-
   }
   // locale not found
   console.timeEnd(label)
