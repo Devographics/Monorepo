@@ -33,8 +33,6 @@ export const StandaloneMagicLoginForm = ({
   const { user } = useUser();
   const { locale } = useLocaleContext();
 
-  const params = useSearchParams();
-
   async function handleSubmit(e) {
     e.preventDefault();
     resetMessages();

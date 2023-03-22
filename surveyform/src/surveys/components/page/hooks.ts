@@ -9,7 +9,7 @@ import { useSearchParams } from "next/navigation";
 import { SurveyEdition } from "@devographics/core-models";
 
 export const useSurveyActionParams = (): { source?: string; referrer?: string } => {
-  const query = useSearchParams()
+  const query = useSearchParams()!
   const source = query.get("source") || localStorage.getItem("source");
   const referrer = query.get("referrer") || localStorage.getItem("referrer");
   const params: any = {}
