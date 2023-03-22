@@ -164,6 +164,7 @@ export const getQuestionObject = ({
     })
 
     const questionId = question.id || templateObject.id
+
     // initialize defaults
     const fieldTypeName = graphqlize(survey.id) + graphqlize(questionId)
 
@@ -184,8 +185,8 @@ export const getQuestionObject = ({
 
     const questionObject: ParsedQuestionExt = {
         ...defaultObject,
-        ...templateObject,
         ...question,
+        ...templateObject,
         ...globalObject
     }
 

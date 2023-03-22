@@ -1,5 +1,6 @@
 import { TemplateFunction } from '../../types/surveys'
-import { FEATURES_OPTIONS } from '@devographics/constants'
+// import { FEATURES_OPTIONS } from '@devographics/constants'
+const FEATURES_OPTIONS = ['never_heard', 'heard', 'used']
 import {
     idResolverFunction,
     responsesResolverFunction,

@@ -5,6 +5,10 @@ export interface QuestionData {
     id: string
 }
 
+export interface StandardQuestionData extends QuestionData {
+    responses: ResponseData
+}
+
 export interface OptionsQuestionData extends QuestionData {
     options: OptionData[]
     responses: ResponseData
@@ -115,8 +119,12 @@ export interface ToolRatiosItemEditionData {
 All tools in a section
 
 */
-export interface SectionAllToolsData {
+
+export interface AllToolsData {
     items: ToolQuestionData[]
     ids: string[]
     years: number[]
 }
+export interface SectionAllToolsData extends AllToolsData {}
+export interface AllFeaturesData extends AllToolsData {}
+export interface SectionAllFeaturesData extends AllFeaturesData {}

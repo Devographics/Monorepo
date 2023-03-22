@@ -2,7 +2,7 @@ import { EntityResolvedFields, Entity } from '@devographics/core-models'
 import { GitHub, RequestContext } from '../types'
 // import projects from '../data/bestofjs.yml'
 import { fetchMdnResource, fetchTwitterUser } from '../external_apis'
-import { useCache } from '../helpers/caching'
+import { computeKey, useCache } from '../helpers/caching'
 import { getEntity } from '../load/entities'
 import compact from 'lodash/compact.js'
 
@@ -55,10 +55,12 @@ export const entityResolverMap: EntityResolverMap = {
             return
         }
 
+        const funcOptions = { path: entity.mdn }
         const mdn = await useCache({
             func: fetchMdnResource,
+            key: computeKey(fetchMdnResource, funcOptions),
             context,
-            funcOptions: { path: entity.mdn }
+            funcOptions
         })
 
         if (mdn && Array.isArray(mdn)) {
@@ -81,11 +83,13 @@ export const entityResolverMap: EntityResolverMap = {
         const hasAPIFields =
             queriedFields && queriedFields.some((f: any) => !['url', 'name'].includes(f))
 
+        const funcOptions = { twitterName: entity.twitterName }
         const twitterAPIData = hasAPIFields
             ? await useCache({
                   func: fetchTwitterUser,
                   context,
-                  funcOptions: { twitterName: entity.twitterName }
+                  funcOptions,
+                  key: computeKey(fetchTwitterUser, funcOptions)
               })
             : {}
 

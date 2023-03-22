@@ -1,6 +1,6 @@
 import dotenv from 'dotenv'
 
-interface AppSettings {
+export interface AppSettings {
     cacheType: 'local' | 'redis'
     disableCache: boolean
     loadLocalesMode?: 'local'

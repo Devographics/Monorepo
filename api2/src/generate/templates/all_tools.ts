@@ -11,7 +11,7 @@ export const all_tools: TemplateFunction = ({ survey, edition, section, question
     }
     return {
         ...question,
-        id: `allItems`,
+        id: `allTools`,
         fieldTypeName,
         typeDef: `type ${fieldTypeName} {
     ids: [String]

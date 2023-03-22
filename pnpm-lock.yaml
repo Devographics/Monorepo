@@ -547,30 +547,7 @@ importers:
 
   shared/constants:
     specifiers:
-      '@types/lodash': ^4.14.175
       '@types/node': ^18.11.18
-      '@vulcanjs/graphql': ^0.7.1
-      '@vulcanjs/mongo': ^0.7.1
-      graphql-tag: ^2.12.6
-      ioredis: ^5.2.4
-      js-yaml: ^4.1.0
-      lodash: ^4.17.21
-      moment: ^2.29.4
-      mongoose: ^6.7.1
-      nanoid: ^3.1.25
-      node-cache: ^5.1.2
-    dependencies:
-      '@types/lodash': 4.14.191
-      '@vulcanjs/graphql': 0.7.1_moment@2.29.4
-      '@vulcanjs/mongo': 0.7.1_bvxyc23qcdm36i55ezkcrpiirq
-      graphql-tag: 2.12.6
-      ioredis: 5.2.4
-      js-yaml: 4.1.0
-      lodash: 4.17.21
-      moment: 2.29.4
-      mongoose: 6.9.1
-      nanoid: 3.3.4
-      node-cache: 5.1.2
     devDependencies:
       '@types/node': 18.11.18
 
@@ -13195,7 +13172,6 @@ packages:
       '@babel/runtime': 7.20.7
       '@types/testing-library__react-hooks': 3.4.1
       react: 18.2.0
-    dev: false
     optional: true
 
   /@testing-library/react/10.4.9_biqbaboplfbrettd7655fr4n2y:

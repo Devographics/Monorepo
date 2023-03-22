@@ -4,10 +4,9 @@ import { getFiltersTypeName, getFacetsTypeName, graphqlize } from '../../generat
 
 Sample output:
 
-type DisabilityStatus {
-    allEditions: [EditionData]
-    edition(editionId: StateOfJsEditionID!): EditionData
-    options: [DisabilityStatusOptions]
+type StateOfJsDisabilityStatus {
+    responses(filters: StateOfJsFilters, parameters: Parameters, facet: StateOfJsFacets): StateOfJsResponses
+    options: [StateOfJsDisabilityStatusOption]
 }
 
 */

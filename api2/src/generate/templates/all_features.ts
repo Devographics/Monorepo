@@ -9,9 +9,10 @@ export const all_features: TemplateFunction = ({ survey, edition, section, quest
     for (const section of edition.sections.filter(s => s.template === 'feature')) {
         items = [...items, ...getSectionItems({ survey, edition, section })]
     }
+
     return {
         ...question,
-        id: `allItems`,
+        id: `allFeatures`,
         fieldTypeName,
         typeDef: `type ${fieldTypeName} {
     ids: [String]
