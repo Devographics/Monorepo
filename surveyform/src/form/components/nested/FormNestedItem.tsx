@@ -1,4 +1,3 @@
-import React from "react";
 import { useIntlContext } from "@devographics/react-i18n";
 import { Button } from "~/core/components/ui/Button";
 import FormComponent from "../elements/FormComponent";

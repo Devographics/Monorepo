@@ -97,13 +97,9 @@ export const FormComponentInner = (props: FormComponentInnerProps) => {
     inputClassName,
     name,
     input,
-    //inputType,
-    beforeComponent,
-    afterComponent,
     errors,
     showCharsRemaining,
     charsRemaining,
-    renderComponent,
     formInput,
   } = props;
 
@@ -121,10 +117,19 @@ export const FormComponentInner = (props: FormComponentInnerProps) => {
 
   const FormInput = formInput;
 
+  if (!formInput) {
+    console.error("Unsupported input", props);
+    return;
+  }
+
   return (
     <div className={inputClass}>
       {/*instantiateComponent(beforeComponent, properties)*/}
-      <FormInput {...properties} />
+      {FormInput ? (
+        <FormInput {...properties} />
+      ) : (
+        <div>Error while loading input</div>
+      )}
       {hasErrors ? <FieldErrors errors={errors} /> : null}
       {renderClear()}
       {showCharsRemaining && (

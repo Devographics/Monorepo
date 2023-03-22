@@ -1,5 +1,4 @@
 import { FormInputProps } from "@devographics/react-form";
-import React from "react";
 import { FormControl } from "react-bootstrap";
 import { FormItem } from "~/form/components/elements/FormItem";
 
@@ -17,3 +16,5 @@ export const FormComponentText = ({
     </FormItem>
   );
 };
+
+export default FormComponentText;

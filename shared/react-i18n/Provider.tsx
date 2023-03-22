@@ -65,7 +65,6 @@ export const IntlContextProvider = ({
 }: IntlProviderProps) => {
   // merge parent strings if any (default registry is just empty)
   const currentContext = useIntlContext();
-  console.log("currentContext", currentContext)
   stringsRegistry.mergeTokens(currentContext.stringsRegistry);
 
   const formatters = makeContext({ localeId, stringsRegistry });

@@ -85,10 +85,6 @@ export const LocaleContextProvider = (props: {
 
   const stringsRegistry = new StringsRegistry("en-US");
   stringsRegistry.addStrings(localeId, localeStrings.strings);
-  console.log(
-    "localeStrings",
-    localeStrings.strings["sections.graphql_language.title"]
-  );
   return (
     // NOTE: IntlContextProvider is in charge of merging strings with a previously existing parent
     <IntlContextProvider stringsRegistry={stringsRegistry} localeId={localeId}>
