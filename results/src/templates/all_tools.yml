@@ -1,3 +1,4 @@
+id: all_tools
 hidden: true
 query: >
     dataAPI {
@@ -5,7 +6,7 @@ query: >
             ${surveyId} {
                 ${editionId} {
                     libraries {
-                        allItems {
+                        allTools {
                             items {
                                 id
                                 responses(parameters: { ENABLE_CACHE_PLACEHOLDER }) {

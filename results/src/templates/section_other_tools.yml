@@ -2,8 +2,9 @@ id: ${sectionId}_prenormalized
 titleId: blocks.category_other_tools
 blockType: HorizontalBarBlock
 defaultUnits: count
-dataPath: 'dataAPI.survey.${sectionId}_others.year'
+# dataPath: 'dataAPI.survey.${sectionId}_others.year'
 hasSponsor: true
+query: currentEditionDataWithEntities
 variables:
     limit: 20
 # query: >

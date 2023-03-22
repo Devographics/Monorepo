@@ -123,6 +123,10 @@ export const pageFromConfig = async (page, pageIndex, editionVariables) => {
 
                     if (blockVariant.template) {
                         const templateObject = await loadTemplate(blockVariant.template)
+                        if (!contextVariables.questionId) {
+                            // if no questionId was defined in question outline, use id from template itself
+                            contextVariables.questionId = templateObject.id
+                        }
                         blockVariant = applyTemplate({
                             block: blockVariant,
                             templateObject,

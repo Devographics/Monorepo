@@ -1,6 +1,7 @@
+id: scatterplot_overview
 blockType: ToolsScatterplotBlock
 titleId: blocks.tools_quadrant
 descriptionId: blocks.tools_quadrant.description
 noteId: blocks.tools_quadrant.note
-dataPath: 'dataAPI.surveys.${surveyId}.${editionId}.libraries.allItems.items'
+dataPath: 'dataAPI.surveys.${surveyId}.${editionId}.libraries.allTools'
 hasSponsor: true

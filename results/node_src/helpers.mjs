@@ -151,7 +151,7 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId }) => 
 
     for (const b of page.blocks) {
         for (const v of b.variants) {
-            if (v.query || v.loadData) {
+            if (v.query) {
                 let data
 
                 const dataDirPath = path.resolve(`${basePath}/data/${page.id}`)
@@ -180,11 +180,8 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId }) => 
                         editionId,
                         sectionId: page.id,
                         questionId,
-                        parameters: v?.variables?.parameters || {},
-                        addEntities: v.addEntities,
-                        allEditions: v.allEditions
+                        parameters: v.parameters || {}
                     }
-
                     const query = getQuery({ query: v.query, queryOptions, isLog: false })
 
                     if (query.includes('dataAPI')) {

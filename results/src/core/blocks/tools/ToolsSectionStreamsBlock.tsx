@@ -14,6 +14,7 @@ import { BlockComponentProps } from 'core/types'
 import { SectionAllToolsData, ToolQuestionData } from '@devographics/types'
 import { useOptions } from 'core/helpers/options'
 import { TOOLS_OPTIONS } from '@devographics/constants'
+import { useEntities, getEntityName } from 'core/helpers/entities'
 
 interface ToolsSectionStreamsBlockProps extends BlockComponentProps {
     data: SectionAllToolsData
@@ -24,36 +25,34 @@ const ToolsSectionStreamsBlock = ({
     triggerId,
     units: defaultUnits = 'percentageQuestion'
 }: ToolsSectionStreamsBlockProps) => {
+    const allEntities = useEntities()
     const [units, setUnits] = useState(defaultUnits)
     const [current, setCurrent] = useState(null)
     const { translate } = useI18n()
 
     const chartOptions = TOOLS_OPTIONS
     const legends = useLegends(block, chartOptions, 'tools')
-    console.log(block)
-    console.log(chartOptions)
-    console.log(legends)
 
     const filteredData = data.items.filter(item => item.responses.allEditions.length > 1)
-    console.log(data)
-    console.log(filteredData)
 
     const controlledCurrent = triggerId || current
 
     return (
         <Block
-            // tables={filteredData.map(tool =>
-            //     getTableData({
-            //         title: tool?.entity?.name,
-            //         data: groupDataByYears({
-            //             keys: chartOptions,
-            //             data: tool.responses.allEditions
-            //         }),
-            //         years: tool.responses.allEditions.map(y => y.year),
-            //         translateData: true,
-            //         i18nNamespace: 'tools'
-            //     })
-            // )}
+            tables={filteredData.map(tool => {
+                const entity = allEntities.find(e => e.id === tool.id)
+                return getTableData({
+                    id: block.id,
+                    title: entity && getEntityName(entity),
+                    data: groupDataByYears({
+                        keys: chartOptions,
+                        data: tool.responses.allEditions
+                    }),
+                    years: tool.responses.allEditions.map(y => y.year),
+                    translateData: true,
+                    i18nNamespace: 'tools'
+                })
+            })}
             units={units}
             setUnits={setUnits}
             block={{
@@ -120,7 +119,7 @@ const Stream = ({ itemData, current, units, keys, legends }: StreamProps) => {
                 height={160}
             />
             <StreamTitle>
-                <ToolLabel id={itemData.id} entity={itemData.entity} />
+                <ToolLabel id={itemData.id} />
             </StreamTitle>
         </StreamItem>
     )

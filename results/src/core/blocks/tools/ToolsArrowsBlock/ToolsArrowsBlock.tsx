@@ -3,7 +3,7 @@ import Block from 'core/blocks/block/BlockVariant'
 import ChartContainer from 'core/charts/ChartContainer'
 import { BlockContext } from 'core/blocks/types'
 import { ToolsArrowsChart } from './ToolsArrowsChart'
-import { ToolQuestionData } from '@devographics/types'
+import { AllToolsData } from '@devographics/types'
 
 interface ToolsArrowsBlockProps {
     index: number
@@ -13,7 +13,7 @@ interface ToolsArrowsBlockProps {
         { toolIds: string },
         any
     >
-    data: ToolQuestionData[]
+    data: AllToolsData
     triggerId: string | null
 }
 
@@ -24,7 +24,7 @@ export const ToolsArrowsBlock = ({ block, data, triggerId = null }: ToolsArrowsB
         <Block block={block} data={data}>
             <ChartContainer vscroll={false}>
                 <ToolsArrowsChart
-                    data={data.data}
+                    data={data.items}
                     current={controlledCurrent}
                     activeCategory="all"
                 />

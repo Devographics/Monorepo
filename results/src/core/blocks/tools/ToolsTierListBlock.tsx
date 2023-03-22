@@ -6,13 +6,13 @@ import { useI18n } from 'core/i18n/i18nContext'
 import ChartContainer from 'core/charts/ChartContainer'
 import sortBy from 'lodash/sortBy.js'
 import { BlockContext } from 'core/blocks/types'
-import { QuestionData, SectionMetadata } from '@devographics/types'
+import { AllToolsData, ToolQuestionData, SectionMetadata } from '@devographics/types'
 import { useToolSections } from 'core/helpers/metadata'
 import { BlockComponentProps } from 'core/types/block'
 
 interface TierListBlockProps extends BlockComponentProps {
     block: BlockContext<'toolsTierListTemplate', 'ToolsTierListBlock', { toolIds: string }, any>
-    data: QuestionData[]
+    data: AllToolsData
 }
 
 // minimum user percentage of total respondents to consider for tier list
@@ -32,7 +32,7 @@ Parse data and convert it into a format compatible with the TierList chart
 
 */
 const getChartData = (
-    data: QuestionData[],
+    data: ToolQuestionData[],
     theme: any,
     toolsSections: SectionMetadata[]
 ): TierData[] => {
@@ -81,7 +81,7 @@ const TierListBlock = ({ block, data }: TierListBlockProps) => {
     const theme = useTheme()
 
     const toolsSections = useToolSections()
-    const chartData = getChartData(data, theme, toolsSections)
+    const chartData = getChartData(data.items, theme, toolsSections)
 
     const legends = toolsSections.map(({ id }: SectionMetadata) => ({
         id: `toolCategories.${id}`,

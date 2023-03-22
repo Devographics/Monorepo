@@ -1,4 +1,4 @@
-import { Entity } from '../../../types'
+import { Entity } from '@devographics/types'
 
 export interface ToolExperienceBucket {
     id: string
@@ -18,10 +18,15 @@ export interface ToolsExperienceToolData {
 }
 
 export interface ToolsExperienceMarimekkoToolData {
-    tool: Entity
+    id: string
+    entity: Entity
     awareness: number
-    would_not_use: number
-    not_interested: number
-    interested: number
-    would_use: number
+    // would_not_use: number
+    // not_interested: number
+    // interested: number
+    // would_use: number
+    would_not_use_percentage: number
+    not_interested_percentage: number
+    interested_percentage: number
+    would_use_percentage: number
 }

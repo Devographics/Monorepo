@@ -10,8 +10,7 @@ bucketKeysName: tools
 # enableCustomization: true
 hasComments: true
 hasSponsor: true
-loadData: true
-allEditions: true
+query: allEditionsData
 # query: >
 #     dataAPI {
 #         survey(survey: ${surveyId}) {

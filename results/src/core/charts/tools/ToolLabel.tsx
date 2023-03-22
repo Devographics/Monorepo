@@ -7,8 +7,10 @@ import { usePageContext } from 'core/helpers/pageContext'
 import get from 'lodash/get'
 import ModalTrigger from 'core/components/ModalTrigger'
 import BlockWrapper from 'core/blocks/block/BlockWrapper'
+import { useEntity } from 'core/helpers/entities'
 
-const ToolLabel = ({ id, entity }) => {
+const ToolLabel = ({ id }) => {
+    const entity = useEntity(id)
     if (!entity) {
         return <span title="Missing entity">{id}</span>
     }

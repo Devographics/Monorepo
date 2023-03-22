@@ -5,7 +5,7 @@ import { ToolsSectionId } from 'core/bucket_keys'
 import { ToolsScatterplotBlockData, ToolsQuadrantsMetric } from './types'
 import { useChartData, useTabularData } from './hooks'
 import { ToolsQuadrantsChart } from './ToolsScatterplotChart'
-import { ToolQuestionData, SectionMetadata } from '@devographics/types'
+import { AllToolsData, SectionMetadata } from '@devographics/types'
 import { useToolSections } from 'core/helpers/metadata'
 import { useI18n } from 'core/i18n/i18nContext'
 import { useTheme } from 'styled-components'
@@ -18,7 +18,7 @@ export const ToolsScatterplotBlock = ({
     triggerId
 }: {
     block: ToolsScatterplotBlockData
-    data: ToolQuestionData[]
+    data: AllToolsData
     // used for the report, to control which category is highlighted
     triggerId?: ToolsSectionId
 }) => {
@@ -36,8 +36,8 @@ export const ToolsScatterplotBlock = ({
         [metric, setMetric]
     )
 
-    const chartData = useChartData(data, metric)
-    const tabularData = useTabularData(data, metric)
+    const chartData = useChartData(data.items, metric)
+    const tabularData = useTabularData(data.items, metric)
 
     const [currentCategory, setCurrentCategory] = useState<ToolsSectionId | null>(null)
     const controlledCurrentCategory = triggerId || currentCategory

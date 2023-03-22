@@ -150,7 +150,6 @@ export const getDefaultQuery = ({
     allEditions = false
 }) => {
     const parametersString = `(parameters: ${unquote(JSON.stringify(parameters))})`
-
     const editionType = allEditions ? 'allEditions' : 'currentEdition'
 
     return `
@@ -219,21 +218,38 @@ const enableCachePlaceholder = 'ENABLE_CACHE_PLACEHOLDER'
 
 Get query by either
 
-A) using query defined in block template definition
+A) generating a default query based on presets
 
 or 
 
-B) generating a default query
+B) using query defined in block template definition
 
 */
-export const getQuery = ({ query: blockTemplateQuery, queryOptions, isLog = false }) => {
+const defaultQueries = [
+    'currentEditionData',
+    'currentEditionDataWithEntities',
+    'allEditionsData',
+    'allEditionsDataWithEntities'
+]
+export const getQuery = ({ query, queryOptions, isLog = false }) => {
     const { editionId, questionId } = queryOptions
     const queryName = getQueryName({ editionId, questionId })
 
     const enableCache = process.env.USE_CACHE === 'false' ? false : true
     let queryContents
-    if (blockTemplateQuery) {
-        queryContents = blockTemplateQuery
+    if (defaultQueries.includes(query)) {
+        if (['allEditionsData'].includes(query)) {
+            queryOptions.allEditions = true
+        }
+        if (['currentEditionDataWithEntities', 'allEditionsDataWithEntities'].includes(query)) {
+            queryOptions.addEntities = true
+        }
+        if (!isLog) {
+            queryOptions.parameters.enableCache = enableCache
+        }
+        queryContents = getDefaultQuery(queryOptions)
+    } else {
+        queryContents = query
         if (isLog) {
             queryContents = queryContents.replace(enableCachePlaceholder, '')
         } else {
@@ -242,12 +258,8 @@ export const getQuery = ({ query: blockTemplateQuery, queryOptions, isLog = fals
                 `enableCache: ${enableCache.toString()}`
             )
         }
-    } else {
-        if (!isLog) {
-            queryOptions.parameters.enableCache = enableCache
-        }
-        queryContents = getDefaultQuery(queryOptions)
     }
+
     const wrappedQuery = wrapQuery({ queryName, queryContents })
     return wrappedQuery
 }

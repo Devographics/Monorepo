@@ -1,5 +1,4 @@
-import React, { useMemo, useState } from 'react'
-import get from 'lodash/get'
+import React, { useState } from 'react'
 import compact from 'lodash/compact'
 import round from 'lodash/round'
 import sortBy from 'lodash/sortBy'
@@ -7,16 +6,16 @@ import Block from 'core/blocks/block/BlockVariant'
 import { FeaturesCirclePackingChart } from 'core/charts/features/FeaturesCirclePackingChart'
 import { useI18n } from 'core/i18n/i18nContext'
 import ChartContainer from 'core/charts/ChartContainer'
-import variables from 'Config/variables.yml'
 import { getTableData } from 'core/helpers/datatables'
 import { useLegends } from 'core/helpers/useBucketKeys'
-import { usePageContext } from 'core/helpers/pageContext'
 import { useFeatureSections } from 'core/helpers/metadata'
+import { BlockComponentProps } from 'core/types'
+import { AllFeaturesData, QuestionMetadata, ToolQuestionData } from '@devographics/types'
 
 const modes = ['grouped', 'awareness_rank', 'usage_rank' /*'usage_ratio_rank'*/]
 
-const getNodeData = (question, questionData, index) => {
-    const buckets = get(questionData, 'responses.currentEdition.buckets')
+const getNodeData = (question: QuestionMetadata, questionData: ToolQuestionData, index: number) => {
+    const buckets = questionData.responses.currentEdition.buckets
     if (!buckets) {
         throw new Error(`Feature “${questionData.id}” does not have any data associated.`)
     }
@@ -60,19 +59,18 @@ const addRanks = features => {
     return featuresWithRanks
 }
 
-const useChartData = (data, translate) => {
+const useChartData = (data: ToolQuestionData[], translate: any) => {
     const featureSections = useFeatureSections()
-
-    const allQuestions = featureSections
+    const allFeatureQuestions = featureSections
         .map(s => s.questions.map(q => ({ ...q, sectionId: s.id })))
         .flat()
-    const allNodes = allQuestions.map((q, i) =>
-        getNodeData(
+    const allNodes = allFeatureQuestions.map((q, i) => {
+        return getNodeData(
             q,
             data.find(questionData => questionData.id === q.id),
             i
         )
-    )
+    })
     const allNodesWithRanks = addRanks(allNodes)
 
     const sections = featureSections.map(section => {
@@ -95,9 +93,22 @@ const useChartData = (data, translate) => {
     }
 }
 
-const FeaturesOverviewBlock = ({ block, data: blockData, triggerId, controlledMode }) => {
+interface FeaturesOverviewBlockProps {
+    block: BlockComponentProps
+    data: AllFeaturesData
+    triggerId?: string
+    controlledMode?: string
+}
+
+const FeaturesOverviewBlock = ({
+    block,
+    data: blockData,
+    triggerId,
+    controlledMode
+}: FeaturesOverviewBlockProps) => {
     const { translate } = useI18n()
-    const chartData = useMemo(() => useChartData(blockData.data, translate), [blockData, translate])
+
+    const chartData = useChartData(blockData.items, translate)
 
     const categories = chartData.children
     const legends = useLegends(

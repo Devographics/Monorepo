@@ -1,5 +1,5 @@
-id: '${fieldId}_happiness'
-titleId: 'happiness.${fieldId}'
+id: '${sectionId}_happiness'
+titleId: 'happiness.${sectionId}'
 # blockType: HappinessBlock
 blockType: VerticalBarBlock
 # dataPath: "dataAPI.survey.${fieldId}_happiness.year"
@@ -9,7 +9,7 @@ blockNamespace: happiness
 chartNamespace: happiness
 # enableCustomization: true
 hasSponsor: true
-loadData: true
+query: currentEditionData
 # query: >
 #     dataAPI {
 #         survey(survey: ${surveyId}) {

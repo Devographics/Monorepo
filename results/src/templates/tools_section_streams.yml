@@ -13,7 +13,7 @@ query: >
             ${surveyId} {
                 ${editionId} {
                     ${sectionId} {
-                        ${sectionId}_section_streams: ${sectionId}_allItems {
+                        ${sectionId}_section_streams: ${sectionId}_allTools {
                             items {
                                 id
                                 responses(parameters: { ENABLE_CACHE_PLACEHOLDER }) {

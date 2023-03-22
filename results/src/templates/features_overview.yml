@@ -7,7 +7,7 @@ query: >
             ${surveyId} {
                 ${editionId} {
                     features {
-                        features_overview: allItems {
+                        features_overview: allFeatures {
                             items {
                                 id
                                 responses(parameters: { ENABLE_CACHE_PLACEHOLDER }) {

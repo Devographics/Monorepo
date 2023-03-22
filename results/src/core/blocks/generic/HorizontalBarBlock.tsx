@@ -5,7 +5,7 @@ import ChartContainer from 'core/charts/ChartContainer'
 import HorizontalBarChart from 'core/charts/generic/HorizontalBarChart'
 import { getTableData } from 'core/helpers/datatables'
 import { BlockComponentProps } from '@types/index'
-import { QuestionData } from '@devographics/types'
+import { StandardQuestionData } from '@devographics/types'
 import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
 import { MODE_GRID, MODE_FACET } from 'core/blocks/filters/constants'
 import { useChartFilters } from 'core/blocks/filters/helpers'
@@ -13,7 +13,7 @@ import { defaultOptions } from 'core/blocks/block/BlockUnitsSelector'
 import { useAllChartsOptions } from 'core/charts/hooks'
 
 export interface HorizontalBarBlockProps extends BlockComponentProps {
-    data: QuestionData
+    data: StandardQuestionData
 }
 
 const HorizontalBarBlock = ({
@@ -24,6 +24,7 @@ const HorizontalBarBlock = ({
 }: HorizontalBarBlockProps) => {
     const chartData = questionData?.responses?.currentEdition
     if (!chartData) {
+        console.log(questionData)
         throw Error(`No data found for block ${block.id}`)
     }
 

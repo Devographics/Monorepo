@@ -13,7 +13,7 @@ query: >
             ${surveyId} {
                 ${editionId} {
                     ${sectionId} {
-                        ${sectionId}_experience_marimekko: ${sectionId}_allItems {
+                        ${sectionId}_experience_marimekko: ${sectionId}_allTools {
                             items {
                                 id
                                 responses(parameters: { ENABLE_CACHE_PLACEHOLDER }) {

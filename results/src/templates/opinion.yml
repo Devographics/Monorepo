@@ -2,5 +2,4 @@ blockType: OpinionBlock
 translateData: true
 blockNamespace: opinions
 hasSponsor: true
-loadData: true
-allEditions: true
+query: allEditionsData

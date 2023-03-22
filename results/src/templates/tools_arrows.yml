@@ -1,3 +1,4 @@
+id: tools_arrows
 blockType: ToolsArrowsBlock
 titleId: blocks.tools_arrows
 descriptionId: blocks.tools_arrows.description
@@ -9,8 +10,8 @@ query: >
             ${surveyId} {
                 ${editionId} {
                     libraries {
-                        ${questionId}: allItems {
-                            data {
+                        ${questionId}: allTools {
+                            items {
                                 id
                                 responses(parameters: { ENABLE_CACHE_PLACEHOLDER }) {
                                     allEditions {

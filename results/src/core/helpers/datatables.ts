@@ -1,6 +1,5 @@
-import { Entity, BlockUnits, BlockLegend, BucketItem } from '@types/index'
-import { EditionData } from '@devographics/types'
-
+import { BlockUnits, BlockLegend, BucketItem } from '@types/index'
+import { Entity, EditionData } from '@devographics/types'
 import { isPercentage } from 'core/helpers/units'
 import get from 'lodash/get'
 
@@ -24,6 +23,7 @@ export interface TableBucketYearValue {
 }
 
 export interface TableParams {
+    id?: string
     title?: string
     data: TableBucketItem[]
     legends?: BlockLegend[]
@@ -61,10 +61,10 @@ export interface TableDataCell {
     isPercentage?: boolean
 }
 
-const getLabel = (id: string | number, legends?: BlockLegend[]) => {
-    const legend = legends && legends.find(key => key.id === id)
-    return legend ? legend.shortLabel || legend.label : id
-}
+// const getLabel = (id: string | number, legends?: BlockLegend[]) => {
+//     const legend = legends && legends.find(key => key.id === id)
+//     return legend ? legend.shortLabel || legend.label : id
+// }
 
 const getValue = (row: TableBucketItem, units: BlockUnits) => {
     const value = get(row, units)
@@ -99,8 +99,7 @@ export const getTableData = (params: TableParams): TableData => {
             translateData
         }
         firstColumn.labelId = `options.${i18nNamespace}.${row.id}`
-        firstColumn.label = row.label ?? row?.entity?.name ?? getLabel(row.id, legends)
-
+        firstColumn.label = row.label ?? row?.entity?.name
         const columns: TableDataCell[] = []
 
         valueKeys.forEach(key => {
@@ -157,7 +156,7 @@ export const getBucketValue = ({
     valueKey: BlockUnits
 }) => {
     const yearData = data.find(d => d.year === year)
-    const yearBuckets = yearData.facets[0].buckets
+    const yearBuckets = yearData.buckets
     const bucket = yearBuckets.find(b => b.id === key)
     return bucket && bucket[valueKey]
 }

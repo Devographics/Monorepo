@@ -1,15 +1,12 @@
-// @ts-ignore
 import React, { useMemo } from 'react'
 import { useTheme } from 'styled-components'
 import { DataFormatter } from '@nivo/core'
 import { keyBy } from 'lodash'
 import { ResponsiveMarimekko, CustomLayerProps } from '@nivo/marimekko'
 import { keys } from 'core/bucket_keys'
-// @ts-ignore
 import { useI18n } from 'core/i18n/i18nContext'
 import { ToolsExperienceMarimekkoToolData } from './types'
 import { ToolsExperienceMarimekkoLegend } from './ToolsExperienceMarimekkoLegend'
-// @ts-ignore
 import ToolLabel from 'core/charts/tools/ToolLabel'
 
 export const MARGIN = {
@@ -67,6 +64,7 @@ const ToolsLabels = ({ data }: CustomLayerProps<ToolsExperienceMarimekkoToolData
 interface ToolsExperienceMarimekkoChartProps {
     data: ToolsExperienceMarimekkoToolData[]
     current: string | null
+    colorMapping: any
 }
 
 export const ToolsExperienceMarimekkoChart = (props: ToolsExperienceMarimekkoChartProps) => {

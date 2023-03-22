@@ -1,4 +1,3 @@
 blockType: HorizontalBarBlock
 hasSponsor: true
-loadData: true
-addEntities: true
+query: currentEditionDataWithEntities
