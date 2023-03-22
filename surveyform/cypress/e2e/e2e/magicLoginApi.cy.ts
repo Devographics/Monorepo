@@ -158,7 +158,7 @@ describe("auth - API", () => {
         .should("equal", 200);
     });
   });
-  it.skip("makes existing user verified user when verifying magic link", () => {});
+  it.skip("makes existing user verified user when verifying magic link", () => { });
   it("adds anonymousId to new user when verifying token", () => {
     const email = "test@test.test";
     cyfy(() => loginAnonymously())
@@ -192,5 +192,5 @@ describe("auth - API", () => {
         });
       });
   });
-  it.skip("adds anonymousId to existing user when verifying token", () => {});
+  it.skip("adds anonymousId to existing user when verifying token", () => { });
 });

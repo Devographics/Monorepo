@@ -43,7 +43,7 @@ describe("survey - API", () => {
     // TODO: authenticate user
     cy.request({
       method: "POST",
-      url: apiRoutes.response.saveSurvey.href({ slug: testSurvey.slug, year: testSurvey.year }),
+      url: apiRoutes.response.saveSurvey.href({ surveyId: testSurvey.surveyId, editionId: testSurvey.editionId }),
       body: {},
       // we specificallly test a failure
       failOnStatusCode: false,
@@ -57,7 +57,7 @@ describe("survey - API", () => {
   test("unauthenticated user cannot start survey", () => {
     cy.request({
       method: "POST",
-      url: apiRoutes.response.saveSurvey.href({ slug: testSurvey.slug, year: testSurvey.year }),
+      url: apiRoutes.response.saveSurvey.href({ surveyId: testSurvey.surveyId, editionId: testSurvey.editionId }),
       body: {},
       // we specificallly test a failure
       failOnStatusCode: false,
