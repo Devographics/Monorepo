@@ -7,7 +7,7 @@ export const EmptyWrapper = ({ block, pageData, blockIndex }) => (
     <Wrapper className="empty-wrapper">
         {block.variants.map((block, variantIndex) => (
             <BlockSwitcher
-                key={block.id}
+                key={block.id + variantIndex}
                 block={block}
                 pageData={pageData}
                 blockIndex={blockIndex}

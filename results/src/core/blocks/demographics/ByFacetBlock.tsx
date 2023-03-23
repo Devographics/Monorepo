@@ -14,6 +14,9 @@ import styled from 'styled-components'
 import { fontSize, spacing } from 'core/theme'
 import { getCountryName } from 'core/helpers/countries'
 import { getTableData } from 'core/helpers/datatables'
+import { StandardQuestionData } from '@devographics/types'
+import { BlockComponentProps } from 'core/types'
+import { useOptions } from 'core/helpers/options'
 
 const getLabel = (facetId, facet) => {
     const { translate } = useI18n()
@@ -28,37 +31,63 @@ const getLabel = (facetId, facet) => {
     }
 }
 
-const ByFacetBlock = ({ block, data, keys }) => {
+interface ByFacetBlockProps extends BlockComponentProps {
+    data: StandardQuestionData
+}
+
+const ByFacetBlock = ({ block, data }: ByFacetBlockProps) => {
     const {
         id,
         mode = 'relative',
         defaultUnits = 'percentageFacet',
         translateData = true,
         colorVariant,
-        variables
+        facet,
+        fieldId,
+        parameters
     } = block
 
     const { translate } = useI18n()
 
-    const { fieldId, facetId, options = {} } = variables
-    const { facetSort = {} } = options
-    const { property = 'mean', order = '___desc___' } = facetSort
+    const { facetSort = {} } = parameters
+    const { property = 'mean', order = 'desc' } = facetSort
+
+    const facetId = facet
 
     const units = defaultUnits
 
-    const globalFacet = data[`${fieldId}_all_${facetId}`]?.year?.facets[0]
-    const facetFacets = data[`${fieldId}_by_${facetId}`]?.year?.facets.filter(f => f.id !== null)
+    const globalFacet = {
+        id: 'default',
+        buckets: data.responses.currentEdition.buckets.map(bucket => {
+            const { facetBuckets, ...rest } = bucket
+            return rest
+        })
+    }
+    const facetFacets = data.responses.currentEdition.buckets.map(bucket => bucket.facetBuckets)
+
+    // const globalFacet = data[`${fieldId}_all_${facetId}`]?.year?.facets[0]
+    // const facetFacets = data[`${fieldId}_by_${facetId}`]?.year?.facets.filter(f => f.id !== null)
     const allFacets = [globalFacet, ...facetFacets]
     let sortedFacets = sortBy(allFacets, f => f[property])
 
-    if (order === '___desc___') {
+    console.log(block)
+    console.log(data)
+    console.log(globalFacet)
+    console.log(facetFacets)
+    console.log(allFacets)
+
+    if (order === 'desc') {
         sortedFacets.reverse()
     }
 
     const theme = useTheme()
 
-    const bucketKeys = useLegends(block, keys, fieldId)
-    const colorRange = theme.colors.ranges[fieldId] ?? {}
+    // facet is going to be "user_info__gender", but we only want to keep "gender"
+    const facetFieldId = facet.split('__')[1]
+    const chartOptions = useOptions(facetFieldId)
+
+    const bucketKeys = useLegends(block, chartOptions, facetFieldId)
+    const colorRange = theme.colors.ranges[facetFieldId] ?? {}
     const colorMapping = useMemo(
         () =>
             bucketKeys.map(item => ({
@@ -79,8 +108,8 @@ const ByFacetBlock = ({ block, data, keys }) => {
                     data: sortedFacets.map(facet => {
                         const label = getLabel(facetId, facet)
                         const rowData = { id: facet.id, displayAsPercentage: true, label }
-                        keys.forEach(key => {
-                            const bucket = facet.buckets.find(b => b.id === key)
+                        chartOptions.forEach(key => {
+                            const bucket = facet.find(b => b.id === key)
                             if (bucket) {
                                 // note: some buckets might not contain all keys
                                 rowData[key] = bucket[units]
@@ -88,7 +117,7 @@ const ByFacetBlock = ({ block, data, keys }) => {
                         })
                         return rowData
                     }),
-                    valueKeys: keys?.map(k => ({
+                    valueKeys: chartOptions?.map(k => ({
                         id: `${k}`,
                         labelId: `options.${fieldId}.${k}`
                     })),
@@ -104,7 +133,7 @@ const ByFacetBlock = ({ block, data, keys }) => {
                     i={i}
                     facet={facet}
                     colorMapping={colorMapping}
-                    keys={keys}
+                    keys={chartOptions}
                     facetId={facetId}
                 />
             ))}
@@ -141,7 +170,7 @@ const Facet = ({ facet, colorMapping, keys, fieldId, facetId }) => {
                 <GaugeBarChart
                     keys={keys}
                     units="percentageFacet"
-                    buckets={facet.buckets}
+                    buckets={facet}
                     colorMapping={colorMapping}
                     i18nNamespace={fieldId}
                 />

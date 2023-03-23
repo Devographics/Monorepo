@@ -16,6 +16,7 @@ import { useChartFilters } from 'core/blocks/filters/helpers'
 import { MODE_COMBINED, MODE_FACET } from 'core/blocks/filters/constants'
 import { defaultOptions } from 'core/blocks/block/BlockUnitsSelector'
 import { useAllChartsOptions } from 'core/charts/hooks'
+import { MAIN_UNITS } from '@devographics/constants'
 
 export interface VerticalBarBlockProps extends BlockComponentProps {
     data: QuestionData
@@ -83,7 +84,7 @@ const VerticalBarBlock = ({
                 getTableData({
                     legends: bucketKeys,
                     data: buckets,
-                    valueKeys: ['percentageSurvey', 'percentageQuestion', 'count'],
+                    valueKeys: MAIN_UNITS,
                     translateData
                 })
             ]}

@@ -1,5 +1,6 @@
 import camelCase from 'lodash/camelCase.js'
 import { indentString } from './indent_string.mjs'
+import { getQuestionId } from './helpers.mjs'
 
 export const getLocalesQuery = (localeIds, contexts, loadStrings = true) => {
     const args = []
@@ -38,7 +39,7 @@ query {
 `
 }
 
-const entityFragment = `entity {
+const getEntityFragment = () => `entity {
     name
     nameHtml
     nameClean
@@ -71,6 +72,17 @@ const entityFragment = `entity {
         url
     }
 }`
+
+const getFacetFragment = addEntities => `
+    facetBuckets {
+        id
+        count
+        percentageQuestion
+        percentageSurvey
+        percentageFacet
+        ${addEntities ? getEntityFragment() : ''}
+    }
+`
 
 export const getMetadataQuery = ({ surveyId, editionId }) => {
     return `
@@ -122,7 +134,7 @@ query {
                                     nameHtml
                                 }
                                 options {
-                                    ${entityFragment}
+                                    ${getEntityFragment()}
                                     id
                                 }
                             }
@@ -138,18 +150,48 @@ query {
 const allEditionsFragment = `editionId
   year`
 
-const unquote = s => s.replace(/"([^"]+)":/g, '$1:')
+// v1: {"foo": "bar"} => {foo: "bar"}
+// const unquote = s => s.replace(/"([^"]+)":/g, '$1:')
+
+// v2: {"foo": "bar"} => {foo: bar} (for enums)
+const unquote = s => s.replaceAll('"', '')
+
+const wrapArguments = args => {
+    const keys = Object.keys(args)
+
+    return keys.length > 0
+        ? `(${keys
+              .filter(k => !!args[k])
+              .map(k => `${k}: ${args[k]}`)
+              .join(', ')})`
+        : ''
+}
+
+const getQuestionIdString = (questionId, fieldId) =>
+    questionId === fieldId ? questionId : `${questionId}: ${fieldId}`
 
 export const getDefaultQuery = ({
     surveyId,
     editionId,
     sectionId,
     questionId,
+    fieldId,
+    facet,
+    filters,
     parameters = {},
     addEntities = false,
     allEditions = false
 }) => {
-    const parametersString = `(parameters: ${unquote(JSON.stringify(parameters))})`
+    const args = {}
+    if (facet) {
+        args.facet = facet
+    }
+    if (filters) {
+        args.filters = unquote(JSON.stringify(filters))
+    }
+    if (parameters) {
+        args.parameters = unquote(JSON.stringify(parameters))
+    }
     const editionType = allEditions ? 'allEditions' : 'currentEdition'
 
     return `
@@ -158,8 +200,8 @@ dataAPI {
     ${surveyId} {
       ${editionId} {
         ${sectionId} {
-          ${questionId} {
-            responses${parametersString} {
+          ${getQuestionIdString(questionId, fieldId)} {
+            responses${wrapArguments(args)} {
               ${editionType} {
                 ${allEditions ? allEditionsFragment : ''}
                 completion {
@@ -172,7 +214,8 @@ dataAPI {
                   id
                   percentageQuestion
                   percentageSurvey
-                  ${addEntities ? entityFragment : ''}
+                  ${addEntities ? getEntityFragment() : ''}
+                  ${facet ? getFacetFragment(addEntities) : ''}
                 }
               }
             }

@@ -95,6 +95,8 @@ enum SortProperty {
     count
     percent
     id
+    mean
+    average
 }
 
 enum SortOrder {

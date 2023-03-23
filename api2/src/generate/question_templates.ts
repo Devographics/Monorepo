@@ -15,7 +15,6 @@ export const templates: TemplatesDictionnary = {
     bracket: defaultTemplateFunction,
     text: defaultTemplateFunction,
     longtext: defaultTemplateFunction,
-    country: defaultTemplateFunction,
 
     email2: doNotInclude,
     receive_notifications: doNotInclude,

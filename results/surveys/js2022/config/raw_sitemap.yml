@@ -109,14 +109,12 @@
       - id: years_of_experience
         template: demographics
         variants:
-            - id: years_of_experience_by_salary
+            - id: years_of_experience
+              facet: user_info__yearly_salary
               blockNamespace: user_info
               tabId: tabs.by_salary
-              template: by_facet
-              variables:
-                  fieldId: years_of_experience
-                  facetId: yearly_salary
-              parameters: { facetSort: { order: ___asc___, property: mean }, facetMinCount: 100 }
+              template: demographics # facet
+              parameters: { facetSort: { order: asc, property: mean }, facetCutoff: 100 }
 
       - id: company_size
         template: demographics
@@ -127,51 +125,44 @@
       - id: higher_education_degree
         template: demographics
         variants:
-            - id: higher_education_degree_by_gender
+            - id: higher_education_degree
+              facet: user_info__gender
               blockNamespace: user_info
               tabId: tabs.by_gender
-              template: by_facet
-              variables:
-                  fieldId: higher_education_degree
-                  facetId: gender
-              parameters: { facetSort: { order: ___asc___, property: mean }, facetMinCount: 100 }
+              template: demographics # facet
+              parameters: { facetSort: { order: asc, property: mean }, facetCutoff: 100 }
 
       - id: yearly_salary
         template: demographics
         variants:
-            - id: yearly_salary_by_gender
+            - id: yearly_salary
+              facet: user_info__gender
               blockNamespace: user_info
               tabId: tabs.by_gender
-              template: by_facet
-              variables:
-                  fieldId: yearly_salary
-                  facetId: gender
-                  parameters:
-                      { facetSort: { order: ___desc___, property: mean }, facetMinCount: 100 }
-            - id: yearly_salary_by_country
+              template: demographics # facet
+              parameters: { facetSort: { order: desc, property: mean }, facetCutoff: 100 }
+            - id: yearly_salary
+              facet: user_info__country
               blockNamespace: user_info
               tabId: tabs.by_country
-              template: by_facet
-              variables:
-                  fieldId: yearly_salary
-                  facetId: country
-              parameters: { facetSort: { order: ___desc___, property: mean }, facetMinCount: 100 }
+              template: demographics # facet
+              parameters: { facetSort: { order: desc, property: mean }, facetCutoff: 100 }
             # - id: yearly_salary_by_degree
             #   blockNamespace: user_info
             #   tabId: tabs.by_degree
-            #   template: by_facet
+            #   template: demographics
             #   variables:
             #     fieldId: yearly_salary
-            #     facetId: higher_education_degree
-            #     parameters: {facetSort: {order: ___desc___, property: mean}, facetMinCount: 100}
+            #     facet: higher_education_degree
+            #     parameters: {facetSort: {order: desc, property: mean}, facetCutoff: 100}
             # - id: yearly_salary_by_experience
             #   blockNamespace: user_info
             #   tabId: tabs.by_experience
-            #   template: by_facet
+            #   template: demographics
             #   variables:
             #     fieldId: yearly_salary
-            #     facetId: years_of_experience
-            #     parameters: {facetSort: {order: ___desc___, property: mean}, facetMinCount: 100}
+            #     facet: years_of_experience
+            #     parameters: {facetSort: {order: desc, property: mean}, facetCutoff: 100}
 
       - id: source
         template: demographics
@@ -181,19 +172,13 @@
       - id: gender
         template: demographics
         variants:
-            - id: gender_by_country
+            - id: gender
+              facet: user_info__country
               blockNamespace: user_info
               tabId: tabs.by_country
-              template: by_facet
-              variables:
-                  fieldId: gender
-                  facetId: country
+              template: demographics # facet
               parameters:
-                  {
-                      facetSort: { order: ___desc___, property: mean },
-                      limit: 11,
-                      facetMinCount: 100
-                  }
+                  { facetSort: { order: desc, property: mean }, limit: 11, facetCutoff: 100 }
 
       - id: race_ethnicity
         defaultUnits: count
@@ -201,15 +186,12 @@
         blockType: HorizontalBarBlock
         translateData: true
         variants:
-            - id: race_ethnicity_by_years_of_experience
+            - id: race_ethnicity
+              facet: user_info__years_of_experience
               blockNamespace: user_info
               tabId: tabs.by_experience
-              template: by_facet
-              variables:
-                  fieldId: race_ethnicity
-                  facetId: years_of_experience
-              parameters:
-                  { facetSort: { order: ___asc___, property: mean }, limit: 11, facetMinCount: 100 }
+              template: demographics # facet
+              parameters: { facetSort: { order: asc, property: mean }, limit: 11, facetCutoff: 100 }
 
       - id: disability_status
         defaultUnits: count
@@ -1068,7 +1050,7 @@
               parameters: { limit: 15 }
 
       - id: video_creators
-        filters: [filters]
+        blockFilters: [filters]
         blockType: PeopleBlock
         blockNamespace: resources
         chartNamespace: video_creators
@@ -1085,7 +1067,7 @@
               parameters: { limit: 15 }
 
       - id: people_others
-        filters: [filters]
+        blockFilters: [filters]
         defaultUnits: count
         blockNamespace: resources
         chartNamespace: people

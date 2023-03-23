@@ -3,12 +3,16 @@ import {
     ComputeAxisParameters,
     SortProperty,
     SortOrderNumeric,
-    Bucket
+    Bucket,
+    FacetBucket
 } from '../../types'
 import sortBy from 'lodash/sortBy.js'
 import isEmpty from 'lodash/isEmpty.js'
 
-export function sortBuckets(buckets: Bucket[], axis: ComputeAxisParameters) {
+export function sortBuckets<T extends Bucket | FacetBucket>(
+    buckets: T[],
+    axis: ComputeAxisParameters
+) {
     const { sort, order, options } = axis
     let sortedBuckets = [...buckets]
     if (sort === 'options') {
@@ -22,7 +26,7 @@ export function sortBuckets(buckets: Bucket[], axis: ComputeAxisParameters) {
     return sortedBuckets
 }
 
-export function sortByOptions(buckets: Bucket[], options: string[]) {
+export function sortByOptions<T extends Bucket | FacetBucket>(buckets: T[], options: string[]) {
     return [...buckets].sort((a, b) => {
         // make sure everything is a string to avoid type mismatches
         const stringValues = options.map(v => v.toString())
@@ -30,11 +34,13 @@ export function sortByOptions(buckets: Bucket[], options: string[]) {
     })
 }
 
-export function sortByProperty(
-    buckets: Bucket[],
+export function sortByProperty<T extends Bucket | FacetBucket>(
+    buckets: T[],
     sortProperty: SortProperty,
     sortOrder: SortOrderNumeric
 ) {
+    console.log('// sortProperty')
+    console.log(sortProperty)
     let sortedBuckets = [...buckets]
     // start with an alphabetical sort to ensure a stable
     // sort even when multiple items have same count
@@ -58,12 +64,12 @@ export async function sortData(
 ) {
     for (let editionData of resultsByEdition) {
         // first, sort regular buckets
-        editionData.buckets = sortBuckets(editionData.buckets, axis1)
+        editionData.buckets = sortBuckets<Bucket>(editionData.buckets, axis1)
 
         if (axis2) {
             // then, sort facetBuckets if they exist
             for (let bucket of editionData.buckets) {
-                bucket.facetBuckets = sortBuckets(bucket.facetBuckets, axis2)
+                bucket.facetBuckets = sortBuckets<FacetBucket>(bucket.facetBuckets, axis2)
             }
         }
     }

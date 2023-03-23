@@ -180,6 +180,9 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId }) => 
                         editionId,
                         sectionId: page.id,
                         questionId,
+                        fieldId: v.fieldId,
+                        facet: v.facet,
+                        filters: v.filters,
                         parameters: v.parameters || {}
                     }
                     const query = getQuery({ query: v.query, queryOptions, isLog: false })
@@ -243,3 +246,5 @@ export const sleep = ms => {
         setTimeout(resolve, ms)
     })
 }
+
+export const getQuestionId = (id, facet) => (facet ? `${id}_by_${facet}` : id)

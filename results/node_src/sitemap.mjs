@@ -4,7 +4,7 @@ import findLastIndex from 'lodash/findLastIndex.js'
 import omit from 'lodash/omit.js'
 import template from 'lodash/template.js'
 import yaml from 'js-yaml'
-import { loadTemplate } from './helpers.mjs'
+import { getQuestionId, loadTemplate } from './helpers.mjs'
 
 const stringify = value => {
     const json = JSON.stringify(value)
@@ -104,11 +104,18 @@ export const pageFromConfig = async (page, pageIndex, editionVariables) => {
                 const variants = []
 
                 for (let blockVariant of blockVariants) {
+                    // fieldId: id of the GraphQL field (e.g. gender)
+                    blockVariant.fieldId = blockVariant.id
+                    // id: id of the question (e.g. gender_by_age)
+                    blockVariant.id = getQuestionId(blockVariant.id, blockVariant.facet)
+
                     const contextVariables = {
                         ...editionVariables,
                         sectionId: page.id,
-                        questionId: blockVariant.id
+                        questionId: blockVariant.id,
+                        fieldId: blockVariant.fieldId
                     }
+
                     // if template has been provided, apply it
 
                     // if block has variables, inject them based on current page and global variables

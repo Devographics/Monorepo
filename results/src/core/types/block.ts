@@ -6,7 +6,7 @@ export type BlockUnits =
     | 'percentageSurvey'
     | 'percentageQuestion'
     | 'percentageFacet'
-    | 'percentage_bucket'
+    | 'percentageBucket'
     | 'average'
 export type BlockRatioUnits =
     | 'satisfaction_percentage'
