@@ -1,8 +1,8 @@
 import { TemplateFunction } from '../../types/surveys'
 
 export const slider: TemplateFunction = ({ question, section }) => ({
-    ...question,
     id: 'placeholder',
+    ...question,
     defaultSort: 'options',
     dbPath: `${section.id}.${question.id}.choices`,
     optionsAreNumeric: true,

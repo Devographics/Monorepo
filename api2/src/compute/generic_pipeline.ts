@@ -1,5 +1,7 @@
 import { generateFiltersQuery } from '../filters'
 import { ComputeAxisParameters } from '../types'
+// import { NO_ANSWER } from '@devographics/constants'
+const NO_ANSWER = 'no_answer'
 
 export type PipelineProps = {
     surveyId: string
@@ -22,8 +24,8 @@ export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
     }
 
     let match: any = {
-        survey: surveyId,
-        [axis1DbPath]: { $nin: [null, '', [], {}] }
+        survey: surveyId
+        // [axis1DbPath]: { $nin: [null, '', [], {}] }
     }
 
     if (filters) {
@@ -40,7 +42,13 @@ export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
         {
             $match: match
         },
-        // { $count: 'questionRespondents' },
+        {
+            $set: {
+                [`${axis1DbPath}`]: {
+                    $cond: [{ $not: [`$${axis1DbPath}`] }, NO_ANSWER, `$${axis1DbPath}`]
+                }
+            }
+        },
         {
             $unwind: {
                 path: `$${axis1DbPath}`
@@ -51,6 +59,17 @@ export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
                   {
                       $unwind: {
                           path: `$${axis2DbPath}`
+                      }
+                  }
+              ]
+            : []),
+        ...(axis2
+            ? [
+                  {
+                      $set: {
+                          [`${axis2DbPath}`]: {
+                              $cond: [{ $not: [`$${axis2DbPath}`] }, NO_ANSWER, `$${axis2DbPath}`]
+                          }
                       }
                   }
               ]
@@ -88,7 +107,7 @@ export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
                 },
                 buckets: {
                     $push: {
-                        // facetId: axis2?.question?.id ?? 'default',
+                        // type: axis2 ?? 'default',
                         id: axis2 ? `$_id.${axis2.question.id}` : 'default',
                         count: '$count',
                         facetBuckets: '$facetBuckets'
@@ -105,15 +124,6 @@ export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
         },
         { $sort: { editionId: 1 } }
     ]
-
-    // if (cutoff) {
-    //     pipeline.push({ $match: { count: { $gt: cutoff } } })
-    // }
-
-    // only add limit if year is specified
-    // if (year) {
-    //     pipeline.push({ $limit: limit })
-    // }
 
     return pipeline
 }

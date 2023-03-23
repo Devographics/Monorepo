@@ -1,8 +1,10 @@
-import { EditionData, Bucket, ComputeAxisParameters } from '../../types'
+import { EditionData, Bucket, FacetBucket, ComputeAxisParameters } from '../../types'
 import { ratioToPercentage } from '../common'
+// import { NO_ANSWER } from '@devographics/constants'
+const NO_ANSWER = 'no_answer'
 
-const computeBucketsWithPercentages = (
-    buckets: Bucket[],
+const computeBucketsWithPercentages = <T extends Bucket | FacetBucket>(
+    buckets: T[],
     editionData: EditionData,
     parentBucket?: Bucket
 ) => {
@@ -11,9 +13,10 @@ const computeBucketsWithPercentages = (
         bucketWithPercentages.percentageSurvey = ratioToPercentage(
             bucket.count / editionData.completion.total
         )
-        bucketWithPercentages.percentageQuestion = ratioToPercentage(
-            bucket.count / editionData.completion.count
-        )
+        bucketWithPercentages.percentageQuestion =
+            bucket.id === NO_ANSWER
+                ? 0
+                : ratioToPercentage(bucket.count / editionData.completion.count)
         if (parentBucket) {
             bucketWithPercentages.percentageFacet = ratioToPercentage(
                 bucketWithPercentages.count / parentBucket.count
@@ -26,10 +29,13 @@ const computeBucketsWithPercentages = (
 
 export async function addPercentages(resultsByEdition: EditionData[]) {
     for (let editionData of resultsByEdition) {
-        editionData.buckets = computeBucketsWithPercentages(editionData.buckets, editionData)
+        editionData.buckets = computeBucketsWithPercentages<Bucket>(
+            editionData.buckets,
+            editionData
+        )
         for (let bucket of editionData.buckets) {
             if (bucket.facetBuckets) {
-                bucket.facetBuckets = computeBucketsWithPercentages(
+                bucket.facetBuckets = computeBucketsWithPercentages<FacetBucket>(
                     bucket.facetBuckets,
                     editionData,
                     bucket

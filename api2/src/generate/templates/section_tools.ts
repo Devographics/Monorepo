@@ -3,7 +3,7 @@ import { graphqlize, getSectionItems } from '../helpers'
 import { getFiltersTypeName, getFacetsTypeName } from '../helpers'
 import { getToolsFeaturesResolverMap } from '../resolvers'
 
-export const section_tools: TemplateFunction = ({ survey, edition, section }) => {
+export const section_tools: TemplateFunction = ({ question, survey, edition, section }) => {
     const fieldTypeName = `${graphqlize(survey.id)}${graphqlize(edition.id)}${graphqlize(
         section.id
     )}AllTools`
@@ -11,7 +11,8 @@ export const section_tools: TemplateFunction = ({ survey, edition, section }) =>
     const items = getSectionItems({ survey, edition, section })
 
     return {
-        id: `${section.id}_allItems`,
+        ...question,
+        id: `${section.id}_allTools`,
         fieldTypeName,
         typeDef: `type ${fieldTypeName} {
     ids: [String]

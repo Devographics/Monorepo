@@ -96,23 +96,23 @@ export const useCache = async <F extends DynamicComputeCall>(options: {
     const settingsLogs = JSON.stringify(settings)
 
     if (enableCache) {
-        const existingResult = await getCache(key, context)
-        if (refreshCache || !existingResult) {
-            verb = refreshCache
-                ? 'recomputed and refreshed cached result'
-                : 'computed and cached result'
+        const existingCachedValue = await getCache(key, context)
+        if (existingCachedValue) {
+            verb = '✅ Cache hit'
+            value = existingCachedValue
+        } else {
+            verb = '⭕ Cache miss (cache updated)'
             value = await func(funcOptionsWithContext)
             if (value) {
-                // in case previous cached entry exists, delete it
                 await setCache(key, JSON.stringify(value), context)
             }
-        } else {
-            verb = 'using cache'
-            value = existingResult
         }
     } else {
-        verb = 'computed result'
+        verb = '🟤 Cache bypass (cache updated)'
         value = await func(funcOptionsWithContext)
+        if (value) {
+            await setCache(key, JSON.stringify(value), context)
+        }
     }
     const finishedAt = new Date()
     console.log(
