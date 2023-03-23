@@ -22,6 +22,8 @@ import {
 } from 'core/charts/hooks'
 import { CHART_MODE_DEFAULT } from 'core/blocks/filters/constants'
 import { useEntities } from 'core/helpers/entities'
+import { moveNoAnswerBucket } from 'core/helpers/data'
+import { Bucket } from '@devographics/types'
 
 export const margin = {
     top: 40,
@@ -44,7 +46,7 @@ type BarColor = {
 
 export interface HorizontalBarChartProps extends ChartComponentProps {
     total: number
-    buckets: BucketItem[]
+    buckets: Bucket[]
     size: keyof typeof barSizes
     barColor: BarColor
     facet?: string
@@ -177,7 +179,7 @@ const HorizontalBarChart = ({
                 layout="horizontal"
                 margin={{ ...margin, left }}
                 keys={keys}
-                data={data}
+                data={moveNoAnswerBucket(data)}
                 maxValue={maxValue}
                 theme={theme.charts}
                 enableGridX={true}

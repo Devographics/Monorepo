@@ -920,23 +920,6 @@
               defaultUnits: count
               parameters: { limit: 15 }
 
-      - id: bracket_hint
-        template: hint
-
-      - id: tool_evaluation_wins
-        tabId: tabs.bracket_wins
-        template: bracket_wins
-        blockNamespace: tool_evaluation
-        variables:
-            fieldId: tools_others__tool_evaluation
-        variants:
-            - id: tool_evaluation_matchups
-              tabId: tabs.bracket_matchups
-              blockNamespace: tool_evaluation
-              variables:
-                  fieldId: tools_others__tool_evaluation
-              template: bracket_matchups
-
       - id: tools_others_resources
         items: [fm-typescript, fm-node-js]
         template: recommended_resources

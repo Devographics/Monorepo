@@ -12,6 +12,7 @@ import TooltipComponent from 'core/components/Tooltip'
 import { CloseIcon, DotsIcon } from 'core/icons'
 import TickItemLinks, { getSocialLinks } from 'core/charts/generic/TickItemLinks'
 import Popover from 'core/components/Popover2'
+import { NO_ANSWER } from '@devographics/constants'
 
 const labelMaxLength = 20
 
@@ -87,22 +88,26 @@ export const getBucketLabel = args => {
         shortenLabel = false,
         label: providedLabel
     } = args
-    let label
-    const s = getString(`options.${i18nNamespace}.${id}`)
-
-    if (providedLabel) {
-        label = providedLabel
-    } else if (entity?.name) {
-        label = entity.nameClean || entity.name
-    } else if (shouldTranslate && !s.missing) {
-        label = s.tClean || s.t
+    if (id === NO_ANSWER) {
+        return getString('charts.no_answer').t
     } else {
-        label = id
+        let label
+        const s = getString(`options.${i18nNamespace}.${id}`)
+
+        if (providedLabel) {
+            label = providedLabel
+        } else if (entity?.name) {
+            label = entity.nameClean || entity.name
+        } else if (shouldTranslate && !s.missing) {
+            label = s.tClean || s.t
+        } else {
+            label = id
+        }
+
+        const shortenedLabel = shortenLabel ? shorten(label) + '…' : label
+
+        return shortenedLabel
     }
-
-    const shortenedLabel = shortenLabel ? shorten(label) + '…' : label
-
-    return shortenedLabel
 }
 
 export const TickItem = (tick: TickItemProps) => {

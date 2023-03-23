@@ -7,3 +7,5 @@ export const TOOLS_OPTIONS = [
 ]
 
 export const FEATURES_OPTIONS = ['never_heard', 'heard', 'used']
+
+export const NO_ANSWER = 'no_answer'

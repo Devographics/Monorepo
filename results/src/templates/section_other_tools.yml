@@ -1,4 +1,4 @@
-id: ${sectionId}_prenormalized
+id: ${sectionId}_others
 titleId: blocks.category_other_tools
 blockType: HorizontalBarBlock
 defaultUnits: count

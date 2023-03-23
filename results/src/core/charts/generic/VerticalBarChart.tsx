@@ -15,6 +15,9 @@ import ChartLabel from 'core/components/ChartLabel'
 import { isPercentage } from 'core/helpers/units'
 import { ChartComponentProps, BlockUnits, BucketItem, BlockLegend } from '@types/index'
 import { CHART_MODE_DEFAULT } from 'core/blocks/filters/constants'
+import { moveNoAnswerBucket } from 'core/helpers/data'
+import { Bucket } from '@devographics/types'
+
 const breakpoint = 600
 
 const getMargins = (viewportWidth: number) => ({
@@ -59,7 +62,7 @@ const getAxisLabels = (v: any, legends: BlockLegend[]) => {
 
 export interface VerticalBarChartProps extends ChartComponentProps {
     total: number
-    buckets: BucketItem[]
+    buckets: Bucket[]
     seriesCount: number
 }
 
@@ -112,7 +115,7 @@ const VerticalBarChart = ({
     return (
         <div style={{ height: 260 }} className={`VerticalBarChart ${className}`}>
             <ResponsiveBar
-                data={buckets}
+                data={moveNoAnswerBucket(buckets, 'end')}
                 groupMode={chartDisplayMode}
                 indexBy="id"
                 keys={keys}

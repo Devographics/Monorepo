@@ -23,18 +23,6 @@ export interface VerticalBarBlockProps extends BlockComponentProps {
     isCustom: boolean
 }
 
-export const addNoAnswerBucket = ({ buckets, completion }) => {
-    const countSum = sumBy(buckets, b => b.count)
-    const percentageSum = sumBy(buckets, b => b.percentageSurvey)
-    const noAnswerBucket = {
-        id: 'no_answer',
-        count: completion.total - countSum,
-        percentageQuestion: 0,
-        percentageSurvey: Math.round((100 - percentageSum) * 10) / 10
-    }
-    return [...buckets, noAnswerBucket]
-}
-
 const VerticalBarBlock = ({
     block,
     data: blockData,
@@ -70,8 +58,7 @@ const VerticalBarBlock = ({
 
     const { completion } = chartData
 
-    const buckets_ = chartData.buckets
-    const buckets = addNoAnswer ? addNoAnswerBucket({ buckets: buckets_, completion }) : buckets_
+    const buckets = chartData.buckets
     const { total } = completion
 
     const { chartFilters, setChartFilters, legends } = useChartFilters({
@@ -90,7 +77,6 @@ const VerticalBarBlock = ({
             unitsOptions.push('average')
         }
     }
-
     return (
         <BlockVariant
             tables={[
