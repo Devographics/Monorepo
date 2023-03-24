@@ -202,6 +202,14 @@ module.exports = {
       ...commonConfig,
       name: "client",
       displayName: "client",
+      // TODO: needed to pass the skipped exampleClient test, but throwing
+      // "    SecurityError: localStorage is not available for opaque origins
+      // @see https://stackoverflow.com/questions/51554366/jest-securityerror-localstorage-is-not-available-for-opaque-origins
+      //testEnvironment: "jsdom",
+      //testEnvironmentOptions: {
+      //html: '<html lang="fr-FR"></html>',
+      //url: 'http://localhost:3000',
+      //},
       // testEnvironment: "jsdom", // defautl already
       // The glob patterns Jest uses to detect test files
       testMatch: [

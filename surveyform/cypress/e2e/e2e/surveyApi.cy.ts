@@ -44,21 +44,25 @@ describe("survey - API", () => {
     cy.request({
       method: "POST",
       url: apiRoutes.response.saveSurvey.href({ surveyId: testSurvey.surveyId, editionId: testSurvey.editionId }),
-      body: {},
+      body: {
+        data: {}
+      },
       // we specificallly test a failure
       failOnStatusCode: false,
     })
       .its("status")
       .should("equal", 200);
   })
-  test("cannot start closed survey", () => {
-
+  test.skip("cannot start closed survey", () => {
+    // TODO
   })
   test("unauthenticated user cannot start survey", () => {
     cy.request({
       method: "POST",
       url: apiRoutes.response.saveSurvey.href({ surveyId: testSurvey.surveyId, editionId: testSurvey.editionId }),
-      body: {},
+      body: {
+        data: {}
+      },
       // we specificallly test a failure
       failOnStatusCode: false,
     })

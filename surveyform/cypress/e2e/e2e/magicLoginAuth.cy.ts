@@ -56,7 +56,7 @@ test("Access state of 2022, magic auth new user", () => {
 
   // this email should not exist in db yet (not test user)
   const email = "test@test.test";
-  cy.findByLabelText(/email/i).type(email);
+  cy.findByLabelText(/email/i).type(email, { force: true });
   getCreateAccountButton().click();
 
   // Check that the request succeeded

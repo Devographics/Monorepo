@@ -8,9 +8,17 @@ import { getFragmentName } from "~/core/server/graphqlUtils";
 import { fetchSurvey, initRedis } from "@devographics/core-models/server";
 import { connectToAppDb } from "~/lib/server/mongoose/connection";
 import { connectToRedis } from "~/lib/server/redis";
+import { userFromReq } from "~/lib/server/context/userContext";
 // import { userFromReq } from "~/lib/server/context/userContext";
 
 export default async function saveSurveyResponseHandler(req: NextApiRequest, res: NextApiResponse) {
+    const user = userFromReq(req)
+    console.log("user", user)
+    if (!user) {
+        // TODO: check also ownership of the response
+        // (currently the graphql resolver also checks permissions, but it should progressively be done here)
+        return res.status(401)
+    }
     await connectToAppDb()
     connectToRedis()
     // method
