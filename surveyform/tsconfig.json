@@ -9,8 +9,6 @@
     ".next/types/**/*.ts"
   ],
   "exclude": [
-    "**/*.stories.tsx",
-    "**/stories.tsx",
     "**/*.test.ts",
     "**/*.tests.ts",
     // must exclude collocated code too
