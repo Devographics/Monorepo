@@ -23,7 +23,7 @@ type ResultType<F> = F extends (...args: any[]) => infer P
  */
 export const computeKey = (func: Function, funcOptions?: any) => {
     const { parameters = {}, ...otherKeys } = funcOptions
-    const { enableCache, refreshCache, ...validParameters } = parameters
+    const { enableCache, ...validParameters } = parameters
     const validOptions = { ...otherKeys, parameters: validParameters }
 
     const serializedOptions = validOptions
@@ -75,10 +75,9 @@ export const useCache = async <F extends DynamicComputeCall>(options: {
     // args?: ArgumentTypes<F>
     key?: string
     enableCache?: boolean
-    refreshCache?: boolean
 }): Promise<ResultType<F>> => {
     const startedAt = new Date()
-    const { func, context, key, funcOptions = {}, refreshCache } = options
+    const { func, context, key, funcOptions = {} } = options
     const { redisClient, isDebug = false } = context
     const { disableCache, cacheType } = appSettings
     let value, verb

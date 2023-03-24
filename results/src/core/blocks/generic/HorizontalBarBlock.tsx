@@ -24,7 +24,6 @@ const HorizontalBarBlock = ({
 }: HorizontalBarBlockProps) => {
     const chartData = questionData?.responses?.currentEdition
     if (!chartData) {
-        console.log(questionData)
         throw Error(`No data found for block ${block.id}`)
     }
 

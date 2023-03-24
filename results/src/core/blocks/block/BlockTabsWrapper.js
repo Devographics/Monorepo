@@ -8,6 +8,7 @@ import T from 'core/i18n/T'
 import { getBlockTabKey } from 'core/helpers/blockHelpers'
 import { usePageContext } from 'core/helpers/pageContext'
 import get from 'lodash/get'
+import { useEntities } from 'core/helpers/entities'
 
 const BlockHeader = styled.div`
     display: flex;
@@ -55,15 +56,14 @@ export const TabsTrigger = styled(Tabs.Trigger)`
 export const TabsWrapper = ({ block, pageData, blockIndex, withMargin = true }) => {
     const context = usePageContext()
 
+    const entities = useEntities()
     let firstBlock = block.variants[0]
-    if (firstBlock.entityPath) {
-        const blockEntity = get(pageData, firstBlock.entityPath)
-        firstBlock = {
-            ...firstBlock,
-            entity: blockEntity,
-            title: blockEntity?.nameClean || blockEntity?.name,
-            titleLink: blockEntity?.homepage?.url
-        }
+    const blockEntity = entities.find(e => e.id === firstBlock.id)
+    firstBlock = {
+        ...firstBlock,
+        entity: blockEntity,
+        title: blockEntity?.nameClean || blockEntity?.name,
+        titleLink: blockEntity?.homepage?.url
     }
 
     return (

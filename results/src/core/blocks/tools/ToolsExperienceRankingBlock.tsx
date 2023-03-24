@@ -1,24 +1,19 @@
 import React, { useState, useMemo } from 'react'
 import { BlockContext } from 'core/blocks/types'
-// @ts-ignore
 import Block from 'core/blocks/block/BlockVariant'
-// @ts-ignore
 import ChartContainer from 'core/charts/ChartContainer'
 import { RankingChart, RankingChartSerie } from 'core/charts/generic/RankingChart'
-// @ts-ignore
 import ButtonGroup from 'core/components/ButtonGroup'
-// @ts-ignore
 import Button from 'core/components/Button'
-import { Entity } from '@types/index'
-// @ts-ignore
 import T from 'core/i18n/T'
-// @ts-ignore
 import { useI18n } from 'core/i18n/i18nContext'
 import { getTableData } from 'core/helpers/datatables'
 import { MODE_GRID } from 'core/blocks/filters/constants'
 import { MetricId, ALL_METRICS } from 'core/helpers/units'
 import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
 import { useChartFilters } from 'core/blocks/filters/helpers'
+import { ToolRatiosQuestionData, Entity } from '@devographics/types'
+import { useEntities, getEntityName } from 'core/helpers/entities'
 
 export interface MetricBucket {
     year: number
@@ -35,11 +30,6 @@ export interface ToolData extends Record<MetricId, MetricBucket[]> {
     satisfaction: MetricBucket[]
 }
 
-export interface ToolsExperienceRankingBlockData {
-    years: number[]
-    experience: ToolData[]
-}
-
 export interface ToolsExperienceRankingBlockProps {
     block: BlockContext<
         'toolsExperienceRankingTemplate',
@@ -48,19 +38,19 @@ export interface ToolsExperienceRankingBlockProps {
         any
     >
     triggerId: MetricId
-    data: ToolsExperienceRankingBlockData
+    data: ToolRatiosQuestionData
     titleProps: any
 }
 
 const processBlockData = (
-    data: ToolsExperienceRankingBlockData,
-    options: { controlledMetric: any }
+    data: ToolRatiosQuestionData,
+    options: { controlledMetric: any; entities: Entity[] }
 ) => {
-    const { controlledMetric } = options
-    return data?.experience?.map(tool => {
+    const { controlledMetric, entities } = options
+    return data?.items?.map(tool => {
         return {
             id: tool.id,
-            name: tool?.entity?.name,
+            name: getEntityName(entities.find(e => e.id === tool.id)),
             data: tool[controlledMetric]?.map(bucket => {
                 return {
                     x: bucket.year,
@@ -79,13 +69,13 @@ export const ToolsExperienceRankingBlock = ({
 }: ToolsExperienceRankingBlockProps) => {
     const [metric, setMetric] = useState<MetricId>('satisfaction')
     const { getString } = useI18n()
-
+    const entities = useEntities()
     const controlledMetric = triggerId || metric
 
-    const { years, experience } = data
-    const chartData: RankingChartSerie[] = processBlockData(data, { controlledMetric })
+    const { years, items } = data
+    const chartData: RankingChartSerie[] = processBlockData(data, { controlledMetric, entities })
 
-    const tableData = experience.map(tool => {
+    const tableData = items.map(tool => {
         const cellData = { label: tool?.entity?.name }
         ALL_METRICS.forEach(metric => {
             cellData[`${metric}_percentage`] = tool[metric]?.map(y => ({
@@ -132,11 +122,11 @@ export const ToolsExperienceRankingBlock = ({
                 chartFilters={chartFilters}
                 layout="grid"
             >
-                <ChartContainer height={experience.length * 50 + 80}>
+                <ChartContainer height={items.length * 50 + 80}>
                     <RankingChart
                         buckets={data}
                         processBlockData={processBlockData}
-                        processBlockDataOptions={{ controlledMetric }}
+                        processBlockDataOptions={{ controlledMetric, entities }}
                     />
                 </ChartContainer>
             </DynamicDataLoader>

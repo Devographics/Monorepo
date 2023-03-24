@@ -13,25 +13,25 @@ import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
 import { useChartFilters } from 'core/blocks/filters/helpers'
 import { MODE_GRID } from 'core/blocks/filters/constants'
 import { useEntity } from 'core/helpers/entities'
+import { ToolQuestionData } from '@devographics/types'
+import { TOOLS_OPTIONS } from '@devographics/constants'
 
 const BAR_THICKNESS = 28
 const BAR_SPACING = 16
 
 interface ToolExperienceBlockProps {
     block: BlockContext<'toolExperienceTemplate', 'ToolExperienceBlock', { toolIds: string }>
-    data: ToolAllYearsExperience
+    data: ToolQuestionData
     keys: string[]
     units?: 'percentageSurvey' | 'percentageQuestion' | 'count'
     closeComponent: any
 }
 
-const processBlockData = (data, { bucketKeys }) => {
-    const allYears = data.responses.allEditions
-    return allYears.map((yearExperience, index) => {
-        const yearData: ToolExperienceBucket[] = bucketKeys.map((key: { id: string }) => {
-            const matchingBucket = yearExperience.facets[0].buckets.find(
-                bucket => bucket.id === key.id
-            )
+const processBlockData = (data: ToolQuestionData, { bucketKeys }) => {
+    const allEditions = data.responses.allEditions
+    return allEditions.map((editionData, index) => {
+        const yearData = bucketKeys.map((key: { id: string }) => {
+            const matchingBucket = editionData.buckets.find(bucket => bucket.id === key.id)
             return (
                 matchingBucket || {
                     id: key.id,
@@ -41,10 +41,10 @@ const processBlockData = (data, { bucketKeys }) => {
             )
         })
 
-        const isLastYear = index === allYears.length - 1
+        const isLastYear = index === allEditions.length - 1
 
         return {
-            year: yearExperience.year,
+            year: editionData.year,
             ...keyBy(yearData, 'id'),
             thickness: isLastYear ? 2 : 1
         }
@@ -64,15 +64,16 @@ export const ToolExperienceBlock = ({
 
     const [units, setUnits] = useState(defaultUnits)
 
-    const entity = useEntity(data.id)
+    const entity = useEntity(block.id)
     const title = entity?.nameClean || entity?.name
-    const titleLink = data?.entity?.homepage?.url
+    const titleLink = entity?.homepage?.url
 
     // as descriptions are extracted from best of js/github...
     // we only have english available.
     const description = locale?.id === 'en-US' && entity?.description
 
-    const bucketKeys = useLegends(block, keys, 'tools')
+    const chartOptions = TOOLS_OPTIONS
+    const bucketKeys = useLegends(block, chartOptions, 'tools')
 
     const allYears = data.responses.allEditions
     const completion = allYears[allYears.length - 1]?.completion

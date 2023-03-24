@@ -268,7 +268,7 @@ export const allEditionsResolver: ResolverType = async (parent, args, context, i
     console.log('// allEditionsResolver')
     const { survey, edition, section, question, responseArguments, questionObjects } = parent
     const { parameters = {}, ...cacheKeyArguments } = responseArguments || {}
-    const { enableCache, refreshCache, ...cacheKeyParameters } = parameters
+    const { enableCache, ...cacheKeyParameters } = parameters
 
     const { selectedEditionId } = args
     const funcOptions = {
@@ -293,8 +293,7 @@ export const allEditionsResolver: ResolverType = async (parent, args, context, i
         func: genericComputeFunction,
         context,
         funcOptions,
-        enableCache,
-        refreshCache
+        enableCache
     })
 
     if (question.transformFunction) {

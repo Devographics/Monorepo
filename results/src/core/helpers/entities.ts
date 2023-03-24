@@ -19,4 +19,4 @@ export const useEntity = (id: string) => {
     return allEntities.find(e => e.id === id)
 }
 
-export const getEntityName = (entity: Entity) => entity?.nameClean || entity?.name
+export const getEntityName = (entity?: Entity) => entity?.nameClean || entity?.name

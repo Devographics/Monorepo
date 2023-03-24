@@ -16,6 +16,7 @@ import { SectionMetadata, ToolQuestionData } from '@devographics/types'
 import { useToolSections, getQuestionSectionId } from 'core/helpers/metadata'
 import { usePageContext } from 'core/helpers/pageContext'
 import { useEntities } from 'core/helpers/entities'
+import { NO_ANSWER } from '@devographics/constants'
 
 // hide any item with less than n years of data
 const minimumYearCount = 2
@@ -87,9 +88,11 @@ export const ToolsArrowsChart = ({
         () =>
             data.map(toolQuestionData => {
                 return toolQuestionData.responses?.allEditions?.map(({ year, buckets }) => {
-                    const points = buckets.map(({ id, percentageQuestion }) =>
-                        conditionDiffs[id].map(d => d * percentageQuestion)
-                    )
+                    const points = buckets
+                        .filter(b => b.id !== NO_ANSWER)
+                        .map(({ id, percentageQuestion }) =>
+                            conditionDiffs[id].map(d => d * percentageQuestion)
+                        )
                     return [
                         round(sum(points.map(d => d[0])), 3),
                         round(sum(points.map(d => d[1])), 3),

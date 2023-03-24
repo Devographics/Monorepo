@@ -28,6 +28,7 @@ import {
     limitData,
     cutoffData,
     addEditionYears,
+    discardEmptyEditions,
     removeEmptyEditions
 } from './stages/index'
 
@@ -66,7 +67,8 @@ export async function genericComputeFunction({
         facetSort,
         facetLimit = 50,
         facetCutoff = 1,
-        facetCutoffPercent
+        facetCutoffPercent,
+        showNoAnswer
     } = parameters
 
     const options = question.options && question.options.map(o => o.id)
@@ -151,7 +153,8 @@ export async function genericComputeFunction({
         selectedEditionId,
         filters,
         axis1,
-        axis2
+        axis2,
+        showNoAnswer
     }
 
     const pipeline = await getGenericPipeline(pipelineProps)
@@ -178,6 +181,8 @@ export async function genericComputeFunction({
     }
 
     await discardEmptyIds(results)
+
+    results = await discardEmptyEditions(results)
 
     await addEntities(results, context)
 

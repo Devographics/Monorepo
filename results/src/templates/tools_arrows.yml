@@ -10,7 +10,7 @@ query: >
             ${surveyId} {
                 ${editionId} {
                     libraries {
-                        ${questionId}: allTools {
+                        tools_arrows: allTools {
                             items {
                                 id
                                 responses(parameters: { ENABLE_CACHE_PLACEHOLDER }) {

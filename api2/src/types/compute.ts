@@ -20,6 +20,7 @@ export interface GenericComputeParameters {
     facetCutoff?: number
     facetCutoffPercent?: number
     enableCache?: boolean
+    showNoAnswer?: boolean
 }
 
 export interface ComputeAxisParameters {

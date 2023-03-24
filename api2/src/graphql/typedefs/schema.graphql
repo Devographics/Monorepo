@@ -82,7 +82,7 @@ input Parameters {
     facetCutoff: Int
     facetCutoffPercent: Float
     enableCache: Boolean
-    refreshCache: Boolean
+    showNoAnswer: Boolean
 }
 
 input SortSpecifier {

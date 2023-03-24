@@ -105,9 +105,11 @@
 
       - id: age
         template: demographics
+        parameters: { showNoAnswer: true }
 
       - id: years_of_experience
         template: demographics
+        parameters: { showNoAnswer: true }
         variants:
             - id: years_of_experience
               facet: user_info__yearly_salary
@@ -118,12 +120,14 @@
 
       - id: company_size
         template: demographics
+        parameters: { showNoAnswer: true }
 
       - id: variants_hint
         template: hint
 
       - id: higher_education_degree
         template: demographics
+        parameters: { showNoAnswer: true }
         variants:
             - id: higher_education_degree
               facet: user_info__gender
@@ -134,6 +138,7 @@
 
       - id: yearly_salary
         template: demographics
+        parameters: { showNoAnswer: true }
         variants:
             - id: yearly_salary
               facet: user_info__gender
@@ -171,6 +176,7 @@
 
       - id: gender
         template: demographics
+        parameters: { showNoAnswer: true }
         variants:
             - id: gender
               facet: user_info__country

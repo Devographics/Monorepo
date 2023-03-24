@@ -104,18 +104,6 @@ export const pageFromConfig = async (page, pageIndex, editionVariables) => {
                 const variants = []
 
                 for (let blockVariant of blockVariants) {
-                    // fieldId: id of the GraphQL field (e.g. gender)
-                    blockVariant.fieldId = blockVariant.id
-                    // id: id of the question (e.g. gender_by_age)
-                    blockVariant.id = getQuestionId(blockVariant.id, blockVariant.facet)
-
-                    const contextVariables = {
-                        ...editionVariables,
-                        sectionId: page.id,
-                        questionId: blockVariant.id,
-                        fieldId: blockVariant.fieldId
-                    }
-
                     // if template has been provided, apply it
 
                     // if block has variables, inject them based on current page and global variables
@@ -130,16 +118,26 @@ export const pageFromConfig = async (page, pageIndex, editionVariables) => {
 
                     if (blockVariant.template) {
                         const templateObject = await loadTemplate(blockVariant.template)
-                        if (!contextVariables.questionId) {
-                            // if no questionId was defined in question outline, use id from template itself
-                            contextVariables.questionId = templateObject.id
+
+                        const contextVariables = {
+                            ...editionVariables,
+                            sectionId: page.id,
+                            questionId: blockVariant.id
                         }
+
                         blockVariant = applyTemplate({
                             block: blockVariant,
                             templateObject,
                             blockVariables: blockVariant.variables,
                             contextVariables
                         })
+
+                        if (blockVariant.facet) {
+                            // fieldId: id of the GraphQL field (e.g. gender)
+                            blockVariant.fieldId = blockVariant.id
+                            // id: id of the question (e.g. gender_by_age)
+                            blockVariant.id = getQuestionId(blockVariant.id, blockVariant.facet)
+                        }
                     }
 
                     // if block type is missing, get it from parent

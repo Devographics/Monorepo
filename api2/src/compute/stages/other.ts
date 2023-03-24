@@ -2,6 +2,8 @@ import { ComputeAxisParameters, EditionData, Bucket, FacetBucket, Survey } from 
 import isEmpty from 'lodash/isEmpty.js'
 import sumBy from 'lodash/sumBy.js'
 import difference from 'lodash/difference.js'
+// import { NO_ANSWER } from '@devographics/constants'
+const NO_ANSWER = 'no_answer'
 
 /*
 
@@ -21,6 +23,18 @@ export async function discardEmptyIds(resultsByEdition: EditionData[]) {
             }
         }
     }
+}
+
+/*
+
+Discard any empty editions (editions that contain only no_answer buckets)
+
+*/
+export async function discardEmptyEditions(resultsByEdition: EditionData[]) {
+    return resultsByEdition.filter(
+        editionData =>
+            !(editionData.buckets.length === 1 && editionData.buckets[0].id === NO_ANSWER)
+    )
 }
 
 /*

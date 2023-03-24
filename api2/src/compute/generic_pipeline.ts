@@ -9,12 +9,20 @@ export type PipelineProps = {
     filters?: any
     axis1: ComputeAxisParameters
     axis2?: ComputeAxisParameters | null
+    showNoAnswer?: boolean
 }
 
 // generate an aggregation pipeline for all years, or
 // optionally restrict it to a specific year of data
 export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
-    const { surveyId, selectedEditionId, filters, axis1, axis2 } = pipelineProps
+    const {
+        surveyId,
+        selectedEditionId,
+        filters,
+        axis1,
+        axis2,
+        showNoAnswer = false
+    } = pipelineProps
 
     const axis1DbPath = axis1?.question.dbPath
     const axis2DbPath = axis2?.question.dbPath
@@ -26,6 +34,10 @@ export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
     let match: any = {
         survey: surveyId
         // [axis1DbPath]: { $nin: [null, '', [], {}] }
+    }
+
+    if (!showNoAnswer) {
+        match[axis1DbPath] = { $nin: [null, '', [], {}] }
     }
 
     if (filters) {

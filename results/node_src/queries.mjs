@@ -167,9 +167,6 @@ const wrapArguments = args => {
         : ''
 }
 
-const getQuestionIdString = (questionId, fieldId) =>
-    questionId === fieldId ? questionId : `${questionId}: ${fieldId}`
-
 export const getDefaultQuery = ({
     surveyId,
     editionId,
@@ -194,13 +191,15 @@ export const getDefaultQuery = ({
     }
     const editionType = allEditions ? 'allEditions' : 'currentEdition'
 
+    const questionIdString = fieldId ? `${questionId}: ${fieldId}` : questionId
+
     return `
 dataAPI {
   surveys {
     ${surveyId} {
       ${editionId} {
         ${sectionId} {
-          ${getQuestionIdString(questionId, fieldId)} {
+          ${questionIdString} {
             responses${wrapArguments(args)} {
               ${editionType} {
                 ${allEditions ? allEditionsFragment : ''}

@@ -115,7 +115,7 @@ const VerticalBarChart = ({
     return (
         <div style={{ height: 260 }} className={`VerticalBarChart ${className}`}>
             <ResponsiveBar
-                data={handleNoAnswerBucket(buckets, units, 'end')}
+                data={handleNoAnswerBucket({ buckets, units, moveTo: 'end' })}
                 groupMode={chartDisplayMode}
                 indexBy="id"
                 keys={keys}
