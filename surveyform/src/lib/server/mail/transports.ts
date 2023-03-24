@@ -19,7 +19,10 @@ if (process.env.SMTP_HOST) {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS,
     },
+    debug: true
   };
+} else {
+  console.warn("SMTP_HOST not set, will use debug transport")
 }
 if (process.env.NEXT_PUBLIC_NODE_ENV === "test" && !process.env.SMTP_HOST) {
   console.warn(

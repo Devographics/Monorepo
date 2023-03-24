@@ -179,7 +179,9 @@ export const fetchSurveysListGithub = async (): Promise<Array<SurveyEditionDescr
  * @param surveyId state_of_js
  */
 export async function fetchSurveyContextGithub(surveyId: string): Promise<SurveySharedContext> {
-    const surveyContextRes = await fetchGithub(`${contentsRoot}/${surveyId}/config.yml`)
-    const surveyContext = yamlAsJson<SurveySharedContext>(await githubBody(surveyContextRes))
+    const url = `${contentsRoot}/${surveyId}/config.yml`
+    const surveyContextRes = await fetchGithub(url)
+    console.log("url", url, surveyContextRes)
+    const surveyContext = yamlAsJson<SurveySharedContext>(await githubContent(surveyContextRes))
     return surveyContext
 }
