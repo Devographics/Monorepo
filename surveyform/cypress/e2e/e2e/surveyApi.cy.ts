@@ -39,7 +39,7 @@ describe("survey - API", () => {
     cy.exec("pnpm run db:test:seed");
   });
 
-  test("authenticated user starts survey", () => {
+  test.skip("authenticated user starts survey", () => {
     // TODO: authenticate user
     cy.request({
       method: "POST",

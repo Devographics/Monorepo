@@ -12,18 +12,17 @@ import { userFromReq } from "~/lib/server/context/userContext";
 // import { userFromReq } from "~/lib/server/context/userContext";
 
 export default async function saveSurveyResponseHandler(req: NextApiRequest, res: NextApiResponse) {
-    const user = userFromReq(req)
-    console.log("user", user)
+    const user = await userFromReq(req)
     if (!user) {
         // TODO: check also ownership of the response
         // (currently the graphql resolver also checks permissions, but it should progressively be done here)
-        return res.status(401)
+        return res.status(401).send({})
     }
     await connectToAppDb()
     connectToRedis()
     // method
     if (req.method !== "POST") {
-        return res.status(405)
+        return res.status(405).send({})
     }
     // parameters
     const surveyId = req.query["surveyId"] as string
