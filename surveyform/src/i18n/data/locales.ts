@@ -154,7 +154,7 @@ export const getClosestLocale = (localeId?: string) => {
     return defaultLocale
   }
   // country codes where finding the closest locale is fine
-  // TODO: add more if relevant
+  // TODO: should this apply for China too?
   if (["fr", "pt"].includes(localeId.slice(0, 2))) {
     const firstMatchingLocale = uniqueLocales.find((l) => {
       return l.slice(0, 2) === localeId.slice(0, 2);

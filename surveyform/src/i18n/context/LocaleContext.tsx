@@ -51,6 +51,7 @@ export const useSetLocale = (updateUser?: any) => {
       }
     }
     // the middleware will rerun and redirect user to right locale
+    // TODO: it doesn't change the visible URL in the browser despite using the right locale and running the middleware
     router.refresh();
   }
   return setLocale;
