@@ -55,12 +55,12 @@ function localize(request: NextRequest): NextResponse {
   const validLocale = getClosestLocale(locale);
   if (validLocale !== locale) {
     console.warn(
-      `In middleware, locale ${locale} is not yet supported, falling back to ${locale}`
+      `In middleware, locale ${locale} is not yet supported, falling back to ${validLocale}`
     );
   }
   // add or replace locale
   let url = request.nextUrl.clone();
-  if (langFromPath && validLocale != langFromPath) {
+  if (langFromPath && validLocale !== langFromPath) {
     // console.debug("Will replace locale", langFromPath, "by", validLocale, "in", url.pathname)
     // replace locale
     url.pathname = url.pathname.replace(langFromPath, validLocale)

@@ -1,29 +1,26 @@
 // No need to use ts-jest https://github.com/vercel/next.js/discussions/13528#discussioncomment-22933
-
+/** @type {import('ts-jest').JestConfigWithTsJest} */
 // configuration that must be set for each project but does not change
 const commonConfig = {
+  preset: 'ts-jest',
+  testEnvironment: 'node',
   // A map from regular expressions to paths to transformers
   // transform: undefined,
-  transform: {
-    //"^.+\\.[jt]sx?$": "ts-jest",
-    "^.+\\.(js|jsx|ts|tsx)$": "<rootDir>/node_modules/babel-jest",
-    // MDX support
-    "^.+\\.(md|mdx)$": "jest-transformer-mdx",
-  },
-
+  //transform: {
+  //  //"^.+\\.[jt]sx?$": "ts-jest",
+  //  "^.+\\.(js|jsx|ts|tsx)$": "<rootDir>/node_modules/ts-jest",
+  //},
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
   testPathIgnorePatterns: [
     "/node_modules/",
     "/cypress/",
     "/.next/",
   ],
-
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
   transformIgnorePatterns: [
     "/node_modules/",
     "^.+\\.module\\.(css|sass|scss)$",
   ],
-
   // A map from regular expressions to module names that allow to stub out resources with a single module
   moduleNameMapper: {
     "~/(.*)": "<rootDir>/src/$1",

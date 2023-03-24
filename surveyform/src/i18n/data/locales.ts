@@ -138,7 +138,7 @@ export const defaultLocale = "en-US";
 /**
  * Return a locale that exists in our locales definitions
  * If passed a country, will use the first matching locale for this country
- * Return default locale (en-US) otherwise
+ * Return default locale (en-US) otherwise or a close locale if possible
  * @param localeId
  * @returns
  */
@@ -151,8 +151,17 @@ export const getClosestLocale = (localeId?: string) => {
       return l.slice(0, 2) === localeId;
     });
     if (firstMatchingLocale) return firstMatchingLocale;
-  } else {
-    return defaultLocale;
+    return defaultLocale
   }
+  // country codes where finding the closest locale is fine
+  // TODO: add more if relevant
+  if (["fr", "pt"].includes(localeId.slice(0, 2))) {
+    const firstMatchingLocale = uniqueLocales.find((l) => {
+      return l.slice(0, 2) === localeId.slice(0, 2);
+    });
+    if (firstMatchingLocale) return firstMatchingLocale
+    return defaultLocale
+  }
+  // else use English (for unsupported countries/if en-US is safer for this country)
   return defaultLocale;
 };

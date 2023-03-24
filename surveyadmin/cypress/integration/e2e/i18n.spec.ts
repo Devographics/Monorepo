@@ -57,7 +57,7 @@ test("When using unlisted locale, fallback to closest country locale", () => {
     headers: { "Accept-Language": `${unlistedFrLocale};q=0.9` },
     followRedirect: true,
   }).as("homeFr");
-  cy.get("@homeFr").its("body").should("include", 'lang="fr"');
+  cy.get("@homeFr").its("body", { timeout: 0 }).should("include", 'lang="fr"');
 });
 test("Switch locale via UI", () => {
   cy.visit("/");
