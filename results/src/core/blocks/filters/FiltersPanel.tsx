@@ -15,15 +15,21 @@ import FacetSelection from './FacetSelection'
 import FiltersSelection from './FiltersSelection'
 import { MODE_DEFAULT, MODE_FACET, MODE_COMBINED, MODE_GRID } from './constants'
 import cloneDeep from 'lodash/cloneDeep'
-import { BlockDefinition } from '@types/index'
+import { BlockDefinition } from '../../types/index'
 import { useStickyState, getFiltersLink } from './helpers'
 import { CheckIcon } from 'core/icons'
+import { CustomizationDefinition, SupportedMode } from './types'
 
 type FiltersPanelPropsType = {
     block: BlockDefinition
-    chartFilters: any
-    setChartFilters: Dispatch<SetStateAction<any>>
-    closeModal: Function
+    chartFilters: CustomizationDefinition
+    setChartFilters: Dispatch<SetStateAction<CustomizationDefinition>>
+    closeModal: any
+}
+
+type TabConfigItem = {
+    mode: SupportedMode
+    component: React.FC
 }
 
 const FiltersPanel = ({
@@ -68,7 +74,7 @@ const FiltersPanel = ({
     // whenever this panel is loaded without a mode specified, set mode to currentMode
     useEffect(() => {
         if (filtersState.options.mode === MODE_DEFAULT) {
-            setFiltersState(fState => {
+            setFiltersState((fState: CustomizationDefinition) => {
                 const newState = cloneDeep(fState)
                 newState.options.mode = currentMode
                 return newState
@@ -76,7 +82,7 @@ const FiltersPanel = ({
         }
     }, [])
 
-    const tabConfig = [
+    const tabConfig: TabConfigItem[] = [
         { mode: MODE_COMBINED, component: FiltersSelection },
         { mode: MODE_GRID, component: FiltersSelection },
         { mode: MODE_FACET, component: FacetSelection }
@@ -85,8 +91,8 @@ const FiltersPanel = ({
 
     const filtersLink = getFiltersLink({ block, context, filtersState })
 
-    const handleTabChange = (tab: string) => {
-        setFiltersState((fState: any) => {
+    const handleTabChange = (tab: SupportedMode) => {
+        setFiltersState((fState: CustomizationDefinition) => {
             const newState = cloneDeep(fState)
             newState.options.mode = tab
             return newState
@@ -152,11 +158,10 @@ const FiltersPanel = ({
     )
 }
 
-const CopyLink = ({ link }) => {
+const CopyLink = ({ link }: { link: string }) => {
     const [isCopied, setIsCopied] = useState(false)
 
-    // This is the function we wrote earlier
-    async function copyTextToClipboard(text) {
+    async function copyTextToClipboard(text: string) {
         if ('clipboard' in navigator) {
             return await navigator.clipboard.writeText(text)
         } else {

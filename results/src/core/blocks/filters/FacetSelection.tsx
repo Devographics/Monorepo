@@ -8,11 +8,19 @@ import { useI18n } from 'core/i18n/i18nContext'
 import cloneDeep from 'lodash/cloneDeep'
 import { useAllChartsOptionsIdsOnly } from 'core/charts/hooks'
 import { MODE_FACET } from './constants'
+import { PanelState } from './types'
+import { BlockDefinition } from 'core/types'
 
 // disable facets with too many segments
 const disabledFacets = ['source', 'country', 'industry_sector']
 
-const FacetSelection = ({ chartName, stateStuff, block }) => {
+interface FacetSelectionProps {
+    chartName: string
+    stateStuff: PanelState
+    block: BlockDefinition
+}
+
+const FacetSelection = ({ chartName, stateStuff, block }: FacetSelectionProps) => {
     const { getString } = useI18n()
     const allChartsKeys = useAllChartsOptionsIdsOnly()
     const { facets } = allChartsKeys

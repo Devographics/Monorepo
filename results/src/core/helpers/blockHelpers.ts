@@ -1,5 +1,7 @@
 import get from 'lodash/get'
 import config from 'Config/config.yml'
+import { BlockDefinition } from 'core/types'
+import { Entity } from '@devographics/types'
 
 const { siteTitle, capturesUrl, hashtag, year } = config
 
@@ -25,7 +27,12 @@ export const getBlockTitleKey = (block, page) => block.titleId || `${getBlockKey
 export const getBlockDescriptionKey = (block, page) =>
     block.descriptionId || `${getBlockKey(block, page)}.description`
 
-export const getBlockTitle = (block, page, translate, entities) => {
+export const getBlockTitle = (
+    block: BlockDefinition,
+    page: any,
+    translate: any,
+    entities?: Entity[]
+) => {
     const entity = entities?.find(e => e.id === block.id)
     const translation = translate(
         getBlockTitleKey(block, page),

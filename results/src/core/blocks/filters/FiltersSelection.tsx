@@ -2,40 +2,43 @@ import React from 'react'
 import Series from './Series'
 import styled from 'styled-components'
 import T from 'core/i18n/T'
-import { mq, spacing, fontSize } from 'core/theme'
+import { spacing } from 'core/theme'
 import Button from 'core/components/Button'
 import cloneDeep from 'lodash/cloneDeep.js'
 import { getNewSeries } from './helpers'
-import { maxSeriesCount, MODE_GRID } from './constants'
+import { maxSeriesCount } from './constants'
 import { usePageContext } from 'core/helpers/pageContext'
-import { useI18n } from 'core/i18n/i18nContext'
 import { Series_ } from './Series'
 import Presets from './Presets'
 import Options from './Options'
-import { useAllChartsOptionsIdsOnly } from 'core/charts/hooks'
+import { useAllChartsOptions } from 'core/charts/hooks'
+import { CustomizationDefinition, PanelState, CustomizationFiltersSeries } from './types'
+import { BlockDefinition } from 'core/types'
 
-const FiltersSelection = ({ chartName, block, stateStuff, mode = MODE_GRID }) => {
+interface FiltersSelectionProps {
+    block: BlockDefinition
+    stateStuff: PanelState
+}
+
+const FiltersSelection = ({ block, stateStuff }: FiltersSelectionProps) => {
     const context = usePageContext()
-    const allChartsKeys = useAllChartsOptionsIdsOnly()
+    const availableFilters = useAllChartsOptions()
     const { currentEdition } = context
     const { filtersState, setFiltersState } = stateStuff
 
-    const canAddSeries = filtersState.filters.length < maxSeriesCount
+    const canAddSeries = (filtersState?.filters?.length || 0) < maxSeriesCount
 
-    const availableFilters = allChartsKeys.filters
-
-    const filtersWithoutCurrentItem = availableFilters.filter(f => f !== block.id)
+    const filtersWithoutCurrentItem = availableFilters?.filter(q => q.id !== block.id)
 
     const emptySeries = getNewSeries({
         filters: filtersWithoutCurrentItem,
-        keys: allChartsKeys,
         year: currentEdition.year
     })
 
     const handleAddSeries = () => {
-        setFiltersState(fState => {
+        setFiltersState((fState: CustomizationDefinition) => {
             const newState = cloneDeep(fState)
-            newState.filters = [...newState.filters, emptySeries]
+            newState.filters = [...(newState.filters || []), emptySeries]
             return newState
         })
     }
@@ -49,7 +52,7 @@ const FiltersSelection = ({ chartName, block, stateStuff, mode = MODE_GRID }) =>
             <Presets stateStuff={stateStuff} />
             <SeriesList_>
                 <Options filtersState={filtersState} setFiltersState={setFiltersState} />
-                {filtersState.filters.map((series, index) => (
+                {filtersState?.filters?.map((series: CustomizationFiltersSeries, index: number) => (
                     <Series
                         key={index}
                         series={series}

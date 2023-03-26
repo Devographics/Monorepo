@@ -4,16 +4,28 @@ import styled from 'styled-components'
 import { mq, spacing } from 'core/theme'
 import Button from 'core/components/Button'
 import T from 'core/i18n/T'
-import difference from 'lodash/difference.js'
 import cloneDeep from 'lodash/cloneDeep.js'
 import { getNewCondition } from './helpers'
 import { Condition_ } from './Condition'
-import { TrashIcon, DeleteIcon } from 'core/icons'
+import { DeleteIcon } from 'core/icons'
 import { useTheme } from 'styled-components'
 import YearSelector from './YearSelector'
-import { useAllChartsOptionsIdsOnly } from 'core/charts/hooks'
+import { useAllChartsOptions } from 'core/charts/hooks'
+import {
+    CustomizationDefinition,
+    FilterItem,
+    CustomizationFiltersSeries,
+    PanelState
+} from './types'
 
-const Series = ({ filters, series, index, stateStuff }) => {
+interface SeriesProps {
+    filters: FilterItem[]
+    series: CustomizationFiltersSeries
+    index: number
+    stateStuff: PanelState
+}
+
+const Series = ({ filters, series, index, stateStuff }: SeriesProps) => {
     const theme = useTheme()
 
     const { conditions } = series
@@ -22,24 +34,25 @@ const Series = ({ filters, series, index, stateStuff }) => {
     const { enableYearSelect } = options
     const showDefaultSeries = filtersState.options.showDefaultSeries
 
-    const allChartsKeys = useAllChartsOptionsIdsOnly()
+    const allChartsKeys = useAllChartsOptions()
 
-    const filtersInUse = conditions.map(c => c.field)
-    const filtersNotInUse = difference(filters, filtersInUse)
+    const filtersInUse = conditions.map(c => c.fieldId)
+    // const filtersNotInUse = difference(filters, filtersInUse)
+    const filtersNotInUse = filtersInUse
 
     const handleAddCondition = () => {
-        setFiltersState(fState => {
+        setFiltersState((fState: CustomizationDefinition) => {
             const newState = cloneDeep(fState)
             newState.filters[index].conditions = [
                 ...series.conditions,
-                getNewCondition({ filtersNotInUse, keys: allChartsKeys })
+                getNewCondition({ filtersNotInUse })
             ]
             return newState
         })
     }
 
     const handleDeleteSeries = () => {
-        setFiltersState(fState => {
+        setFiltersState((fState: CustomizationDefinition) => {
             const newState = cloneDeep(fState)
             newState.filters.splice(index, 1)
             return newState

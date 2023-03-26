@@ -185,10 +185,23 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId }) => 
                         filters: v.filters,
                         parameters: v.parameters || {}
                     }
-                    const query = getQuery({ query: v.query, queryOptions, isLog: false })
+                    const enableCache = process.env.USE_CACHE === 'false' ? false : true
+
+                    const query = getQuery({
+                        query: v.query,
+                        queryOptions,
+                        isLog: false,
+                        enableCache,
+                        addRootNode: true
+                    })
 
                     if (query.includes('dataAPI')) {
-                        const queryLog = getQuery({ query: v.query, queryOptions, isLog: true })
+                        const queryLog = getQuery({
+                            query: v.query,
+                            queryOptions,
+                            isLog: true,
+                            addRootNode: false
+                        })
                         logToFile(queryFileName, queryLog, {
                             mode: 'overwrite',
                             dirPath: queryDirPath,

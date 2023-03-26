@@ -5,29 +5,27 @@ descriptionId: blocks.tools_arrows.description
 noteId: blocks.tools_arrows.note
 hasSponsor: true
 query: >
-    dataAPI {
-        surveys {
-            ${surveyId} {
-                ${editionId} {
-                    libraries {
-                        tools_arrows: allTools {
-                            items {
-                                id
-                                responses(parameters: { ENABLE_CACHE_PLACEHOLDER }) {
-                                    allEditions {
-                                        year
-                                        editionId
-                                        buckets {
-                                            id
-                                            percentageQuestion
-                                            percentageSurvey
-                                            count
-                                        }
-                                        completion {
-                                            count
-                                            percentageSurvey
-                                            total
-                                        }
+    surveys {
+        ${surveyId} {
+            ${editionId} {
+                libraries {
+                    tools_arrows: allTools {
+                        items {
+                            id
+                            responses(parameters: { ENABLE_CACHE_PLACEHOLDER }) {
+                                allEditions {
+                                    year
+                                    editionId
+                                    buckets {
+                                        id
+                                        percentageQuestion
+                                        percentageSurvey
+                                        count
+                                    }
+                                    completion {
+                                        count
+                                        percentageSurvey
+                                        total
                                     }
                                 }
                             }

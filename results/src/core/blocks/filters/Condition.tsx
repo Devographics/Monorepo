@@ -4,8 +4,21 @@ import { mq, spacing } from 'core/theme'
 import Button from 'core/components/Button'
 import { DeleteIcon, TrashIcon, PlusIcon } from 'core/icons'
 import cloneDeep from 'lodash/cloneDeep.js'
-import { useAllChartsOptions } from 'core/charts/hooks'
-import { FieldSegment, ValueSegment, OperatorSegment } from './ConditionSegments'
+import { useAllFilters } from 'core/charts/hooks'
+import { FieldSegment } from './FieldSegment'
+import { ValueSegment } from './ValueSegment'
+import { OperatorSegment } from './OperatorSegment'
+import { CustomizationFiltersCondition, FilterItem, PanelState } from './types'
+
+interface ConditionProps {
+    seriesIndex: number
+    index: number
+    filters: string[]
+    filtersInUse: string[]
+    filtersNotInUse: string[]
+    condition: CustomizationFiltersCondition
+    stateStuff: PanelState
+}
 
 const Condition = ({
     seriesIndex,
@@ -15,16 +28,20 @@ const Condition = ({
     filtersNotInUse,
     condition,
     stateStuff
-}) => {
+}: ConditionProps) => {
     const defaultField = filtersNotInUse[0]
-    const { field = defaultField, operator, value } = condition
+    const { fieldId = defaultField, operator, value } = condition
     const { setFiltersState } = stateStuff
 
-    const allChartsOptions = useAllChartsOptions()
+    const allFilters = useAllFilters()
 
-    const values = allChartsOptions[field] || []
+    const values = allFilters.find(o => o.id === fieldId)?.options || []
 
-    const disabledList = filtersInUse.filter(fieldId => fieldId !== field)
+    // console.log(allFilters)
+    // console.log(fieldId)
+    // console.log(allFilters.find(o => o.id === fieldId))
+    // console.log(values)
+    const disabledList = filtersInUse.filter(id => id !== fieldId)
 
     const handleDelete = () => {
         setFiltersState(fState => {
@@ -34,7 +51,13 @@ const Condition = ({
         })
     }
 
-    const segmentProps = { seriesIndex, conditionIndex: index, stateStuff, allChartsOptions, field }
+    const segmentProps = {
+        seriesIndex,
+        conditionIndex: index,
+        stateStuff,
+        allFilters,
+        fieldId
+    }
 
     return (
         <ActiveCondition_>
@@ -42,7 +65,7 @@ const Condition = ({
                 <FieldSegment
                     {...segmentProps}
                     options={filters}
-                    value={field}
+                    fieldId={fieldId}
                     disabledList={disabledList}
                 />
                 <OperatorSegment {...segmentProps} value={operator} />

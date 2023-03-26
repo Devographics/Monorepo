@@ -8,6 +8,8 @@ import { mq, spacing, fontSize } from 'core/theme'
 import camelCase from 'lodash/camelCase'
 import BlockFooter from 'core/blocks/block/BlockFooter'
 import get from 'lodash/get'
+import { getBlockQuery } from 'core/helpers/queries'
+import { usePageContext } from 'core/helpers/pageContext'
 
 const BlockData = props => {
     return (
@@ -68,7 +70,10 @@ export const JSONExport = ({ block, data }) => {
 }
 
 export const getGraphQLQuery = block => {
-    const { id, query } = block
+    const { id } = block
+    const pageContext = usePageContext()
+    const query = getBlockQuery({ block, pageContext })
+
     // remove first and last lines of query to remove "dataAPI" field
     const trimmedQuery = query && query.split('\n').slice(1, -2).join('\n')
     const graphQLExport = `query ${camelCase(id)}Query {

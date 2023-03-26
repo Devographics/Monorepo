@@ -8,29 +8,27 @@ noteId: blocks.tools_experience_marimekko.note
 bucketKeysName: tools
 hasSponsor: true
 query: >
-    dataAPI {
-        surveys {
-            ${surveyId} {
-                ${editionId} {
-                    ${sectionId} {
-                        ${sectionId}_experience_marimekko: ${sectionId}_allTools {
-                            items {
-                                id
-                                responses(parameters: { ENABLE_CACHE_PLACEHOLDER }) {
-                                    currentEdition {
-                                        editionId
-                                        year
-                                        buckets {
-                                            id
-                                            percentageQuestion
-                                            percentageSurvey
-                                            count
-                                        }
-                                        completion {
-                                            count
-                                            percentageSurvey
-                                            total
-                                        }
+    surveys {
+        ${surveyId} {
+            ${editionId} {
+                ${sectionId} {
+                    ${sectionId}_experience_marimekko: ${sectionId}_allTools {
+                        items {
+                            id
+                            responses(parameters: { ENABLE_CACHE_PLACEHOLDER }) {
+                                currentEdition {
+                                    editionId
+                                    year
+                                    buckets {
+                                        id
+                                        percentageQuestion
+                                        percentageSurvey
+                                        count
+                                    }
+                                    completion {
+                                        count
+                                        percentageSurvey
+                                        total
                                     }
                                 }
                             }
@@ -40,38 +38,3 @@ query: >
             }
         }
     }
-
-# query: >
-#     dataAPI {
-#         survey(survey: ${surveyId}) {
-#             # fragmentStart
-#             ${sectionId}_marimekko: tools(ids: [${toolsCategories[parentId]}]) {
-#                 id
-#                 entity {
-#                     name
-#                     nameClean
-#                     nameHtml
-#                 }
-#                 experience(filters: {}) {
-#                     keys
-#                     year(year: ${currentYear}) {
-#                         year
-#                         completion {
-#                             total
-#                             count
-#                             percentageSurvey
-#                         }
-#                         facets {
-#                             buckets {
-#                                 id
-#                                 count
-#                                 percentageSurvey
-#                                 percentageQuestion
-#                             }
-#                         }
-#                     }
-#                 }
-#             }
-#             # fragmentEnd
-#         }
-#     }

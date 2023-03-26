@@ -2,22 +2,20 @@ titleId: blocks.features_overview
 blockType: FeaturesOverviewBlock
 hasSponsor: true
 query: >
-    dataAPI {
-        surveys {
-            ${surveyId} {
-                ${editionId} {
-                    features {
-                        features_overview: allFeatures {
-                            items {
-                                id
-                                responses(parameters: { ENABLE_CACHE_PLACEHOLDER }) {
-                                    currentEdition {
-                                        buckets {
-                                            id
-                                            percentageQuestion
-                                            percentageSurvey
-                                            count
-                                        }
+    surveys {
+        ${surveyId} {
+            ${editionId} {
+                features {
+                    features_overview: allFeatures {
+                        items {
+                            id
+                            responses(parameters: { ENABLE_CACHE_PLACEHOLDER }) {
+                                currentEdition {
+                                    buckets {
+                                        id
+                                        percentageQuestion
+                                        percentageSurvey
+                                        count
                                     }
                                 }
                             }

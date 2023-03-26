@@ -39,3 +39,42 @@ export interface ParsedQuestion extends Omit<Question, 'id'> {
 export interface QuestionTemplateOutput extends Omit<Question, 'id'> {
     id: string
 }
+
+export type ResponseArguments = {
+    filters: Filters
+    facet: string
+    parameters: ResponsesParameters
+}
+
+export interface Filters {
+    [key: string]: Filter<string>
+}
+
+export interface Filter<T> {
+    // must equal value
+    eq?: T
+    // must be one of given values
+    in?: T[]
+    // must not be one of given values
+    nin?: T[]
+}
+
+export interface ResponsesParameters {
+    cutoff?: number
+    cutoffPercent?: number
+    limit?: number
+    sort?: SortSpecifier
+
+    facetCutoff?: number
+    facetCutoffPercent?: number
+    facetLimit?: number
+    facetSort?: SortSpecifier
+
+    enableCache?: boolean
+    showNoAnswer?: boolean
+}
+
+export interface SortSpecifier {
+    order: 'asc' | 'desc'
+    property: 'options' | 'count' | 'percent' | 'id' | 'mean' | 'average'
+}

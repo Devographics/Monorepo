@@ -336,6 +336,8 @@ importers:
       '@babel/plugin-syntax-flow': ^7.18.6
       '@babel/plugin-transform-react-jsx': ^7.21.0
       '@devographics/constants': workspace:^1.0.0
+      '@devographics/core-models': workspace:^1.0.0
+      '@devographics/graphql': workspace:^1.0.0
       '@devographics/types': workspace:^1.0.0
       '@graphql-tools/links': 8.3.9
       '@mdx-js/mdx': ^2.1.5
@@ -438,6 +440,8 @@ importers:
       webpack: 5.75.0
     dependencies:
       '@devographics/constants': link:../shared/constants
+      '@devographics/core-models': link:../shared/core-models
+      '@devographics/graphql': link:../shared/graphql
       '@devographics/types': link:../shared/types
       '@mdx-js/mdx': 2.1.5
       '@mdx-js/react': 2.1.5_react@18.0.0
@@ -609,6 +613,37 @@ importers:
 
   shared/encrypt-email:
     specifiers: {}
+
+  shared/graphql:
+    specifiers:
+      '@devographics/types': workspace:^1.0.0
+      '@types/lodash': ^4.14.175
+      '@types/node': ^18.11.18
+      '@vulcanjs/graphql': ^0.7.1
+      '@vulcanjs/mongo': ^0.7.1
+      graphql-tag: ^2.12.6
+      ioredis: ^5.2.4
+      js-yaml: ^4.1.0
+      lodash: ^4.17.21
+      moment: ^2.29.4
+      mongoose: ^6.7.1
+      nanoid: ^3.1.25
+      node-cache: ^5.1.2
+    dependencies:
+      '@devographics/types': link:../types
+      '@types/lodash': 4.14.191
+      '@vulcanjs/graphql': 0.7.1_moment@2.29.4
+      '@vulcanjs/mongo': 0.7.1_bvxyc23qcdm36i55ezkcrpiirq
+      graphql-tag: 2.12.6
+      ioredis: 5.2.4
+      js-yaml: 4.1.0
+      lodash: 4.17.21
+      moment: 2.29.4
+      mongoose: 6.9.1
+      nanoid: 3.3.4
+      node-cache: 5.1.2
+    devDependencies:
+      '@types/node': 18.11.18
 
   shared/i18n:
     specifiers:
@@ -13172,6 +13207,7 @@ packages:
       '@babel/runtime': 7.20.7
       '@types/testing-library__react-hooks': 3.4.1
       react: 18.2.0
+    dev: false
     optional: true
 
   /@testing-library/react/10.4.9_biqbaboplfbrettd7655fr4n2y:

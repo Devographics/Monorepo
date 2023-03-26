@@ -4,8 +4,14 @@ import T from 'core/i18n/T'
 import { mq, spacing, fontSize } from 'core/theme'
 import cloneDeep from 'lodash/cloneDeep.js'
 import { Series_ } from './Series'
+import { CustomizationDefinition } from './types'
 
-const Options = ({ filtersState, setFiltersState }) => (
+interface OptionsProps {
+    filtersState: CustomizationDefinition
+    setFiltersState: React.Dispatch<React.SetStateAction<CustomizationDefinition>>
+}
+
+const Options = ({ filtersState, setFiltersState }: OptionsProps) => (
     <Options_>
         <Option_>
             <label>

@@ -1,13 +1,18 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import Button from 'core/components/Button'
 import T from 'core/i18n/T'
 import { mq, spacing, fontSize } from 'core/theme'
-import cloneDeep from 'lodash/cloneDeep.js'
 import { DeleteIcon } from 'core/icons'
 import { useI18n } from 'core/i18n/i18nContext'
+import {
+    PanelState,
+    PresetDefinition,
+    CustomizationOptions,
+    CustomizationDefinition
+} from './types'
 
-const getPresetsArray = options => {
+const getPresetsArray = (options: CustomizationOptions): PresetDefinition[] => {
     const { enableYearSelect } = options
     return [
         ...(enableYearSelect
@@ -43,7 +48,7 @@ const getPresetsArray = options => {
                 {
                     conditions: [
                         {
-                            field: 'gender',
+                            fieldId: 'gender',
                             operator: 'eq',
                             value: 'male'
                         }
@@ -52,7 +57,7 @@ const getPresetsArray = options => {
                 {
                     conditions: [
                         {
-                            field: 'gender',
+                            fieldId: 'gender',
                             operator: 'eq',
                             value: 'female'
                         }
@@ -61,7 +66,7 @@ const getPresetsArray = options => {
                 {
                     conditions: [
                         {
-                            field: 'gender',
+                            fieldId: 'gender',
                             operator: 'eq',
                             value: 'non_binary'
                         }
@@ -116,7 +121,7 @@ const getPresetsArray = options => {
                 {
                     conditions: [
                         {
-                            field: 'yearly_salary',
+                            fieldId: 'yearly_salary',
                             operator: 'in',
                             value: [
                                 'range_work_for_free',
@@ -130,7 +135,7 @@ const getPresetsArray = options => {
                 {
                     conditions: [
                         {
-                            field: 'yearly_salary',
+                            fieldId: 'yearly_salary',
                             operator: 'in',
                             value: ['range_50_100', 'range_100_200', 'range_more_than_200']
                         }
@@ -147,7 +152,7 @@ const getPresetsArray = options => {
                 {
                     conditions: [
                         {
-                            field: 'years_of_experience',
+                            fieldId: 'years_of_experience',
                             operator: 'in',
                             value: ['range_less_than_1', 'range_1_2', 'range_2_5']
                         }
@@ -156,7 +161,7 @@ const getPresetsArray = options => {
                 {
                     conditions: [
                         {
-                            field: 'years_of_experience',
+                            fieldId: 'years_of_experience',
                             operator: 'in',
                             value: ['range_5_10', 'range_10_20', 'range_more_than_20']
                         }
@@ -167,7 +172,11 @@ const getPresetsArray = options => {
     ]
 }
 
-const Presets = ({ stateStuff }) => {
+interface PresetsProps {
+    stateStuff: PanelState
+}
+
+const Presets = ({ stateStuff }: PresetsProps) => {
     const { customPresets, setCustomPresets, filtersState, setFiltersState } = stateStuff
     const { getString } = useI18n()
 
@@ -192,10 +201,12 @@ const Presets = ({ stateStuff }) => {
                 variant="link"
                 size="small"
                 onClick={() => {
-                    const name = prompt(getString('filters.presets.enter_name')?.t)
-                    setCustomPresets(presets => {
-                        return [...presets, { ...filtersState, name }]
-                    })
+                    const name = window.prompt(getString('filters.presets.enter_name')?.t)
+                    if (name) {
+                        setCustomPresets(presets => {
+                            return [...presets, { ...filtersState, name }]
+                        })
+                    }
                 }}
             >
                 <T k="filters.presets.save" />
@@ -204,12 +215,19 @@ const Presets = ({ stateStuff }) => {
     )
 }
 
-const Preset = ({ preset, setCustomPresets, setFiltersState, isCustom }) => {
+interface PresetProps {
+    preset: PresetDefinition
+    setCustomPresets?: React.Dispatch<React.SetStateAction<PresetDefinition[]>>
+    setFiltersState: React.Dispatch<React.SetStateAction<CustomizationDefinition>>
+    isCustom?: boolean
+}
+const Preset = ({ preset, setCustomPresets, setFiltersState, isCustom }: PresetProps) => {
     const handleDelete = () => {
-        setCustomPresets(presets => {
-            const newPresets = presets.filter(p => p.name !== preset.name)
-            return newPresets
-        })
+        setCustomPresets &&
+            setCustomPresets(presets => {
+                const newPresets = presets.filter(p => p.name !== preset.name)
+                return newPresets
+            })
     }
     return (
         <PresetWrapper_>

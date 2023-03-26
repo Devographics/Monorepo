@@ -1,27 +1,25 @@
 id: all_tools
 hidden: true
 query: >
-    dataAPI {
-        surveys {
-            ${surveyId} {
-                ${editionId} {
-                    libraries {
-                        allTools {
-                            items {
-                                id
-                                responses(parameters: { ENABLE_CACHE_PLACEHOLDER }) {
-                                    currentEdition {
-                                        buckets {
-                                            id
-                                            percentageQuestion
-                                            percentageSurvey
-                                            count
-                                        }
-                                        completion {
-                                            count
-                                            percentageSurvey
-                                            total
-                                        }
+    surveys {
+        ${surveyId} {
+            ${editionId} {
+                libraries {
+                    allTools {
+                        items {
+                            id
+                            responses(parameters: { ENABLE_CACHE_PLACEHOLDER }) {
+                                currentEdition {
+                                    buckets {
+                                        id
+                                        percentageQuestion
+                                        percentageSurvey
+                                        count
+                                    }
+                                    completion {
+                                        count
+                                        percentageSurvey
+                                        total
                                     }
                                 }
                             }

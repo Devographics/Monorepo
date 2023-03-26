@@ -14,6 +14,7 @@ import {
     CHART_MODE_STACKED,
     CHART_MODE_GROUPED
 } from 'core/blocks/filters/constants'
+import { FilterItem } from 'core/blocks/filters/types'
 
 /*
 
@@ -303,12 +304,22 @@ export const useColorFills = (options: UseColorFillsOptions = {}) => {
 Get options keys ([{ id: 'range_work_for_free' }, { id: 'range_0_10' }, { id: 'range_10_30' }, ...]) for all chart types
 
 */
-export const useAllChartsOptions = () => {
+export const useAllChartsOptions = (): FilterItem[] => {
     const context = usePageContext()
-    const { metadata } = context
-    const { keys } = metadata
+    const { currentEdition } = context
+    const keys = []
+    for (const section of currentEdition.sections) {
+        for (const question of section.questions) {
+            const { id, options, template } = question
+            if (options) {
+                keys.push({ sectionId: section.id, id, options, template })
+            }
+        }
+    }
     return keys
 }
+
+export const useAllFilters = useAllChartsOptions
 
 export const useAllChartsOptionsIdsOnly = () => {
     const options = {}
@@ -349,12 +360,12 @@ export const useChartKeys = ({
     seriesCount?: number
     showDefaultSeries?: boolean
 }) => {
-    const allChartKeys = useAllChartsOptionsIdsOnly()
+    const allChartKeys = useAllChartsOptions()
     if (facet) {
         if (units === 'average') {
             return ['average']
         } else {
-            return allChartKeys[facet].map(key => `${units}__${key}`)
+            return allChartKeys.find(q => q.id === facet)?.options.map(key => `${units}__${key}`)
         }
     } else if (seriesCount) {
         if (showDefaultSeries) {

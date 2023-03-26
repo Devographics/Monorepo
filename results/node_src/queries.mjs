@@ -1,6 +1,7 @@
 import camelCase from 'lodash/camelCase.js'
 import { indentString } from './indent_string.mjs'
 import { getQuestionId } from './helpers.mjs'
+import isEmpty from 'lodash/isEmpty.js'
 
 export const getLocalesQuery = (localeIds, contexts, loadStrings = true) => {
     const args = []
@@ -99,6 +100,11 @@ query {
                         url
                         imageUrl
                     }
+                    editions {
+                        year
+                        id
+                        resultsUrl
+                    }
                 }
                 ${editionId} {
                     _metadata {
@@ -183,10 +189,10 @@ export const getDefaultQuery = ({
     if (facet) {
         args.facet = facet
     }
-    if (filters) {
+    if (filters && !isEmpty(filters)) {
         args.filters = unquote(JSON.stringify(filters))
     }
-    if (parameters) {
+    if (parameters && !isEmpty(parameters)) {
         args.parameters = unquote(JSON.stringify(parameters))
     }
     const editionType = allEditions ? 'allEditions' : 'currentEdition'
@@ -194,7 +200,6 @@ export const getDefaultQuery = ({
     const questionIdString = fieldId ? `${questionId}: ${fieldId}` : questionId
 
     return `
-dataAPI {
   surveys {
     ${surveyId} {
       ${editionId} {
@@ -223,7 +228,6 @@ dataAPI {
       }
     }
   }
-}
 `
 }
 
@@ -235,9 +239,20 @@ export const getQueryName = ({ editionId, questionId }) =>
 Wrap query contents with query FooQuery {...}
 
 */
-export const wrapQuery = ({ queryName, queryContents }) => `query ${queryName} {
-   ${indentString(queryContents, 4)}
+export const wrapQuery = ({ queryName, queryContents, addRootNode }) => {
+    const isInteralAPIQuery = queryContents.includes('internalAPI')
+    if (addRootNode && !isInteralAPIQuery) {
+        return `query ${queryName} {
+    dataAPI{
+        ${indentString(queryContents, 8)}
+    }
 }`
+    } else {
+        return `query ${queryName} {
+    ${indentString(queryContents, 4)}
+}`
+    }
+}
 
 /*
 
@@ -273,11 +288,16 @@ const defaultQueries = [
     'allEditionsData',
     'allEditionsDataWithEntities'
 ]
-export const getQuery = ({ query, queryOptions, isLog = false }) => {
+export const getQuery = ({
+    query,
+    queryOptions,
+    isLog = false,
+    enableCache,
+    addRootNode = true
+}) => {
     const { editionId, questionId } = queryOptions
     const queryName = getQueryName({ editionId, questionId })
 
-    const enableCache = process.env.USE_CACHE === 'false' ? false : true
     let queryContents
     if (defaultQueries.includes(query)) {
         if (['allEditionsData'].includes(query)) {
@@ -302,6 +322,6 @@ export const getQuery = ({ query, queryOptions, isLog = false }) => {
         }
     }
 
-    const wrappedQuery = wrapQuery({ queryName, queryContents })
+    const wrappedQuery = wrapQuery({ queryName, queryContents, addRootNode })
     return wrappedQuery
 }

@@ -102,7 +102,7 @@ const DynamicDataLoader = ({
 
     const initialLoad = useRef(true)
 
-    const allChartsOptions = useAllChartsOptions()
+    const useAllFilters = useAllChartsOptions()
 
     useEffect(() => {
         if (initialLoad.current && !chartFilters.queryOnLoad) {
@@ -199,7 +199,7 @@ const DynamicDataLoader = ({
                 })
                 const invertedFacetsBucketsWithAverages = calculateAverages({
                     buckets: invertedFacetsBuckets,
-                    allChartsOptions,
+                    useAllFilters,
                     facet: chartFilters.facet
                 })
                 setUnits('percentage_bucket')

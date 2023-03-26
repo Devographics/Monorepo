@@ -20,11 +20,13 @@ export interface SectionMetadata extends Omit<Section, 'questions'> {
     questions: QuestionMetadata[]
 }
 
-export interface QuestionMetadata extends Omit<Question, 'options'> {
+export interface QuestionMetadata extends Omit<Question, 'options' | 'id'> {
+    id: string
     entity?: Entity
     options?: OptionMetadata[]
 }
 
 export interface OptionMetadata extends Option {
     entity?: Entity
+    label?: string
 }

@@ -12,6 +12,7 @@ import {
     ParsedQuestion,
     Option,
     EditionData,
+    ResponseArguments,
     FacetBucket,
     Bucket
 } from '@devographics/types'
@@ -54,12 +55,6 @@ export interface ResolverParent {
 
 export interface QuestionResolverParent extends ResolverParent {
     options?: Option[]
-}
-
-export type ResponseArguments = {
-    filters: any
-    facet: string
-    parameters: any
 }
 
 export type ResolverType = (
@@ -109,5 +104,6 @@ export {
     Option,
     EditionData,
     FacetBucket,
+    ResponseArguments,
     Bucket
 } from '@devographics/types'

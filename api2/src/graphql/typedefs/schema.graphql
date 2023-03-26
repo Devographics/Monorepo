@@ -17,6 +17,7 @@ type SurveyMetadata {
     name: String
     domain: String
     partners: [SponsorItem]
+    editions: [EditionMetadata]
 }
 
 type EditionMetadata {

@@ -1,5 +1,5 @@
 import React from 'react'
-import IconWrapper from './IconWrapper.js'
+import IconWrapper from './IconWrapper'
 
 export const CodeIcon = props => (
     <IconWrapper {...props}>

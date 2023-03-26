@@ -6,35 +6,33 @@ noteId: blocks.tools_experience_linechart.note
 # dataPath: 'dataAPI.survey.${sectionId}_experience_linechart'
 hasSponsor: true
 query: >
-    dataAPI {
-        surveys {
-            ${surveyId} {
-                ${editionId} {
-                    ${sectionId} {
-                        ${sectionId}_experience_linechart: ${sectionId}_ratios {
-                            years
-                            items {
-                                id
-                                usage {
-                                    year
-                                    rank
-                                    percentageQuestion
-                                }
-                                awareness {
-                                    year
-                                    rank
-                                    percentageQuestion
-                                }
-                                interest {
-                                    year
-                                    rank
-                                    percentageQuestion
-                                }
-                                satisfaction {
-                                    year
-                                    rank
-                                    percentageQuestion
-                                }
+    surveys {
+        ${surveyId} {
+            ${editionId} {
+                ${sectionId} {
+                    ${sectionId}_experience_linechart: ${sectionId}_ratios {
+                        years
+                        items {
+                            id
+                            usage {
+                                year
+                                rank
+                                percentageQuestion
+                            }
+                            awareness {
+                                year
+                                rank
+                                percentageQuestion
+                            }
+                            interest {
+                                year
+                                rank
+                                percentageQuestion
+                            }
+                            satisfaction {
+                                year
+                                rank
+                                percentageQuestion
                             }
                         }
                     }

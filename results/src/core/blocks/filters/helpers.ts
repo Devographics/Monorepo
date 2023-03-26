@@ -1,11 +1,19 @@
 import { useState, useEffect } from 'react'
 import { getGraphQLQuery } from 'core/blocks/block/BlockData'
-import { addNoAnswerBucket } from 'core/blocks/generic/VerticalBarBlock'
 import { getCountryName } from 'core/helpers/countries'
 import cloneDeep from 'lodash/cloneDeep.js'
-import isEmpty from 'lodash/isEmpty'
-import { CustomizationDefinition, CustomizationOptions } from './types'
-import { BlockDefinition } from '@types/index'
+import {
+    CustomizationDefinition,
+    CustomizationOptions,
+    FilterItem,
+    CustomizationFiltersCondition,
+    CustomizationFiltersSeries,
+    FilterValue,
+    FilterValueString,
+    Operator,
+    OperatorEnum
+} from './types'
+import { BlockDefinition } from 'core/types'
 import {
     MODE_DEFAULT,
     MODE_FACET,
@@ -19,19 +27,29 @@ import { useTheme } from 'styled-components'
 import round from 'lodash/round'
 import { useAllChartsOptions, getVariantBarColorItem } from 'core/charts/hooks'
 import sumBy from 'lodash/sumBy'
-import roundBy from 'lodash/roundBy'
 import { usePageContext } from 'core/helpers/pageContext'
-import { CustomizationFiltersCondition } from './types'
 import { getBlockLink } from 'core/helpers/blockHelpers'
+import { getEntityName } from 'core/helpers/entities'
+import { Entity, SectionMetadata } from '@devographics/types'
 
-export const getNewCondition = ({ filtersNotInUse, keys }) => {
+export const getNewCondition = ({
+    filtersNotInUse
+}: {
+    filtersNotInUse: FilterItem[]
+}): CustomizationFiltersCondition => {
     const field = filtersNotInUse[0]
-    return { field, operator: 'eq', value: keys?.[field]?.[0] }
+    return { fieldId: field.id, operator: OperatorEnum['EQ'], value: field.options[0].id }
 }
 
-export const getNewSeries = ({ filters, keys, year }) => {
+export const getNewSeries = ({
+    filters,
+    year
+}: {
+    filters: FilterItem[]
+    year: number
+}): CustomizationFiltersSeries => {
     const filtersNotInUse = filters
-    return { year, conditions: [getNewCondition({ filtersNotInUse, keys })] }
+    return { year, conditions: [getNewCondition({ filtersNotInUse })] }
 }
 
 /*
@@ -48,14 +66,23 @@ const getSeriesName = ({
 }: {
     block: BlockDefinition
     year: number
-    conditions: CustomizationFiltersCondition
+    conditions: CustomizationFiltersCondition[]
 }) => {
     const suffix = conditions.map(
-        ({ field, operator, value }) => `${field}__${operator}__${value.toString()}`
+        ({ fieldId, operator, value }) => `${fieldId}__${operator}__${value.toString()}`
     )
     return `${block.id}___${year}___${suffix}`
 }
 
+const cleanUpValue = (s: string) => s?.replaceAll('-', '_')
+
+type FiltersObject = {
+    [key: string]: FilterDefinitionObject
+}
+
+type FilterDefinitionObject = {
+    [key in OperatorEnum]: FilterValue
+}
 /*
 
 Generate query used for filtering
@@ -82,22 +109,20 @@ export const getFiltersQuery = ({
 
     const seriesNames: string[] = []
 
-    const cleanUpValue = s => s.replaceAll('-', '_')
-
     const queryFooter = query.slice(query.indexOf(END_MARKER) + END_MARKER.length)
 
-    if (mode === MODE_GRID || mode === MODE_COMBINED) {
+    if (filters && (mode === MODE_GRID || mode === MODE_COMBINED)) {
         queryBody = filters
             .map((singleSeries, seriesIndex) => {
                 // {gender: {eq: male}, company_size: {eq: range_1}}
-                const filtersObject = {}
+                const filtersObject: FiltersObject = {}
                 singleSeries.conditions.forEach(condition => {
-                    const { field, operator, value } = condition
+                    const { fieldId, operator, value } = condition
                     // transform e.g. es-ES into es_ES
-                    const cleanValue = Array.isArray(value)
+                    const cleanValue: FilterValue = Array.isArray(value)
                         ? value.map(cleanUpValue)
                         : cleanUpValue(value)
-                    filtersObject[field] = { [operator]: cleanValue }
+                    filtersObject[fieldId] = { [operator]: cleanValue }
                 })
                 const seriesName = `${block.id}_${seriesIndex + 1}`
                 seriesNames.push(seriesName)
@@ -119,20 +144,20 @@ export const getFiltersQuery = ({
     } else if (mode === MODE_FACET) {
         queryBody = queryFragment.replace('facet: null', `facet: ${facet}`)
 
-        if (block?.variables?.fixedIds) {
-            /*
+        // if (block?.variables?.fixedIds) {
+        //     /*
 
-            Because facets are obtained in a "reversed" structure from the API, in some cases
-            (e.g. countries) we need to fix the ids to ensure each facet contains the same items. 
-            
-            TODO: return proper structure from API and delete this step
+        //     Because facets are obtained in a "reversed" structure from the API, in some cases
+        //     (e.g. countries) we need to fix the ids to ensure each facet contains the same items.
 
-            */
-            const fixedIdsFilter = `{ ids: { in: [${block?.variables?.fixedIds
-                .map(id => `"${id}"`)
-                .join()}] } }`
-            queryBody = queryBody.replace('filters: {}', `filters: ${fixedIdsFilter}`)
-        }
+        //     TODO: return proper structure from API and delete this step
+
+        //     */
+        //     const fixedIdsFilter = `{ ids: { in: [${block?.variables?.fixedIds
+        //         .map(id => `"${id}"`)
+        //         .join()}] } }`
+        //     queryBody = queryBody.replace('filters: {}', `filters: ${fixedIdsFilter}`)
+        // }
     }
     const newQuery = queryHeader + queryBody + queryFooter
 
@@ -265,8 +290,8 @@ export const invertFacets = ({ facets, defaultBuckets }) => {
 Calculate facet averages
 
 */
-export const calculateAverages = ({ buckets, facet, allChartsOptions }) => {
-    const facetOptions = allChartsOptions[facet]
+export const calculateAverages = ({ buckets, facet, useAllFilters }) => {
+    const facetOptions = useAllFilters[facet]
     if (facetOptions && typeof facetOptions[0].average !== 'undefined') {
         buckets.forEach(bucket => {
             if (bucket.id === 'no_answer') {
@@ -284,43 +309,118 @@ export const calculateAverages = ({ buckets, facet, allChartsOptions }) => {
     return buckets
 }
 
+// const getLabelPrefix = (template)=>{    switch (template) {
+//     case 'feature'
+//         return 'feature'
+//     case 'user'
+// }}
+
+/*
+
+*/
+export const getSectionLabel = ({
+    getString,
+    section
+}: {
+    getString: any
+    section: SectionMetadata
+}) => {
+    return getString(`sections.${section.id === 'user_info' ? 'demographics' : section.id}.title`)
+        ?.t
+}
 /*
 
 Get label for field
 
 */
-export const getFieldLabel = ({ getString, field }) => getString(`user_info.${field}`)?.t
+export const getFieldLabel = ({
+    getString,
+    field,
+    entities
+}: {
+    getString: any
+    field: FilterItem
+    entities: Entity[]
+}) => {
+    const { sectionId, template, id } = field
+    const entity = entities.find(e => e.id === id)
+    if (entity) {
+        return getEntityName(entity)
+    } else if (template === 'happiness') {
+        return getString('blocks.happiness')?.t
+    } else if (sectionId === 'other_tools') {
+        return getString(`tools_others.${id}`)?.t
+    } else {
+        return getString(`${sectionId}.${id}`)?.t
+    }
+}
 
 /*
 
 Get label for operator
 
 */
-export const getOperatorLabel = ({ getString, operator }) =>
-    getString(`filters.operators.${operator}`, {}, operator)?.t
+export const getOperatorLabel = ({
+    getString,
+    operator
+}: {
+    getString: any
+    operator: OperatorEnum
+}) => getString(`filters.operators.${operator}`, {}, operator)?.t
 
 /*
 
 Get label for a field value (age range, country name, source name, locale label, etc.)
 
 */
-export const getValueLabel = ({ getString, field, value, allChartsOptions }) => {
-    switch (field) {
-        case 'country': {
-            return getCountryName(value) || value
-        }
-        case 'source': {
-            const source = allChartsOptions.source.find(s => s.id === value)
-            return source?.entity?.name || value
-        }
-        case 'locale': {
-            const locale = allChartsOptions.locale.find(l => l.id === value)
-            const fallback = locale.label
-            return getString(`options.${field}.${value}`, {}, fallback)?.t
-        }
-        default: {
-            const fallback = value
-            return getString(`options.${field}.${value}`, {}, fallback)?.t
+export const getValueLabel = ({
+    getString,
+    fieldId,
+    value,
+    allFilters,
+    entity,
+    label
+}: {
+    getString: any
+    fieldId: string
+    value: FilterValue
+    allFilters: FilterItem[]
+    entity?: Entity
+    label?: string
+}) => {
+    const field = allFilters.find(o => o.id === fieldId)
+    if (!field) {
+        return
+    }
+    const { template } = field
+    if (entity) {
+        return getEntityName(entity)
+    } else if (template === 'feature') {
+        return getString(`options.features.${value}.label`)?.t
+    } else if (template === 'tool') {
+        return getString(`options.tools.${value}.short`)?.t
+    } else {
+        switch (field.id) {
+            case 'country': {
+                return getCountryName(value as FilterValueString) || value
+            }
+            case 'source': {
+                const source = allFilters
+                    .find(q => q.id === 'source')
+                    ?.options.find(s => s.id === value)
+                return source?.entity?.name || value
+            }
+            case 'locale': {
+                const locale = allFilters
+                    .find(q => q.id === 'locale')
+                    ?.options.find(l => l.id === value)
+                const fallback = locale?.label
+                return getString(`options.${fieldId}.${value}`, {}, fallback)?.t
+            }
+            default: {
+                const fallback = value
+                return getString(`options.${fieldId}.${value}`, {}, fallback)?.t
+            }
         }
     }
 }
@@ -330,7 +430,7 @@ export const getValueLabel = ({ getString, field, value, allChartsOptions }) => 
 Generate the legends used when filtering is enabled
 
 */
-export const useFilterLegends = (props: { chartFilters: any }) => {
+export const useFilterLegends = (props: { chartFilters: CustomizationDefinition }) => {
     const context = usePageContext()
     const { currentEdition } = context
     const { year: currentYear } = currentEdition
@@ -341,7 +441,7 @@ export const useFilterLegends = (props: { chartFilters: any }) => {
 
     const reverse = mode === MODE_FACET
 
-    const allChartsOptions = useAllChartsOptions()
+    const useAllFilters = useAllChartsOptions()
     const theme = useTheme()
     const { colors } = theme
     const { getString } = useI18n()
@@ -387,7 +487,7 @@ export const useFilterLegends = (props: { chartFilters: any }) => {
                                         getString,
                                         field,
                                         value: valueString,
-                                        allChartsOptions
+                                        useAllFilters
                                     })
                                 )
                                 .join(', ')
@@ -411,12 +511,12 @@ export const useFilterLegends = (props: { chartFilters: any }) => {
             results = [...(showDefaultSeries ? [defaultLegendItem] : []), ...seriesLegendItems]
         }
     } else if (chartFilters.options.mode === MODE_FACET) {
-        results = allChartsOptions[chartFilters.facet].map(({ id }, index) => {
+        results = useAllFilters[chartFilters.facet].map(({ id }, index) => {
             const label = getValueLabel({
                 getString,
                 field: chartFilters.facet,
                 value: id,
-                allChartsOptions
+                useAllFilters
             })
             const barColorItem = getVariantBarColorItem(colors, index + 1, chartFilters.facet)
             return {
@@ -438,7 +538,7 @@ export const useFilterLegends = (props: { chartFilters: any }) => {
 Initialize the chart customization filter state
 
 */
-export const getInitFilters = (initOptions: CustomizationOptions): CustomizationDefinition => ({
+export const getInitFilters = (initOptions?: CustomizationOptions): CustomizationDefinition => ({
     options: {
         showDefaultSeries: true,
         enableYearSelect: true,
