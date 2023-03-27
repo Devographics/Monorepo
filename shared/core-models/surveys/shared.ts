@@ -1,4 +1,4 @@
-import type { SurveyEdition } from "./typings"
+import type { SurveyEdition, SurveyStatus } from "./typings"
 
 /**
  * Functions that gets a safe unique id per survey edition,
@@ -14,3 +14,5 @@ export function getSurveyEditionId(survey: SurveyEdition) {
 export function getSurveyPrettySlug(survey: SurveyEdition) {
     return survey.surveyId.replaceAll("_", "-")
 }
+
+export const SURVEY_OPEN: SurveyStatus = 2

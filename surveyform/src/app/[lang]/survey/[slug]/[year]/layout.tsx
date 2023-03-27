@@ -3,18 +3,14 @@ import { notFound } from "next/navigation";
 import { EntitiesProvider } from "~/core/components/common/EntitiesContext";
 import { fetchEntitiesRedis } from "~/core/server/fetchEntitiesRedis";
 import { SurveyProvider } from "~/surveys/components/SurveyContext/Provider";
-import {
-  fetchSurvey,
-  fetchSurveyDescriptionFromUrl,
-  initRedis,
-} from "@devographics/core-models/server";
+import { initRedis } from "@devographics/core-models/server";
 import {
   fetchLocaleStrings,
   getLocales,
 } from "~/i18n/server/fetchLocalesRedis";
 import { LocaleContextProvider } from "~/i18n/context/LocaleContext";
 import { serverConfig } from "~/config/server";
-import { getSurveyFromUrl } from "../../getSurvey";
+import { mustGetSurvey } from "./fetchers";
 
 // revalidate survey/entities every 5 minutes
 const SURVEY_TIMEOUT_SECONDS = 5 * 60;
@@ -46,11 +42,7 @@ export default async function SurveyLayout({
   // TODO: it seems we need to call this initialization code on all relevant pages/layouts
   initRedis(serverConfig().redisUrl);
 
-  const { slug, year } = params;
-  const survey = await getSurveyFromUrl(slug, year);
-  if (!survey) {
-    notFound();
-  }
+  const survey = await mustGetSurvey(params);
 
   // survey specific strings
   const locale = params.lang; // getCurrentLocale();
@@ -72,7 +64,7 @@ If this error still happens in a few months (2023) open an issue with repro at N
           // => generic strings and survey specific will be merged automatically
           //...i18nCommonContexts,
           localeSlug,
-          localeSlug + "_" + year,
+          localeSlug + "_" + params.year,
         ]
       : // TODO for local testing, we don't have tokens for demo_survey yet
         ["state_of_graphql", "state_of_graphql_2022"];

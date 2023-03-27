@@ -34,13 +34,15 @@
 }
 .survey-login-options {
   @include medium-large {
-    display: grid;
-    column-gap: $spacing * 2;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    gap: $spacing * 2;
+    justify-content: space-around;
+    /*grid-template-columns: 1fr 1fr;*/
   }
 }
 .survey-login-option {
   @include border;
+  flex-basis: 50%;
   padding: $spacing;
 }
 .survey-login-option-description {

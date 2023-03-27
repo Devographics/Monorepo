@@ -1,6 +1,5 @@
 "use client";
 import { useIntlContext } from "@devographics/react-i18n";
-import React from "react";
 import Head from "next/head";
 import { computeHeadTags } from "./computeHeadTags";
 import { publicConfig } from "~/config/public";
@@ -8,6 +7,7 @@ import { SurveyEdition, SurveySection } from "@devographics/core-models";
 import { getSurveyImageUrl } from "~/surveys/getSurveyImageUrl";
 import { getSectionKey, getSurveyTitle } from "~/surveys/helpers";
 
+// TODO: update to Next 13, we can compute that in "head.tsx"
 const SurveyHeadTags = ({
   survey,
   section,

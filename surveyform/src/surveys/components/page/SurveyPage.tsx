@@ -1,5 +1,4 @@
 "use client";
-import React from "react";
 // TODO: we need to enable accounts back
 // import { STATES } from "meteor/vulcan:accounts";
 // import AccountMessage from "../../users/AccountMessage";
@@ -9,23 +8,19 @@ import SurveyMessage from "../SurveyMessage";
 import SurveyCredits from "../SurveyCredits";
 import Translators from "~/core/components/common/Translators";
 import Faq from "~/core/components/common/Faq";
-import Support from "~/core/components/common/Support";
 import { useIntlContext } from "@devographics/react-i18n";
 import LoginDialog from "~/account/LoginDialog";
 import { useUser } from "~/account/user/hooks";
 import Image from "next/image";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
-import { getSurveyImageUrl } from "~/surveys/getSurveyImageUrl";
 import { Loading } from "~/core/components/ui/Loading";
 import { useSurvey } from "../SurveyContext/Provider";
+import { SurveyEdition, SURVEY_OPEN } from "@devographics/core-models";
 
-const SurveyPageWrapper = () => {
+const SurveyPageWrapper = ({ imageUrl }: { imageUrl: string }) => {
   const survey = useSurvey();
   const { name, resultsUrl } = survey;
 
-  const imageUrl = getSurveyImageUrl(survey);
-
-  // console.log(props)
   return (
     <div className="survey-page contents-narrow">
       <SurveyHeadTags survey={survey} />
@@ -55,7 +50,6 @@ const SurveyPageWrapper = () => {
       <Faq survey={survey} />
       {survey.credits && <SurveyCredits survey={survey} />}
       <Translators />
-      <Support />
     </div>
   );
 };
@@ -74,11 +68,11 @@ const SurveyIntro = ({ survey }) => {
   );
 };
 
-const SurveyMain = ({ survey }) => {
+const SurveyMain = ({ survey }: { survey: SurveyEdition }) => {
   const { user, loading: currentUserLoading } = useUser();
   if (currentUserLoading) return <Loading />;
   if (!user) {
-    return <LoginDialog />;
+    return <LoginDialog hideGuest={survey.status !== SURVEY_OPEN} />;
   } else {
     return (
       <>

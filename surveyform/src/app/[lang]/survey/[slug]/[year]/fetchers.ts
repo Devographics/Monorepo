@@ -1,6 +1,11 @@
+/**
+ * Fetchers optimized for Next.js 
+ */
+import { notFound } from "next/navigation";
+
 import { fetchSurvey, fetchSurveyDescriptionFromUrl } from "@devographics/core-models/server";
 
-export async function getSurveyFromUrl(slug: string, year: string) {
+async function getSurveyFromUrl(slug: string, year: string) {
     try {
         const surveyDesc = await fetchSurveyDescriptionFromUrl(slug, year);
         const survey = await fetchSurvey(
@@ -13,4 +18,13 @@ export async function getSurveyFromUrl(slug: string, year: string) {
         return null
     }
 
+}
+
+export async function mustGetSurvey(params: { slug: string; year: string }) {
+    const { slug, year } = params;
+    const survey = await getSurveyFromUrl(slug, year);
+    if (!survey) {
+        notFound();
+    }
+    return survey;
 }
