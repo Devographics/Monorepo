@@ -179,6 +179,9 @@ interface SurveyEditionSpecifics {
    * that handles the legacy behaviour properly
    */
   imageUrl: string;
+  /**
+   * Relative or absolute URL
+   */
   faviconUrl?: string;
   /**
    * Absolute URL to a social image

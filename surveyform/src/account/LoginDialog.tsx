@@ -5,7 +5,7 @@ import { useUser } from "~/account/user/hooks";
 import { StandaloneMagicLoginForm } from "~/account/magicLogin/components/StandaloneMagicLoginForm";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 
-const LoginOptions = ({ hideGuest }: { hideGuest: boolean }) => {
+const LoginOptions = ({ hideGuest }: { hideGuest?: boolean }) => {
   const { user } = useUser({ redirectTo: "/", redirectIfFound: true });
   //const redirectedFrom = router.query?.from as string;
   return user ? (

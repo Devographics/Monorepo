@@ -45,3 +45,13 @@ test("access 2022 survey", () => {
   cy.url().should("match", /survey\/state-of-graphql\/2022/)
   cy.findByText(/now closed/i).should("be.visible")
 })
+
+
+test.skip("accessing a closed survey with an account that did not exist should return an empty read-only form", () => {
+  cy.visit("/survey/state-of-js/2022")
+  cy.findByText(/now closed/i).should("be.visible")
+  // TODO: auth with email, reuse logic from magicLogin
+})
+test.skip("accessing closed survey should load response", () => {
+  // TODO: a tad complicated to test, we need to first create a response for a closed survey in the db
+})

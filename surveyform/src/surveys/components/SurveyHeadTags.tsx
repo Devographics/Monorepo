@@ -2,9 +2,7 @@
 import { useIntlContext } from "@devographics/react-i18n";
 import Head from "next/head";
 import { computeHeadTags } from "./computeHeadTags";
-import { publicConfig } from "~/config/public";
 import { SurveyEdition, SurveySection } from "@devographics/core-models";
-import { getSurveyImageUrl } from "~/surveys/getSurveyImageUrl";
 import { getSectionKey, getSurveyTitle } from "~/surveys/helpers";
 
 // TODO: update to Next 13, we can compute that in "head.tsx"
@@ -15,11 +13,8 @@ const SurveyHeadTags = ({
   survey: SurveyEdition;
   section?: SurveySection;
 }) => {
-  const { name, year, socialImageUrl, faviconUrl } = survey;
+  const { name, year } = survey;
   const intl = useIntlContext();
-
-  let finalImageUrl = socialImageUrl || getSurveyImageUrl(survey);
-
   const sectionTitle =
     section && intl.formatMessage({ id: getSectionKey(section) });
   const title = getSurveyTitle({ survey, sectionTitle });
@@ -33,9 +28,6 @@ const SurveyHeadTags = ({
           { id: "general.take_survey" },
           { name, year }
         ),
-        imageAbsoluteUrl: finalImageUrl,
-        faviconUrl,
-        siteUrl: publicConfig.appUrl,
       })}
     </Head>
   );
