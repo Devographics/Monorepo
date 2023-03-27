@@ -1,8 +1,8 @@
-import { EditionData, ComputeAxisParameters, Bucket } from '../../types'
+import { ResponseEditionData, ComputeAxisParameters, Bucket } from '../../types'
 import isEmpty from 'lodash/isEmpty.js'
 
 export async function cutoffData(
-    resultsByEdition: EditionData[],
+    resultsByEdition: ResponseEditionData[],
     axis1: ComputeAxisParameters,
     axis2?: ComputeAxisParameters
 ) {

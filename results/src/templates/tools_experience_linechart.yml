@@ -12,7 +12,7 @@ query: >
                 ${sectionId} {
                     ${sectionId}_experience_linechart: ${sectionId}_ratios {
                         years
-                        items {
+                        items<ARGUMENTS_PLACEHOLDER> {
                             id
                             usage {
                                 year

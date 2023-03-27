@@ -1,5 +1,6 @@
 import React, { FC } from 'react'
 import { PageContextValue } from '@types/context'
+import { ResponsesParameters } from '@devographics/types'
 
 export type BlockUnits =
     | 'count'
@@ -24,6 +25,7 @@ export interface BlockComponentProps {
 }
 
 export interface BlockDefinition {
+    parameters: ResponsesParameters
     id: string
     template?: string
     blockType?: string
@@ -76,3 +78,5 @@ export interface BlockLegend {
     shortLabel?: string
     color?: string
 }
+
+// export type GetChartDataFunction =

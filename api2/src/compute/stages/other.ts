@@ -1,4 +1,10 @@
-import { ComputeAxisParameters, EditionData, Bucket, FacetBucket, Survey } from '../../types'
+import {
+    ComputeAxisParameters,
+    ResponseEditionData,
+    Bucket,
+    FacetBucket,
+    Survey
+} from '../../types'
 import isEmpty from 'lodash/isEmpty.js'
 import sumBy from 'lodash/sumBy.js'
 import difference from 'lodash/difference.js'
@@ -10,7 +16,7 @@ const NO_ANSWER = 'no_answer'
 Discard any result where id is {}, "", [], etc. 
 
 */
-export async function discardEmptyIds(resultsByEdition: EditionData[]) {
+export async function discardEmptyIds(resultsByEdition: ResponseEditionData[]) {
     for (let editionData of resultsByEdition) {
         editionData.buckets = editionData.buckets.filter(
             b => typeof b.id === 'number' || !isEmpty(b.id)
@@ -30,7 +36,7 @@ export async function discardEmptyIds(resultsByEdition: EditionData[]) {
 Discard any empty editions (editions that contain only no_answer buckets)
 
 */
-export async function discardEmptyEditions(resultsByEdition: EditionData[]) {
+export async function discardEmptyEditions(resultsByEdition: ResponseEditionData[]) {
     return resultsByEdition.filter(
         editionData =>
             !(editionData.buckets.length === 1 && editionData.buckets[0].id === NO_ANSWER)
@@ -48,7 +54,7 @@ NOTE: data is slightly off because it doesn't account for people who didn't answ
 TODO: get rid of this using mongo pipeline
 
 */
-export async function addDefaultBucketCounts(resultsByEdition: EditionData[]) {
+export async function addDefaultBucketCounts(resultsByEdition: ResponseEditionData[]) {
     for (let editionData of resultsByEdition) {
         for (let bucket of editionData.buckets) {
             bucket.count = sumBy(bucket.facetBuckets, 'count')
@@ -62,7 +68,7 @@ When no facet is specified, move default buckets down one level
 TODO: get rid of this
 
 */
-export async function moveFacetBucketsToDefaultBuckets(resultsByEdition: EditionData[]) {
+export async function moveFacetBucketsToDefaultBuckets(resultsByEdition: ResponseEditionData[]) {
     for (let editionData of resultsByEdition) {
         editionData.buckets = editionData.buckets[0].facetBuckets as Bucket[]
     }
@@ -93,7 +99,7 @@ const getZeroBucketItem = (id: string, facetAxis?: ComputeAxisParameters) => ({
 })
 
 export async function addMissingItems(
-    resultsByEdition: EditionData[],
+    resultsByEdition: ResponseEditionData[],
     axis1: ComputeAxisParameters,
     axis2?: ComputeAxisParameters
 ) {
@@ -129,7 +135,7 @@ export async function addMissingItems(
     }
 }
 
-export async function addEditionYears(resultsByEdition: EditionData[], survey: Survey) {
+export async function addEditionYears(resultsByEdition: ResponseEditionData[], survey: Survey) {
     for (let editionData of resultsByEdition) {
         const edition = survey.editions.find(e => e.id === editionData.editionId)
         if (edition) {
@@ -145,13 +151,13 @@ Some results do not have an edition assigned to them, so remove them for now
 Note: not needed if db is properly cleaned up
 
 */
-export async function removeEmptyEditions(resultsByEdition: EditionData[]) {
+export async function removeEmptyEditions(resultsByEdition: ResponseEditionData[]) {
     return resultsByEdition.filter(editionData => editionData.editionId !== null)
 }
 
 // TODO
 // add means
-// export async function addMeans(resultsByEdition: EditionData[], values: string[] | number[]) {
+// export async function addMeans(resultsByEdition: ResponseEditionData[], values: string[] | number[]) {
 //     for (let year of resultsByEdition) {
 //         for (let facet of year.facets) {
 //             let totalValue = 0

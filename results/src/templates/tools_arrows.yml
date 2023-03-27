@@ -12,7 +12,7 @@ query: >
                     tools_arrows: allTools {
                         items {
                             id
-                            responses(parameters: { ENABLE_CACHE_PLACEHOLDER }) {
+                            responses<ARGUMENTS_PLACEHOLDER> {
                                 allEditions {
                                     year
                                     editionId

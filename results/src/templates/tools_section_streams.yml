@@ -15,7 +15,7 @@ query: >
                     ${sectionId}_section_streams: ${sectionId}_allTools {
                         items {
                             id
-                            responses(parameters: { ENABLE_CACHE_PLACEHOLDER }) {
+                            responses<ARGUMENTS_PLACEHOLDER> {
                                 allEditions {
                                     editionId
                                     year

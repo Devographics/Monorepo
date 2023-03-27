@@ -1,16 +1,16 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React from 'react'
 import Condition from './Condition'
 import styled from 'styled-components'
 import { mq, spacing } from 'core/theme'
 import Button from 'core/components/Button'
 import T from 'core/i18n/T'
+import difference from 'lodash/difference.js'
 import cloneDeep from 'lodash/cloneDeep.js'
 import { getNewCondition } from './helpers'
 import { Condition_ } from './Condition'
 import { DeleteIcon } from 'core/icons'
 import { useTheme } from 'styled-components'
 import YearSelector from './YearSelector'
-import { useAllChartsOptions } from 'core/charts/hooks'
 import {
     CustomizationDefinition,
     FilterItem,
@@ -19,13 +19,13 @@ import {
 } from './types'
 
 interface SeriesProps {
-    filters: FilterItem[]
+    allFilters: FilterItem[]
     series: CustomizationFiltersSeries
     index: number
     stateStuff: PanelState
 }
 
-const Series = ({ filters, series, index, stateStuff }: SeriesProps) => {
+const Series = ({ allFilters, series, index, stateStuff }: SeriesProps) => {
     const theme = useTheme()
 
     const { conditions } = series
@@ -34,18 +34,18 @@ const Series = ({ filters, series, index, stateStuff }: SeriesProps) => {
     const { enableYearSelect } = options
     const showDefaultSeries = filtersState.options.showDefaultSeries
 
-    const allChartsKeys = useAllChartsOptions()
-
-    const filtersInUse = conditions.map(c => c.fieldId)
-    // const filtersNotInUse = difference(filters, filtersInUse)
-    const filtersNotInUse = filtersInUse
+    const filterIdsInUse = conditions.map(c => c.fieldId)
+    const filterIdsNotInUse = difference(
+        allFilters.map(f => f.id),
+        filterIdsInUse
+    )
 
     const handleAddCondition = () => {
         setFiltersState((fState: CustomizationDefinition) => {
             const newState = cloneDeep(fState)
             newState.filters[index].conditions = [
                 ...series.conditions,
-                getNewCondition({ filtersNotInUse })
+                getNewCondition({ filters: allFilters })
             ]
             return newState
         })
@@ -59,7 +59,7 @@ const Series = ({ filters, series, index, stateStuff }: SeriesProps) => {
         })
     }
 
-    const canAddConditions = conditions.length < filters.length
+    const canAddConditions = conditions.length < allFilters.length
 
     const backgroundColor = theme.colors.barColors[index].color
 
@@ -87,9 +87,9 @@ const Series = ({ filters, series, index, stateStuff }: SeriesProps) => {
                         seriesIndex={index}
                         index={i}
                         condition={condition}
-                        filters={filters}
-                        filtersInUse={filtersInUse}
-                        filtersNotInUse={filtersNotInUse}
+                        allFilters={allFilters}
+                        filtersIdsInUse={filterIdsInUse}
+                        filtersIdsNotInUse={filterIdsNotInUse}
                         stateStuff={stateStuff}
                     />
                 ))}

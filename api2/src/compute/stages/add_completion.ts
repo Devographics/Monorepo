@@ -1,11 +1,11 @@
-import { EditionData, EditionParticipation } from '../../types'
+import { ResponseEditionData, EditionParticipation } from '../../types'
 import { ratioToPercentage } from '../common'
 import { CompletionResult } from '../completion'
 import sumBy from 'lodash/sumBy.js'
 
 // add completion counts for each year and facet
 export async function addCompletionCounts(
-    resultsByEdition: EditionData[],
+    resultsByEdition: ResponseEditionData[],
     totalRespondentsByYear: EditionParticipation[],
     completionByYear: CompletionResult[]
 ) {

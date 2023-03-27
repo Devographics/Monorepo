@@ -2,8 +2,14 @@ import React, { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
 import { usePageContext } from 'core/helpers/pageContext'
 import cloneDeep from 'lodash/cloneDeep.js'
+import { PanelState } from './types'
 
-const YearSelector = ({ seriesIndex, stateStuff }) => {
+type YearSelectorProps = {
+    seriesIndex: number
+    stateStuff: PanelState
+}
+
+const YearSelector = ({ seriesIndex, stateStuff }: YearSelectorProps) => {
     const { filtersState, setFiltersState } = stateStuff
 
     const context = usePageContext()
@@ -15,7 +21,7 @@ const YearSelector = ({ seriesIndex, stateStuff }) => {
         <Label_>
             {/* <span>{segmentId}</span> */}
             <Select_
-                onChange={e => {
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     const value = e.target.value
                     setFiltersState(fState => {
                         const newState = cloneDeep(fState)

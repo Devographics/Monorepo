@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { getGraphQLQuery } from 'core/blocks/block/BlockData'
 import { getCountryName } from 'core/helpers/countries'
 import cloneDeep from 'lodash/cloneDeep.js'
 import {
@@ -11,34 +10,51 @@ import {
     FilterValue,
     FilterValueString,
     Operator,
-    OperatorEnum
+    OperatorEnum,
+    FacetItem
 } from './types'
 import { BlockDefinition } from 'core/types'
 import {
     MODE_DEFAULT,
     MODE_FACET,
     MODE_GRID,
-    MODE_COMBINED,
-    START_MARKER,
-    END_MARKER
+    MODE_COMBINED
+    // START_MARKER,
+    // END_MARKER
 } from './constants'
 import { useI18n } from 'core/i18n/i18nContext'
 import { useTheme } from 'styled-components'
 import round from 'lodash/round'
-import { useAllChartsOptions, getVariantBarColorItem } from 'core/charts/hooks'
+import { useAllFilters, getVariantBarColorItem } from 'core/charts/hooks'
 import sumBy from 'lodash/sumBy'
 import { usePageContext } from 'core/helpers/pageContext'
 import { getBlockLink } from 'core/helpers/blockHelpers'
-import { getEntityName } from 'core/helpers/entities'
-import { Entity, SectionMetadata } from '@devographics/types'
+import { getEntityName, useEntities } from 'core/helpers/entities'
+import { getBlockQuery, getQueryArgs, argumentsPlaceholder } from 'core/helpers/queries'
+import { PageContextValue } from 'core/types/context'
+import {
+    Entity,
+    Filters,
+    ResponseEditionData,
+    SectionMetadata,
+    BucketUnits,
+    Bucket,
+    CombinedBucket
+} from '@devographics/types'
 
 export const getNewCondition = ({
-    filtersNotInUse
+    filters
 }: {
-    filtersNotInUse: FilterItem[]
+    filters: FilterItem[]
 }): CustomizationFiltersCondition => {
-    const field = filtersNotInUse[0]
-    return { fieldId: field.id, operator: OperatorEnum['EQ'], value: field.options[0].id }
+    const field = filters[0]
+    const { id: fieldId, sectionId, options } = field
+    return {
+        fieldId,
+        sectionId,
+        operator: OperatorEnum['EQ'],
+        value: options[0].id
+    }
 }
 
 export const getNewSeries = ({
@@ -48,8 +64,7 @@ export const getNewSeries = ({
     filters: FilterItem[]
     year: number
 }): CustomizationFiltersSeries => {
-    const filtersNotInUse = filters
-    return { year, conditions: [getNewCondition({ filtersNotInUse })] }
+    return { year, conditions: [getNewCondition({ filters })] }
 }
 
 /*
@@ -83,55 +98,96 @@ type FiltersObject = {
 type FilterDefinitionObject = {
     [key in OperatorEnum]: FilterValue
 }
+
+function getNthPosition(s: string, subString: string, count: number, fromEnd = false) {
+    const regex = new RegExp(subString, 'g')
+    const totalCount = (s.match(regex) || []).length
+    const nthIndex = fromEnd ? totalCount - count : count
+    return s.split(subString, nthIndex).join(subString).length
+}
+
+const conditionsToFilters = (conditions: CustomizationFiltersCondition[]) => {
+    const filters: Filters = {}
+    conditions.forEach(condition => {
+        const { sectionId, fieldId, operator, value } = condition
+        filters[`${sectionId}__${fieldId}`] = { [operator]: value }
+    })
+    return filters
+}
+
+const facetItemToFacet = ({ sectionId, id }: FacetItem) => `${sectionId}__${id}`
+
 /*
 
 Generate query used for filtering
 
+TODO: currently lots of search-and-replace for strings going on which 
+could be avoided by making template query definitions JS/TS objects that 
+define how to accept filters and series themselves.
+
 */
 export const getFiltersQuery = ({
     block,
-    chartFilters = { options: {} },
-    currentYear
+    chartFilters,
+    currentYear,
+    pageContext
 }: {
     block: BlockDefinition
     chartFilters: CustomizationDefinition
     currentYear: number
+    pageContext: PageContextValue
 }) => {
+    let queryBody
     const { options = {}, filters, facet } = chartFilters
     const { enableYearSelect, mode } = options
-    let queryBody
-    const query = getGraphQLQuery(block)
-    const queryHeader = query.slice(0, query.indexOf(START_MARKER))
-    const queryFragment = query.slice(
-        query.indexOf(START_MARKER) + START_MARKER.length,
-        query.indexOf(END_MARKER)
-    )
+    const query = getBlockQuery({ block, pageContext, addArgumentsPlaceholder: true })
+    // fragment starts after fourth "{"
+    const fragmentStartIndex = getNthPosition(query, '{', 5) + 1
+    // fragment ends before fourth "}" when counting from the end
+    const fragmentEndIndex = getNthPosition(query, '}', 5, true) + 1
+    const queryHeader = query.slice(0, fragmentStartIndex)
+    const queryFragment = query.slice(fragmentStartIndex, fragmentEndIndex)
 
     const seriesNames: string[] = []
 
-    const queryFooter = query.slice(query.indexOf(END_MARKER) + END_MARKER.length)
+    const queryFooter = query.slice(fragmentEndIndex)
 
     if (filters && (mode === MODE_GRID || mode === MODE_COMBINED)) {
         queryBody = filters
             .map((singleSeries, seriesIndex) => {
+                let seriesFragment = queryFragment
+
                 // {gender: {eq: male}, company_size: {eq: range_1}}
-                const filtersObject: FiltersObject = {}
-                singleSeries.conditions.forEach(condition => {
-                    const { fieldId, operator, value } = condition
-                    // transform e.g. es-ES into es_ES
-                    const cleanValue: FilterValue = Array.isArray(value)
-                        ? value.map(cleanUpValue)
-                        : cleanUpValue(value)
-                    filtersObject[fieldId] = { [operator]: cleanValue }
-                })
+                // const filtersObject: FiltersObject = {}
+                // singleSeries.conditions.forEach(condition => {
+                //     const { fieldId, operator, value } = condition
+                //     // transform e.g. es-ES into es_ES
+                //     const cleanValue: FilterValue = Array.isArray(value)
+                //         ? value.map(cleanUpValue)
+                //         : cleanUpValue(value)
+                //     filtersObject[fieldId] = { [operator]: cleanValue }
+                // })
+
                 const seriesName = `${block.id}_${seriesIndex + 1}`
                 seriesNames.push(seriesName)
-                let seriesFragment = queryFragment
-                    .replace(`${block.id}: `, `${seriesName}: `)
-                    .replace(
-                        'filters: {}',
-                        `filters: ${JSON.stringify(filtersObject).replaceAll('"', '')}`
+
+                const alreadyHasAlias = seriesFragment.includes(':')
+                if (alreadyHasAlias) {
+                    seriesFragment = seriesFragment.replace(`${block.id}`, `${seriesName}`)
+                } else {
+                    seriesFragment = seriesFragment.replace(
+                        `${block.id}`,
+                        `${seriesName}: ${block.id}`
                     )
+                }
+
+                const queryArgs = getQueryArgs({
+                    filters: conditionsToFilters(singleSeries.conditions),
+                    parameters: block.parameters
+                })
+
+                seriesFragment = seriesFragment.replace(argumentsPlaceholder, queryArgs || '')
+
                 if (enableYearSelect && singleSeries.year) {
                     seriesFragment = seriesFragment.replace(
                         `year: ${currentYear}`,
@@ -141,8 +197,13 @@ export const getFiltersQuery = ({
                 return seriesFragment
             })
             .join('')
-    } else if (mode === MODE_FACET) {
-        queryBody = queryFragment.replace('facet: null', `facet: ${facet}`)
+    } else if (facet && mode === MODE_FACET) {
+        const queryArgs = getQueryArgs({
+            facet: facetItemToFacet(facet),
+            parameters: block.parameters
+        })
+
+        queryBody = queryFragment.replace(argumentsPlaceholder, queryArgs || '')
 
         // if (block?.variables?.fixedIds) {
         //     /*
@@ -161,11 +222,12 @@ export const getFiltersQuery = ({
     }
     const newQuery = queryHeader + queryBody + queryFooter
 
-    // console.log(newQuery)
+    console.log('// newQuery')
+    console.log(newQuery)
     return { query: newQuery, seriesNames }
 }
 
-const baseUnits = ['count', 'percentageQuestion', 'percentageSurvey']
+const baseUnits = Object.values(BucketUnits)
 
 /*
 
@@ -173,19 +235,30 @@ Take multiple buckets arrays and merge them into a array with
 multiple series (e.g. { count, count_1, percentageQuestion, percentageQuestion_1, etc. })
 
 */
-export const combineBuckets = ({ defaultBuckets, otherBucketsArrays, completion }) => {
-    const mergedBuckets = cloneDeep(defaultBuckets)
-    otherBucketsArrays.forEach((buckets = [], index) => {
+type CombineBucketsOptions = {
+    defaultBuckets: Bucket[]
+    otherBucketsArray: Bucket[][]
+}
+export const combineBuckets = ({ defaultBuckets, otherBucketsArray }: CombineBucketsOptions) => {
+    const mergedBuckets = cloneDeep(defaultBuckets) as CombinedBucket[]
+    console.log('// combineBuckets')
+    console.log(defaultBuckets)
+    console.log(otherBucketsArray)
+    otherBucketsArray.forEach((otherBuckets: Bucket[], index: number) => {
         // default series is series 0, first custom series is series 1, etc.
         const seriesIndex = index + 1
         // TODO: add this later
         // const bucketsWithNoAnswerBucket = addNoAnswerBucket({ buckets, completion })
         mergedBuckets.forEach(bucket => {
             const { id } = bucket
-            const otherSeriesBucket = buckets.find(b => b.id === id)
+            const otherSeriesBucket = otherBuckets.find(b => b.id === id)
             if (otherSeriesBucket) {
-                baseUnits.forEach(field => {
-                    bucket[`${field}__${seriesIndex}`] = otherSeriesBucket[field]
+                baseUnits.forEach(unit => {
+                    const unitName = `${unit}__${seriesIndex}` as `${BucketUnits}__${number}`
+                    const value = otherSeriesBucket[unit]
+                    if (typeof value !== 'undefined') {
+                        bucket[unitName] = value
+                    }
                 })
             } else {
                 // series might have returned undefined;
@@ -290,8 +363,8 @@ export const invertFacets = ({ facets, defaultBuckets }) => {
 Calculate facet averages
 
 */
-export const calculateAverages = ({ buckets, facet, useAllFilters }) => {
-    const facetOptions = useAllFilters[facet]
+export const calculateAverages = ({ buckets, facet, allFilters }) => {
+    const facetOptions = allFilters[facet]
     if (facetOptions && typeof facetOptions[0].average !== 'undefined') {
         buckets.forEach(bucket => {
             if (bucket.id === 'no_answer') {
@@ -342,7 +415,7 @@ export const getFieldLabel = ({
     field: FilterItem
     entities: Entity[]
 }) => {
-    const { sectionId, template, id } = field
+    const { sectionId, template, id: id } = field
     const entity = entities.find(e => e.id === id)
     if (entity) {
         return getEntityName(entity)
@@ -375,23 +448,19 @@ Get label for a field value (age range, country name, source name, locale label,
 */
 export const getValueLabel = ({
     getString,
-    fieldId,
+    field,
     value,
     allFilters,
     entity,
     label
 }: {
     getString: any
-    fieldId: string
+    field: FilterItem
     value: FilterValue
     allFilters: FilterItem[]
     entity?: Entity
     label?: string
 }) => {
-    const field = allFilters.find(o => o.id === fieldId)
-    if (!field) {
-        return
-    }
     const { template } = field
     if (entity) {
         return getEntityName(entity)
@@ -415,11 +484,11 @@ export const getValueLabel = ({
                     .find(q => q.id === 'locale')
                     ?.options.find(l => l.id === value)
                 const fallback = locale?.label
-                return getString(`options.${fieldId}.${value}`, {}, fallback)?.t
+                return getString(`options.${field.id}.${value}`, {}, fallback)?.t
             }
             default: {
                 const fallback = value
-                return getString(`options.${fieldId}.${value}`, {}, fallback)?.t
+                return getString(`options.${field.id}.${value}`, {}, fallback)?.t
             }
         }
     }
@@ -430,22 +499,30 @@ export const getValueLabel = ({
 Generate the legends used when filtering is enabled
 
 */
-export const useFilterLegends = (props: { chartFilters: CustomizationDefinition }) => {
+type FilterLegend = {
+    color: string
+    gradientColors: string[]
+    id: string
+    label: string
+    shortLabel: string
+}
+export const useFilterLegends = ({ chartFilters }: { chartFilters: CustomizationDefinition }) => {
     const context = usePageContext()
     const { currentEdition } = context
     const { year: currentYear } = currentEdition
 
-    const { chartFilters } = props
+    const entities = useEntities()
+    const allFilters = useAllFilters()
+
     const { options } = chartFilters
     const { showDefaultSeries, mode } = options
 
     const reverse = mode === MODE_FACET
 
-    const useAllFilters = useAllChartsOptions()
     const theme = useTheme()
     const { colors } = theme
     const { getString } = useI18n()
-    let results
+    let results: FilterLegend[]
     if (chartFilters.options.mode === MODE_GRID || chartFilters.options.mode === MODE_COMBINED) {
         if (!chartFilters.filters || chartFilters.filters.length === 0) {
             return []
@@ -477,8 +554,9 @@ export const useFilterLegends = (props: { chartFilters: CustomizationDefinition 
                     // add conditions filters to legend
                     labelSegments = [
                         ...labelSegments,
-                        seriesItem.conditions.map(({ field, operator, value }) => {
-                            const fieldLabel = getFieldLabel({ getString, field })
+                        seriesItem.conditions.map(({ fieldId, operator, value }) => {
+                            const field = allFilters.find(f => f.id === fieldId) as FilterItem
+                            const fieldLabel = getFieldLabel({ getString, field, entities })
                             const operatorLabel = getOperatorLabel({ getString, operator })
                             const valueArray = Array.isArray(value) ? value : [value]
                             const valueLabel = valueArray
@@ -487,11 +565,12 @@ export const useFilterLegends = (props: { chartFilters: CustomizationDefinition 
                                         getString,
                                         field,
                                         value: valueString,
-                                        useAllFilters
+                                        allFilters,
+                                        entity: entities.find(e => e.id === valueString)
                                     })
                                 )
                                 .join(', ')
-                            return `${fieldLabel} ${operatorLabel} ${valueLabel}`
+                            return `<strong>${fieldLabel}</strong> ${operatorLabel} <strong>${valueLabel}</strong>`
                         })
                     ]
                 }
@@ -510,13 +589,14 @@ export const useFilterLegends = (props: { chartFilters: CustomizationDefinition 
             })
             results = [...(showDefaultSeries ? [defaultLegendItem] : []), ...seriesLegendItems]
         }
-    } else if (chartFilters.options.mode === MODE_FACET) {
-        results = useAllFilters[chartFilters.facet].map(({ id }, index) => {
+    } else if (chartFilters.options.mode === MODE_FACET && chartFilters.facet) {
+        const facetField = allFilters.find(f => f.id === chartFilters?.facet?.id) as FilterItem
+        results = facetField.options.map(({ id }, index) => {
             const label = getValueLabel({
                 getString,
-                field: chartFilters.facet,
+                field: facetField,
                 value: id,
-                useAllFilters
+                allFilters
             })
             const barColorItem = getVariantBarColorItem(colors, index + 1, chartFilters.facet)
             return {
@@ -562,7 +642,7 @@ export const useChartFilters = ({
     options: CustomizationOptions
 }) => {
     let loadFiltersFromUrl = false,
-        urlFilters = {}
+        urlFilters = {} as CustomizationDefinition
     if (typeof location !== 'undefined') {
         const search = new URLSearchParams(location.search)
         const queryParams = Object.fromEntries(search.entries())
@@ -572,7 +652,9 @@ export const useChartFilters = ({
 
     // contains the filters that define the series
     const [chartFilters, setChartFilters] = useState(
-        loadFiltersFromUrl ? { ...urlFilters, queryOnLoad: true } : getInitFilters(options)
+        loadFiltersFromUrl
+            ? { ...urlFilters, options: { queryOnLoad: true } }
+            : getInitFilters(options)
     )
 
     const legends = useFilterLegends({

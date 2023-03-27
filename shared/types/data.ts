@@ -1,9 +1,30 @@
 import { Entity } from './entities'
 import { Option } from './outlines'
 
+export type QueryData<T> = {
+    surveys: SurveysData<T>
+}
+export type SurveysData<T> = {
+    [key: string]: EditionData<T>
+}
+export type EditionData<T> = {
+    [key: string]: SectionData<T>
+}
+
+export type SectionData<T> = {
+    [key: string]: T
+}
+
 export interface QuestionData {
     id: string
 }
+
+export type AllQuestionData =
+    | StandardQuestionData
+    | OptionsQuestionData
+    | FreeformQuestionData
+    | ToolQuestionData
+    | FeatureQuestionData
 
 export interface StandardQuestionData extends QuestionData {
     responses: ResponseData
@@ -44,11 +65,11 @@ export interface Comment {
 }
 
 export interface ResponseData {
-    allEditions: [EditionData]
-    currentEdition: EditionData
+    allEditions: [ResponseEditionData]
+    currentEdition: ResponseEditionData
 }
 
-export interface EditionData {
+export interface ResponseEditionData {
     editionId: string
     year: number
     completion: YearCompletion
@@ -73,16 +94,29 @@ export interface FacetCompletion extends YearCompletion {
     percentageQuestion: number
 }
 
-export interface Bucket {
-    count: number
+export enum BucketUnits {
+    COUNT = 'count',
+    PERCENTAGE_FACET = 'percentageFacet',
+    PERCENTAGE_QUESTION = 'percentageQuestion',
+    PERCENTAGE_SURVEY = 'percentageSurvey'
+}
+
+export type BucketData = {
+    [key in BucketUnits]?: number
+}
+
+export interface Bucket extends BucketData {
     id: string
-    percentageFacet?: number
-    percentageQuestion: number
-    percentageSurvey: number
     completion?: BucketCompletion
     entity?: Entity
     facetBuckets: FacetBucket[]
 }
+
+export type CombinedBucketData = {
+    [key in BucketUnits as `${key}__${number}`]: number
+}
+
+export interface CombinedBucket extends Bucket, CombinedBucketData {}
 
 export interface FacetBucket extends Omit<Bucket, 'facetBuckets'> {}
 

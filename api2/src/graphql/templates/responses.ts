@@ -22,8 +22,8 @@ export const generateResponsesType = ({ survey, path }: { survey: ParsedSurvey; 
         path,
         typeName,
         typeDef: `type ${typeName} {
-    allEditions: [EditionData]
-    currentEdition: EditionData
+    allEditions: [ResponseEditionData]
+    currentEdition: ResponseEditionData
 }`
     }
 }

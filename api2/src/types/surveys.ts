@@ -11,7 +11,7 @@ import {
     ParsedSection,
     ParsedQuestion,
     Option,
-    EditionData,
+    ResponseEditionData,
     ResponseArguments,
     FacetBucket,
     Bucket
@@ -66,7 +66,7 @@ export type ResolverType = (
 
 export type TransformFunction = (
     parent: ResolverParent,
-    data: EditionData[],
+    data: ResponseEditionData[],
     context: RequestContext
 ) => any
 
@@ -102,7 +102,7 @@ export {
     ParsedSection,
     ParsedQuestion,
     Option,
-    EditionData,
+    ResponseEditionData,
     FacetBucket,
     ResponseArguments,
     Bucket

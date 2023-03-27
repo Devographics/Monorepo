@@ -9,7 +9,7 @@ query: >
                     features_overview: allFeatures {
                         items {
                             id
-                            responses(parameters: { ENABLE_CACHE_PLACEHOLDER }) {
+                            responses<ARGUMENTS_PLACEHOLDER> {
                                 currentEdition {
                                     buckets {
                                         id

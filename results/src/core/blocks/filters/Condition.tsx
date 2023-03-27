@@ -2,9 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 import { mq, spacing } from 'core/theme'
 import Button from 'core/components/Button'
-import { DeleteIcon, TrashIcon, PlusIcon } from 'core/icons'
+import { DeleteIcon, PlusIcon } from 'core/icons'
 import cloneDeep from 'lodash/cloneDeep.js'
-import { useAllFilters } from 'core/charts/hooks'
 import { FieldSegment } from './FieldSegment'
 import { ValueSegment } from './ValueSegment'
 import { OperatorSegment } from './OperatorSegment'
@@ -13,35 +12,30 @@ import { CustomizationFiltersCondition, FilterItem, PanelState } from './types'
 interface ConditionProps {
     seriesIndex: number
     index: number
-    filters: string[]
-    filtersInUse: string[]
-    filtersNotInUse: string[]
+    allFilters: FilterItem[]
+    filtersIdsInUse: string[]
+    filtersIdsNotInUse: string[]
     condition: CustomizationFiltersCondition
     stateStuff: PanelState
 }
 
 const Condition = ({
+    allFilters,
     seriesIndex,
     index,
-    filters,
-    filtersInUse,
-    filtersNotInUse,
+    filtersIdsInUse,
+    filtersIdsNotInUse,
     condition,
     stateStuff
 }: ConditionProps) => {
-    const defaultField = filtersNotInUse[0]
-    const { fieldId = defaultField, operator, value } = condition
+    const defaultFieldId = filtersIdsNotInUse[0]
+    const { fieldId = defaultFieldId, operator, value } = condition
     const { setFiltersState } = stateStuff
 
-    const allFilters = useAllFilters()
+    const field = allFilters.find(o => o.id === fieldId) as FilterItem
+    const values = field?.options || []
 
-    const values = allFilters.find(o => o.id === fieldId)?.options || []
-
-    // console.log(allFilters)
-    // console.log(fieldId)
-    // console.log(allFilters.find(o => o.id === fieldId))
-    // console.log(values)
-    const disabledList = filtersInUse.filter(id => id !== fieldId)
+    const disabledList = filtersIdsInUse.filter(id => id !== fieldId)
 
     const handleDelete = () => {
         setFiltersState(fState => {
@@ -56,7 +50,7 @@ const Condition = ({
         conditionIndex: index,
         stateStuff,
         allFilters,
-        fieldId
+        field
     }
 
     return (
@@ -64,8 +58,7 @@ const Condition = ({
             <Segments_>
                 <FieldSegment
                     {...segmentProps}
-                    options={filters}
-                    fieldId={fieldId}
+                    allFilters={allFilters}
                     disabledList={disabledList}
                 />
                 <OperatorSegment {...segmentProps} value={operator} />

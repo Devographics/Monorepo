@@ -50,12 +50,18 @@ export interface Filters {
     [key: string]: Filter<string>
 }
 
-export interface Filter<T> {
+export enum OperatorEnum {
     // must equal value
-    eq?: T
+    EQ = 'eq',
     // must be one of given values
-    in?: T[]
+    IN = 'in',
     // must not be one of given values
+    NIN = 'nin'
+}
+
+export interface Filter<T> {
+    eq?: T
+    in?: T[]
     nin?: T[]
 }
 

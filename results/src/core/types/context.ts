@@ -10,4 +10,5 @@ export interface PageContextValue {
     config?: any
     currentSurvey: SurveyMetadata
     currentEdition: EditionMetadata
+    pageData: any
 }

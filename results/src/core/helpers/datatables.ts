@@ -1,5 +1,5 @@
 import { BlockUnits, BlockLegend, BucketItem } from '@types/index'
-import { Entity, EditionData } from '@devographics/types'
+import { Entity, ResponseEditionData } from '@devographics/types'
 import { isPercentage } from 'core/helpers/units'
 import get from 'lodash/get'
 
@@ -124,7 +124,7 @@ export const groupDataByYears = ({
     data = [],
     valueKeys = defaultValueKeys
 }: {
-    data: EditionData[]
+    data: ResponseEditionData[]
     valueKeys?: string[] | TableHeading[]
     keys: string[]
 }) => {
@@ -150,7 +150,7 @@ export const getBucketValue = ({
     key,
     valueKey
 }: {
-    data: EditionData[]
+    data: ResponseEditionData[]
     year: number
     key: number | string
     valueKey: BlockUnits

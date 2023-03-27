@@ -1,11 +1,11 @@
-import { EditionData, Bucket, FacetBucket, ComputeAxisParameters } from '../../types'
+import { ResponseEditionData, Bucket, FacetBucket, ComputeAxisParameters } from '../../types'
 import { ratioToPercentage } from '../common'
 // import { NO_ANSWER } from '@devographics/constants'
 const NO_ANSWER = 'no_answer'
 
 const computeBucketsWithPercentages = <T extends Bucket | FacetBucket>(
     buckets: T[],
-    editionData: EditionData,
+    editionData: ResponseEditionData,
     parentBucket?: Bucket
 ) => {
     const bucketsWithPercentages = buckets.map(bucket => {
@@ -27,7 +27,7 @@ const computeBucketsWithPercentages = <T extends Bucket | FacetBucket>(
     return bucketsWithPercentages
 }
 
-export async function addPercentages(resultsByEdition: EditionData[]) {
+export async function addPercentages(resultsByEdition: ResponseEditionData[]) {
     for (let editionData of resultsByEdition) {
         editionData.buckets = computeBucketsWithPercentages<Bucket>(
             editionData.buckets,

@@ -16,11 +16,7 @@ export const all_tools: TemplateFunction = ({ survey, edition, section, question
         typeDef: `type ${fieldTypeName} {
     ids: [String]
     years: [Int]
-    items(filters: ${getFiltersTypeName(
-        survey.id
-    )},  parameters: Parameters, facet: ${getFacetsTypeName(survey.id)}): [${graphqlize(
-            survey.id
-        )}Tool]
+    items: [${graphqlize(survey.id)}Tool]
 }`,
         resolverMap: getToolsFeaturesResolverMap({ survey, items })
     }

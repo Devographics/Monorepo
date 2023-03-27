@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import T from 'core/i18n/T'
 import { mq, spacing, fontSize } from 'core/theme'

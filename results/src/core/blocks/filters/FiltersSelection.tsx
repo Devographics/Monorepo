@@ -11,27 +11,29 @@ import { usePageContext } from 'core/helpers/pageContext'
 import { Series_ } from './Series'
 import Presets from './Presets'
 import Options from './Options'
-import { useAllChartsOptions } from 'core/charts/hooks'
-import { CustomizationDefinition, PanelState, CustomizationFiltersSeries } from './types'
+import {
+    CustomizationDefinition,
+    PanelState,
+    CustomizationFiltersSeries,
+    FilterItem
+} from './types'
 import { BlockDefinition } from 'core/types'
 
 interface FiltersSelectionProps {
+    allFilters: FilterItem[]
     block: BlockDefinition
     stateStuff: PanelState
 }
 
-const FiltersSelection = ({ block, stateStuff }: FiltersSelectionProps) => {
+const FiltersSelection = ({ allFilters, block, stateStuff }: FiltersSelectionProps) => {
     const context = usePageContext()
-    const availableFilters = useAllChartsOptions()
     const { currentEdition } = context
     const { filtersState, setFiltersState } = stateStuff
 
     const canAddSeries = (filtersState?.filters?.length || 0) < maxSeriesCount
 
-    const filtersWithoutCurrentItem = availableFilters?.filter(q => q.id !== block.id)
-
     const emptySeries = getNewSeries({
-        filters: filtersWithoutCurrentItem,
+        filters: allFilters,
         year: currentEdition.year
     })
 
@@ -57,7 +59,7 @@ const FiltersSelection = ({ block, stateStuff }: FiltersSelectionProps) => {
                         key={index}
                         series={series}
                         index={index}
-                        filters={filtersWithoutCurrentItem}
+                        allFilters={allFilters}
                         stateStuff={stateStuff}
                     />
                 ))}

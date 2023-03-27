@@ -7,7 +7,7 @@
         "target": "es2021",
         "moduleResolution": "Node",
         "module": "ES2020",
-        "lib": ["es7", "es2019", "es2021", "dom"],
+        "lib": ["es2021", "dom"],
         "jsx": "react",
         "skipLibCheck": true,
         "allowSyntheticDefaultImports": true,

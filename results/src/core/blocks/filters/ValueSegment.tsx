@@ -22,7 +22,7 @@ interface ValueSegmentProps<T> {
     conditionIndex: number
     stateStuff: PanelState
     options: OptionMetadata[]
-    fieldId: string
+    field: FilterItem
     allFilters: FilterItem[]
     operator: OperatorEnum
     value: T
@@ -30,6 +30,7 @@ interface ValueSegmentProps<T> {
 
 export const ValueSegment = (props: ValueSegmentProps<FilterValue>) => {
     const isArray = ['in', 'nin'].includes(props.operator)
+
     return isArray ? (
         <ValueSegmentArray {...(props as ValueSegmentArrayProps)} />
     ) : (
@@ -45,12 +46,11 @@ const ValueSegmentField = ({
     stateStuff,
     options,
     value,
-    fieldId,
+    field,
     allFilters
 }: ValueSegmentFieldProps) => {
     const { setFiltersState } = stateStuff
     const { getString } = useI18n()
-
     return (
         <Label_>
             {/* <span>{segmentId}</span> */}
@@ -72,7 +72,7 @@ const ValueSegmentField = ({
                     <option key={id} value={id}>
                         {getValueLabel({
                             getString,
-                            fieldId,
+                            field,
                             value: id,
                             allFilters,
                             entity,
@@ -94,7 +94,7 @@ const ValueSegmentArray = ({
     options,
     value,
     allFilters,
-    fieldId
+    field
 }: ValueSegmentArrayProps) => {
     const { setFiltersState } = stateStuff
     const { getString } = useI18n()
@@ -150,7 +150,7 @@ const ValueSegmentArray = ({
                                 <option key={id} value={id}>
                                     {getValueLabel({
                                         getString,
-                                        fieldId,
+                                        field,
                                         value: id,
                                         allFilters,
                                         entity,

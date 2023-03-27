@@ -105,7 +105,7 @@ enum SortOrder {
     desc
 }
 
-type EditionData {
+type ResponseEditionData {
     year: Int
     editionId: String
     completion: YearCompletion

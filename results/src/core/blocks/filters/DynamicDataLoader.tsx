@@ -25,23 +25,32 @@ import {
 import { CustomizationDefinition } from './types'
 import WrapperGrid from './WrapperGrid'
 import { useAllChartsOptions } from 'core/charts/hooks'
-import { BlockDefinition } from '@types/index'
+import { BlockDefinition, PageContextValue } from '@types/index'
 import get from 'lodash/get'
+import { getBlockDataPath, getDefaultDataPath } from 'core/helpers/data'
+import {
+    QueryData,
+    AllQuestionData,
+    ResponseEditionData,
+    StandardQuestionData,
+    BucketUnits,
+    Bucket
+} from '@devographics/types'
 
-const doNothing = a => a
+export const doNothing = a => a
 
-const getSeriesData = ({ result, path }: { result: any; path: string }) => {
-    // example paths: "dataAPI.survey.demographics.yearly_salary1.year" or "dataAPI.survey.podcasts2.year"
-    const pathSegments = path.split('.')
-    const [apiSegment, surveySegment, sectionSegment, ...rest] = pathSegments
-    if (path.includes('demographics')) {
-        // result object of type survey.demographics.age_1
-        return result[surveySegment][sectionSegment]
-    } else {
-        // result object of type survey.first_steps_1
-        return result[surveySegment]
-    }
-}
+// const getSeriesData = ({ result, path }: { result: any; path: string }) => {
+//     // example paths: "dataAPI.survey.demographics.yearly_salary1.year" or "dataAPI.survey.podcasts2.year"
+//     const pathSegments = path.split('.')
+//     const [apiSegment, surveySegment, sectionSegment, ...rest] = pathSegments
+//     if (path.includes('demographics')) {
+//         // result object of type survey.demographics.age_1
+//         return result[surveySegment][sectionSegment]
+//     } else {
+//         // result object of type survey.first_steps_1
+//         return result[surveySegment]
+//     }
+// }
 
 /*
 
@@ -50,34 +59,74 @@ Take a series and get the buckets from its first facet
 */
 const getSeriesItemBuckets = seriesItem => seriesItem?.year?.facets[0]?.buckets
 
-type DynamicDataLoaderProps = {
-    block: any
-    processBlockData: Function
+export type DynamicDataLoaderProps = {
+    block: BlockDefinition
+    data: any
+    getChartData: any
     processBlockDataOptions: any
-    setUnits: Dispatch<SetStateAction<number>>
+    setUnits: Dispatch<SetStateAction<BucketUnits>>
     completion: any
-    defaultBuckets: any
     children: ReactNode
     chartFilters: CustomizationDefinition
     setBuckets: Dispatch<SetStateAction<any>>
     layout: 'grid' | 'column'
+    combineSeries: Function
+}
+
+export type GetDataOptions = {
+    block: BlockDefinition
+    pageContext: PageContextValue
+    chartFilters: CustomizationDefinition
+    year: number
+}
+
+export const fetchSeriesData = async ({
+    block,
+    pageContext,
+    chartFilters,
+    year
+}: GetDataOptions) => {
+    const { query, seriesNames } = getFiltersQuery({
+        block,
+        pageContext,
+        chartFilters,
+        currentYear: year
+    })
+
+    const url = process.env.GATSBY_DATA_API_URL
+    if (!url) {
+        throw new Error('GATSBY_DATA_API_URL env variable is not set')
+    }
+    const result: QueryData<AllQuestionData> = await runQuery(url, query, `${block.id}FiltersQuery`)
+    console.log('// result')
+    console.log(result)
+
+    const dataPath = getBlockDataPath({ block, pageContext, addRootNode: false })
+
+    // apply dataPath to get block data for each series
+    const seriesBlockData = seriesNames.map(
+        seriesName => get(result, dataPath.replace(block.id, seriesName)) as AllQuestionData
+    )
+    return { seriesNames, seriesBlockData }
 }
 
 const DynamicDataLoader = ({
     block,
-    processBlockData = doNothing,
+    data,
+    getChartData = doNothing,
     processBlockDataOptions = {},
     setUnits,
     completion,
-    defaultBuckets,
     children,
     chartFilters,
     setBuckets,
+    combineSeries,
     layout = 'column'
 }: DynamicDataLoaderProps) => {
     const theme = useTheme()
     const { getString } = useI18n()
 
+    const defaultBuckets = getChartData(data, processBlockDataOptions)
     const [isLoading, setIsLoading] = useState(false)
     const defaultSeries = { name: 'default', buckets: defaultBuckets }
 
@@ -89,8 +138,8 @@ const DynamicDataLoader = ({
     // multiple behavior: multiple series with normal buckets
     const [series, setSeries] = useState([defaultSeries])
 
-    const context = usePageContext()
-    const { currentEdition } = context
+    const pageContext = usePageContext()
+    const { currentEdition } = pageContext
     const { year } = currentEdition
 
     const { options = {} } = chartFilters
@@ -105,7 +154,7 @@ const DynamicDataLoader = ({
     const useAllFilters = useAllChartsOptions()
 
     useEffect(() => {
-        if (initialLoad.current && !chartFilters.queryOnLoad) {
+        if (initialLoad.current && !chartFilters.options.queryOnLoad) {
             initialLoad.current = false
             return
         }
@@ -115,6 +164,7 @@ const DynamicDataLoader = ({
 
             const { query, seriesNames } = getFiltersQuery({
                 block,
+                pageContext,
                 chartFilters,
                 currentYear: year
             })
@@ -123,56 +173,36 @@ const DynamicDataLoader = ({
             if (!url) {
                 throw new Error('GATSBY_DATA_API_URL env variable is not set')
             }
-            const result = await runQuery(url, query, `${block.id}FiltersQuery`)
-
+            const result: QueryData<AllQuestionData> = await runQuery(
+                url,
+                query,
+                `${block.id}FiltersQuery`
+            )
             console.log('// result')
             console.log(result)
 
-            const dataPath = block.dataPath.replace('dataAPI.', '')
+            const dataPath = getBlockDataPath({ block, pageContext, addRootNode: false })
 
             if (mode === MODE_GRID || mode === MODE_COMBINED) {
                 // apply dataPath to get block data for each series
-                const seriesBlockData = seriesNames.map(seriesName =>
-                    get(result, dataPath.replace(block.id, seriesName))
+                const seriesBlockData = seriesNames.map(
+                    seriesName =>
+                        get(result, dataPath.replace(block.id, seriesName)) as AllQuestionData
                 )
-                // apply processBlockData to get chart data (buckets) for each series
-                const seriesChartData = seriesBlockData.map((blockData, i) =>
-                    processBlockData(blockData, {
-                        ...processBlockDataOptions,
-                        seriesName: seriesNames[i]
-                    })
-                )
-                // console.log('// DynamicDataLoader')
-                // console.log(seriesBlockData)
+
+                console.log('// DynamicDataLoader')
+                console.log(seriesBlockData)
                 // console.log(seriesChartData)
 
-                if (mode === MODE_COMBINED) {
-                    /*
-
-                    Combine multiple series into a single chart
-
-                    */
-
-                    /*
-
-                    In case buckets have a processing function applied (for example to merge them into
-                    fewer buckets), apply it now to the new buckets
-
-                    */
-
-                    const combinedBuckets = combineBuckets({
-                        defaultBuckets,
-                        otherBucketsArrays: seriesChartData,
-                        completion
-                    })
-
+                if (mode === MODE_COMBINED && combineSeries) {
                     // percentageQuestion is the only unit that lets us
                     // meaningfully compare values across series
                     if (setUnits) {
-                        setUnits('percentageQuestion')
+                        setUnits(BucketUnits.PERCENTAGE_QUESTION)
                     }
-                    setCombinedBuckets(combinedBuckets)
-                    setSeriesCount(seriesChartData.length)
+                    const newCombinedBuckets = combineSeries(defaultBuckets, seriesBlockData)
+                    setCombinedBuckets(newCombinedBuckets)
+                    setSeriesCount(seriesBlockData.length)
                 } else {
                     /*
 
@@ -183,27 +213,28 @@ const DynamicDataLoader = ({
                         ...(showDefaultSeries ? [defaultSeries] : []),
                         ...seriesNames.map((name, i) => ({
                             name,
-                            buckets: seriesChartData[i]
+                            ...seriesBlockData[i]
                         }))
                     ]
+                    console.log(allSeries)
                     setSeries(allSeries)
                 }
             } else if (mode === MODE_FACET) {
                 // apply dataPath to get block data for each series
                 const blockData = get(result, dataPath)
-                const facets = blockData?.facets
+                // const facets = blockData?.facets
 
-                const invertedFacetsBuckets = invertFacets({
-                    facets,
-                    defaultBuckets
-                })
-                const invertedFacetsBucketsWithAverages = calculateAverages({
-                    buckets: invertedFacetsBuckets,
-                    useAllFilters,
-                    facet: chartFilters.facet
-                })
-                setUnits('percentage_bucket')
-                setCombinedBuckets(invertedFacetsBucketsWithAverages)
+                // const invertedFacetsBuckets = invertFacets({
+                //     facets,
+                //     defaultBuckets
+                // })
+                // const invertedFacetsBucketsWithAverages = calculateAverages({
+                //     buckets: invertedFacetsBuckets,
+                //     useAllFilters,
+                //     facet: chartFilters.facet
+                // })
+                // setUnits('percentage_bucket')
+                // setCombinedBuckets(invertedFacetsBucketsWithAverages)
             }
             setIsLoading(false)
         }
@@ -246,15 +277,25 @@ const DynamicDataLoader = ({
     }
 }
 
-const SingleWrapper = ({
-    children,
+type SingleWrapperProps = {
+    buckets: any
+    seriesCount: number
+    chartDisplayMode: any
+    facet: string
+    isLoading: boolean
+    showDefaultSeries: boolean
+    children: React.ReactNode
+}
+
+export const SingleWrapper = ({
     buckets,
     seriesCount,
     chartDisplayMode,
     facet,
     isLoading,
-    showDefaultSeries
-}) => (
+    showDefaultSeries,
+    children
+}: SingleWrapperProps) => (
     <Wrapper_>
         <Contents_>
             {React.cloneElement(children, {

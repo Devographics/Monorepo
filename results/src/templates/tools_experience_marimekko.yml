@@ -15,7 +15,7 @@ query: >
                     ${sectionId}_experience_marimekko: ${sectionId}_allTools {
                         items {
                             id
-                            responses(parameters: { ENABLE_CACHE_PLACEHOLDER }) {
+                            responses<ARGUMENTS_PLACEHOLDER> {
                                 currentEdition {
                                     editionId
                                     year

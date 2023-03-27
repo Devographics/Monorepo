@@ -1,31 +1,22 @@
 import React from 'react'
-import styled from 'styled-components'
 import T from 'core/i18n/T'
-import { mq, spacing, fontSize } from 'core/theme'
-import { FiltersTop_, Heading_, Description_, Wrapper_ } from './FiltersSelection'
+import { FiltersTop_, Description_, Wrapper_ } from './FiltersSelection'
 import { Options_, Option_ } from './Options'
-import { useI18n } from 'core/i18n/i18nContext'
 import cloneDeep from 'lodash/cloneDeep'
-import { useAllChartsOptionsIdsOnly } from 'core/charts/hooks'
-import { MODE_FACET } from './constants'
-import { PanelState } from './types'
-import { BlockDefinition } from 'core/types'
+import { FilterItem, PanelState } from './types'
+import { ItemSelectOptions } from './FieldSegment'
 
 // disable facets with too many segments
 const disabledFacets = ['source', 'country', 'industry_sector']
 
 interface FacetSelectionProps {
-    chartName: string
+    allFilters: FilterItem[]
     stateStuff: PanelState
-    block: BlockDefinition
 }
 
-const FacetSelection = ({ chartName, stateStuff, block }: FacetSelectionProps) => {
-    const { getString } = useI18n()
-    const allChartsKeys = useAllChartsOptionsIdsOnly()
-    const { facets } = allChartsKeys
+const FacetSelection = ({ allFilters, stateStuff }: FacetSelectionProps) => {
     const { filtersState, setFiltersState } = stateStuff
-    const enabledFacets = facets.filter(f => !disabledFacets.includes(f))
+    const enabledFacets = allFilters.filter(f => !disabledFacets.includes(f.id))
 
     return (
         <Wrapper_>
@@ -43,18 +34,14 @@ const FacetSelection = ({ chartName, stateStuff, block }: FacetSelectionProps) =
                                 const value = e.target.value
                                 setFiltersState(fState => {
                                     const newState = cloneDeep(fState)
-                                    newState.facet = value
+                                    const field = allFilters.find(f => f.id === value) as FilterItem
+                                    newState.facet = { sectionId: field.sectionId, id: value }
                                     return newState
                                 })
                             }}
-                            value={filtersState.facet}
+                            value={filtersState?.facet?.id}
                         >
-                            <option>{getString('filters.facet.select')?.t}</option>
-                            {enabledFacets.map(f => (
-                                <option key={f} value={f} disabled={f === block.id}>
-                                    {getString(`user_info.${f}`)?.t}
-                                </option>
-                            ))}
+                            <ItemSelectOptions allFilters={enabledFacets} />
                         </select>
                     </label>
                 </Option_>

@@ -22,7 +22,9 @@ import {
 } from 'core/charts/hooks'
 import { CHART_MODE_DEFAULT } from 'core/blocks/filters/constants'
 import { useEntities } from 'core/helpers/entities'
-import { Bucket } from '@devographics/types'
+import { Bucket, StandardQuestionData } from '@devographics/types'
+
+export const getChartData = (data: StandardQuestionData) => data?.responses?.currentEdition?.buckets
 
 export const margin = {
     top: 40,
@@ -101,7 +103,8 @@ const getLabelsLayer = labelTransformer => (props: any) => {
 }
 
 const HorizontalBarChart = ({
-    buckets,
+    // buckets,
+    data,
     total,
     i18nNamespace,
     translateData = false,
@@ -117,6 +120,7 @@ const HorizontalBarChart = ({
     chartDisplayMode = CHART_MODE_DEFAULT,
     showDefaultSeries
 }: HorizontalBarChartProps) => {
+    const buckets = getChartData(data)
     const theme = useTheme()
     const { translate } = useI18n()
 
@@ -150,14 +154,7 @@ const HorizontalBarChart = ({
         units
     })
 
-    const data = useMemo(
-        () =>
-            sortBy(
-                buckets.map(bucket => ({ ...bucket })),
-                'count'
-            ),
-        [buckets]
-    )
+    const data = sortBy(buckets, 'count')
 
     const defaultBarColor = theme.colors.barColors[0]
     const barColor = barColor_ || defaultBarColor

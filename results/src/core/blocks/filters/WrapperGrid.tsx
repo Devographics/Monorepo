@@ -7,7 +7,23 @@ import isEmpty from 'lodash/isEmpty'
 import { CHART_MODE_GRID } from './constants'
 import T from 'core/i18n/T'
 
-const WrapperGrid = ({ layout, series, legends, children, isLoading, showDefaultSeries }) => (
+type WrapperGridProps = {
+    layout: any
+    series: any
+    legends: any
+    children: any
+    isLoading: boolean
+    showDefaultSeries: boolean
+}
+
+const WrapperGrid = ({
+    layout,
+    series,
+    legends,
+    children,
+    isLoading,
+    showDefaultSeries
+}: WrapperGridProps) => (
     <GridWrapper_ layout={layout}>
         {series.map(({ name, buckets }, i) => (
             <GridItem_ key={name}>
@@ -15,10 +31,10 @@ const WrapperGrid = ({ layout, series, legends, children, isLoading, showDefault
                     <Tooltip
                         trigger={
                             <Legend_>
-                                <span>{legends[i]?.label}</span>
+                                <span dangerouslySetInnerHTML={{ __html: legends[i]?.label }} />
                             </Legend_>
                         }
-                        contents={<span>{legends[i]?.label}</span>}
+                        contents={<span dangerouslySetInnerHTML={{ __html: legends[i]?.label }} />}
                     />
                 )}
                 <Contents_>

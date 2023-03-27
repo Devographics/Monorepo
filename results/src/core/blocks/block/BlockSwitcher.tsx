@@ -8,35 +8,18 @@ import Block from 'core/blocks/block/BlockVariant'
 import get from 'lodash/get'
 import { usePageContext } from 'core/helpers/pageContext'
 import { BlockError } from 'core/blocks/block/BlockError'
-
-// const getDefaultDataPath = ({ survey, edition, section, question }) =>
-//     `dataAPI.surveys.${survey.id}.${edition.id}.${section.id}.${question.id}.responses.${
-//         question.allEditions ? 'all_editions' : 'current_edition'
-//     }`
-
-const getDefaultDataPath = ({ survey, edition, section, question }) =>
-    `dataAPI.surveys.${survey.id}.${edition.id}.${section.id}.${question.id}`
+import { getBlockData } from 'core/helpers/data'
 
 const BlockSwitcher = ({ pageData, block, index, ...props }) => {
     const pageContext = usePageContext()
+    const blockData = getBlockData({ block, pageContext })
 
-    const { currentSurvey, currentEdition } = pageContext
-    const dataPath =
-        block.dataPath ||
-        getDefaultDataPath({
-            survey: currentSurvey,
-            edition: currentEdition,
-            section: { id: pageContext.id },
-            question: block
-        })
-
-    let blockData = dataPath && get(pageData, dataPath)
     const [customData, setCustomData] = useState()
     // console.log(block)
     // console.log(pageData)
     // console.log(dataPath)
     // console.log(blockData)
-    let blockKeys = block.keysPath && get(pageData, block.keysPath)
+    const blockKeys = block.keysPath && get(pageData, block.keysPath)
     const { id, blockType, hidden } = block
     if (!blockRegistry[blockType]) {
         return (
@@ -47,7 +30,7 @@ const BlockSwitcher = ({ pageData, block, index, ...props }) => {
         )
     }
     const BlockComponent = blockRegistry[blockType]
-    if (block.dataPath && (!blockData || blockData === null || isEmpty(blockData))) {
+    if (block.query && (!blockData || blockData === null || isEmpty(blockData))) {
         return (
             <BlockError
                 block={block}

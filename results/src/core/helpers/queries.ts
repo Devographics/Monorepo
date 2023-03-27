@@ -4,6 +4,10 @@ import { indentString } from './indentString'
 import { ResponsesParameters, Filters } from '@devographics/types'
 import { PageContextValue } from 'core/types/context'
 import isEmpty from 'lodash/isEmpty'
+import { usePageContext } from 'core/helpers/pageContext'
+import { FacetItem } from 'core/blocks/filters/types'
+
+export const argumentsPlaceholder = '<ARGUMENTS_PLACEHOLDER>'
 
 const getEntityFragment = () => `entity {
     name
@@ -39,7 +43,7 @@ const getEntityFragment = () => `entity {
     }
 }`
 
-const getFacetFragment = addEntities => `
+const getFacetFragment = (addEntities: boolean) => `
     facetBuckets {
         id
         count
@@ -57,17 +61,49 @@ const allEditionsFragment = `editionId
 // const unquote = s => s.replace(/"([^"]+)":/g, '$1:')
 
 // v2: {"foo": "bar"} => {foo: bar} (for enums)
-const unquote = s => s.replaceAll('"', '')
+const unquote = (s: string) => s.replaceAll('"', '')
 
-const wrapArguments = args => {
+const wrapArguments = (args: ResponseArgumentsStrings) => {
     const keys = Object.keys(args)
 
     return keys.length > 0
         ? `(${keys
-              .filter(k => !!args[k])
-              .map(k => `${k}: ${args[k]}`)
+              .filter(k => !!args[k as keyof ResponseArgumentsStrings])
+              .map(k => `${k}: ${args[k as keyof ResponseArgumentsStrings]}`)
               .join(', ')})`
         : ''
+}
+
+interface ResponseArgumentsStrings {
+    facet?: string
+    filters?: string
+    parameters?: string
+}
+
+export const getQueryArgs = ({
+    facet,
+    filters,
+    parameters
+}: {
+    facet?: string
+    filters?: Filters
+    parameters?: ResponsesParameters
+}) => {
+    const args: ResponseArgumentsStrings = {}
+    if (facet) {
+        args.facet = facet
+    }
+    if (filters && !isEmpty(filters)) {
+        args.filters = unquote(JSON.stringify(filters))
+    }
+    if (parameters && !isEmpty(parameters)) {
+        args.parameters = unquote(JSON.stringify(parameters))
+    }
+    if (isEmpty(args)) {
+        return
+    } else {
+        return wrapArguments(args)
+    }
 }
 
 interface QueryOptions {
@@ -76,17 +112,12 @@ interface QueryOptions {
     sectionId: string
     questionId: string
     fieldId?: string
-    facet?: string
+    facet?: FacetItem
     filters?: Filters
     parameters?: ResponsesParameters
     allEditions?: boolean
     addEntities?: boolean
-}
-
-interface ResponseArgumentsStrings {
-    facet?: string
-    filters?: string
-    parameters?: string
+    addArgumentsPlaceholder?: boolean
 }
 
 export const getDefaultQuery = ({
@@ -99,18 +130,12 @@ export const getDefaultQuery = ({
     filters,
     parameters,
     addEntities = false,
-    allEditions = false
+    allEditions = false,
+    addArgumentsPlaceholder = false
 }: QueryOptions) => {
-    const args = {} as ResponseArgumentsStrings
-    if (facet) {
-        args.facet = facet
-    }
-    if (filters && !isEmpty(filters)) {
-        args.filters = unquote(JSON.stringify(filters))
-    }
-    if (parameters && !isEmpty(parameters)) {
-        args.parameters = unquote(JSON.stringify(parameters))
-    }
+    const queryArgs = addArgumentsPlaceholder
+        ? argumentsPlaceholder
+        : getQueryArgs({ facet, filters, parameters })
     const editionType = allEditions ? 'allEditions' : 'currentEdition'
 
     const questionIdString = fieldId ? `${questionId}: ${fieldId}` : questionId
@@ -121,7 +146,7 @@ surveys {
     ${editionId} {
       ${sectionId} {
         ${questionIdString} {
-          responses${wrapArguments(args)} {
+          responses${queryArgs} {
             ${editionType} {
               ${allEditions ? allEditionsFragment : ''}
               completion {
@@ -147,15 +172,28 @@ surveys {
 `
 }
 
-export const getQueryName = ({ editionId, questionId }) =>
-    `${camelCase(editionId)}${camelCase(questionId)}Query`
+export const getQueryName = ({
+    editionId,
+    questionId
+}: {
+    editionId: string
+    questionId: string
+}) => `${camelCase(editionId)}${camelCase(questionId)}Query`
 
 /*
 
 Wrap query contents with query FooQuery {...}
 
 */
-export const wrapQuery = ({ queryName, queryContents, addRootNode }) => {
+export const wrapQuery = ({
+    queryName,
+    queryContents,
+    addRootNode
+}: {
+    queryName: string
+    queryContents: string
+    addRootNode: boolean
+}) => {
     const isInteralAPIQuery = queryContents.includes('internalAPI')
     if (addRootNode && !isInteralAPIQuery) {
         return `query ${queryName} {
@@ -169,25 +207,6 @@ export const wrapQuery = ({ queryName, queryContents, addRootNode }) => {
 }`
     }
 }
-
-export const cleanQueryLinebreaks = s => s.replaceAll('\n\n\n', '\n').replaceAll('\n\n', '\n')
-
-/*
-
-Remove "dataAPI" part
-
-*/
-const removeLast = (str, char) => {
-    const lastIndex = str.lastIndexOf(char)
-    return str.substring(0, lastIndex) + str.substring(lastIndex + 1)
-}
-
-export const cleanQuery = query => {
-    const cleanQuery = removeLast(query.replace('dataAPI {', ''), '}')
-    return cleanQuery
-}
-
-const enableCachePlaceholder = 'ENABLE_CACHE_PLACEHOLDER'
 
 /*
 
@@ -211,12 +230,14 @@ export const getBlockQuery = ({
     block,
     pageContext,
     isLog = false,
-    enableCache = false
+    enableCache = false,
+    addArgumentsPlaceholder = false
 }: {
     block: BlockDefinition
     pageContext: PageContextValue
     isLog?: boolean
     enableCache?: boolean
+    addArgumentsPlaceholder?: boolean
 }) => {
     const { query, id: questionId } = block
     const { id: sectionId, currentSurvey, currentEdition } = pageContext
@@ -224,11 +245,17 @@ export const getBlockQuery = ({
     const { id: editionId } = currentEdition
 
     if (!query) {
-        return
+        return ''
     } else {
         let queryContents
         const queryName = getQueryName({ editionId, questionId })
-        const queryOptions: QueryOptions = { surveyId, editionId, sectionId, questionId }
+        const queryOptions: QueryOptions = {
+            surveyId,
+            editionId,
+            sectionId,
+            questionId,
+            addArgumentsPlaceholder
+        }
 
         if (defaultQueries.includes(query)) {
             if (['allEditionsData'].includes(query)) {
@@ -240,16 +267,18 @@ export const getBlockQuery = ({
             queryContents = getDefaultQuery(queryOptions)
         } else {
             queryContents = query
-            if (isLog) {
-                queryContents = queryContents.replace(enableCachePlaceholder, '')
-            } else {
-                queryContents = queryContents.replace(
-                    enableCachePlaceholder,
-                    `enableCache: ${enableCache.toString()}`
-                )
+            const queryArgs = getQueryArgs(queryOptions)
+            if (queryArgs) {
+                queryContents = queryContents.replace(argumentsPlaceholder, queryArgs)
             }
         }
         const wrappedQuery = wrapQuery({ queryName, queryContents, addRootNode: false })
         return wrappedQuery
     }
+}
+
+export const useBlockQuery = (block: BlockDefinition) => {
+    const pageContext = usePageContext()
+    const query = getBlockQuery({ block, pageContext })
+    return query
 }

@@ -1,8 +1,11 @@
-import { EditionData, RequestContext } from '../../types'
+import { ResponseEditionData, RequestContext } from '../../types'
 import { getEntity } from '../../load/entities'
 
 // add entities to facet and bucket items if applicable
-export async function addEntities(resultsByEdition: EditionData[], context: RequestContext) {
+export async function addEntities(
+    resultsByEdition: ResponseEditionData[],
+    context: RequestContext
+) {
     for (let editionData of resultsByEdition) {
         for (let bucket of editionData.buckets) {
             const bucketEntity = await getEntity({ id: bucket.id, context })

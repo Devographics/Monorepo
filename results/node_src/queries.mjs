@@ -3,6 +3,8 @@ import { indentString } from './indent_string.mjs'
 import { getQuestionId } from './helpers.mjs'
 import isEmpty from 'lodash/isEmpty.js'
 
+const argumentsPlaceholder = '<ARGUMENTS_PLACEHOLDER>'
+
 export const getLocalesQuery = (localeIds, contexts, loadStrings = true) => {
     const args = []
     if (localeIds.length > 0) {
@@ -173,18 +175,7 @@ const wrapArguments = args => {
         : ''
 }
 
-export const getDefaultQuery = ({
-    surveyId,
-    editionId,
-    sectionId,
-    questionId,
-    fieldId,
-    facet,
-    filters,
-    parameters = {},
-    addEntities = false,
-    allEditions = false
-}) => {
+export const getQueryArgs = ({ facet, filters, parameters }) => {
     const args = {}
     if (facet) {
         args.facet = facet
@@ -195,6 +186,24 @@ export const getDefaultQuery = ({
     if (parameters && !isEmpty(parameters)) {
         args.parameters = unquote(JSON.stringify(parameters))
     }
+    return wrapArguments(args)
+}
+
+export const getDefaultQuery = queryOptions => {
+    const {
+        surveyId,
+        editionId,
+        sectionId,
+        questionId,
+        fieldId,
+        facet,
+        filters,
+        parameters = {},
+        addEntities = false,
+        allEditions = false
+    } = queryOptions
+    const queryArgs = getQueryArgs({ facet, filters, parameters })
+
     const editionType = allEditions ? 'allEditions' : 'currentEdition'
 
     const questionIdString = fieldId ? `${questionId}: ${fieldId}` : questionId
@@ -205,7 +214,7 @@ export const getDefaultQuery = ({
       ${editionId} {
         ${sectionId} {
           ${questionIdString} {
-            responses${wrapArguments(args)} {
+            responses${queryArgs} {
               ${editionType} {
                 ${allEditions ? allEditionsFragment : ''}
                 completion {
@@ -269,8 +278,6 @@ export const cleanQuery = query => {
     return cleanQuery
 }
 
-const enableCachePlaceholder = 'ENABLE_CACHE_PLACEHOLDER'
-
 /*
 
 Get query by either
@@ -299,6 +306,12 @@ export const getQuery = ({
     const queryName = getQueryName({ editionId, questionId })
 
     let queryContents
+
+    if (isLog) {
+        // when logging we can leave out enableCache parameter
+        delete queryOptions.parameters.enableCache
+    }
+
     if (defaultQueries.includes(query)) {
         if (['allEditionsData'].includes(query)) {
             queryOptions.allEditions = true
@@ -306,20 +319,19 @@ export const getQuery = ({
         if (['currentEditionDataWithEntities', 'allEditionsDataWithEntities'].includes(query)) {
             queryOptions.addEntities = true
         }
-        if (!isLog) {
-            queryOptions.parameters.enableCache = enableCache
-        }
         queryContents = getDefaultQuery(queryOptions)
     } else {
         queryContents = query
-        if (isLog) {
-            queryContents = queryContents.replace(enableCachePlaceholder, '')
-        } else {
-            queryContents = queryContents.replace(
-                enableCachePlaceholder,
-                `enableCache: ${enableCache.toString()}`
-            )
-        }
+        const queryArgs = getQueryArgs(queryOptions)
+        queryContents = queryContents.replace(argumentsPlaceholder, queryArgs)
+        // if (isLog) {
+        //     queryContents = queryContents.replace(enableCachePlaceholder, '')
+        // } else {
+        //     queryContents = queryContents.replace(
+        //         enableCachePlaceholder,
+        //         `enableCache: ${enableCache.toString()}`
+        //     )
+        // }
     }
 
     const wrappedQuery = wrapQuery({ queryName, queryContents, addRootNode })

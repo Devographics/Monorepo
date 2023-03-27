@@ -43,6 +43,8 @@ declare module 'styled-components' {
             }
         }
         colors: {
+            barColorDefault: any
+            barColors: any
             tiers: string[]
             background: string
             backgroundBackground: string

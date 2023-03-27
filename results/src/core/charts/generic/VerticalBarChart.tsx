@@ -17,6 +17,9 @@ import { ChartComponentProps, BlockUnits, BucketItem, BlockLegend } from '@types
 import { CHART_MODE_DEFAULT } from 'core/blocks/filters/constants'
 import { handleNoAnswerBucket } from 'core/helpers/data'
 import { Bucket } from '@devographics/types'
+import { StandardQuestionData } from '@devographics/types'
+
+export const getChartData = (data: StandardQuestionData) => data?.responses?.currentEdition.buckets
 
 const breakpoint = 600
 
@@ -78,12 +81,15 @@ const VerticalBarChart = ({
     seriesCount,
     chartProps,
     colorVariant = 'primary',
-    buckets,
+    // buckets,
     gridIndex = 1,
     chartDisplayMode = CHART_MODE_DEFAULT,
     facet,
-    showDefaultSeries
+    showDefaultSeries,
+    data
 }: VerticalBarChartProps) => {
+    const buckets = getChartData(data)
+
     const theme = useTheme()
 
     const keys = useChartKeys({ units, facet, seriesCount, showDefaultSeries })

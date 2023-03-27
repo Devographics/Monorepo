@@ -1,10 +1,10 @@
 import React from 'react'
-import { Option, OptionMetadata } from '@devographics/types'
+import { OptionMetadata } from '@devographics/types'
 
 export interface CustomizationDefinition {
     options: CustomizationOptions
     filters: CustomizationFiltersSeries[]
-    facet?: string
+    facet?: FacetItem
 }
 
 export interface PresetDefinition extends CustomizationDefinition {
@@ -28,6 +28,7 @@ export type CustomizationFiltersSeries = {
 }
 
 export type CustomizationFiltersCondition = {
+    sectionId: string
     fieldId: string
     operator: OperatorEnum
     value: FilterValue
@@ -46,6 +47,11 @@ export type FilterItem = {
     sectionId: string
     options: OptionMetadata[]
     template: string
+}
+
+export type FacetItem = {
+    id: string
+    sectionId: string
 }
 
 export type FilterValue = FilterValueString | FilterValueArray

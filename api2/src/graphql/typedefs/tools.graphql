@@ -14,13 +14,13 @@ for awareness/interest and stisfaction.
 type ToolRatiosItemData {
     id: String
     entity: Entity
-    awareness: [ToolRatiosItemEditionData]
-    usage: [ToolRatiosItemEditionData]
-    interest: [ToolRatiosItemEditionData]
-    satisfaction: [ToolRatiosItemEditionData]
+    awareness: [ToolRatiosItemResponseEditionData]
+    usage: [ToolRatiosItemResponseEditionData]
+    interest: [ToolRatiosItemResponseEditionData]
+    satisfaction: [ToolRatiosItemResponseEditionData]
 }
 
-type ToolRatiosItemEditionData {
+type ToolRatiosItemResponseEditionData {
     year: Int
     editionId: String
     rank: Int

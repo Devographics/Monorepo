@@ -1,5 +1,5 @@
 import {
-    EditionData,
+    ResponseEditionData,
     ComputeAxisParameters,
     SortProperty,
     SortOrderNumeric,
@@ -58,7 +58,7 @@ export function sortByProperty<T extends Bucket | FacetBucket>(
 }
 
 export async function sortData(
-    resultsByEdition: EditionData[],
+    resultsByEdition: ResponseEditionData[],
     axis1: ComputeAxisParameters,
     axis2?: ComputeAxisParameters
 ) {

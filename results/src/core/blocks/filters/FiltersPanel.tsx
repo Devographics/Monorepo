@@ -19,6 +19,7 @@ import { BlockDefinition } from '../../types/index'
 import { useStickyState, getFiltersLink } from './helpers'
 import { CheckIcon } from 'core/icons'
 import { CustomizationDefinition, SupportedMode } from './types'
+import { useAllFilters } from 'core/charts/hooks'
 
 type FiltersPanelPropsType = {
     block: BlockDefinition
@@ -39,10 +40,11 @@ const FiltersPanel = ({
     closeModal
 }: FiltersPanelPropsType) => {
     const { translate } = useI18n()
-    const context = usePageContext()
-    const { currentEdition } = context
+    const pageContext = usePageContext()
+    const { currentEdition } = pageContext
+    const allFilters = useAllFilters(block.id)
 
-    const chartName = getBlockTitle(block, context, translate)
+    const chartName = getBlockTitle(block, pageContext, translate)
 
     const initState = isEmpty(chartFilters) ? getInitFilters() : chartFilters
     const [filtersState, setFiltersState] = useState(initState)
@@ -57,6 +59,7 @@ const FiltersPanel = ({
     const props = {
         chartName,
         block,
+        allFilters,
         stateStuff: {
             filtersState,
             setFiltersState,
@@ -69,7 +72,7 @@ const FiltersPanel = ({
 
     // if mode is set to "default" then open first supported filter tab
     const currentMode =
-        filtersState.options.mode === MODE_DEFAULT ? supportedModes[0] : filtersState.options.mode
+        filtersState.options.mode === MODE_DEFAULT ? supportedModes?.[0] : filtersState.options.mode
 
     // whenever this panel is loaded without a mode specified, set mode to currentMode
     useEffect(() => {
@@ -87,9 +90,9 @@ const FiltersPanel = ({
         { mode: MODE_GRID, component: FiltersSelection },
         { mode: MODE_FACET, component: FacetSelection }
     ]
-    const tabs = tabConfig.filter(tab => supportedModes.includes(tab.mode))
+    const tabs = tabConfig.filter(tab => supportedModes?.includes(tab.mode))
 
-    const filtersLink = getFiltersLink({ block, context, filtersState })
+    const filtersLink = getFiltersLink({ block, context: pageContext, filtersState })
 
     const handleTabChange = (tab: SupportedMode) => {
         setFiltersState((fState: CustomizationDefinition) => {
@@ -142,6 +145,7 @@ const FiltersPanel = ({
                         query={
                             getFiltersQuery({
                                 block,
+                                pageContext,
                                 chartFilters: filtersState,
                                 currentYear: currentEdition.year
                             })?.query
@@ -170,7 +174,7 @@ const CopyLink = ({ link }: { link: string }) => {
     }
 
     // onClick handler function for the copy button
-    const handleCopyClick = async e => {
+    const handleCopyClick = async (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault()
         // Asynchronously call copyTextToClipboard
         await copyTextToClipboard(link)

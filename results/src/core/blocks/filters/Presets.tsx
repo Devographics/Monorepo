@@ -9,7 +9,8 @@ import {
     PanelState,
     PresetDefinition,
     CustomizationOptions,
-    CustomizationDefinition
+    CustomizationDefinition,
+    OperatorEnum
 } from './types'
 
 const getPresetsArray = (options: CustomizationOptions): PresetDefinition[] => {
@@ -49,7 +50,7 @@ const getPresetsArray = (options: CustomizationOptions): PresetDefinition[] => {
                     conditions: [
                         {
                             fieldId: 'gender',
-                            operator: 'eq',
+                            operator: OperatorEnum['EQ'],
                             value: 'male'
                         }
                     ]
@@ -58,7 +59,7 @@ const getPresetsArray = (options: CustomizationOptions): PresetDefinition[] => {
                     conditions: [
                         {
                             fieldId: 'gender',
-                            operator: 'eq',
+                            operator: OperatorEnum['EQ'],
                             value: 'female'
                         }
                     ]
@@ -67,7 +68,7 @@ const getPresetsArray = (options: CustomizationOptions): PresetDefinition[] => {
                     conditions: [
                         {
                             fieldId: 'gender',
-                            operator: 'eq',
+                            operator: OperatorEnum['EQ'],
                             value: 'non_binary'
                         }
                     ]
@@ -122,7 +123,7 @@ const getPresetsArray = (options: CustomizationOptions): PresetDefinition[] => {
                     conditions: [
                         {
                             fieldId: 'yearly_salary',
-                            operator: 'in',
+                            operator: OperatorEnum['IN'],
                             value: [
                                 'range_work_for_free',
                                 'range_0_10',
@@ -136,7 +137,7 @@ const getPresetsArray = (options: CustomizationOptions): PresetDefinition[] => {
                     conditions: [
                         {
                             fieldId: 'yearly_salary',
-                            operator: 'in',
+                            operator: OperatorEnum['IN'],
                             value: ['range_50_100', 'range_100_200', 'range_more_than_200']
                         }
                     ]
@@ -153,7 +154,7 @@ const getPresetsArray = (options: CustomizationOptions): PresetDefinition[] => {
                     conditions: [
                         {
                             fieldId: 'years_of_experience',
-                            operator: 'in',
+                            operator: OperatorEnum['IN'],
                             value: ['range_less_than_1', 'range_1_2', 'range_2_5']
                         }
                     ]
@@ -162,7 +163,7 @@ const getPresetsArray = (options: CustomizationOptions): PresetDefinition[] => {
                     conditions: [
                         {
                             fieldId: 'years_of_experience',
-                            operator: 'in',
+                            operator: OperatorEnum['IN'],
                             value: ['range_5_10', 'range_10_20', 'range_more_than_20']
                         }
                     ]

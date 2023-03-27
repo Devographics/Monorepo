@@ -1,14 +1,9 @@
-import React, { useState } from 'react'
-import styled from 'styled-components'
+import React from 'react'
 import ModalTrigger from 'core/components/ModalTrigger'
-import Button from 'core/components/Button'
-import T from 'core/i18n/T'
-import { mq, spacing, fontSize } from 'core/theme'
 import { FiltersIcon } from 'core/icons'
-import isEmpty from 'lodash/isEmpty'
 import FiltersPanel from './FiltersPanel'
 
-const FiltersTrigger = props => (
+const FiltersTrigger = (props: any) => (
     <ModalTrigger
         trigger={
             <div>

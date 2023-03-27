@@ -2,7 +2,7 @@ import React, { memo, useState } from 'react'
 import PropTypes from 'prop-types'
 import Block from 'core/blocks/block/BlockVariant'
 import ChartContainer from 'core/charts/ChartContainer'
-import HorizontalBarChart from 'core/charts/generic/HorizontalBarChart'
+import HorizontalBarChart, { getChartData } from 'core/charts/generic/HorizontalBarChart'
 import { getTableData } from 'core/helpers/datatables'
 import { BlockComponentProps } from '@types/index'
 import { StandardQuestionData } from '@devographics/types'
@@ -10,7 +10,7 @@ import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
 import { MODE_GRID, MODE_FACET } from 'core/blocks/filters/constants'
 import { useChartFilters } from 'core/blocks/filters/helpers'
 import { defaultOptions } from 'core/blocks/block/BlockUnitsSelector'
-import { useAllChartsOptions } from 'core/charts/hooks'
+import { useAllFilters } from 'core/charts/hooks'
 
 export interface HorizontalBarBlockProps extends BlockComponentProps {
     data: StandardQuestionData
@@ -18,15 +18,10 @@ export interface HorizontalBarBlockProps extends BlockComponentProps {
 
 const HorizontalBarBlock = ({
     block,
-    data: questionData,
+    data,
     controlledUnits,
     isCustom
 }: HorizontalBarBlockProps) => {
-    const chartData = questionData?.responses?.currentEdition
-    if (!chartData) {
-        throw Error(`No data found for block ${block.id}`)
-    }
-
     const {
         id,
         mode = 'relative',
@@ -38,7 +33,7 @@ const HorizontalBarBlock = ({
 
     const [units, setUnits] = useState(defaultUnits)
 
-    const { buckets, completion } = chartData
+    const completion = data?.responses?.currentEdition?.completion
     const { total } = completion
 
     const { chartFilters, setChartFilters, legends } = useChartFilters({
@@ -46,14 +41,14 @@ const HorizontalBarBlock = ({
         options: { supportedModes: [MODE_GRID, MODE_FACET] }
     })
 
-    const allChartsOptions = useAllChartsOptions()
+    const allFilters = useAllFilters(block.id)
     let unitsOptions = defaultOptions
     if (chartFilters.facet) {
         // if filtering by facet, use special units
         unitsOptions = ['percentage_bucket', 'count']
-        const facetOptions = allChartsOptions[chartFilters.facet]
+        const facetOptions = allFilters.find(o => o.id === chartFilters.facet)?.options
         // if this facet can be quantified numerically and has averages, add that as unit too
-        if (typeof facetOptions[0].average !== 'undefined') {
+        if (facetOptions && typeof facetOptions[0].average !== 'undefined') {
             unitsOptions.push('average')
         }
     }
@@ -66,7 +61,7 @@ const HorizontalBarBlock = ({
             data={chartData}
             tables={[
                 getTableData({
-                    data: buckets,
+                    data: {},
                     valueKeys: ['percentageSurvey', 'percentageQuestion', 'count'],
                     translateData,
                     i18nNamespace: chartNamespace
@@ -81,16 +76,17 @@ const HorizontalBarBlock = ({
         >
             <DynamicDataLoader
                 completion={completion}
-                defaultBuckets={buckets}
                 block={block}
                 chartFilters={chartFilters}
                 setUnits={setUnits}
                 layout="grid"
+                blockData={data}
+                getChartData={getChartData}
             >
                 <ChartContainer fit={false}>
                     <HorizontalBarChart
                         total={total}
-                        buckets={buckets}
+                        data={data}
                         i18nNamespace={chartNamespace}
                         translateData={translateData}
                         mode={mode}

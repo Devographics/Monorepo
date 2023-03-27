@@ -11,7 +11,7 @@ import {
     Edition,
     Section,
     ParsedQuestionExt,
-    EditionData,
+    ResponseEditionData,
     ComputeAxisParameters,
     SortProperty
 } from '../types'
@@ -159,7 +159,7 @@ export async function genericComputeFunction({
 
     const pipeline = await getGenericPipeline(pipelineProps)
 
-    let results = (await collection.aggregate(pipeline).toArray()) as EditionData[]
+    let results = (await collection.aggregate(pipeline).toArray()) as ResponseEditionData[]
 
     if (isDebug) {
         console.log(

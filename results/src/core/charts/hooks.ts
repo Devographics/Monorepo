@@ -319,7 +319,15 @@ export const useAllChartsOptions = (): FilterItem[] => {
     return keys
 }
 
-export const useAllFilters = useAllChartsOptions
+/*
+
+Get all available filters, while optionally filtering out the current question's id
+
+*/
+export const useAllFilters = (excludeFilterId?: string) => {
+    const allFilters = useAllChartsOptions()
+    return allFilters.filter(q => q.id !== excludeFilterId)
+}
 
 export const useAllChartsOptionsIdsOnly = () => {
     const options = {}
