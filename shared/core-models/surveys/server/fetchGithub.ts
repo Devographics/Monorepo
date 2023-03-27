@@ -14,6 +14,9 @@ const repo = "surveys"
 // @see https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28#get-repository-content
 const contentsRoot = `${ghApiReposRoot}/${org}/${repo}/contents`
 
+// before 2021 surveys do not have a "questions.yml"
+const YEARS_THRESHOLD = 2021
+
 // Utils
 
 async function githubBody(res: Response) {
@@ -63,7 +66,7 @@ async function fetchGithubJson<T = any>(url: string): Promise<T> {
 // Surveys
 
 /**
- * Will throw if survey is not found/can't call github
+ * /!\ supports only recent surveys with a "questions.yml"
  * @param surveyId 
  * @param editionId 
  * @returns 
@@ -83,6 +86,7 @@ export async function fetchSurveyGithub(surveyId: string, editionId: string): Pr
     }
     const questionsRes = await fetchGithub(`${contentsRoot}/${yearlyFolder}/questions.yml`)
     if (!questionsRes.ok) {
+        // You may have tried to load a survey pre 2021, with no questions.yml in the "surveys" repository
         throw new Error(`Cannot fetch survey questions for survey context "${surveyId}" and editionId "${editionId}, error ${configRes.status}"`)
     }
     const commonConfigRes = await fetchGithub(commonConfigUrl)
@@ -142,7 +146,6 @@ interface GhFileOrDir {
 
 const isDir = (fileOrDir: GhFileOrDir) => fileOrDir.type === "dir"
 
-const yearThreshold = 2019
 
 /**
  * @param surveyId state_of_js
@@ -156,7 +159,10 @@ async function fetchEditionFolders(surveyId: string) {
 
 }
 
-export const fetchSurveysListGithub = async (): Promise<Array<SurveyEditionDescription>> => {
+export const fetchSurveysListGithub = async (yearThreshold: number = YEARS_THRESHOLD): Promise<Array<SurveyEditionDescription>> => {
+    if (yearThreshold < YEARS_THRESHOLD) {
+        console.warn(`You are loading surveys before the hard threshold ${YEARS_THRESHOLD}, surveys may have an outdated structure.`)
+    }
     const content = await fetchGithubJson<Array<GhFileOrDir>>(contentsRoot)
     const surveysFolders = content
         .filter(fileOrDir => fileOrDir.type === "dir")

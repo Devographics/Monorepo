@@ -67,7 +67,7 @@ export async function fetchSurvey(surveyId: SurveyEdition["surveyId"], editionId
     )
 }
 
-export const fetchSurveysList = async (keepDemo?: boolean): Promise<Array<SurveyEditionDescription>> => {
+export const fetchSurveysList = async (keepDemo?: boolean, yearThreshold?: number): Promise<Array<SurveyEditionDescription>> => {
     const key = "surveys_description_list"
     let surveys = await fromSurveysCache(
         key,
@@ -76,7 +76,7 @@ export const fetchSurveysList = async (keepDemo?: boolean): Promise<Array<Survey
             if (redisSurveys) {
                 return redisSurveys
             }
-            const ghSurveys = await fetchSurveysListGithub()
+            const ghSurveys = await fetchSurveysListGithub(yearThreshold)
             storeSurveysListRedis(ghSurveys)
             return ghSurveys
         }
