@@ -9,7 +9,9 @@ import { FacetItem } from 'core/blocks/filters/types'
 
 export const argumentsPlaceholder = '<ARGUMENTS_PLACEHOLDER>'
 
-const getEntityFragment = () => `entity {
+export const bucketFacetsPlaceholder = '<BUCKETFACETS_PLACEHOLDER>'
+
+export const getEntityFragment = () => `entity {
     name
     nameHtml
     nameClean
@@ -43,7 +45,7 @@ const getEntityFragment = () => `entity {
     }
 }`
 
-const getFacetFragment = (addEntities: boolean) => `
+export const getFacetFragment = (addEntities?: boolean) => `
     facetBuckets {
         id
         count
@@ -118,6 +120,7 @@ interface QueryOptions {
     allEditions?: boolean
     addEntities?: boolean
     addArgumentsPlaceholder?: boolean
+    addBucketFacetsPlaceholder?: boolean
 }
 
 export const getDefaultQuery = ({
@@ -131,7 +134,8 @@ export const getDefaultQuery = ({
     parameters,
     addEntities = false,
     allEditions = false,
-    addArgumentsPlaceholder = false
+    addArgumentsPlaceholder = false,
+    addBucketFacetsPlaceholder = false
 }: QueryOptions) => {
     const queryArgs = addArgumentsPlaceholder
         ? argumentsPlaceholder
@@ -161,6 +165,7 @@ surveys {
                 percentageSurvey
                 ${addEntities ? getEntityFragment() : ''}
                 ${facet ? getFacetFragment(addEntities) : ''}
+                ${addBucketFacetsPlaceholder ? bucketFacetsPlaceholder : ''}
               }
             }
           }
@@ -231,13 +236,15 @@ export const getBlockQuery = ({
     pageContext,
     isLog = false,
     enableCache = false,
-    addArgumentsPlaceholder = false
+    addArgumentsPlaceholder = false,
+    addBucketFacetsPlaceholder = false
 }: {
     block: BlockDefinition
     pageContext: PageContextValue
     isLog?: boolean
     enableCache?: boolean
     addArgumentsPlaceholder?: boolean
+    addBucketFacetsPlaceholder?: boolean
 }) => {
     const { query, id: questionId } = block
     const { id: sectionId, currentSurvey, currentEdition } = pageContext
@@ -254,7 +261,8 @@ export const getBlockQuery = ({
             editionId,
             sectionId,
             questionId,
-            addArgumentsPlaceholder
+            addArgumentsPlaceholder,
+            addBucketFacetsPlaceholder
         }
 
         if (defaultQueries.includes(query)) {

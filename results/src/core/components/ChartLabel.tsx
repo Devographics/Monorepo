@@ -13,6 +13,13 @@ const ChartLabel = ({
     outlineColor: _outlineColor,
     textColor: _textColor,
     ...rest
+}: {
+    label: string
+    fontSize: number
+    outlineColor?: string
+    textColor?: string
+    transform: any
+    style: any
 }) => {
     const theme = useTheme()
 
@@ -49,13 +56,6 @@ const ChartLabel = ({
             </text>
         </g>
     )
-}
-
-ChartLabel.propTypes = {
-    label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    fontSize: PropTypes.number,
-    outlineColor: PropTypes.string,
-    textColor: PropTypes.string
 }
 
 export default memo(ChartLabel)

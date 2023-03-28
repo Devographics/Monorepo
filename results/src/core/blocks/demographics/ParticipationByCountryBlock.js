@@ -18,11 +18,12 @@ const processBlockData = data => {
 
 const ParticipationByCountryBlock = ({
     block,
-    data: questionData,
+    data,
     triggerId,
     units: defaultUnits = 'percentageSurvey'
 }) => {
-    const chartData = questionData?.responses?.currentEdition
+    return <div>todo</div>
+    const chartData = data?.responses?.currentEdition
 
     const {
         id,
@@ -88,7 +89,7 @@ const ParticipationByCountryBlock = ({
                         translateData={translateData}
                         mode={mode}
                         units={units}
-                        buckets={processBlockData(buckets)}
+                        data={processBlockData(data)}
                         facet={chartFilters.facet}
                     />
                 </ChartContainer>

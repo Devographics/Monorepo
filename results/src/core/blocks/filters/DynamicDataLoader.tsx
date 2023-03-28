@@ -31,18 +31,14 @@ Take a series and get the buckets from its first facet
 */
 // const getSeriesItemBuckets = seriesItem => seriesItem?.year?.facets[0]?.buckets
 
-export type DynamicDataLoaderProps = {
+export interface DynamicDataLoaderProps {
     block: BlockDefinition
-    data: any
-    getChartData: any
-    processBlockDataOptions: any
     setUnits: Dispatch<SetStateAction<BucketUnits>>
     completion: any
     children: ReactNode
     chartFilters: CustomizationDefinition
     setBuckets: Dispatch<SetStateAction<any>>
     layout: 'grid' | 'column'
-    combineSeries: Function
 }
 
 const DynamicDataLoader = (props: DynamicDataLoaderProps) => {

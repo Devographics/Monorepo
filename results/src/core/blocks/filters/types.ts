@@ -1,5 +1,5 @@
 import React from 'react'
-import { OptionMetadata } from '@devographics/types'
+import { OptionMetadata, AllQuestionData } from '@devographics/types'
 
 export interface CustomizationDefinition {
     options: CustomizationOptions
@@ -64,4 +64,16 @@ export type PanelState = {
     setFiltersState: React.Dispatch<React.SetStateAction<CustomizationDefinition>>
     customPresets: PresetDefinition[]
     setCustomPresets: React.Dispatch<React.SetStateAction<PresetDefinition[]>>
+}
+
+export type DataSeries = {
+    name: string
+    data: AllQuestionData
+}
+
+export enum ChartModes {
+    CHART_MODE_GRID = 'grid',
+    CHART_MODE_STACKED = 'stacked',
+    CHART_MODE_GROUPED = 'grouped',
+    CHART_MODE_DEFAULT = 'default'
 }

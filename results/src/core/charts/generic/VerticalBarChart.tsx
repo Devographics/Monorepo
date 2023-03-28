@@ -1,5 +1,4 @@
 import React, { memo, useMemo } from 'react'
-import PropTypes from 'prop-types'
 import { useTheme } from 'styled-components'
 import { ResponsiveBar } from '@nivo/bar'
 import { useI18n } from 'core/i18n/i18nContext'
@@ -12,13 +11,14 @@ import {
 } from 'core/charts/hooks'
 import BarTooltip from './BarTooltip'
 import ChartLabel from 'core/components/ChartLabel'
-import { isPercentage } from 'core/helpers/units'
-import { ChartComponentProps, BlockUnits, BucketItem, BlockLegend } from '@types/index'
+import { ChartComponentProps, BlockLegend } from 'core/types/index'
 import { CHART_MODE_DEFAULT } from 'core/blocks/filters/constants'
 import { handleNoAnswerBucket } from 'core/helpers/data'
-import { Bucket } from '@devographics/types'
-import { StandardQuestionData } from '@devographics/types'
+import { StandardQuestionData, BucketUnits } from '@devographics/types'
 import { combineBuckets } from 'core/blocks/filters/helpers'
+import { DataSeries, ChartModes, FacetItem } from 'core/blocks/filters/types'
+
+const baseUnits = Object.values(BucketUnits)
 
 export const getChartData = (data: StandardQuestionData) => data?.responses?.currentEdition.buckets
 
@@ -27,10 +27,10 @@ export const getChartData = (data: StandardQuestionData) => data?.responses?.cur
 Combine multiple series into a single chart
 
 */
-export const combineSeries = (dataSeries: StandardQuestionData[]) => {
+export const combineSeries = (dataSeries: DataSeries[]) => {
     console.log('// combineSeries')
     console.log(dataSeries)
-    const allBuckets = dataSeries.map(blockData => getChartData(blockData))
+    const allBuckets = dataSeries.map(series => getChartData(series.data))
     const [defaultBuckets, ...otherBucketsArray] = allBuckets
 
     console.log(defaultBuckets)
@@ -89,39 +89,51 @@ const getAxisLabels = (v: any, legends: BlockLegend[]) => {
 
 export interface VerticalBarChartProps extends ChartComponentProps {
     total: number
-    data: StandardQuestionData[]
+    series: DataSeries[]
     seriesCount: number
+    gridIndex?: number
+    chartDisplayMode?: ChartModes
+    facet?: FacetItem
+    showDefaultSeries?: boolean
 }
 
-const VerticalBarChart = ({
-    viewportWidth,
-    className,
-    bucketKeys,
-    total,
-    i18nNamespace,
-    translateData,
-    mode,
-    units,
-    seriesCount,
-    chartProps,
-    colorVariant = 'primary',
-    // buckets,
-    gridIndex = 1,
-    chartDisplayMode = CHART_MODE_DEFAULT,
-    facet,
-    showDefaultSeries,
-    data
-}: VerticalBarChartProps) => {
+const VerticalBarChart = (props: VerticalBarChartProps) => {
+    const {
+        viewportWidth,
+        className,
+        bucketKeys,
+        total,
+        i18nNamespace,
+        translateData,
+        mode,
+        units,
+        chartProps,
+        colorVariant = 'primary',
+        gridIndex = 1,
+        chartDisplayMode = ChartModes.CHART_MODE_DEFAULT,
+        facet,
+        showDefaultSeries,
+        series
+    } = props
+
     // by default this chart only receive one data series, but if it receives more
     // it can combine them into a single chart
-    const buckets = data.length > 1 ? combineSeries(data) : getChartData(data[0])
+    let buckets = series.length > 1 ? combineSeries(series) : getChartData(series[0].data)
 
-    console.log(data)
-    console.log(buckets)
+    if (facet) {
+        buckets = buckets.map(bucket => {
+            bucket?.facetBuckets?.forEach(facetBucket => {
+                baseUnits.forEach(unit => {
+                    bucket[`${unit}__${facetBucket.id}`] = facetBucket[unit]
+                })
+            })
+            return bucket
+        })
+    }
 
     const theme = useTheme()
 
-    const keys = useChartKeys({ units, facet, seriesCount, showDefaultSeries })
+    const keys = useChartKeys({ units, facet, seriesCount: series.length, showDefaultSeries })
 
     const colorDefs = useColorDefs()
     const colorFills = useColorFills({ chartDisplayMode, gridIndex, keys, facet })

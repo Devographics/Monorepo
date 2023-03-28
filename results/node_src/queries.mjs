@@ -324,6 +324,7 @@ export const getQuery = ({
         queryContents = query
         const queryArgs = getQueryArgs(queryOptions)
         queryContents = queryContents.replace(argumentsPlaceholder, queryArgs)
+
         // if (isLog) {
         //     queryContents = queryContents.replace(enableCachePlaceholder, '')
         // } else {

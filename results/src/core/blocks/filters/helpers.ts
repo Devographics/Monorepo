@@ -10,7 +10,8 @@ import {
     FilterValue,
     FilterValueString,
     OperatorEnum,
-    FacetItem
+    FacetItem,
+    DataSeries
 } from './types'
 import { BlockDefinition } from 'core/types'
 import {
@@ -29,7 +30,13 @@ import sumBy from 'lodash/sumBy'
 import { usePageContext } from 'core/helpers/pageContext'
 import { getBlockLink } from 'core/helpers/blockHelpers'
 import { getEntityName, useEntities } from 'core/helpers/entities'
-import { getBlockQuery, getQueryArgs, argumentsPlaceholder } from 'core/helpers/queries'
+import {
+    getBlockQuery,
+    getQueryArgs,
+    argumentsPlaceholder,
+    bucketFacetsPlaceholder,
+    getFacetFragment
+} from 'core/helpers/queries'
 import { PageContextValue } from 'core/types/context'
 import {
     Entity,
@@ -143,7 +150,12 @@ export const getFiltersQuery = ({
     let queryBody
     const { options = {}, filters, facet } = chartFilters
     const { enableYearSelect, mode } = options
-    const query = getBlockQuery({ block, pageContext, addArgumentsPlaceholder: true })
+    const query = getBlockQuery({
+        block,
+        pageContext,
+        addArgumentsPlaceholder: true,
+        addBucketFacetsPlaceholder: true
+    })
     // fragment starts after fourth "{"
     const fragmentStartIndex = getNthPosition(query, '{', 5) + 1
     // fragment ends before fourth "}" when counting from the end
@@ -176,12 +188,9 @@ export const getFiltersQuery = ({
 
                 const alreadyHasAlias = seriesFragment.includes(':')
                 if (alreadyHasAlias) {
-                    seriesFragment = seriesFragment.replace(`${block.id}`, `${seriesName}`)
+                    seriesFragment = seriesFragment.replace(block.id, `${seriesName}`)
                 } else {
-                    seriesFragment = seriesFragment.replace(
-                        `${block.id}`,
-                        `${seriesName}: ${block.id}`
-                    )
+                    seriesFragment = seriesFragment.replace(block.id, `${seriesName}: ${block.id}`)
                 }
 
                 const queryArgs = getQueryArgs({
@@ -201,12 +210,25 @@ export const getFiltersQuery = ({
             })
             .join('')
     } else if (facet && mode === MODE_FACET) {
+        queryBody = queryFragment
+
         const queryArgs = getQueryArgs({
             facet: facetItemToFacet(facet),
             parameters: block.parameters
         })
 
-        queryBody = queryFragment.replace(argumentsPlaceholder, queryArgs || '')
+        const seriesName = `${block.id}_by_${facet.id}`
+        seriesNames.push(seriesName)
+
+        const alreadyHasAlias = queryBody.includes(':')
+        if (alreadyHasAlias) {
+            queryBody = queryBody.replace(block.id, `${seriesName}`)
+        } else {
+            queryBody = queryBody.replace(block.id, `${seriesName}: ${block.id}`)
+        }
+        queryBody = queryBody.replace(argumentsPlaceholder, queryArgs || '')
+
+        queryBody = queryBody.replace(bucketFacetsPlaceholder, getFacetFragment() || '')
 
         // if (block?.variables?.fixedIds) {
         //     /*
@@ -576,7 +598,7 @@ export const useFilterLegends = ({ chartFilters }: { chartFilters: Customization
                 }
                 const label = labelSegments.join(', ')
 
-                const barColorItem = getVariantBarColorItem(colors, seriesIndex, null)
+                const barColorItem = getVariantBarColorItem(theme, seriesIndex)
 
                 const legendItem = {
                     color: barColorItem.color,
@@ -598,7 +620,7 @@ export const useFilterLegends = ({ chartFilters }: { chartFilters: Customization
                 value: id,
                 allFilters
             })
-            const barColorItem = getVariantBarColorItem(colors, index + 1, chartFilters.facet)
+            const barColorItem = getVariantBarColorItem(theme, index + 1, chartFilters?.facet)
             return {
                 color: barColorItem.color,
                 gradientColors: barColorItem.gradient,
@@ -708,13 +730,15 @@ export const fetchSeriesData = async ({
     pageContext,
     chartFilters,
     year
-}: FetchSeriesDataOptions) => {
+}: FetchSeriesDataOptions): Promise<DataSeries[]> => {
     const { query, seriesNames } = getFiltersQuery({
         block,
         pageContext,
         chartFilters,
         currentYear: year
     })
+    console.log(query)
+    console.log(seriesNames)
 
     const url = process.env.GATSBY_DATA_API_URL
     if (!url) {
@@ -726,12 +750,13 @@ export const fetchSeriesData = async ({
 
     const dataPath = getBlockDataPath({ block, pageContext, addRootNode: false })
 
+    console.log(dataPath)
     // apply dataPath to get block data for each series
     const seriesData = seriesNames.map(seriesName => {
         const data = get(result, dataPath.replace(block.id, seriesName)) as AllQuestionData
-        return { ...data, name: seriesName }
+        return { data, name: seriesName }
     })
+
+    console.log(seriesData)
     return seriesData
 }
-
-export const doNothing = (a: any) => a

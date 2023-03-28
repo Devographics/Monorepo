@@ -3,9 +3,9 @@ import ceil from 'lodash/ceil'
 // @ts-ignore
 import { useI18n } from 'core/i18n/i18nContext'
 import { Units, Mode, isPercentage } from 'core/helpers/units'
-import { BucketItem, ChartOptionDefinition } from '@types/data'
+import { BucketItem, ChartOptionDefinition, Facet } from '@types/data'
 import { BlockMode, BlockUnits } from '@types/index'
-import { useTheme } from 'styled-components'
+import { DefaultTheme, useTheme } from 'styled-components'
 import { usePageContext } from 'core/helpers/pageContext'
 import isEmpty from 'lodash/isEmpty'
 import round from 'lodash/round'
@@ -14,7 +14,7 @@ import {
     CHART_MODE_STACKED,
     CHART_MODE_GROUPED
 } from 'core/blocks/filters/constants'
-import { FilterItem } from 'core/blocks/filters/types'
+import { ChartModes, FacetItem, FilterItem } from 'core/blocks/filters/types'
 import { Bucket } from '@devographics/types'
 
 /*
@@ -76,9 +76,13 @@ Variant 10 = barColor 10
 Variant 11 = barColor 1 // start over
 
 */
-export const getVariantBarColorItem = (colors, variantIndex, facet) => {
-    const { velocityBarColors, barColors } = colors
-    if (velocityFacets.includes(facet)) {
+export const getVariantBarColorItem = (
+    theme: DefaultTheme,
+    variantIndex: number,
+    facet?: FacetItem
+) => {
+    const { velocityBarColors, barColors } = theme.colors
+    if (facet && velocityFacets.includes(facet.id)) {
         return velocityBarColors[variantIndex]
     } else {
         const numberOfVariantColors = barColors.length
@@ -201,9 +205,9 @@ type UseColorFillsOptions = {
     orientation?: 'Vertical' | 'Horizontal'
     defaultColorIndex?: number
     keys?: string[]
-    facet?: string
+    facet?: FacetItem
     gridIndex?: number
-    chartDisplayMode: 'grid' | 'grouped' | 'stacked'
+    chartDisplayMode: ChartModes
     showDefaultSeries?: boolean
 }
 
@@ -216,7 +220,7 @@ chartKeys are e.g.
 ['percentage_bucket__male', 'percentage_bucket__female', 'percentage_bucket__non_binary', etc. ]
 
 */
-export const useColorFills = (options: UseColorFillsOptions = {}) => {
+export const useColorFills = (options: UseColorFillsOptions) => {
     const theme = useTheme()
     const {
         chartDisplayMode,
@@ -252,7 +256,7 @@ export const useColorFills = (options: UseColorFillsOptions = {}) => {
             This will match keys of the type count__male, count__female, etc.
 
             */
-            const prefix = velocityFacets.includes(facet) ? 'Velocity' : 'Gradient'
+            const prefix = velocityFacets.includes(facet.id) ? 'Velocity' : 'Gradient'
 
             const averageFill = {
                 match: d => {
@@ -365,7 +369,7 @@ export const useChartKeys = ({
     showDefaultSeries = true
 }: {
     units: BlockUnits
-    facet?: string
+    facet?: FacetItem
     seriesCount?: number
     showDefaultSeries?: boolean
 }) => {
@@ -374,7 +378,9 @@ export const useChartKeys = ({
         if (units === 'average') {
             return ['average']
         } else {
-            return allChartKeys.find(q => q.id === facet)?.options.map(key => `${units}__${key}`)
+            return allChartKeys
+                .find(q => q.id === facet.id)
+                ?.options.map(option => `${units}__${option.id}`)
         }
     } else if (seriesCount) {
         if (showDefaultSeries) {

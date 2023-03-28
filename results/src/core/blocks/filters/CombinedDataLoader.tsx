@@ -1,30 +1,31 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { usePageContext } from 'core/helpers/pageContext'
-// import { spacing, mq, fontSize } from 'core/theme'
-import isEmpty from 'lodash/isEmpty'
 import { CHART_MODE_GROUPED } from './constants'
 import { BucketUnits } from '@devographics/types'
 import { DynamicDataLoaderProps } from './DynamicDataLoader'
-import SingleWrapper from './SingleWrapper'
 import { fetchSeriesData } from './helpers'
+import { DataSeries } from 'core/blocks/filters/types'
+import styled from 'styled-components'
+import Loading from 'core/blocks/explorer/Loading'
+// import { spacing, mq, fontSize } from 'core/theme'
+
+interface CombinedDataLoaderProps extends DynamicDataLoaderProps {
+    defaultSeries: DataSeries
+}
 
 const CombinedDataLoader = ({
     block,
-    getChartData,
-    data,
+    defaultSeries,
     setUnits,
     chartFilters,
     children
-}: DynamicDataLoaderProps) => {
+}: CombinedDataLoaderProps) => {
     const pageContext = usePageContext()
-    const { currentEdition } = pageContext
-    const { year } = currentEdition
-    const [isLoading, setIsLoading] = useState(false)
-    const defaultSeries = data[0]
+    const year = pageContext.currentEdition.year
+    const showDefaultSeries = chartFilters.options.showDefaultSeries
 
-    // combined behavior: single series with a combined bucket
-    const [combinedSeries, setCombinedSeries] = useState([defaultSeries])
-    // keep track of how many series are displayed within the combined bucket
+    const [isLoading, setIsLoading] = useState(false)
+    const [series, setSeries] = useState([defaultSeries])
     const [seriesCount, setSeriesCount] = useState(1)
 
     useEffect(() => {
@@ -39,39 +40,44 @@ const CombinedDataLoader = ({
                 chartFilters,
                 year
             })
-            console.log('// CombinedDataLoader')
-            console.log(seriesData)
 
             // percentageQuestion is the only unit that lets us
             // meaningfully compare values across series
             if (setUnits) {
                 setUnits(BucketUnits.PERCENTAGE_QUESTION)
             }
-            defaultSeries.name = 'default'
-            const combinedSeries = chartFilters.options.showDefaultSeries
-                ? [defaultSeries, ...seriesData]
-                : seriesData
+            const combinedSeries = showDefaultSeries ? [defaultSeries, ...seriesData] : seriesData
             setSeriesCount(combinedSeries.length)
-            setCombinedSeries(combinedSeries)
+            setSeries(combinedSeries)
             setIsLoading(false)
         }
 
-        if (chartFilters?.filters?.length > 0 || !isEmpty(chartFilters.facet)) {
+        if (chartFilters?.filters?.length > 0) {
             getData()
         }
     }, [chartFilters])
 
     return (
-        <SingleWrapper
-            data={combinedSeries}
-            seriesCount={seriesCount}
-            chartDisplayMode={CHART_MODE_GROUPED}
-            isLoading={isLoading}
-            showDefaultSeries={chartFilters.options.showDefaultSeries}
-        >
-            {children}
-        </SingleWrapper>
+        <Wrapper_>
+            <Contents_>
+                {React.cloneElement(children, {
+                    series,
+                    seriesCount,
+                    chartDisplayMode: CHART_MODE_GROUPED,
+                    showDefaultSeries
+                })}
+            </Contents_>
+            {isLoading && <Loading />}
+        </Wrapper_>
     )
 }
+
+const Wrapper_ = styled.div`
+    position: relative;
+`
+
+const Contents_ = styled.div`
+    flex: 1;
+`
 
 export default CombinedDataLoader

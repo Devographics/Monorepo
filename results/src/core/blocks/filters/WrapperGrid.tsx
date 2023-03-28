@@ -6,14 +6,15 @@ import Tooltip from 'core/components/Tooltip'
 import isEmpty from 'lodash/isEmpty'
 import { CHART_MODE_GRID } from './constants'
 import T from 'core/i18n/T'
+import { DataSeries } from './types'
 
 type WrapperGridProps = {
     layout: any
-    series: any
+    series: DataSeries[]
     legends: any
     children: any
     isLoading: boolean
-    showDefaultSeries: boolean
+    showDefaultSeries?: boolean
 }
 
 const WrapperGrid = ({
@@ -25,7 +26,7 @@ const WrapperGrid = ({
     showDefaultSeries
 }: WrapperGridProps) => (
     <GridWrapper_ layout={layout}>
-        {series.map(({ name, buckets }, i) => (
+        {series.map(({ name, data }, i) => (
             <GridItem_ key={name}>
                 {legends && legends.length > 0 && (
                     <Tooltip
@@ -38,11 +39,11 @@ const WrapperGrid = ({
                     />
                 )}
                 <Contents_>
-                    {isEmpty(buckets) ? (
+                    {isEmpty(data) ? (
                         <EmptySeries />
                     ) : (
                         React.cloneElement(children, {
-                            buckets,
+                            data,
                             gridIndex: i,
                             chartDisplayMode: CHART_MODE_GRID,
                             showDefaultSeries

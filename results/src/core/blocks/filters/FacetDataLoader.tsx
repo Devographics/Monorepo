@@ -1,73 +1,78 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { useFilterLegends, fetchSeriesData, doNothing } from './helpers'
+import React, { useState, useEffect } from 'react'
+import { fetchSeriesData } from './helpers'
 import { usePageContext } from 'core/helpers/pageContext'
 // import { spacing, mq, fontSize } from 'core/theme'
-import { useTheme } from 'styled-components'
-import { useI18n } from 'core/i18n/i18nContext'
 import isEmpty from 'lodash/isEmpty'
 import { CHART_MODE_STACKED } from './constants'
-import { useAllChartsOptions } from 'core/charts/hooks'
 import { DynamicDataLoaderProps } from './DynamicDataLoader'
-import SingleWrapper from './SingleWrapper'
+import { AllQuestionData } from '@devographics/types'
+import Loading from 'core/blocks/explorer/Loading'
+import styled from 'styled-components'
+import { DataSeries } from './types'
 
-const FacetDataLoader = ({ block, children, chartFilters }: DynamicDataLoaderProps) => {
-    const [isLoading, setIsLoading] = useState(false)
+interface FacetDataLoaderProps extends DynamicDataLoaderProps {
+    defaultSeries: DataSeries
+}
 
+const FacetDataLoader = ({
+    defaultSeries,
+    block,
+    children,
+    chartFilters
+}: FacetDataLoaderProps) => {
     const pageContext = usePageContext()
-    const { currentEdition } = pageContext
-    const { year } = currentEdition
+    const year = pageContext.currentEdition.year
+    const showDefaultSeries = chartFilters.options.showDefaultSeries
 
-    const { options = {} } = chartFilters
-    const { showDefaultSeries = true } = options
+    const [isLoading, setIsLoading] = useState(false)
+    const [series, setSeries] = useState([defaultSeries])
 
     useEffect(() => {
         const getData = async () => {
             setIsLoading(true)
 
-            const { seriesNames, seriesBlockData } = await fetchSeriesData({
+            const seriesData = await fetchSeriesData({
                 block,
                 pageContext,
                 chartFilters,
                 year
             })
 
-            console.log(seriesNames)
-            console.log(seriesBlockData)
-            // const dataPath = getBlockDataPath({ block, pageContext, addRootNode: false })
+            console.log('// FacetDataLoader')
+            console.log(seriesData)
 
-            // apply dataPath to get block data for each series
-            // const blockData = get(result, dataPath)
-            // const facets = blockData?.facets
-
-            // const invertedFacetsBuckets = invertFacets({
-            //     facets,
-            //     defaultBuckets
-            // })
-            // const invertedFacetsBucketsWithAverages = calculateAverages({
-            //     buckets: invertedFacetsBuckets,
-            //     useAllFilters,
-            //     facet: chartFilters.facet
-            // })
-            // setUnits('percentage_bucket')
-            // setCombinedBuckets(invertedFacetsBucketsWithAverages)
+            setSeries(seriesData)
             setIsLoading(false)
         }
 
-        if (chartFilters?.filters?.length > 0 || !isEmpty(chartFilters.facet)) {
+        if (!isEmpty(chartFilters.facet)) {
             getData()
         }
     }, [chartFilters])
 
+    const props = isLoading
+        ? {}
+        : {
+              series,
+              chartDisplayMode: CHART_MODE_STACKED,
+              facet: chartFilters.facet,
+              showDefaultSeries
+          }
+
     return (
-        <SingleWrapper
-            chartDisplayMode={CHART_MODE_STACKED}
-            facet={chartFilters.facet}
-            isLoading={isLoading}
-            showDefaultSeries={showDefaultSeries}
-        >
-            {children}
-        </SingleWrapper>
+        <Wrapper_>
+            <Contents_>{React.cloneElement(children, props)}</Contents_>
+            {isLoading && <Loading />}
+        </Wrapper_>
     )
 }
+
+const Wrapper_ = styled.div`
+    position: relative;
+`
+
+const Contents_ = styled.div`
+    flex: 1;
+`
 
 export default FacetDataLoader

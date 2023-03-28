@@ -1,14 +1,11 @@
-import React, { memo, useMemo } from 'react'
-import PropTypes from 'prop-types'
+import React, { useMemo } from 'react'
 import { useTheme } from 'styled-components'
 import sortBy from 'lodash/sortBy'
-import round from 'lodash/round'
 import { ResponsiveBar } from '@nivo/bar'
 import { useI18n } from 'core/i18n/i18nContext'
 import BarTooltip from 'core/charts/generic/BarTooltip'
 import HorizontalBarStripes from './HorizontalBarStripes'
-import { isPercentage } from 'core/helpers/units'
-import { ChartComponentProps, BucketItem, BlockUnits } from '@types/index'
+import { ChartComponentProps } from 'core/types/index'
 import TickItem, { getBucketLabel } from 'core/charts/generic/TickItem'
 import maxBy from 'lodash/maxBy'
 import ChartLabel from 'core/components/ChartLabel'
@@ -20,9 +17,9 @@ import {
     useChartLabelFormatter,
     HORIZONTAL
 } from 'core/charts/hooks'
-import { CHART_MODE_DEFAULT } from 'core/blocks/filters/constants'
 import { useEntities } from 'core/helpers/entities'
-import { Bucket, StandardQuestionData } from '@devographics/types'
+import { StandardQuestionData, BucketUnits, Bucket } from '@devographics/types'
+import { FacetItem, DataSeries, ChartModes } from 'core/blocks/filters/types'
 
 export const getChartData = (data: StandardQuestionData) => data?.responses?.currentEdition?.buckets
 
@@ -45,19 +42,19 @@ type BarColor = {
     gradient: string[]
 }
 
-export interface HorizontalBarChartProps extends ChartComponentProps {
-    total: number
-    buckets: Bucket[]
-    size: keyof typeof barSizes
-    barColor: BarColor
-    facet?: string
-}
-
 const marginCoeff = 9
 
-export const getLeftMargin = ({ data, shouldTranslate, i18nNamespace }) => {
-    if (data && data.length > 0) {
-        const labels = data.map(bucket =>
+export const getLeftMargin = ({
+    buckets,
+    shouldTranslate,
+    i18nNamespace
+}: {
+    buckets: Bucket[]
+    shouldTranslate: boolean
+    i18nNamespace: string
+}) => {
+    if (buckets && buckets.length > 0) {
+        const labels = buckets.map(bucket =>
             getBucketLabel({
                 shouldTranslate,
                 i18nNamespace,
@@ -75,10 +72,10 @@ export const getLeftMargin = ({ data, shouldTranslate, i18nNamespace }) => {
     }
 }
 
-const getLabelsLayer = labelTransformer => (props: any) => {
+const getLabelsLayer = (labelTransformer: any) => (props: any) => {
     // adjust settings according to dimensions
-    let fontSize = 13
-    let rotation = 0
+    const fontSize = 13
+    const rotation = 0
     // if (props.width < 600) {
     //     fontSize = 11
     //     rotation = -90
@@ -102,28 +99,48 @@ const getLabelsLayer = labelTransformer => (props: any) => {
     })
 }
 
+const baseUnits = Object.values(BucketUnits)
+
+export interface HorizontalBarChartProps extends ChartComponentProps {
+    total: number
+    size: keyof typeof barSizes
+    barColor: BarColor
+    facet?: FacetItem
+    series: DataSeries[]
+    gridIndex?: number
+    chartDisplayMode?: ChartModes
+    showDefaultSeries?: boolean
+}
+
 const HorizontalBarChart = ({
-    // buckets,
-    data,
+    series,
     total,
     i18nNamespace,
     translateData = false,
     mode,
     units,
     chartProps,
-    colorVariant = 'primary',
     size = 'm',
-    colorMappings,
     barColor: barColor_,
     gridIndex,
     facet,
-    chartDisplayMode = CHART_MODE_DEFAULT,
+    chartDisplayMode = ChartModes.CHART_MODE_DEFAULT,
     showDefaultSeries
 }: HorizontalBarChartProps) => {
-    const buckets = getChartData(data)
-    // console.log(data)
-    // console.log(buckets)
-    return <div>no data</div>
+    // TODO: currently this chart only receive one data series, but if it receives more
+    // in the future it will be able to combine them into a single chart
+    let buckets = getChartData(series[0].data)
+
+    if (facet) {
+        buckets = buckets.map(bucket => {
+            bucket?.facetBuckets?.forEach(facetBucket => {
+                baseUnits.forEach(unit => {
+                    bucket[`${unit}__${facetBucket.id}`] = facetBucket[unit]
+                })
+            })
+            return bucket
+        })
+    }
 
     const theme = useTheme()
     const { translate } = useI18n()
@@ -143,12 +160,6 @@ const HorizontalBarChart = ({
         showDefaultSeries
     })
 
-    // console.log(chartDisplayMode)
-    // console.log(showDefaultSeries)
-    // console.log(keys)
-    // console.log(colorDefs)
-    // console.log(colorFills)
-
     const { formatTick, formatValue, maxValue } = useBarChart({
         buckets,
         total,
@@ -166,7 +177,7 @@ const HorizontalBarChart = ({
     const baseSize = barSizes[size]
 
     const left = getLeftMargin({
-        data: sortedBuckets,
+        buckets: sortedBuckets,
         shouldTranslate: translateData,
         i18nNamespace
     })
@@ -183,7 +194,7 @@ const HorizontalBarChart = ({
                 layout="horizontal"
                 margin={{ ...margin, left }}
                 keys={keys}
-                data={data}
+                data={sortedBuckets}
                 maxValue={maxValue}
                 theme={theme.charts}
                 enableGridX={true}
