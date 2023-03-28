@@ -18,8 +18,32 @@ import { CHART_MODE_DEFAULT } from 'core/blocks/filters/constants'
 import { handleNoAnswerBucket } from 'core/helpers/data'
 import { Bucket } from '@devographics/types'
 import { StandardQuestionData } from '@devographics/types'
+import { combineBuckets } from 'core/blocks/filters/helpers'
 
 export const getChartData = (data: StandardQuestionData) => data?.responses?.currentEdition.buckets
+
+/*
+
+Combine multiple series into a single chart
+
+*/
+export const combineSeries = (dataSeries: StandardQuestionData[]) => {
+    console.log('// combineSeries')
+    console.log(dataSeries)
+    const allBuckets = dataSeries.map(blockData => getChartData(blockData))
+    const [defaultBuckets, ...otherBucketsArray] = allBuckets
+
+    console.log(defaultBuckets)
+    console.log(otherBucketsArray)
+    // get chart data (buckets) for each series
+    const combinedBuckets = combineBuckets({
+        defaultBuckets,
+        otherBucketsArray
+    })
+
+    console.log(combinedBuckets)
+    return combinedBuckets
+}
 
 const breakpoint = 600
 
@@ -65,7 +89,7 @@ const getAxisLabels = (v: any, legends: BlockLegend[]) => {
 
 export interface VerticalBarChartProps extends ChartComponentProps {
     total: number
-    buckets: Bucket[]
+    data: StandardQuestionData[]
     seriesCount: number
 }
 
@@ -88,7 +112,12 @@ const VerticalBarChart = ({
     showDefaultSeries,
     data
 }: VerticalBarChartProps) => {
-    const buckets = getChartData(data)
+    // by default this chart only receive one data series, but if it receives more
+    // it can combine them into a single chart
+    const buckets = data.length > 1 ? combineSeries(data) : getChartData(data[0])
+
+    console.log(data)
+    console.log(buckets)
 
     const theme = useTheme()
 
@@ -96,10 +125,6 @@ const VerticalBarChart = ({
 
     const colorDefs = useColorDefs()
     const colorFills = useColorFills({ chartDisplayMode, gridIndex, keys, facet })
-
-    // console.log(chartDisplayMode)
-    // console.log(colorDefs)
-    // console.log(colorFills)
 
     const { translate } = useI18n()
 

@@ -5,9 +5,10 @@ import Button from 'core/components/Button'
 import T from 'core/i18n/T'
 import { mq, spacing, fontSize } from 'core/theme'
 import get from 'lodash/get'
-import { useBlockQuery, AutoSelectText, TextArea, Message } from 'core/blocks/block/BlockData'
+import { AutoSelectText, TextArea, Message } from 'core/blocks/block/BlockData'
 import { EditIcon } from 'core/icons'
 import isEmpty from 'lodash/isEmpty'
+import { useBlockQuery } from 'core/helpers/queries'
 
 const parseData = (block, contents) => {
     const apiDataPath = block.dataPath.replace('dataAPI', 'data')

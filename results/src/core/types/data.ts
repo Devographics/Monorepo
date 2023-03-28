@@ -63,38 +63,38 @@ export interface MDN {
     url: string
 }
 
-export type BucketItem = DefaultBucketItem | RatioBucketItem
+// export type BucketItem = DefaultBucketItem | RatioBucketItem
 
-export interface DefaultBucketItem {
-    id: number | string
-    count: number
+// export interface DefaultBucketItem {
+//     id: number | string
+//     count: number
 
-    // percentage relative to the number of respondents in the survey
-    percentageSurvey: number
-    // percentage relative to the number of question respondents
-    percentageQuestion: number
-    // percentage relative to the number of respondents in the facet
-    percentageFacet?: number
+//     // percentage relative to the number of respondents in the survey
+//     percentageSurvey: number
+//     // percentage relative to the number of question respondents
+//     percentageQuestion: number
+//     // percentage relative to the number of respondents in the facet
+//     percentageFacet?: number
 
-    // count when no facet is selected
-    count_all_facets?: number
-    // percentage relative to the number
-    percentage_all_facets?: number
+//     // count when no facet is selected
+//     count_all_facets?: number
+//     // percentage relative to the number
+//     percentage_all_facets?: number
 
-    entity?: Entity
-    label?: string
-}
+//     entity?: Entity
+//     label?: string
+// }
 
-export interface RatioBucketItem {
-    id: number | string
+// export interface RatioBucketItem {
+//     id: number | string
 
-    interest_percentage?: number
-    satisfaction_percentage?: number
-    awareness_percentage?: number
-    usage_percentage?: number
+//     interest_percentage?: number
+//     satisfaction_percentage?: number
+//     awareness_percentage?: number
+//     usage_percentage?: number
 
-    entity?: Entity
-}
+//     entity?: Entity
+// }
 
 export interface FacetItem {
     type: Facet

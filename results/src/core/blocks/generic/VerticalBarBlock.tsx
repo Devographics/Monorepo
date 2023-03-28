@@ -29,32 +29,6 @@ export interface VerticalBarBlockProps extends BlockComponentProps {
     isCustom: boolean
 }
 
-/*
-
-Combine multiple series into a single chart
-
-*/
-export const combineSeries = (
-    defaultBuckets: Bucket[],
-    seriesBlockData: StandardQuestionData[]
-) => {
-    // get chart data (buckets) for each series
-    const otherBucketsArray = seriesBlockData.map((blockData, i) => getChartData(blockData))
-
-    /*
-
-    In case buckets have a processing function applied (for example to merge them into
-    fewer buckets), apply it now to the new buckets
-
-    */
-    const combinedBuckets = combineBuckets({
-        defaultBuckets,
-        otherBucketsArray
-    })
-    console.log(combinedBuckets)
-    return combinedBuckets
-}
-
 const VerticalBarBlock = ({
     block,
     data,
@@ -124,9 +98,8 @@ const VerticalBarBlock = ({
                 block={block}
                 chartFilters={chartFilters}
                 setUnits={setUnits}
-                data={data}
+                data={[data]}
                 getChartData={getChartData}
-                combineSeries={combineSeries}
             >
                 <ChartContainer fit={true}>
                     <VerticalBarChart
@@ -137,7 +110,7 @@ const VerticalBarBlock = ({
                         units={controlledUnits ?? units}
                         viewportWidth={width}
                         colorVariant={isCustom ? 'secondary' : 'primary'}
-                        data={data}
+                        data={[data]}
                     />
                 </ChartContainer>
             </DynamicDataLoader>

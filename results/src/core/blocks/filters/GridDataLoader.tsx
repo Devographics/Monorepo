@@ -3,8 +3,9 @@ import { useFilterLegends } from './helpers'
 import { usePageContext } from 'core/helpers/pageContext'
 // import { spacing, mq, fontSize } from 'core/theme'
 import isEmpty from 'lodash/isEmpty'
+import { DynamicDataLoaderProps } from './DynamicDataLoader'
 import WrapperGrid from './WrapperGrid'
-import { doNothing, DynamicDataLoaderProps, fetchSeriesData } from './DynamicDataLoader'
+import { doNothing, fetchSeriesData } from './helpers'
 
 /*
 
@@ -38,14 +39,7 @@ const GridDataLoader = ({
         chartFilters
     })
 
-    const initialLoad = useRef(true)
-
     useEffect(() => {
-        if (initialLoad.current && !chartFilters.options.queryOnLoad) {
-            initialLoad.current = false
-            return
-        }
-
         const getData = async () => {
             setIsLoading(true)
 

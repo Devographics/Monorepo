@@ -58,10 +58,11 @@ const HorizontalBarBlock = ({
             units={controlledUnits ?? units}
             setUnits={setUnits}
             unitsOptions={unitsOptions}
-            data={chartData}
+            data={data}
+            getChartData={getChartData}
             tables={[
                 getTableData({
-                    data: {},
+                    data: getChartData(data),
                     valueKeys: ['percentageSurvey', 'percentageQuestion', 'count'],
                     translateData,
                     i18nNamespace: chartNamespace

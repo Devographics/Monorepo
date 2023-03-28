@@ -9,7 +9,6 @@ import {
     CustomizationFiltersSeries,
     FilterValue,
     FilterValueString,
-    Operator,
     OperatorEnum,
     FacetItem
 } from './types'
@@ -35,12 +34,16 @@ import { PageContextValue } from 'core/types/context'
 import {
     Entity,
     Filters,
-    ResponseEditionData,
     SectionMetadata,
     BucketUnits,
     Bucket,
     CombinedBucket
 } from '@devographics/types'
+import { runQuery } from 'core/blocks/explorer/data'
+// import { spacing, mq, fontSize } from 'core/theme'
+import get from 'lodash/get'
+import { getBlockDataPath } from 'core/helpers/data'
+import { QueryData, AllQuestionData } from '@devographics/types'
 
 export const getNewCondition = ({
     filters
@@ -222,8 +225,8 @@ export const getFiltersQuery = ({
     }
     const newQuery = queryHeader + queryBody + queryFooter
 
-    console.log('// newQuery')
-    console.log(newQuery)
+    // console.log('// newQuery')
+    // console.log(newQuery)
     return { query: newQuery, seriesNames }
 }
 
@@ -241,9 +244,6 @@ type CombineBucketsOptions = {
 }
 export const combineBuckets = ({ defaultBuckets, otherBucketsArray }: CombineBucketsOptions) => {
     const mergedBuckets = cloneDeep(defaultBuckets) as CombinedBucket[]
-    console.log('// combineBuckets')
-    console.log(defaultBuckets)
-    console.log(otherBucketsArray)
     otherBucketsArray.forEach((otherBuckets: Bucket[], index: number) => {
         // default series is series 0, first custom series is series 1, etc.
         const seriesIndex = index + 1
@@ -695,3 +695,43 @@ export const getFiltersLink = ({
     const link = getBlockLink({ block, context, params, useRedirect: false })
     return link
 }
+
+export type FetchSeriesDataOptions = {
+    block: BlockDefinition
+    pageContext: PageContextValue
+    chartFilters: CustomizationDefinition
+    year: number
+}
+
+export const fetchSeriesData = async ({
+    block,
+    pageContext,
+    chartFilters,
+    year
+}: FetchSeriesDataOptions) => {
+    const { query, seriesNames } = getFiltersQuery({
+        block,
+        pageContext,
+        chartFilters,
+        currentYear: year
+    })
+
+    const url = process.env.GATSBY_DATA_API_URL
+    if (!url) {
+        throw new Error('GATSBY_DATA_API_URL env variable is not set')
+    }
+    const result: QueryData<AllQuestionData> = await runQuery(url, query, `${block.id}FiltersQuery`)
+    console.log('// result')
+    console.log(result)
+
+    const dataPath = getBlockDataPath({ block, pageContext, addRootNode: false })
+
+    // apply dataPath to get block data for each series
+    const seriesData = seriesNames.map(seriesName => {
+        const data = get(result, dataPath.replace(block.id, seriesName)) as AllQuestionData
+        return { ...data, name: seriesName }
+    })
+    return seriesData
+}
+
+export const doNothing = (a: any) => a

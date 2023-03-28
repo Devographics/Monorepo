@@ -15,6 +15,7 @@ import {
     CHART_MODE_GROUPED
 } from 'core/blocks/filters/constants'
 import { FilterItem } from 'core/blocks/filters/types'
+import { Bucket } from '@devographics/types'
 
 /*
 
@@ -99,7 +100,7 @@ export const useBarChart = ({
     i18nNamespace,
     shouldTranslate
 }: {
-    buckets: BucketItem[]
+    buckets: Bucket[]
     total: number
     mode: BlockMode
     units: BlockUnits
@@ -377,7 +378,7 @@ export const useChartKeys = ({
         }
     } else if (seriesCount) {
         if (showDefaultSeries) {
-            return [...Array(seriesCount + 1)].map((x, i) => (i === 0 ? units : `${units}__${i}`))
+            return [...Array(seriesCount)].map((x, i) => (i === 0 ? units : `${units}__${i}`))
         } else {
             return [...Array(seriesCount)].map((x, i) => `${units}__${i + 1}`)
         }

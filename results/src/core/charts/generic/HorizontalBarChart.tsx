@@ -121,6 +121,10 @@ const HorizontalBarChart = ({
     showDefaultSeries
 }: HorizontalBarChartProps) => {
     const buckets = getChartData(data)
+    // console.log(data)
+    // console.log(buckets)
+    return <div>no data</div>
+
     const theme = useTheme()
     const { translate } = useI18n()
 
@@ -154,14 +158,18 @@ const HorizontalBarChart = ({
         units
     })
 
-    const data = sortBy(buckets, 'count')
+    const sortedBuckets = sortBy(buckets, 'count')
 
     const defaultBarColor = theme.colors.barColors[0]
     const barColor = barColor_ || defaultBarColor
 
     const baseSize = barSizes[size]
 
-    const left = getLeftMargin({ data, shouldTranslate: translateData, i18nNamespace })
+    const left = getLeftMargin({
+        data: sortedBuckets,
+        shouldTranslate: translateData,
+        i18nNamespace
+    })
 
     const colors = [barColor.color]
 
