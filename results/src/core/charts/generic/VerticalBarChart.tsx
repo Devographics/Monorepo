@@ -27,21 +27,12 @@ export const getChartData = (data: StandardQuestionData) => data?.responses?.cur
 Combine multiple series into a single chart
 
 */
-export const combineSeries = (dataSeries: DataSeries[]) => {
-    console.log('// combineSeries')
-    console.log(dataSeries)
+export const combineSeries = (dataSeries: DataSeries[], showDefaultSeries: boolean) => {
     const allBuckets = dataSeries.map(series => getChartData(series.data))
-    const [defaultBuckets, ...otherBucketsArray] = allBuckets
-
-    console.log(defaultBuckets)
-    console.log(otherBucketsArray)
     // get chart data (buckets) for each series
     const combinedBuckets = combineBuckets({
-        defaultBuckets,
-        otherBucketsArray
+        allBuckets
     })
-
-    console.log(combinedBuckets)
     return combinedBuckets
 }
 
@@ -90,7 +81,6 @@ const getAxisLabels = (v: any, legends: BlockLegend[]) => {
 export interface VerticalBarChartProps extends ChartComponentProps {
     total: number
     series: DataSeries[]
-    seriesCount: number
     gridIndex?: number
     chartDisplayMode?: ChartModes
     facet?: FacetItem
@@ -118,7 +108,8 @@ const VerticalBarChart = (props: VerticalBarChartProps) => {
 
     // by default this chart only receive one data series, but if it receives more
     // it can combine them into a single chart
-    let buckets = series.length > 1 ? combineSeries(series) : getChartData(series[0].data)
+    let buckets =
+        series.length > 1 ? combineSeries(series, showDefaultSeries) : getChartData(series[0].data)
 
     if (facet) {
         buckets = buckets.map(bucket => {

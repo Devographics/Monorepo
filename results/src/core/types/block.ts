@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import { PageContextValue } from '@types/context'
-import { ResponsesParameters } from '@devographics/types'
+import { BucketUnits, ResponsesParameters } from '@devographics/types'
 
 export type BlockUnits =
     | 'count'
@@ -47,7 +47,7 @@ export interface BlockDefinition {
     dataPath?: string
     keysPath?: string
     entityPath?: string
-    defaultUnits?: BlockUnits
+    defaultUnits?: BucketUnits
 
     // booleans
     legendPosition?: 'bottom' | 'top'
@@ -56,21 +56,6 @@ export interface BlockDefinition {
 }
 
 type FilterType = 'filters' | 'facets'
-
-export interface BlockVariantProps {
-    id?: string
-    className?: string
-    units?: BlockUnits
-    setUnits?: BlockSetUnits
-    unitsOptions?: BlockUnits[] | string[]
-    block: BlockDefinition
-    // error,
-    // data,
-    // legendProps,
-    // titleProps,
-    // headings,
-    // tables,
-}
 
 export interface BlockLegend {
     id: string

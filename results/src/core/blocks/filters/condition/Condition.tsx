@@ -7,7 +7,7 @@ import cloneDeep from 'lodash/cloneDeep.js'
 import { FieldSegment } from './FieldSegment'
 import { ValueSegment } from './ValueSegment'
 import { OperatorSegment } from './OperatorSegment'
-import { CustomizationFiltersCondition, FilterItem, PanelState } from './types'
+import { CustomizationFiltersCondition, FilterItem, PanelState } from '../types'
 
 interface ConditionProps {
     seriesIndex: number
@@ -17,6 +17,7 @@ interface ConditionProps {
     filtersIdsNotInUse: string[]
     condition: CustomizationFiltersCondition
     stateStuff: PanelState
+    conditionsCount: number
 }
 
 const Condition = ({
@@ -26,6 +27,7 @@ const Condition = ({
     filtersIdsInUse,
     filtersIdsNotInUse,
     condition,
+    conditionsCount,
     stateStuff
 }: ConditionProps) => {
     const defaultFieldId = filtersIdsNotInUse[0]
@@ -78,9 +80,11 @@ const Condition = ({
                 />
             </Segments_>
             <DeleteWrapper_>
-                <DeleteCondition_ onClick={handleDelete}>
-                    <DeleteIcon labelId="filters.condition.delete" />
-                </DeleteCondition_>
+                {conditionsCount > 1 && (
+                    <DeleteCondition_ onClick={handleDelete}>
+                        <DeleteIcon labelId="filters.condition.delete" />
+                    </DeleteCondition_>
+                )}
             </DeleteWrapper_>
             <And_>
                 {/* <T k="filters.condition.and" /> */}
@@ -101,6 +105,7 @@ const DeleteWrapper_ = styled.div`
     padding: 0 ${spacing()};
     display: flex;
     align-items: center;
+    min-width: 73px;
 `
 
 const ActiveCondition_ = styled(Condition_)`

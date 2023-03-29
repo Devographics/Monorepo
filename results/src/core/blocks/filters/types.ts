@@ -69,6 +69,8 @@ export type PanelState = {
 export type DataSeries = {
     name: string
     data: AllQuestionData
+    filters?: CustomizationFiltersSeries
+    facet?: FacetItem
 }
 
 export enum ChartModes {

@@ -33,7 +33,8 @@ const FiltersSelection = ({ allFilters, block, stateStuff }: FiltersSelectionPro
     const canAddSeries = (filtersState?.filters?.length || 0) < maxSeriesCount
 
     const emptySeries = getNewSeries({
-        filters: allFilters,
+        filtersState,
+        allFilters,
         year: currentEdition.year
     })
 

@@ -4,10 +4,10 @@ import ChartContainer from 'core/charts/ChartContainer'
 import VerticalBarChart, { getChartData } from 'core/charts/generic/VerticalBarChart'
 import { useLegends } from 'core/helpers/useBucketKeys'
 import { useOptions } from 'core/helpers/options'
-import { BlockComponentProps, BlockUnits } from 'core/types/index'
+import { BlockComponentProps } from 'core/types/index'
 import { StandardQuestionData, BucketUnits } from '@devographics/types'
 import { getTableData } from 'core/helpers/datatables'
-import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
+import DynamicDataLoader from 'core/blocks/filters/dataloaders/DynamicDataLoader'
 import { useChartFilters } from 'core/blocks/filters/helpers'
 import { MODE_COMBINED, MODE_FACET } from 'core/blocks/filters/constants'
 import { useAllChartsOptions } from 'core/charts/hooks'
@@ -15,17 +15,9 @@ import { MAIN_UNITS } from '@devographics/constants'
 
 export interface VerticalBarBlockProps extends BlockComponentProps {
     data: StandardQuestionData
-    controlledUnits: BlockUnits
-    isCustom: boolean
 }
 
-const VerticalBarBlock = ({
-    block,
-    data,
-    controlledUnits,
-    isCustom,
-    context
-}: VerticalBarBlockProps) => {
+const VerticalBarBlock = ({ block, data, context }: VerticalBarBlockProps) => {
     const {
         defaultUnits = BucketUnits.PERCENTAGE_SURVEY,
         translateData,
@@ -34,8 +26,7 @@ const VerticalBarBlock = ({
 
     const { width } = context
 
-    const [uncontrolledUnits, setUnits] = useState(defaultUnits)
-    const units = controlledUnits || uncontrolledUnits
+    const [units, setUnits] = useState(defaultUnits)
 
     const addNoAnswer = units === BucketUnits.PERCENTAGE_SURVEY
 
@@ -52,13 +43,15 @@ const VerticalBarBlock = ({
     })
 
     const allChartsOptions = useAllChartsOptions()
-    let unitsOptions = Object.values(BucketUnits)
+    let unitsOptions = [
+        BucketUnits.PERCENTAGE_SURVEY,
+        BucketUnits.PERCENTAGE_QUESTION,
+        BucketUnits.COUNT
+    ]
     if (chartFilters.facet) {
         // if filtering by facet, use special units
         unitsOptions = [BucketUnits.PERCENTAGE_BUCKET, BucketUnits.COUNT]
         const facetField = allChartsOptions.find(o => o.id === chartFilters?.facet?.id)
-        console.log(chartFilters)
-        console.log(facetField)
         // if this facet can be quantified numerically and has averages, add that as unit too
         if (typeof facetField?.options[0].average !== 'undefined') {
             unitsOptions.push(BucketUnits.AVERAGE)
@@ -78,7 +71,7 @@ const VerticalBarBlock = ({
                     translateData
                 })
             ]}
-            units={controlledUnits ?? units}
+            units={units}
             setUnits={setUnits}
             completion={completion}
             data={getChartData(data)}
@@ -90,12 +83,10 @@ const VerticalBarBlock = ({
             {...(legends.length > 0 ? { legends } : {})}
         >
             <DynamicDataLoader
-                completion={completion}
                 block={block}
                 chartFilters={chartFilters}
                 setUnits={setUnits}
                 defaultSeries={defaultSeries}
-                getChartData={getChartData}
             >
                 <ChartContainer fit={true}>
                     <VerticalBarChart
@@ -103,9 +94,9 @@ const VerticalBarBlock = ({
                         total={total}
                         i18nNamespace={chartNamespace}
                         translateData={translateData}
-                        units={controlledUnits ?? units}
+                        units={units}
                         viewportWidth={width}
-                        colorVariant={isCustom ? 'secondary' : 'primary'}
+                        colorVariant={'primary'}
                         series={[defaultSeries]}
                     />
                 </ChartContainer>

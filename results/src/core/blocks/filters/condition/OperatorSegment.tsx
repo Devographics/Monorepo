@@ -1,8 +1,8 @@
 import React from 'react'
 import { useI18n } from 'core/i18n/i18nContext'
 import cloneDeep from 'lodash/cloneDeep.js'
-import { getOperatorLabel } from './helpers'
-import { PanelState, FilterValue, CustomizationDefinition, OperatorEnum } from './types'
+import { getOperatorLabel } from '../helpers'
+import { PanelState, FilterValue, CustomizationDefinition, OperatorEnum } from '../types'
 import { Label_, Select_ } from './FieldSegment'
 
 type OperatorSegmentProps = {

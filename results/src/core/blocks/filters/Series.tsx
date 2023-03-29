@@ -1,5 +1,5 @@
 import React from 'react'
-import Condition from './Condition'
+import Condition from './condition/Condition'
 import styled from 'styled-components'
 import { mq, spacing } from 'core/theme'
 import Button from 'core/components/Button'
@@ -7,7 +7,7 @@ import T from 'core/i18n/T'
 import difference from 'lodash/difference.js'
 import cloneDeep from 'lodash/cloneDeep.js'
 import { getNewCondition } from './helpers'
-import { Condition_ } from './Condition'
+import { Condition_ } from './condition/Condition'
 import { DeleteIcon } from 'core/icons'
 import { useTheme } from 'styled-components'
 import YearSelector from './YearSelector'
@@ -43,9 +43,11 @@ const Series = ({ allFilters, series, index, stateStuff }: SeriesProps) => {
     const handleAddCondition = () => {
         setFiltersState((fState: CustomizationDefinition) => {
             const newState = cloneDeep(fState)
+            const filtersInUse = series.conditions.map(c => c.fieldId)
+            const newFilter = allFilters.filter(f => !filtersInUse.includes(f.id))[0]
             newState.filters[index].conditions = [
                 ...series.conditions,
-                getNewCondition({ filters: allFilters })
+                getNewCondition({ filter: newFilter })
             ]
             return newState
         })
@@ -91,6 +93,7 @@ const Series = ({ allFilters, series, index, stateStuff }: SeriesProps) => {
                         filtersIdsInUse={filterIdsInUse}
                         filtersIdsNotInUse={filterIdsNotInUse}
                         stateStuff={stateStuff}
+                        conditionsCount={series.conditions.length}
                     />
                 ))}
                 {canAddConditions && (

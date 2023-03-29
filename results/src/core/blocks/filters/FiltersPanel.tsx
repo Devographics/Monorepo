@@ -158,6 +158,9 @@ const FiltersPanel = ({
                     <T k="filters.submit" />
                 </Button>
             </FiltersBottom_>
+            <pre>
+                <code>{JSON.stringify(filtersState, null, 2)}</code>
+            </pre>
         </Filters_>
     )
 }

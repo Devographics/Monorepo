@@ -1,13 +1,10 @@
-import { useMemo } from 'react'
-import ceil from 'lodash/ceil'
-// @ts-ignore
+import ceil from 'lodash/ceil.js'
 import { useI18n } from 'core/i18n/i18nContext'
 import { Units, Mode, isPercentage } from 'core/helpers/units'
-import { BucketItem, ChartOptionDefinition, Facet } from '@types/data'
+import { ChartOptionDefinition } from '@types/data'
 import { BlockMode, BlockUnits } from '@types/index'
 import { DefaultTheme, useTheme } from 'styled-components'
 import { usePageContext } from 'core/helpers/pageContext'
-import isEmpty from 'lodash/isEmpty'
 import round from 'lodash/round'
 import {
     CHART_MODE_GRID,
@@ -42,7 +39,7 @@ const getMode = (units: Units, mode: Mode) => {
 Get chart's max value
 
 */
-const getMaxValue = (units: Units, mode: Mode, buckets: BucketItem[], total: number) => {
+const getMaxValue = (units: Units, mode: Mode, buckets: Bucket[], total: number) => {
     if (units === 'average') {
         return Math.max(...buckets.map(b => b[units]))
     } else if (isPercentage(units)) {
@@ -386,7 +383,7 @@ export const useChartKeys = ({
         if (showDefaultSeries) {
             return [...Array(seriesCount)].map((x, i) => (i === 0 ? units : `${units}__${i}`))
         } else {
-            return [...Array(seriesCount)].map((x, i) => `${units}__${i + 1}`)
+            return [...Array(seriesCount - 1)].map((x, i) => `${units}__${i + 1}`)
         }
     } else {
         return [units]

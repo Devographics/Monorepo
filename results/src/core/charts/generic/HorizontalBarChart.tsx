@@ -103,8 +103,8 @@ const baseUnits = Object.values(BucketUnits)
 
 export interface HorizontalBarChartProps extends ChartComponentProps {
     total: number
-    size: keyof typeof barSizes
-    barColor: BarColor
+    size?: keyof typeof barSizes
+    barColor?: BarColor
     facet?: FacetItem
     series: DataSeries[]
     gridIndex?: number

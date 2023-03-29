@@ -70,8 +70,7 @@ export const JSONExport = ({ block, data }) => {
     )
 }
 
-export const GraphQLExport = ({ block }: { block: BlockDefinition }) => {
-    const query = useBlockQuery(block)
+export const GraphQLExport = ({ query }: { query: string }) => {
     return (
         <div>
             <AutoSelectText value={query} />

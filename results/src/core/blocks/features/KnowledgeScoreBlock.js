@@ -5,7 +5,7 @@ import VerticalBarChart from 'core/charts/generic/VerticalBarChart'
 import { usePageContext } from 'core/helpers/pageContext'
 import range from 'lodash/range'
 import { getTableData } from 'core/helpers/datatables'
-import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
+import DynamicDataLoader from 'core/blocks/filters/dataloaders/DynamicDataLoader'
 import { useChartFilters } from 'core/blocks/filters/helpers'
 import { MODE_COMBINED } from 'core/blocks/filters/constants'
 

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { usePageContext } from 'core/helpers/pageContext'
-import { CHART_MODE_GROUPED } from './constants'
+import { CHART_MODE_GROUPED } from '../constants'
 import { BucketUnits } from '@devographics/types'
 import { DynamicDataLoaderProps } from './DynamicDataLoader'
-import { fetchSeriesData } from './helpers'
+import { fetchSeriesData } from '../helpers'
 import { DataSeries } from 'core/blocks/filters/types'
 import styled from 'styled-components'
 import Loading from 'core/blocks/explorer/Loading'
@@ -22,15 +22,11 @@ const CombinedDataLoader = ({
 }: CombinedDataLoaderProps) => {
     const pageContext = usePageContext()
     const year = pageContext.currentEdition.year
-    const showDefaultSeries = chartFilters.options.showDefaultSeries
 
     const [isLoading, setIsLoading] = useState(false)
     const [series, setSeries] = useState([defaultSeries])
-    const [seriesCount, setSeriesCount] = useState(1)
 
     useEffect(() => {
-        console.log('// useEffect')
-
         const getData = async () => {
             setIsLoading(true)
 
@@ -46,8 +42,7 @@ const CombinedDataLoader = ({
             if (setUnits) {
                 setUnits(BucketUnits.PERCENTAGE_QUESTION)
             }
-            const combinedSeries = showDefaultSeries ? [defaultSeries, ...seriesData] : seriesData
-            setSeriesCount(combinedSeries.length)
+            const combinedSeries = [defaultSeries, ...seriesData]
             setSeries(combinedSeries)
             setIsLoading(false)
         }
@@ -62,9 +57,8 @@ const CombinedDataLoader = ({
             <Contents_>
                 {React.cloneElement(children, {
                     series,
-                    seriesCount,
                     chartDisplayMode: CHART_MODE_GROUPED,
-                    showDefaultSeries
+                    showDefaultSeries: chartFilters.options.showDefaultSeries
                 })}
             </Contents_>
             {isLoading && <Loading />}

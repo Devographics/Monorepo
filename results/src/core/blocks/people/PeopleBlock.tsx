@@ -20,7 +20,7 @@ import {
     RSSIcon,
     BlogIcon
 } from 'core/icons'
-import DynamicDataLoader from 'core/blocks/filters/DynamicDataLoader'
+import DynamicDataLoader from 'core/blocks/filters/dataloaders/DynamicDataLoader'
 import { useChartFilters } from 'core/blocks/filters/helpers'
 import { MODE_GRID } from 'core/blocks/filters/constants'
 import { useEntities } from 'core/helpers/entities'

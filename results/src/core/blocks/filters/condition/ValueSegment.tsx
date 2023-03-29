@@ -1,7 +1,7 @@
 import React from 'react'
 import { useI18n } from 'core/i18n/i18nContext'
 import cloneDeep from 'lodash/cloneDeep.js'
-import { getValueLabel } from './helpers'
+import { getValueLabel } from '../helpers'
 import {
     PanelState,
     FilterValue,
@@ -9,7 +9,7 @@ import {
     FilterValueArray,
     FilterItem,
     OperatorEnum
-} from './types'
+} from '../types'
 import styled from 'styled-components'
 import { mq, spacing } from 'core/theme'
 import { DeleteIcon, PlusIcon } from 'core/icons'

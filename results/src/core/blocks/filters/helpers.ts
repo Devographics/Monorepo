@@ -44,7 +44,8 @@ import {
     SectionMetadata,
     BucketUnits,
     Bucket,
-    CombinedBucket
+    CombinedBucket,
+    OptionMetadata
 } from '@devographics/types'
 import { runQuery } from 'core/blocks/explorer/data'
 // import { spacing, mq, fontSize } from 'core/theme'
@@ -53,28 +54,93 @@ import { getBlockDataPath } from 'core/helpers/data'
 import { QueryData, AllQuestionData } from '@devographics/types'
 
 export const getNewCondition = ({
-    filters
+    filter,
+    option: providedOption
 }: {
-    filters: FilterItem[]
+    filter: FilterItem
+    option?: OptionMetadata
 }): CustomizationFiltersCondition => {
-    const field = filters[0]
+    const field = filter
     const { id: fieldId, sectionId, options } = field
+    const option = providedOption || options[0]
     return {
         fieldId,
         sectionId,
         operator: OperatorEnum['EQ'],
-        value: options[0].id
+        value: option.id
     }
 }
 
+/*
+
+For a given filter field, get a list of all options currently in use
+
+*/
+const getOptionsInUse = ({
+    filterId,
+    filtersState
+}: {
+    filterId: string
+    filtersState: CustomizationDefinition
+}) => {
+    let optionsInUse: string[] = []
+    filtersState.filters.forEach(filter => {
+        filter.conditions.forEach(condition => {
+            const { fieldId, value } = condition
+            if (fieldId === filterId) {
+                if (Array.isArray(value)) {
+                    optionsInUse = [...optionsInUse, ...value]
+                } else {
+                    optionsInUse = [...optionsInUse, value]
+                }
+            }
+        })
+    })
+    return optionsInUse
+}
+
+/*
+
+To initialize a new series, either pick the first demographics filter
+
+OR copy the currently defined filters but with the next available option
+
+*/
 export const getNewSeries = ({
-    filters,
+    filtersState,
+    allFilters,
     year
 }: {
-    filters: FilterItem[]
+    filtersState: CustomizationDefinition
+    allFilters: FilterItem[]
     year: number
 }): CustomizationFiltersSeries => {
-    return { year, conditions: [getNewCondition({ filters })] }
+    let conditionOptions
+    if (filtersState.filters.length === 0) {
+        const userInfoFilters = allFilters.filter(f => f.sectionId === 'user_info')
+        conditionOptions = { filter: userInfoFilters[0] }
+    } else {
+        const firstFilter = filtersState.filters[0]
+        const firstCondition = firstFilter?.conditions[0]
+        const firstConditionField = allFilters.find(
+            f => f.id === firstCondition.fieldId
+        ) as FilterItem
+        const optionsInUse = getOptionsInUse({ filterId: firstCondition.fieldId, filtersState })
+        // exclude any option currently in use
+        const availableOptions = firstConditionField?.options.filter(
+            o => !optionsInUse.includes(o.id)
+        )
+        // get first available option, unless no option is available
+        // in which case just take first option from default list
+        const option =
+            availableOptions.length > 0 ? availableOptions[0] : firstConditionField?.options[0]
+
+        conditionOptions = { filter: firstConditionField, option }
+    }
+    return {
+        year,
+        conditions: [getNewCondition(conditionOptions)]
+    }
 }
 
 /*
@@ -147,7 +213,6 @@ export const getFiltersQuery = ({
     currentYear: number
     pageContext: PageContextValue
 }) => {
-    let queryBody
     const { options = {}, filters, facet } = chartFilters
     const { enableYearSelect, mode } = options
     const query = getBlockQuery({
@@ -162,6 +227,7 @@ export const getFiltersQuery = ({
     const fragmentEndIndex = getNthPosition(query, '}', 5, true) + 1
     const queryHeader = query.slice(0, fragmentStartIndex)
     const queryFragment = query.slice(fragmentStartIndex, fragmentEndIndex)
+    let queryBody = queryFragment
 
     const seriesNames: string[] = []
 
@@ -210,8 +276,6 @@ export const getFiltersQuery = ({
             })
             .join('')
     } else if (facet && mode === MODE_FACET) {
-        queryBody = queryFragment
-
         const queryArgs = getQueryArgs({
             facet: facetItemToFacet(facet),
             parameters: block.parameters
@@ -245,10 +309,11 @@ export const getFiltersQuery = ({
         //     queryBody = queryBody.replace('filters: {}', `filters: ${fixedIdsFilter}`)
         // }
     }
+    queryBody = queryBody.replace(argumentsPlaceholder, '')
+    queryBody = queryBody?.replaceAll(bucketFacetsPlaceholder, '')
+
     const newQuery = queryHeader + queryBody + queryFooter
 
-    // console.log('// newQuery')
-    // console.log(newQuery)
     return { query: newQuery, seriesNames }
 }
 
@@ -261,11 +326,11 @@ multiple series (e.g. { count, count_1, percentageQuestion, percentageQuestion_1
 
 */
 type CombineBucketsOptions = {
-    defaultBuckets: Bucket[]
-    otherBucketsArray: Bucket[][]
+    allBuckets: Bucket[][]
 }
-export const combineBuckets = ({ defaultBuckets, otherBucketsArray }: CombineBucketsOptions) => {
-    const mergedBuckets = cloneDeep(defaultBuckets) as CombinedBucket[]
+export const combineBuckets = ({ allBuckets }: CombineBucketsOptions) => {
+    const [defaultBuckets, ...otherBucketsArray] = allBuckets as CombinedBucket[][]
+    const mergedBuckets = cloneDeep(defaultBuckets)
     otherBucketsArray.forEach((otherBuckets: Bucket[], index: number) => {
         // default series is series 0, first custom series is series 1, etc.
         const seriesIndex = index + 1
@@ -643,7 +708,7 @@ Initialize the chart customization filter state
 export const getInitFilters = (initOptions?: CustomizationOptions): CustomizationDefinition => ({
     options: {
         showDefaultSeries: true,
-        enableYearSelect: true,
+        enableYearSelect: false,
         mode: MODE_DEFAULT,
         queryOnLoad: false,
         ...initOptions
@@ -737,8 +802,6 @@ export const fetchSeriesData = async ({
         chartFilters,
         currentYear: year
     })
-    console.log(query)
-    console.log(seriesNames)
 
     const url = process.env.GATSBY_DATA_API_URL
     if (!url) {
@@ -750,13 +813,16 @@ export const fetchSeriesData = async ({
 
     const dataPath = getBlockDataPath({ block, pageContext, addRootNode: false })
 
-    console.log(dataPath)
     // apply dataPath to get block data for each series
-    const seriesData = seriesNames.map(seriesName => {
+    const seriesData = seriesNames.map((seriesName, seriesIndex) => {
         const data = get(result, dataPath.replace(block.id, seriesName)) as AllQuestionData
-        return { data, name: seriesName }
+        return {
+            data,
+            name: seriesName,
+            filters: chartFilters.filters[seriesIndex],
+            facet: chartFilters.facet
+        }
     })
 
-    console.log(seriesData)
     return seriesData
 }

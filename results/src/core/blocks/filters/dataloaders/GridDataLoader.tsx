@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { useFilterLegends } from './helpers'
+import { useFilterLegends } from '../helpers'
 import { usePageContext } from 'core/helpers/pageContext'
 import { DynamicDataLoaderProps } from './DynamicDataLoader'
 import WrapperGrid from './WrapperGrid'
-import { fetchSeriesData } from './helpers'
+import { fetchSeriesData } from '../helpers'
 import { DataSeries } from 'core/blocks/filters/types'
-import { AllQuestionData } from '@devographics/types'
 
 interface GridDataLoaderProps extends DynamicDataLoaderProps {
     defaultSeries: DataSeries

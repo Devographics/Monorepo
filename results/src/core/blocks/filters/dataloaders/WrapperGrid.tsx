@@ -1,18 +1,18 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 import Loading from 'core/blocks/explorer/Loading'
-import { spacing, mq, fontSize } from 'core/theme'
+import { spacing, fontSize } from 'core/theme'
 import Tooltip from 'core/components/Tooltip'
 import isEmpty from 'lodash/isEmpty'
-import { CHART_MODE_GRID } from './constants'
+import { CHART_MODE_GRID } from '../constants'
 import T from 'core/i18n/T'
-import { DataSeries } from './types'
+import { DataSeries } from '../types'
 
 type WrapperGridProps = {
     layout: any
     series: DataSeries[]
     legends: any
-    children: any
+    children: ReactNode
     isLoading: boolean
     showDefaultSeries?: boolean
 }

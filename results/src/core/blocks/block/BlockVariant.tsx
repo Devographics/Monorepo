@@ -1,4 +1,4 @@
-import React, { memo, PropsWithChildren, ReactNode } from 'react'
+import React, { memo, PropsWithChildren, ReactNode, Dispatch, SetStateAction } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { mq, spacing } from 'core/theme'
@@ -11,11 +11,21 @@ import BlockShare from 'core/blocks/block/BlockShare'
 // import BlockDebug from 'core/blocks/block/BlockDebug'
 import { ChartIcon, DataIcon, ShareIcon } from 'core/icons'
 import { ErrorBoundary } from 'core/blocks/block/BlockError'
-import { BlockVariantProps } from '@types/index'
+import { BlockDefinition } from 'core/types/index'
 import { usePageContext } from 'core/helpers/pageContext'
 import CustomInputTrigger from 'core/blocks/block/CustomInputTrigger'
 import CommentsTrigger from 'core/blocks/block/CommentsTrigger'
 import FiltersTrigger from 'core/blocks/filters/FiltersTrigger'
+import { BucketUnits } from '@devographics/types'
+
+export interface BlockVariantProps {
+    id?: string
+    className?: string
+    units?: BucketUnits
+    setUnits?: Dispatch<SetStateAction<BucketUnits>>
+    unitsOptions?: BucketUnits[] | string[]
+    block: BlockDefinition
+}
 
 const BlockVariant = (props: PropsWithChildren<BlockVariantProps>) => {
     const context = usePageContext()

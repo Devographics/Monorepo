@@ -9,7 +9,7 @@ export interface ChartComponentProps {
     total?: number
     i18nNamespace: string
     translateData?: boolean
-    mode: BlockMode
+    mode?: BlockMode
     units: BlockUnits
     chartProps?: any
     colorVariant?: 'primary' | 'secondary'

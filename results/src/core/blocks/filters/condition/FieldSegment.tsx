@@ -2,10 +2,10 @@ import React from 'react'
 import { useI18n } from 'core/i18n/i18nContext'
 import styled from 'styled-components'
 import cloneDeep from 'lodash/cloneDeep.js'
-import { getFieldLabel, getSectionLabel } from './helpers'
+import { getFieldLabel, getSectionLabel } from '../helpers'
 import { usePageContext } from 'core/helpers/pageContext'
 import { useEntities } from 'core/helpers/entities'
-import { PanelState, FilterItem, CustomizationDefinition } from './types'
+import { PanelState, FilterItem, CustomizationDefinition } from '../types'
 
 interface FieldSegmentProps {
     seriesIndex: number

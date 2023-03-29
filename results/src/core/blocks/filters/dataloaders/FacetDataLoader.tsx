@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import { fetchSeriesData } from './helpers'
+import { fetchSeriesData } from '../helpers'
 import { usePageContext } from 'core/helpers/pageContext'
 // import { spacing, mq, fontSize } from 'core/theme'
 import isEmpty from 'lodash/isEmpty'
-import { CHART_MODE_STACKED } from './constants'
+import { CHART_MODE_STACKED } from '../constants'
 import { DynamicDataLoaderProps } from './DynamicDataLoader'
-import { AllQuestionData } from '@devographics/types'
 import Loading from 'core/blocks/explorer/Loading'
 import styled from 'styled-components'
-import { DataSeries } from './types'
+import { DataSeries } from '../types'
 
 interface FacetDataLoaderProps extends DynamicDataLoaderProps {
     defaultSeries: DataSeries
@@ -37,9 +36,6 @@ const FacetDataLoader = ({
                 chartFilters,
                 year
             })
-
-            console.log('// FacetDataLoader')
-            console.log(seriesData)
 
             setSeries(seriesData)
             setIsLoading(false)
