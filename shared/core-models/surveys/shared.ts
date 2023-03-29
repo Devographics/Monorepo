@@ -16,3 +16,4 @@ export function getSurveyPrettySlug(survey: SurveyEdition) {
 }
 
 export const SURVEY_OPEN: SurveyStatus = 2
+export const SURVEY_PREVIEW: SurveyStatus = 1

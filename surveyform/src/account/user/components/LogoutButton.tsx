@@ -1,9 +1,9 @@
 import { useUser } from "~/account/user/hooks";
 import { routes } from "~/lib/routes";
 import { useIntlContext } from "@devographics/react-i18n";
-import { apiRoutes } from "~/lib/apiRoutes";
 import React from "react";
 import { Button } from "~/core/components/ui/Button";
+import { logout } from "../lib/logout";
 
 export const LogoutButton = ({
   component,
@@ -18,9 +18,7 @@ export const LogoutButton = ({
     <LinkOrButton
       onClick={async (evt) => {
         evt.preventDefault();
-        await fetch(apiRoutes.account.logout.href, {
-          method: "POST",
-        });
+        await logout();
         window.location.replace(routes.home.href);
       }}
       {...(component && { href: "#" })}

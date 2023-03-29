@@ -8,6 +8,8 @@ import { print } from 'graphql'
 import { fetchSurvey } from "@devographics/core-models/server";
 import { connectToAppDb } from "~/lib/server/mongoose/connection";
 import { connectToRedis } from "~/lib/server/redis";
+import { userFromReq } from "~/lib/server/context/userContext";
+import { SurveyEdition, SURVEY_OPEN, SURVEY_PREVIEW } from "@devographics/core-models";
 
 export default async function responseStartSurveyHandler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== "POST") {
@@ -15,7 +17,14 @@ export default async function responseStartSurveyHandler(req: NextApiRequest, re
     }
     await connectToAppDb()
     connectToRedis()
+    const user = await userFromReq(req)
+    if (!user) {
+        // TODO: check also ownership of the response
+        // (currently the graphql resolver also checks permissions, but it should progressively be done here)
+        return res.status(401).send({ error: "Not authenticated" })
+    }
 
+    // TODO: we have already created an helper for this part to prepare migration to Next 13 route handlers
     const surveyId = req.query["surveyId"] as string
     if (!surveyId) {
         return res.status(400).send({ error: "No survey id, can't start survey" })
@@ -24,8 +33,16 @@ export default async function responseStartSurveyHandler(req: NextApiRequest, re
     if (!editionId) {
         return res.status(400).send({ error: "No survey edition id, can't start survey" })
     }
-
-    const survey = await fetchSurvey(surveyId, editionId)
+    let survey: SurveyEdition
+    try {
+        survey = await fetchSurvey(surveyId, editionId)
+    } catch (err) {
+        console.error()
+        return res.status(404).send({ error: `No survey found, surveyId: '${surveyId}', editionId: '${editionId}'` })
+    }
+    if (!survey.status || ![SURVEY_OPEN, SURVEY_PREVIEW].includes(survey.status)) {
+        return res.status(400).send({ error: `Survey '${editionId}' is not in open or preview mode.` })
+    }
 
 
     // TODO: this code used to be a client-side graphql query

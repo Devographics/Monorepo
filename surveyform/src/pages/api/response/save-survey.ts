@@ -9,27 +9,44 @@ import { fetchSurvey, initRedis } from "@devographics/core-models/server";
 import { connectToAppDb } from "~/lib/server/mongoose/connection";
 import { connectToRedis } from "~/lib/server/redis";
 import { userFromReq } from "~/lib/server/context/userContext";
+import { SurveyEdition, SURVEY_OPEN, SURVEY_PREVIEW } from "@devographics/core-models";
 // import { userFromReq } from "~/lib/server/context/userContext";
 
 export default async function saveSurveyResponseHandler(req: NextApiRequest, res: NextApiResponse) {
-    const user = await userFromReq(req)
-    if (!user) {
-        // TODO: check also ownership of the response
-        // (currently the graphql resolver also checks permissions, but it should progressively be done here)
-        return res.status(401).send({})
-    }
-    await connectToAppDb()
-    connectToRedis()
     // method
     if (req.method !== "POST") {
         return res.status(405).send({})
     }
+    // db connections
+    await connectToAppDb()
+    connectToRedis()
+    // authenticated route
+    const user = await userFromReq(req)
+    if (!user) {
+        // TODO: check also ownership of the response
+        // (currently the graphql resolver also checks permissions, but it should progressively be done here)
+        return res.status(401).send({ error: "Not authenticated" })
+    }
     // parameters
+    // TODO: we have already created an helper for this part to prepare migration to Next 13 route handlers
     const surveyId = req.query["surveyId"] as string
-    if (!surveyId) throw new Error("No survey slug, can't start survey")
+    if (!surveyId) {
+        return res.status(400).send({ error: "No survey id, can't start survey" })
+    }
     const editionId = req.query["editionId"] as string
-    if (!editionId) throw new Error("No survey editionId, can't start survey")
-    const survey = await fetchSurvey(surveyId, editionId)
+    if (!editionId) {
+        return res.status(400).send({ error: "No survey edition id, can't start survey" })
+    }
+    let survey: SurveyEdition
+    try {
+        survey = await fetchSurvey(surveyId, editionId)
+    } catch (err) {
+        console.error()
+        return res.status(404).send({ error: `No survey found, surveyId: '${surveyId}', editionId: '${editionId}'` })
+    }
+    if (!survey.status || ![SURVEY_OPEN, SURVEY_PREVIEW].includes(survey.status)) {
+        return res.status(400).send({ error: `Survey '${editionId}' is not in open or preview mode.` })
+    }
 
     // TODO: this code used to be a client-side graphql query
     // we reuse the same call temporarily to facilitate moving out of graphql
