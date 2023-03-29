@@ -76,7 +76,7 @@ test("cannot start closed survey", () => {
   cyfy(loginAnonymously).its("status").should("equal", 200)
   cy.request({
     method: "POST",
-    url: apiRoutes.response.startSurvey.href({ surveyId: testSurvey.surveyId, editionId: testSurvey.editionId }),
+    url: apiRoutes.response.startSurvey.href({ surveyId: "state_of_js", editionId: "js2022" }),
     body: {
       surveyId: "state_of_js",
       editionId: "js2022"
