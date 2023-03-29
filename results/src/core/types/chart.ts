@@ -5,7 +5,7 @@ export interface ChartComponentProps {
     data?: any
     viewportWidth?: number
     className?: string
-    bucketKeys?: BlockLegend[]
+    legends?: BlockLegend[]
     total?: number
     i18nNamespace: string
     translateData?: boolean

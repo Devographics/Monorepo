@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 import { mq, spacing, fontSize, color } from 'core/theme'
 import BlockLegendsItem from './BlockLegendsItem'
-import { useBucketKeys, useLegends } from '../../helpers/useBucketKeys'
 
 const BlockLegends = ({
     legends = [],

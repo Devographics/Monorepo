@@ -6,7 +6,7 @@ import Block from 'core/blocks/block/BlockVariant'
 import ChartContainer from 'core/charts/ChartContainer'
 import GaugeBarChart from 'core/charts/generic/GaugeBarChart'
 import { usePageContext } from 'core/helpers/pageContext'
-import { useLegends } from 'core/helpers/useBucketKeys'
+import { useLegends } from 'core/helpers/legends'
 import { mq, spacing } from 'core/theme'
 import { useI18n } from 'core/i18n/i18nContext'
 import { getTableData, groupDataByYears } from 'core/helpers/datatables'
@@ -35,7 +35,7 @@ const MultiFeaturesExperienceBlock = ({
 
     // const allYears = get(data, 'experience.all_years', [])
 
-    const bucketKeys = useLegends(block, keys)
+    const bucketKeys = useLegends({ block })
 
     // const mdnLink = mdn && `https://developer.mozilla.org${mdn.url}`
     // only show descriptions for english version

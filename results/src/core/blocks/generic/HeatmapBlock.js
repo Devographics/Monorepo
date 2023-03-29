@@ -4,7 +4,7 @@ import Block from 'core/blocks/block/BlockVariant'
 import HeatmapChart from 'core/charts/generic/HeatmapChart'
 import { useI18n } from 'core/i18n/i18nContext'
 import ChartContainer from 'core/charts/ChartContainer'
-import { useBucketKeys } from 'core/helpers/useBucketKeys'
+import { useBucketKeys } from 'core/helpers/legends'
 
 const HeatmapBlock = ({ block, data }) => {
     const { translate } = useI18n()

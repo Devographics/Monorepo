@@ -190,6 +190,7 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId }) => 
                     const query = getQuery({
                         query: v.query,
                         queryOptions,
+                        block: v,
                         isLog: false,
                         enableCache,
                         addRootNode: true
@@ -199,6 +200,7 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId }) => 
                         const queryLog = getQuery({
                             query: v.query,
                             queryOptions,
+                            block: v,
                             isLog: true,
                             addRootNode: false
                         })

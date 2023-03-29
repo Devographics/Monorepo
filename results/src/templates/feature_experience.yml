@@ -8,6 +8,7 @@ chartNamespace: features
 hasComments: true
 hasSponsor: true
 query: allEditionsData
+parameters: { showNoAnswer: true }
 # query: >
 #     dataAPI {
 #         survey(survey: ${surveyId}) {

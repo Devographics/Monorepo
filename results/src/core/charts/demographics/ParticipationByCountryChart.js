@@ -2,7 +2,7 @@ import React, { memo, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { useTheme } from 'styled-components'
 import { ResponsiveChoroplethCanvas } from '@nivo/geo'
-import countries from 'data/geo/world_countries'
+// import countries from 'data/geo/world_countries'
 import { isPercentage } from 'core/helpers/units'
 import { BasicTooltip } from '@nivo/tooltip'
 

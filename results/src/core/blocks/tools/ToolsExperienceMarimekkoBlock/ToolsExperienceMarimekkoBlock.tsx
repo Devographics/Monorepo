@@ -8,7 +8,7 @@ import { getTableData } from 'core/helpers/datatables'
 import keyBy from 'lodash/keyBy'
 import round from 'lodash/round'
 import sortBy from 'lodash/sortBy'
-import { useLegends } from 'core/helpers/useBucketKeys'
+import { useLegends } from 'core/helpers/legends'
 import { SectionAllToolsData, ToolQuestionData, Entity } from '@devographics/types'
 import { TOOLS_OPTIONS } from '@devographics/constants'
 import { useEntities } from 'core/helpers/entities'
@@ -99,7 +99,7 @@ export const ToolsExperienceMarimekkoBlock = ({
     const height = MARGIN.top + ROW_HEIGHT * data.items.length + MARGIN.bottom
     const controlledCurrent = triggerId
 
-    const legends = useLegends(block, TOOLS_OPTIONS, 'tools')
+    const legends = useLegends({ block, namespace: 'tools' })
     return (
         <Block
             block={block}

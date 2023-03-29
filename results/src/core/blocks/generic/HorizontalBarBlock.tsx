@@ -27,7 +27,7 @@ const HorizontalBarBlock = ({ block, data }: HorizontalBarBlockProps) => {
     const completion = data?.responses?.currentEdition?.completion
     const { total } = completion
 
-    const { chartFilters, setChartFilters, legends } = useChartFilters({
+    const { chartFilters, setChartFilters, filterLegends } = useChartFilters({
         block,
         options: { supportedModes: [MODE_GRID, MODE_FACET] }
     })
@@ -47,9 +47,6 @@ const HorizontalBarBlock = ({ block, data }: HorizontalBarBlockProps) => {
             unitsOptions.push(BucketUnits.AVERAGE)
         }
     }
-
-    // note: HorizontalBarChart accepts multiple data series
-    const defaultSeries = { name: 'default', data }
 
     return (
         <Block
@@ -71,19 +68,19 @@ const HorizontalBarBlock = ({ block, data }: HorizontalBarBlockProps) => {
             chartFilters={chartFilters}
             setChartFilters={setChartFilters}
             legendProps={{ layout: 'vertical' }}
-            {...(legends.length > 0 ? { legends } : {})}
+            {...(filterLegends.length > 0 ? { legends: filterLegends } : {})}
         >
             <DynamicDataLoader
                 block={block}
                 chartFilters={chartFilters}
                 setUnits={setUnits}
                 layout="grid"
-                defaultSeries={defaultSeries}
+                defaultData={data}
             >
                 <ChartContainer fit={false}>
                     <HorizontalBarChart
                         total={total}
-                        series={[defaultSeries]}
+                        series={[{ name: 'default', data }]}
                         i18nNamespace={chartNamespace}
                         translateData={translateData}
                         mode={mode}

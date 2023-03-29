@@ -79,13 +79,8 @@ export const getRelevantServices = allEntities => {
     })
 }
 
-const PeopleBlock = ({
-    block,
-    data: questionData,
-    controlledUnits,
-    isCustom
-}: PeopleBlockProps) => {
-    const chartData = questionData?.responses?.currentEdition
+const PeopleBlock = ({ block, data, controlledUnits, isCustom }: PeopleBlockProps) => {
+    const chartData = data?.responses?.currentEdition
     if (!chartData) {
         throw Error(`No data found for block ${block.id}`)
     }
@@ -109,7 +104,7 @@ const PeopleBlock = ({
 
     const services = getRelevantServices(entities)
 
-    const { chartFilters, setChartFilters, legends } = useChartFilters({
+    const { chartFilters, setChartFilters, filterLegends } = useChartFilters({
         block,
         options: { supportedModes: [MODE_GRID] }
     })
@@ -133,8 +128,7 @@ const PeopleBlock = ({
             setChartFilters={setChartFilters}
         >
             <DynamicDataLoader
-                completion={completion}
-                defaultBuckets={buckets}
+                defaultData={data}
                 block={block}
                 chartFilters={chartFilters}
                 layout="grid"

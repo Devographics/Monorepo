@@ -2,8 +2,7 @@ import React, { memo, useState } from 'react'
 import BlockVariant from 'core/blocks/block/BlockVariant'
 import ChartContainer from 'core/charts/ChartContainer'
 import VerticalBarChart, { getChartData } from 'core/charts/generic/VerticalBarChart'
-import { useLegends } from 'core/helpers/useBucketKeys'
-import { useOptions } from 'core/helpers/options'
+import { useLegends } from 'core/helpers/legends'
 import { BlockComponentProps } from 'core/types/index'
 import { StandardQuestionData, BucketUnits } from '@devographics/types'
 import { getTableData } from 'core/helpers/datatables'
@@ -30,19 +29,19 @@ const VerticalBarBlock = ({ block, data, context }: VerticalBarBlockProps) => {
 
     const addNoAnswer = units === BucketUnits.PERCENTAGE_SURVEY
 
-    const chartOptions = useOptions(block.id)
-    const bucketKeys = chartOptions && useLegends(block, chartOptions, undefined, addNoAnswer)
+    const chartLegends = useLegends({ block, addNoAnswer })
 
     const completion = data?.responses?.currentEdition?.completion
 
     const { total } = completion
 
-    const { chartFilters, setChartFilters, legends } = useChartFilters({
+    const { chartFilters, setChartFilters, filterLegends } = useChartFilters({
         block,
         options: { supportedModes: [MODE_COMBINED, MODE_FACET] }
     })
 
     const allChartsOptions = useAllChartsOptions()
+
     let unitsOptions = [
         BucketUnits.PERCENTAGE_SURVEY,
         BucketUnits.PERCENTAGE_QUESTION,
@@ -58,14 +57,13 @@ const VerticalBarBlock = ({ block, data, context }: VerticalBarBlockProps) => {
         }
     }
 
-    // note: VerticalBarChart accepts multiple data series
     const defaultSeries = { name: 'default', data }
 
     return (
         <BlockVariant
             tables={[
                 getTableData({
-                    legends: bucketKeys,
+                    // legends: bucketKeys,
                     data: getChartData(data),
                     valueKeys: MAIN_UNITS,
                     translateData
@@ -80,7 +78,7 @@ const VerticalBarBlock = ({ block, data, context }: VerticalBarBlockProps) => {
             chartFilters={chartFilters}
             setChartFilters={setChartFilters}
             legendProps={{ layout: 'vertical' }}
-            {...(legends.length > 0 ? { legends } : {})}
+            {...(filterLegends.length > 0 ? { legends: filterLegends } : {})}
         >
             <DynamicDataLoader
                 block={block}
@@ -90,7 +88,7 @@ const VerticalBarBlock = ({ block, data, context }: VerticalBarBlockProps) => {
             >
                 <ChartContainer fit={true}>
                     <VerticalBarChart
-                        bucketKeys={bucketKeys}
+                        legends={chartLegends}
                         total={total}
                         i18nNamespace={chartNamespace}
                         translateData={translateData}

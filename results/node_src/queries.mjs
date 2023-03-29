@@ -76,14 +76,14 @@ const getEntityFragment = () => `entity {
     }
 }`
 
-const getFacetFragment = addEntities => `
+const getFacetFragment = addBucketsEntities => `
     facetBuckets {
         id
         count
         percentageQuestion
         percentageSurvey
         percentageFacet
-        ${addEntities ? getEntityFragment() : ''}
+        ${addBucketsEntities ? getEntityFragment() : ''}
     }
 `
 
@@ -199,7 +199,8 @@ export const getDefaultQuery = queryOptions => {
         facet,
         filters,
         parameters = {},
-        addEntities = false,
+        addBucketsEntities = false,
+        addQuestionEntity = false,
         allEditions = false
     } = queryOptions
     const queryArgs = getQueryArgs({ facet, filters, parameters })
@@ -214,6 +215,7 @@ export const getDefaultQuery = queryOptions => {
       ${editionId} {
         ${sectionId} {
           ${questionIdString} {
+            ${addQuestionEntity ? getEntityFragment() : ''}
             responses${queryArgs} {
               ${editionType} {
                 ${allEditions ? allEditionsFragment : ''}
@@ -227,8 +229,8 @@ export const getDefaultQuery = queryOptions => {
                   id
                   percentageQuestion
                   percentageSurvey
-                  ${addEntities ? getEntityFragment() : ''}
-                  ${facet ? getFacetFragment(addEntities) : ''}
+                  ${addBucketsEntities ? getEntityFragment() : ''}
+                  ${facet ? getFacetFragment(addBucketsEntities) : ''}
                 }
               }
             }
@@ -299,6 +301,7 @@ export const getQuery = ({
     query,
     queryOptions,
     isLog = false,
+    block,
     enableCache,
     addRootNode = true
 }) => {
@@ -317,7 +320,10 @@ export const getQuery = ({
             queryOptions.allEditions = true
         }
         if (['currentEditionDataWithEntities', 'allEditionsDataWithEntities'].includes(query)) {
-            queryOptions.addEntities = true
+            queryOptions.addBucketsEntities = true
+        }
+        if (['tool_experience', 'feature_experience'].includes(block.template)) {
+            queryOptions.addQuestionEntity = true
         }
         queryContents = getDefaultQuery(queryOptions)
     } else {

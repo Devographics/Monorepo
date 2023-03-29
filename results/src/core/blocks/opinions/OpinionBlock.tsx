@@ -1,6 +1,6 @@
-import React, { useMemo, useState } from 'react'
+import React, { useState } from 'react'
 import { BlockContext } from 'core/blocks/types'
-import { OpinionBucket, OpinionAllYearsData } from '@types/survey_api/opinions'
+import { OpinionBucket } from '@types/survey_api/opinions'
 // @ts-ignore
 import Block from 'core/blocks/block/BlockVariant'
 // @ts-ignore
@@ -8,19 +8,17 @@ import ChartContainer from 'core/charts/ChartContainer'
 // @ts-ignore
 import StreamChart from 'core/charts/generic/StreamChart'
 // @ts-ignore
-import { useBucketKeys, useLegends } from 'core/helpers/useBucketKeys'
+import { useLegends } from 'core/helpers/legends'
 // @ts-ignore
 import { useI18n } from 'core/i18n/i18nContext'
-import { TableBucketItem, getTableData, groupDataByYears } from 'core/helpers/datatables'
-import { BlockUnits, ResultsByYear } from '@types/index'
-import { isPercentage } from 'core/helpers/units'
+import { getTableData, groupDataByYears } from 'core/helpers/datatables'
 import { QuestionData } from '@devographics/types'
-import { useOptions } from 'core/helpers/options'
+import { BlockDefinition } from 'core/types'
 
 const OPINION_BUCKET_KEYS_ID = 'opinions'
 
 interface OpinionBlockProps {
-    block: BlockContext<'opinionTemplate', 'OpinionBlock'>
+    block: BlockDefinition
     data: QuestionData
     units: 'percentageSurvey' | 'percentageQuestion' | 'count'
     keys: string[]
@@ -46,8 +44,7 @@ export const OpinionBlock = ({
 
     const { translate } = useI18n()
 
-    const chartOptions = useOptions(block.id)
-    const bucketKeys = useLegends(block, chartOptions, 'opinions')
+    const bucketKeys = useLegends({ block, namespace: 'opinions' })
 
     const years = chartData.map(edition => edition.year)
     const allBuckets = chartData

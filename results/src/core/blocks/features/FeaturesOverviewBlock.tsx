@@ -7,9 +7,9 @@ import { FeaturesCirclePackingChart } from 'core/charts/features/FeaturesCircleP
 import { useI18n } from 'core/i18n/i18nContext'
 import ChartContainer from 'core/charts/ChartContainer'
 import { getTableData } from 'core/helpers/datatables'
-import { useLegends } from 'core/helpers/useBucketKeys'
+import { useLegends } from 'core/helpers/legends'
 import { useFeatureSections } from 'core/helpers/metadata'
-import { BlockComponentProps } from 'core/types'
+import { BlockComponentProps, BlockDefinition } from 'core/types'
 import { AllFeaturesData, QuestionMetadata, ToolQuestionData } from '@devographics/types'
 
 const modes = ['grouped', 'awareness_rank', 'usage_rank' /*'usage_ratio_rank'*/]
@@ -94,7 +94,7 @@ const useChartData = (data: ToolQuestionData[], translate: any) => {
 }
 
 interface FeaturesOverviewBlockProps {
-    block: BlockComponentProps
+    block: BlockDefinition
     data: AllFeaturesData
     triggerId?: string
     controlledMode?: string
@@ -111,11 +111,10 @@ const FeaturesOverviewBlock = ({
     const chartData = useChartData(blockData.items, translate)
 
     const categories = chartData.children
-    const legends = useLegends(
+    const legends = useLegends({
         block,
-        categories.map(c => c.id),
-        'features_categories'
-    )
+        namespace: 'features_categories'
+    })
 
     const [mode, setMode] = useState(modes[0])
 

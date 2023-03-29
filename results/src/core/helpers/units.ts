@@ -1,5 +1,5 @@
 import { BlockUnits } from '@types/index'
-
+import { RatiosUnits } from '@devographics/types'
 export const percentageUnits = [
     'percentage',
     'satisfaction_percentage',
@@ -21,4 +21,4 @@ export const isPercentage = (units: string) => percentageUnits.includes(units)
 
 export type MetricId = 'satisfaction' | 'interest' | 'usage' | 'awareness'
 
-export const ALL_METRICS: MetricId[] = ['satisfaction', 'interest', 'usage', 'awareness']
+export const ALL_METRICS = Object.values(RatiosUnits)

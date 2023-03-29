@@ -21,6 +21,8 @@ export interface BlockComponentProps {
     block: BlockDefinition
     keys?: string[]
     context: PageContextValue
+    chartNamespace?: string
+    defaultUnits?: BucketUnits
     // 'data' property is defined by each specific block
 }
 
@@ -62,6 +64,5 @@ export interface BlockLegend {
     label: string
     shortLabel?: string
     color?: string
+    gradientColors: string[]
 }
-
-// export type GetChartDataFunction =

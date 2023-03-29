@@ -7,9 +7,16 @@ import { ResponsiveMarimekko } from '@nivo/marimekko'
 import ChartLabel from 'core/components/ChartLabel'
 import { isPercentage } from 'core/helpers/units'
 import { BlockUnits } from '@types/index'
+import { FeatureQuestionData, ToolQuestionData } from '@devographics/types'
+
+const BAR_THICKNESS = 28
+const BAR_SPACING = 16
+
+export const getChartData = (data: FeatureQuestionData | ToolQuestionData) =>
+    data.responses.allEditions
 
 interface ExperienceByYearBarChartProps {
-    buckets: any[]
+    data: FeatureQuestionData | ToolQuestionData
     bucketKeys: {
         id: string
         label: string

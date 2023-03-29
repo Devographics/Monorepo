@@ -91,7 +91,7 @@ const VerticalBarChart = (props: VerticalBarChartProps) => {
     const {
         viewportWidth,
         className,
-        bucketKeys,
+        legends,
         total,
         i18nNamespace,
         translateData,
@@ -177,7 +177,7 @@ const VerticalBarChart = (props: VerticalBarChartProps) => {
                     legendOffset: 52
                 }}
                 axisBottom={{
-                    format: v => getAxisLabels(v, bucketKeys),
+                    format: v => getAxisLabels(v, legends),
                     // legend: translate(`charts.axis_legends.${i18nNamespace}`),
                     legendPosition: 'middle',
                     legendOffset: viewportWidth < breakpoint ? 90 : 50,
@@ -186,7 +186,7 @@ const VerticalBarChart = (props: VerticalBarChartProps) => {
                 tooltip={barProps => (
                     <BarTooltip
                         units={units}
-                        bucketKeys={bucketKeys}
+                        legends={legends}
                         i18nNamespace={i18nNamespace}
                         shouldTranslate={translateData}
                         facet={facet}

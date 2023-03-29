@@ -173,3 +173,31 @@ export async function removeEmptyEditions(resultsByEdition: ResponseEditionData[
 //         }
 //     }
 // }
+
+/*
+
+Add labels to buckets (only used for country names currently)
+
+*/
+export async function addLabels(
+    resultsByEdition: ResponseEditionData[],
+    axis1: ComputeAxisParameters,
+    axis2?: ComputeAxisParameters | null
+) {
+    for (const editionData of resultsByEdition) {
+        for (const bucket of editionData.buckets) {
+            const label1 = axis1.question.options?.find(o => o.id === bucket.id)?.label
+            if (label1) {
+                bucket.label = label1
+            }
+            if (bucket.facetBuckets && axis2) {
+                for (const facetBucket of bucket.facetBuckets) {
+                    const label2 = axis2.question.options?.find(o => o.id === facetBucket.id)?.label
+                    if (label2) {
+                        facetBucket.label = label2
+                    }
+                }
+            }
+        }
+    }
+}

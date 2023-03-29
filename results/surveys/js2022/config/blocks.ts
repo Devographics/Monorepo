@@ -29,14 +29,12 @@ import LivestreamBlock from 'core/blocks/other/LivestreamBlock'
 import DataExplorerBlock from 'core/blocks/explorer/DataExplorerBlock'
 
 // demographics
-import ParticipationByCountryBlock from 'core/blocks/demographics/ParticipationByCountryBlock'
 import GenderBlock from 'core/blocks/demographics/GenderBlock'
 import ByFacetBlock from 'core/blocks/demographics/ByFacetBlock'
 
 // features
 import FeatureExperienceBlock from 'core/blocks/features/FeatureExperienceBlock'
 import FeaturesOverviewBlock from 'core/blocks/features/FeaturesOverviewBlock'
-import KnowledgeScoreBlock from 'core/blocks/features/KnowledgeScoreBlock'
 import MultiFeaturesExperienceBlock from 'core/blocks/features/MultiFeaturesExperienceBlock'
 
 // tools
@@ -104,14 +102,12 @@ const blockRegistry = {
     DataExplorerBlock,
 
     // demographics
-    ParticipationByCountryBlock,
     GenderBlock,
     ByFacetBlock,
 
     // features
     FeatureExperienceBlock,
     FeaturesOverviewBlock,
-    KnowledgeScoreBlock,
     MultiFeaturesExperienceBlock,
 
     // tools

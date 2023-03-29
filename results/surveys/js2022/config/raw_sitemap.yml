@@ -84,9 +84,11 @@
       - template: page_introduction
 
       - id: country
-        # defaultUnits: count
+        defaultUnits: count
         template: demographics
-        blockType: ParticipationByCountryBlock
+        blockType: HorizontalBarBlock
+        translateData: true
+        # blockType: ParticipationByCountryBlock
         parameters: { limit: 20 }
 
       - id: locale
@@ -100,7 +102,6 @@
 
       - id: completion_stats
         template: demographics
-        # blockType: KnowledgeScoreBlock
         translateData: true
 
       - id: age
@@ -228,7 +229,6 @@
       - id: knowledge_score
         template: demographics
         blockNamespace: features
-        # blockType: KnowledgeScoreBlock
 
       - id: features_resources
         items: [fm-javascript]

@@ -1,10 +1,8 @@
 import React, { memo, useState } from 'react'
-import PropTypes from 'prop-types'
 import Block from 'core/blocks/block/BlockVariant'
 import ChartContainer from 'core/charts/ChartContainer'
 // import ParticipationByCountryChart from 'core/charts/demographics/ParticipationByCountryChart'
 import { getTableData } from 'core/helpers/datatables'
-import { getCountryName } from 'core/helpers/countries'
 import HorizontalBarChart from 'core/charts/generic/HorizontalBarChart'
 import DynamicDataLoader from 'core/blocks/filters/dataloaders/DynamicDataLoader'
 import { MODE_GRID } from 'core/blocks/filters/constants'
@@ -12,17 +10,12 @@ import { useChartFilters } from 'core/blocks/filters/helpers'
 import { defaultOptions } from 'core/blocks/block/BlockUnitsSelector'
 import { useAllChartsOptions } from 'core/charts/hooks'
 
-const processBlockData = data => {
-    return data && data.map(b => ({ ...b, label: getCountryName(b.id) }))
-}
-
 const ParticipationByCountryBlock = ({
     block,
     data,
     triggerId,
     units: defaultUnits = 'percentageSurvey'
 }) => {
-    return <div>todo</div>
     const chartData = data?.responses?.currentEdition
 
     const {
@@ -59,7 +52,7 @@ const ParticipationByCountryBlock = ({
         <Block
             tables={[
                 getTableData({
-                    data: processBlockData(buckets)
+                    data: buckets
                 })
             ]}
             units={units}
@@ -80,7 +73,6 @@ const ParticipationByCountryBlock = ({
                 chartFilters={chartFilters}
                 setUnits={setUnits}
                 layout="grid"
-                processBlockData={processBlockData}
             >
                 <ChartContainer fit={false}>
                     <HorizontalBarChart
@@ -89,7 +81,7 @@ const ParticipationByCountryBlock = ({
                         translateData={translateData}
                         mode={mode}
                         units={units}
-                        data={processBlockData(data)}
+                        data={data}
                         facet={chartFilters.facet}
                     />
                 </ChartContainer>

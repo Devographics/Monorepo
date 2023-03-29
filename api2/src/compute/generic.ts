@@ -29,6 +29,7 @@ import {
     cutoffData,
     addEditionYears,
     discardEmptyEditions,
+    addLabels,
     removeEmptyEditions
 } from './stages/index'
 
@@ -203,11 +204,13 @@ export async function genericComputeFunction({
         await sortData(results, axis2, axis1)
         await limitData(results, axis2, axis1)
         await cutoffData(results, axis2, axis1)
+        await addLabels(results, axis2, axis1)
     } else {
         await addMissingItems(results, axis1)
         await sortData(results, axis1)
         await limitData(results, axis1)
         await cutoffData(results, axis1)
+        await addLabels(results, axis1)
     }
 
     console.log('// results final')

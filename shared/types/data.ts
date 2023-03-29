@@ -25,6 +25,7 @@ export type AllQuestionData =
     | FreeformQuestionData
     | ToolQuestionData
     | FeatureQuestionData
+    | ToolRatiosQuestionData
 
 export interface StandardQuestionData extends QuestionData {
     responses: ResponseData
@@ -136,12 +137,19 @@ export interface ToolRatiosQuestionData {
     years: number[]
 }
 
-export interface ToolRatiosItemData extends QuestionData {
+export enum RatiosUnits {
+    AWARENESS = 'awareness',
+    USAGE = 'usage',
+    INTEREST = 'interest',
+    SATISFACTION = 'satisfaction'
+}
+
+export type ToolRatiosItemDataFields = {
+    [key in RatiosUnits]: [ToolRatiosItemEditionData]
+}
+
+export interface ToolRatiosItemData extends QuestionData, ToolRatiosItemDataFields {
     entity: Entity
-    awareness: [ToolRatiosItemEditionData]
-    usage: [ToolRatiosItemEditionData]
-    interest: [ToolRatiosItemEditionData]
-    satisfaction: [ToolRatiosItemEditionData]
 }
 
 export interface ToolRatiosItemEditionData {
@@ -165,3 +173,17 @@ export interface AllToolsData {
 export interface SectionAllToolsData extends AllToolsData {}
 export interface AllFeaturesData extends AllToolsData {}
 export interface SectionAllFeaturesData extends AllFeaturesData {}
+
+export enum ToolsOptions {
+    WOULD_USE = 'would_use',
+    WOULD_NOT_USE = 'would_not_use',
+    INTERESTED = 'interested',
+    NOT_INTERESTED = 'not_interested',
+    NEVER_HEARD = 'never_heard'
+}
+
+export enum FeaturesOptions {
+    NEVER_HEARD = 'never_heard',
+    HEARD = 'heard',
+    USED = 'used'
+}

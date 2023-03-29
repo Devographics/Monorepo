@@ -4,7 +4,36 @@ import { useTheme } from 'styled-components'
 import { ResponsiveBump } from '@nivo/bump'
 import { BasicTooltip } from '@nivo/tooltip'
 import { ResponsiveLine } from '@nivo/line'
-import { ToolRatiosQuestionData } from '@devographics/types'
+import { RatiosUnits, BucketUnits, ToolRatiosQuestionData } from '@devographics/types'
+import { getLabel } from 'core/blocks/tools/ToolsExperienceLineChartBlock'
+import { Entity } from '@devographics/types'
+import { useEntities } from 'core/helpers/entities'
+
+export const getChartData = (
+    data: ToolRatiosQuestionData,
+    options: { allEntities: Entity[]; units: RatiosUnits }
+) => {
+    const { units, allEntities } = options
+    const buckets = data.items.map(tool => {
+        return {
+            id: tool.id,
+            name: getLabel(tool.id, allEntities),
+            data: tool[units]?.map((bucket, index) => {
+                const datapoint = {
+                    x: bucket.year,
+                    y: bucket.percentageQuestion,
+                    percentageQuestion: bucket.percentageQuestion
+                }
+                // add all metrics to datapoint for ease of debugging
+                Object.values(RatiosUnits).forEach(metric => {
+                    datapoint[`${metric}_percentage`] = tool[metric][index].percentageQuestion
+                })
+                return datapoint
+            })
+        }
+    })
+    return buckets
+}
 
 export interface RankingChartDatum {
     // year
@@ -87,9 +116,7 @@ const CustomTooltip = (props: CustomTooltipProps) => {
 }
 
 interface RankingChartProps {
-    buckets: ToolRatiosQuestionData
-    processBlockData: Function
-    processBlockDataOptions: any
+    data: ToolRatiosQuestionData
 }
 
 /*
@@ -99,12 +126,9 @@ we need to call processBlockData() again whenever the metric changes,
 which will not happen unless we call it from within the chart
 
 */
-export const LineChart = ({
-    buckets: unprocessedData,
-    processBlockData,
-    processBlockDataOptions
-}: RankingChartProps) => {
-    const buckets = processBlockData(unprocessedData, processBlockDataOptions)
+export const LineChart = ({ units, data: unprocessedData }: RankingChartProps) => {
+    const allEntities = useEntities()
+    const buckets = getChartData(unprocessedData, { allEntities, units })
 
     const theme = useTheme()
     // const { getString } = useI18n()

@@ -52,4 +52,5 @@ export type Option = {
     id: string
     editions?: string[]
     average?: number
+    label?: string
 }

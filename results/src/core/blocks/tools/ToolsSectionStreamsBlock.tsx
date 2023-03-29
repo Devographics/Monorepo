@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 import Block from 'core/blocks/block/BlockVariant'
 import StreamChart from 'core/charts/generic/StreamChart'
-import { useBucketKeys } from 'core/helpers/useBucketKeys'
+import { useBucketKeys } from 'core/helpers/legends'
 import styled from 'styled-components'
 import { mq, spacing, fontSize } from 'core/theme'
 import sortBy from 'lodash/sortBy'
 import range from 'lodash/range'
 import ToolLabel from 'core/charts/tools/ToolLabel'
 import { useI18n } from 'core/i18n/i18nContext'
-import { useLegends } from '../../helpers/useBucketKeys'
+import { useLegends } from '../../helpers/legends'
 import { groupDataByYears, getTableData } from 'core/helpers/datatables'
 import { BlockComponentProps } from 'core/types'
 import { SectionAllToolsData, ToolQuestionData } from '@devographics/types'
@@ -30,8 +30,7 @@ const ToolsSectionStreamsBlock = ({
     const [current, setCurrent] = useState(null)
     const { translate } = useI18n()
 
-    const chartOptions = TOOLS_OPTIONS
-    const legends = useLegends(block, chartOptions, 'tools')
+    const legends = useLegends({ block, namespace: 'tools' })
 
     const filteredData = data.items.filter(item => item.responses.allEditions.length > 1)
 

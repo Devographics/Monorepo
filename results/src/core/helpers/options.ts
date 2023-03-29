@@ -1,4 +1,4 @@
-import { Edition, Question, Option } from '@devographics/types'
+import { Edition, Question, Option, ToolsOptions, FeaturesOptions } from '@devographics/types'
 import { usePageContext } from 'core/helpers/pageContext'
 
 export const getAllQuestions = (edition: Edition) => {
@@ -15,6 +15,13 @@ export const useOptions = (questionId: string) => {
     if (!question) {
         return []
     }
-    const optionsIds = question.options.map((o: Option) => o.id)
-    return optionsIds
+    if (question.options) {
+        return question.options.map((o: Option) => o.id)
+    } else if (question.template === 'tool') {
+        return Object.values(ToolsOptions)
+    } else if (question.template === 'feature') {
+        return Object.values(FeaturesOptions)
+    } else {
+        return
+    }
 }

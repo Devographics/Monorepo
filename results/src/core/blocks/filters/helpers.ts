@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { getCountryName } from 'core/helpers/countries'
 import cloneDeep from 'lodash/cloneDeep.js'
 import {
     CustomizationDefinition,
@@ -557,9 +556,6 @@ export const getValueLabel = ({
         return getString(`options.tools.${value}.short`)?.t
     } else {
         switch (field.id) {
-            case 'country': {
-                return getCountryName(value as FilterValueString) || value
-            }
             case 'source': {
                 const source = allFilters
                     .find(q => q.id === 'source')
@@ -744,10 +740,10 @@ export const useChartFilters = ({
             : getInitFilters(options)
     )
 
-    const legends = useFilterLegends({
+    const filterLegends = useFilterLegends({
         chartFilters
     })
-    return { chartFilters, setChartFilters, legends }
+    return { chartFilters, setChartFilters, filterLegends }
 }
 
 /*

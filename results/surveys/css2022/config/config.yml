@@ -1,4 +1,4 @@
-translationContexts: [homepage, common, results, how_to_help, state_of_css, state_of_css_2022]
+translationContexts: [homepage, common, results, countries, state_of_css, state_of_css_2022]
 socialMediaImage: social/state-of-css-2021-logo-social.png
 hashtag: '#StateOfCSS'
 surveySlug: css2022
@@ -23,5 +23,4 @@ tshirtDesignerLink: https://chriskirknielsen.com/
 # baseUrl: http://localhost:8001
 baseUrl: http://localhost:9000
 sitemap: ../../../node_src/.logs/css2022/flat_sitemap_full_build.yml
-
 # bannerId: general.css2022.js2022_banner

@@ -1,4 +1,4 @@
-translationContexts: [homepage, common, results, state_of_js, state_of_js_2022]
+translationContexts: [homepage, common, results, countries, state_of_js, state_of_js_2022]
 
 translationLink: https://github.com/StateOfJS/locale-en-US
 capturesUrl: https://assets.devographics.com/captures/js2022

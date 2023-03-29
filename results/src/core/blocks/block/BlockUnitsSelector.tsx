@@ -4,6 +4,7 @@ import ButtonGroup from 'core/components/ButtonGroup'
 import Button from 'core/components/Button'
 import T from 'core/i18n/T'
 import { ChartModes } from '../filters/types'
+import { BucketUnits } from '@devographics/types'
 
 const UnitButton = ({ units, current, onChange, i18nNamespace = 'chart_units' }) => (
     <Button
@@ -19,7 +20,7 @@ const UnitButton = ({ units, current, onChange, i18nNamespace = 'chart_units' })
 const BlockUnitsSelector = ({
     units,
     onChange,
-    options = Object.values(ChartModes),
+    options = [BucketUnits.PERCENTAGE_SURVEY, BucketUnits.PERCENTAGE_QUESTION, BucketUnits.COUNT],
     i18nNamespace
 }) => {
     return (
