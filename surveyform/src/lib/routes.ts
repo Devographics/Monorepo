@@ -11,21 +11,9 @@ export const routes = {
     root: {
       href: "/account",
     },
-    forgottenPassword: {
-      href: "/account/forgotten-password",
-    },
-    resetPassword: {
-      href: "/account/reset-password",
-    },
-    verifyEmail: {
-      href: "/account/verify-email",
-    },
     login: {
       href: "/account/login",
       from: (currentUrl: string) => `/account/login?from=${encodeURIComponent(currentUrl)}`
-    },
-    signup: {
-      href: "/account/signup",
     },
     profile: {
       href: "/account/profile",
