@@ -17,6 +17,7 @@ import {
 import { notFound } from "next/navigation";
 import { initRedis } from "@devographics/core-models/server";
 import { serverConfig } from "~/config/server";
+import { Metadata } from "next";
 
 // TODO: not yet compatible with having dynamic pages down the tree
 // we may have to call generateStaticParams in each static page instead
@@ -24,6 +25,17 @@ import { serverConfig } from "~/config/server";
 // export function generateStaticParams() {
 //   return locales.map((l) => ({ lang: l }));
 // }
+
+export const metadata: Metadata = {
+  title: "Devographics Surveys",
+  description: "State of JavaScript, CSS, GraphQL and friends",
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 1,
+  },
+  // /app/favicon.ico is automatically used as icon
+};
 
 export default async function RootLayout({
   children,

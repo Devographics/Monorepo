@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { captureException } from "@sentry/nextjs";
 import { notFound } from "next/navigation";
 import { EntitiesProvider } from "~/core/components/common/EntitiesContext";
@@ -26,6 +27,50 @@ export async function generateStaticParams() {
     year: String(s.year),
   }));
 }*/
+
+import { getSurveyImageUrl } from "~/surveys/getSurveyImageUrl";
+import { publicConfig } from "~/config/public";
+
+interface SurveyPageServerProps {
+  slug: string;
+  year: string;
+}
+
+// TODO: localized content still uses "next/head", see computeHeadTags
+export async function generateMetadata({
+  params: { slug, year },
+}: {
+  params: SurveyPageServerProps;
+}): Promise<Metadata> {
+  // TODO: it seems we need to call this initialization code on all relevant pages/layouts
+  initRedis(serverConfig().redisUrl);
+  const survey = await mustGetSurvey({ slug, year });
+  const { socialImageUrl, faviconUrl } = survey;
+  const imageUrl = getSurveyImageUrl(survey);
+  let imageAbsoluteUrl = socialImageUrl || imageUrl;
+  const url = publicConfig.appUrl;
+  return {
+    images: {
+      icon: faviconUrl || undefined,
+      shortcut: faviconUrl || undefined,
+    },
+    openGraph: {
+      // @ts-ignore
+      type: "article" as const,
+      url,
+      image: imageAbsoluteUrl,
+    },
+    twitter: {
+      // @ts-ignore
+      card: "summary" as const,
+      image: imageAbsoluteUrl,
+    },
+    alternates: {
+      canonical: url,
+      // we could create alternates for languages too
+    },
+  };
+}
 
 /**
  * TODO: get the list of surveys statically during getStaticParams call
