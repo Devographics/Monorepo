@@ -3,7 +3,6 @@
 // import { STATES } from "meteor/vulcan:accounts";
 // import AccountMessage from "../../users/AccountMessage";
 import SurveyAction from "./SurveyAction";
-import SurveyHeadTags from "../SurveyHeadTags";
 import SurveyMessage from "../SurveyMessage";
 import SurveyCredits from "../SurveyCredits";
 import Translators from "~/core/components/common/Translators";
@@ -23,7 +22,6 @@ const SurveyPageWrapper = ({ imageUrl }: { imageUrl: string }) => {
 
   return (
     <div className="survey-page contents-narrow">
-      <SurveyHeadTags survey={survey} />
       <SurveyMessage survey={survey} />
 
       {resultsUrl && (

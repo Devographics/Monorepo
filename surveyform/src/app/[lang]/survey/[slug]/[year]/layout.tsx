@@ -30,13 +30,13 @@ export async function generateStaticParams() {
 
 import { getSurveyImageUrl } from "~/surveys/getSurveyImageUrl";
 import { publicConfig } from "~/config/public";
+import { getSurveyTitle } from "~/surveys/helpers";
 
 interface SurveyPageServerProps {
   slug: string;
   year: string;
 }
 
-// TODO: localized content still uses "next/head", see computeHeadTags
 export async function generateMetadata({
   params: { slug, year },
 }: {
@@ -49,11 +49,10 @@ export async function generateMetadata({
   const imageUrl = getSurveyImageUrl(survey);
   let imageAbsoluteUrl = socialImageUrl || imageUrl;
   const url = publicConfig.appUrl;
-  return {
-    images: {
-      icon: faviconUrl || undefined,
-      shortcut: faviconUrl || undefined,
-    },
+
+  const meta: Metadata = {
+    title: getSurveyTitle({ survey }),
+    // NOTE: merge between route segments is shallow, you may need to repeat field from layout
     openGraph: {
       // @ts-ignore
       type: "article" as const,
@@ -70,6 +69,13 @@ export async function generateMetadata({
       // we could create alternates for languages too
     },
   };
+  if (faviconUrl) {
+    meta.icons = {
+      icon: faviconUrl,
+      shortcut: faviconUrl,
+    };
+  }
+  return meta;
 }
 
 /**
