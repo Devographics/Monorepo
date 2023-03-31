@@ -49,6 +49,8 @@ function getLocaleId(params: { lang: string }): string | null {
  */
 export async function mustFetchLocale(params: { lang: string }) {
     const loc = await fetchLocaleFromUrl(params)
+    // TODO: this will lead to a 404 if Redis haven't been properly filled with the right locales
+    // we might want to redirect to a specific error page at the root of the app, that do not depend on a specific locale
     if (!loc) return notFound()
     return loc
 }

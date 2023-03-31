@@ -49,7 +49,6 @@ export async function generateMetadata({
       section &&
       stringsRegistry.getString({ localeId, id: getSectionKey(section) });
     title = getSurveyTitle({ survey, sectionTitle });
-    console.log("GOT SECTION", section, sectionTitle);
   } catch (err) {
     console.error("cant get section", err, params);
   }
