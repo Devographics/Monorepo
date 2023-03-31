@@ -26,10 +26,13 @@ export type AllQuestionData =
     | ToolQuestionData
     | FeatureQuestionData
     | ToolRatiosQuestionData
+    | OpinionQuestionData
 
 export interface StandardQuestionData extends QuestionData {
     responses: ResponseData
 }
+
+export interface OpinionQuestionData extends StandardQuestionData {}
 
 export interface OptionsQuestionData extends QuestionData {
     options: OptionData[]

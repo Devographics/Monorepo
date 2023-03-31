@@ -57,14 +57,16 @@ const getNoAnswerKey = (theme: any, translate: any) => ({
 
 export const useLegends = ({
     block,
+    legendIds,
     namespace: providedNamespace,
     addNoAnswer = false
 }: {
     block: BlockDefinition
+    legendIds?: string[]
     namespace?: string
     addNoAnswer?: boolean
 }): BlockLegend[] => {
-    const keys = useOptions(block.id)
+    const keys = legendIds || useOptions(block.id)
 
     if (!keys || keys.length === 0) {
         return []

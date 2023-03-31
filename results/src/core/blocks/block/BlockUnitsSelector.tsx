@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import ButtonGroup from 'core/components/ButtonGroup'
 import Button from 'core/components/Button'
 import T from 'core/i18n/T'
-import { ChartModes } from '../filters/types'
+import { ChartModes } from '../../filters/types'
 import { BucketUnits } from '@devographics/types'
 
 const UnitButton = ({ units, current, onChange, i18nNamespace = 'chart_units' }) => (

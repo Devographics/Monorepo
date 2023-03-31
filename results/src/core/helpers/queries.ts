@@ -5,7 +5,7 @@ import { ResponsesParameters, Filters } from '@devographics/types'
 import { PageContextValue } from 'core/types/context'
 import isEmpty from 'lodash/isEmpty'
 import { usePageContext } from 'core/helpers/pageContext'
-import { FacetItem } from 'core/blocks/filters/types'
+import { FacetItem } from 'core/filters/types'
 
 export const argumentsPlaceholder = '<ARGUMENTS_PLACEHOLDER>'
 

@@ -6,12 +6,8 @@ import { BlockMode, BlockUnits } from '@types/index'
 import { DefaultTheme, useTheme } from 'styled-components'
 import { usePageContext } from 'core/helpers/pageContext'
 import round from 'lodash/round'
-import {
-    CHART_MODE_GRID,
-    CHART_MODE_STACKED,
-    CHART_MODE_GROUPED
-} from 'core/blocks/filters/constants'
-import { ChartModes, FacetItem, FilterItem } from 'core/blocks/filters/types'
+import { CHART_MODE_GRID, CHART_MODE_STACKED, CHART_MODE_GROUPED } from 'core/filters/constants'
+import { ChartModes, FacetItem, FilterItem } from 'core/filters/types'
 import { Bucket } from '@devographics/types'
 
 /*

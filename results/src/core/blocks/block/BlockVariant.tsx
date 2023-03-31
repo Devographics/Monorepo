@@ -15,7 +15,7 @@ import { BlockDefinition } from 'core/types/index'
 import { usePageContext } from 'core/helpers/pageContext'
 import CustomInputTrigger from 'core/blocks/block/CustomInputTrigger'
 import CommentsTrigger from 'core/blocks/block/CommentsTrigger'
-import FiltersTrigger from 'core/blocks/filters/FiltersTrigger'
+import FiltersTrigger from 'core/filters/FiltersTrigger'
 import { BucketUnits } from '@devographics/types'
 
 export interface BlockVariantProps {

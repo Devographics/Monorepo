@@ -1,4 +1,4 @@
-blockType: FeatureExperienceBlock
+blockType: ToolFeatureExperienceBlock
 # dataPath: "dataAPI.survey.${questionId}"
 # keysPath: "dataAPI.survey.${questionId}.experience.keys"
 # entityPath: dataAPI.survey.${questionId}.entity

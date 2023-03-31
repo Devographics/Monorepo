@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import Table from '../../charts/table/Table'
+import Table from '../table/Table'
 import ModalTrigger from 'core/components/ModalTrigger'
 import Button from 'core/components/Button'
 import T from 'core/i18n/T'
