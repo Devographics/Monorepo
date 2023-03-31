@@ -10,10 +10,6 @@
 // generic charts
 import HorizontalBarBlock from 'core/charts/horizontalBar/index'
 import VerticalBarBlock from 'core/charts/verticalBar'
-
-console.log('// VerticalBarBlock')
-console.log(VerticalBarBlock)
-
 import PeopleBlock from 'core/charts/people'
 import ToolFeatureExperienceBlock from 'core/charts/toolFeatureExperience'
 

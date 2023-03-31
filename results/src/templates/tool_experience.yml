@@ -6,65 +6,8 @@ noteId: blocks.tool_experience.note
 blockNamespace: tools
 chartNamespace: tools
 
-# dataPath: dataAPI.survey.${questionId}
-# keysPath: dataAPI.survey.${questionId}.experience.keys
-# entityPath: dataAPI.survey.${questionId}.entity
 bucketKeysName: tools
-# hidden: true
-# enableCustomization: true
 hasComments: true
 hasSponsor: true
 query: allEditionsData
 parameters: { showNoAnswer: true }
-# query: >
-#     dataAPI {
-#         survey(survey: ${surveyId}) {
-#             # fragmentStart
-#             ${questionId}: tool(id: ${questionId}) {
-#                 id
-#                 entity {
-#                     name
-#                     nameClean
-#                     nameHtml
-#                     homepage {
-#                         url
-#                     }
-#                     description
-#                     github {
-#                         name
-#                         url
-#                     }
-#                     npm {
-#                         name
-#                         url
-#                     }
-#                 }
-#                 comments {
-#                     year(year: ${currentYear}) {
-#                         count
-#                     }
-#                 }
-#                 experience(filters: {}, facet: null) {
-#                     keys
-#                     all_years {
-#                         year
-#                         completion {
-#                             total
-#                             count
-#                             percentageSurvey
-#                         }
-#                         facets {
-#                             buckets {
-#                                 id
-#                                 count
-#                                 countDelta
-#                                 percentageSurvey
-#                                 percentageQuestion
-#                             }
-#                         }
-#                     }
-#                 }
-#             }
-#             # fragmentEnd
-#         }
-#     }

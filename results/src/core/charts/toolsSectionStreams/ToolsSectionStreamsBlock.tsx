@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Block from 'core/blocks/block/BlockVariant'
-import StreamChart from 'core/charts/toolFeatureExperience/ToolFeatureStreamChart'
+import StreamChart from 'core/charts/toolsSectionStreams/ToolFeatureStreamChart'
 import styled from 'styled-components'
 import { mq, spacing, fontSize } from 'core/theme'
 import sortBy from 'lodash/sortBy'
@@ -80,7 +80,7 @@ const ToolsSectionStreamsBlock = ({
                     return (
                         <Stream
                             key={itemData.id}
-                            data={itemData}
+                            itemData={itemData}
                             current={controlledCurrent}
                             units={units}
                             legends={legends}
@@ -105,15 +105,12 @@ const Stream = ({ itemData, current, units, legends }: StreamProps) => {
     //     buckets: edition.buckets
     // }))
     const colors = legends.map(key => key.color)
-
     return (
         <StreamItem>
             <StreamChart
                 colorScale={colors}
                 current={current}
-                // for tools only having one year of data, we duplicate the year's data
-                // to be able to use the stream chart.
-                data={itemData.length === 1 ? [itemData[0], itemData[0]] : itemData}
+                data={itemData}
                 keys={legends.map(l => l.id)}
                 bucketKeys={legends}
                 units={units}

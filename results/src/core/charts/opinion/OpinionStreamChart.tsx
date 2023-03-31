@@ -8,7 +8,7 @@ import {
     margin,
     StreamChartProps,
     convertDataForStreamChart
-} from 'core/charts/toolFeatureExperience/ToolFeatureStreamChart'
+} from 'core/charts/toolsSectionStreams/ToolFeatureStreamChart'
 import { BucketUnits, EditionData, OpinionQuestionData } from '@devographics/types'
 
 export const getChartData = (data: OpinionQuestionData, units: BucketUnits) => {

@@ -10,7 +10,7 @@ import styled, { useTheme } from 'styled-components'
 import { useI18n } from 'core/i18n/i18nContext'
 import TooltipComponent from 'core/components/Tooltip'
 import { CloseIcon, DotsIcon } from 'core/icons'
-import TickItemLinks, { getSocialLinks } from 'core/not_used/generic/TickItemLinks'
+import TickItemLinks, { getSocialLinks } from 'core/charts/common/TickItemLinks'
 import Popover from 'core/components/Popover2'
 import { NO_ANSWER } from '@devographics/constants'
 

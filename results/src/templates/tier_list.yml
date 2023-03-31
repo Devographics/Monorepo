@@ -3,44 +3,5 @@ blockType: ToolsTierListBlock
 titleId: blocks.tools_tier_list
 descriptionId: blocks.tools_tier_list.description
 noteId: blocks.tools_tier_list.note
-# dataPath: 'dataAPI.survey.${questionId}'
-# keysPath: 'dataAPI.survey.${questionId}.experience.keys'
 dataPath: 'dataAPI.surveys.${surveyId}.${editionId}.libraries.allTools'
 hasSponsor: true
-# query: >
-#     dataAPI {
-#         survey(survey: ${surveyId}) {
-#               ${questionId}: tools(ids: [${allTools}]) {
-#                 id
-#                 entity {
-#                     name
-#                     nameClean
-#                     nameHtml
-#                     homepage {
-#                         url
-#                     }
-#                     github {
-#                         url
-#                     }
-#                 }
-#                 experience {
-#                     keys
-#                     year(year:${currentYear}) {
-#                         facets {
-#                             buckets{
-#                                 id
-#                                 count
-#                                 percentageQuestion
-#                                 percentageSurvey
-#                             }
-#                         }
-#                         completion {
-#                             count
-#                             total
-#                             percentageSurvey
-#                         }
-#                     }
-#                 }
-#             }
-#         }
-#     }

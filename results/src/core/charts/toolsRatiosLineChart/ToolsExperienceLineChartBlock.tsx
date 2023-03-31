@@ -148,3 +148,5 @@ const LineChartWrapper_ = styled.div`
             }
         `}
 `
+
+export default ToolsExperienceLineChartBlock

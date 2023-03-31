@@ -69,3 +69,5 @@ export const ToolsExperienceMarimekkoBlock = ({
         </Block>
     )
 }
+
+export default ToolsExperienceMarimekkoBlock

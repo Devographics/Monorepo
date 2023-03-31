@@ -10,7 +10,7 @@ import { MODE_GRID } from 'core/filters/constants'
 import { useEntity } from 'core/helpers/entities'
 import { BucketUnits, FeatureQuestionData, ToolQuestionData } from '@devographics/types'
 import { BlockComponentProps } from 'core/types'
-import { ExperienceByYearBarChart } from 'core/not_used/generic/ExperienceByYearBarChart'
+import { ExperienceByYearBarChart } from 'core/charts/toolFeatureExperience/ExperienceByYearBarChart'
 
 export const BAR_THICKNESS = 28
 export const BAR_SPACING = 16

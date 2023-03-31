@@ -16,7 +16,7 @@ import {
 } from 'core/charts/toolsRatiosRanking/ToolsRatiosRankingBlock'
 import { ALL_METRICS } from 'core/helpers/units'
 import ToolLabel from 'core/charts/tools/ToolLabel'
-import HorizontalBarStripes from 'core/not_used/generic/HorizontalBarStripes'
+import HorizontalBarStripes from 'core/charts/horizontalBar/HorizontalBarStripes'
 
 const ToolsLabels = props => {
     const { bars } = props

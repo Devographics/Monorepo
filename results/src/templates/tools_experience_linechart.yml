@@ -1,5 +1,5 @@
 id: '${sectionId}_experience_linechart'
-blockType: ToolsExperienceLineChartBlock
+blockType: ToolsRatiosLineChartBlock
 titleId: blocks.tools_experience_linechart
 descriptionId: blocks.tools_experience_linechart.description
 noteId: blocks.tools_experience_linechart.note
