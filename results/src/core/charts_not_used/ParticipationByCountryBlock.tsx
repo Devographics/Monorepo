@@ -18,12 +18,7 @@ const ParticipationByCountryBlock = ({
 }) => {
     const chartData = data?.responses?.currentEdition
 
-    const {
-        id,
-        mode = 'relative',
-        translateData,
-        chartNamespace = block.blockNamespace ?? block.id
-    } = block
+    const { id, mode = 'relative', translateData, i18nNamespace = block.id } = block
 
     const { completion, buckets } = chartData
     const { total } = completion
@@ -77,7 +72,7 @@ const ParticipationByCountryBlock = ({
                 <ChartContainer fit={false}>
                     <HorizontalBarChart
                         total={total}
-                        i18nNamespace={chartNamespace}
+                        i18nNamespace={i18nNamespace}
                         translateData={translateData}
                         mode={mode}
                         units={units}

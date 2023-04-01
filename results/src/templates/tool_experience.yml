@@ -2,11 +2,8 @@ blockType: ToolFeatureExperienceBlock
 titleId: blocks.tool_experience
 descriptionId: blocks.tool_experience.description
 noteId: blocks.tool_experience.note
-
-blockNamespace: tools
-chartNamespace: tools
-
-bucketKeysName: tools
+i18nNamespace: tools
+# bucketKeysName: tools
 hasComments: true
 hasSponsor: true
 query: allEditionsData

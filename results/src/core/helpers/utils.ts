@@ -1,8 +1,12 @@
-export function indentString(string, count = 1, options = {}) {
+// const parseBold = (s) => s.replace(/\*([^*]+)\*/g, '<b>$1</b>')
+
+// export default parseBold
+
+export function indentString(s: string, count = 1, options = {}) {
     const { indent = ' ', includeEmptyLines = false } = options
 
-    if (typeof string !== 'string') {
-        throw new TypeError(`Expected \`input\` to be a \`string\`, got \`${typeof string}\``)
+    if (typeof s !== 'string') {
+        throw new TypeError(`Expected \`input\` to be a \`string\`, got \`${typeof s}\``)
     }
 
     if (typeof count !== 'number') {
@@ -20,10 +24,12 @@ export function indentString(string, count = 1, options = {}) {
     }
 
     if (count === 0) {
-        return string
+        return s
     }
 
     const regex = includeEmptyLines ? /^/gm : /^(?!\s*$)/gm
 
-    return string.replace(regex, indent.repeat(count))
+    return s.replace(regex, indent.repeat(count))
 }
+
+export const stripHtml = s => s && s.replace(/<([^>]+?)([^>]*?)>(.*?)<\/\1>/gi, '$3')

@@ -46,7 +46,7 @@ const BracketWinsBlock = ({ block, data, keys }: HorizontalBarBlockProps) => {
         mode = 'relative',
         defaultUnits = 'count',
         translateData = true,
-        chartNamespace = block.blockNamespace ?? block.id,
+        i18nNamespace = block.id,
         colorVariant
     } = block
 
@@ -91,7 +91,7 @@ const BracketWinsBlock = ({ block, data, keys }: HorizontalBarBlockProps) => {
         tooltip: barProps => (
             <BarTooltip
                 units={units}
-                i18nNamespace={chartNamespace}
+                i18nNamespace={i18nNamespace}
                 shouldTranslate={translateData}
                 {...barProps}
             />
@@ -111,7 +111,7 @@ const BracketWinsBlock = ({ block, data, keys }: HorizontalBarBlockProps) => {
                         labelId: `options.bracket.${k}`
                     })),
                     translateData,
-                    i18nNamespace: chartNamespace
+                    i18nNamespace: i18nNamespace
                 })
             ]}
             legends={legends}
@@ -122,7 +122,7 @@ const BracketWinsBlock = ({ block, data, keys }: HorizontalBarBlockProps) => {
                     size="l"
                     total={total}
                     buckets={buckets}
-                    i18nNamespace={chartNamespace}
+                    i18nNamespace={i18nNamespace}
                     translateData={translateData}
                     mode={mode}
                     units={units}

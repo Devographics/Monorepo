@@ -1,7 +1,7 @@
 import { useTheme } from 'styled-components'
 import { useI18n } from 'core/i18n/i18nContext'
 import { BlockLegend, BlockDefinition } from 'core/types/block'
-import { stripHtml } from 'core/helpers/stripHtml'
+import { stripHtml } from 'core/helpers/utils'
 import { useOptions } from 'core/helpers/options'
 
 export const getColor = (colorRange, id) => {
@@ -24,37 +24,6 @@ const getNoAnswerKey = (theme: any, translate: any) => ({
     gradientColors: theme.colors.no_answer
 })
 
-// export const useBucketKeys = (bucketKeysId, addNoAnswer = false) => {
-//     const theme = useTheme()
-//     const { translate, getString } = useI18n()
-//     const keysConfig = keys[bucketKeysId]
-//     if (!keysConfig) {
-//         throw new Error(`Could not find bucket keys config for: "${bucketKeysId}"`)
-//     }
-
-//     return useMemo(() => {
-//         let colorRange
-//         if (keysConfig.colorRange) {
-//             colorRange = theme.colors.ranges[keysConfig.colorRange]
-//         }
-
-//         const keys = keysConfig.keys.map(key => {
-//             const label = translate(key.label)
-//             const shortLabelObject = getString(key.shortLabel)
-//             const shortLabel = shortLabelObject.missing ? undefined : shortLabelObject.t
-//             return {
-//                 id: key.id,
-//                 label,
-//                 shortLabel,
-//                 color: getColor(colorRange, key.id)?.color,
-//                 gradientColors: getColor(colorRange, key.id)?.gradient
-//             }
-//         })
-
-//         return addNoAnswer ? [...keys, getNoAnswerKey(theme, translate)] : keys
-//     }, [keysConfig, theme, translate])
-// }
-
 export const useLegends = ({
     block,
     legendIds,
@@ -74,7 +43,7 @@ export const useLegends = ({
     const theme = useTheme()
     const { translate, getString } = useI18n()
 
-    const namespace = providedNamespace ?? block.chartNamespace ?? block.id
+    const namespace = providedNamespace ?? block.i18nNamespace ?? block.id
     const colorRange = theme.colors.ranges[namespace]
     const legends = keys.map(id => {
         const labelKey = `options.${namespace}.${id}`

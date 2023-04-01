@@ -19,7 +19,7 @@ const HorizontalBarBlock = ({ block, data }: HorizontalBarBlockProps) => {
         mode = 'relative',
         defaultUnits = BucketUnits.COUNT,
         translateData,
-        chartNamespace = block.blockNamespace ?? block.id
+        i18nNamespace = block.id
     } = block
 
     const [units, setUnits] = useState(defaultUnits)
@@ -58,9 +58,13 @@ const HorizontalBarBlock = ({ block, data }: HorizontalBarBlockProps) => {
             tables={[
                 getTableData({
                     data: getChartData(data),
-                    valueKeys: ['percentageSurvey', 'percentageQuestion', 'count'],
+                    valueKeys: [
+                        BucketUnits.PERCENTAGE_SURVEY,
+                        BucketUnits.PERCENTAGE_QUESTION,
+                        BucketUnits.COUNT
+                    ],
                     translateData,
-                    i18nNamespace: chartNamespace
+                    i18nNamespace: i18nNamespace
                 })
             ]}
             block={block}
@@ -81,7 +85,7 @@ const HorizontalBarBlock = ({ block, data }: HorizontalBarBlockProps) => {
                     <HorizontalBarChart
                         total={total}
                         series={[{ name: 'default', data }]}
-                        i18nNamespace={chartNamespace}
+                        i18nNamespace={i18nNamespace}
                         translateData={translateData}
                         mode={mode}
                         units={units}

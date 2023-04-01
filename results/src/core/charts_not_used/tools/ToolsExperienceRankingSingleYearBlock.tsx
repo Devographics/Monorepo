@@ -66,7 +66,7 @@ const ToolsExperienceRankingSingleYearBlock = ({
         mode = 'relative',
         defaultUnits = 'satisfaction_percentage',
         translateData,
-        chartNamespace: i18nNamespace = block.blockNamespace ?? block.id
+        i18nNamespace = block.id
     } = block
 
     const [units, setUnits] = useState(defaultUnits)

@@ -20,7 +20,7 @@ const VerticalBarBlock = ({ block, data, context }: VerticalBarBlockProps) => {
     const {
         defaultUnits = BucketUnits.PERCENTAGE_SURVEY,
         translateData,
-        chartNamespace = block.blockNamespace ?? block.id
+        i18nNamespace = block.id
     } = block
 
     const { width } = context
@@ -66,7 +66,8 @@ const VerticalBarBlock = ({ block, data, context }: VerticalBarBlockProps) => {
                     // legends: bucketKeys,
                     data: getChartData(data),
                     valueKeys: MAIN_UNITS,
-                    translateData
+                    translateData,
+                    i18nNamespace: i18nNamespace
                 })
             ]}
             units={units}
@@ -90,7 +91,7 @@ const VerticalBarBlock = ({ block, data, context }: VerticalBarBlockProps) => {
                     <VerticalBarChart
                         legends={chartLegends}
                         total={total}
-                        i18nNamespace={chartNamespace}
+                        i18nNamespace={i18nNamespace}
                         translateData={translateData}
                         units={units}
                         viewportWidth={width}

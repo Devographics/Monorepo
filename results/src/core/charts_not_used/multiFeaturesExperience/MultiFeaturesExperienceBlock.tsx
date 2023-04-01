@@ -23,7 +23,7 @@ const MultiFeaturesExperienceBlock = ({
     block,
     keys,
     data,
-    chartNamespace = 'features',
+    i18nNamespace = 'features',
     units: defaultUnits = 'percentageQuestion'
 }) => {
     const [units, setUnits] = useState(defaultUnits)
@@ -72,7 +72,7 @@ const MultiFeaturesExperienceBlock = ({
                                     colorMapping={bucketKeys}
                                     units={units}
                                     applyEmptyPatternTo="never_heard"
-                                    i18nNamespace={chartNamespace}
+                                    i18nNamespace={i18nNamespace}
                                 />
                             </ChartContainer>
                         </RowChart>

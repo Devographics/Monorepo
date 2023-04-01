@@ -2,6 +2,7 @@ import { BlockUnits, BlockLegend, BucketItem } from '@types/index'
 import { Entity, ResponseEditionData } from '@devographics/types'
 import { isPercentage } from 'core/helpers/units'
 import get from 'lodash/get'
+import { NO_ANSWER } from '@devographics/constants'
 
 export interface TableBucketItem {
     id: string | number
@@ -98,7 +99,8 @@ export const getTableData = (params: TableParams): TableData => {
             id: 'label',
             translateData
         }
-        firstColumn.labelId = `options.${i18nNamespace}.${row.id}`
+        firstColumn.labelId =
+            row.id === NO_ANSWER ? 'charts.no_answer' : `options.${i18nNamespace}.${row.id}`
         firstColumn.label = row.label ?? row?.entity?.name
         const columns: TableDataCell[] = []
 

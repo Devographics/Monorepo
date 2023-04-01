@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { mq, spacing, fontSize, color } from 'core/theme'
 import { stripMarkdown } from 'core/helpers/stripMarkdown'
-import { stripHtml } from 'core/helpers/stripHtml'
+import { stripHtml } from 'core/helpers/utils'
 import config from 'Config/config.yml'
 import T from 'core/i18n/T'
 

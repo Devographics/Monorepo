@@ -89,7 +89,7 @@ const PeopleBlock = ({ block, data, controlledUnits, isCustom }: PeopleBlockProp
         mode = 'relative',
         defaultUnits = 'count',
         translateData,
-        chartNamespace = block.blockNamespace ?? block.id,
+        i18nNamespace = block.id,
         colorVariant
     } = block
 
@@ -119,7 +119,7 @@ const PeopleBlock = ({ block, data, controlledUnits, isCustom }: PeopleBlockProp
                     data: buckets,
                     valueKeys: ['percentageSurvey', 'percentageQuestion', 'count'],
                     translateData,
-                    i18nNamespace: chartNamespace
+                    i18nNamespace: i18nNamespace
                 })
             ]}
             block={block}

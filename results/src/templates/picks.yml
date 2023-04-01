@@ -1,5 +1,5 @@
 blockType: PicksBlock
-blockNamespace: picks
+i18nNamespace: picks
 wrapBlock: false
 disableExport: true
 dataPath: 'internalAPI.entity_${questionId}'

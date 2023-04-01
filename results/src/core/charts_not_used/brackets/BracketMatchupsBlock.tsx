@@ -24,7 +24,7 @@ const BracketMatchupsBlock = ({ block, data }: HorizontalBarBlockProps) => {
         mode = 'relative',
         defaultUnits = 'percentage',
         translateData = true,
-        chartNamespace = block.blockNamespace,
+        i18nNamespace = block.id,
         colorVariant
     } = block
 
@@ -69,11 +69,11 @@ const BracketMatchupsBlock = ({ block, data }: HorizontalBarBlockProps) => {
                     data: heatmapBuckets,
                     valueKeys: keys?.map(k => ({
                         id: `${k}___percentage`,
-                        labelId: `options.${chartNamespace}.${k}`,
+                        labelId: `options.${i18nNamespace}.${k}`,
                         isPercentage: true
                     })),
                     translateData,
-                    i18nNamespace: chartNamespace
+                    i18nNamespace: i18nNamespace
                 })
             ]}
             block={block}
@@ -124,7 +124,7 @@ const BracketMatchupsBlock = ({ block, data }: HorizontalBarBlockProps) => {
                         renderTick: tick => (
                             <TickItem
                                 tickRotation={-45}
-                                i18nNamespace={chartNamespace}
+                                i18nNamespace={i18nNamespace}
                                 shouldTranslate={translateData}
                                 entity={buckets.find(b => b.id === tick.value)?.entity}
                                 {...tick}
@@ -143,7 +143,7 @@ const BracketMatchupsBlock = ({ block, data }: HorizontalBarBlockProps) => {
                         // legendOffset: -40,
                         renderTick: tick => (
                             <TickItem
-                                i18nNamespace={chartNamespace}
+                                i18nNamespace={i18nNamespace}
                                 shouldTranslate={translateData}
                                 entity={buckets.find(b => b.id === tick.value)?.entity}
                                 {...tick}

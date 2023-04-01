@@ -2,9 +2,7 @@ titleId: sections.${categoryId}.title
 blockType: MultiFeaturesExperienceBlock
 dataPath: 'dataAPI.survey.${questionId}'
 keysPath: 'dataAPI.survey.${questionId}.0.experience.keys'
-blockNamespace: features
-chartNamespace: features
-# enableCustomization: true
+i18nNamespace: features
 hasSponsor: true
 # query: >
 #     dataAPI {

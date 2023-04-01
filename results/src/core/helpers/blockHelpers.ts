@@ -8,7 +8,7 @@ const { siteTitle, capturesUrl, hashtag, year } = config
 export const replaceOthers = s => s?.replace('_others', '.others')
 
 export const getBlockKey = block => {
-    const namespace = block.blockNamespace ?? 'blocks'
+    const namespace = block.sectionId === 'user_info' ? 'user_info' : 'blocks'
     const blockId = replaceOthers(block?.intlId || block?.id)
     return `${namespace}.${blockId}`
 }

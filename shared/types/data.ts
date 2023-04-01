@@ -107,6 +107,13 @@ export enum BucketUnits {
     PERCENTAGE_BUCKET = 'percentageBucket'
 }
 
+export enum OtherPercentages {
+    WOULD_NOT_USE_PERCENTAGE = 'would_not_use_percentage',
+    NOT_INTERESTED_PERCENTAG='not_interested_percentage',
+    WOULD_USE_PERCENTAGE='would_use_percentage',
+    INTERESTED_PERCENTAGE='interested_percentage',
+}
+
 export type BucketData = {
     [key in BucketUnits]?: number
 }

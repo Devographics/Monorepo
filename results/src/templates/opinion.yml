@@ -1,5 +1,5 @@
 blockType: OpinionBlock
 translateData: true
-blockNamespace: opinions
+i18nNamespace: opinions
 hasSponsor: true
 query: allEditionsData

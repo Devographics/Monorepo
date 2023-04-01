@@ -147,6 +147,8 @@ export const pageFromConfig = async (page, pageIndex, editionVariables) => {
 
                     blockVariant.path = `${page.path}${blockVariant.id}/`
 
+                    blockVariant.sectionId = page.id
+
                     variants.push(blockVariant)
                 }
 

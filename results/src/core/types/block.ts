@@ -19,42 +19,38 @@ export type BlockMode = 'absolute' | 'relative'
 
 export interface BlockComponentProps {
     block: BlockDefinition
-    keys?: string[]
     context: PageContextValue
-    chartNamespace?: string
-    defaultUnits?: BucketUnits
-    // 'data' property is defined by each specific block
 }
 
 export interface BlockDefinition {
-    parameters: ResponsesParameters
     id: string
     template?: string
     blockType?: string
     tabId?: string
     titleId?: string
-    blockName?: string
-    filters?: FilterType[]
+    descriptionId?: string
+    noteId?: string
 
-    // config
-    mode?: BlockMode
-    blockNamespace?: string
-    chartNamespace?: string
-    colorVariant?: string
-    overrides?: object
+    defaultUnits?: BucketUnits
 
     // data
     query?: string
     variables?: any
-    dataPath?: string
-    keysPath?: string
-    entityPath?: string
-    defaultUnits?: BucketUnits
+    parameters: ResponsesParameters
+    filters?: FilterType[]
+
+    // config
+    mode?: BlockMode
+    // will default to the id of the chart
+    i18nNamespace?: string
+    colorVariant?: string
+    overrides?: object
 
     // booleans
     legendPosition?: 'bottom' | 'top'
     translateData?: boolean
     hasSponsor?: boolean
+    hasComments?: boolean
 }
 
 type FilterType = 'filters' | 'facets'
