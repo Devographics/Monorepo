@@ -4,7 +4,7 @@ import { BlockContext } from 'core/blocks/types'
 import Block from 'core/blocks/block/BlockVariant'
 // @ts-ignore
 import ChartContainer from 'core/charts/ChartContainer'
-import { RadarChart, RadarChartSerie } from 'core/not_used/generic/RadarChart'
+import { RadarChart, RadarChartSerie } from 'core/charts_not_used/generic/RadarChart'
 // @ts-ignore
 import ButtonGroup from 'core/components/ButtonGroup'
 // @ts-ignore

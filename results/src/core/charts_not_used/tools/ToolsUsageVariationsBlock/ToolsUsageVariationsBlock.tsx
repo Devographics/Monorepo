@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { BlockContext } from 'core/blocks/types'
 // @ts-ignore
 import Block from 'core/blocks/block/BlockVariant'
-import { UsageVariationsChart } from 'core/not_used/generic/UsageVariationsChart'
+import { UsageVariationsChart } from 'core/charts_not_used/generic/UsageVariationsChart'
 import { keys } from 'core/bucket_keys'
 import { ToolsExperienceMatrices } from '@types/survey_api/matrices'
 import { DimensionId } from './types'
