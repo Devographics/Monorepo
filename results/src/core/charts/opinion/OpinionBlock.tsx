@@ -31,7 +31,7 @@ export const OpinionBlock = ({
 
     const [current, setCurrent] = useState<OpinionBucket['id'] | null>(null)
 
-    const legends = useLegends({ block, namespace: 'opinions' })
+    const legends = useLegends({ block, namespace: block.i18nNamespace })
 
     const years = chartData.map(edition => edition.year)
     const allBuckets = chartData

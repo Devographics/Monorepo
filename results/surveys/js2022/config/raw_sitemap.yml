@@ -114,7 +114,6 @@
         variants:
             - id: years_of_experience
               facet: user_info__yearly_salary
-              blockNamespace: user_info
               tabId: tabs.by_salary
               template: demographics # facet
               parameters: { facetSort: { order: asc, property: mean }, facetCutoff: 100 }
@@ -132,7 +131,6 @@
         variants:
             - id: higher_education_degree
               facet: user_info__gender
-              blockNamespace: user_info
               tabId: tabs.by_gender
               template: demographics # facet
               parameters: { facetSort: { order: asc, property: mean }, facetCutoff: 100 }
@@ -143,18 +141,15 @@
         variants:
             - id: yearly_salary
               facet: user_info__gender
-              blockNamespace: user_info
               tabId: tabs.by_gender
               template: demographics # facet
               parameters: { facetSort: { order: desc, property: mean }, facetCutoff: 100 }
             - id: yearly_salary
               facet: user_info__country
-              blockNamespace: user_info
               tabId: tabs.by_country
               template: demographics # facet
               parameters: { facetSort: { order: desc, property: mean }, facetCutoff: 100 }
             # - id: yearly_salary_by_degree
-            #   blockNamespace: user_info
             #   tabId: tabs.by_degree
             #   template: demographics
             #   variables:
@@ -162,7 +157,6 @@
             #     facet: higher_education_degree
             #     parameters: {facetSort: {order: desc, property: mean}, facetCutoff: 100}
             # - id: yearly_salary_by_experience
-            #   blockNamespace: user_info
             #   tabId: tabs.by_experience
             #   template: demographics
             #   variables:
@@ -181,7 +175,6 @@
         variants:
             - id: gender
               facet: user_info__country
-              blockNamespace: user_info
               tabId: tabs.by_country
               template: demographics # facet
               parameters:
@@ -195,7 +188,6 @@
         variants:
             - id: race_ethnicity
               facet: user_info__years_of_experience
-              blockNamespace: user_info
               tabId: tabs.by_experience
               template: demographics # facet
               parameters: { facetSort: { order: asc, property: mean }, limit: 11, facetCutoff: 100 }
@@ -228,7 +220,6 @@
 
       - id: knowledge_score
         template: demographics
-        blockNamespace: features
 
       - id: features_resources
         items: [fm-javascript]
@@ -783,11 +774,11 @@
 
       - id: libraries
         tabId: tabs.main_answers
-        blockNamespace: tools_others
+        i18nNamespace: tools_others
         template: multiple_options
         variants:
             - id: libraries_others
-              blockNamespace: tools_others
+              i18nNamespace: tools_others
               template: multiple_options
               defaultUnits: count
               parameters: { limit: 15 }
@@ -800,11 +791,11 @@
       - id: date_management
         year: 2022
         tabId: tabs.main_answers
-        blockNamespace: tools_others
+        i18nNamespace: tools_others
         template: multiple_options
         variants:
             - id: date_management_others
-              blockNamespace: tools_others
+              i18nNamespace: tools_others
               template: multiple_options
               defaultUnits: count
               parameters: { limit: 5 }
@@ -812,11 +803,11 @@
       - id: data_visualization
         year: 2022
         tabId: tabs.main_answers
-        blockNamespace: tools_others
+        i18nNamespace: tools_others
         template: multiple_options
         variants:
             - id: data_visualization_others
-              blockNamespace: tools_others
+              i18nNamespace: tools_others
               template: multiple_options
               defaultUnits: count
               parameters: { limit: 5 }
@@ -824,11 +815,11 @@
       - id: data_fetching
         year: 2022
         tabId: tabs.main_answers
-        blockNamespace: tools_others
+        i18nNamespace: tools_others
         template: multiple_options
         variants:
             - id: data_fetching_others
-              blockNamespace: tools_others
+              i18nNamespace: tools_others
               template: multiple_options
               defaultUnits: count
               parameters: { limit: 10 }
@@ -836,22 +827,22 @@
       - id: backend_frameworks
         year: 2022
         tabId: tabs.main_answers
-        blockNamespace: tools_others
+        i18nNamespace: tools_others
         template: multiple_options
         variants:
             - id: backend_frameworks_others
-              blockNamespace: tools_others
+              i18nNamespace: tools_others
               template: multiple_options
               defaultUnits: count
               parameters: { limit: 10 }
 
       - id: utilities
         tabId: tabs.main_answers
-        blockNamespace: tools_others
+        i18nNamespace: tools_others
         template: multiple_options
         variants:
             - id: utilities_others
-              blockNamespace: tools_others
+              i18nNamespace: tools_others
               template: multiple_options
               defaultUnits: count
               parameters: { limit: 10 }
@@ -861,33 +852,33 @@
 
       - id: runtimes
         tabId: tabs.main_answers
-        blockNamespace: tools_others
+        i18nNamespace: tools_others
         template: multiple_options
         variants:
             - id: runtimes_others
-              blockNamespace: tools_others
+              i18nNamespace: tools_others
               template: multiple_options
               defaultUnits: count
               parameters: { limit: 10 }
 
       - id: edge_runtimes
         tabId: tabs.main_answers
-        blockNamespace: tools_others
+        i18nNamespace: tools_others
         template: multiple_options
         variants:
             - id: edge_runtimes_others
-              blockNamespace: tools_others
+              i18nNamespace: tools_others
               template: multiple_options
               defaultUnits: count
               parameters: { limit: 10 }
 
       - id: javascript_flavors
         tabId: tabs.main_answers
-        blockNamespace: tools_others
+        i18nNamespace: tools_others
         template: multiple_options
         variants:
             - id: javascript_flavors_others
-              blockNamespace: tools_others
+              i18nNamespace: tools_others
               template: multiple_options
               defaultUnits: count
               parameters: { limit: 10 }
@@ -899,11 +890,11 @@
 
       - id: non_js_languages
         tabId: tabs.main_answers
-        blockNamespace: tools_others
+        i18nNamespace: tools_others
         template: multiple_options
         variants:
             - id: non_js_languages_others
-              blockNamespace: tools_others
+              i18nNamespace: tools_others
               template: multiple_options
               defaultUnits: count
               parameters: { limit: 15 }
@@ -919,27 +910,20 @@
 
       - id: js_ts_balance
         tabId: tabs.main_answers
-        blockNamespace: usage
-        chartNamespace: js_ts_balance
         translateData: true
         template: single_option
 
       - id: usage_type
-        blockNamespace: usage
-        chartNamespace: usage_type
         translateData: true
         template: single_option
 
       - id: what_do_you_use_js_for
         tabId: tabs.main_answers
-        blockNamespace: usage
-        chartNamespace: what_do_you_use_js_for
         translateData: true
         template: multiple_options
         variants:
             - id: what_do_you_use_js_for_others
               defaultUnits: count
-              blockNamespace: usage
               tabId: tabs.other_answers
               chartNamespace: what_do_you_use_js_for
               translateData: true
@@ -947,15 +931,12 @@
               parameters: { limit: 10 }
 
       - id: industry_sector
-        blockNamespace: usage
-        chartNamespace: industry_sector
         tabId: tabs.main_answers
         template: multiple_options
         translateData: true
         variants:
             - id: industry_sector_others
               defaultUnits: count
-              blockNamespace: usage
               chartNamespace: industry_sector
               tabId: tabs.other_answers
               template: multiple_options
@@ -963,16 +944,12 @@
               parameters: { limit: 15 }
 
       - id: js_app_patterns
-        blockNamespace: usage
-        chartNamespace: js_app_patterns
         tabId: tabs.main_answers
         template: multiple_options
         translateData: true
         variants:
             - id: js_app_patterns_others
               defaultUnits: count
-              blockNamespace: usage
-              chartNamespace: js_app_patterns
               tabId: tabs.other_answers
               template: multiple_options
               translateData: true
@@ -988,16 +965,12 @@
       - template: page_introduction
 
       - id: first_steps
-        blockNamespace: resources
-        chartNamespace: first_steps
         tabId: tabs.main_answers
         template: multiple_options
         translateData: true
         variants:
             - id: first_steps_others
               defaultUnits: count
-              blockNamespace: resources
-              chartNamespace: first_steps
               tabId: tabs.other_answers
               template: multiple_options_freeform
               translateData: true
@@ -1009,29 +982,21 @@
             url: https://sarahdrasnerdesign.com/
 
       - id: blogs_news_magazines
-        blockNamespace: resources
-        chartNamespace: blogs_news_magazines
         tabId: tabs.main_answers
         template: multiple_options
         variants:
             - id: blogs_news_magazines_others
               defaultUnits: count
-              blockNamespace: resources
-              chartNamespace: blogs_news_magazines
               tabId: tabs.other_answers
               template: multiple_options_freeform
               parameters: { limit: 15 }
 
       - id: sites_courses
-        blockNamespace: resources
-        chartNamespace: sites_courses
         tabId: tabs.main_answers
         template: multiple_options
         variants:
             - id: sites_courses_others
               defaultUnits: count
-              blockNamespace: resources
-              chartNamespace: sites_courses
               tabId: tabs.other_answers
               template: multiple_options_freeform
               parameters: { limit: 15 }
@@ -1042,15 +1007,11 @@
             url: https://tanstack.com/
 
       - id: podcasts
-        blockNamespace: resources
-        chartNamespace: podcasts
         tabId: tabs.main_answers
         template: multiple_options
         variants:
             - id: podcasts_others
               defaultUnits: count
-              blockNamespace: resources
-              chartNamespace: podcasts
               tabId: tabs.other_answers
               template: multiple_options_freeform
               parameters: { limit: 15 }
@@ -1058,16 +1019,12 @@
       - id: video_creators
         blockFilters: [filters]
         blockType: PeopleBlock
-        blockNamespace: resources
-        chartNamespace: video_creators
         tabId: tabs.main_answers
         template: multiple_options
         variants:
             - id: video_creators_others
               blockType: PeopleBlock
               defaultUnits: count
-              blockNamespace: resources
-              chartNamespace: video_creators
               tabId: tabs.other_answers
               template: multiple_options_freeform
               parameters: { limit: 15 }
@@ -1075,7 +1032,6 @@
       - id: people_others
         blockFilters: [filters]
         defaultUnits: count
-        blockNamespace: resources
         chartNamespace: people
         template: multiple_options_freeform
         blockType: PeopleBlock
@@ -1083,14 +1039,11 @@
 
       - id: other_surveys
         defaultUnits: count
-        blockNamespace: resources
-        chartNamespace: other_surveys
         tabId: tabs.main_answers
         template: multiple_options
         variants:
             - id: other_surveys_others
               defaultUnits: count
-              blockNamespace: resources
               chartNamespace: other_surveys
               tabId: tabs.other_answers
               template: multiple_options_freeform
@@ -1124,16 +1077,12 @@
       - id: top_js_pain_points
         translateData: true
         defaultUnits: count
-        blockNamespace: opinions
-        chartNamespace: top_js_pain_points
         tabId: tabs.main_answers
         template: multiple_options
         variants:
             - id: top_js_pain_points_others
               translateData: true
               defaultUnits: count
-              blockNamespace: opinions
-              chartNamespace: top_js_pain_points
               tabId: tabs.other_answers
               template: multiple_options_freeform
               parameters: { cutoff: 5 }
@@ -1141,15 +1090,12 @@
       - id: top_currently_missing_from_js
         translateData: true
         defaultUnits: count
-        blockNamespace: opinions
-        chartNamespace: top_currently_missing_from_js
         tabId: tabs.main_answers
         template: multiple_options
         variants:
             - id: top_currently_missing_from_js_others
               translateData: true
               defaultUnits: count
-              blockNamespace: opinions
               chartNamespace: top_currently_missing_from_js
               tabId: tabs.other_answers
               template: multiple_options_freeform

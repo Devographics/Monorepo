@@ -24,6 +24,7 @@ export interface BlockComponentProps {
 
 export interface BlockDefinition {
     id: string
+    sectionId: string
     template?: string
     blockType?: string
     tabId?: string
