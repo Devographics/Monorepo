@@ -57,7 +57,18 @@ export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
         {
             $set: {
                 [`${axis1DbPath}`]: {
-                    $cond: [{ $not: [`$${axis1DbPath}`] }, NO_ANSWER, `$${axis1DbPath}`]
+                    $cond: [
+                        {
+                            $and: [
+                                { $not: [`$${axis1DbPath}`] },
+                                {
+                                    $ne: [`$${axis1DbPath}`, 0]
+                                }
+                            ]
+                        },
+                        NO_ANSWER,
+                        `$${axis1DbPath}`
+                    ]
                 }
             }
         },
