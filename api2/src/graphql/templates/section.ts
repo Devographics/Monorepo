@@ -33,6 +33,7 @@ export const generateSectionType = ({
     return {
         path,
         typeName,
+        typeType: 'section',
         typeDef: `type ${typeName} {
     ${questions
         .map((question: ParsedQuestionExt) => {

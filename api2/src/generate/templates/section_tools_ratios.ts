@@ -47,7 +47,9 @@ export const section_tools_ratios: TemplateFunction = ({ survey, section, questi
         typeDef: `type ${fieldTypeName} {
             ids: [String]
             years: [Int]
-            items(filters: ${graphqlize(survey.id)}Filters): [ToolRatiosItemData]
+            items(parameters: ToolRatiosParameters, filters: ${graphqlize(
+                survey.id
+            )}Filters): [ToolRatiosItemData]
         }`,
         resolverMap: getResolverMap({ survey, sectionTools })
     }

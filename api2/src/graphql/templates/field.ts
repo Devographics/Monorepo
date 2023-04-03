@@ -16,7 +16,7 @@ export const generateFieldType = ({ question }: { question: ParsedQuestionExt })
 
     return {
         typeName: fieldTypeName,
-        typeType: 'question',
+        typeType: 'field_generated',
         typeDef: `type ${fieldTypeName} {
     responses(filters: ${getFiltersTypeName(
         question.surveyId

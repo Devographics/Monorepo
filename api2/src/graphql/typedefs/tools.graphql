@@ -27,6 +27,10 @@ type ToolRatiosItemResponseEditionData {
     percentageQuestion: Float
 }
 
+input ToolRatiosParameters {
+    enableCache: Boolean
+}
+
 input ToolFilters {
     eq: ToolExperienceID
     in: [ToolExperienceID]
