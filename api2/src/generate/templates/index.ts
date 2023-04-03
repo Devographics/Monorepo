@@ -21,3 +21,5 @@ export * from './completion_stats'
 export * from './knowledge_score'
 export * from './source'
 export * from './country'
+
+export * from './data_explorer'

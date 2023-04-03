@@ -1,5 +1,3 @@
-#importXXX "./surveys.graphql"
-
 #import "./entity.graphql"
 #import "./completion.graphql"
 #import "./mdn.graphql"
@@ -8,6 +6,7 @@
 #import "./tools.graphql"
 #import "./features.graphql"
 #import "./comments.graphql"
+#import "./data_explorer.graphql"
 
 scalar JSON
 scalar JSONObject
