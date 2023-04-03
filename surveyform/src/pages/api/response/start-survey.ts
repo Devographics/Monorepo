@@ -10,6 +10,8 @@ import { connectToAppDb } from "~/lib/server/mongoose/connection";
 import { connectToRedis } from "~/lib/server/redis";
 import { userFromReq } from "~/lib/server/context/userContext";
 import { SurveyEdition, SURVEY_OPEN, SURVEY_PREVIEW } from "@devographics/core-models";
+// TODO: skip the graphql part by calling the mutator directly
+// import {createMutator} from "@devographics/crud/server"
 
 export default async function responseStartSurveyHandler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== "POST") {
@@ -17,13 +19,11 @@ export default async function responseStartSurveyHandler(req: NextApiRequest, re
     }
     await connectToAppDb()
     connectToRedis()
+    // TODO: we have created an helper for this part to prepare migration to Next 13 route handlers
     const user = await userFromReq(req)
     if (!user) {
-        // TODO: check also ownership of the response
-        // (currently the graphql resolver also checks permissions, but it should progressively be done here)
         return res.status(401).send({ error: "Not authenticated" })
     }
-
     // TODO: we have already created an helper for this part to prepare migration to Next 13 route handlers
     const surveyId = req.query["surveyId"] as string
     if (!surveyId) {

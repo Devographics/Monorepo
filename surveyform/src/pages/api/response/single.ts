@@ -1,3 +1,6 @@
+// TODO: get the response directly in a React Server Component
+// instead of an API endpoint (or even route handler)
+// as it is never called on demand
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 import gql from "graphql-tag"
