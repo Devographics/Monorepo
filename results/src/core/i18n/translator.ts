@@ -5,7 +5,7 @@ import {
     LegacyTranslator,
     StringTranslator,
     StringTranslatorResult
-} from '@types/index'
+} from 'core/types/index'
 /*
 
 Returns the translation string object

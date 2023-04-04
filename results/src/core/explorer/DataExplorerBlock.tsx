@@ -1,23 +1,21 @@
 import React, { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
-import { mq, spacing, fontSize } from 'core/theme'
+import { spacing } from 'core/theme'
 import T from 'core/i18n/T'
 import DataExplorer from './DataExplorer'
-import { ExplorerData } from './types'
+import { ExplorerData } from '@devographics/types'
 // import Selector from './Selector'
 import dataExplorerTemplate from '../../templates/data_explorer.yml'
 import { usePageContext } from 'core/helpers/pageContext'
-import { getFacetPath, getFacetSegments, getQuery, runQuery, formatData } from './data'
-import { BlockDefinition } from '@types/index'
+import { getFacetPath, getAxisSegments, getQuery, runQuery } from './data'
+import { BlockDefinition } from 'core/types/index'
 import last from 'lodash/last'
-import BlockSponsor from 'core/blocks/block/sponsor_chart/BlockSponsor'
 import {
     MOBILE_BREAKPOINT_WIDTH,
     ISSUES_URL,
     RESPONDENTS_PER_DOT,
     PERCENTS_PER_DOT,
     MAX_DOT_PER_CELL_LINE,
-    SUPPORT_MULTIPLE_YEARS,
     SHOW_CELL_COUNTS,
     PERCENTAGE_UNIT
 } from './constants'
@@ -26,6 +24,7 @@ import { useLocation } from '@reach/router'
 import { getQuestionLabel } from './labels'
 import { useI18n } from 'core/i18n/i18nContext'
 import { useWindowDimensions } from './helpers'
+import { useEntities } from 'core/helpers/entities'
 
 const DataExplorerBlock = ({
     block,
@@ -36,37 +35,39 @@ const DataExplorerBlock = ({
     data: ExplorerData
     pageData: any
 }) => {
+    console.log(block)
+    console.log(defaultData)
     const { getString } = useI18n()
     const { width } = useWindowDimensions()
 
     const location = useLocation()
     const context = usePageContext()
-    const surveyType = context.currentSurvey.slug
+    const surveyType = context.currentSurvey.id
     const surveyYear = context.currentEdition.year
-    const entities = [].concat(pageData?.internalAPI?.features, pageData?.internalAPI?.tools)
+
+    const entities = useEntities()
 
     const search = new URLSearchParams(location.search)
     const queryParams = Object.fromEntries(search.entries())
 
-    const formattedData = formatData(defaultData)
-    const lastYear = last(formattedData.all_years)?.year
+    const lastYear = last(defaultData.items)?.year
 
-    const defaultFacet1 = block?.variables?.facet1
-    const segments1 = getFacetSegments(defaultFacet1)
-    const defaultFacet2 = block?.variables?.facet2
-    const segments2 = getFacetSegments(defaultFacet2)
-    const defaultXSection = segments1.sectionName
-    const defaultXField = segments1.fieldName
-    const defaultYSection = segments2.sectionName
-    const defaultYField = segments2.fieldName
+    const defaultXAxis = block?.variables?.xAxis
+    const xSegments = getAxisSegments(defaultXAxis)
+    const defaultYAxis = block?.variables?.yAxis
+    const ySegments = getAxisSegments(defaultYAxis)
+    const defaultXSection = xSegments.sectionId
+    const defaultXField = xSegments.questionId
+    const defaultYSection = ySegments.sectionId
+    const defaultYField = ySegments.questionId
     const defaultQuery = getQuery(dataExplorerTemplate.query, {
         surveyType,
-        facet1: defaultFacet1,
-        facet2: defaultFacet2,
+        axis1: defaultXAxis,
+        axis2: defaultYAxis,
         currentYear: surveyYear
     })
 
-    const [data, setData] = useState(formattedData)
+    const [data, setData] = useState(defaultData)
     const [xSection, setxSection] = useState(queryParams.xSection || defaultXSection)
     const [xField, setxField] = useState(queryParams.xField || defaultXField)
     const [ySection, setySection] = useState(queryParams.ySection || defaultYSection)
@@ -134,6 +135,7 @@ const DataExplorerBlock = ({
         yAxisLabel,
         lastYear
     }
+    console.log(stateStuff)
 
     useEffect(() => {
         if (useMobileLayout) {
@@ -202,13 +204,14 @@ const DataExplorerBlock = ({
                 throw new Error('GATSBY_DATA_API_URL env variable is not set')
             }
             const result = await runQuery(url, query, 'ExplorerQuery')
-            const formattedData = formatData(result.survey.explorer)
-            setData(formattedData)
+            console.log('// result')
+            console.log(result)
+            setData(result.survey.explorer)
             setIsLoading(false)
         }
 
         if (xField && yField) {
-            getData()
+            // getData()
         }
     }, [xField, yField])
 

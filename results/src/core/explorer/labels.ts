@@ -1,3 +1,4 @@
+import { NO_ANSWER } from '@devographics/constants'
 import { Entity } from '@types/index'
 
 export const getSectionLabel = ({ getString, id }) => {
@@ -34,19 +35,16 @@ export const getQuestionLabel = ({
 
 export const getOptionLabel = ({
     getString,
-    sectionId,
     questionId,
-    optionId,
-    isShort = false
+    optionId
 }: {
     getString: any
-    sectionId: string
     questionId: string
     optionId: string
-    isShort: boolean
 }) => {
-    const middleSegment = sectionId === 'demographics' ? questionId : sectionId
-    const key = `options.${middleSegment}.${optionId}${isShort ? '.short' : ''}`
+    const key = optionId === NO_ANSWER ? 'charts.no_answer' : `options.${questionId}.${optionId}`
     const s = getString(key)
-    return s.t
+    // use short version if it exists, with regular version as fallback
+    const short = getString(`${key}.short`, {}, s.t)
+    return short.t
 }

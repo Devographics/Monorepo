@@ -62,20 +62,21 @@
         wrapBlock: false
         disableExport: true
 
-# - id: data_explorer
-#   titleId: sections.data_explorer.title
-#   path: /explorer
-#   blocks:
-#     - template: page_introduction
+- id: data_explorer
+  titleId: sections.data_explorer.title
+  path: /explorer
+  blocks:
+      - template: page_introduction
 
-#     - id: data_explorer
-#       showTitle: false
-#       chartOnly: true
-#       wrapBlock: false
-#       template: data_explorer
-#       variables:
-#         facet1: demographics/yearly_salary
-#         facet2: demographics/years_of_experience
+      - id: data_explorer
+        showTitle: false
+        chartOnly: true
+        wrapBlock: false
+        template: data_explorer
+        parameters: { showNoAnswer: true }
+        variables:
+            xAxis: user_info__gender
+            yAxis: user_info__higher_education_degree
 
 - id: user_info
   titleId: sections.demographics.title
@@ -774,11 +775,9 @@
 
       - id: libraries
         tabId: tabs.main_answers
-        i18nNamespace: tools_others
         template: multiple_options
         variants:
             - id: libraries_others
-              i18nNamespace: tools_others
               template: multiple_options
               defaultUnits: count
               parameters: { limit: 15 }
@@ -791,11 +790,9 @@
       - id: date_management
         year: 2022
         tabId: tabs.main_answers
-        i18nNamespace: tools_others
         template: multiple_options
         variants:
             - id: date_management_others
-              i18nNamespace: tools_others
               template: multiple_options
               defaultUnits: count
               parameters: { limit: 5 }
@@ -803,11 +800,9 @@
       - id: data_visualization
         year: 2022
         tabId: tabs.main_answers
-        i18nNamespace: tools_others
         template: multiple_options
         variants:
             - id: data_visualization_others
-              i18nNamespace: tools_others
               template: multiple_options
               defaultUnits: count
               parameters: { limit: 5 }
@@ -815,11 +810,9 @@
       - id: data_fetching
         year: 2022
         tabId: tabs.main_answers
-        i18nNamespace: tools_others
         template: multiple_options
         variants:
             - id: data_fetching_others
-              i18nNamespace: tools_others
               template: multiple_options
               defaultUnits: count
               parameters: { limit: 10 }
@@ -827,22 +820,18 @@
       - id: backend_frameworks
         year: 2022
         tabId: tabs.main_answers
-        i18nNamespace: tools_others
         template: multiple_options
         variants:
             - id: backend_frameworks_others
-              i18nNamespace: tools_others
               template: multiple_options
               defaultUnits: count
               parameters: { limit: 10 }
 
       - id: utilities
         tabId: tabs.main_answers
-        i18nNamespace: tools_others
         template: multiple_options
         variants:
             - id: utilities_others
-              i18nNamespace: tools_others
               template: multiple_options
               defaultUnits: count
               parameters: { limit: 10 }
@@ -852,33 +841,27 @@
 
       - id: runtimes
         tabId: tabs.main_answers
-        i18nNamespace: tools_others
         template: multiple_options
         variants:
             - id: runtimes_others
-              i18nNamespace: tools_others
               template: multiple_options
               defaultUnits: count
               parameters: { limit: 10 }
 
       - id: edge_runtimes
         tabId: tabs.main_answers
-        i18nNamespace: tools_others
         template: multiple_options
         variants:
             - id: edge_runtimes_others
-              i18nNamespace: tools_others
               template: multiple_options
               defaultUnits: count
               parameters: { limit: 10 }
 
       - id: javascript_flavors
         tabId: tabs.main_answers
-        i18nNamespace: tools_others
         template: multiple_options
         variants:
             - id: javascript_flavors_others
-              i18nNamespace: tools_others
               template: multiple_options
               defaultUnits: count
               parameters: { limit: 10 }
@@ -890,11 +873,9 @@
 
       - id: non_js_languages
         tabId: tabs.main_answers
-        i18nNamespace: tools_others
         template: multiple_options
         variants:
             - id: non_js_languages_others
-              i18nNamespace: tools_others
               template: multiple_options
               defaultUnits: count
               parameters: { limit: 15 }
@@ -925,7 +906,7 @@
             - id: what_do_you_use_js_for_others
               defaultUnits: count
               tabId: tabs.other_answers
-              chartNamespace: what_do_you_use_js_for
+              i18nNamespace: what_do_you_use_js_for
               translateData: true
               template: multiple_options
               parameters: { limit: 10 }
@@ -937,7 +918,7 @@
         variants:
             - id: industry_sector_others
               defaultUnits: count
-              chartNamespace: industry_sector
+              i18nNamespace: industry_sector
               tabId: tabs.other_answers
               template: multiple_options
               translateData: true
@@ -1017,7 +998,6 @@
               parameters: { limit: 15 }
 
       - id: video_creators
-        blockFilters: [filters]
         blockType: PeopleBlock
         tabId: tabs.main_answers
         template: multiple_options
@@ -1030,9 +1010,8 @@
               parameters: { limit: 15 }
 
       - id: people_others
-        blockFilters: [filters]
         defaultUnits: count
-        chartNamespace: people
+        i18nNamespace: people
         template: multiple_options_freeform
         blockType: PeopleBlock
         parameters: { limit: 50 }
@@ -1044,7 +1023,7 @@
         variants:
             - id: other_surveys_others
               defaultUnits: count
-              chartNamespace: other_surveys
+              i18nNamespace: other_surveys
               tabId: tabs.other_answers
               template: multiple_options_freeform
               parameters: { cutoff: 5 }
@@ -1096,7 +1075,7 @@
             - id: top_currently_missing_from_js_others
               translateData: true
               defaultUnits: count
-              chartNamespace: top_currently_missing_from_js
+              i18nNamespace: top_currently_missing_from_js
               tabId: tabs.other_answers
               template: multiple_options_freeform
               parameters: { cutoff: 5 }

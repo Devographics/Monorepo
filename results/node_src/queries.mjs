@@ -175,7 +175,7 @@ const wrapArguments = args => {
         : ''
 }
 
-export const getQueryArgs = ({ facet, filters, parameters }) => {
+export const getQueryArgs = ({ facet, filters, parameters, xAxis, yAxis }) => {
     const args = {}
     if (facet) {
         args.facet = facet
@@ -185,6 +185,13 @@ export const getQueryArgs = ({ facet, filters, parameters }) => {
     }
     if (parameters && !isEmpty(parameters)) {
         args.parameters = unquote(JSON.stringify(parameters))
+    }
+    // for data explorer
+    if (yAxis && !isEmpty(yAxis)) {
+        args.axis1 = yAxis
+    }
+    if (xAxis && !isEmpty(xAxis)) {
+        args.axis2 = xAxis
     }
     return wrapArguments(args)
 }
@@ -199,11 +206,13 @@ export const getDefaultQuery = queryOptions => {
         facet,
         filters,
         parameters = {},
+        xAxis,
+        yAxis,
         addBucketsEntities = false,
         addQuestionEntity = false,
         allEditions = false
     } = queryOptions
-    const queryArgs = getQueryArgs({ facet, filters, parameters })
+    const queryArgs = getQueryArgs({ facet, filters, parameters, xAxis, yAxis })
 
     const editionType = allEditions ? 'allEditions' : 'currentEdition'
 
@@ -297,14 +306,7 @@ const defaultQueries = [
     'allEditionsData',
     'allEditionsDataWithEntities'
 ]
-export const getQuery = ({
-    query,
-    queryOptions,
-    isLog = false,
-    block,
-    enableCache,
-    addRootNode = true
-}) => {
+export const getQuery = ({ query, queryOptions, isLog = false, block, addRootNode = true }) => {
     const { editionId, questionId } = queryOptions
     const queryName = getQueryName({ editionId, questionId })
 

@@ -38,23 +38,23 @@ Note: take into account 1-space gap in between each cell
 */
 export const getPixelCoordinates = ({
     facets,
-    keys1,
-    keys2,
+    xKeys,
+    yKeys,
     rowIndex,
     columnIndex,
     dotIndex
 }: {
     facets: ExplorerDataFacet[]
-    keys1: Key[]
-    keys2: Key[]
+    xKeys: Key[]
+    yKeys: Key[]
     rowIndex: number
     columnIndex: number
     dotIndex: number
 }) => {
     const { cellColumnCount, cellRowCount } = getParameters({
         facets,
-        keys1,
-        keys2
+        xKeys,
+        yKeys
     })
 
     const x = columnIndex * cellColumnCount + (dotIndex % cellColumnCount)
@@ -79,13 +79,13 @@ Get all the dots for the entire grid as one array
 */
 export const getAllDots = ({
     facets,
-    keys1,
-    keys2,
+    xKeys,
+    yKeys,
     respondentsPerDot
 }: {
     facets: ExplorerDataFacet[]
-    keys1: Key[]
-    keys2: Key[]
+    xKeys: Key[]
+    yKeys: Key[]
     respondentsPerDot: number
 }): DotType[] => {
     const totalRespondents = sumBy(facets, f => f.completion.count)
@@ -118,8 +118,8 @@ export const getAllDots = ({
             const dotIndex = Math.floor((peopleCount - bucket.fromCount) / INCREMENT)
             const { x, y } = getPixelCoordinates({
                 facets,
-                keys1,
-                keys2,
+                xKeys,
+                yKeys,
                 rowIndex,
                 columnIndex,
                 dotIndex
@@ -154,16 +154,13 @@ export const getDotStyle = (dot: DotType, params) => {
 
 interface DotsProps {
     facets: ExplorerDataFacet[]
-    keys1: Key[]
-    keys2: Key[]
+    xKeys: Key[]
+    yKeys: Key[]
 }
 
-const Dots = ({ facets, keys1, keys2 }: DotsProps) => {
-    // console.log(facets)
-    const dots = getAllDots({ facets, keys1, keys2 })
-    const params = getParameters({ facets, keys1, keys2 })
-    // console.log(dots)
-    // console.log(params)
+const Dots = ({ facets, xKeys, yKeys }: DotsProps) => {
+    const dots = getAllDots({ facets, xKeys, yKeys })
+    const params = getParameters({ facets, xKeys, yKeys })
     return (
         <Dots_>
             {dots.map((dot, i) => (

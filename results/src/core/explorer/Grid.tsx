@@ -11,8 +11,8 @@ import { GRID_GAP } from './constants'
 
 /*
 
-keys1: x-axis
-keys2: y-axis
+xKeys: x-axis
+yKeys: y-axis
 
 */
 
@@ -22,12 +22,12 @@ export interface GridProps extends CommonProps {
 }
 
 const Grid = (props: GridProps) => {
-    const { keys1, keys2 } = props
+    const { xKeys, yKeys } = props
     return (
         <GridWrapper_>
             <Corner {...props} />
-            <Axis axis="x" keys={keys1} {...props} />
-            <Axis axis="y" keys={keys2} {...props} />
+            <Axis axis="x" keys={xKeys} {...props} />
+            <Axis axis="y" keys={yKeys} {...props} />
             <InnerGrid {...props} />
         </GridWrapper_>
     )

@@ -11,6 +11,8 @@ import {
 } from './types'
 import { TOTAL_DOTS, INCREMENT, GAP, GRID_WIDTH } from './constants'
 import variables from 'Config/variables.yml'
+import { Bucket, FacetBucket } from '@devographics/types'
+import { NO_ANSWER } from '@devographics/constants'
 
 // https://stackoverflow.com/a/36862446/649299
 const getWindowDimensions = () => {
@@ -64,16 +66,16 @@ Get grid parameters
 */
 export const getParameters = ({
     facets,
-    keys1,
-    keys2
+    xKeys,
+    yKeys
 }: {
     facets: ExplorerDataFacet[]
-    keys1: Key[]
-    keys2: Key[]
+    xKeys: Key[]
+    yKeys: Key[]
 }) => {
     const maxBucketCount = getMaxBucketCount(facets)
-    const columnCount = keys1.length
-    const rowCount = keys2.length
+    const columnCount = xKeys.length
+    const rowCount = yKeys.length
     const cellWidth = Math.floor((GRID_WIDTH - (columnCount - 1) * GAP) / columnCount)
     const maxDotsPerLine = Math.floor(cellWidth / INCREMENT)
     const columnWidth = maxDotsPerLine * INCREMENT
@@ -88,24 +90,24 @@ export const getParameters = ({
     }
 }
 
-export const addExtraCounts = (facets: ExplorerDataFacet[]) => {
-    let facetRunningCount = 0,
-        bucketRunningCount = 0
-    const facetsWithCounts = facets.map((f: ExplorerDataFacet, i: number) => {
-        f.fromCount = facetRunningCount
-        facetRunningCount += f.completion.count
-        f.toCount = facetRunningCount
-        f.rowIndex = i
-        f.buckets.forEach((b: ExplorerDataBucket, j: number) => {
-            b.fromCount = bucketRunningCount
-            bucketRunningCount += b.count
-            b.toCount = bucketRunningCount
-            b.columnIndex = j
-        })
-        return f
-    })
-    return facetsWithCounts
-}
+// export const addExtraCounts = (facets: ExplorerDataFacet[]) => {
+//     let facetRunningCount = 0,
+//         bucketRunningCount = 0
+//     const facetsWithCounts = facets.map((f: ExplorerDataFacet, i: number) => {
+//         f.fromCount = facetRunningCount
+//         facetRunningCount += f.completion.count
+//         f.toCount = facetRunningCount
+//         f.rowIndex = i
+//         f.buckets.forEach((b: ExplorerDataBucket, j: number) => {
+//             b.fromCount = bucketRunningCount
+//             bucketRunningCount += b.count
+//             b.toCount = bucketRunningCount
+//             b.columnIndex = j
+//         })
+//         return f
+//     })
+//     return facetsWithCounts
+// }
 
 export const isBetween = (i: number, lowerBound = 0, upperBound = 0) => {
     return lowerBound <= i && i <= upperBound
@@ -144,32 +146,34 @@ export const getSelectorItems = () => {
 }
 
 export const getTotals = ({
-    facets,
+    buckets,
     axis,
-    keys
+    keys,
+    totalCount
 }: {
-    facets: ExplorerDataFacet[]
+    buckets: Bucket[]
     axis: AxisType
     keys: Key[]
+    totalCount: number
 }): Total[] => {
     if (axis === 'x') {
-        // facet 1
         return keys.map((key: Key) => {
-            const total = sumBy(facets, (facet: ExplorerDataFacet) => {
-                const bucket = facet.buckets.find(b => b.id === key)
-                return bucket?.count || 0
+            const total = sumBy(buckets, (bucket: Bucket) => {
+                const facetBucket = bucket.facetBuckets.find(b => b.id === key)
+                return facetBucket?.count || 0
             })
             return {
                 id: key,
-                total
+                count: total,
+                percentage: Math.floor((total * 100) / totalCount)
             }
         })
     } else {
-        // facet 2
-        return keys.map((key: Key) => {
-            const facet = facets.find((f: ExplorerDataFacet) => f.id === key)
-            return { id: key, total: facet?.completion?.count || 0 }
-        })
+        return buckets.map(({ id, count }) => ({
+            id,
+            count: count || 0,
+            percentage: Math.floor((count * 100) / totalCount)
+        }))
     }
 }
 
@@ -178,43 +182,72 @@ export const getTotals = ({
 Get all data for a single cell when we already know its facet (row)
 
 */
+export interface CellData {
+    dots: Dot[]
+    dotsCount: number
+    columnCount: number
+    rowCount: number
+    xAxisTotal: Total
+    yAxisTotal: Total
+    // facetPercentageQuestion: number
+    // facetPercentageSurvey: number
+    cellCount: number
+    bucketPercentage: number
+    normalizedCount: number
+    normalizedCountDelta: number
+    normalizedPercentageDelta: number
+}
+
 export const getCellData = (options: {
-    facet: ExplorerDataFacet
+    facetBucket: FacetBucket
     xTotals: Total[]
+    yTotals: Total[]
     xIndex: number
+    yIndex: number
     respondentsPerDot: number
     percentsPerDot: number
     dotsPerLine: number
     unit: UnitType
-}) => {
-    const { facet, xTotals, xIndex, respondentsPerDot, percentsPerDot, dotsPerLine, unit } = options
-    // find the right bucket for the current cell based on its xIndex (column index)
-    const bucket = facet?.buckets[xIndex]
-    // aggregated sum for every instance of this bucket (column total)
-    const bucketTotal = xTotals.find(t => t.id === bucket.id)?.total || 0
-    // total count for current facet (row total)
-    const facetTotal = facet.completion.count
+    totalCount: number
+}): CellData => {
+    const {
+        facetBucket,
+        xTotals,
+        yTotals,
+        xIndex,
+        yIndex,
+        respondentsPerDot,
+        percentsPerDot,
+        dotsPerLine,
+        unit
+    } = options
+
+    // x axis (axis1) total corresponding to this cell
+    const xAxisTotal = xTotals?.at(xIndex) as Total
+    // y axis (axis2) total corresponding to this cell
+    const yAxisTotal = yTotals?.at(yIndex) as Total
+
+    // number of respondents in this cell (= in this facetBucket)
+    const cellCount = facetBucket.count
+
     // what percentage of question respondents are represented by this facet
-    const facetPercentageQuestion = facet.completion.percentageQuestion
-    // what percentage of survey respondents are represented by this facet
-    // note: we probably don't want to use this here because all totals used already
-    // discount people who didn't answer the question
-    const facetPercentageSurvey = facet.completion.percentageSurvey
-    // count for current bucket (cell)
-    const bucketCount = bucket.count
+    // const facetPercentageQuestion = facetBucket.percentageQuestion
+
     // percentage of bucket relative to current facet (row)
-    const bucketPercentageFacet = bucket.percentageFacet
-    // count that you would expect based solely on total respondents for this bucket overall,
-    // divided by percentage of question respondents in this facet
-    const normalizedCount = Math.floor((bucketTotal * facetPercentageQuestion) / 100)
-    // delta between expected count and real count
-    const normalizedCountDelta = bucketCount - normalizedCount
-    // same delta expressed as a percentage
-    const normalizedPercentage = Math.floor((bucketTotal * facetPercentageQuestion) / facetTotal)
+    const bucketPercentageFacet = facetBucket?.percentageFacet
+
+    // percentage of respondents in column
+    const normalizedPercentage = xAxisTotal.percentage
+    // delta with bucketPercentageFacet
     const normalizedPercentageDelta = bucketPercentageFacet - normalizedPercentage
 
+    // expected count based on row count times normalizedPercentage
+    const normalizedCount = (yAxisTotal.count * normalizedPercentage) / 100
+    // delta with cellCount
+    const normalizedCountDelta = cellCount - normalizedCount
+
     const dots = getCellDots({
-        bucket,
+        facetBucket,
         normalizedCount,
         normalizedPercentage,
         respondentsPerDot,
@@ -231,15 +264,12 @@ export const getCellData = (options: {
         dotsCount,
         columnCount,
         rowCount,
-        bucketTotal,
-        facetTotal,
-        facetPercentageQuestion,
-        facetPercentageSurvey,
-        bucketCount,
+        xAxisTotal,
+        yAxisTotal,
+        cellCount: cellCount,
         bucketPercentage: bucketPercentageFacet,
         normalizedCount,
         normalizedCountDelta,
-        normalizedPercentage,
         normalizedPercentageDelta
     }
 }
@@ -249,55 +279,78 @@ export const getCellData = (options: {
 Get the dots for a single cell of the grid
 
 */
-
+export enum DotTypes {
+    ERROR = 'error',
+    NORMAL = 'normal',
+    EXTRA = 'extra',
+    MISSING = 'missing'
+}
+export interface Dot {
+    index: number
+    type: DotTypes
+}
 export const getCellDots = ({
-    bucket,
+    facetBucket,
     normalizedCount,
     normalizedPercentage,
     respondentsPerDot,
     percentsPerDot,
     unit
 }: {
-    bucket: ExplorerDataBucket
+    facetBucket: FacetBucket
     normalizedCount: number
     normalizedPercentage: number
     respondentsPerDot: number
     percentsPerDot: number
     unit: UnitType
-}) => {
-    // console.log(bucket);
-    // console.log(normalizedPercentage);
-    if (unit === 'count') {
-        // find the right bucket for the current cell based on its xIndex (column index)
-        const peopleCount = Math.max(normalizedCount, bucket.count)
-        const dotCount = Math.floor(peopleCount / respondentsPerDot)
-        return [...Array(dotCount)].map((x, index) => {
-            const peopleInDot = index * respondentsPerDot
-            let type
-            if (peopleInDot <= bucket.count && peopleInDot <= normalizedCount) {
-                type = 'normal'
-            } else if (peopleInDot <= bucket.count) {
-                type = 'extra'
-            } else if (peopleInDot <= normalizedCount) {
-                type = 'missing'
-            }
-            return { index, type }
-        })
-    } else {
-        // find the right bucket for the current cell based on its xIndex (column index)
-        const percentCount = Math.max(normalizedPercentage, bucket.percentageFacet)
-        const dotCount = Math.floor(percentCount / percentsPerDot)
-        return [...Array(dotCount)].map((x, index) => {
-            const percentsInDot = index * percentsPerDot
-            let type
-            if (percentsInDot <= bucket.percentageFacet && percentsInDot <= normalizedPercentage) {
-                type = 'normal'
-            } else if (percentsInDot <= bucket.percentageFacet) {
-                type = 'extra'
-            } else if (percentsInDot <= normalizedPercentage) {
-                type = 'missing'
-            }
-            return { index, type }
-        })
+}): Dot[] => {
+    console.log('// getCellDots')
+    console.log({
+        facetBucket,
+        normalizedCount,
+        normalizedPercentage,
+        respondentsPerDot,
+        percentsPerDot,
+        unit
+    })
+    try {
+        if (unit === 'count') {
+            // find the right bucket for the current cell based on its xIndex (column index)
+            const peopleCount = Math.max(normalizedCount, facetBucket.count)
+            const dotCount = Math.floor(peopleCount / respondentsPerDot)
+            return [...Array(dotCount)].map((x, index) => {
+                const peopleInDot = index * respondentsPerDot
+                let type = DotTypes.ERROR
+                if (peopleInDot <= facetBucket.count && peopleInDot <= normalizedCount) {
+                    type = DotTypes.NORMAL
+                } else if (peopleInDot <= facetBucket.count) {
+                    type = DotTypes.EXTRA
+                } else if (peopleInDot <= normalizedCount) {
+                    type = DotTypes.MISSING
+                }
+                return { index, type }
+            })
+        } else {
+            // find the right bucket for the current cell based on its xIndex (column index)
+            const percentCount = Math.max(normalizedPercentage, facetBucket.percentageFacet)
+            const dotCount = Math.floor(percentCount / percentsPerDot)
+            return [...Array(dotCount)].map((x, index) => {
+                const percentsInDot = index * percentsPerDot
+                let type = DotTypes.ERROR
+                if (
+                    percentsInDot <= facetBucket.percentageFacet &&
+                    percentsInDot <= normalizedPercentage
+                ) {
+                    type = DotTypes.NORMAL
+                } else if (percentsInDot <= facetBucket.percentageFacet) {
+                    type = DotTypes.EXTRA
+                } else if (percentsInDot <= normalizedPercentage) {
+                    type = DotTypes.MISSING
+                }
+                return { index, type }
+            })
+        }
+    } catch (error) {
+        return []
     }
 }

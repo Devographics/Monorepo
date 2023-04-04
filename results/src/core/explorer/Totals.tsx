@@ -9,7 +9,7 @@ import { Total, AxisType } from './types'
 const Totals = ({ axis, totals }: { axis: AxisType; totals: Total[] }) => {
     return (
         <Totals_ axis={axis} count={totals.length}>
-            {totals.map(({ total }, i) => (
+            {totals.map(({ count: total }, i) => (
                 <TotalItem key={i} total={total} />
             ))}
         </Totals_>

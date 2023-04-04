@@ -1,3 +1,4 @@
+import { Bucket } from '@devographics/types'
 import { Entity } from '@types/index'
 
 export type Key = string
@@ -34,15 +35,15 @@ export interface ExplorerDataYear {
 }
 
 export interface ExplorerData {
-    keys1: Key[]
-    keys2: Key[]
+    xKeys: Key[]
+    yKeys: Key[]
     all_years?: ExplorerDataYear[]
     year?: ExplorerDataYear
 }
 
 export interface ExplorerDataFormatted {
-    keys1: Key[]
-    keys2: Key[]
+    xKeys: Key[]
+    yKeys: Key[]
     all_years: ExplorerDataYear[]
 }
 
@@ -62,15 +63,16 @@ export type AxisType = 'x' | 'y'
 
 export interface Total {
     id: Key
-    total: number
+    count: number
+    percentage: number
 }
 
 export interface CommonProps {
     data: any
     query: string
-    facets: ExplorerDataFacet[]
-    keys1: Key[]
-    keys2: Key[]
+    buckets: Bucket[]
+    xKeys: Key[]
+    yKeys: Key[]
     xTotals: Total[]
     yTotals: Total[]
     totalCount: number

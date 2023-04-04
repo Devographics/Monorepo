@@ -1,7 +1,6 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
-import { mq, spacing, fontSize } from 'core/theme'
-import T from 'core/i18n/T'
+import { mq } from 'core/theme'
 import {
     AXIS_PADDING,
     AXIS_BG,
@@ -12,41 +11,54 @@ import {
     CELL_VPADDING
 } from './constants'
 import { CommonProps, Key, AxisType, Total } from './types'
-import { getQuestionLabel, getOptionLabel } from './labels'
+import { getOptionLabel } from './labels'
 import { useI18n } from 'core/i18n/i18nContext'
 import maxBy from 'lodash/maxBy.js'
-import { getCellData } from './helpers'
+import { CellData, getCellData } from './helpers'
 import { UserIcon, PercentIcon } from 'core/icons'
 import Tooltip from 'core/components/Tooltip'
+import { Bucket, FacetBucket } from '@devographics/types'
 
 interface AxisProps extends CommonProps {
     axis: AxisType
     keys: Key[]
 }
 
-const getAxisStyle = props => {
-    const { axis, facets, id, xTotals, stateStuff } = props
+const getAxisStyle = ({
+    buckets,
+    id,
+    xTotals,
+    yTotals,
+    totalCount,
+    stateStuff
+}: {
+    buckets: Bucket[]
+    id: string
+    xTotals: Total[]
+    yTotals: Total[]
+    totalCount: number
+    stateStuff: any
+}) => {
     const { respondentsPerDot, percentsPerDot, dotsPerLine, unit } = stateStuff
-    if (axis === 'y') {
-        const facet = facets.find(f => f.id === id)
-        const rowCells = facet.buckets.map((bucket, xIndex) =>
-            getCellData({
-                facet,
-                xTotals,
-                xIndex,
-                respondentsPerDot,
-                percentsPerDot,
-                dotsPerLine,
-                unit
-            })
-        )
-        const biggestCell = maxBy(rowCells, c => c.dotsCount)
-        const { dotsCount, rowCount } = biggestCell
-        const dynamicHeight = DOT_RADIUS * rowCount + DOT_GAP * (rowCount - 1) + CELL_VPADDING * 2
-        return { flexBasis: `${Math.max(100, dynamicHeight)}px` }
-    } else {
-        return {}
-    }
+    const currentRowCells = buckets.find(b => b.id === id)?.facetBuckets as FacetBucket[]
+    const currentRowCellsData = currentRowCells.map((facetBucket, xIndex) =>
+        getCellData({
+            facetBucket,
+            xTotals,
+            xIndex,
+            yTotals,
+            yIndex: 0,
+            respondentsPerDot,
+            percentsPerDot,
+            dotsPerLine,
+            totalCount,
+            unit
+        })
+    )
+    const biggestCell = maxBy(currentRowCellsData, c => c.dotsCount) as CellData
+    const { dotsCount, rowCount } = biggestCell
+    const dynamicHeight = DOT_RADIUS * rowCount + DOT_GAP * (rowCount - 1) + CELL_VPADDING * 2
+    return { flexBasis: `${Math.max(100, dynamicHeight)}px` }
 }
 
 const Axis = (props: AxisProps) => {
@@ -61,6 +73,7 @@ const Axis = (props: AxisProps) => {
 }
 
 interface AxisItemProps extends AxisProps {
+    buckets: Bucket[]
     id: string
     index: number
     xTotals: Total[]
@@ -68,26 +81,25 @@ interface AxisItemProps extends AxisProps {
 }
 
 const AxisItem = (props: AxisItemProps) => {
-    const { id, axis, index, entities, stateStuff, totalCount } = props
+    const { id, axis, index, entities, stateStuff } = props
     const { useMobileLayout } = stateStuff
     const totals = props[`${axis}Totals`]
     const { getString } = useI18n()
     const sectionId = stateStuff[`${axis}Section`]
     const questionId = stateStuff[`${axis}Field`]
 
-    const rowColumnTotal = totals.find(t => t.id === id)?.total
-    const totalPercentage = Math.floor((rowColumnTotal * 100) / totalCount)
+    const total = totals.find(t => t.id === id) as Total
+    const { count: totalCount, percentage: totalPercentage } = total
 
     const answerLabel = getOptionLabel({
         getString,
-        sectionId,
         questionId,
         optionId: id,
         isShort: useMobileLayout
     })
 
     return (
-        <AxisItem_ axis={axis} style={getAxisStyle(props)}>
+        <AxisItem_ axis={axis} style={axis === 'y' ? getAxisStyle(props) : {}}>
             <Tooltip
                 trigger={
                     <AxisItemInner_>
@@ -98,9 +110,9 @@ const AxisItem = (props: AxisItemProps) => {
                                     enableHover={false}
                                     enableTooltip={false}
                                     labelId="explorer.axis_total"
-                                    values={{ totalCount: rowColumnTotal }}
+                                    values={{ totalCount }}
                                 />
-                                <span>{rowColumnTotal}</span>
+                                <span>{totalCount}</span>
                             </AxisTotal_>
                             <AxisTotal_>
                                 <PercentIcon

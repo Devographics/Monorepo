@@ -8,10 +8,10 @@ import { GRID_GAP } from './constants'
 import { GridProps } from './Grid'
 
 const InnerGrid = (props: CommonProps) => {
-    const { keys2 } = props
+    const { yKeys } = props
     return (
         <Grid_>
-            {keys2.map((f, i) => (
+            {yKeys.map((f, i) => (
                 <Row key={i} yIndex={i} {...props} />
             ))}
         </Grid_>
@@ -23,12 +23,18 @@ export interface RowProps extends GridProps {
 }
 
 const Row = (props: RowProps) => {
-    const { facets, keys1, yIndex } = props
-    const facet = facets[yIndex]
+    const { buckets, xKeys, yIndex } = props
+    const bucket = buckets[yIndex]
     return (
         <Row_>
-            {keys1.map((b, i) => (
-                <Cell key={i} {...props} facet={facet} yIndex={yIndex} xIndex={i} />
+            {xKeys.map((b, i) => (
+                <Cell
+                    key={i}
+                    {...props}
+                    facetBucket={bucket.facetBuckets[i]}
+                    yIndex={yIndex}
+                    xIndex={i}
+                />
             ))}
         </Row_>
     )

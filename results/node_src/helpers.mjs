@@ -183,16 +183,18 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId }) => 
                         fieldId: v.fieldId,
                         facet: v.facet,
                         filters: v.filters,
-                        parameters: v.parameters || {}
+                        parameters: v.parameters || {},
+                        xAxis: v?.variables?.xAxis,
+                        yAxis: v?.variables?.yAxis
                     }
-                    const enableCache = process.env.USE_CACHE === 'false' ? false : true
+
+                    queryOptions.parameters.enableCache = useCache
 
                     const query = getQuery({
                         query: v.query,
                         queryOptions,
                         block: v,
                         isLog: false,
-                        enableCache,
                         addRootNode: true
                     })
 

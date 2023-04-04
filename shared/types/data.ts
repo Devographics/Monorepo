@@ -115,7 +115,7 @@ export enum OtherPercentages {
 }
 
 export type BucketData = {
-    [key in BucketUnits]?: number
+    [key in BucketUnits]: number
 }
 
 export interface Bucket extends BucketData {
@@ -196,4 +196,15 @@ export enum FeaturesOptions {
     NEVER_HEARD = 'never_heard',
     HEARD = 'heard',
     USED = 'used'
+}
+
+
+/*
+
+Explorer
+
+*/
+
+export interface ExplorerData {
+    items: ResponseEditionData[]
 }

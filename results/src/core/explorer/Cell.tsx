@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { mq, spacing, fontSize, fontWeight } from 'core/theme'
 // import T from 'core/i18n/T'
 // import Dot from './Dot'
-import { getCellData } from './helpers'
+import { CellData, getCellData } from './helpers'
 import { ExplorerDataFacet, Key } from './types'
 import { RowProps } from './InnerGrid'
 import CellDots from './CellDots'
@@ -12,10 +12,10 @@ import { useI18n } from 'core/i18n/i18nContext'
 import { COUNT_UNIT, CELL_BG, CELL_VPADDING, CELL_HPADDING } from './constants'
 import ModalTrigger from 'core/components/ModalTrigger'
 import Details from './Details'
-import round from 'lodash/round.js'
+import { FacetBucket } from '@devographics/types'
 
 export interface CellProps extends RowProps {
-    facet: ExplorerDataFacet
+    facetBucket: FacetBucket
     xIndex: number
     yIndex: number
 }
@@ -31,18 +31,29 @@ export interface CellProps extends RowProps {
 const Cell = (props: CellProps) => {
     // const { getString } = useI18n();
 
-    const { addModals = true, facet, xIndex, xTotals, stateStuff } = props
+    const {
+        addModals = true,
+        facetBucket,
+        xIndex,
+        yIndex,
+        xTotals,
+        yTotals,
+        totalCount,
+        stateStuff
+    } = props
     const { respondentsPerDot, percentsPerDot, dotsPerLine, unit } = stateStuff
     const cellData = getCellData({
-        facet,
-        xTotals,
+        facetBucket,
         xIndex,
+        xTotals,
+        yIndex,
+        yTotals,
         respondentsPerDot,
         percentsPerDot,
         dotsPerLine,
-        unit
+        unit,
+        totalCount
     })
-
     return addModals ? (
         <ModalTrigger
             size="s"
@@ -60,7 +71,7 @@ const Cell = (props: CellProps) => {
 }
 
 export interface InnerCellProps extends CellProps {
-    cellData: any
+    cellData: CellData
 }
 
 const InnerCell = (props: InnerCellProps) => {
@@ -74,8 +85,8 @@ const InnerCell = (props: InnerCellProps) => {
                 <CellCount_>
                     <CellCountInner_>
                         {unit === COUNT_UNIT
-                            ? cellData.bucketCount
-                            : `${Math.floor(cellData.bucketPercentage, 2)}%`}
+                            ? cellData.cellCount
+                            : `${Math.floor(cellData.bucketPercentage)}%`}
                     </CellCountInner_>
                 </CellCount_>
             )}

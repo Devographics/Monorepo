@@ -13,9 +13,10 @@ import { UnitType } from './types'
 import { COUNT_UNIT } from './constants'
 import round from 'lodash/round.js'
 import Legend from './Legend'
+import { CellData } from './helpers'
 
 export interface DetailsProps extends CellProps {
-    cellData: any
+    cellData: CellData
 }
 
 const getSingleCellGrid = (options: {
@@ -26,21 +27,21 @@ const getSingleCellGrid = (options: {
     setUnit: Dispatch<SetStateAction<UnitType>>
 }) => {
     const { props, xKey, yKey, unit, setUnit } = options
-    const { facets, keys1, keys2, xTotals, yTotals, entities, totalCount, stateStuff } = props
+    const { buckets, xKeys, yKeys, xTotals, yTotals, entities, totalCount, stateStuff } = props
     const singleCellGrid = {
         showCellCountsOverride: true,
         addModals: false,
         entities,
         stateStuff: { ...stateStuff, unit, setUnit },
         totalCount,
-        keys1: keys1.filter(k => k === xKey),
-        keys2: keys2.filter(k => k === yKey),
+        xKeys: xKeys.filter(k => k === xKey),
+        yKeys: yKeys.filter(k => k === yKey),
         xTotals: xTotals.filter(t => t.id === xKey),
         yTotals: yTotals.filter(t => t.id === yKey),
-        facets: facets
-            .filter(f => f.id === yKey)
-            .map(f => {
-                return { ...f, buckets: f.buckets.filter(b => b.id === xKey) }
+        buckets: buckets
+            .filter(b => b.id === yKey)
+            .map(b => {
+                return { ...b, facetBuckets: b.facetBuckets.filter(b => b.id === xKey) }
             })
     }
     return singleCellGrid
@@ -49,9 +50,8 @@ const getSingleCellGrid = (options: {
 const Details = (props: DetailsProps) => {
     const { getString } = useI18n()
     const {
-        facet,
-        keys1,
-        keys2,
+        xKeys,
+        yKeys,
         entities,
         xIndex,
         yIndex,
@@ -62,27 +62,24 @@ const Details = (props: DetailsProps) => {
         totalCount
     } = props
     const [unit, setUnit] = useState(stateStuff.unit)
-    const xKey = keys1[xIndex]
-    const yKey = keys2[yIndex]
+    const xKey = xKeys[xIndex]
+    const yKey = yKeys[yIndex]
     const propsOverride = getSingleCellGrid({ props, xKey, yKey, unit, setUnit })
     const { xSection, ySection, xField, yField } = stateStuff
 
-    const xTotal = sumBy(xTotals, 'total')
-    const yTotal = sumBy(yTotals, 'total')
+    // const xTotal = sumBy(xTotals, 'total')
+    // const yTotal = sumBy(yTotals, 'total')
 
     const {
-        dots,
-        bucketTotal,
-        facetTotal,
+        xAxisTotal,
+        yAxisTotal,
         bucketPercentage,
-        facetPercentageQuestion,
-        facetPercentageSurvey,
-        bucketCount,
+        cellCount,
         normalizedCount,
         normalizedCountDelta,
-        normalizedPercentage,
         normalizedPercentageDelta
     } = cellData
+
     const xAxisLabel = getQuestionLabel({
         getString,
         sectionId: xSection,
@@ -117,24 +114,24 @@ const Details = (props: DetailsProps) => {
         html: true,
         element: 'p',
         values: {
-            xAxisTotal: bucketTotal,
-            xAxisPercentage: Math.floor((bucketTotal * 100) / totalCount),
+            xAxisTotal: xAxisTotal.count,
+            xAxisPercentage: xAxisTotal.percentage,
             xAxisLabel,
             xAnswerLabel,
 
-            yAxisTotal: yTotal,
-            yAxisPercentage: facetPercentageQuestion,
+            yAxisTotal: yAxisTotal.count,
+            yAxisPercentage: yAxisTotal.percentage,
             yAxisLabel,
             yAnswerLabel,
 
             bucketPercentage,
             normalizedCount,
-            bucketCount,
-            normalizedCountDelta: Math.abs(normalizedCountDelta),
-            normalizedPercentage,
-            normalizedPercentageDelta: round(normalizedPercentageDelta, 2)
+            cellCount,
+            normalizedCountDelta: Math.abs(round(normalizedCountDelta, 2)),
+            normalizedPercentageDelta: Math.abs(round(normalizedPercentageDelta, 2))
         }
     }
+    const { dots: dots2, ...cellData2 } = cellData
 
     return (
         <Details_>
@@ -166,6 +163,13 @@ const Details = (props: DetailsProps) => {
                     </>
                 )}
             </DetailsExplanation_>
+
+            <pre>
+                <code>{JSON.stringify(cellData2, null, 2)}</code>
+            </pre>
+            <pre>
+                <code>{JSON.stringify(tProps.values, null, 2)}</code>
+            </pre>
         </Details_>
     )
 }
