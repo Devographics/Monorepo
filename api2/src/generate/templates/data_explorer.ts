@@ -5,17 +5,22 @@ import { useCache, computeKey } from '../../helpers/caching'
 
 const getResolverMap = ({ survey }: { survey: Survey }): ResolverMap => ({
     items: async (parent, args, context, info) => {
+        console.log('// data_explorer resolver', args.axis1, args.axis2)
         const { survey, edition, section, questionObjects } = parent
         const { axis1, axis2, parameters = {}, filters = {} } = args
-        const { enableCache } = parameters
-
-        // console.log('// data_explorer', axis1, axis2)
+        const { enableCache, ...cacheKeyParameters } = parameters
 
         const [sectionId, questionId] = axis1.split('__')
         const question = questionObjects.find(q => q.id === questionId && q.surveyId === survey.id)
-        const responseArguments = { facet: axis2 }
 
         const selectedEditionId = edition.id
+        const computeArguments = {
+            parameters,
+            filters,
+            facet: axis2,
+            selectedEditionId
+        }
+
         const funcOptions = {
             survey,
             edition,
@@ -23,7 +28,7 @@ const getResolverMap = ({ survey }: { survey: Survey }): ResolverMap => ({
             question,
             context,
             questionObjects,
-            computeArguments: { ...responseArguments, selectedEditionId }
+            computeArguments
         }
 
         let result = await useCache({
@@ -32,6 +37,9 @@ const getResolverMap = ({ survey }: { survey: Survey }): ResolverMap => ({
                 editionId: edition.id,
                 sectionId,
                 questionId,
+                parameters: cacheKeyParameters,
+                filters,
+                facet: axis2,
                 selectedEditionId
             }),
             func: genericComputeFunction,

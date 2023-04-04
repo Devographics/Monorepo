@@ -80,8 +80,21 @@ export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
         ...(axis2
             ? [
                   {
-                      $unwind: {
-                          path: `$${axis2DbPath}`
+                      $set: {
+                          [`${axis2DbPath}`]: {
+                              $cond: [
+                                  {
+                                      $and: [
+                                          { $not: [`$${axis2DbPath}`] },
+                                          {
+                                              $ne: [`$${axis2DbPath}`, 0]
+                                          }
+                                      ]
+                                  },
+                                  NO_ANSWER,
+                                  `$${axis2DbPath}`
+                              ]
+                          }
                       }
                   }
               ]
@@ -89,10 +102,8 @@ export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
         ...(axis2
             ? [
                   {
-                      $set: {
-                          [`${axis2DbPath}`]: {
-                              $cond: [{ $not: [`$${axis2DbPath}`] }, NO_ANSWER, `$${axis2DbPath}`]
-                          }
+                      $unwind: {
+                          path: `$${axis2DbPath}`
                       }
                   }
               ]

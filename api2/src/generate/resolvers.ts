@@ -267,10 +267,12 @@ export const responsesResolverFunction: ResolverType = async (parent, args, cont
 export const allEditionsResolver: ResolverType = async (parent, args, context, info) => {
     console.log('// allEditionsResolver')
     const { survey, edition, section, question, responseArguments, questionObjects } = parent
-    const { parameters = {}, ...cacheKeyArguments } = responseArguments || {}
+    const { parameters = {}, filters, facet } = responseArguments || {}
     const { enableCache, ...cacheKeyParameters } = parameters
 
     const { selectedEditionId } = args
+    const computeArguments = { parameters, filters, facet, selectedEditionId }
+
     const funcOptions = {
         survey,
         edition,
@@ -278,7 +280,7 @@ export const allEditionsResolver: ResolverType = async (parent, args, context, i
         question,
         context,
         questionObjects,
-        computeArguments: { ...responseArguments, selectedEditionId }
+        computeArguments
     }
 
     let result = await useCache({
@@ -287,8 +289,10 @@ export const allEditionsResolver: ResolverType = async (parent, args, context, i
             editionId: edition.id,
             sectionId: section.id,
             questionId: question.id,
-            selectedEditionId,
-            ...{ ...cacheKeyArguments, parameters: cacheKeyParameters }
+            parameters: cacheKeyParameters,
+            filters,
+            facet,
+            selectedEditionId
         }),
         func: genericComputeFunction,
         context,

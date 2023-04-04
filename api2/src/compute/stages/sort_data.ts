@@ -8,6 +8,8 @@ import {
 } from '../../types'
 import sortBy from 'lodash/sortBy.js'
 import isEmpty from 'lodash/isEmpty.js'
+// import { NO_ANSWER } from '@devographics/constants'
+const NO_ANSWER = 'no_answer'
 
 export function sortBuckets<T extends Bucket | FacetBucket>(
     buckets: T[],
@@ -23,6 +25,7 @@ export function sortBuckets<T extends Bucket | FacetBucket>(
     } else {
         sortedBuckets = sortByProperty(sortedBuckets, sort, order)
     }
+    sortedBuckets = putNoAnswerBucketLast<T>(sortedBuckets)
     return sortedBuckets
 }
 
@@ -39,8 +42,6 @@ export function sortByProperty<T extends Bucket | FacetBucket>(
     sortProperty: SortProperty,
     sortOrder: SortOrderNumeric
 ) {
-    console.log('// sortProperty')
-    console.log(sortProperty)
     let sortedBuckets = [...buckets]
     // start with an alphabetical sort to ensure a stable
     // sort even when multiple items have same count
@@ -55,6 +56,12 @@ export function sortByProperty<T extends Bucket | FacetBucket>(
         sortedBuckets = sortBy(sortedBuckets, sortProperty)
     }
     return sortedBuckets
+}
+
+export function putNoAnswerBucketLast<T extends Bucket | FacetBucket>(buckets: T[]) {
+    const regularBuckets = buckets.filter(b => b.id !== NO_ANSWER) as T[]
+    const noAnswerBucket = buckets.find(b => b.id === NO_ANSWER) as T
+    return [...regularBuckets, noAnswerBucket]
 }
 
 export async function sortData(
