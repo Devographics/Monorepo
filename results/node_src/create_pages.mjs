@@ -42,7 +42,9 @@ export const createPagesSingleLoop = async ({
     actions: { createPage, createRedirect }
 }) => {
     const surveyId = process.env.SURVEYID
+    if (!surveyId) throw new Error(`Must provide "SURVEYID" env variable`)
     const editionId = process.env.EDITIONID
+    if (!editionId) throw new Error(`Must provide "EDITIONID" env variable`)
 
     const buildInfo = {
         USE_FAST_BUILD,

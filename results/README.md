@@ -10,9 +10,9 @@ Create an `.env` file at the root of the `/results` directory.
 DATA_API_URL=http://api.devographics.com/graphql
 INTERNAL_API_URL=http://api-internal.devographics.com/graphql
 
-# SURVEY=css2021
-# SURVEY=js2021
-SURVEY=graphql2022
+# adapt to current survey
+SURVEYID=state_of_graphql
+EDITIONID=graphql2022
 
 # set to true to only build en-US and ru-RU locales
 FAST_BUILD=true
