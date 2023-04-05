@@ -586,8 +586,10 @@ export const getValueLabel = ({
                 return getString(`options.${field.id}.${value}`, {}, fallback)?.t
             }
             default: {
-                const fallback = value
-                return getString(`options.${field.id}.${value}`, {}, fallback)?.t
+                const key = `options.${field.id}.${value}`
+                const regular = getString(key, {}, value)?.t
+                const short = getString(`${key}.short`, {}, regular)?.t
+                return short
             }
         }
     }
