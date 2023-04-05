@@ -5,7 +5,6 @@ import { sendMagicLinkEmail } from "../email/magicLinkEmail";
 
 import { UserTypeServer } from "~/core/models/user.server";
 
-import debug from "debug";
 import { routes } from "~/lib/routes";
 import { serverConfig } from "~/config/server";
 import type { Request } from "express";
@@ -16,7 +15,6 @@ import {
   updateUserEmailHash,
   upgradeUser,
 } from "./userUtils";
-const debugMagic = debug("stateof:magiclink");
 
 /**
  * Compute the full magic link, with redirection parameter
@@ -57,7 +55,7 @@ async function sendMagicLink(
   // => this could enable a "temporary authentication" mode for new users to reduce friction in the future (we have to assess security yet)
   const foundUser = await findUserFromEmail(email);
 
-  const { anonymousId, prettySlug, year, locale } = req.body;
+  const { anonymousId, surveyId, editionId, year, locale } = req.body;
   if (!foundUser) {
     const user: {
       email: string;
@@ -71,9 +69,13 @@ async function sendMagicLink(
       isVerified: false,
     };
 
-    if (prettySlug || year) {
+    if (surveyId || editionId) {
       user.meta = {
-        surveySlug: prettySlug,
+        surveyId,
+        editionId,
+        // @deprecated, use surveyId
+        surveySlug: surveyId?.replaceAll("_", "-"),
+        // @deprecated, use editionId
         surveyYear: year,
       };
     }
@@ -94,7 +96,7 @@ async function sendMagicLink(
     email,
     // href = /callbackUrl?token=<the magic token>
     magicLink,
-    prettySlug,
+    surveyId,
     locale,
   });
   /*
@@ -104,29 +106,6 @@ async function sendMagicLink(
       });
       */
 }
-
-/*
-@see https://github.com/StateOfJS/StateOfJS-next2/issues/3
-This would allow a temporary access without clicking the magic link in some scnearios
-However this is not secure (someone could use your email and get your data until you verify your account)
-const getTemporaryUserMiddleware = (req, res, next) => {
-  const { email } = req.body;
-  if (!email) {
-    return res.status(400).end();
-  }
-  UserMongooseModel.findOne({ email }).then((userResult) => {
-    const user = userResult?.toObject();
-    if (!user) {
-      return res.status(401).end();
-    }
-    if (user.isVerified) {
-      // If user is already verified, they have to click the magic link
-      // Otherwise it would allow anyone to connect to their account
-      return res.status(401).end()
-    }
-  });
-};
-*/
 
 /**
  * Find the user and create it if it doesn't exist yet

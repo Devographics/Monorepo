@@ -9,7 +9,7 @@ import { useSearchParams } from "next/navigation";
 import { SurveyEdition } from "@devographics/core-models";
 
 export const useSurveyActionParams = (): { source?: string; referrer?: string } => {
-  const query = useSearchParams()
+  const query = useSearchParams()!
   const source = query.get("source") || localStorage.getItem("source");
   const referrer = query.get("referrer") || localStorage.getItem("referrer");
   const params: any = {}
@@ -63,6 +63,6 @@ export interface BrowserData {
   common__user_info__os?: string;
 }
 
-export interface PrefilledData extends BrowserData, Pick<SurveyEdition, "surveyContextId" | "surveyEditionId"> {
+export interface PrefilledData extends BrowserData, Pick<SurveyEdition, "surveyId" | "editionId"> {
   email?: string;
 }

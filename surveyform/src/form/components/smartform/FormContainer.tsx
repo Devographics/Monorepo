@@ -1,4 +1,4 @@
-import React from "react";
+"use client";
 import gql from "graphql-tag";
 import type { DocumentNode } from "graphql";
 

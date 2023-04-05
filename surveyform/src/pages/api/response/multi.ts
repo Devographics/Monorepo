@@ -41,11 +41,14 @@ export default async function responseHandler(req: NextApiRequest, res: NextApiR
         responses {
           _id
           pagePath
-          surveySlug
+          editionId
+          surveyId
           completion
           createdAt
           survey {
             slug
+            surveyId
+            editionId
             prettySlug
             name
             year

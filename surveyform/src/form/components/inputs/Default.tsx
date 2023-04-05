@@ -1,6 +1,7 @@
+"use client";
 import { FormInputProps } from "@devographics/react-form";
-import React from "react";
-import { FormControl } from "react-bootstrap";
+import FormControl from "react-bootstrap/FormControl";
+
 import { FormItem } from "~/form/components/elements/FormItem";
 
 export const FormComponentText = ({
@@ -17,3 +18,5 @@ export const FormComponentText = ({
     </FormItem>
   );
 };
+
+export default FormComponentText;

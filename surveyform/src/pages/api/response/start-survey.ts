@@ -8,6 +8,10 @@ import { print } from 'graphql'
 import { fetchSurvey } from "@devographics/core-models/server";
 import { connectToAppDb } from "~/lib/server/mongoose/connection";
 import { connectToRedis } from "~/lib/server/redis";
+import { userFromReq } from "~/lib/server/context/userContext";
+import { SurveyEdition, SURVEY_OPEN, SURVEY_PREVIEW } from "@devographics/core-models";
+// TODO: skip the graphql part by calling the mutator directly
+// import {createMutator} from "@devographics/crud/server"
 
 export default async function responseStartSurveyHandler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== "POST") {
@@ -15,12 +19,30 @@ export default async function responseStartSurveyHandler(req: NextApiRequest, re
     }
     await connectToAppDb()
     connectToRedis()
-
-    const surveyContextId = req.query["surveyContextId"] as string
-    if (!surveyContextId) throw new Error("No survey slug, can't start survey")
-    const surveyYear = req.query["surveyYear"] as string
-    if (!surveyYear) throw new Error("No survey year, can't start survey")
-    const survey = await fetchSurvey(surveyContextId, surveyYear)
+    // TODO: we have created an helper for this part to prepare migration to Next 13 route handlers
+    const user = await userFromReq(req)
+    if (!user) {
+        return res.status(401).send({ error: "Not authenticated" })
+    }
+    // TODO: we have already created an helper for this part to prepare migration to Next 13 route handlers
+    const surveyId = req.query["surveyId"] as string
+    if (!surveyId) {
+        return res.status(400).send({ error: "No survey id, can't start survey" })
+    }
+    const editionId = req.query["editionId"] as string
+    if (!editionId) {
+        return res.status(400).send({ error: "No survey edition id, can't start survey" })
+    }
+    let survey: SurveyEdition
+    try {
+        survey = await fetchSurvey(surveyId, editionId)
+    } catch (err) {
+        console.error()
+        return res.status(404).send({ error: `No survey found, surveyId: '${surveyId}', editionId: '${editionId}'` })
+    }
+    if (!survey.status || ![SURVEY_OPEN, SURVEY_PREVIEW].includes(survey.status)) {
+        return res.status(400).send({ error: `Survey '${editionId}' is not in open or preview mode.` })
+    }
 
 
     // TODO: this code used to be a client-side graphql query
@@ -61,7 +83,7 @@ export default async function responseStartSurveyHandler(req: NextApiRequest, re
         })
         if (!gqlRes.ok) {
             console.error("Response text:", await gqlRes.text())
-            throw new Error("Error during startSurvey")
+            return res.status(500).send("Error during startSurvey")
         }
         const gqlJson: {
             data?: any,
@@ -78,7 +100,7 @@ export default async function responseStartSurveyHandler(req: NextApiRequest, re
                 locations: Array<{ column: number, line: number }>
             }>
         } = await gqlRes.json()
-        console.log("startSurvey result", gqlJson)
+        console.log("startSurvey result", JSON.stringify(gqlJson))
         return res.status(200).json(gqlJson)
     } catch (err) {
         console.error("GraphQL fetch error", err)

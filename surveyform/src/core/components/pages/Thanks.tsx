@@ -6,19 +6,22 @@ import Image from "next/image";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import { getSurveyImageUrl } from "~/surveys/getSurveyImageUrl";
 import Link from "next/link";
-import { ResponseDocument } from "@devographics/core-models";
 import { useSurvey } from "~/surveys/components/SurveyContext/Provider";
+// import { ResponseDocument } from "@devographics/core-models";
+import { useResponse } from "~/surveys/components/ResponseContext/ResponseProvider";
 
 export const Thanks = ({
-  response,
+  //response,
   readOnly,
 }: {
-  response?: ResponseDocument;
+  //response?: ResponseDocument;
   readOnly?: boolean;
 }) => {
   const survey = useSurvey();
   const imageUrl = getSurveyImageUrl(survey);
   const { name, year } = survey;
+  // TODO: get from server, see ongoing investigation
+  const response = useResponse();
 
   return (
     <div className="contents-narrow thanks">

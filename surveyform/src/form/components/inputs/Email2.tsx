@@ -2,9 +2,11 @@
 import React, { useState } from "react";
 import { useIntlContext } from "@devographics/react-i18n";
 import { FormInputProps, useFormContext } from "@devographics/react-form";
-import { FormControl } from "react-bootstrap";
+import FormControl from "react-bootstrap/FormControl";
+
 import isEmpty from "lodash/isEmpty.js";
-import { Form } from "react-bootstrap";
+import Form from "react-bootstrap/Form";
+
 import FormOptionLabel from "~/form/components/elements/FormOptionLabel";
 import { FormItem } from "~/form/components/elements/FormItem";
 

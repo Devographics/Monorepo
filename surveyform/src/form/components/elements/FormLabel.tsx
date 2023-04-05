@@ -1,5 +1,4 @@
-import React from "react";
-import { Form } from "react-bootstrap";
+import Form from "react-bootstrap/Form";
 import EntityLabel, {
   EntityLabelProps,
 } from "~/core/components/common/EntityLabel";

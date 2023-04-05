@@ -19,5 +19,6 @@ export type {
     SurveyStatus,
     SurveyStatusLabel
 } from './surveys/typings'
+export * from './surveys/shared'
 
 export type { EntityResolvedFields, Entity } from './entities/typings'

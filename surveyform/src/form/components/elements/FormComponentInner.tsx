@@ -1,7 +1,7 @@
-import React from "react";
+"use client";
 import { useIntlContext } from "@devographics/react-i18n";
 import { uiUtils, FormInputProps } from "@devographics/react-form";
-import cslx, { clsx } from "clsx";
+import { clsx } from "clsx";
 const { whitelistInputProps } = uiUtils;
 /*
 import {
@@ -97,13 +97,9 @@ export const FormComponentInner = (props: FormComponentInnerProps) => {
     inputClassName,
     name,
     input,
-    //inputType,
-    beforeComponent,
-    afterComponent,
     errors,
     showCharsRemaining,
     charsRemaining,
-    renderComponent,
     formInput,
   } = props;
 
@@ -121,10 +117,19 @@ export const FormComponentInner = (props: FormComponentInnerProps) => {
 
   const FormInput = formInput;
 
+  if (!formInput) {
+    console.error("Unsupported input", props);
+    return;
+  }
+
   return (
     <div className={inputClass}>
       {/*instantiateComponent(beforeComponent, properties)*/}
-      <FormInput {...properties} />
+      {FormInput ? (
+        <FormInput {...properties} />
+      ) : (
+        <div>Error while loading input</div>
+      )}
       {hasErrors ? <FieldErrors errors={errors} /> : null}
       {renderClear()}
       {showCharsRemaining && (

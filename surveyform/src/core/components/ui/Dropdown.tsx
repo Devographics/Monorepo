@@ -1,6 +1,7 @@
 // TODO: uses react bootstrap a lot, need a refactor
 import React from "react";
-import { Dropdown as BsDropdown, DropdownButton } from "react-bootstrap";
+import BsDropdown from "react-bootstrap/Dropdown";
+import DropdownButton from "react-bootstrap/DropdownButton";
 import { FormattedMessage } from "../common/FormattedMessage";
 const DropdownItem = BsDropdown.Item;
 // import { LinkContainer } from "react-router-bootstrap";

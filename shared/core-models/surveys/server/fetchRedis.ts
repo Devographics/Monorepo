@@ -7,7 +7,7 @@ import { SurveyEdition, SurveyEditionDescription, SurveySharedContext } from "..
 import { getRedisClient } from "./redis";
 
 // This TTL can be long (multiple hours) since we can manually invalidate Redis cache if needed
-const TTL_SECONDS = 60 * 60 * 6
+const TTL_SECONDS = 60 * 60 * 2
 
 function storeRedis(key: string) {
     return async function <T = any>(val: T extends Promise<unknown> ? never : T): Promise<boolean> {
@@ -39,17 +39,17 @@ async function fetchJson<T = any>(key: string): Promise<T | null> {
 
 const prefix = "surveyform"
 
-const surveyKey = (prettySlug: SurveyEdition["prettySlug"], year: string) => `${prefix}_survey_${prettySlug}_${year}`
-
-const surveyContextKey = (slug: SurveySharedContext["slug"]) => `${prefix}_surveycontext_${slug}`
+const surveyKey = (surveyId: string, editionId: string) => `${prefix}_survey_${surveyId}_${editionId}`
+const surveyContextKey = (surveyId: string) => `${prefix}_surveycontext_${surveyId}`
 
 /**
- * @param slug Slug of the survey from URL
- * /!\ this is different from the github folder path, we need to replace "-" by "_"
- * @param year 
+ * 
+ * @param contextId state_of_css
+ * @param editionId css2019
+ * @returns 
  */
-export async function fetchSurveyRedis(prettySlug: SurveyEdition["prettySlug"], year: string): Promise<SurveyEdition | null> {
-    const survey = fetchJson<SurveyEdition>(surveyKey(prettySlug, year))
+export async function fetchSurveyRedis(contextId: SurveyEdition["surveyId"], editionId: string): Promise<SurveyEdition | null> {
+    const survey = fetchJson<SurveyEdition>(surveyKey(contextId, editionId))
     return survey
 }
 export const storeSurveyRedis = (...args: Parameters<typeof surveyKey>) => storeRedis(surveyKey(...args))
@@ -63,9 +63,8 @@ export const fetchSurveysListRedis = async (): Promise<Array<SurveyEditionDescri
 }
 export const storeSurveysListRedis = storeRedis(surveyListKey)
 
-// prettySlug is the one from the URL
-export async function fetchSurveyContextRedis(slug: SurveySharedContext["slug"]): Promise<SurveySharedContext> {
-    const surveyContext = await fetchJson(surveyContextKey(slug))
+export async function fetchSurveyContextRedis(surveyId: SurveySharedContext["id"]): Promise<SurveySharedContext> {
+    const surveyContext = await fetchJson(surveyContextKey(surveyId))
     return surveyContext
 }
 export const storeSurveyContextRedis = (...args: Parameters<typeof surveyContextKey>) => storeRedis(surveyContextKey(...args))

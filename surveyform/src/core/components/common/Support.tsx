@@ -1,4 +1,3 @@
-import React from "react";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 
 const Support = () => {

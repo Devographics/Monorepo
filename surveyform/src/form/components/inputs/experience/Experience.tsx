@@ -1,14 +1,16 @@
 "use client";
-import React, { useState, useRef } from "react";
-import { Overlay, Tooltip } from "react-bootstrap";
+import { useState, useRef } from "react";
+import Overlay from "react-bootstrap/Overlay";
+import Tooltip from "react-bootstrap/Tooltip";
+import FormControl from "react-bootstrap/FormControl";
 import { FormItem } from "~/form/components/elements/FormItem";
 import FormOptionLabel from "~/form/components/elements/FormOptionLabel";
-import { Form } from "react-bootstrap";
+import Form from "react-bootstrap/Form";
+
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 // import { isOtherValue, removeOtherMarker, addOtherMarker } from './Checkboxgroup';
 import { FormInputProps, useFormContext } from "@devographics/react-form";
 import { useEntities } from "~/core/components/common/EntitiesContext";
-import { FormControl } from "react-bootstrap";
 import get from "lodash/get.js";
 import IconComment from "~/core/components/icons/Comment";
 import IconCommentDots from "~/core/components/icons/CommentDots";

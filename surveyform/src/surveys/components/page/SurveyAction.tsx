@@ -49,7 +49,7 @@ const SurveyAction = ({
     response,
     loading: responseLoading,
     error: responseError,
-  } = useUserResponse({ surveyEditionId: getSurveyEditionId(survey) });
+  } = useUserResponse({ editionId: getSurveyEditionId(survey) });
   if (userLoading) return <Loading />;
   if (userError) throw new Error(userError);
   if (responseLoading) return <Loading />;
@@ -141,8 +141,8 @@ const SurveyStart = ({
 
   // prefilled data
   let data: PrefilledData = {
-    surveyEditionId: getSurveyEditionId(survey),
-    surveyContextId: getSurveyContextId(survey),
+    editionId: getSurveyEditionId(survey),
+    surveyId: getSurveyContextId(survey),
     email: currentUser?.email,
     common__user_info__source: source,
     common__user_info__referrer: referrer,
@@ -175,7 +175,9 @@ const SurveyStart = ({
           // no need to stop spinner because it'll disappear when we change page
           // setLoading(false);
           console.log("start survey result", result);
-          const pagePath = get(result, `data.startSurvey.data.pagePath`);
+          const pagePath =
+            get(result, `data.startSurvey.data.pagePath`) ||
+            getSurveySectionPath({ survey, response: result.data, number: 1 });
           console.log(`Redirecting to ${pagePath}…`);
           router.push(pagePath);
         }

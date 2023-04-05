@@ -23,13 +23,6 @@ module.exports = {
   overrides: [
     { files: ["**/__tests__/**"], env: { jest: true } },
     {
-      files: ["**/*.stories.tsx"],
-      rules: {
-        // stories always have a named default export
-        "import/no-anonymous-default-export": "off",
-      },
-    },
-    {
       files: ["**/*.ts", "**/*.tsx"],
       rules: {
         // Already handled by TS

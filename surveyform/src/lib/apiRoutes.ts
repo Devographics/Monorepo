@@ -1,5 +1,3 @@
-import { SurveyEdition } from "@devographics/core-models";
-
 /**
  * NOTE: this is SHARED code not API only, we use this in the frontend as well
  */
@@ -10,32 +8,10 @@ export const apiRoutes = {
     method: "POST"
   },
   account: {
-    // POST
-    signup: {
-      href: "/api/account/signup",
-      method: "POST",
-    },
-    login: {
-      href: "/api/account/login",
-      method: "POST",
-    },
     logout: {
       href: "/api/account/logout",
       method: "POST",
     },
-    sendResetPasswordEmail: {
-      href: "/api/account/send-reset-password-email",
-      method: "POST",
-    },
-    changePassword: {
-      href: "/api/account/changePassword",
-      method: "POST",
-    },
-    verifyEmail: {
-      href: "/api/account/verify-email",
-      method: "POST",
-    },
-    // GET
     user: {
       href: "/api/account/user",
       method: "GET",
@@ -61,16 +37,16 @@ export const apiRoutes = {
   },
   response: {
     single: {
-      href: ({ surveyEditionId }: { surveyEditionId: string }) => `/api/response/single?surveyEditionId=${surveyEditionId}`
+      href: ({ editionId }: { editionId: string }) => `/api/response/single?editionId=${editionId}`
     },
     multi: {
       href: "/api/response/multi"
     },
     startSurvey: {
-      href: ({ surveyContextId, year }: Required<Pick<SurveyEdition, "surveyContextId" | "year">>) => `/api/response/start-survey?surveyContextId=${surveyContextId}&surveyYear=${year}`
+      href: ({ surveyId, editionId }: { surveyId: string, editionId: string }) => `/api/response/start-survey?surveyId=${surveyId}&editionId=${editionId}`
     },
     saveSurvey: {
-      href: ({ surveyContextId, year }: Required<Pick<SurveyEdition, "surveyContextId" | "year">>) => `/api/response/save-survey?surveyContextId=${surveyContextId}&surveyYear=${year}`
+      href: ({ surveyId, editionId }: { surveyId: string, editionId: string }) => `/api/response/save-survey?surveyId=${surveyId}&editionId=${editionId}`
     }
   }
 }

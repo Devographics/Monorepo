@@ -1,3 +1,6 @@
+// TODO: get the response directly in a React Server Component
+// instead of an API endpoint (or even route handler)
+// as it is never called on demand
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 import gql from "graphql-tag"
@@ -10,9 +13,9 @@ import { connectToRedis } from '~/lib/server/redis'
 export default async function singleResponseHandler(req: NextApiRequest, res: NextApiResponse) {
   await connectToAppDb()
   connectToRedis()
-  const surveyEditionId = req.query["surveyEditionId"]
-  if (!surveyEditionId) {
-    return res.status(400).json({ error: "Missing surveyEditionId" })
+  const editionId = req.query["editionId"]
+  if (!editionId) {
+    return res.status(400).json({ error: "Missing editionId" })
   }
   // TODO: this code used to be a client-side graphql query
   // we reuse the same call temporarily to facilitate moving out of graphql
@@ -47,11 +50,13 @@ export default async function singleResponseHandler(req: NextApiRequest, res: Ne
         responses {
           _id
           pagePath
-          surveyEditionId
+          editionId
           completion
           createdAt
           survey {
             slug
+            surveyId
+            editionId
             prettySlug
             name
             year
@@ -71,14 +76,12 @@ export default async function singleResponseHandler(req: NextApiRequest, res: Ne
     })
     if (!gqlRes.ok) {
       console.error("Response text:", await gqlRes.text())
-      throw new Error("Error during fetch")
+      return res.status(500)
     }
     const data = await gqlRes.json()
-    console.log("GOT DATA FROM GRAPHQL CALL", data)
     // TODO: filter during call to db already
     const responses: Array<ResponseDocument & { survey: SurveyEdition }> = data?.data?.currentUser?.responses || []
-    const surveyResponse = responses.find((r) => r.surveyEditionId === surveyEditionId) || null;
-    console.log("response", surveyResponse, responses)
+    const surveyResponse = responses.find((r) => r.editionId === editionId) || null;
     return res.status(200).json(surveyResponse)
   } catch (err) {
     console.error("GraphQL fetch error", err)

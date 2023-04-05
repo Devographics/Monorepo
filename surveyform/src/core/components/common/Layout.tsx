@@ -8,10 +8,8 @@ import { useSearchParams } from "next/navigation";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 
 export const Layout = ({ children }: { children: any }) => {
-  //const router = useRouter();
-  const query = useSearchParams();
-  //const { query = {} } = router;
-  // const { source, referrer } = query;
+  // TODO: TS is not happy during build, don't know why
+  const query = useSearchParams()!;
   const source = query.get("source");
   const referrer = query.get("referrer");
 

@@ -2,8 +2,6 @@
  * 1) get from in-memory cache if available (short TTL because it can't be emptied)
  * 2) get from Redis if available (longer TTL, can be invalidated/updated easily)
  * 3) get from Github in last resort
- * 
- * TODO: add "surveyId" and "surveyEditionId" to the merged object here, instead of in fetchGithub
  */
 import { SurveyEdition, SurveyEditionDescription, SurveySharedContext } from "../typings";
 import NodeCache from 'node-cache'
@@ -33,20 +31,35 @@ async function fromSurveysCache<T = any>(key: string, fetchFunc: () => Promise<T
     return await promise
 }
 
-export async function fetchSurvey(prettySlug: SurveyEdition["prettySlug"], year: string): Promise<SurveyEdition> {
-    const key = `survey_${prettySlug}_promise`
+
+/**
+ * 
+ * @param surveyId The survey context but with dashes "state-of-css"
+ * @param year The year usually present in a survey clean URL "2019"
+ * @returns Survey with surveyId "state_of_css" and editionId "css2019"
+ */
+export async function fetchSurveyDescriptionFromUrl(slug: string, year: string) {
+    const contextId = slug.replaceAll("-", "_")
+    const list = await fetchSurveysList(true)
+    const survey = list.find(s => s.surveyId === contextId && "" + s.year === year)
+    if (!survey) throw new Error(`Can't find survey ${contextId} ${year}`)
+    return survey
+}
+
+export async function fetchSurvey(surveyId: SurveyEdition["surveyId"], editionId: string): Promise<SurveyEdition> {
+    const key = `survey_${surveyId}_promise`
     return await fromSurveysCache(
         key,
         async () => {
-            const redisSurvey = await fetchSurveyRedis(prettySlug, year)
+            const redisSurvey = await fetchSurveyRedis(surveyId, editionId)
             if (redisSurvey) {
-                console.debug("redis cache hit", prettySlug, year)
+                console.debug("redis cache hit", surveyId, editionId)
                 return redisSurvey
             }
-            console.debug("redis cache miss,", prettySlug, year, "fetching from github")
-            const ghSurvey = await fetchSurveyGithub(prettySlug, year)
+            console.debug("redis cache miss,", surveyId, editionId, "fetching from github")
+            const ghSurvey = await fetchSurveyGithub(surveyId, editionId)
             // store in Redis in the background
-            storeSurveyRedis(prettySlug, year)(ghSurvey).catch(err => {
+            storeSurveyRedis(surveyId, editionId)(ghSurvey).catch(err => {
                 console.error("couldn't store survey in Redis", err)
             })
             return ghSurvey
@@ -54,7 +67,7 @@ export async function fetchSurvey(prettySlug: SurveyEdition["prettySlug"], year:
     )
 }
 
-export const fetchSurveysList = async (keepDemo?: boolean): Promise<Array<SurveyEditionDescription>> => {
+export const fetchSurveysList = async (keepDemo?: boolean, yearThreshold?: number): Promise<Array<SurveyEditionDescription>> => {
     const key = "surveys_description_list"
     let surveys = await fromSurveysCache(
         key,
@@ -63,7 +76,7 @@ export const fetchSurveysList = async (keepDemo?: boolean): Promise<Array<Survey
             if (redisSurveys) {
                 return redisSurveys
             }
-            const ghSurveys = await fetchSurveysListGithub()
+            const ghSurveys = await fetchSurveysListGithub(yearThreshold)
             storeSurveysListRedis(ghSurveys)
             return ghSurveys
         }
@@ -72,51 +85,38 @@ export const fetchSurveysList = async (keepDemo?: boolean): Promise<Array<Survey
     // so we have to use a custom node_env variable NEXT_PUBLIC_NODE_ENV
     console.log("ENV", process.env.NODE_ENV, process.env.NEXT_PUBLIC_NODE_ENV)
     if (!keepDemo) {
-        surveys = surveys.filter(s => s.slug !== "demo_survey")
+        surveys = surveys.filter(s => s.surveyId !== "demo_survey")
     }
-    const sorted = orderBy(surveys, ["year", "slug"], ["desc", "asc"])
+    const sorted = orderBy(surveys, ["year", "surveyId"], ["desc", "asc"])
     return sorted
 }
 
-/**
- * Functions that gets a safe unique id per survey edition,
- * taking legacy fields into account
- * @param survey 
- * @returns js2022, graphql2022, css2022 etc.
- */
-export function getSurveyEditionId(survey: SurveyEdition) {
-    // js2022 etc.
-    const surveyEditionId = survey.surveyEditionId || survey.id || survey.surveyId || survey.slug
-    return surveyEditionId
-}
-export async function fetchSurveyFromId(surveyEditionId: SurveyEdition["surveyEditionId"]) {
+export async function fetchSurveyFromId(editionId: SurveyEdition["editionId"]) {
     // no need to cache this functions, 
     // because it is derived from other functions that are themselves cached
     // (always get demo survey here, we filter afterward)
     const surveyList = await fetchSurveysList(true)
-    const surveyDescription = surveyList.find(s => s.surveyEditionId === surveyEditionId)
+    const surveyDescription = surveyList.find(s => s.editionId === editionId)
     if (!surveyDescription) {
-        throw new Error(`No survey with surveyId ${surveyEditionId}`)
+        throw new Error(`No survey with surveyId ${editionId}`)
     }
     // state_of_js
-    // be careful with older suveys that use "context" not slug
-    const slug = surveyDescription.context || surveyDescription.slug
-    const survey = await fetchSurvey(slug, surveyDescription.year + "")
+    const survey = await fetchSurvey(surveyDescription.surveyId, surveyDescription.editionId)
     return survey
 }
 
 
-export async function fetchSurveyContext(slug: SurveySharedContext["slug"]): Promise<SurveySharedContext> {
-    const key = `survey_context_${slug}`
+export async function fetchSurveyContext(surveyId: SurveySharedContext["id"]): Promise<SurveySharedContext> {
+    const key = `survey_context_${surveyId}`
     return await fromSurveysCache(
         key,
         async () => {
-            const redisSurvey = await fetchSurveyContextRedis(slug)
+            const redisSurvey = await fetchSurveyContextRedis(surveyId)
             if (redisSurvey) {
                 return redisSurvey
             }
-            const ghSurvey = await fetchSurveyContextGithub(slug)
-            storeSurveyContextRedis(slug)(ghSurvey)
+            const ghSurvey = await fetchSurveyContextGithub(surveyId)
+            storeSurveyContextRedis(surveyId)(ghSurvey)
             return ghSurvey
         }
     )

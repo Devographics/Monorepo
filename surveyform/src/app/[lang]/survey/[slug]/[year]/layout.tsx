@@ -1,15 +1,17 @@
+import type { Metadata } from "next";
 import { captureException } from "@sentry/nextjs";
 import { notFound } from "next/navigation";
 import { EntitiesProvider } from "~/core/components/common/EntitiesContext";
 import { fetchEntitiesRedis } from "~/core/server/fetchEntitiesRedis";
 import { SurveyProvider } from "~/surveys/components/SurveyContext/Provider";
-import { fetchSurvey, initRedis } from "@devographics/core-models/server";
+import { initRedis } from "@devographics/core-models/server";
 import {
   fetchLocaleStrings,
   getLocales,
 } from "~/i18n/server/fetchLocalesRedis";
 import { LocaleContextProvider } from "~/i18n/context/LocaleContext";
 import { serverConfig } from "~/config/server";
+import { mustGetSurvey } from "./fetchers";
 
 // revalidate survey/entities every 5 minutes
 const SURVEY_TIMEOUT_SECONDS = 5 * 60;
@@ -21,10 +23,60 @@ export const revalidate = SURVEY_TIMEOUT_SECONDS;
 /*
 export async function generateStaticParams() {
   return surveys.map((s) => ({
-    slug: s.prettySlug,
+    slug: s.surveyId.replaceAll("_", "-"),
     year: String(s.year),
   }));
 }*/
+
+import { getSurveyImageUrl } from "~/surveys/getSurveyImageUrl";
+import { publicConfig } from "~/config/public";
+import { getSurveyTitle } from "~/surveys/helpers";
+
+interface SurveyPageServerProps {
+  slug: string;
+  year: string;
+}
+
+export async function generateMetadata({
+  params: { slug, year },
+}: {
+  params: SurveyPageServerProps;
+}): Promise<Metadata> {
+  // TODO: it seems we need to call this initialization code on all relevant pages/layouts
+  initRedis(serverConfig().redisUrl);
+  const survey = await mustGetSurvey({ slug, year });
+  const { socialImageUrl, faviconUrl } = survey;
+  const imageUrl = getSurveyImageUrl(survey);
+  let imageAbsoluteUrl = socialImageUrl || imageUrl;
+  const url = publicConfig.appUrl;
+
+  const meta: Metadata = {
+    title: getSurveyTitle({ survey }),
+    // NOTE: merge between route segments is shallow, you may need to repeat field from layout
+    openGraph: {
+      // @ts-ignore
+      type: "article" as const,
+      url,
+      image: imageAbsoluteUrl,
+    },
+    twitter: {
+      // @ts-ignore
+      card: "summary" as const,
+      image: imageAbsoluteUrl,
+    },
+    alternates: {
+      canonical: url,
+      // we could create alternates for languages too
+    },
+  };
+  if (faviconUrl) {
+    meta.icons = {
+      icon: faviconUrl,
+      shortcut: faviconUrl,
+    };
+  }
+  return meta;
+}
 
 /**
  * TODO: get the list of surveys statically during getStaticParams call
@@ -41,11 +93,7 @@ export default async function SurveyLayout({
   // TODO: it seems we need to call this initialization code on all relevant pages/layouts
   initRedis(serverConfig().redisUrl);
 
-  const { slug, year } = params;
-  const survey = await fetchSurvey(slug, year);
-  if (!survey) {
-    notFound();
-  }
+  const survey = await mustGetSurvey(params);
 
   // survey specific strings
   const locale = params.lang; // getCurrentLocale();
@@ -58,17 +106,16 @@ Next.js will fallback to trying to find a valid page path.
 If this error still happens in a few months (2023) open an issue with repro at Next.js.`);
     notFound();
   }
-  const localeSlug = survey.prettySlug!.replaceAll("-", "_");
+  const localeSlug = survey.surveyId;
   const i18nContexts =
-    survey.prettySlug !== "demo-survey"
+    localeSlug !== "demo_survey"
       ? [
           // We expect the root layout to load the common contexts
           // and define a LocaleContextProvider
           // => generic strings and survey specific will be merged automatically
           //...i18nCommonContexts,
-          // TODO: get this "survey context" value more reliably
           localeSlug,
-          localeSlug + "_" + year,
+          localeSlug + "_" + params.year,
         ]
       : // TODO for local testing, we don't have tokens for demo_survey yet
         ["state_of_graphql", "state_of_graphql_2022"];
@@ -89,7 +136,7 @@ If this error still happens in a few months (2023) open an issue with repro at N
   // (not useful in static mode though)
   let entities = [];
   try {
-    const redisEntities = await fetchEntitiesRedis(survey.surveyEditionId);
+    const redisEntities = await fetchEntitiesRedis(survey.editionId);
     if (!redisEntities) throw new Error("Entities not found in Redis");
     entities = redisEntities;
   } catch (err) {
@@ -115,6 +162,7 @@ If this error still happens in a few months (2023) open an issue with repro at N
           locales={locales}
           localeId={locale}
           localeStrings={localeWithStrings}
+          contexts={i18nContexts}
         >
           {children}
         </LocaleContextProvider>

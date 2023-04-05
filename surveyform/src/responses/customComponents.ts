@@ -1,8 +1,9 @@
 import RaceEthnicity from "~/form/components/inputs/RaceEthnicity";
-import Email2 from "~/form/components/inputs//Email2";
+import Email2 from "~/form/components/inputs/Email2";
 import Hidden from "~/form/components/inputs/Hidden";
 import { Help } from "~/form/components/inputs/Help";
 import Bracket from "~/form/components/inputs/Bracket";
+import Text from "~/form/components/inputs/Default";
 import Feature from "~/form/components/inputs/experience/Feature";
 import Tool from "~/form/components/inputs/experience/Tool";
 import Slider from "~/form/components/inputs/Slider";
@@ -26,6 +27,7 @@ const customComponents = {
   select: Select,
   checkboxgroup: Checkboxgroup,
   textarea: Textarea,
+  text: Text,
   radiogroup: Radiogroup,
   multiautocomplete: AutocompleteMultiple
 };

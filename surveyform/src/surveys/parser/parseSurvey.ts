@@ -42,8 +42,8 @@ export const getQuestionObject = (
 export function getSurveyEditionId(survey: SurveyEdition) {
   //console.log("survey", survey)
   // js2022 etc.
-  const surveyEditionId = survey.surveyEditionId || survey.surveyId || survey.id || survey.slug
-  return surveyEditionId
+  const editionId = survey.editionId || survey.surveyId || survey.id || survey.slug
+  return editionId
 }
 /**
  * state_of_js
@@ -52,8 +52,8 @@ export function getSurveyEditionId(survey: SurveyEdition) {
  */
 export function getSurveyContextId(survey: SurveyEdition) {
   // state_of_js
-  const surveyContextId = survey.surveyContextId || survey.context
-  return surveyContextId!
+  const surveyId = survey.surveyId || survey.context
+  return surveyId!
 }
 /** 
 Note: section's slug can be overriden by the question
@@ -64,9 +64,9 @@ Get question unique id, to be used in the schema
 
 */
 export const getQuestionId = (survey: SurveyEdition, section, question) => {
-  const surveyEditionId = getSurveyEditionId(survey)
+  const editionId = getSurveyEditionId(survey)
   const sectionSlug = question.sectionSlug || section.slug || section.id;
-  let fieldName = surveyEditionId + "__" + sectionSlug + "__" + question.id;
+  let fieldName = editionId + "__" + sectionSlug + "__" + question.id;
   if (question.suffix) {
     fieldName += `__${question.suffix}`;
   }

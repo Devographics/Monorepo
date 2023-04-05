@@ -14,19 +14,31 @@ import { fetchSurveyFromId } from "@devographics/core-models/server";
 import { ResponseDocument, SurveyEdition } from "@devographics/core-models";
 import { getSchema, getServerSchema, initResponseSchema } from "./schema.server";
 
-
-export async function duplicateCheck(validationErrors, options) {
-  const { document, currentUser } = options;
-  if (!document.surveySlug) {
-    console.log(document);
-    throw new Error(`duplicateCheck: document.surveySlug must be defined`);
+function getReponseEditionId(response: ResponseDocument) {
+  const editionId = response.editionId || response.surveySlug
+  if (!editionId) {
+    throw new Error(`response.editionId (or legacy surveySlug) must be defined`);
   }
+  return editionId
+}
+
+/**
+ * Check duplicate response
+ * @param validationErrors 
+ * @param options 
+ * @returns 
+ */
+export async function duplicateCheck(validationErrors, options: {
+  document: any,
+  currentUser: any
+}) {
+  const { document, currentUser } = options;
+  const editionId = getReponseEditionId(document)
   if (!currentUser._id) {
-    console.log(currentUser);
     throw new Error(`duplicateCheck: currentUser._id must be defined`);
   }
   const selector = {
-    surveySlug: document.surveySlug,
+    editionId,
     userId: currentUser._id,
   };
 
@@ -59,13 +71,13 @@ const emailFieldName = "email_temporary";
 
 export async function processEmailOnUpdate(data, properties) {
   const { document } = properties
-  const { _id, surveySlug, emailHash, isSubscribed
+  const { isSubscribed
   } = document as ResponseDocument;
-  if (!surveySlug) throw new Error(`Response ${_id} has no surveySlug`)
+  const editionId = getReponseEditionId(document)
 
-  const survey = await fetchSurveyFromId(surveySlug)
+  const survey = await fetchSurveyFromId(editionId)
   const listId = survey?.emailOctopus?.listId;
-  const emailFieldPath = `${surveySlug}__user_info__${emailFieldName}`;
+  const emailFieldPath = `${editionId}__user_info__${emailFieldName}`;
   const email = data[emailFieldPath];
 
   // if user has entered their email

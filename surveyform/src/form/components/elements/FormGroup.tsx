@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+"use client";
+import { useState } from "react";
 import _some from "lodash/some.js";
 import { VulcanUser, isAdmin } from "@vulcanjs/permissions";
 import { FieldGroup } from "@vulcanjs/schema";

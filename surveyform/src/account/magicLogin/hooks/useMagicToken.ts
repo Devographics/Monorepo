@@ -7,7 +7,8 @@ import { useSearchParams } from "next/navigation";
  * @returns
  */
 export const useMagicToken = () => {
-  const params = useSearchParams()
+  // TS is unhappy during build for unknown reason
+  const params = useSearchParams()!
   const token = params.get("token")
   const from = params.get("from")
   if (!token) throw new Error("No magic token found in query params.");

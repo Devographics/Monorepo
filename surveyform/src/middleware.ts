@@ -6,6 +6,7 @@ import { cronMiddleware } from "~/core/server/edge/cronMiddleware";
 import { getLocaleFromAcceptLanguage } from "~/i18n/server/localeDetection";
 import { LOCALE_COOKIE_NAME } from "./i18n/cookie";
 import { getClosestLocale, locales } from "./i18n/data/locales";
+import { splitPath } from "@devographics/react-form/components/form/utils/path_utils";
 
 function getFirstParam(pathname: string) {
   if (!pathname) {
@@ -19,11 +20,33 @@ function getFirstParam(pathname: string) {
   const firstParam = segments[1]
   return firstParam
 }
+
+
+function maybeLocale(str: string) {
+  const split = str.split("-")
+  // fr-FR, zn-Hans...
+  return split.length === 2 && split[0].length === 2 && split[1].length >= 2
+}
+/**
+ * If the first parameter of the pathname looks like a locale
+ * returns it
+ * returns null otherwise
+ * 
+ * It should also work with unsupported locales, like fr-CA
+ * @param pathname 
+ * @returns 
+ */
 function getLang(pathname: string) {
   const firstParam = getFirstParam(pathname)
   if (!firstParam) return null
-  if (locales.includes(firstParam)) {
-    //console.debug("path includes lang", pathname)
+  if (
+    // it really looks like a locale (be careful to avoid using ambiguous params like filenames)
+    maybeLocale(firstParam) ||
+    // known locale
+    locales.includes(firstParam) ||
+    // matches a known country
+    (firstParam.length === 2 && locales.map(l => l.slice(0, 2)).includes(firstParam))
+  ) {
     return firstParam
   }
   return null
@@ -55,12 +78,12 @@ function localize(request: NextRequest): NextResponse {
   const validLocale = getClosestLocale(locale);
   if (validLocale !== locale) {
     console.warn(
-      `In middleware, locale ${locale} is not yet supported, falling back to ${locale}`
+      `In middleware, locale ${locale} is not yet supported, falling back to ${validLocale}`
     );
   }
   // add or replace locale
   let url = request.nextUrl.clone();
-  if (langFromPath && validLocale != langFromPath) {
+  if (langFromPath && (validLocale !== langFromPath)) {
     // console.debug("Will replace locale", langFromPath, "by", validLocale, "in", url.pathname)
     // replace locale
     url.pathname = url.pathname.replace(langFromPath, validLocale)

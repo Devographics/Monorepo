@@ -1,6 +1,4 @@
-import React from "react";
 import SurveySectionContents from "./SurveySectionContents";
-import SurveyHeadTags from "../SurveyHeadTags";
 import SurveyMessage from "../SurveyMessage";
 import { useSurvey } from "../SurveyContext/Provider";
 import { useSection } from "../SectionContext/SectionProvider";
@@ -22,7 +20,6 @@ const SurveySectionReadOnly = () => {
   return (
     <div className="survey-section-wrapper">
       <SurveyMessage survey={survey} />
-      <SurveyHeadTags survey={survey} section={section} />
       <SurveySectionContents
         survey={survey}
         {...sectionProps}

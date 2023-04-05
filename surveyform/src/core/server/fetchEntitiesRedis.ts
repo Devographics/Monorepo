@@ -11,9 +11,9 @@ export const getSurveyEditionEntitiesCacheKey = ({
   surveyId: string;
 }) => `entities_${surveyId}`;
 
-export const fetchEntitiesRedis = async (surveyEditionId: SurveyEdition["surveyEditionId"]) => {
+export const fetchEntitiesRedis = async (editionId: SurveyEdition["editionId"]) => {
   const redisClient = getRedisClient();
-  const key = getSurveyEditionEntitiesCacheKey({ surveyId: surveyEditionId });
+  const key = getSurveyEditionEntitiesCacheKey({ surveyId: editionId });
   const value = await measureTime(async () => {
     return await redisClient.get(key);
   }, `fetchFromRedis ${key}`);
@@ -29,7 +29,7 @@ export const fetchEntitiesRedis = async (surveyEditionId: SurveyEdition["surveyE
 const ENTITIES_PROMISE_TTL_SECONDS = 10 * 60;
 
 type EntitiesVariables = {
-  surveyId: SurveyEdition["surveyEditionId"]
+  surveyId: SurveyEdition["editionId"]
 };
 
 export const getOrFetchEntities = async (variables: EntitiesVariables) => {

@@ -2,7 +2,7 @@
 /**
  * Context that provides methods to access translated strings
  */
-import React, { useContext, createContext } from "react";
+import { useContext, createContext } from "react";
 import { StringsRegistry } from "./stringsRegistry";
 import { Message } from "./typings";
 

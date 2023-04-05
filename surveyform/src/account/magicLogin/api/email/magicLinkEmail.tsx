@@ -42,27 +42,33 @@ export const magicLinkEmailParameters = ({
   };
 };
 
-const defaultSlug = "state-of-js";
-
+const defaultSurveyId = "state_of_js";
 export const sendMagicLinkEmail = async ({
   email,
   magicLink,
-  prettySlug = defaultSlug,
+  surveyId,
   locale,
-}: //token,
-{
+}: {
   email: string;
   magicLink: string;
-  prettySlug: string;
   locale: string;
-  //token: string;
+  surveyId?: string;
 }) => {
-  const slug = prettySlug.replace(/-/g, "_");
-  const survey = await fetchSurveyContext(slug);
-  const from =
-    survey && survey.domain && `${survey.name} <login@mail.${survey.domain}>`;
+  if (!surveyId) {
+    console.warn(
+      "No surveyId provided to sendMagicLinkEmail, will use state_of_js"
+    );
+  }
+  const survey = await fetchSurveyContext(surveyId || defaultSurveyId);
+  if (!survey?.domain) {
+    console.warn(
+      `No survey domain found for id ${surveyId}, cannot set 'from'`
+    );
+  }
+  const from = survey?.domain && `${survey.name} <login@mail.${survey.domain}>`;
 
-  /** NOTE: when testing be careful that email will be displayed with addition "=" on line ends!!!
+  /**
+   * NOTE: when testing be careful that email will be displayed with addition "=" on line ends!!!
    *  We log a cleaner version of the link
    *
    */

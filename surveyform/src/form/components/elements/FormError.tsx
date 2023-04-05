@@ -1,7 +1,4 @@
-import React from "react";
-// import PropTypes from "prop-types";
-// import getContext from 'recompose/getContext';
-// import { Components, registerComponent } from 'meteor/vulcan:core';
+"use client";
 import get from "lodash/get.js";
 import { useFormContext } from "@devographics/react-form";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";

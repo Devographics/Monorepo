@@ -3,6 +3,5 @@
   "include": [
     "./**/*.tsx",
     "./**/*.ts",
-    "modules/private_responses/model.server?ts"
   ],
 }

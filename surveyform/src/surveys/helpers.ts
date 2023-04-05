@@ -36,10 +36,9 @@ export const getSurveyFieldNames = (survey: SurveyEdition | SurveyEdition) => {
 
 
 function getSurveyPathSegments(survey: SurveyEditionDescription): Array<string> {
-  const { year, prettySlug } = survey;
-  // console.log("SURVEY year", { year, prettySlug }, response)
+  const { year, surveyId } = survey;
   const prefixSegment = "/survey";
-  const slugSegment = prettySlug!;
+  const slugSegment = surveyId.replaceAll("_", "-");
   const yearSegment = year! + "";
   const pathSegments = [prefixSegment, slugSegment, yearSegment];
   return pathSegments
@@ -75,7 +74,6 @@ export function getSurveySectionPath(
   } else {
     if (!response) throw new Error("Undefined response")
     const responseSegment = response.id || response._id
-    console.debug(response, response.id, response._id, response.id || response._id)
     if (!responseSegment) throw new Error("Response object has no id or _id. We may have failed to load your response from server.")
     pathSegments.push(responseSegment);
   }

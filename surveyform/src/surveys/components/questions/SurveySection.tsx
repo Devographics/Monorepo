@@ -1,6 +1,4 @@
-import React from "react";
 import SurveySectionContents from "./SurveySectionContents";
-import SurveyHeadTags from "../SurveyHeadTags";
 import SurveyMessage from "../SurveyMessage";
 import { useSurveyResponseSectionParams } from "../hooks";
 import { useSurvey } from "../SurveyContext/Provider";
@@ -26,7 +24,6 @@ const SurveySection = () => {
   return (
     <div className="survey-section-wrapper">
       <SurveyMessage survey={survey} />
-      <SurveyHeadTags survey={survey} section={section} />
       <SurveySectionContents survey={survey} {...sectionProps} />
     </div>
   );

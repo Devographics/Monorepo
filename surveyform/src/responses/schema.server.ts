@@ -20,6 +20,10 @@ import { serverConfig } from "~/config/server";
 
 const getSurveyDescriptionFromResponse = async (response: ResponseDocument): Promise<SurveyEditionDescription | undefined> => {
   const isDevOrTest = serverConfig().isDev || serverConfig().isTest;
+  if (response.editionId) {
+    return await fetchSurveyFromId(response.editionId)
+  }
+  // using legacy slug
   const surveys = await fetchSurveysList(isDevOrTest)
   return surveys.find((s) => s.slug === response.surveySlug);
 }
@@ -149,10 +153,12 @@ export const getServerSchema = (): VulcanGraphqlSchemaServer => {
           typeName: "Survey",
           // TODO: use a relation instead
           resolver: async (response, args, context) => {
-            if (!response.surveySlug) {
-              throw new Error(`Can't get response survey, response ${response._id} has no surveySlug`)
+            // surveySlug is legacy
+            const editionId = response.editionId || response.surveySlug
+            if (!response.editionId) {
+              throw new Error(`Can't get response survey, response ${response._id} has no editionId (or legacy surveySlug)`)
             }
-            return await fetchSurveyFromId(response.surveySlug)
+            return await fetchSurveyFromId(editionId)
           },
         },
       },
@@ -206,9 +212,9 @@ export async function initResponseSchema(surveys: Array<SurveyEdition>) {
   schemaIsReady = true
   const coreSchema = cloneDeep(schema) as VulcanGraphqlSchema;
   surveys.forEach((survey) => {
-    const surveyEditionId = getSurveyEditionId(survey)
-    if (surveyEditionId) {
-      schemaPerSurvey[surveyEditionId] = cloneDeep(coreSchema);
+    const editionId = getSurveyEditionId(survey)
+    if (editionId) {
+      schemaPerSurvey[editionId] = cloneDeep(coreSchema);
     }
     survey.outline.forEach((section) => {
       section.questions &&
@@ -228,8 +234,8 @@ export async function initResponseSchema(surveys: Array<SurveyEdition>) {
 
           const questionId = getQuestionId(survey, section, questionObject);
           schema[questionId] = questionSchema;
-          if (surveyEditionId) {
-            schemaPerSurvey[surveyEditionId][questionId] = questionSchema;
+          if (editionId) {
+            schemaPerSurvey[editionId][questionId] = questionSchema;
           }
 
           if (questionObject.suffix === "experience") {
@@ -240,8 +246,8 @@ export async function initResponseSchema(surveys: Array<SurveyEdition>) {
               suffix: "comment",
             });
             schema[commentQuestionId] = commentSchema;
-            if (surveyEditionId) {
-              schemaPerSurvey[surveyEditionId][commentQuestionId] = commentSchema;
+            if (editionId) {
+              schemaPerSurvey[editionId][commentQuestionId] = commentSchema;
             }
           }
         });

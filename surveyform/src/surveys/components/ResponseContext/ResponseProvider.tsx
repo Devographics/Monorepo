@@ -1,10 +1,8 @@
 "use client";
 import { ResponseDocument } from "@devographics/core-models";
-import React, { useContext } from "react";
+import React, { createContext, useContext } from "react";
 
-const ResponseContext = React.createContext<ResponseDocument | undefined>(
-  undefined
-);
+const ResponseContext = createContext<ResponseDocument | undefined>(undefined);
 
 export const ResponseProvider = ({
   response,

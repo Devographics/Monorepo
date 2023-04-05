@@ -18,7 +18,7 @@ import { LocaleContextProvider } from "~/i18n/context/LocaleContext";
 import { ErrorBoundary } from "~/core/components/error";
 import Layout from "~/core/components/common/Layout";
 import type { LocaleDef, LocaleDefWithStrings } from "~/i18n/typings";
-import { SSRProvider } from "react-bootstrap";
+import SSRProvider from "react-bootstrap/SSRProvider";
 import { SWRConfig } from "swr";
 
 export interface AppLayoutProps {

@@ -1,4 +1,3 @@
-import React from "react";
 import { statuses } from "~/surveys/constants";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 

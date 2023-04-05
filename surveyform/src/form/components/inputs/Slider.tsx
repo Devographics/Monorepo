@@ -1,6 +1,5 @@
 "use client";
-import React from "react";
-import { FormCheck } from "react-bootstrap";
+import FormCheck from "react-bootstrap/FormCheck";
 import type { FormInputProps } from "@devographics/react-form";
 import { FormItem } from "~/form/components/elements/FormItem";
 import FormOptionLabel from "~/form/components/elements/FormOptionLabel";

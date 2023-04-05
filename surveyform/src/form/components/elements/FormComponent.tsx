@@ -1,3 +1,4 @@
+"use client";
 /**
  * TODO: rename "FieldComponent" to clarify
  * Change compared to Meteor:
@@ -107,14 +108,18 @@ const getFormInput = ({
   FormComponents: any;
 }): // TODO: we could type the props here, it's an InputComponent to be more precise
 ComponentType => {
-  // if input is a React component, use it
-  // NOTE: does it work with class components?
   if (typeof input === "function") {
+    // input is listed in "customComponents"
     const InputComponent = input;
     return InputComponent;
   } else {
+    // @deprecated
+    // ideally, this branch should not be hit, instead define a custom "input" function
+    console.warn("Hitting deprecated switch in getFormInput:", type, input);
+    console.warn("Define input in 'customComponent' instead");
+    // NOTE: don't forget to register them beforehand in the relevant VulcanComponentsProvider
+    // for each question in "customComponents"
     const inputName = getInputName(type, input);
-    // else pick a predefined component
     switch (inputName) {
       case "text":
         return FormComponents.FormComponentDefault;

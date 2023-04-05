@@ -1,4 +1,4 @@
-import React from "react";
+"use client";
 import { useFormContext } from "@devographics/react-form";
 import { FormError } from "./FormError";
 import { Alert } from "~/core/components/ui/Alert";

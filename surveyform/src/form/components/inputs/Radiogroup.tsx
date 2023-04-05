@@ -1,6 +1,7 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { Form } from "react-bootstrap";
+import { useState, useEffect } from "react";
+import Form from "react-bootstrap/Form";
+
 import isEmpty from "lodash/isEmpty.js";
 import {
   isOtherValue,

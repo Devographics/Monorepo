@@ -1,4 +1,4 @@
-import React from "react";
+"use client";
 import omit from "lodash/omit.js";
 import { useFormContext } from "@devographics/react-form";
 import FormComponent from "../elements/FormComponent";

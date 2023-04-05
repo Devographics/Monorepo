@@ -30,7 +30,7 @@ import mongoose from "mongoose";
 export const ResponseAdminConnector = createMongooseConnector<ResponseDocument>(
   ResponseAdmin,
   {
-    mongooseSchema: new mongoose.Schema({ _id: String, surveySlug: String }, { strict: false }),
+    mongooseSchema: new mongoose.Schema({ _id: String, editionId: String, surveyId: String }, { strict: false }),
   }
 );
 ResponseAdmin.crud.connector = ResponseAdminConnector;
