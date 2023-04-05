@@ -110,7 +110,6 @@ const StreamChart = ({
     showYears = true,
     height = 260
 }: StreamChartProps) => {
-    console.log(data)
     const chartData = getChartData(data, units)
     const theme = useTheme()
     const { getString } = useI18n()
