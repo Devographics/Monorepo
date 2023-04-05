@@ -38,7 +38,11 @@ export const apiRoutes = {
   // TODO: remove "-legacy" when migration to route handlers is done
   response: {
     single: {
-      href: ({ editionId }: { editionId: string }) => `/api/response-legacy/single?editionId=${editionId}`
+      href: ({ editionId,
+        surveyId }: {
+          editionId: string,
+          surveyId: string
+        }) => `/api/response-legacy/single?editionId=${editionId}&surveyId=${surveyId}`
     },
     multi: {
       href: "/api/response-legacy/multi"
