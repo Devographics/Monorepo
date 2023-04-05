@@ -1,3 +1,5 @@
+// TODO: this route may be removed if we load the response in RSC
+// but we need the same logic anyway
 import { ResponseDocument, SurveyEdition } from "@devographics/core-models";
 import { ProjectionFields } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
@@ -54,31 +56,24 @@ export async function GET(req: NextRequest, res: NextResponse) {
     if (!currentUser) {
         return NextResponse.json({ error: "User do not exist anymore" }, { status: 401 })
     }
-    //console.log("user", currentUser)
-    const resProj = asProject<ResponseDocument>([
+    const responseProjection = asProject<ResponseDocument>([
         "pagePath",
         "editionId",
         "completion",
         "createdAt",
-        // TODO: survey? it's resolved via endpoint,
-        // we should get it from editionId (+ add surveyId param) instead
     ])
-    // TODO: we have to init the "response" model
-    const userSurveyResponse = (await ResponseMongooseModel().findOne<ResponseDocument>({
+    const userSurveyResponse = await ResponseMongooseModel().findOne<ResponseDocument>({
         userId,
         editionId: survey.editionId
-    }, {
-    }))
-    //console.log("responses", userResponse)
-    // TODO: shape similary as the previous graphql response
-    // then improve (need frontend update)
+    }, responseProjection)
+    if (!userSurveyResponse) {
+        return NextResponse.json(null)
+    }
     const surveyResult = restrict<SurveyEdition>(surveyOrRes, ["slug", "surveyId", "editionId", "prettySlug", "name", "year", "domain", "status", "imageUrl", "faviconUrl", "socialImageUrl", "resultsUrl"])
-    console.log({
-        ...currentUser,
-        responses: [{
-            ...userSurveyResponse,
-            survey: surveyResult
-        }],
+    return NextResponse.json({
+        ...userSurveyResponse,
+        // TODO: this is useless, the frontend already know the survey when it fetches the response
+        // check where it's used in the frontend and remove
+        survey: surveyResult
     })
-    return NextResponse.json({ error: "NOT YET IMPLEMENTED" }, { status: 500 })
 }

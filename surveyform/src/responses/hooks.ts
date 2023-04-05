@@ -21,6 +21,7 @@ export const useUserResponse = (params: { editionId: SurveyEdition["editionId"],
     const { editionId, surveyId } = params
     const { data, error } = useSWR<ApiData<ResponseWithSurvey>>(apiRoutes.response.single.href({ editionId, surveyId }),
         basicFetcher)
+    console.log("data", data, error)
     const loading = !error && !data
     return { response: data?.data, loading, error }
 }

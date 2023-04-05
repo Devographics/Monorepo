@@ -42,7 +42,7 @@ export const apiRoutes = {
         surveyId }: {
           editionId: string,
           surveyId: string
-        }) => `/api/response-legacy/single?editionId=${editionId}&surveyId=${surveyId}`
+        }) => `/api/response/single?editionId=${editionId}&surveyId=${surveyId}`
     },
     multi: {
       href: "/api/response-legacy/multi"
