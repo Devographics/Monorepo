@@ -30,9 +30,6 @@ function restrict<T>(doc: T, fields: Array<keyof T>): any {
 export async function GET(req: NextRequest, res: NextResponse) {
     await connectToAppDb()
     connectToRedis()
-    // TODO: existing endpoint was only getting the editionId 
-    // => it's unable to get the whole response this way, why it works this way?
-    // if adding "surveyId", use the already existing "getters" to get the survey
     const surveyOrRes = await getSurveyFromReq(req)
     if (surveyOrRes instanceof Response) {
         console.log("res")
