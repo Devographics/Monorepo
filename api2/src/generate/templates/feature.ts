@@ -21,6 +21,7 @@ export const feature: TemplateFunction = ({ survey, question }) => {
         options: FEATURES_OPTIONS.map(id => ({
             id
         })),
+        defaultSort: 'options',
         fieldTypeName,
         filterTypeName: 'FeatureFilters',
         autogenerateFilterType: false,

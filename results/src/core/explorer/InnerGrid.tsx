@@ -12,7 +12,7 @@ const InnerGrid = (props: CommonProps) => {
     return (
         <Grid_>
             {yKeys.map((f, i) => (
-                <Row key={i} yIndex={i} {...props} />
+                <Row key={i} {...props} yIndex={i} />
             ))}
         </Grid_>
     )

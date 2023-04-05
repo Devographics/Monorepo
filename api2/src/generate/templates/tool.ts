@@ -21,6 +21,7 @@ export const tool: TemplateFunction = ({ survey, question }) => {
         options: TOOLS_OPTIONS.map(id => ({
             id
         })),
+        defaultSort: 'options',
         fieldTypeName,
         filterTypeName: 'ToolFilters',
         autogenerateFilterType: false,

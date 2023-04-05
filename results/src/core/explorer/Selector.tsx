@@ -20,6 +20,7 @@ const Selector = ({ axis, stateStuff, entities }: SelectorProps) => {
     const allFilters = useAllFilters()
 
     const { currentEdition } = usePageContext()
+    const { sections } = currentEdition
     const { setCurrentYear, lastYear } = stateStuff
     const section = stateStuff[`${axis}Section`]
     const setSection = stateStuff[`set${axis}Section`]
@@ -29,11 +30,11 @@ const Selector = ({ axis, stateStuff, entities }: SelectorProps) => {
     const getSectionFilters = (section: SectionMetadata) =>
         allFilters.filter(o => o.sectionId === section?.id)
 
+    const currentSection = sections.find(s => s.id === section) as SectionMetadata
+
     const orderedSections = getOrderedSections(currentEdition.sections).filter(
         s => getSectionFilters(s).length > 0
     )
-
-    const currentSection = orderedSections.find(s => s.id === section) as SectionMetadata
 
     const sectionItems = getSectionFilters(currentSection)
     return (
@@ -41,8 +42,13 @@ const Selector = ({ axis, stateStuff, entities }: SelectorProps) => {
             <span>{axis === 'x' ? '→' : '↓'}</span>{' '}
             <select
                 onChange={e => {
-                    setSection(e.target.value)
-                    setField('')
+                    const selectedSectionId = e.target.value
+                    setSection(selectedSectionId)
+                    const selectedSection = sections.find(
+                        s => s.id == selectedSectionId
+                    ) as SectionMetadata
+                    const selectedSectionItems = getSectionFilters(selectedSection)
+                    setField(selectedSectionItems[0].id)
                 }}
                 value={section}
             >

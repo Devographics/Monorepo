@@ -51,6 +51,7 @@ import { runQuery } from 'core/explorer/data'
 import get from 'lodash/get'
 import { getBlockDataPath } from 'core/helpers/data'
 import { QueryData, AllQuestionData } from '@devographics/types'
+import { NO_ANSWER } from '@devographics/constants'
 
 export const getNewCondition = ({
     filter,
@@ -559,7 +560,9 @@ export const getValueLabel = ({
     label?: string
 }) => {
     const { template } = field
-    if (label) {
+    if (value === NO_ANSWER) {
+        return getString('charts.no_answer').t
+    } else if (label) {
         return label
     } else if (entity) {
         return getEntityName(entity)

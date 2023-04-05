@@ -75,8 +75,8 @@
         template: data_explorer
         parameters: { showNoAnswer: true }
         variables:
-            xAxis: user_info__gender
-            yAxis: user_info__higher_education_degree
+            xAxis: user_info__yearly_salary
+            yAxis: user_info__years_of_experience
 
 - id: user_info
   titleId: sections.demographics.title

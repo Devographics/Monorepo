@@ -36,8 +36,8 @@ const DataExplorerBlock = ({
     block: BlockDefinition
     data: ExplorerData
 }) => {
-    console.log(block)
-    console.log(defaultData)
+    // console.log(block)
+    // console.log(defaultData)
 
     const allFilters = useAllFilters()
 

@@ -126,16 +126,18 @@ const Details = (props: DetailsProps) => {
     }
     const { dots: dots2, ...cellData2 } = cellData
 
+    const combinedProps = { ...props, ...propsOverride }
+
     return (
         <Details_>
             <DetailsUnit_>
-                <UnitsSelector {...props} {...propsOverride} />
+                <UnitsSelector {...combinedProps} />
             </DetailsUnit_>
             <DetailsLegend_>
-                <Legend {...props} {...propsOverride} />
+                <Legend {...combinedProps} />
             </DetailsLegend_>
             <DetailsGrid_ className="details-grid">
-                <Grid {...props} {...propsOverride} />
+                <Grid {...combinedProps} />
             </DetailsGrid_>
 
             <DetailsExplanation_>
