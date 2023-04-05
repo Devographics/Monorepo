@@ -1,6 +1,6 @@
 import get from 'lodash/get'
 import config from 'Config/config.yml'
-import { BlockDefinition } from 'core/types'
+import { BlockDefinition, PageContextValue } from 'core/types'
 import { Entity } from '@devographics/types'
 
 const { siteTitle, capturesUrl, hashtag, year } = config
@@ -13,23 +13,25 @@ export const getBlockKey = (block: BlockDefinition) => {
     return `${namespace}.${blockId}`
 }
 
-export const getBlockTabKey = (block, page, variantIndex) =>
+export const getBlockTabKey = (block: BlockDefinition, page: PageContextValue, variantIndex) =>
     block.tabId
         ? block.tabId
         : variantIndex === 0
         ? 'tabs.all_respondents'
         : getBlockTitleKey(block, page)
 
-export const getBlockNoteKey = (block, page) => block.noteId || `${getBlockKey(block, page)}.note`
+export const getBlockNoteKey = (block: BlockDefinition, page: PageContextValue) =>
+    block.noteId || `${getBlockKey(block)}.note`
 
-export const getBlockTitleKey = (block, page) => block.titleId || `${getBlockKey(block, page)}`
+export const getBlockTitleKey = (block: BlockDefinition, page: PageContextValue) =>
+    block.titleId || `${getBlockKey(block)}`
 
-export const getBlockDescriptionKey = (block, page) =>
-    block.descriptionId || `${getBlockKey(block, page)}.description`
+export const getBlockDescriptionKey = (block: BlockDefinition, page: PageContextValue) =>
+    block.descriptionId || `${getBlockKey(block)}.description`
 
 export const getBlockTitle = (
     block: BlockDefinition,
-    page: any,
+    page: PageContextValue,
     translate: any,
     entities?: Entity[]
 ) => {
