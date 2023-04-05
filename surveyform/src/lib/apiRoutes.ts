@@ -35,18 +35,19 @@ export const apiRoutes = {
   admin: {
     dataExport: { href: "/api/admin/data-export" },
   },
+  // TODO: remove "-legacy" when migration to route handlers is done
   response: {
     single: {
-      href: ({ editionId }: { editionId: string }) => `/api/response/single?editionId=${editionId}`
+      href: ({ editionId }: { editionId: string }) => `/api/response-legacy/single?editionId=${editionId}`
     },
     multi: {
-      href: "/api/response/multi"
+      href: "/api/response-legacy/multi"
     },
     startSurvey: {
-      href: ({ surveyId, editionId }: { surveyId: string, editionId: string }) => `/api/response/start-survey?surveyId=${surveyId}&editionId=${editionId}`
+      href: ({ surveyId, editionId }: { surveyId: string, editionId: string }) => `/api/response-legacy/start-survey?surveyId=${surveyId}&editionId=${editionId}`
     },
     saveSurvey: {
-      href: ({ surveyId, editionId }: { surveyId: string, editionId: string }) => `/api/response/save-survey?surveyId=${surveyId}&editionId=${editionId}`
+      href: ({ surveyId, editionId }: { surveyId: string, editionId: string }) => `/api/response-legacy/save-survey?surveyId=${surveyId}&editionId=${editionId}`
     }
   }
 }

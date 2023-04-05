@@ -41,6 +41,38 @@ function getId(res: Cypress.Response<any>) {
   // TODO: this complex structure is due to using GraphQL, simplify
   return res?.body?.data?.startSurvey?.data?._id
 }
+
+// single
+test.skip("bad request if survey cannot be retrieved", () => {
+  // TODO: we currently only check the absence of editionId
+  cy.request({
+    method: "GET",
+    url: apiRoutes.response.single.href({ editionId: "foobar" }),
+    failOnStatusCode: false
+
+  }).its("status").should("equal", 400)
+})
+
+test.skip("unauthenticated can't get response", () => {
+  // TODO: this is done in new route handlers but the legacy endpoints return a 200
+  cy.request({
+    method: "GET",
+    url: apiRoutes.response.single.href({ editionId: testSurvey.editionId }),
+    failOnStatusCode: false
+
+  }).its("status").should("equal", 401)
+})
+test("authenticated get empty response", () => {
+  cyfy(loginAnonymously).its("status").should("equal", 200)
+  cy.request({
+    method: "GET",
+    url: apiRoutes.response.single.href({ editionId: testSurvey.editionId }),
+  }).its("status").should("equal", 200)
+})
+// TODO: in save/start test, also retrieve the response to test single/multi endpoint
+
+
+// start and save
 test("authenticated user starts then update survey", () => {
   cyfy(loginAnonymously).its("status").should("equal", 200)
   cy.request({
