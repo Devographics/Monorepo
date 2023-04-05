@@ -175,7 +175,7 @@ const wrapArguments = args => {
         : ''
 }
 
-export const getQueryArgs = ({ facet, filters, parameters, xAxis, yAxis }) => {
+export const getQueryArgsString = ({ facet, filters, parameters, xAxis, yAxis }) => {
     const args = {}
     if (facet) {
         args.facet = facet
@@ -193,7 +193,11 @@ export const getQueryArgs = ({ facet, filters, parameters, xAxis, yAxis }) => {
     if (xAxis && !isEmpty(xAxis)) {
         args.axis2 = xAxis
     }
-    return wrapArguments(args)
+    if (isEmpty(args)) {
+        return
+    } else {
+        return wrapArguments(args)
+    }
 }
 
 export const getDefaultQuery = queryOptions => {
@@ -212,7 +216,7 @@ export const getDefaultQuery = queryOptions => {
         addQuestionEntity = false,
         allEditions = false
     } = queryOptions
-    const queryArgs = getQueryArgs({ facet, filters, parameters, xAxis, yAxis })
+    const queryArgs = getQueryArgsString({ facet, filters, parameters, xAxis, yAxis })
 
     const editionType = allEditions ? 'allEditions' : 'currentEdition'
 
@@ -330,7 +334,7 @@ export const getQuery = ({ query, queryOptions, isLog = false, block, addRootNod
         queryContents = getDefaultQuery(queryOptions)
     } else {
         queryContents = query
-        const queryArgs = getQueryArgs(queryOptions)
+        const queryArgs = getQueryArgsString(queryOptions)
         queryContents = queryContents.replace(argumentsPlaceholder, queryArgs)
 
         // if (isLog) {

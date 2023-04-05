@@ -4,7 +4,6 @@ import { indentString } from './utils'
 import { ResponsesParameters, Filters } from '@devographics/types'
 import { PageContextValue } from 'core/types/context'
 import isEmpty from 'lodash/isEmpty'
-import { usePageContext } from 'core/helpers/pageContext'
 import { FacetItem } from 'core/filters/types'
 
 export const argumentsPlaceholder = '<ARGUMENTS_PLACEHOLDER>'
@@ -80,26 +79,42 @@ interface ResponseArgumentsStrings {
     facet?: string
     filters?: string
     parameters?: string
+    axis1?: string
+    axis2?: string
 }
 
-export const getQueryArgs = ({
-    facet,
-    filters,
-    parameters
-}: {
-    facet?: string
+const facetItemToFacet = ({ sectionId, id }: FacetItem) => `${sectionId}__${id}`
+
+interface QueryArgsOptions {
+    facet?: FacetItem
     filters?: Filters
     parameters?: ResponsesParameters
-}) => {
+    xAxis?: string
+    yAxis?: string
+}
+export const getQueryArgsString = ({
+    facet,
+    filters,
+    parameters,
+    xAxis,
+    yAxis
+}: QueryArgsOptions): string | undefined => {
     const args: ResponseArgumentsStrings = {}
     if (facet) {
-        args.facet = facet
+        args.facet = facetItemToFacet(facet)
     }
     if (filters && !isEmpty(filters)) {
         args.filters = unquote(JSON.stringify(filters))
     }
     if (parameters && !isEmpty(parameters)) {
         args.parameters = unquote(JSON.stringify(parameters))
+    }
+    // for data explorer
+    if (yAxis && !isEmpty(yAxis)) {
+        args.axis1 = yAxis
+    }
+    if (xAxis && !isEmpty(xAxis)) {
+        args.axis2 = xAxis
     }
     if (isEmpty(args)) {
         return
@@ -137,9 +152,9 @@ export const getDefaultQuery = ({
     addArgumentsPlaceholder = false,
     addBucketFacetsPlaceholder = false
 }: QueryOptions) => {
-    const queryArgs = addArgumentsPlaceholder
+    const queryArgsString = addArgumentsPlaceholder
         ? argumentsPlaceholder
-        : getQueryArgs({ facet, filters, parameters })
+        : getQueryArgsString({ facet, filters, parameters })
     const editionType = allEditions ? 'allEditions' : 'currentEdition'
 
     const questionIdString = fieldId ? `${questionId}: ${fieldId}` : questionId
@@ -150,7 +165,7 @@ surveys {
     ${editionId} {
       ${sectionId} {
         ${questionIdString} {
-          responses${queryArgs} {
+          responses${queryArgsString} {
             ${editionType} {
               ${allEditions ? allEditionsFragment : ''}
               completion {
@@ -237,7 +252,8 @@ export const getBlockQuery = ({
     isLog = false,
     enableCache = false,
     addArgumentsPlaceholder = false,
-    addBucketFacetsPlaceholder = false
+    addBucketFacetsPlaceholder = false,
+    queryArgs
 }: {
     block: BlockDefinition
     pageContext: PageContextValue
@@ -245,6 +261,7 @@ export const getBlockQuery = ({
     enableCache?: boolean
     addArgumentsPlaceholder?: boolean
     addBucketFacetsPlaceholder?: boolean
+    queryArgs?: QueryArgsOptions
 }) => {
     const { query, id: questionId } = block
     const { id: sectionId, currentSurvey, currentEdition } = pageContext
@@ -275,18 +292,14 @@ export const getBlockQuery = ({
             queryContents = getDefaultQuery(queryOptions)
         } else {
             queryContents = query
-            const queryArgs = getQueryArgs(queryOptions)
-            if (queryArgs) {
-                queryContents = queryContents.replace(argumentsPlaceholder, queryArgs)
+        }
+        if (queryArgs) {
+            const queryArgsString = getQueryArgsString(queryArgs)
+            if (queryArgsString) {
+                queryContents = queryContents.replace(argumentsPlaceholder, queryArgsString)
             }
         }
         const wrappedQuery = wrapQuery({ queryName, queryContents, addRootNode: false })
         return wrappedQuery
     }
-}
-
-export const useBlockQuery = (block: BlockDefinition) => {
-    const pageContext = usePageContext()
-    const query = getBlockQuery({ block, pageContext })
-    return query
 }

@@ -1,10 +1,8 @@
 import React from 'react'
 import styled, { useTheme, css } from 'styled-components'
-import { mq, spacing, fontSize, color } from 'core/theme'
 // import T from 'core/i18n/T'
 // import Dot from './Dot'
-import { getAllDots, getDataAttr, getParameters } from './helpers'
-import { ExplorerDataFacet, Key, DotType, UnitType } from './types'
+import { DotType, UnitType } from './types'
 import { CellProps } from './Cell'
 import { GAP, DOT_RADIUS, DOT_GAP } from './constants'
 

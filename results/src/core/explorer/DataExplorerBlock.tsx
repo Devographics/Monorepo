@@ -5,9 +5,8 @@ import T from 'core/i18n/T'
 import DataExplorer from './DataExplorer'
 import { ExplorerData } from '@devographics/types'
 // import Selector from './Selector'
-import dataExplorerTemplate from '../../templates/data_explorer.yml'
 import { usePageContext } from 'core/helpers/pageContext'
-import { getFacetPath, getAxisSegments, getQuery, runQuery } from './data'
+import { getAxisString, getAxisSegments, runQuery } from './data'
 import { BlockDefinition } from 'core/types/index'
 import last from 'lodash/last'
 import {
@@ -17,6 +16,7 @@ import {
     PERCENTS_PER_DOT,
     MAX_DOT_PER_CELL_LINE,
     SHOW_CELL_COUNTS,
+    SHOW_NO_ANSWER,
     PERCENTAGE_UNIT
 } from './constants'
 import HintBlock from 'core/blocks/other/HintBlock'
@@ -25,25 +25,23 @@ import { getQuestionLabel } from './labels'
 import { useI18n } from 'core/i18n/i18nContext'
 import { useWindowDimensions } from './helpers'
 import { useEntities } from 'core/helpers/entities'
+import { getBlockQuery } from 'core/helpers/queries'
 
 const DataExplorerBlock = ({
     block,
-    data: defaultData,
-    pageData
+    data: defaultData
 }: {
     block: BlockDefinition
     data: ExplorerData
-    pageData: any
 }) => {
     console.log(block)
     console.log(defaultData)
+
     const { getString } = useI18n()
     const { width } = useWindowDimensions()
 
     const location = useLocation()
-    const context = usePageContext()
-    const surveyType = context.currentSurvey.id
-    const surveyYear = context.currentEdition.year
+    const pageContext = usePageContext()
 
     const entities = useEntities()
 
@@ -60,11 +58,11 @@ const DataExplorerBlock = ({
     const defaultXField = xSegments.questionId
     const defaultYSection = ySegments.sectionId
     const defaultYField = ySegments.questionId
-    const defaultQuery = getQuery(dataExplorerTemplate.query, {
-        surveyType,
-        axis1: defaultXAxis,
-        axis2: defaultYAxis,
-        currentYear: surveyYear
+
+    const defaultQuery = getBlockQuery({
+        block,
+        pageContext,
+        queryArgs: { xAxis: defaultXAxis, yAxis: defaultYAxis, parameters: { showNoAnswer: true } }
     })
 
     const [data, setData] = useState(defaultData)
@@ -87,6 +85,9 @@ const DataExplorerBlock = ({
     )
     const [showCellCounts, setShowCellCounts] = useState(
         (queryParams.showCellCounts === 'true' ? true : false) || SHOW_CELL_COUNTS
+    )
+    const [showNoAnswer, setShowNoAnswer] = useState(
+        (queryParams.showNoAnswer === 'true' ? true : false) || SHOW_NO_ANSWER
     )
 
     const xAxisLabel = getQuestionLabel({
@@ -129,13 +130,14 @@ const DataExplorerBlock = ({
         setDotsPerLine,
         showCellCounts,
         setShowCellCounts,
+        showNoAnswer,
+        setShowNoAnswer,
         // other stuff
         useMobileLayout,
         xAxisLabel,
         yAxisLabel,
         lastYear
     }
-    console.log(stateStuff)
 
     useEffect(() => {
         if (useMobileLayout) {
@@ -190,28 +192,39 @@ const DataExplorerBlock = ({
 
         const getData = async () => {
             setIsLoading(true)
-            const facet1 = getFacetPath(xSection, xField)
-            const facet2 = getFacetPath(ySection, yField)
-            const query = getQuery(dataExplorerTemplate.query, {
-                surveyType,
-                facet1,
-                facet2,
-                currentYear: surveyYear
+            const xAxis = getAxisString(xSection, xField)
+            const yAxis = getAxisString(ySection, yField)
+
+            const query = getBlockQuery({
+                block,
+                pageContext,
+                queryArgs: { xAxis, yAxis, parameters: { showNoAnswer: true } }
             })
+            // console.log('// query')
+            // console.log(query)
             setQuery(query)
             const url = process.env.GATSBY_DATA_API_URL
             if (!url) {
                 throw new Error('GATSBY_DATA_API_URL env variable is not set')
             }
             const result = await runQuery(url, query, 'ExplorerQuery')
-            console.log('// result')
-            console.log(result)
-            setData(result.survey.explorer)
+            // console.log('// result')
+            // console.log(result)
+
+            const { id: sectionId, currentSurvey, currentEdition } = pageContext
+            const { id: surveyId } = currentSurvey
+            const { id: editionId } = currentEdition
+
+            const data = result.surveys[surveyId][editionId][sectionId].data_explorer
+
+            // console.log(data)
+
+            setData(data)
             setIsLoading(false)
         }
 
         if (xField && yField) {
-            // getData()
+            getData()
         }
     }, [xField, yField])
 

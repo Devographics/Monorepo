@@ -1,5 +1,4 @@
-import { Bucket } from '@devographics/types'
-import { Entity } from '@types/index'
+import { Entity, Bucket, ExplorerData } from '@devographics/types'
 
 export type Key = string
 
@@ -7,44 +6,6 @@ export interface Completion {
     count: number
     percentageSurvey: number
     percentageQuestion: number
-}
-
-export interface ExplorerDataBucket {
-    count: number
-    id: string
-    completion: Completion
-    fromCount?: number
-    toCount?: number
-    columnIndex?: number
-    percentageFacet: number
-    percentageQuestion: number
-    percentageSurvey: number
-}
-export interface ExplorerDataFacet {
-    buckets: ExplorerDataBucket[]
-    id: string
-    completion: Completion
-    fromCount?: number
-    toCount?: number
-    rowIndex?: number
-}
-
-export interface ExplorerDataYear {
-    facets: ExplorerDataFacet[]
-    year: number
-}
-
-export interface ExplorerData {
-    xKeys: Key[]
-    yKeys: Key[]
-    all_years?: ExplorerDataYear[]
-    year?: ExplorerDataYear
-}
-
-export interface ExplorerDataFormatted {
-    xKeys: Key[]
-    yKeys: Key[]
-    all_years: ExplorerDataYear[]
 }
 
 export interface DotTypeOld {
@@ -68,7 +29,7 @@ export interface Total {
 }
 
 export interface CommonProps {
-    data: any
+    data: ExplorerData
     query: string
     buckets: Bucket[]
     xKeys: Key[]
@@ -79,6 +40,8 @@ export interface CommonProps {
     stateStuff: any
     entities: Entity[]
     useMobileLayout: boolean
+    showCellCountsOverride: boolean
+    addModals: boolean
 }
 
 export type UnitType = 'count' | 'percentage'

@@ -3,10 +3,12 @@ import styled from 'styled-components'
 // import { mq, spacing, fontSize } from 'core/theme'
 // import T from 'core/i18n/T'
 import { AxisType, CommonProps } from './types'
-import { getSelectorItems } from './helpers'
 import { useI18n } from 'core/i18n/i18nContext'
-import { getSectionLabel, getGroupLabel, getQuestionLabel } from './labels'
-import { Entity } from '@types/index'
+import { getGroupLabel, getQuestionLabel } from './labels'
+import { Entity, SectionMetadata } from '@devographics/types'
+import { usePageContext } from 'core/helpers/pageContext'
+import { getSectionLabel, getOrderedSections, getFieldLabel } from 'core/filters/helpers'
+import { useAllFilters } from 'core/charts/hooks'
 
 interface SelectorProps extends CommonProps {
     axis: AxisType
@@ -16,15 +18,25 @@ interface SelectorProps extends CommonProps {
 // Selextor either accepts section/setSection props, or use the ones from stateStuff
 const Selector = ({ axis, stateStuff, entities }: SelectorProps) => {
     const { getString } = useI18n()
+    const allFilters = useAllFilters()
 
-    const selectorItems = getSelectorItems()
+    const { currentEdition } = usePageContext()
     const { setCurrentYear, lastYear } = stateStuff
     const section = stateStuff[`${axis}Section`]
     const setSection = stateStuff[`set${axis}Section`]
     const field = stateStuff[`${axis}Field`]
     const setField = stateStuff[`set${axis}Field`]
 
-    const currentSection = selectorItems.find(s => s.id === section)
+    const getSectionFilters = (section: SectionMetadata) =>
+        allFilters.filter(o => o.sectionId === section?.id)
+
+    const orderedSections = getOrderedSections(currentEdition.sections).filter(
+        s => getSectionFilters(s).length > 0
+    )
+
+    const currentSection = orderedSections.find(s => s.id === section) as SectionMetadata
+
+    const sectionItems = getSectionFilters(currentSection)
     return (
         <Selector_>
             <span>{axis === 'x' ? '→' : '↓'}</span>{' '}
@@ -35,9 +47,9 @@ const Selector = ({ axis, stateStuff, entities }: SelectorProps) => {
                 }}
                 value={section}
             >
-                {selectorItems.map(({ id }) => (
-                    <option key={id} value={id}>
-                        {getSectionLabel({ getString, id })}
+                {orderedSections.map(section => (
+                    <option key={section.id} value={section.id}>
+                        {getSectionLabel({ getString, section })}
                     </option>
                 ))}
             </select>
@@ -48,40 +60,46 @@ const Selector = ({ axis, stateStuff, entities }: SelectorProps) => {
                 }}
                 value={field}
             >
-                <option value="" disabled>
+                {/* <option value="" disabled>
                     {getString('explorer.select_item')?.t}
-                </option>
-                {currentSection?.optGroups.map(({ id, fields }) => (
-                    <Group key={id} id={id} fields={fields} section={section} entities={entities} />
+                </option> */}
+                {sectionItems.map(field => (
+                    <option key={field.id} value={field.id}>
+                        {getFieldLabel({
+                            getString,
+                            field,
+                            entities
+                        })}
+                    </option>
                 ))}
             </select>
         </Selector_>
     )
 }
 
-const Group = ({
-    id,
-    fields,
-    section,
-    entities
-}: {
-    id: string
-    fields: string[]
-    section: string
-    entities: Entity[]
-}) => {
-    const { getString } = useI18n()
+// const Group = ({
+//     id,
+//     fields,
+//     section,
+//     entities
+// }: {
+//     id: string
+//     fields: string[]
+//     section: string
+//     entities: Entity[]
+// }) => {
+//     const { getString } = useI18n()
 
-    return (
-        <optgroup label={getGroupLabel({ getString, section, id })}>
-            {fields.map(f => (
-                <option key={f} value={f}>
-                    {getQuestionLabel({ getString, sectionId: section, questionId: f, entities })}
-                </option>
-            ))}
-        </optgroup>
-    )
-}
+//     return (
+//         <optgroup label={getGroupLabel({ getString, section, id })}>
+//             {fields.map(f => (
+//                 <option key={f} value={f}>
+//                     {getQuestionLabel({ getString, sectionId: section, questionId: f, entities })}
+//                 </option>
+//             ))}
+//         </optgroup>
+//     )
+// }
 
 const Selector_ = styled.div`
     display: flex;

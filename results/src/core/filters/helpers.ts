@@ -12,7 +12,7 @@ import {
     FacetItem,
     DataSeries
 } from './types'
-import { BlockDefinition } from 'core/types'
+import { BlockDefinition, StringTranslator } from 'core/types'
 import {
     MODE_DEFAULT,
     MODE_FACET,
@@ -31,7 +31,7 @@ import { getBlockLink } from 'core/helpers/blockHelpers'
 import { getEntityName, useEntities } from 'core/helpers/entities'
 import {
     getBlockQuery,
-    getQueryArgs,
+    getQueryArgsString,
     argumentsPlaceholder,
     bucketFacetsPlaceholder,
     getFacetFragment
@@ -190,8 +190,6 @@ const conditionsToFilters = (conditions: CustomizationFiltersCondition[]) => {
     return filters
 }
 
-const facetItemToFacet = ({ sectionId, id }: FacetItem) => `${sectionId}__${id}`
-
 /*
 
 Generate query used for filtering
@@ -258,7 +256,7 @@ export const getFiltersQuery = ({
                     seriesFragment = seriesFragment.replace(block.id, `${seriesName}: ${block.id}`)
                 }
 
-                const queryArgs = getQueryArgs({
+                const queryArgs = getQueryArgsString({
                     filters: conditionsToFilters(singleSeries.conditions),
                     parameters: block.parameters
                 })
@@ -275,8 +273,8 @@ export const getFiltersQuery = ({
             })
             .join('')
     } else if (facet && mode === MODE_FACET) {
-        const queryArgs = getQueryArgs({
-            facet: facetItemToFacet(facet),
+        const queryArgs = getQueryArgsString({
+            facet,
             parameters: block.parameters
         })
 
@@ -476,12 +474,25 @@ export const calculateAverages = ({ buckets, facet, allFilters }) => {
 
 /*
 
+Put demographics section first
+
+*/
+export const getOrderedSections = (sections: SectionMetadata[]) => {
+    const demographicsSection = sections.find(s => s.id === 'user_info')
+    const otherSections = sections.filter(s => s.id !== 'user_info')
+    const orderedSections = demographicsSection
+        ? [demographicsSection, ...otherSections]
+        : otherSections
+    return orderedSections
+}
+/*
+
 */
 export const getSectionLabel = ({
     getString,
     section
 }: {
-    getString: any
+    getString: StringTranslator
     section: SectionMetadata
 }) => {
     return getString(`sections.${section.id === 'user_info' ? 'demographics' : section.id}.title`)
@@ -497,7 +508,7 @@ export const getFieldLabel = ({
     field,
     entities
 }: {
-    getString: any
+    getString: StringTranslator
     field: FilterItem
     entities: Entity[]
 }) => {
@@ -523,7 +534,7 @@ export const getOperatorLabel = ({
     getString,
     operator
 }: {
-    getString: any
+    getString: StringTranslator
     operator: OperatorEnum
 }) => getString(`filters.operators.${operator}`, {}, operator)?.t
 
@@ -540,7 +551,7 @@ export const getValueLabel = ({
     entity,
     label
 }: {
-    getString: any
+    getString: StringTranslator
     field: FilterItem
     value: FilterValue
     allFilters: FilterItem[]

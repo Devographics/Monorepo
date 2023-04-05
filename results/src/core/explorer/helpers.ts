@@ -1,18 +1,8 @@
 import { useState, useEffect } from 'react'
 import sumBy from 'lodash/sumBy'
-import {
-    ExplorerDataBucket,
-    ExplorerDataFacet,
-    Key,
-    AxisType,
-    Total,
-    UnitType,
-    DotType
-} from './types'
-import { TOTAL_DOTS, INCREMENT, GAP, GRID_WIDTH } from './constants'
+import { Key, AxisType, Total, UnitType } from './types'
 import variables from 'Config/variables.yml'
 import { Bucket, FacetBucket } from '@devographics/types'
-import { NO_ANSWER } from '@devographics/constants'
 
 // https://stackoverflow.com/a/36862446/649299
 const getWindowDimensions = () => {
@@ -42,73 +32,6 @@ export const useWindowDimensions = () => {
     return windowDimensions
 }
 
-/* 
-
-Find bucket containing the most items
-
-*/
-export const getMaxBucketCount = (facets: ExplorerDataFacet[]) => {
-    let maxBucketCount = 0
-    facets.forEach(f => {
-        f.buckets.forEach(b => {
-            if (b.count > maxBucketCount) {
-                maxBucketCount = b.count
-            }
-        })
-    })
-    return maxBucketCount
-}
-
-/*
-
-Get grid parameters
-
-*/
-export const getParameters = ({
-    facets,
-    xKeys,
-    yKeys
-}: {
-    facets: ExplorerDataFacet[]
-    xKeys: Key[]
-    yKeys: Key[]
-}) => {
-    const maxBucketCount = getMaxBucketCount(facets)
-    const columnCount = xKeys.length
-    const rowCount = yKeys.length
-    const cellWidth = Math.floor((GRID_WIDTH - (columnCount - 1) * GAP) / columnCount)
-    const maxDotsPerLine = Math.floor(cellWidth / INCREMENT)
-    const columnWidth = maxDotsPerLine * INCREMENT
-    return {
-        gap: GAP,
-        columnCount,
-        rowCount,
-        cellWidth,
-        maxDotsPerLine,
-        columnWidth,
-        maxBucketCount
-    }
-}
-
-// export const addExtraCounts = (facets: ExplorerDataFacet[]) => {
-//     let facetRunningCount = 0,
-//         bucketRunningCount = 0
-//     const facetsWithCounts = facets.map((f: ExplorerDataFacet, i: number) => {
-//         f.fromCount = facetRunningCount
-//         facetRunningCount += f.completion.count
-//         f.toCount = facetRunningCount
-//         f.rowIndex = i
-//         f.buckets.forEach((b: ExplorerDataBucket, j: number) => {
-//             b.fromCount = bucketRunningCount
-//             bucketRunningCount += b.count
-//             b.toCount = bucketRunningCount
-//             b.columnIndex = j
-//         })
-//         return f
-//     })
-//     return facetsWithCounts
-// }
-
 export const isBetween = (i: number, lowerBound = 0, upperBound = 0) => {
     return lowerBound <= i && i <= upperBound
 }
@@ -119,31 +42,31 @@ const getOptGroups = (categories: any) => {
     })
 }
 
-export const getSelectorItems = () => {
-    const selectorItems = [
-        {
-            id: 'demographics',
-            optGroups: [
-                {
-                    id: 'all_fields',
-                    fields: [
-                        'age',
-                        'years_of_experience',
-                        'company_size',
-                        'higher_education_degree',
-                        'yearly_salary',
-                        'gender',
-                        'race_ethnicity',
-                        'disability_status'
-                    ]
-                }
-            ]
-        },
-        { id: 'features', optGroups: getOptGroups(variables.featuresCategories) },
-        { id: 'tools', optGroups: getOptGroups(variables.toolsCategories) }
-    ]
-    return selectorItems
-}
+// export const getSelectorItems = () => {
+//     const selectorItems = [
+//         {
+//             id: 'demographics',
+//             optGroups: [
+//                 {
+//                     id: 'all_fields',
+//                     fields: [
+//                         'age',
+//                         'years_of_experience',
+//                         'company_size',
+//                         'higher_education_degree',
+//                         'yearly_salary',
+//                         'gender',
+//                         'race_ethnicity',
+//                         'disability_status'
+//                     ]
+//                 }
+//             ]
+//         },
+//         { id: 'features', optGroups: getOptGroups(variables.featuresCategories) },
+//         { id: 'tools', optGroups: getOptGroups(variables.toolsCategories) }
+//     ]
+//     return selectorItems
+// }
 
 export const getTotals = ({
     buckets,
@@ -304,15 +227,6 @@ export const getCellDots = ({
     percentsPerDot: number
     unit: UnitType
 }): Dot[] => {
-    console.log('// getCellDots')
-    console.log({
-        facetBucket,
-        normalizedCount,
-        normalizedPercentage,
-        respondentsPerDot,
-        percentsPerDot,
-        unit
-    })
     try {
         if (unit === 'count') {
             // find the right bucket for the current cell based on its xIndex (column index)

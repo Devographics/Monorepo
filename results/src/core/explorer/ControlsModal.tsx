@@ -1,12 +1,8 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { mq, spacing, fontSize, fontWeight } from 'core/theme'
 import Selector from './Selector'
-import { useI18n } from 'core/i18n/i18nContext'
 import Button from 'core/components/Button'
 import T from 'core/i18n/T'
-import { HEADING_BG, AXIS_PADDING, GRID_GAP } from './constants'
-import theme from 'Theme/index.ts'
 import { CommonProps } from './types'
 
 interface ControlsModalProps extends CommonProps {
@@ -22,6 +18,7 @@ const ControlsModal = (props: ControlsModalProps) => {
     const [dotsPerLine, setDotsPerLine] = useState(stateStuff.dotsPerLine)
     const [respondentsPerDot, setRespondentsPerDot] = useState(stateStuff.respondentsPerDot)
     const [showCellCounts, setShowCellCounts] = useState(stateStuff.showCellCounts)
+    const [showNoAnswer, setShowNoAnswer] = useState(stateStuff.showNoAnswer)
 
     const stateStuffOverride = {
         ...stateStuff,
@@ -43,6 +40,7 @@ const ControlsModal = (props: ControlsModalProps) => {
         stateStuff.setDotsPerLine(dotsPerLine)
         stateStuff.setRespondentsPerDot(respondentsPerDot)
         stateStuff.setShowCellCounts(showCellCounts)
+        stateStuff.setShowNoAnswer(showNoAnswer)
         closeModal()
     }
 
@@ -99,6 +97,20 @@ const ControlsModal = (props: ControlsModalProps) => {
                         </span>
                     </Label_>
                 </Row_>
+                <Row_>
+                    <Label_>
+                        <input
+                            type="checkbox"
+                            checked={showNoAnswer}
+                            onChange={e => {
+                                setShowNoAnswer(!showNoAnswer)
+                            }}
+                        />
+                        <span>
+                            <T k="explorer.show_no_answer" />
+                        </span>
+                    </Label_>
+                </Row_>
                 <Button onClick={handleSubmit}>Submit</Button>
             </Form_>
         </ControlsModal_>
@@ -115,7 +127,7 @@ const Form_ = styled.div`
 
 const Row_ = styled.div``
 
-const Label_ = styled.div`
+const Label_ = styled.label`
     display: flex;
     align-items: center;
     gap: 10px;

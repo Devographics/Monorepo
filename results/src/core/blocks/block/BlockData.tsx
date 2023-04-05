@@ -1,16 +1,10 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import Table from '../table/Table'
 import ModalTrigger from 'core/components/ModalTrigger'
 import Button from 'core/components/Button'
 import T from 'core/i18n/T'
 import { mq, spacing, fontSize } from 'core/theme'
-import camelCase from 'lodash/camelCase'
-import BlockFooter from 'core/blocks/block/BlockFooter'
-import get from 'lodash/get'
-import { useBlockQuery } from 'core/helpers/queries'
-import { usePageContext } from 'core/helpers/pageContext'
-import { BlockDefinition } from 'core/types'
 
 const BlockData = props => {
     return (

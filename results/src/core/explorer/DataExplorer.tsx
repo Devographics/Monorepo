@@ -1,16 +1,15 @@
 import React from 'react'
 import styled from 'styled-components'
-import { mq, spacing, fontSize } from 'core/theme'
+import { mq } from 'core/theme'
 // import T from 'core/i18n/T'
 import Grid from './Grid'
 import { ExplorerData } from '@devographics/types'
-import { addExtraCounts, getTotals } from './helpers'
+import { getTotals } from './helpers'
 import { Entity } from '@types/index'
 import Heading from './Heading'
-import { GRID_GAP } from './constants'
 import sumBy from 'lodash/sumBy.js'
 import Loading from './Loading'
-import { useOptions } from 'core/helpers/options'
+import { NO_ANSWER } from '@devographics/constants'
 
 /*
 
@@ -28,7 +27,7 @@ const DataExplorer = (props: DataExplorerProps) => {
     const { data, stateStuff } = props
 
     const { items } = data
-    const { isLoading, currentYear, xField, yField } = stateStuff
+    const { isLoading, currentYear, xField, yField, showNoAnswer } = stateStuff
 
     // const allYears = all_years.map((y) => y.year);
     const currentYearData = items?.find(i => i?.year === currentYear)
@@ -36,7 +35,14 @@ const DataExplorer = (props: DataExplorerProps) => {
         return <div>No data for year {currentYear}.</div>
     }
     // const facets = addExtraCounts(currentYearData.facets)
-    const buckets = currentYearData.buckets
+    let buckets = currentYearData.buckets
+
+    // remove "no_answer" buckets if we're not showing them
+    if (!showNoAnswer) {
+        buckets = buckets
+            .map(b => ({ ...b, facetBuckets: b.facetBuckets.filter(b => b.id !== NO_ANSWER) }))
+            .filter(b => b.id !== NO_ANSWER)
+    }
 
     const yKeys = buckets.map(b => b.id)
     const xKeys = buckets[0].facetBuckets.map(b => b.id)

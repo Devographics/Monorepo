@@ -1,6 +1,6 @@
 import template from 'lodash/template'
 
-export const getFacetPath = (section: string, field: string) => `${section}/${field}`
+export const getAxisString = (section: string, field: string) => `${section}__${field}`
 
 export const getAxisSegments = (facet: string) => {
     const [sectionId, questionId] = facet.split('__')
@@ -19,14 +19,6 @@ interface QueryVariables {
     axis1: string
     axis2: string
     currentYear: number
-}
-
-export const getQuery = (queryTemplate: string, variables: QueryVariables) => {
-    const query = queryTemplate
-        .slice(queryTemplate.indexOf('dataAPI'))
-        .replace('dataAPI', 'query ExplorerQuery')
-    const t = template(query)
-    return t(variables)
 }
 
 export const runQuery = async (

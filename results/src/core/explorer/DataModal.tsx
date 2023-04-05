@@ -32,7 +32,7 @@ const DataModal = (props: ShareModalProps) => {
                     <JSONExport block={{ id: `${xField}__${yField}` }} data={data} />
                 </Tab_>
                 <Tab_ value="export_graphql">
-                    <GraphQLExport block={{ id: `${xField}__${yField}`, query }} />
+                    <GraphQLExport query={query} />
                 </Tab_>
             </Tabs.Root>
         </DataModal_>

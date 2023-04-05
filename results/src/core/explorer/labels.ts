@@ -1,8 +1,9 @@
 import { NO_ANSWER } from '@devographics/constants'
-import { Entity } from '@types/index'
+import { Entity } from '@devographics/types'
+import { StringTranslator } from 'core/types'
 
 export const getSectionLabel = ({ getString, id }) => {
-    const s = getString(`explorer.sections.${id}`)
+    const s = getString(`sections.${id}.title`)
     return s.t
 }
 
@@ -17,7 +18,7 @@ export const getQuestionLabel = ({
     questionId,
     entities
 }: {
-    getString: any
+    getString: StringTranslator
     sectionId: string
     questionId: string
     entities: Entity[]
@@ -38,7 +39,7 @@ export const getOptionLabel = ({
     questionId,
     optionId
 }: {
-    getString: any
+    getString: StringTranslator
     questionId: string
     optionId: string
 }) => {

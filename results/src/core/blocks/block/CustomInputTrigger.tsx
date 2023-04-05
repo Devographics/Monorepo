@@ -8,7 +8,8 @@ import get from 'lodash/get'
 import { AutoSelectText, TextArea, Message } from 'core/blocks/block/BlockData'
 import { EditIcon } from 'core/icons'
 import isEmpty from 'lodash/isEmpty'
-import { useBlockQuery } from 'core/helpers/queries'
+import { getBlockQuery } from 'core/helpers/queries'
+import { usePageContext } from 'core/helpers/pageContext'
 
 const parseData = (block, contents) => {
     const apiDataPath = block.dataPath.replace('dataAPI', 'data')
@@ -19,6 +20,8 @@ const parseData = (block, contents) => {
 }
 
 const InputData = ({ block, closeModal }) => {
+    const pageContext = usePageContext()
+
     const textData = block.customData && JSON.stringify(block.customData, '', 2)
 
     const [contents, setContents] = useState(textData)
@@ -45,7 +48,7 @@ const InputData = ({ block, closeModal }) => {
                     <TextFieldHeading>
                         <T k="custom_data.graphql_query" />
                     </TextFieldHeading>
-                    <GraphQLTextArea value={useBlockQuery(block)} size="s" />
+                    <GraphQLTextArea value={getBlockQuery({ block, pageContext })} size="s" />
                 </TextFieldContainer>
                 <TextFieldContainer>
                     <TextFieldHeading>

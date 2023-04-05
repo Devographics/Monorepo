@@ -2,7 +2,6 @@ import React from 'react'
 import styled from 'styled-components'
 // import { mq, spacing, fontSize } from 'core/theme'
 // import T from 'core/i18n/T'
-import { ExplorerDataFacet } from './types'
 
 const YearSelector = ({ allYears, stateStuff }: { allYears: number[]; stateStuff: any }) => {
     const { currentYear, setCurrentYear } = stateStuff

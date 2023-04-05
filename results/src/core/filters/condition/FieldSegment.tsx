@@ -2,7 +2,7 @@ import React from 'react'
 import { useI18n } from 'core/i18n/i18nContext'
 import styled from 'styled-components'
 import cloneDeep from 'lodash/cloneDeep.js'
-import { getFieldLabel, getSectionLabel } from '../helpers'
+import { getFieldLabel, getOrderedSections, getSectionLabel } from '../helpers'
 import { usePageContext } from 'core/helpers/pageContext'
 import { useEntities } from 'core/helpers/entities'
 import { PanelState, FilterItem, CustomizationDefinition } from '../types'
@@ -64,11 +64,7 @@ export const ItemSelectOptions = ({ allFilters, disabledList }: ItemSelectOption
     const { getString } = useI18n()
     const { currentEdition } = usePageContext()
     const { sections } = currentEdition
-    const demographicsSection = sections.find(s => s.id === 'user_info')
-    const otherSections = sections.filter(s => s.id !== 'user_info')
-    const orderedSections = demographicsSection
-        ? [demographicsSection, ...otherSections]
-        : otherSections
+    const orderedSections = getOrderedSections(sections)
 
     return (
         <>

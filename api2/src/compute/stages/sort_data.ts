@@ -58,10 +58,15 @@ export function sortByProperty<T extends Bucket | FacetBucket>(
     return sortedBuckets
 }
 
+// put on answer bucket last (if it exists)
 export function putNoAnswerBucketLast<T extends Bucket | FacetBucket>(buckets: T[]) {
-    const regularBuckets = buckets.filter(b => b.id !== NO_ANSWER) as T[]
     const noAnswerBucket = buckets.find(b => b.id === NO_ANSWER) as T
-    return [...regularBuckets, noAnswerBucket]
+    if (noAnswerBucket) {
+        const regularBuckets = buckets.filter(b => b.id !== NO_ANSWER) as T[]
+        return [...regularBuckets, noAnswerBucket]
+    } else {
+        return buckets
+    }
 }
 
 export async function sortData(
