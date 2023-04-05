@@ -1,19 +1,14 @@
-import { useMemo } from 'react'
-import ceil from 'lodash/ceil'
-// @ts-ignore
+import ceil from 'lodash/ceil.js'
 import { useI18n } from 'core/i18n/i18nContext'
 import { Units, Mode, isPercentage } from 'core/helpers/units'
-import { BucketItem, ChartOptionDefinition } from 'core/types/data'
-import { BlockMode, BlockUnits } from 'core/types'
-import { useTheme } from 'styled-components'
+import { ChartOptionDefinition } from '@types/data'
+import { BlockMode, BlockUnits } from '@types/index'
+import { DefaultTheme, useTheme } from 'styled-components'
 import { usePageContext } from 'core/helpers/pageContext'
-import isEmpty from 'lodash/isEmpty'
 import round from 'lodash/round'
-import {
-    CHART_MODE_GRID,
-    CHART_MODE_STACKED,
-    CHART_MODE_GROUPED
-} from 'core/blocks/filters/constants'
+import { CHART_MODE_GRID, CHART_MODE_STACKED, CHART_MODE_GROUPED } from 'core/filters/constants'
+import { ChartModes, FacetItem, FilterItem } from 'core/filters/types'
+import { Bucket } from '@devographics/types'
 
 /*
 
@@ -28,7 +23,7 @@ Switch between absolute (chart always has same max value) and relative (chart ad
 
 */
 const getMode = (units: Units, mode: Mode) => {
-    if (units === 'percentage_survey' || units === 'percentage_bucket') {
+    if (units === 'percentageSurvey' || units === 'percentage_bucket') {
         return 'absolute'
     } else {
         return 'relative'
@@ -40,7 +35,7 @@ const getMode = (units: Units, mode: Mode) => {
 Get chart's max value
 
 */
-const getMaxValue = (units: Units, mode: Mode, buckets: BucketItem[], total: number) => {
+const getMaxValue = (units: Units, mode: Mode, buckets: Bucket[], total: number) => {
     if (units === 'average') {
         return Math.max(...buckets.map(b => b[units]))
     } else if (isPercentage(units)) {
@@ -74,9 +69,13 @@ Variant 10 = barColor 10
 Variant 11 = barColor 1 // start over
 
 */
-export const getVariantBarColorItem = (colors, variantIndex, facet) => {
-    const { velocityBarColors, barColors } = colors
-    if (velocityFacets.includes(facet)) {
+export const getVariantBarColorItem = (
+    theme: DefaultTheme,
+    variantIndex: number,
+    facet?: FacetItem
+) => {
+    const { velocityBarColors, barColors } = theme.colors
+    if (facet && velocityFacets.includes(facet.id)) {
         return velocityBarColors[variantIndex]
     } else {
         const numberOfVariantColors = barColors.length
@@ -98,7 +97,7 @@ export const useBarChart = ({
     i18nNamespace,
     shouldTranslate
 }: {
-    buckets: BucketItem[]
+    buckets: Bucket[]
     total: number
     mode: BlockMode
     units: BlockUnits
@@ -199,9 +198,9 @@ type UseColorFillsOptions = {
     orientation?: 'Vertical' | 'Horizontal'
     defaultColorIndex?: number
     keys?: string[]
-    facet?: string
+    facet?: FacetItem
     gridIndex?: number
-    chartDisplayMode: 'grid' | 'grouped' | 'stacked'
+    chartDisplayMode: ChartModes
     showDefaultSeries?: boolean
 }
 
@@ -214,7 +213,7 @@ chartKeys are e.g.
 ['percentage_bucket__male', 'percentage_bucket__female', 'percentage_bucket__non_binary', etc. ]
 
 */
-export const useColorFills = (options: UseColorFillsOptions = {}) => {
+export const useColorFills = (options: UseColorFillsOptions) => {
     const theme = useTheme()
     const {
         chartDisplayMode,
@@ -250,7 +249,7 @@ export const useColorFills = (options: UseColorFillsOptions = {}) => {
             This will match keys of the type count__male, count__female, etc.
 
             */
-            const prefix = velocityFacets.includes(facet) ? 'Velocity' : 'Gradient'
+            const prefix = velocityFacets.includes(facet.id) ? 'Velocity' : 'Gradient'
 
             const averageFill = {
                 match: d => {
@@ -303,11 +302,29 @@ export const useColorFills = (options: UseColorFillsOptions = {}) => {
 Get options keys ([{ id: 'range_work_for_free' }, { id: 'range_0_10' }, { id: 'range_10_30' }, ...]) for all chart types
 
 */
-export const useAllChartsOptions = () => {
+export const useAllChartsOptions = (): FilterItem[] => {
     const context = usePageContext()
-    const { metadata } = context
-    const { keys } = metadata
+    const { currentEdition } = context
+    const keys = []
+    for (const section of currentEdition.sections) {
+        for (const question of section.questions) {
+            const { id, options, template } = question
+            if (options) {
+                keys.push({ sectionId: section.id, id, options, template })
+            }
+        }
+    }
     return keys
+}
+
+/*
+
+Get all available filters, while optionally filtering out the current question's id
+
+*/
+export const useAllFilters = (excludeFilterId?: string) => {
+    const allFilters = useAllChartsOptions()
+    return allFilters.filter(q => q.id !== excludeFilterId)
 }
 
 export const useAllChartsOptionsIdsOnly = () => {
@@ -345,22 +362,24 @@ export const useChartKeys = ({
     showDefaultSeries = true
 }: {
     units: BlockUnits
-    facet?: string
+    facet?: FacetItem
     seriesCount?: number
     showDefaultSeries?: boolean
 }) => {
-    const allChartKeys = useAllChartsOptionsIdsOnly()
+    const allChartKeys = useAllChartsOptions()
     if (facet) {
         if (units === 'average') {
             return ['average']
         } else {
-            return allChartKeys[facet].map(key => `${units}__${key}`)
+            return allChartKeys
+                .find(q => q.id === facet.id)
+                ?.options.map(option => `${units}__${option.id}`)
         }
     } else if (seriesCount) {
         if (showDefaultSeries) {
-            return [...Array(seriesCount + 1)].map((x, i) => (i === 0 ? units : `${units}__${i}`))
+            return [...Array(seriesCount)].map((x, i) => (i === 0 ? units : `${units}__${i}`))
         } else {
-            return [...Array(seriesCount)].map((x, i) => `${units}__${i + 1}`)
+            return [...Array(seriesCount - 1)].map((x, i) => `${units}__${i + 1}`)
         }
     } else {
         return [units]

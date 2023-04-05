@@ -1,0 +1,6 @@
+blockType: HorizontalBarBlock
+dataPath: 'dataAPI.survey.demographics.${questionId}.year'
+titleId: user_info.${questionId}
+descriptionId: user_info.${questionId}.description
+noteId: user_info.${questionId}.note
+hasSponsor: true

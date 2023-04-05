@@ -1,4 +1,4 @@
-import { Survey, ParsedQuestion } from '../../types/surveys'
+import { Survey, ParsedQuestionExt } from '../../types/surveys'
 import { getFacetsTypeName } from '../../generate/helpers'
 
 /*
@@ -25,7 +25,7 @@ export const generateFacetsType = ({
     questionObjects
 }: {
     survey: Survey
-    questionObjects: ParsedQuestion[]
+    questionObjects: ParsedQuestionExt[]
 }) => {
     const typeName = getFacetsTypeName(survey.id)
     const questionObjectsWithFilters = questionObjects.filter(

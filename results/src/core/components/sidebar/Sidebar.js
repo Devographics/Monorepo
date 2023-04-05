@@ -28,9 +28,10 @@ export const Sidebar = ({ showSidebar, closeSidebar, rest }) => {
             <SidebarCloseButton
                 onClick={closeSidebar}
                 aria-haspopup="menu"
-                aria-expanded={showSidebar}>
-                    <CloseIcon />
-                    <ScreenReadersHint>{translate('general.close_nav')}</ScreenReadersHint>
+                aria-expanded={showSidebar}
+            >
+                <CloseIcon />
+                <ScreenReadersHint>{translate('general.close_nav')}</ScreenReadersHint>
             </SidebarCloseButton>
 
             <SidebarScreenReadersTitle>{siteTitle}</SidebarScreenReadersTitle>
@@ -47,7 +48,7 @@ export const Sidebar = ({ showSidebar, closeSidebar, rest }) => {
 }
 
 const SidebarContainer = styled.div`
-    border-right: ${(props) => props.theme.separationBorder};
+    border-right: ${props => props.theme.separationBorder};
     display: grid;
     grid-template-rows: auto 1fr auto;
 
@@ -67,7 +68,7 @@ const SidebarContainer = styled.div`
         z-index: 1000;
         text-align: center;
         position: fixed;
-        display: ${(props) => (props.show ? 'grid' : 'none')};
+        display: ${props => (props.show ? 'grid' : 'none')};
     }
 `
 
@@ -83,7 +84,7 @@ const SidebarHeader = styled.div`
     display: grid;
     grid-template-columns: 0 1fr 0;
     grid-template-areas: 'left logo right';
-    border-bottom: ${(props) => props.theme.separationBorder};
+    border-bottom: ${props => props.theme.separationBorder};
 
     @media ${mq.smallMedium} {
         grid-template-columns: 50px 1fr 50px;
@@ -117,7 +118,6 @@ const SidebarCloseButton = styled.button`
     border: none;
     position: absolute;
 
-
     box-sizing: border-box;
     width: calc(calc(100vw - 270px) / 2);
     height: 68px;
@@ -130,7 +130,8 @@ const SidebarCloseButton = styled.button`
         display: none;
     }
 
-    &:hover, &:focus {
-      background-color: ${colors.greyDarkish}
+    &:hover,
+    &:focus {
+        background-color: ${colors.greyDarkish};
     }
 `

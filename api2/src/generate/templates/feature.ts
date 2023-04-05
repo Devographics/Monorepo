@@ -1,5 +1,6 @@
 import { TemplateFunction } from '../../types/surveys'
-import { FEATURES_OPTIONS } from '../../constants'
+// import { FEATURES_OPTIONS } from '@devographics/constants'
+const FEATURES_OPTIONS = ['never_heard', 'heard', 'used']
 import {
     idResolverFunction,
     responsesResolverFunction,
@@ -20,6 +21,7 @@ export const feature: TemplateFunction = ({ survey, question }) => {
         options: FEATURES_OPTIONS.map(id => ({
             id
         })),
+        defaultSort: 'options',
         fieldTypeName,
         filterTypeName: 'FeatureFilters',
         autogenerateFilterType: false,

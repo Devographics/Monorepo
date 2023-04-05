@@ -4,7 +4,7 @@ import ModalTrigger from 'core/components/ModalTrigger'
 import T from 'core/i18n/T'
 import { secondaryFontMixin, mq, spacing, fontSize } from 'core/theme'
 import { CommentIcon } from 'core/icons'
-import { runQuery } from 'core/blocks/explorer/data'
+import { runQuery } from 'core/explorer/data'
 import config from 'Config/config.yml'
 import newGithubIssueUrl from 'new-github-issue-url'
 

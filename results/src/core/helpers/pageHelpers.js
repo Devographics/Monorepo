@@ -1,4 +1,3 @@
-import { getToolName } from 'core/helpers/tools'
 import get from 'lodash/get'
 import config from 'Config/config.yml'
 import { getBlockImage } from './blockHelpers'
@@ -9,7 +8,8 @@ export const getTranslationValuesFromContext = (context, translate) => {
         values.section = translate(`section.${context.section}`)
     }
     if (context.tool !== undefined) {
-        values.tool = getToolName(context.tool, translate)
+        // values.tool = getToolName(context.tool, translate)
+        values.tool = 'todo'
     }
 
     return values

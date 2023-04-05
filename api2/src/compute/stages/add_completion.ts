@@ -1,11 +1,11 @@
-import { EditionData, EditionParticipation } from '../../types'
+import { ResponseEditionData, EditionParticipation } from '../../types'
 import { ratioToPercentage } from '../common'
 import { CompletionResult } from '../completion'
 import sumBy from 'lodash/sumBy.js'
 
 // add completion counts for each year and facet
 export async function addCompletionCounts(
-    resultsByEdition: EditionData[],
+    resultsByEdition: ResponseEditionData[],
     totalRespondentsByYear: EditionParticipation[],
     completionByYear: CompletionResult[]
 ) {
@@ -18,7 +18,7 @@ export async function addCompletionCounts(
         editionData.completion = {
             total: totalRespondents,
             count: questionRespondents,
-            percentage_survey: ratioToPercentage(questionRespondents / totalRespondents)
+            percentageSurvey: ratioToPercentage(questionRespondents / totalRespondents)
         }
         // TODO: this is probably not needed anymore?
         // for (let bucket of editionData.buckets) {
@@ -28,8 +28,8 @@ export async function addCompletionCounts(
         //     bucket.completion = {
         //         total: totalRespondents,
         //         count,
-        //         percentage_question: ratioToPercentage(count / questionRespondents),
-        //         percentage_survey: ratioToPercentage(count / totalRespondents)
+        //         percentageQuestion: ratioToPercentage(count / questionRespondents),
+        //         percentageSurvey: ratioToPercentage(count / totalRespondents)
         //     }
         // }
     }

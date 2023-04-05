@@ -16,7 +16,7 @@ const SponsorCredit = ({ sponsor }) => {
                 trigger={
                     <SponsorLink href={link}>
                         <ImageWrapper>
-                            <Image src={avatarUrl} alt='' />
+                            <Image src={avatarUrl} alt="" />
                         </ImageWrapper>
                         <Username>
                             <UsernameInner>@{username}</UsernameInner>

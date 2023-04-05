@@ -5,18 +5,17 @@ import { mq, spacing, fontSize } from 'core/theme'
 import T from 'core/i18n/T'
 import { usePageContext } from 'core/helpers/pageContext'
 
-const SponsorsBlock = ({ data }) => {
+const SponsorsBlock = () => {
     const context = usePageContext()
-    const { currentSurvey, currentEdition } = context
+    const { currentEdition } = context
 
-    const survey = data?.find(s => s.slug === currentSurvey.slug)
-    const edition = survey?.editions?.find(e => e.year === currentEdition.year)
-    const sponsors = edition?.sponsors
-
+    const sponsors = currentEdition?.sponsors
     return sponsors && sponsors.length > 0 ? (
         <>
             <Container>
-                <Header><T k="sponsors.our_partners" /></Header>
+                <Header>
+                    <T k="sponsors.our_partners" />
+                </Header>
                 <SponsorList className="Sponsor__list">
                     {sponsors.map(({ name, imageUrl, url, id }) => (
                         <Sponsor className={`Sponsor Sponsor--${id}`} key={name}>
@@ -33,7 +32,9 @@ const SponsorsBlock = ({ data }) => {
                 </SponsorList>
             </Container>
             <Support className="Sponsors__Support">
-                <Link to="/support"><T k="sponsors.become_partner" /></Link>
+                <Link to="/support">
+                    <T k="sponsors.become_partner" />
+                </Link>
             </Support>
         </>
     ) : null

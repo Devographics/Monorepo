@@ -1,64 +1,10 @@
-blockType: ToolExperienceBlock
+blockType: ToolFeatureExperienceBlock
 titleId: blocks.tool_experience
 descriptionId: blocks.tool_experience.description
 noteId: blocks.tool_experience.note
-dataPath: dataAPI.survey.${id}
-keysPath: dataAPI.survey.${id}.experience.keys
-entityPath: dataAPI.survey.${id}.entity
-bucketKeysName: tools
-hidden: true
-# enableCustomization: true
+i18nNamespace: tools
+# bucketKeysName: tools
 hasComments: true
 hasSponsor: true
-query: >
-    dataAPI {
-        survey(survey: ${surveyType}) {
-            # fragmentStart
-            ${id}: tool(id: ${id}) {
-                id
-                entity {
-                    name
-                    nameClean
-                    nameHtml
-                    homepage {
-                        url
-                    }
-                    description
-                    github {
-                        name
-                        url
-                    }
-                    npm {
-                        name
-                        url
-                    }
-                }
-                comments {
-                    year(year: ${currentYear}) {
-                        count
-                    }
-                }
-                experience(filters: {}, facet: null) {
-                    keys
-                    all_years {
-                        year
-                        completion {
-                            total
-                            count
-                            percentage_survey
-                        }
-                        facets {
-                            buckets {
-                                id
-                                count
-                                countDelta
-                                percentage_survey
-                                percentage_question
-                            }
-                        }
-                    }
-                }
-            }
-            # fragmentEnd
-        }
-    }
+query: allEditionsData
+parameters: { showNoAnswer: true }

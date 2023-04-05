@@ -1,46 +1,42 @@
-id: "${parentId}_experience_linechart"
-blockType: ToolsExperienceLineChartBlock
+id: '${sectionId}_experience_linechart'
+blockType: ToolsRatiosLineChartBlock
 titleId: blocks.tools_experience_linechart
 descriptionId: blocks.tools_experience_linechart.description
 noteId: blocks.tools_experience_linechart.note
-dataPath: "dataAPI.survey.${parentId}_experience_linechart"
+# dataPath: 'dataAPI.survey.${sectionId}_experience_linechart'
 hasSponsor: true
 query: >
-    dataAPI {
-        survey(survey: ${surveyType}) {
-            # fragmentStart
-            ${parentId}_experience_linechart: tools_rankings(ids: [${toolsCategories[parentId]}]) {
-                ids
-                years
-                experience(filters: {}) {
-                    id
-                    entity {
-                        name
-                        nameClean
-                        nameHtml
-                    }
-                    usage {
-                        year
-                        rank
-                        percentage_question
-                    }
-                    awareness {
-                        year
-                        rank
-                        percentage_question
-                    }
-                    interest {
-                        year
-                        rank
-                        percentage_question
-                    }
-                    satisfaction {
-                        year
-                        rank
-                        percentage_question
+    surveys {
+        ${surveyId} {
+            ${editionId} {
+                ${sectionId} {
+                    ${sectionId}_experience_linechart: ${sectionId}_ratios {
+                        years
+                        items<ARGUMENTS_PLACEHOLDER> {
+                            id
+                            usage {
+                                year
+                                rank
+                                percentageQuestion
+                            }
+                            awareness {
+                                year
+                                rank
+                                percentageQuestion
+                            }
+                            interest {
+                                year
+                                rank
+                                percentageQuestion
+                            }
+                            satisfaction {
+                                year
+                                rank
+                                percentageQuestion
+                            }
+                        }
                     }
                 }
             }
-            # fragmentEnd
         }
     }

@@ -1,7 +1,7 @@
 import React from 'react'
-import IconWrapper from './IconWrapper.js'
+import IconWrapper from './IconWrapper'
 
-export const FacebookIcon = (props) => (
+export const FacebookIcon = props => (
     <IconWrapper {...props}>
         <svg
             version="1.1"
@@ -14,7 +14,10 @@ export const FacebookIcon = (props) => (
             xmlSpace="preserve"
             aria-hidden="true"
         >
-            <path  fill="currentColor" d="M18.768,7.465H14.5V5.56c0-0.896,0.594-1.105,1.012-1.105s2.988,0,2.988,0V0.513L14.171,0.5C10.244,0.5,9.5,3.438,9.5,5.32 v2.145h-3v4h3c0,5.212,0,12,0,12h5c0,0,0-6.85,0-12h3.851L18.768,7.465z" />
+            <path
+                fill="currentColor"
+                d="M18.768,7.465H14.5V5.56c0-0.896,0.594-1.105,1.012-1.105s2.988,0,2.988,0V0.513L14.171,0.5C10.244,0.5,9.5,3.438,9.5,5.32 v2.145h-3v4h3c0,5.212,0,12,0,12h5c0,0,0-6.85,0-12h3.851L18.768,7.465z"
+            />
         </svg>
     </IconWrapper>
 )

@@ -1,0 +1,67 @@
+blockType: AllSectionsToolsCardinalityByUserBlock
+dataPath: dataAPI.cardinality
+bucketKeysName: tools
+hasSponsor: true
+# this chart's query is quite repetitive, in order to be able
+# to generate it in a more dynamic way, we would have
+# to support loops.
+
+# query: >
+#     dataAPI {
+#         cardinality: survey(survey: ${surveyId}) {
+#             front_end_frameworks: tools_cardinality_by_user(
+#                 year: ${currentYear},
+#                 ids: [${toolsCategories.front_end_frameworks}],
+#                 experienceId: would_use
+#             ) {
+#                 cardinality
+#                 count
+#                 percentageSurvey
+#             }
+#             back_end_frameworks: tools_cardinality_by_user(
+#                 year: ${currentYear},
+#                 ids: [${toolsCategories.back_end_frameworks}],
+#                 experienceId: would_use
+#             ) {
+#                 cardinality
+#                 count
+#                 percentageSurvey
+#             }
+#             testing: tools_cardinality_by_user(
+#                 year: ${currentYear},
+#                 ids: [${toolsCategories.testing}],
+#                 experienceId: would_use
+#             ) {
+#                 cardinality
+#                 count
+#                 percentageSurvey
+#             }
+#             build_tools: tools_cardinality_by_user(
+#                 year: ${currentYear},
+#                 ids: [${toolsCategories.build_tools}],
+#                 experienceId: would_use
+#             ) {
+#                 cardinality
+#                 count
+#                 percentageSurvey
+#             }
+#             monorepo_tools: tools_cardinality_by_user(
+#                 year: ${currentYear},
+#                 ids: [${toolsCategories.monorepo_tools}],
+#                 experienceId: would_use
+#             ) {
+#                 cardinality
+#                 count
+#                 percentageSurvey
+#             }
+#             mobile_desktop: tools_cardinality_by_user(
+#                 year: ${currentYear},
+#                 ids: [${toolsCategories.mobile_desktop}],
+#                 experienceId: would_use
+#             ) {
+#                 cardinality
+#                 count
+#                 percentageSurvey
+#             }
+#         }
+#     }

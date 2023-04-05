@@ -1,43 +1,40 @@
-id: "${parentId}_experience_marimekko"
+id: '${sectionId}_experience_marimekko'
 blockType: ToolsExperienceMarimekkoBlock
 titleId: blocks.tools_experience_marimekko
 descriptionId: blocks.tools_experience_marimekko.description
 noteId: blocks.tools_experience_marimekko.note
-dataPath: "dataAPI.survey.${parentId}_marimekko"
-keysPath: "dataAPI.survey.${parentId}_marimekko.0.experience.keys"
+# dataPath: 'dataAPI.survey.${sectionId}_marimekko'
+# keysPath: 'dataAPI.survey.${sectionId}_marimekko.0.experience.keys'
 bucketKeysName: tools
 hasSponsor: true
 query: >
-    dataAPI {
-        survey(survey: ${surveyType}) {
-            # fragmentStart
-            ${parentId}_marimekko: tools(ids: [${toolsCategories[parentId]}]) {
-                id
-                entity {
-                    name
-                    nameClean
-                    nameHtml
-                }
-                experience(filters: {}) {
-                    keys
-                    year(year: ${currentYear}) {
-                        year
-                        completion {
-                            total
-                            count
-                            percentage_survey
-                        }
-                        facets {
-                            buckets {
-                                id
-                                count
-                                percentage_survey
-                                percentage_question
+    surveys {
+        ${surveyId} {
+            ${editionId} {
+                ${sectionId} {
+                    ${sectionId}_experience_marimekko: ${sectionId}_allTools {
+                        items {
+                            id
+                            responses<ARGUMENTS_PLACEHOLDER> {
+                                currentEdition {
+                                    editionId
+                                    year
+                                    buckets {
+                                        id
+                                        percentageQuestion
+                                        percentageSurvey
+                                        count
+                                    }
+                                    completion {
+                                        count
+                                        percentageSurvey
+                                        total
+                                    }
+                                }
                             }
                         }
                     }
                 }
             }
-            # fragmentEnd
         }
     }

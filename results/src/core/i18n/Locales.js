@@ -33,11 +33,11 @@ const Item = styled.span`
 
 const Locales = () => {
     const context = usePageContext()
-    const links = get(context, 'locales', []).map((locale) => {
+    const links = get(context, 'locales', []).map(locale => {
         return {
             ...locale,
             link: locale.path + context.basePath,
-            isCurrent: locale.locale === context.locale,
+            isCurrent: locale.locale === context.locale
         }
     })
 

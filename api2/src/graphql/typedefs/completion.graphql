@@ -13,7 +13,7 @@ type YearCompletion {
     """
     Completion percentage relative to total number of survey respondents for a given year
     """
-    percentage_survey: Float
+    percentageSurvey: Float
 }
 
 type FacetCompletion {
@@ -28,9 +28,9 @@ type FacetCompletion {
     """
     Completion percentage relative to total number of question respondents
     """
-    percentage_question: Float
+    percentageQuestion: Float
     """
     Completion percentage relative to total number of survey respondents for a given year
     """
-    percentage_survey: Float
+    percentageSurvey: Float
 }

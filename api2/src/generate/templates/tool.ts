@@ -1,5 +1,4 @@
 import { TemplateFunction } from '../../types/surveys'
-import { TOOLS_OPTIONS } from '../../constants'
 import {
     idResolverFunction,
     commentsResolverFunction,
@@ -9,6 +8,8 @@ import {
 import { getFiltersTypeName, getFacetsTypeName } from '../helpers'
 import { graphqlize } from '../helpers'
 import { getResponseTypeName } from '../../graphql/templates/responses'
+// import { TOOLS_OPTIONS } from '@devographics/constants'
+const TOOLS_OPTIONS = ['would_use', 'would_not_use', 'interested', 'not_interested', 'never_heard']
 
 export const tool: TemplateFunction = ({ survey, question }) => {
     const fieldTypeName = `${graphqlize(survey.id)}Tool`
@@ -20,6 +21,7 @@ export const tool: TemplateFunction = ({ survey, question }) => {
         options: TOOLS_OPTIONS.map(id => ({
             id
         })),
+        defaultSort: 'options',
         fieldTypeName,
         filterTypeName: 'ToolFilters',
         autogenerateFilterType: false,

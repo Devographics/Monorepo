@@ -1,48 +1,48 @@
 blockType: BracketWinsBlock
-dataPath: "dataAPI.survey.${id}.year.facets.0"
-keysPath: "dataAPI.survey.${id}.keys"
+dataPath: 'dataAPI.survey.${questionId}.year.facets.0'
+keysPath: 'dataAPI.survey.${questionId}.keys'
 hasSponsor: true
-query: >
-    dataAPI {
-        survey(survey: ${surveyType}) {
-            ${id}: bracket_wins(id: ${fieldId}, filters: ${filters}, options: ${options}) {
-                id
-                keys
-                year(year: ${currentYear}) {
-                    year
-                    completion {
-                        total
-                        count
-                        percentage_survey
-                    }
-                    facets {
-                        completion {
-                            total
-                            count
-                            percentage_survey
-                            percentage_question
-                        }
-                        buckets {
-                            id
-                            combined {
-                                count
-                                percentage
-                            }
-                            round1 {
-                                count
-                                percentage
-                            }
-                            round2 {
-                                count
-                                percentage
-                            }
-                            round3 {
-                                count
-                                percentage
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+# query: >
+#     dataAPI {
+#         survey(survey: ${surveyId}) {
+#             ${questionId}: bracket_wins(id: ${fieldId}, filters: ${filters}, options: ${options}) {
+#                 id
+#                 keys
+#                 year(year: ${currentYear}) {
+#                     year
+#                     completion {
+#                         total
+#                         count
+#                         percentageSurvey
+#                     }
+#                     facets {
+#                         completion {
+#                             total
+#                             count
+#                             percentageSurvey
+#                             percentageQuestion
+#                         }
+#                         buckets {
+#                             id
+#                             combined {
+#                                 count
+#                                 percentage
+#                             }
+#                             round1 {
+#                                 count
+#                                 percentage
+#                             }
+#                             round2 {
+#                                 count
+#                                 percentage
+#                             }
+#                             round3 {
+#                                 count
+#                                 percentage
+#                             }
+#                         }
+#                     }
+#                 }
+#             }
+#         }
+#     }

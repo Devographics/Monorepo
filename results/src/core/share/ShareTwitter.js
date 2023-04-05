@@ -11,7 +11,9 @@ const ShareTwitter = ({ twitterText, twitterLink, trackingId, ...rest }) => {
         <ShareLink
             onClick={track('Twitter', trackingId)}
             media="twitter"
-            href={`https://twitter.com/intent/tweet/?url=${encodeURIComponent(twitterLink)}&text=${encodeURIComponent(twitterText)}`}
+            href={`https://twitter.com/intent/tweet/?url=${encodeURIComponent(
+                twitterLink
+            )}&text=${encodeURIComponent(twitterText)}`}
             target="_blank"
             rel="noopener noreferrer"
             labelId="share.twitter"

@@ -19,7 +19,7 @@ const NewsletterBlock = () => {
 const Container = styled.div`
     padding: ${spacing(1.5)};
     margin-bottom: ${spacing(2)};
-    border: ${(props) => props.theme.separationBorder};
+    border: ${props => props.theme.separationBorder};
     max-width: 700px;
     margin-left: auto;
     margin-right: auto;
@@ -27,7 +27,7 @@ const Container = styled.div`
 
 const Heading = styled.h3`
     margin-bottom: ${spacing(0.5)};
-    font-size: ${(props) => props.theme.typography.size.larger};
+    font-size: ${props => props.theme.typography.size.larger};
 `
 
 const Description = styled.div`

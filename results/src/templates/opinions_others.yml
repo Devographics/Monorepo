@@ -1,44 +1,44 @@
-titleId: "opinions_others.${id}.others"
+titleId: 'opinions_others.${questionId}.others'
 blockType: HorizontalBarBlock
-dataPath: "dataAPI.survey.${id}.year"
-query: >
-    dataAPI {
-        survey(survey: ${surveyType}) {
-            ${id}: opinions_others(id: ${id}) {
-                id
-                year(year: ${currentYear}) {
-                    year
-                    completion {
-                        total
-                        count
-                        percentage_survey
-                    }
-                    facets {
-                        id
-                        type
-                        completion {
-                            total
-                            percentage_question
-                            percentage_survey
-                            count
-                        }
-                        buckets {
-                            id
-                            count
-                            percentage_question
-                            percentage_survey
-                            entity {
-                                name
-                                nameClean
-                                nameHtml
-                                id
-                                homepage {
-                                    url
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+dataPath: 'dataAPI.survey.${questionId}.year'
+# query: >
+#     dataAPI {
+#         survey(survey: ${surveyId}) {
+#             ${questionId}: opinions_others(id: ${questionId}) {
+#                 id
+#                 year(year: ${currentYear}) {
+#                     year
+#                     completion {
+#                         total
+#                         count
+#                         percentageSurvey
+#                     }
+#                     facets {
+#                         id
+#                         type
+#                         completion {
+#                             total
+#                             percentageQuestion
+#                             percentageSurvey
+#                             count
+#                         }
+#                         buckets {
+#                             id
+#                             count
+#                             percentageQuestion
+#                             percentageSurvey
+#                             entity {
+#                                 name
+#                                 nameClean
+#                                 nameHtml
+#                                 id
+#                                 homepage {
+#                                     url
+#                                 }
+#                             }
+#                         }
+#                     }
+#                 }
+#             }
+#         }
+#     }

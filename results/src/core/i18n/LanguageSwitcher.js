@@ -189,7 +189,7 @@ const LanguageSwitcherHelp = styled.div`
     font-size: ${fontSize('small')};
     padding-top: ${spacing(1)};
     margin-top: ${spacing(1)};
-    border-top: ${(props) => props.theme.separationBorder};
+    border-top: ${props => props.theme.separationBorder};
 `
 
 export default LanguageSwitcher

@@ -1,23 +1,22 @@
-import { ParsedQuestion } from '../../types/surveys'
+import { ParsedQuestionExt } from '../../types/surveys'
 import { getFiltersTypeName, getFacetsTypeName, graphqlize } from '../../generate/helpers'
 /*
 
 Sample output:
 
-type DisabilityStatus {
-    all_editions: [EditionData]
-    edition(editionId: StateOfJsEditionID!): EditionData
-    options: [DisabilityStatusOptions]
+type StateOfJsDisabilityStatus {
+    responses(filters: StateOfJsFilters, parameters: Parameters, facet: StateOfJsFacets): StateOfJsResponses
+    options: [StateOfJsDisabilityStatusOption]
 }
 
 */
 
-export const generateFieldType = ({ question }: { question: ParsedQuestion }) => {
+export const generateFieldType = ({ question }: { question: ParsedQuestionExt }) => {
     const { fieldTypeName, optionTypeName, options } = question
 
     return {
         typeName: fieldTypeName,
-        typeType: 'question',
+        typeType: 'field_generated',
         typeDef: `type ${fieldTypeName} {
     responses(filters: ${getFiltersTypeName(
         question.surveyId

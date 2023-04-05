@@ -13,9 +13,9 @@ const EssaySectionLink = ({ path, children }) => (
 )
 
 const SectionLinkWrapper = styled.div`
-  margin-bottom: ${spacing(2)};
-  display: flex;
-  justify-content: center;
+    margin-bottom: ${spacing(2)};
+    display: flex;
+    justify-content: center;
 `
 
 const SectionLink = styled(Button)``

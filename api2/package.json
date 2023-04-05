@@ -3,6 +3,7 @@
     "version": "1.0.0",
     "license": "MIT",
     "dependencies": {
+        "@devographics/constants": "workspace:^1.0.0",
         "@devographics/core-models": "workspace:*",
         "@octokit/core": "^3.5.1",
         "@sentry/node": "^7.11.1",
@@ -30,6 +31,7 @@
         "twitter-api-v2": "^1.5.2"
     },
     "devDependencies": {
+        "@devographics/types": "workspace:*",
         "@luckycatfactory/esbuild-graphql-loader": "^3.7.0",
         "@types/js-yaml": "^4.0.3",
         "@types/lodash": "^4.14.175",

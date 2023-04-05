@@ -33,7 +33,7 @@ export const appendCompletionToYearlyResults = async <
             completion: {
                 total: totalRespondentsByYear.find(e => e.editionId === yearlyResult.id)?.count,
                 count: yearlyResult.completion.count,
-                percentage_survey: ratioToPercentage(
+                percentageSurvey: ratioToPercentage(
                     yearlyResult.completion.count / totalRespondentsByYear[yearlyResult.year]
                 )
             }

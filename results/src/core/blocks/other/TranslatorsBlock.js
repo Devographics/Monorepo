@@ -20,7 +20,7 @@ const TranslatorsBlock = () => {
                             <Locale key={label}>
                                 <LocaleLabel>{label}</LocaleLabel>
                                 <Translators>
-                                    {translators.map((name) => (
+                                    {translators.map(name => (
                                         <Translator key={name}>
                                             <a href={`http://github.com/${name}`}>{name}</a>
                                         </Translator>
@@ -39,7 +39,7 @@ const Container = styled.div`
     max-width: 700px;
     margin-left: auto;
     margin-right: auto;
-    border: ${(props) => props.theme.separationBorder};
+    border: ${props => props.theme.separationBorder};
     padding: ${spacing(2)};
 `
 

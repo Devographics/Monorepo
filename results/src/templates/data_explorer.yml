@@ -1,47 +1,28 @@
 blockType: DataExplorerBlock
-dataPath: "dataAPI.survey.explorer"
 hasSponsor: true
 query: >
-    internalAPI {
-        features: entities(ids: [${allFeaturesAsStrings}]) {
-            id
-            name
-            nameClean
-            nameHtml
-        }
-        tools: entities(ids: [${allToolsAsStrings}]) {
-            id
-            name
-            nameClean
-            nameHtml
-        }
-    }
-    dataAPI {
-        survey(survey: ${surveyType}) {
-            explorer(
-                facet1: "${facet1}"
-                facet2: "${facet2}"
-            ) {
-                keys1
-                keys2
-                year(year: ${currentYear}) {
-                  year
-                  facets {
-                      buckets {
-                          id
-                          count
-                          percentage_question
-                          percentage_survey
-                          percentage_facet
-                      }
-                      completion {
-                          total
-                          count
-                          percentage_question
-                          percentage_survey
-                      }
-                      id
-                      type
+    surveys {
+        ${surveyId} {
+            ${editionId} {
+                ${sectionId} {
+                    data_explorer {
+                        items<ARGUMENTS_PLACEHOLDER> {
+                            editionId
+                            year
+                            buckets {
+                                count
+                                id
+                                facetBuckets {
+                                    count
+                                    id
+                                    percentageFacet
+                                    percentageQuestion
+                                    percentageSurvey
+                                }
+                                percentageQuestion
+                                percentageSurvey
+                            }
+                        }
                     }
                 }
             }

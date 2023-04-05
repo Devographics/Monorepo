@@ -14,7 +14,7 @@ const ShareImage = ({ trackingId, url, ...rest }) => {
             href={url}
             target="_blank"
             rel="noopener noreferrer"
-            labelId="share.image" 
+            labelId="share.image"
             {...rest}
         >
             <ImageIcon labelId="share.image" />

@@ -1,14 +1,20 @@
 import {
-    EditionData,
+    ResponseEditionData,
     ComputeAxisParameters,
     SortProperty,
     SortOrderNumeric,
-    Bucket
+    Bucket,
+    FacetBucket
 } from '../../types'
 import sortBy from 'lodash/sortBy.js'
 import isEmpty from 'lodash/isEmpty.js'
+// import { NO_ANSWER } from '@devographics/constants'
+const NO_ANSWER = 'no_answer'
 
-export function sortBuckets(buckets: Bucket[], axis: ComputeAxisParameters) {
+export function sortBuckets<T extends Bucket | FacetBucket>(
+    buckets: T[],
+    axis: ComputeAxisParameters
+) {
     const { sort, order, options } = axis
     let sortedBuckets = [...buckets]
     if (sort === 'options') {
@@ -19,10 +25,11 @@ export function sortBuckets(buckets: Bucket[], axis: ComputeAxisParameters) {
     } else {
         sortedBuckets = sortByProperty(sortedBuckets, sort, order)
     }
+    sortedBuckets = putNoAnswerBucketLast<T>(sortedBuckets)
     return sortedBuckets
 }
 
-export function sortByOptions(buckets: Bucket[], options: string[]) {
+export function sortByOptions<T extends Bucket | FacetBucket>(buckets: T[], options: string[]) {
     return [...buckets].sort((a, b) => {
         // make sure everything is a string to avoid type mismatches
         const stringValues = options.map(v => v.toString())
@@ -30,8 +37,8 @@ export function sortByOptions(buckets: Bucket[], options: string[]) {
     })
 }
 
-export function sortByProperty(
-    buckets: Bucket[],
+export function sortByProperty<T extends Bucket | FacetBucket>(
+    buckets: T[],
     sortProperty: SortProperty,
     sortOrder: SortOrderNumeric
 ) {
@@ -51,19 +58,30 @@ export function sortByProperty(
     return sortedBuckets
 }
 
+// put on answer bucket last (if it exists)
+export function putNoAnswerBucketLast<T extends Bucket | FacetBucket>(buckets: T[]) {
+    const noAnswerBucket = buckets.find(b => b.id === NO_ANSWER) as T
+    if (noAnswerBucket) {
+        const regularBuckets = buckets.filter(b => b.id !== NO_ANSWER) as T[]
+        return [...regularBuckets, noAnswerBucket]
+    } else {
+        return buckets
+    }
+}
+
 export async function sortData(
-    resultsByEdition: EditionData[],
+    resultsByEdition: ResponseEditionData[],
     axis1: ComputeAxisParameters,
     axis2?: ComputeAxisParameters
 ) {
     for (let editionData of resultsByEdition) {
         // first, sort regular buckets
-        editionData.buckets = sortBuckets(editionData.buckets, axis1)
+        editionData.buckets = sortBuckets<Bucket>(editionData.buckets, axis1)
 
         if (axis2) {
             // then, sort facetBuckets if they exist
             for (let bucket of editionData.buckets) {
-                bucket.facetBuckets = sortBuckets(bucket.facetBuckets, axis2)
+                bucket.facetBuckets = sortBuckets<FacetBucket>(bucket.facetBuckets, axis2)
             }
         }
     }

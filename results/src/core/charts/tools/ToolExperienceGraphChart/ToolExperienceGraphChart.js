@@ -11,13 +11,13 @@ const sortedExperienceKeys = [
     'not_interested',
     'interested',
     'would_not_use',
-    'would_use',
+    'would_use'
 ]
 
-const getColor = (d) => {
+const getColor = d => {
     // it's a node
     if (d.id) {
-        return keys.tools.keys.find((xp) => xp.id === d.experience).color
+        return keys.tools.keys.find(xp => xp.id === d.experience).color
     }
 
     // otherwise it's a link
@@ -28,17 +28,17 @@ const getColor = (d) => {
 
 const minNodeValueOnTop = (nodeA, nodeB) => {
     return (
-        sortedExperienceKeys.findIndex((xp) => xp === nodeA.experience) -
-        sortedExperienceKeys.findIndex((xp) => xp === nodeB.experience)
+        sortedExperienceKeys.findIndex(xp => xp === nodeA.experience) -
+        sortedExperienceKeys.findIndex(xp => xp === nodeB.experience)
     )
 }
 
 const ToolExperienceGraphChart = ({ data }) => {
     const theme = useTheme()
 
-    const links = data.links.map((link) => ({
+    const links = data.links.map(link => ({
         ...link,
-        value: link.count,
+        value: link.count
     }))
 
     return (
@@ -47,7 +47,7 @@ const ToolExperienceGraphChart = ({ data }) => {
             margin={{ top: 60, right: 16, bottom: 40, left: 16 }}
             data={{
                 nodes: data.nodes,
-                links,
+                links
             }}
             sort={minNodeValueOnTop}
             align="center"
@@ -60,13 +60,13 @@ const ToolExperienceGraphChart = ({ data }) => {
             nodeOpacity={1}
             nodeBorderWidth={0}
             nodeInnerPadding={2}
-            nodeTooltip={(node) => <NodeTooltip {...node} />}
+            nodeTooltip={node => <NodeTooltip {...node} />}
             linkContract={1}
             linkBlendMode="screen"
             enableLinkGradient
             linkOpacity={0.75}
             linkHoverOpacity={1}
-            linkTooltip={(link) => <LinkTooltip {...link} />}
+            linkTooltip={link => <LinkTooltip {...link} />}
         />
     )
 }

@@ -5,7 +5,6 @@ import ShareLink from './ShareLink'
 import { LinkedInIcon } from 'core/icons'
 
 const ShareLinkedIn = ({ link, title, summary = '', trackingId, ...rest }) => {
-
     return (
         <ShareLink
             onClick={track('LinkedIn', trackingId)}
@@ -21,13 +20,6 @@ const ShareLinkedIn = ({ link, title, summary = '', trackingId, ...rest }) => {
             <LinkedInIcon labelId="share.linkedin" />
         </ShareLink>
     )
-}
-
-ShareLinkedIn.propTypes = {
-    link: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    summary: PropTypes.string,
-    trackingId: PropTypes.string,
 }
 
 export default ShareLinkedIn

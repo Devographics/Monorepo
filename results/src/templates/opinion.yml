@@ -1,41 +1,5 @@
 blockType: OpinionBlock
-dataPath: "dataAPI.survey.${id}.all_years"
-keysPath: "dataAPI.survey.${id}.keys"
 translateData: true
-blockNamespace: opinions
-# enableCustomization: true
+i18nNamespace: opinions
 hasSponsor: true
-query: >
-    dataAPI {
-        survey(survey: ${surveyType}) {
-            ${id}: opinion(id: ${id}) {
-                id
-                keys
-                all_years {
-                    year
-                    mean
-                    completion {
-                        total
-                        count
-                        percentage_survey
-                    }
-                    facets {
-                        id
-                        type
-                        completion {
-                            total
-                            percentage_question
-                            percentage_survey
-                            count
-                        }
-                        buckets {
-                            id
-                            count
-                            percentage_question
-                            percentage_survey
-                        }
-                    }
-                }
-            }
-        }
-    }
+query: allEditionsData

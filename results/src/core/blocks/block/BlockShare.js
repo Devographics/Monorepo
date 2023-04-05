@@ -17,7 +17,7 @@ import ShareURL from 'core/share/ShareURL'
 const Share = styled.div`
     display: flex;
     flex-direction: column;
-    gap:2rem;
+    gap: 2rem;
 
     @media ${mq.mediumLarge} {
         display: grid;
@@ -30,10 +30,10 @@ const ShareIcons = styled.div`
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    a:first-child{
+    a:first-child {
         border-radius: 5px 5px 0 0;
     }
-    a:last-child{
+    a:last-child {
         border-radius: 0 0 5px 5px;
     }
 `

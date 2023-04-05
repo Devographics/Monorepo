@@ -1,21 +1,24 @@
-import { EditionData, Bucket, ComputeAxisParameters } from '../../types'
+import { ResponseEditionData, Bucket, FacetBucket, ComputeAxisParameters } from '../../types'
 import { ratioToPercentage } from '../common'
+// import { NO_ANSWER } from '@devographics/constants'
+const NO_ANSWER = 'no_answer'
 
-const computeBucketsWithPercentages = (
-    buckets: Bucket[],
-    editionData: EditionData,
+const computeBucketsWithPercentages = <T extends Bucket | FacetBucket>(
+    buckets: T[],
+    editionData: ResponseEditionData,
     parentBucket?: Bucket
 ) => {
     const bucketsWithPercentages = buckets.map(bucket => {
         const bucketWithPercentages = { ...bucket }
-        bucketWithPercentages.percentage_survey = ratioToPercentage(
+        bucketWithPercentages.percentageSurvey = ratioToPercentage(
             bucket.count / editionData.completion.total
         )
-        bucketWithPercentages.percentage_question = ratioToPercentage(
-            bucket.count / editionData.completion.count
-        )
+        bucketWithPercentages.percentageQuestion =
+            bucket.id === NO_ANSWER
+                ? 0
+                : ratioToPercentage(bucket.count / editionData.completion.count)
         if (parentBucket) {
-            bucketWithPercentages.percentage_facet = ratioToPercentage(
+            bucketWithPercentages.percentageFacet = ratioToPercentage(
                 bucketWithPercentages.count / parentBucket.count
             )
         }
@@ -24,12 +27,15 @@ const computeBucketsWithPercentages = (
     return bucketsWithPercentages
 }
 
-export async function addPercentages(resultsByEdition: EditionData[]) {
+export async function addPercentages(resultsByEdition: ResponseEditionData[]) {
     for (let editionData of resultsByEdition) {
-        editionData.buckets = computeBucketsWithPercentages(editionData.buckets, editionData)
+        editionData.buckets = computeBucketsWithPercentages<Bucket>(
+            editionData.buckets,
+            editionData
+        )
         for (let bucket of editionData.buckets) {
             if (bucket.facetBuckets) {
-                bucket.facetBuckets = computeBucketsWithPercentages(
+                bucket.facetBuckets = computeBucketsWithPercentages<FacetBucket>(
                     bucket.facetBuckets,
                     editionData,
                     bucket

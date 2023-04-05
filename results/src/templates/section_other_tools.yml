@@ -1,52 +1,90 @@
-id: ${parentId}_others
+id: ${sectionId}_others
 titleId: blocks.category_other_tools
 blockType: HorizontalBarBlock
 defaultUnits: count
-dataPath: "dataAPI.survey.${parentId}_others.year"
+# dataPath: 'dataAPI.survey.${sectionId}_others.year'
 hasSponsor: true
-defaultVariables:
+query: currentEditionDataWithEntities
+variables:
     limit: 20
-query: >
-    dataAPI {
-        survey(survey: ${surveyType}) {
-            ${parentId}_others: tools_others(id: ${parentId}_others, options: {limit: ${limit}}) {
-                id
-                year(year: ${currentYear}) {
-                    year
-                    completion {
-                        total
-                        count
-                        percentage_survey
-                    }
-                    facets {
-                        id
-                        type
-                        completion {
-                            total
-                            percentage_question
-                            percentage_survey
-                            count
-                        }
-                        buckets{
-                            id
-                            count
-                            percentage_question
-                            percentage_survey
-                            entity {
-                                name
-                                nameClean
-                                nameHtml
-                                id
-                                homepage {
-                                    url
-                                }
-                                github {
-                                    url
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+# query: >
+#     dataAPI {
+#         surveys {
+#             ${surveyId} {
+#                 ${editionId} {
+#                     ${sectionId} {
+#                         ${questionId} {
+#                             data {
+#                                 id
+#                                 usage {
+#                                     year
+#                                     rank
+#                                     percentageQuestion
+#                                 }
+#                                 awareness {
+#                                     year
+#                                     rank
+#                                     percentageQuestion
+#                                 }
+#                                 interest {
+#                                     year
+#                                     rank
+#                                     percentageQuestion
+#                                 }
+#                                 satisfaction {
+#                                     year
+#                                     rank
+#                                     percentageQuestion
+#                                 }
+#                             }
+#                         }
+#                     }
+#                 }
+#             }
+#         }
+#     }
+
+# query: >
+#     dataAPI {
+#         survey(survey: ${surveyId}) {
+#             ${sectionId}_others: tools_others(id: ${sectionId}_others, options: {limit: ${limit}}) {
+#                 id
+#                 year(year: ${currentYear}) {
+#                     year
+#                     completion {
+#                         total
+#                         count
+#                         percentageSurvey
+#                     }
+#                     facets {
+#                         id
+#                         type
+#                         completion {
+#                             total
+#                             percentageQuestion
+#                             percentageSurvey
+#                             count
+#                         }
+#                         buckets{
+#                             id
+#                             count
+#                             percentageQuestion
+#                             percentageSurvey
+#                             entity {
+#                                 name
+#                                 nameClean
+#                                 nameHtml
+#                                 id
+#                                 homepage {
+#                                     url
+#                                 }
+#                                 github {
+#                                     url
+#                                 }
+#                             }
+#                         }
+#                     }
+#                 }
+#             }
+#         }
+#     }

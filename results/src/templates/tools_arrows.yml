@@ -1,30 +1,33 @@
+id: tools_arrows
 blockType: ToolsArrowsBlock
-dataPath: "dataAPI.survey.${id}"
-keysPath: "dataAPI.survey.${id}.0.experience.keys"
 titleId: blocks.tools_arrows
 descriptionId: blocks.tools_arrows.description
 noteId: blocks.tools_arrows.note
 hasSponsor: true
 query: >
-    dataAPI {
-        survey(survey: ${surveyType}) {
-            ${id}: tools(ids: [${allTools}]) {
-                id
-                entity {
-                    name
-                    nameClean
-                    nameHtml
-                    description
-                    id
-                }
-                experience {
-                    keys
-                    all_years {
-                        year
-                        facets {
-                            buckets {
-                                percentage_question
-                                id
+    surveys {
+        ${surveyId} {
+            ${editionId} {
+                libraries {
+                    tools_arrows: allTools {
+                        items {
+                            id
+                            responses<ARGUMENTS_PLACEHOLDER> {
+                                allEditions {
+                                    year
+                                    editionId
+                                    buckets {
+                                        id
+                                        percentageQuestion
+                                        percentageSurvey
+                                        count
+                                    }
+                                    completion {
+                                        count
+                                        percentageSurvey
+                                        total
+                                    }
+                                }
                             }
                         }
                     }

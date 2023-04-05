@@ -1,5 +1,3 @@
-#importXXX "./surveys.graphql"
-
 #import "./entity.graphql"
 #import "./completion.graphql"
 #import "./mdn.graphql"
@@ -8,6 +6,7 @@
 #import "./tools.graphql"
 #import "./features.graphql"
 #import "./comments.graphql"
+#import "./data_explorer.graphql"
 
 scalar JSON
 scalar JSONObject
@@ -16,6 +15,8 @@ type SurveyMetadata {
     id: String
     name: String
     domain: String
+    partners: [SponsorItem]
+    editions: [EditionMetadata]
 }
 
 type EditionMetadata {
@@ -23,16 +24,32 @@ type EditionMetadata {
     year: Int
     status: Int
 
-    started_at: String
-    ended_at: String
+    startedAt: String
+    endedAt: String
 
-    questions_url: String
-    results_url: String
-    image_url: String
-    favicon_url: String
-    social_image_url: String
+    questionsUrl: String
+    resultsUrl: String
+    imageUrl: String
+    faviconUrl: String
+    socialImageUrl: String
 
     sections: [SectionMetadata]
+
+    sponsors: [SponsorItem]
+
+    credits: [CreditItem]
+}
+
+type SponsorItem {
+    id: String
+    name: String
+    url: String
+    imageUrl: String
+}
+
+type CreditItem {
+    id: String
+    role: String
 }
 
 type SectionMetadata {
@@ -64,6 +81,8 @@ input Parameters {
     facetLimit: Int = 50
     facetCutoff: Int
     facetCutoffPercent: Float
+    enableCache: Boolean
+    showNoAnswer: Boolean
 }
 
 input SortSpecifier {
@@ -76,6 +95,8 @@ enum SortProperty {
     count
     percent
     id
+    mean
+    average
 }
 
 enum SortOrder {
@@ -83,7 +104,7 @@ enum SortOrder {
     desc
 }
 
-type EditionData {
+type ResponseEditionData {
     year: Int
     editionId: String
     completion: YearCompletion
@@ -95,6 +116,7 @@ A data bucket
 """
 type Bucket {
     id: String
+    label: String
     """
     Respondent count
     """
@@ -102,11 +124,11 @@ type Bucket {
     """
     Percentage relative to question respondents
     """
-    percentage_question: Float
+    percentageQuestion: Float
     """
     Percentage relative to survey respondents
     """
-    percentage_survey: Float
+    percentageSurvey: Float
     """
     Entity associated with the current bucket
     """
@@ -119,6 +141,7 @@ type Bucket {
 
 type FacetBucket {
     id: String
+    label: String
     """
     Respondent count
     """
@@ -126,15 +149,15 @@ type FacetBucket {
     """
     Percentage relative to question respondents
     """
-    percentage_question: Float
+    percentageQuestion: Float
     """
     Percentage relative to survey respondents
     """
-    percentage_survey: Float
+    percentageSurvey: Float
     """
     Percentage relative to question respondents in facet
     """
-    percentage_facet: Float
+    percentageFacet: Float
     """
     Entity associated with the current bucket
     """

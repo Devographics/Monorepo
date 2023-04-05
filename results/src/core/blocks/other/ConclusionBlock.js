@@ -3,9 +3,10 @@ import styled from 'styled-components'
 import { mq, spacing, fontSize, secondaryFontMixin } from 'core/theme'
 import T from 'core/i18n/T'
 import CreditItem from 'core/blocks/other/CreditItem'
-import config from 'Config/config.yml'
+import { usePageContext } from 'core/helpers/pageContext'
 
 const ConclusionBlock = ({ block, data: entities }) => {
+    const { currentEdition } = usePageContext()
     const entity = entities && entities.find(e => e.id === block.variables.author)
     if (!entity) {
         return null
@@ -19,10 +20,10 @@ const ConclusionBlock = ({ block, data: entities }) => {
                 <CreditItem
                     id={block.variables.author}
                     entity={entity}
-                    labelId={`conclusion.${config.surveySlug}.bio`}
+                    labelId={`conclusion.${currentEdition.id}.bio`}
                 />
             </Heading>
-            <T k={`conclusion.${config.surveySlug}`} md={true} />
+            <T k={`conclusion.${currentEdition.id}`} md={true} />
         </Conclusion>
     )
 }

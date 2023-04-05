@@ -1,0 +1,4 @@
+input DataExplorerParameters {
+    enableCache: Boolean
+    showNoAnswer: Boolean
+}

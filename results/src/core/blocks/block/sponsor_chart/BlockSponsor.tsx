@@ -1,5 +1,5 @@
 import React from 'react'
-import { BlockDefinition } from 'core/types'
+import { BlockDefinition } from '@types/index'
 import { usePageContext } from 'core/helpers/pageContext'
 import config from 'Config/config.yml'
 import SponsorCredit from './SponsorCredit'

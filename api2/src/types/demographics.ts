@@ -4,6 +4,12 @@ export interface EditionParticipation {
 }
 
 export interface Participation {
-    all_editions: EditionParticipation[]
+    allEditions: EditionParticipation[]
     edition: EditionParticipation
+}
+
+export interface Country {
+    name: string
+    'alpha-3': string
+    'country-code': number
 }

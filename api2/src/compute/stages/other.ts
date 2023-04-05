@@ -1,14 +1,22 @@
-import { ComputeAxisParameters, EditionData, Bucket, FacetBucket } from '../../types'
+import {
+    ComputeAxisParameters,
+    ResponseEditionData,
+    Bucket,
+    FacetBucket,
+    Survey
+} from '../../types'
 import isEmpty from 'lodash/isEmpty.js'
 import sumBy from 'lodash/sumBy.js'
 import difference from 'lodash/difference.js'
+// import { NO_ANSWER } from '@devographics/constants'
+const NO_ANSWER = 'no_answer'
 
 /*
 
 Discard any result where id is {}, "", [], etc. 
 
 */
-export async function discardEmptyIds(resultsByEdition: EditionData[]) {
+export async function discardEmptyIds(resultsByEdition: ResponseEditionData[]) {
     for (let editionData of resultsByEdition) {
         editionData.buckets = editionData.buckets.filter(
             b => typeof b.id === 'number' || !isEmpty(b.id)
@@ -25,6 +33,18 @@ export async function discardEmptyIds(resultsByEdition: EditionData[]) {
 
 /*
 
+Discard any empty editions (editions that contain only no_answer buckets)
+
+*/
+export async function discardEmptyEditions(resultsByEdition: ResponseEditionData[]) {
+    return resultsByEdition.filter(
+        editionData =>
+            !(editionData.buckets.length === 1 && editionData.buckets[0].id === NO_ANSWER)
+    )
+}
+
+/*
+
 When adding a facet, the "default" bucket counts will disappear. 
 
 Add them back. 
@@ -34,7 +54,7 @@ NOTE: data is slightly off because it doesn't account for people who didn't answ
 TODO: get rid of this using mongo pipeline
 
 */
-export async function addDefaultBucketCounts(resultsByEdition: EditionData[]) {
+export async function addDefaultBucketCounts(resultsByEdition: ResponseEditionData[]) {
     for (let editionData of resultsByEdition) {
         for (let bucket of editionData.buckets) {
             bucket.count = sumBy(bucket.facetBuckets, 'count')
@@ -48,7 +68,7 @@ When no facet is specified, move default buckets down one level
 TODO: get rid of this
 
 */
-export async function moveFacetBucketsToDefaultBuckets(resultsByEdition: EditionData[]) {
+export async function moveFacetBucketsToDefaultBuckets(resultsByEdition: ResponseEditionData[]) {
     for (let editionData of resultsByEdition) {
         editionData.buckets = editionData.buckets[0].facetBuckets as Bucket[]
     }
@@ -63,9 +83,9 @@ so that all buckets have the same shape
 */
 const zeroBucketItem = {
     count: 0,
-    percentage_question: 0,
-    percentage_facet: 0,
-    percentage_survey: 0
+    percentageQuestion: 0,
+    percentageFacet: 0,
+    percentageSurvey: 0
 }
 const getZeroBucketItem = (id: string, facetAxis?: ComputeAxisParameters) => ({
     ...zeroBucketItem,
@@ -79,20 +99,26 @@ const getZeroBucketItem = (id: string, facetAxis?: ComputeAxisParameters) => ({
 })
 
 export async function addMissingItems(
-    resultsByEdition: EditionData[],
+    resultsByEdition: ResponseEditionData[],
     axis1: ComputeAxisParameters,
     axis2?: ComputeAxisParameters
 ) {
-    for (let editionData of resultsByEdition) {
+    for (const editionData of resultsByEdition) {
+        const { editionId, buckets } = editionData
+
         if (axis1.question.options) {
-            for (const option1 of axis1.question.options) {
-                const existingBucketItem = editionData.buckets.find(
-                    bucket => bucket.id === option1.id
+            const options1 = axis1.question.options.filter(o => o.editions?.includes(editionId))
+            for (const option1 of options1) {
+                const existingBucketItem = buckets.find(
+                    bucket => String(bucket.id) === String(option1.id)
                 )
                 if (existingBucketItem) {
                     if (axis2?.question?.options) {
+                        const options2 = axis2?.question?.options.filter(o =>
+                            o.editions?.includes(editionId)
+                        )
                         // check facet buckets
-                        for (const option2 of axis2.question.options) {
+                        for (const option2 of options2) {
                             const existingFacetBucketItem = existingBucketItem.facetBuckets?.find(
                                 bucket => bucket.id === option2.id
                             )
@@ -102,16 +128,36 @@ export async function addMissingItems(
                         }
                     }
                 } else {
-                    editionData.buckets.push(getZeroBucketItem(option1.id, axis2))
+                    buckets.push(getZeroBucketItem(option1.id, axis2))
                 }
             }
         }
     }
 }
 
+export async function addEditionYears(resultsByEdition: ResponseEditionData[], survey: Survey) {
+    for (let editionData of resultsByEdition) {
+        const edition = survey.editions.find(e => e.id === editionData.editionId)
+        if (edition) {
+            editionData.year = edition.year
+        }
+    }
+}
+
+/*
+
+Some results do not have an edition assigned to them, so remove them for now
+
+Note: not needed if db is properly cleaned up
+
+*/
+export async function removeEmptyEditions(resultsByEdition: ResponseEditionData[]) {
+    return resultsByEdition.filter(editionData => editionData.editionId !== null)
+}
+
 // TODO
 // add means
-// export async function addMeans(resultsByEdition: EditionData[], values: string[] | number[]) {
+// export async function addMeans(resultsByEdition: ResponseEditionData[], values: string[] | number[]) {
 //     for (let year of resultsByEdition) {
 //         for (let facet of year.facets) {
 //             let totalValue = 0
@@ -127,3 +173,31 @@ export async function addMissingItems(
 //         }
 //     }
 // }
+
+/*
+
+Add labels to buckets (only used for country names currently)
+
+*/
+export async function addLabels(
+    resultsByEdition: ResponseEditionData[],
+    axis1: ComputeAxisParameters,
+    axis2?: ComputeAxisParameters | null
+) {
+    for (const editionData of resultsByEdition) {
+        for (const bucket of editionData.buckets) {
+            const label1 = axis1.question.options?.find(o => o.id === bucket.id)?.label
+            if (label1) {
+                bucket.label = label1
+            }
+            if (bucket.facetBuckets && axis2) {
+                for (const facetBucket of bucket.facetBuckets) {
+                    const label2 = axis2.question.options?.find(o => o.id === facetBucket.id)?.label
+                    if (label2) {
+                        facetBucket.label = label2
+                    }
+                }
+            }
+        }
+    }
+}

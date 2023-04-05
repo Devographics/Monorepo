@@ -10,8 +10,8 @@ import {
     Survey,
     Edition,
     Section,
-    ParsedQuestion,
-    EditionData,
+    ParsedQuestionExt,
+    ResponseEditionData,
     ComputeAxisParameters,
     SortProperty
 } from '../types'
@@ -26,7 +26,11 @@ import {
     addPercentages,
     sortData,
     limitData,
-    cutoffData
+    cutoffData,
+    addEditionYears,
+    discardEmptyEditions,
+    addLabels,
+    removeEmptyEditions
 } from './stages/index'
 
 const convertOrder = (order: 'asc' | 'desc') => (order === 'asc' ? 1 : -1)
@@ -44,8 +48,8 @@ export async function genericComputeFunction({
     survey: Survey
     edition: Edition
     section: Section
-    question: ParsedQuestion
-    questionObjects: ParsedQuestion[]
+    question: ParsedQuestionExt
+    questionObjects: ParsedQuestionExt[]
     computeArguments: GenericComputeArguments
 }) {
     let axis1: ComputeAxisParameters,
@@ -64,7 +68,8 @@ export async function genericComputeFunction({
         facetSort,
         facetLimit = 50,
         facetCutoff = 1,
-        facetCutoffPercent
+        facetCutoffPercent,
+        showNoAnswer
     } = parameters
 
     const options = question.options && question.options.map(o => o.id)
@@ -137,7 +142,7 @@ export async function genericComputeFunction({
     }
     // if edition is passed, restrict aggregation to specific edition
     if (selectedEditionId) {
-        match.surveySlug = selectedEditionId
+        match.editionId = selectedEditionId
     }
 
     // TODO: merge these counts into the main aggregation pipeline if possible
@@ -149,12 +154,13 @@ export async function genericComputeFunction({
         selectedEditionId,
         filters,
         axis1,
-        axis2
+        axis2,
+        showNoAnswer
     }
 
     const pipeline = await getGenericPipeline(pipelineProps)
 
-    let results = (await collection.aggregate(pipeline).toArray()) as EditionData[]
+    let results = (await collection.aggregate(pipeline).toArray()) as ResponseEditionData[]
 
     if (isDebug) {
         console.log(
@@ -177,6 +183,8 @@ export async function genericComputeFunction({
 
     await discardEmptyIds(results)
 
+    results = await discardEmptyEditions(results)
+
     await addEntities(results, context)
 
     if (axis2) {
@@ -189,16 +197,20 @@ export async function genericComputeFunction({
 
     // await addDeltas(results)
 
+    await addEditionYears(results, survey)
+
     if (axis2) {
         await addMissingItems(results, axis2, axis1)
         await sortData(results, axis2, axis1)
         await limitData(results, axis2, axis1)
         await cutoffData(results, axis2, axis1)
+        await addLabels(results, axis2, axis1)
     } else {
         await addMissingItems(results, axis1)
         await sortData(results, axis1)
         await limitData(results, axis1)
         await cutoffData(results, axis1)
+        await addLabels(results, axis1)
     }
 
     console.log('// results final')

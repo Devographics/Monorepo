@@ -1,8 +1,8 @@
-import { EditionData, ComputeAxisParameters, Bucket } from '../../types'
+import { ResponseEditionData, ComputeAxisParameters, Bucket } from '../../types'
 import take from 'lodash/take.js'
 
 export async function limitData(
-    resultsByEdition: EditionData[],
+    resultsByEdition: ResponseEditionData[],
     axis1: ComputeAxisParameters,
     axis2?: ComputeAxisParameters
 ) {

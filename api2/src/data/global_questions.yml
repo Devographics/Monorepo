@@ -69,6 +69,7 @@
         average: 1000
 
 - id: higher_education_degree
+  defaultSort: options
   options:
       - id: no_degree
       - id: yes_related
@@ -94,6 +95,7 @@
         average: 200000
 
 - id: gender
+  defaultSort: options
   options:
       - id: male
       - id: female

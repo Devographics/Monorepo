@@ -50,7 +50,7 @@ const RecommendedResourcesBlock = ({ block, data }) => {
                                         onClick={() => trackClick(id, resource, 'text')}
                                         href={`${url}&utm_content=textlink`}
                                         title={resource.name}
-                                        padding={resource.padding} 
+                                        padding={resource.padding}
                                     >
                                         <ImageImage src={resource.image} alt={resource.name} />
                                     </ImageLink>
@@ -144,7 +144,7 @@ const ImageLink = styled.a`
     place-items: center;
     width: 100%;
     border-radius: 100%;
-    padding: ${({ padding }) => padding ? padding+'px' : 0};
+    padding: ${({ padding }) => (padding ? padding + 'px' : 0)};
     border: 3px solid ${({ theme }) => theme.colors.border};
     border-radius: 100%;
     aspect-ratio: 1/1;

@@ -20,7 +20,6 @@ export const TitleWrapper = ({ block, pageData, blockIndex }) => (
 )
 
 const TitleBlock = ({ block, pageData, blockIndex, variantIndex }) => {
-
     if (block.entityPath) {
         const blockEntity = get(pageData, block.entityPath)
         block = {
@@ -30,22 +29,22 @@ const TitleBlock = ({ block, pageData, blockIndex, variantIndex }) => {
             titleLink: blockEntity?.homepage?.url
         }
     }
-    
-    return (
-    <VariantWrapper id={block.id}>
-        <BlockTitle block={block} />
-        <BlockSwitcher
-            key={block.id}
-            block={block}
-            pageData={pageData}
-            blockIndex={blockIndex}
-            variantIndex={variantIndex}
-        />
-    </VariantWrapper>
-)}
 
-const BlockWrapper = styled.section`
-`
+    return (
+        <VariantWrapper id={block.id}>
+            <BlockTitle block={block} />
+            <BlockSwitcher
+                key={block.id}
+                block={block}
+                pageData={pageData}
+                blockIndex={blockIndex}
+                variantIndex={variantIndex}
+            />
+        </VariantWrapper>
+    )
+}
+
+const BlockWrapper = styled.section``
 
 const VariantWrapper = styled.div`
     padding: ${spacing()};

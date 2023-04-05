@@ -10,7 +10,7 @@ const getResolverMap = ({
     survey: Survey
     sectionTools: Question[]
 }): ResolverMap => ({
-    data: async (parent, args, context, info) => {
+    items: async (parent, args, context, info) => {
         const { survey, edition, section, question } = parent
         const { filters } = args
         const tools = sectionTools.map(q => q.id)
@@ -36,7 +36,7 @@ const getResolverMap = ({
 })
 
 export const section_tools_ratios: TemplateFunction = ({ survey, section, question }) => {
-    const fieldTypeName = `${graphqlize(section.id)}ToolsRankings`
+    const fieldTypeName = `${graphqlize(section.id)}ToolsRatios`
     // in any given section, the tools will be the questions which don't have a template defined
     const sectionTools = section.questions.filter(q => typeof q.template === 'undefined')
 
@@ -47,7 +47,9 @@ export const section_tools_ratios: TemplateFunction = ({ survey, section, questi
         typeDef: `type ${fieldTypeName} {
             ids: [String]
             years: [Int]
-            data(filters: ${graphqlize(survey.id)}Filters): [ToolExperienceRanking]
+            items(parameters: ToolRatiosParameters, filters: ${graphqlize(
+                survey.id
+            )}Filters): [ToolRatiosItemData]
         }`,
         resolverMap: getResolverMap({ survey, sectionTools })
     }

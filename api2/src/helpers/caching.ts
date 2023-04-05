@@ -1,6 +1,7 @@
 // import { Db } from 'mongodb'
 // import config from './config'
 import { RequestContext } from '../types'
+import { AppSettings } from './settings'
 
 import NodeCache from 'node-cache'
 import { appSettings } from './settings'
@@ -21,7 +22,11 @@ type ResultType<F> = F extends (...args: any[]) => infer P
  * the function should have a name in order to generate a proper key.
  */
 export const computeKey = (func: Function, funcOptions?: any) => {
-    const serializedOptions = funcOptions
+    const { parameters = {}, ...otherKeys } = funcOptions
+    const { enableCache, ...validParameters } = parameters
+    const validOptions = { ...otherKeys, parameters: validParameters }
+
+    const serializedOptions = validOptions
         ? Object.keys(funcOptions)
               .map((key: string) => {
                   const argument = funcOptions[key]
@@ -42,6 +47,24 @@ export const computeKey = (func: Function, funcOptions?: any) => {
 }
 
 /**
+ * Figure out if cache should be enabled for this request
+ */
+const getEnableCache = (
+    context: RequestContext,
+    appSettings: AppSettings,
+    enableCache?: boolean
+) => {
+    if (appSettings.disableCache) {
+        // cache is disabled on an app-wide basis
+        return false
+    } else if (typeof enableCache === 'undefined') {
+        return context.isDebug ? false : true
+    } else {
+        return enableCache
+    }
+}
+
+/**
  * Cache results in a dedicated Redis db to improve performance,
  * if the result isn't already available in the db, it will be created.
  */
@@ -51,38 +74,44 @@ export const useCache = async <F extends DynamicComputeCall>(options: {
     funcOptions?: any
     // args?: ArgumentTypes<F>
     key?: string
+    enableCache?: boolean
 }): Promise<ResultType<F>> => {
     const startedAt = new Date()
-    const { func, context, key: providedKey, funcOptions = {} } = options
-    const key = providedKey ?? computeKey(func, funcOptions)
+    const { func, context, key, funcOptions = {} } = options
     const { redisClient, isDebug = false } = context
     const { disableCache, cacheType } = appSettings
     let value, verb
 
+    if (!key) {
+        throw new Error('useCache call needs a key')
+    }
+
     // always pass context to cached function just in case it's needed
     const funcOptionsWithContext = { ...funcOptions, context }
 
-    const enableCache = !disableCache && !isDebug
+    const enableCache = getEnableCache(context, appSettings, options.enableCache)
 
     const settings = { isDebug, disableCache, cacheType }
     const settingsLogs = JSON.stringify(settings)
 
     if (enableCache) {
-        const existingResult = await getCache(key, context)
-        if (existingResult) {
-            verb = 'using cache'
-            value = existingResult
+        const existingCachedValue = await getCache(key, context)
+        if (existingCachedValue) {
+            verb = '✅ Cache hit'
+            value = existingCachedValue
         } else {
-            verb = 'computed and cached result'
+            verb = '⭕ Cache miss (cache updated)'
             value = await func(funcOptionsWithContext)
             if (value) {
-                // in case previous cached entry exists, delete it
                 await setCache(key, JSON.stringify(value), context)
             }
         }
     } else {
-        verb = 'computed result'
+        verb = '🟤 Cache bypass (cache updated)'
         value = await func(funcOptionsWithContext)
+        if (value) {
+            await setCache(key, JSON.stringify(value), context)
+        }
     }
     const finishedAt = new Date()
     console.log(
