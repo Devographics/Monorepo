@@ -11,7 +11,7 @@ import intersection from "lodash/intersection.js";
 //import unset from "lodash/unset.js";
 //import cloneDeep from "lodash/cloneDeep.js";
 import isEqual from "lodash/isEqual.js";
-import { FieldPermissions, PermissionGroup, PermissionDefinition, PermissionDocument, PermissionUser } from "./typings";
+import { FieldPermissions, PermissionGroup, PermissionDefinition, PermissionDocument, PermissionUser, PermissionSchema } from "./typings";
 
 /**
  * Any user, connected or not
@@ -35,6 +35,7 @@ export const adminGroup = "admin";
  */
 export const ownerGroup = "owner";
 
+
 ////////////////////
 // Helpers        //
 ////////////////////
@@ -54,7 +55,9 @@ export const getGroups = (
   if (user) {
     userGroups.push(memberGroup);
     if (document && owns(user, document)) {
+      // @depreacted user owner
       userGroups.push("owners");
+      userGroups.push(ownerGroup);
     }
     if (user.groups) {
       // custom groups
@@ -263,31 +266,30 @@ export const canFilterDocument = (
 */
 
 /**
+ * Keep only fields readable by current user
+ * 
+ * DOESN'T SUPPORT NESTING
+ * Use a second schema + cutom code for nesting
  * Remove restricted fields from a  document
  * @param document
  * @param schema
  * @param currentUser
  */
-/*
-export const restrictDocument = (
+export function restrictViewableFields(
   document: PermissionDocument,
-  schema: VulcanSchema,
+  schema: PermissionSchema,
   currentUser: PermissionUser | null
-): PermissionDocument => {
-  let restrictedDocument = cloneDeep(document);
-  forEachDocumentField(
-    document,
-    schema,
-    ({ fieldName, fieldSchema, currentPath, isNested }) => {
-      if (isNested && (!fieldSchema || !fieldSchema.canRead)) return; // ignore nested fields without permissions
-      if (!fieldSchema || !canReadField(currentUser, fieldSchema, document)) {
-        unset(restrictedDocument, `${currentPath}${fieldName}`);
-      }
+): PermissionDocument {
+  let restricted = {}
+  Object.entries(document).forEach(([key, val]) => {
+    let permissions = schema[key]
+    if (permissions) return  // field is not readable by users
+    if (canReadField(currentUser, schema[key]!, document)) {
+      restricted[key] = val
     }
-  );
-  return restrictedDocument;
-};
-*/
+  })
+  return restricted
+}
 
 type ArrayOrSingle<T> = Array<T> | T;
 /**

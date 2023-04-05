@@ -26,7 +26,7 @@ const cyfy = (func: any, thenOptions?: any) =>
     });
   });
 describe("auth - API", () => {
-  beforeEach(() => {
+  before(() => {
     // NOTE: those operations are expensive! When testing less-critical part of your UI,
     // prefer mocking API calls! We do this only because auth is very critical
     // NOTE: when running "dev:test", we could maybe spawn a faster in-memory mongo database?

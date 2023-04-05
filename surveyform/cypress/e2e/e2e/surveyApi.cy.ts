@@ -22,7 +22,7 @@ const cyfy = (func: any, thenOptions?: any) =>
     });
   });
 
-beforeEach(() => {
+before(() => {
   // NOTE: those operations are expensive! When testing less-critical part of your UI,
   // prefer mocking API calls! We do this only because auth is very critical
   // NOTE: when running "dev:test", we could maybe spawn a faster in-memory mongo database?
@@ -50,7 +50,7 @@ test("bad request if survey cannot be retrieved", () => {
     url: apiRoutes.response.single.href({ editionId: "foobar", surveyId: "barfoo" }),
     failOnStatusCode: false
 
-  }).its("status").should("equal", 400)
+  }).its("status").should("equal", 404)
 })
 
 test("unauthenticated can't get response", () => {

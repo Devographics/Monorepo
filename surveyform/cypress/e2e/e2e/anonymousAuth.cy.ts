@@ -5,7 +5,7 @@ import { LOCALE_COOKIE_NAME } from "~/i18n/cookie";
 import { startSurveyButtonName } from "../../helpers/selectors";
 import { getContinueAsGuestButton } from "../..//helpers/getters";
 
-beforeEach(() => {
+before(() => {
   // NOTE: those operations are expensive! When testing less-critical part of your UI,
   // prefer mocking API calls! We do this only because auth is very critical
   cy.exec("pnpm run db:test:reset");

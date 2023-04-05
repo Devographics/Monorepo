@@ -8,11 +8,12 @@ import {
 } from "@vulcanjs/graphql/server";
 import { createMongooseConnector } from "@vulcanjs/mongo";
 import { subscribe } from "~/server/email/email_octopus";
-import mongoose, { Connection, mongo } from "mongoose";
+import mongoose, { Connection } from "mongoose";
 import { captureException } from "@sentry/nextjs";
 import { fetchSurveyFromId } from "@devographics/core-models/server";
 import { ResponseDocument, SurveyEdition } from "@devographics/core-models";
 import { getSchema, getServerSchema, initResponseSchema } from "./schema.server";
+import { canModifyResponse } from "./server/model";
 
 function getReponseEditionId(response: ResponseDocument) {
   const editionId = response.editionId || response.surveySlug
@@ -104,6 +105,12 @@ export async function processEmailOnUpdate(data, properties) {
   return data;
 }
 
+// Using Mongoose (advised)
+export const ResponseMongooseModel = (conn: Connection = mongoose.connection) => conn.db.collection("responses")
+
+
+// LEGACY CODE
+
 export const getModelDefServer = (): CreateGraphqlModelOptionsServer => {
   return mergeModelDefinitionServer(getModelDef(), {
     schema: getServerSchema(),
@@ -123,14 +130,9 @@ export const getModelDefServer = (): CreateGraphqlModelOptionsServer => {
       canCreate: ["members"],
       // NOTE: save survey also check if the response can be updated
       // TODO: drop Vulcan system here
+      // @ts-ignore
       canUpdate: ({ user, document: response }) => {
-        if (typeof window === "undefined") {
-          const canModifyResponse = require("./server/permissions").canModifyReponse
-          return canModifyResponse(response, user);
-        } else {
-          // client side
-          return user?.isAdmin || user?._id === response?.userId
-        }
+        return canModifyResponse(response as any, user as any);
       },
       canDelete: ["admins"],
     },
@@ -195,8 +197,6 @@ export const initResponseConnector = () => {
   ResponseModel.crud.connector = ResponseConnector;
 }
 
-// Using Mongoose (advised)
-export const ResponseMongooseModel = (conn: Connection = mongoose.connection) => conn.db.collection("responses")
 
 
 //  ResponseConnector.getRawCollection() as mongoose.Model<ResponseDocument>;
@@ -214,3 +214,5 @@ export const ResponseMongoCollection = () => {
   }
   return mongoose.connection.db.collection<ResponseDocument>("responses");
 };
+
+
