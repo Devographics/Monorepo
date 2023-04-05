@@ -1,19 +1,21 @@
 import React, { useState, Dispatch, SetStateAction } from 'react'
 import styled from 'styled-components'
-import { mq, spacing, fontSize, fontWeight } from 'core/theme'
+import { spacing, fontWeight } from 'core/theme'
 import T from 'core/i18n/T'
 // import Dot from './Dot'
 import { CellProps } from './Cell'
-import { getQuestionLabel, getOptionLabel } from './labels'
+import { getOptionLabel } from './labels'
 import { useI18n } from 'core/i18n/i18nContext'
 import Grid from './Grid'
-import sumBy from 'lodash/sumBy.js'
 import UnitsSelector from './UnitsSelector'
 import { UnitType } from './types'
 import { COUNT_UNIT } from './constants'
 import round from 'lodash/round.js'
 import Legend from './Legend'
 import { CellData } from './helpers'
+import { getValueLabel } from 'core/filters/helpers'
+import { useAllFilters } from 'core/charts/hooks'
+import { FilterItem } from 'core/filters/types'
 
 export interface DetailsProps extends CellProps {
     cellData: CellData
@@ -49,6 +51,7 @@ const getSingleCellGrid = (options: {
 
 const Details = (props: DetailsProps) => {
     const { getString } = useI18n()
+    const allFilters = useAllFilters()
     const {
         xKeys,
         yKeys,
@@ -65,7 +68,7 @@ const Details = (props: DetailsProps) => {
     const xKey = xKeys[xIndex]
     const yKey = yKeys[yIndex]
     const propsOverride = getSingleCellGrid({ props, xKey, yKey, unit, setUnit })
-    const { xSection, ySection, xField, yField } = stateStuff
+    const { xSection, ySection, xField, yField, xAxisLabel, yAxisLabel } = stateStuff
 
     // const xTotal = sumBy(xTotals, 'total')
     // const yTotal = sumBy(yTotals, 'total')
@@ -80,30 +83,20 @@ const Details = (props: DetailsProps) => {
         normalizedPercentageDelta
     } = cellData
 
-    const xAxisLabel = getQuestionLabel({
+    const xAnswerLabel = getValueLabel({
         getString,
-        sectionId: xSection,
-        questionId: xField,
-        entities
-    })
-    const yAxisLabel = getQuestionLabel({
-        getString,
-        sectionId: ySection,
-        questionId: yField,
-        entities
+        field: allFilters.find(f => f.id === xField) as FilterItem,
+        value: xKey,
+        allFilters,
+        entity: entities.find(e => e.id === xKey)
     })
 
-    const xAnswerLabel = getOptionLabel({
+    const yAnswerLabel = getValueLabel({
         getString,
-        sectionId: xSection,
-        questionId: xField,
-        optionId: xKey
-    })
-    const yAnswerLabel = getOptionLabel({
-        getString,
-        sectionId: ySection,
-        questionId: yField,
-        optionId: yKey
+        field: allFilters.find(f => f.id === yField) as FilterItem,
+        value: yKey,
+        allFilters,
+        entity: entities.find(e => e.id === yKey)
     })
 
     const deltaValue = unit === COUNT_UNIT ? normalizedCountDelta : normalizedPercentageDelta
@@ -136,13 +129,13 @@ const Details = (props: DetailsProps) => {
     return (
         <Details_>
             <DetailsUnit_>
-                <UnitsSelector {...propsOverride} />
+                <UnitsSelector {...props} {...propsOverride} />
             </DetailsUnit_>
             <DetailsLegend_>
-                <Legend {...propsOverride} />
+                <Legend {...props} {...propsOverride} />
             </DetailsLegend_>
             <DetailsGrid_ className="details-grid">
-                <Grid {...propsOverride} />
+                <Grid {...props} {...propsOverride} />
             </DetailsGrid_>
 
             <DetailsExplanation_>
@@ -164,12 +157,12 @@ const Details = (props: DetailsProps) => {
                 )}
             </DetailsExplanation_>
 
-            <pre>
+            {/* <pre>
                 <code>{JSON.stringify(cellData2, null, 2)}</code>
             </pre>
             <pre>
                 <code>{JSON.stringify(tProps.values, null, 2)}</code>
-            </pre>
+            </pre> */}
         </Details_>
     )
 }

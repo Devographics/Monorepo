@@ -1,13 +1,10 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
-import { mq, spacing, fontSize, fontWeight } from 'core/theme'
-import { useI18n } from 'core/i18n/i18nContext'
+import { mq, spacing } from 'core/theme'
 import ModalTrigger from 'core/components/ModalTrigger'
 import Button from 'core/components/Button'
 import T from 'core/i18n/T'
-import { getQuestionLabel } from './labels'
 import { HEADING_BG, AXIS_PADDING, GRID_GAP } from './constants'
-import theme from 'Theme/index.ts'
 import { CommonProps } from './types'
 import UnitsSelector from './UnitsSelector'
 import ControlsModal from './ControlsModal'
@@ -17,21 +14,9 @@ import { EditIcon } from 'core/icons'
 import Legend from './Legend'
 
 const Heading = (props: CommonProps) => {
-    const { totalCount, entities, stateStuff } = props
-    const { getString } = useI18n()
-    const { xSection, ySection, xField, yField } = stateStuff
-    const xAxisLabel = getQuestionLabel({
-        getString,
-        sectionId: xSection,
-        questionId: xField,
-        entities
-    })
-    const yAxisLabel = getQuestionLabel({
-        getString,
-        sectionId: ySection,
-        questionId: yField,
-        entities
-    })
+    const { stateStuff } = props
+    const { xAxisLabel, yAxisLabel } = stateStuff
+
     return (
         <Heading_ className="secondary-bg">
             <HeadingLeft_>
@@ -105,7 +90,7 @@ const Heading_ = styled.div`
     align-items: center;
     padding: ${AXIS_PADDING}px;
     background: ${HEADING_BG};
-    background: ${theme.colors.backgroundAlt};
+    background: ${({ theme }) => theme.colors.backgroundAlt};
     margin-bottom: ${GRID_GAP}px;
     @media ${mq.smallMedium} {
         flex-direction: column;
@@ -147,10 +132,6 @@ const EditButton_ = styled(Button)`
         }
     }
     cursor: pointer;
-`
-
-const Total_ = styled.div`
-    font-size: ${fontSize('small')};
 `
 
 const HeadingRight_ = styled.div`

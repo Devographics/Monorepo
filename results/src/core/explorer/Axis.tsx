@@ -11,13 +11,15 @@ import {
     CELL_VPADDING
 } from './constants'
 import { CommonProps, Key, AxisType, Total } from './types'
-import { getOptionLabel } from './labels'
 import { useI18n } from 'core/i18n/i18nContext'
 import maxBy from 'lodash/maxBy.js'
 import { CellData, getCellData } from './helpers'
 import { UserIcon, PercentIcon } from 'core/icons'
 import Tooltip from 'core/components/Tooltip'
 import { Bucket, FacetBucket } from '@devographics/types'
+import { getValueLabel } from 'core/filters/helpers'
+import { useAllFilters } from 'core/charts/hooks'
+import { FilterItem } from 'core/filters/types'
 
 interface AxisProps extends CommonProps {
     axis: AxisType
@@ -81,21 +83,21 @@ interface AxisItemProps extends AxisProps {
 }
 
 const AxisItem = (props: AxisItemProps) => {
-    const { id, axis, index, entities, stateStuff } = props
-    const { useMobileLayout } = stateStuff
+    const { id, axis, entities, stateStuff } = props
+    const allFilters = useAllFilters()
     const totals = props[`${axis}Totals`]
     const { getString } = useI18n()
-    const sectionId = stateStuff[`${axis}Section`]
     const questionId = stateStuff[`${axis}Field`]
 
     const total = totals.find(t => t.id === id) as Total
     const { count: totalCount, percentage: totalPercentage } = total
 
-    const answerLabel = getOptionLabel({
+    const answerLabel = getValueLabel({
         getString,
-        questionId,
-        optionId: id,
-        isShort: useMobileLayout
+        field: allFilters.find(f => f.id === questionId) as FilterItem,
+        value: id,
+        allFilters,
+        entity: entities.find(e => e.id === id)
     })
 
     return (

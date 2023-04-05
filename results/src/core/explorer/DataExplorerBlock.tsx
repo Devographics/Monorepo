@@ -21,11 +21,13 @@ import {
 } from './constants'
 import HintBlock from 'core/blocks/other/HintBlock'
 import { useLocation } from '@reach/router'
-import { getQuestionLabel } from './labels'
 import { useI18n } from 'core/i18n/i18nContext'
 import { useWindowDimensions } from './helpers'
 import { useEntities } from 'core/helpers/entities'
 import { getBlockQuery } from 'core/helpers/queries'
+import { getFieldLabel } from 'core/filters/helpers'
+import { useAllFilters } from 'core/charts/hooks'
+import { FilterItem } from 'core/filters/types'
 
 const DataExplorerBlock = ({
     block,
@@ -36,6 +38,8 @@ const DataExplorerBlock = ({
 }) => {
     console.log(block)
     console.log(defaultData)
+
+    const allFilters = useAllFilters()
 
     const { getString } = useI18n()
     const { width } = useWindowDimensions()
@@ -90,16 +94,14 @@ const DataExplorerBlock = ({
         (queryParams.showNoAnswer === 'true' ? true : false) || SHOW_NO_ANSWER
     )
 
-    const xAxisLabel = getQuestionLabel({
+    const xAxisLabel = getFieldLabel({
         getString,
-        sectionId: xSection,
-        questionId: xField,
+        field: allFilters.find(f => f.id === xField) as FilterItem,
         entities
     })
-    const yAxisLabel = getQuestionLabel({
+    const yAxisLabel = getFieldLabel({
         getString,
-        sectionId: ySection,
-        questionId: yField,
+        field: allFilters.find(f => f.id === yField) as FilterItem,
         entities
     })
 
@@ -161,7 +163,8 @@ const DataExplorerBlock = ({
         respondentsPerDot,
         percentsPerDot,
         dotsPerLine,
-        showCellCounts
+        showCellCounts,
+        showNoAnswer
     }
     useEffect(() => {
         if (typeof window !== 'undefined' && 'URLSearchParams' in window) {

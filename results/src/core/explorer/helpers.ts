@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import sumBy from 'lodash/sumBy'
 import { Key, AxisType, Total, UnitType } from './types'
-import variables from 'Config/variables.yml'
 import { Bucket, FacetBucket } from '@devographics/types'
+import round from 'lodash/round.js'
 
 // https://stackoverflow.com/a/36862446/649299
 const getWindowDimensions = () => {
@@ -36,37 +36,15 @@ export const isBetween = (i: number, lowerBound = 0, upperBound = 0) => {
     return lowerBound <= i && i <= upperBound
 }
 
-const getOptGroups = (categories: any) => {
-    return Object.keys(categories).map(id => {
-        return { id, fields: categories[id] }
-    })
+export const formatPercentage = (value: number) => {
+    if (value < 0.1) {
+        return round(value, 2)
+    } else if (value < 1) {
+        return round(value, 1)
+    } else {
+        return round(value)
+    }
 }
-
-// export const getSelectorItems = () => {
-//     const selectorItems = [
-//         {
-//             id: 'demographics',
-//             optGroups: [
-//                 {
-//                     id: 'all_fields',
-//                     fields: [
-//                         'age',
-//                         'years_of_experience',
-//                         'company_size',
-//                         'higher_education_degree',
-//                         'yearly_salary',
-//                         'gender',
-//                         'race_ethnicity',
-//                         'disability_status'
-//                     ]
-//                 }
-//             ]
-//         },
-//         { id: 'features', optGroups: getOptGroups(variables.featuresCategories) },
-//         { id: 'tools', optGroups: getOptGroups(variables.toolsCategories) }
-//     ]
-//     return selectorItems
-// }
 
 export const getTotals = ({
     buckets,
@@ -88,14 +66,14 @@ export const getTotals = ({
             return {
                 id: key,
                 count: total,
-                percentage: Math.floor((total * 100) / totalCount)
+                percentage: formatPercentage((total * 100) / totalCount)
             }
         })
     } else {
         return buckets.map(({ id, count }) => ({
             id,
             count: count || 0,
-            percentage: Math.floor((count * 100) / totalCount)
+            percentage: formatPercentage((count * 100) / totalCount)
         }))
     }
 }
@@ -118,6 +96,7 @@ export interface CellData {
     bucketPercentage: number
     normalizedCount: number
     normalizedCountDelta: number
+    normalizedPercentage: number
     normalizedPercentageDelta: number
 }
 
@@ -193,6 +172,7 @@ export const getCellData = (options: {
         bucketPercentage: bucketPercentageFacet,
         normalizedCount,
         normalizedCountDelta,
+        normalizedPercentage,
         normalizedPercentageDelta
     }
 }
@@ -227,17 +207,18 @@ export const getCellDots = ({
     percentsPerDot: number
     unit: UnitType
 }): Dot[] => {
+    const { count: cellCount } = facetBucket
     try {
         if (unit === 'count') {
             // find the right bucket for the current cell based on its xIndex (column index)
-            const peopleCount = Math.max(normalizedCount, facetBucket.count)
-            const dotCount = Math.floor(peopleCount / respondentsPerDot)
+            const peopleCount = Math.max(normalizedCount, cellCount)
+            const dotCount = Math.ceil(peopleCount / respondentsPerDot)
             return [...Array(dotCount)].map((x, index) => {
                 const peopleInDot = index * respondentsPerDot
                 let type = DotTypes.ERROR
-                if (peopleInDot <= facetBucket.count && peopleInDot <= normalizedCount) {
+                if (peopleInDot <= cellCount && peopleInDot <= normalizedCount) {
                     type = DotTypes.NORMAL
-                } else if (peopleInDot <= facetBucket.count) {
+                } else if (peopleInDot <= cellCount) {
                     type = DotTypes.EXTRA
                 } else if (peopleInDot <= normalizedCount) {
                     type = DotTypes.MISSING

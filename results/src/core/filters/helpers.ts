@@ -559,7 +559,9 @@ export const getValueLabel = ({
     label?: string
 }) => {
     const { template } = field
-    if (entity) {
+    if (label) {
+        return label
+    } else if (entity) {
         return getEntityName(entity)
     } else if (template === 'feature') {
         return getString(`options.features.${value}.label`)?.t

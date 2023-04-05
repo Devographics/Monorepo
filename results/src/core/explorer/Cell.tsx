@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { mq, fontWeight } from 'core/theme'
 // import T from 'core/i18n/T'
 // import Dot from './Dot'
-import { CellData, getCellData } from './helpers'
+import { CellData, formatPercentage, getCellData } from './helpers'
 import { RowProps } from './InnerGrid'
 import CellDots from './CellDots'
 import { COUNT_UNIT, CELL_BG, CELL_VPADDING, CELL_HPADDING } from './constants'
@@ -83,7 +83,7 @@ const InnerCell = (props: InnerCellProps) => {
                     <CellCountInner_>
                         {unit === COUNT_UNIT
                             ? cellData.cellCount
-                            : `${Math.floor(cellData.bucketPercentage)}%`}
+                            : `${formatPercentage(cellData.bucketPercentage)}%`}
                     </CellCountInner_>
                 </CellCount_>
             )}

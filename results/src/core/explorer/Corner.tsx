@@ -1,14 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
-import { mq, spacing, fontSize } from 'core/theme'
-import { getQuestionLabel } from './labels'
-import { useI18n } from 'core/i18n/i18nContext'
 import { AXIS_BG, AXIS_BG2, AXIS_PADDING, GRID_GAP } from './constants'
 
 const Corner = props => {
-    const { entities, stateStuff } = props
-    const { getString } = useI18n()
-    const { xSection, ySection, xField, yField } = stateStuff
+    const { stateStuff } = props
+    const { xAxisLabel, yAxisLabel } = stateStuff
     return (
         <Corner_>
             <CornerInner_>
@@ -16,29 +12,13 @@ const Corner = props => {
                     <SVGTriangle1_ viewBox="0 0 100 100" preserveAspectRatio="none">
                         <polygon points="0,0 100,0 100,100" />
                     </SVGTriangle1_>
-                    <span>
-                        {getQuestionLabel({
-                            getString,
-                            sectionId: xSection,
-                            questionId: xField,
-                            entities
-                        })}{' '}
-                        →
-                    </span>
+                    <span>{xAxisLabel} →</span>
                 </XQuestionLabel_>
                 <YQuestionLabel_>
                     <SVGTriangle2_ viewBox="0 0 100 100" preserveAspectRatio="none">
                         <polygon points="0,0 100,100 0,100" />
                     </SVGTriangle2_>
-                    <span>
-                        ↓{' '}
-                        {getQuestionLabel({
-                            getString,
-                            sectionId: ySection,
-                            questionId: yField,
-                            entities
-                        })}
-                    </span>
+                    <span>↓ {yAxisLabel}</span>
                 </YQuestionLabel_>
                 {/* <Edit_>Click to edit</Edit_> */}
             </CornerInner_>
