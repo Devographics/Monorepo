@@ -24,6 +24,7 @@ export function encryptSession(session: UserType) {
  * Returns the user data from the token
  * => it let's the backend check for user existence in the database
  * @param req
+ * @deprecated Next.js already parses cookies for us
  */
 export async function getSessionFromReq(
   req: NextApiRequest | Request
@@ -36,7 +37,7 @@ export async function getSessionFromReq(
 /**
  * @param token 
  */
-export async function getSessionFromToken(token) {
+export async function getSessionFromToken(token: string) {
   const TOKEN_SECRET = getTokenSecret();
   return token && Iron.unseal(token, TOKEN_SECRET!, Iron.defaults);
 

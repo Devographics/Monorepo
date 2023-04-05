@@ -8,7 +8,7 @@ import {
 } from "@vulcanjs/graphql/server";
 import { createMongooseConnector } from "@vulcanjs/mongo";
 import { subscribe } from "~/server/email/email_octopus";
-import mongoose from "mongoose";
+import mongoose, { Connection, mongo } from "mongoose";
 import { captureException } from "@sentry/nextjs";
 import { fetchSurveyFromId } from "@devographics/core-models/server";
 import { ResponseDocument, SurveyEdition } from "@devographics/core-models";
@@ -42,8 +42,6 @@ export async function duplicateCheck(validationErrors, options: {
     userId: currentUser._id,
   };
 
-  // const existingResponse = await ResponseConnector.findOne(selector);
-  // const existingResponse = await ResponseMongooseModel.findOne(selector);
   const Responses = ResponseMongoCollection()
   const existingResponse = await Responses.findOne(selector);
 
@@ -198,8 +196,10 @@ export const initResponseConnector = () => {
 }
 
 // Using Mongoose (advised)
-export const ResponseMongooseModel = () =>
-  ResponseConnector.getRawCollection() as mongoose.Model<ResponseDocument>;
+export const ResponseMongooseModel = (conn: Connection = mongoose.connection) => conn.db.collection("responses")
+
+
+//  ResponseConnector.getRawCollection() as mongoose.Model<ResponseDocument>;
 
 /**
  * For direct Mongo access (not advised, used only for aggregations)

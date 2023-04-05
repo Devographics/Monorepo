@@ -150,5 +150,8 @@ const UserConnector = createMongooseConnector<UserWithEmailServer>(User, {
 
 User.crud.connector = UserConnector;
 
+// TODO: rewrite this Mongoose model by hand
+// instead of relying on Vulcan (which uses blackbox mongoose models with no schema)
+// OR define a zod schema or whatever can be useful for permission validation
 export const UserMongooseModel =
   UserConnector.getRawCollection() as mongoose.Model<UserWithEmailServer>;
