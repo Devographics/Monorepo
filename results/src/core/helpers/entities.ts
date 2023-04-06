@@ -6,11 +6,11 @@ export const useEntities = (): Entity[] => {
     const context = usePageContext()
     const { currentEdition } = context
     const allQuestions = getAllQuestions(currentEdition)
-    const questionsEntities = allQuestions.map((q: QuestionMetadata) => q.entity).flat() as Entity[]
+    const questionsEntities = allQuestions.map((q: QuestionMetadata) => q.entity).flat()
     const optionsEntities = allQuestions
         .map((q: QuestionMetadata) => q?.options?.map(o => o?.entity))
-        .flat() as Entity[]
-    const allEntities = [...questionsEntities, ...optionsEntities].filter(e => !!e)
+        .flat()
+    const allEntities = [...questionsEntities, ...optionsEntities].filter(e => !!e) as Entity[]
     return allEntities
 }
 

@@ -1,10 +1,7 @@
 import React, { useState } from 'react'
-import PropTypes from 'prop-types'
 // import globalBlockRegistry from 'core/helpers/blockRegistry'
 import blockRegistry from 'Config/blocks'
-import { keys } from 'core/bucket_keys'
 import isEmpty from 'lodash/isEmpty'
-import Block from 'core/blocks/block/BlockVariant'
 import get from 'lodash/get'
 import { usePageContext } from 'core/helpers/pageContext'
 import { BlockError } from 'core/blocks/block/BlockError'
@@ -17,9 +14,7 @@ const BlockSwitcher = ({ pageData, block, index, ...props }) => {
     const [customData, setCustomData] = useState()
     // console.log(block)
     // console.log(pageData)
-    // console.log(dataPath)
     // console.log(blockData)
-    const blockKeys = block.keysPath && get(pageData, block.keysPath)
     const { id, blockType, hidden } = block
     if (!blockRegistry[blockType]) {
         return (
@@ -49,7 +44,6 @@ const BlockSwitcher = ({ pageData, block, index, ...props }) => {
             pageData={pageData}
             data={customData}
             entity={blockEntity}
-            keys={blockKeys}
             index={index}
             context={pageContext}
             {...props}
@@ -62,7 +56,6 @@ const BlockSwitcher = ({ pageData, block, index, ...props }) => {
             pageData={pageData}
             data={blockData}
             entity={blockEntity}
-            keys={blockKeys}
             index={index}
             context={pageContext}
             {...props}

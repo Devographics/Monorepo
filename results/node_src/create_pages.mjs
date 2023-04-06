@@ -137,6 +137,18 @@ export const createPagesSingleLoop = async ({
         let pageData = {}
         const context = getPageContext(page)
 
+        const fullContext = {
+            ...context,
+            metadata,
+            locales: cleanLocales,
+            localeContexts: config.translationContexts,
+            chartSponsors,
+            surveyId,
+            config,
+            currentSurvey,
+            currentEdition
+        }
+
         try {
             // pageData = await runPageQuery({ page, graphql })
             pageData = await runPageQueries({ page, graphql, surveyId, editionId })
@@ -157,18 +169,10 @@ export const createPagesSingleLoop = async ({
                 path: getLocalizedPath(page.path, locale),
                 component: path.resolve(`./src/core/pages/PageTemplate.js`),
                 context: {
-                    ...context,
-                    metadata,
-                    locales: cleanLocales,
-                    locale,
-                    localeId: locale.id,
-                    localeContexts: config.translationContexts,
-                    chartSponsors,
+                    ...fullContext,
                     pageData,
-                    surveyId,
-                    config,
-                    currentSurvey,
-                    currentEdition
+                    locale,
+                    localeId: locale.id
                 }
             }
 
@@ -188,7 +192,7 @@ export const createPagesSingleLoop = async ({
 
         if (!USE_FAST_BUILD) {
             // skip this is fast_build option is enabled
-            createBlockPages(page, context, createPage, locales, buildInfo)
+            createBlockPages(page, fullContext, createPage, locales, buildInfo)
         }
     }
     logToFile('build.yml', yaml.dump(buildInfo, { noRefs: true }), {

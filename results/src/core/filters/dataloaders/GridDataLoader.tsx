@@ -46,7 +46,6 @@ const GridDataLoader = ({
 
             const allSeries = showDefaultSeries ? [defaultSeries, ...seriesData] : seriesData
 
-            console.log(seriesData)
             setSeries(allSeries)
             setIsLoading(false)
         }

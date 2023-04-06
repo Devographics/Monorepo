@@ -94,7 +94,8 @@ export const createBlockPages = (page, context, createPage, locales, buildInfo) 
                             redirect: `${getLocalizedPath(page.path, locale)}#${blockVariant.id}`,
                             block: blockVariant,
                             locales: getCleanLocales(locales),
-                            locale
+                            locale,
+                            localeId: locale.id
                         }
                     }
                     createPage(blockPage)

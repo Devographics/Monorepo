@@ -32,14 +32,14 @@ Parse data and convert it into a format compatible with the TierList chart
 
 */
 const getChartData = (
-    data: ToolQuestionData[],
+    data: AllToolsData,
     theme: any,
     toolsSections: SectionMetadata[]
 ): TierData[] => {
     let sortedData = tiers.map((tier, index) => ({ ...tier, index, items: [] as TierItemData[] }))
     // remove native apps for this chart
-    data = data.filter(tool => tool.id !== 'nativeapps')
-    data.forEach(tool => {
+    const items = data.items.filter(tool => tool.id !== 'nativeapps')
+    items.forEach(tool => {
         const total = tool?.responses?.currentEdition?.completion?.total || 0
         const buckets = tool?.responses?.currentEdition?.buckets
         const wouldUseCount = buckets?.find(b => b.id === 'would_use')?.count || 0
@@ -79,9 +79,8 @@ const getChartData = (
 const TierListBlock = ({ block, data }: TierListBlockProps) => {
     const { translate } = useI18n()
     const theme = useTheme()
-
     const toolsSections = useToolSections()
-    const chartData = getChartData(data.items, theme, toolsSections)
+    const chartData = getChartData(data, theme, toolsSections)
 
     const legends = toolsSections.map(({ id }: SectionMetadata) => ({
         id: `toolCategories.${id}`,

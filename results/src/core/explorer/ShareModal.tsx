@@ -17,7 +17,6 @@ const ShareModal = (props: ShareModalProps) => {
     const { getString } = useI18n()
 
     const context = usePageContext()
-    console.log(context)
     const surveyName = context.currentSurvey.name
     const year = context.currentEdition.year
     const { stateStuff, closeModal } = props

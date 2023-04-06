@@ -32,8 +32,6 @@ const OpinionStreamChart = ({
     const theme = useTheme()
     const { getString } = useI18n()
 
-    console.log(data)
-    console.log(chartData)
     const horizontalAxis = {
         tickSize: 10,
         tickPadding: 6,

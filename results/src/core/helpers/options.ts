@@ -1,8 +1,15 @@
 import { NO_ANSWER } from '@devographics/constants'
-import { Edition, Question, Option, ToolsOptions, FeaturesOptions } from '@devographics/types'
+import {
+    Edition,
+    Question,
+    Option,
+    ToolsOptions,
+    FeaturesOptions,
+    EditionMetadata
+} from '@devographics/types'
 import { usePageContext } from 'core/helpers/pageContext'
 
-export const getAllQuestions = (edition: Edition) => {
+export const getAllQuestions = (edition: EditionMetadata) => {
     const { sections } = edition
     const allQuestions = sections.map(s => s.questions).flat()
     return allQuestions
