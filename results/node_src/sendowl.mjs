@@ -133,10 +133,9 @@ const createMissingProducts = async ({ products, chartVariants, editionId, siteU
             const formData = new FormData()
             formData.append('product[name]', chartId)
             formData.append('product[product_type]', 'digital')
-            formData.append(
-                'product[self_hosted_url]',
-                `${siteUrl}/sponsor-chart-finish?chartId=${chartId}`.replaceAll('//', '/')
-            )
+            const separator = siteUrl.slice(-1) === '/' ? '' : '/'
+            const url = `${siteUrl}${separator}sponsor-chart-finish?chartId=${chartId}`
+            formData.append('product[self_hosted_url]', url)
             formData.append('product[price]', '10.00')
             formData.append('product[sales_limit]', 1)
             formData.append('product[price_is_minimum]', 1)
