@@ -1,5 +1,7 @@
 export interface SurveyConfig {
     id: string
+    name: string
+    domain: string
 }
 
 export interface Survey extends SurveyConfig {

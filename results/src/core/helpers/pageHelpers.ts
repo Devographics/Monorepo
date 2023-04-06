@@ -1,6 +1,6 @@
 import get from 'lodash/get'
-import config from 'Config/config.yml'
 import { getBlockImage } from './blockHelpers'
+import { PageContextValue, LegacyTranslator } from 'core/types'
 
 export const getTranslationValuesFromContext = (context, translate) => {
     const values = {}
@@ -17,13 +17,17 @@ export const getTranslationValuesFromContext = (context, translate) => {
 
 export const getPageLabelKey = page => page.titleId || `sections.${page.intlId || page.id}.title`
 
-export const getPageLabel = (page, translate, { includeWebsite = false } = {}) => {
+export const getPageLabel = (
+    page: PageContextValue,
+    translate: LegacyTranslator,
+    { includeWebsite = false } = {}
+) => {
     let label
 
     label = translate(getPageLabelKey(page))
 
     if (includeWebsite === true) {
-        label = `${config.siteTitle}: ${label}`
+        label = `${page.currentSurvey.name} ${page.currentEdition.year}: ${label}`
     }
 
     return label
@@ -46,15 +50,20 @@ export const getPageImageUrl = context => {
     return imageUrl
 }
 
-export const getPageMeta = (context, translate, overrides = {}) => {
+export const getPageMeta = (
+    context: PageContextValue,
+    translate: LegacyTranslator,
+    overrides = {}
+) => {
     const url = `${context.host}${get(context, 'locale.path')}${context.basePath}`
     const imageUrl = getPageImageUrl(context)
     const isRoot = context.path === '/' || context.basePath === '/'
 
+    console.log(context)
     const meta = {
         url,
         title: isRoot
-            ? config.siteTitle
+            ? `${context.currentSurvey.name} ${context.currentEdition.year}`
             : getPageLabel(context, translate, { includeWebsite: true }),
         imageUrl,
         ...overrides
@@ -93,7 +102,7 @@ export const mergePageContext = (pageContext, location, state) => {
     const isDebugEnabled =
         location && location.search ? location.search.indexOf('debug') !== -1 : false
 
-    let host = config.siteUrl
+    let host = pageContext.currentEdition.resultsUrl
     if (location && location.host && location.protocol) {
         host = `${location.protocol}//${location.host}`
     }
