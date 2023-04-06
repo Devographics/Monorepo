@@ -20,7 +20,9 @@ export async function getSurveyFromReq(req: NextRequest) {
     // parameters
     const surveyId = req.nextUrl.searchParams.get("surveyId")
     if (!surveyId) {
-        throw new Error("No survey slug, can't start survey")
+        return NextResponse.json({
+            error: "No survey id, can't start survey"
+        })
     }
     const editionId = req.nextUrl.searchParams.get("editionId")
     if (!editionId) throw new Error("No survey editionId, can't start survey")

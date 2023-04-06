@@ -1,7 +1,7 @@
 // Set to english (NOTE: this won't work in before.ts)
 import { LOCALE_COOKIE_NAME } from "~/i18n/cookie";
 
-beforeEach(() => {
+before(() => {
   // NOTE: those operations are expensive! When testing less-critical part of your UI,
   // prefer mocking API calls! We do this only because auth is very critical
   cy.exec("pnpm run db:test:reset");

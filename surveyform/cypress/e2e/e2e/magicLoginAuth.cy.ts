@@ -13,7 +13,7 @@ import { getCreateAccountButton } from "../../helpers/getters";
 // Must be seeded in the db
 const TEST_USER_EMAIL = "test@devographics.com";
 
-beforeEach(() => {
+before(() => {
   // NOTE: those operations are expensive! When testing less-critical part of your UI,
   // prefer mocking API calls! We do this only because auth is very critical
   cy.exec("pnpm run db:test:reset");

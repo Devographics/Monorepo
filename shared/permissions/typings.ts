@@ -51,11 +51,24 @@ export type PermissionChecker = (
   user: PermissionUser | null | undefined,
   document?: PermissionDocument
 ) => boolean | Promise<boolean>;
+
+/**
+ * "admin" is implicit, no need to add it
+ */
 export type PermissionDefinition = PermissionGroupString | PermissionChecker
 
+/**
+ * If a function is ommited,
+ * only admin/server-side calls can read, set or update the value
+ * 
+ */
 export interface FieldPermissions {
   canRead?: PermissionDefinition | Array<PermissionDefinition>;
   canCreate?: PermissionDefinition | Array<PermissionDefinition>;
   canUpdate?: PermissionDefinition | Array<PermissionDefinition>;
-
 }
+
+/**
+ * A simplified version of Vulcan schemas, with only permissions
+ */
+export type PermissionSchema = { [key in string]?: FieldPermissions }

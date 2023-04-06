@@ -1,9 +1,16 @@
+/**
+ * All relevant methods based on declarative schema
+ */
 import { ResponseDocument } from "@devographics/core-models";
 import { UserDocument } from "~/core/models/user";
 import { statuses } from "~/surveys/constants";
 import { fetchSurveyFromId } from "@devographics/core-models/server";
 import { isAdmin, owns } from "@devographics/permissions";
 
+
+/**
+ * TODO: pass the survey as argument directly?
+ */
 export const canModifyResponse = async (response: ResponseDocument, user: UserDocument) => {
     if (!response || !user) {
         return false;

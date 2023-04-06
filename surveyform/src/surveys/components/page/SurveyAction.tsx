@@ -49,7 +49,10 @@ const SurveyAction = ({
     response,
     loading: responseLoading,
     error: responseError,
-  } = useUserResponse({ editionId: getSurveyEditionId(survey) });
+  } = useUserResponse({
+    editionId: getSurveyEditionId(survey),
+    surveyId: survey.surveyId,
+  });
   if (userLoading) return <Loading />;
   if (userError) throw new Error(userError);
   if (responseLoading) return <Loading />;

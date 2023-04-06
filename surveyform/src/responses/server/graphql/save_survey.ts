@@ -4,7 +4,7 @@ import {
 } from "~/responses/model.server";
 import { getSurveyResponseSchema } from "~/responses/schema.server";
 import { fetchSurveyFromId } from "@devographics/core-models/server";
-import { canModifyResponse } from "../permissions";
+import { canModifyResponse } from "../model";
 import { throwError } from "./errors";
 
 /**
