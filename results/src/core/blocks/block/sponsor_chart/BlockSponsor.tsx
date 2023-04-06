@@ -1,7 +1,6 @@
 import React from 'react'
 import { BlockDefinition } from '@types/index'
 import { usePageContext } from 'core/helpers/pageContext'
-import config from 'Config/config.yml'
 import SponsorCredit from './SponsorCredit'
 import SponsorPrompt from './SponsorPrompt'
 
@@ -12,10 +11,11 @@ interface BlockSponsorProps {
 const BlockSponsor = ({ block }: BlockSponsorProps) => {
     const context = usePageContext()
     const { hasSponsor } = block
-    const { chartSponsors = {} } = context
+    const { currentEdition, chartSponsors = {} } = context
     const { products = [], orders = [] } = chartSponsors
-    const order = orders.find(o => o.chartId === `${config.surveySlug}___${block.id}`)
-    const product = products.find(p => p.chartId === `${config.surveySlug}___${block.id}`)
+    const order = orders.find(o => o.chartId === `${currentEdition.id}___${block.id}`)
+    const product = products.find(p => p.chartId === `${currentEdition.id}___${block.id}`)
+
     return hasSponsor ? (
         <div>
             {order ? (

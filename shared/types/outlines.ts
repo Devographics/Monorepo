@@ -14,6 +14,9 @@ export type Edition = {
     apiSections: Section[]
     year: number
     credits: Credit[]
+    resultsUrl: string
+    questionsUrl: string
+    status: number
 }
 
 export type Credit = {

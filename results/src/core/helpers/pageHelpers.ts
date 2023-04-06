@@ -59,7 +59,6 @@ export const getPageMeta = (
     const imageUrl = getPageImageUrl(context)
     const isRoot = context.path === '/' || context.basePath === '/'
 
-    console.log(context)
     const meta = {
         url,
         title: isRoot
@@ -94,7 +93,8 @@ export const getPageSocialMeta = (context, translate, overrides = {}) => {
 /**
  * Merge context generated from `gatsby-node` with runtime context.
  */
-export const mergePageContext = (pageContext, location, state) => {
+export const mergePageContext = (pageContext: PageContextValue, location, state) => {
+    console.log(pageContext)
     const isCapturing =
         location && location.search ? location.search.indexOf('capture') !== -1 : false
     const isRawChartMode =
@@ -102,12 +102,12 @@ export const mergePageContext = (pageContext, location, state) => {
     const isDebugEnabled =
         location && location.search ? location.search.indexOf('debug') !== -1 : false
 
-    let host = pageContext.currentEdition.resultsUrl
+    let host = pageContext?.currentEdition?.resultsUrl
     if (location && location.host && location.protocol) {
         host = `${location.protocol}//${location.host}`
     }
 
-    return {
+    const context = {
         ...pageContext,
         host,
         currentPath: location ? location.pathname : undefined,
@@ -116,4 +116,6 @@ export const mergePageContext = (pageContext, location, state) => {
         isDebugEnabled,
         ...state
     }
+    console.log(context)
+    return context
 }

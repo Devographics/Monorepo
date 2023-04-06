@@ -57,6 +57,8 @@ const getProducts = async ({ editionId }) => {
         `${sendOwlAPIUrl}/v1/products/`,
         getSendOwlOptions()
     )
+    logToFile('products.json', productsData, { ...logOptions, editionId })
+
     let productsDataClean = productsData.map(({ product }) => ({
         editionId: product.name.split('___')[0],
         chartId: product.name,
@@ -66,7 +68,6 @@ const getProducts = async ({ editionId }) => {
         sales_page_url: product.sales_page_url
     }))
     productsDataClean = productsDataClean.filter(p => p.editionId === editionId)
-    logToFile('products.json', productsData, { ...logOptions, editionId })
     logToFile('product_clean.json', productsDataClean, { ...logOptions, editionId })
 
     return productsDataClean
@@ -134,7 +135,7 @@ const createMissingProducts = async ({ products, chartVariants, editionId, siteU
             formData.append('product[product_type]', 'digital')
             formData.append(
                 'product[self_hosted_url]',
-                `${siteUrl}/sponsor-chart-finish?chartId=${chartId}`
+                `${siteUrl}/sponsor-chart-finish?chartId=${chartId}`.replaceAll('//', '/')
             )
             formData.append('product[price]', '10.00')
             formData.append('product[sales_limit]', 1)
@@ -155,12 +156,18 @@ const createMissingProducts = async ({ products, chartVariants, editionId, siteU
 
             // add newly created product to list of all products
             const { product } = createProductData
-            newProducts.push({
-                chartId,
-                instant_buy_url: product.instant_buy_url,
-                add_to_cart_url: product.add_to_cart_url,
-                sales_page_url: product.sales_page_url
-            })
+            try {
+                newProducts.push({
+                    chartId,
+                    instant_buy_url: product.instant_buy_url,
+                    add_to_cart_url: product.add_to_cart_url,
+                    sales_page_url: product.sales_page_url
+                })
+            } catch (error) {
+                console.log('// createProductData error')
+                console.log(createProductData)
+                console.log(error)
+            }
             i++
             await sleep(1000)
         }
