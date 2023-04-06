@@ -155,18 +155,12 @@ const createMissingProducts = async ({ products, chartVariants, editionId, siteU
 
             // add newly created product to list of all products
             const { product } = createProductData
-            try {
-                newProducts.push({
-                    chartId,
-                    instant_buy_url: product.instant_buy_url,
-                    add_to_cart_url: product.add_to_cart_url,
-                    sales_page_url: product.sales_page_url
-                })
-            } catch (error) {
-                console.log('// createProductData error')
-                console.log(createProductData)
-                console.log(error)
-            }
+            newProducts.push({
+                chartId,
+                instant_buy_url: product.instant_buy_url,
+                add_to_cart_url: product.add_to_cart_url,
+                sales_page_url: product.sales_page_url
+            })
             i++
             await sleep(1000)
         }

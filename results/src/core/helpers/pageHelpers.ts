@@ -94,7 +94,6 @@ export const getPageSocialMeta = (context, translate, overrides = {}) => {
  * Merge context generated from `gatsby-node` with runtime context.
  */
 export const mergePageContext = (pageContext: PageContextValue, location, state) => {
-    console.log(pageContext)
     const isCapturing =
         location && location.search ? location.search.indexOf('capture') !== -1 : false
     const isRawChartMode =
@@ -116,6 +115,5 @@ export const mergePageContext = (pageContext: PageContextValue, location, state)
         isDebugEnabled,
         ...state
     }
-    console.log(context)
     return context
 }
