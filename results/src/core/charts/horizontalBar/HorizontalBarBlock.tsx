@@ -48,6 +48,8 @@ const HorizontalBarBlock = ({ block, data }: HorizontalBarBlockProps) => {
         }
     }
 
+    const defaultSeries = { name: 'default', data }
+
     return (
         <Block
             units={units}
@@ -79,7 +81,7 @@ const HorizontalBarBlock = ({ block, data }: HorizontalBarBlockProps) => {
                 chartFilters={chartFilters}
                 setUnits={setUnits}
                 layout="grid"
-                defaultData={data}
+                defaultSeries={defaultSeries}
             >
                 <ChartContainer fit={false}>
                     <HorizontalBarChart
