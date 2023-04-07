@@ -9,9 +9,11 @@ import Faq from "~/core/components/common/Faq";
 
 export const SurveyPage = ({
   survey,
+  surveyIntro,
   imageUrl,
 }: {
   survey: SurveyEdition;
+  surveyIntro: string;
   imageUrl: string;
 }) => {
   const { name, resultsUrl } = survey;
@@ -38,6 +40,13 @@ export const SurveyPage = ({
         />
       </h1>
       <div className="survey-page-block">
+        <div
+          className="survey-intro"
+          // TODO: it should not be needed anymore?
+          dangerouslySetInnerHTML={{
+            __html: surveyIntro,
+          }}
+        />
         <SurveyMain survey={survey} />
       </div>
       <Faq survey={survey} />

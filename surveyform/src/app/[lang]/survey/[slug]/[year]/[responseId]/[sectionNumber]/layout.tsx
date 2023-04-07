@@ -23,7 +23,6 @@ export async function generateMetadata({
   initRedis(serverConfig().redisUrl);
   const survey = await getSurveyFromUrl(params);
   if (!survey) return {};
-  // TODO: get lang to compute section title
   const loc = await fetchLocaleFromUrl(params);
   if (!loc) {
     return {
@@ -36,6 +35,7 @@ export async function generateMetadata({
   // similar to how we get translated strings client-side
   const stringsRegistry = new StringsRegistry(localeId);
   stringsRegistry.addStrings(localeId, localeWithStrings.strings);
+  // TODO: this doesn't fallback to english
   const description = stringsRegistry.getString({
     localeId,
     id: "general.take_survey",

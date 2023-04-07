@@ -139,6 +139,11 @@ const localePromiseKey = (id: string, contexts: Array<string>) => {
 };
 
 interface LocaleStringsVariables {
+  /**
+   * Possible contexts:
+   * - common contexts (general, survey...)
+   * - survey and edition contexts: ["state_of_graphql", "state_of_graphql_2022"]
+   */
   contexts: Array<string>;
   localeId: string;
 }
@@ -151,9 +156,7 @@ interface LocaleStringsVariables {
  * @example "fr" will return "fr-FR" locale, because it's the closest matching one
  * Next.js will use the country locale if there is no region local
  * @example (full process) Next redirects fr-CA to fr, and we return fr-FR locale from server
- *
- * @param localeId
- * @returns
+ * 
  */
 export async function fetchLocaleStrings(variables: LocaleStringsVariables) {
   const label = `locales_${variables.localeId}_${variables.contexts}`

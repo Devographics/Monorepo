@@ -7,6 +7,10 @@ type StringsMap = {
 
 /**
  * Helper that can be used on the fly, server side
+ * 1) get message in current locale
+ * 2) if not found get in default locale (usuall en-US)
+ * 3) if not found get default message
+ * 4) if not found empty string
  * @param param0 
  * @returns 
  */

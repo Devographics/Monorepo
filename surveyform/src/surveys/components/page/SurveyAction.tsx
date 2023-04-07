@@ -12,7 +12,6 @@ import get from "lodash/get.js";
 import isEmpty from "lodash/isEmpty.js";
 import { statuses } from "~/surveys/constants";
 import { SurveyEdition } from "@devographics/core-models";
-import { UserType } from "~/core/models/user";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import { useSurveyActionParams, useBrowserData, PrefilledData } from "./hooks";
 import { useRouter } from "next/navigation";
@@ -29,13 +28,7 @@ import { ErrorObject, startSurvey } from "./services";
 
 const duplicateResponseErrorId = "error.duplicate_response";
 
-const SurveyAction = ({
-  survey,
-}: //currentUser,
-{
-  survey: SurveyEdition;
-  currentUser?: UserType;
-}) => {
+const SurveyAction = ({ survey }: { survey: SurveyEdition }) => {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<
     Array<ErrorObject | Error> | undefined

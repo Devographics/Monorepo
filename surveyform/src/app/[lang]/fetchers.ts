@@ -6,17 +6,18 @@ import { cache } from "react";
 import { publicConfig } from "~/config/public";
 import { fetchLocaleStrings, i18nCommonContexts } from "~/i18n/server/fetchLocalesRedis";
 
-export const cachedFetchLocaleStrings = cache(fetchLocaleStrings)
+export const cachedFetchLocaleStrings = cache((localeId: string, ...contexts) => fetchLocaleStrings({ contexts, localeId }))
 
 /** Used to compute metadata, use "mustFetchLocale" in pages */
-export async function fetchLocaleFromUrl(params: { lang: string }) {
+export async function fetchLocaleFromUrl(params: { lang: string }, contexts: Array<string> = i18nCommonContexts) {
+    // TODO: take the contexts or survey ID as a possible parameter to get the right set of strings
     const localeId = getLocaleId(params)
     if (!localeId) return null
     // locale fetching
-    const localeWithStrings = await cachedFetchLocaleStrings({
+    const localeWithStrings = await cachedFetchLocaleStrings(
         localeId,
-        contexts: i18nCommonContexts,
-    });
+        ...contexts,
+    );
     if (!localeWithStrings) {
         console.error("Could not load locales of id: " + localeId);
         // TODO: ideally we would reset the user lang cookie
