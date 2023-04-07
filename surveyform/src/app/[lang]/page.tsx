@@ -1,4 +1,4 @@
-import Surveys from "~/core/components/pages/Surveys";
+import Surveys from "~/app/[lang]/Surveys";
 import { fetchSurveysList, initRedis } from "@devographics/core-models/server";
 import { serverConfig } from "~/config/server";
 

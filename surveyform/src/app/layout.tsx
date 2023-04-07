@@ -1,3 +1,4 @@
+import "~/stylesheets/main.scss";
 import { Metadata } from "next";
 
 export default function RootLayout({

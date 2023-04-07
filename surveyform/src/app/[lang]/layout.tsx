@@ -1,4 +1,3 @@
-import "~/stylesheets/main.scss";
 import { AppLayout } from "./AppLayout";
 import { getLocales } from "~/i18n/server/fetchLocalesRedis";
 

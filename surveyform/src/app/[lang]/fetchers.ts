@@ -3,6 +3,7 @@
  */
 import { notFound } from "next/navigation";
 import { cache } from "react";
+import { publicConfig } from "~/config/public";
 import { fetchLocaleStrings, i18nCommonContexts } from "~/i18n/server/fetchLocalesRedis";
 
 export const cachedFetchLocaleStrings = cache(fetchLocaleStrings)
@@ -27,16 +28,20 @@ export async function fetchLocaleFromUrl(params: { lang: string }) {
 function getLocaleId(params: { lang: string }): string | null {
     const locale = params.lang; // getCurrentLocale();
     if (locale.includes(".")) {
-        console.warn(
-            `Error: matched a file instead of a lang: ${locale}. This happens when the file is not found.`
-        );
+        if (publicConfig.isDev) {
+            console.warn(
+                `Error: matched a file instead of a lang: ${locale}. This happens when the file is not found.`
+            )
+        };
         return null
     }
     if (locale === "[lang]" || locale === "%5Blang%5D") {
-        console.warn(
-            "Trying to render with param lang literally set to '[lang]'." +
-            "This issue has appeared in Next 13.1.0+ (fev 2023)."
-        );
+        if (publicConfig.isDev) {
+            console.warn(
+                "Trying to render with param lang literally set to '[lang]'." +
+                "This issue has appeared in Next 13.1.0+ (fev 2023)."
+            )
+        };
         return null
     }
     return locale
