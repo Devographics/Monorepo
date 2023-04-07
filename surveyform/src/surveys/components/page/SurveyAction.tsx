@@ -1,3 +1,4 @@
+"use client";
 /*
 
 1. Check currentUserResponse field on the survey to see if current user has a response

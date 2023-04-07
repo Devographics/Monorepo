@@ -34,7 +34,6 @@ async function getSurveyIntro(
     localeId,
     id: `general.${editionId}.survey_intro`,
   });
-  console.log("locale", localeId, editionId, intro);
   return intro;
 }
 
