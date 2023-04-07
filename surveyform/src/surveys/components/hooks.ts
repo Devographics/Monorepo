@@ -3,15 +3,19 @@ import { useResponse } from "./ResponseContext/ResponseProvider";
 import { useSection } from "./SectionContext/SectionProvider";
 import { useSurvey } from "./SurveyContext/Provider";
 
-export const useSurveyParams = (): {
+export const useSurveyParams = (dontThrow?: boolean): {
   slug: string;
   year: string,
   // TODO: use those id instead of slug/year whenever possible
   // (= all the time except when building actual URL)
   editionId: string, surveyId: string
 } => {
-  const survey = useSurvey()
+  const survey = useSurvey(dontThrow)
   if (!survey) {
+    // Needed for components that use the survey if its there, like the login form
+    if (dontThrow) {
+      return { editionId: "", surveyId: "", year: "", slug: "" }
+    }
     throw new Error("Called useSurveyParams outside of survey page")
   }
   // TODO: we will need useParams instead, it's not yet released (07/12/2022)

@@ -1,12 +1,15 @@
-"use client";
 import { AnonymousLoginForm } from "~/account/anonymousLogin/components/AnonymousLogin";
-//import { isAnonymousAuthEnabled } from "~/account/anonymousLogin/lib";
-import { useUser } from "~/account/user/hooks";
 import { StandaloneMagicLoginForm } from "~/account/magicLogin/components/StandaloneMagicLoginForm";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
+import { UserDocument } from "~/core/models/user";
 
-const LoginOptions = ({ hideGuest }: { hideGuest?: boolean }) => {
-  const { user } = useUser({ redirectTo: "/", redirectIfFound: true });
+export const LoginDialog = ({
+  hideGuest,
+  user,
+}: {
+  hideGuest?: boolean;
+  user?: UserDocument | null;
+}) => {
   //const redirectedFrom = router.query?.from as string;
   return user ? (
     <div>You are already logged in.</div>
@@ -48,5 +51,3 @@ const LoginOptions = ({ hideGuest }: { hideGuest?: boolean }) => {
     </div>
   );
 };
-
-export default LoginOptions;

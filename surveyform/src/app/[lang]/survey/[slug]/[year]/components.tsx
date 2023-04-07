@@ -6,7 +6,7 @@ import { SurveyEdition, SURVEY_OPEN } from "@devographics/core-models";
 import Translators from "~/core/components/common/Translators";
 import Faq from "~/core/components/common/Faq";
 import SurveyAction from "~/surveys/components/page/SurveyAction";
-import LoginDialog from "~/account/LoginDialog";
+import { LoginDialog } from "~/account/LoginDialog";
 import { Loading } from "~/core/components/ui/Loading";
 import { getCurrentUser } from "./[responseId]/fetchers";
 import { Suspense } from "react";
@@ -30,7 +30,9 @@ export const SurveyMain = ({ survey }: { survey: SurveyEdition }) => {
 const SurveyMainAsync = async ({ survey }: { survey: SurveyEdition }) => {
   const user = await getCurrentUser();
   if (!user) {
-    return <LoginDialog hideGuest={survey.status !== SURVEY_OPEN} />;
+    return (
+      <LoginDialog hideGuest={survey.status !== SURVEY_OPEN} user={user} />
+    );
   } else {
     return (
       <>

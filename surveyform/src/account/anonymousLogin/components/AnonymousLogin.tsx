@@ -31,7 +31,6 @@ export const AnonymousLoginForm = ({
   const refreshUser = useRefreshUser();
 
   async function loginAnonymouslyOnClick() {
-    //e.preventDefault();
     try {
       if (errorMsg) setErrorMsg("");
       const res = await loginAnonymously();
@@ -43,6 +42,8 @@ export const AnonymousLoginForm = ({
           console.log("push to", successRedirection);
           router.push(successRedirection);
         }
+        // will reload the user in the RSC
+        router.refresh();
       }
     } catch (error) {
       console.error("An unexpected error occurred:", error);

@@ -22,7 +22,7 @@ export const StandaloneMagicLoginForm = ({
   label?: string | ReactNode;
 }) => {
   const intl = useIntlContext();
-  const { surveyId, editionId } = useSurveyParams();
+  const { surveyId, editionId } = useSurveyParams(true);
   const placeholder = intl.formatMessage({ id: `accounts.your_email` });
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");

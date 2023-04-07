@@ -53,3 +53,9 @@ test("Access state of 2022, anonymous auth", () => {
   }).click();
   cy.url().should("match", new RegExp("thanks"));
 });
+
+test.skip("open login page directly", () => {
+  // TODO: should pass
+  cy.visit("/account/login")
+  getContinueAsGuestButton()
+})

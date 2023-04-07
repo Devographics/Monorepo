@@ -25,9 +25,11 @@ export const SurveyProvider = ({
  *
  * @returns The survey definition WITHOUT REACT COMPONENTS
  */
-export const useSurvey = (): SurveyEdition => {
+export const useSurvey = (dontThrow?: boolean): SurveyEdition => {
   const context = useContext(SurveyContext);
   if (!context) {
+    // TODO: a hack to support calling in the login form
+    if (dontThrow) return null as unknown as SurveyEdition;
     throw new Error("Called useSurvey before setting SurveyProvider context");
   }
   return context;
