@@ -1,15 +1,5 @@
 translationContexts: [homepage, common, results, countries, state_of_js, state_of_js_2022]
 
-translationLink: https://github.com/StateOfJS/locale-en-US
-capturesUrl: https://assets.devographics.com/captures/js2022
-discordUrl: https://discord.gg/zRDb35jfrt
-issuesUrl: https://github.com/StateOfJS/Monorepo
-
-tshirtImages: ['js2021-tshirt.jpg']
-tshirtLink: https://cottonbureau.com/products/javascript-retro-vhs
-tshirtPrice: 29
-tshirtDesignerLink: https://chriskirknielsen.com/
-
 # baseUrl: http://localhost:8001
 baseUrl: http://localhost:9000
 sitemap: ../../../node_src/.logs/js2022/flat_sitemap_full_build.yml

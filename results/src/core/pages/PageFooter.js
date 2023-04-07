@@ -6,8 +6,10 @@ import { usePageContext } from 'core/helpers/pageContext'
 import Link from 'core/components/LocaleLink'
 import Button from 'core/components/Button'
 import PageLabel from './PageLabel'
-import config from 'Config/config.yml'
 import T from 'core/i18n/T'
+
+const discordUrl = 'https://discord.gg/zRDb35jfrt'
+const issuesUrl = 'https://github.com/Devographics/Monorepo/issues'
 
 const PageFooter = () => {
     const context = usePageContext()
@@ -49,8 +51,8 @@ const PageFooter = () => {
                     html={true}
                 />
                 <br />
-                <T k="general.leave_issue" values={{ link: config.issuesUrl }} html={true} />{' '}
-                <T k="general.join_discord" values={{ link: config.discordUrl }} html={true} />
+                <T k="general.leave_issue" values={{ link: issuesUrl }} html={true} />{' '}
+                <T k="general.join_discord" values={{ link: discordUrl }} html={true} />
                 {context.locale.id !== 'en-US' && (
                     <>
                         <br />

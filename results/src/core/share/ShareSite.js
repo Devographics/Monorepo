@@ -5,14 +5,18 @@ import ShareEmail from './ShareEmail'
 import ShareFacebook from './ShareFacebook'
 import ShareLinkedIn from './ShareLinkedIn'
 import { useI18n } from 'core/i18n/i18nContext'
-import config from 'Config/config.yml'
-
-const { hashtag, year, siteTitle, siteUrl } = config
+import { usePageContext } from '../helpers/pageContext'
+import { getSiteTitle } from '../helpers/pageHelpers'
 
 const ShareSite = () => {
     const { translate } = useI18n()
 
-    const options = { values: { hashtag, year, siteTitle, link: siteUrl } }
+    const context = usePageContext()
+    const { currentEdition } = context
+    const { hashtag, year, resultsUrl } = currentEdition
+    const siteTitle = getSiteTitle(context)
+
+    const options = { values: { hashtag, year, siteTitle, link: resultsUrl } }
     const title = translate('share.site.title', options)
     const twitterText = translate('share.site.twitter_text', options)
     const subject = translate('share.site.subject', options)
@@ -21,8 +25,8 @@ const ShareSite = () => {
     return (
         <Container className="ShareSite">
             <ShareTwitter twitterText={twitterText} />
-            <ShareFacebook link={siteUrl} />
-            <ShareLinkedIn link={siteUrl} title={title} />
+            <ShareFacebook link={resultsUrl} />
+            <ShareLinkedIn link={resultsUrl} title={title} />
             <ShareEmail subject={subject} body={body} />
         </Container>
     )

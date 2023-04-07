@@ -6,10 +6,9 @@ import { useI18n } from 'core/i18n/i18nContext'
 import { mq, color, screenReadersOnlyMixin } from 'core/theme'
 import colors from 'core/theme/colors'
 import { Nav } from './Nav'
-import config from 'Config/config.yml'
 import SidebarLogo from 'Logo/SidebarLogo'
-
-const { siteTitle } = config
+import { usePageContext } from 'core/helpers/pageContext'
+import { getSiteTitle } from 'core/helpers/pageHelpers'
 
 const CloseIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -22,6 +21,7 @@ const CloseIcon = () => (
 
 export const Sidebar = ({ showSidebar, closeSidebar, rest }) => {
     const { translate } = useI18n()
+    const pageContext = usePageContext()
 
     return (
         <SidebarContainer id="sidebar" show={showSidebar} className="Sidebar">
@@ -34,7 +34,7 @@ export const Sidebar = ({ showSidebar, closeSidebar, rest }) => {
                 <ScreenReadersHint>{translate('general.close_nav')}</ScreenReadersHint>
             </SidebarCloseButton>
 
-            <SidebarScreenReadersTitle>{siteTitle}</SidebarScreenReadersTitle>
+            <SidebarScreenReadersTitle>{getSiteTitle(pageContext)}</SidebarScreenReadersTitle>
             <SidebarHeader>
                 <SidebarLogoLink to="/">
                     <SidebarLogo />

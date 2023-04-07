@@ -7,7 +7,7 @@ import colors from 'core/theme/colors'
 import classNames from 'classnames'
 import Hamburger from 'core/components/Hamburger'
 import { useI18n } from 'core/i18n/i18nContext'
-import SurveyBanner from 'core/components/SurveyBanner'
+// import SurveyBanner from 'core/components/SurveyBanner'
 
 const MainLayout = ({
     context,
@@ -21,7 +21,7 @@ const MainLayout = ({
     return (
         <>
             <Skip href="#page-main">{translate('general.skip_to_content')}</Skip>
-            <SurveyBanner />
+            {/* <SurveyBanner /> */}
             <Page
                 showSidebar={showSidebar}
                 className={classNames(`Page--${context.id}`, {

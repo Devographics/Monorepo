@@ -3,8 +3,8 @@ import styled from 'styled-components'
 import { mq, spacing, fontSize, color } from 'core/theme'
 import { stripMarkdown } from 'core/helpers/stripMarkdown'
 import { stripHtml } from 'core/helpers/utils'
-import config from 'Config/config.yml'
 import T from 'core/i18n/T'
+import { usePageContext } from 'core/helpers/pageContext'
 
 const Container = styled.div`
     border-radius: 3px;
@@ -43,7 +43,8 @@ const Legend = styled.div`
 `
 
 const SharePreview = ({ title, subtitle, image, link }) => {
-    const { hostname } = new URL(config.siteUrl)
+    const context = usePageContext()
+    const { hostname } = new URL(context.currentEdition.resultsUrl)
     return (
         <div>
             <Container>

@@ -23,6 +23,7 @@ type EditionMetadata {
     id: String
     year: Int
     status: Int
+    hashtag: String
 
     startedAt: String
     endedAt: String
@@ -38,6 +39,15 @@ type EditionMetadata {
     sponsors: [SponsorItem]
 
     credits: [CreditItem]
+
+    tshirt: TshirtDefinition
+}
+
+type TshirtDefinition {
+    images: [String]
+    url: String
+    price: Float
+    designerUrl: String
 }
 
 type SponsorItem {

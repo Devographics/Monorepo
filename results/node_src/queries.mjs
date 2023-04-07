@@ -130,6 +130,13 @@ query {
                         imageUrl
                         faviconUrl
                         socialImageUrl
+                        hashtag
+                        tshirt {
+                            images
+                            url
+                            price
+                            designerUrl
+                        }
                         sponsors {
                             id
                             name

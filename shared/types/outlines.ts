@@ -17,6 +17,14 @@ export type Edition = {
     resultsUrl: string
     questionsUrl: string
     status: number
+    tshirt: Tshirt
+}
+
+export type Tshirt = {
+    images: string[]
+    url: string
+    price: number
+    designerUrl: string
 }
 
 export type Credit = {

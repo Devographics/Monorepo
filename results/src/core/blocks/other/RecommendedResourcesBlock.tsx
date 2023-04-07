@@ -1,13 +1,11 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 import ReactGA from 'react-ga'
 import Link from 'core/components/LocaleLink'
 import resources from 'Config/recommended_resources.yml'
-import BlockTitle from 'core/blocks/block/BlockTitle'
 import { mq, spacing, fontSize, fontWeight } from 'core/theme'
-import config from 'Config/config.yml'
 import T from 'core/i18n/T'
+import { usePageContext } from 'core/helpers/pageContext'
 
 const trackClick = (id, resource, label) => {
     ReactGA.event({
@@ -18,6 +16,7 @@ const trackClick = (id, resource, label) => {
 }
 
 const RecommendedResourcesBlock = ({ block, data }) => {
+    const { context } = usePageContext()
     const { items: sponsors, variables = {} } = block
     const { isEvent = false } = variables
 
@@ -38,7 +37,7 @@ const RecommendedResourcesBlock = ({ block, data }) => {
                     {sectionResources.map(resource => {
                         const url = resource.url.includes('utm_source')
                             ? resource.url
-                            : `${resource.url}?utm_source=${config.siteContext}&utm_medium=sponsor&utm_campaign=${id}`
+                            : `${resource.url}?utm_source=${context.currentEdition.id}&utm_medium=sponsor&utm_campaign=${id}`
 
                         return (
                             <Resource key={resource.name} className="Resource">
@@ -87,10 +86,6 @@ const RecommendedResourcesBlock = ({ block, data }) => {
             </div>
         </div>
     )
-}
-
-RecommendedResourcesBlock.propTypes = {
-    section: PropTypes.string
 }
 
 const List = styled.div`

@@ -50,6 +50,9 @@ export const getPageImageUrl = context => {
     return imageUrl
 }
 
+export const getSiteTitle = (context: PageContextValue) =>
+    `${context.currentSurvey.name} ${context.currentEdition.year}`
+
 export const getPageMeta = (
     context: PageContextValue,
     translate: LegacyTranslator,
@@ -62,7 +65,7 @@ export const getPageMeta = (
     const meta = {
         url,
         title: isRoot
-            ? `${context.currentSurvey.name} ${context.currentEdition.year}`
+            ? getSiteTitle(context)
             : getPageLabel(context, translate, { includeWebsite: true }),
         imageUrl,
         ...overrides

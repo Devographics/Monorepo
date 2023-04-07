@@ -1,9 +1,7 @@
 import get from 'lodash/get'
-import config from 'Config/config.yml'
 import { BlockDefinition, PageContextValue } from 'core/types'
 import { Entity } from '@devographics/types'
-
-const { siteTitle, capturesUrl, hashtag, year } = config
+import { getSiteTitle } from './pageHelpers'
 
 export const replaceOthers = s => s?.replace('_others', '.others')
 
@@ -50,6 +48,7 @@ export const getBlockDescription = (block, page, translate) => {
 }
 
 export const getBlockImage = (block, context) => {
+    const capturesUrl = `https://assets.devographics.com/captures/${context.currentEdition.id}`
     return `${capturesUrl}${get(context, 'locale.path')}/${block.id}.png`
 }
 
@@ -67,10 +66,16 @@ export const getBlockLink = ({ block, context, params, useRedirect = true }) => 
     return link
 }
 
-export const getBlockMeta = (block, context, translate, title) => {
+export const getBlockMeta = (
+    block: BlockDefinition,
+    context: PageContextValue,
+    translate,
+    title
+) => {
     const { id } = block
     const link = getBlockLink({ block, context })
-
+    const { currentEdition } = context
+    const { year, hashtag } = currentEdition
     const trackingId = `${context.currentPath}${id}`.replace(/^\//, '')
 
     title = title || getBlockTitle(block, context, translate)
@@ -84,7 +89,7 @@ export const getBlockMeta = (block, context, translate, title) => {
         link,
         hashtag,
         year,
-        siteTitle
+        siteTitle: getSiteTitle(context)
     }
 
     const twitterText = translate('share.block.twitter_text', {

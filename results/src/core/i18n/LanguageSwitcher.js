@@ -5,7 +5,6 @@ import { usePageContext } from 'core/helpers/pageContext'
 // import { useI18n } from 'core/i18n/i18nContext'
 import Locales from './Locales'
 import get from 'lodash/get'
-import config from 'Config/config.yml'
 import Popover from 'core/components/Popover'
 import T from 'core/i18n/T'
 
@@ -14,13 +13,15 @@ import T from 'core/i18n/T'
 //     bottom: <polygon stroke="#000" points="0,0 100,0 50,50" />,
 // }
 
+const translationLink = 'https://github.com/Devographics/locale-en-US'
+
 const LanguageSwitcher = ({ position = 'bottom', positionOpen = 'top' }) => {
     const context = usePageContext()
     return (
         <Popover label={get(context, 'locale.label')}>
             <Locales />
             <LanguageSwitcherHelp className="LanguageSwitcherHelp">
-                <a href={config.translationLink}>
+                <a href={translationLink}>
                     <T k="general.help_us_translate" />
                 </a>
             </LanguageSwitcherHelp>

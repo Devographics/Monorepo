@@ -3,19 +3,20 @@ import styled from 'styled-components'
 import { useI18n } from 'core/i18n/i18nContext'
 import { mq, spacing, fontSize } from 'core/theme'
 import Button from 'core/components/Button'
-import config from 'Config/config.yml'
 import T from 'core/i18n/T'
 import take from 'lodash/take'
-
-const { tshirtImages, tshirtLink, tshirtPrice } = config
+import { usePageContext } from 'core/helpers/pageContext'
 
 const TshirtBlock = () => {
     const { translate } = useI18n()
-
+    const context = usePageContext()
+    const { currentEdition } = context
+    const { tshirt } = currentEdition
+    const { images, url, price, designerUrl } = tshirt
     return (
         <Container>
             <ImagesContainer>
-                {take(tshirtImages, 1).map((image, i) => (
+                {take(images, 1).map((image, i) => (
                     <Image key={i}>
                         <a
                             href={`/images/tshirt/${image}`}
@@ -41,12 +42,11 @@ const TshirtBlock = () => {
                     <TshirtButton
                         as="a"
                         className="TshirtButton gumroad-button"
-                        href={tshirtLink}
+                        href={url}
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        <T k="tshirt.getit" /> –{' '}
-                        <T k="tshirt.price" values={{ price: tshirtPrice }} />
+                        <T k="tshirt.getit" /> – <T k="tshirt.price" values={{ price }} />
                     </TshirtButton>
                 </Description>
                 <Designer>
@@ -54,7 +54,7 @@ const TshirtBlock = () => {
                         <T k="tshirt.designer.heading" />
                     </h5>
                     <h3>
-                        <a href={config.tshirtDesignerLink}>
+                        <a href={designerUrl}>
                             <T k="tshirt.designer.name" />
                         </a>
                     </h3>
