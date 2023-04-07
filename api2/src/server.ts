@@ -7,10 +7,9 @@ const responseCachePlugin = (responseCachePluginPkg as any).default
 import defaultTypeDefs from './graphql/typedefs/schema.graphql'
 import { RequestContext } from './types'
 import express from 'express'
-import { analyzeTwitterFollowings } from './rpcs'
 // import { clearCache } from './caching'
 import { createClient } from 'redis'
-import { initMemoryCache, reinitialize } from './init'
+import { reinitialize } from './init'
 import path from 'path'
 import GraphQLJSON, { GraphQLJSONObject } from 'graphql-type-json'
 
@@ -19,7 +18,6 @@ import Sentry from '@sentry/node'
 import { rootDir } from './rootDir'
 import { appSettings } from './helpers/settings'
 
-import { watchFiles } from './helpers/watch'
 // import { cacheAvatars } from './avatars'
 
 import { logToFile } from './helpers/debug'
@@ -54,9 +52,12 @@ Sentry.init({
 
 const isDev = process.env.NODE_ENV === 'development'
 
-const checkSecretKey = (req: any) => {
+const checkSecretKey = async (req: any, res: any, func) => {
     if (req?.query?.key !== process.env.SECRET_KEY) {
-        throw new Error('Authorization error')
+        // throw new Error('Authorization error')
+        res.status(401).send('Not authorized')
+    } else {
+        await func()
     }
 }
 
@@ -157,23 +158,26 @@ const start = async () => {
     //     res.status(200).send('Analyzing…')
     // })
 
-    // app.get('/reinitialize', async function (req, res) {
-    //     checkSecretKey(req)
-    //     await reinitialize({ context })
-    //     res.status(200).send('Cache cleared')
-    // })
+    app.get('/reinitialize', async function (req, res) {
+        await checkSecretKey(req, res, async () => {
+            await reinitialize({ context })
+            res.status(200).send('Cache cleared')
+        })
+    })
 
-    // app.get('/reinitialize-surveys', async function (req, res) {
-    //     checkSecretKey(req)
-    //     await reinitialize({ context, initList: ['surveys'] })
-    //     res.status(200).send('Cache cleared')
-    // })
+    app.get('/reinitialize-surveys', async function (req, res) {
+        await checkSecretKey(req, res, async () => {
+            await reinitialize({ context, initList: ['surveys'] })
+            res.status(200).send('Cache cleared')
+        })
+    })
 
-    // app.get('/reinitialize-entities', async function (req, res) {
-    //     checkSecretKey(req)
-    //     await reinitialize({ context, initList: ['entities'] })
-    //     res.status(200).send('Cache cleared')
-    // })
+    app.get('/reinitialize-entities', async function (req, res) {
+        await checkSecretKey(req, res, async () => {
+            await reinitialize({ context, initList: ['entities'] })
+            res.status(200).send('Cache cleared')
+        })
+    })
 
     // app.get('/cache-avatars', async function (req, res) {
     //     checkSecretKey(req)

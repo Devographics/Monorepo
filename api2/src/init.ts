@@ -19,7 +19,7 @@ interface InitProps {
     initList?: WatchedItem[]
 }
 
-const defaultInitList: WatchedItem[] = ['entities', 'surveys', 'projects']
+const defaultInitList: WatchedItem[] = ['entities', 'surveys']
 
 export const initMemoryCache = async ({ context, initList = defaultInitList }: InitProps) => {
     console.log(`// Initializing in-memory cache for ${initList.join(', ')}…`)
