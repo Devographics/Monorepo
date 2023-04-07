@@ -17,7 +17,7 @@ export const tool: TemplateFunction = ({ survey, question }) => {
         ...question,
         id: question.id || 'placeholder',
         dbPath: `tools.${question.id}.experience`,
-        dbPathComments: `tools.${question.id}.comments`,
+        dbPathComments: `tools.${question.id}.comment`,
         options: TOOLS_OPTIONS.map(id => ({
             id
         })),

@@ -55,6 +55,14 @@ export const getFacetFragment = (addEntities?: boolean) => `
     }
 `
 
+const getCommentsCountFragment = () => `
+  comments {
+    currentEdition {
+      count
+    }
+  }
+`
+
 const allEditionsFragment = `editionId
   year`
 
@@ -85,7 +93,7 @@ interface ResponseArgumentsStrings {
 
 const facetItemToFacet = ({ sectionId, id }: FacetItem) => `${sectionId}__${id}`
 
-interface QueryArgsOptions {
+interface QueryArgs {
     facet?: FacetItem
     filters?: Filters
     parameters?: ResponsesParameters
@@ -98,7 +106,7 @@ export const getQueryArgsString = ({
     parameters,
     xAxis,
     yAxis
-}: QueryArgsOptions): string | undefined => {
+}: QueryArgs): string | undefined => {
     const args: ResponseArgumentsStrings = {}
     if (facet) {
         args.facet = facetItemToFacet(facet)
@@ -123,38 +131,48 @@ export const getQueryArgsString = ({
     }
 }
 
-interface QueryOptions {
+export interface ProvidedQueryOptions {
+    allEditions?: boolean
+    addEntities?: boolean
+    addArgumentsPlaceholder?: boolean
+    addBucketFacetsPlaceholder?: boolean
+    isLog?: boolean
+    addRootNode?: boolean
+    addQuestionEntity?: boolean
+    addQuestionComments?: boolean
+}
+
+interface QueryOptions extends ProvidedQueryOptions {
     surveyId: string
     editionId: string
     sectionId: string
     questionId: string
     fieldId?: string
-    facet?: FacetItem
-    filters?: Filters
-    parameters?: ResponsesParameters
-    allEditions?: boolean
-    addEntities?: boolean
-    addArgumentsPlaceholder?: boolean
-    addBucketFacetsPlaceholder?: boolean
 }
 
 export const getDefaultQuery = ({
-    surveyId,
-    editionId,
-    sectionId,
-    questionId,
-    fieldId,
-    facet,
-    filters,
-    parameters,
-    addEntities = false,
-    allEditions = false,
-    addArgumentsPlaceholder = false,
-    addBucketFacetsPlaceholder = false
-}: QueryOptions) => {
+    queryOptions,
+    queryArgs = {}
+}: {
+    queryOptions: QueryOptions
+    queryArgs?: QueryArgs
+}) => {
+    const {
+        surveyId,
+        editionId,
+        sectionId,
+        questionId,
+        fieldId,
+        addEntities = false,
+        allEditions = false,
+        addArgumentsPlaceholder = false,
+        addBucketFacetsPlaceholder = false,
+        addQuestionEntity = false,
+        addQuestionComments = false
+    } = queryOptions
     const queryArgsString = addArgumentsPlaceholder
         ? argumentsPlaceholder
-        : getQueryArgsString({ facet, filters, parameters })
+        : getQueryArgsString(queryArgs)
     const editionType = allEditions ? 'allEditions' : 'currentEdition'
 
     const questionIdString = fieldId ? `${questionId}: ${fieldId}` : questionId
@@ -165,6 +183,8 @@ surveys {
     ${editionId} {
       ${sectionId} {
         ${questionIdString} {
+          ${addQuestionEntity ? getEntityFragment() : ''}
+          ${addQuestionComments ? getCommentsCountFragment() : ''}
           responses${queryArgsString} {
             ${editionType} {
               ${allEditions ? allEditionsFragment : ''}
@@ -179,7 +199,7 @@ surveys {
                 percentageQuestion
                 percentageSurvey
                 ${addEntities ? getEntityFragment() : ''}
-                ${facet ? getFacetFragment(addEntities) : ''}
+                ${queryArgs.facet ? getFacetFragment(addEntities) : ''}
                 ${addBucketFacetsPlaceholder ? bucketFacetsPlaceholder : ''}
               }
             }
@@ -208,11 +228,11 @@ Wrap query contents with query FooQuery {...}
 export const wrapQuery = ({
     queryName,
     queryContents,
-    addRootNode
+    addRootNode = false
 }: {
     queryName: string
     queryContents: string
-    addRootNode: boolean
+    addRootNode?: boolean
 }) => {
     const isInteralAPIQuery = queryContents.includes('internalAPI')
     if (addRootNode && !isInteralAPIQuery) {
@@ -239,67 +259,92 @@ or
 B) using query defined in block template definition
 
 */
-const defaultQueries = [
-    'currentEditionData',
-    'currentEditionDataWithEntities',
-    'allEditionsData',
-    'allEditionsDataWithEntities'
-]
+const defaultQueries = ['currentEditionData', 'allEditionsData']
 
+/*
+
+For a given block and pageContext, generate query and query options and return result
+
+*/
 export const getBlockQuery = ({
     block,
     pageContext,
-    isLog = false,
-    enableCache = false,
-    addArgumentsPlaceholder = false,
-    addBucketFacetsPlaceholder = false,
-    queryArgs
+    queryOptions: providedQueryOptions = {},
+    queryArgs = {}
 }: {
     block: BlockDefinition
     pageContext: PageContextValue
-    isLog?: boolean
-    enableCache?: boolean
-    addArgumentsPlaceholder?: boolean
-    addBucketFacetsPlaceholder?: boolean
-    queryArgs?: QueryArgsOptions
+    queryOptions?: ProvidedQueryOptions
+    // isLog?: boolean
+    // enableCache?: boolean
+    // addArgumentsPlaceholder?: boolean
+    // addBucketFacetsPlaceholder?: boolean
+    queryArgs?: QueryArgs
 }) => {
-    const { query, id: questionId } = block
-    const { id: sectionId, currentSurvey, currentEdition } = pageContext
-    const { id: surveyId } = currentSurvey
-    const { id: editionId } = currentEdition
+    const { query, queryOptions: blockQueryOptions } = block
+
+    const defaultQueryOptions = {
+        surveyId: pageContext.currentSurvey.id,
+        editionId: pageContext.currentEdition.id,
+        sectionId: pageContext.id,
+        questionId: block.id
+    }
+
+    const queryOptions = { ...defaultQueryOptions, ...providedQueryOptions, ...blockQueryOptions }
 
     if (!query) {
         return ''
     } else {
-        let queryContents
-        const queryName = getQueryName({ editionId, questionId })
-        const queryOptions: QueryOptions = {
-            surveyId,
-            editionId,
-            sectionId,
-            questionId,
-            addArgumentsPlaceholder,
-            addBucketFacetsPlaceholder
-        }
-
-        if (defaultQueries.includes(query)) {
-            if (['allEditionsData'].includes(query)) {
-                queryOptions.allEditions = true
-            }
-            if (['currentEditionDataWithEntities', 'allEditionsDataWithEntities'].includes(query)) {
-                queryOptions.addEntities = true
-            }
-            queryContents = getDefaultQuery(queryOptions)
-        } else {
-            queryContents = query
-        }
-        if (queryArgs) {
-            const queryArgsString = getQueryArgsString(queryArgs)
-            if (queryArgsString) {
-                queryContents = queryContents.replace(argumentsPlaceholder, queryArgsString)
-            }
-        }
-        const wrappedQuery = wrapQuery({ queryName, queryContents, addRootNode: false })
-        return wrappedQuery
+        return getQuery({ query, queryOptions, queryArgs })
     }
+}
+
+/*
+
+Take query, queryOptions, and queryArgs, and return full query
+
+*/
+export const getQuery = ({
+    query,
+    queryOptions,
+    // isLog = false,
+    // enableCache = false,
+    queryArgs
+}: {
+    query: string
+    queryOptions: QueryOptions
+    // isLog?: boolean
+    // enableCache?: boolean
+    queryArgs?: QueryArgs
+}) => {
+    let queryContents
+
+    if (queryOptions.isLog) {
+        // when logging we can leave out enableCache parameter
+        delete queryArgs?.parameters?.enableCache
+    }
+
+    const { editionId, questionId } = queryOptions
+    const queryName = getQueryName({ editionId, questionId })
+
+    if (defaultQueries.includes(query)) {
+        if (['allEditionsData'].includes(query)) {
+            queryOptions.allEditions = true
+        }
+        queryContents = getDefaultQuery({ queryOptions, queryArgs })
+    } else {
+        queryContents = query
+    }
+    if (queryArgs) {
+        const queryArgsString = getQueryArgsString(queryArgs)
+        if (queryArgsString) {
+            queryContents = queryContents.replace(argumentsPlaceholder, queryArgsString)
+        }
+    }
+    const wrappedQuery = wrapQuery({
+        queryName,
+        queryContents,
+        addRootNode: queryOptions.addRootNode
+    })
+    return wrappedQuery
 }

@@ -2,66 +2,72 @@ import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import ModalTrigger from 'core/components/ModalTrigger'
 import T from 'core/i18n/T'
-import { secondaryFontMixin, mq, spacing, fontSize } from 'core/theme'
+import { secondaryFontMixin, spacing } from 'core/theme'
 import { CommentIcon } from 'core/icons'
 import { runQuery } from 'core/explorer/data'
-import config from 'Config/config.yml'
 import newGithubIssueUrl from 'new-github-issue-url'
+import { usePageContext } from 'core/helpers/pageContext'
+
+type GetQueryNameProps = {
+    editionId: string
+    questionId: string
+}
+const getQueryName = ({ editionId, questionId }: GetQueryNameProps) =>
+    `${editionId}${questionId}CommentsQuery`
 
 type GetQueryProps = {
-    id: string
-    slug: string
-    year: number
-    field: string
+    surveyId: string
+    editionId: string
+    sectionId: string
+    questionId: string
 }
-
-const getQuery = ({ id, slug, year, field }: GetQueryProps) => `
-query ${id}CommentsQuery {
-  survey(survey: ${slug}) {
-    ${field}(id: ${id}) {
-      comments {
-        year(year: ${year}) {
-          comments_raw {
-            message
-            responseId
-          }
+const getQuery = ({ surveyId, editionId, sectionId, questionId }: GetQueryProps) => {
+    return `
+query ${getQueryName({ editionId, questionId })} {
+    surveys {
+        ${surveyId} {
+            ${editionId} {
+                ${sectionId} {
+                    ${questionId} {
+                        comments {
+                            currentEdition {
+                                commentsRaw {
+                                    message
+                                    responseId
+                                }
+                                count
+                                year
+                            }
+                        }
+                    }
+                }
+            }
         }
-      }
     }
-  }
-}
-`
-
-const getField = (blockType: string) => {
-    switch (blockType) {
-        case 'FeatureExperienceBlock':
-            return 'feature'
-        case 'ToolExperienceBlock':
-            return 'tool'
-        default:
-            throw new Error(`Cannot get comments for block type "${blockType}"`)
-    }
+}`
 }
 
-const CommentsWrapper = props => {
+const CommentsWrapper = ({ block, name }) => {
+    const pageContext = usePageContext()
     const [data, setData] = useState()
     const [isLoading, setIsLoading] = useState(false)
-
-    const { block, name } = props
-    const { id, blockType } = block
-    const { slug, year } = config
-    const field = getField(blockType)
-
+    const surveyId = pageContext.currentSurvey.id
+    const editionId = pageContext.currentEdition.id
+    const sectionId = pageContext.id
+    const questionId = block.id
+    const queryOptions = { surveyId, editionId, sectionId, questionId }
     useEffect(() => {
         const getData = async () => {
             setIsLoading(true)
-            const query = getQuery({ id, slug, year, field })
+            const query = getQuery(queryOptions)
             const url = process.env.GATSBY_DATA_API_URL
             if (!url) {
                 throw new Error('GATSBY_DATA_API_URL env variable is not set')
             }
-            const result = await runQuery(url, query, `${id}CommentsQuery`)
-            const comments = result?.survey?.[field]?.comments?.year?.comments_raw
+            const result = await runQuery(url, query, getQueryName(queryOptions))
+            const comments =
+                result?.surveys[surveyId][editionId][sectionId][questionId].comments.currentEdition
+                    .commentsRaw
             setData(comments)
             setIsLoading(false)
         }
@@ -124,7 +130,9 @@ const CommentsTrigger = props => {
             trigger={
                 <span>
                     <CommentIcon enableTooltip={true} labelId="comments.comments" />
-                    <CommentCount>{props?.originalData?.comments?.year?.count}</CommentCount>
+                    <CommentCount>
+                        {props?.originalData?.comments?.currentEdition?.count}
+                    </CommentCount>
                 </span>
             }
         >

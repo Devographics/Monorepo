@@ -216,8 +216,10 @@ export const getFiltersQuery = ({
     const query = getBlockQuery({
         block,
         pageContext,
-        addArgumentsPlaceholder: true,
-        addBucketFacetsPlaceholder: true
+        queryOptions: {
+            addArgumentsPlaceholder: true,
+            addBucketFacetsPlaceholder: true
+        }
     })
     // fragment starts after fourth "{"
     const fragmentStartIndex = getNthPosition(query, '{', 5) + 1

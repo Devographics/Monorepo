@@ -22,6 +22,12 @@ export interface BlockComponentProps {
     context: PageContextValue
 }
 
+export interface BlockQueryOptions {
+    addBucketsEntities?: boolean
+    addQuestionEntity?: boolean
+    addQuestionComments?: boolean
+}
+
 export interface BlockDefinition {
     id: string
     sectionId: string
@@ -39,6 +45,7 @@ export interface BlockDefinition {
     variables?: any
     parameters: ResponsesParameters
     filters?: FilterType[]
+    queryOptions?: BlockQueryOptions
 
     // config
     mode?: BlockMode

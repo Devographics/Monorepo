@@ -339,7 +339,7 @@ export const commentsResolverMap: ResolverMap = {
             question,
             context
         }),
-    currentEdition: async ({ survey, edition, question }, context) =>
+    currentEdition: async ({ survey, edition, question }, {}, context) =>
         await getRawCommentsWithCache({
             survey,
             question,

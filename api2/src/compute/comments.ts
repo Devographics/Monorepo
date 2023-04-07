@@ -66,9 +66,6 @@ export const getRawComments = async ({
     editionId
 }: GetRawCommentsOptions) => {
     console.log('// getRawComments')
-    console.log(survey)
-    console.log(question)
-    console.log(editionId)
 
     const { db, isDebug } = context
     const collection = db.collection(config.mongo.normalized_collection)

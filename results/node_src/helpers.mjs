@@ -151,15 +151,15 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId }) => 
     let pageData = {}
 
     for (const b of page.blocks) {
-        for (const v of b.variants) {
-            if (v.query) {
+        for (const block of b.variants) {
+            if (block.query) {
                 let data
 
                 const dataDirPath = path.resolve(`${basePath}/data/${page.id}`)
-                const dataFileName = `${v.id}.json`
+                const dataFileName = `${block.id}.json`
                 const dataFilePath = `${dataDirPath}/${dataFileName}`
                 const queryDirPath = path.resolve(`${basePath}/queries/${page.id}`)
-                const queryFileName = `${v.id}.graphql`
+                const queryFileName = `${block.id}.graphql`
                 const queryFilePath = `${queryDirPath}/${queryFileName}`
 
                 const existingData = await getExistingData({
@@ -175,37 +175,37 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId }) => 
                     )
                     data = existingData
                 } else {
-                    const questionId = v.id
+                    const questionId = block.id
                     const queryOptions = {
                         surveyId,
                         editionId,
                         sectionId: page.id,
                         questionId,
-                        fieldId: v.fieldId,
-                        facet: v.facet,
-                        filters: v.filters,
-                        parameters: v.parameters || {},
-                        xAxis: v?.variables?.xAxis,
-                        yAxis: v?.variables?.yAxis
+                        fieldId: block.fieldId,
+                        isLog: false,
+                        addRootNode: true,
+                        ...block.queryOptions
                     }
 
-                    queryOptions.parameters.enableCache = useCache
+                    const queryArgs = {
+                        facet: block.facet,
+                        filters: block.filters,
+                        parameters: { ...block.parameters, enableCache: useCache },
+                        xAxis: block?.variables?.xAxis,
+                        yAxis: block?.variables?.yAxis
+                    }
 
                     const query = getQuery({
-                        query: v.query,
+                        query: block.query,
                         queryOptions,
-                        block: v,
-                        isLog: false,
-                        addRootNode: true
+                        queryArgs
                     })
 
                     if (query.includes('dataAPI')) {
                         const queryLog = getQuery({
-                            query: v.query,
+                            query: block.query,
                             queryOptions,
-                            block: v,
-                            isLog: true,
-                            addRootNode: false
+                            queryArgs: { ...queryArgs, isLog: true, addRootNode: false }
                         })
                         logToFile(queryFileName, queryLog, {
                             mode: 'overwrite',

@@ -5,6 +5,8 @@ import isEmpty from 'lodash/isEmpty.js'
 
 const argumentsPlaceholder = '<ARGUMENTS_PLACEHOLDER>'
 
+export const bucketFacetsPlaceholder = '<BUCKETFACETS_PLACEHOLDER>'
+
 export const getLocalesQuery = (localeIds, contexts, loadStrings = true) => {
     const args = []
     if (localeIds.length > 0) {
@@ -85,6 +87,14 @@ const getFacetFragment = addBucketsEntities => `
         percentageFacet
         ${addBucketsEntities ? getEntityFragment() : ''}
     }
+`
+
+const getCommentsCountFragment = () => `
+comments {
+    currentEdition {
+      count
+    }
+  }
 `
 
 export const getMetadataQuery = ({ surveyId, editionId }) => {
@@ -200,51 +210,51 @@ export const getQueryArgsString = ({ facet, filters, parameters, xAxis, yAxis })
     }
 }
 
-export const getDefaultQuery = queryOptions => {
+export const getDefaultQuery = ({ queryOptions, queryArgs = {} }) => {
     const {
         surveyId,
         editionId,
         sectionId,
         questionId,
         fieldId,
-        facet,
-        filters,
-        parameters = {},
-        xAxis,
-        yAxis,
-        addBucketsEntities = false,
+        addEntities = false,
+        allEditions = false,
+        addArgumentsPlaceholder = false,
+        addBucketFacetsPlaceholder = false,
         addQuestionEntity = false,
-        allEditions = false
+        addQuestionComments = false
     } = queryOptions
-    const queryArgs = getQueryArgsString({ facet, filters, parameters, xAxis, yAxis })
-
+    const queryArgsString = addArgumentsPlaceholder
+        ? argumentsPlaceholder
+        : getQueryArgsString(queryArgs)
     const editionType = allEditions ? 'allEditions' : 'currentEdition'
 
     const questionIdString = fieldId ? `${questionId}: ${fieldId}` : questionId
 
     return `
-  surveys {
-    ${surveyId} {
-      ${editionId} {
-        ${sectionId} {
-          ${questionIdString} {
-            ${addQuestionEntity ? getEntityFragment() : ''}
-            responses${queryArgs} {
-              ${editionType} {
-                ${allEditions ? allEditionsFragment : ''}
-                completion {
-                  count
-                  percentageSurvey
-                  total
-                }
-                buckets {
-                  count
-                  id
-                  percentageQuestion
-                  percentageSurvey
-                  ${addBucketsEntities ? getEntityFragment() : ''}
-                  ${facet ? getFacetFragment(addBucketsEntities) : ''}
-                }
+surveys {
+  ${surveyId} {
+    ${editionId} {
+      ${sectionId} {
+        ${questionIdString} {
+          ${addQuestionEntity ? getEntityFragment() : ''}
+          ${addQuestionComments ? getCommentsCountFragment() : ''}
+          responses${queryArgsString} {
+            ${editionType} {
+              ${allEditions ? allEditionsFragment : ''}
+              completion {
+                count
+                percentageSurvey
+                total
+              }
+              buckets {
+                count
+                id
+                percentageQuestion
+                percentageSurvey
+                ${addEntities ? getEntityFragment() : ''}
+                ${queryArgs.facet ? getFacetFragment(addEntities) : ''}
+                ${addBucketFacetsPlaceholder ? bucketFacetsPlaceholder : ''}
               }
             }
           }
@@ -252,6 +262,7 @@ export const getDefaultQuery = queryOptions => {
       }
     }
   }
+}
 `
 }
 
@@ -293,60 +304,44 @@ export const cleanQuery = query => {
     return cleanQuery
 }
 
+const defaultQueries = ['currentEditionData', 'allEditionsData']
+
 /*
 
-Get query by either
+Take query, queryOptions, and queryArgs, and return full query
 
-A) generating a default query based on presets
-
-or 
-
-B) using query defined in block template definition
+Note: query can be either a query name, or the full query text
 
 */
-const defaultQueries = [
-    'currentEditionData',
-    'currentEditionDataWithEntities',
-    'allEditionsData',
-    'allEditionsDataWithEntities'
-]
-export const getQuery = ({ query, queryOptions, isLog = false, block, addRootNode = true }) => {
-    const { editionId, questionId } = queryOptions
-    const queryName = getQueryName({ editionId, questionId })
-
+export const getQuery = ({ query, queryOptions, queryArgs }) => {
     let queryContents
 
-    if (isLog) {
+    if (queryOptions.isLog) {
         // when logging we can leave out enableCache parameter
         delete queryOptions.parameters.enableCache
     }
+
+    const { editionId, questionId } = queryOptions
+    const queryName = getQueryName({ editionId, questionId })
 
     if (defaultQueries.includes(query)) {
         if (['allEditionsData'].includes(query)) {
             queryOptions.allEditions = true
         }
-        if (['currentEditionDataWithEntities', 'allEditionsDataWithEntities'].includes(query)) {
-            queryOptions.addBucketsEntities = true
-        }
-        if (['tool_experience', 'feature_experience'].includes(block.template)) {
-            queryOptions.addQuestionEntity = true
-        }
-        queryContents = getDefaultQuery(queryOptions)
+        queryContents = getDefaultQuery({ queryOptions, queryArgs })
     } else {
         queryContents = query
-        const queryArgs = getQueryArgsString(queryOptions)
-        queryContents = queryContents.replace(argumentsPlaceholder, queryArgs)
-
-        // if (isLog) {
-        //     queryContents = queryContents.replace(enableCachePlaceholder, '')
-        // } else {
-        //     queryContents = queryContents.replace(
-        //         enableCachePlaceholder,
-        //         `enableCache: ${enableCache.toString()}`
-        //     )
-        // }
     }
-
-    const wrappedQuery = wrapQuery({ queryName, queryContents, addRootNode })
+    if (queryArgs) {
+        const queryArgsString = getQueryArgsString(queryArgs)
+        if (queryArgsString) {
+            queryContents = queryContents.replace(argumentsPlaceholder, queryArgsString)
+        }
+    }
+    const wrappedQuery = wrapQuery({
+        queryName,
+        queryContents,
+        addRootNode: queryOptions.addRootNode
+    })
     return wrappedQuery
 }
