@@ -16,7 +16,7 @@ const trackClick = (id, resource, label) => {
 }
 
 const RecommendedResourcesBlock = ({ block, data }) => {
-    const { context } = usePageContext()
+    const context = usePageContext()
     const { items: sponsors, variables = {} } = block
     const { isEvent = false } = variables
 

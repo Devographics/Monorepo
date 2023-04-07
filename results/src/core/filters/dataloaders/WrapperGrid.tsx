@@ -20,40 +20,46 @@ type WrapperGridProps = {
 
 const WrapperGrid = ({
     layout,
-    series,
+    series: allSeries,
     legends,
     children,
     isLoading,
     showDefaultSeries
 }: WrapperGridProps) => (
     <GridWrapper_ layout={layout}>
-        {series.map(({ name, data }, i) => (
-            <GridItem_ key={name}>
-                {legends && legends.length > 0 && (
-                    <Tooltip
-                        trigger={
-                            <Legend_>
+        {allSeries.map((series, i) => {
+            const { name, data } = series
+            return (
+                <GridItem_ key={name}>
+                    {legends && legends.length > 0 && (
+                        <Tooltip
+                            trigger={
+                                <Legend_>
+                                    <span dangerouslySetInnerHTML={{ __html: legends[i]?.label }} />
+                                </Legend_>
+                            }
+                            contents={
                                 <span dangerouslySetInnerHTML={{ __html: legends[i]?.label }} />
-                            </Legend_>
-                        }
-                        contents={<span dangerouslySetInnerHTML={{ __html: legends[i]?.label }} />}
-                    />
-                )}
-                <Contents_>
-                    {isEmpty(data) ? (
-                        <EmptySeries />
-                    ) : (
-                        React.cloneElement(children, {
-                            data,
-                            gridIndex: i,
-                            chartDisplayMode: CHART_MODE_GRID,
-                            showDefaultSeries
-                        })
+                            }
+                        />
                     )}
-                </Contents_>
-                {isLoading && <Loading />}
-            </GridItem_>
-        ))}
+                    <Contents_>
+                        {isEmpty(data) ? (
+                            <EmptySeries />
+                        ) : (
+                            React.cloneElement(children, {
+                                data,
+                                series: [series],
+                                gridIndex: i,
+                                chartDisplayMode: CHART_MODE_GRID,
+                                showDefaultSeries
+                            })
+                        )}
+                    </Contents_>
+                    {isLoading && <Loading />}
+                </GridItem_>
+            )
+        })}
     </GridWrapper_>
 )
 
