@@ -1,9 +1,9 @@
-import SurveyPageComponent from "~/surveys/components/page/SurveyPage";
 import Support from "~/core/components/common/Support";
 import { mustGetSurvey } from "./fetchers";
 import { getSurveyImageUrl } from "~/surveys/getSurveyImageUrl";
 import { initRedis } from "@devographics/core-models/server";
 import { serverConfig } from "~/config/server";
+import { SurveyPage as SurveyPageComponent } from "./components";
 
 interface SurveyPageServerProps {
   slug: string;
@@ -20,10 +20,7 @@ export default async function SurveyPage({
   const imageUrl = getSurveyImageUrl(survey);
   return (
     <div>
-      <SurveyPageComponent
-        imageUrl={imageUrl} /*NOTE: currently it's a client component 
-  so it gets the survey via client context instead of props*/
-      />
+      <SurveyPageComponent survey={survey} imageUrl={imageUrl} />
       <Support />
     </div>
   );

@@ -1,4 +1,4 @@
-import React from "react";
+"use client";
 import { Entity } from "@devographics/core-models";
 import type { SurveyEdition } from "@devographics/core-models";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";

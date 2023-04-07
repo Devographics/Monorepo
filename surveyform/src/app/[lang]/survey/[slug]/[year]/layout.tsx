@@ -96,7 +96,7 @@ export default async function SurveyLayout({
   const survey = await mustGetSurvey(params);
 
   // survey specific strings
-  const locale = params.lang; // getCurrentLocale();
+  const locale = params.lang;
   if (locale.includes(".")) {
     console.error(`Error: matched a file instead of a lang: ${locale}.
 This is a bug in current Next.js version (13.0.4, november 2022). 

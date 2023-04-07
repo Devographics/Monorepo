@@ -1,7 +1,9 @@
+"use client";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
 
 const Translators = () => {
+  // TODO: pass locale list from context to make it a server component
   const { locales } = useLocaleContext();
 
   return (
