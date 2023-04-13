@@ -103,7 +103,7 @@ export const MutationButton = (props: MutationButtonProps) => {
           mutationArguments = callbackReturn.mutationArguments;
         }
       }
-      const result = await mutationFunc({ variables: mutationArguments });
+      const result = await mutationFunc(mutationArguments);
       if (successCallback) {
         await successCallback(result);
       }

@@ -22,6 +22,7 @@ export interface SectionMetadata extends Omit<Section, 'questions'> {
 
 export interface QuestionMetadata extends Omit<Question, 'options' | 'id'> {
     id: string
+    label?: string
     entity?: Entity
     options?: OptionMetadata[]
 }

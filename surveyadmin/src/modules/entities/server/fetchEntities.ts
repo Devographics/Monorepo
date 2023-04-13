@@ -37,7 +37,7 @@ const entitiesQuery = print(gql`
  * @returns
  */
 export const fetchEntities = async () => {
-  const response = await fetch(serverConfig.translationAPI, {
+  const response = await fetch(serverConfig().translationAPI, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -71,7 +71,7 @@ export const getOrFetchEntities = async ({
   forceLoad?: boolean;
 } = {}) => {
   try {
-    let entities = await fetchEntities()
+    let entities = await fetchEntities();
     // const { tags, name, id, ids } = args;
 
     if (tags) {

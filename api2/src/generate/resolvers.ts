@@ -45,7 +45,7 @@ export const generateResolvers = async ({
     )
 
     const resolvers = {
-        Query: { surveys: () => surveys },
+        Query: { _metadata: getGlobalMetadataResolver({ surveys }), surveys: () => surveys },
         Surveys: surveysFieldsResolvers,
         ItemComments: commentsResolverMap,
         Entity: entityResolverMap
@@ -140,6 +140,12 @@ export const generateResolvers = async ({
     return resolvers
 }
 
+const getGlobalMetadataResolver =
+    ({ surveys }: { surveys: ParsedSurveyExt[] }): ResolverType =>
+    () => {
+        return { surveys }
+    }
+
 const getSurveyResolver =
     ({ survey }: { survey: ParsedSurveyExt }): ResolverType =>
     (parent, args, context, info) => {
@@ -171,6 +177,7 @@ const getEditionMetadataResolver =
                 .map(async question => {
                     const pickProperties = [
                         'id',
+                        'label',
                         'intlId',
                         'template',
                         'dbPath',

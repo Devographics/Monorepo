@@ -13,7 +13,7 @@ import { getFragmentName } from "@vulcanjs/graphql";
 import { nodeCache } from "~/lib/server/caching";
 
 const disableAPICache = false; //getSetting("disableAPICache", false);
-const translationAPI = serverConfig.translationAPI; //getSetting("translationAPI");
+const translationAPI = serverConfig().translationAPI; //getSetting("translationAPI");
 
 const localeDefinitionFragment = gql`
   fragment LocaleDefinition on Locale {
@@ -108,7 +108,7 @@ const fetchLocales = async (variables?: { contexts?: Array<String> }) => {
   const json = await fetchTranslationApi(localesQuery, {
     contexts,
     ...(variables || {}),
-  })
+  });
   const locales = get(json, "data.locales");
   if (locales) {
     return locales as Array<
@@ -127,7 +127,7 @@ export const getLocales = async () => {
   try {
     return await fetchLocales();
   } catch (err) {
-    console.error(err)
+    console.error(err);
     return undefined;
   }
 };
@@ -157,7 +157,7 @@ const fetchLocaleStrings = async (variables: {
     /** Will use en-US strings if language is not yet covered, this is the default */
     enableFallbacks: true,
     ...variables,
-  })
+  });
   const locale = get(json, "data.locale") as RawLocale | undefined | null;
   if (locale) {
     //console.debug("Got locale", locale.id);

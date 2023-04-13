@@ -24,10 +24,19 @@ export const loadOrGetSurveys = async (
     return allSurveys.filter(s => s.id !== 'demo_survey')
 }
 
+const getRepo = () => {
+    const repo = process.env.SURVEYS_REPO
+    if (!repo) {
+        throw new Error(`Env variable SURVEYS_REPO not defined`)
+    }
+    return repo
+}
+
 const options = {
     owner: 'Devographics',
-    repo: 'surveys'
+    repo: getRepo()
 }
+
 const listGitHubFiles = async (ghPath: string) => {
     const contents = await octokit.request('GET /repos/{owner}/{repo}/contents/{path}', {
         ...options,
@@ -48,6 +57,8 @@ const getGitHubYamlFile = async (url: string) => {
     }
 }
 
+const skipItem = (fileName: string) => fileName.slice(0, 1) === '_'
+
 export const loadFromGitHub = async () => {
     console.log(`-> loading surveys repo`)
     const surveys: Survey[] = []
@@ -57,12 +68,18 @@ export const loadFromGitHub = async () => {
     // loop over repo contents and fetch raw yaml files
     for (const file of repoDirContents) {
         if (file.type === 'dir') {
+            if (skipItem(file.name)) {
+                continue
+            }
             console.log(`// Loading survey ${file.name}…`)
             const editions: any[] = []
             let surveyConfigYaml: SurveyConfig = { id: 'default' }
             const surveyDirContents = await listGitHubFiles(file.path)
 
             for (const file2 of surveyDirContents) {
+                if (skipItem(file2.name)) {
+                    continue
+                }
                 if (file2.name === 'config.yml') {
                     // found config.yml for survey
                     surveyConfigYaml = await getGitHubYamlFile(file2.download_url)
@@ -112,6 +129,9 @@ export const loadLocally = async () => {
 
     // loop over dir contents and fetch raw yaml files
     for (const surveyDirName of surveysDirs) {
+        if (skipItem(surveyDirName)) {
+            continue
+        }
         const editions = []
         const surveyDirPath = surveysDirPath + '/' + surveyDirName
         const stat = await lstat(surveyDirPath)
@@ -123,6 +143,10 @@ export const loadLocally = async () => {
             const editionsDirs = await readdir(surveyDirPath)
 
             for (const editionDirName of editionsDirs) {
+                if (skipItem(editionDirName)) {
+                    console.log(`    -> Skipping ${editionDirName}…`)
+                    continue
+                }
                 const editionDirPath = `${surveyDirPath}/${editionDirName}`
                 const stat = await lstat(editionDirPath)
                 if (!excludeDirs.includes(editionDirName) && stat.isDirectory()) {
@@ -143,7 +167,10 @@ export const loadLocally = async () => {
                         )
                         const editionQuestionsYaml: any = yaml.load(editionQuestionsContents)
                         edition.sections = editionQuestionsYaml
-                    } catch (error) {}
+                    } catch (error) {
+                        console.log(`YAML parsing error for edition ${editionDirName}`)
+                        console.log(error)
+                    }
                     try {
                         const editionApiContents = await readFile(
                             editionDirPath + '/api.yml',

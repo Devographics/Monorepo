@@ -69,6 +69,7 @@ type SectionMetadata {
 
 type QuestionMetadata {
     id: String
+    label: String
     intlId: String
     template: String
     dbPath: String
@@ -79,6 +80,7 @@ type QuestionMetadata {
 
 type OptionsMetadata {
     id: String
+    label: String
     average: Float
     entity: Entity
 }
@@ -182,5 +184,9 @@ type Query {
     """
     Meta information about the API
     """
-    _metadata: JSON
+    _metadata: APIMetadata
+}
+
+type APIMetadata {
+    surveys: [SurveyMetadata]
 }

@@ -52,9 +52,14 @@ export type Question = {
     template: string
 
     id?: string
+    label?: string
     options?: Option[]
     optionsAreNumeric?: boolean
     defaultSort?: string
+
+    // for slider questions
+    from?: number
+    to?: number
 
     autogenerateOptionType?: boolean
     autogenerateEnumType?: boolean

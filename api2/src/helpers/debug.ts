@@ -1,5 +1,4 @@
 import fs, { promises as fsAsync } from 'fs'
-import path from 'path'
 import yaml from 'js-yaml'
 
 // @see https://blog.logrocket.com/alternatives-dirname-node-js-es-modules/

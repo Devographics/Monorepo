@@ -98,7 +98,6 @@ export const getQuestionObjects = ({ surveys }: { surveys: Survey[] }) => {
 
     for (const survey of surveys) {
         const surveyQuestionObjects: ParsedQuestionExt[] = []
-
         for (const edition of survey.editions) {
             const allSections = mergeSections(edition.sections, edition.apiSections)
 

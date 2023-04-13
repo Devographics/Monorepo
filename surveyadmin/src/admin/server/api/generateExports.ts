@@ -101,7 +101,7 @@ function mongoExportCmd({
    */
   const baseCmd = `
  mongoexport\
- --uri ${serverConfig.publicReadonlyMongoUri}\
+ --uri ${serverConfig().publicReadonlyMongoUri}\
  --collection normalized_responses \
  --pretty\
  --query='{"surveySlug": "${surveySlug}"}' \
@@ -148,8 +148,9 @@ const makeFilePath = (
   const day = now.getDate().toString().padStart(2, "0");
   const timestamp = `${year}-${month}-${day}`;
 
-  const filename = `${surveySlug}${addTimestamp ? "_" + timestamp : ""
-    }.${extension}`;
+  const filename = `${surveySlug}${
+    addTimestamp ? "_" + timestamp : ""
+  }.${extension}`;
   return path.resolve("/tmp", filename);
 };
 
@@ -187,7 +188,10 @@ async function generateMongoExport({
     survey,
     format,
   });
-  console.log("Start running mongo export with command:", cmd.replace(/\/\/(.*?)@/, '//username:password@'));
+  console.log(
+    "Start running mongo export with command:",
+    cmd.replace(/\/\/(.*?)@/, "//username:password@")
+  );
   await execAsPromise(cmd);
   console.log("Export successfully created", filePath);
   return filePath;

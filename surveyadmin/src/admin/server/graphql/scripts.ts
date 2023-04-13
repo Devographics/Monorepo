@@ -8,14 +8,24 @@ export const scripts = async (root, args, context) => {
     throw new Error("You cannot perform this operation");
   }
   return Object.keys(allScripts).map((id) => {
-    const script = allScripts[id]
-    return { id, description: script.description, args: script.args, done: script.done}
+    const script = allScripts[id];
+    return {
+      id,
+      description: script.description,
+      args: script.args,
+      done: script.done,
+    };
   });
 };
 
-export const runScript = async (root, { id, scriptArgs }, { currentUser }) => {
+export const runScript = async (root, args, context, info) => {
+  const { currentUser } = context;
+  const { id, scriptArgs } = args;
   if (!isAdmin(currentUser)) {
     throw new Error("You cannot perform this operation");
+  }
+  if (!id) {
+    throw new Error("No script id specified");
   }
   console.log(`📜 running script ${id}…`);
   if (!isEmpty(scriptArgs)) {
