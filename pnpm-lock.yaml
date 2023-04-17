@@ -758,6 +758,19 @@ importers:
       graphql: 16.6.0
       swr: 2.0.1
 
+  shared/templates:
+    specifiers:
+      '@devographics/constants': workspace:^1.0.0
+      '@devographics/types': workspace:^1.0.0
+      '@types/node': ^18.11.18
+      lodash: ^4.17.21
+    dependencies:
+      '@devographics/constants': link:../constants
+      '@devographics/types': link:../types
+      lodash: 4.17.21
+    devDependencies:
+      '@types/node': 18.11.18
+
   shared/types:
     specifiers:
       '@types/lodash': ^4.14.175
@@ -797,6 +810,7 @@ importers:
       '@devographics/react-form': workspace:*
       '@devographics/react-i18n': workspace:*
       '@devographics/swr-graphql': workspace:*
+      '@devographics/templates': workspace:^1.0.0
       '@devographics/types': workspace:^1.0.0
       '@emotion/cache': ^11.4.0
       '@emotion/react': ^11.4.1
@@ -932,6 +946,7 @@ importers:
       '@devographics/react-form': link:../shared/react-form
       '@devographics/react-i18n': link:../shared/react-i18n
       '@devographics/swr-graphql': link:../shared/swr-graphql
+      '@devographics/templates': link:../shared/templates
       '@devographics/types': link:../shared/types
       '@emotion/cache': 11.10.5
       '@emotion/react': 11.10.5_oyfwtx4tu3dbvghedp4njqx5ke
@@ -30825,6 +30840,12 @@ packages:
   /react-dev-utils/11.0.4_a7xmpkungfd35is2c4kqy55h3i:
     resolution: {integrity: sha512-dx0LvIGHcOPtKbeiSUM4jqpBl3TcY7CDjZdfOIcKeznE7BWr9dg0iPG90G5yfVQ+p/rGNMXdbfStvzQZEVEi4A==}
     engines: {node: '>=10'}
+    peerDependencies:
+      typescript: '>=2.7'
+      webpack: '>=4'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
     dependencies:
       '@babel/code-frame': 7.10.4
       address: 1.1.2
@@ -30854,14 +30875,18 @@ packages:
     transitivePeerDependencies:
       - eslint
       - supports-color
-      - typescript
       - vue-template-compiler
-      - webpack
     dev: false
 
   /react-dev-utils/12.0.1_5cls54yhub2wqfkrovxqeaw2om:
     resolution: {integrity: sha512-84Ivxmr17KjUupyqzFode6xKhjwuEJDROWKJy/BthkL7Wn6NJ8h4WE6k/exAv6ImS+0oZLRRW5j/aINMHyeGeQ==}
     engines: {node: '>=14'}
+    peerDependencies:
+      typescript: '>=2.7'
+      webpack: '>=4'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
     dependencies:
       '@babel/code-frame': 7.18.6
       address: 1.2.2
@@ -30892,9 +30917,7 @@ packages:
     transitivePeerDependencies:
       - eslint
       - supports-color
-      - typescript
       - vue-template-compiler
-      - webpack
     dev: false
 
   /react-dom/18.0.0_react@18.0.0:
