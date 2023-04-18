@@ -1,4 +1,5 @@
-import { TemplateFunction } from '../../types/surveys'
+import { ApiTemplateFunction } from '../../types/surveys'
+
 // import { FEATURES_OPTIONS } from '@devographics/constants'
 const FEATURES_OPTIONS = ['never_heard', 'heard', 'used']
 import {
@@ -7,17 +8,21 @@ import {
     commentsResolverFunction,
     entityResolverFunction
 } from '../resolvers'
-import { getFiltersTypeName, getFacetsTypeName } from '../helpers'
+import { getFiltersTypeName, getFacetsTypeName, getPaths } from '../helpers'
 import { graphqlize } from '../helpers'
 import { getResponseTypeName } from '../../graphql/templates/responses'
+import { DbSuffixes } from '@devographics/types'
 
-export const feature: TemplateFunction = ({ survey, question }) => {
+export const feature: ApiTemplateFunction = options => {
+    const { survey, question } = options
     const fieldTypeName = `${graphqlize(survey.id)}Feature`
-    return {
+    const output = {
         ...question,
         id: question.id || 'placeholder',
-        dbPath: `features.${question.id}.experience`,
-        dbPathComments: `features.${question.id}.comment`,
+        allowComment: true,
+        // dbSuffix: 'experience',
+        // dbPath: `features.${question.id}.experience`,
+        // dbPathComments: `features.${question.id}.comment`,
         options: FEATURES_OPTIONS.map(id => ({
             id
         })),
@@ -43,5 +48,9 @@ export const feature: TemplateFunction = ({ survey, question }) => {
             responses: responsesResolverFunction,
             entity: entityResolverFunction
         }
+    }
+    return {
+        ...output,
+        ...getPaths({ ...options, question: output }, DbSuffixes.EXPERIENCE)
     }
 }

@@ -10,17 +10,29 @@ query SurveysMetadataQuery {
         domain
         editions {
           id
+          year
           status
           sections {
             id
             questions {
-              dbPath
               id
               label
+              contentType
+              template
               options {
                 average
                 id
                 label
+              }
+              rawPaths {
+                response
+                other
+                comment
+              }
+              normPaths {
+                response
+                other
+                comment
               }
             }
           }

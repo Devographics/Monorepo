@@ -1,23 +1,28 @@
-import { TemplateFunction } from '../../types/surveys'
+import { ApiTemplateFunction } from '../../types/surveys'
+
 import {
     idResolverFunction,
     commentsResolverFunction,
     responsesResolverFunction,
     entityResolverFunction
 } from '../resolvers'
-import { getFiltersTypeName, getFacetsTypeName } from '../helpers'
+import { getFiltersTypeName, getFacetsTypeName, getPaths } from '../helpers'
 import { graphqlize } from '../helpers'
 import { getResponseTypeName } from '../../graphql/templates/responses'
+import { DbSuffixes } from '@devographics/types'
 // import { TOOLS_OPTIONS } from '@devographics/constants'
 const TOOLS_OPTIONS = ['would_use', 'would_not_use', 'interested', 'not_interested', 'never_heard']
 
-export const tool: TemplateFunction = ({ survey, question }) => {
+export const tool: ApiTemplateFunction = options => {
+    const { survey, question } = options
     const fieldTypeName = `${graphqlize(survey.id)}Tool`
-    return {
+    const output = {
         ...question,
         id: question.id || 'placeholder',
-        dbPath: `tools.${question.id}.experience`,
-        dbPathComments: `tools.${question.id}.comment`,
+        allowComment: true,
+        // dbSuffix: 'experience',
+        // dbPath: `tools.${question.id}.experience`,
+        // dbPathComments: `tools.${question.id}.comment`,
         options: TOOLS_OPTIONS.map(id => ({
             id
         })),
@@ -43,5 +48,10 @@ export const tool: TemplateFunction = ({ survey, question }) => {
             responses: responsesResolverFunction,
             entity: entityResolverFunction
         }
+    }
+
+    return {
+        ...output,
+        ...getPaths({ ...options, question: output, suffix: DbSuffixes.EXPERIENCE })
     }
 }

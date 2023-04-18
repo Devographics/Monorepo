@@ -8,12 +8,15 @@ import {
     ParsedSection,
     ParsedQuestionExt,
     Option,
-    QuestionTemplateOutput
+    QuestionTemplateOutput,
+    ParsedSurveyExt,
+    ParsedEditionExt
 } from '../types/surveys'
 import globalQuestions from '../data/global_questions.yml'
 import { templates } from './question_templates'
 import uniq from 'lodash/uniq.js'
 import { getQuestionObject } from './generate'
+import { DbSuffixes, DbPaths } from '@devographics/types'
 
 export const graphqlize = (str: string) => capitalizeFirstLetter(snakeToCamel(str))
 
@@ -98,6 +101,10 @@ export const applyQuestionTemplate = (options: {
             console.log(question)
             output = { ...output, template }
         }
+    } else {
+        throw new Error(
+            `Question "${edition.id}/${question.id}" does not have a template specified.`
+        )
     }
     return output
 }
@@ -211,3 +218,91 @@ export const formatNumericOptions = (options: Option[]) =>
 
 export const getFiltersTypeName = (surveyId: string) => graphqlize(surveyId) + 'Filters'
 export const getFacetsTypeName = (surveyId: string) => graphqlize(surveyId) + 'Facets'
+
+export const getRawPaths = (
+    {
+        survey,
+        edition,
+        section,
+        question
+    }: {
+        survey: Survey
+        edition: Edition
+        section: Section
+        question: Question
+    },
+    suffix?: string
+) => {
+    const sectionPathSegment = section.slug || section.id
+    const pathSegments = [edition.id, sectionPathSegment, question.id]
+    const separator = '__'
+
+    const getPath = (suffix?: string) =>
+        suffix ? [...pathSegments, suffix].join(separator) : [...pathSegments].join(separator)
+
+    const paths = {
+        response: getPath(suffix)
+    } as DbPaths
+
+    if (question.allowOther) {
+        paths.other = getPath(DbSuffixes.OTHERS)
+    }
+    if (question.allowPrenormalized) {
+        paths.other = getPath(DbSuffixes.PRENORMALIZED)
+    }
+    if (question.allowComment) {
+        paths.comment = getPath(DbSuffixes.COMMENT)
+    }
+    return paths
+}
+
+export const getNormPaths = (
+    {
+        survey,
+        edition,
+        section,
+        question
+    }: {
+        survey: Survey
+        edition: Edition
+        section: Section
+        question: Question
+    },
+    suffix?: string
+) => {
+    const sectionPathSegment = section.slug || section.id
+    const pathSegments = [sectionPathSegment, question.id]
+    const separator = '.'
+
+    const getPath = (suffix?: string) =>
+        suffix ? [...pathSegments, suffix].join(separator) : pathSegments.join(separator)
+
+    const paths = {
+        response: getPath(suffix)
+    } as DbPaths
+
+    if (question.allowOther || question.allowPrenormalized) {
+        paths.other = getPath(`${DbSuffixes.OTHERS}.${DbSuffixes.NORMALIZED}`)
+    }
+
+    if (question.allowComment) {
+        paths.comment = getPath(DbSuffixes.COMMENT)
+    }
+    return paths
+}
+
+export const getPaths = (
+    options: {
+        survey: Survey
+        edition: Edition
+        section: Section
+        question: Question
+    },
+    suffix?: string
+) => ({
+    rawPaths: getRawPaths(options, suffix),
+    normPaths: getNormPaths(options, suffix)
+})
+
+export const getContentType = (question: QuestionTemplateOutput) =>
+    question.optionsAreNumeric ? 'number' : 'string'

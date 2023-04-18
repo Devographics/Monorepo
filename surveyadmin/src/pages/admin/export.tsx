@@ -2,7 +2,7 @@ import React, { useReducer, useRef, useState } from "react";
 import { ExportOptions, ExportOptionsStr } from "~/admin/models/export";
 import { SurveyMarkdownOutline } from "~/core/components/survey/SurveyExport";
 import { apiRoutes } from "~/lib/apiRoutes";
-import { getSurveyBySlug } from "~/modules/surveys/helpers";
+import { getSurveyByEditionId } from "~/modules/surveys/helpers";
 // TODO: get from top-level context as in surveyform
 import { surveys } from "~/surveys";
 
@@ -55,7 +55,7 @@ const reducer = (state, action) => {
 export const AdminExportPage = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [surveySlug, setSurveySlug] = useState<string | undefined>();
-  const survey = surveySlug ? getSurveyBySlug(surveySlug) : undefined;
+  const survey = surveySlug ? getSurveyByEditionId(surveySlug) : undefined;
 
   async function triggerExport(evt: React.FormEvent<HTMLFormElement>) {
     try {

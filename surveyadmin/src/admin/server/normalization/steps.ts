@@ -19,6 +19,14 @@ import {
 } from "~/admin/models/private_responses/model.server";
 import { getUUID } from "~/account/email/api/encryptEmail";
 import { logToFile } from "@devographics/core-models/server";
+import * as templateFunctions from "@devographics/templates";
+import {
+  QuestionMetadata,
+  SectionMetadata,
+  TemplateFunction,
+} from "@devographics/types";
+import { NormalizationParams } from "./normalize";
+import { getQuestionPath } from "~/modules/surveys/parser/parseSurvey";
 
 const replaceAll = function (target, search, replacement) {
   return target.replace(new RegExp(search, "g"), replacement);
@@ -110,7 +118,7 @@ export const normalizeSourceField = async ({
   allRules,
   survey,
   verbose,
-}) => {
+}: NormalizationParams) => {
   const normSource = await normalizeSource(normResp, allRules, survey, verbose);
   if (normSource.raw) {
     set(normResp, "user_info.source.raw", normSource.raw);
@@ -183,7 +191,7 @@ export const handlePrivateInfo = async ({
   privateFields,
   response,
   options,
-}) => {
+}: NormalizationParams) => {
   const { isSimulation } = options;
   /*
   
@@ -227,7 +235,7 @@ export const discardEmptyResponses = async ({
   options,
   errors,
   result,
-}) => {
+}: NormalizationParams) => {
   const { verbose } = options;
   // discard empty responses
   if (intersection(Object.keys(normResp), mustHaveKeys).length === 0) {
@@ -244,8 +252,13 @@ const privateFieldPaths = [
   "user_info.twitter_username",
 ];
 
+interface NormalizeFieldOptions extends NormalizationParams {
+  question: QuestionMetadata;
+  section: SectionMetadata;
+}
+
 export const normalizeField = async ({
-  field,
+  question,
   normResp,
   prenormalizedFields,
   normalizedFields,
@@ -253,9 +266,11 @@ export const normalizeField = async ({
   options,
   fileName,
   survey,
+  edition,
+  section,
   allRules,
   privateFields,
-}) => {
+}: NormalizeFieldOptions) => {
   const {
     document: response,
     log = false,
@@ -263,8 +278,23 @@ export const normalizeField = async ({
     verbose = false,
   } = options;
 
+  const templateFunction = templateFunctions[
+    question.template
+  ] as TemplateFunction;
+  const questionObject = templateFunction({
+    survey,
+    edition,
+    section,
+    question,
+  });
+
+  console.log("// questionObject");
+  console.log(questionObject);
+
+  const fieldPath = [edition.id, section.id, question.id].join("__");
   const { fieldName, suffix, matchTags = [] } = field as ParsedQuestion;
-  if (!fieldName) throw new Error(`Field without fieldName`);
+  console.log(field);
+  if (!fieldName) throw new Error(`Field without fieldName!`);
   const { initialSegment, sectionSegment, fieldSegment } =
     getFieldSegments(field);
   const {

@@ -1254,6 +1254,7 @@ const countriesTyped = countries as Country[]
 export const country: TemplateFunction = ({ question, section }) => ({
     id: 'placeholder',
     ...question,
+    dbSuffix: null,
     dbPath: `${section.id}.${question.id}`,
     options: countriesTyped.map(country => ({ id: country['alpha-3'], label: country.name }))
 })

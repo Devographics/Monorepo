@@ -41,7 +41,7 @@ Get question unique id, to be used in the schema
 /!\ different from the graphql field names
 
 */
-export const getQuestionId = (survey, section, question) => {
+export const getQuestionPath = (survey, section, question) => {
   const sectionSlug = question.sectionSlug || section.slug || section.id;
   let fieldName = survey.slug + "__" + sectionSlug + "__" + question.id;
   if (question.suffix) {
@@ -60,13 +60,20 @@ to every question
 */
 export const parseSurvey = (survey: SurveyEdition) => {
   let i = 0;
-  const parsedSurvey = { ...survey, createdAt: survey.createdAt ? new Date(survey.createdAt) : undefined };
+  const parsedSurvey = {
+    ...survey,
+    createdAt: survey.createdAt ? new Date(survey.createdAt) : undefined,
+  };
   parsedSurvey.outline = survey.outline.map((section) => {
     const questions = section.questions.map((question) => {
       i++;
       // @ts-ignore TODO: question may be an array according to types
       const questionObject = getQuestionObject(question, section, i);
-      questionObject.fieldName = getQuestionId(survey, section, questionObject);
+      questionObject.fieldName = getQuestionPath(
+        survey,
+        section,
+        questionObject
+      );
       return questionObject;
     });
     return {

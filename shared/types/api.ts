@@ -13,31 +13,54 @@ export interface ParsedSection extends Omit<Section, 'questions'> {
     questions: ParsedQuestion[]
 }
 
-export interface ParsedQuestion extends Omit<Question, 'id'> {
+export enum DbSuffixes {
+    CHOICES = 'choices',
+    EXPERIENCE = 'experience',
+    OTHERS = 'others',
+    NORMALIZED = 'normalized',
+    PRENORMALIZED = 'prenormalized',
+    COMMENT = 'comment'
+}
+
+export type DbPaths = {
+    response: string
+    other: string
+    comment: string
+}
+
+export interface TemplateOutputQuestion extends Omit<Question, 'id'> {
     id: string
 
-    sectionIds: string[]
-    sectionIndex: number
-    dbPath?: string
-    dbPathComments?: string
+    // dbSuffix?: DbSuffixes
+    // rawPath?: string
+    // dbPath?: string
+    // dbPathComments?: string
     includeInApi?: boolean
+    // isNormalized?: boolean
+
+    contentType: 'string' | 'number'
 
     editions?: string[]
-
-    surveyId: string
 
     typeDef?: string
 
     isGlobal?: boolean
 
-    fieldTypeName: string
+    autogenerateOptionType?: boolean
+    autogenerateEnumType?: boolean
+    autogenerateFilterType?: boolean
+
+    fieldTypeName?: string
     filterTypeName?: string
     optionTypeName?: string
     enumTypeName?: string
 }
 
-export interface QuestionTemplateOutput extends Omit<Question, 'id'> {
-    id: string
+export interface ParsedQuestion extends Omit<TemplateOutputQuestion, 'fieldTypeName'> {
+    sectionIds: string[]
+    sectionIndex: number
+    surveyId: string
+    fieldTypeName: string
 }
 
 export type ResponseArguments = {

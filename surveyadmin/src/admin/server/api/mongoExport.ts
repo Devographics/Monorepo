@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import fs from "fs";
 const fsPromises = fs.promises;
 import path from "path";
-import { getSurveyBySlug } from "~/modules/surveys/helpers";
+import { getSurveyByEditionId } from "~/modules/surveys/helpers";
 import { ExportOptions } from "~/admin/models/export";
 import { generateExportsZip } from "./generateExports";
 
@@ -28,7 +28,7 @@ export async function mongoExportMiddleware(
     },
   };
   // find the survey
-  const survey = getSurveyBySlug(surveySlug);
+  const survey = getSurveyByEditionId(surveySlug);
   if (!survey) {
     return res
       .status(400)

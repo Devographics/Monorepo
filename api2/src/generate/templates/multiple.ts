@@ -1,7 +1,14 @@
-import { TemplateFunction } from '../../types/surveys'
+import { DbSuffixes } from '@devographics/types'
+import { ApiTemplateFunction } from '../../types/surveys'
+import { getPaths } from '../helpers'
 
-export const multiple: TemplateFunction = ({ question, section }) => ({
-    id: 'placeholder',
-    ...question,
-    dbPath: `${section.slug || section.id}.${question.id}.choices`
-})
+export const multiple: ApiTemplateFunction = options => {
+    const { question, section } = options
+    return {
+        id: 'placeholder',
+        // dbSuffix: 'choices'
+        // dbPath: `${section.slug || section.id}.${question.id}.choices`
+        ...getPaths(options, DbSuffixes.CHOICES),
+        ...question
+    }
+}

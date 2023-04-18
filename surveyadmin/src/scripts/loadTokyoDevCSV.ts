@@ -10,12 +10,16 @@ import {
   Edition,
   EditionMetadata,
   QuestionMetadata,
+  Section,
   SectionMetadata,
+  Question,
   SurveyMetadata,
 } from "@devographics/types";
 import yaml from "js-yaml";
 import { readdir, readFile } from "fs/promises";
 import { logToFile } from "@devographics/core-models/server";
+import { normalizeResponse } from "~/admin/server/normalization/normalize";
+import { getOrFetchEntities } from "~/modules/entities/server";
 
 const editions = {
   // td2019: "International Developers in Japan Survey 2019.csv",
@@ -57,20 +61,18 @@ const loadYamlFile = async (surveyId) => {
   return yamlContents;
 };
 
-type EditionOutline = SectionMetadata[];
+type EditionOutline = Section[];
 
 type EditionObject = {
-  id: string;
+  editionId: string;
+  year: number;
   data: any[];
   outline: EditionOutline;
   metadata: EditionMetadata;
 };
 
-const loadAllEditions = async (surveyId) => {
+const loadAllEditions = async (allSurveysMetadata, surveyId) => {
   // load survey outlines
-  const allSurveysMetadata = await fetchSurveysListGraphQL({
-    apiUrl: process.env.DATA_API_URL,
-  });
 
   const allEditions: EditionObject[] = [];
   for (const editionId of Object.keys(editions)) {
@@ -84,7 +86,13 @@ const loadAllEditions = async (surveyId) => {
     const metadata = survey.editions.find(
       (e) => e.id === editionId
     ) as EditionMetadata;
-    allEditions.push({ id: editionId, data, outline, metadata });
+    allEditions.push({
+      editionId,
+      year: metadata.year,
+      data,
+      outline,
+      metadata,
+    });
   }
   await logToFile(
     "tokyodev.yml",
@@ -97,24 +105,105 @@ const loadAllEditions = async (surveyId) => {
 const flattenOutline = (outline: EditionOutline) =>
   outline.map((s) => s.questions).flat();
 
-const getOutlineQuestion = (outline: EditionOutline, questionLabel: string) =>
-  flattenOutline(outline).find((q) => q.label.trim() === questionLabel.trim());
+const getOutlineQuestion = (
+  outline: EditionOutline,
+  questionLabel: string,
+  editionId: string
+) => {
+  const question = flattenOutline(outline).find(
+    (q) => q.label?.trim() === questionLabel.trim()
+  );
+  if (!question) {
+    throw new Error(
+      `🔴 Could not find question outline for "${editionId}/${questionLabel}"`
+    );
+  }
+  return question;
+};
 
 const getQuestionMetadata = (
   editionMetadata: EditionMetadata,
-  question: QuestionMetadata
+  question: Question,
+  editionId: string
 ) => {
-  const allQuestions = editionMetadata.sections.map((s) => s.questions).flat();
-  return allQuestions.find((q) => q.id === question.id);
+  const allQuestions = editionMetadata.sections
+    .map((s) => s.questions.map((q) => ({ ...q, sectionId: s.id })))
+    .flat();
+  const questionMetadata = allQuestions.find((q) => q.id === question.id);
+  if (!questionMetadata) {
+    throw new Error(
+      `🔴 Could not find question metadata for "${editionId}/${question.id}"`
+    );
+  }
+  return questionMetadata as QuestionMetadata;
 };
 
-const acceptsOtherAnswers = (
-  outline: EditionOutline,
-  question: QuestionMetadata
-) => flattenOutline(outline).some((q) => q.id === `${question.id}_other`);
+/*
+
+Check if a question accepts freeform answers
+
+*/
+const getOtherId = (questionId?: string) => `${questionId}_other`;
+
+const acceptsOtherAnswers = (outline: EditionOutline, question: Question) =>
+  flattenOutline(outline).some((q) => q.id === getOtherId(question?.id));
+
+// const getFieldPath = ({
+//   editionId,
+//   sectionId,
+//   questionId,
+// }: {
+//   editionId: string;
+//   sectionId: string;
+//   questionId: string;
+// }) => [editionId, sectionId, questionId].join("__");
+
+/*
+
+For a question that accepts freeform answers, take the answer string
+and split it between "regular" answers that match one of the predefined options,
+and "other" freeform answers
+
+*/
+const getOptionValues = (
+  edition: EditionObject,
+  question: Question,
+  value: string
+) => {
+  const { editionId, outline } = edition;
+  let optionsValues: string[] = [],
+    otherValue: string | undefined;
+  const acceptsOther = acceptsOtherAnswers(outline, question);
+  // CSV fields that hold multiple values are separated with semi-columns
+  const values = value.split(";");
+  for (const value of values) {
+    // check if a predefined matching option exists based on the option label
+    const matchingOption = question.options?.find(
+      (o) => String(o.label) === String(value)
+    );
+    if (matchingOption) {
+      optionsValues.push(matchingOption.id);
+    } else {
+      if (acceptsOther) {
+        // handle this value as an "other" answer
+        otherValue = value;
+      } else {
+        throw new Error(
+          `🔴 Could not find value "${value}" within options for "${editionId}/${question.id}"`
+        );
+      }
+    }
+  }
+  return { optionsValues, otherValue };
+};
 
 export const loadTokyoDevCSV = async () => {
-  const allEditions = await loadAllEditions("tokyodev");
+  const allSurveysMetadata = await fetchSurveysListGraphQL({
+    apiUrl: process.env.DATA_API_URL,
+  });
+
+  const entities = await getOrFetchEntities();
+  const allEditions = await loadAllEditions(allSurveysMetadata, "tokyodev");
 
   // initRedis(serverConfig().redisUrl);
   // const surveys = await fetchSurveysList();
@@ -123,12 +212,18 @@ export const loadTokyoDevCSV = async () => {
 
   // iterate over all editions
   for (const edition of allEditions) {
-    const { id, data, outline, metadata } = edition;
+    const { editionId, year, data, outline, metadata } = edition;
     // iterate over all CSV rows
-    for (const responseData of data) {
-      const document = {};
+    for (const responseData of data.slice(0, 5)) {
+      const document = {
+        year,
+        editionId,
+        surveyId: "tokyodev",
+      };
       // iterate over each { question: answer } field in the response
       for (const questionLabel of Object.keys(responseData)) {
+        let suffix, value;
+
         const questionValue = responseData[questionLabel];
         if (questionLabel === "Timestamp") {
           document.createdAt = questionValue;
@@ -136,62 +231,72 @@ export const loadTokyoDevCSV = async () => {
           if (questionValue !== "") {
             // find the question's canonical ID across all surveys based
             // on its label
-            const outlineQuestion = getOutlineQuestion(outline, questionLabel);
-            if (!outlineQuestion) {
-              throw new Error(
-                `🔴 Could not find question outline for "${id}/${questionLabel}"`
-              );
-            }
+            // note: we need to refer to the YAML outline to do this because
+            // the question metadata we get through the API is merged across editions
+            const question = getOutlineQuestion(
+              outline,
+              questionLabel,
+              editionId
+            );
+
             // find the question's canonical metadata based on its ID
             const questionMetadata = getQuestionMetadata(
               metadata,
-              outlineQuestion
+              question,
+              editionId
             );
-            if (!questionMetadata) {
-              throw new Error(
-                `🔴 Could not find question metadata for "${id}/${outlineQuestion.id}"`
-              );
-            }
+
+            const convertToType = (value) =>
+              questionMetadata.contentType === "number" ? Number(value) : value;
+
+            // const pathOptions = {
+            //   editionId,
+            //   sectionId: questionMetadata.sectionId,
+            //   questionId: question.id,
+            // };
+            const path = questionMetadata.normPaths.response;
+
             // if question has options, check that the value belongs to
             // the list of acceptable options
-            if (outlineQuestion.options) {
-              const acceptsOther = acceptsOtherAnswers(
-                outline,
-                outlineQuestion
+            if (question.options) {
+              const { optionsValues, otherValue } = getOptionValues(
+                edition,
+                question,
+                questionValue
               );
-              // console.log("// acceptsOther");
-              // console.log(id, outlineQuestion.id);
-              // console.log(acceptsOther);
-              // CSV fields that hold multiple values are separated with semi-columns
-              const values = questionValue.split(";");
-              for (const value of values) {
-                const option = outlineQuestion.options.find(
-                  (o) => String(o.label) === String(value)
-                );
-                if (!option) {
-                  if (acceptsOther) {
-                    // handle this as an "other" answer
-                  } else {
-                    throw new Error(
-                      `🔴 Could not find value "${value}" within options for "${id}/${outlineQuestion.id}"`
-                    );
-                  }
+
+              if (optionsValues.length > 0) {
+                if (["single", "dropdown"].includes(question.template)) {
+                  // this field accepts a single answer
+                  document[path] = convertToType(optionsValues[0]);
+                } else {
+                  // this field accepts an array of answers
+                  document[path] = optionsValues.map(convertToType);
                 }
               }
+              if (otherValue) {
+                // handle "other" answer
+                document[path] = convertToType(otherValue);
+              }
+            } else {
+              // freeform field
+              document[path] = convertToType(questionValue);
             }
           }
         }
       }
+      console.log("// document");
+      console.log(document);
+
+      // const normalizedDocument = await normalizeResponse({
+      //   document,
+      //   entities,
+      //   surveys: allSurveysMetadata,
+      // });
+      // console.log("// normalizedDocument");
+      // console.log(normalizedDocument);
     }
   }
-  // initialize empty new document
-  // loop over each column
-  // find corresponding question in survey outline
-  // if no question throw error
-  // if field has preset values check if row value is valid
-  // if not throw error
-  // add value to document
-  // add document to db
 };
 
 loadTokyoDevCSV.description = `Load data from TokyoDev CSV file.`;

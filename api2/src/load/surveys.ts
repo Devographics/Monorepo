@@ -3,6 +3,7 @@ import { RequestContext } from '../types'
 import { Octokit } from '@octokit/core'
 import fetch from 'node-fetch'
 import yaml from 'js-yaml'
+import { existsSync } from 'fs'
 import { readdir, readFile, lstat } from 'fs/promises'
 import { logToFile } from '../helpers/debug'
 import path from 'path'
@@ -160,17 +161,18 @@ export const loadLocally = async () => {
                         const editionConfigYaml: any = yaml.load(editionConfigContents)
                         edition = editionConfigYaml
                     } catch (error) {}
-                    try {
-                        const editionQuestionsContents = await readFile(
-                            editionDirPath + '/questions.yml',
-                            'utf8'
-                        )
-                        const editionQuestionsYaml: any = yaml.load(editionQuestionsContents)
-                        edition.sections = editionQuestionsYaml
-                    } catch (error) {
-                        console.log(`YAML parsing error for edition ${editionDirName}`)
-                        console.log(error)
+                    const questionsPath = editionDirPath + '/questions.yml'
+                    if (existsSync(questionsPath)) {
+                        try {
+                            const editionQuestionsContents = await readFile(questionsPath, 'utf8')
+                            const editionQuestionsYaml: any = yaml.load(editionQuestionsContents)
+                            edition.sections = editionQuestionsYaml
+                        } catch (error) {
+                            console.log(`YAML parsing error for edition ${editionDirName}`)
+                            console.log(error)
+                        }
                     }
+
                     try {
                         const editionApiContents = await readFile(
                             editionDirPath + '/api.yml',

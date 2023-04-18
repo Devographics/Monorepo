@@ -14,7 +14,7 @@ import type {
 } from "@devographics/core-models";
 import { logToFile } from "@devographics/core-models/server";
 import { getOrFetchEntities } from "~/modules/entities/server";
-import { getSurveyBySlug } from "~/modules/surveys/helpers";
+import { getSurveyByEditionId } from "~/modules/surveys/helpers";
 import { NormalizedResponseMongooseModel } from "~/admin/models/normalized_responses/model.server";
 
 export const getFieldSegments = (field: Field) => {
@@ -52,7 +52,7 @@ export const getFieldPaths = (field: Field) => {
 };
 
 export const getSurveyFieldById = (survey, fieldId) => {
-  const allFields = survey.outline.map((s) => s.questions).flat();
+  const allFields = survey.sections.map((s) => s.questions).flat();
   // make sure to narrow it down to the freeform "others" field since the main "choices"
   // field can have the same id
   const field = allFields.find(
@@ -166,7 +166,9 @@ const extractTokens = async ({ value, rules, survey, field, verbose }) => {
     while (scanCompleted !== true && count < rulesLimit) {
       count++;
       if (count === rulesLimit) {
-        console.warn(`// Reached rules limit of ${rulesLimit} while normalizing [${rawString}]`)
+        console.warn(
+          `// Reached rules limit of ${rulesLimit} while normalizing [${rawString}]`
+        );
       }
       if (
         context &&
@@ -373,14 +375,16 @@ export const normalizeSource = async (normResp, allRules, survey, verbose) => {
 Generate normalization rules from entities
 
 */
+export interface EntityRule {
+  id: string;
+  pattern: RegExp | string;
+  context?: string;
+  fieldId?: string;
+  tags: Array<string>;
+}
+
 export const generateEntityRules = (entities: Array<Entity>) => {
-  const rules: Array<{
-    id: string;
-    pattern: RegExp | string;
-    context?: string;
-    fieldId?: string;
-    tags: Array<string>;
-  }> = [];
+  const rules: Array<EntityRule> = [];
   entities
     .filter((e) => !e.apiOnly)
     .forEach((entity) => {
@@ -483,7 +487,7 @@ const existsSelector = { $exists: true, $nin: ignoreValues };
 
 // get mongo selector
 export const getSelector = async (surveyId, fieldId, onlyUnnormalized) => {
-  const survey = getSurveyBySlug(surveyId);
+  const survey = getSurveyByEditionId(surveyId);
 
   const selector = {
     surveySlug: surveyId,
@@ -518,7 +522,7 @@ export const getSelector = async (surveyId, fieldId, onlyUnnormalized) => {
 
 export const getUnnormalizedResponses = async (surveyId, fieldId) => {
   let rawFieldPath, normalizedFieldPath;
-  const survey = getSurveyBySlug(surveyId);
+  const survey = getSurveyByEditionId(surveyId);
   if (fieldId === "source") {
     rawFieldPath = "user_info.source.raw";
     normalizedFieldPath = "user_info.source.normalized";
@@ -555,16 +559,16 @@ export const getUnnormalizedResponses = async (surveyId, fieldId) => {
 export const getBulkOperation = (selector, modifier, isReplace) =>
   isReplace
     ? {
-      replaceOne: {
-        filter: selector,
-        replacement: modifier,
-        upsert: true,
-      },
-    }
+        replaceOne: {
+          filter: selector,
+          replacement: modifier,
+          upsert: true,
+        },
+      }
     : {
-      updateMany: {
-        filter: selector,
-        update: modifier,
-        upsert: false,
-      },
-    };
+        updateMany: {
+          filter: selector,
+          update: modifier,
+          upsert: false,
+        },
+      };

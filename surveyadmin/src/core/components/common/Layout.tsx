@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import Footer from "./Footer";
 import Header from "./Header";
 // import { useParams } from "react-router-dom";
-import { getSurvey } from "~/modules/surveys/helpers";
 import { KeydownContextProvider } from "./KeydownContext";
 import { useSurveyParams } from "../survey/hooks";
 import { useRouter } from "next/router";
@@ -38,20 +37,6 @@ export const Layout = ({
   });
   let style = "";
 
-  if (paramsReady && slug && year) {
-    const survey = getSurvey(slug, year);
-    if (survey) {
-      const { bgColor, textColor, linkColor, hoverColor } = survey;
-      style = `
-:root {
-  --bg-color: ${bgColor};
-  --text-color: ${textColor};
-  --link-color: ${linkColor};
-  --hover-color: ${hoverColor};
-}
-  `;
-    }
-  }
   return (
     <KeydownContextProvider>
       <div className="wrapper" id="wrapper">

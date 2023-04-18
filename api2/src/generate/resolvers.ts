@@ -180,9 +180,12 @@ const getEditionMetadataResolver =
                         'label',
                         'intlId',
                         'template',
-                        'dbPath',
-                        'dbPathComments',
-                        'options'
+                        // 'dbPath',
+                        // 'dbPathComments',
+                        'options',
+                        'rawPaths',
+                        'normPaths',
+                        'contentType'
                     ]
                     const cleanQuestion = {
                         ...pick(question, pickProperties),

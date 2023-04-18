@@ -5,11 +5,11 @@ import {
     Edition,
     Section,
     Question,
-    QuestionTemplateOutput,
     ParsedSurvey,
     ParsedEdition,
     ParsedSection,
     ParsedQuestion,
+    TemplateOutputQuestion,
     Option,
     ResponseEditionData,
     ResponseArguments,
@@ -33,11 +33,12 @@ export type TemplateArguments = {
     question: Question
 }
 
-export type TemplateFunction = (arg0: TemplateArguments) => QuestionTemplateOutput
+export type ApiTemplateFunction = (arg0: TemplateArguments) => TemplateOutputQuestion
+
 export type NullTemplate = (arg0: TemplateArguments) => { includeInApi: boolean }
 
 export interface TemplatesDictionnary {
-    [index: string]: TemplateFunction | NullTemplate
+    [index: string]: ApiTemplateFunction | NullTemplate
 }
 
 export interface ResolverMap {
@@ -101,6 +102,7 @@ export {
     ParsedEdition,
     ParsedSection,
     ParsedQuestion,
+    TemplateOutputQuestion,
     Option,
     ResponseEditionData,
     FacetBucket,

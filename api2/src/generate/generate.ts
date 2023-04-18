@@ -14,7 +14,10 @@ import {
     applyQuestionTemplate,
     mergeOptions,
     mergeSections,
-    getSectionQuestionObjects
+    getSectionQuestionObjects,
+    getRawPaths,
+    getNormPaths,
+    getContentType
 } from './helpers'
 import {
     generateSurveysTypeObjects,
@@ -182,12 +185,21 @@ export const getQuestionObject = ({
         ? { ...globalQuestionDefinition, isGlobal: true }
         : {}
 
-    const questionObject: ParsedQuestionExt = {
+    let questionObject: ParsedQuestionExt = {
         ...defaultObject,
         ...question,
         ...templateObject,
         ...globalObject
     }
+
+    questionObject.contentType = getContentType(questionObject)
+
+    // const pathsObject = {
+    //     rawPaths: getRawPaths({ survey, edition, section, question: questionObject }),
+    //     normPaths: getNormPaths({ survey, edition, section, question: questionObject })
+    // }
+
+    // questionObject = { ...questionObject, ...pathsObject }
 
     if (questionObject.options) {
         if (!questionObject.optionTypeName) {

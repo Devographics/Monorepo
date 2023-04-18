@@ -1,9 +1,9 @@
-import { ParsedQuestionExt, TemplateFunction, ResolverMap, Survey } from '../../types/surveys'
+import { ParsedQuestionExt } from '../../types/surveys'
 import { getSectionItems, graphqlize } from '../helpers'
-import { getFiltersTypeName, getFacetsTypeName } from '../helpers'
 import { getToolsFeaturesResolverMap } from '../resolvers'
+import { ApiTemplateFunction } from '../../types/surveys'
 
-export const all_features: TemplateFunction = ({ survey, edition, section, question }) => {
+export const all_features: ApiTemplateFunction = ({ survey, edition, section, question }) => {
     const fieldTypeName = `${graphqlize(survey.id)}${graphqlize(edition.id)}AllFeatures`
     let items: ParsedQuestionExt[] = []
     for (const section of edition.sections.filter(s => s.template === 'feature')) {

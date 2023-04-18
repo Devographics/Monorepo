@@ -75,6 +75,7 @@
     "@devographics/react-form": "workspace:*",
     "@devographics/react-i18n": "workspace:*",
     "@devographics/swr-graphql": "workspace:*",
+    "@devographics/templates": "workspace:^1.0.0",
     "@devographics/types": "workspace:^1.0.0",
     "@emotion/cache": "^11.4.0",
     "@emotion/react": "^11.4.1",

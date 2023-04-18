@@ -1,4 +1,4 @@
-import { TemplateFunction, TransformFunction } from '../../types/surveys'
+import { ApiTemplateFunction, TransformFunction } from '../../types/surveys'
 import range from 'lodash/range.js'
 import sumBy from 'lodash/sumBy.js'
 
@@ -24,7 +24,7 @@ export const transformFunction: TransformFunction = (
             const selectedBuckets = editionData.buckets.filter(
                 b => Number(b.id) >= lowerBound && Number(b.id) < upperBound
             )
-            return {
+            const bucket = {
                 id: getId(n),
                 count: sumBy(selectedBuckets, 'count'),
                 percentageSurvey:
@@ -33,6 +33,7 @@ export const transformFunction: TransformFunction = (
                     Math.round(100 * sumBy(selectedBuckets, 'percentageQuestion')) / 100,
                 facetBuckets: []
             }
+            return bucket
         })
     })
     return data
@@ -44,10 +45,16 @@ export const getOptions = () =>
         average: n * groupBy + groupBy / 2
     }))
 
-export const knowledge_score: TemplateFunction = ({ question, section }) => ({
-    ...question,
-    id: 'knowledge_score',
-    dbPath: 'user_info.knowledge_score',
-    options: getOptions(),
-    transformFunction
-})
+export const knowledge_score: ApiTemplateFunction = options => {
+    const { question, section } = options
+    return {
+        id: 'knowledge_score',
+        // dbPath: 'user_info.knowledge_score',
+        options: getOptions(),
+        transformFunction,
+        normPaths: {
+            response: 'user_info.knowledge_score'
+        },
+        ...question
+    }
+}

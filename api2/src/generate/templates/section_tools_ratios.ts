@@ -1,4 +1,4 @@
-import { TemplateFunction, ResolverMap, Survey, Question } from '../../types/surveys'
+import { ApiTemplateFunction, ResolverMap, Survey, Question } from '../../types/surveys'
 import { graphqlize } from '../helpers'
 import { computeKey, useCache } from '../../helpers/caching'
 import { computeToolsExperienceRatios } from '../../compute/experience'
@@ -35,7 +35,7 @@ const getResolverMap = ({
     }
 })
 
-export const section_tools_ratios: TemplateFunction = ({ survey, section, question }) => {
+export const section_tools_ratios: ApiTemplateFunction = ({ survey, section, question }) => {
     const fieldTypeName = `${graphqlize(section.id)}ToolsRatios`
     // in any given section, the tools will be the questions which don't have a template defined
     const sectionTools = section.questions.filter(q => typeof q.template === 'undefined')

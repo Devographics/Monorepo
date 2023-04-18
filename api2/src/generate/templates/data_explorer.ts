@@ -1,4 +1,4 @@
-import { TemplateFunction, ResolverMap, Survey, Question } from '../../types/surveys'
+import { ApiTemplateFunction, ResolverMap, Survey, Question } from '../../types/surveys'
 import { graphqlize, getFacetsTypeName } from '../helpers'
 import { genericComputeFunction } from '../../compute'
 import { useCache, computeKey } from '../../helpers/caching'
@@ -53,7 +53,7 @@ const getResolverMap = ({ survey }: { survey: Survey }): ResolverMap => ({
     }
 })
 
-export const data_explorer: TemplateFunction = ({ survey, question }) => {
+export const data_explorer: ApiTemplateFunction = ({ survey, question }) => {
     const fieldTypeName = `${graphqlize(survey.id)}DataExplorer`
     return {
         ...question,

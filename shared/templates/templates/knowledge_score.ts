@@ -16,6 +16,7 @@ export const getOptions = () =>
 export const knowledge_score: TemplateFunction = ({ question, section }) => ({
     ...question,
     id: 'knowledge_score',
+    dbSuffix: null,
     dbPath: 'user_info.knowledge_score',
     options: getOptions()
 })

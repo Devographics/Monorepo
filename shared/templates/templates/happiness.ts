@@ -10,6 +10,7 @@ export const happiness: TemplateFunction = ({ question, section }) => {
     return {
         id: 'placeholder',
         ...question,
+        dbSuffix: null,
         dbPath: `happiness.${happinessDbFieldName}`,
         defaultSort: 'options',
         optionsAreNumeric: true,

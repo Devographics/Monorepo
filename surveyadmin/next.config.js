@@ -1,4 +1,4 @@
-const path = require("path")
+const path = require("path");
 const { locales } = require("./src/i18n/data/locales");
 const { extendNextConfig } = require("./packages/@vulcanjs/next-config");
 // Use @next/mdx for a basic MDX support.
@@ -10,11 +10,13 @@ const flowRight = require("lodash/flowRight");
 const debug = require("debug")("vns:next");
 
 // Pass the modules that are written directly in TS here
-const withTM = require('next-transpile-modules')(['@devographics/core-models',
-  '@devographics/react-form',
-  '@devographics/react-i18n',
-  '@devographics/swr-graphql']);
-
+const withTM = require("next-transpile-modules")([
+  "@devographics/core-models",
+  "@devographics/react-form",
+  "@devographics/react-i18n",
+  "@devographics/swr-graphql",
+  "@devographics/templates",
+]);
 
 // @see https://nextjs.org/docs/api-reference/next.config.js/runtime-configuration
 const moduleExports = (phase, { defaultConfig }) => {
@@ -69,8 +71,8 @@ const moduleExports = (phase, { defaultConfig }) => {
 
   extendedConfig.experimental = {
     ...(extendNextConfig.experimental || {}),
-    outputFileTracingRoot: path.join(__dirname, '../'),
-  }
+    outputFileTracingRoot: path.join(__dirname, "../"),
+  };
 
   // Finally add relevant webpack configs/utils
   extendedConfig = flowRight([

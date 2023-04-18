@@ -1,17 +1,19 @@
 import {
+  EntityRule,
   generateEntityRules,
   getFieldPaths,
   getSurveyFieldById,
 } from "./helpers";
 import { getOrFetchEntities } from "~/modules/entities/server";
-import { getSurveyBySlug } from "~/modules/surveys/helpers";
+import { getSurveyEditionById } from "~/modules/surveys/helpers";
 import {
   NormalizedResponseMongooseModel,
   NormalizedResponseDocument,
 } from "~/admin/models/normalized_responses/model.server";
 import * as steps from "./steps";
 import get from "lodash/get.js";
-
+import { EditionMetadata, SurveyMetadata } from "@devographics/types";
+import { fetchSurveysListGraphQL } from "@devographics/core-models/server";
 
 interface RegularField {
   fieldName: string;
@@ -57,6 +59,25 @@ interface NormalizationOptions {
   isSimulation?: boolean;
   fieldId?: string;
   isBulk?: boolean;
+  surveys?: SurveyMetadata[];
+}
+
+export interface NormalizationParams {
+  response: any;
+  normResp: any;
+  prenormalizedFields: RegularField[];
+  normalizedFields: RegularField[];
+  regularFields: RegularField[];
+  options: NormalizationOptions;
+  fileName?: string;
+  survey: SurveyMetadata;
+  edition: EditionMetadata;
+  allRules: EntityRule[];
+  privateFields?: any;
+  result?: any;
+  errors?: any;
+  fieldId?: string;
+  verbose?: boolean;
 }
 
 export const normalizeResponse = async (
@@ -73,6 +94,7 @@ export const normalizeResponse = async (
       isSimulation = false,
       fieldId,
       isBulk = false,
+      surveys,
     } = options;
 
     if (verbose) {
@@ -100,11 +122,22 @@ export const normalizeResponse = async (
     const prenormalizedFields: Array<RegularField> = [];
     const regularFields: Array<RegularField> = [];
 
-    const survey = getSurveyBySlug(response.surveySlug);
-    if (!survey)
-      throw new Error(`Could not find survey for slug ${response.surveySlug}`);
+    let updatedNormalizedResponse, allSurveys, allEntities, modifier;
 
-    let updatedNormalizedResponse, allEntities, modifier;
+    if (surveys) {
+      allSurveys = surveys;
+    } else {
+      allSurveys = await fetchSurveysListGraphQL({
+        apiUrl: process.env.DATA_API_URL,
+      });
+    }
+
+    const survey = allSurveys.find((s) => s.id === response.surveyId);
+    const edition = survey.editions.find((e) => e.id === response.editionId);
+
+    if (!edition)
+      throw new Error(`Could not find edition for slug ${response.editionId}`);
+
     if (entities) {
       allEntities = entities;
     } else {
@@ -114,7 +147,7 @@ export const normalizeResponse = async (
     const allRules = rules ?? generateEntityRules(allEntities);
     const fileName = _fileName || `${response.surveySlug}_normalization`;
 
-    const normalizationParams = {
+    const normalizationParams: NormalizationParams = {
       response,
       normResp,
       prenormalizedFields,
@@ -123,6 +156,7 @@ export const normalizeResponse = async (
       options,
       fileName,
       survey,
+      edition,
       allRules,
       privateFields,
       result,
@@ -151,7 +185,7 @@ export const normalizeResponse = async (
             "Please normalize full document in order to normalize country field"
           );
         default:
-          const field = getSurveyFieldById(survey, fieldId);
+          const field = getSurveyFieldById(edition, fieldId);
           await steps.normalizeField({ field, ...normalizationParams });
           fullPath = getFieldPaths(field).fullPath;
           break;
@@ -202,9 +236,13 @@ export const normalizeResponse = async (
       await steps.handleLocale(normalizationParams);
 
       // loop over all survey questions and normalize (or just copy over) values
-      for (const s of survey.outline) {
-        for (const field_ of s.questions) {
-          await steps.normalizeField({ field: field_, ...normalizationParams });
+      for (const section of edition.sections) {
+        for (const question of section.questions) {
+          await steps.normalizeField({
+            question,
+            section,
+            ...normalizationParams,
+          });
         }
       }
 

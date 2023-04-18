@@ -5,3 +5,4 @@ export * from "./findDuplicateAccounts";
 export * from "./logOutEnv";
 export * from "./setMissingUUIDs";
 export * from "./loadTokyoDevCSV";
+export * from "./addEditionIdSurveyId";

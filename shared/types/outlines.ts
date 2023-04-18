@@ -1,3 +1,5 @@
+import { TemplateOutputQuestion } from './api'
+
 export interface SurveyConfig {
     id: string
     name: string
@@ -61,9 +63,9 @@ export type Question = {
     from?: number
     to?: number
 
-    autogenerateOptionType?: boolean
-    autogenerateEnumType?: boolean
-    autogenerateFilterType?: boolean
+    allowOther?: boolean
+    allowPrenormalized?: boolean
+    allowComment?: boolean
 }
 
 export type Option = {
@@ -72,3 +74,22 @@ export type Option = {
     average?: number
     label?: string
 }
+
+export interface Country {
+    name: string
+    'alpha-3': string
+    'country-code': string
+}
+
+export type TemplateArguments = {
+    survey: Survey
+    edition: Edition
+    section: Section
+    question: Question
+}
+
+export interface QuestionTemplateOutput extends Omit<TemplateOutputQuestion, 'id'> {
+    id: string
+}
+
+export type TemplateFunction = (arg0: TemplateArguments) => QuestionTemplateOutput

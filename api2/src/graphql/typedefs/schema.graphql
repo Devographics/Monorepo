@@ -72,10 +72,22 @@ type QuestionMetadata {
     label: String
     intlId: String
     template: String
-    dbPath: String
-    dbPathComments: String
+    rawPaths: DbPaths
+    normPaths: DbPaths
+    contentType: ContentType
     options: [OptionsMetadata]
     entity: Entity
+}
+
+type DbPaths {
+    response: String
+    other: String
+    comment: String
+}
+
+enum ContentType {
+    string
+    number
 }
 
 type OptionsMetadata {
