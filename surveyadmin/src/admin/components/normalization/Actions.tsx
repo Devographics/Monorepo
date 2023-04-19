@@ -13,11 +13,11 @@ const Actions = (props) => {
   const {
     allEditions,
     editionId,
-    survey,
-    fieldId,
+    edition,
+    questionId,
     normalizeableFields,
     setEditionId,
-    setFieldId,
+    setQuestionId,
     onlyUnnormalized,
     isAllFields,
     initializeSegments,
@@ -26,67 +26,67 @@ const Actions = (props) => {
   const router = useRouter();
 
   // get list of all normalizeable ("other") field for current survey
-  const fields = [allFields, ...normalizeableFields];
+  const questions = [allFields, ...normalizeableFields];
 
   return (
     <div className="normalization-actions">
       <div className="primary">
         <Dropdown
           label={editionId}
-          menuItems={surveysWithTemplates.map((survey) => ({
-            label: survey.slug,
+          menuItems={allEditions.map((edition) => ({
+            label: edition.id,
             onClick: () => {
               // build search string to update the browser URL query string
               const search = qs.stringify({
-                surveySlug: survey.slug,
-                fieldId,
+                editionId: edition.id,
+                questionId,
               });
               const newUrl = new URL(window.location.href);
               newUrl.search = search;
               router.push(newUrl);
-              setEditionId(survey.slug);
+              setEditionId(edition.id);
             },
           }))}
         />{" "}
         &gt;{" "}
         <Dropdown
-          label={fieldId}
-          menuItems={fields.map((field) => ({
-            label: field.id,
+          label={questionId}
+          menuItems={questions.map((question) => ({
+            label: question.id,
             onClick: () => {
               // build search string to update the browser URL query string
               const search = qs.stringify({
-                surveySlug,
-                fieldId: field.id,
+                editionId,
+                questionId: question.id,
               });
               const newUrl = new URL(window.location.href);
               newUrl.search = search;
               router.push(newUrl);
-              setFieldId(field.id);
+              setQuestionId(question.id);
             },
           }))}
         />{" "}
         &gt;{" "}
         <MutationButton
-          label={`Renormalize ${survey.slug}/${
-            isAllFields ? allFields.id : fieldId
+          label={`Renormalize ${editionId}/${
+            isAllFields ? allFields.id : questionId
           }`}
           mutation={gql`
             mutation getSurveyMetadata(
-              $surveyId: String
-              $fieldId: String
+              $editionId: String
+              $questionId: String
               $onlyUnnormalized: Boolean
             ) {
               getSurveyMetadata(
-                surveyId: $surveyId
-                fieldId: $fieldId
+                editionId: $editionId
+                questionId: $questionId
                 onlyUnnormalized: $onlyUnnormalized
               )
             }
           `}
           mutationArguments={{
-            surveyId: survey.slug,
-            fieldId: isAllFields ? null : fieldId,
+            editionId,
+            questionId: isAllFields ? null : questionId,
             onlyUnnormalized,
           }}
           successCallback={(result) => {

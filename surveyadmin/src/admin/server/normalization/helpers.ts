@@ -220,7 +220,7 @@ const extractTokens = async ({
       if (
         context &&
         fieldId &&
-        (context !== edition.context || fieldId !== question.id)
+        (context !== edition.foo || fieldId !== question.id)
       ) {
         // if a context and fieldId are defined for the current rule,
         // abort unless they match the current context and fieldId
@@ -346,10 +346,16 @@ Handle source normalization separately since its value can come from
 three different fields (source field, referrer field, 'how did you hear' field)
 
 */
-export const normalizeSource = async (normResp, allRules, survey, verbose) => {
+export const normalizeSource = async (
+  normResp,
+  allRules,
+  survey,
+  edition,
+  verbose
+) => {
   const tags = [
     "sources",
-    `sources_${survey.context}`,
+    `sources_${survey.id}`,
     "surveys",
     "sites",
     "podcasts",
@@ -375,8 +381,8 @@ export const normalizeSource = async (normResp, allRules, survey, verbose) => {
         value: rawSource,
         allRules,
         tags,
-        survey,
-        field: { id: "source" },
+        edition,
+        question: { id: "source" },
         verbose,
       }));
     const normFindOut =
@@ -385,8 +391,8 @@ export const normalizeSource = async (normResp, allRules, survey, verbose) => {
         value: rawFindOut,
         allRules: allRules,
         tags,
-        survey,
-        field: { id: "how_did_user_find_out_about_the_survey" },
+        edition,
+        question: { id: "how_did_user_find_out_about_the_survey" },
         verbose,
       }));
     const normReferrer =
@@ -395,8 +401,8 @@ export const normalizeSource = async (normResp, allRules, survey, verbose) => {
         value: rawRef,
         allRules: allRules,
         tags,
-        survey,
-        field: { id: "referrer" },
+        edition,
+        question: { id: "referrer" },
         verbose,
       }));
 
@@ -570,7 +576,9 @@ export const getSelector = async (editionId, questionId, onlyUnnormalized) => {
   return selector;
 };
 
-export const getEditionQuestionsFlat = (edition: EditionMetadata) =>
+export const getEditionQuestionsFlat = (
+  edition: EditionMetadata
+): QuestionMetadata[] =>
   edition.sections
     .map((s) => s.questions.map((q) => ({ ...q, sectionId: s.id })))
     .flat();

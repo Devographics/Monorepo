@@ -15,6 +15,7 @@ export interface SurveyMetadata extends Omit<Survey, 'editions'> {
 
 export interface EditionMetadata extends Omit<Edition, 'sections'> {
     sections: SectionMetadata[]
+    surveyId?: string
 }
 
 export interface SectionMetadata extends Omit<Section, 'questions'> {
@@ -23,6 +24,7 @@ export interface SectionMetadata extends Omit<Section, 'questions'> {
 
 export interface QuestionMetadata extends Omit<Question, 'options' | 'id'> {
     id: string
+    sectionId?: string
     label?: string
     entity?: Entity
     rawPaths: DbPaths

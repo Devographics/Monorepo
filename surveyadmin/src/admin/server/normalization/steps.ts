@@ -276,6 +276,9 @@ export const normalizeField = async ({
   const templateFunction = templateFunctions[
     question.template
   ] as TemplateFunction;
+  if (!templateFunction) {
+    return;
+  }
   const questionObject = templateFunction({
     survey,
     edition,
@@ -285,128 +288,129 @@ export const normalizeField = async ({
 
   const { template, rawPaths, normPaths, matchTags = [] } = questionObject;
 
-  console.log("// questionObject");
-  console.log(questionObject);
+  const fieldName = rawPaths?.response;
 
-  const fieldName = rawPaths.response;
+  if (fieldName) {
+    // const fieldPath = [edition.id, section.id, question.id].join("__");
+    // const { fieldName, suffix, matchTags = [] } = field as ParsedQuestion;
+    // console.log(field);
+    // if (!fieldName) throw new Error(`Field without fieldName!`);
 
-  // const fieldPath = [edition.id, section.id, question.id].join("__");
-  // const { fieldName, suffix, matchTags = [] } = field as ParsedQuestion;
-  // console.log(field);
-  // if (!fieldName) throw new Error(`Field without fieldName!`);
+    const responseCommentValue = cleanupValue(response[rawPaths.comment]);
+    if (responseCommentValue !== null) {
+      set(normResp, normPaths.comment, responseCommentValue);
+    }
 
-  const responseCommentValue = cleanupValue(response[rawPaths.comment]);
-  if (responseCommentValue !== null) {
-    set(normResp, normPaths.comment, responseCommentValue);
-  }
+    const value = response[fieldName];
+    // clean value to eliminate empty spaces, "none", "n/a", etc.
+    const cleanValue = cleanupValue(value);
 
-  const value = response[rawPaths.response];
-  // clean value to eliminate empty spaces, "none", "n/a", etc.
-  const cleanValue = cleanupValue(value);
-
-  if (cleanValue !== null) {
-    if (template === "others") {
-      // A. "others" fields needing to be normalized
-      set(normResp, normPaths.raw, value);
-
-      if (log) {
-        await logToFile(
-          `${fileName}.txt`,
-          `${
-            response._id
-          }, ${fieldName}, ${cleanValue}, ${matchTags.toString()}`
-        );
-      }
-      try {
-        if (verbose) {
-          console.log(
-            `// Normalizing key "${fieldName}" with value "${value}" and tags ${matchTags.toString()}…`
-          );
-        }
-
-        const normTokens = await normalize({
-          value: cleanValue,
-          allRules,
-          tags: matchTags,
-          edition,
-          question,
-          verbose,
-        });
-        if (verbose) {
-          console.log(`  -> Normalized values: ${JSON.stringify(normTokens)}`);
-        }
-
-        // console.log(
-        //   `  -> Normalized values: ${JSON.stringify(normTokens)}`
-        // );
+    if (cleanValue !== null) {
+      if (template === "others") {
+        // A. "others" fields needing to be normalized
+        set(normResp, normPaths.raw, value);
 
         if (log) {
-          if (normTokens.length > 0) {
-            normTokens.forEach(async (token) => {
-              const { id, pattern, rules, match } = token;
+          await logToFile(
+            `${fileName}.txt`,
+            `${
+              response._id
+            }, ${fieldName}, ${cleanValue}, ${matchTags.toString()}`
+          );
+        }
+        try {
+          if (verbose) {
+            console.log(
+              `// Normalizing key "${fieldName}" with value "${value}" and tags ${matchTags.toString()}…`
+            );
+          }
+
+          const normTokens = await normalize({
+            value: cleanValue,
+            allRules,
+            tags: matchTags,
+            edition,
+            question,
+            verbose,
+          });
+          if (verbose) {
+            console.log(
+              `  -> Normalized values: ${JSON.stringify(normTokens)}`
+            );
+          }
+
+          // console.log(
+          //   `  -> Normalized values: ${JSON.stringify(normTokens)}`
+          // );
+
+          if (log) {
+            if (normTokens.length > 0) {
+              normTokens.forEach(async (token) => {
+                const { id, pattern, rules, match } = token;
+                await logRow(
+                  [
+                    response._id,
+                    rawPaths.response,
+                    value,
+                    matchTags,
+                    id,
+                    pattern,
+                    rules,
+                    match,
+                  ],
+                  fileName
+                );
+              });
+            } else {
               await logRow(
                 [
                   response._id,
-                  rawPaths.response,
+                  fieldName,
                   value,
                   matchTags,
-                  id,
-                  pattern,
-                  rules,
-                  match,
+                  "n/a",
+                  "n/a",
+                  "n/a",
+                  "n/a",
                 ],
                 fileName
               );
-            });
-          } else {
-            await logRow(
-              [
-                response._id,
-                fieldName,
-                value,
-                matchTags,
-                "n/a",
-                "n/a",
-                "n/a",
-                "n/a",
-              ],
-              fileName
-            );
+            }
           }
+
+          const normIds = normTokens.map((token) => token.id);
+          const normPatterns = normTokens.map((token) =>
+            token.pattern.toString()
+          );
+          set(normResp, normPaths.response, normIds);
+          set(normResp, normPaths.patterns, normPatterns);
+
+          // keep trace of fields that were normalized
+          normalizedFields.push({
+            fieldName,
+            value,
+            normTokens,
+          });
+        } catch (error) {
+          set(normResp, normPaths.error, error.message);
         }
+      } else if (template === "project") {
+        set(normResp, normPaths.raw, value);
+        set(normResp, normPaths.response, value);
+        set(normResp, normPaths.patterns, ["prenormalized"]);
 
-        const normIds = normTokens.map((token) => token.id);
-        const normPatterns = normTokens.map((token) =>
-          token.pattern.toString()
-        );
-        set(normResp, normPaths.response, normIds);
-        set(normResp, normPaths.patterns, normPatterns);
-
-        // keep trace of fields that were normalized
-        normalizedFields.push({
+        prenormalizedFields.push({
           fieldName,
           value,
-          normTokens,
         });
-      } catch (error) {
-        set(normResp, normPaths.error, error.message);
+      } else {
+        // C. any other field
+        set(normResp, normPaths.response, value);
+        regularFields.push({
+          fieldName,
+          value,
+        });
       }
-    } else if (template === "project") {
-      set(normResp, normPaths.raw, value);
-      set(normResp, normPaths.response, value);
-      set(normResp, normPaths.patterns, ["prenormalized"]);
-
-      prenormalizedFields.push({
-        fieldName,
-        value,
-      });
-    } else {
-      // C. any other field
-      set(normResp, normPaths.response, value);
-      regularFields.push({
-        fieldName,
-        value,
-      });
     }
   }
 };

@@ -31,7 +31,7 @@ const usePageParams = () => {
   };
 };
 
-const getNormalizableFields = (edition) => {
+const getNormalizableQuestions = (edition) => {
   const allQuestions = edition.sections.map((o) => o.questions).flat();
   const fields = allQuestions.filter((q) => q.template === "others");
   // also add source
@@ -177,9 +177,9 @@ const Normalization = ({ allEditions, edition, questionId: questionId_ }) => {
   };
 
   // get list of all normalizeable ("other") field for current survey
-  const normalizeableFields = getNormalizableFields(edition);
+  const normalizeableQuestions = getNormalizableQuestions(edition);
   // set field
-  const field = normalizeableFields.find((f) => f.id === questionId);
+  const question = normalizeableQuestions.find((f) => f.id === questionId);
 
   const isAllFields = questionId === allFields.id;
   const onlyUnnormalized = normalizationMode === "only_normalized";
@@ -196,8 +196,8 @@ const Normalization = ({ allEditions, edition, questionId: questionId_ }) => {
   const props = {
     allEditions,
     edition,
-    field,
-    normalizeableFields,
+    question,
+    normalizeableFields: normalizeableQuestions,
     unnormalizedFieldsLoading,
     unnormalizedFieldsData,
     onlyUnnormalized,
@@ -210,7 +210,7 @@ const Normalization = ({ allEditions, edition, questionId: questionId_ }) => {
     <div className="admin-normalization admin-content">
       <Actions {...props} />
       {!!responsesCount && <Progress {...props} />}
-      {field && <Fields {...props} />}
+      {question && <Fields {...props} />}
     </div>
   );
 };

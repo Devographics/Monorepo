@@ -7,6 +7,7 @@ import { serverConfig } from "~/config/server";
 import fs from "fs";
 import csvParser from "csv-parser";
 import type {
+  Survey,
   Edition,
   EditionMetadata,
   QuestionMetadata,
@@ -14,6 +15,7 @@ import type {
   SectionMetadata,
   Question,
   SurveyMetadata,
+  TemplateFunction,
 } from "@devographics/types";
 import yaml from "js-yaml";
 import { readdir, readFile } from "fs/promises";
@@ -21,6 +23,7 @@ import { logToFile } from "@devographics/core-models/server";
 import { normalizeResponse } from "~/admin/server/normalization/normalize";
 import { getOrFetchEntities } from "~/modules/entities/server";
 import { getEditionQuestionsFlat } from "~/admin/server/normalization/helpers";
+import * as templateFunctions from "@devographics/templates";
 
 const editions = {
   // td2019: "International Developers in Japan Survey 2019.csv",
@@ -202,6 +205,7 @@ export const loadTokyoDevCSV = async () => {
   });
 
   const entities = await getOrFetchEntities();
+  const survey = allSurveysMetadata.find((s) => s.id === "tokyodev") as Survey;
   const allEditions = await loadAllEditions(allSurveysMetadata, "tokyodev");
 
   // initRedis(serverConfig().redisUrl);
@@ -253,19 +257,35 @@ export const loadTokyoDevCSV = async () => {
             //   sectionId: questionMetadata.sectionId,
             //   questionId: question.id,
             // };
-            const path = questionMetadata.normPaths.response;
+            const templateFunction = templateFunctions[
+              questionMetadata.template
+            ] as TemplateFunction;
+            if (!templateFunction) {
+              return;
+            }
+
+            const section = { id: questionMetadata.sectionId } as Section;
+
+            const questionObject = templateFunction({
+              survey,
+              edition: edition.metadata,
+              section,
+              question,
+            });
+
+            const path = questionObject.normPaths.response;
 
             // if question has options, check that the value belongs to
             // the list of acceptable options
-            if (question.options) {
+            if (questionObject.options) {
               const { optionsValues, otherValue } = getOptionValues(
                 edition,
-                question,
+                questionObject,
                 questionValue
               );
 
               if (optionsValues.length > 0) {
-                if (["single", "dropdown"].includes(question.template)) {
+                if (["single", "dropdown"].includes(questionObject.template)) {
                   // this field accepts a single answer
                   document[path] = convertToType(optionsValues[0]);
                 } else {

@@ -40,7 +40,11 @@ export const normalizeIds = async (
   });
   for (const document of responses) {
     const { _id } = document;
-    const normalization = await normalizeResponse({ document, verbose: true });
+    const normalization = await normalizeResponse({
+      document,
+      verbose: true,
+      isSimulation: true,
+    });
     if (!normalization) {
       throw new Error(
         `Could not normalize response ${JSON.stringify(document)}`
@@ -48,6 +52,8 @@ export const normalizeIds = async (
     }
     results.push(normalization);
   }
+  // console.log("// normalizeIds");
+  // console.log(JSON.stringify(results, null, 2));
   return results;
 };
 
@@ -262,7 +268,7 @@ export const getSurveyMetadata = async (
 };
 
 export const getSurveyMetadataTypeDefs =
-  "getSurveyMetadata(surveyId: String, fieldId: String, onlyUnnormalized: Boolean): JSON";
+  "getSurveyMetadata(editionId: String, questionId: String, onlyUnnormalized: Boolean): JSON";
 
 /*
 
@@ -292,7 +298,7 @@ export const unnormalizedFields = async (root, { editionId, questionId }) => {
 };
 
 export const unnormalizedFieldsTypeDefs =
-  "unnormalizedFields(surveyId: String, fieldId: String): [JSON]";
+  "unnormalizedFields(editionId: String, questionId: String): [JSON]";
 
 /*
 
@@ -304,4 +310,4 @@ TODO
 export const resetNormalization = async (root, { surveyId }) => {};
 
 export const resetNormalizationTypeDefs =
-  "resetNormalization(surveyId: String): [JSON]";
+  "resetNormalization(editionId: String): [JSON]";
