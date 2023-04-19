@@ -1,10 +1,13 @@
-import { TemplateFunction } from '@devographics/types'
+import { QuestionTemplateOutput, TemplateFunction } from '@devographics/types'
+import { getPaths, checkHasId } from '../helpers'
 
-export const opinion: TemplateFunction = ({ question, section }) => ({
-    id: 'placeholder',
-    ...question,
-    dbSuffix: null,
-    dbPath: `${section.id}.${question.id}`,
-    optionsAreNumeric: true,
-    options: [...Array(5)].map((x, i) => ({ id: String(i) }))
-})
+export const opinion: TemplateFunction = options => {
+    const question = checkHasId(options)
+    const output: QuestionTemplateOutput = {
+        optionsAreNumeric: true,
+        options: [...Array(5)].map((x, i) => ({ id: String(i) })),
+        ...getPaths(options),
+        ...question
+    }
+    return output
+}

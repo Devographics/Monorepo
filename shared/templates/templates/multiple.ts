@@ -1,8 +1,12 @@
+import { DbSuffixes, QuestionTemplateOutput } from '@devographics/types'
 import { TemplateFunction } from '@devographics/types'
+import { getPaths, checkHasId } from '../helpers'
 
-export const multiple: TemplateFunction = ({ question, section }) => ({
-    id: 'placeholder',
-    ...question,
-    dbSuffix: 'choices',
-    dbPath: `${section.slug || section.id}.${question.id}.choices`
-})
+export const multiple: TemplateFunction = options => {
+    const question = checkHasId(options)
+    const output: QuestionTemplateOutput = {
+        ...getPaths(options, DbSuffixes.CHOICES),
+        ...question
+    }
+    return output
+}

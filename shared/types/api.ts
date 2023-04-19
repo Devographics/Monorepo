@@ -1,18 +1,5 @@
 import { Survey, Edition, Section, Question } from './outlines'
 
-export interface ParsedSurvey extends Omit<Survey, 'editions'> {
-    editions: ParsedEdition[]
-}
-
-export interface ParsedEdition extends Omit<Edition, 'sections' | 'apiSections'> {
-    sections: ParsedSection[]
-    apiSections: ParsedSection[]
-}
-
-export interface ParsedSection extends Omit<Section, 'questions'> {
-    questions: ParsedQuestion[]
-}
-
 export enum DbSuffixes {
     CHOICES = 'choices',
     EXPERIENCE = 'experience',
@@ -22,45 +9,13 @@ export enum DbSuffixes {
     COMMENT = 'comment'
 }
 
-export type DbPaths = {
-    response: string
-    other: string
-    comment: string
-}
-
-export interface TemplateOutputQuestion extends Omit<Question, 'id'> {
-    id: string
-
-    // dbSuffix?: DbSuffixes
-    // rawPath?: string
-    // dbPath?: string
-    // dbPathComments?: string
-    includeInApi?: boolean
-    // isNormalized?: boolean
-
-    editions?: string[]
-
-    typeDef?: string
-
-    isGlobal?: boolean
-
-    autogenerateOptionType?: boolean
-    autogenerateEnumType?: boolean
-    autogenerateFilterType?: boolean
-
-    fieldTypeName?: string
-    filterTypeName?: string
-    optionTypeName?: string
-    enumTypeName?: string
-}
-
-export interface ParsedQuestion extends Omit<TemplateOutputQuestion, 'fieldTypeName'> {
-    sectionIds: string[]
-    sectionIndex: number
-    surveyId: string
-    fieldTypeName: string
-    contentType: 'string' | 'number'
-}
+// export interface QuestionParsed extends Omit<TemplateOutputQuestion, 'fieldTypeName'> {
+//     sectionIds: string[]
+//     sectionIndex: number
+//     surveyId: string
+//     fieldTypeName: string
+//     contentType: 'string' | 'number'
+// }
 
 export type ResponseArguments = {
     filters: Filters

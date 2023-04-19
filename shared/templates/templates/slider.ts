@@ -1,5 +1,6 @@
-import { Question } from '@devographics/types'
+import { DbSuffixes, Question, QuestionTemplateOutput } from '@devographics/types'
 import { TemplateFunction } from '@devographics/types'
+import { getPaths, checkHasId } from '../helpers'
 
 const getSliderOptions = (question: Question) => {
     const lowerBound = question.from ?? 0
@@ -9,12 +10,16 @@ const getSliderOptions = (question: Question) => {
     return options
 }
 
-export const slider: TemplateFunction = ({ question, section }) => ({
-    id: 'placeholder',
-    ...question,
-    defaultSort: 'options',
-    dbSuffix: 'choices',
-    dbPath: `${section.id}.${question.id}.choices`,
-    optionsAreNumeric: true,
-    options: getSliderOptions(question)
-})
+export const slider: TemplateFunction = options => {
+    const question = checkHasId(options)
+
+    const output: QuestionTemplateOutput = {
+        defaultSort: 'options',
+        optionsAreNumeric: true,
+        options: getSliderOptions(question),
+        ...getPaths(options, DbSuffixes.CHOICES),
+        ...question
+    }
+
+    return output
+}

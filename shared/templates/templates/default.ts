@@ -1,7 +1,11 @@
-import { TemplateFunction } from '@devographics/types'
+import { QuestionTemplateOutput, TemplateFunction } from '@devographics/types'
+import { getPaths, checkHasId } from '../helpers'
 
-export const defaultTemplateFunction: TemplateFunction = ({ question, section }) => ({
-    id: 'placeholder',
-    ...question,
-    dbPath: `${section.id}.${question.id}`
-})
+export const defaultTemplateFunction: TemplateFunction = options => {
+    const question = checkHasId(options)
+    const output: QuestionTemplateOutput = {
+        ...getPaths(options),
+        ...question
+    }
+    return output
+}

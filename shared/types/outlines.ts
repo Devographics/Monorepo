@@ -1,4 +1,4 @@
-import { TemplateOutputQuestion } from './api'
+import { DbPaths, TemplateOutputQuestion } from './api'
 
 export interface SurveyConfig {
     id: string
@@ -66,6 +66,8 @@ export type Question = {
     allowOther?: boolean
     allowPrenormalized?: boolean
     allowComment?: boolean
+
+    matchTags?: string[]
 }
 
 export type Option = {
@@ -88,8 +90,30 @@ export type TemplateArguments = {
     question: Question
 }
 
-export interface QuestionTemplateOutput extends Omit<TemplateOutputQuestion, 'id'> {
+export enum DbSuffixes {
+    CHOICES = 'choices',
+    EXPERIENCE = 'experience',
+    OTHERS = 'others',
+    NORMALIZED = 'normalized',
+    PRENORMALIZED = 'prenormalized',
+    COMMENT = 'comment'
+}
+
+export type DbPaths = {
+    response: string
+    other: string
+    comment: string
+}
+
+// once a question has gone through a template it should always have an id
+// if we know an ID exists we can use this type to cast the object
+export interface QuestionWithId extends Omit<Question, 'id'> {
     id: string
+}
+
+export interface QuestionTemplateOutput extends QuestionWithId {
+    rawPaths?: DbPaths
+    normPaths?: DbPaths
 }
 
 export type TemplateFunction = (arg0: TemplateArguments) => QuestionTemplateOutput

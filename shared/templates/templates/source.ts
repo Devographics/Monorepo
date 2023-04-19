@@ -1,7 +1,14 @@
-import { TemplateFunction } from '@devographics/types'
-// import sources from '../../data/sources.yml'
+import { Option, QuestionTemplateOutput, TemplateFunction } from '@devographics/types'
+import { DbSuffixes } from '@devographics/types'
 
-const sources = {
+type Sources = {
+    [key in string]: SourceEdition
+}
+type SourceEdition = {
+    [key in string]: Option[]
+}
+
+const sources: Sources = {
     state_of_graphql: {
         graphql2022: [
             {
@@ -429,10 +436,13 @@ const sources = {
 }
 
 export const source: TemplateFunction = ({ survey, edition, question, section }) => {
-    return {
-        ...question,
+    const output: QuestionTemplateOutput = {
         id: 'source',
-        dbPath: 'user_info.source.normalized',
-        options: sources[survey.id][edition.id]
+        options: sources[survey.id][edition.id],
+        normPaths: {
+            response: `user_info.source.${DbSuffixes.NORMALIZED}`
+        },
+        ...question
     }
+    return output
 }

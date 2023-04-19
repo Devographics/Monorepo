@@ -1,4 +1,4 @@
-import { TemplateFunction } from '@devographics/types'
+import { TemplateFunction, QuestionTemplateOutput } from '@devographics/types'
 import range from 'lodash/range.js'
 
 const groupBy = 10
@@ -13,10 +13,15 @@ export const getOptions = () =>
         average: n * groupBy + groupBy / 2
     }))
 
-export const knowledge_score: TemplateFunction = ({ question, section }) => ({
-    ...question,
-    id: 'knowledge_score',
-    dbSuffix: null,
-    dbPath: 'user_info.knowledge_score',
-    options: getOptions()
-})
+export const knowledge_score: TemplateFunction = options => {
+    const { question, section } = options
+    const output: QuestionTemplateOutput = {
+        id: 'knowledge_score',
+        options: getOptions(),
+        normPaths: {
+            response: 'user_info.knowledge_score'
+        },
+        ...question
+    }
+    return output
+}

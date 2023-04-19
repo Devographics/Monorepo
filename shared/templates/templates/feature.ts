@@ -1,16 +1,21 @@
-import { TemplateFunction } from '@devographics/types'
+import { QuestionTemplateOutput, TemplateFunction } from '@devographics/types'
 import { FEATURES_OPTIONS } from '@devographics/constants'
+import { getPaths, checkHasId } from '../helpers'
+import { DbSuffixes } from '@devographics/types'
 
-export const feature: TemplateFunction = ({ survey, question }) => {
-    return {
-        ...question,
-        id: question.id || 'placeholder',
-        dbSuffix: 'experience',
-        dbPath: `features.${question.id}.experience`,
-        dbPathComments: `features.${question.id}.comment`,
+export const feature: TemplateFunction = options => {
+    const question = checkHasId(options)
+    const output: QuestionTemplateOutput = {
+        allowComment: true,
         options: FEATURES_OPTIONS.map(id => ({
             id
         })),
-        defaultSort: 'options'
+        defaultSort: 'options',
+        ...question
     }
+    const output2: QuestionTemplateOutput = {
+        ...output,
+        ...getPaths({ ...options, question: output }, DbSuffixes.EXPERIENCE)
+    }
+    return output2
 }

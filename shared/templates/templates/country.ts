@@ -1,7 +1,6 @@
-import { TemplateFunction, Country } from '@devographics/types'
-// import countries from '../../data/countries2.yml'
+import { TemplateFunction, QuestionTemplateOutput, Country } from '@devographics/types'
 
-const countries = [
+const countries: Country[] = [
     {
         name: 'Afghanistan',
         'alpha-3': 'AFG',
@@ -1249,12 +1248,15 @@ const countries = [
     }
 ]
 
-const countriesTyped = countries as Country[]
-
-export const country: TemplateFunction = ({ question, section }) => ({
-    id: 'placeholder',
-    ...question,
-    dbSuffix: null,
-    dbPath: `${section.id}.${question.id}`,
-    options: countriesTyped.map(country => ({ id: country['alpha-3'], label: country.name }))
-})
+export const country: TemplateFunction = options => {
+    const { question } = options
+    const output: QuestionTemplateOutput = {
+        id: 'country',
+        options: countries.map(country => ({ id: country['alpha-3'], label: country.name })),
+        normPaths: {
+            response: 'user_info.country_alpha3'
+        },
+        ...question
+    }
+    return output
+}
