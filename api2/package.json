@@ -3,6 +3,7 @@
     "version": "1.0.0",
     "license": "MIT",
     "dependencies": {
+        "@devographics/templates": "workspace:^1.0.0",
         "@devographics/constants": "workspace:^1.0.0",
         "@devographics/core-models": "workspace:*",
         "@octokit/core": "^3.5.1",

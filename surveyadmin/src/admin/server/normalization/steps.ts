@@ -247,11 +247,6 @@ export const discardEmptyResponses = async ({
   }
 };
 
-const privateFieldPaths = [
-  "user_info.github_username",
-  "user_info.twitter_username",
-];
-
 interface NormalizeFieldOptions extends NormalizationParams {
   question: QuestionMetadata;
   section: SectionMetadata;
@@ -278,162 +273,157 @@ export const normalizeField = async ({
     verbose = false,
   } = options;
 
-  const templateFunction = templateFunctions[
-    question.template
-  ] as TemplateFunction;
-  const questionObject = templateFunction({
-    survey,
-    edition,
-    section,
-    question,
-  });
+  // const templateFunction = templateFunctions[
+  //   question.template
+  // ] as TemplateFunction;
+  // const questionObject = templateFunction({
+  //   survey,
+  //   edition,
+  //   section,
+  //   question,
+  // });
 
   console.log("// questionObject");
-  console.log(questionObject);
+  console.log(question);
 
-  const fieldPath = [edition.id, section.id, question.id].join("__");
-  const { fieldName, suffix, matchTags = [] } = field as ParsedQuestion;
-  console.log(field);
-  if (!fieldName) throw new Error(`Field without fieldName!`);
-  const { initialSegment, sectionSegment, fieldSegment } =
-    getFieldSegments(field);
-  const {
-    commentPath,
-    fullPath,
-    rawFieldPath,
-    normalizedFieldPath,
-    patternsFieldPath,
-    errorPath,
-  } = getFieldPaths(field);
+  // const fieldPath = [edition.id, section.id, question.id].join("__");
+  // const { fieldName, suffix, matchTags = [] } = field as ParsedQuestion;
+  // console.log(field);
+  // if (!fieldName) throw new Error(`Field without fieldName!`);
+  // const { initialSegment, sectionSegment, fieldSegment } =
+  //   getFieldSegments(field);
+  // const {
+  //   commentPath,
+  //   fullPath,
+  //   rawFieldPath,
+  //   normalizedFieldPath,
+  //   patternsFieldPath,
+  //   errorPath,
+  // } = getFieldPaths(field);
 
   // handle freeform comments related to the field
-  const responseCommentPath = [
-    initialSegment,
-    sectionSegment,
-    fieldSegment,
-    "comment",
-  ].join("__");
-  const responseCommentValue = cleanupValue(response[responseCommentPath]);
+  // const responseCommentPath = [
+  //   initialSegment,
+  //   sectionSegment,
+  //   fieldSegment,
+  //   "comment",
+  // ].join("__");
+  const responseCommentValue = cleanupValue(
+    response[question.rawPaths.comment]
+  );
   if (responseCommentValue !== null) {
-    set(normResp, commentPath, responseCommentValue);
+    set(normResp, question.normPaths.comment, responseCommentValue);
   }
 
-  const value = response[fieldName];
+  const value = response[question.rawPaths.response];
   // clean value to eliminate empty spaces, "none", "n/a", etc.
   const cleanValue = cleanupValue(value);
 
   if (cleanValue !== null) {
-    if (privateFieldPaths.includes(fullPath)) {
-      // handle private info fields separately
-      set(privateFields, fullPath, value);
-    } else {
-      if (suffix === "others") {
-        // A. "others" fields needing to be normalized
-        set(normResp, rawFieldPath, value);
+    if (suffix === "others") {
+      // A. "others" fields needing to be normalized
+      set(normResp, rawFieldPath, value);
 
-        if (log) {
-          await logToFile(
-            `${fileName}.txt`,
-            `${
-              response._id
-            }, ${fieldName}, ${cleanValue}, ${matchTags.toString()}`
+      if (log) {
+        await logToFile(
+          `${fileName}.txt`,
+          `${
+            response._id
+          }, ${fieldName}, ${cleanValue}, ${matchTags.toString()}`
+        );
+      }
+      try {
+        if (verbose) {
+          console.log(
+            `// Normalizing key "${fieldName}" with value "${value}" and tags ${matchTags.toString()}…`
           );
         }
-        try {
-          if (verbose) {
-            console.log(
-              `// Normalizing key "${fieldName}" with value "${value}" and tags ${matchTags.toString()}…`
-            );
-          }
 
-          const normTokens = await normalize({
-            value: cleanValue,
-            allRules,
-            tags: matchTags,
-            survey,
-            field,
-            verbose,
-          });
-          if (verbose) {
-            console.log(
-              `  -> Normalized values: ${JSON.stringify(normTokens)}`
-            );
-          }
+        const normTokens = await normalize({
+          value: cleanValue,
+          allRules,
+          tags: matchTags,
+          survey,
+          field,
+          verbose,
+        });
+        if (verbose) {
+          console.log(`  -> Normalized values: ${JSON.stringify(normTokens)}`);
+        }
 
-          // console.log(
-          //   `  -> Normalized values: ${JSON.stringify(normTokens)}`
-          // );
+        // console.log(
+        //   `  -> Normalized values: ${JSON.stringify(normTokens)}`
+        // );
 
-          if (log) {
-            if (normTokens.length > 0) {
-              normTokens.forEach(async (token) => {
-                const { id, pattern, rules, match } = token;
-                await logRow(
-                  [
-                    response._id,
-                    fieldName,
-                    value,
-                    matchTags,
-                    id,
-                    pattern,
-                    rules,
-                    match,
-                  ],
-                  fileName
-                );
-              });
-            } else {
+        if (log) {
+          if (normTokens.length > 0) {
+            normTokens.forEach(async (token) => {
+              const { id, pattern, rules, match } = token;
               await logRow(
                 [
                   response._id,
                   fieldName,
                   value,
                   matchTags,
-                  "n/a",
-                  "n/a",
-                  "n/a",
-                  "n/a",
+                  id,
+                  pattern,
+                  rules,
+                  match,
                 ],
                 fileName
               );
-            }
+            });
+          } else {
+            await logRow(
+              [
+                response._id,
+                fieldName,
+                value,
+                matchTags,
+                "n/a",
+                "n/a",
+                "n/a",
+                "n/a",
+              ],
+              fileName
+            );
           }
-
-          const normIds = normTokens.map((token) => token.id);
-          const normPatterns = normTokens.map((token) =>
-            token.pattern.toString()
-          );
-          set(normResp, normalizedFieldPath, normIds);
-          set(normResp, patternsFieldPath, normPatterns);
-
-          // keep trace of fields that were normalized
-          normalizedFields.push({
-            fieldName,
-            value,
-            normTokens,
-          });
-        } catch (error) {
-          set(normResp, errorPath, error.message);
         }
-      } else if (suffix === "prenormalized") {
-        // B. these fields are "prenormalized" through autocomplete inputs
-        const newPath = fullPath.replace(".prenormalized", ".others");
-        set(normResp, `${newPath}.raw`, value);
-        set(normResp, `${newPath}.normalized`, value);
-        set(normResp, `${newPath}.patterns`, ["prenormalized"]);
 
-        prenormalizedFields.push({
+        const normIds = normTokens.map((token) => token.id);
+        const normPatterns = normTokens.map((token) =>
+          token.pattern.toString()
+        );
+        set(normResp, normalizedFieldPath, normIds);
+        set(normResp, patternsFieldPath, normPatterns);
+
+        // keep trace of fields that were normalized
+        normalizedFields.push({
           fieldName,
           value,
+          normTokens,
         });
-      } else {
-        // C. any other field
-        set(normResp, fullPath, value);
-        regularFields.push({
-          fieldName,
-          value,
-        });
+      } catch (error) {
+        set(normResp, errorPath, error.message);
       }
+    } else if (suffix === "prenormalized") {
+      // B. these fields are "prenormalized" through autocomplete inputs
+      const newPath = fullPath.replace(".prenormalized", ".others");
+      set(normResp, `${newPath}.raw`, value);
+      set(normResp, `${newPath}.normalized`, value);
+      set(normResp, `${newPath}.patterns`, ["prenormalized"]);
+
+      prenormalizedFields.push({
+        fieldName,
+        value,
+      });
+    } else {
+      // C. any other field
+      set(normResp, fullPath, value);
+      regularFields.push({
+        fieldName,
+        value,
+      });
     }
   }
 };

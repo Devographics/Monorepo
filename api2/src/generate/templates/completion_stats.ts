@@ -9,7 +9,7 @@ export const completion_stats: ApiTemplateFunction = options => {
         options: getOptions(),
         transformFunction,
         normPaths: {
-            response: 'user_info.completion_stats'
+            response: 'user_info.completion'
         },
         ...question
     }

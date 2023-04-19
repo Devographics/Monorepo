@@ -102,9 +102,7 @@ export const applyQuestionTemplate = (options: {
             output = { ...output, template }
         }
     } else {
-        throw new Error(
-            `Question "${edition.id}/${question.id}" does not have a template specified.`
-        )
+        console.warn(`Question "${edition.id}/${question.id}" does not have a template specified.`)
     }
     return output
 }

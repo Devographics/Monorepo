@@ -187,6 +187,7 @@ importers:
     specifiers:
       '@devographics/constants': workspace:^1.0.0
       '@devographics/core-models': workspace:*
+      '@devographics/templates': workspace:^1.0.0
       '@devographics/types': workspace:*
       '@luckycatfactory/esbuild-graphql-loader': ^3.7.0
       '@octokit/core': ^3.5.1
@@ -231,6 +232,7 @@ importers:
     dependencies:
       '@devographics/constants': link:../shared/constants
       '@devographics/core-models': link:../shared/core-models
+      '@devographics/templates': link:../shared/templates
       '@octokit/core': 3.6.0
       '@sentry/node': 7.19.0
       '@sentry/tracing': 7.18.0
@@ -10565,7 +10567,6 @@ packages:
       '@babel/runtime': 7.20.7
       '@types/testing-library__react-hooks': 3.4.1
       react: 18.2.0
-    dev: false
     optional: true
 
   /@testing-library/react/10.4.9_biqbaboplfbrettd7655fr4n2y:

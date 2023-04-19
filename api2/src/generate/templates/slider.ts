@@ -19,7 +19,6 @@ export const slider: ApiTemplateFunction = options => {
         // dbPath: `${section.id}.${question.id}.choices`,
         optionsAreNumeric: true,
         options: getSliderOptions(question),
-        contentType: Number,
         ...getPaths(options, DbSuffixes.CHOICES),
         ...question
     }

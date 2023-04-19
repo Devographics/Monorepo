@@ -38,8 +38,6 @@ export interface TemplateOutputQuestion extends Omit<Question, 'id'> {
     includeInApi?: boolean
     // isNormalized?: boolean
 
-    contentType: 'string' | 'number'
-
     editions?: string[]
 
     typeDef?: string
@@ -61,6 +59,7 @@ export interface ParsedQuestion extends Omit<TemplateOutputQuestion, 'fieldTypeN
     sectionIndex: number
     surveyId: string
     fieldTypeName: string
+    contentType: 'string' | 'number'
 }
 
 export type ResponseArguments = {

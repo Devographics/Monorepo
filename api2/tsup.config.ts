@@ -19,6 +19,11 @@ export default defineConfig([
         entry: ['./src/server.ts'],
         ...commonConfig,
         format: ['esm'],
-        outDir: 'dist'
+        outDir: 'dist',
+        noExternal: [
+            '@devographics/constants',
+            '@devographics/templates',
+            '@devographics/core-models'
+        ]
     }
 ])

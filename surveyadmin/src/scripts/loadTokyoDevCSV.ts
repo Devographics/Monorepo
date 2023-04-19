@@ -288,13 +288,13 @@ export const loadTokyoDevCSV = async () => {
       console.log("// document");
       console.log(document);
 
-      // const normalizedDocument = await normalizeResponse({
-      //   document,
-      //   entities,
-      //   surveys: allSurveysMetadata,
-      // });
-      // console.log("// normalizedDocument");
-      // console.log(normalizedDocument);
+      const normalizedDocument = await normalizeResponse({
+        document,
+        entities,
+        surveys: allSurveysMetadata,
+      });
+      console.log("// normalizedDocument");
+      console.log(normalizedDocument);
     }
   }
 };

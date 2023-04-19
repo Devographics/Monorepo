@@ -1,14 +1,5 @@
 # Demographics
 
-- id: country
-  dbPath: user_info.country_alpha3
-
-- id: locale
-  dbPath: user_info.locale
-
-- id: completion_stats
-  dbPath: user_info.completion
-
 - id: age
   optionsTypeName: AgeRange
   defaultSort: options
