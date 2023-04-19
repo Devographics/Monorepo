@@ -2,7 +2,7 @@ import {
   EntityRule,
   generateEntityRules,
   getFieldPaths,
-  getSurveyFieldById,
+  getEditionFieldById,
 } from "./helpers";
 import { getOrFetchEntities } from "~/modules/entities/server";
 import { getSurveyEditionById } from "~/modules/surveys/helpers";
@@ -12,7 +12,7 @@ import {
 } from "~/admin/models/normalized_responses/model.server";
 import * as steps from "./steps";
 import get from "lodash/get.js";
-import { EditionMetadata, SurveyMetadata } from "@devographics/types";
+import type { EditionMetadata, SurveyMetadata } from "@devographics/types";
 import { fetchSurveysListGraphQL } from "@devographics/core-models/server";
 
 interface RegularField {
@@ -185,7 +185,7 @@ export const normalizeResponse = async (
             "Please normalize full document in order to normalize country field"
           );
         default:
-          const field = getSurveyFieldById(edition, fieldId);
+          const field = getEditionFieldById(edition, fieldId);
           await steps.normalizeField({ field, ...normalizationParams });
           fullPath = getFieldPaths(field).fullPath;
           break;

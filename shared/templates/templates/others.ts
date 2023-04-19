@@ -1,22 +1,26 @@
-import { DbSuffixes, QuestionTemplateOutput } from '@devographics/types'
-import { TemplateFunction } from '@devographics/types'
+import { DbSuffixes, QuestionTemplateOutput, DbPaths, TemplateFunction } from '@devographics/types'
 import { checkHasId } from '../helpers'
 
 export const others: TemplateFunction = options => {
     const { edition, section } = options
     const question = checkHasId(options)
+    const sectionSegment = section.slug || section.id
     const questionSegment = question.id?.replace('_others', '')
+
+    const basePath = `${sectionSegment}.${questionSegment}.${DbSuffixes.OTHERS}`
+
+    const normPaths: DbPaths = {
+        raw: `${basePath}.${DbSuffixes.RAW}`,
+        patterns: `${basePath}.${DbSuffixes.PATTERNS}`,
+        error: `${basePath}.${DbSuffixes.ERROR}`,
+        response: `${basePath}.${DbSuffixes.NORMALIZED}`
+    }
+
     const output: QuestionTemplateOutput = {
         rawPaths: {
-            response: `${edition.id}__${section.slug || section.id}__${questionSegment}__${
-                DbSuffixes.OTHERS
-            }`
+            response: `${edition.id}__${sectionSegment}__${questionSegment}__${DbSuffixes.OTHERS}`
         },
-        normPaths: {
-            response: `${section.slug || section.id}.${questionSegment}.${DbSuffixes.OTHERS}.${
-                DbSuffixes.NORMALIZED
-            }`
-        },
+        normPaths,
         ...question
     }
     return output

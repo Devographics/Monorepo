@@ -1,14 +1,5 @@
 import { Survey, Edition, Section, Question } from './outlines'
 
-export enum DbSuffixes {
-    CHOICES = 'choices',
-    EXPERIENCE = 'experience',
-    OTHERS = 'others',
-    NORMALIZED = 'normalized',
-    PRENORMALIZED = 'prenormalized',
-    COMMENT = 'comment'
-}
-
 // export interface QuestionParsed extends Omit<TemplateOutputQuestion, 'fieldTypeName'> {
 //     sectionIds: string[]
 //     sectionIndex: number

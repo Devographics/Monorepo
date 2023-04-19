@@ -2,12 +2,11 @@ import type {
   SurveyEdition,
   ResponseDocument,
 } from "@devographics/core-models";
-import { SurveyMetadata } from "@devographics/types";
+import type { SurveyMetadata } from "@devographics/types";
+import { loadOrGetSurveys } from "./load";
 
-export const getSurveyEditionById = (
-  allSurveys: SurveyMetadata[],
-  editionId: string
-) => {
+export const getSurveyEditionById = async (editionId: string) => {
+  const allSurveys = await loadOrGetSurveys();
   for (const survey of allSurveys) {
     for (const edition of survey.editions) {
       if (edition.id === editionId) {

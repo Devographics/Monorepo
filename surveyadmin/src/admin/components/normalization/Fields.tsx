@@ -3,8 +3,8 @@ import get from "lodash/get.js";
 import { Loading } from "~/core/components/ui/Loading";
 
 const Fields = ({
-  survey,
-  field,
+  edition,
+  question,
   unnormalizedFieldsLoading,
   unnormalizedFieldsData,
 }) => {
@@ -30,7 +30,7 @@ const Fields = ({
   return (
     <div>
       <h5>
-        {results.length} Missing Normalizations for {survey.slug}/{field.id}
+        {results.length} Missing Normalizations for {edition.id}/{question.id}
       </h5>
       <p>
         <input

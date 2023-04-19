@@ -1,15 +1,4 @@
-import { ApiTemplateFunction } from '../../types/surveys'
-import sources from '../../data/sources.yml'
-import { DbSuffixes } from '@devographics/types'
+import { source as templateFunction } from '@devographics/templates'
+import { ApiTemplateFunction } from '../../types'
 
-export const source: ApiTemplateFunction = ({ survey, edition, question, section }) => {
-    return {
-        id: 'source',
-        // dbPath: 'user_info.source.normalized',
-        options: sources[survey.id][edition.id],
-        normPaths: {
-            response: `user_info.source.${DbSuffixes.NORMALIZED}`
-        },
-        ...question
-    }
-}
+export const source = templateFunction as ApiTemplateFunction

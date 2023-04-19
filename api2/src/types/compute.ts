@@ -1,4 +1,4 @@
-import { ParsedQuestionExt } from './surveys'
+import { QuestionApiObject } from './surveys'
 import { Filters } from './filters'
 
 export interface GenericComputeArguments {
@@ -24,7 +24,7 @@ export interface GenericComputeParameters {
 }
 
 export interface ComputeAxisParameters {
-    question: ParsedQuestionExt
+    question: QuestionApiObject
     sort: SortProperty
     order: SortOrderNumeric
     cutoff: number

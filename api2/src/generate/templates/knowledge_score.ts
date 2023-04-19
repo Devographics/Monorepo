@@ -1,4 +1,9 @@
-import { ApiTemplateFunction, TransformFunction } from '../../types/surveys'
+import { knowledge_score as templateFunction } from '@devographics/templates'
+import {
+    ApiTemplateFunction,
+    QuestionApiTemplateOutput,
+    TransformFunction
+} from '../../types/surveys'
 import range from 'lodash/range.js'
 import sumBy from 'lodash/sumBy.js'
 
@@ -39,22 +44,11 @@ export const transformFunction: TransformFunction = (
     return data
 }
 
-export const getOptions = () =>
-    range(0, 100 / groupBy).map(n => ({
-        id: getId(n),
-        average: n * groupBy + groupBy / 2
-    }))
-
 export const knowledge_score: ApiTemplateFunction = options => {
     const { question, section } = options
-    return {
-        id: 'knowledge_score',
-        // dbPath: 'user_info.knowledge_score',
-        options: getOptions(),
-        transformFunction,
-        normPaths: {
-            response: 'user_info.knowledge_score'
-        },
-        ...question
+    const output: QuestionApiTemplateOutput = {
+        ...templateFunction(options),
+        transformFunction
     }
+    return output
 }

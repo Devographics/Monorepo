@@ -25,4 +25,6 @@ export * from './knowledge_score'
 export * from './source'
 export * from './country'
 
+export { country } from '@devographics/templates'
+
 export * from './data_explorer'

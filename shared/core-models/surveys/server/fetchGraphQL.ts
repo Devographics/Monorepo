@@ -10,6 +10,7 @@ query SurveysMetadataQuery {
         domain
         editions {
           id
+          surveyId
           year
           status
           sections {
@@ -23,16 +24,6 @@ query SurveysMetadataQuery {
                 average
                 id
                 label
-              }
-              rawPaths {
-                response
-                other
-                comment
-              }
-              normPaths {
-                response
-                other
-                comment
               }
             }
           }

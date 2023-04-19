@@ -78,15 +78,15 @@ const SegmentDone = ({ startFrom, responsesCount, data }) => {
 
 const normalizeSurveyMutation = gql`
   mutation normalizeSurvey(
-    $surveyId: String
-    $fieldId: String
+    $editionId: String
+    $questionId: String
     $startFrom: Int
     $limit: Int
     $onlyUnnormalized: Boolean
   ) {
     normalizeSurvey(
-      surveyId: $surveyId
-      fieldId: $fieldId
+      editionId: $editionId
+      questionId: $questionId
       startFrom: $startFrom
       limit: $limit
       onlyUnnormalized: $onlyUnnormalized
@@ -95,8 +95,8 @@ const normalizeSurveyMutation = gql`
 `;
 
 const SegmentInProgress = ({
-  survey,
-  fieldId,
+  edition,
+  questionId,
   segmentIndex,
   startFrom,
   responsesCount,
@@ -106,7 +106,7 @@ const SegmentInProgress = ({
   updateSegments,
   segmentSize,
 }) => {
-  const surveyId = survey.slug;
+  const editionId = edition.id;
 
   const mutateFunction = useMutation(normalizeSurveyMutation);
 
@@ -119,8 +119,8 @@ const SegmentInProgress = ({
 
       */
       mutateFunction({
-        surveyId,
-        fieldId: isAllFields ? null : fieldId,
+        editionId,
+        questionId: isAllFields ? null : questionId,
         startFrom: onlyUnnormalized ? 0 : startFrom,
         limit: segmentSize,
         onlyUnnormalized,

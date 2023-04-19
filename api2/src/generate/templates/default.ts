@@ -1,12 +1,4 @@
-import { ApiTemplateFunction } from '../../types/surveys'
-import { getPaths } from '../helpers'
+import { defaultTemplateFunction as templateFunction } from '@devographics/templates'
+import { ApiTemplateFunction } from '../../types'
 
-export const defaultTemplateFunction: ApiTemplateFunction = options => {
-    const { question } = options
-    return {
-        id: 'placeholder',
-        ...getPaths(options),
-        ...question
-        // dbPath: `${section.id}.${question.id}`
-    }
-}
+export const defaultTemplateFunction = templateFunction as ApiTemplateFunction

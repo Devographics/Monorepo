@@ -1,16 +1,8 @@
 import { ApiTemplateFunction } from '../../types/surveys'
-import { transformFunction, getOptions } from './knowledge_score'
+import { transformFunction } from './knowledge_score'
+import { completion_stats as templateFunction } from '@devographics/templates'
 
-export const completion_stats: ApiTemplateFunction = options => {
-    const { question } = options
-    return {
-        id: 'completion_stats',
-        // dbPath: 'user_info.completion_stats',
-        options: getOptions(),
-        transformFunction,
-        normPaths: {
-            response: 'user_info.completion'
-        },
-        ...question
-    }
-}
+export const completion_stats: ApiTemplateFunction = options => ({
+    ...templateFunction(options),
+    transformFunction
+})

@@ -8,13 +8,14 @@ import {
     ParsedSurvey,
     ParsedEdition,
     ParsedSection,
-    ParsedQuestion,
+    QuestionParsed,
     TemplateOutputQuestion,
     Option,
     ResponseEditionData,
     ResponseArguments,
     FacetBucket,
-    Bucket
+    Bucket,
+    QuestionTemplateOutput
 } from '@devographics/types'
 
 export type TypeObject = {
@@ -33,7 +34,7 @@ export type TemplateArguments = {
     question: Question
 }
 
-export type ApiTemplateFunction = (arg0: TemplateArguments) => TemplateOutputQuestion
+export type ApiTemplateFunction = (arg0: TemplateArguments) => QuestionApiTemplateOutput
 
 export type NullTemplate = (arg0: TemplateArguments) => { includeInApi: boolean }
 
@@ -49,8 +50,8 @@ export interface ResolverParent {
     survey: ParsedSurvey
     edition: ParsedEdition
     section: ParsedSection
-    question: ParsedQuestionExt
-    questionObjects: ParsedQuestionExt[]
+    question: QuestionApiObject
+    questionObjects: QuestionApiObject[]
     responseArguments?: ResponseArguments
 }
 
@@ -71,25 +72,58 @@ export type TransformFunction = (
     context: RequestContext
 ) => any
 
-// ParsedQuestion extended with API-specific fields
-export interface ParsedSurveyExt extends Omit<ParsedSurvey, 'editions'> {
-    editions: ParsedEditionExt[]
-}
+// // ParsedQuestion extended with API-specific fields
+// export interface ParsedSurveyExt extends Omit<ParsedSurvey, 'editions'> {
+//     editions: ParsedEditionExt[]
+// }
 
-// ParsedQuestion extended with API-specific fields
-export interface ParsedEditionExt extends Omit<ParsedEdition, 'sections'> {
-    sections: ParsedSectionExt[]
-}
+// // ParsedQuestion extended with API-specific fields
+// export interface ParsedEditionExt extends Omit<ParsedEdition, 'sections'> {
+//     sections: ParsedSectionExt[]
+// }
 
-// ParsedQuestion extended with API-specific fields
-export interface ParsedSectionExt extends Omit<ParsedSection, 'questions'> {
-    questions: ParsedQuestionExt[]
-}
+// // ParsedQuestion extended with API-specific fields
+// export interface ParsedSectionExt extends Omit<ParsedSection, 'questions'> {
+//     questions: QuestionApiObject[]
+// }
 
-// ParsedQuestion extended with API-specific fields
-export interface ParsedQuestionExt extends ParsedQuestion {
+export interface QuestionApiTemplateOutput extends QuestionTemplateOutput {
     resolverMap?: ResolverMap
     transformFunction?: TransformFunction
+
+    autogenerateOptionType?: boolean
+    autogenerateEnumType?: boolean
+    autogenerateFilterType?: boolean
+
+    fieldTypeName?: string
+    filterTypeName?: string
+    optionTypeName?: string
+    enumTypeName?: string
+
+    typeDef?: string
+}
+
+export interface SurveyApiObject extends Omit<Survey, 'editions'> {
+    editions: EditionApiObject[]
+}
+
+export interface EditionApiObject extends Omit<Edition, 'sections' | 'apiSections'> {
+    sections: SectionApiObject[]
+    apiSections: SectionApiObject[]
+}
+
+export interface SectionApiObject extends Omit<Section, 'questions'> {
+    questions: QuestionApiObject[]
+}
+
+export interface QuestionApiObject extends QuestionApiTemplateOutput {
+    includeInApi?: boolean
+
+    editions?: string[]
+
+    isGlobal?: boolean
+
+    contentType?: string
 }
 
 export {
@@ -101,7 +135,7 @@ export {
     ParsedSurvey,
     ParsedEdition,
     ParsedSection,
-    ParsedQuestion,
+    QuestionParsed as ParsedQuestion,
     TemplateOutputQuestion,
     Option,
     ResponseEditionData,

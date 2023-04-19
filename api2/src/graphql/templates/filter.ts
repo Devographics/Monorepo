@@ -1,4 +1,4 @@
-import { ParsedQuestionExt } from '../../types/surveys'
+import { QuestionApiObject } from '../../types/surveys'
 
 /*
 
@@ -12,7 +12,7 @@ input DisabilityStatusFilter {
 
 */
 
-export const generateFilterType = ({ question }: { question: ParsedQuestionExt }) => {
+export const generateFilterType = ({ question }: { question: QuestionApiObject }) => {
     const { filterTypeName, enumTypeName } = question
     if (!filterTypeName) return
     return {

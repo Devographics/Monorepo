@@ -20,7 +20,7 @@ import {
 import { getUUID } from "~/account/email/api/encryptEmail";
 import { logToFile } from "@devographics/core-models/server";
 import * as templateFunctions from "@devographics/templates";
-import {
+import type {
   QuestionMetadata,
   SectionMetadata,
   TemplateFunction,
@@ -273,56 +273,41 @@ export const normalizeField = async ({
     verbose = false,
   } = options;
 
-  // const templateFunction = templateFunctions[
-  //   question.template
-  // ] as TemplateFunction;
-  // const questionObject = templateFunction({
-  //   survey,
-  //   edition,
-  //   section,
-  //   question,
-  // });
+  const templateFunction = templateFunctions[
+    question.template
+  ] as TemplateFunction;
+  const questionObject = templateFunction({
+    survey,
+    edition,
+    section,
+    question,
+  });
+
+  const { template, rawPaths, normPaths, matchTags = [] } = questionObject;
 
   console.log("// questionObject");
-  console.log(question);
+  console.log(questionObject);
+
+  const fieldName = rawPaths.response;
 
   // const fieldPath = [edition.id, section.id, question.id].join("__");
   // const { fieldName, suffix, matchTags = [] } = field as ParsedQuestion;
   // console.log(field);
   // if (!fieldName) throw new Error(`Field without fieldName!`);
-  // const { initialSegment, sectionSegment, fieldSegment } =
-  //   getFieldSegments(field);
-  // const {
-  //   commentPath,
-  //   fullPath,
-  //   rawFieldPath,
-  //   normalizedFieldPath,
-  //   patternsFieldPath,
-  //   errorPath,
-  // } = getFieldPaths(field);
 
-  // handle freeform comments related to the field
-  // const responseCommentPath = [
-  //   initialSegment,
-  //   sectionSegment,
-  //   fieldSegment,
-  //   "comment",
-  // ].join("__");
-  const responseCommentValue = cleanupValue(
-    response[question.rawPaths.comment]
-  );
+  const responseCommentValue = cleanupValue(response[rawPaths.comment]);
   if (responseCommentValue !== null) {
-    set(normResp, question.normPaths.comment, responseCommentValue);
+    set(normResp, normPaths.comment, responseCommentValue);
   }
 
-  const value = response[question.rawPaths.response];
+  const value = response[rawPaths.response];
   // clean value to eliminate empty spaces, "none", "n/a", etc.
   const cleanValue = cleanupValue(value);
 
   if (cleanValue !== null) {
-    if (suffix === "others") {
+    if (template === "others") {
       // A. "others" fields needing to be normalized
-      set(normResp, rawFieldPath, value);
+      set(normResp, normPaths.raw, value);
 
       if (log) {
         await logToFile(
@@ -343,8 +328,8 @@ export const normalizeField = async ({
           value: cleanValue,
           allRules,
           tags: matchTags,
-          survey,
-          field,
+          edition,
+          question,
           verbose,
         });
         if (verbose) {
@@ -362,7 +347,7 @@ export const normalizeField = async ({
               await logRow(
                 [
                   response._id,
-                  fieldName,
+                  rawPaths.response,
                   value,
                   matchTags,
                   id,
@@ -394,8 +379,8 @@ export const normalizeField = async ({
         const normPatterns = normTokens.map((token) =>
           token.pattern.toString()
         );
-        set(normResp, normalizedFieldPath, normIds);
-        set(normResp, patternsFieldPath, normPatterns);
+        set(normResp, normPaths.response, normIds);
+        set(normResp, normPaths.patterns, normPatterns);
 
         // keep trace of fields that were normalized
         normalizedFields.push({
@@ -404,14 +389,12 @@ export const normalizeField = async ({
           normTokens,
         });
       } catch (error) {
-        set(normResp, errorPath, error.message);
+        set(normResp, normPaths.error, error.message);
       }
-    } else if (suffix === "prenormalized") {
-      // B. these fields are "prenormalized" through autocomplete inputs
-      const newPath = fullPath.replace(".prenormalized", ".others");
-      set(normResp, `${newPath}.raw`, value);
-      set(normResp, `${newPath}.normalized`, value);
-      set(normResp, `${newPath}.patterns`, ["prenormalized"]);
+    } else if (template === "project") {
+      set(normResp, normPaths.raw, value);
+      set(normResp, normPaths.response, value);
+      set(normResp, normPaths.patterns, ["prenormalized"]);
 
       prenormalizedFields.push({
         fieldName,
@@ -419,7 +402,7 @@ export const normalizeField = async ({
       });
     } else {
       // C. any other field
-      set(normResp, fullPath, value);
+      set(normResp, normPaths.response, value);
       regularFields.push({
         fieldName,
         value,

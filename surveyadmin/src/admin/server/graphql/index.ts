@@ -21,6 +21,7 @@ import {
   getSurveyMetadataTypeDefs,
   getSurveyMetadata,
 } from "./normalization";
+import { surveysTypeDefs, surveys } from "./surveys";
 import {
   entitiesResolver,
   entitiesTypeDefs,
@@ -197,6 +198,9 @@ addGraphQLResolvers({ Query: { stats } });
 
 addGraphQLQuery(unnormalizedFieldsTypeDefs);
 addGraphQLResolvers({ Query: { unnormalizedFields } });
+
+addGraphQLQuery(surveysTypeDefs);
+addGraphQLResolvers({ Query: { surveys } });
 
 addGraphQLMutation(normalizeIdsTypeDefs);
 addGraphQLMutation(normalizeSurveyTypeDefs);

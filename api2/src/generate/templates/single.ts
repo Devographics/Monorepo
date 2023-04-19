@@ -1,14 +1,4 @@
-import { DbSuffixes } from '@devographics/types'
-import { ApiTemplateFunction } from '../../types/surveys'
-import { getPaths } from '../helpers'
+import { single as templateFunction } from '@devographics/templates'
+import { ApiTemplateFunction } from '../../types'
 
-export const single: ApiTemplateFunction = options => {
-    const { question, section } = options
-    return {
-        id: 'placeholder',
-        // dbSuffix: 'choices'
-        // dbPath: `${section.slug || section.id}.${question.id}.choices`
-        ...getPaths(options, DbSuffixes.CHOICES),
-        ...question
-    }
-}
+export const single = templateFunction as ApiTemplateFunction

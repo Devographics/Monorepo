@@ -6,7 +6,7 @@ import {
 import { serverConfig } from "~/config/server";
 import fs from "fs";
 import csvParser from "csv-parser";
-import {
+import type {
   Edition,
   EditionMetadata,
   QuestionMetadata,
@@ -20,6 +20,7 @@ import { readdir, readFile } from "fs/promises";
 import { logToFile } from "@devographics/core-models/server";
 import { normalizeResponse } from "~/admin/server/normalization/normalize";
 import { getOrFetchEntities } from "~/modules/entities/server";
+import { getEditionQuestionsFlat } from "~/admin/server/normalization/helpers";
 
 const editions = {
   // td2019: "International Developers in Japan Survey 2019.csv",
@@ -126,9 +127,7 @@ const getQuestionMetadata = (
   question: Question,
   editionId: string
 ) => {
-  const allQuestions = editionMetadata.sections
-    .map((s) => s.questions.map((q) => ({ ...q, sectionId: s.id })))
-    .flat();
+  const allQuestions = getEditionQuestionsFlat(editionMetadata);
   const questionMetadata = allQuestions.find((q) => q.id === question.id);
   if (!questionMetadata) {
     throw new Error(

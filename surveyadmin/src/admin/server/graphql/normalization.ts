@@ -7,7 +7,7 @@ import {
 } from "../normalization/helpers";
 import { UserType } from "~/core/models/user";
 // import { ResponseAdminMongooseModel } from "@devographics/core-models/server";
-import { ResponseMongooseModel } from "~/modules/responses/model.server"
+import { ResponseMongooseModel } from "~/modules/responses/model.server";
 import { getOrFetchEntities } from "~/modules/entities/server";
 import pick from "lodash/pick.js";
 import { NormalizedResponseMongooseModel } from "~/admin/models/normalized_responses/model.server";
@@ -77,7 +77,7 @@ interface NormalizedDocumentMetadata {
 }
 
 interface NormalizeSurveyResult {
-  surveyId: string;
+  editionId: string;
   normalizedDocuments: NormalizedDocumentMetadata[];
   duration?: number;
   count?: number;
@@ -96,8 +96,8 @@ export const normalizeSurvey = async (
   }
 
   const {
-    surveyId,
-    fieldId,
+    editionId,
+    questionId,
     startFrom = 0,
     limit = defaultLimit,
     onlyUnnormalized,
@@ -110,10 +110,10 @@ export const normalizeSurvey = async (
 
   // if no fieldId is defined then we are normalizing the entire document and want
   // to replace everything instead of updating a single field
-  const isReplace = !fieldId;
+  const isReplace = !questionId;
 
   const mutationResult: NormalizeSurveyResult = {
-    surveyId,
+    editionId,
     normalizedDocuments: [],
     errorCount: 0,
   };
@@ -123,7 +123,7 @@ export const normalizeSurvey = async (
   // TODO: use Response model and connector instead
 
   // first, get all the responses we're going to operate on
-  const selector = await getSelector(surveyId, fieldId, onlyUnnormalized);
+  const selector = await getSelector(editionId, questionId, onlyUnnormalized);
   const responses = await ResponseMongooseModel.find(selector, null, {
     sort: {
       createdAt: 1,
@@ -136,8 +136,8 @@ export const normalizeSurvey = async (
   const tickInterval = Math.round(count / 200);
 
   console.log(
-    `// Renormalizing survey ${surveyId}${
-      fieldId ? ` (field [${fieldId}])` : ""
+    `// Renormalizing survey ${editionId}${
+      questionId ? ` (field [${questionId}])` : ""
     }… Found ${count} responses to renormalize (startFrom: ${startFrom}, limit: ${limit}). (${startAt})`
   );
   // console.log(JSON.stringify(selector, null, 2))
@@ -149,7 +149,7 @@ export const normalizeSurvey = async (
       verbose,
       isSimulation,
       entities,
-      fieldId,
+      fieldId: questionId,
       isBulk: true,
     });
 
@@ -228,7 +228,7 @@ export const normalizeSurvey = async (
   // duration in seconds
   mutationResult.duration = duration;
   console.log(
-    `👍 Normalized ${limit - discardedCount} responses in survey ${surveyId} ${
+    `👍 Normalized ${limit - discardedCount} responses in survey ${editionId} ${
       discardedCount > 0
         ? `(${discardedCount}/${limit} responses discarded)`
         : ""
@@ -239,7 +239,7 @@ export const normalizeSurvey = async (
 };
 
 export const normalizeSurveyTypeDefs =
-  "normalizeSurvey(surveyId: String, fieldId: String, startFrom: Int, limit: Int, onlyUnnormalized: Boolean): JSON";
+  "normalizeSurvey(editionId: String, questionId: String, startFrom: Int, limit: Int, onlyUnnormalized: Boolean): JSON";
 
 /*
 
@@ -251,10 +251,10 @@ export const getSurveyMetadata = async (
   args,
   { currentUser }: { currentUser: UserType }
 ) => {
-  const { surveyId, fieldId, onlyUnnormalized } = args;
+  const { editionId, questionId, onlyUnnormalized } = args;
   if (!currentUser.isAdmin) throw new Error("Non admin cannot do this");
 
-  const selector = await getSelector(surveyId, fieldId, onlyUnnormalized);
+  const selector = await getSelector(editionId, questionId, onlyUnnormalized);
 
   // TODO: use Response model and connector instead
   const responsesCount = await ResponseMongooseModel.count(selector);
@@ -269,12 +269,12 @@ export const getSurveyMetadataTypeDefs =
 Unnormalized Fields
 
 */
-export const unnormalizedFields = async (root, { surveyId, fieldId }) => {
+export const unnormalizedFields = async (root, { editionId, questionId }) => {
   // console.log(`// unnormalizedFields ${surveySlug} ${fieldName}`);
-  if (fieldId) {
+  if (questionId) {
     const { responses, rawFieldPath } = await getUnnormalizedResponses(
-      surveyId,
-      fieldId
+      editionId,
+      questionId
     );
 
     const cleanResponses = responses.map((r) => {

@@ -11,11 +11,12 @@ export const allFields = { id: "all_fields", label: "All Fields" };
 
 const Actions = (props) => {
   const {
-    surveyId,
+    allEditions,
+    editionId,
     survey,
     fieldId,
     normalizeableFields,
-    setSurveyId,
+    setEditionId,
     setFieldId,
     onlyUnnormalized,
     isAllFields,
@@ -24,8 +25,6 @@ const Actions = (props) => {
   } = props;
   const router = useRouter();
 
-  const surveySlug = surveyId;
-
   // get list of all normalizeable ("other") field for current survey
   const fields = [allFields, ...normalizeableFields];
 
@@ -33,7 +32,7 @@ const Actions = (props) => {
     <div className="normalization-actions">
       <div className="primary">
         <Dropdown
-          label={surveySlug}
+          label={editionId}
           menuItems={surveysWithTemplates.map((survey) => ({
             label: survey.slug,
             onClick: () => {
@@ -45,7 +44,7 @@ const Actions = (props) => {
               const newUrl = new URL(window.location.href);
               newUrl.search = search;
               router.push(newUrl);
-              setSurveyId(survey.slug);
+              setEditionId(survey.slug);
             },
           }))}
         />{" "}

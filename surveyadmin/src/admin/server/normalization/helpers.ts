@@ -14,8 +14,18 @@ import type {
 } from "@devographics/core-models";
 import { logToFile } from "@devographics/core-models/server";
 import { getOrFetchEntities } from "~/modules/entities/server";
-import { getSurveyByEditionId } from "~/modules/surveys/helpers";
+import { getSurveyEditionById } from "~/modules/surveys/helpers";
 import { NormalizedResponseMongooseModel } from "~/admin/models/normalized_responses/model.server";
+import {
+  DbSuffixes,
+  QuestionMetadata,
+  QuestionTemplateOutput,
+  EditionMetadata,
+  SurveyMetadata,
+  TemplateFunction,
+  SectionMetadata,
+} from "@devographics/types";
+import * as templateFunctions from "@devographics/templates";
 
 export const getFieldSegments = (field: Field) => {
   if (!field.fieldName) {
@@ -27,22 +37,23 @@ export const getFieldSegments = (field: Field) => {
   return { initialSegment, sectionSegment, fieldSegment, suffix };
 };
 
-export const getFieldPaths = (field: Field) => {
+export const getFieldPaths = (questionObject: QuestionTemplateOutput) => {
+  const { normPaths } = questionObject;
   const { suffix } = field as ParsedQuestion;
   const { sectionSegment, fieldSegment } = getFieldSegments(field);
 
   const basePath = `${sectionSegment}.${fieldSegment}`;
   const fullPath = suffix ? `${basePath}.${suffix}` : basePath;
-  const errorPath = `${basePath}.error`;
-  const commentPath = `${basePath}.comment`;
+  const errorPath = `${basePath}.${DbSuffixes.ERROR}`;
+  const commentPath = `${basePath}.${DbSuffixes.COMMENT}`;
 
-  const rawFieldPath = `${fullPath}.raw`;
-  const normalizedFieldPath = `${fullPath}.normalized`;
-  const patternsFieldPath = `${fullPath}.patterns`;
+  const rawFieldPath = `${fullPath}.${DbSuffixes.RAW}`;
+  const normalizedFieldPath = `${fullPath}.${DbSuffixes.NORMALIZED}`;
+  const patternsFieldPath = `${fullPath}.${DbSuffixes.PATTERNS}`;
 
   return {
     basePath,
-    commentPath,
+    commentPath: normPaths.comment,
     fullPath,
     errorPath,
     rawFieldPath,
@@ -51,8 +62,32 @@ export const getFieldPaths = (field: Field) => {
   };
 };
 
-export const getSurveyFieldById = (survey, fieldId) => {
-  const allFields = survey.sections.map((s) => s.questions).flat();
+// export const getFieldPaths = (field: Field) => {
+//   const { suffix } = field as ParsedQuestion;
+//   const { sectionSegment, fieldSegment } = getFieldSegments(field);
+
+//   const basePath = `${sectionSegment}.${fieldSegment}`;
+//   const fullPath = suffix ? `${basePath}.${suffix}` : basePath;
+//   const errorPath = `${basePath}.error`;
+//   const commentPath = `${basePath}.comment`;
+
+//   const rawFieldPath = `${fullPath}.raw`;
+//   const normalizedFieldPath = `${fullPath}.normalized`;
+//   const patternsFieldPath = `${fullPath}.patterns`;
+
+//   return {
+//     basePath,
+//     commentPath,
+//     fullPath,
+//     errorPath,
+//     rawFieldPath,
+//     normalizedFieldPath,
+//     patternsFieldPath,
+//   };
+// };
+
+export const getEditionFieldById = (edition, fieldId) => {
+  const allFields = edition.sections.map((s) => s.questions).flat();
   // make sure to narrow it down to the freeform "others" field since the main "choices"
   // field can have the same id
   const field = allFields.find(
@@ -130,7 +165,19 @@ Extract matching tokens from a string
 const enableLimit = false;
 const stringLimit = enableLimit ? 170 : 1000; // max length of string to try and find tokens in
 const rulesLimit = 1500; // max number of rules to try and match for any given string
-const extractTokens = async ({ value, rules, survey, field, verbose }) => {
+const extractTokens = async ({
+  value,
+  rules,
+  edition,
+  question,
+  verbose,
+}: {
+  value: any;
+  rules: Array<any>;
+  edition: EditionMetadata;
+  question: QuestionMetadata;
+  verbose?: boolean;
+}) => {
   const rawString = value;
 
   // RegExp.prototype.toJSON = RegExp.prototype.toString;
@@ -173,7 +220,7 @@ const extractTokens = async ({ value, rules, survey, field, verbose }) => {
       if (
         context &&
         fieldId &&
-        (context !== survey.context || fieldId !== field.id)
+        (context !== edition.context || fieldId !== question.id)
       ) {
         // if a context and fieldId are defined for the current rule,
         // abort unless they match the current context and fieldId
@@ -260,15 +307,15 @@ export const normalize = async ({
   value,
   allRules,
   tags,
-  survey,
-  field,
+  edition,
+  question,
   verbose,
 }: {
   value: any;
   allRules: Array<any>;
   tags?: Array<string>;
-  survey?: SurveyEdition;
-  field?: SurveyQuestion;
+  edition: EditionMetadata;
+  question: QuestionMetadata;
   verbose?: boolean;
 }) => {
   const rules = tags
@@ -278,7 +325,7 @@ export const normalize = async ({
   if (verbose) {
     console.log(`// Found ${rules.length} rules to match against`);
   }
-  return await extractTokens({ value, rules, survey, field, verbose });
+  return await extractTokens({ value, rules, edition, question, verbose });
 };
 
 /*
@@ -486,26 +533,29 @@ export const getSourceFields = (surveyId) => [
 const existsSelector = { $exists: true, $nin: ignoreValues };
 
 // get mongo selector
-export const getSelector = async (surveyId, fieldId, onlyUnnormalized) => {
-  const survey = getSurveyByEditionId(surveyId);
+export const getSelector = async (editionId, questionId, onlyUnnormalized) => {
+  const survey = getSurveyEditionById(editionId);
 
   const selector = {
-    surveySlug: surveyId,
+    editionId,
   } as any;
 
-  if (fieldId) {
+  if (questionId) {
     if (onlyUnnormalized) {
-      const { responses } = await getUnnormalizedResponses(surveyId, fieldId);
+      const { responses } = await getUnnormalizedResponses(
+        editionId,
+        questionId
+      );
       const unnormalizedIds = responses.map((r) => r.responseId);
       selector._id = { $in: unnormalizedIds };
     } else {
-      if (fieldId === "source") {
+      if (questionId === "source") {
         // source field should be treated differently
-        selector["$or"] = getSourceFields(surveyId).map((f) => ({
+        selector["$or"] = getSourceFields(editionId).map((f) => ({
           [f]: existsSelector,
         }));
       } else {
-        const field = getSurveyFieldById(survey, fieldId);
+        const field = getEditionFieldById(survey, questionId);
         selector[field.fieldName] = existsSelector;
       }
     }
@@ -520,20 +570,42 @@ export const getSelector = async (surveyId, fieldId, onlyUnnormalized) => {
   return selector;
 };
 
-export const getUnnormalizedResponses = async (surveyId, fieldId) => {
+export const getEditionQuestionsFlat = (edition: EditionMetadata) =>
+  edition.sections
+    .map((s) => s.questions.map((q) => ({ ...q, sectionId: s.id })))
+    .flat();
+
+export const getUnnormalizedResponses = async (editionId, questionId) => {
   let rawFieldPath, normalizedFieldPath;
-  const survey = getSurveyByEditionId(surveyId);
-  if (fieldId === "source") {
+  const edition = (await getSurveyEditionById(editionId)) as EditionMetadata;
+  if (questionId === "source") {
     rawFieldPath = "user_info.source.raw";
     normalizedFieldPath = "user_info.source.normalized";
   } else {
-    const field = getSurveyFieldById(survey, fieldId);
-    rawFieldPath = getFieldPaths(field).rawFieldPath;
-    normalizedFieldPath = getFieldPaths(field).normalizedFieldPath;
+    const question = getEditionQuestionsFlat(edition).find(
+      (q) => q.id === questionId
+    ) as QuestionMetadata;
+
+    const templateFunction = templateFunctions[
+      question.template
+    ] as TemplateFunction;
+
+    const survey = { id: edition.surveyId } as SurveyMetadata;
+    const section = { id: question.sectionId } as SectionMetadata;
+
+    const questionObject = templateFunction({
+      survey,
+      edition,
+      section,
+      question,
+    });
+
+    rawFieldPath = questionObject.normPaths.raw;
+    normalizedFieldPath = questionObject.normPaths.response;
   }
 
   const selector = {
-    surveySlug: surveyId,
+    editionId,
     [rawFieldPath]: existsSelector,
     $or: [
       { [normalizedFieldPath]: [] },

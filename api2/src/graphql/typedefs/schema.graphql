@@ -21,6 +21,7 @@ type SurveyMetadata {
 
 type EditionMetadata {
     id: String
+    surveyId: String
     year: Int
     status: Int
     hashtag: String

@@ -14,8 +14,8 @@ import { routes } from "~/lib/routes";
 export const defaultSegmentSize = 500;
 
 const unnormalizedFieldsQuery = gql`
-  query UnnormalizedFieldsQuery($surveyId: String, $fieldId: String) {
-    unnormalizedFields(surveyId: $surveyId, fieldId: $fieldId)
+  query UnnormalizedFieldsQuery($editionId: String, $questionId: String) {
+    unnormalizedFields(editionId: $editionId, questionId: $questionId)
   }
 `;
 
@@ -23,18 +23,18 @@ const usePageParams = () => {
   const router = useRouter();
   const { isReady, isFallback, query } = router;
   if (!isReady || isFallback) return { paramsReady: false, email: null };
-  const { surveySlug, fieldId } = query;
+  const { editionId, questionId } = query;
   return {
     paramsReady: true,
-    surveySlug: surveySlug as string,
-    fieldId: fieldId as string,
+    editionId: editionId as string,
+    questionId: questionId as string,
   };
 };
 
-const getNormalizableFields = (survey) => {
-  const allQuestions = survey.outline.map((o) => o.questions).flat();
+const getNormalizableFields = (edition) => {
+  const allQuestions = edition.sections.map((o) => o.questions).flat();
   const fields = allQuestions.filter((q) => q.template === "others");
-  // // also add source
+  // also add source
   fields.push({ id: "source", fieldName: "common__user_info__source" });
   return fields;
 };
@@ -70,19 +70,34 @@ export const getSegments = ({ responsesCount, segmentSize }): Segment[] => {
   return segments;
 };
 
+const surveysQuery = gql`
+  query SurveysQuery {
+    surveys
+  }
+`;
+
 const NormalizationWrapper = () => {
-  const { surveySlug: surveyId, fieldId, paramsReady } = usePageParams();
-  if (!surveyId) {
+  const { editionId, questionId, paramsReady } = usePageParams();
+  const { loading: surveysLoading, data: surveysData } = useQuery(surveysQuery);
+
+  if (!paramsReady || surveysLoading) {
+    return <Loading />;
+  }
+
+  const allSurveys = surveysData.surveys;
+  const allEditions = allSurveys.map((s) => s.editions).flat();
+
+  if (!editionId) {
     return (
       <div>
-        <h2>No survey slug provided in URL</h2>
-        <h3>Available surveys:</h3>
+        <h2>No editionId provided in URL</h2>
+        <h3>Available editions:</h3>
         <ul>
-          {surveysWithTemplates.map((survey) => {
-            const normalizeUrl = `${routes.admin.normalization.href}/?surveySlug=${survey.slug}`;
+          {allEditions.map((edition) => {
+            const normalizeUrl = `${routes.admin.normalization.href}/?editionId=${edition.id}`;
             return (
-              <li key={survey.slug}>
-                <Link href={normalizeUrl}>{survey.slug}</Link>
+              <li key={edition.id}>
+                <Link href={normalizeUrl}>{edition.id}</Link>
               </li>
             );
           })}
@@ -91,24 +106,27 @@ const NormalizationWrapper = () => {
     );
   }
 
-  if (!paramsReady) {
-    return <Loading />;
+  const edition = allEditions.find((e) => e.id === editionId);
+
+  if (!edition) {
+    return <h3>Edition {editionId} not found</h3>;
   }
 
-  const survey = surveysWithTemplates.find((s) => s.slug === surveyId);
-  if (!survey) {
-    return <h3>Survey {surveyId} not found</h3>;
-  }
-
-  return <Normalization surveyId={surveyId} fieldId={fieldId} />;
+  return (
+    <Normalization
+      allEditions={allEditions}
+      edition={edition}
+      questionId={questionId}
+    />
+  );
 };
 
-const Normalization = ({ surveyId: surveyId_, fieldId: fieldId_ }) => {
+const Normalization = ({ allEditions, edition, questionId: questionId_ }) => {
   const [responsesCount, setResponsesCount] = useState(0);
   const [doneCount, setDoneCount] = useState(0);
   const [enabled, setEnabled] = useState(true);
-  const [surveyId, setSurveyId] = useState(surveyId_);
-  const [fieldId, setFieldId] = useState(fieldId_);
+  const [editionId, setEditionId] = useState(edition.id);
+  const [questionId, setQuestionId] = useState(questionId_);
   const [normalizationMode, setNormalizationMode] = useState("all");
   const emptySegments: Segment[] = [];
   const [segmentSize, setSegmentSize] = useState(defaultSegmentSize);
@@ -144,10 +162,10 @@ const Normalization = ({ surveyId: surveyId_, fieldId: fieldId_ }) => {
     setDoneCount,
     enabled,
     setEnabled,
-    surveyId,
-    setSurveyId,
-    fieldId,
-    setFieldId,
+    editionId,
+    setEditionId,
+    questionId,
+    setQuestionId,
     normalizationMode,
     setNormalizationMode,
     segments,
@@ -158,14 +176,12 @@ const Normalization = ({ surveyId: surveyId_, fieldId: fieldId_ }) => {
     setSegmentSize,
   };
 
-  const survey = surveysWithTemplates.find((s) => s.slug === surveyId);
-
   // get list of all normalizeable ("other") field for current survey
-  const normalizeableFields = getNormalizableFields(survey);
+  const normalizeableFields = getNormalizableFields(edition);
   // set field
-  const field = normalizeableFields.find((f) => f.id === fieldId);
+  const field = normalizeableFields.find((f) => f.id === questionId);
 
-  const isAllFields = fieldId === allFields.id;
+  const isAllFields = questionId === allFields.id;
   const onlyUnnormalized = normalizationMode === "only_normalized";
 
   const {
@@ -173,11 +189,13 @@ const Normalization = ({ surveyId: surveyId_, fieldId: fieldId_ }) => {
     data: unnormalizedFieldsData = {},
     refetch: refetchMissingFields,
   } = useQuery(unnormalizedFieldsQuery, {
-    variables: { surveyId, fieldId: isAllFields ? null : fieldId },
+    editionId,
+    questionId: isAllFields ? null : questionId,
   });
 
   const props = {
-    survey,
+    allEditions,
+    edition,
     field,
     normalizeableFields,
     unnormalizedFieldsLoading,

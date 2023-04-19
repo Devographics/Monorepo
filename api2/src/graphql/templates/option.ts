@@ -1,6 +1,6 @@
 import { Option } from '../../types'
 import { graphqlize } from '../../generate/helpers'
-import { ParsedQuestionExt } from '../../types/surveys'
+import { QuestionApiObject } from '../../types/surveys'
 
 /*
 
@@ -13,7 +13,7 @@ type DisabilityStatusOption {
 
 */
 
-export const generateOptionType = ({ question }: { question: ParsedQuestionExt }) => {
+export const generateOptionType = ({ question }: { question: QuestionApiObject }) => {
     const { optionTypeName, enumTypeName, surveyId, options } = question
     if (!optionTypeName) return
     const optionsHaveAverage = options?.some((o: Option) => typeof o.average !== 'undefined')

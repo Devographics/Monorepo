@@ -1,14 +1,4 @@
-import { ApiTemplateFunction } from '../../types/surveys'
+import { locale as templateFunction } from '@devographics/templates'
+import { ApiTemplateFunction } from '../../types'
 
-export const locale: ApiTemplateFunction = ({ survey, edition, question, section }) => {
-    return {
-        id: 'locale',
-        rawPaths: {
-            response: 'locale'
-        },
-        normPaths: {
-            response: `user_info.locale`
-        },
-        ...question
-    }
-}
+export const locale = templateFunction as ApiTemplateFunction

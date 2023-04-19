@@ -4,7 +4,7 @@ import {
     Survey,
     Edition,
     Section,
-    ParsedQuestionExt,
+    QuestionApiObject,
     ParsedSection,
     Option,
     TypeObject,
@@ -29,7 +29,7 @@ export const generateResolvers = async ({
     typeObjects
 }: {
     surveys: ParsedSurveyExt[]
-    questionObjects: ParsedQuestionExt[]
+    questionObjects: QuestionApiObject[]
     typeObjects: TypeObject[]
 }) => {
     // generate resolver map for root survey fields (i.e. each survey)
@@ -209,7 +209,7 @@ const getEditionMetadataResolver =
                         : { ...cleanQuestion, options }
                 })
         }))
-        return { ...edition, sections }
+        return { ...edition, surveyId: survey.id, sections }
     }
 
 const getSectionResolver =
@@ -378,7 +378,7 @@ export const getToolsFeaturesResolverMap = ({
     items
 }: {
     survey: Survey
-    items: ParsedQuestionExt[]
+    items: QuestionApiObject[]
 }): ResolverMap => ({
     items: async (parent, args, context, info) => {
         return items.map(question => ({ ...parent, question }))

@@ -764,6 +764,7 @@ importers:
     specifiers:
       '@devographics/constants': workspace:^1.0.0
       '@devographics/types': workspace:^1.0.0
+      '@types/lodash': ^4.14.194
       '@types/node': ^18.11.18
       lodash: ^4.17.21
     dependencies:
@@ -771,6 +772,7 @@ importers:
       '@devographics/types': link:../types
       lodash: 4.17.21
     devDependencies:
+      '@types/lodash': 4.14.194
       '@types/node': 18.11.18
 
   shared/types:
@@ -10567,6 +10569,7 @@ packages:
       '@babel/runtime': 7.20.7
       '@types/testing-library__react-hooks': 3.4.1
       react: 18.2.0
+    dev: false
     optional: true
 
   /@testing-library/react/10.4.9_biqbaboplfbrettd7655fr4n2y:
@@ -10960,6 +10963,10 @@ packages:
 
   /@types/lodash/4.14.191:
     resolution: {integrity: sha512-BdZ5BCCvho3EIXw6wUCXHe7rS53AIDPLE+JzwgT+OsJk53oBfbSmZZ7CX4VaRoN78N+TJpFi9QPlfIVNmJYWxQ==}
+
+  /@types/lodash/4.14.194:
+    resolution: {integrity: sha512-r22s9tAS7imvBt2lyHC9B8AGwWnXaYb1tY09oyLkXDs4vArpYJzw09nj8MLx5VfciBPGIb+ZwG0ssYnEPJxn/g==}
+    dev: true
 
   /@types/long/4.0.2:
     resolution: {integrity: sha512-MqTGEo5bj5t157U6fA/BiDynNkn0YknVdh48CMPkTSpFTVmvao5UQmm7uEF6xBEo7qIMAlY/JSleYaE6VOdpaA==}

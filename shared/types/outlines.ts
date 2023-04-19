@@ -96,13 +96,19 @@ export enum DbSuffixes {
     OTHERS = 'others',
     NORMALIZED = 'normalized',
     PRENORMALIZED = 'prenormalized',
-    COMMENT = 'comment'
+    COMMENT = 'comment',
+    ERROR = 'error',
+    PATTERNS = 'patterns',
+    RAW = 'raw'
 }
 
 export type DbPaths = {
-    response: string
-    other: string
-    comment: string
+    response?: string
+    other?: string
+    comment?: string
+    raw?: string
+    patterns?: string
+    error?: string
 }
 
 // once a question has gone through a template it should always have an id

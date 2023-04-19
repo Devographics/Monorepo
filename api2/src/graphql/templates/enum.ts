@@ -1,5 +1,5 @@
 import { formatNumericOptions } from '../../generate/helpers'
-import { ParsedQuestionExt } from '../../types/surveys'
+import { QuestionApiObject } from '../../types/surveys'
 
 /*
 
@@ -15,7 +15,7 @@ enum DisabilityStatusID {
 
 */
 
-export const generateEnumType = ({ question }: { question: ParsedQuestionExt }) => {
+export const generateEnumType = ({ question }: { question: QuestionApiObject }) => {
     const { enumTypeName, options, optionsAreNumeric } = question
     if (!enumTypeName || !options) return
     const formattedOptions = optionsAreNumeric ? formatNumericOptions(options) : options
