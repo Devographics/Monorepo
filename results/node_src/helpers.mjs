@@ -129,7 +129,7 @@ export const getExistingData = async ({ dataFileName, dataFilePath, baseUrl }) =
 }
 
 export const getDataLocations = (surveyId, editionId) => ({
-    localPath: `./../../${${process.env.SURVEYS_DIR}}/${surveyId}/${editionId}`,
+    localPath: `./../../${process.env.SURVEYS_DIR}}/${surveyId}/${editionId}`,
     url: `https://devographics.github.io/${process.env.SURVEYS_REPO}/${surveyId}/${editionId}`
 })
 
