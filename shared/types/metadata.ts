@@ -36,3 +36,9 @@ export interface OptionMetadata extends Option {
     entity?: Entity
     label?: string
 }
+
+export enum ResponsesTypes {
+    PREDEFINED = 'Predefined',
+    PRENORMALIZED = 'Prenormalized',
+    FREEFORM = 'Freeform'
+}

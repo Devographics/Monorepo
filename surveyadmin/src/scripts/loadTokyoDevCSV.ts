@@ -141,16 +141,6 @@ const getQuestionMetadata = (
   return questionMetadata as QuestionMetadata;
 };
 
-/*
-
-Check if a question accepts freeform answers
-
-*/
-const getOtherId = (questionId?: string) => `${questionId}_other`;
-
-const acceptsOtherAnswers = (outline: EditionOutline, question: Question) =>
-  flattenOutline(outline).some((q) => q.id === getOtherId(question?.id));
-
 // const getFieldPath = ({
 //   editionId,
 //   sectionId,
@@ -187,7 +177,6 @@ const getOptionValues = (
   const { editionId, outline } = edition;
   let optionsValues: (string | number)[] = [],
     otherValue: string | undefined;
-  const acceptsOther = acceptsOtherAnswers(outline, question);
 
   // if this is a number question that has options defined, take the provided number
   // and replace it with the closest available option
@@ -212,7 +201,7 @@ const getOptionValues = (
     if (matchingOption) {
       optionsValues.push(matchingOption.id);
     } else {
-      if (acceptsOther) {
+      if (question.allowOther) {
         // handle this value as an "other" answer
         otherValue = value;
       } else {
@@ -227,7 +216,7 @@ const getOptionValues = (
 };
 
 export const loadTokyoDevCSV = async () => {
-  const allSurveysMetadata = await loadOrGetSurveys();
+  const allSurveysMetadata = await loadOrGetSurveys({ forceReload: true });
   const entities = await getOrFetchEntities();
   const survey = allSurveysMetadata.find((s) => s.id === "tokyodev") as Survey;
   const allEditions = await loadAllEditions(allSurveysMetadata, "tokyodev");
@@ -304,12 +293,12 @@ export const loadTokyoDevCSV = async () => {
               question,
             });
 
-            if (!questionObject.rawPaths) {
+            const { rawPaths } = questionObject;
+
+            if (!rawPaths) {
               console.log("// no rawPaths");
               console.log(questionObject);
             } else {
-              const path = questionObject.rawPaths?.response;
-
               // if question has options, check that the value belongs to
               // the list of acceptable options
               if (questionObject.options) {
@@ -325,19 +314,22 @@ export const loadTokyoDevCSV = async () => {
                     ["single", "dropdown"].includes(questionObject.template)
                   ) {
                     // this field accepts a single answer
-                    document[path] = convertToType(optionsValues[0]);
+                    document[rawPaths.response] = convertToType(
+                      optionsValues[0]
+                    );
                   } else {
                     // this field accepts an array of answers
-                    document[path] = optionsValues.map(convertToType);
+                    document[rawPaths.response] =
+                      optionsValues.map(convertToType);
                   }
                 }
                 if (otherValue) {
                   // handle "other" answer
-                  document[path] = convertToType(otherValue);
+                  document[rawPaths.other] = convertToType(otherValue);
                 }
               } else {
                 // freeform field
-                document[path] = convertToType(questionValue);
+                document[rawPaths.response] = convertToType(questionValue);
               }
             }
           }
@@ -350,10 +342,10 @@ export const loadTokyoDevCSV = async () => {
         document,
         entities,
         surveys: allSurveysMetadata,
+        verbose: true,
       });
 
-      // console.log("// normalizedDocument");
-      // console.log(normalizedDocument);
+      // logToFile(`${_id}.yml`, normalizedDocument, { mode: "overwrite" });
     }
   }
 };

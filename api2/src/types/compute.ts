@@ -1,8 +1,9 @@
 import { QuestionApiObject } from './surveys'
 import { Filters } from './filters'
-import { OptionId } from '@devographics/types'
+import { OptionId, ResponsesTypes } from '@devographics/types'
 
 export interface GenericComputeArguments {
+    responsesType?: ResponsesTypes
     filters?: Filters
     parameters?: GenericComputeParameters
     facet?: string
@@ -22,6 +23,7 @@ export interface GenericComputeParameters {
     facetCutoffPercent?: number
     enableCache?: boolean
     showNoAnswer?: boolean
+    responsesType?: ResponseTypes
 }
 
 export interface ComputeAxisParameters {

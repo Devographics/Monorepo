@@ -318,6 +318,98 @@ export const normalizeField = async ({
     // clean value to eliminate empty spaces, "none", "n/a", etc.
     const cleanValue = cleanupValue(value);
 
+    // new method (other value belongs to same question)
+    if (questionObject.allowOther) {
+      const otherValue = cleanupValue(response[rawPaths?.other]);
+      if (otherValue) {
+        set(normResp, normPaths.raw, otherValue);
+
+        if (log) {
+          await logToFile(
+            `${fileName}.txt`,
+            `${
+              response._id
+            }, ${fieldName}, ${cleanValue}, ${matchTags.toString()}`
+          );
+        }
+        try {
+          if (verbose) {
+            console.log(
+              `// Normalizing key "${
+                rawPaths?.other
+              }" with value "${otherValue}" and tags ${matchTags.toString()}…`
+            );
+          }
+
+          const normTokens = await normalize({
+            value: otherValue,
+            allRules,
+            tags: matchTags,
+            edition,
+            question,
+            verbose,
+          });
+          if (verbose) {
+            console.log(
+              `  -> Normalized values: ${JSON.stringify(normTokens)}`
+            );
+          }
+
+          if (log) {
+            if (normTokens.length > 0) {
+              normTokens.forEach(async (token) => {
+                const { id, pattern, rules, match } = token;
+                await logRow(
+                  [
+                    response._id,
+                    rawPaths.response,
+                    value,
+                    matchTags,
+                    id,
+                    pattern,
+                    rules,
+                    match,
+                  ],
+                  fileName
+                );
+              });
+            } else {
+              await logRow(
+                [
+                  response._id,
+                  fieldName,
+                  value,
+                  matchTags,
+                  "n/a",
+                  "n/a",
+                  "n/a",
+                  "n/a",
+                ],
+                fileName
+              );
+            }
+          }
+
+          const normIds = normTokens.map((token) => token.id);
+          const normPatterns = normTokens.map((token) =>
+            token.pattern.toString()
+          );
+          set(normResp, normPaths.other, normIds);
+          set(normResp, normPaths.patterns, normPatterns);
+
+          // keep trace of fields that were normalized
+          normalizedFields.push({
+            fieldName,
+            value,
+            normTokens,
+          });
+        } catch (error) {
+          set(normResp, normPaths.error, error.message);
+        }
+      }
+    }
+
+    // legacy method (other value is treated as belonging to a separate question)
     if (cleanValue !== null) {
       if (template === "others") {
         // A. "others" fields needing to be normalized

@@ -37,6 +37,10 @@ export const getRawPaths = (
     return paths
 }
 
+const separator = '.'
+
+const getPath = (pathSegments: string[]) => pathSegments.join(separator)
+
 export const getNormPaths = (
     {
         survey,
@@ -51,23 +55,26 @@ export const getNormPaths = (
     },
     suffix?: string
 ) => {
-    const sectionPathSegment = section.slug || section.id
-    const pathSegments = [sectionPathSegment, question.id]
-    const separator = '.'
+    const sectionSegment = section.slug || section.id
+    const questionSegment = question.id as string
+    const basePathSegments = [sectionSegment, questionSegment]
 
-    const getPath = (suffix?: string) =>
-        suffix ? [...pathSegments, suffix].join(separator) : pathSegments.join(separator)
-
-    const paths = {
-        response: getPath(suffix)
+    let paths = {
+        response: getPath(suffix ? [...basePathSegments, suffix] : basePathSegments)
     } as DbPaths
 
     if (question.allowOther || question.allowPrenormalized) {
-        paths.other = getPath(`${DbSuffixes.OTHERS}.${DbSuffixes.NORMALIZED}`)
+        paths = {
+            ...paths,
+            other: getPath([...basePathSegments, DbSuffixes.OTHERS, DbSuffixes.NORMALIZED]),
+            raw: getPath([...basePathSegments, DbSuffixes.OTHERS, DbSuffixes.RAW]),
+            patterns: getPath([...basePathSegments, DbSuffixes.OTHERS, DbSuffixes.PATTERNS]),
+            error: getPath([...basePathSegments, DbSuffixes.OTHERS, DbSuffixes.ERROR])
+        }
     }
 
     if (question.allowComment) {
-        paths.comment = getPath(DbSuffixes.COMMENT)
+        paths.comment = getPath([...basePathSegments, DbSuffixes.COMMENT])
     }
     return paths
 }

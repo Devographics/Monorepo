@@ -2,6 +2,8 @@ import { generateFiltersQuery } from '../filters'
 import { ComputeAxisParameters } from '../types'
 import { NO_ANSWER } from '@devographics/constants'
 // const NO_ANSWER = 'no_answer'
+import { getDbPath } from './generic'
+import { ResponsesTypes } from '@devographics/types'
 
 export type PipelineProps = {
     surveyId: string
@@ -10,6 +12,7 @@ export type PipelineProps = {
     axis1: ComputeAxisParameters
     axis2?: ComputeAxisParameters | null
     showNoAnswer?: boolean
+    responsesType?: ResponsesTypes
 }
 
 // generate an aggregation pipeline for all years, or
@@ -21,11 +24,12 @@ export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
         filters,
         axis1,
         axis2,
-        showNoAnswer = false
+        showNoAnswer = false,
+        responsesType
     } = pipelineProps
 
-    const axis1DbPath = axis1?.question?.normPaths?.response
-    const axis2DbPath = axis2?.question?.normPaths?.response
+    const axis1DbPath = getDbPath(axis1.question, responsesType)
+    const axis2DbPath = axis2 && getDbPath(axis2.question, responsesType)
 
     if (!axis1DbPath) {
         throw new Error(`Could not find dbPath for question ${axis1.question.id}`)

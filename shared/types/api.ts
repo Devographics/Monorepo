@@ -1,4 +1,5 @@
 import { Survey, Edition, Section, Question } from './outlines'
+import { ResponsesTypes } from './metadata'
 
 // export interface QuestionParsed extends Omit<TemplateOutputQuestion, 'fieldTypeName'> {
 //     sectionIds: string[]
@@ -9,6 +10,7 @@ import { Survey, Edition, Section, Question } from './outlines'
 // }
 
 export type ResponseArguments = {
+    responsesType: ResponsesTypes
     filters: Filters
     facet: string
     parameters: ResponsesParameters

@@ -21,6 +21,8 @@ query SurveysMetadataQuery {
               label
               contentType
               template
+              allowOther
+              matchTags
               options {
                 average
                 id

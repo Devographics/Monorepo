@@ -15,7 +15,6 @@ import {
     ComputeAxisParameters,
     SortProperty
 } from '../types'
-
 import {
     discardEmptyIds,
     addDefaultBucketCounts,
@@ -32,8 +31,30 @@ import {
     addLabels,
     removeEmptyEditions
 } from './stages/index'
+import { ResponsesTypes, DbSuffixes } from '@devographics/types'
 
 const convertOrder = (order: 'asc' | 'desc') => (order === 'asc' ? 1 : -1)
+
+/*
+
+TODO:
+
+- Actually differentiate between "freeform" and "prenormalized"
+- Add ability to specify more than one response type in the same result list to generate
+    global rankings of all responses
+
+*/
+export const getDbPath = (
+    question: QuestionApiObject,
+    responsesType: ResponsesTypes = ResponsesTypes.PREDEFINED
+) => {
+    const { normPaths } = question
+    if (responsesType === ResponsesTypes.PREDEFINED) {
+        return normPaths.response
+    } else {
+        return normPaths.other
+    }
+}
 
 export async function genericComputeFunction({
     context,
@@ -59,7 +80,7 @@ export async function genericComputeFunction({
 
     const { normPaths } = question
 
-    const { filters, parameters = {}, facet, selectedEditionId } = computeArguments
+    const { responsesType, filters, parameters = {}, facet, selectedEditionId } = computeArguments
     const {
         cutoff = 1,
         cutoffPercent,
@@ -128,16 +149,22 @@ export async function genericComputeFunction({
     console.log('// axis2')
     console.log(axis2)
 
-    if (!normPaths.response) {
-        throw new Error(`No normPaths.response found for question id ${question.id}`)
+    const dbPath = getDbPath(question, responsesType)
+
+    console.log(responsesType)
+    console.log(ResponsesTypes.PREDEFINED)
+    console.log(dbPath)
+
+    if (!dbPath) {
+        throw new Error(`No dbPath found for question id ${question.id}`)
     }
 
     let match: any = {
         surveyId: survey.id,
-        [normPaths.response]: { $nin: [null, '', [], {}] }
+        [dbPath]: { $nin: [null, '', [], {}] }
     }
     if (filters) {
-        const filtersQuery = await generateFiltersQuery({ filters, dbPath: normPaths.response })
+        const filtersQuery = await generateFiltersQuery({ filters, dbPath })
         match = { ...match, ...filtersQuery }
     }
     // if edition is passed, restrict aggregation to specific edition
@@ -155,6 +182,7 @@ export async function genericComputeFunction({
         filters,
         axis1,
         axis2,
+        responsesType,
         showNoAnswer
     }
 
@@ -201,13 +229,17 @@ export async function genericComputeFunction({
     await addEditionYears(results, survey)
 
     if (axis2) {
-        await addMissingItems(results, axis2, axis1)
+        if (responsesType === ResponsesTypes.PREDEFINED) {
+            await addMissingItems(results, axis2, axis1)
+        }
         await sortData(results, axis2, axis1)
         await limitData(results, axis2, axis1)
         await cutoffData(results, axis2, axis1)
         await addLabels(results, axis2, axis1)
     } else {
-        await addMissingItems(results, axis1)
+        if (responsesType === ResponsesTypes.PREDEFINED) {
+            await addMissingItems(results, axis1)
+        }
         await sortData(results, axis1)
         await limitData(results, axis1)
         await cutoffData(results, axis1)

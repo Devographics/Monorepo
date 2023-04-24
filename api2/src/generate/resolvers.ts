@@ -180,12 +180,11 @@ const getEditionMetadataResolver =
                         'label',
                         'intlId',
                         'template',
-                        // 'dbPath',
-                        // 'dbPathComments',
                         'options',
                         'rawPaths',
                         'normPaths',
-                        'contentType'
+                        'contentType',
+                        'matchTags'
                     ]
                     const cleanQuestion = {
                         ...pick(question, pickProperties),
@@ -265,23 +264,17 @@ Responses
 
 export const responsesResolverFunction: ResolverType = async (parent, args, context, info) => {
     console.log('// responses resolver')
-    const { filters, parameters, facet } = args
-    const responseArguments = {
-        filters,
-        parameters,
-        facet
-    }
-    return { ...parent, responseArguments }
+    return { ...parent, responseArguments: args }
 }
 
 export const allEditionsResolver: ResolverType = async (parent, args, context, info) => {
     console.log('// allEditionsResolver')
     const { survey, edition, section, question, responseArguments, questionObjects } = parent
-    const { parameters = {}, filters, facet } = responseArguments || {}
+    const { parameters = {}, filters, facet, responsesType } = responseArguments || {}
     const { enableCache, ...cacheKeyParameters } = parameters
 
     const { selectedEditionId } = args
-    const computeArguments = { parameters, filters, facet, selectedEditionId }
+    const computeArguments = { responsesType, parameters, filters, facet, selectedEditionId }
 
     const funcOptions = {
         survey,

@@ -82,17 +82,28 @@ type QuestionMetadata {
     label: String
     intlId: String
     template: String
-    rawPaths: DbPaths
-    normPaths: DbPaths
+    rawPaths: RawDbPaths
+    normPaths: NormDbPaths
     contentType: ContentType
     options: [OptionsMetadata]
     entity: Entity
+    allowOther: Boolean
+    matchTags: [String]
 }
 
-type DbPaths {
+type RawDbPaths {
     response: String
     other: String
     comment: String
+}
+
+type NormDbPaths {
+    response: String
+    other: String
+    comment: String
+    raw: String
+    patterns: String
+    error: String
 }
 
 enum ContentType {
@@ -117,6 +128,12 @@ input Parameters {
     facetCutoffPercent: Float
     enableCache: Boolean
     showNoAnswer: Boolean
+}
+
+enum ResponsesType {
+    Predefined
+    Prenormalized
+    Freeform
 }
 
 input SortSpecifier {
