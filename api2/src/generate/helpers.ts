@@ -8,15 +8,11 @@ import {
     ParsedSection,
     QuestionApiObject,
     Option,
-    QuestionTemplateOutput,
-    ParsedSurveyExt,
-    ParsedEditionExt
+    QuestionTemplateOutput
 } from '../types/surveys'
-import globalQuestions from '../data/global_questions.yml'
 import { templates } from './question_templates'
 import uniq from 'lodash/uniq.js'
 import { getQuestionObject } from './generate'
-import { DbSuffixes, DbPaths } from '@devographics/types'
 
 export const graphqlize = (str: string) => capitalizeFirstLetter(snakeToCamel(str))
 
@@ -28,10 +24,6 @@ export const snakeToCamel = (str: string) =>
     str
         .toLowerCase()
         .replace(/([-_][a-z])/g, group => group.toUpperCase().replace('-', '').replace('_', ''))
-
-export const getGlobalQuestions = () => {
-    return globalQuestions as Question[]
-}
 
 /*
 
