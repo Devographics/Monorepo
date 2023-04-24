@@ -1,5 +1,5 @@
 import config from '../config'
-import { RequestContext } from '../types'
+import { RequestContext, Survey } from '../types'
 import { inspect } from 'util'
 
 export interface CompletionResult {
@@ -9,13 +9,15 @@ export interface CompletionResult {
 
 export async function computeCompletionByYear({
     context,
-    match
+    match,
+    survey
 }: {
     context: RequestContext
     match: any
+    survey: Survey
 }): Promise<CompletionResult[]> {
     const { db } = context
-    const collection = db.collection(config.mongo.normalized_collection)
+    const collection = db.collection(survey.dbCollectionName)
 
     const aggregationPipeline = [
         {
@@ -23,7 +25,7 @@ export async function computeCompletionByYear({
         },
         {
             $group: {
-                _id: { editionId: '$surveySlug' },
+                _id: { editionId: '$editionId' },
                 total: {
                     $sum: 1
                 }

@@ -44,8 +44,8 @@ export const generateFiltersQuery = async ({
         for (const filterKey of Object.keys(filters)) {
             const [sectionId, filterId] = filterKey.split('__')
             const filterField = questionObjects.find(q => q.id === filterId)
-            if (filterField?.dbPath) {
-                match[filterField.dbPath] = mapFilter<string>(filters[filterKey])
+            if (filterField?.normPaths?.response) {
+                match[filterField.normPaths.response] = mapFilter<string>(filters[filterKey])
             }
         }
         if (filters.ids !== undefined && dbPath) {

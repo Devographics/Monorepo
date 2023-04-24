@@ -70,7 +70,7 @@ export async function computeExperienceOverYears({
     filters?: Filters
 }) {
     const { db, isDebug } = context
-    const collection = db.collection(config.mongo.normalized_collection)
+    const collection = db.collection(survey.dbCollectionName)
 
     const path = `tools.${tool}.experience`
 
@@ -122,7 +122,7 @@ export async function computeExperienceOverYears({
         )
     }
 
-    const completionByYear = await computeCompletionByYear({ context, match })
+    const completionByYear = await computeCompletionByYear({ context, match, survey })
 
     // group by years and add counts
     const experienceByYear = orderBy(

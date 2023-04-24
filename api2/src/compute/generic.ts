@@ -55,9 +55,9 @@ export async function genericComputeFunction({
     let axis1: ComputeAxisParameters,
         axis2: ComputeAxisParameters | null = null
     const { db, isDebug } = context
-    const collection = db.collection(config.mongo.normalized_collection)
+    const collection = db.collection(survey.dbCollectionName)
 
-    const { dbPath } = question
+    const { normPaths } = question
 
     const { filters, parameters = {}, facet, selectedEditionId } = computeArguments
     const {
@@ -128,16 +128,16 @@ export async function genericComputeFunction({
     console.log('// axis2')
     console.log(axis2)
 
-    if (!dbPath) {
-        throw new Error(`No dbPath found for question id ${question.id}`)
+    if (!normPaths.response) {
+        throw new Error(`No normPaths.response found for question id ${question.id}`)
     }
 
     let match: any = {
-        survey: survey.id,
-        [dbPath]: { $nin: [null, '', [], {}] }
+        surveyId: survey.id,
+        [normPaths.response]: { $nin: [null, '', [], {}] }
     }
     if (filters) {
-        const filtersQuery = await generateFiltersQuery({ filters, dbPath })
+        const filtersQuery = await generateFiltersQuery({ filters, dbPath: normPaths.response })
         match = { ...match, ...filtersQuery }
     }
     // if edition is passed, restrict aggregation to specific edition
@@ -147,7 +147,7 @@ export async function genericComputeFunction({
 
     // TODO: merge these counts into the main aggregation pipeline if possible
     const totalRespondentsByYear = await computeParticipationByYear({ context, survey })
-    const completionByYear = await computeCompletionByYear({ context, match })
+    const completionByYear = await computeCompletionByYear({ context, match, survey })
 
     const pipelineProps = {
         surveyId: survey.id,
@@ -163,6 +163,7 @@ export async function genericComputeFunction({
     let results = (await collection.aggregate(pipeline).toArray()) as ResponseEditionData[]
 
     if (isDebug) {
+        console.log(`// Using collection ${survey.dbCollectionName}`)
         console.log(
             inspect(
                 {

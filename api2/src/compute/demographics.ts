@@ -12,17 +12,17 @@ export async function computeParticipationByYear({
     survey: Survey
 }): Promise<EditionParticipation[]> {
     const { db } = context
-    const collection = db.collection(config.mongo.normalized_collection)
+    const collection = db.collection(survey.dbCollectionName)
 
     const aggregationPipeline = [
         {
             $match: {
-                survey: survey.id
+                surveyId: survey.id
             }
         },
         {
             $group: {
-                _id: { editionId: '$surveySlug' },
+                _id: { editionId: '$editionId' },
                 total: { $sum: 1 }
             }
         },

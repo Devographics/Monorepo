@@ -24,15 +24,15 @@ export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
         showNoAnswer = false
     } = pipelineProps
 
-    const axis1DbPath = axis1?.question.dbPath
-    const axis2DbPath = axis2?.question.dbPath
+    const axis1DbPath = axis1?.question?.normPaths?.response
+    const axis2DbPath = axis2?.question?.normPaths?.response
 
     if (!axis1DbPath) {
         throw new Error(`Could not find dbPath for question ${axis1.question.id}`)
     }
 
     let match: any = {
-        survey: surveyId
+        surveyId: surveyId
         // [axis1DbPath]: { $nin: [null, '', [], {}] }
     }
 

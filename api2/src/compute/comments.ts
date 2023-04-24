@@ -68,9 +68,9 @@ export const getRawComments = async ({
     console.log('// getRawComments')
 
     const { db, isDebug } = context
-    const collection = db.collection(config.mongo.normalized_collection)
+    const collection = db.collection(survey.dbCollectionName)
 
-    const dbPath = question.dbPathComments
+    const dbPath = question.normPaths.comment
     if (!dbPath) {
         throw new Error(`Could not find comments dbPath for question ${survey.id}/${question.id}`)
     }
