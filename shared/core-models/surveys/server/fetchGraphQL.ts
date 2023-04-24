@@ -7,6 +7,7 @@ query SurveysMetadataQuery {
       surveys {
         id
         name
+        dbCollectionName
         domain
         editions {
           id

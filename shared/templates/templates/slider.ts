@@ -6,7 +6,7 @@ const getSliderOptions = (question: Question) => {
     const lowerBound = question.from ?? 0
     const upperBound = question.to ?? 9
     const delta = upperBound - lowerBound + 1
-    const options = [...Array(delta)].map((x, i) => ({ id: String(lowerBound + i) }))
+    const options = [...Array(delta)].map((x, i) => ({ id: lowerBound + i }))
     return options
 }
 

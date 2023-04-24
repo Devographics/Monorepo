@@ -124,6 +124,10 @@ export interface QuestionApiObject extends QuestionApiTemplateOutput {
     isGlobal?: boolean
 
     contentType?: string
+
+    sectionIds?: string[]
+    sectionIndex?: number
+    surveyId?: string
 }
 
 export {

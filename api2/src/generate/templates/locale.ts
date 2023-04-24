@@ -1,4 +1,4 @@
-import { locale as templateFunction } from '@devographics/templates'
-import { ApiTemplateFunction } from '../../types'
+// import { locale as templateFunction } from '@devographics/templates'
+// import { ApiTemplateFunction } from '../../types'
 
-export const locale = templateFunction as ApiTemplateFunction
+// export const locale = templateFunction as ApiTemplateFunction

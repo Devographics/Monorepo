@@ -10,13 +10,12 @@ import {
 } from '../types/surveys'
 import {
     graphqlize,
-    getGlobalQuestions,
     applyQuestionTemplate,
     mergeOptions,
     mergeSections,
     getSectionQuestionObjects,
-    getRawPaths,
-    getNormPaths,
+    // getRawPaths,
+    // getNormPaths,
     getContentType
 } from './helpers'
 import {
@@ -170,36 +169,21 @@ export const getQuestionObject = ({
     // initialize defaults
     const fieldTypeName = graphqlize(survey.id) + graphqlize(questionId)
 
-    const defaultObject = {
+    const templateOutputWithExtraFields: QuestionApiObject = {
         fieldTypeName,
         sectionIds: [section.id], // a question can belong to more than one section in different editions
         sectionIndex: edition.sections.findIndex(s => s.id === section.id), // just a simple way to group questions together when belonging to same section
         surveyId: survey.id,
-        editions: [edition.id]
+        editions: [edition.id],
+        ...templateObject
     }
 
-    // if a global question definition exists, extend question with it
-    const globalQuestions = getGlobalQuestions()
-    const globalQuestionDefinition = globalQuestions.find(q => q.id === questionId)
-    const globalObject = globalQuestionDefinition
-        ? { ...globalQuestionDefinition, isGlobal: true }
-        : {}
-
     let questionObject: QuestionApiObject = {
-        ...defaultObject,
-        ...question,
-        ...templateObject,
-        ...globalObject
+        ...templateOutputWithExtraFields,
+        ...question
     }
 
     questionObject.contentType = getContentType(questionObject)
-
-    // const pathsObject = {
-    //     rawPaths: getRawPaths({ survey, edition, section, question: questionObject }),
-    //     normPaths: getNormPaths({ survey, edition, section, question: questionObject })
-    // }
-
-    // questionObject = { ...questionObject, ...pathsObject }
 
     if (questionObject.options) {
         if (!questionObject.optionTypeName) {

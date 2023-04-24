@@ -4,6 +4,23 @@ export interface SurveyConfig {
     id: string
     name: string
     domain: string
+
+    dbCollectionName: string
+
+    emailOctopus: EmailOctopusData
+
+    partners: [SponsorItem]
+}
+
+export interface EmailOctopusData {
+    listId: string
+}
+
+export interface SponsorItem {
+    id: string
+    name: string
+    url: string
+    imageUrl: string
 }
 
 export interface Survey extends SurveyConfig {
@@ -57,6 +74,7 @@ export type Question = {
     label?: string
     options?: Option[]
     optionsAreNumeric?: boolean
+    optionsAreRange?: boolean
     defaultSort?: string
 
     // for slider questions
@@ -71,11 +89,13 @@ export type Question = {
 }
 
 export type Option = {
-    id: string
+    id: OptionId
     editions?: string[]
     average?: number
     label?: string
 }
+
+export type OptionId = string | number
 
 export interface Country {
     name: string

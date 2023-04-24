@@ -11,53 +11,55 @@ import { ResponseMongooseModel } from "~/modules/responses/model.server";
 import { getOrFetchEntities } from "~/modules/entities/server";
 import pick from "lodash/pick.js";
 import { NormalizedResponseMongooseModel } from "~/admin/models/normalized_responses/model.server";
+import { getNormCollection, getRawCollection } from "../mongo";
+import { loadOrGetSurveys } from "~/modules/surveys/load";
 
 /*
 
 Normalization
 
 */
-export const normalizeIds = async (
-  root,
-  args,
-  { currentUser }: { currentUser: UserType }
-) => {
-  // if (!Users.isAdmin(currentUser)) {
-  //   throw new Error('You cannot perform this operation');
-  // }
-  const results: Array<{
-    normalizedResponseId?: string;
-    responseId?: string;
-    normalizedFields?: Array<any>;
-  }> = [];
+// export const normalizeIds = async (
+//   root,
+//   args,
+//   { currentUser }: { currentUser: UserType }
+// ) => {
+//   // if (!Users.isAdmin(currentUser)) {
+//   //   throw new Error('You cannot perform this operation');
+//   // }
+//   const results: Array<{
+//     normalizedResponseId?: string;
+//     responseId?: string;
+//     normalizedFields?: Array<any>;
+//   }> = [];
 
-  if (!currentUser.isAdmin) throw new Error("Non admin cannot normalize ids");
+//   if (!currentUser.isAdmin) throw new Error("Non admin cannot normalize ids");
 
-  const { ids } = args;
-  // TODO: use Response model and connector instead
-  const responses = await ResponseMongooseModel.find({
-    _id: { $in: ids },
-  });
-  for (const document of responses) {
-    const { _id } = document;
-    const normalization = await normalizeResponse({
-      document,
-      verbose: true,
-      isSimulation: true,
-    });
-    if (!normalization) {
-      throw new Error(
-        `Could not normalize response ${JSON.stringify(document)}`
-      );
-    }
-    results.push(normalization);
-  }
-  // console.log("// normalizeIds");
-  // console.log(JSON.stringify(results, null, 2));
-  return results;
-};
+//   const { ids } = args;
+//   // TODO: use Response model and connector instead
+//   const responses = await ResponseMongooseModel.find({
+//     _id: { $in: ids },
+//   });
+//   for (const document of responses) {
+//     const { _id } = document;
+//     const normalization = await normalizeResponse({
+//       document,
+//       verbose: true,
+//       isSimulation: true,
+//     });
+//     if (!normalization) {
+//       throw new Error(
+//         `Could not normalize response ${JSON.stringify(document)}`
+//       );
+//     }
+//     results.push(normalization);
+//   }
+//   // console.log("// normalizeIds");
+//   // console.log(JSON.stringify(results, null, 2));
+//   return results;
+// };
 
-export const normalizeIdsTypeDefs = "normalizeIds(ids: [String]): [JSON]";
+// export const normalizeIdsTypeDefs = "normalizeIds(ids: [String]): [JSON]";
 
 /*
 
@@ -92,9 +94,26 @@ interface NormalizeSurveyResult {
   discardedCount?: number;
 }
 
-export const normalizeSurvey = async (
+type NormalizeResponsesArgs = {
+  editionId: string;
+  questionId?: string;
+  responsesIds?: string[];
+  startFrom?: number;
+  limit?: number;
+  onlyUnnormalized?: boolean;
+};
+/*
+
+We can normalize:
+
+A) a specific set of documents (if responsesIds is passed)
+B) a specific question on *all* documents (if questionId) is passed
+C) *all* questions on *all* documents (if neither is passed)
+
+*/
+export const normalizeResponses = async (
   root,
-  args,
+  args: NormalizeResponsesArgs,
   { currentUser }: { currentUser: UserType }
 ) => {
   if (!currentUser.isAdmin) {
@@ -104,6 +123,7 @@ export const normalizeSurvey = async (
   const {
     editionId,
     questionId,
+    responsesIds,
     startFrom = 0,
     limit = defaultLimit,
     onlyUnnormalized,
@@ -111,6 +131,12 @@ export const normalizeSurvey = async (
   const startAt = new Date();
   let progress = 0,
     discardedCount = 0;
+
+  const surveys = await loadOrGetSurveys();
+  const survey = surveys.find((s) =>
+    s.editions.some((e) => e.id === editionId)
+  );
+  const edition = survey?.editions.find((e) => e.id === editionId);
 
   const bulkOperations: BulkOperation[] = [];
 
@@ -129,12 +155,21 @@ export const normalizeSurvey = async (
   // TODO: use Response model and connector instead
 
   // first, get all the responses we're going to operate on
-  const selector = await getSelector(editionId, questionId, onlyUnnormalized);
-  const responses = await ResponseMongooseModel.find(selector, null, {
-    sort: {
-      createdAt: 1,
-    },
-  })
+  const selector = await getSelector({
+    editionId,
+    questionId,
+    responsesIds,
+    onlyUnnormalized,
+  });
+
+  const rawResponsesCollection = await getRawCollection(survey);
+
+  const responses = await rawResponsesCollection
+    .find(selector, null, {
+      sort: {
+        createdAt: 1,
+      },
+    })
     .skip(startFrom)
     .limit(limit);
   const count = responses.length;
@@ -217,8 +252,10 @@ export const normalizeSurvey = async (
   */
   // see https://www.mongodb.com/docs/manual/reference/method/db.collection.bulkWrite
   console.log(`-> Now starting bulk write…`);
+
+  const normResponsesCollection = await getNormCollection(survey);
   try {
-    const operationResult = await NormalizedResponseMongooseModel.bulkWrite(
+    const operationResult = await normResponsesCollection.bulkWrite(
       bulkOperations
     );
     mutationResult.operationResult = operationResult.result;
@@ -244,26 +281,40 @@ export const normalizeSurvey = async (
   return mutationResult;
 };
 
-export const normalizeSurveyTypeDefs =
-  "normalizeSurvey(editionId: String, questionId: String, startFrom: Int, limit: Int, onlyUnnormalized: Boolean): JSON";
+export const normalizeResponsesTypeDefs =
+  "normalizeResponses(editionId: String, responsesIds: [String], questionId: String, startFrom: Int, limit: Int, onlyUnnormalized: Boolean): JSON";
 
 /*
 
 Get survey metadata
 
 */
+type GetSurveyMetadataArgs = {
+  editionId: string;
+  questionId?: string;
+  onlyUnnormalized?: boolean;
+};
 export const getSurveyMetadata = async (
   root,
-  args,
+  args: GetSurveyMetadataArgs,
   { currentUser }: { currentUser: UserType }
 ) => {
   const { editionId, questionId, onlyUnnormalized } = args;
   if (!currentUser.isAdmin) throw new Error("Non admin cannot do this");
 
-  const selector = await getSelector(editionId, questionId, onlyUnnormalized);
+  const surveys = await loadOrGetSurveys();
+  const survey = surveys.find((s) =>
+    s.editions.some((e) => e.id === editionId)
+  );
 
-  // TODO: use Response model and connector instead
-  const responsesCount = await ResponseMongooseModel.count(selector);
+  const selector = await getSelector({
+    editionId,
+    questionId,
+    onlyUnnormalized,
+  });
+
+  const rawResponsesCollection = await getRawCollection(survey);
+  const responsesCount = await rawResponsesCollection.count(selector);
   return { responsesCount };
 };
 

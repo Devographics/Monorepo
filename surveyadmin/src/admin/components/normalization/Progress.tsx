@@ -76,15 +76,15 @@ const SegmentDone = ({ startFrom, responsesCount, data }) => {
   );
 };
 
-const normalizeSurveyMutation = gql`
-  mutation normalizeSurvey(
+const normalizeResponsesMutation = gql`
+  mutation normalizeResponses(
     $editionId: String
     $questionId: String
     $startFrom: Int
     $limit: Int
     $onlyUnnormalized: Boolean
   ) {
-    normalizeSurvey(
+    normalizeResponses(
       editionId: $editionId
       questionId: $questionId
       startFrom: $startFrom
@@ -108,7 +108,7 @@ const SegmentInProgress = ({
 }) => {
   const editionId = edition.id;
 
-  const mutateFunction = useMutation(normalizeSurveyMutation);
+  const mutateFunction = useMutation(normalizeResponsesMutation);
 
   useEffect(() => {
     if (enabled) {
@@ -125,11 +125,11 @@ const SegmentInProgress = ({
         limit: segmentSize,
         onlyUnnormalized,
       }).then((data) => {
-        const doneCount = startFrom + data?.normalizeSurvey?.count;
+        const doneCount = startFrom + data?.normalizeResponses?.count;
         updateSegments({
           doneCount,
           doneSegmentIndex: segmentIndex,
-          doneSegmentData: data?.normalizeSurvey,
+          doneSegmentData: data?.normalizeResponses,
           segmentSize,
         });
       });

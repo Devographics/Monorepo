@@ -24,6 +24,7 @@ import { normalizeResponse } from "~/admin/server/normalization/normalize";
 import { getOrFetchEntities } from "~/modules/entities/server";
 import { getEditionQuestionsFlat } from "~/admin/server/normalization/helpers";
 import * as templateFunctions from "@devographics/templates";
+import { loadOrGetSurveys } from "~/modules/surveys/load";
 
 const editions = {
   // td2019: "International Developers in Japan Survey 2019.csv",
@@ -160,9 +161,19 @@ const acceptsOtherAnswers = (outline: EditionOutline, question: Question) =>
 //   questionId: string;
 // }) => [editionId, sectionId, questionId].join("__");
 
+function findClosestValue(arr, target) {
+  let closest = arr[0];
+  for (let i = 1; i < arr.length; i++) {
+    if (Math.abs(target - arr[i]) < Math.abs(target - closest)) {
+      closest = arr[i];
+    }
+  }
+  return closest;
+}
+
 /*
 
-For a question that accepts freeform answers, take the answer string
+For a question that accepts predefined answers, take the answer string
 and split it between "regular" answers that match one of the predefined options,
 and "other" freeform answers
 
@@ -170,18 +181,33 @@ and "other" freeform answers
 const getOptionValues = (
   edition: EditionObject,
   question: Question,
-  value: string
+  value_: string,
+  questionLabel: string
 ) => {
   const { editionId, outline } = edition;
-  let optionsValues: string[] = [],
+  let optionsValues: (string | number)[] = [],
     otherValue: string | undefined;
   const acceptsOther = acceptsOtherAnswers(outline, question);
+
+  // if this is a number question that has options defined, take the provided number
+  // and replace it with the closest available option
+  const value =
+    question.template === "number"
+      ? String(
+          findClosestValue(
+            question.options?.map((o) => o.id),
+            Number(value_)
+          )
+        )
+      : value_;
+
   // CSV fields that hold multiple values are separated with semi-columns
   const values = value.split(";");
   for (const value of values) {
     // check if a predefined matching option exists based on the option label
+    // or the option id, for question whose options are generated from a template
     const matchingOption = question.options?.find(
-      (o) => String(o.label) === String(value)
+      (o) => String(o.label) === String(value) || String(o.id) === String(value)
     );
     if (matchingOption) {
       optionsValues.push(matchingOption.id);
@@ -190,8 +216,9 @@ const getOptionValues = (
         // handle this value as an "other" answer
         otherValue = value;
       } else {
+        console.log(question);
         throw new Error(
-          `🔴 Could not find value "${value}" within options for "${editionId}/${question.id}"`
+          `🔴 Could not find value "${value}" within options for ${editionId}/${question.id} ("${questionLabel})"`
         );
       }
     }
@@ -200,10 +227,7 @@ const getOptionValues = (
 };
 
 export const loadTokyoDevCSV = async () => {
-  const allSurveysMetadata = await fetchSurveysListGraphQL({
-    apiUrl: process.env.DATA_API_URL,
-  });
-
+  const allSurveysMetadata = await loadOrGetSurveys();
   const entities = await getOrFetchEntities();
   const survey = allSurveysMetadata.find((s) => s.id === "tokyodev") as Survey;
   const allEditions = await loadAllEditions(allSurveysMetadata, "tokyodev");
@@ -216,20 +240,25 @@ export const loadTokyoDevCSV = async () => {
   // iterate over all editions
   for (const edition of allEditions) {
     const { editionId, year, data, outline, metadata } = edition;
+    let i = 0;
+
     // iterate over all CSV rows
-    for (const responseData of data.slice(0, 5)) {
+    for (const responseData of data) {
+      i++;
+      const _id = `${editionId}_${i}`;
+      console.log(`Processing response ${_id}…`);
       const document = {
         year,
         editionId,
         surveyId: "tokyodev",
+        _id,
       };
       // iterate over each { question: answer } field in the response
       for (const questionLabel of Object.keys(responseData)) {
-        let suffix, value;
-
         const questionValue = responseData[questionLabel];
+
         if (questionLabel === "Timestamp") {
-          document.createdAt = questionValue;
+          document.createdAt = new Date(questionValue);
         } else {
           if (questionValue !== "") {
             // find the question's canonical ID across all surveys based
@@ -261,7 +290,9 @@ export const loadTokyoDevCSV = async () => {
               questionMetadata.template
             ] as TemplateFunction;
             if (!templateFunction) {
-              return;
+              throw new Error(
+                `// No template ${questionMetadata.template} found`
+              );
             }
 
             const section = { id: questionMetadata.sectionId } as Section;
@@ -273,47 +304,56 @@ export const loadTokyoDevCSV = async () => {
               question,
             });
 
-            const path = questionObject.normPaths.response;
-
-            // if question has options, check that the value belongs to
-            // the list of acceptable options
-            if (questionObject.options) {
-              const { optionsValues, otherValue } = getOptionValues(
-                edition,
-                questionObject,
-                questionValue
-              );
-
-              if (optionsValues.length > 0) {
-                if (["single", "dropdown"].includes(questionObject.template)) {
-                  // this field accepts a single answer
-                  document[path] = convertToType(optionsValues[0]);
-                } else {
-                  // this field accepts an array of answers
-                  document[path] = optionsValues.map(convertToType);
-                }
-              }
-              if (otherValue) {
-                // handle "other" answer
-                document[path] = convertToType(otherValue);
-              }
+            if (!questionObject.rawPaths) {
+              console.log("// no rawPaths");
+              console.log(questionObject);
             } else {
-              // freeform field
-              document[path] = convertToType(questionValue);
+              const path = questionObject.rawPaths?.response;
+
+              // if question has options, check that the value belongs to
+              // the list of acceptable options
+              if (questionObject.options) {
+                const { optionsValues, otherValue } = getOptionValues(
+                  edition,
+                  questionObject,
+                  questionValue,
+                  questionLabel
+                );
+
+                if (optionsValues.length > 0) {
+                  if (
+                    ["single", "dropdown"].includes(questionObject.template)
+                  ) {
+                    // this field accepts a single answer
+                    document[path] = convertToType(optionsValues[0]);
+                  } else {
+                    // this field accepts an array of answers
+                    document[path] = optionsValues.map(convertToType);
+                  }
+                }
+                if (otherValue) {
+                  // handle "other" answer
+                  document[path] = convertToType(otherValue);
+                }
+              } else {
+                // freeform field
+                document[path] = convertToType(questionValue);
+              }
             }
           }
         }
       }
-      console.log("// document");
-      console.log(document);
+      // console.log("// document");
+      // console.log(document);
 
       const normalizedDocument = await normalizeResponse({
         document,
         entities,
         surveys: allSurveysMetadata,
       });
-      console.log("// normalizedDocument");
-      console.log(normalizedDocument);
+
+      // console.log("// normalizedDocument");
+      // console.log(normalizedDocument);
     }
   }
 };

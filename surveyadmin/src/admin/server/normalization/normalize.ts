@@ -2,18 +2,22 @@ import {
   EntityRule,
   generateEntityRules,
   getFieldPaths,
-  getEditionFieldById,
+  getEditionQuestionById,
 } from "./helpers";
 import { getOrFetchEntities } from "~/modules/entities/server";
-import { getSurveyEditionById } from "~/modules/surveys/helpers";
 import {
   NormalizedResponseMongooseModel,
   NormalizedResponseDocument,
 } from "~/admin/models/normalized_responses/model.server";
 import * as steps from "./steps";
 import get from "lodash/get.js";
-import type { EditionMetadata, SurveyMetadata } from "@devographics/types";
+import type {
+  EditionMetadata,
+  Survey,
+  SurveyMetadata,
+} from "@devographics/types";
 import { fetchSurveysListGraphQL } from "@devographics/core-models/server";
+import { getNormCollection } from "../mongo";
 
 interface RegularField {
   fieldName: string;
@@ -135,6 +139,8 @@ export const normalizeResponse = async (
     const survey = allSurveys.find((s) => s.id === response.surveyId);
     const edition = survey.editions.find((e) => e.id === response.editionId);
 
+    const normCollection = await getNormCollection(survey);
+
     if (!edition)
       throw new Error(`Could not find edition for slug ${response.editionId}`);
 
@@ -145,7 +151,7 @@ export const normalizeResponse = async (
       allEntities = await getOrFetchEntities();
     }
     const allRules = rules ?? generateEntityRules(allEntities);
-    const fileName = _fileName || `${response.surveySlug}_normalization`;
+    const fileName = _fileName || `${response.surveyId}_normalization`;
 
     const normalizationParams: NormalizationParams = {
       response,
@@ -185,9 +191,9 @@ export const normalizeResponse = async (
             "Please normalize full document in order to normalize country field"
           );
         default:
-          const field = getEditionFieldById(edition, fieldId);
-          await steps.normalizeField({ field, ...normalizationParams });
-          fullPath = getFieldPaths(field).fullPath;
+          const question = getEditionQuestionById(edition, fieldId);
+          await steps.normalizeField({ question, ...normalizationParams });
+          fullPath = getFieldPaths(question).fullPath;
           break;
       }
 
@@ -199,15 +205,17 @@ export const normalizeResponse = async (
       } else {
         modifier = { $set: { [fullPath]: value } };
 
-        // console.log(JSON.stringify(selector, null, 2));
-        // console.log(JSON.stringify(modifier, null, 2));
+        console.log(JSON.stringify(selector, null, 2));
+        console.log(JSON.stringify(modifier, null, 2));
 
         if (!isSimulation && !isBulk) {
           // update normalized response, or insert it if it doesn't exist
           // NOTE: this will generate ObjectId _id for unknown reason, see https://github.com/Devographics/StateOfJS-next2/issues/31
-          updatedNormalizedResponse =
-            await NormalizedResponseMongooseModel.updateOne(selector, modifier);
-
+          // updatedNormalizedResponse = await NormalizedResponseMongooseModel.updateOne(selector, modifier);
+          updatedNormalizedResponse = await normCollection.updateOne(
+            selector,
+            modifier
+          );
           if (
             !updatedNormalizedResponse ||
             !updatedNormalizedResponse.matchedCount
@@ -263,12 +271,21 @@ export const normalizeResponse = async (
       if (!isSimulation && !isBulk) {
         // update normalized response, or insert it if it doesn't exist
         // NOTE: this will generate ObjectId _id for unknown reason, see https://github.com/Devographics/StateOfJS-next2/issues/31
-        updatedNormalizedResponse =
-          await NormalizedResponseMongooseModel.findOneAndUpdate(
-            selector,
-            modifier,
-            { upsert: true, returnDocument: "after" }
-          );
+        // updatedNormalizedResponse =
+        //   await NormalizedResponseMongooseModel.findOneAndUpdate(
+        //     selector,
+        //     modifier,
+        //     { upsert: true, returnDocument: "after" }
+        //   );
+
+        // console.log(JSON.stringify(selector, null, 2));
+        // console.log(JSON.stringify(modifier, null, 2));
+
+        updatedNormalizedResponse = await normCollection.findOneAndReplace(
+          selector,
+          modifier,
+          { upsert: true, returnDocument: "after" }
+        );
       }
     }
     // eslint-disable-next-line

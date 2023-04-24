@@ -47,93 +47,6 @@ export const renameFieldMigration = async (
 
 /*
 
-Renormalize a survey's results
-
-*/
-const renormalizeSurvey = async (surveySlug) => {
-  await connectToAppDb();
-
-  const fileName = `${surveySlug}_normalization`;
-  const limit = 99999;
-  // const survey = getSurveyBySlug(surveySlug);
-  const selector = { surveySlug };
-  const entities = await fetchEntities();
-
-  console.log(`// found ${entities?.length} entities`);
-
-  // for (const s of survey.outline) {
-  //   for (const field of s.questions) {
-  //     const { fieldName } = field;
-  //     const [initialSegment, ...restOfPath] = fieldName.split('__');
-  //     if (last(restOfPath) === 'others') {
-  //       selector['$or'].push({ [fieldName]: { $exists: true } });
-  //     }
-  //   }
-  // }
-
-  const startAt = new Date();
-  let progress = 0;
-  const responsesCursor = ResponseMongooseModel.find(selector, null, { limit });
-  const count = await responsesCursor.clone().count();
-  const tickInterval = Math.round(count / 200);
-
-  await logToFile(
-    `${fileName}.txt`,
-    "id, fieldName, value, matchTags, id, pattern, rules, match \n",
-    { mode: "overwrite" }
-  );
-  await logToFile(`${fileName}.txt`, "", { mode: "overwrite" });
-  await logToFile("normalization_errors.txt", "", { mode: "overwrite" });
-
-  console.log(
-    `// Renormalizing survey ${surveySlug}… Found ${count} responses to renormalize. (${startAt})`
-  );
-
-  const responses = await responsesCursor.clone().exec();
-  for (const response of responses) {
-    try {
-      // console.log(progress, progress % tickInterval, response._id);
-      await normalizeResponse({
-        document: response,
-        entities,
-        log: true,
-        fileName,
-        verbose: false,
-      });
-      progress++;
-      if (progress % tickInterval === 0) {
-        console.log(`  -> Normalized ${progress}/${count} responses…`);
-      }
-    } catch (error) {
-      console.log("// Renormalization error");
-      console.log(error);
-    }
-  }
-
-  // responsesCursor.forEach(async (response) => {
-  //   try {
-  //     await normalizeResponse({ document: response });
-  //     progress++;
-  //     if (progress % tickInterval === 0) {
-  //       console.log(`  -> Normalized ${progress}/${count} responses…`);
-  //     }
-  //   } catch (error) {
-  //     console.log('// Renormalization error');
-  //     console.log(error);
-  //   }
-  // });
-
-  const endAt = new Date();
-  const duration = Math.ceil(
-    (endAt.valueOf() - startAt.valueOf()) / (1000 * 60)
-  );
-  console.log(
-    `-> Done renormalizing ${count} responses in survey ${surveySlug}. (${endAt}) - ${duration} min`
-  );
-};
-
-/*
-
 Log all "currently missing features from CSS" answers to file
 
 */
@@ -182,11 +95,6 @@ export async function migrateUserEmails() {
     );
   }
 }
-
-export const renormalizeGraphQL2022 = async () => {
-  console.log("// renormalizeGraphQL2022");
-  await renormalizeSurvey("graphql2022");
-};
 
 export const renameFields = async () => {
   console.log("// renameFields");
@@ -399,7 +307,6 @@ export const fixChoicesChoices = async () => {
   console.log("// result3");
   console.log(result3);
 };
-
 
 // $unset: {
 //   services: 1,

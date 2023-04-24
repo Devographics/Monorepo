@@ -10,3 +10,13 @@ export const checkHasId = (options: TemplateArguments) => {
         return question as QuestionWithId
     }
 }
+
+/*
+
+single & multiple templates expect question to already have an id, otherwise
+they will throw an error
+
+*/
+export const addQuestionId = (options: TemplateArguments, id: string): TemplateArguments => {
+    return { ...options, question: { ...options.question, id } }
+}

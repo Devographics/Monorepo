@@ -86,17 +86,17 @@ export const getFieldPaths = (questionObject: QuestionTemplateOutput) => {
 //   };
 // };
 
-export const getEditionFieldById = (edition, fieldId) => {
-  const allFields = edition.sections.map((s) => s.questions).flat();
+export const getEditionQuestionById = (edition, questionId) => {
+  const allQuestions = edition.sections.map((s) => s.questions).flat();
   // make sure to narrow it down to the freeform "others" field since the main "choices"
   // field can have the same id
-  const field = allFields.find(
-    (f) => f.id === fieldId && f.template === "others"
+  const question = allQuestions.find(
+    (q) => q.id === questionId && q.template === "others"
   );
-  if (!field) {
-    throw new Error(`Could not find field for fieldId "${fieldId}"`);
+  if (!question) {
+    throw new Error(`Could not find field for questionId "${questionId}"`);
   }
-  return field;
+  return question;
 };
 
 /*
@@ -346,13 +346,13 @@ Handle source normalization separately since its value can come from
 three different fields (source field, referrer field, 'how did you hear' field)
 
 */
-export const normalizeSource = async (
+export const normalizeSource = async ({
   normResp,
   allRules,
   survey,
   edition,
-  verbose
-) => {
+  verbose,
+}) => {
   const tags = [
     "sources",
     `sources_${survey.id}`,
@@ -539,13 +539,26 @@ export const getSourceFields = (surveyId) => [
 const existsSelector = { $exists: true, $nin: ignoreValues };
 
 // get mongo selector
-export const getSelector = async (editionId, questionId, onlyUnnormalized) => {
+export const getSelector = async ({
+  editionId,
+  questionId,
+  responsesIds,
+  onlyUnnormalized,
+}: {
+  editionId: string;
+  questionId?: string;
+  responsesIds?: string[];
+  onlyUnnormalized?: boolean;
+}) => {
   const survey = getSurveyEditionById(editionId);
 
   const selector = {
     editionId,
   } as any;
 
+  if (responsesIds) {
+    selector._id = { $in: responsesIds };
+  }
   if (questionId) {
     if (onlyUnnormalized) {
       const { responses } = await getUnnormalizedResponses(
@@ -561,7 +574,7 @@ export const getSelector = async (editionId, questionId, onlyUnnormalized) => {
           [f]: existsSelector,
         }));
       } else {
-        const field = getEditionFieldById(survey, questionId);
+        const field = getEditionQuestionById(survey, questionId);
         selector[field.fieldName] = existsSelector;
       }
     }
@@ -572,7 +585,8 @@ export const getSelector = async (editionId, questionId, onlyUnnormalized) => {
       // do nothing, use default selector
     }
   }
-  // console.log(JSON.stringify(selector, undefined, 2));
+  console.log("// selector");
+  console.log(JSON.stringify(selector, undefined, 2));
   return selector;
 };
 

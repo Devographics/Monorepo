@@ -9,7 +9,6 @@ const doNotInclude = () => ({
 export const templates: TemplatesDictionnary = {
     ...allTemplates,
 
-    race_ethnicity: allTemplates.multiple,
     top_n: allTemplates.multiple,
 
     bracket: defaultTemplateFunction,

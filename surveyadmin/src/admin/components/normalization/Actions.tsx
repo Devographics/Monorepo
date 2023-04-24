@@ -106,16 +106,22 @@ const Actions = (props) => {
             args: { ids: "[String]" },
           }}*/
           mutation={gql`
-            mutation normalizeIds($ids: [String]) {
-              normalizeIds(ids: $ids)
+            mutation normalizeResponses(
+              $responsesIds: [String]
+              $editionId: String
+            ) {
+              normalizeResponses(
+                responsesIds: $responsesIds
+                editionId: $editionId
+              )
             }
           `}
           // Not needed when returning arguments from the mutation callback
           //mutationArguments={{}}
           submitCallback={() => {
             const idsString = prompt("Enter comma-separated ids") || "";
-            const ids = idsString.split(",");
-            return { mutationArguments: { ids } };
+            const responsesIds = idsString.split(",");
+            return { mutationArguments: { responsesIds, editionId } };
           }}
           successCallback={(result) => {
             alert("Responses normalized");

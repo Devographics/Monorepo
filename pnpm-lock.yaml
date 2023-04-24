@@ -896,6 +896,7 @@ importers:
       js-yaml-loader: ^1.2.2
       lodash: ^4.17.19
       moment: ^2.29.4
+      mongodb: ^5.3.0
       mongodb-memory-server: ^7.3.6
       mongoose: ^6.4.5
       nanoid: ^3.1.25
@@ -971,8 +972,8 @@ importers:
       '@vulcanjs/i18n': 0.8.1-y.0
       '@vulcanjs/mdx': 0.7.2-alpha.8
       '@vulcanjs/model': 0.7.2-alpha.8
-      '@vulcanjs/mongo': 0.8.1_fbta7zxnlib62z2eo4ad3a5zwi
-      '@vulcanjs/mongo-apollo': 0.8.1_kce3vlkaamzijypd5kaovjga64
+      '@vulcanjs/mongo': 0.8.1_ap5xunkzzmiqhh4nfhqn35bhla
+      '@vulcanjs/mongo-apollo': 0.8.1_3g6ypbzj23fvzepk5gftvl3a3e
       '@vulcanjs/permissions': 0.7.2-alpha.8_biqbaboplfbrettd7655fr4n2y
       '@vulcanjs/schema': 0.7.2-alpha.8
       '@vulcanjs/utils': 0.7.2-alpha.8
@@ -1004,6 +1005,7 @@ importers:
       js-yaml-loader: 1.2.2
       lodash: 4.17.21
       moment: 2.29.4
+      mongodb: 5.3.0
       mongoose: 6.7.1
       nanoid: 3.3.4
       next: 13.1.3_e6en2gkdnbspgmiqkggoqbxjgy
@@ -10696,7 +10698,7 @@ packages:
     resolution: {integrity: sha512-ELCPqAdroMdcuxqwMgUpifQyRoTpyYCNr1V9xKyF40VsBobsj+BbWNRvwGchMgBPGqkw655ypkjj2MEF5ywVwg==}
     deprecated: This is a stub types definition. bson provides its own type definitions, so you do not need this installed.
     dependencies:
-      bson: 5.0.1
+      bson: 5.2.0
 
   /@types/cacheable-request/6.0.3:
     resolution: {integrity: sha512-IQ3EbTzGxIigb1I3qPZc1rWJnH0BmSKv5QYTalEwweFvyBDLSAe24zP0le/hyi7ecGfZVlIVAg4BZqb8WBwKqw==}
@@ -12423,7 +12425,7 @@ packages:
       - supports-color
     dev: false
 
-  /@vulcanjs/mongo-apollo/0.8.1_kce3vlkaamzijypd5kaovjga64:
+  /@vulcanjs/mongo-apollo/0.8.1_3g6ypbzj23fvzepk5gftvl3a3e:
     resolution: {integrity: sha512-O1h3Y2Y9N9qyMNJ/hz6Ba2xj4WU9dEtWod5K23cXfJVzsLBwENeL2tKrVYJ7QMK9ZbmRpT0mtue4OdtR3RnQ9g==}
     peerDependencies:
       mongodb: '>= 3.6.2'
@@ -12431,10 +12433,11 @@ packages:
     dependencies:
       '@vulcanjs/crud': 0.7.2-alpha.8_biqbaboplfbrettd7655fr4n2y
       '@vulcanjs/graphql': 0.8.1-y.0_d5rxnovlc3juxvfb3ez34dftf4
-      '@vulcanjs/mongo': 0.8.1_fbta7zxnlib62z2eo4ad3a5zwi
+      '@vulcanjs/mongo': 0.8.1_ap5xunkzzmiqhh4nfhqn35bhla
       '@vulcanjs/utils': 0.7.2-alpha.8
       apollo-datasource-mongodb: 0.5.4_7g7spk322yia62taxdff3dtov4
-      graphql-objectid-scalar: 1.0.5_graphql@16.6.0
+      graphql-objectid-scalar: 1.0.5_b7lhni3lmhxw5dczxxinvjqoqi
+      mongodb: 5.3.0
       mongoose: 6.7.1
     transitivePeerDependencies:
       - '@apollo/client'
@@ -12565,7 +12568,7 @@ packages:
       - supports-color
     dev: false
 
-  /@vulcanjs/mongo/0.8.1_fbta7zxnlib62z2eo4ad3a5zwi:
+  /@vulcanjs/mongo/0.8.1_ap5xunkzzmiqhh4nfhqn35bhla:
     resolution: {integrity: sha512-sUHduVMSmjg3pOstZC84jBHLci2ZRRpZ8pUW2z2IWgTWsKoreYRmZ5eextNr49e+rfxFXzvyESo1gnEBjDSopQ==}
     peerDependencies:
       mongodb: '>= 3.6.2'
@@ -12577,6 +12580,7 @@ packages:
       '@vulcanjs/schema': 0.7.2-alpha.8
       '@vulcanjs/utils': 0.7.2-alpha.8
       lodash: 4.17.21
+      mongodb: 5.3.0
       mongoose: 6.7.1
     optionalDependencies:
       mongodb-memory-server: 8.12.2
@@ -15085,8 +15089,8 @@ packages:
       buffer: 5.7.1
     dev: false
 
-  /bson/5.0.1:
-    resolution: {integrity: sha512-y09gBGusgHtinMon/GVbv1J6FrXhnr/+6hqLlSmEFzkz6PodqF6TxjyvfvY3AfO+oG1mgUtbC86xSbOlwvM62Q==}
+  /bson/5.2.0:
+    resolution: {integrity: sha512-HevkSpDbpUfsrHWmWiAsNavANKYIErV2ePXllp1bwq5CDreAaFVj6RVlZpJnxK4WWDCJ/5jMUpaY6G526q3Hjg==}
     engines: {node: '>=14.20.1'}
 
   /buf-compare/1.0.1:
@@ -22201,13 +22205,14 @@ packages:
       mongodb: 4.13.0
     dev: false
 
-  /graphql-objectid-scalar/1.0.5_graphql@16.6.0:
+  /graphql-objectid-scalar/1.0.5_b7lhni3lmhxw5dczxxinvjqoqi:
     resolution: {integrity: sha512-tJsc500+FVHreMAAjvdLMeYHupK1Q9NJWDkBwIcg4jnm/7mfY6VSvLUwPJpBKgkGXZk6btE2o6Zt2SYoza3SCA==}
     peerDependencies:
       graphql: '>=0.8.0'
       mongodb: '>=3.0.0'
     dependencies:
       graphql: 16.6.0
+      mongodb: 5.3.0
     dev: false
 
   /graphql-tag/2.10.3_graphql@16.6.0:
@@ -27496,6 +27501,28 @@ packages:
       bson: 4.7.0
       denque: 2.1.0
       mongodb-connection-string-url: 2.5.4
+      socks: 2.7.1
+    optionalDependencies:
+      saslprep: 1.0.3
+    dev: false
+
+  /mongodb/5.3.0:
+    resolution: {integrity: sha512-Wy/sbahguL8c3TXQWXmuBabiLD+iVmz+tOgQf+FwkCjhUIorqbAxRbbz00g4ZoN4sXIPwpAlTANMaGRjGGTikQ==}
+    engines: {node: '>=14.20.1'}
+    peerDependencies:
+      '@aws-sdk/credential-providers': ^3.201.0
+      mongodb-client-encryption: '>=2.3.0 <3'
+      snappy: ^7.2.2
+    peerDependenciesMeta:
+      '@aws-sdk/credential-providers':
+        optional: true
+      mongodb-client-encryption:
+        optional: true
+      snappy:
+        optional: true
+    dependencies:
+      bson: 5.2.0
+      mongodb-connection-string-url: 2.6.0
       socks: 2.7.1
     optionalDependencies:
       saslprep: 1.0.3

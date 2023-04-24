@@ -12,10 +12,11 @@ import { ResponseMongoCollection } from "~/modules/responses/model.server";
 import { isAdmin } from "@vulcanjs/permissions";
 import { SaveMongoCollection } from "@devographics/core-models/server";
 import {
-  normalizeIdsTypeDefs,
-  normalizeIds,
-  normalizeSurveyTypeDefs,
-  normalizeSurvey,
+  // normalizeIdsTypeDefs,
+  // normalizeIds,
+  normalizeResponsesTypeDefs,
+  // normalizeSurvey,
+  normalizeResponses,
   unnormalizedFieldsTypeDefs,
   unnormalizedFields,
   getSurveyMetadataTypeDefs,
@@ -202,11 +203,11 @@ addGraphQLResolvers({ Query: { unnormalizedFields } });
 addGraphQLQuery(surveysTypeDefs);
 addGraphQLResolvers({ Query: { surveys } });
 
-addGraphQLMutation(normalizeIdsTypeDefs);
-addGraphQLMutation(normalizeSurveyTypeDefs);
+// addGraphQLMutation(normalizeIdsTypeDefs);
+addGraphQLMutation(normalizeResponsesTypeDefs);
 addGraphQLMutation(getSurveyMetadataTypeDefs);
 addGraphQLResolvers({
-  Mutation: { normalizeIds, normalizeSurvey, getSurveyMetadata },
+  Mutation: { normalizeResponses, getSurveyMetadata },
 });
 
 /*

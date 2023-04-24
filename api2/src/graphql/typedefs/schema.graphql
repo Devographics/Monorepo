@@ -15,8 +15,17 @@ type SurveyMetadata {
     id: String
     name: String
     domain: String
+
+    dbCollectionName: String
+
+    emailOctopus: EmailOctopusData
+
     partners: [SponsorItem]
     editions: [EditionMetadata]
+}
+
+type EmailOctopusData {
+    listId: String
 }
 
 type EditionMetadata {

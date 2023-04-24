@@ -54,7 +54,9 @@ const logRow = async (columns, fileName) => {
 
 // fields to copy, along with the path at which to copy them (if different)
 const getFieldsToCopy = (surveyId) => [
-  ["surveySlug"],
+  ["year"],
+  ["surveyId"],
+  ["editionId"],
   ["createdAt"],
   ["updatedAt"],
   ["finishedAt"],
@@ -76,15 +78,18 @@ const getFieldsToCopy = (surveyId) => [
   ],
 ];
 
-export const copyFields = async ({ normResp, response, survey }) => {
-  getFieldsToCopy(survey.surveyId).forEach((field) => {
+export const copyFields = async ({ normResp, response, survey, edition }) => {
+  getFieldsToCopy(edition.surveyId).forEach((field) => {
     const [fieldName, fieldPath = fieldName] = field;
-    set(normResp, fieldPath, response[fieldName]);
+    if (response[fieldName]) {
+      set(normResp, fieldPath, response[fieldName]);
+    }
   });
   normResp.responseId = response._id;
   normResp.generatedAt = new Date();
-  normResp.survey = survey.context;
-  normResp.year = survey.year;
+  normResp.surveyId = survey.id;
+  normResp.editionId = edition.id;
+  normResp.year = edition.year;
 };
 
 export const normalizeCountryField = async ({ normResp, options }) => {
@@ -118,8 +123,15 @@ export const normalizeSourceField = async ({
   allRules,
   survey,
   verbose,
+  edition,
 }: NormalizationParams) => {
-  const normSource = await normalizeSource(normResp, allRules, survey, verbose);
+  const normSource = await normalizeSource({
+    normResp,
+    allRules,
+    survey,
+    edition,
+    verbose,
+  });
   if (normSource.raw) {
     set(normResp, "user_info.source.raw", normSource.raw);
   }
@@ -228,6 +240,7 @@ const mustHaveKeys = [
   "usage",
   "opinions",
   "environments",
+  "employer_info",
 ];
 export const discardEmptyResponses = async ({
   normResp,
