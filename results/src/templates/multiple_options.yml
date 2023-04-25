@@ -1,3 +1,4 @@
 blockType: HorizontalBarBlock
 hasSponsor: true
 query: currentEditionData
+translateData: true

@@ -196,26 +196,26 @@
       - id: databases
         template: multiple_options
 
-      - id: databases_other
-        template: multiple_options_other
+      # - id: databases_other
+      #   template: multiple_options_other
 
       - id: web_frameworks
         template: multiple_options
 
-      - id: web_frameworks_other
-        template: multiple_options_other
+      # - id: web_frameworks_other
+      #   template: multiple_options_other
 
       - id: other_frameworks_libraries
         template: multiple_options
 
-      - id: other_frameworks_libraries_other
-        template: multiple_options_other
+      # - id: other_frameworks_libraries_other
+      #   template: multiple_options_other
 
       - id: developer_tools
         template: multiple_options
 
-      - id: developer_tools_other
-        template: multiple_options_other
+      # - id: developer_tools_other
+      #   template: multiple_options_other
 
       - id: developer_environments
         template: multiple_options
