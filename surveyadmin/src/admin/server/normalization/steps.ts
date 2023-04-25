@@ -307,7 +307,7 @@ export const normalizeField = async ({
   } = questionObject;
 
   // automatically add question's own id as a potential match tag
-  const matchTags = [...matchTags_, questionObject.id];
+  const matchTags = [...(matchTags_ || []), questionObject.id];
 
   const fieldName = rawPaths?.response;
 
