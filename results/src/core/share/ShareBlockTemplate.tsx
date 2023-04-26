@@ -26,7 +26,9 @@ const ShareBlockTemplate = () => {
         }
     })
     const overrides = {
-        title: `${getSiteTitle(pageContext)}: ${blockTitle} ${pageContext.currentEdition.hashtag}`
+        title: `${getSiteTitle({ pageContext })}: ${blockTitle} ${
+            pageContext.currentEdition.hashtag
+        }`
     }
     if (blockDescription) {
         overrides.description = blockDescription

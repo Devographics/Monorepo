@@ -89,6 +89,11 @@ type QuestionMetadata {
     entity: Entity
     allowOther: Boolean
     matchTags: [String]
+
+    # options/values for the question are numeric
+    optionsAreNumeric: Boolean
+    # options are ranges of numbers
+    optionsAreRange: Boolean
 }
 
 type RawDbPaths {

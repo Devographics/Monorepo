@@ -191,7 +191,7 @@ export const getBlockMeta = ({
         link,
         hashtag,
         year,
-        siteTitle: getSiteTitle(pageContext)
+        siteTitle: getSiteTitle({ pageContext })
     }
 
     const twitterText = getString('share.block.twitter_text', {

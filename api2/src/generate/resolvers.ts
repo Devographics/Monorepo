@@ -184,7 +184,9 @@ const getEditionMetadataResolver =
                         'rawPaths',
                         'normPaths',
                         'contentType',
-                        'matchTags'
+                        'matchTags',
+                        'optionsAreNumeric',
+                        'optionsAreRange'
                     ]
                     const cleanQuestion = {
                         ...pick(question, pickProperties),

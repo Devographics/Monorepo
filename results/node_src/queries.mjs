@@ -152,6 +152,8 @@ query {
                             questions {
                                 id
                                 template
+                                optionsAreNumeric
+                                optionsAreRange
                                 entity {
                                     id
                                     name
@@ -161,6 +163,7 @@ query {
                                 options {
                                     ${getEntityFragment()}
                                     id
+                                    average
                                 }
                             }
                         }

@@ -34,7 +34,7 @@ export const Sidebar = ({ showSidebar, closeSidebar, rest }) => {
                 <ScreenReadersHint>{translate('general.close_nav')}</ScreenReadersHint>
             </SidebarCloseButton>
 
-            <SidebarScreenReadersTitle>{getSiteTitle(pageContext)}</SidebarScreenReadersTitle>
+            <SidebarScreenReadersTitle>{getSiteTitle({ pageContext })}</SidebarScreenReadersTitle>
             <SidebarHeader>
                 <SidebarLogoLink to="/">
                     <SidebarLogo />

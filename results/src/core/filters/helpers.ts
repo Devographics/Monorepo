@@ -701,7 +701,7 @@ export const useFilterLegends = ({ chartFilters }: { chartFilters: Customization
                 value: id,
                 allFilters
             })
-            const barColorItem = getVariantBarColorItem(theme, index + 1, chartFilters?.facet)
+            const barColorItem = getVariantBarColorItem(theme, index + 1, facetField)
             return {
                 color: barColorItem.color,
                 gradientColors: barColorItem.gradient,

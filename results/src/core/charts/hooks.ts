@@ -75,8 +75,9 @@ export const getVariantBarColorItem = (
     facet?: FacetItem
 ) => {
     const { velocityBarColors, barColors } = theme.colors
-    if (facet && velocityFacets.includes(facet.id)) {
-        return velocityBarColors[variantIndex]
+    if (facet && facet.optionsAreRange) {
+        const i = Math.min(variantIndex, velocityBarColors.length - 1)
+        return velocityBarColors[i]
     } else {
         const numberOfVariantColors = barColors.length
         const barColorIndex = variantIndex % numberOfVariantColors
@@ -215,6 +216,8 @@ chartKeys are e.g.
 */
 export const useColorFills = (options: UseColorFillsOptions) => {
     const theme = useTheme()
+    const allFilters = useAllFilters()
+
     const {
         chartDisplayMode,
         orientation = VERTICAL,
@@ -249,7 +252,10 @@ export const useColorFills = (options: UseColorFillsOptions) => {
             This will match keys of the type count__male, count__female, etc.
 
             */
-            const prefix = velocityFacets.includes(facet.id) ? 'Velocity' : 'Gradient'
+            const facetField = allFilters.find(f => f.id === facet?.id) as FilterItem
+
+            console.log(facet)
+            const prefix = facetField.optionsAreRange ? 'Velocity' : 'Gradient'
 
             const averageFill = {
                 match: d => {
@@ -308,9 +314,8 @@ export const useAllChartsOptions = (): FilterItem[] => {
     const keys = []
     for (const section of currentEdition.sections) {
         for (const question of section.questions) {
-            const { id, options, template } = question
-            if (options) {
-                keys.push({ sectionId: section.id, id, options, template })
+            if (question.options) {
+                keys.push({ sectionId: section.id, ...question })
             }
         }
     }

@@ -73,7 +73,9 @@ export type Question = {
     id?: string
     label?: string
     options?: Option[]
+    // options/values for the question are numeric
     optionsAreNumeric?: boolean
+    // options are ranges of numbers
     optionsAreRange?: boolean
     defaultSort?: string
 

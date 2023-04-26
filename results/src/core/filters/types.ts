@@ -1,5 +1,5 @@
 import React from 'react'
-import { OptionMetadata, AllQuestionData } from '@devographics/types'
+import { OptionMetadata, AllQuestionData, QuestionMetadata } from '@devographics/types'
 
 export interface CustomizationDefinition {
     options: CustomizationOptions
@@ -42,17 +42,9 @@ export enum OperatorEnum {
     NIN = 'nin'
 }
 
-export type FilterItem = {
-    id: string
-    sectionId: string
-    options: OptionMetadata[]
-    template: string
-}
+export type FilterItem = QuestionMetadata
 
-export type FacetItem = {
-    id: string
-    sectionId: string
-}
+export type FacetItem = QuestionMetadata
 
 export type FilterValue = FilterValueString | FilterValueArray
 

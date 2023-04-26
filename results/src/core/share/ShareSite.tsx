@@ -11,10 +11,10 @@ import { getSiteTitle } from '../helpers/pageHelpers'
 const ShareSite = () => {
     const { translate } = useI18n()
 
-    const context = usePageContext()
-    const { currentEdition } = context
+    const pageContext = usePageContext()
+    const { currentEdition } = pageContext
     const { hashtag, year, resultsUrl } = currentEdition
-    const siteTitle = getSiteTitle(context)
+    const siteTitle = getSiteTitle({ pageContext })
 
     const options = { values: { hashtag, year, siteTitle, link: resultsUrl } }
     const title = translate('share.site.title', options)
