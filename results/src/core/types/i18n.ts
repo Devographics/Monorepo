@@ -9,7 +9,7 @@ export interface Locale {
 }
 
 interface InterpolationValues {
-    values?: { [key: string]: string }
+    values?: { [key: string]: string | number }
 }
 
 export interface LegacyTranslator {

@@ -5,12 +5,13 @@ import BlockNote from 'core/blocks/block/BlockNote'
 import BlockLegends from 'core/blocks/block/BlockLegends'
 import { useI18n } from 'core/i18n/i18nContext'
 import { usePageContext } from 'core/helpers/pageContext'
-import { getBlockDescriptionKey, getBlockTitle } from 'core/helpers/blockHelpers'
+import { useBlockDescription, useBlockTitle, useBlockQuestion } from 'core/helpers/blockHelpers'
 import T from 'core/i18n/T'
 import BlockFooter from 'core/blocks/block/BlockFooter'
 import BlockUnitsSelector from 'core/blocks/block/BlockUnitsSelector'
 import EditInline from 'core/components/EditInline'
 import BlockLinks from 'core/blocks/block/BlockLinks'
+import { BlockDefinition } from 'core/types'
 
 const BlockChart = props => {
     const { children, units, error, data, block = {}, legends, legendProps, modeProps } = props
@@ -30,6 +31,7 @@ const BlockChart = props => {
     return (
         <div>
             <BlockDescriptionContents block={block} />
+            <BlockQuestionContents block={block} />
             {entity && !isCapturing && <BlockLinks entity={entity} />}
             {legends && legendPosition === 'top' && <BlockLegends {...legendProps_} />}
             {modeProps && switcherPosition === 'top' && (
@@ -64,27 +66,23 @@ const BlockChart = props => {
     )
 }
 
-const BlockDescriptionContents = ({ block }) => {
-    const { translate } = useI18n()
-    const context = usePageContext()
-
-    const { description, enableDescriptionMarkdown = true, isFreeform } = block
-    const key = `${getBlockDescriptionKey(block, context)}`
-    if (description ?? translate(key, {}, null)) {
+const BlockDescriptionContents = ({ block }: { block: BlockDefinition }) => {
+    const blockTitle = useBlockTitle({ block })
+    const blockDescription = useBlockDescription({ block, values: { name: blockTitle } })
+    if (blockDescription) {
         return (
             <Description className="Block__Description">
-                <T
-                    t={description}
-                    k={key}
-                    md={enableDescriptionMarkdown}
-                    fallback={null}
-                    html={false}
-                    element="span"
-                    values={{ name: getBlockTitle(block, context, translate) }}
-                />{' '}
-                {isFreeform && <T k="blocks.freeform" />}
+                {blockDescription} {block.isFreeform && <T k="blocks.freeform" />}
             </Description>
         )
+    }
+    return null
+}
+
+const BlockQuestionContents = ({ block }: { block: BlockDefinition }) => {
+    const blockQuestion = useBlockQuestion({ block })
+    if (blockQuestion) {
+        return <Description className="Block__Question">(?) {blockQuestion}</Description>
     }
     return null
 }

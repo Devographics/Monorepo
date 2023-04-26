@@ -19,12 +19,17 @@ const findString = (key: string, strings: Translation[]) => {
         .find(t => t.key === key)
 }
 
-export const applyTemplate = (
-    t: string,
-    values: { [key: string]: string },
-    locale: Locale,
+export const applyTemplate = ({
+    t,
+    values,
+    locale,
+    key
+}: {
+    t?: string
+    values: { [key: string]: string | number }
+    locale: Locale
     key: string
-) => {
+}) => {
     try {
         return template(t, { interpolate: /{([\s\S]+?)}/g })(values)
     } catch (error) {
@@ -51,8 +56,13 @@ export const getStringTranslator =
         }
 
         if (result.t) {
-            result.t = values ? applyTemplate(result.t, values, locale, key) : result.t
-            result.tHtml = values ? applyTemplate(result.tHtml, values, locale, key) : result.tHtml
+            result.t = values ? applyTemplate({ t: result.t, values, locale, key }) : result.t
+            result.tClean = values
+                ? applyTemplate({ t: result.tClean, values, locale, key })
+                : result.t
+            result.tHtml = values
+                ? applyTemplate({ t: result.tHtml, values, locale, key })
+                : result.tHtml
         }
 
         return result

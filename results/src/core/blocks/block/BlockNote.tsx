@@ -1,16 +1,16 @@
-import React, { memo } from 'react'
-import PropTypes from 'prop-types'
+import React from 'react'
 import styled from 'styled-components'
 import { spacing } from 'core/theme'
 import { useI18n } from 'core/i18n/i18nContext'
 import T from 'core/i18n/T'
 import { usePageContext } from 'core/helpers/pageContext'
 import { getBlockNoteKey } from 'core/helpers/blockHelpers'
+import { BlockDefinition } from 'core/types'
 
-const BlockNote = ({ block }) => {
-    const context = usePageContext()
+const BlockNote = ({ block }: { block: BlockDefinition }) => {
+    const pageContext = usePageContext()
     const { translate } = useI18n()
-    const key = getBlockNoteKey(block, context)
+    const key = getBlockNoteKey({ block })
     const blockNote = translate(key, {}, null)
     if (blockNote) {
         return (
@@ -21,16 +21,6 @@ const BlockNote = ({ block }) => {
     } else {
         return null
     }
-}
-
-BlockNote.propTypes = {
-    block: PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        title: PropTypes.node,
-        titleId: PropTypes.string,
-        description: PropTypes.node,
-        descriptionId: PropTypes.string
-    }).isRequired
 }
 
 const Note = styled.div`
@@ -50,4 +40,4 @@ const Note = styled.div`
     }
 `
 
-export default memo(BlockNote)
+export default BlockNote

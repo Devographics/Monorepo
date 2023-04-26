@@ -7,21 +7,21 @@ import { usePageContext } from 'core/helpers/pageContext'
 import { getBlockTitleKey, getBlockTitle } from 'core/helpers/blockHelpers'
 import T from 'core/i18n/T'
 
-const BlockTitleContents = ({ block, context }) => {
+const BlockTitleContents = ({ block, pageContext }) => {
     const { title, titleLink } = block
     if (title) {
         return titleLink ? <a href={titleLink}>{title}</a> : title
     } else {
-        return <T k={getBlockTitleKey(block, context)} />
+        return <T k={getBlockTitleKey({ block, pageContext })} />
     }
 }
 
 const BlockTitle = ({ isShareable, values, block }) => {
     const [showOptions, setShowOptions] = useState(false)
-    const context = usePageContext()
-    const { translate } = useI18n()
+    const pageContext = usePageContext()
+    const { getString } = useI18n()
 
-    const blockTitle = getBlockTitle(block, context, translate)
+    const blockTitle = getBlockTitle({ block, pageContext, getString })
 
     return (
         <>
@@ -30,12 +30,12 @@ const BlockTitle = ({ isShareable, values, block }) => {
             >
                 <LeftPart>
                     <BlockTitleText className="BlockTitleText">
-                        <BlockTitleContents block={block} context={context} />
+                        <BlockTitleContents block={block} context={pageContext} />
                         {/* {completion && !context.isCapturing && (
                             <BlockCompletionIndicator completion={completion} />
                         )} */}
                     </BlockTitleText>
-                    {isShareable && !context.isCapturing && (
+                    {isShareable && !pageContext.isCapturing && (
                         <ShareBlock
                             block={block}
                             className="Block__Title__Share"

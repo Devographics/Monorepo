@@ -40,8 +40,8 @@ const ShareIcon = () => (
 
 const ShareBlock = ({ block, section, className, toggleClass, title }) => {
     const [showOptions, setShowOptions] = useState(false)
-    const context = usePageContext()
-    const { translate } = useI18n()
+    const pageContext = usePageContext()
+    const { getString } = useI18n()
 
     const toggleOptions = e => {
         e.preventDefault()
@@ -55,7 +55,7 @@ const ShareBlock = ({ block, section, className, toggleClass, title }) => {
         })
     }
 
-    const meta = getBlockMeta(block, context, translate, title)
+    const meta = getBlockMeta({ block, pageContext, getString, title })
 
     return (
         <Container

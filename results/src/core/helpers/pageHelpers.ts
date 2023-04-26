@@ -1,6 +1,6 @@
 import get from 'lodash/get'
 import { getBlockImage } from './blockHelpers'
-import { PageContextValue, LegacyTranslator } from 'core/types'
+import { PageContextValue, StringTranslator } from 'core/types'
 
 export const getTranslationValuesFromContext = (context, translate) => {
     const values = {}
@@ -15,19 +15,24 @@ export const getTranslationValuesFromContext = (context, translate) => {
     return values
 }
 
-export const getPageLabelKey = page => page.titleId || `sections.${page.intlId || page.id}.title`
+export const getPageLabelKey = ({ pageContext }: { pageContext: PageContextValue }) =>
+    pageContext.titleId || `sections.${pageContext.intlId || pageContext.id}.title`
 
-export const getPageLabel = (
-    page: PageContextValue,
-    translate: LegacyTranslator,
-    { includeWebsite = false } = {}
-) => {
+export const getPageLabel = ({
+    pageContext,
+    getString,
+    options = { includeWebsite: false }
+}: {
+    pageContext: PageContextValue
+    getString: StringTranslator
+    options?: { includeWebsite?: boolean }
+}) => {
     let label
 
-    label = translate(getPageLabelKey(page))
+    label = getString(getPageLabelKey({ pageContext }))?.t
 
-    if (includeWebsite === true) {
-        label = `${page.currentSurvey.name} ${page.currentEdition.year}: ${label}`
+    if (options.includeWebsite === true) {
+        label = `${pageContext.currentSurvey.name} ${pageContext.currentEdition.year}: ${label}`
     }
 
     return label
@@ -53,20 +58,24 @@ export const getPageImageUrl = context => {
 export const getSiteTitle = (context: PageContextValue) =>
     `${context.currentSurvey.name} ${context.currentEdition.year}`
 
-export const getPageMeta = (
-    context: PageContextValue,
-    translate: LegacyTranslator,
+export const getPageMeta = ({
+    pageContext,
+    getString,
     overrides = {}
-) => {
-    const url = `${context.host}${get(context, 'locale.path')}${context.basePath}`
-    const imageUrl = getPageImageUrl(context)
-    const isRoot = context.path === '/' || context.basePath === '/'
+}: {
+    pageContext: PageContextValue
+    getString: StringTranslator
+    overrides: any
+}) => {
+    const url = `${pageContext.host}${get(pageContext, 'locale.path')}${pageContext.basePath}`
+    const imageUrl = getPageImageUrl(pageContext)
+    const isRoot = pageContext.path === '/' || pageContext.basePath === '/'
 
     const meta = {
         url,
         title: isRoot
-            ? getSiteTitle(context)
-            : getPageLabel(context, translate, { includeWebsite: true }),
+            ? getSiteTitle(pageContext)
+            : getPageLabel({ pageContext, getString, options: { includeWebsite: true } }),
         imageUrl,
         ...overrides
     }
@@ -74,8 +83,16 @@ export const getPageMeta = (
     return meta
 }
 
-export const getPageSocialMeta = (context, translate, overrides = {}) => {
-    const meta = getPageMeta(context, translate, overrides)
+export const getPageSocialMeta = ({
+    pageContext,
+    getString,
+    overrides = {}
+}: {
+    pageContext: PageContextValue
+    getString: StringTranslator
+    overrides: any
+}) => {
+    const meta = getPageMeta({ pageContext, getString, overrides })
     const socialMeta = [
         // facebook
         { property: 'og:type', content: 'article' },
@@ -96,7 +113,7 @@ export const getPageSocialMeta = (context, translate, overrides = {}) => {
 /**
  * Merge context generated from `gatsby-node` with runtime context.
  */
-export const mergePageContext = (pageContext: PageContextValue, location, state) => {
+export const mergePageContext = (pageContext: PageContextValue, location: any, state: any = {}) => {
     const isCapturing =
         location && location.search ? location.search.indexOf('capture') !== -1 : false
     const isRawChartMode =

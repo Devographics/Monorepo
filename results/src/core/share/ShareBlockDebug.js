@@ -6,12 +6,12 @@ import { getBlockMeta } from 'core/helpers/blockHelpers'
 import Debug from '../components/Debug'
 
 const ShareBlockDebug = ({ block }) => {
-    const context = usePageContext()
-    const { translate } = useI18n()
+    const pageContext = usePageContext()
+    const { getString } = useI18n()
 
-    if (!context.isDebugEnabled) return null
+    if (!pageContext.isDebugEnabled) return null
 
-    const meta = getBlockMeta(block, context, translate)
+    const meta = getBlockMeta({ block, pageContext, getString })
 
     return <Debug title="Block sharing" data={meta} />
 }

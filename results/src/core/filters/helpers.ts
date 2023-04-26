@@ -786,16 +786,16 @@ export function useStickyState(defaultValue: any, key: string) {
 
 export const getFiltersLink = ({
     block,
-    context,
+    pageContext,
     filtersState
 }: {
     block: BlockDefinition
-    context: any
+    pageContext: PageContextValue
     filtersState: any
 }) => {
     const encodedParams = btoa(JSON.stringify(filtersState))
     const params = { filters: encodedParams, blockId: block.id }
-    const link = getBlockLink({ block, context, params, useRedirect: false })
+    const link = getBlockLink({ block, pageContext, params, useRedirect: false })
     return link
 }
 

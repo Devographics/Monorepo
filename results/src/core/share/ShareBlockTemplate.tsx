@@ -9,16 +9,21 @@ import { usePageContext } from 'core/helpers/pageContext'
 import { useEntities } from 'core/helpers/entities'
 
 const ShareBlockTemplate = () => {
-    const pageContext = usePageContext()
+    const pageContext_ = usePageContext()
     const entities = useEntities()
-    const { block } = pageContext
     const location = useLocation()
-    const { translate } = useI18n()
-    const context = mergePageContext(pageContext, location)
+    const { getString } = useI18n()
+    const pageContext = mergePageContext(pageContext_, location)
+    const { block } = pageContext
 
-    const blockTitle = getBlockTitle(block, context, translate, entities)
-    const blockDescription = getBlockDescription(context.block, context, translate, {
-        isMarkdownEnabled: false
+    const blockTitle = getBlockTitle({ block, pageContext, getString, entities })
+    const blockDescription = getBlockDescription({
+        block,
+        pageContext,
+        getString,
+        options: {
+            isHtml: false
+        }
     })
     const overrides = {
         title: `${getSiteTitle(pageContext)}: ${blockTitle} ${pageContext.currentEdition.hashtag}`
@@ -31,7 +36,7 @@ const ShareBlockTemplate = () => {
         <div className="template">
             <PageMeta overrides={overrides} />
             <PageMetaDebug overrides={overrides} />
-            {!context.isDebugEnabled && <Redirect to={context.redirect} noThrow />}
+            {!pageContext.isDebugEnabled && <Redirect to={pageContext.redirect} noThrow />}
             Redirecting…
         </div>
     )

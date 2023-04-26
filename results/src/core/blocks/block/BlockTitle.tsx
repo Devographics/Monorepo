@@ -1,27 +1,19 @@
 import React, { memo, useState } from 'react'
-import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 import last from 'lodash/last'
 import { mq, spacing, fontSize, secondaryFontMixin } from 'core/theme'
-import ShareBlock from 'core/share/ShareBlock'
-import BlockExport from 'core/blocks/block/BlockExport'
 import { useI18n } from 'core/i18n/i18nContext'
 import { usePageContext } from 'core/helpers/pageContext'
 import SharePermalink from 'core/share/SharePermalink'
 import BlockCompletionIndicator from 'core/blocks/block/BlockCompletionIndicator'
-import { getBlockMeta, getBlockTitleKey, getBlockTitle } from 'core/helpers/blockHelpers'
-import BlockLinks from 'core/blocks/block/BlockLinks'
+import { getBlockTitle, useBlockTitle } from 'core/helpers/blockHelpers'
 import BlockSponsor from 'core/blocks/block/sponsor_chart/BlockSponsor'
 import { useEntities } from 'core/helpers/entities'
+import { BlockDefinition } from 'core/types'
 
-const BlockTitleContents = ({ block, context }) => {
-    const { translate } = useI18n()
-    const entities = useEntities()
-    return (
-        <Title
-            dangerouslySetInnerHTML={{ __html: getBlockTitle(block, context, translate, entities) }}
-        />
-    )
+const BlockTitleContents = ({ block }: { block: BlockDefinition }) => {
+    const title = useBlockTitle({ block })
+    return <Title dangerouslySetInnerHTML={{ __html: title }} />
 }
 
 const Title = styled.span``
@@ -43,16 +35,16 @@ const BlockTitle = ({
     const completion =
         data && (Array.isArray(data) ? last(data) && last(data).completion : data.completion)
     const [showOptions, setShowOptions] = useState(false)
-    const context = usePageContext()
-    const { isCapturing } = context
+    const pageContext = usePageContext()
+    const { isCapturing } = pageContext
 
-    const { translate } = useI18n()
+    const { getString } = useI18n()
 
     const entities = useEntities()
-    const blockTitle = getBlockTitle(block, context, translate, entities)
+    const blockTitle = getBlockTitle({ block, pageContext, getString, entities })
 
     const properties = {
-        context,
+        context: pageContext,
         block,
         isExportable,
         isShareable,
@@ -75,8 +67,8 @@ const BlockTitle = ({
                 <LeftPart>
                     <BlockTitleText className="BlockTitleText">
                         <SharePermalink block={block} />
-                        <BlockTitleContents block={block} context={context} />
-                        {completion && !context.isCapturing && (
+                        <BlockTitleContents block={block} />
+                        {completion && !pageContext.isCapturing && (
                             <BlockCompletionIndicator completion={completion} />
                         )}
                         {!isCapturing && <BlockSponsor block={block} />}
@@ -100,17 +92,6 @@ const BlockTitle = ({
             {/* {showDescription && <BlockDescriptionContents block={block} context={context} />} */}
         </>
     )
-}
-
-BlockTitle.propTypes = {
-    block: PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        title: PropTypes.node,
-        titleId: PropTypes.string,
-        description: PropTypes.node,
-        descriptionId: PropTypes.string
-    }).isRequired,
-    isShareable: PropTypes.bool
 }
 
 const StyledBlockTitle = styled.div`

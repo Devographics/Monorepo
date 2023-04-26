@@ -14,6 +14,7 @@ import {
     AccordionTrigger,
     AccordionContent
 } from 'core/components/Accordion'
+import { BlockDefinition } from 'core/types'
 
 const faqItems = ['usage', 'public', 'refund', 'influence', 'feedback']
 
@@ -59,10 +60,10 @@ const SponsorIconWrapper = styled(Button)`
     }
 `
 
-const SponsorModal = ({ product, block }) => {
-    const context = usePageContext()
-    const { translate } = useI18n()
-    const meta = getBlockMeta(block, context, translate)
+const SponsorModal = ({ product, block }: { product: any; block: BlockDefinition }) => {
+    const pageContext = usePageContext()
+    const { getString } = useI18n()
+    const meta = getBlockMeta({ block, pageContext, getString })
 
     return (
         <ModalContents>

@@ -7,10 +7,10 @@ import { mq, secondaryFontMixin, fontSize } from 'core/theme'
 import T from 'core/i18n/T'
 
 const PageHeader = () => {
-    const page = usePageContext()
+    const pageContext = usePageContext()
     return (
         <PageTitle>
-            <T k={getPageLabelKey(page)} />
+            <T k={getPageLabelKey({ pageContext })} />
         </PageTitle>
     )
 }

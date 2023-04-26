@@ -7,19 +7,19 @@ import { useI18n } from 'core/i18n/i18nContext'
 import colors from 'core/theme/colors'
 
 const Head = () => {
-    const context = usePageContext()
-    const { translate } = useI18n()
+    const pageContext = usePageContext()
+    const { getString } = useI18n()
     // const { getToolName } = useTools()
 
-    let overrides = {}
+    const overrides = {}
     // const toolName = getToolName(context)
     // if (toolName) {
     //     overrides.title = `${websiteTitle}: ${toolName}`
     // }
 
-    const meta = getPageMeta(context, translate, overrides)
-    const socialMeta = getPageSocialMeta(context, translate, overrides)
-    const description = translate(`general.results.description`)
+    const meta = getPageMeta({ pageContext, getString, overrides })
+    const socialMeta = getPageSocialMeta({ pageContext, getString, overrides })
+    const description = getString(`general.results.description`)?.t
 
     const mergedMeta = [
         { charset: 'utf-8' },
@@ -42,7 +42,7 @@ const Head = () => {
             <Helmet defaultTitle={meta.fullTitle}>
                 <html lang="en" />
                 <title>{meta.title}</title>
-                <link rel="shortcut icon" href={context?.currentEdition?.faviconUrl} />
+                <link rel="shortcut icon" href={pageContext?.currentEdition?.faviconUrl} />
                 <meta name="theme-color" content={colors.link} />
                 <link rel="preconnect" href="https://fonts.googleapis.com" />
                 <link rel="preconnect" href="https://fonts.gstatic.com/" crossOrigin />

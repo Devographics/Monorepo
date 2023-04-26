@@ -50,10 +50,10 @@ const ShareOptionsHeading = styled.h4`
 `
 
 const BlockShare = ({ isShareable, block, values, blockTitle }) => {
-    const context = usePageContext()
-    const { translate } = useI18n()
+    const pageContext = usePageContext()
+    const { getString } = useI18n()
 
-    const meta = getBlockMeta(block, context, translate, blockTitle)
+    const meta = getBlockMeta({ block, pageContext, getString, title: blockTitle })
 
     const props = { ...meta, showLabel: true }
 

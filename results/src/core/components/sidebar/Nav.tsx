@@ -89,7 +89,7 @@ const NavItem = ({ page, parentPage, currentPath, closeSidebar, isHidden = false
                 isHidden={isHidden}
                 parentPage={parentPage}
             >
-                <T k={getPageLabelKey(page)} />
+                <T k={getPageLabelKey({ pageContext: page })} />
             </StyledPageLink>
             {hasChildren && (
                 <>

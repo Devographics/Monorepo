@@ -39,12 +39,12 @@ const FiltersPanel = ({
     setChartFilters,
     closeModal
 }: FiltersPanelPropsType) => {
-    const { translate } = useI18n()
+    const { getString } = useI18n()
     const pageContext = usePageContext()
     const { currentEdition } = pageContext
     const allFilters = useAllFilters(block.id)
 
-    const chartName = getBlockTitle(block, pageContext, translate)
+    const chartName = getBlockTitle({ block, pageContext, getString })
 
     const initState = isEmpty(chartFilters) ? getInitFilters() : chartFilters
     const [filtersState, setFiltersState] = useState(initState)
@@ -92,7 +92,7 @@ const FiltersPanel = ({
     ]
     const tabs = tabConfig.filter(tab => supportedModes?.includes(tab.mode))
 
-    const filtersLink = getFiltersLink({ block, context: pageContext, filtersState })
+    const filtersLink = getFiltersLink({ block, pageContext, filtersState })
 
     const handleTabChange = (tab: SupportedMode) => {
         setFiltersState((fState: CustomizationDefinition) => {
