@@ -10,6 +10,7 @@ import { generateFiltersQuery } from '../filters'
 import { computeCompletionByYear } from './completion'
 // import { computeYearlyTransitions, YearlyTransitionsResult } from './yearly_transitions'
 import { inspect } from 'util'
+import { getCollection } from '../helpers/db'
 
 interface ExperienceBucket {
     id: string
@@ -70,7 +71,7 @@ export async function computeExperienceOverYears({
     filters?: Filters
 }) {
     const { db, isDebug } = context
-    const collection = db.collection(survey.dbCollectionName)
+    const collection = getCollection(db, survey)
 
     const path = `tools.${tool}.experience`
 

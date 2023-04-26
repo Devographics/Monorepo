@@ -3,6 +3,7 @@ import config from '../config'
 import { RequestContext, EditionParticipation } from '../types'
 import { Survey } from '../types/surveys'
 import { inspect } from 'util'
+import { getCollection } from '../helpers/db'
 
 export async function computeParticipationByYear({
     context,
@@ -12,7 +13,7 @@ export async function computeParticipationByYear({
     survey: Survey
 }): Promise<EditionParticipation[]> {
     const { db } = context
-    const collection = db.collection(survey.dbCollectionName)
+    const collection = getCollection(db, survey)
 
     const aggregationPipeline = [
         {

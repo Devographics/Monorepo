@@ -32,6 +32,7 @@ import {
     removeEmptyEditions
 } from './stages/index'
 import { ResponsesTypes, DbSuffixes } from '@devographics/types'
+import { getCollection } from '../helpers/db'
 
 const convertOrder = (order: 'asc' | 'desc') => (order === 'asc' ? 1 : -1)
 
@@ -76,7 +77,7 @@ export async function genericComputeFunction({
     let axis1: ComputeAxisParameters,
         axis2: ComputeAxisParameters | null = null
     const { db, isDebug } = context
-    const collection = db.collection(survey.dbCollectionName)
+    const collection = getCollection(db, survey)
 
     const { normPaths } = question
 

@@ -4,6 +4,7 @@ import get from 'lodash/get.js'
 import uniq from 'lodash/uniq.js'
 import { useCache } from '../helpers/caching'
 import { Survey, QuestionApiObject } from '../types/surveys'
+import { getCollection } from '../helpers/db'
 
 // note currently working because of "Dynamic require of "util" is not supported" error
 
@@ -68,7 +69,7 @@ export const getRawComments = async ({
     console.log('// getRawComments')
 
     const { db, isDebug } = context
-    const collection = db.collection(survey.dbCollectionName)
+    const collection = getCollection(db, survey)
 
     const dbPath = question.normPaths.comment
     if (!dbPath) {

@@ -1,4 +1,5 @@
 import config from '../config'
+import { getCollection } from '../helpers/db'
 import { RequestContext, Survey } from '../types'
 import { inspect } from 'util'
 
@@ -17,7 +18,7 @@ export async function computeCompletionByYear({
     survey: Survey
 }): Promise<CompletionResult[]> {
     const { db } = context
-    const collection = db.collection(survey.dbCollectionName)
+    const collection = getCollection(db, survey)
 
     const aggregationPipeline = [
         {
