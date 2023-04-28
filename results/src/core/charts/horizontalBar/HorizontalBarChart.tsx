@@ -54,15 +54,16 @@ export const getLeftMargin = ({
     i18nNamespace: string
 }) => {
     if (buckets && buckets.length > 0) {
-        const labels = buckets.map(bucket =>
-            getBucketLabel({
-                shouldTranslate,
-                i18nNamespace,
-                id: bucket.id,
-                label: bucket.label,
-                entity: bucket.entity,
-                shortenLabel: true
-            })
+        const labels = buckets.map(
+            bucket =>
+                getBucketLabel({
+                    shouldTranslate,
+                    i18nNamespace,
+                    id: bucket.id,
+                    label: bucket.label,
+                    entity: bucket.entity,
+                    shortenLabel: true
+                }).label
         )
         const longestLabel = maxBy(labels, l => l.length)
         const longestLabelLength = longestLabel ? longestLabel.length : 100

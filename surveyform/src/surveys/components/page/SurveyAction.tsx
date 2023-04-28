@@ -140,7 +140,6 @@ const SurveyStart = ({
   let data: PrefilledData = {
     editionId: getSurveyEditionId(survey),
     surveyId: getSurveyContextId(survey),
-    email: currentUser?.email,
     common__user_info__source: source,
     common__user_info__referrer: referrer,
   };

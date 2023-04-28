@@ -44,14 +44,14 @@ export const getEntityFragment = () => `entity {
     }
 }`
 
-export const getFacetFragment = (addEntities?: boolean) => `
+export const getFacetFragment = (addBucketsEntities?: boolean) => `
     facetBuckets {
         id
         count
         percentageQuestion
         percentageSurvey
         percentageFacet
-        ${addEntities ? getEntityFragment() : ''}
+        ${addBucketsEntities ? getEntityFragment() : ''}
     }
 `
 
@@ -133,7 +133,7 @@ export const getQueryArgsString = ({
 
 export interface ProvidedQueryOptions {
     allEditions?: boolean
-    addEntities?: boolean
+    addBucketsEntities?: boolean
     addArgumentsPlaceholder?: boolean
     addBucketFacetsPlaceholder?: boolean
     isLog?: boolean
@@ -163,7 +163,7 @@ export const getDefaultQuery = ({
         sectionId,
         questionId,
         fieldId,
-        addEntities = false,
+        addBucketsEntities = false,
         allEditions = false,
         addArgumentsPlaceholder = false,
         addBucketFacetsPlaceholder = false,
@@ -198,8 +198,8 @@ surveys {
                 id
                 percentageQuestion
                 percentageSurvey
-                ${addEntities ? getEntityFragment() : ''}
-                ${queryArgs.facet ? getFacetFragment(addEntities) : ''}
+                ${addBucketsEntities ? getEntityFragment() : ''}
+                ${queryArgs.facet ? getFacetFragment(addBucketsEntities) : ''}
                 ${addBucketFacetsPlaceholder ? bucketFacetsPlaceholder : ''}
               }
             }

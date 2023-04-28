@@ -227,7 +227,7 @@ export const getDefaultQuery = ({ queryOptions, queryArgs = {} }) => {
         sectionId,
         questionId,
         fieldId,
-        addEntities = false,
+        addBucketsEntities = false,
         allEditions = false,
         addArgumentsPlaceholder = false,
         addBucketFacetsPlaceholder = false,
@@ -262,8 +262,8 @@ surveys {
                 id
                 percentageQuestion
                 percentageSurvey
-                ${addEntities ? getEntityFragment() : ''}
-                ${queryArgs.facet ? getFacetFragment(addEntities) : ''}
+                ${addBucketsEntities ? getEntityFragment() : ''}
+                ${queryArgs.facet ? getFacetFragment(addBucketsEntities) : ''}
                 ${addBucketFacetsPlaceholder ? bucketFacetsPlaceholder : ''}
               }
             }

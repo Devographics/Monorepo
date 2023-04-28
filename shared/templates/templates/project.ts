@@ -6,7 +6,7 @@ export const project: TemplateFunction = options => {
     const question = checkHasId(options)
 
     const sectionSegment = section.template === 'tool' ? 'tools_others' : section.slug || section.id
-    const questionSegment = question?.id?.replace('_prenormalized', '')
+    const questionSegment = question?.id?.replace('_prenormalized', '').replace('_others', '')
 
     const basePath = `${sectionSegment}.${questionSegment}.${DbSuffixes.OTHERS}`
 

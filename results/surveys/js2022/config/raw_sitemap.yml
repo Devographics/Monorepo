@@ -422,7 +422,7 @@
 
             - template: tools_experience_marimekko
 
-            - template: section_other_prenormalized
+            - template: section_prenormalized_tools
               parameters:
                   limit: 10
 
@@ -481,7 +481,7 @@
 
             - template: tools_experience_marimekko
 
-            - template: section_other_prenormalized
+            - template: section_prenormalized_tools
               parameters:
                   limit: 10
 
@@ -538,7 +538,7 @@
 
             - template: tools_experience_marimekko
 
-            - template: section_other_prenormalized
+            - template: section_prenormalized_tools
               parameters:
                   limit: 10
 
@@ -602,7 +602,7 @@
 
             - template: tools_experience_marimekko
 
-            - template: section_other_prenormalized
+            - template: section_prenormalized_tools
               parameters:
                   limit: 5
 
@@ -660,7 +660,7 @@
 
             - template: tools_experience_marimekko
 
-            - template: section_other_prenormalized
+            - template: section_prenormalized_tools
               parameters:
                   limit: 5
 
@@ -723,7 +723,7 @@
 
             - template: tools_experience_marimekko
 
-            - template: section_other_prenormalized
+            - template: section_prenormalized_tools
               parameters:
                   limit: 5
 
@@ -952,6 +952,7 @@
         variants:
             - id: first_steps_others
               defaultUnits: count
+              i18nNamespace: first_steps
               tabId: tabs.other_answers
               template: multiple_options_freeform
               translateData: true
@@ -968,6 +969,7 @@
         variants:
             - id: blogs_news_magazines_others
               defaultUnits: count
+              i18nNamespace: blogs_news_magazines
               tabId: tabs.other_answers
               template: multiple_options_freeform
               parameters: { limit: 15 }
@@ -978,6 +980,7 @@
         variants:
             - id: sites_courses_others
               defaultUnits: count
+              i18nNamespace: sites_courses
               tabId: tabs.other_answers
               template: multiple_options_freeform
               parameters: { limit: 15 }
@@ -993,6 +996,7 @@
         variants:
             - id: podcasts_others
               defaultUnits: count
+              i18nNamespace: podcasts
               tabId: tabs.other_answers
               template: multiple_options_freeform
               parameters: { limit: 15 }
@@ -1005,6 +1009,7 @@
             - id: video_creators_others
               blockType: PeopleBlock
               defaultUnits: count
+              i18nNamespace: video_creators
               tabId: tabs.other_answers
               template: multiple_options_freeform
               parameters: { limit: 15 }

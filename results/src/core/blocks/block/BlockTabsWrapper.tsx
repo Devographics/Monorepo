@@ -54,7 +54,7 @@ export const TabsTrigger = styled(Tabs.Trigger)`
 `
 
 export const TabsWrapper = ({ block, pageData, blockIndex, withMargin = true }) => {
-    const context = usePageContext()
+    const pageContext = usePageContext()
 
     const entities = useEntities()
     let firstBlock = block.variants[0]
@@ -75,7 +75,7 @@ export const TabsWrapper = ({ block, pageData, blockIndex, withMargin = true }) 
                         <TabsList aria-label="tabs example">
                             {block.variants.map((block, variantIndex) => (
                                 <TabsTrigger key={block.id} value={`tab${variantIndex}`}>
-                                    <T k={getBlockTabKey(block, context, variantIndex)} />
+                                    <T k={getBlockTabKey({ block, pageContext, variantIndex })} />
                                 </TabsTrigger>
                             ))}
                         </TabsList>

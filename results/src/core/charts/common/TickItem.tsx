@@ -27,6 +27,7 @@ const shorten = (label: string) => {
 const getTextOffset = () => 10
 
 export const Text = ({
+    key,
     hasLink = false,
     label,
     description,
@@ -34,6 +35,7 @@ export const Text = ({
     index,
     i18nNamespace
 }: {
+    key: string
     hasLink: boolean
     label: string
     description: string
@@ -64,7 +66,11 @@ export const Text = ({
         textProps.textAnchor = 'start'
     }
 
-    const component = <text {...textProps}>{shortLabel ?? label}</text>
+    const component = (
+        <text data-i18n={key} {...textProps}>
+            {shortLabel ?? label}
+        </text>
+    )
 
     const textContents = `#${index}: ${description ?? label}`
 
@@ -79,6 +85,7 @@ export const Text = ({
 }
 
 export const getBucketLabel = args => {
+    let key, label
     const { getString } = useI18n()
     const {
         shouldTranslate,
@@ -89,14 +96,17 @@ export const getBucketLabel = args => {
         label: providedLabel
     } = args
     if (id === NO_ANSWER) {
-        return getString('charts.no_answer').t
+        key = 'charts.no_answer'
+        label = getString('charts.no_answer').t
     } else {
-        let label
-        const s = getString(`options.${i18nNamespace}.${id}`)
+        key = `options.${i18nNamespace}.${id}`
+        const s = getString(key)
 
         if (providedLabel) {
+            key = 'providedLabel'
             label = providedLabel
         } else if (entity?.name) {
+            key = 'entity'
             label = entity.nameClean || entity.name
         } else if (shouldTranslate && !s.missing) {
             label = s.tClean || s.t
@@ -104,10 +114,9 @@ export const getBucketLabel = args => {
             label = id
         }
 
-        const shortenedLabel = shortenLabel ? shorten(label) + '…' : label
-
-        return shortenedLabel
+        label = shortenLabel ? shorten(label) + '…' : label
     }
+    return { key, label }
 }
 
 export const TickItem = (tick: TickItemProps) => {
@@ -129,7 +138,7 @@ export const TickItem = (tick: TickItemProps) => {
     let link,
         description = tick.description
 
-    const tickLabel = getBucketLabel({
+    const { key, label: tickLabel } = getBucketLabel({
         shouldTranslate,
         i18nNamespace,
         entity,
@@ -151,6 +160,8 @@ export const TickItem = (tick: TickItemProps) => {
     const index = itemCount - tickIndex
 
     const textProps = {
+        id: tick.value,
+        key,
         label: tickLabel,
         description,
         tickRotation,
