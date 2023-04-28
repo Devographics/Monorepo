@@ -154,13 +154,23 @@ export const getClosestLocale = (localeId?: string) => {
     return defaultLocale
   }
   // country codes where finding the closest locale is fine
-  // TODO: should this apply for China too?
-  if (["fr", "pt"].includes(localeId.slice(0, 2))) {
+  const countryCode = localeId.slice(0, 2)
+  if (["fr", "pt"].includes(countryCode)) {
     const firstMatchingLocale = uniqueLocales.find((l) => {
       return l.slice(0, 2) === localeId.slice(0, 2);
     });
     if (firstMatchingLocale) return firstMatchingLocale
     return defaultLocale
+  }
+  // use zh-Hans as the default for China
+  // TODO: might not always be the most appropriate?
+  if (countryCode === "zh") {
+    const zhHans = uniqueLocales.find(l => l === "zh-Hans")
+    if (!zhHans) {
+      console.warn("zh-Hans not found in locales list, fallback to en-US")
+      return defaultLocale
+    }
+    return zhHans
   }
   // else use English (for unsupported countries/if en-US is safer for this country)
   return defaultLocale;
