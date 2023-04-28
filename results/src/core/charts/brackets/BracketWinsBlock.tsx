@@ -1,10 +1,9 @@
-import React, { memo, useState } from 'react'
-import PropTypes from 'prop-types'
+import React from 'react'
 import Block from 'core/blocks/block/BlockVariant'
 import ChartContainer from 'core/charts/ChartContainer'
 import HorizontalBarChart from 'core/charts/horizontalBar/HorizontalBarChart'
 import { getTableData } from 'core/helpers/datatables'
-import { BracketFacetItem, BlockComponentProps, BlockDefinition } from '@types/index'
+import { BracketFacetItem, BlockComponentProps } from '@types/index'
 import sortBy from 'lodash/sortBy'
 import { useLegends } from 'core/helpers/legends'
 import { useTheme } from 'styled-components'
@@ -41,6 +40,7 @@ const getChartData = ({ data, keys }: { data: BracketFacetItem; keys?: string[] 
 }
 
 const BracketWinsBlock = ({ block, data, keys }: HorizontalBarBlockProps) => {
+    return <div>TODO</div>
     const {
         id,
         mode = 'relative',
@@ -162,23 +162,4 @@ const BarTooltip = props => {
     )
 }
 
-BracketWinsBlock.propTypes = {
-    block: PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        dataPath: PropTypes.string.isRequired,
-        showDescription: PropTypes.bool,
-        translateData: PropTypes.bool,
-        mode: PropTypes.oneOf(['absolute', 'relative']),
-        defaultUnits: PropTypes.oneOf(['percentageSurvey', 'percentageQuestion', 'count']),
-        colorVariant: PropTypes.oneOf(['primary', 'secondary'])
-    }).isRequired,
-    data: PropTypes.shape({
-        buckets: PropTypes.arrayOf(
-            PropTypes.shape({
-                id: PropTypes.string.isRequired
-            })
-        ).isRequired
-    }).isRequired
-}
-
-export default memo(BracketWinsBlock)
+export default BracketWinsBlock

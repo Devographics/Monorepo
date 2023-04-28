@@ -323,12 +323,14 @@ Take query, queryOptions, and queryArgs, and return full query
 Note: query can be either a query name, or the full query text
 
 */
-export const getQuery = ({ query, queryOptions, queryArgs }) => {
-    let queryContents
+export const getQuery = ({ query: query_, queryOptions, queryArgs }) => {
+    let queryContents,
+        query = query_
 
     if (queryOptions.isLog) {
         // when logging we can leave out enableCache parameter
         delete queryOptions.parameters.enableCache
+        query = cleanQuery(query)
     }
 
     const { editionId, questionId } = queryOptions

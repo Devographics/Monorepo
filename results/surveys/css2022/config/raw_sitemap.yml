@@ -27,500 +27,484 @@
   path: /
   showTitle: false
   blocks:
-    - id: survey_intro
-      blockType: SurveyIntroBlock
-      disableExport: true
-      wrapBlock: false
-    - id: survey_sponsors
-      template: sponsors
-    - id: survey_partners
-      template: sponsors
-      blockType: PartnersBlock
-    - id: survey_credits
-      template: credits
-    - id: survey_newsletter
-      blockType: NewsletterBlock
-      disableExport: true
-      wrapBlock: false
-    - id: survey_translators
-      blockType: TranslatorsBlock
-      disableExport: true
-      wrapBlock: false
+      - id: survey_intro
+        blockType: SurveyIntroBlock
+        disableExport: true
+        wrapBlock: false
+      - id: survey_sponsors
+        template: sponsors
+      - id: survey_partners
+        template: sponsors
+        blockType: PartnersBlock
+      - id: survey_credits
+        template: credits
+      - id: survey_newsletter
+        blockType: NewsletterBlock
+        disableExport: true
+        wrapBlock: false
+      - id: survey_translators
+        blockType: TranslatorsBlock
+        disableExport: true
+        wrapBlock: false
 
 - id: tshirt
   path: /tshirt
   showTitle: false
   blocks:
-    - id: tshirt_intro
-      template: page_introduction
-    - id: tshirt_block
-      blockType: TshirtBlock
-      wrapBlock: false
-      disableExport: true
+      - id: tshirt_intro
+        template: page_introduction
+      - id: tshirt_block
+        blockType: TshirtBlock
+        wrapBlock: false
+        disableExport: true
 
 - id: data_explorer
   titleId: sections.data_explorer.title
   path: /explorer
   blocks:
-    - template: page_introduction
+      - template: page_introduction
 
-    - id: data_explorer
-      showTitle: false
-      chartOnly: true
-      wrapBlock: false
-      template: data_explorer
-      variables:
-        facet1: demographics/yearly_salary
-        facet2: demographics/years_of_experience
+      - id: data_explorer
+        showTitle: false
+        chartOnly: true
+        wrapBlock: false
+        template: data_explorer
+        parameters: { showNoAnswer: true }
+        variables:
+            xAxis: user_info__yearly_salary
+            yAxis: user_info__years_of_experience
 
 - id: user_info
   titleId: sections.demographics.title
   path: /demographics
   blocks:
-    - template: page_introduction
+      - template: page_introduction
 
-    - id: country
-      template: demographics
-      blockType: ParticipationByCountryBlock
-      variables:
-        options: { limit: 50, cutoff: 50}
+      - id: country
+        defaultUnits: count
+        template: demographics
+        blockType: HorizontalBarBlock
+        translateData: true
+        # blockType: ParticipationByCountryBlock
+        parameters: { limit: 20 }
 
-    - id: locale
-      template: demographics
-      blockType: HorizontalBarBlock
-      translateData: true
-      variables:
-        options: {cutoff: 20}
+      - id: locale
+        template: demographics
+        blockType: HorizontalBarBlock
+        translateData: true
+        parameters: { cutoff: 20 }
 
-    - id: hint_hint
-      template: hint
+      - id: hint_hint
+        template: hint
 
-    - id: completion_stats
-      template: demographics
-      blockType: KnowledgeScoreBlock
-      translateData: true
-      hasFilters: true
-      
-    - id: age
-      template: demographics
-      hasFilters: true
+      - id: completion_stats
+        template: demographics
+        blockType: KnowledgeScoreBlock
+        translateData: true
+        hasFilters: true
 
-    - id: years_of_experience
-      template: demographics
-      hasFilters: true
-      variants:
-        - id: years_of_experience_by_salary
-          blockNamespace: user_info
-          tabId: tabs.by_salary
-          template: by_facet
-          variables:  
-            fieldId: years_of_experience
-            facetId: yearly_salary
-            options: {facetSort: {order: ___asc___, property: mean}, facetMinCount: 100}
+      - id: age
+        template: demographics
+        parameters: { showNoAnswer: true }
 
-    - id: company_size
-      template: demographics
-      hasFilters: true
+      - id: years_of_experience
+        template: demographics
+        parameters: { showNoAnswer: true }
+        variants:
+            - id: years_of_experience
+              facet: user_info__yearly_salary
+              tabId: tabs.by_salary
+              template: demographics # facet
+              parameters: { facetSort: { order: asc, property: mean }, facetCutoff: 100 }
 
-    - id: variants_hint
-      template: hint
+      - id: company_size
+        template: demographics
+        parameters: { showNoAnswer: true }
 
-    - id: higher_education_degree
-      template: demographics
-      hasFilters: true
-      variants:
-        - id: higher_education_degree_by_gender
-          blockNamespace: user_info
-          tabId: tabs.by_gender
-          template: by_facet
-          variables:  
-            fieldId: higher_education_degree
-            facetId: gender
-            options: {facetSort: {order: ___asc___, property: mean}, facetMinCount: 100}
+      - id: variants_hint
+        template: hint
 
-    - id: yearly_salary
-      template: demographics
-      hasFilters: true
-      variants:
-        - id: yearly_salary_by_gender
-          blockNamespace: user_info
-          tabId: tabs.by_gender
-          template: by_facet
-          variables:  
-            fieldId: yearly_salary
-            facetId: gender
-            options: {facetSort: {order: ___desc___, property: mean}, facetMinCount: 100}
-        - id: yearly_salary_by_country
-          blockNamespace: user_info
-          tabId: tabs.by_country
-          template: by_facet
-          variables:  
-            fieldId: yearly_salary
-            facetId: country
-            options: {facetSort: {order: ___desc___, property: mean}, facetMinCount: 100}
-        - id: yearly_salary_by_degree
-          blockNamespace: user_info
-          tabId: tabs.by_degree
-          template: by_facet
-          variables:  
-            fieldId: yearly_salary
-            facetId: higher_education_degree
-            options: {facetSort: {order: ___desc___, property: mean}, facetMinCount: 100}
-        - id: yearly_salary_by_experience
-          blockNamespace: user_info
-          tabId: tabs.by_experience
-          template: by_facet
-          variables:  
-            fieldId: yearly_salary
-            facetId: years_of_experience
-            options: {facetSort: {order: ___desc___, property: mean}, facetMinCount: 100}
+      - id: higher_education_degree
+        template: demographics
+        parameters: { showNoAnswer: true }
+        variants:
+            - id: higher_education_degree
+              facet: user_info__gender
+              tabId: tabs.by_gender
+              template: demographics # facet
+              parameters: { facetSort: { order: asc, property: mean }, facetCutoff: 100 }
 
-    - id: source
-      template: source
-      blockType: HorizontalBarBlock
-      variables:
-        options: {cutoff: 20}
-      
-    - id: gender
-      template: demographics
-      hasFilters: true
-      variants:
-        - id: gender_by_country
-          blockNamespace: user_info
-          tabId: tabs.by_country
-          template: by_facet
-          variables:  
-            fieldId: gender
-            facetId: country
-            options: {facetSort: {order: ___desc___, property: mean}, limit: 11, facetMinCount: 100}
+      - id: yearly_salary
+        template: demographics
+        parameters: { showNoAnswer: true }
+        variants:
+            - id: yearly_salary
+              facet: user_info__gender
+              tabId: tabs.by_gender
+              template: demographics # facet
+              parameters: { facetSort: { order: desc, property: mean }, facetCutoff: 100 }
+            - id: yearly_salary
+              facet: user_info__country
+              tabId: tabs.by_country
+              template: demographics # facet
+              parameters: { facetSort: { order: desc, property: mean }, facetCutoff: 100 }
+            # - id: yearly_salary_by_degree
+            #   tabId: tabs.by_degree
+            #   template: demographics
+            #   variables:
+            #     fieldId: yearly_salary
+            #     facet: higher_education_degree
+            #     parameters: {facetSort: {order: desc, property: mean}, facetCutoff: 100}
+            # - id: yearly_salary_by_experience
+            #   tabId: tabs.by_experience
+            #   template: demographics
+            #   variables:
+            #     fieldId: yearly_salary
+            #     facet: years_of_experience
+            #     parameters: {facetSort: {order: desc, property: mean}, facetCutoff: 100}
 
-    - id: race_ethnicity
-      template: demographics
-      blockType: HorizontalBarBlock
-      translateData: true
-      variants:
-        - id: race_ethnicity_by_years_of_experience
-          blockNamespace: user_info
-          tabId: tabs.by_experience
-          template: by_facet
-          variables:  
-            fieldId: race_ethnicity
-            facetId: years_of_experience
-            options: {facetSort: {order: ___asc___, property: mean}, limit: 11, facetMinCount: 100}
+      - id: source
+        template: demographics
+        blockType: HorizontalBarBlock
+        parameters: { limit: 20 }
 
-    - id: disability_status
-      template: demographics
-      blockType: HorizontalBarBlock
-      translateData: true
-      variants:
-        - id: disability_status_others
-          defaultUnits: count
-          template: demographics
-          blockType: HorizontalBarBlock
-          translateData: true
+      - id: gender
+        template: demographics
+        parameters: { showNoAnswer: true }
+        variants:
+            - id: gender
+              facet: user_info__country
+              tabId: tabs.by_country
+              template: demographics # facet
+              parameters:
+                  { facetSort: { order: desc, property: mean }, limit: 11, facetCutoff: 100 }
 
-    - id: user_info_resources
-      items: [fm-homepage]
-      template: recommended_resources
+      - id: race_ethnicity
+        defaultUnits: count
+        template: demographics
+        blockType: HorizontalBarBlock
+        translateData: true
+        variants:
+            - id: race_ethnicity
+              facet: user_info__years_of_experience
+              tabId: tabs.by_experience
+              template: demographics # facet
+              parameters: { facetSort: { order: asc, property: mean }, limit: 11, facetCutoff: 100 }
+
+      - id: disability_status
+        defaultUnits: count
+        template: demographics
+        blockType: HorizontalBarBlock
+        translateData: true
+        variants:
+            - id: disability_status_others
+              defaultUnits: count
+              template: demographics
+              blockType: HorizontalBarBlock
+              units: count
+              translateData: true
+              parameters: { cutoff: 10 }
+
+      - id: user_info_resources
+        items: [fm-homepage]
+        template: recommended_resources
 
 - id: features
   path: /features
   blocks:
-    - template: page_introduction
+      - template: page_introduction
 
-    - id: features_overview
-      template: features_overview
+      - id: features_overview
+        template: features_overview
 
-    - id: knowledge_score
-      template: demographics
-      blockNamespace: features
-      blockType: KnowledgeScoreBlock
+      - id: knowledge_score
+        template: demographics
 
-    - id: features_resources
-      items: [fm-learncss]
-      template: recommended_resources
+      - id: features_resources
+        items: [fm-learncss]
+        template: recommended_resources
 
   children:
-    - id: layout
-      path: /layout
-      blocks:
-        - id: layout
-          template: page_introduction
+      - id: layout
+        path: /layout
+        blocks:
+            - id: layout
+              template: page_introduction
 
-        - id: subgrid
-          template: feature_experience
-        - id: writing_modes
-          template: feature_experience
+            - id: subgrid
+              template: feature_experience
+            - id: writing_modes
+              template: feature_experience
 
-        - id: comments_hint
-          template: hint
+            - id: comments_hint
+              template: hint
 
-        - id: logical_properties
-          template: feature_experience
-        - id: aspect_ratio
-          template: feature_experience
+            - id: logical_properties
+              template: feature_experience
+            - id: aspect_ratio
+              template: feature_experience
 
-        - id: content_visibility
-          template: feature_experience
-        - id: flexbox_gap
-          template: feature_experience
-          year: 2021
-        - id: at_container
-          template: feature_experience
-          year: 2021
+            - id: content_visibility
+              template: feature_experience
+            - id: flexbox_gap
+              template: feature_experience
+              year: 2021
+            - id: at_container
+              template: feature_experience
+              year: 2021
 
-        - id: david_east
-          template: picks
-          variables:
-            url: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout/Subgrid
+            - id: david_east
+              template: picks
+              variables:
+                  url: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout/Subgrid
 
-        - id: object_view_box
-          template: feature_experience
-          year: 2022
-        - id: viewport_percentage_length_units
-          template: feature_experience
-          year: 2022
-        - id: media_queries_range_contexts
-          template: feature_experience
-          year: 2022
+            - id: object_view_box
+              template: feature_experience
+              year: 2022
+            - id: viewport_percentage_length_units
+              template: feature_experience
+              year: 2022
+            - id: media_queries_range_contexts
+              template: feature_experience
+              year: 2022
 
-        - id: layout_resources
-          items: [fm-gridsflexbox]
-          template: recommended_resources
+            - id: layout_resources
+              items: [fm-gridsflexbox]
+              template: recommended_resources
 
-    - id: shapes_graphics
-      path: /shapes-and-graphics
-      blocks:
-        - id: shapes_graphics
-          template: page_introduction
+      - id: shapes_graphics
+        path: /shapes-and-graphics
+        blocks:
+            - id: shapes_graphics
+              template: page_introduction
 
-        - id: blend_modes
-          template: feature_experience
-        - id: filter_effects
-          template: feature_experience
-        - id: backdrop_filter
-          template: feature_experience
+            - id: blend_modes
+              template: feature_experience
+            - id: filter_effects
+              template: feature_experience
+            - id: backdrop_filter
+              template: feature_experience
 
-        - id: export_hint
-          template: hint
+            - id: export_hint
+              template: hint
 
-        - id: intrinsic_sizing
-          template: feature_experience
-          year: 2021
-        - id: conic_gradient
-          template: feature_experience
-          year: 2021
+            - id: intrinsic_sizing
+              template: feature_experience
+              year: 2021
+            - id: conic_gradient
+              template: feature_experience
+              year: 2021
 
-        - id: shapes_graphics_resources
-          items: [fm-svg]
-          template: recommended_resources
+            - id: shapes_graphics_resources
+              items: [fm-svg]
+              template: recommended_resources
 
-    - id: colors
-      path: /colors
-      blocks:
-        - id: colors
-          template: page_introduction
-  
-        - id: color_function
-          template: feature_experience
-          year: 2021
-        - id: accent_color
-          template: feature_experience
-          year: 2021
+      - id: colors
+        path: /colors
+        blocks:
+            - id: colors
+              template: page_introduction
 
-        - id: share_hint
-          template: hint
+            - id: color_function
+              template: feature_experience
+              year: 2021
+            - id: accent_color
+              template: feature_experience
+              year: 2021
 
-        - id: currentcolor
-          template: feature_experience
-          year: 2022
-        - id: color_mix
-          template: feature_experience
-          year: 2022
-        - id: wide_gamut_colors
-          template: feature_experience
-          year: 2022
-        - id: relative_colors
-          template: feature_experience
-          year: 2022
-        - id: gradient_color_spaces
-          template: feature_experience
-          year: 2022
+            - id: share_hint
+              template: hint
 
-    - id: interactions
-      path: /interactions
-      blocks:
-        - id: interactions
-          template: page_introduction
+            - id: currentcolor
+              template: feature_experience
+              year: 2022
+            - id: color_mix
+              template: feature_experience
+              year: 2022
+            - id: wide_gamut_colors
+              template: feature_experience
+              year: 2022
+            - id: relative_colors
+              template: feature_experience
+              year: 2022
+            - id: gradient_color_spaces
+              template: feature_experience
+              year: 2022
 
-        - id: scroll_snap
-          template: feature_experience
-        - id: overscroll_behavior
-          template: feature_experience
+      - id: interactions
+        path: /interactions
+        blocks:
+            - id: interactions
+              template: page_introduction
 
-        - id: bramus_van_damme
-          template: picks
-          variables:
-            url: https://developer.mozilla.org/en-US/docs/Web/CSS/:has
+            - id: scroll_snap
+              template: feature_experience
+            - id: overscroll_behavior
+              template: feature_experience
 
-        - id: units_switcher_hint
-          template: hint
+            - id: bramus_van_damme
+              template: picks
+              variables:
+                  url: https://developer.mozilla.org/en-US/docs/Web/CSS/:has
 
-        - id: touch_action
-          template: feature_experience
+            - id: units_switcher_hint
+              template: hint
 
-        - id: scroll_behavior
-          template: feature_experience
-        - id: scrollbar_gutter
-          template: feature_experience
-          year: 2021
+            - id: touch_action
+              template: feature_experience
 
-        - id: shapes_graphics_resources
-          items: [fm-animations-transitions]
-          template: recommended_resources
-          
-    - id: typography
-      path: /typography
-      blocks:
-        - id: typography
-          template: page_introduction
+            - id: scroll_behavior
+              template: feature_experience
+            - id: scrollbar_gutter
+              template: feature_experience
+              year: 2021
 
-        - id: font_display
-          template: feature_experience
-        - id: line_clamp
-          template: feature_experience
+            - id: shapes_graphics_resources
+              items: [fm-animations-transitions]
+              template: recommended_resources
 
-        - id: kevin_j_powell
-          template: picks
-          variables:
-            url: https://jhey.dev/
+      - id: typography
+        path: /typography
+        blocks:
+            - id: typography
+              template: page_introduction
 
-        - id: variable_fonts
-          template: feature_experience
-        - id: font_palette
-          template: feature_experience
+            - id: font_display
+              template: feature_experience
+            - id: line_clamp
+              template: feature_experience
 
-        - items: [fm-typography]
-          template: recommended_resources
+            - id: kevin_j_powell
+              template: picks
+              variables:
+                  url: https://jhey.dev/
 
-    - id: accessibility
-      path: /accessibility
-      blocks:
-        - id: accessibility
-          template: page_introduction
+            - id: variable_fonts
+              template: feature_experience
+            - id: font_palette
+              template: feature_experience
 
-        - id: prefers_reduced_motion
-          template: feature_experience
-        - id: prefers_color_scheme
-          template: feature_experience
+            - items: [fm-typography]
+              template: recommended_resources
 
-        - id: samuel_kraft
-          template: picks
-          variables:
-            url: https://webkit.org/blog/13096/css-has-pseudo-class/
+      - id: accessibility
+        path: /accessibility
+        blocks:
+            - id: accessibility
+              template: page_introduction
 
-        - id: prefers_reduced_data
-          template: feature_experience
-          year: 2021
-          
-        - id: color_contrast
-          template: feature_experience
-          year: 2021
-        - id: color_scheme
-          template: feature_experience
-          year: 2021
-        
-        - id: prefers_contrast
-          template: feature_experience
-          year: 2022
-        - id: forced_colors
-          template: feature_experience
-          year: 2022
-        - id: focus_visible
-          template: feature_experience
-          year: 2022
+            - id: prefers_reduced_motion
+              template: feature_experience
+            - id: prefers_color_scheme
+              template: feature_experience
 
-        - items: [fm-accessibility]
-          template: recommended_resources
+            - id: samuel_kraft
+              template: picks
+              variables:
+                  url: https://webkit.org/blog/13096/css-has-pseudo-class/
 
-    - id: selectors
-      path: /selectors
-      blocks:
-        - id: selectors
-          template: page_introduction
+            - id: prefers_reduced_data
+              template: feature_experience
+              year: 2021
 
-        - id: marker
-          template: feature_experience
-          year: 2021
+            - id: color_contrast
+              template: feature_experience
+              year: 2021
+            - id: color_scheme
+              template: feature_experience
+              year: 2021
 
-        - id: josh_comeau
-          template: picks
-          variables:
-            url: https://moderncss.dev/
+            - id: prefers_contrast
+              template: feature_experience
+              year: 2022
+            - id: forced_colors
+              template: feature_experience
+              year: 2022
+            - id: focus_visible
+              template: feature_experience
+              year: 2022
 
-        - id: has_selector
-          template: feature_experience
-          year: 2022
-        - id: where_selector
-          template: feature_experience
-          year: 2022
+            - items: [fm-accessibility]
+              template: recommended_resources
 
-        - items: [fm-html-css]
-          template: recommended_resources
+      - id: selectors
+        path: /selectors
+        blocks:
+            - id: selectors
+              template: page_introduction
 
-    - id: other_features
-      path: /other-features
-      blocks:
-        - id: other_features
-          template: page_introduction
+            - id: marker
+              template: feature_experience
+              year: 2021
 
-        - id: variables
-          template: feature_experience
+            - id: josh_comeau
+              template: picks
+              variables:
+                  url: https://moderncss.dev/
 
-        - id: adam_argyle
-          template: picks
-          variables:
-            url: https://developer.chrome.com/blog/has-m105/
+            - id: has_selector
+              template: feature_experience
+              year: 2022
+            - id: where_selector
+              template: feature_experience
+              year: 2022
 
-        - id: feature_support_queries
-          template: feature_experience
+            - items: [fm-html-css]
+              template: recommended_resources
 
-        - id: will_change
-          template: feature_experience
-          
-        - id: comparison_functions
-          template: feature_experience
+      - id: other_features
+        path: /other-features
+        blocks:
+            - id: other_features
+              template: page_introduction
 
-        - id: at_property
-          template: feature_experience
-          year: 2021
+            - id: variables
+              template: feature_experience
 
-        - id: cascade_layers
-          template: feature_experience
-          year: 2022
+            - id: adam_argyle
+              template: picks
+              variables:
+                  url: https://developer.chrome.com/blog/has-m105/
 
-        - id: shadow_dom_part
-          template: feature_experience
-          year: 2022
+            - id: feature_support_queries
+              template: feature_experience
 
-        - id: trigonometric_functions
-          template: feature_experience
-          year: 2022
+            - id: will_change
+              template: feature_experience
 
-        - id: css_nesting
-          template: feature_experience
-          year: 2022
+            - id: comparison_functions
+              template: feature_experience
 
-        - id: image_set
-          template: feature_experience
-          year: 2022
+            - id: at_property
+              template: feature_experience
+              year: 2021
 
-        - id: image_function
-          template: feature_experience
-          year: 2022
+            - id: cascade_layers
+              template: feature_experience
+              year: 2022
 
-        - items: [fm-cssvariables]
-          template: recommended_resources
+            - id: shadow_dom_css
+              template: feature_experience
+              year: 2022
+
+            - id: trigonometric_functions
+              template: feature_experience
+              year: 2022
+
+            - id: css_nesting
+              template: feature_experience
+              year: 2022
+
+            - id: image_set
+              template: feature_experience
+              year: 2022
+
+            - id: image_function
+              template: feature_experience
+              year: 2022
+
+            - items: [fm-cssvariables]
+              template: recommended_resources
 
 # - id: technologies
 #   path: /technologies
@@ -536,521 +520,444 @@
 #     #   template: tools_cardinality_by_user_css
 
 #   children:
-    
+
 - id: css_frameworks
   path: /css-frameworks
   blocks:
-    - template: page_introduction
+      - template: page_introduction
 
-    - template: tools_experience_linechart
-      tabId: blocks.tools_experience_ranking.percentages
-      variants:
-        - template: tools_experience_ranking
-          tabId: blocks.tools_experience_ranking.rankings
+      - template: tools_experience_linechart
+        tabId: blocks.tools_experience_ranking.percentages
+        variants:
+            - template: tools_experience_ranking
+              tabId: blocks.tools_experience_ranking.rankings
 
-    - id: rankings_modes_hint
-      template: hint
-      
-    - template: tools_section_streams
+      - id: rankings_modes_hint
+        template: hint
 
-    - template: tools_experience_marimekko
+      - template: tools_section_streams
 
-    - id: eric_w_bailey
-      template: picks
-      variables:
-        url: https://benmyers.dev/blog/semantic-selectors/
+      - template: tools_experience_marimekko
 
-    - template: section_other_tools
+      - id: eric_w_bailey
+        template: picks
+        variables:
+            url: https://benmyers.dev/blog/semantic-selectors/
 
-    - template: happiness
-      variables:
-        fieldId: css_frameworks
+      - template: section_other_tools
+        parameters: { limit: 10 }
 
-    # - template: toolsUsageVariationsTemplate
+      - template: happiness
+        variables:
+            fieldId: css_frameworks
 
-    - id: bootstrap
-      template: tool_experience
-    - id: materialize_css
-      template: tool_experience
-    - id: ant_design
-      template: tool_experience
-    - id: semantic_ui
-      template: tool_experience
-    - id: bulma
-      template: tool_experience
-    - id: foundation
-      template: tool_experience
-    - id: ui_kit
-      template: tool_experience
-    - id: tachyons
-      template: tool_experience
-    - id: primer
-      template: tool_experience
-    - id: tailwind_css
-      template: tool_experience
-    - id: pure_css
-      template: tool_experience
-    - id: halfmoon
-      template: tool_experience
-      year: 2021
+      # - template: toolsUsageVariationsTemplate
+
+      - id: bootstrap
+        template: tool_experience
+      - id: materialize_css
+        template: tool_experience
+      - id: ant_design
+        template: tool_experience
+      - id: semantic_ui
+        template: tool_experience
+      - id: bulma
+        template: tool_experience
+      - id: foundation
+        template: tool_experience
+      - id: ui_kit
+        template: tool_experience
+      - id: tachyons
+        template: tool_experience
+      - id: primer
+        template: tool_experience
+      - id: tailwind_css
+        template: tool_experience
+      - id: pure_css
+        template: tool_experience
+      - id: halfmoon
+        template: tool_experience
+        year: 2021
 
 - id: css_in_js
   path: /css-in-js
   blocks:
-    - template: page_introduction
+      - template: page_introduction
 
-    - template: tools_experience_linechart
+      - template: tools_experience_linechart
 
-    - template: tools_experience_ranking
+      - template: tools_experience_ranking
 
-    - template: tools_section_streams
+      - template: tools_section_streams
 
-    - template: tools_experience_marimekko
+      - template: tools_experience_marimekko
 
-    # - template: toolsUsageVariationsTemplate
-    
-    - id: michelle_barker
-      template: picks
-      variables:
-        url: https://wpt.fyi/interop-2022
+      # - template: toolsUsageVariationsTemplate
 
-    - template: section_other_tools
+      - id: michelle_barker
+        template: picks
+        variables:
+            url: https://wpt.fyi/interop-2022
 
-    - template: happiness
-      variables:
-        fieldId: css_in_js
+      - template: section_other_tools
+        parameters: { limit: 10 }
 
-    - items: [fm-reactv3]
-      template: recommended_resources
+      - template: happiness
+        variables:
+            fieldId: css_in_js
 
-    - id: styled_components
-      template: tool_experience
-    - id: jss
-      template: tool_experience
-    - id: styled_jsx
-      template: tool_experience
-    - id: emotion
-      template: tool_experience
-    - id: css_modules
-      template: tool_experience
-    - id: styled_system
-      template: tool_experience
-    - id: stitches
-      template: tool_experience
-    - id: fela
-      template: tool_experience
-    - id: linaria
-      template: tool_experience
-    - id: astroturf
-      template: tool_experience
-    - id: twin
-      template: tool_experience
-      year: 2021
-    - id: theme_ui
-      template: tool_experience
-      year: 2021
-    - id: vanilla_extract
-      template: tool_experience
-      year: 2021
-    - id: windi_css
-      template: tool_experience
-      year: 2021
+      - items: [fm-reactv3]
+        template: recommended_resources
 
-- id: tools_others
+      - id: styled_components
+        template: tool_experience
+      - id: jss
+        template: tool_experience
+      - id: styled_jsx
+        template: tool_experience
+      - id: emotion
+        template: tool_experience
+      - id: css_modules
+        template: tool_experience
+      - id: styled_system
+        template: tool_experience
+      - id: stitches
+        template: tool_experience
+      - id: fela
+        template: tool_experience
+      - id: linaria
+        template: tool_experience
+      - id: astroturf
+        template: tool_experience
+      - id: twin
+        template: tool_experience
+        year: 2021
+      - id: theme_ui
+        template: tool_experience
+        year: 2021
+      - id: vanilla_extract
+        template: tool_experience
+        year: 2021
+      - id: windi_css
+        template: tool_experience
+        year: 2021
+
+- id: other_tools
   path: /other-tools
   blocks:
-    - id: tools_others_intro
-      template: page_introduction
+      - id: tools_others_intro
+        template: page_introduction
 
-    - id: pre_post_processors
-      defaultUnits: count
-      tabId: tabs.main_answers
-      blockNamespace: tools_others  
-      template: multiple_options
-      variables:
-        fieldId: tools_others
-      variants:
-        - id: pre_post_processors_others
-          blockNamespace: tools_others  
-          template: multiple_options
-          defaultUnits: count
-          variables:
-            fieldId: tools_others
-            options: { cutoff: 5 }
+      - id: pre_post_processors
+        defaultUnits: count
+        tabId: tabs.main_answers
+        template: multiple_options
+        variants:
+            - id: pre_post_processors_others
+              template: multiple_options_freeform
+              defaultUnits: count
+              parameters: { cutoff: 5 }
 
-    - id: kilian_valkhof
-      template: picks
-      variables:
-        url: https://wpt.fyi/interop-2022
+      - id: kilian_valkhof
+        template: picks
+        variables:
+            url: https://wpt.fyi/interop-2022
 
-    - id: utilities
-      defaultUnits: count
-      tabId: tabs.main_answers
-      blockNamespace: tools_others  
-      template: multiple_options
-      variables:
-        fieldId: tools_others
-      variants:
-        - id: utilities_others
-          blockNamespace: tools_others  
-          template: multiple_options
-          defaultUnits: count
-          variables:
-            fieldId: tools_others
-            options: { cutoff: 5 }
+      - id: utilities
+        defaultUnits: count
+        tabId: tabs.main_answers
+        template: multiple_options
+        variants:
+            - id: utilities_others
+              template: multiple_options_freeform
+              defaultUnits: count
+              parameters: { cutoff: 5 }
 
-    - id: gift_egwuenu
-      template: picks
-      variables:
-        url: https://web.dev/learn/css/
+      - id: gift_egwuenu
+        template: picks
+        variables:
+            url: https://web.dev/learn/css/
 
-    - id: browsers
-      defaultUnits: count
-      tabId: tabs.main_answers
-      blockNamespace: tools_others  
-      template: multiple_options
-      variables:
-        fieldId: tools_others
-      variants: 
-        - id: browsers_others
-          blockNamespace: tools_others  
-          template: multiple_options
-          defaultUnits: count
-          variables:
-            fieldId: tools_others
+      - id: browsers
+        defaultUnits: count
+        tabId: tabs.main_answers
+        template: multiple_options
+        variants:
+            - id: browsers_others
+              template: multiple_options
+              defaultUnits: count
 
-    - id: bracket_hint
-      template: hint
+      - id: bracket_hint
+        template: hint
 
-    - id: tool_evaluation_wins
-      tabId: tabs.bracket_wins
-      template: bracket_wins
-      blockNamespace: tool_evaluation
-      variables:
-        fieldId: tools_others__tool_evaluation
-      # Note: disabled because of Nivo heatmap bug
-      # variants: 
-      #   - id: tool_evaluation_matchups
-      #     tabId: tabs.bracket_matchups
-      #     blockNamespace: tool_evaluation
-      #     variables:
-      #       fieldId: tools_others__tool_evaluation
-      #     template: bracket_matchups
+      - id: tool_evaluation_wins
+        tabId: tabs.bracket_wins
+        template: bracket_wins
+        # Note: disabled because of Nivo heatmap bug
+        # variants:
+        #   - id: tool_evaluation_matchups
+        #     tabId: tabs.bracket_matchups
+        #     blockNamespace: tool_evaluation
+        #     variables:
+        #       fieldId: tools_others__tool_evaluation
+        #     template: bracket_matchups
 
-    - id: tools_others_resources
-      items: [fm-storybook]
-      template: recommended_resources
+      - id: tools_others_resources
+        items: [fm-storybook]
+        template: recommended_resources
 
 - id: usage
   intlId: usage_css
   path: /usage
   blocks:
-    - template: page_introduction
+      - template: page_introduction
 
-    - id: form_factors
-      blockNamespace: environments
-      chartNamespace: form_factors
-      translateData: true
-      template: multiple_options
-      variables:
-        fieldId: usage
+      - id: form_factors
+        i18nNamespace: environments
+        translateData: true
+        template: multiple_options
 
-    - id: sharing_hint
-      template: hint
+      - id: sharing_hint
+        template: hint
 
-    - id: what_do_you_use_css_for
-      tabId: tabs.main_answers
-      blockNamespace: environments
-      chartNamespace: what_do_you_use_css_for
-      translateData: true
-      template: multiple_options
-      variables:
-        fieldId: usage
-      variants: 
-        - id: what_do_you_use_css_for_others
-          defaultUnits: count
-          blockNamespace: environments
-          tabId: tabs.other_answers
-          chartNamespace: what_do_you_use_css_for
-          translateData: true
-          template: multiple_options
-          variables:
-            fieldId: usage
+      - id: what_do_you_use_css_for
+        tabId: tabs.main_answers
+        i18nNamespace: environments
+        translateData: true
+        template: multiple_options
+        variants:
+            - id: what_do_you_use_css_for_others
+              defaultUnits: count
+              i18nNamespace: environments
+              tabId: tabs.other_answers
+              translateData: true
+              template: multiple_options_freeform
 
-    - id: sara_soueidan
-      template: picks
-      variables:
-        url: https://webkit.org/blog/13096/css-has-pseudo-class/
+      - id: sara_soueidan
+        template: picks
+        variables:
+            url: https://webkit.org/blog/13096/css-has-pseudo-class/
 
-    - id: css_js_balance
-      tabId: tabs.main_answers
-      blockNamespace: usage
-      chartNamespace: css_js_balance
-      translateData: true
-      template: single_option
-      variables:
-        fieldId: usage
+      - id: css_js_balance
+        tabId: tabs.main_answers
+        translateData: true
+        template: single_option
 
-    - id: interoperability_features_freeform
-      defaultUnits: count
-      blockNamespace: usage
-      chartNamespace: features
-      translateData: true
-      template: multiple_options
-      isFreeform: true
-      variables:
-        fieldId: usage
-        options: { limit: 20, cutoff: 20 }
+      - id: interoperability_features_freeform
+        defaultUnits: count
+        translateData: true
+        template: multiple_options_freeform
+        isFreeform: true
+        parameters: { limit: 20, cutoff: 20 }
 
-    - id: missing_features_freeform
-      defaultUnits: count
-      blockNamespace: usage
-      # chartNamespace: css_js_balance
-      translateData: true
-      template: multiple_options
-      isFreeform: true
-      variables:
-        fieldId: usage
-        options: { limit: 20, cutoff: 20 }
+      - id: missing_features_freeform
+        defaultUnits: count
+        translateData: true
+        template: multiple_options_freeform
+        isFreeform: true
+        parameters: { limit: 20, cutoff: 20 }
 
-    - id: other_pain_points_freeform
-      defaultUnits: count
-      blockNamespace: usage
-      # chartNamespace: css_js_balance
-      translateData: true
-      template: multiple_options
-      isFreeform: true
-      variables:
-        fieldId: usage
-        options: { limit: 20, cutoff: 20 }
+      - id: other_pain_points_freeform
+        defaultUnits: count
+        translateData: true
+        template: multiple_options_freeform
+        isFreeform: true
+        parameters: { limit: 20, cutoff: 20 }
 
-    - id: adam_wathan
-      template: picks
-      variables:
-        url: https://adamwathan.me/composing-the-uncomposable-with-css-variables/
+      - id: adam_wathan
+        template: picks
+        variables:
+            url: https://adamwathan.me/composing-the-uncomposable-with-css-variables/
 
-    - template: happiness
-      variables:
-        fieldId: state_of_the_web
+      - template: happiness
+        id: state_of_the_web_happiness
+        titleId: happiness.state_of_the_web
 
-    - template: happiness
-      variables:
-        fieldId: state_of_css
+      - template: happiness
+        id: state_of_css_happiness
+        titleId: happiness.state_of_css
 
 - id: resources
   intlId: resources_css
   path: /resources
   blocks:
-    - template: page_introduction
+      - template: page_introduction
 
-    - id: first_steps
-      defaultUnits: count
-      blockNamespace: resources
-      chartNamespace: first_steps
-      tabId: tabs.main_answers
-      template: multiple_options
-      translateData: true
-      variables:
-        fieldId: resources
-      variants:
-        - id: first_steps_others
-          defaultUnits: count
-          blockNamespace: resources
-          chartNamespace: first_steps
-          tabId: tabs.other_answers
-          template: multiple_options
-          translateData: true
-          variables:
-            options: { cutoff: 10 }
+      - id: first_steps
+        defaultUnits: count
+        tabId: tabs.main_answers
+        template: multiple_options
+        translateData: true
+        variants:
+            - id: first_steps_others
+              defaultUnits: count
+              i18nNamespace: first_steps
+              tabId: tabs.other_answers
+              template: multiple_options_freeform
+              translateData: true
+              parameters: { cutoff: 10 }
+
+      - id: blogs_news_magazines
+        defaultUnits: count
+        tabId: tabs.main_answers
+        template: multiple_options
+        variables:
             fieldId: resources
+        variants:
+            - id: blogs_news_magazines_others
+              i18nNamespace: blogs_news_magazines
+              defaultUnits: count
+              tabId: tabs.other_answers
+              template: multiple_options_freeform
+              parameters: { cutoff: 10 }
 
-    - id: blogs_news_magazines
-      defaultUnits: count
-      blockNamespace: resources
-      chartNamespace: blogs_news_magazines
-      tabId: tabs.main_answers
-      template: multiple_options
-      variables:
-        fieldId: resources
-      variants:
-        - id: blogs_news_magazines_others
-          defaultUnits: count
-          blockNamespace: resources
-          chartNamespace: blogs_news_magazines
-          tabId: tabs.other_answers
-          template: multiple_options
-          variables:
-            options: { cutoff: 10 }
+      - id: sites_courses
+        defaultUnits: count
+        tabId: tabs.main_answers
+        template: multiple_options
+        variables:
             fieldId: resources
+        variants:
+            - id: sites_courses_others
+              i18nNamespace: sites_courses
+              defaultUnits: count
+              tabId: tabs.other_answers
+              template: multiple_options_freeform
+              parameters: { cutoff: 10 }
 
-    - id: sites_courses
-      defaultUnits: count
-      blockNamespace: resources
-      chartNamespace: sites_courses
-      tabId: tabs.main_answers
-      template: multiple_options
-      variables:
-        fieldId: resources
-      variants:
-        - id: sites_courses_others
-          defaultUnits: count
-          blockNamespace: resources
-          chartNamespace: sites_courses
-          tabId: tabs.other_answers
-          template: multiple_options
-          variables:
-            options: { cutoff: 10 }
+      - id: jen_simmons
+        template: picks
+        variables:
+            url: https://webkit.org/blog/13096/css-has-pseudo-class/
+
+      - id: podcasts
+        defaultUnits: count
+        tabId: tabs.main_answers
+        template: multiple_options
+        variables:
             fieldId: resources
+        variants:
+            - id: podcasts_others
+              defaultUnits: count
+              i18nNamespace: podcasts
+              tabId: tabs.other_answers
+              template: multiple_options_freeform
+              parameters: { cutoff: 10 }
 
-    - id: jen_simmons
-      template: picks
-      variables:
-        url: https://webkit.org/blog/13096/css-has-pseudo-class/
+      - id: people_others
+        blockType: PeopleBlock
+        defaultUnits: count
+        template: multiple_options_freeform
+        parameters: { cutoff: 15 }
 
-    - id: podcasts
-      defaultUnits: count
-      blockNamespace: resources
-      chartNamespace: podcasts
-      tabId: tabs.main_answers
-      template: multiple_options
-      variables:
-        fieldId: resources
-      variants:
-        - id: podcasts_others
-          defaultUnits: count
-          blockNamespace: resources
-          chartNamespace: podcasts
-          tabId: tabs.other_answers
-          template: multiple_options
-          variables:
-            options: { cutoff: 10 }
+      - id: ahmad_shadeed
+        template: picks
+        variables:
+            url: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Container_Queries
+
+      - id: other_surveys
+        defaultUnits: count
+        tabId: tabs.main_answers
+        template: multiple_options
+        variables:
             fieldId: resources
+        variants:
+            - id: other_surveys_others
+              defaultUnits: count
+              i18nNamespace: other_surveys
+              tabId: tabs.other_answers
+              template: multiple_options
+              parameters: { cutoff: 5 }
 
-    - id: people_others
-      blockType: PeopleBlock
-      defaultUnits: count
-      blockNamespace: resources
-      chartNamespace: people
-      template: multiple_options
-      variables:
-        options: { cutoff: 15 }
-        fieldId: resources
-
-    - id: ahmad_shadeed
-      template: picks
-      variables:
-        url: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Container_Queries
-
-    - id: other_surveys
-      defaultUnits: count
-      blockNamespace: resources
-      chartNamespace: podcasts
-      tabId: tabs.main_answers
-      template: multiple_options
-      variables:
-        fieldId: resources
-      variants:
-        - id: other_surveys_others
-          defaultUnits: count
-          blockNamespace: resources
-          chartNamespace: podcasts
-          tabId: tabs.other_answers
-          template: multiple_options
-          variables:
-            options: { cutoff: 5 }
-            fieldId: resources
-
-    - items: [renderatl]
-      template: recommended_resources
-      titleId: blocks.recommended_events
-      variables:
-        isEvent: true
+      - items: [renderatl]
+        template: recommended_resources
+        titleId: blocks.recommended_events
+        variables:
+            isEvent: true
 
 - id: awards
   path: /awards
   blocks:
-    - template: page_introduction
+      - template: page_introduction
 
-    - id: awards
-      template: awards
-      variables:
-        entities: '"flexbox_gap","aspect_ratio","intrinsic_sizing","subgrid","nesting","at_container","css_modules","tailwind_css","vanilla_extract","arc","uno_css","open_props"'
-      awards:
-        - id: feature_adoption_delta_award
-          template: award
-          awards:
-            - id: flexbox_gap
-              value: "+25.4%"
-            - id: aspect_ratio
-              value: "+17.9%"
-            - id: intrinsic_sizing
-              value: "+13%"
+      - id: awards
+        template: awards
+        variables:
+            entities: '"flexbox_gap","aspect_ratio","intrinsic_sizing","subgrid","nesting","at_container","css_modules","tailwind_css","vanilla_extract","arc","uno_css","open_props"'
+        awards:
+            - id: feature_adoption_delta_award
+              template: award
+              awards:
+                  - id: flexbox_gap
+                    value: '+25.4%'
+                  - id: aspect_ratio
+                    value: '+17.9%'
+                  - id: intrinsic_sizing
+                    value: '+13%'
 
-        - id: most_commented_feature_award
-          template: award
-          awards:
-            - id: subgrid
-              value: 126
-            - id: css_nesting
-              value: 60
-            - id: at_container
-              value: 50
+            - id: most_commented_feature_award
+              template: award
+              awards:
+                  - id: subgrid
+                    value: 126
+                  - id: css_nesting
+                    value: 60
+                  - id: at_container
+                    value: 50
 
-        # - id: tool_usage_delta_award
-        #   template: award
-        #   awards:
-        #     - id: tailwind_css
-        #       value: "+17.8%"
-        #     - id: atomic_css
-        #       value: "+10.8%"
-        #     - id: css_modules
-        #       value: "+10.1%"
+            # - id: tool_usage_delta_award
+            #   template: award
+            #   awards:
+            #     - id: tailwind_css
+            #       value: "+17.8%"
+            #     - id: atomic_css
+            #       value: "+10.8%"
+            #     - id: css_modules
+            #       value: "+10.1%"
 
-        - id: tool_satisfaction_award
-          template: award
-          awards:
-            - id: css_modules
-              value: "85.6%"
-            - id: tailwind_css
-              value: "79%"
-            - id: vanilla_extract
-              value: "78.8%"
+            - id: tool_satisfaction_award
+              template: award
+              awards:
+                  - id: css_modules
+                    value: '85.6%'
+                  - id: tailwind_css
+                    value: '79%'
+                  - id: vanilla_extract
+                    value: '78.8%'
 
-        # - id: tool_interest_award
-        #   template: award
-        #   awards:
-        #     - id: css_modules
-        #       value: "74%"
-        #     - id: vanilla_extract
-        #       value: "68%"
-        #     - id: stitches
-        #       value: "55%"
+            # - id: tool_interest_award
+            #   template: award
+            #   awards:
+            #     - id: css_modules
+            #       value: "74%"
+            #     - id: vanilla_extract
+            #       value: "68%"
+            #     - id: stitches
+            #       value: "55%"
 
-        - id: most_write_ins_award
-          template: award
-          awards:
-            - id: arc
-              value: 113
-            - id: uno_css
-              value: 105
-            - id: open_props
-              value: 68
-
+            - id: most_write_ins_award
+              template: award
+              awards:
+                  - id: arc
+                    value: 113
+                  - id: uno_css
+                    value: 105
+                  - id: open_props
+                    value: 68
 
 - id: conclusion
   path: /conclusion
   blocks:
+      - id: conclusion
+        template: conclusion
+        variables:
+            author: lea_verou
+            entities: '"lea_verou"'
 
-    - id: conclusion
-      template: conclusion
-      variables:
-        author: lea_verou
-        entities: '"lea_verou"'
-
-    - id: conclusion_newsletter
-      blockType: NewsletterBlock
-      wrapBlock: false
-      disableExport: true
+      - id: conclusion_newsletter
+        blockType: NewsletterBlock
+        wrapBlock: false
+        disableExport: true
 
 # note: other pages need to be included in the sitemap too so they can get the proper
 # locale passed to them
@@ -1058,11 +965,10 @@
 - id: about
   path: /about
   blocks:
-
-    - id: about_contents
-      blockType: AboutBlock
-      wrapBlock: false
-      disableExport: true
+      - id: about_contents
+        blockType: AboutBlock
+        wrapBlock: false
+        disableExport: true
 
 # - id: how_to_help
 #   path: /how_to_help
@@ -1077,24 +983,24 @@
   path: /support
   is_hidden: true
   blocks:
-    - id: support
-      template: page_introduction
+      - id: support
+        template: page_introduction
 
 - id: sponsor_finish
   path: /sponsor-chart-finish
   is_hidden: true
   blocks:
-    - id: sponsor_finish
-      blockType: SponsorFinishBlock
-      wrapBlock: false
+      - id: sponsor_finish
+        blockType: SponsorFinishBlock
+        wrapBlock: false
 
 - id: notfound
   titleId: notfound.title
   path: /404
   is_hidden: true
   blocks:
-    - id: notfound
-      blockType: NotFoundBlock
+      - id: notfound
+        blockType: NotFoundBlock
 # - id: report
 #   showTitle: false
 #   path: /report

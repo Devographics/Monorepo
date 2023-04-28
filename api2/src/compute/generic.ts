@@ -152,10 +152,6 @@ export async function genericComputeFunction({
 
     const dbPath = getDbPath(question, responsesType)
 
-    console.log(responsesType)
-    console.log(ResponsesTypes.PREDEFINED)
-    console.log(dbPath)
-
     if (!dbPath) {
         throw new Error(`No dbPath found for question id ${question.id}`)
     }
