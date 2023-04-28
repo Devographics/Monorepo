@@ -1,3 +1,4 @@
+import { Survey } from "@devographics/types";
 import { MongoClient } from "mongodb";
 
 const dbs = {};
@@ -19,7 +20,7 @@ export const getMongoDb = async ({ dbUri, dbName }) => {
   }
 };
 
-export const getRawCollection = async (survey) => {
+export const getRawCollection = async (survey?: Survey) => {
   const db = await getMongoDb({
     dbUri: process.env.MONGO_URI,
     dbName: "production",
@@ -27,10 +28,18 @@ export const getRawCollection = async (survey) => {
   return db.collection("responses");
 };
 
-export const getNormCollection = async (survey) => {
+export const getNormCollection = async (survey?: Survey) => {
   const db = await getMongoDb({
     dbUri: process.env.MONGO_URI_PUBLIC_READONLY,
     dbName: "public",
   });
-  return db.collection(survey.dbCollectionName);
+  return db.collection(survey?.dbCollectionName || "normalized_responses");
+};
+
+export const getUsersCollection = async () => {
+  const db = await getMongoDb({
+    dbUri: process.env.MONGO_URI,
+    dbName: "production",
+  });
+  return db.collection("users");
 };

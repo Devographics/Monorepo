@@ -28,9 +28,10 @@ export const runScript = async (root, args, context, info) => {
     throw new Error("No script id specified");
   }
   console.log(`📜 running script ${id}…`);
-  if (!isEmpty(scriptArgs)) {
-    console.log(scriptArgs);
-  }
+  // don't log out args to avoid leaking emails, etc. to server logs?
+  // if (!isEmpty(scriptArgs)) {
+  //   console.log(scriptArgs);
+  // }
   const script = allScripts[id];
   const result = await measureTime(
     async () => await script(scriptArgs),

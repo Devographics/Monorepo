@@ -205,8 +205,8 @@ export const normalizeResponse = async (
       } else {
         modifier = { $set: { [fullPath]: value } };
 
-        console.log(JSON.stringify(selector, null, 2));
-        console.log(JSON.stringify(modifier, null, 2));
+        // console.log(JSON.stringify(selector, null, 2));
+        // console.log(JSON.stringify(modifier, null, 2));
 
         if (!isSimulation && !isBulk) {
           // update normalized response, or insert it if it doesn't exist

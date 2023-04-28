@@ -422,7 +422,7 @@
 
             - template: tools_experience_marimekko
 
-            - template: section_other_tools
+            - template: section_other_prenormalized
               parameters:
                   limit: 10
 
@@ -481,7 +481,7 @@
 
             - template: tools_experience_marimekko
 
-            - template: section_other_tools
+            - template: section_other_prenormalized
               parameters:
                   limit: 10
 
@@ -538,7 +538,7 @@
 
             - template: tools_experience_marimekko
 
-            - template: section_other_tools
+            - template: section_other_prenormalized
               parameters:
                   limit: 10
 
@@ -602,7 +602,7 @@
 
             - template: tools_experience_marimekko
 
-            - template: section_other_tools
+            - template: section_other_prenormalized
               parameters:
                   limit: 5
 
@@ -660,7 +660,7 @@
 
             - template: tools_experience_marimekko
 
-            - template: section_other_tools
+            - template: section_other_prenormalized
               parameters:
                   limit: 5
 
@@ -723,7 +723,7 @@
 
             - template: tools_experience_marimekko
 
-            - template: section_other_tools
+            - template: section_other_prenormalized
               parameters:
                   limit: 5
 

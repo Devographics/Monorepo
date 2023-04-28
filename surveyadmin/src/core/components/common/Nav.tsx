@@ -40,14 +40,6 @@ const adminNavContents: Array<NavItemDef> = [
   //   to: '/admin/surveys',
   // },
   {
-    label: "Users",
-    to: "/admin/users",
-  },
-  {
-    label: "Responses",
-    to: "/admin/responses",
-  },
-  {
     label: "Normalization",
     to: "/admin/normalization",
   },

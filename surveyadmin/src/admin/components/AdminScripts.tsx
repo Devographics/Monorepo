@@ -95,7 +95,7 @@ const Script = ({ id, description, args, done }) => {
                 X
               </button>
               <pre>
-                <code>{JSON.stringify(result, null, 2)}</code>
+                <textarea>{JSON.stringify(result, null, 2)}</textarea>
               </pre>
             </div>
           </td>

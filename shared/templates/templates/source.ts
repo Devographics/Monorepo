@@ -218,6 +218,81 @@ const sources: Sources = {
             {
                 id: 'levelup'
             }
+        ],
+        // TODO: update with correct sources
+        css2023: [
+            {
+                id: 'state_of_css_survey'
+            },
+            {
+                id: 'kevin_j_powell'
+            },
+            {
+                id: 'twitter'
+            },
+            {
+                id: 'css_tricks'
+            },
+            {
+                id: 'stateofjs'
+            },
+            {
+                id: 'google'
+            },
+            {
+                id: 'lea_verou'
+            },
+            {
+                id: 'smashing_magazine'
+            },
+            {
+                id: 'work'
+            },
+            {
+                id: 'codrops'
+            },
+            {
+                id: 'youtube'
+            },
+            {
+                id: 'hn'
+            },
+            {
+                id: 'mozilla'
+            },
+            {
+                id: 'slack'
+            },
+            {
+                id: 'microsoft_teams'
+            },
+            {
+                id: 'web_standards_ru'
+            },
+            {
+                id: 'sidebar'
+            },
+            {
+                id: 'linkedin'
+            },
+            {
+                id: 'reddit'
+            },
+            {
+                id: 'duckduckgo'
+            },
+            {
+                id: 'front_end_front'
+            },
+            {
+                id: 'una_kravets'
+            },
+            {
+                id: 'frontend_focus'
+            },
+            {
+                id: 'levelup'
+            }
         ]
     },
     state_of_js: {

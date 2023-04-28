@@ -89,6 +89,14 @@
 
 .admin-script-result {
   position: relative;
+  pre {
+    max-width: 800px;
+    max-height: 400px;
+  }
+  textarea {
+    width: 100%;
+    height: 400px;
+  }
   button {
     position: absolute;
     top: 2px;

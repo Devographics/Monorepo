@@ -1,0 +1,11 @@
+id: ${sectionId}_prenormalized
+titleId: blocks.category_other_tools
+blockType: HorizontalBarBlock
+defaultUnits: count
+# dataPath: 'dataAPI.survey.${sectionId}_others.year'
+hasSponsor: true
+query: currentEditionData
+variables:
+    limit: 20
+queryOptions:
+    addBucketsEntities: true

@@ -70,7 +70,7 @@ export const getSegments = ({ responsesCount, segmentSize }): Segment[] => {
   return segments;
 };
 
-const surveysQuery = gql`
+export const surveysQuery = gql`
   query SurveysQuery {
     surveys
   }
