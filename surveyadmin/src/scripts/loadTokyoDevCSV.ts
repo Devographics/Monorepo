@@ -228,6 +228,8 @@ export const loadTokyoDevCSV = async () => {
 
   // iterate over all editions
   for (const edition of allEditions) {
+    const prefixWithEditionId = (s) => `${edition.editionId}__${s}`;
+
     const { editionId, year, data, outline, metadata } = edition;
     let i = 0;
 
@@ -314,22 +316,23 @@ export const loadTokyoDevCSV = async () => {
                     ["single", "dropdown"].includes(questionObject.template)
                   ) {
                     // this field accepts a single answer
-                    document[rawPaths.response] = convertToType(
-                      optionsValues[0]
-                    );
+                    document[prefixWithEditionId(rawPaths.response)] =
+                      convertToType(optionsValues[0]);
                   } else {
                     // this field accepts an array of answers
-                    document[rawPaths.response] =
+                    document[prefixWithEditionId(rawPaths.response)] =
                       optionsValues.map(convertToType);
                   }
                 }
                 if (otherValue) {
                   // handle "other" answer
-                  document[rawPaths.other] = convertToType(otherValue);
+                  document[prefixWithEditionId(rawPaths.other)] =
+                    convertToType(otherValue);
                 }
               } else {
                 // freeform field
-                document[rawPaths.response] = convertToType(questionValue);
+                document[prefixWithEditionId(rawPaths.response)] =
+                  convertToType(questionValue);
               }
             }
           }

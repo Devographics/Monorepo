@@ -3,19 +3,17 @@ import { Survey, Edition, Section, Question, DbPaths, DbSuffixes } from '@devogr
 export const getRawPaths = (
     {
         survey,
-        edition,
         section,
         question
     }: {
         survey: Survey
-        edition: Edition
         section: Section
         question: Question
     },
     suffix?: string
 ) => {
     const sectionPathSegment = section.slug || section.id
-    const pathSegments = [edition.id, sectionPathSegment, question.id]
+    const pathSegments = [sectionPathSegment, question.id]
     const separator = '__'
 
     const getPath = (suffix?: string) =>

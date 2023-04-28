@@ -306,10 +306,12 @@ export const normalizeField = async ({
     matchTags: matchTags_ = [],
   } = questionObject;
 
+  const prefixWithEditionId = (s) => `${edition.id}__${s}`;
+
   // automatically add question's own id as a potential match tag
   const matchTags = [...(matchTags_ || []), questionObject.id];
 
-  const fieldName = rawPaths?.response;
+  const fieldName = prefixWithEditionId(rawPaths?.response);
 
   if (fieldName) {
     // const fieldPath = [edition.id, section.id, question.id].join("__");
@@ -317,7 +319,9 @@ export const normalizeField = async ({
     // console.log(field);
     // if (!fieldName) throw new Error(`Field without fieldName!`);
 
-    const responseCommentValue = cleanupValue(response[rawPaths.comment]);
+    const responseCommentValue = cleanupValue(
+      response[prefixWithEditionId(rawPaths.comment)]
+    );
     if (responseCommentValue !== null) {
       set(normResp, normPaths.comment, responseCommentValue);
     }
@@ -328,7 +332,9 @@ export const normalizeField = async ({
 
     // new method (other value belongs to same question)
     if (questionObject.allowOther) {
-      const otherValue = cleanupValue(response[rawPaths?.other]);
+      const otherValue = cleanupValue(
+        response[prefixWithEditionId(rawPaths?.other)]
+      );
       if (otherValue) {
         set(normResp, normPaths.raw, otherValue);
 
@@ -343,9 +349,9 @@ export const normalizeField = async ({
         try {
           if (verbose) {
             console.log(
-              `// Normalizing key "${
+              `// Normalizing key "${prefixWithEditionId(
                 rawPaths?.other
-              }" with value "${otherValue}" and tags ${matchTags.toString()}…`
+              )}" with value "${otherValue}" and tags ${matchTags.toString()}…`
             );
           }
 
@@ -370,7 +376,7 @@ export const normalizeField = async ({
                 await logRow(
                   [
                     response._id,
-                    rawPaths.response,
+                    prefixWithEditionId(rawPaths.response),
                     value,
                     matchTags,
                     id,
@@ -463,7 +469,7 @@ export const normalizeField = async ({
                 await logRow(
                   [
                     response._id,
-                    rawPaths.response,
+                    prefixWithEditionId(rawPaths.response),
                     value,
                     matchTags,
                     id,

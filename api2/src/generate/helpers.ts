@@ -3,9 +3,6 @@ import {
     Edition,
     Section,
     Question,
-    ParsedSurvey,
-    ParsedEdition,
-    ParsedSection,
     QuestionApiObject,
     Option,
     QuestionTemplateOutput
@@ -167,10 +164,7 @@ Into
 ]
 
 */
-export const mergeSections = (
-    sections1: Section[] | ParsedSection[] = [],
-    sections2: Section[] | ParsedSection[] = []
-) => {
+export const mergeSections = (sections1: Section[] = [], sections2: Section[] = []) => {
     const sections = [...sections1]
     for (const section of sections2) {
         const existingSectionIndex = sections.findIndex(s => s.id === section.id)
@@ -195,13 +189,10 @@ export const getSectionItems = ({
     edition,
     section
 }: {
-    survey: Survey | ParsedSurvey
-    edition: Edition | ParsedEdition
-    section: Section | ParsedSection
-}) =>
-    section.questions
-        .filter(q => typeof q.template === 'undefined')
-        .map(question => getQuestionObject({ survey, edition, section, question }))
+    survey: Survey
+    edition: Edition
+    section: Section
+}) => section.questions.filter(q => typeof q.template === 'undefined')
 
 export const formatNumericOptions = (options: Option[]) =>
     options.map(option => ({ ...option, id: `value_${option.id}` }))

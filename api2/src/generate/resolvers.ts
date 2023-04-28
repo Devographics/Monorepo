@@ -4,8 +4,8 @@ import {
     Survey,
     Edition,
     Section,
+    Question,
     QuestionApiObject,
-    ParsedSection,
     Option,
     TypeObject,
     ResolverType,
@@ -370,13 +370,21 @@ Resolver map used for all_features, all_tools, section_features, section_tools
 */
 export const getToolsFeaturesResolverMap = ({
     survey,
+    edition,
     items
 }: {
     survey: Survey
-    items: QuestionApiObject[]
+    edition: Edition
+    items: Question[]
 }): ResolverMap => ({
     items: async (parent, args, context, info) => {
-        return items.map(question => ({ ...parent, question }))
+        const { edition, questionObjects } = parent
+        return items
+            .map(question => ({
+                ...parent,
+                question: questionObjects.find(q => q.id === question.id)!
+            }))
+            .filter(item => item.question.editions?.includes(edition.id))
     },
     ids: () => {
         return items.map(q => q.id)
