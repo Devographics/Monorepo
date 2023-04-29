@@ -88,7 +88,7 @@ export const createBlockPages = (page, context, createPage, locales, buildInfo) 
                     const blockPage = {
                         // defer: true,
                         path: getLocalizedPath(blockVariant.path, locale),
-                        component: path.resolve(`./src/core/share/ShareBlockTemplate.js`),
+                        component: path.resolve(`./src/core/share/ShareBlockTemplate.tsx`),
                         context: {
                             ...context,
                             redirect: `${getLocalizedPath(page.path, locale)}#${blockVariant.id}`,
