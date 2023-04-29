@@ -168,6 +168,7 @@ export const TickItem = (tick: TickItemProps) => {
         index
     }
 
+    console.log(textProps)
     const showLinks = entity && getSocialLinks(entity).length > 0
 
     return (

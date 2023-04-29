@@ -711,7 +711,7 @@
       - template: page_introduction
 
       - id: form_factors
-        i18nNamespace: environments
+        # i18nNamespace: environments
         translateData: true
         template: multiple_options
 
@@ -720,13 +720,13 @@
 
       - id: what_do_you_use_css_for
         tabId: tabs.main_answers
-        i18nNamespace: environments
+        # i18nNamespace: environments
         translateData: true
         template: multiple_options
         variants:
             - id: what_do_you_use_css_for_others
               defaultUnits: count
-              i18nNamespace: environments
+              # i18nNamespace: environments
               tabId: tabs.other_answers
               translateData: true
               template: multiple_options_freeform
