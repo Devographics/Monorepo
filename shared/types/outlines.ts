@@ -35,6 +35,8 @@ export type Edition = {
     credits: Credit[]
     resultsUrl: string
     questionsUrl: string
+    imageUrl: string
+    socialImageUrl: string
     status: number
     tshirt: Tshirt
 }

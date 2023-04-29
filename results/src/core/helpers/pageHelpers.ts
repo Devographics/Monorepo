@@ -42,12 +42,12 @@ export const getPageLabel = ({
  * example:
  *   http://2018.stateofjs.com/images/captures/en-US/front-end_overview.png
  */
-export const getPageImageUrl = context => {
-    const { currentEdition, block } = context
+export const getPageImageUrl = ({ pageContext }: { pageContext: PageContextValue }) => {
+    const { currentEdition, block } = pageContext
 
     let imageUrl
     if (block !== undefined) {
-        imageUrl = getBlockImage(block, context)
+        imageUrl = getBlockImage({ block, pageContext })
     } else {
         imageUrl = currentEdition?.socialImageUrl
     }
@@ -68,7 +68,7 @@ export const getPageMeta = ({
     overrides: any
 }) => {
     const url = `${pageContext.host}${get(pageContext, 'locale.path')}${pageContext.basePath}`
-    const imageUrl = getPageImageUrl(pageContext)
+    const imageUrl = getPageImageUrl({ pageContext })
     const isRoot = pageContext.path === '/' || pageContext.basePath === '/'
 
     const meta = {
