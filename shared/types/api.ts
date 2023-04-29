@@ -8,6 +8,15 @@ import { ResponsesTypes } from './metadata'
 //     contentType: 'string' | 'number'
 // }
 
+export type DbPaths = {
+    response?: string
+    other?: string
+    comment?: string
+    raw?: string
+    patterns?: string
+    error?: string
+}
+
 export type ResponseArguments = {
     responsesType: ResponsesTypes
     filters: Filters
