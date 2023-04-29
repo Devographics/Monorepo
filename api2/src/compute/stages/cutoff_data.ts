@@ -8,7 +8,6 @@ export async function cutoffData(
 ) {
     for (let editionData of resultsByEdition) {
         // first, limit regular buckets
-        console.log('// cutoffData')
         if (axis1.sort !== 'options') {
             // do not apply cutoffs for aggregations that are sorted along predefined options,
             // as that might result in unexpectedly missing buckets

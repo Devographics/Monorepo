@@ -12,6 +12,9 @@ const TshirtBlock = () => {
     const context = usePageContext()
     const { currentEdition } = context
     const { tshirt } = currentEdition
+    if (!tshirt) {
+        return <div>no tshirt</div>
+    }
     const { images, url, price, designerUrl } = tshirt
     return (
         <Container>
