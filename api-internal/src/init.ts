@@ -13,7 +13,7 @@ const initFunctions: InitFunctionsType = {
 
 export const initMemoryCache = async ({
     context,
-    initList = ['entities', 'locales']
+    initList = ['locales']
 }: {
     context: RequestContext
     initList?: WatchedItem[]

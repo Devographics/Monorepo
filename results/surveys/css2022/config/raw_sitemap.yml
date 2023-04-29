@@ -99,9 +99,7 @@
 
       - id: completion_stats
         template: demographics
-        blockType: KnowledgeScoreBlock
         translateData: true
-        hasFilters: true
 
       - id: age
         template: demographics
@@ -866,7 +864,7 @@
               defaultUnits: count
               i18nNamespace: other_surveys
               tabId: tabs.other_answers
-              template: multiple_options
+              template: multiple_options_freeform
               parameters: { cutoff: 5 }
 
       - items: [renderatl]
