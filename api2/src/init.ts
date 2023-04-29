@@ -24,6 +24,10 @@ const defaultInitList: WatchedItem[] = ['entities', 'surveys']
 export const initMemoryCache = async ({ context, initList = defaultInitList }: InitProps) => {
     console.log(`// Initializing in-memory cache for ${initList.join(', ')}…`)
     const data: any = {}
+    // we need surveys data to init other stuff too
+    if (!initList.includes('surveys')) {
+        initList.push('surveys')
+    }
     for (const initFunctionName of initList) {
         const f = initFunctions[initFunctionName]
         const result = await f({ context })

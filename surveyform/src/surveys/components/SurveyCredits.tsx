@@ -47,6 +47,7 @@ const SurveyCredit = ({
 };
 
 const SurveyCreditItem = ({
+  id,
   name,
   twitterName,
   twitter,
@@ -59,7 +60,11 @@ const SurveyCreditItem = ({
         href={`https://twitter.com/${twitterName}`}
         className="survey-credits-item-avatar"
       >
-        <img src={twitter?.avatarUrl} alt="twitter avatar" />
+        {/* <img src={twitter?.avatarUrl} alt="twitter avatar" /> */}
+        <img
+          src={`https://assets.devographics.com/avatars/${id}.jpg`}
+          alt="twitter avatar"
+        />
       </a>
       <div className="survey-credits-item-details">
         <h4 className="survey-credits-item-name">
