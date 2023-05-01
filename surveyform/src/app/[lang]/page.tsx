@@ -7,7 +7,7 @@ const IndexPage = async () => {
   // TODO: it seems we need to call this initialization code on all relevant pages/layouts
   initRedis(serverConfig().redisUrl);
   const isDevOrTest = serverConfig().isDev || serverConfig().isTest;
-  const surveys = await fetchSurveysMetadata(isDevOrTest);
+  const surveys = await fetchSurveysMetadata({ isDevOrTest });
   return <Surveys surveys={surveys} />;
 };
 

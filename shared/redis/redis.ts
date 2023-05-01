@@ -80,11 +80,11 @@ export const storeSurveyRedis = (args: { surveyId: string; editionId: string }) 
 const surveyListKey = `surveyform_surveys_descriptions`
 /// Surveys list
 
-export const fetchSurveysListRedis = async (): Promise<Array<SurveyMetadata> | null> => {
-    let surveys = await fetchJson<Array<SurveyMetadata>>(surveyListKey)
+export const fetchSurveysListRedis = async (key): Promise<Array<SurveyMetadata> | null> => {
+    let surveys = await fetchJson<Array<SurveyMetadata>>(key)
     return surveys
 }
-export const storeSurveysListRedis = storeRedis(surveyListKey)
+export const storeSurveysListRedis = (key) => storeRedis(key)
 
 export async function fetchSurveyContextRedis(surveyId: string): Promise<any> {
     const surveyContext = await fetchJson(surveyContextKey(surveyId))

@@ -56,6 +56,7 @@ query SurveysMetadataQuery {
         surveyId
         year
         status
+        imageUrl
         ${
             includeQuestions
                 ? `sections {

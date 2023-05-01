@@ -70,12 +70,14 @@ export const fetchSurveysMetadata = async ({
 }): Promise<Array<SurveyMetadata>> => {
     const key = 'surveys_description_list'
     let surveys = await fromSurveysCache(key, async () => {
-        const redisSurveys = await fetchSurveysListRedis()
+        const redisSurveys = await fetchSurveysListRedis(key)
         if (redisSurveys) {
+            console.debug('redis cache hit surveys_description_list')
             return redisSurveys
         }
+        console.debug('redis cache miss surveys_description_list')
         const graphqlSurveys = await fetchSurveysListGraphQL({ includeQuestions: false })
-        storeSurveysListRedis(graphqlSurveys)
+        storeSurveysListRedis(key)(graphqlSurveys)
         return graphqlSurveys
     })
     // NOTE: we cannot systematically override "NODE_ENV" with test,
