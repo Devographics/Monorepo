@@ -20,7 +20,7 @@ import { useUser } from "~/account/user/hooks";
 import { useUserResponse } from "~/responses/hooks";
 import { Loading } from "~/core/components/ui/Loading";
 import { LoadingButton } from "~/core/components/ui/LoadingButton";
-import { getSurveySectionPath } from "~/surveys/helpers";
+import { getEditionSectionPath } from "~/surveys/helpers";
 import {
   getSurveyContextId,
   getSurveyEditionId,
@@ -173,7 +173,7 @@ const SurveyStart = ({
           console.log("start survey result", result);
           const pagePath =
             get(result, `data.startSurvey.data.pagePath`) ||
-            getSurveySectionPath({ survey, response: result.data, number: 1 });
+            getEditionSectionPath({ survey, response: result.data, number: 1 });
           console.log(`Redirecting to ${pagePath}…`);
           router.push(pagePath);
         }
@@ -217,7 +217,7 @@ const SurveyLink = ({
     <Link
       href={
         response.pagePath ||
-        getSurveySectionPath({ survey, forceReadOnly: true })
+        getEditionSectionPath({ survey, forceReadOnly: true })
       }
       type="button"
       className="btn btn-primary"
@@ -249,7 +249,7 @@ const ErrorItem = ({ survey, error, response }) => {
       <FormattedMessage id={id} />{" "}
       {id === duplicateResponseErrorId && (
         <Link
-          href={getSurveySectionPath({
+          href={getEditionSectionPath({
             survey,
             // @ts-ignore
             response: { _id: properties.responseId },

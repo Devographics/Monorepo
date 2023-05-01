@@ -10,7 +10,9 @@ import {
     ResponseArguments,
     FacetBucket,
     Bucket,
-    QuestionTemplateOutput
+    QuestionTemplateOutput,
+    SectionMetadata,
+    EditionMetadata
 } from '@devographics/types'
 
 export type TypeObject = {
@@ -126,6 +128,8 @@ export interface QuestionApiObject extends QuestionApiTemplateOutput {
 
     // only when this appears as part of a complete edition outline
     editionId?: string
+    section?: SectionMetadata
+    edition?: EditionMetadata
 }
 
 export {

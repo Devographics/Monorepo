@@ -21,8 +21,10 @@ import {
   getQuestionId,
   getQuestionObject,
   parseEdition,
+  QuestionFormObject,
 } from "~/surveys/parser/parseSurvey";
 import { captureException } from "@sentry/nextjs";
+import { EditionMetadata, SectionMetadata } from "@devographics/types";
 
 // Previously it lived in Vulcan NPM, but that's something you'd want to control more
 // precisely at app level
@@ -136,45 +138,50 @@ export const parseOptions = (questionObject, options) => {
   });
 };
 
-export const generateIntlId = (questionObject, section, survey) => {
-  const { sectionSlug, id, intlId, intlPrefix, suffix } = questionObject;
+export const generateIntlId = ({
+  question,
+  section,
+}: {
+  question: QuestionFormObject;
+  section: SectionMetadata;
+}) => {
+  const { id, intlId, template } = question;
   // if intlId is explicitely specified on question object use that
   if (intlId) {
     return intlId;
   }
   // survey contexts are not currently supported
   // const surveySegment = survey.context;
-  const surveySegment = "";
   // for section segment, use either intlPrefix, section slug or sectionSlug override on question
-  const sectionSegment =
-    intlPrefix || sectionSlug || section.slug || section.id;
-  const questionSegment = `.${String(id)}`;
+  const sectionSegment = section.id;
+  const questionSegment = id;
   // for now hardcode "others" and "prenormalized" as the only valid suffixes
-  const suffixSegment =
-    suffix && (suffix === "others" || suffix === "prenormalized")
-      ? ".others"
-      : "";
-  return [surveySegment, sectionSegment, questionSegment, suffixSegment].join(
-    ""
-  );
+  const suffixSegment = ".others";
+  const addSuffix = ["project", "others", "others_textarea"];
+  const segments = addSuffix
+    ? [sectionSegment, questionSegment, suffixSegment]
+    : [sectionSegment, questionSegment];
+  return segments.join(".");
 };
 
 // transform question object into SimpleSchema-compatible schema field
-export const getQuestionSchema = (
-  questionObject: ParsedQuestion,
+export const getQuestionSchema = ({
+  questionObject,
   section,
-  survey: SurveyEdition | SurveyEdition
-): VulcanGraphqlFieldSchema => {
+}: {
+  questionObject: QuestionFormObject;
+  section: SectionMetadata;
+}): VulcanGraphqlFieldSchema => {
   const {
     id,
-    title,
+    // title,
     options,
-    allowmultiple = false,
-    alias,
-    year,
+    allowMultiple = false,
+    // alias,
+    yearAdded,
     limit,
     arrayItem,
-    itemProperties,
+    // itemProperties,
   } = questionObject;
 
   const intlId = generateIntlId(questionObject, section, survey);
@@ -190,7 +197,8 @@ export const getQuestionSchema = (
   const questionSchema = {
     ...pick(questionObject, fieldKeys),
     // label: title,
-    label: alias || title,
+    // label: alias || title,
+    label: questionObject.id,
     intlId,
     optional: true,
     // canRead: isprivate ? ['owners'] : ['members'],
@@ -198,9 +206,9 @@ export const getQuestionSchema = (
     canCreate: ["members"],
     canUpdate: ["owners", "admins"],
     itemProperties: {
-      ...itemProperties,
+      // ...itemProperties,
       questionId: id,
-      year,
+      year: yearAdded,
       limit,
     },
   };
@@ -209,7 +217,7 @@ export const getQuestionSchema = (
     questionSchema.options = parseOptions(questionObject, options);
   }
 
-  if (allowmultiple) {
+  if (allowMultiple) {
     questionSchema.type = Array;
     questionSchema.arrayItem = {
       type: String,
@@ -235,17 +243,17 @@ export const ignoredFieldTypes: Array<FieldTemplateId> = [
 
 export const getCompletionPercentage = (
   response: ResponseDocument,
-  survey: SurveyEdition | SurveyEdition
+  edition: EditionMetadata
 ) => {
   let completedCount = 0;
   let totalCount = 0;
-  const parsedOutline = parseEdition(survey).outline;
-  parsedOutline.forEach((section) => {
+  const parsedSections = parseEdition(edition).sections;
+  parsedSections.forEach((section) => {
     section.questions &&
       section.questions.forEach((question) => {
         if (Array.isArray(question))
           throw new Error("Question cannot be an array");
-        const questionId = getQuestionId(survey, section, question);
+        const questionId = getQuestionId(edition, section, question);
         const answer = response[questionId];
         const ignoreQuestion =
           question.template && ignoredFieldTypes.includes(question.template);
@@ -314,9 +322,9 @@ Calculate CSS features knowledge score
 */
 export const getKnowledgeScore = (
   response: ResponseDocument,
-  survey: SurveyEdition | SurveyEdition
+  edition: EditionMetadata
 ) => {
-  const featureSections = survey.outline.filter(
+  const featureSections = edition.sections.filter(
     (section) => section.slug === "features"
   );
   const featureFields = featureSections

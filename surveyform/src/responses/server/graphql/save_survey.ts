@@ -2,10 +2,10 @@ import {
   ResponseMongoCollection,
   processEmailOnUpdate,
 } from "~/responses/model.server";
-import { getSurveyResponseSchema } from "~/responses/schema.server";
-import { fetchEditionPackageFromId } from "@devographics/core-models/server";
+import { getEditionResponseSchema } from "~/responses/schema.server";
 import { canModifyResponse } from "../model";
 import { throwError } from "./errors";
+import { fetchEditionMetadata } from "@devographics/fetch";
 
 /**
  * Save a survey response
@@ -41,7 +41,8 @@ export const saveSurvey = async (root, args, context) => {
   }
 
   if (!response) throw new Error("TS"); // just to please ts because throwError already has never return type
-  if (!response.surveySlug) throw new Error("TS"); // just to please ts because throwError already has never return type
+
+  const { surveyId, editionId } = response;
 
   // do not allow to edit closed survey
   // (this replace canUpdate logic from vulcan that needs to be async here)
@@ -62,9 +63,9 @@ export const saveSurvey = async (root, args, context) => {
       },
     });
 
-  const survey = await fetchEditionPackageFromId(response.surveySlug);
+  const edition = await fetchEditionMetadata({ surveyId, editionId });
   // @ts-ignore
-  const schema = getSurveyResponseSchema(survey);
+  const schema = getEditionResponseSchema(edition);
 
   // run all onUpdate callbacks
   for (const fieldName of Object.keys(schema)) {

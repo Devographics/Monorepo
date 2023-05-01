@@ -74,13 +74,17 @@ export type Question = {
     template: string
 
     id?: string
+    intlId?: string
     label?: string
+    yearAdded?: number
     options?: Option[]
     // options/values for the question are numeric
     optionsAreNumeric?: boolean
     // options are ranges of numbers
     optionsAreRange?: boolean
     defaultSort?: string
+
+    limit?: number
 
     i18nNamespace?: string
 
@@ -139,6 +143,7 @@ export interface QuestionWithId extends Omit<Question, 'id'> {
 export interface QuestionTemplateOutput extends QuestionWithId {
     rawPaths?: DbPaths
     normPaths?: DbPaths
+    options?: Option[]
 }
 
 export type TemplateFunction = (arg0: TemplateArguments) => QuestionTemplateOutput

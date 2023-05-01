@@ -137,7 +137,7 @@ export const getSectionQuestionObjects = ({
                 q.editions.includes(edition.id) &&
                 q.includeInApi !== false
         )
-        .map(q => ({ ...q, editionId: edition.id }))
+        .map(q => ({ ...q, editionId: edition.id, edition, section }))
     return results
 }
 

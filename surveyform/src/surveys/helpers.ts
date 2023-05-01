@@ -8,8 +8,35 @@ import {
   SurveyEditionDescription,
   ResponseDocument,
 } from "@devographics/core-models";
-import { EditionMetadata, SectionMetadata } from "@devographics/types";
+import {
+  EditionMetadata,
+  SectionMetadata,
+  SurveyMetadata,
+} from "@devographics/types";
 import { getQuestionObject } from "./parser/parseSurvey";
+
+export const surveyParamsTable = {
+  "state-of-css": {
+    2019: { surveyId: "state_of_css", editionId: "css2019" },
+    2020: { surveyId: "state_of_css", editionId: "css2020" },
+    2021: { surveyId: "state_of_css", editionId: "css2021" },
+    2022: { surveyId: "state_of_css", editionId: "css2022" },
+    2023: { surveyId: "state_of_css", editionId: "css2023" },
+  },
+  "state-of-graphql": {
+    2022: { surveyId: "state_of_css", editionId: "graphql2022" },
+  },
+  "state-of-js": {
+    2016: { surveyId: "state_of_js", editionId: "js2016" },
+    2017: { surveyId: "state_of_js", editionId: "js2017" },
+    2018: { surveyId: "state_of_js", editionId: "js2018" },
+    2019: { surveyId: "state_of_js", editionId: "js2019" },
+    2020: { surveyId: "state_of_js", editionId: "js2020" },
+    2021: { surveyId: "state_of_js", editionId: "js2021" },
+    2022: { surveyId: "state_of_js", editionId: "js2022" },
+    2023: { surveyId: "state_of_js", editionId: "js2023" },
+  },
+};
 
 export const getCommentFieldName = (fieldName) =>
   fieldName.replace("__experience", "__comment");
@@ -43,19 +70,39 @@ export const getSurveyFieldNames = (survey: SurveyEdition | SurveyEdition) => {
   return fieldNamesWithoutDups;
 };
 
-function getSurveyPathSegments(
-  survey: SurveyEditionDescription
-): Array<string> {
-  const { year, surveyId } = survey;
+type ReverseEditionParam = {
+  slugSegment: string;
+  yearSegment: string;
+  surveyId: string;
+  editionId: string;
+};
+
+function getEditionPathSegments(edition: EditionMetadata): Array<string> {
+  const { id: editionId } = edition;
+
+  const reverseEditionsParams = [] as ReverseEditionParam[];
+  for (const slugSegment of Object.keys(surveyParamsTable)) {
+    for (const yearSegment of Object.keys(surveyParamsTable[slugSegment])) {
+      reverseEditionsParams.push({
+        ...surveyParamsTable[slugSegment][yearSegment],
+        slugSegment,
+        yearSegment,
+      });
+    }
+  }
+
+  const reverseParamEntry = reverseEditionsParams.find(
+    (e) => e.editionId === editionId
+  )!;
+  const { slugSegment, yearSegment } = reverseParamEntry;
   const prefixSegment = "/survey";
-  const slugSegment = surveyId.replaceAll("_", "-");
-  const yearSegment = year! + "";
   const pathSegments = [prefixSegment, slugSegment, yearSegment];
   return pathSegments;
 }
+
 // survey home
-export function getSurveyHomePath(survey: SurveyEditionDescription) {
-  return getSurveyPathSegments(survey).join("/");
+export function getEditionHomePath(edition: EditionMetadata) {
+  return getEditionPathSegments(edition).join("/");
 }
 
 export function getReadOnlyPath({
@@ -64,9 +111,15 @@ export function getReadOnlyPath({
   survey: SurveyEditionDescription;
 }) {}
 // specific section path for the form
-export function getSurveySectionPath(props: {
+export function getEditionSectionPath({
+  edition,
+  forceReadOnly,
+  response,
+  page,
+  number,
+}: {
   // we only need basic info about the survey
-  survey: SurveyEditionDescription;
+  edition: EditionMetadata;
   // forceReadOnly (no response needed in this case)
   forceReadOnly?: boolean;
   // section
@@ -75,11 +128,10 @@ export function getSurveySectionPath(props: {
   number?: any;
   page?: "thanks";
 }) {
-  const { survey, forceReadOnly, response, page, number } = props;
-  const pathSegments = getSurveyPathSegments(survey);
+  const pathSegments = getEditionPathSegments(edition);
   // survey home
   const readOnly =
-    forceReadOnly || !survey.status || ![1, 2].includes(survey.status);
+    forceReadOnly || !edition.status || ![1, 2].includes(edition.status);
   if (readOnly) {
     const readOnlySegment = "read-only";
     pathSegments.push(readOnlySegment);

@@ -10,9 +10,34 @@ import type {
   SurveyEdition,
   SurveySection,
 } from "@devographics/core-models";
-import type { Survey, Edition, Section, Question } from "@devographics/types";
+import type {
+  Survey,
+  Edition,
+  Section,
+  Question,
+  QuestionMetadata,
+} from "@devographics/types";
 
 import { getTemplate } from "./schemaTemplates";
+
+export interface FormTemplateOutput {
+  input: string;
+  arrayItem?: {
+    type: any;
+    optional: boolean;
+  };
+  autocompleteOptions?: {
+    autocompletePropertyName: string;
+    labelsQueryResolverName: string;
+    autocompleteQueryResolverName: string;
+    fragmentName: string;
+  };
+  randomize?: boolean;
+}
+
+export interface QuestionFormTemplateOutput
+  extends FormTemplateOutput,
+    QuestionMetadata {}
 
 /**
  * Add React component to templates
@@ -24,7 +49,7 @@ import { getTemplate } from "./schemaTemplates";
  * @param number
  * @returns
  */
-export const addTemplateToQuestionObject = ({
+export const applyTemplateToQuestionObject = ({
   survey,
   edition,
   section,
@@ -36,32 +61,28 @@ export const addTemplateToQuestionObject = ({
   section: Section;
   question: Question;
   number?: number;
-}) => {
+}): QuestionFormTemplateOutput => {
   // get template from either question or parent section
   const templateName = question?.template || section?.template;
-  // Question does not necessarilly use a known template, it's ok if templateName is not defined
-  if (templateName) {
-    const questionTemplate = getTemplate(templateName);
-    if (questionTemplate) {
-      console.log("// addTemplateToQuestionObject");
-      console.log(question);
-      const templateOutput = questionTemplate({
-        survey,
-        edition,
-        section,
-        question,
-      });
-      console.log(templateOutput);
-      question = {
-        ...question,
-        ...templateOutput,
-      };
-    } else {
-      console.warn(`Template ${templateName} does not exist.`);
-    }
+  if (!templateName) {
+    throw new Error(
+      `Question ${question.id} does not have a template specified.`
+    );
   }
-
-  return question;
+  const questionTemplate = getTemplate(templateName);
+  if (!questionTemplate) {
+    throw new Error(`Template ${templateName} does not exist.`);
+  }
+  console.log("// addTemplateToQuestionObject");
+  console.log(question);
+  const templateOutput: QuestionFormTemplateOutput = questionTemplate({
+    survey,
+    edition,
+    section,
+    question,
+  });
+  console.log(templateOutput);
+  return { ...templateOutput, ...question };
 };
 
 // /**

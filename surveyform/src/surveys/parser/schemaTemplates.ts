@@ -3,7 +3,7 @@ import type {
   ParsedQuestion,
 } from "@devographics/core-models";
 import countriesOptions from "./countriesOptions";
-
+import { FormTemplateOutput } from "./addTemplateToSurvey";
 export const getTemplate = (templateName: string) => {
   return templates[templateName];
   // return ({survey, edition, section, question}) => {
@@ -17,9 +17,9 @@ export const templates: {
   [templateName in FieldTemplateId]: (
     questionObject: any
   ) => // TODO: is this type VulcanGraphqlFieldSchema or smth intermediate like "QuestionObject"?
-  Partial<ParsedQuestion>;
+  FormTemplateOutput;
 } = {
-  feature: () => ({
+  feature: ({ question }) => ({
     input: "feature",
     // suffix: "experience",
     // hasComment: true,
@@ -132,7 +132,7 @@ export const templates: {
     allowother,
     input: "radiogroup",
     // randomize: false,
-    suffix: "choices",
+    // suffix: "choices",
   }),
   slider: ({ allowother = false }) => ({
     // allowmultiple: false,

@@ -1,4 +1,4 @@
-import { getSurveyHomePath } from "~/surveys/helpers";
+import { getEditionHomePath } from "~/surveys/helpers";
 import Link from "next/link";
 import { statuses } from "~/surveys/constants";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
@@ -13,7 +13,7 @@ const SurveyItem = ({ survey }: { survey: SurveyEditionDescription }) => {
     <div>
       <div className="survey-item">
         <div className="survey-image">
-          <Link href={getSurveyHomePath(survey)} className="survey-link">
+          <Link href={getEditionHomePath(survey)} className="survey-link">
             <div className="survey-image-inner">
               <Image
                 priority={

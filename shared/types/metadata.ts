@@ -6,8 +6,7 @@ about a survey edition and its contents
 */
 
 import { Entity } from './entities'
-import { Survey, Edition, Section, Question, Option } from './outlines'
-import { DbPaths } from './api'
+import { Survey, Edition, Section, Option, QuestionTemplateOutput } from './outlines'
 
 export interface SurveyMetadata extends Omit<Survey, 'editions'> {
     editions: EditionMetadata[]
@@ -23,13 +22,10 @@ export interface SectionMetadata extends Omit<Section, 'questions'> {
     questions: QuestionMetadata[]
 }
 
-export interface QuestionMetadata extends Omit<Question, 'options' | 'id'> {
-    id: string
+export interface QuestionMetadata extends Omit<QuestionTemplateOutput, 'options'> {
     sectionId?: string
     label?: string
     entity?: Entity
-    rawPaths: DbPaths
-    normPaths: DbPaths
     options?: OptionMetadata[]
 }
 

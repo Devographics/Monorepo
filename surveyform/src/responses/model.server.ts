@@ -10,7 +10,7 @@ import { createMongooseConnector } from "@vulcanjs/mongo";
 import { subscribe } from "~/server/email/email_octopus";
 import mongoose, { Connection } from "mongoose";
 import { captureException } from "@sentry/nextjs";
-import { fetchEditionPackageFromId } from "@devographics/core-models/server";
+import { fetchSurveysMetadata } from "@devographics/fetch";
 import { ResponseDocument, SurveyEdition } from "@devographics/core-models";
 import {
   getSchema,
@@ -79,10 +79,10 @@ const emailFieldName = "email_temporary";
 
 export async function processEmailOnUpdate(data, properties) {
   const { document } = properties;
-  const { isSubscribed } = document as ResponseDocument;
-  const editionId = getReponseEditionId(document);
+  const { isSubscribed, surveyId, editionId } = document as ResponseDocument;
 
-  const survey = await fetchEditionPackageFromId(editionId);
+  const surveys = await fetchSurveysMetadata({});
+  const survey = surveys.find((s) => s.id === surveyId);
   const listId = survey?.emailOctopus?.listId;
   const emailFieldPath = `${editionId}__user_info__${emailFieldName}`;
   const email = data[emailFieldPath];

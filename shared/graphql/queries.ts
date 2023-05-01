@@ -220,6 +220,8 @@ query ${editionId}MetadataQuery {
           questions {
             id
             intlId
+            yearAdded
+            limit
             template
             # contentType
             allowOther

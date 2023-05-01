@@ -9,7 +9,7 @@ import { VulcanGraphqlSchemaServer } from "@vulcanjs/graphql/server";
 import { VulcanGraphqlSchema } from "@vulcanjs/graphql";
 import { getCommentSchema, schema } from "./schema";
 
-import { getSurveySectionPath } from "~/surveys/helpers";
+import { getEditionSectionPath } from "~/surveys/helpers";
 import {
   extendSchemaServer,
   ResponseDocument,
@@ -18,10 +18,7 @@ import {
 
 import { nanoid } from "nanoid";
 import { ApiContext } from "~/lib/server/context";
-import {
-  fetchEditionPackageFromId,
-  fetchSurveysMetadata,
-} from "@devographics/core-models/server";
+import { fetchSurveysMetadata } from "@devographics/fetch";
 import { SurveyEditionDescription } from "@devographics/core-models";
 import cloneDeep from "lodash/cloneDeep.js";
 import {
@@ -31,18 +28,8 @@ import {
 } from "~/surveys/parser/parseSurvey";
 import { VulcanFieldSchema } from "@vulcanjs/schema";
 import { serverConfig } from "~/config/server";
-
-const getSurveyDescriptionFromResponse = async (
-  response: ResponseDocument
-): Promise<SurveyEditionDescription | undefined> => {
-  const isDevOrTest = serverConfig().isDev || serverConfig().isTest;
-  if (response.editionId) {
-    return await fetchEditionPackageFromId(response.editionId);
-  }
-  // using legacy slug
-  const surveys = await fetchSurveysMetadata(isDevOrTest);
-  return surveys.find((s) => s.slug === response.surveySlug);
-};
+import { Edition, EditionMetadata } from "@devographics/types";
+import { fetchEditionMetadata } from "@devographics/fetch";
 
 export const getServerSchema = (): VulcanGraphqlSchemaServer => {
   const schemaCommon = getSchema();
@@ -93,24 +80,21 @@ export const getServerSchema = (): VulcanGraphqlSchemaServer => {
     },
     completion: {
       onCreate: async ({ document, data }) => {
-        const survey = await fetchEditionPackageFromId(document.surveySlug);
-        return getCompletionPercentage({ ...document, ...data }, survey);
+        const { surveyId, editionId } = document;
+        const edition = await fetchEditionMetadata({ surveyId, editionId });
+        return getCompletionPercentage({ ...document, ...data }, edition);
       },
       onUpdate: async ({ document, data }) => {
-        const survey = await fetchEditionPackageFromId(document.surveySlug);
-        return getCompletionPercentage({ ...document, ...data }, survey);
+        const { surveyId, editionId } = document;
+        const edition = await fetchEditionMetadata({ surveyId, editionId });
+        return getCompletionPercentage({ ...document, ...data }, edition);
       },
     },
     knowledgeScore: {
       onUpdate: async ({ document }) => {
-        const response = document as ResponseDocument;
-        if (!response.surveySlug) {
-          throw new Error(
-            `Can't compute knowledge score, response ${response._id} has no surveySLug`
-          );
-        }
-        const survey = await fetchEditionPackageFromId(response.surveySlug);
-        return getKnowledgeScore(response, survey).score;
+        const { surveyId, editionId } = document;
+        const edition = await fetchEditionMetadata({ surveyId, editionId });
+        return getKnowledgeScore(document, edition).score;
       },
     },
     locale: {
@@ -148,11 +132,10 @@ export const getServerSchema = (): VulcanGraphqlSchemaServer => {
         fieldName: "pagePath",
         type: "String",
         resolver: async (response) => {
-          const surveyDescription = await getSurveyDescriptionFromResponse(
-            response
-          );
-          if (!surveyDescription) return null;
-          return getSurveySectionPath({ survey: surveyDescription, response });
+          const { surveyId, editionId } = response;
+          const edition = await fetchEditionMetadata({ surveyId, editionId });
+          if (!edition) return null;
+          return getEditionSectionPath({ edition, response });
         },
       },
     },
@@ -160,25 +143,19 @@ export const getServerSchema = (): VulcanGraphqlSchemaServer => {
     // TODO: for those "resolved from document" fields, only the resolveAs part matter
     // we should improve this scenario in Vulcan Next (previously was handled via apiSchema in Vulcan,
     // but we need something more integrated into the schema)
-    survey: {
+    edition: {
       type: Object,
-      typeName: "Survey",
+      typeName: "Edition",
       blackbox: true,
       optional: true,
       canRead: ["owners"],
       resolveAs: {
-        fieldName: "survey",
-        typeName: "Survey",
+        fieldName: "edition",
+        typeName: "Edition",
         // TODO: use a relation instead
         resolver: async (response, args, context) => {
-          // surveySlug is legacy
-          const editionId = response.editionId || response.surveySlug;
-          if (!response.editionId) {
-            throw new Error(
-              `Can't get response survey, response ${response._id} has no editionId (or legacy surveySlug)`
-            );
-          }
-          return await fetchEditionPackageFromId(editionId);
+          const { surveyId, editionId } = response;
+          return await fetchEditionMetadata({ surveyId, editionId });
         },
       },
     },
@@ -227,43 +204,50 @@ export function getSchema() {
 }
 const schemaPerSurvey: { [slug: string]: VulcanGraphqlSchema } = {};
 // TODO: unused client-side?
-export async function initResponseSchema(surveys: Array<SurveyEdition>) {
+export async function initResponseSchema(editions: Array<EditionMetadata>) {
   schemaIsReady = true;
   const coreSchema = cloneDeep(schema) as VulcanGraphqlSchema;
-  surveys.forEach((survey) => {
-    const editionId = getSurveyEditionId(survey);
+  editions.forEach((edition) => {
+    const editionId = edition.id;
     if (editionId) {
       schemaPerSurvey[editionId] = cloneDeep(coreSchema);
     }
-    survey.outline.forEach((section) => {
+    edition.sections.forEach((section) => {
+      let i = 0;
       section.questions &&
-        section.questions.forEach((questionOrId) => {
-          //i++;
-          if (Array.isArray(questionOrId)) {
-            // NOTE: from the typings, it seems that questions can be arrays? To be confirmed
-            throw new Error("Found an array of questions");
-          }
-          let questionObject = getQuestionObject(questionOrId, section);
-          //questionObject = addComponentToQuestionObject(questionObject);
-          const questionSchema = getQuestionSchema(
-            questionObject,
-            section,
-            survey
-          );
+        section.questions.forEach((question) => {
+          i++;
 
-          const questionId = getQuestionId(survey, section, questionObject);
+          let questionObject = getQuestionObject({
+            survey: edition.survey,
+            edition,
+            section,
+            question,
+            number: i,
+          });
+          const questionSchema = getQuestionSchema({ questionObject, section });
+
+          const questionId = question.rawPaths.response;
+          if (!questionId) {
+            throw new Error(
+              `Question ${questionId} does not have a raw response path defined`
+            );
+          }
           schema[questionId] = questionSchema;
           if (editionId) {
             schemaPerSurvey[editionId][questionId] = questionSchema;
           }
 
-          if (questionObject.suffix === "experience") {
+          if (questionObject.allowComment) {
             const commentSchema = //addComponentToQuestionObject(
               getCommentSchema() as VulcanFieldSchema<any>;
-            const commentQuestionId = getQuestionId(survey, section, {
-              ...questionObject,
-              suffix: "comment",
-            });
+
+            const commentQuestionId = question.rawPaths.comment;
+            if (!commentQuestionId) {
+              throw new Error(
+                `Question ${questionId} does not have a raw comment path defined`
+              );
+            }
             schema[commentQuestionId] = commentSchema;
             if (editionId) {
               schemaPerSurvey[editionId][commentQuestionId] = commentSchema;
@@ -274,10 +258,10 @@ export async function initResponseSchema(surveys: Array<SurveyEdition>) {
   });
 }
 // generate schema on the fly, used only in frontend for survey specific pages at the moment
-export function getSurveyResponseSchema(survey: SurveyEdition | SurveyEdition) {
+export function getEditionResponseSchema(edition: EditionMetadata) {
   const coreSchema = cloneDeep(schema) as VulcanGraphqlSchema;
   const surveyResponseSchema = cloneDeep(coreSchema);
-  survey.outline.forEach((section) => {
+  edition.sections.forEach((section) => {
     section.questions &&
       section.questions.forEach((questionOrId) => {
         //i++;
@@ -285,7 +269,7 @@ export function getSurveyResponseSchema(survey: SurveyEdition | SurveyEdition) {
           // NOTE: from the typings, it seems that questions can be arrays? To be confirmed
           throw new Error("Found an array of questions");
         }
-        let questionObject = getQuestionObject(questionOrId, section);
+        let questionObject = getQuestionObject({ questionOrId, section });
         //questionObject = addComponentToQuestionObject(questionObject);
         const questionSchema = getQuestionSchema(
           questionObject,
@@ -293,14 +277,14 @@ export function getSurveyResponseSchema(survey: SurveyEdition | SurveyEdition) {
           survey
         );
 
-        const questionId = getQuestionId(survey, section, questionObject);
+        const questionId = getQuestionId(edition, section, questionObject);
         surveyResponseSchema[questionId] = questionSchema;
 
         if (questionObject.suffix === "experience") {
           const commentSchema = //addComponentToQuestionObject(
             getCommentSchema() as VulcanFieldSchema<any>;
           //) as VulcanFieldSchema<any>;
-          const commentQuestionId = getQuestionId(survey, section, {
+          const commentQuestionId = getQuestionId(edition, section, {
             ...questionObject,
             suffix: "comment",
           });

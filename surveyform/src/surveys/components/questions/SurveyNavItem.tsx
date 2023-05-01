@@ -6,13 +6,14 @@ import type { SurveySection, SurveyEdition } from "@devographics/core-models";
 import { ResponseDocument } from "@devographics/core-models";
 import { getSectionCompletionPercentage } from "~/responses/helpers";
 import { useFormContext } from "@devographics/react-form";
-import { getSurveySectionPath } from "~/surveys/helpers";
+import { getEditionSectionPath } from "~/surveys/helpers";
 import { useRouter } from "next/navigation";
 import { captureException } from "@sentry/nextjs";
 import { saveSurvey } from "../page/services";
+import { EditionMetadata } from "@devographics/types";
 
 const SurveyNavItem = ({
-  survey,
+  edition,
   response,
   section,
   number,
@@ -22,7 +23,7 @@ const SurveyNavItem = ({
   setNavLoading,
   readOnly,
 }: {
-  survey: SurveyEdition;
+  edition: EditionMetadata;
   response: ResponseDocument;
   section: SurveySection;
   number: any;
@@ -52,7 +53,7 @@ const SurveyNavItem = ({
     setNavLoading(true);
     e.preventDefault();
     setShown(false);
-    const res = await saveSurvey(survey, {
+    const res = await saveSurvey(edition, {
       id: document._id,
       data: currentValues,
     });
@@ -61,7 +62,7 @@ const SurveyNavItem = ({
       captureException(res.error);
     }
     setNavLoading(false);
-    router.push(getSurveySectionPath({ survey, response, number }));
+    router.push(getEditionSectionPath({ edition, response, number }));
   };
 
   return (
@@ -69,8 +70,8 @@ const SurveyNavItem = ({
       {/** TODO: was a NavLink previously from bootstrap */}
       <Link
         //exact={true}
-        href={getSurveySectionPath({
-          survey,
+        href={getEditionSectionPath({
+          edition,
           number,
           forceReadOnly: readOnly,
           response,

@@ -5,8 +5,8 @@ import {
 import { nanoid } from "nanoid";
 import { throwError } from "./errors";
 import { ResponseDocument } from "@devographics/core-models";
-import { fetchEditionPackageFromId } from "@devographics/core-models/server";
-import { getSurveyResponseSchema } from "~/responses/schema.server";
+import { getEditionResponseSchema } from "~/responses/schema.server";
+import { fetchEditionMetadata } from "@devographics/fetch";
 
 /**
  * Create a new response for the survey
@@ -23,7 +23,7 @@ export const startSurvey = async (root, args, context) => {
   if (!document.editionId)
     throw new Error("Cannot create a response without a editionId");
   const { editionId, surveyId } = document;
-  const survey = await fetchEditionPackageFromId(editionId);
+  const edition = await fetchEditionMetadata({ surveyId, editionId });
 
   // run duplicate responses check
   const validationErrors = await duplicateCheck([], { document, currentUser });
@@ -45,7 +45,7 @@ export const startSurvey = async (root, args, context) => {
   };
 
   // run all onCreate callbacks
-  const schema = getSurveyResponseSchema(survey);
+  const schema = getEditionResponseSchema(edition);
   for (const fieldName of Object.keys(schema)) {
     const field = schema[fieldName];
     const { onCreate } = field;

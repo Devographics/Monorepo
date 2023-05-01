@@ -192,94 +192,9 @@ const getEditionMetadataResolver =
             questions: section.questions
                 .filter(question => question?.editions?.includes(edition.id))
                 .map(q => ({ ...q, editionId: edition.id }))
-            // .map(async question => {
-            //     const pickProperties = [
-            //         'id',
-            //         'label',
-            //         'intlId',
-            //         'template',
-            //         'options',
-            //         'rawPaths',
-            //         'normPaths',
-            //         'contentType',
-            //         'matchTags',
-            //         'optionsAreNumeric',
-            //         'optionsAreRange'
-            //     ]
-            //     const cleanQuestion = {
-            //         ...pick(question, pickProperties),
-            //         entity: getEntity({ id: question.id, context })
-            //     }
-            //     const optionEntities = await getEntities({
-            //         ids: question.options?.map(o => o.id),
-            //         context
-            //     })
-
-            //     const options = question.options
-            //         ?.filter(o => o.editions?.includes(edition.id))
-            //         .map(option => ({
-            //             ...omit(option, 'editions'),
-            //             entity: optionEntities.find(o => o.id === option.id)
-            //         }))
-            //     // avoid repeating the options for feature and tool questions
-            //     // since there's so many of them
-            //     return ['feature', 'tool'].includes(question.template)
-            //         ? cleanQuestion
-            //         : { ...cleanQuestion, options }
-            // })
         }))
         return { ...edition, surveyId: survey.id, survey, sections }
     }
-
-// const getQuestionMetadataResolver =
-//     ({
-//         survey,
-//         edition,
-//         section,
-//         question
-//     }: {
-//         survey: SurveyApiObject
-//         edition: EditionApiObject
-//         section: SectionApiObject
-//         question: QuestionApiObject
-//     }): ResolverType =>
-//     async (parent, args, context, info) => {
-//         console.log('// question metadata resolver')
-
-//         const pickProperties = [
-//             'id',
-//             'label',
-//             'intlId',
-//             'template',
-//             'options',
-//             'rawPaths',
-//             'normPaths',
-//             'contentType',
-//             'matchTags',
-//             'optionsAreNumeric',
-//             'optionsAreRange'
-//         ]
-//         const cleanQuestion = {
-//             ...pick(question, pickProperties),
-//             entity: getEntity({ id: question.id, context })
-//         }
-//         const optionEntities = await getEntities({
-//             ids: question.options?.map(o => o.id),
-//             context
-//         })
-
-//         const options = question.options
-//             ?.filter(o => o.editions?.includes(edition.id))
-//             .map(option => ({
-//                 ...omit(option, 'editions'),
-//                 entity: optionEntities.find(o => o.id === option.id)
-//             }))
-//         // avoid repeating the options for feature and tool questions
-//         // since there's so many of them
-//         return ['feature', 'tool'].includes(question.template)
-//             ? cleanQuestion
-//             : { ...cleanQuestion, options }
-//     }
 
 const getSectionResolver =
     ({
@@ -427,6 +342,19 @@ Questions Metadata (decorate with entities)
 
 */
 export const questionMetadataResolverMap = {
+    // intlId: async (parent: QuestionApiObject, {}, context: RequestContext) => {
+    //     const { id, intlId, section } = parent
+    //     console.log('// intlId')
+    //     console.log(parent)
+    //     // if intlId is explicitely specified on question object use that
+    //     if (intlId) {
+    //         return intlId
+    //     }
+    //     const sectionSegment = section!.id
+    //     const questionSegment = id
+    //     return [sectionSegment, questionSegment].join('.')
+    // },
+
     entity: async (parent: QuestionApiObject, {}, context: RequestContext) => {
         const { id } = parent
         return await getEntity({ id, context })

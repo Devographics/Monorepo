@@ -83,6 +83,7 @@ type SectionMetadata {
 
 type QuestionMetadata {
     id: String
+    yearAdded: Int
     label: String
     intlId: String
     template: String
@@ -93,7 +94,7 @@ type QuestionMetadata {
     entity: Entity
     allowOther: Boolean
     matchTags: [String]
-
+    limit: Int
     # options/values for the question are numeric
     optionsAreNumeric: Boolean
     # options are ranges of numbers

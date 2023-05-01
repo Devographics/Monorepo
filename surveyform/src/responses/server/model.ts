@@ -4,8 +4,8 @@
 import { ResponseDocument } from "@devographics/core-models";
 import { UserDocument } from "~/core/models/user";
 import { statuses } from "~/surveys/constants";
-import { fetchEditionPackageFromId } from "@devographics/core-models/server";
 import { isAdmin, owns } from "@devographics/permissions";
+import { fetchEditionMetadata } from "@devographics/fetch";
 
 /**
  * TODO: pass the survey as argument directly?
@@ -17,12 +17,8 @@ export const canModifyResponse = async (
   if (!response || !user) {
     return false;
   }
-  if (!response.surveySlug) {
-    throw new Error(
-      `Cannot modify response ${response._id}, it has no surveySlug`
-    );
-  }
-  const survey = await fetchEditionPackageFromId(response.surveySlug);
+  const { surveyId, editionId } = response;
+  const survey = await fetchEditionMetadata({ surveyId, editionId });
   // admins can modify any survey; users can modify their own surveys
   const isAdminOrOwner = isAdmin(user) || owns(user, response);
 

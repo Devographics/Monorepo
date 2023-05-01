@@ -13,13 +13,14 @@ TODO
 import { useFormContext } from "@devographics/react-form";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { getSurveyHomePath } from "~/surveys/helpers";
+import { getEditionHomePath } from "~/surveys/helpers";
 import type { SurveyEdition } from "@devographics/core-models";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import SurveyNavItem from "~/surveys/components/questions/SurveyNavItem";
 import { getCompletionPercentage } from "~/responses/helpers";
 import { Button } from "~/core/components/ui/Button";
 import { Loading } from "~/core/components/ui/Loading";
+import { EditionMetadata } from "@devographics/types";
 
 // TODO
 // const getOverallCompletionPercentage = (response) => {
@@ -27,13 +28,13 @@ import { Loading } from "~/core/components/ui/Loading";
 // }
 
 const SurveyNav = ({
-  survey,
+  edition,
   // response,
   navLoading,
   setNavLoading,
   readOnly,
 }: {
-  survey: SurveyEdition;
+  edition: EditionMetadata;
   // response?: any;
   navLoading?: boolean;
   setNavLoading?: any;
@@ -44,9 +45,9 @@ const SurveyNav = ({
 
   const response = getDocument();
 
-  const outline = survey.outline; //surveys.find((o) => o.slug === survey.slug)?.outline;
-  if (!outline)
-    throw new Error(`Survey or outline not found for slug ${survey.slug}`);
+  const sections = edition.sections; //surveys.find((o) => o.slug === survey.slug)?.outline;
+  if (!sections)
+    throw new Error(`Survey or outline not found for slug ${edition.id}`);
 
   const [shown, setShown] = useState(false);
   const [currentTabindex, setCurrentTabindex] = useState<number | null>(null);
@@ -55,7 +56,7 @@ const SurveyNav = ({
   );
 
   const overallCompletion =
-    !readOnly && response && getCompletionPercentage(response, survey);
+    !readOnly && response && getCompletionPercentage(response, edition);
 
   useEffect(() => {
     const keyPressHandler = (e) => {
@@ -90,12 +91,12 @@ const SurveyNav = ({
       className={`section-nav ${
         shown ? "section-nav-shown" : "section-nav-hidden"
       }`}
-      aria-label={`${survey.name} ${survey.year}`}
+      aria-label={`${edition.survey.name} ${edition.year}`}
     >
       <div className="section-nav-inner">
         <h2 className="section-nav-heading">
-          <Link href={getSurveyHomePath(survey)}>
-            {survey.name} {survey.year}
+          <Link href={getEditionHomePath(edition)}>
+            {edition.survey.name} {edition.year}
           </Link>
         </h2>
         <Button
@@ -118,9 +119,9 @@ const SurveyNav = ({
         </Button>
         <div className="section-nav-contents">
           <ul>
-            {outline.map((section, i) => (
+            {sections.map((section, i) => (
               <SurveyNavItem
-                survey={survey}
+                edition={edition}
                 setShown={setShown}
                 response={response}
                 section={section}

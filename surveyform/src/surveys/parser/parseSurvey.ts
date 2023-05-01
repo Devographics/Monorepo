@@ -3,14 +3,20 @@ import type {
   SurveySection,
   SurveyEdition,
 } from "@devographics/core-models";
-import { addTemplateToQuestionObject } from "./addTemplateToSurvey";
+import { applyTemplateToQuestionObject } from "./addTemplateToSurvey";
 import type {
   Survey,
   Edition,
   Section,
   Question,
   EditionMetadata,
+  QuestionMetadata,
 } from "@devographics/types";
+import { QuestionFormTemplateOutput } from "./addTemplateToSurvey";
+
+export interface QuestionFormObject extends QuestionFormTemplateOutput {
+  type: NumberConstructor | StringConstructor;
+}
 
 // build question object from outline
 export const getQuestionObject = ({
@@ -34,27 +40,26 @@ export const getQuestionObject = ({
   // },
   // section: SurveySection
   // number?: number
-}) => {
-  question.slug = question.id;
-  question.type = String; // default to String type
+}): QuestionFormObject => {
+  // question.slug = question.id;
+  // question.type = String; // default to String type
 
-  question.showOther = question.allowother;
-
-  // if type is specified, use it
-  if (question.fieldType) {
-    if (question.fieldType === "Number") {
-      question.type = Number;
-    }
-  }
+  // question.showOther = question.allowother;
 
   // apply template to question
-  return addTemplateToQuestionObject({
+  const questionTemplateOutput = applyTemplateToQuestionObject({
     survey,
-    section,
     edition,
+    section,
     question,
     number,
   });
+  const questionFormObject = {
+    ...questionTemplateOutput,
+    type: question.optionsAreNumeric ? Number : String,
+  };
+
+  return questionFormObject;
 };
 
 /**
@@ -88,8 +93,8 @@ Get question unique id, to be used in the schema
 /!\ different from the graphql field names
 
 */
-export const getQuestionId = (survey: SurveyEdition, section, question) => {
-  const editionId = getSurveyEditionId(survey);
+export const getQuestionId = (edition: EditionMetadata, section, question) => {
+  const editionId = edition.id;
   const sectionSlug = question.sectionSlug || section.slug || section.id;
   let fieldName = editionId + "__" + sectionSlug + "__" + question.id;
   if (question.suffix) {
