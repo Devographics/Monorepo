@@ -1,9 +1,12 @@
-export const foo = 123
+import type { EditionMetadata, SurveyMetadata } from '@devographics/types'
 import camelCase from 'lodash/camelCase.js'
 import { ResponsesParameters, Filters } from '@devographics/types'
 import isEmpty from 'lodash/isEmpty'
+import { getEntityFragment, getFacetFragment, getSurveysQuery, getEditionQuery, getEditionQuerySurveyForm} from './queries'
 
-export function indentString(string, count = 1, options = {}) {
+type IndentStringOptions = {indent?: string, includeEmptyLines?: boolean}
+
+export function indentString(string, count = 1, options: IndentStringOptions = {}) {
     const { indent = ' ', includeEmptyLines = false } = options
 
     if (typeof string !== 'string') {
@@ -32,51 +35,6 @@ export function indentString(string, count = 1, options = {}) {
 
     return string.replace(regex, indent.repeat(count))
 }
-
-const getEntityFragment = () => `entity {
-    name
-    nameHtml
-    nameClean
-    id
-    homepage {
-      url
-    }
-    youtube {
-      url
-    }
-    twitter {
-      url
-    }
-    twitch {
-      url
-    }
-    rss {
-      url
-    }
-    blog { 
-        url
-    }
-    mastodon {
-        url
-    }
-    github {
-        url
-    }
-    npm {
-        url
-    }
-}`
-
-const getFacetFragment = addEntities => `
-    facetBuckets {
-        id
-        count
-        percentageQuestion
-        percentageSurvey
-        percentageFacet
-        ${addEntities ? getEntityFragment() : ''}
-    }
-`
 
 const allEditionsFragment = `editionId
   year`
@@ -234,3 +192,59 @@ const defaultQueries = [
     'allEditionsData',
     'allEditionsDataWithEntities'
 ]
+
+export const getApiUrl = () => {
+    const apiUrl = process.env.DATA_API_URL
+    if (!apiUrl) {
+        throw new Error('process.env.DATA_API_URL not defined')
+    }
+    return apiUrl
+}
+
+
+export const fetchSurveysListGraphQL = async ({
+    includeQuestions
+}): Promise<Array<SurveyMetadata>> => {
+    console.log('// fetchSurveysList GraphQL')
+    const query = getSurveysQuery({ includeQuestions })
+    const result = await fetchGraphQL({ query })
+    return result._metadata.surveys as SurveyMetadata[]
+}
+
+
+export const fetchEditionGraphQL = async ({ surveyId, editionId }): Promise<EditionMetadata> => {
+    console.log('// fetchEditionGraphQL')
+    const query = getEditionQuery({ surveyId, editionId })
+    const result = await fetchGraphQL({ query })
+    return result._metadata.surveys[0].editions[0]
+}
+
+export const fetchEditionGraphQLSurveyForm = async ({
+    surveyId,
+    editionId
+}): Promise<EditionMetadata> => {
+    console.log('// fetchEditionGraphQLSurveyForm')
+    const query = getEditionQuerySurveyForm({ surveyId, editionId })
+    const result = await fetchGraphQL({ query })
+    return result._metadata.surveys[0].editions[0]
+}
+
+export const fetchGraphQL = async ({ query }): Promise<any> => {
+    console.log('// fetchSurveysList GraphQL')
+
+    const response = await fetch(getApiUrl(), {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json'
+        },
+        body: JSON.stringify({ query, variables: {} })
+    })
+    const json: any = await response.json()
+    if (json.errors) {
+        console.log('// surveysQuery API query error')
+        console.log(JSON.stringify(json.errors, null, 2))
+        throw new Error()
+    }
+    return json.data
+}

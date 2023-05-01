@@ -54,6 +54,7 @@ export type Credit = {
 
 export type Section = {
     id: string
+    intlId?: string
     slug: string // TODO: maybe get rid of this?
     questions: Question[]
     template?: string
@@ -81,10 +82,13 @@ export type Question = {
     optionsAreRange?: boolean
     defaultSort?: string
 
+    i18nNamespace?: string
+
     // for slider questions
     from?: number
     to?: number
 
+    allowMultiple?: boolean
     allowOther?: boolean
     allowPrenormalized?: boolean
     allowComment?: boolean

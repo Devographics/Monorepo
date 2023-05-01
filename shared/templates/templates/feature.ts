@@ -10,6 +10,7 @@ export const feature: TemplateFunction = options => {
         options: FEATURES_OPTIONS.map(id => ({
             id
         })),
+        i18nNamespace: 'features',
         defaultSort: 'options',
         ...question
     }

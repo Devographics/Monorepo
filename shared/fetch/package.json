@@ -1,0 +1,37 @@
+{
+    "name": "@devographics/fetch",
+    "version": "1.0.0",
+    "description": "",
+    "type": "module",
+    "exports": {
+        ".": "./index.ts",
+        "./server": "./index.server.ts",
+        "./client": "./index.client.ts"
+    },
+    "types": "./index.ts",
+    "typesVersions": {
+        "*": {
+            "server": [
+                "./index.server.ts"
+            ],
+            "client": [
+                "./index.client.ts"
+            ]
+        }
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@devographics/graphql": "workspace:^1.0.0",
+        "@devographics/redis": "workspace:^1.0.0",
+        "ioredis": "^5.2.4",
+        "lodash": "^4.17.21",
+        "node-cache": "^5.1.2"
+    },
+    "devDependencies": {
+        "@types/node": "^18.11.18"
+    }
+}

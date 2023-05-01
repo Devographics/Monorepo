@@ -15,7 +15,8 @@ export interface SurveyMetadata extends Omit<Survey, 'editions'> {
 
 export interface EditionMetadata extends Omit<Edition, 'sections'> {
     sections: SectionMetadata[]
-    surveyId?: string
+    surveyId: string
+    survey: SurveyMetadata
 }
 
 export interface SectionMetadata extends Omit<Section, 'questions'> {
@@ -41,4 +42,9 @@ export enum ResponsesTypes {
     PREDEFINED = 'Predefined',
     PRENORMALIZED = 'Prenormalized',
     FREEFORM = 'Freeform'
+}
+
+export interface MetadataPackage {
+    survey: SurveyMetadata
+    edition: EditionMetadata
 }

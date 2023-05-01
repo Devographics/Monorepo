@@ -5,6 +5,7 @@ import { getPaths, checkHasId } from '../helpers'
 export const single: TemplateFunction = options => {
     const question = checkHasId(options)
     const output: QuestionTemplateOutput = {
+        allowMultiple: false,
         defaultSort: 'options',
         ...getPaths(options, DbSuffixes.CHOICES),
         ...question
