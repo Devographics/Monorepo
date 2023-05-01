@@ -128,14 +128,16 @@ export const getSectionQuestionObjects = ({
     section: Section
     questionObjects: QuestionApiObject[]
 }) => {
-    const results = questionObjects.filter(
-        q =>
-            q.sectionIds &&
-            q.sectionIds.includes(section.id) &&
-            q.editions &&
-            q.editions.includes(edition.id) &&
-            q.includeInApi !== false
-    )
+    const results = questionObjects
+        .filter(
+            q =>
+                q.sectionIds &&
+                q.sectionIds.includes(section.id) &&
+                q.editions &&
+                q.editions.includes(edition.id) &&
+                q.includeInApi !== false
+        )
+        .map(q => ({ ...q, editionId: edition.id }))
     return results
 }
 

@@ -1,6 +1,6 @@
 import {
-    ParsedSurveyExt,
-    ParsedEdition,
+    SurveyApiObject,
+    EditionApiObject,
     Survey,
     Edition,
     Section,
@@ -11,7 +11,8 @@ import {
     ResolverType,
     ResolverMap,
     ResolverParent,
-    QuestionResolverParent
+    QuestionResolverParent,
+    SectionApiObject
 } from '../types/surveys'
 import { getPath, mergeSections, formatNumericOptions } from './helpers'
 import { genericComputeFunction } from '../compute'
@@ -22,13 +23,14 @@ import omit from 'lodash/omit.js'
 import pick from 'lodash/pick.js'
 import { entityResolverMap } from '../resolvers/entities'
 import { getResponseTypeName } from '../graphql/templates/responses'
+import { RequestContext } from '../types'
 
 export const generateResolvers = async ({
     surveys,
     questionObjects,
     typeObjects
 }: {
-    surveys: ParsedSurveyExt[]
+    surveys: SurveyApiObject[]
     questionObjects: QuestionApiObject[]
     typeObjects: TypeObject[]
 }) => {
@@ -48,7 +50,8 @@ export const generateResolvers = async ({
         Query: { _metadata: getGlobalMetadataResolver({ surveys }), surveys: () => surveys },
         Surveys: surveysFieldsResolvers,
         ItemComments: commentsResolverMap,
-        Entity: entityResolverMap
+        Entity: entityResolverMap,
+        QuestionMetadata: questionMetadataResolverMap
     } as any
 
     for (const survey of surveys) {
@@ -109,7 +112,7 @@ export const generateResolvers = async ({
                     if (sectionTypeObject) {
                         // generate resolver map for each section field (i.e. each section question)
                         resolvers[sectionTypeObject.typeName] = Object.fromEntries(
-                            section.questions.map(questionObject => {
+                            section.questions.map((questionObject: QuestionApiObject) => {
                                 return [
                                     questionObject.id,
                                     getQuestionResolver({
@@ -141,77 +144,142 @@ export const generateResolvers = async ({
 }
 
 const getGlobalMetadataResolver =
-    ({ surveys }: { surveys: ParsedSurveyExt[] }): ResolverType =>
-    () => {
-        return { surveys }
+    ({ surveys }: { surveys: SurveyApiObject[] }): ResolverType =>
+    (parent, args) => {
+        console.log('// getGlobalMetadataResolver')
+        const { surveyId, editionId } = args
+        let filteredSurveys = surveys
+        if (editionId) {
+            filteredSurveys = filteredSurveys
+                .map(s => ({
+                    ...s,
+                    editions: s.editions.filter(e => e.id === editionId)
+                }))
+                .filter(s => s.editions.length > 0)
+        } else if (surveyId) {
+            filteredSurveys = surveys.filter(s => s.id === surveyId)
+        }
+        return { surveys: filteredSurveys }
     }
 
 const getSurveyResolver =
-    ({ survey }: { survey: ParsedSurveyExt }): ResolverType =>
+    ({ survey }: { survey: SurveyApiObject }): ResolverType =>
     (parent, args, context, info) => {
         console.log('// survey resolver')
         return survey
     }
 
 const getSurveyMetadataResolver =
-    ({ survey }: { survey: ParsedSurveyExt }): ResolverType =>
+    ({ survey }: { survey: SurveyApiObject }): ResolverType =>
     (parent, args, context, info) => {
         console.log('// survey metadata resolver')
         return survey
     }
+
 const getEditionResolver =
-    ({ survey, edition }: { survey: ParsedSurveyExt; edition: ParsedEdition }): ResolverType =>
+    ({ survey, edition }: { survey: SurveyApiObject; edition: EditionApiObject }): ResolverType =>
     (parent, args, context, info) => {
         console.log('// edition resolver')
         return edition
     }
 
 const getEditionMetadataResolver =
-    ({ survey, edition }: { survey: ParsedSurveyExt; edition: ParsedEdition }): ResolverType =>
+    ({ survey, edition }: { survey: SurveyApiObject; edition: EditionApiObject }): ResolverType =>
     async (parent, args, context, info) => {
         console.log('// edition metadata resolver')
         const sections = edition.sections.map(section => ({
             ...section,
             questions: section.questions
                 .filter(question => question?.editions?.includes(edition.id))
-                .map(async question => {
-                    const pickProperties = [
-                        'id',
-                        'label',
-                        'intlId',
-                        'template',
-                        'options',
-                        'rawPaths',
-                        'normPaths',
-                        'contentType',
-                        'matchTags',
-                        'optionsAreNumeric',
-                        'optionsAreRange'
-                    ]
-                    const cleanQuestion = {
-                        ...pick(question, pickProperties),
-                        entity: getEntity({ id: question.id, context })
-                    }
-                    const optionEntities = await getEntities({
-                        ids: question.options?.map(o => o.id),
-                        context
-                    })
+                .map(q => ({ ...q, editionId: edition.id }))
+            // .map(async question => {
+            //     const pickProperties = [
+            //         'id',
+            //         'label',
+            //         'intlId',
+            //         'template',
+            //         'options',
+            //         'rawPaths',
+            //         'normPaths',
+            //         'contentType',
+            //         'matchTags',
+            //         'optionsAreNumeric',
+            //         'optionsAreRange'
+            //     ]
+            //     const cleanQuestion = {
+            //         ...pick(question, pickProperties),
+            //         entity: getEntity({ id: question.id, context })
+            //     }
+            //     const optionEntities = await getEntities({
+            //         ids: question.options?.map(o => o.id),
+            //         context
+            //     })
 
-                    const options = question.options
-                        ?.filter(o => o.editions?.includes(edition.id))
-                        .map(option => ({
-                            ...omit(option, 'editions'),
-                            entity: optionEntities.find(o => o.id === option.id)
-                        }))
-                    // avoid repeating the options for feature and tool questions
-                    // since there's so many of them
-                    return ['feature', 'tool'].includes(question.template)
-                        ? cleanQuestion
-                        : { ...cleanQuestion, options }
-                })
+            //     const options = question.options
+            //         ?.filter(o => o.editions?.includes(edition.id))
+            //         .map(option => ({
+            //             ...omit(option, 'editions'),
+            //             entity: optionEntities.find(o => o.id === option.id)
+            //         }))
+            //     // avoid repeating the options for feature and tool questions
+            //     // since there's so many of them
+            //     return ['feature', 'tool'].includes(question.template)
+            //         ? cleanQuestion
+            //         : { ...cleanQuestion, options }
+            // })
         }))
-        return { ...edition, surveyId: survey.id, sections }
+        return { ...edition, surveyId: survey.id, survey, sections }
     }
+
+// const getQuestionMetadataResolver =
+//     ({
+//         survey,
+//         edition,
+//         section,
+//         question
+//     }: {
+//         survey: SurveyApiObject
+//         edition: EditionApiObject
+//         section: SectionApiObject
+//         question: QuestionApiObject
+//     }): ResolverType =>
+//     async (parent, args, context, info) => {
+//         console.log('// question metadata resolver')
+
+//         const pickProperties = [
+//             'id',
+//             'label',
+//             'intlId',
+//             'template',
+//             'options',
+//             'rawPaths',
+//             'normPaths',
+//             'contentType',
+//             'matchTags',
+//             'optionsAreNumeric',
+//             'optionsAreRange'
+//         ]
+//         const cleanQuestion = {
+//             ...pick(question, pickProperties),
+//             entity: getEntity({ id: question.id, context })
+//         }
+//         const optionEntities = await getEntities({
+//             ids: question.options?.map(o => o.id),
+//             context
+//         })
+
+//         const options = question.options
+//             ?.filter(o => o.editions?.includes(edition.id))
+//             .map(option => ({
+//                 ...omit(option, 'editions'),
+//                 entity: optionEntities.find(o => o.id === option.id)
+//             }))
+//         // avoid repeating the options for feature and tool questions
+//         // since there's so many of them
+//         return ['feature', 'tool'].includes(question.template)
+//             ? cleanQuestion
+//             : { ...cleanQuestion, options }
+//     }
 
 const getSectionResolver =
     ({
@@ -351,6 +419,36 @@ export const commentsResolverMap: ResolverMap = {
             editionId: edition.id,
             context
         })
+}
+
+/*
+
+Questions Metadata (decorate with entities)
+
+*/
+export const questionMetadataResolverMap = {
+    entity: async (parent: QuestionApiObject, {}, context: RequestContext) => {
+        const { id } = parent
+        return await getEntity({ id, context })
+    },
+
+    options: async (parent: QuestionApiObject, {}, context: RequestContext) => {
+        const { template, options, editionId } = parent
+
+        const optionEntities = await getEntities({
+            ids: options?.map(o => o.id),
+            context
+        })
+        const optionsWithEntities = options
+            ?.filter(option => option.editions?.includes(editionId!))
+            .map(option => ({
+                ...omit(option, 'editions'),
+                entity: optionEntities.find(o => o.id === option.id)
+            }))
+        // avoid repeating the options for feature and tool questions
+        // since there's so many of them
+        return ['feature', 'tool'].includes(template) ? [] : optionsWithEntities
+    }
 }
 
 /*

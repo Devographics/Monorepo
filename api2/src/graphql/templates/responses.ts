@@ -1,5 +1,5 @@
 import { graphqlize } from '../../generate/helpers'
-import { ParsedSurvey } from '../../types/surveys'
+import { SurveyApiObject } from '../../types/surveys'
 
 /*
 
@@ -16,7 +16,13 @@ type Surveys {
 
 export const getResponseTypeName = (surveyId: string) => `${graphqlize(surveyId)}Responses`
 
-export const generateResponsesType = ({ survey, path }: { survey: ParsedSurvey; path: string }) => {
+export const generateResponsesType = ({
+    survey,
+    path
+}: {
+    survey: SurveyApiObject
+    path: string
+}) => {
     const typeName = getResponseTypeName(survey.id)
     return {
         path,

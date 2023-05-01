@@ -1,5 +1,5 @@
 import {
-    ParsedSurvey,
+    SurveyApiObject,
     Survey,
     Edition,
     Section,
@@ -37,7 +37,7 @@ export const parseSurveys = ({
 }: {
     surveys: Survey[]
     questionObjects: QuestionApiObject[]
-}): ParsedSurvey[] => {
+}): SurveyApiObject[] => {
     for (const survey of surveys) {
         for (const edition of survey.editions) {
             const allSections = mergeSections(edition.sections, edition.apiSections)
@@ -47,14 +47,14 @@ export const parseSurveys = ({
             }
         }
     }
-    return surveys as ParsedSurvey[]
+    return surveys as SurveyApiObject[]
 }
 
 export const generateTypeObjects = async ({
     surveys,
     questionObjects
 }: {
-    surveys: ParsedSurvey[]
+    surveys: SurveyApiObject[]
     questionObjects: QuestionApiObject[]
 }): Promise<TypeObject[]> => {
     const surveysTypeObjects = await generateSurveysTypeObjects({

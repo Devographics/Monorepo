@@ -31,6 +31,9 @@ type EmailOctopusData {
 type EditionMetadata {
     id: String
     surveyId: String
+
+    survey: SurveyMetadata
+
     year: Int
     status: Int
     hashtag: String
@@ -74,6 +77,7 @@ type CreditItem {
 
 type SectionMetadata {
     id: String
+    intlId: String
     questions: [QuestionMetadata]
 }
 
@@ -228,7 +232,7 @@ type Query {
     """
     Meta information about the API
     """
-    _metadata: APIMetadata
+    _metadata(surveyId: SurveysID, editionId: AllEditionsID): APIMetadata
 }
 
 type APIMetadata {

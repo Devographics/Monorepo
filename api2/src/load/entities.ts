@@ -12,10 +12,11 @@ import hljs from 'highlight.js/lib/common'
 import { appSettings } from '../helpers/settings'
 import sanitizeHtml from 'sanitize-html'
 import { RequestContext } from '../types'
-import { ParsedSurvey, ParsedEdition, ResolverMap } from '../types/surveys'
+import { SurveyApiObject, EditionApiObject, ResolverMap } from '../types/surveys'
 import { setCache } from '../helpers/caching'
 import { EntityResolverMap, entityResolverMap } from '../resolvers/entities'
 import isEmpty from 'lodash/isEmpty.js'
+import { OptionId } from '@devographics/types'
 
 let Entities: Entity[] = []
 
@@ -53,6 +54,8 @@ export const parseEntitiesMarkdown = (entities: Entity[]) => {
                     entity[`${fieldName}Clean`] = sanitizeHtml(fieldHtml, {
                         allowedTags: []
                     })
+                } else {
+                    entity[`${fieldName}Clean`] = field
                 }
             }
         }
@@ -169,7 +172,7 @@ export const getEntities = async ({
     tags,
     context
 }: {
-    ids?: string[]
+    ids?: OptionId[]
     tag?: string
     tags?: string[]
     context?: RequestContext
@@ -239,7 +242,7 @@ export const cacheSurveysEntities = async ({
     entities,
     context
 }: {
-    surveys: ParsedSurvey[]
+    surveys: SurveyApiObject[]
     entities: Entity[]
     context: RequestContext
 }) => {
@@ -296,7 +299,7 @@ export const applyEntityResolvers = async (entity: Entity, context: RequestConte
 For a given survey questions outline, extract all mentioned entities
 
 */
-export const extractEntityIds = (edition: ParsedEdition) => {
+export const extractEntityIds = (edition: EditionApiObject) => {
     let entityIds: string[] = []
     if (edition.credits) {
         entityIds = [...entityIds, ...edition.credits.map(c => c.id)]
@@ -306,7 +309,7 @@ export const extractEntityIds = (edition: ParsedEdition) => {
             for (const question of section.questions) {
                 entityIds.push(question.id)
                 if (question.options) {
-                    entityIds = [...entityIds, ...question.options.map(o => o.id)]
+                    entityIds = [...entityIds, ...question.options.map(o => String(o.id))]
                 }
             }
         }

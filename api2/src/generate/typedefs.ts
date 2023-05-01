@@ -1,3 +1,4 @@
+import { generateAllEditionsEnumType } from '../graphql/templates/all_editions_enum'
 import {
     generateFacetsType,
     generateFiltersType,
@@ -12,7 +13,8 @@ import {
     generateSurveysType,
     generateResponsesType
 } from '../graphql/templates/index'
-import { ParsedSurvey, QuestionApiObject, TypeObject } from '../types/surveys'
+import { generateSurveysEnumType } from '../graphql/templates/surveys_enum'
+import { SurveyApiObject, QuestionApiObject, TypeObject } from '../types/surveys'
 import { getPath, mergeSections } from './helpers'
 import isEmpty from 'lodash/isEmpty.js'
 
@@ -21,7 +23,7 @@ import isEmpty from 'lodash/isEmpty.js'
 Generate typeDefs corresponding to survey arborescence
 
 */
-export const generateSurveysTypeObjects = async ({ surveys }: { surveys: ParsedSurvey[] }) => {
+export const generateSurveysTypeObjects = async ({ surveys }: { surveys: SurveyApiObject[] }) => {
     let typeObjects = []
 
     // store all options for all fields contained in survey question outlines
@@ -29,7 +31,9 @@ export const generateSurveysTypeObjects = async ({ surveys }: { surveys: ParsedS
 
     // type for all surveys
     let path = getPath({})
+    typeObjects.push(generateSurveysEnumType({ surveys, path }))
     typeObjects.push(generateSurveysType({ surveys, path }))
+    typeObjects.push(generateAllEditionsEnumType({ surveys, path }))
 
     for (const survey of surveys) {
         path = getPath({ survey })
@@ -120,7 +124,7 @@ export const generateFiltersTypeObjects = ({
     surveys,
     questionObjects
 }: {
-    surveys: ParsedSurvey[]
+    surveys: SurveyApiObject[]
     questionObjects: QuestionApiObject[]
 }) => {
     return surveys.map(survey => generateFiltersType({ survey, questionObjects }))
@@ -130,7 +134,7 @@ export const generateFacetsTypeObjects = ({
     surveys,
     questionObjects
 }: {
-    surveys: ParsedSurvey[]
+    surveys: SurveyApiObject[]
     questionObjects: QuestionApiObject[]
 }) => {
     return surveys.map(survey => generateFacetsType({ survey, questionObjects }))

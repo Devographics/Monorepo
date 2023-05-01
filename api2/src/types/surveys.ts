@@ -5,11 +5,6 @@ import {
     Edition,
     Section,
     Question,
-    ParsedSurvey,
-    ParsedEdition,
-    ParsedSection,
-    QuestionParsed,
-    TemplateOutputQuestion,
     Option,
     ResponseEditionData,
     ResponseArguments,
@@ -47,9 +42,9 @@ export interface ResolverMap {
 }
 
 export interface ResolverParent {
-    survey: ParsedSurvey
-    edition: ParsedEdition
-    section: ParsedSection
+    survey: SurveyApiObject
+    edition: EditionApiObject
+    section: SectionApiObject
     question: QuestionApiObject
     questionObjects: QuestionApiObject[]
     responseArguments?: ResponseArguments
@@ -73,12 +68,12 @@ export type TransformFunction = (
 ) => any
 
 // // ParsedQuestion extended with API-specific fields
-// export interface ParsedSurveyExt extends Omit<ParsedSurvey, 'editions'> {
-//     editions: ParsedEditionExt[]
+// export interface SurveyApiObject extends Omit<SurveyApiObject, 'editions'> {
+//     editions: EditionApiObjectExt[]
 // }
 
 // // ParsedQuestion extended with API-specific fields
-// export interface ParsedEditionExt extends Omit<ParsedEdition, 'sections'> {
+// export interface EditionApiObjectExt extends Omit<EditionApiObject, 'sections'> {
 //     sections: ParsedSectionExt[]
 // }
 
@@ -128,6 +123,9 @@ export interface QuestionApiObject extends QuestionApiTemplateOutput {
     sectionIds?: string[]
     sectionIndex?: number
     surveyId?: string
+
+    // only when this appears as part of a complete edition outline
+    editionId?: string
 }
 
 export {
