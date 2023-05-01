@@ -4,56 +4,81 @@ import type {
   SurveyEdition,
 } from "@devographics/core-models";
 import { addTemplateToQuestionObject } from "./addTemplateToSurvey";
+import type {
+  Survey,
+  Edition,
+  Section,
+  Question,
+  EditionMetadata,
+} from "@devographics/types";
 
 // build question object from outline
-export const getQuestionObject = (
-  questionObject: Field & {
-    slug?: any;
-    type?: any;
-    fieldType?: any;
-    showOther?: boolean;
-    allowother?: boolean;
-  },
-  section: SurveySection
+export const getQuestionObject = ({
+  survey,
+  edition,
+  section,
+  question,
+  number,
+}: {
+  survey: Survey;
+  edition: Edition;
+  section: Section;
+  question: Question;
+  number?: number;
+  // questionObject: Field & {
+  //   slug?: any;
+  //   type?: any;
+  //   fieldType?: any;
+  //   showOther?: boolean;
+  //   allowother?: boolean;
+  // },
+  // section: SurveySection
   // number?: number
-) => {
-  questionObject.slug = questionObject.id;
-  questionObject.type = String; // default to String type
+}) => {
+  question.slug = question.id;
+  question.type = String; // default to String type
 
-  questionObject.showOther = questionObject.allowother;
+  question.showOther = question.allowother;
 
   // if type is specified, use it
-  if (questionObject.fieldType) {
-    if (questionObject.fieldType === "Number") {
-      questionObject.type = Number;
+  if (question.fieldType) {
+    if (question.fieldType === "Number") {
+      question.type = Number;
     }
   }
 
   // apply template to question
-  return addTemplateToQuestionObject(questionObject, section);
+  return addTemplateToQuestionObject({
+    survey,
+    section,
+    edition,
+    question,
+    number,
+  });
 };
 
 /**
  * Functions that gets a safe unique id per survey edition,
  * taking legacy fields into account
- * @param survey 
+ * @param survey
  * @returns js2022, graphql2022, css2022 etc.
  */
 export function getSurveyEditionId(survey: SurveyEdition) {
   //console.log("survey", survey)
   // js2022 etc.
-  const editionId = survey.editionId || survey.surveyId || survey.id || survey.slug
-  return editionId
+  const editionId =
+    survey.editionId || survey.surveyId || survey.id || survey.slug;
+  return editionId;
 }
 /**
  * state_of_js
- * @param survey 
- * @returns 
+ * @param survey
+ * @returns
  */
 export function getSurveyContextId(survey: SurveyEdition) {
   // state_of_js
-  const surveyId = survey.surveyId || survey.context
-  return surveyId!
+  const surveyId = survey.surveyId || survey.context;
+  return surveyId!;
 }
 /** 
 Note: section's slug can be overriden by the question
@@ -64,7 +89,7 @@ Get question unique id, to be used in the schema
 
 */
 export const getQuestionId = (survey: SurveyEdition, section, question) => {
-  const editionId = getSurveyEditionId(survey)
+  const editionId = getSurveyEditionId(survey);
   const sectionSlug = question.sectionSlug || section.slug || section.id;
   let fieldName = editionId + "__" + sectionSlug + "__" + question.id;
   if (question.suffix) {
@@ -81,15 +106,29 @@ to every question
 /!\ Will NOT add components, so that it can be reused in scripts
 
 */
-export const parseSurvey = (survey: SurveyEdition | SurveyEdition): SurveyEdition => {
+export const parseEdition = (edition: EditionMetadata): Edition => {
   let i = 0;
-  const parsedSurvey = { ...survey, createdAt: survey.createdAt ? new Date(survey.createdAt) : undefined };
-  parsedSurvey.outline = survey.outline.map((section) => {
+  const survey = { id: edition.surveyId } as Survey;
+  const parsedEdition = {
+    ...edition,
+    createdAt: edition.createdAt ? new Date(edition.createdAt) : undefined,
+  };
+  parsedEdition.sections = edition.sections.map((section) => {
     const questions = section.questions.map((question) => {
       i++;
       // @ts-ignore TODO: question may be an array according to types
-      const questionObject = getQuestionObject(question, section, i);
-      questionObject.fieldName = getQuestionId(survey, section, questionObject);
+      const questionObject = getQuestionObject({
+        survey,
+        edition,
+        section,
+        question,
+        number: i,
+      });
+      questionObject.fieldName = getQuestionId(
+        edition,
+        section,
+        questionObject
+      );
       return questionObject;
     });
     return {
@@ -98,5 +137,5 @@ export const parseSurvey = (survey: SurveyEdition | SurveyEdition): SurveyEditio
     } as SurveySection;
   });
   // @ts-ignore
-  return parsedSurvey;
+  return parsedEdition;
 };

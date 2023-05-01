@@ -13,21 +13,21 @@ export type FieldTemplateId =
   | "single"
   | "multiple"
   | "opinion"
-  | "proficiency"
+  // | "proficiency"
   | "country"
   | "bracket"
   | "feature"
-  | "pattern"
+  // | "pattern"
   | "tool"
   /** An autocomplete for the Project collection */
   | "project"
   /** An autocomplete for the People collection */
-  | "people"
+  // | "people"
   | "email2"
   | "receive_notifications"
   | "race_ethnicity"
   | "slider"
-  | "top_n";
+  // | "top_n";
 
 // TODO: what is a section template? The default for all questions?
 export type SectionTemplateId = FieldTemplateId | string;

@@ -1,109 +1,125 @@
 import moment from "moment";
 
-import { getCompletionPercentage, getKnowledgeScore, getQuestionSchema } from "./helpers";
+import {
+  getCompletionPercentage,
+  getKnowledgeScore,
+  getQuestionSchema,
+} from "./helpers";
 import { VulcanGraphqlSchemaServer } from "@vulcanjs/graphql/server";
 import { VulcanGraphqlSchema } from "@vulcanjs/graphql";
 import { getCommentSchema, schema } from "./schema";
 
 import { getSurveySectionPath } from "~/surveys/helpers";
-import { extendSchemaServer, ResponseDocument, SurveyEdition } from "@devographics/core-models";
+import {
+  extendSchemaServer,
+  ResponseDocument,
+  SurveyEdition,
+} from "@devographics/core-models";
 
 import { nanoid } from "nanoid";
 import { ApiContext } from "~/lib/server/context";
-import { fetchSurveyFromId, fetchSurveysList } from "@devographics/core-models/server";
+import {
+  fetchEditionPackageFromId,
+  fetchSurveysMetadata,
+} from "@devographics/core-models/server";
 import { SurveyEditionDescription } from "@devographics/core-models";
 import cloneDeep from "lodash/cloneDeep.js";
-import { getQuestionId, getQuestionObject, getSurveyEditionId } from "~/surveys/parser/parseSurvey";
+import {
+  getQuestionId,
+  getQuestionObject,
+  getSurveyEditionId,
+} from "~/surveys/parser/parseSurvey";
 import { VulcanFieldSchema } from "@vulcanjs/schema";
 import { serverConfig } from "~/config/server";
 
-
-const getSurveyDescriptionFromResponse = async (response: ResponseDocument): Promise<SurveyEditionDescription | undefined> => {
+const getSurveyDescriptionFromResponse = async (
+  response: ResponseDocument
+): Promise<SurveyEditionDescription | undefined> => {
   const isDevOrTest = serverConfig().isDev || serverConfig().isTest;
   if (response.editionId) {
-    return await fetchSurveyFromId(response.editionId)
+    return await fetchEditionPackageFromId(response.editionId);
   }
   // using legacy slug
-  const surveys = await fetchSurveysList(isDevOrTest)
+  const surveys = await fetchSurveysMetadata(isDevOrTest);
   return surveys.find((s) => s.slug === response.surveySlug);
-}
+};
 
 export const getServerSchema = (): VulcanGraphqlSchemaServer => {
-  const schemaCommon = getSchema()
-  return extendSchemaServer(
-    schemaCommon,
-    {
-      // MANDATORY when using string ids for a collection instead of ObjectId
-      // you have to handle the id creation manually
-      _id: {
-        onCreate: () => {
-          // generate a random value for the id
-          const _id = nanoid();
-          return _id;
-        },
+  const schemaCommon = getSchema();
+  return extendSchemaServer(schemaCommon, {
+    // MANDATORY when using string ids for a collection instead of ObjectId
+    // you have to handle the id creation manually
+    _id: {
+      onCreate: () => {
+        // generate a random value for the id
+        const _id = nanoid();
+        return _id;
       },
-      common__user_info__authmode: {
-        onCreate: ({ currentUser }) => {
-          return currentUser?.authMode;
-        },
+    },
+    common__user_info__authmode: {
+      onCreate: ({ currentUser }) => {
+        return currentUser?.authMode;
       },
-      createdAt: {
-        onCreate: () => {
+    },
+    createdAt: {
+      onCreate: () => {
+        return new Date();
+      },
+    },
+    updatedAt: {
+      onUpdate: () => {
+        return new Date();
+      },
+    },
+    finishedAt: {
+      onUpdate: ({ data }) => {
+        if (data.isFinished) {
           return new Date();
-        },
+        }
       },
-      updatedAt: {
-        onUpdate: () => {
-          return new Date();
-        },
+    },
+    year: {
+      onCreate: () => {
+        return new Date().getFullYear();
       },
-      finishedAt: {
-        onUpdate: ({ data }) => {
-          if (data.isFinished) {
-            return new Date();
-          }
-        },
+    },
+    duration: {
+      onUpdate: ({ document }) => {
+        return moment(document.updatedAt).diff(
+          moment(document.createdAt),
+          "minutes"
+        );
       },
-      year: {
-        onCreate: () => {
-          return new Date().getFullYear();
-        },
+    },
+    completion: {
+      onCreate: async ({ document, data }) => {
+        const survey = await fetchEditionPackageFromId(document.surveySlug);
+        return getCompletionPercentage({ ...document, ...data }, survey);
       },
-      duration: {
-        onUpdate: ({ document }) => {
-          return moment(document.updatedAt).diff(
-            moment(document.createdAt),
-            "minutes"
+      onUpdate: async ({ document, data }) => {
+        const survey = await fetchEditionPackageFromId(document.surveySlug);
+        return getCompletionPercentage({ ...document, ...data }, survey);
+      },
+    },
+    knowledgeScore: {
+      onUpdate: async ({ document }) => {
+        const response = document as ResponseDocument;
+        if (!response.surveySlug) {
+          throw new Error(
+            `Can't compute knowledge score, response ${response._id} has no surveySLug`
           );
-        },
+        }
+        const survey = await fetchEditionPackageFromId(response.surveySlug);
+        return getKnowledgeScore(response, survey).score;
       },
-      completion: {
-        onCreate: async ({ document, data }) => {
-          const survey = await fetchSurveyFromId(document.surveySlug)
-          return getCompletionPercentage({ ...document, ...data }, survey);
-        },
-        onUpdate: async ({ document, data }) => {
-          const survey = await fetchSurveyFromId(document.surveySlug)
-          return getCompletionPercentage({ ...document, ...data }, survey);
-        },
+    },
+    locale: {
+      onCreate: async ({ document, context, currentUser }) => {
+        return (context as ApiContext).locale;
       },
-      knowledgeScore: {
-        onUpdate: async ({ document }) => {
-          const response = document as ResponseDocument
-          if (!response.surveySlug) {
-            throw new Error(`Can't compute knowledge score, response ${response._id} has no surveySLug`)
-          }
-          const survey = await fetchSurveyFromId(response.surveySlug)
-          return getKnowledgeScore(response, survey).score;
-        },
-      },
-      locale: {
-        onCreate: async ({ document, context, currentUser }) => {
-          return (context as ApiContext).locale;
-        },
-        onUpdate: async ({ document, context, currentUser }) => {
-          return (context as ApiContext).locale;
-          /*
+      onUpdate: async ({ document, context, currentUser }) => {
+        return (context as ApiContext).locale;
+        /*
           TODO: this should be computed when creating the context
           Currently we get the locale from Accept-Language or explicit cookies,
           not from the deb
@@ -116,103 +132,106 @@ export const getServerSchema = (): VulcanGraphqlSchemaServer => {
             );
           return user && user.locale;
           */
-        },
       },
-      isNormalized: {
-        onUpdate: () => {
-          return false;
-        },
+    },
+    isNormalized: {
+      onUpdate: () => {
+        return false;
       },
+    },
 
-      pagePath: {
-        type: String,
-        canRead: ["owners"],
-        optional: true,
-        resolveAs: {
-          fieldName: "pagePath",
-          type: "String",
-          resolver: async (response) => {
-            const surveyDescription = await getSurveyDescriptionFromResponse(response)
-            if (!surveyDescription) return null
-            return getSurveySectionPath({ survey: surveyDescription, response })
-          },
+    pagePath: {
+      type: String,
+      canRead: ["owners"],
+      optional: true,
+      resolveAs: {
+        fieldName: "pagePath",
+        type: "String",
+        resolver: async (response) => {
+          const surveyDescription = await getSurveyDescriptionFromResponse(
+            response
+          );
+          if (!surveyDescription) return null;
+          return getSurveySectionPath({ survey: surveyDescription, response });
         },
       },
+    },
 
-      // TODO: for those "resolved from document" fields, only the resolveAs part matter
-      // we should improve this scenario in Vulcan Next (previously was handled via apiSchema in Vulcan,
-      // but we need something more integrated into the schema)
-      survey: {
-        type: Object,
+    // TODO: for those "resolved from document" fields, only the resolveAs part matter
+    // we should improve this scenario in Vulcan Next (previously was handled via apiSchema in Vulcan,
+    // but we need something more integrated into the schema)
+    survey: {
+      type: Object,
+      typeName: "Survey",
+      blackbox: true,
+      optional: true,
+      canRead: ["owners"],
+      resolveAs: {
+        fieldName: "survey",
         typeName: "Survey",
-        blackbox: true,
-        optional: true,
-        canRead: ["owners"],
-        resolveAs: {
-          fieldName: "survey",
-          typeName: "Survey",
-          // TODO: use a relation instead
-          resolver: async (response, args, context) => {
-            // surveySlug is legacy
-            const editionId = response.editionId || response.surveySlug
-            if (!response.editionId) {
-              throw new Error(`Can't get response survey, response ${response._id} has no editionId (or legacy surveySlug)`)
-            }
-            return await fetchSurveyFromId(editionId)
-          },
+        // TODO: use a relation instead
+        resolver: async (response, args, context) => {
+          // surveySlug is legacy
+          const editionId = response.editionId || response.surveySlug;
+          if (!response.editionId) {
+            throw new Error(
+              `Can't get response survey, response ${response._id} has no editionId (or legacy surveySlug)`
+            );
+          }
+          return await fetchEditionPackageFromId(editionId);
         },
       },
+    },
 
-      knowledgeRanking: {
-        type: Number,
-        canRead: ["owners"],
-        optional: true,
+    knowledgeRanking: {
+      type: Number,
+      canRead: ["owners"],
+      optional: true,
+      typeName: "Int",
+      resolveAs: {
+        fieldName: "knowledgeRanking",
         typeName: "Int",
-        resolveAs: {
-          fieldName: "knowledgeRanking",
-          typeName: "Int",
-          resolver: async (response) => {
-            // TODO: check if this is messing with db perf? add indexes?
-            // @see https://github.com/Devographics/Monorepo/issues/172
-            return 100
-            // const { surveySlug, knowledgeScore } = response;
+        resolver: async (response) => {
+          // TODO: check if this is messing with db perf? add indexes?
+          // @see https://github.com/Devographics/Monorepo/issues/172
+          return 100;
+          // const { surveySlug, knowledgeScore } = response;
 
-            // const totalResults = await ResponseConnector.count({
-            //   surveySlug,
-            //   knowledgeScore: { $exists: true },
-            // });
+          // const totalResults = await ResponseConnector.count({
+          //   surveySlug,
+          //   knowledgeScore: { $exists: true },
+          // });
 
-            // const scoredAboveCount = await ResponseConnector.count({
-            //   surveySlug,
-            //   knowledgeScore: { $gt: knowledgeScore },
-            // });
+          // const scoredAboveCount = await ResponseConnector.count({
+          //   surveySlug,
+          //   knowledgeScore: { $gt: knowledgeScore },
+          // });
 
-            // const scoreAbovePercent = Math.max(
-            //   1,
-            //   Math.round((scoredAboveCount * 100) / totalResults)
-            // );
-            // return scoreAbovePercent;
-          },
+          // const scoreAbovePercent = Math.max(
+          //   1,
+          //   Math.round((scoredAboveCount * 100) / totalResults)
+          // );
+          // return scoreAbovePercent;
         },
       },
-    }
-  );
-}
+    },
+  });
+};
 
-
-let schemaIsReady = false
+let schemaIsReady = false;
 // global schema, useful server-side
 export function getSchema() {
-  if (!schemaIsReady) throw new Error("Calling get response schema before schema is ready")
-  return schema
+  if (!schemaIsReady)
+    throw new Error("Calling get response schema before schema is ready");
+  return schema;
 }
 const schemaPerSurvey: { [slug: string]: VulcanGraphqlSchema } = {};
 // TODO: unused client-side?
 export async function initResponseSchema(surveys: Array<SurveyEdition>) {
-  schemaIsReady = true
+  schemaIsReady = true;
   const coreSchema = cloneDeep(schema) as VulcanGraphqlSchema;
   surveys.forEach((survey) => {
-    const editionId = getSurveyEditionId(survey)
+    const editionId = getSurveyEditionId(survey);
     if (editionId) {
       schemaPerSurvey[editionId] = cloneDeep(coreSchema);
     }
@@ -279,7 +298,7 @@ export function getSurveyResponseSchema(survey: SurveyEdition | SurveyEdition) {
 
         if (questionObject.suffix === "experience") {
           const commentSchema = //addComponentToQuestionObject(
-            getCommentSchema() as VulcanFieldSchema<any>
+            getCommentSchema() as VulcanFieldSchema<any>;
           //) as VulcanFieldSchema<any>;
           const commentQuestionId = getQuestionId(survey, section, {
             ...questionObject,
@@ -289,6 +308,5 @@ export function getSurveyResponseSchema(survey: SurveyEdition | SurveyEdition) {
         }
       });
   });
-  return surveyResponseSchema
+  return surveyResponseSchema;
 }
-

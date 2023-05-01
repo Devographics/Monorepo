@@ -1,7 +1,8 @@
 import Support from "~/core/components/common/Support";
-import { mustGetSurvey } from "./fetchers";
+import { mustGetSurveyEdition } from "./fetchers";
 import { getSurveyImageUrl } from "~/surveys/getSurveyImageUrl";
-import { initRedis } from "@devographics/core-models/server";
+import { initRedis } from "@devographics/redis";
+
 import { serverConfig } from "~/config/server";
 import { SurveyPage as SurveyPageComponent } from "./components";
 import { fetchLocaleFromUrl } from "~/app/[lang]/fetchers";
@@ -50,7 +51,7 @@ export default async function SurveyPage({
 }) {
   // TODO: it seems we need to call this initialization code on all relevant pages/layouts
   initRedis(serverConfig().redisUrl);
-  const survey = await mustGetSurvey({ slug, year });
+  const survey = await mustGetSurveyEdition({ slug, year });
   const imageUrl = getSurveyImageUrl(survey);
   let intro = "";
   try {

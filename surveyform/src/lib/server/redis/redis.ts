@@ -1,4 +1,5 @@
-import { initRedis } from "@devographics/core-models/server";
+import { initRedis } from "@devographics/redis";
+
 import { captureMessage, init } from "@sentry/node";
 import Redis from "ioredis";
 import { serverConfig } from "~/config/server";
@@ -8,14 +9,13 @@ import { serverConfig } from "~/config/server";
  * TODO: we might want a dedicated @devographics/redis package
  */
 export function connectToRedis() {
-  initRedis(serverConfig().redisUrl)
+  initRedis(serverConfig().redisUrl);
 }
 
 /**
  * Middleware version for legacy next-connect
  */
 export const connectToRedisMiddleware = (req, res, next) => {
-  connectToRedis()
+  connectToRedis();
   return next();
 };
-

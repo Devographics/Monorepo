@@ -10,7 +10,7 @@ import {
 } from "~/lib/server/caching";
 import { LocaleDef, LocaleDefWithStrings } from "../typings";
 import { measureTime } from "~/lib/server/utils";
-import { getRedisClient } from "@devographics/core-models/server";
+import { getRedisClient } from "@devographics/redis";
 
 export const i18nCommonContexts = ["common", "surveys", "accounts"];
 
@@ -135,7 +135,7 @@ export const getLocales = async () => {
 // ONE LOCALE WITH STRINGS
 
 const localePromiseKey = (id: string, contexts: Array<string>) => {
-  return ["localePromise", id, ...contexts].join("/")
+  return ["localePromise", id, ...contexts].join("/");
 };
 
 interface LocaleStringsVariables {
@@ -156,12 +156,15 @@ interface LocaleStringsVariables {
  * @example "fr" will return "fr-FR" locale, because it's the closest matching one
  * Next.js will use the country locale if there is no region local
  * @example (full process) Next redirects fr-CA to fr, and we return fr-FR locale from server
- * 
+ *
  */
 export async function fetchLocaleStrings(variables: LocaleStringsVariables) {
-  const label = `locales_${variables.localeId}_${variables.contexts}`
+  const label = `locales_${variables.localeId}_${variables.contexts}`;
   // Be careful to include contexts (= fetched locales) in this cache key
-  const cacheKey = localePromiseKey(variables.localeId, variables.contexts || [])
+  const cacheKey = localePromiseKey(
+    variables.localeId,
+    variables.contexts || []
+  );
   //console.debug("Fetching locale", variables.localeId);
   const cached = cachedPromise(
     promisesNodeCache,
@@ -178,8 +181,10 @@ export async function fetchLocaleStrings(variables: LocaleStringsVariables) {
 
   if (locale) {
     // Convert strings array to a map (and cache the result)
-    const convertedLocaleCacheKey = "convertedLocale/" + cacheKey
-    let convertedLocale = nodeCache.get<LocaleDefWithStrings>(convertedLocaleCacheKey);
+    const convertedLocaleCacheKey = "convertedLocale/" + cacheKey;
+    let convertedLocale = nodeCache.get<LocaleDefWithStrings>(
+      convertedLocaleCacheKey
+    );
     if (convertedLocale) return convertedLocale;
 
     const convertedStrings = {};
@@ -196,6 +201,6 @@ export async function fetchLocaleStrings(variables: LocaleStringsVariables) {
     return convertedLocale as LocaleDefWithStrings;
   }
   // locale not found
-  console.timeEnd(label)
+  console.timeEnd(label);
   return null;
-};
+}

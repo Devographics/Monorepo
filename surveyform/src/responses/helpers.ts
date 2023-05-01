@@ -20,7 +20,7 @@ import SimpleSchema from "simpl-schema";
 import {
   getQuestionId,
   getQuestionObject,
-  parseSurvey,
+  parseEdition,
 } from "~/surveys/parser/parseSurvey";
 import { captureException } from "@sentry/nextjs";
 
@@ -233,10 +233,13 @@ export const ignoredFieldTypes: Array<FieldTemplateId> = [
   "project",
 ];
 
-export const getCompletionPercentage = (response: ResponseDocument, survey: SurveyEdition | SurveyEdition) => {
+export const getCompletionPercentage = (
+  response: ResponseDocument,
+  survey: SurveyEdition | SurveyEdition
+) => {
   let completedCount = 0;
   let totalCount = 0;
-  const parsedOutline = parseSurvey(survey).outline;
+  const parsedOutline = parseEdition(survey).outline;
   parsedOutline.forEach((section) => {
     section.questions &&
       section.questions.forEach((question) => {
@@ -309,7 +312,10 @@ export const getSectionCompletionPercentage = (
 Calculate CSS features knowledge score
 
 */
-export const getKnowledgeScore = (response: ResponseDocument, survey: SurveyEdition | SurveyEdition) => {
+export const getKnowledgeScore = (
+  response: ResponseDocument,
+  survey: SurveyEdition | SurveyEdition
+) => {
   const featureSections = survey.outline.filter(
     (section) => section.slug === "features"
   );

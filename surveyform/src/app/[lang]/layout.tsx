@@ -4,7 +4,8 @@ import { getLocales } from "~/i18n/server/fetchLocalesRedis";
 //*** I18n redirections
 // @see https://nextjs.org/docs/advanced-features/i18n-routing
 //import { locales } from "~/i18n/data/locales";
-import { initRedis } from "@devographics/core-models/server";
+import { initRedis } from "@devographics/redis";
+
 import { serverConfig } from "~/config/server";
 import { Metadata } from "next";
 import { mustFetchLocale } from "./fetchers";

@@ -4,10 +4,11 @@ import { notFound } from "next/navigation";
 import { EntitiesProvider } from "~/core/components/common/EntitiesContext";
 import { fetchEntitiesRedis } from "~/core/server/fetchEntitiesRedis";
 import { SurveyProvider } from "~/surveys/components/SurveyContext/Provider";
-import { initRedis } from "@devographics/core-models/server";
+import { initRedis } from "@devographics/redis";
+
 import { LocaleContextProvider } from "~/i18n/context/LocaleContext";
 import { serverConfig } from "~/config/server";
-import { mustGetSurvey } from "./fetchers";
+import { mustGetSurveyEdition } from "./fetchers";
 
 const cachedGetLocales = cache(getLocales);
 
@@ -28,7 +29,7 @@ export async function generateStaticParams() {
 
 import { getSurveyImageUrl } from "~/surveys/getSurveyImageUrl";
 import { publicConfig } from "~/config/public";
-import { getSurveyTitle } from "~/surveys/helpers";
+import { getEditionTitle } from "~/surveys/helpers";
 import { cachedFetchLocaleStrings } from "~/app/[lang]/fetchers";
 import { cache } from "react";
 import { getLocales } from "~/i18n/server/fetchLocalesRedis";
@@ -45,14 +46,14 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   // TODO: it seems we need to call this initialization code on all relevant pages/layouts
   initRedis(serverConfig().redisUrl);
-  const survey = await mustGetSurvey({ slug, year });
+  const survey = await mustGetSurveyEdition({ slug, year });
   const { socialImageUrl, faviconUrl } = survey;
   const imageUrl = getSurveyImageUrl(survey);
   let imageAbsoluteUrl = socialImageUrl || imageUrl;
   const url = publicConfig.appUrl;
 
   const meta: Metadata = {
-    title: getSurveyTitle({ survey }),
+    title: getEditionTitle({ survey }),
     // NOTE: merge between route segments is shallow, you may need to repeat field from layout
     openGraph: {
       // @ts-ignore
@@ -94,8 +95,9 @@ export default async function SurveyLayout({
   // TODO: it seems we need to call this initialization code on all relevant pages/layouts
   initRedis(serverConfig().redisUrl);
 
-  const survey = await mustGetSurvey(params);
-
+  const survey = await mustGetSurveyEdition(params);
+  console.log("// mustGetSurveyEdition");
+  console.log(survey);
   // survey specific strings
   const localeId = params.lang;
   if (localeId.includes(".")) {
@@ -154,7 +156,7 @@ If this error still happens in a few months (2023) open an issue with repro at N
   `;
 
   return (
-    <SurveyProvider survey={survey}>
+    <SurveyProvider edition={survey}>
       <style dangerouslySetInnerHTML={{ __html: style }} />
       <EntitiesProvider entities={entities}>
         <LocaleContextProvider

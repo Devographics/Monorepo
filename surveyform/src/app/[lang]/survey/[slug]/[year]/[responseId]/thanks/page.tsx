@@ -1,7 +1,8 @@
 import Thanks from "~/core/components/pages/Thanks";
 import { serverConfig } from "~/config/server";
-import { initRedis } from "@devographics/core-models/server";
-import { mustGetSurvey } from "../../fetchers";
+import { initRedis } from "@devographics/redis";
+
+import { mustGetSurveyEdition } from "../../fetchers";
 // import { getResponseWithRanking } from "./getResponseWithRanking";
 
 const ThanksPage = async ({
@@ -18,7 +19,7 @@ const ThanksPage = async ({
   // it's ok to fetch data again here after fetching in the layout
   // TODO: it seems we need to call this initialization code on all relevant pages/layouts
   initRedis(serverConfig().redisUrl);
-  const survey = await mustGetSurvey({ slug, year });
+  const survey = await mustGetSurveyEdition({ slug, year });
   if (readOnly) {
     return <Thanks readOnly={readOnly} />;
   }

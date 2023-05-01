@@ -1,21 +1,21 @@
 "use client";
 import { SurveyEdition } from "@devographics/core-models";
 import { createContext, ReactNode, useContext } from "react";
-import { parseSurvey } from "~/surveys/parser/parseSurvey";
+import { parseEdition } from "~/surveys/parser/parseSurvey";
 
 const SurveyContext = createContext<SurveyEdition | undefined>(undefined);
 
 export const SurveyProvider = ({
-  survey,
+  edition,
   children,
 }: {
-  survey: SurveyEdition;
+  edition: SurveyEdition;
   children: ReactNode;
 }) => {
   // @ts-ignore
-  const parsedSurvey = parseSurvey(survey);
+  const parsedEdition = parseEdition(edition);
   return (
-    <SurveyContext.Provider value={parsedSurvey}>
+    <SurveyContext.Provider value={parsedEdition}>
       {children}
     </SurveyContext.Provider>
   );

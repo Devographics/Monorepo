@@ -1,5 +1,5 @@
 import { SurveyEdition } from "@devographics/core-models";
-import { getRedisClient } from "@devographics/core-models/server";
+import { getRedisClient } from "@devographics/redis";
 import { cachedPromise, promisesNodeCache } from "~/lib/server/caching";
 import { measureTime } from "~/lib/server/utils";
 
@@ -11,7 +11,9 @@ export const getSurveyEditionEntitiesCacheKey = ({
   surveyId: string;
 }) => `entities_${surveyId}`;
 
-export const fetchEntitiesRedis = async (editionId: SurveyEdition["editionId"]) => {
+export const fetchEntitiesRedis = async (
+  editionId: SurveyEdition["editionId"]
+) => {
   const redisClient = getRedisClient();
   const key = getSurveyEditionEntitiesCacheKey({ surveyId: editionId });
   const value = await measureTime(async () => {
@@ -29,7 +31,7 @@ export const fetchEntitiesRedis = async (editionId: SurveyEdition["editionId"]) 
 const ENTITIES_PROMISE_TTL_SECONDS = 10 * 60;
 
 type EntitiesVariables = {
-  surveyId: SurveyEdition["editionId"]
+  surveyId: SurveyEdition["editionId"];
 };
 
 export const getOrFetchEntities = async (variables: EntitiesVariables) => {

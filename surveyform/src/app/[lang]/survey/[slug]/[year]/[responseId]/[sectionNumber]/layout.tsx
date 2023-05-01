@@ -1,11 +1,12 @@
-import { initRedis } from "@devographics/core-models/server";
+import { initRedis } from "@devographics/redis";
+
 import { StringsRegistry } from "@devographics/react-i18n";
 import { Metadata } from "next";
 import { fetchLocaleFromUrl } from "~/app/[lang]/fetchers";
 import { serverConfig } from "~/config/server";
 import { SectionProvider } from "~/surveys/components/SectionContext/SectionProvider";
-import { getSectionKey, getSurveyTitle } from "~/surveys/helpers";
-import { getSurveyFromUrl } from "../../fetchers";
+import { getSectionKey, getEditionTitle } from "~/surveys/helpers";
+import { getSurveyEditionFromUrl } from "../../fetchers";
 
 interface SurveySectionParams {
   lang: string;
@@ -21,16 +22,16 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   // TODO: it seems we need to call this initialization code on all relevant pages/layouts
   initRedis(serverConfig().redisUrl);
-  const survey = await getSurveyFromUrl(params);
-  if (!survey) return {};
+  const edition = await getSurveyEditionFromUrl(params);
+  if (!edition) return {};
   const loc = await fetchLocaleFromUrl(params);
   if (!loc) {
     return {
-      title: getSurveyTitle({ survey }),
+      title: getEditionTitle({ edition }),
     };
   }
   const { localeId, localeWithStrings } = loc;
-  const { name = "", year = "" } = survey;
+  const { name = "", year = "" } = edition;
   // localized description
   // similar to how we get translated strings client-side
   const stringsRegistry = new StringsRegistry(localeId);
@@ -42,13 +43,13 @@ export async function generateMetadata({
     values: { name, year: year + "" },
   });
   // title
-  let title = getSurveyTitle({ survey });
+  let title = getEditionTitle({ edition });
   try {
-    const section = survey.outline?.[parseInt(params.sectionNumber) - 1];
+    const section = edition.sections?.[parseInt(params.sectionNumber) - 1];
     const sectionTitle =
       section &&
       stringsRegistry.getString({ localeId, id: getSectionKey(section) });
-    title = getSurveyTitle({ survey, sectionTitle });
+    title = getEditionTitle({ edition, sectionTitle });
   } catch (err) {
     console.error("cant get section", err, params);
   }
