@@ -239,7 +239,7 @@ export async function initResponseSchema(editions: Array<EditionMetadata>) {
           });
           const questionSchema = getQuestionSchema({ questionObject, section });
 
-          const questionId = question.rawPaths.response;
+          const questionId = question?.rawPaths?.response;
           if (!questionId) {
             throw new Error(
               `Question ${questionId} does not have a raw response path defined`
@@ -251,10 +251,8 @@ export async function initResponseSchema(editions: Array<EditionMetadata>) {
           }
 
           if (questionObject.allowComment) {
-            const commentSchema = //addComponentToQuestionObject(
-              getCommentSchema() as VulcanFieldSchema<any>;
-
-            const commentQuestionId = question.rawPaths.comment;
+            const commentSchema = getCommentSchema() as VulcanFieldSchema<any>;
+            const commentQuestionId = question?.rawPaths?.comment;
             if (!commentQuestionId) {
               throw new Error(
                 `Question ${questionId} does not have a raw comment path defined`
@@ -275,31 +273,30 @@ export function getEditionResponseSchema(edition: EditionMetadata) {
   const surveyResponseSchema = cloneDeep(coreSchema);
   edition.sections.forEach((section) => {
     section.questions &&
-      section.questions.forEach((questionOrId) => {
+      section.questions.forEach((question) => {
         //i++;
-        if (Array.isArray(questionOrId)) {
+        if (Array.isArray(question)) {
           // NOTE: from the typings, it seems that questions can be arrays? To be confirmed
           throw new Error("Found an array of questions");
         }
-        let questionObject = getQuestionObject({ questionOrId, section });
+        let questionObject = getQuestionObject({
+          survey: edition.survey,
+          edition,
+          section,
+          question,
+        });
         //questionObject = addComponentToQuestionObject(questionObject);
-        const questionSchema = getQuestionSchema(
+        const questionSchema = getQuestionSchema({
           questionObject,
           section,
-          survey
-        );
+        });
 
-        const questionId = getQuestionId(edition, section, questionObject);
+        const questionId = question?.rawPaths?.response;
         surveyResponseSchema[questionId] = questionSchema;
 
-        if (questionObject.suffix === "experience") {
-          const commentSchema = //addComponentToQuestionObject(
-            getCommentSchema() as VulcanFieldSchema<any>;
-          //) as VulcanFieldSchema<any>;
-          const commentQuestionId = getQuestionId(edition, section, {
-            ...questionObject,
-            suffix: "comment",
-          });
+        if (questionObject.allowComment) {
+          const commentSchema = getCommentSchema() as VulcanFieldSchema<any>;
+          const commentQuestionId = question?.rawPaths?.comment;
           surveyResponseSchema[commentQuestionId] = commentSchema;
         }
       });

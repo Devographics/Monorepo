@@ -11,6 +11,11 @@ import type {
   SurveyEdition,
   SurveySection,
 } from "@devographics/core-models";
+import {
+  EditionMetadata,
+  QuestionMetadata,
+  SectionMetadata,
+} from "@devographics/types";
 
 interface MarkdownOptions {
   showFieldName?: boolean;
@@ -18,17 +23,18 @@ interface MarkdownOptions {
 export const convertSurveyToMarkdown = ({
   formatMessage,
   entities,
-  survey,
+  edition,
   options,
 }: {
   formatMessage?: any;
   entities: any;
-  survey: SurveyEdition;
+  edition: EditionMetadata;
   options?: MarkdownOptions;
 }) => {
+  const { survey } = edition;
   let surveyString = "";
   surveyString += `# ${survey.name}\n\n`;
-  survey?.outline?.forEach((section) => {
+  edition?.sections?.forEach((section) => {
     surveyString += convertSection({
       formatMessage,
       entities,
@@ -47,7 +53,7 @@ const convertSection = ({
 }: {
   formatMessage?: any;
   entities?: any;
-  section: SurveySection;
+  section: SectionMetadata;
   options?: MarkdownOptions;
 }) => {
   let sectionString = "";
@@ -64,7 +70,7 @@ const convertSection = ({
     sectionString += convertQuestion({
       formatMessage,
       entities,
-      question: question as unknown as ParsedQuestion,
+      question,
       section,
       options,
     });
@@ -108,8 +114,8 @@ const convertQuestion = ({
 }: {
   formatMessage: any;
   entities: any;
-  question: ParsedQuestion;
-  section: SurveySection;
+  question: QuestionMetadata;
+  section: SectionMetadata;
   options?: MarkdownOptions;
 }) => {
   let questionString = "";
@@ -173,8 +179,8 @@ const convertOption = ({ formatMessage, entities, question, option }) => {
   const title = entity
     ? entity.name
     : formatMessage({
-      id: intlId,
-    });
+        id: intlId,
+      });
   optionString += `- ${title || intlId}\n`;
   return optionString;
 };

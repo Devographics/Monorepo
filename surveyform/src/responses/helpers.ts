@@ -184,7 +184,7 @@ export const getQuestionSchema = ({
     // itemProperties,
   } = questionObject;
 
-  const intlId = generateIntlId(questionObject, section, survey);
+  const intlId = generateIntlId({ section, question: questionObject });
 
   const fieldKeys = [
     "type",
@@ -232,7 +232,7 @@ export const getQuestionSchema = ({
 /**
  * Fields that do not count in the completion percentage or knowledge score
  */
-export const ignoredFieldTypes: Array<FieldTemplateId> = [
+export const ignoredFieldTypes = [
   "email",
   "email2",
   "receive_notifications",
@@ -276,36 +276,40 @@ export const getCompletionPercentage = (
  * @returns null if completion cannot be computed (no fillable question), the completion percentage
  * from 0 to 100 otherwise
  */
-export const getSectionCompletionPercentage = (
-  section: SurveySection,
-  response?: ResponseDocument
-) => {
+export const getSectionCompletionPercentage = ({
+  edition,
+  section,
+  response,
+}: {
+  edition: EditionMetadata;
+  section: SectionMetadata;
+  response?: ResponseDocument;
+}) => {
   if (!response || !section.questions) {
     return null;
   }
   // don't count text questions towards completion score
   // TODO: we may have array of fields in a question yet it doesn't seem supported
   const completableQuestions = section.questions.filter((question) => {
-    if (Array.isArray(question)) {
-      console.warn("Found array question", section, question);
-      return false;
-    }
-    const questionObject = getQuestionObject(question, section);
+    const questionObject = getQuestionObject({
+      survey: edition.survey,
+      edition,
+      section,
+      question,
+    });
+    const fieldName = questionObject.rawPaths?.response!;
     // NOTE: if question has no template it's a valid one, it will use the default radiogroup input
     const isValidTemplate =
       !questionObject.template ||
       !ignoredFieldTypes.includes(questionObject.template);
-    const isCompletable = !!(isValidTemplate && questionObject.fieldName);
+    const isCompletable = !!(isValidTemplate && fieldName);
     return isCompletable;
-  }) as Array<Field & Required<Pick<Field, "fieldName">>>;
+  });
   const questionsCount = completableQuestions.length;
   if (!questionsCount) return null;
 
-  const completedQuestions = completableQuestions.filter((question) => {
-    const questionObject = getQuestionObject(question, section) as Required<
-      Pick<Field, "fieldName">
-    >;
-    const { fieldName } = questionObject;
+  const completedQuestions = completableQuestions.filter((questionObject) => {
+    const fieldName = questionObject.rawPaths?.response!;
     const isCompleted =
       response[fieldName] !== null &&
       typeof response[fieldName] !== "undefined";

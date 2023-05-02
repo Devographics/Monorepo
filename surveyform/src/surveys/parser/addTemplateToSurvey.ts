@@ -73,15 +73,15 @@ export const applyTemplateToQuestionObject = ({
   if (!questionTemplate) {
     throw new Error(`Template ${templateName} does not exist.`);
   }
-  console.log("// addTemplateToQuestionObject");
-  console.log(question);
+  // console.log("// addTemplateToQuestionObject");
+  // console.log(question);
   const templateOutput: QuestionFormTemplateOutput = questionTemplate({
     survey,
     edition,
     section,
     question,
   });
-  console.log(templateOutput);
+  // console.log(templateOutput);
   return { ...templateOutput, ...question };
 };
 

@@ -16,6 +16,7 @@ import { LoadingButton } from "~/core/components/ui/LoadingButton";
 import { TooltipTrigger } from "~/core/components/ui/TooltipTrigger";
 import { Loading } from "~/core/components/ui/Loading";
 import { SmartForm } from "~/form/components/smartform/FormContainer";
+import { EditionMetadata } from "@devographics/types";
 
 const SurveySectionContents = (props) => {
   const [prevLoading, setPrevLoading] = useState(false);
@@ -75,7 +76,7 @@ const SurveySectionContents = (props) => {
 };
 
 const SurveySectionContentsInner = ({
-  survey,
+  edition,
   sectionNumber,
   section,
   responseId,
@@ -83,7 +84,7 @@ const SurveySectionContentsInner = ({
   nextSection,
   readOnly,
 }: {
-  survey: SurveyEdition;
+  edition: EditionMetadata;
   sectionNumber?: number;
   section?: any;
   responseId?: string;
@@ -107,11 +108,11 @@ const SurveySectionContentsInner = ({
     <SmartForm
       documentId={responseId}
       fields={fields}
-      model={getSurveyResponseModel(survey)}
+      model={getSurveyResponseModel(edition)}
       // TODO: check those params in the smart form, they should accept DocumentNode and not only strings
       // + the name should be retrieved using getFragmentName from the DocumentNode fragment
-      queryFragment={SurveyResponseFragment(survey)}
-      mutationFragment={SurveyResponseFragment(survey)}
+      queryFragment={SurveyResponseFragment(edition)}
+      mutationFragment={SurveyResponseFragment(edition)}
       // TODO: not all those props are correctly handled by the SmartForm
       showDelete={false}
       itemProperties={{

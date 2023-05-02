@@ -10,9 +10,10 @@ import { captureException } from "@sentry/nextjs";
 import { saveSurvey } from "~/surveys/components/page/services";
 import { getEditionSectionPath } from "~/surveys/helpers";
 import { useResponse } from "~/surveys/components/ResponseContext/ResponseProvider";
+import { EditionMetadata, SectionMetadata } from "@devographics/types";
 
 const FormSubmit = ({
-  survey,
+  edition,
   // response,
   sectionNumber,
   nextSection,
@@ -25,16 +26,16 @@ const FormSubmit = ({
   nextLoading,
   setNextLoading,
 }: {
-  survey: SurveyEdition;
-  nextSection?: SurveySection;
-  prevSection?: SurveySection;
+  edition: EditionMetadata;
+  nextSection?: SectionMetadata;
+  prevSection?: SectionMetadata;
 } & any) => {
   const router = useRouter();
   const formContext = useFormContext();
   const { getDocument, currentValues } = formContext;
   const response = useResponse();
 
-  const pathProps = { readOnly, survey, response };
+  const pathProps = { readOnly, edition, response };
   const nextPath = nextSection
     ? getEditionSectionPath({
         ...pathProps,
@@ -56,7 +57,7 @@ const FormSubmit = ({
     setPrevLoading,
     nextLoading,
     setNextLoading,
-    survey,
+    survey: edition,
     response,
     sectionNumber,
     getDocument,

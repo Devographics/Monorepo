@@ -1,8 +1,8 @@
 import { SurveyEdition } from "@devographics/core-models";
+import { EditionMetadata } from "@devographics/types";
 import { getFragmentName } from "@vulcanjs/graphql";
 import gql from "graphql-tag";
 import { getSurveyFieldNames } from "~/surveys/helpers";
-
 
 /**
  * Doesn't include survey specifics
@@ -33,10 +33,10 @@ export const LightweightResponseFragment = gql`
   }
 `;
 
-export const SurveyResponseFragment = (survey: SurveyEdition | SurveyEdition) => {
-  const responseSpecificFragmentName = `SurveyResponseFragment_${survey.slug}`;
-  const surveySpecificFragmentName = `SurveySpecificFields_${survey.slug}`;
-  const surveySpecificFields = getSurveyFieldNames(survey);
+export const SurveyResponseFragment = (edition: EditionMetadata) => {
+  const responseSpecificFragmentName = `SurveyResponseFragment_${edition.id}`;
+  const surveySpecificFragmentName = `SurveySpecificFields_${edition.id}`;
+  const surveySpecificFields = getSurveyFieldNames(edition);
   if (surveySpecificFields.length > 0) {
     //console.log("name", responseSpecificFragmentName, surveySpecificFragmentName, surveySpecificFields)
     return gql`
@@ -67,7 +67,7 @@ export const SurveyResponseFragment = (survey: SurveyEdition | SurveyEdition) =>
 `;
   } else {
     // TODO: is this scenario expected??
-    console.log("No survey specific fields on response")
+    console.log("No survey specific fields on response");
     return gql`
     fragment ${responseSpecificFragmentName} on Response {
       _id
@@ -91,23 +91,24 @@ export const SurveyResponseFragment = (survey: SurveyEdition | SurveyEdition) =>
       editionId
       surveyId
     }
-  `
-  };
-}
+  `;
+  }
+};
 
 //registerFragment(/* GraphQL */
-export const ResponseFragmentWithRanking = (survey: SurveyEdition | SurveyEdition) => {
-  const srf = SurveyResponseFragment(survey)
+export const ResponseFragmentWithRanking = (edition: EditionMetadata) => {
+  const srf = SurveyResponseFragment(edition);
   return gql`
   fragment ResponseFragmentWithRanking on Response {
     ...${getFragmentName(srf)}
     knowledgeRanking
   }
   ${srf}
-`}
+`;
+};
 
-export const CreateResponseOutputFragment = (survey: SurveyEdition | SurveyEdition) => {
-  const surveySpecificFragment = SurveyResponseFragment(survey);
+export const CreateResponseOutputFragment = (edition: EditionMetadata) => {
+  const surveySpecificFragment = SurveyResponseFragment(edition);
   return gql`
   fragment CreateResponseOutputFragment on ResponseMutationOutput {
     data {

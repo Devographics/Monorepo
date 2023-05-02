@@ -10,7 +10,7 @@ import { getEditionSectionPath } from "~/surveys/helpers";
 import { useRouter } from "next/navigation";
 import { captureException } from "@sentry/nextjs";
 import { saveSurvey } from "../page/services";
-import { EditionMetadata } from "@devographics/types";
+import { EditionMetadata, SectionMetadata } from "@devographics/types";
 
 const SurveyNavItem = ({
   edition,
@@ -25,7 +25,7 @@ const SurveyNavItem = ({
 }: {
   edition: EditionMetadata;
   response: ResponseDocument;
-  section: SurveySection;
+  section: SectionMetadata;
   number: any;
   setShown: (boolean) => void;
   currentTabindex?: number | null;
@@ -36,7 +36,11 @@ const SurveyNavItem = ({
 }) => {
   const router = useRouter();
   const textInput = useRef<any>(null);
-  const completion = getSectionCompletionPercentage(section, response);
+  const completion = getSectionCompletionPercentage({
+    edition,
+    section,
+    response,
+  });
   const showCompletion = completion !== null && completion > 0;
 
   const formContext = useFormContext();

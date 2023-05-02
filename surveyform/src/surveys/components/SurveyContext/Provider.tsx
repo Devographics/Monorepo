@@ -1,23 +1,23 @@
 "use client";
-import { SurveyEdition } from "@devographics/core-models";
+import { EditionMetadata } from "@devographics/types";
 import { createContext, ReactNode, useContext } from "react";
 import { parseEdition } from "~/surveys/parser/parseSurvey";
 
-const SurveyContext = createContext<SurveyEdition | undefined>(undefined);
+const EditionContext = createContext<EditionMetadata | undefined>(undefined);
 
 export const SurveyProvider = ({
   edition,
   children,
 }: {
-  edition: SurveyEdition;
+  edition: EditionMetadata;
   children: ReactNode;
 }) => {
   // @ts-ignore
   const parsedEdition = parseEdition(edition);
   return (
-    <SurveyContext.Provider value={parsedEdition}>
+    <EditionContext.Provider value={parsedEdition}>
       {children}
-    </SurveyContext.Provider>
+    </EditionContext.Provider>
   );
 };
 
@@ -25,11 +25,11 @@ export const SurveyProvider = ({
  *
  * @returns The survey definition WITHOUT REACT COMPONENTS
  */
-export const useSurvey = (dontThrow?: boolean): SurveyEdition => {
-  const context = useContext(SurveyContext);
+export const useEdition = (dontThrow?: boolean): EditionMetadata => {
+  const context = useContext(EditionContext);
   if (!context) {
     // TODO: a hack to support calling in the login form
-    if (dontThrow) return null as unknown as SurveyEdition;
+    if (dontThrow) return null as unknown as EditionMetadata;
     throw new Error("Called useSurvey before setting SurveyProvider context");
   }
   return context;

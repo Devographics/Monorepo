@@ -14,6 +14,7 @@ import Radiogroup from "~/form/components/inputs/Radiogroup";
 import AutocompleteMultiple from "~/form/components/inputs/AutocompleteMultiple";
 import { makeAutocomplete } from "~/core/utils/autocomplete";
 import type { ParsedQuestion } from "@devographics/core-models";
+import { QuestionFormObject } from "~/surveys/parser/parseSurvey";
 
 const customComponents = {
   help: Help,
@@ -29,7 +30,7 @@ const customComponents = {
   textarea: Textarea,
   text: Text,
   radiogroup: Radiogroup,
-  multiautocomplete: AutocompleteMultiple
+  multiautocomplete: AutocompleteMultiple,
 };
 
 /**
@@ -43,9 +44,9 @@ const customComponents = {
  * @returns
  */
 export const addComponentToQuestionObject = (
-  questionObject: ParsedQuestion
+  questionObject: QuestionFormObject
 ) => {
-  let question = questionObject
+  let question = questionObject;
 
   const customComponent = customComponents[questionObject.input];
   if (customComponent) {
@@ -53,10 +54,7 @@ export const addComponentToQuestionObject = (
   }
 
   if (question.autocompleteOptions) {
-    question = makeAutocomplete(
-      question,
-      question.autocompleteOptions
-    );
+    question = makeAutocomplete(question, question.autocompleteOptions);
   }
 
   return question;

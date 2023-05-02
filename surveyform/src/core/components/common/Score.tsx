@@ -10,6 +10,7 @@ import { useIntlContext } from "@devographics/react-i18n";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import { useEntities } from "~/core/components/common/EntitiesContext";
 import { Button } from "~/core/components/ui/Button";
+import { EditionMetadata } from "@devographics/types";
 
 const Features = ({
   features,
@@ -63,10 +64,10 @@ const FeatureItem = ({ feature, showComma }) => {
 };
 const Score = ({
   response,
-  survey,
+  edition,
 }: {
   response: any;
-  survey: SurveyEdition;
+  edition: EditionMetadata;
 }) => {
   const intl = useIntlContext();
   const containerRef = useRef<HTMLInputElement | null>(null);
@@ -74,10 +75,11 @@ const Score = ({
   const { knowledgeRanking = 100 } = response;
   const { known, total, score, unknownFields } = getKnowledgeScore(
     response,
-    survey
+    edition
   );
   const knowledgeRankingFromTop = knowledgeRanking;
-  const { name, shareUrl, hashtag } = survey;
+  const { survey, shareUrl } = edition;
+  const { name, hashtag } = survey;
 
   const text = intl.formatMessage(
     { id: "thanks.share_score_message" },

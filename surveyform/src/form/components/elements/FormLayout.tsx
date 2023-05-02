@@ -17,7 +17,7 @@ const FormLayout = (props: any) => {
     // response,
     section,
     sectionNumber,
-    survey,
+    edition,
     navLoading,
     setNavLoading,
     readOnly,
@@ -25,7 +25,7 @@ const FormLayout = (props: any) => {
   return (
     <div className="survey-section">
       <SurveyNav
-        survey={survey}
+        edition={edition}
         // response={response}
         navLoading={navLoading}
         setNavLoading={setNavLoading}
@@ -38,7 +38,7 @@ const FormLayout = (props: any) => {
           <SurveySectionHeading
             section={section}
             sectionNumber={sectionNumber}
-            survey={survey}
+            edition={edition}
           />
           <FormElement {...formProps}>
             {" "}

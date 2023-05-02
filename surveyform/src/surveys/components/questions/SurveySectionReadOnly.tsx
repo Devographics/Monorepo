@@ -1,16 +1,16 @@
 import SurveySectionContents from "./SurveySectionContents";
 import EditionMessage from "../SurveyMessage";
-import { useSurvey } from "../SurveyContext/Provider";
+import { useEdition } from "../SurveyContext/Provider";
 import { useSection } from "../SectionContext/SectionProvider";
 
 const SurveySectionReadOnly = () => {
-  const survey = useSurvey();
+  const edition = useEdition();
   const sectionNumber = useSection();
-  const surveyOutline = survey.outline;
+  const sections = edition.sections;
   const sectionIndex = sectionNumber - 1;
-  const section = surveyOutline[sectionIndex];
-  const previousSection = surveyOutline[sectionIndex - 1];
-  const nextSection = surveyOutline[sectionIndex + 1];
+  const section = sections[sectionIndex];
+  const previousSection = sections[sectionIndex - 1];
+  const nextSection = sections[sectionIndex + 1];
   const sectionProps = {
     sectionNumber,
     section,
@@ -19,9 +19,9 @@ const SurveySectionReadOnly = () => {
   };
   return (
     <div className="survey-section-wrapper">
-      <EditionMessage survey={survey} />
+      <EditionMessage edition={edition} />
       <SurveySectionContents
-        survey={survey}
+        edition={edition}
         {...sectionProps}
         readOnly={true}
       />

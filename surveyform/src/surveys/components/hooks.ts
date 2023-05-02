@@ -1,29 +1,31 @@
-"use client"
+"use client";
 import { useResponse } from "./ResponseContext/ResponseProvider";
 import { useSection } from "./SectionContext/SectionProvider";
-import { useSurvey } from "./SurveyContext/Provider";
+import { useEdition } from "./SurveyContext/Provider";
 
-export const useSurveyParams = (dontThrow?: boolean): {
+export const useSurveyParams = (
+  dontThrow?: boolean
+): {
   slug: string;
-  year: string,
+  year: string;
   // TODO: use those id instead of slug/year whenever possible
   // (= all the time except when building actual URL)
-  editionId: string, surveyId: string
+  editionId: string;
+  surveyId: string;
 } => {
-  const survey = useSurvey(dontThrow)
+  const survey = useEdition(dontThrow);
   if (!survey) {
     // Needed for components that use the survey if its there, like the login form
     if (dontThrow) {
-      return { editionId: "", surveyId: "", year: "", slug: "" }
+      return { editionId: "", surveyId: "", year: "", slug: "" };
     }
-    throw new Error("Called useSurveyParams outside of survey page")
+    throw new Error("Called useSurveyParams outside of survey page");
   }
   // TODO: we will need useParams instead, it's not yet released (07/12/2022)
-  const slug = survey.surveyId.replaceAll("_", "-")
-  const year = survey.year + ""
+  const slug = survey.surveyId.replaceAll("_", "-");
+  const year = survey.year + "";
   return { slug, year, surveyId: survey.surveyId, editionId: survey.editionId };
 };
-
 
 export const useSurveyResponseSectionParams = (): {
   slug: string;
@@ -33,8 +35,8 @@ export const useSurveyResponseSectionParams = (): {
 } => {
   // TODO: we will need useParams instead, it's not yet released (07/12/2022)
   const rootParams = useSurveyParams(); // slug and year
-  const { id: responseId } = useResponse()
-  const sectionNumber = useSection()
+  const { id: responseId } = useResponse();
+  const sectionNumber = useSection();
   return {
     ...rootParams,
     responseId: responseId as string,
@@ -49,7 +51,7 @@ export const useSurveyResponseParams = (): {
 } => {
   // TODO: we will need useParams instead, it's not yet released (07/12/2022)
   const rootParams = useSurveyParams(); // slug and year
-  const { id: responseId } = useResponse()
+  const { id: responseId } = useResponse();
   return {
     ...rootParams,
     responseId: responseId as string,
