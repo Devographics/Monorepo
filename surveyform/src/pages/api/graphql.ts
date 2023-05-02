@@ -45,13 +45,12 @@ const currentUserResolver = {
  * based on survey definitions
  */
 async function initServer() {
-  const models = await getServerModels()
+  const models = await getServerModels();
   /**
    * Example graphQL schema and resolvers generated using Vulcan declarative approach
    * http://vulcanjs.org/
    */
   const vulcanRawSchema = buildApolloSchema(models);
-
 
   // NOTE: sojsTypedefs are implicitely expecting Vulcan default typedefs (usign JSON scalar for instance)
   // so you cannot call makeExecutableSchema on them
@@ -93,11 +92,11 @@ async function initServer() {
     plugins:
       process.env.NODE_ENV !== "production"
         ? [
-          ApolloServerPluginLandingPageGraphQLPlayground({
-            // @see https://www.apollographql.com/docs/apollo-server/api/plugin/landing-pages/#graphql-playground-landing-page
-            // options
-          }),
-        ]
+            ApolloServerPluginLandingPageGraphQLPlayground({
+              // @see https://www.apollographql.com/docs/apollo-server/api/plugin/landing-pages/#graphql-playground-landing-page
+              // options
+            }),
+          ]
         : [],
     // Important otherwie Apollo swallows errors
     formatError: (err) => {
@@ -105,7 +104,7 @@ async function initServer() {
       return err;
     },
   });
-  return server
+  return server;
 }
 
 const app = express();
@@ -118,19 +117,20 @@ app.use(gqlPath, cors(corsOptions));
 app.use(gqlPath, connectToAppDbMiddleware);
 app.use(gqlPath, connectToRedisMiddleware);
 
-let serverPromise: Promise<void> | undefined = undefined
+let serverPromise: Promise<void> | undefined = undefined;
 app.use(gqlPath, async function (req, res, next) {
-  if (!serverPromise) throw new Error("Got a first request before serverPromise was initialized")
-  console.debug("waiting apollo server start")
-  await serverPromise
-  console.debug("apollo server is started, will process request")
-  next()
-})
+  if (!serverPromise)
+    throw new Error("Got a first request before serverPromise was initialized");
+  console.debug("waiting apollo server start");
+  await serverPromise;
+  console.debug("apollo server is started, will process request");
+  next();
+});
 serverPromise = (async () => {
-  const server = await initServer()
+  const server = await initServer();
   await server.start();
   server.applyMiddleware({ app, path: "/api/graphql" });
-})()
+})();
 
 export default app;
 

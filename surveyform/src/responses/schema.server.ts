@@ -155,22 +155,22 @@ export const getServerSchema = (): VulcanGraphqlSchemaServer => {
     // TODO: for those "resolved from document" fields, only the resolveAs part matter
     // we should improve this scenario in Vulcan Next (previously was handled via apiSchema in Vulcan,
     // but we need something more integrated into the schema)
-    edition: {
-      type: Object,
-      typeName: "Edition",
-      blackbox: true,
-      optional: true,
-      canRead: ["owners"],
-      resolveAs: {
-        fieldName: "edition",
-        typeName: "Edition",
-        // TODO: use a relation instead
-        resolver: async (response, args, context) => {
-          const { surveyId, editionId } = response;
-          return await fetchEditionMetadataSurveyForm({ surveyId, editionId });
-        },
-      },
-    },
+    // edition: {
+    //   type: Object,
+    //   typeName: "Edition",
+    //   blackbox: true,
+    //   optional: true,
+    //   canRead: ["owners"],
+    //   resolveAs: {
+    //     fieldName: "edition",
+    //     typeName: "Edition",
+    //     // TODO: use a relation instead
+    //     resolver: async (response, args, context) => {
+    //       const { surveyId, editionId } = response;
+    //       return await fetchEditionMetadataSurveyForm({ surveyId, editionId });
+    //     },
+    //   },
+    // },
 
     knowledgeRanking: {
       type: Number,

@@ -51,14 +51,15 @@ export const SurveyResponseFragment = (edition: EditionMetadata) => {
       pagePath
     }
     userId
-    survey {
-      name
-      year
-      status
-      slug
-      surveyId
-    }
-    surveySlug
+    # survey {
+    #   name
+    #   year
+    #   status
+    #   slug
+    #   surveyId
+    # }
+    editionId
+    surveyId
     ...${surveySpecificFragmentName}
   }
   fragment ${surveySpecificFragmentName} on Response {

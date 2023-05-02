@@ -5,7 +5,7 @@ import { print } from "graphql";
 import { gqlHeaders } from "~/core/server/graphqlBff";
 import { SurveyResponseFragment } from "~/responses/fragments";
 import { getFragmentName } from "~/core/server/graphqlUtils";
-import { fetchEditionMetadata } from "@devographics/core-models/server";
+import { fetchEditionMetadataSurveyForm } from "@devographics/fetch";
 import { initRedis } from "@devographics/redis";
 import { connectToAppDb } from "~/lib/server/mongoose/connection";
 import { connectToRedis } from "~/lib/server/redis";
@@ -50,7 +50,7 @@ export default async function saveSurveyResponseHandler(
   }
   let edition: EditionMetadata;
   try {
-    edition = await fetchEditionMetadata({ surveyId, editionId });
+    edition = await fetchEditionMetadataSurveyForm({ surveyId, editionId });
   } catch (err) {
     console.error();
     return res.status(404).send({

@@ -26,6 +26,8 @@ import {
 } from "~/surveys/parser/parseSurvey";
 import { ErrorObject, startEdition } from "./services";
 import type { EditionMetadata } from "@devographics/types";
+import { ResponseDocument } from "@devographics/core-models";
+
 const duplicateResponseErrorId = "error.duplicate_response";
 
 const EditionAction = ({ edition }: { edition: EditionMetadata }) => {
@@ -205,11 +207,11 @@ Link to the "naked" survey path or to the actual response
 */
 const EditionLink = ({
   edition,
-  response = {},
+  response,
   message,
 }: {
   edition: EditionMetadata;
-  response?: { pagePath?: string };
+  response?: ResponseDocument;
   message: string;
 }) => {
   return (
@@ -218,10 +220,7 @@ const EditionLink = ({
     //<LinkContainer to={response.pagePath || getSurveyPath({ survey })}>
     //</LinkContainer>
     <Link
-      href={
-        response.pagePath ||
-        getEditionSectionPath({ edition, forceReadOnly: true })
-      }
+      href={response?.pagePath || getEditionSectionPath({ edition, response })}
       type="button"
       className="btn btn-primary"
     >

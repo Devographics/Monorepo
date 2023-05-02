@@ -12,6 +12,7 @@ import {
   EditionMetadata,
   SectionMetadata,
   SurveyMetadata,
+  SurveyStatusEnum,
 } from "@devographics/types";
 import { getQuestionObject } from "./parser/parseSurvey";
 
@@ -134,7 +135,9 @@ export function getEditionSectionPath({
   const pathSegments = getEditionPathSegments(edition);
   // survey home
   const readOnly =
-    forceReadOnly || !edition.status || ![1, 2].includes(edition.status);
+    forceReadOnly ||
+    !edition.status ||
+    ![SurveyStatusEnum.CLOSED].includes(edition.status);
   if (readOnly) {
     const readOnlySegment = "read-only";
     pathSegments.push(readOnlySegment);

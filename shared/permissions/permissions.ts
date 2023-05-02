@@ -3,44 +3,44 @@
 /**
  * Group based permissions
  */
-import intersection from 'lodash/intersection.js'
+import intersection from "lodash/intersection.js";
 //import compact from "lodash/compact.js";
 //import map from "lodash/map.js";
 //import difference from "lodash/difference.js";
 //import get from "lodash/get.js";
 //import unset from "lodash/unset.js";
 //import cloneDeep from "lodash/cloneDeep.js";
-import isEqual from 'lodash/isEqual.js'
+import isEqual from "lodash/isEqual.js";
 import {
-    FieldPermissions,
-    PermissionGroup,
-    PermissionDefinition,
-    PermissionDocument,
-    PermissionUser,
-    PermissionSchema
-} from './typings'
+  FieldPermissions,
+  PermissionGroup,
+  PermissionDefinition,
+  PermissionDocument,
+  PermissionUser,
+  PermissionSchema,
+} from "./typings";
 
 /**
  * Any user, connected or not
  */
-export const anyoneGroup = 'anyone'
+export const anyoneGroup = "anyone";
 /**
  * Visitors that are NOT connected
  */
-export const visitorGroup = 'visitor'
+export const visitorGroup = "visitor";
 /**
  * Any connected user
  */
-export const memberGroup = 'member'
+export const memberGroup = "member";
 /**
  * Admins
  */
-export const adminGroup = 'admin'
+export const adminGroup = "admin";
 /**
  * User that owns the current document
  * (document.userId is equal to currentUser._id)
  */
-export const ownerGroup = 'owner'
+export const ownerGroup = "owner";
 
 ////////////////////
 // Helpers        //
@@ -52,30 +52,30 @@ export const ownerGroup = 'owner'
  * @param {Object} user
  */
 export const getGroups = (
-    user: PermissionUser | null | undefined,
-    document?: PermissionDocument | null | undefined
+  user: PermissionUser | null | undefined,
+  document?: PermissionDocument | null | undefined
 ): Array<PermissionGroup> => {
-    let userGroups = [anyoneGroup]
-    if (user) {
-        userGroups.push(memberGroup)
-        if (document && owns(user, document)) {
-            // @depreacted user owner
-            userGroups.push('owners')
-            userGroups.push(ownerGroup)
-        }
-        if (user.groups) {
-            // custom groups
-            userGroups = userGroups.concat(user.groups)
-        }
-        if (isAdmin(user)) {
-            userGroups.push(adminGroup)
-        }
-    } else {
-        userGroups.push(visitorGroup)
+  let userGroups = [anyoneGroup];
+  if (user) {
+    userGroups.push(memberGroup);
+    if (document && owns(user, document)) {
+      // @depreacted user owner
+      userGroups.push("owners");
+      userGroups.push(ownerGroup);
     }
+    if (user.groups) {
+      // custom groups
+      userGroups = userGroups.concat(user.groups);
+    }
+    if (isAdmin(user)) {
+      userGroups.push(adminGroup);
+    }
+  } else {
+    userGroups.push(visitorGroup);
+  }
 
-    return userGroups
-}
+  return userGroups;
+};
 
 /**
  * @summary check if a user is a member of a group
@@ -83,13 +83,13 @@ export const getGroups = (
  * @param {String} group or array of groups
  */
 export const isMemberOf = (
-    user: PermissionUser | null | undefined,
-    groupOrGroups: Array<PermissionGroup> | PermissionGroup,
-    document?: PermissionDocument | null
+  user: PermissionUser | null | undefined,
+  groupOrGroups: Array<PermissionGroup> | PermissionGroup,
+  document?: PermissionDocument | null
 ) => {
-    const groups = Array.isArray(groupOrGroups) ? groupOrGroups : [groupOrGroups]
-    return intersection(getGroups(user, document), groups).length > 0
-}
+  const groups = Array.isArray(groupOrGroups) ? groupOrGroups : [groupOrGroups];
+  return intersection(getGroups(user, document), groups).length > 0;
+};
 
 /**
  * Alias for isMemberOf if you want to translate roles into actions
@@ -97,63 +97,79 @@ export const isMemberOf = (
  * const canDoThing = ["admin", "moderator"]
  * canDoAction(user, canDoThing, document)
  */
-export const canDo = isMemberOf
+export const canDo = isMemberOf;
 
 /**
  * @summary Check if a user owns a document
  */
-export const owns = function (user: PermissionUser | null, document: PermissionDocument) {
-    if (!user) return false
-    try {
-        if (!!document.userId) {
-            // isEqual is robust to the scenario where the "_id" is not a string but an ObjectId
-            // However, _id is usually expected to be a string
-            // @see check https://github.com/VulcanJS/vulcan-npm/issues/63
-            return isEqual(user._id, document.userId)
-        } else {
-            // special-case : the user itself
-            return isEqual(user._id, document._id)
-        }
-    } catch (e) {
-        return false
-    }
-}
-
-export const isAdmin = function (user: PermissionUser | null | undefined): boolean {
-    return !!user?.isAdmin
-}
-
-export const canReadField = function (
-    user: PermissionUser | null,
-    field: FieldPermissions,
-    document?: Object
+export const owns = function (
+  user: PermissionUser | null,
+  document: PermissionDocument
 ) {
-    const canRead = field?.canRead
-    if (!canRead) {
-        return false
+  if (!user) return false;
+  try {
+    if (!!document.userId) {
+      // isEqual is robust to the scenario where the "_id" is not a string but an ObjectId
+      // However, _id is usually expected to be a string
+      // @see check https://github.com/VulcanJS/vulcan-npm/issues/63
+      return isEqual(user._id, document.userId);
+    } else {
+      // special-case : the user itself
+      return isEqual(user._id, document._id);
     }
-    // make all fields readable by admin
-    if (isAdmin(user)) {
-        return true
-    }
-    if (typeof canRead === 'function') {
-        // if canRead is a function, execute it with user and document passed. it must return a boolean
-        return (canRead as Function)(user, document) // TODO: we should not need the explicit case thanks to the typecguard
-    } else if (typeof canRead === 'string') {
-        // if canRead is just a string, we assume it's the name of a group and pass it to isMemberOf
-        return (
-            // @deprecated
-            canRead === 'guests' ||
-            // new name for "guests"
-            canRead === 'anyone' ||
-            isMemberOf(user, canRead, document)
-        )
-    } else if (Array.isArray(canRead) && canRead.length > 0) {
-        // if canRead is an array, we do a recursion on every item and return true if one of the items return true
-        return canRead.some(group => canReadField(user, { canRead: group }, document))
-    }
-    return false
-}
+  } catch (e) {
+    return false;
+  }
+};
+
+export const isAdmin = function (
+  user: PermissionUser | null | undefined
+): boolean {
+  return !!user?.isAdmin;
+};
+
+export const canReadField = function ({
+  user,
+  field,
+  document,
+}: {
+  user: PermissionUser | null;
+  field: FieldPermissions;
+  document?: any;
+}) {
+  console.log("////// canReadField");
+  console.log(user);
+  console.log(field);
+  console.log(document);
+  const canRead = field?.canRead;
+  if (!canRead) {
+    return false;
+  }
+  // make all fields readable by admin
+  if (isAdmin(user)) {
+    return true;
+  }
+  if (typeof canRead === "function") {
+    // if canRead is a function, execute it with user and document passed. it must return a boolean
+    return (canRead as Function)(user, document); // TODO: we should not need the explicit case thanks to the typecguard
+  } else if (typeof canRead === "string") {
+    // if canRead is just a string, we assume it's the name of a group and pass it to isMemberOf
+    return (
+      // @deprecated
+      canRead === "guests" ||
+      // new name for "guests"
+      canRead === "anyone" ||
+      (canRead === "owner" && user?._id === document?.userId) ||
+      isMemberOf(user, canRead, document)
+    );
+  } else if (Array.isArray(canRead) && canRead.length > 0) {
+    // if canRead is an array, we do a recursion on every item and return true if one of the items return true
+    return canRead.some((group) =>
+      canReadField({ user, field: { canRead: group }, document })
+    );
+  }
+  return false;
+};
 
 /**
  * TODO: how to define a simpler "VulcanModel" just for permissions?
@@ -177,19 +193,21 @@ export const getUserReadableFields = function (
  * Check if field canRead include a permission that needs to be checked against the actual document and not just from the user
  */
 export const isDocumentBasedPermissionField = (field: FieldPermissions) => {
-    const canRead = field?.canRead
-    if (canRead) {
-        if (typeof canRead === 'function') {
-            return true
-        } else if (canRead === 'owners') {
-            return true
-        } else if (Array.isArray(canRead) && canRead.length > 0) {
-            // recursive call on if canRead is an array
-            return canRead.some(group => isDocumentBasedPermissionField({ canRead: group }))
-        }
+  const canRead = field?.canRead;
+  if (canRead) {
+    if (typeof canRead === "function") {
+      return true;
+    } else if (canRead === "owners") {
+      return true;
+    } else if (Array.isArray(canRead) && canRead.length > 0) {
+      // recursive call on if canRead is an array
+      return canRead.some((group) =>
+        isDocumentBasedPermissionField({ canRead: group })
+      );
     }
-    return false
-}
+  }
+  return false;
+};
 
 /**
  * Retrieve fields that needs the document to be already fetched to be checked, and not just the user
@@ -270,23 +288,27 @@ export const canFilterDocument = (
  * @param schema
  * @param currentUser
  */
-export function restrictViewableFields(
-    document: PermissionDocument,
-    schema: PermissionSchema,
-    currentUser: PermissionUser | null
-): PermissionDocument {
-    let restricted = {}
-    Object.entries(document).forEach(([key, val]) => {
-        let permissions = schema[key]
-        if (permissions) return // field is not readable by users
-        if (canReadField(currentUser, schema[key]!, document)) {
-            restricted[key] = val
-        }
-    })
-    return restricted
+export function restrictViewableFields({
+  document,
+  schema,
+  currentUser,
+}: {
+  document: PermissionDocument;
+  schema: PermissionSchema;
+  currentUser: PermissionUser | null;
+}): PermissionDocument {
+  let restricted = {};
+  Object.entries(document).forEach(([key, val]) => {
+    let permissions = schema[key];
+    if (!permissions) return; // field is not readable by users
+    if (canReadField({ user: currentUser, field: schema[key]!, document })) {
+      restricted[key] = val;
+    }
+  });
+  return restricted;
 }
 
-type ArrayOrSingle<T> = Array<T> | T
+type ArrayOrSingle<T> = Array<T> | T;
 /**
  * @summary For a given document or list of documents, keep only fields viewable by current user
  * @param {Object} user - The user performing the action
@@ -382,31 +404,33 @@ export const canCreateField = function (
  * @param {Object} document - The document being edited or inserted
  */
 export const canUpdateField = function (
-    user: PermissionUser,
-    field: FieldPermissions,
-    document: PermissionDocument
+  user: PermissionUser,
+  field: FieldPermissions,
+  document: PermissionDocument
 ) {
-    const canUpdate = field.canUpdate
+  const canUpdate = field.canUpdate;
 
-    if (canUpdate) {
-        if (typeof canUpdate === 'function') {
-            // if canUpdate is a function, execute it with user and document passed. it must return a boolean
-            return canUpdate(user, document)
-        } else if (typeof canUpdate === 'string') {
-            // if canUpdate is just a string, we assume it's the name of a group and pass it to isMemberOf
-            // note: if canUpdate is 'guests' then anybody can create it
-            return (
-                canUpdate === 'guests' ||
-                canUpdate === 'anyone' ||
-                isMemberOf(user, canUpdate, document)
-            )
-        } else if (Array.isArray(canUpdate) && canUpdate.length > 0) {
-            // if canUpdate is an array, we look at every item and return true if one of the items return true
-            return canUpdate.some(group => canUpdateField(user, { canUpdate: group }, document))
-        }
+  if (canUpdate) {
+    if (typeof canUpdate === "function") {
+      // if canUpdate is a function, execute it with user and document passed. it must return a boolean
+      return canUpdate(user, document);
+    } else if (typeof canUpdate === "string") {
+      // if canUpdate is just a string, we assume it's the name of a group and pass it to isMemberOf
+      // note: if canUpdate is 'guests' then anybody can create it
+      return (
+        canUpdate === "guests" ||
+        canUpdate === "anyone" ||
+        isMemberOf(user, canUpdate, document)
+      );
+    } else if (Array.isArray(canUpdate) && canUpdate.length > 0) {
+      // if canUpdate is an array, we look at every item and return true if one of the items return true
+      return canUpdate.some((group) =>
+        canUpdateField(user, { canUpdate: group }, document)
+      );
     }
-    return false
-}
+  }
+  return false;
+};
 
 /** @function
  * Check if a user passes a permission check
@@ -420,24 +444,24 @@ export const canUpdateField = function (
  * @param {Object} document - The document being edited or inserted
  */
 export const permissionCheck = (options: {
-    check: PermissionDefinition
-    user: PermissionUser
-    document: PermissionDocument
+  check: PermissionDefinition;
+  user: PermissionUser;
+  document: PermissionDocument;
 }) => {
-    const { check, user, document } = options
-    if (typeof check === 'function') {
-        return check(user, document)
-    } else if (isAdmin(user)) {
-        // admins always pass all permission checks
-        return true
-    } else if (Array.isArray(check)) {
-        return isMemberOf(user, check, document)
-    } else if (typeof check === 'string') {
-        return isMemberOf(user, [check], document)
-    } else {
-        return false
-    }
-}
+  const { check, user, document } = options;
+  if (typeof check === "function") {
+    return check(user, document);
+  } else if (isAdmin(user)) {
+    // admins always pass all permission checks
+    return true;
+  } else if (Array.isArray(check)) {
+    return isMemberOf(user, check, document);
+  } else if (typeof check === "string") {
+    return isMemberOf(user, [check], document);
+  } else {
+    return false;
+  }
+};
 
 // TODO: adapt to modelsoptions
 /*
