@@ -1,5 +1,5 @@
 import SurveySectionContents from "./SurveySectionContents";
-import SurveyMessage from "../SurveyMessage";
+import EditionMessage from "../SurveyMessage";
 import { useSurvey } from "../SurveyContext/Provider";
 import { useSection } from "../SectionContext/SectionProvider";
 
@@ -19,7 +19,7 @@ const SurveySectionReadOnly = () => {
   };
   return (
     <div className="survey-section-wrapper">
-      <SurveyMessage survey={survey} />
+      <EditionMessage survey={survey} />
       <SurveySectionContents
         survey={survey}
         {...sectionProps}

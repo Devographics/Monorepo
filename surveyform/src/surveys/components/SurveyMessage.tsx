@@ -1,8 +1,8 @@
 import { statuses } from "~/surveys/constants";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 
-const SurveyMessage = ({ survey }) => {
-  const { status } = survey;
+const EditionMessage = ({ edition }) => {
+  const { status } = edition;
   switch (status) {
     case statuses.preview:
       return (
@@ -21,4 +21,4 @@ const SurveyMessage = ({ survey }) => {
   }
 };
 
-export default SurveyMessage;
+export default EditionMessage;

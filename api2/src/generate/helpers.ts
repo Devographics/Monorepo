@@ -5,7 +5,9 @@ import {
     Question,
     QuestionApiObject,
     Option,
-    QuestionTemplateOutput
+    QuestionTemplateOutput,
+    SectionApiObject,
+    EditionApiObject
 } from '../types/surveys'
 import { templates } from './question_templates'
 import uniq from 'lodash/uniq.js'
@@ -124,10 +126,10 @@ export const getSectionQuestionObjects = ({
     section,
     questionObjects
 }: {
-    edition: Edition
-    section: Section
+    edition: EditionApiObject
+    section: SectionApiObject
     questionObjects: QuestionApiObject[]
-}) => {
+}): QuestionApiObject[] => {
     const results = questionObjects
         .filter(
             q =>

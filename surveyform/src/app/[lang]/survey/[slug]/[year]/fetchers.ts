@@ -3,7 +3,7 @@
  */
 import { notFound } from "next/navigation";
 import { surveyParamsTable } from "~/surveys/helpers";
-import { fetchEditionMetadata } from "@devographics/fetch";
+import { fetchEditionMetadataSurveyForm } from "@devographics/fetch";
 
 /**
  * Use in metadata
@@ -18,7 +18,10 @@ export async function getSurveyEditionFromUrl(params: {
   try {
     const { slug, year } = params;
     const { surveyId, editionId } = surveyParamsTable[slug][year];
-    const survey = await fetchEditionMetadata({ surveyId, editionId });
+    const survey = await fetchEditionMetadataSurveyForm({
+      surveyId,
+      editionId,
+    });
     return survey;
   } catch (err) {
     console.error(

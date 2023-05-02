@@ -5,7 +5,7 @@ import {
 import { getEditionResponseSchema } from "~/responses/schema.server";
 import { canModifyResponse } from "../model";
 import { throwError } from "./errors";
-import { fetchEditionMetadata } from "@devographics/fetch";
+import { fetchEditionMetadataSurveyForm } from "@devographics/fetch";
 
 /**
  * Save a survey response
@@ -63,7 +63,7 @@ export const saveSurvey = async (root, args, context) => {
       },
     });
 
-  const edition = await fetchEditionMetadata({ surveyId, editionId });
+  const edition = await fetchEditionMetadataSurveyForm({ surveyId, editionId });
   // @ts-ignore
   const schema = getEditionResponseSchema(edition);
 

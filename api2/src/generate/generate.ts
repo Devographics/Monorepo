@@ -6,7 +6,8 @@ import {
     Question,
     QuestionApiObject,
     Option,
-    TypeObject
+    TypeObject,
+    SectionApiObject
 } from '../types/surveys'
 import {
     graphqlize,
@@ -38,10 +39,13 @@ export const parseSurveys = ({
     surveys: Survey[]
     questionObjects: QuestionApiObject[]
 }): SurveyApiObject[] => {
-    for (const survey of surveys) {
+    for (const survey_ of surveys) {
+        const survey = survey_ as SurveyApiObject
         for (const edition of survey.editions) {
             const allSections = mergeSections(edition.sections, edition.apiSections)
-            edition.sections = allSections
+            edition.sections = allSections as SectionApiObject[]
+            edition.survey = survey
+            edition.surveyId = survey.id
             for (const section of edition.sections) {
                 section.questions = getSectionQuestionObjects({ edition, section, questionObjects })
             }

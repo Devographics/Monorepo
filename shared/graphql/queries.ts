@@ -57,6 +57,13 @@ query SurveysMetadataQuery {
         year
         status
         imageUrl
+        colors {
+          primary
+          secondary
+          text
+          background
+          backgroundSecondary
+        }
         ${
             includeQuestions
                 ? `sections {
@@ -108,6 +115,13 @@ query ${editionId}MetadataQuery {
           imageUrl
           faviconUrl
           socialImageUrl
+          colors {
+            primary
+            secondary
+            text
+            background
+            backgroundSecondary
+          }
           sponsors {
             id
             imageUrl
@@ -194,6 +208,13 @@ query ${editionId}MetadataQuery {
         imageUrl
         faviconUrl
         socialImageUrl
+        colors {
+          primary
+          secondary
+          text
+          background
+          backgroundSecondary
+        }
         survey {
           domain
           id

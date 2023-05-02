@@ -1,5 +1,5 @@
 import { SurveyConfig, Survey, Edition } from '../types/surveys'
-import { RequestContext } from '../types'
+import { RequestContext, Section } from '../types'
 import { Octokit } from '@octokit/core'
 import fetch from 'node-fetch'
 import yaml from 'js-yaml'
@@ -12,6 +12,13 @@ import { setCache } from '../helpers/caching'
 let allSurveys: Survey[] = []
 
 const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
+
+// add `apiOnly` flags to sections and questins
+const makeAPIOnly = (sections: Section[]) =>
+    sections.map(s => ({
+        ...s,
+        questions: s.questions.map(q => ({ ...q, apiOnly: true }))
+    }))
 
 // load surveys if not yet loaded
 export const loadOrGetSurveys = async (
@@ -100,7 +107,7 @@ export const loadFromGitHub = async () => {
                         } else if (file3.name === 'api.yml') {
                             // found api.yml for edition
                             const editionApiYaml = await getGitHubYamlFile(file3.download_url)
-                            edition = { ...edition, apiSections: editionApiYaml }
+                            edition = { ...edition, apiSections: makeAPIOnly(editionApiYaml) }
                         }
                     }
                     editions.push(edition)
@@ -179,7 +186,7 @@ export const loadLocally = async () => {
                             'utf8'
                         )
                         const editionApiYaml: any = yaml.load(editionApiContents)
-                        edition.apiSections = editionApiYaml
+                        edition.apiSections = makeAPIOnly(editionApiYaml)
                     } catch (error) {}
                     editions.push(edition)
                 }

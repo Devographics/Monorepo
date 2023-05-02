@@ -8,7 +8,7 @@ import { Project } from "@devographics/core-models/server";
 // @see https://www.apollographql.com/docs/apollo-server/data/data-sources
 import { addDefaultMongoConnector } from "@vulcanjs/mongo-apollo/server";
 import {
-  fetchEditionMetadata,
+  fetchEditionMetadataSurveyForm,
   fetchSurveysMetadata,
 } from "@devographics/fetch";
 import {
@@ -29,7 +29,7 @@ export const getServerModels = async () => {
       .map((survey) => survey.editions)
       .flat()
       .map((edition) => {
-        return fetchEditionMetadata({
+        return fetchEditionMetadataSurveyForm({
           surveyId: edition.surveyId,
           editionId: edition.id,
         });

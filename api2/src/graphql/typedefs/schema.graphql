@@ -54,6 +54,16 @@ type EditionMetadata {
     credits: [CreditItem]
 
     tshirt: TshirtDefinition
+
+    colors: Colors
+}
+
+type Colors {
+    primary: String
+    secondary: String
+    text: String
+    background: String
+    backgroundSecondary: String
 }
 
 type TshirtDefinition {
@@ -99,6 +109,8 @@ type QuestionMetadata {
     optionsAreNumeric: Boolean
     # options are ranges of numbers
     optionsAreRange: Boolean
+    # if a question only exists in the API is will currently not be included in the metadata
+    # apiOnly: Boolean
 }
 
 type RawDbPaths {

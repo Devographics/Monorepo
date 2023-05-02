@@ -1,17 +1,18 @@
-import SurveyMessage from "~/surveys/components/SurveyMessage";
+import EditionMessage from "~/surveys/components/SurveyMessage";
 import SurveyCredits from "~/surveys/components/SurveyCredits";
 import Image from "next/image";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
-import { SurveyEdition, SURVEY_OPEN } from "@devographics/core-models";
+import { SURVEY_OPEN } from "@devographics/core-models";
 import Translators from "~/core/components/common/Translators";
 import Faq from "~/core/components/common/Faq";
-import SurveyAction from "~/surveys/components/page/SurveyAction";
+import EditionAction from "~/surveys/components/page/SurveyAction";
 import { LoginDialog } from "~/account/LoginDialog";
 import { Loading } from "~/core/components/ui/Loading";
 import { getCurrentUser } from "./[responseId]/fetchers";
 import { Suspense } from "react";
+import { EditionMetadata } from "@devographics/types";
 
-export const SurveyMain = ({ survey }: { survey: SurveyEdition }) => {
+export const EditionMain = ({ edition }: { edition: EditionMetadata }) => {
   return (
     <Suspense
       fallback={
@@ -22,39 +23,40 @@ export const SurveyMain = ({ survey }: { survey: SurveyEdition }) => {
     >
       {/** @see https://github.com/vercel/app-playground/blob/afa2a63c4abd2d99687cf002d76647a183bdcb78/app/streaming/_components/pricing.tsx */}
       {/** @ts-expect-error This an experimental syntax TS will cringe at async components */}
-      <SurveyMainAsync survey={survey} />
+      <EditionMainAsync edition={edition} />
     </Suspense>
   );
 };
 
-const SurveyMainAsync = async ({ survey }: { survey: SurveyEdition }) => {
+const EditionMainAsync = async ({ edition }: { edition: EditionMetadata }) => {
   const user = await getCurrentUser();
   if (!user) {
     return (
-      <LoginDialog hideGuest={survey.status !== SURVEY_OPEN} user={user} />
+      <LoginDialog hideGuest={edition.status !== SURVEY_OPEN} user={user} />
     );
   } else {
     return (
       <>
-        <SurveyAction survey={survey} />
+        <EditionAction edition={edition} />
       </>
     );
   }
 };
 
-export const SurveyPage = ({
-  survey,
-  surveyIntro,
+export const EditionPage = ({
+  edition,
+  editionIntro,
   imageUrl,
 }: {
-  survey: SurveyEdition;
-  surveyIntro: string;
-  imageUrl: string;
+  edition: EditionMetadata;
+  editionIntro: string;
+  imageUrl?: string;
 }) => {
-  const { name, resultsUrl } = survey;
+  const { resultsUrl, survey } = edition;
+  const { name } = survey;
   return (
     <div className="survey-page contents-narrow">
-      <SurveyMessage survey={survey} />
+      <EditionMessage edition={edition} />
 
       {resultsUrl && (
         <div className="survey-results">
@@ -70,7 +72,7 @@ export const SurveyPage = ({
           height={400}
           priority={true}
           src={imageUrl}
-          alt={`${name} ${survey.year}`}
+          alt={`${name} ${edition.year}`}
           quality={100}
         />
       </h1>
@@ -79,13 +81,13 @@ export const SurveyPage = ({
           className="survey-intro"
           // TODO: it should not be needed anymore?
           dangerouslySetInnerHTML={{
-            __html: surveyIntro,
+            __html: editionIntro,
           }}
         />
-        <SurveyMain survey={survey} />
+        <EditionMain edition={edition} />
       </div>
-      <Faq survey={survey} />
-      {survey.credits && <SurveyCredits survey={survey} />}
+      <Faq survey={edition} />
+      {edition.credits && <SurveyCredits survey={edition} />}
       <Translators />
     </div>
   );

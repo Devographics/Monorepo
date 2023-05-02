@@ -26,8 +26,8 @@ export type FieldTemplateId =
   | "email2"
   | "receive_notifications"
   | "race_ethnicity"
-  | "slider"
-  // | "top_n";
+  | "slider";
+// | "top_n";
 
 // TODO: what is a section template? The default for all questions?
 export type SectionTemplateId = FieldTemplateId | string;
@@ -75,10 +75,10 @@ export interface ParsedQuestion extends Pick<Field, "template"> {
   input?: any;
   intlId?: string;
   options?:
-  | ((
-    props: any
-  ) => Array<{ value?: string | number; intlId?: string; label?: string }>)
-  | Array<{ value?: string | number; intlId?: string; label?: string }>;
+    | ((
+        props: any
+      ) => Array<{ value?: string | number; intlId?: string; label?: string }>)
+    | Array<{ value?: string | number; intlId?: string; label?: string }>;
   query?: () => any;
   queryWaitsForValue?: boolean;
   sectionSlug?: string;
@@ -115,9 +115,9 @@ export interface SurveySharedContext {
   id: string;
   /**
    * In previous survey: was equal to the survey id eg "js2022"
-   * 
+   *
    * Now: equal to the survey context with "_" eg "state_of_js"
-   * 
+   *
    * => use as survey context coupled with year
    * => DO NOT use as unique survey id
    */
@@ -142,7 +142,7 @@ interface SurveyEditionSpecifics {
   /**
    * In newer surveys, id = id of the unique edition
    * = editionId when merged
-   * 
+   *
    * @example js2022
    * /!\ when merging survey context and edition, we might want to
    * be careful to keep both id, ideally by isolating edition in its field:
@@ -170,12 +170,12 @@ interface SurveyEditionSpecifics {
   outline: Array<SurveySection>;
   /**
    * Home page URL. May be big!
-   * 
+   *
    * /!\ in older configs, was relative to "/surveys"!
    * /!\ In newer configs, is absolute!
-   * 
+   *
    * If you need to read this value,
-   * use the "getSurveyImageUrl" helper 
+   * use the "getSurveyImageUrl" helper
    * that handles the legacy behaviour properly
    */
   imageUrl: string;
@@ -185,9 +185,9 @@ interface SurveyEditionSpecifics {
   faviconUrl?: string;
   /**
    * Absolute URL to a social image
-   * 
+   *
    * Should be smaller to consume less bandwidth
-   * 
+   *
    * As a best practice, should be hosted outside of the app,
    * as it consumes a lot of bandwith
    */
@@ -202,7 +202,7 @@ interface SurveyEditionSpecifics {
     text: string;
     background: string;
     backgroundSecondary: string;
-  }
+  };
   // style
   /** @deprecated old syntax*/
   bgColor: string;
@@ -222,35 +222,41 @@ interface SurveyEditionSpecifics {
  * A survey edition
  * With common info, edition specific info, and questions
  */
-export type SurveyEdition = SurveySharedContext & SurveyEditionSpecifics & {
-  // NOTE: this id overrides the old deprecated edition specific "surveyId" (js2019)
-  surveyId: SurveySharedContext["id"],
-  editionId: SurveyEdition["id"]
-}
+export type SurveyEdition = SurveySharedContext &
+  SurveyEditionSpecifics & {
+    // NOTE: this id overrides the old deprecated edition specific "surveyId" (js2019)
+    surveyId: SurveySharedContext["id"];
+    editionId: SurveyEdition["id"];
+  };
 
-export type SurveyEditionDescription = Pick<SurveyEdition,
-  "id" // = editionId
+export type SurveyEditionDescription = Pick<
+  SurveyEdition,
+  | "id" // = editionId
   | "surveyId"
   | "editionId"
-  | "name" | "status" | "prettySlug" | "slug" | "year" | "imageUrl"
+  | "name"
+  | "status"
+  | "prettySlug"
+  | "slug"
+  | "year"
+  | "imageUrl"
   // in older surveys, "context" is state_of_js and slug is "js2022"
   // while in newer surveys slug is "state_of_js"
-  | "context">
-
+  | "context"
+>;
 
 /**
  * A survey with all it's editions
  * Structure used in "/api"
  * NOTE: this structure is big and only meant for intermediate usage
  * eg loading all surveys before displaying a specific one
- * 
+ *
  * When we want to list surveys => only need the descriptions of each
  * Or to display a specific surveys => only need one edition (=1 year)
  */
 export interface SurveyEditions extends SurveySharedContext {
-  editions: Array<SurveyEditionSpecifics>
+  editions: Array<SurveyEditionSpecifics>;
 }
-
 
 export type HydratedSurveyEdition = Omit<
   SurveyEdition,
@@ -259,13 +265,3 @@ export type HydratedSurveyEdition = Omit<
   createdAt?: Date;
   updatedAt?: Date;
 };
-
-/**
- * 1 preview
- * 2 open
- * 3 closed
- * 4 hidden
- */
-export type SurveyStatus = 1 | 2 | 3 | 4;
-export type SurveyStatusLabel = "preview" | "open" | "closed" | "hidden";
-

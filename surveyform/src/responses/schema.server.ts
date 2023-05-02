@@ -29,7 +29,7 @@ import {
 import { VulcanFieldSchema } from "@vulcanjs/schema";
 import { serverConfig } from "~/config/server";
 import { Edition, EditionMetadata } from "@devographics/types";
-import { fetchEditionMetadata } from "@devographics/fetch";
+import { fetchEditionMetadataSurveyForm } from "@devographics/fetch";
 
 export const getServerSchema = (): VulcanGraphqlSchemaServer => {
   const schemaCommon = getSchema();
@@ -81,19 +81,28 @@ export const getServerSchema = (): VulcanGraphqlSchemaServer => {
     completion: {
       onCreate: async ({ document, data }) => {
         const { surveyId, editionId } = document;
-        const edition = await fetchEditionMetadata({ surveyId, editionId });
+        const edition = await fetchEditionMetadataSurveyForm({
+          surveyId,
+          editionId,
+        });
         return getCompletionPercentage({ ...document, ...data }, edition);
       },
       onUpdate: async ({ document, data }) => {
         const { surveyId, editionId } = document;
-        const edition = await fetchEditionMetadata({ surveyId, editionId });
+        const edition = await fetchEditionMetadataSurveyForm({
+          surveyId,
+          editionId,
+        });
         return getCompletionPercentage({ ...document, ...data }, edition);
       },
     },
     knowledgeScore: {
       onUpdate: async ({ document }) => {
         const { surveyId, editionId } = document;
-        const edition = await fetchEditionMetadata({ surveyId, editionId });
+        const edition = await fetchEditionMetadataSurveyForm({
+          surveyId,
+          editionId,
+        });
         return getKnowledgeScore(document, edition).score;
       },
     },
@@ -133,7 +142,10 @@ export const getServerSchema = (): VulcanGraphqlSchemaServer => {
         type: "String",
         resolver: async (response) => {
           const { surveyId, editionId } = response;
-          const edition = await fetchEditionMetadata({ surveyId, editionId });
+          const edition = await fetchEditionMetadataSurveyForm({
+            surveyId,
+            editionId,
+          });
           if (!edition) return null;
           return getEditionSectionPath({ edition, response });
         },
@@ -155,7 +167,7 @@ export const getServerSchema = (): VulcanGraphqlSchemaServer => {
         // TODO: use a relation instead
         resolver: async (response, args, context) => {
           const { surveyId, editionId } = response;
-          return await fetchEditionMetadata({ surveyId, editionId });
+          return await fetchEditionMetadataSurveyForm({ surveyId, editionId });
         },
       },
     },

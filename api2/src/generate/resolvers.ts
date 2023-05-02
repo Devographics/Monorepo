@@ -11,19 +11,17 @@ import {
     ResolverType,
     ResolverMap,
     ResolverParent,
-    QuestionResolverParent,
-    SectionApiObject
+    QuestionResolverParent
 } from '../types/surveys'
-import { getPath, mergeSections, formatNumericOptions } from './helpers'
+import { getPath, formatNumericOptions } from './helpers'
 import { genericComputeFunction } from '../compute'
 import { useCache, computeKey } from '../helpers/caching'
 import { getRawCommentsWithCache } from '../compute/comments'
 import { getEntity, getEntities } from '../load/entities'
 import omit from 'lodash/omit.js'
-import pick from 'lodash/pick.js'
 import { entityResolverMap } from '../resolvers/entities'
 import { getResponseTypeName } from '../graphql/templates/responses'
-import { RequestContext } from '../types'
+import { RequestContext, SectionApiObject } from '../types'
 
 export const generateResolvers = async ({
     surveys,
@@ -51,6 +49,7 @@ export const generateResolvers = async ({
         Surveys: surveysFieldsResolvers,
         ItemComments: commentsResolverMap,
         Entity: entityResolverMap,
+        SectionMetadata: sectionMetadataResolverMap,
         QuestionMetadata: questionMetadataResolverMap
     } as any
 
@@ -334,6 +333,18 @@ export const commentsResolverMap: ResolverMap = {
             editionId: edition.id,
             context
         })
+}
+
+/*
+
+Section Metadata (remove "virtual" apiOnly questions from metadata)
+
+*/
+export const sectionMetadataResolverMap = {
+    questions: async (parent: SectionApiObject, {}, context: RequestContext) => {
+        const { questions } = parent
+        return questions.filter(q => q.apiOnly !== true)
+    }
 }
 
 /*

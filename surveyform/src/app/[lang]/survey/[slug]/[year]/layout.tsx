@@ -46,14 +46,14 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   // TODO: it seems we need to call this initialization code on all relevant pages/layouts
   initRedis(serverConfig().redisUrl);
-  const survey = await mustGetSurveyEdition({ slug, year });
-  const { socialImageUrl, faviconUrl } = survey;
-  const imageUrl = getSurveyImageUrl(survey);
+  const edition = await mustGetSurveyEdition({ slug, year });
+  const { socialImageUrl, faviconUrl } = edition;
+  const imageUrl = getSurveyImageUrl(edition);
   let imageAbsoluteUrl = socialImageUrl || imageUrl;
   const url = publicConfig.appUrl;
 
   const meta: Metadata = {
-    title: getEditionTitle({ survey }),
+    title: getEditionTitle({ edition }),
     // NOTE: merge between route segments is shallow, you may need to repeat field from layout
     openGraph: {
       // @ts-ignore
@@ -95,9 +95,7 @@ export default async function SurveyLayout({
   // TODO: it seems we need to call this initialization code on all relevant pages/layouts
   initRedis(serverConfig().redisUrl);
 
-  const survey = await mustGetSurveyEdition(params);
-  console.log("// mustGetSurveyEdition");
-  console.log(survey);
+  const edition = await mustGetSurveyEdition(params);
   // survey specific strings
   const localeId = params.lang;
   if (localeId.includes(".")) {
@@ -109,7 +107,9 @@ Next.js will fallback to trying to find a valid page path.
 If this error still happens in a few months (2023) open an issue with repro at Next.js.`);
     notFound();
   }
-  const localeSlug = survey.surveyId;
+  const localeSlug = edition.surveyId;
+  console.log("// localeSlug");
+  console.log(edition.surveyId);
   // NOTE: the demo survey was previously using the graphql contexts ["state_of_graphql", "state_of_graphql_2022"]
   // now it has its own strings
   const i18nContexts = [
@@ -137,7 +137,7 @@ If this error still happens in a few months (2023) open an issue with repro at N
   // (not useful in static mode though)
   let entities = [];
   try {
-    const redisEntities = await fetchEntitiesRedis(survey.editionId);
+    const redisEntities = await fetchEntitiesRedis(edition.editionId);
     if (!redisEntities) throw new Error("Entities not found in Redis");
     entities = redisEntities;
   } catch (err) {
@@ -145,7 +145,7 @@ If this error still happens in a few months (2023) open an issue with repro at N
   }
 
   // Apply survey colors
-  const { colors } = survey;
+  const { colors } = edition;
   const style = `
 :root {
   --bg-color: ${/*bgColor*/ colors.background};
@@ -156,7 +156,7 @@ If this error still happens in a few months (2023) open an issue with repro at N
   `;
 
   return (
-    <SurveyProvider edition={survey}>
+    <SurveyProvider edition={edition}>
       <style dangerouslySetInnerHTML={{ __html: style }} />
       <EntitiesProvider entities={entities}>
         <LocaleContextProvider

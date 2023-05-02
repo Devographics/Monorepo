@@ -15,7 +15,7 @@ import {
 } from '../graphql/templates/index'
 import { generateSurveysEnumType } from '../graphql/templates/surveys_enum'
 import { SurveyApiObject, QuestionApiObject, TypeObject } from '../types/surveys'
-import { getPath, mergeSections } from './helpers'
+import { getPath } from './helpers'
 import isEmpty from 'lodash/isEmpty.js'
 
 /*

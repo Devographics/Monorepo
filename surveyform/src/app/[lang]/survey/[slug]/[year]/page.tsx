@@ -4,7 +4,7 @@ import { getSurveyImageUrl } from "~/surveys/getSurveyImageUrl";
 import { initRedis } from "@devographics/redis";
 
 import { serverConfig } from "~/config/server";
-import { SurveyPage as SurveyPageComponent } from "./components";
+import { EditionPage as EditionPageComponent } from "./components";
 import { fetchLocaleFromUrl } from "~/app/[lang]/fetchers";
 import { StringsRegistry } from "@devographics/react-i18n";
 
@@ -51,21 +51,21 @@ export default async function SurveyPage({
 }) {
   // TODO: it seems we need to call this initialization code on all relevant pages/layouts
   initRedis(serverConfig().redisUrl);
-  const survey = await mustGetSurveyEdition({ slug, year });
-  const imageUrl = getSurveyImageUrl(survey);
+  const edition = await mustGetSurveyEdition({ slug, year });
+  const imageUrl = getSurveyImageUrl(edition);
   let intro = "";
   try {
     // TODO: use this string in final version
-    intro = await getSurveyIntro(survey.editionId, lang);
+    intro = await getSurveyIntro(edition.id, lang);
   } catch (err) {
-    console.warn("couldn't get survey intro:", survey.editionId, lang);
+    console.warn("couldn't get survey intro:", edition.id, lang);
   }
   return (
     <div>
-      <SurveyPageComponent
-        survey={survey}
+      <EditionPageComponent
+        edition={edition}
         imageUrl={imageUrl}
-        surveyIntro={intro}
+        editionIntro={intro}
       />
       <Support />
     </div>

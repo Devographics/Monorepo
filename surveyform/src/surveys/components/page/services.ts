@@ -21,16 +21,20 @@ const extractErrorObject = (rawError): ErrorObject | null => {
   }
 };
 
-export async function startSurvey(
-  survey: SurveyEdition | SurveyEdition,
-  data: any
-) {
+export async function startEdition({
+  edition,
+  data,
+}: {
+  edition: EditionMetadata;
+  data: any;
+}) {
+  const { id: editionId, surveyId } = edition;
   // TODO: this should also invalidate the "getCurrentUser" query
   // we should figure how to do so using SWR, maybe in the code that calls startSurvey?
   const fetchRes = await fetch(
     apiRoutes.response.startSurvey.href({
-      surveyId: survey.surveyId,
-      editionId: survey.editionId!,
+      surveyId,
+      editionId,
     }),
     {
       method: "POST",

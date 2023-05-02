@@ -1,7 +1,4 @@
-import type {
-  SurveyStatus,
-  SurveyStatusLabel,
-} from "@devographics/core-models";
+import type { SurveyStatus, SurveyStatusLabel } from "@devographics/types";
 
 export const statuses: { [label in SurveyStatusLabel]: SurveyStatus } = {
   preview: 1,

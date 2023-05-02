@@ -12,7 +12,6 @@ import Link from "next/link";
 import get from "lodash/get.js";
 import isEmpty from "lodash/isEmpty.js";
 import { statuses } from "~/surveys/constants";
-import { SurveyEdition } from "@devographics/core-models";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import { useSurveyActionParams, useBrowserData, PrefilledData } from "./hooks";
 import { useRouter } from "next/navigation";
@@ -25,18 +24,17 @@ import {
   getSurveyContextId,
   getSurveyEditionId,
 } from "~/surveys/parser/parseSurvey";
-import { ErrorObject, startSurvey } from "./services";
-
+import { ErrorObject, startEdition } from "./services";
+import type { EditionMetadata } from "@devographics/types";
 const duplicateResponseErrorId = "error.duplicate_response";
 
-const SurveyAction = ({ survey }: { survey: SurveyEdition }) => {
+const EditionAction = ({ edition }: { edition: EditionMetadata }) => {
+  const { id: editionId, surveyId } = edition;
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<
     Array<ErrorObject | Error> | undefined
   >();
-  const { status } = survey;
-  if (!getSurveyEditionId(survey))
-    throw new Error(`Slug or context not found in SurveyAction`);
+  const { status } = edition;
   const { user, loading: userLoading, error: userError } = useUser();
   // TODO: fetch data during SSR instead?
   const {
@@ -44,8 +42,8 @@ const SurveyAction = ({ survey }: { survey: SurveyEdition }) => {
     loading: responseLoading,
     error: responseError,
   } = useUserResponse({
-    editionId: getSurveyEditionId(survey),
-    surveyId: survey.surveyId,
+    editionId,
+    surveyId,
   });
   if (userLoading) return <Loading />;
   if (userError) throw new Error(userError);
@@ -75,7 +73,7 @@ const SurveyAction = ({ survey }: { survey: SurveyEdition }) => {
         // 1a. there is no response, or there is a response but we are currently loading it
         return (
           <SurveyStart
-            survey={survey}
+            edition={edition}
             loading={loading}
             setLoading={setLoading}
             currentUser={user}
@@ -85,8 +83,8 @@ const SurveyAction = ({ survey }: { survey: SurveyEdition }) => {
       } else {
         // 1b. there is a response already
         return (
-          <SurveyLink
-            survey={survey}
+          <EditionLink
+            edition={edition}
             response={response}
             message="general.continue_survey"
           />
@@ -95,8 +93,8 @@ const SurveyAction = ({ survey }: { survey: SurveyEdition }) => {
     } else {
       // 2. the survey is no longer available
       return (
-        <SurveyLink
-          survey={survey}
+        <EditionLink
+          edition={edition}
           message="general.review_survey"
           {...(hasResponse && { response })}
         />
@@ -111,7 +109,7 @@ const SurveyAction = ({ survey }: { survey: SurveyEdition }) => {
       )}
       {parsedErrors && (
         <Errors
-          survey={survey}
+          edition={edition}
           parsedErrors={parsedErrors}
           currentSurveyResponse={response}
         />
@@ -121,25 +119,26 @@ const SurveyAction = ({ survey }: { survey: SurveyEdition }) => {
 };
 
 const SurveyStart = ({
-  survey,
+  edition,
   loading,
   setLoading,
   currentUser,
   setErrors,
 }: {
-  survey: SurveyEdition;
+  edition: EditionMetadata;
   loading: boolean;
   setLoading: any;
   currentUser: any;
   setErrors: any;
 }) => {
+  const { id: editionId, surveyId } = edition;
   const router = useRouter();
   const { source, referrer } = useSurveyActionParams();
 
   // prefilled data
   let data: PrefilledData = {
-    editionId: getSurveyEditionId(survey),
-    surveyId: getSurveyContextId(survey),
+    editionId,
+    surveyId,
     common__user_info__source: source,
     common__user_info__referrer: referrer,
   };
@@ -163,7 +162,7 @@ const SurveyStart = ({
       setLoading(true);
       try {
         // TODO: we might want to use an Error boundary and a Suspense to handle loading and errors
-        const result = await startSurvey(survey, data);
+        const result = await startEdition({ edition, data });
         if (result.error) {
           setErrors([result.error]);
           setLoading(false);
@@ -173,7 +172,11 @@ const SurveyStart = ({
           console.log("start survey result", result);
           const pagePath =
             get(result, `data.startSurvey.data.pagePath`) ||
-            getEditionSectionPath({ survey, response: result.data, number: 1 });
+            getEditionSectionPath({
+              edition,
+              response: result.data,
+              number: 1,
+            });
           console.log(`Redirecting to ${pagePath}…`);
           router.push(pagePath);
         }
@@ -200,12 +203,12 @@ const SurveyStart = ({
 Link to the "naked" survey path or to the actual response
 
 */
-const SurveyLink = ({
-  survey,
+const EditionLink = ({
+  edition,
   response = {},
   message,
 }: {
-  survey: SurveyEdition;
+  edition: EditionMetadata;
   response?: { pagePath?: string };
   message: string;
 }) => {
@@ -217,7 +220,7 @@ const SurveyLink = ({
     <Link
       href={
         response.pagePath ||
-        getEditionSectionPath({ survey, forceReadOnly: true })
+        getEditionSectionPath({ edition, forceReadOnly: true })
       }
       type="button"
       className="btn btn-primary"
@@ -227,21 +230,21 @@ const SurveyLink = ({
   );
 };
 
-const Errors = ({ survey, parsedErrors, currentSurveyResponse }) => {
+const Errors = ({ edition, parsedErrors, currentSurveyResponse }) => {
   return (
     <>
       {parsedErrors.map((error, i) => (
         <ErrorItem
           key={i}
           error={error}
-          survey={survey}
+          edition={edition}
           response={currentSurveyResponse}
         />
       ))}
     </>
   );
 };
-const ErrorItem = ({ survey, error, response }) => {
+const ErrorItem = ({ edition, error, response }) => {
   console.log(error);
   const { id, message, properties } = error;
   return (
@@ -250,7 +253,7 @@ const ErrorItem = ({ survey, error, response }) => {
       {id === duplicateResponseErrorId && (
         <Link
           href={getEditionSectionPath({
-            survey,
+            edition,
             // @ts-ignore
             response: { _id: properties.responseId },
           })}
@@ -262,4 +265,4 @@ const ErrorItem = ({ survey, error, response }) => {
   );
 };
 
-export default SurveyAction;
+export default EditionAction;

@@ -1,5 +1,5 @@
 import SurveySectionContents from "./SurveySectionContents";
-import SurveyMessage from "../SurveyMessage";
+import EditionMessage from "../SurveyMessage";
 import { useSurveyResponseSectionParams } from "../hooks";
 import { useSurvey } from "../SurveyContext/Provider";
 
@@ -23,7 +23,7 @@ const SurveySection = () => {
 
   return (
     <div className="survey-section-wrapper">
-      <SurveyMessage survey={survey} />
+      <EditionMessage survey={survey} />
       <SurveySectionContents survey={survey} {...sectionProps} />
     </div>
   );

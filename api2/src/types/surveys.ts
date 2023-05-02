@@ -12,7 +12,8 @@ import {
     Bucket,
     QuestionTemplateOutput,
     SectionMetadata,
-    EditionMetadata
+    EditionMetadata,
+    SurveyMetadata
 } from '@devographics/types'
 
 export type TypeObject = {
@@ -107,6 +108,10 @@ export interface SurveyApiObject extends Omit<Survey, 'editions'> {
 export interface EditionApiObject extends Omit<Edition, 'sections' | 'apiSections'> {
     sections: SectionApiObject[]
     apiSections: SectionApiObject[]
+
+    // only when this appears as part of a complete survey metadata tree
+    surveyId?: string
+    survey?: SurveyApiObject
 }
 
 export interface SectionApiObject extends Omit<Section, 'questions'> {
@@ -114,6 +119,7 @@ export interface SectionApiObject extends Omit<Section, 'questions'> {
 }
 
 export interface QuestionApiObject extends QuestionApiTemplateOutput {
+    // a question that's in the outline but not in the API
     includeInApi?: boolean
 
     editions?: string[]
@@ -126,10 +132,12 @@ export interface QuestionApiObject extends QuestionApiTemplateOutput {
     sectionIndex?: number
     surveyId?: string
 
-    // only when this appears as part of a complete edition outline
+    // only when this appears as part of a complete edition metadata tree
     editionId?: string
-    section?: SectionMetadata
-    edition?: EditionMetadata
+    section?: SectionApiObject
+    edition?: EditionApiObject
+    // a question that's in the API but not the outline
+    apiOnly?: boolean
 }
 
 export {
