@@ -17,6 +17,7 @@ const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
 const makeAPIOnly = (sections: Section[]) =>
     sections.map(s => ({
         ...s,
+        apiOnly: true,
         questions: s.questions.map(q => ({ ...q, apiOnly: true }))
     }))
 

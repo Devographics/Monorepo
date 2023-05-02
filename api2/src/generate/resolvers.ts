@@ -49,6 +49,7 @@ export const generateResolvers = async ({
         Surveys: surveysFieldsResolvers,
         ItemComments: commentsResolverMap,
         Entity: entityResolverMap,
+        EditionMetadata: editionMetadataResolverMap,
         SectionMetadata: sectionMetadataResolverMap,
         QuestionMetadata: questionMetadataResolverMap
     } as any
@@ -333,6 +334,18 @@ export const commentsResolverMap: ResolverMap = {
             editionId: edition.id,
             context
         })
+}
+
+/*
+
+Edition Metadata (remove "virtual" apiOnly sections from metadata)
+
+*/
+export const editionMetadataResolverMap = {
+    sections: async (parent: EditionApiObject, {}, context: RequestContext) => {
+        const { sections } = parent
+        return sections.filter(s => s.apiOnly !== true)
+    }
 }
 
 /*
