@@ -6,7 +6,7 @@
  * - Or establish the connection before you run those function, using "connectoToAppDb()" helper
  */
 import crypto from "crypto";
-import { UserMongooseModel, UserTypeServer } from "~/core/models/user.server";
+import { UserTypeServer } from "~/core/models/user.server";
 
 import passport from "passport";
 /**

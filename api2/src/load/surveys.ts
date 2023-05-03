@@ -23,13 +23,18 @@ const makeAPIOnly = (sections: Section[]) =>
 
 // load surveys if not yet loaded
 export const loadOrGetSurveys = async (
-    options: { forceReload?: boolean } = { forceReload: false }
+    options: {
+        forceReload?: boolean,
+        /** Set to true to keep the demo survey during dev */
+        includeDemo?: boolean
+    } = {}
 ) => {
-    const { forceReload } = options
+    const { forceReload, includeDemo } = options
 
     if (forceReload || allSurveys.length === 0) {
         allSurveys = await loadSurveys()
     }
+    if (includeDemo) return allSurveys
     return allSurveys.filter(s => s.id !== 'demo_survey')
 }
 
@@ -168,7 +173,7 @@ export const loadLocally = async () => {
                         )
                         const editionConfigYaml: any = yaml.load(editionConfigContents)
                         edition = editionConfigYaml
-                    } catch (error) {}
+                    } catch (error) { }
                     const questionsPath = editionDirPath + '/questions.yml'
                     if (existsSync(questionsPath)) {
                         try {
@@ -188,7 +193,7 @@ export const loadLocally = async () => {
                         )
                         const editionApiYaml: any = yaml.load(editionApiContents)
                         edition.apiSections = makeAPIOnly(editionApiYaml)
-                    } catch (error) {}
+                    } catch (error) { }
                     editions.push(edition)
                 }
             }

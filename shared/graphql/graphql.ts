@@ -66,9 +66,9 @@ const wrapArguments = (args) => {
 
     return keys.length > 0
         ? `(${keys
-              .filter((k) => !!args[k])
-              .map((k) => `${k}: ${args[k]}`)
-              .join(", ")})`
+            .filter((k) => !!args[k])
+            .map((k) => `${k}: ${args[k]}`)
+            .join(", ")})`
         : "";
 };
 
@@ -213,7 +213,7 @@ const defaultQueries = [
 export const getApiUrl = () => {
     const apiUrl = process.env.DATA_API_URL;
     if (!apiUrl) {
-        throw new Error("process.env.DATA_API_URL not defined");
+        throw new Error("process.env.DATA_API_URL not defined, it should point the the API");
     }
     return apiUrl;
 };
