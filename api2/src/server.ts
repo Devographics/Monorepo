@@ -61,6 +61,12 @@ const checkSecretKey = async (req: any, res: any, func) => {
     }
 }
 
+function getMongoUri() {
+    const uri = process.env.MONGO_URI
+    if (!uri) throw new Error("MONGO_URI not defined")
+    return uri
+}
+
 const start = async () => {
     const startedAt = new Date()
     console.log('// Starting server…')
@@ -70,7 +76,7 @@ const start = async () => {
 
     redisClient.on('error', err => console.log('Redis Client Error', err))
 
-    const mongoClient = new MongoClient(process.env!.MONGO_URI!, {
+    const mongoClient = new MongoClient(getMongoUri(), {
         // useNewUrlParser: true,
         // useUnifiedTopology: true,
         connectTimeoutMS: 10000
@@ -209,8 +215,7 @@ const start = async () => {
 
     app.listen({ port: port }, () =>
         console.log(
-            `🚀 Server ready at http://localhost:${port}${server.graphqlPath} (in ${
-                finishedAt.getTime() - startedAt.getTime()
+            `🚀 Server ready at http://localhost:${port}${server.graphqlPath} (in ${finishedAt.getTime() - startedAt.getTime()
             }ms)`
         )
     )
