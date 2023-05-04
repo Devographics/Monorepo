@@ -22,7 +22,6 @@ import { fetchSurveysMetadata } from "@devographics/fetch";
 import { SurveyEditionDescription } from "@devographics/core-models";
 import cloneDeep from "lodash/cloneDeep.js";
 import {
-  getQuestionId,
   getQuestionObject,
   getSurveyEditionId,
 } from "~/surveys/parser/parseSurvey";
@@ -239,7 +238,7 @@ export async function initResponseSchema(editions: Array<EditionMetadata>) {
           });
           const questionSchema = getQuestionSchema({ questionObject, section });
 
-          const questionId = question?.rawPaths?.response;
+          const questionId = questionObject?.formPaths?.response;
           if (!questionId) {
             throw new Error(
               `Question ${questionId} does not have a raw response path defined`
@@ -252,7 +251,7 @@ export async function initResponseSchema(editions: Array<EditionMetadata>) {
 
           if (questionObject.allowComment) {
             const commentSchema = getCommentSchema() as VulcanFieldSchema<any>;
-            const commentQuestionId = question?.rawPaths?.comment;
+            const commentQuestionId = questionObject?.formPaths?.comment;
             if (!commentQuestionId) {
               throw new Error(
                 `Question ${questionId} does not have a raw comment path defined`
@@ -291,12 +290,12 @@ export function getEditionResponseSchema(edition: EditionMetadata) {
           section,
         });
 
-        const questionId = question?.rawPaths?.response;
+        const questionId = questionObject?.formPaths?.response;
         surveyResponseSchema[questionId] = questionSchema;
 
         if (questionObject.allowComment) {
           const commentSchema = getCommentSchema() as VulcanFieldSchema<any>;
-          const commentQuestionId = question?.rawPaths?.comment;
+          const commentQuestionId = questionObject?.formPaths?.comment;
           surveyResponseSchema[commentQuestionId] = commentSchema;
         }
       });

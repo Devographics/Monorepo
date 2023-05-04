@@ -10,7 +10,6 @@ import { Form, VulcanComponentsProvider } from "@devographics/react-form";
 import { getSurveyResponseModel } from "~/responses/model.client";
 import type { SurveyEdition } from "@devographics/core-models";
 import { SurveyResponseFragment } from "~/responses/fragments";
-import { getCommentFieldName } from "~/surveys/helpers";
 import { Button } from "~/core/components/ui/Button";
 import { LoadingButton } from "~/core/components/ui/LoadingButton";
 import { TooltipTrigger } from "~/core/components/ui/TooltipTrigger";
@@ -93,12 +92,12 @@ const SurveySectionContentsInner = ({
   readOnly?: boolean;
 }) => {
   const questions = section.questions.filter((q) => !q.hidden);
-  const fields = questions.map((question) => question.fieldName);
+  const fields = questions.map((question) => question?.formPaths?.response);
 
   // we need to tell SmartForm to accept the comment fields as valid fields too
-  for (const f of fields) {
-    if (f.includes("__experience")) {
-      fields.push(getCommentFieldName(f));
+  for (const f of section.questions) {
+    if (f?.formPaths?.comment) {
+      fields.push(f.formPaths.comment);
     }
   }
 

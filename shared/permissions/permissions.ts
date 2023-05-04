@@ -137,10 +137,6 @@ export const canReadField = function ({
   field: FieldPermissions;
   document?: any;
 }) {
-  console.log("////// canReadField");
-  console.log(user);
-  console.log(field);
-  console.log(document);
   const canRead = field?.canRead;
   if (!canRead) {
     return false;

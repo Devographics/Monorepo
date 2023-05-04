@@ -17,7 +17,6 @@ import IconCommentDots from "~/core/components/icons/CommentDots";
 import { useIntlContext } from "@devographics/react-i18n";
 import isEmpty from "lodash/isEmpty.js";
 import debounce from "lodash/debounce.js";
-import { getCommentFieldName } from "~/surveys/helpers";
 
 interface ExperienceProps extends FormInputProps {
   showDescription: boolean;
@@ -32,9 +31,9 @@ export const Experience = (props: ExperienceProps) => {
     document,
     showDescription,
   } = props;
-  const { isFirstQuestion, questionId } = itemProperties;
+  const { isFirstQuestion, questionId, questionObject } = itemProperties;
 
-  const commentPath = getCommentFieldName(path);
+  const commentPath = questionObject.formPaths.comment;
   const commentValue = get(document, commentPath);
 
   const {

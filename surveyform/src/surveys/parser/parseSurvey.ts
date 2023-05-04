@@ -10,13 +10,43 @@ import type {
   Section,
   Question,
   EditionMetadata,
+  SectionMetadata,
   QuestionMetadata,
+  SurveyMetadata,
+  DbPaths,
 } from "@devographics/types";
 import { QuestionFormTemplateOutput } from "./addTemplateToSurvey";
 
 export interface QuestionFormObject extends QuestionFormTemplateOutput {
   type: NumberConstructor | StringConstructor;
+  formPaths: DbPaths;
 }
+
+/*
+
+Note: we currently need to prefix all paths with the edition id
+
+TODO: In the future, get rid of this prefix, and replace formPaths with rawPaths?
+
+*/
+const getFormPaths = ({
+  edition,
+  question,
+}: {
+  edition: EditionMetadata;
+  question: QuestionMetadata;
+}): DbPaths => {
+  const paths = {};
+  if (question.rawPaths) {
+    Object.keys(question.rawPaths).forEach((key) => {
+      const path = question?.rawPaths?.[key];
+      if (path) {
+        paths[key] = `${edition.id}__${path}`;
+      }
+    });
+  }
+  return paths;
+};
 
 // build question object from outline
 export const getQuestionObject = ({
@@ -26,10 +56,10 @@ export const getQuestionObject = ({
   question,
   number,
 }: {
-  survey: Survey;
-  edition: Edition;
-  section: Section;
-  question: Question;
+  survey: SurveyMetadata;
+  edition: EditionMetadata;
+  section: SectionMetadata;
+  question: QuestionMetadata;
   number?: number;
   // questionObject: Field & {
   //   slug?: any;
@@ -54,9 +84,12 @@ export const getQuestionObject = ({
     question,
     number,
   });
+  const formPaths = getFormPaths({ edition, question });
   const questionFormObject = {
     ...questionTemplateOutput,
     type: question.optionsAreNumeric ? Number : String,
+    formPaths,
+    fieldName: formPaths.response,
   };
 
   return questionFormObject;
@@ -85,23 +118,6 @@ export function getSurveyContextId(survey: SurveyEdition) {
   const surveyId = survey.surveyId || survey.context;
   return surveyId!;
 }
-/** 
-Note: section's slug can be overriden by the question
-
-Get question unique id, to be used in the schema
-
-/!\ different from the graphql field names
-
-*/
-export const getQuestionId = (edition: EditionMetadata, section, question) => {
-  const editionId = edition.id;
-  const sectionSlug = question.sectionSlug || section.slug || section.id;
-  let fieldName = editionId + "__" + sectionSlug + "__" + question.id;
-  if (question.suffix) {
-    fieldName += `__${question.suffix}`;
-  }
-  return fieldName;
-};
 
 /** 
 
@@ -111,9 +127,9 @@ to every question
 /!\ Will NOT add components, so that it can be reused in scripts
 
 */
-export const parseEdition = (edition: EditionMetadata): Edition => {
+export const parseEdition = (edition: EditionMetadata) => {
   let i = 0;
-  const survey = { id: edition.surveyId } as Survey;
+  const survey = { id: edition.surveyId } as SurveyMetadata;
   const parsedEdition = {
     ...edition,
     createdAt: edition.createdAt ? new Date(edition.createdAt) : undefined,
@@ -129,17 +145,12 @@ export const parseEdition = (edition: EditionMetadata): Edition => {
         question,
         number: i,
       });
-      questionObject.fieldName = getQuestionId(
-        edition,
-        section,
-        questionObject
-      );
       return questionObject;
     });
     return {
       ...section,
       questions,
-    } as SurveySection;
+    };
   });
   // @ts-ignore
   return parsedEdition;

@@ -1,6 +1,6 @@
 import { getQuestionSchema } from "./helpers";
 import { VulcanGraphqlSchema } from "@vulcanjs/graphql";
-import { getQuestionId, getQuestionObject } from "~/surveys/parser/parseSurvey";
+import { getQuestionObject } from "~/surveys/parser/parseSurvey";
 import { addComponentToQuestionObject } from "./customComponents";
 import { VulcanFieldSchema } from "@vulcanjs/schema";
 import { SurveyEdition } from "@devographics/core-models";
@@ -59,14 +59,14 @@ export function getSurveyResponseSchema(edition: EditionMetadata) {
           section,
         });
 
-        const questionId = question?.rawPaths?.response;
-        surveyResponseSchema[questionId] = questionSchema;
+        const fieldName = questionObject?.formPaths?.response;
+        surveyResponseSchema[fieldName] = questionSchema;
 
         if (questionObject.allowComment) {
           const commentSchema = addComponentToQuestionObject(
             getCommentSchema()
           ) as VulcanFieldSchema<any>;
-          const commentQuestionId = question?.rawPaths?.comment;
+          const commentQuestionId = questionObject?.formPaths?.comment;
           surveyResponseSchema[commentQuestionId] = commentSchema;
         }
       });

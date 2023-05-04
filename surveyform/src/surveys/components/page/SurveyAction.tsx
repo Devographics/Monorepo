@@ -214,6 +214,8 @@ const EditionLink = ({
   response?: ResponseDocument;
   message: string;
 }) => {
+  console.log(response);
+  console.log(getEditionSectionPath({ edition, response }));
   return (
     // TODO: see https://www.npmjs.com/package/react-router-bootstrap
     // We should probably use a NavLink bootstrap component

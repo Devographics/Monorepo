@@ -18,7 +18,6 @@ import { ResponseDocument } from "@devographics/core-models";
 import { VulcanGraphqlFieldSchema } from "@vulcanjs/graphql";
 import SimpleSchema from "simpl-schema";
 import {
-  getQuestionId,
   getQuestionObject,
   parseEdition,
   QuestionFormObject,
@@ -206,6 +205,7 @@ export const getQuestionSchema = ({
     canCreate: ["members"],
     canUpdate: ["owners", "admins"],
     itemProperties: {
+      questionObject,
       // ...itemProperties,
       questionId: id,
       year: yearAdded,
@@ -251,10 +251,8 @@ export const getCompletionPercentage = (
   parsedSections.forEach((section) => {
     section.questions &&
       section.questions.forEach((question) => {
-        if (Array.isArray(question))
-          throw new Error("Question cannot be an array");
-        const questionId = getQuestionId(edition, section, question);
-        const answer = response[questionId];
+        const fieldName = question.formPaths.response;
+        const answer = response[fieldName];
         const ignoreQuestion =
           question.template && ignoredFieldTypes.includes(question.template);
         if (!ignoreQuestion) {
@@ -297,7 +295,7 @@ export const getSectionCompletionPercentage = ({
       section,
       question,
     });
-    const fieldName = questionObject.rawPaths?.response!;
+    const fieldName = questionObject.formPaths?.response!;
     // NOTE: if question has no template it's a valid one, it will use the default radiogroup input
     const isValidTemplate =
       !questionObject.template ||
@@ -309,7 +307,7 @@ export const getSectionCompletionPercentage = ({
   if (!questionsCount) return null;
 
   const completedQuestions = completableQuestions.filter((questionObject) => {
-    const fieldName = questionObject.rawPaths?.response!;
+    const fieldName = questionObject.formPaths?.response!;
     const isCompleted =
       response[fieldName] !== null &&
       typeof response[fieldName] !== "undefined";

@@ -2,7 +2,7 @@ import { SurveyEdition } from "@devographics/core-models";
 import { EditionMetadata } from "@devographics/types";
 import { getFragmentName } from "@vulcanjs/graphql";
 import gql from "graphql-tag";
-import { getSurveyFieldNames } from "~/surveys/helpers";
+import { getEditionFieldNames } from "~/surveys/helpers";
 
 /**
  * Doesn't include survey specifics
@@ -36,7 +36,7 @@ export const LightweightResponseFragment = gql`
 export const SurveyResponseFragment = (edition: EditionMetadata) => {
   const responseSpecificFragmentName = `SurveyResponseFragment_${edition.id}`;
   const surveySpecificFragmentName = `SurveySpecificFields_${edition.id}`;
-  const surveySpecificFields = getSurveyFieldNames(edition);
+  const surveySpecificFields = getEditionFieldNames(edition);
   if (surveySpecificFields.length > 0) {
     //console.log("name", responseSpecificFragmentName, surveySpecificFragmentName, surveySpecificFields)
     return gql`

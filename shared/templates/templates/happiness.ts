@@ -28,7 +28,7 @@ export const happiness: TemplateFunction = options => {
         optionsAreNumeric: true,
         options: [...Array(5)].map((x, i) => ({ id: String(i) })),
         rawPaths: {
-            response: `${edition.id}__happiness__${questionSegment}`
+            response: `happiness__${questionSegment}`
         },
         normPaths: {
             response: `happiness.${happinessDbFieldName}`

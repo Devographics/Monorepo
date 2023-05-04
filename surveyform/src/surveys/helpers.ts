@@ -39,10 +39,7 @@ export const surveyParamsTable = {
   },
 };
 
-export const getCommentFieldName = (fieldName) =>
-  fieldName.replace("__experience", "__comment");
-
-export const getSurveyFieldNames = (edition: EditionMetadata) => {
+export const getEditionFieldNames = (edition: EditionMetadata) => {
   let questionFieldNames: Array<string> = [];
   edition.sections.forEach((section) => {
     section.questions &&
@@ -53,19 +50,12 @@ export const getSurveyFieldNames = (edition: EditionMetadata) => {
           section,
           question,
         });
-        /*
-        const questionId = getQuestionId(
-          survey,
-          section,
-          questionObject
-        );
-        */
-        if (!questionObject.rawPaths?.response) {
+        if (!questionObject.formPaths?.response) {
           return;
         }
-        questionFieldNames.push(questionObject.rawPaths.response);
-        if (questionObject.allowComment && questionObject.rawPaths?.comment) {
-          questionFieldNames.push(questionObject.rawPaths?.comment);
+        questionFieldNames.push(questionObject.formPaths.response);
+        if (questionObject.allowComment && questionObject.formPaths?.comment) {
+          questionFieldNames.push(questionObject.formPaths?.comment);
         }
       });
   });
@@ -137,7 +127,8 @@ export function getEditionSectionPath({
   const readOnly =
     forceReadOnly ||
     !edition.status ||
-    ![SurveyStatusEnum.CLOSED].includes(edition.status);
+    [SurveyStatusEnum.CLOSED].includes(edition.status);
+
   if (readOnly) {
     const readOnlySegment = "read-only";
     pathSegments.push(readOnlySegment);

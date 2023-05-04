@@ -15,7 +15,7 @@ import {
   SURVEY_OPEN,
   SURVEY_PREVIEW,
 } from "@devographics/core-models";
-import { EditionMetadata } from "@devographics/types";
+import { EditionMetadata, SurveyStatusEnum } from "@devographics/types";
 // import { userFromReq } from "~/lib/server/context/userContext";
 
 export default async function saveSurveyResponseHandler(
@@ -57,10 +57,7 @@ export default async function saveSurveyResponseHandler(
       error: `No survey found, surveyId: '${surveyId}', editionId: '${editionId}'`,
     });
   }
-  if (
-    !edition.status ||
-    ![SURVEY_OPEN, SURVEY_PREVIEW].includes(edition.status)
-  ) {
+  if (!edition.status || [SurveyStatusEnum.CLOSED].includes(edition.status)) {
     return res
       .status(400)
       .send({ error: `Survey '${editionId}' is not in open or preview mode.` });
