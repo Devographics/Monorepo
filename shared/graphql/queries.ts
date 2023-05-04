@@ -68,6 +68,7 @@ query SurveysMetadataQuery {
             includeQuestions
                 ? `sections {
           id
+          slug
           questions {
             id
             label
@@ -134,6 +135,7 @@ query ${editionId}MetadataQuery {
           }
           sections {
             id
+            slug
             intlId
             questions {
               id
@@ -238,6 +240,7 @@ query ${editionId}MetadataQuery {
         }
         sections {
           id
+          slug
           intlId
           questions {
             id

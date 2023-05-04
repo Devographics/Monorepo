@@ -87,6 +87,8 @@ type CreditItem {
 
 type SectionMetadata {
     id: String
+    # used to override id when building field paths
+    slug: String
     intlId: String
     questions: [QuestionMetadata]
 }

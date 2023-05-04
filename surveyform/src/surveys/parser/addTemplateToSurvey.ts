@@ -62,13 +62,8 @@ export const applyTemplateToQuestionObject = ({
   question: Question;
   number?: number;
 }): QuestionFormTemplateOutput => {
-  // get template from either question or parent section
   const templateName = question?.template || section?.template;
-  if (!templateName) {
-    throw new Error(
-      `Question ${question.id} does not have a template specified.`
-    );
-  }
+
   const questionTemplate = getTemplate(templateName);
   if (!questionTemplate) {
     throw new Error(`Template ${templateName} does not exist.`);

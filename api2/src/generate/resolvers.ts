@@ -399,7 +399,9 @@ export const questionMetadataResolverMap = {
             }))
         // avoid repeating the options for feature and tool questions
         // since there's so many of them
-        return ['feature', 'tool'].includes(template) ? [] : optionsWithEntities
+        // NOTE: disabled since it does saves a few kb, but at the cost of a lot of downstream complexity
+        // return ['feature', 'tool'].includes(template) ? [] : optionsWithEntities
+        return optionsWithEntities
     }
 }
 

@@ -16,6 +16,7 @@ import type {
   DbPaths,
 } from "@devographics/types";
 import { QuestionFormTemplateOutput } from "./addTemplateToSurvey";
+// import allTemplates from "@devographics/templates";
 
 export interface QuestionFormObject extends QuestionFormTemplateOutput {
   type: NumberConstructor | StringConstructor;
@@ -71,19 +72,37 @@ export const getQuestionObject = ({
   // section: SurveySection
   // number?: number
 }): QuestionFormObject => {
+  let questionObject = question;
   // question.slug = question.id;
   // question.type = String; // default to String type
 
   // question.showOther = question.allowother;
 
-  // apply template to question
+  // get template from either question or parent section
+  const templateName = question?.template || section?.template;
+  if (!templateName) {
+    throw new Error(
+      `Question ${question.id} does not have a template specified.`
+    );
+  }
+
+  // apply core template to question
+  // NOTE: not currently necessary, we get all the data we need from API
+  // const coreTemplate = allTemplates[templateName];
+  // if (coreTemplate) {
+  //   questionObject = coreTemplate({ survey, edition, section, question });
+  // }
+
+  // apply form template to question
   const questionTemplateOutput = applyTemplateToQuestionObject({
     survey,
     edition,
     section,
-    question,
+    question: questionObject,
     number,
   });
+
+  // add extra properties
   const formPaths = getFormPaths({ edition, question });
   const questionFormObject = {
     ...questionTemplateOutput,
