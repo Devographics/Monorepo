@@ -1,12 +1,18 @@
-import { getEditionHomePath } from "~/surveys/helpers";
 import Link from "next/link";
 import { statuses } from "~/surveys/constants";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import Image from "next/image";
 import { getSurveyImageUrl } from "~/surveys/getSurveyImageUrl";
 import { EditionMetadata, SurveyMetadata } from "@devographics/types";
+import { getEditionHomePath, SurveyParamsTable } from "./fetchers";
 
-const EditionItem = ({ edition }: { edition: EditionMetadata }) => {
+const EditionItem = ({
+  edition,
+  homePath,
+}: {
+  edition: EditionMetadata;
+  homePath: string;
+}) => {
   const { survey, year, status } = edition;
   const { name } = survey;
   const imageUrl = getSurveyImageUrl(edition);
@@ -15,7 +21,7 @@ const EditionItem = ({ edition }: { edition: EditionMetadata }) => {
     <div>
       <div className="survey-item">
         <div className="survey-image">
-          <Link href={getEditionHomePath(edition)} className="survey-link">
+          <Link href={homePath} className="survey-link">
             <div className="survey-image-inner">
               {imageUrl && (
                 <Image
@@ -44,9 +50,11 @@ const EditionItem = ({ edition }: { edition: EditionMetadata }) => {
 
 const EditionGroup = ({
   allEditions,
+  surveyParamsTable,
   status,
 }: {
   allEditions: Array<EditionMetadata>;
+  surveyParamsTable: SurveyParamsTable;
   status: string;
 }) => {
   if (!status) throw new Error("SurveyGroup must receive a defined status");
@@ -60,7 +68,11 @@ const EditionGroup = ({
       </h3>
       {filteredEditions.length > 0 ? (
         filteredEditions.map((edition) => (
-          <EditionItem key={edition.id} edition={edition} />
+          <EditionItem
+            key={edition.id}
+            edition={edition}
+            homePath={getEditionHomePath(edition, surveyParamsTable)}
+          />
         ))
       ) : (
         <div className={`surveys-none surveys-no${status}`}>
@@ -71,16 +83,34 @@ const EditionGroup = ({
   );
 };
 
-const Surveys = ({ surveys }: { surveys: Array<SurveyMetadata> }) => {
+const Surveys = ({
+  surveys,
+  surveyParamsTable,
+}: {
+  surveys: Array<SurveyMetadata>;
+  surveyParamsTable: SurveyParamsTable;
+}) => {
   const allEditions = surveys
     .map((survey) => survey.editions.map((e) => ({ ...e, survey })))
     .flat();
   return (
     <div className="surveys">
       {/* FIXME won't load useLocaleContext correctly... <LocaleSelector />*/}
-      <EditionGroup allEditions={allEditions} status={"open"} />
-      <EditionGroup allEditions={allEditions} status={"preview"} />
-      <EditionGroup allEditions={allEditions} status={"closed"} />
+      <EditionGroup
+        surveyParamsTable={surveyParamsTable}
+        allEditions={allEditions}
+        status={"open"}
+      />
+      <EditionGroup
+        surveyParamsTable={surveyParamsTable}
+        allEditions={allEditions}
+        status={"preview"}
+      />
+      <EditionGroup
+        surveyParamsTable={surveyParamsTable}
+        allEditions={allEditions}
+        status={"closed"}
+      />
       {/*<Translators />*/}
     </div>
   );

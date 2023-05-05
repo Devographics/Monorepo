@@ -2,8 +2,9 @@
  * Fetchers optimized for Next.js
  */
 import { notFound } from "next/navigation";
-import { surveyParamsTable } from "~/surveys/helpers";
 import { fetchEditionMetadataSurveyForm } from "@devographics/fetch";
+import { getSurveyParamsTable } from "~/surveys/data";
+
 
 /**
  * Use in metadata
@@ -17,7 +18,7 @@ export async function getSurveyEditionFromUrl(params: {
 }) {
   try {
     const { slug, year } = params;
-    const { surveyId, editionId } = surveyParamsTable[slug][year];
+    const { surveyId, editionId } = (await getSurveyParamsTable())[slug][year];
     const survey = await fetchEditionMetadataSurveyForm({
       surveyId,
       editionId,
@@ -45,3 +46,4 @@ export async function mustGetSurveyEdition(params: {
   }
   return survey;
 }
+

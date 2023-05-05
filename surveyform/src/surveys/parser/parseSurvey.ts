@@ -114,29 +114,6 @@ export const getQuestionObject = ({
   return questionFormObject;
 };
 
-/**
- * Functions that gets a safe unique id per survey edition,
- * taking legacy fields into account
- * @param survey
- * @returns js2022, graphql2022, css2022 etc.
- */
-export function getSurveyEditionId(survey: SurveyEdition) {
-  //console.log("survey", survey)
-  // js2022 etc.
-  const editionId =
-    survey.editionId || survey.surveyId || survey.id || survey.slug;
-  return editionId;
-}
-/**
- * state_of_js
- * @param survey
- * @returns
- */
-export function getSurveyContextId(survey: SurveyEdition) {
-  // state_of_js
-  const surveyId = survey.surveyId || survey.context;
-  return surveyId!;
-}
 
 /** 
 

@@ -253,7 +253,6 @@ export const fetchEditionGraphQLSurveyForm = async ({
 };
 
 export const fetchGraphQLApi = async ({ query }): Promise<any> => {
-    const q = validateGraphqlQuery(query)
     console.debug(`// querying ${getApiUrl()} (${query.slice(0, 15)}...)`)
     const response = await fetch(getApiUrl(), {
         method: "POST",

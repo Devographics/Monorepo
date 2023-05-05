@@ -5,7 +5,7 @@ import { parseEdition } from "~/surveys/parser/parseSurvey";
 
 const EditionContext = createContext<EditionMetadata | undefined>(undefined);
 
-export const SurveyProvider = ({
+export const EditionProvider = ({
   edition,
   children,
 }: {

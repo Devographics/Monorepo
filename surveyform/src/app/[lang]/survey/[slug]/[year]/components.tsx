@@ -66,16 +66,20 @@ export const EditionPage = ({
         </div>
       )}
 
-      <h1 className="survey-image">
-        <Image
-          width={600}
-          height={400}
-          priority={true}
-          src={imageUrl}
-          alt={`${name} ${edition.year}`}
-          quality={100}
-        />
-      </h1>
+      {!!imageUrl && (
+        <h1 className="survey-image">
+          <Image
+            // TODO: width and height are not the wanted size, but a hint to help next optimize the size
+            // investigate using "probe" instead
+            width={600}
+            height={400}
+            priority={true}
+            src={imageUrl}
+            alt={`${name} ${edition.year}`}
+            quality={100}
+          />
+        </h1>
+      )}
       <div className="survey-page-block">
         <div
           className="survey-intro"

@@ -16,28 +16,6 @@ import {
 } from "@devographics/types";
 import { getQuestionObject } from "./parser/parseSurvey";
 
-export const surveyParamsTable = {
-  "state-of-css": {
-    2019: { surveyId: "state_of_css", editionId: "css2019" },
-    2020: { surveyId: "state_of_css", editionId: "css2020" },
-    2021: { surveyId: "state_of_css", editionId: "css2021" },
-    2022: { surveyId: "state_of_css", editionId: "css2022" },
-    2023: { surveyId: "state_of_css", editionId: "css2023" },
-  },
-  "state-of-graphql": {
-    2022: { surveyId: "state_of_css", editionId: "graphql2022" },
-  },
-  "state-of-js": {
-    2016: { surveyId: "state_of_js", editionId: "js2016" },
-    2017: { surveyId: "state_of_js", editionId: "js2017" },
-    2018: { surveyId: "state_of_js", editionId: "js2018" },
-    2019: { surveyId: "state_of_js", editionId: "js2019" },
-    2020: { surveyId: "state_of_js", editionId: "js2020" },
-    2021: { surveyId: "state_of_js", editionId: "js2021" },
-    2022: { surveyId: "state_of_js", editionId: "js2022" },
-    2023: { surveyId: "state_of_js", editionId: "js2023" },
-  },
-};
 
 export const getEditionFieldNames = (edition: EditionMetadata) => {
   let questionFieldNames: Array<string> = [];
@@ -64,46 +42,13 @@ export const getEditionFieldNames = (edition: EditionMetadata) => {
   return fieldNamesWithoutDups;
 };
 
-type ReverseEditionParam = {
-  slugSegment: string;
-  yearSegment: string;
-  surveyId: string;
-  editionId: string;
-};
 
-function getEditionPathSegments(edition: EditionMetadata): Array<string> {
-  const { id: editionId } = edition;
-
-  const reverseEditionsParams = [] as ReverseEditionParam[];
-  for (const slugSegment of Object.keys(surveyParamsTable)) {
-    for (const yearSegment of Object.keys(surveyParamsTable[slugSegment])) {
-      reverseEditionsParams.push({
-        ...surveyParamsTable[slugSegment][yearSegment],
-        slugSegment,
-        yearSegment,
-      });
-    }
-  }
-
-  const reverseParamEntry = reverseEditionsParams.find(
-    (e) => e.editionId === editionId
-  )!;
-  const { slugSegment, yearSegment } = reverseParamEntry;
-  const prefixSegment = "/survey";
-  const pathSegments = [prefixSegment, slugSegment, yearSegment];
-  return pathSegments;
-}
-
-// survey home
-export function getEditionHomePath(edition: EditionMetadata) {
-  return getEditionPathSegments(edition).join("/");
-}
 
 export function getReadOnlyPath({
   survey,
 }: {
   survey: SurveyEditionDescription;
-}) {}
+}) { }
 // specific section path for the form
 export function getEditionSectionPath({
   edition,
@@ -111,6 +56,7 @@ export function getEditionSectionPath({
   response,
   page,
   number,
+  editionPathSegments,
 }: {
   // we only need basic info about the survey
   edition: EditionMetadata;
@@ -121,8 +67,10 @@ export function getEditionSectionPath({
   response?: Partial<Pick<ResponseDocument, "_id" | "id">>;
   number?: any;
   page?: "thanks";
+  /** [state-of-js, 2022] */
+  editionPathSegments: Array<string>
 }) {
-  const pathSegments = getEditionPathSegments(edition);
+  const pathSegments = [...editionPathSegments]
   // survey home
   const readOnly =
     forceReadOnly ||

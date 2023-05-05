@@ -3,7 +3,7 @@ import { captureException } from "@sentry/nextjs";
 import { notFound } from "next/navigation";
 import { EntitiesProvider } from "~/core/components/common/EntitiesContext";
 import { fetchEntitiesRedis } from "~/core/server/fetchEntitiesRedis";
-import { SurveyProvider } from "~/surveys/components/SurveyContext/Provider";
+import { EditionProvider } from "~/surveys/components/SurveyContext/Provider";
 import { initRedis } from "@devographics/redis";
 
 import { LocaleContextProvider } from "~/i18n/context/LocaleContext";
@@ -33,7 +33,7 @@ import { getEditionTitle } from "~/surveys/helpers";
 import { cachedFetchLocaleStrings } from "~/app/[lang]/fetchers";
 import { cache } from "react";
 import { getLocales } from "~/i18n/server/fetchLocalesRedis";
-
+import { EditionPathSegmentsProvider } from "~/surveys/components/EditionPathSegmentsProvider";
 interface SurveyPageServerProps {
   slug: string;
   year: string;
@@ -157,18 +157,24 @@ If this error still happens in a few months (2023) open an issue with repro at N
   `;
 
   return (
-    <SurveyProvider edition={edition}>
-      <style dangerouslySetInnerHTML={{ __html: style }} />
-      <EntitiesProvider entities={entities}>
-        <LocaleContextProvider
-          locales={locales}
-          localeId={localeId}
-          localeStrings={localeWithStrings || { id: "NOT_FOUND", strings: {} }}
-          contexts={i18nContexts}
-        >
-          {children}
-        </LocaleContextProvider>
-      </EntitiesProvider>
-    </SurveyProvider>
+    <EditionProvider edition={edition}>
+      <EditionPathSegmentsProvider
+        editionPathSegments={[params.slug, params.year]}
+      >
+        <style dangerouslySetInnerHTML={{ __html: style }} />
+        <EntitiesProvider entities={entities}>
+          <LocaleContextProvider
+            locales={locales}
+            localeId={localeId}
+            localeStrings={
+              localeWithStrings || { id: "NOT_FOUND", strings: {} }
+            }
+            contexts={i18nContexts}
+          >
+            {children}
+          </LocaleContextProvider>
+        </EntitiesProvider>
+      </EditionPathSegmentsProvider>
+    </EditionProvider>
   );
 }

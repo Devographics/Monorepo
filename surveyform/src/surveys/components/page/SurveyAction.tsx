@@ -20,13 +20,11 @@ import { useUserResponse } from "~/responses/hooks";
 import { Loading } from "~/core/components/ui/Loading";
 import { LoadingButton } from "~/core/components/ui/LoadingButton";
 import { getEditionSectionPath } from "~/surveys/helpers";
-import {
-  getSurveyContextId,
-  getSurveyEditionId,
-} from "~/surveys/parser/parseSurvey";
 import { ErrorObject, startEdition } from "./services";
 import type { EditionMetadata } from "@devographics/types";
 import { ResponseDocument } from "@devographics/core-models";
+import { useEdition } from "../SurveyContext/Provider";
+import { useEditionPathSegments } from "../EditionPathSegmentsProvider";
 
 const duplicateResponseErrorId = "error.duplicate_response";
 
@@ -85,18 +83,13 @@ const EditionAction = ({ edition }: { edition: EditionMetadata }) => {
       } else {
         // 1b. there is a response already
         return (
-          <EditionLink
-            edition={edition}
-            response={response}
-            message="general.continue_survey"
-          />
+          <EditionLink response={response} message="general.continue_survey" />
         );
       }
     } else {
       // 2. the survey is no longer available
       return (
         <EditionLink
-          edition={edition}
           message="general.review_survey"
           {...(hasResponse && { response })}
         />
@@ -110,18 +103,13 @@ const EditionAction = ({ edition }: { edition: EditionMetadata }) => {
         <div className="survey-action-inner">{getSurveyAction()}</div>
       )}
       {parsedErrors && (
-        <Errors
-          edition={edition}
-          parsedErrors={parsedErrors}
-          currentSurveyResponse={response}
-        />
+        <Errors parsedErrors={parsedErrors} currentSurveyResponse={response} />
       )}
     </div>
   );
 };
 
 const SurveyStart = ({
-  edition,
   loading,
   setLoading,
   currentUser,
@@ -133,6 +121,8 @@ const SurveyStart = ({
   currentUser: any;
   setErrors: any;
 }) => {
+  const edition = useEdition();
+  const editionPathSegments = useEditionPathSegments();
   const { id: editionId, surveyId } = edition;
   const router = useRouter();
   const { source, referrer } = useSurveyActionParams();
@@ -175,6 +165,7 @@ const SurveyStart = ({
           const pagePath =
             get(result, `data.startSurvey.data.pagePath`) ||
             getEditionSectionPath({
+              editionPathSegments,
               edition,
               response: result.data,
               number: 1,
@@ -206,23 +197,21 @@ Link to the "naked" survey path or to the actual response
 
 */
 const EditionLink = ({
-  edition,
   response,
   message,
 }: {
-  edition: EditionMetadata;
   response?: ResponseDocument;
   message: string;
 }) => {
-  console.log(response);
-  console.log(getEditionSectionPath({ edition, response }));
+  const edition = useEdition();
+  const editionPathSegments = useEditionPathSegments();
+  console.log("editionLink", { response });
   return (
-    // TODO: see https://www.npmjs.com/package/react-router-bootstrap
-    // We should probably use a NavLink bootstrap component
-    //<LinkContainer to={response.pagePath || getSurveyPath({ survey })}>
-    //</LinkContainer>
     <Link
-      href={response?.pagePath || getEditionSectionPath({ edition, response })}
+      href={
+        response?.pagePath ||
+        getEditionSectionPath({ edition, response, editionPathSegments })
+      }
       type="button"
       className="btn btn-primary"
     >
@@ -231,23 +220,20 @@ const EditionLink = ({
   );
 };
 
-const Errors = ({ edition, parsedErrors, currentSurveyResponse }) => {
+const Errors = ({ parsedErrors, currentSurveyResponse }) => {
   return (
     <>
       {parsedErrors.map((error, i) => (
-        <ErrorItem
-          key={i}
-          error={error}
-          edition={edition}
-          response={currentSurveyResponse}
-        />
+        <ErrorItem key={i} error={error} response={currentSurveyResponse} />
       ))}
     </>
   );
 };
-const ErrorItem = ({ edition, error, response }) => {
-  console.log(error);
+const ErrorItem = ({ error, response }) => {
+  console.log("errorItem", { error });
   const { id, message, properties } = error;
+  const edition = useEdition();
+  const editionPathSegments = useEditionPathSegments();
   return (
     <div className="survey-item-error error message">
       <FormattedMessage id={id} />{" "}
@@ -257,6 +243,7 @@ const ErrorItem = ({ edition, error, response }) => {
             edition,
             // @ts-ignore
             response: { _id: properties.responseId },
+            editionPathSegments,
           })}
         >
           <FormattedMessage id="general.continue_survey" />
