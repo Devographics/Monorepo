@@ -201,6 +201,5 @@ export async function fetchLocaleStrings(variables: LocaleStringsVariables) {
     return convertedLocale as LocaleDefWithStrings;
   }
   // locale not found
-  console.timeEnd(label);
   return null;
 }

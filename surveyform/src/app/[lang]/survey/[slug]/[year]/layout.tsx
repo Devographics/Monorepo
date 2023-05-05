@@ -125,7 +125,7 @@ If this error still happens in a few months (2023) open an issue with repro at N
     ...i18nContexts
   );
   if (!localeWithStrings) {
-    throw new Error(
+    console.warn(
       `Could not get locales for id ${localeId} and context ${i18nContexts}`
     );
   }
@@ -137,7 +137,8 @@ If this error still happens in a few months (2023) open an issue with repro at N
   // (not useful in static mode though)
   let entities = [];
   try {
-    const redisEntities = await fetchEntitiesRedis(edition.editionId);
+    console.log("edition", edition.surveyId);
+    const redisEntities = await fetchEntitiesRedis(edition.surveyId); //.editionId);
     if (!redisEntities) throw new Error("Entities not found in Redis");
     entities = redisEntities;
   } catch (err) {
@@ -162,7 +163,7 @@ If this error still happens in a few months (2023) open an issue with repro at N
         <LocaleContextProvider
           locales={locales}
           localeId={localeId}
-          localeStrings={localeWithStrings}
+          localeStrings={localeWithStrings || { id: "NOT_FOUND", strings: {} }}
           contexts={i18nContexts}
         >
           {children}

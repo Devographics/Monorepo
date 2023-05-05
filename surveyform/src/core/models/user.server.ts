@@ -18,7 +18,6 @@ import {
   UserType as UserTypeShared,
   NewUserDocument,
 } from "./user";
-import { restrictDocuments } from "@vulcanjs/permissions";
 import { ResponseMongoCollection } from "~/responses/model.server";
 import mongoose from "mongoose";
 
