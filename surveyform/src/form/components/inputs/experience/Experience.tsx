@@ -49,8 +49,9 @@ export const Experience = (props: ExperienceProps) => {
   // open the comment widget if there is already a comment
   const [showCommentInput, setShowCommentInput] = useState(!!commentValue);
 
-  const entities = useEntities();
-  const entity = entities?.find((e) => e.id === questionId);
+  // const entities = useEntities();
+  // const entity = entities?.find((e) => e.id === questionId);
+  const entity = questionObject.entity;
 
   return (
     <FormItem

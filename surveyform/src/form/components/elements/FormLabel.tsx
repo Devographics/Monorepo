@@ -21,6 +21,7 @@ export const FormLabel = ({
   path,
   year,
   entity,
+  questionObject,
   inputProperties,
 }: FormLabelProps) => {
   const intl = useIntlContext();
@@ -38,7 +39,7 @@ export const FormLabel = ({
   return (
     <h3 className="form-label-heading">
       <Form.Label {...labelProps}>
-        <EntityLabel {...entityProps} entity={entity} />
+        <EntityLabel {...entityProps} entity={questionObject.entity} />
         {year === 2022 && (
           <span
             className="question-label-new"

@@ -19,25 +19,30 @@ interface EntityLabelDefinition {
 }
 export interface EntityLabelProps extends EntityLabelDefinition, StringLabel {}
 
-const EntityLabel = ({ id, intlId, label, fallback }: EntityLabelProps) => {
-  const entities = useEntities();
-  const entity = entities?.find((e) => e.id === id);
+const EntityLabel = ({
+  id,
+  entity,
+  intlId,
+  label,
+  fallback,
+}: EntityLabelProps) => {
+  // const entities = useEntities();
+  // const entity = entities?.find((e) => e.id === id);
 
-  // string label
-  if (label) {
+  if (entity) {
+    const { name, nameClean, nameHtml } = entity;
+    return (
+      <span
+        className="entity-label"
+        dangerouslySetInnerHTML={{ __html: nameHtml || nameClean }}
+      />
+    );
+  } else if (label) {
     // if label is provided, use that
     return (
       <span
         className="entity-label entity-label-i18n"
         dangerouslySetInnerHTML={{ __html: label }}
-      />
-    );
-  } else if (entity) {
-    const { name, nameHtml } = entity;
-    return (
-      <span
-        className="entity-label"
-        dangerouslySetInnerHTML={{ __html: nameHtml || name }}
       />
     );
   } else {
