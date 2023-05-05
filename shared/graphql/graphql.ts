@@ -9,6 +9,7 @@ import {
     getEditionQuery,
     getEditionQuerySurveyForm,
 } from "./queries";
+import gql from "graphql-tag";
 
 type IndentStringOptions = { indent?: string; includeEmptyLines?: boolean };
 
@@ -218,12 +219,18 @@ export const getApiUrl = () => {
     return apiUrl;
 };
 
+/**
+ * If connecting to the local API instance, will also include the demo survey
+ * /!\ if you run the production version of the API locally, you may need to reset your Redis cache
+ * to get the demo survey back
+ * @param param0 
+ * @returns 
+ */
 export const fetchSurveysListGraphQL = async ({
     includeQuestions,
-    keepDemo,
 }): Promise<Array<SurveyMetadata>> => {
     const query = getSurveysQuery({ includeQuestions });
-    const result = await fetchGraphQL({ query });
+    const result = await fetchGraphQLApi({ query });
     return result._metadata.surveys as SurveyMetadata[];
 };
 
@@ -232,7 +239,7 @@ export const fetchEditionGraphQL = async ({
     editionId,
 }): Promise<EditionMetadata> => {
     const query = getEditionQuery({ surveyId, editionId });
-    const result = await fetchGraphQL({ query });
+    const result = await fetchGraphQLApi({ query });
     return result._metadata.surveys[0].editions[0];
 };
 
@@ -241,11 +248,13 @@ export const fetchEditionGraphQLSurveyForm = async ({
     editionId,
 }): Promise<EditionMetadata> => {
     const query = getEditionQuerySurveyForm({ surveyId, editionId });
-    const result = await fetchGraphQL({ query });
+    const result = await fetchGraphQLApi({ query });
     return result._metadata.surveys[0].editions[0];
 };
 
-export const fetchGraphQL = async ({ query }): Promise<any> => {
+export const fetchGraphQLApi = async ({ query }): Promise<any> => {
+    const q = validateGraphqlQuery(query)
+    console.debug(`// querying ${getApiUrl()} (${query.slice(0, 15)}...)`)
     const response = await fetch(getApiUrl(), {
         method: "POST",
         headers: {
@@ -253,6 +262,8 @@ export const fetchGraphQL = async ({ query }): Promise<any> => {
             Accept: "application/json",
         },
         body: JSON.stringify({ query, variables: {} }),
+        // always get a fresh answer
+        cache: "no-store"
     });
     const json: any = await response.json();
     if (json.errors) {

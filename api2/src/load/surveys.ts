@@ -218,7 +218,8 @@ export const loadSurveys = async () => {
 
 export const initSurveys = async () => {
     console.log('// initializing surveys')
-    const surveys = await loadOrGetSurveys({ forceReload: true })
+    const isDevOrTest = !!(process.env.NODE_ENV && ["test", "development"].includes(process.env.NODE_ENV))
+    const surveys = await loadOrGetSurveys({ forceReload: true, includeDemo: isDevOrTest })
     logToFile('surveys.json', surveys, { mode: 'overwrite' })
     return surveys
 }

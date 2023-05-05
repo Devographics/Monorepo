@@ -86,17 +86,15 @@ export async function fetchEditionMetadataSurveyForm({
 const surveysMetadataKey = ({ context }: { context: string }) =>
     `${context}__allSurveys__metadata`;
 
-export const fetchSurveysMetadata = async ({
-    keepDemo,
-    isDevOrTest,
-}: {
-    keepDemo?: boolean;
-    isDevOrTest?: boolean;
-}): Promise<Array<SurveyMetadata>> => {
+/**
+ * When connecting to the dev API, will get the demo survey
+ * @returns 
+ */
+export const fetchSurveysMetadata = async (): Promise<Array<SurveyMetadata>> => {
     const key = surveysMetadataKey({ context: SURVEY_FORM_CONTEXT });
     return await getFromCache<Array<SurveyMetadata>>(
         key,
         async () =>
-            await fetchSurveysListGraphQL({ includeQuestions: false, keepDemo })
+            await fetchSurveysListGraphQL({ includeQuestions: false })
     );
 };

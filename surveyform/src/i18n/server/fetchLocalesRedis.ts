@@ -82,7 +82,7 @@ const fetchLocaleStringsRedis = async (variables: LocaleStringsVariables) => {
     };
     return locale;
   } catch (error) {
-    console.log("// JSON parsing error");
+    console.log(`JSON parsing error when fetching locale ${JSON.stringify(variables)}`);
     console.log(valueArray);
   }
 };

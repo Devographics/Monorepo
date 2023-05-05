@@ -93,7 +93,8 @@ const start = async () => {
     const entities = await loadOrGetEntities({})
     const context = { db, redisClient }
 
-    const surveys = await loadOrGetSurveys()
+    const isDevOrTest = !!(process.env.NODE_ENV && ["test", "development"].includes(process.env.NODE_ENV))
+    const surveys = await loadOrGetSurveys({ includeDemo: isDevOrTest })
     const questionObjects = getQuestionObjects({ surveys })
 
     const parsedSurveys = parseSurveys({ surveys, questionObjects })
