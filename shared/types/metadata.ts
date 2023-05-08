@@ -14,6 +14,7 @@ export interface SurveyMetadata extends Omit<Survey, 'editions'> {
 
 export interface EditionMetadata extends Omit<Edition, 'sections'> {
     sections: SectionMetadata[]
+    /** js2019 */
     surveyId: string
     survey: SurveyMetadata
 }

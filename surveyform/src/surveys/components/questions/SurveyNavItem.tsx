@@ -2,7 +2,6 @@
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
-import type { SurveySection, SurveyEdition } from "@devographics/core-models";
 import { ResponseDocument } from "@devographics/core-models";
 import { getSectionCompletionPercentage } from "~/responses/helpers";
 import { useFormContext } from "@devographics/react-form";
@@ -10,10 +9,10 @@ import { getEditionSectionPath } from "~/surveys/helpers";
 import { useRouter } from "next/navigation";
 import { captureException } from "@sentry/nextjs";
 import { saveSurvey } from "../page/services";
-import { EditionMetadata, SectionMetadata } from "@devographics/types";
+import { SectionMetadata } from "@devographics/types";
+import { useEdition } from "../SurveyContext/Provider";
 
 const SurveyNavItem = ({
-  edition,
   response,
   section,
   number,
@@ -23,7 +22,6 @@ const SurveyNavItem = ({
   setNavLoading,
   readOnly,
 }: {
-  edition: EditionMetadata;
   response: ResponseDocument;
   section: SectionMetadata;
   number: any;
@@ -36,6 +34,7 @@ const SurveyNavItem = ({
 }) => {
   const router = useRouter();
   const textInput = useRef<any>(null);
+  const { edition, editionHomePath, editionPathSegments } = useEdition();
   const completion = getSectionCompletionPercentage({
     edition,
     section,
@@ -66,7 +65,9 @@ const SurveyNavItem = ({
       captureException(res.error);
     }
     setNavLoading(false);
-    router.push(getEditionSectionPath({ edition, response, number }));
+    router.push(
+      getEditionSectionPath({ edition, response, number, editionPathSegments })
+    );
   };
 
   return (
@@ -79,6 +80,7 @@ const SurveyNavItem = ({
           number,
           forceReadOnly: readOnly,
           response,
+          editionPathSegments,
         })}
         ref={textInput}
         tabIndex={currentTabindex === number ? 0 : -1}

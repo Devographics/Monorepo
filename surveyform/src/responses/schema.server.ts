@@ -12,22 +12,16 @@ import { getCommentSchema, schema } from "./schema";
 import { getEditionSectionPath } from "~/surveys/helpers";
 import {
   extendSchemaServer,
-  ResponseDocument,
-  SurveyEdition,
 } from "@devographics/core-models";
 
 import { nanoid } from "nanoid";
 import { ApiContext } from "~/lib/server/context";
-import { fetchSurveysMetadata } from "@devographics/fetch";
-import { SurveyEditionDescription } from "@devographics/core-models";
 import cloneDeep from "lodash/cloneDeep.js";
 import {
   getQuestionObject,
-  getSurveyEditionId,
 } from "~/surveys/parser/parseSurvey";
 import { VulcanFieldSchema } from "@vulcanjs/schema";
-import { serverConfig } from "~/config/server";
-import { Edition, EditionMetadata } from "@devographics/types";
+import { EditionMetadata } from "@devographics/types";
 import { fetchEditionMetadataSurveyForm } from "@devographics/fetch";
 
 export const getServerSchema = (): VulcanGraphqlSchemaServer => {
@@ -146,7 +140,8 @@ export const getServerSchema = (): VulcanGraphqlSchemaServer => {
             editionId,
           });
           if (!edition) return null;
-          return getEditionSectionPath({ edition, response });
+          // TODO: editionPathSegments should be more reliable
+          return getEditionSectionPath({ edition, response, editionPathSegments: [edition.surveyId.replace("_", "-"), edition.year] });
         },
       },
     },

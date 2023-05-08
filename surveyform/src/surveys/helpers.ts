@@ -113,3 +113,49 @@ export const getEditionTitle = ({
 
 export const getSectionKey = (section: SectionMetadata, keyType = "title") =>
   `sections.${section.intlId || section.id}.${keyType}`;
+
+
+type ReverseEditionParam = {
+  slugSegment: string;
+  yearSegment: string;
+  surveyId: string;
+  editionId: string;
+};
+export type SurveyParamsTable = {
+  [slug: string]: {
+    [year: number]: {
+      surveyId: string,
+      editionId: string
+    }
+  }
+}
+
+// js2022 => [state-of-js, 2022]
+function getEditionPathSegments(edition: EditionMetadata, surveyParamsTable: SurveyParamsTable): Array<string> {
+  const { id: editionId } = edition;
+  const reverseEditionsParams = [] as ReverseEditionParam[];
+  for (const slugSegment of Object.keys(surveyParamsTable)) {
+    for (const yearSegment of Object.keys(surveyParamsTable[slugSegment])) {
+      reverseEditionsParams.push({
+        ...surveyParamsTable[slugSegment][yearSegment],
+        slugSegment,
+        yearSegment,
+      });
+    }
+  }
+
+  const reverseParamEntry = reverseEditionsParams.find(
+    (e) => e.editionId === editionId
+  )!;
+  if (!reverseParamEntry) {
+    console.debug({ reverseEditionsParams })
+    throw new Error(`Could not get reverseParamEntry for edition ${editionId}.`)
+  }
+  const { slugSegment, yearSegment } = reverseParamEntry;
+  const prefixSegment = "/survey";
+  const pathSegments = [prefixSegment, slugSegment, yearSegment];
+  return pathSegments;
+}
+export function getEditionHomePath(edition: EditionMetadata, surveyParamsTable: SurveyParamsTable) {
+  return getEditionPathSegments(edition, surveyParamsTable).join("/");
+}

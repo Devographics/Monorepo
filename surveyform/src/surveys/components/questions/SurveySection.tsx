@@ -1,3 +1,4 @@
+"use client";
 import SurveySectionContents from "./SurveySectionContents";
 import EditionMessage from "../SurveyMessage";
 import { useSurveyResponseSectionParams } from "../hooks";
@@ -5,7 +6,7 @@ import { useEdition } from "../SurveyContext/Provider";
 
 const SurveySection = () => {
   let { responseId, sectionNumber = 1 } = useSurveyResponseSectionParams();
-  const edition = useEdition();
+  const { edition } = useEdition();
 
   const sections = edition.sections;
   const sectionIndex = sectionNumber - 1;

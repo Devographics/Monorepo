@@ -632,6 +632,7 @@ importers:
     specifiers:
       '@devographics/graphql': workspace:^1.0.0
       '@devographics/redis': workspace:^1.0.0
+      '@devographics/types': workspace:^1.0.0
       '@types/node': ^18.11.18
       ioredis: ^5.2.4
       lodash: ^4.17.21
@@ -639,6 +640,7 @@ importers:
     dependencies:
       '@devographics/graphql': link:../graphql
       '@devographics/redis': link:../redis
+      '@devographics/types': link:../types
       ioredis: 5.2.4
       lodash: 4.17.21
       node-cache: 5.1.2
@@ -652,7 +654,6 @@ importers:
       '@types/node': ^18.11.18
       '@vulcanjs/graphql': ^0.7.1
       '@vulcanjs/mongo': ^0.7.1
-      graphql: ^16.6.0
       graphql-tag: ^2.12.6
       ioredis: ^5.2.4
       js-yaml: ^4.1.0
@@ -664,10 +665,9 @@ importers:
     dependencies:
       '@devographics/types': link:../types
       '@types/lodash': 4.14.191
-      '@vulcanjs/graphql': 0.7.1_42u3nf6ijcxs5jahjtnvmf45lm
+      '@vulcanjs/graphql': 0.7.1_moment@2.29.4
       '@vulcanjs/mongo': 0.7.1_bvxyc23qcdm36i55ezkcrpiirq
-      graphql: 16.6.0
-      graphql-tag: 2.12.6_graphql@16.6.0
+      graphql-tag: 2.12.6
       ioredis: 5.2.4
       js-yaml: 4.1.0
       lodash: 4.17.21
@@ -779,9 +779,11 @@ importers:
 
   shared/redis:
     specifiers:
+      '@devographics/types': workspace:*
       '@types/node': ^18.11.18
       ioredis: ^5.2.4
     dependencies:
+      '@devographics/types': link:../types
       ioredis: 5.2.4
     devDependencies:
       '@types/node': 18.11.18
@@ -10619,7 +10621,6 @@ packages:
       '@babel/runtime': 7.20.7
       '@types/testing-library__react-hooks': 3.4.1
       react: 18.2.0
-    dev: false
     optional: true
 
   /@testing-library/react/10.4.9_biqbaboplfbrettd7655fr4n2y:
@@ -12246,37 +12247,6 @@ packages:
     transitivePeerDependencies:
       - encoding
       - react
-      - react-dom
-      - supports-color
-    dev: false
-
-  /@vulcanjs/graphql/0.7.1_42u3nf6ijcxs5jahjtnvmf45lm:
-    resolution: {integrity: sha512-ywiAmhrO9p8YLqCL+J0y6bxmsb9crloGavVxQ43Moqdj1oodCSvkNaM+pzIsdNQZ9bbX8t+wwgtXcqTMbpjNjw==}
-    peerDependencies:
-      '@apollo/client': ^3.5.5
-      apollo-server: ^2.18.2
-      graphql: ^16.2.0
-      react: ^17.0.1
-    dependencies:
-      '@vulcanjs/crud': 0.7.1_moment@2.29.4
-      '@vulcanjs/i18n': 0.7.1_moment@2.29.4
-      '@vulcanjs/model': 0.7.1
-      '@vulcanjs/permissions': 0.7.1
-      '@vulcanjs/schema': 0.7.1
-      '@vulcanjs/utils': 0.7.1_moment@2.29.4
-      apollo-datasource: 3.3.2
-      debug: 4.3.4
-      deepmerge: 4.2.2
-      graphql: 16.6.0
-      graphql-date: 1.0.3_graphql@16.6.0
-      graphql-type-json: 0.3.2_graphql@16.6.0
-      lodash: 4.17.21
-      moment-timezone: 0.5.37
-    optionalDependencies:
-      msw: 0.35.0
-    transitivePeerDependencies:
-      - encoding
-      - moment
       - react-dom
       - supports-color
     dev: false
@@ -20846,7 +20816,7 @@ packages:
       debug:
         optional: true
     dependencies:
-      debug: 4.3.4
+      debug: 4.3.4_supports-color@6.1.0
     dev: false
 
   /for-each/0.3.3:

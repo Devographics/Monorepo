@@ -25,7 +25,8 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "ioredis": "^5.2.4"
+        "ioredis": "^5.2.4",
+        "@devographics/types": "workspace:*"
     },
     "devDependencies": {
         "@types/node": "^18.11.18"

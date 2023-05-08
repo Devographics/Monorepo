@@ -27,6 +27,7 @@
     "dependencies": {
         "@devographics/graphql": "workspace:^1.0.0",
         "@devographics/redis": "workspace:^1.0.0",
+        "@devographics/types": "workspace:^1.0.0",
         "ioredis": "^5.2.4",
         "lodash": "^4.17.21",
         "node-cache": "^5.1.2"

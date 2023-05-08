@@ -1,14 +1,5 @@
-import type {
-  Field,
-  SurveySection,
-  SurveyEdition,
-} from "@devographics/core-models";
 import { applyTemplateToQuestionObject } from "./addTemplateToSurvey";
 import type {
-  Survey,
-  Edition,
-  Section,
-  Question,
   EditionMetadata,
   SectionMetadata,
   QuestionMetadata,
@@ -128,7 +119,6 @@ export const parseEdition = (edition: EditionMetadata) => {
   const survey = { id: edition.surveyId } as SurveyMetadata;
   const parsedEdition = {
     ...edition,
-    createdAt: edition.createdAt ? new Date(edition.createdAt) : undefined,
   };
   parsedEdition.sections = edition.sections.map((section) => {
     const questions = section.questions.map((question) => {

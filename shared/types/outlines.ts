@@ -1,6 +1,7 @@
 import { DbPaths } from './api'
 
 export interface SurveyConfig {
+    /** state-of-js */
     id: string
     name: string
     domain: string
@@ -31,6 +32,8 @@ export type Edition = {
     id: string
     sections: Section[]
     apiSections: Section[]
+    // TODO: maybe we should use a string here, so we can have "Summer 2023" instead of "2023"
+    // it's never really used as a number in the code
     year: number
     credits: Credit[]
     resultsUrl: string

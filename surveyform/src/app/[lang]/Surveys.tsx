@@ -4,7 +4,7 @@ import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import Image from "next/image";
 import { getSurveyImageUrl } from "~/surveys/getSurveyImageUrl";
 import { EditionMetadata, SurveyMetadata } from "@devographics/types";
-import { getEditionHomePath, SurveyParamsTable } from "./fetchers";
+import { getEditionHomePath, SurveyParamsTable } from "~/surveys/helpers";
 
 const EditionItem = ({
   edition,

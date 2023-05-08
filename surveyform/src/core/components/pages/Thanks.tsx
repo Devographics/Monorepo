@@ -17,7 +17,7 @@ export const Thanks = ({
   //response?: ResponseDocument;
   readOnly?: boolean;
 }) => {
-  const edition = useEdition();
+  const { edition, editionPathSegments } = useEdition();
   const imageUrl = getSurveyImageUrl(edition);
   const { survey, year } = edition;
   const { name } = survey;
@@ -51,6 +51,7 @@ export const Thanks = ({
               response,
               forceReadOnly: readOnly,
               number: edition.sections.length,
+              editionPathSegments,
             })}
           >
             « <FormattedMessage id="general.back" />

@@ -31,7 +31,8 @@ export async function generateMetadata({
     };
   }
   const { localeId, localeWithStrings } = loc;
-  const { name = "", year = "" } = edition;
+  const { name = "" } = edition.survey;
+  const { year } = edition;
   // localized description
   // similar to how we get translated strings client-side
   const stringsRegistry = new StringsRegistry(localeId);

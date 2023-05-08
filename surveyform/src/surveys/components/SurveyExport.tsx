@@ -7,8 +7,9 @@ import { useEntities } from "~/core/components/common/EntitiesContext";
 import { useEdition } from "./SurveyContext/Provider";
 
 const SurveyExport = () => {
-  const survey = useEdition();
-  return <SurveyMarkdownOutline survey={survey} />;
+  const { edition } = useEdition();
+  // @ts-ignore
+  return <SurveyMarkdownOutline survey={edition} />;
 };
 
 export const SurveyMarkdownOutline = ({
@@ -37,7 +38,8 @@ export const SurveyMarkdownOutline = ({
         style={{ width: 800, height: 600 }}
         value={convertSurveyToMarkdown({
           formatMessage: intl.formatMessage,
-          survey,
+          // @ts-ignore
+          survey: edition,
           entities,
           options: {
             showFieldName,

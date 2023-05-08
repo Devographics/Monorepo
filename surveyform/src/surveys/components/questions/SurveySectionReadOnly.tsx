@@ -1,10 +1,11 @@
+"use client";
 import SurveySectionContents from "./SurveySectionContents";
 import EditionMessage from "../SurveyMessage";
 import { useEdition } from "../SurveyContext/Provider";
 import { useSection } from "../SectionContext/SectionProvider";
 
 const SurveySectionReadOnly = () => {
-  const edition = useEdition();
+  const { edition } = useEdition();
   const sectionNumber = useSection();
   const sections = edition.sections;
   const sectionIndex = sectionNumber - 1;

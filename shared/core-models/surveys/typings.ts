@@ -75,10 +75,10 @@ export interface ParsedQuestion extends Pick<Field, "template"> {
   input?: any;
   intlId?: string;
   options?:
-    | ((
-        props: any
-      ) => Array<{ value?: string | number; intlId?: string; label?: string }>)
-    | Array<{ value?: string | number; intlId?: string; label?: string }>;
+  | ((
+    props: any
+  ) => Array<{ value?: string | number; intlId?: string; label?: string }>)
+  | Array<{ value?: string | number; intlId?: string; label?: string }>;
   query?: () => any;
   queryWaitsForValue?: boolean;
   sectionSlug?: string;
@@ -265,3 +265,12 @@ export type HydratedSurveyEdition = Omit<
   createdAt?: Date;
   updatedAt?: Date;
 };
+
+/**
+ * 1 preview
+ * 2 open
+ * 3 closed
+ * 4 hidden
+ */
+export type SurveyStatus = 1 | 2 | 3 | 4;
+export type SurveyStatusLabel = "preview" | "open" | "closed" | "hidden";

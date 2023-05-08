@@ -22,8 +22,7 @@ let models: Array<VulcanGraphqlModelServer> = [];
 export const getServerModels = async () => {
   if (models.length) return models;
   initRedis(serverConfig().redisUrl);
-  const isDevOrTest = serverConfig().isTest || serverConfig().isDev;
-  const surveyList = await fetchSurveysMetadata({ isDevOrTest });
+  const surveyList = await fetchSurveysMetadata();
   const editions = await Promise.all(
     surveyList
       .map((survey) => survey.editions)

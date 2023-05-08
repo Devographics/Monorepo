@@ -24,7 +24,6 @@ import { ErrorObject, startEdition } from "./services";
 import type { EditionMetadata } from "@devographics/types";
 import { ResponseDocument } from "@devographics/core-models";
 import { useEdition } from "../SurveyContext/Provider";
-import { useEditionPathSegments } from "../EditionPathSegmentsProvider";
 
 const duplicateResponseErrorId = "error.duplicate_response";
 
@@ -121,8 +120,7 @@ const SurveyStart = ({
   currentUser: any;
   setErrors: any;
 }) => {
-  const edition = useEdition();
-  const editionPathSegments = useEditionPathSegments();
+  const { edition, editionPathSegments } = useEdition();
   const { id: editionId, surveyId } = edition;
   const router = useRouter();
   const { source, referrer } = useSurveyActionParams();
@@ -203,8 +201,7 @@ const EditionLink = ({
   response?: ResponseDocument;
   message: string;
 }) => {
-  const edition = useEdition();
-  const editionPathSegments = useEditionPathSegments();
+  const { edition, editionPathSegments } = useEdition();
   console.log("editionLink", { response });
   return (
     <Link
@@ -232,8 +229,7 @@ const Errors = ({ parsedErrors, currentSurveyResponse }) => {
 const ErrorItem = ({ error, response }) => {
   console.log("errorItem", { error });
   const { id, message, properties } = error;
-  const edition = useEdition();
-  const editionPathSegments = useEditionPathSegments();
+  const { edition, editionPathSegments } = useEdition();
   return (
     <div className="survey-item-error error message">
       <FormattedMessage id={id} />{" "}

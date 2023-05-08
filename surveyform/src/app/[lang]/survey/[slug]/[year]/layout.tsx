@@ -29,11 +29,11 @@ export async function generateStaticParams() {
 
 import { getSurveyImageUrl } from "~/surveys/getSurveyImageUrl";
 import { publicConfig } from "~/config/public";
-import { getEditionTitle } from "~/surveys/helpers";
+import { getEditionHomePath, getEditionTitle } from "~/surveys/helpers";
 import { cachedFetchLocaleStrings } from "~/app/[lang]/fetchers";
 import { cache } from "react";
 import { getLocales } from "~/i18n/server/fetchLocalesRedis";
-import { EditionPathSegmentsProvider } from "~/surveys/components/EditionPathSegmentsProvider";
+import { getSurveyParamsTable } from "~/surveys/data";
 interface SurveyPageServerProps {
   slug: string;
   year: string;
@@ -96,6 +96,7 @@ export default async function SurveyLayout({
   initRedis(serverConfig().redisUrl);
 
   const edition = await mustGetSurveyEdition(params);
+  const surveyParamsTable = await getSurveyParamsTable();
   // survey specific strings
   const localeId = params.lang;
   if (localeId.includes(".")) {
@@ -157,24 +158,24 @@ If this error still happens in a few months (2023) open an issue with repro at N
   `;
 
   return (
-    <EditionProvider edition={edition}>
-      <EditionPathSegmentsProvider
-        editionPathSegments={[params.slug, params.year]}
-      >
-        <style dangerouslySetInnerHTML={{ __html: style }} />
-        <EntitiesProvider entities={entities}>
-          <LocaleContextProvider
-            locales={locales}
-            localeId={localeId}
-            localeStrings={
-              localeWithStrings || { id: "NOT_FOUND", strings: {} }
-            }
-            contexts={i18nContexts}
-          >
-            {children}
-          </LocaleContextProvider>
-        </EntitiesProvider>
-      </EditionPathSegmentsProvider>
+    <EditionProvider
+      edition={edition}
+      editionPathSegments={[params.slug, params.year]}
+      editionHomePath={getEditionHomePath(edition, surveyParamsTable)}
+      surveySlug={params.slug}
+      editionSlug={params.year}
+    >
+      <style dangerouslySetInnerHTML={{ __html: style }} />
+      <EntitiesProvider entities={entities}>
+        <LocaleContextProvider
+          locales={locales}
+          localeId={localeId}
+          localeStrings={localeWithStrings || { id: "NOT_FOUND", strings: {} }}
+          contexts={i18nContexts}
+        >
+          {children}
+        </LocaleContextProvider>
+      </EntitiesProvider>
     </EditionProvider>
   );
 }

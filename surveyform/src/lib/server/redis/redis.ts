@@ -1,7 +1,4 @@
 import { initRedis } from "@devographics/redis";
-
-import { captureMessage, init } from "@sentry/node";
-import Redis from "ioredis";
 import { serverConfig } from "~/config/server";
 
 /**

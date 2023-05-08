@@ -7,12 +7,7 @@ import NodeCache from "node-cache";
 import {
     fetchJson,
     storeRedis,
-    fetchEditionRedis,
-    fetchSurveysListRedis,
-    storeSurveyRedis,
-    storeSurveysListRedis,
 } from "@devographics/redis";
-import orderBy from "lodash/orderBy.js";
 import { SurveyMetadata, EditionMetadata } from "@devographics/types";
 import {
     fetchEditionGraphQLSurveyForm,

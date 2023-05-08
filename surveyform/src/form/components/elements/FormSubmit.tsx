@@ -2,18 +2,17 @@
 import { useFormContext } from "@devographics/react-form";
 import { useEffect } from "react";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
-import { SurveyEdition, SurveySection } from "@devographics/core-models";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { LoadingButton } from "~/core/components/ui/LoadingButton";
 import { captureException } from "@sentry/nextjs";
 import { saveSurvey } from "~/surveys/components/page/services";
 import { getEditionSectionPath } from "~/surveys/helpers";
 import { useResponse } from "~/surveys/components/ResponseContext/ResponseProvider";
-import { EditionMetadata, SectionMetadata } from "@devographics/types";
+import { SectionMetadata } from "@devographics/types";
+import { useEdition } from "~/surveys/components/SurveyContext/Provider";
+import Link from "next/link";
 
 const FormSubmit = ({
-  edition,
   // response,
   sectionNumber,
   nextSection,
@@ -26,16 +25,16 @@ const FormSubmit = ({
   nextLoading,
   setNextLoading,
 }: {
-  edition: EditionMetadata;
   nextSection?: SectionMetadata;
   prevSection?: SectionMetadata;
 } & any) => {
+  const { edition, editionPathSegments } = useEdition();
   const router = useRouter();
   const formContext = useFormContext();
   const { getDocument, currentValues } = formContext;
   const response = useResponse();
 
-  const pathProps = { readOnly, edition, response };
+  const pathProps = { readOnly, edition, response, editionPathSegments };
   const nextPath = nextSection
     ? getEditionSectionPath({
         ...pathProps,

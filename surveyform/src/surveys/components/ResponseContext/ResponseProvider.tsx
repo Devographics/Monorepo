@@ -2,13 +2,16 @@
 import { ResponseDocument } from "@devographics/core-models";
 import React, { createContext, useContext } from "react";
 
-const ResponseContext = createContext<ResponseDocument | undefined>(undefined);
+const ResponseContext = createContext<Pick<ResponseDocument, "id"> | undefined>(
+  undefined
+);
 
 export const ResponseProvider = ({
   response,
   children,
 }: {
-  response: ResponseDocument;
+  // TODO: should be the full response fetched server-side
+  response: Pick<ResponseDocument, "id">;
   children: React.ReactNode;
 }) => {
   return (

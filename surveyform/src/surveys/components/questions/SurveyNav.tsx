@@ -13,14 +13,12 @@ TODO
 import { useFormContext } from "@devographics/react-form";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { getEditionHomePath } from "~/surveys/helpers";
-import type { SurveyEdition } from "@devographics/core-models";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import SurveyNavItem from "~/surveys/components/questions/SurveyNavItem";
 import { getCompletionPercentage } from "~/responses/helpers";
 import { Button } from "~/core/components/ui/Button";
 import { Loading } from "~/core/components/ui/Loading";
-import { EditionMetadata } from "@devographics/types";
+import { useEdition } from "../SurveyContext/Provider";
 
 // TODO
 // const getOverallCompletionPercentage = (response) => {
@@ -28,18 +26,17 @@ import { EditionMetadata } from "@devographics/types";
 // }
 
 const SurveyNav = ({
-  edition,
   // response,
   navLoading,
   setNavLoading,
   readOnly,
 }: {
-  edition: EditionMetadata;
   // response?: any;
   navLoading?: boolean;
   setNavLoading?: any;
   readOnly?: boolean;
 }) => {
+  const { edition, editionHomePath } = useEdition();
   const formContext = useFormContext();
   const { getDocument } = formContext;
 
@@ -95,7 +92,7 @@ const SurveyNav = ({
     >
       <div className="section-nav-inner">
         <h2 className="section-nav-heading">
-          <Link href={getEditionHomePath(edition)}>
+          <Link href={editionHomePath}>
             {edition.survey.name} {edition.year}
           </Link>
         </h2>
@@ -121,7 +118,6 @@ const SurveyNav = ({
           <ul>
             {sections.map((section, i) => (
               <SurveyNavItem
-                edition={edition}
                 setShown={setShown}
                 response={response}
                 section={section}

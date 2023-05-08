@@ -25,19 +25,6 @@ export const getRedisClient = () => {
 // This TTL can be long (multiple hours) since we can manually invalidate Redis cache if needed
 const TTL_SECONDS = 60 * 60 * 2;
 
-// export function storeRedis(key: string) {
-//     return async function <T = any>(val: T extends Promise<unknown> ? never : T): Promise<boolean> {
-//         const redisClient = getRedisClient()
-//         // EX = Expiration time in seconds
-//         const res = await redisClient.set(key, JSON.stringify(val), 'EX', TTL_SECONDS)
-//         if (res !== 'OK') {
-//             console.error("Can't store JSON into Redis, error:" + res)
-//             return false
-//         }
-//         return true
-//     }
-// }
-
 export async function storeRedis<T>(key: string, val: T): Promise<boolean> {
     const redisClient = getRedisClient();
     // EX = Expiration time in seconds
@@ -88,26 +75,7 @@ export async function fetchEditionRedis(
     const survey = fetchJson<EditionMetadata>(key);
     return survey;
 }
-export const storeSurveyRedis = (args: {
-    surveyId: string;
-    editionId: string;
-}) => storeRedis(editionKey(args));
-
-const surveyListKey = `surveyform_surveys_descriptions`;
-/// Surveys list
-
-export const fetchSurveysListRedis = async (
-    key
-): Promise<Array<SurveyMetadata> | null> => {
-    let surveys = await fetchJson<Array<SurveyMetadata>>(key);
-    return surveys;
-};
-export const storeSurveysListRedis = (key) => storeRedis(key);
-
 export async function fetchSurveyContextRedis(surveyId: string): Promise<any> {
     const surveyContext = await fetchJson(surveyContextKey(surveyId));
     return surveyContext;
 }
-export const storeSurveyContextRedis = (
-    ...args: Parameters<typeof surveyContextKey>
-) => storeRedis(surveyContextKey(...args));

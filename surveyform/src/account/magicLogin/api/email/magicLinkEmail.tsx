@@ -10,8 +10,8 @@ import { localMailTransport } from "~/lib/server/mail/transports";
  * @see https://reactjs.org/docs/react-dom-server.html
  */
 import Mail from "nodemailer/lib/mailer";
-import { fetchSurveyContext } from "@devographics/core-models/server";
-import { SurveySharedContext } from "@devographics/core-models";
+import { fetchEditionMetadataSurveyForm } from "@devographics/fetch";
+import { SurveyMetadata } from "@devographics/types";
 
 const MagicLinkHtml = ({
   magicLink,
@@ -19,7 +19,7 @@ const MagicLinkHtml = ({
   locale,
 }: {
   magicLink: string;
-  survey?: SurveySharedContext;
+  survey?: SurveyMetadata;
   locale?: String;
 }) =>
   `<h3>${survey?.name}</h3>
@@ -31,7 +31,7 @@ export const magicLinkEmailParameters = ({
   locale,
 }: {
   magicLink: string;
-  survey?: SurveySharedContext;
+  survey?: SurveyMetadata;
   locale?: String;
 }): Partial<Mail.Options> => {
   return {
@@ -43,29 +43,38 @@ export const magicLinkEmailParameters = ({
 };
 
 const defaultSurveyId = "state_of_js";
+// TODO: should not be needed we only need the surveyId actually
+const defaultEditionId = "js2022";
 export const sendMagicLinkEmail = async ({
   email,
   magicLink,
   surveyId,
+  editionId,
   locale,
 }: {
   email: string;
   magicLink: string;
   locale: string;
   surveyId?: string;
+  editionId?: string;
 }) => {
   if (!surveyId) {
     console.warn(
       "No surveyId provided to sendMagicLinkEmail, will use state_of_js"
     );
   }
-  const survey = await fetchSurveyContext(surveyId || defaultSurveyId);
-  if (!survey?.domain) {
+  // TODO: technically only the survey context is needed here
+  const edition = await fetchEditionMetadataSurveyForm({
+    surveyId: surveyId || defaultSurveyId,
+    editionId: editionId || defaultEditionId,
+  });
+  const survey = edition.survey;
+  if (!survey.domain) {
     console.warn(
       `No survey domain found for id ${surveyId}, cannot set 'from'`
     );
   }
-  const from = survey?.domain && `${survey.name} <login@mail.${survey.domain}>`;
+  const from = survey.domain && `${survey.name} <login@mail.${survey.domain}>`;
 
   /**
    * NOTE: when testing be careful that email will be displayed with addition "=" on line ends!!!

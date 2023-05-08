@@ -25,7 +25,6 @@ const FormLayout = (props: any) => {
   return (
     <div className="survey-section">
       <SurveyNav
-        edition={edition}
         // response={response}
         navLoading={navLoading}
         setNavLoading={setNavLoading}

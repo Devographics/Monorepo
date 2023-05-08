@@ -1,3 +1,5 @@
+import { SurveyParamsTable } from "./helpers";
+
 /**
  * Map to get survey id and edition id from the slug and year
  *
@@ -6,7 +8,7 @@
  * 
  * TODO: this probably belongs to the shared repo too
  */
-export const getSurveyParamsTable = async () => ({
+export const getSurveyParamsTable = async (): Promise<SurveyParamsTable> => ({
     "demo-survey": {
         2022: { surveyId: "demo_survey", editionId: "demo2022" },
     },
