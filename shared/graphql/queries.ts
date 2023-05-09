@@ -51,6 +51,7 @@ query SurveysMetadataQuery {
       name
       dbCollectionName
       domain
+      hashtag
       editions {
         id
         surveyId
@@ -99,6 +100,7 @@ query SurveyMetadataQuery {
         name
         dbCollectionName
         domain
+        hashtag
         editions {
           id
           surveyId
@@ -125,6 +127,7 @@ query ${editionId}MetadataQuery {
       domain
       id
       name
+      hashtag
       partners {
         id
         name
@@ -249,6 +252,7 @@ query ${editionId}MetadataQuery {
           domain
           id
           name
+          hashtag
           partners {
             id
             name

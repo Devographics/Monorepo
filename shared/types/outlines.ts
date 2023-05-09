@@ -5,6 +5,7 @@ export interface SurveyConfig {
     id: string
     name: string
     domain: string
+    hashtag: string
 
     dbCollectionName: string
 

@@ -78,12 +78,17 @@ const Score = ({
     edition
   );
   const knowledgeRankingFromTop = knowledgeRanking;
-  const { survey, shareUrl } = edition;
+  const { survey, questionsUrl } = edition;
   const { name, hashtag } = survey;
 
   const text = intl.formatMessage(
     { id: "thanks.share_score_message" },
-    { score, name, shareUrl: `${shareUrl}?source=post_survey_share`, hashtag }
+    {
+      score,
+      name,
+      shareUrl: `${questionsUrl}?source=post_survey_share`,
+      hashtag,
+    }
   );
 
   const entities = useEntities();

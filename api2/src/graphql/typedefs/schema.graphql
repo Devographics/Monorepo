@@ -15,6 +15,7 @@ type SurveyMetadata {
     id: String
     name: String
     domain: String
+    hashtag: String
 
     dbCollectionName: String
 
