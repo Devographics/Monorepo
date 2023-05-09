@@ -1,8 +1,8 @@
 import { createEmailHash } from "~/account/email/api/encryptEmail";
 import {
   getUsersCollection,
-  getNormCollection,
-  getRawCollection,
+  getNormResponsesCollection,
+  getRawResponsesCollection,
 } from "~/admin/server/mongo";
 
 export const deleteUser = async ({ email, reallyDelete = 0 }) => {
@@ -17,8 +17,8 @@ export const deleteUser = async ({ email, reallyDelete = 0 }) => {
     newResponses = [];
 
   const users = await getUsersCollection();
-  const responses = await getRawCollection();
-  const normResponses = await getNormCollection();
+  const responses = await getRawResponsesCollection();
+  const normResponses = await getNormResponsesCollection();
 
   const emailHash1 = createEmailHash(email, process.env.ENCRYPTION_KEY);
   const emailHash2 = createEmailHash(email, process.env.ENCRYPTION_KEY2);

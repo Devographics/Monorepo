@@ -6,6 +6,7 @@ import { getEditionResponseSchema } from "~/responses/schema.server";
 import { canModifyResponse } from "../model";
 import { throwError } from "./errors";
 import { fetchEditionMetadataSurveyForm } from "@devographics/fetch";
+import { getRawResponsesCollection } from "@devographics/mongo";
 
 /**
  * Save a survey response
@@ -18,7 +19,7 @@ export const saveSurvey = async (root, args, context) => {
   const { currentUser } = context;
   let data = args?.input?.data;
   const _id = args.input.id;
-  const Responses = ResponseMongoCollection();
+  const Responses = await getRawResponsesCollection();
 
   // fetch document from db
   const response = await Responses.findOne({ _id });

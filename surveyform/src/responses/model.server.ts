@@ -6,9 +6,9 @@ import {
   mergeModelDefinitionServer,
   VulcanGraphqlModelServer,
 } from "@vulcanjs/graphql/server";
-import { createMongooseConnector } from "@vulcanjs/mongo";
+// import { createMongooseConnector } from "@vulcanjs/mongo";
 import { subscribe } from "~/server/email/email_octopus";
-import mongoose, { Connection } from "mongoose";
+// import mongoose, { Connection } from "mongoose";
 import { captureException } from "@sentry/nextjs";
 import { fetchSurveysMetadata } from "@devographics/fetch";
 import { ResponseDocument, SurveyEdition } from "@devographics/core-models";
@@ -19,6 +19,7 @@ import {
 } from "./schema.server";
 import { canModifyResponse } from "./server/model";
 import { EditionMetadata } from "@devographics/types";
+import { getRawResponsesCollection } from "@devographics/mongo";
 
 function getReponseEditionId(response: ResponseDocument) {
   const editionId = response.editionId || response.surveySlug;
@@ -53,7 +54,7 @@ export async function duplicateCheck(
     userId: currentUser._id,
   };
 
-  const Responses = ResponseMongoCollection();
+  const Responses = await getRawResponsesCollection();
   const existingResponse = await Responses.findOne(selector);
 
   if (existingResponse) {
@@ -114,8 +115,7 @@ export async function processEmailOnUpdate(data, properties) {
 }
 
 // Using Mongoose (advised)
-export const ResponseMongooseModel = (conn: Connection = mongoose.connection) =>
-  conn.db.collection("responses");
+export const ResponseMongooseModel = (conn) => conn.db.collection("responses");
 
 // LEGACY CODE
 
@@ -195,10 +195,10 @@ export const initResponseModelServer = (editions: Array<EditionMetadata>) => {
 let ResponseConnector;
 // Using Vulcan (limited to CRUD operations)
 export const initResponseConnector = () => {
-  ResponseConnector = createMongooseConnector<ResponseDocument>(ResponseModel, {
-    mongooseSchema: new mongoose.Schema({ _id: String }, { strict: false }),
-  });
-  ResponseModel.crud.connector = ResponseConnector;
+  // ResponseConnector = createMongooseConnector<ResponseDocument>(ResponseModel, {
+  //   mongooseSchema: new mongoose.Schema({ _id: String }, { strict: false }),
+  // });
+  // ResponseModel.crud.connector = ResponseConnector;
 };
 
 //  ResponseConnector.getRawCollection() as mongoose.Model<ResponseDocument>;
@@ -209,10 +209,10 @@ export const initResponseConnector = () => {
  * that's why it's a function
  */
 export const ResponseMongoCollection = () => {
-  if (!mongoose.connection.db) {
-    throw new Error(
-      "Trying to access Response mongo collection before Mongo/Mongoose is connected."
-    );
-  }
-  return mongoose.connection.db.collection<ResponseDocument>("responses");
+  // if (!mongoose.connection.db) {
+  //   throw new Error(
+  //     "Trying to access Response mongo collection before Mongo/Mongoose is connected."
+  //   );
+  // }
+  // return mongoose.connection.db.collection<ResponseDocument>("responses");
 };

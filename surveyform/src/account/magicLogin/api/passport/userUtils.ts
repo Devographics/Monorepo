@@ -6,6 +6,7 @@ import {
 import { UserType } from "~/core/models/user";
 import { createMutator, updateMutator } from "@vulcanjs/crud/server";
 import { createEmailHash } from "~/account/email/api/encryptEmail";
+import { getUsersCollection } from "@devographics/mongo";
 
 /**
  * If a valid anonymousId is provided, we add email to this anonymous user and upgrade it
@@ -28,7 +29,11 @@ export const createOrUpgradeUser = async ({
     // create a new user in the db and return it
 
     // just to please ts
-    const { authMode: otherAuthMode, meta: any, ...otherOtherUserProps } = otherUserProps;
+    const {
+      authMode: otherAuthMode,
+      meta: any,
+      ...otherOtherUserProps
+    } = otherUserProps;
     const user: UserTypeServer = {
       emailHash: createEmailHash(email),
       // TODO: the typings here are not very good, groups is optional during creation
@@ -49,9 +54,12 @@ export const createOrUpgradeUser = async ({
     return createdUser;
   } else {
     // 1.2) already logged as anonymous, upgrade to passwordless with email
-    const anonymousUser = (
-      await UserMongooseModel.findById(anonymousId)
-    )?.toObject();
+    const Users = await getUsersCollection();
+    // const anonymousUser = (
+    //   await UserMongooseModel.findById(anonymousId)
+    // )?.toObject();
+
+    const anonymousUser = await Users.findOne({ _id: anonymousId });
     if (!anonymousUser) {
       throw new Error(
         `Got anonymousId ${anonymousId} but no user is matching in database. Cannot upgrade account`
@@ -141,7 +149,7 @@ export const upgradeUser = async ({
  * @param email
  * @returns
  */
-// note: in case there are more than one users with the same emailHash, 
+// note: in case there are more than one users with the same emailHash,
 // always use the most recent one
 export const findUserFromEmail = async (email: string) => {
   const users = await UserMongooseModel.find({
@@ -162,8 +170,22 @@ export const findUserFromEmail = async (email: string) => {
 export const updateUserEmailHash = async (user, email) => {
   const { _id, emailHash, emailHash2 } = user;
   if (!emailHash2) {
-    const updatedEmailHash = createEmailHash(email, process.env.ENCRYPTION_KEY2)
-    await UserMongooseModel.updateOne(
+    const updatedEmailHash = createEmailHash(
+      email,
+      process.env.ENCRYPTION_KEY2
+    );
+    const Users = await getUsersCollection();
+
+    // await UserMongooseModel.updateOne(
+    //   { _id },
+    //   {
+    //     $set: {
+    //       emailHash1: emailHash,
+    //       emailHash2: updatedEmailHash,
+    //     },
+    //   }
+    // );
+    await Users.updateOne(
       { _id },
       {
         $set: {

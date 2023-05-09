@@ -1,5 +1,5 @@
 import { debugMongo } from "~/lib/debuggers";
-import mongoose, { ConnectOptions } from "mongoose";
+// import mongoose, { ConnectOptions } from "mongoose";
 import { serverConfig } from "~/config/server";
 
 // Based on https://github.com/vercel/next.js/blob/canary/examples/with-mongodb/util/mongodb.js
@@ -28,46 +28,37 @@ if (!mongooseCache) {
  * @param mongoUri
  * @param options
  */
-export const connectToDb = async (
-  mongoUri: string,
-  options?: ConnectOptions
-) => {
-  if (mongooseCache?.connectPromise) {
-    debugMongo(
-      "Running connectToDb, already connected or connecting to Mongo, waiting for promise"
-    );
+// export const connectToDb = async (
+//   mongoUri: string,
+//   options?: ConnectOptions
+// ) => {
+//   if (mongooseCache?.connectPromise) {
+//     debugMongo(
+//       "Running connectToDb, already connected or connecting to Mongo, waiting for promise"
+//     );
 
-    await mongooseCache.connectPromise;
-  }
-  if (![1, 2].includes(mongoose.connection.readyState)) {
-    debugMongo("Call mongoose connect");
-    (mongooseCache as MongooseCache).connectPromise = mongoose.connect(
-      mongoUri,
-      {
-        ...(options || {}),
-      }
-    );
-    // Wait for connection
-    await mongooseCache?.connectPromise;
-  }
-};
+//     await mongooseCache.connectPromise;
+//   }
+//   if (![1, 2].includes(mongoose.connection.readyState)) {
+//     debugMongo("Call mongoose connect");
+//     (mongooseCache as MongooseCache).connectPromise = mongoose.connect(
+//       mongoUri,
+//       {
+//         ...(options || {}),
+//       }
+//     );
+//     // Wait for connection
+//     await mongooseCache?.connectPromise;
+//   }
+// };
 
-export const isLocalMongoUri = () => {
-  const mongoUri = process.env.MONGO_URI;
-  if (!mongoUri)
-    throw new Error(
-      "MONGO_URI env variable not defined. Is your .env file correctly loaded?"
-    );
-  const isLocal = mongoUri.match(/localhost/);
-  return isLocal;
-};
 /**
  * Connect to the application main database
  *
  * Mongo URI is provided throught the MONGO_URI environment variable
  */
 export const connectToAppDb = async () => {
-  const mongoUri = serverConfig().mongoUri
+  const mongoUri = serverConfig().mongoUri;
   const isLocalMongo = mongoUri.match(/localhost/);
   try {
     await connectToDb(mongoUri, {
@@ -88,7 +79,7 @@ export const connectToAppDb = async () => {
 
 export async function closeDbConnection() {
   try {
-    await mongoose.connection.close();
+    // await mongoose.connection.close();
   } catch (err) {
     // Catch locally error
     console.error("Could not close mongoose connection");

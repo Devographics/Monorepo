@@ -20,7 +20,7 @@ export const getMongoDb = async ({ dbUri, dbName }) => {
   }
 };
 
-export const getRawCollection = async (survey?: Survey) => {
+export const getRawResponsesCollection = async (survey?: Survey) => {
   const db = await getMongoDb({
     dbUri: process.env.MONGO_URI,
     dbName: "production",
@@ -28,7 +28,7 @@ export const getRawCollection = async (survey?: Survey) => {
   return db.collection("responses");
 };
 
-export const getNormCollection = async (survey?: Survey) => {
+export const getNormResponsesCollection = async (survey?: Survey) => {
   const db = await getMongoDb({
     dbUri: process.env.MONGO_URI_PUBLIC_READONLY,
     dbName: "public",

@@ -1,15 +1,18 @@
+import { getUsersCollection } from "@devographics/mongo";
 import { getSessionFromReq } from "~/account/user/api";
-import { UserMongooseModel } from "~/core/models/user.server";
-import { connectToAppDb } from "~/lib/server/mongoose/connection";
+// import { UserMongooseModel } from "~/core/models/user.server";
+// import { connectToAppDb } from "~/lib/server/mongoose/connection";
 import { apiWrapper } from "~/lib/server/sentry";
 
 async function user(req, res) {
-  await connectToAppDb();
+  // await connectToAppDb();
   const session = await getSessionFromReq(req);
   // Get fresh data about the user
-  const user = session?._id
-    ? (await UserMongooseModel.findById(session._id))?.toObject()
-    : null;
+  const Users = await getUsersCollection();
+  const user = session?._id ? await Users.findOne({ _id: session._id }) : null;
+  // const user = session?._id
+  //   ? (await UserMongooseModel.findById(session._id))?.toObject()
+  //   : null;
   // TODO: apply usual security like mutators would do! In order to filter out the hash
   // @see https://github.com/VulcanJS/vulcan-npm/issues/82
   if (user) {

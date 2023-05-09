@@ -4,6 +4,7 @@ import {
   SURVEY_PREVIEW,
 } from "@devographics/core-models";
 import { fetchEditionMetadataSurveyForm } from "@devographics/fetch";
+import { getUsersCollection } from "@devographics/mongo";
 import { EditionMetadata, SurveyStatusEnum } from "@devographics/types";
 import { NextRequest, NextResponse } from "next/server";
 import {
@@ -77,6 +78,8 @@ export async function getUserFromReq(req: NextRequest) {
   // NOTE: State of app is using "string" _id for legacy reason,
   // be careful during dev that if "users" were seeded with Vulcan Next, the _id might ObjectId, thus failing connection
   // In this case, just drop vulcanusers, the admin user will be recreated during seed
-  const user = await UserMongooseModel.findOne({ _id });
+  const Users = await getUsersCollection();
+  const user = await Users.findOne({ _id });
+  // const user = await UserMongooseModel.findOne({ _id });
   return user;
 }

@@ -12,7 +12,6 @@ const { withSentryConfig } = require("@sentry/nextjs");
 
 // @see https://nextjs.org/docs/api-reference/next.config.js/runtime-configuration
 const moduleExports = (phase, { defaultConfig }) => {
-
   /**
    * @type {import('next/dist/next-server/server/config').NextConfig}
    **/
@@ -22,7 +21,12 @@ const moduleExports = (phase, { defaultConfig }) => {
     experimental: {
       appDir: true,
     },
-    transpilePackages: ["@devographics/permissions", "@devographics/core-models", "@devographics/react-hooks", "@devographics/react-form"],
+    transpilePackages: [
+      "@devographics/permissions",
+      "@devographics/core-models",
+      "@devographics/react-hooks",
+      "@devographics/react-form",
+    ],
     // Disable linting during build => the linter may have optional dev dependencies
     // (eslint-plugin-cypress) that wont exist during prod build
     // You should lint manually only
@@ -56,6 +60,11 @@ const moduleExports = (phase, { defaultConfig }) => {
         use: "js-yaml-loader",
       });
 
+      config.module.rules.push({
+        test: /\.node$/,
+        use: "node-loader",
+      });
+
       config.experiments.topLevelAwait = true;
       return config;
     },
@@ -72,10 +81,11 @@ const moduleExports = (phase, { defaultConfig }) => {
         {
           protocol: "https",
           hostname: "devographics.github.io",
-        }, {
+        },
+        {
           protocol: "https",
-          hostname: "static.devographics.com"
-        }
+          hostname: "static.devographics.com",
+        },
       ],
     },
 
@@ -167,17 +177,17 @@ const moduleExports = (phase, { defaultConfig }) => {
     extendedConfig.redirects = async () => {
       return [
         {
-          source: '/',
-          destination: '/maintenance',
+          source: "/",
+          destination: "/maintenance",
           permanent: false,
         },
         {
-          source: '/((?!maintenance|_next|api).*)',
-          destination: '/maintenance',
+          source: "/((?!maintenance|_next|api).*)",
+          destination: "/maintenance",
           permanent: false,
         },
-      ]
-    }
+      ];
+    };
   }
 
   return extendedConfig;

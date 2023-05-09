@@ -1,6 +1,6 @@
 /**
  * Extends user.ts with server-side logic
- * 
+ *
  * TODO: is this still used??
  */
 import merge from "lodash/merge.js";
@@ -10,7 +10,7 @@ import {
   createGraphqlModelServer,
   VulcanGraphqlSchemaServer,
 } from "@vulcanjs/graphql/server";
-import { createMongooseConnector } from "@vulcanjs/mongo";
+// import { createMongooseConnector } from "@vulcanjs/mongo";
 
 import {
   schema as clientSchema,
@@ -18,8 +18,8 @@ import {
   UserType as UserTypeShared,
   NewUserDocument,
 } from "./user";
-import { ResponseMongoCollection } from "~/responses/model.server";
-import mongoose from "mongoose";
+// import { ResponseMongoCollection } from "~/responses/model.server";
+// import mongoose from "mongoose";
 
 /**
  * User + hashed password
@@ -67,16 +67,16 @@ const apiSchema: VulcanGraphqlSchemaServer = {
         // const responses = await ResponseConnector.find({
         //   userId: user._id,
         // });
-        const Responses = ResponseMongoCollection()
+        const Responses = await getRawResponsesCollection();
         const cursor = await Responses.find({
           userId: user._id,
-        })
+        });
         const responses = await cursor.toArray();
 
         // TODO: it's currently hard to access the server model this way
         // There are no user sensitive fields in users' own responses anyway
         // only a few internal fields
-        const restrictedResponses = responses
+        const restrictedResponses = responses;
         /*
         const restrictedResponses = restrictDocuments({
           user: currentUser, //user,
@@ -93,6 +93,7 @@ const apiSchema: VulcanGraphqlSchemaServer = {
 import { nanoid } from "nanoid";
 import { createEmailHash } from "~/account/email/api/encryptEmail";
 import { captureMessage } from "@sentry/node";
+import { getRawResponsesCollection } from "@devographics/mongo";
 const schema: VulcanGraphqlSchemaServer = merge(
   {},
   clientSchema,
@@ -142,15 +143,15 @@ const modelDef: CreateGraphqlModelOptionsServer = merge({}, clientModelDef, {
 });
 export const User = createGraphqlModelServer(modelDef);
 
-const UserConnector = createMongooseConnector<UserWithEmailServer>(User, {
-  // We will use "String" _id because we have a legacy db from Meteor
-  mongooseSchema: new mongoose.Schema({ _id: String }, { strict: false }),
-});
+// const UserConnector = createMongooseConnector<UserWithEmailServer>(User, {
+//   // We will use "String" _id because we have a legacy db from Meteor
+//   mongooseSchema: new mongoose.Schema({ _id: String }, { strict: false }),
+// });
 
-User.crud.connector = UserConnector;
+// User.crud.connector = UserConnector;
 
 // TODO: rewrite this Mongoose model by hand
 // instead of relying on Vulcan (which uses blackbox mongoose models with no schema)
 // OR define a zod schema or whatever can be useful for permission validation
-export const UserMongooseModel =
-  UserConnector.getRawCollection() as mongoose.Model<UserWithEmailServer>;
+// export const UserMongooseModel =
+//   UserConnector.getRawCollection() as mongoose.Model<UserWithEmailServer>;

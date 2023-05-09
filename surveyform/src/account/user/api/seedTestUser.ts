@@ -1,3 +1,4 @@
+import { getUsersCollection } from "@devographics/mongo";
 import { createMutator } from "@vulcanjs/crud/server";
 import { NewUserDocument } from "~/core/models/user";
 import { User, UserMongooseModel } from "~/core/models/user.server";
@@ -7,7 +8,9 @@ import { User, UserMongooseModel } from "~/core/models/user.server";
  * @param context
  */
 export const seedTestUser = async () => {
-  const count = await UserMongooseModel.count({ isAdmin: true });
+  const Users = await getUsersCollection();
+  const count = await Users.countDocuments({ isAdmin: true });
+  // const count = await UserMongooseModel.count({ isAdmin: true });
 
   if (count === 0) {
     console.log("No admin user found, seeding admin");

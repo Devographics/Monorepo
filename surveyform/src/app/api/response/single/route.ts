@@ -2,43 +2,47 @@
 // but we need the same logic anyway
 import { ResponseDocument, SurveyEdition } from "@devographics/core-models";
 import { getGroups, restrictViewableFields } from "@devographics/permissions";
-import { ProjectionFields } from "mongoose";
+// import { ProjectionFields } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 import { UserDocument } from "~/core/models/user";
-import { UserMongooseModel } from "~/core/models/user.server";
-import { connectToAppDb } from "~/lib/server/mongoose/connection";
+// import { UserMongooseModel } from "~/core/models/user.server";
+// import { connectToAppDb } from "~/lib/server/mongoose/connection";
 import { connectToRedis } from "~/lib/server/redis";
-import { ResponseMongooseModel } from "~/responses/model.server";
+// import { ResponseMongooseModel } from "~/responses/model.server";
 import { getEditionFromReq, getUserIdFromReq } from "../getters";
 import { responsePermissionSchema } from "~/responses/server/shema";
 import { EditionMetadata } from "@devographics/types";
+import {
+  getRawResponsesCollection,
+  getUsersCollection,
+} from "@devographics/mongo";
 
 // TODO: filter based on user permission,
 // we probably have some logic for this in Vulcan
-function asProjection<T>(fields: Array<keyof T>): ProjectionFields<T> {
-  return fields.reduce(
-    (p, f) => ({
-      ...p,
-      [f]: 1,
-    }),
-    {}
-  );
-}
+// function asProjection<T>(fields: Array<keyof T>): ProjectionFields<T> {
+//   return fields.reduce(
+//     (p, f) => ({
+//       ...p,
+//       [f]: 1,
+//     }),
+//     {}
+//   );
+// }
 
 // TODO: take current user into account
 // we probably have some logic for this in Vulcan
-function restrict<T>(doc: T, fields: Array<keyof T>): any {
-  return fields.reduce(
-    (d, f) => ({
-      ...d,
-      [f]: doc[f],
-    }),
-    {}
-  );
-}
+// function restrict<T>(doc: T, fields: Array<keyof T>): any {
+//   return fields.reduce(
+//     (d, f) => ({
+//       ...d,
+//       [f]: doc[f],
+//     }),
+//     {}
+//   );
+// }
 
 export async function GET(req: NextRequest, res: NextResponse) {
-  await connectToAppDb();
+  // await connectToAppDb();
   connectToRedis();
   const editionOrRes = await getEditionFromReq(req);
   if (editionOrRes instanceof Response) {
@@ -51,16 +55,24 @@ export async function GET(req: NextRequest, res: NextResponse) {
   if (!userId) {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   }
-  const currentUser = (
-    await UserMongooseModel.findById<UserDocument>(userId, {
-      username: 1,
-      createdAt: 1,
-      isAdmin: 1,
-      // TODO: groups are populated by Vulcan logic
-      // reenable this
-      groups: 1,
-    })
-  )?.toObject();
+
+  const Users = await getUsersCollection();
+  const currentUser = await Users.findOne<UserDocument>(
+    { _id: userId },
+    { projection: { isAdmin: true, createdAt: true } }
+  );
+
+  // const currentUser = (
+  //   await UserMongooseModel.findById<UserDocument>(userId, {
+  //     username: 1,
+  //     createdAt: 1,
+  //     isAdmin: 1,
+  //     // TODO: groups are populated by Vulcan logic
+  //     // reenable this
+  //     groups: 1,
+  //   })
+  // )?.toObject();
+
   if (!currentUser) {
     return NextResponse.json(
       { error: "User do not exist anymore" },
@@ -69,21 +81,32 @@ export async function GET(req: NextRequest, res: NextResponse) {
   }
 
   // get response with relevant fields
-  const responseProjection = asProjection<ResponseDocument>([
-    "pagePath",
-    "editionId",
-    "completion",
-    "createdAt",
-  ]);
+  // const responseProjection = asProjection<ResponseDocument>([
+  //   "pagePath",
+  //   "editionId",
+  //   "completion",
+  //   "createdAt",
+  // ]);
   const selector = {
     userId,
     editionId: edition.id,
   };
-  const responseFromDb =
-    await ResponseMongooseModel().findOne<ResponseDocument>(
-      selector,
-      responseProjection
-    );
+
+  const Responses = await getRawResponsesCollection();
+  const responseFromDb = await Responses.findOne(selector, {
+    projection: {
+      pagePath: true,
+      editionId: true,
+      completion: true,
+      createdAt: true,
+    },
+  });
+
+  // const responseFromDb =
+  //   await ResponseMongooseModel().findOne<ResponseDocument>(
+  //     selector,
+  //     responseProjection
+  //   );
   if (!responseFromDb) {
     return NextResponse.json(null);
   }

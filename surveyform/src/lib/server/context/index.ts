@@ -7,7 +7,7 @@ import {
 } from "@vulcanjs/graphql/server";
 import { Connector } from "@vulcanjs/crud/server";
 
-import { createMongooseConnector } from "@vulcanjs/mongo";
+// import { createMongooseConnector } from "@vulcanjs/mongo";
 import { Request } from "express";
 import debug from "debug";
 import { getLocaleFromReq } from "~/i18n/server/localeDetection";
@@ -42,7 +42,8 @@ const createContextForModels = (
       ...context,
       [model.graphql.typeName]: {
         model,
-        connector: model.crud.connector || createMongooseConnector(model),
+        connector: model.crud.connector,
+        // connector: model.crud.connector || createMongooseConnector(model),
       },
     }),
     {}
@@ -66,7 +67,7 @@ export const contextFromReq = async (req: Request) => {
   // TODO
   const userContext = await userContextFromReq(req);
   const localeContext = await localeContextFromReq(req);
-  const base = await contextBase()
+  const base = await contextBase();
   const context = {
     ...base,
     ...userContext,
@@ -83,4 +84,4 @@ export const contextFromReq = async (req: Request) => {
  * API context used by graphql also includes req object,
  * currentUser, etc.
  */
-export interface ApiContext extends LocaleApiContext { }
+export interface ApiContext extends LocaleApiContext {}

@@ -17,7 +17,7 @@ import type {
   SurveyMetadata,
 } from "@devographics/types";
 import { fetchSurveysListGraphQL } from "@devographics/core-models/server";
-import { getNormCollection } from "../mongo";
+import { getNormResponsesCollection } from "../mongo";
 
 interface RegularField {
   fieldName: string;
@@ -139,7 +139,7 @@ export const normalizeResponse = async (
     const survey = allSurveys.find((s) => s.id === response.surveyId);
     const edition = survey.editions.find((e) => e.id === response.editionId);
 
-    const normCollection = await getNormCollection(survey);
+    const normCollection = await getNormResponsesCollection(survey);
 
     if (!edition)
       throw new Error(`Could not find edition for slug ${response.editionId}`);

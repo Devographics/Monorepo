@@ -7,7 +7,7 @@ import { SurveyResponseFragment } from "~/responses/fragments";
 import { getFragmentName } from "~/core/server/graphqlUtils";
 import { fetchEditionMetadataSurveyForm } from "@devographics/fetch";
 import { initRedis } from "@devographics/redis";
-import { connectToAppDb } from "~/lib/server/mongoose/connection";
+// import { connectToAppDb } from "~/lib/server/mongoose/connection";
 import { connectToRedis } from "~/lib/server/redis";
 import { userFromReq } from "~/lib/server/context/userContext";
 import {
@@ -27,7 +27,7 @@ export default async function saveSurveyResponseHandler(
     return res.status(405).send({});
   }
   // db connections
-  await connectToAppDb();
+  // await connectToAppDb();
   connectToRedis();
   // authenticated route
   const user = await userFromReq(req);

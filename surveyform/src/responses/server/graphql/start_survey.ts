@@ -7,6 +7,7 @@ import { throwError } from "./errors";
 import { ResponseDocument } from "@devographics/core-models";
 import { getEditionResponseSchema } from "~/responses/schema.server";
 import { fetchEditionMetadataSurveyForm } from "@devographics/fetch";
+import { getRawResponsesCollection } from "@devographics/mongo";
 
 /**
  * Create a new response for the survey
@@ -60,7 +61,7 @@ export const startSurvey = async (root, args, context) => {
   }
 
   // insert document
-  const Responses = ResponseMongoCollection();
+  const Responses = await getRawResponsesCollection();
   const insertedDocument = await Responses.insertOne(document);
   return { data: document };
 };

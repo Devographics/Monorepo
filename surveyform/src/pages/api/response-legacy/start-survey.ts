@@ -6,7 +6,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { serverConfig } from "~/config/server";
 import { print } from "graphql";
 import { fetchEditionMetadataSurveyForm } from "@devographics/fetch";
-import { connectToAppDb } from "~/lib/server/mongoose/connection";
+// import { connectToAppDb } from "~/lib/server/mongoose/connection";
 import { connectToRedis } from "~/lib/server/redis";
 import { userFromReq } from "~/lib/server/context/userContext";
 import {
@@ -25,7 +25,7 @@ export default async function responseStartSurveyHandler(
   if (req.method !== "POST") {
     return res.status(405);
   }
-  await connectToAppDb();
+  // await connectToAppDb();
   connectToRedis();
   // TODO: we have created an helper for this part to prepare migration to Next 13 route handlers
   const user = await userFromReq(req);

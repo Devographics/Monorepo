@@ -11,7 +11,10 @@ import { ResponseMongooseModel } from "~/modules/responses/model.server";
 import { getOrFetchEntities } from "~/modules/entities/server";
 import pick from "lodash/pick.js";
 import { NormalizedResponseMongooseModel } from "~/admin/models/normalized_responses/model.server";
-import { getNormCollection, getRawCollection } from "../mongo";
+import {
+  getNormResponsesCollection,
+  getRawResponsesCollection,
+} from "../mongo";
 import { loadOrGetSurveys } from "~/modules/surveys/load";
 
 /*
@@ -162,7 +165,7 @@ export const normalizeResponses = async (
     onlyUnnormalized,
   });
 
-  const rawResponsesCollection = await getRawCollection(survey);
+  const rawResponsesCollection = await getRawResponsesCollection(survey);
 
   const responses = await rawResponsesCollection
     .find(selector, null, {
@@ -253,7 +256,7 @@ export const normalizeResponses = async (
   // see https://www.mongodb.com/docs/manual/reference/method/db.collection.bulkWrite
   console.log(`-> Now starting bulk write…`);
 
-  const normResponsesCollection = await getNormCollection(survey);
+  const normResponsesCollection = await getNormResponsesCollection(survey);
   try {
     const operationResult = await normResponsesCollection.bulkWrite(
       bulkOperations
@@ -313,7 +316,7 @@ export const getSurveyMetadata = async (
     onlyUnnormalized,
   });
 
-  const rawResponsesCollection = await getRawCollection(survey);
+  const rawResponsesCollection = await getRawResponsesCollection(survey);
   const responsesCount = await rawResponsesCollection.count(selector);
   return { responsesCount };
 };

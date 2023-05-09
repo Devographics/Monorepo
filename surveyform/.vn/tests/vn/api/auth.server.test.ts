@@ -5,10 +5,10 @@
  * @see https://github.com/vercel/next.js/discussions/15166
  * @see
  */
-import { connectToDb } from "~/lib/server/mongoose/connection";
+// import { connectToDb } from "~/lib/server/mongoose/connection";
 import { apiRoutes } from "~/lib/apiRoutes";
 import { MongoMemoryServer } from "mongodb-memory-server"; // @see https://github.com/nodkz/mongodb-memory-server
-import mongoose from "mongoose";
+// import mongoose from "mongoose";
 import request from "supertest";
 
 import { spawn } from "child_process";
@@ -25,14 +25,14 @@ beforeAll(async () => {
   // const dbName = await mongod.getDbName();
   // Connect mongoose client
   //await mongoose.connect(mongoUri);
-  await connectToDb(mongoUri);
+  // await connectToDb(mongoUri);
 
   // TODO: spin up the Next server as well USING THE LOCAL MONGO_URI
 });
 afterAll(async () => {
   // remove the collection
   // disconnect the client
-  await mongoose.disconnect();
+  // await mongoose.disconnect();
   // stop mongo server
   await mongod.stop();
 });

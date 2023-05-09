@@ -13,10 +13,8 @@ import { isAdmin } from "@vulcanjs/permissions";
 import { SaveMongoCollection } from "@devographics/core-models/server";
 
 import { startSurvey, saveSurvey } from "~/responses/server/graphql";
-import {
-  projectsAutocomplete,
-  projectsLabels,
-} from "./projects/graphql";
+import { projectsAutocomplete, projectsLabels } from "./projects/graphql";
+import { getRawResponsesCollection } from "@devographics/mongo";
 
 const { mergeResolvers, mergeTypeDefs } = require("@graphql-tools/merge");
 // Simulate Vulcan Meteor global "addGraphQLSchema" etc.
@@ -140,18 +138,15 @@ const stats = async () => {
     ])
     .toArray()) as Array<{ average: any }>;
 
-  const responses = (await ResponseMongoCollection()
-    .aggregate([
-      { $group: { _id: null, averageCompletion: { $avg: "$completion" } } },
-    ])
-    .toArray()) as Array<{ averageCompletion: any }>;
+  const ResponseMongoCollection = await getRawResponsesCollection();
+  const responses = (await ResponseMongoCollection.aggregate([
+    { $group: { _id: null, averageCompletion: { $avg: "$completion" } } },
+  ]).toArray()) as Array<{ averageCompletion: any }>;
 
-  const responsesOver50 = (await ResponseMongoCollection()
-    .aggregate([
-      { $match: { completion: { $gte: 50 } } },
-      { $group: { _id: null, averageDuration: { $avg: "$duration" } } },
-    ])
-    .toArray()) as Array<{ averageDuration: any }>;
+  const responsesOver50 = (await ResponseMongoCollection.aggregate([
+    { $match: { completion: { $gte: 50 } } },
+    { $group: { _id: null, averageDuration: { $avg: "$duration" } } },
+  ]).toArray()) as Array<{ averageDuration: any }>;
 
   return {
     contents: {
