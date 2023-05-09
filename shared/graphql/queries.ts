@@ -90,6 +90,34 @@ query SurveysMetadataQuery {
   }
 }`
 
+export const getSurveyQuery = ({ surveyId }) => `
+query SurveyMetadataQuery {
+  surveys {
+    ${surveyId} {
+      _metadata {
+        id
+        name
+        dbCollectionName
+        domain
+        editions {
+          id
+          surveyId
+          year
+          status
+          imageUrl
+          colors {
+            primary
+            secondary
+            text
+            background
+            backgroundSecondary
+          }
+        }
+      }
+    }
+  }
+}`
+
 export const getEditionQuery = ({ surveyId, editionId }) => `
 query ${editionId}MetadataQuery {
   _metadata(editionId: ${editionId}) {

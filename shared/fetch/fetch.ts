@@ -3,49 +3,45 @@
  * 2) get from Redis if available (longer TTL, can be invalidated/updated easily)
  * 3) get from Github in last resort
  */
-import NodeCache from "node-cache";
-import {
-    fetchJson,
-    storeRedis,
-} from "@devographics/redis";
-import { SurveyMetadata, EditionMetadata } from "@devographics/types";
+import NodeCache from 'node-cache'
+import { fetchJson, storeRedis } from '@devographics/redis'
+import { SurveyMetadata, EditionMetadata } from '@devographics/types'
 import {
     fetchEditionGraphQLSurveyForm,
-    fetchSurveysListGraphQL,
-} from "@devographics/graphql";
+    fetchSurveyGraphQL,
+    fetchSurveysListGraphQL
+} from '@devographics/graphql'
 
-const SURVEY_FORM_CONTEXT = "surveyform";
+const SURVEY_FORM_CONTEXT = 'surveyform'
 
 const memoryCache = new NodeCache({
     // This TTL must stay short, because we manually invalidate this cache
     stdTTL: 5 * 60, // in seconds
     // needed for caching promises
-    useClones: false,
-});
+    useClones: false
+})
 
 async function getFromCache<T = any>(key: string, fetchFunc: () => Promise<T>) {
     if (memoryCache.has(key)) {
-        console.debug(`🟢 [${key}] in-memory cache hit`);
-        const res = await memoryCache.get<Promise<T>>(key)!;
-        return res;
+        console.debug(`🟢 [${key}] in-memory cache hit`)
+        const res = await memoryCache.get<Promise<T>>(key)!
+        return res
     } else {
-        const redisData = await fetchJson<T>(key);
+        const redisData = await fetchJson<T>(key)
         if (redisData) {
-            console.debug(`🔵 [${key}] in-memory cache miss, redis hit`);
-            return redisData;
+            console.debug(`🔵 [${key}] in-memory cache miss, redis hit`)
+            return redisData
         } else {
-            console.debug(
-                `🟣 [${key}] in-memory & redis cache miss, fetching from API`
-            );
+            console.debug(`🟣 [${key}] in-memory & redis cache miss, fetching from API`)
 
-            const promise = fetchFunc();
-            memoryCache.set(key, promise);
-            const result = await promise;
+            const promise = fetchFunc()
+            memoryCache.set(key, promise)
+            const result = await promise
 
             // store in Redis in the background
-            await storeRedis<T>(key, result);
+            await storeRedis<T>(key, result)
 
-            return result;
+            return result
         }
     }
 }
@@ -53,43 +49,60 @@ async function getFromCache<T = any>(key: string, fetchFunc: () => Promise<T>) {
 const editionMetadataKey = ({
     context,
     surveyId,
-    editionId,
+    editionId
 }: {
-    context: string;
-    surveyId: string;
-    editionId: string;
-}) => `${context}__${surveyId}__${editionId}__metadata`;
+    context: string
+    surveyId: string
+    editionId: string
+}) => `${context}__${surveyId}__${editionId}__metadata`
 
 export async function fetchEditionMetadataSurveyForm({
     surveyId,
-    editionId,
+    editionId
 }: {
-    surveyId: string;
-    editionId: string;
+    surveyId: string
+    editionId: string
 }): Promise<EditionMetadata> {
     const key = editionMetadataKey({
         context: SURVEY_FORM_CONTEXT,
         surveyId,
-        editionId,
-    });
+        editionId
+    })
     return await getFromCache<EditionMetadata>(
         key,
         async () => await fetchEditionGraphQLSurveyForm({ surveyId, editionId })
-    );
+    )
 }
 
-const surveysMetadataKey = ({ context }: { context: string }) =>
-    `${context}__allSurveys__metadata`;
+const surveysMetadataKey = ({ context }: { context: string }) => `${context}__allSurveys__metadata`
 
 /**
  * When connecting to the dev API, will get the demo survey
- * @returns 
+ * @returns
  */
 export const fetchSurveysMetadata = async (): Promise<Array<SurveyMetadata>> => {
-    const key = surveysMetadataKey({ context: SURVEY_FORM_CONTEXT });
+    const key = surveysMetadataKey({ context: SURVEY_FORM_CONTEXT })
     return await getFromCache<Array<SurveyMetadata>>(
         key,
-        async () =>
-            await fetchSurveysListGraphQL({ includeQuestions: false })
-    );
-};
+        async () => await fetchSurveysListGraphQL({ includeQuestions: false })
+    )
+}
+
+const surveyMetadataKey = ({ context, surveyId }: { context: string; surveyId: string }) =>
+    `${context}__${surveyId}__metadata`
+
+/**
+ * When connecting to the dev API, will get the demo survey
+ * @returns
+ */
+export const fetchSurveyMetadata = async ({
+    surveyId
+}: {
+    surveyId: string
+}): Promise<SurveyMetadata> => {
+    const key = surveyMetadataKey({ context: SURVEY_FORM_CONTEXT, surveyId })
+    return await getFromCache<SurveyMetadata>(
+        key,
+        async () => await fetchSurveyGraphQL({ surveyId })
+    )
+}
