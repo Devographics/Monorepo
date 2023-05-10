@@ -3,7 +3,6 @@ import EntityLabel, {
   EntityLabelProps,
 } from "~/core/components/common/EntityLabel";
 import { useIntlContext } from "@devographics/react-i18n";
-import { Entity } from "@devographics/core-models";
 import { QuestionFormObject } from "~/surveys/parser/parseSurvey";
 
 export interface FormLabelProps {
@@ -14,8 +13,6 @@ export interface FormLabelProps {
   path: string;
   year?: number;
   inputProperties: any;
-  // TODO
-  questionObject?: any;
 }
 export const FormLabel = ({
   questionId,
