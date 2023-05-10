@@ -299,21 +299,19 @@ export const getSectionCompletionPercentage = ({
   }
   // don't count text questions towards completion score
   // TODO: we may have array of fields in a question yet it doesn't seem supported
-  const completableQuestions = section.questions.filter((question) => {
-    const questionObject = getQuestionObject({
-      survey: edition.survey,
-      edition,
-      section,
-      question,
+  const completableQuestions = section.questions
+    .map((question) =>
+      getQuestionObject({ survey: edition.survey, edition, section, question })
+    )
+    .filter((questionObject) => {
+      const fieldName = questionObject.formPaths?.response!;
+      // NOTE: if question has no template it's a valid one, it will use the default radiogroup input
+      const isValidTemplate =
+        !questionObject.template ||
+        !ignoredFieldTypes.includes(questionObject.template);
+      const isCompletable = !!(isValidTemplate && fieldName);
+      return isCompletable;
     });
-    const fieldName = questionObject.formPaths?.response!;
-    // NOTE: if question has no template it's a valid one, it will use the default radiogroup input
-    const isValidTemplate =
-      !questionObject.template ||
-      !ignoredFieldTypes.includes(questionObject.template);
-    const isCompletable = !!(isValidTemplate && fieldName);
-    return isCompletable;
-  });
   const questionsCount = completableQuestions.length;
   if (!questionsCount) return null;
 

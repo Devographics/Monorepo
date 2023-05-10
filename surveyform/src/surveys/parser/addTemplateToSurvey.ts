@@ -6,11 +6,6 @@
  * This code will load JSX components
  */
 import type {
-  ParsedQuestion,
-  SurveyEdition,
-  SurveySection,
-} from "@devographics/core-models";
-import type {
   Survey,
   Edition,
   Section,
@@ -70,7 +65,9 @@ export const applyTemplateToQuestionObject = ({
 
   if (!templateName) {
     throw new Error(
-      `Question ${question.id} does not have a template defined.`
+      `Question or section has no template: ${
+        question && JSON.stringify(question)
+      }|${section && JSON.stringify(section)}`
     );
   }
 

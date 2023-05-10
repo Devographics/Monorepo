@@ -1,6 +1,5 @@
 import React from "react";
 import { Entity } from "@devographics/core-models";
-import { useEntities } from "~/core/components/common/EntitiesContext";
 
 /**
  * When using a string as label
@@ -20,15 +19,12 @@ interface EntityLabelDefinition {
 export interface EntityLabelProps extends EntityLabelDefinition, StringLabel {}
 
 const EntityLabel = ({
-  id,
+  //id,
   entity,
-  intlId,
+  // intlId,
   label,
   fallback,
 }: EntityLabelProps) => {
-  // const entities = useEntities();
-  // const entity = entities?.find((e) => e.id === id);
-
   if (entity) {
     const { name, nameClean, nameHtml } = entity;
     return (

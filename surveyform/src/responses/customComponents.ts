@@ -39,11 +39,13 @@ const customComponents = {
  * /!\ Importing this file will load some React
  * so involves JSX, it should not be used in scripts
  * @param questionObject
- * @param section
- * @param number
  * @returns
  */
-export const addComponentToQuestionObject = (questionObject: any) => {
+export const addComponentToQuestionObject = <
+  T extends { input: any; autocompleteOptions?: any }
+>(
+  questionObject: T
+): T => {
   let question = questionObject;
 
   const customComponent = customComponents[questionObject.input];

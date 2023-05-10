@@ -10,7 +10,6 @@ import { FormLabel, FormLabelProps } from "./FormLabel";
 import { FormInputLoading } from "./FormInputLoading";
 import FormNote from "./FormNote";
 import { useIntlContext } from "@devographics/react-i18n";
-import { useEntities } from "~/core/components/common/EntitiesContext";
 
 export interface FormItemProps
   extends FormLabelProps,
@@ -39,8 +38,9 @@ export const FormItem = (props: FormItemProps) => {
     noteIntlId: noteIntlId_,
   } = props;
 
-  const entities = useEntities();
-  const entity = entities?.find((e) => e.id === questionId);
+  // Now entity is obtained via the "questionObject"
+  // const entities = useEntities();
+  // const entity = entities?.find((e) => e.id === questionId);
 
   // const description =
   //   showDescription &&
@@ -60,7 +60,7 @@ export const FormItem = (props: FormItemProps) => {
 
   return (
     <Form.Group controlId={path}>
-      <FormLabel {...props} entity={entity} />
+      <FormLabel {...props} /*entity={entity}*/ />
       <div className="form-item-contents">
         {description && <FormDescription description={description} />}
         <div className="form-item-input">

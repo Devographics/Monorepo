@@ -48,7 +48,8 @@ export const getQuestionObject = ({
   question,
   number,
 }: {
-  survey: SurveyMetadata;
+  /** @deprecated edition already contains the survey */
+  survey?: SurveyMetadata;
   edition: EditionMetadata;
   section: SectionMetadata;
   question: QuestionMetadata;
@@ -86,7 +87,7 @@ export const getQuestionObject = ({
 
   // apply form template to question
   const questionTemplateOutput = applyTemplateToQuestionObject({
-    survey,
+    survey: edition.survey,
     edition,
     section,
     question: questionObject,

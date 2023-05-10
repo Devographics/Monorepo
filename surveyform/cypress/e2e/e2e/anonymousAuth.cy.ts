@@ -32,7 +32,7 @@ const CURRENT_SURVEY_URL = `/${testSurvey.prettySlug}/${testSurvey.year}`;
 test("Access state of 2022, anonymous auth", () => {
   cy.visit("/");
   cy.findByRole("link", { name: CURRENT_SURVEY_REGEX }).click();
-  const surveyRootUrl = routes.survey.root.href + CURRENT_SURVEY_URL;
+  const surveyRootUrl = "en-US" + routes.survey.root.href + CURRENT_SURVEY_URL;
   cy.url().should("match", new RegExp(surveyRootUrl));
   getContinueAsGuestButton().click();
   // TODO: replace by the english label when i18n is there
