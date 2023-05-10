@@ -1,7 +1,7 @@
 import type { EditionMetadata, SurveyMetadata } from '@devographics/types'
 import camelCase from 'lodash/camelCase.js'
 import { ResponsesParameters, Filters } from '@devographics/types'
-import isEmpty from 'lodash/isEmpty'
+import isEmpty from 'lodash/isEmpty.js'
 import {
     getEntityFragment,
     getFacetFragment,
