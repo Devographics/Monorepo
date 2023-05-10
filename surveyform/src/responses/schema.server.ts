@@ -141,7 +141,11 @@ export const getServerSchema = (): VulcanGraphqlSchemaServer => {
           });
           if (!edition) return null;
           // TODO: editionPathSegments should be more reliable
-          return getEditionSectionPath({ edition, response, editionPathSegments: [edition.surveyId.replace("_", "-"), edition.year] });
+          return getEditionSectionPath({
+            edition, response, editionPathSegments: [edition.surveyId.replace("_", "-"),
+            edition.year + ""
+            ]
+          });
         },
       },
     },
