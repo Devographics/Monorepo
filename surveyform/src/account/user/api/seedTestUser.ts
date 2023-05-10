@@ -7,11 +7,10 @@ import { UserDocument } from "~/core/models/user";
  */
 export const seedTestUser = async () => {
   const Users = await getUsersCollection();
-  const count = await Users.countDocuments({ isAdmin: true });
-  // const count = await UserMongooseModel.count({ isAdmin: true });
+  const count = await Users.countDocuments();
 
   if (count === 0) {
-    console.log("No admin user found, seeding admin");
+    console.log("No user found, seeding admin");
     const testUser: UserDocument = {
       email: "test@devographics.com",
     };
