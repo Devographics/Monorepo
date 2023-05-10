@@ -1221,7 +1221,7 @@ importers:
       js-yaml-loader: ^1.2.2
       lodash: ^4.17.21
       moment: ^2.29.4
-      mongodb: 4.13.0
+      mongodb: ^5.4.0
       mongodb-memory-server: ^7.6.3
       nanoid: ^3.3.4
       next: 13.4.1
@@ -1324,7 +1324,7 @@ importers:
       js-yaml-loader: 1.2.2
       lodash: 4.17.21
       moment: 2.29.4
-      mongodb: 4.13.0
+      mongodb: 5.4.0
       nanoid: 3.3.4
       next: 13.4.1_vgii64pd2ccbnbx2v3ro5gbin4
       next-connect: 0.9.1
@@ -28329,6 +28329,28 @@ packages:
 
   /mongodb/5.3.0:
     resolution: {integrity: sha512-Wy/sbahguL8c3TXQWXmuBabiLD+iVmz+tOgQf+FwkCjhUIorqbAxRbbz00g4ZoN4sXIPwpAlTANMaGRjGGTikQ==}
+    engines: {node: '>=14.20.1'}
+    peerDependencies:
+      '@aws-sdk/credential-providers': ^3.201.0
+      mongodb-client-encryption: '>=2.3.0 <3'
+      snappy: ^7.2.2
+    peerDependenciesMeta:
+      '@aws-sdk/credential-providers':
+        optional: true
+      mongodb-client-encryption:
+        optional: true
+      snappy:
+        optional: true
+    dependencies:
+      bson: 5.2.0
+      mongodb-connection-string-url: 2.6.0
+      socks: 2.7.1
+    optionalDependencies:
+      saslprep: 1.0.3
+    dev: false
+
+  /mongodb/5.4.0:
+    resolution: {integrity: sha512-6GDKgO7WiYUw+ILap143VXfAou06hjxDGgYUZWGnI4hgoZfP3el0G3l69JqJF8SEQbZmC+SN/2a0aWI/aWJoxA==}
     engines: {node: '>=14.20.1'}
     peerDependencies:
       '@aws-sdk/credential-providers': ^3.201.0

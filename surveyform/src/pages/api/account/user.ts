@@ -1,4 +1,5 @@
 import { getUsersCollection } from "@devographics/mongo";
+import { ObjectId } from "mongodb";
 import { getSessionFromReq } from "~/account/user/api";
 import { UserDocument } from "~/core/models/user";
 import { apiWrapper } from "~/lib/server/sentry";
@@ -8,7 +9,7 @@ async function user(req, res) {
   const session = await getSessionFromReq(req);
   // Get fresh data about the user
   const Users = await getUsersCollection<UserDocument>();
-  const user = session?._id ? await Users.findOne({ _id: session._id }) : null;
+  const user = session?._id ? await Users.findOne({ _id: new ObjectId(session._id) }) : null;
   // const user = session?._id
   //   ? (await UserMongooseModel.findById(session._id))?.toObject()
   //   : null;
