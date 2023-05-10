@@ -6,11 +6,6 @@
  * This code will load JSX components
  */
 import type {
-  ParsedQuestion,
-  SurveyEdition,
-  SurveySection,
-} from "@devographics/core-models";
-import type {
   Survey,
   Edition,
   Section,
@@ -37,7 +32,7 @@ export interface FormTemplateOutput {
 
 export interface QuestionFormTemplateOutput
   extends FormTemplateOutput,
-    QuestionMetadata {}
+  QuestionMetadata { }
 
 /**
  * Add React component to templates
@@ -63,6 +58,9 @@ export const applyTemplateToQuestionObject = ({
   number?: number;
 }): QuestionFormTemplateOutput => {
   const templateName = question?.template || section?.template;
+  if (!templateName) {
+    throw new Error(`Question or section has no template: ${question && JSON.stringify(question)}|${section && JSON.stringify(section)}`)
+  }
 
   const questionTemplate = getTemplate(templateName);
   if (!questionTemplate) {
