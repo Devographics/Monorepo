@@ -109,8 +109,6 @@ If this error still happens in a few months (2023) open an issue with repro at N
     notFound();
   }
   const localeSlug = edition.surveyId;
-  console.log("// localeSlug");
-  console.log(edition.surveyId);
   // NOTE: the demo survey was previously using the graphql contexts ["state_of_graphql", "state_of_graphql_2022"]
   // now it has its own strings
   const i18nContexts = [

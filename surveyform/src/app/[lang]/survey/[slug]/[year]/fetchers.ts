@@ -5,7 +5,6 @@ import { notFound } from "next/navigation";
 import { fetchEditionMetadataSurveyForm } from "@devographics/fetch";
 import { getSurveyParamsTable } from "~/surveys/data";
 
-
 /**
  * Use in metadata
  * Prefer "mustGetSurvey" in pages
@@ -19,11 +18,11 @@ export async function getSurveyEditionFromUrl(params: {
   try {
     const { slug, year } = params;
     const { surveyId, editionId } = (await getSurveyParamsTable())[slug][year];
-    const survey = await fetchEditionMetadataSurveyForm({
+    const edition = await fetchEditionMetadataSurveyForm({
       surveyId,
       editionId,
     });
-    return survey;
+    return edition;
   } catch (err) {
     console.error(
       "Could not load survey",
@@ -46,4 +45,3 @@ export async function mustGetSurveyEdition(params: {
   }
   return survey;
 }
-

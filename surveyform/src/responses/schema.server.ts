@@ -10,16 +10,12 @@ import { VulcanGraphqlSchema } from "@vulcanjs/graphql";
 import { getCommentSchema, schema } from "./schema";
 
 import { getEditionSectionPath } from "~/surveys/helpers";
-import {
-  extendSchemaServer,
-} from "@devographics/core-models";
+import { extendSchemaServer } from "@devographics/core-models";
 
 import { nanoid } from "nanoid";
 import { ApiContext } from "~/lib/server/context";
 import cloneDeep from "lodash/cloneDeep.js";
-import {
-  getQuestionObject,
-} from "~/surveys/parser/parseSurvey";
+import { getQuestionObject } from "~/surveys/parser/parseSurvey";
 import { VulcanFieldSchema } from "@vulcanjs/schema";
 import { EditionMetadata } from "@devographics/types";
 import { fetchEditionMetadataSurveyForm } from "@devographics/fetch";
@@ -141,7 +137,14 @@ export const getServerSchema = (): VulcanGraphqlSchemaServer => {
           });
           if (!edition) return null;
           // TODO: editionPathSegments should be more reliable
-          return getEditionSectionPath({ edition, response, editionPathSegments: [edition.surveyId.replace("_", "-"), edition.year] });
+          return getEditionSectionPath({
+            edition,
+            response,
+            editionPathSegments: [
+              edition.surveyId.replace("_", "-"),
+              edition.year,
+            ],
+          });
         },
       },
     },
@@ -235,8 +238,9 @@ export async function initResponseSchema(editions: Array<EditionMetadata>) {
 
           const questionId = questionObject?.formPaths?.response;
           if (!questionId) {
+            console.log(questionObject);
             throw new Error(
-              `Question ${questionId} does not have a raw response path defined`
+              `Question ${questionObject.id} does not have a raw response path defined`
             );
           }
           schema[questionId] = questionSchema;

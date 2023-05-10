@@ -16,6 +16,9 @@ import type {
   Section,
   Question,
   QuestionMetadata,
+  SectionMetadata,
+  EditionMetadata,
+  SurveyMetadata,
 } from "@devographics/types";
 
 import { getTemplate } from "./schemaTemplates";
@@ -56,15 +59,23 @@ export const applyTemplateToQuestionObject = ({
   question,
   number,
 }: {
-  survey: Survey;
-  edition: Edition;
-  section: Section;
-  question: Question;
+  survey: SurveyMetadata;
+  edition: EditionMetadata;
+  section: SectionMetadata;
+  question: QuestionMetadata;
   number?: number;
 }): QuestionFormTemplateOutput => {
-  const templateName = question?.template || section?.template;
+  const templateName =
+    question?.extends || question?.template || section?.template;
+
+  if (!templateName) {
+    throw new Error(
+      `Question ${question.id} does not have a template defined.`
+    );
+  }
 
   const questionTemplate = getTemplate(templateName);
+
   if (!questionTemplate) {
     throw new Error(`Template ${templateName} does not exist.`);
   }

@@ -24,6 +24,7 @@ import { ErrorObject, startEdition } from "./services";
 import type { EditionMetadata } from "@devographics/types";
 import { ResponseDocument } from "@devographics/core-models";
 import { useEdition } from "../SurveyContext/Provider";
+import { useLocaleContext } from "~/i18n/context/LocaleContext";
 
 const duplicateResponseErrorId = "error.duplicate_response";
 
@@ -202,12 +203,19 @@ const EditionLink = ({
   message: string;
 }) => {
   const { edition, editionPathSegments } = useEdition();
+  const { locale } = useLocaleContext();
+
   console.log("editionLink", { response });
   return (
     <Link
       href={
         response?.pagePath ||
-        getEditionSectionPath({ edition, response, editionPathSegments })
+        getEditionSectionPath({
+          edition,
+          response,
+          editionPathSegments,
+          locale,
+        })
       }
       type="button"
       className="btn btn-primary"

@@ -14,8 +14,8 @@ import {
   SurveyMetadata,
   SurveyStatusEnum,
 } from "@devographics/types";
+import { LocaleDef } from "~/i18n/typings";
 import { getQuestionObject } from "./parser/parseSurvey";
-
 
 export const getEditionFieldNames = (edition: EditionMetadata) => {
   let questionFieldNames: Array<string> = [];
@@ -42,13 +42,11 @@ export const getEditionFieldNames = (edition: EditionMetadata) => {
   return fieldNamesWithoutDups;
 };
 
-
-
 export function getReadOnlyPath({
   survey,
 }: {
   survey: SurveyEditionDescription;
-}) { }
+}) {}
 // specific section path for the form
 export function getEditionSectionPath({
   edition,
@@ -57,6 +55,7 @@ export function getEditionSectionPath({
   page,
   number,
   editionPathSegments,
+  locale,
 }: {
   // we only need basic info about the survey
   edition: EditionMetadata;
@@ -68,9 +67,10 @@ export function getEditionSectionPath({
   number?: any;
   page?: "thanks";
   /** [state-of-js, 2022] */
-  editionPathSegments: Array<string>
+  editionPathSegments: Array<string>;
+  locale: LocaleDef;
 }) {
-  const pathSegments = [...editionPathSegments]
+  const pathSegments = [locale.id, "survey", ...editionPathSegments];
   // survey home
   const readOnly =
     forceReadOnly ||
@@ -92,7 +92,7 @@ export function getEditionSectionPath({
   const suffixSegment = page || number || 1;
   pathSegments.push(suffixSegment);
   const path = pathSegments.join("/");
-  return path;
+  return `/${path}`;
 }
 
 export const getEditionTitle = ({
@@ -114,7 +114,6 @@ export const getEditionTitle = ({
 export const getSectionKey = (section: SectionMetadata, keyType = "title") =>
   `sections.${section.intlId || section.id}.${keyType}`;
 
-
 type ReverseEditionParam = {
   slugSegment: string;
   yearSegment: string;
@@ -124,14 +123,17 @@ type ReverseEditionParam = {
 export type SurveyParamsTable = {
   [slug: string]: {
     [year: number]: {
-      surveyId: string,
-      editionId: string
-    }
-  }
-}
+      surveyId: string;
+      editionId: string;
+    };
+  };
+};
 
 // js2022 => [state-of-js, 2022]
-function getEditionPathSegments(edition: EditionMetadata, surveyParamsTable: SurveyParamsTable): Array<string> {
+function getEditionPathSegments(
+  edition: EditionMetadata,
+  surveyParamsTable: SurveyParamsTable
+): Array<string> {
   const { id: editionId } = edition;
   const reverseEditionsParams = [] as ReverseEditionParam[];
   for (const slugSegment of Object.keys(surveyParamsTable)) {
@@ -148,14 +150,19 @@ function getEditionPathSegments(edition: EditionMetadata, surveyParamsTable: Sur
     (e) => e.editionId === editionId
   )!;
   if (!reverseParamEntry) {
-    console.debug({ reverseEditionsParams })
-    throw new Error(`Could not get reverseParamEntry for edition ${editionId}.`)
+    console.debug({ reverseEditionsParams });
+    throw new Error(
+      `Could not get reverseParamEntry for edition ${editionId}.`
+    );
   }
   const { slugSegment, yearSegment } = reverseParamEntry;
   const prefixSegment = "/survey";
   const pathSegments = [prefixSegment, slugSegment, yearSegment];
   return pathSegments;
 }
-export function getEditionHomePath(edition: EditionMetadata, surveyParamsTable: SurveyParamsTable) {
+export function getEditionHomePath(
+  edition: EditionMetadata,
+  surveyParamsTable: SurveyParamsTable
+) {
   return getEditionPathSegments(edition, surveyParamsTable).join("/");
 }
