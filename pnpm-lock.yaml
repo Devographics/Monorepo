@@ -1190,6 +1190,7 @@ importers:
       '@vulcanjs/permissions': 0.7.2-alpha.8
       '@vulcanjs/schema': 0.7.2-alpha.8
       '@vulcanjs/utils': 0.7.2-alpha.8
+      apollo-datasource-mongodb: ^0.5.4
       apollo-server: ^3.11.1
       apollo-server-core: ^3.11.1
       apollo-server-express: ^3.11.1
@@ -1302,6 +1303,7 @@ importers:
       '@vulcanjs/permissions': 0.7.2-alpha.8_biqbaboplfbrettd7655fr4n2y
       '@vulcanjs/schema': 0.7.2-alpha.8
       '@vulcanjs/utils': 0.7.2-alpha.8
+      apollo-datasource-mongodb: 0.5.4_graphql@16.6.0
       apollo-server: 3.11.1_graphql@16.6.0
       apollo-server-core: 3.11.1_graphql@16.6.0
       apollo-server-express: 3.11.1_p7hh2zom2mmpwc6saiaaeoh4nq
@@ -14120,6 +14122,23 @@ packages:
       - graphql
     dev: false
 
+  /apollo-datasource-mongodb/0.5.4_graphql@16.6.0:
+    resolution: {integrity: sha512-XXbBoyBQ21kGp/oNUupAF5F7LK50Nt7FIRp0MclaabpeAkiBOkp2QtcYrfhehKoxI/wysCvY3IDedey7wSLWXA==}
+    engines: {node: '>=8'}
+    peerDependencies:
+      mongoose: '*'
+    dependencies:
+      '@types/mongodb': 3.6.20
+      apollo-datasource: 0.3.1
+      apollo-server-caching: 0.3.1
+      apollo-server-errors: 2.5.0_graphql@16.6.0
+      bson: 4.7.2
+      dataloader: 1.4.0
+    transitivePeerDependencies:
+      - encoding
+      - graphql
+    dev: false
+
   /apollo-datasource/0.3.1:
     resolution: {integrity: sha512-qdEUeonc9pPZvYwXK36h2NZoT7Pddmy0HYOzdV0ON5pcG1YtNmUyyYi83Q60V5wTWjuaCjyJ9hOY6wr0BMvQuA==}
     engines: {node: '>=6'}
@@ -14193,7 +14212,6 @@ packages:
   /apollo-server-env/2.2.0:
     resolution: {integrity: sha512-wjJiI5nQWPBpNmpiLP389Ezpstp71szS6DHAeTgYLb/ulCw3CTuuA+0/E1bsThVWiQaDeHZE0sE3yI8q2zrYiA==}
     engines: {node: '>=6'}
-    deprecated: The `apollo-server-env` package is part of Apollo Server v2 and v3, which are now deprecated (end-of-life October 22nd 2023). This package's functionality is now found in the `@apollo/utils.fetcher` package. See https://www.apollographql.com/docs/apollo-server/previous-versions/ for more details.
     dependencies:
       node-fetch: 2.6.8
       util.promisify: 1.1.1

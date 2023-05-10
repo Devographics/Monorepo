@@ -6,7 +6,7 @@ import { User } from "~/core/models/user.server";
 import { Project } from "@devographics/core-models/server";
 // Add default connectors and dataSources creators for models that may miss some
 // @see https://www.apollographql.com/docs/apollo-server/data/data-sources
-// import { addDefaultMongoConnector } from "@vulcanjs/mongo-apollo/server";
+import { addDefaultMongoConnector } from "./addDefaultMongoConnector";
 import {
   fetchEditionMetadataSurveyForm,
   fetchSurveysMetadata,
@@ -17,6 +17,7 @@ import {
 } from "~/responses/model.server";
 import { VulcanGraphqlModelServer } from "@vulcanjs/graphql/server";
 import { serverConfig } from "~/config/server";
+import { getAppClient } from "@devographics/mongo";
 
 let models: Array<VulcanGraphqlModelServer> = [];
 export const getServerModels = async () => {
@@ -37,6 +38,6 @@ export const getServerModels = async () => {
   // @ts-ignore
   initResponseModelServer(editions);
   models = [User, Save, Project, getResponseModel()];
-  // addDefaultMongoConnector(models);
+  addDefaultMongoConnector(models, { mongoClient: await getAppClient() });
   return models;
 };
