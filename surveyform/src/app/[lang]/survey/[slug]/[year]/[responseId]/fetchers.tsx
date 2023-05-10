@@ -2,8 +2,7 @@ import { getUsersCollection } from "@devographics/mongo";
 import { cookies } from "next/headers";
 import { cache } from "react";
 import { getSessionFromToken, TOKEN_NAME } from "~/account/user/api";
-// import { UserMongooseModel } from "~/core/models/user.server";
-// import { connectToAppDb } from "~/lib/server/mongoose/connection";
+import { UserDocument } from "~/core/models/user";
 
 export function getToken() {
   const c = cookies();
@@ -15,7 +14,7 @@ export const getCurrentUser = cache(async () => {
   if (!token) return null;
   const session = await getSessionFromToken(token);
   // Get fresh data about the user
-  const Users = await getUsersCollection();
+  const Users = await getUsersCollection<UserDocument>();
   // const user = session?._id
   //   ? (await UserMongooseModel.findById(session._id))?.toObject()
   //   : null;

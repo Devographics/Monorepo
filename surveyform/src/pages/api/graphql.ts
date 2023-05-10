@@ -1,6 +1,5 @@
 import express, { Request } from "express";
 import cors from "cors";
-// import mongoose from "mongoose";
 import { ApolloServer } from "apollo-server-express";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import { mergeResolvers, mergeTypeDefs } from "@graphql-tools/merge";
@@ -92,11 +91,11 @@ async function initServer() {
     plugins:
       process.env.NODE_ENV !== "production"
         ? [
-            ApolloServerPluginLandingPageGraphQLPlayground({
-              // @see https://www.apollographql.com/docs/apollo-server/api/plugin/landing-pages/#graphql-playground-landing-page
-              // options
-            }),
-          ]
+          ApolloServerPluginLandingPageGraphQLPlayground({
+            // @see https://www.apollographql.com/docs/apollo-server/api/plugin/landing-pages/#graphql-playground-landing-page
+            // options
+          }),
+        ]
         : [],
     // Important otherwie Apollo swallows errors
     formatError: (err) => {

@@ -13,7 +13,6 @@ import debug from "debug";
 import { getLocaleFromReq } from "~/i18n/server/localeDetection";
 import { userContextFromReq } from "./userContext";
 import { getServerModels } from "~/_vulcan/models.index.server";
-// import mongoose from "mongoose";
 const debugGraphqlContext = debug("vn:graphql:context");
 
 /**
@@ -84,4 +83,4 @@ export const contextFromReq = async (req: Request) => {
  * API context used by graphql also includes req object,
  * currentUser, etc.
  */
-export interface ApiContext extends LocaleApiContext {}
+export interface ApiContext extends LocaleApiContext { }

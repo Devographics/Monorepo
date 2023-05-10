@@ -1,6 +1,4 @@
-// import mongoose from "mongoose";
 import { debugMongo } from "~/lib/debuggers";
-// import { connectToAppDb } from "~/lib/server/mongoose/connection";
 import seedDatabase from "~/lib/server/seed";
 import { contextBase } from "~/lib/server/context";
 

@@ -1,10 +1,6 @@
+import { getAppClient, getAppDb } from "@devographics/mongo";
 import env from "@next/env";
 const { loadEnvConfig } = env;
-// import mongoose from "mongoose";
-// import {
-//   closeDbConnection,
-//   connectToAppDb,
-// } from "~/lib/server/mongoose/connection";
 
 async function run() {
   loadEnvConfig(
@@ -12,8 +8,9 @@ async function run() {
     // will load either from .env.development or .env.production
     process.env.NODE_ENV === "development"
   );
-  // await connectToAppDb();
-  // await mongoose.connection.db.dropDatabase();
-  // await closeDbConnection();
+  const db = await getAppDb()
+  await db.dropDatabase();
+  const client = await getAppClient()
+  client.close()
 }
 run();

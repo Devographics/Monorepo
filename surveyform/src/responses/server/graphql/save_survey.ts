@@ -1,5 +1,4 @@
 import {
-  ResponseMongoCollection,
   processEmailOnUpdate,
 } from "~/responses/model.server";
 import { getEditionResponseSchema } from "~/responses/schema.server";

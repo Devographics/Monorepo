@@ -1,4 +1,3 @@
-// import { ProjectsMongoCollection } from "./model.server";
 import { getProjectsCollection } from "@devographics/mongo";
 
 /*

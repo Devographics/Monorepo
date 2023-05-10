@@ -7,14 +7,8 @@ import { SurveyResponseFragment } from "~/responses/fragments";
 import { getFragmentName } from "~/core/server/graphqlUtils";
 import { fetchEditionMetadataSurveyForm } from "@devographics/fetch";
 import { initRedis } from "@devographics/redis";
-// import { connectToAppDb } from "~/lib/server/mongoose/connection";
 import { connectToRedis } from "~/lib/server/redis";
 import { userFromReq } from "~/lib/server/context/userContext";
-import {
-  SurveyEdition,
-  SURVEY_OPEN,
-  SURVEY_PREVIEW,
-} from "@devographics/core-models";
 import { EditionMetadata, SurveyStatusEnum } from "@devographics/types";
 // import { userFromReq } from "~/lib/server/context/userContext";
 
@@ -27,7 +21,6 @@ export default async function saveSurveyResponseHandler(
     return res.status(405).send({});
   }
   // db connections
-  // await connectToAppDb();
   connectToRedis();
   // authenticated route
   const user = await userFromReq(req);

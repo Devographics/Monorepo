@@ -1,15 +1,19 @@
 /**
- * Methods that retrieve a collection also handle the proper connection logic
+ * Methods that retrieve a collection
+ * All exported methods automatically handle the connection
  * 
- * TODO: get rid of direct access to env variables, maybe by moving back
- * some methods into each app and pass the uri as params from config (eg in surveyform)
+ * This module rely on env variable, this is the best solution we have found
+ * to avoid an explicit initialization step
+ * 
+ * Each app can pass their own typings 
+ * (because they might want to know only a subset of each collection type)
  */
 import { Survey } from '@devographics/types'
 import { MongoClient, Db } from 'mongodb'
 
-const dbs: { [name: string]: Promise<Db> } = {}
+const clients: { [uri: string]: Promise<MongoClient> } = {}
 
-const connectToDb = async ({ dbUri, dbName }) => {
+const connectToDb = async ({ dbUri }) => {
     const mongoClient = new MongoClient(dbUri, {
         // useNewUrlParser: true,
         // useUnifiedTopology: true,
@@ -17,22 +21,41 @@ const connectToDb = async ({ dbUri, dbName }) => {
         compressors: 'none'
     })
     await mongoClient.connect()
-    return mongoClient.db(dbName)
-}
-export const getMongoDb = async ({ dbUri, dbName }): Promise<Db> => {
-    if (!(dbName in dbs)) {
-        // important: do not await so we store the promise
-        dbs[dbName] = connectToDb({ dbUri, dbName })
-    }
-    return await dbs[dbName]
+    return mongoClient
 }
 
-const getAppDb = () => {
+const getClient = async ({ dbUri }): Promise<MongoClient> => {
+    if (!(dbUri in clients)) {
+        // important: do not await so we store the promise
+        clients[dbUri] = connectToDb({ dbUri })
+    }
+    return await clients[dbUri]
+}
+export const getMongoDb = async ({ dbUri, dbName }): Promise<Db> => {
+    return (await getClient({ dbUri })).db(dbName)
+}
+
+/**
+ * Used to get the full MongoClient, eg to disconnect
+ * Handles the connection automatically
+ * @returns 
+ */
+export const getAppClient = () => {
+    if (!process.env.MONGO_URI) {
+        throw new Error("MONGO_URI not set")
+    }
+    return getClient({ dbUri: process.env.MONGO_URI })
+}
+/**
+ * Handle the connection automatically when called the first time
+ */
+export const getAppDb = () => {
     if (!process.env.MONGO_URI) {
         throw new Error("MONGO_URI not set")
     }
     return getMongoDb({ dbUri: process.env.MONGO_URI, dbName: "production" })
 }
+
 const getReadOnlyDb = () => {
     if (!process.env.MONGO_URI_PUBLIC_READ_ONLY) {
         throw new Error("MONGO_URI_PUBLIC_READ_ONLY not set")
@@ -40,26 +63,41 @@ const getReadOnlyDb = () => {
     return getMongoDb({ dbUri: process.env.MONGO_URI_PUBLIC_READ_ONLY, dbName: "public" })
 }
 
+/**
+ * Handle the connection automatically when called the first time
+ */
 export const getRawResponsesCollection = async (survey?: Survey) => {
     const db = await getAppDb()
     return db.collection('responses')
 }
 
+/**
+ * Handle the connection automatically when called the first time
+ */
 export const getNormResponsesCollection = async (survey?: Survey) => {
     const db = await getReadOnlyDb()
     return db.collection(survey?.dbCollectionName || 'normalized_responses')
 }
 
-export const getUsersCollection = async () => {
+/**
+ * Handle the connection automatically when called the first time
+ */
+export const getUsersCollection = async <T = any>() => {
     const db = await getAppDb()
-    return db.collection('users')
+    return db.collection<T>('users')
 }
 
+/**
+ * Handle the connection automatically when called the first time
+ */
 export const getProjectsCollection = async () => {
     const db = await getAppDb()
     return db.collection('projects')
 }
 
+/**
+ * Handle the connection automatically when called the first time
+ */
 export const getEmailHashesCollection = async () => {
     const db = await getAppDb()
     return db.collection('email_hashes')

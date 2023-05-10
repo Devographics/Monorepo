@@ -1,14 +1,13 @@
 import { getUsersCollection } from "@devographics/mongo";
 import { getSessionFromReq } from "~/account/user/api";
-// import { UserMongooseModel } from "~/core/models/user.server";
-// import { connectToAppDb } from "~/lib/server/mongoose/connection";
+import { UserDocument } from "~/core/models/user";
 import { apiWrapper } from "~/lib/server/sentry";
 
 async function user(req, res) {
   // await connectToAppDb();
   const session = await getSessionFromReq(req);
   // Get fresh data about the user
-  const Users = await getUsersCollection();
+  const Users = await getUsersCollection<UserDocument>();
   const user = session?._id ? await Users.findOne({ _id: session._id }) : null;
   // const user = session?._id
   //   ? (await UserMongooseModel.findById(session._id))?.toObject()

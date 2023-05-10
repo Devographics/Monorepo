@@ -1,7 +1,5 @@
 import type { VulcanDocument } from "@vulcanjs/schema";
 import { createGraphqlModelServer } from "@vulcanjs/graphql/server";
-// import { createMongooseConnector } from "@vulcanjs/mongo";
-// import mongoose from "mongoose";
 
 export const EmailHash = createGraphqlModelServer({
   name: "EmailHashes",

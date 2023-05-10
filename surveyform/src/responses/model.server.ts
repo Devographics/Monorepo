@@ -6,9 +6,7 @@ import {
   mergeModelDefinitionServer,
   VulcanGraphqlModelServer,
 } from "@vulcanjs/graphql/server";
-// import { createMongooseConnector } from "@vulcanjs/mongo";
 import { subscribe } from "~/server/email/email_octopus";
-// import mongoose, { Connection } from "mongoose";
 import { captureException } from "@sentry/nextjs";
 import { fetchSurveysMetadata } from "@devographics/fetch";
 import { ResponseDocument, SurveyEdition } from "@devographics/core-models";
@@ -190,29 +188,4 @@ function initReponseModel(editions: Array<EditionMetadata>) {
 export const initResponseModelServer = (editions: Array<EditionMetadata>) => {
   initReponseModel(editions);
   ResponseModel = createGraphqlModelServer(getModelDefServer());
-};
-
-let ResponseConnector;
-// Using Vulcan (limited to CRUD operations)
-export const initResponseConnector = () => {
-  // ResponseConnector = createMongooseConnector<ResponseDocument>(ResponseModel, {
-  //   mongooseSchema: new mongoose.Schema({ _id: String }, { strict: false }),
-  // });
-  // ResponseModel.crud.connector = ResponseConnector;
-};
-
-//  ResponseConnector.getRawCollection() as mongoose.Model<ResponseDocument>;
-
-/**
- * For direct Mongo access (not advised, used only for aggregations)
- * NOTE: should be called only after the database is connected,
- * that's why it's a function
- */
-export const ResponseMongoCollection = () => {
-  // if (!mongoose.connection.db) {
-  //   throw new Error(
-  //     "Trying to access Response mongo collection before Mongo/Mongoose is connected."
-  //   );
-  // }
-  // return mongoose.connection.db.collection<ResponseDocument>("responses");
 };

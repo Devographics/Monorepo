@@ -1,16 +1,17 @@
-// import { connectToAppDb } from "~/lib/server/mongoose/connection";
+
+import { getAppClient } from "@devographics/mongo";
+
 /**
- * Mongoose connection is not set automtically,
- * we need to trigger the connection for each middleware!
- *
- * We can be tricked by the seed step in production, this is important
+ * Force connecting to the mongo database
+ * (not technically needed, but this way Mongo is connected the first time we retrieve a collection)
  */
 export const connectToAppDbMiddleware = (req, res, next) => {
-  // connectToAppDb()
-  //   .then(() => {
-  //     return next();
-  //   })
-  //   .catch((err) => {
-  //     return res.status(500).send(err);
-  //   });
+  // force connecting to the db early
+  getAppClient()
+    .then(() => {
+      return next();
+    })
+    .catch((err) => {
+      return res.status(500).send(err);
+    });
 };

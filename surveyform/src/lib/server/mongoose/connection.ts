@@ -1,3 +1,5 @@
+// LEGACY: do not yse mongoose anymore
+// code left for reference
 import { debugMongo } from "~/lib/debuggers";
 // import mongoose, { ConnectOptions } from "mongoose";
 import { serverConfig } from "~/config/server";
