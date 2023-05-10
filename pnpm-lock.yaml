@@ -864,6 +864,7 @@ importers:
       '@cypress/webpack-preprocessor': ^5.4.1
       '@devographics/core-models': workspace:*
       '@devographics/encrypt-email': workspace:*
+      '@devographics/mongo': workspace:^1.0.0
       '@devographics/react-form': workspace:*
       '@devographics/react-i18n': workspace:*
       '@devographics/swr-graphql': workspace:*
@@ -1001,6 +1002,7 @@ importers:
     dependencies:
       '@devographics/core-models': link:../shared/core-models
       '@devographics/encrypt-email': link:../shared/encrypt-email
+      '@devographics/mongo': link:../shared/mongo
       '@devographics/react-form': link:../shared/react-form
       '@devographics/react-i18n': link:../shared/react-i18n
       '@devographics/swr-graphql': link:../shared/swr-graphql
@@ -1225,6 +1227,7 @@ importers:
       js-yaml-loader: ^1.2.2
       lodash: ^4.17.21
       moment: ^2.29.4
+      mongodb: 5.3.0
       mongodb-memory-server: ^7.6.3
       nanoid: ^3.3.4
       next: 13.4.1
@@ -1327,6 +1330,7 @@ importers:
       js-yaml-loader: 1.2.2
       lodash: 4.17.21
       moment: 2.29.4
+      mongodb: 5.3.0
       nanoid: 3.3.4
       next: 13.4.1_vgii64pd2ccbnbx2v3ro5gbin4
       next-connect: 0.9.1
@@ -6589,7 +6593,7 @@ packages:
       '@graphql-tools/utils': 8.12.0_graphql@16.6.0
       dataloader: 2.1.0
       graphql: 16.6.0
-      tslib: 2.4.1
+      tslib: 2.5.0
       value-or-promise: 1.0.11
 
   /@graphql-tools/code-file-loader/7.3.21_cd4r55mkxm7wczyrejmztiwhaa:
@@ -6728,7 +6732,7 @@ packages:
     dependencies:
       '@graphql-tools/utils': 8.12.0_graphql@16.6.0
       graphql: 16.6.0
-      tslib: 2.4.1
+      tslib: 2.5.0
 
   /@graphql-tools/merge/8.4.0_graphql@16.6.0:
     resolution: {integrity: sha512-3XYCWe0d3I4F1azNj1CdShlbHfTIfiDgj00R9uvFH8tHKh7i1IWN3F7QQYovcHKhayaR6zPok3YYMESYQcBoaA==}
@@ -6819,7 +6823,7 @@ packages:
       '@graphql-tools/merge': 8.3.6_graphql@16.6.0
       '@graphql-tools/utils': 8.12.0_graphql@16.6.0
       graphql: 16.6.0
-      tslib: 2.4.1
+      tslib: 2.5.0
       value-or-promise: 1.0.11
 
   /@graphql-tools/schema/9.0.9_graphql@16.6.0:
@@ -10751,7 +10755,6 @@ packages:
       '@babel/runtime': 7.20.7
       '@types/testing-library__react-hooks': 3.4.1
       react: 18.2.0
-    dev: false
     optional: true
 
   /@testing-library/react/10.4.9_biqbaboplfbrettd7655fr4n2y:
@@ -13024,7 +13027,7 @@ packages:
     resolution: {integrity: sha512-LOmVnY1iTU2D8tv4Xf6MVMZZ+juIJ87Kt/plMijjN20NMAXGmH4u8bS1t0uT74cZ5gwpocYueV58YwyI8y+GKw==}
     engines: {node: '>=8'}
     dependencies:
-      tslib: 2.4.1
+      tslib: 2.5.0
 
   /@wry/context/0.7.0:
     resolution: {integrity: sha512-LcDAiYWRtwAoSOArfk7cuYvFXytxfVrdX7yxoUmK7pPITLk5jYh2F8knCwS7LjgYL8u1eidPlKKV6Ikqq0ODqQ==}
@@ -14084,7 +14087,7 @@ packages:
       postcss: ^8.1.0
     dependencies:
       browserslist: 4.21.5
-      caniuse-lite: 1.0.30001457
+      caniuse-lite: 1.0.30001474
       fraction.js: 4.2.0
       normalize-range: 0.1.2
       picocolors: 1.0.0
@@ -14097,7 +14100,7 @@ packages:
     hasBin: true
     dependencies:
       browserslist: 4.21.5
-      caniuse-lite: 1.0.30001457
+      caniuse-lite: 1.0.30001474
       normalize-range: 0.1.2
       num2fraction: 1.2.2
       picocolors: 0.2.1
@@ -15144,7 +15147,7 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001457
+      caniuse-lite: 1.0.30001474
       electron-to-chromium: 1.4.284
       escalade: 3.1.1
       node-releases: 1.1.77
@@ -20878,7 +20881,7 @@ packages:
       debug:
         optional: true
     dependencies:
-      debug: 4.3.4
+      debug: 4.3.4_supports-color@6.1.0
     dev: false
 
   /for-each/0.3.3:
@@ -27558,9 +27561,9 @@ packages:
     resolution: {integrity: sha512-9l9n4Nk2BYZzljW3vHah3Z0rfS5npKw6ktnkmFgTcnzaXH1DRm3pDl6VMHu84EVb1lzmSaJC4OzWZqTkB5i2wg==}
     engines: {node: '>=12.9.0'}
     dependencies:
-      bson: 4.7.0
+      bson: 4.7.2
       denque: 2.1.0
-      mongodb-connection-string-url: 2.5.4
+      mongodb-connection-string-url: 2.6.0
       socks: 2.7.1
     optionalDependencies:
       '@aws-sdk/credential-providers': 3.306.0
@@ -30721,12 +30724,6 @@ packages:
     resolution: {integrity: sha512-jmYNElW7yvO7TV33CjSmvSiE2yco3bV2czu/OzDKdMNVZQWfxCblURLhf+47syQRBntjfLdd/H0egrzIG+oaFQ==}
     dev: false
 
-  /punycode/2.1.1:
-    resolution: {integrity: sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==}
-    engines: {node: '>=6'}
-    dev: false
-    optional: true
-
   /punycode/2.3.0:
     resolution: {integrity: sha512-rRV+zQD8tVFys26lAGR9WUuS4iUAngJScM+ZRSKtvl5tKeZ2t5bvdNFdNHBW9FWR4guGHlgmsZ1G7BSm2wTbuA==}
     engines: {node: '>=6'}
@@ -31316,7 +31313,7 @@ packages:
       '@types/react': 17.0.52
       react: 18.0.0
       react-style-singleton: 2.2.1_kx5muofkyzg6xl5sre3s32j3vy
-      tslib: 2.4.1
+      tslib: 2.5.0
     dev: false
 
   /react-remove-scroll/2.5.4_kx5muofkyzg6xl5sre3s32j3vy:
@@ -31333,7 +31330,7 @@ packages:
       react: 18.0.0
       react-remove-scroll-bar: 2.3.4_kx5muofkyzg6xl5sre3s32j3vy
       react-style-singleton: 2.2.1_kx5muofkyzg6xl5sre3s32j3vy
-      tslib: 2.4.1
+      tslib: 2.5.0
       use-callback-ref: 1.3.0_kx5muofkyzg6xl5sre3s32j3vy
       use-sidecar: 1.1.2_kx5muofkyzg6xl5sre3s32j3vy
     dev: false
@@ -31499,7 +31496,7 @@ packages:
       get-nonce: 1.0.1
       invariant: 2.2.4
       react: 18.0.0
-      tslib: 2.4.1
+      tslib: 2.5.0
     dev: false
 
   /react-tabs/3.2.3_react@18.0.0:
@@ -31673,7 +31670,7 @@ packages:
       ast-types: 0.14.2
       esprima: 4.0.1
       source-map: 0.6.1
-      tslib: 2.4.1
+      tslib: 2.5.0
     dev: true
 
   /rechoir/0.6.2:
@@ -32464,7 +32461,7 @@ packages:
   /rxjs/7.5.7:
     resolution: {integrity: sha512-z9MzKh/UcOqB3i20H6rtrlaE/CgjLOvheWK/9ILrbhROGTweAi1BaFsTT9FbwZi5Trr1qNRs+MXkhmR06awzQA==}
     dependencies:
-      tslib: 2.4.1
+      tslib: 2.5.0
     dev: true
 
   /rxjs/7.8.0:
@@ -34237,7 +34234,7 @@ packages:
     engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
     dependencies:
       '@pkgr/utils': 2.3.1
-      tslib: 2.4.1
+      tslib: 2.5.0
     dev: true
 
   /synckit/0.8.4:
@@ -34651,7 +34648,7 @@ packages:
     engines: {node: '>=0.8'}
     dependencies:
       psl: 1.9.0
-      punycode: 2.1.1
+      punycode: 2.3.0
     dev: false
     optional: true
 
@@ -35663,7 +35660,7 @@ packages:
     dependencies:
       '@types/react': 17.0.52
       react: 18.0.0
-      tslib: 2.4.1
+      tslib: 2.5.0
     dev: false
 
   /use-isomorphic-layout-effect/1.1.2_kx5muofkyzg6xl5sre3s32j3vy:
@@ -35692,7 +35689,7 @@ packages:
       '@types/react': 17.0.52
       detect-node-es: 1.1.0
       react: 18.0.0
-      tslib: 2.4.1
+      tslib: 2.5.0
     dev: false
 
   /use-sync-external-store/1.2.0:

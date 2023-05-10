@@ -75,6 +75,7 @@ query SurveysMetadataQuery {
             label
             contentType
             template
+            extends
             allowOther
             matchTags
             options {
@@ -173,6 +174,7 @@ query ${editionId}MetadataQuery {
               label
               intlId
               template
+              extends
               contentType
               allowOther
               matchTags
@@ -280,6 +282,7 @@ query ${editionId}MetadataQuery {
             yearAdded
             limit
             template
+            extends
             # contentType
             allowOther
             optionsAreNumeric

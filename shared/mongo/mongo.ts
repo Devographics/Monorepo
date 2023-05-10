@@ -10,7 +10,8 @@ export const getMongoDb = async ({ dbUri, dbName }): Promise<Db> => {
         const mongoClient = new MongoClient(dbUri, {
             // useNewUrlParser: true,
             // useUnifiedTopology: true,
-            connectTimeoutMS: 10000
+            connectTimeoutMS: 10000,
+            compressors: 'none'
         })
 
         await mongoClient.connect()
@@ -43,6 +44,22 @@ export const getUsersCollection = async () => {
         dbName: 'production'
     })
     return db.collection('users')
+}
+
+export const getProjectsCollection = async () => {
+    const db = await getMongoDb({
+        dbUri: process.env.MONGO_URI,
+        dbName: 'production'
+    })
+    return db.collection('projects')
+}
+
+export const getEmailHashesCollection = async () => {
+    const db = await getMongoDb({
+        dbUri: process.env.MONGO_URI,
+        dbName: 'production'
+    })
+    return db.collection('email_hashes')
 }
 
 export const isLocalMongoUri = () => {

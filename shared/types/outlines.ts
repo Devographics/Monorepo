@@ -174,6 +174,7 @@ export interface QuestionTemplateOutput extends QuestionWithId {
     rawPaths?: DbPaths
     normPaths?: DbPaths
     options?: Option[]
+    extends?: string
 }
 
 export type TemplateFunction = (arg0: TemplateArguments) => QuestionTemplateOutput

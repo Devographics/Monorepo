@@ -1253,6 +1253,9 @@ export const country: TemplateFunction = options => {
     const output: QuestionTemplateOutput = {
         id: 'country',
         options: countries.map(country => ({ id: country['alpha-3'], label: country.name })),
+        rawPaths: {
+            response: 'user_info__country'
+        },
         normPaths: {
             response: 'user_info.country_alpha3'
         },

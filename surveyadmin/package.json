@@ -72,6 +72,7 @@
   "dependencies": {
     "@devographics/core-models": "workspace:*",
     "@devographics/encrypt-email": "workspace:*",
+    "@devographics/mongo": "workspace:^1.0.0",
     "@devographics/react-form": "workspace:*",
     "@devographics/react-i18n": "workspace:*",
     "@devographics/swr-graphql": "workspace:*",
