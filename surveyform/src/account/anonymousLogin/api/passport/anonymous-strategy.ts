@@ -1,7 +1,7 @@
+import { getUsersCollection } from "@devographics/mongo";
 import { createMutator } from "@vulcanjs/crud/server";
 import type { Request } from "express";
 import { StrategyCreatedStatic } from "passport";
-import { Strategy } from "passport";
 import { generateAnonymousUser } from "~/account/anonymousLogin/api";
 import { User } from "~/core/models/user.server";
 
@@ -20,7 +20,7 @@ interface AnonymousLoginOptions {
  */
 class AnonymousLoginStrategy /* extends Strategy*/ {
   name: string = "anonymouslogin";
-  constructor(private _options: AnonymousLoginOptions) {}
+  constructor(private _options: AnonymousLoginOptions) { }
 
   authenticate(
     this: StrategyCreatedStatic & AnonymousLoginStrategy,
@@ -77,11 +77,9 @@ class AnonymousLoginStrategy /* extends Strategy*/ {
 const createAnonymousUser = async () => {
   const data = generateAnonymousUser();
   // Create a new anonymous user in the db
-  const { data: user } = await createMutator({
-    model: User,
-    data,
-  });
-  return user;
+  const Users = await getUsersCollection()
+  const { insertedId } = await Users.insertOne(data);
+  return await Users.findOne({ _id: insertedId });
 };
 
 export const anonymousLoginStrategy = new AnonymousLoginStrategy({
