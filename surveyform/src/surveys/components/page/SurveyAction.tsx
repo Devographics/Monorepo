@@ -125,6 +125,7 @@ const SurveyStart = ({
   const { id: editionId, surveyId } = edition;
   const router = useRouter();
   const { source, referrer } = useSurveyActionParams();
+  const { locale } = useLocaleContext();
 
   // prefilled data
   let data: PrefilledData = {
@@ -168,6 +169,7 @@ const SurveyStart = ({
               edition,
               response: result.data,
               number: 1,
+              locale,
             });
           console.log(`Redirecting to ${pagePath}…`);
           router.push(pagePath);
@@ -236,6 +238,7 @@ const Errors = ({ parsedErrors, currentSurveyResponse }) => {
 };
 const ErrorItem = ({ error, response }) => {
   console.log("errorItem", { error });
+  const { locale } = useLocaleContext();
   const { id, message, properties } = error;
   const { edition, editionPathSegments } = useEdition();
   return (
@@ -248,6 +251,7 @@ const ErrorItem = ({ error, response }) => {
             // @ts-ignore
             response: { _id: properties.responseId },
             editionPathSegments,
+            locale,
           })}
         >
           <FormattedMessage id="general.continue_survey" />

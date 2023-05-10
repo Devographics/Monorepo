@@ -34,7 +34,7 @@ const EntityLabel = ({
     return (
       <span
         className="entity-label"
-        dangerouslySetInnerHTML={{ __html: nameHtml || nameClean }}
+        dangerouslySetInnerHTML={{ __html: nameHtml || nameClean || name }}
       />
     );
   } else if (label) {

@@ -1,4 +1,5 @@
-import { ProjectsMongoCollection } from "./model.server";
+// import { ProjectsMongoCollection } from "./model.server";
+import { getProjectsCollection } from "@devographics/mongo";
 
 /*
 
@@ -9,10 +10,13 @@ Take a query string and find matching projects
 export const projectsAutocomplete = async (root, args, context) => {
   const queryString = args?.input?.filter?.name?._like;
 
-  const Projects = ProjectsMongoCollection();
-  const projectsCursor = await Projects.find({
-    name: { $regex: queryString, $options: "i" },
-  }).limit(20);
+  const Projects = await getProjectsCollection();
+  const projectsCursor = await Projects.find(
+    {
+      name: { $regex: queryString, $options: "i" },
+    },
+    { limit: 20 }
+  );
   const projectsArray = await projectsCursor.toArray();
 
   const result = {
@@ -31,7 +35,7 @@ Take a list of _ids and find matching projects
 export const projectsLabels = async (root, args, context) => {
   const ids = args?.input?.filter?._id?._in;
 
-  const Projects = ProjectsMongoCollection();
+  const Projects = await getProjectsCollection();
   const projectsCursor = await Projects.find({
     _id: { $in: ids },
   });

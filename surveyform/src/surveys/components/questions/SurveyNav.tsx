@@ -53,7 +53,7 @@ const SurveyNav = ({
   );
 
   const overallCompletion =
-    !readOnly && response && getCompletionPercentage(response, edition);
+    !readOnly && response && getCompletionPercentage({ response, edition });
 
   useEffect(() => {
     const keyPressHandler = (e) => {

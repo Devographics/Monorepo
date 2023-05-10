@@ -1,6 +1,6 @@
 import { apiRoutes } from "~/lib/apiRoutes";
 import { SurveyEdition } from "@devographics/core-models";
-import { getSurveyContextId } from "~/surveys/parser/parseSurvey";
+// import { getSurveyContextId } from "~/surveys/parser/parseSurvey";
 import { EditionMetadata } from "@devographics/types";
 export interface ErrorObject {
   id: string;

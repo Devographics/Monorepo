@@ -82,7 +82,7 @@ export async function processEmailOnUpdate(data, properties) {
   const { document } = properties;
   const { isSubscribed, surveyId, editionId } = document as ResponseDocument;
 
-  const surveys = await fetchSurveysMetadata({});
+  const surveys = await fetchSurveysMetadata();
   const survey = surveys.find((s) => s.id === surveyId);
   const listId = survey?.emailOctopus?.listId;
   const emailFieldPath = `${editionId}__user_info__${emailFieldName}`;

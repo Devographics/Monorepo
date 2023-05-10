@@ -241,24 +241,35 @@ export const ignoredFieldTypes = [
   "project",
 ];
 
-export const getCompletionPercentage = (
-  response: ResponseDocument,
-  edition: EditionMetadata
-) => {
+export const getCompletionPercentage = ({
+  response,
+  edition,
+}: {
+  response: ResponseDocument;
+  edition: EditionMetadata;
+}) => {
   let completedCount = 0;
   let totalCount = 0;
   const parsedSections = parseEdition(edition).sections;
   parsedSections.forEach((section) => {
     section.questions &&
       section.questions.forEach((question) => {
-        const fieldName = question.formPaths.response;
-        const answer = response[fieldName];
-        const ignoreQuestion =
-          question.template && ignoredFieldTypes.includes(question.template);
-        if (!ignoreQuestion) {
-          totalCount++;
-          if (answer !== null && typeof answer !== "undefined") {
-            completedCount++;
+        const questionObject = getQuestionObject({
+          survey: edition.survey,
+          edition,
+          section,
+          question,
+        });
+        const fieldName = questionObject.formPaths.response;
+        if (fieldName) {
+          const answer = response[fieldName];
+          const ignoreQuestion =
+            question.template && ignoredFieldTypes.includes(question.template);
+          if (!ignoreQuestion) {
+            totalCount++;
+            if (answer !== null && typeof answer !== "undefined") {
+              completedCount++;
+            }
           }
         }
       });
@@ -306,7 +317,13 @@ export const getSectionCompletionPercentage = ({
   const questionsCount = completableQuestions.length;
   if (!questionsCount) return null;
 
-  const completedQuestions = completableQuestions.filter((questionObject) => {
+  const completedQuestions = completableQuestions.filter((question) => {
+    const questionObject = getQuestionObject({
+      survey: edition.survey,
+      edition,
+      section,
+      question,
+    });
     const fieldName = questionObject.formPaths?.response!;
     const isCompleted =
       response[fieldName] !== null &&

@@ -11,6 +11,7 @@ import { captureException } from "@sentry/nextjs";
 import { saveSurvey } from "../page/services";
 import { SectionMetadata } from "@devographics/types";
 import { useEdition } from "../SurveyContext/Provider";
+import { useLocaleContext } from "~/i18n/context/LocaleContext";
 
 const SurveyNavItem = ({
   response,
@@ -32,6 +33,7 @@ const SurveyNavItem = ({
   setNavLoading: (navLoading: boolean) => void;
   readOnly?: boolean;
 }) => {
+  const { locale } = useLocaleContext();
   const router = useRouter();
   const textInput = useRef<any>(null);
   const { edition, editionHomePath, editionPathSegments } = useEdition();
@@ -66,7 +68,13 @@ const SurveyNavItem = ({
     }
     setNavLoading(false);
     router.push(
-      getEditionSectionPath({ edition, response, number, editionPathSegments })
+      getEditionSectionPath({
+        edition,
+        response,
+        number,
+        editionPathSegments,
+        locale,
+      })
     );
   };
 
@@ -81,6 +89,7 @@ const SurveyNavItem = ({
           forceReadOnly: readOnly,
           response,
           editionPathSegments,
+          locale,
         })}
         ref={textInput}
         tabIndex={currentTabindex === number ? 0 : -1}

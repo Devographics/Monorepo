@@ -4,9 +4,11 @@ import EntityLabel, {
 } from "~/core/components/common/EntityLabel";
 import { useIntlContext } from "@devographics/react-i18n";
 import { Entity } from "@devographics/core-models";
+import { QuestionFormObject } from "~/surveys/parser/parseSurvey";
 
 export interface FormLabelProps {
   questionId: string;
+  questionObject: QuestionFormObject;
   label: string;
   layout?: "horizontal" | "vertical";
   path: string;

@@ -43,9 +43,7 @@ const customComponents = {
  * @param number
  * @returns
  */
-export const addComponentToQuestionObject = (
-  questionObject: QuestionFormObject
-) => {
+export const addComponentToQuestionObject = (questionObject: any) => {
   let question = questionObject;
 
   const customComponent = customComponents[questionObject.input];

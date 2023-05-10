@@ -1,4 +1,4 @@
-import { UserMongooseModel, UserTypeServer } from "~/core/models/user.server";
+import { UserTypeServer } from "~/core/models/user.server";
 import { getSessionFromReq } from "~/account/user/api";
 import type { NextApiRequest } from "next";
 import type { Request } from "express";

@@ -11,6 +11,7 @@ import { useResponse } from "~/surveys/components/ResponseContext/ResponseProvid
 import { SectionMetadata } from "@devographics/types";
 import { useEdition } from "~/surveys/components/SurveyContext/Provider";
 import Link from "next/link";
+import { useLocaleContext } from "~/i18n/context/LocaleContext";
 
 const FormSubmit = ({
   // response,
@@ -28,6 +29,7 @@ const FormSubmit = ({
   nextSection?: SectionMetadata;
   prevSection?: SectionMetadata;
 } & any) => {
+  const { locale } = useLocaleContext();
   const { edition, editionPathSegments } = useEdition();
   const router = useRouter();
   const formContext = useFormContext();
@@ -39,10 +41,12 @@ const FormSubmit = ({
     ? getEditionSectionPath({
         ...pathProps,
         number: sectionNumber + 1,
+        locale,
       })
     : getEditionSectionPath({
         ...pathProps,
         page: "thanks",
+        locale,
       });
 
   useEffect(() => {
@@ -91,6 +95,7 @@ const FormSubmit = ({
             path={getEditionSectionPath({
               ...pathProps,
               number: sectionNumber - 1,
+              locale,
             })}
           />
         ) : (

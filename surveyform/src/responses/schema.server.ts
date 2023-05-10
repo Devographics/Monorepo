@@ -19,6 +19,7 @@ import { getQuestionObject } from "~/surveys/parser/parseSurvey";
 import { VulcanFieldSchema } from "@vulcanjs/schema";
 import { EditionMetadata } from "@devographics/types";
 import { fetchEditionMetadataSurveyForm } from "@devographics/fetch";
+import { LocaleDef } from "~/i18n/typings";
 
 export const getServerSchema = (): VulcanGraphqlSchemaServer => {
   const schemaCommon = getSchema();
@@ -74,7 +75,10 @@ export const getServerSchema = (): VulcanGraphqlSchemaServer => {
           surveyId,
           editionId,
         });
-        return getCompletionPercentage({ ...document, ...data }, edition);
+        return getCompletionPercentage({
+          response: { ...document, ...data },
+          edition,
+        });
       },
       onUpdate: async ({ document, data }) => {
         const { surveyId, editionId } = document;
@@ -82,7 +86,10 @@ export const getServerSchema = (): VulcanGraphqlSchemaServer => {
           surveyId,
           editionId,
         });
-        return getCompletionPercentage({ ...document, ...data }, edition);
+        return getCompletionPercentage({
+          response: { ...document, ...data },
+          edition,
+        });
       },
     },
     knowledgeScore: {
@@ -136,14 +143,16 @@ export const getServerSchema = (): VulcanGraphqlSchemaServer => {
             editionId,
           });
           if (!edition) return null;
+          const locale = { id: "xx-yy" } as LocaleDef;
           // TODO: editionPathSegments should be more reliable
           return getEditionSectionPath({
             edition,
             response,
             editionPathSegments: [
               edition.surveyId.replace("_", "-"),
-              edition.year,
+              String(edition.year),
             ],
+            locale,
           });
         },
       },

@@ -9,6 +9,7 @@ import Link from "next/link";
 import { useEdition } from "~/surveys/components/SurveyContext/Provider";
 // import { ResponseDocument } from "@devographics/core-models";
 import { useResponse } from "~/surveys/components/ResponseContext/ResponseProvider";
+import { useLocaleContext } from "~/i18n/context/LocaleContext";
 
 export const Thanks = ({
   //response,
@@ -17,6 +18,7 @@ export const Thanks = ({
   //response?: ResponseDocument;
   readOnly?: boolean;
 }) => {
+  const { locale } = useLocaleContext();
   const { edition, editionPathSegments } = useEdition();
   const imageUrl = getSurveyImageUrl(edition);
   const { survey, year } = edition;
@@ -52,6 +54,7 @@ export const Thanks = ({
               forceReadOnly: readOnly,
               number: edition.sections.length,
               editionPathSegments,
+              locale,
             })}
           >
             « <FormattedMessage id="general.back" />

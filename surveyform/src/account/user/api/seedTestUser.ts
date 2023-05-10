@@ -1,7 +1,7 @@
 import { getUsersCollection } from "@devographics/mongo";
 import { createMutator } from "@vulcanjs/crud/server";
 import { NewUserDocument } from "~/core/models/user";
-import { User, UserMongooseModel } from "~/core/models/user.server";
+import { User } from "~/core/models/user.server";
 
 /**
  * Create at least one user

@@ -1,7 +1,7 @@
 import crypto from "crypto";
 import { v4 as uuidv4 } from "uuid";
-import { EmailHashMongooseModel } from "~/account/email_hashes/model.server";
-
+// import { EmailHashMongooseModel } from "~/account/email_hashes/model.server";
+import { getEmailHashesCollection } from "@devographics/mongo";
 /**
  *
  * Creating Hash from Emails, not reversible
@@ -18,26 +18,25 @@ export const createEmailHash = (email: string, providedHashSalt?: string) => {
   return hash.digest("hex");
 };
 
-
 /**
  * Either get the random UUID associated with an email hash, or store one
  * if it doesn't exist yet
  * @param emailHash String
  */
 export async function getUUID(emailHash, userId) {
-  const hashDoc = await EmailHashMongooseModel.findOne({ hash: emailHash });
+  const EmailHashes = await getEmailHashesCollection();
+  const hashDoc = await EmailHashes.findOne({ hash: emailHash });
   let emailUuid;
   if (hashDoc) {
     emailUuid = hashDoc.uuid;
   } else {
     emailUuid = uuidv4();
-    await EmailHashMongooseModel.create({
+    await EmailHashes.insertOne({
       userId: userId,
       hash: emailHash,
       uuid: emailUuid,
     });
   }
-
 }
 
 /**

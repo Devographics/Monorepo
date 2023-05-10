@@ -1,6 +1,6 @@
 import {
   User,
-  UserMongooseModel,
+  // UserMongooseModel,
   UserTypeServer,
 } from "~/core/models/user.server";
 import { UserType } from "~/core/models/user";
@@ -152,13 +152,14 @@ export const upgradeUser = async ({
 // note: in case there are more than one users with the same emailHash,
 // always use the most recent one
 export const findUserFromEmail = async (email: string) => {
-  const users = await UserMongooseModel.find({
-    emailHash: createEmailHash(email),
-  })
-    .sort({ createdAt: -1 })
-    .limit(1)
-    .exec();
-  return users[0];
+  const Users = await getUsersCollection();
+  const usersByEmail = await Users.find(
+    {
+      emailHash: createEmailHash(email),
+    },
+    { sort: { createdAt: -1 }, limit: 1 }
+  );
+  return usersByEmail[0];
 };
 
 /**

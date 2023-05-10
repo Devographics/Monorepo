@@ -61,11 +61,11 @@ export const connectToAppDb = async () => {
   const mongoUri = serverConfig().mongoUri;
   const isLocalMongo = mongoUri.match(/localhost/);
   try {
-    await connectToDb(mongoUri, {
-      // fail the seed early during development
-      // Do not seem to exist with mongoose 6?
-      //serverSelectionTimeoutMS: isLocalMongo ? 3000 : undefined,
-    });
+    // await connectToDb(mongoUri, {
+    //   // fail the seed early during development
+    //   // Do not seem to exist with mongoose 6?
+    //   //serverSelectionTimeoutMS: isLocalMongo ? 3000 : undefined,
+    // });
   } catch (err) {
     console.error(`\nCould not connect to Mongo database on URI ${mongoUri}.`);
     if (isLocalMongo) {
