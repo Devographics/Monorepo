@@ -344,7 +344,7 @@ Edition Metadata (remove "virtual" apiOnly sections from metadata)
 export const editionMetadataResolverMap = {
     sections: async (parent: EditionApiObject, {}, context: RequestContext) => {
         const { sections } = parent
-        return sections.filter(s => s.apiOnly !== true)
+        return sections.filter(s => s.questions.some(q => q.apiOnly !== true))
     }
 }
 
