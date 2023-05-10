@@ -10,6 +10,7 @@
  */
 import { Survey } from '@devographics/types'
 import { MongoClient, Db } from 'mongodb'
+import { nanoid } from 'nanoid'
 
 const clients: { [uri: string]: Promise<MongoClient> } = {}
 
@@ -34,6 +35,15 @@ const getClient = async ({ dbUri }): Promise<MongoClient> => {
 export const getMongoDb = async ({ dbUri, dbName }): Promise<Db> => {
     return (await getClient({ dbUri })).db(dbName)
 }
+
+/**
+ * Generate a new STRING id for Mongo
+ * To be used when calling "insertOne"
+ * This avoids having ObjectId leaking everywhere in relations
+ * /!\ We don't guarantee that it's a valid ObjectId, we currently use nanoid instead
+ * @returns 
+ */
+export const newMongoId = (): string => nanoid()//(new ObjectId()).toString()
 
 /**
  * Used to get the full MongoClient, eg to disconnect

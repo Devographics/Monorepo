@@ -693,12 +693,14 @@ importers:
       ioredis: ^5.2.4
       mongodb: ^5.4.0
       mongodb-client-encryption: ^2.7.1
+      nanoid: ^4.0.2
       snappy: ^7.2.2
     dependencies:
       '@devographics/types': link:../types
       ioredis: 5.2.4
       mongodb: 5.4.0_k6g22hirxxolmpmmi2eqykttpy
       mongodb-client-encryption: 2.7.1_mongodb@5.4.0
+      nanoid: 4.0.2
       snappy: 7.2.2
     devDependencies:
       '@types/node': 18.11.18
@@ -28583,6 +28585,12 @@ packages:
 
   /nanoid/4.0.1:
     resolution: {integrity: sha512-udKGtCCUafD3nQtJg9wBhRP3KMbPglUsgV5JVsXhvyBs/oefqb4sqMEhKBBgqZncYowu58p1prsZQBYvAj/Gww==}
+    engines: {node: ^14 || ^16 || >=18}
+    hasBin: true
+    dev: false
+
+  /nanoid/4.0.2:
+    resolution: {integrity: sha512-7ZtY5KTCNheRGfEFxnedV5zFiORN1+Y1N6zvPTnHQd8ENUvfaDBeuJDZb2bN/oXwXxu3qkTXDzy57W5vAmDTBw==}
     engines: {node: ^14 || ^16 || >=18}
     hasBin: true
     dev: false

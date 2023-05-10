@@ -40,7 +40,6 @@ export const startSurvey = async (root, args, context) => {
     editionId,
     surveyId,
     userId: currentUser._id,
-    // _id: ObjectID().valueOf(), // also works
     _id: nanoid(),
   };
 
@@ -61,6 +60,6 @@ export const startSurvey = async (root, args, context) => {
 
   // insert document
   const Responses = await getRawResponsesCollection();
-  const insertedDocument = await Responses.insertOne(document);
+  await Responses.insertOne(document);
   return { data: document };
 };

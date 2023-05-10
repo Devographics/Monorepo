@@ -1,4 +1,4 @@
-import { getUsersCollection } from "@devographics/mongo";
+import { getUsersCollection, newMongoId } from "@devographics/mongo";
 import { UserDocument } from "~/core/models/user";
 
 /**
@@ -12,10 +12,11 @@ export const seedTestUser = async () => {
   if (count === 0) {
     console.log("No user found, seeding admin");
     const testUser: UserDocument = {
+      _id: newMongoId(),
       email: "test@devographics.com",
     };
     try {
-      const resUser = await Users.insertOne(testUser)
+      await Users.insertOne(testUser)
       console.log(
         `Seed a test user with email ${testUser.email} and _id ${testUser._id}`
       );
