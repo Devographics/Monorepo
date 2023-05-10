@@ -9,11 +9,10 @@ import { nodeCache, promisesNodeCache } from "~/lib/server/caching";
 //import NormalizedResponses from "../modules/normalized_responses/collection";
 
 import { isAdmin } from "@vulcanjs/permissions";
-import { SaveMongoCollection } from "@devographics/core-models/server";
 
 import { startSurvey, saveSurvey } from "~/responses/server/graphql";
 import { projectsAutocomplete, projectsLabels } from "./projects/graphql";
-import { getRawResponsesCollection } from "@devographics/mongo";
+import { getRawResponsesCollection, getSavesCollection } from "@devographics/mongo";
 
 const { mergeResolvers, mergeTypeDefs } = require("@graphql-tools/merge");
 // Simulate Vulcan Meteor global "addGraphQLSchema" etc.
@@ -129,7 +128,8 @@ addGraphQLSchema(statsType);
 const formatResult = (r, unit) => `${Math.round(r)}${unit}`;
 
 const stats = async () => {
-  const saves = (await SaveMongoCollection()
+  const SaveMongoCollection = await getSavesCollection()
+  const saves = (await SaveMongoCollection
     .aggregate([
       { $group: { _id: null, average: { $avg: "$duration" } } },
       { $sort: { createdAt: -1 } },

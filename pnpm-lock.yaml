@@ -573,7 +573,6 @@ importers:
       js-yaml: ^4.1.0
       lodash: ^4.17.21
       moment: ^2.29.4
-      mongoose: ^6.7.1
       nanoid: ^3.1.25
       node-cache: ^5.1.2
     dependencies:
@@ -582,13 +581,12 @@ importers:
       '@devographics/types': link:../types
       '@types/lodash': 4.14.184
       '@vulcanjs/graphql': 0.7.1_moment@2.29.4
-      '@vulcanjs/mongo': 0.7.1_6zw25q2yhthnzz66c6os22ggrm
+      '@vulcanjs/mongo': 0.7.1_moment@2.29.4
       graphql-tag: 2.12.6
       ioredis: 5.2.4
       js-yaml: 4.1.0
       lodash: 4.17.21
       moment: 2.29.4
-      mongoose: 6.7.1
       nanoid: 3.3.4
       node-cache: 5.1.2
     devDependencies:
@@ -659,20 +657,18 @@ importers:
       js-yaml: ^4.1.0
       lodash: ^4.17.21
       moment: ^2.29.4
-      mongoose: ^6.7.1
       nanoid: ^3.1.25
       node-cache: ^5.1.2
     dependencies:
       '@devographics/types': link:../types
       '@types/lodash': 4.14.191
       '@vulcanjs/graphql': 0.7.1_moment@2.29.4
-      '@vulcanjs/mongo': 0.7.1_bvxyc23qcdm36i55ezkcrpiirq
+      '@vulcanjs/mongo': 0.7.1_moment@2.29.4
       graphql-tag: 2.12.6
       ioredis: 5.2.4
       js-yaml: 4.1.0
       lodash: 4.17.21
       moment: 2.29.4
-      mongoose: 6.9.1
       nanoid: 3.3.4
       node-cache: 5.1.2
     devDependencies:
@@ -839,19 +835,17 @@ importers:
       js-yaml: ^4.1.0
       lodash: ^4.17.21
       moment: ^2.29.4
-      mongoose: ^6.7.1
       nanoid: ^3.1.25
       node-cache: ^5.1.2
     dependencies:
       '@types/lodash': 4.14.190
       '@vulcanjs/graphql': 0.7.1_moment@2.29.4
-      '@vulcanjs/mongo': 0.7.1_bvxyc23qcdm36i55ezkcrpiirq
+      '@vulcanjs/mongo': 0.7.1_moment@2.29.4
       graphql-tag: 2.12.6
       ioredis: 5.2.4
       js-yaml: 4.1.0
       lodash: 4.17.21
       moment: 2.29.4
-      mongoose: 6.9.1
       nanoid: 3.3.4
       node-cache: 5.1.2
     devDependencies:
@@ -12608,7 +12602,7 @@ packages:
       - supports-color
     dev: false
 
-  /@vulcanjs/mongo/0.7.1_6zw25q2yhthnzz66c6os22ggrm:
+  /@vulcanjs/mongo/0.7.1_moment@2.29.4:
     resolution: {integrity: sha512-7T22Exav5iUFaS8HM8QhqYPd3ig7/cGYdaUUlxxMgHJu4WzwHNfm7vTAY8IHNzRf4B5Xgjcv+S+urSmEHLn4rA==}
     peerDependencies:
       mongodb: '>= 3.6.2'
@@ -12620,31 +12614,6 @@ packages:
       '@vulcanjs/schema': 0.7.1
       '@vulcanjs/utils': 0.7.1_moment@2.29.4
       lodash: 4.17.21
-      mongoose: 6.7.1
-    optionalDependencies:
-      mongodb-memory-server: 8.12.2
-    transitivePeerDependencies:
-      - aws-crt
-      - encoding
-      - moment
-      - react
-      - react-dom
-      - supports-color
-    dev: false
-
-  /@vulcanjs/mongo/0.7.1_bvxyc23qcdm36i55ezkcrpiirq:
-    resolution: {integrity: sha512-7T22Exav5iUFaS8HM8QhqYPd3ig7/cGYdaUUlxxMgHJu4WzwHNfm7vTAY8IHNzRf4B5Xgjcv+S+urSmEHLn4rA==}
-    peerDependencies:
-      mongodb: '>= 3.6.2'
-      mongoose: '>= 6.2'
-    dependencies:
-      '@vulcanjs/crud': 0.7.1_moment@2.29.4
-      '@vulcanjs/model': 0.7.1
-      '@vulcanjs/permissions': 0.7.1
-      '@vulcanjs/schema': 0.7.1
-      '@vulcanjs/utils': 0.7.1_moment@2.29.4
-      lodash: 4.17.21
-      mongoose: 6.9.1
     optionalDependencies:
       mongodb-memory-server: 8.12.2
     transitivePeerDependencies:
@@ -20878,7 +20847,7 @@ packages:
       debug:
         optional: true
     dependencies:
-      debug: 4.3.4
+      debug: 4.3.4_supports-color@6.1.0
     dev: false
 
   /for-each/0.3.3:

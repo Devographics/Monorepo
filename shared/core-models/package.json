@@ -36,7 +36,6 @@
         "js-yaml": "^4.1.0",
         "lodash": "^4.17.21",
         "moment": "^2.29.4",
-        "mongoose": "^6.7.1",
         "nanoid": "^3.1.25",
         "node-cache": "^5.1.2"
     },

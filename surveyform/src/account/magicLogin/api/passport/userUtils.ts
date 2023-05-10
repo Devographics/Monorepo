@@ -3,7 +3,7 @@ import {
   // UserMongooseModel,
   UserTypeServer,
 } from "~/core/models/user.server";
-import { UserType } from "~/core/models/user";
+import { UserDocument, UserType } from "~/core/models/user";
 import { createMutator, updateMutator } from "@vulcanjs/crud/server";
 import { createEmailHash } from "~/account/email/api/encryptEmail";
 import { getUsersCollection } from "@devographics/mongo";
@@ -54,7 +54,7 @@ export const createOrUpgradeUser = async ({
     return createdUser;
   } else {
     // 1.2) already logged as anonymous, upgrade to passwordless with email
-    const Users = await getUsersCollection();
+    const Users = await getUsersCollection<UserDocument>();
     // const anonymousUser = (
     //   await UserMongooseModel.findById(anonymousId)
     // )?.toObject();
@@ -152,13 +152,13 @@ export const upgradeUser = async ({
 // note: in case there are more than one users with the same emailHash,
 // always use the most recent one
 export const findUserFromEmail = async (email: string) => {
-  const Users = await getUsersCollection();
-  const usersByEmail = await Users.find(
+  const Users = await getUsersCollection<UserDocument>();
+  const usersByEmail = await (Users.find(
     {
       emailHash: createEmailHash(email),
     },
     { sort: { createdAt: -1 }, limit: 1 }
-  );
+  )).toArray();
   return usersByEmail[0];
 };
 

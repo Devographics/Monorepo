@@ -7,7 +7,6 @@ import {
 } from "@vulcanjs/graphql/server";
 import { Connector } from "@vulcanjs/crud/server";
 
-// import { createMongooseConnector } from "@vulcanjs/mongo";
 import { Request } from "express";
 import debug from "debug";
 import { getLocaleFromReq } from "~/i18n/server/localeDetection";

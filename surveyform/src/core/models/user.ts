@@ -1,4 +1,4 @@
-// import { VulcanDocument } from "@vulcanjs/schema";
+import type { Document } from "mongodb"
 import {
   createGraphqlModel,
   CreateGraphqlModelOptionsShared,
@@ -18,7 +18,7 @@ export type NewUserDocument = Omit<UserDocument, "emailHash" | "groups"> & {
   groups?: UserDocument["groups"];
 };
 
-export type UserDocument = VulcanDocument & {
+export type UserDocument = VulcanDocument & Document & {
   isAdmin?: boolean;
   isVerified?: boolean;
   groups: Array<string>;
