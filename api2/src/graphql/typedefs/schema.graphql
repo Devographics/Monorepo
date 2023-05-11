@@ -107,6 +107,7 @@ type QuestionMetadata {
     options: [OptionsMetadata]
     entity: Entity
     allowOther: Boolean
+    allowComment: Boolean
     matchTags: [String]
     limit: Int
     # options/values for the question are numeric

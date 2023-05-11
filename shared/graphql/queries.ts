@@ -77,6 +77,7 @@ query SurveysMetadataQuery {
             template
             extends
             allowOther
+            allowComment
             matchTags
             options {
               average
@@ -177,6 +178,7 @@ query ${editionId}MetadataQuery {
               extends
               contentType
               allowOther
+              allowComment
               matchTags
               optionsAreNumeric
               optionsAreRange
@@ -285,6 +287,7 @@ query ${editionId}MetadataQuery {
             extends
             # contentType
             allowOther
+            allowComment
             optionsAreNumeric
             # optionsAreRange
             entity {
