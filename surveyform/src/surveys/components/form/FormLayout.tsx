@@ -5,7 +5,7 @@ import { FormErrors } from "./FormErrors";
 import { FormElement } from "./FormElement";
 import { FormSubmit } from "./FormSubmit";
 
-const FormLayout = (props: any) => {
+export const FormLayout = (props: any) => {
   const {
     children,
     response,
@@ -15,6 +15,8 @@ const FormLayout = (props: any) => {
     navLoading,
     setNavLoading,
     readOnly,
+    nextSection,
+    previousSection,
   } = props;
   return (
     <div className="survey-section">
@@ -33,9 +35,13 @@ const FormLayout = (props: any) => {
             sectionNumber={sectionNumber}
             edition={edition}
           />
-          <FormElement>
+          <FormElement {...props}>
             {children}
-            <FormSubmit />
+            <FormSubmit
+              {...props}
+              nextSection={nextSection}
+              previousSection={previousSection}
+            />
           </FormElement>
         </div>
       </div>
