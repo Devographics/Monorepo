@@ -74,6 +74,7 @@ export const getServerSchema = (): VulcanGraphqlSchemaServer => {
         const edition = await fetchEditionMetadataSurveyForm({
           surveyId,
           editionId,
+          calledFrom: "completion onCreate",
         });
         return getCompletionPercentage({
           response: { ...document, ...data },
@@ -85,6 +86,7 @@ export const getServerSchema = (): VulcanGraphqlSchemaServer => {
         const edition = await fetchEditionMetadataSurveyForm({
           surveyId,
           editionId,
+          calledFrom: "completion onUpdate",
         });
         return getCompletionPercentage({
           response: { ...document, ...data },
@@ -98,6 +100,7 @@ export const getServerSchema = (): VulcanGraphqlSchemaServer => {
         const edition = await fetchEditionMetadataSurveyForm({
           surveyId,
           editionId,
+          calledFrom: "knowledgeScore",
         });
         return getKnowledgeScore(document, edition).score;
       },
@@ -137,10 +140,13 @@ export const getServerSchema = (): VulcanGraphqlSchemaServer => {
         fieldName: "pagePath",
         type: "String",
         resolver: async (response) => {
+          console.log("// pagePath response");
+          console.log(response);
           const { surveyId, editionId } = response;
           const edition = await fetchEditionMetadataSurveyForm({
             surveyId,
             editionId,
+            calledFrom: "pagePath",
           });
           if (!edition) return null;
           const locale = { id: "xx-yy" } as LocaleDef;
@@ -221,6 +227,7 @@ export function getSchema() {
   return schema;
 }
 const schemaPerSurvey: { [slug: string]: VulcanGraphqlSchema } = {};
+
 // TODO: unused client-side?
 export async function initResponseSchema(editions: Array<EditionMetadata>) {
   schemaIsReady = true;

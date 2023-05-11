@@ -58,11 +58,19 @@ const editionMetadataKey = ({
 
 export async function fetchEditionMetadataSurveyForm({
     surveyId,
-    editionId
+    editionId,
+    calledFrom
 }: {
     surveyId: string
     editionId: string
+    calledFrom?: string
 }): Promise<EditionMetadata> {
+    if (!surveyId) {
+        throw new Error(`surveyId not defined (calledFrom: ${calledFrom})`)
+    }
+    if (!editionId) {
+        throw new Error(`editionId not defined (calledFrom: ${calledFrom})`)
+    }
     const key = editionMetadataKey({
         context: SURVEY_FORM_CONTEXT,
         surveyId,
@@ -100,6 +108,9 @@ export const fetchSurveyMetadata = async ({
 }: {
     surveyId: string
 }): Promise<SurveyMetadata> => {
+    if (!surveyId) {
+        throw new Error('surveyId not defined')
+    }
     const key = surveyMetadataKey({ context: SURVEY_FORM_CONTEXT, surveyId })
     return await getFromCache<SurveyMetadata>(
         key,

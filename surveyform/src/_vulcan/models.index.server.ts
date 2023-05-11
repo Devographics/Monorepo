@@ -32,6 +32,7 @@ export const getServerModels = async () => {
         return fetchEditionMetadataSurveyForm({
           surveyId: edition.surveyId,
           editionId: edition.id,
+          calledFrom: "getServerModels",
         });
       })
   );

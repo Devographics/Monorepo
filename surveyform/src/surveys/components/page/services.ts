@@ -71,7 +71,7 @@ export async function saveSurvey(edition: EditionMetadata, data: any) {
   if (!fetchRes.ok) {
     console.error(await fetchRes.text());
 
-    throw new Error("Could not start survey, request failed");
+    throw new Error("Could not save survey, request failed");
   }
   // data/errors is typical of graphql endpoints
   const res: { data?: any; errors?: Array<any> } = await fetchRes.json();

@@ -63,7 +63,11 @@ export const saveSurvey = async (root, args, context) => {
       },
     });
 
-  const edition = await fetchEditionMetadataSurveyForm({ surveyId, editionId });
+  const edition = await fetchEditionMetadataSurveyForm({
+    surveyId,
+    editionId,
+    calledFrom: "saveSurvey",
+  });
   // @ts-ignore
   const schema = getEditionResponseSchema(edition);
 

@@ -18,7 +18,11 @@ export const canModifyResponse = async (
     return false;
   }
   const { surveyId, editionId } = response;
-  const survey = await fetchEditionMetadataSurveyForm({ surveyId, editionId });
+  const survey = await fetchEditionMetadataSurveyForm({
+    surveyId,
+    editionId,
+    calledFrom: "canModifyResponse",
+  });
   // admins can modify any survey; users can modify their own surveys
   const isAdminOrOwner = isAdmin(user) || owns(user, response);
 

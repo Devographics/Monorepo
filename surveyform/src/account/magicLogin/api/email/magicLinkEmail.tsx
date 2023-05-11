@@ -67,6 +67,7 @@ export const sendMagicLinkEmail = async ({
   const edition = await fetchEditionMetadataSurveyForm({
     surveyId: surveyId || defaultSurveyId,
     editionId: editionId || defaultEditionId,
+    calledFrom: "sendMagicLinkEmail",
   });
   const survey = edition.survey;
   if (!survey.domain) {

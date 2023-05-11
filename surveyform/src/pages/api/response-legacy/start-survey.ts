@@ -45,7 +45,11 @@ export default async function responseStartSurveyHandler(
   }
   let edition: EditionMetadata;
   try {
-    edition = await fetchEditionMetadataSurveyForm({ surveyId, editionId });
+    edition = await fetchEditionMetadataSurveyForm({
+      surveyId,
+      editionId,
+      calledFrom: "responseStartSurveyHandler",
+    });
   } catch (err) {
     console.error();
     return res.status(404).send({

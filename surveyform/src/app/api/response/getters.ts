@@ -38,7 +38,11 @@ export async function getEditionFromReq(req: NextRequest) {
   if (!editionId) throw new Error("No survey editionId, can't start survey");
   let edition: EditionMetadata;
   try {
-    edition = await fetchEditionMetadataSurveyForm({ surveyId, editionId });
+    edition = await fetchEditionMetadataSurveyForm({
+      surveyId,
+      editionId,
+      calledFrom: "getEditionFromReq",
+    });
   } catch (err) {
     return NextResponse.json(
       {

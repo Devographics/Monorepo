@@ -21,6 +21,7 @@ export async function getSurveyEditionFromUrl(params: {
     const edition = await fetchEditionMetadataSurveyForm({
       surveyId,
       editionId,
+      calledFrom: "getSurveyEditionFromUrl",
     });
     return edition;
   } catch (err) {
