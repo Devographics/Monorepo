@@ -74,16 +74,18 @@ export default async function saveSurveyResponseHandler(
 
     // TODO: this hack let's us call the existing graphql API until we rewrite the server without graphql
     const headers = gqlHeaders(req);
-    const gqlRes = await fetch(serverConfig().appUrl + "/api/graphql", {
+    const body = JSON.stringify({
+      query: print(mutation),
+      variables: {
+        input: req.body,
+      },
+    });
+    const url = serverConfig().appUrl + "/api/graphql";
+    const gqlRes = await fetch(url, {
       method: "POST",
       // @ts-ignore
       headers,
-      body: JSON.stringify({
-        query: print(mutation),
-        variables: {
-          input: req.body,
-        },
-      }),
+      body,
     });
     if (!gqlRes.ok) {
       console.error("Response text:", await gqlRes.text());
