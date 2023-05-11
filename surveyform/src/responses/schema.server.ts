@@ -140,8 +140,6 @@ export const getServerSchema = (): VulcanGraphqlSchemaServer => {
         fieldName: "pagePath",
         type: "String",
         resolver: async (response) => {
-          console.log("// pagePath response");
-          console.log(response);
           const { surveyId, editionId } = response;
           const edition = await fetchEditionMetadataSurveyForm({
             surveyId,
