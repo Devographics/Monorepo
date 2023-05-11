@@ -2,8 +2,24 @@
 import { addComponentToQuestionObject } from "~/responses/customComponents";
 import { parseOptions } from "~/responses/helpers";
 
+const getOnChangeHandler = ({
+  edition,
+  section,
+  question,
+  response,
+  stateStuff,
+}) => {
+  const { updateCurrentValues, setFormState } = stateStuff;
+  return (event) => {
+    const path = question.formPaths.response;
+    const value = event.target.value;
+    updateCurrentValues(path, value);
+  };
+};
+
 export const FormQuestion = (props) => {
-  const { edition, section, response, question } = props;
+  const { edition, section, response, question, stateStuff } = props;
+  const { setFormState } = stateStuff;
   const qWithComponent = addComponentToQuestionObject(question);
   const Component = qWithComponent.input;
   const value = response?.[question.formPaths.response];
@@ -12,6 +28,7 @@ export const FormQuestion = (props) => {
     inputProperties: {
       options,
       value,
+      onChange: getOnChangeHandler(props),
     },
     itemProperties: {
       questionId: question.id,
