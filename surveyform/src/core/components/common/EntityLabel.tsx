@@ -1,5 +1,6 @@
 import React from "react";
 import { Entity } from "@devographics/core-models";
+import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 
 /**
  * When using a string as label
@@ -12,7 +13,7 @@ interface StringLabel {
  */
 interface EntityLabelDefinition {
   id?: string;
-  intlId?: string;
+  intlId: string;
   fallback?: any;
   entity?: Entity;
 }
@@ -21,7 +22,7 @@ export interface EntityLabelProps extends EntityLabelDefinition, StringLabel {}
 const EntityLabel = ({
   //id,
   entity,
-  // intlId,
+  intlId,
   label,
   fallback,
 }: EntityLabelProps) => {
@@ -43,7 +44,9 @@ const EntityLabel = ({
     );
   } else {
     return (
-      <span className="entity-label entity-label-fallback">{fallback}</span>
+      <span className="entity-label entity-label-fallback">
+        <FormattedMessage id={intlId} defaultMessage={fallback} />
+      </span>
     );
   }
 };

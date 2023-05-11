@@ -17,6 +17,7 @@ import { Loading } from "~/core/components/ui/Loading";
 import { SmartForm } from "~/form/components/smartform/FormContainer";
 import { EditionMetadata } from "@devographics/types";
 import { useUserResponse } from "~/responses/hooks";
+import { FormSection } from "../form/FormSection";
 
 const SurveySectionContents = (props) => {
   const [prevLoading, setPrevLoading] = useState(false);
@@ -117,43 +118,50 @@ const SurveySectionContentsInner = ({
 
   const isLastSection = !nextSection;
 
-  return (
-    <SmartForm
-      documentId={responseId}
-      document={response}
-      fields={fields}
-      model={getSurveyResponseModel(edition)}
-      // TODO: check those params in the smart form, they should accept DocumentNode and not only strings
-      // + the name should be retrieved using getFragmentName from the DocumentNode fragment
-      queryFragment={SurveyResponseFragment(edition)}
-      mutationFragment={SurveyResponseFragment(edition)}
-      // TODO: not all those props are correctly handled by the SmartForm
-      showDelete={false}
-      itemProperties={{
-        layout: "vertical",
-      }}
-      submitCallback={(data) => {
-        data.lastSavedAt = new Date();
-        if (isLastSection) {
-          data.isFinished = true;
-        }
-        return data;
-      }}
-      // successCallback={(result) => {
-      //   const { lastSavedAt } = result;
-      //   trackSave({ lastSavedAt, isError: false });
-      // }}
-      // errorCallback={(document, error) => {
-      //   if (document) {
-      //     const { lastSavedAt } = document;
-      //     trackSave({ lastSavedAt, isError: true });
-      //   }
-      //   console.error(error);
-      // }}
-      warnUnsavedChanges={false}
-      disabled={readOnly}
-    />
-  );
+  const formProps = {
+    sectionNumber,
+    response,
+    section,
+    edition,
+  };
+  return <FormSection {...formProps} />;
+  // return (
+  //   <SmartForm
+  //     documentId={responseId}
+  //     document={response}
+  //     fields={fields}
+  //     model={getSurveyResponseModel(edition)}
+  //     // TODO: check those params in the smart form, they should accept DocumentNode and not only strings
+  //     // + the name should be retrieved using getFragmentName from the DocumentNode fragment
+  //     queryFragment={SurveyResponseFragment(edition)}
+  //     mutationFragment={SurveyResponseFragment(edition)}
+  //     // TODO: not all those props are correctly handled by the SmartForm
+  //     showDelete={false}
+  //     itemProperties={{
+  //       layout: "vertical",
+  //     }}
+  //     submitCallback={(data) => {
+  //       data.lastSavedAt = new Date();
+  //       if (isLastSection) {
+  //         data.isFinished = true;
+  //       }
+  //       return data;
+  //     }}
+  //     // successCallback={(result) => {
+  //     //   const { lastSavedAt } = result;
+  //     //   trackSave({ lastSavedAt, isError: false });
+  //     // }}
+  //     // errorCallback={(document, error) => {
+  //     //   if (document) {
+  //     //     const { lastSavedAt } = document;
+  //     //     trackSave({ lastSavedAt, isError: true });
+  //     //   }
+  //     //   console.error(error);
+  //     // }}
+  //     warnUnsavedChanges={false}
+  //     disabled={readOnly}
+  //   />
+  // );
 };
 
 export default SurveySectionContents;

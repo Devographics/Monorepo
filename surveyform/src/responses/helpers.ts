@@ -135,7 +135,6 @@ export const parseOptions = (questionObject, options) => {
       return { value: option, label: option };
     }
   });
-
   return parsedOptions;
 };
 
