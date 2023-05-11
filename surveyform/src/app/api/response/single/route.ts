@@ -10,12 +10,13 @@ import { UserDocument } from "~/core/models/user";
 import { connectToRedis } from "~/lib/server/redis";
 // import { ResponseMongooseModel } from "~/responses/model.server";
 import { getEditionFromReq, getUserIdFromReq } from "../getters";
-import { responsePermissionSchema } from "~/responses/server/shema";
+import { responseRestrictedFields } from "~/responses/server/shema";
 import { EditionMetadata } from "@devographics/types";
 import {
   getRawResponsesCollection,
   getUsersCollection,
 } from "@devographics/mongo";
+import omit from "lodash/omit";
 
 // TODO: filter based on user permission,
 // we probably have some logic for this in Vulcan
@@ -106,11 +107,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
   // fill currentUser groups
   currentUser.groups = getGroups(currentUser, responseFromDb);
   // remove fields that user cannot read
-  const response = restrictViewableFields({
-    schema: responsePermissionSchema,
-    document: responseFromDb,
-    currentUser,
-  });
+  const response = omit(responseFromDb, responseRestrictedFields);
 
   return NextResponse.json(response);
 }
