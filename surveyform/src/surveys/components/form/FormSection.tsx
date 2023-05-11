@@ -2,6 +2,9 @@
 import { useState } from "react";
 import FormLayout from "./FormLayout";
 import FormQuestion from "./FormQuestion";
+import { captureException } from "@sentry/nextjs";
+import { saveSurvey } from "~/surveys/components/page/services";
+import { useRouter } from "next/navigation";
 
 const initFormState = (response) => ({
   currentValues: {},
@@ -15,9 +18,8 @@ const mergeWithResponse = (response, currentValues, deletedValues) => {
 export const FormSection = (props) => {
   const { edition, section, response: originalResponse, sectionNumber } = props;
   const [formState, setFormState] = useState(initFormState(originalResponse));
-  const [isLoading, setIsLoading] = useState(false);
-  const [prevLoading, setPrevLoading] = useState(false);
-  const [nextLoading, setNextLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const updateCurrentValues = (path, value) => {
     setFormState((currentFormState) => {
@@ -27,16 +29,35 @@ export const FormSection = (props) => {
     });
   };
 
+  const submitForm = async ({
+    path,
+    setButtonLoading,
+  }: {
+    path: string;
+    setButtonLoading: any;
+  }) => {
+    setLoading(true);
+    setButtonLoading(true);
+    const res = await saveSurvey(edition, {
+      id: response._id,
+      data: formState.currentValues,
+    });
+    if (res.error) {
+      console.error(res.error);
+      captureException(res.error);
+    }
+    setLoading(false);
+    setButtonLoading(false);
+    router.push(path);
+  };
+
   const stateStuff = {
     formState,
     setFormState,
     updateCurrentValues,
-    isLoading,
-    setIsLoading,
-    prevLoading,
-    setPrevLoading,
-    nextLoading,
-    setNextLoading,
+    loading,
+    setLoading,
+    submitForm,
   };
 
   const response = mergeWithResponse(

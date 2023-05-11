@@ -3,14 +3,13 @@ import { useEffect } from "react";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import { useRouter } from "next/navigation";
 import { LoadingButton } from "~/core/components/ui/LoadingButton";
-import { captureException } from "@sentry/nextjs";
-import { saveSurvey } from "~/surveys/components/page/services";
 import { getEditionSectionPath } from "~/surveys/helpers";
 import { EditionMetadata, SectionMetadata } from "@devographics/types";
 import { useEdition } from "~/surveys/components/SurveyContext/Provider";
 import Link from "next/link";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { ResponseDocument } from "@devographics/core-models";
+import { useState } from "react";
 
 export const FormSubmit = ({
   response,
@@ -115,17 +114,10 @@ const SubmitButton = (props: {
   readOnly: boolean;
   edition: EditionMetadata;
 }) => {
-  const router = useRouter();
+  const [buttonLoading, setButtonLoading] = useState(false);
 
   const { response, intlId, path, type, readOnly, edition, stateStuff } = props;
-
-  const { prevLoading, setPrevLoading, nextLoading, setNextLoading } =
-    stateStuff;
-  const { formState } = stateStuff;
-  const { currentValues } = formState;
-
-  const loading = type === "next" ? nextLoading : prevLoading;
-  const setLoading = type === "next" ? setNextLoading : setPrevLoading;
+  const { submitForm } = stateStuff;
 
   const sectionName = <FormattedMessage id={intlId} defaultMessage={intlId} />;
   const contents = (
@@ -145,8 +137,6 @@ const SubmitButton = (props: {
     </>
   );
 
-  const document = response;
-
   return (
     <div className={`form-btn form-btn-${type}`}>
       {readOnly ? (
@@ -155,23 +145,12 @@ const SubmitButton = (props: {
         <LoadingButton
           title={path}
           type="submit"
-          loading={loading}
+          loading={buttonLoading}
           variant="primary"
           onClick={async (e) => {
             e.preventDefault();
-            setLoading(true);
-            const res = await saveSurvey(edition, {
-              id: document._id,
-              data: currentValues,
-            });
-            if (res.error) {
-              console.error(res.error);
-              captureException(res.error);
-            }
-            setLoading(false);
-            router.push(path);
+            await submitForm({ path, setButtonLoading });
           }}
-          //{...props}
         >
           {contents}
         </LoadingButton>
