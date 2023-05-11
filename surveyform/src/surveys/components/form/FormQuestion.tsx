@@ -22,9 +22,11 @@ export const FormQuestion = (props) => {
   const { setFormState } = stateStuff;
   const qWithComponent = addComponentToQuestionObject(question);
   const Component = qWithComponent.input;
+  const path = question.formPaths.response;
   const value = response?.[question.formPaths.response];
   const options = parseOptions(question, question.options);
   const componentProperties = {
+    path,
     inputProperties: {
       options,
       value,
@@ -33,7 +35,7 @@ export const FormQuestion = (props) => {
     itemProperties: {
       questionId: question.id,
       questionObject: question,
-      label: question.formPaths.response,
+      label: path,
     },
   };
   return (
