@@ -16,6 +16,7 @@ import { TooltipTrigger } from "~/core/components/ui/TooltipTrigger";
 import { Loading } from "~/core/components/ui/Loading";
 import { SmartForm } from "~/form/components/smartform/FormContainer";
 import { EditionMetadata } from "@devographics/types";
+import { useUserResponse } from "~/responses/hooks";
 
 const SurveySectionContents = (props) => {
   const [prevLoading, setPrevLoading] = useState(false);
@@ -91,6 +92,19 @@ const SurveySectionContentsInner = ({
   nextSection?: any;
   readOnly?: boolean;
 }) => {
+  const {
+    response,
+    loading: responseLoading,
+    error: responseError,
+  } = useUserResponse({
+    editionId: edition.id,
+    surveyId: edition.survey.id,
+  });
+
+  if (responseLoading) {
+    return <Loading />;
+  }
+
   const questions = section.questions.filter((q) => !q.hidden);
   const fields = questions.map((question) => question?.formPaths?.response);
 
@@ -106,6 +120,7 @@ const SurveySectionContentsInner = ({
   return (
     <SmartForm
       documentId={responseId}
+      document={response}
       fields={fields}
       model={getSurveyResponseModel(edition)}
       // TODO: check those params in the smart form, they should accept DocumentNode and not only strings

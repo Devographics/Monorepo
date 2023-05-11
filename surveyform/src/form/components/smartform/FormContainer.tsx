@@ -20,6 +20,10 @@ export interface FormContainerProps extends PassedDownFormProps {
   model: VulcanGraphqlModel;
   /** Document id for edition mode, will automatically fetch the document */
   documentId?: string;
+  /** Document might already be loaded and passed as prop */
+  document?: any;
+  /** How to refetch document, if passed as prop */
+  refetch?: any;
   /** Slug (= human readable unique id) for edition mode, will automatically fetch the document */
   slug?: string;
   /**
@@ -139,8 +143,41 @@ export const FormContainer = (props: FormContainerProps) => {
     <FormContainerInner {...props} />
   );
 };
+
 // Fonctionnal version to be able to use hooks
 const FormContainerInner = (props: FormContainerProps) => {
+  const { model, documentId, document, refetch, slug } = props;
+  const { currentUser, loading: currentUserLoading } = useVulcanCurrentUser();
+
+  if (currentUserLoading && !currentUser) {
+    return <Loading />;
+  }
+  if (document) {
+    const { schema } = model;
+    const isEdit = documentId || slug;
+
+    const formType = isEdit ? "edit" : "new";
+
+    const childProps = {
+      formType,
+      schema,
+    };
+    return (
+      <Form
+        document={document}
+        loading={false}
+        refetch={refetch}
+        currentUser={currentUser}
+        {...childProps}
+        {...props}
+      />
+    );
+  } else {
+    return <FormContainerLoader currentUser={currentUser} {...props} />;
+  }
+};
+
+const FormContainerLoader = (props: FormContainerProps) => {
   const {
     model,
     documentId,
@@ -149,7 +186,7 @@ const FormContainerInner = (props: FormContainerProps) => {
     loadingCurrentUser: loadingCurrentUserFromProps,
   } = props;
   const { schema } = model;
-  // if a document is being passed, this is an edit form
+  // if a document or documentId is being passed, this is an edit form
   const isEdit = documentId || slug;
   const formType = isEdit ? "edit" : "new";
 

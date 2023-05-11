@@ -93,14 +93,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
   };
 
   const Responses = await getRawResponsesCollection();
-  const responseFromDb = await Responses.findOne(selector, {
-    projection: {
-      pagePath: true,
-      editionId: true,
-      completion: true,
-      createdAt: true,
-    },
-  });
+  const responseFromDb = await Responses.findOne(selector);
 
   // const responseFromDb =
   //   await ResponseMongooseModel().findOne<ResponseDocument>(
