@@ -9,6 +9,7 @@ export const tool: TemplateFunction = options => {
         options: TOOLS_OPTIONS.map(id => ({
             id
         })),
+        i18nNamespace: 'tools',
         defaultSort: 'options',
         ...question
     }

@@ -116,8 +116,8 @@ export const makeId = (str) => {
 };
 
 export const parseOptions = (questionObject, options) => {
-  const { optionsIntlId } = questionObject;
-  return options.map((option) => {
+  const { optionsIntlId, i18nNamespace = questionObject.id } = questionObject;
+  const parsedOptions = options.map((option) => {
     if (typeof option === "object") {
       // if option is an object, use its id or value as translation key
       const { id, value } = option;
@@ -127,7 +127,7 @@ export const parseOptions = (questionObject, options) => {
         label: idString, // only used as fallback
         intlId: optionsIntlId
           ? `${optionsIntlId}.${idString}`
-          : `options.${questionObject.id}.${idString}`,
+          : `options.${i18nNamespace}.${idString}`,
         ...option,
       };
     } else {
@@ -135,6 +135,8 @@ export const parseOptions = (questionObject, options) => {
       return { value: option, label: option };
     }
   });
+
+  return parsedOptions;
 };
 
 export const generateIntlId = ({

@@ -99,6 +99,7 @@ type QuestionMetadata {
     yearAdded: Int
     label: String
     intlId: String
+    i18nNamespace: String
     template: String
     extends: String
     rawPaths: RawDbPaths

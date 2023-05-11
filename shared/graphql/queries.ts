@@ -174,6 +174,7 @@ query ${editionId}MetadataQuery {
               id
               label
               intlId
+              i18nNamespace
               template
               extends
               contentType
@@ -281,6 +282,7 @@ query ${editionId}MetadataQuery {
           questions {
             id
             intlId
+            i18nNamespace
             yearAdded
             limit
             template
