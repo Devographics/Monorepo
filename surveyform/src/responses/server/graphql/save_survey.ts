@@ -1,6 +1,4 @@
-import {
-  processEmailOnUpdate,
-} from "~/responses/model.server";
+import { processEmailOnUpdate } from "~/responses/model.server";
 import { getEditionResponseSchema } from "~/responses/schema.server";
 import { canModifyResponse } from "../model";
 import { throwError } from "./errors";
@@ -88,8 +86,12 @@ export const saveSurvey = async (root, args, context) => {
   data = await processEmailOnUpdate(data, { document: response });
 
   // insert document
-  const updatedDocument = await Responses.updateOne({ _id }, { $set: data });
+  const updatedDocument = await Responses.findOneAndUpdate(
+    { _id },
+    { $set: data },
+    { returnDocument: "after" }
+  );
 
-  const mergedDocument = { ...document, ...data };
+  const mergedDocument = { ...updatedDocument.value, ...data };
   return { data: mergedDocument };
 };
