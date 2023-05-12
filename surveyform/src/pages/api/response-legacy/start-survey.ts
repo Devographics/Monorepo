@@ -115,7 +115,10 @@ export default async function responseStartSurveyHandler(
       }>;
     } = await gqlRes.json();
     console.log("startSurvey result", JSON.stringify(gqlJson));
-    return res.status(200).json(gqlJson);
+    return res.status(200).json({
+      ...gqlJson,
+      data: gqlJson.data?.startSurvey?.data
+    });
   } catch (err) {
     console.error("GraphQL fetch error", err);
     return res.status(500);
