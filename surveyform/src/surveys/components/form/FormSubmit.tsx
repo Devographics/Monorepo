@@ -149,7 +149,15 @@ const SubmitButton = (props: {
           variant="primary"
           onClick={async (e) => {
             e.preventDefault();
-            await submitForm({ path, setButtonLoading });
+            await submitForm({
+              path,
+              beforeSubmitCallback: () => {
+                setButtonLoading(true);
+              },
+              afterSubmitCallback: () => {
+                setButtonLoading(false);
+              },
+            });
           }}
         >
           {contents}

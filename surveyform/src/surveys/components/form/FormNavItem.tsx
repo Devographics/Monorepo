@@ -12,43 +12,44 @@ import { saveSurvey } from "../page/services";
 import { SectionMetadata } from "@devographics/types";
 import { useEdition } from "../SurveyContext/Provider";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
+import { FormInputProps } from "./typings";
+
+interface SurveyNavItemProps extends FormInputProps {
+  setShown: any;
+  number: number;
+  setNavLoading: any;
+  currentSection: SectionMetadata;
+}
 
 const SurveyNavItem = ({
+  submitForm,
   response,
-  section,
+  currentSection,
   number,
   setShown,
-  currentTabindex,
-  setCurrentFocusIndex,
-  setNavLoading,
+  stateStuff,
   readOnly,
-}: {
-  response?: ResponseDocument;
-  section: SectionMetadata;
-  number: any;
-  setShown: (boolean) => void;
-  currentTabindex?: number | null;
-  setCurrentFocusIndex: (index: number | null) => void;
-  setCurrentTabindex: (index: number | null) => void;
-  setNavLoading: (navLoading: boolean) => void;
-  readOnly?: boolean;
-}) => {
+  setNavLoading,
+}: SurveyNavItemProps) => {
+  const { currentTabindex, setCurrentFocusIndex } = stateStuff;
   const { locale } = useLocaleContext();
   const router = useRouter();
   const textInput = useRef<any>(null);
   const { edition, editionHomePath, editionPathSegments } = useEdition();
   const completion = getSectionCompletionPercentage({
     edition,
-    section,
+    section: currentSection,
     response,
   });
   const showCompletion = completion !== null && completion > 0;
 
-  // const formContext = useFormContext();
-  // const { getDocument, currentValues } = formContext;
-  const document = response;
-  // TODO
-  const currentValues = {};
+  const path = getEditionSectionPath({
+    edition,
+    response,
+    number,
+    editionPathSegments,
+    locale,
+  });
 
   useEffect(() => {
     if (currentTabindex === number) {
@@ -57,27 +58,17 @@ const SurveyNavItem = ({
   }, [currentTabindex]);
 
   const handleClick = async (e) => {
-    setNavLoading(true);
     e.preventDefault();
-    setShown(false);
-    const res = await saveSurvey(edition, {
-      id: document._id,
-      data: currentValues,
+    await submitForm({
+      path,
+      beforeSubmitCallback: () => {
+        setShown(false);
+        setNavLoading(true);
+      },
+      afterSubmitCallback: () => {
+        setNavLoading(false);
+      },
     });
-    if (res.error) {
-      console.error(res.error);
-      captureException(res.error);
-    }
-    setNavLoading(false);
-    router.push(
-      getEditionSectionPath({
-        edition,
-        response,
-        number,
-        editionPathSegments,
-        locale,
-      })
-    );
   };
 
   return (
@@ -104,7 +95,7 @@ const SurveyNavItem = ({
         {...(!readOnly && { onClick: handleClick })}
       >
         <FormattedMessage
-          id={`sections.${section.intlId || section.id}.title`}
+          id={`sections.${currentSection.intlId || currentSection.id}.title`}
         />{" "}
         {showCompletion && (
           <span className="section-nav-item-completion">{completion}%</span>

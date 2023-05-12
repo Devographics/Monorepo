@@ -8,26 +8,15 @@ import { FormSubmit } from "./FormSubmit";
 export const FormLayout = (props: any) => {
   const {
     children,
-    response,
     section,
     sectionNumber,
     edition,
-    navLoading,
-    setNavLoading,
-    readOnly,
     nextSection,
     previousSection,
   } = props;
   return (
     <div className="survey-section">
-      <FormNav
-        response={response}
-        navLoading={navLoading}
-        setNavLoading={setNavLoading}
-        readOnly={readOnly}
-        // Not actually used in SurveyNav
-        //currentSectionNumber={sectionNumber}
-      />
+      <FormNav {...props} />
       <div className="section-contents">
         <div className="section-questions" id="section-questions">
           <SurveySectionHeading

@@ -21,6 +21,22 @@ export const FormSection = (props) => {
   const { edition, section, response: originalResponse, sectionNumber } = props;
   const [formState, setFormState] = useState(initFormState(originalResponse));
   const [loading, setLoading] = useState(false);
+  const [currentTabindex, setCurrentTabindex] = useState<number | null>(null);
+  const [currentFocusIndex, setCurrentFocusIndex] = useState<number | null>(
+    null
+  );
+
+  const stateStuff = {
+    formState,
+    setFormState,
+    loading,
+    setLoading,
+    currentTabindex,
+    setCurrentTabindex,
+    currentFocusIndex,
+    setCurrentFocusIndex,
+  };
+
   const router = useRouter();
 
   const updateCurrentValues = (path, value) => {
@@ -33,15 +49,19 @@ export const FormSection = (props) => {
 
   const submitForm = async ({
     path,
-    setButtonLoading,
+    beforeSubmitCallback,
+    afterSubmitCallback,
   }: {
     path: string;
-    setButtonLoading: any;
+    beforeSubmitCallback: any;
+    afterSubmitCallback: any;
   }) => {
     const { currentValues } = formState;
     if (!isEmpty(currentValues)) {
       setLoading(true);
-      setButtonLoading(true);
+      if (beforeSubmitCallback) {
+        beforeSubmitCallback();
+      }
       const res = await saveSurvey(edition, {
         id: response._id,
         data: currentValues,
@@ -51,16 +71,12 @@ export const FormSection = (props) => {
         captureException(res.error);
       }
       setLoading(false);
-      setButtonLoading(false);
+
+      if (afterSubmitCallback) {
+        afterSubmitCallback();
+      }
     }
     router.push(path);
-  };
-
-  const stateStuff = {
-    formState,
-    setFormState,
-    loading,
-    setLoading,
   };
 
   const response = mergeWithResponse(

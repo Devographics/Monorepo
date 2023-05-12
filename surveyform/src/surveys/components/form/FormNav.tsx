@@ -20,35 +20,30 @@ import { Button } from "~/core/components/ui/Button";
 import { Loading } from "~/core/components/ui/Loading";
 import { useEdition } from "../SurveyContext/Provider";
 import { ResponseDocument } from "@devographics/core-models";
+import { FormInputProps } from "~/surveys/components/form/typings";
 
 // TODO
 // const getOverallCompletionPercentage = (response) => {
 
 // }
 
-const SurveyNav = ({
-  response,
-  navLoading,
-  setNavLoading,
-  readOnly,
-}: {
-  response?: ResponseDocument;
-  navLoading?: boolean;
-  setNavLoading?: any;
-  readOnly?: boolean;
-}) => {
+const SurveyNav = (props: FormInputProps) => {
+  const { readOnly, response, stateStuff } = props;
+  const {
+    currentFocusIndex,
+    currentTabindex,
+    setCurrentTabindex,
+    setCurrentFocusIndex,
+  } = stateStuff;
+  const [navLoading, setNavLoading] = useState(false);
+  const [shown, setShown] = useState(false);
+
   const { edition, editionHomePath } = useEdition();
 
   const sections = edition.sections; //surveys.find((o) => o.slug === survey.slug)?.outline;
-  if (!sections)
+  if (!sections) {
     throw new Error(`Survey or outline not found for slug ${edition.id}`);
-
-  const [shown, setShown] = useState(false);
-  const [currentTabindex, setCurrentTabindex] = useState<number | null>(null);
-  const [currentFocusIndex, setCurrentFocusIndex] = useState<number | null>(
-    null
-  );
-
+  }
   const overallCompletion =
     !readOnly && response && getCompletionPercentage({ response, edition });
 
@@ -115,16 +110,12 @@ const SurveyNav = ({
           <ul>
             {sections.map((section, i) => (
               <FormNavItem
+                {...props}
+                currentSection={section}
                 setShown={setShown}
-                response={response}
-                section={section}
                 number={i + 1}
                 key={i}
-                currentTabindex={currentTabindex}
-                setCurrentTabindex={setCurrentTabindex}
-                setCurrentFocusIndex={setCurrentFocusIndex}
                 setNavLoading={setNavLoading}
-                readOnly={readOnly}
               />
             ))}
             {/* {response && <li>Overall: {getOverallCompletionPercentage(response)}%</li>} */}

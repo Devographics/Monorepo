@@ -22,5 +22,8 @@ export type FormInputProps = {
   section: SectionMetadata;
   question: QuestionFormObject;
   updateCurrentValues: any;
+  submitForm: any;
   isFirstQuestion?: boolean;
+  readOnly?: boolean;
+  stateStuff: any;
 };
