@@ -44,7 +44,7 @@ export const FormItem = (props: FormItemProps) => {
     isFirstQuestion,
   } = props;
 
-  const { options, formPaths, entity } = question;
+  const { options, formPaths, entity, allowComment } = question;
 
   const commentPath = formPaths.comment;
   const commentValue = get(response, commentPath);
@@ -70,13 +70,15 @@ export const FormItem = (props: FormItemProps) => {
         </div>
         <FormItemNote {...props} />
 
-        <CommentTrigger
-          value={commentValue}
-          showCommentInput={showCommentInput}
-          setShowCommentInput={setShowCommentInput}
-          isFirstQuestion={isFirstQuestion}
-        />
-        {showCommentInput && (
+        {allowComment && (
+          <CommentTrigger
+            value={commentValue}
+            showCommentInput={showCommentInput}
+            setShowCommentInput={setShowCommentInput}
+            isFirstQuestion={isFirstQuestion}
+          />
+        )}
+        {allowComment && showCommentInput && (
           <CommentInput
             {...props}
             commentPath={commentPath}
