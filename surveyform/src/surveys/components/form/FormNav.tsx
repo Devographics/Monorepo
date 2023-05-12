@@ -19,7 +19,6 @@ import { getCompletionPercentage } from "~/responses/helpers";
 import { Button } from "~/core/components/ui/Button";
 import { Loading } from "~/core/components/ui/Loading";
 import { useEdition } from "../SurveyContext/Provider";
-import { ResponseDocument } from "@devographics/core-models";
 import { FormInputProps } from "~/surveys/components/form/typings";
 
 // TODO

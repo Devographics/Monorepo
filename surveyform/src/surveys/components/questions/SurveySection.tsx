@@ -1,13 +1,16 @@
-"use client";
 import SurveySectionContents from "./SurveySectionContents";
 import EditionMessage from "../SurveyMessage";
-import { useSurveyResponseSectionParams } from "../hooks";
-import { useEdition } from "../SurveyContext/Provider";
+import { EditionMetadata } from "@devographics/types";
 
-const SurveySection = () => {
-  let { responseId, sectionNumber = 1 } = useSurveyResponseSectionParams();
-  const { edition } = useEdition();
-
+const SurveySection = ({
+  responseId,
+  sectionNumber,
+  edition,
+}: {
+  responseId: string;
+  sectionNumber: number;
+  edition: EditionMetadata;
+}) => {
   const sections = edition.sections;
   const sectionIndex = sectionNumber - 1;
   const section = sections[sectionIndex];
@@ -25,7 +28,7 @@ const SurveySection = () => {
   return (
     <div className="survey-section-wrapper">
       <EditionMessage edition={edition} />
-      <SurveySectionContents edition={edition} {...sectionProps} />
+      <SurveySectionContents {...sectionProps} />
     </div>
   );
 };

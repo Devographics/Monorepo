@@ -7,19 +7,18 @@ import FormLayout from "~/form/components/elements/FormLayout";
 import FormOptionLabel from "~/form/components/elements/FormOptionLabel";
 import FormGroup from "~/form/components/elements/FormGroup";
 import { Form, VulcanComponentsProvider } from "@devographics/react-form";
-import { getSurveyResponseModel } from "~/responses/model.client";
-import type { SurveyEdition } from "@devographics/core-models";
-import { SurveyResponseFragment } from "~/responses/fragments";
 import { Button } from "~/core/components/ui/Button";
 import { LoadingButton } from "~/core/components/ui/LoadingButton";
 import { TooltipTrigger } from "~/core/components/ui/TooltipTrigger";
 import { Loading } from "~/core/components/ui/Loading";
-import { SmartForm } from "~/form/components/smartform/FormContainer";
 import { EditionMetadata } from "@devographics/types";
 import { useUserResponse } from "~/responses/hooks";
 import { FormSection } from "../form/FormSection";
+import { useEdition } from "../SurveyContext/Provider";
 
-const SurveySectionContents = (props) => {
+const SurveySectionContents = (props: any) => {
+  // TODO: get from server? But I am not sure if we need the parseEdition (with React component) or not here
+  const { edition } = useEdition();
   const [prevLoading, setPrevLoading] = useState(false);
   const [nextLoading, setNextLoading] = useState(false);
   const [navLoading, setNavLoading] = useState(false);
@@ -71,7 +70,11 @@ const SurveySectionContents = (props) => {
         // FormDescription,
       }}
     >
-      <SurveySectionContentsInner {...props} {...loadingProps} />
+      <SurveySectionContentsInner
+        edition={edition}
+        {...props}
+        {...loadingProps}
+      />
     </VulcanComponentsProvider>
   );
 };
@@ -125,9 +128,6 @@ const SurveySectionContentsInner = ({
     edition,
   };
   return <FormSection {...formProps} />;
-  // return (
-  //   <SmartForm
-  //     documentId={responseId}
   //     document={response}
   //     fields={fields}
   //     model={getSurveyResponseModel(edition)}

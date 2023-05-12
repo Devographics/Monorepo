@@ -9,8 +9,6 @@ import {
   addOtherMarker,
 } from "./Checkboxgroup";
 import { FormInputProps } from "~/surveys/components/form/typings";
-import { useFormContext } from "~/surveys/components/form/FormContext";
-
 import { FormOption } from "~/surveys/components/form/FormOption";
 import { useIntlContext } from "@devographics/react-i18n";
 import { FormItem } from "~/surveys/components/form/FormItem";
@@ -72,6 +70,7 @@ const OtherComponent = ({
       />
       {showOther && (
         <FormComponentText
+          // @ts-ignore
           inputProperties={textFieldInputProperties}
           itemProperties={textFieldItemProperties}
         />

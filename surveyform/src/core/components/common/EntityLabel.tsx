@@ -45,7 +45,7 @@ export const EntityLabel = ({
   } else {
     return (
       <span className="entity-label entity-label-fallback">
-        <FormattedMessage id={intlId} defaultMessage={fallback} />
+        <FormattedMessage id={intlId || ""} defaultMessage={fallback} />
       </span>
     );
   }

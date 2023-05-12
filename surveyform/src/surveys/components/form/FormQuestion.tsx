@@ -1,4 +1,5 @@
 "use client";
+import { ErrorBoundary } from "~/core/components/error";
 import { addComponentToQuestionObject } from "~/responses/customComponents";
 import { parseOptions } from "~/responses/helpers";
 
@@ -48,12 +49,14 @@ export const FormQuestion = (props) => {
   };
 
   return (
-    <div className="form-input">
-      <Component {...componentProperties} />
-      {/* <pre>
+    <ErrorBoundary>
+      <div className="form-input">
+        <Component {...componentProperties} />
+        {/* <pre>
         <code>{JSON.stringify(question, null, 2)}</code>
       </pre> */}
-    </div>
+      </div>
+    </ErrorBoundary>
   );
 };
 

@@ -30,6 +30,7 @@ export interface Survey extends SurveyConfig {
 }
 
 export type Edition = {
+    /** js2019 */
     id: string
     sections: Section[]
     apiSections: Section[]

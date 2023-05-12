@@ -1,5 +1,5 @@
 import { LoginDialog } from "~/account/LoginDialog";
-import { getCurrentUser } from "../../survey/[slug]/[year]/[responseId]/fetchers";
+import { getCurrentUser } from "~/account/user/api/fetchers";
 
 const Login = async () => {
   const user = await getCurrentUser();

@@ -9,12 +9,9 @@ import get from "lodash/get.js";
 
 import { useIntlContext } from "@devographics/react-i18n";
 import Form from "react-bootstrap/Form";
-import { FormInputLoading } from "./FormInputLoading";
 import { FormInputProps } from "./typings";
 import { CommentTrigger, CommentInput } from "./FormComment";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
-
-import { EntityLabel } from "~/core/components/common/EntityLabel";
 
 interface FormItemProps extends FormInputProps {
   children: ReactNode;
@@ -78,7 +75,7 @@ export const FormItem = (props: FormItemProps) => {
             isFirstQuestion={isFirstQuestion}
           />
         )}
-        {allowComment && showCommentInput && (
+        {allowComment && showCommentInput && commentPath && (
           <CommentInput
             {...props}
             commentPath={commentPath}

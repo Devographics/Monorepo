@@ -1,7 +1,8 @@
 import { statuses } from "~/surveys/constants";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
+import { EditionMetadata } from "@devographics/types";
 
-const EditionMessage = ({ edition }) => {
+const EditionMessage = ({ edition }: { edition: EditionMetadata }) => {
   const { status } = edition;
   switch (status) {
     case statuses.preview:

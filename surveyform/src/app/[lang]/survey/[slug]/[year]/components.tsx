@@ -8,9 +8,9 @@ import Faq from "~/core/components/common/Faq";
 import EditionAction from "~/surveys/components/page/SurveyAction";
 import { LoginDialog } from "~/account/LoginDialog";
 import { Loading } from "~/core/components/ui/Loading";
-import { getCurrentUser } from "./[responseId]/fetchers";
 import { Suspense } from "react";
 import { EditionMetadata } from "@devographics/types";
+import { getCurrentUser } from "~/account/user/api/fetchers";
 
 export const EditionMain = ({ edition }: { edition: EditionMetadata }) => {
   return (

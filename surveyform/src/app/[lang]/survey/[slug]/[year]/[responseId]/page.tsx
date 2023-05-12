@@ -1,7 +1,8 @@
-import SurveySectionSwitcher from "~/surveys/components/SurveySectionSwitcher";
+import { redirect } from "next/navigation";
 
 const SurveyFromResponseIdPage = () => {
-  return <SurveySectionSwitcher />;
+  // first section
+  redirect("./1");
 };
 
 export default SurveyFromResponseIdPage;

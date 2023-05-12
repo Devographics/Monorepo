@@ -64,14 +64,16 @@ export const CommentTrigger = ({
 export const CommentInput = ({
   commentPath,
   commentValue,
-  questionLabel,
   questionValue,
   questionOptions,
-  questionEntity,
-  questionPath,
+}: {
+  commentPath: string;
+  commentValue?: string;
+  questionValue?: string;
+  questionOptions?: Array<{ value: string; label: string }>;
 }) => {
   const [localValue, setLocalValue] = useState(commentValue);
-  const { getDocument, updateCurrentValues } = useFormContext();
+  const { updateCurrentValues } = useFormContext();
 
   // if label has been translated, use that to override entity name
   //   const label =
@@ -89,13 +91,13 @@ export const CommentInput = ({
     (event) => {
       let value = event.target.value;
       setLocalValue(value);
-      const f = isDebounced
+      const _updateCurrentValues = isDebounced
         ? updateCurrentValuesDebounced
         : updateCurrentValues;
       if (value === "") {
-        f({ [commentPath]: null });
+        _updateCurrentValues({ [commentPath]: null });
       } else {
-        f({ [commentPath]: value });
+        _updateCurrentValues({ [commentPath]: value });
       }
     };
 

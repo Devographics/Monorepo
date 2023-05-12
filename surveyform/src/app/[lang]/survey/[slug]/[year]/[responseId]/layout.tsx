@@ -1,7 +1,9 @@
+// TODO: technically, we don't need the "responseId" parameter
+// the response can be retrieved given the current user
 import { redirect } from "next/navigation";
 import { ResponseProvider } from "~/surveys/components/ResponseContext/ResponseProvider";
 import { routes } from "~/lib/routes";
-import { getCurrentUser } from "./fetchers";
+import { getCurrentUser } from "~/account/user/api/fetchers";
 
 // Important, otherwise the page will use ISR
 // https://github.com/vercel/next.js/issues/44712

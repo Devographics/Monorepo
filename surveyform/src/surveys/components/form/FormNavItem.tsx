@@ -2,13 +2,9 @@
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
-import { ResponseDocument } from "@devographics/core-models";
 import { getSectionCompletionPercentage } from "~/responses/helpers";
 // import { useFormContext } from "@devographics/react-form";
 import { getEditionSectionPath } from "~/surveys/helpers";
-import { useRouter } from "next/navigation";
-import { captureException } from "@sentry/nextjs";
-import { saveSurvey } from "../page/services";
 import { SectionMetadata } from "@devographics/types";
 import { useEdition } from "../SurveyContext/Provider";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
@@ -33,7 +29,6 @@ const SurveyNavItem = ({
 }: SurveyNavItemProps) => {
   const { currentTabindex, setCurrentFocusIndex } = stateStuff;
   const { locale } = useLocaleContext();
-  const router = useRouter();
   const textInput = useRef<any>(null);
   const { edition, editionHomePath, editionPathSegments } = useEdition();
   const completion = getSectionCompletionPercentage({

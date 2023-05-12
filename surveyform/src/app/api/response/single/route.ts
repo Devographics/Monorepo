@@ -62,18 +62,6 @@ export async function GET(req: NextRequest, res: NextResponse) {
     { _id: userId },
     { projection: { isAdmin: true, createdAt: true } }
   );
-
-  // const currentUser = (
-  //   await UserMongooseModel.findById<UserDocument>(userId, {
-  //     username: 1,
-  //     createdAt: 1,
-  //     isAdmin: 1,
-  //     // TODO: groups are populated by Vulcan logic
-  //     // reenable this
-  //     groups: 1,
-  //   })
-  // )?.toObject();
-
   if (!currentUser) {
     return NextResponse.json(
       { error: "User do not exist anymore" },
@@ -95,7 +83,6 @@ export async function GET(req: NextRequest, res: NextResponse) {
 
   const Responses = await getRawResponsesCollection();
   const responseFromDb = await Responses.findOne(selector);
-
   // const responseFromDb =
   //   await ResponseMongooseModel().findOne<ResponseDocument>(
   //     selector,

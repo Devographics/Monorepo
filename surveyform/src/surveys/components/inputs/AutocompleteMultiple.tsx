@@ -20,8 +20,8 @@ import { useFormContext } from "~/surveys/components/form/FormContext";
 import { Alert } from "~/core/components/ui/Alert";
 import { FormItem } from "~/surveys/components/form/FormItem";
 import useSWR from "swr";
-import { FormInputProps } from "../../typings";
 import { graphqlFetcher } from "~/core/utils/graphqlQuery";
+import { FormInputProps } from "~/form/typings";
 
 export interface AutocompleteMultipleProps extends FormInputProps {}
 

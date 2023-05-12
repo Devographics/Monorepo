@@ -76,9 +76,9 @@ const getReadOnlyDb = () => {
 /**
  * Handle the connection automatically when called the first time
  */
-export const getRawResponsesCollection = async (survey?: Survey) => {
+export const getRawResponsesCollection = async <T = any>(survey?: Survey) => {
     const db = await getAppDb()
-    return db.collection('responses')
+    return db.collection<T>('responses')
 }
 
 /**

@@ -3,7 +3,7 @@ import EntityLabel, {
   EntityLabelProps,
 } from "~/core/components/common/EntityLabel";
 import { useIntlContext } from "@devographics/react-i18n";
-import { QuestionFormObject } from "~/surveys/parser/parseSurvey";
+import { QuestionFormObject } from "~/surveys/components/form/typings";
 
 export interface FormLabelProps {
   questionId: string;

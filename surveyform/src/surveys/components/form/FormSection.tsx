@@ -7,6 +7,7 @@ import { saveSurvey } from "~/surveys/components/page/services";
 import { useRouter } from "next/navigation";
 import isEmpty from "lodash/isEmpty";
 import { FormContext } from "./FormContext";
+import { ErrorBoundary } from "~/core/components/error";
 
 const initFormState = (response) => ({
   currentValues: {},
@@ -105,11 +106,20 @@ export const FormSection = (props) => {
       <FormContext.Provider value={formProps}>
         <FormLayout {...formProps}>
           {section.questions.map((question) => (
-            <FormQuestion
-              {...formProps}
+            <ErrorBoundary
               key={question.id}
-              question={question}
-            />
+              fallbackComponent={({ error }) => (
+                <p>
+                  Could not load question {question.id} ({error?.message})
+                </p>
+              )}
+            >
+              <FormQuestion
+                {...formProps}
+                key={question.id}
+                question={question}
+              />
+            </ErrorBoundary>
           ))}
         </FormLayout>
       </FormContext.Provider>
