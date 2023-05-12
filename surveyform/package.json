@@ -58,6 +58,7 @@
     "@devographics/crud": "workspace:1.0.0",
     "@devographics/encrypt-email": "workspace:1.0.0",
     "@devographics/fetch": "workspace:^1.0.0",
+    "@devographics/i18n": "workspace:^1.0.0",
     "@devographics/mongo": "workspace:^1.0.0",
     "@devographics/permissions": "workspace:1.0.0",
     "@devographics/react-form": "workspace:1.0.0",

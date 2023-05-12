@@ -12,6 +12,7 @@ import Form from "react-bootstrap/Form";
 import { FormInputProps } from "./typings";
 import { CommentTrigger, CommentInput } from "./FormComment";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
+import { getQuestioni18nIds } from "@devographics/i18n";
 
 interface FormItemProps extends FormInputProps {
   children: ReactNode;
@@ -92,11 +93,11 @@ export const FormItem = (props: FormItemProps) => {
   );
 };
 
-export const FormItemTitle = ({ section, question }: FormInputProps) => {
+export const FormItemTitle = (props: FormInputProps) => {
+  const { question } = props;
   const intl = useIntlContext();
-  const { entity, yearAdded, intlId: intlIdOverride } = question;
-
-  const intlId = intlIdOverride ?? `${section.id}.${question.id}`;
+  const { entity, yearAdded } = question;
+  const intlIds = getQuestioni18nIds(props);
 
   return (
     <h3 className="form-label-heading">
@@ -109,7 +110,7 @@ export const FormItemTitle = ({ section, question }: FormInputProps) => {
             }}
           />
         ) : (
-          <FormattedMessage id={intlId} defaultMessage={question.id} />
+          <FormattedMessage id={intlIds.base} defaultMessage={question.id} />
         )}
         {yearAdded === 2023 && (
           <span
@@ -124,18 +125,20 @@ export const FormItemTitle = ({ section, question }: FormInputProps) => {
   );
 };
 
-export const FormItemDescription = ({ section, question }: FormInputProps) => {
+export const FormItemDescription = (props: FormInputProps) => {
   const intl = useIntlContext();
-  const intlId = `${section.id}.${question.id}.description`;
-  const description = intl.formatMessage({ id: intlId });
+  const intlIds = getQuestioni18nIds(props);
+  const description = intl.formatMessage({ id: intlIds.description });
   return description ? (
-    <FormattedMessage className="form-description" id={intlId} />
+    <FormattedMessage className="form-description" id={intlIds.description} />
   ) : null;
 };
 
-export const FormItemNote = ({ section, question }: FormInputProps) => {
+export const FormItemNote = (props: FormInputProps) => {
   const intl = useIntlContext();
-  const intlId = `${section.id}.${question.id}.note`;
-  const note = intl.formatMessage({ id: intlId });
-  return note ? <FormattedMessage className="form-note" id={intlId} /> : null;
+  const intlIds = getQuestioni18nIds(props);
+  const note = intl.formatMessage({ id: intlIds.note });
+  return note ? (
+    <FormattedMessage className="form-note" id={intlIds.note} />
+  ) : null;
 };

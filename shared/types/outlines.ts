@@ -133,6 +133,7 @@ export type Question = {
 
 export type Option = {
     id: OptionId
+    intlId?: string
     editions?: string[]
     average?: number
     label?: string
