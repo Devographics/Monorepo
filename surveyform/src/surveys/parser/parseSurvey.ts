@@ -7,12 +7,9 @@ import type {
   DbPaths,
 } from "@devographics/types";
 import { QuestionFormTemplateOutput } from "./addTemplateToSurvey";
-// import allTemplates from "@devographics/templates";
+import { QuestionFormObject } from "~/surveys/components/form/typings";
 
-export interface QuestionFormObject extends QuestionFormTemplateOutput {
-  type: NumberConstructor | StringConstructor;
-  formPaths: DbPaths;
-}
+// import allTemplates from "@devographics/templates";
 
 /*
 
@@ -105,7 +102,6 @@ export const getQuestionObject = ({
 
   return questionFormObject;
 };
-
 
 /** 
 

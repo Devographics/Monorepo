@@ -5,6 +5,8 @@ import FormQuestion from "./FormQuestion";
 import { captureException } from "@sentry/nextjs";
 import { saveSurvey } from "~/surveys/components/page/services";
 import { useRouter } from "next/navigation";
+import isEmpty from "lodash/isEmpty";
+import { FormContext } from "./FormContext";
 
 const initFormState = (response) => ({
   currentValues: {},
@@ -36,28 +38,29 @@ export const FormSection = (props) => {
     path: string;
     setButtonLoading: any;
   }) => {
-    setLoading(true);
-    setButtonLoading(true);
-    const res = await saveSurvey(edition, {
-      id: response._id,
-      data: formState.currentValues,
-    });
-    if (res.error) {
-      console.error(res.error);
-      captureException(res.error);
+    const { currentValues } = formState;
+    if (!isEmpty(currentValues)) {
+      setLoading(true);
+      setButtonLoading(true);
+      const res = await saveSurvey(edition, {
+        id: response._id,
+        data: currentValues,
+      });
+      if (res.error) {
+        console.error(res.error);
+        captureException(res.error);
+      }
+      setLoading(false);
+      setButtonLoading(false);
     }
-    setLoading(false);
-    setButtonLoading(false);
     router.push(path);
   };
 
   const stateStuff = {
     formState,
     setFormState,
-    updateCurrentValues,
     loading,
     setLoading,
-    submitForm,
   };
 
   const response = mergeWithResponse(
@@ -77,15 +80,23 @@ export const FormSection = (props) => {
     stateStuff,
     previousSection,
     nextSection,
+    updateCurrentValues,
+    submitForm,
   };
 
   return (
     <div>
-      <FormLayout {...formProps}>
-        {section.questions.map((question) => (
-          <FormQuestion {...formProps} key={question.id} question={question} />
-        ))}
-      </FormLayout>
+      <FormContext.Provider value={formProps}>
+        <FormLayout {...formProps}>
+          {section.questions.map((question) => (
+            <FormQuestion
+              {...formProps}
+              key={question.id}
+              question={question}
+            />
+          ))}
+        </FormLayout>
+      </FormContext.Provider>
     </div>
   );
 };

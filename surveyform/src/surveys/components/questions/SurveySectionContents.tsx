@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 // TODO: let the FormContainer directly get those components
-import { FormItem } from "~/form/components/elements/FormItem";
+import { FormItem } from "~/surveys/components/form/FormItem";
 import FormSubmit from "~/form/components/elements/FormSubmit";
 import FormLayout from "~/form/components/elements/FormLayout";
 import FormOptionLabel from "~/form/components/elements/FormOptionLabel";

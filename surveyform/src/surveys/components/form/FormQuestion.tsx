@@ -2,42 +2,51 @@
 import { addComponentToQuestionObject } from "~/responses/customComponents";
 import { parseOptions } from "~/responses/helpers";
 
-const getOnChangeHandler = ({
-  edition,
-  section,
-  question,
-  response,
-  stateStuff,
-}) => {
-  const { updateCurrentValues, setFormState } = stateStuff;
-  return (event) => {
-    const path = question.formPaths.response;
-    const value = event.target.value;
-    updateCurrentValues(path, value);
-  };
-};
+// const getOnChangeHandler = ({
+//   edition,
+//   section,
+//   question,
+//   response,
+//   updateCurrentValues,
+// }) => {
+//   return (event) => {
+//     const path = question.formPaths.response;
+//     const value = event.target.value;
+//     updateCurrentValues(path, value);
+//   };
+// };
 
 export const FormQuestion = (props) => {
-  const { edition, section, response, question, stateStuff } = props;
+  const {
+    survey,
+    edition,
+    section,
+    response,
+    question,
+    stateStuff,
+    updateCurrentValues,
+    isFirstQuestion,
+  } = props;
   const { setFormState } = stateStuff;
   const qWithComponent = addComponentToQuestionObject(question);
   const Component = qWithComponent.input;
   const path = question.formPaths.response;
   const value = response?.[question.formPaths.response];
-  const options = parseOptions(question, question.options);
+  const options = question.options && parseOptions(question, question.options);
+
   const componentProperties = {
+    response,
     path,
-    inputProperties: {
-      options,
-      value,
-      onChange: getOnChangeHandler(props),
-    },
-    itemProperties: {
-      questionId: question.id,
-      questionObject: question,
-      label: path,
-    },
+    options,
+    value,
+    survey,
+    edition,
+    section,
+    question,
+    updateCurrentValues,
+    isFirstQuestion,
   };
+
   return (
     <div className="form-input">
       <Component {...componentProperties} />

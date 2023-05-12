@@ -13,13 +13,13 @@ interface StringLabel {
  */
 interface EntityLabelDefinition {
   id?: string;
-  intlId: string;
+  intlId?: string;
   fallback?: any;
   entity?: Entity;
 }
 export interface EntityLabelProps extends EntityLabelDefinition, StringLabel {}
 
-const EntityLabel = ({
+export const EntityLabel = ({
   //id,
   entity,
   intlId,

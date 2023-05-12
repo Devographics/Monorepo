@@ -1,20 +1,18 @@
-import RaceEthnicity from "~/form/components/inputs/RaceEthnicity";
-import Email2 from "~/form/components/inputs/Email2";
-import Hidden from "~/form/components/inputs/Hidden";
-import { Help } from "~/form/components/inputs/Help";
-import Bracket from "~/form/components/inputs/Bracket";
-import Text from "~/form/components/inputs/Default";
-import Feature from "~/form/components/inputs/experience/Feature";
-import Tool from "~/form/components/inputs/experience/Tool";
-import Slider from "~/form/components/inputs/Slider";
-import Select from "~/form/components/inputs/Select";
-import Textarea from "~/form/components/inputs/Textarea";
-import Checkboxgroup from "~/form/components/inputs/Checkboxgroup";
-import Radiogroup from "~/form/components/inputs/Radiogroup";
-import AutocompleteMultiple from "~/form/components/inputs/AutocompleteMultiple";
+import RaceEthnicity from "~/surveys/components/inputs/RaceEthnicity";
+import Email2 from "~/surveys/components/inputs/Email2";
+import Hidden from "~/surveys/components/inputs/Hidden";
+import { Help } from "~/surveys/components/inputs/Help";
+import Bracket from "~/surveys/components/inputs/Bracket";
+import Text from "~/surveys/components/inputs/Default";
+import Feature from "~/surveys/components/inputs/experience/Feature";
+import Tool from "~/surveys/components/inputs/experience/Tool";
+import Slider from "~/surveys/components/inputs/Slider";
+import Select from "~/surveys/components/inputs/Select";
+import Textarea from "~/surveys/components/inputs/Textarea";
+import Checkboxgroup from "~/surveys/components/inputs/Checkboxgroup";
+import Radiogroup from "~/surveys/components/inputs/Radiogroup";
+import AutocompleteMultiple from "~/surveys/components/inputs/AutocompleteMultiple";
 import { makeAutocomplete } from "~/core/utils/autocomplete";
-import type { ParsedQuestion } from "@devographics/core-models";
-import { QuestionFormObject } from "~/surveys/parser/parseSurvey";
 
 const customComponents = {
   help: Help,
