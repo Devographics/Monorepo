@@ -2,6 +2,7 @@
 import { ErrorBoundary } from "~/core/components/error";
 import { addComponentToQuestionObject } from "~/responses/customComponents";
 import { parseOptions } from "~/responses/helpers";
+import { getQuestionObject } from "~/surveys/parser/parseSurvey";
 
 // const getOnChangeHandler = ({
 //   edition,
@@ -23,40 +24,41 @@ export const FormQuestion = (props) => {
     edition,
     section,
     response,
-    question,
-    stateStuff,
-    updateCurrentValues,
-    isFirstQuestion,
+    question: questionMetadata,
   } = props;
-  const { setFormState } = stateStuff;
-  const qWithComponent = addComponentToQuestionObject(question);
-  const Component = qWithComponent.input;
-  const path = question.formPaths.response;
-  const value = response?.[question.formPaths.response];
-  const options = question.options && parseOptions(question, question.options);
 
-  const componentProperties = {
-    response,
-    path,
-    options,
-    value,
+  const question = getQuestionObject({
     survey,
     edition,
     section,
+    question: questionMetadata,
+  });
+
+  const { formPaths } = question;
+  const qWithComponent = addComponentToQuestionObject(question);
+  const Component = qWithComponent.input;
+  const path = formPaths.response;
+  if (!path) {
+    throw new Error(`Could not find response path for question ${question.id}`);
+  }
+  const value = response?.[path];
+  const options = question.options && parseOptions(question, question.options);
+
+  const componentProperties = {
+    ...props,
     question,
-    updateCurrentValues,
-    isFirstQuestion,
+    path,
+    options,
+    value,
   };
 
   return (
-    <ErrorBoundary>
-      <div className="form-input">
-        <Component {...componentProperties} />
-        {/* <pre>
+    <div className="form-input">
+      <Component {...componentProperties} />
+      {/* <pre>
         <code>{JSON.stringify(question, null, 2)}</code>
       </pre> */}
-      </div>
-    </ErrorBoundary>
+    </div>
   );
 };
 
