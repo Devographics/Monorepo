@@ -69,9 +69,11 @@ query SurveysMetadataQuery {
             includeQuestions
                 ? `sections {
           id
+          intlId
           slug
           questions {
             id
+            intlId
             label
             contentType
             template

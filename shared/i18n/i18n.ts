@@ -39,7 +39,9 @@ export const getQuestioni18nIds = ({
         // e.g. user_info.yearly_salary.question => "How much do you earn?"
         question: joinWithBaseSegments('question'),
         // e.g. user_info.yearly_salary.note => a note about the question displayed below
-        note: joinWithBaseSegments('note')
+        note: joinWithBaseSegments('note'),
+        // e.g. resources.video_creators.others => "Other video creators" (legacy)
+        others: joinWithBaseSegments('others')
     }
 
     return ids
@@ -72,3 +74,9 @@ export const getOptioni18nIds = ({
 
     return ids
 }
+
+// just to avoid warnings, delete later
+export const isIntlField = () => undefined
+export const formatLabel = () => undefined
+export const getIntlKeys = () => undefined
+export const getIntlLabel = () => undefined

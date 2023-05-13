@@ -59,7 +59,7 @@ export const Experience = (props: ExperienceProps) => {
                   <div className="form-input-wrapper">
                     <Form.Check.Input
                       onChange={(e) => {
-                        updateCurrentValues(path, e.target.value);
+                        updateCurrentValues({ [path]: e.target.value });
                       }}
                       type="radio"
                       value={option.id}

@@ -97,7 +97,7 @@ export const FormItemTitle = (props: FormInputProps) => {
   const { question } = props;
   const intl = useIntlContext();
   const { entity, yearAdded } = question;
-  const intlIds = getQuestioni18nIds(props);
+  const i18n = getQuestioni18nIds(props);
 
   return (
     <h3 className="form-label-heading">
@@ -110,7 +110,7 @@ export const FormItemTitle = (props: FormInputProps) => {
             }}
           />
         ) : (
-          <FormattedMessage id={intlIds.base} defaultMessage={question.id} />
+          <FormattedMessage id={i18n.base} defaultMessage={i18n.base} />
         )}
         {yearAdded === 2023 && (
           <span

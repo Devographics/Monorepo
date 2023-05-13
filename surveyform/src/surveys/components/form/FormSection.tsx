@@ -40,11 +40,13 @@ export const FormSection = (props) => {
 
   const router = useRouter();
 
-  const updateCurrentValues = (path, value) => {
+  const updateCurrentValues = (newValues) => {
     setFormState((currentFormState) => {
       const { currentValues } = currentFormState;
-      currentValues[path] = value;
-      return { ...currentFormState, currentValues };
+      return {
+        ...currentFormState,
+        currentValues: { ...currentValues, ...newValues },
+      };
     });
   };
 

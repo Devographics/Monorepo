@@ -55,9 +55,9 @@ export const FormQuestion = (props) => {
   return (
     <div className="form-input">
       <Component {...componentProperties} />
-      {/* <pre>
+      <pre>
         <code>{JSON.stringify(question, null, 2)}</code>
-      </pre> */}
+      </pre>
     </div>
   );
 };

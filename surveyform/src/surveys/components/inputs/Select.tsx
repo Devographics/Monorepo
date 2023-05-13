@@ -24,7 +24,7 @@ export const FormComponentSelect = (props: FormInputProps) => {
         // ref={refFunction}
         defaultValue={emptyValue}
         onChange={(e) => {
-          updateCurrentValues(path, e.target.value);
+          updateCurrentValues({ [path]: e.target.value });
         }}
       >
         {allOptions.map(({ id, ...rest }) => (

@@ -110,7 +110,7 @@ export const FormComponentRadioGroup = (props: FormInputProps) => {
                   checked={isChecked}
                   className={checkClass}
                   onChange={(e) => {
-                    updateCurrentValues(path, e.target.value);
+                    updateCurrentValues({ [path]: e.target.value });
                   }}
                 />
               </div>

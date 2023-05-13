@@ -13,12 +13,12 @@ export const FormComponentText = (props: FormInputProps) => {
 
   const handleChange = (event) => {
     setLocalValue(event.target.value);
-    updateCurrentValues(path, event.target.value);
+    updateCurrentValues({ [path]: event.target.value });
   };
 
   const handleChangeDebounced = (event) => {
     setLocalValue(event.target.value);
-    updateCurrentValuesDebounced(path, event.target.value);
+    updateCurrentValuesDebounced({ [path]: event.target.value });
   };
 
   return (

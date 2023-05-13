@@ -106,8 +106,10 @@ export const FormComponentCheckboxGroup = (props: FormInputProps) => {
   const intl = useIntlContext();
   const [showMore, setShowMore] = useState(false);
 
-  const { path, value, question, updateCurrentValues } = props;
+  const { path, value: value_ = [], question, updateCurrentValues } = props;
   const { options, allowOther, limit } = question;
+
+  const value = value_ as string[] | number[];
 
   const cutoff = defaultCutoff;
 
@@ -116,27 +118,23 @@ export const FormComponentCheckboxGroup = (props: FormInputProps) => {
   const hasReachedLimit = limit && value?.length >= limit;
 
   const useCutoff =
-    typeof cutoff !== "undefined" && cutoff > 0 && options.length > cutoff;
+    typeof cutoff !== "undefined" && cutoff > 0 && options?.length > cutoff;
   const optionsToShow = useCutoff
     ? showMore
       ? options
-      : take(options, cutoff)
+      : options?.slice(0, cutoff)
     : options;
 
   return (
     <FormItem {...props}>
       <div className="form-item-options">
-        {optionsToShow.map((option, i) => {
-          const isChecked = value?.includes(option.value);
+        {optionsToShow?.map((option, i) => {
+          const isChecked = value?.includes(option.id);
           const checkClass = hasValue
             ? isChecked
               ? "form-check-checked"
               : "form-check-unchecked"
             : "";
-
-          const optionDescription = intl.formatMessage({
-            id: `${option.intlId}.description`,
-          });
 
           return (
             <Form.Check layout="elementOnly" key={i} className={checkClass}>
@@ -152,9 +150,10 @@ export const FormComponentCheckboxGroup = (props: FormInputProps) => {
                     // ref={refFunction}
                     onChange={(event) => {
                       const isChecked = event.target.checked;
+                      console.log(isChecked);
                       const newValue = isChecked
-                        ? [...value, option.value]
-                        : without(value, option.value);
+                        ? [...value, option.id]
+                        : without(value, option.id);
                       updateCurrentValues({ [path]: newValue });
                     }}
                   />

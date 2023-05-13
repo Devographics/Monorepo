@@ -16,7 +16,7 @@ export interface QuestionFormObject extends QuestionFormTemplateOutput {
 export type FormInputProps = {
   response: ResponseDocument;
   path: string;
-  value: string | number;
+  value: string | number | string[] | number[];
   survey: SurveyMetadata;
   edition: EditionMetadata;
   section: SectionMetadata;
