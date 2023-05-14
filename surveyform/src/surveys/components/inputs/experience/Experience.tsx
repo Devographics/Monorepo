@@ -30,6 +30,7 @@ export const Experience = (props: ExperienceProps) => {
     question,
     updateCurrentValues,
     isFirstQuestion,
+    readOnly,
   } = props;
 
   const { options, formPaths, entity } = question;
@@ -68,6 +69,7 @@ export const Experience = (props: ExperienceProps) => {
                       // ref={refFunction}
                       checked={isChecked}
                       className={checkClass}
+                      disabled={readOnly}
                     />
                   </div>
                   <FormOption {...props} option={option} />

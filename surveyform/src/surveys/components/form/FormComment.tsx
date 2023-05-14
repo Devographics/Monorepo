@@ -11,6 +11,8 @@ import { useIntlContext } from "@devographics/react-i18n";
 import debounce from "lodash/debounce.js";
 import IconComment from "~/core/components/icons/Comment";
 import IconCommentDots from "~/core/components/icons/CommentDots";
+import { FormInputProps } from "./typings";
+import { getOptioni18nIds } from "@devographics/i18n";
 
 export const CommentTrigger = ({
   value,
@@ -61,28 +63,28 @@ export const CommentTrigger = ({
   );
 };
 
-export const CommentInput = ({
-  commentPath,
-  commentValue,
-  questionValue,
-  questionOptions,
-}: {
+interface CommentInputProps extends FormInputProps {
   commentPath: string;
-  commentValue?: string;
-  questionValue?: string;
-  questionOptions?: Array<{ value: string; label: string }>;
-}) => {
+  commentValue: string;
+}
+
+export const CommentInput = (props: CommentInputProps) => {
+  let response;
+  const intl = useIntlContext();
+  const {
+    commentPath,
+    commentValue,
+    value: questionValue,
+    question,
+    readOnly,
+  } = props;
   const [localValue, setLocalValue] = useState(commentValue);
   const { updateCurrentValues } = useFormContext();
 
-  // if label has been translated, use that to override entity name
-  //   const label =
-  //     (questionLabel.toLowerCase() !== questionPath && questionLabel) ||
-  //     questionEntity?.name;
-  const label = "foo";
-  const response = questionOptions?.find(
-    (o) => o.value === questionValue
-  )?.label;
+  const option = question.options?.find((o) => o.id === questionValue);
+
+  const i18n = option && getOptioni18nIds({ ...props, option });
+  response = i18n && intl.formatMessage({ id: i18n.base });
 
   const updateCurrentValuesDebounced = debounce(updateCurrentValues, 500);
 
@@ -104,10 +106,10 @@ export const CommentInput = ({
   return (
     <div className="comment-input">
       <h5 className="comment-input-heading">
-        <FormattedMessage id="experience.leave_comment" values={{ label }} />
+        <FormattedMessage id="experience.leave_comment" />
       </h5>
       <p className="comment-input-subheading">
-        {questionValue ? (
+        {response ? (
           <FormattedMessage
             id="experience.tell_us_more"
             values={{ response }}
@@ -121,6 +123,7 @@ export const CommentInput = ({
         onChange={handleChange(true)}
         onBlur={handleChange(false)}
         value={localValue}
+        disabled={readOnly}
         // ref={refFunction}
         // {...inputProperties}
       />

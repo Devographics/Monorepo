@@ -7,7 +7,7 @@ import { FormItem } from "~/surveys/components/form/FormItem";
 import { FormInputProps } from "~/surveys/components/form/typings";
 
 export const FormComponentTextarea = (props: FormInputProps) => {
-  const { path, value, question, updateCurrentValues } = props;
+  const { path, value, question, updateCurrentValues, readOnly } = props;
 
   const [localValue, setLocalValue] = useState(value);
 
@@ -31,6 +31,7 @@ export const FormComponentTextarea = (props: FormInputProps) => {
         value={localValue}
         onChange={handleChangeDebounced}
         onBlur={handleChange}
+        disabled={readOnly}
       />
     </FormItem>
   );

@@ -4,32 +4,30 @@ import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import { useRouter } from "next/navigation";
 import { LoadingButton } from "~/core/components/ui/LoadingButton";
 import { getEditionSectionPath } from "~/surveys/helpers";
-import { EditionMetadata, SectionMetadata } from "@devographics/types";
+import { SectionMetadata } from "@devographics/types";
 import { useEdition } from "~/surveys/components/SurveyContext/Provider";
 import Link from "next/link";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
-import { ResponseDocument } from "@devographics/core-models";
 import { useState } from "react";
+import { FormInputProps } from "./typings";
 
-export const FormSubmit = ({
-  response,
-  sectionNumber,
-  nextSection,
-  previousSection,
-  showMessage = true,
-  variant = "bottom",
-  readOnly,
-  stateStuff,
-}: {
-  response: ResponseDocument;
+interface FormSubmitProps extends FormInputProps {
   sectionNumber: number;
-  nextSection?: SectionMetadata;
-  previousSection?: SectionMetadata;
-  showMessage: boolean;
-  variant: "bottom" | "top";
-  readOnly: boolean;
-  stateStuff: any;
-}) => {
+  nextSection: SectionMetadata;
+  previousSection: SectionMetadata;
+}
+
+export const FormSubmit = (props: FormSubmitProps) => {
+  const {
+    response,
+    sectionNumber,
+    nextSection,
+    previousSection,
+    // showMessage = true,
+    readOnly,
+    submitForm,
+  } = props;
+
   const { locale } = useLocaleContext();
   const { edition, editionPathSegments } = useEdition();
   const router = useRouter();
@@ -52,27 +50,19 @@ export const FormSubmit = ({
     router.prefetch(nextPath);
   }, []);
 
-  const commonProps = {
-    response,
-    readOnly,
-    stateStuff,
-    edition,
-    sectionNumber,
-  };
-
   return (
-    <div className={`form-submit form-section-nav form-section-nav-${variant}`}>
+    <div className={`form-submit form-section-nav`}>
       <div className="form-submit-actions">
         {nextSection ? (
           <SubmitButton
-            {...commonProps}
+            {...props}
             type="next"
             intlId={`sections.${nextSection.intlId || nextSection.id}.title`}
             path={nextPath}
           />
         ) : (
           <SubmitButton
-            {...commonProps}
+            {...props}
             type="next"
             intlId="general.finish_survey"
             path={nextPath}
@@ -80,7 +70,7 @@ export const FormSubmit = ({
         )}
         {previousSection ? (
           <SubmitButton
-            {...commonProps}
+            {...props}
             type="previous"
             intlId={`sections.${
               previousSection.intlId || previousSection.id
@@ -96,28 +86,24 @@ export const FormSubmit = ({
         )}
       </div>
 
-      {showMessage && (
+      {/* {showMessage && (
         <div className="form-submit-help">
           <FormattedMessage id="general.data_is_saved" />
         </div>
-      )}
+      )} */}
     </div>
   );
 };
 
-const SubmitButton = (props: {
-  response: ResponseDocument;
+interface SubmitButtonProps extends FormSubmitProps {
   intlId: string;
-  stateStuff: any;
-  path: string;
-  type: any;
-  readOnly: boolean;
-  edition: EditionMetadata;
-}) => {
+  type: "previous" | "next";
+}
+
+const SubmitButton = (props: SubmitButtonProps) => {
   const [buttonLoading, setButtonLoading] = useState(false);
 
-  const { response, intlId, path, type, readOnly, edition, stateStuff } = props;
-  const { submitForm } = stateStuff;
+  const { intlId, path, type, readOnly, submitForm } = props;
 
   const sectionName = <FormattedMessage id={intlId} defaultMessage={intlId} />;
   const contents = (

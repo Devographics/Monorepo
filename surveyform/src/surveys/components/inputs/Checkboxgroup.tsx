@@ -106,7 +106,13 @@ export const FormComponentCheckboxGroup = (props: FormInputProps) => {
   const intl = useIntlContext();
   const [showMore, setShowMore] = useState(false);
 
-  const { path, value: value_ = [], question, updateCurrentValues } = props;
+  const {
+    path,
+    value: value_ = [],
+    question,
+    updateCurrentValues,
+    readOnly,
+  } = props;
   const { options, allowOther, limit } = question;
 
   const value = value_ as string[] | number[];
@@ -156,6 +162,7 @@ export const FormComponentCheckboxGroup = (props: FormInputProps) => {
                         : without(value, option.id);
                       updateCurrentValues({ [path]: newValue });
                     }}
+                    disabled={readOnly}
                   />
                 </div>
                 <FormOption {...props} option={option} />

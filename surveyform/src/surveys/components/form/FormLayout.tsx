@@ -4,8 +4,18 @@ import FormNav from "./FormNav";
 import { FormErrors } from "./FormErrors";
 import { FormElement } from "./FormElement";
 import { FormSubmit } from "./FormSubmit";
+import { FormInputProps } from "./typings";
+import { ReactNode } from "react";
+import { SectionMetadata } from "@devographics/types";
 
-export const FormLayout = (props: any) => {
+interface FormLayoutProps extends FormInputProps {
+  children: ReactNode;
+  sectionNumber: number;
+  nextSection: SectionMetadata;
+  previousSection: SectionMetadata;
+}
+
+export const FormLayout = (props: FormLayoutProps) => {
   const {
     children,
     section,

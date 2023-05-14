@@ -7,7 +7,7 @@ import Form from "react-bootstrap/Form";
 import { FormItem } from "~/surveys/components/form/FormItem";
 
 export const FormComponentSelect = (props: FormInputProps) => {
-  const { path, value, question, updateCurrentValues } = props;
+  const { path, value, question, updateCurrentValues, readOnly } = props;
   const { options, optionsAreNumeric } = question;
   const intl = useIntlContext();
   const emptyValue = "";
@@ -26,6 +26,7 @@ export const FormComponentSelect = (props: FormInputProps) => {
         onChange={(e) => {
           updateCurrentValues({ [path]: e.target.value });
         }}
+        disabled={readOnly}
       >
         {allOptions.map(({ id, ...rest }) => (
           <option key={id} value={id} {...rest}>

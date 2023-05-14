@@ -82,7 +82,7 @@ const OtherComponent = ({
 export const FormComponentRadioGroup = (props: FormInputProps) => {
   const intl = useIntlContext();
 
-  const { path, value, question, updateCurrentValues } = props;
+  const { path, value, question, updateCurrentValues, readOnly } = props;
   const { options, allowOther } = question;
 
   const hasValue = value !== "";
@@ -112,6 +112,7 @@ export const FormComponentRadioGroup = (props: FormInputProps) => {
                   onChange={(e) => {
                     updateCurrentValues({ [path]: e.target.value });
                   }}
+                  disabled={readOnly}
                 />
               </div>
               <FormOption {...props} option={option} />

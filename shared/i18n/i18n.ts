@@ -22,26 +22,27 @@ export const getQuestioni18nIds = ({
     const { id: sectionId, slug } = section
     const sectionNamespace = slug || sectionId
 
-    const { id: questionId, i18nNamespace } = question
+    const { id: questionId, i18nNamespace, intlId } = question
     const questionNamespace = i18nNamespace || questionId
 
     const baseSegments = [sectionNamespace, questionNamespace]
+    const base = intlId || baseSegments.join(separator)
 
-    const joinWithBaseSegments = suffix => [...baseSegments, suffix].join(separator)
+    const joinWithBase = suffix => [base, suffix].join(separator)
 
     const ids = {
         // e.g. user_info.yearly_salary => "Yearly Salary" (legacy)
-        base: baseSegments.join(separator),
+        base,
         // e.g. user_info.yearly_salary.title => "Yearly Salary"
-        title: joinWithBaseSegments('title'),
+        title: joinWithBase('title'),
         // e.g. user_info.yearly_salary.description => "How much do you earn?" (legacy)
-        description: joinWithBaseSegments('description'),
+        description: joinWithBase('description'),
         // e.g. user_info.yearly_salary.question => "How much do you earn?"
-        question: joinWithBaseSegments('question'),
+        question: joinWithBase('question'),
         // e.g. user_info.yearly_salary.note => a note about the question displayed below
-        note: joinWithBaseSegments('note'),
+        note: joinWithBase('note'),
         // e.g. resources.video_creators.others => "Other video creators" (legacy)
-        others: joinWithBaseSegments('others')
+        others: joinWithBase('others')
     }
 
     return ids

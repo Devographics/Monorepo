@@ -81,11 +81,6 @@ export const FormItem = (props: FormItemProps) => {
             {...props}
             commentPath={commentPath}
             commentValue={commentValue}
-            // questionLabel={inputProperties.label}
-            // questionEntity={entity}
-            // questionValue={value}
-            // questionOptions={options}
-            // questionPath={path}
           />
         )}
       </div>

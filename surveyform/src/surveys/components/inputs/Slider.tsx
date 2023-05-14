@@ -52,6 +52,7 @@ export const Slider = ({
                   ref={refFunction}
                   checked={isChecked}
                   className={checkClass}
+                  disabled={readOnly}
                 />
               </label>
             );

@@ -11,7 +11,7 @@ import { Button } from "~/core/components/ui/Button";
 import { LoadingButton } from "~/core/components/ui/LoadingButton";
 import { TooltipTrigger } from "~/core/components/ui/TooltipTrigger";
 import { Loading } from "~/core/components/ui/Loading";
-import { EditionMetadata } from "@devographics/types";
+import { EditionMetadata, SurveyStatusEnum } from "@devographics/types";
 import { useUserResponse } from "~/responses/hooks";
 import { FormSection } from "../form/FormSection";
 import { useEdition } from "../SurveyContext/Provider";
@@ -86,7 +86,7 @@ const SurveySectionContentsInner = ({
   responseId,
   previousSection,
   nextSection,
-  readOnly,
+  readOnly: readOnlyRoute,
 }: {
   edition: EditionMetadata;
   sectionNumber?: number;
@@ -126,6 +126,7 @@ const SurveySectionContentsInner = ({
     response,
     section,
     edition,
+    readOnly: readOnlyRoute || edition.status === SurveyStatusEnum.CLOSED,
   };
   return <FormSection {...formProps} />;
   //     document={response}

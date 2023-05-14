@@ -19,7 +19,13 @@ const mergeWithResponse = (response, currentValues, deletedValues) => {
 };
 
 export const FormSection = (props) => {
-  const { edition, section, response: originalResponse, sectionNumber } = props;
+  const {
+    edition,
+    section,
+    response: originalResponse,
+    sectionNumber,
+    readOnly,
+  } = props;
   const [formState, setFormState] = useState(initFormState(originalResponse));
   const [loading, setLoading] = useState(false);
   const [currentTabindex, setCurrentTabindex] = useState<number | null>(null);
@@ -60,7 +66,7 @@ export const FormSection = (props) => {
     afterSubmitCallback: any;
   }) => {
     const { currentValues } = formState;
-    if (!isEmpty(currentValues)) {
+    if (!readOnly && !isEmpty(currentValues)) {
       setLoading(true);
       if (beforeSubmitCallback) {
         beforeSubmitCallback();
