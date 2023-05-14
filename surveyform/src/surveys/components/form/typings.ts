@@ -26,5 +26,6 @@ export type FormInputProps = {
   isFirstQuestion?: boolean;
   readOnly?: boolean;
   stateStuff: any;
-  children: any;
+  sectionNumber: number;
+  questionNumber: number;
 };

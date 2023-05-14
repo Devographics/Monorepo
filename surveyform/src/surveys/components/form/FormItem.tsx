@@ -91,7 +91,7 @@ export const FormItem = (props: FormItemProps) => {
 };
 
 export const FormItemTitle = (props: FormInputProps) => {
-  const { question } = props;
+  const { question, sectionNumber, questionNumber } = props;
   const intl = useIntlContext();
   const { entity, yearAdded } = question;
   const i18n = getQuestioni18nIds(props);
@@ -118,6 +118,10 @@ export const FormItemTitle = (props: FormInputProps) => {
           </span>
         )}
       </Form.Label>
+
+      <span className="form-label-number">
+        {sectionNumber}.{questionNumber}
+      </span>
     </h3>
   );
 };

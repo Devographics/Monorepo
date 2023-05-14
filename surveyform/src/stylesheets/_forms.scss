@@ -38,6 +38,9 @@
   }
   .form-label-heading {
     margin-bottom: math.div($spacing, 2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
   .form-label {
     @include small-medium {
@@ -64,6 +67,12 @@
       margin-left: math.div($spacing, 2);
       font-size: $smaller-font;
       // @include font-regular;
+    }
+    &-number {
+      opacity: 0.3;
+      margin-right: 8px;
+      @include font-regular;
+      font-size: $medium-font;
     }
   }
   .form-check {

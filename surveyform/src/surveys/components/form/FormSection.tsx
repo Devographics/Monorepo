@@ -14,7 +14,7 @@ const initFormState = (response) => ({
   deletedValues: {},
 });
 
-const mergeWithResponse = (response, currentValues, deletedValues) => {
+const mergeWithResponse = (response, currentValues) => {
   return { ...response, ...currentValues };
 };
 
@@ -127,7 +127,7 @@ export const FormSection = (props) => {
                 key={question.id}
                 question={question}
                 sectionNumber={sectionNumber}
-                questionNumber={index}
+                questionNumber={index + 1}
               />
             </ErrorBoundary>
           ))}

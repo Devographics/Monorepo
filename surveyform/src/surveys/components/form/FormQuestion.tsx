@@ -28,6 +28,8 @@ export const FormQuestion = (props) => {
     response,
     question: questionMetadata,
     index,
+    sectionNumber,
+    questionNumber,
   } = props;
 
   const question = getQuestionObject({
@@ -53,7 +55,9 @@ export const FormQuestion = (props) => {
     path,
     options,
     value,
-    isFirstQuestion: index === 0,
+    sectionNumber,
+    questionNumber,
+    isFirstQuestion: sectionNumber === 1 && questionNumber === 1,
   };
 
   return (

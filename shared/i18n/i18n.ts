@@ -61,16 +61,18 @@ export const getOptioni18nIds = ({
     question: QuestionMetadata
     option: OptionMetadata
 }) => {
+    const { id, intlId } = option
     const { id: questionId, i18nNamespace } = question
     const questionNamespace = i18nNamespace || questionId
 
-    const baseSegments = ['options', questionNamespace, option.id]
+    const baseSegments = ['options', questionNamespace, id]
+    const base = intlId || baseSegments.join(separator)
 
     const ids = {
         // e.g. options.yearly_salary.range_1000_2000
-        base: baseSegments.join(separator),
+        base,
         // e.g. options.yearly_salary.range_1000_2000.description
-        description: [...baseSegments, 'description'].join(separator)
+        description: [base, 'description'].join(separator)
     }
 
     return ids

@@ -2,97 +2,69 @@
 import { useState } from "react";
 import Form from "react-bootstrap/Form";
 import without from "lodash/without.js";
-import uniq from "lodash/uniq.js";
-import take from "lodash/take.js";
-import isEmpty from "lodash/isEmpty.js";
 import { useIntlContext } from "@devographics/react-i18n";
 import { Button } from "~/core/components/ui/Button";
 import { FormItem } from "~/surveys/components/form/FormItem";
-import { FormComponentText } from "./Default";
-import { useFormContext } from "~/surveys/components/form/FormContext";
 import { FormInputProps } from "~/surveys/components/form/typings";
 import { FormOption } from "~/surveys/components/form/FormOption";
+import debounce from "lodash/debounce.js";
+import FormControl from "react-bootstrap/FormControl";
 
-// this marker is used to identify "other" values
-export const otherMarker = "[other]";
-
-// check if a string is an "other" value
-export const isOtherValue = (s) =>
-  s && typeof s === "string" && s.substr(0, otherMarker.length) === otherMarker;
-
-// remove the "other" marker from a string
-export const removeOtherMarker = (s) =>
-  s && typeof s === "string" && s.substr(otherMarker.length);
-
-// add the "other" marker to a string
-export const addOtherMarker = (s) => `${otherMarker}${s}`;
-
-// return array of values without the "other" value
-export const removeOtherValue = (a) => {
-  return a.filter((s) => !isOtherValue(s));
-};
-
-const OtherComponent = ({
-  value,
-  path,
-  updateCurrentValues,
-}: FormInputProps) => {
-  const otherValue = removeOtherMarker(value?.find(isOtherValue));
-  // get copy of checkbox group values with "other" value removed
-  const withoutOtherValue = removeOtherValue(value);
+const OtherComponent = (props: FormInputProps) => {
+  const { question, updateCurrentValues, response, readOnly } = props;
+  const { formPaths } = question;
+  const path = formPaths.other!;
+  const value = response[path];
 
   // keep track of whether "other" field is shown or not
-  const [showOther, setShowOther] = useState(!!otherValue);
+  const [showOther, setShowOther] = useState(!!value);
 
   // keep track of "other" field value locally
-  const [textFieldValue, setTextFieldValue] = useState(otherValue);
+  const [localValue, setLocalValue] = useState(value);
 
-  // textfield properties
-  const textFieldInputProperties = {
-    name,
-    value: textFieldValue,
-    onChange: (event) => {
-      const fieldValue = event.target.value;
-      // first, update local state
-      setTextFieldValue(fieldValue);
-      // then update global form state
-      const newValue = isEmpty(fieldValue)
-        ? withoutOtherValue
-        : [...withoutOtherValue, addOtherMarker(fieldValue)];
-      updateCurrentValues({ [path]: newValue });
-    },
+  const updateCurrentValuesDebounced = debounce(updateCurrentValues, 500);
+
+  const handleChange = (event) => {
+    setLocalValue(event.target.value);
+    updateCurrentValues({ [path]: event.target.value });
   };
-  const textFieldItemProperties = { layout: "elementOnly" };
+
+  const handleChangeDebounced = (event) => {
+    setLocalValue(event.target.value);
+    updateCurrentValuesDebounced({ [path]: event.target.value });
+  };
+
+  const checkClass = showOther ? "form-check-checked" : "form-check-unchecked";
 
   return (
     <div className="form-option-other">
-      <Form.Check
-        layout="elementOnly"
-        label={"Other"}
-        // @ts-expect-error
-        value={showOther}
-        checked={showOther}
-        onClick={(event) => {
-          // @ts-expect-error
-          const isChecked = event.target.checked;
-          setShowOther(isChecked);
-          if (isChecked) {
-            // if checkbox is checked and textfield has value, update global form state with current textfield value
-            if (textFieldValue) {
-              updateCurrentValues({
-                [path]: [...withoutOtherValue, addOtherMarker(textFieldValue)],
-              });
-            }
-          } else {
-            // if checkbox is unchecked, also clear out field value from global form state
-            updateCurrentValues({ [path]: withoutOtherValue });
-          }
-        }}
-      />
+      <Form.Check layout="elementOnly" className={checkClass}>
+        <Form.Check.Label htmlFor={`${path}.other`}>
+          <div className="form-input-wrapper">
+            <Form.Check.Input
+              id={`${path}.other`}
+              type="checkbox"
+              value={showOther}
+              checked={showOther}
+              onChange={(event) => {
+                const isChecked = event.target.checked;
+                setShowOther(isChecked);
+              }}
+            />
+          </div>
+          <FormOption
+            {...props}
+            option={{ id: "other", intlId: "options.other" }}
+          />
+        </Form.Check.Label>
+      </Form.Check>
       {showOther && (
-        <FormComponentText
-          inputProperties={textFieldInputProperties}
-          itemProperties={textFieldItemProperties}
+        <FormControl
+          type="text"
+          value={localValue}
+          onChange={handleChangeDebounced}
+          onBlur={handleChange}
+          disabled={readOnly}
         />
       )}
     </div>
@@ -115,13 +87,18 @@ export const FormComponentCheckboxGroup = (props: FormInputProps) => {
   } = props;
   const { options, allowOther, limit } = question;
 
+  if (!options) {
+    throw new Error(
+      `Question ${question.id} does not have any options defined.`
+    );
+  }
   const value = value_ as string[] | number[];
 
   const cutoff = defaultCutoff;
 
   const hasValue = value?.length > 0;
 
-  const hasReachedLimit = limit && value?.length >= limit;
+  const hasReachedLimit = !!(limit && value?.length >= limit);
 
   const useCutoff =
     typeof cutoff !== "undefined" && cutoff > 0 && options?.length > cutoff;
@@ -150,7 +127,7 @@ export const FormComponentCheckboxGroup = (props: FormInputProps) => {
                     type="checkbox"
                     value={isChecked}
                     checked={isChecked}
-                    disabled={!isChecked && hasReachedLimit}
+                    disabled={!!readOnly || (!isChecked && hasReachedLimit)}
                     id={`${path}.${i}`}
                     path={`${path}.${i}`}
                     // ref={refFunction}
@@ -162,7 +139,6 @@ export const FormComponentCheckboxGroup = (props: FormInputProps) => {
                         : without(value, option.id);
                       updateCurrentValues({ [path]: newValue });
                     }}
-                    disabled={readOnly}
                   />
                 </div>
                 <FormOption {...props} option={option} />
@@ -180,7 +156,9 @@ export const FormComponentCheckboxGroup = (props: FormInputProps) => {
             {intl.formatMessage({ id: "forms.more_options" })}…
           </Button>
         )}
-        {allowOther && <OtherComponent {...props} />}
+        {allowOther && (!useCutoff || showMore) && (
+          <OtherComponent {...props} />
+        )}
       </div>
     </FormItem>
   );
