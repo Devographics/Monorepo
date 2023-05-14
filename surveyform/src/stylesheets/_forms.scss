@@ -256,13 +256,22 @@
 }
 
 .code-example {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: $spacing $spacing;
   margin-top: $spacing;
+  margin-bottom: $spacing;
+  position: relative;
   // background: $bg-color-light;
   pre {
     background: none;
+    margin-bottom: 0;
     // padding: $spacing/2 $spacing;
   }
   &-heading {
+    position: absolute;
+    right: 15px;
+    opacity: 0.7;
     text-transform: uppercase;
     font-size: $small-font;
     // border-bottom: 1px solid rgba(255, 255, 255, 0.25);

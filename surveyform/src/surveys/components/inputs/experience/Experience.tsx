@@ -23,15 +23,8 @@ interface ExperienceProps extends FormInputProps {
 }
 
 export const Experience = (props: ExperienceProps) => {
-  const {
-    response,
-    path,
-    value,
-    question,
-    updateCurrentValues,
-    isFirstQuestion,
-    readOnly,
-  } = props;
+  const { response, path, value, question, updateCurrentValues, readOnly } =
+    props;
 
   const { options, formPaths, entity } = question;
 

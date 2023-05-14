@@ -1,8 +1,10 @@
 "use client";
+import { ReactNode } from "react";
 import { ErrorBoundary } from "~/core/components/error";
 import { addComponentToQuestionObject } from "~/responses/customComponents";
 import { parseOptions } from "~/responses/helpers";
 import { getQuestionObject } from "~/surveys/parser/parseSurvey";
+import { FormInputProps } from "./typings";
 
 // const getOnChangeHandler = ({
 //   edition,
@@ -25,6 +27,7 @@ export const FormQuestion = (props) => {
     section,
     response,
     question: questionMetadata,
+    index,
   } = props;
 
   const question = getQuestionObject({
@@ -50,6 +53,7 @@ export const FormQuestion = (props) => {
     path,
     options,
     value,
+    isFirstQuestion: index === 0,
   };
 
   return (

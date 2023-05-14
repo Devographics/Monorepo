@@ -47,8 +47,10 @@ export const FormItem = (props: FormItemProps) => {
   const commentPath = formPaths.comment;
   const commentValue = get(response, commentPath);
 
-  // open the comment widget if there is already a comment
-  const [showCommentInput, setShowCommentInput] = useState(!!commentValue);
+  // open the comment widget if there is already a comment or this is the first question
+  const [showCommentInput, setShowCommentInput] = useState(
+    isFirstQuestion || !!commentValue
+  );
 
   // const innerComponent = loading ? (
   //   <FormInputLoading loading={loading}>{children}</FormInputLoading>

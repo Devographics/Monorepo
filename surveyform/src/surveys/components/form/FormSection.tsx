@@ -113,7 +113,7 @@ export const FormSection = (props) => {
     <div>
       <FormContext.Provider value={formProps}>
         <FormLayout {...formProps}>
-          {section.questions.map((question) => (
+          {section.questions.map((question, index) => (
             <ErrorBoundary
               key={question.id}
               fallbackComponent={({ error }) => (
@@ -126,6 +126,8 @@ export const FormSection = (props) => {
                 {...formProps}
                 key={question.id}
                 question={question}
+                sectionNumber={sectionNumber}
+                questionNumber={index}
               />
             </ErrorBoundary>
           ))}
