@@ -1,50 +1,58 @@
 "use client";
 import { useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
-
 import isEmpty from "lodash/isEmpty.js";
-import {
-  isOtherValue,
-  removeOtherMarker,
-  addOtherMarker,
-} from "./Checkboxgroup";
 import { FormInputProps } from "~/surveys/components/form/typings";
 import { FormOption } from "~/surveys/components/form/FormOption";
 import { useIntlContext } from "@devographics/react-i18n";
 import { FormItem } from "~/surveys/components/form/FormItem";
-import { FormComponentText } from "./Default";
+import FormControl from "react-bootstrap/FormControl";
+import debounce from "lodash/debounce.js";
 
-const OtherComponent = ({
-  value,
-  path,
-  updateCurrentValues,
-}: FormInputProps) => {
-  const otherValue = removeOtherMarker(value);
+const OtherComponent = (props: FormInputProps) => {
+  const { question, updateCurrentValues, response, readOnly } = props;
+  const { formPaths } = question;
+  const path = formPaths.other!;
+  const value = response[path];
 
-  // keep track of whether "other" field is shown or not
-  const [showOther, setShowOther] = useState(isOtherValue(value));
+  const [showOther, setShowOther] = useState(!!value);
 
   // keep track of "other" field value locally
-  const [textFieldValue, setTextFieldValue] = useState(otherValue);
+  const [localValue, setLocalValue] = useState(value);
+
+  const updateCurrentValuesDebounced = debounce(updateCurrentValues, 500);
+
+  const handleChange = (event) => {
+    setLocalValue(event.target.value);
+    updateCurrentValues({ [path]: event.target.value });
+  };
+
+  const handleChangeDebounced = (event) => {
+    const value = event.target.value;
+    setLocalValue(value);
+    updateCurrentValuesDebounced({ [path]: value });
+  };
 
   // whenever value changes (and is not empty), if it's not an "other" value
   // this means another option has been selected and we need to uncheck the "other" radio button
   useEffect(() => {
     if (value) {
-      setShowOther(isOtherValue(value));
+      // TODO
+      // setShowOther(isOtherValue(value));
+      setShowOther(false);
     }
   }, [value]);
 
   // textfield properties
   const textFieldInputProperties = {
     name: path,
-    value: textFieldValue,
+    value: localValue,
     onChange: (event) => {
       const fieldValue = event.target.value;
       // first, update local state
-      setTextFieldValue(fieldValue);
+      setLocalValue(fieldValue);
       // then update global form state
-      const newValue = isEmpty(fieldValue) ? null : addOtherMarker(fieldValue);
+      const newValue = isEmpty(fieldValue) ? null : fieldValue;
       updateCurrentValues({ [path]: newValue });
     },
   };
@@ -54,10 +62,7 @@ const OtherComponent = ({
     <div className="form-option-other">
       <Form.Check
         name={path}
-        // @ts-expect-error
-        layout="elementOnly"
         label={"Other"}
-        value={showOther}
         checked={showOther}
         type="radio"
         onClick={(event) => {
@@ -69,10 +74,12 @@ const OtherComponent = ({
         }}
       />
       {showOther && (
-        <FormComponentText
-          // @ts-ignore
-          inputProperties={textFieldInputProperties}
-          itemProperties={textFieldItemProperties}
+        <FormControl
+          type="text"
+          value={localValue}
+          onChange={handleChangeDebounced}
+          onBlur={handleChange}
+          disabled={readOnly}
         />
       )}
     </div>
@@ -97,7 +104,7 @@ export const FormComponentRadioGroup = (props: FormInputProps) => {
           : "";
 
         return (
-          <Form.Check key={i} layout="elementOnly" type="radio">
+          <Form.Check key={i} type="radio">
             <Form.Check.Label htmlFor={`${path}.${i}`}>
               <div className="form-input-wrapper">
                 <Form.Check.Input
@@ -105,7 +112,6 @@ export const FormComponentRadioGroup = (props: FormInputProps) => {
                   value={option.id}
                   name={path}
                   id={`${path}.${i}`}
-                  path={`${path}.${i}`}
                   // ref={refFunction}
                   checked={isChecked}
                   className={checkClass}

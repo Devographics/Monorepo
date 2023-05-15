@@ -6,7 +6,16 @@ import { FormItem } from "~/surveys/components/form/FormItem";
 import debounce from "lodash/debounce.js";
 
 export const FormComponentText = (props: FormInputProps) => {
-  const { path, value, question, updateCurrentValues, readOnly } = props;
+  const {
+    path,
+    value: value_,
+    question,
+    updateCurrentValues,
+    readOnly,
+  } = props;
+
+  const value = value_ as string | number;
+
   const [localValue, setLocalValue] = useState(value);
 
   const updateCurrentValuesDebounced = debounce(updateCurrentValues, 500);

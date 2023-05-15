@@ -21,7 +21,7 @@ import { Alert } from "~/core/components/ui/Alert";
 import { FormItem } from "~/surveys/components/form/FormItem";
 import useSWR from "swr";
 import { graphqlFetcher } from "~/core/utils/graphqlQuery";
-import { FormInputProps } from "~/form/typings";
+import { FormInputProps } from "~/surveys/components/form/typings";
 
 export interface AutocompleteMultipleProps extends FormInputProps {}
 
@@ -33,24 +33,20 @@ const useAutocomplete = (autocompleteQuery, autocompleteVariables) =>
 export const AutocompleteMultiple = (props: AutocompleteMultipleProps) => {
   // TODO: some props are now comming from the context
   const {
-    queryData,
-    //updateCurrentValues,
-    refFunction,
+    updateCurrentValues,
+    // refFunction,
     path,
-    inputProperties = {},
-    itemProperties = {},
-    autocompleteQuery,
-    optionsFunction,
+    value,
   } = props;
 
-  const { updateCurrentValues } = useFormContext();
+  const queryData = {};
+  const autocompleteQuery = () => "";
+  const optionsFunction = (a, b) => [{ id: "foo" }];
 
   // MergeWithComponents should be handled at the Form level
   // by creating a new VulcanComponents context that merges default components
   // and components passed via props
   //const Components = mergeWithComponents(formComponents);
-
-  const { value } = inputProperties;
 
   // store current autocomplete query string in local component state
   const [queryString, setQueryString] = useState<string | undefined>();
@@ -76,15 +72,13 @@ export const AutocompleteMultiple = (props: AutocompleteMultipleProps) => {
   const selectedItems =
     queryData &&
     optionsFunction({ data: queryData }, "labels").filter((d) =>
-      (value as Array<any>)?.includes(d.value)
+      (value as Array<any>)?.includes(d.id)
     );
 
   return (
     <FormItem
-      {...props} /*path={path} label={label} {...itemProperties}*/
-      {...itemProperties}
-      name={path}
-      noteIntlId="tools.best_of_js_projects.note"
+      {...props}
+      // noteIntlId="tools.best_of_js_projects.note"
     >
       {/** Inspired by "FormErrors" */}
       {error && error.message && (
@@ -94,7 +88,6 @@ export const AutocompleteMultiple = (props: AutocompleteMultipleProps) => {
       )}
       {/** @ts-ignore */}
       <AsyncTypeahead
-        {...inputProperties}
         multiple
         onChange={(selected) => {
           const selectedIds = selected.map(
@@ -107,7 +100,7 @@ export const AutocompleteMultiple = (props: AutocompleteMultipleProps) => {
         id={path}
         // passing id doesn't seem to work, we need input props
         inputProps={{ id: path }}
-        ref={refFunction}
+        // ref={refFunction}
         onSearch={(queryString) => {
           setQueryString(queryString);
         }}

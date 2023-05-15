@@ -1,8 +1,8 @@
 "use client";
 import FormCheck from "react-bootstrap/FormCheck";
 import type { FormInputProps } from "@devographics/react-form";
-import { FormItem } from "~/form/components/elements/FormItem";
-import FormOptionLabel from "~/form/components/elements/FormOptionLabel";
+import { FormItem } from "~/form_not_used/components/elements/FormItem";
+import FormOptionLabel from "~/form_not_used/components/elements/FormOptionLabel";
 
 export const Slider = ({
   refFunction,

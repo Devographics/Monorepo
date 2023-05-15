@@ -99,17 +99,7 @@ const MagicLinkLoginForm = ({
 }) => {
   return (
     <form onSubmit={onSubmit} className="magic-link-login-form">
-      <FormComponentEmail
-        inputProperties={{
-          placeholder,
-          name: "email",
-          required: true,
-          autoCorrect: "off",
-          autoCapitalize: "none",
-        }}
-        label={placeholder}
-        name="email"
-      />
+      <FormComponentEmail placeholder={placeholder} label={label} />
       <div className="submit">
         <Button type="submit">{label}</Button>
       </div>

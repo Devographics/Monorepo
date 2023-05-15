@@ -6,11 +6,11 @@ import uniq from "lodash/uniq.js";
 import take from "lodash/take.js";
 import isEmpty from "lodash/isEmpty.js";
 import { FormInputProps, useFormContext } from "@devographics/react-form";
-import FormOptionLabel from "~/form/components/elements/FormOptionLabel";
-import FormOptionDescription from "~/form/components/elements/FormOptionDescription";
+import FormOptionLabel from "~/form_not_used/components/elements/FormOptionLabel";
+import FormOptionDescription from "~/form_not_used/components/elements/FormOptionDescription";
 import { useIntlContext } from "@devographics/react-i18n";
 import { Button } from "~/core/components/ui/Button";
-import { FormItem } from "~/form/components/elements/FormItem";
+import { FormItem } from "~/form_not_used/components/elements/FormItem";
 import { FormComponentText } from "./Default";
 
 // this marker is used to identify "other" values

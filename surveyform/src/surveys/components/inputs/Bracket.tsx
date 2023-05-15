@@ -92,9 +92,9 @@ const Bracket = (
     itemProperties,
     options: _options,
     path,
+    updateCurrentValues,
   } /* FormInputProps*/ /** TODO The props are those of a Vulcan custom form input */
 ) => {
-  const { updateCurrentValues } = useFormContext();
   const { value } = inputProperties;
   const [results, setResults] = useState(
     isEmpty(value) ? initResults() : value

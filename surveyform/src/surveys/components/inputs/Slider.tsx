@@ -1,7 +1,5 @@
 "use client";
-import FormCheck from "react-bootstrap/FormCheck";
 import { FormItem } from "~/surveys/components/form/FormItem";
-import FormOptionLabel from "~/form/components/elements/FormOptionLabel";
 import type { FormInputProps } from "~/surveys/components/form/typings";
 import Form from "react-bootstrap/Form";
 import { FormOption } from "~/surveys/components/form/FormOption";
@@ -23,7 +21,7 @@ export const Slider = (props: FormInputProps) => {
                 : "form-check-unchecked"
               : "";
             return (
-              <Form.Check key={i} layout="elementOnly" type="radio">
+              <Form.Check key={i} type="radio">
                 <Form.Check.Label htmlFor={`${path}.${i}`}>
                   <div className="form-input-wrapper">
                     <Form.Check.Input
@@ -31,7 +29,6 @@ export const Slider = (props: FormInputProps) => {
                       value={option.id}
                       name={path}
                       id={`${path}.${i}`}
-                      path={`${path}.${i}`}
                       // ref={refFunction}
                       checked={isChecked}
                       className={checkClass}

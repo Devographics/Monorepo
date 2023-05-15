@@ -28,7 +28,7 @@ const SurveySection = ({
   return (
     <div className="survey-section-wrapper">
       <EditionMessage edition={edition} />
-      <SurveySectionContents {...sectionProps} />
+      <SurveySectionContents {...sectionProps} edition={edition} />
     </div>
   );
 };

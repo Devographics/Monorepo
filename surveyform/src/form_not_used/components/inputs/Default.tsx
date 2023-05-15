@@ -2,7 +2,7 @@
 import { FormInputProps } from "@devographics/react-form";
 import FormControl from "react-bootstrap/FormControl";
 
-import { FormItem } from "~/form/components/elements/FormItem";
+import { FormItem } from "~/form_not_used/components/elements/FormItem";
 
 export const FormComponentText = ({
   path,

@@ -39,13 +39,12 @@ const OtherComponent = (props: FormInputProps) => {
 
   return (
     <div className="form-option-other">
-      <Form.Check layout="elementOnly" className={checkClass}>
+      <Form.Check className={checkClass}>
         <Form.Check.Label htmlFor={`${path}.other`}>
           <div className="form-input-wrapper">
             <Form.Check.Input
               id={`${path}.other`}
               type="checkbox"
-              value={showOther}
               checked={showOther}
               onChange={(event) => {
                 const isChecked = event.target.checked;
@@ -93,7 +92,7 @@ export const FormComponentCheckboxGroup = (props: FormInputProps) => {
       `Question ${question.id} does not have any options defined.`
     );
   }
-  const value = value_ as string[] | number[];
+  const value = value_ as Array<string | number>;
 
   const cutoff = defaultCutoff;
 
@@ -121,16 +120,14 @@ export const FormComponentCheckboxGroup = (props: FormInputProps) => {
             : "";
 
           return (
-            <Form.Check layout="elementOnly" key={i} className={checkClass}>
+            <Form.Check key={i} className={checkClass}>
               <Form.Check.Label htmlFor={`${path}.${i}`}>
                 <div className="form-input-wrapper">
                   <Form.Check.Input
                     type="checkbox"
-                    value={isChecked}
                     checked={isChecked}
                     disabled={!!readOnly || (!isChecked && hasReachedLimit)}
                     id={`${path}.${i}`}
-                    path={`${path}.${i}`}
                     // ref={refFunction}
                     onChange={(event) => {
                       const isChecked = event.target.checked;

@@ -18,7 +18,7 @@ import { useState } from "react";
 import gql from "graphql-tag";
 import { useFormContext } from "@devographics/react-form";
 import { Alert } from "~/core/components/ui/Alert";
-import { FormItem } from "~/form/components/elements/FormItem";
+import { FormItem } from "~/form_not_used/components/elements/FormItem";
 import useSWR from "swr";
 import { FormInputProps } from "../../typings";
 import { graphqlFetcher } from "~/core/utils/graphqlQuery";

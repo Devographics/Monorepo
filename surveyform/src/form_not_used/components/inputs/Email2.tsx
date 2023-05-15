@@ -7,8 +7,8 @@ import FormControl from "react-bootstrap/FormControl";
 import isEmpty from "lodash/isEmpty.js";
 import Form from "react-bootstrap/Form";
 
-import FormOptionLabel from "~/form/components/elements/FormOptionLabel";
-import { FormItem } from "~/form/components/elements/FormItem";
+import FormOptionLabel from "~/form_not_used/components/elements/FormOptionLabel";
+import { FormItem } from "~/form_not_used/components/elements/FormItem";
 
 const receiveNotificationsFieldName = "receive_notifications";
 

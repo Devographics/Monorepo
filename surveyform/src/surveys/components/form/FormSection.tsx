@@ -14,7 +14,7 @@ const initFormState = (response) => ({
   deletedValues: {},
 });
 
-const mergeWithResponse = (response, currentValues) => {
+const mergeWithResponse = (response, currentValues, deletedValues) => {
   return { ...response, ...currentValues };
 };
 

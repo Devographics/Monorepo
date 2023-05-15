@@ -9,35 +9,33 @@ import FormControl from "react-bootstrap/FormControl";
 import isEmpty from "lodash/isEmpty.js";
 import Form from "react-bootstrap/Form";
 
-import FormOptionLabel from "~/form/components/elements/FormOptionLabel";
+import FormOption from "~/surveys/components/form/FormOption";
 import { FormItem } from "~/surveys/components/form/FormItem";
 
 const receiveNotificationsFieldName = "receive_notifications";
 
-export const Email2 = ({
-  document,
-  path,
-  label,
-  refFunction,
-  inputProperties = {},
-  itemProperties = {},
-}: FormInputProps) => {
-  const { questionId } = itemProperties;
+export const Email2 = (props: FormInputProps) => {
+  const {
+    response,
+    path,
+    question,
+    value: value_,
+    updateCurrentValues,
+  } = props;
+
+  const { id: questionId } = question;
   const checkboxPath = path.replace(questionId, receiveNotificationsFieldName);
   const checkboxValue = document[checkboxPath];
   const intl = useIntlContext();
   const [showEmail, setShowEmail] = useState(checkboxValue);
-  const { updateCurrentValues } = useFormContext();
 
   const email = localStorage && localStorage.getItem("email");
-  if (email && isEmpty(inputProperties.value)) {
-    inputProperties.value = email;
-  }
+  const value = email && isEmpty(value_) ? email : (value_ as string);
 
   const yesLabel = intl.formatMessage({ id: `options.${questionId}.yes` });
 
   return (
-    <FormItem path={path} label={label} {...itemProperties}>
+    <FormItem {...props}>
       {/* <FormCheck
         name="show_email"
         label={intl.formatMessage({ id: `options.${questionId}.yes` })}
@@ -62,7 +60,7 @@ export const Email2 = ({
             />
           </div>
           <div className="form-option">
-            <FormOptionLabel option={{ label: yesLabel }} />
+            <FormOption {...props} option={{ id: "email", label: yesLabel }} />
           </div>
         </Form.Check.Label>
       </Form.Check>
@@ -71,10 +69,9 @@ export const Email2 = ({
         <div>
           {/* @ts-ignore */}
           <FormControl
-            {...inputProperties}
             placeholder={intl.formatMessage({ id: "user_info.email" })}
-            ref={refFunction}
             type="email"
+            value={value}
           />
         </div>
       )}

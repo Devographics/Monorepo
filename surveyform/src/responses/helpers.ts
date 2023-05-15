@@ -17,13 +17,10 @@ import {
 import { ResponseDocument } from "@devographics/core-models";
 import { VulcanGraphqlFieldSchema } from "@vulcanjs/graphql";
 import SimpleSchema from "simpl-schema";
-import {
-  getQuestionObject,
-  parseEdition,
-  QuestionFormObject,
-} from "~/surveys/parser/parseSurvey";
+import { getQuestionObject, parseEdition } from "~/surveys/parser/parseSurvey";
 import { captureException } from "@sentry/nextjs";
 import { EditionMetadata, SectionMetadata } from "@devographics/types";
+import { QuestionFormObject } from "~/surveys/components/form/typings";
 
 // Previously it lived in Vulcan NPM, but that's something you'd want to control more
 // precisely at app level

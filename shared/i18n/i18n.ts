@@ -79,7 +79,7 @@ export const getOptioni18nIds = ({
 }
 
 // just to avoid warnings, delete later
-export const isIntlField = () => undefined
-export const formatLabel = () => undefined
-export const getIntlKeys = () => undefined
-export const getIntlLabel = () => undefined
+export const isIntlField = foo => false
+export const formatLabel = foo => 'foobar'
+export const getIntlKeys = foo => ['foo', 'bar']
+export const getIntlLabel = foo => 'foo'

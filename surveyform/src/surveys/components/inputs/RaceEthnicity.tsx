@@ -1,6 +1,6 @@
 import React from "react";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
-import FormComponentCheckboxGroup from "~/form/components/inputs/Checkboxgroup";
+import FormComponentCheckboxGroup from "./Checkboxgroup";
 
 const disallowedCountries = ["FR", "GF", "TF", "PF"];
 

@@ -2,7 +2,7 @@ import { useIntlContext } from "@devographics/react-i18n";
 import { Button } from "~/core/components/ui/Button";
 import FormComponent from "../elements/FormComponent";
 import { IconRemove } from "./FormNestedArray";
-import { FormComponentProps } from "~/form/typings";
+import { FormComponentProps } from "~/form_not_used/typings";
 
 export const FormNestedItemLayout = ({ content, removeButton }) => (
   <div className="form-nested-item">

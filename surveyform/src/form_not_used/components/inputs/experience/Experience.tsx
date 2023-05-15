@@ -3,8 +3,8 @@ import { useState, useRef } from "react";
 import Overlay from "react-bootstrap/Overlay";
 import Tooltip from "react-bootstrap/Tooltip";
 import FormControl from "react-bootstrap/FormControl";
-import { FormItem } from "~/form/components/elements/FormItem";
-import FormOptionLabel from "~/form/components/elements/FormOptionLabel";
+import { FormItem } from "~/form_not_used/components/elements/FormItem";
+import FormOptionLabel from "~/form_not_used/components/elements/FormOptionLabel";
 import Form from "react-bootstrap/Form";
 
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";

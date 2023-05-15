@@ -7,7 +7,7 @@ import cloneDeep from "lodash/cloneDeep.js";
 import { useIntlContext } from "@devographics/react-i18n";
 import { useFormContext } from "@devographics/react-form";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
-import { FormItem } from "~/form/components/elements/FormItem";
+import { FormItem } from "~/form_not_used/components/elements/FormItem";
 import { TooltipTrigger } from "~/core/components/ui/TooltipTrigger";
 import { Button } from "~/core/components/ui/Button";
 
