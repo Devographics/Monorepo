@@ -117,6 +117,7 @@ export type Question = {
 
     limit?: number
 
+    // typically the question id is used as the question "namespace", this can override it
     i18nNamespace?: string
 
     // for slider questions

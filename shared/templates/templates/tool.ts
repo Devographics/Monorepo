@@ -7,9 +7,9 @@ export const tool: TemplateFunction = options => {
     const output: QuestionTemplateOutput = {
         allowComment: true,
         options: TOOLS_OPTIONS.map(id => ({
-            id
+            id,
+            intlId: `options.tools.${id}`
         })),
-        i18nNamespace: 'tools',
         defaultSort: 'options',
         ...question
     }

@@ -30,8 +30,9 @@ const OtherComponent = (props: FormInputProps) => {
   };
 
   const handleChangeDebounced = (event) => {
-    setLocalValue(event.target.value);
-    updateCurrentValuesDebounced({ [path]: event.target.value });
+    const value = event.target.value;
+    setLocalValue(value);
+    updateCurrentValuesDebounced({ [path]: value });
   };
 
   const checkClass = showOther ? "form-check-checked" : "form-check-unchecked";

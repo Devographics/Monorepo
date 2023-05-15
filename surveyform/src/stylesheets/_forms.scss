@@ -268,7 +268,7 @@
   background: rgba(255, 255, 255, 0.1);
   border-radius: 10px;
   padding: $spacing $spacing;
-  margin-top: $spacing;
+  // margin-top: $spacing;
   margin-bottom: $spacing;
   position: relative;
   // background: $bg-color-light;
@@ -306,12 +306,12 @@
     grid-auto-flow: column;
     column-gap: 2px;
   }
-  .form-check-wrapper {
+  .form-check {
     background: $bg-color-light;
     padding: math.div($spacing, 2);
     position: relative;
     margin: 0;
-    & > div {
+    & > label {
       position: static;
       padding: 0;
       display: flex;
@@ -322,10 +322,12 @@
         background: none;
       }
     }
-    input {
+    .form-input-wrapper {
       margin: 0;
+      display: block;
+      line-height: 0;
     }
-    label {
+    .form-option {
       padding: 0;
       position: absolute;
       top: calc(100% + 5px);

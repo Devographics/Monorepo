@@ -1,13 +1,21 @@
 "use client";
-import React from "react";
 import { useIntlContext } from "@devographics/react-i18n";
 import type { FormInputProps } from "~/surveys/components/form/typings";
 import Form from "react-bootstrap/Form";
-
 import { FormItem } from "~/surveys/components/form/FormItem";
+import { getOptioni18nIds } from "@devographics/i18n";
 
 export const FormComponentSelect = (props: FormInputProps) => {
-  const { path, value, question, updateCurrentValues, readOnly } = props;
+  const {
+    survey,
+    edition,
+    section,
+    path,
+    value,
+    question,
+    updateCurrentValues,
+    readOnly,
+  } = props;
   const { options, optionsAreNumeric } = question;
   const intl = useIntlContext();
   const emptyValue = "";
@@ -28,11 +36,34 @@ export const FormComponentSelect = (props: FormInputProps) => {
         }}
         disabled={readOnly}
       >
-        {allOptions.map(({ id, ...rest }) => (
-          <option key={id} value={id} {...rest}>
-            {id}
-          </option>
-        ))}
+        {allOptions.map((option) => {
+          const { id, label } = option;
+          const i18n = getOptioni18nIds({
+            survey,
+            edition,
+            section,
+            question,
+            option,
+          });
+          const optionLabel =
+            label ||
+            intl.formatMessage({
+              id: i18n.base,
+            });
+          console.log("//o");
+          console.log(label);
+          console.log(i18n.base);
+          console.log(
+            intl.formatMessage({
+              id: i18n.base,
+            })
+          );
+          return (
+            <option key={id} value={id}>
+              {optionLabel}
+            </option>
+          );
+        })}
       </Form.Select>
     </FormItem>
   );

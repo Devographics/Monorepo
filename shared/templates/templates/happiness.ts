@@ -26,7 +26,10 @@ export const happiness: TemplateFunction = options => {
     const output: QuestionTemplateOutput = {
         defaultSort: 'options',
         optionsAreNumeric: true,
-        options: [...Array(5)].map((x, i) => ({ id: String(i) })),
+        options: [...Array(5)].map((x, i) => ({
+            id: String(i),
+            intlId: `options.happiness.${String(i)}`
+        })),
         rawPaths: {
             response: `happiness__${questionSegment}`
         },

@@ -84,6 +84,7 @@ query SurveysMetadataQuery {
             options {
               average
               id
+              intlId
               label
             }
           }
@@ -210,6 +211,7 @@ query ${editionId}MetadataQuery {
               }
               options {
                 id
+                intlId
                 label
                 average
                 entity {
@@ -310,6 +312,8 @@ query ${editionId}MetadataQuery {
             }
             options {
               id
+              intlId
+              label
               entity {
                 nameClean
                 nameHtml

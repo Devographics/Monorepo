@@ -1,60 +1,49 @@
 "use client";
 import FormCheck from "react-bootstrap/FormCheck";
-import type { FormInputProps } from "@devographics/react-form";
 import { FormItem } from "~/surveys/components/form/FormItem";
 import FormOptionLabel from "~/form/components/elements/FormOptionLabel";
+import type { FormInputProps } from "~/surveys/components/form/typings";
+import Form from "react-bootstrap/Form";
+import { FormOption } from "~/surveys/components/form/FormOption";
 
-export const Slider = ({
-  refFunction,
-  path,
-  inputProperties,
-  itemProperties = {},
-  intlKeys,
-}: FormInputProps) => {
-  // @ts-expect-error
-  const { options = [], value, ...otherInputProperties } = inputProperties;
+export const Slider = (props: FormInputProps) => {
+  const { path, value, question, readOnly, updateCurrentValues } = props;
+  const { options } = question;
   const hasValue = value !== "";
   return (
-    <FormItem
-      path={/*inputProperties.*/ path}
-      label={inputProperties.label}
-      {...itemProperties}
-    >
+    <FormItem {...props}>
       <div className="form-slider">
         <div className="form-slider-options">
-          {options.map((option, i) => {
-            const hasLabel =
-              option.label && Number(option.label) !== option.value;
-            const isChecked = value === option.value;
+          {options?.map((option, i) => {
+            const hasLabel = option.label && Number(option.label) !== option.id;
+            const isChecked = value === option.id;
             const checkClass = hasValue
               ? isChecked
                 ? "form-check-checked"
                 : "form-check-unchecked"
               : "";
             return (
-              <label
-                key={i}
-                className="form-check-wrapper"
-                htmlFor={`${path}.${i}`}
-              >
-                {/*
-              // @ts-expect-error */}
-                <FormCheck
-                  {...otherInputProperties}
-                  layout="elementOnly"
-                  type="radio"
-                  // @ts-ignore
-                  label={hasLabel && <FormOptionLabel option={option} />}
-                  value={option.value}
-                  name={path}
-                  id={`${path}.${i}`}
-                  path={`${path}.${i}`}
-                  ref={refFunction}
-                  checked={isChecked}
-                  className={checkClass}
-                  disabled={readOnly}
-                />
-              </label>
+              <Form.Check key={i} layout="elementOnly" type="radio">
+                <Form.Check.Label htmlFor={`${path}.${i}`}>
+                  <div className="form-input-wrapper">
+                    <Form.Check.Input
+                      type="radio"
+                      value={option.id}
+                      name={path}
+                      id={`${path}.${i}`}
+                      path={`${path}.${i}`}
+                      // ref={refFunction}
+                      checked={isChecked}
+                      className={checkClass}
+                      onChange={(e) => {
+                        updateCurrentValues({ [path]: e.target.value });
+                      }}
+                      disabled={readOnly}
+                    />
+                  </div>
+                  <FormOption {...props} option={option} />
+                </Form.Check.Label>
+              </Form.Check>
             );
           })}
         </div>

@@ -141,6 +141,7 @@ enum ContentType {
 
 type OptionsMetadata {
     id: String
+    intlId: String
     label: String
     average: Float
     entity: Entity

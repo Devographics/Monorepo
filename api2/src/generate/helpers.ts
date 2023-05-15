@@ -7,7 +7,8 @@ import {
     Option,
     QuestionTemplateOutput,
     SectionApiObject,
-    EditionApiObject
+    EditionApiObject,
+    SurveyApiObject
 } from '../types/surveys'
 import { templates } from './question_templates'
 import uniq from 'lodash/uniq.js'
@@ -121,25 +122,64 @@ export const getPath = ({
     return pathSegments.join('.')
 }
 
+export const getSurveyObject = ({ survey }: { survey: Survey }): SurveyApiObject => {}
+export const getEditionObject = ({
+    survey,
+    edition
+}: {
+    survey: Survey
+    edition: Edition
+}): EditionApiObject => {
+    const allSections = mergeSections(edition.sections, edition.apiSections)
+    edition.sections = allSections
+    edition.survey = survey
+    edition.surveyId = survey.id
+    for (const section of edition.sections) {
+        section.questions = getSectionQuestionObjects({ edition, section, questionObjects })
+    }
+    return edition
+}
+
 export const getSectionQuestionObjects = ({
     edition,
     section,
     questionObjects
 }: {
-    edition: EditionApiObject
-    section: SectionApiObject
+    edition: Edition
+    section: Section
     questionObjects: QuestionApiObject[]
 }): QuestionApiObject[] => {
-    const results = questionObjects
-        .filter(
-            q =>
-                q.sectionIds &&
-                q.sectionIds.includes(section.id) &&
-                q.editions &&
-                q.editions.includes(edition.id) &&
-                q.includeInApi !== false
-        )
-        .map(q => ({ ...q, editionId: edition.id, edition, section }))
+    // const sectionQuestions = questionObjects
+    // .filter(
+    //     q =>
+    //         q.sectionIds &&
+    //         q.sectionIds.includes(section.id) &&
+    //         q.editions &&
+    //         q.editions.includes(edition.id) &&
+    //         q.includeInApi !== false
+    // )
+    // .map(q => ({ ...q, editionId: edition.id, edition, section }))
+
+    // // reorder to be in the same order as in the outline
+    // const results = sectionQuestions
+
+    const results: QuestionApiObject[] = []
+    section.questions.forEach(question => {
+        const questionObject = questionObjects.find(q => q.id === question.id)
+        console.log('/////')
+        console.log(question)
+        console.log(questionObject)
+        if (questionObject) {
+            const result = {
+                ...questionObject,
+                editionId: edition.id,
+                edition,
+                section
+            }
+            results.push(result)
+        }
+    })
+
     return results
 }
 

@@ -1,20 +1,23 @@
 import {
-    SurveyApiObject,
     Survey,
     Edition,
     Section,
     Question,
+    SurveyApiObject,
+    EditionApiObject,
+    SectionApiObject,
     QuestionApiObject,
     Option,
-    TypeObject,
-    SectionApiObject
+    TypeObject
 } from '../types/surveys'
 import {
     graphqlize,
     applyQuestionTemplate,
     mergeOptions,
     mergeSections,
-    getSectionQuestionObjects,
+    // getSurveyObject,
+    // getEditionObject,
+    // getSectionQuestionObjects,
     // getRawPaths,
     // getNormPaths,
     getContentType
@@ -39,19 +42,85 @@ export const parseSurveys = ({
     surveys: Survey[]
     questionObjects: QuestionApiObject[]
 }): SurveyApiObject[] => {
-    for (const survey_ of surveys) {
-        const survey = survey_ as SurveyApiObject
-        for (const edition of survey.editions) {
-            const allSections = mergeSections(edition.sections, edition.apiSections)
-            edition.sections = allSections as SectionApiObject[]
-            edition.survey = survey
-            edition.surveyId = survey.id
-            for (const section of edition.sections) {
-                section.questions = getSectionQuestionObjects({ edition, section, questionObjects })
-            }
-        }
+    return surveys.map(survey => getSurveyObject({ survey, questionObjects }))
+}
+
+// Take a Survey and return a SurveyApiObject
+export const getSurveyObject = ({
+    survey,
+    questionObjects
+}: {
+    survey: Survey
+    questionObjects: QuestionApiObject[]
+}): SurveyApiObject => {
+    return {
+        ...survey,
+        editions: survey.editions.map(edition =>
+            getEditionObject({ survey, edition, questionObjects })
+        )
     }
-    return surveys as SurveyApiObject[]
+}
+
+// Take an Edition and return an EditionApiObject
+export const getEditionObject = ({
+    survey,
+    edition,
+    questionObjects
+}: {
+    survey: Survey
+    edition: Edition
+    questionObjects: QuestionApiObject[]
+}): EditionApiObject => {
+    const { apiSections, sections, ...rest } = edition
+    const allSections = mergeSections(edition.sections, edition.apiSections).map(section =>
+        getSectionObject({ survey, edition, section, questionObjects })
+    )
+    return {
+        ...rest,
+        survey,
+        surveyId: survey.id,
+        sections: allSections
+    }
+}
+
+// Take a Section and return a SectionApiObject
+export const getSectionObject = ({
+    survey,
+    edition,
+    section,
+    questionObjects
+}: {
+    survey: Survey
+    edition: Edition
+    section: Section
+    questionObjects: QuestionApiObject[]
+}): SectionApiObject => {
+    const sectionQuestions: QuestionApiObject[] = []
+    section.questions.forEach(question => {
+        const questionObject = questionObjects.find(
+            q =>
+                q.sectionIds &&
+                q.sectionIds.includes(section.id) &&
+                q.editions &&
+                q.editions.includes(edition.id) &&
+                q.includeInApi !== false &&
+                q.id === question.id
+        )
+        // help callouts, email sign up fields, etc. do not have questionObjects associated
+        if (questionObject) {
+            const result = {
+                ...questionObject,
+                editionId: edition.id,
+                edition,
+                section
+            }
+            sectionQuestions.push(result)
+        }
+    })
+    return {
+        ...section,
+        questions: sectionQuestions
+    }
 }
 
 export const generateTypeObjects = async ({

@@ -8,9 +8,9 @@ export const feature: TemplateFunction = options => {
     const output: QuestionTemplateOutput = {
         allowComment: true,
         options: FEATURES_OPTIONS.map(id => ({
-            id
+            id,
+            intlId: `options.features.${id}`
         })),
-        i18nNamespace: 'features',
         defaultSort: 'options',
         ...question
     }

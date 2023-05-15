@@ -96,14 +96,17 @@ export const FormItemTitle = (props: FormInputProps) => {
   const { entity, yearAdded } = question;
   const i18n = getQuestioni18nIds(props);
 
+  const entityName =
+    entity && (entity.nameHtml || entity.nameClean || entity.name);
+
   return (
     <h3 className="form-label-heading">
       <Form.Label>
-        {entity ? (
+        {entityName ? (
           <span
             className="entity-label"
             dangerouslySetInnerHTML={{
-              __html: entity.nameHtml || entity.nameClean || entity.name,
+              __html: entityName,
             }}
           />
         ) : (
