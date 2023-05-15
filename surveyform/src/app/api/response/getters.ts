@@ -1,20 +1,17 @@
-import {
-  SurveyEdition,
-  SURVEY_OPEN,
-  SURVEY_PREVIEW,
-} from "@devographics/core-models";
 import { fetchEditionMetadataSurveyForm } from "@devographics/fetch";
 import { getUsersCollection } from "@devographics/mongo";
 import { EditionMetadata, SurveyStatusEnum } from "@devographics/types";
 import { NextRequest, NextResponse } from "next/server";
 import {
-  getSessionFromReq,
   getSessionFromToken,
   TOKEN_NAME,
 } from "~/account/user/api";
+import { UserDocument } from "~/core/models/user";
 // import { UserMongooseModel } from "~/core/models/user.server";
 
 /**
+ * Will return an error response if survey is closed
+ * 
  * WORK IN PROGRESS moving save/start survey to Next 13 route handlers
  * @param req
  * @param res
@@ -26,7 +23,7 @@ import {
  * }
  * // ... keep using survey
  */
-export async function getEditionFromReq(req: NextRequest) {
+export async function tryGetEditionFromReq(req: NextRequest) {
   // parameters
   const surveyId = req.nextUrl.searchParams.get("surveyId");
   if (!surveyId) {
@@ -68,6 +65,7 @@ export async function getUserIdFromReq(req: NextRequest) {
   if (!session?._id) return null;
   return session?._id;
 }
+
 /**
  * Get user, for authentication purpose
  * /!\ If you need to send back the user in the response,
@@ -86,4 +84,29 @@ export async function getUserFromReq(req: NextRequest) {
   const user = await Users.findOne({ _id });
   // const user = await UserMongooseModel.findOne({ _id });
   return user;
+}
+
+/**
+ * Experimental: a helper function to be called by Route Handlers
+ * Will either return an error response or the value we want 
+ * (similarly to a Connect middleware)
+ */
+export async function tryGetCurrentUser(req: NextRequest): Promise<UserDocument | NextResponse> {
+  const userId = await getUserIdFromReq(req);
+  if (!userId) {
+    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+  }
+  const Users = await getUsersCollection<UserDocument>();
+  const currentUser = await Users.findOne(
+    { _id: userId },
+    { projection: { isAdmin: true, createdAt: true } }
+  );
+  if (!currentUser) {
+    return NextResponse.json(
+      { error: "User do not exist anymore" },
+      { status: 401 }
+    );
+  }
+  return currentUser
+
 }

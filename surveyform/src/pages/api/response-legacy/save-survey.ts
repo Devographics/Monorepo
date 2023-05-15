@@ -6,7 +6,6 @@ import { gqlHeaders } from "~/core/server/graphqlBff";
 import { SurveyResponseFragment } from "~/responses/fragments";
 import { getFragmentName } from "~/core/server/graphqlUtils";
 import { fetchEditionMetadataSurveyForm } from "@devographics/fetch";
-import { initRedis } from "@devographics/redis";
 import { connectToRedis } from "~/lib/server/redis";
 import { userFromReq } from "~/lib/server/context/userContext";
 import { EditionMetadata, SurveyStatusEnum } from "@devographics/types";

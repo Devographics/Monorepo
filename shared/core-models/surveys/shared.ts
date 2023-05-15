@@ -15,5 +15,11 @@ export function getSurveyPrettySlug(survey: SurveyEdition) {
     return survey.surveyId.replaceAll("_", "-")
 }
 
+/**
+ * @deprecated use SurveyStatusEnum
+ */
 export const SURVEY_OPEN: SurveyStatus = 2
+/**
+ * @deprecated use SurveyStatusEnum
+ */
 export const SURVEY_PREVIEW: SurveyStatus = 1

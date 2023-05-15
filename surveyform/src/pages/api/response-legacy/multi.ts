@@ -4,7 +4,6 @@ import gql from "graphql-tag";
 import { serverConfig } from "~/config/server";
 import { print } from "graphql";
 import { ResponseDocument, SurveyEdition } from "@devographics/core-models";
-// import { connectToAppDb } from '~/lib/server/mongoose/connection'
 import { connectToRedis } from "~/lib/server/redis";
 
 export default async function responseHandler(

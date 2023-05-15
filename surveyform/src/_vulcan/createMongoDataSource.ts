@@ -3,7 +3,7 @@ import type { Connector } from "@vulcanjs/crud/server";
 import { MongoDataSource } from "apollo-datasource-mongodb";
 
 /**
- * Create a mongoose data source
+ * Create a mongo data source
  * @param model
  * @param connector
  * @returns
@@ -18,7 +18,7 @@ export const createMongoDataSource = (
     manually provide a dataSource in model.graphql options.`);
     return undefined;
   }
-  // TODO: check that it's a mongoose model?
-  const mongooseModel = rawCollection as unknown as any;
-  return new MongoDataSource(mongooseModel);
+  // TODO: check that it's a mongo model?
+  const mongoModel = rawCollection as unknown as any;
+  return new MongoDataSource(mongoModel);
 };

@@ -45,7 +45,7 @@ export const createMongoConnector = <TDocument extends VulcanDocument>(
 ): MongoConnector<TDocument> => {
     const mongoClient = options.mongoClient;
     const collectionName = options.collectionName || model.name;
-    // 1. use, retrieve or create the mongoose model
+    // 1. use, retrieve or create the mongo model
     // TODO: get a better key than "model.name" eg "model.mongo.collectionName"
     const mongoCollection = mongoClient
         .db()

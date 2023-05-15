@@ -17,7 +17,7 @@ function escapeStringRegexp(string) {
 import merge from "lodash/merge.js";
 import { isEmptyOrUndefined } from "@vulcanjs/utils";
 import { VulcanModel } from "@vulcanjs/model";
-// TODO: handle both mongo and mongoose
+// TODO: handle both mongo and mongo
 import { FilterableInput } from "@vulcanjs/crud";
 import { VulcanCrudModelServer } from "@vulcanjs/crud/server";
 

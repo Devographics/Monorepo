@@ -6,7 +6,6 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { serverConfig } from "~/config/server";
 import { print } from "graphql";
 import { fetchEditionMetadataSurveyForm } from "@devographics/fetch";
-// import { connectToAppDb } from "~/lib/server/mongoose/connection";
 import { connectToRedis } from "~/lib/server/redis";
 import { userFromReq } from "~/lib/server/context/userContext";
 import {

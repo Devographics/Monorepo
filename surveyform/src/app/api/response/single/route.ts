@@ -1,17 +1,14 @@
 // TODO: this route may be removed if we load the response in RSC
 // but we need the same logic anyway
-import { ResponseDocument, SurveyEdition } from "@devographics/core-models";
-import { getGroups, restrictViewableFields } from "@devographics/permissions";
-// import { ProjectionFields } from "mongoose";
+import { getGroups } from "@devographics/permissions";
 import { NextRequest, NextResponse } from "next/server";
 import { UserDocument } from "~/core/models/user";
 // import { UserMongooseModel } from "~/core/models/user.server";
 // import { connectToAppDb } from "~/lib/server/mongoose/connection";
 import { connectToRedis } from "~/lib/server/redis";
 // import { ResponseMongooseModel } from "~/responses/model.server";
-import { getEditionFromReq, getUserIdFromReq } from "../getters";
+import { tryGetEditionFromReq, getUserIdFromReq } from "../getters";
 import { responseRestrictedFields } from "~/responses/server/shema";
-import { EditionMetadata } from "@devographics/types";
 import {
   getRawResponsesCollection,
   getUsersCollection,
@@ -45,18 +42,17 @@ import omit from "lodash/omit";
 export async function GET(req: NextRequest, res: NextResponse) {
   // await connectToAppDb();
   connectToRedis();
-  const editionOrRes = await getEditionFromReq(req);
+  const editionOrRes = await tryGetEditionFromReq(req);
   if (editionOrRes instanceof Response) {
     console.log("res");
     return editionOrRes;
   }
-  const edition = editionOrRes as EditionMetadata;
+  const edition = editionOrRes
 
   const userId = await getUserIdFromReq(req);
   if (!userId) {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   }
-
   const Users = await getUsersCollection();
   const currentUser = await Users.findOne<UserDocument>(
     { _id: userId },
@@ -81,8 +77,8 @@ export async function GET(req: NextRequest, res: NextResponse) {
     editionId: edition.id,
   };
 
-  const Responses = await getRawResponsesCollection();
-  const responseFromDb = await Responses.findOne(selector);
+  const RawResponses = await getRawResponsesCollection();
+  const responseFromDb = await RawResponses.findOne(selector);
   // const responseFromDb =
   //   await ResponseMongooseModel().findOne<ResponseDocument>(
   //     selector,

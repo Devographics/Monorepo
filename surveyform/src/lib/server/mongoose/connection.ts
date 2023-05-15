@@ -1,7 +1,5 @@
 // LEGACY: do not yse mongoose anymore
 // code left for reference
-import { debugMongo } from "~/lib/debuggers";
-// import mongoose, { ConnectOptions } from "mongoose";
 import { serverConfig } from "~/config/server";
 
 // Based on https://github.com/vercel/next.js/blob/canary/examples/with-mongodb/util/mongodb.js
@@ -84,7 +82,7 @@ export async function closeDbConnection() {
     // await mongoose.connection.close();
   } catch (err) {
     // Catch locally error
-    console.error("Could not close mongoose connection");
+    console.error("Could not close mongo connection");
     console.error(err);
     throw err;
   }

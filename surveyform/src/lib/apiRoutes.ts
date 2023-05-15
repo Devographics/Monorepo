@@ -48,7 +48,7 @@ export const apiRoutes = {
       href: "/api/response-legacy/multi"
     },
     startSurvey: {
-      href: ({ surveyId, editionId }: { surveyId: string, editionId: string }) => `/api/response-legacy/start-survey?surveyId=${surveyId}&editionId=${editionId}`
+      href: ({ surveyId, editionId }: { surveyId: string, editionId: string }) => `/api/response/start-survey?surveyId=${surveyId}&editionId=${editionId}`
     },
     saveSurvey: {
       href: ({ surveyId, editionId }: { surveyId: string, editionId: string }) => `/api/response-legacy/save-survey?surveyId=${surveyId}&editionId=${editionId}`
