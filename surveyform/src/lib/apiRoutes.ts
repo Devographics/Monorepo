@@ -5,7 +5,7 @@ export const apiRoutes = {
   /** @deprecated try to move graphql calls to backend only */
   graphql: {
     href: "/api/graphql",
-    method: "POST"
+    method: "POST",
   },
   account: {
     logout: {
@@ -38,20 +38,37 @@ export const apiRoutes = {
   // TODO: remove "-legacy" when migration to route handlers is done
   response: {
     single: {
-      href: ({ editionId,
-        surveyId }: {
-          editionId: string,
-          surveyId: string
-        }) => `/api/response/single?editionId=${editionId}&surveyId=${surveyId}`
+      href: ({
+        editionId,
+        surveyId,
+      }: {
+        editionId: string;
+        surveyId: string;
+      }) => `/api/response/single?editionId=${editionId}&surveyId=${surveyId}`,
     },
-    multi: {
-      href: "/api/response-legacy/multi"
+    // multi: {
+    //   href: "/api/response-legacy/multi"
+    // },
+    createResponse: {
+      href: ({
+        surveyId,
+        editionId,
+      }: {
+        surveyId: string;
+        editionId: string;
+      }) => `/api/response/create?surveyId=${surveyId}&editionId=${editionId}`,
     },
-    startSurvey: {
-      href: ({ surveyId, editionId }: { surveyId: string, editionId: string }) => `/api/response/start-survey?surveyId=${surveyId}&editionId=${editionId}`
+    saveResponse: {
+      href: ({
+        surveyId,
+        editionId,
+      }: {
+        surveyId: string;
+        editionId: string;
+      }) => `/api/response/save?surveyId=${surveyId}&editionId=${editionId}`,
     },
-    saveSurvey: {
-      href: ({ surveyId, editionId }: { surveyId: string, editionId: string }) => `/api/response-legacy/save-survey?surveyId=${surveyId}&editionId=${editionId}`
-    }
-  }
-}
+    // saveResponse: {
+    //   href: ({ surveyId, editionId }: { surveyId: string, editionId: string }) => `/api/response-legacy/save-survey?surveyId=${surveyId}&editionId=${editionId}`
+    // }
+  },
+};

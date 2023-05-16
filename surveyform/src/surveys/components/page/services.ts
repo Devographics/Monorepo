@@ -19,7 +19,7 @@ const extractErrorObject = (rawError): ErrorObject | null => {
   }
 };
 
-export async function startEdition({
+export async function createResponse({
   edition,
   data,
 }: {
@@ -30,7 +30,7 @@ export async function startEdition({
   // TODO: this should also invalidate the "getCurrentUser" query
   // we should figure how to do so using SWR, maybe in the code that calls startSurvey?
   const fetchRes = await fetch(
-    apiRoutes.response.startSurvey.href({
+    apiRoutes.response.createResponse.href({
       surveyId,
       editionId,
     }),

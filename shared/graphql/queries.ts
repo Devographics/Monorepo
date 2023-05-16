@@ -58,6 +58,11 @@ query SurveysMetadataQuery {
         year
         status
         imageUrl
+        faq
+        credits {
+          id
+          role
+        }
         colors {
           primary
           secondary
@@ -108,6 +113,11 @@ query SurveyMetadataQuery {
         hashtag
         editions {
           id
+          faq
+          credits {
+            id
+            role
+          }
           surveyId
           year
           status
@@ -141,51 +151,84 @@ query ${editionId}MetadataQuery {
       }
       editions {
         id
-          surveyId
-          year
-          status
-          hashtag
-          startedAt
-          endedAt
-          questionsUrl
-          resultsUrl
+        surveyId
+        year
+        status
+        hashtag
+        startedAt
+        endedAt
+        questionsUrl
+        resultsUrl
+        imageUrl
+        faviconUrl
+        socialImageUrl
+        faq
+        credits {
+          id
+          role
+        }
+        colors {
+          primary
+          secondary
+          text
+          background
+          backgroundSecondary
+        }
+        sponsors {
+          id
           imageUrl
-          faviconUrl
-          socialImageUrl
-          colors {
-            primary
-            secondary
-            text
-            background
-            backgroundSecondary
-          }
-          sponsors {
+          name
+          url
+        }
+        credits {
+          id
+          role
+        }
+        sections {
+          id
+          slug
+          intlId
+          questions {
             id
-            imageUrl
-            name
-            url
-          }
-          credits {
-            id
-            role
-          }
-          sections {
-            id
-            slug
+            label
             intlId
-            questions {
+            i18nNamespace
+            template
+            extends
+            contentType
+            allowOther
+            allowComment
+            matchTags
+            optionsAreNumeric
+            optionsAreRange
+            entity {
+              nameClean
+              name
+              nameHtml
+              example {
+                language
+                code
+                codeHighlighted
+              }
+            }
+            rawPaths {
+              response
+              other
+              comment
+            }
+            normPaths {
+              response
+              other
+              comment
+              raw
+              patterns
+              error
+            }
+            options {
               id
-              label
               intlId
-              i18nNamespace
-              template
-              extends
-              contentType
-              allowOther
-              allowComment
-              matchTags
-              optionsAreNumeric
-              optionsAreRange
+              label
+              average
               entity {
                 nameClean
                 name
@@ -196,37 +239,9 @@ query ${editionId}MetadataQuery {
                   codeHighlighted
                 }
               }
-              rawPaths {
-                response
-                other
-                comment
-              }
-              normPaths {
-                response
-                other
-                comment
-                raw
-                patterns
-                error
-              }
-              options {
-                id
-                intlId
-                label
-                average
-                entity {
-                  nameClean
-                  name
-                  nameHtml
-                  example {
-                    language
-                    code
-                    codeHighlighted
-                  }
-                }
-              }
             }
           }
+        }
       }
     }
   }

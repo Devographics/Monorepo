@@ -20,7 +20,7 @@ import { useUserResponse } from "~/responses/hooks";
 import { Loading } from "~/core/components/ui/Loading";
 import { LoadingButton } from "~/core/components/ui/LoadingButton";
 import { getEditionSectionPath } from "~/surveys/helpers";
-import { ErrorObject, startEdition } from "./services";
+import { ErrorObject, createResponse } from "./services";
 import type { EditionMetadata } from "@devographics/types";
 import { ResponseDocument } from "@devographics/core-models";
 import { useEdition } from "../SurveyContext/Provider";
@@ -154,7 +154,7 @@ const SurveyStart = ({
       setLoading(true);
       try {
         // TODO: we might want to use an Error boundary and a Suspense to handle loading and errors
-        const result = await startEdition({ edition, data });
+        const result = await createResponse({ edition, data });
         if (result.error) {
           setErrors([result.error]);
           setLoading(false);

@@ -16,6 +16,7 @@
     "cypress"
   ],
   "compilerOptions": {
+    "strict": true,
     "incremental": true,
     "plugins": [
       {

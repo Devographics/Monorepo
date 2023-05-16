@@ -54,6 +54,8 @@ type EditionMetadata {
 
     credits: [CreditItem]
 
+    faq: [String]
+
     tshirt: TshirtDefinition
 
     colors: Colors

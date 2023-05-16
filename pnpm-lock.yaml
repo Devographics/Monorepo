@@ -1267,6 +1267,7 @@ importers:
       uuid: ^8.3.2
       webpack: ^5.75.0
       yalc: ^1.0.0-pre.53
+      zod: ^3.21.4
     dependencies:
       '@apollo/server': 4.3.0_graphql@16.6.0
       '@as-integrations/next': 1.2.0_4mtssk47662j2nsa4t6fu2ax7y
@@ -1357,6 +1358,7 @@ importers:
       simpl-schema: 1.13.1
       swr: 2.0.1_react@18.2.0
       uuid: 8.3.2
+      zod: 3.21.4
     optionalDependencies:
       '@cypress/code-coverage': 3.10.4_e7klpuia4rhht36bzymnmcd2iu
       '@cypress/webpack-preprocessor': 5.17.1_npabyccmuonwo2rku4k53xo3hi
