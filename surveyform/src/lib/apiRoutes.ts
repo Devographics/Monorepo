@@ -50,22 +50,11 @@ export const apiRoutes = {
     //   href: "/api/response-legacy/multi"
     // },
     createResponse: {
-      href: ({
-        surveyId,
-        editionId,
-      }: {
-        surveyId: string;
-        editionId: string;
-      }) => `/api/response/create?surveyId=${surveyId}&editionId=${editionId}`,
+      href: () => `/api/response/create`,
     },
     saveResponse: {
-      href: ({
-        surveyId,
-        editionId,
-      }: {
-        surveyId: string;
-        editionId: string;
-      }) => `/api/response/save?surveyId=${surveyId}&editionId=${editionId}`,
+      href: ({ responseId }: { responseId: string }) =>
+        `/api/response/save?responseId=${responseId}`,
     },
     // saveResponse: {
     //   href: ({ surveyId, editionId }: { surveyId: string, editionId: string }) => `/api/response-legacy/save-survey?surveyId=${surveyId}&editionId=${editionId}`

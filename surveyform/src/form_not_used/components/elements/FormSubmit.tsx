@@ -5,7 +5,7 @@ import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import { useRouter } from "next/navigation";
 import { LoadingButton } from "~/core/components/ui/LoadingButton";
 import { captureException } from "@sentry/nextjs";
-import { saveSurvey } from "~/surveys/components/page/services";
+import { saveResponse } from "~/surveys/components/page/services";
 import { getEditionSectionPath } from "~/surveys/helpers";
 import { useResponse } from "~/surveys/components/ResponseContext/ResponseProvider";
 import { SectionMetadata } from "@devographics/types";
@@ -178,8 +178,8 @@ const SubmitButton = (props: {
           onClick={async (e) => {
             e.preventDefault();
             setLoading(true);
-            const res = await saveSurvey(survey, {
-              id: document._id,
+            const res = await saveResponse({
+              responseId: document._id,
               data: currentValues,
             });
             if (res.error) {

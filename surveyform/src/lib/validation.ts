@@ -1,7 +1,28 @@
 import { ResponseDocument } from "@devographics/core-models";
-import { SurveyMetadata, EditionMetadata } from "@devographics/types";
+import {
+  SurveyMetadata,
+  EditionMetadata,
+  SurveyStatusEnum,
+} from "@devographics/types";
 import { z } from "zod";
-import { getQuestionObject } from "~/surveys/parser/parseSurvey";
+import { SchemaObject, Schema } from "./schemas";
+import { getResponseSchema } from "./responses";
+
+export interface ServerErrorObject {
+  id: string;
+  message: string;
+  status: number;
+  properties?: any;
+  error?: any;
+}
+
+export function ServerError(props: ServerErrorObject) {
+  console.log("// ServerError");
+  console.log(props);
+  Object.keys(props).forEach((key) => {
+    this[key] = props[key];
+  });
+}
 
 export enum ActionContexts {
   CLIENT = "client",
@@ -12,161 +33,6 @@ export enum Actions {
   CREATE = "create",
   UPDATE = "update",
 }
-
-interface SchemaObject {
-  type?:
-    | DateConstructor
-    | StringConstructor
-    | NumberConstructor
-    | BooleanConstructor;
-  requiredDuring?: Actions;
-  clientMutable?: boolean;
-}
-
-type Schema = {
-  [key in string]: SchemaObject;
-};
-
-/*
-
-All fields can only be accessed by document owner.
-
-Some fields can be mutated by owner from client; or else only from server
-
-*/
-
-const defaultSchemaObject: SchemaObject = {
-  type: String,
-  requiredDuring: undefined,
-  clientMutable: false,
-};
-
-export const responseBaseSchema: Schema = {
-  _id: {
-    type: String,
-    requiredDuring: Actions.CREATE,
-  },
-  createdAt: {
-    type: Date,
-    requiredDuring: Actions.CREATE,
-  },
-  updatedAt: {
-    type: Date,
-    requiredDuring: Actions.UPDATE,
-  },
-  // unlike updatedAt, this tracks when the user clicked "submit" on the client,
-  // not when the server finished the update
-  lastSavedAt: {
-    type: Date,
-    requiredDuring: Actions.UPDATE,
-    clientMutable: true,
-  },
-  // tracks the most recent time the user reached the end of the survey
-  finishedAt: {
-    type: Date,
-  },
-  /**
-   * NOTE: this userId is only present in Response
-   * It is removed in the NormalizedResponse that can be made public
-   */
-  userId: {
-    type: String,
-    requiredDuring: Actions.CREATE,
-  },
-
-  // custom properties
-
-  year: {
-    type: Number,
-  },
-  duration: {
-    type: Number,
-  },
-  completion: {
-    type: Number,
-  },
-  knowledgeScore: {
-    type: Number,
-  },
-  locale: {
-    type: String,
-  },
-  isSynced: {
-    type: Boolean,
-  },
-  //   emailHash: {
-  //     canCreate: ["members"],
-  //     canUpdate: ["admins"],
-  //   },
-  isSubscribed: {
-    type: Boolean,
-    clientMutable: true, // ?
-  },
-  surveyId: {
-    type: String,
-    requiredDuring: Actions.CREATE,
-  },
-  editionId: {
-    type: String,
-    requiredDuring: Actions.CREATE,
-  },
-  isNormalized: {
-    type: Boolean,
-  },
-  /*
-    NOTE: this field will exist in the database, but is only used in the admin area
-    Currently (09/2022) the admin area doesn't use this field but instead rely on a virtual field with a
-    "reversed relation" to get the normalizedResponse from a response
-    However the normalization adds this field in the db for convenience of future changes
-    normalizedResponseId: {
-      type: String,
-      
-      canRead: ["admins"],
-      canCreate: ["admins"],
-      canUpdate: ["admins"],
-    },
-    */
-  //   isFinished: {
-  //     type: Boolean,
-  //     canCreate: ["members"],
-  //     canUpdate: ["members"],
-  //   },
-  common__user_info__authmode: {
-    type: String,
-    clientMutable: true,
-  },
-  common__user_info__device: {
-    type: String,
-    clientMutable: true,
-  },
-  common__user_info__browser: {
-    type: String,
-    clientMutable: true,
-  },
-  common__user_info__version: {
-    type: String,
-    clientMutable: true,
-  },
-  common__user_info__os: {
-    type: String,
-    clientMutable: true,
-  },
-  common__user_info__referrer: {
-    type: String,
-    clientMutable: true,
-  },
-  common__user_info__source: {
-    type: String,
-    clientMutable: true,
-  },
-};
-
-const extendSchema = (schema) => {
-  Object.keys(schema).forEach((key) => {
-    schema[key] = { ...defaultSchemaObject, ...schema[key] };
-  });
-  return schema;
-};
 
 const getZodType = (type) => {
   switch (type) {
@@ -193,12 +59,12 @@ type ZodObject =
   | z.ZodOptional<z.ZodNumber>;
 
 const getZodObject = ({
-  key,
+  fieldName,
   schemaObject,
   action,
   context,
 }: {
-  key: string;
+  fieldName: string;
   schemaObject: SchemaObject;
   action: Actions;
   context: ActionContexts;
@@ -235,46 +101,23 @@ const getZodSchema = ({
   context: ActionContexts;
 }) => {
   const zObject = {};
-  Object.keys(schema).forEach((key) => {
-    const schemaObject = schema[key];
-    zObject[key] = getZodObject({ key, schemaObject, action, context });
+  const allFieldNames = Object.keys(schema);
+  // if we're validating client input, only keep fields that are mutable by client
+  const fieldNames =
+    context === ActionContexts.CLIENT
+      ? allFieldNames.filter((key) => schema[key].clientMutable)
+      : allFieldNames;
+  // build Zod object
+  fieldNames.forEach((fieldName) => {
+    const schemaObject = schema[fieldName];
+    zObject[fieldName] = getZodObject({
+      fieldName,
+      schemaObject,
+      action,
+      context,
+    });
   });
-  return z.object(zObject);
-};
-
-const getResponseSchema = ({
-  survey,
-  edition,
-}: {
-  survey: SurveyMetadata;
-  edition: EditionMetadata;
-}) => {
-  const editionSchema = {};
-  for (const section of edition.sections) {
-    for (const question of section.questions) {
-      const questionObject = getQuestionObject({
-        survey,
-        edition,
-        section,
-        question,
-      });
-      for (const formPath in questionObject.formPaths) {
-        // responses can sometimes be numeric, everything else is string
-        const type =
-          questionObject.optionsAreNumeric && formPath === "response"
-            ? Number
-            : String;
-        editionSchema[questionObject.formPaths[formPath]] = {
-          type,
-          required: false,
-          clientMutable: true,
-        };
-      }
-    }
-  }
-  const schema = { ...responseBaseSchema, ...editionSchema };
-  const extendedSchema = extendSchema(schema);
-  return extendedSchema;
+  return z.object(zObject).strict();
 };
 
 export const validateResponse = ({
@@ -294,23 +137,35 @@ export const validateResponse = ({
   edition: EditionMetadata;
   action: Actions;
 }) => {
+  // check that user can perform action
   if (action === Actions.UPDATE) {
     if (existingResponse) {
       if (existingResponse.userId !== user._id) {
-        throw new Error(
-          `User ${user._id} not authorized to perform UPDATE on document ${existingResponse._id}`
-        );
+        throw new ServerError({
+          id: "update_not_authorized",
+          message: `User ${user._id} not authorized to perform UPDATE on document ${existingResponse._id}`,
+          status: 400,
+        });
       }
     } else {
-      throw new Error(
-        `Cannot validate UPDATE operation without an existing response`
-      );
+      throw new ServerError({
+        id: "no_existing_response",
+        message: `Cannot validate UPDATE operation without an existing response`,
+        status: 400,
+      });
     }
   }
 
+  // check that edition is open
+  if (edition.status === SurveyStatusEnum.CLOSED) {
+    throw new ServerError({
+      id: "survey_closed",
+      message: `Survey ${edition.id} is currently closed, operation failed`,
+      status: 400,
+    });
+  }
+
   const schema = getResponseSchema({ survey, edition });
-  //   console.log("// validateResponse");
-  //   console.log(schema);
   const clientSchema = getZodSchema({
     schema,
     action,
@@ -321,6 +176,28 @@ export const validateResponse = ({
     action,
     context: ActionContexts.SERVER,
   });
-  clientSchema.parse(clientData);
-  serverSchema.parse(serverData);
+
+  // parse client data
+  try {
+    clientSchema.parse(clientData);
+  } catch (error) {
+    throw new ServerError({
+      id: "client_data_validation_error",
+      message: `Encountered an error while validating client data during ${action}`,
+      status: 400,
+      error,
+    });
+  }
+
+  // parse server data
+  try {
+    serverSchema.parse(serverData);
+  } catch (error) {
+    throw new ServerError({
+      id: "server_data_validation_error",
+      message: `Encountered an error while validating server data during ${action}`,
+      status: 400,
+      error,
+    });
+  }
 };

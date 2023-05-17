@@ -154,7 +154,7 @@ const SurveyStart = ({
       setLoading(true);
       try {
         // TODO: we might want to use an Error boundary and a Suspense to handle loading and errors
-        const result = await createResponse({ edition, data });
+        const result = await createResponse({ data });
         if (result.error) {
           setErrors([result.error]);
           setLoading(false);
@@ -162,15 +162,13 @@ const SurveyStart = ({
           // no need to stop spinner because it'll disappear when we change page
           // setLoading(false);
           console.log("start survey result", result);
-          const pagePath =
-            get(result, `data.startSurvey.data.pagePath`) ||
-            getEditionSectionPath({
-              editionPathSegments,
-              edition,
-              response: result.data,
-              number: 1,
-              locale,
-            });
+          const pagePath = getEditionSectionPath({
+            editionPathSegments,
+            edition,
+            response: result.data,
+            number: 1,
+            locale,
+          });
           console.log(`Redirecting to ${pagePath}…`);
           router.push(pagePath);
         }

@@ -11,11 +11,11 @@ export interface ResponseDocument extends VulcanDocument {
   /**
    * js2022
    */
-  editionId: string,
+  editionId?: string;
   /**
    * state_of_js
    */
-  surveyId: string,
+  surveyId?: string;
 }
 
 /**

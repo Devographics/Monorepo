@@ -8,7 +8,7 @@ import { useFormContext } from "@devographics/react-form";
 import { getEditionSectionPath } from "~/surveys/helpers";
 import { useRouter } from "next/navigation";
 import { captureException } from "@sentry/nextjs";
-import { saveSurvey } from "../page/services";
+import { saveResponse } from "../page/services";
 import { SectionMetadata } from "@devographics/types";
 import { useEdition } from "../SurveyContext/Provider";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
@@ -58,8 +58,8 @@ const SurveyNavItem = ({
     setNavLoading(true);
     e.preventDefault();
     setShown(false);
-    const res = await saveSurvey(edition, {
-      id: document._id,
+    const res = await saveResponse({
+      responseId: document._id,
       data: currentValues,
     });
     if (res.error) {

@@ -19,46 +19,36 @@ const extractErrorObject = (rawError): ErrorObject | null => {
   }
 };
 
-export async function createResponse({
-  edition,
-  data,
-}: {
-  edition: EditionMetadata;
-  data: any;
-}) {
-  const { id: editionId, surveyId } = edition;
+export async function createResponse({ data }: { data: any }) {
   // TODO: this should also invalidate the "getCurrentUser" query
   // we should figure how to do so using SWR, maybe in the code that calls startSurvey?
-  const fetchRes = await fetch(
-    apiRoutes.response.createResponse.href({
-      surveyId,
-      editionId,
-    }),
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    }
-  );
+  const fetchRes = await fetch(apiRoutes.response.createResponse.href(), {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
   if (!fetchRes.ok) {
     console.error(await fetchRes.text());
     throw new Error("Could not start survey, request failed");
   }
-  // data/errors is typical of graphql endpoints
-  const res: { data?: any; errors?: Array<any> } = await fetchRes.json();
-  const errorObject = extractErrorObject(res?.errors?.[0]);
-  return { data: res.data, error: errorObject };
+  const result: { data: any; error: any } = await fetchRes.json();
+  return result;
 }
 
-export async function saveSurvey(edition: EditionMetadata, data: any) {
+export async function saveResponse({
+  responseId,
+  data,
+}: {
+  responseId: string;
+  data: any;
+}) {
   // TODO: this should also invalidate the "getCurrentUser" query
   // we should figure how to do so using SWR, maybe in the code that calls startSurvey?
   const fetchRes = await fetch(
-    apiRoutes.response.saveSurvey.href({
-      surveyId: edition.surveyId,
-      editionId: edition.id!,
+    apiRoutes.response.saveResponse.href({
+      responseId,
     }),
     {
       method: "POST",
@@ -68,13 +58,6 @@ export async function saveSurvey(edition: EditionMetadata, data: any) {
       body: JSON.stringify(data),
     }
   );
-  if (!fetchRes.ok) {
-    console.error(await fetchRes.text());
-
-    throw new Error("Could not save survey, request failed");
-  }
-  // data/errors is typical of graphql endpoints
-  const res: { data?: any; errors?: Array<any> } = await fetchRes.json();
-  const errorObject = extractErrorObject(res?.errors?.[0]);
-  return { data: res.data, error: errorObject };
+  const result: { data: any; error: any } = await fetchRes.json();
+  return result;
 }

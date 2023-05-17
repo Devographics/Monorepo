@@ -3,7 +3,7 @@ import { useState } from "react";
 import FormLayout from "./FormLayout";
 import FormQuestion from "./FormQuestion";
 import { captureException } from "@sentry/nextjs";
-import { saveSurvey } from "~/surveys/components/page/services";
+import { saveResponse } from "~/surveys/components/page/services";
 import { useRouter } from "next/navigation";
 import isEmpty from "lodash/isEmpty";
 import { FormContext } from "./FormContext";
@@ -71,9 +71,16 @@ export const FormSection = (props) => {
       if (beforeSubmitCallback) {
         beforeSubmitCallback();
       }
-      const res = await saveSurvey(edition, {
-        id: response._id,
-        data: currentValues,
+      const data = {
+        ...currentValues,
+        lastSavedAt: new Date(),
+        booleanTest: true,
+        numberTest: 123,
+        dateTest: new Date(),
+      };
+      const res = await saveResponse({
+        responseId: response._id,
+        data,
       });
       if (res.error) {
         console.error(res.error);

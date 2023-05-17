@@ -2,16 +2,15 @@ import { fetchEditionMetadataSurveyForm } from "@devographics/fetch";
 import { getUsersCollection } from "@devographics/mongo";
 import { EditionMetadata, SurveyStatusEnum } from "@devographics/types";
 import { NextRequest, NextResponse } from "next/server";
-import {
-  getSessionFromToken,
-  TOKEN_NAME,
-} from "~/account/user/api";
+import { getSessionFromToken, TOKEN_NAME } from "~/account/user/api";
 import { UserDocument } from "~/core/models/user";
+import { throwError, ServerError } from "~/lib/validation";
+
 // import { UserMongooseModel } from "~/core/models/user.server";
 
 /**
  * Will return an error response if survey is closed
- * 
+ *
  * WORK IN PROGRESS moving save/start survey to Next 13 route handlers
  * @param req
  * @param res
@@ -27,8 +26,10 @@ export async function tryGetEditionFromReq(req: NextRequest) {
   // parameters
   const surveyId = req.nextUrl.searchParams.get("surveyId");
   if (!surveyId) {
-    return NextResponse.json({
-      error: "No survey id, can't start survey",
+    throw new ServerError({
+      id: "no_survey_id",
+      message: "No survey id, can't start survey",
+      status: 400,
     });
   }
   const editionId = req.nextUrl.searchParams.get("editionId");
@@ -88,13 +89,19 @@ export async function getUserFromReq(req: NextRequest) {
 
 /**
  * Experimental: a helper function to be called by Route Handlers
- * Will either return an error response or the value we want 
+ * Will either return an error response or the value we want
  * (similarly to a Connect middleware)
  */
-export async function tryGetCurrentUser(req: NextRequest): Promise<UserDocument | NextResponse> {
+export async function tryGetCurrentUser(
+  req: NextRequest
+): Promise<UserDocument | NextResponse> {
   const userId = await getUserIdFromReq(req);
   if (!userId) {
-    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    throwError({
+      id: "authentication",
+      message: "Not authenticated",
+      status: 401,
+    });
   }
   const Users = await getUsersCollection<UserDocument>();
   const currentUser = await Users.findOne(
@@ -107,6 +114,5 @@ export async function tryGetCurrentUser(req: NextRequest): Promise<UserDocument 
       { status: 401 }
     );
   }
-  return currentUser
-
+  return currentUser;
 }
