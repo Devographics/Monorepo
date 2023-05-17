@@ -110,7 +110,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     const updateRes = await RawResponse.updateOne(
       { _id: responseId },
       {
-        $set: { serverData },
+        $set: { ...serverData },
       }
     );
     return NextResponse.json({ data: serverData });

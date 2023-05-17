@@ -74,9 +74,6 @@ export const FormSection = (props) => {
       const data = {
         ...currentValues,
         lastSavedAt: new Date(),
-        booleanTest: true,
-        numberTest: 123,
-        dateTest: new Date(),
       };
       const res = await saveResponse({
         responseId: response._id,
