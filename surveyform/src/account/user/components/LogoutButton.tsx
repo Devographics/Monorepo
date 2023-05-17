@@ -1,3 +1,4 @@
+"use client";
 import { useUser } from "~/account/user/hooks";
 import { routes } from "~/lib/routes";
 import { useIntlContext } from "@devographics/react-i18n";

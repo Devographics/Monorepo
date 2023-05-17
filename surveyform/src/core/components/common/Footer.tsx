@@ -1,9 +1,9 @@
+"use client";
 import React from "react";
 import Link from "next/link";
 import { useUser } from "~/account/user/hooks";
 import { routes } from "~/lib/routes";
 import { LogoutButton } from "~/account/user/components/LogoutButton";
-import Image from "next/image";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 
 export const Footer = () => {
