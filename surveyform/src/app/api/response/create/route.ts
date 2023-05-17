@@ -107,7 +107,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
   } catch (error) {
     if (error instanceof ServerError) {
       const error_ = error as ServerErrorObject;
-      return NextResponse.json(error_, { status: error_.status });
+      return NextResponse.json({ error: error_ }, { status: error_.status });
     } else {
       return NextResponse.json(
         { error: `Could not create response` },
