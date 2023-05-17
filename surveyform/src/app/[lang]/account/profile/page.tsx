@@ -1,21 +1,29 @@
-"use client";
-import { useUser } from "~/account/user/hooks";
 import { routes } from "~/lib/routes";
 import { LogoutButton } from "~/account/user/components/LogoutButton";
 import UserResponses from "~/core/components/users/UserResponses";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
+import { redirect } from "next/navigation";
+import { getCurrentUser } from "~/account/user/api/rsc-fetchers";
 
-const Profile = () => {
-  const { user } = useUser({ redirectTo: routes.account.login.href });
-  if (!user) return null; // will redirect
+const Profile = async () => {
+  // TODO: filter out fields the user is not supposed to see
+  const currentUser = await getCurrentUser();
+  if (!currentUser) {
+    // TODO: use from, require to get current request URL
+    return redirect(routes.account.login.href);
+  }
+  // TODO: get responses from DB
+  const responses = [];
   return (
     <div className="contents-narrow account">
       <p>
-        {user.authMode === "anonymous" && (
+        {currentUser.authMode === "anonymous" && (
           <FormattedMessage id="accounts.logged_in_as_guest" />
         )}
       </p>
-      {user.authMode !== "anonymous" && <UserResponses />}
+      {currentUser.authMode !== "anonymous" && (
+        <UserResponses responses={responses} user={currentUser} />
+      )}
       <p>
         <FormattedMessage id="accounts.questions" />
       </p>

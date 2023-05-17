@@ -12,6 +12,7 @@ export function getToken() {
   const c = cookies();
   return c.get(TOKEN_NAME)?.value;
 }
+
 export const getCurrentUser = cache(async () => {
   const token = getToken();
   if (!token) return null;

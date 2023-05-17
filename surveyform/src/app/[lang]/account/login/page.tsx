@@ -1,5 +1,5 @@
 import { LoginDialog } from "~/account/LoginDialog";
-import { getCurrentUser } from "~/account/user/api/fetchers";
+import { getCurrentUser } from "~/account/user/api/rsc-fetchers";
 
 const Login = async () => {
   const user = await getCurrentUser();

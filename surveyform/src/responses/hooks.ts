@@ -19,6 +19,8 @@ type ResponseWithSurvey = Required<ResponseDocument> & {
 
 /**
  * Passing no surveySlug will get all responses for the user
+ * TODO: pass the response via a server call instead when possible
+ * @deprecated
  */
 export const useUserResponse = (params: {
   editionId: SurveyEdition["editionId"];
@@ -32,13 +34,4 @@ export const useUserResponse = (params: {
   console.log("data", data, error);
   const loading = !error && !data;
   return { response: data?.data, loading, error };
-};
-
-export const useUserResponses = () => {
-  const { data, error } = useSWR<ApiData<Array<ResponseWithSurvey>>>(
-    apiRoutes.response.multi.href,
-    basicFetcher
-  );
-  const loading = !error && !data;
-  return { responses: data?.data, loading, error };
 };

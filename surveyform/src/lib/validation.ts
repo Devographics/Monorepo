@@ -8,6 +8,10 @@ import { z } from "zod";
 import { SchemaObject, Schema } from "./schemas";
 import { getResponseSchema } from "./responses";
 
+export function throwError(errDef: { id: string, message: string, status: number }) {
+  throw new Error("TODO")
+}
+
 export interface ServerErrorObject {
   id: string;
   message: string;

@@ -1,23 +1,16 @@
 import Link from "next/link";
 import { statusesReverse } from "~/surveys/constants";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
-import { useUser } from "~/account/user/hooks";
-import { useUserResponses } from "~/responses/hooks";
-import { Loading } from "../ui/Loading";
-import { SurveyEdition } from "@devographics/core-models";
+import { ResponseDocument, SurveyEdition } from "@devographics/core-models";
+import { UserDocument } from "~/core/models/user";
 
-const UserResponses = () => {
-  const { user, loading: userLoading, error: userError } = useUser();
-  // TODO: fetch data during SSR instead?
-  const {
-    responses,
-    loading: responseLoading,
-    error: responseError,
-  } = useUserResponses();
-  if (userLoading) return <Loading />;
-  if (userError) throw new Error(userError);
-  if (responseLoading) return <Loading />;
-  if (responseError) throw new Error(userError);
+const UserResponses = ({
+  responses,
+  user,
+}: {
+  responses: Array<ResponseDocument>;
+  user: UserDocument;
+}) => {
   return (
     <div>
       <div>

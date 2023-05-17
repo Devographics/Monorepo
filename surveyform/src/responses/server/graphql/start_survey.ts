@@ -18,8 +18,8 @@ export const startSurvey = async (root, args, context) => {
   const data = args?.input?.data;
   let document = data as ResponseDocument;
 
-  if (!document.editionId)
-    throw new Error("Cannot create a response without a editionId");
+  if (!(document.editionId && document.surveyId))
+    throw new Error("Cannot create a response without a editionId and surveyId");
   const { editionId, surveyId } = document;
   const edition = await fetchEditionMetadataSurveyForm({
     surveyId,

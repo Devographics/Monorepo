@@ -10,7 +10,7 @@ import { LoginDialog } from "~/account/LoginDialog";
 import { Loading } from "~/core/components/ui/Loading";
 import { Suspense } from "react";
 import { EditionMetadata } from "@devographics/types";
-import { getCurrentUser } from "~/account/user/api/fetchers";
+import { getCurrentUser } from "~/account/user/api/rsc-fetchers";
 
 export const EditionMain = ({ edition }: { edition: EditionMetadata }) => {
   return (

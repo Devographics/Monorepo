@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { ResponseProvider } from "~/surveys/components/ResponseContext/ResponseProvider";
 import { routes } from "~/lib/routes";
-import { getCurrentUser } from "~/account/user/api/fetchers";
+import { getCurrentUser } from "~/account/user/api/rsc-fetchers";
 
 // Important, otherwise the page will use ISR
 // https://github.com/vercel/next.js/issues/44712

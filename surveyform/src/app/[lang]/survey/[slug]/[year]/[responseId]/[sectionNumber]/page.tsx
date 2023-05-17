@@ -2,7 +2,7 @@ import { ResponseDocument } from "@devographics/core-models";
 import { getRawResponsesCollection } from "@devographics/mongo";
 import { getGroups } from "@vulcanjs/permissions";
 import { notFound, redirect } from "next/navigation";
-import { getCurrentUser } from "~/account/user/api/fetchers";
+import { getCurrentUser } from "~/account/user/api/rsc-fetchers";
 import SurveySection from "~/surveys/components/questions/SurveySection";
 import { mustGetSurveyEdition } from "../../fetchers";
 import omit from "lodash/omit";

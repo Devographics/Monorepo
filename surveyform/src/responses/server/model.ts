@@ -18,6 +18,7 @@ export const canModifyResponse = async (
     return false;
   }
   const { surveyId, editionId } = response;
+  if (!(surveyId && editionId)) throw new Error(`Responses should contain surveyId and editionId`)
   const survey = await fetchEditionMetadataSurveyForm({
     surveyId,
     editionId,
