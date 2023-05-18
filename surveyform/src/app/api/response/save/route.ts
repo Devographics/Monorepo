@@ -9,9 +9,15 @@ import {
   ServerErrorObject,
 } from "~/lib/validation";
 import { fetchEditionMetadataSurveyForm } from "@devographics/fetch";
-import { EditionMetadata } from "@devographics/types";
+import { SurveyMetadata, EditionMetadata } from "@devographics/types";
 import { getResponseSchema } from "~/lib/responses/schema";
 import { restoreTypes, runFieldCallbacks, OnUpdateProps } from "~/lib/schemas";
+import { ResponseDocument } from "@devographics/core-models";
+import { getQuestionObject } from "~/lib/surveys/helpers";
+import { subscribe } from "~/lib/server/email/email_octopus";
+import { captureException } from "@sentry/nextjs";
+
+const emailPlaceholder = "*****@*****";
 
 export async function POST(req: NextRequest, res: NextResponse) {
   try {
@@ -115,6 +121,24 @@ export async function POST(req: NextRequest, res: NextResponse) {
       props,
     });
 
+    // if user has entered their email, try to subscribe them to the email list
+    const { email, emailFieldPath } = getResponseEmail(props);
+    if (email && emailFieldPath && email !== emailPlaceholder) {
+      if (!existingResponse.isSubscribed) {
+        const listId = survey?.emailOctopus?.listId;
+        try {
+          subscribe({ email, listId });
+          clientData.isSubscribed = true;
+        } catch (error) {
+          // We do not hard fail on subscription error, just log to Sentry
+          captureException(error);
+          console.error(error);
+        }
+      }
+      // replace email with placeholder value for privacy reasons
+      clientData[emailFieldPath] = emailPlaceholder;
+    }
+
     // validate response
     validateResponse({ ...props, serverData });
 
@@ -139,41 +163,30 @@ export async function POST(req: NextRequest, res: NextResponse) {
   }
 }
 
-// const emailPlaceholder = "*****@*****";
-// const emailFieldName = "email_temporary";
-
-// export async function processEmailOnUpdate(data, properties) {
-//   const { document } = properties;
-//   const { isSubscribed, surveyId, editionId } = document as ResponseDocument;
-
-//   const surveys = await fetchSurveysMetadata();
-//   const survey = surveys.find((s) => s.id === surveyId);
-//   const listId = survey?.emailOctopus?.listId;
-//   const emailFieldPath = `${editionId}__user_info__${emailFieldName}`;
-//   const email = data[emailFieldPath];
-
-//   // if user has entered their email
-//   if (email && email !== emailPlaceholder) {
-//     // try to subscribe them to the email list
-//     if (!isSubscribed) {
-//       try {
-//         subscribe({ email, listId });
-//       } catch (error) {
-//         // We do not hard fail on subscription error, just log to Sentry
-//         captureException(error);
-//         console.error(error);
-//       }
-//       data["isSubscribed"] = true;
-//     }
-
-//     // Note: do this separately after all, and only if we get permission
-//     // generate a hash and store it
-//     // if (!emailHash) {
-//     //   data["emailHash"] = createEmailHash(email);
-//     // }
-
-//     // replace the email with a dummy placeholder, effectively deleting it
-//     data[emailFieldPath] = emailPlaceholder;
-//   }
-//   return data;
-// }
+const getResponseEmail = ({
+  existingResponse,
+  survey,
+  edition,
+}: {
+  existingResponse: ResponseDocument;
+  survey: SurveyMetadata;
+  edition: EditionMetadata;
+}) => {
+  const emailSection = edition.sections.find((s) => s.id === "user_info");
+  const emailQuestion = edition.sections
+    .map((s) => s.questions)
+    .flat()
+    .find((q) => q.template === "email2");
+  if (!emailSection || !emailQuestion) {
+    return {};
+  }
+  const emailQuestionObject = getQuestionObject({
+    survey,
+    edition,
+    section: emailSection,
+    question: emailQuestion,
+  });
+  const emailFieldPath = emailQuestionObject?.formPaths?.response;
+  const email = emailFieldPath && existingResponse[emailFieldPath];
+  return { email, emailFieldPath };
+};
