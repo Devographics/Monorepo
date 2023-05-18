@@ -1,35 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { connectToRedis } from "~/lib/server/redis";
 import { tryGetCurrentUser } from "../../currentUser/getters";
-import { getRawResponsesCollection, newMongoId } from "@devographics/mongo";
-import {
-  validateResponse,
-  Actions,
-  ServerError,
-  ServerErrorObject,
-} from "~/lib/validation";
-import { fetchEditionMetadataSurveyForm } from "@devographics/fetch";
-import { SurveyMetadata, EditionMetadata } from "@devographics/types";
-import { getResponseSchema } from "~/lib/responses/schema";
-import { restoreTypes, runFieldCallbacks, OnUpdateProps } from "~/lib/schemas";
-import { ResponseDocument } from "@devographics/core-models";
-import { getQuestionObject } from "~/lib/surveys/helpers";
-import { subscribe } from "~/lib/server/email/email_octopus";
-import { captureException } from "@sentry/nextjs";
-
-const emailPlaceholder = "*****@*****";
+import { ServerError, ServerErrorObject } from "~/lib/validation";
+import { saveResponse } from "~/actions/responses/save";
 
 export async function POST(req: NextRequest, res: NextResponse) {
   try {
-    if (!process.env.ENABLE_ROUTE_HANDLERS) {
-      throw new ServerError({
-        id: "route_handlers_error",
-        message: "work in progress route handlers",
-        status: 400,
-      });
-    }
-    connectToRedis();
-
     // Get current user
     const currentUser = await tryGetCurrentUser(req);
 
@@ -47,8 +22,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
     let clientData: any;
     try {
       clientData = await req.json();
-      console.log("// clientData");
-      console.log(clientData);
     } catch (err) {
       throw new ServerError({
         id: "invalid_data",
@@ -57,99 +30,13 @@ export async function POST(req: NextRequest, res: NextResponse) {
       });
     }
 
-    // Check for existing response
-    const RawResponse = await getRawResponsesCollection();
-    const existingResponse = await RawResponse.findOne({
-      _id: responseId,
-    });
-    if (!existingResponse) {
-      throw new ServerError({
-        id: "response_doesnt_exists",
-        message: `Could not find existing response with _id ${responseId}`,
-        status: 400,
-      });
-    }
-
-    const { surveyId, editionId } = existingResponse;
-
-    // Get edition metadata
-    let edition: EditionMetadata;
-    try {
-      edition = await fetchEditionMetadataSurveyForm({
-        surveyId,
-        editionId,
-        calledFrom: "api/response/update",
-      });
-    } catch (error) {
-      throw new ServerError({
-        id: "fetch_edition",
-        message: `Could not load edition metadata for surveyId: '${surveyId}', editionId: '${editionId}'`,
-        status: 400,
-        error,
-      });
-    }
-    const survey = edition.survey;
-
-    const schema = getResponseSchema({ survey, edition });
-
-    clientData = restoreTypes({
-      document: clientData,
-      schema,
-    });
-
-    // update existing response with new client data
-    const updatedResponse = {
-      ...existingResponse,
-      ...clientData,
-    };
-
-    const props = {
+    const data = await saveResponse({
+      responseId,
       currentUser,
-      existingResponse,
-      updatedResponse,
       clientData,
-      survey: edition.survey,
-      edition,
-      action: Actions.UPDATE,
-    };
-
-    // add server-defined properties
-    const serverData = await runFieldCallbacks<OnUpdateProps>({
-      document: clientData,
-      schema,
-      action: Actions.CREATE,
-      props,
     });
 
-    // if user has entered their email, try to subscribe them to the email list
-    const { email, emailFieldPath } = getResponseEmail(props);
-    if (email && emailFieldPath && email !== emailPlaceholder) {
-      if (!existingResponse.isSubscribed) {
-        const listId = survey?.emailOctopus?.listId;
-        try {
-          subscribe({ email, listId });
-          clientData.isSubscribed = true;
-        } catch (error) {
-          // We do not hard fail on subscription error, just log to Sentry
-          captureException(error);
-          console.error(error);
-        }
-      }
-      // replace email with placeholder value for privacy reasons
-      clientData[emailFieldPath] = emailPlaceholder;
-    }
-
-    // validate response
-    validateResponse({ ...props, serverData });
-
-    // update
-    const updateRes = await RawResponse.updateOne(
-      { _id: responseId },
-      {
-        $set: { ...serverData },
-      }
-    );
-    return NextResponse.json({ data: serverData });
+    return NextResponse.json({ data });
   } catch (error) {
     if (error instanceof ServerError) {
       const error_ = error as ServerErrorObject;
@@ -162,31 +49,3 @@ export async function POST(req: NextRequest, res: NextResponse) {
     }
   }
 }
-
-const getResponseEmail = ({
-  existingResponse,
-  survey,
-  edition,
-}: {
-  existingResponse: ResponseDocument;
-  survey: SurveyMetadata;
-  edition: EditionMetadata;
-}) => {
-  const emailSection = edition.sections.find((s) => s.id === "user_info");
-  const emailQuestion = edition.sections
-    .map((s) => s.questions)
-    .flat()
-    .find((q) => q.template === "email2");
-  if (!emailSection || !emailQuestion) {
-    return {};
-  }
-  const emailQuestionObject = getQuestionObject({
-    survey,
-    edition,
-    section: emailSection,
-    question: emailQuestion,
-  });
-  const emailFieldPath = emailQuestionObject?.formPaths?.response;
-  const email = emailFieldPath && existingResponse[emailFieldPath];
-  return { email, emailFieldPath };
-};

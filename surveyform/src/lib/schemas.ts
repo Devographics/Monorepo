@@ -1,6 +1,7 @@
 import { ResponseDocument } from "@devographics/core-models";
 import { EditionMetadata, SurveyMetadata } from "@devographics/types";
 import { Actions } from "./validation";
+import clone from "lodash/clone";
 
 export interface OnCreateProps {
   currentUser: any;
@@ -102,14 +103,15 @@ export const runFieldCallbacks = async <
   action: Actions;
   props: T;
 }) => {
+  const documentWithCallbacks = clone(document);
   for (const fieldName of Object.keys(schema)) {
     const field = schema[fieldName];
     const callback =
       (action === Actions.CREATE && field.onCreate) ||
       (action === Actions.UPDATE && field.onUpdate);
     if (callback) {
-      document[fieldName] = await callback(props);
+      documentWithCallbacks[fieldName] = await callback(props);
     }
   }
-  return document;
+  return documentWithCallbacks;
 };
