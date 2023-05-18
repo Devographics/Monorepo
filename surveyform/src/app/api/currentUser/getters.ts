@@ -6,58 +6,6 @@ import { getSessionFromToken, TOKEN_NAME } from "~/account/user/api";
 import { UserDocument } from "~/core/models/user";
 import { throwError, ServerError } from "~/lib/validation";
 
-// import { UserMongooseModel } from "~/core/models/user.server";
-
-/**
- * Will return an error response if survey is closed
- *
- * WORK IN PROGRESS moving save/start survey to Next 13 route handlers
- * @param req
- * @param res
- * @returns
- *
- * @example const survey = await getSurveyFromReq(req)
- * if (survey instanceof Response) {
- *      return response
- * }
- * // ... keep using survey
- */
-export async function tryGetEditionFromReq(req: NextRequest) {
-  // parameters
-  const surveyId = req.nextUrl.searchParams.get("surveyId");
-  if (!surveyId) {
-    throw new ServerError({
-      id: "no_survey_id",
-      message: "No survey id, can't start survey",
-      status: 400,
-    });
-  }
-  const editionId = req.nextUrl.searchParams.get("editionId");
-  if (!editionId) throw new Error("No survey editionId, can't start survey");
-  let edition: EditionMetadata;
-  try {
-    edition = await fetchEditionMetadataSurveyForm({
-      surveyId,
-      editionId,
-      calledFrom: "getEditionFromReq",
-    });
-  } catch (err) {
-    return NextResponse.json(
-      {
-        error: `No survey found, surveyId: '${surveyId}', editionId: '${editionId}'`,
-      },
-      { status: 404 }
-    );
-  }
-  if (!edition.status || [SurveyStatusEnum.CLOSED].includes(edition.status)) {
-    return NextResponse.json(
-      { error: `Survey '${editionId}' is closed.` },
-      { status: 400 }
-    );
-  }
-  return edition;
-}
-
 export async function getUserIdFromReq(req: NextRequest) {
   const token = req.cookies.get(TOKEN_NAME)?.value;
   if (!token) return null;

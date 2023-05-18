@@ -32,7 +32,7 @@ export function useUser({
 } = {}) {
   // TODO: skip if there is already an anonymous user
   const { data, error } = useSWR<{ user?: UserType }>(
-    apiRoutes.account.user.href,
+    apiRoutes.currentUser.load.href,
     fetcher
   );
   const router = useRouter();

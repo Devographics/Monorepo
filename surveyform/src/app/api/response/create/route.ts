@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectToRedis } from "~/lib/server/redis";
-import { tryGetCurrentUser } from "../getters";
+import { tryGetCurrentUser } from "../../currentUser/getters";
 import { getRawResponsesCollection, newMongoId } from "@devographics/mongo";
 import {
   validateResponse,
