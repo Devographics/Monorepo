@@ -7,8 +7,8 @@ import { useUser } from "~/account/user/hooks";
 import { useSearchParams } from "next/navigation";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { FormComponentEmail } from "./FormComponentEmail";
-import { Button } from "~/core/components/ui/Button";
-import { useSurveyParams } from "~/surveys/components/hooks";
+import { Button } from "~/components/ui/Button";
+import { useSurveyParams } from "~/components/hooks";
 
 /**
  * With passwordless approach, there is no signup step,

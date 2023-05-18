@@ -1,6 +1,6 @@
-import Support from "~/core/components/common/Support";
+import Support from "~/components/common/Support";
 import { mustGetSurveyEdition } from "./fetchers";
-import { getSurveyImageUrl } from "~/surveys/getSurveyImageUrl";
+import { getSurveyImageUrl } from "~/lib/surveys/helpers";
 import { initRedis } from "@devographics/redis";
 
 import { serverConfig } from "~/config/server";

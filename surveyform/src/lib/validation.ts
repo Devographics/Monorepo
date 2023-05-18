@@ -6,11 +6,7 @@ import {
 } from "@devographics/types";
 import { z } from "zod";
 import { SchemaObject, Schema } from "./schemas";
-import { getResponseSchema } from "./responses";
-
-export function throwError(errDef: { id: string, message: string, status: number }) {
-  throw new Error("TODO")
-}
+import { getResponseSchema } from "~/lib/responses/schema";
 
 export interface ServerErrorObject {
   id: string;
@@ -62,14 +58,14 @@ type ZodObject =
   | z.ZodOptional<z.ZodDate>
   | z.ZodOptional<z.ZodNumber>;
 
-const getZodObject = ({
+const getZodObject = <T>({
   fieldName,
   schemaObject,
   action,
   context,
 }: {
   fieldName: string;
-  schemaObject: SchemaObject;
+  schemaObject: SchemaObject<T>;
   action: Actions;
   context: ActionContexts;
 }): ZodObject => {
@@ -125,16 +121,18 @@ const getZodSchema = ({
 };
 
 export const validateResponse = ({
-  user,
+  currentUser,
   existingResponse,
+  updatedResponse,
   clientData,
   serverData,
   survey,
   edition,
   action,
 }: {
-  user: any;
+  currentUser: any;
   existingResponse?: ResponseDocument;
+  updatedResponse?: ResponseDocument;
   clientData: ResponseDocument;
   serverData: ResponseDocument;
   survey: SurveyMetadata;
@@ -144,10 +142,10 @@ export const validateResponse = ({
   // check that user can perform action
   if (action === Actions.UPDATE) {
     if (existingResponse) {
-      if (existingResponse.userId !== user._id) {
+      if (existingResponse.userId !== currentUser._id) {
         throw new ServerError({
           id: "update_not_authorized",
-          message: `User ${user._id} not authorized to perform UPDATE on document ${existingResponse._id}`,
+          message: `User ${currentUser._id} not authorized to perform UPDATE on document ${existingResponse._id}`,
           status: 400,
         });
       }

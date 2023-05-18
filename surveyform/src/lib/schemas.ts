@@ -1,18 +1,50 @@
 import { ResponseDocument } from "@devographics/core-models";
-import type { Actions } from "./validation";
+import { EditionMetadata, SurveyMetadata } from "@devographics/types";
+import { Actions } from "./validation";
 
-export interface SchemaObject {
-  type?:
-    | DateConstructor
-    | StringConstructor
-    | NumberConstructor
-    | BooleanConstructor;
+export interface OnCreateProps {
+  currentUser: any;
+  clientData: ResponseDocument;
+  survey: SurveyMetadata;
+  edition: EditionMetadata;
+}
+
+export interface OnUpdateProps extends OnCreateProps {
+  existingResponse: ResponseDocument;
+  updatedResponse: ResponseDocument;
+}
+
+export type OnCreate<T> = (prop: OnCreateProps) => T | undefined;
+export type OnUpdate<T> = (prop: OnUpdateProps) => T | undefined;
+
+export interface SchemaObject<T> {
+  type?: T;
   requiredDuring?: Actions;
   clientMutable?: boolean;
+  onCreate?: OnCreate<
+    T extends StringConstructor
+      ? string
+      : T extends NumberConstructor
+      ? number
+      : T extends BooleanConstructor
+      ? boolean
+      : Date
+  >;
+  onUpdate?: OnUpdate<
+    T extends StringConstructor
+      ? string
+      : T extends NumberConstructor
+      ? number
+      : T extends BooleanConstructor
+      ? boolean
+      : Date
+  >;
 }
 
 export type Schema = {
-  [key in string]: SchemaObject;
+  [key in string]: SchemaObject<
+    DateConstructor | StringConstructor | NumberConstructor | BooleanConstructor
+  >;
 };
 
 /*
@@ -23,7 +55,7 @@ Some fields can be mutated by owner from client; or else only from server
 
 */
 
-export const defaultSchemaObject: SchemaObject = {
+export const defaultSchemaObject: SchemaObject<StringConstructor> = {
   type: String,
   requiredDuring: undefined,
   clientMutable: false,
@@ -54,5 +86,30 @@ export const restoreTypes = ({
       document[fieldName] = new Date(document[fieldName]);
     }
   });
+  return document;
+};
+
+export const runFieldCallbacks = async <
+  T extends OnCreateProps | OnUpdateProps
+>({
+  document,
+  schema,
+  action,
+  props,
+}: {
+  document: ResponseDocument;
+  schema: Schema;
+  action: Actions;
+  props: T;
+}) => {
+  for (const fieldName of Object.keys(schema)) {
+    const field = schema[fieldName];
+    const callback =
+      (action === Actions.CREATE && field.onCreate) ||
+      (action === Actions.UPDATE && field.onUpdate);
+    if (callback) {
+      document[fieldName] = await callback(props);
+    }
+  }
   return document;
 };

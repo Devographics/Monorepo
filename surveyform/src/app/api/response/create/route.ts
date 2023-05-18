@@ -10,8 +10,8 @@ import {
 } from "~/lib/validation";
 import { fetchEditionMetadataSurveyForm } from "@devographics/fetch";
 import { EditionMetadata } from "@devographics/types";
-import { getResponseSchema } from "~/lib/responses";
-import { restoreTypes } from "~/lib/schemas";
+import { getResponseSchema } from "~/lib/responses/schema";
+import { restoreTypes, runFieldCallbacks, OnCreateProps } from "~/lib/schemas";
 
 export async function POST(req: NextRequest, res: NextResponse) {
   try {
@@ -75,31 +75,31 @@ export async function POST(req: NextRequest, res: NextResponse) {
     }
     const survey = edition.survey;
 
+    const schema = getResponseSchema({ survey, edition });
+
     clientData = restoreTypes({
       document: clientData,
-      schema: getResponseSchema({ survey, edition }),
+      schema,
     });
 
-    // add server-defined properties
-    const serverData = {
-      ...clientData,
-      // Important: generate string ids in Mongo
-      _id: newMongoId(),
-      userId: currentUser._id,
-      createdAt: new Date(),
-      surveyId: edition.survey.id,
-      editionId: edition.id,
-    };
-
-    // validate response
-    validateResponse({
-      user: currentUser,
+    const props = {
+      currentUser,
       clientData,
-      serverData,
       survey: edition.survey,
       edition,
       action: Actions.CREATE,
+    };
+
+    // add server-defined properties
+    const serverData = await runFieldCallbacks<OnCreateProps>({
+      document: clientData,
+      schema,
+      action: Actions.CREATE,
+      props,
     });
+
+    // validate response
+    validateResponse({ ...props, serverData });
 
     // insert
     const insertRes = await RawResponse.insertOne(serverData);

@@ -1,10 +1,10 @@
 import Link from "next/link";
-import { statuses } from "~/surveys/constants";
-import { FormattedMessage } from "~/core/components/common/FormattedMessage";
+import { SurveyStatusEnum } from "@devographics/types";
+import { FormattedMessage } from "~/components/common/FormattedMessage";
 import Image from "next/image";
-import { getSurveyImageUrl } from "~/surveys/getSurveyImageUrl";
 import { EditionMetadata, SurveyMetadata } from "@devographics/types";
-import { getEditionHomePath, SurveyParamsTable } from "~/surveys/helpers";
+import { getEditionHomePath, getSurveyImageUrl } from "~/lib/surveys/helpers";
+import { SurveyParamsTable } from "~/lib/surveys/data";
 
 const EditionItem = ({
   edition,
@@ -55,12 +55,10 @@ const EditionGroup = ({
 }: {
   allEditions: Array<EditionMetadata>;
   surveyParamsTable: SurveyParamsTable;
-  status: string;
+  status: SurveyStatusEnum;
 }) => {
   if (!status) throw new Error("SurveyGroup must receive a defined status");
-  const filteredEditions = allEditions.filter(
-    (s) => s.status === statuses[status]
-  );
+  const filteredEditions = allEditions.filter((s) => s.status === status);
   return (
     <div className="surveys-group">
       <h3 className="surveys-group-heading">
@@ -99,17 +97,17 @@ const Surveys = ({
       <EditionGroup
         surveyParamsTable={surveyParamsTable}
         allEditions={allEditions}
-        status={"open"}
+        status={SurveyStatusEnum.OPEN}
       />
       <EditionGroup
         surveyParamsTable={surveyParamsTable}
         allEditions={allEditions}
-        status={"preview"}
+        status={SurveyStatusEnum.PREVIEW}
       />
       <EditionGroup
         surveyParamsTable={surveyParamsTable}
         allEditions={allEditions}
-        status={"closed"}
+        status={SurveyStatusEnum.CLOSED}
       />
       {/*<Translators />*/}
     </div>

@@ -3,12 +3,12 @@ import MagicLoginStrategy from "passport-magic-login";
 import { getTokenSecret } from "~/account/user/api/session";
 import { sendMagicLinkEmail } from "../email/magicLinkEmail";
 
-import { UserTypeServer } from "~/core/models/user.server";
+import { UserTypeServer } from "~/lib/users/model.server";
 
 import { routes } from "~/lib/routes";
 import { serverConfig } from "~/config/server";
 import type { Request } from "express";
-import { UserType } from "~/core/models/user";
+import { UserType } from "~/lib/users/model";
 import {
   createOrUpgradeUser,
   findUserFromEmail,

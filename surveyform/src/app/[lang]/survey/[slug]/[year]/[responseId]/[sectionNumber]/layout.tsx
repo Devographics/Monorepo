@@ -4,8 +4,8 @@ import { StringsRegistry } from "@devographics/react-i18n";
 import { Metadata } from "next";
 import { fetchLocaleFromUrl } from "~/app/[lang]/fetchers";
 import { serverConfig } from "~/config/server";
-import { SectionProvider } from "~/surveys/components/SectionContext/SectionProvider";
-import { getSectionKey, getEditionTitle } from "~/surveys/helpers";
+import { SectionProvider } from "~/components/SectionContext/SectionProvider";
+import { getSectionKey, getEditionTitle } from "~/lib/surveys/helpers";
 import { getSurveyEditionFromUrl } from "../../fetchers";
 
 interface SurveySectionParams {

@@ -10,8 +10,8 @@ import {
 } from "~/lib/validation";
 import { fetchEditionMetadataSurveyForm } from "@devographics/fetch";
 import { EditionMetadata } from "@devographics/types";
-import { getResponseSchema } from "~/lib/responses";
-import { restoreTypes } from "~/lib/schemas";
+import { getResponseSchema } from "~/lib/responses/schema";
+import { restoreTypes, runFieldCallbacks, OnUpdateProps } from "~/lib/schemas";
 
 export async function POST(req: NextRequest, res: NextResponse) {
   try {
@@ -84,27 +84,39 @@ export async function POST(req: NextRequest, res: NextResponse) {
     }
     const survey = edition.survey;
 
+    const schema = getResponseSchema({ survey, edition });
+
     clientData = restoreTypes({
       document: clientData,
-      schema: getResponseSchema({ survey, edition }),
+      schema,
     });
 
-    // add server-defined properties
-    const serverData = {
+    // update existing response with new client data
+    const updatedResponse = {
+      ...existingResponse,
       ...clientData,
-      updatedAt: new Date(),
     };
 
-    // validate response
-    validateResponse({
-      user: currentUser,
+    const props = {
+      currentUser,
       existingResponse,
+      updatedResponse,
       clientData,
-      serverData,
       survey: edition.survey,
       edition,
       action: Actions.UPDATE,
+    };
+
+    // add server-defined properties
+    const serverData = await runFieldCallbacks<OnUpdateProps>({
+      document: clientData,
+      schema,
+      action: Actions.CREATE,
+      props,
     });
+
+    // validate response
+    validateResponse({ ...props, serverData });
 
     // update
     const updateRes = await RawResponse.updateOne(
@@ -126,3 +138,42 @@ export async function POST(req: NextRequest, res: NextResponse) {
     }
   }
 }
+
+// const emailPlaceholder = "*****@*****";
+// const emailFieldName = "email_temporary";
+
+// export async function processEmailOnUpdate(data, properties) {
+//   const { document } = properties;
+//   const { isSubscribed, surveyId, editionId } = document as ResponseDocument;
+
+//   const surveys = await fetchSurveysMetadata();
+//   const survey = surveys.find((s) => s.id === surveyId);
+//   const listId = survey?.emailOctopus?.listId;
+//   const emailFieldPath = `${editionId}__user_info__${emailFieldName}`;
+//   const email = data[emailFieldPath];
+
+//   // if user has entered their email
+//   if (email && email !== emailPlaceholder) {
+//     // try to subscribe them to the email list
+//     if (!isSubscribed) {
+//       try {
+//         subscribe({ email, listId });
+//       } catch (error) {
+//         // We do not hard fail on subscription error, just log to Sentry
+//         captureException(error);
+//         console.error(error);
+//       }
+//       data["isSubscribed"] = true;
+//     }
+
+//     // Note: do this separately after all, and only if we get permission
+//     // generate a hash and store it
+//     // if (!emailHash) {
+//     //   data["emailHash"] = createEmailHash(email);
+//     // }
+
+//     // replace the email with a dummy placeholder, effectively deleting it
+//     data[emailFieldPath] = emailPlaceholder;
+//   }
+//   return data;
+// }

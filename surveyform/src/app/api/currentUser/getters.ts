@@ -3,8 +3,8 @@ import { getUsersCollection } from "@devographics/mongo";
 import { EditionMetadata, SurveyStatusEnum } from "@devographics/types";
 import { NextRequest, NextResponse } from "next/server";
 import { getSessionFromToken, TOKEN_NAME } from "~/account/user/api";
-import { UserDocument } from "~/core/models/user";
-import { throwError, ServerError } from "~/lib/validation";
+import { UserDocument } from "~/lib/users/model";
+import { ServerError } from "~/lib/validation";
 
 export async function getUserIdFromReq(req: NextRequest) {
   const token = req.cookies.get(TOKEN_NAME)?.value;
@@ -45,8 +45,8 @@ export async function tryGetCurrentUser(
 ): Promise<UserDocument | NextResponse> {
   const userId = await getUserIdFromReq(req);
   if (!userId) {
-    throwError({
-      id: "authentication",
+    throw new ServerError({
+      id: "not_authenticated",
       message: "Not authenticated",
       status: 401,
     });
@@ -57,10 +57,11 @@ export async function tryGetCurrentUser(
     { projection: { isAdmin: true, createdAt: true } }
   );
   if (!currentUser) {
-    return NextResponse.json(
-      { error: "User do not exist anymore" },
-      { status: 401 }
-    );
+    throw new ServerError({
+      id: "user_not_found",
+      message: "Could not find current user",
+      status: 401,
+    });
   }
   return currentUser;
 }

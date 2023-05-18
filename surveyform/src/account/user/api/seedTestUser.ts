@@ -1,5 +1,5 @@
 import { getUsersCollection, newMongoId } from "@devographics/mongo";
-import { UserDocument } from "~/core/models/user";
+import { UserDocument } from "~/lib/users/model";
 
 /**
  * Create at least one user
@@ -16,7 +16,7 @@ export const seedTestUser = async () => {
       email: "test@devographics.com",
     };
     try {
-      await Users.insertOne(testUser)
+      await Users.insertOne(testUser);
       console.log(
         `Seed a test user with email ${testUser.email} and _id ${testUser._id}`
       );

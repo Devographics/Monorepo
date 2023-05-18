@@ -1,4 +1,4 @@
-import { UserDocument } from "~/core/models/user";
+import { UserDocument } from "~/lib/users/model";
 
 export const generateAnonymousUser =
   (): UserDocument /*AnonymousUserDocument*/ => {

@@ -12,8 +12,8 @@ import { useMagicToken } from "~/account/magicLogin/hooks";
 import { verifyMagicToken } from "~/account/magicLogin/lib";
 import { routes } from "~/lib/routes";
 
-import { FormattedMessage } from "~/core/components/common/FormattedMessage";
-import { Loading } from "~/core/components/ui/Loading";
+import { FormattedMessage } from "~/components/common/FormattedMessage";
+import { Loading } from "~/components/ui/Loading";
 
 const useMagicLoginCheck = () => {
   const [loading, setLoading] = useState(false);

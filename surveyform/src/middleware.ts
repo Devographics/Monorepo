@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { debugAccessMiddleware } from "~/core/server/edge/debugMiddleware";
-import { cronMiddleware } from "~/core/server/edge/cronMiddleware";
+import { debugAccessMiddleware } from "~/lib/server/edge/debugMiddleware";
+import { cronMiddleware } from "~/lib/server/edge/cronMiddleware";
 
 import { getLocaleFromAcceptLanguage } from "~/i18n/server/localeDetection";
 import { LOCALE_COOKIE_NAME } from "./i18n/cookie";

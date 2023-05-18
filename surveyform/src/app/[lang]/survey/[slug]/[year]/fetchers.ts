@@ -3,7 +3,7 @@
  */
 import { notFound } from "next/navigation";
 import { fetchEditionMetadataSurveyForm } from "@devographics/fetch";
-import { getSurveyParamsTable } from "~/surveys/data";
+import { getSurveyParamsTable } from "~/lib/surveys/data";
 
 /**
  * Use in metadata

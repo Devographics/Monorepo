@@ -3,7 +3,7 @@ import { useUser } from "~/account/user/hooks";
 import { routes } from "~/lib/routes";
 import { useIntlContext } from "@devographics/react-i18n";
 import React from "react";
-import { Button } from "~/core/components/ui/Button";
+import { Button } from "~/components/ui/Button";
 import { logout } from "../lib/logout";
 
 export const LogoutButton = ({

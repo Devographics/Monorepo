@@ -4,7 +4,7 @@ import { useState, ReactNode } from "react";
 import { loginAnonymously } from "../lib";
 import { useSWRConfig } from "swr";
 import { apiRoutes } from "~/lib/apiRoutes";
-import { Button } from "~/core/components/ui/Button";
+import { Button } from "~/components/ui/Button";
 
 /**
  * Will update all "useUser" hooks

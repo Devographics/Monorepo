@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { captureException } from "@sentry/nextjs";
 import { notFound } from "next/navigation";
-import { EntitiesProvider } from "~/core/components/common/EntitiesContext";
-import { fetchEntitiesRedis } from "~/core/server/fetchEntitiesRedis";
-import { EditionProvider } from "~/surveys/components/SurveyContext/Provider";
+import { EntitiesProvider } from "~/components/common/EntitiesContext";
+import { EditionProvider } from "~/components/SurveyContext/Provider";
 import { initRedis } from "@devographics/redis";
 
 import { LocaleContextProvider } from "~/i18n/context/LocaleContext";
@@ -27,13 +26,13 @@ export async function generateStaticParams() {
   }));
 }*/
 
-import { getSurveyImageUrl } from "~/surveys/getSurveyImageUrl";
+import { getSurveyImageUrl } from "~/lib/surveys/helpers";
 import { publicConfig } from "~/config/public";
-import { getEditionHomePath, getEditionTitle } from "~/surveys/helpers";
+import { getEditionHomePath, getEditionTitle } from "~/lib/surveys/helpers";
 import { cachedFetchLocaleStrings } from "~/app/[lang]/fetchers";
 import { cache } from "react";
 import { getLocales } from "~/i18n/server/fetchLocalesRedis";
-import { getSurveyParamsTable } from "~/surveys/data";
+import { getSurveyParamsTable } from "~/lib/surveys/data";
 interface SurveyPageServerProps {
   slug: string;
   year: string;
@@ -131,19 +130,6 @@ If this error still happens in a few months (2023) open an issue with repro at N
   // locales lists
   const locales = (await cachedGetLocales()) || [];
 
-  // NOTE: if fetch entities was based on survey slug
-  // we could run those queries in //
-  // (not useful in static mode though)
-  let entities = [];
-  try {
-    console.log("edition", edition.surveyId);
-    const redisEntities = await fetchEntitiesRedis(edition.surveyId); //.editionId);
-    if (!redisEntities) throw new Error("Entities not found in Redis");
-    entities = redisEntities;
-  } catch (err) {
-    captureException(err);
-  }
-
   // Apply survey colors
   const { colors } = edition;
   const style = `
@@ -164,16 +150,14 @@ If this error still happens in a few months (2023) open an issue with repro at N
       editionSlug={params.year}
     >
       <style dangerouslySetInnerHTML={{ __html: style }} />
-      <EntitiesProvider entities={entities}>
-        <LocaleContextProvider
-          locales={locales}
-          localeId={localeId}
-          localeStrings={localeWithStrings || { id: "NOT_FOUND", strings: {} }}
-          contexts={i18nContexts}
-        >
-          {children}
-        </LocaleContextProvider>
-      </EntitiesProvider>
+      <LocaleContextProvider
+        locales={locales}
+        localeId={localeId}
+        localeStrings={localeWithStrings || { id: "NOT_FOUND", strings: {} }}
+        contexts={i18nContexts}
+      >
+        {children}
+      </LocaleContextProvider>
     </EditionProvider>
   );
 }

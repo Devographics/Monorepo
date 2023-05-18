@@ -8,3 +8,8 @@ export const parseEnvVariableArray = (variable = "") => {
   if (!variable) return [];
   return variable.split(",").map((s) => s.trim());
 };
+
+export const isAbsoluteUrl = (url?: string) => {
+  if (!url) return false;
+  return url.indexOf("//") !== -1;
+};

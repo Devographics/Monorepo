@@ -2,8 +2,8 @@ import {
   User,
   // UserMongooseModel,
   UserTypeServer,
-} from "~/core/models/user.server";
-import { UserDocument, UserType } from "~/core/models/user";
+} from "~/lib/users/model.server";
+import { UserDocument, UserType } from "~/lib/users/model";
 import { createMutator, updateMutator } from "@vulcanjs/crud/server";
 import { createEmailHash } from "~/account/email/api/encryptEmail";
 import { getUsersCollection } from "@devographics/mongo";
@@ -153,12 +153,12 @@ export const upgradeUser = async ({
 // always use the most recent one
 export const findUserFromEmail = async (email: string) => {
   const Users = await getUsersCollection<UserDocument>();
-  const usersByEmail = await (Users.find(
+  const usersByEmail = await Users.find(
     {
       emailHash: createEmailHash(email),
     },
     { sort: { createdAt: -1 }, limit: 1 }
-  )).toArray();
+  ).toArray();
   return usersByEmail[0];
 };
 

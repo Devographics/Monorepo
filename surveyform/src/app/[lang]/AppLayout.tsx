@@ -15,8 +15,8 @@ import { useUser } from "~/account/user/hooks";
 
 import { LocaleContextProvider } from "~/i18n/context/LocaleContext";
 
-import { ErrorBoundary } from "~/core/components/error";
-import Layout from "~/core/components/common/Layout";
+import { ErrorBoundary } from "~/components/error";
+import Layout from "~/components/common/Layout";
 import type { LocaleDef, LocaleDefWithStrings } from "~/i18n/typings";
 import SSRProvider from "react-bootstrap/SSRProvider";
 import { SWRConfig } from "swr";

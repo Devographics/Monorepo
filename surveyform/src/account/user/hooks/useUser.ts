@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import useSWR from "swr";
-import { UserType } from "~/core/models/user";
+import { UserType } from "~/lib/users/model";
 import { apiRoutes } from "~/lib/apiRoutes";
 
 const fetcher = (url) =>

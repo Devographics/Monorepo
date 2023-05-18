@@ -2,7 +2,7 @@ import yaml from "js-yaml";
 import { promises as fs } from "fs";
 import path from "path";
 
-const surveyDirPath = path.resolve(__dirname, "~/surveys/");
+const surveyDirPath = path.resolve(__dirname, "~/lib/surveys/");
 
 export const convertYAMLDir = async (dirPath) => {
   try {

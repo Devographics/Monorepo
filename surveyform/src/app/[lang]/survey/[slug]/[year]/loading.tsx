@@ -1,4 +1,4 @@
-import { Loading } from "~/core/components/ui/Loading";
+import { Loading } from "~/components/ui/Loading";
 
 export default function LoadingSurvey() {
   return (

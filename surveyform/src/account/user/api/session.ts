@@ -3,7 +3,7 @@
 import Iron from "@hapi/iron";
 import type { Request } from "express";
 import type { NextApiRequest } from "next";
-import { UserType } from "~/core/models/user";
+import { UserType } from "~/lib/users/model";
 import { getTokenCookie } from "./auth-cookies";
 
 // Use an environment variable here instead of a hardcoded value for production
@@ -30,17 +30,15 @@ export async function getSessionFromReq(
   req: NextApiRequest | Request
 ): Promise<UserType> {
   const token = getTokenCookie(req);
-  return getSessionFromToken(token)
+  return getSessionFromToken(token);
 }
 
-
 /**
- * @param token 
+ * @param token
  */
 export async function getSessionFromToken(token: string) {
   const TOKEN_SECRET = getTokenSecret();
   return token && Iron.unseal(token, TOKEN_SECRET!, Iron.defaults);
-
 }
 
 export async function decryptToken(token: string) {

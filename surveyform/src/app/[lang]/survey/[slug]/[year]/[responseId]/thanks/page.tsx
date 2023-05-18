@@ -1,4 +1,4 @@
-import Thanks from "~/core/components/pages/Thanks";
+import Thanks from "~/components/pages/Thanks";
 import { serverConfig } from "~/config/server";
 import { initRedis } from "@devographics/redis";
 
