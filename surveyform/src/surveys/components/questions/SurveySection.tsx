@@ -1,36 +1,30 @@
-import SurveySectionContents from "./SurveySectionContents";
-import EditionMessage from "../SurveyMessage";
-import { EditionMetadata } from "@devographics/types";
+"use client";
 
-const SurveySection = ({
+import SurveySectionContents from "./SurveySectionContents";
+import { EditionMetadata } from "@devographics/types";
+import { useResponse } from "~/responses/hooks";
+import { Loading } from "~/core/components/ui/Loading";
+
+export const SurveySectionWithResponse = ({
   responseId,
-  sectionNumber,
-  edition,
 }: {
   responseId: string;
   sectionNumber: number;
   edition: EditionMetadata;
 }) => {
-  const sections = edition.sections;
-  const sectionIndex = sectionNumber - 1;
-  const section = sections[sectionIndex];
-  const previousSection = sections[sectionIndex - 1];
-  const nextSection = sections[sectionIndex + 1];
-  const sectionProps = {
-    sectionNumber,
-    section,
-    // response,
-    responseId,
-    previousSection,
-    nextSection,
-  };
+  const {
+    response,
+    loading: responseLoading,
+    error: responseError,
+  } = useResponse({ responseId });
 
-  return (
-    <div className="survey-section-wrapper">
-      <EditionMessage edition={edition} />
-      <SurveySectionContents {...sectionProps} edition={edition} />
-    </div>
-  );
+  if (responseLoading) {
+    return <Loading />;
+  }
+
+  return <SurveySectionContents response={response} />;
 };
 
-export default SurveySection;
+export const SurveySectionReadOnly = () => {
+  return <SurveySectionContents readOnly={true} />;
+};

@@ -1,4 +1,4 @@
-import SurveySectionReadOnly from "~/surveys/components/questions/SurveySectionReadOnly";
+import { SurveySectionReadOnly } from "~/surveys/components/questions/SurveySection";
 
 const SurveyFromResponseIdPage = () => {
   return <SurveySectionReadOnly />;

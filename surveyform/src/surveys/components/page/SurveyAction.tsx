@@ -9,14 +9,12 @@
 */
 import { useState } from "react";
 import Link from "next/link";
-import get from "lodash/get.js";
-import isEmpty from "lodash/isEmpty.js";
 import { statuses } from "~/surveys/constants";
 import { FormattedMessage } from "~/core/components/common/FormattedMessage";
 import { useSurveyActionParams, useBrowserData, PrefilledData } from "./hooks";
 import { useRouter } from "next/navigation";
 import { useUser } from "~/account/user/hooks";
-import { useUserResponse } from "~/responses/hooks";
+import { useResponse, useCurrentUser } from "~/responses/hooks";
 import { Loading } from "~/core/components/ui/Loading";
 import { LoadingButton } from "~/core/components/ui/LoadingButton";
 import { getEditionSectionPath } from "~/surveys/helpers";
@@ -35,23 +33,19 @@ const EditionAction = ({ edition }: { edition: EditionMetadata }) => {
     Array<ErrorObject | Error> | undefined
   >();
   const { status } = edition;
-  const { user, loading: userLoading, error: userError } = useUser();
-  // TODO: fetch data during SSR instead?
   const {
-    response,
-    loading: responseLoading,
-    error: responseError,
-  } = useUserResponse({
-    editionId,
-    surveyId,
-  });
+    currentUser,
+    loading: userLoading,
+    error: userError,
+  } = useCurrentUser();
+
   if (userLoading) return <Loading />;
   if (userError) throw new Error(userError);
-  if (responseLoading) return <Loading />;
-  if (responseError) throw new Error(responseError);
-  //const currentSurveyResponse = responses?.find((r) => r.surveySlug === slug);
 
-  const hasResponse = response && !isEmpty(response);
+  const response = currentUser?.responses.find(
+    (r) => r.surveyId === surveyId && r.editionId === editionId
+  );
+  const hasResponse = !!response;
 
   const parsedErrors: Array<ErrorObject> | undefined = errors?.map((e) =>
     "id" in e ? e : { id: "app.unknown_error" }
@@ -76,7 +70,7 @@ const EditionAction = ({ edition }: { edition: EditionMetadata }) => {
             edition={edition}
             loading={loading}
             setLoading={setLoading}
-            currentUser={user}
+            currentUser={currentUser}
             setErrors={setErrors}
           />
         );

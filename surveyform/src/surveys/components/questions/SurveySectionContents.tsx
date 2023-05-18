@@ -1,49 +1,26 @@
 "use client";
-import { Loading } from "~/core/components/ui/Loading";
-import { EditionMetadata, SurveyStatusEnum } from "@devographics/types";
-import { useUserResponse } from "~/responses/hooks";
+import { SurveyStatusEnum } from "@devographics/types";
 import { FormSection } from "../form/FormSection";
+import EditionMessage from "../SurveyMessage";
+import { ResponseDocument } from "@devographics/core-models";
+import { useEdition } from "../SurveyContext/Provider";
+import { useSection } from "../SectionContext/SectionProvider";
 
 const SurveySectionContents = ({
-  sectionNumber,
-  section,
-  responseId,
-  previousSection,
-  nextSection,
+  response,
   readOnly: readOnlyRoute,
-  edition,
 }: {
-  sectionNumber?: number;
-  section?: any;
-  responseId?: string;
-  previousSection?: any;
-  nextSection?: any;
+  response?: ResponseDocument;
   readOnly?: boolean;
-  edition: EditionMetadata;
 }) => {
-  const {
-    response,
-    loading: responseLoading,
-    error: responseError,
-  } = useUserResponse({
-    editionId: edition.id,
-    surveyId: edition.survey.id,
-  });
+  const { edition } = useEdition();
 
-  if (responseLoading) {
-    return <Loading />;
-  }
-
-  const questions = section.questions.filter((q) => !q.hidden);
-  const fields = questions.map((question) => question?.formPaths?.response);
-
-  // we need to tell SmartForm to accept the comment fields as valid fields too
-  for (const f of section.questions) {
-    if (f?.formPaths?.comment) {
-      fields.push(f.formPaths.comment);
-    }
-  }
-
+  const sectionNumber = useSection();
+  const sections = edition.sections;
+  const sectionIndex = sectionNumber - 1;
+  const section = sections[sectionIndex];
+  const previousSection = sections[sectionIndex - 1];
+  const nextSection = sections[sectionIndex + 1];
   const isLastSection = !nextSection;
 
   const formProps = {
@@ -53,7 +30,12 @@ const SurveySectionContents = ({
     edition,
     readOnly: readOnlyRoute || edition.status === SurveyStatusEnum.CLOSED,
   };
-  return <FormSection {...formProps} />;
+  return (
+    <div className="survey-section-wrapper">
+      <EditionMessage edition={edition} />
+      <FormSection {...formProps} />
+    </div>
+  );
 };
 
 export default SurveySectionContents;
