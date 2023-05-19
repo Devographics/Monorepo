@@ -37,9 +37,9 @@ const getFormPaths = ({
   edition: EditionMetadata;
   question: QuestionMetadata;
 }): DbPaths => {
-  const paths = {};
+  const paths: { [key in keyof DbPaths]: string } = {};
   if (question.rawPaths) {
-    Object.keys(question.rawPaths).forEach((key) => {
+    (Object.keys(question.rawPaths) as Array<keyof DbPaths>).forEach((key) => {
       const path = question?.rawPaths?.[key];
       if (path) {
         paths[key] = `${edition.id}__${path}`;
@@ -128,7 +128,7 @@ export const getSurveyImageUrl = (edition: EditionMetadata) => {
   let finalImageUrl = isAbsoluteUrl(imageUrl)
     ? imageUrl
     : // legacy behaviour
-      `/surveys/${imageUrl}`;
+    `/surveys/${imageUrl}`;
 
   return finalImageUrl;
 };
@@ -162,7 +162,7 @@ export function getReadOnlyPath({
   survey,
 }: {
   survey: SurveyEditionDescription;
-}) {}
+}) { }
 // specific section path for the form
 export function getEditionSectionPath({
   edition,
@@ -240,7 +240,8 @@ type ReverseEditionParam = {
 };
 export type SurveyParamsTable = {
   [slug: string]: {
-    [year: number]: {
+    /** NOTE: could be a string like "summer-2022" */
+    [year: string]: {
       surveyId: string;
       editionId: string;
     };

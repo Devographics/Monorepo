@@ -97,8 +97,10 @@ export const CommentInput = (props: CommentInputProps) => {
         ? updateCurrentValuesDebounced
         : updateCurrentValues;
       if (value === "") {
+        // @ts-ignore
         _updateCurrentValues({ [commentPath]: null });
       } else {
+        // @ts-ignore
         _updateCurrentValues({ [commentPath]: value });
       }
     };

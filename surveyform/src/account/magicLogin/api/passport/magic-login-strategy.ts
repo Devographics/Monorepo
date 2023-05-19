@@ -7,7 +7,6 @@ import { UserTypeServer } from "~/lib/users/model.server";
 
 import { routes } from "~/lib/routes";
 import { serverConfig } from "~/config/server";
-import type { Request } from "express";
 import { UserType } from "~/lib/users/model";
 import {
   createOrUpgradeUser,
@@ -120,7 +119,7 @@ async function verify(
     destination: string;
     anonymousId?: string;
   },
-  cb /*{ email }: Pick<UserTypeServer, "email">*/
+  cb: any /*{ email }: Pick<UserTypeServer, "email">*/
 ) {
   try {
     if (!payload) throw new Error("Invalid token, cannot verify user");
@@ -194,6 +193,7 @@ export const magicLinkStrategy = new MagicLoginStrategy({
   //userFields: ["email"],
   //tokenField: magicTokenName,
   // Will be called with parameter "?token=<magic token>"
+  // @ts-ignore
   sendMagicLink,
   verify,
 });

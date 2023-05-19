@@ -32,21 +32,13 @@ export const FormItem = (props: FormItemProps) => {
   //   noteIntlId: noteIntlId_,
   // } = props;
 
-  const {
-    children,
-    response,
-    path,
-    value,
-    question,
-    updateCurrentValues,
-    isFirstQuestion,
-    readOnly,
-  } = props;
+  const { children, response, path, question, isFirstQuestion, readOnly } =
+    props;
 
-  const { options, formPaths, entity, allowComment } = question;
+  const { formPaths, allowComment } = question;
 
   const commentPath = formPaths.comment;
-  const commentValue = get(response, commentPath);
+  const commentValue = commentPath && get(response, commentPath);
 
   // open the comment widget if there is already a comment or this is the first question
   const [showCommentInput, setShowCommentInput] = useState(

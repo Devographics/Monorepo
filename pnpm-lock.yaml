@@ -1197,6 +1197,7 @@ importers:
       '@types/express': ^4.17.17
       '@types/hast': ^2.3.4
       '@types/jest': ^25.2.3
+      '@types/lodash': ^4.14.194
       '@types/node': ^13.13.52
       '@types/nodemailer': ^6.4.6
       '@types/passport': ^1.0.12
@@ -1409,6 +1410,7 @@ importers:
       '@sentry/types': 7.19.0
       '@types/express': 4.17.17
       '@types/hast': 2.3.4
+      '@types/lodash': 4.14.194
       '@types/node': 13.13.52
       '@types/nodemailer': 6.4.6
       '@types/passport': 1.0.12

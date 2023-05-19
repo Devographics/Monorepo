@@ -1,7 +1,7 @@
 import { ResponseDocument } from "@devographics/core-models";
 import { EditionMetadata, SurveyMetadata } from "@devographics/types";
 import { Actions } from "./validation";
-import clone from "lodash/clone";
+import clone from "lodash/clone.js";
 
 export interface OnCreateProps {
   currentUser: any;
@@ -24,21 +24,21 @@ export interface SchemaObject<T> {
   clientMutable?: boolean;
   onCreate?: OnCreate<
     T extends StringConstructor
-      ? string
-      : T extends NumberConstructor
-      ? number
-      : T extends BooleanConstructor
-      ? boolean
-      : Date
+    ? string
+    : T extends NumberConstructor
+    ? number
+    : T extends BooleanConstructor
+    ? boolean
+    : Date
   >;
   onUpdate?: OnUpdate<
     T extends StringConstructor
-      ? string
-      : T extends NumberConstructor
-      ? number
-      : T extends BooleanConstructor
-      ? boolean
-      : Date
+    ? string
+    : T extends NumberConstructor
+    ? number
+    : T extends BooleanConstructor
+    ? boolean
+    : Date
   >;
 }
 
@@ -62,7 +62,7 @@ export const defaultSchemaObject: SchemaObject<StringConstructor> = {
   clientMutable: false,
 };
 
-export const extendSchema = (schema) => {
+export const extendSchema = (schema: any) => {
   Object.keys(schema).forEach((key) => {
     schema[key] = { ...defaultSchemaObject, ...schema[key] };
   });

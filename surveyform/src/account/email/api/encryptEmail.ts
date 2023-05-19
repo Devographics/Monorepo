@@ -23,7 +23,7 @@ export const createEmailHash = (email: string, providedHashSalt?: string) => {
  * if it doesn't exist yet
  * @param emailHash String
  */
-export async function getUUID(emailHash, userId) {
+export async function getUUID(emailHash: string, userId: string) {
   const EmailHashes = await getEmailHashesCollection();
   const hashDoc = await EmailHashes.findOne({ hash: emailHash });
   let emailUuid;
@@ -48,7 +48,7 @@ NOTE: NOT SECURE! DO NOT USE unless it's for processing older existing data
 @deprecated
 
 */
-export const encrypt = (text) => {
+export const encrypt = (text: string) => {
   const encryptionKey = process.env.ENCRYPTION_KEY; // || getSetting('encriptionKey');
   if (!encryptionKey) throw new Error("Encryption not set in this application");
   const cipher = crypto.createCipheriv(

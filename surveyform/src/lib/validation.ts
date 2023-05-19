@@ -16,12 +16,20 @@ export interface ServerErrorObject {
   error?: any;
 }
 
-export function ServerError(props: ServerErrorObject) {
-  console.log("// ServerError");
-  console.log(props);
-  Object.keys(props).forEach((key) => {
-    this[key] = props[key];
-  });
+export class ServerError extends Error {
+  id: string
+  status: number
+  properties?: string
+  error?: any
+  constructor(props: ServerErrorObject) {
+    super(props.message)
+    console.error("// ServerError");
+    console.error(props);
+    this.id = props.id
+    this.status = props.status;
+    this.properties = props.properties
+    this.error = props.error
+  }
 }
 
 export enum ActionContexts {
@@ -34,7 +42,7 @@ export enum Actions {
   UPDATE = "update",
 }
 
-const getZodType = (type) => {
+const getZodType = (type: any) => {
   switch (type) {
     case String:
     default:
@@ -100,7 +108,7 @@ const getZodSchema = ({
   action: Actions;
   context: ActionContexts;
 }) => {
-  const zObject = {};
+  const zObject: any = {};
   const allFieldNames = Object.keys(schema);
   // if we're validating client input, only keep fields that are mutable by client
   const fieldNames =

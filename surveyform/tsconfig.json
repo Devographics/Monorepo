@@ -15,14 +15,15 @@
     // can create inconsistencies with VS Code...
     "cypress"
   ],
+  // if possible extend tsconfig.common instead
+  // (this is a trick to correctly handle colocated non-built files such as unit tests)
   "compilerOptions": {
-    "strict": true,
     "incremental": true,
     "plugins": [
       {
         "name": "next"
       }
     ],
-    "strictNullChecks": true
+    "strict": false
   }
 }
