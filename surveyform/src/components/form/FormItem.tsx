@@ -40,6 +40,7 @@ export const FormItem = (props: FormItemProps) => {
     question,
     updateCurrentValues,
     isFirstQuestion,
+    readOnly,
   } = props;
 
   const { options, formPaths, entity, allowComment } = question;
@@ -49,7 +50,7 @@ export const FormItem = (props: FormItemProps) => {
 
   // open the comment widget if there is already a comment or this is the first question
   const [showCommentInput, setShowCommentInput] = useState(
-    isFirstQuestion || !!commentValue
+    (!readOnly && isFirstQuestion) || !!commentValue
   );
 
   // const innerComponent = loading ? (

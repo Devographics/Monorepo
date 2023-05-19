@@ -10,6 +10,7 @@ import Link from "next/link";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { useState } from "react";
 import { FormInputProps } from "./typings";
+import Button from "react-bootstrap/esm/Button";
 
 interface FormSubmitProps extends FormInputProps {
   sectionNumber: number;
@@ -126,7 +127,9 @@ const SubmitButton = (props: SubmitButtonProps) => {
   return (
     <div className={`form-btn form-btn-${type}`}>
       {readOnly ? (
-        <Link href={path}>{contents}</Link>
+        <Button as={Link} href={path}>
+          {contents}
+        </Button>
       ) : (
         <LoadingButton
           title={path}

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { EditionMetadata, SurveyMetadata } from "@devographics/types";
 import { getEditionHomePath, getSurveyImageUrl } from "~/lib/surveys/helpers";
 import { SurveyParamsTable } from "~/lib/surveys/data";
+import sortBy from "lodash/sortBy";
 
 const EditionItem = ({
   edition,
@@ -59,13 +60,21 @@ const EditionGroup = ({
 }) => {
   if (!status) throw new Error("SurveyGroup must receive a defined status");
   const filteredEditions = allEditions.filter((s) => s.status === status);
+  const sortedEdition = sortBy(
+    filteredEditions,
+    (edition: EditionMetadata) => new Date(edition.startedAt)
+  ).reverse();
+  console.log(sortedEdition);
+
   return (
     <div className="surveys-group">
       <h3 className="surveys-group-heading">
-        <FormattedMessage id={`general.${status}_surveys`} />
+        <FormattedMessage
+          id={`general.${SurveyStatusEnum[status].toLowerCase()}_surveys`}
+        />
       </h3>
-      {filteredEditions.length > 0 ? (
-        filteredEditions.map((edition) => (
+      {sortedEdition.length > 0 ? (
+        sortedEdition.map((edition) => (
           <EditionItem
             key={edition.id}
             edition={edition}

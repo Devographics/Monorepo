@@ -1,10 +1,7 @@
-"use client";
-import { Entity } from "@devographics/core-models";
-import type { SurveyEdition } from "@devographics/core-models";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
-import { useEntities } from "~/components/common/EntitiesContext";
+import type { EditionMetadata, Credit } from "@devographics/types";
 
-const SurveyCredits = ({ survey }) => {
+const SurveyCredits = ({ edition }: { edition: EditionMetadata }) => {
   return (
     <div className="survey-credits survey-page-block">
       <h3 className="survey-credits-heading survey-page-block-heading">
@@ -14,46 +11,21 @@ const SurveyCredits = ({ survey }) => {
         <FormattedMessage id="credits.contributors.description" />
       </p>
       <div className="survey-credits-items">
-        <SurveyCreditItems survey={survey} />
+        {edition.credits
+          .filter((c) => c.role === "survey_design")
+          .map((c) => (
+            <SurveyCredit key={c.id} {...c} />
+          ))}
       </div>
     </div>
   );
 };
 
-const SurveyCreditItems = ({ survey }: { survey: SurveyEdition }) => {
-  const entities = useEntities();
-  return (
-    <>
-      {survey.credits
-        .filter((c) => c.role === "survey_design")
-        .map((c) => {
-          const entity = entities && entities.find((e) => e.id === c.id);
-          return <SurveyCredit key={c.id} {...c} entity={entity} />;
-        })}
-    </>
-  );
-};
-
-const SurveyCredit = ({
-  id,
-  role,
-  entity,
-}: {
-  id: string;
-  role?: string;
-  entity: Entity;
-}) => {
-  return <SurveyCreditItem {...entity} role={role} />;
-};
-
-const SurveyCreditItem = ({
-  id,
-  name,
-  twitterName,
-  twitter,
-  role,
-  company,
-}: Entity & { role?: string }) => {
+const SurveyCredit = ({ id, role, entity }: Credit) => {
+  if (!entity) {
+    return <div>No entity found for {id}</div>;
+  }
+  const { name, company, twitterName } = entity;
   return (
     <div className="survey-credits-item">
       <a

@@ -42,6 +42,8 @@ const EditionAction = ({ edition }: { edition: EditionMetadata }) => {
   if (userLoading) return <Loading />;
   if (userError) throw new Error(userError);
 
+  console.log("// currentUser");
+  console.log(currentUser);
   const response = currentUser?.responses.find(
     (r) => r.surveyId === surveyId && r.editionId === editionId
   );

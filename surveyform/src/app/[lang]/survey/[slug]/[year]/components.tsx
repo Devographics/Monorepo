@@ -91,7 +91,7 @@ export const EditionPage = ({
         <EditionMain edition={edition} />
       </div>
       <Faq survey={edition} />
-      {edition.credits && <SurveyCredits survey={edition} />}
+      {edition.credits && <SurveyCredits edition={edition} />}
       <Translators />
     </div>
   );

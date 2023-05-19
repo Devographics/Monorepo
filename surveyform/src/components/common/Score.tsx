@@ -8,7 +8,6 @@ import take from "lodash/take.js";
 import type { SurveyEdition } from "@devographics/core-models";
 import { useIntlContext } from "@devographics/react-i18n";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
-import { useEntities } from "~/components/common/EntitiesContext";
 import { Button } from "~/components/ui/Button";
 import { EditionMetadata } from "@devographics/types";
 
@@ -91,11 +90,11 @@ const Score = ({
     }
   );
 
-  const entities = useEntities();
-
   // if (loading) return <Components.Loading />;
   // if (error) return <span>Could not load entities</span>;
 
+  // TODO
+  const entities = [];
   // only keep features which have an associated entity which itself has a URL
   const unknownFeatures = unknownFields
     .map((field) => {
