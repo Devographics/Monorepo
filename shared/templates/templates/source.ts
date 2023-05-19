@@ -506,11 +506,166 @@ const sources: Sources = {
             {
                 id: 'instagram'
             }
+        ],
+        js2023: [
+            {
+                id: 'state_of_js_survey'
+            },
+            {
+                id: 'twitter'
+            },
+            {
+                id: 'google'
+            },
+            {
+                id: 'youtube'
+            },
+            {
+                id: 'fireship'
+            },
+            {
+                id: 'angular_community'
+            },
+            {
+                id: 'js_weekly'
+            },
+            {
+                id: 'reddit'
+            },
+            {
+                id: 'scrimba'
+            },
+            {
+                id: 'linkedin'
+            },
+            {
+                id: 'work'
+            },
+            {
+                id: 'word_of_mouth'
+            },
+            {
+                id: 'duckduckgo'
+            },
+            {
+                id: 'slack'
+            },
+            {
+                id: 'discord'
+            },
+            {
+                id: 'codrops'
+            },
+            {
+                id: 'microsoft_teams'
+            },
+            {
+                id: 'devto'
+            },
+            {
+                id: 'state_of_css_survey'
+            },
+            {
+                id: 'mastodon'
+            },
+            {
+                id: 'midudev'
+            },
+            {
+                id: 'web_standards_ru'
+            },
+            {
+                id: 'bytes'
+            },
+            {
+                id: 'facebook'
+            },
+            {
+                id: 'telegram'
+            },
+            {
+                id: 'vue_community'
+            },
+            {
+                id: 'theo_browne'
+            },
+            {
+                id: 'brave'
+            },
+            {
+                id: 'kevin_j_powell'
+            },
+            {
+                id: 'state_of_frontend'
+            },
+            {
+                id: 'elm_community'
+            },
+            {
+                id: 'james_q_quick'
+            },
+            {
+                id: 'zero_to_mastery'
+            },
+            {
+                id: 'front_end_front'
+            },
+            {
+                id: 'github'
+            },
+            {
+                id: 'svelte_community'
+            },
+            {
+                id: 'bing'
+            },
+            {
+                id: 'twitch'
+            },
+            {
+                id: 'coding_garden'
+            },
+            {
+                id: 'kode24'
+            },
+            {
+                id: 'rich_harris'
+            },
+            {
+                id: 'frontend_focus'
+            },
+            {
+                id: 'jser'
+            },
+            {
+                id: 'ryan_carniato'
+            },
+            {
+                id: 'changelog'
+            },
+            {
+                id: 'state_of_purescript'
+            },
+            {
+                id: 'eleventy'
+            },
+            {
+                id: 'hn'
+            },
+            {
+                id: 'instagram'
+            }
         ]
     }
 }
 
 export const source: TemplateFunction = ({ survey, edition, question, section }) => {
+    const options = sources[survey.id][edition.id]
+    if (!options) {
+        throw new Error(
+            `Could not find source options for edition ${edition.id} (defined in /shared/templates/source)`
+        )
+    }
     const output: QuestionTemplateOutput = {
         id: 'source',
         options: sources[survey.id][edition.id],

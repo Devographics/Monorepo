@@ -11,6 +11,7 @@ import {
     getSurveyQuery
 } from './queries'
 import gql from 'graphql-tag'
+import { logToFile } from '@devographics/helpers'
 
 type IndentStringOptions = { indent?: string; includeEmptyLines?: boolean }
 
@@ -220,19 +221,25 @@ export const fetchSurveysListGraphQL = async ({
     includeQuestions
 }): Promise<Array<SurveyMetadata>> => {
     const query = getSurveysQuery({ includeQuestions })
+    await logToFile('fetchSurveysListGraphQL.gql', query, { mode: 'overwrite' })
     const result = await fetchGraphQLApi({ query })
+    await logToFile('fetchSurveysListGraphQL.json', result, { mode: 'overwrite' })
     return result._metadata.surveys as SurveyMetadata[]
 }
 
 export const fetchEditionGraphQL = async ({ surveyId, editionId }): Promise<EditionMetadata> => {
     const query = getEditionQuery({ surveyId, editionId })
+    await logToFile('fetchEditionGraphQL.gql', query, { mode: 'overwrite' })
     const result = await fetchGraphQLApi({ query })
+    await logToFile('fetchEditionGraphQL.json', result, { mode: 'overwrite' })
     return result._metadata.surveys[0].editions[0]
 }
 
 export const fetchSurveyGraphQL = async ({ surveyId }): Promise<SurveyMetadata> => {
     const query = getSurveyQuery({ surveyId })
+    await logToFile('fetchSurveyGraphQL.gql', query, { mode: 'overwrite' })
     const result = await fetchGraphQLApi({ query })
+    await logToFile('fetchSurveyGraphQL.json', result, { mode: 'overwrite' })
     return result[surveyId]._metadata as SurveyMetadata
 }
 
@@ -241,7 +248,9 @@ export const fetchEditionGraphQLSurveyForm = async ({
     editionId
 }): Promise<EditionMetadata> => {
     const query = getEditionQuerySurveyForm({ surveyId, editionId })
+    await logToFile('fetchEditionGraphQLSurveyForm.gql', query, { mode: 'overwrite' })
     const result = await fetchGraphQLApi({ query })
+    await logToFile('fetchEditionGraphQLSurveyForm.json', result, { mode: 'overwrite' })
     return result._metadata.surveys[0].editions[0]
 }
 

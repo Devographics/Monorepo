@@ -25,6 +25,7 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "@devographics/helpers": "workspace:^1.0.0",
         "@devographics/types": "workspace:^1.0.0",
         "@types/lodash": "^4.14.175",
         "@vulcanjs/graphql": "^0.7.1",
