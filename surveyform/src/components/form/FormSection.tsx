@@ -32,6 +32,7 @@ export const FormSection = (props) => {
   const [currentFocusIndex, setCurrentFocusIndex] = useState<number | null>(
     null
   );
+  const [errorResponse, setErrorResponse] = useState();
 
   const stateStuff = {
     formState,
@@ -42,6 +43,8 @@ export const FormSection = (props) => {
     setCurrentTabindex,
     currentFocusIndex,
     setCurrentFocusIndex,
+    errorResponse,
+    setErrorResponse,
   };
 
   const router = useRouter();
@@ -65,8 +68,13 @@ export const FormSection = (props) => {
     beforeSubmitCallback: any;
     afterSubmitCallback: any;
   }) => {
+    setErrorResponse(undefined);
     const { currentValues } = formState;
-    if (!readOnly && !isEmpty(currentValues)) {
+    if (readOnly || isEmpty(currentValues)) {
+      // no data to submit, go straight to other page
+      router.push(path);
+    } else {
+      // submit data
       setLoading(true);
       if (beforeSubmitCallback) {
         beforeSubmitCallback();
@@ -75,21 +83,24 @@ export const FormSection = (props) => {
         ...currentValues,
         lastSavedAt: new Date(),
       };
+      // run action
       const res = await saveResponse({
         responseId: response._id,
         data,
       });
-      if (res.error) {
-        console.error(res.error);
-        captureException(res.error);
-      }
       setLoading(false);
-
+      // callbacks include setting navLoading to false, etc.
       if (afterSubmitCallback) {
         afterSubmitCallback();
       }
+      if (res.error) {
+        console.error(res.error);
+        captureException(res.error);
+        setErrorResponse(res.error);
+      } else {
+        router.push(path);
+      }
     }
-    router.push(path);
   };
 
   const response = mergeWithResponse(

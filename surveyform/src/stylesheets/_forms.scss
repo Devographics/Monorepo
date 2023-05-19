@@ -470,3 +470,20 @@
     width: 100%;
   }
 }
+
+.toast {
+  background: none;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000000;
+  backdrop-filter: blur(6px);
+  &-header {
+    background: rgba(211, 65, 65, 0.3);
+    color: rgba(253, 232, 232, 0.9);
+  }
+  &-body {
+    background: rgba(255, 93, 93, 0.3);
+    color: rgba(253, 232, 232, 0.9);
+  }
+}

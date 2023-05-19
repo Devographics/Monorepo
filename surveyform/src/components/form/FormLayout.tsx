@@ -7,6 +7,7 @@ import { FormSubmit } from "./FormSubmit";
 import { FormInputProps } from "./typings";
 import { ReactNode } from "react";
 import { SectionMetadata } from "@devographics/types";
+import { FormError } from "./FormError";
 
 interface FormLayoutProps extends FormInputProps {
   children: ReactNode;
@@ -25,25 +26,28 @@ export const FormLayout = (props: FormLayoutProps) => {
     previousSection,
   } = props;
   return (
-    <div className="survey-section">
-      <FormNav {...props} />
-      <div className="section-contents">
-        <div className="section-questions" id="section-questions">
-          <SurveySectionHeading
-            section={section}
-            sectionNumber={sectionNumber}
-            edition={edition}
-          />
-          <FormElement {...props}>
-            {children}
-            <FormSubmit
-              {...props}
-              nextSection={nextSection}
-              previousSection={previousSection}
+    <div className="survey-layout">
+      <div className="survey-section">
+        <FormNav {...props} />
+        <div className="section-contents">
+          <div className="section-questions" id="section-questions">
+            <SurveySectionHeading
+              section={section}
+              sectionNumber={sectionNumber}
+              edition={edition}
             />
-          </FormElement>
+            <FormElement {...props}>
+              {children}
+              <FormSubmit
+                {...props}
+                nextSection={nextSection}
+                previousSection={previousSection}
+              />
+            </FormElement>
+          </div>
         </div>
       </div>
+      <FormError {...props} />
     </div>
   );
 };
