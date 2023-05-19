@@ -5,7 +5,6 @@ import get from "lodash/get.js";
 import CountUp from "react-countup";
 import Confetti from "react-confetti";
 import take from "lodash/take.js";
-import type { SurveyEdition } from "@devographics/core-models";
 import { useIntlContext } from "@devographics/react-i18n";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { Button } from "~/components/ui/Button";
@@ -94,7 +93,7 @@ const Score = ({
   // if (error) return <span>Could not load entities</span>;
 
   // TODO
-  const entities = [];
+  const entities: Array<any> = [];
   // only keep features which have an associated entity which itself has a URL
   const unknownFeatures = unknownFields
     .map((field) => {

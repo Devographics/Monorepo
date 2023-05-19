@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
-import { captureException } from "@sentry/nextjs";
 import { notFound } from "next/navigation";
-import { EntitiesProvider } from "~/components/common/EntitiesContext";
 import { EditionProvider } from "~/components/SurveyContext/Provider";
 import { initRedis } from "@devographics/redis";
 
