@@ -39,9 +39,6 @@ export const FormComponentSelect = (props: FormInputProps) => {
         {allOptions.map((option) => {
           const { id, label } = option;
           const i18n = getOptioni18nIds({
-            survey,
-            edition,
-            section,
             question,
             option,
           });

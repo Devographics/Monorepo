@@ -4,7 +4,7 @@ import { StrategyCreatedStatic } from "passport";
 import { generateAnonymousUser } from "~/account/anonymousLogin/api";
 
 interface AnonymousLoginOptions {
-  createUser: (req: Request) => Promise<any>;
+  createUser: () => Promise<any>;
   /**
    * Return true if user is a spammer
    */
@@ -18,12 +18,12 @@ interface AnonymousLoginOptions {
  */
 class AnonymousLoginStrategy /* extends Strategy*/ {
   name: string = "anonymouslogin";
-  constructor(private _options: AnonymousLoginOptions) {}
+  constructor(private _options: AnonymousLoginOptions) { }
 
   authenticate(
     this: StrategyCreatedStatic & AnonymousLoginStrategy,
     req: Request
-  ): void {
+  ): Promise<void> {
     const self = this;
 
     return (self._options.checkSpam?.(req) || Promise.resolve(false))
@@ -39,12 +39,14 @@ class AnonymousLoginStrategy /* extends Strategy*/ {
             })
             .catch((err) => {
               const info = "User creation failed";
+              // @ts-ignore
               return self.error(err, info);
             });
         }
       })
       .catch((err) => {
         const info = "Spam detection failed unexpectedly";
+        // @ts-ignore
         return self.error(err, info);
       });
 

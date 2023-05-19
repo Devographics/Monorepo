@@ -45,7 +45,7 @@ export const AnonymousLoginForm = ({
         // will reload the user in the RSC
         router.refresh();
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("An unexpected error occurred:", error);
       setErrorMsg(error.message);
     }

@@ -1199,10 +1199,12 @@ importers:
       '@types/jest': ^25.2.3
       '@types/node': ^13.13.52
       '@types/nodemailer': ^6.4.6
+      '@types/passport': ^1.0.12
       '@types/react': ^18.0.27
       '@types/react-dom': ^18.0.10
       '@types/shelljs': ^0.8.11
       '@types/unist': ^2.0.6
+      '@types/uuid': ^9.0.1
       '@vercel/analytics': ^0.1.5
       '@vulcanjs/core': 0.7.2-alpha.8
       '@vulcanjs/crud': 0.7.2-alpha.8
@@ -1409,10 +1411,12 @@ importers:
       '@types/hast': 2.3.4
       '@types/node': 13.13.52
       '@types/nodemailer': 6.4.6
+      '@types/passport': 1.0.12
       '@types/react': 18.0.27
       '@types/react-dom': 18.0.10
       '@types/shelljs': 0.8.11
       '@types/unist': 2.0.6
+      '@types/uuid': 9.0.1
       chalk: 4.1.2
       esbuild-plugin-yaml: 0.0.1
       eslint: 7.32.0
@@ -11302,6 +11306,12 @@ packages:
   /@types/parse5/6.0.3:
     resolution: {integrity: sha512-SuT16Q1K51EAVPz1K29DJ/sXjhSQ0zjvsypYJ6tlwVsRV9jwW5Adq2ch8Dq8kDBCkYnELS7N7VNCSB5nC56t/g==}
 
+  /@types/passport/1.0.12:
+    resolution: {integrity: sha512-QFdJ2TiAEoXfEQSNDISJR1Tm51I78CymqcBa8imbjo6dNNu+l2huDxxbDEIoFIwOSKMkOfHEikyDuZ38WwWsmw==}
+    dependencies:
+      '@types/express': 4.17.17
+    dev: true
+
   /@types/prettier/2.7.1:
     resolution: {integrity: sha512-ri0UmynRRvZiiUJdiz38MmIblKK+oH30MztdBVR95dv/Ubw6neWSb8u1XpRb72L4qsZOhz+L+z9JD40SJmfWow==}
 
@@ -11513,6 +11523,10 @@ packages:
 
   /@types/unist/2.0.6:
     resolution: {integrity: sha512-PBjIUxZHOuj0R15/xuwJYjFi+KZdNFrehocChv4g5hu6aFroHue8m0lBP0POdK2nKzbw0cgV1mws8+V/JAcEkQ==}
+
+  /@types/uuid/9.0.1:
+    resolution: {integrity: sha512-rFT3ak0/2trgvp4yYZo5iKFEPsET7vKydKF+VRCxlQ9bpheehyAJH89dAkaLEq/j/RZXJIqcgsmPJKUP1Z28HA==}
+    dev: true
 
   /@types/warning/3.0.0:
     resolution: {integrity: sha512-t/Tvs5qR47OLOr+4E9ckN8AmP2Tf16gWq+/qA4iUGS/OOyHVO8wv2vjJuX8SNOUTJyWb+2t7wJm6cXILFnOROA==}

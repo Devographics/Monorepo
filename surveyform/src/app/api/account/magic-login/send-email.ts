@@ -30,7 +30,7 @@ const limiter = rateLimit({
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
   // NOTE: as a default rateLimit will use the IP but this is not totally reliable
   // we can use the requested email here for this precise scenario
-  keyGenerator: (request, response) => {
+  keyGenerator: (request: NextApiRequest, response) => {
     // request.ip
     return (request.body as MagicLoginSendEmailReqBody).destination;
   },
@@ -42,6 +42,7 @@ interface MagicLoginSendEmailReqBody {
 // NOTE: adding NextApiRequest, NextApiResponse is required to get the right typings in next-connect
 // this is the normal behaviour
 // TODO: get rid of nextConnect if possible
+// @ts-ignore
 const login = nextConnect<NextApiRequest, NextApiResponse>().post(
   checkBody,
   limiter,

@@ -1,5 +1,5 @@
 import { serialize } from "cookie";
-import { parseCookies } from "~/lib/server/cookies";
+import { NextApiRequest } from "next";
 
 export const TOKEN_NAME = "token";
 // in milliseconds
@@ -32,7 +32,6 @@ export function removeTokenCookie(res) {
 
   res.setHeader("Set-Cookie", cookie);
 }
-export function getTokenCookie(req) {
-  const cookies = parseCookies(req);
-  return cookies[TOKEN_NAME];
+export function getTokenCookie(req: NextApiRequest) {
+  return req.cookies[TOKEN_NAME];
 }

@@ -1,7 +1,6 @@
 // For the token
 // https://hapi.dev/module/iron/
 import Iron from "@hapi/iron";
-import type { Request } from "express";
 import type { NextApiRequest } from "next";
 import { UserType } from "~/lib/users/model";
 import { getTokenCookie } from "./auth-cookies";
@@ -27,7 +26,7 @@ export function encryptSession(session: UserType) {
  * @deprecated Next.js already parses cookies for us
  */
 export async function getSessionFromReq(
-  req: NextApiRequest | Request
+  req: NextApiRequest
 ): Promise<UserType> {
   const token = getTokenCookie(req);
   return getSessionFromToken(token);
@@ -36,7 +35,7 @@ export async function getSessionFromReq(
 /**
  * @param token
  */
-export async function getSessionFromToken(token: string) {
+export async function getSessionFromToken(token?: string) {
   const TOKEN_SECRET = getTokenSecret();
   return token && Iron.unseal(token, TOKEN_SECRET!, Iron.defaults);
 }

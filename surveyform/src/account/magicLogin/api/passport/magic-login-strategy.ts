@@ -15,6 +15,7 @@ import {
   updateUserEmailHash,
   upgradeUser,
 } from "./userUtils";
+import { NextApiRequest } from "next";
 
 /**
  * Compute the full magic link, with redirection parameter
@@ -22,7 +23,7 @@ import {
  * @param href
  * @returns
  */
-const computeMagicLink = (req: Request, href: string) => {
+const computeMagicLink = (req: NextApiRequest, href: string) => {
   const magicLinkUrl = new URL(`${serverConfig().appUrl}${href}`);
   const from = req.query?.from;
   if (from && typeof from === "string") {
@@ -40,7 +41,7 @@ async function sendMagicLink(
   // the auth token
   code: string,
   // the request
-  req: Request
+  req: NextApiRequest
 ) {
   const email = destination;
   // Important! otherwise we could send the email to a random user!

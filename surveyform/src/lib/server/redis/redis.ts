@@ -1,4 +1,5 @@
 import { initRedis } from "@devographics/redis";
+import { NextApiRequest, NextApiResponse } from "next";
 import { serverConfig } from "~/config/server";
 
 /**
@@ -12,7 +13,7 @@ export function connectToRedis() {
 /**
  * Middleware version for legacy next-connect
  */
-export const connectToRedisMiddleware = (req, res, next) => {
+export const connectToRedisMiddleware = (req: NextApiRequest, res: NextApiResponse, next) => {
   connectToRedis();
   return next();
 };
