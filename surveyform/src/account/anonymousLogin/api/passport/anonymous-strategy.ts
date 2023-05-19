@@ -1,7 +1,7 @@
-import { getUsersCollection, newMongoId } from "@devographics/mongo";
 import type { Request } from "express";
 import { StrategyCreatedStatic } from "passport";
 import { generateAnonymousUser } from "~/account/anonymousLogin/api";
+import { createUser } from "~/lib/users/db-actions/create";
 
 interface AnonymousLoginOptions {
   createUser: () => Promise<any>;
@@ -18,7 +18,7 @@ interface AnonymousLoginOptions {
  */
 class AnonymousLoginStrategy /* extends Strategy*/ {
   name: string = "anonymouslogin";
-  constructor(private _options: AnonymousLoginOptions) { }
+  constructor(private _options: AnonymousLoginOptions) {}
 
   authenticate(
     this: StrategyCreatedStatic & AnonymousLoginStrategy,
@@ -77,12 +77,7 @@ class AnonymousLoginStrategy /* extends Strategy*/ {
 const createAnonymousUser = async () => {
   const data = generateAnonymousUser();
   // Create a new anonymous user in the db
-  const Users = await getUsersCollection();
-  const { insertedId } = await Users.insertOne({
-    _id: newMongoId(),
-    ...data,
-  });
-  return await Users.findOne({ _id: insertedId });
+  return await createUser({ data });
 };
 
 export const anonymousLoginStrategy = new AnonymousLoginStrategy({

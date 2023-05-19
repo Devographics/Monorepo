@@ -7,6 +7,7 @@ import { UserDocument } from "~/account/user/typings";
 import { createMutator, updateMutator } from "@vulcanjs/crud/server";
 import { createEmailHash } from "~/account/email/api/encryptEmail";
 import { getUsersCollection } from "@devographics/mongo";
+import { loadUser } from "~/lib/users/db-actions/load";
 
 /**
  * If a valid anonymousId is provided, we add email to this anonymous user and upgrade it
@@ -54,12 +55,8 @@ export const createOrUpgradeUser = async ({
     return createdUser;
   } else {
     // 1.2) already logged as anonymous, upgrade to passwordless with email
-    const Users = await getUsersCollection<UserDocument>();
-    // const anonymousUser = (
-    //   await UserMongooseModel.findById(anonymousId)
-    // )?.toObject();
+    const anonymousUser = await loadUser({ userId: anonymousId });
 
-    const anonymousUser = await Users.findOne({ _id: anonymousId });
     if (!anonymousUser) {
       throw new Error(
         `Got anonymousId ${anonymousId} but no user is matching in database. Cannot upgrade account`
