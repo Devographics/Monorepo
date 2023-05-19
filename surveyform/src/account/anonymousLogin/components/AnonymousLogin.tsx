@@ -14,7 +14,7 @@ const useRefreshUser = () => {
   return async function refreshUser() {
     // NOTE: this step is very important,
     // it updates "useUser" hook so user is connected
-    await mutate(apiRoutes.account.user.href);
+    await mutate(apiRoutes.account.currentUser.href);
   };
 };
 

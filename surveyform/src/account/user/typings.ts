@@ -15,17 +15,15 @@ export type UserDocument = any & {
   groups: Array<string>;
 } & (
     | {
-        /**
-         * Legacy password based auth
-         */
-        authMode: undefined | "password";
-        emailHash: string;
-      }
+      /**
+       * Legacy password based auth
+       */
+      authMode: undefined | "password";
+      emailHash: string;
+    }
     | { authMode: "anonymous"; emailHash?: undefined }
     | {
-        authMode: "passwordless";
-        emailHash: string;
-      }
+      authMode: "passwordless";
+      emailHash: string;
+    }
   );
-
-export type UserType = UserDocument; //UserWithEmailDocument | AnonymousUserDocument;

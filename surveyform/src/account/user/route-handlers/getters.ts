@@ -3,7 +3,7 @@ import { getUsersCollection } from "@devographics/mongo";
 import { EditionMetadata, SurveyStatusEnum } from "@devographics/types";
 import { NextRequest, NextResponse } from "next/server";
 import { getSessionFromToken, TOKEN_NAME } from "~/account/user/api";
-import { UserDocument } from "~/lib/users/model";
+import { UserDocument } from "~/account/user/typings";
 import { ServerError } from "~/lib/validation";
 
 export async function getUserIdFromReq(req: NextRequest) {

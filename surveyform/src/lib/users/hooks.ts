@@ -1,6 +1,6 @@
 import useSWR from "swr";
 import { apiRoutes } from "~/lib/apiRoutes";
-import { UserType } from "~/lib/users/model";
+import { UserWithResponses } from "../responses/typings";
 
 const basicFetcher = (url: string): any => fetch(url).then((r) => r.json());
 
@@ -10,8 +10,8 @@ interface ApiData<T = any> {
 }
 
 export const useCurrentUser = () => {
-  const result = useSWR<UserType>(
-    apiRoutes.users.loadCurrentUser.href(),
+  const result = useSWR<UserWithResponses>(
+    apiRoutes.account.currentUser.href,
     basicFetcher
   );
   const { data, error, isLoading } = result;

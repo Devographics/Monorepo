@@ -1,5 +1,5 @@
 import { getUsersCollection, newMongoId } from "@devographics/mongo";
-import { UserDocument } from "~/lib/users/model";
+import { UserDocument } from "~/account/user/typings";
 
 /**
  * Create at least one user

@@ -6,7 +6,7 @@ import { getUsersCollection } from "@devographics/mongo";
 import { cookies } from "next/headers";
 import { cache } from "react";
 import { getSessionFromToken, TOKEN_NAME } from "~/account/user/api";
-import { UserDocument } from "~/lib/users/model";
+import { UserDocument } from "~/account/user/typings";
 
 export function getToken() {
   const c = cookies();

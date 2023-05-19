@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { tryGetCurrentUser } from "../../users/getters";
+import { tryGetCurrentUser } from "../../../../account/user/route-handlers/getters";
 import { ServerError, ServerErrorObject } from "~/lib/validation";
-import { createResponse } from "~/actions/responses/create";
+import { createResponse } from "~/lib/responses/db-actions/create";
 
 export async function POST(req: NextRequest, res: NextResponse) {
   try {

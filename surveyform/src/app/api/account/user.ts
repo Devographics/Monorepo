@@ -1,7 +1,7 @@
 import { getUsersCollection } from "@devographics/mongo";
 import { ObjectId } from "mongodb";
 import { getSessionFromReq } from "~/account/user/api";
-import { UserDocument } from "~/lib/users/model";
+import { UserDocument } from "~/account/user/typings";
 import { apiWrapper } from "~/lib/server/sentry";
 
 async function user(req, res) {

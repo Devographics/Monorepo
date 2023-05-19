@@ -7,8 +7,8 @@ export const apiRoutes = {
       href: "/api/account/logout",
       method: "POST",
     },
-    user: {
-      href: "/api/account/user",
+    currentUser: {
+      href: "/api/account/current-user",
       method: "GET",
     },
     magicLogin: {
@@ -41,11 +41,6 @@ export const apiRoutes = {
     saveResponse: {
       href: ({ responseId }: { responseId: string }) =>
         `/api/responses/saveResponse?responseId=${responseId}`,
-    },
-  },
-  users: {
-    loadCurrentUser: {
-      href: () => `/api/users/loadCurrentUser`,
     },
   },
 };

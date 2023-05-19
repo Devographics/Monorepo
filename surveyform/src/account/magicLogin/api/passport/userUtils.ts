@@ -3,7 +3,7 @@ import {
   // UserMongooseModel,
   UserTypeServer,
 } from "~/lib/users/model.server";
-import { UserDocument, UserType } from "~/lib/users/model";
+import { UserDocument } from "~/account/user/typings";
 import { createMutator, updateMutator } from "@vulcanjs/crud/server";
 import { createEmailHash } from "~/account/email/api/encryptEmail";
 import { getUsersCollection } from "@devographics/mongo";
@@ -23,7 +23,7 @@ export const createOrUpgradeUser = async ({
   email: string;
   /** Upgrade an existing anonymous user to "passwordless" with email */
   anonymousId?: string;
-} & Partial<UserType>) => {
+} & Partial<UserDocument>) => {
   if (!anonymousId) {
     // 1.1) not anonymous, first login: create a user
     // create a new user in the db and return it
@@ -118,7 +118,7 @@ export const upgradeUser = async ({
   // TODO: we should also trigger a script that will replace the "anonymousId" by "foundUser._id"
   // in all documents with a userId (eg responses)
   if (needUpdate) {
-    const updatedUser: UserType = {
+    const updatedUser: UserDocument = {
       ...foundUser,
     };
     if (mustVerify) {

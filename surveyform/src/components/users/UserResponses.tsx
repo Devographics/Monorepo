@@ -2,7 +2,7 @@ import Link from "next/link";
 import { EditionMetadata, SurveyStatusEnum } from "@devographics/types";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { ResponseDocument, SurveyEdition } from "@devographics/core-models";
-import { UserDocument } from "~/lib/users/model";
+import { UserDocument } from "~/account/user/typings";
 
 const UserResponses = ({
   responses,

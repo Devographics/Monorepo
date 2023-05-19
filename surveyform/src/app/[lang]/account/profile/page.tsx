@@ -5,7 +5,7 @@ import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "~/account/user/api/rsc-fetchers";
 import { getRawResponsesCollection } from "@devographics/mongo";
-import { UserDocument } from "~/lib/users/model";
+import { UserDocument } from "~/account/user/typings";
 import { cache } from "react";
 import { ResponseDocument } from "@devographics/core-models";
 

@@ -1,7 +1,7 @@
 import { AnonymousLoginForm } from "~/account/anonymousLogin/components/AnonymousLogin";
 import { StandaloneMagicLoginForm } from "~/account/magicLogin/components/StandaloneMagicLoginForm";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
-import { UserDocument } from "~/lib/users/model";
+import { UserDocument } from "~/account/user/typings";
 
 export const LoginDialog = ({
   hideGuest,

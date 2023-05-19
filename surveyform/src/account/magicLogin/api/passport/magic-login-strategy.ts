@@ -7,7 +7,7 @@ import { UserTypeServer } from "~/lib/users/model.server";
 
 import { routes } from "~/lib/routes";
 import { serverConfig } from "~/config/server";
-import { UserType } from "~/lib/users/model";
+import { UserDocument } from "~/account/user/typings";
 import {
   createOrUpgradeUser,
   findUserFromEmail,
@@ -85,7 +85,7 @@ async function sendMagicLink(
 
     // add anonymous id if necessary (BUT DO NOT VERIFY)
     await upgradeUser({
-      foundUser: foundUser as UserType,
+      foundUser: foundUser as UserDocument,
       anonymousId,
       makeVerified: false,
     });

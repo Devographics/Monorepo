@@ -2,7 +2,7 @@
 // https://hapi.dev/module/iron/
 import Iron from "@hapi/iron";
 import type { NextApiRequest } from "next";
-import { UserType } from "~/lib/users/model";
+import { UserDocument } from "~/account/user/typings";
 import { getTokenCookie } from "./auth-cookies";
 
 // Use an environment variable here instead of a hardcoded value for production
@@ -14,7 +14,7 @@ export const getTokenSecret = () => {
   return TOKEN_SECRET;
 };
 
-export function encryptSession(session: UserType) {
+export function encryptSession(session: UserDocument) {
   const TOKEN_SECRET = getTokenSecret();
   return Iron.seal(session, TOKEN_SECRET, Iron.defaults);
 }
@@ -27,7 +27,7 @@ export function encryptSession(session: UserType) {
  */
 export async function getSessionFromReq(
   req: NextApiRequest
-): Promise<UserType> {
+): Promise<UserDocument> {
   const token = getTokenCookie(req);
   return getSessionFromToken(token);
 }

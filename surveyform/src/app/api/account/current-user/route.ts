@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ServerError, ServerErrorObject } from "~/lib/validation";
-import { tryGetCurrentUser } from "../getters";
-import { loadCurrentUser } from "~/actions/users/loadCurrent";
+import { tryGetCurrentUser } from "~/account/user/route-handlers/getters";
+import { populateUserResponses } from "~/lib/responses/db-actions/populateUserResponses";
 
 export async function GET(req: NextRequest, res: NextResponse) {
   try {
     const currentUser = await tryGetCurrentUser(req);
-    const data = await loadCurrentUser({ currentUser });
-    return NextResponse.json({ data });
+    const currentUserWithResponse = await populateUserResponses({ user: currentUser });
+    return NextResponse.json({ data: currentUserWithResponse });
   } catch (error) {
     if (error instanceof ServerError) {
       const error_ = error as ServerErrorObject;

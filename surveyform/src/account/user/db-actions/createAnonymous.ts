@@ -3,7 +3,7 @@ import {
   // UserMongooseModel,
   UserTypeServer,
 } from "~/lib/users/model.server";
-import { UserDocument, UserType } from "~/lib/users/model";
+import { UserDocument } from "~/account/user/typings";
 import { createMutator, updateMutator } from "@vulcanjs/crud/server";
 import { createEmailHash } from "~/account/email/api/encryptEmail";
 
