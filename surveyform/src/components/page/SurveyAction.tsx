@@ -17,13 +17,12 @@ import { useCurrentUser } from "~/lib/users/hooks";
 import { Loading } from "~/components/ui/Loading";
 import { LoadingButton } from "~/components/ui/LoadingButton";
 import { getEditionSectionPath } from "~/lib/surveys/helpers";
-import { ErrorObject, createResponse } from "./services";
+import { createResponse } from "./services";
 import type { EditionMetadata } from "@devographics/types";
 import { ResponseDocument } from "@devographics/core-models";
 import { useEdition } from "../SurveyContext/Provider";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
-
-export const duplicateResponseErrorId = "duplicate_response";
+import { ResponseError } from "~/components/error/ResponseError";
 
 const EditionAction = ({ edition }: { edition: EditionMetadata }) => {
   const { id: editionId, surveyId } = edition;
@@ -85,7 +84,7 @@ const EditionAction = ({ edition }: { edition: EditionMetadata }) => {
   return (
     <div className="survey-action">
       <div className="survey-action-inner">{getSurveyAction()}</div>
-      {responseError && <ErrorItem responseError={responseError} />}
+      {responseError && <ResponseError responseError={responseError} />}
     </div>
   );
 };
@@ -198,37 +197,6 @@ const EditionLink = ({
     >
       <FormattedMessage id={message} />
     </Link>
-  );
-};
-
-const ErrorItem = ({ responseError }) => {
-  console.log("responseError", { responseError });
-  const { locale } = useLocaleContext();
-  const { id, message, error, properties } = responseError;
-  const { edition, editionPathSegments } = useEdition();
-  return (
-    <div className="survey-item-error error message">
-      <h5 className="error-code">
-        <code>{id}</code>
-      </h5>
-
-      <p>
-        <FormattedMessage id={`error.${id}`} fallback={message} />
-      </p>
-
-      {id === duplicateResponseErrorId && (
-        <Link
-          href={getEditionSectionPath({
-            edition,
-            response: { _id: properties.responseId },
-            editionPathSegments,
-            locale,
-          })}
-        >
-          <FormattedMessage id="general.continue_survey" />
-        </Link>
-      )}
-    </div>
   );
 };
 

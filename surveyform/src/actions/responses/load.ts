@@ -16,7 +16,7 @@ export async function loadResponse({
   const response = await RawResponses.findOne({ _id: responseId });
   if (!response) {
     throw new ServerError({
-      id: "missing_response_",
+      id: "missing_response",
       message: `Could not find response ${responseId}`,
       status: 404,
     });

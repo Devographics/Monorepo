@@ -30,7 +30,6 @@ export const apiRoutes = {
   admin: {
     dataExport: { href: "/api/admin/data-export" },
   },
-  // TODO: remove "-legacy" when migration to route handlers is done
   responses: {
     loadResponse: {
       href: ({ responseId }: { responseId: string }) =>

@@ -40,9 +40,11 @@ export async function mustGetSurveyEdition(params: {
   slug: string;
   year: string;
 }) {
-  const survey = await getSurveyEditionFromUrl(params);
-  if (!survey) {
+  const edition = await getSurveyEditionFromUrl(params);
+  console.log("// mustGetSurveyEdition");
+  console.log(edition);
+  if (!edition) {
     notFound();
   }
-  return survey;
+  return edition;
 }

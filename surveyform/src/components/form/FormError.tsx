@@ -5,6 +5,7 @@ import Row from "react-bootstrap/Row";
 import Toast from "react-bootstrap/Toast";
 import { FormInputProps } from "./typings";
 import type { ServerErrorObject } from "~/lib/validation";
+import { ResponseErrorContents } from "../error/ResponseError";
 
 export const FormError = ({ stateStuff }: FormInputProps) => {
   const { errorResponse } = stateStuff;
@@ -43,7 +44,9 @@ const Error = ({
         <strong className="me-auto">{id}</strong>
         <small>{status}</small>
       </Toast.Header>
-      <Toast.Body>{message}</Toast.Body>
+      <Toast.Body>
+        <ResponseErrorContents responseError={errorResponse} />
+      </Toast.Body>
     </Toast>
   );
 };

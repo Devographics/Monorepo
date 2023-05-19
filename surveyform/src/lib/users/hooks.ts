@@ -6,6 +6,7 @@ const basicFetcher = (url: string): any => fetch(url).then((r) => r.json());
 
 interface ApiData<T = any> {
   data: T;
+  error: any;
 }
 
 export const useCurrentUser = () => {
@@ -14,5 +15,5 @@ export const useCurrentUser = () => {
     basicFetcher
   );
   const { data, error, isLoading } = result;
-  return { currentUser: data?.data, loading: isLoading, error };
+  return { currentUser: data?.data, loading: isLoading, error: data?.error };
 };

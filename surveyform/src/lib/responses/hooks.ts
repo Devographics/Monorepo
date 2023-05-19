@@ -6,6 +6,7 @@ const basicFetcher = (url: string): any => fetch(url).then((r) => r.json());
 
 interface ApiData<T = any> {
   data: T;
+  error: any;
 }
 
 type ResponseWithSurvey = Required<ResponseDocument> & {
@@ -14,11 +15,10 @@ type ResponseWithSurvey = Required<ResponseDocument> & {
 
 export const useResponse = (params: { responseId: string }) => {
   const { responseId } = params;
-  const { data, error } = useSWR<ApiData<ResponseWithSurvey>>(
+  const { data, error, isLoading } = useSWR<ApiData<ResponseWithSurvey>>(
     apiRoutes.responses.loadResponse.href({ responseId }),
     basicFetcher
   );
   console.log("data", data, error);
-  const loading = !error && !data;
-  return { response: data?.data, loading, error };
+  return { response: data?.data, loading: isLoading, error: data?.error };
 };
