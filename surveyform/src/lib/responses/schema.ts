@@ -110,11 +110,13 @@ export const responseBaseSchema: Schema = {
     type: String,
     requiredDuring: Actions.CREATE,
     onCreate: ({ survey }) => survey.id,
+    clientMutable: true,
   },
   editionId: {
     type: String,
     requiredDuring: Actions.CREATE,
     onCreate: ({ edition }) => edition.id,
+    clientMutable: true,
   },
   isNormalized: {
     type: Boolean,
