@@ -1,4 +1,4 @@
-@use 'sass:math';
+@use "sass:math";
 .survey-item-contents {
   @include small {
     text-align: center;
@@ -16,7 +16,7 @@
   img {
     display: block;
     width: 100%;
-    height:auto;
+    height: auto;
   }
   &-small {
     max-width: 250px;
@@ -86,7 +86,7 @@
 }
 .survey-action {
   margin: 0 auto;
-  max-width: 300px;
+  max-width: 400px;
 }
 
 .survey-action-inner {
@@ -100,4 +100,9 @@
 }
 .survey-item-error {
   margin-top: math.div($spacing, 2);
+  background: rgba(255, 93, 93, 0.3);
+  color: rgba(253, 232, 232, 0.9);
+}
+.error-code {
+  font-size: $smallish-font;
 }

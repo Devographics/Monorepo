@@ -14,6 +14,7 @@ export interface ServerErrorObject {
   status: number;
   properties?: any;
   error?: any;
+  properties?: any;
 }
 
 export function ServerError(props: ServerErrorObject) {

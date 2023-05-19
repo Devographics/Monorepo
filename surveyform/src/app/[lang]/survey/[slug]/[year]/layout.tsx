@@ -137,7 +137,8 @@ If this error still happens in a few months (2023) open an issue with repro at N
   --bg-color: ${/*bgColor*/ colors.background};
   --text-color: ${/*textColor*/ colors.text};
   --link-color: ${/*linkColor*/ colors.primary};
-  --hover-color: ${/*hoverColor*/ colors.secondary};
+  /*--hover-color: ${/*hoverColor*/ colors.secondary};*/
+  --hover-color: white;
 }
   `;
 

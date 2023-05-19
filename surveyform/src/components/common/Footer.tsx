@@ -1,13 +1,13 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import { useUser } from "~/account/user/hooks";
+import { useCurrentUser } from "~/lib/users/hooks";
 import { routes } from "~/lib/routes";
 import { LogoutButton } from "~/account/user/components/LogoutButton";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 
 export const Footer = () => {
-  const { user } = useUser();
+  const { currentUser } = useCurrentUser();
 
   return (
     <footer className="footer">
@@ -24,14 +24,14 @@ export const Footer = () => {
           }}
         />{" "}
         |{" "}
-        {!user && (
+        {!currentUser && (
           <>
             <Link href={routes.account.login.href}>
               <FormattedMessage id="accounts.sign_in" />
             </Link>
           </>
         )}
-        {user && (
+        {currentUser && (
           <>
             <LogoutButton component={"a" as const} />
           </>

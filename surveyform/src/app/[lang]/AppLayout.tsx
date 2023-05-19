@@ -11,7 +11,7 @@ export function reportWebVitals(metric) {
 }
 */
 
-import { useUser } from "~/account/user/hooks";
+import { useCurrentUser } from "~/lib/users/hooks";
 
 import { LocaleContextProvider } from "~/i18n/context/LocaleContext";
 
@@ -32,7 +32,7 @@ export interface AppLayoutProps {
 
 export function AppLayout(props: AppLayoutProps) {
   const { children, localeId, locales, localeStrings } = props;
-  const { user } = useUser();
+  const { currentUser } = useCurrentUser();
   return (
     <SSRProvider>
       {/** @ts-ignore */}
@@ -54,7 +54,7 @@ export function AppLayout(props: AppLayoutProps) {
               <VulcanCurrentUserProvider
                 // @ts-ignore FIXME: weird error with groups
                 value={{
-                  currentUser: user || null,
+                  currentUser: currentUser || null,
                   loading:
                     false /* TODO: we don't get the loading information from useUser yet */,
                 }}

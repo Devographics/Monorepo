@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectToRedis } from "~/lib/server/redis";
 import { getRawResponsesCollection } from "@devographics/mongo";
 import { ServerError, ServerErrorObject } from "~/lib/validation";
-import { tryGetCurrentUser } from "../../currentUser/getters";
+import { tryGetCurrentUser } from "../../users/getters";
 
 export async function GET(req: NextRequest, res: NextResponse) {
   try {

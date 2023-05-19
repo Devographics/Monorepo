@@ -22,17 +22,13 @@ const extractErrorObject = (rawError): ErrorObject | null => {
 export async function createResponse({ data }: { data: any }) {
   // TODO: this should also invalidate the "getCurrentUser" query
   // we should figure how to do so using SWR, maybe in the code that calls startSurvey?
-  const fetchRes = await fetch(apiRoutes.response.createResponse.href(), {
+  const fetchRes = await fetch(apiRoutes.responses.createResponse.href(), {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(data),
   });
-  if (!fetchRes.ok) {
-    console.error(await fetchRes.text());
-    throw new Error("Could not start survey, request failed");
-  }
   const result: { data: any; error: any } = await fetchRes.json();
   return result;
 }
@@ -47,7 +43,7 @@ export async function saveResponse({
   // TODO: this should also invalidate the "getCurrentUser" query
   // we should figure how to do so using SWR, maybe in the code that calls startSurvey?
   const fetchRes = await fetch(
-    apiRoutes.response.saveResponse.href({
+    apiRoutes.responses.saveResponse.href({
       responseId,
     }),
     {

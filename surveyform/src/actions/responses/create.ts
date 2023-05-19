@@ -7,6 +7,8 @@ import { getResponseSchema } from "~/lib/responses/schema";
 import { restoreTypes, runFieldCallbacks, OnCreateProps } from "~/lib/schemas";
 import { ResponseDocument } from "@devographics/core-models";
 
+export const duplicateResponseErrorId = "duplicate_response";
+
 export async function createResponse({
   currentUser,
   clientData,
@@ -40,9 +42,10 @@ export async function createResponse({
   });
   if (currentResponse) {
     throw new ServerError({
-      id: "response_exists",
+      id: duplicateResponseErrorId,
       message: `You already started to answer the ${editionId} survey`,
       status: 400,
+      properties: { responseId: currentResponse._id },
     });
   }
 

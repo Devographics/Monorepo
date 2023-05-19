@@ -15,7 +15,7 @@ type ResponseWithSurvey = Required<ResponseDocument> & {
 export const useResponse = (params: { responseId: string }) => {
   const { responseId } = params;
   const { data, error } = useSWR<ApiData<ResponseWithSurvey>>(
-    apiRoutes.response.load.href({ responseId }),
+    apiRoutes.responses.loadResponse.href({ responseId }),
     basicFetcher
   );
   console.log("data", data, error);

@@ -31,28 +31,22 @@ export const apiRoutes = {
     dataExport: { href: "/api/admin/data-export" },
   },
   // TODO: remove "-legacy" when migration to route handlers is done
-  response: {
-    load: {
+  responses: {
+    loadResponse: {
       href: ({ responseId }: { responseId: string }) =>
-        `/api/response/load?responseId=${responseId}`,
+        `/api/responses/loadResponse?responseId=${responseId}`,
     },
-    // multi: {
-    //   href: "/api/response-legacy/multi"
-    // },
     createResponse: {
-      href: () => `/api/response/create`,
+      href: () => `/api/responses/createResponse`,
     },
     saveResponse: {
       href: ({ responseId }: { responseId: string }) =>
-        `/api/response/save?responseId=${responseId}`,
+        `/api/responses/saveResponse?responseId=${responseId}`,
     },
-    // saveResponse: {
-    //   href: ({ surveyId, editionId }: { surveyId: string, editionId: string }) => `/api/response-legacy/save-survey?surveyId=${surveyId}&editionId=${editionId}`
-    // }
   },
-  currentUser: {
-    load: {
-      href: () => `/api/currentUser/load`,
+  users: {
+    loadCurrentUser: {
+      href: () => `/api/users/loadCurrentUser`,
     },
   },
 };

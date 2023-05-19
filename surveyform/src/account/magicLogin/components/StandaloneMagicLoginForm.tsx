@@ -3,7 +3,7 @@
 import { useState, ReactNode, FormEventHandler } from "react";
 import { useIntlContext } from "@devographics/react-i18n";
 import { sendMagicLoginEmail } from "../lib/sendMagicLoginEmail";
-import { useUser } from "~/account/user/hooks";
+import { useCurrentUser } from "~/lib/users/hooks";
 import { useSearchParams } from "next/navigation";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { FormComponentEmail } from "./FormComponentEmail";
@@ -30,7 +30,7 @@ export const StandaloneMagicLoginForm = ({
     if (errorMsg) setErrorMsg("");
     if (successMsg) setErrorMsg("");
   };
-  const { user } = useUser();
+  const { currentUser } = useCurrentUser();
   const { locale } = useLocaleContext();
 
   async function handleSubmit(e) {
@@ -47,7 +47,7 @@ export const StandaloneMagicLoginForm = ({
 
     const body = {
       destination: email,
-      anonymousId: user?._id,
+      anonymousId: currentUser?._id,
       surveyId,
       editionId,
       locale,

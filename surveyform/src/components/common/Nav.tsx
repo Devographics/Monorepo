@@ -7,7 +7,7 @@ import Nav from "react-bootstrap/Nav";
 import LocaleSwitcher from "./LocaleSwitcher";
 import Link from "next/link";
 import { routes } from "~/lib/routes";
-import { useUser } from "~/account/user/hooks";
+import { useCurrentUser } from "~/lib/users/hooks";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 
 interface NavItemDef {
@@ -30,9 +30,9 @@ const loggedInNavContents: Array<NavItemDef> = [
 ];
 
 const Navigation = () => {
-  const { user } = useUser();
+  const { currentUser } = useCurrentUser();
   let navItems = navContents;
-  if (user) {
+  if (currentUser) {
     navItems = [...navItems, ...loggedInNavContents];
   }
   return (

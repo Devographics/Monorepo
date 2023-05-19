@@ -16,29 +16,8 @@ export async function getUserIdFromReq(req: NextRequest) {
 }
 
 /**
- * Get user, for authentication purpose
- * /!\ If you need to send back the user in the response,
- * instead get use "getUserIdFromReq" and write your own database call
- * @param req
- * @returns
- */
-export async function getUserFromReq(req: NextRequest) {
-  const _id = getUserIdFromReq(req);
-  if (!_id) return null;
-  // Refetch the user from db in order to get the freshest data
-  // NOTE: State of app is using "string" _id for legacy reason,
-  // be careful during dev that if "users" were seeded with Vulcan Next, the _id might ObjectId, thus failing connection
-  // In this case, just drop vulcanusers, the admin user will be recreated during seed
-  const Users = await getUsersCollection();
-  const user = await Users.findOne({ _id });
-  // const user = await UserMongooseModel.findOne({ _id });
-  return user;
-}
-
-/**
  * Experimental: a helper function to be called by Route Handlers
- * Will either return an error response or the value we want
- * (similarly to a Connect middleware)
+ * Will either throw an error or return the value we want
  */
 export async function tryGetCurrentUser(
   req: NextRequest

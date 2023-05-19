@@ -7,7 +7,7 @@ import { LOCALE_COOKIE_NAME } from "../cookie";
 import { localesDefsMap, defaultLocale } from "~/i18n/data/locales";
 import { captureException } from "@sentry/nextjs";
 import { LocaleDef, LocaleDefWithStrings } from "../typings";
-import { useUser } from "~/account/user/hooks";
+import { useCurrentUser } from "~/lib/users/hooks";
 
 interface LocaleContextValue {
   setLocale: (localId: string) => Promise<void>;
@@ -27,7 +27,7 @@ const dummyContext: LocaleContextValue = {
 export const LocaleContext = createContext<LocaleContextValue>(dummyContext);
 
 export const useSetLocale = (updateUser?: any) => {
-  const { user } = useUser();
+  const { currentUser } = useCurrentUser();
   const [cookies, setCookie, removeCookie] = useCookies();
   const router = useRouter();
   /**
@@ -39,10 +39,10 @@ export const useSetLocale = (updateUser?: any) => {
     removeCookie(LOCALE_COOKIE_NAME, { path: "/" });
     setCookie(LOCALE_COOKIE_NAME, newLocaleId, { path: "/" });
     // if user is logged in, change their `locale` profile property
-    if (user && updateUser) {
+    if (currentUser && updateUser) {
       try {
         await updateUser({
-          selector: { documentId: user._id },
+          selector: { documentId: currentUser._id },
           data: { locale: newLocaleId },
         });
       } catch (err) {

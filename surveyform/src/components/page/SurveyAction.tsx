@@ -13,7 +13,6 @@ import { SurveyStatusEnum } from "@devographics/types";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { useSurveyActionParams, useBrowserData, PrefilledData } from "./hooks";
 import { useRouter } from "next/navigation";
-import { useUser } from "~/account/user/hooks";
 import { useCurrentUser } from "~/lib/users/hooks";
 import { Loading } from "~/components/ui/Loading";
 import { LoadingButton } from "~/components/ui/LoadingButton";
@@ -24,14 +23,12 @@ import { ResponseDocument } from "@devographics/core-models";
 import { useEdition } from "../SurveyContext/Provider";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
 
-const duplicateResponseErrorId = "error.duplicate_response";
+export const duplicateResponseErrorId = "duplicate_response";
 
 const EditionAction = ({ edition }: { edition: EditionMetadata }) => {
   const { id: editionId, surveyId } = edition;
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState<
-    Array<ErrorObject | Error> | undefined
-  >();
+  const [responseError, setResponseError] = useState();
   const { status } = edition;
   const {
     currentUser,
@@ -42,21 +39,15 @@ const EditionAction = ({ edition }: { edition: EditionMetadata }) => {
   if (userLoading) return <Loading />;
   if (userError) throw new Error(userError);
 
-  console.log("// currentUser");
-  console.log(currentUser);
   const response = currentUser?.responses.find(
     (r) => r.surveyId === surveyId && r.editionId === editionId
   );
   const hasResponse = !!response;
 
-  const parsedErrors: Array<ErrorObject> | undefined = errors?.map((e) =>
-    "id" in e ? e : { id: "app.unknown_error" }
-  );
-
   // hide action button if there is already a duplicate response
-  const hideAction = parsedErrors?.some(
-    (e) => e.id === duplicateResponseErrorId
-  );
+  // const hideAction = parsedErrors?.some(
+  //   (e) => e.id === duplicateResponseErrorId
+  // );
 
   const isAvailable = status && status !== SurveyStatusEnum.CLOSED;
 
@@ -71,7 +62,7 @@ const EditionAction = ({ edition }: { edition: EditionMetadata }) => {
             loading={loading}
             setLoading={setLoading}
             currentUser={currentUser}
-            setErrors={setErrors}
+            setErrors={setResponseError}
           />
         );
       } else {
@@ -93,12 +84,8 @@ const EditionAction = ({ edition }: { edition: EditionMetadata }) => {
 
   return (
     <div className="survey-action">
-      {!hideAction && (
-        <div className="survey-action-inner">{getSurveyAction()}</div>
-      )}
-      {parsedErrors && (
-        <Errors parsedErrors={parsedErrors} currentSurveyResponse={response} />
-      )}
+      <div className="survey-action-inner">{getSurveyAction()}</div>
+      {responseError && <ErrorItem responseError={responseError} />}
     </div>
   );
 };
@@ -150,7 +137,7 @@ const SurveyStart = ({
         // TODO: we might want to use an Error boundary and a Suspense to handle loading and errors
         const result = await createResponse({ data });
         if (result.error) {
-          setErrors([result.error]);
+          setErrors(result.error);
           setLoading(false);
         } else {
           // no need to stop spinner because it'll disappear when we change page
@@ -167,11 +154,8 @@ const SurveyStart = ({
           router.push(pagePath);
         }
       } catch (error) {
-        // TODO: this is expecting a graphql syntax for errors,
-        // need to be updated
-        setErrors([error]);
+        setErrors(error);
         setLoading(false);
-        //setErrors(getErrors(error));
       } finally {
         setLoading(false);
       }
@@ -198,8 +182,6 @@ const EditionLink = ({
 }) => {
   const { edition, editionPathSegments } = useEdition();
   const { locale } = useLocaleContext();
-
-  console.log("editionLink", { response });
   return (
     <Link
       href={
@@ -219,28 +201,25 @@ const EditionLink = ({
   );
 };
 
-const Errors = ({ parsedErrors, currentSurveyResponse }) => {
-  return (
-    <>
-      {parsedErrors.map((error, i) => (
-        <ErrorItem key={i} error={error} response={currentSurveyResponse} />
-      ))}
-    </>
-  );
-};
-const ErrorItem = ({ error, response }) => {
-  console.log("errorItem", { error });
+const ErrorItem = ({ responseError }) => {
+  console.log("responseError", { responseError });
   const { locale } = useLocaleContext();
-  const { id, message, properties } = error;
+  const { id, message, error, properties } = responseError;
   const { edition, editionPathSegments } = useEdition();
   return (
     <div className="survey-item-error error message">
-      <FormattedMessage id={id} />{" "}
+      <h5 className="error-code">
+        <code>{id}</code>
+      </h5>
+
+      <p>
+        <FormattedMessage id={`error.${id}`} fallback={message} />
+      </p>
+
       {id === duplicateResponseErrorId && (
         <Link
           href={getEditionSectionPath({
             edition,
-            // @ts-ignore
             response: { _id: properties.responseId },
             editionPathSegments,
             locale,

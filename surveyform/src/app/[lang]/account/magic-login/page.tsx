@@ -1,5 +1,5 @@
 "use client";
-import { useUser } from "~/account/user/hooks";
+import { useCurrentUser } from "~/lib/users/hooks";
 /**
  * Verify the magic token from the url, and then sets the actual auth token,
  * then redirect
@@ -23,13 +23,13 @@ const useMagicLoginCheck = () => {
    * If the user is anonymous, we already have a current user without an email
    * We must pass their id
    */
-  const { user, loading: currentUserLoading } = useUser();
+  const { currentUser, loading: currentUserLoading } = useCurrentUser();
 
   useEffect(() => {
     setLoading(true);
     if (token && !currentUserLoading) {
       // Pass the current user id
-      const anonymousId = user?._id;
+      const anonymousId = currentUser?._id;
       verifyMagicToken(token, anonymousId || undefined)
         .then(() => {
           if (from) {

@@ -1,5 +1,5 @@
 "use client";
-import { useUser } from "~/account/user/hooks";
+import { useCurrentUser } from "~/lib/users/hooks";
 import { routes } from "~/lib/routes";
 import { useIntlContext } from "@devographics/react-i18n";
 import React from "react";
@@ -13,8 +13,8 @@ export const LogoutButton = ({
 }) => {
   const intl = useIntlContext();
   const LinkOrButton = (component || Button) as React.ComponentType<any>;
-  const { user } = useUser();
-  if (!user) return null;
+  const { currentUser } = useCurrentUser();
+  if (!currentUser) return null;
   return (
     <LinkOrButton
       onClick={async (evt) => {

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { tryGetCurrentUser } from "../../currentUser/getters";
+import { tryGetCurrentUser } from "../../users/getters";
 import { ServerError, ServerErrorObject } from "~/lib/validation";
 import { saveResponse } from "~/actions/responses/save";
 
