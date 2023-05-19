@@ -8,7 +8,7 @@ export interface RequestContext {
     db: Db
     redisClient?: any
     isDebug?: Boolean
-    entities: Entity[]
+    entities?: Entity[]
 }
 
 export type WatchedItem = 'locales' | 'entities' | 'surveys' | 'projects'

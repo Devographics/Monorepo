@@ -16,7 +16,6 @@ import { useState } from "react";
 // anymore. Instead, provide the right fragments directly, using composition with string templates.
 //import { expandQueryFragments } from "meteor/vulcan:core";
 import gql from "graphql-tag";
-import { useFormContext } from "~/components/form/FormContext";
 import { Alert } from "~/components/ui/Alert";
 import { FormItem } from "~/components/form/FormItem";
 import useSWR from "swr";

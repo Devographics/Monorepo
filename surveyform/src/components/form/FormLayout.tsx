@@ -1,7 +1,6 @@
 "use client";
 import SurveySectionHeading from "~/components/questions/SurveySectionHeading";
 import FormNav from "./FormNav";
-import { FormErrors } from "./FormErrors";
 import { FormElement } from "./FormElement";
 import { FormSubmit } from "./FormSubmit";
 import { FormInputProps } from "./typings";

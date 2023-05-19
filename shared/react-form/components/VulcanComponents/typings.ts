@@ -74,7 +74,7 @@ export interface PossibleFormComponents {
   Form: any;
   SmartForm: any;
   // Used by ui-boostrap and ui-material
-  FormItem;
+  FormItem: any;
   // flag to detect parent state
   __not_initialized?: boolean;
 }

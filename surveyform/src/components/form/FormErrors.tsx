@@ -7,7 +7,6 @@ import { FormattedMessage } from "~/components/common/FormattedMessage";
  * Display errors for the current form, based on the context
  */
 export const FormErrors = () => {
-  //   const { errors } = useFormContext();
   const errors = [];
   return (
     <div className="form-errors">

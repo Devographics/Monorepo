@@ -6,7 +6,7 @@ const responseCachePlugin = (responseCachePluginPkg as any).default
 
 import defaultTypeDefs from './graphql/typedefs/schema.graphql'
 import { RequestContext } from './types'
-import express from 'express'
+import express, { Request, Response } from 'express'
 // import { clearCache } from './caching'
 import { createClient } from 'redis'
 import { reinitialize } from './init'
@@ -52,7 +52,7 @@ Sentry.init({
 
 const isDev = process.env.NODE_ENV === 'development'
 
-const checkSecretKey = async (req: any, res: any, func) => {
+const checkSecretKey = async (req: Request, res: Response, func: () => Promise<void>) => {
     if (req?.query?.key !== process.env.SECRET_KEY) {
         // throw new Error('Authorization error')
         res.status(401).send('Not authorized')
@@ -218,8 +218,7 @@ const start = async () => {
 
     app.listen({ port: port }, () =>
         console.log(
-            `🚀 Server ready at http://localhost:${port}${server.graphqlPath} (in ${
-                finishedAt.getTime() - startedAt.getTime()
+            `🚀 Server ready at http://localhost:${port}${server.graphqlPath} (in ${finishedAt.getTime() - startedAt.getTime()
             }ms)`
         )
     )

@@ -1,22 +1,12 @@
 "use client";
-import { useState, useRef } from "react";
-import Overlay from "react-bootstrap/Overlay";
-import Tooltip from "react-bootstrap/Tooltip";
-import FormControl from "react-bootstrap/FormControl";
 import { FormItem } from "~/components/form/FormItem";
 import Form from "react-bootstrap/Form";
 
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { FormInputProps } from "~/components/form/typings";
-import { useFormContext } from "~/components/form/FormContext";
 import { FormOption } from "~/components/form/FormOption";
 
-import get from "lodash/get.js";
-import IconComment from "~/components/icons/Comment";
-import IconCommentDots from "~/components/icons/CommentDots";
-import { useIntlContext } from "@devographics/react-i18n";
 import isEmpty from "lodash/isEmpty.js";
-import debounce from "lodash/debounce.js";
 
 interface ExperienceProps extends FormInputProps {
   showDescription: boolean;

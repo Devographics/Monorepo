@@ -32,7 +32,7 @@ export const getEntityFragment = () => `entity {
     }
 }`
 
-export const getFacetFragment = addEntities => `
+export const getFacetFragment = (addEntities: boolean) => `
     facetBuckets {
         id
         count
@@ -82,9 +82,8 @@ query SurveysMetadataQuery {
           background
           backgroundSecondary
         }
-        ${
-            includeQuestions
-                ? `sections {
+        ${includeQuestions
+    ? `sections {
           id
           intlId
           slug
@@ -106,14 +105,14 @@ query SurveysMetadataQuery {
             }
           }
         }`
-                : ''
-        }
+    : ''
+  }
       }
     }
   }
 }`
 
-export const getSurveyQuery = ({ surveyId }) => `
+export const getSurveyQuery = ({ surveyId }: { surveyId: string }) => `
 query SurveyMetadataQuery {
   surveys {
     ${surveyId} {
@@ -157,7 +156,7 @@ query SurveyMetadataQuery {
   }
 }`
 
-export const getEditionQuery = ({ surveyId, editionId }) => `
+export const getEditionQuery = ({ surveyId, editionId }: { surveyId: string, editionId: string }) => `
 query ${editionId}MetadataQuery {
   _metadata(editionId: ${editionId}) {
     surveys {
@@ -276,7 +275,7 @@ query ${editionId}MetadataQuery {
 }
 `
 
-export const getEditionQuerySurveyForm = ({ surveyId, editionId }) => `
+export const getEditionQuerySurveyForm = ({ surveyId, editionId }: { surveyId: string, editionId: string }) => `
 query ${editionId}MetadataQuery {
   _metadata(editionId: ${editionId}) {
     surveys {

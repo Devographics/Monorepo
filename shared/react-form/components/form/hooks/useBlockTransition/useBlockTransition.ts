@@ -1,7 +1,5 @@
 import { useEffect, useRef } from "react";
 import { block } from "./block";
-import debug from "debug";
-const debugTransitions = debug("vn:router-transitions");
 
 /**
  * Can trigger an alert on unsaved changes
@@ -25,16 +23,7 @@ export const useBlockTransition = ({
 
   useEffect(() => {
     const isBlocking = !!unblockRef.current;
-    debugTransitions(
-      "running effect",
-      "should block",
-      shouldBlock,
-      "currently blocked",
-      isBlocking
-    );
-
     const onUnblock = () => {
-      debugTransitions("running unblock from effect");
       if (!shouldBlock) {
         if (unblockRef.current) {
           unblockRef.current();
@@ -44,24 +33,16 @@ export const useBlockTransition = ({
     // block
     const onBlocked = (evt?: BeforeUnloadEvent): string => {
       const message = getBlockedMessage(evt);
-      debugTransitions(
-        "user is being blocked after trying to leave the page, with message: " +
-          message
-      );
       if (evt) {
         evt.returnValue = message;
       }
       return message;
     };
     if (shouldBlock) {
-      debugTransitions(
-        "should block transition, setting up relevant event listener"
-      );
       unblockRef.current = block(onBlocked, onUnblock);
     }
     // unblock if not blocking anymore and was blocking previously
     if (!shouldBlock && isBlocking) {
-      debugTransitions("should unblock (state has been reinitialized)");
       if (unblockRef.current) {
         unblockRef.current();
       }

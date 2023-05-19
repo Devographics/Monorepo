@@ -4,8 +4,6 @@
         "**/*.tsx"
     ],
     "exclude": [
-        "**/*.test.ts",
-        "**/*.tests.ts",
         "node_modules"
     ],
     "compilerOptions": {
@@ -30,11 +28,6 @@
         "noFallthroughCasesInSwitch": true,
         "noUnusedLocals": false, // won't fail on unused variables
         "noUnusedParameters": false,
-        "paths": {
-            "~/*": [
-                "src/*"
-            ]
-        },
         "resolveJsonModule": true,
         "skipLibCheck": true,
         "strict": true,

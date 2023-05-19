@@ -116,7 +116,7 @@ const getOptionLabel = (
   */
 export const getFieldNames = (
   props: Pick<FormProps, "fields" | "addFields" | "removeFields">,
-  currentDocument,
+  currentDocument: any,
   optionsFromArgs: {
     excludeHiddenFields?: boolean;
     excludeRemovedFields?: boolean;

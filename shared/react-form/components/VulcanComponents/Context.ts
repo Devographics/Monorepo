@@ -3,7 +3,7 @@ import type { PossibleVulcanComponents } from "./typings";
 import { Dummy } from "./Dummy";
 
 const dummyHandler = {
-  get(target, property) {
+  get(target: any, property: string) {
     if (property in target) {
       return target[property];
     }

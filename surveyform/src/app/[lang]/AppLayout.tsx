@@ -1,8 +1,6 @@
 "use client";
-import { VulcanCurrentUserProvider } from "@devographics/react-form";
 
 import debug from "debug";
-const debugPerf = debug("vns:perf");
 // @see https://nextjs.org/docs/advanced-features/measuring-performance
 /*
 TODO: planned in v13 but not yet available 2022/11
@@ -10,9 +8,6 @@ export function reportWebVitals(metric) {
   debugPerf(metric); // The metric object ({ id, name, startTime, value, label }) is logged to the console
 }
 */
-
-import { useCurrentUser } from "~/lib/users/hooks";
-
 import { LocaleContextProvider } from "~/i18n/context/LocaleContext";
 
 import { ErrorBoundary } from "~/components/error";
@@ -32,7 +27,6 @@ export interface AppLayoutProps {
 
 export function AppLayout(props: AppLayoutProps) {
   const { children, localeId, locales, localeStrings } = props;
-  const { currentUser } = useCurrentUser();
   return (
     <SSRProvider>
       {/** @ts-ignore */}
@@ -51,22 +45,10 @@ export function AppLayout(props: AppLayoutProps) {
               localeId={localeId}
               localeStrings={localeStrings}
             >
-              <VulcanCurrentUserProvider
-                // @ts-ignore FIXME: weird error with groups
-                value={{
-                  currentUser: currentUser || null,
-                  loading:
-                    false /* TODO: we don't get the loading information from useUser yet */,
-                }}
-              >
-                {/** @ts-ignore */}
-                <ErrorBoundary
-                  proposeReload={true}
-                  proposeHomeRedirection={true}
-                >
-                  <Layout>{children}</Layout>
-                </ErrorBoundary>
-              </VulcanCurrentUserProvider>
+              {/** @ts-ignore */}
+              <ErrorBoundary proposeReload={true} proposeHomeRedirection={true}>
+                <Layout>{children}</Layout>
+              </ErrorBoundary>
             </LocaleContextProvider>
           </SWRConfig>
         }

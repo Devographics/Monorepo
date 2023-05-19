@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import { useIntlContext } from "@devographics/react-i18n";
 import { FormInputProps } from "~/components/form/typings";
-import { useFormContext } from "~/components/form/FormContext";
 
 import FormControl from "react-bootstrap/FormControl";
 

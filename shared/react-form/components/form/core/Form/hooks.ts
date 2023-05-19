@@ -38,21 +38,21 @@ export const useSubmitCallbacks = () => {
     failureFormCallbacks: [],
   });
   // add a callback to the form submission
-  const addToSubmitForm = (callback) => {
+  const addToSubmitForm = (callback: any) => {
     setCallbacks((cbs) => ({
       ...cbs,
       submitFormCallbacks: [...cbs.submitFormCallbacks, callback],
     }));
   };
   // add a callback to form submission success
-  const addToSuccessForm = (callback) => {
+  const addToSuccessForm = (callback: any) => {
     setCallbacks((cbs) => ({
       ...cbs,
       successFormCallbacks: [...cbs.successFormCallbacks, callback],
     }));
   };
   // add a callback to form submission failure
-  const addToFailureForm = (callback) => {
+  const addToFailureForm = (callback: any) => {
     setCallbacks((cbs) => ({
       ...cbs,
       failureFormCallbacks: [...cbs.failureFormCallbacks, callback],

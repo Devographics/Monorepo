@@ -1,6 +1,4 @@
 import type {
-    SurveyMetadata,
-    EditionMetadata,
     SectionMetadata,
     QuestionMetadata,
     OptionMetadata
@@ -9,13 +7,9 @@ import type {
 export const separator = '.'
 
 export const getQuestioni18nIds = ({
-    survey,
-    edition,
     section,
     question
 }: {
-    survey: SurveyMetadata
-    edition: EditionMetadata
     section: SectionMetadata
     question: QuestionMetadata
 }) => {
@@ -28,7 +22,7 @@ export const getQuestioni18nIds = ({
     const baseSegments = [sectionNamespace, questionNamespace]
     const base = intlId || baseSegments.join(separator)
 
-    const joinWithBase = suffix => [base, suffix].join(separator)
+    const joinWithBase = (suffix: string) => [base, suffix].join(separator)
 
     const ids = {
         // e.g. user_info.yearly_salary => "Yearly Salary" (legacy)
@@ -49,15 +43,9 @@ export const getQuestioni18nIds = ({
 }
 
 export const getOptioni18nIds = ({
-    survey,
-    edition,
-    section,
     question,
     option
 }: {
-    survey: SurveyMetadata
-    edition: EditionMetadata
-    section: SectionMetadata
     question: QuestionMetadata
     option: OptionMetadata
 }) => {
@@ -79,7 +67,7 @@ export const getOptioni18nIds = ({
 }
 
 // just to avoid warnings, delete later
-export const isIntlField = foo => false
-export const formatLabel = foo => 'foobar'
-export const getIntlKeys = foo => ['foo', 'bar']
-export const getIntlLabel = foo => 'foo'
+export const isIntlField = (foo: any) => false
+export const formatLabel = (foo: any) => 'foobar'
+export const getIntlKeys = (foo: any) => ['foo', 'bar']
+export const getIntlLabel = (foo: any) => 'foo'

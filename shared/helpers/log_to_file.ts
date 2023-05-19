@@ -1,4 +1,4 @@
-import fs, { promises as fsAsync } from 'fs'
+import fs from 'fs'
 import yaml from 'js-yaml'
 
 export const logToFile = async (fileName: string, object: any, options: any = {}) => {

@@ -14,7 +14,7 @@ import { nanoid } from 'nanoid'
 
 const clients: { [uri: string]: Promise<MongoClient> } = {}
 
-const connectToDb = async ({ dbUri }) => {
+const connectToDb = async ({ dbUri }: { dbUri: string }) => {
     const mongoClient = new MongoClient(dbUri, {
         // useNewUrlParser: true,
         // useUnifiedTopology: true,
@@ -25,14 +25,14 @@ const connectToDb = async ({ dbUri }) => {
     return mongoClient
 }
 
-const getClient = async ({ dbUri }): Promise<MongoClient> => {
+const getClient = async ({ dbUri }: { dbUri: string }): Promise<MongoClient> => {
     if (!(dbUri in clients)) {
         // important: do not await so we store the promise
         clients[dbUri] = connectToDb({ dbUri })
     }
     return await clients[dbUri]
 }
-export const getMongoDb = async ({ dbUri, dbName }): Promise<Db> => {
+export const getMongoDb = async ({ dbUri, dbName }: { dbUri: string, dbName: string }): Promise<Db> => {
     return (await getClient({ dbUri })).db(dbName)
 }
 

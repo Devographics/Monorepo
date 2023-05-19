@@ -91,7 +91,7 @@ export class StringsRegistry {
      * @param localeId 
      * @returns 
      */
-    getStrings(localeId) {
+    getStrings(localeId: string) {
         return this.Strings[localeId];
     }
 

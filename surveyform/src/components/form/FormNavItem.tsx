@@ -3,7 +3,6 @@ import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { getSectionCompletionPercentage } from "~/lib/responses/helpers";
-// import { useFormContext } from "@devographics/react-form";
 import { getEditionSectionPath } from "~/lib/surveys/helpers";
 import { SectionMetadata } from "@devographics/types";
 import { useEdition } from "../SurveyContext/Provider";

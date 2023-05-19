@@ -1,5 +1,3 @@
-import debug from "debug";
-const debugTransitions = debug("vn:route-transition");
 const BeforeUnloadEventType = "beforeunload";
 /**
  * Event triggered when a warning on unsaved changes is necessary
@@ -54,7 +52,6 @@ export const block = (
   setConfirmationMessage: (event?: BeforeUnloadEvent) => string,
   onUnblock?: Function
 ) => {
-  debugTransitions("running block function");
   // trigger a block event, to be handled at the framework level
   // TODO: setConfirmationMessage should be passed as well
   const blockEvent = new Event(BLOCK_TRANSITION_EVENT_TYPE);
@@ -64,9 +61,7 @@ export const block = (
   window.addEventListener(BeforeUnloadEventType, setConfirmationMessage);
   // return an unblock function to cancel
   const unblock = () => {
-    debugTransitions("running unblock function");
     if (onUnblock) {
-      debugTransitions("running user defined function");
       onUnblock(); // callback from user land
     }
     // trigger an unblock event, to be handled at the framework level

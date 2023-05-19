@@ -1,11 +1,7 @@
-import type {
-  CreateVariables,
-  UpdateVariables,
-  DeleteVariables,
-} from "@vulcanjs/crud";
 import { VulcanModel } from "@vulcanjs/model";
 import { VulcanUser } from "@vulcanjs/permissions";
 import { VulcanSchema } from "@vulcanjs/schema";
+// @ts-ignore
 import { DocumentNode } from "graphql";
 
 export interface FormState {
@@ -40,11 +36,11 @@ export interface PassedDownFormProps {
    */
   warnUnsavedChanges?: boolean;
   /*A callback called on form submission on the form data. Can return the submitted data object as well.*/
-  submitCallback?: (data) => any;
+  submitCallback?: (data: any) => any;
   /*A callback called on mutation success.*/
-  successCallback?: (document, meta: { form: any }) => void;
+  successCallback?: (document: any, meta: { form: any }) => void;
   /*A callback called on mutation failure.*/
-  errorCallback?: (document, error, meta: { form: any }) => void;
+  errorCallback?: (document: any, error: any, meta: { form: any }) => void;
 
   // Fragments
   /**
@@ -140,12 +136,12 @@ export interface FormProps<TModel = { [key in string]: any }>
   /** Callback ran on first render */
   initCallback?: Function;
   /*If a cancelCallback function is provided, a “cancel” link will be shown next to the form’s submit button and the callback will be called on click.*/
-  cancelCallback?: (document) => void;
+  cancelCallback?: (document: any) => void;
   /*A callback to call when a document is successfully removed (deleted).*/
-  removeSuccessCallback?: (document) => void;
+  removeSuccessCallback?: (document: any) => void;
 
   /*A callback called a every change or blur event inside the form.*/
-  changeCallback?: (currentDocument) => void;
+  changeCallback?: (currentDocument: any) => void;
 
   loading: boolean;
   // Other results from the Apollo query => should be ignored, in order to avoid dependency to graphql in the Form

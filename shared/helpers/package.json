@@ -26,11 +26,12 @@
     "license": "ISC",
     "dependencies": {
         "@devographics/types": "workspace:^1.0.0",
-        "@types/lodash": "^4.14.175",
         "js-yaml": "^4.1.0",
         "lodash": "^4.17.21"
     },
     "devDependencies": {
+        "@types/js-yaml": "^4.0.3",
+        "@types/lodash": "^4.14.194",
         "@types/node": "^18.11.18"
     }
 }
