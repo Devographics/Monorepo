@@ -1,10 +1,8 @@
-import { fetchEditionMetadataSurveyForm } from "@devographics/fetch";
 import { getUsersCollection } from "@devographics/mongo";
-import { EditionMetadata, SurveyStatusEnum } from "@devographics/types";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { getSessionFromToken, TOKEN_NAME } from "~/account/user/api";
 import { UserDocument } from "~/account/user/typings";
-import { ServerError } from "~/lib/validation";
+import { ServerError } from "~/lib/server-error";
 
 export async function getUserIdFromReq(req: NextRequest) {
   const token = req.cookies.get(TOKEN_NAME)?.value;
@@ -16,12 +14,36 @@ export async function getUserIdFromReq(req: NextRequest) {
 }
 
 /**
+ * Do not fail if user is not found
+ * => when fetching "current-user", a null user should be a 200, not a 401
+ * because it's expected to get no user if you are not logged in
+ * Use "mustGetCurrentUser" if you actually expect the user to be logged in
+ * @param req 
+ * @returns 
+ */
+export async function tryGetCurrentUser(req: NextRequest) {
+  const userId = await getUserIdFromReq(req);
+  if (!userId) {
+    return null
+  }
+  const Users = await getUsersCollection<UserDocument>();
+  const currentUser = await Users.findOne(
+    { _id: userId },
+    { projection: { createdAt: true } }
+  );
+  if (!currentUser) {
+    return null
+  }
+  return currentUser as UserDocument;
+
+}
+/**
  * Experimental: a helper function to be called by Route Handlers
  * Will either throw an error or return the value we want
  */
-export async function tryGetCurrentUser(
+export async function mustGetCurrentUser(
   req: NextRequest
-): Promise<UserDocument | NextResponse> {
+): Promise<UserDocument> {
   const userId = await getUserIdFromReq(req);
   if (!userId) {
     throw new ServerError({
@@ -33,7 +55,7 @@ export async function tryGetCurrentUser(
   const Users = await getUsersCollection<UserDocument>();
   const currentUser = await Users.findOne(
     { _id: userId },
-    { projection: { isAdmin: true, createdAt: true } }
+    { projection: { createdAt: true } }
   );
   if (!currentUser) {
     throw new ServerError({
@@ -42,5 +64,5 @@ export async function tryGetCurrentUser(
       status: 401,
     });
   }
-  return currentUser;
+  return currentUser as UserDocument;
 }

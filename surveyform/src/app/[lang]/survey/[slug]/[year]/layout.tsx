@@ -27,10 +27,10 @@ export async function generateStaticParams() {
 import { getSurveyImageUrl } from "~/lib/surveys/helpers";
 import { publicConfig } from "~/config/public";
 import { getEditionHomePath, getEditionTitle } from "~/lib/surveys/helpers";
-import { cachedFetchLocaleStrings } from "~/app/[lang]/fetchers";
 import { cache } from "react";
-import { getLocales } from "~/i18n/server/fetchLocalesRedis";
 import { getSurveyParamsTable } from "~/lib/surveys/data";
+import { cachedFetchLocaleStrings } from "~/i18n/server/rsc-fetchers";
+import { getLocales } from "~/i18n/db-actions/fetchLocales";
 interface SurveyPageServerProps {
   slug: string;
   year: string;

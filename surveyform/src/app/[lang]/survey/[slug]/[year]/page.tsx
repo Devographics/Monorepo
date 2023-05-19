@@ -5,8 +5,8 @@ import { initRedis } from "@devographics/redis";
 
 import { serverConfig } from "~/config/server";
 import { EditionPage as EditionPageComponent } from "./components";
-import { fetchLocaleFromUrl } from "~/app/[lang]/fetchers";
 import { StringsRegistry } from "@devographics/react-i18n";
+import { cachedFetchLocaleFromUrl } from "~/i18n/server/rsc-fetchers";
 
 async function getSurveyIntro(
   editionId: string,
@@ -16,11 +16,11 @@ async function getSurveyIntro(
   // It needs more work to get translated content in a robust manner
   // TODO: fetchLocaleFromUrl doesn't account for the survey context
   // TODO: correctly fallback to english
-  const locDef = await fetchLocaleFromUrl({ lang });
+  const locDef = await cachedFetchLocaleFromUrl(lang);
   const enLocDef =
     lang === "en-US"
       ? locDef
-      : await fetchLocaleFromUrl({ lang: "en-US" }, ["surveys"]);
+      : await cachedFetchLocaleFromUrl("en-US", "surveys");
   if (!locDef && !enLocDef) {
     console.warn("Could not load locales to get survey intro, lang:", locDef);
     return "";

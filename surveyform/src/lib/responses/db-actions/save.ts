@@ -1,6 +1,6 @@
 import { connectToRedis } from "~/lib/server/redis";
 import { getRawResponsesCollection } from "@devographics/mongo";
-import { validateResponse, Actions, ServerError } from "~/lib/validation";
+import { Actions } from "~/lib/validation";
 import { fetchEditionMetadataSurveyForm } from "@devographics/fetch";
 import { EditionMetadata } from "@devographics/types";
 import { getResponseSchema } from "~/lib/responses/schema";
@@ -9,6 +9,8 @@ import { ResponseDocument } from "@devographics/core-models";
 import { getResponseEmail } from "~/lib/responses/helpers";
 import { subscribe } from "~/lib/server/email/email_octopus";
 import { captureException } from "@sentry/nextjs";
+import { ServerError } from "~/lib/server-error";
+import { validateResponse } from "./validate";
 
 const emailPlaceholder = "*****@*****";
 

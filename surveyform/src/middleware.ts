@@ -61,6 +61,7 @@ function isFile(pathname: string) {
 function localize(request: NextRequest): NextResponse {
   const langFromPath = getLang(request.nextUrl.pathname);
   /**
+   * NOTE: we have similar code in route handlers that produce localized responses
    * Priorities:
    * 1. locale cookie
    * 2. lang already in URL

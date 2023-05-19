@@ -1,5 +1,4 @@
 import { AppLayout } from "./AppLayout";
-import { getLocales } from "~/i18n/server/fetchLocalesRedis";
 
 //*** I18n redirections
 // @see https://nextjs.org/docs/advanced-features/i18n-routing
@@ -8,7 +7,8 @@ import { initRedis } from "@devographics/redis";
 
 import { serverConfig } from "~/config/server";
 import { Metadata } from "next";
-import { mustFetchLocale } from "./fetchers";
+import { mustFetchLocale } from "../../i18n/server/rsc-fetchers";
+import { getLocales } from "~/i18n/db-actions/fetchLocales";
 
 // TODO: not yet compatible with having dynamic pages down the tree
 // we may have to call generateStaticParams in each static page instead

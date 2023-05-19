@@ -1,36 +1,5 @@
-import { ResponseDocument } from "@devographics/core-models";
-import {
-  SurveyMetadata,
-  EditionMetadata,
-  SurveyStatusEnum,
-} from "@devographics/types";
 import { z } from "zod";
 import { SchemaObject, Schema } from "./schemas";
-import { getResponseSchema } from "~/lib/responses/schema";
-
-export interface ServerErrorObject {
-  id: string;
-  message: string;
-  status: number;
-  properties?: any;
-  error?: any;
-}
-
-export class ServerError extends Error {
-  id: string
-  status: number
-  properties?: string
-  error?: any
-  constructor(props: ServerErrorObject) {
-    super(props.message)
-    console.error("// ServerError");
-    console.error(props);
-    this.id = props.id
-    this.status = props.status;
-    this.properties = props.properties
-    this.error = props.error
-  }
-}
 
 export enum ActionContexts {
   CLIENT = "client",
@@ -99,7 +68,7 @@ const getZodObject = <T>({
   return isRequired ? zType : zType.optional();
 };
 
-const getZodSchema = ({
+export const getZodSchema = ({
   schema,
   action,
   context,
@@ -126,88 +95,4 @@ const getZodSchema = ({
     });
   });
   return z.object(zObject).strict();
-};
-
-export const validateResponse = ({
-  currentUser,
-  existingResponse,
-  updatedResponse,
-  clientData,
-  serverData,
-  survey,
-  edition,
-  action,
-}: {
-  currentUser: any;
-  existingResponse?: ResponseDocument;
-  updatedResponse?: ResponseDocument;
-  clientData: ResponseDocument;
-  serverData: ResponseDocument;
-  survey: SurveyMetadata;
-  edition: EditionMetadata;
-  action: Actions;
-}) => {
-  // check that user can perform action
-  if (action === Actions.UPDATE) {
-    if (existingResponse) {
-      if (existingResponse.userId !== currentUser._id) {
-        throw new ServerError({
-          id: "update_not_authorized",
-          message: `User ${currentUser._id} not authorized to perform UPDATE on document ${existingResponse._id}`,
-          status: 400,
-        });
-      }
-    } else {
-      throw new ServerError({
-        id: "no_existing_response",
-        message: `Cannot validate UPDATE operation without an existing response`,
-        status: 400,
-      });
-    }
-  }
-
-  // check that edition is open
-  if (edition.status === SurveyStatusEnum.CLOSED) {
-    throw new ServerError({
-      id: "survey_closed",
-      message: `Survey ${edition.id} is currently closed, operation failed`,
-      status: 400,
-    });
-  }
-
-  const schema = getResponseSchema({ survey, edition });
-  const clientSchema = getZodSchema({
-    schema,
-    action,
-    context: ActionContexts.CLIENT,
-  });
-  const serverSchema = getZodSchema({
-    schema,
-    action,
-    context: ActionContexts.SERVER,
-  });
-
-  // parse client data
-  try {
-    clientSchema.parse(clientData);
-  } catch (error) {
-    throw new ServerError({
-      id: "client_data_validation_error",
-      message: `Encountered an error while validating client data during ${action}`,
-      status: 400,
-      error,
-    });
-  }
-
-  // parse server data
-  try {
-    serverSchema.parse(serverData);
-  } catch (error) {
-    throw new ServerError({
-      id: "server_data_validation_error",
-      message: `Encountered an error while validating server data during ${action}`,
-      status: 400,
-      error,
-    });
-  }
 };

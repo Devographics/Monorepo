@@ -38,42 +38,37 @@ export const promisesNodeCache = new NodeCache({
  *
  * /!\ PROVIDE A NODE CACHE WITH OPTION "useClones" DISABLED! Otherwise the "catch" won't work
  *
- *
- * @param nodeCache
- * @param cacheKey
- * @param TTL_MS
- * @returns
  */
 export const cachedPromise =
   (nodeCache: NodeCache, cacheKey: string, TTL_SECONDS?: number) =>
-  <TReturn>(asyncFn: () => Promise<TReturn>): Promise<TReturn> => {
-    let promise;
-    const promiseFromCache = nodeCache.get(cacheKey) as Promise<TReturn>;
-    if (!promiseFromCache) {
-      // console.info(`Cache MISS for cached promise "${cacheKey}"`);
-      promise = asyncFn().catch((err) => {
-        // This catch block will be called in case error
-        // I haven't found a way to both use "try/catch" and manipulate the promise, it just doesn't work
-        captureException(err);
-        // Don't forget to drop failed promises from the cache!
-        nodeCache.del(cacheKey);
-        console.error(
-          `Error in a cached promise "${cacheKey}", will flush the cache and return undefined`,
-          err
-        );
-        // NOTE: if you don't use a node cache with "useClones: false" you will never be able to catch the error
-        // because the promise gets cloned! Be careful to pass a "promisesNodeCache" with the right options
-        // @see https://github.com/node-cache/node-cache/issues/30
-        throw err;
-      });
-      if (typeof TTL_SECONDS !== "undefined") {
-        nodeCache.set(cacheKey, promise, TTL_SECONDS);
+    <TReturn>(asyncFn: () => Promise<TReturn>): Promise<TReturn> => {
+      let promise;
+      const promiseFromCache = nodeCache.get(cacheKey) as Promise<TReturn>;
+      if (!promiseFromCache) {
+        // console.info(`Cache MISS for cached promise "${cacheKey}"`);
+        promise = asyncFn().catch((err) => {
+          // This catch block will be called in case error
+          // I haven't found a way to both use "try/catch" and manipulate the promise, it just doesn't work
+          captureException(err);
+          // Don't forget to drop failed promises from the cache!
+          nodeCache.del(cacheKey);
+          console.error(
+            `Error in a cached promise "${cacheKey}", will flush the cache and return undefined`,
+            err
+          );
+          // NOTE: if you don't use a node cache with "useClones: false" you will never be able to catch the error
+          // because the promise gets cloned! Be careful to pass a "promisesNodeCache" with the right options
+          // @see https://github.com/node-cache/node-cache/issues/30
+          throw err;
+        });
+        if (typeof TTL_SECONDS !== "undefined") {
+          nodeCache.set(cacheKey, promise, TTL_SECONDS);
+        } else {
+          nodeCache.set(cacheKey, promise);
+        }
       } else {
-        nodeCache.set(cacheKey, promise);
+        // console.info(`Cache HIT for cached promise "${cacheKey}"`);
+        promise = promiseFromCache;
       }
-    } else {
-      // console.info(`Cache HIT for cached promise "${cacheKey}"`);
-      promise = promiseFromCache;
-    }
-    return promise;
-  };
+      return promise;
+    };
