@@ -1,8 +1,8 @@
-import { getUsersCollection } from "@devographics/mongo";
 import { NextRequest } from "next/server";
 import { getSessionFromToken, TOKEN_NAME } from "~/account/user/api";
 import { UserDocument } from "~/account/user/typings";
 import { ServerError } from "~/lib/server-error";
+import { loadUser } from "~/lib/users/db-actions/load";
 
 export async function getUserIdFromReq(req: NextRequest) {
   const token = req.cookies.get(TOKEN_NAME)?.value;
@@ -18,24 +18,19 @@ export async function getUserIdFromReq(req: NextRequest) {
  * => when fetching "current-user", a null user should be a 200, not a 401
  * because it's expected to get no user if you are not logged in
  * Use "mustGetCurrentUser" if you actually expect the user to be logged in
- * @param req 
- * @returns 
+ * @param req
+ * @returns
  */
 export async function tryGetCurrentUser(req: NextRequest) {
   const userId = await getUserIdFromReq(req);
   if (!userId) {
-    return null
+    return null;
   }
-  const Users = await getUsersCollection<UserDocument>();
-  const currentUser = await Users.findOne(
-    { _id: userId },
-    { projection: { createdAt: true } }
-  );
+  const currentUser = await loadUser({ userId });
   if (!currentUser) {
-    return null
+    return null;
   }
   return currentUser as UserDocument;
-
 }
 /**
  * Experimental: a helper function to be called by Route Handlers
@@ -52,11 +47,7 @@ export async function mustGetCurrentUser(
       status: 401,
     });
   }
-  const Users = await getUsersCollection<UserDocument>();
-  const currentUser = await Users.findOne(
-    { _id: userId },
-    { projection: { createdAt: true } }
-  );
+  const currentUser = await loadUser({ userId });
   if (!currentUser) {
     throw new ServerError({
       id: "user_not_found",
