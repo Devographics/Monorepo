@@ -20,7 +20,7 @@ import { appSettings } from './helpers/settings'
 
 // import { cacheAvatars } from './avatars'
 
-import { logToFile } from './helpers/debug'
+import { logToFile } from '@devographics/helpers'
 import { loadOrGetSurveys } from './load/surveys'
 
 //import Tracing from '@sentry/tracing'
@@ -63,7 +63,7 @@ const checkSecretKey = async (req: any, res: any, func) => {
 
 function getMongoUri() {
     const uri = process.env.MONGO_URI
-    if (!uri) throw new Error("MONGO_URI not defined")
+    if (!uri) throw new Error('MONGO_URI not defined')
     return uri
 }
 
@@ -93,7 +93,9 @@ const start = async () => {
     const entities = await loadOrGetEntities({})
     const context = { db, redisClient }
 
-    const isDevOrTest = !!(process.env.NODE_ENV && ["test", "development"].includes(process.env.NODE_ENV))
+    const isDevOrTest = !!(
+        process.env.NODE_ENV && ['test', 'development'].includes(process.env.NODE_ENV)
+    )
     const surveys = await loadOrGetSurveys({ includeDemo: isDevOrTest })
     const questionObjects = getQuestionObjects({ surveys })
 
@@ -216,7 +218,8 @@ const start = async () => {
 
     app.listen({ port: port }, () =>
         console.log(
-            `🚀 Server ready at http://localhost:${port}${server.graphqlPath} (in ${finishedAt.getTime() - startedAt.getTime()
+            `🚀 Server ready at http://localhost:${port}${server.graphqlPath} (in ${
+                finishedAt.getTime() - startedAt.getTime()
             }ms)`
         )
     )

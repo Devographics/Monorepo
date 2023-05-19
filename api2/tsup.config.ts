@@ -23,7 +23,8 @@ export default defineConfig([
         noExternal: [
             '@devographics/constants',
             '@devographics/templates',
-            '@devographics/core-models'
+            '@devographics/core-models',
+            '@devographics/helpers'
         ]
     }
 ])

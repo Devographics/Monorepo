@@ -4,8 +4,6 @@ import yaml from 'js-yaml'
 export const logToFile = async (fileName: string, object: any, options: any = {}) => {
     const { mode = 'append', timestamp = false } = options
     const logsDirPath = process.env.LOGS_DIRECTORY
-    console.log('////////////////////////////////// logToFile')
-    console.log(logsDirPath)
     if (!logsDirPath) {
         console.warn('Please define LOGS_DIRECTORY in your .env file to enable logging')
     } else {

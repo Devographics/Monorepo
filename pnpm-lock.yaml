@@ -187,6 +187,7 @@ importers:
     specifiers:
       '@devographics/constants': workspace:^1.0.0
       '@devographics/core-models': workspace:*
+      '@devographics/helpers': workspace:^1.0.0
       '@devographics/templates': workspace:^1.0.0
       '@devographics/types': workspace:*
       '@luckycatfactory/esbuild-graphql-loader': ^3.7.0
@@ -232,6 +233,7 @@ importers:
     dependencies:
       '@devographics/constants': link:../shared/constants
       '@devographics/core-models': link:../shared/core-models
+      '@devographics/helpers': link:../shared/helpers
       '@devographics/templates': link:../shared/templates
       '@octokit/core': 3.6.0
       '@sentry/node': 7.19.0

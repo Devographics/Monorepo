@@ -5,7 +5,7 @@ import fetch from 'node-fetch'
 import yaml from 'js-yaml'
 import { existsSync } from 'fs'
 import { readdir, readFile, lstat } from 'fs/promises'
-import { logToFile } from '../helpers/debug'
+import { logToFile } from '@devographics/helpers'
 import path from 'path'
 import { setCache } from '../helpers/caching'
 
