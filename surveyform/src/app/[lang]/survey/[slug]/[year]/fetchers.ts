@@ -41,8 +41,8 @@ export async function mustGetSurveyEdition(params: {
   year: string;
 }) {
   const edition = await getSurveyEditionFromUrl(params);
-  console.log("// mustGetSurveyEdition");
-  console.log(edition);
+  //console.debug("// mustGetSurveyEdition");
+  //console.debug(edition);
   if (!edition) {
     notFound();
   }
