@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { tryGetCurrentUser } from "../../../../account/user/route-handlers/getters";
-import { ServerError, ServerErrorObject } from "~/lib/validation";
+import { DetailedErrorObject } from "~/lib/validation";
 import { createResponse } from "~/lib/responses/db-actions/create";
+import { ServerError } from "~/lib/server-error";
 
 export async function POST(req: NextRequest, res: NextResponse) {
   try {
@@ -26,8 +27,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     return NextResponse.json({ data });
   } catch (error) {
     if (error instanceof ServerError) {
-      const error_ = error as ServerErrorObject;
-      return NextResponse.json({ error: error_ }, { status: error_.status });
+      return await error.toNextResponse(req)
     } else {
       return NextResponse.json(
         { error: `Could not create response` },

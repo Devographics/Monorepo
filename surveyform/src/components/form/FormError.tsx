@@ -1,10 +1,7 @@
 import { useState, useEffect, Dispatch, SetStateAction } from "react";
-import Button from "react-bootstrap/Button";
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
 import Toast from "react-bootstrap/Toast";
 import { FormInputProps } from "./typings";
-import type { ServerErrorObject } from "~/lib/validation";
+import type { DetailedErrorObject } from "~/lib/validation";
 import { ResponseErrorContents } from "../error/ResponseError";
 
 export const FormError = ({ stateStuff }: FormInputProps) => {
@@ -31,7 +28,7 @@ const Error = ({
   showToast,
   setShowToast,
 }: {
-  errorResponse: ServerErrorObject;
+  errorResponse: DetailedErrorObject;
   showToast: boolean;
   setShowToast: Dispatch<SetStateAction<boolean>>;
 }) => {

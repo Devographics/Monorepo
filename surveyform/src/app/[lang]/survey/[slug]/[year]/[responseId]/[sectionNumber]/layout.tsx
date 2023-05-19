@@ -2,11 +2,11 @@ import { initRedis } from "@devographics/redis";
 
 import { StringsRegistry } from "@devographics/react-i18n";
 import { Metadata } from "next";
-import { fetchLocaleFromUrl } from "~/app/[lang]/fetchers";
 import { serverConfig } from "~/config/server";
 import { SectionProvider } from "~/components/SectionContext/SectionProvider";
 import { getSectionKey, getEditionTitle } from "~/lib/surveys/helpers";
 import { getSurveyEditionFromUrl } from "../../fetchers";
+import { cachedFetchLocaleFromUrl } from "~/i18n/server/rsc-fetchers";
 
 interface SurveySectionParams {
   lang: string;
@@ -24,7 +24,7 @@ export async function generateMetadata({
   initRedis(serverConfig().redisUrl);
   const edition = await getSurveyEditionFromUrl(params);
   if (!edition) return {};
-  const loc = await fetchLocaleFromUrl(params);
+  const loc = await cachedFetchLocaleFromUrl(params.lang);
   if (!loc) {
     return {
       title: getEditionTitle({ edition }),

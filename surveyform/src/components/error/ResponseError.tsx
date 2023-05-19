@@ -3,14 +3,14 @@ import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { getEditionSectionPath } from "~/lib/surveys/helpers";
 import { useEdition } from "../SurveyContext/Provider";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
-import type { ServerErrorObject } from "~/lib/validation";
+import type { DetailedErrorObject } from "~/lib/validation";
 
 export const duplicateResponseErrorId = "duplicate_response";
 
 export const ResponseError = ({
   responseError,
 }: {
-  responseError: ServerErrorObject;
+  responseError: DetailedErrorObject;
 }) => {
   console.log("responseError", { responseError });
   const { locale } = useLocaleContext();
@@ -43,7 +43,7 @@ export const ResponseError = ({
 export const ResponseErrorContents = ({
   responseError,
 }: {
-  responseError: ServerErrorObject;
+  responseError: DetailedErrorObject;
 }) => {
   const { id, message, error, properties } = responseError;
   return (

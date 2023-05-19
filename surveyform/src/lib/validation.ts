@@ -1,6 +1,14 @@
 import { z } from "zod";
 import { SchemaObject, Schema } from "./schemas";
 
+export interface DetailedErrorObject {
+  id: string;
+  message: string;
+  properties?: any;
+  error?: any;
+  status?: number
+}
+
 export enum ActionContexts {
   CLIENT = "client",
   SERVER = "server",
