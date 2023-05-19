@@ -55,6 +55,8 @@ query SurveysMetadataQuery {
       editions {
         id
         surveyId
+        startedAt
+        endedAt
         year
         status
         imageUrl
@@ -62,6 +64,16 @@ query SurveysMetadataQuery {
         credits {
           id
           role
+          entity {
+            name
+            twitterName
+            company {
+              name
+              homepage {
+                url
+              }
+            }
+          }
         }
         colors {
           primary
@@ -117,6 +129,16 @@ query SurveyMetadataQuery {
           credits {
             id
             role
+            entity {
+              name
+              twitterName
+              company {
+                name
+                homepage {
+                  url
+                }
+              }
+            }
           }
           surveyId
           year
@@ -166,6 +188,16 @@ query ${editionId}MetadataQuery {
         credits {
           id
           role
+          entity {
+            name
+            twitterName
+            company {
+              name
+              homepage {
+                url
+              }
+            }
+          }
         }
         colors {
           primary
@@ -179,10 +211,6 @@ query ${editionId}MetadataQuery {
           imageUrl
           name
           url
-        }
-        credits {
-          id
-          role
         }
         sections {
           id
@@ -293,6 +321,16 @@ query ${editionId}MetadataQuery {
         credits {
           id
           role
+          entity {
+            name
+            twitterName
+            company {
+              name
+              homepage {
+                url
+              }
+            }
+          }
         }
         sections {
           id

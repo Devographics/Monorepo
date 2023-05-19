@@ -48,6 +48,7 @@ export const generateResolvers = async ({
         Query: { _metadata: getGlobalMetadataResolver({ surveys }), surveys: () => surveys },
         Surveys: surveysFieldsResolvers,
         ItemComments: commentsResolverMap,
+        CreditItem: creditResolverMap,
         Entity: entityResolverMap,
         EditionMetadata: editionMetadataResolverMap,
         SectionMetadata: sectionMetadataResolverMap,
@@ -334,6 +335,16 @@ export const commentsResolverMap: ResolverMap = {
             editionId: edition.id,
             context
         })
+}
+
+/*
+
+Credit
+
+*/
+export const creditResolverMap = {
+    entity: async ({ id }: { id: string }, {}, context: RequestContext) =>
+        await getEntity({ id, context })
 }
 
 /*

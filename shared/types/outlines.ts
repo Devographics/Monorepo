@@ -1,4 +1,5 @@
 import { DbPaths } from './api'
+import { Entity } from './entities'
 
 export interface SurveyConfig {
     /** state-of-js */
@@ -34,6 +35,9 @@ export type Edition = {
     id: string
     sections: Section[]
     apiSections: Section[]
+    // TODO: should these be strings or dates?
+    startedAt: string
+    endedAt: string
     // TODO: maybe we should use a string here, so we can have "Summer 2023" instead of "2023"
     // it's never really used as a number in the code
     year: number
@@ -81,6 +85,8 @@ export type Tshirt = {
 
 export type Credit = {
     id: string
+    role: string
+    entity?: Entity
 }
 
 export type Section = {

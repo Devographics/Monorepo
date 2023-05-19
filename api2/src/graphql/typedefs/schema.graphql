@@ -86,6 +86,7 @@ type SponsorItem {
 type CreditItem {
     id: String
     role: String
+    entity: Entity
 }
 
 type SectionMetadata {
