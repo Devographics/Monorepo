@@ -92,7 +92,7 @@ export const getNormResponsesCollection = async (survey?: Survey) => {
 /**
  * Handle the connection automatically when called the first time
  */
-export const getUsersCollection = async <T extends Document>() => {
+export const getUsersCollection = async <T = any>() => {
     const db = await getAppDb()
     return db.collection<T>('users')
 }

@@ -6,19 +6,19 @@ import { createUser } from "~/lib/users/db-actions/create";
  * Create at least one user
  * @param context
  */
-export const seedTestUser = async () => {
-  const Users = await getUsersCollection();
+export async function seedTestUser() {
+  const Users = await getUsersCollection<UserDocument>();
   const count = await Users.countDocuments();
 
   if (count === 0) {
     console.log("No user found, seeding admin");
-    const data: UserDocument = {
+    const data = {
       email: "test@devographics.com",
     };
     try {
       const testUser = await createUser({ data });
       console.log(
-        `Seed a test user with email ${testUser?.email} and _id ${testUser?._id}`
+        `Seed a test user with email ${testUser?.emailHash} and _id ${testUser?._id}`
       );
     } catch (error) {
       console.error("Could not seed test user", error);

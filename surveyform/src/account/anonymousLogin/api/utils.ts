@@ -1,7 +1,7 @@
 import { UserDocument } from "~/account/user/typings";
 
 export const generateAnonymousUser =
-  (): UserDocument /*AnonymousUserDocument*/ => {
+  (): UserDocument => {
     return {
       groups: [],
       isAdmin: false,

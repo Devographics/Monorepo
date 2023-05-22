@@ -9,8 +9,14 @@ export type NewUserDocument = Omit<UserDocument, "emailHash" | "groups"> & {
   groups?: UserDocument["groups"];
 };
 
-export type UserDocument = any & {
+export type UserDocument = {
+  _id?: string;
+  /** @deprecated There is no admin on surveyform anymore */
   isAdmin?: boolean;
+  /** 
+   * For passwordless, false until the user clicked the magic link for the first time 
+   * TODO: verify spec for anon user: they should probably stay always unverified
+   **/
   isVerified?: boolean;
   groups: Array<string>;
 } & (
