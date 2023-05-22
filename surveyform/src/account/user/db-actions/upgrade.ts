@@ -1,15 +1,9 @@
-import {
-  User,
-  // UserMongooseModel,
-  UserTypeServer,
-} from "~/lib/users/model.server";
 import { UserDocument } from "~/account/user/typings";
-import { createMutator, updateMutator } from "@vulcanjs/crud/server";
-import { createEmailHash } from "~/account/email/api/encryptEmail";
 import { getUsersCollection } from "@devographics/mongo";
 
 /**
  * If necessary, make the user verified and add an anonymousId
+ * TODO: not very clear when to call this function
  * @param param0
  */
 export const upgradeUser = async ({
@@ -17,7 +11,7 @@ export const upgradeUser = async ({
   anonymousId,
   makeVerified,
 }: {
-  foundUser: UserTypeServer;
+  foundUser: UserDocument;
   anonymousId?: string;
   // Set to true if the user must be verified
   makeVerified: boolean;
@@ -60,12 +54,14 @@ export const upgradeUser = async ({
     if (mustChangeAuthMode) {
       updatedUser.authMode = "passwordless";
     }
-    const { data: userAfterUpdate } = await updateMutator<UserTypeServer>({
-      model: User,
-      dataId: foundUser._id as string,
-      data: updatedUser,
-      asAdmin: true,
-    });
+
+    const Users = await getUsersCollection()
+    await Users.updateOne({ _id: foundUser._id }, {
+      $set: {
+        ...updatedUser
+      }
+    })
+    const userAfterUpdate = await Users.findOne({ _id: foundUser._id })
     return userAfterUpdate;
   }
   return foundUser;

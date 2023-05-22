@@ -1,10 +1,4 @@
-import {
-  User,
-  // UserMongooseModel,
-  UserTypeServer,
-} from "~/lib/users/model.server";
 import { UserDocument } from "~/account/user/typings";
-import { createMutator, updateMutator } from "@vulcanjs/crud/server";
 import { createEmailHash } from "~/account/email/api/encryptEmail";
 import { getUsersCollection } from "@devographics/mongo";
 
@@ -23,5 +17,6 @@ export const findUserFromEmail = async (email: string) => {
     },
     { sort: { createdAt: -1 }, limit: 1 }
   ).toArray();
+  if (usersByEmail.length > 0) console.warn("Found more than one user (_id:" + usersByEmail[0]._id + ")")
   return usersByEmail[0];
 };

@@ -27,3 +27,8 @@ export type UserDocument = any & {
       emailHash: string;
     }
   );
+
+/**
+ * Minimal structure to authenticate via email
+ */
+export type EmailUser = { _id: string, emailHash: string, emailHash2: string }
