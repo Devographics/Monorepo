@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { tryGetCurrentUser } from "../../../../account/user/route-handlers/getters";
-import { DetailedErrorObject } from "~/lib/validation";
+import { tryGetCurrentUser } from "~/account/user/route-handlers/getters";
 import { createResponse } from "~/lib/responses/db-actions/create";
 import { ServerError } from "~/lib/server-error";
 
@@ -13,8 +12,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
     let clientData: any;
     try {
       clientData = await req.json();
-      console.log("// clientData");
-      console.log(clientData);
     } catch (err) {
       throw new ServerError({
         id: "invalid_data",
@@ -27,7 +24,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     return NextResponse.json({ data });
   } catch (error) {
     if (error instanceof ServerError) {
-      return await error.toNextResponse(req)
+      return await error.toNextResponse(req);
     } else {
       return NextResponse.json(
         { error: `Could not create response` },

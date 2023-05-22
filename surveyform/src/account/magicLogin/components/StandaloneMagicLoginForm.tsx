@@ -50,7 +50,7 @@ export const StandaloneMagicLoginForm = ({
       anonymousId: currentUser?._id,
       surveyId,
       editionId,
-      locale,
+      locale: locale.id,
     };
 
     try {

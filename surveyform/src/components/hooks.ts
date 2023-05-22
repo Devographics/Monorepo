@@ -15,7 +15,8 @@ interface SurveyParams {
 }
 
 export const useSurveyParams = (dontThrow?: boolean): SurveyParams => {
-  const { edition, surveySlug, editionSlug } = useEdition(dontThrow);
+  const result = useEdition(dontThrow);
+  const { edition, surveySlug, editionSlug } = result;
   if (!edition) {
     // Needed for components that use the survey if its there, like the login form
     if (dontThrow) {
@@ -28,7 +29,7 @@ export const useSurveyParams = (dontThrow?: boolean): SurveyParams => {
     surveySlug,
     editionSlug,
     surveyId: edition.survey.id,
-    editionId: edition.surveyId,
+    editionId: edition.id,
   };
 };
 

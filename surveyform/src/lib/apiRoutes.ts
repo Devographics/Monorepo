@@ -4,26 +4,26 @@
 export const apiRoutes = {
   account: {
     logout: {
-      href: "/api/account/logout",
+      href: () => "/api/account/logout",
       method: "POST",
     },
     currentUser: {
-      href: "/api/account/current-user",
+      href: () => "/api/account/current-user",
       method: "GET",
     },
     magicLogin: {
       verifyToken: {
-        href: "/api/account/magic-login/verify-token",
+        href: () => "/api/account/magic-login/verify-token",
         method: "GET",
       },
       sendEmail: {
-        href: "/api/account/magic-login/send-email",
+        href: () => "/api/account/magic-login/send-email",
         method: "POST",
       },
     },
     anonymousLogin: {
       login: {
-        href: "/api/account/anonymous-login/login",
+        href: () => "/api/account/anonymous-login/login",
       },
     },
   },
