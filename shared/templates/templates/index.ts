@@ -14,6 +14,8 @@ export * from './project'
 export * from './happiness'
 export * from './opinion'
 
+export * from './quiz'
+
 export * from './feature'
 export * from './tool'
 

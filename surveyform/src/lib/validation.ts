@@ -1,12 +1,14 @@
 import { z } from "zod";
 import { SchemaObject, Schema } from "./schemas";
 
+export const GLOBAL_TEXTFIELD_LIMIT = 500;
+
 export interface DetailedErrorObject {
   id: string;
   message: string;
   properties?: any;
   error?: any;
-  status?: number
+  status?: number;
 }
 
 export enum ActionContexts {
@@ -71,7 +73,7 @@ const getZodObject = <T>({
 
   let zType = getZodType(type);
   if (zType === z.string()) {
-    zType = zType.max(500);
+    zType = zType.max(GLOBAL_TEXTFIELD_LIMIT);
   }
   return isRequired ? zType : zType.optional();
 };

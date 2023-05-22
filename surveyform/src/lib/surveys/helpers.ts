@@ -20,7 +20,6 @@ import {
 } from "@devographics/types";
 import { LocaleDef } from "~/i18n/typings";
 import { QuestionFormObject } from "~/components/form/typings";
-import { applyTemplateToQuestionObject } from "../parser/addTemplateToSurvey";
 import { isAbsoluteUrl } from "~/lib/utils";
 
 /*
@@ -30,7 +29,7 @@ Note: we currently need to prefix all paths with the edition id
 TODO: In the future, get rid of this prefix, and replace formPaths with rawPaths?
 
 */
-const getFormPaths = ({
+export const getFormPaths = ({
   edition,
   question,
 }: {
@@ -80,12 +79,12 @@ export const getQuestionObject = ({
   // question.showOther = question.allowother;
 
   // get template from either question or parent section
-  const templateName = question?.template || section?.template;
-  if (!templateName) {
-    throw new Error(
-      `Question ${question.id} does not have a template specified.`
-    );
-  }
+  // const templateName = question?.template || section?.template;
+  // if (!templateName) {
+  //   throw new Error(
+  //     `Question ${question.id} does not have a template specified.`
+  //   );
+  // }
 
   // apply core template to question
   // NOTE: not currently necessary, we get all the data we need from API
@@ -95,18 +94,19 @@ export const getQuestionObject = ({
   // }
 
   // apply form template to question
-  const questionTemplateOutput = applyTemplateToQuestionObject({
-    survey: edition.survey,
-    edition,
-    section,
-    question: questionObject,
-    number,
-  });
+  // const questionTemplateOutput = applyTemplateToQuestionObject({
+  //   survey: edition.survey,
+  //   edition,
+  //   section,
+  //   question: questionObject,
+  //   number,
+  // });
 
   // add extra properties
   const formPaths = getFormPaths({ edition, question });
   const questionFormObject = {
-    ...questionTemplateOutput,
+    ...question,
+    // ...questionTemplateOutput,
     type: question.optionsAreNumeric ? Number : String,
     formPaths,
     fieldName: formPaths.response,
@@ -128,7 +128,7 @@ export const getSurveyImageUrl = (edition: EditionMetadata) => {
   let finalImageUrl = isAbsoluteUrl(imageUrl)
     ? imageUrl
     : // legacy behaviour
-    `/surveys/${imageUrl}`;
+      `/surveys/${imageUrl}`;
 
   return finalImageUrl;
 };
@@ -162,7 +162,7 @@ export function getReadOnlyPath({
   survey,
 }: {
   survey: SurveyEditionDescription;
-}) { }
+}) {}
 // specific section path for the form
 export function getEditionSectionPath({
   edition,

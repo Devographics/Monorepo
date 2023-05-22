@@ -1,7 +1,6 @@
 "use client";
 import { EditionMetadata } from "@devographics/types";
 import { createContext, ReactNode, useContext } from "react";
-import { parseEdition } from "~/lib/parser/parseSurvey";
 
 interface EditionContextType {
   edition: EditionMetadata;
@@ -26,12 +25,10 @@ export const EditionProvider = ({
 }: EditionContextType & {
   children: ReactNode;
 }) => {
-  // @ts-ignore
-  const parsedEdition = parseEdition(edition);
   return (
     <EditionContext.Provider
       value={{
-        edition: parsedEdition,
+        edition,
         editionPathSegments,
         editionHomePath,
         surveySlug,

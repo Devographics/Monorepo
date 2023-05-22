@@ -13,6 +13,7 @@ import { FormInputProps } from "./typings";
 import { CommentTrigger, CommentInput } from "./FormComment";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { getQuestioni18nIds } from "@devographics/i18n";
+import { getFormPaths } from "~/lib/surveys/helpers";
 
 interface FormItemProps extends FormInputProps {
   children: ReactNode;
@@ -32,11 +33,19 @@ export const FormItem = (props: FormItemProps) => {
   //   noteIntlId: noteIntlId_,
   // } = props;
 
-  const { children, response, path, question, isFirstQuestion, readOnly } =
-    props;
+  const {
+    children,
+    response,
+    path,
+    edition,
+    question,
+    isFirstQuestion,
+    readOnly,
+  } = props;
 
-  const { formPaths, allowComment } = question;
+  const { allowComment } = question;
 
+  const formPaths = getFormPaths({ edition, question });
   const commentPath = formPaths.comment;
   const commentValue = commentPath && get(response, commentPath);
 

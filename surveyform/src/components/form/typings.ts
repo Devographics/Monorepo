@@ -5,13 +5,8 @@ import {
   OptionMetadata,
   DbPaths,
   SectionMetadata,
+  QuestionMetadata,
 } from "@devographics/types";
-import { QuestionFormTemplateOutput } from "~/lib/parser/addTemplateToSurvey";
-
-export interface QuestionFormObject extends QuestionFormTemplateOutput {
-  type: NumberConstructor | StringConstructor;
-  formPaths: DbPaths;
-}
 
 export type FormInputProps = {
   response: ResponseDocument;
@@ -20,7 +15,7 @@ export type FormInputProps = {
   survey: SurveyMetadata;
   edition: EditionMetadata;
   section: SectionMetadata;
-  question: QuestionFormObject;
+  question: QuestionMetadata;
   updateCurrentValues: any;
   submitForm: any;
   isFirstQuestion?: boolean;

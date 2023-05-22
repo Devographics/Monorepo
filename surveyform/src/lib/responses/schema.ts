@@ -2,7 +2,7 @@ import type { SurveyMetadata, EditionMetadata } from "@devographics/types";
 import { Schema, extendSchema } from "~/lib/schemas";
 import { nanoid } from "nanoid";
 import { getCompletionPercentage, getKnowledgeScore } from "./helpers";
-import { getQuestionObject } from "~/lib/surveys/helpers";
+import { getFormPaths } from "~/lib/surveys/helpers";
 export enum Actions {
   CREATE = "create",
   UPDATE = "update",
@@ -183,19 +183,14 @@ export const getResponseSchema = ({
   const editionSchema = {};
   for (const section of edition.sections) {
     for (const question of section.questions) {
-      const questionObject = getQuestionObject({
-        survey,
-        edition,
-        section,
-        question,
-      });
-      for (const formPath in questionObject.formPaths) {
+      const formPaths = getFormPaths({ edition, question });
+      for (const formPath in formPaths) {
         // responses can sometimes be numeric, everything else is string
         const type =
-          questionObject.optionsAreNumeric && formPath === "response"
+          question.optionsAreNumeric && formPath === "response"
             ? Number
             : String;
-        editionSchema[questionObject.formPaths[formPath]] = {
+        editionSchema[formPaths[formPath]] = {
           type,
           required: false,
           clientMutable: true,

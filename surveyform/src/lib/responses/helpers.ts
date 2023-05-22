@@ -5,8 +5,7 @@ import type {
   SectionMetadata,
   QuestionMetadata,
 } from "@devographics/types";
-import { getQuestionObject } from "~/lib/surveys/helpers";
-import { parseEdition } from "~/lib/parser/parseSurvey";
+import { getFormPaths } from "~/lib/surveys/helpers";
 
 export const getCompletionPercentage = ({
   response,
@@ -17,17 +16,11 @@ export const getCompletionPercentage = ({
 }) => {
   let completedCount = 0;
   let totalCount = 0;
-  const parsedSections = parseEdition(edition).sections;
-  parsedSections.forEach((section) => {
+  edition.sections.forEach((section) => {
     section.questions &&
       section.questions.forEach((question) => {
-        const questionObject = getQuestionObject({
-          survey: edition.survey,
-          edition,
-          section,
-          question,
-        });
-        const fieldName = questionObject.formPaths.response;
+        const formPaths = getFormPaths({ edition, question });
+        const fieldName = formPaths.response;
         if (fieldName) {
           const answer = response[fieldName];
           const ignoreQuestion =
@@ -111,30 +104,21 @@ export const getSectionCompletionPercentage = ({
   }
   // don't count text questions towards completion score
   // TODO: we may have array of fields in a question yet it doesn't seem supported
-  const completableQuestions = section.questions
-    .map((question) =>
-      getQuestionObject({ survey: edition.survey, edition, section, question })
-    )
-    .filter((questionObject) => {
-      const fieldName = questionObject.formPaths?.response!;
-      // NOTE: if question has no template it's a valid one, it will use the default radiogroup input
-      const isValidTemplate =
-        !questionObject.template ||
-        !ignoredFieldTypes.includes(questionObject.template);
-      const isCompletable = !!(isValidTemplate && fieldName);
-      return isCompletable;
-    });
+  const completableQuestions = section.questions.filter((question) => {
+    const formPaths = getFormPaths({ edition, question });
+    const fieldName = formPaths?.response!;
+    // NOTE: if question has no template it's a valid one, it will use the default radiogroup input
+    const isValidTemplate =
+      !question.template || !ignoredFieldTypes.includes(question.template);
+    const isCompletable = !!(isValidTemplate && fieldName);
+    return isCompletable;
+  });
   const questionsCount = completableQuestions.length;
   if (!questionsCount) return null;
 
   const completedQuestions = completableQuestions.filter((question) => {
-    const questionObject = getQuestionObject({
-      survey: edition.survey,
-      edition,
-      section,
-      question,
-    });
-    const fieldName = questionObject.formPaths?.response!;
+    const formPaths = getFormPaths({ edition, question });
+    const fieldName = formPaths?.response!;
     const isCompleted =
       response[fieldName] !== null &&
       typeof response[fieldName] !== "undefined";
@@ -162,13 +146,8 @@ export const getResponseEmail = ({
   if (!emailSection || !emailQuestion) {
     return {};
   }
-  const emailQuestionObject = getQuestionObject({
-    survey,
-    edition,
-    section: emailSection,
-    question: emailQuestion,
-  });
-  const emailFieldPath = emailQuestionObject?.formPaths?.response;
+  const formPaths = getFormPaths({ edition, question: emailQuestion });
+  const emailFieldPath = formPaths?.response;
   const email = emailFieldPath && existingResponse[emailFieldPath];
   return { email, emailFieldPath };
 };

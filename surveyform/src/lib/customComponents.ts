@@ -12,47 +12,32 @@ import Textarea from "~/components/inputs/Textarea";
 import Checkboxgroup from "~/components/inputs/Checkboxgroup";
 import Radiogroup from "~/components/inputs/Radiogroup";
 import AutocompleteMultiple from "~/components/inputs/AutocompleteMultiple";
+import { QuestionMetadata } from "@devographics/types";
 
 const customComponents = {
   help: Help,
   email2: Email2,
   hidden: Hidden,
-  raceEthnicity: RaceEthnicity,
+  race_ethnicity: RaceEthnicity,
   bracket: Bracket,
   feature: Feature,
   tool: Tool,
   slider: Slider,
   select: Select,
-  checkboxgroup: Checkboxgroup,
+  multiple: Checkboxgroup,
   textarea: Textarea,
   text: Text,
-  radiogroup: Radiogroup,
-  multiautocomplete: AutocompleteMultiple,
+  single: Radiogroup,
+  project: AutocompleteMultiple,
 };
 
-/**
- * Add React component to templates
- *
- * /!\ Importing this file will load some React
- * so involves JSX, it should not be used in scripts
- * @param questionObject
- * @returns
- */
-export const addComponentToQuestionObject = <
-  T extends { input: any; autocompleteOptions?: any }
->(
-  questionObject: T
-): T => {
-  let question = questionObject;
-
-  const customComponent = customComponents[questionObject.input];
-  if (customComponent) {
-    question = { ...questionObject, input: customComponent };
+export const getQuestionComponent = (question: QuestionMetadata) => {
+  const templateName = question.extends || question.template;
+  const customComponent = customComponents[templateName];
+  if (!customComponent) {
+    throw Error(
+      `Could not find question component for question ${question.id} with template ${templateName}`
+    );
   }
-
-  // if (question.autocompleteOptions) {
-  //   question = makeAutocomplete(question, question.autocompleteOptions);
-  // }
-
-  return question;
+  return customComponent;
 };

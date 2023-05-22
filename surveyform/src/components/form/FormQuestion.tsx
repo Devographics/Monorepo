@@ -1,6 +1,6 @@
 "use client";
-import { addComponentToQuestionObject } from "~/lib/customComponents";
-import { getQuestionObject } from "~/lib/surveys/helpers";
+import { getQuestionComponent } from "~/lib/customComponents";
+import { getFormPaths } from "~/lib/surveys/helpers";
 
 export const FormQuestion = (props) => {
   const {
@@ -8,22 +8,22 @@ export const FormQuestion = (props) => {
     edition,
     section,
     response,
-    question: questionMetadata,
+    question,
     index,
     sectionNumber,
     questionNumber,
   } = props;
 
-  const question = getQuestionObject({
-    survey,
-    edition,
-    section,
-    question: questionMetadata,
-  });
+  // const question = getQuestionObject({
+  //   survey,
+  //   edition,
+  //   section,
+  //   question: questionMetadata,
+  // });
+  // const { formPaths } = question;
 
-  const { formPaths } = question;
-  const qWithComponent = addComponentToQuestionObject(question);
-  const Component = qWithComponent.input;
+  const formPaths = getFormPaths({ edition, question });
+  const Component = getQuestionComponent(question);
   const path = formPaths.response;
   if (!path) {
     throw new Error(`Could not find response path for question ${question.id}`);

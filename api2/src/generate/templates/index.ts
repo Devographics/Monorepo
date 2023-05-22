@@ -33,7 +33,8 @@ export {
     higher_education_degree,
     race_ethnicity,
     yearly_salary,
-    years_of_experience
+    years_of_experience,
+    quiz
 } from '@devographics/templates'
 
 export * from './data_explorer'
