@@ -27,9 +27,6 @@ export const apiRoutes = {
       },
     },
   },
-  admin: {
-    dataExport: { href: "/api/admin/data-export" },
-  },
   responses: {
     loadResponse: {
       href: ({ responseId }: { responseId: string }) =>
@@ -41,6 +38,12 @@ export const apiRoutes = {
     saveResponse: {
       href: ({ responseId }: { responseId: string }) =>
         `/api/responses/saveResponse?responseId=${responseId}`,
+    },
+  },
+  projects: {
+    search: {
+      href: ({ query }: { query: string }) =>
+        `/api/projects/search?query=${query}`,
     },
   },
 };

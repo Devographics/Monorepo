@@ -1,7 +1,7 @@
 import { DbPaths, QuestionTemplateOutput, TemplateFunction, DbSuffixes } from '@devographics/types'
 import { checkHasId } from '../helpers'
 
-export const project: TemplateFunction = options => {
+export const projects: TemplateFunction = options => {
     const { edition, section } = options
     const question = checkHasId(options)
 
@@ -22,6 +22,7 @@ export const project: TemplateFunction = options => {
             response: `${sectionSegment}__${questionSegment}__${DbSuffixes.PRENORMALIZED}`
         },
         normPaths,
+        allowMultiple: true,
         ...question
     }
     return output

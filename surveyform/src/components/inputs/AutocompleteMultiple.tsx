@@ -1,77 +1,57 @@
 "use client";
+
+/*
+
+Problem: because we store project IDs, when we load previously filled in values such
+as "vue_js" we don't have the corresponding "clean" label ("Vue.js")
+
+Solution: whenver a user picks a project to add as a response, also store the full
+object (including label) to localStorage for future lookup.
+
+TODO: if localStorage lookup fails, ideally we should then do a server request to
+populate localStorage cache; but we don't currently do it
+
+*/
 /**
- *
- * // Copied for bootstrap package
- * // TODO: find a more generic implementation
- *
- * Ideally for such a rich component we should also expose
- * hooks and internal logic so users can build their own
- *
- *
  * NOTE: currently we don't load react-boostrap css
  */
 import { AsyncTypeahead } from "react-bootstrap-typeahead"; // ES2015
 import { useState } from "react";
-// We don't auto-expand queries in Vulcan NPM, since we don't use the registry pattern
-// anymore. Instead, provide the right fragments directly, using composition with string templates.
-//import { expandQueryFragments } from "meteor/vulcan:core";
-import gql from "graphql-tag";
 import { Alert } from "~/components/ui/Alert";
 import { FormItem } from "~/components/form/FormItem";
-import useSWR from "swr";
 import { FormInputProps } from "~/components/form/typings";
+import { Loading } from "~/components/ui/Loading";
+import { useLocalStorage } from "~/lib/hooks";
+import uniqBy from "lodash/uniqBy";
 
-export interface AutocompleteMultipleProps extends FormInputProps {}
-
-// TODO: move the autocomplete query creation logic to server
-// @see https://swr.vercel.app/docs/arguments
-const useAutocomplete = (autocompleteQuery, autocompleteVariables) =>
-  useSWR<any>([autocompleteQuery, autocompleteVariables]);
+export interface AutocompleteMultipleProps extends FormInputProps {
+  // note: we pass this as prop to make it easy to switch
+  // the component to a different data source if needed
+  loadDataHook: any;
+}
 
 export const AutocompleteMultiple = (props: AutocompleteMultipleProps) => {
-  // TODO: some props are now comming from the context
-  const {
-    updateCurrentValues,
-    // refFunction,
-    path,
-    value,
-  } = props;
+  const { updateCurrentValues, path, value: value_, loadDataHook } = props;
 
-  const queryData = {};
-  const autocompleteQuery = () => "";
-  const optionsFunction = (a, b) => [{ id: "foo" }];
-
-  // MergeWithComponents should be handled at the Form level
-  // by creating a new VulcanComponents context that merges default components
-  // and components passed via props
-  //const Components = mergeWithComponents(formComponents);
-
-  // store current autocomplete query string in local component state
-  const [queryString, setQueryString] = useState<string | undefined>();
-
-  // get component's autocomplete query and use it to load autocomplete suggestions
-  // note: we use useLazyQuery because
-  // we don't want to trigger the query until the user has actually typed in something
-  const { data, error } = useAutocomplete(
-    queryString &&
-      //const [loadAutocompleteOptions, { loading, error, data }] = useLazyQuery(
-      gql(/*expandQueryFragments(*/ autocompleteQuery() /*)*/),
-    {
-      queryString,
-    }
+  // store a list of projects locally
+  const [loadedProjects, setLoadedProjects] = useLocalStorage(
+    "loadedProjects",
+    []
   );
-  const loading = !data && !error;
 
-  // apply options function to data to get suggestions in { value, label } pairs
-  const autocompleteOptions = data && optionsFunction({ data }, "autocomplete");
+  const value = value_ as string[];
 
-  // apply same function to loaded data; filter by current value to avoid displaying any
-  // extra unwanted items if field-level data loading loaded too many items
-  const selectedItems =
-    queryData &&
-    optionsFunction({ data: queryData }, "labels").filter((d) =>
-      (value as Array<any>)?.includes(d.id)
-    );
+  const [query, setQuery] = useState<string | undefined>();
+
+  // note: will not load anything unless query is defined
+  const result = loadDataHook({ query });
+  const { projects, error, loading } = result;
+
+  // instead of making extra server request, look in localStorage cache
+  const findProject = (id) =>
+    loadedProjects.find((p) => p.id === id) || { id, label: id };
+
+  const selectedItems = value ? value.map(findProject) : [];
 
   return (
     <FormItem
@@ -87,28 +67,26 @@ export const AutocompleteMultiple = (props: AutocompleteMultipleProps) => {
       {/** @ts-ignore */}
       <AsyncTypeahead
         multiple
-        onChange={(selected) => {
-          const selectedIds = selected.map(
-            // @ts-ignore Typing is wrong for some reason
-            ({ value }) => value
-          );
+        onChange={(selected: Array<{ id: string; label: string }>) => {
+          const selectedIds = selected.map(({ id }) => id);
           updateCurrentValues({ [path]: selectedIds });
+          // whenever user picks project, also add it to localStorage if it's not already theree
+          const newProjects = uniqBy([...loadedProjects, ...selected], "id");
+          setLoadedProjects(newProjects);
         }}
-        options={autocompleteOptions}
+        options={projects}
         id={path}
         // passing id doesn't seem to work, we need input props
         inputProps={{ id: path }}
-        // ref={refFunction}
         onSearch={(queryString) => {
-          setQueryString(queryString);
+          setQuery(queryString);
         }}
         isLoading={loading}
         selected={selectedItems}
       />
+      {loading && <Loading />}
     </FormItem>
   );
 };
-
-//registerComponent("FormComponentMultiAutocomplete", MultiAutocomplete);
 
 export default AutocompleteMultiple;

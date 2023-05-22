@@ -19,7 +19,7 @@ export {
     number,
     slider,
     others,
-    project,
+    projects,
     happiness,
     opinion,
     locale,

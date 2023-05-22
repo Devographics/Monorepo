@@ -23,11 +23,6 @@ export const SurveySectionWithResponse = ({
     return <Loading />;
   }
 
-  console.log("// SurveySectionWithResponse");
-  console.log(response);
-  console.log(responseLoading);
-  console.log(responseError);
-
   if (responseError) {
     return (
       <div>

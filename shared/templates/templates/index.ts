@@ -10,7 +10,7 @@ export * from './dropdown'
 export * from './number'
 export * from './slider'
 export * from './others'
-export * from './project'
+export * from './projects'
 export * from './happiness'
 export * from './opinion'
 

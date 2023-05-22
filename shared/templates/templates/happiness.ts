@@ -26,6 +26,7 @@ export const happiness: TemplateFunction = options => {
     const output: QuestionTemplateOutput = {
         defaultSort: 'options',
         optionsAreNumeric: true,
+        extends: 'single',
         options: [...Array(5)].map((x, i) => ({
             id: String(i),
             intlId: `options.happiness.${String(i)}`

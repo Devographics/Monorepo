@@ -11,7 +11,7 @@ import Select from "~/components/inputs/Select";
 import Textarea from "~/components/inputs/Textarea";
 import Checkboxgroup from "~/components/inputs/Checkboxgroup";
 import Radiogroup from "~/components/inputs/Radiogroup";
-import AutocompleteMultiple from "~/components/inputs/AutocompleteMultiple";
+import Projects from "~/components/inputs/Projects";
 import { QuestionMetadata } from "@devographics/types";
 
 const customComponents = {
@@ -27,8 +27,9 @@ const customComponents = {
   multiple: Checkboxgroup,
   textarea: Textarea,
   text: Text,
+  others: Text,
   single: Radiogroup,
-  project: AutocompleteMultiple,
+  projects: Projects,
 };
 
 export const getQuestionComponent = (question: QuestionMetadata) => {
