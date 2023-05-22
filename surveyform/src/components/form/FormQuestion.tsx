@@ -14,14 +14,6 @@ export const FormQuestion = (props) => {
     questionNumber,
   } = props;
 
-  // const question = getQuestionObject({
-  //   survey,
-  //   edition,
-  //   section,
-  //   question: questionMetadata,
-  // });
-  // const { formPaths } = question;
-
   const formPaths = getFormPaths({ edition, question });
   const Component = getQuestionComponent(question);
   const path = formPaths.response;
