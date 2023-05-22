@@ -1,10 +1,13 @@
+import { ResponseDocument } from "@devographics/core-models";
 import {
   EditionMetadata,
   SectionMetadata,
   QuestionMetadata,
   DbPaths,
+  SurveyStatusEnum,
 } from "@devographics/types";
 import { isAbsoluteUrl } from "~/lib/utils";
+import { LocaleDef } from "~/i18n/typings";
 
 /*
 
@@ -65,6 +68,55 @@ export const getEditionTitle = ({
   }
   return title;
 };
+
+export function getEditionSectionPath({
+  edition,
+  forceReadOnly,
+  response,
+  page,
+  number,
+  editionPathSegments,
+  locale,
+}: {
+  // we only need basic info about the survey
+  edition: EditionMetadata;
+  // forceReadOnly (no response needed in this case)
+  forceReadOnly?: boolean;
+  // section
+  // TODO: why sometimes we have "id" vs "_id"? (_id coming from Mongo, id from Vulcan probably)
+  response?: Partial<Pick<ResponseDocument, "_id" | "id">>;
+  number?: any;
+  page?: "thanks";
+  /** [state-of-js, 2022] */
+  editionPathSegments: Array<string>;
+  locale: LocaleDef;
+}) {
+  const pathSegments = [locale.id, "survey", ...editionPathSegments];
+  // survey home
+  const readOnly =
+    forceReadOnly ||
+    !edition.status ||
+    [SurveyStatusEnum.CLOSED].includes(edition.status);
+
+  if (readOnly) {
+    const readOnlySegment = "read-only";
+    pathSegments.push(readOnlySegment);
+  } else {
+    if (!response) throw new Error("Undefined response");
+    const responseSegment = response.id || response._id;
+    if (!responseSegment) {
+      console.log(response);
+      throw new Error(
+        "Response object has no id or _id. We may have failed to load your response from server."
+      );
+    }
+    pathSegments.push(responseSegment);
+  }
+  const suffixSegment = page || number || 1;
+  pathSegments.push(suffixSegment);
+  const path = pathSegments.join("/");
+  return `/${path}`;
+}
 
 export const getSectionKey = (section: SectionMetadata, keyType = "title") =>
   `sections.${section.intlId || section.id}.${keyType}`;
