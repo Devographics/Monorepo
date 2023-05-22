@@ -19,6 +19,13 @@ export type UserDocument = {
    **/
   isVerified?: boolean;
   groups: Array<string>;
+  /**
+   * TODO: is it still used?
+   */
+  meta?: {
+    surveyId,
+    editionId,
+  }
 } & (
     | {
       /**
@@ -26,15 +33,17 @@ export type UserDocument = {
        */
       authMode: undefined | "password";
       emailHash: string;
+      emailHash2: string
     }
-    | { authMode: "anonymous"; emailHash?: undefined }
+    | { authMode: "anonymous"; emailHash?: undefined, emailHash2?: undefined }
     | {
       authMode: "passwordless";
       emailHash: string;
+      emailHash2: string
     }
   );
 
 /**
  * Minimal structure to authenticate via email
  */
-export type EmailUser = { _id: string, emailHash: string, emailHash2: string }
+export type EmailUser = { _id?: string, emailHash?: string, emailHash2?: string }

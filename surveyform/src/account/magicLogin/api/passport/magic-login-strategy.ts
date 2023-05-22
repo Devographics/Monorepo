@@ -70,16 +70,6 @@ async function sendMagicLink(
       isVerified: false,
     };
 
-    if (surveyId || editionId) {
-      user.meta = {
-        surveyId,
-        editionId,
-        // @deprecated, use surveyId
-        surveySlug: surveyId?.replaceAll("_", "-"),
-        // @deprecated, use editionId
-        surveyYear: year,
-      };
-    }
     await createOrUpgradeUser(user);
   } else {
     await updateUserEmailHash(foundUser, email);

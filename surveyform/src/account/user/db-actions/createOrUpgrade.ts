@@ -4,14 +4,13 @@ import { getUsersCollection, newMongoId } from "@devographics/mongo";
 import { createUser } from "~/lib/users/db-actions/create";
 import { loadUser } from "~/lib/users/db-actions/load";
 
-async function createPasswordlessUser({ email, meta, ...otherUserProps }: { email: string } & Partial<UserDocument>) {
+async function createPasswordlessUser({ email, ...otherUserProps }: { email: string } & Partial<UserDocument>) {
   // 1.1) not anonymous, first login: create a user
   // create a new user in the db and return it
 
   // just to please ts
   const {
     authMode: otherAuthMode,
-    meta: any,
     ...otherOtherUserProps
   } = otherUserProps;
   const user: UserDocument = {
@@ -22,7 +21,6 @@ async function createPasswordlessUser({ email, meta, ...otherUserProps }: { emai
     // since we used a magic link the email is known to be valid already
     isVerified: true,
     authMode: "passwordless",
-    meta,
     ...otherOtherUserProps, // can override other props, such as "isVerfied"
   };
   const createdUser = await createUser({ data: user })
@@ -42,6 +40,7 @@ async function upgradeToPasswordlessUser({ anonymousId, email }: { anonymousId: 
       `Got anonymousId ${anonymousId} but no user is matching in database. Cannot upgrade account`
     );
   }
+  // @ts-ignore
   const upgradedUser: UserDocument = {
     ...(anonymousUser as UserDocument),
     emailHash: createEmailHash(email),
@@ -64,7 +63,6 @@ async function upgradeToPasswordlessUser({ anonymousId, email }: { anonymousId: 
 export const createOrUpgradeUser = async ({
   anonymousId,
   email,
-  meta,
   ...otherUserProps
 }: {
   email: string;
@@ -72,7 +70,7 @@ export const createOrUpgradeUser = async ({
   anonymousId?: string;
 } & Partial<UserDocument>) => {
   if (!anonymousId) {
-    return await createPasswordlessUser({ email, meta, ...otherUserProps })
+    return await createPasswordlessUser({ email, ...otherUserProps })
   } else {
     return await upgradeToPasswordlessUser({ anonymousId, email, ...otherUserProps })
   }

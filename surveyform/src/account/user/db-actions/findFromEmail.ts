@@ -18,5 +18,5 @@ export const findUserFromEmail = async (email: string) => {
     { sort: { createdAt: -1 }, limit: 1 }
   ).toArray();
   if (usersByEmail.length > 0) console.warn("Found more than one user (_id:" + usersByEmail[0]._id + ")")
-  return usersByEmail[0];
+  return usersByEmail[0] as UserDocument;
 };
