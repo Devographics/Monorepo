@@ -1,10 +1,10 @@
 "use client";
 import { useCurrentUser } from "~/lib/users/hooks";
-import { routes } from "~/lib/routes";
 import { useIntlContext } from "@devographics/react-i18n";
 import React from "react";
 import { Button } from "~/components/ui/Button";
-import { logout } from "../lib/logout";
+import { logout } from "../client-fetchers/logout";
+import { routes } from "~/lib/routes";
 
 export const LogoutButton = ({
   component,
@@ -19,8 +19,12 @@ export const LogoutButton = ({
     <LinkOrButton
       onClick={async (evt) => {
         evt.preventDefault();
-        await logout();
-        window.location.replace(routes.home.href);
+        try {
+          await logout();
+          window.location.replace(routes.home.href);
+        } catch (err) {
+          console.error(err);
+        }
       }}
       {...(component && { href: "#" })}
     >

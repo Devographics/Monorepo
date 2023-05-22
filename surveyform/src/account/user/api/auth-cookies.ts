@@ -1,5 +1,6 @@
 import { serialize } from "cookie";
 import { NextApiRequest } from "next";
+import { NextResponse } from "next/server";
 
 export const TOKEN_NAME = "token";
 // in milliseconds
@@ -24,13 +25,12 @@ export function setTokenCookie(res, token) {
   res.setHeader("Set-Cookie", cookie);
 }
 
-export function removeTokenCookie(res) {
-  const cookie = serialize(TOKEN_NAME, "", {
-    maxAge: -1,
-    path: "/",
-  });
-
-  res.setHeader("Set-Cookie", cookie);
+/**
+ * To be used in route handlers
+ * @param res 
+ */
+export function removeTokenCookie(res: NextResponse) {
+  res.cookies.delete(TOKEN_NAME)
 }
 export function getTokenCookie(req: NextApiRequest) {
   return req.cookies[TOKEN_NAME];
