@@ -21,7 +21,13 @@ export enum Actions {
   UPDATE = "update",
 }
 
-const getZodType = (type: any) => {
+type ConstructorType =
+  | StringConstructor
+  | BooleanConstructor
+  | NumberConstructor
+  | DateConstructor;
+
+const getZodType = (type: ConstructorType): ZodObjectContents => {
   switch (type) {
     case String:
     default:
@@ -35,15 +41,11 @@ const getZodType = (type: any) => {
   }
 };
 
-type ZodObject =
-  | z.ZodString
-  | z.ZodBoolean
-  | z.ZodDate
-  | z.ZodNumber
-  | z.ZodOptional<z.ZodString>
-  | z.ZodOptional<z.ZodBoolean>
-  | z.ZodOptional<z.ZodDate>
-  | z.ZodOptional<z.ZodNumber>;
+type ZodObjectContents = z.ZodString | z.ZodBoolean | z.ZodDate | z.ZodNumber;
+
+type ZodObjectValueOrArray = z.ZodArray<ZodObjectContents> | ZodObjectContents;
+
+type ZodObject = z.ZodOptional<ZodObjectValueOrArray> | ZodObjectValueOrArray;
 
 const getZodObject = <T>({
   fieldName,
@@ -56,7 +58,7 @@ const getZodObject = <T>({
   action: Actions;
   context: ActionContexts;
 }): ZodObject => {
-  const { type, requiredDuring, clientMutable } = schemaObject;
+  const { type, requiredDuring, clientMutable, isArray } = schemaObject;
   /*
     A field is required if:
 
@@ -75,7 +77,10 @@ const getZodObject = <T>({
   if (zType === z.string()) {
     zType = zType.max(GLOBAL_TEXTFIELD_LIMIT);
   }
-  return isRequired ? zType : zType.optional();
+
+  zType = isArray ? zType.array() : zType;
+  zType = isRequired ? zType : zType.optional();
+  return zType;
 };
 
 export const getZodSchema = ({

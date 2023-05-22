@@ -82,8 +82,9 @@ query SurveysMetadataQuery {
           background
           backgroundSecondary
         }
-        ${includeQuestions
-    ? `sections {
+        ${
+            includeQuestions
+                ? `sections {
           id
           intlId
           slug
@@ -96,6 +97,7 @@ query SurveysMetadataQuery {
             extends
             allowOther
             allowComment
+            allowMultiple
             matchTags
             options {
               average
@@ -105,8 +107,8 @@ query SurveysMetadataQuery {
             }
           }
         }`
-    : ''
-  }
+                : ''
+        }
       }
     }
   }
@@ -156,7 +158,13 @@ query SurveyMetadataQuery {
   }
 }`
 
-export const getEditionQuery = ({ surveyId, editionId }: { surveyId: string, editionId: string }) => `
+export const getEditionQuery = ({
+    surveyId,
+    editionId
+}: {
+    surveyId: string
+    editionId: string
+}) => `
 query ${editionId}MetadataQuery {
   _metadata(editionId: ${editionId}) {
     surveys {
@@ -225,6 +233,7 @@ query ${editionId}MetadataQuery {
             contentType
             allowOther
             allowComment
+            allowMultiple
             matchTags
             optionsAreNumeric
             optionsAreRange
@@ -275,7 +284,13 @@ query ${editionId}MetadataQuery {
 }
 `
 
-export const getEditionQuerySurveyForm = ({ surveyId, editionId }: { surveyId: string, editionId: string }) => `
+export const getEditionQuerySurveyForm = ({
+    surveyId,
+    editionId
+}: {
+    surveyId: string
+    editionId: string
+}) => `
 query ${editionId}MetadataQuery {
   _metadata(editionId: ${editionId}) {
     surveys {
@@ -346,6 +361,7 @@ query ${editionId}MetadataQuery {
             # contentType
             allowOther
             allowComment
+            allowMultiple
             optionsAreNumeric
             # optionsAreRange
             entity {

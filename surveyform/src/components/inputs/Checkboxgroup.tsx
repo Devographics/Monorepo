@@ -9,10 +9,11 @@ import { FormInputProps } from "~/components/form/typings";
 import { FormOption } from "~/components/form/FormOption";
 import debounce from "lodash/debounce.js";
 import FormControl from "react-bootstrap/FormControl";
+import { getFormPaths } from "~/lib/surveys/helpers";
 
 const OtherComponent = (props: FormInputProps) => {
-  const { question, updateCurrentValues, response, readOnly } = props;
-  const { formPaths } = question;
+  const { edition, question, updateCurrentValues, response, readOnly } = props;
+  const formPaths = getFormPaths({ edition, question });
   const path = formPaths.other!;
   const value = response[path];
 
@@ -94,15 +95,15 @@ export const FormComponentCheckboxGroup = (props: FormInputProps) => {
   }
   const value = value_ as Array<string | number>;
 
-  const cutoff = defaultCutoff;
+  const cutoff = question.cutoff || defaultCutoff;
 
   const hasValue = value?.length > 0;
 
   const hasReachedLimit = !!(limit && value?.length >= limit);
 
-  const useCutoff =
+  const enableCutoff =
     typeof cutoff !== "undefined" && cutoff > 0 && options?.length > cutoff;
-  const optionsToShow = useCutoff
+  const optionsToShow = enableCutoff
     ? showMore
       ? options
       : options?.slice(0, cutoff)
@@ -131,7 +132,6 @@ export const FormComponentCheckboxGroup = (props: FormInputProps) => {
                     // ref={refFunction}
                     onChange={(event) => {
                       const isChecked = event.target.checked;
-                      console.log(isChecked);
                       const newValue = isChecked
                         ? [...value, option.id]
                         : without(value, option.id);
@@ -144,7 +144,7 @@ export const FormComponentCheckboxGroup = (props: FormInputProps) => {
             </Form.Check>
           );
         })}
-        {useCutoff && !showMore && (
+        {enableCutoff && !showMore && (
           <Button
             className="form-show-more"
             onClick={() => {
@@ -154,7 +154,7 @@ export const FormComponentCheckboxGroup = (props: FormInputProps) => {
             {intl.formatMessage({ id: "forms.more_options" })}…
           </Button>
         )}
-        {allowOther && (!useCutoff || showMore) && (
+        {allowOther && (!enableCutoff || showMore) && (
           <OtherComponent {...props} />
         )}
       </div>

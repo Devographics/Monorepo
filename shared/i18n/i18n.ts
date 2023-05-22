@@ -1,8 +1,4 @@
-import type {
-    SectionMetadata,
-    QuestionMetadata,
-    OptionMetadata
-} from '@devographics/types'
+import type { SectionMetadata, QuestionMetadata, OptionMetadata } from '@devographics/types'
 
 export const separator = '.'
 

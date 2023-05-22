@@ -8,10 +8,11 @@ import { useIntlContext } from "@devographics/react-i18n";
 import { FormItem } from "~/components/form/FormItem";
 import FormControl from "react-bootstrap/FormControl";
 import debounce from "lodash/debounce.js";
+import { getFormPaths } from "~/lib/surveys/helpers";
 
 const OtherComponent = (props: FormInputProps) => {
-  const { question, updateCurrentValues, response, readOnly } = props;
-  const { formPaths } = question;
+  const { edition, question, updateCurrentValues, response, readOnly } = props;
+  const formPaths = getFormPaths({ edition, question });
   const path = formPaths.other!;
   const value = response[path];
 

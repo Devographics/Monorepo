@@ -5,7 +5,10 @@ export const opinion: TemplateFunction = options => {
     const question = checkHasId(options)
     const output: QuestionTemplateOutput = {
         optionsAreNumeric: true,
-        options: [...Array(5)].map((x, i) => ({ id: String(i) })),
+        options: [...Array(5)].map((x, i) => ({
+            id: String(i),
+            intlId: `options.opinions.${String(i)}`
+        })),
         ...getPaths(options),
         ...question
     }

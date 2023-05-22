@@ -19,26 +19,27 @@ export type OnCreate<T> = (prop: OnCreateProps) => T | undefined;
 export type OnUpdate<T> = (prop: OnUpdateProps) => T | undefined;
 
 export interface SchemaObject<T> {
-  type?: T;
+  type: T;
   requiredDuring?: Actions;
   clientMutable?: boolean;
+  isArray?: boolean;
   onCreate?: OnCreate<
     T extends StringConstructor
-    ? string
-    : T extends NumberConstructor
-    ? number
-    : T extends BooleanConstructor
-    ? boolean
-    : Date
+      ? string
+      : T extends NumberConstructor
+      ? number
+      : T extends BooleanConstructor
+      ? boolean
+      : Date
   >;
   onUpdate?: OnUpdate<
     T extends StringConstructor
-    ? string
-    : T extends NumberConstructor
-    ? number
-    : T extends BooleanConstructor
-    ? boolean
-    : Date
+      ? string
+      : T extends NumberConstructor
+      ? number
+      : T extends BooleanConstructor
+      ? boolean
+      : Date
   >;
 }
 

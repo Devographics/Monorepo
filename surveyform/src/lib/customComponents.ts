@@ -30,6 +30,7 @@ const customComponents = {
   others: Text,
   single: Radiogroup,
   projects: Projects,
+  opinion: Radiogroup,
 };
 
 export const getQuestionComponent = (question: QuestionMetadata) => {

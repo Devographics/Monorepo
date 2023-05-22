@@ -194,6 +194,7 @@ export const getResponseSchema = ({
           type,
           required: false,
           clientMutable: true,
+          isArray: question.allowMultiple,
         };
       }
     }

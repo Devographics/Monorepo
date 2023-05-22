@@ -121,7 +121,10 @@ export type Question = {
     optionsAreRange?: boolean
     defaultSort?: string
 
+    // how many options can be selected
     limit?: number
+    // how many options to show before "show more…" button (set to 99 to always show all)
+    cutoff?: number
 
     // typically the question id is used as the question "namespace", this can override it
     i18nNamespace?: string

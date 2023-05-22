@@ -22,27 +22,37 @@ const memoryCache = new NodeCache({
 })
 
 async function getFromCache<T = any>(key: string, fetchFunc: () => Promise<T>) {
-    if (memoryCache.has(key)) {
-        console.debug(`🟢 [${key}] in-memory cache hit`)
-        const res = await memoryCache.get<Promise<T>>(key)!
-        return res
-    } else {
-        const redisData = await fetchJson<T>(key)
-        if (redisData) {
-            console.debug(`🔵 [${key}] in-memory cache miss, redis hit`)
-            return redisData
+    const enableCache = !(process.env.ENABLE_CACHE === 'false')
+    if (enableCache) {
+        if (memoryCache.has(key)) {
+            console.debug(`🟢 [${key}] in-memory cache hit`)
+            const res = await memoryCache.get<Promise<T>>(key)!
+            return res
         } else {
-            console.debug(`🟣 [${key}] in-memory & redis cache miss, fetching from API`)
+            const redisData = await fetchJson<T>(key)
+            if (redisData) {
+                console.debug(`🔵 [${key}] in-memory cache miss, redis hit`)
+                return redisData
+            } else {
+                console.debug(`🟣 [${key}] in-memory & redis cache miss, fetching from API`)
 
-            const promise = fetchFunc()
-            memoryCache.set(key, promise)
-            const result = await promise
+                const promise = fetchFunc()
+                memoryCache.set(key, promise)
+                const result = await promise
 
-            // store in Redis in the background
-            await storeRedis<T>(key, result)
+                // store in Redis in the background
+                await storeRedis<T>(key, result)
 
-            return result
+                return result
+            }
         }
+    } else {
+        console.debug(`🟠 [${key}] cache disabled, fetching from API`)
+
+        const promise = fetchFunc()
+        const result = await promise
+
+        return result
     }
 }
 
