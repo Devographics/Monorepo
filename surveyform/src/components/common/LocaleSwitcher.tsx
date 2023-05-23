@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { Dropdown } from "~/components/ui/Dropdown";
 

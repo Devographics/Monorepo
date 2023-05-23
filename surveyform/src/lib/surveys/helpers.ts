@@ -9,7 +9,6 @@ import {
 import { isAbsoluteUrl } from "~/lib/utils";
 import { LocaleDef } from "~/i18n/typings";
 import { reverseSurveyParamsLookup } from "./data";
-import { useLocaleContext } from "~/i18n/context/LocaleContext";
 
 /*
 

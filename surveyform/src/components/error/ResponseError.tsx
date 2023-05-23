@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { getEditionSectionPath } from "~/lib/surveys/helpers";

@@ -1,15 +1,10 @@
 import Link from "next/link";
-import {
-  EditionMetadata,
-  SurveyMetadata,
-  SurveyStatusEnum,
-} from "@devographics/types";
+import { SurveyMetadata, SurveyStatusEnum } from "@devographics/types";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { ResponseDocument, SurveyEdition } from "@devographics/core-models";
 import { UserDocument } from "~/account/user/typings";
 import { fetchSurveysMetadata } from "@devographics/fetch";
 import { getEditionSectionPath } from "~/lib/surveys/helpers";
-import { useLocaleContext } from "~/i18n/context/LocaleContext";
 
 const UserResponses = async ({
   localeId,

@@ -6,7 +6,7 @@ import { EditionMetadata, SurveyMetadata } from "@devographics/types";
 import { getEditionHomePath, getSurveyImageUrl } from "~/lib/surveys/helpers";
 import { SurveyParamsTable } from "~/lib/surveys/data";
 import sortBy from "lodash/sortBy";
-import { useLocaleContext } from "~/i18n/context/LocaleContext";
+// import { useLocaleContext } from "~/i18n/context/LocaleContext";
 
 const EditionItem = ({
   edition,
@@ -53,10 +53,13 @@ const EditionGroup = ({
   allEditions,
   surveyParamsTable,
   status,
+  localeId,
 }: {
   allEditions: Array<EditionMetadata>;
   surveyParamsTable: SurveyParamsTable;
   status: SurveyStatusEnum;
+
+  localeId: string;
 }) => {
   if (!status) throw new Error("SurveyGroup must receive a defined status");
   const filteredEditions = allEditions.filter((s) => s.status === status);
@@ -64,8 +67,8 @@ const EditionGroup = ({
     filteredEditions,
     (edition: EditionMetadata) => new Date(edition.startedAt)
   ).reverse();
-  const { locale } = useLocaleContext();
-
+  // const { locale } = useLocaleContext();
+  const locale = { id: localeId };
   return (
     <div className="surveys-group">
       <h3 className="surveys-group-heading">
@@ -93,9 +96,11 @@ const EditionGroup = ({
 const Surveys = ({
   surveys,
   surveyParamsTable,
+  localeId,
 }: {
   surveys: Array<SurveyMetadata>;
   surveyParamsTable: SurveyParamsTable;
+  localeId: string;
 }) => {
   const allEditions = surveys
     .map((survey) => survey.editions.map((e) => ({ ...e, survey })))
@@ -107,16 +112,19 @@ const Surveys = ({
         surveyParamsTable={surveyParamsTable}
         allEditions={allEditions}
         status={SurveyStatusEnum.OPEN}
+        localeId={localeId}
       />
       <EditionGroup
         surveyParamsTable={surveyParamsTable}
         allEditions={allEditions}
         status={SurveyStatusEnum.PREVIEW}
+        localeId={localeId}
       />
       <EditionGroup
         surveyParamsTable={surveyParamsTable}
         allEditions={allEditions}
         status={SurveyStatusEnum.CLOSED}
+        localeId={localeId}
       />
       {/*<Translators />*/}
     </div>
