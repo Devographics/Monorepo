@@ -26,8 +26,7 @@ const ThanksPage = async ({
   // TODO: getResponseWithRanking will include the schema that can contain functions
   // thus it's not accepted
   // Uncomment to investigate
-  // const response = await getResponseWithRanking({ responseId, survey });
-  return <Thanks /*response={response}*/ />;
+  return <Thanks responseId={responseId} />;
 };
 
 export default ThanksPage;

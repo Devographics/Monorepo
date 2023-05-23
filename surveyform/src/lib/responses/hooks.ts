@@ -9,10 +9,10 @@ interface ApiData<T = any> {
   error: any;
 }
 
-export const useResponse = (params: { responseId: string }) => {
+export const useResponse = (params: { responseId?: string }) => {
   const { responseId } = params;
   const { data, error, isLoading } = useSWR<ApiData<ResponseDocument>>(
-    apiRoutes.responses.loadResponse.href({ responseId }),
+    responseId && apiRoutes.responses.loadResponse.href({ responseId }),
     basicFetcher
   );
   console.log("data", data, error);

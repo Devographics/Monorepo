@@ -7,15 +7,15 @@ import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { getSurveyImageUrl } from "~/lib/surveys/helpers";
 import Link from "next/link";
 import { useEdition } from "~/components/SurveyContext/Provider";
-// import type { ResponseDocument } from "@devographics/types";
-import { useResponseId } from "~/components/ResponseContext/ResponseProvider";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
+import { Loading } from "~/components/ui/Loading";
+import { useResponse } from "~/lib/responses/hooks";
 
 export const Thanks = ({
-  //response,
+  responseId,
   readOnly,
 }: {
-  //response?: ResponseDocument;
+  responseId?: string;
   readOnly?: boolean;
 }) => {
   const { locale } = useLocaleContext();
@@ -24,7 +24,16 @@ export const Thanks = ({
   const { survey, year } = edition;
   const { name } = survey;
   // TODO: get from server, see ongoing investigation
-  const response = {};
+
+  const {
+    response,
+    loading: responseLoading,
+    error: responseError,
+  } = useResponse({ responseId });
+
+  if (responseLoading) {
+    return <Loading />;
+  }
 
   return (
     <div className="contents-narrow thanks">
