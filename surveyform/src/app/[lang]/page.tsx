@@ -6,8 +6,8 @@ import { getSurveyParamsTable } from "~/lib/surveys/data";
 
 const IndexPage = async () => {
   initRedis(serverConfig().redisUrl);
-  const surveys = await fetchSurveysMetadata();
-  const surveyParamsTable = await getSurveyParamsTable();
+  const surveys = await fetchSurveysMetadata({ calledFrom: "app/[lang]/page" });
+  const surveyParamsTable = getSurveyParamsTable();
   return <Surveys surveys={surveys} surveyParamsTable={surveyParamsTable} />;
 };
 

@@ -6,6 +6,7 @@ import { EditionMetadata, SurveyMetadata } from "@devographics/types";
 import { getEditionHomePath, getSurveyImageUrl } from "~/lib/surveys/helpers";
 import { SurveyParamsTable } from "~/lib/surveys/data";
 import sortBy from "lodash/sortBy";
+import { useLocaleContext } from "~/i18n/context/LocaleContext";
 
 const EditionItem = ({
   edition,
@@ -17,7 +18,6 @@ const EditionItem = ({
   const { survey, year, status } = edition;
   const { name } = survey;
   const imageUrl = getSurveyImageUrl(edition);
-  // console.log(edition);
   return (
     <div>
       <div className="survey-item">
@@ -64,7 +64,7 @@ const EditionGroup = ({
     filteredEditions,
     (edition: EditionMetadata) => new Date(edition.startedAt)
   ).reverse();
-  console.log(sortedEdition);
+  const { locale } = useLocaleContext();
 
   return (
     <div className="surveys-group">
@@ -78,7 +78,7 @@ const EditionGroup = ({
           <EditionItem
             key={edition.id}
             edition={edition}
-            homePath={getEditionHomePath(edition, surveyParamsTable)}
+            homePath={getEditionHomePath({ edition, locale })}
           />
         ))
       ) : (

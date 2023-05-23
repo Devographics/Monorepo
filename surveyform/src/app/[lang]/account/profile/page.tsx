@@ -11,24 +11,16 @@ import { ResponseDocument } from "@devographics/core-models";
 
 const getResponses = cache(
   async ({ currentUser }: { currentUser: UserDocument }) => {
-    const RawResponse = await getRawResponsesCollection<ResponseDocument>();
-    const responsesFromDb = await RawResponse.find({
-      userId: currentUser,
+    const RawResponses = await getRawResponsesCollection<ResponseDocument>();
+    const responsesFromDb = await RawResponses.find({
+      userId: currentUser._id,
     }).toArray();
-    // just a defensive permission check
-    responsesFromDb.forEach((r) => {
-      if (r.userId !== currentUser._id) {
-        throw new Error("Got response whose userId doesn't match current user");
-      }
-    });
-    // TODO: restrict fields, double check that the document
     const responses = responsesFromDb as Array<ResponseDocument>;
-    return [];
-    //return responses;
+    return responses;
   }
 );
 
-const Profile = async () => {
+const Profile = async ({ params }) => {
   // TODO: filter out fields the user is not supposed to see
   const currentUser = await getCurrentUser();
   if (!currentUser) {
@@ -43,8 +35,12 @@ const Profile = async () => {
           <FormattedMessage id="accounts.logged_in_as_guest" />
         )}
       </p>
-      {currentUser.authMode !== "anonymous" && (
-        <UserResponses responses={responses} user={currentUser} />
+      {responses?.length > 0 && currentUser.authMode !== "anonymous" && (
+        <UserResponses
+          localeId={params.lang}
+          responses={responses}
+          user={currentUser}
+        />
       )}
       <p>
         <FormattedMessage id="accounts.questions" />

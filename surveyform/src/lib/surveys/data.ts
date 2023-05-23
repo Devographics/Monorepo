@@ -1,9 +1,14 @@
+export type SurveyParam = {
+  surveyId: string;
+  editionId: string;
+};
+export type ReverseSurveyParam = {
+  surveySlug: string;
+  editionSlug: string;
+};
 export type SurveyParamsTable = {
   [slug: string]: {
-    [year: number]: {
-      surveyId: string;
-      editionId: string;
-    };
+    [year: number]: SurveyParam;
   };
 };
 
@@ -15,7 +20,7 @@ export type SurveyParamsTable = {
  *
  * TODO: this probably belongs to the shared repo too
  */
-export const getSurveyParamsTable = async (): Promise<SurveyParamsTable> => ({
+export const getSurveyParamsTable = (): SurveyParamsTable => ({
   "demo-survey": {
     2022: { surveyId: "demo_survey", editionId: "demo2022" },
   },
@@ -40,3 +45,29 @@ export const getSurveyParamsTable = async (): Promise<SurveyParamsTable> => ({
     2023: { surveyId: "state_of_js", editionId: "js2023" },
   },
 });
+
+export const surveyParamsLookup = ({
+  surveySlug,
+  editionSlug,
+}): SurveyParam => {
+  return getSurveyParamsTable()[surveySlug][editionSlug];
+};
+
+export const reverseSurveyParamsLookup = ({
+  surveyId,
+  editionId,
+}): ReverseSurveyParam => {
+  const table = getSurveyParamsTable();
+  for (const surveySlug of Object.keys(table)) {
+    const editions = table[surveySlug];
+    for (const editionSlug of Object.keys(editions)) {
+      const edition = editions[editionSlug];
+      if (edition.surveyId === surveyId && edition.editionId === editionId) {
+        return { surveySlug, editionSlug };
+      }
+    }
+  }
+  throw Error(
+    `Could not find surveySlug and editionSlug for ${surveyId}/${editionId}`
+  );
+};

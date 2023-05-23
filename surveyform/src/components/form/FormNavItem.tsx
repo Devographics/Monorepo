@@ -29,7 +29,7 @@ const SurveyNavItem = ({
   const { currentTabindex, setCurrentFocusIndex } = stateStuff;
   const { locale } = useLocaleContext();
   const textInput = useRef<any>(null);
-  const { edition, editionHomePath, editionPathSegments } = useEdition();
+  const { edition } = useEdition();
   const completion = getSectionCompletionPercentage({
     edition,
     section: currentSection,
@@ -41,7 +41,6 @@ const SurveyNavItem = ({
     edition,
     response,
     number,
-    editionPathSegments,
     locale,
   });
 
@@ -75,7 +74,6 @@ const SurveyNavItem = ({
           number,
           forceReadOnly: readOnly,
           response,
-          editionPathSegments,
           locale,
         })}
         ref={textInput}

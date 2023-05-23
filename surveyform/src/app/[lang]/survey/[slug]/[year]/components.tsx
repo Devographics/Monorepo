@@ -9,7 +9,7 @@ import EditionAction from "~/components/page/SurveyAction";
 import { LoginDialog } from "~/account/LoginDialog";
 import { Loading } from "~/components/ui/Loading";
 import { Suspense } from "react";
-import { EditionMetadata } from "@devographics/types";
+import { EditionMetadata, SurveyStatusEnum } from "@devographics/types";
 import { getCurrentUser } from "~/account/user/api/rsc-fetchers";
 
 export const EditionMain = ({ edition }: { edition: EditionMetadata }) => {
@@ -32,7 +32,10 @@ const EditionMainAsync = async ({ edition }: { edition: EditionMetadata }) => {
   const user = await getCurrentUser();
   if (!user) {
     return (
-      <LoginDialog hideGuest={edition.status !== SURVEY_OPEN} user={user} />
+      <LoginDialog
+        hideGuest={edition.status === SurveyStatusEnum.CLOSED}
+        user={user}
+      />
     );
   } else {
     return (

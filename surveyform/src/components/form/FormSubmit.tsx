@@ -30,10 +30,10 @@ export const FormSubmit = (props: FormSubmitProps) => {
   } = props;
 
   const { locale } = useLocaleContext();
-  const { edition, editionPathSegments } = useEdition();
+  const { edition } = useEdition();
   const router = useRouter();
 
-  const pathProps = { readOnly, edition, response, editionPathSegments };
+  const pathProps = { readOnly, edition, response };
   const nextPath = nextSection
     ? getEditionSectionPath({
         ...pathProps,

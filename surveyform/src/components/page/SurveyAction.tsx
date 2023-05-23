@@ -101,7 +101,7 @@ const SurveyStart = ({
   currentUser: any;
   setErrors: any;
 }) => {
-  const { edition, editionPathSegments } = useEdition();
+  const { edition } = useEdition();
   const { id: editionId, surveyId } = edition;
   const router = useRouter();
   const { source, referrer } = useSurveyActionParams();
@@ -143,7 +143,6 @@ const SurveyStart = ({
           // setLoading(false);
           console.log("start survey result", result);
           const pagePath = getEditionSectionPath({
-            editionPathSegments,
             edition,
             response: result.data,
             number: 1,
@@ -179,7 +178,7 @@ const EditionLink = ({
   response?: ResponseDocument;
   message: string;
 }) => {
-  const { edition, editionPathSegments } = useEdition();
+  const { edition } = useEdition();
   const { locale } = useLocaleContext();
   return (
     <Link
@@ -188,7 +187,6 @@ const EditionLink = ({
         getEditionSectionPath({
           edition,
           response,
-          editionPathSegments,
           locale,
         })
       }

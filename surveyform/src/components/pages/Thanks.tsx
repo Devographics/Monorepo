@@ -19,7 +19,7 @@ export const Thanks = ({
   readOnly?: boolean;
 }) => {
   const { locale } = useLocaleContext();
-  const { edition, editionPathSegments } = useEdition();
+  const { edition } = useEdition();
   const imageUrl = getSurveyImageUrl(edition);
   const { survey, year } = edition;
   const { name } = survey;
@@ -53,7 +53,6 @@ export const Thanks = ({
               response,
               forceReadOnly: readOnly,
               number: edition.sections.length,
-              editionPathSegments,
               locale,
             })}
           >

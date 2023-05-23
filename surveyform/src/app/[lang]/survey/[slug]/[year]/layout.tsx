@@ -93,7 +93,7 @@ export default async function SurveyLayout({
   initRedis(serverConfig().redisUrl);
 
   const edition = await mustGetSurveyEdition(params);
-  const surveyParamsTable = await getSurveyParamsTable();
+  const surveyParamsTable = getSurveyParamsTable();
   // survey specific strings
   const localeId = params.lang;
   if (localeId.includes(".")) {
@@ -144,7 +144,10 @@ If this error still happens in a few months (2023) open an issue with repro at N
     <EditionProvider
       edition={edition}
       editionPathSegments={[params.slug, params.year]}
-      editionHomePath={getEditionHomePath(edition, surveyParamsTable)}
+      editionHomePath={getEditionHomePath({
+        edition,
+        locale: { id: localeId },
+      })}
       surveySlug={params.slug}
       editionSlug={params.year}
     >

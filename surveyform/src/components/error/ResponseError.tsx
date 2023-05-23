@@ -15,7 +15,7 @@ export const ResponseError = ({
   console.log("responseError", { responseError });
   const { locale } = useLocaleContext();
   const { id, properties } = responseError;
-  const { edition, editionPathSegments } = useEdition();
+  const { edition } = useEdition();
   return (
     <div className="survey-item-error error message">
       <h5 className="error-code">
@@ -29,7 +29,6 @@ export const ResponseError = ({
           href={getEditionSectionPath({
             edition,
             response: { _id: properties.responseId },
-            editionPathSegments,
             locale,
           })}
         >
