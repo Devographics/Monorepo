@@ -10,13 +10,12 @@ import { UserDocument } from "~/account/user/typings";
 import { NextApiRequest } from "next";
 // TODO: perhaps pass those via an init function/closure to make the account package independant from user db actions
 import { upgradeUser } from "~/account/user/db-actions/upgrade";
-import { updateUserEmailHash } from "~/account/user/db-actions/updateEmailHash";
 import { createOrUpgradeUser } from "~/account/user/db-actions/createOrUpgrade";
 import { findUserFromEmail } from "~/account/user/db-actions/findFromEmail";
 
 /**
  * Compute the full magic link, with redirection parameter
- * 
+ *
  * TODO: use NextRequest not NextApiRequest to move out of route handlers
  *
  * @param req
@@ -33,6 +32,7 @@ const computeMagicLink = (req: NextApiRequest, href: string) => {
   }
   return magicLinkUrl.toString();
 };
+
 async function sendMagicLink(
   destination: string,
 
@@ -56,8 +56,16 @@ async function sendMagicLink(
   // => this could enable a "temporary authentication" mode for new users to reduce friction in the future (we have to assess security yet)
   const foundUser = await findUserFromEmail(email);
 
+
   const { anonymousId, surveyId, editionId, year, locale } = req.body;
-  if (!foundUser) {
+  if (foundUser) {
+    // add anonymous id if necessary (BUT DO NOT VERIFY)
+    await upgradeUser({
+      foundUser: foundUser as UserDocument,
+      anonymousId,
+      makeVerified: false,
+    });
+  } else {
     const user: {
       email: string;
       anonymousId: string;
@@ -71,15 +79,6 @@ async function sendMagicLink(
     };
 
     await createOrUpgradeUser(user);
-  } else {
-    await updateUserEmailHash(foundUser, email);
-
-    // add anonymous id if necessary (BUT DO NOT VERIFY)
-    await upgradeUser({
-      foundUser: foundUser as UserDocument,
-      anonymousId,
-      makeVerified: false,
-    });
   }
 
   //console.log("send to", email);
@@ -158,8 +157,6 @@ async function verify(
       });
       return cb(null, createdOrUpgradedUser);
     } else {
-      await updateUserEmailHash(foundUser, email);
-
       const upgradedUser = await upgradeUser({
         foundUser: foundUser as UserTypeServer,
         anonymousId,

@@ -11,12 +11,44 @@ import { getUsersCollection } from "@devographics/mongo";
 // always use the most recent one
 export const findUserFromEmail = async (email: string) => {
   const Users = await getUsersCollection<UserDocument>();
-  const usersByEmail = await Users.find(
+  let newHashUser, legacyHashUser;
+  const emailHash = createEmailHash(email);
+  // start by looking for a user matching the new (secure) hash
+  newHashUser = await Users.findOne(
     {
-      emailHash: createEmailHash(email),
+      emailHash,
     },
-    { sort: { createdAt: -1 }, limit: 1 }
-  ).toArray();
-  if (usersByEmail.length > 0) console.warn("Found more than one user (_id:" + usersByEmail[0]._id + ")")
-  return usersByEmail[0] as UserDocument;
+    { sort: { createdAt: -1 } }
+  );
+
+  // if we didn't find user matching email using regular hash, also
+  // try with legacy (weaker) hash
+  if (!newHashUser) {
+    const emailHashLegacy = createEmailHash(
+      email,
+      process.env.ENCRYPTION_KEY_LEGACY
+    );
+    legacyHashUser = await Users.findOne(
+      {
+        emailHash: emailHashLegacy,
+      },
+      { sort: { createdAt: -1 } }
+    );
+
+    // if we did find a user, update it to the regular hash so that
+    // we can skip this step next time
+    if (legacyHashUser) {
+      await Users.updateOne(
+        { _id: legacyHashUser._id },
+        {
+          $set: {
+            emailHash,
+            emailHashLegacy, // save legacy hash for safekeeping
+          },
+        }
+      );
+    }
+  }
+  const user = newHashUser || legacyHashUser;
+  return user as UserDocument;
 };
