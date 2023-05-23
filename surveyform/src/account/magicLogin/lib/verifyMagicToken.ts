@@ -18,11 +18,9 @@ export async function verifyMagicToken(
   //  verifyUrl.searchParams.set("anonymousId", anonymousId);
   //}
   // @see https://github.com/mxstbr/passport-magic-login/pull/19
-  const url = `${
-    apiRoutes.account.magicLogin.verifyToken.href
-  }?token=${encodeURIComponent(token)}${
-    anonymousId ? `&anonymousId=${encodeURIComponent(anonymousId)}` : ""
-  }`;
+  const url = `${apiRoutes.account.magicLogin.verifyToken.href()}?token=${encodeURIComponent(
+    token
+  )}${anonymousId ? `&anonymousId=${encodeURIComponent(anonymousId)}` : ""}`;
 
   const res = await fetch(url, {
     //body: JSON.stringify({ token, anonymousId }),

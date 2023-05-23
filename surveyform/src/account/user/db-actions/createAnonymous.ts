@@ -7,8 +7,6 @@ export const generateAnonymousUser =
     return {
       // maybe overwritten later on, but we generate a string _id here to guarantee we don't accidentaly use MongoId
       _id: newMongoId(),
-      groups: [],
-      isAdmin: false,
       authMode: "anonymous",
       isVerified: false,
     };

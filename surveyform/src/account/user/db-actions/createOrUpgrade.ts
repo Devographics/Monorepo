@@ -4,30 +4,34 @@ import { getUsersCollection, newMongoId } from "@devographics/mongo";
 import { createUser } from "~/lib/users/db-actions/create";
 import { loadUser } from "~/lib/users/db-actions/load";
 
-async function createPasswordlessUser({ email, ...otherUserProps }: { email: string } & Partial<UserDocument>) {
+async function createPasswordlessUser({
+  email,
+  ...otherUserProps
+}: { email: string } & Partial<UserDocument>) {
   // 1.1) not anonymous, first login: create a user
   // create a new user in the db and return it
 
   // just to please ts
-  const {
-    authMode: otherAuthMode,
-    ...otherOtherUserProps
-  } = otherUserProps;
+  const { authMode: otherAuthMode, ...otherOtherUserProps } = otherUserProps;
   const user: UserDocument = {
     _id: newMongoId(),
     emailHash: createEmailHash(email),
-    // TODO: the typings here are not very good, groups is optional during creation
-    groups: [],
     // since we used a magic link the email is known to be valid already
     isVerified: true,
     authMode: "passwordless",
     ...otherOtherUserProps, // can override other props, such as "isVerfied"
   };
-  const createdUser = await createUser({ data: user })
+  const createdUser = await createUser({ data: user });
   return createdUser;
 }
 
-async function upgradeToPasswordlessUser({ anonymousId, email }: { anonymousId: string, email: string }) {
+async function upgradeToPasswordlessUser({
+  anonymousId,
+  email,
+}: {
+  anonymousId: string;
+  email: string;
+}) {
   // 1.2) already logged as anonymous, upgrade to passwordless with email
   const Users = await getUsersCollection<UserDocument>();
   // const anonymousUser = (
@@ -48,14 +52,16 @@ async function upgradeToPasswordlessUser({ anonymousId, email }: { anonymousId: 
     authMode: "passwordless",
   };
 
-  await Users.updateOne({ _id: anonymousId }, {
-    $set: {
-      ...upgradedUser
+  await Users.updateOne(
+    { _id: anonymousId },
+    {
+      $set: {
+        ...upgradedUser,
+      },
     }
-  })
-  return await Users.findOne({ _id: anonymousId })
+  );
+  return await Users.findOne({ _id: anonymousId });
 }
-
 
 /**
  * Create the user after they clicked the first magic link
@@ -70,8 +76,12 @@ export const createOrUpgradeUser = async ({
   anonymousId?: string;
 } & Partial<UserDocument>) => {
   if (!anonymousId) {
-    return await createPasswordlessUser({ email, ...otherUserProps })
+    return await createPasswordlessUser({ email, ...otherUserProps });
   } else {
-    return await upgradeToPasswordlessUser({ anonymousId, email, ...otherUserProps })
+    return await upgradeToPasswordlessUser({
+      anonymousId,
+      email,
+      ...otherUserProps,
+    });
   }
 };
