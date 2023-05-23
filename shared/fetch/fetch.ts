@@ -21,20 +21,27 @@ const memoryCache = new NodeCache({
     useClones: false
 })
 
-async function getFromCache<T = any>(key: string, fetchFunc: () => Promise<T>) {
+async function getFromCache<T = any>(
+    key: string,
+    fetchFunc: () => Promise<T>,
+    calledFrom?: string
+) {
+    const calledFromLog = calledFrom ? `(↪️  ${calledFrom})` : ''
     const enableCache = !(process.env.ENABLE_CACHE === 'false')
     if (enableCache) {
         if (memoryCache.has(key)) {
-            console.debug(`🟢 [${key}] in-memory cache hit`)
+            console.debug(`🟢 [${key}] in-memory cache hit ${calledFromLog}`)
             const res = await memoryCache.get<Promise<T>>(key)!
             return res
         } else {
             const redisData = await fetchJson<T>(key)
             if (redisData) {
-                console.debug(`🔵 [${key}] in-memory cache miss, redis hit`)
+                console.debug(`🔵 [${key}] in-memory cache miss, redis hit ${calledFromLog}`)
                 return redisData
             } else {
-                console.debug(`🟣 [${key}] in-memory & redis cache miss, fetching from API`)
+                console.debug(
+                    `🟣 [${key}] in-memory & redis cache miss, fetching from API ${calledFromLog}`
+                )
 
                 const promise = fetchFunc()
                 memoryCache.set(key, promise)
@@ -47,7 +54,7 @@ async function getFromCache<T = any>(key: string, fetchFunc: () => Promise<T>) {
             }
         }
     } else {
-        console.debug(`🟠 [${key}] cache disabled, fetching from API`)
+        console.debug(`🟠 [${key}] cache disabled, fetching from API ${calledFromLog}`)
 
         const promise = fetchFunc()
         const result = await promise
@@ -88,7 +95,8 @@ export async function fetchEditionMetadataSurveyForm({
     })
     return await getFromCache<EditionMetadata>(
         key,
-        async () => await fetchEditionGraphQLSurveyForm({ surveyId, editionId })
+        async () => await fetchEditionGraphQLSurveyForm({ surveyId, editionId }),
+        calledFrom
     )
 }
 
@@ -98,11 +106,14 @@ const surveysMetadataKey = ({ context }: { context: string }) => `${context}__al
  * When connecting to the dev API, will get the demo survey
  * @returns
  */
-export const fetchSurveysMetadata = async (): Promise<Array<SurveyMetadata>> => {
+export const fetchSurveysMetadata = async (options?: {
+    calledFrom?: string
+}): Promise<Array<SurveyMetadata>> => {
     const key = surveysMetadataKey({ context: SURVEY_FORM_CONTEXT })
     return await getFromCache<Array<SurveyMetadata>>(
         key,
-        async () => await fetchSurveysListGraphQL({ includeQuestions: false })
+        async () => await fetchSurveysListGraphQL({ includeQuestions: false }),
+        options?.calledFrom
     )
 }
 
