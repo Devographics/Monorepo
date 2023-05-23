@@ -13,15 +13,14 @@ async function createPasswordlessUser({
 
   // just to please ts
   const { authMode: otherAuthMode, ...otherOtherUserProps } = otherUserProps;
-  const user: UserDocument = {
-    _id: newMongoId(),
+  const data = {
     emailHash: createEmailHash(email),
     // since we used a magic link the email is known to be valid already
     isVerified: true,
     authMode: "passwordless",
     ...otherOtherUserProps, // can override other props, such as "isVerfied"
   };
-  const createdUser = await createUser({ data: user });
+  const createdUser = await createUser({ data });
   return createdUser;
 }
 
