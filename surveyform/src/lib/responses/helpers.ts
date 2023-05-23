@@ -1,4 +1,4 @@
-import { ResponseDocument } from "@devographics/core-models";
+import type { ResponseDocument } from "@devographics/types";
 import type {
   SurveyMetadata,
   EditionMetadata,

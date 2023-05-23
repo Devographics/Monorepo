@@ -33,7 +33,7 @@ export const Footer = () => {
         )}
         {currentUser && (
           <>
-            <LogoutButton component={"a" as const} />
+            <LogoutButton asLink={true} />
           </>
         )}{" "}
       </div>

@@ -1,5 +1,4 @@
-import React from "react";
-import { Entity } from "@devographics/core-models";
+import { Entity } from "@devographics/types";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 
 /**

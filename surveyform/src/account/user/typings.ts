@@ -9,7 +9,8 @@ export type NewUserDocument = Omit<UserDocument, "emailHash"> & {
 
 export type UserDocument = {
   _id?: string;
-  anonymousIds?: string;
+  anonymousId?: string;
+  anonymousIds?: string[];
   /**
    * For passwordless, false until the user clicked the magic link for the first time
    * TODO: verify spec for anon user: they should probably stay always unverified

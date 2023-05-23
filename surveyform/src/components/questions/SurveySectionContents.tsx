@@ -2,7 +2,7 @@
 import { SurveyStatusEnum } from "@devographics/types";
 import { FormSection } from "../form/FormSection";
 import EditionMessage from "../surveys/SurveyMessage";
-import { ResponseDocument } from "@devographics/core-models";
+import type { ResponseDocument } from "@devographics/types";
 import { useEdition } from "../SurveyContext/Provider";
 import { useSection } from "../SectionContext/SectionProvider";
 

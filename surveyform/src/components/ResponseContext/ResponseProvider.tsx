@@ -1,23 +1,21 @@
 "use client";
-import { ResponseDocument } from "@devographics/core-models";
+import type { ResponseDocument } from "@devographics/types";
 import React, { createContext, useContext } from "react";
 
-const ResponseContext = createContext<Pick<ResponseDocument, "id"> | undefined>(
-  undefined
-);
+const ResponseIdContext = createContext<string | undefined>(undefined);
 
 export const ResponseProvider = ({
-  response,
+  responseId,
   children,
 }: {
   // TODO: should be the full response fetched server-side
-  response: Pick<ResponseDocument, "id">;
+  responseId: string;
   children: React.ReactNode;
 }) => {
   return (
-    <ResponseContext.Provider value={response}>
+    <ResponseIdContext.Provider value={responseId}>
       {children}
-    </ResponseContext.Provider>
+    </ResponseIdContext.Provider>
   );
 };
 
@@ -25,11 +23,11 @@ export const ResponseProvider = ({
  * Response id can be "read-only"
  * @returns
  */
-export const useResponse = () => {
-  const context = useContext(ResponseContext);
+export const useResponseId = () => {
+  const context = useContext(ResponseIdContext);
   if (!context) {
     throw new Error(
-      "Called useResponse before setting ResponseProvider context"
+      "Called useResponseId before setting ResponseIdProvider context"
     );
   }
   return context;

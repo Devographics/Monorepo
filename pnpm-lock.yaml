@@ -1165,7 +1165,6 @@ importers:
       '@babel/core': ^7.20.2
       '@cypress/code-coverage': ^3.10.0
       '@cypress/webpack-preprocessor': ^5.15.5
-      '@devographics/core-models': workspace:1.0.0
       '@devographics/fetch': workspace:^1.0.0
       '@devographics/i18n': workspace:^1.0.0
       '@devographics/mongo': workspace:^1.0.0
@@ -1257,7 +1256,6 @@ importers:
       yalc: ^1.0.0-pre.53
       zod: ^3.21.4
     dependencies:
-      '@devographics/core-models': link:../shared/core-models
       '@devographics/fetch': link:../shared/fetch
       '@devographics/i18n': link:../shared/i18n
       '@devographics/mongo': link:../shared/mongo

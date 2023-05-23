@@ -1,4 +1,4 @@
-import { ResponseDocument } from "@devographics/core-models";
+import type { ResponseDocument } from "@devographics/types";
 import {
   EditionMetadata,
   SectionMetadata,
@@ -86,7 +86,7 @@ export function getEditionSectionPath({
   forceReadOnly?: boolean;
   // section
   // TODO: why sometimes we have "id" vs "_id"? (_id coming from Mongo, id from Vulcan probably)
-  response?: Partial<Pick<ResponseDocument, "_id" | "id">>;
+  response?: Partial<Pick<ResponseDocument, "_id">>;
   number?: any;
   page?: "thanks";
 }) {
@@ -106,7 +106,7 @@ export function getEditionSectionPath({
     pathSegments.push(readOnlySegment);
   } else {
     if (!response) throw new Error("Undefined response");
-    const responseSegment = response.id || response._id;
+    const responseSegment = response._id;
     if (!responseSegment) {
       console.log(response);
       throw new Error(

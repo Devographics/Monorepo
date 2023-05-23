@@ -10,7 +10,7 @@ interface ApiData<T = any> {
 }
 
 export const useCurrentUser = () => {
-  const result = useSWR<UserWithResponses>(
+  const result = useSWR<ApiData<UserWithResponses>>(
     apiRoutes.account.currentUser.href,
     basicFetcher
   );

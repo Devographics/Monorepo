@@ -26,7 +26,7 @@ export default async function WithResponseLayout({
   // instead of doing client-side data fetching
   // TODO: also check response access permissions!
   return (
-    <ResponseProvider response={{ id: params.responseId }}>
+    <ResponseProvider responseId={params.responseId}>
       {children}
     </ResponseProvider>
   );

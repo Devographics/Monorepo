@@ -52,7 +52,6 @@
     "typecheck": "tsc --noEmit --p src/tsconfig.json"
   },
   "dependencies": {
-    "@devographics/core-models": "workspace:1.0.0",
     "@devographics/fetch": "workspace:^1.0.0",
     "@devographics/i18n": "workspace:^1.0.0",
     "@devographics/mongo": "workspace:^1.0.0",

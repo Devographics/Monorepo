@@ -1,5 +1,5 @@
 "use client";
-import { useResponse } from "./ResponseContext/ResponseProvider";
+import { useResponseId } from "./ResponseContext/ResponseProvider";
 import { useSection } from "./SectionContext/SectionProvider";
 import { useEdition } from "./SurveyContext/Provider";
 
@@ -39,7 +39,7 @@ export const useSurveyResponseSectionParams = (): SurveyParams & {
 } => {
   // TODO: we will need useParams instead, it's not yet released (07/12/2022)
   const rootParams = useSurveyParams(); // slug and year
-  const { id: responseId } = useResponse();
+  const responseId = useResponseId();
   const sectionNumber = useSection();
   return {
     ...rootParams,
@@ -53,7 +53,7 @@ export const useSurveyResponseParams = (): SurveyParams & {
 } => {
   // TODO: we will need useParams instead, it's not yet released (07/12/2022)
   const rootParams = useSurveyParams(); // slug and year
-  const { id: responseId } = useResponse();
+  const responseId = useResponseId();
   return {
     ...rootParams,
     responseId: responseId as string,

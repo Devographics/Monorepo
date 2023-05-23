@@ -19,7 +19,7 @@ import { LoadingButton } from "~/components/ui/LoadingButton";
 import { getEditionSectionPath } from "~/lib/surveys/helpers";
 import { createResponse } from "./services";
 import type { EditionMetadata } from "@devographics/types";
-import { ResponseDocument } from "@devographics/core-models";
+import type { ResponseDocument } from "@devographics/types";
 import { useEdition } from "../SurveyContext/Provider";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { ResponseError } from "~/components/error/ResponseError";

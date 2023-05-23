@@ -73,12 +73,15 @@ const getZodObject = <T>({
       ? context === ActionContexts.CLIENT
       : context === ActionContexts.SERVER);
 
+  // @ts-ignore
   let zType = getZodType(type);
   if (zType === z.string()) {
     zType = zType.max(GLOBAL_TEXTFIELD_LIMIT);
   }
 
+  // @ts-ignore
   zType = isArray ? zType.array() : zType;
+  // @ts-ignore
   zType = isRequired ? zType : zType.optional();
   return zType;
 };

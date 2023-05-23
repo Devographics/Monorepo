@@ -1,22 +1,25 @@
 import Link from "next/link";
-import { SurveyMetadata, SurveyStatusEnum } from "@devographics/types";
+import {
+  SurveyMetadata,
+  SurveyStatusEnum,
+  ResponseDocument,
+} from "@devographics/types";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
-import { ResponseDocument, SurveyEdition } from "@devographics/core-models";
 import { UserDocument } from "~/account/user/typings";
 import { fetchSurveysMetadata } from "@devographics/fetch";
 import { getEditionSectionPath } from "~/lib/surveys/helpers";
 
-const UserResponses = async ({
+const UserResponses = ({
+  surveys,
   localeId,
   responses,
   user,
 }: {
+  surveys: SurveyMetadata[];
   localeId: string;
   responses: Array<ResponseDocument>;
   user: UserDocument;
 }) => {
-  const surveys = await fetchSurveysMetadata({ calledFrom: "UserResponses" });
-
   return (
     <div>
       <div>

@@ -1,4 +1,4 @@
-import { ResponseDocument } from "@devographics/core-models";
+import type { ResponseDocument } from "@devographics/types";
 import { EditionMetadata, SurveyMetadata } from "@devographics/types";
 import { Actions } from "./validation";
 import clone from "lodash/clone.js";

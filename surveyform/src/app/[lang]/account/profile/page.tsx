@@ -7,7 +7,8 @@ import { getCurrentUser } from "~/account/user/api/rsc-fetchers";
 import { getRawResponsesCollection } from "@devographics/mongo";
 import { UserDocument } from "~/account/user/typings";
 import { cache } from "react";
-import { ResponseDocument } from "@devographics/core-models";
+import type { ResponseDocument } from "@devographics/types";
+import { fetchSurveysMetadata } from "@devographics/fetch";
 
 const getResponses = cache(
   async ({ currentUser }: { currentUser: UserDocument }) => {
@@ -21,6 +22,8 @@ const getResponses = cache(
 );
 
 const Profile = async ({ params }) => {
+  const surveys = await fetchSurveysMetadata({ calledFrom: "UserResponses" });
+
   // TODO: filter out fields the user is not supposed to see
   const currentUser = await getCurrentUser();
   if (!currentUser) {
@@ -37,6 +40,7 @@ const Profile = async ({ params }) => {
       </p>
       {responses?.length > 0 && currentUser.authMode !== "anonymous" && (
         <UserResponses
+          surveys={surveys}
           localeId={params.lang}
           responses={responses}
           user={currentUser}

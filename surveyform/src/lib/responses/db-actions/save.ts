@@ -5,7 +5,7 @@ import { fetchEditionMetadataSurveyForm } from "@devographics/fetch";
 import { EditionMetadata } from "@devographics/types";
 import { getResponseSchema } from "~/lib/responses/schema";
 import { restoreTypes, runFieldCallbacks, OnUpdateProps } from "~/lib/schemas";
-import { ResponseDocument } from "@devographics/core-models";
+import type { ResponseDocument } from "@devographics/types";
 import { getResponseEmail } from "~/lib/responses/helpers";
 import { subscribe } from "~/lib/server/email/email_octopus";
 import { captureException } from "@sentry/nextjs";

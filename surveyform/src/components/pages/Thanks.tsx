@@ -7,8 +7,8 @@ import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { getSurveyImageUrl } from "~/lib/surveys/helpers";
 import Link from "next/link";
 import { useEdition } from "~/components/SurveyContext/Provider";
-// import { ResponseDocument } from "@devographics/core-models";
-import { useResponse } from "~/components/ResponseContext/ResponseProvider";
+// import type { ResponseDocument } from "@devographics/types";
+import { useResponseId } from "~/components/ResponseContext/ResponseProvider";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
 
 export const Thanks = ({
@@ -24,7 +24,7 @@ export const Thanks = ({
   const { survey, year } = edition;
   const { name } = survey;
   // TODO: get from server, see ongoing investigation
-  const response = useResponse();
+  const response = {};
 
   return (
     <div className="contents-narrow thanks">

@@ -2,7 +2,6 @@ import EditionMessage from "~/components/surveys/SurveyMessage";
 import SurveyCredits from "~/components/surveys/SurveyCredits";
 import Image from "next/image";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
-import { SURVEY_OPEN } from "@devographics/core-models";
 import Translators from "~/components/common/Translators";
 import Faq from "~/components/common/Faq";
 import EditionAction from "~/components/page/SurveyAction";

@@ -6,13 +6,9 @@ import { Button } from "~/components/ui/Button";
 import { logout } from "../client-fetchers/logout";
 import { routes } from "~/lib/routes";
 
-export const LogoutButton = ({
-  component,
-}: {
-  component?: React.ComponentType<any> | React.ElementType<any>;
-}) => {
+export const LogoutButton = ({ asLink }: { asLink?: boolean }) => {
   const intl = useIntlContext();
-  const LinkOrButton = (component || Button) as React.ComponentType<any>;
+  const LinkOrButton = asLink ? "a" : Button;
   const { currentUser } = useCurrentUser();
   if (!currentUser) return null;
   return (
@@ -26,7 +22,7 @@ export const LogoutButton = ({
           console.error(err);
         }
       }}
-      {...(component && { href: "#" })}
+      {...(asLink && { href: "#" })}
     >
       {intl.formatMessage({
         id: `accounts.sign_out`,

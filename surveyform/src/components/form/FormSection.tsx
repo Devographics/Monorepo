@@ -129,22 +129,13 @@ export const FormSection = (props) => {
       <FormContext.Provider value={formProps}>
         <FormLayout {...formProps}>
           {section.questions.map((question, index) => (
-            <ErrorBoundary
+            <FormQuestion
+              {...formProps}
               key={question.id}
-              fallbackComponent={({ error }) => (
-                <p>
-                  Could not load question {question.id} ({error?.message})
-                </p>
-              )}
-            >
-              <FormQuestion
-                {...formProps}
-                key={question.id}
-                question={question}
-                sectionNumber={sectionNumber}
-                questionNumber={index + 1}
-              />
-            </ErrorBoundary>
+              question={question}
+              sectionNumber={sectionNumber}
+              questionNumber={index + 1}
+            />
           ))}
         </FormLayout>
       </FormContext.Provider>
@@ -153,3 +144,26 @@ export const FormSection = (props) => {
 };
 
 export default FormSection;
+
+/* 
+
+ErrorBoundary triggers TS error, disable for now
+
+<ErrorBoundary
+  key={question.id}
+  fallbackComponent={({ error }) => (
+    <p>
+      Could not load question {question.id} ({error?.message})
+    </p>
+  )}
+>
+  <FormQuestion
+    {...formProps}
+    key={question.id}
+    question={question}
+    sectionNumber={sectionNumber}
+    questionNumber={index + 1}
+  />
+</ErrorBoundary> 
+
+*/
