@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import isEmpty from "lodash/isEmpty";
 import { FormContext } from "./FormContext";
 import { ErrorBoundary } from "~/components/error";
+import { useLocaleContext } from "~/i18n/context/LocaleContext";
 
 const initFormState = (response) => ({
   currentValues: {},
@@ -33,6 +34,7 @@ export const FormSection = (props) => {
     null
   );
   const [errorResponse, setErrorResponse] = useState();
+  const { locale } = useLocaleContext();
 
   const stateStuff = {
     formState,
@@ -82,6 +84,7 @@ export const FormSection = (props) => {
       const data = {
         ...currentValues,
         lastSavedAt: new Date(),
+        locale: locale.id,
       };
       // run action
       const res = await saveResponse({

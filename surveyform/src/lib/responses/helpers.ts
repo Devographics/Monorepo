@@ -39,28 +39,19 @@ export const getCompletionPercentage = ({
   return completion;
 };
 
-enum KnowledgeRank {
-  NOVICE = "novice",
-  APPRENTICE = "apprentice",
-  INTERMEDIATE = "intermediate",
-  EXPERT = "expert",
-  SCHOLAR = "scholar",
-  ELITE = "elite",
-}
-
 const getRank = (score) => {
   if (score < 10) {
-    return KnowledgeRank.NOVICE;
+    return "rank1";
   } else if (score < 30) {
-    return KnowledgeRank.APPRENTICE;
+    return "rank2";
   } else if (score < 50) {
-    return KnowledgeRank.INTERMEDIATE;
+    return "rank3";
   } else if (score < 70) {
-    return KnowledgeRank.EXPERT;
+    return "rank4";
   } else if (score < 90) {
-    return KnowledgeRank.SCHOLAR;
+    return "rank5";
   } else {
-    return KnowledgeRank.ELITE;
+    return "rank6";
   }
 };
 

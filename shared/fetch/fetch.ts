@@ -9,7 +9,9 @@ import { SurveyMetadata, EditionMetadata } from '@devographics/types'
 import {
     fetchEditionGraphQLSurveyForm,
     fetchSurveyGraphQL,
-    fetchSurveysListGraphQL
+    fetchSurveysListGraphQL,
+    fetchLocalesListGraphQL,
+    fetchLocaleGraphQL
 } from '@devographics/graphql'
 
 const SURVEY_FORM_CONTEXT = 'surveyform'
@@ -21,6 +23,10 @@ const memoryCache = new NodeCache({
     useClones: false
 })
 
+/**
+ * Generic function to fetch something from cache, or store it if cache misses
+ * @returns
+ */
 async function getFromCache<T = any>(
     key: string,
     fetchFunc: () => Promise<T>,
@@ -73,6 +79,10 @@ const editionMetadataKey = ({
     editionId: string
 }) => `${context}__${surveyId}__${editionId}__metadata`
 
+/**
+ * Load the metadata of a survey edition for the surveyform app
+ * @returns
+ */
 export async function fetchEditionMetadataSurveyForm({
     surveyId,
     editionId,
@@ -103,7 +113,7 @@ export async function fetchEditionMetadataSurveyForm({
 const surveysMetadataKey = ({ context }: { context: string }) => `${context}__allSurveys__metadata`
 
 /**
- * When connecting to the dev API, will get the demo survey
+ * Fetch metadata for all surveys
  * @returns
  */
 export const fetchSurveysMetadata = async (options?: {
@@ -121,7 +131,7 @@ const surveyMetadataKey = ({ context, surveyId }: { context: string; surveyId: s
     `${context}__${surveyId}__metadata`
 
 /**
- * When connecting to the dev API, will get the demo survey
+ * Fetch metadata for a single survey
  * @returns
  */
 export const fetchSurveyMetadata = async ({
@@ -137,4 +147,32 @@ export const fetchSurveyMetadata = async ({
         key,
         async () => await fetchSurveyGraphQL({ surveyId })
     )
+}
+
+export const allLocalesMetadataCacheKey = ({ context }: { context: string }) =>
+    `${context}__all_locales`
+
+/**
+ * Fetch metadata for all locales
+ * @returns
+ */
+export const fetchLocalesList = async ({}: {}): Promise<any> => {
+    const key = allLocalesMetadataCacheKey({ context: SURVEY_FORM_CONTEXT })
+    return await getFromCache<any>(key, async () => await fetchLocalesListGraphQL({}))
+}
+export const localeParsedCacheKey = ({
+    localeId,
+    context
+}: {
+    localeId: string
+    context: string
+}) => `${context}__${localeId}__parsed`
+
+/**
+ * Fetch metadata for all locales
+ * @returns
+ */
+export const fetchLocale = async ({ localeId }: { localeId: string }): Promise<any> => {
+    const key = localeParsedCacheKey({ localeId, context: SURVEY_FORM_CONTEXT })
+    return await getFromCache<any>(key, async () => await fetchLocaleGraphQL({ localeId }))
 }

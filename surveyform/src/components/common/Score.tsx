@@ -70,7 +70,7 @@ const Score = ({
   const intl = useIntlContext();
   const containerRef = useRef<HTMLInputElement | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
-  const { known, total, score, unknownFields } = getKnowledgeScore({
+  const { known, total, score, unknownFields, rank } = getKnowledgeScore({
     response,
     edition,
   });
@@ -148,6 +148,9 @@ const Score = ({
             id="thanks.score_explanation"
             values={{ known, total }}
           />
+        </div>
+        <div className="score-rank">
+          <FormattedMessage id={`knowledge_rank.${rank}`} />
         </div>
         <div className="score-share">
           <Button

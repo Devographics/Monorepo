@@ -10,6 +10,7 @@ import { useEdition } from "~/components/SurveyContext/Provider";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { Loading } from "~/components/ui/Loading";
 import { useResponse } from "~/lib/responses/hooks";
+import ReadingListResults from "~/components/reading_list/ReadingListResults";
 
 export const Thanks = ({
   responseId,
@@ -37,11 +38,14 @@ export const Thanks = ({
 
   return (
     <div className="contents-narrow thanks">
+      <div className="survey-message survey-finished">
+        <FormattedMessage id="general.thanks1" />
+      </div>
       <h1 className="survey-image survey-image-small">
         {imageUrl && (
           <Image
-            width={300}
-            height={200}
+            width={420}
+            height={280}
             src={imageUrl}
             alt={`${name} ${year}`}
             quality={100}
@@ -49,8 +53,10 @@ export const Thanks = ({
         )}
       </h1>
       {response && <Score response={response} edition={edition} />}
+      {response && <ReadingListResults response={response} edition={edition} />}
+
       <div>
-        <FormattedMessage id="general.thanks" />
+        <FormattedMessage id="general.thanks2" />
       </div>
       <ShareSite survey={edition} />
       <div className="form-submit form-section-nav form-section-nav-bottom">

@@ -270,10 +270,14 @@
 .survey-message {
   padding: $spacing;
   margin-bottom: $spacing * 2;
+  text-align: center;
   &.survey-closed {
     background: $redTransparent;
   }
   &.survey-preview {
+    background: $greenTransparent;
+  }
+  &.survey-finished {
     background: $greenTransparent;
   }
 }
@@ -293,7 +297,28 @@
   // gap: math.div($spacing, 2);
 }
 
-.reading-list {
+.reading-list-summary {
+  .reading-list {
+    &-title {
+      margin-bottom: $spacing/3;
+    }
+    &-description {
+      font-size: $smallish-font;
+    }
+    &-items {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+    &-item {
+      padding-top: $spacing/3;
+      margin-top: $spacing/3;
+      border-top: $border;
+      font-size: $medium-font;
+    }
+  }
+}
+.reading-list-summary {
   position: sticky;
   top: $spacing;
   opacity: 0.3;
@@ -301,23 +326,9 @@
   &:hover {
     opacity: 1;
   }
-  &-title {
-    margin-bottom: $spacing/3;
-  }
-  &-description {
-    font-size: $smallish-font;
-  }
-  &-items {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-  }
-  &-item {
-    padding-top: $spacing/3;
-    margin-top: $spacing/3;
-    border-top: $border;
-    font-size: $medium-font;
-  }
+}
+
+.reading-list-results {
 }
 @keyframes flash {
   0% {

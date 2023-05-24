@@ -38,7 +38,6 @@ export const ReadingList = (props: FormInputProps) => {
 
   useEffect(() => {
     if (hasReadingListChanged) {
-      console.log("readingList has changed");
       setAnimate(true);
     }
 
@@ -53,7 +52,11 @@ export const ReadingList = (props: FormInputProps) => {
   }, [hasReadingListChanged]);
 
   return (
-    <div className={`reading-list ${animate ? "reading-list-animate" : ""}`}>
+    <div
+      className={`reading-list reading-list-summary ${
+        animate ? "reading-list-animate" : ""
+      }`}
+    >
       <h5 className="reading-list-title">
         <FormattedMessage id="readinglist.title" />
       </h5>
