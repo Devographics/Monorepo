@@ -9,6 +9,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     const currentUser = await tryGetCurrentUser(req);
 
     // Get responseId
+    // TODO: this should be a route parameter instead
     const responseId = req.nextUrl.searchParams.get("responseId");
     if (!responseId) {
       throw new ServerError({

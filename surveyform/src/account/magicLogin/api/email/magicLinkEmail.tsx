@@ -12,6 +12,7 @@ import { localMailTransport } from "~/lib/server/mail/transports";
 import Mail from "nodemailer/lib/mailer";
 import { fetchEditionMetadataSurveyForm } from "@devographics/fetch";
 import { SurveyMetadata } from "@devographics/types";
+import { MagicLoginSendEmailBody } from "../../typings/requests-body";
 
 const MagicLinkHtml = ({
   magicLink,
@@ -51,19 +52,13 @@ export const sendMagicLinkEmail = async ({
   surveyId,
   editionId,
   locale,
-}: {
-  email: string;
+}: Pick<MagicLoginSendEmailBody, "surveyId" | "editionId" | "locale"> & {
   magicLink: string;
-  locale: string;
-  surveyId?: string;
-  editionId?: string;
+  email: string;
 }) => {
-  if (!surveyId) {
-    console.warn(
-      "No surveyId provided to sendMagicLinkEmail, will use state_of_js"
-    );
-  }
-  // TODO: technically only the survey context is needed here
+  /**
+   * We use state of js as the default context when user is connecting from the generic form
+   */
   const edition = await fetchEditionMetadataSurveyForm({
     surveyId: surveyId || defaultSurveyId,
     editionId: editionId || defaultEditionId,

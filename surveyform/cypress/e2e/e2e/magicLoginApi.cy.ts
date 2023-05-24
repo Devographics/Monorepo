@@ -47,7 +47,7 @@ describe("auth - API", () => {
     it("do not send verification email if email is not provided", () => {
       cy.request({
         method: "POST",
-        url: apiRoutes.account.magicLogin.sendEmail.href,
+        url: apiRoutes.account.magicLogin.sendEmail.href(),
         body: { wrong: "foo" },
         // we specificallly test a failure
         failOnStatusCode: false,

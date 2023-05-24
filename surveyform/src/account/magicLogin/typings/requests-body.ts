@@ -3,7 +3,11 @@ export interface MagicLoginSendEmailBody {
     destination: string;
     /** We can create an unverified account as soon as we send the email */
     anonymousId?: string;
-    locale: string;
+    /**
+     * TODO: get locale from request instead of passing from client explicitely
+     * @deprecated
+     */
+    locale?: string;
     /**
      * Optional editionId and surveyId to login to a precise survey
      */

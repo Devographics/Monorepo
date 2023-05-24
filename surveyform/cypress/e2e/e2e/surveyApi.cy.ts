@@ -1,9 +1,9 @@
 //**** API TESTS
 // TODO: those tests should be replaced by tests against API routes when this is more mature in Next (no need to use a browser here)
 import { loginAnonymously } from "~/account/anonymousLogin/lib";
-import { logout } from "~/account/user/lib";
 import { apiRoutes } from "~/lib/apiRoutes";
 import { testSurvey } from "../../fixtures/testSurvey";
+import { logout } from "~/account/user/client-fetchers/logout";
 
 const test = it
 
@@ -42,42 +42,21 @@ function getId(res: Cypress.Response<any>) {
   return res?.body?.data?.startSurvey?.data?._id
 }
 
-// single
-test("bad request if survey cannot be retrieved", () => {
-  // TODO: we currently only check the absence of editionId
-  cy.request({
-    method: "GET",
-    url: apiRoutes.response.single.href({ editionId: "foobar", surveyId: "barfoo" }),
-    failOnStatusCode: false
-
-  }).its("status").should("equal", 404)
-})
-
 test("unauthenticated can't get response", () => {
   // TODO: this is done in new route handlers but the legacy endpoints return a 200
   cy.request({
     method: "GET",
-    url: apiRoutes.response.single.href({ editionId: testSurvey.editionId, surveyId: testSurvey.surveyId }),
+    url: apiRoutes.responses.loadResponse.href({ responseId: "124" }),
     failOnStatusCode: false
 
   }).its("status").should("equal", 401)
 })
-test("authenticated get empty response", () => {
-  cyfy(loginAnonymously).its("status").should("equal", 200)
-  cy.request({
-    method: "GET",
-    url: apiRoutes.response.single.href({ editionId: testSurvey.editionId, surveyId: testSurvey.surveyId }),
-  }).its("status").should("equal", 200)
-})
-// TODO: in save/start test, also retrieve the response to test single/multi endpoint
-
-
 // start and save
 test("authenticated user starts then update survey", () => {
   cyfy(loginAnonymously).its("status").should("equal", 200)
   cy.request({
     method: "POST",
-    url: apiRoutes.response.startSurvey.href({ surveyId: testSurvey.surveyId, editionId: testSurvey.editionId }),
+    url: apiRoutes.responses.createResponse.href(),
     body: {
       surveyId: testSurvey.surveyId,
       editionId: testSurvey.editionId,
@@ -88,12 +67,11 @@ test("authenticated user starts then update survey", () => {
     expect(res.status).to.eq(200)
 
     expect(getId(res)).to.have.length.greaterThan(0)
-    const id = getId(res)
+    const responseId = getId(res)
     cy.request({
       method: "POST",
-      url: apiRoutes.response.saveSurvey.href({ surveyId: testSurvey.surveyId, editionId: testSurvey.editionId }),
+      url: apiRoutes.responses.saveResponse.href({ responseId }),
       body: {
-        id,
         // TODO: is it a partial or full-update? I think partial
         // TODO: pass actual data, and get the response back to see if they were saved
         data: {}
@@ -108,7 +86,7 @@ test("cannot start closed survey", () => {
   cyfy(loginAnonymously).its("status").should("equal", 200)
   cy.request({
     method: "POST",
-    url: apiRoutes.response.startSurvey.href({ surveyId: "state_of_js", editionId: "js2022" }),
+    url: apiRoutes.responses.createResponse.href(),
     body: {
       surveyId: "state_of_js",
       editionId: "js2022"
@@ -119,7 +97,7 @@ test("cannot start closed survey", () => {
 test("unauthenticated user cannot start survey", () => {
   cy.request({
     method: "POST",
-    url: apiRoutes.response.startSurvey.href({ surveyId: testSurvey.surveyId, editionId: testSurvey.editionId }),
+    url: apiRoutes.responses.createResponse.href(),
     body: {
       surveyId: testSurvey.surveyId,
       editionId: testSurvey.editionId,
@@ -135,21 +113,20 @@ test("authenticated or unauthenticated users cannot save someone else survey", (
   cyfy(loginAnonymously).its("status").should("equal", 200)
   cy.request({
     method: "POST",
-    url: apiRoutes.response.startSurvey.href({ surveyId: testSurvey.surveyId, editionId: testSurvey.editionId }),
+    url: apiRoutes.responses.createResponse.href(),
     body: {
       surveyId: testSurvey.surveyId,
       editionId: testSurvey.editionId,
     },
   }).then(res => {
-    const id = getId(res)
-    expect(id).to.have.length.greaterThan(0)
+    const responseId = getId(res)
+    expect(responseId).to.have.length.greaterThan(0)
     // logout
     cyfy(logout)
     cy.request({
       method: "POST",
-      url: apiRoutes.response.saveSurvey.href({ surveyId: testSurvey.surveyId, editionId: testSurvey.editionId }),
+      url: apiRoutes.responses.saveResponse.href({ responseId }),
       body: {
-        id,
         data: {}
       },
       // we specificallly test a failure
@@ -161,9 +138,8 @@ test("authenticated or unauthenticated users cannot save someone else survey", (
     cyfy(loginAnonymously).its("status").should("equal", 200)
     cy.request({
       method: "POST",
-      url: apiRoutes.response.saveSurvey.href({ surveyId: testSurvey.surveyId, editionId: testSurvey.editionId }),
+      url: apiRoutes.responses.saveResponse.href({ responseId }),
       body: {
-        id,
         data: {}
       },
       // we specificallly test a failure
