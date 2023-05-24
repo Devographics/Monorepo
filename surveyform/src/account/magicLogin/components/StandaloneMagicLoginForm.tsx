@@ -2,14 +2,20 @@
 
 import { useState, ReactNode, FormEventHandler } from "react";
 import { useIntlContext } from "@devographics/react-i18n";
-import { sendMagicLoginEmail } from "../lib/sendMagicLoginEmail";
+import { sendMagicLoginEmail } from "~/account/magicLogin/client-actions/sendMagicLoginEmail";
 import { useCurrentUser } from "~/lib/users/hooks";
-import { useSearchParams } from "next/navigation";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { FormComponentEmail } from "./FormComponentEmail";
 import { Button } from "~/components/ui/Button";
-import { useSurveyParams } from "~/components/hooks";
 
+export interface StandaloneMagicLoginFormProps {
+  label?: string | ReactNode;
+  /**
+   * Optional surveyId and editionId to login to a specific survey
+   */
+  surveyId?: string;
+  editionId?: string;
+}
 /**
  * With passwordless approach, there is no signup step,
  * and you provide only an email
@@ -18,11 +24,10 @@ import { useSurveyParams } from "~/components/hooks";
  */
 export const StandaloneMagicLoginForm = ({
   label,
-}: {
-  label?: string | ReactNode;
-}) => {
+  surveyId,
+  editionId,
+}: StandaloneMagicLoginFormProps) => {
   const intl = useIntlContext();
-  const { surveyId, editionId } = useSurveyParams(true);
   const placeholder = intl.formatMessage({ id: `accounts.your_email` });
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");

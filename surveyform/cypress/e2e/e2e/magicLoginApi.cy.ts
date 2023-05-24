@@ -3,7 +3,7 @@
 import {
   sendMagicLoginEmail,
   verifyMagicToken,
-} from "~/account/magicLogin/lib";
+} from "~/account/magicLogin/client-actions";
 import { loginAnonymously } from "~/account/anonymousLogin/lib";
 import { magicLinkRegex } from "../../helpers/magicLogin";
 import { apiRoutes } from "~/lib/apiRoutes";

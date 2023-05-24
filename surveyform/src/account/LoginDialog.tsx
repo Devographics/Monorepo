@@ -1,15 +1,20 @@
 import { AnonymousLoginForm } from "~/account/anonymousLogin/components/AnonymousLogin";
-import { StandaloneMagicLoginForm } from "~/account/magicLogin/components/StandaloneMagicLoginForm";
+import {
+  StandaloneMagicLoginForm,
+  StandaloneMagicLoginFormProps,
+} from "~/account/magicLogin/components/StandaloneMagicLoginForm";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { UserDocument } from "~/account/user/typings";
 
 export const LoginDialog = ({
   hideGuest,
   user,
+  surveyId,
+  editionId,
 }: {
   hideGuest?: boolean;
   user?: UserDocument | null;
-}) => {
+} & Pick<StandaloneMagicLoginFormProps, "surveyId" | "editionId">) => {
   //const redirectedFrom = router.query?.from as string;
   return user ? (
     <div>You are already logged in.</div>
@@ -24,6 +29,8 @@ export const LoginDialog = ({
         </div>
         <div className="survey-login-action">
           <StandaloneMagicLoginForm
+            surveyId={surveyId}
+            editionId={editionId}
             label={<FormattedMessage id="accounts.create_account.action" />}
           />
         </div>

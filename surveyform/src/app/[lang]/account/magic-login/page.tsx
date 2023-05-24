@@ -9,7 +9,7 @@ import { useCurrentUser } from "~/lib/users/hooks";
  */
 import { useState, useEffect } from "react";
 import { useMagicToken } from "~/account/magicLogin/hooks";
-import { verifyMagicToken } from "~/account/magicLogin/lib";
+import { verifyMagicToken } from "~/account/magicLogin/client-actions";
 import { routes } from "~/lib/routes";
 
 import { FormattedMessage } from "~/components/common/FormattedMessage";

@@ -23,6 +23,7 @@ const checkBody = (req, res, next) => {
 // Prevent spam
 import rateLimit from "express-rate-limit";
 import { connectToRedisMiddleware } from "~/lib/server/redis";
+import { MagicLoginSendEmailBody } from "~/account/magicLogin/typings/requests-body";
 const limiter = rateLimit({
   windowMs: 10 * 60 * 1000, // 10 minutes
   max: 10, // 10 request max for a key
@@ -32,13 +33,10 @@ const limiter = rateLimit({
   // we can use the requested email here for this precise scenario
   keyGenerator: (request: NextApiRequest, response) => {
     // request.ip
-    return (request.body as MagicLoginSendEmailReqBody).destination;
+    return (request.body as MagicLoginSendEmailBody).destination;
   },
 });
 
-interface MagicLoginSendEmailReqBody {
-  destination: string;
-}
 // NOTE: adding NextApiRequest, NextApiResponse is required to get the right typings in next-connect
 // this is the normal behaviour
 // TODO: get rid of nextConnect if possible

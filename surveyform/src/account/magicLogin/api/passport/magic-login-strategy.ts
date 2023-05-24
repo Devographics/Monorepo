@@ -12,6 +12,7 @@ import { NextApiRequest } from "next";
 import { upgradeUser } from "~/account/user/db-actions/upgrade";
 import { createOrUpgradeUser } from "~/account/user/db-actions/createOrUpgrade";
 import { findUserFromEmail } from "~/account/user/db-actions/findFromEmail";
+import { MagicLoginSendEmailBody } from "../../typings/requests-body";
 
 /**
  * Compute the full magic link, with redirection parameter
@@ -57,7 +58,7 @@ async function sendMagicLink(
   const foundUser = await findUserFromEmail(email);
 
 
-  const { anonymousId, surveyId, editionId, year, locale } = req.body;
+  const { anonymousId, surveyId, editionId, locale } = req.body as MagicLoginSendEmailBody;
   if (foundUser) {
     // add anonymous id if necessary (BUT DO NOT VERIFY)
     await upgradeUser({
@@ -68,9 +69,8 @@ async function sendMagicLink(
   } else {
     const user: {
       email: string;
-      anonymousId: string;
+      anonymousId?: string;
       isVerified: boolean;
-      meta?: any;
     } = {
       email,
       anonymousId,

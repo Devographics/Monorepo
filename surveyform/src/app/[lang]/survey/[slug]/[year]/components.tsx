@@ -32,6 +32,8 @@ const EditionMainAsync = async ({ edition }: { edition: EditionMetadata }) => {
   if (!user) {
     return (
       <LoginDialog
+        editionId={edition.id}
+        surveyId={edition.surveyId}
         hideGuest={edition.status === SurveyStatusEnum.CLOSED}
         user={user}
       />
