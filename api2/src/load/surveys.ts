@@ -8,6 +8,7 @@ import { readdir, readFile, lstat } from 'fs/promises'
 import { logToFile } from '@devographics/helpers'
 import path from 'path'
 import { setCache } from '../helpers/caching'
+import { appSettings } from '../helpers/settings'
 
 let allSurveys: Survey[] = []
 
@@ -131,10 +132,7 @@ const excludeDirs = ['.git', '.DS_Store']
 export const loadLocally = async () => {
     const surveys: Survey[] = []
 
-    if (!process.env.SURVEYS_DIR) {
-        throw new Error('SURVEYS_DIR env variable not defined')
-    }
-    const surveysDirPath = path.resolve(`../../${process.env.SURVEYS_DIR}/`)
+    const surveysDirPath = path.resolve(`../../${appSettings.surveysDir}/`)
 
     console.log(`-> loading surveys locally (${surveysDirPath})`)
 
@@ -172,7 +170,7 @@ export const loadLocally = async () => {
                         )
                         const editionConfigYaml: any = yaml.load(editionConfigContents)
                         edition = editionConfigYaml
-                    } catch (error) {}
+                    } catch (error) { }
                     const questionsPath = editionDirPath + '/questions.yml'
                     if (existsSync(questionsPath)) {
                         try {
@@ -192,7 +190,7 @@ export const loadLocally = async () => {
                         )
                         const editionApiYaml: any = yaml.load(editionApiContents)
                         edition.apiSections = makeAPIOnly(editionApiYaml)
-                    } catch (error) {}
+                    } catch (error) { }
                     editions.push(edition)
                 }
             }

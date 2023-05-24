@@ -3,7 +3,19 @@ import dotenv from 'dotenv'
 export interface AppSettings {
     cacheType: 'local' | 'redis'
     disableCache: boolean
+    /**
+     * Whether we get entities and surveys from local folders
+     * or from github
+     * 
+     * @example LOAD_DATA=local
+     */
     loadLocalesMode?: 'local'
+    /**
+     * Relevant when loading data locally
+     * @example ENTITIES_DIR=entities will fetch entities in ../../entities relative to "api" folder
+     */
+    entitiesDir?: string;
+    surveysDir?: string;
     githubToken: string
     redisUrl: string
 }
@@ -34,6 +46,16 @@ const loadSettings = () => {
         loadLocalesMode: loadLocalesMode as 'local' | undefined,
         githubToken,
         redisUrl
+    }
+    if (loadLocalesMode === "local") {
+        function loadEnvVar(settings: AppSettings, settingName: "surveysDir" | "entitiesDir", envVarName: string) {
+            if (!process.env[envVarName]) {
+                throw new Error(`${envVarName} not defined while using local data loading mode for setting ${settingName}`)
+            }
+            settings[settingName] = process.env[envVarName]
+        }
+        loadEnvVar(settings, "entitiesDir", "ENTITIES_DIR")
+        loadEnvVar(settings, "surveysDir", "SURVEYS_DIR")
     }
     return settings
 }

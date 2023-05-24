@@ -1,3 +1,8 @@
+/**
+ * TODO: make this not hardcoded
+ * To achieve that, load possible source from db or a config file on github
+ * before generating the API graphql schema
+ */
 import { Option, QuestionTemplateOutput, TemplateFunction } from '@devographics/types'
 import { DbSuffixes } from '@devographics/types'
 
