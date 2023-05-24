@@ -119,10 +119,7 @@ export const loadFromGitHub = async () => {
 export const loadLocally = async () => {
     const entities: Entity[] = []
 
-    if (!process.env.ENTITIES_DIR) {
-        throw new Error('ENTITIES_DIR env variable not defined')
-    }
-    const entitiesDirPath = path.resolve(`../../${process.env.ENTITIES_DIR}/`)
+    const entitiesDirPath = path.resolve(`../../${appSettings.entitiesDir}/`)
 
     console.log(`-> loading entities locally (${entitiesDirPath})`)
 
@@ -265,8 +262,7 @@ export const cacheSurveysEntities = async ({
             if (editionEntities.length > 0) {
                 setCache(getSurveyEditionEntitiesCacheKey({ editionId }), editionEntities, context)
                 console.log(
-                    `-> Cached ${
-                        editionEntities.length
+                    `-> Cached ${editionEntities.length
                     } entities (${getSurveyEditionEntitiesCacheKey({ editionId })})`
                 )
             }
