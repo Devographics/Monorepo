@@ -1215,6 +1215,7 @@ importers:
       i18next-http-backend: ^1.4.5
       jest: ^29.5.0
       lodash: ^4.17.21
+      mongodb: ^5.5.0
       mongodb-memory-server: ^7.6.3
       nanoid: ^3.3.4
       next: 13.4.2
@@ -1340,6 +1341,7 @@ importers:
       chalk: 4.1.2
       esbuild-plugin-yaml: 0.0.1
       eslint: 7.32.0
+      mongodb: 5.5.0
       mongodb-memory-server: 7.6.3
       node-loader: 2.0.0_webpack@5.75.0
       react-is: 16.13.1
@@ -10548,6 +10550,7 @@ packages:
       '@babel/runtime': 7.20.7
       '@types/testing-library__react-hooks': 3.4.1
       react: 18.2.0
+    dev: false
     optional: true
 
   /@testing-library/react/10.4.9_biqbaboplfbrettd7655fr4n2y:
@@ -10673,7 +10676,7 @@ packages:
     resolution: {integrity: sha512-ELCPqAdroMdcuxqwMgUpifQyRoTpyYCNr1V9xKyF40VsBobsj+BbWNRvwGchMgBPGqkw655ypkjj2MEF5ywVwg==}
     deprecated: This is a stub types definition. bson provides its own type definitions, so you do not need this installed.
     dependencies:
-      bson: 5.2.0
+      bson: 5.3.0
 
   /@types/cacheable-request/6.0.3:
     resolution: {integrity: sha512-IQ3EbTzGxIigb1I3qPZc1rWJnH0BmSKv5QYTalEwweFvyBDLSAe24zP0le/hyi7ecGfZVlIVAg4BZqb8WBwKqw==}
@@ -11313,7 +11316,6 @@ packages:
 
   /@types/webidl-conversions/7.0.0:
     resolution: {integrity: sha512-xTE1E+YF4aWPJJeUzaZI5DRntlkY3+BCVJi0axFptnjGmAoWxkyREIh/XMrfxVLejwQxMCfDXdICo0VLxThrog==}
-    dev: false
 
   /@types/webpack-sources/3.2.0:
     resolution: {integrity: sha512-Ft7YH3lEVRQ6ls8k4Ff1oB4jN6oy/XmU6tQISKdhfh+1mR+viZFphS6WL0IrtDOzvefmJg5a0s7ZQoRXwqTEFg==}
@@ -11339,7 +11341,6 @@ packages:
     dependencies:
       '@types/node': 18.11.18
       '@types/webidl-conversions': 7.0.0
-    dev: false
 
   /@types/yargs-parser/21.0.0:
     resolution: {integrity: sha512-iO9ZQHkZxHn4mSakYV0vFHAVDyEOIJQrV2uZ06HxEPcx+mt8swXoZHIbaaJ2crJYFfErySgktuTZ3BeLz+XmFA==}
@@ -15015,6 +15016,11 @@ packages:
 
   /bson/5.2.0:
     resolution: {integrity: sha512-HevkSpDbpUfsrHWmWiAsNavANKYIErV2ePXllp1bwq5CDreAaFVj6RVlZpJnxK4WWDCJ/5jMUpaY6G526q3Hjg==}
+    engines: {node: '>=14.20.1'}
+    dev: false
+
+  /bson/5.3.0:
+    resolution: {integrity: sha512-ukmCZMneMlaC5ebPHXIkP8YJzNl5DC41N5MAIvKDqLggdao342t4McltoJBQfQya/nHBWAcSsYRqlXPoQkTJag==}
     engines: {node: '>=14.20.1'}
 
   /buf-compare/1.0.1:
@@ -20691,7 +20697,7 @@ packages:
       debug:
         optional: true
     dependencies:
-      debug: 4.3.4_supports-color@6.1.0
+      debug: 4.3.4
     dev: false
 
   /for-each/0.3.3:
@@ -23324,7 +23330,6 @@ packages:
 
   /ip/2.0.0:
     resolution: {integrity: sha512-WKa+XuLG1A1R0UWhl2+1XQSi+fZWMsYKffMZTTYsiZaUD8k2yDAj5atimTUD2TZkyCkNEeYE5NhFZmupOGtjYQ==}
-    dev: false
 
   /ipaddr.js/1.9.1:
     resolution: {integrity: sha512-0KI/607xoxSToH7GjN1FfSbLoU0+btTicjsQSWQlh/hZykN8KpmMf7uYwPW3R+akZ6R/w18ZlXSHBYXiYUPO3g==}
@@ -27246,7 +27251,6 @@ packages:
     dependencies:
       '@types/whatwg-url': 8.2.2
       whatwg-url: 11.0.0
-    dev: false
 
   /mongodb-memory-server-core/7.6.3:
     resolution: {integrity: sha512-5rv79YlPoPvguRfFv1fvR78z69/QohGD+65f9UYWDfD70ykXpf6tAXPpWJ4ww/ues7FIVepkFCr3aiUvu6lA+A==}
@@ -27468,6 +27472,28 @@ packages:
     optionalDependencies:
       saslprep: 1.0.3
     dev: false
+
+  /mongodb/5.5.0:
+    resolution: {integrity: sha512-XgrkUgAAdfnZKQfk5AsYL8j7O99WHd4YXPxYxnh8dZxD+ekYWFRA3JktUsBnfg+455Smf75/+asoU/YLwNGoQQ==}
+    engines: {node: '>=14.20.1'}
+    peerDependencies:
+      '@aws-sdk/credential-providers': ^3.201.0
+      mongodb-client-encryption: '>=2.3.0 <3'
+      snappy: ^7.2.2
+    peerDependenciesMeta:
+      '@aws-sdk/credential-providers':
+        optional: true
+      mongodb-client-encryption:
+        optional: true
+      snappy:
+        optional: true
+    dependencies:
+      bson: 5.3.0
+      mongodb-connection-string-url: 2.6.0
+      socks: 2.7.1
+    optionalDependencies:
+      saslprep: 1.0.3
+    dev: true
 
   /mongoose/6.7.1:
     resolution: {integrity: sha512-qbagtqSyvIhUz4EWzXC00EA0DJHFrQwlzTlNGX5DjiESoJiPKqkEga1k9hviFKRFgBna+OlW54mkdi+0+AqxCw==}
@@ -33043,7 +33069,6 @@ packages:
   /smart-buffer/4.2.0:
     resolution: {integrity: sha512-94hK0Hh8rPqQl2xXc3HsaBoOXKV20MToPkcXvwbISWLEs+64sBq5kFgn2kJDHb1Pry9yrP0dxrCI9RRci7RXKg==}
     engines: {node: '>= 6.0.0', npm: '>= 3.0.0'}
-    dev: false
 
   /smtp-server/3.11.0:
     resolution: {integrity: sha512-j/W6mEKeMNKuiM9oCAAjm87agPEN1O3IU4cFLT4ZOCyyq3UXN7HiIXF+q7izxJcYSar15B/JaSxcijoPCR8Tag==}
@@ -33220,7 +33245,6 @@ packages:
     dependencies:
       ip: 2.0.0
       smart-buffer: 4.2.0
-    dev: false
 
   /sort-keys/1.1.2:
     resolution: {integrity: sha512-vzn8aSqKgytVik0iwdBEi+zevbTYZogewTUM6dtpmGwEcdzbub/TX4bCzRhebDCRC3QzXgJsLRKB2V/Oof7HXg==}
@@ -34548,7 +34572,6 @@ packages:
     engines: {node: '>=12'}
     dependencies:
       punycode: 2.3.0
-    dev: false
 
   /tree-kill/1.2.2:
     resolution: {integrity: sha512-L0Orpi8qGpRG//Nd+H90vFB+3iHnue1zSSGmNOOCh1GLJ7rUKVwV2HvijphGQS2UmhUZewS9VgvxYIdgr+fG1A==}
@@ -36005,7 +36028,6 @@ packages:
   /webidl-conversions/7.0.0:
     resolution: {integrity: sha512-VwddBukDzu71offAQR975unBIGqfKZpM+8ZX6ySk8nYhVoo5CYaZyzt3YBvYtRtO+aoGlqxPg/B87NGVZ/fu6g==}
     engines: {node: '>=12'}
-    dev: false
 
   /webpack-assets-manifest/5.1.0_webpack@5.75.0:
     resolution: {integrity: sha512-kPuTMEjBrqZQVJ5M6yXNBCEdFbQQn7p+loNXt8NOeDFaAbsNFWqqwR0YL1mfG5LbwhK5FLXWXpuK3GuIIZ46rg==}
@@ -36352,7 +36374,6 @@ packages:
     dependencies:
       tr46: 3.0.0
       webidl-conversions: 7.0.0
-    dev: false
 
   /whatwg-url/5.0.0:
     resolution: {integrity: sha512-saE57nupxk6v3HY35+jzBwYa0rKSy0XR8JSxZPwgLr7ys0IBzhGviA1/TUGJLmSVqs8pb9AnvICXEuOHLprYTw==}

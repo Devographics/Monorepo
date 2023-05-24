@@ -118,6 +118,7 @@
     "chalk": "^4.1.2",
     "esbuild-plugin-yaml": "^0.0.1",
     "eslint": "^7.32.0",
+    "mongodb": "^5.5.0",
     "mongodb-memory-server": "^7.6.3",
     "node-loader": "^2.0.0",
     "react-is": "^16.13.1",
