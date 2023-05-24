@@ -70,12 +70,10 @@ const Score = ({
   const intl = useIntlContext();
   const containerRef = useRef<HTMLInputElement | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
-  const { knowledgeRanking = 100 } = response;
   const { known, total, score, unknownFields } = getKnowledgeScore({
     response,
     edition,
   });
-  const knowledgeRankingFromTop = knowledgeRanking;
   const { survey, questionsUrl } = edition;
   const { name, hashtag } = survey;
 
@@ -110,7 +108,7 @@ const Score = ({
     <div className="score">
       <div className="score-calculation">
         <div className="score-calcuation-heading">
-          <FormattedMessage id="thanks.knowledge_score" />
+          <FormattedMessage id="thanks.features_score" />
         </div>
         <div className="score-percent">
           <CountUp
@@ -148,7 +146,7 @@ const Score = ({
         <div className="score-ratio">
           <FormattedMessage
             id="thanks.score_explanation"
-            values={{ known, total, knowledgeRankingFromTop }}
+            values={{ known, total }}
           />
         </div>
         <div className="score-share">

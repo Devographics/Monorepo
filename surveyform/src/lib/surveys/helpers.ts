@@ -138,3 +138,6 @@ export function getEditionHomePath({
   const prefixSegment = "survey";
   return "/" + [locale.id, prefixSegment, surveySlug, editionSlug].join("/");
 }
+
+export const getEditionQuestions = (edition: EditionMetadata) =>
+  edition.sections.map((s) => s.questions).flat();

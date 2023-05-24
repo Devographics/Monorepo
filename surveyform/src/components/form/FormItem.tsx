@@ -14,9 +14,11 @@ import { CommentTrigger, CommentInput } from "./FormComment";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { getQuestioni18nIds } from "@devographics/i18n";
 import { getFormPaths } from "~/lib/surveys/helpers";
+import AddToList from "../reading_list/AddToList";
 
-interface FormItemProps extends FormInputProps {
+export interface FormItemProps extends FormInputProps {
   children: ReactNode;
+  enableLearnMore?: boolean;
 }
 
 export const FormItem = (props: FormItemProps) => {
@@ -41,6 +43,7 @@ export const FormItem = (props: FormItemProps) => {
     question,
     isFirstQuestion,
     readOnly,
+    enableLearnMore,
   } = props;
 
   const { allowComment } = question;
@@ -92,8 +95,8 @@ export const FormItem = (props: FormItemProps) => {
   );
 };
 
-export const FormItemTitle = (props: FormInputProps) => {
-  const { question, sectionNumber, questionNumber } = props;
+export const FormItemTitle = (props: FormItemProps) => {
+  const { question, sectionNumber, questionNumber, enableLearnMore } = props;
   const intl = useIntlContext();
   const { entity, yearAdded } = question;
   const i18n = getQuestioni18nIds(props);
@@ -124,14 +127,16 @@ export const FormItemTitle = (props: FormInputProps) => {
         )}
       </Form.Label>
 
-      <span className="form-label-number">
+      {enableLearnMore && <AddToList {...props} />}
+
+      {/* <span className="form-label-number">
         {sectionNumber}.{questionNumber}
-      </span>
+      </span> */}
     </h3>
   );
 };
 
-export const FormItemDescription = (props: FormInputProps) => {
+export const FormItemDescription = (props: FormItemProps) => {
   const intl = useIntlContext();
   const intlIds = getQuestioni18nIds(props);
   const description = intl.formatMessage({ id: intlIds.description });
@@ -140,7 +145,7 @@ export const FormItemDescription = (props: FormInputProps) => {
   ) : null;
 };
 
-export const FormItemNote = (props: FormInputProps) => {
+export const FormItemNote = (props: FormItemProps) => {
   const intl = useIntlContext();
   const intlIds = getQuestioni18nIds(props);
   const note = intl.formatMessage({ id: intlIds.note });

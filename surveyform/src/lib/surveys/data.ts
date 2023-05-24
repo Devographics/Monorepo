@@ -32,7 +32,7 @@ export const getSurveyParamsTable = (): SurveyParamsTable => ({
     2023: { surveyId: "state_of_css", editionId: "css2023" },
   },
   "state-of-graphql": {
-    2022: { surveyId: "state_of_css", editionId: "graphql2022" },
+    2022: { surveyId: "state_of_graphql", editionId: "graphql2022" },
   },
   "state-of-js": {
     2016: { surveyId: "state_of_js", editionId: "js2016" },

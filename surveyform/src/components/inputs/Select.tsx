@@ -47,14 +47,6 @@ export const FormComponentSelect = (props: FormInputProps) => {
             intl.formatMessage({
               id: i18n.base,
             });
-          console.log("//o");
-          console.log(label);
-          console.log(i18n.base);
-          console.log(
-            intl.formatMessage({
-              id: i18n.base,
-            })
-          );
           return (
             <option key={id} value={id}>
               {optionLabel}

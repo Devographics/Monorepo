@@ -151,7 +151,7 @@ export const FormComponentCheckboxGroup = (props: FormInputProps) => {
               setShowMore(true);
             }}
           >
-            {intl.formatMessage({ id: "forms.more_options" })}…
+            {intl.formatMessage({ id: "forms.more_options" })}
           </Button>
         )}
         {allowOther && (!enableCutoff || showMore) && (

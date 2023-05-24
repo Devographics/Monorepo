@@ -1,9 +1,10 @@
-import type { ResponseDocument } from "@devographics/types";
-import type {
+import {
   SurveyMetadata,
   EditionMetadata,
   SectionMetadata,
   QuestionMetadata,
+  ResponseDocument,
+  FeaturesOptions,
 } from "@devographics/types";
 import { getFormPaths } from "~/lib/surveys/helpers";
 
@@ -38,6 +39,31 @@ export const getCompletionPercentage = ({
   return completion;
 };
 
+enum KnowledgeRank {
+  NOVICE = "novice",
+  APPRENTICE = "apprentice",
+  INTERMEDIATE = "intermediate",
+  EXPERT = "expert",
+  SCHOLAR = "scholar",
+  ELITE = "elite",
+}
+
+const getRank = (score) => {
+  if (score < 10) {
+    return KnowledgeRank.NOVICE;
+  } else if (score < 30) {
+    return KnowledgeRank.APPRENTICE;
+  } else if (score < 50) {
+    return KnowledgeRank.INTERMEDIATE;
+  } else if (score < 70) {
+    return KnowledgeRank.EXPERT;
+  } else if (score < 90) {
+    return KnowledgeRank.SCHOLAR;
+  } else {
+    return KnowledgeRank.ELITE;
+  }
+};
+
 export const getKnowledgeScore = ({
   response,
   edition,
@@ -48,27 +74,41 @@ export const getKnowledgeScore = ({
   const featureSections = edition.sections.filter(
     (section) => section.slug === "features"
   );
-  const featureFields = featureSections
+  const featureQuestions = featureSections
     .map((s) => s.questions)
     // NOTE: the cast is mandatory here because typing of flat
     // is not ideal
     .flat() as Array<QuestionMetadata>;
-  const unknownFields = featureFields.filter((field) => {
-    //TODO: fields in "Response" probably have a slightly different type than fields in "Survey" (more attributes?)
-    if (!field.id) throw new Error(`Field without id`);
-    const value = response[field.id];
-    return value !== "heard" && value !== "used";
+
+  const getValue = (question) => {
+    const formPaths = getFormPaths({ edition, question });
+    return formPaths.response && response[formPaths.response];
+  };
+  const knownFields = featureQuestions.filter((question) => {
+    const value = getValue(question);
+    return value === FeaturesOptions.HEARD || value === FeaturesOptions.USED;
   });
-  const total = featureFields.length;
+  const unknownFields = featureQuestions.filter((question) => {
+    const value = getValue(question);
+    return value === FeaturesOptions.NEVER_HEARD;
+  });
+
   const unknown = unknownFields.length;
-  const known = total - unknown;
-  return {
+  const known = knownFields.length;
+  const total = featureQuestions.length;
+  const score = Math.round((known * 100) / total);
+  const rank = getRank(score);
+
+  const result = {
     total,
     unknown,
     known,
-    score: Math.round((known * 100) / total),
+    score,
+    rank,
+    knownFields,
     unknownFields,
   };
+  return result;
 };
 
 /**
@@ -81,6 +121,7 @@ export const ignoredFieldTypes = [
   "help",
   "others",
   "project",
+  "quiz",
 ];
 
 /**

@@ -123,6 +123,11 @@ export const responseBaseSchema: Schema = {
     type: Boolean,
     onUpdate: () => false,
   },
+  readingList: {
+    type: String,
+    clientMutable: true,
+    isArray: true,
+  },
   /*
         NOTE: this field will exist in the database, but is only used in the admin area
         Currently (09/2022) the admin area doesn't use this field but instead rely on a virtual field with a

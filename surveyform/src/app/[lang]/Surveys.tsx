@@ -51,14 +51,11 @@ const EditionItem = ({
 
 const EditionGroup = ({
   allEditions,
-  surveyParamsTable,
   status,
   localeId,
 }: {
   allEditions: Array<EditionMetadata>;
-  surveyParamsTable: SurveyParamsTable;
   status: SurveyStatusEnum;
-
   localeId: string;
 }) => {
   if (!status) throw new Error("SurveyGroup must receive a defined status");
@@ -95,11 +92,9 @@ const EditionGroup = ({
 
 const Surveys = ({
   surveys,
-  surveyParamsTable,
   localeId,
 }: {
   surveys: Array<SurveyMetadata>;
-  surveyParamsTable: SurveyParamsTable;
   localeId: string;
 }) => {
   const allEditions = surveys
@@ -109,19 +104,16 @@ const Surveys = ({
     <div className="surveys">
       {/* FIXME won't load useLocaleContext correctly... <LocaleSelector />*/}
       <EditionGroup
-        surveyParamsTable={surveyParamsTable}
         allEditions={allEditions}
         status={SurveyStatusEnum.OPEN}
         localeId={localeId}
       />
       <EditionGroup
-        surveyParamsTable={surveyParamsTable}
         allEditions={allEditions}
         status={SurveyStatusEnum.PREVIEW}
         localeId={localeId}
       />
       <EditionGroup
-        surveyParamsTable={surveyParamsTable}
         allEditions={allEditions}
         status={SurveyStatusEnum.CLOSED}
         localeId={localeId}

@@ -15,6 +15,6 @@ export const useResponse = (params: { responseId?: string }) => {
     responseId && apiRoutes.responses.loadResponse.href({ responseId }),
     basicFetcher
   );
-  console.log("data", data, error);
+  // console.log("data", data, error);
   return { response: data?.data, loading: isLoading, error: data?.error };
 };

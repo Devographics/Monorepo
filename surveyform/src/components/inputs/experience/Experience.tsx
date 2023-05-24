@@ -30,7 +30,7 @@ export const Experience = (props: ExperienceProps) => {
   const hasValue = !isEmpty(value);
 
   return (
-    <FormItem {...props}>
+    <FormItem {...props} enableLearnMore={true}>
       {entity?.example && <CodeExample {...entity.example} />}
       <div className="experience-contents">
         <div className="experience-options">

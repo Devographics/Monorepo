@@ -7,6 +7,7 @@ import { FormInputProps } from "./typings";
 import { ReactNode } from "react";
 import { SectionMetadata } from "@devographics/types";
 import { FormError } from "./FormError";
+import ReadingList from "../reading_list/ReadingList";
 
 interface FormLayoutProps extends FormInputProps {
   children: ReactNode;
@@ -44,6 +45,9 @@ export const FormLayout = (props: FormLayoutProps) => {
               />
             </FormElement>
           </div>
+        </div>
+        <div>
+          <ReadingList {...props} />
         </div>
       </div>
       <FormError {...props} />
