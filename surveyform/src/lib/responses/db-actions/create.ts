@@ -18,13 +18,6 @@ export async function createResponse({
   currentUser: any;
   clientData: ResponseDocument;
 }) {
-  if (!process.env.ENABLE_ROUTE_HANDLERS) {
-    throw new ServerError({
-      id: "route_handlers",
-      message: "work in progress route handlers",
-      status: 400,
-    });
-  }
   connectToRedis();
 
   const { surveyId, editionId } = clientData;

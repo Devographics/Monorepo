@@ -23,13 +23,6 @@ export async function saveResponse({
   clientData: ResponseDocument;
   currentUser: any;
 }) {
-  if (!process.env.ENABLE_ROUTE_HANDLERS) {
-    throw new ServerError({
-      id: "route_handlers_error",
-      message: "work in progress route handlers",
-      status: 400,
-    });
-  }
   connectToRedis();
 
   // Check for existing response

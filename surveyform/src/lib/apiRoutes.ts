@@ -30,14 +30,14 @@ export const apiRoutes = {
   responses: {
     loadResponse: {
       href: ({ responseId }: { responseId: string }) =>
-        `/api/responses/loadResponse?responseId=${responseId}`,
+        `/api/responses/${responseId}/loadResponse`,
     },
     createResponse: {
       href: () => `/api/responses/createResponse`,
     },
     saveResponse: {
       href: ({ responseId }: { responseId: string }) =>
-        `/api/responses/saveResponse?responseId=${responseId}`,
+        `/api/responses/${responseId}/saveResponse/`,
     },
   },
   projects: {
