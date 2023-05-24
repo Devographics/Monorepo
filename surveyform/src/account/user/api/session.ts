@@ -3,7 +3,7 @@
 import Iron from "@hapi/iron";
 import type { NextApiRequest } from "next";
 import { UserDocument } from "~/account/user/typings";
-import { getTokenCookie } from "./auth-cookies";
+import { apiGetTokenCookie } from "./auth-cookies";
 
 // Use an environment variable here instead of a hardcoded value for production
 
@@ -19,16 +19,10 @@ export function encryptSession(session: UserDocument) {
   return Iron.seal(session, TOKEN_SECRET, Iron.defaults);
 }
 
-/**
- * Returns the user data from the token
- * => it let's the backend check for user existence in the database
- * @param req
- * @deprecated Next.js already parses cookies for us
- */
-export async function getSessionFromReq(
+export async function apiGetSessionFromReq(
   req: NextApiRequest
 ): Promise<UserDocument> {
-  const token = getTokenCookie(req);
+  const token = apiGetTokenCookie(req);
   return getSessionFromToken(token);
 }
 

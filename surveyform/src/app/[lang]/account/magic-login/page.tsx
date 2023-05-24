@@ -1,68 +1,15 @@
-"use client";
-import { useCurrentUser } from "~/lib/users/hooks";
-/**
- * Verify the magic token from the url, and then sets the actual auth token,
- * then redirect
- *
- * NOTE: this could be an API route as well, but a web page let's us have a nicer
- * UI in case of error.
- */
-import { useState, useEffect } from "react";
-import { useMagicToken } from "~/account/magicLogin/hooks";
-import { verifyMagicToken } from "~/account/magicLogin/client-actions";
-import { routes } from "~/lib/routes";
+import { NextPageParams } from "~/app/typings";
+import { MagicLoginChecker } from "./MagicLoginChecker";
 
-import { FormattedMessage } from "~/components/common/FormattedMessage";
-import { Loading } from "~/components/ui/Loading";
-
-const useMagicLoginCheck = () => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<null | Error>(null);
-  const { token, from } = useMagicToken();
-  /**
-   * If the user is anonymous, we already have a current user without an email
-   * We must pass their id
-   */
-  const { currentUser, loading: currentUserLoading } = useCurrentUser();
-
-  useEffect(() => {
-    setLoading(true);
-    if (token && !currentUserLoading) {
-      // Pass the current user id
-      const anonymousId = currentUser?._id;
-      verifyMagicToken(token, anonymousId || undefined)
-        .then(() => {
-          if (from) {
-            // the query param can be used to immediately redirect user or display a specific message
-            window.location.replace(from + "?from-magic-login=1");
-          } else {
-            // We do a full page reload to avoid any caching issue and not just a SPA router.push
-            window.location.replace(routes.home.href);
-          }
-        })
-        .catch((err) => {
-          setError(err);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    }
-  }, [!!token, !!currentUserLoading]);
-
-  return {
-    loading: loading || currentUserLoading,
-    error,
-  };
-};
-const MagicLoginCheckPage = () => {
-  const { loading, error } = useMagicLoginCheck();
-  if (loading) return <Loading />;
-  if (error) return <p>Error: {error.message}</p>;
-  return (
-    <p>
-      <FormattedMessage id="accounts.token_verified" />
-    </p>
-  );
-};
-
-export default MagicLoginCheckPage;
+export default async function MagicLoginCheckPage({
+  searchParams,
+}: NextPageParams<any, { token: string; from?: string }>) {
+  const { token, from } = searchParams;
+  if (!token) throw new Error("No magic token found in query params.");
+  if (Array.isArray(token))
+    throw new Error("Found more than one token in query params.");
+  if (from && Array.isArray(from)) {
+    console.warn("Found more than one redirection router in query params.");
+  }
+  return <MagicLoginChecker token={token} from={from} />;
+}

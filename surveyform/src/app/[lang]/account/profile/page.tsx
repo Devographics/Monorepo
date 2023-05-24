@@ -3,12 +3,12 @@ import { LogoutButton } from "~/account/user/components/LogoutButton";
 import UserResponses from "~/components/users/UserResponses";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { redirect } from "next/navigation";
-import { getCurrentUser } from "~/account/user/api/rsc-fetchers";
 import { getRawResponsesCollection } from "@devographics/mongo";
 import { UserDocument } from "~/account/user/typings";
 import { cache } from "react";
 import type { ResponseDocument } from "@devographics/types";
 import { fetchSurveysMetadata } from "@devographics/fetch";
+import { rscCurrentUser } from "~/account/user/rsc-fetchers/rscCurrentUser";
 
 const getResponses = cache(
   async ({ currentUser }: { currentUser: UserDocument }) => {
@@ -25,7 +25,7 @@ const Profile = async ({ params }) => {
   const surveys = await fetchSurveysMetadata({ calledFrom: "UserResponses" });
 
   // TODO: filter out fields the user is not supposed to see
-  const currentUser = await getCurrentUser();
+  const currentUser = await rscCurrentUser();
   if (!currentUser) {
     // TODO: use from, require to get current request URL
     return redirect(routes.account.login.href);

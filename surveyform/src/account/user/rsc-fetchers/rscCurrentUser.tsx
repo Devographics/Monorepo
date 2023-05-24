@@ -11,8 +11,7 @@ export function getToken() {
   const c = cookies();
   return c.get(TOKEN_NAME)?.value;
 }
-
-export const getCurrentUser = cache(async () => {
+export const rscCurrentUser = cache(async () => {
   const token = getToken();
   if (!token) return null;
   const session = await getSessionFromToken(token);

@@ -9,7 +9,7 @@ import { LoginDialog } from "~/account/LoginDialog";
 import { Loading } from "~/components/ui/Loading";
 import { Suspense } from "react";
 import { EditionMetadata, SurveyStatusEnum } from "@devographics/types";
-import { getCurrentUser } from "~/account/user/api/rsc-fetchers";
+import { rscCurrentUser } from "~/account/user/rsc-fetchers/rscCurrentUser";
 
 export const EditionMain = ({ edition }: { edition: EditionMetadata }) => {
   return (
@@ -28,7 +28,7 @@ export const EditionMain = ({ edition }: { edition: EditionMetadata }) => {
 };
 
 const EditionMainAsync = async ({ edition }: { edition: EditionMetadata }) => {
-  const user = await getCurrentUser();
+  const user = await rscCurrentUser();
   if (!user) {
     return (
       <LoginDialog

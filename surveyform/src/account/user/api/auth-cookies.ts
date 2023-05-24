@@ -25,13 +25,11 @@ export function setTokenCookie(res, token) {
   res.setHeader("Set-Cookie", cookie);
 }
 
-/**
- * To be used in route handlers
- * @param res 
- */
-export function removeTokenCookie(res: NextResponse) {
+export function rhRemoveTokenCookie(res: NextResponse) {
   res.cookies.delete(TOKEN_NAME)
 }
-export function getTokenCookie(req: NextApiRequest) {
+
+
+export function apiGetTokenCookie(req: NextApiRequest) {
   return req.cookies[TOKEN_NAME];
 }

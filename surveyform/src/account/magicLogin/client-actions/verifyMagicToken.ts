@@ -6,8 +6,6 @@ import { apiRoutes } from "~/lib/apiRoutes";
  */
 export async function verifyMagicToken(
   token: string,
-  /** Pass an existing user id to "upgrade" an anonymous user during its first passwordless login */
-  anonymousId?: string
 ) {
   // NOTE: URL needs an absolute URL so it's not good here
   //const verifyUrl = new URL(
@@ -18,16 +16,9 @@ export async function verifyMagicToken(
   //  verifyUrl.searchParams.set("anonymousId", anonymousId);
   //}
   // @see https://github.com/mxstbr/passport-magic-login/pull/19
-  const url = `${apiRoutes.account.magicLogin.verifyToken.href()}?token=${encodeURIComponent(
-    token
-  )}${anonymousId ? `&anonymousId=${encodeURIComponent(anonymousId)}` : ""}`;
-
+  const url = apiRoutes.account.magicLogin.verifyToken.href({ token })
   const res = await fetch(url, {
-    //body: JSON.stringify({ token, anonymousId }),
     method: "GET",
-    //headers: {
-    //  "Content-Type": "application/json",
-    //},
   });
   if (!res.ok) {
     throw new Error(`Could not verify token, ${await res.text()}`);

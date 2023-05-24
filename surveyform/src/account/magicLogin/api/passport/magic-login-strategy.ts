@@ -1,5 +1,5 @@
 import MagicLoginStrategy from "passport-magic-login";
-import { getTokenSecret } from "~/account/user/api/session";
+import { apiGetSessionFromReq, getTokenSecret } from "~/account/user/api/session";
 import { sendMagicLinkEmail } from "../email/magicLinkEmail";
 
 import { UserTypeServer } from "~/lib/users/model.server";
@@ -44,6 +44,8 @@ async function sendMagicLink(
   // the request
   req: NextApiRequest
 ) {
+  const currentUser = await apiGetSessionFromReq(req)
+  const anonymousId = currentUser?._id
   const email = destination;
   // Important! otherwise we could send the email to a random user!
   if (!(email && typeof email === "string"))
@@ -58,7 +60,7 @@ async function sendMagicLink(
   const foundUser = await findUserFromEmail(email);
 
 
-  const { anonymousId, surveyId, editionId, locale } = req.body as MagicLoginSendEmailBody;
+  const { surveyId, editionId, locale } = req.body as MagicLoginSendEmailBody;
   if (foundUser) {
     // add anonymous id if necessary (BUT DO NOT VERIFY)
     await upgradeUser({
@@ -81,20 +83,12 @@ async function sendMagicLink(
     await createOrUpgradeUser(user);
   }
 
-  //console.log("send to", email);
   return sendMagicLinkEmail({
     email,
-    // href = /callbackUrl?token=<the magic token>
     magicLink,
     surveyId,
     locale,
   });
-  /*
-      return MailService.sendMail({
-        to: user.email,
-        token,
-      });
-      */
 }
 
 /**

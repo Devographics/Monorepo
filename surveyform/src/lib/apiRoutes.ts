@@ -13,7 +13,9 @@ export const apiRoutes = {
     },
     magicLogin: {
       verifyToken: {
-        href: () => "/api/account/magic-login/verify-token",
+        href: ({ token }: { token: string }) => `/api/account/magic-login/verify-token?token=${encodeURIComponent(
+          token
+        )}`,
         method: "GET",
       },
       sendEmail: {
