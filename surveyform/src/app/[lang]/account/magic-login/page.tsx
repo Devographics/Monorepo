@@ -33,7 +33,8 @@ const useMagicLoginCheck = () => {
       verifyMagicToken(token, anonymousId || undefined)
         .then(() => {
           if (from) {
-            window.location.replace(from);
+            // the query param can be used to immediately redirect user or display a specific message
+            window.location.replace(from + "?from-magic-login=1");
           } else {
             // We do a full page reload to avoid any caching issue and not just a SPA router.push
             window.location.replace(routes.home.href);

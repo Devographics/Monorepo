@@ -1,11 +1,18 @@
 import { apiRoutes } from "~/lib/apiRoutes";
 import { MagicLoginSendEmailBody } from "~/account/magicLogin/typings/requests-body";
 
-export const sendMagicLoginEmail = async (body: MagicLoginSendEmailBody) => {
-  const res = await fetch(apiRoutes.account.magicLogin.sendEmail.href(), {
+export const sendMagicLoginEmail = async (body: MagicLoginSendEmailBody,
+  /** Current URL path
+   * "/survey/foobar"
+   */
+  from?: string) => {
+  const res = await fetch(apiRoutes.account.magicLogin.sendEmail.href({ from }), {
     method: apiRoutes.account.magicLogin.sendEmail.method,
     body: JSON.stringify({ ...body, pathname: window.location.pathname }),
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json"
+    },
   });
 
   return res;

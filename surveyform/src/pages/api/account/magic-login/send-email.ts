@@ -10,7 +10,7 @@ import { magicLinkStrategy } from "~/account/magicLogin/api/passport/magic-login
 import { connectToAppDbMiddleware } from "~/lib/server/middlewares/mongoAppConnection";
 
 // check request validity
-const checkBody = (req, res, next) => {
+const checkBody = (req: NextApiRequest, res: NextApiResponse, next) => {
   if (!req.body) {
     return res.status(400).send("Request body not defined");
   }

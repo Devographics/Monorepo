@@ -46,8 +46,10 @@ interface SurveyPageServerProps {
 }
 export default async function SurveyPage({
   params: { slug, year, lang },
+  searchParams,
 }: {
   params: SurveyPageServerProps;
+  searchParams: { "from-magic-login"?: string };
 }) {
   // TODO: it seems we need to call this initialization code on all relevant pages/layouts
   initRedis(serverConfig().redisUrl);
@@ -59,6 +61,11 @@ export default async function SurveyPage({
     intro = await getSurveyIntro(edition.id, lang);
   } catch (err) {
     console.warn("couldn't get survey intro:", edition.id, lang);
+  }
+  if (searchParams["from-magic-login"]) {
+    // TODO: check if user has a response
+    // if they have a response => redirect to it
+    // if not => create and redirect
   }
   return (
     <div>

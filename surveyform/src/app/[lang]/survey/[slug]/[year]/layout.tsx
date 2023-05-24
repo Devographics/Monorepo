@@ -89,11 +89,8 @@ export default async function SurveyLayout({
   children: React.ReactNode;
   params: { slug: string; year: string; lang: string };
 }) {
-  // TODO: it seems we need to call this initialization code on all relevant pages/layouts
   initRedis(serverConfig().redisUrl);
-
   const edition = await mustGetSurveyEdition(params);
-  const surveyParamsTable = getSurveyParamsTable();
   // survey specific strings
   const localeId = params.lang;
   if (localeId.includes(".")) {

@@ -17,7 +17,12 @@ export const apiRoutes = {
         method: "GET",
       },
       sendEmail: {
-        href: () => "/api/account/magic-login/send-email",
+        href: ({ from }:
+          {
+            /** Keep in mind the redirection path, if applicable */
+            from?: string
+          }) =>
+          "/api/account/magic-login/send-email" + (from ? "?from=" + encodeURIComponent(from) : ""),
         method: "POST",
       },
     },

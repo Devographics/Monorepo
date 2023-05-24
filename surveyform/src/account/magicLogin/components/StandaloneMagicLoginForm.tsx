@@ -59,7 +59,7 @@ export const StandaloneMagicLoginForm = ({
     };
 
     try {
-      const res = await sendMagicLoginEmail(body);
+      const res = await sendMagicLoginEmail(body, window.location.pathname);
       if (res.status === 200) {
         setSuccessMsg(
           intl.formatMessage({ id: `accounts.magic_link.success` }) ||
