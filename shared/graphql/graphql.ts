@@ -100,7 +100,7 @@ export const fetchGraphQLApi = async ({
     apiUrl?: string
 }): Promise<any> => {
     const apiUrl = apiUrl_ || getApiUrl()
-    console.debug(`// querying ${apiUrl} (${query.slice(0, 15)}...)`)
+    // console.debug(`// querying ${apiUrl} (${query.slice(0, 15)}...)`)
     const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {

@@ -34,12 +34,12 @@ async function getFromCache<T = any>(
 ) {
     const calledFromLog = calledFrom ? `(↪️  ${calledFrom})` : ''
     const enableCache = !(process.env.ENABLE_CACHE === 'false')
-    if (enableCache) {
-        if (memoryCache.has(key)) {
-            console.debug(`🟢 [${key}] in-memory cache hit ${calledFromLog}`)
-            const res = await memoryCache.get<Promise<T>>(key)!
-            return res
-        } else {
+    if (memoryCache.has(key)) {
+        console.debug(`🟢 [${key}] in-memory cache hit ${calledFromLog}`)
+        const res = await memoryCache.get<Promise<T>>(key)!
+        return res
+    } else {
+        if (enableCache) {
             const redisData = await fetchJson<T>(key)
             if (redisData) {
                 console.debug(`🔵 [${key}] in-memory cache miss, redis hit ${calledFromLog}`)
@@ -58,17 +58,17 @@ async function getFromCache<T = any>(
 
                 return result
             }
+        } else {
+            console.debug(`🟠 [${key}] cache disabled, fetching from API ${calledFromLog}`)
+
+            const promise = fetchFunc()
+            memoryCache.set(key, promise)
+            const result = await promise
+
+            return result
         }
-    } else {
-        console.debug(`🟠 [${key}] cache disabled, fetching from API ${calledFromLog}`)
-
-        const promise = fetchFunc()
-        const result = await promise
-
-        return result
     }
 }
-
 const editionMetadataKey = ({
     context,
     surveyId,
