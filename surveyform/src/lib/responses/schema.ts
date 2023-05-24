@@ -89,12 +89,7 @@ export const responseBaseSchema: Schema = {
   },
   locale: {
     type: String,
-    onCreate: () => {
-      return "TODO";
-    },
-    onUpdate: () => {
-      return "TODO";
-    },
+    clientMutable: true,
   },
   isSynced: {
     type: Boolean,

@@ -246,6 +246,16 @@ query ${editionId}MetadataQuery {
                 code
                 codeHighlighted
               }
+              homepage {
+                url
+              }
+              github {
+                url
+              }
+              mdn {
+                url
+                summary
+              }
             }
             rawPaths {
               response
@@ -372,6 +382,16 @@ query ${editionId}MetadataQuery {
                 code
                 codeHighlighted
               }
+              homepage {
+                url
+              }
+              github {
+                url
+              }
+              mdn {
+                url
+                summary
+              }
             }
             rawPaths {
               response
@@ -394,3 +414,38 @@ query ${editionId}MetadataQuery {
   }
 }
 `
+
+export const getLocalesListQuerySurveyForm = () => `
+query LocalesListQuery {
+  locales {
+    id
+    completion
+    label
+    repo
+    totalCount
+    translatedCount
+    translators
+  }
+}`
+
+export const getLocaleQuerySurveyForm = ({ localeId }: { localeId: string }) => `
+query Locale_${localeId.replace('-', '_')}_Query {
+  locale(localeId: "${localeId}") {
+    id
+    completion
+    label
+    repo
+    totalCount
+    translatedCount
+    translators
+    strings {
+      tHtml
+      t
+      tClean
+      key
+      isFallback
+      context
+      aliasFor
+    }
+  }
+}`

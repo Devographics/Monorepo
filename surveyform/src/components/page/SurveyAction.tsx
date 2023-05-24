@@ -109,6 +109,7 @@ const SurveyStart = ({
 
   // prefilled data
   let data: PrefilledData = {
+    locale: locale.id,
     editionId,
     surveyId,
     common__user_info__source: source,

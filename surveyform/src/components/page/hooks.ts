@@ -69,4 +69,5 @@ export interface BrowserData {
 export interface PrefilledData extends BrowserData {
   surveyId: string;
   editionId: string;
+  locale: string;
 }

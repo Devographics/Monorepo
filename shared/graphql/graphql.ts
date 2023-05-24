@@ -3,7 +3,9 @@ import {
     getSurveysQuery,
     getEditionQuery,
     getEditionQuerySurveyForm,
-    getSurveyQuery
+    getSurveyQuery,
+    getLocalesListQuerySurveyForm,
+    getLocaleQuerySurveyForm
 } from './queries'
 import { logToFile } from '@devographics/helpers'
 
@@ -24,7 +26,9 @@ export const getApiUrl = () => {
  */
 export const fetchSurveysListGraphQL = async ({
     includeQuestions
-}: { includeQuestions?: boolean }): Promise<Array<SurveyMetadata>> => {
+}: {
+    includeQuestions?: boolean
+}): Promise<Array<SurveyMetadata>> => {
     const query = getSurveysQuery({ includeQuestions })
     await logToFile('fetchSurveysListGraphQL.gql', query, { mode: 'overwrite' })
     const result = await fetchGraphQLApi({ query })
@@ -32,7 +36,13 @@ export const fetchSurveysListGraphQL = async ({
     return result._metadata.surveys as SurveyMetadata[]
 }
 
-export const fetchEditionGraphQL = async ({ surveyId, editionId }: { surveyId: string, editionId: string }): Promise<EditionMetadata> => {
+export const fetchEditionGraphQL = async ({
+    surveyId,
+    editionId
+}: {
+    surveyId: string
+    editionId: string
+}): Promise<EditionMetadata> => {
     const query = getEditionQuery({ surveyId, editionId })
     await logToFile('fetchEditionGraphQL.gql', query, { mode: 'overwrite' })
     const result = await fetchGraphQLApi({ query })
@@ -40,7 +50,11 @@ export const fetchEditionGraphQL = async ({ surveyId, editionId }: { surveyId: s
     return result._metadata.surveys[0].editions[0]
 }
 
-export const fetchSurveyGraphQL = async ({ surveyId }: { surveyId: string }): Promise<SurveyMetadata> => {
+export const fetchSurveyGraphQL = async ({
+    surveyId
+}: {
+    surveyId: string
+}): Promise<SurveyMetadata> => {
     const query = getSurveyQuery({ surveyId })
     await logToFile('fetchSurveyGraphQL.gql', query, { mode: 'overwrite' })
     const result = await fetchGraphQLApi({ query })
@@ -51,7 +65,10 @@ export const fetchSurveyGraphQL = async ({ surveyId }: { surveyId: string }): Pr
 export const fetchEditionGraphQLSurveyForm = async ({
     surveyId,
     editionId
-}: { surveyId: string, editionId: string }): Promise<EditionMetadata> => {
+}: {
+    surveyId: string
+    editionId: string
+}): Promise<EditionMetadata> => {
     const query = getEditionQuerySurveyForm({ surveyId, editionId })
     await logToFile('fetchEditionGraphQLSurveyForm.gql', query, { mode: 'overwrite' })
     const result = await fetchGraphQLApi({ query })
@@ -59,9 +76,32 @@ export const fetchEditionGraphQLSurveyForm = async ({
     return result._metadata.surveys[0].editions[0]
 }
 
-export const fetchGraphQLApi = async ({ query }: { query: string }): Promise<any> => {
-    console.debug(`// querying ${getApiUrl()} (${query.slice(0, 15)}...)`)
-    const response = await fetch(getApiUrl(), {
+export const fetchLocalesListGraphQL = async ({}: {}): Promise<any> => {
+    const query = getLocalesListQuerySurveyForm()
+    await logToFile('fetchLocalesListGraphQL.gql', query, { mode: 'overwrite' })
+    const result = await fetchGraphQLApi({ query, apiUrl: process.env.INTERNAL_API_URL })
+    await logToFile('fetchLocalesListGraphQL.json', result, { mode: 'overwrite' })
+    return result
+}
+
+export const fetchLocaleGraphQL = async ({ localeId }: { localeId: string }): Promise<any> => {
+    const query = getLocaleQuerySurveyForm({ localeId })
+    await logToFile('fetchLocaleGraphQL.gql', query, { mode: 'overwrite' })
+    const result = await fetchGraphQLApi({ query, apiUrl: process.env.INTERNAL_API_URL })
+    await logToFile('fetchLocaleGraphQL.json', result, { mode: 'overwrite' })
+    return result
+}
+
+export const fetchGraphQLApi = async ({
+    query,
+    apiUrl: apiUrl_
+}: {
+    query: string
+    apiUrl?: string
+}): Promise<any> => {
+    const apiUrl = apiUrl_ || getApiUrl()
+    // console.debug(`// querying ${apiUrl} (${query.slice(0, 15)}...)`)
+    const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
