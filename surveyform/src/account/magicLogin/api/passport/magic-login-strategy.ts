@@ -53,10 +53,6 @@ async function sendMagicLink(
 
   const magicLink = computeMagicLink(req, href);
 
-  // If there is no user with this email, we create an unverified user
-  // => this is particularly useful if anonymousId is set, this way we can remember the anonymousId/email link even if the user
-  // did not click the magic link
-  // => this could enable a "temporary authentication" mode for new users to reduce friction in the future (we have to assess security yet)
   const foundUser = await findUserFromEmail(email);
 
 
@@ -69,6 +65,10 @@ async function sendMagicLink(
       makeVerified: false,
     });
   } else {
+    // If there is no user with this email, we create an unverified user
+    // => this is particularly useful if anonymousId is set, this way we can remember the anonymousId/email link even if the user
+    // did not click the magic link
+    // => this could enable a "temporary authentication" mode for new users to reduce friction in the future (we have to assess security yet)
     const user: {
       email: string;
       anonymousId?: string;
@@ -79,7 +79,6 @@ async function sendMagicLink(
       // Important: the user is not verified until they have actually clicked the magic link
       isVerified: false,
     };
-
     await createOrUpgradeUser(user);
   }
 

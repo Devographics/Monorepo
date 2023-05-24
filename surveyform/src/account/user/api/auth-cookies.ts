@@ -25,7 +25,7 @@ export function setTokenCookie(res, token) {
   res.setHeader("Set-Cookie", cookie);
 }
 
-export function rhRemoveTokenCookie(res: NextResponse) {
+export function handlerRemoveTokenCookie(res: NextResponse) {
   res.cookies.delete(TOKEN_NAME)
 }
 
