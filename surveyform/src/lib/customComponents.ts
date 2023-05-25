@@ -16,7 +16,7 @@ import { QuestionMetadata } from "@devographics/types";
 
 const customComponents = {
   help: Help,
-  email2: Email2,
+  receive_notifications: Email2,
   hidden: Hidden,
   race_ethnicity: RaceEthnicity,
   bracket: Bracket,

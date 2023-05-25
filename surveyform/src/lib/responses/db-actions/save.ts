@@ -6,13 +6,11 @@ import { EditionMetadata } from "@devographics/types";
 import { getResponseSchema } from "~/lib/responses/schema";
 import { restoreTypes, runFieldCallbacks, OnUpdateProps } from "~/lib/schemas";
 import type { ResponseDocument } from "@devographics/types";
-import { getResponseEmail } from "~/lib/responses/helpers";
 import { subscribe } from "~/lib/server/email/email_octopus";
 import { captureException } from "@sentry/nextjs";
 import { ServerError } from "~/lib/server-error";
 import { validateResponse } from "./validate";
-
-const emailPlaceholder = "*****@*****";
+import { emailPlaceholder } from "~/lib/responses/schema";
 
 export async function saveResponse({
   responseId,
@@ -90,13 +88,15 @@ export async function saveResponse({
   });
 
   // if user has entered their email, try to subscribe them to the email list
-  const { email, emailFieldPath } = getResponseEmail(props);
-  if (email && emailFieldPath && email !== emailPlaceholder) {
+  const receiveNotifications = clientData.receiveNotifications;
+  const email = clientData.email;
+
+  if (receiveNotifications && email && email !== emailPlaceholder) {
     if (!existingResponse.isSubscribed) {
       const listId = survey?.emailOctopus?.listId;
       try {
         subscribe({ email, listId });
-        clientData.isSubscribed = true;
+        serverData.isSubscribed = true;
       } catch (error) {
         // We do not hard fail on subscription error, just log to Sentry
         captureException(error);
@@ -104,7 +104,7 @@ export async function saveResponse({
       }
     }
     // replace email with placeholder value for privacy reasons
-    clientData[emailFieldPath] = emailPlaceholder;
+    serverData.email = emailPlaceholder;
   }
 
   // validate response

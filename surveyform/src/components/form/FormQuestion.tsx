@@ -17,10 +17,7 @@ export const FormQuestion = (props) => {
   const formPaths = getFormPaths({ edition, question });
   const Component = getQuestionComponent(question);
   const path = formPaths.response;
-  if (!path) {
-    throw new Error(`Could not find response path for question ${question.id}`);
-  }
-  const value = response?.[path];
+  const value = path && response?.[path];
 
   const componentProperties = {
     ...props,

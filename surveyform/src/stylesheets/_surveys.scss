@@ -271,13 +271,13 @@
   padding: $spacing;
   margin-bottom: $spacing * 2;
   text-align: center;
-  &.survey-closed {
+  &.survey-closed,
+  &.survey-error {
     background: $redTransparent;
   }
-  &.survey-preview {
-    background: $greenTransparent;
-  }
-  &.survey-finished {
+  &.survey-preview,
+  &.survey-finished,
+  &.survey-success {
     background: $greenTransparent;
   }
 }
@@ -329,6 +329,132 @@
 }
 
 .reading-list-results {
+  background: var(--bg-color-light);
+  padding: $spacing * 2;
+  margin-bottom: $spacing;
+  .reading-list {
+    &-title {
+      text-align: center;
+      font-size: $largeish-font;
+      text-transform: uppercase;
+      display: flex;
+      gap: $spacing/2;
+      align-items: center;
+      &::before,
+      &::after {
+        content: " ";
+        display: block;
+        height: 1px;
+        width: 100%;
+        background: var(--dark-border-color);
+      }
+      span {
+        flex: 1;
+        white-space: nowrap;
+      }
+    }
+    &-description {
+      font-size: $large-font;
+      margin-bottom: $spacing;
+      @include secondary-font;
+      text-align: center;
+    }
+    &-items {
+      margin-bottom: $spacing;
+    }
+    &-show-more {
+      display: flex;
+      justify-content: center;
+    }
+    &-item {
+      padding-top: $spacing;
+      margin-top: $spacing;
+      border-top: $border;
+      &-title {
+        display: flex;
+        align-items: center;
+        gap: $spacing/2;
+        margin-bottom: $spacing/2;
+      }
+      &-summary {
+        font-size: $medium-font;
+      }
+      &-links {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        gap: $spacing;
+      }
+    }
+
+    &-link-button {
+      display: flex;
+      align-items: center;
+      gap: $spacing/6;
+      padding: 4px 8px;
+      // @include primary-font;
+      span {
+        display: block;
+        line-height: 1;
+      }
+      svg {
+        width: 16px;
+        height: 16px;
+        position: relative;
+        top: -1px;
+      }
+    }
+    &-link {
+      background: var(--bg-color-lighter);
+      border-radius: 10px;
+      display: block;
+      color: var(--text-color);
+      font-weight: $medium;
+      @include primary-font;
+      font-size: $small-font;
+      padding: 3px 6px;
+      display: flex;
+      align-items: center;
+      gap: $spacing/6;
+      span {
+        display: block;
+        line-height: 1;
+      }
+      svg {
+        width: 16px;
+        height: 16px;
+        position: relative;
+        top: -1px;
+      }
+      &:hover {
+        background-color: var(--link-color);
+        text-decoration: none;
+      }
+    }
+    &-send {
+      padding-top: $spacing;
+      margin-top: $spacing;
+      border-top: $border;
+      &-title {
+        font-size: $large-font;
+        margin-bottom: $spacing;
+        @include secondary-font;
+        text-align: center;
+      }
+    }
+    &-form {
+      display: flex;
+      align-items: center;
+      gap: $spacing/2;
+    }
+  }
+
+  .survey-message {
+    margin: 0;
+    margin-top: $spacing;
+  }
 }
 @keyframes flash {
   0% {

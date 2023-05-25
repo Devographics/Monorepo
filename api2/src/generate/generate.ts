@@ -103,7 +103,6 @@ export const getSectionObject = ({
                 q.sectionIds.includes(section.id) &&
                 q.editions &&
                 q.editions.includes(edition.id) &&
-                q.includeInApi !== false &&
                 q.id === question.id
         )
         // help callouts, email sign up fields, etc. do not have questionObjects associated

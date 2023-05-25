@@ -160,26 +160,3 @@ export const getSectionCompletionPercentage = ({
   const completedQuestionsCount = completedQuestions.length;
   return Math.round((completedQuestionsCount / questionsCount) * 100);
 };
-
-export const getResponseEmail = ({
-  existingResponse,
-  survey,
-  edition,
-}: {
-  existingResponse: ResponseDocument;
-  survey: SurveyMetadata;
-  edition: EditionMetadata;
-}) => {
-  const emailSection = edition.sections.find((s) => s.id === "user_info");
-  const emailQuestion = edition.sections
-    .map((s) => s.questions)
-    .flat()
-    .find((q) => q.template === "email2");
-  if (!emailSection || !emailQuestion) {
-    return {};
-  }
-  const formPaths = getFormPaths({ edition, question: emailQuestion });
-  const emailFieldPath = formPaths?.response;
-  const email = emailFieldPath && existingResponse[emailFieldPath];
-  return { email, emailFieldPath };
-};

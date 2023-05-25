@@ -140,6 +140,9 @@ export type Question = {
     randomize?: boolean
 
     matchTags?: string[]
+
+    // a question that's in the outline but not in the API
+    hasApiEndpoint?: boolean
 }
 
 export type Option = {

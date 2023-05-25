@@ -113,18 +113,20 @@ export const generateResolvers = async ({
                     if (sectionTypeObject) {
                         // generate resolver map for each section field (i.e. each section question)
                         resolvers[sectionTypeObject.typeName] = Object.fromEntries(
-                            section.questions.map((questionObject: QuestionApiObject) => {
-                                return [
-                                    questionObject.id,
-                                    getQuestionResolver({
-                                        survey,
-                                        edition,
-                                        section,
-                                        question: questionObject,
-                                        questionObjects
-                                    })
-                                ]
-                            })
+                            section.questions
+                                .filter(q => q.hasApiEndpoint !== false)
+                                .map((questionObject: QuestionApiObject) => {
+                                    return [
+                                        questionObject.id,
+                                        getQuestionResolver({
+                                            survey,
+                                            edition,
+                                            section,
+                                            question: questionObject,
+                                            questionObjects
+                                        })
+                                    ]
+                                })
                         )
                     }
 

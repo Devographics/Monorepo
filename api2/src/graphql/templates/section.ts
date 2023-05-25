@@ -36,6 +36,7 @@ export const generateSectionType = ({
         typeType: 'section',
         typeDef: `type ${typeName} {
     ${questions
+        .filter(q => q.hasApiEndpoint !== false)
         .map((question: QuestionApiObject) => {
             return `${question.id}: ${question.fieldTypeName}`
         })

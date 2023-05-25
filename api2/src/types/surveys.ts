@@ -34,7 +34,7 @@ export type TemplateArguments = {
 
 export type ApiTemplateFunction = (arg0: TemplateArguments) => QuestionApiTemplateOutput
 
-export type NullTemplate = (arg0: TemplateArguments) => { includeInApi: boolean }
+export type NullTemplate = (arg0: TemplateArguments) => { hasApiEndpoint: boolean }
 
 export interface TemplatesDictionnary {
     [index: string]: ApiTemplateFunction | NullTemplate
@@ -122,9 +122,6 @@ export interface SectionApiObject extends Omit<Section, 'questions'> {
 }
 
 export interface QuestionApiObject extends QuestionApiTemplateOutput {
-    // a question that's in the outline but not in the API
-    includeInApi?: boolean
-
     editions?: string[]
 
     isGlobal?: boolean

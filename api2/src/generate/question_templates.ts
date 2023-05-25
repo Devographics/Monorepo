@@ -3,7 +3,7 @@ const { defaultTemplateFunction } = allTemplates
 import { TemplatesDictionnary } from '../types/surveys'
 
 const doNotInclude = () => ({
-    includeInApi: false
+    hasApiEndpoint: false
 })
 
 export const templates: TemplatesDictionnary = {
@@ -15,7 +15,6 @@ export const templates: TemplatesDictionnary = {
     text: defaultTemplateFunction,
     longtext: defaultTemplateFunction,
 
-    email2: doNotInclude,
     receive_notifications: doNotInclude,
     help: doNotInclude
 }

@@ -13,18 +13,21 @@ export const apiRoutes = {
     },
     magicLogin: {
       verifyToken: {
-        href: ({ token }: { token: string }) => `/api/account/magic-login/verify-token?token=${encodeURIComponent(
-          token
-        )}`,
+        href: ({ token }: { token: string }) =>
+          `/api/account/magic-login/verify-token?token=${encodeURIComponent(
+            token
+          )}`,
         method: "GET",
       },
       sendEmail: {
-        href: ({ from }:
-          {
-            /** Keep in mind the redirection path, if applicable */
-            from?: string
-          }) =>
-          "/api/account/magic-login/send-email" + (from ? "?from=" + encodeURIComponent(from) : ""),
+        href: ({
+          from,
+        }: {
+          /** Keep in mind the redirection path, if applicable */
+          from?: string;
+        }) =>
+          "/api/account/magic-login/send-email" +
+          (from ? "?from=" + encodeURIComponent(from) : ""),
         method: "POST",
       },
     },
@@ -44,7 +47,11 @@ export const apiRoutes = {
     },
     saveResponse: {
       href: ({ responseId }: { responseId: string }) =>
-        `/api/responses/${responseId}/saveResponse/`,
+        `/api/responses/${responseId}/saveResponse`,
+    },
+    sendReadingList: {
+      href: ({ responseId }: { responseId: string }) =>
+        `/api/responses/${responseId}/sendReadingList`,
     },
   },
   projects: {

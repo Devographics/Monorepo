@@ -9,6 +9,8 @@ export enum Actions {
   UPDATE = "update",
 }
 
+export const emailPlaceholder = "*****@*****";
+
 export const responseBaseSchema: Schema = {
   _id: {
     type: String,
@@ -117,6 +119,14 @@ export const responseBaseSchema: Schema = {
   isNormalized: {
     type: Boolean,
     onUpdate: () => false,
+  },
+  receiveNotifications: {
+    type: Boolean,
+    clientMutable: true,
+  },
+  email: {
+    type: String,
+    clientMutable: true,
   },
   readingList: {
     type: String,
