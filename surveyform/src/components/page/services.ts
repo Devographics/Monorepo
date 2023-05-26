@@ -1,3 +1,4 @@
+import { ResponseDocument } from "@devographics/types";
 import { apiRoutes } from "~/lib/apiRoutes";
 
 export async function createResponse({ data }: { data: any }) {
@@ -35,7 +36,7 @@ export async function saveResponse({
       body: JSON.stringify(data),
     }
   );
-  const result: { data: any; error: any } = await fetchRes.json();
+  const result: { data?: ResponseDocument; error: any } = await fetchRes.json();
   return result;
 }
 

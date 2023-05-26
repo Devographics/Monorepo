@@ -9,6 +9,7 @@ import isEmpty from "lodash/isEmpty";
 import { FormContext } from "./FormContext";
 import { ErrorBoundary } from "~/components/error";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
+import { useResponse } from "../ResponseContext/ResponseProvider";
 
 const initFormState = (response) => ({
   currentValues: {},
@@ -35,6 +36,8 @@ export const FormSection = (props) => {
   );
   const [errorResponse, setErrorResponse] = useState();
   const { locale } = useLocaleContext();
+
+  const { updateResponseFromClient } = useResponse();
 
   const stateStuff = {
     formState,
@@ -108,11 +111,10 @@ export const FormSection = (props) => {
         setErrorResponse(res.error);
         return;
       }
-      // Important: router.push may trigger a soft navigation
-      // but we want the response to be updated from server
-      // => we need a hard navigation
-      window.location.href = path;
-      // router.push(path);
+      // TODO: @see https://github.com/vercel/next.js/issues/49387#issuecomment-1564539515
+      updateResponseFromClient(res.data!);
+      console.log("res", res);
+      router.push(path);
     }
   };
 

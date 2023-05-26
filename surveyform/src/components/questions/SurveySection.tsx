@@ -13,7 +13,7 @@ export const SurveySectionWithResponse = ({
   sectionNumber: number;
   edition: EditionMetadata;
 }) => {
-  const response = useResponse();
+  const { response } = useResponse();
 
   /*
   if (responseError) {

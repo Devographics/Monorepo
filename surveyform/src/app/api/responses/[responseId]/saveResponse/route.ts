@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { tryGetCurrentUser } from "~/account/user/route-handlers/getters";
 import { RouteHandlerOptions } from "~/app/api/typings";
+import { loadResponse } from "~/lib/responses/db-actions/load";
 import { saveResponse } from "~/lib/responses/db-actions/save";
 import { ServerError } from "~/lib/server-error";
 
@@ -37,8 +38,12 @@ export async function POST(req: NextRequest, { params }: RouteHandlerOptions<{ r
       currentUser,
       clientData,
     });
-
-    return NextResponse.json({ data });
+    const updatedResponse = await loadResponse({ responseId, currentUser })
+    if (!updatedResponse) throw new ServerError({ id: "response-not-found-after-update", message: "Couldn't find response after an update", status: 500 })
+    // NOTE: it's important to return the updated data
+    // because we do some client-side updates until issue below is fixed:
+    // @see https://github.com/vercel/next.js/issues/49450
+    return NextResponse.json({ data: updatedResponse });
   } catch (error) {
     if (error instanceof ServerError) {
       return await error.toNextResponse(req)

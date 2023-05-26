@@ -1,6 +1,7 @@
 import { connectToRedis } from "~/lib/server/redis";
 import { getRawResponsesCollection } from "@devographics/mongo";
 import { ServerError } from "~/lib/server-error";
+import { ResponseDocument } from "@devographics/types";
 
 export async function loadResponse({
   responseId,
@@ -11,7 +12,7 @@ export async function loadResponse({
 }) {
   connectToRedis();
 
-  const RawResponses = await getRawResponsesCollection();
+  const RawResponses = await getRawResponsesCollection<ResponseDocument>();
   const response = await RawResponses.findOne({ _id: responseId });
   if (!response) {
     throw new ServerError({
