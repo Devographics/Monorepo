@@ -8,7 +8,7 @@ import { initRedis } from "@devographics/redis";
 import { serverConfig } from "~/config/server";
 import { Metadata } from "next";
 import { mustFetchLocale } from "../../i18n/server/rsc-fetchers";
-import { getLocales } from "~/i18n/db-actions/fetchLocales";
+import { fetchAllLocalesMetadata } from "~/lib/api/fetch";
 
 // TODO: not yet compatible with having dynamic pages down the tree
 // we may have to call generateStaticParams in each static page instead
@@ -44,7 +44,7 @@ export default async function RootLayout({
   const { localeWithStrings, localeId } = loc;
 
   // locales lists
-  const locales = (await getLocales()) || [];
+  const locales = (await fetchAllLocalesMetadata()) || [];
 
   // TODO: we load waaaay too much strings
   // we should load survey specific strings in another nested layout

@@ -6,7 +6,7 @@ import {
 } from "@devographics/types";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { UserDocument } from "~/account/user/typings";
-import { fetchSurveysMetadata } from "@devographics/fetch";
+import { fetchSurveysMetadata } from "~/lib/api/fetch";
 import { getEditionSectionPath } from "~/lib/surveys/helpers";
 
 const UserResponses = ({

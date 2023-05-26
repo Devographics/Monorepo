@@ -24,7 +24,7 @@ export async function generateMetadata({
   initRedis(serverConfig().redisUrl);
   const edition = await getSurveyEditionFromUrl(params);
   if (!edition) return {};
-  const loc = await cachedFetchLocaleFromUrl(params.lang);
+  const loc = await cachedFetchLocaleFromUrl({ langParam: params.lang });
   if (!loc) {
     return {
       title: getEditionTitle({ edition }),

@@ -7,7 +7,7 @@ import { LocaleContextProvider } from "~/i18n/context/LocaleContext";
 import { serverConfig } from "~/config/server";
 import { mustGetSurveyEdition } from "./fetchers";
 
-const cachedGetLocales = cache(getLocales);
+const cachedGetLocales = cache(fetchAllLocalesMetadata);
 
 // revalidate survey/entities every 5 minutes
 const SURVEY_TIMEOUT_SECONDS = 5 * 60;
@@ -28,9 +28,9 @@ import { getSurveyImageUrl } from "~/lib/surveys/helpers";
 import { publicConfig } from "~/config/public";
 import { getEditionHomePath, getEditionTitle } from "~/lib/surveys/helpers";
 import { cache } from "react";
-import { getSurveyParamsTable } from "~/lib/surveys/data";
-import { cachedFetchLocaleStrings } from "~/i18n/server/rsc-fetchers";
-import { getLocales } from "~/i18n/db-actions/fetchLocales";
+import { cachedFetchLocale } from "~/i18n/server/rsc-fetchers";
+import { fetchAllLocalesMetadata } from "~/lib/api/fetch";
+import { getEditionContexts } from "~/i18n/config";
 interface SurveyPageServerProps {
   slug: string;
   year: string;
@@ -105,18 +105,11 @@ If this error still happens in a few months (2023) open an issue with repro at N
   const localeSlug = edition.surveyId;
   // NOTE: the demo survey was previously using the graphql contexts ["state_of_graphql", "state_of_graphql_2022"]
   // now it has its own strings
-  const i18nContexts = [
-    // We expect the root layout to load the common contexts
-    // and define a LocaleContextProvider
-    // => generic strings and survey specific will be merged automatically
-    //...i18nCommonContexts,
-    localeSlug,
-    localeSlug + "_" + params.year,
-  ];
-  const localeWithStrings = await cachedFetchLocaleStrings(
+  const i18nContexts = getEditionContexts({ edition });
+  const localeWithStrings = await cachedFetchLocale({
     localeId,
-    ...i18nContexts
-  );
+    contexts: i18nContexts,
+  });
   if (!localeWithStrings) {
     console.warn(
       `Could not get locales for id ${localeId} and context ${i18nContexts}`

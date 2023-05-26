@@ -1,5 +1,5 @@
 import Surveys from "~/app/[lang]/Surveys";
-import { fetchSurveysMetadata } from "@devographics/fetch";
+import { fetchSurveysMetadata } from "~/lib/api/fetch";
 import { initRedis } from "@devographics/redis";
 import { serverConfig } from "~/config/server";
 

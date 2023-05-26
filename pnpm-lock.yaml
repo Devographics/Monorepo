@@ -633,6 +633,7 @@ importers:
   shared/fetch:
     specifiers:
       '@devographics/graphql': workspace:^1.0.0
+      '@devographics/helpers': workspace:^1.0.0
       '@devographics/redis': workspace:^1.0.0
       '@devographics/types': workspace:^1.0.0
       '@types/node': ^18.11.18
@@ -641,6 +642,7 @@ importers:
       node-cache: ^5.1.2
     dependencies:
       '@devographics/graphql': link:../graphql
+      '@devographics/helpers': link:../helpers
       '@devographics/redis': link:../redis
       '@devographics/types': link:../types
       ioredis: 5.2.4

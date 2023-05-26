@@ -149,9 +149,9 @@ const Score = ({
             values={{ known, total }}
           />
         </div>
-        <div className="score-rank">
+        {/* <div className="score-rank">
           <FormattedMessage id={`knowledge_rank.${rank}`} />
-        </div>
+        </div> */}
         <div className="score-share">
           <Button
             target="_blank"

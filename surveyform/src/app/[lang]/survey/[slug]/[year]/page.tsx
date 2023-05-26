@@ -16,11 +16,14 @@ async function getSurveyIntro(
   // It needs more work to get translated content in a robust manner
   // TODO: fetchLocaleFromUrl doesn't account for the survey context
   // TODO: correctly fallback to english
-  const locDef = await cachedFetchLocaleFromUrl(lang);
+  const locDef = await cachedFetchLocaleFromUrl({ langParam: lang });
   const enLocDef =
     lang === "en-US"
       ? locDef
-      : await cachedFetchLocaleFromUrl("en-US", "surveys");
+      : await cachedFetchLocaleFromUrl({
+          langParam: "en-US",
+          contexts: ["surveys"],
+        });
   if (!locDef && !enLocDef) {
     console.warn("Could not load locales to get survey intro, lang:", locDef);
     return "";

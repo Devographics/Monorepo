@@ -31,7 +31,7 @@ export const fetchSurveysListGraphQL = async ({
 }): Promise<Array<SurveyMetadata>> => {
     const query = getSurveysQuery({ includeQuestions })
     await logToFile('fetchSurveysListGraphQL.gql', query, { mode: 'overwrite' })
-    const result = await fetchGraphQLApi({ query })
+    const result = await fetchGraphQLApi({ query, queryName: 'fetchSurveysListGraphQL' })
     await logToFile('fetchSurveysListGraphQL.json', result, { mode: 'overwrite' })
     return result._metadata.surveys as SurveyMetadata[]
 }
@@ -45,7 +45,7 @@ export const fetchEditionGraphQL = async ({
 }): Promise<EditionMetadata> => {
     const query = getEditionQuery({ surveyId, editionId })
     await logToFile('fetchEditionGraphQL.gql', query, { mode: 'overwrite' })
-    const result = await fetchGraphQLApi({ query })
+    const result = await fetchGraphQLApi({ query, queryName: 'fetchEditionGraphQL' })
     await logToFile('fetchEditionGraphQL.json', result, { mode: 'overwrite' })
     return result._metadata.surveys[0].editions[0]
 }
@@ -57,7 +57,7 @@ export const fetchSurveyGraphQL = async ({
 }): Promise<SurveyMetadata> => {
     const query = getSurveyQuery({ surveyId })
     await logToFile('fetchSurveyGraphQL.gql', query, { mode: 'overwrite' })
-    const result = await fetchGraphQLApi({ query })
+    const result = await fetchGraphQLApi({ query, queryName: 'fetchSurveyGraphQL' })
     await logToFile('fetchSurveyGraphQL.json', result, { mode: 'overwrite' })
     return result[surveyId]._metadata as SurveyMetadata
 }
@@ -71,7 +71,7 @@ export const fetchEditionGraphQLSurveyForm = async ({
 }): Promise<EditionMetadata> => {
     const query = getEditionQuerySurveyForm({ surveyId, editionId })
     await logToFile('fetchEditionGraphQLSurveyForm.gql', query, { mode: 'overwrite' })
-    const result = await fetchGraphQLApi({ query })
+    const result = await fetchGraphQLApi({ query, queryName: 'fetchEditionGraphQLSurveyForm' })
     await logToFile('fetchEditionGraphQLSurveyForm.json', result, { mode: 'overwrite' })
     return result._metadata.surveys[0].editions[0]
 }
@@ -79,27 +79,37 @@ export const fetchEditionGraphQLSurveyForm = async ({
 export const fetchLocalesListGraphQL = async ({}: {}): Promise<any> => {
     const query = getLocalesListQuerySurveyForm()
     await logToFile('fetchLocalesListGraphQL.gql', query, { mode: 'overwrite' })
-    const result = await fetchGraphQLApi({ query, apiUrl: process.env.INTERNAL_API_URL })
+    const result = await fetchGraphQLApi({
+        query,
+        queryName: 'fetchLocalesListGraphQL',
+        apiUrl: process.env.INTERNAL_API_URL
+    })
     await logToFile('fetchLocalesListGraphQL.json', result, { mode: 'overwrite' })
     return result
 }
 
 export const fetchLocaleGraphQL = async ({ localeId }: { localeId: string }): Promise<any> => {
     const query = getLocaleQuerySurveyForm({ localeId })
-    await logToFile('fetchLocaleGraphQL.gql', query, { mode: 'overwrite' })
-    const result = await fetchGraphQLApi({ query, apiUrl: process.env.INTERNAL_API_URL })
-    await logToFile('fetchLocaleGraphQL.json', result, { mode: 'overwrite' })
+    const result = await fetchGraphQLApi({
+        query,
+        queryName: 'fetchLocaleGraphQL',
+        apiUrl: process.env.INTERNAL_API_URL
+    })
     return result
 }
 
 export const fetchGraphQLApi = async ({
     query,
+    queryName,
     apiUrl: apiUrl_
 }: {
     query: string
+    queryName: string
     apiUrl?: string
 }): Promise<any> => {
     const apiUrl = apiUrl_ || getApiUrl()
+    await logToFile(`${queryName}.gql`, query, { mode: 'overwrite' })
+
     // console.debug(`// querying ${apiUrl} (${query.slice(0, 15)}...)`)
     const response = await fetch(apiUrl, {
         method: 'POST',
@@ -117,5 +127,7 @@ export const fetchGraphQLApi = async ({
         console.log(JSON.stringify(json.errors, null, 2))
         throw new Error()
     }
+    await logToFile(`${queryName}.json`, json.data, { mode: 'overwrite' })
+
     return json.data
 }

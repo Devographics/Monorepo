@@ -5,16 +5,7 @@
  */
 import NodeCache from 'node-cache'
 import { fetchJson, storeRedis } from '@devographics/redis'
-import { SurveyMetadata, EditionMetadata } from '@devographics/types'
-import {
-    fetchEditionGraphQLSurveyForm,
-    fetchSurveyGraphQL,
-    fetchSurveysListGraphQL,
-    fetchLocalesListGraphQL,
-    fetchLocaleGraphQL
-} from '@devographics/graphql'
-
-const SURVEY_FORM_CONTEXT = 'surveyform'
+import { logToFile } from '@devographics/helpers'
 
 const memoryCache = new NodeCache({
     // This TTL must stay short, because we manually invalidate this cache
@@ -27,7 +18,7 @@ const memoryCache = new NodeCache({
  * Generic function to fetch something from cache, or store it if cache misses
  * @returns
  */
-async function getFromCache<T = any>(
+export async function getFromCache<T = any>(
     key: string,
     fetchFunc: () => Promise<T>,
     calledFrom?: string
@@ -69,110 +60,52 @@ async function getFromCache<T = any>(
         }
     }
 }
-const editionMetadataKey = ({
-    context,
-    surveyId,
-    editionId
-}: {
-    context: string
-    surveyId: string
-    editionId: string
-}) => `${context}__${surveyId}__${editionId}__metadata`
 
-/**
- * Load the metadata of a survey edition for the surveyform app
- * @returns
- */
-export async function fetchEditionMetadataSurveyForm({
-    surveyId,
-    editionId,
-    calledFrom
+export const getApiUrl = () => {
+    const apiUrl = process.env.DATA_API_URL
+    if (!apiUrl) {
+        throw new Error('process.env.DATA_API_URL not defined, it should point the the API')
+    }
+    return apiUrl
+}
+
+function extractQueryName(queryString) {
+    const regex = /query\s+(\w+)/
+    const match = regex.exec(queryString)
+    return match ? match[1] : null
+}
+
+export const fetchGraphQLApi = async ({
+    query,
+    queryName: queryName_,
+    apiUrl: apiUrl_
 }: {
-    surveyId: string
-    editionId: string
-    calledFrom?: string
-}): Promise<EditionMetadata> {
-    if (!surveyId) {
-        throw new Error(`surveyId not defined (calledFrom: ${calledFrom})`)
-    }
-    if (!editionId) {
-        throw new Error(`editionId not defined (calledFrom: ${calledFrom})`)
-    }
-    const key = editionMetadataKey({
-        context: SURVEY_FORM_CONTEXT,
-        surveyId,
-        editionId
+    query: string
+    queryName?: string
+    apiUrl?: string
+}): Promise<any> => {
+    const apiUrl = apiUrl_ || getApiUrl()
+    const queryName = queryName_ || extractQueryName(query)
+    await logToFile(`${queryName}.gql`, query, { mode: 'overwrite' })
+
+    // console.debug(`// querying ${apiUrl} (${query.slice(0, 15)}...)`)
+    const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json'
+        },
+        body: JSON.stringify({ query, variables: {} }),
+        // always get a fresh answer
+        cache: 'no-store'
     })
-    return await getFromCache<EditionMetadata>(
-        key,
-        async () => await fetchEditionGraphQLSurveyForm({ surveyId, editionId }),
-        calledFrom
-    )
-}
-
-const surveysMetadataKey = ({ context }: { context: string }) => `${context}__allSurveys__metadata`
-
-/**
- * Fetch metadata for all surveys
- * @returns
- */
-export const fetchSurveysMetadata = async (options?: {
-    calledFrom?: string
-}): Promise<Array<SurveyMetadata>> => {
-    const key = surveysMetadataKey({ context: SURVEY_FORM_CONTEXT })
-    return await getFromCache<Array<SurveyMetadata>>(
-        key,
-        async () => await fetchSurveysListGraphQL({ includeQuestions: false }),
-        options?.calledFrom
-    )
-}
-
-const surveyMetadataKey = ({ context, surveyId }: { context: string; surveyId: string }) =>
-    `${context}__${surveyId}__metadata`
-
-/**
- * Fetch metadata for a single survey
- * @returns
- */
-export const fetchSurveyMetadata = async ({
-    surveyId
-}: {
-    surveyId: string
-}): Promise<SurveyMetadata> => {
-    if (!surveyId) {
-        throw new Error('surveyId not defined')
+    const json: any = await response.json()
+    if (json.errors) {
+        console.log('// surveysQuery API query error')
+        console.log(JSON.stringify(json.errors, null, 2))
+        throw new Error()
     }
-    const key = surveyMetadataKey({ context: SURVEY_FORM_CONTEXT, surveyId })
-    return await getFromCache<SurveyMetadata>(
-        key,
-        async () => await fetchSurveyGraphQL({ surveyId })
-    )
-}
+    await logToFile(`${queryName}.json`, json.data, { mode: 'overwrite' })
 
-export const allLocalesMetadataCacheKey = ({ context }: { context: string }) =>
-    `${context}__all_locales`
-
-/**
- * Fetch metadata for all locales
- * @returns
- */
-export const fetchLocalesList = async ({}: {}): Promise<any> => {
-    const key = allLocalesMetadataCacheKey({ context: SURVEY_FORM_CONTEXT })
-    return await getFromCache<any>(key, async () => await fetchLocalesListGraphQL({}))
-}
-export const localeParsedCacheKey = ({
-    localeId,
-    context
-}: {
-    localeId: string
-    context: string
-}) => `${context}__${localeId}__parsed`
-
-/**
- * Fetch metadata for all locales
- * @returns
- */
-export const fetchLocale = async ({ localeId }: { localeId: string }): Promise<any> => {
-    const key = localeParsedCacheKey({ localeId, context: SURVEY_FORM_CONTEXT })
-    return await getFromCache<any>(key, async () => await fetchLocaleGraphQL({ localeId }))
+    return json.data
 }

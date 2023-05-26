@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { tryGetCurrentUser } from "~/account/user/route-handlers/getters";
 import { RouteHandlerOptions } from "~/app/api/typings";
 import { ServerError } from "~/lib/server-error";
-import { fetchEditionMetadataSurveyForm } from "@devographics/fetch";
+import { fetchEditionMetadata } from "~/lib/api/fetch";
 import { localMailTransport } from "~/lib/server/mail/transports";
 import { getRawResponsesCollection } from "@devographics/mongo";
 import { EditionMetadata, ResponseDocument } from "@devographics/types";
@@ -41,7 +41,7 @@ export async function POST(
 
     const { email, surveyId, editionId } = clientData;
 
-    const edition = await fetchEditionMetadataSurveyForm({
+    const edition = await fetchEditionMetadata({
       surveyId,
       editionId,
       calledFrom: "sendReadingList",

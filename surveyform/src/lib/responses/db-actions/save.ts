@@ -1,7 +1,7 @@
 import { connectToRedis } from "~/lib/server/redis";
 import { getRawResponsesCollection } from "@devographics/mongo";
 import { Actions } from "~/lib/validation";
-import { fetchEditionMetadataSurveyForm } from "@devographics/fetch";
+import { fetchEditionMetadata } from "~/lib/api/fetch";
 import { EditionMetadata } from "@devographics/types";
 import { getResponseSchema } from "~/lib/responses/schema";
 import { restoreTypes, runFieldCallbacks, OnUpdateProps } from "~/lib/schemas";
@@ -41,7 +41,7 @@ export async function saveResponse({
   // Get edition metadata
   let edition: EditionMetadata;
   try {
-    edition = await fetchEditionMetadataSurveyForm({
+    edition = await fetchEditionMetadata({
       surveyId,
       editionId,
       calledFrom: "api/response/update",

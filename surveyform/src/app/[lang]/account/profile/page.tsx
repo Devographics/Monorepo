@@ -7,7 +7,7 @@ import { getRawResponsesCollection } from "@devographics/mongo";
 import { UserDocument } from "~/account/user/typings";
 import { cache } from "react";
 import type { ResponseDocument } from "@devographics/types";
-import { fetchSurveysMetadata } from "@devographics/fetch";
+import { fetchSurveysMetadata } from "~/lib/api/fetch";
 import { rscCurrentUser } from "~/account/user/rsc-fetchers/rscCurrentUser";
 
 const getResponses = cache(

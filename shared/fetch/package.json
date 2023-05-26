@@ -26,6 +26,7 @@
     "license": "ISC",
     "dependencies": {
         "@devographics/graphql": "workspace:^1.0.0",
+        "@devographics/helpers": "workspace:^1.0.0",
         "@devographics/redis": "workspace:^1.0.0",
         "@devographics/types": "workspace:^1.0.0",
         "ioredis": "^5.2.4",

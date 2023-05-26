@@ -2,7 +2,7 @@
  * Fetchers optimized for Next.js
  */
 import { notFound } from "next/navigation";
-import { fetchEditionMetadataSurveyForm } from "@devographics/fetch";
+import { fetchEditionMetadata } from "~/lib/api/fetch";
 import { surveyParamsLookup } from "~/lib/surveys/data";
 
 /**
@@ -21,7 +21,7 @@ export async function getSurveyEditionFromUrl(params: {
       surveySlug: slug,
       editionSlug: year,
     });
-    const edition = await fetchEditionMetadataSurveyForm({
+    const edition = await fetchEditionMetadata({
       surveyId,
       editionId,
       calledFrom: "getSurveyEditionFromUrl",
