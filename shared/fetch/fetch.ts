@@ -15,6 +15,19 @@ const memoryCache = new NodeCache({
 })
 
 /**
+ * GraphQL objects have explicit "foo: null" fields, we can remove them to save space
+ * @returns
+ */
+function removeNull(obj) {
+    var clean = Object.fromEntries(
+        Object.entries(obj)
+            .map(([k, v]) => [k, v === Object(v) ? removeNull(v) : v])
+            .filter(([_, v]) => v != null && (v !== Object(v) || Object.keys(v).length))
+    )
+    return Array.isArray(obj) ? Object.values(clean) : clean
+}
+
+/**
  * Generic function to fetch something from cache, or store it if cache misses
  * @returns
  */
@@ -25,6 +38,17 @@ export async function getFromCache<T = any>(
 ) {
     const calledFromLog = calledFrom ? `(↪️  ${calledFrom})` : ''
     const enableCache = !(process.env.ENABLE_CACHE === 'false')
+
+    const fetchAndStore = async () => {
+        const promise = fetchFunc()
+        memoryCache.set(key, promise)
+        const result = await promise
+
+        // store in Redis in the background
+        await storeRedis<T>(key, removeNull(result))
+        return result
+    }
+
     if (memoryCache.has(key)) {
         console.debug(`🟢 [${key}] in-memory cache hit ${calledFromLog}`)
         const res = await memoryCache.get<Promise<T>>(key)!
@@ -39,24 +63,11 @@ export async function getFromCache<T = any>(
                 console.debug(
                     `🟣 [${key}] in-memory & redis cache miss, fetching from API ${calledFromLog}`
                 )
-
-                const promise = fetchFunc()
-                memoryCache.set(key, promise)
-                const result = await promise
-
-                // store in Redis in the background
-                await storeRedis<T>(key, result)
-
-                return result
+                return await fetchAndStore()
             }
         } else {
             console.debug(`🟠 [${key}] cache disabled, fetching from API ${calledFromLog}`)
-
-            const promise = fetchFunc()
-            memoryCache.set(key, promise)
-            const result = await promise
-
-            return result
+            return await fetchAndStore()
         }
     }
 }
@@ -77,16 +88,16 @@ function extractQueryName(queryString) {
 
 export const fetchGraphQLApi = async ({
     query,
-    queryName: queryName_,
+    key: key_,
     apiUrl: apiUrl_
 }: {
     query: string
-    queryName?: string
+    key?: string
     apiUrl?: string
 }): Promise<any> => {
     const apiUrl = apiUrl_ || getApiUrl()
-    const queryName = queryName_ || extractQueryName(query)
-    await logToFile(`${queryName}.gql`, query, { mode: 'overwrite' })
+    const key = key_ || extractQueryName(query)
+    await logToFile(`${key}.gql`, query, { mode: 'overwrite' })
 
     // console.debug(`// querying ${apiUrl} (${query.slice(0, 15)}...)`)
     const response = await fetch(apiUrl, {
@@ -105,7 +116,7 @@ export const fetchGraphQLApi = async ({
         console.log(JSON.stringify(json.errors, null, 2))
         throw new Error()
     }
-    await logToFile(`${queryName}.json`, json.data, { mode: 'overwrite' })
+    await logToFile(`${key}.json`, json.data, { mode: 'overwrite' })
 
     return json.data
 }

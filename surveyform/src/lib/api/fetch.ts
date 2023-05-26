@@ -47,6 +47,7 @@ export async function fetchEditionMetadata({
     async () => {
       const result = await fetchGraphQLApi({
         query: getEditionMetadataQuery({ editionId }),
+        key,
       });
       return result._metadata.surveys[0].editions[0];
     },
@@ -65,7 +66,7 @@ export const fetchSurveysMetadata = async (options?: {
   return await getFromCache<Array<SurveyMetadata>>(
     key,
     async () => {
-      const result = await fetchGraphQLApi({ query: getSurveysQuery() });
+      const result = await fetchGraphQLApi({ query: getSurveysQuery(), key });
       return result._metadata.surveys as SurveyMetadata[];
     },
     options?.calledFrom
@@ -81,6 +82,7 @@ export const fetchAllLocalesMetadata = async (): Promise<Array<LocaleDef>> => {
   return await getFromCache<any>(key, async () => {
     const result = await fetchGraphQLApi({
       query: getAllLocalesMetadataQuery(),
+      key,
       apiUrl: process.env.INTERNAL_API_URL,
     });
     return result.locales;
@@ -103,6 +105,7 @@ export const fetchLocale = async ({
   return await getFromCache<any>(key, async () => {
     const result = await fetchGraphQLApi({
       query: getLocaleQuery({ localeId, contexts }),
+      key,
       apiUrl: process.env.INTERNAL_API_URL,
     });
     const locale = result.locale;
