@@ -21,11 +21,10 @@ const useRefreshUser = () => {
 };
 
 export const AnonymousLoginForm = ({
-  successRedirection,
+  successRedirectionPath,
   label = "Log In Anonymously",
 }: {
-  /** Path to redirect to on successful implementation */
-  successRedirection?: string;
+  successRedirectionPath?: string;
   label?: string | ReactNode;
 }) => {
   const [errorMsg, setErrorMsg] = useState("");
@@ -42,9 +41,9 @@ export const AnonymousLoginForm = ({
         setErrorMsg(await res.text());
       } else {
         await refreshUser();
-        if (successRedirection) {
-          console.log("push to", successRedirection);
-          router.push(successRedirection);
+        if (successRedirectionPath) {
+          console.log("push to", successRedirectionPath);
+          router.push(successRedirectionPath);
         }
         // will reload the user in the RSC
         router.refresh();

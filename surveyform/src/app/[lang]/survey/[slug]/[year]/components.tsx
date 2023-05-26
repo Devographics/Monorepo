@@ -11,7 +11,13 @@ import { Suspense } from "react";
 import { EditionMetadata, SurveyStatusEnum } from "@devographics/types";
 import { rscCurrentUser } from "~/account/user/rsc-fetchers/rscCurrentUser";
 
-export const EditionMain = ({ edition }: { edition: EditionMetadata }) => {
+export const EditionMain = ({
+  edition,
+  editionPath,
+}: {
+  edition: EditionMetadata;
+  editionPath?: string;
+}) => {
   return (
     <Suspense
       fallback={
@@ -22,12 +28,18 @@ export const EditionMain = ({ edition }: { edition: EditionMetadata }) => {
     >
       {/** @see https://github.com/vercel/app-playground/blob/afa2a63c4abd2d99687cf002d76647a183bdcb78/app/streaming/_components/pricing.tsx */}
       {/** @ts-expect-error This an experimental syntax TS will cringe at async components */}
-      <EditionMainAsync edition={edition} />
+      <EditionMainAsync edition={edition} editionPath={editionPath} />
     </Suspense>
   );
 };
 
-const EditionMainAsync = async ({ edition }: { edition: EditionMetadata }) => {
+const EditionMainAsync = async ({
+  edition,
+  editionPath,
+}: {
+  edition: EditionMetadata;
+  editionPath?: string;
+}) => {
   const user = await rscCurrentUser();
   if (!user) {
     return (
@@ -36,6 +48,7 @@ const EditionMainAsync = async ({ edition }: { edition: EditionMetadata }) => {
         surveyId={edition.surveyId}
         hideGuest={edition.status === SurveyStatusEnum.CLOSED}
         user={user}
+        successRedirectionPath={editionPath}
       />
     );
   } else {
@@ -51,10 +64,12 @@ export const EditionPage = ({
   edition,
   editionIntro,
   imageUrl,
+  editionPath,
 }: {
   edition: EditionMetadata;
   editionIntro: string;
   imageUrl?: string;
+  editionPath?: string;
 }) => {
   const { resultsUrl, survey } = edition;
   const { name } = survey;
@@ -92,7 +107,7 @@ export const EditionPage = ({
             __html: editionIntro,
           }}
         />
-        <EditionMain edition={edition} />
+        <EditionMain edition={edition} editionPath={editionPath} />
       </div>
       <Faq survey={edition} />
       {edition.credits && <SurveyCredits edition={edition} />}

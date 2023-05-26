@@ -16,6 +16,7 @@ export interface StandaloneMagicLoginFormProps {
    */
   surveyId?: string;
   editionId?: string;
+  successRedirectionPath?: string;
 }
 /**
  * With passwordless approach, there is no signup step,
@@ -27,6 +28,7 @@ export const StandaloneMagicLoginForm = ({
   label,
   surveyId,
   editionId,
+  successRedirectionPath,
 }: StandaloneMagicLoginFormProps) => {
   const intl = useIntlContext();
   const placeholder = intl.formatMessage({ id: `accounts.your_email` });
@@ -58,7 +60,7 @@ export const StandaloneMagicLoginForm = ({
       locale: locale.id,
     };
     try {
-      const res = await sendMagicLoginEmail(body, window.location.pathname);
+      const res = await sendMagicLoginEmail(body, successRedirectionPath);
       if (res.status === 200) {
         setSuccessMsg(
           intl.formatMessage({ id: `accounts.magic_link.success` }) ||

@@ -11,9 +11,14 @@ export const LoginDialog = ({
   user,
   surveyId,
   editionId,
+  successRedirectionPath,
 }: {
   hideGuest?: boolean;
   user?: UserDocument | null;
+  /**
+   * Redirect after succesful auth
+   */
+  successRedirectionPath?: string;
 } & Pick<StandaloneMagicLoginFormProps, "surveyId" | "editionId">) => {
   //const redirectedFrom = router.query?.from as string;
   return user ? (
@@ -28,10 +33,12 @@ export const LoginDialog = ({
           <FormattedMessage id="accounts.create_account.description" />
         </div>
         <div className="survey-login-action">
+          {/* TODO: use successRedirectionPath and put it in the magic link for proper redirects */}
           <StandaloneMagicLoginForm
             surveyId={surveyId}
             editionId={editionId}
             label={<FormattedMessage id="accounts.create_account.action" />}
+            successRedirectionPath={successRedirectionPath}
           />
         </div>
         <div className="survey-login-option-note">
@@ -51,6 +58,7 @@ export const LoginDialog = ({
               label={
                 <FormattedMessage id="accounts.continue_as_guest.action" />
               }
+              successRedirectionPath={successRedirectionPath}
             />
           </div>
         </div>

@@ -76,6 +76,7 @@ export default async function SurveyPage({
         edition={edition}
         imageUrl={imageUrl}
         editionIntro={intro}
+        editionPath={`/survey/${slug}/${year}`}
       />
       <Support />
     </div>
