@@ -28,7 +28,7 @@ import { getSurveyImageUrl } from "~/lib/surveys/helpers";
 import { publicConfig } from "~/config/public";
 import { getEditionHomePath, getEditionTitle } from "~/lib/surveys/helpers";
 import { cache } from "react";
-import { cachedFetchLocale } from "~/i18n/server/rsc-fetchers";
+import { rscFetchLocale } from "~/i18n/server/rsc-fetchers";
 import { fetchAllLocalesMetadata } from "~/lib/api/fetch";
 import { getEditionContexts } from "~/i18n/config";
 interface SurveyPageServerProps {
@@ -106,7 +106,7 @@ If this error still happens in a few months (2023) open an issue with repro at N
   // NOTE: the demo survey was previously using the graphql contexts ["state_of_graphql", "state_of_graphql_2022"]
   // now it has its own strings
   const i18nContexts = getEditionContexts({ edition });
-  const localeWithStrings = await cachedFetchLocale({
+  const localeWithStrings = await rscFetchLocale({
     localeId,
     contexts: i18nContexts,
   });

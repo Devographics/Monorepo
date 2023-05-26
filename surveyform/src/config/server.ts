@@ -19,7 +19,7 @@ export function serverConfig() {
     /**
      * Internal API for translations and entities
      */
-    translationAPI: process.env.TRANSLATION_API!,
+    translationAPI: process.env.INTERNAL_API_URL!,
     mongoUri: process.env.MONGO_URI!,
     redisUrl: process.env.REDIS_URL || "redis://localhost:6379",
     githubToken: process.env.GITHUB_TOKEN,
@@ -43,7 +43,11 @@ export function checkServerConfig() {
   if (!process.env.GITHUB_TOKEN) {
     throw new Error("GITHUB_TOKEN is now necessary to get the survey files")
   }
+  if (!process.env.INTERNAL_API_URL) {
+    throw new Error("INTERNAL_API_URL should point to the internal API. It was previously named 'TRANSLATION_API'.")
+  }
   if (process.env.NODE_ENV === "production") {
+    // prod only check
     if (!process.env.REDIS_URL) {
       throw new Error(
         "process.env.REDIS_URL is mandatory in production.\n If building locally, set this value in .env.production.local or .env.test.local"
@@ -53,5 +57,6 @@ export function checkServerConfig() {
       throw new Error("process.env.TOKEN_SECRET not set");
     }
   } else {
+    // dev only check
   }
 };

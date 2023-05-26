@@ -112,9 +112,9 @@ export const fetchGraphQLApi = async ({
     })
     const json: any = await response.json()
     if (json.errors) {
-        console.log('// surveysQuery API query error')
-        console.log(JSON.stringify(json.errors, null, 2))
-        throw new Error()
+        console.error('// surveysQuery API query error')
+        console.error(JSON.stringify(json.errors, null, 2))
+        throw new Error("Got some errors while calling a GraphQL API")
     }
     await logToFile(`${key}.json`, json.data, { mode: 'overwrite' })
 

@@ -6,7 +6,7 @@ import { serverConfig } from "~/config/server";
 import { SectionProvider } from "~/components/SectionContext/SectionProvider";
 import { getSectionKey, getEditionTitle } from "~/lib/surveys/helpers";
 import { getSurveyEditionFromUrl } from "../../fetchers";
-import { cachedFetchLocaleFromUrl } from "~/i18n/server/rsc-fetchers";
+import { rscFetchLocaleFromUrl } from "~/i18n/server/rsc-fetchers";
 
 interface SurveySectionParams {
   lang: string;
@@ -24,7 +24,7 @@ export async function generateMetadata({
   initRedis(serverConfig().redisUrl);
   const edition = await getSurveyEditionFromUrl(params);
   if (!edition) return {};
-  const loc = await cachedFetchLocaleFromUrl({ langParam: params.lang });
+  const loc = await rscFetchLocaleFromUrl({ langParam: params.lang });
   if (!loc) {
     return {
       title: getEditionTitle({ edition }),

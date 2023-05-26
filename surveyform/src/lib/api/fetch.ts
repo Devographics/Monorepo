@@ -18,6 +18,8 @@ import {
   getAllLocalesMetadataQuery,
   getLocaleQuery,
 } from "./queries";
+import { publicConfig } from "~/config/public";
+import { serverConfig } from "~/config/server";
 
 /**
  * Load the metadata of a survey edition for the surveyform app
@@ -83,7 +85,7 @@ export const fetchAllLocalesMetadata = async (): Promise<Array<LocaleDef>> => {
     const result = await fetchGraphQLApi({
       query: getAllLocalesMetadataQuery(),
       key,
-      apiUrl: process.env.INTERNAL_API_URL,
+      apiUrl: serverConfig().translationAPI
     });
     return result.locales;
   });
@@ -106,7 +108,7 @@ export const fetchLocale = async ({
     const result = await fetchGraphQLApi({
       query: getLocaleQuery({ localeId, contexts }),
       key,
-      apiUrl: process.env.INTERNAL_API_URL,
+      apiUrl: serverConfig().translationAPI,
     });
     const locale = result.locale;
 

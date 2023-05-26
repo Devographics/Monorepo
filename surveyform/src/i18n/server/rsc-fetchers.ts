@@ -7,14 +7,14 @@ import { publicConfig } from "~/config/public";
 import { fetchLocale, FetchLocaleOptions } from "~/lib/api/fetch";
 import { getCommonContexts } from "~/i18n/config";
 
-export const cachedFetchLocale = cache((options: FetchLocaleOptions) =>
+export const rscFetchLocale = cache((options: FetchLocaleOptions) =>
   fetchLocale(options)
 );
 
 /**
  * Will add default contexts if nor is passed
  */
-export const cachedFetchLocaleFromUrl = cache(
+export const rscFetchLocaleFromUrl = cache(
   async ({
     langParam,
     contexts,
@@ -26,7 +26,7 @@ export const cachedFetchLocaleFromUrl = cache(
     const localeId = filterLang(langParam);
     if (!localeId) return null;
     // locale fetching
-    const localeWithStrings = await cachedFetchLocale({
+    const localeWithStrings = await rscFetchLocale({
       localeId,
       contexts: contexts || getCommonContexts(),
     });
@@ -58,7 +58,7 @@ function filterLang(maybeLocale: string): string | null {
     if (publicConfig.isDev) {
       console.warn(
         "Trying to render with param lang literally set to '[lang]'." +
-          "This issue has appeared in Next 13.1.0+ (fev 2023)."
+        "This issue has appeared in Next 13.1.0+ (fev 2023)."
       );
     }
     return null;
@@ -71,8 +71,8 @@ function filterLang(maybeLocale: string): string | null {
  * @param params
  * @returns
  */
-export async function mustFetchLocale(params: { lang: string }) {
-  const loc = await cachedFetchLocaleFromUrl({ langParam: params.lang });
+export async function rscMustFetchLocale(params: { lang: string }) {
+  const loc = await rscFetchLocaleFromUrl({ langParam: params.lang });
   // TODO: this will lead to a 404 if Redis haven't been properly filled with the right locales
   // we might want to redirect to a specific error page at the root of the app, that do not depend on a specific locale
   if (!loc) notFound();
