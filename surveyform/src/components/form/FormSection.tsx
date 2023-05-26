@@ -61,11 +61,17 @@ export const FormSection = (props) => {
     });
   };
 
+  /**
+   * Called when we navigate from a page to another, saves the current response
+   */
   const submitForm = async ({
     path,
     beforeSubmitCallback,
     afterSubmitCallback,
   }: {
+    /**
+     * Next page path
+     */
     path: string;
     beforeSubmitCallback: any;
     afterSubmitCallback: any;
@@ -73,7 +79,7 @@ export const FormSection = (props) => {
     setErrorResponse(undefined);
     const { currentValues } = formState;
     if (readOnly || isEmpty(currentValues)) {
-      // no data to submit, go straight to other page
+      // no data to submit, go straight to other page with soft navigation
       router.push(path);
     } else {
       // submit data
@@ -100,9 +106,13 @@ export const FormSection = (props) => {
         console.error(res.error);
         captureException(res.error);
         setErrorResponse(res.error);
-      } else {
-        router.push(path);
+        return;
       }
+      // Important: router.push may trigger a soft navigation
+      // but we want the response to be updated from server
+      // => we need a hard navigation
+      window.location.href = path;
+      // router.push(path);
     }
   };
 

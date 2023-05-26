@@ -3,7 +3,7 @@ import React from "react";
 import { useIntlContext } from "@devographics/react-i18n";
 
 const getFormattedMessage = (intlKeys, intl) => {
-  if (!intlKeys.length) {
+  if (!intlKeys?.length) {
     console.error("No intlKeys provided to an Help component");
     return null;
   }
