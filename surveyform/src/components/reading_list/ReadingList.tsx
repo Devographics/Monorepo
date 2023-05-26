@@ -76,7 +76,6 @@ export const ReadingList = (props: FormInputProps) => {
         <Button
           className="form-show-more"
           onClick={() => {
-            console.log(showMore);
             setShowMore((showMore) => !showMore);
           }}
         >
