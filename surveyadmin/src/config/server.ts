@@ -28,7 +28,7 @@ const appUrl =
 //   /**
 //    * Internal API for translations and entities
 //    */
-//   translationAPI: process.env.TRANSLATION_API!,
+//   translationAPI: process.env.INTERNAL_API_URL!,
 //   mongoUri: process.env.MONGO_URI,
 //   publicReadonlyMongoUri: process.env.MONGO_URI_PUBLIC_READONLY,
 //   // NOTE: each survey should try to use their own specific domain (see magic link auth)
@@ -47,7 +47,7 @@ export function serverConfig() {
     /**
      * Internal API for translations and entities
      */
-    translationAPI: process.env.TRANSLATION_API!,
+    translationAPI: process.env.INTERNAL_API_URL!,
     mongoUri: process.env.MONGO_URI!,
     publicReadonlyMongoUri: process.env.MONGO_URI_PUBLIC_READONLY,
     redisUrl: process.env.REDIS_URL || "redis://localhost:6379",

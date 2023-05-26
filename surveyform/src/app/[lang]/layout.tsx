@@ -7,7 +7,7 @@ import { initRedis } from "@devographics/redis";
 
 import { serverConfig } from "~/config/server";
 import { Metadata } from "next";
-import { mustFetchLocale } from "../../i18n/server/rsc-fetchers";
+import { rscMustFetchLocale } from "../../i18n/server/rsc-fetchers";
 import { fetchAllLocalesMetadata } from "~/lib/api/fetch";
 
 // TODO: not yet compatible with having dynamic pages down the tree
@@ -39,7 +39,7 @@ export default async function RootLayout({
 }) {
   // TODO: it seems we need to call this initialization code on all relevant pages/layouts
   initRedis(serverConfig().redisUrl);
-  const loc = await mustFetchLocale(params);
+  const loc = await rscMustFetchLocale(params);
   if (!loc) return <></>;
   const { localeWithStrings, localeId } = loc;
 
