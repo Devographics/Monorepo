@@ -1,12 +1,13 @@
 "use client";
-
-import { useState, ReactNode, FormEventHandler } from "react";
+import { useState, ReactNode } from "react";
 import { useIntlContext } from "@devographics/react-i18n";
 import { sendMagicLoginEmail } from "~/account/magicLogin/client-actions/sendMagicLoginEmail";
 import { useCurrentUser } from "~/lib/users/hooks";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { FormComponentEmail } from "./FormComponentEmail";
 import { Button } from "~/components/ui/Button";
+import { Loading } from "~/components/ui/Loading";
+import { LoadingButton } from "~/components/ui/LoadingButton";
 
 export interface StandaloneMagicLoginFormProps {
   label?: string | ReactNode;
@@ -31,6 +32,7 @@ export const StandaloneMagicLoginForm = ({
   const placeholder = intl.formatMessage({ id: `accounts.your_email` });
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
+  const [loading, setLoading] = useState(false);
   const resetMessages = () => {
     if (errorMsg) setErrorMsg("");
     if (successMsg) setErrorMsg("");
@@ -40,16 +42,14 @@ export const StandaloneMagicLoginForm = ({
 
   async function handleSubmit(e) {
     e.preventDefault();
+    setLoading(true);
     resetMessages();
-
     const email = e?.currentTarget?.email?.value;
     if (!email) {
       setErrorMsg(intl.formatMessage({ id: `accounts.magic_link.no_email` }));
       return;
     }
-
     localStorage && localStorage.setItem("email", email);
-
     const body = {
       destination: email,
       anonymousId: currentUser?._id,
@@ -57,7 +57,6 @@ export const StandaloneMagicLoginForm = ({
       editionId,
       locale: locale.id,
     };
-
     try {
       const res = await sendMagicLoginEmail(body, window.location.pathname);
       if (res.status === 200) {
@@ -71,48 +70,20 @@ export const StandaloneMagicLoginForm = ({
     } catch (error) {
       console.error("An unexpected error occurred:", error);
       setErrorMsg(error.message);
+    } finally {
+      setLoading(false);
     }
   }
   return (
-    <>
-      <div className="login">
-        <MagicLinkLoginForm
-          errorMessage={errorMsg}
-          successMessage={successMsg}
-          onSubmit={handleSubmit}
-          label={label}
-          placeholder={placeholder}
-        />
-      </div>
-    </>
-  );
-};
-
-const MagicLinkLoginForm = ({
-  errorMessage,
-  successMessage,
-  onSubmit,
-  label = "Send me a magic link",
-  placeholder,
-}: {
-  /** Path to redirect to on successful implementation */
-  errorMessage?: string;
-  successMessage?: string;
-  onSubmit?: FormEventHandler<HTMLFormElement>;
-  label?: string | ReactNode;
-  placeholder?: string;
-}) => {
-  return (
-    <form onSubmit={onSubmit} className="magic-link-login-form">
+    <form onSubmit={handleSubmit} className="magic-link-login-form">
       <FormComponentEmail placeholder={placeholder} label={label} />
       <div className="submit">
-        <Button type="submit">{label}</Button>
+        <LoadingButton type="submit" loading={loading}>
+          {label}
+        </LoadingButton>
       </div>
-
-      {errorMessage && <div className="error magic-error">{errorMessage}</div>}
-      {successMessage && (
-        <div className="success magic-success">{successMessage}</div>
-      )}
+      {errorMsg && <div className="error magic-error">{errorMsg}</div>}
+      {successMsg && <div className="success magic-success">{successMsg}</div>}
     </form>
   );
 };

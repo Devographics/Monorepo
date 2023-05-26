@@ -5,6 +5,8 @@ import { loginAnonymously } from "../lib";
 import { useSWRConfig } from "swr";
 import { apiRoutes } from "~/lib/apiRoutes";
 import { Button } from "~/components/ui/Button";
+import { Loading } from "~/components/ui/Loading";
+import { LoadingButton } from "~/components/ui/LoadingButton";
 
 /**
  * Will update all "useUser" hooks
@@ -27,10 +29,12 @@ export const AnonymousLoginForm = ({
   label?: string | ReactNode;
 }) => {
   const [errorMsg, setErrorMsg] = useState("");
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const refreshUser = useRefreshUser();
 
   async function loginAnonymouslyOnClick() {
+    setLoading(true);
     try {
       if (errorMsg) setErrorMsg("");
       const res = await loginAnonymously();
@@ -48,14 +52,20 @@ export const AnonymousLoginForm = ({
     } catch (error: any) {
       console.error("An unexpected error occurred:", error);
       setErrorMsg(error.message);
+    } finally {
+      setLoading(false);
     }
   }
 
   return (
     <>
       <div className="anonymous-login">
-        {/*<Form isLogin errorMessage={errorMsg} onSubmit={handleSubmit} />*/}
-        <Button onClick={() => loginAnonymouslyOnClick()}>{label}</Button>
+        <LoadingButton
+          onClick={() => loginAnonymouslyOnClick()}
+          loading={loading}
+        >
+          {label}
+        </LoadingButton>
         {errorMsg && <p className="error">{errorMsg}</p>}
       </div>
     </>
