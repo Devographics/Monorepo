@@ -9,7 +9,12 @@ interface ApiData<T = any> {
   error: any;
 }
 
-export const useResponse = (params: { responseId?: string }) => {
+/**
+ * @deprecated "useResponse" gets the response from layout context directly
+ * @param params 
+ * @returns 
+ */
+export const useResponseClient = (params: { responseId?: string }) => {
   const { responseId } = params;
   const { data, error, isLoading } = useSWR<ApiData<ResponseDocument>>(
     responseId && apiRoutes.responses.loadResponse.href({ responseId }),

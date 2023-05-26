@@ -5,7 +5,7 @@ import { initRedis } from "@devographics/redis";
 
 import { LocaleContextProvider } from "~/i18n/context/LocaleContext";
 import { serverConfig } from "~/config/server";
-import { mustGetSurveyEdition } from "./fetchers";
+import { rscMustGetSurveyEdition } from "./rsc-fetchers";
 
 const cachedGetLocales = cache(fetchAllLocalesMetadata);
 
@@ -43,7 +43,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   // TODO: it seems we need to call this initialization code on all relevant pages/layouts
   initRedis(serverConfig().redisUrl);
-  const edition = await mustGetSurveyEdition({ slug, year });
+  const edition = await rscMustGetSurveyEdition({ slug, year });
   const { socialImageUrl, faviconUrl } = edition;
   const imageUrl = getSurveyImageUrl(edition);
   let imageAbsoluteUrl = socialImageUrl || imageUrl;
@@ -90,7 +90,7 @@ export default async function SurveyLayout({
   params: { slug: string; year: string; lang: string };
 }) {
   initRedis(serverConfig().redisUrl);
-  const edition = await mustGetSurveyEdition(params);
+  const edition = await rscMustGetSurveyEdition(params);
   // survey specific strings
   const localeId = params.lang;
   if (localeId.includes(".")) {

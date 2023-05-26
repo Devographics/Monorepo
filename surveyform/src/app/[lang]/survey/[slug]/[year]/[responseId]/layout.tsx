@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { rscCurrentUser } from "~/account/user/rsc-fetchers/rscCurrentUser";
 import { ResponseProvider } from "~/components/ResponseContext/ResponseProvider";
+import { rscMustGetResponse } from "~/lib/responses/rsc-fetchers";
 import { routes } from "~/lib/routes";
 
 // Important, otherwise the page will use ISR
@@ -14,20 +15,16 @@ export default async function WithResponseLayout({
   params,
 }: {
   children: React.ReactNode;
-  params: { responseId: string };
+  params: { slug: string; year: string; responseId: string };
 }) {
-  // pages below this layout require authentication
+  const { slug, year, responseId } = params;
   const currentUser = await rscCurrentUser();
   if (!currentUser) {
-    // TODO: use from, require to get current request URL
-    return redirect(routes.account.login.href);
+    return redirect(routes.account.login.from(`/survey/${slug}/${year}`));
   }
-  // TODO: get the response from server directly
-  // instead of doing client-side data fetching
-  // TODO: also check response access permissions!
-  return (
-    <ResponseProvider responseId={params.responseId}>
-      {children}
-    </ResponseProvider>
-  );
+  const response = await rscMustGetResponse({
+    currentUser,
+    responseId,
+  });
+  return <ResponseProvider response={response}>{children}</ResponseProvider>;
 }

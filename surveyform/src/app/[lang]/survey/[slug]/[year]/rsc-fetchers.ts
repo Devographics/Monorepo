@@ -11,7 +11,7 @@ import { surveyParamsLookup } from "~/lib/surveys/data";
  * @param params
  * @returns
  */
-export async function getSurveyEditionFromUrl(params: {
+export async function rscGetSurveyEditionFromUrl(params: {
   slug: string;
   year: string;
 }) {
@@ -39,11 +39,11 @@ export async function getSurveyEditionFromUrl(params: {
   }
 }
 
-export async function mustGetSurveyEdition(params: {
+export async function rscMustGetSurveyEdition(params: {
   slug: string;
   year: string;
 }) {
-  const edition = await getSurveyEditionFromUrl(params);
+  const edition = await rscGetSurveyEditionFromUrl(params);
   //console.debug("// mustGetSurveyEdition");
   //console.debug(edition);
   if (!edition) {

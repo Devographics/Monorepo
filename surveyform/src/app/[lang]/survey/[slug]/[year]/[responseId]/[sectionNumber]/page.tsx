@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
 import { SurveySectionWithResponse } from "~/components/questions/SurveySection";
-import { mustGetSurveyEdition } from "../../fetchers";
 import { initRedis } from "@devographics/redis";
 import { serverConfig } from "~/config/server";
+import { rscMustGetSurveyEdition } from "../../rsc-fetchers";
 
 // SectionNumber is optional in the URL so this page is exactly the same as ../index.tsx
 const SurveyFromResponseIdPage = async ({
@@ -16,7 +16,7 @@ const SurveyFromResponseIdPage = async ({
   };
 }) => {
   initRedis(serverConfig().redisUrl);
-  const edition = await mustGetSurveyEdition({ slug, year });
+  const edition = await rscMustGetSurveyEdition({ slug, year });
   const sn = parseInt(sectionNumber);
   if (isNaN(sn)) notFound();
 

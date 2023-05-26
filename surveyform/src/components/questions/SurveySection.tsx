@@ -2,9 +2,9 @@
 
 import SurveySectionContents from "./SurveySectionContents";
 import { EditionMetadata } from "@devographics/types";
-import { useResponse } from "~/lib/responses/hooks";
 import { Loading } from "~/components/ui/Loading";
 import { ResponseError } from "~/components/error/ResponseError";
+import { useResponse } from "../ResponseContext/ResponseProvider";
 
 export const SurveySectionWithResponse = ({
   responseId,
@@ -13,23 +13,16 @@ export const SurveySectionWithResponse = ({
   sectionNumber: number;
   edition: EditionMetadata;
 }) => {
-  const {
-    response,
-    loading: responseLoading,
-    error: responseError,
-  } = useResponse({ responseId });
+  const response = useResponse();
 
-  if (responseLoading) {
-    return <Loading />;
-  }
-
+  /*
   if (responseError) {
     return (
       <div>
         <ResponseError responseError={responseError} />
       </div>
     );
-  }
+  }*/
   return <SurveySectionContents response={response} />;
 };
 

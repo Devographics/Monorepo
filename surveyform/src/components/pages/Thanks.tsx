@@ -1,41 +1,24 @@
-"use client";
 import ShareSite from "../share/ShareSite";
-import { getEditionSectionPath } from "~/lib/surveys/helpers";
 import Score from "../common/Score";
 import Image from "next/image";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { getSurveyImageUrl } from "~/lib/surveys/helpers";
-import Link from "next/link";
-import { useEdition } from "~/components/SurveyContext/Provider";
-import { useLocaleContext } from "~/i18n/context/LocaleContext";
-import { Loading } from "~/components/ui/Loading";
-import { useResponse } from "~/lib/responses/hooks";
 import ReadingListResults from "~/components/reading_list/ReadingListResults";
+import { EditionMetadata, ResponseDocument } from "@devographics/types";
+import { ThanksBackButton } from "./ThanksBackButton";
 
 export const Thanks = ({
-  responseId,
+  edition,
+  response,
   readOnly,
 }: {
-  responseId?: string;
   readOnly?: boolean;
+  edition: EditionMetadata;
+  response: ResponseDocument;
 }) => {
-  const { locale } = useLocaleContext();
-  const { edition } = useEdition();
   const imageUrl = getSurveyImageUrl(edition);
   const { survey, year } = edition;
   const { name } = survey;
-  // TODO: get from server, see ongoing investigation
-
-  const {
-    response,
-    loading: responseLoading,
-    error: responseError,
-  } = useResponse({ responseId });
-
-  if (responseLoading) {
-    return <Loading />;
-  }
-
   return (
     <div className="contents-narrow thanks">
       <div className="survey-message survey-finished">
@@ -59,22 +42,11 @@ export const Thanks = ({
         <FormattedMessage id="general.thanks2" />
       </div>
       <ShareSite survey={edition} />
-      <div className="form-submit form-section-nav form-section-nav-bottom">
-        <div className="form-submit-actions">
-          <Link
-            className="form-btn-prev"
-            href={getEditionSectionPath({
-              edition,
-              response,
-              forceReadOnly: readOnly,
-              number: edition.sections.length,
-              locale,
-            })}
-          >
-            « <FormattedMessage id="general.back" />
-          </Link>
-        </div>
-      </div>
+      <ThanksBackButton
+        readOnly={readOnly}
+        edition={edition}
+        response={response}
+      />
     </div>
   );
 };

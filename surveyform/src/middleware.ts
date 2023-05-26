@@ -119,7 +119,7 @@ export function middleware(request: NextRequest) {
     return localize(request);
   }
 
-  return NextResponse.next();
+  NextResponse.next();
 }
 
 // middleware will run only on those paths

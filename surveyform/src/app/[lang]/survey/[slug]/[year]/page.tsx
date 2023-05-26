@@ -1,5 +1,4 @@
 import Support from "~/components/common/Support";
-import { mustGetSurveyEdition } from "./fetchers";
 import { getSurveyImageUrl } from "~/lib/surveys/helpers";
 import { initRedis } from "@devographics/redis";
 
@@ -7,6 +6,7 @@ import { serverConfig } from "~/config/server";
 import { EditionPage as EditionPageComponent } from "./components";
 import { StringsRegistry } from "@devographics/react-i18n";
 import { rscFetchLocaleFromUrl } from "~/i18n/server/rsc-fetchers";
+import { rscMustGetSurveyEdition } from "./rsc-fetchers";
 
 async function getSurveyIntro(
   editionId: string,
@@ -56,7 +56,7 @@ export default async function SurveyPage({
 }) {
   // TODO: it seems we need to call this initialization code on all relevant pages/layouts
   initRedis(serverConfig().redisUrl);
-  const edition = await mustGetSurveyEdition({ slug, year });
+  const edition = await rscMustGetSurveyEdition({ slug, year });
   const imageUrl = getSurveyImageUrl(edition);
   let intro = "";
   try {

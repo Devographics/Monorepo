@@ -5,8 +5,8 @@ import { Metadata } from "next";
 import { serverConfig } from "~/config/server";
 import { SectionProvider } from "~/components/SectionContext/SectionProvider";
 import { getSectionKey, getEditionTitle } from "~/lib/surveys/helpers";
-import { getSurveyEditionFromUrl } from "../../fetchers";
 import { rscFetchLocaleFromUrl } from "~/i18n/server/rsc-fetchers";
+import { rscGetSurveyEditionFromUrl } from "../../rsc-fetchers";
 
 interface SurveySectionParams {
   lang: string;
@@ -22,7 +22,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   // TODO: it seems we need to call this initialization code on all relevant pages/layouts
   initRedis(serverConfig().redisUrl);
-  const edition = await getSurveyEditionFromUrl(params);
+  const edition = await rscGetSurveyEditionFromUrl(params);
   if (!edition) return {};
   const loc = await rscFetchLocaleFromUrl({ langParam: params.lang });
   if (!loc) {
