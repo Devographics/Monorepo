@@ -36,6 +36,7 @@ export async function getFromCache<T = any>(
     fetchFunc: () => Promise<T>,
     calledFrom?: string
 ) {
+    let result
     const calledFromLog = calledFrom ? `(↪️  ${calledFrom})` : ''
     const enableCache = !(process.env.ENABLE_CACHE === 'false')
 
@@ -51,25 +52,26 @@ export async function getFromCache<T = any>(
 
     if (memoryCache.has(key)) {
         console.debug(`🟢 [${key}] in-memory cache hit ${calledFromLog}`)
-        const res = await memoryCache.get<Promise<T>>(key)!
-        return res
+        result = await memoryCache.get<Promise<T>>(key)!
     } else {
         if (enableCache) {
             const redisData = await fetchJson<T>(key)
             if (redisData) {
                 console.debug(`🔵 [${key}] in-memory cache miss, redis hit ${calledFromLog}`)
-                return redisData
+                result = redisData
             } else {
                 console.debug(
                     `🟣 [${key}] in-memory & redis cache miss, fetching from API ${calledFromLog}`
                 )
-                return await fetchAndStore()
+                result = await fetchAndStore()
             }
         } else {
             console.debug(`🟠 [${key}] cache disabled, fetching from API ${calledFromLog}`)
-            return await fetchAndStore()
+            result = await fetchAndStore()
         }
     }
+    await logToFile(`${key}.json`, result, { mode: 'overwrite' })
+    return result
 }
 
 export const getApiUrl = () => {
@@ -116,7 +118,6 @@ export const fetchGraphQLApi = async ({
         console.log(JSON.stringify(json.errors, null, 2))
         throw new Error()
     }
-    await logToFile(`${key}.json`, json.data, { mode: 'overwrite' })
 
     return json.data
 }
