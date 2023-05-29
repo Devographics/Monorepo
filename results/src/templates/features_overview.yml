@@ -6,7 +6,7 @@ query: >
         ${surveyId} {
             ${editionId} {
                 features {
-                    features_overview: allFeatures {
+                    features_overview: all_features {
                         items {
                             id
                             responses<ARGUMENTS_PLACEHOLDER> {
