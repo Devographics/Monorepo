@@ -251,10 +251,13 @@ export const getTwitterUser = async twitterName => {
     } catch (error) {
         console.log(`// getTwitterUser error for ${twitterName}`)
         // console.log(error)
-        console.log(error.rateLimit)
-        const resetTime = new Date(error.rateLimit.reset * 1000)
-        console.log(resetTime)
-        console.log(error.data)
+        if (error?.rateLimit) {
+            console.log('// Rate Limit error')
+            console.log(error.rateLimit)
+            const resetTime = new Date(error.rateLimit.reset * 1000)
+            console.log(resetTime)
+        }
+        console.log(error?.data)
         return
     }
 }
