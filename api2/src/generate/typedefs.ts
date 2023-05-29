@@ -57,7 +57,6 @@ export const generateSurveysTypeObjects = async ({ surveys }: { surveys: SurveyA
                             survey,
                             edition,
                             section,
-                            questions: section.questions,
                             path
                         })
                     )

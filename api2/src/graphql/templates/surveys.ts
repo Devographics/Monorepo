@@ -1,5 +1,5 @@
 import { graphqlize } from '../../generate/helpers'
-import { Survey } from '../../types/surveys'
+import { Survey, SurveyApiObject } from '../../types/surveys'
 
 /*
 
@@ -14,13 +14,19 @@ type Surveys {
 }
 */
 
-export const generateSurveysType = ({ surveys, path }: { surveys: Survey[]; path: string }) => {
+export const generateSurveysType = ({
+    surveys,
+    path
+}: {
+    surveys: SurveyApiObject[]
+    path: string
+}) => {
     return {
         path,
         typeName: 'Surveys',
         typeDef: `type Surveys {
     ${surveys
-        .map((survey: Survey) => `${survey.id}: ${graphqlize(survey.id)}Survey`)
+        .map((survey: SurveyApiObject) => `${survey.id}: ${graphqlize(survey.id)}Survey`)
         .join('\n    ')}
 }`
     }

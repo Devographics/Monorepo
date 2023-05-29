@@ -132,8 +132,7 @@ export const createPagesSingleLoop = async ({
     const currentEdition = metadataData.surveys[surveyId][editionId]._metadata
 
     const siteUrl = currentEdition.resultsUrl
-    // const chartSponsors = await getSendOwlData({ flat, surveyId, editionId, siteUrl })
-    const chartSponsors = []
+    const chartSponsors = await getSendOwlData({ flat, surveyId, editionId, siteUrl })
 
     for (const page of flat) {
         let pageData = {}

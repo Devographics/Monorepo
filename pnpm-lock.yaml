@@ -109,6 +109,7 @@ importers:
   api-internal:
     specifiers:
       '@devographics/core-models': workspace:*
+      '@devographics/helpers': workspace:^1.0.0
       '@luckycatfactory/esbuild-graphql-loader': ^3.7.0
       '@octokit/core': ^3.5.1
       '@sentry/node': ^7.11.1
@@ -146,6 +147,7 @@ importers:
       typescript: 4.9.4
     dependencies:
       '@devographics/core-models': link:../shared/core-models
+      '@devographics/helpers': link:../shared/helpers
       '@octokit/core': 3.6.0
       '@sentry/node': 7.17.4
       '@sentry/tracing': 7.18.0
@@ -344,6 +346,7 @@ importers:
       '@devographics/constants': workspace:^1.0.0
       '@devographics/core-models': workspace:^1.0.0
       '@devographics/graphql': workspace:^1.0.0
+      '@devographics/helpers': workspace:^1.0.0
       '@devographics/types': workspace:^1.0.0
       '@graphql-tools/links': 8.3.9
       '@mdx-js/mdx': ^2.1.5
@@ -449,6 +452,7 @@ importers:
       '@devographics/constants': link:../shared/constants
       '@devographics/core-models': link:../shared/core-models
       '@devographics/graphql': link:../shared/graphql
+      '@devographics/helpers': link:../shared/helpers
       '@devographics/types': link:../shared/types
       '@mdx-js/mdx': 2.1.5
       '@mdx-js/react': 2.1.5_react@18.0.0

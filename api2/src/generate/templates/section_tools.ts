@@ -1,13 +1,9 @@
 import { ApiTemplateFunction } from '../../types/surveys'
-
 import { graphqlize, getSectionItems } from '../helpers'
-import { getFiltersTypeName, getFacetsTypeName } from '../helpers'
 import { getToolsFeaturesResolverMap } from '../resolvers'
 
 export const section_tools: ApiTemplateFunction = ({ question, survey, edition, section }) => {
-    const fieldTypeName = `${graphqlize(survey.id)}${graphqlize(edition.id)}${graphqlize(
-        section.id
-    )}AllTools`
+    const fieldTypeName = `${graphqlize(survey.id)}${graphqlize(section.id)}SectionTools`
 
     const items = getSectionItems({ survey, edition, section })
 
@@ -20,6 +16,6 @@ export const section_tools: ApiTemplateFunction = ({ question, survey, edition, 
     years: [Int]
     items: [${graphqlize(survey.id)}Tool]
 }`,
-        resolverMap: getToolsFeaturesResolverMap({ survey, items })
+        resolverMap: getToolsFeaturesResolverMap({ survey, edition, items })
     }
 }

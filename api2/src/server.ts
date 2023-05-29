@@ -99,7 +99,7 @@ const start = async () => {
     const surveys = await loadOrGetSurveys({ includeDemo: isDevOrTest })
     const questionObjects = getQuestionObjects({ surveys })
 
-    const parsedSurveys = parseSurveys({ surveys, questionObjects })
+    const parsedSurveys = parseSurveys({ surveys })
 
     const typeObjects = await generateTypeObjects({ surveys: parsedSurveys, questionObjects })
     const allTypeDefsString = typeObjects.map(t => t.typeDef).join('\n\n')
@@ -218,7 +218,8 @@ const start = async () => {
 
     app.listen({ port: port }, () =>
         console.log(
-            `🚀 Server ready at http://localhost:${port}${server.graphqlPath} (in ${finishedAt.getTime() - startedAt.getTime()
+            `🚀 Server ready at http://localhost:${port}${server.graphqlPath} (in ${
+                finishedAt.getTime() - startedAt.getTime()
             }ms)`
         )
     )

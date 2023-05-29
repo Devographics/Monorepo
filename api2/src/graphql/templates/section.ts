@@ -1,5 +1,13 @@
 import { graphqlize } from '../../generate/helpers'
-import { Survey, Edition, Section, QuestionApiObject } from '../../types/surveys'
+import {
+    Survey,
+    Edition,
+    Section,
+    QuestionApiObject,
+    SectionApiObject,
+    EditionApiObject,
+    SurveyApiObject
+} from '../../types/surveys'
 
 /*
 
@@ -20,22 +28,21 @@ export const generateSectionType = ({
     survey,
     edition,
     section,
-    questions,
     path
 }: {
-    survey: Survey
-    edition: Edition
-    section: Section
-    questions: QuestionApiObject[]
+    survey: SurveyApiObject
+    edition: EditionApiObject
+    section: SectionApiObject
     path: string
 }) => {
     const typeName = `${graphqlize(edition.id)}${graphqlize(section.id)}Section`
+
     return {
         path,
         typeName,
         typeType: 'section',
         typeDef: `type ${typeName} {
-    ${questions
+    ${section.questions
         .filter(q => q.hasApiEndpoint !== false)
         .map((question: QuestionApiObject) => {
             return `${question.id}: ${question.fieldTypeName}`

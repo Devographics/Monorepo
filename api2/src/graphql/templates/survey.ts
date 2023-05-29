@@ -1,5 +1,5 @@
 import { graphqlize } from '../../generate/helpers'
-import { Survey, Edition } from '../../types/surveys'
+import { Survey, Edition, SurveyApiObject, EditionApiObject } from '../../types/surveys'
 
 /*
 
@@ -17,7 +17,7 @@ type StateOfJsSurvey {
 
 */
 
-export const generateSurveyType = ({ survey, path }: { survey: Survey; path: string }) => {
+export const generateSurveyType = ({ survey, path }: { survey: SurveyApiObject; path: string }) => {
     const typeName = graphqlize(survey.id) + 'Survey'
     return {
         path,
@@ -25,7 +25,7 @@ export const generateSurveyType = ({ survey, path }: { survey: Survey; path: str
         typeDef: `type ${typeName} {
     _metadata: SurveyMetadata
     ${survey.editions
-        .map((edition: Edition) => `${edition.id}: ${graphqlize(edition.id)}Edition`)
+        .map((edition: EditionApiObject) => `${edition.id}: ${graphqlize(edition.id)}Edition`)
         .join('\n    ')}
 }`
     }

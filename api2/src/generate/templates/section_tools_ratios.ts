@@ -35,8 +35,13 @@ const getResolverMap = ({
     }
 })
 
-export const section_tools_ratios: ApiTemplateFunction = ({ survey, section, question }) => {
-    const fieldTypeName = `${graphqlize(section.id)}ToolsRatios`
+export const section_tools_ratios: ApiTemplateFunction = ({
+    survey,
+    edition,
+    section,
+    question
+}) => {
+    const fieldTypeName = `${graphqlize(survey.id)}${graphqlize(section.id)}ToolsRatios`
     // in any given section, the tools will be the questions which don't have a template defined
     const sectionTools = section.questions.filter(q => typeof q.template === 'undefined')
 

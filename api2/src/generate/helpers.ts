@@ -12,7 +12,6 @@ import {
 } from '../types/surveys'
 import { templates } from './question_templates'
 import uniq from 'lodash/uniq.js'
-import { getQuestionObject } from './generate'
 
 export const graphqlize = (str: string) => capitalizeFirstLetter(snakeToCamel(str))
 
@@ -106,10 +105,10 @@ export const getPath = ({
     question,
     suffix
 }: {
-    survey?: Survey
-    edition?: Edition
-    section?: Section
-    question?: Question
+    survey?: SurveyApiObject
+    edition?: EditionApiObject
+    section?: SectionApiObject
+    question?: QuestionApiObject
     suffix?: string
 }) => {
     const pathSegments = ['root']

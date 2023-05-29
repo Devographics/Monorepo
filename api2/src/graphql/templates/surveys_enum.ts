@@ -1,4 +1,4 @@
-import { Survey } from '../../types/surveys'
+import { Survey, SurveyApiObject } from '../../types/surveys'
 
 /*
 
@@ -12,13 +12,19 @@ enum SurveysID {
 
 */
 
-export const generateSurveysEnumType = ({ surveys, path }: { surveys: Survey[]; path: string }) => {
+export const generateSurveysEnumType = ({
+    surveys,
+    path
+}: {
+    surveys: SurveyApiObject[]
+    path: string
+}) => {
     const typeName = 'SurveysID'
     return {
         path,
         typeName,
         typeDef: `enum ${typeName} {
-    ${surveys.map((s: Survey) => s.id).join('\n    ')}
+    ${surveys.map((s: SurveyApiObject) => s.id).join('\n    ')}
 }`
     }
 }

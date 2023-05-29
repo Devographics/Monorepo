@@ -1,5 +1,5 @@
 import { graphqlize } from '../../generate/helpers'
-import { Survey, Edition } from '../../types/surveys'
+import { Survey, Edition, SurveyApiObject, EditionApiObject } from '../../types/surveys'
 
 /*
 
@@ -20,7 +20,7 @@ export const generateSurveyEditionsEnumType = ({
     survey,
     path
 }: {
-    survey: Survey
+    survey: SurveyApiObject
     path: string
 }) => {
     const { editions } = survey
@@ -29,7 +29,7 @@ export const generateSurveyEditionsEnumType = ({
         path,
         typeName,
         typeDef: `enum ${typeName} {
-    ${editions.map((e: Edition) => e.id).join('\n    ')}
+    ${editions.map((e: EditionApiObject) => e.id).join('\n    ')}
 }`
     }
 }

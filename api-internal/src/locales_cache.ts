@@ -25,6 +25,7 @@ import {
 import path from 'path'
 import sanitizeHtml from 'sanitize-html'
 import { decode } from 'html-entities'
+import { logToFile } from '@devographics/helpers'
 
 import { appSettings } from './settings'
 
@@ -85,6 +86,7 @@ export const loadAllFromGitHub = async (
                 }
             }
         }
+        logToFile(`github_${localeMetaData.id}.yml`, localeRawData, { mode: 'overwrite' })
         locales.push(localeRawData)
     }
     return locales
@@ -102,7 +104,7 @@ export const loadAllLocally = async (localesToLoad: LocaleMetaData[]): Promise<L
         console.log(`-> loading directory ${localeDirName} locally (${i}/${localesToLoad.length})`)
 
         if (!process.env.LOCALES_DIR) {
-            throw new Error("LOCALES_DIR not set")
+            throw new Error('LOCALES_DIR not set')
         }
         const localeDirPath = path.resolve(`../../${process.env.LOCALES_DIR}/${localeDirName}`)
         const files = await readdir(localeDirPath)
@@ -124,6 +126,7 @@ export const loadAllLocally = async (localesToLoad: LocaleMetaData[]): Promise<L
                 })
             }
         }
+        logToFile(`filesystem_${localeMetaData.id}.yml`, localeRawData, { mode: 'overwrite' })
         locales.push(localeRawData)
     }
     return locales
@@ -315,8 +318,8 @@ export const computeUntranslatedKeys = (
     const untranslatedKeys = isEn
         ? []
         : allStrings
-            .filter((s: TranslationStringObject) => s.isFallback)
-            .map((s: TranslationStringObject) => s.key)
+              .filter((s: TranslationStringObject) => s.isFallback)
+              .map((s: TranslationStringObject) => s.key)
     return untranslatedKeys
 }
 

@@ -5,7 +5,7 @@ import fetch from 'node-fetch'
 import yaml from 'js-yaml'
 import { readdir, readFile } from 'fs/promises'
 import last from 'lodash/last.js'
-import { logToFile } from './debug'
+import { logToFile } from '@devographics/helpers'
 import path from 'path'
 import marked from 'marked'
 import hljs from 'highlight.js/lib/common'
@@ -25,7 +25,7 @@ export const loadOrGetEntities = async (
     return await highlightEntitiesExampleCode(parseEntitiesMarkdown(entities))
 }
 
-type MarkdownFields = "name" | "description"
+type MarkdownFields = 'name' | 'description'
 
 const markdownFields: MarkdownFields[] = ['name', 'description']
 

@@ -1,4 +1,4 @@
-import { Survey, QuestionApiObject } from '../../types/surveys'
+import { Survey, QuestionApiObject, SurveyApiObject } from '../../types/surveys'
 import { getFiltersTypeName } from '../../generate/helpers'
 
 /*
@@ -24,7 +24,7 @@ export const generateFiltersType = ({
     survey,
     questionObjects
 }: {
-    survey: Survey
+    survey: SurveyApiObject
     questionObjects: QuestionApiObject[]
 }) => {
     const typeName = getFiltersTypeName(survey.id)

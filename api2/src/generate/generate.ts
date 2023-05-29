@@ -35,45 +35,29 @@ import uniq from 'lodash/uniq.js'
 Parse surveys and generate a "rich" version of the outline tree
 
 */
-export const parseSurveys = ({
-    surveys,
-    questionObjects
-}: {
-    surveys: Survey[]
-    questionObjects: QuestionApiObject[]
-}): SurveyApiObject[] => {
-    return surveys.map(survey => getSurveyObject({ survey, questionObjects }))
+export const parseSurveys = ({ surveys }: { surveys: Survey[] }): SurveyApiObject[] => {
+    return surveys.map(survey => getSurveyObject({ survey }))
 }
 
 // Take a Survey and return a SurveyApiObject
-export const getSurveyObject = ({
-    survey,
-    questionObjects
-}: {
-    survey: Survey
-    questionObjects: QuestionApiObject[]
-}): SurveyApiObject => {
+export const getSurveyObject = ({ survey }: { survey: Survey }): SurveyApiObject => {
     return {
         ...survey,
-        editions: survey.editions.map(edition =>
-            getEditionObject({ survey, edition, questionObjects })
-        )
+        editions: survey.editions.map(edition => getEditionObject({ survey, edition }))
     }
 }
 
 // Take an Edition and return an EditionApiObject
 export const getEditionObject = ({
     survey,
-    edition,
-    questionObjects
+    edition
 }: {
     survey: Survey
     edition: Edition
-    questionObjects: QuestionApiObject[]
 }): EditionApiObject => {
     const { apiSections, sections, ...rest } = edition
     const allSections = mergeSections(edition.sections, edition.apiSections).map(section =>
-        getSectionObject({ survey, edition, section, questionObjects })
+        getSectionObject({ survey, edition, section })
     )
     return {
         ...rest,
@@ -83,45 +67,43 @@ export const getEditionObject = ({
     }
 }
 
-// Take a Section and return a SectionApiObject
+/*
+
+Take a Section and return a SectionApiObject
+
+Note: here we don't care if questionObjects are duplicated when identical questions
+appear across different survey editions, so we make sure to generate a new questionObject
+for every question. 
+
+*/
 export const getSectionObject = ({
     survey,
     edition,
-    section,
-    questionObjects
+    section
 }: {
     survey: Survey
     edition: Edition
     section: Section
-    questionObjects: QuestionApiObject[]
 }): SectionApiObject => {
-    const sectionQuestions: QuestionApiObject[] = []
-    section.questions.forEach(question => {
-        const questionObject = questionObjects.find(
-            q =>
-                q.sectionIds &&
-                q.sectionIds.includes(section.id) &&
-                q.editions &&
-                q.editions.includes(edition.id) &&
-                q.id === question.id
-        )
-        // help callouts, email sign up fields, etc. do not have questionObjects associated
-        if (questionObject) {
-            const result = {
-                ...questionObject,
-                editionId: edition.id,
-                edition,
-                section
-            }
-            sectionQuestions.push(result)
-        }
-    })
     return {
         ...section,
-        questions: sectionQuestions
+        questions: section.questions.map(question => ({
+            ...getQuestionObject({ survey, edition, section, question }),
+            editionId: edition.id,
+            edition,
+            section
+        }))
     }
 }
 
+/*
+
+Generate all GraphQL type objects
+
+Note: we pass questionObjects array containing all questionObjects to make sure we
+avoid duplicating similar GraphQL types and reuse definitions for similar questions. 
+
+*/
 export const generateTypeObjects = async ({
     surveys,
     questionObjects
