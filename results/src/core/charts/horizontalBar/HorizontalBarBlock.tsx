@@ -25,7 +25,7 @@ const HorizontalBarBlock = ({ block, data }: HorizontalBarBlockProps) => {
     const [units, setUnits] = useState(defaultUnits)
 
     const completion = data?.responses?.currentEdition?.completion
-    const { total } = completion
+    const total = completion?.total
 
     const { chartFilters, setChartFilters, filterLegends } = useChartFilters({
         block,
@@ -50,6 +50,19 @@ const HorizontalBarBlock = ({ block, data }: HorizontalBarBlockProps) => {
 
     const defaultSeries = { name: 'default', data }
 
+    // TODO: kind of hacky?
+    const chartData = getChartData(data)
+    if (!chartData) {
+        return (
+            <div>
+                <h4>No data</h4>
+                <pre>
+                    <code>{JSON.stringify(data, null, 2)}</code>
+                </pre>
+            </div>
+        )
+    }
+
     return (
         <Block
             units={units}
@@ -59,7 +72,7 @@ const HorizontalBarBlock = ({ block, data }: HorizontalBarBlockProps) => {
             getChartData={getChartData}
             tables={[
                 getTableData({
-                    data: getChartData(data),
+                    data: chartData,
                     valueKeys: [
                         BucketUnits.PERCENTAGE_SURVEY,
                         BucketUnits.PERCENTAGE_QUESTION,

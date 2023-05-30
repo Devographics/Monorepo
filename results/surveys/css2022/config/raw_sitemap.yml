@@ -682,7 +682,7 @@
         template: multiple_options
         variants:
             - id: browsers_others
-              template: multiple_options
+              template: multiple_options_freeform
               defaultUnits: count
 
       - id: bracket_hint

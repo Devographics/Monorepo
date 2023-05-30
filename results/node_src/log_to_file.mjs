@@ -3,13 +3,15 @@ import yaml from 'js-yaml'
 
 export const logToFile = async (fileName, object, options = {}) => {
     if (process.env.NODE_ENV === 'development') {
-        const { mode = 'append', timestamp = false } = options
-        const logsDirPath = process.env.LOGS_DIRECTORY
+        const { mode = 'append', timestamp = false, dirPath, subDir } = options
+        const envLogsDirPath = process.env.LOGS_DIRECTORY
 
-        if (!logsDirPath) {
+        if (!envLogsDirPath) {
             console.warn('Please define LOGS_DIRECTORY in your .env file to enable logging')
             return
         }
+        const logsDirPath = dirPath ?? (subDir ? `${envLogsDirPath}/${subDir}` : envLogsDirPath)
+
         if (!fs.existsSync(logsDirPath)) {
             fs.mkdirSync(logsDirPath, { recursive: true })
         }
