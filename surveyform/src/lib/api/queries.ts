@@ -63,6 +63,7 @@ query ${editionId}MetadataQuery {
         imageUrl
         faviconUrl
         socialImageUrl
+        faq
         colors {
           primary
           secondary

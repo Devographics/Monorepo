@@ -1,7 +1,14 @@
 import fs from 'fs'
 import yaml from 'js-yaml'
 
-export const logToFile = async (fileName: string, object: any, options: any = {}) => {
+type LogOptions = {
+    mode?: 'append' | 'overwrite'
+    timestamp?: boolean
+    dirPath?: string
+    subDir?: string
+}
+
+export const logToFile = async (fileName: string, object: any, options: LogOptions = {}) => {
     if (process.env.NODE_ENV === 'development') {
         const { mode = 'append', timestamp = false, dirPath, subDir } = options
         const envLogsDirPath = process.env.LOGS_DIRECTORY

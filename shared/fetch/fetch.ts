@@ -70,7 +70,7 @@ export async function getFromCache<T = any>(
             result = await fetchAndStore()
         }
     }
-    await logToFile(`${key}.json`, result, { mode: 'overwrite' })
+    await logToFile(`${key}.json`, result, { mode: 'overwrite', subDir: 'fetch' })
     return result
 }
 
@@ -99,7 +99,7 @@ export const fetchGraphQLApi = async ({
 }): Promise<any> => {
     const apiUrl = apiUrl_ || getApiUrl()
     const key = key_ || extractQueryName(query)
-    await logToFile(`${key}.gql`, query, { mode: 'overwrite' })
+    await logToFile(`${key}.gql`, query, { mode: 'overwrite', subDir: 'graphql' })
 
     // console.debug(`// querying ${apiUrl} (${query.slice(0, 15)}...)`)
     const response = await fetch(apiUrl, {
@@ -116,7 +116,7 @@ export const fetchGraphQLApi = async ({
     if (json.errors) {
         console.error('// surveysQuery API query error')
         console.error(JSON.stringify(json.errors, null, 2))
-        throw new Error("Got some errors while calling a GraphQL API")
+        throw new Error('Got some errors while calling a GraphQL API')
     }
 
     return json.data
