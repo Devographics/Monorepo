@@ -12,7 +12,7 @@ query: >
         ${surveyId} {
             ${editionId} {
                 ${sectionId} {
-                    ${sectionId}_experience_marimekko: ${sectionId}_allTools {
+                    ${sectionId}_experience_marimekko: ${sectionId}_tools {
                         items {
                             id
                             responses<ARGUMENTS_PLACEHOLDER> {

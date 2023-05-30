@@ -3,5 +3,5 @@ blockType: ToolsScatterplotBlock
 titleId: blocks.tools_quadrant
 descriptionId: blocks.tools_quadrant.description
 noteId: blocks.tools_quadrant.note
-dataPath: 'dataAPI.surveys.${surveyId}.${editionId}.libraries.allTools'
+dataPath: 'dataAPI.surveys.${surveyId}.${editionId}.libraries.all_tools'
 hasSponsor: true

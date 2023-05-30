@@ -69,7 +69,7 @@ export const ReadingList = (
 
 const ListItem = ({ itemId, question }) => {
   const { entity } = question;
-  const { mdn, github, homepage } = entity;
+  const { mdn, github, homepage, resources } = entity;
 
   return (
     <div className="reading-list-item">
@@ -88,6 +88,15 @@ const ListItem = ({ itemId, question }) => {
       </h5>
       {mdn?.summary && (
         <div className="reading-list-item-summary">{mdn.summary}</div>
+      )}
+      {resources && (
+        <ul className="reading-list-item-resources">
+          {resources.map(({ title, url }) => (
+            <li key={url}>
+              <a href={url}>{title}</a>
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   );

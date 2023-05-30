@@ -138,6 +138,10 @@ query ${editionId}MetadataQuery {
                 url
                 summary
               }
+              resources {
+                title
+                url
+              }
             }
             rawPaths {
               response

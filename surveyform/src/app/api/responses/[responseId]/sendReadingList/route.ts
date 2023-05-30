@@ -142,7 +142,9 @@ ${entity?.mdn?.summary || ""}
 ${[entity?.mdn?.url, entity?.github?.url, entity?.homepage?.url]
   .filter((l) => !!l)
   .map((l) => `- ${l}`)
-  .join("<hr/>")}
+  .join("\n")}
+
+${entity?.resources ? entity.resources.map((l) => `- ${l.url}`).join("\n") : ""}
 
 ------------------------
 `;
@@ -162,8 +164,15 @@ const htmlItem = ({ survey, edition, entity }) => `
       .filter((l) => !!l)
       .map((l) => `<li>${l}</li>`)
       .join("\n")}
+
+    ${
+      entity?.resources
+        ? entity.resources.map((l) => `<li>${l.url}</li>`).join("\n")
+        : ""
+    }
     </ul>
 </div>
+<br/>
 `;
 
 const htmlFooter = (props) => `<hr/><p>${textFooter(props)}</p>`;

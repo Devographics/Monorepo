@@ -41,6 +41,8 @@ type Entity {
     blog: Blog
     rss: RSS
 
+    resources: [Resource]
+
     related: [Entity]
 
     companyName: String
@@ -119,4 +121,13 @@ type Example {
     language: String
     code: String
     codeHighlighted: String
+}
+
+"""
+Resource (link)
+"""
+type Resource {
+    title: String
+    url: String
+    language: String
 }

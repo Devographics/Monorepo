@@ -12,7 +12,7 @@ query: >
         ${surveyId} {
             ${editionId} {
                 ${sectionId} {
-                    ${sectionId}_section_streams: ${sectionId}_allTools {
+                    ${sectionId}_section_streams: ${sectionId}_tools {
                         items {
                             id
                             responses<ARGUMENTS_PLACEHOLDER> {

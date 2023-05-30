@@ -5,7 +5,7 @@ query: >
         ${surveyId} {
             ${editionId} {
                 libraries {
-                    allTools {
+                    all_tools {
                         items {
                             id
                             responses<ARGUMENTS_PLACEHOLDER> {

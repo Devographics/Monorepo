@@ -3,5 +3,5 @@ blockType: ToolsTierListBlock
 titleId: blocks.tools_tier_list
 descriptionId: blocks.tools_tier_list.description
 noteId: blocks.tools_tier_list.note
-dataPath: 'dataAPI.surveys.${surveyId}.${editionId}.libraries.allTools'
+dataPath: 'dataAPI.surveys.${surveyId}.${editionId}.libraries.all_tools'
 hasSponsor: true

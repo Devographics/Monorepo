@@ -9,7 +9,7 @@ query: >
         ${surveyId} {
             ${editionId} {
                 libraries {
-                    tools_arrows: allTools {
+                    tools_arrows: all_tools {
                         items {
                             id
                             responses<ARGUMENTS_PLACEHOLDER> {

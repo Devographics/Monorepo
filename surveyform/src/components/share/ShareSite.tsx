@@ -1,4 +1,4 @@
-import React from "react";
+"use client";
 import ShareTwitter from "./ShareTwitter";
 import ShareEmail from "./ShareEmail";
 import ShareFacebook from "./ShareFacebook";
