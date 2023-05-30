@@ -22,7 +22,6 @@ export const ReadingList = (
   const allQuestions = getEditionQuestions(edition);
 
   const readingList = response?.readingList;
-  const email = localStorage && localStorage.getItem("email");
 
   const [showMore, setShowMore] = useState(false);
   const hasTooManyItems = readingList.length > cutoff;
@@ -116,7 +115,8 @@ export const SendByEmail = ({
   edition,
 }: Pick<FormInputProps, "edition" | "response">) => {
   const localStorageEmail =
-    (localStorage && localStorage.getItem("email")) || "";
+    (typeof localStorage !== "undefined" && localStorage.getItem("email")) ||
+    "";
   const [email, setEmail] = useState(localStorageEmail);
   const [loading, setLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
