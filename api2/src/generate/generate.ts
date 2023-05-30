@@ -85,14 +85,17 @@ export const getSectionObject = ({
     edition: Edition
     section: Section
 }): SectionApiObject => {
+    const questions = section.questions.map(question => ({
+        ...getQuestionObject({ survey, edition, section, question }),
+        editionId: edition.id,
+        edition,
+        section
+    }))
+    const apiOnly = questions.every(q => q.apiOnly)
     return {
         ...section,
-        questions: section.questions.map(question => ({
-            ...getQuestionObject({ survey, edition, section, question }),
-            editionId: edition.id,
-            edition,
-            section
-        }))
+        questions,
+        apiOnly
     }
 }
 

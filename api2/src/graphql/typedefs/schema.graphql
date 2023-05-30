@@ -48,7 +48,7 @@ type EditionMetadata {
     faviconUrl: String
     socialImageUrl: String
 
-    sections: [SectionMetadata]
+    sections(include: IncludeEnum): [SectionMetadata]
 
     sponsors: [SponsorItem]
 
@@ -59,6 +59,12 @@ type EditionMetadata {
     tshirt: TshirtDefinition
 
     colors: Colors
+}
+
+enum IncludeEnum {
+    outlineOnly
+    apiOnly
+    all
 }
 
 type Colors {
@@ -95,6 +101,8 @@ type SectionMetadata {
     slug: String
     intlId: String
     questions: [QuestionMetadata]
+    # whether a section only exists in the API and not the ouline
+    apiOnly: Boolean
 }
 
 type QuestionMetadata {
@@ -119,8 +127,8 @@ type QuestionMetadata {
     optionsAreNumeric: Boolean
     # options are ranges of numbers
     optionsAreRange: Boolean
-    # if a question only exists in the API is will currently not be included in the metadata
-    # apiOnly: Boolean
+    # whether a question only exists in the API and not the ouline
+    apiOnly: Boolean
 }
 
 type RawDbPaths {

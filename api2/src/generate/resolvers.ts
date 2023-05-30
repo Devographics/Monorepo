@@ -11,7 +11,8 @@ import {
     ResolverType,
     ResolverMap,
     ResolverParent,
-    QuestionResolverParent
+    QuestionResolverParent,
+    IncludeEnum
 } from '../types/surveys'
 import { getPath, formatNumericOptions } from './helpers'
 import { genericComputeFunction } from '../compute'
@@ -217,8 +218,6 @@ const getSectionResolver =
 const getQuestionResolver =
     ({ survey, edition, section, question, questionObjects }: ResolverParent): ResolverType =>
     async (parent, args, context, info) => {
-        console.log('// question resolver')
-
         const result: QuestionResolverParent = {
             survey,
             edition,
@@ -349,27 +348,51 @@ export const creditResolverMap = {
         await getEntity({ id, context })
 }
 
+const filterItems = (items: Array<SectionApiObject | QuestionApiObject>, include: IncludeEnum) => {
+    switch (include) {
+        case IncludeEnum.OUTLINE_ONLY:
+            return items.filter(q => q.apiOnly !== true)
+
+        case IncludeEnum.API_ONLY:
+            return items.filter(q => q.apiOnly === true)
+
+        case IncludeEnum.ALL:
+        default:
+            return items
+    }
+}
+
+type EditionSectionMetadataArgs = {
+    include: IncludeEnum
+}
+
 /*
 
-Edition Metadata (remove "virtual" apiOnly sections from metadata)
+Edition Metadata (remove "virtual" apiOnly questions from metadata if needed)
 
 */
 export const editionMetadataResolverMap = {
-    sections: async (parent: EditionApiObject, {}, context: RequestContext) => {
-        const { sections } = parent
-        return sections.filter(s => s.questions.some(q => q.apiOnly !== true))
+    sections: async (
+        parent: EditionApiObject,
+        args: EditionSectionMetadataArgs,
+        context: RequestContext
+    ) => {
+        return filterItems(parent.sections, args.include).map(s => ({ ...s, ...args }))
     }
 }
 
 /*
 
-Section Metadata (remove "virtual" apiOnly questions from metadata)
+Section Metadata (remove "virtual" apiOnly questions from metadata if needed)
 
 */
 export const sectionMetadataResolverMap = {
-    questions: async (parent: SectionApiObject, {}, context: RequestContext) => {
-        const { questions } = parent
-        return questions.filter(q => q.apiOnly !== true)
+    questions: async (
+        parent: SectionApiObject & { include: IncludeEnum },
+        args: EditionSectionMetadataArgs,
+        context: RequestContext
+    ) => {
+        return filterItems(parent.questions, parent.include)
     }
 }
 
