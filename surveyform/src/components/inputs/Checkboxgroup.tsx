@@ -73,6 +73,8 @@ const OtherComponent = (props: FormInputProps) => {
 };
 
 const defaultCutoff = 10;
+// how many items to allow past the cutoff limit before actually cutting off the list
+const cutoffMargin = 2;
 
 // note: treat checkbox group the same as a nested component, using `path`
 export const FormComponentCheckboxGroup = (props: FormInputProps) => {
@@ -102,7 +104,9 @@ export const FormComponentCheckboxGroup = (props: FormInputProps) => {
   const hasReachedLimit = !!(limit && value?.length >= limit);
 
   const enableCutoff =
-    typeof cutoff !== "undefined" && cutoff > 0 && options?.length > cutoff;
+    typeof cutoff !== "undefined" &&
+    cutoff > 0 &&
+    options?.length > cutoff + cutoffMargin;
   const optionsToShow = enableCutoff
     ? showMore
       ? options

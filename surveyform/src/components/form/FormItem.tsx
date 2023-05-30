@@ -68,6 +68,7 @@ export const FormItem = (props: FormItemProps) => {
       <FormItemTitle {...props} />
       <div className="form-item-contents">
         <FormItemDescription {...props} />
+        <FormItemLimit {...props} />
         <div className="form-item-input">
           {/* {beforeInput} */}
           {children}
@@ -141,7 +142,19 @@ export const FormItemDescription = (props: FormItemProps) => {
   const intlIds = getQuestioni18nIds(props);
   const description = intl.formatMessage({ id: intlIds.description });
   return description ? (
-    <FormattedMessage className="form-description" id={intlIds.description} />
+    <FormattedMessage
+      className="form-item-description"
+      id={intlIds.description}
+    />
+  ) : null;
+};
+
+export const FormItemLimit = ({ question }: FormItemProps) => {
+  const { limit } = question;
+  return limit ? (
+    <div className="form-item-limit">
+      <FormattedMessage values={limit} id="general.pick_up_to" />
+    </div>
   ) : null;
 };
 

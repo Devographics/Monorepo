@@ -289,13 +289,19 @@
   }
 }
 
-.form-description {
+.form-item-description {
   margin-bottom: $spacing;
   color: var(--text-color);
   font-size: $medium-font;
   p:last-child {
     margin: 0;
   }
+}
+
+.form-item-limit {
+  margin-bottom: $spacing;
+  font-size: $smallish-font;
+  color: var(--text-color-dark);
 }
 
 .form-slider {

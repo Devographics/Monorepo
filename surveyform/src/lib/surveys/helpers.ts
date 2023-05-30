@@ -141,3 +141,9 @@ export function getEditionHomePath({
 
 export const getEditionQuestions = (edition: EditionMetadata) =>
   edition.sections.map((s) => s.questions).flat();
+
+export const getEntityName = (entity) => {
+  if (!entity) return;
+  const { name, nameClean, nameHtml } = entity;
+  return nameHtml || nameClean || name;
+};

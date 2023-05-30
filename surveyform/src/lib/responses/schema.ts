@@ -1,4 +1,8 @@
-import type { SurveyMetadata, EditionMetadata } from "@devographics/types";
+import {
+  SurveyMetadata,
+  EditionMetadata,
+  DbPathsEnum,
+} from "@devographics/types";
 import { Schema, extendSchema } from "~/lib/schemas";
 import { nanoid } from "nanoid";
 import { getCompletionPercentage, getKnowledgeScore } from "./helpers";
@@ -198,14 +202,14 @@ export const getResponseSchema = ({
       for (const formPath in formPaths) {
         // responses can sometimes be numeric, everything else is string
         const type =
-          question.optionsAreNumeric && formPath === "response"
+          question.optionsAreNumeric && formPath === DbPathsEnum.RESPONSE
             ? Number
             : String;
         editionSchema[formPaths[formPath]] = {
           type,
           required: false,
           clientMutable: true,
-          isArray: question.allowMultiple,
+          isArray: formPath === DbPathsEnum.RESPONSE && question.allowMultiple,
         };
       }
     }

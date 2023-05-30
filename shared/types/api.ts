@@ -8,13 +8,16 @@ import { ResponsesTypes } from './metadata'
 //     contentType: 'string' | 'number'
 // }
 
+export enum DbPathsEnum {
+    RESPONSE = 'response',
+    OTHER = 'other',
+    COMMENT = 'comment',
+    RAW = 'raw',
+    PATTERNS = 'patterns',
+    ERROR = 'error'
+}
 export type DbPaths = {
-    response?: string
-    other?: string
-    comment?: string
-    raw?: string
-    patterns?: string
-    error?: string
+    [key in DbPathsEnum]?: string
 }
 
 export type ResponseArguments = {

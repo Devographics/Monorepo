@@ -1,5 +1,6 @@
 import { Entity } from "@devographics/types";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
+import { getEntityName } from "~/lib/surveys/helpers";
 
 /**
  * When using a string as label
@@ -25,12 +26,13 @@ export const EntityLabel = ({
   label,
   fallback,
 }: EntityLabelProps) => {
-  if (entity) {
-    const { name, nameClean, nameHtml } = entity;
+  const entityName = getEntityName(entity);
+
+  if (entityName) {
     return (
       <span
         className="entity-label"
-        dangerouslySetInnerHTML={{ __html: nameHtml || nameClean || name }}
+        dangerouslySetInnerHTML={{ __html: entityName }}
       />
     );
   } else if (label) {
