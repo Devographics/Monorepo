@@ -19,7 +19,8 @@ export const Email2 = (props: FormInputProps) => {
   const checkboxValue = response.receiveNotifications;
   const intl = useIntlContext();
 
-  const localStorageEmail = localStorage && localStorage.getItem("email");
+  const localStorageEmail =
+    typeof localStorage !== "undefined" && localStorage.getItem("email");
   const responseEmail = response.email;
   // const value = localStorageEmail && isEmpty(responseEmail) ? localStorageEmail : (responseEmail as string);
   const value = localStorageEmail || responseEmail;
