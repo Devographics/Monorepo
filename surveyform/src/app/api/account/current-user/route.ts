@@ -3,7 +3,13 @@ import { tryGetCurrentUser } from "~/account/user/route-handlers/getters";
 import { populateUserResponses } from "~/lib/responses/db-actions/populateUserResponses";
 import { ServerError } from "~/lib/server-error";
 
-export async function GET(req: NextRequest, res: NextResponse) {
+// TODO: it seems that 'auto' always give a 304 on this endpoint,
+// despite using "req"
+// Need to create a minimal repro to verify what happens, 
+// perhaps not calling "cookies()" explicitely is the issue
+export const dynamic = 'force-dynamic'
+
+export async function GET(req: NextRequest) {
   try {
     const currentUser = await tryGetCurrentUser(req);
     // NOTE: it's ok to not have a current user
