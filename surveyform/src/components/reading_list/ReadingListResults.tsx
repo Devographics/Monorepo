@@ -24,46 +24,58 @@ export const ReadingList = (
   const readingList = response?.readingList;
 
   const [showMore, setShowMore] = useState(false);
-  const hasTooManyItems = readingList.length > cutoff;
-  const cutoffReadingList = showMore
-    ? readingList
-    : readingList.slice(0, cutoff);
 
-  return (
-    <div className="reading-list reading-list-results">
-      <h5 className="reading-list-title">
-        <FormattedMessage id="readinglist.title" />
-      </h5>
-      <p className="reading-list-description">
-        <FormattedMessage id="readinglist.results" />
-      </p>
-      <div className="reading-list-items">
-        {cutoffReadingList.map((itemId) => (
-          <ListItem
-            key={itemId}
-            itemId={itemId}
-            question={allQuestions.find((q) => q.id === itemId)}
-          />
-        ))}
-        {hasTooManyItems && (
-          <div className="reading-list-show-more">
-            <Button
-              className="form-show-more"
-              onClick={() => {
-                console.log(showMore);
-                setShowMore((showMore) => !showMore);
-              }}
-            >
-              <FormattedMessage
-                id={showMore ? "forms.less_options" : "forms.more_options"}
-              />
-            </Button>
-          </div>
-        )}
+  if (!readingList || readingList.length === 0) {
+    return (
+      <div className="reading-list reading-list-results">
+        <h5 className="reading-list-title">
+          <FormattedMessage id="readinglist.title" />
+        </h5>
+        <FormattedMessage id="readinglist.empty" />
       </div>
-      <SendByEmail response={response} edition={edition} />
-    </div>
-  );
+    );
+  } else {
+    const hasTooManyItems = readingList?.length > cutoff;
+    const cutoffReadingList = showMore
+      ? readingList
+      : readingList.slice(0, cutoff);
+
+    return (
+      <div className="reading-list reading-list-results">
+        <h5 className="reading-list-title">
+          <FormattedMessage id="readinglist.title" />
+        </h5>
+        <p className="reading-list-description">
+          <FormattedMessage id="readinglist.results" />
+        </p>
+        <div className="reading-list-items">
+          {cutoffReadingList.map((itemId) => (
+            <ListItem
+              key={itemId}
+              itemId={itemId}
+              question={allQuestions.find((q) => q.id === itemId)}
+            />
+          ))}
+          {hasTooManyItems && (
+            <div className="reading-list-show-more">
+              <Button
+                className="form-show-more"
+                onClick={() => {
+                  console.log(showMore);
+                  setShowMore((showMore) => !showMore);
+                }}
+              >
+                <FormattedMessage
+                  id={showMore ? "forms.less_options" : "forms.more_options"}
+                />
+              </Button>
+            </div>
+          )}
+        </div>
+        <SendByEmail response={response} edition={edition} />
+      </div>
+    );
+  }
 };
 
 const ListItem = ({ itemId, question }) => {
