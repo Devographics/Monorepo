@@ -31,11 +31,11 @@ const Table = ({ title, headings, rows, years }) => (
                 </tr>
                 {years && (
                     <tr>
-                        <TH>
+                        <TH_>
                             <T k="table.year" />
-                        </TH>
+                        </TH_>
                         {[...Array(headings.length - 1)].map((heading, i) =>
-                            years.map(year => <TH key={year}>{year}</TH>)
+                            years.map(year => <TH_ key={year}>{year}</TH_>)
                         )}
                     </tr>
                 )}
@@ -50,12 +50,12 @@ const Table = ({ title, headings, rows, years }) => (
 )
 
 const TableHeading = ({ id, colSpan, labelId }) => (
-    <TH scope="col" id={id} colSpan={colSpan}>
+    <TH_ scope="col" id={id} colSpan={colSpan}>
         <T useShort={true} k={labelId} />
-    </TH>
+    </TH_>
 )
 
-const TH = styled.th`
+const TH_ = styled.th`
     background: ${props => props.theme.colors.backgroundAlt};
     text-overflow: ellipsis;
     overflow: hidden;
@@ -67,9 +67,13 @@ const TableRow = ({ row }) => (
     <tr>
         {row.map((cell, index) => {
             return index === 0 ? (
-                <TH key={index} scope="row">
-                    {cell.label ?? <T k={cell.labelId} useShort={true} html={true} />}
-                </TH>
+                <TH_ key={index} scope="row">
+                    {cell.label ? (
+                        <span dangerouslySetInnerHTML={{ __html: cell.label }} />
+                    ) : (
+                        <T k={cell.labelId} useShort={true} html={true} />
+                    )}
+                </TH_>
             ) : Array.isArray(cell.value) ? (
                 cell.value.map(yearValue => (
                     <TableCell key={yearValue.year} {...cell} {...yearValue} />

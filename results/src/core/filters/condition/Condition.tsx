@@ -8,6 +8,7 @@ import { FieldSegment } from './FieldSegment'
 import { ValueSegment } from './ValueSegment'
 import { OperatorSegment } from './OperatorSegment'
 import { CustomizationFiltersCondition, FilterItem, PanelState } from '../types'
+import { BlockDefinition } from 'core/types'
 
 interface ConditionProps {
     seriesIndex: number
@@ -18,6 +19,7 @@ interface ConditionProps {
     condition: CustomizationFiltersCondition
     stateStuff: PanelState
     conditionsCount: number
+    block: BlockDefinition
 }
 
 const Condition = ({
@@ -28,6 +30,7 @@ const Condition = ({
     filtersIdsNotInUse,
     condition,
     conditionsCount,
+    block,
     stateStuff
 }: ConditionProps) => {
     const defaultFieldId = filtersIdsNotInUse[0]
@@ -52,7 +55,8 @@ const Condition = ({
         conditionIndex: index,
         stateStuff,
         allFilters,
-        field
+        field,
+        block
     }
 
     return (

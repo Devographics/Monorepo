@@ -17,15 +17,17 @@ import {
     CustomizationFiltersSeries,
     PanelState
 } from './types'
+import { BlockDefinition } from 'core/types'
 
 interface SeriesProps {
     allFilters: FilterItem[]
     series: CustomizationFiltersSeries
     index: number
     stateStuff: PanelState
+    block: BlockDefinition
 }
 
-const Series = ({ allFilters, series, index, stateStuff }: SeriesProps) => {
+const Series = ({ allFilters, series, index, block, stateStuff }: SeriesProps) => {
     const theme = useTheme()
 
     const { conditions } = series
@@ -94,6 +96,7 @@ const Series = ({ allFilters, series, index, stateStuff }: SeriesProps) => {
                         filtersIdsNotInUse={filterIdsNotInUse}
                         stateStuff={stateStuff}
                         conditionsCount={series.conditions.length}
+                        block={block}
                     />
                 ))}
                 {canAddConditions && (

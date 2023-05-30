@@ -20,6 +20,7 @@ import { useStickyState, getFiltersLink } from './helpers'
 import { CheckIcon } from 'core/icons'
 import { CustomizationDefinition, SupportedMode } from './types'
 import { useAllFilters } from 'core/charts/hooks'
+import { useEntities } from 'core/helpers/entities'
 
 type FiltersPanelPropsType = {
     block: BlockDefinition
@@ -42,9 +43,10 @@ const FiltersPanel = ({
     const { getString } = useI18n()
     const pageContext = usePageContext()
     const { currentEdition } = pageContext
-    const allFilters = useAllFilters(block.id)
+    const allFilters = useAllFilters()
+    const entities = useEntities()
 
-    const chartName = getBlockTitle({ block, pageContext, getString })
+    const chartName = getBlockTitle({ block, pageContext, getString, entities })
 
     const initState = isEmpty(chartFilters) ? getInitFilters() : chartFilters
     const [filtersState, setFiltersState] = useState(initState)

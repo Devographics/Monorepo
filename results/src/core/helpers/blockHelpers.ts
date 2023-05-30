@@ -54,6 +54,7 @@ export const getBlockTitle = ({
     const entityName = entity?.nameClean || entity?.name
     const blockTitle = block.titleId && getString(block.titleId)?.t
     const key = getBlockTitleKey({ block, pageContext })
+
     const translation = getString(key)?.t
     return blockTitle || translation || entityName || key
 }

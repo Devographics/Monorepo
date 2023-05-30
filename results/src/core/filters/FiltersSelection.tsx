@@ -62,6 +62,7 @@ const FiltersSelection = ({ allFilters, block, stateStuff }: FiltersSelectionPro
                         index={index}
                         allFilters={allFilters}
                         stateStuff={stateStuff}
+                        block={block}
                     />
                 ))}
                 {canAddSeries && (

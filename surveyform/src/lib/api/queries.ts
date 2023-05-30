@@ -102,7 +102,7 @@ query ${editionId}MetadataQuery {
             }
           }
         }
-        sections {
+        sections(include: outlineOnly) {
           id
           slug
           intlId

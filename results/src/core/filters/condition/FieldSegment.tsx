@@ -6,9 +6,11 @@ import { getFieldLabel, getOrderedSections, getSectionLabel } from '../helpers'
 import { usePageContext } from 'core/helpers/pageContext'
 import { useEntities } from 'core/helpers/entities'
 import { PanelState, FilterItem, CustomizationDefinition } from '../types'
+import { BlockDefinition } from 'core/types'
 
 interface FieldSegmentProps {
     seriesIndex: number
+    block: BlockDefinition
     conditionIndex: number
     stateStuff: PanelState
     field: FilterItem
@@ -17,6 +19,7 @@ interface FieldSegmentProps {
 }
 export const FieldSegment = ({
     seriesIndex,
+    block,
     conditionIndex,
     stateStuff,
     field,
@@ -48,7 +51,11 @@ export const FieldSegment = ({
                 }}
                 value={field.id}
             >
-                <ItemSelectOptions allFilters={allFilters} disabledList={disabledList} />
+                <ItemSelectOptions
+                    allFilters={allFilters}
+                    currentQuestionId={block.id}
+                    disabledList={disabledList}
+                />
             </Select_>
         </Label_>
     )
@@ -56,10 +63,15 @@ export const FieldSegment = ({
 
 type ItemSelectOptionsProps = {
     allFilters: FilterItem[]
+    currentQuestionId: string
     disabledList?: string[]
 }
 
-export const ItemSelectOptions = ({ allFilters, disabledList }: ItemSelectOptionsProps) => {
+export const ItemSelectOptions = ({
+    allFilters,
+    currentQuestionId,
+    disabledList
+}: ItemSelectOptionsProps) => {
     const entities = useEntities()
     const { getString } = useI18n()
     const { currentEdition } = usePageContext()
@@ -76,7 +88,11 @@ export const ItemSelectOptions = ({ allFilters, disabledList }: ItemSelectOption
                 return sectionItems.length > 0 ? (
                     <optgroup key={section.id} label={getSectionLabel({ getString, section })}>
                         {sectionItems.map((o: FilterItem) => (
-                            <option key={o.id} value={o.id} disabled={disabledList?.includes(o.id)}>
+                            <option
+                                key={o.id}
+                                value={o.id}
+                                disabled={[...disabledList, currentQuestionId]?.includes(o.id)}
+                            >
                                 {getFieldLabel({ getString, field: o, entities })}
                             </option>
                         ))}

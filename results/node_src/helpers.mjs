@@ -141,7 +141,7 @@ Try loading data from disk or GitHub, or else run queries for *each block* in a 
 export const runPageQueries = async ({ page, graphql, surveyId, editionId }) => {
     const startedAt = new Date()
     const useCache = process.env.USE_CACHE === 'false' ? false : true
-    console.log(`// Running GraphQL queries for page ${page.id}… (useCache=${useCache})`)
+    console.log(`// 🔍 Running GraphQL queries for page ${page.id}… (useCache=${useCache})`)
 
     const paths = getDataLocations(surveyId, editionId)
 

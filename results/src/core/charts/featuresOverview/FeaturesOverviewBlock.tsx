@@ -142,7 +142,7 @@ const FeaturesOverviewBlock = ({
                     title: category.name,
                     data: sortBy(category.children, 'usage_ratio')
                         .reverse()
-                        .map(f => ({ ...f, id: f?.name })),
+                        .map(f => ({ ...f, id: f?.name, displayAsPercentage: false })),
                     valueKeys: ['awareness', 'usage', 'usage_ratio']
                 })
             )}

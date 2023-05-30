@@ -101,7 +101,7 @@ export const getTableData = (params: TableParams): TableData => {
         }
         firstColumn.labelId =
             row.id === NO_ANSWER ? 'charts.no_answer' : `options.${i18nNamespace}.${row.id}`
-        firstColumn.label = row.label ?? row?.entity?.name
+        firstColumn.label = row.label ?? (row?.entity?.nameHtml || row?.entity?.nameClean)
         const columns: TableDataCell[] = []
 
         valueKeys.forEach(key => {
