@@ -165,16 +165,22 @@ export const mergeSections = (sections1: Section[] = [], sections2: Section[] = 
     return sections
 }
 
-// in any given section, the features will be the questions which don't have a template defined
-export const getSectionItems = ({
-    survey,
-    edition,
-    section
-}: {
-    survey: Survey
-    edition: Edition
-    section: Section
-}) => section.questions.filter(q => typeof q.template === 'undefined')
+// in any given section, the features or tools will be the questions
+// which don't have a template defined
+export const getSectionItems = (section: SectionApiObject, type: 'tools' | 'features') =>
+    type === 'tools' ? getSectionTools(section) : getSectionFeatures(section)
+export const getSectionFeatures = (section: SectionApiObject) =>
+    section?.questions?.filter(q => q.template === 'feature')
+export const getSectionTools = (section: SectionApiObject) =>
+    section?.questions?.filter(q => q.template === 'tool')
+
+export const getEditionItems = (edition: EditionApiObject, type: 'tools' | 'features') => {
+    let items: QuestionApiObject[] = []
+    for (const section of edition.sections) {
+        items = [...items, ...getSectionItems(section, type)]
+    }
+    return items
+}
 
 export const formatNumericOptions = (options: Option[]) =>
     options.map(option => ({ ...option, id: `value_${option.id}` }))

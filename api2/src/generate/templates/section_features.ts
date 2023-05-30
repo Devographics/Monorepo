@@ -3,23 +3,22 @@
 import { ApiTemplateFunction } from '../../types/surveys'
 
 import { graphqlize, getSectionItems } from '../helpers'
-import { getToolsFeaturesResolverMap } from '../resolvers'
+import { getSectionToolsFeaturesResolverMap } from '../resolvers'
 
-export const section_tools: ApiTemplateFunction = ({ question, survey, edition, section }) => {
+export const section_features: ApiTemplateFunction = ({ question, survey, edition, section }) => {
     const fieldTypeName = `${graphqlize(survey.id)}${graphqlize(edition.id)}${graphqlize(
         section.id
-    )}AllFeatures`
-    const items = getSectionItems({ survey, edition, section })
+    )}SectionFeatures`
 
     return {
         ...question,
-        id: `${section.id}_allFeatures`,
+        id: `${section.id}_features`,
         fieldTypeName,
         typeDef: `type ${fieldTypeName} {
     ids: [String]
     years: [Int]
     items: [${graphqlize(survey.id)}Feature]
 }`,
-        resolverMap: getToolsFeaturesResolverMap({ survey, items })
+        resolverMap: getSectionToolsFeaturesResolverMap('features')
     }
 }

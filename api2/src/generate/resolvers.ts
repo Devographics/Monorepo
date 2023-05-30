@@ -23,6 +23,7 @@ import omit from 'lodash/omit.js'
 import { entityResolverMap } from '../resolvers/entities'
 import { getResponseTypeName } from '../graphql/templates/responses'
 import { RequestContext, SectionApiObject } from '../types'
+import { getSectionItems, getEditionItems } from './helpers'
 
 export const generateResolvers = async ({
     surveys,
@@ -453,31 +454,24 @@ export const idResolverFunction: ResolverType = ({ question }) => question.id
 
 /*
 
-Resolver map used for all_features, all_tools, section_features, section_tools
+Resolver map used for all_features, all_tools
 
 */
-export const getToolsFeaturesResolverMap = ({
-    survey,
-    edition,
-    items
-}: {
-    survey: Survey
-    edition: Edition
-    items: Question[]
-}): ResolverMap => ({
-    items: async (parent, args, context, info) => {
-        const { edition, questionObjects } = parent
-        return items
-            .map(question => ({
-                ...parent,
-                question: questionObjects.find(q => q.id === question.id)!
-            }))
-            .filter(item => item.question.editions?.includes(edition.id))
-    },
-    ids: () => {
-        return items.map(q => q.id)
-    },
-    years: () => {
-        return survey.editions.map(e => e.year)
-    }
+export const getEditionToolsFeaturesResolverMap = (type: 'tools' | 'features'): ResolverMap => ({
+    items: parent =>
+        getEditionItems(parent.edition, type).map(question => ({ ...parent, question })),
+    ids: parent => getEditionItems(parent.edition, type).map(q => q.id),
+    years: parent => parent.survey.editions.map(e => e.year)
+})
+
+/*
+
+Resolver map used for section_features, section_tools
+
+*/
+export const getSectionToolsFeaturesResolverMap = (type: 'tools' | 'features'): ResolverMap => ({
+    items: parent =>
+        getSectionItems(parent.section, type).map(question => ({ ...parent, question })),
+    ids: parent => getSectionItems(parent.section, type).map(q => q.id),
+    years: parent => parent.survey.editions.map(e => e.year)
 })
