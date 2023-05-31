@@ -20,6 +20,9 @@ const LocaleSwitcher = () => {
           index = 0;
         }
         setLocale(locales[index].id);
+        // TODO: there is currently no method to replace only a parameter in the current route
+        // so have to do a hard refresh
+        window.location.reload();
       }}
       className="nav-locale-dropdown"
       menuItems={locales.map(({ label, id }) => ({
