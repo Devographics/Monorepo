@@ -42,7 +42,7 @@ export const Footer = () => {
           className="stellate-badge"
           href="https://stellate.co/?source=devographics"
         >
-          <Image
+          <img
             src="/stellate-badge.svg"
             width={136}
             height={60}

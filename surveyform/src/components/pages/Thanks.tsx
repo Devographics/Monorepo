@@ -1,6 +1,5 @@
 import ShareSite from "../share/ShareSite";
 import Score from "../common/Score";
-import Image from "next/image";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { getSurveyImageUrl } from "~/lib/surveys/helpers";
 import ReadingListResults from "~/components/reading_list/ReadingListResults";
@@ -26,12 +25,12 @@ export const Thanks = ({
       </div>
       <h1 className="survey-image survey-image-small">
         {imageUrl && (
-          <Image
+          <img
             width={420}
             height={280}
             src={imageUrl}
             alt={`${name} ${year}`}
-            quality={100}
+            //quality={100}
           />
         )}
       </h1>

@@ -178,5 +178,6 @@ module.exports = {
     "react/style-prop-object": "warn",
     "react-hooks/rules-of-hooks": "error",
     "react/no-unescaped-entities": ["error", { forbid: [">", "}"] }],
+    "@next/next/no-img-element": "off"
   },
 };
