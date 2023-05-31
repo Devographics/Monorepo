@@ -27,6 +27,7 @@ async function createPasswordlessUser({
 async function upgradeToPasswordlessUser({
   anonymousId,
   email,
+  ...otherProps
 }: {
   anonymousId: string;
   email: string;
@@ -39,9 +40,14 @@ async function upgradeToPasswordlessUser({
 
   const anonymousUser = await loadUser({ userId: anonymousId });
   if (!anonymousUser) {
-    throw new Error(
+    // this can legitimately happen if the anonymous user has been deleted in db
+    // but user did not log out
+    // (this happen often during dev after running e2e tests that resets the db)
+    console.warn(
       `Got anonymousId ${anonymousId} but no user is matching in database. Cannot upgrade account`
     );
+    // go back to just creating a user
+    return await createPasswordlessUser({ email, ...otherProps })
   }
   // @ts-ignore
   const upgradedUser: UserDocument = {

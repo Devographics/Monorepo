@@ -9,6 +9,7 @@ import { Loading } from "~/components/ui/Loading";
 import { Suspense } from "react";
 import { EditionMetadata, SurveyStatusEnum } from "@devographics/types";
 import { rscCurrentUser } from "~/account/user/rsc-fetchers/rscCurrentUser";
+import { CenteredContainer } from "~/components/ui/CenteredContainer";
 
 export const EditionMain = ({
   edition,
@@ -19,10 +20,11 @@ export const EditionMain = ({
 }) => {
   return (
     <Suspense
+      // TODO: how come this is not centered?
       fallback={
-        <div style={{ textAlign: "center" }}>
+        <CenteredContainer>
           <Loading />
-        </div>
+        </CenteredContainer>
       }
     >
       {/** @see https://github.com/vercel/app-playground/blob/afa2a63c4abd2d99687cf002d76647a183bdcb78/app/streaming/_components/pricing.tsx */}

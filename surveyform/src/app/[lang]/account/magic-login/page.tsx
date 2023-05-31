@@ -1,5 +1,6 @@
 import { NextPageParams } from "~/app/typings";
 import { MagicLoginChecker } from "./MagicLoginChecker";
+import { CenteredContainer } from "~/components/ui/CenteredContainer";
 
 export default async function MagicLoginCheckPage({
   searchParams,
@@ -11,5 +12,9 @@ export default async function MagicLoginCheckPage({
   if (from && Array.isArray(from)) {
     console.warn("Found more than one redirection router in query params.");
   }
-  return <MagicLoginChecker token={token} from={from} />;
+  return (
+    <CenteredContainer>
+      <MagicLoginChecker token={token} from={from} />
+    </CenteredContainer>
+  );
 }

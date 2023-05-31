@@ -9,6 +9,9 @@ async function run() {
     process.env.NODE_ENV === "development"
   );
   const db = await getAppDb()
+  if (!process.env.MONGO_URI?.match(/localhost/)) {
+    throw new Error("Cannot reset non local database!! Uri was: " + process.env.MONGO_URI)
+  }
   await db.dropDatabase();
   const client = await getAppClient()
   client.close()

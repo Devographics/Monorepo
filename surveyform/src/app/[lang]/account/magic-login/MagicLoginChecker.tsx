@@ -26,7 +26,7 @@ const useMagicLoginCheck = ({
   token: string;
   from?: string;
 }) => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<null | Error>(null);
   /**
    * If the user is anonymous, we already have a current user without an email
