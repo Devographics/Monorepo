@@ -9,9 +9,13 @@ export function generateStaticParams() {
   return locales.map((l) => ({ lang: l }));
 }
 
-const rscFetchSurveysMetadata = cache(() =>
-  fetchSurveysMetadata({ calledFrom: __filename })
-);
+const rscFetchSurveysMetadata = cache(async () => {
+  const surveys = await fetchSurveysMetadata({ calledFrom: __filename });
+  if (serverConfig().isProd) {
+    return surveys.filter((s) => s.id !== "demo_survey");
+  }
+  return surveys;
+});
 
 const IndexPage = async ({ params }) => {
   initRedis(serverConfig().redisUrl);
