@@ -11,7 +11,7 @@ export function generateStaticParams() {
 
 const rscFetchSurveysMetadata = cache(async () => {
   const surveys = await fetchSurveysMetadata({ calledFrom: __filename });
-  if (serverConfig().isProd) {
+  if (serverConfig().isProd && !serverConfig()?.isTest) {
     return surveys.filter((s) => s.id !== "demo_survey");
   }
   return surveys;
