@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { tryGetCurrentUser } from "~/account/user/route-handlers/getters";
 import { createResponse } from "~/lib/responses/db-actions/create";
-import { ServerError } from "~/lib/server-error";
+import { HandlerError } from "~/lib/handler-error";
 
 export async function POST(req: NextRequest, res: NextResponse) {
   try {
@@ -13,7 +13,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     try {
       clientData = await req.json();
     } catch (err) {
-      throw new ServerError({
+      throw new HandlerError({
         id: "invalid_data",
         message: "Found invalid data when parsing response data",
         status: 400,
@@ -23,7 +23,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     const data = await createResponse({ clientData, currentUser });
     return NextResponse.json({ data });
   } catch (error) {
-    if (error instanceof ServerError) {
+    if (error instanceof HandlerError) {
       return await error.toNextResponse(req);
     } else {
       return NextResponse.json(

@@ -6,7 +6,7 @@ import { EditionMetadata } from "@devographics/types";
 import { getResponseSchema } from "~/lib/responses/schema";
 import { restoreTypes, runFieldCallbacks, OnCreateProps } from "~/lib/schemas";
 import type { ResponseDocument } from "@devographics/types";
-import { ServerError } from "~/lib/server-error";
+import { HandlerError } from "~/lib/handler-error";
 import { validateResponse } from "./validate";
 
 export const duplicateResponseErrorId = "duplicate_response";
@@ -22,7 +22,7 @@ export async function createResponse({
 
   const { surveyId, editionId } = clientData;
   if (!surveyId || !editionId) {
-    throw new ServerError({
+    throw new HandlerError({
       id: "missing_surveyid_editionid",
       message: "Missing surveyId or editionId",
       status: 400,
@@ -36,7 +36,7 @@ export async function createResponse({
     editionId,
   });
   if (currentResponse) {
-    throw new ServerError({
+    throw new HandlerError({
       id: duplicateResponseErrorId,
       message: `You already started to answer the ${editionId} survey`,
       status: 400,
@@ -53,7 +53,7 @@ export async function createResponse({
       calledFrom: "api/response/create",
     });
   } catch (error) {
-    throw new ServerError({
+    throw new HandlerError({
       id: "fetch_edition",
       message: `Could not load edition metadata for surveyId: '${surveyId}', editionId: '${editionId}'`,
       status: 400,

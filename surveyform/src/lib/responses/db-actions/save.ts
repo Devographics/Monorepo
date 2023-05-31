@@ -8,7 +8,7 @@ import { restoreTypes, runFieldCallbacks, OnUpdateProps } from "~/lib/schemas";
 import type { ResponseDocument } from "@devographics/types";
 import { subscribe } from "~/lib/server/email/email_octopus";
 import { captureException } from "@sentry/nextjs";
-import { ServerError } from "~/lib/server-error";
+import { HandlerError } from "~/lib/handler-error";
 import { validateResponse } from "./validate";
 import { emailPlaceholder } from "~/lib/responses/schema";
 
@@ -29,7 +29,7 @@ export async function saveResponse({
     _id: responseId,
   });
   if (!existingResponse) {
-    throw new ServerError({
+    throw new HandlerError({
       id: "response_doesnt_exists",
       message: `Could not find existing response with _id ${responseId}`,
       status: 400,
@@ -47,7 +47,7 @@ export async function saveResponse({
       calledFrom: "api/response/update",
     });
   } catch (error) {
-    throw new ServerError({
+    throw new HandlerError({
       id: "fetch_edition",
       message: `Could not load edition metadata for surveyId: '${surveyId}', editionId: '${editionId}'`,
       status: 400,

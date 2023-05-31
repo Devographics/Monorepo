@@ -3,7 +3,7 @@ import { tryGetCurrentUser } from "~/account/user/route-handlers/getters";
 import { RouteHandlerOptions } from "~/app/api/typings";
 import { loadResponse } from "~/lib/responses/db-actions/load";
 import { saveResponse } from "~/lib/responses/db-actions/save";
-import { ServerError } from "~/lib/server-error";
+import { HandlerError } from "~/lib/handler-error";
 
 export async function POST(
   req: NextRequest,
@@ -17,7 +17,7 @@ export async function POST(
     // TODO: this should be a route parameter instead
     const responseId = params.responseId;
     if (!responseId) {
-      throw new ServerError({
+      throw new HandlerError({
         id: "missing_response_id",
         message: "Could not find responseId",
         status: 400,
@@ -29,7 +29,7 @@ export async function POST(
     try {
       clientData = await req.json();
     } catch (err) {
-      throw new ServerError({
+      throw new HandlerError({
         id: "invalid_data",
         message: "Found invalid data when parsing response data",
         status: 400,
@@ -43,7 +43,7 @@ export async function POST(
     });
     const updatedResponse = await loadResponse({ responseId, currentUser });
     if (!updatedResponse)
-      throw new ServerError({
+      throw new HandlerError({
         id: "response-not-found-after-update",
         message: "Couldn't find response after an update",
         status: 500,
@@ -53,7 +53,7 @@ export async function POST(
     // @see https://github.com/vercel/next.js/issues/49450
     return NextResponse.json({ data: updatedResponse });
   } catch (error) {
-    if (error instanceof ServerError) {
+    if (error instanceof HandlerError) {
       return await error.toNextResponse(req);
     } else {
       console.error(error);

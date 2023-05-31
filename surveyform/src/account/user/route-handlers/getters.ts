@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { getSessionFromToken, TOKEN_NAME } from "~/account/user/api";
 import { UserDocument } from "~/account/user/typings";
-import { ServerError } from "~/lib/server-error";
+import { HandlerError } from "~/lib/handler-error";
 import { loadUser } from "~/lib/users/db-actions/load";
 
 export async function getUserIdFromReq(req: NextRequest) {
@@ -41,7 +41,7 @@ export async function mustGetCurrentUser(
 ): Promise<UserDocument> {
   const userId = await getUserIdFromReq(req);
   if (!userId) {
-    throw new ServerError({
+    throw new HandlerError({
       id: "not_authenticated",
       message: "Not authenticated",
       status: 401,
@@ -49,7 +49,7 @@ export async function mustGetCurrentUser(
   }
   const currentUser = await loadUser({ userId });
   if (!currentUser) {
-    throw new ServerError({
+    throw new HandlerError({
       id: "user_not_found",
       message: "Could not find current user",
       status: 401,
