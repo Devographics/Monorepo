@@ -44,21 +44,6 @@ const OtherComponent = (props: FormInputProps) => {
     }
   }, [value]);
 
-  // textfield properties
-  const textFieldInputProperties = {
-    name: path,
-    value: localValue,
-    onChange: (event) => {
-      const fieldValue = event.target.value;
-      // first, update local state
-      setLocalValue(fieldValue);
-      // then update global form state
-      const newValue = isEmpty(fieldValue) ? null : fieldValue;
-      updateCurrentValues({ [path]: newValue });
-    },
-  };
-  const textFieldItemProperties = { layout: "elementOnly" };
-
   return (
     <div className="form-option-other">
       <Form.Check
@@ -97,7 +82,7 @@ export const FormComponentRadioGroup = (props: FormInputProps) => {
   return (
     <FormItem {...props}>
       {options?.map((option, i) => {
-        const isChecked = value === option.id;
+        const isChecked = String(value) === String(option.id);
         const checkClass = hasValue
           ? isChecked
             ? "form-check-checked"
@@ -117,7 +102,9 @@ export const FormComponentRadioGroup = (props: FormInputProps) => {
                   checked={isChecked}
                   className={checkClass}
                   onChange={(e) => {
-                    updateCurrentValues({ [path]: e.target.value });
+                    const v = e.target.value;
+                    const newValue = question.optionsAreNumeric ? Number(v) : v;
+                    updateCurrentValues({ [path]: newValue });
                   }}
                   disabled={readOnly}
                 />

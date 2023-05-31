@@ -185,6 +185,9 @@ export const getEditionItems = (edition: EditionApiObject, type: 'tools' | 'feat
 export const formatNumericOptions = (options: Option[]) =>
     options.map(option => ({ ...option, id: `value_${option.id}` }))
 
+// convert an option back into a number
+export const convertNumericOption = (value: string) => Number(value.replace('value_', ''))
+
 export const getFiltersTypeName = (surveyId: string) => graphqlize(surveyId) + 'Filters'
 export const getFacetsTypeName = (surveyId: string) => graphqlize(surveyId) + 'Facets'
 

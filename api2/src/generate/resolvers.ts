@@ -24,6 +24,8 @@ import { entityResolverMap } from '../resolvers/entities'
 import { getResponseTypeName } from '../graphql/templates/responses'
 import { RequestContext, SectionApiObject } from '../types'
 import { getSectionItems, getEditionItems } from './helpers'
+import { stringOrInt } from '../graphql/string_or_int'
+import { GraphQLScalarType } from 'graphql'
 
 export const generateResolvers = async ({
     surveys,
@@ -54,7 +56,8 @@ export const generateResolvers = async ({
         Entity: entityResolverMap,
         EditionMetadata: editionMetadataResolverMap,
         SectionMetadata: sectionMetadataResolverMap,
-        QuestionMetadata: questionMetadataResolverMap
+        QuestionMetadata: questionMetadataResolverMap,
+        StringOrInt: new GraphQLScalarType(stringOrInt)
     } as any
 
     for (const survey of surveys) {
@@ -227,9 +230,7 @@ const getQuestionResolver =
             questionObjects
         }
         if (question.options) {
-            const questionOptions: Option[] = question.optionsAreNumeric
-                ? formatNumericOptions(question.options)
-                : question.options
+            const questionOptions: Option[] = question.options
 
             const optionEntities = await getEntities({
                 ids: questionOptions.map(o => o.id),

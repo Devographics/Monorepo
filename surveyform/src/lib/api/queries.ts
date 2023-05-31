@@ -129,6 +129,8 @@ query ${editionId}MetadataQuery {
                 code
                 codeHighlighted
               }
+              descriptionClean
+              descriptionHtml
               homepage {
                 url
               }

@@ -151,8 +151,10 @@ enum ContentType {
     number
 }
 
+scalar StringOrInt
+
 type OptionsMetadata {
-    id: String
+    id: StringOrInt
     intlId: String
     label: String
     average: Float

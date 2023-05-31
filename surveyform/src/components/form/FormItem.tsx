@@ -138,13 +138,23 @@ export const FormItemTitle = (props: FormItemProps) => {
 };
 
 export const FormItemDescription = (props: FormItemProps) => {
+  const { question } = props;
+  const { entity } = question;
   const intl = useIntlContext();
   const intlIds = getQuestioni18nIds(props);
-  const description = intl.formatMessage({ id: intlIds.description });
-  return description ? (
+  const i18nDescription = intl.formatMessage({ id: intlIds.description });
+  const entityDescription = entity?.descriptionHtml || entity?.descriptionClean;
+  return i18nDescription ? (
     <FormattedMessage
       className="form-item-description"
       id={intlIds.description}
+    />
+  ) : entityDescription ? (
+    <span
+      className="form-item-description"
+      dangerouslySetInnerHTML={{
+        __html: entityDescription,
+      }}
     />
   ) : null;
 };

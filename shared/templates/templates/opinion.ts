@@ -6,7 +6,7 @@ export const opinion: TemplateFunction = options => {
     const output: QuestionTemplateOutput = {
         optionsAreNumeric: true,
         options: [...Array(5)].map((x, i) => ({
-            id: String(i),
+            id: i,
             intlId: `options.opinions.${String(i)}`
         })),
         ...getPaths(options),
