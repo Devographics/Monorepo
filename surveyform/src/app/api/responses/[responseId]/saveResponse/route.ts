@@ -5,14 +5,17 @@ import { loadResponse } from "~/lib/responses/db-actions/load";
 import { saveResponse } from "~/lib/responses/db-actions/save";
 import { ServerError } from "~/lib/server-error";
 
-export async function POST(req: NextRequest, { params }: RouteHandlerOptions<{ responseId: string }>) {
+export async function POST(
+  req: NextRequest,
+  { params }: RouteHandlerOptions<{ responseId: string }>
+) {
   try {
     // Get current user
     const currentUser = await tryGetCurrentUser(req);
 
     // Get responseId
     // TODO: this should be a route parameter instead
-    const responseId = params.responseId
+    const responseId = params.responseId;
     if (!responseId) {
       throw new ServerError({
         id: "missing_response_id",
@@ -38,16 +41,22 @@ export async function POST(req: NextRequest, { params }: RouteHandlerOptions<{ r
       currentUser,
       clientData,
     });
-    const updatedResponse = await loadResponse({ responseId, currentUser })
-    if (!updatedResponse) throw new ServerError({ id: "response-not-found-after-update", message: "Couldn't find response after an update", status: 500 })
+    const updatedResponse = await loadResponse({ responseId, currentUser });
+    if (!updatedResponse)
+      throw new ServerError({
+        id: "response-not-found-after-update",
+        message: "Couldn't find response after an update",
+        status: 500,
+      });
     // NOTE: it's important to return the updated data
     // because we do some client-side updates until issue below is fixed:
     // @see https://github.com/vercel/next.js/issues/49450
     return NextResponse.json({ data: updatedResponse });
   } catch (error) {
     if (error instanceof ServerError) {
-      return await error.toNextResponse(req)
+      return await error.toNextResponse(req);
     } else {
+      console.error(error);
       return NextResponse.json(
         { error: `Could not update response` },
         { status: 500 }
