@@ -163,7 +163,7 @@ export const FormItemLimit = ({ question }: FormItemProps) => {
   const { limit } = question;
   return limit ? (
     <div className="form-item-limit">
-      <FormattedMessage values={limit} id="general.pick_up_to" />
+      <FormattedMessage values={{ limit }} id="general.pick_up_to" />
     </div>
   ) : null;
 };
