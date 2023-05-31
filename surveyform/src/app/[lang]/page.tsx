@@ -3,8 +3,8 @@ import { fetchSurveysMetadata } from "~/lib/api/fetch";
 import { initRedis } from "@devographics/redis";
 import { serverConfig } from "~/config/server";
 import { cache } from "react";
-import { locales } from "~/i18n/data/locales";
 
+import { locales } from "~/i18n/data/locales";
 export function generateStaticParams() {
   return locales.map((l) => ({ lang: l }));
 }
