@@ -9,6 +9,7 @@ import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { FormItem } from "~/components/form/FormItem";
 import { TooltipTrigger } from "~/components/ui/TooltipTrigger";
 import { Button } from "~/components/ui/Button";
+import { FormInputProps } from "../form/typings";
 
 /*
 
@@ -85,20 +86,20 @@ Main Component
 
 */
 
-const Bracket = (
-  {
-    inputProperties,
-    itemProperties,
-    options: _options,
+const Bracket = (props: FormInputProps) => {
+  const {
+    //inputProperties,
+    //itemProperties,
+    //options: _options,
+    value,
+    question,
     path,
     updateCurrentValues,
-  } /* FormInputProps*/ /** TODO The props are those of a Vulcan custom form input */
-) => {
-  const { value } = inputProperties;
+  } = props;
   const [results, setResults] = useState(
     isEmpty(value) ? initResults() : value
   );
-
+  const { options: _options = [], label } = question;
   // add index to all options since we use that to keep track of them
   const options = _options.map((o, index) => ({ ...o, index }));
 
@@ -143,7 +144,8 @@ const Bracket = (
     updateCurrentValues({ [path]: newResults });
   };
 
-  const props = {
+  const itemProps = {
+    ...props,
     options,
     results,
     pickWinner,
@@ -152,14 +154,10 @@ const Bracket = (
   };
 
   return (
-    <FormItem
-      path={inputProperties.path}
-      label={inputProperties.label}
-      {...itemProperties}
-    >
+    <FormItem {...itemProps} path={path}>
       <div className="bracket">
-        <BracketLegend {...props} />
-        <BracketResults {...props} />
+        <BracketLegend {...itemProps} />
+        <BracketResults {...itemProps} />
       </div>
     </FormItem>
   );

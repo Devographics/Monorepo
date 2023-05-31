@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { tryGetCurrentUser } from "~/account/user/route-handlers/getters";
 import { populateUserResponses } from "~/lib/responses/db-actions/populateUserResponses";
-import { ServerError } from "~/lib/server-error";
+import { HandlerError } from "~/lib/handler-error";
 
 // TODO: it seems that 'auto' always give a 304 on this endpoint,
 // despite using "req"
@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
     const currentUserWithResponse = await populateUserResponses({ user: currentUser });
     return NextResponse.json({ data: currentUserWithResponse });
   } catch (error) {
-    if (error instanceof ServerError) {
+    if (error instanceof HandlerError) {
       return await error.toNextResponse(req)
     } else {
       return NextResponse.json(

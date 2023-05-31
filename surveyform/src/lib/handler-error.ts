@@ -5,7 +5,7 @@ import { getClosestLocale } from "~/i18n/data/locales";
 import { getLocaleFromAcceptLanguage } from "~/i18n/server/localeDetection";
 import { DetailedErrorObject } from "./validation";
 
-export interface ServerErrorObject extends DetailedErrorObject {
+export interface HandlerErrorObject extends DetailedErrorObject {
   status: number;
 }
 
@@ -25,18 +25,18 @@ function handlerLocaleId(request: NextRequest) {
     getLocaleFromAcceptLanguage(request.headers.get("accept-language")) ||
     "en-US";
   const validLocale = getClosestLocale(locale);
-  console.log("// server-error locale");
+  console.log("// handler-error locale");
   console.log({ locale, validLocale });
 }
 
-export class ServerError extends Error {
+export class HandlerError extends Error {
   id: string;
   status: number;
   properties?: string;
   error?: any;
-  constructor(props: ServerErrorObject) {
+  constructor(props: HandlerErrorObject) {
     super(props.message);
-    console.error("// ServerError");
+    console.error("// HandlerError");
     console.error(props);
     this.id = props.id;
     this.status = props.status;

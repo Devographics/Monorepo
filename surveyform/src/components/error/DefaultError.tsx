@@ -1,14 +1,8 @@
+"use client";
 import React from "react";
 
 import { useIntlContext } from "@devographics/react-i18n";
-// import routes from "~/config/routes";
 import { useRouter } from "next/navigation";
-// import palette from "~/config/palette";
-// import { computeErrorI18nTokens } from "~/config/errors";
-// import { logout } from "~/services/AuthService";
-// import { useCurrentUserContext } from "~/core/components/account";
-// import { isUserServiceUnavailable } from "~/core/components/account/CurrentUserProvider";
-// import { getAccessToken } from "~/services/AuthService";
 import { routes } from "~/lib/routes";
 import { LogoutButton } from "~/account/user/components";
 import { Button } from "~/components/ui/Button";
@@ -92,10 +86,12 @@ export const DefaultErrorDisplay = ({
         {errorTitle}
         {error?.name && <span> {}</span>}
       </h2>
-      <p>
-        <span>Error message: {addPointToSentence(errorMessage)}</span>{" "}
-        <span>{t("error.message_sent_to_technical_team")}</span>
-      </p>
+      {!!errorMessage && (
+        <p>
+          <span>Error message: {addPointToSentence(errorMessage)}</span>{" "}
+          <span>{t("error.message_sent_to_technical_team")}</span>
+        </p>
+      )}
       {hasButtons && (
         <div className={classes.buttonsWrapper}>
           {proposeReload && (

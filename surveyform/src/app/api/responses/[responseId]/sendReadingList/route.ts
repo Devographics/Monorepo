@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { tryGetCurrentUser } from "~/account/user/route-handlers/getters";
 import { RouteHandlerOptions } from "~/app/api/typings";
-import { ServerError } from "~/lib/server-error";
+import { HandlerError } from "~/lib/handler-error";
 import { fetchEditionMetadata } from "~/lib/api/fetch";
 import { localMailTransport } from "~/lib/server/mail/transports";
 import { getRawResponsesCollection } from "@devographics/mongo";
@@ -20,7 +20,7 @@ export async function POST(
     // TODO: this should be a route parameter instead
     const responseId = params.responseId;
     if (!responseId) {
-      throw new ServerError({
+      throw new HandlerError({
         id: "missing_response_id",
         message: "Could not find responseId",
         status: 400,
@@ -32,7 +32,7 @@ export async function POST(
     try {
       clientData = await req.json();
     } catch (err) {
-      throw new ServerError({
+      throw new HandlerError({
         id: "invalid_data",
         message: "Found invalid data when parsing response data",
         status: 400,
@@ -80,7 +80,7 @@ export async function POST(
     return NextResponse.json({ data: { emailObject } });
   } catch (error) {
     console.log(error);
-    if (error instanceof ServerError) {
+    if (error instanceof HandlerError) {
       return await error.toNextResponse(req);
     } else {
       return NextResponse.json(
@@ -112,8 +112,8 @@ const getReadingListEmail = ({
 ${textHeader(props)}
 
 ${readingList
-  .map((itemId) => textItem({ ...props, entity: getEntity(itemId) }))
-  .join("")}
+      .map((itemId) => textItem({ ...props, entity: getEntity(itemId) }))
+      .join("")}
 
 ${textFooter(props)}
 `;
@@ -122,8 +122,8 @@ ${textFooter(props)}
 ${htmlHeader(props)}
 
 ${readingList
-  .map((itemId) => htmlItem({ ...props, entity: getEntity(itemId) }))
-  .join("")}
+      .map((itemId) => htmlItem({ ...props, entity: getEntity(itemId) }))
+      .join("")}
 
 ${htmlFooter(props)}
 `;
@@ -140,9 +140,9 @@ ${entity.nameClean}
 ${entity?.mdn?.summary || ""}
 
 ${[entity?.mdn?.url, entity?.github?.url, entity?.homepage?.url]
-  .filter((l) => !!l)
-  .map((l) => `- ${l}`)
-  .join("\n")}
+    .filter((l) => !!l)
+    .map((l) => `- ${l}`)
+    .join("\n")}
 
 ${entity?.resources ? entity.resources.map((l) => `- ${l.url}`).join("\n") : ""}
 
@@ -161,15 +161,14 @@ const htmlItem = ({ survey, edition, entity }) => `
     <div>
     <ul>
     ${[entity?.mdn?.url, entity?.github?.url, entity?.homepage?.url]
-      .filter((l) => !!l)
-      .map((l) => `<li>${l}</li>`)
-      .join("\n")}
+    .filter((l) => !!l)
+    .map((l) => `<li>${l}</li>`)
+    .join("\n")}
 
-    ${
-      entity?.resources
-        ? entity.resources.map((l) => `<li>${l.url}</li>`).join("\n")
-        : ""
-    }
+    ${entity?.resources
+    ? entity.resources.map((l) => `<li>${l.url}</li>`).join("\n")
+    : ""
+  }
     </ul>
 </div>
 <br/>

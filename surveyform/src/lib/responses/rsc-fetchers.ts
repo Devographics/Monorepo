@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { cache } from "react";
 import { UserDocument } from "~/account/user/typings";
 import { rscMustGetSurveyEdition } from "~/app/[lang]/survey/[slug]/[year]/rsc-fetchers";
+import { RscError } from "../rsc-error";
 
 /**
  * Get user response for a survey
@@ -37,6 +38,8 @@ export const rscMustGetUserResponse = cache(
 export const rscMustGetResponse = cache(
     async ({ responseId, currentUser }: { responseId: string, currentUser: UserDocument }) => {
         const Responses = await getRawResponsesCollection<ResponseDocument>();
+        // get the response by id, than only check if it belong to current user
+        // this helps having a clearer error message
         const selector = {
             _id: responseId
         };
@@ -45,7 +48,11 @@ export const rscMustGetResponse = cache(
             return notFound();
         }
         if (responseFromDb.userId !== currentUser._id) {
-            throw new Error("Response retrieved from server doesn't belong to current user");
+            throw new RscError({
+                id: "response.permission",
+                message: "You cannot access this response.",
+                status: 400
+            });
         }
         // Technically the responseId URL parameter is not really needed
         // since there is one response per survey

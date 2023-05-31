@@ -1,4 +1,10 @@
+import { ReactNode } from "react"
+
 export interface NextPageParams<TParams = any, TSearchParams = any> {
-    params: Partial<TParams>
+    params: TParams
     searchParams: Partial<TSearchParams>
+}
+export interface NextLayoutParams<TParams = any> {
+    params: TParams,
+    children: ReactNode
 }

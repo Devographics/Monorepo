@@ -44,8 +44,6 @@ export async function rscMustGetSurveyEdition(params: {
   year: string;
 }) {
   const edition = await rscGetSurveyEditionFromUrl(params);
-  //console.debug("// mustGetSurveyEdition");
-  //console.debug(edition);
   if (!edition) {
     notFound();
   }

@@ -10,6 +10,7 @@ import { FormContext } from "./FormContext";
 import { ErrorBoundary } from "~/components/error";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { useResponse } from "../ResponseContext/ResponseProvider";
+import { Edition, ResponseDocument, Section } from "@devographics/types";
 
 const initFormState = (response) => ({
   currentValues: {},
@@ -20,7 +21,15 @@ const mergeWithResponse = (response, currentValues, deletedValues) => {
   return { ...response, ...currentValues };
 };
 
-export const FormSection = (props) => {
+export const FormSection = (
+  props: {
+    edition: Edition;
+    section: Section;
+    response: ResponseDocument;
+    sectionNumber: number;
+    readOnly?: boolean;
+  } & any /** TODO: finish typing */
+) => {
   const {
     edition,
     section,
@@ -144,13 +153,24 @@ export const FormSection = (props) => {
       <FormContext.Provider value={formProps}>
         <FormLayout {...formProps}>
           {section.questions.map((question, index) => (
-            <FormQuestion
-              {...formProps}
+            // TODO: the boundary "render" function has some where typings
+            // @ts-ignore
+            <ErrorBoundary
               key={question.id}
-              question={question}
-              sectionNumber={sectionNumber}
-              questionNumber={index + 1}
-            />
+              fallbackComponent={({ error }) => (
+                <p>
+                  Could not load question {question.id} ({error?.message})
+                </p>
+              )}
+            >
+              <FormQuestion
+                {...formProps}
+                key={question.id}
+                question={question}
+                sectionNumber={sectionNumber}
+                questionNumber={index + 1}
+              />
+            </ErrorBoundary>
           ))}
         </FormLayout>
       </FormContext.Provider>
