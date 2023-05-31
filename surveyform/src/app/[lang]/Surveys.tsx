@@ -4,9 +4,7 @@ import { FormattedMessage } from "~/components/common/FormattedMessage";
 import Image from "next/image";
 import { EditionMetadata, SurveyMetadata } from "@devographics/types";
 import { getEditionHomePath, getSurveyImageUrl } from "~/lib/surveys/helpers";
-import { SurveyParamsTable } from "~/lib/surveys/data";
 import sortBy from "lodash/sortBy";
-// import { useLocaleContext } from "~/i18n/context/LocaleContext";
 
 const EditionItem = ({
   edition,
