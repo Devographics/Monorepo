@@ -10,6 +10,7 @@ import { FormOption } from "~/components/form/FormOption";
 import debounce from "lodash/debounce.js";
 import FormControl from "react-bootstrap/FormControl";
 import { getFormPaths } from "~/lib/surveys/helpers";
+import { seededShuffle } from "~/lib/utils";
 
 const OtherComponent = (props: FormInputProps) => {
   const { edition, question, updateCurrentValues, response, readOnly } = props;
@@ -87,14 +88,19 @@ export const FormComponentCheckboxGroup = (props: FormInputProps) => {
     question,
     updateCurrentValues,
     readOnly,
+    response,
   } = props;
-  const { options, allowOther, limit } = question;
 
-  if (!options) {
+  const { options: options_, allowOther, limit, randomize } = question;
+
+  if (!options_) {
     throw new Error(
       `Question ${question.id} does not have any options defined.`
     );
   }
+
+  const options = randomize ? seededShuffle(options_, response._id) : options_;
+
   const value = value_ as Array<string | number>;
 
   const cutoff = question.cutoff || defaultCutoff;
@@ -107,6 +113,7 @@ export const FormComponentCheckboxGroup = (props: FormInputProps) => {
     typeof cutoff !== "undefined" &&
     cutoff > 0 &&
     options?.length > cutoff + cutoffMargin;
+
   const optionsToShow = enableCutoff
     ? showMore
       ? options

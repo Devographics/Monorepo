@@ -119,6 +119,7 @@ query ${editionId}MetadataQuery {
             allowOther
             allowComment
             allowMultiple
+            randomize
             optionsAreNumeric
             # optionsAreRange
             entity {

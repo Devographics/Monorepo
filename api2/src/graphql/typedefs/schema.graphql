@@ -121,6 +121,7 @@ type QuestionMetadata {
     allowOther: Boolean
     allowComment: Boolean
     allowMultiple: Boolean
+    randomize: Boolean
     matchTags: [String]
     limit: Int
     # options/values for the question are numeric
