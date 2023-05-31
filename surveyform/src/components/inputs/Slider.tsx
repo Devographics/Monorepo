@@ -4,7 +4,6 @@ import type { FormInputProps } from "~/components/form/typings";
 import Form from "react-bootstrap/Form";
 import { FormOption } from "~/components/form/FormOption";
 import { useIntlContext } from "@devographics/react-i18n";
-import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { getOptioni18nIds } from "@devographics/i18n";
 
 export const Slider = (props: FormInputProps) => {
@@ -42,7 +41,11 @@ export const Slider = (props: FormInputProps) => {
                       checked={isChecked}
                       className={checkClass}
                       onChange={(e) => {
-                        updateCurrentValues({ [path]: e.target.value });
+                        const val =
+                          typeof option.id === "number"
+                            ? parseInt(e.target.value)
+                            : e.target.value;
+                        updateCurrentValues({ [path]: val });
                       }}
                       disabled={readOnly}
                     />
