@@ -83,7 +83,9 @@ const EditionGroup = ({
         ))
       ) : (
         <div className={`surveys-none surveys-no${status}`}>
-          <FormattedMessage id={`general.no_${status}_surveys`} />
+          <FormattedMessage
+            id={`general.no_${SurveyStatusEnum[status].toLowerCase()}_surveys`}
+          />
         </div>
       )}
     </div>
