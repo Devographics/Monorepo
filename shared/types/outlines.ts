@@ -137,6 +137,7 @@ export type Question = {
     allowOther?: boolean
     allowPrenormalized?: boolean
     allowComment?: boolean
+    showCommentInput?: boolean
     randomize?: boolean
 
     matchTags?: string[]

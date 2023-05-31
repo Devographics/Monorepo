@@ -41,7 +41,6 @@ export const FormItem = (props: FormItemProps) => {
     path,
     edition,
     question,
-    isFirstQuestion,
     readOnly,
     enableLearnMore,
   } = props;
@@ -54,7 +53,7 @@ export const FormItem = (props: FormItemProps) => {
 
   // open the comment widget if there is already a comment or this is the first question
   const [showCommentInput, setShowCommentInput] = useState(
-    (!readOnly && isFirstQuestion) || !!commentValue
+    (!readOnly && question.showCommentInput) || !!commentValue
   );
 
   // const innerComponent = loading ? (
@@ -81,7 +80,6 @@ export const FormItem = (props: FormItemProps) => {
             value={commentValue}
             showCommentInput={showCommentInput}
             setShowCommentInput={setShowCommentInput}
-            isFirstQuestion={isFirstQuestion}
           />
         )}
         {allowComment && showCommentInput && commentPath && (

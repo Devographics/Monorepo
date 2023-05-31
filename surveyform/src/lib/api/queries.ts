@@ -118,6 +118,7 @@ query ${editionId}MetadataQuery {
             # contentType
             allowOther
             allowComment
+            showCommentInput
             allowMultiple
             randomize
             optionsAreNumeric

@@ -1,30 +1,13 @@
-"use client";
 import React from "react";
-import { useIntlContext } from "@devographics/react-i18n";
+import { FormattedMessage } from "../common/FormattedMessage";
+import { getQuestioni18nIds } from "@devographics/i18n";
 
-const getFormattedMessage = (intlKeys, intl) => {
-  if (!intlKeys?.length) {
-    console.error("No intlKeys provided to an Help component");
-    return null;
-  }
-  for (const intlKey of intlKeys) {
-    const formattedMessage = intl.formatMessage({ id: intlKey });
-    if (formattedMessage) return formattedMessage;
-  }
-  console.warn(
-    "No translation found for at least one of those intlKeys",
-    intlKeys
-  );
-  return intlKeys[0];
-};
-export const Help = ({ intlKeys }) => {
-  const intl = useIntlContext();
-  const formattedMessage = getFormattedMessage(intlKeys, intl);
+export const Help = (props) => {
+  const i18n = getQuestioni18nIds(props);
   return (
-    <div
-      className="form-help"
-      dangerouslySetInnerHTML={{ __html: formattedMessage }}
-    />
+    <div className="form-help">
+      <FormattedMessage id={i18n.base} />
+    </div>
   );
 };
 

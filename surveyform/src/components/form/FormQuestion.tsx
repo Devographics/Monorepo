@@ -26,7 +26,6 @@ export const FormQuestion = (props) => {
     value,
     sectionNumber,
     questionNumber,
-    isFirstQuestion: sectionNumber === 1 && questionNumber === 1,
   };
 
   return (

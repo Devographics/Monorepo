@@ -18,7 +18,6 @@ export type FormInputProps = {
   question: QuestionMetadata;
   updateCurrentValues: any;
   submitForm: any;
-  isFirstQuestion?: boolean;
   readOnly?: boolean;
   stateStuff: any;
   sectionNumber: number;

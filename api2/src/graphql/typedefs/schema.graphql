@@ -120,6 +120,7 @@ type QuestionMetadata {
     entity: Entity
     allowOther: Boolean
     allowComment: Boolean
+    showCommentInput: Boolean
     allowMultiple: Boolean
     randomize: Boolean
     matchTags: [String]

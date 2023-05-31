@@ -16,11 +16,10 @@ import { getOptioni18nIds } from "@devographics/i18n";
 
 export const CommentTrigger = ({
   value,
-  showCommentInput,
+  showCommentInput = false,
   setShowCommentInput,
-  isFirstQuestion = false,
 }) => {
-  const [show, setShow] = useState(isFirstQuestion);
+  const [show, setShow] = useState(showCommentInput);
 
   const isActive = showCommentInput || !!value;
   const intl = useIntlContext();
