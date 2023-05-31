@@ -54,8 +54,8 @@ test("Access state of 2022, anonymous auth", () => {
   cy.url().should("match", new RegExp("thanks"));
 });
 
-test.skip("open login page directly", () => {
-  // TODO: should pass
+test("open login page directly", () => {
   cy.visit("/account/login")
-  getContinueAsGuestButton()
+  getContinueAsGuestButton().click()
+  cy.url().should("match", routes.home.href)
 })

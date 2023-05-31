@@ -51,7 +51,7 @@ test("Access state of 2022, magic auth new user", () => {
   cy.intercept({
     method: "POST",
     // we still need to add * to match any query params
-    url: `${apiRoutes.account.magicLogin.sendEmail.href}*`,
+    url: `${apiRoutes.account.magicLogin.sendEmail.href({})}*`,
   }).as("sendEmailRequest");
 
   // this email should not exist in db yet (not test user)
@@ -79,7 +79,7 @@ test("Access state of 2022, magic auth new user", () => {
     // Verify the token
     cy.intercept({
       method: apiRoutes.account.magicLogin.verifyToken.method,
-      url: apiRoutes.account.magicLogin.verifyToken.href + "*",
+      url: apiRoutes.account.magicLogin.verifyToken.href({ token: "" }) + "*",
     }).as("verifyToken");
 
     cy.visit(magicLink);

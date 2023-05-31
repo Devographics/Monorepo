@@ -1,8 +1,6 @@
 import React, { ReactNode } from "react";
 import FormControl from "react-bootstrap/FormControl";
 
-// TODO
-
 export const LoginFormItem = ({
   label,
   name,

@@ -9,7 +9,6 @@ import { getEntityName } from "~/lib/surveys/helpers";
 interface FormOptionProps extends FormInputProps {
   option: OptionMetadata;
 }
-
 export const FormOption = (props: FormOptionProps) => {
   const { option } = props;
   const { entity } = option;
@@ -29,10 +28,9 @@ export const FormOption = (props: FormOptionProps) => {
         {entityName ? (
           <EntityLabel entity={entity} />
         ) : (
-          <FormattedMessage id={i18n.base} />
+          <FormattedMessage id={i18n.base} defaultMessage={option.id + ""} />
         )}
       </span>
-
       {optionDescription && (
         <FormattedMessage
           className="form-option-description"

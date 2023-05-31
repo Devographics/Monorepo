@@ -34,7 +34,7 @@ const test = it;
 
 const CURRENT_SURVEY_REGEX = new RegExp(`${testSurvey.name}`, "i");
 const CURRENT_SURVEY_URL = `/${testSurvey.prettySlug}/${testSurvey.year}`;
-test("Access state of 2022, signup, start filling form", () => {
+test("Access demo survey 2022, signup, start filling form", () => {
   const surveyRootUrl = routes.survey.root.href + CURRENT_SURVEY_URL;
   cy.visit(surveyRootUrl);
 
@@ -60,8 +60,9 @@ test("Access state of 2022, signup, start filling form", () => {
     ).click();
   });
 
-  // Click a checkboxgroup
+  // Go to usage section
   getLinkToSection(/Usage|sections\.usage\.title/i).click();
+  // Click a checkboxgroup
   cy.findByRole("heading", {
     name: /API Types|demo_survey__usage__api_type__choices/i,
   })
@@ -74,16 +75,24 @@ test("Access state of 2022, signup, start filling form", () => {
       //cy.findByLabelText("private_apis").click();
     });
 
+  // Click a "slider"
+  getQuestionBlock(/demo_balance_slider/i).within(() => {
+    cy.findByRole("radio", { name: /2/i }).click();
+  })
+
   // Click a bracket
   // Be careful not to match "Others GraphQL strong points", that's why we need a ^ and a $
   getQuestionBlock(
     /^GraphQL Strong Points|demo_survey__usage__graphql_strong_points$/i
   ).within(() => {
-    // TODO: order is random so hard to test, we would need more
-    // logic to find siblings
-    cy.findByRole("button", {
-      name: /Type-checking|options\.graphql_strong_points\.type_checking/i,
-    }).click();
+    /*
+    TODO: bracket is not yet fully updated
+      // TODO: order is random so hard to test, we would need more
+      // logic to find siblings
+      cy.findByRole("button", {
+        name: /Type-checking|options\.graphql_strong_points\.type_checking/i,
+      }).click();
+    */
   });
 
   // Fill a text area

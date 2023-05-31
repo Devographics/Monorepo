@@ -10,6 +10,7 @@ import { Loading } from "~/components/ui/Loading";
 import { LoadingButton } from "~/components/ui/LoadingButton";
 
 export interface StandaloneMagicLoginFormProps {
+  /** Button label */
   label?: string | ReactNode;
   /**
    * Optional surveyId and editionId to login to a specific survey
@@ -78,7 +79,7 @@ export const StandaloneMagicLoginForm = ({
   }
   return (
     <form onSubmit={handleSubmit} className="magic-link-login-form">
-      <FormComponentEmail placeholder={placeholder} label={label} />
+      <FormComponentEmail placeholder={placeholder} label={placeholder} />
       <div className="submit">
         <LoadingButton type="submit" loading={loading}>
           {label}

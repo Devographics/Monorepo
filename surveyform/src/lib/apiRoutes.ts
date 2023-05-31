@@ -25,7 +25,7 @@ export const apiRoutes = {
         }: {
           /** Keep in mind the redirection path, if applicable */
           from?: string;
-        }) =>
+        } = {}) =>
           "/api/account/magic-login/send-email" +
           (from ? "?from=" + encodeURIComponent(from) : ""),
         method: "POST",

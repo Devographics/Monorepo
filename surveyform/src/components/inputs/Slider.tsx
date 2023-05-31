@@ -25,9 +25,8 @@ export const Slider = (props: FormInputProps) => {
                 : "form-check-unchecked"
               : "";
             const i18n = getOptioni18nIds({ question, option });
-            const optionLabel = intl.formatMessage({
-              id: i18n.base,
-            });
+            // TODO: we don't really use this label, we only use it
+            // to check if there is a translation for this value
             return (
               <Form.Check key={i} type="radio">
                 <Form.Check.Label htmlFor={`${path}.${i}`}>
@@ -50,7 +49,7 @@ export const Slider = (props: FormInputProps) => {
                       disabled={readOnly}
                     />
                   </div>
-                  {optionLabel && <FormOption {...props} option={option} />}
+                  {i18n.base && <FormOption {...props} option={option} />}
                 </Form.Check.Label>
               </Form.Check>
             );

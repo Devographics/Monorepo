@@ -39,7 +39,7 @@ after(() => {
 
 function getId(res: Cypress.Response<any>) {
   // TODO: this complex structure is due to using GraphQL, simplify
-  return res?.body?.data?.startSurvey?.data?._id
+  return res?.body?.data?._id
 }
 
 test("unauthenticated can't get response", () => {
@@ -65,7 +65,6 @@ test("authenticated user starts then update survey", () => {
     },
   }).then(res => {
     expect(res.status).to.eq(200)
-
     expect(getId(res)).to.have.length.greaterThan(0)
     const responseId = getId(res)
     cy.request({

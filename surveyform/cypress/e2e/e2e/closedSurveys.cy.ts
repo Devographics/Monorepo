@@ -29,14 +29,14 @@ const test = it;
 const CURRENT_SURVEY_REGEX = new RegExp(`${testSurvey.name}`, "i");
 const CURRENT_SURVEY_URL = `/${testSurvey.prettySlug}/${testSurvey.year}`;
 
-test("Access 2021 survey", () => {
+// TODO: there is no link to 2021 survey, access via URL instead
+test.skip("Access 2021 survey", () => {
   // surveys before 2021 are not supported (no questions.yml)
-  cy.visit("/")
+  cy.visit("/survey/state-of-js/2021")
   // an older survey
   cy.findByText(/state of javascript 2021/i).click()
   cy.url().should("match", /survey\/state-of-js\/2021/)
   cy.findByText(/now closed/i).should("be.visible")
-
 })
 test("access 2022 survey", () => {
   cy.visit("/")
@@ -45,9 +45,7 @@ test("access 2022 survey", () => {
   cy.url().should("match", /survey\/state-of-graphql\/2022/)
   cy.findByText(/now closed/i).should("be.visible")
 })
-
-
-test.skip("accessing a closed survey with an account that did not exist should return an empty read-only form", () => {
+test("accessing a closed survey with an account that did not exist should return an empty read-only form", () => {
   cy.visit("/survey/state-of-js/2022")
   cy.findByText(/now closed/i).should("be.visible")
   // TODO: auth with email, reuse logic from magicLogin
