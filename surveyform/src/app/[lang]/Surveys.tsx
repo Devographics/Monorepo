@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { SurveyStatusEnum } from "@devographics/types";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
-import Image from "next/image";
 import { EditionMetadata, SurveyMetadata } from "@devographics/types";
 import { getEditionHomePath, getSurveyImageUrl } from "~/lib/surveys/helpers";
 import sortBy from "lodash/sortBy";
@@ -23,15 +22,16 @@ const EditionItem = ({
           <Link href={homePath} className="survey-link">
             <div className="survey-image-inner">
               {imageUrl && (
-                <Image
+                <img
+                  /*
                   priority={
                     typeof status !== "undefined" && [1, 2].includes(status)
-                  }
+                  }*/
                   width={300}
                   height={200}
                   src={imageUrl}
                   alt={`${name} ${year}`}
-                  quality={100}
+                  //quality={100}
                 />
               )}
             </div>

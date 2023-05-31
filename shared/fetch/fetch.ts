@@ -91,11 +91,18 @@ function extractQueryName(queryString) {
 export const fetchGraphQLApi = async ({
     query,
     key: key_,
-    apiUrl: apiUrl_
+    apiUrl: apiUrl_,
+    cache
 }: {
     query: string
     key?: string
     apiUrl?: string
+    /**
+     * Override Next.js caching
+     * "no-store" will prevent static rendering
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/Request/cache
+     */
+    cache?: RequestCache
 }): Promise<any> => {
     const apiUrl = apiUrl_ || getApiUrl()
     const key = key_ || extractQueryName(query)
@@ -109,8 +116,7 @@ export const fetchGraphQLApi = async ({
             Accept: 'application/json'
         },
         body: JSON.stringify({ query, variables: {} }),
-        // always get a fresh answer
-        cache: 'no-store'
+        cache: cache || undefined
     })
     const json: any = await response.json()
     if (json.errors) {

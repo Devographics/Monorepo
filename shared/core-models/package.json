@@ -25,7 +25,6 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "@devographics/graphql": "workspace:^1.0.0",
         "@devographics/redis": "workspace:^1.0.0",
         "@devographics/types": "workspace:^1.0.0",
         "@types/lodash": "^4.14.175",
