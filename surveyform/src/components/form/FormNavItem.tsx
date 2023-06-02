@@ -9,12 +9,13 @@ import { useEdition } from "../SurveyContext/Provider";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { FormInputProps } from "./typings";
 
-interface SurveyNavItemProps extends FormInputProps {
+interface SurveyNavItemProps extends Omit<FormInputProps, "section"> {
   setShown: any;
   number: number;
   sectionNumber: number;
   setNavLoading: any;
-  section: SectionMetadata;
+  page?: "finish";
+  section?: SectionMetadata;
   currentSection: SectionMetadata;
 }
 
@@ -29,21 +30,24 @@ const SurveyNavItem = ({
   stateStuff,
   readOnly,
   setNavLoading,
+  page,
 }: SurveyNavItemProps) => {
   const { currentTabindex, setCurrentFocusIndex } = stateStuff;
   const { locale } = useLocaleContext();
   const textInput = useRef<any>(null);
   const { edition } = useEdition();
   const completion =
-    getSectionCompletionPercentage({
-      edition,
-      section,
-      response,
-    }) || 0;
+    (section &&
+      getSectionCompletionPercentage({
+        edition,
+        section,
+        response,
+      })) ||
+    0;
   // const showCompletion = completion !== null && completion > 0;
-  const showCompletion = true;
-
-  const isCurrent = currentSection.id === section.id;
+  const showCompletion = !page && completion > 0;
+  const sectionIntlId = page || section?.intlId || section?.id;
+  const isCurrent = currentSection.id === section?.id;
   const currentClass = isCurrent ? "section-nav-item-current" : "";
   const isBeforeCurrent = number < sectionNumber;
   const beforeClass = isBeforeCurrent ? "section-nav-item-before-current" : "";
@@ -53,6 +57,7 @@ const SurveyNavItem = ({
     response,
     number,
     locale,
+    page,
   });
 
   useEffect(() => {
@@ -99,7 +104,7 @@ const SurveyNavItem = ({
         {...(!readOnly && { onClick: handleClick })}
       >
         <span className="section-nav-item-completion  btn btn-primary">
-          {completion > 0 && (
+          {showCompletion && (
             <>
               <span className="section-nav-item-completion-label">
                 <span>{completion}%</span>
@@ -112,8 +117,8 @@ const SurveyNavItem = ({
                   cy="10"
                   fill="transparent"
                   stroke="rgba(255, 255, 255, 0.2)"
-                  stroke-width="10"
-                  stroke-dasharray={`calc(${completion} * 31.4 / 100) 31.4`}
+                  strokeWidth="10"
+                  strokeDasharray={`calc(${completion} * 31.4 / 100) 31.4`}
                   transform="rotate(-90) translate(-20)"
                 />
               </svg>
@@ -122,7 +127,7 @@ const SurveyNavItem = ({
         </span>
         <FormattedMessage
           className="section-nav-item-label"
-          id={`sections.${section.intlId || section.id}.title`}
+          id={`sections.${sectionIntlId}.title`}
         />
       </Link>
     </li>

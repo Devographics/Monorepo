@@ -6,7 +6,7 @@ import ReadingListResults from "~/components/reading_list/ReadingListResults";
 import { EditionMetadata, ResponseDocument } from "@devographics/types";
 import { ThanksBackButton } from "./ThanksBackButton";
 
-export const Thanks = ({
+export const Finish = ({
   edition,
   response,
   readOnly,
@@ -50,4 +50,4 @@ export const Thanks = ({
   );
 };
 
-export default Thanks;
+export default Finish;

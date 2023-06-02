@@ -1,4 +1,4 @@
-import Thanks from "~/components/pages/Thanks";
+import Finish from "~/components/pages/Finish";
 import { serverConfig } from "~/config/server";
 import { initRedis } from "@devographics/redis";
 import { rscMustGetSurveyEdition } from "../../rsc-fetchers";
@@ -11,7 +11,7 @@ import { redirect } from "next/navigation";
 // Uncomment to investigate
 // import { getResponseWithRanking } from "./getResponseWithRanking";
 
-const ThanksPage = async ({
+const FinishPage = async ({
   params: { responseId, slug, year },
 }: {
   params: {
@@ -29,7 +29,7 @@ const ThanksPage = async ({
   }
   const response = await rscMustGetResponse({ responseId, currentUser });
   const edition = await rscMustGetSurveyEdition({ slug, year });
-  return <Thanks response={response} edition={edition} />;
+  return <Finish response={response} edition={edition} />;
 };
 
-export default ThanksPage;
+export default FinishPage;

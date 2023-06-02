@@ -98,7 +98,7 @@ export function getEditionSectionPath({
   // TODO: why sometimes we have "id" vs "_id"? (_id coming from Mongo, id from Vulcan probably)
   response?: Partial<Pick<ResponseDocument, "_id">>;
   number?: any;
-  page?: "thanks";
+  page?: "finish";
 }) {
   const { surveySlug, editionSlug } = reverseSurveyParamsLookup({
     surveyId: edition.survey.id,

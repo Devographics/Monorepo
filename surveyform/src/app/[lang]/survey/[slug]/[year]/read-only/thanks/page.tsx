@@ -1,4 +1,4 @@
-import Thanks from "~/components/pages/Thanks";
+import Finish from "~/components/pages/Finish";
 import { serverConfig } from "~/config/server";
 import { initRedis } from "@devographics/redis";
 import { rscMustGetSurveyEdition } from "../../rsc-fetchers";
@@ -32,7 +32,7 @@ const ThanksPage = async ({
   // it's ok to fetch data again here after fetching in the layout
   // TODO: it seems we need to call this initialization code on all relevant pages/layouts
   const edition = await rscMustGetSurveyEdition({ slug, year });
-  return <Thanks readOnly={true} edition={edition} response={response} />;
+  return <Finish readOnly={true} edition={edition} response={response} />;
 };
 
 export default ThanksPage;

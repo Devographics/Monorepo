@@ -6,7 +6,6 @@
 3. Figure out completion percentage
 
 */
-import Link from "next/link";
 import { useState, useEffect } from "react";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import FormNavItem from "./FormNavItem";
@@ -15,7 +14,6 @@ import { Button } from "~/components/ui/Button";
 import { Loading } from "~/components/ui/Loading";
 import { useEdition } from "../SurveyContext/Provider";
 import { FormInputProps } from "~/components/form/typings";
-import { getSurveyImageUrl } from "~/lib/surveys/helpers";
 
 // TODO
 // const getOverallCompletionPercentage = (response) => {
@@ -23,7 +21,8 @@ import { getSurveyImageUrl } from "~/lib/surveys/helpers";
 // }
 
 const SurveyNav = (props: FormInputProps) => {
-  const { readOnly, response, stateStuff, section: currentSection } = props;
+  const { section: currentSection, ...propsWithoutSection } = props;
+  const { readOnly, response, stateStuff } = propsWithoutSection;
   const {
     currentFocusIndex,
     currentTabindex,
@@ -105,7 +104,7 @@ const SurveyNav = (props: FormInputProps) => {
           <ul className="section-nav-items">
             {sections.map((section, i) => (
               <FormNavItem
-                {...props}
+                {...propsWithoutSection}
                 section={section}
                 currentSection={currentSection}
                 setShown={setShown}
@@ -114,6 +113,14 @@ const SurveyNav = (props: FormInputProps) => {
                 setNavLoading={setNavLoading}
               />
             ))}
+            <FormNavItem
+              {...propsWithoutSection}
+              page="finish"
+              currentSection={currentSection}
+              setShown={setShown}
+              number={sections.length}
+              setNavLoading={setNavLoading}
+            />
             {/* {response && <li>Overall: {getOverallCompletionPercentage(response)}%</li>} */}
           </ul>
           {/* <p className="completion-message">

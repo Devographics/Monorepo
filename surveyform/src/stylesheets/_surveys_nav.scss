@@ -84,6 +84,8 @@
   border-radius: 100%;
   height: 50px;
   width: 50px;
+  display: grid !important;
+  place-items: center;
   &-label {
     position: absolute;
     z-index: 4;
@@ -96,14 +98,15 @@
     font-size: $smallish-font;
   }
   svg {
-    position: absolute;
+    display: block;
+    position: relative;
     z-index: 3;
-    height: 100%;
-    width: 100%;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    top: 0;
+    height: 80%;
+    width: 80%;
+    // left: 0;
+    // bottom: 0;
+    // right: 0;
+    // top: 0;
   }
 }
 
