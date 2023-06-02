@@ -69,7 +69,6 @@ const SurveyNav = (props: FormInputProps) => {
     };
   }, [currentFocusIndex]);
 
-  console.log({ response });
   return (
     <nav
       className={`section-nav ${

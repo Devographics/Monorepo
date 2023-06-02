@@ -34,34 +34,45 @@ export const FormSubmit = (props: FormSubmitProps) => {
   const router = useRouter();
 
   const pathProps = { readOnly, edition, response };
-  const nextPath = nextSection
-    ? getEditionSectionPath({
-        ...pathProps,
-        number: sectionNumber + 1,
-        locale,
-      })
-    : getEditionSectionPath({
-        ...pathProps,
-        page: "finish",
-        locale,
-      });
 
+  // in "outline" mode, there is no last step
+  let nextState: "finish" | "next" | undefined;
+  let nextPath;
+  console.log("respnse", response);
+  if (nextSection) {
+    nextState = "next";
+    nextPath = getEditionSectionPath({
+      ...pathProps,
+      number: sectionNumber + 1,
+      locale,
+    });
+  } else if (response) {
+    nextState = "finish";
+    nextPath = getEditionSectionPath({
+      ...pathProps,
+      page: "finish",
+      locale,
+    });
+  }
   useEffect(() => {
-    // Prefetch the next page
-    router.prefetch(nextPath);
-  }, []);
+    if (nextPath) {
+      // Prefetch the next page
+      router.prefetch(nextPath);
+    }
+  }, [nextPath]);
 
   return (
     <div className={`form-submit form-section-nav`}>
       <div className="form-submit-actions">
-        {nextSection ? (
+        {nextState === "next" && (
           <SubmitButton
             {...props}
             type="next"
             intlId={`sections.${nextSection.intlId || nextSection.id}.title`}
             path={nextPath}
           />
-        ) : (
+        )}
+        {nextState === "finish" && (
           <SubmitButton
             {...props}
             type="next"
@@ -86,12 +97,6 @@ export const FormSubmit = (props: FormSubmitProps) => {
           <div className="prev-placeholder" />
         )}
       </div>
-
-      {/* {showMessage && (
-        <div className="form-submit-help">
-          <FormattedMessage id="general.data_is_saved" />
-        </div>
-      )} */}
     </div>
   );
 };

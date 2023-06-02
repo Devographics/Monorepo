@@ -5,6 +5,8 @@
 import { testSurvey } from "../../fixtures/testSurvey";
 // Set to english (NOTE: this won't work in before.ts)
 import { LOCALE_COOKIE_NAME } from "~/i18n/cookie";
+import { curry } from "cypress/types/lodash";
+import { routes } from "~/lib/routes";
 
 beforeEach(() => {
   //  // NOTE: those operations are expensive! When testing less-critical part of your UI,
@@ -45,9 +47,10 @@ test("access 2022 survey", () => {
   cy.url().should("match", /survey\/state-of-graphql\/2022/)
   cy.findByText(/now closed/i).should("be.visible")
 })
-test("accessing a closed survey with an account that did not exist should return an empty read-only form", () => {
+test("accessing a closed survey with an account that did not exist should return an empty outline form", () => {
   cy.visit("/survey/state-of-js/2022")
   cy.findByText(/now closed/i).should("be.visible")
+  cy.visit(routes.survey.outline.href({ slug: "state-of-js", year: "2022" }))
   // TODO: auth with email, reuse logic from magicLogin
 })
 test.skip("accessing closed survey should load response", () => {
