@@ -34,7 +34,7 @@ test("Access state of 2022, anonymous auth", () => {
   cy.findByRole("link", { name: CURRENT_SURVEY_REGEX }).click();
   const surveyRootUrl = "en-US" + routes.survey.root.href + CURRENT_SURVEY_URL;
   cy.url().should("match", new RegExp(surveyRootUrl));
-  getContinueAsGuestButton().click();
+  getContinueAsGuestButton().scrollIntoView().click();
   // TODO: replace by the english label when i18n is there
   // FIXME: this is not language resistant...
   // @see https://github.com/cypress-io/cypress/issues/7890
@@ -57,6 +57,6 @@ test("Access state of 2022, anonymous auth", () => {
 
 test("open login page directly", () => {
   cy.visit("/account/login")
-  getContinueAsGuestButton().click()
+  getContinueAsGuestButton().scrollIntoView().click()
   cy.url().should("match", new RegExp(routes.home.href))
 })
