@@ -28,12 +28,13 @@ export const FormLayout = (props: FormLayoutProps) => {
   return (
     <div className="survey-layout">
       <FormNav {...props} />
-      <SurveySectionHeading
-        section={section}
-        sectionNumber={sectionNumber}
-        edition={edition}
-      />
+
       <div className="survey-section">
+        <SurveySectionHeading
+          section={section}
+          sectionNumber={sectionNumber}
+          edition={edition}
+        />
         <div className="section-contents">
           <div className="section-questions" id="section-questions">
             <FormElement {...props}>

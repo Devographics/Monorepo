@@ -97,26 +97,27 @@
 }
 
 // Survey Section
-.survey-section,
-.section-heading {
+.survey-section {
   @include large {
     display: grid;
+    grid-template-rows: auto auto;
     grid-template-columns: 2fr 1fr;
-    grid-template-areas: "contents sidebar";
+    grid-template-areas:
+      "heading heading"
+      "contents sidebar";
     column-gap: $spacing;
   }
   @include xlarge {
     display: grid;
     grid-template-columns: 1fr 3fr 1fr;
-    grid-template-areas: "empty contents sidebar";
+    grid-template-areas: "heading contents sidebar";
     column-gap: $spacing * 2;
   }
 }
-.survey-section-title {
-  grid-area: empty;
+.section-heading {
+  grid-area: heading;
 }
-.section-contents,
-.section-heading-contents {
+.section-contents {
   grid-area: contents;
 }
 .section-sidebar {
@@ -141,10 +142,16 @@
     background: var(--bg-color-light);
   }
   @include medium-large {
-    margin-bottom: $spacing * 2;
+    margin-bottom: $spacing;
   }
 }
-
+.section-heading-contents {
+  @include xlarge {
+    text-align: right;
+    position: sticky;
+    top: $spacing * 2;
+  }
+}
 .section-title {
   @include small-medium {
     font-size: $larger-font;
