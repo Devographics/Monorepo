@@ -42,7 +42,7 @@ export const FormSubmit = (props: FormSubmitProps) => {
       })
     : getEditionSectionPath({
         ...pathProps,
-        page: "thanks",
+        page: "finish",
         locale,
       });
 
