@@ -8,6 +8,7 @@ import { ReactNode } from "react";
 import { SectionMetadata } from "@devographics/types";
 import { FormError } from "./FormError";
 import ReadingList from "../reading_list/ReadingList";
+import FormSectionMessage from "./FormSectionMessage";
 
 interface FormLayoutProps extends FormInputProps {
   children: ReactNode;
@@ -25,8 +26,10 @@ export const FormLayout = (props: FormLayoutProps) => {
     nextSection,
     previousSection,
   } = props;
+
   return (
     <div className="survey-layout">
+      {section.messageId && <FormSectionMessage section={section} />}
       <FormNav {...props} />
 
       <div className="survey-section">

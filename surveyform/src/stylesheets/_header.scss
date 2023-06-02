@@ -1,6 +1,7 @@
 .nav-wrapper {
+  padding-top: $spacing;
   padding-bottom: $spacing;
-  margin: $spacing;
+  // margin: $spacing;
   display: flex;
   justify-content: space-between;
   align-items: center;

@@ -91,6 +91,7 @@ export type Credit = {
 
 export type Section = {
     id: string
+    messageId?: string
     intlId?: string
     slug: string // TODO: maybe get rid of this?
     questions: Question[]

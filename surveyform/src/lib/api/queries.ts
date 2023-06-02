@@ -105,6 +105,7 @@ query ${editionId}MetadataQuery {
         }
         sections(include: outlineOnly) {
           id
+          messageId
           slug
           intlId
           questions {

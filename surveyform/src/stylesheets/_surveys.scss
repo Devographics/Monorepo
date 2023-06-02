@@ -203,3 +203,9 @@
   // grid-template-columns: 1fr 1fr;
   // gap: math.div($spacing, 2);
 }
+.form-section-message {
+  background: var(--bg-color-light);
+  padding: $spacing;
+  margin-bottom: $spacing;
+  background: $greenTransparent;
+}

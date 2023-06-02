@@ -85,13 +85,7 @@ const SurveyNavItem = ({
       {/** TODO: was a NavLink previously from bootstrap */}
       <Link
         //exact={true}
-        href={getEditionSectionPath({
-          edition,
-          number,
-          forceReadOnly: readOnly,
-          response,
-          locale,
-        })}
+        href={path}
         ref={textInput}
         tabIndex={currentTabindex === number ? 0 : -1}
         onFocus={() => {

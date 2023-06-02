@@ -97,6 +97,8 @@ type CreditItem {
 
 type SectionMetadata {
     id: String
+    # optionally, a message at the top of the section
+    messageId: String
     # used to override id when building field paths
     slug: String
     intlId: String

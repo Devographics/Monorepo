@@ -157,7 +157,8 @@ Page-specific styles
   margin: 0 auto $spacing * 2 auto;
 }
 
-.main-contents {
+.main-contents,
+.header {
   flex: 1 0 auto;
   padding: $spacing;
 
