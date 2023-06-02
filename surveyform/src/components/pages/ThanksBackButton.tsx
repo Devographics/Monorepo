@@ -23,7 +23,7 @@ export const ThanksBackButton = ({
           href={getEditionSectionPath({
             edition,
             response,
-            forceReadOnly: readOnly,
+            readOnly,
             number: edition.sections.length,
             locale,
           })}

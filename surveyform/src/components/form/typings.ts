@@ -9,7 +9,11 @@ import {
 } from "@devographics/types";
 
 export type FormInputProps = {
-  response: ResponseDocument;
+  /**
+   * NOTE: in read-only mode there might be no response
+   * All form inputs have to be robust to this scenario
+   */
+  response?: ResponseDocument;
   path: string;
   value: string | number | string[] | number[];
   survey: SurveyMetadata;

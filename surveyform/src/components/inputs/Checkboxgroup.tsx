@@ -16,7 +16,7 @@ const OtherComponent = (props: FormInputProps) => {
   const { edition, question, updateCurrentValues, response, readOnly } = props;
   const formPaths = getFormPaths({ edition, question });
   const path = formPaths.other!;
-  const value = response[path];
+  const value = response?.[path];
 
   // keep track of whether "other" field is shown or not
   const [showOther, setShowOther] = useState(!!value);
@@ -99,7 +99,9 @@ export const FormComponentCheckboxGroup = (props: FormInputProps) => {
     );
   }
 
-  const options = randomize ? seededShuffle(options_, response._id) : options_;
+  const options = randomize
+    ? seededShuffle(options_, response?._id || "outline")
+    : options_;
 
   const value = value_ as Array<string | number>;
 

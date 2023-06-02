@@ -2,18 +2,18 @@
 import { ResponseDocument } from "@devographics/types";
 import React, { createContext, useContext, useState } from "react";
 
-const ResponseContext = createContext<
-  | {
-      response: ResponseDocument;
-      /**
-       * TODO: this is a palliative to force updating the value after we save the response
-       * Otherwise, "router.push" will soft navigate => it won't refetch the response
-       * @see https://github.com/vercel/next.js/issues/49387
-       */
-      updateResponseFromClient: (response: ResponseDocument) => void;
-    }
-  | undefined
->(undefined);
+interface ResponseContextType {
+  response: ResponseDocument | null;
+  /**
+   * TODO: this is a palliative to force updating the value after we save the response
+   * Otherwise, "router.push" will soft navigate => it won't refetch the response
+   * @see https://github.com/vercel/next.js/issues/49387
+   */
+  updateResponseFromClient: (response: ResponseDocument) => void;
+}
+const ResponseContext = createContext<ResponseContextType | undefined>(
+  undefined
+);
 
 export const ResponseProvider = ({
   response,
@@ -45,16 +45,22 @@ export const ResponseProvider = ({
   );
 };
 
-export const useResponse = () => {
+export const useResponse = (): ResponseContextType => {
   const context = useContext(ResponseContext);
   if (!context) {
+    return {
+      response: null,
+      updateResponseFromClient: () => {
+        throw new Error(
+          "Called updateResponseFromClient without verifying if there was a response"
+        );
+      },
+    };
+    /*
     throw new Error(
-      "Called useResponseId before setting ResponseIdProvider context"
+      "Called useResponse before setting ResponseIdProvider context"
     );
+    */
   }
   return context;
-};
-
-export const useResponseId = () => {
-  return useResponse().response._id;
 };

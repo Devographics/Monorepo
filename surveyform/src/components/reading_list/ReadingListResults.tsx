@@ -141,6 +141,7 @@ export const SendByEmail = ({
   };
 
   const handleSubmit = async () => {
+    if (!response) throw new Error("Can send reading list in read-only mode");
     setLoading(true);
     const res = await sendReadingList({
       responseId: response._id,

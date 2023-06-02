@@ -1,3 +1,5 @@
+import { string } from "zod";
+
 export const outlineSegment = "outline"
 /**
  * Route manifest
@@ -37,5 +39,6 @@ export const routes = {
   // state of js
   survey: {
     root: { href: "/survey" },
+    home: { href: ({ slug, year }: { slug: string, year: string }) => `/survey/${slug}/${year}` }
   },
 };

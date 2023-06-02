@@ -32,7 +32,7 @@ const SurveyNav = (props: FormInputProps) => {
   const [navLoading, setNavLoading] = useState(false);
   const [shown, setShown] = useState(false);
 
-  const { edition, editionHomePath } = useEdition();
+  const { edition } = useEdition();
 
   const sections = edition.sections; //surveys.find((o) => o.slug === survey.slug)?.outline;
   if (!sections) {
@@ -69,6 +69,7 @@ const SurveyNav = (props: FormInputProps) => {
     };
   }, [currentFocusIndex]);
 
+  console.log({ response });
   return (
     <nav
       className={`section-nav ${
@@ -113,14 +114,17 @@ const SurveyNav = (props: FormInputProps) => {
                 setNavLoading={setNavLoading}
               />
             ))}
-            <FormNavItem
-              {...propsWithoutSection}
-              page="finish"
-              currentSection={currentSection}
-              setShown={setShown}
-              number={sections.length}
-              setNavLoading={setNavLoading}
-            />
+            {!!response && (
+              // finish step is not available in "outline" mode (read-only + no response)
+              <FormNavItem
+                {...propsWithoutSection}
+                page="finish"
+                currentSection={currentSection}
+                setShown={setShown}
+                number={sections.length}
+                setNavLoading={setNavLoading}
+              />
+            )}
             {/* {response && <li>Overall: {getOverallCompletionPercentage(response)}%</li>} */}
           </ul>
           {/* <p className="completion-message">

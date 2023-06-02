@@ -4,7 +4,7 @@ import { PlusIcon } from "~/components/icons";
 
 export const AddToList = (props: FormItemProps) => {
   const { updateCurrentValues, question, response } = props;
-  const readingList = response.readingList || [];
+  const readingList = response?.readingList || [];
   return (
     <div className="add-to-list">
       <PlusIcon

@@ -14,7 +14,7 @@ const OtherComponent = (props: FormInputProps) => {
   const { edition, question, updateCurrentValues, response, readOnly } = props;
   const formPaths = getFormPaths({ edition, question });
   const path = formPaths.other!;
-  const value = response[path];
+  const value = response?.[path];
 
   const [showOther, setShowOther] = useState(!!value);
 

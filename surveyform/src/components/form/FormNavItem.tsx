@@ -38,6 +38,7 @@ const SurveyNavItem = ({
   const { edition } = useEdition();
   const completion =
     (section &&
+      response &&
       getSectionCompletionPercentage({
         edition,
         section,
@@ -58,6 +59,7 @@ const SurveyNavItem = ({
     number,
     locale,
     page,
+    readOnly,
   });
 
   useEffect(() => {

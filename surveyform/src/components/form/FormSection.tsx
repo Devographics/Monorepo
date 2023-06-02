@@ -17,7 +17,11 @@ const initFormState = (response) => ({
   deletedValues: {},
 });
 
-const mergeWithResponse = (response, currentValues, deletedValues) => {
+const mergeWithResponse = (
+  response: ResponseDocument,
+  currentValues: Partial<ResponseDocument>,
+  deletedValues
+) => {
   return { ...response, ...currentValues };
 };
 
@@ -25,10 +29,11 @@ export const FormSection = (
   props: {
     edition: Edition;
     section: Section;
-    response: ResponseDocument;
+    // in outline mode there is no response
+    response?: ResponseDocument;
     sectionNumber: number;
     readOnly?: boolean;
-  } & any /** TODO: finish typing */
+  } & any /** TODO: those are form input props? */
 ) => {
   const {
     edition,
@@ -88,6 +93,11 @@ export const FormSection = (
     beforeSubmitCallback: any;
     afterSubmitCallback: any;
   }) => {
+    if (!response) {
+      throw new Error(
+        "Can't submit for if there is no response (read-only or outline mode)"
+      );
+    }
     setErrorResponse(undefined);
     const { currentValues } = formState;
     if (readOnly || isEmpty(currentValues)) {
@@ -122,16 +132,18 @@ export const FormSection = (
       }
       // TODO: @see https://github.com/vercel/next.js/issues/49387#issuecomment-1564539515
       updateResponseFromClient(res.data!);
-      console.log("res", res);
       router.push(path);
     }
   };
 
-  const response = mergeWithResponse(
-    originalResponse,
-    formState.currentValues,
-    formState.deletedValues
-  );
+  // keep response undefined if it was not provided (read-only mode)
+  const response =
+    originalResponse &&
+    mergeWithResponse(
+      originalResponse,
+      formState.currentValues,
+      formState.deletedValues
+    );
 
   // number is 1-based, so use 0-based index instead
   const sectionIndex = sectionNumber - 1;
@@ -179,26 +191,3 @@ export const FormSection = (
 };
 
 export default FormSection;
-
-/* 
-
-ErrorBoundary triggers TS error, disable for now
-
-<ErrorBoundary
-  key={question.id}
-  fallbackComponent={({ error }) => (
-    <p>
-      Could not load question {question.id} ({error?.message})
-    </p>
-  )}
->
-  <FormQuestion
-    {...formProps}
-    key={question.id}
-    question={question}
-    sectionNumber={sectionNumber}
-    questionNumber={index + 1}
-  />
-</ErrorBoundary> 
-
-*/

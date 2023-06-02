@@ -8,7 +8,7 @@ import { useSection } from "../SectionContext/SectionProvider";
 
 const SurveySectionContents = ({
   response,
-  readOnly: readOnlyRoute,
+  readOnly,
 }: {
   response?: ResponseDocument;
   readOnly?: boolean;
@@ -28,7 +28,7 @@ const SurveySectionContents = ({
     response,
     section,
     edition,
-    readOnly: readOnlyRoute || edition.status === SurveyStatusEnum.CLOSED,
+    readOnly,
   };
   return (
     <div className="survey-section-wrapper">

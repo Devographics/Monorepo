@@ -16,12 +16,12 @@ export const Email2 = (props: FormInputProps) => {
   const { response, question, updateCurrentValues, readOnly } = props;
 
   const { id: questionId } = question;
-  const checkboxValue = response.receiveNotifications;
+  const checkboxValue = response?.receiveNotifications;
   const intl = useIntlContext();
 
   const localStorageEmail =
     typeof localStorage !== "undefined" && localStorage.getItem("email");
-  const responseEmail = response.email;
+  const responseEmail = response?.email;
   // const value = localStorageEmail && isEmpty(responseEmail) ? localStorageEmail : (responseEmail as string);
   const value = localStorageEmail || responseEmail;
 

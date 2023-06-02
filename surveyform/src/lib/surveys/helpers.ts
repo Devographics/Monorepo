@@ -4,7 +4,6 @@ import {
   SectionMetadata,
   QuestionMetadata,
   DbPaths,
-  SurveyStatusEnum,
 } from "@devographics/types";
 import { isAbsoluteUrl } from "~/lib/utils";
 import { LocaleDef } from "~/i18n/typings";
@@ -84,7 +83,7 @@ export const getEditionTitle = ({
 export function getEditionSectionPath({
   edition,
   locale,
-  forceReadOnly,
+  readOnly,
   response,
   page,
   number,
@@ -93,8 +92,8 @@ export function getEditionSectionPath({
   edition: EditionMetadata;
   /** [state-of-js, 2022] */
   locale: LocaleDef;
-  // forceReadOnly (no response needed in this case)
-  forceReadOnly?: boolean;
+  /** No response is needed in read only mode */
+  readOnly?: boolean;
   // section
   // TODO: why sometimes we have "id" vs "_id"? (_id coming from Mongo, id from Vulcan probably)
   response?: Partial<Pick<ResponseDocument, "_id">>;
@@ -106,11 +105,6 @@ export function getEditionSectionPath({
     editionId: edition.id,
   });
   const pathSegments = [locale.id, "survey", surveySlug, editionSlug];
-  // survey home
-  const readOnly =
-    forceReadOnly ||
-    !edition.status ||
-    [SurveyStatusEnum.CLOSED].includes(edition.status);
 
   if (readOnly) {
     pathSegments.push(outlineSegment);
