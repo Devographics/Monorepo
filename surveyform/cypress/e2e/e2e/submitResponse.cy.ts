@@ -6,7 +6,7 @@ import { testSurvey } from "../../fixtures/testSurvey";
 import { routes } from "~/lib/routes";
 // Set to english (NOTE: this won't work in before.ts)
 import { LOCALE_COOKIE_NAME } from "~/i18n/cookie";
-import { getContinueAsGuestButton } from "../../helpers/getters";
+import { getContinueAsGuestButton, getLinkToSection } from "../../helpers/getters";
 
 before(() => {
   // NOTE: those operations are expensive! When testing less-critical part of your UI,
@@ -55,14 +55,11 @@ test("Access state of 2022, signup, start filling form", () => {
   }).click();
   cy.url().should("match", new RegExp(surveyRootUrl + "/.+" + "/2"));
   // skip to last section
-  const lastSectionLinkName = /About You|sections\.user_info\.title/i;
-  cy.findByRole("link", {
-    name: lastSectionLinkName,
-  }).click();
+  getLinkToSection(/About You|sections\.user_info\.title/i).click()
   cy.url().should("match", new RegExp(surveyRootUrl + "/.+" + "/\\d+"));
   // finish
   cy.findByRole("button", {
     name: /Finish survey|general\.finish_survey/i,
   }).click();
-  cy.url().should("match", new RegExp("thanks"));
+  cy.url().should("match", new RegExp("finish"));
 });

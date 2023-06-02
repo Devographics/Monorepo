@@ -7,8 +7,8 @@ interface SurveySectionParams {
   sectionNumber: string;
 }
 
-// revalidate only every 12h
-export const revalidate = 60 * 60 * 12;
+// revalidate only every 1h
+export const revalidate = 60 * 60 * 1;
 
 export default async function WithSectionLayout({
   children,

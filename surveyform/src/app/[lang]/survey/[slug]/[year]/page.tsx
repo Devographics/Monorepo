@@ -8,6 +8,10 @@ import { StringsRegistry } from "@devographics/react-i18n";
 import { rscFetchLocaleFromUrl } from "~/i18n/server/rsc-fetchers";
 import { rscMustGetSurveyEdition } from "./rsc-fetchers";
 
+// revalidate survey/entities every 5 minutes
+const SURVEY_TIMEOUT_SECONDS = 5 * 60;
+export const revalidate = SURVEY_TIMEOUT_SECONDS;
+
 async function getSurveyIntro(
   editionId: string,
   lang: string

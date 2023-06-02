@@ -9,10 +9,6 @@ import { rscMustGetSurveyEdition } from "./rsc-fetchers";
 
 const cachedGetLocales = cache(fetchAllLocalesMetadata);
 
-// revalidate survey/entities every 5 minutes
-const SURVEY_TIMEOUT_SECONDS = 5 * 60;
-export const revalidate = SURVEY_TIMEOUT_SECONDS;
-
 // TODO: not yet compatible with having dynamic pages down the tree
 // we may have to call generateStaticParams in each static page instead
 // @see https://github.com/vercel/next.js/issues/44712

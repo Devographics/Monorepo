@@ -71,9 +71,7 @@ test("authenticated user starts then update survey", () => {
       method: "POST",
       url: apiRoutes.responses.saveResponse.href({ responseId }),
       body: {
-        // TODO: is it a partial or full-update? I think partial
-        // TODO: pass actual data, and get the response back to see if they were saved
-        data: {}
+        lastSavedAt: new Date()
       },
     })
       .its("status")
@@ -126,7 +124,7 @@ test("authenticated or unauthenticated users cannot save someone else survey", (
       method: "POST",
       url: apiRoutes.responses.saveResponse.href({ responseId }),
       body: {
-        data: {}
+        lastSavedAt: new Date()
       },
       // we specificallly test a failure
       failOnStatusCode: false,
@@ -139,7 +137,7 @@ test("authenticated or unauthenticated users cannot save someone else survey", (
       method: "POST",
       url: apiRoutes.responses.saveResponse.href({ responseId }),
       body: {
-        data: {}
+        lastSavedAt: new Date()
       },
       // we specificallly test a failure
       //failOnStatusCode: false,

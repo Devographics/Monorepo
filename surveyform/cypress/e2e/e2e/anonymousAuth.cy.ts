@@ -3,7 +3,7 @@ import { routes } from "~/lib/routes";
 // Set to english (NOTE: this won't work in before.ts)
 import { LOCALE_COOKIE_NAME } from "~/i18n/cookie";
 import { startSurveyButtonName } from "../../helpers/selectors";
-import { getContinueAsGuestButton } from "../..//helpers/getters";
+import { getContinueAsGuestButton, openNavigationMenu } from "../..//helpers/getters";
 
 before(() => {
   // NOTE: those operations are expensive! When testing less-critical part of your UI,
@@ -43,6 +43,7 @@ test("Access state of 2022, anonymous auth", () => {
   }).click();
   cy.url().should("match", new RegExp(surveyRootUrl + "/.+"));
   // skip to last section
+  openNavigationMenu()
   cy.findByRole("link", {
     name: /About You|sections\.user_info\.title/i,
   }).click();
@@ -51,11 +52,11 @@ test("Access state of 2022, anonymous auth", () => {
   cy.findByRole("button", {
     name: /Finish survey|general\.finish_survey/i,
   }).click();
-  cy.url().should("match", new RegExp("thanks"));
+  cy.url().should("match", new RegExp("finish"));
 });
 
 test("open login page directly", () => {
   cy.visit("/account/login")
   getContinueAsGuestButton().click()
-  cy.url().should("match", routes.home.href)
+  cy.url().should("match", new RegExp(routes.home.href))
 })

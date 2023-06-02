@@ -35,7 +35,7 @@ const SurveyFromResponseIdPage = async ({
 
   // read-only mode
   if (
-    [SurveyStatusEnum.OPEN, SurveyStatusEnum.PREVIEW].includes(edition.status)
+    ![SurveyStatusEnum.OPEN, SurveyStatusEnum.PREVIEW].includes(edition.status)
   ) {
     return <SurveySectionReadOnly response={response} />;
   }

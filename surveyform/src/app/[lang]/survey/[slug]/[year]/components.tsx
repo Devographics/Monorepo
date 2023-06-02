@@ -91,10 +91,8 @@ export const EditionPage = ({
           <img
             width={600}
             height={400}
-            //priority={true}
             src={imageUrl}
             alt={`${name} ${edition.year}`}
-            // quality={100}
           />
         </h1>
       )}
