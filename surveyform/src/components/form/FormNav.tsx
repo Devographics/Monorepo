@@ -15,6 +15,7 @@ import { Button } from "~/components/ui/Button";
 import { Loading } from "~/components/ui/Loading";
 import { useEdition } from "../SurveyContext/Provider";
 import { FormInputProps } from "~/components/form/typings";
+import { getSurveyImageUrl } from "~/lib/surveys/helpers";
 
 // TODO
 // const getOverallCompletionPercentage = (response) => {
@@ -22,7 +23,7 @@ import { FormInputProps } from "~/components/form/typings";
 // }
 
 const SurveyNav = (props: FormInputProps) => {
-  const { readOnly, response, stateStuff } = props;
+  const { readOnly, response, stateStuff, section: currentSection } = props;
   const {
     currentFocusIndex,
     currentTabindex,
@@ -77,11 +78,11 @@ const SurveyNav = (props: FormInputProps) => {
       aria-label={`${edition.survey.name} ${edition.year}`}
     >
       <div className="section-nav-inner">
-        <h2 className="section-nav-heading">
+        {/* <h2 className="section-nav-heading">
           <Link href={editionHomePath}>
             {edition.survey.name} {edition.year}
           </Link>
-        </h2>
+        </h2> */}
         <Button
           className="section-nav-head"
           onClick={(e) => {
@@ -92,20 +93,21 @@ const SurveyNav = (props: FormInputProps) => {
             <h3 className="section-nav-toc">
               <FormattedMessage id="general.table_of_contents" />
             </h3>
-            {overallCompletion && (
+            {/* {overallCompletion && (
               <span className="section-nav-completion">
                 {overallCompletion}%
               </span>
-            )}
+            )} */}
           </span>
           <span className="section-nav-toggle">{shown ? "▼" : "▶"}</span>
         </Button>
         <div className="section-nav-contents">
-          <ul>
+          <ul className="section-nav-items">
             {sections.map((section, i) => (
               <FormNavItem
                 {...props}
-                currentSection={section}
+                section={section}
+                currentSection={currentSection}
                 setShown={setShown}
                 number={i + 1}
                 key={i}
@@ -114,9 +116,9 @@ const SurveyNav = (props: FormInputProps) => {
             ))}
             {/* {response && <li>Overall: {getOverallCompletionPercentage(response)}%</li>} */}
           </ul>
-          <p className="completion-message">
+          {/* <p className="completion-message">
             <FormattedMessage id="general.all_questions_optional" />
-          </p>
+          </p> */}
         </div>
         {navLoading && (
           <div className="section-nav-loading">

@@ -49,7 +49,7 @@ export const useEdition = (dontThrow?: boolean): EditionContextType => {
   if (!context) {
     // TODO: a hack to support calling in the login form
     if (dontThrow) return null as unknown as EditionContextType;
-    throw new Error("Called useSurvey before setting SurveyProvider context");
+    throw new Error("Called useEdition before setting EditionProvider context");
   }
   return context;
 };

@@ -27,15 +27,15 @@ export const FormLayout = (props: FormLayoutProps) => {
   } = props;
   return (
     <div className="survey-layout">
+      <FormNav {...props} />
+      <SurveySectionHeading
+        section={section}
+        sectionNumber={sectionNumber}
+        edition={edition}
+      />
       <div className="survey-section">
-        <FormNav {...props} />
         <div className="section-contents">
           <div className="section-questions" id="section-questions">
-            <SurveySectionHeading
-              section={section}
-              sectionNumber={sectionNumber}
-              edition={edition}
-            />
             <FormElement {...props}>
               {children}
               <FormSubmit
@@ -46,7 +46,7 @@ export const FormLayout = (props: FormLayoutProps) => {
             </FormElement>
           </div>
         </div>
-        <div>
+        <div className="section-sidebar">
           <ReadingList {...props} />
         </div>
       </div>

@@ -32,9 +32,6 @@ const loggedInNavContents: Array<NavItemDef> = [
 const Navigation = () => {
   const { currentUser } = useCurrentUser();
   let navItems = navContents;
-  if (currentUser) {
-    navItems = [...navItems, ...loggedInNavContents];
-  }
   return (
     <div className="nav-wrapper">
       <Navbar

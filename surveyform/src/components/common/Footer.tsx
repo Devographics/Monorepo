@@ -13,6 +13,14 @@ export const Footer = () => {
     <footer className="footer">
       <div className="footer-top">
         &copy; 2022 <a href="https://devographics.com/">Devographics</a> |{" "}
+        {currentUser && (
+          <>
+            <Link href={routes.account.profile.href} passHref>
+              <FormattedMessage id="nav.account" />
+            </Link>{" "}
+            |
+          </>
+        )}{" "}
         <Link href="/privacy-policy" passHref>
           <FormattedMessage id="general.privacy_policy" />
         </Link>{" "}

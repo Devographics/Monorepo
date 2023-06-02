@@ -162,7 +162,7 @@ export const getQuestionObjects = ({ surveys }: { surveys: Survey[] }) => {
 
             if (allSections) {
                 for (const section of allSections) {
-                    for (const question of section.questions) {
+                    for (const question of section?.questions) {
                         const questionObject = getQuestionObject({
                             survey,
                             edition,

@@ -1,4 +1,5 @@
 .nav-wrapper {
+  padding-bottom: $spacing;
   margin: $spacing;
   display: flex;
   justify-content: space-between;
@@ -22,9 +23,15 @@
   margin-right: $spacing;
 }
 .nav-item-locale {
-  padding: $spacing 0;
   .loading {
     transform: translateX(-10px);
+  }
+}
+.nav-link {
+  &,
+  &:link,
+  &:visited {
+    color: var(--text-color);
   }
 }
 

@@ -97,7 +97,8 @@
 }
 
 // Survey Section
-.survey-section {
+.survey-section,
+.section-heading {
   @include large {
     display: grid;
     grid-template-columns: 1fr 3fr;
@@ -106,121 +107,19 @@
   @include xlarge {
     display: grid;
     grid-template-columns: 1fr 3fr 1fr;
+    grid-template-areas: "empty contents sidebar";
     column-gap: $spacing * 2;
   }
 }
-.section-contents {
+.survey-section-title {
+  grid-area: empty;
 }
-.section-nav {
-  // background: $bg-color-light;
-  // padding: $spacing;
-  @include large {
-    max-width: 280px;
-  }
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  a {
-    @include font-regular;
-  }
-  .active {
-    @include font-bold;
-    // color: $contrast-color;
-  }
-  li {
-    font-size: $medium-font;
-    margin-bottom: math.div($spacing, 4);
-    &:last-child {
-      margin: 0;
-    }
-  }
+.section-contents,
+.section-heading-contents {
+  grid-area: contents;
 }
-.section-nav-inner {
-  position: relative;
-}
-.section-nav-loading {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  right: 0px;
-  bottom: 0px;
-  background: rgba(255, 255, 255, 0.2);
-  display: grid;
-  place-items: center;
-  backdrop-filter: blur(5px);
-}
-.section-nav-heading {
-  font-size: $large-font;
-  margin-bottom: $spacing;
-  @include small-medium {
-    text-align: center;
-  }
-  @include large {
-    border-bottom: $border;
-    padding-bottom: $spacing;
-  }
-}
-.section-nav-head {
-  @include small-medium {
-    @include flex-center;
-    display: flex !important;
-    margin-bottom: $spacing;
-    width: 100%;
-    justify-content: space-between;
-    align-items: center;
-  }
-  @include large {
-    display: none !important;
-  }
-}
-.section-nav-head-left {
-  display: flex !important;
-  align-items: center;
-  gap: 8px;
-  line-height: 1;
-}
-.section-nav-toggle {
-  font-size: $medium-font;
-  @include large {
-    display: none;
-  }
-}
-.section-nav-hidden {
-  .section-nav-contents {
-    @include small-medium {
-      display: none;
-    }
-  }
-}
-.section-nav-contents {
-  @include small-medium {
-    margin-top: -$spacing - 1px;
-    @include border;
-    @include border-radius;
-    padding: $spacing;
-    margin-bottom: $spacing;
-  }
-}
-.section-nav-toc {
-  font-size: $medium-font;
-  margin: 0;
-  @include small-medium {
-    display: block;
-  }
-  @include large {
-    display: none;
-  }
-}
-.completion-message {
-  font-size: $small-font;
-  margin: $spacing 0 0 0;
-}
-.section-nav-completion,
-.section-nav-item-completion {
-  @include font-regular;
-  @include primary-font;
-  color: $text-color;
+.section-sidebar {
+  grid-area: sidebar;
 }
 .section-questions {
   max-width: 800px;
@@ -250,7 +149,7 @@
     font-size: $larger-font;
   }
   @include large {
-    font-size: $largest-font;
+    font-size: $largestest-font;
   }
   margin-bottom: math.div($spacing, 2);
   line-height: 1;
@@ -320,7 +219,7 @@
 }
 .reading-list-summary {
   position: sticky;
-  top: $spacing;
+  top: 150px;
   opacity: 0.3;
   transition: all 300ms ease-in;
   &:hover {

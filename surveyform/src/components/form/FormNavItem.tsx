@@ -12,7 +12,9 @@ import { FormInputProps } from "./typings";
 interface SurveyNavItemProps extends FormInputProps {
   setShown: any;
   number: number;
+  sectionNumber: number;
   setNavLoading: any;
+  section: SectionMetadata;
   currentSection: SectionMetadata;
 }
 
@@ -20,7 +22,9 @@ const SurveyNavItem = ({
   submitForm,
   response,
   currentSection,
+  section,
   number,
+  sectionNumber,
   setShown,
   stateStuff,
   readOnly,
@@ -30,12 +34,19 @@ const SurveyNavItem = ({
   const { locale } = useLocaleContext();
   const textInput = useRef<any>(null);
   const { edition } = useEdition();
-  const completion = getSectionCompletionPercentage({
-    edition,
-    section: currentSection,
-    response,
-  });
-  const showCompletion = completion !== null && completion > 0;
+  const completion =
+    getSectionCompletionPercentage({
+      edition,
+      section,
+      response,
+    }) || 0;
+  // const showCompletion = completion !== null && completion > 0;
+  const showCompletion = true;
+
+  const isCurrent = currentSection.id === section.id;
+  const currentClass = isCurrent ? "section-nav-item-current" : "";
+  const isBeforeCurrent = number < sectionNumber;
+  const beforeClass = isBeforeCurrent ? "section-nav-item-before-current" : "";
 
   const path = getEditionSectionPath({
     edition,
@@ -65,7 +76,7 @@ const SurveyNavItem = ({
   };
 
   return (
-    <li className="section-nav-item">
+    <li className={`section-nav-item ${currentClass} ${beforeClass}`}>
       {/** TODO: was a NavLink previously from bootstrap */}
       <Link
         //exact={true}
@@ -84,14 +95,35 @@ const SurveyNavItem = ({
         onBlur={() => {
           setCurrentFocusIndex(null);
         }}
+        className="section-nav-item-link"
         {...(!readOnly && { onClick: handleClick })}
       >
+        <span className="section-nav-item-completion  btn btn-primary">
+          {completion > 0 && (
+            <>
+              <span className="section-nav-item-completion-label">
+                <span>{completion}%</span>
+              </span>
+              <svg height="20" width="20" viewBox="0 0 20 20">
+                <circle r="10" cx="10" cy="10" fill="transparent" />
+                <circle
+                  r="5"
+                  cx="10"
+                  cy="10"
+                  fill="transparent"
+                  stroke="rgba(255, 255, 255, 0.2)"
+                  stroke-width="10"
+                  stroke-dasharray={`calc(${completion} * 31.4 / 100) 31.4`}
+                  transform="rotate(-90) translate(-20)"
+                />
+              </svg>
+            </>
+          )}
+        </span>
         <FormattedMessage
-          id={`sections.${currentSection.intlId || currentSection.id}.title`}
-        />{" "}
-        {showCompletion && (
-          <span className="section-nav-item-completion">{completion}%</span>
-        )}
+          className="section-nav-item-label"
+          id={`sections.${section.intlId || section.id}.title`}
+        />
       </Link>
     </li>
   );
