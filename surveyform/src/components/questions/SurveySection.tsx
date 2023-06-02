@@ -1,31 +1,22 @@
-"use client";
-
 import SurveySectionContents from "./SurveySectionContents";
-import { EditionMetadata } from "@devographics/types";
-import { Loading } from "~/components/ui/Loading";
-import { ResponseError } from "~/components/error/ResponseError";
-import { useResponse } from "../ResponseContext/ResponseProvider";
+import { EditionMetadata, ResponseDocument } from "@devographics/types";
 
-export const SurveySectionWithResponse = ({
-  responseId,
+export const SurveySection = ({
+  response,
 }: {
-  responseId: string;
+  response: ResponseDocument;
   sectionNumber: number;
   edition: EditionMetadata;
 }) => {
-  const { response } = useResponse();
-
-  /*
-  if (responseError) {
-    return (
-      <div>
-        <ResponseError responseError={responseError} />
-      </div>
-    );
-  }*/
   return <SurveySectionContents response={response} />;
 };
 
-export const SurveySectionReadOnly = () => {
+// show the user response in readonly mode
+export const SurveySectionReadOnly = ({ response }) => {
+  return <SurveySectionContents readOnly={true} response={response} />;
+};
+
+// just show the questions
+export const SurveySectionOutline = () => {
   return <SurveySectionContents readOnly={true} />;
 };

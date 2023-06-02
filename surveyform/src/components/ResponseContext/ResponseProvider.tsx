@@ -45,10 +45,6 @@ export const ResponseProvider = ({
   );
 };
 
-/**
- * Response id can be "read-only"
- * @returns
- */
 export const useResponse = () => {
   const context = useContext(ResponseContext);
   if (!context) {

@@ -1,3 +1,4 @@
+export const outlineSegment = "outline"
 /**
  * Route manifest
  * TODO: should be automatically generated based on the pages/app folder

@@ -9,6 +9,7 @@ import {
 import { isAbsoluteUrl } from "~/lib/utils";
 import { LocaleDef } from "~/i18n/typings";
 import { reverseSurveyParamsLookup } from "./data";
+import { outlineSegment } from "../routes";
 
 /*
 
@@ -59,7 +60,7 @@ export const getSurveyImageUrl = (
   let finalImageUrl = isAbsoluteUrl(imageUrl)
     ? imageUrl
     : // legacy behaviour
-      `/surveys/${imageUrl}`;
+    `/surveys/${imageUrl}`;
 
   return finalImageUrl;
 };
@@ -112,8 +113,7 @@ export function getEditionSectionPath({
     [SurveyStatusEnum.CLOSED].includes(edition.status);
 
   if (readOnly) {
-    const readOnlySegment = "read-only";
-    pathSegments.push(readOnlySegment);
+    pathSegments.push(outlineSegment);
   } else {
     if (!response) throw new Error("Undefined response");
     const responseSegment = response._id;

@@ -1,28 +1,14 @@
 import { redirect } from "next/navigation";
 import { rscCurrentUser } from "~/account/user/rsc-fetchers/rscCurrentUser";
 import { NextLayoutParams } from "~/app/typings";
+import { WithErrorCatcher } from "~/app/utils";
 import { ResponseProvider } from "~/components/ResponseContext/ResponseProvider";
 import { rscMustGetResponse } from "~/lib/responses/rsc-fetchers";
 import { routes } from "~/lib/routes";
-import { RscError } from "~/lib/rsc-error";
 
 // Important, otherwise the page will use ISR
 // https://github.com/vercel/next.js/issues/44712
 export const dynamic = "force-dynamic";
-
-function WithErrorCatcher(rsc: any) {
-  return async (...args: any) => {
-    try {
-      return await rsc(...args);
-    } catch (err) {
-      if (err instanceof RscError) {
-        return err.render();
-      }
-      // uncatched error
-      throw err;
-    }
-  };
-}
 
 export default WithErrorCatcher(async function ResponseLayout({
   children,
@@ -36,11 +22,14 @@ export default WithErrorCatcher(async function ResponseLayout({
   if (!responseId) {
     throw new Error("no responseId");
   }
-  // TODO: technically, we don't need the "responseId" parameter
+  // technically, we don't need the "responseId" parameter
   // the response can be retrieved given the current user
+  // but this RSC will also check if the response id/user matches
+  // for clearer error messages
   const response = await rscMustGetResponse({
     currentUser,
     responseId,
   });
+  // NOTE: this context is used only by client components
   return <ResponseProvider response={response}>{children}</ResponseProvider>;
 });

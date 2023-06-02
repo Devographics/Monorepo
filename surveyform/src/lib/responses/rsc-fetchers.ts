@@ -9,6 +9,8 @@ import { RscError } from "../rsc-error";
 /**
  * Get user response for a survey
  * Possible because we expect only one response per edition
+ * 
+ * Guarantees that the response belong to the passed user
  */
 export const rscMustGetUserResponse = cache(
     async ({ currentUser, slug, year }: { currentUser: UserDocument, slug: string, year: string }) => {
@@ -24,7 +26,11 @@ export const rscMustGetUserResponse = cache(
             return notFound();
         }
         if (responseFromDb.userId !== currentUser._id) {
-            throw new Error("Response retrieved from server doesn't belong to current user");
+            throw new RscError({
+                id: "response-non-matching-user-id",
+                message: "Response retrieved from server doesn't belong to current user",
+                status: 403
+            })
         }
         // There is no field to omit in the response anymore
         const response = responseFromDb
@@ -34,7 +40,11 @@ export const rscMustGetUserResponse = cache(
 
 /**
  * Get response from id
- */
+ * 
+ * Will throw:
+ * - if response userId doesn't match currentUser id
+ * - if response id doesn't match the provided responseId
+ *  */
 export const rscMustGetResponse = cache(
     async ({ responseId, currentUser }: { responseId: string, currentUser: UserDocument }) => {
         const Responses = await getRawResponsesCollection<ResponseDocument>();
