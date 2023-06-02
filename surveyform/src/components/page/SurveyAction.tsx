@@ -72,11 +72,10 @@ const EditionAction = ({ edition }: { edition: EditionMetadata }) => {
       }
     } else {
       // 2. the survey is no longer available
-      return (
-        <EditionLink
-          message="general.review_survey"
-          {...(hasResponse && { response })}
-        />
+      return hasResponse ? (
+        <EditionLink message="general.review_survey" response={response} />
+      ) : (
+        <EditionLink message="general.review_answers" readOnly={true} />
       );
     }
   };
@@ -175,13 +174,14 @@ Link to the "naked" survey path or to the actual response
 const EditionLink = ({
   response,
   message,
+  readOnly,
 }: {
   response?: ResponseDocument;
   message: string;
+  readOnly?: boolean;
 }) => {
   const { edition } = useEdition();
   const { locale } = useLocaleContext();
-  const readOnly = !response;
   return (
     <Link
       href={getEditionSectionPath({
