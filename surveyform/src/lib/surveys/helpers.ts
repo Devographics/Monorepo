@@ -109,8 +109,7 @@ export function getEditionSectionPath({
   if (readOnly) {
     pathSegments.push(outlineSegment);
   } else {
-    if (!response) throw new Error("Undefined response");
-    const responseSegment = response._id;
+    const responseSegment = response?._id;
     if (!responseSegment) {
       console.log(response);
       throw new Error(

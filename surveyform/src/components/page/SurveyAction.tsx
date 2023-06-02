@@ -181,16 +181,15 @@ const EditionLink = ({
 }) => {
   const { edition } = useEdition();
   const { locale } = useLocaleContext();
+  const readOnly = !response;
   return (
     <Link
-      href={
-        response?.pagePath ||
-        getEditionSectionPath({
-          edition,
-          response,
-          locale,
-        })
-      }
+      href={getEditionSectionPath({
+        edition,
+        response,
+        locale,
+        readOnly,
+      })}
       type="button"
       className="btn btn-primary"
     >
