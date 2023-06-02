@@ -1,0 +1,194 @@
+.reading-list-summary {
+  .reading-list {
+    &-title {
+      margin-bottom: $spacing/3;
+    }
+    &-description {
+      font-size: $smallish-font;
+    }
+    &-items {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+    &-item {
+      padding-top: $spacing/3;
+      margin-top: $spacing/3;
+      border-top: $border;
+      font-size: $medium-font;
+    }
+  }
+  @include small-medium {
+    margin-top: $spacing;
+  }
+}
+.reading-list-summary {
+  @include large {
+    position: sticky;
+    top: $spacing * 2;
+    opacity: 0.3;
+    transition: all 300ms ease-in;
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+.reading-list-results {
+  background: var(--bg-color-light);
+  padding: $spacing * 2;
+  margin-bottom: $spacing;
+  .reading-list {
+    &-title {
+      text-align: center;
+      font-size: $largeish-font;
+      text-transform: uppercase;
+      display: flex;
+      gap: $spacing/2;
+      align-items: center;
+      &::before,
+      &::after {
+        content: " ";
+        display: block;
+        height: 1px;
+        width: 100%;
+        background: var(--dark-border-color);
+      }
+      span {
+        flex: 1;
+        white-space: nowrap;
+      }
+    }
+    &-description {
+      font-size: $large-font;
+      margin-bottom: $spacing;
+      @include secondary-font;
+      text-align: center;
+    }
+    &-items {
+      margin-bottom: $spacing;
+    }
+    &-show-more {
+      display: flex;
+      justify-content: center;
+    }
+    &-item {
+      padding-top: $spacing;
+      margin-top: $spacing;
+      border-top: $border;
+      &-title {
+        display: flex;
+        align-items: center;
+        gap: $spacing/2;
+        margin-bottom: $spacing/2;
+      }
+      &-summary {
+        font-size: $medium-font;
+      }
+      &-links {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        gap: $spacing;
+      }
+    }
+
+    &-link-button {
+      display: flex;
+      align-items: center;
+      gap: $spacing/6;
+      padding: 4px 8px;
+      // @include primary-font;
+      span {
+        display: block;
+        line-height: 1;
+      }
+      svg {
+        width: 16px;
+        height: 16px;
+        position: relative;
+        top: -1px;
+      }
+    }
+    &-link {
+      background: var(--bg-color-lighter);
+      border-radius: 10px;
+      display: block;
+      color: var(--text-color);
+      font-weight: $medium;
+      @include primary-font;
+      font-size: $small-font;
+      padding: 3px 6px;
+      display: flex;
+      align-items: center;
+      gap: $spacing/6;
+      span {
+        display: block;
+        line-height: 1;
+      }
+      svg {
+        width: 16px;
+        height: 16px;
+        position: relative;
+        top: -1px;
+      }
+      &:hover {
+        background-color: var(--link-color);
+        text-decoration: none;
+      }
+    }
+    &-send {
+      padding-top: $spacing;
+      margin-top: $spacing;
+      border-top: $border;
+      &-title {
+        font-size: $large-font;
+        margin-bottom: $spacing;
+        @include secondary-font;
+        text-align: center;
+      }
+    }
+    &-form {
+      display: flex;
+      align-items: center;
+      gap: $spacing/2;
+    }
+  }
+
+  .survey-message {
+    margin: 0;
+    margin-top: $spacing;
+  }
+}
+@keyframes flash {
+  0% {
+    opacity: 0.8;
+    background: rgba(255, 255, 255, 0.15);
+  }
+  100% {
+    opacity: 0.3;
+    background: rgba(255, 255, 255, 0);
+  }
+}
+.reading-list-animate {
+  animation: flash ease-in 0.5s;
+}
+.add-to-list {
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  margin-left: $spacing/2;
+  .btn {
+    // border-radius: 100%;
+    border-radius: 0 0 0 3px;
+    aspect-ratio: 1/1;
+    padding: 3px;
+  }
+  svg {
+    height: 20px;
+    width: 20px;
+    display: block;
+  }
+}

@@ -1,4 +1,4 @@
-@use 'sass:math';
+@use "sass:math";
 :focus:not(:focus-visible) {
   outline: none;
 }
@@ -163,6 +163,12 @@ Page-specific styles
 
   @include small {
     padding: math.div($spacing, 2);
+  }
+  @include medium {
+    padding: $spacing;
+  }
+  @include large {
+    padding: $spacing $spacing * 2;
   }
 }
 

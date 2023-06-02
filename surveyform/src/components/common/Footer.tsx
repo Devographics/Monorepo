@@ -12,7 +12,7 @@ export const Footer = () => {
   return (
     <footer className="footer">
       <div className="footer-top">
-        &copy; 2022 <a href="https://devographics.com/">Devographics</a> |{" "}
+        &copy; 2023 <a href="https://devographics.com/">Devographics</a> |{" "}
         {currentUser && (
           <>
             <Link href={routes.account.profile.href} passHref>
@@ -24,7 +24,7 @@ export const Footer = () => {
         <Link href="/privacy-policy" passHref>
           <FormattedMessage id="general.privacy_policy" />
         </Link>{" "}
-        | <FormattedMessage id="general.emoji_icons" /> |{" "}
+        {/* | <FormattedMessage id="general.emoji_icons" /> |{" "} */}
         <FormattedMessage
           id="general.leave_issue"
           values={{
