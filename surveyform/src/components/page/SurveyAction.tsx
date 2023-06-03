@@ -73,9 +73,9 @@ const EditionAction = ({ edition }: { edition: EditionMetadata }) => {
     } else {
       // 2. the survey is no longer available
       return hasResponse ? (
-        <EditionLink message="general.review_survey" response={response} />
+        <EditionLink message="general.review_answers" response={response} />
       ) : (
-        <EditionLink message="general.review_answers" readOnly={true} />
+        <EditionLink message="general.review_survey" readOnly={true} />
       );
     }
   };
@@ -182,19 +182,38 @@ const EditionLink = ({
 }) => {
   const { edition } = useEdition();
   const { locale } = useLocaleContext();
+  const updatedAt = response && new Date(response.updatedAt);
   return (
-    <Link
-      href={getEditionSectionPath({
-        edition,
-        response,
-        locale,
-        readOnly,
-      })}
-      type="button"
-      className="btn btn-primary"
-    >
-      <FormattedMessage id={message} />
-    </Link>
+    <div className="edition-link">
+      <Link
+        href={getEditionSectionPath({
+          edition,
+          response,
+          locale,
+          readOnly,
+        })}
+        type="button"
+        className="btn btn-primary"
+      >
+        <FormattedMessage id={message} />
+      </Link>
+      {response && (
+        <div className="edition-response-details">
+          <p>
+            <FormattedMessage
+              id="general.last_modified_on"
+              values={{ updatedAt: updatedAt?.toDateString() }}
+            />
+          </p>
+          <p>
+            <FormattedMessage
+              id="general.completion"
+              values={{ completion: response.completion }}
+            />
+          </p>
+        </div>
+      )}
+    </div>
   );
 };
 

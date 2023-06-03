@@ -209,3 +209,13 @@
   margin-bottom: $spacing;
   background: $greenTransparent;
 }
+
+.edition-response-details {
+  margin-top: $spacing/2;
+  font-size: $smallish-font;
+  color: var(--text-color-dark);
+  text-align: center;
+  p {
+    margin-bottom: $spacing/4;
+  }
+}
