@@ -3,7 +3,7 @@ import { ResponseDocument } from "@devographics/types";
 import React, { createContext, useContext, useState } from "react";
 
 interface ResponseContextType {
-  response: ResponseDocument | null;
+  response?: ResponseDocument;
   /**
    * TODO: this is a palliative to force updating the value after we save the response
    * Otherwise, "router.push" will soft navigate => it won't refetch the response
@@ -50,7 +50,7 @@ export const useResponse = (): ResponseContextType => {
   const context = useContext(ResponseContext);
   if (!context) {
     return {
-      response: null,
+      response: undefined,
       updateResponseFromClient: () => {
         throw new Error(
           "Called updateResponseFromClient without verifying if there was a response"
