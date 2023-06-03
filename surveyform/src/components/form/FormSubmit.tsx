@@ -38,7 +38,6 @@ export const FormSubmit = (props: FormSubmitProps) => {
   // in "outline" mode, there is no last step
   let nextState: "finish" | "next" | undefined;
   let nextPath;
-  console.log("respnse", response);
   if (nextSection) {
     nextState = "next";
     nextPath = getEditionSectionPath({

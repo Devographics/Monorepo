@@ -131,8 +131,11 @@ export const FormSection = (
         return;
       }
       // TODO: @see https://github.com/vercel/next.js/issues/49387#issuecomment-1564539515
-      updateResponseFromClient(res.data!);
-      router.push(path);
+      // TODO: even the client update doesn't seem to work, we have stale response when going back
+      //console.log("Update response", res);
+      //updateResponseFromClient(res.data!);
+      //router.push(path);
+      window.location.pathname = path;
     }
   };
 

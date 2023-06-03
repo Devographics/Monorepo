@@ -28,6 +28,8 @@ export const FormQuestion = (props) => {
     questionNumber,
   };
 
+  //console.log("rendering FormQuestion", { response, value });
+
   return (
     <div className="form-input">
       <Component {...componentProperties} />

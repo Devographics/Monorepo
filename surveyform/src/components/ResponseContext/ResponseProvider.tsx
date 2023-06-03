@@ -31,6 +31,7 @@ export const ResponseProvider = ({
    */
   const [responseState, setResponseState] =
     useState<ResponseDocument>(response);
+  //console.log("rerendering context", responseState);
   return (
     <ResponseContext.Provider
       value={{
@@ -62,5 +63,5 @@ export const useResponse = (): ResponseContextType => {
     );
     */
   }
-  return context;
+  return { ...context };
 };
