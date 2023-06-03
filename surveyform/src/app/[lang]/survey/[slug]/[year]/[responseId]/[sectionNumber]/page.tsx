@@ -37,10 +37,15 @@ const SurveyFromResponseIdPage = async ({
   if (
     ![SurveyStatusEnum.OPEN, SurveyStatusEnum.PREVIEW].includes(edition.status)
   ) {
-    return <SurveySectionReadOnly response={response} />;
+    return <SurveySectionReadOnly /*response={response}*/ />;
   }
+  // TODO: @see https://github.com/vercel/next.js/issues/49387#issuecomment-1564539515
   return (
-    <SurveySection response={response} edition={edition} sectionNumber={sn} />
+    <SurveySection
+    /*response={response}*/
+    // edition={edition}
+    // sectionNumber={sn}
+    />
   );
 };
 
