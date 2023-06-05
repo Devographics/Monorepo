@@ -23,6 +23,7 @@ import type { ResponseDocument } from "@devographics/types";
 import { useEdition } from "../SurveyContext/Provider";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { ResponseError } from "~/components/error/ResponseError";
+import { ResponseDetails } from "../surveys/ResponseDetails";
 
 const EditionAction = ({ edition }: { edition: EditionMetadata }) => {
   const { id: editionId, surveyId } = edition;
@@ -182,7 +183,6 @@ const EditionLink = ({
 }) => {
   const { edition } = useEdition();
   const { locale } = useLocaleContext();
-  const updatedAt = response && new Date(response.updatedAt);
   return (
     <div className="edition-link">
       <Link
@@ -197,22 +197,7 @@ const EditionLink = ({
       >
         <FormattedMessage id={message} />
       </Link>
-      {response && (
-        <div className="edition-response-details">
-          <p>
-            <FormattedMessage
-              id="general.last_modified_on"
-              values={{ updatedAt: updatedAt?.toDateString() }}
-            />
-          </p>
-          <p>
-            <FormattedMessage
-              id="general.completion"
-              values={{ completion: response.completion }}
-            />
-          </p>
-        </div>
-      )}
+      {response && <ResponseDetails response={response} />}
     </div>
   );
 };

@@ -1,11 +1,18 @@
 import { connectToRedis } from "~/lib/server/redis";
 import { getRawResponsesCollection } from "@devographics/mongo";
-import { UserDocument } from "~/account/user/typings";
+import {
+  UserDocument,
+  UserDocumentWithResponses,
+} from "~/account/user/typings";
 
 /**
  * Add responses to user
  */
-export async function populateUserResponses({ user }: { user: UserDocument }) {
+export async function populateUserResponses({
+  user,
+}: {
+  user: UserDocument;
+}): Promise<UserDocumentWithResponses> {
   connectToRedis();
 
   const RawResponses = await getRawResponsesCollection();

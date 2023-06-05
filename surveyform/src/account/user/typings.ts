@@ -1,3 +1,5 @@
+import { ResponseDocument } from "@devographics/types";
+
 /**
  * Temporary user data with unhashed email
  *
@@ -7,7 +9,7 @@ export type NewUserDocument = Omit<UserDocument, "emailHash"> & {
   email?: string;
 };
 
-export type UserDocument = {
+export interface UserDocument {
   _id?: string;
   anonymousId?: string;
   anonymousIds?: string[];
@@ -23,22 +25,37 @@ export type UserDocument = {
     surveyId;
     editionId;
   };
-} & (
-  | {
-      /**
-       * Legacy password based auth
-       */
-      authMode: undefined | "password";
-      emailHash: string;
-      emailHash2: string;
-    }
-  | { authMode: "anonymous"; emailHash?: undefined; emailHash2?: undefined }
-  | {
-      authMode: "passwordless";
-      emailHash: string;
-      emailHash2: string;
-    }
-);
+}
+
+// & (
+//   | {
+//       /**
+//        * Legacy password based auth
+//        */
+//       authMode: undefined | "password";
+//       emailHash: string;
+//       emailHash2: string;
+//     }
+//   | { authMode: "anonymous"; emailHash?: undefined; emailHash2?: undefined }
+//   | {
+//       authMode: "passwordless";
+//       emailHash: string;
+//       emailHash2: string;
+//     }
+// );
+
+export interface UserDocumentWithResponses extends UserDocument {
+  responses: Pick<
+    ResponseDocument,
+    | "_id"
+    | "userId"
+    | "editionId"
+    | "surveyId"
+    | "updatedAt"
+    | "createdAt"
+    | "completion"
+  >[];
+}
 
 /**
  * Minimal structure to authenticate via email

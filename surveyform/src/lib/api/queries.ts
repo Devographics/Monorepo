@@ -9,6 +9,8 @@ query SurveysMetadataQuery {
       hashtag
       editions {
         id
+        questionsUrl
+        resultsUrl
         surveyId
         startedAt
         endedAt
