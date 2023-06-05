@@ -18,7 +18,7 @@ import { setToken } from "~/account/middlewares/setToken";
 
 passport.use(anonymousLoginStrategy);
 
-interface AnonymousLoginReqBody { }
+interface AnonymousLoginReqBody {}
 // NOTE: adding NextApiRequest, NextApiResponse is required to get the right typings in next-connect
 // this is the normal behaviour
 const login = nextConnect<NextApiRequest, NextApiResponse>()
@@ -39,7 +39,8 @@ const login = nextConnect<NextApiRequest, NextApiResponse>()
           .status(500)
           .send("Anonymous login succeeded but req.user not correctly set.");
       }
-      return next();
+      console.log(req.body);
+      return next({ foo: 123 });
     },
     setToken,
     (req, res) => {

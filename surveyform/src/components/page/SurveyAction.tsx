@@ -11,7 +11,6 @@ import { useState } from "react";
 import Link from "next/link";
 import { SurveyStatusEnum } from "@devographics/types";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
-import { useSurveyActionParams, useBrowserData, PrefilledData } from "./hooks";
 import { useRouter } from "next/navigation";
 import { useCurrentUser } from "~/lib/users/hooks";
 import { Loading } from "~/components/ui/Loading";
@@ -24,6 +23,7 @@ import { useEdition } from "../SurveyContext/Provider";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { ResponseError } from "~/components/error/ResponseError";
 import { ResponseDetails } from "../surveys/ResponseDetails";
+import { useClientData } from "./hooks";
 
 const EditionAction = ({ edition }: { edition: EditionMetadata }) => {
   const { id: editionId, surveyId } = edition;
@@ -102,29 +102,10 @@ const SurveyStart = ({
   setErrors: any;
 }) => {
   const { edition } = useEdition();
-  const { id: editionId, surveyId } = edition;
   const router = useRouter();
-  const { source, referrer } = useSurveyActionParams();
   const { locale } = useLocaleContext();
 
-  // prefilled data
-  let data: PrefilledData = {
-    locale: locale.id,
-    editionId,
-    surveyId,
-    common__user_info__source: source,
-    common__user_info__referrer: referrer,
-  };
-
-  const browserData = useBrowserData();
-  data = {
-    ...data,
-    ...browserData,
-    // override only if referrer is not set already
-    common__user_info__referrer:
-      data.common__user_info__referrer ||
-      browserData?.common__user_info__referrer,
-  };
+  const data = useClientData({ survey: edition.survey, edition });
 
   const loadingButtonProps = {
     type: "submit",

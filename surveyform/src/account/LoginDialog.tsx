@@ -12,6 +12,7 @@ export const LoginDialog = ({
   surveyId,
   editionId,
   successRedirectionPath,
+  data,
 }: {
   hideGuest?: boolean;
   user?: UserDocument | null;
@@ -19,6 +20,7 @@ export const LoginDialog = ({
    * Redirect after succesful auth
    */
   successRedirectionPath?: string;
+  data?: any;
 } & Pick<StandaloneMagicLoginFormProps, "surveyId" | "editionId">) => {
   //const redirectedFrom = router.query?.from as string;
   return user ? (
@@ -39,6 +41,7 @@ export const LoginDialog = ({
             editionId={editionId}
             label={<FormattedMessage id="accounts.create_account.action" />}
             successRedirectionPath={successRedirectionPath}
+            data={data}
           />
         </div>
         <div className="survey-login-option-note">
@@ -59,6 +62,7 @@ export const LoginDialog = ({
                 <FormattedMessage id="accounts.continue_as_guest.action" />
               }
               successRedirectionPath={successRedirectionPath}
+              data={data}
             />
           </div>
         </div>

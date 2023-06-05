@@ -23,9 +23,11 @@ const useRefreshUser = () => {
 export const AnonymousLoginForm = ({
   successRedirectionPath,
   label = "Log In Anonymously",
+  data,
 }: {
   successRedirectionPath?: string;
   label?: string | ReactNode;
+  data?: any;
 }) => {
   const [errorMsg, setErrorMsg] = useState("");
   const [loading, setLoading] = useState(false);
@@ -36,7 +38,7 @@ export const AnonymousLoginForm = ({
     setLoading(true);
     try {
       if (errorMsg) setErrorMsg("");
-      const res = await loginAnonymously();
+      const res = await loginAnonymously({ data });
       if (!res.ok) {
         setErrorMsg(await res.text());
       } else {

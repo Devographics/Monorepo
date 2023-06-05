@@ -6,15 +6,20 @@ import bowser from "bowser";
 // const bowser = require("bowser"); // CommonJS
 // import { isAdmin as checkIsAdmin } from "@vulcanjs/permissions";
 import { useSearchParams } from "next/navigation";
-import { EditionMetadata } from "@devographics/types";
+import { EditionMetadata, SurveyMetadata } from "@devographics/types";
+import { useLocaleContext } from "~/i18n/context/LocaleContext";
 
 export const useSurveyActionParams = (): {
   source?: string;
   referrer?: string;
 } => {
   const query = useSearchParams()!;
-  const source = query.get("source") || localStorage.getItem("source");
-  const referrer = query.get("referrer") || localStorage.getItem("referrer");
+  const source =
+    query.get("source") ||
+    (typeof localStorage !== "undefined" && localStorage.getItem("source"));
+  const referrer =
+    query.get("referrer") ||
+    (typeof localStorage !== "undefined" && localStorage.getItem("referrer"));
   const params: any = {};
   if (source) {
     params.source = source as string;
@@ -71,3 +76,32 @@ export interface PrefilledData extends BrowserData {
   editionId: string;
   locale: string;
 }
+
+export const useClientData = ({
+  edition,
+  survey,
+}: {
+  edition: EditionMetadata;
+  survey: SurveyMetadata;
+}) => {
+  const { source, referrer } = useSurveyActionParams();
+  const { locale } = useLocaleContext();
+  // prefilled data
+  let data: PrefilledData = {
+    locale: locale.id,
+    editionId: edition.id,
+    surveyId: survey.id,
+    common__user_info__source: source,
+    common__user_info__referrer: referrer,
+  };
+
+  const browserData = useBrowserData();
+  data = {
+    ...data,
+    ...browserData,
+    // override only if referrer is not set already
+    common__user_info__referrer:
+      data.common__user_info__referrer ||
+      browserData?.common__user_info__referrer,
+  };
+};

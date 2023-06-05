@@ -1,3 +1,4 @@
+"use client";
 import EditionMessage from "~/components/surveys/SurveyMessage";
 import SurveyCredits from "~/components/surveys/SurveyCredits";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
@@ -10,6 +11,8 @@ import { Suspense } from "react";
 import { EditionMetadata, SurveyStatusEnum } from "@devographics/types";
 import { rscCurrentUser } from "~/account/user/rsc-fetchers/rscCurrentUser";
 import { CenteredContainer } from "~/components/ui/CenteredContainer";
+import { useClientData } from "~/components/page/hooks";
+import { useCurrentUser } from "~/lib/users/hooks";
 
 export const EditionMain = ({
   edition,
@@ -34,14 +37,15 @@ export const EditionMain = ({
   );
 };
 
-const EditionMainAsync = async ({
+const EditionMainAsync = ({
   edition,
   editionPath,
 }: {
   edition: EditionMetadata;
   editionPath?: string;
 }) => {
-  const user = await rscCurrentUser();
+  const user = useCurrentUser();
+  const clientData = useClientData({ edition, survey: edition.survey });
   if (!user) {
     return (
       <LoginDialog
@@ -50,6 +54,7 @@ const EditionMainAsync = async ({
         hideGuest={edition.status === SurveyStatusEnum.CLOSED}
         user={user}
         successRedirectionPath={editionPath}
+        data={clientData}
       />
     );
   } else {
