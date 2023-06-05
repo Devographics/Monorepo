@@ -8,6 +8,7 @@ import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { UserDocument } from "~/account/user/typings";
 import { fetchSurveysMetadata } from "~/lib/api/fetch";
 import { getEditionSectionPath } from "~/lib/surveys/helpers";
+import { ResponseDetails } from "../surveys/ResponseDetails";
 
 const UserResponses = ({
   surveys,
@@ -80,8 +81,8 @@ const ResponseItem = ({
   });
   const surveyStatus = SurveyStatusEnum[status].toLowerCase();
   return (
-    <li className="response-item">
-      <h4 className="response-item-survey">
+    <li className="user-response-item">
+      <h4 className="user-response-item-survey">
         <Link href={pagePath}>
           {survey.name} {year}
         </Link>
@@ -89,18 +90,7 @@ const ResponseItem = ({
           <FormattedMessage id={`general.survey_status_${surveyStatus}`} />
         </span>
       </h4>
-      <div className="response-item-details">
-        <FormattedMessage
-          id="response.details"
-          // TODO: not sure if createdAt is a string or Date here
-          values={{ startedAt: String(createdAt).substring(0, 10), completion }}
-        />{" "}
-        {resultsUrl && (
-          <a href={resultsUrl}>
-            <FormattedMessage id="response.view_results" />
-          </a>
-        )}
-      </div>
+      <ResponseDetails edition={edition} response={response} />
     </li>
   );
 };

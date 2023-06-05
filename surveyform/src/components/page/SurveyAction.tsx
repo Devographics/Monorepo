@@ -197,7 +197,7 @@ const EditionLink = ({
       >
         <FormattedMessage id={message} />
       </Link>
-      {response && <ResponseDetails response={response} />}
+      <ResponseDetails edition={edition} response={response} />
     </div>
   );
 };

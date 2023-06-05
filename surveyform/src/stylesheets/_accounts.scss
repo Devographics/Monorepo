@@ -1,4 +1,4 @@
-@use 'sass:math';
+@use "sass:math";
 
 .accounts-ui {
   .fields {
@@ -34,13 +34,18 @@
   margin: 0;
   list-style-type: none;
 }
-.response-item {
+.user-response-item {
   margin-bottom: $spacing/2;
   border: 1px solid var(--border-color);
   padding: $spacing;
   border-radius: 3px;
+  & .response-details {
+    display: flex;
+    gap: $spacing;
+    flex-wrap: wrap;
+  }
 }
-.response-item-survey {
+.user-response-item-survey {
   display: flex;
   align-items: center;
   font-size: $large-font;
@@ -48,9 +53,6 @@
   .survey-status {
     margin-left: 10px;
   }
-}
-.response-item-details {
-  font-size: $smallish-font;
 }
 .survey-status {
   text-transform: uppercase;

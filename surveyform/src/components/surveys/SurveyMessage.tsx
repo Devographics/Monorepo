@@ -3,7 +3,7 @@ import { EditionMetadata } from "@devographics/types";
 import { SurveyStatusEnum } from "@devographics/types";
 
 const EditionMessage = ({ edition }: { edition: EditionMetadata }) => {
-  const { status } = edition;
+  const { status, endedAt } = edition;
   switch (status) {
     case SurveyStatusEnum.PREVIEW:
       return (
@@ -14,7 +14,10 @@ const EditionMessage = ({ edition }: { edition: EditionMetadata }) => {
     case SurveyStatusEnum.CLOSED:
       return (
         <div className="survey-message survey-closed">
-          <FormattedMessage id="general.survey_closed" />
+          <FormattedMessage
+            id="general.survey_closed_on"
+            values={{ endedAt }}
+          />
         </div>
       );
     default:

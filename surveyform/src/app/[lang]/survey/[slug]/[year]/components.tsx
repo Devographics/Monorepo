@@ -78,14 +78,6 @@ export const EditionPage = ({
     <div className="survey-page contents-narrow">
       <EditionMessage edition={edition} />
 
-      {resultsUrl && (
-        <div className="survey-results">
-          <a href={resultsUrl} target="_blank" rel="noreferrer noopener">
-            <FormattedMessage id="general.survey_results" />
-          </a>
-        </div>
-      )}
-
       {!!imageUrl && (
         <h1 className="survey-image">
           <img
