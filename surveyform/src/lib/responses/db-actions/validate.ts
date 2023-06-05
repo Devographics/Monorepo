@@ -7,13 +7,14 @@ import {
 import { HandlerError } from "~/lib/handler-error";
 import { ActionContexts, Actions, getZodSchema } from "~/lib/validation";
 import { getResponseSchema } from "../schema";
+import omitBy from "lodash/omitBy";
 
 export const validateResponse = ({
   currentUser,
   existingResponse,
   updatedResponse,
-  clientData,
-  serverData,
+  clientData: clientData_,
+  serverData: serverData_,
   survey,
   edition,
   action,
@@ -27,6 +28,12 @@ export const validateResponse = ({
   edition: EditionMetadata;
   action: Actions;
 }) => {
+  // TODO: instead of simply filtering out null fields,
+  // also check that they are client-mutable
+  // since null means they should be deleted
+  const clientData = omitBy(clientData_, (field) => field === null);
+  const serverData = omitBy(serverData_, (field) => field === null);
+
   // check that user can perform action
   if (action === Actions.UPDATE) {
     if (existingResponse) {
