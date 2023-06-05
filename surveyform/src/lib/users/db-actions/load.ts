@@ -12,5 +12,5 @@ export const loadUser = async ({ userId }) => {
     { _id: userId },
     { projection: { createdAt: true, authMode: true, isVerified: true } }
   );
-  return currentUser;
+  return currentUser as UserDocument;
 };

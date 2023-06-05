@@ -13,6 +13,8 @@ export interface UserDocument {
   _id?: string;
   anonymousId?: string;
   anonymousIds?: string[];
+  authMode: "passwordless" | "anonymous"
+  emailHash?: string;
   /**
    * For passwordless, false until the user clicked the magic link for the first time
    * TODO: verify spec for anon user: they should probably stay always unverified

@@ -41,15 +41,21 @@ export const EditionProvider = ({
 };
 
 /**
- *
  * @returns The survey definition WITHOUT REACT COMPONENTS
  */
-export const useEdition = (dontThrow?: boolean): EditionContextType => {
+export const useEdition = (): EditionContextType => {
   const context = useContext(EditionContext);
   if (!context) {
-    // TODO: a hack to support calling in the login form
-    if (dontThrow) return null as unknown as EditionContextType;
     throw new Error("Called useEdition before setting EditionProvider context");
   }
+  return context;
+};
+
+/**
+ * Use when you legitimately not sure there is an Edition
+ * for instance in layouts
+ */
+export const useEditionMaybe = () => {
+  const context = useContext(EditionContext);
   return context;
 };
