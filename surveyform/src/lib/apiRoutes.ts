@@ -35,6 +35,9 @@ export const apiRoutes = {
       login: {
         href: () => "/api/account/anonymous-login/login",
       },
+      loginAndCreateResponse: {
+        href: () => "/api/account/anonymous-login/loginAndCreateResponse",
+      },
     },
   },
   responses: {

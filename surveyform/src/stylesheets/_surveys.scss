@@ -188,6 +188,12 @@
     background: $greenTransparent;
   }
 }
+.login-error {
+  text-align: left;
+  margin-top: $spacing/2;
+  margin-bottom: 0;
+  padding: $spacing/2;
+}
 
 .survey-page-block {
   margin-bottom: $spacing * 3;

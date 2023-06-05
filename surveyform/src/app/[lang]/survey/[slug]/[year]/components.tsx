@@ -13,6 +13,8 @@ import { rscCurrentUser } from "~/account/user/rsc-fetchers/rscCurrentUser";
 import { CenteredContainer } from "~/components/ui/CenteredContainer";
 import { useClientData } from "~/components/page/hooks";
 import { useCurrentUser } from "~/lib/users/hooks";
+import { getEditionSectionPath } from "~/lib/surveys/helpers";
+import { useLocaleContext } from "~/i18n/context/LocaleContext";
 
 export const EditionMain = ({
   edition,
@@ -44,17 +46,26 @@ const EditionMainAsync = ({
   edition: EditionMetadata;
   editionPath?: string;
 }) => {
-  const user = useCurrentUser();
+  const { locale } = useLocaleContext();
+  const { currentUser, loading } = useCurrentUser();
   const clientData = useClientData({ edition, survey: edition.survey });
-  if (!user) {
+  if (loading) {
+    return <Loading />;
+  }
+  if (!currentUser) {
     return (
       <LoginDialog
         editionId={edition.id}
         surveyId={edition.surveyId}
         hideGuest={edition.status === SurveyStatusEnum.CLOSED}
-        user={user}
+        user={currentUser}
         successRedirectionPath={editionPath}
-        data={clientData}
+        successRedirectionFunction={(res) => {
+          const { response } = res;
+          const path = getEditionSectionPath({ edition, locale, response });
+          return path;
+        }}
+        loginOptions={{ data: clientData, createResponse: true }}
       />
     );
   } else {

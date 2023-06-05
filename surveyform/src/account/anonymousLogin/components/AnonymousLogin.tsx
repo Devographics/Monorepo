@@ -22,12 +22,14 @@ const useRefreshUser = () => {
 
 export const AnonymousLoginForm = ({
   successRedirectionPath,
+  successRedirectionFunction,
   label = "Log In Anonymously",
-  data,
+  loginOptions,
 }: {
   successRedirectionPath?: string;
+  successRedirectionFunction?: (any) => string;
   label?: string | ReactNode;
-  data?: any;
+  loginOptions?: { data?: any; createResponse?: boolean };
 }) => {
   const [errorMsg, setErrorMsg] = useState("");
   const [loading, setLoading] = useState(false);
@@ -38,22 +40,25 @@ export const AnonymousLoginForm = ({
     setLoading(true);
     try {
       if (errorMsg) setErrorMsg("");
-      const res = await loginAnonymously({ data });
+      const res = await loginAnonymously(loginOptions);
       if (!res.ok) {
         setErrorMsg(await res.text());
       } else {
+        const result = await res.json();
         await refreshUser();
-        if (successRedirectionPath) {
-          console.log("push to", successRedirectionPath);
+        if (successRedirectionFunction) {
+          const path = successRedirectionFunction(result);
+          router.push(path);
+        } else if (successRedirectionPath) {
           router.push(successRedirectionPath);
         }
         // will reload the user in the RSC
         router.refresh();
+        setLoading(false);
       }
     } catch (error: any) {
       console.error("An unexpected error occurred:", error);
       setErrorMsg(error.message);
-    } finally {
       setLoading(false);
     }
   }
@@ -67,7 +72,11 @@ export const AnonymousLoginForm = ({
         >
           {label}
         </LoadingButton>
-        {errorMsg && <p className="error">{errorMsg}</p>}
+        {errorMsg && (
+          <p className="error survey-message survey-error login-error">
+            {errorMsg}
+          </p>
+        )}
       </div>
     </>
   );

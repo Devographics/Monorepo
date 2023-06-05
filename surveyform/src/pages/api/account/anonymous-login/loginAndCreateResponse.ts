@@ -15,13 +15,15 @@ import { apiWrapper } from "~/lib/server/sentry";
 import { anonymousLoginStrategy } from "~/account/anonymousLogin/api/passport/anonymous-strategy";
 import { connectToAppDbMiddleware } from "~/lib/server/middlewares/mongoAppConnection";
 import { setToken } from "~/account/middlewares/setToken";
+import { HandlerError } from "~/lib/handler-error";
+import { createResponse } from "~/lib/responses/db-actions/create";
 
 passport.use(anonymousLoginStrategy);
 
 interface AnonymousLoginReqBody {}
 // NOTE: adding NextApiRequest, NextApiResponse is required to get the right typings in next-connect
 // this is the normal behaviour
-const login = nextConnect<NextApiRequest, NextApiResponse>()
+const loginAndCreateResponse = nextConnect<NextApiRequest, NextApiResponse>()
   // @ts-ignore
   .use(passport.initialize())
   .post(
@@ -42,9 +44,21 @@ const login = nextConnect<NextApiRequest, NextApiResponse>()
       return next();
     },
     setToken,
-    (req, res) => {
-      return res.status(200).send({ done: true, userId: req.user._id });
+    async (req, res) => {
+      const currentUser = (req as unknown as any).user;
+      const clientData = req.body;
+
+      console.log("// loginAndCreateResponse");
+      console.log(currentUser);
+      console.log(clientData);
+
+      const response = await createResponse({ clientData, currentUser });
+
+      console.log(response);
+      return res
+        .status(200)
+        .send({ done: true, userId: req.user._id, response });
     }
   );
 
-export default apiWrapper(login);
+export default apiWrapper(loginAndCreateResponse);

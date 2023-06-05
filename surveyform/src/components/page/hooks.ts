@@ -104,4 +104,5 @@ export const useClientData = ({
       data.common__user_info__referrer ||
       browserData?.common__user_info__referrer,
   };
+  return data;
 };
