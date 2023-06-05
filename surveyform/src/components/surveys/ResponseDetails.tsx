@@ -9,16 +9,24 @@ export const ResponseDetails = ({
   response?: ResponseDocument;
 }) => {
   const updatedAt = response && new Date(response.updatedAt);
+  const createdAt = response && new Date(response.createdAt);
   const { resultsUrl } = edition;
   return (
     <div className="response-details">
       {response && (
         <>
           <p>
-            <FormattedMessage
-              id="general.last_modified_on"
-              values={{ updatedAt: updatedAt?.toDateString() }}
-            />
+            {updatedAt ? (
+              <FormattedMessage
+                id="general.last_modified_on"
+                values={{ updatedAt: updatedAt?.toDateString() }}
+              />
+            ) : (
+              <FormattedMessage
+                id="general.started_on"
+                values={{ createdAt: createdAt?.toDateString() }}
+              />
+            )}
           </p>
           <p>
             <FormattedMessage
