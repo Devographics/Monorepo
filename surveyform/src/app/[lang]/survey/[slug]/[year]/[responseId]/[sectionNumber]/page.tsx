@@ -3,8 +3,6 @@ import {
   SurveySection,
   SurveySectionReadOnly,
 } from "~/components/questions/SurveySection";
-import { initRedis } from "@devographics/redis";
-import { serverConfig } from "~/config/server";
 import { rscMustGetSurveyEdition } from "../../rsc-fetchers";
 import { rscMustGetUserResponse } from "~/lib/responses/rsc-fetchers";
 import { rscCurrentUser } from "~/account/user/rsc-fetchers/rscCurrentUser";
@@ -22,7 +20,6 @@ const SurveyFromResponseIdPage = async ({
     sectionNumber: string;
   };
 }) => {
-  initRedis(serverConfig().redisUrl);
   const edition = await rscMustGetSurveyEdition({ slug, year });
   const sn = parseInt(sectionNumber);
   if (isNaN(sn)) notFound();

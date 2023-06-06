@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { EditionProvider } from "~/components/SurveyContext/Provider";
-import { initRedis } from "@devographics/redis";
 
 import { LocaleContextProvider } from "~/i18n/context/LocaleContext";
-import { serverConfig } from "~/config/server";
 import { rscMustGetSurveyEdition } from "./rsc-fetchers";
 
 const cachedGetLocales = cache(fetchAllLocalesMetadata);
@@ -38,7 +36,6 @@ export async function generateMetadata({
   params: SurveyPageServerProps;
 }): Promise<Metadata> {
   // TODO: it seems we need to call this initialization code on all relevant pages/layouts
-  initRedis(serverConfig().redisUrl);
   const edition = await rscMustGetSurveyEdition({ slug, year });
   const { socialImageUrl, faviconUrl } = edition;
   const imageUrl = getSurveyImageUrl(edition);
@@ -85,7 +82,6 @@ export default async function SurveyLayout({
   children: React.ReactNode;
   params: { slug: string; year: string; lang: string };
 }) {
-  initRedis(serverConfig().redisUrl);
   const edition = await rscMustGetSurveyEdition(params);
   // survey specific strings
   const localeId = params.lang;
@@ -149,3 +145,26 @@ If this error still happens in a few months (2023) open an issue with repro at N
     </EditionProvider>
   );
 }
+
+// export default async function RootLayout({
+//   children,
+//   params,
+// }: {
+//   children: React.ReactNode;
+//   params: {
+//     lang: string;
+//   };
+// }) {
+//   const { localeId, localeWithStrings } = await rscMustFetchLocale(params);
+//   const locales = await fetchAllLocalesMetadata();
+//   return (
+//     <AppLayout
+//       params={params}
+//       locales={locales}
+//       localeId={localeId}
+//       localeStrings={localeWithStrings}
+//     >
+//       {children}
+//     </AppLayout>
+//   );
+// }

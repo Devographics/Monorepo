@@ -1,12 +1,14 @@
-import { initRedis } from "@devographics/redis";
-
 import { StringsRegistry } from "@devographics/react-i18n";
 import { Metadata } from "next";
-import { serverConfig } from "~/config/server";
 import { SectionProvider } from "~/components/SectionContext/SectionProvider";
 import { getSectionKey, getEditionTitle } from "~/lib/surveys/helpers";
 import { rscFetchLocaleFromUrl } from "~/i18n/server/rsc-fetchers";
 import { rscGetSurveyEditionFromUrl } from "../../rsc-fetchers";
+
+import Header from "~/components/common/Header";
+import Footer from "~/components/common/Footer";
+import { EditionMetadata } from "@devographics/types";
+import { ReactNode } from "react";
 
 interface SurveySectionParams {
   lang: string;

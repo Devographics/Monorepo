@@ -1,8 +1,5 @@
 import Support from "~/components/common/Support";
 import { getSurveyImageUrl } from "~/lib/surveys/helpers";
-import { initRedis } from "@devographics/redis";
-
-import { serverConfig } from "~/config/server";
 import { EditionPage as EditionPageComponent } from "./components";
 import { StringsRegistry } from "@devographics/react-i18n";
 import { rscFetchLocaleFromUrl } from "~/i18n/server/rsc-fetchers";
@@ -58,8 +55,6 @@ export default async function SurveyPage({
   params: SurveyPageServerProps;
   searchParams: { "from-magic-login"?: string };
 }) {
-  // TODO: it seems we need to call this initialization code on all relevant pages/layouts
-  initRedis(serverConfig().redisUrl);
   const edition = await rscMustGetSurveyEdition({ slug, year });
   const imageUrl = getSurveyImageUrl(edition);
   let intro = "";

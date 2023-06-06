@@ -21,6 +21,13 @@ import {
 import { publicConfig } from "~/config/public";
 import { serverConfig } from "~/config/server";
 
+interface FetcherFunctionOptions {
+  // optionally indicate where this function was called from to help with logging
+  calledFrom?: string;
+  // function that returns a server config object
+  serverConfig: Function;
+}
+
 /**
  * Load the metadata of a survey edition for the surveyform app
  * @returns
@@ -44,17 +51,18 @@ export async function fetchEditionMetadata({
     surveyId,
     editionId,
   });
-  return await getFromCache<EditionMetadata>(
+  return await getFromCache<EditionMetadata>({
     key,
-    async () => {
+    fetchFunction: async () => {
       const result = await fetchGraphQLApi({
         query: getEditionMetadataQuery({ editionId }),
         key,
       });
       return result._metadata.surveys[0].editions[0];
     },
-    calledFrom
-  );
+    calledFrom,
+    serverConfig,
+  });
 }
 
 /**
@@ -65,14 +73,15 @@ export const fetchSurveysMetadata = async (options?: {
   calledFrom?: string;
 }): Promise<Array<SurveyMetadata>> => {
   const key = surveysMetadataCacheKey();
-  return await getFromCache<Array<SurveyMetadata>>(
+  return await getFromCache<Array<SurveyMetadata>>({
     key,
-    async () => {
+    fetchFunction: async () => {
       const result = await fetchGraphQLApi({ query: getSurveysQuery(), key });
       return result._metadata.surveys as SurveyMetadata[];
     },
-    options?.calledFrom
-  );
+    calledFrom: options?.calledFrom,
+    serverConfig,
+  });
 };
 
 /**
@@ -81,13 +90,17 @@ export const fetchSurveysMetadata = async (options?: {
  */
 export const fetchAllLocalesMetadata = async (): Promise<Array<LocaleDef>> => {
   const key = allLocalesMetadataCacheKey();
-  return await getFromCache<any>(key, async () => {
-    const result = await fetchGraphQLApi({
-      query: getAllLocalesMetadataQuery(),
-      key,
-      apiUrl: serverConfig().translationAPI
-    });
-    return result.locales;
+  return await getFromCache<any>({
+    key,
+    fetchFunction: async () => {
+      const result = await fetchGraphQLApi({
+        query: getAllLocalesMetadataQuery(),
+        key,
+        apiUrl: serverConfig().translationAPI,
+      });
+      return result.locales;
+    },
+    serverConfig,
   });
 };
 
@@ -104,23 +117,27 @@ export const fetchLocale = async ({
   contexts,
 }: FetchLocaleOptions): Promise<LocaleDefWithStrings> => {
   const key = localeCacheKey({ localeId, contexts });
-  return await getFromCache<any>(key, async () => {
-    const result = await fetchGraphQLApi({
-      query: getLocaleQuery({ localeId, contexts }),
-      key,
-      apiUrl: serverConfig().translationAPI,
-    });
-    const locale = result.locale;
-
-    // react-i18n expects {foo1: bar1, foo2: bar2} etc. map whereas
-    // api returns [{key: foo1, t: bar1}, {key: foo2, t: bar2}] etc. array
-    const convertedStrings = {};
-    locale.strings &&
-      locale.strings.forEach(({ key, t, tHtml }) => {
-        convertedStrings[key] = tHtml || t;
+  return await getFromCache<any>({
+    key,
+    fetchFunction: async () => {
+      const result = await fetchGraphQLApi({
+        query: getLocaleQuery({ localeId, contexts }),
+        key,
+        apiUrl: serverConfig().translationAPI,
       });
-    const convertedLocale = { ...locale, strings: convertedStrings };
+      const locale = result.locale;
 
-    return convertedLocale as LocaleDefWithStrings;
+      // react-i18n expects {foo1: bar1, foo2: bar2} etc. map whereas
+      // api returns [{key: foo1, t: bar1}, {key: foo2, t: bar2}] etc. array
+      const convertedStrings = {};
+      locale.strings &&
+        locale.strings.forEach(({ key, t, tHtml }) => {
+          convertedStrings[key] = tHtml || t;
+        });
+      const convertedLocale = { ...locale, strings: convertedStrings };
+
+      return convertedLocale as LocaleDefWithStrings;
+    },
+    serverConfig,
   });
 };
