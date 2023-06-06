@@ -4,8 +4,10 @@ import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { EditionMetadata, SurveyMetadata } from "@devographics/types";
 import { getEditionHomePath, getSurveyImageUrl } from "~/lib/surveys/helpers";
 import sortBy from "lodash/sortBy";
+import { rscCurrentUserWithResponses } from "~/account/user/rsc-fetchers/rscCurrentUser";
+import { ResponseDetails } from "~/components/surveys/ResponseDetails";
 
-const EditionItem = ({
+const EditionItem = async ({
   edition,
   homePath,
 }: {
@@ -15,6 +17,12 @@ const EditionItem = ({
   const { survey, year, status } = edition;
   const { name } = survey;
   const imageUrl = getSurveyImageUrl(edition);
+
+  const currentUser = await rscCurrentUserWithResponses();
+  const response = currentUser?.responses?.find(
+    (r) => r.editionId === edition.id
+  );
+
   return (
     <div>
       <div className="survey-item">
@@ -43,6 +51,7 @@ const EditionItem = ({
           </Link>
         </div>
       </div>
+      {response && <ResponseDetails edition={edition} response={response} />}
     </div>
   );
 };

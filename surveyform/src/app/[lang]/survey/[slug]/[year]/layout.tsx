@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { EditionProvider } from "~/components/SurveyContext/Provider";
 
-import { LocaleContextProvider } from "~/i18n/context/LocaleContext";
 import { rscMustGetSurveyEdition } from "./rsc-fetchers";
+import AppLayout from "~/app/[lang]/AppLayout";
+import EditionLayout from "~/components/common/EditionLayout";
 
 const cachedGetLocales = cache(fetchAllLocalesMetadata);
 
@@ -22,9 +23,12 @@ import { getSurveyImageUrl } from "~/lib/surveys/helpers";
 import { publicConfig } from "~/config/public";
 import { getEditionHomePath, getEditionTitle } from "~/lib/surveys/helpers";
 import { cache } from "react";
-import { rscFetchLocale } from "~/i18n/server/rsc-fetchers";
-import { fetchAllLocalesMetadata } from "~/lib/api/fetch";
-import { getEditionContexts } from "~/i18n/config";
+import { fetchAllLocalesMetadata, fetchLocaleCached } from "~/lib/api/fetch";
+import {
+  getCommonContexts,
+  getEditionContexts,
+  getLocaleIdFromParams,
+} from "~/i18n/config";
 interface SurveyPageServerProps {
   slug: string;
   year: string;
@@ -84,7 +88,7 @@ export default async function SurveyLayout({
 }) {
   const edition = await rscMustGetSurveyEdition(params);
   // survey specific strings
-  const localeId = params.lang;
+  const localeId = getLocaleIdFromParams(params);
   if (localeId.includes(".")) {
     console.error(`Error: matched a file instead of a lang: ${localeId}.
 This is a bug in current Next.js version (13.0.4, november 2022). 
@@ -94,15 +98,27 @@ Next.js will fallback to trying to find a valid page path.
 If this error still happens in a few months (2023) open an issue with repro at Next.js.`);
     notFound();
   }
-  const localeSlug = edition.surveyId;
-  // NOTE: the demo survey was previously using the graphql contexts ["state_of_graphql", "state_of_graphql_2022"]
-  // now it has its own strings
   const i18nContexts = getEditionContexts({ edition });
-  const localeWithStrings = await rscFetchLocale({
+
+  const localeCommonContexts = await fetchLocaleCached({
+    localeId,
+    contexts: getCommonContexts(),
+  });
+
+  const localeEditionContexts = await fetchLocaleCached({
     localeId,
     contexts: i18nContexts,
   });
-  if (!localeWithStrings) {
+
+  const localeAllContexts = {
+    ...localeCommonContexts,
+    strings: {
+      ...localeCommonContexts.strings,
+      ...localeEditionContexts.strings,
+    },
+  };
+
+  if (!localeEditionContexts) {
     console.warn(
       `Could not get locales for id ${localeId} and context ${i18nContexts}`
     );
@@ -123,48 +139,26 @@ If this error still happens in a few months (2023) open an issue with repro at N
   `;
 
   return (
-    <EditionProvider
-      edition={edition}
-      editionPathSegments={[params.slug, params.year]}
-      editionHomePath={getEditionHomePath({
-        edition,
-        locale: { id: localeId },
-      })}
-      surveySlug={params.slug}
-      editionSlug={params.year}
+    <AppLayout
+      params={params}
+      locales={locales}
+      localeId={localeId}
+      localeStrings={localeAllContexts}
+      addWrapper={false}
     >
-      <style dangerouslySetInnerHTML={{ __html: style }} />
-      <LocaleContextProvider
-        locales={locales}
-        localeId={localeId}
-        localeStrings={localeWithStrings || { id: "NOT_FOUND", strings: {} }}
-        contexts={i18nContexts}
+      <EditionProvider
+        edition={edition}
+        editionPathSegments={[params.slug, params.year]}
+        editionHomePath={getEditionHomePath({
+          edition,
+          locale: { id: localeId },
+        })}
+        surveySlug={params.slug}
+        editionSlug={params.year}
       >
-        {children}
-      </LocaleContextProvider>
-    </EditionProvider>
+        <style dangerouslySetInnerHTML={{ __html: style }} />
+        <EditionLayout edition={edition}>{children}</EditionLayout>
+      </EditionProvider>
+    </AppLayout>
   );
 }
-
-// export default async function RootLayout({
-//   children,
-//   params,
-// }: {
-//   children: React.ReactNode;
-//   params: {
-//     lang: string;
-//   };
-// }) {
-//   const { localeId, localeWithStrings } = await rscMustFetchLocale(params);
-//   const locales = await fetchAllLocalesMetadata();
-//   return (
-//     <AppLayout
-//       params={params}
-//       locales={locales}
-//       localeId={localeId}
-//       localeStrings={localeWithStrings}
-//     >
-//       {children}
-//     </AppLayout>
-//   );
-// }

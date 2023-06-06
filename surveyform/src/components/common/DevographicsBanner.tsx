@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { useCookies } from "react-cookie";
 import { FormattedMessage } from "~/components/common/FormattedMessage";

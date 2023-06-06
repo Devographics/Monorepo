@@ -79,12 +79,10 @@ const EditionMainAsync = ({
 
 export const EditionPage = ({
   edition,
-  editionIntro,
   imageUrl,
   editionPath,
 }: {
   edition: EditionMetadata;
-  editionIntro: string;
   imageUrl?: string;
   editionPath?: string;
 }) => {
@@ -105,13 +103,7 @@ export const EditionPage = ({
         </h1>
       )}
       <div className="survey-page-block">
-        <div
-          className="survey-intro"
-          // TODO: it should not be needed anymore?
-          dangerouslySetInnerHTML={{
-            __html: editionIntro,
-          }}
-        />
+        <FormattedMessage id={`general.${edition.id}.survey_intro`} />
         <EditionMain edition={edition} editionPath={editionPath} />
       </div>
       <Faq survey={edition} />

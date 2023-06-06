@@ -52,7 +52,7 @@ export class HandlerError extends Error {
     /// const localeId = handlerLocaleId(request)
     // await fetchLocaleStrings({ localeId: validLocale, contexts: ["errors"] })
 
-    // TODO: then apply the translation: factor code from surveyform/src/app/[lang]/layout.tsx
+    // TODO: then apply the translation: factor code from surveyform/src/app/[lang]/(mainLayout)/layout.tsx
     // that creates a StringsRegistry sever side
 
     const { id, status, properties, message, error } = this;
