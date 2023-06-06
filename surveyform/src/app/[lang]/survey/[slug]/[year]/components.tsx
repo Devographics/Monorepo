@@ -33,7 +33,6 @@ export const EditionMain = ({
       }
     >
       {/** @see https://github.com/vercel/app-playground/blob/afa2a63c4abd2d99687cf002d76647a183bdcb78/app/streaming/_components/pricing.tsx */}
-      {/** @ts-expect-error This an experimental syntax TS will cringe at async components */}
       <EditionMainAsync edition={edition} editionPath={editionPath} />
     </Suspense>
   );

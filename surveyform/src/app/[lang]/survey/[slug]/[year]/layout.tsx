@@ -53,12 +53,12 @@ export async function generateMetadata({
       // @ts-ignore
       type: "article" as const,
       url,
-      image: imageAbsoluteUrl,
+      images: imageAbsoluteUrl,
     },
     twitter: {
       // @ts-ignore
       card: "summary" as const,
-      image: imageAbsoluteUrl,
+      images: imageAbsoluteUrl,
     },
     alternates: {
       canonical: url,
