@@ -1,3 +1,14 @@
+.nav-surveys {
+  color: var(--text-color-dark);
+}
+.nav-surveys-link {
+  &,
+  &:link,
+  &:visited {
+    color: var(--text-color);
+  }
+}
+
 .section-nav-loading {
   z-index: 10;
   position: absolute;

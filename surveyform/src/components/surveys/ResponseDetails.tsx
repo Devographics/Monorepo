@@ -8,35 +8,10 @@ export const ResponseDetails = ({
   edition: EditionMetadata;
   response?: ResponseDocument;
 }) => {
-  const updatedAt = response && new Date(response.updatedAt);
-  const createdAt = response && new Date(response.createdAt);
   const { resultsUrl } = edition;
   return (
     <div className="response-details">
-      {response && (
-        <>
-          <p>
-            {updatedAt ? (
-              <FormattedMessage
-                id="general.last_modified_on"
-                values={{ updatedAt: updatedAt?.toDateString() }}
-              />
-            ) : (
-              <FormattedMessage
-                id="general.started_on"
-                values={{ createdAt: createdAt?.toDateString() }}
-              />
-            )}
-          </p>
-          <p>
-            <FormattedMessage
-              id="general.completion"
-              values={{ completion: response.completion }}
-            />
-          </p>
-        </>
-      )}
-
+      {response && <ResponseMetadata response={response} />}
       {resultsUrl && (
         <p>
           <a href={resultsUrl}>
@@ -45,5 +20,29 @@ export const ResponseDetails = ({
         </p>
       )}
     </div>
+  );
+};
+
+const ResponseMetadata = ({ response }: { response: ResponseDocument }) => {
+  const { updatedAt, createdAt, completion } = response;
+  return (
+    <>
+      <p>
+        {updatedAt ? (
+          <FormattedMessage
+            id="general.last_modified_on"
+            values={{ updatedAt: new Date(updatedAt)?.toDateString() }}
+          />
+        ) : (
+          <FormattedMessage
+            id="general.started_on"
+            values={{ createdAt: new Date(createdAt)?.toDateString() }}
+          />
+        )}
+      </p>
+      <p>
+        <FormattedMessage id="general.completion" values={{ completion }} />
+      </p>
+    </>
   );
 };
