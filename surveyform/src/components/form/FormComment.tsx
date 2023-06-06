@@ -123,7 +123,7 @@ export const CommentInput = (props: CommentInputProps) => {
         as="textarea"
         onChange={handleChange(true)}
         onBlur={handleChange(false)}
-        value={localValue}
+        value={localValue || ""}
         disabled={readOnly}
         // ref={refFunction}
         // {...inputProperties}
