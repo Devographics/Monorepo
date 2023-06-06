@@ -41,7 +41,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   // TODO: it seems we need to call this initialization code on all relevant pages/layouts
   const edition = await rscMustGetSurveyEdition({ slug, year });
-  const { socialImageUrl, faviconUrl } = edition;
+  const { socialImageUrl } = edition;
   const imageUrl = getSurveyImageUrl(edition);
   let imageAbsoluteUrl = socialImageUrl || imageUrl;
   const url = publicConfig.appUrl;
@@ -65,12 +65,6 @@ export async function generateMetadata({
       // we could create alternates for languages too
     },
   };
-  if (faviconUrl) {
-    meta.icons = {
-      icon: faviconUrl,
-      shortcut: faviconUrl,
-    };
-  }
   return meta;
 }
 
