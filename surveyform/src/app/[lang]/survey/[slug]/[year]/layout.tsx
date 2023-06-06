@@ -126,18 +126,6 @@ If this error still happens in a few months (2023) open an issue with repro at N
   // locales lists
   const locales = (await cachedGetLocales()) || [];
 
-  // Apply survey colors
-  const { colors } = edition;
-  const style = `
-:root {
-  --bg-color: ${/*bgColor*/ colors.background};
-  --text-color: ${/*textColor*/ colors.text};
-  --link-color: ${/*linkColor*/ colors.primary};
-  /*--hover-color: ${/*hoverColor*/ colors.secondary};*/
-  --hover-color: white;
-}
-  `;
-
   return (
     <AppLayout
       params={params}
@@ -156,7 +144,6 @@ If this error still happens in a few months (2023) open an issue with repro at N
         surveySlug={params.slug}
         editionSlug={params.year}
       >
-        <style dangerouslySetInnerHTML={{ __html: style }} />
         <EditionLayout edition={edition}>{children}</EditionLayout>
       </EditionProvider>
     </AppLayout>
