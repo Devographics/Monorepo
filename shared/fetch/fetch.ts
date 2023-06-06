@@ -4,7 +4,7 @@
  * 3) get from Github in last resort
  */
 import NodeCache from 'node-cache'
-import { fetchJson, storeRedis } from '@devographics/redis'
+import { initRedis, fetchJson, storeRedis } from '@devographics/redis'
 import { logToFile } from '@devographics/helpers'
 
 const memoryCache = new NodeCache({
@@ -31,17 +31,25 @@ function removeNull(obj) {
  * Generic function to fetch something from cache, or store it if cache misses
  * @returns
  */
-export async function getFromCache<T = any>(
-    key: string,
-    fetchFunc: () => Promise<T>,
+export async function getFromCache<T = any>({
+    key,
+    fetchFunction,
+    calledFrom,
+    serverConfig
+}: {
+    key: string
+    fetchFunction: () => Promise<T>
     calledFrom?: string
-) {
+    serverConfig: Function
+}) {
+    initRedis(serverConfig().redisUrl)
+
     let result
     const calledFromLog = calledFrom ? `(↪️  ${calledFrom})` : ''
     const enableCache = !(process.env.ENABLE_CACHE === 'false')
 
     const fetchAndStore = async () => {
-        const promise = fetchFunc()
+        const promise = fetchFunction()
         memoryCache.set(key, promise)
         const result = await promise
 
@@ -70,7 +78,10 @@ export async function getFromCache<T = any>(
             result = await fetchAndStore()
         }
     }
-    await logToFile(`${key}.json`, result, { mode: 'overwrite', subDir: 'fetch' })
+    await logToFile(`${key}.json`, result, {
+        mode: 'overwrite',
+        subDir: 'fetch'
+    })
     return result
 }
 
@@ -106,7 +117,10 @@ export const fetchGraphQLApi = async ({
 }): Promise<any> => {
     const apiUrl = apiUrl_ || getApiUrl()
     const key = key_ || extractQueryName(query)
-    await logToFile(`${key}.gql`, query, { mode: 'overwrite', subDir: 'graphql' })
+    await logToFile(`${key}.gql`, query, {
+        mode: 'overwrite',
+        subDir: 'graphql'
+    })
 
     // console.debug(`// querying ${apiUrl} (${query.slice(0, 15)}...)`)
     const response = await fetch(apiUrl, {
