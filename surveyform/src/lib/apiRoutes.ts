@@ -1,3 +1,6 @@
+import { PrefilledData } from "~/components/page/hooks";
+import { encodeParams } from "./utils";
+
 /**
  * NOTE: this is SHARED code not API only, we use this in the frontend as well
  */
@@ -13,22 +16,17 @@ export const apiRoutes = {
     },
     magicLogin: {
       verifyToken: {
-        href: ({ token }: { token: string }) =>
-          `/api/account/magic-login/verify-token?token=${encodeURIComponent(
-            token
+        href: (params: { token: string }) =>
+          `/api/account/magic-login/verifyToken?${encodeParams(params)}`,
+      },
+      verifyTokenAndFindCreateResponse: {
+        href: (params: { token: string }) =>
+          `/api/account/magic-login/verifyTokenAndFindCreateResponse?${encodeParams(
+            params
           )}`,
-        method: "GET",
       },
       sendEmail: {
-        href: ({
-          from,
-        }: {
-          /** Keep in mind the redirection path, if applicable */
-          from?: string;
-        } = {}) =>
-          "/api/account/magic-login/send-email" +
-          (from ? "?from=" + encodeURIComponent(from) : ""),
-        method: "POST",
+        href: () => `/api/account/magic-login/sendEmail`,
       },
     },
     anonymousLogin: {

@@ -54,3 +54,8 @@ export function seededShuffle(array: Array<any>, seed: string) {
 
   return newArray;
 }
+
+export function encodeParams(params) {
+  const searchParams = new URLSearchParams(params);
+  return searchParams.toString();
+}
