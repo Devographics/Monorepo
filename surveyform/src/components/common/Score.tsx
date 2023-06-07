@@ -146,7 +146,8 @@ const Score = ({
         <div className="score-ratio">
           <FormattedMessage
             id="thanks.score_explanation"
-            values={{ known, total }}
+            // TODO: compute me for real (we have historical issue with indexing...)
+            values={{ known, total, knowledgeRankingFromTop: 100 }}
           />
         </div>
         {/* <div className="score-rank">
