@@ -33,7 +33,7 @@ export const FormSubmit = (props: FormSubmitProps) => {
   const { edition } = useEdition();
   const router = useRouter();
 
-  const pathProps = { readOnly, edition, response };
+  const pathProps = { readOnly, edition, survey: edition.survey, response };
 
   // in "outline" mode, there is no last step
   let nextState: "finish" | "next" | undefined;

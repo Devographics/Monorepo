@@ -22,6 +22,7 @@ export const ThanksBackButton = ({
           className="form-btn-prev"
           href={getEditionSectionPath({
             edition,
+            survey: edition.survey,
             response,
             readOnly,
             number: edition.sections.length,

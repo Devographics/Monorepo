@@ -55,6 +55,7 @@ const SurveyNavItem = ({
 
   const path = getEditionSectionPath({
     edition,
+    survey: edition.survey,
     response,
     number,
     locale,

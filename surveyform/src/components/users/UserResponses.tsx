@@ -76,6 +76,7 @@ const ResponseItem = ({
 
   const pagePath = getEditionSectionPath({
     edition,
+    survey: edition.survey,
     response,
     locale: { id: localeId },
   });

@@ -47,7 +47,10 @@ const EditionMainAsync = ({
 }) => {
   const { locale } = useLocaleContext();
   const { currentUser, loading } = useCurrentUser();
-  const clientData = useClientData({ edition, survey: edition.survey });
+  const clientData = useClientData({
+    editionId: edition.id,
+    surveyId: edition.survey.id,
+  });
   if (loading) {
     return <Loading />;
   }
@@ -61,7 +64,12 @@ const EditionMainAsync = ({
         successRedirectionPath={editionPath}
         successRedirectionFunction={(res) => {
           const { response } = res;
-          const path = getEditionSectionPath({ edition, locale, response });
+          const path = getEditionSectionPath({
+            edition,
+            survey: edition.survey,
+            locale,
+            response,
+          });
           return path;
         }}
         loginOptions={{ data: clientData, createResponse: true }}

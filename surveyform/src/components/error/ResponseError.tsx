@@ -29,6 +29,7 @@ export const ResponseError = ({
         <Link
           href={getEditionSectionPath({
             edition,
+            survey: edition.survey,
             response: { _id: properties.responseId },
             locale,
           })}

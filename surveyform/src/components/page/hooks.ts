@@ -78,19 +78,19 @@ export interface PrefilledData extends BrowserData {
 }
 
 export const useClientData = ({
-  edition,
-  survey,
+  editionId,
+  surveyId,
 }: {
-  edition: EditionMetadata;
-  survey: SurveyMetadata;
+  editionId: string;
+  surveyId: string;
 }) => {
   const { source, referrer } = useSurveyActionParams();
   const { locale } = useLocaleContext();
   // prefilled data
   let data: PrefilledData = {
     locale: locale.id,
-    editionId: edition.id,
-    surveyId: survey.id,
+    editionId,
+    surveyId,
     common__user_info__source: source,
     common__user_info__referrer: referrer,
   };

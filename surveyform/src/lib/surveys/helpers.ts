@@ -1,4 +1,4 @@
-import type { ResponseDocument } from "@devographics/types";
+import type { ResponseDocument, SurveyMetadata } from "@devographics/types";
 import {
   EditionMetadata,
   SectionMetadata,
@@ -59,7 +59,7 @@ export const getSurveyImageUrl = (
   let finalImageUrl = isAbsoluteUrl(imageUrl)
     ? imageUrl
     : // legacy behaviour
-    `/surveys/${imageUrl}`;
+      `/surveys/${imageUrl}`;
 
   return finalImageUrl;
 };
@@ -81,6 +81,7 @@ export const getEditionTitle = ({
 };
 
 export function getEditionSectionPath({
+  survey,
   edition,
   locale,
   readOnly,
@@ -89,7 +90,8 @@ export function getEditionSectionPath({
   number,
 }: {
   // we only need basic info about the survey
-  edition: EditionMetadata;
+  edition: Pick<EditionMetadata, "id">;
+  survey: Pick<SurveyMetadata, "id">;
   /** [state-of-js, 2022] */
   locale: LocaleDef;
   /** No response is needed in read only mode */
@@ -101,7 +103,7 @@ export function getEditionSectionPath({
   page?: "finish";
 }) {
   const { surveySlug, editionSlug } = reverseSurveyParamsLookup({
-    surveyId: edition.survey.id,
+    surveyId: survey.id,
     editionId: edition.id,
   });
   const pathSegments = [locale.id, "survey", surveySlug, editionSlug];

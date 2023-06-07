@@ -105,7 +105,10 @@ const SurveyStart = ({
   const router = useRouter();
   const { locale } = useLocaleContext();
 
-  const data = useClientData({ survey: edition.survey, edition });
+  const data = useClientData({
+    surveyId: edition.survey.id,
+    editionId: edition.id,
+  });
 
   const loadingButtonProps = {
     type: "submit",
@@ -126,6 +129,7 @@ const SurveyStart = ({
           console.log("start survey result", result);
           const pagePath = getEditionSectionPath({
             edition,
+            survey: edition.survey,
             response: result.data,
             number: 1,
             locale,
@@ -169,6 +173,7 @@ const EditionLink = ({
       <Link
         href={getEditionSectionPath({
           edition,
+          survey: edition.survey,
           response,
           locale,
           readOnly,
