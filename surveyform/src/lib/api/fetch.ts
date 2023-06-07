@@ -4,7 +4,6 @@ import {
   LocaleDef,
   LocaleDefWithStrings,
 } from "@devographics/types";
-import { cache } from "react";
 
 import { getFromCache, fetchGraphQLApi } from "@devographics/fetch";
 import {
@@ -142,5 +141,3 @@ export const fetchLocale = async ({
     serverConfig,
   });
 };
-
-export const fetchLocaleCached = cache(async (options) => fetchLocale(options));

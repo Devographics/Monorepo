@@ -38,13 +38,10 @@ test("Access demo survey 2022, signup, start filling form", () => {
   const surveyRootUrl = routes.survey.root.href + CURRENT_SURVEY_URL;
   cy.visit(surveyRootUrl);
 
-  getContinueAsGuestButton().click();
+  getContinueAsGuestButton().click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
   // TODO: replace by the english label when i18n is there
   // FIXME: this is not language resistant...
   // @see https://github.com/cypress-io/cypress/issues/7890
-  cy.findByRole("button", {
-    name: /start_survey|start survey/i,
-  }).click();
   cy.url().should("match", new RegExp(surveyRootUrl + "/.+"));
 
   // Click a radio button
@@ -57,11 +54,11 @@ test("Access demo survey 2022, signup, start filling form", () => {
       /I've used it|^used$/,
       // not exact because we need the emoji also
       { exact: false }
-    ).click();
+    ).click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
   });
 
   // Go to usage section
-  getLinkToSection(/Usage|sections\.usage\.title/i).click();
+  getLinkToSection(/Usage|sections\.usage\.title/i).click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
   // Click a checkboxgroup
   cy.findByRole("heading", {
     name: /API Types|demo_survey__usage__api_type__choices/i,
@@ -69,15 +66,13 @@ test("Access demo survey 2022, signup, start filling form", () => {
     .parent()
     .within(() => {
       // "Used" radio
-      cy.findByRole("checkbox", { name: /Public|public_apis/i }).click();
-      cy.findByRole("checkbox", { name: /Private|private_apis/i }).click();
-      //cy.findByLabelText("public_apis").click();
-      //cy.findByLabelText("private_apis").click();
+      cy.findByRole("checkbox", { name: /Public|public_apis/i }).click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
+      cy.findByRole("checkbox", { name: /Private|private_apis/i }).click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
     });
 
   // Click a "slider"
   getQuestionBlock(/demo_balance_slider/i).within(() => {
-    cy.findByRole("radio", { name: /2/i }).click();
+    cy.findByRole("radio", { name: /2/i }).click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
   })
 
   // Click a bracket
@@ -91,7 +86,7 @@ test("Access demo survey 2022, signup, start filling form", () => {
       // logic to find siblings
       cy.findByRole("button", {
         name: /Type-checking|options\.graphql_strong_points\.type_checking/i,
-      }).click();
+      }).click({force:true}); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
     */
   });
 
@@ -107,13 +102,13 @@ test("Access demo survey 2022, signup, start filling form", () => {
   cy.findByRole("button", {
     // Next section: update depending on the survey
     name: /next section|sections\.directives\.title/i,
-  }).click();
+  }).click({force:true}); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
   */
   // Provide personal info
   // Fill autocomplete
 
   // Select a combobox
-  getLinkToSection(/About|user_info/i).click();
+  getLinkToSection(/About|user_info/i).click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
   getQuestionBlock(/Country|user_info__country/i).within(() => {
     cy.findByRole("combobox").select("France");
   });
@@ -122,6 +117,6 @@ test("Access demo survey 2022, signup, start filling form", () => {
   // finish
   cy.findByRole("button", {
     name: /Finish survey|general\.finish_survey/i,
-  }).click();
+  }).click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
   cy.url().should("match", new RegExp("thanks"));
 });

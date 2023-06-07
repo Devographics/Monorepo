@@ -6,8 +6,6 @@ import { rscMustGetSurveyEdition } from "./rsc-fetchers";
 import AppLayout from "~/app/[lang]/AppLayout";
 import EditionLayout from "~/components/common/EditionLayout";
 
-const cachedGetLocales = cache(fetchAllLocalesMetadata);
-
 // TODO: not yet compatible with having dynamic pages down the tree
 // we may have to call generateStaticParams in each static page instead
 // @see https://github.com/vercel/next.js/issues/44712
@@ -22,13 +20,12 @@ export async function generateStaticParams() {
 import { getSurveyImageUrl } from "~/lib/surveys/helpers";
 import { publicConfig } from "~/config/public";
 import { getEditionHomePath, getEditionTitle } from "~/lib/surveys/helpers";
-import { cache } from "react";
-import { fetchAllLocalesMetadata, fetchLocaleCached } from "~/lib/api/fetch";
 import {
   getCommonContexts,
   getEditionContexts,
   getLocaleIdFromParams,
 } from "~/i18n/config";
+import { rscAllLocalesMetadata, rscLocale } from "~/lib/api/rsc-fetchers";
 interface SurveyPageServerProps {
   slug: string;
   year: string;
@@ -94,12 +91,12 @@ If this error still happens in a few months (2023) open an issue with repro at N
   }
   const i18nContexts = getEditionContexts({ edition });
 
-  const localeCommonContexts = await fetchLocaleCached({
+  const localeCommonContexts = await rscLocale({
     localeId,
     contexts: getCommonContexts(),
   });
 
-  const localeEditionContexts = await fetchLocaleCached({
+  const localeEditionContexts = await rscLocale({
     localeId,
     contexts: i18nContexts,
   });
@@ -118,7 +115,7 @@ If this error still happens in a few months (2023) open an issue with repro at N
     );
   }
   // locales lists
-  const locales = (await cachedGetLocales()) || [];
+  const locales = (await rscAllLocalesMetadata()) || [];
 
   return (
     <AppLayout

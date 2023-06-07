@@ -56,7 +56,7 @@ const login = nextConnect<NextApiRequest, NextApiResponse>()
     setToken,
     async (req, res) => {
       // note: the following refers to a survey response, not an Express response
-      let response, responseType;
+      let response: ResponseDocument, responseType: "new" | "existing";
       // TODO: would be nice to use POST instead of GET here but passport
       // does not seem to accept POST?
       // const { clientData } = req.body;

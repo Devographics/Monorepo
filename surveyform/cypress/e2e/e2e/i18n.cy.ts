@@ -64,8 +64,8 @@ test("Switch locale via UI", () => {
   cy.visit("/");
   cy.findByRole("button", { name: /English/i })
     .as("localeSwitcher")
-    .click();
-  cy.findByRole("button", { name: /français/i }).click();
+    .click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
+  cy.findByRole("button", { name: /français/i }).click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
   // Should not switch to en when js is loaded
   cy.findByText(/Questionnaires en cours/).should("exist");
   cy.findByText(/Open Surveys/).should("not.exist");

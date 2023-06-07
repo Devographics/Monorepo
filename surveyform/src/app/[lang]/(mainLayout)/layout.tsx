@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import AppLayout from "~/app/[lang]/AppLayout";
-import { fetchAllLocalesMetadata, fetchLocaleCached } from "~/lib/api/fetch";
 import { getCommonContexts, getLocaleIdFromParams } from "~/i18n/config";
+import { rscAllLocalesMetadata, rscLocale } from "~/lib/api/rsc-fetchers";
 
 // TODO: not yet compatible with having dynamic pages down the tree
 // we may have to call generateStaticParams in each static page instead
@@ -32,8 +32,8 @@ export default async function RootLayout({
 }) {
   const contexts = getCommonContexts();
   const localeId = getLocaleIdFromParams(params);
-  const locale = await fetchLocaleCached({ localeId, contexts });
-  const locales = await fetchAllLocalesMetadata();
+  const locale = await rscLocale({ localeId, contexts });
+  const locales = await rscAllLocalesMetadata();
   return (
     <AppLayout
       params={params}

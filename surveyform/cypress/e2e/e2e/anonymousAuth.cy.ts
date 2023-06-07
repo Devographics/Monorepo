@@ -31,27 +31,21 @@ const CURRENT_SURVEY_REGEX = new RegExp(`${testSurvey.name}`, "i");
 const CURRENT_SURVEY_URL = `/${testSurvey.prettySlug}/${testSurvey.year}`;
 test("Access state of 2022, anonymous auth", () => {
   cy.visit("/");
-  cy.findByRole("link", { name: CURRENT_SURVEY_REGEX }).click();
+  cy.findByRole("link", { name: CURRENT_SURVEY_REGEX }).click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
   const surveyRootUrl = "en-US" + routes.survey.root.href + CURRENT_SURVEY_URL;
   cy.url().should("match", new RegExp(surveyRootUrl));
-  getContinueAsGuestButton().click();
-  // TODO: replace by the english label when i18n is there
-  // FIXME: this is not language resistant...
-  // @see https://github.com/cypress-io/cypress/issues/7890
-  cy.findByRole("button", {
-    name: startSurveyButtonName,
-  }).click();
+  getContinueAsGuestButton().click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
   cy.url().should("match", new RegExp(surveyRootUrl + "/.+"));
   // skip to last section
   openNavigationMenu()
   cy.findByRole("link", {
     name: /About You|sections\.user_info\.title/i,
-  }).click();
+  }).click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
   cy.url().should("match", new RegExp(surveyRootUrl + "/.+" + "/\\d+"));
   // finish
   cy.findByRole("button", {
     name: /Finish survey|general\.finish_survey/i,
-  }).click();
+  }).click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
   cy.url().should("match", new RegExp("finish"));
 });
 

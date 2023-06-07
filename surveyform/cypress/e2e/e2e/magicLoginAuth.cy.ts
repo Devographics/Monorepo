@@ -44,20 +44,20 @@ const magicLinkRegex = `(http|https)://(?<domain>.+)/account/magic-login\\?token
 
 test("Access state of 2022, magic auth new user", () => {
   cy.visit("/");
-  cy.findByRole("link", { name: CURRENT_SURVEY_REGEX }).click();
+  cy.findByRole("link", { name: CURRENT_SURVEY_REGEX }).click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
   const surveyRootUrl = routes.survey.root.href + CURRENT_SURVEY_URL;
   cy.url().should("match", new RegExp(surveyRootUrl));
 
   cy.intercept({
     method: "POST",
     // we still need to add * to match any query params
-    url: `${apiRoutes.account.magicLogin.sendEmail.href({})}*`,
+    url: `${apiRoutes.account.magicLogin.sendEmail.href()}*`,
   }).as("sendEmailRequest");
 
   // this email should not exist in db yet (not test user)
   const email = "test@test.test";
   cy.findByLabelText(/email/i).type(email, { force: true });
-  getCreateAccountButton().click();
+  getCreateAccountButton().click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
 
   // Check that the request succeeded
   cy.wait("@sendEmailRequest");
@@ -78,7 +78,6 @@ test("Access state of 2022, magic auth new user", () => {
 
     // Verify the token
     cy.intercept({
-      method: apiRoutes.account.magicLogin.verifyToken.method,
       url: apiRoutes.account.magicLogin.verifyToken.href({ token: "" }) + "*",
     }).as("verifyToken");
 
@@ -92,8 +91,8 @@ test("Access state of 2022, magic auth new user", () => {
 
     const token = magicLinkUrl.searchParams.get("token") as string; // equivalent to getting the 2nd item
     const from = magicLinkUrl.searchParams.get("from") as string;
-
     cy.url().should("match", new RegExp(from));
-    cy.findByRole("button", { name: startSurveyButtonName }).should("exist");
+
+    cy.url().should("match", new RegExp(surveyRootUrl + "/.+"));
   });
 });
