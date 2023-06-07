@@ -48,13 +48,8 @@ const loginAndCreateResponse = nextConnect<NextApiRequest, NextApiResponse>()
       const currentUser = (req as unknown as any).user;
       const clientData = req.body;
 
-      console.log("// loginAndCreateResponse");
-      console.log(currentUser);
-      console.log(clientData);
-
       const response = await createResponse({ clientData, currentUser });
 
-      console.log(response);
       return res
         .status(200)
         .send({ done: true, userId: req.user._id, response });
