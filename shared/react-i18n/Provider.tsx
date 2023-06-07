@@ -8,23 +8,18 @@ import { useContext, createContext } from 'react'
 import { StringsRegistry } from './stringsRegistry'
 import { Message } from './typings'
 
-type Formatter<T = any> = (val: T, ...args: any) => string
-
-interface IntlContextInput {
+interface IntlContextValue {
     localeId: string
     stringsRegistry: StringsRegistry
 }
-export interface IntlContextValue extends IntlContextInput {
-    formatMessage: Formatter<Message>
+export interface IntlContextFormat extends IntlContextValue {
+    formatMessage: (msg: Message) => string
 }
 
-/**
- * Generate the format functions for a locale, that can be provided dynamically
- * @param
- * @returns
- */
-const makeFormatMessage = ({ stringsRegistry, localeId }: IntlContextInput): Formatter => {
-    return function formatMessageForLocale({ id, defaultMessage }: Message, values = null) {
+const makeContext = ({ localeId, stringsRegistry }: IntlContextInput): IntlContextFormat => ({
+    localeId,
+    stringsRegistry,
+    formatMessage: ({ id, defaultMessage, values }: Message) => {
         return stringsRegistry.getString({
             id,
             defaultMessage,
@@ -32,15 +27,9 @@ const makeFormatMessage = ({ stringsRegistry, localeId }: IntlContextInput): For
             localeId
         })
     }
-}
-
-const makeContext = ({ localeId, stringsRegistry }: IntlContextInput): IntlContextValue => ({
-    localeId,
-    stringsRegistry,
-    formatMessage: makeFormatMessage({ localeId, stringsRegistry })
 })
 
-export const IntlContext = createContext<IntlContextValue>(
+export const IntlContext = createContext<IntlContextFormat>(
     // default values: return tokens as is
     makeContext({
         localeId: 'NOT_INITIALIZED',
@@ -48,7 +37,7 @@ export const IntlContext = createContext<IntlContextValue>(
     })
 )
 
-export interface IntlProviderProps extends IntlContextInput {
+export interface IntlProviderProps extends IntlContextValue {
     children: React.ReactNode
 }
 export const IntlContextProvider = ({

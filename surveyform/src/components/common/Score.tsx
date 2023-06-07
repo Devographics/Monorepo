@@ -77,15 +77,15 @@ const Score = ({
   const { survey, questionsUrl } = edition;
   const { name, hashtag } = survey;
 
-  const text = intl.formatMessage(
-    { id: "thanks.share_score_message" },
-    {
+  const text = intl.formatMessage({
+    id: "thanks.share_score_message",
+    values: {
       score,
       name,
       shareUrl: `${questionsUrl}?source=post_survey_share`,
       hashtag,
-    }
-  );
+    },
+  });
 
   // if (loading) return <Components.Loading />;
   // if (error) return <span>Could not load entities</span>;

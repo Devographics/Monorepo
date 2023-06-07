@@ -21,7 +21,7 @@ export const FormattedMessage = ({
   const translatorMode = useTranslatorMode();
 
   // The message can contain sanitized HTML
-  let message = intl.formatMessage({ id, defaultMessage }, values);
+  let message = intl.formatMessage({ id, defaultMessage, values });
   const props: any = {
     "data-key": id,
   };

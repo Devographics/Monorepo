@@ -11,8 +11,8 @@ const ShareSite = ({ survey }) => {
   const link = `${shareUrl}?source=post_survey_share`;
   const surveyName = `${name} ${year}`;
   const values = { surveyName, link };
-  const title = intl.formatMessage({ id: "general.share_subject" }, values);
-  const body = intl.formatMessage({ id: "general.share_text" }, values);
+  const title = intl.formatMessage({ id: "general.share_subject", values });
+  const body = intl.formatMessage({ id: "general.share_text", values });
   const twitterText = body + ` #${hashtag}`;
 
   return (
