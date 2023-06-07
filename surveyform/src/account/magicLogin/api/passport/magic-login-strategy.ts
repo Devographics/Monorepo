@@ -1,5 +1,8 @@
 import MagicLoginStrategy from "passport-magic-login";
-import { apiGetSessionFromReq, getTokenSecret } from "~/account/user/api/session";
+import {
+  apiGetSessionFromReq,
+  getTokenSecret,
+} from "~/account/user/api/session";
 import { sendMagicLinkEmail } from "../email/magicLinkEmail";
 
 import { UserTypeServer } from "~/lib/users/model.server";
@@ -23,14 +26,22 @@ import { MagicLoginSendEmailBody } from "../../typings/requests-body";
  * @param href
  * @returns
  */
+
+const checkAndSetParams = (url, params, req) => {
+  Object.keys(params).forEach((key) => {
+    const value = params[key];
+    if (value && typeof value === "string") {
+      url.searchParams.set(key, value);
+    } else if (value) {
+      console.warn(`${key} parameter is not a string`, req.query, req.url);
+    }
+  });
+};
+
 const computeMagicLink = (req: NextApiRequest, href: string) => {
   const magicLinkUrl = new URL(`${serverConfig().appUrl}${href}`);
-  const from = req.query?.from;
-  if (from && typeof from === "string") {
-    magicLinkUrl.searchParams.set("from", from);
-  } else if (from) {
-    console.warn("From parameter is not a string", req.query, req.url);
-  }
+  const { redirectTo, editionId, surveyId } = req.body;
+  checkAndSetParams(magicLinkUrl, { redirectTo, editionId, surveyId }, req);
   return magicLinkUrl.toString();
 };
 
@@ -44,8 +55,8 @@ async function sendMagicLink(
   // the request
   req: NextApiRequest
 ) {
-  const currentUser = await apiGetSessionFromReq(req)
-  const anonymousId = currentUser?._id
+  const currentUser = await apiGetSessionFromReq(req);
+  const anonymousId = currentUser?._id;
   const email = destination;
   // Important! otherwise we could send the email to a random user!
   if (!(email && typeof email === "string"))
@@ -54,7 +65,6 @@ async function sendMagicLink(
   const magicLink = computeMagicLink(req, href);
 
   const foundUser = await findUserFromEmail(email);
-
 
   const { surveyId, editionId, locale } = req.body as MagicLoginSendEmailBody;
   if (foundUser) {
@@ -85,6 +95,7 @@ async function sendMagicLink(
   return sendMagicLinkEmail({
     email,
     magicLink,
+    editionId,
     surveyId,
     locale,
   });

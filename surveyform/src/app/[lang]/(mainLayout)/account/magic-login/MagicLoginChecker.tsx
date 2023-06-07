@@ -18,14 +18,23 @@ import { routes } from "~/lib/routes";
 
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { Loading } from "~/components/ui/Loading";
+import { useClientData } from "~/components/page/hooks";
+import { getEditionSectionPath } from "~/lib/surveys/helpers";
+import { useLocaleContext } from "~/i18n/context/LocaleContext";
 
 const useMagicLoginCheck = ({
   token,
-  from,
+  redirectTo,
+  editionId,
+  surveyId,
 }: {
   token: string;
-  from?: string;
+  redirectTo?: string;
+  editionId?: string;
+  surveyId?: string;
 }) => {
+  const { locale } = useLocaleContext();
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<null | Error>(null);
   /**
@@ -33,26 +42,39 @@ const useMagicLoginCheck = ({
    * We must pass their id
    */
 
+  const clientData =
+    editionId && surveyId ? useClientData({ editionId, surveyId }) : undefined;
+
   useEffect(() => {
-    setLoading(true);
-    if (token) {
-      verifyMagicToken(token)
-        .then(() => {
-          if (from) {
-            // the query param can be used to immediately redirect user or display a specific message
-            window.location.replace(from + "?from-magic-login=1");
-          } else {
-            // We do a full page reload to avoid any caching issue and not just a SPA router.push
-            window.location.replace(routes.home.href);
-          }
-        })
-        .catch((err) => {
-          setError(err);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    }
+    const verifyToken = async () => {
+      setLoading(true);
+      if (token) {
+        const res = await verifyMagicToken({ token, redirectTo, clientData });
+        const result = await res.json();
+        const { response, editionId, surveyId } = result;
+        let path;
+        if (response) {
+          path = getEditionSectionPath({
+            edition: { id: editionId },
+            survey: { id: surveyId },
+            locale,
+            response,
+          });
+        } else if (redirectTo) {
+          path = redirectTo;
+        } else {
+          path = routes.home.href;
+        }
+        // TODO: having that query param triggers hydration mismatch errors?
+        // We do a full page reload to avoid any caching issue and not just a SPA router.push
+        // window.location.replace(path + "?from-magic-login=1");
+        window.location.replace(path);
+      }
+      setLoading(false);
+    };
+    verifyToken().catch((err) => {
+      setError(err);
+    });
   }, [!!token]);
 
   return {
@@ -62,12 +84,21 @@ const useMagicLoginCheck = ({
 };
 export const MagicLoginChecker = ({
   token,
-  from,
+  redirectTo,
+  editionId,
+  surveyId,
 }: {
   token: string;
-  from?: string;
+  redirectTo?: string;
+  editionId?: string;
+  surveyId?: string;
 }) => {
-  const { loading, error } = useMagicLoginCheck({ token, from });
+  const { loading, error } = useMagicLoginCheck({
+    token,
+    redirectTo,
+    editionId,
+    surveyId,
+  });
   if (loading) return <Loading />;
   if (error) return <p>Error: {error.message}</p>;
   return (

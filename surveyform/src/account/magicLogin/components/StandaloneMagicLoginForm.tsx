@@ -17,7 +17,7 @@ export interface StandaloneMagicLoginFormProps {
    */
   surveyId?: string;
   editionId?: string;
-  successRedirectionPath?: string;
+  redirectTo?: string;
   loginOptions?: { data?: any; createResponse?: boolean };
 }
 /**
@@ -30,7 +30,7 @@ export const StandaloneMagicLoginForm = ({
   label,
   surveyId,
   editionId,
-  successRedirectionPath,
+  redirectTo,
   loginOptions,
 }: StandaloneMagicLoginFormProps) => {
   const intl = useIntlContext();
@@ -58,12 +58,13 @@ export const StandaloneMagicLoginForm = ({
     const body = {
       destination: email,
       anonymousId: currentUser?._id,
+      redirectTo,
       surveyId,
       editionId,
       locale: locale.id,
     };
     try {
-      const res = await sendMagicLoginEmail(body, successRedirectionPath);
+      const res = await sendMagicLoginEmail({ body });
       if (res.status === 200) {
         setSuccessMsg(
           intl.formatMessage({ id: `accounts.magic_link.success` }) ||
