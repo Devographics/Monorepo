@@ -72,6 +72,7 @@
   }
 }
 .survey-name {
+  font-size: $large-font;
   position: absolute;
   bottom: 0;
   margin-left: 50%;
@@ -79,6 +80,7 @@
   z-index: 1;
   background: var(--bg-color);
   border-radius: 30px;
+  margin-bottom: 0;
   span {
     padding: 5px 10px;
     @include border;

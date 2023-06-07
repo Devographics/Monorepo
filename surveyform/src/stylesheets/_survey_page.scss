@@ -22,13 +22,6 @@
     max-width: 420px;
   }
 }
-.survey-name {
-  @include small {
-    margin-bottom: math.div($spacing, 2);
-  }
-  font-size: $large-font;
-  margin: 0;
-}
 .survey-page-message {
   text-align: center;
 }
@@ -44,6 +37,9 @@
   @include border;
   flex-basis: 50%;
   padding: $spacing;
+  @include small {
+    margin-bottom: $spacing;
+  }
 }
 .survey-login-option-description {
   font-size: $smallish-font;
