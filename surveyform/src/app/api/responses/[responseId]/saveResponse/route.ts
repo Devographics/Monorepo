@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { tryGetCurrentUser } from "~/account/user/route-handlers/getters";
+import { handlerMustHaveCurrentUser } from "~/account/user/route-handlers/getters";
 import { RouteHandlerOptions } from "~/app/api/typings";
 import { loadResponse } from "~/lib/responses/db-actions/load";
 import { saveResponse } from "~/lib/responses/db-actions/save";
@@ -11,7 +11,7 @@ export async function POST(
 ) {
   try {
     // Get current user
-    const currentUser = await tryGetCurrentUser(req);
+    const currentUser = await handlerMustHaveCurrentUser(req);
 
     // Get responseId
     // TODO: this should be a route parameter instead
@@ -36,7 +36,7 @@ export async function POST(
       });
     }
 
-    const data = await saveResponse({
+    await saveResponse({
       responseId,
       currentUser,
       clientData,

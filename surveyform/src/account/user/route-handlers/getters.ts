@@ -17,11 +17,11 @@ export async function getUserIdFromReq(req: NextRequest) {
  * Do not fail if user is not found
  * => when fetching "current-user", a null user should be a 200, not a 401
  * because it's expected to get no user if you are not logged in
- * Use "mustGetCurrentUser" if you actually expect the user to be logged in
+ * Use "handlerMustHaveCurrentUser" if you actually expect the user to be logged in
  * @param req
  * @returns
  */
-export async function tryGetCurrentUser(req: NextRequest) {
+export async function handlerCurrentUser(req: NextRequest) {
   const userId = await getUserIdFromReq(req);
   if (!userId) {
     return null;
@@ -36,7 +36,7 @@ export async function tryGetCurrentUser(req: NextRequest) {
  * Experimental: a helper function to be called by Route Handlers
  * Will either throw an error or return the value we want
  */
-export async function mustGetCurrentUser(
+export async function handlerMustHaveCurrentUser(
   req: NextRequest
 ): Promise<UserDocument> {
   const userId = await getUserIdFromReq(req);

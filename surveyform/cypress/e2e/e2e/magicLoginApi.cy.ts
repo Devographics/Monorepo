@@ -47,7 +47,7 @@ describe("auth - API", () => {
     it("do not send verification email if email is not provided", () => {
       cy.request({
         method: "POST",
-        url: apiRoutes.account.magicLogin.sendEmail.href({}),
+        url: apiRoutes.account.magicLogin.sendEmail.href(),
         body: { wrong: "foo" },
         // we specificallly test a failure
         failOnStatusCode: false,
@@ -62,7 +62,7 @@ describe("auth - API", () => {
           const uniqueEmail = new Date().getTime() + "@RATE.LIMIT";
           let latestRes;
           for (let i = 0; i < 1000; i++) {
-            latestRes = await sendMagicLoginEmail({ destination: uniqueEmail });
+            latestRes = await sendMagicLoginEmail({ body: { destination: uniqueEmail } });
             if (latestRes.status === 429) {
               return latestRes;
             }
@@ -76,13 +76,13 @@ describe("auth - API", () => {
         .should("equal", 429);
     });
     it("sends verification email for non-existing user", () => {
-      cyfy(() => sendMagicLoginEmail({ destination: "test@test.test" }))
+      cyfy(() => sendMagicLoginEmail({ body: { destination: "test@test.test" } }))
         .its("status")
         .should("equal", 200);
     });
     it("sends verification email for existing user", () => {
       const email = TEST_USER_EMAIL;
-      cyfy(() => sendMagicLoginEmail({ destination: email }))
+      cyfy(() => sendMagicLoginEmail({ body: { destination: email } }))
         .its("status")
         .should("equal", 200);
     });
@@ -95,8 +95,10 @@ describe("auth - API", () => {
           cy.wrap(result).its("userId").should("exist");
           cyfy(() =>
             sendMagicLoginEmail({
-              destination: email,
-              anonymousId: result.userId,
+              body: {
+                destination: email,
+                anonymousId: result.userId,
+              }
             })
           )
             .its("status")
@@ -112,8 +114,10 @@ describe("auth - API", () => {
           cy.wrap(result).its("userId").should("exist");
           cyfy(() =>
             sendMagicLoginEmail({
-              destination: email,
-              anonymousId: result.userId,
+              body: {
+                destination: email,
+                anonymousId: result.userId,
+              }
             })
           )
             .its("status")
@@ -138,7 +142,7 @@ describe("auth - API", () => {
   it("create new verified user when verifying magic link", () => {
     // 1. get a token
     const email = "test@test.test";
-    cyfy(() => sendMagicLoginEmail({ destination: email }))
+    cyfy(() => sendMagicLoginEmail({ body: { destination: email } }))
       // Wait  for request to finish and succeed otherwise the mail won't be there yet
       .its("status")
       .should("equal", 200);
@@ -154,7 +158,7 @@ describe("auth - API", () => {
 
       console.log("token", token);
       // 2. verify
-      cyfy(() => verifyMagicToken(token))
+      cyfy(() => verifyMagicToken({ token }))
         .its("status")
         .should("equal", 200);
     });
@@ -171,7 +175,7 @@ describe("auth - API", () => {
         // TODO: log anonymous
         // 1. get a token
         const email = "test@test.test";
-        cyfy(() => sendMagicLoginEmail({ destination: email, anonymousId }))
+        cyfy(() => sendMagicLoginEmail({ body: { destination: email, anonymousId } }))
           // Wait  for request to finish and succeed otherwise the mail won't be there yet
           .its("status")
           .should("equal", 200);
@@ -185,7 +189,7 @@ describe("auth - API", () => {
           const token = magicLinkUrl.searchParams.get("token");
           if (!token) throw new Error("Cannot get token");
           // 2. verify
-          cyfy(() => verifyMagicToken(token))
+          cyfy(() => verifyMagicToken({ token }))
             .its("status")
             .should("equal", 200);
 

@@ -8,6 +8,7 @@ import { HandlerError } from "~/lib/handler-error";
 import { ActionContexts, Actions, getZodSchema } from "~/lib/validation";
 import { getResponseSchema } from "../schema";
 import omitBy from "lodash/omitBy";
+import { UserDocument } from "~/account/user/typings";
 
 export const validateResponse = ({
   currentUser,
@@ -19,7 +20,7 @@ export const validateResponse = ({
   edition,
   action,
 }: {
-  currentUser: any;
+  currentUser: UserDocument;
   existingResponse?: ResponseDocument;
   updatedResponse?: ResponseDocument;
   clientData: ResponseDocument;
@@ -41,7 +42,7 @@ export const validateResponse = ({
         throw new HandlerError({
           id: "update_not_authorized",
           message: `User ${currentUser._id} not authorized to perform UPDATE on document ${existingResponse._id}`,
-          status: 400,
+          status: 403,
         });
       }
     } else {

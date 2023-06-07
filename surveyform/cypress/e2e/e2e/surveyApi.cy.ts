@@ -140,11 +140,10 @@ test("authenticated or unauthenticated users cannot save someone else survey", (
         lastSavedAt: new Date()
       },
       // we specificallly test a failure
-      //failOnStatusCode: false,
+      failOnStatusCode: false,
     })
-    // TODO: setup a 403 status
-    //.its("status")
-    //.should("equal", 403);
+      .its("status")
+      .should("equal", 403);
   })
 })
 

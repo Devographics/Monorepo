@@ -41,12 +41,6 @@ test("Access state of 2022, signup, start filling form", () => {
 
   getContinueAsGuestButton().click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
 
-  // TODO: replace by the english label when i18n is there
-  // FIXME: this is not language resistant...
-  // @see https://github.com/cypress-io/cypress/issues/7890
-  cy.findByRole("button", {
-    name: /start_survey|start survey|commencer à répondre/i,
-  }).click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
   cy.url().should("match", new RegExp(surveyRootUrl + "/.+"));
   // click 1st section
   const secondSectionButtonName = /Directives|sections\.directives\.title/i;
@@ -55,7 +49,7 @@ test("Access state of 2022, signup, start filling form", () => {
   }).click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
   cy.url().should("match", new RegExp(surveyRootUrl + "/.+" + "/2"));
   // skip to last section
-  getLinkToSection(/About You|sections\.user_info\.title/i).click()
+  getLinkToSection(/About You|sections\.user_info\.title/i).click({ force: true })
   cy.url().should("match", new RegExp(surveyRootUrl + "/.+" + "/\\d+"));
   // finish
   cy.findByRole("button", {

@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { tryGetCurrentUser } from "~/account/user/route-handlers/getters";
+import { handlerMustHaveCurrentUser } from "~/account/user/route-handlers/getters";
 import { createResponse } from "~/lib/responses/db-actions/create";
 import { HandlerError } from "~/lib/handler-error";
 
 export async function POST(req: NextRequest, res: NextResponse) {
   try {
     // Get current user
-    const currentUser = await tryGetCurrentUser(req);
+    const currentUser = await handlerMustHaveCurrentUser(req);
 
     // Get body data as JSON
     let clientData: any;
@@ -23,6 +23,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     const data = await createResponse({ clientData, currentUser });
     return NextResponse.json({ data });
   } catch (error) {
+    console.error(error)
     if (error instanceof HandlerError) {
       return await error.toNextResponse(req);
     } else {

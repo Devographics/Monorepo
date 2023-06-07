@@ -6,7 +6,6 @@ import { testSurvey } from "../../fixtures/testSurvey";
 import { routes } from "~/lib/routes";
 // Set to english (NOTE: this won't work in before.ts)
 import { LOCALE_COOKIE_NAME } from "~/i18n/cookie";
-import { startSurveyButtonName } from "../../helpers/selectors";
 import { apiRoutes } from "~/lib/apiRoutes";
 import { getCreateAccountButton } from "../../helpers/getters";
 
@@ -78,7 +77,7 @@ test("Access state of 2022, magic auth new user", () => {
 
     // Verify the token
     cy.intercept({
-      url: apiRoutes.account.magicLogin.verifyToken.href({ token: "" }) + "*",
+      url: apiRoutes.account.magicLogin.verifyTokenAndFindCreateResponse.href({ token: "" }) + "*",
     }).as("verifyToken");
 
     cy.visit(magicLink);
@@ -90,9 +89,47 @@ test("Access state of 2022, magic auth new user", () => {
     //cy.findByText(/successfully verified/i).should("exist");
 
     const token = magicLinkUrl.searchParams.get("token") as string; // equivalent to getting the 2nd item
-    const from = magicLinkUrl.searchParams.get("from") as string;
+    const from = magicLinkUrl.searchParams.get("redirectTo") as string;
     cy.url().should("match", new RegExp(from));
 
     cy.url().should("match", new RegExp(surveyRootUrl + "/.+"));
+  });
+});
+
+test("Magic auth new user from generic page", () => {
+  cy.visit(routes.account.login.href);
+  cy.intercept({
+    method: "POST",
+    // we still need to add * to match any query params
+    url: `${apiRoutes.account.magicLogin.sendEmail.href()}*`,
+  }).as("sendEmailRequest");
+  // this email should not exist in db yet (not test user)
+  const email = "test@test.test";
+  cy.findByLabelText(/email/i).type(email, { force: true });
+  getCreateAccountButton().click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
+  // Check that the request succeeded
+  cy.wait("@sendEmailRequest");
+  cy.get("@sendEmailRequest").its("response.body").should("exist");
+  // Then, we check for the verification email to be sent
+  cy.task("getLastEmail", email).then((emailBody: string) => {
+    // FIXME: doesn't pass yet because the mail is never caught by "mail.js", not sure why
+    cy.wrap(emailBody).should("not.be.null");
+    const magicLinkMatch = emailBody.match(magicLinkRegex);
+    cy.wrap(magicLinkMatch).should("exist");
+    const magicLink = (magicLinkMatch?.[0] as string)
+      // remove the last "
+      .slice(0, -1);
+    const magicLinkUrl = new URL(magicLink);
+    // token = resetLink.groups.token
+    // Verify the token
+    cy.intercept({
+      url: apiRoutes.account.magicLogin.verifyToken.href({ token: "" }) + "*",
+    }).as("verifyToken");
+    cy.visit(magicLink);
+    cy.wait("@verifyToken");
+    //cy.get("@verifyToken").its("request.body").should("deep.equal", { token });
+    cy.get("@verifyToken").its("response.body").should("exist"); // wait for the response to be there
+    // FIXME: it doesn't wait enough
+    // cy.url().should("match", routes.home.href);
   });
 });
