@@ -94,7 +94,6 @@ export const ReadingList = (props: FormInputProps) => {
 
 const ListItem = ({
   itemId: currentItemId,
-  section,
   question,
   response,
   updateCurrentValues,
