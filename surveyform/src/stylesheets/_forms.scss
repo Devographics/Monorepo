@@ -477,19 +477,37 @@
   }
 }
 
-.toast {
-  background: none;
+.form-messages {
   position: fixed;
   bottom: 20px;
   right: 20px;
   z-index: 1000000;
+}
+.form-message {
+  background: none;
   backdrop-filter: blur(6px);
-  &-header {
+  &:not(:last-child) {
+    margin-bottom: $spacing/2;
+  }
+}
+.form-message-error {
+  .toast-header {
     background: rgba(211, 65, 65, 0.3);
     color: rgba(253, 232, 232, 0.9);
   }
-  &-body {
+  .toast-body {
     background: rgba(255, 93, 93, 0.3);
     color: rgba(253, 232, 232, 0.9);
+  }
+}
+
+.form-message-success {
+  .toast-header {
+    background: rgba(65, 211, 138, 0.3);
+    color: rgba(232, 253, 237, 0.9);
+  }
+  .toast-body {
+    background: rgba(123, 250, 157, 0.3);
+    color: rgba(232, 253, 237, 0.9);
   }
 }

@@ -5,6 +5,8 @@ import { FormInputProps } from "../form/typings";
 import { getEditionQuestions } from "~/lib/surveys/helpers";
 import EntityLabel from "~/components/common/EntityLabel";
 import { Button } from "~/components/ui/Button";
+import { Cross } from "../icons";
+import QuestionLabel from "../form/QuestionLabel";
 
 const cutoff = 5;
 const animationDurationInMs = 700;
@@ -23,7 +25,7 @@ const usePrevious = (value) => {
 };
 
 export const ReadingList = (props: FormInputProps) => {
-  const { edition, response } = props;
+  const { edition, response, updateCurrentValues } = props;
   const allQuestions = getEditionQuestions(edition);
   const [showMore, setShowMore] = useState(false);
   const [animate, setAnimate] = useState(false);
@@ -69,6 +71,8 @@ export const ReadingList = (props: FormInputProps) => {
             key={itemId}
             itemId={itemId}
             question={allQuestions.find((q) => q.id === itemId)}
+            response={response}
+            updateCurrentValues={updateCurrentValues}
           />
         ))}
       </ul>
@@ -88,10 +92,25 @@ export const ReadingList = (props: FormInputProps) => {
   );
 };
 
-const ListItem = ({ itemId, question }) => {
+const ListItem = ({
+  itemId: currentItemId,
+  section,
+  question,
+  response,
+  updateCurrentValues,
+}) => {
+  const handleClick = () => {
+    const readingList = response?.readingList || [];
+    updateCurrentValues({
+      readingList: readingList.filter((itemId) => itemId !== currentItemId),
+    });
+  };
   return (
     <li className="reading-list-item">
-      <EntityLabel entity={question.entity} />
+      <QuestionLabel section={question.section} question={question} />
+      <button className="reading-list-item-delete" onClick={handleClick}>
+        <Cross />
+      </button>
     </li>
   );
 };

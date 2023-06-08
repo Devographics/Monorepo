@@ -7,6 +7,7 @@ import {
   SectionMetadata,
   QuestionMetadata,
 } from "@devographics/types";
+import { Message } from "./FormMessages";
 
 export type FormInputProps = {
   /**
@@ -26,4 +27,5 @@ export type FormInputProps = {
   stateStuff: any;
   sectionNumber: number;
   questionNumber: number;
+  addMessage: (message: Message) => void;
 };

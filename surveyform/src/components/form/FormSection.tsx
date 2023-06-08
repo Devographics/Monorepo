@@ -11,6 +11,7 @@ import { ErrorBoundary } from "~/components/error";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { useResponse } from "../ResponseContext/ResponseProvider";
 import { Edition, ResponseDocument, Section } from "@devographics/types";
+import { Message } from "./FormMessages";
 
 const initFormState = (response) => ({
   currentValues: {},
@@ -49,6 +50,7 @@ export const FormSection = (
     null
   );
   const [errorResponse, setErrorResponse] = useState();
+  const [messages, setMessages] = useState<Message[]>([]);
   const { locale } = useLocaleContext();
 
   const { updateResponseFromClient } = useResponse();
@@ -64,6 +66,8 @@ export const FormSection = (
     setCurrentFocusIndex,
     errorResponse,
     setErrorResponse,
+    messages,
+    setMessages,
   };
 
   const router = useRouter();
@@ -128,6 +132,13 @@ export const FormSection = (
         console.error(res.error);
         captureException(res.error);
         setErrorResponse(res.error);
+        const { id, message, status } = res.error;
+        addMessage({
+          type: "error",
+          headerId: id,
+          extraInfo: status,
+          body: message,
+        });
         return;
       }
       // TODO: @see https://github.com/vercel/next.js/issues/49387#issuecomment-1564539515
@@ -153,6 +164,10 @@ export const FormSection = (
   const previousSection = edition.sections[sectionIndex - 1];
   const nextSection = edition.sections[sectionIndex + 1];
 
+  const addMessage = (message: Message) => {
+    setMessages((messages) => [...messages, message]);
+  };
+
   const formProps = {
     ...props,
     response,
@@ -161,6 +176,7 @@ export const FormSection = (
     nextSection,
     updateCurrentValues,
     submitForm,
+    addMessage,
   };
 
   return (

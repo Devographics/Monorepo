@@ -9,6 +9,8 @@ import { isAbsoluteUrl } from "~/lib/utils";
 import { LocaleDef } from "~/i18n/typings";
 import { reverseSurveyParamsLookup } from "./data";
 import { outlineSegment } from "../routes";
+import { useIntlContext } from "@devographics/react-i18n";
+import { getQuestioni18nIds } from "@devographics/i18n";
 
 /*
 
@@ -144,11 +146,40 @@ export function getEditionHomePath({
   return "/" + [locale.id, prefixSegment, surveySlug, editionSlug].join("/");
 }
 
-export const getEditionQuestions = (edition: EditionMetadata) =>
-  edition.sections.map((s) => s.questions).flat();
+export const getEditionQuestions = (
+  edition: EditionMetadata
+): Array<QuestionMetadata & { section: SectionMetadata }> =>
+  edition.sections
+    .map((s) => s.questions.map((q) => ({ ...q, section: s })))
+    .flat();
 
 export const getEntityName = (entity) => {
   if (!entity) return;
   const { name, nameClean, nameHtml } = entity;
   return nameHtml || nameClean || name;
+};
+
+export const useQuestionTitle = ({
+  section,
+  question,
+}: {
+  section: SectionMetadata;
+  question: QuestionMetadata;
+}) => {
+  const intl = useIntlContext();
+  const { entity } = question;
+  const i18n = getQuestioni18nIds({ section, question });
+
+  const entityNameHtml = entity && (entity.nameHtml || entity.name);
+  const entityNameClean = entity && (entity.nameClean || entity.name);
+
+  // TODO: formatMessage should return an object with html and clean versions
+  // instead of just a string
+  const i18nNameHtml = intl.formatMessage({ id: i18n.base });
+  const i18nNameClean = intl.formatMessage({ id: i18n.base });
+
+  return {
+    html: entityNameHtml || i18nNameHtml,
+    clean: entityNameClean || i18nNameClean,
+  };
 };

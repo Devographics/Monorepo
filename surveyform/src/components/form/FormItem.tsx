@@ -14,7 +14,8 @@ import { CommentTrigger, CommentInput } from "./FormComment";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { getQuestioni18nIds } from "@devographics/i18n";
 import { getFormPaths } from "~/lib/surveys/helpers";
-import AddToList from "../reading_list/AddToList";
+import AddToList from "~/components/reading_list/AddToList";
+import QuestionLabel from "./QuestionLabel";
 
 export interface FormItemProps extends FormInputProps {
   children: ReactNode;
@@ -95,27 +96,15 @@ export const FormItem = (props: FormItemProps) => {
 };
 
 export const FormItemTitle = (props: FormItemProps) => {
-  const { question, sectionNumber, questionNumber, enableLearnMore } = props;
+  const { section, question, enableLearnMore } = props;
   const intl = useIntlContext();
-  const { entity, yearAdded } = question;
-  const i18n = getQuestioni18nIds(props);
-
-  const entityName =
-    entity && (entity.nameHtml || entity.nameClean || entity.name);
+  const { yearAdded } = question;
 
   return (
     <h3 className="form-label-heading">
       <Form.Label>
-        {entityName ? (
-          <span
-            className="entity-label"
-            dangerouslySetInnerHTML={{
-              __html: entityName,
-            }}
-          />
-        ) : (
-          <FormattedMessage id={i18n.base} defaultMessage={i18n.base} />
-        )}
+        <QuestionLabel section={section} question={question} />
+
         {yearAdded === 2023 && (
           <span
             className="question-label-new"
