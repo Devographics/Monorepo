@@ -21,4 +21,4 @@ export default nextConnect<NextApiRequest, NextApiResponse>({
     next();
   },
   mongoExportMiddleware
-)
+);

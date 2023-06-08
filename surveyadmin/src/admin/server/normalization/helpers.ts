@@ -14,7 +14,7 @@ import type {
 } from "@devographics/core-models";
 import { logToFile } from "@devographics/core-models/server";
 import { getOrFetchEntities } from "~/modules/entities/server";
-import { getSurveyEditionById } from "~/modules/surveys/helpers";
+import { getEditionById } from "~/modules/surveys/helpers";
 import { NormalizedResponseMongooseModel } from "~/admin/models/normalized_responses/model.server";
 import {
   DbSuffixes,
@@ -550,7 +550,7 @@ export const getSelector = async ({
   responsesIds?: string[];
   onlyUnnormalized?: boolean;
 }) => {
-  const survey = getSurveyEditionById(editionId);
+  const edition = await getEditionById(editionId);
 
   const selector = {
     editionId,
@@ -574,7 +574,7 @@ export const getSelector = async ({
           [f]: existsSelector,
         }));
       } else {
-        const field = getEditionQuestionById(survey, questionId);
+        const field = getEditionQuestionById(edition, questionId);
         selector[field.fieldName] = existsSelector;
       }
     }
@@ -599,7 +599,7 @@ export const getEditionQuestionsFlat = (
 
 export const getUnnormalizedResponses = async (editionId, questionId) => {
   let rawFieldPath, normalizedFieldPath;
-  const edition = (await getSurveyEditionById(editionId)) as EditionMetadata;
+  const edition = (await getEditionById(editionId)) as EditionMetadata;
   if (questionId === "source") {
     rawFieldPath = "user_info.source.raw";
     normalizedFieldPath = "user_info.source.normalized";

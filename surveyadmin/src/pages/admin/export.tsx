@@ -2,7 +2,7 @@ import React, { useReducer, useRef, useState } from "react";
 import { ExportOptions, ExportOptionsStr } from "~/admin/models/export";
 import { SurveyMarkdownOutline } from "~/core/components/survey/SurveyExport";
 import { apiRoutes } from "~/lib/apiRoutes";
-import { getSurveyEditionById } from "~/modules/surveys/helpers";
+import { getEditionById } from "~/modules/surveys/helpers";
 // TODO: get from top-level context as in surveyform
 import { surveys } from "~/surveys";
 import { surveysQuery } from "~/admin/components/normalization/Normalization";

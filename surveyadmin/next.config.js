@@ -17,6 +17,9 @@ const withTM = require("next-transpile-modules")([
   "@devographics/swr-graphql",
   "@devographics/templates",
   "@devographics/types",
+  "@devographics/fetch",
+  "@devographics/helpers",
+  "@devographics/redis",
 ]);
 
 // @see https://nextjs.org/docs/api-reference/next.config.js/runtime-configuration

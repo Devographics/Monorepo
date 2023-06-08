@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import fs from "fs";
 const fsPromises = fs.promises;
 import path from "path";
-import { getSurveyEditionById } from "~/modules/surveys/helpers";
+import { getEditionById } from "~/modules/surveys/helpers";
 import { ExportOptions } from "~/admin/models/export";
 import { generateExportsZip } from "./generateExports";
 
@@ -13,31 +13,35 @@ export async function mongoExportMiddleware(
   // We log exports so they never go unnoticed
   console.log(`Started an export with options ${JSON.stringify(req.query)}`);
   // parse options
-  const surveySlug = req.query["surveySlug"];
-  if (typeof surveySlug !== "string") {
+  const editionId = req.query["editionId"];
+
+  if (typeof editionId !== "string") {
     return res
       .status(400)
       .send(
-        "Survey slug must be defined and must be a string, got:" + surveySlug
+        "Survey slug must be defined and must be a string, got:" + editionId
       );
   }
+
   const options: ExportOptions = {
-    surveySlug,
+    editionId,
     format: {
       json: true,
     },
   };
+
   // find the survey
-  const survey = getSurveyEditionById(surveySlug);
-  if (!survey) {
+  const edition = await getEditionById(editionId);
+
+  if (!edition) {
     return res
       .status(400)
-      .send(`Survey with slug ${surveySlug} not found, cannot export.`);
+      .send(`Survey with slug ${editionId} not found, cannot export.`);
   }
 
   // TODO: allow CSV https://www.mongodb.com/docs/database-tools/mongoexport/#export-in-csv-format
   try {
-    const zipFilePath = await generateExportsZip(survey);
+    const zipFilePath = await generateExportsZip(edition);
     // Now stream the file
     const stats = await fsPromises.stat(zipFilePath);
     res.writeHead(200, {

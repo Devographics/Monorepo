@@ -850,9 +850,12 @@ importers:
       '@cypress/webpack-preprocessor': ^5.4.1
       '@devographics/core-models': workspace:*
       '@devographics/encrypt-email': workspace:*
+      '@devographics/fetch': workspace:^1.0.0
+      '@devographics/helpers': workspace:^1.0.0
       '@devographics/mongo': workspace:^1.0.0
       '@devographics/react-form': workspace:*
       '@devographics/react-i18n': workspace:*
+      '@devographics/redis': workspace:^1.0.0
       '@devographics/swr-graphql': workspace:*
       '@devographics/templates': workspace:^1.0.0
       '@devographics/types': workspace:^1.0.0
@@ -945,6 +948,7 @@ importers:
       next-transpile-modules: ^10.0.0
       node-cache: ^5.1.2
       node-fetch: ^3.2.10
+      node-loader: ^2.0.0
       nodemailer: ^6.6.3
       nyc: ^15.1.0
       passport: ^0.4.1
@@ -988,9 +992,12 @@ importers:
     dependencies:
       '@devographics/core-models': link:../shared/core-models
       '@devographics/encrypt-email': link:../shared/encrypt-email
+      '@devographics/fetch': link:../shared/fetch
+      '@devographics/helpers': link:../shared/helpers
       '@devographics/mongo': link:../shared/mongo
       '@devographics/react-form': link:../shared/react-form
       '@devographics/react-i18n': link:../shared/react-i18n
+      '@devographics/redis': link:../shared/redis
       '@devographics/swr-graphql': link:../shared/swr-graphql
       '@devographics/templates': link:../shared/templates
       '@devographics/types': link:../shared/types
@@ -1081,7 +1088,7 @@ importers:
       swr: 0.4.2_react@18.2.0
       uuid: 8.3.2
     optionalDependencies:
-      '@cypress/code-coverage': 3.10.4_jm3zfnor3dejdgoaolv43yzg3m
+      '@cypress/code-coverage': 3.10.7_jm3zfnor3dejdgoaolv43yzg3m
       '@cypress/webpack-preprocessor': 5.17.1_vqwn22oqs42olud44fk6wru6ge
       '@istanbuljs/nyc-config-typescript': 1.0.2_nyc@15.1.0
       '@next/bundle-analyzer': 9.5.5
@@ -1120,6 +1127,7 @@ importers:
       eslint: 7.32.0
       mongodb-memory-server: 7.6.3
       next-transpile-modules: 10.0.0
+      node-loader: 2.0.0_webpack@5.74.0
       react-is: 16.13.1
       source-map-support: 0.5.21
       supertest: 6.3.1
@@ -5542,8 +5550,8 @@ packages:
     resolution: {integrity: sha512-ij4wRiunFfaJxjB0BdrYHIH8FxBJpOwNPhhAcunlmPdXudL1WQV1qoP9un6JsEBAgQH+7UXyyjh0g7jTxXK6tg==}
     dev: false
 
-  /@cypress/code-coverage/3.10.4_jm3zfnor3dejdgoaolv43yzg3m:
-    resolution: {integrity: sha512-FTB6ftXjO87KlqXiR/55UaniXwPia6+CcaO7I6aZDbB9u7Zz2InBx5iakpKB28CJoqmk1sywblOP57QHd6weLQ==}
+  /@cypress/code-coverage/3.10.7_jm3zfnor3dejdgoaolv43yzg3m:
+    resolution: {integrity: sha512-kQFB8GemDAAk6JBINsR9MLEgCw2AKb3FcdHQjIJ3KV4ZER6ZF0NGdO8SRj5oTVp28oqfOab4cgoBdecRiOE3qA==}
     requiresBuild: true
     peerDependencies:
       cypress: '*'
@@ -28077,6 +28085,16 @@ packages:
       util: 0.11.1
       vm-browserify: 1.1.2
     dev: false
+
+  /node-loader/2.0.0_webpack@5.74.0:
+    resolution: {integrity: sha512-I5VN34NO4/5UYJaUBtkrODPWxbobrE4hgDqPrjB25yPkonFhCmZ146vTH+Zg417E9Iwoh1l/MbRs1apc5J295Q==}
+    engines: {node: '>= 10.13.0'}
+    peerDependencies:
+      webpack: ^5.0.0
+    dependencies:
+      loader-utils: 2.0.4
+      webpack: 5.74.0
+    dev: true
 
   /node-loader/2.0.0_webpack@5.75.0:
     resolution: {integrity: sha512-I5VN34NO4/5UYJaUBtkrODPWxbobrE4hgDqPrjB25yPkonFhCmZ146vTH+Zg417E9Iwoh1l/MbRs1apc5J295Q==}

@@ -8,7 +8,7 @@ export interface ExportOptions {
     csvExplanation?: boolean;
     mongoDump?: boolean;
   };
-  surveySlug: SurveyEdition["slug"];
+  editionId: SurveyEdition["id"];
   /**
    * Not yet used
    *

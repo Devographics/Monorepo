@@ -1,5 +1,6 @@
 import { SurveyMetadata } from "@devographics/types";
-import { fetchSurveysListGraphQL } from "@devographics/core-models/server";
+import { getFromCache, fetchGraphQLApi } from "@devographics/fetch";
+import { getSurveysQuery } from "./queries";
 
 export let allSurveys: SurveyMetadata[] = [];
 
@@ -10,9 +11,18 @@ export const loadOrGetSurveys = async (
   const { forceReload } = options;
 
   if (forceReload || allSurveys.length === 0) {
-    allSurveys = await fetchSurveysListGraphQL({
-      apiUrl: process.env.DATA_API_URL,
-    });
+    allSurveys = await fetchSurveysMetadata();
   }
   return allSurveys;
+};
+
+/**
+ * Fetch metadata for all surveys
+ * @returns
+ */
+export const fetchSurveysMetadata = async (options?: {
+  calledFrom?: string;
+}): Promise<Array<SurveyMetadata>> => {
+  const result = await fetchGraphQLApi({ query: getSurveysQuery() });
+  return result._metadata.surveys as SurveyMetadata[];
 };
