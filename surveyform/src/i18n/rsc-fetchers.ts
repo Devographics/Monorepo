@@ -12,15 +12,15 @@ export async function rscIntlContext({ localeId, contexts }: { localeId: string,
     // 1. feed the string registry
     const stringsRegistry = new StringsRegistry(localeId);
     const loc = await rscLocale({ localeId, contexts: contexts || getCommonContexts() })
+    const enLoc = await rscLocale({ localeId: "en-US", contexts: contexts || getCommonContexts() })
     if (loc) {
         stringsRegistry.addStrings(localeId, loc.strings);
-    } else {
-        const enLoc = await rscLocale({ localeId: "en-US", contexts: contexts || getCommonContexts() })
-        if (enLoc) {
-            stringsRegistry.addStrings("en-US", enLoc.strings);
-        } else {
-            console.warn(`Couldn't get locale ${localeId} or en-US`)
-        }
+    }
+    if (enLoc) {
+        stringsRegistry.addStrings("en-US", enLoc.strings);
+    }
+    if (!(loc || enLoc)) {
+        console.warn(`Couldn't get locale ${localeId} or en-US`)
     }
     // TODO: fallback to default locale (en-US)
     return {
