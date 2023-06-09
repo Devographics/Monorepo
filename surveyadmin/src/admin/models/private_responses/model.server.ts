@@ -52,21 +52,6 @@ const privateResponseSchema = new mongoose.Schema({
   },
 });
 */
-const mongooseModelName = "private_responses";
-/*
-export const PrivateResponseMongooseModel =
-  mongoose.models[mongooseModelName] ||
-  mongoose.model<PrivateResponseDocument>(
-    mongooseModelName,
-    privateResponseSchema
-  );
-
-PrivateResponses.crud.connector =
-  createMongooseConnector<PrivateResponseDocument>(PrivateResponses, {
-    mongooseModel: PrivateResponseMongooseModel,
-    mongooseConnection: appDb
-  });
-  */
 
 export default PrivateResponses;
 

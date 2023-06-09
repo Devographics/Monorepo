@@ -1,7 +1,4 @@
-import { UserMongoCollection } from "~/core/models/user.server";
-import { ResponseMongoCollection } from "~/modules/responses/model.server";
-import { NormalizedResponseMongoCollection } from "~/admin/models/normalized_responses/model.server";
-import { getUsersCollection } from "@devographics/mongo";
+import { getNormResponsesCollection, getRawResponsesCollection, getUsersCollection } from "@devographics/mongo";
 
 export const findDuplicateAccounts = async ({ limit = 10000, skip = 0 }) => {
   limit = Number(limit);
@@ -10,10 +7,8 @@ export const findDuplicateAccounts = async ({ limit = 10000, skip = 0 }) => {
   let i = 0;
   const result = { duplicateAccountsCount: 0, duplicateUsers: [] };
 
-  const Users = UserMongoCollection();
-
   // restrict search to legacy accounts that have an `email` field
-  const users = await Users.find({
+  const users = Users.find({
     emailHash: { $exists: true },
     email: { $exists: true },
     newerUserId: { $exists: false },
@@ -24,7 +19,7 @@ export const findDuplicateAccounts = async ({ limit = 10000, skip = 0 }) => {
 
   const usersArray = await users.toArray();
 
-  console.log(users.length);
+  console.log(usersArray.length);
 
   for (const user of usersArray) {
     if (i % 100 === 0) {
@@ -64,12 +59,12 @@ export const findDuplicateAccounts = async ({ limit = 10000, skip = 0 }) => {
       const modifier = { $set: { userId: newerDuplicateAccount._id } };
 
       // update all responses and normalized responses to use new userId
-      const Responses = await ResponseMongoCollection();
+      const Responses = await getRawResponsesCollection()
       const responsesUpdated = await Responses.updateMany(selector, modifier);
       // console.log("// responsesUpdated");
       // console.log(responsesUpdated);
 
-      const NormalizedResponses = await NormalizedResponseMongoCollection();
+      const NormalizedResponses = await getNormResponsesCollection()
       const normResponesUpdated = await NormalizedResponses.updateMany(
         selector,
         modifier

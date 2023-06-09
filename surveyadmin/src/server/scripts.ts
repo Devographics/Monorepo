@@ -90,27 +90,6 @@ export async function migrateUserEmails() {
 export const renameFields = async () => {
   console.log("// renameFields");
   const Responses = await getRawResponsesCollection()
-  // const questionIds = [
-  //   "combining_schemas",
-  //   "web_frameworks",
-  //   "databases",
-  //   "server_languages",
-  //   "graphql_ides",
-  //   "other_tools",
-  // ];
-  // for (const id of questionIds) {
-  //   const before1 = `graphql2022__tools_others__${id}__choices`;
-  //   const after1 =  `graphql2022__tools_others__${id}__choices`;
-  //   await renameFieldMigration(ResponseMongooseModel, before1, after1);
-  //   const before2 = `graphql2022__tools_others__${id}__others`;
-  //   const after2 =  `graphql2022__tools_others__${id}__others`;
-  //   await renameFieldMigration(ResponseMongooseModel, before2, after2);
-  // }
-
-  // await renameFieldMigration(ResponseMongooseModel, 'graphql2022__usage__strong_points', 'graphql2022__usage__graphql_strong_points');
-  // await renameFieldMigration(ResponseMongooseModel, 'graphql2022__usage__pain_points', 'graphql2022__usage__graphql_pain_points');
-  // await renameFieldMigration(ResponseMongooseModel, 'graphql2022__usage_others__strong_points', 'graphql2022__usage_others__graphql_strong_points');
-  // await renameFieldMigration(ResponseMongooseModel, 'graphql2022__usage_others__pain_points', 'graphql2022__usage_others__graphql_pain_points');
 
   const suffix = "__choices";
 

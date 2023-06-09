@@ -1,5 +1,5 @@
+import { getUsersCollection } from "@devographics/mongo";
 import { createEmailHash } from "~/account/email/api/encryptEmail";
-import { UserMongooseModel } from "~/core/models/user.server";
 
 /**
  * Find user from their email, using the hash function
@@ -7,5 +7,6 @@ import { UserMongooseModel } from "~/core/models/user.server";
  * @returns
  */
 export const findUserFromEmail = async (email: string) => {
-  return await UserMongooseModel.findOne({ emailHash: createEmailHash(email) });
+  const Users = await getUsersCollection()
+  return await Users.findOne({ emailHash: createEmailHash(email) });
 };

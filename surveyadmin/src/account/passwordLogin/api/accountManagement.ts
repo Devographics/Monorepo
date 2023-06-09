@@ -1,9 +1,5 @@
 /**
  * Helpers for email/password based authentication and account management
- *
- * /!\ Those methods expects the connection with the database to be already established
- * - Either create a UserMongooseModel that guarantees that the connection is always established
- * - Or establish the connection before you run those function, using "connectoToAppDb()" helper
  */
 import crypto from "crypto";
 import { UserTypeServer } from "~/core/models/user.server";

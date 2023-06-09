@@ -12,10 +12,8 @@ import last from "lodash/last.js";
 import intersection from "lodash/intersection.js";
 import isEmpty from "lodash/isEmpty.js";
 import type { Field, ParsedQuestion } from "@devographics/core-models";
-import { NormalizedResponseMongooseModel } from "~/admin/models/normalized_responses/model.server";
 import {
   PrivateResponseDocument,
-  PrivateResponseMongooseModel,
 } from "~/admin/models/private_responses/model.server";
 import { getUUID } from "~/account/email/api/encryptEmail";
 import { logToFile } from "@devographics/core-models/server";
@@ -27,6 +25,7 @@ import type {
 } from "@devographics/types";
 import { NormalizationParams } from "./normalize";
 import { getQuestionPath } from "~/modules/surveys/parser/parseSurvey";
+import { getCollectionByName, newMongoId } from "@devographics/mongo";
 
 const replaceAll = function (target, search, replacement) {
   return target.replace(new RegExp(search, "g"), replacement);
@@ -204,6 +203,7 @@ export const handlePrivateInfo = async ({
   response,
   options,
 }: NormalizationParams) => {
+  const PrivateResponses = await getCollectionByName("private_responses")
   const { isSimulation } = options;
   /*
   
@@ -213,6 +213,7 @@ export const handlePrivateInfo = async ({
   if (!isEmpty(privateFields)) {
     const privateInfo: Partial<PrivateResponseDocument> &
       Pick<PrivateResponseDocument, "user_info"> = {
+      _id: newMongoId(),
       user_info: {},
       ...privateFields,
       surveySlug: response.surveySlug,
@@ -221,7 +222,7 @@ export const handlePrivateInfo = async ({
     if (!isSimulation) {
       // NOTE: findOneAndUpdate and updateOne with option "upsert:true" are roughly equivalent,
       // but update is probably faster when appliable (the result will have a different shape)
-      await PrivateResponseMongooseModel.updateOne(
+      await PrivateResponses.updateOne(
         { responseId: response._id },
         privateInfo,
         { upsert: true }
@@ -341,8 +342,7 @@ export const normalizeField = async ({
         if (log) {
           await logToFile(
             `${fileName}.txt`,
-            `${
-              response._id
+            `${response._id
             }, ${fieldName}, ${cleanValue}, ${matchTags.toString()}`
           );
         }
@@ -432,8 +432,7 @@ export const normalizeField = async ({
         if (log) {
           await logToFile(
             `${fileName}.txt`,
-            `${
-              response._id
+            `${response._id
             }, ${fieldName}, ${cleanValue}, ${matchTags.toString()}`
           );
         }

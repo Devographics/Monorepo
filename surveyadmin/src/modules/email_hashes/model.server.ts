@@ -51,6 +51,5 @@ export interface EmailHashDocument extends VulcanDocument {
   emailHash?: string;
   uuid: string;
 }
-const mongooseModelName = "email_hashes";
 
 export default EmailHash;

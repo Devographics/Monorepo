@@ -15,7 +15,6 @@ import type {
 import { logToFile } from "@devographics/core-models/server";
 import { getOrFetchEntities } from "~/modules/entities/server";
 import { getEditionById } from "~/modules/surveys/helpers";
-import { NormalizedResponseMongooseModel } from "~/admin/models/normalized_responses/model.server";
 import {
   DbSuffixes,
   QuestionMetadata,
@@ -26,6 +25,7 @@ import {
   SectionMetadata,
 } from "@devographics/types";
 import * as templateFunctions from "@devographics/templates";
+import { getNormResponsesCollection } from "@devographics/mongo";
 
 export const getFieldSegments = (field: Field) => {
   if (!field.fieldName) {
@@ -635,17 +635,17 @@ export const getUnnormalizedResponses = async (editionId, questionId) => {
     ],
   };
 
-  const responses = await NormalizedResponseMongooseModel.find(
+  const NormResponses = await getNormResponsesCollection()
+  const responses = await NormResponses.find(
     selector,
     {
       _id: 1,
       responseId: 1,
       [rawFieldPath]: 1,
+      sort: { [rawFieldPath]: 1 }
+      //lean: true
     },
-    { lean: true }
-  )
-    .sort({ [rawFieldPath]: 1 })
-    .exec();
+  ).toArray()
 
   return { responses, rawFieldPath, normalizedFieldPath };
 };
@@ -653,16 +653,16 @@ export const getUnnormalizedResponses = async (editionId, questionId) => {
 export const getBulkOperation = (selector, modifier, isReplace) =>
   isReplace
     ? {
-        replaceOne: {
-          filter: selector,
-          replacement: modifier,
-          upsert: true,
-        },
-      }
+      replaceOne: {
+        filter: selector,
+        replacement: modifier,
+        upsert: true,
+      },
+    }
     : {
-        updateMany: {
-          filter: selector,
-          update: modifier,
-          upsert: false,
-        },
-      };
+      updateMany: {
+        filter: selector,
+        update: modifier,
+        upsert: false,
+      },
+    };

@@ -7,13 +7,11 @@ import {
 } from "@vulcanjs/graphql/server";
 import { Connector } from "@vulcanjs/crud/server";
 
-import { createMongooseConnector } from "@vulcanjs/mongo";
 import { Request } from "express";
 import debug from "debug";
 import models from "~/_vulcan/models.index.server";
 import { getLocaleFromReq } from "~/i18n/server/localeDetection";
 import { userContextFromReq } from "./userContext";
-import { appDb } from "../mongoose/connection";
 const debugGraphqlContext = debug("vn:graphql:context");
 
 /**
@@ -46,7 +44,7 @@ const createContextForModels = (
         ...context,
         [model.graphql.typeName]: {
           model,
-          connector: model.crud.connector || createMongooseConnector(model, { mongooseConnection: appDb }),
+          connector: model.crud.connector
         },
       })
     },

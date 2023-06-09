@@ -6,63 +6,13 @@ import {
   getBulkOperation,
 } from "../normalization/helpers";
 import { UserType } from "~/core/models/user";
-// import { ResponseAdminMongooseModel } from "@devographics/core-models/server";
-import { ResponseMongooseModel } from "~/modules/responses/model.server";
 import { getOrFetchEntities } from "~/modules/entities/server";
 import pick from "lodash/pick.js";
-import { NormalizedResponseMongooseModel } from "~/admin/models/normalized_responses/model.server";
 import {
   getNormResponsesCollection,
   getRawResponsesCollection,
-} from "../mongo";
+} from "@devographics/mongo";
 import { loadOrGetSurveys } from "~/modules/surveys/load";
-
-/*
-
-Normalization
-
-*/
-// export const normalizeIds = async (
-//   root,
-//   args,
-//   { currentUser }: { currentUser: UserType }
-// ) => {
-//   // if (!Users.isAdmin(currentUser)) {
-//   //   throw new Error('You cannot perform this operation');
-//   // }
-//   const results: Array<{
-//     normalizedResponseId?: string;
-//     responseId?: string;
-//     normalizedFields?: Array<any>;
-//   }> = [];
-
-//   if (!currentUser.isAdmin) throw new Error("Non admin cannot normalize ids");
-
-//   const { ids } = args;
-//   // TODO: use Response model and connector instead
-//   const responses = await ResponseMongooseModel.find({
-//     _id: { $in: ids },
-//   });
-//   for (const document of responses) {
-//     const { _id } = document;
-//     const normalization = await normalizeResponse({
-//       document,
-//       verbose: true,
-//       isSimulation: true,
-//     });
-//     if (!normalization) {
-//       throw new Error(
-//         `Could not normalize response ${JSON.stringify(document)}`
-//       );
-//     }
-//     results.push(normalization);
-//   }
-//   // console.log("// normalizeIds");
-//   // console.log(JSON.stringify(results, null, 2));
-//   return results;
-// };
-
-// export const normalizeIdsTypeDefs = "normalizeIds(ids: [String]): [JSON]";
 
 /*
 
@@ -168,20 +118,19 @@ export const normalizeResponses = async (
   const rawResponsesCollection = await getRawResponsesCollection(survey);
 
   const responses = await rawResponsesCollection
-    .find(selector, null, {
+    .find(selector, {
       sort: {
         createdAt: 1,
       },
-    })
-    .skip(startFrom)
-    .limit(limit);
+      skip: startFrom,
+      limit
+    }).toArray()
   const count = responses.length;
   mutationResult.count = count;
   const tickInterval = Math.round(count / 200);
 
   console.log(
-    `// Renormalizing survey ${editionId}${
-      questionId ? ` (field [${questionId}])` : ""
+    `// Renormalizing survey ${editionId}${questionId ? ` (field [${questionId}])` : ""
     }… Found ${count} responses to renormalize (startFrom: ${startFrom}, limit: ${limit}). (${startAt})`
   );
   // console.log(JSON.stringify(selector, null, 2))
@@ -274,10 +223,9 @@ export const normalizeResponses = async (
   // duration in seconds
   mutationResult.duration = duration;
   console.log(
-    `👍 Normalized ${limit - discardedCount} responses in survey ${editionId} ${
-      discardedCount > 0
-        ? `(${discardedCount}/${limit} responses discarded)`
-        : ""
+    `👍 Normalized ${limit - discardedCount} responses in survey ${editionId} ${discardedCount > 0
+      ? `(${discardedCount}/${limit} responses discarded)`
+      : ""
     }. (${endAt}) - ${duration}s`
   );
 
@@ -361,7 +309,7 @@ Reset Normalization
 TODO
 
 */
-export const resetNormalization = async (root, { surveyId }) => {};
+export const resetNormalization = async (root, { surveyId }) => { };
 
 export const resetNormalizationTypeDefs =
   "resetNormalization(editionId: String): [JSON]";

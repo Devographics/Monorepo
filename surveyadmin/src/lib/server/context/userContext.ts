@@ -1,7 +1,8 @@
-import { UserMongooseModel, UserTypeServer } from "~/core/models/user.server";
+import { UserTypeServer } from "~/core/models/user.server";
 import { getSession } from "~/account/user/api";
 import type { NextApiRequest } from "next";
 import type { Request } from "express";
+import { getUsersCollection } from "@devographics/mongo";
 
 interface UserContext {
   userId?: string;
@@ -15,7 +16,8 @@ const userFromReq = async (req: Request | NextApiRequest) => {
   // NOTE: State of app is using "string" _id for legacy reason,
   // be careful during dev that if "users" were seeded with Vulcan Next, the _id might ObjectId, thus failing connection
   // In this case, just drop vulcanusers, the admin user will be recreated during seed
-  const user = await UserMongooseModel.findOne({ _id: session._id }); //await UserConnector.findOneById(session._id);
+  const Users = await getUsersCollection()
+  const user = await Users.findOne({ _id: session._id }); //await UserConnector.findOneById(session._id);
   return user;
 };
 

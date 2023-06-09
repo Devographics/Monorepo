@@ -8,9 +8,7 @@ import { nodeCache, promisesNodeCache } from "~/lib/server/caching";
 //import Responses from "../modules/responses/collection";
 //import NormalizedResponses from "../modules/normalized_responses/collection";
 
-import { ResponseMongoCollection } from "~/modules/responses/model.server";
 import { isAdmin } from "@vulcanjs/permissions";
-import { SaveMongoCollection } from "@devographics/core-models/server";
 import {
   // normalizeIdsTypeDefs,
   // normalizeIds,
@@ -35,6 +33,7 @@ import {
   surveyLocaleType,
 } from "~/i18n/server/graphql";
 import { scripts, runScript } from "./scripts";
+import { getRawResponsesCollection, getSavesCollection } from "@devographics/mongo";
 
 // import {
 //   surveysResolver,
@@ -161,7 +160,7 @@ addGraphQLSchema(statsType);
 const formatResult = (r, unit) => `${Math.round(r)}${unit}`;
 
 const stats = async () => {
-  const saves = (await SaveMongoCollection()
+  const saves = (await (await getSavesCollection())
     .aggregate([
       { $group: { _id: null, average: { $avg: "$duration" } } },
       { $sort: { createdAt: -1 } },
@@ -169,13 +168,13 @@ const stats = async () => {
     ])
     .toArray()) as Array<{ average: any }>;
 
-  const responses = (await ResponseMongoCollection()
+  const responses = await ((await getRawResponsesCollection())
     .aggregate([
       { $group: { _id: null, averageCompletion: { $avg: "$completion" } } },
     ])
     .toArray()) as Array<{ averageCompletion: any }>;
 
-  const responsesOver50 = (await ResponseMongoCollection()
+  const responsesOver50 = (await (await getRawResponsesCollection())
     .aggregate([
       { $match: { completion: { $gte: 50 } } },
       { $group: { _id: null, averageDuration: { $avg: "$duration" } } },

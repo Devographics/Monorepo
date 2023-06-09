@@ -1,6 +1,5 @@
-import { NormalizedResponseMongooseModel } from "~/admin/models/normalized_responses/model.server";
 import { getUUID } from "~/account/email/api/encryptEmail";
-import { getUsersCollection } from "@devographics/mongo";
+import { getNormResponsesCollection, getUsersCollection } from "@devographics/mongo";
 
 const isSimulation = false;
 
@@ -11,11 +10,11 @@ export const setMissingUUIDs = async ({ limit = 20 }) => {
   let i = 0;
   const result = { duplicateAccountsCount: 0, duplicateUsers: [] };
 
-  const normResponses = await NormalizedResponseMongooseModel.find(
+  const NormResponses = await getNormResponsesCollection()
+  const normResponses = await NormResponses.find(
     { userId: { $exists: true }, "user_info.uuid": { $exists: false } },
-    null,
     { limit }
-  );
+  ).toArray();
 
   console.log(normResponses.length);
 

@@ -17,6 +17,7 @@ import type {
 } from "@devographics/types";
 import { fetchSurveysListGraphQL } from "@devographics/core-models/server";
 import { getNormResponsesCollection } from "../mongo";
+import { newMongoId } from "@devographics/mongo";
 
 interface RegularField {
   fieldName: string;
@@ -119,7 +120,9 @@ export const normalizeResponse = async (
     };
 
     const errors: NormalizationError[] = [];
-    let normResp: Partial<NormalizedResponseDocument> = {};
+    let normResp: Partial<NormalizedResponseDocument> = {
+      _id: newMongoId() // generate a string _id, in case of insert
+    };
     const privateFields = {};
     const normalizedFields: Array<NormalizedField> = [];
     const prenormalizedFields: Array<RegularField> = [];
@@ -210,7 +213,6 @@ export const normalizeResponse = async (
         if (!isSimulation && !isBulk) {
           // update normalized response, or insert it if it doesn't exist
           // NOTE: this will generate ObjectId _id for unknown reason, see https://github.com/Devographics/StateOfJS-next2/issues/31
-          // updatedNormalizedResponse = await NormalizedResponseMongooseModel.updateOne(selector, modifier);
           updatedNormalizedResponse = await normCollection.updateOne(
             selector,
             modifier
@@ -268,15 +270,6 @@ export const normalizeResponse = async (
       modifier = normResp;
 
       if (!isSimulation && !isBulk) {
-        // update normalized response, or insert it if it doesn't exist
-        // NOTE: this will generate ObjectId _id for unknown reason, see https://github.com/Devographics/StateOfJS-next2/issues/31
-        // updatedNormalizedResponse =
-        //   await NormalizedResponseMongooseModel.findOneAndUpdate(
-        //     selector,
-        //     modifier,
-        //     { upsert: true, returnDocument: "after" }
-        //   );
-
         // console.log(JSON.stringify(selector, null, 2));
         // console.log(JSON.stringify(modifier, null, 2));
 

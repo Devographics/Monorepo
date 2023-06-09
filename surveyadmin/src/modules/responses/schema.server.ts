@@ -70,19 +70,6 @@ export const schema: VulcanGraphqlSchemaServer = extendSchemaServer(
     locale: {
       onUpdate: async ({ document, context, currentUser }) => {
         return (context as ApiContext).locale;
-        /*
-        TODO: this should be computed when creating the context
-        Currently we get the locale from Accept-Language or explicit cookies,
-        not from the deb
-        const user = await UserMongooseModel.findOne({
-          _id: document.userId,
-        }).exec();
-        if (!user)
-          throw new Error(
-            `Could not update locale, user with id "${document.userId}" not found`
-          );
-        return user && user.locale;
-        */
       },
     },
     isNormalized: {

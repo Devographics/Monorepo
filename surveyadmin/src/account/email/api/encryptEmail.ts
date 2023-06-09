@@ -1,5 +1,5 @@
+import { getEmailHashesCollection, newMongoId } from "@devographics/mongo";
 import crypto from "crypto";
-import { EmailHashMongooseModel } from "~/modules/email_hashes/model.server";
 import { v4 as uuidv4 } from "uuid";
 
 /**
@@ -25,13 +25,15 @@ export const createEmailHash = (email: string, providedHashSalt?: string) => {
  * @param emailHash String
  */
 export async function getUUID(emailHash, userId) {
-  const hashDoc = await EmailHashMongooseModel.findOne({ hash: emailHash });
+  const EmailHashes = await getEmailHashesCollection()
+  const hashDoc = await EmailHashes.findOne({ hash: emailHash });
   let emailUuid;
   if (hashDoc) {
     emailUuid = hashDoc.uuid;
   } else {
     emailUuid = uuidv4();
-    await EmailHashMongooseModel.create({
+    await EmailHashes.insertOne({
+      _id: newMongoId(),
       userId: userId,
       hash: emailHash,
       uuid: emailUuid,
