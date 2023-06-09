@@ -6,7 +6,6 @@ import {
 } from "./helpers";
 import { getOrFetchEntities } from "~/modules/entities/server";
 import {
-  NormalizedResponseMongooseModel,
   NormalizedResponseDocument,
 } from "~/admin/models/normalized_responses/model.server";
 import * as steps from "./steps";

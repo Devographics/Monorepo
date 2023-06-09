@@ -1,7 +1,7 @@
+import { getAppDb } from "@devographics/mongo";
 import Local from "passport-local";
 import { debugMongo } from "~/lib/debuggers";
 import { findUserByCredentials } from "../accountManagement";
-import { connectToAppDb } from "~/lib/server/mongoose/connection";
 
 /**
  * Passport strategy for local password based authentication
@@ -14,7 +14,7 @@ export const localStrategy = new Local.Strategy(
     passwordField: "password",
   },
   function (email, password, done) {
-    connectToAppDb()
+    getAppDb()
       .then(() => {
         debugMongo("Connected to db from passport local auth strategy");
         findUserByCredentials({ email, password })

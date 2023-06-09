@@ -1,6 +1,5 @@
 import express, { Request } from "express";
 import cors from "cors";
-// import mongoose from "mongoose";
 import { ApolloServer, gql } from "apollo-server-express";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import { mergeResolvers, mergeTypeDefs } from "@graphql-tools/merge";

@@ -4,32 +4,15 @@ MongoDB indexes for geographic search and performance
 
 */
 
-// import { ResponseConnector } from "~/modules/responses/model.server";
-// import { NormalizedResponseConnector } from "~/modules/normalized_responses/model.server";
-// import type { Model } from "mongoose";
-import {
-  appDb,
-  closeDbConnection,
-  connectToAppDb,
-  isLocalMongoUri,
-  publicReadonlyDb,
-} from "~/lib/server/mongoose/connection";
+import { getAppClient, getAppDb, getNormResponsesCollection, getRawResponsesCollection, getUsersCollection } from "@devographics/mongo";
 
-//NOTE: mongo use "createIndex" but mongoose use "index"
-// @see https://mongoosejs.com/docs/api/schema.html#schema_Schema-index
 export const createIndexes = async () => {
-  await connectToAppDb();
-  if (isLocalMongoUri()) {
-    console.info("Adding index to local database");
-  } else {
-    console.info("Adding indexes to distant database");
-  }
+  await getAppDb();
+  console.info("Adding index to database");
 
-  const userCollection = appDb.db.collection("users");
-  const responseCollection = appDb.db.collection("responses");
-  const normalizedResponseCollection = publicReadonlyDb.db.collection(
-    "normalized_responses"
-  );
+  const userCollection = await getUsersCollection()
+  const responseCollection = await getRawResponsesCollection()
+  const normalizedResponseCollection = await getNormResponsesCollection()
   /**
    * Example using Mongoose "index": the problem is that we cannot 
    * wait for indexes to be ready to close the connection, mongoose
@@ -39,7 +22,7 @@ export const createIndexes = async () => {
   const ResponseSchema = ResponseModel.schema;
   const NormalizedResponseSchema = (NormalizedResponseConnector.getRawCollection() as Model<any>)
     .schema;
- */
+  */
   await Promise.all(
     ([{ emailHash: 1 }, { createdAt: 1 }] as const).map(async (idxDef) => {
       await userCollection.createIndex(idxDef);
@@ -72,6 +55,5 @@ export const createIndexes = async () => {
       await normalizedResponseCollection.createIndex(idxDef);
     })
   );
-
-  await closeDbConnection();
+  await (await getAppClient()).close()
 };

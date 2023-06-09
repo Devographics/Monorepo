@@ -8,20 +8,17 @@ import {
   createGraphqlModelServer,
   VulcanGraphqlSchemaServer,
 } from "@vulcanjs/graphql/server";
-import { createMongooseConnector } from "@vulcanjs/mongo";
 
 import {
   schema as clientSchema,
   modelDef as clientModelDef,
   UserType as UserTypeShared,
   NewUserDocument,
-  UserDocument,
 } from "./user";
 import { hashPassword } from "~/account/passwordLogin/api";
 import { restrictDocuments } from "@vulcanjs/permissions";
 import { ResponseConnector } from "~/modules/responses/model.server";
 import { Response } from "~/modules/responses";
-import mongoose from "mongoose";
 
 /**
  * User + hashed password
@@ -161,7 +158,6 @@ const apiSchema: VulcanGraphqlSchemaServer = {
 // For string ids
 import { nanoid } from "nanoid";
 import { createEmailHash } from "~/account/email/api/encryptEmail";
-import { appDb } from "~/lib/server/mongoose/connection";
 const schema: VulcanGraphqlSchemaServer = merge(
   {},
   clientSchema,
@@ -210,23 +206,3 @@ const modelDef: CreateGraphqlModelOptionsServer = merge({}, clientModelDef, {
   schema,
 });
 export const User = createGraphqlModelServer(modelDef);
-
-const UserConnector = createMongooseConnector<UserWithEmailServer>(User, {
-  // We will use "String" _id because we have a legacy db from Meteor
-  mongooseSchema: new mongoose.Schema({ _id: String }, { strict: false }),
-  mongooseConnection: appDb
-});
-
-User.crud.connector = UserConnector;
-
-export const UserMongooseModel =
-  UserConnector.getRawCollection() as mongoose.Model<UserWithEmailServer>;
-
-export const UserMongoCollection = () => {
-  if (!appDb.db) {
-    throw new Error(
-      "Trying to access Response mongo collection before Mongo/Mongoose is connected."
-    );
-  }
-  return appDb.db.collection<UserDocument>("users");
-};

@@ -14,7 +14,7 @@ import { subscribe } from "~/server/email/email_octopus";
 // import { normalizeResponse } from '../normalization/normalize';
 
 async function duplicateCheck(validationErrors, { document, currentUser }) {
-  const existingResponse = await ResponseConnector.findOne({
+  const existingResponse = await (await getRawResponsesCollection()).findOne({
     surveySlug: document.surveySlug,
     userId: currentUser._id,
   });
@@ -83,33 +83,5 @@ export const modelDef: CreateGraphqlModelOptionsServer =
 export const Response = createGraphqlModelServer(modelDef);
 
 type ResponseDocument = any;
-import mongoose from "mongoose";
 import { surveyFromResponse } from "./helpers";
-import { appDb } from "~/lib/server/mongoose/connection";
-// Using Vulcan (limited to CRUD operations)
-export const ResponseConnector = createMongooseConnector<ResponseDocument>(
-  Response,
-  {
-    mongooseSchema: new mongoose.Schema({ _id: String }, { strict: false }),
-    mongooseConnection: appDb
-  }
-);
-Response.crud.connector = ResponseConnector;
-
-// Using Mongoose (advised)
-export const ResponseMongooseModel =
-  ResponseConnector.getRawCollection() as mongoose.Model<ResponseDocument>;
-
-/**
- * For direct Mongo access (not advised, used only for aggregations)
- * NOTE: should be called only after the database is connected,
- * that's why it's a function
- */
-export const ResponseMongoCollection = () => {
-  if (!appDb.db) {
-    throw new Error(
-      "Trying to access Response mongo collection before Mongo/Mongoose is connected."
-    );
-  }
-  return appDb.db.collection<ResponseDocument>("responses");
-};
+import { getRawResponsesCollection } from "@devographics/mongo";

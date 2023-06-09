@@ -110,10 +110,6 @@ export const checkPasswordForUser = (
 /**
  * Find an user during authentication
  * Return null if not found/password mismatch
- *
- * @deprecated Now we use magic link auth
- * If this is used again, please be careful that we now need an email has
- * @param param0
  */
 export async function findUserByCredentials({
   email,

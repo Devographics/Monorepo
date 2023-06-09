@@ -1,14 +1,13 @@
-import { UserMongooseModel } from "~/core/models/user.server";
-import { connectToAppDb } from "~/lib/server/mongoose/connection";
 import { NormalizedResponseMongooseModel } from "~/admin/models/normalized_responses/model.server";
 import { getUUID } from "~/account/email/api/encryptEmail";
+import { getUsersCollection } from "@devographics/mongo";
 
 const isSimulation = false;
 
 export const setMissingUUIDs = async ({ limit = 20 }) => {
   limit = Number(limit);
-  
-  await connectToAppDb();
+  const Users = await getUsersCollection()
+
   let i = 0;
   const result = { duplicateAccountsCount: 0, duplicateUsers: [] };
 
@@ -26,12 +25,12 @@ export const setMissingUUIDs = async ({ limit = 20 }) => {
     }
     const { _id, userId } = normResponse;
 
-    const user = await UserMongooseModel.findOne({ _id: userId });
+    const user = await Users.findOne({ _id: userId });
 
     const { emailHash } = user;
     const uuid = await getUUID(emailHash, userId);
 
-    const update = await UserMongooseModel.updateOne(
+    const update = await Users.updateOne(
       { _id: userId },
       {
         $set: {

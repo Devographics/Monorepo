@@ -5,7 +5,6 @@ import {
   ResponseDocument,
 } from "@devographics/core-models/server";
 import { SurveyEdition } from "@devographics/core-models";
-import mongoose from "mongoose";
 import { nanoid } from "nanoid";
 import { publicReadonlyDb } from "~/lib/server/mongoose/connection";
 
@@ -65,23 +64,6 @@ export const NormalizedResponse = createGraphqlModelServer({
   // TODO: how is it used?
   // dbCollectionName: 'normalized_responses',
 });
-
-export const NormalizedResponseConnector =
-  createMongooseConnector<NormalizedResponseDocument>(
-    NormalizedResponse,
-    {
-      mongooseSchema: new mongoose.Schema({ _id: String }, { strict: false }),
-      mongooseConnection: publicReadonlyDb
-    }
-  );
-
-export default NormalizedResponse;
-
-NormalizedResponse.crud.connector = NormalizedResponseConnector;
-
-export const NormalizedResponseMongooseModel =
-  NormalizedResponseConnector.getRawCollection() as mongoose.Model<NormalizedResponseDocument>;
-// For direct Mongo access
 
 export const NormalizedResponseMongoCollection = () => {
   // db = the mongo instance

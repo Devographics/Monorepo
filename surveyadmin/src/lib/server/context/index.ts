@@ -14,7 +14,6 @@ import models from "~/_vulcan/models.index.server";
 import { getLocaleFromReq } from "~/i18n/server/localeDetection";
 import { userContextFromReq } from "./userContext";
 import { appDb } from "../mongoose/connection";
-// import mongoose from "mongoose";
 const debugGraphqlContext = debug("vn:graphql:context");
 
 /**

@@ -1,26 +1,23 @@
-import { UserMongooseModel } from "~/core/models/user.server";
-import { connectToAppDb } from "~/lib/server/mongoose/connection";
+import { getUsersCollection } from "@devographics/mongo";
 import { createEmailHash } from "~/account/email/api/encryptEmail";
 
 const isSimulation = false;
 const updateFieldName = 'updateLegacyAccounts_15Nov2022';
 
-export const updateLegacyAccountsHashes = async ({ limit = 1000}) => {
+export const updateLegacyAccountsHashes = async ({ limit = 1000 }) => {
   limit = Number(limit);
-  
-  await connectToAppDb();
 
   let i = 0;
   const result = { legacyUsersCount: 0, totalModifiedCount: 0 };
 
-  const legacyUsers = await UserMongooseModel.find(
+  const Users = await getUsersCollection()
+  const legacyUsers = await Users.find(
     {
       email: { $exists: true },
       [updateFieldName]: { $exists: false },
     },
-    null,
     { limit }
-  );
+  ).toArray();
 
   result.legacyUsersCount = legacyUsers.length;
 
@@ -35,7 +32,7 @@ export const updateLegacyAccountsHashes = async ({ limit = 1000}) => {
     const newEmailHash2 = createEmailHash(email, process.env.ENCRYPTION_KEY2);
 
     if (!isSimulation) {
-      const update = await UserMongooseModel.updateOne(
+      const update = await Users.updateOne(
         { _id: userId },
         {
           $set: {

@@ -1,17 +1,12 @@
-import { UserMongooseModel } from "~/core/models/user.server";
-import { NormalizedResponseMongooseModel } from "~/admin/models/normalized_responses/model.server";
-import { ResponseMongooseModel } from "~/modules/responses/model.server";
-import { connectToAppDb } from "~/lib/server/mongoose/connection";
-
 import { UserMongoCollection } from "~/core/models/user.server";
 import { ResponseMongoCollection } from "~/modules/responses/model.server";
 import { NormalizedResponseMongoCollection } from "~/admin/models/normalized_responses/model.server";
+import { getUsersCollection } from "@devographics/mongo";
 
 export const findDuplicateAccounts = async ({ limit = 10000, skip = 0 }) => {
   limit = Number(limit);
   skip = Number(skip);
-
-  await connectToAppDb();
+  const Users = await getUsersCollection()
   let i = 0;
   const result = { duplicateAccountsCount: 0, duplicateUsers: [] };
 
@@ -37,7 +32,7 @@ export const findDuplicateAccounts = async ({ limit = 10000, skip = 0 }) => {
     }
     const { _id, emailHash } = user;
 
-    const newerDuplicateAccount = await UserMongooseModel.findOne({
+    const newerDuplicateAccount = await Users.findOne({
       emailHash,
       _id: { $ne: _id },
     });

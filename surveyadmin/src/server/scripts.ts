@@ -1,25 +1,14 @@
-import type { Model } from "mongoose";
-import { normalizeResponse } from "../admin/server/normalization/normalize";
-import { fetchEntities } from "~/modules/entities/server";
 // import Users from 'meteor/vulcan:users';
-//import {
-//  js2019FieldMigrations,
-//  normalizeJS2019Value,
-//  otherValueNormalisations,
-//} from "./migrations";
-import { ResponseMongooseModel } from "~/modules/responses/model.server";
-// import { NormalizedResponseMongooseModel } from "~/modules/normalized_responses/model.server";
-import { UserMongooseModel } from "~/core/models/user.server";
-import { connectToAppDb } from "~/lib/server/mongoose/connection";
 import { logToFile } from "@devographics/core-models/server";
 // import { getSurveyBySlug } from "~/modules/surveys/helpers";
 import surveys from "~/surveys";
 import type { Field } from "@devographics/core-models";
-import { NormalizedResponseMongooseModel } from "~/admin/models/normalized_responses/model.server";
 import { createEmailHash } from "~/account/email/api/encryptEmail";
-
-import mongoose from "mongoose";
-const ObjectId = mongoose.Types.ObjectId;
+// TODO: TS is unhappy with devographics having its own version of Mongo
+// it should use a peer dependency perhaps
+import { Collection } from "mongodb";
+import { getNormResponsesCollection, getRawResponsesCollection, getUsersCollection } from "@devographics/mongo";
+import { UserDocument } from "~/core/models/user";
 
 /*
 
@@ -27,11 +16,12 @@ Migrations
 
 */
 export const renameFieldMigration = async (
-  collection: Model<any>,
+  collection: any,//Collection<any>,
   field1,
   field2
 ) => {
-  await connectToAppDb();
+  // we exepct the db connection to be checked when we retrieve the collection
+  // await connectToAppDb();
 
   const result = await collection.updateMany(
     { [field1]: { $exists: true } },
@@ -51,7 +41,7 @@ Log all "currently missing features from CSS" answers to file
 
 */
 export const logField = async (
-  collection: Model<any>,
+  collection: Collection<any>,
   fieldName,
   surveySlug
 ) => {
@@ -73,10 +63,11 @@ export const logField = async (
 export async function migrateUserEmails() {
   console.log("// migrateUserEmails");
   // get all users that have a plain-text email stored
-  const usersToMigrate = await UserMongooseModel.find({
+  const Users = await getUsersCollection()
+  const usersToMigrate = await Users.find({
     email: { $exists: true },
     legacyEmailHash: { $exists: false },
-  });
+  }).toArray();
   console.log(`// Found ${usersToMigrate.length} users to migrate…`);
   for (const user of usersToMigrate) {
     const { _id, email, emailHash: legacyEmailHash } = user;
@@ -89,7 +80,7 @@ export async function migrateUserEmails() {
     const unset = {};
     // for now keep emails for safety, in the future delete them
     // const unset = { email: 1, emails: 1}
-    const update = await UserMongooseModel.updateOne(
+    const update = await Users.updateOne(
       { _id },
       { $set: set, $unset: unset }
     );
@@ -98,6 +89,7 @@ export async function migrateUserEmails() {
 
 export const renameFields = async () => {
   console.log("// renameFields");
+  const Responses = await getRawResponsesCollection()
   // const questionIds = [
   //   "combining_schemas",
   //   "web_frameworks",
@@ -128,7 +120,7 @@ export const renameFields = async () => {
         const { fieldName, template } = field as Field;
         if (fieldName && template === "single") {
           await renameFieldMigration(
-            ResponseMongooseModel,
+            Responses,
             fieldName.replace(suffix, ""),
             fieldName
           );
@@ -141,6 +133,7 @@ export const renameFields = async () => {
 // graphql2022__usage__graphql_experience__choices__choices -> graphql2022__usage__graphql_experience__choices
 export const fixRenameFields = async () => {
   console.log("// fixRenameFields");
+  const Responses = await getRawResponsesCollection()
 
   const suffix = "__choices";
 
@@ -151,7 +144,7 @@ export const fixRenameFields = async () => {
         if (fieldName && template === "single") {
           // note: fieldName already includes the suffix, we just don't want to include it twice
           await renameFieldMigration(
-            ResponseMongooseModel,
+            Responses,
             `${fieldName}${suffix}`,
             fieldName
           );
@@ -175,7 +168,7 @@ const fieldsToAddChoicesTo = [
 
 // user_info.yearly_salary => user_info.yearly_salary.choices
 export const addChoicesSuffixToUserInfoFields = async () => {
-  await connectToAppDb();
+  const NormResponses = await getNormResponsesCollection()
 
   console.log("// addChoicesSuffixToUserInfoFields");
 
@@ -206,7 +199,8 @@ export const addChoicesSuffixToUserInfoFields = async () => {
   console.log("// operation1");
   console.log(operation1);
 
-  const result1 = await NormalizedResponseMongooseModel.updateMany(
+
+  const result1 = await NormResponses.updateMany(
     selector1,
     operation1
   );
@@ -224,7 +218,7 @@ export const addChoicesSuffixToUserInfoFields = async () => {
   console.log("// operation2");
   console.log(operation2);
 
-  const result2 = await NormalizedResponseMongooseModel.updateMany(
+  const result2 = await NormResponses.updateMany(
     { user_info_temp: { $exists: true } },
     operation2
   );
@@ -232,7 +226,7 @@ export const addChoicesSuffixToUserInfoFields = async () => {
   console.log(result2);
 
   // unset all user_info_temp subfields to clean up
-  const result3 = await NormalizedResponseMongooseModel.updateMany(
+  const result3 = await NormResponses.updateMany(
     { user_info_temp: { $exists: true } },
     { $unset: { user_info_temp: 1 } }
   );
@@ -249,10 +243,8 @@ const fieldsToRemoveChoicesFrom = [
 
 // user_info.yearly_salary => user_info.yearly_salary.choices
 export const fixChoicesChoices = async () => {
-  await connectToAppDb();
-
   console.log("// addChoicesSuffixToUserInfoFields");
-
+  const NormResponses = await getNormResponsesCollection()
   for (const fieldName of fieldsToRemoveChoicesFrom) {
     console.log(`//// fieldName: ${fieldName}`);
 
@@ -274,7 +266,7 @@ export const fixChoicesChoices = async () => {
     console.log("// operation1");
     console.log(operation1);
 
-    const result1 = await NormalizedResponseMongooseModel.updateMany(
+    const result1 = await NormResponses.updateMany(
       selector1,
       operation1
     );
@@ -291,7 +283,7 @@ export const fixChoicesChoices = async () => {
     console.log("// operation2");
     console.log(operation2);
 
-    const result2 = await NormalizedResponseMongooseModel.updateMany(
+    const result2 = await NormResponses.updateMany(
       selector2,
       operation2
     );
@@ -300,7 +292,7 @@ export const fixChoicesChoices = async () => {
   }
 
   // unset all user_info_temp subfields to clean up
-  const result3 = await NormalizedResponseMongooseModel.updateMany(
+  const result3 = await NormResponses.updateMany(
     { user_info_temp: { $exists: true } },
     { $unset: { user_info_temp: 1 } }
   );
