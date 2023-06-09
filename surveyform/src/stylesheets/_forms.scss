@@ -127,6 +127,12 @@
       background: $greyLightest;
       color: $greyDarker;
     }
+    textarea,
+    input[type="text"] {
+      &:disabled {
+        background: $greyMedium;
+      }
+    }
   }
   .form-submit-actions {
     display: flex;

@@ -9,7 +9,6 @@ import { LoginDialog } from "~/account/LoginDialog";
 import { Loading } from "~/components/ui/Loading";
 import { Suspense } from "react";
 import { EditionMetadata, SurveyStatusEnum } from "@devographics/types";
-import { rscCurrentUser } from "~/account/user/rsc-fetchers/rscCurrentUser";
 import { CenteredContainer } from "~/components/ui/CenteredContainer";
 import { useClientData } from "~/components/page/hooks";
 import { useCurrentUser } from "~/lib/users/hooks";
@@ -56,31 +55,32 @@ const EditionMainAsync = ({
   }
   if (!currentUser) {
     return (
-      <LoginDialog
-        editionId={edition.id}
-        surveyId={edition.surveyId}
-        hideGuest={edition.status === SurveyStatusEnum.CLOSED}
-        user={currentUser}
-        successRedirectionPath={editionPath}
-        successRedirectionFunction={(res) => {
-          const { response } = res;
-          const path = getEditionSectionPath({
-            edition,
-            survey: edition.survey,
-            locale,
-            response,
-          });
-          return path;
-        }}
-        loginOptions={{ data: clientData, createResponse: true }}
-      />
-    );
-  } else {
-    return (
       <>
-        <EditionAction edition={edition} />
+        {edition.status === SurveyStatusEnum.CLOSED && (
+          <EditionAction edition={edition} />
+        )}
+        <LoginDialog
+          editionId={edition.id}
+          surveyId={edition.surveyId}
+          hideGuest={edition.status === SurveyStatusEnum.CLOSED}
+          user={currentUser}
+          successRedirectionPath={editionPath}
+          successRedirectionFunction={(res) => {
+            const { response } = res;
+            const path = getEditionSectionPath({
+              edition,
+              survey: edition.survey,
+              locale,
+              response,
+            });
+            return path;
+          }}
+          loginOptions={{ data: clientData, createResponse: true }}
+        />
       </>
     );
+  } else {
+    return <EditionAction edition={edition} />;
   }
 };
 

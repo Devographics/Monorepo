@@ -7,30 +7,20 @@ import { FormInputProps } from "~/components/form/typings";
 import { FormOption } from "~/components/form/FormOption";
 
 import isEmpty from "lodash/isEmpty.js";
-import { getFormPaths } from "~/lib/surveys/helpers";
 
 interface ExperienceProps extends FormInputProps {
   showDescription: boolean;
 }
 
 export const Experience = (props: ExperienceProps) => {
-  const {
-    response,
-    path,
-    value,
-    edition,
-    question,
-    updateCurrentValues,
-    readOnly,
-  } = props;
+  const { path, value, question, updateCurrentValues, readOnly } = props;
 
   const { options, entity } = question;
-  const formPaths = getFormPaths({ edition, question });
 
   const hasValue = !isEmpty(value);
 
   return (
-    <FormItem {...props} enableLearnMore={true}>
+    <FormItem {...props} enableReadingList={!readOnly}>
       {entity?.example && <CodeExample {...entity.example} />}
       <div className="experience-contents">
         <div className="experience-options">

@@ -25,7 +25,10 @@ export const FormLayout = (props: FormLayoutProps) => {
     edition,
     nextSection,
     previousSection,
+    readOnly,
   } = props;
+
+  const enableReadingList = !readOnly;
 
   return (
     <div className="survey-layout">
@@ -51,7 +54,7 @@ export const FormLayout = (props: FormLayoutProps) => {
           </div>
         </div>
         <div className="section-sidebar">
-          <ReadingList {...props} />
+          {enableReadingList && <ReadingList {...props} />}
         </div>
       </div>
       <FormMessages {...props} />

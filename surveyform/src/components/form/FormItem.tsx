@@ -19,7 +19,7 @@ import QuestionLabel from "./QuestionLabel";
 
 export interface FormItemProps extends FormInputProps {
   children: ReactNode;
-  enableLearnMore?: boolean;
+  enableReadingList?: boolean;
 }
 
 export const FormItem = (props: FormItemProps) => {
@@ -43,7 +43,7 @@ export const FormItem = (props: FormItemProps) => {
     edition,
     question,
     readOnly,
-    enableLearnMore,
+    enableReadingList,
   } = props;
 
   const { allowComment } = question;
@@ -96,7 +96,7 @@ export const FormItem = (props: FormItemProps) => {
 };
 
 export const FormItemTitle = (props: FormItemProps) => {
-  const { section, question, enableLearnMore } = props;
+  const { section, question, enableReadingList } = props;
   const intl = useIntlContext();
   const { yearAdded } = question;
 
@@ -115,7 +115,7 @@ export const FormItemTitle = (props: FormItemProps) => {
         )}
       </Form.Label>
 
-      {enableLearnMore && <AddToList {...props} />}
+      {enableReadingList && <AddToList {...props} />}
 
       {/* <span className="form-label-number">
         {sectionNumber}.{questionNumber}
