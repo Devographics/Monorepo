@@ -23,7 +23,7 @@ const DevographicsBanner = () => {
   const hideBanner = !mounted || cookies.hideDevographicsBanner;
 
   const handleClose = () => {
-    setCookie("hideDevographicsBanner", true);
+    setCookie("hideDevographicsBanner", true, { path: "/" });
   };
 
   return hideBanner ? null : (
