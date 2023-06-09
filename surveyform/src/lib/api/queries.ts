@@ -7,6 +7,9 @@ query SurveysMetadataQuery {
       dbCollectionName
       domain
       hashtag
+      emailOctopus {
+        listId
+      }
       editions {
         id
         questionsUrl
@@ -77,7 +80,11 @@ query ${editionId}MetadataQuery {
           domain
           id
           name
+          dbCollectionName
           hashtag
+          emailOctopus {
+            listId
+          }
           partners {
             id
             name

@@ -11,9 +11,7 @@ const apiKey = process.env.EMAIL_OCTOPUS_APIKEY;
 export async function subscribe({ email, confirm = false, listId }) {
   try {
     if (!(apiKey && listId)) {
-      if (
-        !serverConfig().isProd
-      ) {
+      if (!serverConfig().isProd) {
         console.warn(
           "EMAIL_OCTOPUS_APIKEY or listId not set, current NODE_ENV:",
           process.env.NODE_ENV,
@@ -41,6 +39,8 @@ export async function subscribe({ email, confirm = false, listId }) {
       }
     );
     const json: any = await subscribe.json();
+    // console.log("// emailOctopus subscribe");
+    // console.log(json);
     if (json.error) {
       throw json.error;
     }

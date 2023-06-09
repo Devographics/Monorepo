@@ -95,7 +95,7 @@ export const responseBaseSchema: Schema = {
   },
   locale: {
     type: String,
-    clientMutable: false,
+    clientMutable: true,
   },
   isSynced: {
     type: Boolean,
