@@ -7,71 +7,9 @@ import { Button } from "~/components/ui/Button";
 import { FormItem } from "~/components/form/FormItem";
 import { FormInputProps } from "~/components/form/typings";
 import { FormOption } from "~/components/form/FormOption";
-import debounce from "lodash/debounce.js";
-import FormControl from "react-bootstrap/FormControl";
-import { getFormPaths } from "~/lib/surveys/helpers";
 import { seededShuffle } from "~/lib/utils";
-
-const OtherComponent = (props: FormInputProps) => {
-  const { edition, question, updateCurrentValues, response, readOnly } = props;
-  const formPaths = getFormPaths({ edition, question });
-  const path = formPaths.other!;
-  const value = response?.[path];
-
-  // keep track of whether "other" field is shown or not
-  const [showOther, setShowOther] = useState(!!value);
-
-  // keep track of "other" field value locally
-  const [localValue, setLocalValue] = useState(value);
-
-  const updateCurrentValuesDebounced = debounce(updateCurrentValues, 500);
-
-  const handleChange = (event) => {
-    setLocalValue(event.target.value);
-    updateCurrentValues({ [path]: event.target.value });
-  };
-
-  const handleChangeDebounced = (event) => {
-    const value = event.target.value;
-    setLocalValue(value);
-    updateCurrentValuesDebounced({ [path]: value });
-  };
-
-  const checkClass = showOther ? "form-check-checked" : "form-check-unchecked";
-
-  return (
-    <div className="form-option-other">
-      <Form.Check className={checkClass}>
-        <Form.Check.Label htmlFor={`${path}.other`}>
-          <div className="form-input-wrapper">
-            <Form.Check.Input
-              id={`${path}.other`}
-              type="checkbox"
-              checked={showOther}
-              onChange={(event) => {
-                const isChecked = event.target.checked;
-                setShowOther(isChecked);
-              }}
-            />
-          </div>
-          <FormOption
-            {...props}
-            option={{ id: "other", intlId: "options.other" }}
-          />
-        </Form.Check.Label>
-      </Form.Check>
-      {showOther && (
-        <FormControl
-          type="text"
-          value={localValue}
-          onChange={handleChangeDebounced}
-          onBlur={handleChange}
-          disabled={readOnly}
-        />
-      )}
-    </div>
-  );
-};
+import { OPTION_NA } from "@devographics/types";
+import OtherOption from "./OtherOption";
 
 const defaultCutoff = 10;
 // how many items to allow past the cutoff limit before actually cutting off the list
@@ -79,17 +17,13 @@ const cutoffMargin = 2;
 
 // note: treat checkbox group the same as a nested component, using `path`
 export const FormComponentCheckboxGroup = (props: FormInputProps) => {
+  const { value: value_ = [], question, response } = props;
+  const value = value_ as Array<string | number>;
   const intl = useIntlContext();
-  const [showMore, setShowMore] = useState(false);
 
-  const {
-    path,
-    value: value_ = [],
-    question,
-    updateCurrentValues,
-    readOnly,
-    response,
-  } = props;
+  const [showMore, setShowMore] = useState(false);
+  // keep track of whether "other" field is shown or not
+  const [showOther, setShowOther] = useState(!!value);
 
   const { options: options_, allowOther, limit, randomize } = question;
 
@@ -99,11 +33,15 @@ export const FormComponentCheckboxGroup = (props: FormInputProps) => {
     );
   }
 
-  const options = randomize
-    ? seededShuffle(options_, response?._id || "outline")
-    : options_;
+  let options = options_;
 
-  const value = value_ as Array<string | number>;
+  // remove "n/a" option and handle it separately
+  const naOption = options.find((option) => option.id === OPTION_NA);
+  options = options.filter((option) => option.id !== OPTION_NA);
+
+  options = randomize
+    ? seededShuffle(options, response?._id || "outline")
+    : options;
 
   const cutoff = question.cutoff || defaultCutoff;
 
@@ -125,36 +63,27 @@ export const FormComponentCheckboxGroup = (props: FormInputProps) => {
   return (
     <FormItem {...props}>
       <div className="form-item-options">
+        {naOption && (
+          <Checkbox
+            index={999}
+            option={naOption}
+            hasValue={hasValue}
+            value={value}
+            hasReachedLimit={hasReachedLimit}
+            formProps={props}
+          />
+        )}
         {optionsToShow?.map((option, i) => {
-          const isChecked = value?.includes(option.id);
-          const checkClass = hasValue
-            ? isChecked
-              ? "form-check-checked"
-              : "form-check-unchecked"
-            : "";
-
           return (
-            <Form.Check key={i} className={checkClass}>
-              <Form.Check.Label htmlFor={`${path}.${i}`}>
-                <div className="form-input-wrapper">
-                  <Form.Check.Input
-                    type="checkbox"
-                    checked={isChecked}
-                    disabled={!!readOnly || (!isChecked && hasReachedLimit)}
-                    id={`${path}.${i}`}
-                    // ref={refFunction}
-                    onChange={(event) => {
-                      const isChecked = event.target.checked;
-                      const newValue = isChecked
-                        ? [...value, option.id]
-                        : without(value, option.id);
-                      updateCurrentValues({ [path]: newValue });
-                    }}
-                  />
-                </div>
-                <FormOption {...props} option={option} />
-              </Form.Check.Label>
-            </Form.Check>
+            <Checkbox
+              key={i}
+              index={i}
+              option={option}
+              hasValue={hasValue}
+              value={value}
+              hasReachedLimit={hasReachedLimit}
+              formProps={props}
+            />
           );
         })}
         {enableCutoff && !showMore && (
@@ -168,11 +97,69 @@ export const FormComponentCheckboxGroup = (props: FormInputProps) => {
           </Button>
         )}
         {allowOther && (!enableCutoff || showMore) && (
-          <OtherComponent {...props} />
+          <OtherOption
+            {...props}
+            mainValue={value}
+            type="checkbox"
+            showOther={showOther}
+            setShowOther={setShowOther}
+          />
         )}
       </div>
     </FormItem>
   );
 };
 
+const Checkbox = ({
+  index,
+  value,
+  option,
+  hasValue,
+  hasReachedLimit,
+  formProps,
+}) => {
+  const { path, updateCurrentValues, readOnly } = formProps;
+
+  const isChecked = value?.includes(option.id);
+  const checkClass = hasValue
+    ? isChecked
+      ? "form-check-checked"
+      : "form-check-unchecked"
+    : "";
+
+  const isNA = option.id === OPTION_NA;
+  const naIsChecked = value.includes(OPTION_NA);
+  const disabled =
+    !!readOnly || (!isChecked && hasReachedLimit) || (!isNA && naIsChecked);
+
+  const getNewValue = (isChecked) => {
+    if (isNA) {
+      // when checking the "n/a" option, clear everything else
+      return isChecked ? [OPTION_NA] : [];
+    } else {
+      return isChecked ? [...value, option.id] : without(value, option.id);
+    }
+  };
+  return (
+    <Form.Check className={checkClass}>
+      <Form.Check.Label htmlFor={`${path}.${index}`}>
+        <div className="form-input-wrapper">
+          <Form.Check.Input
+            type="checkbox"
+            checked={isChecked}
+            disabled={disabled}
+            id={`${path}.${index}`}
+            // ref={refFunction}
+            onChange={(event) => {
+              const isChecked = event.target.checked;
+              const newValue = getNewValue(isChecked);
+              updateCurrentValues({ [path]: newValue });
+            }}
+          />
+        </div>
+        <FormOption {...formProps} option={option} />
+      </Form.Check.Label>
+    </Form.Check>
+  );
+};
 export default FormComponentCheckboxGroup;

@@ -184,6 +184,8 @@ export interface SectionAllToolsData extends AllToolsData {}
 export interface AllFeaturesData extends AllToolsData {}
 export interface SectionAllFeaturesData extends AllFeaturesData {}
 
+export const OPTION_NA = 'na'
+
 export enum ToolsOptions {
     WOULD_USE = 'would_use',
     WOULD_NOT_USE = 'would_not_use',
