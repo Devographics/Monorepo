@@ -10,6 +10,7 @@ import { FormOption } from "~/components/form/FormOption";
 import { seededShuffle } from "~/lib/utils";
 import { OPTION_NA } from "@devographics/types";
 import OtherOption from "./OtherOption";
+import sortBy from "lodash/sortBy";
 
 const defaultCutoff = 10;
 // how many items to allow past the cutoff limit before actually cutting off the list
@@ -40,9 +41,10 @@ export const FormComponentCheckboxGroup = (props: FormInputProps) => {
   const naOption = options.find((option) => option.id === OPTION_NA);
   options = options.filter((option) => option.id !== OPTION_NA);
 
+  // either randomize or sort by alphabetical order
   options = randomize
     ? seededShuffle(options, response?._id || "outline")
-    : options;
+    : sortBy(options, (option) => option.id);
 
   const cutoff = question.cutoff || defaultCutoff;
 
