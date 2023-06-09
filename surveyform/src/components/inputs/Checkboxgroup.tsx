@@ -19,11 +19,12 @@ const cutoffMargin = 2;
 export const FormComponentCheckboxGroup = (props: FormInputProps) => {
   const { value: value_ = [], question, response } = props;
   const value = value_ as Array<string | number>;
+  const hasValue = value?.length > 0;
   const intl = useIntlContext();
 
   const [showMore, setShowMore] = useState(false);
   // keep track of whether "other" field is shown or not
-  const [showOther, setShowOther] = useState(!!value);
+  const [showOther, setShowOther] = useState(hasValue);
 
   const { options: options_, allowOther, limit, randomize } = question;
 
@@ -44,8 +45,6 @@ export const FormComponentCheckboxGroup = (props: FormInputProps) => {
     : options;
 
   const cutoff = question.cutoff || defaultCutoff;
-
-  const hasValue = value?.length > 0;
 
   const hasReachedLimit = !!(limit && value?.length >= limit);
 
