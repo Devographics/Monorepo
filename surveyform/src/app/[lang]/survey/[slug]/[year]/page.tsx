@@ -27,7 +27,7 @@ export default async function SurveyPage({
         imageUrl={imageUrl}
         editionPath={`/survey/${slug}/${year}`}
       />
-      <Support edition={edition} />
+      {edition.survey.partners && <Support edition={edition} />}
     </div>
   );
 }

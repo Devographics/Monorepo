@@ -24,8 +24,8 @@ const EditionItem = async ({
   );
 
   return (
-    <div>
-      <div className="survey-item">
+    <div className="survey-item">
+      <div>
         <div className="survey-image">
           <Link href={homePath} className="survey-link">
             <div className="survey-image-inner">

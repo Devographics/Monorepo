@@ -44,6 +44,9 @@ export const getSurveyParamsTable = (): SurveyParamsTable => ({
     2022: { surveyId: "state_of_js", editionId: "js2022" },
     2023: { surveyId: "state_of_js", editionId: "js2023" },
   },
+  "state-of-react": {
+    2023: { surveyId: "state_of_react", editionId: "react2023" },
+  },
 });
 
 export const surveyParamsLookup = ({
@@ -68,6 +71,6 @@ export const reverseSurveyParamsLookup = ({
     }
   }
   throw Error(
-    `Could not find surveySlug and editionSlug for ${surveyId}/${editionId}`
+    `Could not find surveyId and editionId for ${surveyId}/${editionId} in SurveyParamsTable`
   );
 };

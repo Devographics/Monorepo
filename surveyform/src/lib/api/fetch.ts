@@ -120,11 +120,14 @@ export const fetchLocale = async ({
   return await getFromCache<any>({
     key,
     fetchFunction: async () => {
+      console.log(getLocaleQuery({ localeId, contexts }));
+
       const result = await fetchGraphQLApi({
         query: getLocaleQuery({ localeId, contexts }),
         key,
         apiUrl: serverConfig().translationAPI,
       });
+      console.log(result);
       const locale = result.locale;
 
       // react-i18n expects {foo1: bar1, foo2: bar2} etc. map whereas

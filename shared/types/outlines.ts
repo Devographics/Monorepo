@@ -95,6 +95,7 @@ export type Section = {
     intlId?: string
     slug: string // TODO: maybe get rid of this?
     questions: Question[]
+    // define a default template for all questions in this section
     template?: string
 }
 

@@ -27,6 +27,7 @@ enum Contexts {
     state_of_js_2022
     state_of_js_2022_survey
     state_of_js_2022_results
+    state_of_js_2023
 
     state_of_css
     state_of_css_2020_survey
@@ -34,9 +35,13 @@ enum Contexts {
     state_of_css_2021_survey
     state_of_css_2021_results
     state_of_css_2022
+    state_of_css_2023
 
     state_of_graphql
     state_of_graphql_2022
+
+    state_of_react
+    state_of_react_2023
 
     # perpetually open survey for testing and demoes
     demo_survey
