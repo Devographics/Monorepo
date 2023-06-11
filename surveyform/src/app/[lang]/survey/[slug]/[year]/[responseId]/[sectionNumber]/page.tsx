@@ -31,9 +31,7 @@ const SurveyFromResponseIdPage = async ({
   const response = await rscMustGetUserResponse({ currentUser, slug, year });
 
   // read-only mode
-  if (
-    ![SurveyStatusEnum.OPEN, SurveyStatusEnum.PREVIEW].includes(edition.status)
-  ) {
+  if (edition.status === SurveyStatusEnum.CLOSED) {
     return <SurveySectionReadOnly /*response={response}*/ />;
   }
   // TODO: @see https://github.com/vercel/next.js/issues/49387#issuecomment-1564539515
