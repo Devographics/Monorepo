@@ -123,20 +123,25 @@ export const fetchGraphQLApi = async ({
     })
 
     // console.debug(`// querying ${apiUrl} (${query.slice(0, 15)}...)`)
-    const response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json'
-        },
-        body: JSON.stringify({ query, variables: {} }),
-        cache: cache || undefined
-    })
-    const json: any = await response.json()
-    if (json.errors) {
-        console.error('// fetchGraphQLApi error')
-        console.error(JSON.stringify(json.errors, null, 2))
-    }
+    try {
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json'
+            },
+            body: JSON.stringify({ query, variables: {} }),
+            cache: cache || undefined
+        })
+        const json: any = await response.json()
+        if (json.errors) {
+            console.error('// fetchGraphQLApi error 1')
+            console.error(JSON.stringify(json.errors, null, 2))
+        }
 
-    return json.data
+        return json.data
+    } catch (error) {
+        console.error('// fetchGraphQLApi error 2')
+        console.error(error)
+    }
 }
