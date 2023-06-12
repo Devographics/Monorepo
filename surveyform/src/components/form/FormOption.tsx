@@ -1,6 +1,6 @@
 import EntityLabel from "~/components/common/EntityLabel";
 import { FormInputProps } from "~/components/form/typings";
-import { OptionMetadata } from "@devographics/types";
+import { OPTION_NA, OptionMetadata } from "@devographics/types";
 import { useIntlContext } from "@devographics/react-i18n";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { getOptioni18nIds } from "@devographics/i18n";
@@ -16,6 +16,11 @@ export const FormOption = (props: FormOptionProps) => {
   const intl = useIntlContext();
   const i18n = getOptioni18nIds(props);
 
+  const defaultMessage =
+    option.id === OPTION_NA
+      ? intl.formatMessage({ id: "options.na" })
+      : i18n.base + " ❔";
+
   const optionDescription = intl.formatMessage({
     id: i18n.description,
   });
@@ -28,7 +33,7 @@ export const FormOption = (props: FormOptionProps) => {
         {entityName ? (
           <EntityLabel entity={entity} />
         ) : (
-          <FormattedMessage id={i18n.base} defaultMessage={i18n.base + " ❔"} />
+          <FormattedMessage id={i18n.base} defaultMessage={defaultMessage} />
         )}
       </span>
       {optionDescription && (
