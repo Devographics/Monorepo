@@ -1,14 +1,12 @@
 "use client";
-import { useIntlContext } from "@devographics/react-i18n";
-import { FormItemProps } from "../form/FormItem";
+import { FormInputProps } from "../form/typings";
 import { PlusIcon } from "~/components/icons";
-import { useQuestionTitle } from "~/lib/surveys/helpers";
 
-export const AddToList = (props: FormItemProps) => {
-  const { updateCurrentValues, section, question, response, addMessage } =
-    props;
+export const AddToList = (
+  props: FormInputProps & { label: string; id: string | number }
+) => {
+  const { updateCurrentValues, label, id, response, addMessage } = props;
   const readingList = response?.readingList || [];
-  const { clean: label } = useQuestionTitle({ section, question });
 
   return (
     <div className="add-to-list">
@@ -17,8 +15,8 @@ export const AddToList = (props: FormItemProps) => {
         enableTooltip={true}
         isButton={true}
         onClick={() => {
-          if (!readingList.includes(question.id)) {
-            updateCurrentValues({ readingList: [...readingList, question.id] });
+          if (!readingList.includes(id)) {
+            updateCurrentValues({ readingList: [...readingList, id] });
             addMessage({
               type: "success",
               bodyId: "readinglist.added_to_list",

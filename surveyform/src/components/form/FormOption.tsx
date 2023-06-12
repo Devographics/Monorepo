@@ -4,13 +4,14 @@ import { OPTION_NA, OptionMetadata } from "@devographics/types";
 import { useIntlContext } from "@devographics/react-i18n";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { getOptioni18nIds } from "@devographics/i18n";
-import { getEntityName } from "~/lib/surveys/helpers";
+import { getEntityName, useOptionTitle } from "~/lib/surveys/helpers";
+import AddToList from "~/components/reading_list/AddToList";
 
 interface FormOptionProps extends FormInputProps {
   option: OptionMetadata;
 }
 export const FormOption = (props: FormOptionProps) => {
-  const { option } = props;
+  const { option, question } = props;
   const { entity } = option;
 
   const intl = useIntlContext();
@@ -27,20 +28,29 @@ export const FormOption = (props: FormOptionProps) => {
 
   const entityName = getEntityName(entity);
 
+  const { clean: label } = useOptionTitle({ question, option });
+
   return (
     <div className="form-option">
-      <span className="form-option-label">
-        {entityName ? (
-          <EntityLabel entity={entity} />
-        ) : (
-          <FormattedMessage id={i18n.base} defaultMessage={defaultMessage} />
+      <div className="form-option-item">
+        <span className="form-option-label">
+          {entityName ? (
+            <EntityLabel entity={entity} />
+          ) : (
+            <FormattedMessage id={i18n.base} defaultMessage={defaultMessage} />
+          )}
+        </span>
+        {optionDescription && (
+          <FormattedMessage
+            className="form-option-description"
+            id={i18n.description}
+          />
         )}
-      </span>
-      {optionDescription && (
-        <FormattedMessage
-          className="form-option-description"
-          id={i18n.description}
-        />
+      </div>
+      {entity && (
+        <div className="form-option-add">
+          <AddToList {...props} label={label} id={option.id} />
+        </div>
       )}
     </div>
   );

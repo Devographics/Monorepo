@@ -462,6 +462,12 @@
 
 .form-option {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1;
+}
+.form-option-item {
+  display: flex;
   flex-direction: column;
   justify-content: center;
 }
@@ -475,7 +481,15 @@
   font-size: $smallish-font;
   color: var(--text-color-dark);
 }
-
+.form-option-add {
+  .add-to-list {
+    opacity: 0.2;
+    position: static;
+    .form-option:hover & {
+      opacity: 1;
+    }
+  }
+}
 .form-show-more {
   margin-top: $spacing;
   @include small {

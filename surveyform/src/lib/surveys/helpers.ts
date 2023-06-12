@@ -1,4 +1,9 @@
-import type { ResponseDocument, SurveyMetadata } from "@devographics/types";
+import type {
+  Entity,
+  OptionMetadata,
+  ResponseDocument,
+  SurveyMetadata,
+} from "@devographics/types";
 import {
   EditionMetadata,
   SectionMetadata,
@@ -10,7 +15,7 @@ import { LocaleDef } from "~/i18n/typings";
 import { reverseSurveyParamsLookup } from "./data";
 import { outlineSegment } from "../routes";
 import { useIntlContext } from "@devographics/react-i18n";
-import { getQuestioni18nIds } from "@devographics/i18n";
+import { getQuestioni18nIds, getOptioni18nIds } from "@devographics/i18n";
 
 /*
 
@@ -153,6 +158,20 @@ export const getEditionQuestions = (
     .map((s) => s.questions.map((q) => ({ ...q, section: s })))
     .flat();
 
+export const getEditionEntities = (edition: EditionMetadata): Array<Entity> => {
+  const allQuestions = getEditionQuestions(edition);
+  const questionEntities = allQuestions
+    .filter((q) => q.entity)
+    .map((q) => q.entity) as Array<Entity>;
+  const optionEntities = allQuestions
+    .map((q) => q.options)
+    .flat()
+    .filter((o) => o?.entity)
+    .map((o) => o?.entity) as Array<Entity>;
+  const allEntities = [...questionEntities, ...optionEntities];
+  return allEntities;
+};
+
 export const getEntityName = (entity) => {
   if (!entity) return;
   const { name, nameClean, nameHtml } = entity;
@@ -169,6 +188,31 @@ export const useQuestionTitle = ({
   const intl = useIntlContext();
   const { entity } = question;
   const i18n = getQuestioni18nIds({ section, question });
+
+  const entityNameHtml = entity && (entity.nameHtml || entity.name);
+  const entityNameClean = entity && (entity.nameClean || entity.name);
+
+  // TODO: formatMessage should return an object with html and clean versions
+  // instead of just a string
+  const i18nNameHtml = intl.formatMessage({ id: i18n.base });
+  const i18nNameClean = intl.formatMessage({ id: i18n.base });
+
+  return {
+    html: entityNameHtml || i18nNameHtml,
+    clean: entityNameClean || i18nNameClean,
+  };
+};
+
+export const useOptionTitle = ({
+  question,
+  option,
+}: {
+  question: QuestionMetadata;
+  option: OptionMetadata;
+}) => {
+  const intl = useIntlContext();
+  const { entity } = option;
+  const i18n = getOptioni18nIds({ question, option });
 
   const entityNameHtml = entity && (entity.nameHtml || entity.name);
   const entityNameClean = entity && (entity.nameClean || entity.name);

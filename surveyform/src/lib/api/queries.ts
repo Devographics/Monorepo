@@ -25,6 +25,7 @@ query SurveysMetadataQuery {
           id
           role
           entity {
+            id
             name
             twitterName
             company {
@@ -102,6 +103,7 @@ query ${editionId}MetadataQuery {
           id
           role
           entity {
+            id
             name
             twitterName
             company {
@@ -134,6 +136,7 @@ query ${editionId}MetadataQuery {
             optionsAreNumeric
             # optionsAreRange
             entity {
+              id
               nameClean
               nameHtml
               example {
@@ -168,6 +171,7 @@ query ${editionId}MetadataQuery {
               intlId
               label
               entity {
+                id
                 nameClean
                 nameHtml
               }

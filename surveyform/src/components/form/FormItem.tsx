@@ -13,7 +13,7 @@ import { FormInputProps } from "./typings";
 import { CommentTrigger, CommentInput } from "./FormComment";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { getQuestioni18nIds } from "@devographics/i18n";
-import { getFormPaths } from "~/lib/surveys/helpers";
+import { getFormPaths, useQuestionTitle } from "~/lib/surveys/helpers";
 import AddToList from "~/components/reading_list/AddToList";
 import QuestionLabel from "./QuestionLabel";
 
@@ -100,6 +100,8 @@ export const FormItemTitle = (props: FormItemProps) => {
   const intl = useIntlContext();
   const { yearAdded } = question;
 
+  const { clean: label } = useQuestionTitle({ section, question });
+
   return (
     <h3 className="form-label-heading">
       <Form.Label>
@@ -115,7 +117,9 @@ export const FormItemTitle = (props: FormItemProps) => {
         )}
       </Form.Label>
 
-      {enableReadingList && <AddToList {...props} />}
+      {enableReadingList && (
+        <AddToList {...props} label={label} id={question.id} />
+      )}
 
       {/* <span className="form-label-number">
         {sectionNumber}.{questionNumber}

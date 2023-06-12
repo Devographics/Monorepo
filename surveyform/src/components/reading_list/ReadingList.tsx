@@ -2,11 +2,17 @@
 import { useState, useEffect, useRef } from "react";
 import { FormattedMessage } from "../common/FormattedMessage";
 import { FormInputProps } from "../form/typings";
-import { getEditionQuestions } from "~/lib/surveys/helpers";
+import { getEditionEntities, getEditionQuestions } from "~/lib/surveys/helpers";
 import EntityLabel from "~/components/common/EntityLabel";
 import { Button } from "~/components/ui/Button";
 import { Cross } from "../icons";
 import QuestionLabel from "../form/QuestionLabel";
+import {
+  Entity,
+  QuestionMetadata,
+  ResponseDocument,
+  SectionMetadata,
+} from "@devographics/types";
 
 const cutoff = 5;
 const animationDurationInMs = 700;
@@ -27,6 +33,7 @@ const usePrevious = (value) => {
 export const ReadingList = (props: FormInputProps) => {
   const { edition, response, updateCurrentValues } = props;
   const allQuestions = getEditionQuestions(edition);
+  const allEntities = getEditionEntities(edition);
   const [showMore, setShowMore] = useState(false);
   const [animate, setAnimate] = useState(false);
 
@@ -71,6 +78,7 @@ export const ReadingList = (props: FormInputProps) => {
             key={itemId}
             itemId={itemId}
             question={allQuestions.find((q) => q.id === itemId)}
+            entity={allEntities.find((e) => e.id === itemId)}
             response={response}
             updateCurrentValues={updateCurrentValues}
           />
@@ -95,8 +103,15 @@ export const ReadingList = (props: FormInputProps) => {
 const ListItem = ({
   itemId: currentItemId,
   question,
+  entity,
   response,
   updateCurrentValues,
+}: {
+  itemId: string;
+  question?: QuestionMetadata & { section: SectionMetadata };
+  entity?: Entity;
+  response?: ResponseDocument;
+  updateCurrentValues: any;
 }) => {
   const handleClick = () => {
     const readingList = response?.readingList || [];
@@ -106,7 +121,11 @@ const ListItem = ({
   };
   return (
     <li className="reading-list-item">
-      <QuestionLabel section={question.section} question={question} />
+      {question ? (
+        <QuestionLabel section={question.section} question={question} />
+      ) : (
+        <EntityLabel entity={entity} />
+      )}
       <button className="reading-list-item-delete" onClick={handleClick}>
         <Cross />
       </button>
