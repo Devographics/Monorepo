@@ -4,7 +4,7 @@
  * 3) get from Github in last resort
  */
 import NodeCache from 'node-cache'
-import { initRedis, fetchJson, storeRedis } from '@devographics/redis'
+import { initRedis, fetchJson as fetchRedis, storeRedis } from '@devographics/redis'
 import { logToFile } from '@devographics/helpers'
 
 const memoryCache = new NodeCache({
@@ -27,13 +27,28 @@ function removeNull(obj) {
     return Array.isArray(obj) ? Object.values(clean) : clean
 }
 
+async function getFromRedisOrSource<T = any>(key: string, fetchFromSource: () => Promise<T>, calledFromLog: any) {
+    const redisData = await fetchRedis<T>(key)
+    if (redisData) {
+        console.debug(`🔵 [${key}] in-memory cache miss, redis hit ${calledFromLog}`)
+        return redisData
+    }
+    console.debug(
+        `🟣 [${key}] in-memory & redis cache miss, fetching from API ${calledFromLog}`
+    )
+    const result = await fetchFromSource()
+    // store in Redis
+    await storeRedis<T>(key, removeNull(result))
+    return result
+}
+
 /**
  * Generic function to fetch something from cache, or store it if cache misses
  * @returns
  */
 export async function getFromCache<T = any>({
     key,
-    fetchFunction,
+    fetchFunction: fetchFromSource,
     calledFrom,
     serverConfig
 }: {
@@ -43,46 +58,39 @@ export async function getFromCache<T = any>({
     serverConfig: Function
 }) {
     initRedis(serverConfig().redisUrl)
-
-    let result
     const calledFromLog = calledFrom ? `(↪️  ${calledFrom})` : ''
     const enableCache = !(process.env.ENABLE_CACHE === 'false')
 
-    const fetchAndStore = async () => {
-        const promise = fetchFunction()
-        memoryCache.set(key, promise)
-        const result = await promise
 
-        // store in Redis in the background
-        await storeRedis<T>(key, removeNull(result))
-        return result
-    }
-
+    let resultPromise: Promise<T>
+    // 1. we have the a promise that resolve to the data in memory => return that
     if (memoryCache.has(key)) {
         console.debug(`🟢 [${key}] in-memory cache hit ${calledFromLog}`)
-        result = await memoryCache.get<Promise<T>>(key)!
+        resultPromise = memoryCache.get<Promise<T>>(key)!
     } else {
+        // 2. store a promise that will first look in Redis, then in the main db
         if (enableCache) {
-            const redisData = await fetchJson<T>(key)
-            if (redisData) {
-                console.debug(`🔵 [${key}] in-memory cache miss, redis hit ${calledFromLog}`)
-                result = redisData
-            } else {
-                console.debug(
-                    `🟣 [${key}] in-memory & redis cache miss, fetching from API ${calledFromLog}`
-                )
-                result = await fetchAndStore()
-            }
+            resultPromise = getFromRedisOrSource(key, fetchFromSource, calledFromLog)
         } else {
-            console.debug(`🟠 [${key}] cache disabled, fetching from API ${calledFromLog}`)
-            result = await fetchAndStore()
+            console.debug(`🟠 [${key}] Redis cache disabled, fetching from API ${calledFromLog}`)
+            resultPromise = fetchFromSource()
         }
+        memoryCache.set(key, resultPromise)
     }
-    await logToFile(`${key}.json`, result, {
-        mode: 'overwrite',
-        subDir: 'fetch'
-    })
-    return result
+    try {
+        const result = await resultPromise
+        await logToFile(`${key}.json`, result, {
+            mode: 'overwrite',
+            subDir: 'fetch'
+        })
+        return result
+    } catch (err) {
+        console.error("// getFromCache")
+        console.error(err)
+        console.debug(`🔴 [${key}] error when fetching from Redis or source ${calledFromLog}`)
+        memoryCache.del(key)
+        throw err
+    }
 }
 
 export const getApiUrl = () => {
@@ -99,7 +107,10 @@ function extractQueryName(queryString) {
     return match ? match[1] : null
 }
 
-export const fetchGraphQLApi = async ({
+/**
+ * Returns null in case of error
+ */
+export const fetchGraphQLApi = async <T = any>({
     query,
     key: key_,
     apiUrl: apiUrl_,
@@ -114,7 +125,7 @@ export const fetchGraphQLApi = async ({
      * @see https://developer.mozilla.org/en-US/docs/Web/API/Request/cache
      */
     cache?: RequestCache
-}): Promise<any> => {
+}): Promise<T | null> => {
     const apiUrl = apiUrl_ || getApiUrl()
     const key = key_ || extractQueryName(query)
     await logToFile(`${key}.gql`, query, {
@@ -139,9 +150,10 @@ export const fetchGraphQLApi = async ({
             console.error(JSON.stringify(json.errors, null, 2))
         }
 
-        return json.data
+        return json.data || {}
     } catch (error) {
         console.error('// fetchGraphQLApi error 2')
         console.error(error)
+        return null
     }
 }
