@@ -28,7 +28,7 @@ export const FormOption = (props: FormOptionProps) => {
         {entityName ? (
           <EntityLabel entity={entity} />
         ) : (
-          <FormattedMessage id={i18n.base} defaultMessage={option.id + ""} />
+          <FormattedMessage id={i18n.base} defaultMessage={i18n.base + " ❔"} />
         )}
       </span>
       {optionDescription && (

@@ -7,6 +7,7 @@ export const multiple: TemplateFunction = options => {
     const output: QuestionTemplateOutput = {
         extends: 'multiple',
         allowMultiple: true,
+        allowOther: true,
         ...getPaths(options, DbSuffixes.CHOICES),
         ...question
     }

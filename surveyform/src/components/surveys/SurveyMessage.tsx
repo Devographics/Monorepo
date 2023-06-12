@@ -6,6 +6,7 @@ const EditionMessage = ({ edition }: { edition: EditionMetadata }) => {
   const { status, endedAt } = edition;
   switch (status) {
     case SurveyStatusEnum.PREVIEW:
+    case SurveyStatusEnum.HIDDEN:
       return (
         <div className="survey-message survey-preview">
           <FormattedMessage id="general.survey_preview" />
