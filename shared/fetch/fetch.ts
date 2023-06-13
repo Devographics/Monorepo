@@ -27,15 +27,17 @@ function removeNull(obj) {
     return Array.isArray(obj) ? Object.values(clean) : clean
 }
 
-async function getFromRedisOrSource<T = any>(key: string, fetchFromSource: () => Promise<T>, calledFromLog: any) {
+async function getFromRedisOrSource<T = any>(
+    key: string,
+    fetchFromSource: () => Promise<T>,
+    calledFromLog: any
+) {
     const redisData = await fetchRedis<T>(key)
     if (redisData) {
         console.debug(`🔵 [${key}] in-memory cache miss, redis hit ${calledFromLog}`)
         return redisData
     }
-    console.debug(
-        `🟣 [${key}] in-memory & redis cache miss, fetching from API ${calledFromLog}`
-    )
+    console.debug(`🟣 [${key}] in-memory & redis cache miss, fetching from API ${calledFromLog}`)
     const result = await fetchFromSource()
     // store in Redis
     await storeRedis<T>(key, removeNull(result))
@@ -61,7 +63,6 @@ export async function getFromCache<T = any>({
     const calledFromLog = calledFrom ? `(↪️  ${calledFrom})` : ''
     const enableCache = !(process.env.ENABLE_CACHE === 'false')
 
-
     let resultPromise: Promise<T>
     // 1. we have the a promise that resolve to the data in memory => return that
     if (memoryCache.has(key)) {
@@ -85,7 +86,7 @@ export async function getFromCache<T = any>({
         })
         return result
     } catch (err) {
-        console.error("// getFromCache")
+        console.error('// getFromCache')
         console.error(err)
         console.debug(`🔴 [${key}] error when fetching from Redis or source ${calledFromLog}`)
         memoryCache.del(key)
@@ -148,12 +149,14 @@ export const fetchGraphQLApi = async <T = any>({
         if (json.errors) {
             console.error('// fetchGraphQLApi error 1')
             console.error(JSON.stringify(json.errors, null, 2))
+            throw new Error(json.errors[0])
         }
 
         return json.data || {}
     } catch (error) {
         console.error('// fetchGraphQLApi error 2')
         console.error(error)
-        return null
+        throw new Error(error)
+        // return null
     }
 }
