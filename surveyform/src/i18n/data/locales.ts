@@ -144,7 +144,7 @@ export const defaultLocale = "en-US";
  */
 export const getClosestLocale = (localeId?: string) => {
   if (!localeId) return defaultLocale;
-  if (uniqueLocales.includes(localeId)) return localeId;
+  if (localeIds.includes(localeId)) return localeId;
   const isCountry = localeId.length === 2;
   if (isCountry) {
     const firstMatchingLocale = uniqueLocales.find((l) => {

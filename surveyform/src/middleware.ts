@@ -69,13 +69,17 @@ function localize(request: NextRequest): NextResponse {
    *
    * User can change locale cookie via the locale selector menu
    */
-  const locale =
-    request.cookies.get(LOCALE_COOKIE_NAME)?.value ||
-    langFromPath ||
-    getLocaleFromAcceptLanguage(request.headers.get("accept-language")) ||
-    "en-US";
+  const cookieLocale = request.cookies.get(LOCALE_COOKIE_NAME)?.value;
+  const pathLocale = langFromPath;
+  const headerLocale = getLocaleFromAcceptLanguage(
+    request.headers.get("accept-language")
+  );
+  const defaultLocale = "en-US";
+  const locale = cookieLocale || pathLocale || headerLocale || defaultLocale;
+
   // get the closest valid locale
   const validLocale = getClosestLocale(locale);
+
   if (validLocale !== locale) {
     console.warn(
       `In middleware, locale ${locale} is not yet supported, falling back to ${validLocale}`
