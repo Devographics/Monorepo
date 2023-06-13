@@ -33,7 +33,7 @@ const checkAndSetParams = (url, params, req) => {
     if (value && typeof value === "string") {
       url.searchParams.set(key, value);
     } else if (value) {
-      console.warn(`${key} parameter is not a string`, req.query, req.url);
+      console.warn(`${key} parameter is not a string`, req?.query, req?.url);
     }
   });
 };
