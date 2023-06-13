@@ -33,9 +33,9 @@ export async function POST(req: NextRequest, res: NextResponse) {
       return NextResponse.json(
         {
           error: {
-            id: "unkown_error",
+            id: "response_create_error",
             status: 500,
-            message: `Could not create response`,
+            message: error.message,
             error,
           },
         },

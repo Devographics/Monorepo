@@ -62,9 +62,9 @@ export async function POST(
       return NextResponse.json(
         {
           error: {
-            id: "unkown_error",
+            id: "response_save_error",
             status: 500,
-            message: `Could not update response`,
+            message: error.message,
             error,
           },
         },
