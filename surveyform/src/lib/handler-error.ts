@@ -4,6 +4,7 @@ import { getClosestLocale } from "~/i18n/data/locales";
 // import { fetchLocaleStrings } from "~/i18n/db-actions/fetchLocales";
 import { getLocaleFromAcceptLanguage } from "~/i18n/server/localeDetection";
 import { DetailedErrorObject } from "./validation";
+import { captureException } from "@sentry/nextjs";
 
 export interface HandlerErrorObject extends DetailedErrorObject {
   status: number;
@@ -56,6 +57,7 @@ export class HandlerError extends Error {
     // that creates a StringsRegistry sever side
 
     const { id, status, properties, message, error } = this;
+    captureException(this.error)
     return NextResponse.json(
       {
         error: {
