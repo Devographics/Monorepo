@@ -1,10 +1,11 @@
 import { EntityResolvedFields, Entity } from '@devographics/core-models'
-import { GitHub, RequestContext } from '../types'
+import { RequestContext } from '../types'
 // import projects from '../data/bestofjs.yml'
 import { fetchMdnResource, fetchTwitterUser } from '../external_apis'
 import { computeKey, useCache } from '../helpers/caching'
 import { getEntity } from '../load/entities'
 import compact from 'lodash/compact.js'
+import { getEntities } from '../load/entities'
 
 // const getSimulatedGithub = (id: string): GitHub | null => {
 //     const project = projects.find((p: Entity) => p.id === id)
@@ -24,6 +25,19 @@ import compact from 'lodash/compact.js'
 //         return null
 //     }
 // }
+
+export const entitiesResolvers = {
+    entity: async (root: any, { id }: { id: string }, context: RequestContext) => {
+        return await getEntity({ id, context })
+    },
+    entities: async (
+        root: any,
+        { ids, tags }: { ids: string[]; tags: string[] },
+        context: RequestContext
+    ) => {
+        return getEntities({ ids, tags, context })
+    }
+}
 
 export type EntityResolverMap = {
     [key in keyof EntityResolvedFields]: (

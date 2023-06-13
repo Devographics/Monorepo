@@ -271,8 +271,50 @@ type Query {
     Meta information about the API
     """
     _metadata(surveyId: SurveysID, editionId: AllEditionsID): APIMetadata
+    """
+    Data about a specific entity (tool, library, framework, features, etc.)
+    """
+    entity(id: ID!): Entity
+    """
+    Get multiple entities (tools, libraries, frameworks, features, etc.)
+    """
+    entities(ids: [String], tags: [String]): [Entity]
+    """
+    Translate a string
+    """
+    translation(key: String!, localeId: LocaleID!): TranslationString
+    """
+    Get a locale
+    """
+    locale(localeId: LocaleID!, contexts: [I18nContext], enableFallbacks: Boolean): Locale
+    """
+    Get multiple locales
+    """
+    locales(contexts: [I18nContext], localeIds: [LocaleID], enableFallbacks: Boolean): [Locale]
 }
 
 type APIMetadata {
     surveys: [SurveyMetadata]
+}
+
+type TranslationString {
+    key: String
+    t: String
+    tHtml: String
+    tClean: String
+    context: String
+    isFallback: Boolean
+    aliasFor: String
+}
+
+type Locale {
+    id: String
+    label: String
+    translators: [String]
+    repo: String
+    strings: [TranslationString]
+    translatedCount: Int
+    totalCount: Int
+    completion: Int
+    untranslatedKeys: [String]
 }

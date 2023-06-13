@@ -11,13 +11,23 @@ import {
     generateSurveyEditionsEnumType,
     generateSurveyType,
     generateSurveysType,
-    generateResponsesType
+    generateResponsesType,
+    generateI18nContextsEnum,
+    generateLocaleIDEnum,
+    generateSurveysEnumType
 } from '../graphql/templates/index'
-import { generateSurveysEnumType } from '../graphql/templates/surveys_enum'
+import {} from '../graphql/templates/locale_id_enum'
 import { SurveyApiObject, QuestionApiObject, TypeObject } from '../types/surveys'
 import { getPath } from './helpers'
 import isEmpty from 'lodash/isEmpty.js'
 
+export const generateI18nTypeObjects = async ({}) => {
+    let typeObjects = []
+    let path = getPath({})
+    typeObjects.push(await generateI18nContextsEnum({ path }))
+    typeObjects.push(await generateLocaleIDEnum({ path }))
+    return typeObjects
+}
 /*
 
 Generate typeDefs corresponding to survey arborescence

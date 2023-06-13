@@ -20,12 +20,13 @@ import { useCache, computeKey } from '../helpers/caching'
 import { getRawCommentsWithCache } from '../compute/comments'
 import { getEntity, getEntities } from '../load/entities'
 import omit from 'lodash/omit.js'
-import { entityResolverMap } from '../resolvers/entities'
+import { entitiesResolvers, entityResolver, entityResolverMap } from '../resolvers/entities'
 import { getResponseTypeName } from '../graphql/templates/responses'
 import { RequestContext, SectionApiObject } from '../types'
 import { getSectionItems, getEditionItems } from './helpers'
 import { stringOrInt } from '../graphql/string_or_int'
 import { GraphQLScalarType } from 'graphql'
+import { localesResolvers } from '../resolvers/locales'
 
 export const generateResolvers = async ({
     surveys,
@@ -49,7 +50,12 @@ export const generateResolvers = async ({
     )
 
     const resolvers = {
-        Query: { _metadata: getGlobalMetadataResolver({ surveys }), surveys: () => surveys },
+        Query: {
+            _metadata: getGlobalMetadataResolver({ surveys }),
+            surveys: () => surveys,
+            ...entitiesResolvers,
+            ...localesResolvers
+        },
         Surveys: surveysFieldsResolvers,
         ItemComments: commentsResolverMap,
         CreditItem: creditResolverMap,

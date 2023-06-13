@@ -165,12 +165,10 @@ export const initEntities = async (context: RequestContext) => {
 
 export const getEntities = async ({
     ids,
-    tag,
     tags,
     context
 }: {
     ids?: OptionId[]
-    tag?: string
     tags?: string[]
     context?: RequestContext
 }) => {
@@ -179,9 +177,6 @@ export const getEntities = async ({
     entities = entities.filter(e => !e.normalizationOnly)
     if (ids) {
         entities = entities.filter(e => ids.includes(e.id))
-    }
-    if (tag) {
-        entities = entities.filter(e => e.tags && e.tags.includes(tag))
     }
     if (tags) {
         entities = entities.filter(e => tags.every(t => e.tags && e.tags.includes(t)))
@@ -233,6 +228,8 @@ Cache all the entities needed by a survey form
 Note: entities should already have all resolvers applied to them
 before being passed to cacheSurveysEntities()
 
+TODO: probably not used anymore?
+
 */
 export const cacheSurveysEntities = async ({
     surveys,
@@ -262,7 +259,8 @@ export const cacheSurveysEntities = async ({
             if (editionEntities.length > 0) {
                 setCache(getSurveyEditionEntitiesCacheKey({ editionId }), editionEntities, context)
                 console.log(
-                    `-> Cached ${editionEntities.length
+                    `-> Cached ${
+                        editionEntities.length
                     } entities (${getSurveyEditionEntitiesCacheKey({ editionId })})`
                 )
             }

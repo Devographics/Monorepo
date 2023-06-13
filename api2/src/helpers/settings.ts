@@ -6,7 +6,7 @@ export interface AppSettings {
     /**
      * Whether we get entities and surveys from local folders
      * or from github
-     * 
+     *
      * @example LOAD_DATA=local
      */
     loadLocalesMode?: 'local'
@@ -14,8 +14,9 @@ export interface AppSettings {
      * Relevant when loading data locally
      * @example ENTITIES_DIR=entities will fetch entities in ../../entities relative to "api" folder
      */
-    entitiesDir?: string;
-    surveysDir?: string;
+    entitiesDir?: string
+    surveysDir?: string
+    localesDir?: string
     githubToken: string
     redisUrl: string
 }
@@ -47,15 +48,22 @@ const loadSettings = () => {
         githubToken,
         redisUrl
     }
-    if (loadLocalesMode === "local") {
-        function loadEnvVar(settings: AppSettings, settingName: "surveysDir" | "entitiesDir", envVarName: string) {
+    if (loadLocalesMode === 'local') {
+        function loadEnvVar(
+            settings: AppSettings,
+            settingName: 'surveysDir' | 'entitiesDir' | 'localesDir',
+            envVarName: string
+        ) {
             if (!process.env[envVarName]) {
-                throw new Error(`${envVarName} not defined while using local data loading mode for setting ${settingName}`)
+                throw new Error(
+                    `${envVarName} not defined while using local data loading mode for setting ${settingName}`
+                )
             }
             settings[settingName] = process.env[envVarName]
         }
-        loadEnvVar(settings, "entitiesDir", "ENTITIES_DIR")
-        loadEnvVar(settings, "surveysDir", "SURVEYS_DIR")
+        loadEnvVar(settings, 'entitiesDir', 'ENTITIES_DIR')
+        loadEnvVar(settings, 'surveysDir', 'SURVEYS_DIR')
+        loadEnvVar(settings, 'localesDir', 'LOCALES_DIR')
     }
     return settings
 }

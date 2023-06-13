@@ -1,5 +1,5 @@
 import { Db } from 'mongodb'
-import { Entity } from '@devographics/core-models'
+import { Entity, Locale } from '@devographics/types'
 
 /**
  * This context is injected in each and every requests.
@@ -9,6 +9,7 @@ export interface RequestContext {
     redisClient?: any
     isDebug?: Boolean
     entities?: Entity[]
+    locales?: Locale[]
 }
 
 export type WatchedItem = 'locales' | 'entities' | 'surveys' | 'projects'

@@ -26,7 +26,8 @@ import {
     generateSurveysTypeObjects,
     generateQuestionsTypeObjects,
     generateFiltersTypeObjects,
-    generateFacetsTypeObjects
+    generateFacetsTypeObjects,
+    generateI18nTypeObjects
 } from './typedefs'
 import uniq from 'lodash/uniq.js'
 
@@ -114,6 +115,9 @@ export const generateTypeObjects = async ({
     surveys: SurveyApiObject[]
     questionObjects: QuestionApiObject[]
 }): Promise<TypeObject[]> => {
+    const i18nTypeObjects = await generateI18nTypeObjects({
+        surveys
+    })
     const surveysTypeObjects = await generateSurveysTypeObjects({
         surveys
     })
@@ -129,6 +133,7 @@ export const generateTypeObjects = async ({
         questionObjects
     })
     const allTypeObjects = [
+        ...i18nTypeObjects,
         ...surveysTypeObjects,
         ...questionsTypeObjects,
         ...filtersTypeObjects,

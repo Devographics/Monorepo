@@ -215,6 +215,7 @@ importers:
       graphql-tag: ^2.12.5
       graphql-type-json: ^0.3.2
       highlight.js: ^11.6.0
+      html-entities: ^2.3.3
       js-yaml: ^4.1.0
       js-yaml-loader: ^1.2.2
       lodash: ^4.17.21
@@ -249,6 +250,7 @@ importers:
       graphql: 16.6.0
       graphql-type-json: 0.3.2_graphql@16.6.0
       highlight.js: 11.6.0
+      html-entities: 2.3.3
       js-yaml: 4.1.0
       lodash: 4.17.21
       markdown-it: 12.3.2
@@ -10550,6 +10552,7 @@ packages:
       '@babel/runtime': 7.20.7
       '@types/testing-library__react-hooks': 3.4.1
       react: 18.2.0
+    dev: false
     optional: true
 
   /@testing-library/react/10.4.9_biqbaboplfbrettd7655fr4n2y:

@@ -1,0 +1,123 @@
+- id: am-ET
+  label: አማርኛ
+  translators: ['ephy-bayru']
+
+- id: ar-EG
+  label: اَلْعَرَبِيَّةُ
+  translators: ['YoussefMo7amed']
+
+- id: ca-ES
+  label: Català
+  translators: ['socunanena']
+
+- id: cs-CZ
+  label: Česky
+  translators: ['adamkudrna']
+
+- id: de-DE
+  label: Deutsch
+  translators: ['abaldeweg', 'Theiaz']
+
+- id: el-GR
+  label: Ελληνικά
+  translators: ['kormic', 'ipapoutsidis']
+
+- id: en-US
+  label: English
+  translators: []
+
+- id: es-ES
+  label: Español
+  translators: [timbergus, ezakto, fransyrcc]
+
+- id: fa-IR
+  label: فارسی
+  translators: ['fghamsary', 'ASafaeirad', 'erfan-goodarzi', 'mhdi-nzari']
+
+- id: fr-FR
+  label: Français
+  translators: ['arnauddrain', 'AvocadoVenom', 'dragonis41']
+
+- id: gl-ES
+  label: Galego
+  translators: [nunhes]
+
+- id: hi-IN
+  label: Hindi
+  translators: ['srk1195', 'jaideepghosh']
+
+- id: hr-HR
+  label: Hrvatski
+  translators: ['ilevak']
+
+- id: hu-HU
+  label: Hrvatski
+  translators: ['punkah', 'b3nk3']
+
+- id: id-ID
+  label: Indonesia
+  translators: ['ervinismu', 'algustionesa', 'KingSit3']
+
+- id: it-IT
+  label: Italiano
+  translators: ['polettoweb', 'alfiofederico']
+
+- id: ja-JP
+  label: 日本語
+  translators: ['myakura', 'Spice-Z']
+
+- id: ko-KR
+  label: 한국어
+  translators: ['eterv', 'icepeng', 'Jcurver']
+
+- id: nl-NL
+  label: Nederlands
+  translators: ['MaxAltena', 'NielsKersic']
+
+- id: pl-PL
+  label: Polski
+  translators: ['luk-str']
+
+- id: pt-BR
+  label: Português (Brasil)
+  translators: ['the-physicist', 'thiagoloal', 'willmustafa', 'andreseichi']
+
+- id: pt-PT
+  label: Português
+  translators: ['danisal']
+
+- id: ro-RO
+  label: Română
+  translators: ['magdaavram']
+
+- id: ru-RU
+  label: Русский
+  translators: ['lex111', 'Omhet', 'shramkoweb']
+
+- id: sk-SK
+  label: Slɔʋentʂina
+  translators: []
+
+- id: sv-SE
+  label: Svenska
+  translators: ['m-hagberg']
+
+- id: tr-TR
+  label: Türkçe
+  translators: ['berkayyildiz']
+
+- id: ua-UA
+  label: Українська
+  translators: ['shramkoweb']
+
+- id: vi-VN
+  label: Tiếng Việt
+  translators: ['ducdongmg']
+
+- id: 'zh-Hans'
+  label: 简体中文
+  translators: ['TIOvOIT', 'scarsu', 'shadowings-zy', 'littleee', 'donaldxdonald']
+
+- id: 'zh-Hant'
+  label: 正體中文
+  translators: ['ymcheung', 'mingjunlu']
