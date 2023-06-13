@@ -4,6 +4,7 @@ import { RouteHandlerOptions } from "~/app/api/typings";
 import { loadResponse } from "~/lib/responses/db-actions/load";
 import { saveResponse } from "~/lib/responses/db-actions/save";
 import { HandlerError } from "~/lib/handler-error";
+import { captureException } from "@sentry/nextjs";
 
 export async function POST(
   req: NextRequest,
@@ -57,8 +58,16 @@ export async function POST(
       return await error.toNextResponse(req);
     } else {
       console.error(error);
+      captureException(error);
       return NextResponse.json(
-        { error: `Could not update response` },
+        {
+          error: {
+            id: "unkown_error",
+            status: 500,
+            message: `Could not update response`,
+            error,
+          },
+        },
         { status: 500 }
       );
     }
