@@ -7,6 +7,7 @@ import { Schema, extendSchema } from "~/lib/schemas";
 import { nanoid } from "nanoid";
 import { getCompletionPercentage, getKnowledgeScore } from "./helpers";
 import { getFormPaths } from "~/lib/surveys/helpers";
+import { captureException } from "@sentry/nextjs";
 
 export enum Actions {
   CREATE = "create",
@@ -71,6 +72,12 @@ export const responseBaseSchema: Schema = {
     onUpdate: ({ existingResponse }) => {
       const updatedAt = new Date();
       const createdAt = existingResponse.createdAt as Date;
+      if (!createdAt) {
+        captureException(
+          `duration callback error: response ${existingResponse._id} missing createdAt field`
+        );
+        return;
+      }
       const differenceInMilliseconds =
         updatedAt.getTime() - createdAt.getTime();
       const differenceInMinutes = differenceInMilliseconds / 1000 / 60;
