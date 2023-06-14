@@ -2,7 +2,11 @@
 import { useState, useEffect, useRef } from "react";
 import { FormattedMessage } from "../common/FormattedMessage";
 import { FormInputProps } from "../form/typings";
-import { getEditionEntities, getEditionQuestions } from "~/lib/surveys/helpers";
+import {
+  EntityWithQuestion,
+  getEditionEntities,
+  getEditionQuestions,
+} from "~/lib/surveys/helpers";
 import EntityLabel from "~/components/common/EntityLabel";
 import { Button } from "~/components/ui/Button";
 import { Cross } from "../icons";
@@ -73,16 +77,18 @@ export const ReadingList = (props: FormInputProps) => {
         <FormattedMessage id="readinglist.description" />
       </div>
       <ul className="reading-list-items">
-        {cutoffReadingList.map((itemId) => (
-          <ListItem
-            key={itemId}
-            itemId={itemId}
-            question={allQuestions.find((q) => q.id === itemId)}
-            entity={allEntities.find((e) => e.id === itemId)}
-            response={response}
-            updateCurrentValues={updateCurrentValues}
-          />
-        ))}
+        {cutoffReadingList.map((itemId) => {
+          const entity = allEntities.find((e) => e.id === itemId);
+          return entity ? (
+            <ListItem
+              key={itemId}
+              itemId={itemId}
+              entity={entity}
+              response={response}
+              updateCurrentValues={updateCurrentValues}
+            />
+          ) : null;
+        })}
       </ul>
       {hasTooManyItems && (
         <Button
@@ -102,23 +108,26 @@ export const ReadingList = (props: FormInputProps) => {
 
 const ListItem = ({
   itemId: currentItemId,
-  question,
   entity,
   response,
   updateCurrentValues,
 }: {
   itemId: string;
-  question?: QuestionMetadata & { section: SectionMetadata };
-  entity?: Entity;
+  entity: EntityWithQuestion;
   response?: ResponseDocument;
   updateCurrentValues: any;
 }) => {
+  const { question } = entity;
+  if (!question) {
+    return null;
+  }
   const handleClick = () => {
     const readingList = response?.readingList || [];
     updateCurrentValues({
       readingList: readingList.filter((itemId) => itemId !== currentItemId),
     });
   };
+
   return (
     <li className="reading-list-item">
       {question ? (

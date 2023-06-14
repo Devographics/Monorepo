@@ -16,6 +16,7 @@ type Entity {
     github: GitHub
     npm: NPM
     mdn: MDN
+    w3c: W3C
     caniuse: CanIUse
     description: String
     descriptionClean: String
@@ -89,6 +90,13 @@ CanIUse Info
 """
 type CanIUse {
     name: String
+    url: String
+}
+
+"""
+W3C Info
+"""
+type W3C {
     url: String
 }
 

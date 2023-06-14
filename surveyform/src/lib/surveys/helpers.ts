@@ -151,23 +151,50 @@ export function getEditionHomePath({
   return "/" + [locale.id, prefixSegment, surveySlug, editionSlug].join("/");
 }
 
+export interface QuestionWithSection extends QuestionMetadata {
+  section: SectionMetadata;
+}
+
+export interface EntityWithQuestion extends Entity {
+  question: QuestionWithSection;
+}
+
 export const getEditionQuestions = (
   edition: EditionMetadata
-): Array<QuestionMetadata & { section: SectionMetadata }> =>
+): Array<QuestionWithSection> =>
   edition.sections
     .map((s) => s.questions.map((q) => ({ ...q, section: s })))
     .flat();
 
-export const getEditionEntities = (edition: EditionMetadata): Array<Entity> => {
+export const getEditionEntities = (
+  edition: EditionMetadata
+): Array<EntityWithQuestion> => {
   const allQuestions = getEditionQuestions(edition);
+
+  // decorate each question's entity with the question
+  // so we can figure out the entity's label later on
   const questionEntities = allQuestions
     .filter((q) => q.entity)
-    .map((q) => q.entity) as Array<Entity>;
+    .map((question) => ({
+      ...question.entity,
+      question,
+    })) as Array<EntityWithQuestion>;
+
   const optionEntities = allQuestions
-    .map((q) => q.options)
+    .map((question) =>
+      question.options?.map((o) => {
+        // decorate each option's entity with question the option belongs to
+        // so we can figure out the entity's label later on
+        if (o.entity) {
+          return { ...o, entity: { ...o.entity, question } };
+        } else {
+          return o;
+        }
+      })
+    )
     .flat()
     .filter((o) => o?.entity)
-    .map((o) => o?.entity) as Array<Entity>;
+    .map((o) => o?.entity) as Array<EntityWithQuestion>;
   const allEntities = [...questionEntities, ...optionEntities];
   return allEntities;
 };

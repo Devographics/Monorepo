@@ -39,6 +39,7 @@ export const FormOption = (props: FormOptionProps) => {
           ) : (
             <FormattedMessage id={i18n.base} defaultMessage={defaultMessage} />
           )}
+          {entity && <span> [{entity?.id}]</span>}
         </span>
         {optionDescription && (
           <FormattedMessage

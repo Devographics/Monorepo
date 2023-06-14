@@ -1,3 +1,38 @@
+const entityFragment = `
+entity {
+  id
+  nameClean
+  nameHtml
+  example {
+    language
+    code
+    codeHighlighted
+  }
+  descriptionClean
+  descriptionHtml
+  homepage {
+    url
+  }
+  github {
+    url
+  }
+  mdn {
+    url
+    summary
+  }
+  w3c {
+    url
+  }
+  caniuse {
+    name
+    url
+  }
+  resources {
+    title
+    url
+  }
+}`;
+
 export const getSurveysQuery = () => `
 query SurveysMetadataQuery {
   _metadata {
@@ -135,32 +170,7 @@ query ${editionId}MetadataQuery {
             randomize
             optionsAreNumeric
             # optionsAreRange
-            entity {
-              id
-              nameClean
-              nameHtml
-              example {
-                language
-                code
-                codeHighlighted
-              }
-              descriptionClean
-              descriptionHtml
-              homepage {
-                url
-              }
-              github {
-                url
-              }
-              mdn {
-                url
-                summary
-              }
-              resources {
-                title
-                url
-              }
-            }
+            ${entityFragment}
             rawPaths {
               response
               other
@@ -170,11 +180,7 @@ query ${editionId}MetadataQuery {
               id
               intlId
               label
-              entity {
-                id
-                nameClean
-                nameHtml
-              }
+              ${entityFragment}
             }
           }
         }

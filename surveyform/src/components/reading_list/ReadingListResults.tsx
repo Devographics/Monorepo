@@ -2,7 +2,11 @@
 import { useState } from "react";
 import { FormattedMessage } from "../common/FormattedMessage";
 import { FormInputProps } from "../form/typings";
-import { getEditionQuestions } from "~/lib/surveys/helpers";
+import {
+  EntityWithQuestion,
+  getEditionEntities,
+  getEditionQuestions,
+} from "~/lib/surveys/helpers";
 import EntityLabel from "~/components/common/EntityLabel";
 import { Button } from "~/components/ui/Button";
 import { Share } from "~/components/icons";
@@ -12,6 +16,8 @@ import { captureException } from "@sentry/nextjs";
 import FormControl from "react-bootstrap/FormControl";
 import { sendReadingList } from "../page/services";
 import { LoadingButton } from "../ui/LoadingButton";
+import { Entity, QuestionMetadata } from "@devographics/types";
+import QuestionLabel from "../form/QuestionLabel";
 
 const cutoff = 3;
 
@@ -19,7 +25,7 @@ export const ReadingList = (
   props: Pick<FormInputProps, "edition" | "response">
 ) => {
   const { edition, response } = props;
-  const allQuestions = getEditionQuestions(edition);
+  const allEntities = getEditionEntities(edition);
 
   const readingList = response?.readingList;
 
@@ -49,13 +55,12 @@ export const ReadingList = (
           <FormattedMessage id="readinglist.results" />
         </p>
         <div className="reading-list-items">
-          {cutoffReadingList.map((itemId) => (
-            <ListItem
-              key={itemId}
-              itemId={itemId}
-              question={allQuestions.find((q) => q.id === itemId)}
-            />
-          ))}
+          {cutoffReadingList.map((itemId) => {
+            const entity = allEntities.find((e) => e.id === itemId);
+            return entity ? (
+              <ListItem key={itemId} itemId={itemId} entity={entity} />
+            ) : null;
+          })}
           {hasTooManyItems && (
             <div className="reading-list-show-more">
               <Button
@@ -78,17 +83,43 @@ export const ReadingList = (
   }
 };
 
-const ListItem = ({ itemId, question }) => {
-  const { entity } = question;
-  const { mdn, github, homepage, resources } = entity;
+const ListItem = ({
+  itemId,
+  entity,
+}: {
+  itemId: string;
+  entity: EntityWithQuestion;
+}) => {
+  const {
+    mdn,
+    github,
+    homepage,
+    w3c,
+    caniuse,
+    resources,
+    descriptionClean,
+    descriptionHtml,
+    question,
+  } = entity;
 
+  if (!question) {
+    return null;
+  }
+
+  const description = descriptionHtml || descriptionClean;
   return (
     <div className="reading-list-item">
       <h5 className="reading-list-item-title">
-        <EntityLabel entity={entity} />
+        {question ? (
+          <QuestionLabel section={question.section} question={question} />
+        ) : (
+          <EntityLabel entity={entity} />
+        )}
         <ul className="reading-list-item-links">
           {mdn && <LinkItem url={mdn.url} label="MDN" />}
           {github?.url && <LinkItem url={github.url} label="GitHub" />}
+          {w3c?.url && <LinkItem url={w3c.url} label="w3c" />}
+          {caniuse?.url && <LinkItem url={caniuse.url} label="CanIUse" />}
           {homepage && (
             <LinkItem
               url={homepage.url}
@@ -97,6 +128,12 @@ const ListItem = ({ itemId, question }) => {
           )}
         </ul>
       </h5>
+      {description && (
+        <div
+          className="reading-list-item-summary"
+          dangerouslySetInnerHTML={{ __html: description }}
+        />
+      )}
       {mdn?.summary && (
         <div className="reading-list-item-summary">{mdn.summary}</div>
       )}
