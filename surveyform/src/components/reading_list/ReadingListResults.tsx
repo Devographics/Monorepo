@@ -21,8 +21,6 @@ import QuestionLabel from "../form/QuestionLabel";
 
 const cutoff = 3;
 
-// test
-
 export const ReadingList = (
   props: Pick<FormInputProps, "edition" | "response">
 ) => {
