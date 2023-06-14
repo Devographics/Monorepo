@@ -27,6 +27,7 @@
     "dependencies": {
         "@devographics/helpers": "workspace:^1.0.0",
         "@devographics/types": "workspace:*",
+        "@upstash/redis": "^1.21.0",
         "ioredis": "^5.2.4"
     },
     "devDependencies": {

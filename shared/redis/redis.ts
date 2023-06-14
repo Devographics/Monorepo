@@ -1,11 +1,17 @@
-import Redis from 'ioredis'
-let redis: Redis
+// import Redis from 'ioredis'
 import { logToFile } from '@devographics/helpers'
+import { Redis } from '@upstash/redis'
 
-export function initRedis(redisUrl: string) {
+let redis
+
+export function initRedis(url: string, token: string) {
     // console.debug("init redis client");
     if (!redis) {
-        redis = new Redis(redisUrl)
+        // redis = new Redis(redisUrl)
+        redis = new Redis({
+            url,
+            token
+        })
     }
 }
 
@@ -27,7 +33,11 @@ const TTL_SECONDS = 60 * 60 * 2
 export async function storeRedis<T>(key: string, val: T): Promise<boolean> {
     const redisClient = getRedisClient()
     // EX = Expiration time in seconds
-    const res = await redisClient.set(key, JSON.stringify(val), 'EX', TTL_SECONDS)
+    // io-redis version
+    // const res = await redisClient.set(key, JSON.stringify(val), 'EX', TTL_SECONDS)
+    // upstash-redis version
+    const res = await redisClient.set(key, JSON.stringify(val), { ex: TTL_SECONDS })
+
     if (res !== 'OK') {
         console.error("Can't store JSON into Redis, error:" + res)
         return false

@@ -59,7 +59,7 @@ export async function getFromCache<T = any>({
     calledFrom?: string
     serverConfig: Function
 }) {
-    initRedis(serverConfig().redisUrl)
+    initRedis(serverConfig().redisUrl, serverConfig().redisToken)
     const calledFromLog = calledFrom ? `(↪️  ${calledFrom})` : ''
     const enableCache = !(process.env.ENABLE_CACHE === 'false')
 
@@ -75,6 +75,9 @@ export async function getFromCache<T = any>({
         } else {
             console.debug(`🟠 [${key}] Redis cache disabled, fetching from API ${calledFromLog}`)
             resultPromise = fetchFromSource()
+            const result = await fetchFromSource()
+            // store in Redis
+            await storeRedis<T>(key, removeNull(result))
         }
         memoryCache.set(key, resultPromise)
     }
@@ -86,7 +89,7 @@ export async function getFromCache<T = any>({
         })
         return result
     } catch (err) {
-        console.error('// getFromCache')
+        console.error('// getFromCache error')
         console.error(err)
         console.debug(`🔴 [${key}] error when fetching from Redis or source ${calledFromLog}`)
         memoryCache.del(key)
