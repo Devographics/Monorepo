@@ -20,7 +20,9 @@ export function serverConfig() {
      */
     translationAPI: process.env.INTERNAL_API_URL!,
     mongoUri: process.env.MONGO_URI!,
-    redisUrl: process.env.REDIS_URL || "redis://localhost:6379",
+    redisUrl: process.env.REDIS_URL!,
+    // Won't work with upstash, which accepts only HTTP
+    // || "redis://localhost:6379",
     redisToken: process.env.REDIS_TOKEN || "",
     githubToken: process.env.GITHUB_TOKEN,
     // NOTE: each survey should try to use their own specific domain (see magic link auth)
