@@ -50,13 +50,14 @@ export async function fetchJson<T = any>(key: string): Promise<T | null> {
     const str = await redisClient.get(key)
     if (!str) return null
     try {
-        const json = JSON.parse(str)
+        // note: depending on Redis client, str might already be a valid object
+        const json = typeof str === 'object' ? str : JSON.parse(str)
         await logToFile(`fetchJson(${key}).json`, json, { mode: 'overwrite' })
         return json
     } catch (err) {
         redisClient.del(key).catch(err => {
             console.error(`Could not delete malformed Redis value for key ${key}`)
         })
-        throw new Error(`Malformed value in Redis cache ${key}}: ${str}`)
+        throw new Error(`Malformed value for Redis key [${key}]: ${str}`)
     }
 }
