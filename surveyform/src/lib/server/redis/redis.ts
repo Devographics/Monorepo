@@ -7,13 +7,17 @@ import { serverConfig } from "~/config/server";
  * TODO: we might want a dedicated @devographics/redis package
  */
 export function connectToRedis() {
-  initRedis(serverConfig().redisUrl);
+  initRedis(serverConfig().redisUrl, serverConfig().redisToken);
 }
 
 /**
  * Middleware version for legacy next-connect
  */
-export const connectToRedisMiddleware = (req: NextApiRequest, res: NextApiResponse, next) => {
+export const connectToRedisMiddleware = (
+  req: NextApiRequest,
+  res: NextApiResponse,
+  next
+) => {
   connectToRedis();
   return next();
 };

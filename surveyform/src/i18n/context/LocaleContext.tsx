@@ -4,7 +4,7 @@ import { IntlContextProvider, StringsRegistry } from "@devographics/react-i18n";
 import { useRouter } from "next/navigation";
 import { useCookies } from "react-cookie";
 import { LOCALE_COOKIE_NAME } from "../cookie";
-import { localesDefsMap, defaultLocale } from "~/i18n/data/locales";
+import { defaultLocaleId } from "~/i18n/data/locales";
 import { captureException } from "@sentry/nextjs";
 import { LocaleDef, LocaleDefWithStrings } from "../typings";
 import { useCurrentUser } from "~/lib/users/hooks";
@@ -74,8 +74,9 @@ export const LocaleContextProvider = (props: {
 }) => {
   const setLocale = useSetLocale(props.updateUser);
   const { localeId, localeStrings, locales } = props;
-  const localeDef = localesDefsMap[localeId] || defaultLocale;
-  if (localeDef.id !== localeId) {
+  let locale = locales.find((l) => l.id === localeId);
+  if (!locale) {
+    locale = locales.find((l) => l.id === defaultLocaleId)!;
     captureException(
       `${localeId} doesn't exist, falling back to defaultLocale`
     );
@@ -91,7 +92,7 @@ export const LocaleContextProvider = (props: {
       <LocaleContext.Provider
         value={{
           locales,
-          locale: localeDef,
+          locale,
           localeId,
           setLocale,
         }}

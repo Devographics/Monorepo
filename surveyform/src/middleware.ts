@@ -5,7 +5,8 @@ import { cronMiddleware } from "~/lib/server/edge/cronMiddleware";
 
 import { getLocaleFromAcceptLanguage } from "~/i18n/server/localeDetection";
 import { LOCALE_COOKIE_NAME } from "./i18n/cookie";
-import { getClosestLocale, locales } from "./i18n/data/locales";
+import { getClosestLocale } from "./i18n/data/locales";
+import { fetchAllLocalesMetadata } from "./lib/api/fetch";
 
 function getFirstParam(pathname: string) {
   if (!pathname) {
@@ -34,17 +35,19 @@ function maybeLocale(str: string) {
  * @param pathname
  * @returns
  */
-function getLang(pathname: string) {
+async function getLang(pathname: string) {
+  const locales = await fetchAllLocalesMetadata();
+  const localesIds = locales.map((l) => l.id);
   const firstParam = getFirstParam(pathname);
   if (!firstParam) return null;
   if (
     // it really looks like a locale (be careful to avoid using ambiguous params like filenames)
     maybeLocale(firstParam) ||
     // known locale
-    locales.includes(firstParam) ||
+    localesIds.includes(firstParam) ||
     // matches a known country
     (firstParam.length === 2 &&
-      locales.map((l) => l.slice(0, 2)).includes(firstParam))
+      localesIds.map((l) => l.slice(0, 2)).includes(firstParam))
   ) {
     return firstParam;
   }
@@ -58,8 +61,8 @@ function isFile(pathname: string) {
   return pathname.includes(".") || getFirstParam(pathname) === "_next";
 }
 
-function localize(request: NextRequest): NextResponse {
-  const langFromPath = getLang(request.nextUrl.pathname);
+async function localize(request: NextRequest): Promise<NextResponse> {
+  const langFromPath = await getLang(request.nextUrl.pathname);
   /**
    * NOTE: we have similar code in route handlers that produce localized responses
    * Priorities:
@@ -78,7 +81,7 @@ function localize(request: NextRequest): NextResponse {
   const locale = cookieLocale || pathLocale || headerLocale || defaultLocale;
 
   // get the closest valid locale
-  const validLocale = getClosestLocale(locale);
+  const validLocale = await getClosestLocale(locale);
 
   if (validLocale !== locale) {
     console.warn(
@@ -102,7 +105,7 @@ function localize(request: NextRequest): NextResponse {
   return NextResponse.redirect(url);
 }
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
   if (pathname.startsWith("/debug")) {
@@ -120,7 +123,7 @@ export function middleware(request: NextRequest) {
   const api = isApi(pathname);
   const shouldLocalize = !api && !file;
   if (shouldLocalize) {
-    return localize(request);
+    return await localize(request);
   }
 
   NextResponse.next();

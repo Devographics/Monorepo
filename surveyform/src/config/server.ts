@@ -6,9 +6,8 @@
 
 import { publicConfig } from "./public";
 
-
 export function serverConfig() {
-  checkServerConfig()
+  checkServerConfig();
   return {
     // reexpose public variables for consistency
     ...publicConfig,
@@ -22,6 +21,7 @@ export function serverConfig() {
     translationAPI: process.env.INTERNAL_API_URL!,
     mongoUri: process.env.MONGO_URI!,
     redisUrl: process.env.REDIS_URL || "redis://localhost:6379",
+    redisToken: process.env.REDIS_TOKEN || "",
     githubToken: process.env.GITHUB_TOKEN,
     // NOTE: each survey should try to use their own specific domain (see magic link auth)
     defaultMailFrom: process.env.MAIL_FROM || "login@devographics.com",
@@ -29,9 +29,11 @@ export function serverConfig() {
     isDev: process.env.NODE_ENV === "development",
     isProd: process.env.NODE_ENV === "production",
     // for non standard envs, NODE_ENV cannot always be overriden, so we need to check NEXT_PUBLIC_NODE_ENV
-    isTest: process.env.NODE_ENV === "test" || process.env.NEXT_PUBLIC_NODE_ENV === "test",
-  }
-};
+    isTest:
+      process.env.NODE_ENV === "test" ||
+      process.env.NEXT_PUBLIC_NODE_ENV === "test",
+  };
+}
 
 /**
  * Wrapping into a function calls allow use to load env variable manually
@@ -41,10 +43,12 @@ export function checkServerConfig() {
   const mongoUri = process.env.MONGO_URI;
   if (!mongoUri) throw new Error("MONGO_URI env variable is not defined");
   if (!process.env.GITHUB_TOKEN) {
-    throw new Error("GITHUB_TOKEN is now necessary to get the survey files")
+    throw new Error("GITHUB_TOKEN is now necessary to get the survey files");
   }
   if (!process.env.INTERNAL_API_URL) {
-    throw new Error("INTERNAL_API_URL should point to the internal API. It was previously named 'TRANSLATION_API'.")
+    throw new Error(
+      "INTERNAL_API_URL should point to the internal API. It was previously named 'TRANSLATION_API'."
+    );
   }
   if (process.env.NODE_ENV === "production") {
     // prod only check
@@ -59,4 +63,4 @@ export function checkServerConfig() {
   } else {
     // dev only check
   }
-};
+}
