@@ -1,10 +1,11 @@
-import { rscAllLocalesMetadata } from "~/lib/api/rsc-fetchers";
 import PrivacyPolicy from "./PrivacyPolicy";
 
-export async function generateStaticParams() {
-  const locales = await rscAllLocalesMetadata();
-  return locales.map((locale) => ({ lang: locale.id }));
-}
+// uncomment to enable static builds
+// import { rscAllLocalesMetadata } from "~/lib/api/rsc-fetchers";
+// export async function generateStaticParams() {
+//   const locales = await rscAllLocalesMetadata();
+//   return locales.map((locale) => ({ lang: locale.id }));
+// }
 
 const PrivacyPolicyPage = () => {
   return <PrivacyPolicy />;
