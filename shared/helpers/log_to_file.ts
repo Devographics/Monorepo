@@ -1,7 +1,7 @@
 import fs from 'fs'
 import yaml from 'js-yaml'
 
-type LogOptions = {
+export type LogOptions = {
     mode?: 'append' | 'overwrite'
     timestamp?: boolean
     dirPath?: string
