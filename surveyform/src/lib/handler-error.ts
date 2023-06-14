@@ -6,6 +6,7 @@ import { getLocaleFromAcceptLanguage } from "~/i18n/server/localeDetection";
 import { DetailedErrorObject } from "./validation";
 import { captureException } from "@sentry/nextjs";
 
+
 export interface HandlerErrorObject extends DetailedErrorObject {
   status: number;
 }
@@ -56,17 +57,18 @@ export class HandlerError extends Error {
     // TODO: then apply the translation: factor code from surveyform/src/app/[lang]/(mainLayout)/layout.tsx
     // that creates a StringsRegistry sever side
 
-    const { id, status, properties, message, error } = this;
-    captureException(this.error)
+    const { id, status, properties, message, error: initialError } = this;
+    const error = {
+      id,
+      status,
+      properties,
+      message,
+      error: initialError,
+    }
+    captureException(error)
     return NextResponse.json(
       {
-        error: {
-          id,
-          status,
-          properties,
-          message,
-          error,
-        },
+        error,
       },
       { status: this.status }
     );

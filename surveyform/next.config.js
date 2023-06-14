@@ -167,7 +167,7 @@ const moduleExports = (phase, { defaultConfig }) => {
   extendedConfig = flowRight([
     withPkgInfo,
     //withMDX,
-    // (config) => withSentryConfig(config, sentryWebpackPluginOptions),
+    (config) => withSentryConfig(config, sentryWebpackPluginOptions),
     // add other wrappers here
   ])(extendedConfig);
 
