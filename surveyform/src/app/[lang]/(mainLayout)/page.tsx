@@ -2,9 +2,11 @@ import Surveys from "~/app/[lang]/(mainLayout)/Surveys";
 
 import { rscFetchSurveysMetadata } from "~/lib/surveys/rsc-fetchers";
 
-import { locales } from "~/i18n/data/locales";
-// export function generateStaticParams() {
-//   return locales.map((l) => ({ lang: l }));
+// uncomment to make page static again
+// import { rscAllLocalesMetadata } from "~/lib/api/rsc-fetchers";
+// export async function generateStaticParams() {
+//   const locales = await rscAllLocalesMetadata();
+//   return locales.map((locale) => ({ lang: locale.id }));
 // }
 
 const IndexPage = async ({ params }) => {
