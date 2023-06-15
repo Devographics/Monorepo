@@ -53,6 +53,7 @@ export const FormSection = (
   const [messages, setMessages] = useState<Message[]>([]);
   const [scrollPosition, setScrollPosition] = useState(0);
   const [itemPositions, setItemPositions] = useState([]);
+  const [reactToChanges, setReactToChanges] = useState(true);
 
   const handleScroll = () => {
     const position = window.pageYOffset;
@@ -88,6 +89,8 @@ export const FormSection = (
     setScrollPosition,
     itemPositions,
     setItemPositions,
+    reactToChanges,
+    setReactToChanges,
   };
 
   const router = useRouter();

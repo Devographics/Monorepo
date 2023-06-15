@@ -43,15 +43,20 @@ export const FormItem = (props: FormItemProps) => {
     response,
     path,
     edition,
+    section,
     question,
     readOnly,
     enableReadingList,
     stateStuff,
     showMore,
     showOther,
+    questionNumber,
   } = props;
 
-  const { setItemPositions } = stateStuff;
+  const isLastItem = questionNumber === section.questions.length;
+
+  const { itemPositions, setItemPositions, reactToChanges, setReactToChanges } =
+    stateStuff;
 
   const { allowComment } = question;
 
@@ -72,17 +77,25 @@ export const FormItem = (props: FormItemProps) => {
   const myRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    setReactToChanges(true);
+  }, [showCommentInput, showMore, showOther]);
+
+  useEffect(() => {
     const current = myRef?.current;
-    if (current) {
+    if (current && reactToChanges) {
       const pos = current.getBoundingClientRect();
       const { top } = pos;
       const scrollTop = document.documentElement.scrollTop;
+      // console.log("// calculating itemPositions");
       setItemPositions((itemPositions) => ({
         ...itemPositions,
         [question.id]: top + scrollTop,
       }));
+      if (isLastItem) {
+        setReactToChanges(false);
+      }
     }
-  }, [showCommentInput, showMore, showOther]);
+  }, [itemPositions, reactToChanges]);
 
   return (
     <div ref={myRef}>
