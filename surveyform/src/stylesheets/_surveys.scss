@@ -176,6 +176,10 @@
   margin: 0;
 }
 .section-toc {
+  display: none;
+  @include xlarge {
+    display: block;
+  }
   margin-top: $spacing;
   ol {
     list-style-type: none;
@@ -186,6 +190,21 @@
   li {
     a {
       font-size: $smallish-font;
+      @include font-regular;
+      &.not-highlighted {
+        &:link,
+        &:visited {
+          color: var(--text-color-dark);
+        }
+        &:hover {
+          color: var(--hover-color);
+        }
+      }
+      &.highlighted {
+        &::before {
+          content: "» ";
+        }
+      }
     }
   }
 }

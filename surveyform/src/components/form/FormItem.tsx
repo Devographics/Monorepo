@@ -4,7 +4,7 @@ Layout for a single form item
 
 */
 "use client";
-import { ReactNode, useState } from "react";
+import { ReactNode, useState, useRef, useEffect } from "react";
 import get from "lodash/get.js";
 
 import { useIntlContext } from "@devographics/react-i18n";
@@ -20,6 +20,8 @@ import QuestionLabel from "./QuestionLabel";
 export interface FormItemProps extends FormInputProps {
   children: ReactNode;
   enableReadingList?: boolean;
+  showMore: boolean;
+  showOther: boolean;
 }
 
 export const FormItem = (props: FormItemProps) => {
@@ -44,7 +46,12 @@ export const FormItem = (props: FormItemProps) => {
     question,
     readOnly,
     enableReadingList,
+    stateStuff,
+    showMore,
+    showOther,
   } = props;
+
+  const { setItemPositions } = stateStuff;
 
   const { allowComment } = question;
 
@@ -62,36 +69,48 @@ export const FormItem = (props: FormItemProps) => {
   // ) : (
   //   children
   // );
+  const myRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const current = myRef?.current;
+    if (current) {
+      const pos = current.getBoundingClientRect();
+      const { top } = pos;
+      const scrollTop = document.documentElement.scrollTop;
+      setItemPositions((itemPositions) => ({
+        ...itemPositions,
+        [question.id]: top + scrollTop,
+      }));
+    }
+  }, [showCommentInput, showMore, showOther]);
 
   return (
-    <Form.Group controlId={path}>
-      <FormItemTitle {...props} />
-      <div className="form-item-contents">
-        <FormItemDescription {...props} />
-        <FormItemLimit {...props} />
-        <div className="form-item-input">
-          {/* {beforeInput} */}
-          {children}
-          {/* {afterInput} */}
-        </div>
-        <FormItemNote {...props} />
+    <div ref={myRef}>
+      <Form.Group controlId={path}>
+        <FormItemTitle {...props} />
+        <div className="form-item-contents">
+          <FormItemDescription {...props} />
+          <FormItemLimit {...props} />
+          <div className="form-item-input">{children}</div>
+          <FormItemNote {...props} />
 
-        {allowComment && (
-          <CommentTrigger
-            value={commentValue}
-            showCommentInput={showCommentInput}
-            setShowCommentInput={setShowCommentInput}
-          />
-        )}
-        {allowComment && showCommentInput && commentPath && (
-          <CommentInput
-            {...props}
-            commentPath={commentPath}
-            commentValue={commentValue}
-          />
-        )}
-      </div>
-    </Form.Group>
+          {allowComment && (
+            <CommentTrigger
+              value={commentValue}
+              showCommentInput={showCommentInput}
+              setShowCommentInput={setShowCommentInput}
+            />
+          )}
+          {allowComment && showCommentInput && commentPath && (
+            <CommentInput
+              {...props}
+              commentPath={commentPath}
+              commentValue={commentValue}
+            />
+          )}
+        </div>
+      </Form.Group>
+    </div>
   );
 };
 

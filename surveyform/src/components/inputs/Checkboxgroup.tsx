@@ -62,7 +62,7 @@ export const FormComponentCheckboxGroup = (props: FormInputProps) => {
     : options;
 
   return (
-    <FormItem {...props}>
+    <FormItem {...props} showMore={showMore} showOther={showOther}>
       <div className="form-item-options">
         {naOption && (
           <Checkbox

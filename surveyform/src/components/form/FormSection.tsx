@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import FormLayout from "./FormLayout";
 import FormQuestion from "./FormQuestion";
 import { captureException } from "@sentry/nextjs";
@@ -51,6 +51,22 @@ export const FormSection = (
   );
   const [errorResponse, setErrorResponse] = useState();
   const [messages, setMessages] = useState<Message[]>([]);
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const [itemPositions, setItemPositions] = useState([]);
+
+  const handleScroll = () => {
+    const position = window.pageYOffset;
+    setScrollPosition(position);
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   const { locale } = useLocaleContext();
 
   const { updateResponseFromClient } = useResponse();
@@ -68,6 +84,10 @@ export const FormSection = (
     setErrorResponse,
     messages,
     setMessages,
+    scrollPosition,
+    setScrollPosition,
+    itemPositions,
+    setItemPositions,
   };
 
   const router = useRouter();

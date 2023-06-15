@@ -2,10 +2,17 @@ import React from "react";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { getSectionKey } from "~/lib/surveys/helpers";
 import QuestionLabel from "../form/QuestionLabel";
+import { FormInputProps } from "../form/typings";
+import minBy from "lodash/minBy";
 
-const SurveySectionHeading = ({ section, sectionNumber, edition }) => {
+const SurveySectionHeading = ({
+  section,
+  sectionNumber,
+  edition,
+  stateStuff,
+}: FormInputProps) => {
   const { id, intlId } = section;
-
+  const { scrollPosition, itemPositions } = stateStuff;
   return (
     <div className="section-heading">
       <div className="section-heading-contents">
@@ -36,6 +43,8 @@ const SurveySectionHeading = ({ section, sectionNumber, edition }) => {
                 key={question.id}
                 section={section}
                 question={question}
+                scrollPosition={scrollPosition}
+                itemPositions={itemPositions}
               />
             ))}
           </ol>
@@ -45,10 +54,30 @@ const SurveySectionHeading = ({ section, sectionNumber, edition }) => {
   );
 };
 
-const QuestionItem = ({ section, question }) => {
+/*
+
+Get the item currently in viewport
+
+*/
+const offset = 200;
+const getItemIdInViewport = (
+  scrollPosition: number,
+  itemPositions: { [key: string]: number }
+) => {
+  return Object.keys(itemPositions)
+    .reverse()
+    .find((id) => itemPositions[id] < scrollPosition + offset);
+};
+
+const QuestionItem = ({ section, question, scrollPosition, itemPositions }) => {
+  const currentItemId = getItemIdInViewport(scrollPosition, itemPositions);
+  const isHighlighted = currentItemId === question.id;
   return (
     <li>
-      <a href={`#${question.id}`}>
+      <a
+        href={`#${question.id}`}
+        className={isHighlighted ? "highlighted" : "not-highlighted"}
+      >
         <QuestionLabel
           section={section}
           question={question}
