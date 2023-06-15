@@ -8,18 +8,19 @@ import typeDefs from './type_defs/schema.graphql'
 import { RequestContext } from './types'
 import resolvers from './resolvers'
 import express from 'express'
-import { initEntities } from './entities'
-import { initSurveys } from './surveys'
 import { analyzeTwitterFollowings } from './rpcs'
-import { clearCache } from './caching'
+// import { clearCache } from './caching'
 import { createClient } from 'redis'
-
+import { initMemoryCache, reinitialize } from './init'
 import path from 'path'
 
 import Sentry from '@sentry/node'
 
 import { rootDir } from './rootDir'
 import { appSettings } from './settings'
+
+import { watchFiles } from './watch'
+import { cacheAvatars } from './avatars'
 
 //import Tracing from '@sentry/tracing'
 
@@ -74,6 +75,8 @@ const start = async () => {
 
     const db = mongoClient.db(process.env.MONGO_DB_NAME)
 
+    const context = { db, redisClient }
+
     const server = new ApolloServer({
         typeDefs,
         resolvers: resolvers as any,
@@ -94,8 +97,7 @@ const start = async () => {
             // TODO: do this better with a custom header
             const isDebug = expressContext?.req?.rawHeaders?.includes('http://localhost:4001')
             return {
-                db,
-                redisClient,
+                ...context,
                 isDebug
             }
         }
@@ -123,9 +125,27 @@ const start = async () => {
         res.status(200).send('Analyzing…')
     })
 
-    app.get('/clear-cache', async function (req, res) {
+    app.get('/reinitialize', async function (req, res) {
         checkSecretKey(req)
-        clearCache(db)
+        await reinitialize({ context })
+        res.status(200).send('Cache cleared')
+    })
+
+    app.get('/reinitialize-surveys', async function (req, res) {
+        checkSecretKey(req)
+        await reinitialize({ context, initList: ['surveys'] })
+        res.status(200).send('Cache cleared')
+    })
+
+    app.get('/reinitialize-entities', async function (req, res) {
+        checkSecretKey(req)
+        await reinitialize({ context, initList: ['entities'] })
+        res.status(200).send('Cache cleared')
+    })
+
+    app.get('/cache-avatars', async function (req, res) {
+        checkSecretKey(req)
+        await cacheAvatars({ context })
         res.status(200).send('Cache cleared')
     })
 
@@ -133,9 +153,21 @@ const start = async () => {
 
     const port = process.env.PORT || 4000
 
-    await initEntities()
+    const data = await initMemoryCache({ context, initList: ['entities', 'surveys'] })
 
-    await initSurveys()
+    // if (process.env.INITIALIZE_CACHE_ON_STARTUP) {
+    //     await initDbCache({ context, data })
+    // }
+
+    if (process.env.LOAD_DATA === 'local') {
+        await watchFiles({
+            context,
+            config: {
+                entities: process.env.ENTITIES_DIR,
+                surveys: process.env.SURVEYS_DIR
+            }
+        })
+    }
 
     const finishedAt = new Date()
 

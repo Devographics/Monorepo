@@ -1,11 +1,8 @@
-import { UserDocument } from "~/core/models/user";
+import { UserDocument } from "~/account/user/typings";
 
-export const generateAnonymousUser =
-  (): UserDocument /*AnonymousUserDocument*/ => {
-    return {
-      groups: [],
-      isAdmin: false,
-      authMode: "anonymous",
-      isVerified: false,
-    };
+export const generateAnonymousUser = (): UserDocument => {
+  return {
+    authMode: "anonymous",
+    isVerified: false,
   };
+};

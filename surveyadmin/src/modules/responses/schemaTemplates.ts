@@ -1,14 +1,8 @@
-import countriesOptions from "../countriesOptions";
-import Bracket from "~/core/components/forms/Bracket";
-import { makeAutocomplete } from "@vulcanjs/graphql";
-import { Help } from "~/core/components/forms/Help";
+import countriesOptions from "~/modules/countriesOptions";
 import type {
   FieldTemplateId,
   ParsedQuestion,
 } from "@devographics/core-models";
-import RaceEthnicity from "~/core/components/forms/RaceEthnicity";
-import Email2 from "~/core/components/forms/Email2";
-import Hidden from "~/core/components/forms/Hidden";
 
 export const templates: {
   [templateName in FieldTemplateId]: (
@@ -17,7 +11,7 @@ export const templates: {
   Partial<ParsedQuestion>;
 } = {
   feature: () => ({
-    input: "radiogroup",
+    input: "feature",
     suffix: "experience",
     options: [
       {
@@ -40,7 +34,7 @@ export const templates: {
     ],
   }),
   tool: () => ({
-    input: "radiogroup",
+    input: "tool",
     suffix: "experience",
     intlPrefix: "tools",
     options: [
@@ -54,64 +48,58 @@ export const templates: {
       { value: "would_not_use", intlId: "options.tools.would_not_use" },
     ],
   }),
-  project: () =>
-    makeAutocomplete(
-      {
-        suffix: "prenormalized",
-        type: Array,
-        arrayItem: {
-          type: String,
-          optional: true,
-        },
-      },
-      {
-        autocompletePropertyName: "name",
-        queryResolverName: "projects",
-        fragmentName: "ProjectFragment",
-        valuePropertyName: "id",
-      }
-    ),
+  project: () => ({
+    suffix: "prenormalized",
+    type: Array,
+    arrayItem: {
+      type: String,
+      optional: true,
+    },
+    autocompleteOptions: {
+      autocompletePropertyName: "name",
+      queryResolverName: "projects",
+      fragmentName: "ProjectFragment",
+      valuePropertyName: "id",
+    },
+  }),
 
-  people: () =>
-    makeAutocomplete(
-      {
-        suffix: "prenormalized",
-        type: Array,
-        arrayItem: {
-          type: String,
-          optional: true,
-        },
-        options: (props) => {
-          return props?.data?.entities.map((document) => ({
-            ...document,
-            value: document.id,
-            label: document.name,
-          }));
-        },
-        query: () => /* GraphQL */ `
-          query FormComponentDynamicEntityQuery($value: [String!]) {
-            entities(id: { _in: $value }) {
-              id
-              name
-            }
-          }
-        `,
-        autocompleteQuery: () => /* GraphQL */ `
-          query AutocompletePeopleQuery($queryString: String) {
-            entities(tags: ["people"], name: { _like: $queryString }) {
-              id
-              name
-            }
-          }
-        `,
-      },
-      {
-        autocompletePropertyName: "name", // overridden by field definition above
-        queryResolverName: "entities", // overridden by field definition above
-        fragmentName: "EntityFragment", // overridden by field definition above
-        valuePropertyName: "id", // overridden by field definition above
+  people: () => ({
+    suffix: "prenormalized",
+    type: Array,
+    arrayItem: {
+      type: String,
+      optional: true,
+    },
+    options: (props) => {
+      return props?.data?.entities.map((document) => ({
+        ...document,
+        value: document.id,
+        label: document.name,
+      }));
+    },
+    query: () => /* GraphQL */ `
+      query FormComponentDynamicEntityQuery($value: [String!]) {
+        entities(id: { _in: $value }) {
+          id
+          name
+        }
       }
-    ),
+    `,
+    autocompleteQuery: () => /* GraphQL */ `
+      query AutocompletePeopleQuery($queryString: String) {
+        entities(tags: ["people"], name: { _like: $queryString }) {
+          id
+          name
+        }
+      }
+    `,
+    autocompleteOptions: {
+      autocompletePropertyName: "name", // overridden by field definition above
+      queryResolverName: "entities", // overridden by field definition above
+      fragmentName: "EntityFragment", // overridden by field definition above
+      valuePropertyName: "id", // overridden by field definition above
+    },
+  }),
   proficiency: ({ allowother = false }) => ({
     allowmultiple: false,
     allowother,
@@ -133,12 +121,39 @@ export const templates: {
     randomize: false,
     suffix: "choices",
   }),
+  slider: ({ allowother = false }) => ({
+    allowmultiple: false,
+    allowother: false,
+    input: "slider",
+    type: Number,
+    randomize: false,
+    suffix: "choices",
+    options: [
+      { value: 0 },
+      { value: 1 },
+      { value: 2 },
+      { value: 3 },
+      { value: 4 },
+      { value: 5 },
+      { value: 6 },
+      { value: 7 },
+      { value: 8 },
+    ],
+  }),
   multiple: ({ id, allowother = false }) => ({
     allowmultiple: true,
     allowother,
     input: "checkboxgroup",
     randomize: true,
     suffix: "choices",
+  }),
+  top_n: ({ id, allowother = false }) => ({
+    allowmultiple: true,
+    allowother,
+    input: "top_n",
+    randomize: true,
+    suffix: "choices",
+    limit: 3,
   }),
   others: () => ({
     input: "textarea",
@@ -166,7 +181,7 @@ export const templates: {
   }),
   // statictext: () => ({}),
   // just normal text
-  help: () => ({ input: Help }),
+  help: () => ({ input: "help" }),
   happiness: () => ({
     input: "radiogroup",
     type: Number,
@@ -186,7 +201,7 @@ export const templates: {
   },
   bracket: (/*questionObject: any*/) => {
     return {
-      input: Bracket,
+      input: "bracket",
       type: Array,
       // TODO: probably wont work
       arrayItem: {
@@ -200,13 +215,13 @@ export const templates: {
       },
     };
   },
-  email2: () => ({ input: Email2 }),
-  receive_notifications: () => ({ input: Hidden, type: Boolean }),
+  email2: () => ({ input: "email2" }),
+  receive_notifications: () => ({ input: "hidden", type: Boolean }),
   race_ethnicity: ({ id, allowother = false }) => ({
     allowmultiple: true,
     allowother,
     randomize: true,
     suffix: "choices",
-    input: RaceEthnicity,
+    input: "raceEthnicity",
   }),
 };

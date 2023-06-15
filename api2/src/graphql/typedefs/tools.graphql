@@ -1,0 +1,46 @@
+# """
+# Contains various rankings for a set of tools.
+# """
+# type ToolsRankings {
+#     ids: [String]!
+#     years: [Int]
+#     experience(filters: Filters): [ToolRatios]
+# }
+
+"""
+Used to represent the ranking of a tool compared to others
+for awareness/interest and stisfaction.
+"""
+type ToolRatiosItemData {
+    id: String
+    entity: Entity
+    awareness: [ToolRatiosItemResponseEditionData]
+    usage: [ToolRatiosItemResponseEditionData]
+    interest: [ToolRatiosItemResponseEditionData]
+    satisfaction: [ToolRatiosItemResponseEditionData]
+}
+
+type ToolRatiosItemResponseEditionData {
+    year: Int
+    editionId: String
+    rank: Int
+    percentageQuestion: Float
+}
+
+input ToolRatiosParameters {
+    enableCache: Boolean
+}
+
+input ToolFilters {
+    eq: ToolExperienceID
+    in: [ToolExperienceID]
+    nin: [ToolExperienceID]
+}
+
+enum ToolExperienceID {
+    would_use
+    would_not_use
+    interested
+    not_interested
+    never_heard
+}

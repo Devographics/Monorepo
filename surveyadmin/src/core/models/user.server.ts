@@ -8,7 +8,6 @@ import {
   createGraphqlModelServer,
   VulcanGraphqlSchemaServer,
 } from "@vulcanjs/graphql/server";
-import { createMongooseConnector } from "@vulcanjs/mongo";
 
 import {
   schema as clientSchema,
@@ -20,7 +19,6 @@ import { hashPassword } from "~/account/passwordLogin/api";
 import { restrictDocuments } from "@vulcanjs/permissions";
 import { ResponseConnector } from "~/modules/responses/model.server";
 import { Response } from "~/modules/responses";
-import mongoose from "mongoose";
 
 /**
  * User + hashed password
@@ -208,13 +206,3 @@ const modelDef: CreateGraphqlModelOptionsServer = merge({}, clientModelDef, {
   schema,
 });
 export const User = createGraphqlModelServer(modelDef);
-
-const UserConnector = createMongooseConnector<UserWithEmailServer>(User, {
-  // We will use "String" _id because we have a legacy db from Meteor
-  mongooseSchema: new mongoose.Schema({ _id: String }, { strict: false }),
-});
-
-User.crud.connector = UserConnector;
-
-export const UserMongooseModel =
-  UserConnector.getRawCollection() as mongoose.Model<UserWithEmailServer>;

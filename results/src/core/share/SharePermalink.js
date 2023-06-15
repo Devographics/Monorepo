@@ -30,9 +30,9 @@ const Link = styled.a`
 `
 
 const SharePermalink = ({ block }) => {
-    const { translate } = useI18n()
-    const context = usePageContext()
-    const blockMeta = getBlockMeta(block, context, translate)
+    const { getString } = useI18n()
+    const pageContext = usePageContext()
+    const blockMeta = getBlockMeta({ block, pageContext, getString })
 
     return (
         <Link
@@ -57,7 +57,7 @@ const SharePermalink = ({ block }) => {
                 </g>
                 <rect fill="none" width="24" height="24" id="Frames-24px" />
             </svg>
-            <span className="sr-only">{translate('share.link')}</span>
+            <span className="sr-only">{getString('share.link')?.t}</span>
         </Link>
     )
 }

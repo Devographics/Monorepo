@@ -1,18 +1,19 @@
 import { computeToolsExperienceRankingYears, computeToolsExperienceRanking } from '../compute'
 import { useCache } from '../caching'
 import { Filters } from '../filters'
-import keys from '../data/keys.yml'
+import { getChartKeys } from '../helpers'
 import { RequestContext, ResolverDynamicConfig, SurveyConfig } from '../types'
 import {
     computeTermAggregationAllYearsWithCache,
-    computeTermAggregationSingleYearWithCache
+    computeTermAggregationSingleYearWithCache,
+    getRawCommentsWithCache
 } from '../compute'
 
 export default {
     ToolsRankings: {
         years: async (
-            { survey, ids, filters }: { survey: SurveyConfig; ids: string[]; filters?: Filters },
-            args: any,
+            { survey, ids }: { survey: SurveyConfig; ids: string[]; filters?: Filters },
+            { filters }: { filters?: Filters },
             context: RequestContext
         ) =>
             useCache({
@@ -21,8 +22,8 @@ export default {
                 funcOptions: { survey, tools: ids, filters }
             }),
         experience: async (
-            { survey, ids, filters }: { survey: SurveyConfig; ids: string[]; filters?: Filters },
-            args: any,
+            { survey, ids }: { survey: SurveyConfig; ids: string[] },
+            { filters }: { filters?: Filters },
             context: RequestContext
         ) =>
             useCache({
@@ -32,7 +33,7 @@ export default {
             })
     },
     ToolExperience: {
-        keys: () => keys.tool,
+        keys: () => getChartKeys('tool'),
         all_years: async (
             { survey, id, filters, options, facet }: ResolverDynamicConfig,
             args: any,
@@ -46,7 +47,7 @@ export default {
                     ...options,
                     filters,
                     facet,
-                    keys: keys.tool
+                    keys: getChartKeys('tool')
                 }
             }),
         year: async (
@@ -63,12 +64,12 @@ export default {
                     filters,
                     year,
                     facet,
-                    keys: keys.tool
+                    keys: getChartKeys('tool')
                 }
             })
     },
     ToolExperienceAggregated: {
-        keys: () => keys.tool,
+        keys: () => getChartKeys('tool'),
         all_years: async (
             { survey, id, filters, options, facet }: ResolverDynamicConfig,
             args: any,
@@ -82,7 +83,7 @@ export default {
                     ...options,
                     filters,
                     facet,
-                    keys: keys.tool
+                    keys: getChartKeys('tool')
                 }
             }),
         year: async (
@@ -99,8 +100,18 @@ export default {
                     filters,
                     year,
                     facet,
-                    keys: keys.tool
+                    keys: getChartKeys('tool')
                 }
             })
+    },
+    ToolComments: {
+        all_years: async ({ survey, id }: ResolverDynamicConfig, {}, context: RequestContext) =>
+            await getRawCommentsWithCache({ survey, id, context, key: `tools.${id}.comment` }),
+        year: async (
+            { survey, id }: ResolverDynamicConfig,
+            { year }: { year: number },
+            context: RequestContext
+        ) =>
+            await getRawCommentsWithCache({ survey, id, year, context, key: `tools.${id}.comment` })
     }
 }

@@ -4,44 +4,12 @@ import React from "react";
 //
 //import Button from "@mui/material/Button";
 //import makeStyles from "~/lib/mui/makeStyles";
-import { useIntlContext } from "@vulcanjs/react-i18n";
+import { useIntlContext } from "@devographics/react-i18n";
 // import routes from "~/config/routes";
 import { useRouter } from "next/router.js";
-// import palette from "~/config/palette";
-// import { computeErrorI18nTokens } from "~/config/errors";
-// import { logout } from "~/services/AuthService";
-// import { useCurrentUserContext } from "~/core/components/account";
-// import { isUserServiceUnavailable } from "~/core/components/account/CurrentUserProvider";
-// import { getAccessToken } from "~/services/AuthService";
-import { useVulcanComponents } from "@vulcanjs/react-ui";
 import { routes } from "~/lib/routes";
 import { LogoutButton } from "~/account/user/components";
-
-/*
-const useStyles = makeStyles({
-  content: {
-    height: "100%",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    color: palette.neutral[9],
-  },
-  buttonsWrapper: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    "& button": {
-      marginTop: "8px",
-      marginBottom: "4px",
-    },
-  },
-  tryReloadMessage: {
-    color: palette.primary.main,
-    fontWeight: 600,
-  },
-});
-*/
+import { Button } from "../ui/Button";
 
 // NOTE: this expects a latin language. Might need improvements/more reusability
 const addPointToSentence = (sentence?: string | null) => {
@@ -93,7 +61,6 @@ export const DefaultErrorDisplay = ({
   const t = (token) => {
     return formatMessage({ id: token });
   };
-  const Components = useVulcanComponents();
   const router = useRouter();
 
   // const hasAccessToken = !!getAccessToken();
@@ -134,7 +101,7 @@ export const DefaultErrorDisplay = ({
                 {" "}
                 {t("error.try_reloading_the_page") || "Try reloading the page"}
               </p>
-              <Components.Button
+              <Button
                 //color="primary"
                 //variant="outlined"
                 onClick={() => {
@@ -146,28 +113,28 @@ export const DefaultErrorDisplay = ({
                 }}
               >
                 {t("error.retry") || "Reload"}
-              </Components.Button>
+              </Button>
             </>
           )}
           {proposeHomeRedirection && (
-            <Components.Button
+            <Button
               //variant="outlined"
               onClick={() => {
                 router.push(routes.home.href);
               }}
             >
               {t("error.redirect_to_home") || "Back to home"}
-            </Components.Button>
+            </Button>
           )}
           {proposeLoginRedirection && (
-            <Components.Button
+            <Button
               //variant="outlined"
               onClick={() => {
                 router.push(routes.home.href);
               }}
             >
               {t("error.redirect_to_login") || "Go to login"}
-            </Components.Button>
+            </Button>
           )}
           {shouldProposeLogout && <LogoutButton />}
         </div>

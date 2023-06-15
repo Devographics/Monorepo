@@ -1,57 +1,9 @@
-blockType: FeatureExperienceBlock
-dataPath: "dataAPI.survey.${id}"
-keysPath: "dataAPI.survey.${id}.experience.keys"
-entityPath: dataAPI.survey.${id}.entity
-blockNamespace: features
-chartNamespace: features
-enableCustomization: true
+blockType: ToolFeatureExperienceBlock
+i18nNamespace: features
+hasComments: true
 hasSponsor: true
-query: >
-    dataAPI {
-        survey(survey: ${surveyType}) {
-            ${id}: feature(id: ${id}) {
-                id
-                entity {
-                    name
-                    homepage {
-                        url
-                    }
-                    caniuse {
-                        name
-                        url
-                    }
-                    mdn {
-                        locale
-                        url
-                        title
-                        summary
-                    }
-                    example {
-                        language
-                        code
-                    }
-                }
-                experience {
-                    keys
-                    all_years {
-                        year
-                        completion {
-                            total
-                            count
-                            percentage_survey
-                        }
-                        facets{
-                            buckets {
-                                id
-                                count
-                                countDelta
-                                percentage_question
-                                percentage_survey
-                                percentageDelta
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+query: allEditionsData
+parameters: { showNoAnswer: true }
+queryOptions:
+    # addQuestionEntity: true
+    addQuestionComments: true

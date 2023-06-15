@@ -1,4 +1,5 @@
 import { generateFiltersQuery } from '../filters'
+import { getFacetPath } from '../helpers'
 
 export type PipelineProps = {
     survey: string
@@ -12,55 +13,17 @@ export type PipelineProps = {
     cutoff?: number
 }
 
-const getFacetPath = (facet: string | undefined) => {
-    // make exception for some fields if their paths are different
-    switch (facet) {
-        case 'gender':
-            return 'gender.choices'
-
-        case 'race_ethnicity':
-            return 'race_ethnicity.choices'
-
-        case 'yearly_salary':
-            return 'yearly_salary.choices'
-
-        case 'industry_sector':
-            return 'industry_sector.choices'
-
-        case 'disability_status':
-            return 'disability_status.choices'
-
-        case 'company_size':
-            return 'company_size.choices'
-
-        case 'years_of_experience':
-            return 'years_of_experience.choices'
-
-        case 'higher_education_degree':
-            return 'higher_education_degree.choices'
-
-        case 'source':
-            return 'source.normalized'
-
-        case 'country':
-            return 'country_alpha3'
-
-        default:
-            return facet
-    }
-}
-
 // generate an aggregation pipeline for all years, or
 // optionally restrict it to a specific year of data
 export const getGenericPipeline = (pipelineProps: PipelineProps) => {
     const { survey, filters, key, facet, fieldId, year, limit, cutoff = 1 } = pipelineProps
 
-    const facetPath = getFacetPath(facet)
+    const facetPath = facet && getFacetPath(facet)
 
     const match: any = {
         survey,
-        [key]: { $nin: [null, '', []] },
-        ...generateFiltersQuery(filters)
+        [key]: { $nin: [null, '', [], {}] },
+        ...generateFiltersQuery({ filters, key })
     }
 
     // if year is passed, restrict aggregation to specific year
@@ -82,7 +45,7 @@ export const getGenericPipeline = (pipelineProps: PipelineProps) => {
             ? [
                   {
                       $unwind: {
-                          path: `$user_info.${facetPath}`
+                          path: `$${facetPath}`
                       }
                   }
               ]
@@ -91,7 +54,7 @@ export const getGenericPipeline = (pipelineProps: PipelineProps) => {
             $group: {
                 _id: {
                     year: '$year',
-                    ...(facet && { [facet]: `$user_info.${facetPath}` }),
+                    ...(facet && { [facet]: `$${facetPath}` }),
                     [fieldId]: `$${key}`
                 },
                 count: {

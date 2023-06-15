@@ -5,15 +5,26 @@
     "src/**/*.ts",
     "src/**/*.tsx",
     // helps having Node types in the config
-    "tsup.config.ts"
+    "tsup.config.ts",
+    ".next/types/**/*.ts"
   ],
   "exclude": [
-    "**/*.stories.tsx",
-    "**/stories.tsx",
     "**/*.test.ts",
     "**/*.tests.ts",
     // must exclude collocated code too
     // can create inconsistencies with VS Code...
     "cypress"
-  ]
+  ],
+  // if possible extend tsconfig.common instead
+  // (this is a trick to correctly handle colocated non-built files such as unit tests)
+  "compilerOptions": {
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "strict": false,
+    "strictNullChecks": true
+  }
 }

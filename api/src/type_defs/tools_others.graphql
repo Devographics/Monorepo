@@ -1,4 +1,6 @@
 enum OtherToolsID {
+    # CSS
+    pre_post_processors
     pre_post_processors_others
     css_frameworks_others
     css_methodologies_others
@@ -9,6 +11,8 @@ enum OtherToolsID {
     text_editors_others
     browsers
     browsers_others
+
+    # JS
     build_tools
     build_tools_others
     non_js_languages
@@ -25,7 +29,18 @@ enum OtherToolsID {
     libraries_others
     runtimes
     runtimes_others
-
+    rendering_frameworks_others
+    date_management
+    date_management_others
+    data_visualization
+    data_visualization_others
+    data_fetching
+    data_fetching_others
+    backend_frameworks
+    backend_frameworks_others
+    edge_runtimes
+    edge_runtimes_others
+    
     # GraphQL
     graphql_servers_others
     graphql_clients_others

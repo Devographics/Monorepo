@@ -15,12 +15,11 @@ export interface RawLocale {
    */
   strings?: Array<{ key: string; t: string; tHtml?: string }>;
 }
-/**
- * Parsed version used in the app
- */
-export type Locale = Omit<RawLocale, "strings"> & {
+
+export type LocaleDef = Omit<RawLocale, "strings">
+export type LocaleDefWithStrings = Omit<RawLocale, "strings"> & {
   /**
-   * Loading strings is costly! Use only when necessary
+   * Strings as a map
    */
-  strings?: { [id: string]: string };
-};
+  strings: { [id: string]: string };
+}

@@ -1,39 +1,50 @@
-//import { Strategy as MagicLinkStrategy } from "passport-magic-link";
 import MagicLoginStrategy from "passport-magic-login";
-import { getTokenSecret } from "~/account/user/api/session";
+import {
+  apiGetSessionFromReq,
+  getTokenSecret,
+} from "~/account/user/api/session";
 import { sendMagicLinkEmail } from "../email/magicLinkEmail";
 
-import { UserMongooseModel, UserTypeServer } from "~/core/models/user.server";
+import { UserTypeServer } from "~/lib/users/model.server";
 
-import debug from "debug";
 import { routes } from "~/lib/routes";
 import { serverConfig } from "~/config/server";
-import type { Request } from "express";
-import { UserType } from "~/core/models/user";
-import {
-  createOrUpgradeUser,
-  findUserFromEmail,
-  upgradeUser,
-} from "./userUtils";
-import { captureException } from "@sentry/nextjs";
-const debugMagic = debug("stateof:magiclink");
+import { UserDocument } from "~/account/user/typings";
+import { NextApiRequest } from "next";
+// TODO: perhaps pass those via an init function/closure to make the account package independant from user db actions
+import { upgradeUser } from "~/account/user/db-actions/upgrade";
+import { createOrUpgradeUser } from "~/account/user/db-actions/createOrUpgrade";
+import { findUserFromEmail } from "~/account/user/db-actions/findFromEmail";
+import { MagicLoginSendEmailBody } from "../../typings/requests-body";
 
 /**
  * Compute the full magic link, with redirection parameter
+ *
+ * TODO: use NextRequest not NextApiRequest to move out of route handlers
+ *
  * @param req
  * @param href
  * @returns
  */
-const computeMagicLink = (req: Request, href: string) => {
-  const magicLinkUrl = new URL(`${serverConfig.appUrl}${href}`);
-  const from = req.query?.from;
-  if (from && typeof from === "string") {
-    magicLinkUrl.searchParams.set("from", from);
-  } else if (from) {
-    console.warn("From parameter is not a string", req.query, req.url);
-  }
+
+const checkAndSetParams = (url, params, req) => {
+  Object.keys(params).forEach((key) => {
+    const value = params[key];
+    if (value && typeof value === "string") {
+      url.searchParams.set(key, value);
+    } else if (value) {
+      console.warn(`${key} parameter is not a string`, req?.query, req?.url);
+    }
+  });
+};
+
+const computeMagicLink = (req: NextApiRequest, href: string) => {
+  const magicLinkUrl = new URL(`${serverConfig().appUrl}${href}`);
+  const { redirectTo, editionId, surveyId } = req.body;
+  checkAndSetParams(magicLinkUrl, { redirectTo, editionId, surveyId }, req);
   return magicLinkUrl.toString();
 };
+
 async function sendMagicLink(
   destination: string,
 
@@ -42,8 +53,10 @@ async function sendMagicLink(
   // the auth token
   code: string,
   // the request
-  req: Request
+  req: NextApiRequest
 ) {
+  const currentUser = await apiGetSessionFromReq(req);
+  const anonymousId = currentUser?._id;
   const email = destination;
   // Important! otherwise we could send the email to a random user!
   if (!(email && typeof email === "string"))
@@ -51,79 +64,42 @@ async function sendMagicLink(
 
   const magicLink = computeMagicLink(req, href);
 
-  // If there is no user with this email, we create an unverified user
-  // => this is particularly useful if anonymousId is set, this way we can remember the anonymousId/email link even if the user
-  // did not click the magic link
-  // => this could enable a "temporary authentication" mode for new users to reduce friction in the future (we have to assess security yet)
   const foundUser = await findUserFromEmail(email);
-  const { anonymousId, prettySlug, year, locale } = req.body;
-  if (!foundUser) {
+
+  const { surveyId, editionId, locale } = req.body as MagicLoginSendEmailBody;
+  if (foundUser) {
+    // add anonymous id if necessary (BUT DO NOT VERIFY)
+    await upgradeUser({
+      foundUser: foundUser as UserDocument,
+      anonymousId,
+      makeVerified: false,
+    });
+  } else {
+    // If there is no user with this email, we create an unverified user
+    // => this is particularly useful if anonymousId is set, this way we can remember the anonymousId/email link even if the user
+    // did not click the magic link
+    // => this could enable a "temporary authentication" mode for new users to reduce friction in the future (we have to assess security yet)
     const user: {
       email: string;
-      anonymousId: string;
+      anonymousId?: string;
       isVerified: boolean;
-      meta?: any;
     } = {
       email,
       anonymousId,
       // Important: the user is not verified until they have actually clicked the magic link
       isVerified: false,
     };
-
-    if (prettySlug || year) {
-      user.meta = {
-        surveySlug: prettySlug,
-        surveyYear: year,
-      };
-    }
     await createOrUpgradeUser(user);
-  } else {
-    // add anonymous id if necessary (BUT DO NOT VERIFY)
-    await upgradeUser({
-      foundUser: foundUser as UserType,
-      anonymousId,
-      makeVerified: false,
-    });
   }
 
-  //console.log("send to", email);
   return sendMagicLinkEmail({
     email,
-    // href = /callbackUrl?token=<the magic token>
     magicLink,
-    prettySlug,
+    editionId,
+    surveyId,
     locale,
   });
-  /*
-      return MailService.sendMail({
-        to: user.email,
-        token,
-      });
-      */
 }
-
-/*
-@see https://github.com/StateOfJS/StateOfJS-next2/issues/3
-This would allow a temporary access without clicking the magic link in some scnearios
-However this is not secure (someone could use your email and get your data until you verify your account)
-const getTemporaryUserMiddleware = (req, res, next) => {
-  const { email } = req.body;
-  if (!email) {
-    return res.status(400).end();
-  }
-  UserMongooseModel.findOne({ email }).then((userResult) => {
-    const user = userResult?.toObject();
-    if (!user) {
-      return res.status(401).end();
-    }
-    if (user.isVerified) {
-      // If user is already verified, they have to click the magic link
-      // Otherwise it would allow anyone to connect to their account
-      return res.status(401).end()
-    }
-  });
-};
-*/
 
 /**
  * Find the user and create it if it doesn't exist yet
@@ -137,7 +113,7 @@ async function verify(
     destination: string;
     anonymousId?: string;
   },
-  cb /*{ email }: Pick<UserTypeServer, "email">*/
+  cb: any /*{ email }: Pick<UserTypeServer, "email">*/
 ) {
   try {
     if (!payload) throw new Error("Invalid token, cannot verify user");
@@ -209,6 +185,7 @@ export const magicLinkStrategy = new MagicLoginStrategy({
   //userFields: ["email"],
   //tokenField: magicTokenName,
   // Will be called with parameter "?token=<magic token>"
+  // @ts-ignore
   sendMagicLink,
   verify,
 });

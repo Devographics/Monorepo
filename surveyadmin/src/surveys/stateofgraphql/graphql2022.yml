@@ -1,7 +1,6 @@
 ---
 slug: graphql2022
 surveyId: graphql2022
-normalizationId: stateofgraphql
 context: state_of_graphql
 topic: GraphQL
 createdAt: December 1, 2021
@@ -18,7 +17,7 @@ textColor: rgb(224, 228, 228)
 linkColor: rgb(65, 199, 199)
 hoverColor: rgb(254, 106, 106)
 tags: [graphql]
-
+contexts: [state_of_graphql]
 emailOctopus:
   listId: 3fb96da2-e6d5-11ec-9258-0241b9615763
 
@@ -165,7 +164,7 @@ outline:
         template: happiness
         sectionSlug: happiness
 
-  - id: graphql_api_generators
+  - id: api_generators
     template: tool
     slug: tools
     questions:
@@ -500,6 +499,7 @@ outline:
   ######################################################
 
   - id: resources
+    intlId: resources_graphql
     questions:
       - id: first_steps
         intlId: resources.first_steps_graphql
@@ -522,6 +522,7 @@ outline:
         matchTags: [first_steps, courses, podcasts, people, youtube, sites, newsletters, socialmedia, graphql]
 
       - id: sites_courses
+        intlId: resources.sites_courses_graphql
         template: multiple
         options:
           - id: stack_overflow
@@ -540,10 +541,12 @@ outline:
         matchTags: [courses, people, youtube, sites, newsletters, socialmedia, graphql]
 
       - id: podcasts
+        intlId: resources.podcasts_graphql.others
         template: others
         matchTags: [podcasts, people, sites, graphql]
 
       - id: people
+        intlId: resources.people_graphql.others
         template: others
         matchTags: [people, youtube, graphql]
 

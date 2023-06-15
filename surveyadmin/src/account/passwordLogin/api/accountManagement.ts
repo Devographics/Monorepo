@@ -1,12 +1,8 @@
 /**
  * Helpers for email/password based authentication and account management
- *
- * /!\ Those methods expects the connection with the database to be already established
- * - Either create a UserMongooseModel that guarantees that the connection is always established
- * - Or establish the connection before you run those function, using "connectoToAppDb()" helper
  */
 import crypto from "crypto";
-import { UserMongooseModel, UserTypeServer } from "~/core/models/user.server";
+import { UserTypeServer } from "~/core/models/user.server";
 
 import passport from "passport";
 /**
@@ -63,7 +59,7 @@ export const authenticate = (
 
 // For legacy password check
 import bcrypt from "bcrypt";
-import { findUserFromEmail } from "~/account/magicLogin/api/passport/userUtils";
+import { findUserFromEmail } from "./userUtils";
 /**
  * Check that the provided password is the user's password
  * @param user
@@ -79,8 +75,7 @@ export const checkPasswordForUser = (
    */
   if (!(user.salt && user.hash)) {
     console.warn(
-      `User ${
-        user && JSON.stringify(user)
+      `User ${user && JSON.stringify(user)
       } has no salt/hash. Coming from Meteor? Will try to use legacy Meteor password, until the user changes their password.`
     );
     const storedHashedPassword = (user as any)?.services?.password?.bcrypt;
@@ -111,10 +106,6 @@ export const checkPasswordForUser = (
 /**
  * Find an user during authentication
  * Return null if not found/password mismatch
- *
- * @deprecated Now we use magic link auth
- * If this is used again, please be careful that we now need an email has
- * @param param0
  */
 export async function findUserByCredentials({
   email,

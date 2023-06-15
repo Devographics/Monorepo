@@ -7,8 +7,6 @@ import typeDefs from './type_defs/schema.graphql'
 import { RequestContext } from './types'
 import resolvers from './resolvers'
 import express from 'express'
-import { initLocales } from './locales_cache'
-import { initEntities } from './entities'
 import { createClient } from 'redis'
 
 import path from 'path'
@@ -17,6 +15,8 @@ import Sentry from '@sentry/node'
 
 import { rootDir } from './rootDir'
 import { appSettings } from './settings'
+import { initMemoryCache } from './init'
+import { watchFiles } from './watch'
 
 //import Tracing from '@sentry/tracing'
 
@@ -59,6 +59,8 @@ const start = async () => {
         await redisClient.connect()
     }
 
+    const context = { redisClient }
+
     const server = new ApolloServer({
         typeDefs,
         resolvers: resolvers as any,
@@ -75,7 +77,7 @@ const start = async () => {
             // TODO: do this better with a custom header
             const isDebug = expressContext?.req?.rawHeaders?.includes('http://localhost:4002')
             return {
-                redisClient,
+                ...context,
                 isDebug
             }
         }
@@ -97,9 +99,9 @@ const start = async () => {
         throw new Error('My first Sentry error!')
     })
 
-    app.get('/clear-cache', async function (req, res) {
+    app.get('/reinitialize', async function (req, res) {
         checkSecretKey(req)
-        // clearCache(db)
+        await initMemoryCache({ context })
         res.status(200).send('Cache cleared')
     })
 
@@ -107,8 +109,17 @@ const start = async () => {
 
     const port = process.env.PORT || 4020
 
-    await initLocales({ redisClient })
-    await initEntities()
+    const { entities } = await initMemoryCache({ context })
+
+    if (process.env.LOAD_DATA === 'local') {
+        await watchFiles({
+            context,
+            config: {
+                locales: process.env.LOCALES_DIR,
+                entities: process.env.ENTITIES_DIR
+            }
+        })
+    }
 
     app.listen({ port: port }, () =>
         console.log(`🚀 Server ready at http://localhost:${port}${server.graphqlPath}`)

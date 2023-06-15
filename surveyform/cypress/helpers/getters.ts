@@ -10,8 +10,9 @@ export const getQuestionBlock = (titleName: string | RegExp) => {
     })
     .parent();
 };
-/** Use links on the left */
+/** Use nav links, automatically open the navigation menu */
 export const getLinkToSection = (sectionName: string | RegExp) => {
+  openNavigationMenu()
   return cy.findByRole("link", {
     name: sectionName,
   });
@@ -29,3 +30,7 @@ export const getCreateAccountButton = () => {
     name: /Continue with Account|accounts\.create_account\.action/i,
   });
 };
+
+export const openNavigationMenu = () => {
+  cy.findByRole("button", { name: /table_of_content|table of contents/i }).click()
+}

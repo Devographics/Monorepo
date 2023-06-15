@@ -8,8 +8,9 @@ export default {
   greyDarkish: '#2a2d33',
   greyDarker: '#1E252E',
 
-  greyTeal: '#a3cacd',
   greyTealDark: '#789B9D',
+  greyTeal: '#a3cacd',
+  greyTealLight: '#bdedf1',
 
   blueLighter: '#B2BBEE',
   blueLight: '#808EE1',
@@ -43,10 +44,19 @@ export default {
   redDark: '#ec5555',
   redDarker: '#D13F3F',
 
-  yellow: '#fbf34c',
-  skyblue: '#1ea0f2',
+  orangeDarker: '#ab5a0e',
+  orangeDark: '#ce7019',
   orange: '#EF8D33',
+  orangeLight: '#ffa958',
+  orangeLighter: '#fdbd81',
+
+  yellowDark: '#afa81f',
+  yellow: '#fbf34c',
+  skyblueDark: '#1372ad',
+  skyblue: '#1ea0f2',
+  oliveDark: '#3c7920',
   olive: '#599E38',
+  aquaDark: '#1d847d',
   aqua: '#3ABBB3',
   indigo: '#4861EC',
 

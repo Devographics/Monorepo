@@ -50,10 +50,6 @@ reports/
 yalc.lock
 .yalc/
 
-# Storybook
-build-storybook.log
-storybook-static
-
 
 # Local config
 # ! keep them in .dockerignore

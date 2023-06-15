@@ -40,8 +40,8 @@ const BlockCompletionIndicator = ({ completion, variant = 'pink' }) => {
 BlockCompletionIndicator.propTypes = {
     completion: PropTypes.shape({
         count: PropTypes.number,
-        percentage: PropTypes.number.isRequired,
-    }).isRequired,
+        percentage: PropTypes.number.isRequired
+    }).isRequired
 }
 
 const Tooltip = styled.div`
@@ -78,7 +78,7 @@ const Container = styled.div`
     padding: 2px;
 
     &:focus {
-     outline: 5px auto -webkit-focus-ring-color;
+        outline: 5px auto -webkit-focus-ring-color;
     }
 
     &:hover ${Tooltip}, &:focus ${Tooltip} {

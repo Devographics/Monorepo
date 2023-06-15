@@ -1,41 +1,36 @@
-id: "${parentId}_section_streams"
+id: '${sectionId}_section_streams'
 titleId: blocks.tools_section_streams
 descriptionId: blocks.tools_section_streams.description
 noteId: blocks.tools_section_streams.note
 blockType: ToolsSectionStreamsBlock
-dataPath: "dataAPI.survey.${parentId}_streams"
-keysPath: "dataAPI.survey.${parentId}_streams.0.experience.keys"
+# dataPath: 'dataAPI.survey.${sectionId}_streams'
+# keysPath: 'dataAPI.survey.${sectionId}_streams.0.experience.keys'
 bucketKeysName: tools
 hasSponsor: true
 query: >
-    dataAPI {
-        survey(survey: ${surveyType}) {
-            ${parentId}_streams: tools(ids: [${toolsCategories[parentId]}]) {
-                id
-                entity {
-                    name
-                    homepage {
-                        url
-                    }
-                    github {
-                        url
-                    }
-                }
-                experience {
-                    keys
-                    all_years {
-                        year
-                        completion {
-                            total
-                            count
-                            percentage_survey
-                        }
-                        facets {
-                            buckets {
-                                id
-                                count
-                                percentage_question
-                                percentage_survey
+    surveys {
+        ${surveyId} {
+            ${editionId} {
+                ${sectionId} {
+                    ${sectionId}_section_streams: ${sectionId}_tools {
+                        items {
+                            id
+                            responses<ARGUMENTS_PLACEHOLDER> {
+                                allEditions {
+                                    editionId
+                                    year
+                                    buckets {
+                                        id
+                                        percentageQuestion
+                                        percentageSurvey
+                                        count
+                                    }
+                                    completion {
+                                        count
+                                        percentageSurvey
+                                        total
+                                    }
+                                }
                             }
                         }
                     }

@@ -3,8 +3,14 @@ import sampleSize from "lodash/sampleSize.js";
 import isNil from "lodash/isNil.js";
 import isEmpty from "lodash/isEmpty.js";
 import cloneDeep from "lodash/cloneDeep.js";
-import { useIntlContext } from "@vulcanjs/react-i18n";
-import { useFormContext, useVulcanComponents } from "@vulcanjs/react-ui";
+import { useIntlContext } from "@devographics/react-i18n";
+import { FormattedMessage } from "../common/FormattedMessage";
+import { Button } from "../ui/Button";
+
+const Components = {
+  // TODO: use tooltip trigger from bootstrap
+  TooltipTrigger: ({ children }) => <div>{children}</div>,
+};
 
 /*
 
@@ -170,17 +176,16 @@ Sub Components
 
 // bracket legend
 const BracketLegend = ({ options }) => {
-  const Components = useVulcanComponents();
   return (
     <table className="bracket-legend">
       <tbody>
         {options.map(({ value, intlId }, index) => (
           <tr className="bracket-legend-item" key={value}>
             <th className="bracket-legend-heading">
-              <Components.FormattedMessage id={intlId} />
+              <FormattedMessage id={intlId} />
             </th>
             <td className="bracket-legend-description">
-              <Components.FormattedMessage id={`${intlId}.description`} />
+              <FormattedMessage id={`${intlId}.description`} />
             </td>
           </tr>
         ))}
@@ -219,10 +224,10 @@ const BracketMatchGroup = (props) => {
     >
       <p className="visually-hidden">
         {isOverallWinner ? (
-          <Components.FormattedMessage id="bracket.result" />
+          <FormattedMessage id="bracket.result" />
         ) : (
           <>
-            <Components.FormattedMessage id="bracket.round" /> {level}
+            <FormattedMessage id="bracket.round" /> {level}
           </>
         )}
       </p>
@@ -240,7 +245,6 @@ const BracketMatchGroup = (props) => {
 
 // bracket pair; or single winner
 const BracketMatch = (props) => {
-  const Components = useVulcanComponents();
   const { options, result, index, isOverallWinner = false } = props;
   const [p1Index, p2Index, winnerIndex] = result;
   const p1 = options[p1Index];
@@ -272,9 +276,9 @@ const BracketMatch = (props) => {
   ) : (
     <fieldset key={index} className="bracket-match">
       <legend className="visually-hidden">
-        <Components.FormattedMessage id={p1?.intlId} />,{" "}
-        <Components.FormattedMessage id="bracket.vs" />.{" "}
-        <Components.FormattedMessage id={p2?.intlId} />
+        <FormattedMessage id={p1?.intlId} />,{" "}
+        <FormattedMessage id="bracket.vs" />.{" "}
+        <FormattedMessage id={p2?.intlId} />
       </legend>
       <div className="bracket-match">
         <BracketItem
@@ -350,7 +354,6 @@ const BracketItem = (props) => {
 
 // wrap an item with a description or not based on its availability
 const WrapWithDescriptionTooltip = ({ player, children }) => {
-  const Components = useVulcanComponents();
   const intl = useIntlContext();
   const description =
     player && intl.formatMessage({ id: `${player.intlId}.description` });
@@ -380,7 +383,6 @@ const BracketItemButton = (props) => {
     result,
     canCancel,
   } = props;
-  const Components = useVulcanComponents();
   return (
     <div className="bracket-item-button-wrapper">
       <WrapWithDescriptionTooltip player={player}>
@@ -395,13 +397,10 @@ const BracketItemButton = (props) => {
             pickWinner(matchIndex, playerIndex);
           }}
         >
-          <Components.FormattedMessage id={props.player.intlId} />
+          <FormattedMessage id={props.player.intlId} />
           <span className="visually-hidden">
             (
-            <Components.FormattedMessage
-              id={`${props.player.intlId}.description`}
-            />
-            )
+            <FormattedMessage id={`${props.player.intlId}.description`} />)
           </span>
         </button>
       </WrapWithDescriptionTooltip>
@@ -427,7 +426,6 @@ const BracketItemCancel = ({
   isOverallWinner,
   cancelMatch,
 }: BracketItemCancelProps) => {
-  const Components = useVulcanComponents();
   return (
     <Components.TooltipTrigger
       trigger={
@@ -440,7 +438,7 @@ const BracketItemCancel = ({
         >
           <span>
             <span className="visually-hidden">
-              <Components.FormattedMessage id="bracket.cancel" />
+              <FormattedMessage id="bracket.cancel" />
             </span>
             <BracketItemCancelIcon />
           </span>
@@ -448,7 +446,7 @@ const BracketItemCancel = ({
       }
     >
       <div className="bracket-item-details" aria-hidden="true">
-        <Components.FormattedMessage id="bracket.cancel" />
+        <FormattedMessage id="bracket.cancel" />
       </div>
     </Components.TooltipTrigger>
   );
@@ -482,13 +480,12 @@ const BracketItemOverallWinner = (
   } & BracketItemCancelProps
 ) => {
   const { player, canCancel } = props;
-  const Components = useVulcanComponents();
   return (
     <div className="bracket-item-button-wrapper">
       <WrapWithDescriptionTooltip player={player}>
         <div className="bracket-item-button bracket-item-button-overall-winner">
           <div className="bracket-item-label">
-            <Components.FormattedMessage id={player?.intlId} />
+            <FormattedMessage id={player?.intlId} />
           </div>
           {/* <BracketStartOver {...props} /> */}
         </div>
@@ -500,28 +497,26 @@ const BracketItemOverallWinner = (
 
 // start over (not used)
 export const BracketStartOver = ({ startOver }: { startOver: () => void }) => {
-  const Components = useVulcanComponents();
   return (
-    <Components.Button
+    <Button
       className="bracket-startover"
       onClick={() => {
         startOver();
       }}
     >
-      <Components.FormattedMessage id="bracket.start_over" />
-    </Components.Button>
+      <FormattedMessage id="bracket.start_over" />
+    </Button>
   );
 };
 
 // empty bracket result item
 const EmptyBracketItem = ({ classnames }: { classnames: Array<string> }) => {
-  const Components = useVulcanComponents();
   return (
     <div className={[...classnames, "bracket-item-empty"].join(" ")}>
       <div className="bracket-item-inner">
         <span aria-hidden="true">...</span>
         <span className="visually-hidden">
-          <Components.FormattedMessage id="bracket.empty_bracket" />
+          <FormattedMessage id="bracket.empty_bracket" />
         </span>
       </div>
     </div>

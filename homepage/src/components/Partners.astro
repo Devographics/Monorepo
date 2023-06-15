@@ -1,0 +1,74 @@
+---
+import T from './T'
+import LanguageSwitcher from './LanguageSwitcher.astro'
+
+const { survey, locale } = Astro.props
+import { Debug } from 'astro/components'
+
+const { partners } = survey
+---
+
+<section>
+    <h2><T locale={locale} k="homepage.with_support_from" /></h2>
+    <div class="partner-list">
+        {
+            partners.map(({ name, imageUrl, url, id }) => (
+                <div class="partner">
+                    <div class="partner-logo">
+                        <a href={url} title={name}>
+                            <img src={imageUrl} alt={name} />
+                        </a>
+                    </div>
+                </div>
+            ))
+        }
+    </div>
+</section>
+
+<style lang="scss">
+    @import '../stylesheets/_breakpoints.scss';
+
+    section {
+        text-align: center;
+        margin-bottom: var(--doublespacing);
+    }
+
+    .partner-list {
+        @include large {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            column-gap: var(--spacing);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+    }
+
+    .partner {
+        @include small-medium {
+            margin-bottom: var(--spacing);
+            &:last-child {
+                margin: 0;
+            }
+        }
+        @include large {
+            display: grid;
+            place-items: center;
+        }
+    }
+
+    .partner-logo {
+        margin-bottom: var(--spacing);
+
+        &:last-child {
+            margin: 0;
+        }
+
+        a,
+        svg,
+        img {
+            display: block;
+            width: 100%;
+            max-width: 240px;
+        }
+    }
+</style>

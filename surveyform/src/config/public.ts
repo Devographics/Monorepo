@@ -7,7 +7,7 @@
 const appUrl =
   process.env.NODE_ENV === "production"
     ? process.env.NEXT_PUBLIC_APP_URL ||
-      `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+    `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
     : "http://localhost:3000";
 /**
  *
@@ -28,4 +28,6 @@ export const publicConfig = {
    */
   environment: "development",
   appUrl,
+  repoUrl: "https://github.com/Devographics/Monorepo",
+  isDev: process.env.NODE_ENV === "development",
 };

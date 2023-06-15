@@ -1,30 +1,28 @@
-import { useUser } from "~/account/user/hooks";
-import { routes } from "~/lib/routes";
-import { useVulcanComponents } from "@vulcanjs/react-ui";
-import { useIntlContext } from "@vulcanjs/react-i18n";
-import { apiRoutes } from "~/lib/apiRoutes";
+"use client";
+import { useCurrentUser } from "~/lib/users/hooks";
+import { useIntlContext } from "@devographics/react-i18n";
 import React from "react";
+import { Button } from "~/components/ui/Button";
+import { logout } from "../client-fetchers/logout";
+import { routes } from "~/lib/routes";
 
-export const LogoutButton = ({
-  component,
-}: {
-  component?: React.ComponentType<any> | React.ElementType<any>;
-}) => {
-  const Components = useVulcanComponents();
+export const LogoutButton = ({ asLink }: { asLink?: boolean }) => {
   const intl = useIntlContext();
-  const LinkOrButton = component || Components.Button;
-  const { user } = useUser();
-  if (!user) return null;
+  const LinkOrButton = asLink ? "a" : Button;
+  const { currentUser } = useCurrentUser();
+  if (!currentUser) return null;
   return (
     <LinkOrButton
       onClick={async (evt) => {
         evt.preventDefault();
-        await fetch(apiRoutes.account.logout.href, {
-          method: "POST",
-        });
-        window.location.replace(routes.home.href);
+        try {
+          await logout();
+          window.location.replace(routes.home.href);
+        } catch (err) {
+          console.error(err);
+        }
       }}
-      {...(component && { href: "#" })}
+      {...(asLink && { href: "#" })}
     >
       {intl.formatMessage({
         id: `accounts.sign_out`,

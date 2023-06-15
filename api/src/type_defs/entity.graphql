@@ -5,7 +5,10 @@ For example: a library, a podcast, a blog, a framework…
 """
 type Entity {
     id: String
+    belongsTo: String
     name: String
+    nameClean: String
+    nameHtml: String
     otherName: String
     homepage: Homepage
     category: String
@@ -14,18 +17,28 @@ type Entity {
     mdn: MDN
     caniuse: CanIUse
     description: String
+    descriptionClean: String
+    descriptionHtml: String
     type: String
     tags: [String]
     patterns: [String]
 
     apiOnly: Boolean
 
+    mastodonName: String
+    mastodon: Mastodon
+
     twitterName: String
     twitter: Twitter
 
     youtubeName: String
-    blog: String
-    rss: String
+    youtube: YouTube
+
+    twitchName: String
+    twitch: Twitch
+
+    blog: Blog
+    rss: RSS
 
     related: [Entity]
 
@@ -36,11 +49,34 @@ type Entity {
     example: Example
 }
 
-
 """
 Homepage Info
 """
 type Homepage {
+    name: String
+    url: String
+}
+
+"""
+Mastodon Info
+"""
+type Mastodon {
+    name: String
+    url: String
+}
+
+"""
+YouTube Info
+"""
+type YouTube {
+    name: String
+    url: String
+}
+
+"""
+Twitch Info
+"""
+type Twitch {
     name: String
     url: String
 }
@@ -61,6 +97,19 @@ type NPM {
     url: String
 }
 
+"""
+Blog Info
+"""
+type Blog {
+    url: String
+}
+
+"""
+RSS Info
+"""
+type RSS {
+    url: String
+}
 
 """
 Example Info

@@ -1,6 +1,6 @@
-import { QueryHookOptions, useQuery } from "@apollo/client";
 import gql from "graphql-tag";
 import type { Entity } from "@devographics/core-models";
+import { useQuery } from "~/lib/graphql";
 const entitiesQuery = gql`
   query EntitiesQuery(
     $tags: [String]
@@ -38,11 +38,7 @@ interface EntitiesQueryVariables {
     _like?: Array<string>;
   };
 }
-export const useEntitiesQuery = (
-  variables?: EntitiesQueryVariables,
-  options?: QueryHookOptions
-) =>
+export const useEntitiesQuery = (variables?: EntitiesQueryVariables) =>
   useQuery<{ entities: Array<Entity> }>(entitiesQuery, {
     variables,
-    ...(options || {}),
   });

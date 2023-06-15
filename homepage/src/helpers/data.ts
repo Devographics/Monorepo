@@ -11,11 +11,11 @@ type HomepageData = {
 }
 
 export const getSizeInKB = obj => {
-  const str = JSON.stringify(obj);
-  // Get the length of the Uint8Array
-  const bytes = new TextEncoder().encode(str).length;
-  return Math.round(bytes/1000);
-};
+    const str = JSON.stringify(obj)
+    // Get the length of the Uint8Array
+    const bytes = new TextEncoder().encode(str).length
+    return Math.round(bytes / 1000)
+}
 const runQuery = async (url: string, query: string, queryName: string): Promise<any> => {
     const startAt = new Date()
     const response = await fetch(url, {
@@ -28,12 +28,15 @@ const runQuery = async (url: string, query: string, queryName: string): Promise<
     const text = await response.text()
     const endAt = new Date()
     try {
-
         const json = JSON.parse(text) // Try to parse it as JSON
         if (json.errors) {
             throw new Error(json.errors[0].message)
         }
-        console.log(`🕚 Ran query ${queryName} in ${endAt.getTime() - startAt.getTime()}ms (${getSizeInKB(json)}kb) | ${url}`)
+        console.log(
+            `🕚 Ran query ${queryName} in ${endAt.getTime() - startAt.getTime()}ms (${getSizeInKB(
+                json
+            )}kb) | ${url}`
+        )
 
         return json.data
     } catch (error) {
@@ -43,10 +46,12 @@ const runQuery = async (url: string, query: string, queryName: string): Promise<
     }
 }
 
+
 export const getData = async (): Promise<HomepageData> => {
     const surveySlug = import.meta.env.SURVEY
     const dataApiUrl = import.meta.env.DATA_API_URL
     const internalApiUrl = import.meta.env.INTERNAL_API_URL
+    const fastBuild = import.meta.env.FAST_BUILD === 'true'
     const locales = []
     const allSurveysData = await runQuery(dataApiUrl, getAllSurveysQuery(), 'AllSurveys')
 
@@ -55,7 +60,10 @@ export const getData = async (): Promise<HomepageData> => {
         getAllLocalesMetadataQuery(surveySlug),
         'AllLocalesMetadata'
     )
-    for (const locale of allLocalesMetadata.locales) {
+    const localesToUse = fastBuild
+        ? allLocalesMetadata.locales.filter(l => ['en-US', 'ru-RU'].includes(l.id))
+        : allLocalesMetadata.locales
+    for (const locale of localesToUse) {
         const localeWithStrings = await runQuery(
             internalApiUrl,
             getSingleLocaleQuery(locale.id, surveySlug),
@@ -63,7 +71,9 @@ export const getData = async (): Promise<HomepageData> => {
         )
         locales.push(localeWithStrings.locale)
     }
-    const data = { ...allSurveysData, locales }
+    // filter out the demo survey
+    const allSurveys = allSurveysData?.allSurveys?.filter(s => s.slug !== "demo_survey") || []
+    const data = { allSurveys, locales }
     return data
 }
 

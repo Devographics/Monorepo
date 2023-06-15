@@ -4,6 +4,8 @@ import {
   createGraphqlModel,
   CreateGraphqlModelOptionsShared,
 } from "@vulcanjs/graphql";
+import { SurveyEdition } from "@devographics/core-models";
+
 
 const name = "Response";
 export const modelDef: CreateGraphqlModelOptionsShared = {

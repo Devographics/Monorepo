@@ -5,25 +5,30 @@ import fetch from 'node-fetch'
 import yaml from 'js-yaml'
 import { readdir, readFile } from 'fs/promises'
 import last from 'lodash/last.js'
-import { logToFile } from './debug'
+import { logToFile } from '@devographics/helpers'
 import path from 'path'
 import marked from 'marked'
 import hljs from 'highlight.js/lib/common'
 import { appSettings } from './settings'
+import sanitizeHtml from 'sanitize-html'
 
 let entities: Entity[] = []
 
 // load locales if not yet loaded
-export const loadOrGetEntities = async () => {
-    if (entities.length === 0) {
+export const loadOrGetEntities = async (
+    options: { forceReload?: boolean } = { forceReload: false }
+) => {
+    const { forceReload } = options
+    if (forceReload || entities.length === 0) {
         entities = await loadEntities()
     }
     return await highlightEntitiesExampleCode(parseEntitiesMarkdown(entities))
 }
 
-type EntityFields = keyof Entity;
+type MarkdownFields = 'name' | 'description'
 
-const markdownFields = ['name', 'description'] as EntityFields[] 
+const markdownFields: MarkdownFields[] = ['name', 'description']
+
 export const parseEntitiesMarkdown = (entities: Entity[]) => {
     for (const entity of entities) {
         for (const fieldName of markdownFields) {
@@ -33,7 +38,10 @@ export const parseEntitiesMarkdown = (entities: Entity[]) => {
                 const containsTagRegex = new RegExp(/(<([^>]+)>)/i)
 
                 if (field !== fieldHtml || containsTagRegex.test(field)) {
-                    entity[fieldName] = fieldHtml
+                    entity[`${fieldName}Html`] = sanitizeHtml(fieldHtml)
+                    entity[`${fieldName}Clean`] = sanitizeHtml(fieldHtml, {
+                        allowedTags: []
+                    })
                 }
             }
         }
@@ -47,7 +55,7 @@ export const highlightEntitiesExampleCode = async (entities: Entity[]) => {
         if (example) {
             const { code, language } = example
             // make sure to trim any extra /n at the end
-            example.codeHighlighted = hljs.highlight(code.trim(), {language}).value
+            example.codeHighlighted = hljs.highlight(code.trim(), { language }).value
         }
     }
     return entities
@@ -96,10 +104,13 @@ export const loadFromGitHub = async () => {
 // when developing locally, load from local files
 export const loadLocally = async () => {
     console.log(`-> loading entities locally`)
+    if (!process.env.ENTITIES_DIR) {
+        throw new Error("ENTITIES_DIR not set, can't load entities locally")
+    }
 
     const entities: Entity[] = []
 
-    const entitiesDirPath = path.resolve(`../../stateof-entities/`)
+    const entitiesDirPath = path.resolve(`../../${process.env.ENTITIES_DIR}/`)
     const files = await readdir(entitiesDirPath)
     const yamlFiles = files.filter((f: String) => f.includes('.yml'))
 
@@ -127,7 +138,7 @@ export const loadEntities = async () => {
     console.log('// loading entities')
 
     const entities: Entity[] =
-        appSettings.loadLocalesMode === 'local' ? await loadLocally() : await loadFromGitHub()
+        appSettings.loadEntitiesMode === 'local' ? await loadLocally() : await loadFromGitHub()
     console.log('// done loading entities')
 
     return entities
@@ -135,20 +146,25 @@ export const loadEntities = async () => {
 
 export const initEntities = async () => {
     console.log('// initializing entities…')
-    const entities = await loadOrGetEntities()
+    const entities = await loadOrGetEntities({ forceReload: true })
     logToFile('entities.json', entities, { mode: 'overwrite' })
 }
 
 export const getEntities = async ({
     ids,
     tag,
-    tags
+    tags,
+    isNormalization = false
 }: {
     ids?: string[]
     tag?: string
     tags?: string[]
+    isNormalization?: boolean
 }) => {
     let entities = await loadOrGetEntities()
+    if (!isNormalization) {
+        entities = entities.filter(e => !e.normalizationOnly)
+    }
     if (ids) {
         entities = entities.filter(e => ids.includes(e.id))
     }
@@ -161,25 +177,33 @@ export const getEntities = async ({
     return entities
 }
 
-// Look up entities by id, name, or aliases (case-insensitive)
-export const getEntity = async ({ id }: { id: string | number }) => {
-    const entities = await loadOrGetEntities()
+export const findEntity = (id: string, entities: Entity[]) =>
+    entities.find(e => {
+        return (
+            (e.id && e.id.toLowerCase() === id) ||
+            (e.id && e.id.toLowerCase().replace(/\-/g, '_') === id) ||
+            (e.name && e.name.toLowerCase() === id)
+        )
+    })
 
+export const getEntity = async ({ id }: { id: string | number }) => {
     if (!id || typeof id !== 'string') {
         return
     }
 
-    const lowerCaseId = id.toLowerCase()
-    // some entities are only for normalization and should not be made available through API
-    const entity = entities
-        .filter(e => !e.normalizationOnly)
-        .find(e => {
-            return (
-                (e.id && e.id.toLowerCase() === lowerCaseId) ||
-                (e.id && e.id.toLowerCase().replace(/\-/g, '_') === lowerCaseId) ||
-                (e.name && e.name.toLowerCase() === lowerCaseId)
-            )
-        })
+    const entities = await getEntities({})
 
-    return entity
+    const entity = findEntity(id.toLowerCase(), entities)
+
+    if (!entity) {
+        return
+    }
+
+    if (entity.belongsTo) {
+        // if entity A belongs to another entity B, extend B with A and return the result
+        const ownerEntity = findEntity(entity.belongsTo, entities)
+        return { ...ownerEntity, ...entity }
+    } else {
+        return entity
+    }
 }

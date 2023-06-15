@@ -1,11 +1,6 @@
 import React, { createContext, useContext, useMemo, FC } from 'react'
-import {
-    getTranslator,
-    getStringTranslator,
-    Locale,
-    LegacyTranslator,
-    StringTranslator,
-} from './translator'
+import { getTranslator, getStringTranslator } from './translator'
+import { Locale, LegacyTranslator, StringTranslator } from 'core/types'
 import { usePageContext } from '../helpers/pageContext'
 
 export const I18nContext = createContext({})
@@ -20,7 +15,7 @@ const I18nContextProviderInner: FC = ({ children }) => {
         () => ({
             locale,
             translate,
-            getString,
+            getString
         }),
         [locale, translate, getString]
     )
@@ -32,9 +27,10 @@ export const I18nContextProvider: FC = ({ children }) => {
     return <I18nContextProviderInner>{children}</I18nContextProviderInner>
 }
 
-export const useI18n = () =>
-    useContext<{
-        locale?: Locale
-        translate?: LegacyTranslator
-        getString?: StringTranslator
-    }>(I18nContext)
+type I18nContextType = {
+    locale: Locale
+    translate: LegacyTranslator
+    getString: StringTranslator
+}
+
+export const useI18n = () => useContext(I18nContext) as I18nContextType

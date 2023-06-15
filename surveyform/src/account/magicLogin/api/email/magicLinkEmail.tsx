@@ -1,12 +1,8 @@
 /**
  * Mail for the magic link strategy
- *
- * NOTE: in other examples we used Material UI + SSR but it definitely won't work!
  */
 
 import { localMailTransport } from "~/lib/server/mail/transports";
-import surveys from "~/surveys";
-import { SurveyType } from "@devographics/core-models";
 
 /**
  * Email will be rendered using React Dom server rendering (renderToStaticMarkup())
@@ -14,6 +10,9 @@ import { SurveyType } from "@devographics/core-models";
  * @see https://reactjs.org/docs/react-dom-server.html
  */
 import Mail from "nodemailer/lib/mailer";
+import { fetchEditionMetadata } from "~/lib/api/fetch";
+import { SurveyMetadata } from "@devographics/types";
+import { MagicLoginSendEmailBody } from "../../typings/requests-body";
 
 const MagicLinkHtml = ({
   magicLink,
@@ -21,7 +20,7 @@ const MagicLinkHtml = ({
   locale,
 }: {
   magicLink: string;
-  survey?: SurveyType;
+  survey?: SurveyMetadata;
   locale?: String;
 }) =>
   `<h3>${survey?.name}</h3>
@@ -33,7 +32,7 @@ export const magicLinkEmailParameters = ({
   locale,
 }: {
   magicLink: string;
-  survey?: SurveyType;
+  survey?: SurveyMetadata;
   locale?: String;
 }): Partial<Mail.Options> => {
   return {
@@ -44,29 +43,37 @@ export const magicLinkEmailParameters = ({
   };
 };
 
-const defaultSlug = "state-of-js";
-
+const defaultSurveyId = "state_of_js";
+// TODO: should not be needed we only need the surveyId actually
+const defaultEditionId = "js2022";
 export const sendMagicLinkEmail = async ({
   email,
   magicLink,
-  prettySlug = defaultSlug,
+  surveyId,
+  editionId,
   locale,
-}: //token,
-{
-  email: string;
+}: Pick<MagicLoginSendEmailBody, "surveyId" | "editionId" | "locale"> & {
   magicLink: string;
-  prettySlug: string;
-  locale: string;
-  //token: string;
+  email: string;
 }) => {
-  const survey = surveys.find(
-    (s) => s.context === prettySlug.replace(/-/g, "_")
-  );
+  /**
+   * We use state of js as the default context when user is connecting from the generic form
+   */
+  const edition = await fetchEditionMetadata({
+    surveyId: surveyId || defaultSurveyId,
+    editionId: editionId || defaultEditionId,
+    calledFrom: "sendMagicLinkEmail",
+  });
+  const survey = edition.survey;
+  if (!survey.domain) {
+    console.warn(
+      `No survey domain found for id ${surveyId}, cannot set 'from'`
+    );
+  }
+  const from = survey.domain && `${survey.name} <login@mail.${survey.domain}>`;
 
-  const from =
-    survey && survey.domain && `${survey.name} <login@mail.${survey.domain}>`;
-
-  /** NOTE: when testing be careful that email will be displayed with addition "=" on line ends!!!
+  /**
+   * NOTE: when testing be careful that email will be displayed with addition "=" on line ends!!!
    *  We log a cleaner version of the link
    *
    */

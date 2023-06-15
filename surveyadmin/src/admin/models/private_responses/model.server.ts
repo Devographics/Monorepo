@@ -1,6 +1,5 @@
 import { createGraphqlModelServer } from "@vulcanjs/graphql/server";
 import { createMongooseConnector } from "@vulcanjs/mongo";
-import mongoose from "mongoose";
 import { NormalizedResponseDocument } from "../normalized_responses/model.server";
 
 export const PrivateResponses = createGraphqlModelServer({
@@ -33,6 +32,7 @@ const userInfoSchema = /*createSchema(*/ {
     optional: false,
   },
 }; //);
+/*
 const privateResponseSchema = new mongoose.Schema({
   surveySlug: {
     type: String,
@@ -51,19 +51,7 @@ const privateResponseSchema = new mongoose.Schema({
     optional: true,
   },
 });
-
-const mongooseModelName = "private_responses";
-export const PrivateResponseMongooseModel =
-  mongoose.models[mongooseModelName] ||
-  mongoose.model<PrivateResponseDocument>(
-    mongooseModelName,
-    privateResponseSchema
-  );
-
-PrivateResponses.crud.connector =
-  createMongooseConnector<PrivateResponseDocument>(PrivateResponses, {
-    mongooseModel: PrivateResponseMongooseModel,
-  });
+*/
 
 export default PrivateResponses;
 

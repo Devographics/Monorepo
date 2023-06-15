@@ -1,4 +1,4 @@
-// TODO: provide this component in Vulcan Next as well
+"use client";
 import { useState } from "react";
 import Form from "~/account/passwordLogin/components/form";
 import { apiRoutes } from "~/lib/apiRoutes";

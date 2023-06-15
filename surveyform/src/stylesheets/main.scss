@@ -4,7 +4,7 @@
 @import "./vulcan:bootstrap/datetime.scss";
 @import "./vulcan:bootstrap/likert.scss";
 @import "./vulcan:bootstrap/style.scss";
-@import "./vulcan:bootstrap/typeahead-bs4.scss";
+@import "./vulcan:bootstrap/typeahead-bs5.scss";
 @import "./vulcan:bootstrap/typeahead.scss";
 
 // Import State of js styles
@@ -14,6 +14,7 @@
 @import "_variables.scss";
 @import "_breakpoints.scss";
 @import "_typography.scss";
+@import "_icons.scss";
 
 @import "_overrides.scss";
 @import "_forms.scss";
@@ -30,6 +31,8 @@
 @import "_banner.scss";
 @import "_survey_page.scss";
 @import "_surveys.scss";
+@import "_surveys_nav.scss";
+@import "_reading_list.scss";
 @import "_accounts.scss";
 @import "_score.scss";
 @import "_brackets.scss";

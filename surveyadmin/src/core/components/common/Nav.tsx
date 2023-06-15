@@ -3,12 +3,11 @@ import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 // @see https://github.com/react-bootstrap/react-router-bootstrap
 // import { IndexLinkContainer } from "react-router-bootstrap";
-import LocaleSwitcher from "./LocaleSwitcher";
 import { isAdmin } from "@vulcanjs/permissions";
-import { useVulcanComponents } from "@vulcanjs/react-ui";
 import Link from "next/link";
 import { routes } from "~/lib/routes";
 import { useUser } from "~/account/user/hooks";
+import { FormattedMessage } from "./FormattedMessage";
 
 interface NavItemDef {
   id?: string;
@@ -17,14 +16,16 @@ interface NavItemDef {
 }
 const navContents: Array<NavItemDef> = [
   {
-    id: "nav.surveys",
+    id: "home",
+    label: "Home",
     to: routes.home.href,
   },
 ];
 
 const loggedInNavContents: Array<NavItemDef> = [
   {
-    id: "nav.account",
+    id: "account",
+    label: "Account",
     to: routes.account.profile.href,
   },
 ];
@@ -39,20 +40,12 @@ const adminNavContents: Array<NavItemDef> = [
   //   to: '/admin/surveys',
   // },
   {
-    label: "Users",
-    to: "/admin/users",
-  },
-  {
-    label: "Responses",
-    to: "/admin/responses",
-  },
-  {
     label: "Normalization",
     to: "/admin/normalization",
   },
   {
-    label: "Projects",
-    to: "/admin/projects",
+    label: "Scripts",
+    to: "/admin/scripts",
   },
   {
     label: "Export",
@@ -65,7 +58,6 @@ const adminNavContents: Array<NavItemDef> = [
 ];
 
 const Navigation = () => {
-  const Components = useVulcanComponents();
   const { user } = useUser();
   let navItems = navContents;
   if (user) {
@@ -83,7 +75,7 @@ const Navigation = () => {
         aria-labelledby="global-nav"
       >
         <p className="hidden" id="global-nav">
-          <Components.FormattedMessage id={"general.global_nav"} />
+          <FormattedMessage id={"general.global_nav"} />
         </p>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
@@ -95,23 +87,16 @@ const Navigation = () => {
           </Nav>
         </Navbar.Collapse>
       </Navbar>
-
-      <div className="nav-item-locale">
-        <LocaleSwitcher />
-      </div>
     </div>
   );
 };
 
 const NavItem = ({ to, label, id }) => {
-  const Components = useVulcanComponents();
   return (
     <Nav.Item>
       {/*<IndexLinkContainer to={to}>*/}
-      <Link href={to} passHref>
-        <Nav.Link>
-          {label ? label : <Components.FormattedMessage id={id} />}
-        </Nav.Link>
+      <Link href={to} passHref legacyBehavior={true}>
+        <Nav.Link>{label ? label : <FormattedMessage id={id} />}</Nav.Link>
       </Link>
       {/*</IndexLinkContainer>*/}
     </Nav.Item>

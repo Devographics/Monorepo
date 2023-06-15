@@ -2,8 +2,12 @@ import React, { useReducer, useRef, useState } from "react";
 import { ExportOptions, ExportOptionsStr } from "~/admin/models/export";
 import { SurveyMarkdownOutline } from "~/core/components/survey/SurveyExport";
 import { apiRoutes } from "~/lib/apiRoutes";
-import { getSurveyBySlug } from "~/modules/surveys/helpers";
+import { getEditionById } from "~/modules/surveys/helpers";
+// TODO: get from top-level context as in surveyform
 import { surveys } from "~/surveys";
+import { surveysQuery } from "~/admin/components/normalization/Normalization";
+import { useQuery } from "~/lib/graphql";
+import { Loading } from "~/core/components/ui/Loading";
 
 /**
  * Trigger a file download for any URL
@@ -51,19 +55,29 @@ const reducer = (state, action) => {
     }
   }
 };
-export const AdminExportPage = () => {
+
+export const AdminExportPageWithSurveys = () => {
+  const { loading: surveysLoading, data: surveysData } = useQuery(surveysQuery);
+  if (surveysLoading) {
+    return <Loading />;
+  } else {
+    return <AdminExportPage surveys={surveysData.surveys} />;
+  }
+};
+export const AdminExportPage = ({ surveys }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const [surveySlug, setSurveySlug] = useState<string | undefined>();
-  const survey = surveySlug ? getSurveyBySlug(surveySlug) : undefined;
+  const [editionId, setEditionId] = useState<string | undefined>();
+  const allEditions = surveys.map((s) => s.editions).flat();
+  const edition = allEditions.find((e) => e.id === editionId);
 
   async function triggerExport(evt: React.FormEvent<HTMLFormElement>) {
     try {
       evt.preventDefault();
       dispatch({ type: "start" });
-      const surveySlug = evt.target["survey-slug"].value;
+      const editionId = evt.target["editionId"].value;
       // @ts-ignore
       const params = new URLSearchParams({
-        surveySlug,
+        editionId,
       }).toString();
       console.log(params);
       const url = apiRoutes.admin.dataExport.href + "?" + params;
@@ -104,25 +118,25 @@ export const AdminExportPage = () => {
       dispatch({ type: "error", payload: error });
     }
   }
-  const surveySlugs = surveys.map((s) => s.slug);
+  const editionIds = allEditions.map((e) => e.id);
   return (
     <div>
       <h1>Export</h1>
       <form onSubmit={triggerExport}>
-        <label htmlFor="survey-slug">Survey slug</label>
+        <label htmlFor="editionId">Edition ID</label>
         <select
-          id="survey-slug"
-          defaultValue="graphql2022"
+          id="editionId"
+          defaultValue="js2022"
           required
           // not needed for the form, but allow to display the markdown outline
           onChange={(evt) => {
-            setSurveySlug(evt.target.value);
+            setEditionId(evt.target.value);
           }}
         >
-          {surveySlugs.map((slug) => {
+          {editionIds.map((id) => {
             return (
-              <option key={slug} value={slug}>
-                {slug}
+              <option key={id} value={id}>
+                {id}
               </option>
             );
           })}
@@ -135,13 +149,13 @@ export const AdminExportPage = () => {
       {state.done && <p>Download will start shortly...</p>}
       <h2>Outline</h2>
       <p>You can share this markdown content to better describe the survey</p>
-      {survey ? (
-        <SurveyMarkdownOutline survey={survey} />
+      {edition ? (
+        <SurveyMarkdownOutline survey={edition} />
       ) : (
-        <p>Pick a valid survey slug above...</p>
+        <p>Pick a valid editionId above...</p>
       )}
     </div>
   );
 };
 
-export default AdminExportPage;
+export default AdminExportPageWithSurveys;

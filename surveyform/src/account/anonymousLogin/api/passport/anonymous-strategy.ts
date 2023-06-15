@@ -1,12 +1,10 @@
-import { createMutator } from "@vulcanjs/crud/server";
 import type { Request } from "express";
 import { StrategyCreatedStatic } from "passport";
-import { Strategy } from "passport";
 import { generateAnonymousUser } from "~/account/anonymousLogin/api";
-import { User } from "~/core/models/user.server";
+import { createUser } from "~/lib/users/db-actions/create";
 
 interface AnonymousLoginOptions {
-  createUser: (req: Request) => Promise<any>;
+  createUser: () => Promise<any>;
   /**
    * Return true if user is a spammer
    */
@@ -25,7 +23,7 @@ class AnonymousLoginStrategy /* extends Strategy*/ {
   authenticate(
     this: StrategyCreatedStatic & AnonymousLoginStrategy,
     req: Request
-  ): void {
+  ): Promise<void> {
     const self = this;
 
     return (self._options.checkSpam?.(req) || Promise.resolve(false))
@@ -41,12 +39,14 @@ class AnonymousLoginStrategy /* extends Strategy*/ {
             })
             .catch((err) => {
               const info = "User creation failed";
+              // @ts-ignore
               return self.error(err, info);
             });
         }
       })
       .catch((err) => {
         const info = "Spam detection failed unexpectedly";
+        // @ts-ignore
         return self.error(err, info);
       });
 
@@ -77,11 +77,7 @@ class AnonymousLoginStrategy /* extends Strategy*/ {
 const createAnonymousUser = async () => {
   const data = generateAnonymousUser();
   // Create a new anonymous user in the db
-  const { data: user } = await createMutator({
-    model: User,
-    data,
-  });
-  return user;
+  return await createUser({ data });
 };
 
 export const anonymousLoginStrategy = new AnonymousLoginStrategy({

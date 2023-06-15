@@ -8,7 +8,7 @@
 import type {
   FieldTemplateId,
   ParsedQuestion,
-  SurveyDocument,
+  SurveyEdition,
   SurveySection,
 } from "@devographics/core-models";
 
@@ -23,7 +23,7 @@ export const convertSurveyToMarkdown = ({
 }: {
   formatMessage?: any;
   entities: any;
-  survey: SurveyDocument;
+  survey: SurveyEdition;
   options?: MarkdownOptions;
 }) => {
   let surveyString = "";
@@ -173,8 +173,8 @@ const convertOption = ({ formatMessage, entities, question, option }) => {
   const title = entity
     ? entity.name
     : formatMessage({
-        id: intlId,
-      });
+      id: intlId,
+    });
   optionString += `- ${title || intlId}\n`;
   return optionString;
 };

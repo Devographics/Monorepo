@@ -1,6 +1,7 @@
 #import "./surveys.graphql"
 
-
+scalar JSON
+scalar JSONObject
 
 type Query {
     """
@@ -11,6 +12,10 @@ type Query {
     All surveys.
     """
     allSurveys: [SurveyItem]
+    """
+    Meta information about the API
+    """
+    metadata: JSON
     # """
     # Data about a specific entity (tool, library, framework, features, etc.)
     # """

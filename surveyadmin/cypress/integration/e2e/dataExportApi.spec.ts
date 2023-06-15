@@ -1,17 +1,11 @@
+cy.exec("yarn run db:test:seed");
 import { apiRoutes } from "~/lib/apiRoutes";
 
 beforeEach(() => {
-  // NOTE: those operations are expensive! When testing less-critical part of your UI,
-  // prefer mocking API calls! We do this only because auth is very critical
-  // NOTE: when running "dev:test", we could maybe spawn a faster in-memory mongo database?
-  cy.exec("yarn run db:test:reset");
-  cy.exec("yarn run db:test:seed");
+  // TODO: reset db and seed if db is localhost
   cy.clearCookie("token");
 });
 after(() => {
-  // clean the db when done
-  cy.exec("yarn run db:test:reset");
-  cy.exec("yarn run db:test:seed");
 });
 
 const test = it;

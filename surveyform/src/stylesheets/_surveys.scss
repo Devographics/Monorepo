@@ -1,4 +1,4 @@
-@use 'sass:math';
+@use "sass:math";
 // locale selector
 .locale-selector {
   max-width: 600px;
@@ -62,10 +62,17 @@
   }
 }
 .survey-image-inner {
-  display: block;
-  padding: $spacing * 1.5;
+  padding: $spacing;
+  width: 300px;
+  max-height: 200px;
+  & img {
+    width: 90%;
+    height: auto;
+    margin: 0 auto;
+  }
 }
 .survey-name {
+  font-size: $large-font;
   position: absolute;
   bottom: 0;
   margin-left: 50%;
@@ -73,6 +80,7 @@
   z-index: 1;
   background: var(--bg-color);
   border-radius: 30px;
+  margin-bottom: 0;
   span {
     padding: 5px 10px;
     @include border;
@@ -94,118 +102,28 @@
 .survey-section {
   @include large {
     display: grid;
-    grid-template-columns: 1fr 3fr;
-    column-gap: $spacing * 2;
+    grid-template-rows: auto auto;
+    grid-template-columns: 2fr 1fr;
+    grid-template-areas:
+      "heading heading"
+      "contents sidebar";
+    column-gap: $spacing;
   }
   @include xlarge {
     display: grid;
     grid-template-columns: 1fr 3fr 1fr;
+    grid-template-areas: "heading contents sidebar";
     column-gap: $spacing * 2;
   }
 }
+.section-heading {
+  grid-area: heading;
+}
 .section-contents {
+  grid-area: contents;
 }
-.section-nav {
-  // background: $bg-color-light;
-  // padding: $spacing;
-  @include large {
-    max-width: 280px;
-  }
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  a {
-    @include font-regular;
-  }
-  .active {
-    @include font-bold;
-    // color: $contrast-color;
-  }
-  li {
-    font-size: $medium-font;
-    margin-bottom: math.div($spacing, 4);
-    &:last-child {
-      margin: 0;
-    }
-  }
-}
-.section-nav-inner {
-  position: relative;
-}
-.section-nav-loading {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  right: 0px;
-  bottom: 0px;
-  background: rgba(255,255,255,0.2);
-  display: grid;
-  place-items: center;
-  backdrop-filter: blur(5px);
-}
-.section-nav-heading {
-  font-size: $large-font;
-  margin-bottom: $spacing;
-  @include small-medium {
-    text-align: center;
-  }
-  @include large {
-    border-bottom: $border;
-    padding-bottom: $spacing;
-  }
-}
-.section-nav-head {
-  @include small-medium {
-    @include flex-center;
-    display: flex !important;
-    margin-bottom: $spacing;
-    width: 100%;
-  }
-  @include large {
-    display: none !important;
-  }
-}
-.section-nav-toggle {
-  margin-left: math.div($spacing, 2);
-  font-size: $medium-font;
-  @include large {
-    display: none;
-  }
-}
-.section-nav-hidden {
-  .section-nav-contents {
-    @include small-medium {
-      display: none;
-    }
-  }
-}
-.section-nav-contents {
-  @include small-medium {
-    margin-top: -$spacing - 1px;
-    @include border;
-    @include border-radius;
-    padding: $spacing;
-    margin-bottom: $spacing;
-  }
-}
-.section-nav-toc {
-  font-size: $medium-font;
-  margin: 0;
-  @include small-medium {
-    display: block;
-  }
-  @include large {
-    display: none;
-  }
-}
-.completion-message {
-  font-size: $small-font;
-  margin: $spacing 0 0 0;
-}
-.section-nav-item-completion {
-  @include font-regular;
-  color: $text-color;
+.section-sidebar {
+  grid-area: sidebar;
 }
 .section-questions {
   max-width: 800px;
@@ -226,16 +144,22 @@
     background: var(--bg-color-light);
   }
   @include medium-large {
-    margin-bottom: $spacing * 2;
+    margin-bottom: $spacing;
   }
 }
-
+.section-heading-contents {
+  @include xlarge {
+    text-align: right;
+    position: sticky;
+    top: $spacing * 2;
+  }
+}
 .section-title {
   @include small-medium {
     font-size: $larger-font;
   }
   @include large {
-    font-size: $largest-font;
+    font-size: $largestest-font;
   }
   margin-bottom: math.div($spacing, 2);
   line-height: 1;
@@ -251,16 +175,58 @@
   line-height: 1.7;
   margin: 0;
 }
-
+.section-toc {
+  display: none;
+  @include xlarge {
+    display: block;
+  }
+  margin-top: $spacing;
+  ol {
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing/2;
+  }
+  li {
+    a {
+      font-size: $smallish-font;
+      @include font-regular;
+      &.not-highlighted {
+        &:link,
+        &:visited {
+          color: var(--text-color-dark);
+        }
+        &:hover {
+          color: var(--hover-color);
+        }
+      }
+      &.highlighted {
+        &::before {
+          content: "» ";
+        }
+      }
+    }
+  }
+}
 .survey-message {
   padding: $spacing;
   margin-bottom: $spacing * 2;
-  &.survey-closed {
+  text-align: center;
+  &.survey-closed,
+  &.survey-error {
     background: $redTransparent;
   }
-  &.survey-preview {
+  &.survey-preview,
+  &.survey-finished,
+  &.survey-success {
     background: $greenTransparent;
   }
+}
+.login-error {
+  text-align: left;
+  margin-top: $spacing/2;
+  margin-bottom: 0;
+  padding: $spacing/2;
 }
 
 .survey-page-block {
@@ -270,4 +236,26 @@
 .survey-page-block-heading {
   margin-bottom: $spacing * 2;
   text-align: center;
+}
+
+.form-item-options {
+  // display: grid;
+  // grid-template-columns: 1fr 1fr;
+  // gap: math.div($spacing, 2);
+}
+.form-section-message {
+  background: var(--bg-color-light);
+  padding: $spacing;
+  margin-bottom: $spacing;
+  background: $greenTransparent;
+}
+
+.response-details {
+  margin-top: $spacing/2;
+  font-size: $smallish-font;
+  color: var(--text-color-dark);
+  text-align: center;
+  p {
+    margin-bottom: $spacing/8;
+  }
 }

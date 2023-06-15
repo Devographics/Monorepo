@@ -1,0 +1,25 @@
+"""
+Comment
+"""
+type Comment {
+    message: String
+    responseId: String
+    # sentimentScore: Float # not implemented yet
+}
+
+"""
+Comments for a specific edition
+"""
+type EditionComments {
+    year: Int
+    count: Int
+    commentsRaw: [Comment]
+}
+
+"""
+Comments
+"""
+type ItemComments {
+    allEditions: [EditionComments]
+    currentEdition: EditionComments
+}

@@ -12,7 +12,7 @@ type Query {
     """
     Get multiple entities (tools, libraries, frameworks, features, etc.)
     """
-    entities(ids: [String], type: String, tag: String, tags: [String]): [Entity]
+    entities(ids: [String], type: String, tag: String, tags: [String], isNormalization: Boolean): [Entity]
     """
     Translate a string
     """

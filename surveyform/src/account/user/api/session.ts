@@ -1,10 +1,9 @@
 // For the token
 // https://hapi.dev/module/iron/
 import Iron from "@hapi/iron";
-import type { Request } from "express";
 import type { NextApiRequest } from "next";
-import { UserType } from "~/core/models/user";
-import { getTokenCookie } from "./auth-cookies";
+import { UserDocument } from "~/account/user/typings";
+import { apiGetTokenCookie } from "./auth-cookies";
 
 // Use an environment variable here instead of a hardcoded value for production
 
@@ -15,20 +14,22 @@ export const getTokenSecret = () => {
   return TOKEN_SECRET;
 };
 
-export function encryptSession(session: UserType) {
+export function encryptSession(session: UserDocument) {
   const TOKEN_SECRET = getTokenSecret();
   return Iron.seal(session, TOKEN_SECRET, Iron.defaults);
 }
 
+export async function apiGetSessionFromReq(
+  req: NextApiRequest
+): Promise<UserDocument> {
+  const token = apiGetTokenCookie(req);
+  return getSessionFromToken(token);
+}
+
 /**
- * Returns the user data from the token
- * => it let's the backend check for user existence in the database
- * @param req
+ * @param token
  */
-export async function getSession(
-  req: NextApiRequest | Request
-): Promise<UserType> {
-  const token = getTokenCookie(req);
+export async function getSessionFromToken(token?: string) {
   const TOKEN_SECRET = getTokenSecret();
   return token && Iron.unseal(token, TOKEN_SECRET!, Iron.defaults);
 }

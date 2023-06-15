@@ -1,44 +1,7 @@
-id: "${parentId}_happiness"
-titleId: "happiness.${fieldId}"
-# blockType: HappinessBlock
+id: '${sectionId}_happiness'
+titleId: 'happiness.${sectionId}'
 blockType: VerticalBarBlock
-dataPath: "dataAPI.survey.${fieldId}_happiness.year"
-keysPath: "dataAPI.survey.${fieldId}_happiness.keys"
 showDescription: false
-blockNamespace: happiness
-chartNamespace: happiness
-enableCustomization: true
+i18nNamespace: happiness
 hasSponsor: true
-query: >
-    dataAPI {
-        survey(survey: ${surveyType}) {
-            ${fieldId}_happiness: happiness(id: ${fieldId}) {
-                keys
-                year(year: ${currentYear}) {
-                    year
-                    mean
-                    completion {
-                        total
-                        count
-                        percentage_survey
-                    }
-                    facets {
-                        id
-                        type
-                        completion {
-                            total
-                            percentage_question
-                            percentage_survey
-                            count
-                        }
-                        buckets {
-                            id
-                            count
-                            percentage_question
-                            percentage_survey
-                        }
-                    }
-                }
-            }
-        }
-    }
+query: currentEditionData

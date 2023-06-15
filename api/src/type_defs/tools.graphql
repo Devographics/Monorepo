@@ -16,6 +16,8 @@ enum ToolID {
     litelement
     stimulus
     solid # 2021
+    qwik # 2022
+    stencil # 2022
     # JS data layer
     redux
     apollo
@@ -24,7 +26,7 @@ enum ToolID {
     relay
     xstate
     vuex
-    # JS back end frameworks
+    # JS back end frameworks/rendering frameworks
     express
     nextjs
     koa
@@ -43,6 +45,7 @@ enum ToolID {
     blitz # 2021
     remix # 2021
     sveltekit # 2021
+    docusaurus # 2022
     # JS testing
     jest
     mocha
@@ -56,6 +59,8 @@ enum ToolID {
     playwright
     webdriverio
     vitest # 2021
+    selenium # 2022
+    testcafe # 2022
     # JS build tools
     webpack
     parcel
@@ -69,6 +74,7 @@ enum ToolID {
     esbuild
     vite # 2021
     wmr # 2021
+    turbopack # 2022
     # JS mobile desktop
     electron
     reactnative
@@ -80,6 +86,7 @@ enum ToolID {
     capacitor
     quasar
     tauri # 2021
+    nativescript # 2022
     # JS Monorepo tools
     rush # 2021
     turborepo # 2021
@@ -373,5 +380,6 @@ type Tool {
     experienceAggregated(filters: Filters, options: Options, facet: Facet): ToolExperienceAggregated
     experienceGraph(filters: Filters): ToolExperienceGraph
     experienceTransitions(year: Int!): ToolExperienceTransitions
+    comments: ToolComments
     entity: Entity
 }

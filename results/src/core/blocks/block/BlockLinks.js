@@ -4,15 +4,15 @@ import { mq, spacing, fontSize } from 'core/theme'
 import T from 'core/i18n/T'
 
 import { TwitterIcon } from 'core/icons/Twitter'
-import { MDN, Npm } from 'core/icons'
+import { MDNIcon, NpmIcon } from 'core/icons'
 import Button from 'core/components/Button'
 
 const links = [
     { id: 'caniuse', label: 'CanIUse', icon: TwitterIcon },
-    { id: 'mdn', label: 'MDN', icon: MDN },
+    { id: 'mdn', label: 'MDN', icon: MDNIcon },
     { id: 'homepage', label: 'Homepage', icon: TwitterIcon },
     { id: 'github', label: 'GitHub', icon: TwitterIcon },
-    { id: 'npm', label: 'NPM', icon: Npm }
+    { id: 'npm', label: 'NPM', icon: NpmIcon }
 ]
 
 const List = styled.ul`
@@ -22,9 +22,7 @@ const List = styled.ul`
     align-items: center;
     padding: 0;
     margin: 0;
-    @media ${mq.small} {
-        margin-top: ${spacing(0.5)};
-    }
+    margin-bottom: ${spacing()};
 `
 const Item = styled.li`
     margin-right: ${spacing(0.5)};
@@ -55,7 +53,7 @@ const getDomain = url => {
 
 const BlockLink = ({ id, label, url, icon }) => {
     const Icon = icon
-    const label_ = id === 'homepage' ? getDomain(url) : label
+    const label_ = url && (id === 'homepage' ? getDomain(url) : label)
 
     if (!label_) {
         return null

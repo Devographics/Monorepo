@@ -1,13 +1,20 @@
-import {
-  closeDbConnection,
-  connectToAppDb,
-} from "~/lib/server/mongoose/connection";
-import runSeed from "~/lib/server/runSeed";
+import { getAppClient } from "@devographics/mongo";
+import env from "@next/env";
+const { loadEnvConfig } = env;
+import { seedTestUser } from "~/account/user/tests/seedTestUser"
+
+async function runSeed() {
+  await seedTestUser()
+}
 
 // No top-level async for Node 14
 async function run() {
-  await connectToAppDb();
+  loadEnvConfig(
+    process.env.PWD!,
+    // will load either from .env.development or .env.production
+    process.env.NODE_ENV === "development"
+  );
   await runSeed();
-  await closeDbConnection();
+  (await getAppClient()).close()
 }
 run();

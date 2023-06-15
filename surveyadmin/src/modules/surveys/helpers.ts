@@ -1,14 +1,20 @@
-import surveys from "~/surveys";
-import type { SurveyType, ResponseDocument } from "@devographics/core-models";
+import type {
+  SurveyEdition,
+  ResponseDocument,
+} from "@devographics/core-models";
+import type { SurveyMetadata } from "@devographics/types";
+import { loadOrGetSurveys } from "./load";
 
-export const getSurveyFromResponse = (response: ResponseDocument) =>
-  surveys.find((s) => s.slug === response.surveySlug);
-
-export const getSurvey = (prettySlug, year) =>
-  surveys.find((s) => s.prettySlug === prettySlug && s.year === parseInt(year));
-
-export const getSurveyBySlug = (slug?: string) =>
-  surveys.find((s) => s.slug === slug);
+export const getEditionById = async (editionId: string) => {
+  const allSurveys = await loadOrGetSurveys();
+  for (const survey of allSurveys) {
+    for (const edition of survey.editions) {
+      if (edition.id === editionId) {
+        return edition;
+      }
+    }
+  }
+};
 
 export const getSurveyPath = ({
   survey: surveyArgument,
@@ -16,12 +22,12 @@ export const getSurveyPath = ({
   response,
   home = false,
 }: {
-  survey?: SurveyType | null;
+  survey?: SurveyEdition | null;
   number?: any;
   response?: any;
   home?: boolean;
 }) => {
-  const survey = surveyArgument || getSurveyFromResponse(response);
+  const survey = surveyArgument;
   if (!survey) {
     return "";
   }

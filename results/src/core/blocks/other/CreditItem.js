@@ -2,20 +2,19 @@ import React from 'react'
 import { spacing, mq, fontSize } from 'core/theme'
 import styled from 'styled-components'
 import T from 'core/i18n/T'
+import Avatar from 'core/components/Avatar'
 
 const CreditItem = ({ entity, role, labelId }) => {
     if (!entity) {
         return null
     }
-    const { name, twitterName, twitter, company } = entity
+    const { name, twitter, company } = entity
     return (
         <CreditItemDiv>
-            <Avatar href={`https://twitter.com/${twitterName}`}>
-                <img src={twitter?.avatarUrl} alt={name} />
-            </Avatar>
+            <Avatar entity={entity} />
             <Details>
                 <Name>
-                    <a href={`https://twitter.com/${twitterName}`}>{name}</a>
+                    <a href={twitter.url}>{name}</a>
                 </Name>
                 {company && (
                     <Company>
@@ -37,29 +36,18 @@ export default CreditItem
 
 const CreditItemDiv = styled.div`
     display: flex;
-`
-
-const Avatar = styled.a`
-    margin-right: ${spacing(0.5)};
-    overflow: hidden;
-    border-radius: 100%;
-    height: 60px;
-    width: 60px;
-    img {
-        display: block;
-        height: 100%;
-        width: 100%;
-    }
+    align-items: center;
 `
 
 const Details = styled.div`
     position: relative;
-    top: -5px;
+    /* top: -5px; */
 `
 
 const Name = styled.h4`
     font-size: ${fontSize('large')};
     margin-bottom: 0px;
+    line-height: 1.3;
 `
 
 const Twitter = styled.div`

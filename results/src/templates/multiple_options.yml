@@ -1,45 +1,4 @@
 blockType: HorizontalBarBlock
-dataPath: "dataAPI.survey.${id}.year"
-enableCustomization: true
 hasSponsor: true
-query: >
-    dataAPI {
-        survey(survey: ${surveyType}) {
-            ${id}: ${fieldId}(id: ${id}, filters: ${filters}, options: ${options}) {
-                id
-                year(year: ${currentYear}) {
-                    year
-                    completion {
-                        total
-                        count
-                        percentage_survey
-                    }
-                    facets {
-                        id
-                        type
-                        completion {
-                            total
-                            percentage_question
-                            percentage_survey
-                            count
-                        }
-                        buckets {
-                            id
-                            count
-                            percentage_question
-                            percentage_survey
-                            entity {
-                                homepage {
-                                    url
-                                }
-                                name
-                                github {
-                                    url
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+query: currentEditionData
+translateData: true

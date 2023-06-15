@@ -7,6 +7,9 @@ import BlockUnitsSelector from 'core/blocks/block/BlockUnitsSelector'
 import { usePageContext } from 'core/helpers/pageContext'
 
 const Footer = styled.div`
+    .rawchartmode & {
+        display: none;
+    }
     margin-top: ${spacing()};
 `
 
@@ -24,28 +27,28 @@ const Units = styled.div`
 `
 
 const BlockFooter = ({ unitsOptions, completion, units, setUnits }) => {
-
     const context = usePageContext()
     const { isCapturing } = context
     return (
-    <Footer>
-        {completion && (
-            <Respondents>
-                <T
-                    k="chart_units.respondents"
-                    values={{
-                        count: completion?.count,
-                        percentage: completion?.percentage_survey
-                    }}
-                />
-            </Respondents>
-        )}
-        {setUnits && !isCapturing && (
-            <Units>
-                <BlockUnitsSelector units={units} onChange={setUnits} options={unitsOptions} />
-            </Units>
-        )}
-    </Footer>
-)}
+        <Footer>
+            {completion && (
+                <Respondents>
+                    <T
+                        k="chart_units.respondents"
+                        values={{
+                            count: completion?.count,
+                            percentage: completion?.percentageSurvey
+                        }}
+                    />
+                </Respondents>
+            )}
+            {setUnits && !isCapturing && (
+                <Units>
+                    <BlockUnitsSelector units={units} onChange={setUnits} options={unitsOptions} />
+                </Units>
+            )}
+        </Footer>
+    )
+}
 
 export default BlockFooter

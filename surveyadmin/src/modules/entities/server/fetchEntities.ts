@@ -2,7 +2,6 @@ import { serverConfig } from "~/config/server";
 import sortBy from "lodash/sortBy.js";
 import fetch from "node-fetch";
 import get from "lodash/get.js";
-import { cachedPromise, promisesNodeCache } from "~/lib/server/caching";
 import { print } from "graphql/language/printer.js";
 import gql from "graphql-tag";
 import { Entity } from "@devographics/core-models/entities/typings";
@@ -12,7 +11,7 @@ const entitiesPromiseCacheKey = "entitiesPromise";
 /** Query sent to the translation API => load all entitites */
 const entitiesQuery = print(gql`
   query EntitiesQuery {
-    entities {
+    entities(isNormalization: true) {
       id
       name
       tags
@@ -21,17 +20,7 @@ const entitiesQuery = print(gql`
       description
       patterns
       apiOnly
-      mdn {
-        locale
-        url
-        title
-        summary
-      }
       twitterName
-      twitter {
-        userName
-        avatarUrl
-      }
       companyName
       company {
         name
@@ -48,7 +37,7 @@ const entitiesQuery = print(gql`
  * @returns
  */
 export const fetchEntities = async () => {
-  const response = await fetch(serverConfig.translationAPI, {
+  const response = await fetch(serverConfig().translationAPI, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -73,19 +62,16 @@ export const getOrFetchEntities = async ({
   name,
   id,
   ids,
+  forceLoad,
 }: {
   tags?: any[];
   name?: any;
   id?: any;
   ids?: any[];
+  forceLoad?: boolean;
 } = {}) => {
   try {
-    let entities = await cachedPromise(
-      promisesNodeCache,
-      entitiesPromiseCacheKey,
-      ENTITIES_PROMISE_TTL_SECONDS
-    )(async () => await fetchEntities());
-
+    let entities = await fetchEntities();
     // const { tags, name, id, ids } = args;
 
     if (tags) {

@@ -9,7 +9,7 @@ import crypto from "crypto";
 import { nanoid } from "nanoid";
 import { VulcanSchema } from "@vulcanjs/schema";
 import { createModel } from "@vulcanjs/model";
-import { createMongooseConnector } from "@vulcanjs/mongo";
+import { getCollectionByName } from "@devographics/mongo";
 
 const schema: VulcanSchema = {
   _id: {
@@ -65,9 +65,6 @@ export const StorableToken = createModel({
   },
 });
 
-export const StorableTokenConnector = createMongooseConnector<StorableTokenType>(
-  StorableToken
-);
 
 // helpers
 
@@ -94,3 +91,5 @@ export const checkToken = (token: string, storedToken: StorableTokenType) => {
   // TODO: check how secure it is to do an equality
   return storedToken.hashedToken === hashToken(token);
 };
+
+export const getStorableTokensCollection = () => getCollectionByName("storable_tokens")

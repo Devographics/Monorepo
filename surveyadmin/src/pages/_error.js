@@ -1,13 +1,11 @@
 import NextErrorComponent from 'next/error';
 
-import * as Sentry from '@sentry/nextjs';
-
 const MyError = ({ statusCode, hasGetInitialPropsRun, err }) => {
   if (!hasGetInitialPropsRun && err) {
     // getInitialProps is not called in case of
     // https://github.com/vercel/next.js/issues/8592. As a workaround, we pass
     // err via _app.js so it can be captured
-    Sentry.captureException(err);
+    console.error(err)
     // Flushing is not required in this case as it only happens on the client
   }
 
@@ -16,7 +14,7 @@ const MyError = ({ statusCode, hasGetInitialPropsRun, err }) => {
 
 MyError.getInitialProps = async (context) => {
   const errorInitialProps = await NextErrorComponent.getInitialProps(context);
-  
+
   const { res, err, asPath } = context;
 
   // Workaround for https://github.com/vercel/next.js/issues/8592, mark when
@@ -27,7 +25,7 @@ MyError.getInitialProps = async (context) => {
   if (res?.statusCode === 404) {
     return errorInitialProps;
   }
-  
+
   // Running on the server, the response object (`res`) is available.
   //
   // Next.js will pass an err on the server if a page's data fetching methods

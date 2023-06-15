@@ -3,8 +3,8 @@ import { RequestContext, SurveyConfig, ResolverStaticConfig } from '../types'
 import { Filters } from '../filters'
 import { useCache } from '../caching'
 import { computeParticipationByYear } from '../compute'
-import { getStaticResolvers } from '../helpers'
-import keys from '../data/keys.yml'
+import { getDemographicsResolverFunctions } from '../helpers'
+import { getChartKeys } from '../helpers'
 import range from 'lodash/range.js'
 
 const computeParticipation = async (
@@ -31,74 +31,74 @@ export default {
         }
     },
 
-    Country: getStaticResolvers('user_info.country_alpha3', {
+    Country: getDemographicsResolverFunctions({
         limit: 999,
         cutoff: 1
     }),
 
-    LocaleStats: getStaticResolvers('user_info.locale', {
+    LocaleStats: getDemographicsResolverFunctions({
         limit: 100,
         cutoff: 1
     }),
 
-    CompletionStats: getStaticResolvers('user_info.completion', {
+    CompletionStats: getDemographicsResolverFunctions({
         limit: 100,
         cutoff: 1,
         keys: [...Array(100)].map((a, b) => (b + 1).toString()) // numbers from 1 to 100
     }),
-    Source: getStaticResolvers('user_info.source.normalized'),
+    Source: getDemographicsResolverFunctions(),
 
-    Gender: getStaticResolvers('user_info.gender.choices', { cutoff: 1, keys: keys.gender }),
+    Gender: getDemographicsResolverFunctions({ cutoff: 1, keys: getChartKeys('gender') }),
 
-    RaceEthnicity: getStaticResolvers('user_info.race_ethnicity.choices', {
+    RaceEthnicity: getDemographicsResolverFunctions({
         cutoff: 1,
-        keys: keys.race_ethnicity
+        keys: getChartKeys('race_ethnicity')
     }),
 
-    Age: getStaticResolvers('user_info.age.choices', { limit: 100, cutoff: 1, keys: keys.age }),
+    Age: getDemographicsResolverFunctions({ limit: 100, cutoff: 1, keys: getChartKeys('age') }),
 
-    Salary: getStaticResolvers('user_info.yearly_salary.choices', {
+    Salary: getDemographicsResolverFunctions({
         limit: 100,
         cutoff: 1,
-        keys: keys.yearly_salary
+        keys: getChartKeys('yearly_salary')
     }),
 
-    CompanySize: getStaticResolvers('user_info.company_size.choices', {
+    CompanySize: getDemographicsResolverFunctions({
         limit: 100,
         cutoff: 1,
-        keys: keys.company_size
+        keys: getChartKeys('company_size')
     }),
 
-    WorkExperience: getStaticResolvers('user_info.years_of_experience.choices', {
+    WorkExperience: getDemographicsResolverFunctions({
         limit: 100,
         cutoff: 1,
-        keys: keys.years_of_experience
+        keys: getChartKeys('years_of_experience')
     }),
 
-    JobTitle: getStaticResolvers('user_info.job_title.choices', {
+    JobTitle: getDemographicsResolverFunctions({
         cutoff: 1
     }),
 
-    IndustrySector: getStaticResolvers('user_info.industry_sector.choices', {
+    IndustrySector: getDemographicsResolverFunctions({
         cutoff: 1
     }),
 
-    KnowledgeScore: getStaticResolvers('user_info.knowledge_score', {
+    KnowledgeScore: getDemographicsResolverFunctions({
         limit: 100,
         cutoff: 1,
         keys: range(1, 101).map(k => k.toString())
     }),
 
-    HigherEducationDegree: getStaticResolvers('user_info.higher_education_degree.choices', {
+    HigherEducationDegree: getDemographicsResolverFunctions({
         cutoff: 1,
-        keys: keys.higher_education_degree
+        keys: getChartKeys('higher_education_degree')
     }),
 
-    DisabilityStatus: getStaticResolvers('user_info.disability_status.choices', {
+    DisabilityStatus: getDemographicsResolverFunctions({
         cutoff: 1
     }),
 
-    OtherDisabilityStatus: getStaticResolvers('user_info.disability_status.others.normalized', {
+    OtherDisabilityStatus: getDemographicsResolverFunctions({
         cutoff: 1
     })
 }

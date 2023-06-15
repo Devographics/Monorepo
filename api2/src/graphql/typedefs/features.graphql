@@ -1,0 +1,11 @@
+input FeatureFilters {
+    eq: FeatureExperienceID
+    in: [FeatureExperienceID]
+    nin: [FeatureExperienceID]
+}
+
+enum FeatureExperienceID {
+    never_heard
+    heard
+    used
+}

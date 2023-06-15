@@ -5,6 +5,8 @@
 # }
 
 #  TODO: generate this dynamically
+# IF MISSING A VALUE ADD IT IN:
+# api-internal/src/type_defs/translations.graphql
 enum Contexts {
     projects
     features
@@ -14,7 +16,7 @@ enum Contexts {
     results
     accounts
     surveys
-    
+
     state_of_js
     state_of_js_2020
     state_of_js_2020_survey
@@ -22,15 +24,28 @@ enum Contexts {
     state_of_js_2021_survey
     state_of_js_2021_results
 
+    state_of_js_2022
+    state_of_js_2022_survey
+    state_of_js_2022_results
+    state_of_js_2023
+
     state_of_css
     state_of_css_2020_survey
     state_of_css_2021
     state_of_css_2021_survey
     state_of_css_2021_results
     state_of_css_2022
+    state_of_css_2023
 
     state_of_graphql
     state_of_graphql_2022
+
+    state_of_react
+    state_of_react_2023
+
+    # perpetually open survey for testing and demoes
+    demo_survey
+    demo_survey_2022
 
     how_to_help
 }
@@ -39,6 +54,7 @@ type TranslationString {
     key: String
     t: String
     tHtml: String
+    tClean: String
     context: String
     isFallback: Boolean
     aliasFor: String

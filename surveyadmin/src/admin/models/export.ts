@@ -1,4 +1,4 @@
-import type { SurveyDocument } from "@devographics/core-models";
+import type { SurveyEdition } from "@devographics/core-models";
 
 export interface ExportOptions {
   format: {
@@ -8,7 +8,7 @@ export interface ExportOptions {
     csvExplanation?: boolean;
     mongoDump?: boolean;
   };
-  surveySlug: SurveyDocument["slug"];
+  editionId: SurveyEdition["id"];
   /**
    * Not yet used
    *
@@ -30,7 +30,7 @@ export interface ExportOptionsStr {
     csvExplanation?: "true" | "false";
     mongoDump?: "true" | "false";
   };
-  surveySlug: SurveyDocument["slug"];
+  surveySlug: SurveyEdition["slug"];
   /**
    * Not yet used
    *

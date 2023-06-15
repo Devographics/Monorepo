@@ -1,0 +1,21 @@
+{
+  "name": "@devographics/react-i18n",
+  "version": "1.0.0",
+  "description": "Vulcan i18n React components",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.27",
+    "react": "^17.0.1"
+  },
+  "gitHead": "672e9ed494ded98361abe47132899d3f825d6d23"
+}

@@ -41,7 +41,7 @@ export const localesResolver = async (
       getLocalesWithStrings()
     : // now we return only locales definition, strings are only fetched per locale
       getLocales());
-  return locales;
+  // return locales;
 };
 
 export const localesQueryTypeDef = "locales: [SurveyLocale]";
@@ -57,6 +57,6 @@ export const localesQueryTypeDef = "locales: [SurveyLocale]";
  * @returns
  */
 export const localeResolver = async (root, { localeId }, context) => {
-  return await getLocaleStrings(localeId);
+  // return await getLocaleStrings(localeId);
   //return getLocaleWithStrings(localeId);
 };

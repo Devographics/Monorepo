@@ -33,7 +33,7 @@ const Pre = styled.pre`
 `
 
 const Code = styled.code`
-  font-weight: ${fontWeight('medium')};
+    font-weight: ${fontWeight('medium')};
 `
 
 export default CodeExample

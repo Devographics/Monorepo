@@ -1,42 +1,7 @@
-id: "${parentId}_experience_ranking"
-blockType: ToolsExperienceRankingBlock
+id: '${sectionId}_experience_ranking'
+blockType: ToolsRatiosRankingBlock
 titleId: blocks.tools_experience_ranking
 descriptionId: blocks.tools_experience_ranking.description
 noteId: blocks.tools_experience_ranking.note
-dataPath: "dataAPI.survey.${parentId}_rankings"
+dataPath: 'dataAPI.surveys.${surveyId}.${editionId}.${sectionId}.${sectionId}_experience_linechart'
 hasSponsor: true
-query: >
-    dataAPI {
-        survey(survey: ${surveyType}) {
-            ${parentId}_rankings: tools_rankings(ids: [${toolsCategories[parentId]}]) {
-                ids
-                years
-                experience {
-                    id
-                    entity {
-                        name
-                    }
-                    usage {
-                        year
-                        rank
-                        percentage_question
-                    }
-                    awareness {
-                        year
-                        rank
-                        percentage_question
-                    }
-                    interest {
-                        year
-                        rank
-                        percentage_question
-                    }
-                    satisfaction {
-                        year
-                        rank
-                        percentage_question
-                    }
-                }
-            }
-        }
-    }

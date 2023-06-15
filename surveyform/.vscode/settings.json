@@ -16,5 +16,8 @@
     ".env.local": "env",
     ".env.test": "env",
     ".env.test.local": "env"
-  }
+  },
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "javascript.preferences.importModuleSpecifier": "shortest"
 }

@@ -1,6 +1,8 @@
-import { Entity, BlockUnits, BlockLegend, BucketItem, ResultsByYear } from 'core/types'
+import { BlockUnits, BlockLegend, BucketItem } from '@types/index'
+import { Entity, ResponseEditionData } from '@devographics/types'
 import { isPercentage } from 'core/helpers/units'
 import get from 'lodash/get'
+import { NO_ANSWER } from '@devographics/constants'
 
 export interface TableBucketItem {
     id: string | number
@@ -8,11 +10,11 @@ export interface TableBucketItem {
     label?: string
     count?: number | TableBucketYearValue[]
     displayAsPercentage?: boolean
-    percentage_survey?: number | TableBucketYearValue[]
+    percentageSurvey?: number | TableBucketYearValue[]
     // percentage relative to the number of question respondents
-    percentage_question?: number | TableBucketYearValue[]
+    percentageQuestion?: number | TableBucketYearValue[]
     // percentage relative to the number of respondents in the facet
-    percentage_facet?: number | TableBucketYearValue[]
+    percentageFacet?: number | TableBucketYearValue[]
 }
 
 export interface TableBucketYearValue {
@@ -22,6 +24,7 @@ export interface TableBucketYearValue {
 }
 
 export interface TableParams {
+    id?: string
     title?: string
     data: TableBucketItem[]
     legends?: BlockLegend[]
@@ -59,17 +62,17 @@ export interface TableDataCell {
     isPercentage?: boolean
 }
 
-const getLabel = (id: string | number, legends?: BlockLegend[]) => {
-    const legend = legends && legends.find(key => key.id === id)
-    return legend ? legend.shortLabel || legend.label : id
-}
+// const getLabel = (id: string | number, legends?: BlockLegend[]) => {
+//     const legend = legends && legends.find(key => key.id === id)
+//     return legend ? legend.shortLabel || legend.label : id
+// }
 
 const getValue = (row: TableBucketItem, units: BlockUnits) => {
     const value = get(row, units)
     return value
 }
 
-const defaultValueKeys: BlockUnits[] = ['percentage_survey', 'percentage_question', 'count']
+const defaultValueKeys: BlockUnits[] = ['percentageSurvey', 'percentageQuestion', 'count']
 
 export const getTableData = (params: TableParams): TableData => {
     const {
@@ -90,20 +93,21 @@ export const getTableData = (params: TableParams): TableData => {
 
     const rows = data.map(row => {
         if (!row) {
-            return 
+            return
         }
         const firstColumn: TableDataCell = {
             id: 'label',
             translateData
         }
-        firstColumn.labelId = `options.${i18nNamespace}.${row.id}`
-        firstColumn.label = row.label ?? row?.entity?.name ?? getLabel(row.id, legends)
-
+        firstColumn.labelId =
+            row.id === NO_ANSWER ? 'charts.no_answer' : `options.${i18nNamespace}.${row.id}`
+        firstColumn.label = row.label ?? (row?.entity?.nameHtml || row?.entity?.nameClean)
         const columns: TableDataCell[] = []
 
         valueKeys.forEach(key => {
             const valueKey = typeof key === 'object' ? key.id : key
-            const valueIsPercentage = typeof key === 'object' ? key.isPercentage : isPercentage(valueKey)
+            const valueIsPercentage =
+                typeof key === 'object' ? key.isPercentage : isPercentage(valueKey)
             columns.push({
                 id: valueKey,
                 value: getValue(row, valueKey),
@@ -122,7 +126,7 @@ export const groupDataByYears = ({
     data = [],
     valueKeys = defaultValueKeys
 }: {
-    data: ResultsByYear[]
+    data: ResponseEditionData[]
     valueKeys?: string[] | TableHeading[]
     keys: string[]
 }) => {
@@ -148,13 +152,13 @@ export const getBucketValue = ({
     key,
     valueKey
 }: {
-    data: ResultsByYear[]
+    data: ResponseEditionData[]
     year: number
     key: number | string
     valueKey: BlockUnits
 }) => {
     const yearData = data.find(d => d.year === year)
-    const yearBuckets = yearData.facets[0].buckets
+    const yearBuckets = yearData.buckets
     const bucket = yearBuckets.find(b => b.id === key)
     return bucket && bucket[valueKey]
 }

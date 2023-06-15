@@ -1,18 +1,23 @@
-import { Survey } from './types'
+import { RequestContext, Survey, SurveyEdition } from './types'
 import { Octokit } from '@octokit/core'
 import fetch from 'node-fetch'
 import yaml from 'js-yaml'
-import { readdir, readFile, lstat } from 'fs/promises'
 import { logToFile } from './debug'
-import path from 'path'
+import { setCache } from './caching'
+
+// import { loadSurveysLocally } from "@devographics/core-models/server"
 
 let allSurveys: Survey[] = []
 
 const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
 
 // load locales if not yet loaded
-export const loadOrGetSurveys = async () => {
-    if (allSurveys.length === 0) {
+export const loadOrGetSurveys = async (
+    options: { forceReload?: boolean } = { forceReload: false }
+) => {
+    const { forceReload } = options
+
+    if (forceReload || allSurveys.length === 0) {
         allSurveys = await loadSurveys()
     }
     return allSurveys
@@ -53,7 +58,7 @@ export const loadFromGitHub = async () => {
         if (file.type === 'dir') {
             console.log(`// Loading survey ${file.name}…`)
             const editions: any[] = []
-            let editionConfigYaml = {}
+            let editionConfigYaml: any = {}
             const surveyDirContents = await listGitHubFiles(file.path)
 
             for (const file2 of surveyDirContents) {
@@ -63,63 +68,22 @@ export const loadFromGitHub = async () => {
                 } else if (file2.type === 'dir') {
                     console.log(`    -> Edition ${file2.name}…`)
                     const editionsDirContents = await listGitHubFiles(file2.path)
-
+                    let edition = {}
                     for (const file3 of editionsDirContents) {
                         if (file3.name === 'config.yml') {
                             // found config.yml for edition
                             const editionConfigYaml = await getGitHubYamlFile(file3.download_url)
-                            editions.push(editionConfigYaml)
+                            edition = { ...edition, ...editionConfigYaml }
+                        } else if (file3.name === 'questions.yml') {
+                            // found config.yml for edition
+                            const editionQuestionsYaml = await getGitHubYamlFile(file3.download_url)
+                            edition = { ...edition, questions: editionQuestionsYaml }
                         }
                     }
+                    editions.push(edition)
                 }
             }
             const survey = { ...editionConfigYaml, editions }
-            surveys.push(survey)
-        }
-    }
-    return surveys
-}
-
-const excludeDirs = ['.git', '.DS_Store']
-
-// when developing locally, load from local files
-export const loadLocally = async () => {
-    console.log(`-> loading surveys locally`)
-
-    const surveys: Survey[] = []
-
-    const surveysDirPath = path.resolve(`../../devographics-surveys/`)
-    const surveysDirs = await readdir(surveysDirPath)
-
-    // loop over dir contents and fetch raw yaml files
-    for (const surveyDirName of surveysDirs) {
-        const editions = []
-        const surveyDirPath = surveysDirPath + '/' + surveyDirName
-        const stat = await lstat(surveyDirPath)
-        if (!excludeDirs.includes(surveyDirName) && stat.isDirectory()) {
-            console.log(`// Loading survey ${surveyDirName}…`)
-
-            const surveyConfigContents = await readFile(surveyDirPath + '/config.yml', 'utf8')
-            const surveyConfigYaml: any = yaml.load(surveyConfigContents)
-            const editionsDirs = await readdir(surveyDirPath)
-
-            for (const editionDirName of editionsDirs) {
-                const editionDirPath = `${surveyDirPath}/${editionDirName}`
-                const stat = await lstat(editionDirPath)
-                if (!excludeDirs.includes(editionDirName) && stat.isDirectory()) {
-                    console.log(`    -> Edition ${editionDirName}…`)
-                    const editionConfigContents = await readFile(
-                        editionDirPath + '/config.yml',
-                        'utf8'
-                    )
-                    const editionConfigYaml: any = yaml.load(editionConfigContents)
-                    if (editionConfigYaml) {
-                        editions.push(editionConfigYaml)
-                    }
-                }
-            }
-
-            const survey = { ...surveyConfigYaml, editions }
             surveys.push(survey)
         }
     }
@@ -130,8 +94,9 @@ export const loadLocally = async () => {
 export const loadSurveys = async () => {
     console.log('// loading surveys')
 
+    // @ts-ignore
     const surveys: Survey[] =
-        process.env.LOAD_DATA === 'local' ? await loadLocally() : await loadFromGitHub()
+        process.env.LOAD_DATA === 'local' ? await loadFromGitHub() : await loadFromGitHub()
     console.log(`// done loading ${surveys.length} surveys`)
 
     return surveys
@@ -139,8 +104,9 @@ export const loadSurveys = async () => {
 
 export const initSurveys = async () => {
     console.log('// initializing surveys')
-    const surveys = await loadOrGetSurveys()
+    const surveys = await loadOrGetSurveys({ forceReload: true })
     logToFile('surveys.json', surveys, { mode: 'overwrite' })
+    return surveys
 }
 
 export const getSurveys = async () => {
@@ -170,5 +136,46 @@ export const getSurveys = async () => {
 
 //     return entity
 // }
+
+export const cacheSurveys = async ({
+    surveys,
+    // entities,
+    context
+}: {
+    surveys: Survey[]
+    // entities: Entity[]
+    context: RequestContext
+}) => {
+    console.log(`// Initializing surveys cache (Redis)…`)
+
+    setCache(getAllSurveysCacheKey(), surveys, context)
+
+    const surveysWithoutOutlines = surveys.map(({ editions, ...surveyRest }) => {
+        const editionsWithoutOutlines = editions.map(({ questions, ...editionRest }) => editionRest)
+        return { ...surveyRest, editions: editionsWithoutOutlines }
+    })
+    setCache(getAllSurveysMetadataCacheKey(), surveysWithoutOutlines, context)
+
+    for (const survey of surveys) {
+        const { editions, ...rest } = survey
+        for (const edition of editions) {
+            const item = { ...edition, survey: rest }
+            setCache(getSurveyCacheKey({ survey, edition }), item, context)
+        }
+    }
+    console.log(`-> Cached ${surveys.length} surveys (${surveys.map(s => s.name).join()})`)
+}
+
+export const getAllSurveysCacheKey = () => `surveys_all`
+
+export const getAllSurveysMetadataCacheKey = () => `surveys_all_metadata`
+
+export const getSurveyCacheKey = ({
+    survey,
+    edition
+}: {
+    survey?: Survey
+    edition?: SurveyEdition
+}) => `surveys_${edition.surveyId}`
 
 export default allSurveys

@@ -7,6 +7,7 @@ import colors from 'core/theme/colors'
 import classNames from 'classnames'
 import Hamburger from 'core/components/Hamburger'
 import { useI18n } from 'core/i18n/i18nContext'
+// import SurveyBanner from 'core/components/SurveyBanner'
 
 const MainLayout = ({
     context,
@@ -14,33 +15,35 @@ const MainLayout = ({
     showSidebar,
     toggleSidebar,
     closeSidebar,
-    props,
+    props
 }) => {
     const { translate } = useI18n()
     return (
         <>
             <Skip href="#page-main">{translate('general.skip_to_content')}</Skip>
+            {/* <SurveyBanner /> */}
             <Page
                 showSidebar={showSidebar}
                 className={classNames(`Page--${context.id}`, {
                     capture: context.isCapturing,
-                    nocapture: !context.isCapturing,
+                    rawchartmode: context.isRawChartMode,
+                    nocapture: !context.isCapturing
                 })}
             >
                 <header>
-                  <MenuToggle
-                    onClick={toggleSidebar}
-                    aria-haspopup="menu"
-                    aria-expanded={showSidebar}
-                  >
-                    <ScreenReadersHint>{translate('general.open_nav')}</ScreenReadersHint>
-                    <Hamburger />
-                  </MenuToggle>
-                  <Sidebar {...props} showSidebar={showSidebar} closeSidebar={closeSidebar} />
+                    <MenuToggle
+                        onClick={toggleSidebar}
+                        aria-haspopup="menu"
+                        aria-expanded={showSidebar}
+                    >
+                        <ScreenReadersHint>{translate('general.open_nav')}</ScreenReadersHint>
+                        <Hamburger />
+                    </MenuToggle>
+                    <Sidebar {...props} showSidebar={showSidebar} closeSidebar={closeSidebar} />
                 </header>
                 <PageContent className="PageContent">
                     <PaginationWrapper>
-                        {showPagination && <Pagination position="top" />}   
+                        {showPagination && <Pagination position="top" />}
                     </PaginationWrapper>
                     <PageMain id="page-main">
                         {/* <PageMetaDebug /> */}
@@ -65,20 +68,20 @@ const Skip = styled.a`
     left: -900px;
 
     &:focus {
-      display: inline-block;
-      position: static !important;
-      top: 0 !important;
-      left: 0 !important;
-      border: 2px solid white;
+        display: inline-block;
+        position: static !important;
+        top: 0 !important;
+        left: 0 !important;
+        border: 2px solid white;
     }
-`;
+`
 
 const PaginationWrapper = styled.div`
     @media ${mq.smallMedium} {
         padding-left: 5rem;
-        border-bottom: ${({theme}) => theme.separationBorder};
+        border-bottom: ${({ theme }) => theme.separationBorder};
     }
-`;
+`
 
 const MenuToggle = styled.button`
     display: block;
@@ -100,23 +103,24 @@ const MenuToggle = styled.button`
     box-sizing: border-box;
 
     svg {
-      width: 2rem;
-      height: auto;
+        width: 2rem;
+        height: auto;
     }
 
     @media ${mq.large} {
-      display: none;
+        display: none;
     }
 
     &:focus {
-      border: 2px solid ${colors.greenLight};
-      outline: 5px auto -webkit-focus-ring-color;
+        border: 2px solid ${colors.greenLight};
+        outline: 5px auto -webkit-focus-ring-color;
     }
 
-    &:hover, &:focus {
-      background: ${({theme})=>theme.colors.backgroundAlt}
+    &:hover,
+    &:focus {
+        background: ${({ theme }) => theme.colors.backgroundAlt};
     }
-`;
+`
 
 const PageContent = styled.div`
     display: flex;
@@ -125,12 +129,14 @@ const PageContent = styled.div`
 
 const Page = styled.div`
     @media ${mq.large} {
-      display: grid;
-      grid-template-columns: ${({ theme }) => theme.dimensions.sidebar.width}px calc(100% - ${({ theme }) => theme.dimensions.sidebar.width}px);  
+        display: grid;
+        grid-template-columns: ${({ theme }) => theme.dimensions.sidebar.width}px calc(
+                100% - ${({ theme }) => theme.dimensions.sidebar.width}px
+            );
     }
 
     @media ${mq.smallMedium} {
-      grid-template-columns: 5rem auto;
+        grid-template-columns: 5rem auto;
     }
 
     min-height: 100vh;

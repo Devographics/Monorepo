@@ -11,7 +11,7 @@ const StyledLink = styled(PageLink)`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    justify-content: ${(props) => (props.type === 'previous' ? 'flex-start' : 'flex-end')};
+    justify-content: ${props => (props.type === 'previous' ? 'flex-start' : 'flex-end')};
     padding: ${spacing()};
 
     @media ${mq.smallMedium} {
@@ -29,8 +29,9 @@ const StyledLink = styled(PageLink)`
         font-size: ${fontSize('medium')};
     }
 
-    &:hover, &:focus {
-        background: ${(props) => props.theme.colors.backgroundAlt};
+    &:hover,
+    &:focus {
+        background: ${props => props.theme.colors.backgroundAlt};
     }
 `
 
@@ -54,9 +55,9 @@ const PaginationLink = ({ page, type }) => (
 PaginationLink.propTypes = {
     page: PropTypes.shape({
         id: PropTypes.string.isRequired,
-        path: PropTypes.string.isRequired,
+        path: PropTypes.string.isRequired
     }).isRequired,
-    type: PropTypes.oneOf(['previous', 'next']).isRequired,
+    type: PropTypes.oneOf(['previous', 'next']).isRequired
 }
 
 export default PaginationLink

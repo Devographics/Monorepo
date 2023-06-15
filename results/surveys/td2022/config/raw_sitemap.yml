@@ -1,0 +1,257 @@
+# ------------------------------------------------------------------------------------
+
+# ------------------------------------------------------------------------------------
+# Pages Properties
+# - id: the unique (survey-wide) ID of the page
+# - path: the page's path
+# - children: the page's children pages
+# - blocks: the page's blocks
+# - pageTemplate: a template from which to inherit its properties (not used)
+# - showTitle: whether to show the page title or not
+# - variables: page variables (compiled during sitemap generation)
+
+# Block Properties
+# - id: the unique (survey-wide) ID of the block
+# - blockName: the name of the block (used for titles, descriptions, etc.)
+# - bucketKeysName: the name of the block's keys (used for legends, formatting data, etc.)
+# - blockType: the type of block (which component to use)
+# - query: the query used to populate the block's data
+# - dataPath: the path to use (from the query root) to access the block's data
+# - showLegend: whether to show the block's legend
+# - showDescription: whether to show the block's description
+# - template: a template from which to inherit its properties
+# - translateData: whether to try and translate
+# - variables: block variables (compiled during sitemap generation)
+
+- id: introduction
+  path: /
+  showTitle: false
+  blocks:
+      # - id: survey_livestream
+      #   blockType: LivestreamBlock
+      #   disableExport: true
+      #   wrapBlock: false
+      - id: survey_intro
+        blockType: SurveyIntroBlock
+        disableExport: true
+        wrapBlock: false
+      - id: survey_credits
+        template: credits
+      - id: survey_newsletter
+        blockType: NewsletterBlock
+        disableExport: true
+        wrapBlock: false
+      - id: survey_sponsors
+        template: sponsors
+      - id: survey_partners
+        template: sponsors
+        blockType: PartnersBlock
+      - id: survey_translators
+        blockType: TranslatorsBlock
+        disableExport: true
+        wrapBlock: false
+
+# - id: data_explorer
+#   titleId: sections.data_explorer.title
+#   path: /explorer
+#   blocks:
+#       - template: page_introduction
+
+#       - id: data_explorer
+#         showTitle: false
+#         chartOnly: true
+#         wrapBlock: false
+#         template: data_explorer
+#         parameters: { showNoAnswer: true }
+#         variables:
+#             xAxis: user_info__company_size
+#             yAxis: user_info__years_of_experience
+
+- id: user_info
+  titleId: sections.demographics.title
+  path: /demographics
+  blocks:
+      - template: page_introduction
+
+      - id: japan_province
+        template: multiple_options
+
+      - id: residency_status
+        template: multiple_options
+
+      # - id: residency_status_other
+      #   template: multiple_options_other
+
+      - id: nationality
+        template: multiple_options
+
+      - id: gender
+        template: multiple_options
+
+      # - id: gender_other
+      #   template: multiple_options_other
+
+      - id: age
+        template: multiple_options
+
+      - id: years_of_experience
+        template: multiple_options
+
+      - id: years_in_japan
+        template: multiple_options
+
+      - id: professional_qualifications
+        template: multiple_options
+
+      - id: language_proficiency_english
+        template: multiple_options
+
+      - id: language_proficiency_japanese
+        template: multiple_options
+
+      - id: searching_for_job
+        template: multiple_options
+
+      - id: employment_status
+        template: multiple_options
+
+- id: employer_info
+  path: /employer-info
+  blocks:
+      - id: current_employer
+        template: multiple_options
+
+      # - id: current_employer_other
+      #   template: multiple_options_other
+
+      - id: industry_sector
+        template: multiple_options
+
+      # - id: industry_sector_other
+      #   template: multiple_options_other
+
+      - id: remote_work_policy
+        template: multiple_options
+
+      - id: company_size
+        template: multiple_options
+
+- id: job_info
+  path: /job-info
+  blocks:
+      - id: coworker_nationalities_engineers
+        template: multiple_options
+
+      - id: coworker_nationalities_non_engineers
+        template: multiple_options
+
+      - id: languages_used_colleagues_japanese
+        template: multiple_options
+
+      - id: languages_used_colleagues_english
+        template: multiple_options
+
+      - id: years_employed
+        template: multiple_options
+
+      - id: work_hours_per_week
+        template: multiple_options
+
+      - id: work_days_per_week
+        template: multiple_options
+
+      - id: how_did_you_find_your_current_job
+        template: multiple_options
+
+      # - id: how_did_you_find_your_current_job_other
+      #   template: multiple_options_other
+
+      - id: current_total_annual_compensation
+        template: multiple_options
+
+- id: vacations
+  path: /vacations
+  blocks:
+      - id: paid_leave
+        template: multiple_options
+
+      # - id: paid_leave_other
+      #   template: multiple_options_other
+
+      - id: additional_vacations
+        template: multiple_options
+
+      - id: asking_for_time_off
+        template: multiple_options
+
+- id: technology
+  path: /technology
+  blocks:
+      - id: programming_languages
+        template: multiple_options
+
+      # - id: programming_languages_other
+      #   template: multiple_options_other
+
+      - id: databases
+        template: multiple_options
+
+      # - id: databases_other
+      #   template: multiple_options_other
+
+      - id: web_frameworks
+        template: multiple_options
+
+      # - id: web_frameworks_other
+      #   template: multiple_options_other
+
+      - id: other_frameworks_libraries
+        template: multiple_options
+
+      # - id: other_frameworks_libraries_other
+      #   template: multiple_options_other
+
+      - id: developer_tools
+        template: multiple_options
+
+      # - id: developer_tools_other
+      #   template: multiple_options_other
+
+      - id: developer_environments
+        template: multiple_options
+
+- id: satisfaction
+  path: /satisfaction
+  blocks:
+      - id: management_satisfaction
+        template: single_option
+
+      - id: colleagues_satisfaction
+        template: single_option
+
+      - id: work_satisfaction
+        template: single_option
+
+      - id: compensation_satisfaction
+        template: single_option
+
+      - id: overall_satisfaction
+        template: single_option
+
+      - id: how_to_improve_job_satisfaction
+        template: single_option
+
+# - id: future_surveys
+#   path: '/future-surveys'
+#   blocks:
+#       - id: how_to_improve_survey
+#         template: multiple_options
+
+- id: notfound
+  titleId: notfound.title
+  path: /404
+  is_hidden: true
+  blocks:
+      - id: notfound
+        blockType: NotFoundBlock
+        wrapBlock: false

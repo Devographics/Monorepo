@@ -14,6 +14,7 @@ import {
     AccordionTrigger,
     AccordionContent
 } from 'core/components/Accordion'
+import { BlockDefinition } from 'core/types'
 
 const faqItems = ['usage', 'public', 'refund', 'influence', 'feedback']
 
@@ -24,7 +25,11 @@ const SponsorPrompt = ({ product, block }) => (
         <ModalTrigger
             trigger={
                 <SponsorIconWrapper>
-                    <SponsorIcon enableTooltip={true} labelId="sponsor.sponsor_button" />
+                    <SponsorIcon
+                        size="small"
+                        enableTooltip={true}
+                        labelId="sponsor.sponsor_button"
+                    />
                 </SponsorIconWrapper>
             }
         >
@@ -44,26 +49,21 @@ const SponsorIconWrapper = styled(Button)`
     place-items: center;
     /* padding: 4px; */
     margin-left: ${spacing(0.5)};
-    padding: 3px;
+    padding: 0px;
     opacity: 0.4;
     &:hover {
         opacity: 1;
     }
     cursor: pointer;
-    span {
-        display: block;
-        height: 100%;
-        width: 100%;
-    }
     svg {
         color: ${({ theme }) => theme.colors.border};
     }
 `
 
-const SponsorModal = ({ product, block }) => {
-    const context = usePageContext()
-    const { translate } = useI18n()
-    const meta = getBlockMeta(block, context, translate)
+const SponsorModal = ({ product, block }: { product: any; block: BlockDefinition }) => {
+    const pageContext = usePageContext()
+    const { getString } = useI18n()
+    const meta = getBlockMeta({ block, pageContext, getString })
 
     return (
         <ModalContents>
@@ -75,9 +75,13 @@ const SponsorModal = ({ product, block }) => {
                     <Description>
                         <T k="sponsor.sponsor_chart.description" md={true} html={true} />
                     </Description>
-                    <SponsorButton as="a" href={product.add_to_cart_url} target="_blank">
-                        <T k="sponsor.sponsor_this_chart" values={{ baseAmount }} />
-                    </SponsorButton>
+                    {product.add_to_cart_url ? (
+                        <SponsorButton as="a" href={product.add_to_cart_url} target="_blank">
+                            <T k="sponsor.sponsor_this_chart" values={{ baseAmount }} />
+                        </SponsorButton>
+                    ) : (
+                        <span>Error: Missing Product "{product.chartId}"</span>
+                    )}
                 </Contents>
 
                 <Chart>

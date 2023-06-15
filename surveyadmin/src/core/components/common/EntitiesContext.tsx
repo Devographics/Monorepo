@@ -8,9 +8,9 @@
  */
 import React, { useContext } from "react";
 
-import { useQuery } from "@apollo/client";
 import gql from "graphql-tag";
 import { Entity } from "@devographics/core-models";
+import { useQuery } from "~/lib/graphql";
 
 const entitiesQuery = gql`
   query EntitiesQuery($tags: [String], $ids: [String]) {
@@ -23,10 +23,6 @@ const entitiesQuery = gql`
       tags
       mdn
       twitterName
-      twitter {
-        userName
-        avatarUrl
-      }
       company {
         name
         homepage {

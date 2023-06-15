@@ -37,12 +37,18 @@ export const routes = {
     home: {
       href: "/admin",
     },
+    normalization: {
+      href: "/admin/normalization",
+    },
     login: {
       href: "/admin/login",
     },
     export: {
       href: "/admin/export",
     },
+    scripts: {
+      href: "/admin/scripts"
+    }
   },
   // state of js
   survey: {

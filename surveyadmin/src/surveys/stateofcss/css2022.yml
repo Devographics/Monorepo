@@ -10,27 +10,40 @@ slug: css2022 # used as first part of field names
 surveyId: css2022 # used as first part of field names
 context: state_of_css
 topic: CSS
-createdAt: October 30, 2022
+createdAt: October 1, 2022
+startAt: October 1, 2022
+endAt: November 1, 2022
 prettySlug: state-of-css
 hashtag: StateOfCSS
 shareUrl: https://stateofcss.com
 # resultsUrl: https://2022.stateofcss.com/
-name: 'State of CSS'
+name: "State of CSS"
 year: 2022
-status: 1 # preview/open/closed/hidden
-imageUrl: 'stateofcss2022.png'
+status: 2 # preview/open/closed/hidden
+# TODO: this is the old version using a relative path
+imageUrl: "stateofcss2022.png"
+# TODO: should switch to absolute image
+# imageUrl: https://devographics.github.io/surveys/state_of_css/2022/images/stateofcss2022.png
+faviconUrl: https://devographics.github.io/surveys/state_of_css/2022/images/favicon.svg
+socialImageUrl: https://devographics.github.io/surveys/state_of_css/2022/images/stateofcss2022-og.png
 domain: stateofcss.com
-bgColor: '#232840'
-textColor: '#9ac6c9'
-linkColor: '#F95DB2'
-hoverColor: '#59df7f'
+bgColor: "#232840"
+textColor: "#9ac6c9"
+linkColor: "#F95DB2"
+hoverColor: "#59df7f"
 tags: [css]
+contexts: [state_of_css]
+faq:
+  - data_used_css2022
+  - survey_design_css2022
+  - results_released_css2022
+  - team
+  - questions_required
+  - learn_more_css2022
 credits:
-  - id: sarah_fossheim
-    role: accessibility
-  - id: una_kravets
+  - id: lea_verou
     role: survey_design
-  - id: adam_argyle
+  - id: nicole_sullivan
     role: survey_design
   - id: philip_jagenstedt
     role: survey_design
@@ -41,39 +54,47 @@ outline:
     template: feature
     slug: features
     questions:
-      - id: grid
+      - id: features_intro_css
+        template: help
+
+      # - id: grid # removed in 2022, not that new anymore
       - id: subgrid
+        itemProperties:
+          isFirstQuestion: true
       # - id: flexbox # removed in 2022, too high usage
-      - id: multi_column
+      # - id: multi_column # removed in 2022, not new anymore, too niche
       - id: writing_modes
-      - id: position_sticky
+      # - id: position_sticky # removed in 2022, not that new anymore
       - id: logical_properties
       - id: aspect_ratio
       - id: content_visibility
       - id: flexbox_gap
         year: 2021
-      - id: break_rules
-        year: 2021
+      # - id: break_rules # removed in 2022, too niche?
+      #   year: 2021
       - id: at_container # (@container)
         year: 2021
+      # - id: containment # remove in 2022? confusing with container queries
 
-      # - id: object_view_box # too new?
-      #   year: 2023
-      # - id: viewport_percentage_length_units # too new? couldn't find much in terms of code examples
-      #   year: 2023
-      
+      - id: object_view_box # too new?
+        year: 2022
+      - id: viewport_percentage_length_units
+        year: 2022
+      - id: media_queries_range_contexts
+        year: 2022
+
   - id: shapes_graphics
     template: feature
     slug: features
     questions:
-      - id: shapes
-      - id: object_fit
-      - id: clip_path
-      - id: masks
+      # - id: shapes # removed in 2022, not new anymore, downward trend
+      # - id: object_fit # removed in 2022, not new anymore
+      # - id: clip_path # remove in 2022?
+      # - id: masks # remove in 2022?
       - id: blend_modes
       - id: filter_effects
       - id: backdrop_filter
-      - id: perspective
+      # - id: perspective # removed in 2022, downward trend and too niche
       - id: intrinsic_sizing #min-, max, and fit-content
         year: 2021
       - id: conic_gradient
@@ -83,7 +104,7 @@ outline:
     template: feature
     slug: features
     questions:
-      - id: color_gamut
+      # - id: color_gamut # removed in 2022, too niche
       - id: color_function
         year: 2021
       - id: accent_color
@@ -95,8 +116,10 @@ outline:
         year: 2022
       - id: wide_gamut_colors
         year: 2022
-      # - id: relative_colors # too new?
-        # year: 2023
+      - id: relative_colors
+        year: 2022
+      - id: gradient_color_spaces
+        year: 2022
 
   - id: interactions
     template: feature
@@ -104,30 +127,32 @@ outline:
     questions:
       - id: scroll_snap
       - id: overscroll_behavior
-      - id: overflow_anchor
-      - id: touch_action
-      - id: pointer_events
-      - id: scroll_timeline
+      # - id: overflow_anchor # removed in 2022, too niche/no upwards trend
+      - id: touch_action # remove in 2022?
+      # - id: pointer_events # removed in 2022, too old
+      # - id: scroll_timeline # removed in 2022, deprecated? https://developer.mozilla.org/en-US/docs/Web/CSS/@scroll-timeline
 
       - id: scroll_behavior
         year: 2022
-      - id: scroll_padding
+      # - id: scroll_padding # not added since part of scroll snap
+      #   year: 2022
+      - id: scrollbar_gutter
         year: 2022
 
   - id: typography
     template: feature
     slug: features
     questions:
-      - id: font_variant
-      - id: initial_letter
-      # - id: font_variant_numeric # removed because there is already font-variant
+      # - id: font_variant # remove in 2022? downward trend
+      # - id: initial_letter # removed in 2022, downward trend and no browser support
+      # - id: font_variant_numeric # removed in 2022, because there is already font-variant
       - id: font_display
       - id: line_clamp
       - id: variable_fonts
 
       - id: font_palette
         year: 2022
-      # - id: color_fonts # redundant with font-palette?
+      # - id: color_fonts # not a specific CSS feature…
       #   year: 2022
 
   - id: accessibility
@@ -142,13 +167,15 @@ outline:
         year: 2021
       - id: color_scheme
         year: 2021
-      - id: tabindex
-        year: 2021
-      - id: aria_attributes
-        year: 2021
+      # - id: tabindex # removed in 2022, not CSS
+      #   year: 2021
+      # - id: aria_attributes # removed in 2022, not CSS
+      #   year: 2021
       # - prefers-reduced-transparency # not supported yet
-      # - prefers-contrast # not supported yet
-      # - forced-colors # not supported yet
+      - id: prefers_contrast
+        year: 2022
+      - id: forced_colors
+        year: 2022
       # - inverted-colors # not supported yet
 
       - id: focus_visible
@@ -171,44 +198,64 @@ outline:
   #   slug: features
   #   questions:
 
-      # - id: houdini_typed_om # too new?
-      #   year: 2023
-      # - id: houdini_layout_api # too new?
-      #   year: 2023
-      # - id: houdini_animation_worklet # too new?
-      #   year: 2023
+  # - id: houdini_typed_om # too new?
+  #   year: 2023
+  # - id: houdini_layout_api # too new?
+  #   year: 2023
+  # - id: houdini_animation_worklet # too new?
+  #   year: 2023
 
   - id: other_features
     template: feature
     slug: features
     questions:
       - id: variables
+
+      - id: at_property #(@property)
+        year: 2021
+
       - id: feature_support_queries # (@supports)
-      - id: containment
       - id: will_change
       # - id: calc # removed in 2022, too high usage
       # - id: houdini # removed in 2022, not specific enough
       - id: comparison_functions
 
-      - id: at_property #(@property)
-        year: 2021
-
       - id: cascade_layers
         year: 2022
 
-      - id: houdini_paint_api
+      # - id: shadow_dom_css # removed mid-survey in favor of more specific shadow_dom_part
+      #   year: 2022
+
+      - id: shadow_dom_part
         year: 2022
+
+      # decided to group the following as a single question after all
+      # - id: shadow_dom_part
+      #   year: 2022
+      # - id: shadow_dom_host
+      #   year: 2022
+      # - id: shadow_dom_slotted
+      #   year: 2022
+
+      # - id: houdini_paint_api # remove in 2022? not much activity
+      #   year: 2022
 
       # - id: when_else_rules # too new?
       #   year: 2023
-      # - id: trigonometric_functions # too new?
-      #   year: 2023
+      - id: trigonometric_functions # too new?
+        year: 2022
       # - id: stepped_value_functions # too new?
       #   year: 2023
-      # - id: css_nesting # too new?
-      #   year: 2023
+      - id: css_nesting # too new?
+        year: 2022
       # - id: env_function # too new?
       #   year: 2023
+
+      - id: image_set
+        year: 2022
+
+      - id: image_function
+        year: 2022
 
   ### TOOLS ###
 
@@ -238,6 +285,9 @@ outline:
     template: tool
     slug: tools
     questions:
+      - id: tools_intro_css
+        template: help
+
       - id: bootstrap
       - id: materialize_css
       - id: ant_design
@@ -283,7 +333,7 @@ outline:
         year: 2021
       - id: vanilla_extract
         year: 2021
-      - id: windi_css 
+      - id: windi_css
         year: 2021
 
       - id: css_in_js
@@ -302,6 +352,18 @@ outline:
   - id: other_tools
     slug: tools_others
     questions:
+      - id: pre_post_processors
+        template: multiple
+        options:
+          - id: sass
+          - id: less
+          - id: post_css
+          - id: stylus
+          - id: assembler_css
+      - id: pre_post_processors
+        template: others
+        matchTags: [libraries, other]
+
       - id: utilities
         template: multiple
         options:
@@ -336,6 +398,9 @@ outline:
           - id: ucbrowser
           - id: opera
           - id: polypane
+      - id: browsers
+        template: others
+        matchTags: [browsers, other]
 
         # option 1 : stored as [first option, second option, winning option] for each round
       # e.g. [[0,5,5], [3,6,3], [1,7,1], [2,4,2], [5,3,5], [1,2,1], [5,1,1]]
@@ -356,7 +421,6 @@ outline:
   - id: usage
     intlId: usage_css
     questions:
-
       - id: form_factors
         intlId: environments.form_factors
         template: multiple
@@ -380,26 +444,26 @@ outline:
         matchTags: [form_factors]
         year: 2022
 
-      - id: accessibility_features
-        intlId: environments.accessibility_features
-        template: multiple
-        year: 2021
-        options:
-          - id: keyboard_navigation
-          - id: compliant_contrast
-          - id: focus_indicators
-          - id: skip_to_content_link
-          - id: color_themes # dark mode, high contrast mode, etc.
-          - id: prefers_reduced_motion
-          - id: alt_text
-          - id: semantic_markup
-          - id: aria_attributes
+      # - id: accessibility_features
+      #   intlId: environments.accessibility_features
+      #   template: multiple
+      #   year: 2021
+      #   options:
+      #     - id: keyboard_navigation
+      #     - id: compliant_contrast
+      #     - id: focus_indicators
+      #     - id: skip_to_content_link
+      #     - id: color_themes # dark mode, high contrast mode, etc.
+      #     - id: prefers_reduced_motion
+      #     - id: alt_text
+      #     - id: semantic_markup
+      #     - id: aria_attributes
 
-      - id: accessibility_features
-        intlId: environments.accessibility_features.others
-        template: others
-        matchTags: [accessibility_features]
-        year: 2021
+      # - id: accessibility_features
+      #   intlId: environments.accessibility_features.others
+      #   template: others
+      #   matchTags: [accessibility_features]
+      #   year: 2021
 
       - id: what_do_you_use_css_for
         intlId: environments.what_do_you_use_css_for
@@ -418,80 +482,103 @@ outline:
         matchTags: [css_uses]
         template: others
 
-      - id: industry_sector
-        intlId: user_info.industry_sector
-        template: multiple
-        allowother: true
-        options:
-          - id: ecommerce
-          - id: news_media
-          - id: healthcare
-          - id: finance
-          - id: programming_tools
-          - id: socialmedia
-          - id: marketing_tools
-          - id: education
-          - id: real_estate
-          - id: government
-          - id: entertainment
-          - id: consulting
-          - id: travel
-          - id: insurance
-          - id: logistics
-          - id: energy
-          - id: telecommunications
-          - id: student
-          - id: hospitality
-          - id: cyber_security
-          - id: construction
-          - id: automotive
-          - id: agriculture
-          - id: transport
-          - id: manufacturing
-      - id: industry_sector
-        intlId: user_info.industry_sector.others
-        template: others
-        matchTags: [industry_sectors]
+      # - id: industry_sector
+      #   intlId: user_info.industry_sector
+      #   template: multiple
+      #   allowother: true
+      #   options:
+      #     - id: ecommerce
+      #     - id: news_media
+      #     - id: healthcare
+      #     - id: finance
+      #     - id: programming_tools
+      #     - id: socialmedia
+      #     - id: marketing_tools
+      #     - id: education
+      #     - id: real_estate
+      #     - id: government
+      #     - id: entertainment
+      #     - id: consulting
+      #     - id: travel
+      #     - id: insurance
+      #     - id: logistics
+      #     - id: energy
+      #     - id: telecommunications
+      #     - id: student
+      #     - id: hospitality
+      #     - id: cyber_security
+      #     - id: construction
+      #     - id: automotive
+      #     - id: agriculture
+      #     - id: transport
+      #     - id: manufacturing
+      # - id: industry_sector
+      #   intlId: user_info.industry_sector.others
+      #   template: others
+      #   matchTags: [industry_sectors]
 
-      - id: javascript_proficiency # placeholder
-        template: single
-        options:
-          - id: no_js
-          - id: yes_js
+      - id: css_js_balance
+        year: 2022
+        template: slider
 
-      - id: browser_interoperability_features
-        intlId: opinions_others.browser_interoperability_features.others
-        year: 2021
-        sectionSlug: opinions_others
-        template: others
-        matchTags: [features, browser_interoperability, css_missing_features]
+      # - id: interop_features
+      #   year: 2022
+      #   template: top_n
+      #   random: true
+      #   options:
+      #     - id: leading_trim
+      #     - id: image_function
+      #     - id: media_queries
+      #     - id: math_functions
+      #     - id: masks
+      #     - id: border_image
+      #     - id: image_set
+      #     - id: media_queries_range_contexts
+      #     - id: has_selector
+      #     - id: at_container
+      #     - id: attr_function
 
-      - id: css_pain_points
-        intlId: opinions.css_pain_points
+      - id: interoperability_features_freeform
         year: 2021
-        template: bracket
-        options:
-          - id: browser_interoperability
-          - id: interactions
-          - id: architecture
-          - id: layout_positioning
-          - id: scoping_specificity
-          - id: responsive_design
-          - id: form_elements_styling
-          - id: performance_issues
-      - id: css_pain_points
-        intlId: opinions_others.css_pain_points.others
-        year: 2021
-        sectionSlug: opinions_others
         template: others
-        matchTags: [css_pain_points, css_missing_features]
+        matchTags: [features, browsers, browser_interoperability, css_missing_features, css_pain_points]
+
+      - id: missing_features_freeform
+        year: 2021
+        template: others
+        matchTags: [features, browser_interoperability, css_missing_features, css_pain_points]
+
+      - id: other_pain_points_freeform
+        year: 2021
+        template: others
+        matchTags: [features, browsers, browser_interoperability, css_missing_features, css_pain_points]
+
+      # - id: css_pain_points
+      #   intlId: opinions.css_pain_points
+      #   year: 2021
+      #   template: top_n
+      #   options:
+      #     - id: browser_interoperability
+      #     - id: interactions
+      #     - id: architecture
+      #     - id: layout_positioning
+      #     - id: scoping_specificity
+      #     - id: responsive_design
+      #     - id: form_elements_styling
+      #     - id: performance_issues
+      # - id: css_pain_points
+      #   intlId: opinions_others.css_pain_points.others
+      #   year: 2021
+      #   sectionSlug: opinions_others
+      #   template: others
+      #   matchTags: [css_pain_points, css_missing_features]
 
       # - id: currently_missing_from_css
       #   intlId: opinions.currently_missing_from_css
       #   year: 2021
       #   optionsIntlId: features
       #   template: bracket
-      #   options: 
+      #   options:
       #     - id: container_queries
       #     - id: parent_selector
       #     - id: nesting
@@ -518,8 +605,8 @@ outline:
     ### RESOURCES ###
 
   - id: resources
+    intlId: resources_css
     questions:
-
       - id: first_steps
         intlId: resources.first_steps_css
         template: multiple
@@ -536,9 +623,18 @@ outline:
           - id: self_directed
 
       - id: first_steps
-        intlId: resources.first_steps_css.others
+        intlId: resources.first_steps.others
         template: others
-        matchTags: [first_steps, courses, people, youtube, sites, newsletters, socialmedia]
+        matchTags:
+          [
+            first_steps,
+            courses,
+            people,
+            youtube,
+            sites,
+            newsletters,
+            socialmedia,
+          ]
 
       - id: blogs_news_magazines
         template: multiple
@@ -563,6 +659,7 @@ outline:
         matchTags: [courses, people, youtube, sites, newsletters, socialmedia]
 
       - id: sites_courses
+        intlId: resources.sites_courses_css
         template: multiple
         options:
           - id: stack_overflow
@@ -579,12 +676,14 @@ outline:
           - id: egghead
           - id: newline
           - id: web_dev
+          - id: linkedin_learning
 
       - id: sites_courses
         template: others
         matchTags: [courses, people, youtube, sites, newsletters, socialmedia]
 
       - id: podcasts
+        intlId: resources.podcasts_css
         template: multiple
         options:
           - id: shop_talk_show
@@ -608,12 +707,14 @@ outline:
           - id: the_bike_shed
           - id: css_podcast
           - id: undefined_podcast
+          - id: working_draft
 
       - id: podcasts
         template: others
         matchTags: [podcasts, people, sites]
 
       - id: people
+        intlId: people_css
         year: 2021
         template: others
         matchTags: [people, sites, youtube]
@@ -638,7 +739,6 @@ outline:
 
   - id: user_info
     questions:
-
       - id: age
         template: single
         options:
@@ -686,7 +786,7 @@ outline:
 
       - id: higher_education_degree
         template: single
-        options: 
+        options:
           - id: no_degree
           - id: yes_related
           - id: yes_unrelated
@@ -704,7 +804,7 @@ outline:
           - id: not_listed
 
       - id: race_ethnicity
-        template: multiple
+        template: race_ethnicity
         allowother: true
         options:
           - id: black_african
@@ -728,12 +828,12 @@ outline:
           - id: mobility_impairments
           - id: cognitive_impairments
           - id: not_listed
-          
+
       - id: disability_status
         year: 2021
         template: others
         matchTags: [disabilities]
-        
+
       - id: how_did_user_find_out_about_the_survey
         template: text
 

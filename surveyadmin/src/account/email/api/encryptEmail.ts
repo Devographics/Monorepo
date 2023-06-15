@@ -1,17 +1,14 @@
+import { getEmailHashesCollection, newMongoId } from "@devographics/mongo";
 import crypto from "crypto";
-import { EmailHashMongooseModel } from "~/modules/email_hashes/model.server";
 import { v4 as uuidv4 } from "uuid";
 
 /**
  *
  * Creating Hash from Emails, not reversible
  */
-export const createEmailHash = (email) => {
-  const hashSaltStr =
-    process.env.HASH_SALT ||
-    //getSetting('hashSalt') ||
-    process.env.ENCRYPTION_KEY; //||
-  //getSetting('encriptionKey')
+export const createEmailHash = (email: string, providedHashSalt?: string) => {
+  const hashSaltStr = providedHashSalt || process.env.ENCRYPTION_KEY;
+
   if (!hashSaltStr)
     throw new Error(`HASH_SALT/ENCRYPTION_KEY environment variable not set`);
 
@@ -28,19 +25,20 @@ export const createEmailHash = (email) => {
  * @param emailHash String
  */
 export async function getUUID(emailHash, userId) {
-  const hashDoc = await EmailHashMongooseModel.findOne({ hash: emailHash });
+  const EmailHashes = await getEmailHashesCollection()
+  const hashDoc = await EmailHashes.findOne({ hash: emailHash });
   let emailUuid;
   if (hashDoc) {
     emailUuid = hashDoc.uuid;
   } else {
     emailUuid = uuidv4();
-    await EmailHashMongooseModel.create({
+    await EmailHashes.insertOne({
+      _id: newMongoId(),
       userId: userId,
       hash: emailHash,
       uuid: emailUuid,
     });
   }
- 
 }
 
 /**

@@ -1,0 +1,30 @@
+blockType: DataExplorerBlock
+hasSponsor: true
+query: >
+    surveys {
+        ${surveyId} {
+            ${editionId} {
+                ${sectionId} {
+                    data_explorer {
+                        items<ARGUMENTS_PLACEHOLDER> {
+                            editionId
+                            year
+                            buckets {
+                                count
+                                id
+                                facetBuckets {
+                                    count
+                                    id
+                                    percentageFacet
+                                    percentageQuestion
+                                    percentageSurvey
+                                }
+                                percentageQuestion
+                                percentageSurvey
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }

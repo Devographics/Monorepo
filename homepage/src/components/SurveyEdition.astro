@@ -56,10 +56,14 @@ if (isOpen) {
                         />
                     </a>
                 )}
-                {resultsUrl && (
+                {resultsUrl ? (
                     <a href={resultsUrl} class="button">
                         <T locale={locale} k="homepage.view_results" />
                     </a>
+                ) : (
+                    <span class="button">
+                        <T locale={locale} k="homepage.results_coming_soon" />
+                    </span>
                 )}
             </div>
         )

@@ -1,14 +1,18 @@
-
 .faq-contents {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  column-gap: $spacing * 2;
-  row-gap: $spacing * 2;
+  @include medium-large {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: $spacing * 2;
+    row-gap: $spacing * 2;
+  }
 }
 .faq-item {
   margin: 0;
   background: none;
   border: none;
+  @include small {
+    margin-bottom: $spacing;
+  }
 }
 .faq-item-heading {
   .accordion-button {
@@ -23,16 +27,16 @@
       color: var(--hover-color);
       text-decoration: underline;
     }
-    &:after{
+    &:after {
       display: none;
     }
   }
 }
-.faq-item-body{
+.faq-item-body {
   font-size: $smallish-font;
   padding: 0;
   margin: 0;
-  p{
+  p {
     margin: 0;
   }
 }

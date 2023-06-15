@@ -7,7 +7,7 @@
  */
 import type {
   ParsedQuestion,
-  SurveyDocument,
+  SurveyEdition,
   SurveySection,
 } from "@devographics/core-models";
 
@@ -52,7 +52,7 @@ const addTemplateToQuestionObject = (
  * @param parsedSurvey
  * @returns
  */
-export const addTemplatesToSurvey = (parsedSurvey: SurveyDocument) => {
+export const addTemplatesToSurvey = (parsedSurvey: SurveyEdition) => {
   let i = 0;
   // @ts-ignore
   parsedSurvey.outline = parsedSurvey.outline.map((section) => {

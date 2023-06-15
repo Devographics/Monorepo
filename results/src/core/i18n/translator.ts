@@ -1,37 +1,11 @@
-import template from 'lodash/template'
-import clone from 'lodash/clone'
-
-interface Translation {
-    key: string
-    t: string
-}
-
-export interface Locale {
-    id?: string
-    strings?: Translation[]
-}
-
-interface InterpolationValues {
-    values?: { [key: string]: string }
-}
-
-export interface LegacyTranslator {
-    (key: string, interpolation?: InterpolationValues, fallback?: string): string
-}
-
-export interface StringTranslator {
-    (key: string, interpolation?: InterpolationValues, fallback?: string): StringTranslatorResult
-}
-
-interface StringTranslatorResult {
-    locale: Omit<Locale, 'strings'>
-    missing?: boolean
-    key?: string
-    t?: string
-    tHtml?: string
-    fallback?: string
-}
-
+import template from 'lodash/template.js'
+import {
+    Locale,
+    Translation,
+    LegacyTranslator,
+    StringTranslator,
+    StringTranslatorResult
+} from 'core/types'
 /*
 
 Returns the translation string object
@@ -45,7 +19,17 @@ const findString = (key: string, strings: Translation[]) => {
         .find(t => t.key === key)
 }
 
-export const applyTemplate = (t: string, values: { [key: string]: string }, locale: Locale, key: string) => {
+export const applyTemplate = ({
+    t,
+    values,
+    locale,
+    key
+}: {
+    t?: string
+    values: { [key: string]: string | number }
+    locale: Locale
+    key: string
+}) => {
     try {
         return template(t, { interpolate: /{([\s\S]+?)}/g })(values)
     } catch (error) {
@@ -72,8 +56,13 @@ export const getStringTranslator =
         }
 
         if (result.t) {
-            result.t = values ? applyTemplate(result.t, values, locale, key) : result.t
-            result.tHtml = values ? applyTemplate(result.tHtml, values, locale, key) : result.tHtml
+            result.t = values ? applyTemplate({ t: result.t, values, locale, key }) : result.t
+            result.tClean = values
+                ? applyTemplate({ t: result.tClean, values, locale, key })
+                : result.t
+            result.tHtml = values
+                ? applyTemplate({ t: result.tHtml, values, locale, key })
+                : result.tHtml
         }
 
         return result

@@ -1,23 +1,22 @@
-import { BlockUnits } from 'core/types'
-
+import { BucketUnits, RatiosUnits, OtherPercentages } from '@devographics/types'
 export const percentageUnits = [
-    'percentage',
-    'satisfaction_percentage',
-    'interest_percentage',
-    'usage_percentage',
-    'awareness_percentage',
-    'usage_ratio',
-    'would_not_use_percentage',
-    'not_interested_percentage',
-    'would_use_percentage',
-    'interested_percentage',
-    'percentage_question',
-    'percentage_facet',
-    'percentage_survey'
+    RatiosUnits.SATISFACTION,
+    RatiosUnits.INTEREST,
+    RatiosUnits.USAGE,
+    RatiosUnits.AWARENESS,
+    RatiosUnits.USAGE,
+    OtherPercentages.WOULD_NOT_USE_PERCENTAGE,
+    OtherPercentages.NOT_INTERESTED_PERCENTAG,
+    OtherPercentages.WOULD_USE_PERCENTAGE,
+    OtherPercentages.INTERESTED_PERCENTAGE,
+    BucketUnits.PERCENTAGE_QUESTION,
+    BucketUnits.PERCENTAGE_SURVEY,
+    BucketUnits.PERCENTAGE_BUCKET
 ]
 
-export const isPercentage = (units: string) => percentageUnits.includes(units)
+export const isPercentage = (units: BucketUnits | RatiosUnits | OtherPercentages) =>
+    percentageUnits.includes(units)
 
 export type MetricId = 'satisfaction' | 'interest' | 'usage' | 'awareness'
 
-export const ALL_METRICS: MetricId[] = ['satisfaction', 'interest', 'usage', 'awareness']
+export const ALL_METRICS = Object.values(RatiosUnits)

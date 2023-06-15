@@ -68,10 +68,20 @@ export const getValidLocale = async (localeId: string, context: RequestContext) 
 ///////////////////////////////////// Load From Cache /////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
 
-export const getLocaleRawContextCacheKey = (localeId: string, context: string) =>
-    `locale_${localeId}_${context}_raw`
-export const getLocaleParsedContextCacheKey = (localeId: string, context: string) =>
-    `locale_${localeId}_${context}_parsed`
+export const getLocaleRawContextCacheKey = ({
+    localeId,
+    context
+}: {
+    localeId: string
+    context: string
+}) => `locale_${localeId}_${context}_raw`
+export const getLocaleParsedContextCacheKey = ({
+    localeId,
+    context
+}: {
+    localeId: string
+    context: string
+}) => `locale_${localeId}_${context}_parsed`
 // export const getLocaleMetaDataCacheKey = (localeId: string) => `locale_${localeId}_metadata`
 export const getLocaleUntranslatedKeysCacheKey = (localeId: string) =>
     `locale_${localeId}_untranslated`
@@ -111,7 +121,10 @@ export const getLocaleStrings = async (
 ) => {
     const stringFiles = []
     for (const c of contexts) {
-        const stringFile = await getCache(getLocaleParsedContextCacheKey(localeId, c), context)
+        const stringFile = await getCache(
+            getLocaleParsedContextCacheKey({ localeId, context: c }),
+            context
+        )
         if (stringFile) {
             // not all contexts exist for all languages
             stringFiles.push(stringFile)
@@ -189,8 +202,10 @@ export const getLocales = async (options: {
 }) => {
     const { localeIds, context, contexts } = options
     const allLocales = await getLocalesMetadata(context)
-    const allLocalesWithContexts = allLocales.map((l: Locale) => ({...l, contexts}))
-    return localeIds ? allLocalesWithContexts.filter((l: Locale) => localeIds.includes(l.id)) : allLocalesWithContexts
+    const allLocalesWithContexts = allLocales.map((l: Locale) => ({ ...l, contexts }))
+    return localeIds
+        ? allLocalesWithContexts.filter((l: Locale) => localeIds.includes(l.id))
+        : allLocalesWithContexts
 }
 
 /*

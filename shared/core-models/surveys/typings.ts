@@ -1,3 +1,7 @@
+/**
+ * @see api2/src/types/surveys.ts for most up to date types used in API v2
+ * Here are the shared types currently used in the surveyform/surveyadmin
+ */
 export type FieldTemplateId =
   | "email"
   | "text"
@@ -9,21 +13,21 @@ export type FieldTemplateId =
   | "single"
   | "multiple"
   | "opinion"
-  | "proficiency"
+  // | "proficiency"
   | "country"
   | "bracket"
   | "feature"
-  | "pattern"
+  // | "pattern"
   | "tool"
   /** An autocomplete for the Project collection */
   | "project"
   /** An autocomplete for the People collection */
-  | "people"
+  // | "people"
   | "email2"
   | "receive_notifications"
   | "race_ethnicity"
-  | "slider"
-  | "top_n";
+  | "slider";
+// | "top_n";
 
 // TODO: what is a section template? The default for all questions?
 export type SectionTemplateId = FieldTemplateId | string;
@@ -60,7 +64,8 @@ export interface ParsedQuestion extends Pick<Field, "template"> {
     fragmentName?: string;
     valuePropertyName?: string;
     multi?: boolean;
-    queryResolverName?: string;
+    autocompleteQueryResolverName: string;
+    labelsQueryResolverName: string;
   };
   dynamicQuery?: () => any;
   /**
@@ -70,20 +75,21 @@ export interface ParsedQuestion extends Pick<Field, "template"> {
   input?: any;
   intlId?: string;
   options?:
-    | ((
-        props: any
-      ) => Array<{ value?: string | number; intlId?: string; label?: string }>)
-    | Array<{ value?: string | number; intlId?: string; label?: string }>;
+  | ((
+    props: any
+  ) => Array<{ value?: string | number; intlId?: string; label?: string }>)
+  | Array<{ value?: string | number; intlId?: string; label?: string }>;
   query?: () => any;
   queryWaitsForValue?: boolean;
   sectionSlug?: string;
   showOther?: boolean;
   slug?: string;
   suffix?: string;
+  matchTags?: Array<string>;
+  hasComment?: boolean;
 }
 
-// A question can nest fields
-export type SurveyQuestion = Field | Array<Field>;
+export type SurveyQuestion = Field;
 export interface SurveySection {
   intlId?: string;
   id?: string;
@@ -96,32 +102,115 @@ export interface EOConfig {
   listId: string;
 }
 
-export interface SurveyType {
-  createdAt?: Date;
-  updatedAt?: Date;
+/**
+ * Values that do not depend on the survey year
+ * Used for magic link emails
+ */
+export interface SurveySharedContext {
   /**
-   * MUST NOT INCLUDE "-" use underscore instead "_"
-   * Because dashes are not allowed as i18n token
+   * In newer surveys, replace slugs/prettySlug/context
+   * = surveyId when merged
+   * @example state_of_js
    */
-  slug?: string;
+  id: string;
+  /**
+   * In previous survey: was equal to the survey id eg "js2022"
+   *
+   * Now: equal to the survey context with "_" eg "state_of_js"
+   *
+   * => use as survey context coupled with year
+   * => DO NOT use as unique survey id
+   */
+  slug: string;
   /**
    * Slug with "dashes", used as the survey relative URL
+   * = surveyId where _ are replaced by -
+   * @example state-of-js
    */
   prettySlug?: string;
+  /**
+   * Name without the year
+   */
   name?: string;
+  domain?: string;
+}
+
+/**
+ * Fields that are specific to one edition (=1 year) of a survey
+ */
+interface SurveyEditionSpecifics {
+  /**
+   * In newer surveys, id = id of the unique edition
+   * = editionId when merged
+   *
+   * @example js2022
+   * /!\ when merging survey context and edition, we might want to
+   * be careful to keep both id, ideally by isolating edition in its field:
+   * {context: SurveyContext, edition: SurveyEdition }
+   */
+  id: string;
+  createdAt?: string;
+  updatedAt?: string;
+  /**
+   * @deprecated
+   * Slug with underscores
+   * state_of_js
+   * Used as pathname on github
+   * Does NOT include the year
+   */
+  context?: string;
+  /**
+   * @deprecated use id
+   * Same as slug
+   * @example js2022
+   */
+  surveyId: string;
   year?: number;
   status?: SurveyStatus;
   outline: Array<SurveySection>;
-  context?: any;
-  imageUrl?: string;
+  /**
+   * Home page URL. May be big!
+   *
+   * /!\ in older configs, was relative to "/surveys"!
+   * /!\ In newer configs, is absolute!
+   *
+   * If you need to read this value,
+   * use the "getSurveyImageUrl" helper
+   * that handles the legacy behaviour properly
+   */
+  imageUrl: string;
+  /**
+   * Relative or absolute URL
+   */
+  faviconUrl?: string;
+  /**
+   * Absolute URL to a social image
+   *
+   * Should be smaller to consume less bandwidth
+   *
+   * As a best practice, should be hosted outside of the app,
+   * as it consumes a lot of bandwith
+   */
+  socialImageUrl?: string;
+
   credits?: any;
-  domain?: string;
   tags?: string[];
   emailOctopus: EOConfig;
+  colors: {
+    primary: string;
+    secondary: string;
+    text: string;
+    background: string;
+    backgroundSecondary: string;
+  };
   // style
+  /** @deprecated old syntax*/
   bgColor: string;
+  /** @deprecated old syntax*/
   textColor: string;
+  /** @deprecated old syntax*/
   linkColor: string;
+  /** @deprecated old syntax*/
   hoverColor: string;
   //
   shareUrl: string;
@@ -130,23 +219,58 @@ export interface SurveyType {
 }
 
 /**
- * Needed when getting a survey from SSR
+ * A survey edition
+ * With common info, edition specific info, and questions
  */
-export type SerializedSurveyDocument = Omit<
-  SurveyType,
+export type SurveyEdition = SurveySharedContext &
+  SurveyEditionSpecifics & {
+    // NOTE: this id overrides the old deprecated edition specific "surveyId" (js2019)
+    surveyId: SurveySharedContext["id"];
+    editionId: SurveyEdition["id"];
+  };
+
+export type SurveyEditionDescription = Pick<
+  SurveyEdition,
+  | "id" // = editionId
+  | "surveyId"
+  | "editionId"
+  | "name"
+  | "status"
+  | "prettySlug"
+  | "slug"
+  | "year"
+  | "imageUrl"
+  // in older surveys, "context" is state_of_js and slug is "js2022"
+  // while in newer surveys slug is "state_of_js"
+  | "context"
+>;
+
+/**
+ * A survey with all it's editions
+ * Structure used in "/api"
+ * NOTE: this structure is big and only meant for intermediate usage
+ * eg loading all surveys before displaying a specific one
+ *
+ * When we want to list surveys => only need the descriptions of each
+ * Or to display a specific surveys => only need one edition (=1 year)
+ */
+export interface SurveyEditions extends SurveySharedContext {
+  editions: Array<SurveyEditionSpecifics>;
+}
+
+export type HydratedSurveyEdition = Omit<
+  SurveyEdition,
   "createdAt" | "updatedAt"
 > & {
-  createdAt?: string;
-  updatedAt?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 };
 
 /**
- * Survey as stored in the database
+ * 1 preview
+ * 2 open
+ * 3 closed
+ * 4 hidden
  */
-export interface SurveyDocument extends SurveyType {
-  createdAt?: any;
-  updatedAt?: any;
-}
-
 export type SurveyStatus = 1 | 2 | 3 | 4;
 export type SurveyStatusLabel = "preview" | "open" | "closed" | "hidden";

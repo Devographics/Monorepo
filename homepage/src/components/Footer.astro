@@ -33,7 +33,7 @@ const getLinks = (survey) => [
     <LanguageSwitcher canonicalUrl={Astro.url} locale={locale} locales={locales} survey={survey} />
     {getLinks(survey).map(({ link, k }) => (
     <span>
-        <T locale={locale} k={k} values={{ link }} html={true} />
+        <T locale={locale} k={k} values={{ link }} html={true} md={true} />
     </span>
     ))}
 </footer>

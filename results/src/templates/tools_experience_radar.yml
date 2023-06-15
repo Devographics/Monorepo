@@ -1,42 +1,7 @@
-id: "${parentId}_experience_radar"
+id: '${sectionId}_experience_radar'
 blockType: ToolsExperienceRadarBlock
 titleId: blocks.tools_experience_radar
 descriptionId: blocks.tools_experience_radar.description
 noteId: blocks.tools_experience_radar.note
-dataPath: "dataAPI.survey.${parentId}_radar"
+dataPath: 'dataAPI.survey.${sectionId}_radar'
 hasSponsor: true
-query: >
-    dataAPI {
-        survey(survey: ${surveyType}) {
-            ${parentId}_radar: tools_rankings(ids: [${toolsCategories[parentId]}]) {
-                ids
-                years
-                experience {
-                    id
-                    entity {
-                        name
-                    }
-                    usage {
-                        year
-                        rank
-                        percentage_question
-                    }
-                    awareness {
-                        year
-                        rank
-                        percentage_question
-                    }
-                    interest {
-                        year
-                        rank
-                        percentage_question
-                    }
-                    satisfaction {
-                        year
-                        rank
-                        percentage_question
-                    }
-                }
-            }
-        }
-    }

@@ -23,6 +23,9 @@ import {
     allContexts
 } from './locales'
 import path from 'path'
+import sanitizeHtml from 'sanitize-html'
+import { decode } from 'html-entities'
+import { logToFile } from '@devographics/helpers'
 
 import { appSettings } from './settings'
 
@@ -48,9 +51,10 @@ export const loadAllFromGitHub = async (
     for (const localeMetaData of localesToLoad) {
         const localeRawData: LocaleRawData = { id: localeMetaData.id, stringFiles: [] }
         i++
-        console.log(`-> loading repo ${localeMetaData.repo} (${i}/${localesToLoad.length})`)
+        const owner = 'devographics'
+        const repo = `locale-${localeMetaData.id}`
+        console.log(`-> loading repo ${owner}/${repo} (${i}/${localesToLoad.length})`)
 
-        const [owner, repo] = localeMetaData.repo.split('/')
         const options = {
             owner,
             repo,
@@ -82,6 +86,7 @@ export const loadAllFromGitHub = async (
                 }
             }
         }
+        logToFile(`github_${localeMetaData.id}.yml`, localeRawData, { mode: 'overwrite' })
         locales.push(localeRawData)
     }
     return locales
@@ -95,13 +100,13 @@ export const loadAllLocally = async (localesToLoad: LocaleMetaData[]): Promise<L
     for (const localeMetaData of localesToLoad) {
         const localeRawData: LocaleRawData = { id: localeMetaData.id, stringFiles: [] }
         i++
-        console.log(
-            `-> loading directory ${localeMetaData.repo} locally (${i}/${localesToLoad.length})`
-        )
+        const localeDirName = `locale-${localeMetaData.id}`
+        console.log(`-> loading directory ${localeDirName} locally (${i}/${localesToLoad.length})`)
 
-        const [owner, repo] = localeMetaData.repo.split('/')
-
-        const localeDirPath = path.resolve(`../../stateof-locales/${repo}`)
+        if (!process.env.LOCALES_DIR) {
+            throw new Error('LOCALES_DIR not set')
+        }
+        const localeDirPath = path.resolve(`../../${process.env.LOCALES_DIR}/${localeDirName}`)
         const files = await readdir(localeDirPath)
         const yamlFiles = files.filter((f: String) => f.includes('.yml'))
 
@@ -121,6 +126,7 @@ export const loadAllLocally = async (localesToLoad: LocaleMetaData[]): Promise<L
                 })
             }
         }
+        logToFile(`filesystem_${localeMetaData.id}.yml`, localeRawData, { mode: 'overwrite' })
         locales.push(localeRawData)
     }
     return locales
@@ -132,9 +138,7 @@ Load the YAML file containing metadata for all locales
 
 */
 export const getLocalesYAML = () => {
-    // only keep locales which have a repo defined
-    const localesWithRepos = localesYAML.filter((locale: Locale) => !!locale.repo)
-    return localesWithRepos
+    return localesYAML
 }
 
 /*
@@ -156,7 +160,11 @@ export const loadLocales = async (localeIds?: string[]): Promise<LocaleRawData[]
     const localesToLoad = localeIds
         ? allLocales.filter((locale: LocaleMetaData) => localeIds.includes(locale.id))
         : allLocales
-    console.log(`// loading locales… (${localesToLoad.map((l: LocaleMetaData) => l.id).join(',')})`)
+    console.log(
+        `// loading ${localesToLoad.length} locales… (${localesToLoad
+            .map((l: LocaleMetaData) => l.id)
+            .join(',')})`
+    )
     const locales =
         appSettings.loadLocalesMode === 'local'
             ? await loadAllLocally(localesToLoad)
@@ -218,13 +226,24 @@ export const parseMarkdown = (stringFile: StringFile) => {
         // if string contains line breaks parse it as paragraph, else parse it inline
         const containsLineBreaks = (str.match(/\n/g) || []).length > 0
         let tHtml = containsLineBreaks ? marked.parse(str) : marked.parseInline(str)
-        // we don't actually want to replace quotes
+        // we don't actually want to replace quotes or brackets
         tHtml = tHtml.replaceAll('&#39;', `'`)
+        tHtml = tHtml.replaceAll('%7B', `{`)
+        tHtml = tHtml.replaceAll('%7D', `}`)
         const containsTagRegex = new RegExp(/(<([^>]+)>)/i)
         // if markdown-parsed version of the string is different from original,
         // or original contains one or more HTML tags, add it as HTML
         if (tHtml !== s.t || containsTagRegex.test(s.t)) {
-            s.tHtml = tHtml
+            s.tHtml = sanitizeHtml(tHtml, {
+                allowedClasses: {
+                    '*': ['*']
+                }
+            })
+            s.tClean = decode(
+                sanitizeHtml(tHtml, {
+                    allowedTags: []
+                })
+            )
         }
         return s
     })
@@ -271,21 +290,30 @@ export const addFallbacks = (
 ////////////////////////////////////////// Metadata ///////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
 
-export const computeMetaData = (locale: LocaleRawData, allStrings: TranslationStringObject[], untranslatedKeys: string[]) => {
+export const computeMetaData = (
+    locale: LocaleRawData,
+    allStrings: TranslationStringObject[],
+    untranslatedKeys: string[]
+) => {
     const isEn = locale.id === 'en-US'
     const totalCount = allStrings.length
     const translatedCount = totalCount - untranslatedKeys.length
     const completion = isEn ? 100 : Math.round((translatedCount * 100) / totalCount)
+    const repo = `devographics/locale-${locale.id}`
     const dynamicData = {
         totalCount,
         translatedCount,
         completion,
+        repo
     }
     const yamlData = getLocaleYAML(locale.id)
     return { ...dynamicData, ...yamlData }
 }
 
-export const computeUntranslatedKeys = (locale: LocaleRawData, allStrings: TranslationStringObject[]) => {
+export const computeUntranslatedKeys = (
+    locale: LocaleRawData,
+    allStrings: TranslationStringObject[]
+) => {
     const isEn = locale.id === 'en-US'
     const untranslatedKeys = isEn
         ? []
@@ -305,7 +333,7 @@ const STORE_RAW_DATA = false
 Init locales by parsing them and then caching them
 
 **/
-export const initLocales = async (context: RequestContext) => {
+export const initLocales = async ({ context }: { context: RequestContext }) => {
     const startedAt = new Date()
     const allLocalesMetadata = []
     console.log(`// Initializing locales cache (Redis)…`)
@@ -338,21 +366,6 @@ export const initLocales = async (context: RequestContext) => {
                 (s: StringFile) => s.context === enStringFile.context
             )
 
-            if (STORE_RAW_DATA && localeStringFile) {
-                // store raw data
-                setCache(
-                    getLocaleRawContextCacheKey(locale.id, localeStringFile.context),
-                    localeStringFile,
-                    context
-                )
-                console.log(
-                    `-> Done caching raw locale (${getLocaleRawContextCacheKey(
-                        locale.id,
-                        localeStringFile.context
-                    )})`
-                )
-            }
-
             let stringFileWithFallbacks
             if (!localeStringFile) {
                 // this context does not exist in the current locale
@@ -368,22 +381,30 @@ export const initLocales = async (context: RequestContext) => {
                     }))
                 }
             } else {
+                const rawCacheKey = getLocaleRawContextCacheKey({
+                    localeId: locale.id,
+                    context: localeStringFile.context
+                })
+
+                if (STORE_RAW_DATA && localeStringFile) {
+                    // store raw data
+                    setCache(rawCacheKey, localeStringFile, context)
+                    console.log(`-> Done caching raw locale (${rawCacheKey})`)
+                }
+
                 // this context does exist, go through parsing process
                 const stringFileWithAliases = resolveAliases(localeStringFile, locale)
                 const stringFileWithMarkdown = parseMarkdown(stringFileWithAliases)
                 stringFileWithFallbacks = addFallbacks(stringFileWithMarkdown, locale, enStringFile)
             }
             parsedStringFiles.push(stringFileWithFallbacks)
-            setCache(
-                getLocaleParsedContextCacheKey(locale.id, enStringFile.context),
-                stringFileWithFallbacks,
-                context
-            )
+            const parsedCacheKey = getLocaleParsedContextCacheKey({
+                localeId: locale.id,
+                context: enStringFile.context
+            })
+            setCache(parsedCacheKey, stringFileWithFallbacks, context)
             console.log(
-                `-> Done caching locale file ${getLocaleParsedContextCacheKey(
-                    locale.id,
-                    enStringFile.context
-                )} (${j}/${enParsedStringFiles.length})`
+                `-> Done caching locale file ${parsedCacheKey} (${j}/${enParsedStringFiles.length})`
             )
         }
 
@@ -392,18 +413,15 @@ export const initLocales = async (context: RequestContext) => {
         const untranslatedKeys = computeUntranslatedKeys(locale, allStrings)
         allLocalesMetadata.push(computeMetaData(locale, allStrings, untranslatedKeys))
         // store untranslated keys
-        setCache(
-            getLocaleUntranslatedKeysCacheKey(locale.id),
-            untranslatedKeys,
-            context
+        setCache(getLocaleUntranslatedKeysCacheKey(locale.id), untranslatedKeys, context)
+        console.log(
+            `-> Done caching untranslated keys ${getLocaleUntranslatedKeysCacheKey(locale.id)}`
         )
-        console.log(`-> Done caching untranslated keys ${getLocaleUntranslatedKeysCacheKey(locale.id)}`)
     }
 
     // store metadata for all locales
     setCache(getAllLocalesMetadataCacheKey(), allLocalesMetadata, context)
     console.log(`-> Done caching list of all locales (${getAllLocalesMetadataCacheKey()})`)
-
 
     const finishedAt = new Date()
     console.log(

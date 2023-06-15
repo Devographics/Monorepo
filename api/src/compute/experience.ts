@@ -6,11 +6,12 @@ import { Db } from 'mongodb'
 import config from '../config'
 import { ratioToPercentage, appendCompletionToYearlyResults } from './common'
 import { getEntity } from '../entities'
-import keys from '../data/keys.yml'
+import { getChartKeys } from '../helpers'
 import { YearCompletion, SurveyConfig, RequestContext } from '../types'
 import { Filters, generateFiltersQuery } from '../filters'
 import { computeCompletionByYear } from './completion'
 import { computeYearlyTransitions, YearlyTransitionsResult } from './yearly_transitions'
+import { inspect } from 'util'
 
 const EXPERIENCE_RANKING = {
     never_heard: 1,
@@ -82,40 +83,58 @@ export async function computeExperienceOverYears({
     tool: string
     filters?: Filters
 }) {
-    const collection = context.db.collection(config.mongo.normalized_collection)
+    const { db, isDebug } = context
+    const collection = db.collection(config.mongo.normalized_collection)
 
     const path = `tools.${tool}.experience`
 
     const match = {
         survey: survey.survey,
         [path]: { $nin: [null, ''] },
-        ...generateFiltersQuery(filters)
+        ...generateFiltersQuery({ filters })
     }
 
-    const results = await collection
-        .aggregate([
-            {
-                $match: match
-            },
-            {
-                $group: {
-                    _id: {
-                        experience: `$${path}`,
-                        year: '$year'
-                    },
-                    total: { $sum: 1 }
-                }
-            },
-            {
-                $project: {
-                    _id: 0,
-                    experience: '$_id.experience',
-                    year: '$_id.year',
-                    total: 1
-                }
+    const pipeline = [
+        {
+            $match: match
+        },
+        {
+            $group: {
+                _id: {
+                    experience: `$${path}`,
+                    year: '$year'
+                },
+                total: { $sum: 1 }
             }
-        ])
-        .toArray()
+        },
+        {
+            $project: {
+                _id: 0,
+                experience: '$_id.experience',
+                year: '$_id.year',
+                total: 1
+            }
+        }
+    ]
+
+    const results = await collection.aggregate(pipeline).toArray()
+
+    if (isDebug) {
+        console.log('// tool')
+        console.log(tool)
+        console.log('// filters')
+        console.log(filters)
+        console.log(
+            inspect(
+                {
+                    match,
+                    pipeline,
+                    results
+                },
+                { colors: true, depth: null }
+            )
+        )
+    }
 
     const completionByYear = await computeCompletionByYear(context, match)
 
@@ -305,10 +324,15 @@ export async function computeToolsExperienceRanking({
         })
     }
 
-
     return byTool
 }
 
+/*
+
+TODO: this seems inefficient? find a way to reuse computeToolsExperienceRanking
+result instead?
+
+*/
 export async function computeToolsExperienceRankingYears({
     context,
     survey,
@@ -357,6 +381,6 @@ export async function computeToolExperienceTransitions<ToolID extends string = s
 
     return {
         ...yearlyTransitions,
-        keys: keys.tool
+        keys: getChartKeys('tool')
     }
 }

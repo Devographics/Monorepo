@@ -16,7 +16,7 @@ export const OverlayInterObs = ({ id, triggerId, setTriggerId, isFirst, isLast, 
     const { ref, inView, entry } = useInView({
         /* Optional options */
         rootMargin: `-${bufferPercent}% 0% -${bufferPercent}% 0%`,
-        threshold: 0,
+        threshold: 0
     })
 
     // we need extra code to trigger setTriggerId() at the right times

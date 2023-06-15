@@ -1,13 +1,25 @@
-// TODO: provide this component in Vulcan Next as well
-import { useState, ReactNode, FormEventHandler } from "react";
-import { useVulcanComponents } from "@vulcanjs/react-ui";
-import { useIntlContext } from "@vulcanjs/react-i18n";
-import { sendMagicLoginEmail } from "../lib/sendMagicLoginEmail";
-import { useUser } from "~/account/user/hooks";
-import { useRouter } from "next/router";
-import { useLocaleContext } from "~/i18n/components/LocaleContext";
+"use client";
+import { useState, ReactNode } from "react";
+import { useIntlContext } from "@devographics/react-i18n";
+import { sendMagicLoginEmail } from "~/account/magicLogin/client-actions/sendMagicLoginEmail";
+import { useCurrentUser } from "~/lib/users/hooks";
+import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { FormComponentEmail } from "./FormComponentEmail";
+import { Button } from "~/components/ui/Button";
+import { Loading } from "~/components/ui/Loading";
+import { LoadingButton } from "~/components/ui/LoadingButton";
 
+export interface StandaloneMagicLoginFormProps {
+  /** Button label */
+  label?: string | ReactNode;
+  /**
+   * Optional surveyId and editionId to login to a specific survey
+   */
+  surveyId?: string;
+  editionId?: string;
+  redirectTo?: string;
+  loginOptions?: { data?: any; createResponse?: boolean };
+}
 /**
  * With passwordless approach, there is no signup step,
  * and you provide only an email
@@ -16,55 +28,43 @@ import { FormComponentEmail } from "./FormComponentEmail";
  */
 export const StandaloneMagicLoginForm = ({
   label,
-}: {
-  label?: string | ReactNode;
-}) => {
-  const router = useRouter();
+  surveyId,
+  editionId,
+  redirectTo,
+  loginOptions,
+}: StandaloneMagicLoginFormProps) => {
   const intl = useIntlContext();
   const placeholder = intl.formatMessage({ id: `accounts.your_email` });
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
+  const [loading, setLoading] = useState(false);
   const resetMessages = () => {
     if (errorMsg) setErrorMsg("");
     if (successMsg) setErrorMsg("");
   };
-  const { user } = useUser();
-  const { getLocale } = useLocaleContext();
-
-  const locale = getLocale();
-  const { query } = router;
-
-  if (process.env.NEXT_PUBLIC_IS_USING_DEMO_DATABASE)
-    return (
-      <p>
-        CAN'T LOGIN you are using Vulcan Next demo database, please set
-        MONGO_URI env variable to your own database.
-      </p>
-    );
+  const { currentUser } = useCurrentUser();
+  const { locale } = useLocaleContext();
 
   async function handleSubmit(e) {
     e.preventDefault();
+    setLoading(true);
     resetMessages();
-
     const email = e?.currentTarget?.email?.value;
     if (!email) {
       setErrorMsg(intl.formatMessage({ id: `accounts.magic_link.no_email` }));
       return;
     }
-
     localStorage && localStorage.setItem("email", email);
-
     const body = {
       destination: email,
-      // no need to wait for current user loading, because it's normally always faster than typing one's email and submitting
-      anonymousId: user?._id,
-      prettySlug: query.slug,
-      year: query.year,
-      locale,
+      anonymousId: currentUser?._id,
+      redirectTo,
+      surveyId,
+      editionId,
+      locale: locale.id,
     };
-
     try {
-      const res = await sendMagicLoginEmail(body);
+      const res = await sendMagicLoginEmail({ body });
       if (res.status === 200) {
         setSuccessMsg(
           intl.formatMessage({ id: `accounts.magic_link.success` }) ||
@@ -76,104 +76,20 @@ export const StandaloneMagicLoginForm = ({
     } catch (error) {
       console.error("An unexpected error occurred:", error);
       setErrorMsg(error.message);
+    } finally {
+      setLoading(false);
     }
   }
   return (
-    <>
-      <div className="login">
-        <MagicLinkLoginForm
-          errorMessage={errorMsg}
-          successMessage={successMsg}
-          onSubmit={handleSubmit}
-          label={label}
-          placeholder={placeholder}
-        />
-      </div>
-    </>
-  );
-};
-
-const MagicLinkLoginForm = ({
-  errorMessage,
-  successMessage,
-  onSubmit,
-  label = "Send me a magic link",
-  placeholder,
-}: {
-  /** Path to redirect to on successful implementation */
-  errorMessage?: string;
-  successMessage?: string;
-  onSubmit?: FormEventHandler<HTMLFormElement>;
-  label?: string | ReactNode;
-  placeholder?: string;
-}) => {
-  const Components = useVulcanComponents();
-  
-  return (
-    <form onSubmit={onSubmit} className="magic-link-login-form">
-      {/* <span>Your Email</span> */}
-      <FormComponentEmail
-        inputProperties={{
-          placeholder,
-          name: "email",
-          required: true,
-          autoCorrect: "off",
-          autoCapitalize: "none",
-        }}
-        label={placeholder}
-        name="email"
-      />
+    <form onSubmit={handleSubmit} className="magic-link-login-form">
+      <FormComponentEmail placeholder={placeholder} label={placeholder} />
       <div className="submit">
-        <Components.Button type="submit">{label}</Components.Button>
+        <LoadingButton type="submit" loading={loading}>
+          {label}
+        </LoadingButton>
       </div>
-
-      {errorMessage && <div className="error magic-error">{errorMessage}</div>}
-      {successMessage && (
-        <div className="success magic-success">{successMessage}</div>
-      )}
-
-      <style jsx>{`
-        form,
-        label {
-          display: flex;
-          flex-flow: column;
-        }
-        label > span {
-          font-weight: 600;
-        }
-        /* input {
-          padding: 8px;
-          margin: 0.3rem 0 1rem;
-          border: 1px solid #ccc;
-          border-radius: 4px;
-        } */
-        .submit {
-          display: flex;
-          justify-content: flex-end;
-          align-items: center;
-          justify-content: space-between;
-        }
-        .submit > a {
-          text-decoration: none;
-        }
-        .submit > button {
-          padding: 0.5rem 1rem;
-          cursor: pointer;
-          background: #fff;
-          border: 1px solid #ccc;
-          border-radius: 4px;
-        }
-        .submit > button:hover {
-          border-color: #888;
-        }
-        .forgottenPassword {
-          margin: 0 0rem 0.2rem;
-        }
-        .error {
-          color: red;
-          margin: 1rem 0 0;
-        }
-      `}</style>
+      {errorMsg && <div className="error magic-error">{errorMsg}</div>}
+      {successMsg && <div className="success magic-success">{successMsg}</div>}
     </form>
   );
 };

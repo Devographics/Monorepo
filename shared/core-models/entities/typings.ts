@@ -3,32 +3,51 @@
  *
  */
 
-export interface Entity {
-  id: string
-  name: string
-  homepage?: Resource
-  category?: string
-  description?: string
-  tags?: string[]
-  patterns?: string[]
-  normalizationOnly?: boolean
+export interface EntityResolvedFields {
+  homepage?: Resource;
+  github?: any;
+  npm?: any;
+  caniuse?: any;
+  mdn?: any;
+  mastodon?: any;
+  twitter?: any;
+  twitch?: any;
+  youtube?: any;
+  company?: Entity;
+  blog?: Resource;
+  rss?: Resource;
+}
 
-  github?: any
-  npm?: any
-  caniuse?: any
-  mdn?: any
+export interface Entity extends EntityResolvedFields {
+  id: string;
+  belongsTo?: string;
+  name: string;
+  nameClean?: string;
+  nameHtml?: string;
+  category?: string;
+  description?: string;
+  descriptionClean?: string;
+  descriptionHtml?: string;
+  tags?: string[];
+  patterns?: string[];
+  normalizationOnly?: boolean;
 
-  twitterName: string
-  twitter: any
+  homepageUrl?: string;
+  blogUrl?: string;
+  rssUrl?: string;
+  mastodonName?: string;
+  twitterName?: string;
+  twitchName?: string;
+  youtubeName?: string;
+  youtubeUrl?: string;
+  companyName?: string;
 
-  companyName?: string
-  company?: Entity
-
-  example?: Example
+  example?: Example;
+  apiOnly?: boolean;
 }
 
 export interface Resource {
-  name: string;
+  name?: string;
   url: string;
 }
 

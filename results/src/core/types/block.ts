@@ -1,63 +1,72 @@
 import React, { FC } from 'react'
+import { PageContextValue } from '@types/context'
+import { BucketUnits, ResponsesParameters } from '@devographics/types'
 
-export type BlockUnits = 'count' | 'percentage_survey' | 'percentage_question' | 'percentage_facet'
-export type BlockRatioUnits = 'satisfaction_percentage' | 'interest_percentage' | 'awareness_percentage' | 'usage_percentage'
+export type BlockUnits =
+    | 'count'
+    | 'percentageSurvey'
+    | 'percentageQuestion'
+    | 'percentageFacet'
+    | 'percentageBucket'
+    | 'average'
+export type BlockRatioUnits =
+    | 'satisfaction_percentage'
+    | 'interest_percentage'
+    | 'awareness_percentage'
+    | 'usage_percentage'
 export type BlockSetUnits = React.Dispatch<React.SetStateAction<string>>
 export type BlockMode = 'absolute' | 'relative'
 
 export interface BlockComponentProps {
     block: BlockDefinition
-    keys?: string[]
-    // 'data' property is defined by each specific block
+    context: PageContextValue
+}
+
+export interface BlockQueryOptions {
+    addBucketsEntities?: boolean
+    addQuestionEntity?: boolean
+    addQuestionComments?: boolean
 }
 
 export interface BlockDefinition {
     id: string
+    sectionId: string
     template?: string
     blockType?: string
     tabId?: string
     titleId?: string
-    blockName?: string
+    descriptionId?: string
+    noteId?: string
 
-    // config
-    mode?: BlockMode
-    blockNamespace?: string
-    chartNamespace?: string
-    colorVariant?: string
-    overrides?: object
+    defaultUnits?: BucketUnits
 
     // data
     query?: string
-    variables?: object
-    dataPath?: string
-    keysPath?: string
-    entityPath?: string
-    defaultUnits?: BlockUnits
+    variables?: any
+    parameters: ResponsesParameters
+    filters?: FilterType[]
+    queryOptions?: BlockQueryOptions
+
+    // config
+    mode?: BlockMode
+    // will default to the id of the chart
+    i18nNamespace?: string
+    colorVariant?: string
+    overrides?: object
 
     // booleans
     legendPosition?: 'bottom' | 'top'
     translateData?: boolean
     hasSponsor?: boolean
+    hasComments?: boolean
 }
 
-export interface BlockVariantProps {
-    id: string
-    className: string
-    units: BlockUnits
-    setUnits: BlockSetUnits
-    unitsOptions: BlockUnits[] | string[]
-    block: BlockDefinition
-    // error,
-    // data,
-    // legendProps,
-    // titleProps,
-    // headings,
-    // tables,
-}
+type FilterType = 'filters' | 'facets'
 
 export interface BlockLegend {
     id: string
     label: string
     shortLabel?: string
     color?: string
+    gradientColors: string[]
 }

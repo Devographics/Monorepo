@@ -8,9 +8,9 @@
   position: relative;
   text-indent: -9999em;
   animation: load5 1.1s infinite ease;
-  transform: translateX(25px) translateZ(0);
+  //transform: translateX(0px) translateZ(0);
   color:rgba(255, 255, 255, 0);
-  display: block;
+  display: inline-block;
   .loading-button & {
     transform: translateX(0px) translateZ(0);
   }

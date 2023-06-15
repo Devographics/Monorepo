@@ -1,8 +1,7 @@
 import { exec } from "child_process";
 import path from "path";
 import { serverConfig } from "~/config/server";
-import { captureMessage } from "@sentry/nextjs";
-import type { SurveyDocument } from "@devographics/core-models";
+import type { EditionMetadata } from "@devographics/types";
 
 type SupportedFormat = "json" | "csv";
 
@@ -43,32 +42,31 @@ const userNestedFields = [
 ];
 /**
  *
- * @param survey
+ * @param edition
  * @param flat Set to true to unwind the fields (useful for table format exports, like CSV).
  * Keep to false for JSON export.
  * @returns
  */
-function extractSurveyFields(survey: SurveyDocument, flat?: boolean) {
+function extractSurveyFields(edition: EditionMetadata, flat?: boolean) {
   const userInfoFields = !flat ? ["user_info"] : userNestedFields;
   let surveyOutlineFields;
   // Currently, a field path is "outlineId.questionId" (or slug). Sections are
   // not taken into account
   if (!flat) {
-    surveyOutlineFields = survey.outline.map(
-      (outline) => outline.slug || outline.id
-    );
+    surveyOutlineFields =
+      edition?.sections?.map((section) => section.slug || section.id) || [];
   } else {
     let surveyOutlineNestedFields: Array<string> = [];
-    survey.outline.forEach((outline) => {
-      const outlineId = outline.slug || outline.id;
+    edition?.sections?.forEach((section) => {
+      const sectionId = section.slug || section.id;
 
       // skip user_info: we handle user info manually to avoid risk of leaking email etc.
-      if (outlineId === "user_info") return;
+      if (sectionId === "user_info") return;
 
-      outline.questions.forEach((question) => {
+      section.questions.forEach((question) => {
         if (Array.isArray(question)) return;
         const questionId = question.id;
-        surveyOutlineNestedFields.push(`${outlineId}.${questionId}`);
+        surveyOutlineNestedFields.push(`${sectionId}.${questionId}`);
       });
     });
     surveyOutlineFields = surveyOutlineNestedFields;
@@ -85,27 +83,27 @@ function extractSurveyFields(survey: SurveyDocument, flat?: boolean) {
 
 function mongoExportCmd({
   filePath,
-  survey,
+  edition,
   format,
 }: {
   filePath: string;
-  survey: SurveyDocument;
+  edition: EditionMetadata;
   format: SupportedFormat;
 }) {
-  const surveySlug = survey.slug!;
+  const editionId = edition.id!;
   /**
    * query: let's you filter with a custom query
    * fields: what fields will be included in the export
    * TODO: fields are probably not correct
-   * NOTE: if the db is already in the mongoUrl, no need to add the --db parameter
+   * NOTE: if the db is already in the mongoUri, no need to add the --db parameter
    * --db production \
    */
   const baseCmd = `
  mongoexport\
- --uri ${serverConfig.mongoUrl}\
+ --uri ${serverConfig().publicReadonlyMongoUri}\
  --collection normalized_responses \
  --pretty\
- --query='{"surveySlug": "${surveySlug}"}' \
+ --query='{"editionId": "${editionId}"}' \
  --out=${filePath}\
       `;
 
@@ -113,7 +111,7 @@ function mongoExportCmd({
     case "json": {
       // NOTE: fields are mandatory only for CSV but it's probably cleaner to explicitely list them, in particular to avoid
       // leaks if we inavertendly add a field in the db
-      const surveyFields = extractSurveyFields(survey);
+      const surveyFields = extractSurveyFields(edition);
       // Fields seems to be defined by each "outline.id.slug" possible value + common fields like timestamps, and user_info
       // NOTE: in CSV export nested JSON objects stay nested, not sure how to improve that
       const fieldsArg = `--fields=${surveyFields.join(",")}`;
@@ -125,7 +123,7 @@ function mongoExportCmd({
       return jsonCmd;
     }
     case "csv": {
-      const surveyFields = extractSurveyFields(survey, true);
+      const surveyFields = extractSurveyFields(edition, true);
       // Fields seems to be defined by each "outline.id.slug" possible value + common fields like timestamps, and user_info
       // NOTE: in CSV export nested JSON objects stay nested, not sure how to improve that
       const fieldsArg = `--fields=${surveyFields.join(",")}`;
@@ -160,22 +158,22 @@ const makeFilePath = (
  */
 async function generateMongoExport({
   format,
-  survey,
+  edition,
 }: {
   format: "json" | "csv";
-  survey: SurveyDocument;
+  edition: EditionMetadata;
 }) {
-  const surveySlug = survey.slug!;
+  const editionId = edition.id!;
   // run the export
 
   let filePath;
   switch (format) {
     case "json": {
-      filePath = makeFilePath(surveySlug, "json");
+      filePath = makeFilePath(editionId, "json");
       break;
     }
     case "csv": {
-      filePath = makeFilePath(surveySlug, "csv");
+      filePath = makeFilePath(editionId, "csv");
       break;
     }
     default: {
@@ -183,32 +181,38 @@ async function generateMongoExport({
     }
   }
 
+  // DON'T LOG THIS COMMAND, it contains db auth info!
   const cmd = mongoExportCmd({
     filePath,
-    survey,
+    edition,
     format,
   });
-  console.log("Start running mongo export with command:", cmd);
+  console.log(
+    "Start running mongo export with command:",
+    cmd.replace(/\/\/(.*?)@/, "//username:password@")
+  );
   await execAsPromise(cmd);
   console.log("Export successfully created", filePath);
-  captureMessage(`Export succesfully created in ${filePath}`);
   return filePath;
 }
 
-export async function generateExportsZip(survey: SurveyDocument) {
-  const surveySlug = survey.slug!;
+export async function generateExportsZip(edition: EditionMetadata) {
+  const editionId = edition.id!;
   let filePaths: Array<string> = [];
   const jsonFilePath = await generateMongoExport({
     format: "json",
-    survey,
+    edition,
   });
   filePaths.push(jsonFilePath);
   // TODO: generate a zip of the JSON + the CSV
   // Currently only the JSON is streamed back
-  const csvFilePath = await generateMongoExport({ format: "csv", survey });
+  const csvFilePath = await generateMongoExport({
+    format: "csv",
+    edition,
+  });
   filePaths.push(csvFilePath);
 
-  const zipFilePath = makeFilePath(surveySlug, "zip", true);
+  const zipFilePath = makeFilePath(editionId, "zip", true);
   const zipCmd = `zip ${zipFilePath} ${filePaths.join(" ")}`;
   await execAsPromise(zipCmd);
   // Now zipFilePath should exist

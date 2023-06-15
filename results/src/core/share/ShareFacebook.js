@@ -23,9 +23,4 @@ const ShareFacebook = ({ link, trackingId, ...rest }) => {
     )
 }
 
-ShareFacebook.propTypes = {
-    link: PropTypes.string.isRequired,
-    trackingId: PropTypes.string,
-}
-
 export default ShareFacebook

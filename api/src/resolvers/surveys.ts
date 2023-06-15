@@ -1,9 +1,8 @@
 import { getGraphQLEnumValues, getDemographicsResolvers } from '../helpers'
 import { getEntity } from '../entities'
-import { RequestContext, SurveyConfig } from '../types'
+import { RequestContext, SurveyConfig, Facet } from '../types'
 import { Filters } from '../filters'
 import { Options } from '../options'
-import { Facet } from '../facets'
 import {
     computeToolExperienceGraph,
     computeToolExperienceTransitions,
@@ -72,6 +71,11 @@ export default {
                 survey,
                 id,
                 filters
+            }),
+            comments: ({ filters }: { filters?: Filters }) => ({
+                survey,
+                id,
+                filters
             })
         }),
         features: (survey: SurveyConfig, { ids = featureIds }: { ids: string[] }) =>
@@ -133,7 +137,12 @@ export default {
                     func: computeToolExperienceGraph,
                     context,
                     funcOptions: { survey, id, filters }
-                })
+                }),
+            comments: ({ filters }: { filters?: Filters }) => ({
+                survey,
+                id,
+                filters
+            })
         }),
         tools: async (survey: SurveyConfig, { ids = toolIds }: { ids?: string[] }) =>
             ids.map(async id => ({
@@ -200,7 +209,11 @@ export default {
             ids,
             filters
         }),
-        totals: (survey: SurveyConfig) => survey
+        totals: (survey: SurveyConfig) => survey,
+        explorer: (survey: SurveyConfig, args: ResolverArguments) => ({
+            survey,
+            ...args
+        }),
     },
     SurveyCreditsItem: {
         entity: async ({ id }: { id: string }) => await getEntity({ id })

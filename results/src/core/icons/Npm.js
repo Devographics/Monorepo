@@ -1,7 +1,7 @@
 import React from 'react'
-import IconWrapper from './IconWrapper.js'
+import IconWrapper from './IconWrapper'
 
-export const Npm = ({ props }) => (
+export const NpmIcon = ({ props }) => (
     <IconWrapper {...props}>
         <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -11,12 +11,8 @@ export const Npm = ({ props }) => (
             viewBox="0 0 210 210"
         >
             <path
-                fill="#C12127"
-                d="M0 210V0h210v210H0zM39.375 39.375v131.25H105v-105h39.375v105h26.25V39.375H39.375z"
-            ></path>
-            <path
-                fill="#fff"
-                d="M39.375 39.375h131.25v131.25h-26.25v-105H105v105H39.375V39.375z"
+                fill="currentColor"
+                d="M22 .722H0v7.334h6.111v1.222H11V8.056h11V.722zM3.667 6.833H1.222V1.944h4.89v4.89H4.888V3.166H3.667v3.666zm3.666 1.223V1.944h4.89v4.89H9.777v1.222H7.333zm6.111-6.112h7.334v4.89h-1.222V3.166h-1.223v3.666h-1.222V3.167H15.89v3.666h-2.445V1.944z"
             ></path>
         </svg>
     </IconWrapper>

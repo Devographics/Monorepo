@@ -1,34 +1,30 @@
 {
-  "include": [
-    "./src/**/*"
-  ],
-  "exclude": [
-    "node_modules"
-  ],
-  "compilerOptions": {
-    /** For PNPM to work correctly with TypeScript and React*/
-    "preserveSymlinks": true,
-    "target": "es5",
-    "jsx": "react",
-    "skipLibCheck": true,
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "forceConsistentCasingInFileNames": true,
-    "typeRoots": [
-      "node_modules/@types/",
-      "./src/@types/",
-      "./src/**/@types/"
-    ],
-    "strict": true,
-    "baseUrl": "./",
-    "paths": {
-      "core/*": [
-        "./src/core/*"
-      ]
+    "include": ["./src/**/*"],
+    "exclude": ["node_modules"],
+    "compilerOptions": {
+        /** For PNPM to work correctly with TypeScript and React*/
+        "preserveSymlinks": true,
+        "target": "es2022",
+        "moduleResolution": "Node",
+        "module": "ES2020",
+        "lib": ["es2022", "dom"],
+        "jsx": "react",
+        "skipLibCheck": true,
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        "forceConsistentCasingInFileNames": true,
+        "typeRoots": ["node_modules/@types/", "./src/@types/", "./src/**/@types/"],
+        "strict": true,
+        "baseUrl": "./",
+        "paths": {
+            "@node_src/*": ["./node_src/*"],
+            "core/*": ["./src/core/*"],
+            "@types/*": ["./src/core/types/*"],
+            "@templates/*": ["./src/templates/*"]
+        }
     }
-  }
 }

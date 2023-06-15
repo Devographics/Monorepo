@@ -8,7 +8,7 @@ import fetch from "node-fetch";
 import get from "lodash/get.js";
 import { serverConfig } from "~/config/server";
 import { nodeCache } from "~/lib/server/caching";
-const translationAPI = serverConfig.translationAPI; //getSetting("translationAPI");
+const translationAPI = serverConfig().translationAPI; //getSetting("translationAPI");
 const disableAPICache = false; //getSetting("disableAPICache", false);
 
 const surveysPromiseCacheKey = "surveysPromise";

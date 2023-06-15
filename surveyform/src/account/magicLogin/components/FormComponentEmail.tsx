@@ -1,18 +1,14 @@
-import type { FormInputProps } from "@vulcanjs/react-ui";
-import React from "react";
-import { FormControl } from "react-bootstrap";
+import React, { ReactNode } from "react";
+import FormControl from "react-bootstrap/FormControl";
 
-/**
- * Inspired by @vulcanjs/react-ui-lite FormItem
- */
-export const FormItem = ({
+export const LoginFormItem = ({
   label,
   name,
   children,
 }: {
-  label: string;
+  label: string | ReactNode;
   name: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }) => {
   return (
     <div className={`form-item ${name}`}>
@@ -22,29 +18,34 @@ export const FormItem = ({
   );
 };
 
+interface FormComponentEmailProps {
+  placeholder?: string;
+  label?: string | ReactNode;
+}
+
 /**
- * Inspired by @vulcanjs/react-ui-bootstrap FormComponentEmail
+ * Inspired by FormComponentEmail
  * that is used in the SmartForm
  */
-export const FormComponentEmail = ({
-  path,
-  label,
-  refFunction,
-  inputProperties,
-  itemProperties,
-  name,
-}: Partial<FormInputProps>) => {
+export const FormComponentEmail = (props: FormComponentEmailProps) => {
+  const { placeholder, label } = props;
+  const name = "email";
+  const componentProperties = {
+    placeholder,
+    name,
+    id: name,
+    type: "email",
+    required: true,
+    autoCorrect: "off",
+    autoCapitalize: "none",
+    label: placeholder,
+  };
+
   return (
     // passing the name is important to get the right label
-    <FormItem path={path} label={label} name={name} {...itemProperties}>
+    <LoginFormItem label={label || name} name={name}>
       {/** @ts-ignore the "as" prop is problematic */}
-      <FormControl
-        name={name}
-        id={name}
-        {...inputProperties}
-        ref={refFunction}
-        type="email"
-      />
-    </FormItem>
+      <FormControl {...componentProperties} />
+    </LoginFormItem>
   );
 };

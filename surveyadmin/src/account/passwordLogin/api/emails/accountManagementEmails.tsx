@@ -11,7 +11,7 @@ import { serverConfig } from "~/config/server";
 
 export const sendResetPasswordEmail = async ({ email, resetUrl }) => {
   const res = await localMailTransport.sendMail({
-    from: serverConfig.defaultMailFrom,
+    from: serverConfig().defaultMailFrom,
     to: email,
     ...resetPasswordTokenEmailParameters({ resetUrl }),
   });
@@ -20,7 +20,7 @@ export const sendResetPasswordEmail = async ({ email, resetUrl }) => {
 
 export const sendVerificationEmail = async ({ email, verificationUrl }) => {
   const res = await localMailTransport.sendMail({
-    from: serverConfig.defaultMailFrom,
+    from: serverConfig().defaultMailFrom,
     to: email,
     ...verifyEmailEmailParameters({ verificationUrl }),
   });
@@ -29,7 +29,7 @@ export const sendVerificationEmail = async ({ email, verificationUrl }) => {
 
 export const sendResetPasswordSuccessEmail = async ({ email }) => {
   const res = await localMailTransport.sendMail({
-    from: serverConfig.defaultMailFrom,
+    from: serverConfig().defaultMailFrom,
     to: email,
     ...resetPasswordSuccessEmailParameters(),
   });
@@ -38,7 +38,7 @@ export const sendResetPasswordSuccessEmail = async ({ email }) => {
 
 export const sendChangePasswordSuccessEmail = async ({ email }) => {
   const res = await localMailTransport.sendMail({
-    from: serverConfig.defaultMailFrom,
+    from: serverConfig().defaultMailFrom,
     to: email,
     ...changePasswordSuccessEmailParameters(),
   });

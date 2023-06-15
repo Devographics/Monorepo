@@ -1,0 +1,31 @@
+id: all_tools
+hidden: true
+query: >
+    surveys {
+        ${surveyId} {
+            ${editionId} {
+                libraries {
+                    all_tools {
+                        items {
+                            id
+                            responses<ARGUMENTS_PLACEHOLDER> {
+                                currentEdition {
+                                    buckets {
+                                        id
+                                        percentageQuestion
+                                        percentageSurvey
+                                        count
+                                    }
+                                    completion {
+                                        count
+                                        percentageSurvey
+                                        total
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }

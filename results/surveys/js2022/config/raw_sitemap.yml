@@ -1,0 +1,1230 @@
+# ------------------------------------------------------------------------------------
+
+# ------------------------------------------------------------------------------------
+# Pages Properties
+# - id: the unique (survey-wide) ID of the page
+# - path: the page's path
+# - children: the page's children pages
+# - blocks: the page's blocks
+# - pageTemplate: a template from which to inherit its properties (not used)
+# - showTitle: whether to show the page title or not
+# - variables: page variables (compiled during sitemap generation)
+
+# Block Properties
+# - id: the unique (survey-wide) ID of the block
+# - blockName: the name of the block (used for titles, descriptions, etc.)
+# - bucketKeysName: the name of the block's keys (used for legends, formatting data, etc.)
+# - blockType: the type of block (which component to use)
+# - query: the query used to populate the block's data
+# - dataPath: the path to use (from the query root) to access the block's data
+# - showLegend: whether to show the block's legend
+# - showDescription: whether to show the block's description
+# - template: a template from which to inherit its properties
+# - translateData: whether to try and translate
+# - variables: block variables (compiled during sitemap generation)
+
+- id: introduction
+  path: /
+  showTitle: false
+  blocks:
+      # - id: survey_livestream
+      #   blockType: LivestreamBlock
+      #   disableExport: true
+      #   wrapBlock: false
+      - id: survey_intro
+        blockType: SurveyIntroBlock
+        disableExport: true
+        wrapBlock: false
+      - id: survey_credits
+        template: credits
+      - id: survey_newsletter
+        blockType: NewsletterBlock
+        disableExport: true
+        wrapBlock: false
+      - id: survey_sponsors
+        template: sponsors
+      - id: survey_partners
+        template: sponsors
+        blockType: PartnersBlock
+      - id: survey_translators
+        blockType: TranslatorsBlock
+        disableExport: true
+        wrapBlock: false
+
+- id: tshirt
+  path: /tshirt
+  showTitle: false
+  blocks:
+      - id: tshirt_intro
+        template: page_introduction
+      - id: tshirt_block
+        blockType: TshirtBlock
+        wrapBlock: false
+        disableExport: true
+
+- id: data_explorer
+  titleId: sections.data_explorer.title
+  path: /explorer
+  blocks:
+      - template: page_introduction
+
+      - id: data_explorer
+        showTitle: false
+        chartOnly: true
+        wrapBlock: false
+        template: data_explorer
+        parameters: { showNoAnswer: true }
+        variables:
+            xAxis: user_info__yearly_salary
+            yAxis: user_info__years_of_experience
+
+- id: user_info
+  titleId: sections.demographics.title
+  path: /demographics
+  blocks:
+      - template: page_introduction
+
+      - id: country
+        defaultUnits: count
+        template: demographics
+        blockType: HorizontalBarBlock
+        translateData: true
+        # blockType: ParticipationByCountryBlock
+        parameters: { limit: 20 }
+
+      - id: locale
+        template: demographics
+        blockType: HorizontalBarBlock
+        translateData: true
+        parameters: { cutoff: 20 }
+
+      - id: hint_hint
+        template: hint
+
+      - id: completion_stats
+        template: demographics
+        translateData: true
+
+      - id: age
+        template: demographics
+        parameters: { showNoAnswer: true }
+
+      - id: years_of_experience
+        template: demographics
+        parameters: { showNoAnswer: true }
+        variants:
+            - id: years_of_experience
+              facet: user_info__yearly_salary
+              tabId: tabs.by_salary
+              template: demographics # facet
+              parameters: { facetSort: { order: asc, property: mean }, facetCutoff: 100 }
+
+      - id: company_size
+        template: demographics
+        parameters: { showNoAnswer: true }
+
+      - id: variants_hint
+        template: hint
+
+      - id: higher_education_degree
+        template: demographics
+        parameters: { showNoAnswer: true }
+        variants:
+            - id: higher_education_degree
+              facet: user_info__gender
+              tabId: tabs.by_gender
+              template: demographics # facet
+              parameters: { facetSort: { order: asc, property: mean }, facetCutoff: 100 }
+
+      - id: yearly_salary
+        template: demographics
+        parameters: { showNoAnswer: true }
+        variants:
+            - id: yearly_salary
+              facet: user_info__gender
+              tabId: tabs.by_gender
+              template: demographics # facet
+              parameters: { facetSort: { order: desc, property: mean }, facetCutoff: 100 }
+            - id: yearly_salary
+              facet: user_info__country
+              tabId: tabs.by_country
+              template: demographics # facet
+              parameters: { facetSort: { order: desc, property: mean }, facetCutoff: 100 }
+            # - id: yearly_salary_by_degree
+            #   tabId: tabs.by_degree
+            #   template: demographics
+            #   variables:
+            #     fieldId: yearly_salary
+            #     facet: higher_education_degree
+            #     parameters: {facetSort: {order: desc, property: mean}, facetCutoff: 100}
+            # - id: yearly_salary_by_experience
+            #   tabId: tabs.by_experience
+            #   template: demographics
+            #   variables:
+            #     fieldId: yearly_salary
+            #     facet: years_of_experience
+            #     parameters: {facetSort: {order: desc, property: mean}, facetCutoff: 100}
+
+      - id: source
+        template: demographics
+        blockType: HorizontalBarBlock
+        parameters: { limit: 20 }
+
+      - id: gender
+        template: demographics
+        parameters: { showNoAnswer: true }
+        variants:
+            - id: gender
+              facet: user_info__country
+              tabId: tabs.by_country
+              template: demographics # facet
+              parameters:
+                  { facetSort: { order: desc, property: mean }, limit: 11, facetCutoff: 100 }
+
+      - id: race_ethnicity
+        defaultUnits: count
+        template: demographics
+        blockType: HorizontalBarBlock
+        translateData: true
+        variants:
+            - id: race_ethnicity
+              facet: user_info__years_of_experience
+              tabId: tabs.by_experience
+              template: demographics # facet
+              parameters: { facetSort: { order: asc, property: mean }, limit: 11, facetCutoff: 100 }
+
+      - id: disability_status
+        defaultUnits: count
+        template: demographics
+        blockType: HorizontalBarBlock
+        translateData: true
+        variants:
+            - id: disability_status_others
+              defaultUnits: count
+              template: demographics
+              blockType: HorizontalBarBlock
+              units: count
+              translateData: true
+              parameters: { cutoff: 10 }
+
+      - id: user_info_resources
+        items: [renderatl]
+        template: recommended_resources
+
+- id: features
+  path: /features
+  blocks:
+      - template: page_introduction
+
+      - id: features_overview
+        template: features_overview
+
+      - id: knowledge_score
+        template: demographics
+
+      - id: features_resources
+        items: [fm-javascript]
+        template: recommended_resources
+
+  children:
+      - id: language
+        path: /language
+        blocks:
+            - id: language
+              template: page_introduction
+
+            - id: proxies
+              template: feature_experience
+            - id: promise_all_settled
+              template: feature_experience
+            - id: dynamic_import
+              template: feature_experience
+            - id: private_fields
+              template: feature_experience
+            - id: nullish_coalescing
+              template: feature_experience
+
+            - id: lee_robinson
+              template: picks
+              variables:
+                  url: https://svelte.dev/blog/announcing-sveltekit-1.0
+
+            - id: export_hint
+              template: hint
+
+            - id: numeric_separators
+              template: feature_experience
+              year: 2021
+            - id: string_replace_all
+              template: feature_experience
+              year: 2021
+            - id: string_match_all
+              template: feature_experience
+              year: 2021
+            - id: logical_assignment
+              template: feature_experience
+              year: 2021
+
+            - id: miguel_angel_duran
+              template: picks
+              variables:
+                  url: https://astro.build/
+
+            - id: promise_any
+              template: feature_experience
+              year: 2021
+            - id: array_at
+              template: feature_experience
+              year: 2021
+            - id: top_level_await
+              template: feature_experience
+              year: 2021
+
+            # new in 2022
+            - id: temporal
+              template: feature_experience
+              year: 2022
+            - id: array_findlast
+              template: feature_experience
+              year: 2022
+            - id: error_cause
+              template: feature_experience
+              year: 2022
+            - id: object_hasown
+              template: feature_experience
+              year: 2022
+            - id: regexp_match_indices
+              template: feature_experience
+              year: 2022
+
+            - id: language_resources
+              items: [fm-javascript-hard-parts-v2]
+              template: recommended_resources
+
+      - id: browser_apis
+        path: /browser-apis
+        blocks:
+            - id: browser_apis
+              template: page_introduction
+
+            - id: service_workers
+              template: feature_experience
+            - id: intl
+              template: feature_experience
+            - id: webgl
+              template: feature_experience
+            - id: web_animations
+              template: feature_experience
+            - id: webrtc
+              template: feature_experience
+
+            - id: josh_comeau
+              template: picks
+              variables:
+                  url: https://sandpack.codesandbox.io/
+
+            - id: web_speech
+              template: feature_experience
+            - id: websocket
+              template: feature_experience
+            - id: custom_elements
+              template: feature_experience
+            - id: shadow_dom
+              template: feature_experience
+
+            - id: share_hint
+              template: hint
+
+            - id: page_visibility
+              template: feature_experience
+              year: 2021
+            - id: broadcast_channel
+              template: feature_experience
+              year: 2021
+            - id: geolocation
+              template: feature_experience
+              year: 2021
+            - id: file_system_access
+              template: feature_experience
+              year: 2021
+
+            - id: kathryn_grayson_nanz
+              template: picks
+              variables:
+                  url: https://beta.reactjs.org/
+
+            - id: web_share
+              template: feature_experience
+              year: 2021
+            - id: webxr
+              template: feature_experience
+              year: 2021
+
+            - id: browser_apis_resources
+              items: [fm-service-workers, fm-web-components]
+              template: recommended_resources
+
+      - id: other_features
+        path: /other-features
+        blocks:
+            - id: pwa
+              template: feature_experience
+
+            - id: units_switcher_hint
+              template: hint
+
+            - id: rich_harris
+              template: picks
+              variables:
+                  url: https://github.com/tc39/proposal-type-annotations
+
+            - id: wasm
+              template: feature_experience
+
+            - id: browser_apis_resources
+              items: [fm-web-assembly, fm-pwas]
+              template: recommended_resources
+
+- id: libraries
+  path: /libraries
+  blocks:
+      - id: librariesIntroduction
+        template: page_introduction
+
+      # hidden question used to load data for next 3 charts; don't remove
+      - template: all_tools
+
+      - template: tools_arrows
+
+      - template: tier_list
+
+      - template: scatterplot_overview
+
+      # - id: all_sections_tools_cardinality_by_user
+      #   template: tools_cardinality_by_user_js
+
+  children:
+      - id: front_end_frameworks
+        path: /front-end-frameworks
+        blocks:
+            - template: page_introduction
+
+            - template: tools_experience_linechart
+              tabId: blocks.tools_experience_ranking.percentages
+              variants:
+                  - template: tools_experience_ranking
+                    tabId: blocks.tools_experience_ranking.rankings
+
+            - template: tools_section_streams
+
+            - id: tool_modal_hint
+              template: hint
+
+            - template: tools_experience_marimekko
+
+            - template: section_prenormalized_tools
+              parameters:
+                  limit: 10
+
+            - id: lee_robinson
+              template: picks
+              variables:
+                  url: https://kit.svelte.dev/
+
+            - template: happiness
+
+            - id: front_end_frameworks_resources
+              items: [fm-react, fm-vue]
+              template: recommended_resources
+
+            - id: react
+              template: tool_experience
+            - id: vuejs
+              template: tool_experience
+            - id: angular
+              template: tool_experience
+            - id: preact
+              template: tool_experience
+            - id: ember
+              template: tool_experience
+            - id: svelte
+              template: tool_experience
+            - id: alpinejs
+              template: tool_experience
+            - id: litelement
+              template: tool_experience
+            - id: solid
+              template: tool_experience
+              year: 2021
+            - id: qwik
+              template: tool_experience
+              year: 2022
+            - id: stencil
+              template: tool_experience
+              year: 2022
+
+      - id: rendering_frameworks
+        path: /rendering-frameworks
+        blocks:
+            - template: page_introduction
+
+            - template: tools_experience_linechart
+              tabId: blocks.tools_experience_ranking.percentages
+              variants:
+                  - template: tools_experience_ranking
+                    tabId: blocks.tools_experience_ranking.rankings
+
+            - template: tools_section_streams
+
+            - id: tool_modal_hint
+              template: hint
+
+            - template: tools_experience_marimekko
+
+            - template: section_prenormalized_tools
+              parameters:
+                  limit: 10
+
+            - id: cassidy_williams
+              template: picks
+              variables:
+                  url: https://twitter.com/mooeypoo
+
+            - template: happiness
+
+            - id: rendering_frameworks_resources
+              items: [fm-fullstack-app-next, fm-servers-node-js]
+              template: recommended_resources
+
+            - id: nextjs
+              template: tool_experience
+            - id: nuxt
+              template: tool_experience
+            - id: gatsby
+              template: tool_experience
+
+            - id: remix
+              template: tool_experience
+              year: 2021
+            - id: astro
+              template: tool_experience
+              year: 2021
+            - id: eleventy
+              template: tool_experience
+              year: 2021
+            - id: sveltekit
+              template: tool_experience
+              year: 2021
+
+            - id: docusaurus
+              template: tool_experience
+              year: 2022
+
+      - id: testing
+        path: /testing
+        blocks:
+            - template: page_introduction
+
+            - template: tools_experience_linechart
+              tabId: blocks.tools_experience_ranking.percentages
+              variants:
+                  - template: tools_experience_ranking
+                    tabId: blocks.tools_experience_ranking.rankings
+
+            - template: tools_section_streams
+
+            - id: tool_modal_hint
+              template: hint
+
+            - template: tools_experience_marimekko
+
+            - template: section_prenormalized_tools
+              parameters:
+                  limit: 10
+
+            - id: charlie_gerard
+              template: picks
+              variables:
+                  url: https://www.withdiode.com/
+
+            - template: happiness
+
+            - id: testing_resources
+              items: [fm-testing-practices-principles]
+              template: recommended_resources
+
+            - id: jest
+              template: tool_experience
+            - id: mocha
+              template: tool_experience
+            - id: storybook
+              template: tool_experience
+            - id: cypress
+              template: tool_experience
+            - id: ava
+              template: tool_experience
+            - id: jasmine
+              template: tool_experience
+            - id: puppeteer
+              template: tool_experience
+            - id: testing_library
+              template: tool_experience
+            - id: playwright
+              template: tool_experience
+            - id: webdriverio
+              template: tool_experience
+            - id: vitest
+              template: tool_experience
+              year: 2021
+
+            - id: selenium
+              template: tool_experience
+              year: 2022
+            - id: testcafe
+              template: tool_experience
+              year: 2022
+
+      - id: mobile_desktop
+        path: /mobile-desktop
+        blocks:
+            - template: page_introduction
+
+            - template: tools_experience_linechart
+              tabId: blocks.tools_experience_ranking.percentages
+              variants:
+                  - template: tools_experience_ranking
+                    tabId: blocks.tools_experience_ranking.rankings
+
+            - template: tools_section_streams
+
+            - id: tool_modal_hint
+              template: hint
+
+            - template: tools_experience_marimekko
+
+            - template: section_prenormalized_tools
+              parameters:
+                  limit: 5
+
+            - id: alba_silvente
+              template: picks
+              variables:
+                  url: https://arisa-fukuzaki.dev/
+
+            - template: happiness
+
+            - id: mobile_desktop_resources
+              items: [fm-react-native-v2, fm-intermediate-react-native]
+              template: recommended_resources
+
+            - id: electron
+              template: tool_experience
+            - id: reactnative
+              template: tool_experience
+            - id: nativeapps
+              template: tool_experience
+            - id: cordova
+              template: tool_experience
+            - id: ionic
+              template: tool_experience
+            - id: capacitor
+              template: tool_experience
+            - id: nwjs
+              template: tool_experience
+            - id: expo
+              template: tool_experience
+            - id: quasar
+              template: tool_experience
+            - id: tauri
+              template: tool_experience
+              year: 2021
+            - id: nativescript
+              template: tool_experience
+              year: 2022
+
+      - id: build_tools
+        path: /build-tools
+        blocks:
+            - template: page_introduction
+
+            - template: tools_experience_linechart
+              tabId: blocks.tools_experience_ranking.percentages
+              variants:
+                  - template: tools_experience_ranking
+                    tabId: blocks.tools_experience_ranking.rankings
+
+            - template: tools_section_streams
+
+            - id: tool_modal_hint
+              template: hint
+
+            - template: tools_experience_marimekko
+
+            - template: section_prenormalized_tools
+              parameters:
+                  limit: 5
+
+            - id: matt_pocock
+              template: picks
+              variables:
+                  url: https://github.com/statelyai/xstate
+
+            - template: happiness
+
+            - id: webpack
+              template: tool_experience
+            - id: parcel
+              template: tool_experience
+            - id: gulp
+              template: tool_experience
+            - id: rollup
+              template: tool_experience
+            - id: browserify
+              template: tool_experience
+            - id: tsc
+              template: tool_experience
+            - id: rome
+              template: tool_experience
+            - id: snowpack
+              template: tool_experience
+            - id: swc
+              template: tool_experience
+            - id: esbuild
+              template: tool_experience
+            - id: vite
+              template: tool_experience
+              year: 2021
+            - id: wmr
+              template: tool_experience
+              year: 2021
+            - id: turbopack
+              template: tool_experience
+              year: 2022
+
+            - id: build_tools_resources
+              items: [fm-xstate]
+              template: recommended_resources
+
+      - id: monorepo_tools
+        path: /monorepo-tools
+        blocks:
+            - template: page_introduction
+
+            - template: tools_experience_linechart
+              tabId: blocks.tools_experience_ranking.percentages
+              variants:
+                  - template: tools_experience_ranking
+                    tabId: blocks.tools_experience_ranking.rankings
+
+            - template: tools_section_streams
+
+            - id: tool_modal_hint
+              template: hint
+
+            - template: tools_experience_marimekko
+
+            - template: section_prenormalized_tools
+              parameters:
+                  limit: 5
+
+            - id: ryan_carniato
+              template: picks
+              variables:
+                  url: https://astro.build/
+
+            - template: happiness
+
+            - id: monorepo_tools_resources
+              items: [fm-monorepos]
+              template: recommended_resources
+
+            - id: rush
+              template: tool_experience
+              year: 2021
+            - id: turborepo
+              template: tool_experience
+              year: 2021
+            - id: yarn_workspaces
+              template: tool_experience
+              year: 2021
+            - id: yalc
+              template: tool_experience
+              year: 2021
+            - id: lerna
+              template: tool_experience
+              year: 2021
+            - id: npm_workspaces
+              template: tool_experience
+              year: 2021
+            - id: pnpm
+              template: tool_experience
+              year: 2021
+            - id: nx
+              template: tool_experience
+              year: 2021
+
+            # - id: monorepo_resources
+            #   items: [fm-fullstack-app-next, fm-servers-node-js]
+            #   template: recommended_resources
+
+- id: other_tools
+  path: /other-tools
+  blocks:
+      - id: tools_others_intro
+        template: page_introduction
+
+      - id: libraries
+        tabId: tabs.main_answers
+        template: multiple_options
+        variants:
+            - id: libraries_others
+              template: multiple_options
+              defaultUnits: count
+              parameters: { limit: 15 }
+
+      - id: theo_browne
+        template: picks
+        variables:
+            url: https://trpc.io/
+
+      - id: date_management
+        year: 2022
+        tabId: tabs.main_answers
+        template: multiple_options
+        variants:
+            - id: date_management_others
+              template: multiple_options
+              defaultUnits: count
+              parameters: { limit: 5 }
+
+      - id: data_visualization
+        year: 2022
+        tabId: tabs.main_answers
+        template: multiple_options
+        variants:
+            - id: data_visualization_others
+              template: multiple_options
+              defaultUnits: count
+              parameters: { limit: 5 }
+
+      - id: data_fetching
+        year: 2022
+        tabId: tabs.main_answers
+        template: multiple_options
+        variants:
+            - id: data_fetching_others
+              template: multiple_options
+              defaultUnits: count
+              parameters: { limit: 10 }
+
+      - id: backend_frameworks
+        year: 2022
+        tabId: tabs.main_answers
+        template: multiple_options
+        variants:
+            - id: backend_frameworks_others
+              template: multiple_options
+              defaultUnits: count
+              parameters: { limit: 10 }
+
+      - id: utilities
+        tabId: tabs.main_answers
+        template: multiple_options
+        variants:
+            - id: utilities_others
+              template: multiple_options
+              defaultUnits: count
+              parameters: { limit: 10 }
+
+      - id: sharing_hint
+        template: hint
+
+      - id: runtimes
+        tabId: tabs.main_answers
+        template: multiple_options
+        variants:
+            - id: runtimes_others
+              template: multiple_options
+              defaultUnits: count
+              parameters: { limit: 10 }
+
+      - id: edge_runtimes
+        tabId: tabs.main_answers
+        template: multiple_options
+        variants:
+            - id: edge_runtimes_others
+              template: multiple_options
+              defaultUnits: count
+              parameters: { limit: 10 }
+
+      - id: javascript_flavors
+        tabId: tabs.main_answers
+        template: multiple_options
+        variants:
+            - id: javascript_flavors_others
+              template: multiple_options
+              defaultUnits: count
+              parameters: { limit: 10 }
+
+      - id: ben_holmes
+        template: picks
+        variables:
+            url: https://github.com/colinhacks/zod
+
+      - id: non_js_languages
+        tabId: tabs.main_answers
+        template: multiple_options
+        variants:
+            - id: non_js_languages_others
+              template: multiple_options
+              defaultUnits: count
+              parameters: { limit: 15 }
+
+      - id: tools_others_resources
+        items: [fm-typescript, fm-node-js]
+        template: recommended_resources
+- id: usage
+  intlId: usage_js
+  path: /usage
+  blocks:
+      - template: page_introduction
+
+      - id: js_ts_balance
+        tabId: tabs.main_answers
+        translateData: true
+        template: single_option
+
+      - id: usage_type
+        translateData: true
+        template: single_option
+
+      - id: what_do_you_use_js_for
+        tabId: tabs.main_answers
+        translateData: true
+        template: multiple_options
+        variants:
+            - id: what_do_you_use_js_for_others
+              defaultUnits: count
+              tabId: tabs.other_answers
+              i18nNamespace: what_do_you_use_js_for
+              translateData: true
+              template: multiple_options
+              parameters: { limit: 10 }
+
+      - id: industry_sector
+        tabId: tabs.main_answers
+        template: multiple_options
+        translateData: true
+        variants:
+            - id: industry_sector_others
+              defaultUnits: count
+              i18nNamespace: industry_sector
+              tabId: tabs.other_answers
+              template: multiple_options
+              translateData: true
+              parameters: { limit: 15 }
+
+      - id: js_app_patterns
+        tabId: tabs.main_answers
+        template: multiple_options
+        translateData: true
+        variants:
+            - id: js_app_patterns_others
+              defaultUnits: count
+              tabId: tabs.other_answers
+              template: multiple_options
+              translateData: true
+              parameters: { limit: 15 }
+
+      - id: usage_resources
+        items: [fm-algorithms, fm-js-patterns]
+        template: recommended_resources
+
+- id: resources
+  path: /resources
+  blocks:
+      - template: page_introduction
+
+      - id: first_steps
+        tabId: tabs.main_answers
+        template: multiple_options
+        translateData: true
+        variants:
+            - id: first_steps_others
+              defaultUnits: count
+              i18nNamespace: first_steps
+              tabId: tabs.other_answers
+              template: multiple_options_freeform
+              translateData: true
+              parameters: { limit: 10 }
+
+      - id: shaundai_person
+        template: picks
+        variables:
+            url: https://sarahdrasnerdesign.com/
+
+      - id: blogs_news_magazines
+        tabId: tabs.main_answers
+        template: multiple_options
+        variants:
+            - id: blogs_news_magazines_others
+              defaultUnits: count
+              i18nNamespace: blogs_news_magazines
+              tabId: tabs.other_answers
+              template: multiple_options_freeform
+              parameters: { limit: 15 }
+
+      - id: sites_courses
+        tabId: tabs.main_answers
+        template: multiple_options
+        variants:
+            - id: sites_courses_others
+              defaultUnits: count
+              i18nNamespace: sites_courses
+              tabId: tabs.other_answers
+              template: multiple_options_freeform
+              parameters: { limit: 15 }
+
+      - id: tyler_mcginnis
+        template: picks
+        variables:
+            url: https://tanstack.com/
+
+      - id: podcasts
+        tabId: tabs.main_answers
+        template: multiple_options
+        variants:
+            - id: podcasts_others
+              defaultUnits: count
+              i18nNamespace: podcasts
+              tabId: tabs.other_answers
+              template: multiple_options_freeform
+              parameters: { limit: 15 }
+
+      - id: video_creators
+        blockType: PeopleBlock
+        tabId: tabs.main_answers
+        template: multiple_options
+        variants:
+            - id: video_creators_others
+              blockType: PeopleBlock
+              defaultUnits: count
+              i18nNamespace: video_creators
+              tabId: tabs.other_answers
+              template: multiple_options_freeform
+              parameters: { limit: 15 }
+
+      - id: people_others
+        defaultUnits: count
+        i18nNamespace: people
+        template: multiple_options_freeform
+        blockType: PeopleBlock
+        parameters: { limit: 50 }
+
+      - id: other_surveys
+        defaultUnits: count
+        tabId: tabs.main_answers
+        template: multiple_options
+        variants:
+            - id: other_surveys_others
+              defaultUnits: count
+              i18nNamespace: other_surveys
+              tabId: tabs.other_answers
+              template: multiple_options_freeform
+              parameters: { cutoff: 5 }
+
+      - id: resources_resources
+        items: [reactathon]
+        template: recommended_resources
+- id: opinions
+  path: /opinions
+  blocks:
+      - template: page_introduction
+
+      - id: js_moving_in_right_direction
+        template: opinion
+
+      - id: building_js_apps_overly_complex
+        template: opinion
+
+      - id: tshirt_hint
+        template: hint
+
+      - id: js_ecosystem_changing_to_fast
+        template: opinion
+
+      - id: sebastien_lorber
+        template: picks
+        variables:
+            url: https://www.remotion.dev/
+
+      - id: top_js_pain_points
+        translateData: true
+        defaultUnits: count
+        tabId: tabs.main_answers
+        template: multiple_options
+        variants:
+            - id: top_js_pain_points_others
+              translateData: true
+              defaultUnits: count
+              tabId: tabs.other_answers
+              template: multiple_options_freeform
+              parameters: { cutoff: 5 }
+
+      - id: top_currently_missing_from_js
+        translateData: true
+        defaultUnits: count
+        tabId: tabs.main_answers
+        template: multiple_options
+        variants:
+            - id: top_currently_missing_from_js_others
+              translateData: true
+              defaultUnits: count
+              i18nNamespace: top_currently_missing_from_js
+              tabId: tabs.other_answers
+              template: multiple_options_freeform
+              parameters: { cutoff: 5 }
+
+      - template: happiness
+        id: state_of_the_web_happiness
+        titleId: happiness.state_of_the_web
+
+      - template: happiness
+        id: state_of_js_happiness
+        titleId: happiness.state_of_js
+
+      - id: opinions.k_resources
+        items: [fm-javascript, fm-js-fundamentals]
+        template: recommended_resources
+- id: awards
+  path: /awards
+  blocks:
+      - template: page_introduction
+
+      - id: awards
+        template: awards
+        variables:
+            entities: '"top_level_await","array_at","string_replace_all","vite","vitest","pnpm","vite","vitest","testing_library","turbopack","turborepo","astro","fnm","azure_functions","private_fields","proxies","nullish_coalescing","react","angular","storybook"'
+        awards:
+            - id: feature_adoption_delta_award
+              template: award
+              awards:
+                  - id: top_level_await
+                    value: '+26.4%'
+                  - id: array_at
+                    value: '+14.2%'
+                  - id: string_replace_all
+                    value: '+9.6%'
+
+            - id: tool_usage_delta_award
+              template: award
+              awards:
+                  - id: vite
+                    value: '+18.8%'
+                  - id: vitest
+                    value: '+11.1%'
+                  - id: pnpm
+                    value: '+8.4%'
+
+            - id: tool_satisfaction_award
+              template: award
+              awards:
+                  - id: vite
+                    value: '98%'
+                  - id: vitest
+                    value: '97%'
+                  - id: testing_library
+                    value: '95%'
+
+            - id: tool_interest_award
+              template: award
+              awards:
+                  - id: vite
+                    value: '81%'
+                  - id: turbopack
+                    value: '80%'
+                  - id: turborepo
+                    value: '77%'
+
+            - id: most_write_ins_award
+              template: award
+              awards:
+                  - id: astro
+                    value: '402'
+                  - id: fnm
+                    value: '338'
+                  - id: azure_functions
+                    value: '234'
+
+            - id: most_commented_feature_award
+              template: award
+              awards:
+                  - id: private_fields
+                    value: 102
+                  - id: proxies
+                    value: 71
+                  - id: nullish_coalescing
+                    value: 66
+
+            - id: most_commented_tool_award
+              template: award
+              awards:
+                  - id: react
+                    value: 66
+                  - id: angular
+                    value: 47
+                  - id: storybook
+                    value: 42
+
+      - id: awards_resources
+        items: [road-to-react]
+        template: recommended_resources
+
+- id: conclusion
+  path: /conclusion
+  blocks:
+      - id: conclusion
+        template: conclusion
+        variables:
+            author: sarah_drasner
+            entities: '"sarah_drasner"'
+
+      - id: conclusion_newsletter
+        blockType: NewsletterBlock
+        wrapBlock: false
+        disableExport: true
+
+# note: other pages need to be included in the sitemap too so they can get the proper
+# locale passed to them
+
+- id: about
+  path: /about
+  blocks:
+      - id: about_contents
+        blockType: AboutBlock
+        wrapBlock: false
+        disableExport: true
+
+- id: support
+  path: /support
+  is_hidden: true
+  blocks:
+      - id: support
+        template: page_introduction
+
+- id: sponsor_finish
+  path: /sponsor-chart-finish
+  is_hidden: true
+  blocks:
+      - id: sponsor_finish
+        blockType: SponsorFinishBlock
+        wrapBlock: false
+
+- id: notfound
+  titleId: notfound.title
+  path: /404
+  is_hidden: true
+  blocks:
+      - id: notfound
+        blockType: NotFoundBlock
+        wrapBlock: false

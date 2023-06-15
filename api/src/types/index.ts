@@ -1,8 +1,21 @@
 import { Db } from 'mongodb'
 import { SurveyType } from './surveys'
 import { Filters } from '../filters'
-import { Facet } from '../facets'
 import { Options } from '../options'
+
+export type Facet =
+    | 'default'
+    | 'gender'
+    | 'race_ethnicity'
+    | 'yearly_salary'
+    | 'industry_sector'
+    | 'disability_status'
+    | 'company_size'
+    | 'years_of_experience'
+    | 'higher_education_degree'
+    | 'source'
+    | 'country'
+
 
 /**
  * This context is injected in each and every requests.
@@ -12,6 +25,8 @@ export interface RequestContext {
     redisClient?: any
     isDebug?: Boolean
 }
+
+export type WatchedItem =  "locales" | "entities" | "surveys" | "projects"
 
 export interface SurveyConfig {
     survey: SurveyType

@@ -1,23 +1,24 @@
 # API
 
-- [data format](#data-format)
-    - [type](#type-definition)
-    - [example](#example-data)
-
 ## Setup
 
 Create an `.env` file at the root of the `api` directory: 
 
 ```
 # MongoDB connection string and database name
-MONGO_URI=***
-MONGO_DB_NAME=***
+MONGO_URI=mongodb+srv://user:***@server/public
+MONGO_DB_NAME=public
 
-# Keys used to encrypt data and authenticate RPCs
-ENCRYPTION_KEY=***
-SECRET_KEY=***
+# Redis connection string
+REDIS_URL=rediss://user:***@server:6379
+```
 
-# Third party services
+Note: contact me (Sacha) on [Discord](https://discord.gg/zRDb35jfrt) if you need the actual values. 
+
+Third party services env variables (not usually needed):
+
+```
+# Third party services 
 SENTRY_DSN=***
 GITHUB_TOKEN=***
 TWITTER_KEY=***
@@ -25,33 +26,14 @@ TWITTER_SECRET_KEY=***
 TWITTER_BEARER_TOKEN=***
 TWITTER_ACCESS_TOKEN=***
 TWITTER_ACCESS_TOKEN_SECRET=***
-
-# Whether to load locales and entities data from GitHub or from a local directory
-LOAD_LOCALES=local
-LOAD_ENTITIES=local
 ```
-
-Note: contact me (Sacha) on [Discord](https://discord.gg/zRDb35jfrt) if you need the actual values. 
 
 ## Running the App
 
+In `/api`: 
+
 ```
-npm run dev
-npm run dev:clean # run without cache
-```
-
-## Translations
-
-You can use the [GraphQL API](http://localhost:4001/) to get more info about a specific translation locale. Here is a sample query:
-
-```graphql
-query GetLocaleData {
-  locale(localeId: "ru-RU") {
-    completion
-    totalCount
-    translatedCount
-    translators
-    untranslatedKeys
-  }
-}
+pnpm install
+pnpm run dev
+pnpm run dev:clean # run without cache
 ```

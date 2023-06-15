@@ -7,13 +7,11 @@ import {
 } from "@vulcanjs/graphql/server";
 import { Connector } from "@vulcanjs/crud/server";
 
-import { createMongooseConnector } from "@vulcanjs/mongo";
 import { Request } from "express";
 import debug from "debug";
 import models from "~/_vulcan/models.index.server";
 import { getLocaleFromReq } from "~/i18n/server/localeDetection";
 import { userContextFromReq } from "./userContext";
-// import mongoose from "mongoose";
 const debugGraphqlContext = debug("vn:graphql:context");
 
 /**
@@ -38,13 +36,18 @@ const createContextForModels = (
   models: Array<VulcanGraphqlModelServer>
 ): ModelContext => {
   return models.reduce(
-    (context, model: VulcanGraphqlModelServer) => ({
-      ...context,
-      [model.graphql.typeName]: {
-        model,
-        connector: model.crud.connector || createMongooseConnector(model),
-      },
-    }),
+    (context, model: VulcanGraphqlModelServer) => {
+      if (!model.crud.connector) {
+        console.warn("Model has no explicit crud connector:", model.name, "will create one for default application db")
+      }
+      return ({
+        ...context,
+        [model.graphql.typeName]: {
+          model,
+          connector: model.crud.connector
+        },
+      })
+    },
     {}
   );
 };
@@ -81,4 +84,4 @@ export const contextFromReq = async (req: Request) => {
  * API context used by graphql also includes req object,
  * currentUser, etc.
  */
-export interface ApiContext extends LocaleApiContext {}
+export interface ApiContext extends LocaleApiContext { }

@@ -1,4 +1,4 @@
-import { ResponseAdminMongooseModel } from "@devographics/core-models/server";
+import { getNormResponsesCollection, getRawResponsesCollection } from "@devographics/mongo";
 import { normalizeResponse } from "./normalize";
 
 const limit = 800;
@@ -12,13 +12,14 @@ export const normalizeJob = async ({
   rules?: any;
 }) => {
   const startAt = new Date();
-  const unnormalizedResponses = await ResponseAdminMongooseModel.find(
+  const NormResponses = await getNormResponsesCollection()
+  const Responses = await getRawResponsesCollection()
+  const unnormalizedResponses = await Responses.find(
     {
       isNormalized: false,
     },
-    null,
     { limit }
-  );
+  ).toArray();
   const responsesToNormalize = Math.min(unnormalizedResponses.length, limit);
   if (unnormalizedResponses.length === 0) {
     // eslint-disable-next-line

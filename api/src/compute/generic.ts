@@ -1,10 +1,16 @@
 import { Db } from 'mongodb'
 import { inspect } from 'util'
 import config from '../config'
-import { Entity } from "@devographics/core-models";
-import { YearCompletion, FacetCompletion, SurveyConfig, RequestContext, ResolverDynamicConfig } from '../types'
+import { Entity } from '@devographics/core-models'
+import {
+    YearCompletion,
+    Facet,
+    FacetCompletion,
+    SurveyConfig,
+    RequestContext,
+    ResolverDynamicConfig
+} from '../types'
 import { Filters, generateFiltersQuery } from '../filters'
-import { Facet } from '../facets'
 import { ratioToPercentage } from './common'
 import { getEntity } from '../entities'
 import { getParticipationByYearMap } from './demographics'
@@ -18,8 +24,9 @@ import take from 'lodash/take.js'
 import round from 'lodash/round.js'
 import { count } from 'console'
 import difference from 'lodash/difference.js'
-import yamlKeys from '../data/keys.yml'
+import { getChartKeys } from '../helpers'
 import isEmpty from 'lodash/isEmpty.js'
+import { getFacetSegments } from '../helpers'
 
 export interface TermAggregationOptions {
     // filter aggregations
@@ -31,7 +38,7 @@ export interface TermAggregationOptions {
     year?: number
     keys?: string[]
     keysFunction?: (arg0: ResolverDynamicConfig) => Promise<string[]>
-    facet?: Facet
+    facet?: Facet | string
     // bucket
     cutoff?: number
     limit?: number
@@ -39,6 +46,8 @@ export interface TermAggregationOptions {
     facetLimit?: number
     facetMinPercent?: number
     facetMinCount?: number
+    facet1keys?: string[]
+    facet2keys?: string[]
 }
 
 export interface SortSpecifier {
@@ -145,36 +154,48 @@ export async function computeDefaultTermAggregationByYear({
 
     // if values (keys) are not passed as options, look in globally defined yaml keys
     let values
+
     if (options.keysFunction) {
         values = await options.keysFunction({ id: fieldId, survey })
     } else if (options.keys) {
         values = options.keys
-    } else if (yamlKeys[fieldId]) {
-        values = yamlKeys[fieldId]
+    } else if (options.facet1keys) {
+        values = options.facet1keys
+    } else if (getChartKeys(fieldId)) {
+        values = getChartKeys(fieldId)
     }
+
+    const hasValues = !isEmpty(values)
 
     const convertOrder = (order: 'asc' | 'desc') => (order === 'asc' ? 1 : -1)
 
     const sort = options?.sort?.property ?? 'count'
     const order = convertOrder(options?.sort?.order ?? 'desc')
 
+    const { fieldName: facetId } = (options.facet && getFacetSegments(options.facet)) || {}
     const facetSort = options?.facetSort?.property ?? 'mean'
     const facetOrder = convertOrder(options?.facetSort?.order ?? 'desc')
+    const facetValues = options.facet2keys || (facetId && getChartKeys(facetId))
 
-    // console.log('// key')
-    // console.log(key)
-    // console.log('// options')
-    // console.log(options)
+    console.log('// key')
+    console.log(key)
+    console.log('// options')
+    console.log(options)
+    console.log('// values')
+    console.log(values)
+    console.log('// facetValues')
+    console.log(facetValues)
 
     const match: any = {
         survey: survey.survey,
-        [key]: { $nin: [null, '', []] },
-        ...generateFiltersQuery(filters)
+        [key]: { $nin: [null, '', [], {}] },
+        ...generateFiltersQuery({ filters, key })
     }
     // if year is passed, restrict aggregation to specific year
     if (year) {
         match.year = year
     }
+    console.log(match)
 
     // TODO: merge these counts into the main aggregation pipeline if possible
     const totalRespondentsByYear = await getParticipationByYearMap(context, survey)
@@ -194,23 +215,26 @@ export async function computeDefaultTermAggregationByYear({
         survey: survey.survey
     }
 
-    let results = (await collection
-        .aggregate(getGenericPipeline(pipelineProps))
-        .toArray()) as ResultsByYear[]
+    const pipeline = getGenericPipeline(pipelineProps)
+
+    let results = (await collection.aggregate(pipeline).toArray()) as ResultsByYear[]
 
     if (isDebug) {
         console.log(
             inspect(
                 {
                     match,
-                    sampleAggregationPipeline: getGenericPipeline(pipelineProps),
+                    pipeline,
                     results
                 },
                 { colors: true, depth: null }
             )
         )
     }
-    if (values) {
+
+    await discardEmptyIds(results)
+
+    if (hasValues) {
         await addMissingBucketValues(results, values)
     }
 
@@ -218,7 +242,7 @@ export async function computeDefaultTermAggregationByYear({
 
     await addCompletionCounts(results, totalRespondentsByYear, completionByYear)
 
-    if (!values) {
+    if (!hasValues) {
         // do not apply cutoff for aggregations that have predefined values,
         // as that might result in unexpectedly missing buckets
         await applyCutoff(results, cutoff)
@@ -229,23 +253,37 @@ export async function computeDefaultTermAggregationByYear({
 
     await sortBuckets(results, { sort, order, values })
 
-    if (!values) {
+    if (!hasValues) {
         // do not apply limits for aggregations that have predefined values,
         // as that might result in unexpectedly missing buckets
         await limitBuckets(results, limit)
     }
 
-    if (values) {
+    if (hasValues) {
         await addMeans(results, values)
     }
 
-    await sortFacets(results, { sort: facetSort, order: facetOrder })
+    await sortFacets(results, { sort: facetSort, order: facetOrder, values: facetValues })
 
     await limitFacets(results, { facetLimit, facetMinPercent, facetMinCount })
 
     // console.log(JSON.stringify(results, undefined, 2))
 
     return results
+}
+
+/*
+
+Discard any result where id is {}, "", [], etc. 
+
+*/
+async function discardEmptyIds(resultsByYears: ResultsByYear[]) {
+    for (let year of resultsByYears) {
+        year.facets = year.facets.filter(b => typeof b.id === 'number' || !isEmpty(b.id))
+        for (let facet of year.facets) {
+            facet.buckets = facet.buckets.filter(b => typeof b.id === 'number' || !isEmpty(b.id))
+        }
+    }
 }
 
 // add facet limits
@@ -362,6 +400,8 @@ export async function addCompletionCounts(
             percentage_survey: ratioToPercentage(questionRespondents / totalRespondents)
         }
         for (let facet of yearObject.facets) {
+            // TODO: not accurate because it doesn't account for
+            // respondents who didn't answer the question
             const facetTotal = sumBy(facet.buckets, 'count')
             facet.completion = {
                 total: totalRespondents,
@@ -452,10 +492,17 @@ export async function sortBuckets(resultsByYears: ResultsByYear[], options: Sort
                     )
                 })
             } else {
+                // start with an alphabetical sort to ensure a stable
+                // sort even when multiple items have same count
+                facet.buckets = sortBy(facet.buckets, 'id')
                 // sort by sort/order
-                facet.buckets = sortBy(facet.buckets, sort)
                 if (order === -1) {
+                    // reverse first so that ids end up in right order when we reverse again
                     facet.buckets.reverse()
+                    facet.buckets = sortBy(facet.buckets, sort)
+                    facet.buckets.reverse()
+                } else {
+                    facet.buckets = sortBy(facet.buckets, sort)
                 }
             }
         }
@@ -463,11 +510,28 @@ export async function sortBuckets(resultsByYears: ResultsByYear[], options: Sort
 }
 
 export async function sortFacets(resultsByYears: ResultsByYear[], options: SortOptions) {
-    const { sort, order } = options
+    const { sort, order, values } = options
     for (let year of resultsByYears) {
-        year.facets = sortBy(year.facets, sort)
-        if (order === -1) {
-            year.facets.reverse()
+        if (values && !isEmpty(values)) {
+            // if values are specified, sort by values
+            year.facets = [...year.facets].sort((a, b) => {
+                // make sure everything is a string to avoid type mismatches
+                const stringValues = values.map(v => v.toString())
+                return stringValues.indexOf(a.id.toString()) - stringValues.indexOf(b.id.toString())
+            })
+        } else {
+            // start with an alphabetical sort to ensure a stable
+            // sort even when multiple items have same count
+            year.facets = sortBy(year.facets, 'id')
+            // sort by sort/order
+            if (order === -1) {
+                // reverse first so that ids end up in right order when we reverse again
+                year.facets.reverse()
+                year.facets = sortBy(year.facets, sort)
+                year.facets.reverse()
+            } else {
+                year.facets = sortBy(year.facets, sort)
+            }
         }
     }
 }

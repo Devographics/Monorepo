@@ -1,5 +1,5 @@
-@use 'sass:math';
-$root-size-mobile: 13px;
+@use "sass:math";
+$root-size-mobile: 15px;
 $root-size: 17px;
 
 $smallest-font: 0.6rem;
@@ -11,10 +11,11 @@ $large-font: 1.1rem;
 $largeish-font: 1.3rem;
 $larger-font: 1.5rem;
 $largest-font: 2rem;
+$largestest-font: 3rem;
 
 $light: 300; // not used currently
 $medium: 400;
-$bold: 800;
+$bold: 600;
 
 @mixin font-light {
   font-weight: $light;
@@ -29,12 +30,22 @@ $bold: 800;
 }
 
 @mixin primary-font {
-  font-family: "IBM Plex Mono", monospace;
+  // font-family: "IBM Plex Mono", monospace;
+  font-family: avenir next, avenir, -apple-system, BlinkMacSystemFont, segoe ui,
+    helvetica neue, helvetica, Cantarell, Ubuntu, roboto, noto, arial,
+    sans-serif;
   font-weight: $medium;
 }
 @mixin secondary-font {
-  font-family: "IBM Plex Mono", monospace;
+  font-family: avenir next, avenir, -apple-system, BlinkMacSystemFont, segoe ui,
+    helvetica neue, helvetica, Cantarell, Ubuntu, roboto, noto, arial,
+    sans-serif;
+  // font-family: "IBM Plex Mono", monospace;
   font-weight: $bold;
+}
+@mixin monospace {
+  font-family: "IBM Plex Mono", Menlo, Consolas, Monaco, Liberation Mono,
+    Lucida Console, monospace;
 }
 @mixin emoji-font {
   font-family: "apple color emoji", "segoe ui emoji", "noto color emoji",
@@ -44,7 +55,7 @@ $bold: 800;
 
 pre,
 code {
-  @include secondary-font;
+  @include monospace;
   color: $text-color;
 }
 

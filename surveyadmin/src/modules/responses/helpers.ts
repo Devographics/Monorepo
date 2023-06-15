@@ -4,16 +4,13 @@
  * /!\ Template parsing is done separately, because it involves
  * JSX and should not be reused in scripts
  */
-import { slugify } from "@vulcanjs/utils";
 import pick from "lodash/pick.js";
-import pickBy from "lodash/pickBy.js";
-import { getSurveyFromResponse } from "../surveys/helpers";
 import {
   Field,
   FieldTemplateId,
   ParsedQuestion,
   SurveySection,
-  SurveyType,
+  SurveyEdition,
 } from "@devographics/core-models";
 import surveys from "~/surveys";
 import { statuses } from "../constants";
@@ -23,11 +20,7 @@ import { ResponseDocument } from "@devographics/core-models";
 import { isAdmin } from "@vulcanjs/permissions";
 import { VulcanGraphqlFieldSchema } from "@vulcanjs/graphql";
 import SimpleSchema from "simpl-schema";
-import {
-  getQuestionFieldName,
-  getQuestionObject,
-  parseSurvey,
-} from "./parseSurvey";
+import { getQuestionObject } from "~/modules/surveys/parser/parseSurvey";
 
 // Previously it lived in Vulcan NPM, but that's something you'd want to control more
 // precisely at app level
@@ -119,17 +112,6 @@ export const makeId = (str) => {
   return s;
 };
 
-export const getThanksPath = (response: ResponseDocument) => {
-  const survey = getSurveyFromResponse(response);
-  if (!survey)
-    throw new Error(
-      `Survey not found for response ${JSON.stringify(response)}`
-    );
-  const { name, year } = survey;
-  const path = `/survey/${slugify(name)}/${year}/${response._id}/thanks`;
-  return path;
-};
-
 export const parseOptions = (questionObject, options) => {
   const { optionsIntlId } = questionObject;
   return options.map((option) => {
@@ -179,7 +161,7 @@ export const generateIntlId = (questionObject, section, survey) => {
 export const getQuestionSchema = (
   questionObject: ParsedQuestion,
   section,
-  survey: SurveyType
+  survey: SurveyEdition
 ): VulcanGraphqlFieldSchema => {
   const {
     id,
@@ -241,38 +223,6 @@ export const ignoredFieldTypes: Array<FieldTemplateId> = [
   "receive_notifications",
   "help",
 ];
-
-export const getCompletionPercentage = (response: ResponseDocument) => {
-  let completedCount = 0;
-  let totalCount = 0;
-  const survey = getSurveyFromResponse(response);
-  if (!survey)
-    throw new Error(
-      `Could not get survey from response ${
-        response && JSON.stringify(response)
-      }`
-    );
-  const parsedOutline = parseSurvey(survey).outline;
-  parsedOutline.forEach((section) => {
-    section.questions &&
-      section.questions.forEach((question) => {
-        if (Array.isArray(question))
-          throw new Error("Question cannot be an array");
-        const questionId = getQuestionFieldName(survey, section, question);
-        const answer = response[questionId];
-        const ignoreQuestion =
-          question.template && ignoredFieldTypes.includes(question.template);
-        if (!ignoreQuestion) {
-          totalCount++;
-          if (answer !== null && typeof answer !== "undefined") {
-            completedCount++;
-          }
-        }
-      });
-  });
-  const completion = Math.round((completedCount * 100) / totalCount);
-  return completion;
-};
 
 export const surveyFromResponse = (response: ResponseDocument) => {
   const survey = surveys.find((s) => s.slug === response.surveySlug);

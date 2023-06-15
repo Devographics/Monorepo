@@ -1,55 +1,64 @@
+import { PrefilledData } from "~/components/page/hooks";
+import { encodeParams } from "./utils";
+
 /**
  * NOTE: this is SHARED code not API only, we use this in the frontend as well
  */
 export const apiRoutes = {
   account: {
-    // POST
-    signup: {
-      href: "/api/account/signup",
-      method: "POST",
-    },
-    login: {
-      href: "/api/account/login",
-      method: "POST",
-    },
     logout: {
-      href: "/api/account/logout",
+      href: () => "/api/account/logout",
       method: "POST",
     },
-    sendResetPasswordEmail: {
-      href: "/api/account/send-reset-password-email",
-      method: "POST",
-    },
-    changePassword: {
-      href: "/api/account/changePassword",
-      method: "POST",
-    },
-    verifyEmail: {
-      href: "/api/account/verify-email",
-      method: "POST",
-    },
-    // GET
-    user: {
-      href: "/api/account/user",
+    currentUser: {
+      href: () => "/api/account/current-user",
       method: "GET",
     },
     magicLogin: {
       verifyToken: {
-        href: "/api/account/magic-login/verify-token",
-        method: "GET",
+        href: (params: { token: string }) =>
+          `/api/account/magic-login/verifyToken?${encodeParams(params)}`,
+      },
+      verifyTokenAndFindCreateResponse: {
+        href: (params: { token: string }) =>
+          `/api/account/magic-login/verifyTokenAndFindCreateResponse?${encodeParams(
+            params
+          )}`,
       },
       sendEmail: {
-        href: "/api/account/magic-login/send-email",
-        method: "POST",
+        href: () => `/api/account/magic-login/sendEmail`,
       },
     },
     anonymousLogin: {
       login: {
-        href: "/api/account/anonymous-login/login",
+        href: () => "/api/account/anonymous-login/login",
+      },
+      loginAndCreateResponse: {
+        href: () => "/api/account/anonymous-login/loginAndCreateResponse",
       },
     },
   },
-  admin: {
-    dataExport: { href: "/api/admin/data-export" },
+  responses: {
+    loadResponse: {
+      href: ({ responseId }: { responseId: string }) =>
+        `/api/responses/${responseId}/loadResponse`,
+    },
+    createResponse: {
+      href: () => `/api/responses/createResponse`,
+    },
+    saveResponse: {
+      href: ({ responseId }: { responseId: string }) =>
+        `/api/responses/${responseId}/saveResponse`,
+    },
+    sendReadingList: {
+      href: ({ responseId }: { responseId: string }) =>
+        `/api/responses/${responseId}/sendReadingList`,
+    },
+  },
+  projects: {
+    search: {
+      href: ({ query }: { query: string }) =>
+        `/api/projects/search?query=${query}`,
+    },
   },
 };

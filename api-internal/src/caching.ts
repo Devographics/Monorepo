@@ -1,4 +1,4 @@
-import { Db } from 'mongodb'
+// import { Db } from 'mongodb'
 // import config from './config'
 import { RequestContext } from './types'
 
@@ -119,8 +119,8 @@ export const setCache = async (key: string, value: any, context: RequestContext)
     }
 }
 
-export const clearCache = async (db: Db) => {
+// export const clearCache = async (db: Db) => {
     // const collection = db.collection(config.mongo.cache_collection)
     // const result = await collection.deleteMany({})
     // return result
-}
+// }

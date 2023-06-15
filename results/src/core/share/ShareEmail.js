@@ -25,7 +25,7 @@ const ShareEmail = ({ subject, body, trackingId, ...rest }) => {
 ShareEmail.propTypes = {
     subject: PropTypes.string.isRequired,
     body: PropTypes.string.isRequired,
-    trackingId: PropTypes.string,
+    trackingId: PropTypes.string
 }
 
 export default ShareEmail

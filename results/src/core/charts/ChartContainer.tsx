@@ -4,12 +4,13 @@ import styled from 'styled-components'
 import { mq, spacing } from 'core/theme'
 
 export interface IndicatorProps {
-    position: "top"|"right"|"bottom"|"left"
+    position: 'top' | 'right' | 'bottom' | 'left'
 }
 
 export interface ChartContainerProps {
     height?: number
     fit?: boolean
+    minWidth?: number
     className?: string
     vscroll?: boolean
 }
@@ -52,43 +53,47 @@ const MemoIndicator = memo(Indicator)
  * - Fit: fit to viewport width
  * - Expand: force a 600px or props width
  */
-const ChartContainer = ({
-    children,
-    height,
-    minWidth = 600,
-    fit = false,
-    className = '',
-    vscroll = false
-}: PropsWithChildren<ChartContainerProps>) => (
-    <ChartContainerOuter className={`ChartContainerOuter ${className}`} style={{ height }}>
-        <Container className="ChartContainer" style={{ height }}>
-            <ChartContainerInner
-                className={`ChartContainerInner${!fit ? ' ChartContainerInner--expand' : ''}`}
-                style={{ height, minWidth: fit ? '' : minWidth }}
-            >
-                {children}
-            </ChartContainerInner>
-        </Container>
-        {!fit && (
-            <>
-                <MemoIndicator position="left" />
-                <MemoIndicator position="right" />
-                {vscroll && (
-                    <>
-                        <MemoIndicator position="top" />
-                        <MemoIndicator position="bottom" />
-                    </>
-                )}
-            </>
-        )}
-    </ChartContainerOuter>
-)
+const ChartContainer = (props: PropsWithChildren<ChartContainerProps>) => {
+    const {
+        children,
+        height,
+        minWidth = 400,
+        fit = false,
+        className = '',
+        vscroll = false,
+        ...otherProps
+    } = props
+    return (
+        <ChartContainerOuter className={`ChartContainerOuter ${className}`} style={{ height }}>
+            <Container className="ChartContainer" style={{ height }}>
+                <ChartContainerInner
+                    className={`ChartContainerInner${!fit ? ' ChartContainerInner--expand' : ''}`}
+                    style={{ height, minWidth: fit ? '' : minWidth }}
+                >
+                    {React.cloneElement(children, otherProps)}
+                </ChartContainerInner>
+            </Container>
+            {!fit && (
+                <>
+                    <MemoIndicator position="left" />
+                    <MemoIndicator position="right" />
+                    {vscroll && (
+                        <>
+                            <MemoIndicator position="top" />
+                            <MemoIndicator position="bottom" />
+                        </>
+                    )}
+                </>
+            )}
+        </ChartContainerOuter>
+    )
+}
 
 ChartContainer.propTypes = {
     height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     fit: PropTypes.bool,
     className: PropTypes.string,
-    vscroll: PropTypes.bool,
+    vscroll: PropTypes.bool
 }
 
 const ChartContainerOuter = styled.div`
@@ -105,16 +110,16 @@ const Container = styled.div`
     }
 
     .FeatureExperienceBlock__RowChart & {
-      @media ${mq.smallMedium} {
-          overflow-x: visible;
-      }
+        @media ${mq.smallMedium} {
+            overflow-x: visible;
+        }
     }
 `
 
 const ChartContainerInner = styled.div`
     &.ChartContainerInner--expand {
         @media ${mq.small} {
-          min-width:500px;
+            min-width: 500px;
         }
         @media ${mq.medium} {
             max-width: auto;

@@ -25,6 +25,8 @@
 #import "./happiness.graphql"
 #import "./bracket.graphql"
 #import "./usage.graphql"
+#import "./comments.graphql"
+#import "./explorer.graphql"
 
 enum SurveyType {
     state_of_js
@@ -45,6 +47,7 @@ type SurveyItem {
     editions: [SurveyEditionConfig]
     data: SurveyData
     emailOctopus: EmailOctopusConfig
+    partners: [SurveySponsorsItem]
 }
 
 type EmailOctopusConfig {
@@ -233,10 +236,14 @@ type Survey {
     """
     Happiness data, either for a specific category or more generally
     """
-    happiness(id: HappinessID!, filters: Filters): Happiness
+    happiness(id: HappinessID!, filters: Filters, facet: Facet): Happiness
     """
     Brackets
     """
     bracket_wins(id: BracketID!, filters: Filters, options: Options): BracketWins
     bracket_matchups(id: BracketID!, filters: Filters, options: Options): BracketMatchups
+    """
+    Explorer
+    """
+    explorer(facet1: String, facet2: String): ExplorerExperience
 }

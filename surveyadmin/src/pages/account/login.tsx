@@ -1,10 +1,10 @@
 import Layout from "~/account/core/components/layout";
-import LoginDialog from "~/account/LoginDialog";
+import { StandaloneLoginForm } from "~/account/passwordLogin/components/StandaloneLoginForm";
 
 const Login = () => {
   return (
     <Layout>
-      <LoginDialog />
+      <StandaloneLoginForm successRedirection="/admin" />
     </Layout>
   );
 };

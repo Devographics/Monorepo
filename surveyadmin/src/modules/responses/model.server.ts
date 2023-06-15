@@ -14,7 +14,7 @@ import { subscribe } from "~/server/email/email_octopus";
 // import { normalizeResponse } from '../normalization/normalize';
 
 async function duplicateCheck(validationErrors, { document, currentUser }) {
-  const existingResponse = await ResponseConnector.findOne({
+  const existingResponse = await (await getRawResponsesCollection()).findOne({
     surveySlug: document.surveySlug,
     userId: currentUser._id,
   });
@@ -48,7 +48,6 @@ async function processEmailOnUpdate(data, properties) {
         subscribe({ email, listId });
       } catch (error) {
         // We do not hard fail on subscription error, just log to Sentry
-        captureException(error);
         console.error(error);
       }
       data["isSubscribed"] = true;
@@ -84,32 +83,5 @@ export const modelDef: CreateGraphqlModelOptionsServer =
 export const Response = createGraphqlModelServer(modelDef);
 
 type ResponseDocument = any;
-import mongoose from "mongoose";
-import { captureException } from "@sentry/nextjs";
 import { surveyFromResponse } from "./helpers";
-// Using Vulcan (limited to CRUD operations)
-export const ResponseConnector = createMongooseConnector<ResponseDocument>(
-  Response,
-  {
-    mongooseSchema: new mongoose.Schema({ _id: String }, { strict: false }),
-  }
-);
-Response.crud.connector = ResponseConnector;
-
-// Using Mongoose (advised)
-export const ResponseMongooseModel =
-  ResponseConnector.getRawCollection() as mongoose.Model<ResponseDocument>;
-
-/**
- * For direct Mongo access (not advised, used only for aggregations)
- * NOTE: should be called only after the database is connected,
- * that's why it's a function
- */
-export const ResponseMongoCollection = () => {
-  if (!mongoose.connection.db) {
-    throw new Error(
-      "Trying to access Response mongo collection before Mongo/Mongoose is connected."
-    );
-  }
-  return mongoose.connection.db.collection<ResponseDocument>("responses");
-};
+import { getRawResponsesCollection } from "@devographics/mongo";

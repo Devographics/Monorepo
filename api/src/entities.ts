@@ -10,20 +10,29 @@ import path from 'path'
 import marked from 'marked'
 import hljs from 'highlight.js/lib/common'
 import { appSettings } from './settings'
+import sanitizeHtml from 'sanitize-html'
+import { RequestContext, Survey, SurveyEdition } from './types'
+import { setCache } from './caching'
+import entityResolvers from './resolvers/entities'
+import isEmpty from 'lodash/isEmpty.js'
 
 let entities: Entity[] = []
 
 // load locales if not yet loaded
-export const loadOrGetEntities = async () => {
-    if (entities.length === 0) {
+export const loadOrGetEntities = async (
+    options: { forceReload?: boolean } = { forceReload: false }
+) => {
+    const { forceReload } = options
+    if (forceReload || entities.length === 0) {
         entities = await loadEntities()
     }
     return await highlightEntitiesExampleCode(parseEntitiesMarkdown(entities))
 }
 
-type EntityFields = keyof Entity;
+type MarkdownFields = 'name' | 'description'
 
-const markdownFields = ['name', 'description'] as EntityFields[] 
+const markdownFields: MarkdownFields[] = ['name', 'description']
+
 export const parseEntitiesMarkdown = (entities: Entity[]) => {
     for (const entity of entities) {
         for (const fieldName of markdownFields) {
@@ -33,7 +42,10 @@ export const parseEntitiesMarkdown = (entities: Entity[]) => {
                 const containsTagRegex = new RegExp(/(<([^>]+)>)/i)
 
                 if (field !== fieldHtml || containsTagRegex.test(field)) {
-                    entity[fieldName] = fieldHtml
+                    entity[`${fieldName}Html`] = sanitizeHtml(fieldHtml)
+                    entity[`${fieldName}Clean`] = sanitizeHtml(fieldHtml, {
+                        allowedTags: []
+                    })
                 }
             }
         }
@@ -47,7 +59,7 @@ export const highlightEntitiesExampleCode = async (entities: Entity[]) => {
         if (example) {
             const { code, language } = example
             // make sure to trim any extra /n at the end
-            example.codeHighlighted = hljs.highlight(code.trim(), {language}).value
+            example.codeHighlighted = hljs.highlight(code.trim(), { language }).value
         }
     }
     return entities
@@ -56,7 +68,7 @@ export const highlightEntitiesExampleCode = async (entities: Entity[]) => {
 export const loadFromGitHub = async () => {
     const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
     const entities: Entity[] = []
-    console.log(`-> loading entities repo`)
+    console.log(`-> loading entities from GitHub`)
 
     const options = {
         owner: 'StateOfJS',
@@ -99,7 +111,7 @@ export const loadLocally = async () => {
 
     const entities: Entity[] = []
 
-    const entitiesDirPath = path.resolve(`../../stateof-entities/`)
+    const entitiesDirPath = path.resolve(`../../${process.env.ENTITIES_DIR}/`)
     const files = await readdir(entitiesDirPath)
     const yamlFiles = files.filter((f: String) => f.includes('.yml'))
 
@@ -135,8 +147,9 @@ export const loadEntities = async () => {
 
 export const initEntities = async () => {
     console.log('// initializing entities…')
-    const entities = await loadOrGetEntities()
+    const entities = await loadOrGetEntities({ forceReload: true })
     logToFile('entities.json', entities, { mode: 'overwrite' })
+    return entities
 }
 
 export const getEntities = async ({
@@ -149,6 +162,7 @@ export const getEntities = async ({
     tags?: string[]
 }) => {
     let entities = await loadOrGetEntities()
+    entities = entities.filter(e => !e.normalizationOnly)
     if (ids) {
         entities = entities.filter(e => ids.includes(e.id))
     }
@@ -161,25 +175,127 @@ export const getEntities = async ({
     return entities
 }
 
-// Look up entities by id, name, or aliases (case-insensitive)
-export const getEntity = async ({ id }: { id: string | number }) => {
-    const entities = await loadOrGetEntities()
+export const findEntity = (id: string, entities: Entity[]) =>
+    entities.find(e => {
+        return (
+            (e.id && e.id.toLowerCase() === id) ||
+            (e.id && e.id.toLowerCase().replace(/\-/g, '_') === id) ||
+            (e.name && e.name.toLowerCase() === id)
+        )
+    })
 
+export const getEntity = async ({ id }: { id: string | number }) => {
     if (!id || typeof id !== 'string') {
         return
     }
 
-    const lowerCaseId = id.toLowerCase()
-    // some entities are only for normalization and should not be made available through API
-    const entity = entities
-        .filter(e => !e.normalizationOnly)
-        .find(e => {
-            return (
-                (e.id && e.id.toLowerCase() === lowerCaseId) ||
-                (e.id && e.id.toLowerCase().replace(/\-/g, '_') === lowerCaseId) ||
-                (e.name && e.name.toLowerCase() === lowerCaseId)
-            )
-        })
+    const entities = await getEntities({})
 
+    const entity = findEntity(id.toLowerCase(), entities)
+
+    if (!entity) {
+        return
+    }
+    
+    if (entity.belongsTo) {
+        // if entity A belongs to another entity B, extend B with A and return the result
+        const ownerEntity = findEntity(entity.belongsTo, entities)
+        return { ...ownerEntity, ...entity }
+    } else {
+        return entity
+    }
+}
+
+/*
+
+Cache all the entities needed by a survey form
+
+Note: entities should already have all resolvers applied to them
+before being passed to cacheSurveysEntities()
+
+*/
+export const cacheSurveysEntities = async ({
+    surveys,
+    entities,
+    context
+}: {
+    surveys: Survey[]
+    entities: Entity[]
+    context: RequestContext
+}) => {
+    console.log(`// Initializing entities cache (Redis)…`)
+    setCache(getAllEntitiesCacheKey(), entities, context)
+    console.log(`-> Cached ${entities.length} entities (${getAllEntitiesCacheKey()})`)
+
+    for (const survey of surveys) {
+        for (const edition of survey.editions) {
+            const surveyId = edition?.surveyId
+            const entityIds = extractEntityIds(edition)
+            const editionEntities = entities
+                .filter(e => entityIds.includes(e.id))
+                .filter(e => !e.normalizationOnly)
+                .map(e => {
+                    const { category, patterns, ...fieldsToKeep } = e
+                    return fieldsToKeep
+                })
+
+            if (editionEntities.length > 0) {
+                setCache(getSurveyEditionEntitiesCacheKey({ surveyId }), editionEntities, context)
+                console.log(
+                    `-> Cached ${
+                        editionEntities.length
+                    } entities (${getSurveyEditionEntitiesCacheKey({ surveyId })})`
+                )
+            }
+        }
+    }
+}
+
+/*
+
+Apply GraphQL resolvers for Entity type to end up with the same object
+as if we were querying the API through GraphQL
+
+*/
+// TODO: seems unnecessary to have to define this type?
+type EntityResolverKey = 'github' | 'mdn' | 'twitter' | 'caniuse' | 'homepage' | 'npm' | 'company'
+
+export const applyEntityResolvers = async (entity: Entity, context: RequestContext) => {
+    const resolvers = entityResolvers.Entity
+    for (const resolverKey in resolvers) {
+        const resolver = resolvers[resolverKey as EntityResolverKey]
+        const resolvedValue = await resolver(entity, null, context)
+        if (!isEmpty(resolvedValue)) {
+            entity[resolverKey as EntityResolverKey] = resolvedValue
+        }
+    }
     return entity
 }
+
+/*
+
+For a given survey questions outline, extract all mentioned entities
+
+*/
+export const extractEntityIds = (edition: SurveyEdition) => {
+    let entityIds: string[] = []
+    if (edition.credits) {
+        entityIds = [...entityIds, ...edition.credits.map(c => c.id)]
+    }
+    if (edition.questions && !isEmpty(edition.questions)) {
+        for (const section of edition.questions) {
+            for (const question of section.questions) {
+                entityIds.push(question.id)
+                if (question.options) {
+                    entityIds = [...entityIds, ...question.options.map(o => o.id)]
+                }
+            }
+        }
+    }
+    return entityIds
+}
+
+export const getSurveyEditionEntitiesCacheKey = ({ surveyId }: { surveyId: string }) =>
+    `entities_${surveyId}`
+
+export const getAllEntitiesCacheKey = () => `entities_all`

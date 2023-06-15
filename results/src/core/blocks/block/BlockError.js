@@ -6,6 +6,7 @@ import BlockDebug from 'core/blocks/block/BlockDebug'
 
 export const BlockError = ({ message, data, block, children }) => (
     <Block block={block}>
+        <h3 className="block">{block.id}</h3>
         <div className="error">{message}</div>
         <BlockDebug block={block} data={data} />
         {children}

@@ -1,7 +1,6 @@
 import moment from "moment";
-import surveys from "~/surveys";
 
-import { getCompletionPercentage, getKnowledgeScore } from "./helpers";
+import { getKnowledgeScore } from "./helpers";
 import { VulcanGraphqlSchemaServer } from "@vulcanjs/graphql/server";
 import { schema as schemaCommon } from "./schema";
 
@@ -11,6 +10,7 @@ import { extendSchemaServer } from "@devographics/core-models";
 
 import { nanoid } from "nanoid";
 import { ApiContext } from "~/lib/server/context";
+import { fetchSurveyFromId } from "@devographics/core-models/server";
 
 export const schema: VulcanGraphqlSchemaServer = extendSchemaServer(
   schemaCommon,
@@ -62,11 +62,6 @@ export const schema: VulcanGraphqlSchemaServer = extendSchemaServer(
         );
       },
     },
-    completion: {
-      onUpdate: ({ document, data }) => {
-        return getCompletionPercentage({ ...document, ...data });
-      },
-    },
     knowledgeScore: {
       onUpdate: ({ document }) => {
         return getKnowledgeScore(document).score;
@@ -75,19 +70,6 @@ export const schema: VulcanGraphqlSchemaServer = extendSchemaServer(
     locale: {
       onUpdate: async ({ document, context, currentUser }) => {
         return (context as ApiContext).locale;
-        /*
-        TODO: this should be computed when creating the context
-        Currently we get the locale from Accept-Language or explicit cookies,
-        not from the deb
-        const user = await UserMongooseModel.findOne({
-          _id: document.userId,
-        }).exec();
-        if (!user)
-          throw new Error(
-            `Could not update locale, user with id "${document.userId}" not found`
-          );
-        return user && user.locale;
-        */
       },
     },
     isNormalized: {
@@ -124,7 +106,10 @@ export const schema: VulcanGraphqlSchemaServer = extendSchemaServer(
         typeName: "Survey",
         // TODO: use a relation instead
         resolver: async (response, args, context) => {
-          return surveys.find((s) => s.slug === response.surveySlug);
+          if (!response.surveySlug) {
+            throw new Error(`Can't get response survey, response ${response._id} has no surveySlug`)
+          }
+          return await fetchSurveyFromId(response.surveySlug)
         },
       },
     },

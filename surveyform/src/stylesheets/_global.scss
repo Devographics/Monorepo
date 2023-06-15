@@ -1,4 +1,4 @@
-@use 'sass:math';
+@use "sass:math";
 :focus:not(:focus-visible) {
   outline: none;
 }
@@ -157,12 +157,19 @@ Page-specific styles
   margin: 0 auto $spacing * 2 auto;
 }
 
-.main-contents {
+.main-contents,
+.header {
   flex: 1 0 auto;
   padding: $spacing;
 
   @include small {
     padding: math.div($spacing, 2);
+  }
+  @include medium {
+    padding: $spacing;
+  }
+  @include large {
+    padding: $spacing $spacing * 2;
   }
 }
 
@@ -194,7 +201,7 @@ Page-specific styles
   text-align: center;
   margin: $spacing * 2 $spacing 0 $spacing;
   border-top: $border;
-  font-size: $small-font;
+  font-size: $smallish-font;
   padding: $spacing;
 }
 .footer-bottom {

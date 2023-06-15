@@ -1,10 +1,10 @@
 import { getDynamicResolvers } from '../helpers'
 import { winsAggregationFunction, matchupsAggregationFunction } from '../compute/brackets'
-import keys from '../data/keys.yml'
+import { getChartKeys } from '../helpers'
 
 export default {
     BracketWins: {
-        keys: () => keys.bracket,
+        keys: () => getChartKeys('bracket'),
         ...getDynamicResolvers(
             id => {
                 const fullPath = id.replace('__', '.')
