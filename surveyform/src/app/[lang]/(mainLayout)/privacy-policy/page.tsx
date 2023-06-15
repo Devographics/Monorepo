@@ -2,7 +2,7 @@ import PrivacyPolicy from "./PrivacyPolicy";
 
 // TODO: @upstash/redis is incompatible with static rendering
 // @see https://github.com/upstash/upstash-redis/issues/397
-export const dynamic = "force-dynamic";
+export const dynamic = "force-static";
 
 // uncomment to enable static builds
 /*
