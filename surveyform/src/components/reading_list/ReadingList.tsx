@@ -7,16 +7,15 @@ import {
   getEditionEntities,
   getEditionQuestions,
 } from "~/lib/surveys/helpers";
-import EntityLabel from "~/components/common/EntityLabel";
 import { Button } from "~/components/ui/Button";
 import { Cross } from "../icons";
-import QuestionLabel from "../form/QuestionLabel";
 import {
   Entity,
   QuestionMetadata,
   ResponseDocument,
   SectionMetadata,
 } from "@devographics/types";
+import ItemLabel from "./ItemLabel";
 
 const cutoff = 5;
 const animationDurationInMs = 700;
@@ -117,10 +116,6 @@ const ListItem = ({
   response?: ResponseDocument;
   updateCurrentValues: any;
 }) => {
-  const { question } = entity;
-  if (!question) {
-    return null;
-  }
   const handleClick = () => {
     const readingList = response?.readingList || [];
     updateCurrentValues({
@@ -130,11 +125,7 @@ const ListItem = ({
 
   return (
     <li className="reading-list-item">
-      {question ? (
-        <QuestionLabel section={question.section} question={question} />
-      ) : (
-        <EntityLabel entity={entity} />
-      )}
+      <ItemLabel entity={entity} />
       <button className="reading-list-item-delete" onClick={handleClick}>
         <Cross />
       </button>

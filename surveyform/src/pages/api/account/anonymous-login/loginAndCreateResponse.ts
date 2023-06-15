@@ -20,7 +20,7 @@ import { createResponse } from "~/lib/responses/db-actions/create";
 
 passport.use(anonymousLoginStrategy);
 
-interface AnonymousLoginReqBody { }
+interface AnonymousLoginReqBody {}
 // NOTE: adding NextApiRequest, NextApiResponse is required to get the right typings in next-connect
 // this is the normal behaviour
 const loginAndCreateResponse = nextConnect<NextApiRequest, NextApiResponse>()
@@ -36,7 +36,6 @@ const loginAndCreateResponse = nextConnect<NextApiRequest, NextApiResponse>()
     ),
     async (req, res, next) => {
       const user = (req as unknown as any).user;
-      console.log(`// found user: ${user?._id}`);
       if (!user) {
         return res
           .status(500)
@@ -48,18 +47,12 @@ const loginAndCreateResponse = nextConnect<NextApiRequest, NextApiResponse>()
     async (req, res) => {
       const currentUser = (req as unknown as any).user;
       const clientData = req.body;
-      console.log(
-        `// found clientData: ${JSON.stringify(clientData, null, 2)}`
-      );
-
       const response = await createResponse({ clientData, currentUser });
-      console.log(`// created response: ${response._id}`);
       return res
         .status(200)
         .send({ done: true, userId: req.user._id, response });
     }
   );
-
 
 // TODO: removing apiWrapper and/or upgrading to sentry v7 destroys the universe
 export default apiWrapper(loginAndCreateResponse);

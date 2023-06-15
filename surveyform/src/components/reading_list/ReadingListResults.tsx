@@ -18,6 +18,7 @@ import { sendReadingList } from "../page/services";
 import { LoadingButton } from "../ui/LoadingButton";
 import { Entity, QuestionMetadata } from "@devographics/types";
 import QuestionLabel from "../form/QuestionLabel";
+import ItemLabel from "./ItemLabel";
 
 const cutoff = 3;
 
@@ -107,25 +108,23 @@ const ListItem = ({
   }
 
   const description = descriptionHtml || descriptionClean;
+
   return (
     <div className="reading-list-item">
       <h5 className="reading-list-item-title">
-        {question ? (
-          <QuestionLabel section={question.section} question={question} />
+        {homepage?.url ? (
+          <a href={homepage.url} className="reading-list-item-title-link">
+            <ItemLabel entity={entity} />
+            <Share />
+          </a>
         ) : (
-          <EntityLabel entity={entity} />
+          <ItemLabel entity={entity} />
         )}
         <ul className="reading-list-item-links">
           {mdn && <LinkItem url={mdn.url} label="MDN" />}
           {github?.url && <LinkItem url={github.url} label="GitHub" />}
           {w3c?.url && <LinkItem url={w3c.url} label="w3c" />}
           {caniuse?.url && <LinkItem url={caniuse.url} label="CanIUse" />}
-          {homepage && (
-            <LinkItem
-              url={homepage.url}
-              label={<FormattedMessage id="readinglist.homepage_link" />}
-            />
-          )}
         </ul>
       </h5>
       {description && (

@@ -95,6 +95,17 @@
         gap: $spacing/2;
         margin-bottom: $spacing/2;
         font-size: $large-font;
+        &-link {
+          display: flex;
+          align-items: center;
+          gap: 5px;
+          svg {
+            width: 16px;
+            height: 16px;
+            position: relative;
+            top: -2px;
+          }
+        }
       }
       &-summary {
         font-size: $medium-font;
@@ -114,10 +125,12 @@
       align-items: center;
       gap: $spacing/6;
       padding: 4px 8px;
+      font-size: $small-font;
       // @include primary-font;
       span {
         display: block;
         line-height: 1;
+        @include font-regular;
       }
       svg {
         width: 16px;
