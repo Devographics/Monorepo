@@ -4,19 +4,21 @@ import { getPaths, checkHasId } from '../helpers'
 import { DbSuffixes } from '@devographics/types'
 
 export const feature: TemplateFunction = options => {
-    const question = checkHasId(options)
-    const output: QuestionTemplateOutput = {
+    checkHasId(options)
+
+    const question = {
         allowComment: true,
         options: FEATURES_OPTIONS.map(id => ({
             id,
             intlId: `options.features.${id}`
         })),
         defaultSort: 'options',
-        ...question
+        ...options.question
+    } as QuestionTemplateOutput
+
+    const output: QuestionTemplateOutput = {
+        ...question,
+        ...getPaths({ ...options, question }, DbSuffixes.EXPERIENCE)
     }
-    const output2: QuestionTemplateOutput = {
-        ...output,
-        ...getPaths({ ...options, question: output }, DbSuffixes.EXPERIENCE)
-    }
-    return output2
+    return output
 }

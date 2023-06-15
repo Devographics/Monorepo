@@ -11,13 +11,17 @@ const getSliderOptions = (question: Question) => {
 }
 
 export const slider: TemplateFunction = options => {
-    const question = checkHasId(options)
+    checkHasId(options)
 
-    const output: QuestionTemplateOutput = {
+    const question = {
         defaultSort: 'options',
         optionsAreNumeric: true,
-        options: getSliderOptions(question),
-        ...getPaths(options, DbSuffixes.CHOICES),
+        options: getSliderOptions(options.question),
+        ...options.question
+    } as QuestionTemplateOutput
+
+    const output: QuestionTemplateOutput = {
+        ...getPaths({ ...options, question }, DbSuffixes.CHOICES),
         ...question
     }
 

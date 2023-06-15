@@ -27,7 +27,7 @@ export const localesResolvers = {
         { localeIds, contexts }: { localeIds: string[]; contexts: string[] },
         context: RequestContext
     ) => {
-        return await getLocales({ localeIds: localeIds.map(convert), contexts, context })
+        return await getLocales({ localeIds: localeIds?.map(convert), contexts, context })
     },
     translation: async (
         root: any,

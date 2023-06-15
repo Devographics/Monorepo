@@ -3,20 +3,21 @@ import { getPaths, checkHasId } from '../helpers'
 import { TOOLS_OPTIONS } from '@devographics/constants'
 
 export const tool: TemplateFunction = options => {
-    const question = checkHasId(options)
-    const output: QuestionTemplateOutput = {
+    checkHasId(options)
+
+    const question = {
         allowComment: true,
         options: TOOLS_OPTIONS.map(id => ({
             id,
             intlId: `options.tools.${id}`
         })),
         defaultSort: 'options',
-        ...question
-    }
+        ...options.question
+    } as QuestionTemplateOutput
 
-    const output2: QuestionTemplateOutput = {
-        ...output,
-        ...getPaths({ ...options, question: output }, DbSuffixes.EXPERIENCE)
+    const output: QuestionTemplateOutput = {
+        ...question,
+        ...getPaths({ ...options, question }, DbSuffixes.EXPERIENCE)
     }
-    return output2
+    return output
 }

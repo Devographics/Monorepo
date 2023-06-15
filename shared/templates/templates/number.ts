@@ -3,10 +3,15 @@ import { TemplateFunction } from '@devographics/types'
 import { getPaths, checkHasId } from '../helpers'
 
 export const number: TemplateFunction = options => {
-    const question = checkHasId(options)
+    checkHasId(options)
+
+    const question = {
+        optionsAreNumeric: true,
+        ...options.question
+    } as QuestionTemplateOutput
+
     const output: QuestionTemplateOutput = {
         ...getPaths(options, DbSuffixes.CHOICES),
-        optionsAreNumeric: true,
         ...question
     }
     return output

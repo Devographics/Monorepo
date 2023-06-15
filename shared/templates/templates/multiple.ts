@@ -3,12 +3,17 @@ import { TemplateFunction } from '@devographics/types'
 import { getPaths, checkHasId } from '../helpers'
 
 export const multiple: TemplateFunction = options => {
-    const question = checkHasId(options)
-    const output: QuestionTemplateOutput = {
+    checkHasId(options)
+
+    const question = {
         extends: 'multiple',
         allowMultiple: true,
         allowOther: true,
-        ...getPaths(options, DbSuffixes.CHOICES),
+        ...options.question
+    } as QuestionTemplateOutput
+
+    const output = {
+        ...getPaths({ ...options, question }, DbSuffixes.CHOICES),
         ...question
     }
     return output
