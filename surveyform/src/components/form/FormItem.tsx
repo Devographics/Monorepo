@@ -103,7 +103,7 @@ export const FormItemTitle = (props: FormItemProps) => {
   const { clean: label } = useQuestionTitle({ section, question });
 
   return (
-    <h3 className="form-label-heading">
+    <h3 className="form-label-heading" id={question.id}>
       <Form.Label>
         <QuestionLabel section={section} question={question} />
 

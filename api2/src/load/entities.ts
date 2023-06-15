@@ -41,19 +41,23 @@ type MarkdownFields = 'name' | 'description'
 
 const markdownFields: MarkdownFields[] = ['name', 'description']
 
+const containsTagRegex = new RegExp(/(<([^>]+)>)/i)
+const htmlEntitiesRegex = new RegExp(/&([a-z0-9]+|#[0-9]{1,6}|#x[0-9a-fA-F]{1,6});/gi)
+
 export const parseEntitiesMarkdown = (entities: Entity[]) => {
     for (const entity of entities) {
         for (const fieldName of markdownFields) {
             const field = entity[fieldName]
             if (field) {
                 const fieldHtml = marked.parseInline(field)
-                const containsTagRegex = new RegExp(/(<([^>]+)>)/i)
 
                 if (field !== fieldHtml || containsTagRegex.test(field)) {
                     entity[`${fieldName}Html`] = sanitizeHtml(fieldHtml)
                     entity[`${fieldName}Clean`] = sanitizeHtml(fieldHtml, {
                         allowedTags: []
                     })
+                        .replace(htmlEntitiesRegex, '')
+                        .replace('\n', '')
                 } else {
                     entity[`${fieldName}Clean`] = field
                 }

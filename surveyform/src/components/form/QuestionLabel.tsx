@@ -5,9 +5,11 @@ import { QuestionMetadata, SectionMetadata } from "@devographics/types";
 export const QuestionLabel = ({
   section,
   question,
+  formatCode = true,
 }: {
   section: SectionMetadata;
   question: QuestionMetadata;
+  formatCode?: boolean;
 }) => {
   const { entity } = question;
   const i18n = getQuestioni18nIds({ section, question });
@@ -16,12 +18,16 @@ export const QuestionLabel = ({
     entity && (entity.nameHtml || entity.nameClean || entity.name);
 
   return entityName ? (
-    <span
-      className="entity-label"
-      dangerouslySetInnerHTML={{
-        __html: entityName,
-      }}
-    />
+    formatCode ? (
+      <span
+        className="entity-label"
+        dangerouslySetInnerHTML={{
+          __html: entityName,
+        }}
+      />
+    ) : (
+      <span className="entity-label">{entity.nameClean}</span>
+    )
   ) : (
     <FormattedMessage id={i18n.base} />
   );

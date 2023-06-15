@@ -175,7 +175,20 @@
   line-height: 1.7;
   margin: 0;
 }
-
+.section-toc {
+  margin-top: $spacing;
+  ol {
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing/2;
+  }
+  li {
+    a {
+      font-size: $smallish-font;
+    }
+  }
+}
 .survey-message {
   padding: $spacing;
   margin-bottom: $spacing * 2;

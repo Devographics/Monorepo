@@ -28,7 +28,13 @@ const ItemLabel = ({ entity }: { entity: EntityWithQuestion }) => {
 };
 
 const QuestionItem = ({ question }) => {
-  return <QuestionLabel section={question.section} question={question} />;
+  return (
+    <QuestionLabel
+      formatCode={false}
+      section={question.section}
+      question={question}
+    />
+  );
 };
 
 const OptionItem = ({ option, question }) => {
