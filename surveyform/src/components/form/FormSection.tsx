@@ -51,22 +51,8 @@ export const FormSection = (
   );
   const [errorResponse, setErrorResponse] = useState();
   const [messages, setMessages] = useState<Message[]>([]);
-  const [scrollPosition, setScrollPosition] = useState(0);
   const [itemPositions, setItemPositions] = useState([]);
   const [reactToChanges, setReactToChanges] = useState(true);
-
-  const handleScroll = () => {
-    const position = window.pageYOffset;
-    setScrollPosition(position);
-  };
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
 
   const { locale } = useLocaleContext();
 
@@ -85,8 +71,6 @@ export const FormSection = (
     setErrorResponse,
     messages,
     setMessages,
-    scrollPosition,
-    setScrollPosition,
     itemPositions,
     setItemPositions,
     reactToChanges,
