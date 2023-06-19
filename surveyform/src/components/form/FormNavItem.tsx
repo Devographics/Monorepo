@@ -53,6 +53,8 @@ const SurveyNavItem = ({
   const isBeforeCurrent = number < sectionNumber;
   const beforeClass = isBeforeCurrent ? "section-nav-item-before-current" : "";
 
+  const isFinished = number === edition.sections.length;
+
   const path = getEditionSectionPath({
     edition,
     survey: edition.survey,
@@ -80,6 +82,7 @@ const SurveyNavItem = ({
       afterSubmitCallback: () => {
         setNavLoading(false);
       },
+      isFinished,
     });
   };
 

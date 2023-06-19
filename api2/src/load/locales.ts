@@ -157,6 +157,10 @@ export const loadOrGetLocales = async (
     return Locales
 }
 
+export const initLocales = async () => {
+    await loadOrGetLocales({ forceReload: true })
+}
+
 /*
 
 Load locales contents through GitHub API or locally

@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { getSectionKey } from "~/lib/surveys/helpers";
 import QuestionLabel from "../form/QuestionLabel";
 import { FormInputProps } from "../form/typings";
-import minBy from "lodash/minBy";
 
 const SurveySectionHeading = ({
   section,
@@ -12,7 +11,23 @@ const SurveySectionHeading = ({
   stateStuff,
 }: FormInputProps) => {
   const { id, intlId } = section;
-  const { scrollPosition, itemPositions } = stateStuff;
+  const { itemPositions } = stateStuff;
+
+  const [scrollPosition, setScrollPosition] = useState(0);
+
+  const handleScroll = () => {
+    const position = window.pageYOffset;
+    setScrollPosition(position);
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
     <div className="section-heading">
       <div className="section-heading-contents">

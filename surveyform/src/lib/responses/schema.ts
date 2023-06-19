@@ -43,11 +43,7 @@ export const responseBaseSchema: Schema = {
   // tracks the most recent time the user reached the end of the survey
   finishedAt: {
     type: Date,
-    onUpdate: ({ clientData }) => {
-      if (clientData.isFinished) {
-        return new Date();
-      }
-    },
+    clientMutable: true,
   },
   /**
    * NOTE: this userId is only present in Response

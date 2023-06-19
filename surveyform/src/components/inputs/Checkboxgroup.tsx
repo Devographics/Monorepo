@@ -11,6 +11,7 @@ import { seededShuffle } from "~/lib/utils";
 import { OPTION_NA } from "@devographics/types";
 import OtherOption from "./OtherOption";
 import sortBy from "lodash/sortBy";
+import { getFormPaths } from "~/lib/surveys/helpers";
 
 const defaultCutoff = 10;
 // how many items to allow past the cutoff limit before actually cutting off the list
@@ -18,14 +19,17 @@ const cutoffMargin = 2;
 
 // note: treat checkbox group the same as a nested component, using `path`
 export const FormComponentCheckboxGroup = (props: FormInputProps) => {
-  const { value: value_ = [], question, response } = props;
+  const { value: value_ = [], edition, question, response } = props;
   const value = value_ as Array<string | number>;
   const hasValue = value?.length > 0;
   const intl = useIntlContext();
 
+  const formPaths = getFormPaths({ edition, question });
+  const otherValue = response?.[formPaths.other!];
+
   const [showMore, setShowMore] = useState(false);
   // keep track of whether "other" field is shown or not
-  const [showOther, setShowOther] = useState(hasValue);
+  const [showOther, setShowOther] = useState(!!otherValue);
 
   const { options: options_, allowOther, limit, randomize } = question;
 

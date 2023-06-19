@@ -21,9 +21,11 @@ export const getCompletionPercentage = ({
     section.questions &&
       section.questions.forEach((question) => {
         const formPaths = getFormPaths({ edition, question });
-        const fieldName = formPaths.response;
-        if (fieldName) {
-          const answer = response[fieldName];
+        const responsePath = formPaths.response;
+        const otherPath = formPaths.other;
+        const answer = responsePath && response[responsePath];
+        const otherAnswer = otherPath && response[otherPath];
+        if (answer || otherAnswer) {
           const ignoreQuestion =
             question.template && ignoredFieldTypes.includes(question.template);
           if (!ignoreQuestion) {
@@ -150,10 +152,12 @@ export const getSectionCompletionPercentage = ({
 
   const completedQuestions = completableQuestions.filter((question) => {
     const formPaths = getFormPaths({ edition, question });
-    const fieldName = formPaths?.response!;
-    const isCompleted =
-      response[fieldName] !== null &&
-      typeof response[fieldName] !== "undefined";
+
+    const responsePath = formPaths.response;
+    const otherPath = formPaths.other;
+    const answer = responsePath && response[responsePath];
+    const otherAnswer = otherPath && response[otherPath];
+    const isCompleted = !!answer || !!otherAnswer;
     return isCompleted;
   });
 

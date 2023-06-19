@@ -29,6 +29,7 @@ import { generateTypeObjects, getQuestionObjects, parseSurveys } from './generat
 import { generateResolvers } from './generate/resolvers'
 
 import { loadOrGetEntities } from './load/entities'
+import { watchFiles } from './helpers/watch'
 
 const app = express()
 
@@ -204,15 +205,16 @@ const start = async () => {
     //     await initDbCache({ context, data })
     // }
 
-    // if (process.env.LOAD_DATA === 'local') {
-    //     await watchFiles({
-    //         context,
-    //         config: {
-    //             entities: process.env.ENTITIES_DIR,
-    //             surveys: process.env.SURVEYS_DIR
-    //         }
-    //     })
-    // }
+    if (process.env.LOAD_DATA === 'local') {
+        await watchFiles({
+            context,
+            config: {
+                entities: process.env.ENTITIES_DIR,
+                surveys: process.env.SURVEYS_DIR,
+                locales: process.env.LOCALES
+            }
+        })
+    }
 
     const finishedAt = new Date()
 

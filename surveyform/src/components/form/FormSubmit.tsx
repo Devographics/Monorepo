@@ -19,15 +19,8 @@ interface FormSubmitProps extends FormInputProps {
 }
 
 export const FormSubmit = (props: FormSubmitProps) => {
-  const {
-    response,
-    sectionNumber,
-    nextSection,
-    previousSection,
-    // showMessage = true,
-    readOnly,
-    submitForm,
-  } = props;
+  const { response, sectionNumber, nextSection, previousSection, readOnly } =
+    props;
 
   const { locale } = useLocaleContext();
   const { edition } = useEdition();
@@ -108,7 +101,11 @@ interface SubmitButtonProps extends FormSubmitProps {
 const SubmitButton = (props: SubmitButtonProps) => {
   const [buttonLoading, setButtonLoading] = useState(false);
 
-  const { intlId, path, type, readOnly, submitForm } = props;
+  const { edition, sectionNumber, intlId, path, type, readOnly, submitForm } =
+    props;
+
+  const isFinished =
+    sectionNumber === edition.sections.length && type === "next";
 
   const sectionName = <FormattedMessage id={intlId} defaultMessage={intlId} />;
   const contents = (
@@ -150,6 +147,7 @@ const SubmitButton = (props: SubmitButtonProps) => {
               afterSubmitCallback: () => {
                 setButtonLoading(false);
               },
+              isFinished,
             });
           }}
         >

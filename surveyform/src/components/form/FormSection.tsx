@@ -12,6 +12,14 @@ import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { useResponse } from "../ResponseContext/ResponseProvider";
 import { Edition, ResponseDocument, Section } from "@devographics/types";
 import { Message } from "./FormMessages";
+import { useMessagesContext } from "../common/UserMessagesContext";
+
+interface ClientData {
+  [key: string]: any;
+  lastSavedAt: Date;
+  locale: string;
+  finishedAt?: Date;
+}
 
 const initFormState = (response) => ({
   currentValues: {},
@@ -51,22 +59,10 @@ export const FormSection = (
   );
   const [errorResponse, setErrorResponse] = useState();
   const [messages, setMessages] = useState<Message[]>([]);
-  const [scrollPosition, setScrollPosition] = useState(0);
   const [itemPositions, setItemPositions] = useState([]);
   const [reactToChanges, setReactToChanges] = useState(true);
 
-  const handleScroll = () => {
-    const position = window.pageYOffset;
-    setScrollPosition(position);
-  };
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+  const { addMessage } = useMessagesContext();
 
   const { locale } = useLocaleContext();
 
@@ -85,8 +81,6 @@ export const FormSection = (
     setErrorResponse,
     messages,
     setMessages,
-    scrollPosition,
-    setScrollPosition,
     itemPositions,
     setItemPositions,
     reactToChanges,
@@ -112,6 +106,7 @@ export const FormSection = (
     path,
     beforeSubmitCallback,
     afterSubmitCallback,
+    isFinished = false,
   }: {
     /**
      * Next page path
@@ -119,6 +114,7 @@ export const FormSection = (
     path: string;
     beforeSubmitCallback: any;
     afterSubmitCallback: any;
+    isFinished: boolean;
   }) => {
     if (!response) {
       throw new Error(
@@ -136,11 +132,14 @@ export const FormSection = (
       if (beforeSubmitCallback) {
         beforeSubmitCallback();
       }
-      const data = {
+      const data: ClientData = {
         ...currentValues,
         lastSavedAt: new Date(),
         locale: locale.id,
       };
+      if (isFinished) {
+        data.finishedAt = new Date();
+      }
       // run action
       const res = await saveResponse({
         responseId: response._id,
@@ -169,6 +168,8 @@ export const FormSection = (
       //console.log("Update response", res);
       updateResponseFromClient(res.data!);
       router.push(path);
+      console.log("saved");
+      addMessage({ type: "success", bodyId: "success.data_saved.description" });
       // window.location.pathname = path;
     }
   };
@@ -187,10 +188,6 @@ export const FormSection = (
   const previousSection = edition.sections[sectionIndex - 1];
   const nextSection = edition.sections[sectionIndex + 1];
 
-  const addMessage = (message: Message) => {
-    setMessages((messages) => [...messages, message]);
-  };
-
   const formProps = {
     ...props,
     response,
@@ -199,7 +196,6 @@ export const FormSection = (
     nextSection,
     updateCurrentValues,
     submitForm,
-    addMessage,
   };
 
   return (

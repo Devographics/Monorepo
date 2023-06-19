@@ -1,3 +1,5 @@
+// Note: these messages are now displayed from the AppLayout level
+
 "use client";
 import { useState, useEffect, Dispatch, SetStateAction } from "react";
 import { FormInputProps } from "./typings";
@@ -16,7 +18,13 @@ export interface Message {
   bodyValues?: any;
 }
 
-const FormMessages = (props: FormInputProps) => {
+export interface FormMessagesProps {
+  stateStuff: {
+    messages: Message[];
+  };
+}
+
+const FormMessages = (props: FormMessagesProps) => {
   const { stateStuff } = props;
   const { messages } = stateStuff;
   useEffect(() => {}, [messages]);

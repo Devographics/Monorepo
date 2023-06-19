@@ -18,6 +18,9 @@ import SSRProvider from "react-bootstrap/SSRProvider";
 import { SWRConfig } from "swr";
 import { useSearchParams } from "next/navigation";
 import { KeydownContextProvider } from "~/components/common/KeydownContext";
+import { UserMessagesProvider } from "~/components/common/UserMessagesContext";
+
+import { Analytics } from "@vercel/analytics/react";
 
 export interface AppLayoutProps {
   /** Locale extracted from cookies server-side */
@@ -84,7 +87,9 @@ export function AppLayout(props: AppLayoutProps) {
                     proposeHomeRedirection={true}
                   >
                     <KeydownContextProvider>
-                      {addWrapper ? <Layout>{children}</Layout> : children}
+                      <UserMessagesProvider>
+                        {addWrapper ? <Layout>{children}</Layout> : children}
+                      </UserMessagesProvider>
                     </KeydownContextProvider>
                   </ErrorBoundary>
                 </LocaleContextProvider>
@@ -92,6 +97,7 @@ export function AppLayout(props: AppLayoutProps) {
             }
           </ErrorBoundary>
         </SSRProvider>
+        <Analytics />
       </body>
     </html>
   );
