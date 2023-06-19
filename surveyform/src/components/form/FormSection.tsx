@@ -138,7 +138,6 @@ export const FormSection = (
         locale: locale.id,
       };
       if (isFinished) {
-        alert("finished!");
         data.finishedAt = new Date();
       }
       // run action
