@@ -13,6 +13,13 @@ import { useResponse } from "../ResponseContext/ResponseProvider";
 import { Edition, ResponseDocument, Section } from "@devographics/types";
 import { Message } from "./FormMessages";
 
+interface ClientData {
+  [key: string]: any;
+  lastSavedAt: Date;
+  locale: string;
+  finishedAt?: Date;
+}
+
 const initFormState = (response) => ({
   currentValues: {},
   deletedValues: {},
@@ -96,6 +103,7 @@ export const FormSection = (
     path,
     beforeSubmitCallback,
     afterSubmitCallback,
+    isFinished = false,
   }: {
     /**
      * Next page path
@@ -103,6 +111,7 @@ export const FormSection = (
     path: string;
     beforeSubmitCallback: any;
     afterSubmitCallback: any;
+    isFinished: boolean;
   }) => {
     if (!response) {
       throw new Error(
@@ -120,11 +129,15 @@ export const FormSection = (
       if (beforeSubmitCallback) {
         beforeSubmitCallback();
       }
-      const data = {
+      const data: ClientData = {
         ...currentValues,
         lastSavedAt: new Date(),
         locale: locale.id,
       };
+      if (isFinished) {
+        alert("finished!");
+        data.finishedAt = new Date();
+      }
       // run action
       const res = await saveResponse({
         responseId: response._id,
