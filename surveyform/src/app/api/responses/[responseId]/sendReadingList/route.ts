@@ -111,8 +111,9 @@ const getReadingListEmail = ({
 ${textHeader(props)}
 
 ${readingList
-      .map((itemId) => textItem({ ...props, entity: getEntity(itemId) }))
-      .join("")}
+  .filter((itemId) => !!getEntity(itemId))
+  .map((itemId) => textItem({ ...props, entity: getEntity(itemId) }))
+  .join("")}
 
 ${textFooter(props)}
 `;
@@ -121,8 +122,9 @@ ${textFooter(props)}
 ${htmlHeader(props)}
 
 ${readingList
-      .map((itemId) => htmlItem({ ...props, entity: getEntity(itemId) }))
-      .join("")}
+  .filter((itemId) => !!getEntity(itemId))
+  .map((itemId) => htmlItem({ ...props, entity: getEntity(itemId) }))
+  .join("")}
 
 ${htmlFooter(props)}
 `;
@@ -139,9 +141,9 @@ ${entity.nameClean}
 ${entity?.mdn?.summary || ""}
 
 ${[entity?.mdn?.url, entity?.github?.url, entity?.homepage?.url]
-    .filter((l) => !!l)
-    .map((l) => `- ${l}`)
-    .join("\n")}
+  .filter((l) => !!l)
+  .map((l) => `- ${l}`)
+  .join("\n")}
 
 ${entity?.resources ? entity.resources.map((l) => `- ${l.url}`).join("\n") : ""}
 
@@ -160,14 +162,15 @@ const htmlItem = ({ survey, edition, entity }) => `
     <div>
     <ul>
     ${[entity?.mdn?.url, entity?.github?.url, entity?.homepage?.url]
-    .filter((l) => !!l)
-    .map((l) => `<li>${l}</li>`)
-    .join("\n")}
+      .filter((l) => !!l)
+      .map((l) => `<li>${l}</li>`)
+      .join("\n")}
 
-    ${entity?.resources
-    ? entity.resources.map((l) => `<li>${l.url}</li>`).join("\n")
-    : ""
-  }
+    ${
+      entity?.resources
+        ? entity.resources.map((l) => `<li>${l.url}</li>`).join("\n")
+        : ""
+    }
     </ul>
 </div>
 <br/>
