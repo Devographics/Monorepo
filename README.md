@@ -76,6 +76,11 @@ For example, `apollo-server-express` depens on `apollo-server-core`. But if you 
 
 ## Services
 
+- Upstash for serverless Redis
+
+/!\ This means we connect to Redis via HTTP in the surveyform
+The Justfile setup shows how to add an HTTP proxy in front of a Redis instance,
+and running `just dbs` automatically handles everything for you
 
 - ScaleGrid for database hosting: https://scalegrid.io/
 11/2022: running on Mongo v4, be careful with compatibility matrix:

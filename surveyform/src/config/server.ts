@@ -42,27 +42,32 @@ export function serverConfig() {
  * in scripts that reuse this code outside of Next
  */
 export function checkServerConfig() {
+  let errors: Array<string> = []
   const mongoUri = process.env.MONGO_URI;
-  if (!mongoUri) throw new Error("MONGO_URI env variable is not defined");
+  if (!mongoUri) errors.push("MONGO_URI env variable is not defined");
   if (!process.env.GITHUB_TOKEN) {
-    throw new Error("GITHUB_TOKEN is now necessary to get the survey files");
+    errors.push("GITHUB_TOKEN is now necessary to get the survey files");
   }
   if (!process.env.INTERNAL_API_URL) {
-    throw new Error(
+    errors.push(
       "INTERNAL_API_URL should point to the internal API. It was previously named 'TRANSLATION_API'."
     );
   }
   if (process.env.NODE_ENV === "production") {
     // prod only check
     if (!process.env.REDIS_URL) {
-      throw new Error(
+      errors.push(
         "process.env.REDIS_URL is mandatory in production.\n If building locally, set this value in .env.production.local or .env.test.local"
       );
     }
     if (!process.env.TOKEN_SECRET) {
-      throw new Error("process.env.TOKEN_SECRET not set");
+      errors.push("process.env.TOKEN_SECRET not set");
     }
   } else {
     // dev only check
+  }
+  if (errors.length) {
+    console.error("// checkServerConfig")
+    throw new Error(errors.join("\n "))
   }
 }

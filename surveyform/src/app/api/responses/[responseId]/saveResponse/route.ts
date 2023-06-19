@@ -15,7 +15,6 @@ export async function POST(
     const currentUser = await handlerMustHaveCurrentUser(req);
 
     // Get responseId
-    // TODO: this should be a route parameter instead
     const responseId = params.responseId;
     if (!responseId) {
       throw new HandlerError({
