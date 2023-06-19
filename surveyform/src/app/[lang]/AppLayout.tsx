@@ -20,6 +20,8 @@ import { useSearchParams } from "next/navigation";
 import { KeydownContextProvider } from "~/components/common/KeydownContext";
 import { UserMessagesProvider } from "~/components/common/UserMessagesContext";
 
+import { Analytics } from "@vercel/analytics/react";
+
 export interface AppLayoutProps {
   /** Locale extracted from cookies server-side */
   localeId: string;
@@ -95,6 +97,7 @@ export function AppLayout(props: AppLayoutProps) {
             }
           </ErrorBoundary>
         </SSRProvider>
+        <Analytics />
       </body>
     </html>
   );
