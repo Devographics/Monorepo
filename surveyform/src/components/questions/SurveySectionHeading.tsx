@@ -3,7 +3,6 @@ import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { getSectionKey } from "~/lib/surveys/helpers";
 import QuestionLabel from "../form/QuestionLabel";
 import { FormInputProps } from "../form/typings";
-import minBy from "lodash/minBy";
 
 const SurveySectionHeading = ({
   section,

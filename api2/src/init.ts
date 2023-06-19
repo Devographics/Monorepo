@@ -1,6 +1,7 @@
 import { initEntities, cacheSurveysEntities } from './load/entities'
 import { initSurveys } from './load/surveys'
 import { initProjects } from './load/projects'
+import { initLocales } from './load/locales'
 import { RequestContext, WatchedItem } from './types'
 import { applyEntityResolvers } from './load/entities'
 import { cacheSurveys } from './load/surveys'
@@ -10,6 +11,7 @@ type InitFunctionsType = {
 }
 
 const initFunctions: InitFunctionsType = {
+    locales: initLocales,
     entities: initEntities,
     surveys: initSurveys
 }
