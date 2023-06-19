@@ -83,18 +83,26 @@ export const responseBaseSchema: Schema = {
   completion: {
     type: Number,
     onCreate: () => 0,
-    onUpdate: ({ edition, updatedResponse }) =>
-      updatedResponse &&
-      getCompletionPercentage({
-        response: updatedResponse,
-        edition,
-      }),
+    // TODO: TS doesn't catch typing errors here based on "type"
+    onUpdate: ({ edition, updatedResponse, existingResponse }): number => {
+      const up = updatedResponse &&
+        getCompletionPercentage({
+          response: updatedResponse,
+          edition,
+        })
+      if (typeof up === "number") return up
+      return existingResponse.completion || 0
+    },
   },
   knowledgeScore: {
     type: Number,
-    onUpdate: ({ edition, updatedResponse }) =>
-      updatedResponse &&
-      getKnowledgeScore({ response: updatedResponse, edition }).score,
+    // TODO: TS doesn't catch typing errors here based on "type"
+    onUpdate: ({ edition, updatedResponse, existingResponse }): number => {
+      const up = updatedResponse &&
+        getKnowledgeScore({ response: updatedResponse, edition }).score
+      if (typeof up === "number") return up
+      return existingResponse.knowledgeScore || 0
+    }
   },
   locale: {
     type: String,

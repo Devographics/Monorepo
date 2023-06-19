@@ -6,7 +6,8 @@
     "typescriptreact"
   ],
   "search.exclude": {
-    "cypress/examples/": true
+    "cypress/examples/": true,
+    "logs/": true
   },
   "files.associations": {
     "*.env.development": "env",
