@@ -53,7 +53,6 @@ export const FormLayout = (props: FormLayoutProps) => {
           {enableReadingList && <ReadingList {...props} />}
         </div>
       </div>
-      <FormMessages {...props} />
     </div>
   );
 };

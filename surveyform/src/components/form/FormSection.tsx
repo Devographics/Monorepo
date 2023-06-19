@@ -12,6 +12,7 @@ import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { useResponse } from "../ResponseContext/ResponseProvider";
 import { Edition, ResponseDocument, Section } from "@devographics/types";
 import { Message } from "./FormMessages";
+import { useMessagesContext } from "../common/UserMessagesContext";
 
 interface ClientData {
   [key: string]: any;
@@ -60,6 +61,8 @@ export const FormSection = (
   const [messages, setMessages] = useState<Message[]>([]);
   const [itemPositions, setItemPositions] = useState([]);
   const [reactToChanges, setReactToChanges] = useState(true);
+
+  const { addMessage } = useMessagesContext();
 
   const { locale } = useLocaleContext();
 
@@ -166,6 +169,8 @@ export const FormSection = (
       //console.log("Update response", res);
       updateResponseFromClient(res.data!);
       router.push(path);
+      console.log("saved");
+      addMessage({ type: "success", bodyId: "success.data_saved.description" });
       // window.location.pathname = path;
     }
   };
@@ -184,10 +189,6 @@ export const FormSection = (
   const previousSection = edition.sections[sectionIndex - 1];
   const nextSection = edition.sections[sectionIndex + 1];
 
-  const addMessage = (message: Message) => {
-    setMessages((messages) => [...messages, message]);
-  };
-
   const formProps = {
     ...props,
     response,
@@ -196,7 +197,6 @@ export const FormSection = (
     nextSection,
     updateCurrentValues,
     submitForm,
-    addMessage,
   };
 
   return (
