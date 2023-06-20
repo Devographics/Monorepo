@@ -535,3 +535,13 @@
     color: rgba(232, 253, 237, 0.9);
   }
 }
+.form-message-debug-link {
+  margin-top: $spacing/2;
+  display: flex;
+  align-items: center;
+  gap: $spacing/4;
+  svg {
+    height: 16px;
+    width: 16px;
+  }
+}

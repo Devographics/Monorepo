@@ -6,6 +6,8 @@ import { FormInputProps } from "./typings";
 import Toast from "react-bootstrap/Toast";
 import { FormattedMessage } from "../common/FormattedMessage";
 import ToastContainer from "react-bootstrap/ToastContainer";
+import newGithubIssueUrl from "new-github-issue-url";
+import { Share } from "../icons";
 
 export interface Message {
   type: "error" | "success" | "info";
@@ -16,6 +18,7 @@ export interface Message {
   body?: string;
   bodyId?: string;
   bodyValues?: any;
+  debugInfo?: any;
 }
 
 export interface FormMessagesProps {
@@ -47,6 +50,7 @@ const FormMessage = ({ message }: { message: Message }) => {
     headerValues,
     extraInfo,
     type,
+    debugInfo,
   } = message;
 
   const [showToast, setShowToast] = useState(true);
@@ -77,9 +81,56 @@ const FormMessage = ({ message }: { message: Message }) => {
           defaultMessage={body}
           values={bodyValues}
         />
+        {debugInfo && <DebugLink debugInfo={debugInfo} />}
       </Toast.Body>
     </Toast>
   );
 };
 
+const getIssueReportUrl = ({ location, timestamp, data, error }) => {
+  return newGithubIssueUrl({
+    user: "devographics",
+    repo: "monorepo",
+    title: `[surveyform] saveResponse Issue: ${error.message}`,
+    labels: ["saveResponse issue"],
+    body: `
+⚠️IMPORTANT: please make sure to remove any private data from the “Submitted Data” log⚠️
+
+### Submitted Data:
+
+\`\`\`
+${JSON.stringify(data, null, 2)}
+\`\`\`
+
+### Location
+
+${location}
+
+### Timestamp
+
+${timestamp.toString()}
+
+### Error:
+
+\`\`\`
+${JSON.stringify(error, null, 2)}
+\`\`\`
+
+`,
+  });
+};
+
+const DebugLink = ({ debugInfo }) => {
+  return (
+    <a
+      className="form-message-debug-link"
+      target="_blank"
+      rel="nofollow"
+      href={getIssueReportUrl(debugInfo)}
+    >
+      <FormattedMessage id="error.report_issue" />
+      <Share />
+    </a>
+  );
+};
 export default FormMessages;

@@ -1197,6 +1197,7 @@ importers:
       mongodb: ^5.5.0
       mongodb-memory-server: ^7.6.3
       nanoid: ^3.3.4
+      new-github-issue-url: ^1.0.0
       next: 13.4.4
       next-connect: ^0.9.1
       next-sitemap: ^1.9.12
@@ -1260,6 +1261,7 @@ importers:
       i18next-http-backend: 1.4.5
       lodash: 4.17.21
       nanoid: 3.3.4
+      new-github-issue-url: 1.0.0
       next: 13.4.4_vgii64pd2ccbnbx2v3ro5gbin4
       next-connect: 0.9.1
       next-sitemap: 1.9.12_next@13.4.4
@@ -10613,6 +10615,7 @@ packages:
       '@babel/runtime': 7.20.7
       '@types/testing-library__react-hooks': 3.4.1
       react: 18.2.0
+    dev: false
     optional: true
 
   /@testing-library/react/10.4.9_biqbaboplfbrettd7655fr4n2y:
@@ -20798,7 +20801,7 @@ packages:
       debug:
         optional: true
     dependencies:
-      debug: 4.3.4_supports-color@6.1.0
+      debug: 4.3.4
     dev: false
 
   /for-each/0.3.3:
