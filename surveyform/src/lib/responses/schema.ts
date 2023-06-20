@@ -90,8 +90,10 @@ export const responseBaseSchema: Schema = {
           response: updatedResponse,
           edition,
         })
-      if (typeof up === "number") return up
-      return existingResponse.completion || 0
+      if (typeof up === "number" && !isNaN(up)) return up
+      // in case data where corrupted
+      if (typeof existingResponse.completion === "number") return existingResponse.completion
+      return 0
     },
   },
   knowledgeScore: {
@@ -100,8 +102,9 @@ export const responseBaseSchema: Schema = {
     onUpdate: ({ edition, updatedResponse, existingResponse }): number => {
       const up = updatedResponse &&
         getKnowledgeScore({ response: updatedResponse, edition }).score
-      if (typeof up === "number") return up
-      return existingResponse.knowledgeScore || 0
+      if (typeof up === "number" && !isNaN(up)) return up
+      if (typeof existingResponse.knowledgeScore === "number") return existingResponse.knowledgeScore
+      return 0
     }
   },
   locale: {
