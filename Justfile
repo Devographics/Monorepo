@@ -12,13 +12,14 @@ redis:
 
 # HTTP proxy, use in combination with "redis" to simulate
 # a serverless environment locally (upstash)
+# The token specified here is the token that must be passed to your upstash client
 redis-http:
     docker run \
     --rm \
     -p 8080:80 \
     --label srh \
     -e SRH_MODE=env \
-    -e SRH_TOKEN=fake-development-token \
+    -e SRH_TOKEN=fake-dev-token \
     -e SRH_CONNECTION_STRING="redis://localhost:6379" \
     hiett/serverless-redis-http:latest
 

@@ -75,9 +75,6 @@ export async function getFromCache<T = any>({
         } else {
             console.debug(`🟠 [${key}] Redis cache disabled, fetching from API ${calledFromLog}`)
             resultPromise = fetchFromSource()
-            const result = await fetchFromSource()
-            // store in Redis
-            await storeRedis<T>(key, removeNull(result))
         }
         memoryCache.set(key, resultPromise)
     }
