@@ -50,7 +50,6 @@ export async function fetchJson<T = any>(key: string): Promise<T | null> {
     const redisClient = getRedisClient()
     try {
         maybeStr = await redisClient.get(key)
-        console.log({ maybeStr })
         if (!maybeStr) return null
         // note: depending on Redis client, str might already be a valid object
         const json = typeof maybeStr === 'object' ? maybeStr : JSON.parse(maybeStr)
