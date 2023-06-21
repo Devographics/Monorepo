@@ -189,6 +189,13 @@ const start = async () => {
         })
     })
 
+    app.get('/reinitialize-locales', async function (req, res) {
+        await checkSecretKey(req, res, async () => {
+            await reinitialize({ context, initList: ['locales'] })
+            res.status(200).send('Cache cleared')
+        })
+    })
+
     // app.get('/cache-avatars', async function (req, res) {
     //     checkSecretKey(req)
     //     await cacheAvatars({ context })
