@@ -20,19 +20,12 @@ export const getCompletionPercentage = ({
   edition.sections.forEach((section) => {
     section.questions &&
       section.questions.forEach((question) => {
-        const formPaths = getFormPaths({ edition, question });
-        const responsePath = formPaths.response;
-        const otherPath = formPaths.other;
-        const answer = responsePath && response[responsePath];
-        const otherAnswer = otherPath && response[otherPath];
-        if (answer || otherAnswer) {
-          const ignoreQuestion =
-            question.template && ignoredFieldTypes.includes(question.template);
-          if (!ignoreQuestion) {
-            totalCount++;
-            if (answer !== null && typeof answer !== "undefined") {
-              completedCount++;
-            }
+        const ignoreQuestion =
+          question.template && ignoredFieldTypes.includes(question.template);
+        if (!ignoreQuestion) {
+          totalCount++;
+          if (questionIsCompleted({ edition, question, response })) {
+            completedCount++;
           }
         }
       });
@@ -150,17 +143,36 @@ export const getSectionCompletionPercentage = ({
   const questionsCount = completableQuestions.length;
   if (!questionsCount) return null;
 
-  const completedQuestions = completableQuestions.filter((question) => {
-    const formPaths = getFormPaths({ edition, question });
-
-    const responsePath = formPaths.response;
-    const otherPath = formPaths.other;
-    const answer = responsePath && response[responsePath];
-    const otherAnswer = otherPath && response[otherPath];
-    const isCompleted = !!answer || !!otherAnswer;
-    return isCompleted;
-  });
+  const completedQuestions = completableQuestions.filter((question) =>
+    questionIsCompleted({ edition, question, response })
+  );
 
   const completedQuestionsCount = completedQuestions.length;
   return Math.round((completedQuestionsCount / questionsCount) * 100);
+};
+
+export const answerIsNotEmpty = (answer: any) =>
+  !(
+    typeof answer === "undefined" ||
+    answer === null ||
+    answer === "" ||
+    (Array.isArray(answer) && answer.length === 0)
+  );
+
+export const questionIsCompleted = ({
+  edition,
+  question,
+  response,
+}: {
+  edition: EditionMetadata;
+  question: QuestionMetadata;
+  response: ResponseDocument;
+}) => {
+  const formPaths = getFormPaths({ edition, question });
+  const responsePath = formPaths.response;
+  const otherPath = formPaths.other;
+  const answer = responsePath && response[responsePath];
+  const otherAnswer = otherPath && response[otherPath];
+  const isCompleted = answerIsNotEmpty(answer) || answerIsNotEmpty(otherAnswer);
+  return isCompleted;
 };

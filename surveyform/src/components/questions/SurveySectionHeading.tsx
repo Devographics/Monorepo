@@ -3,12 +3,14 @@ import { FormattedMessage } from "~/components/common/FormattedMessage";
 import QuestionLabel from "../form/QuestionLabel";
 import { FormInputProps } from "../form/typings";
 import { getSectioni18nIds } from "@devographics/i18n";
+import { questionIsCompleted } from "~/lib/responses/helpers";
 
 const SurveySectionHeading = ({
   section,
   sectionNumber,
   edition,
   stateStuff,
+  response,
 }: FormInputProps) => {
   const { id, intlId } = section;
   const { itemPositions } = stateStuff;
@@ -56,10 +58,12 @@ const SurveySectionHeading = ({
             {section.questions.map((question) => (
               <QuestionItem
                 key={question.id}
+                edition={edition}
                 section={section}
                 question={question}
                 scrollPosition={scrollPosition}
                 itemPositions={itemPositions}
+                response={response}
               />
             ))}
           </ol>
@@ -84,14 +88,24 @@ const getItemIdInViewport = (
     .find((id) => itemPositions[id] < scrollPosition + offset);
 };
 
-const QuestionItem = ({ section, question, scrollPosition, itemPositions }) => {
+const QuestionItem = ({
+  edition,
+  section,
+  question,
+  scrollPosition,
+  itemPositions,
+  response,
+}) => {
   const currentItemId = getItemIdInViewport(scrollPosition, itemPositions);
   const isHighlighted = currentItemId === question.id;
+  const isCompleted = questionIsCompleted({ edition, question, response });
   return (
     <li>
       <a
         href={`#${question.id}`}
-        className={isHighlighted ? "highlighted" : "not-highlighted"}
+        className={`${isHighlighted ? "highlighted" : "not-highlighted"} ${
+          isCompleted ? "completed" : "not-completed"
+        }`}
       >
         <QuestionLabel
           section={section}
