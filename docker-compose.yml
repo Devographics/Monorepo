@@ -1,0 +1,21 @@
+version: '3'
+services:
+  # Docker compose is needed so Redis and SRH (to simulate Upstash locally) must communicate
+  redis:
+    image: redis
+    ports:
+      - '6379:6379' 
+  serverless-redis-http:
+    ports:
+      - '8080:80'
+    image: hiett/serverless-redis-http:latest
+    environment:
+      SRH_MODE: env
+      SRH_TOKEN: fake-dev-token # Token to use to connect to the server
+      SRH_CONNECTION_STRING: 'redis://redis:6379' # Using `redis` hostname since they're in the same Docker network.
+  mongodb:
+    image: mongo:4.0.4
+    ports:
+      - '27017:27017'
+    volumes:
+      - './.mongo:/data/db'

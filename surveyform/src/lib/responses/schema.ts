@@ -16,6 +16,7 @@ export enum Actions {
 
 export const emailPlaceholder = "*****@*****";
 
+const isValidNumber = (n) => typeof n === "number" && !isNaN(n)
 export const responseBaseSchema: Schema = {
   _id: {
     type: String,
@@ -90,18 +91,23 @@ export const responseBaseSchema: Schema = {
           response: updatedResponse,
           edition,
         })
-      if (typeof up === "number") return up
-      return existingResponse.completion || 0
+      // Zod is adamant in getting a correct value, be careful not to corrupt it
+      if (isValidNumber(up)) return up
+      // in case data where corrupted
+      if (isValidNumber(existingResponse.completion)) return existingResponse.completion
+      return 0
     },
   },
   knowledgeScore: {
     type: Number,
     // TODO: TS doesn't catch typing errors here based on "type"
+    // Zod is adamant in getting a correct value, be careful not to corrupt it
     onUpdate: ({ edition, updatedResponse, existingResponse }): number => {
       const up = updatedResponse &&
         getKnowledgeScore({ response: updatedResponse, edition }).score
-      if (typeof up === "number") return up
-      return existingResponse.knowledgeScore || 0
+      if (isValidNumber(up)) return up
+      if (isValidNumber(existingResponse.knowledgeScore)) return existingResponse.knowledgeScore
+      return 0
     }
   },
   locale: {
