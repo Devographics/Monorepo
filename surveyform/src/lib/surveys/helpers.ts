@@ -245,6 +245,11 @@ export const useOptionTitle = ({
   };
 };
 
+export const getEditionTitle = ({ edition }: { edition: EditionMetadata }) => {
+  const { survey, year } = edition;
+  const { name } = survey;
+  return `${name} ${year}`;
+};
 export const getMetadata = async ({ params }: { params: any }) => {
   const { lang, sectionNumber } = params;
   const edition = await rscMustGetSurveyEditionFromUrl(params);
@@ -263,7 +268,7 @@ export const getMetadata = async ({ params }: { params: any }) => {
     values: { name, year: year + "" },
   });
 
-  let title = `${name} ${year}`;
+  let title = getEditionTitle({ edition });
 
   const section =
     sectionNumber && edition.sections?.[parseInt(sectionNumber) - 1];

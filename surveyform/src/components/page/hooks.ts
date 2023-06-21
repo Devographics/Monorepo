@@ -14,6 +14,7 @@ export const useSurveyActionParams = (): {
   referrer?: string;
 } => {
   const query = useSearchParams()!;
+  // note: source and referrer are set by AppLayout on first page load
   const source =
     query.get("source") ||
     (typeof localStorage !== "undefined" && localStorage.getItem("source"));
