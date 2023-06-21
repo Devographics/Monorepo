@@ -11,6 +11,7 @@ import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { useState } from "react";
 import { FormInputProps } from "./typings";
 import Button from "react-bootstrap/esm/Button";
+import { getSectioni18nIds } from "@devographics/i18n";
 
 interface FormSubmitProps extends FormInputProps {
   sectionNumber: number;
@@ -60,7 +61,7 @@ export const FormSubmit = (props: FormSubmitProps) => {
           <SubmitButton
             {...props}
             type="next"
-            intlId={`sections.${nextSection.intlId || nextSection.id}.title`}
+            intlId={getSectioni18nIds({ section: nextSection }).title}
             path={nextPath}
           />
         )}
@@ -76,9 +77,7 @@ export const FormSubmit = (props: FormSubmitProps) => {
           <SubmitButton
             {...props}
             type="previous"
-            intlId={`sections.${
-              previousSection.intlId || previousSection.id
-            }.title`}
+            intlId={getSectioni18nIds({ section: previousSection }).title}
             path={getEditionSectionPath({
               ...pathProps,
               number: sectionNumber - 1,

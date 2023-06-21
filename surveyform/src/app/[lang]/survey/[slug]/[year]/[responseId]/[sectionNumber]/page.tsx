@@ -3,7 +3,7 @@ import {
   SurveySection,
   SurveySectionReadOnly,
 } from "~/components/questions/SurveySection";
-import { rscMustGetSurveyEdition } from "../../rsc-fetchers";
+import { rscMustGetSurveyEditionFromUrl } from "../../rsc-fetchers";
 import { rscMustGetUserResponse } from "~/lib/responses/rsc-fetchers";
 import { rscCurrentUser } from "~/account/user/rsc-fetchers/rscCurrentUser";
 import { routes } from "~/lib/routes";
@@ -20,7 +20,7 @@ const SurveyFromResponseIdPage = async ({
     sectionNumber: string;
   };
 }) => {
-  const edition = await rscMustGetSurveyEdition({ slug, year });
+  const edition = await rscMustGetSurveyEditionFromUrl({ slug, year });
   const sn = parseInt(sectionNumber);
   if (isNaN(sn)) notFound();
 

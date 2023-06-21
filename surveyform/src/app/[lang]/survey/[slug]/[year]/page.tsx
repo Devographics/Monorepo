@@ -1,7 +1,7 @@
 import Support from "~/components/common/Support";
 import { getSurveyImageUrl } from "~/lib/surveys/helpers";
 import { EditionPage as EditionPageComponent } from "./components";
-import { rscMustGetSurveyEdition } from "./rsc-fetchers";
+import { rscMustGetSurveyEditionFromUrl } from "./rsc-fetchers";
 
 interface SurveyPageServerProps {
   slug: string;
@@ -18,7 +18,7 @@ export default async function SurveyPage({
   searchParams: { "from-magic-login"?: string };
 }) {
   const { slug, year, lang } = params;
-  const edition = await rscMustGetSurveyEdition({ slug, year });
+  const edition = await rscMustGetSurveyEditionFromUrl({ slug, year });
   const imageUrl = getSurveyImageUrl(edition);
   return (
     <div>

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
-import { getSectionKey } from "~/lib/surveys/helpers";
 import QuestionLabel from "../form/QuestionLabel";
 import { FormInputProps } from "../form/typings";
+import { getSectioni18nIds } from "@devographics/i18n";
 
 const SurveySectionHeading = ({
   section,
@@ -38,14 +38,14 @@ const SurveySectionHeading = ({
             </span>
             <FormattedMessage
               className="section-title-label"
-              id={getSectionKey(section, "title")}
+              id={getSectioni18nIds({ section }).title}
               defaultMessage={id}
               values={{ ...edition }}
             />
           </h2>
           <p className="section-description">
             <FormattedMessage
-              id={getSectionKey(section, "description")}
+              id={getSectioni18nIds({ section }).description}
               defaultMessage={id}
               values={{ ...edition }}
             />

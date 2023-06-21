@@ -8,6 +8,7 @@ import { SectionMetadata } from "@devographics/types";
 import { useEdition } from "../SurveyContext/Provider";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { FormInputProps } from "./typings";
+import { getSectioni18nIds } from "@devographics/i18n";
 
 interface SurveyNavItemProps extends Omit<FormInputProps, "section"> {
   setShown: any;
@@ -47,13 +48,19 @@ const SurveyNavItem = ({
     0;
   // const showCompletion = completion !== null && completion > 0;
   const showCompletion = !page && completion > 0;
-  const sectionIntlId = page || section?.intlId || section?.id;
   const isCurrent = currentSection.id === section?.id;
   const currentClass = isCurrent ? "section-nav-item-current" : "";
   const isBeforeCurrent = number < sectionNumber;
   const beforeClass = isBeforeCurrent ? "section-nav-item-before-current" : "";
 
   const isFinished = number === edition.sections.length;
+
+  let pagei18nId;
+  if (page) {
+    pagei18nId = `sections.${page}.title`;
+  } else if (section) {
+    pagei18nId = getSectioni18nIds({ section }).title;
+  }
 
   const path = getEditionSectionPath({
     edition,
@@ -125,10 +132,7 @@ const SurveyNavItem = ({
             </>
           )}
         </span>
-        <FormattedMessage
-          className="section-nav-item-label"
-          id={`sections.${sectionIntlId}.title`}
-        />
+        <FormattedMessage className="section-nav-item-label" id={pagei18nId} />
       </Link>
     </li>
   );

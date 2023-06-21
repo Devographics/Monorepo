@@ -1,5 +1,5 @@
 import Finish from "~/components/pages/Finish";
-import { rscMustGetSurveyEdition } from "../../rsc-fetchers";
+import { rscMustGetSurveyEditionFromUrl } from "../../rsc-fetchers";
 import { rscMustGetResponse } from "~/lib/responses/rsc-fetchers";
 import { rscCurrentUser } from "~/account/user/rsc-fetchers/rscCurrentUser";
 import { routes } from "~/lib/routes";
@@ -26,7 +26,7 @@ const FinishPage = async ({
     );
   }
   const response = await rscMustGetResponse({ responseId, currentUser });
-  const edition = await rscMustGetSurveyEdition({ slug, year });
+  const edition = await rscMustGetSurveyEditionFromUrl({ slug, year });
   return <Finish response={response} edition={edition} />;
 };
 

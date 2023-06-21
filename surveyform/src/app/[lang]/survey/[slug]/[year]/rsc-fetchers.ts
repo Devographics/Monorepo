@@ -39,7 +39,7 @@ export async function rscGetSurveyEditionFromUrl(params: {
   }
 }
 
-export async function rscMustGetSurveyEdition(params: {
+export async function rscMustGetSurveyEditionFromUrl(params: {
   slug: string;
   year: string;
 }) {

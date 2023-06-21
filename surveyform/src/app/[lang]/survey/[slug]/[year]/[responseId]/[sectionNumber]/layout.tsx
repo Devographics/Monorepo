@@ -1,7 +1,10 @@
 import { Metadata } from "next";
 import { SectionProvider } from "~/components/SectionContext/SectionProvider";
-import { getSectionKey, getEditionTitle } from "~/lib/surveys/helpers";
-import { rscGetSurveyEditionFromUrl } from "../../rsc-fetchers";
+import { getMetadata } from "~/lib/surveys/helpers";
+import {
+  rscGetSurveyEditionFromUrl,
+  rscMustGetSurveyEditionFromUrl,
+} from "../../rsc-fetchers";
 import { rscIntlContext } from "~/i18n/rsc-fetchers";
 
 interface SurveySectionParams {
@@ -11,37 +14,13 @@ interface SurveySectionParams {
   sectionNumber: string;
 }
 
-/*
 export async function generateMetadata({
   params,
 }: {
   params: SurveySectionParams;
 }): Promise<Metadata> {
-  const edition = await rscGetSurveyEditionFromUrl(params);
-  if (!edition) return {};
-  const intlContext = await rscIntlContext({ localeId: params.lang });
-  const { name = "" } = edition.survey;
-  const { year } = edition;
-  const description = intlContext.formatMessage({
-    id: "general.take_survey",
-    values: { name, year: year + "" },
-  });
-  // title
-  let title = getEditionTitle({ edition });
-  try {
-    const section = edition.sections?.[parseInt(params.sectionNumber) - 1];
-    const sectionTitle =
-      section && intlContext.formatMessage({ id: getSectionKey(section) });
-    title = getEditionTitle({ edition, sectionTitle });
-  } catch (err) {
-    console.error("cant get section", err, params);
-  }
-  return {
-    title,
-    description,
-  };
+  return await getMetadata({ params });
 }
-*/
 
 export default async function WithSectionLayout({
   children,
