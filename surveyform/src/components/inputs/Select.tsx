@@ -35,6 +35,7 @@ export const FormComponentSelect = (props: FormInputProps) => {
           updateCurrentValues({ [path]: e.target.value });
         }}
         disabled={readOnly}
+        value={value.toString()}
       >
         {allOptions.map((option) => {
           const { id, label } = option;
