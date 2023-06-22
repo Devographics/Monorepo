@@ -12,11 +12,9 @@ import last from "lodash/last.js";
 import intersection from "lodash/intersection.js";
 import isEmpty from "lodash/isEmpty.js";
 import type { Field, ParsedQuestion } from "@devographics/core-models";
-import {
-  PrivateResponseDocument,
-} from "~/admin/models/private_responses/model.server";
-import { getUUID } from "~/account/email/api/encryptEmail";
-import { logToFile } from "@devographics/core-models/server";
+import { PrivateResponseDocument } from "~/admin/models/private_responses/model.server";
+import { getUUID } from "~/lib/email";
+import { logToFile } from "@devographics/helpers";
 import * as templateFunctions from "@devographics/templates";
 import type {
   QuestionMetadata,
@@ -203,7 +201,7 @@ export const handlePrivateInfo = async ({
   response,
   options,
 }: NormalizationParams) => {
-  const PrivateResponses = await getCollectionByName("private_responses")
+  const PrivateResponses = await getCollectionByName("private_responses");
   const { isSimulation } = options;
   /*
   
@@ -342,7 +340,8 @@ export const normalizeField = async ({
         if (log) {
           await logToFile(
             `${fileName}.txt`,
-            `${response._id
+            `${
+              response._id
             }, ${fieldName}, ${cleanValue}, ${matchTags.toString()}`
           );
         }
@@ -432,7 +431,8 @@ export const normalizeField = async ({
         if (log) {
           await logToFile(
             `${fileName}.txt`,
-            `${response._id
+            `${
+              response._id
             }, ${fieldName}, ${cleanValue}, ${matchTags.toString()}`
           );
         }

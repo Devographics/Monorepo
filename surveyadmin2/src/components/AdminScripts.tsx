@@ -1,27 +1,9 @@
 "use client";
-import React, { useState } from "react";
-import gql from "graphql-tag";
-import { useQuery } from "~/lib/graphql";
-import { Loading } from "~/core/components/ui/Loading";
-import { MutationButton } from "~/core/components/ui/MutationButton";
+import { useState } from "react";
+import { runScript } from "~/lib/scripts/services";
+// import { MutationButton } from "~/core/components/ui/MutationButton";
 
-const scriptsQuery = gql`
-  query ScriptsQuery {
-    scripts
-  }
-`;
-
-const runScriptMutation = gql`
-  mutation RunScript($id: String, $scriptArgs: JSON) {
-    runScript(id: $id, scriptArgs: $scriptArgs)
-  }
-`;
-
-const AdminScripts = () => {
-  const { loading, data = {}, error } = useQuery(scriptsQuery);
-  if (loading) {
-    return <Loading />;
-  }
+const AdminScripts = ({ scripts }) => {
   return (
     <div className="admin-scripts admin-content">
       <h3>Scripts</h3>
@@ -36,7 +18,7 @@ const AdminScripts = () => {
           </tr>
         </thead>
         <tbody>
-          {data.scripts.map((script) => (
+          {scripts.map((script) => (
             <Script key={script.id} {...script} />
           ))}
         </tbody>
@@ -48,7 +30,13 @@ const AdminScripts = () => {
 const Script = ({ id, description, args, done }) => {
   const [result, setResult] = useState<any | undefined>();
   const [scriptArgs, setScriptArgs] = useState({});
-
+  const [loading, setLoading] = useState(false);
+  const handleSubmit = async () => {
+    setLoading(true);
+    const result = await runScript({ id, scriptArgs });
+    setResult(result);
+    setLoading(false);
+  };
   return (
     <>
       <tr className="admin-script-actions">
@@ -71,15 +59,7 @@ const Script = ({ id, description, args, done }) => {
           )}
         </td>
         <td>
-          <MutationButton
-            label="Run"
-            mutation={runScriptMutation}
-            mutationArguments={{ id, scriptArgs }}
-            successCallback={(result) => {
-              console.log(result);
-              setResult(result.data.runScript);
-            }}
-          />
+          <button onClick={handleSubmit}>Run {loading ? "⌛" : ""}</button>
         </td>
         <td>{done && "✅"}</td>
       </tr>

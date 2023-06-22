@@ -3,6 +3,7 @@ import {
   EditionMetadata,
   LocaleDef,
   LocaleDefWithStrings,
+  Entity,
 } from "@devographics/types";
 
 import { getFromCache, fetchGraphQLApi } from "@devographics/fetch";
@@ -11,12 +12,14 @@ import {
   surveysMetadataCacheKey,
   allLocalesMetadataCacheKey,
   localeCacheKey,
+  allEntitiesCacheKey,
 } from "./cache_keys";
 import {
   getSurveysQuery,
   getEditionMetadataQuery,
   getAllLocalesMetadataQuery,
   getLocaleQuery,
+  getEntitiesQuery,
 } from "./queries";
 import { publicConfig } from "~/config/public";
 import { serverConfig } from "~/config/server";
@@ -79,6 +82,7 @@ export async function fetchEditionMetadata({
  * @returns
  */
 export const fetchSurveysMetadata = async (options?: {
+  forceReload?: boolean;
   calledFrom?: string;
 }): Promise<Array<SurveyMetadata>> => {
   const key = surveysMetadataCacheKey();
@@ -155,6 +159,24 @@ export const fetchLocale = async ({
 
       return convertedLocale as LocaleDefWithStrings;
     },
+    serverConfig,
+  });
+};
+
+export const fetchEntities = async (options?: {
+  calledFrom?: string;
+}): Promise<Array<Entity>> => {
+  const key = allEntitiesCacheKey();
+  return await getFromCache<Array<Entity>>({
+    shouldGetFromCache: false,
+    shouldUpdateCache: false,
+    key,
+    fetchFunction: async () => {
+      const result = await fetchGraphQLApi({ query: getEntitiesQuery(), key });
+      if (!result) throw new Error(`Couldn't fetch entities`);
+      return result.entities as Entity[];
+    },
+    calledFrom: options?.calledFrom,
     serverConfig,
   });
 };

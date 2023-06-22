@@ -5,14 +5,13 @@ import {
   getUnnormalizedResponses,
   getBulkOperation,
 } from "./helpers";
-import { UserType } from "~/core/models/user";
-import { getOrFetchEntities } from "~/modules/entities/server";
 import pick from "lodash/pick.js";
 import {
   getNormResponsesCollection,
   getRawResponsesCollection,
 } from "@devographics/mongo";
-import { loadOrGetSurveys } from "~/modules/surveys/load";
+import { fetchEntities } from "../api/fetch";
+import { fetchSurveysMetadata } from "../api/fetch";
 
 /*
 
@@ -74,6 +73,7 @@ export const normalizeResponses = async (
   }
 
   const {
+    surveyId,
     editionId,
     questionId,
     responsesIds,
@@ -85,7 +85,7 @@ export const normalizeResponses = async (
   let progress = 0,
     discardedCount = 0;
 
-  const surveys = await loadOrGetSurveys();
+  const surveys = await fetchSurveysMetadata();
   const survey = surveys.find((s) =>
     s.editions.some((e) => e.id === editionId)
   );
@@ -103,12 +103,13 @@ export const normalizeResponses = async (
     errorCount: 0,
   };
 
-  const entities = await getOrFetchEntities({ forceLoad: true });
+  const entities = await fetchEntities();
 
   // TODO: use Response model and connector instead
 
   // first, get all the responses we're going to operate on
   const selector = await getSelector({
+    surveyId,
     editionId,
     questionId,
     responsesIds,
@@ -262,6 +263,7 @@ export const getSurveyMetadata = async (
   );
 
   const selector = await getSelector({
+    surveyId,
     editionId,
     questionId,
     onlyUnnormalized,

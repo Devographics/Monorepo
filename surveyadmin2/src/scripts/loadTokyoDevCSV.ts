@@ -13,10 +13,9 @@ import yaml from "js-yaml";
 import { readFile } from "fs/promises";
 import { logToFile } from "@devographics/helpers";
 import { normalizeResponse } from "~/lib/normalization/normalize";
-import { getOrFetchEntities } from "~/modules/entities/server";
 import { getEditionQuestionsFlat } from "~/lib/normalization/helpers";
 import * as templateFunctions from "@devographics/templates";
-import { loadOrGetSurveys } from "~/modules/surveys/load";
+import { fetchEntities, fetchSurveysMetadata } from "~/lib/api/fetch";
 
 const editions = {
   // td2019: "International Developers in Japan Survey 2019.csv",
@@ -208,8 +207,8 @@ const getOptionValues = (
 };
 
 export const loadTokyoDevCSV = async () => {
-  const allSurveysMetadata = await loadOrGetSurveys({ forceReload: true });
-  const entities = await getOrFetchEntities();
+  const allSurveysMetadata = await fetchSurveysMetadata({ forceReload: true });
+  const entities = await fetchEntities();
   const survey = allSurveysMetadata.find((s) => s.id === "tokyodev") as Survey;
   const allEditions = await loadAllEditions(allSurveysMetadata, "tokyodev");
 

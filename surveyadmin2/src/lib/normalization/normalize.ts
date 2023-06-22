@@ -4,8 +4,6 @@ import {
   getFieldPaths,
   getEditionQuestionById,
 } from "./helpers";
-import { getOrFetchEntities } from "~/modules/entities/server";
-import { NormalizedResponseDocument } from "~/admin/models/normalized_responses/model.server";
 import * as steps from "./steps";
 import get from "lodash/get.js";
 import type {
@@ -13,7 +11,7 @@ import type {
   Survey,
   SurveyMetadata,
 } from "@devographics/types";
-import { fetchSurveysMetadata } from "~/lib/api/fetch";
+import { fetchEntities, fetchSurveysMetadata } from "~/lib/api/fetch";
 import { getNormResponsesCollection } from "@devographics/mongo";
 import { newMongoId } from "@devographics/mongo";
 
@@ -146,7 +144,7 @@ export const normalizeResponse = async (
       allEntities = entities;
     } else {
       console.log("// Getting/fetching entities…");
-      allEntities = await getOrFetchEntities();
+      allEntities = await fetchEntities();
     }
     const allRules = rules ?? generateEntityRules(allEntities);
     const fileName = _fileName || `${response.surveyId}_normalization`;

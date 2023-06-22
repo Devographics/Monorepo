@@ -1,16 +1,19 @@
-import { getUUID } from "~/account/email/api/encryptEmail";
-import { getNormResponsesCollection, getUsersCollection } from "@devographics/mongo";
+import { getUUID } from "~/lib/email";
+import {
+  getNormResponsesCollection,
+  getUsersCollection,
+} from "@devographics/mongo";
 
 const isSimulation = false;
 
 export const setMissingUUIDs = async ({ limit = 20 }) => {
   limit = Number(limit);
-  const Users = await getUsersCollection()
+  const Users = await getUsersCollection();
 
   let i = 0;
   const result = { duplicateAccountsCount: 0, duplicateUsers: [] };
 
-  const NormResponses = await getNormResponsesCollection()
+  const NormResponses = await getNormResponsesCollection();
   const normResponses = await NormResponses.find(
     { userId: { $exists: true }, "user_info.uuid": { $exists: false } },
     { limit }
@@ -43,7 +46,7 @@ export const setMissingUUIDs = async ({ limit = 20 }) => {
   return result;
 };
 
-setMissingUUIDs.args = ['limit'];
+setMissingUUIDs.args = ["limit"];
 
 setMissingUUIDs.description = `Add UUIDs (used for cohort tracking) to normalized responses that lack one. `;
 

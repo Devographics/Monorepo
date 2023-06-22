@@ -5,17 +5,11 @@ import uniqBy from "lodash/uniqBy.js";
 import sortBy from "lodash/sortBy.js";
 import compact from "lodash/compact.js";
 import isEmpty from "lodash/isEmpty.js";
-import type { Entity } from "@devographics/core-models";
-import type {
-  Field,
-  SurveyEdition,
-  SurveyQuestion,
-  ParsedQuestion,
-} from "@devographics/core-models";
-import { logToFile } from "@devographics/core-models/server";
-import { getOrFetchEntities } from "~/modules/entities/server";
-import { getEditionById } from "~/modules/surveys/helpers";
+import { logToFile } from "@devographics/helpers";
 import {
+  Entity,
+  Field,
+  ParsedQuestion,
   DbSuffixes,
   QuestionMetadata,
   QuestionTemplateOutput,
@@ -26,6 +20,7 @@ import {
 } from "@devographics/types";
 import * as templateFunctions from "@devographics/templates";
 import { getNormResponsesCollection } from "@devographics/mongo";
+import { fetchEditionMetadata, fetchEntities } from "../api/fetch";
 
 export const getFieldSegments = (field: Field) => {
   if (!field.fieldName) {
@@ -151,7 +146,7 @@ export const getEntitiesData = async () => {
 
 export const initEntities = async () => {
   console.log(`// 🗄️ Initializing entities…`);
-  const entities = await getOrFetchEntities();
+  const entities = await fetchEntities();
   const rules = generateEntityRules(entities);
   console.log(`  -> Initializing entities done`);
   return { entities, rules };
@@ -512,7 +507,7 @@ export const generateEntityRules = (entities: Array<Entity>) => {
 };
 
 export const logAllRules = async () => {
-  const allEntities = await getOrFetchEntities();
+  const allEntities = await fetchEntities();
   if (allEntities) {
     let rules = generateEntityRules(allEntities);
     rules = rules.map(({ id, pattern, tags }) => ({
@@ -540,17 +535,19 @@ const existsSelector = { $exists: true, $nin: ignoreValues };
 
 // get mongo selector
 export const getSelector = async ({
+  surveyId,
   editionId,
   questionId,
   responsesIds,
   onlyUnnormalized,
 }: {
+  surveyId: string;
   editionId: string;
   questionId?: string;
   responsesIds?: string[];
   onlyUnnormalized?: boolean;
 }) => {
-  const edition = await getEditionById(editionId);
+  const edition = await fetchEditionMetadata({ surveyId, editionId });
 
   const selector = {
     editionId,
@@ -635,17 +632,14 @@ export const getUnnormalizedResponses = async (editionId, questionId) => {
     ],
   };
 
-  const NormResponses = await getNormResponsesCollection()
-  const responses = await NormResponses.find(
-    selector,
-    {
-      _id: 1,
-      responseId: 1,
-      [rawFieldPath]: 1,
-      sort: { [rawFieldPath]: 1 }
-      //lean: true
-    },
-  ).toArray()
+  const NormResponses = await getNormResponsesCollection();
+  const responses = await NormResponses.find(selector, {
+    _id: 1,
+    responseId: 1,
+    [rawFieldPath]: 1,
+    sort: { [rawFieldPath]: 1 },
+    //lean: true
+  }).toArray();
 
   return { responses, rawFieldPath, normalizedFieldPath };
 };
@@ -653,16 +647,16 @@ export const getUnnormalizedResponses = async (editionId, questionId) => {
 export const getBulkOperation = (selector, modifier, isReplace) =>
   isReplace
     ? {
-      replaceOne: {
-        filter: selector,
-        replacement: modifier,
-        upsert: true,
-      },
-    }
+        replaceOne: {
+          filter: selector,
+          replacement: modifier,
+          upsert: true,
+        },
+      }
     : {
-      updateMany: {
-        filter: selector,
-        update: modifier,
-        upsert: false,
-      },
-    };
+        updateMany: {
+          filter: selector,
+          update: modifier,
+          upsert: false,
+        },
+      };

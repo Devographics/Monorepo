@@ -1,4 +1,4 @@
-import { createEmailHash } from "~/account/email/api/encryptEmail";
+import { createEmailHash } from "~/lib/email";
 
 export const encryptEmail = async ({ email, hashSalt }) => {
   const unescapedHashSalt = hashSalt?.replaceAll("//", "/");

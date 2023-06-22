@@ -1,4 +1,4 @@
-import { createEmailHash } from "~/account/email/api/encryptEmail";
+import { createEmailHash } from "~/lib/email";
 import {
   getUsersCollection,
   getNormResponsesCollection,

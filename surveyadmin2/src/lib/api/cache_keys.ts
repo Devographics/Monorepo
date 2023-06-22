@@ -24,3 +24,5 @@ export const localeCacheKey = ({
   localeId: string;
   contexts: string[];
 }) => `${SURVEY_ADMIN_CONTEXT}__${localeId}__${contexts.join("_")}`;
+
+export const allEntitiesCacheKey = () => `${SURVEY_ADMIN_CONTEXT}__allEntities`;
