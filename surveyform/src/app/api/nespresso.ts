@@ -52,8 +52,18 @@ export function nespresso(...middlewares: Array<ExpressMiddleware>) {
     return function (req: NextRequest): NextResponse {
         // inspired from Express codebase
         // TODO: how to properly initialize an Express request?
-        let expressReq = Object.create(request, {}) as Request
-        let expressRes = Object.create(response, {}) as Response
+        // Without that, we have to mimick all features of Express by hand
+        // let expressReq = Object.create(request, {}) as Request
+        // let expressRes = Object.create(response, {}) as Response
+        let expressReq = {
+            ...req,
+        }
+        let expressRes = {
+            status(s: number) {
+                this.statusCode = s
+                return this
+            }
+        }
         const ctx: ExpressMiddlewareCtx = { expressReq, expressRes }
         runMiddleware(middlewares, 0, ctx)
         console.log({ ctx })
