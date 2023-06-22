@@ -594,9 +594,13 @@ export const getEditionQuestionsFlat = (
     .map((s) => s.questions.map((q) => ({ ...q, sectionId: s.id })))
     .flat();
 
-export const getUnnormalizedResponses = async (editionId, questionId) => {
+export const getUnnormalizedResponses = async (
+  surveyId,
+  editionId,
+  questionId
+) => {
   let rawFieldPath, normalizedFieldPath;
-  const edition = (await getEditionById(editionId)) as EditionMetadata;
+  const edition = await fetchEditionMetadata({ surveyId, editionId });
   if (questionId === "source") {
     rawFieldPath = "user_info.source.raw";
     normalizedFieldPath = "user_info.source.normalized";
@@ -660,3 +664,29 @@ export const getBulkOperation = (selector, modifier, isReplace) =>
           upsert: false,
         },
       };
+
+export interface QuestionWithSection extends QuestionMetadata {
+  section: SectionMetadata;
+}
+
+export const getEditionQuestions = (
+  edition: EditionMetadata
+): Array<QuestionWithSection> =>
+  edition.sections
+    .map((s) => s.questions.map((q) => ({ ...q, section: s })))
+    .flat();
+
+export const getNormalizableQuestions = ({
+  edition,
+}: {
+  edition: EditionMetadata;
+}) => {
+  const allQuestions = getEditionQuestions(edition);
+  const questions = allQuestions.filter((question) => {
+    const rawPaths = question.rawPaths;
+    return rawPaths?.other;
+  });
+  // also add source
+  // fields.push({ id: "source", fieldName: "common__user_info__source" });
+  return questions;
+};

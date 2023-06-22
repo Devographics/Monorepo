@@ -101,14 +101,20 @@ const NormalizationWrapper = ({ surveys }) => {
 
   return (
     <Normalization
-      allEditions={allEditions}
+      surveys={surveys}
       edition={edition}
       questionId={questionId}
     />
   );
 };
 
-const Normalization = ({ allEditions, edition, questionId: questionId_ }) => {
+export const Normalization = ({
+  surveys,
+  edition,
+  questionId: questionId_,
+}) => {
+  const allEditions = surveys.map((s) => s.editions).flat();
+
   const [responsesCount, setResponsesCount] = useState(0);
   const [doneCount, setDoneCount] = useState(0);
   const [enabled, setEnabled] = useState(true);
@@ -172,6 +178,7 @@ const Normalization = ({ allEditions, edition, questionId: questionId_ }) => {
   const onlyUnnormalized = normalizationMode === "only_normalized";
 
   const { data, loading, error } = useUnnormalizedFields({
+    surveyId: edition.survey.id,
     editionId,
     questionId: isAllFields ? null : questionId,
   });
@@ -181,7 +188,7 @@ const Normalization = ({ allEditions, edition, questionId: questionId_ }) => {
     edition,
     question,
     normalizeableFields: normalizeableQuestions,
-    unnormalizedFieldsLoading: loading,
+    // unnormalizedFieldsLoading: loading,
     unnormalizedFieldsData: data,
     onlyUnnormalized,
     refetchMissingFields: () => {},

@@ -4,13 +4,15 @@ import { RouteHandlerOptions } from "~/app/api/typings";
 import { loadResponse } from "~/lib/responses/db-actions/load";
 import { HandlerError } from "~/lib/handler-error";
 
-
-export async function GET(req: NextRequest, { params }: RouteHandlerOptions<{ responseId: string }>) {
+export async function GET(
+  req: NextRequest,
+  { params }: RouteHandlerOptions<{ responseId: string }>
+) {
   try {
     // Get current user
     const currentUser = await handlerMustHaveCurrentUser(req);
     // Get responseId
-    const responseId = params.responseId
+    const responseId = params.responseId;
     // Defensive check: technically when using a route param, this should never happen
     if (!responseId) {
       throw new HandlerError({
@@ -25,7 +27,7 @@ export async function GET(req: NextRequest, { params }: RouteHandlerOptions<{ re
     return NextResponse.json({ data });
   } catch (error) {
     if (error instanceof HandlerError) {
-      return await error.toNextResponse(req)
+      return await error.toNextResponse(req);
     } else {
       return NextResponse.json(
         { error: `Could not load response` },

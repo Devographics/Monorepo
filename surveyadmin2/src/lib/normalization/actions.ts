@@ -1,10 +1,15 @@
 import { getUnnormalizedResponses } from "./helpers";
 import get from "lodash/get";
 
-export const getUnnormalizedFields = async ({ editionId, questionId }) => {
+export const getUnnormalizedFields = async ({
+  surveyId,
+  editionId,
+  questionId,
+}) => {
   console.log(`// unnormalizedFields ${editionId} ${questionId}`);
   if (questionId) {
     const { responses, rawFieldPath } = await getUnnormalizedResponses(
+      surveyId,
       editionId,
       questionId
     );

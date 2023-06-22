@@ -1,5 +1,5 @@
 "use client";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import Options from "./Options";
 // import Dropdown from "~/core/components/ui/Dropdown";
 
@@ -19,7 +19,7 @@ const Actions = (props) => {
     initializeSegments,
     segmentSize,
   } = props;
-  const router = useRouter();
+  // const router = useRouter();
 
   // get list of all normalizeable ("other") field for current survey
   const questions = [allFields, ...normalizeableFields];
