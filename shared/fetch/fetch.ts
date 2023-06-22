@@ -27,11 +27,17 @@ function removeNull(obj) {
     return Array.isArray(obj) ? Object.values(clean) : clean
 }
 
-async function getFromRedisOrSource<T = any>(
-    key: string,
-    fetchFromSource: () => Promise<T>,
+async function getFromRedisOrSource<T = any>({
+    key,
+    fetchFromSource,
+    calledFromLog,
+    shouldUpdateCache = true
+}: {
+    key: string
+    fetchFromSource: () => Promise<T>
     calledFromLog: any
-) {
+    shouldUpdateCache?: boolean
+}) {
     const redisData = await fetchRedis<T>(key)
     if (redisData) {
         console.debug(`🔵 [${key}] in-memory cache miss, redis hit ${calledFromLog}`)
@@ -39,8 +45,10 @@ async function getFromRedisOrSource<T = any>(
     }
     console.debug(`🟣 [${key}] in-memory & redis cache miss, fetching from API ${calledFromLog}`)
     const result = await fetchFromSource()
-    // store in Redis
-    await storeRedis<T>(key, removeNull(result))
+    if (shouldUpdateCache) {
+        // store in Redis
+        await storeRedis<T>(key, removeNull(result))
+    }
     return result
 }
 
@@ -52,16 +60,21 @@ export async function getFromCache<T = any>({
     key,
     fetchFunction: fetchFromSource,
     calledFrom,
-    serverConfig
+    serverConfig,
+    shouldGetFromCache: shouldGetFromCache_ = true,
+    shouldUpdateCache = true
 }: {
     key: string
     fetchFunction: () => Promise<T>
     calledFrom?: string
     serverConfig: Function
+    shouldGetFromCache?: boolean
+    shouldUpdateCache?: boolean
 }) {
     initRedis(serverConfig().redisUrl, serverConfig().redisToken)
     const calledFromLog = calledFrom ? `(↪️  ${calledFrom})` : ''
-    const enableCache = !(process.env.ENABLE_CACHE === 'false')
+
+    const shouldGetFromCache = shouldGetFromCache_ || !(process.env.ENABLE_CACHE === 'false')
 
     let resultPromise: Promise<T>
     // 1. we have the a promise that resolve to the data in memory => return that
@@ -70,11 +83,21 @@ export async function getFromCache<T = any>({
         resultPromise = memoryCache.get<Promise<T>>(key)!
     } else {
         // 2. store a promise that will first look in Redis, then in the main db
-        if (enableCache) {
-            resultPromise = getFromRedisOrSource(key, fetchFromSource, calledFromLog)
+        if (shouldGetFromCache) {
+            resultPromise = getFromRedisOrSource({
+                key,
+                fetchFromSource,
+                calledFromLog,
+                shouldUpdateCache
+            })
         } else {
             console.debug(`🟠 [${key}] Redis cache disabled, fetching from API ${calledFromLog}`)
             resultPromise = fetchFromSource()
+            if (shouldUpdateCache) {
+                const result = await fetchFromSource()
+                // store in Redis
+                await storeRedis<T>(key, removeNull(result))
+            }
         }
         memoryCache.set(key, resultPromise)
     }
