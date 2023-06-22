@@ -1,29 +1,28 @@
-import React, { useState } from "react";
-import { useRouter } from "next/router.js";
-import { surveysWithTemplates } from "~/surveys/withTemplates";
+"use client";
+
+import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import Actions from "~/components/normalization/Actions";
 import Progress from "~/components/normalization/Progress";
 import Fields from "~/components/normalization/Fields";
 import { allFields } from "./Actions";
-import { useQuery } from "~/lib/graphql";
-import gql from "graphql-tag";
-import { Loading } from "~/core/components/ui/Loading";
 import Link from "next/link";
 import { routes } from "~/lib/routes";
+import { loadFields } from "~/lib/normalization/services";
+import { useUnnormalizedFields } from "~/lib/normalization/hooks";
 
 export const defaultSegmentSize = 500;
 
-const unnormalizedFieldsQuery = gql`
-  query UnnormalizedFieldsQuery($editionId: String, $questionId: String) {
-    unnormalizedFields(editionId: $editionId, questionId: $questionId)
-  }
-`;
+// const unnormalizedFieldsQuery = gql`
+//   query UnnormalizedFieldsQuery($editionId: String, $questionId: String) {
+//     unnormalizedFields(editionId: $editionId, questionId: $questionId)
+//   }
+// `;
 
 const usePageParams = () => {
-  const router = useRouter();
-  const { isReady, isFallback, query } = router;
-  if (!isReady || isFallback) return { paramsReady: false, email: null };
-  const { editionId, questionId } = query;
+  const searchParams = useSearchParams();
+  const editionId = searchParams.get("editionId");
+  const questionId = searchParams.get("questionId");
   return {
     paramsReady: true,
     editionId: editionId as string,
@@ -70,22 +69,10 @@ export const getSegments = ({ responsesCount, segmentSize }): Segment[] => {
   return segments;
 };
 
-export const surveysQuery = gql`
-  query SurveysQuery {
-    surveys
-  }
-`;
-
-const NormalizationWrapper = () => {
+const NormalizationWrapper = ({ surveys }) => {
   const { editionId, questionId, paramsReady } = usePageParams();
-  const { loading: surveysLoading, data: surveysData } = useQuery(surveysQuery);
 
-  if (!paramsReady || surveysLoading) {
-    return <Loading />;
-  }
-
-  const allSurveys = surveysData.surveys;
-  const allEditions = allSurveys.map((s) => s.editions).flat();
+  const allEditions = surveys.map((s) => s.editions).flat();
 
   if (!editionId) {
     return (
@@ -184,11 +171,7 @@ const Normalization = ({ allEditions, edition, questionId: questionId_ }) => {
   const isAllFields = questionId === allFields.id;
   const onlyUnnormalized = normalizationMode === "only_normalized";
 
-  const {
-    loading: unnormalizedFieldsLoading,
-    data: unnormalizedFieldsData = {},
-    refetch: refetchMissingFields,
-  } = useQuery(unnormalizedFieldsQuery, {
+  const { data, loading, error } = useUnnormalizedFields({
     editionId,
     questionId: isAllFields ? null : questionId,
   });
@@ -198,10 +181,10 @@ const Normalization = ({ allEditions, edition, questionId: questionId_ }) => {
     edition,
     question,
     normalizeableFields: normalizeableQuestions,
-    unnormalizedFieldsLoading,
-    unnormalizedFieldsData,
+    unnormalizedFieldsLoading: loading,
+    unnormalizedFieldsData: data,
     onlyUnnormalized,
-    refetchMissingFields,
+    refetchMissingFields: () => {},
     isAllFields,
     ...stateStuff,
   };

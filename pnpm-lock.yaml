@@ -959,7 +959,7 @@ importers:
       passport-magic-login: ^1.0.9
       polished: ^3.6.5
       postcss-nested: ^4.2.1
-      qs: ^6.10.5
+      qs: ^6.11.0
       querystring: ^0.2.1
       react: ^18.2.0
       react-bootstrap: ^2.0.3
@@ -10547,6 +10547,7 @@ packages:
       '@babel/runtime': 7.20.7
       '@types/testing-library__react-hooks': 3.4.1
       react: 18.2.0
+    dev: false
     optional: true
 
   /@testing-library/react/10.4.9_biqbaboplfbrettd7655fr4n2y:
@@ -20757,7 +20758,7 @@ packages:
       debug:
         optional: true
     dependencies:
-      debug: 4.3.4_supports-color@6.1.0
+      debug: 4.3.4
     dev: false
 
   /for-each/0.3.3:

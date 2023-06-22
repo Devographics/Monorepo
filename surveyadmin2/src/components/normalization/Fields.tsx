@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import get from "lodash/get.js";
-import { Loading } from "~/core/components/ui/Loading";
+
+const Loading = () => <span>⌛</span>;
 
 const Fields = ({
   edition,

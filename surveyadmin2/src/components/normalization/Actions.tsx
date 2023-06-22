@@ -1,11 +1,7 @@
-import React from "react";
-import qs from "qs";
+"use client";
 import { useRouter } from "next/router";
-import { surveysWithTemplates } from "~/surveys/withTemplates";
 import Options from "./Options";
-import gql from "graphql-tag";
-import { MutationButton } from "~/core/components/ui/MutationButton";
-import Dropdown from "~/core/components/ui/Dropdown";
+// import Dropdown from "~/core/components/ui/Dropdown";
 
 export const allFields = { id: "all_fields", label: "All Fields" };
 
@@ -31,102 +27,64 @@ const Actions = (props) => {
   return (
     <div className="normalization-actions">
       <div className="primary">
-        <Dropdown
-          label={editionId}
-          menuItems={allEditions.map((edition) => ({
-            label: edition.id,
-            onClick: () => {
-              // build search string to update the browser URL query string
-              const search = qs.stringify({
-                editionId: edition.id,
-                questionId,
-              });
-              const newUrl = new URL(window.location.href);
-              newUrl.search = search;
-              router.push(newUrl);
-              setEditionId(edition.id);
-            },
-          }))}
-        />{" "}
-        &gt;{" "}
-        <Dropdown
-          label={questionId}
-          menuItems={questions.map((question) => ({
-            label: question.id,
-            onClick: () => {
-              // build search string to update the browser URL query string
-              const search = qs.stringify({
-                editionId,
-                questionId: question.id,
-              });
-              const newUrl = new URL(window.location.href);
-              newUrl.search = search;
-              router.push(newUrl);
-              setQuestionId(question.id);
-            },
-          }))}
-        />{" "}
-        &gt;{" "}
-        <MutationButton
-          label={`Renormalize ${editionId}/${
-            isAllFields ? allFields.id : questionId
-          }`}
-          mutation={gql`
-            mutation getSurveyMetadata(
-              $editionId: String
-              $questionId: String
-              $onlyUnnormalized: Boolean
-            ) {
-              getSurveyMetadata(
-                editionId: $editionId
-                questionId: $questionId
-                onlyUnnormalized: $onlyUnnormalized
-              )
-            }
-          `}
-          mutationArguments={{
-            editionId,
-            questionId: isAllFields ? null : questionId,
-            onlyUnnormalized,
+        <select
+          onChange={() => {
+            // build search string to update the browser URL query string
+            // const search = qs.stringify({
+            //   editionId: edition.id,
+            //   questionId,
+            // });
+            // const newUrl = new URL(window.location.href);
+            // newUrl.search = search;
+            // router.push(newUrl);
+            // setEditionId(edition.id);
           }}
-          successCallback={(result) => {
-            const responsesCount =
-              result?.data?.getSurveyMetadata?.responsesCount;
-            initializeSegments({ responsesCount, segmentSize });
+        >
+          {allEditions.map((edition) => (
+            <option key={edition.id}>{edition.id}</option>
+          ))}
+        </select>{" "}
+        &gt;{" "}
+        <select
+          onChange={() => {
+            // build search string to update the browser URL query string
+            // const search = qs.stringify({
+            //   editionId,
+            //   questionId: question.id,
+            // });
+            // const newUrl = new URL(window.location.href);
+            // newUrl.search = search;
+            // router.push(newUrl);
+            // setQuestionId(question.id);
           }}
-        />
+        >
+          {questions.map((question) => (
+            <option key={question.id}>{question.id}</option>
+          ))}
+        </select>{" "}
+        &gt;{" "}
+        <button
+          onClick={() => {
+            // const responsesCount =
+            //   result?.data?.getSurveyMetadata?.responsesCount;
+            // initializeSegments({ responsesCount, segmentSize });
+          }}
+        >
+          Renormalize {editionId}/{isAllFields ? allFields.id : questionId}
+        </button>
         <Options {...props} />
       </div>
       <div className="secondary">
-        <MutationButton
-          label="Renormalize Responses"
-          /*
-          mutationOptions={{
-            name: "normalizeIds",
-            args: { ids: "[String]" },
-          }}*/
-          mutation={gql`
-            mutation normalizeResponses(
-              $responsesIds: [String]
-              $editionId: String
-            ) {
-              normalizeResponses(
-                responsesIds: $responsesIds
-                editionId: $editionId
-              )
-            }
-          `}
-          // Not needed when returning arguments from the mutation callback
-          //mutationArguments={{}}
-          submitCallback={() => {
-            const idsString = prompt("Enter comma-separated ids") || "";
-            const responsesIds = idsString.split(",");
-            return { mutationArguments: { responsesIds, editionId } };
+        <button
+          onClick={() => {
+            // const idsString = prompt("Enter comma-separated ids") || "";
+            // const responsesIds = idsString.split(",");
+            // return { mutationArguments: { responsesIds, editionId } };
+            // alert("Responses normalized");
           }}
-          successCallback={(result) => {
-            alert("Responses normalized");
-          }}
-        />
+        >
+          Renormalize Responses
+        </button>
       </div>
     </div>
   );

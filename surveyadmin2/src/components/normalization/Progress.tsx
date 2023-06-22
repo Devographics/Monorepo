@@ -1,8 +1,7 @@
 import React, { useEffect } from "react";
 import { statuses } from "./Normalization";
-import gql from "graphql-tag";
-import { useMutation } from "~/lib/graphql";
-import { Loading } from "~/core/components/ui/Loading";
+
+const Loading = () => <span>⌛</span>;
 
 const Progress = (props) => {
   const {
@@ -76,24 +75,6 @@ const SegmentDone = ({ startFrom, responsesCount, data }) => {
   );
 };
 
-const normalizeResponsesMutation = gql`
-  mutation normalizeResponses(
-    $editionId: String
-    $questionId: String
-    $startFrom: Int
-    $limit: Int
-    $onlyUnnormalized: Boolean
-  ) {
-    normalizeResponses(
-      editionId: $editionId
-      questionId: $questionId
-      startFrom: $startFrom
-      limit: $limit
-      onlyUnnormalized: $onlyUnnormalized
-    )
-  }
-`;
-
 const SegmentInProgress = ({
   edition,
   questionId,
@@ -108,7 +89,7 @@ const SegmentInProgress = ({
 }) => {
   const editionId = edition.id;
 
-  const mutateFunction = useMutation(normalizeResponsesMutation);
+  const mutateFunction = () => {};
 
   useEffect(() => {
     if (enabled) {
