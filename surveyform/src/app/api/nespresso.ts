@@ -52,8 +52,8 @@ export function nespresso(...middlewares: Array<ExpressMiddleware>) {
     return function (req: NextRequest): NextResponse {
         // inspired from Express codebase
         // TODO: how to properly initialize an Express request?
-        let expressReq = Object.create(request) as Request
-        let expressRes = Object.create(response) as Response
+        let expressReq = Object.create(request, {}) as Request
+        let expressRes = Object.create(response, {}) as Response
         const ctx: ExpressMiddlewareCtx = { expressReq, expressRes }
         runMiddleware(middlewares, 0, ctx)
         console.log({ ctx })
