@@ -1,6 +1,5 @@
 // @see https://github.com/cypress-io/cypress-webpack-preprocessor/tree/master/examples/use-ts-loader
 const path = require("path");
-const extendWebpackConfig = require("../packages/@vulcanjs/webpack/extendWebpackConfig");
 // Needed when a subdependency of Next is using process.env
 const nextConfig = require("../next.config.js");
 const { DefinePlugin } = require("webpack");
@@ -31,6 +30,7 @@ const config = {
     modules: ["node_modules"],
     alias: {
       "#": path.join(__dirname, "."),
+      "~": path.join(__dirname, "../src"),
     },
   },
   output: {
@@ -71,6 +71,4 @@ const config = {
   ],
 };
 
-const extended = extendWebpackConfig()(config);
-
-module.exports = extended;
+module.exports = config;

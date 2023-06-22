@@ -1,5 +1,4 @@
-//const util = require("util");
-const { extendNextConfig } = require("./packages/@vulcanjs/next-config");
+const path = require("path")
 // Use @next/mdx for a basic MDX support.
 // See the how Vulcan Next docs are setup with next-mdx-remote
 // which is more advanced (loading remote MD, supporting styling correctly etc.)
@@ -117,9 +116,6 @@ const moduleExports = (phase, { defaultConfig }) => {
     // uncomment to support markdown
     // pageExtensions:["js", "jsx", "md", "mdx", "ts", "tsx"];
   };
-
-  let extendedConfig = extendNextConfig(nextConfig);
-
   //*** */ Enable Webpack analyzer
   if (process.env.ANALYZE) {
     const debug = require("debug")("webpack");
@@ -127,7 +123,7 @@ const moduleExports = (phase, { defaultConfig }) => {
     const withBundleAnalyzer = require("@next/bundle-analyzer")({
       enabled: !!process.env.ANALYZE,
     });
-    extendedConfig = withBundleAnalyzer(extendedConfig);
+    nextConfig = withBundleAnalyzer(nextConfig);
   }
 
   //*** Sentry
@@ -181,25 +177,25 @@ const moduleExports = (phase, { defaultConfig }) => {
     disableServerWebpackPlugin: shouldDisableSentry,
     disableClientWebpackPlugin: shouldDisableSentry,
   };
-  extendedConfig.sentry = {
-    ...(extendedConfig.sentry || {}),
+  nextConfig.sentry = {
+    ...(nextConfig.sentry || {}),
     // Will disable source map upload
     disableServerWebpackPlugin: shouldDisableSentry,
     disableClientWebpackPlugin: shouldDisableSentry,
   };
 
   // Finally add relevant webpack configs/utils
-  extendedConfig = flowRight([
+  nextConfig = flowRight([
     withPkgInfo,
     //withMDX,
     (config) => withSentryConfig(config, sentryWebpackPluginOptions),
     // add other wrappers here
-  ])(extendedConfig);
+  ])(nextConfig);
 
-  debug("Extended next config FINAL " + JSON.stringify(extendedConfig));
+  debug("Extended next config FINAL " + JSON.stringify(nextConfig));
 
   if (process.env.MAINTENANCE_MODE) {
-    extendedConfig.redirects = async () => {
+    nextConfig.redirects = async () => {
       return [
         {
           source: "/",
@@ -215,7 +211,7 @@ const moduleExports = (phase, { defaultConfig }) => {
     };
   }
 
-  return extendedConfig;
+  return nextConfig;
 };
 
 module.exports = moduleExports;
