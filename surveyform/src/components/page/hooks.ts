@@ -14,6 +14,7 @@ export const useSurveyActionParams = (): {
   referrer?: string;
 } => {
   const query = useSearchParams()!;
+  // note: source and referrer are set by AppLayout on first page load
   const source =
     query.get("source") ||
     (typeof localStorage !== "undefined" && localStorage.getItem("source"));
@@ -46,14 +47,15 @@ export const useBrowserData = (): BrowserData => {
     // TODO: should it need an update?
     // @ts-expect-error
     const info = browser.parse().parsedResult;
-    const data = {
-      //...data,
+    const data: BrowserData = {
       common__user_info__device: info.platform.type,
       common__user_info__browser: info.browser.name,
       common__user_info__version: info.browser.version,
       common__user_info__os: info.os.name,
-      common__user_info__referrer: document.referrer,
     };
+    if (document.referrer) {
+      data.common__user_info__referrer = document.referrer;
+    }
     setBrowserData(data);
     //if (!data.common__user_info__referrer) {
     //data.common__user_info__referrer = document.referrer;

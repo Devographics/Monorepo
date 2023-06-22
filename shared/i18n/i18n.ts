@@ -2,6 +2,27 @@ import type { SectionMetadata, QuestionMetadata, OptionMetadata } from '@devogra
 
 export const separator = '.'
 
+export const getSectioni18nIds = ({ section }: { section: SectionMetadata }) => {
+    const { id: sectionId, intlId } = section
+
+    const sectionNamespace = sectionId
+    const baseSegments = ['sections', sectionNamespace]
+    const base = intlId || baseSegments.join(separator)
+
+    const joinWithBase = (suffix: string) => [base, suffix].join(separator)
+
+    const ids = {
+        // e.g. user_info (not used)
+        base,
+        // e.g. user_info.title => "About You"
+        title: joinWithBase('title'),
+        // e.g. user_info.description => "Let's get to know the real you."
+        description: joinWithBase('description')
+    }
+
+    return ids
+}
+
 export const getQuestioni18nIds = ({
     section,
     question

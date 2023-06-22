@@ -1,0 +1,30 @@
+@use "sass:math";
+$root-size-mobile: 15px;
+$root-size: 17px;
+
+$smallest-font: 0.6rem;
+$smaller-font: 0.7rem;
+$small-font: 0.8rem;
+$smallish-font: 0.9rem;
+$medium-font: 1rem;
+$large-font: 1.1rem;
+$largeish-font: 1.3rem;
+$larger-font: 1.5rem;
+$largest-font: 2rem;
+$largestest-font: 3rem;
+
+$light: 300; // not used currently
+$medium: 400;
+$bold: 600;
+
+@mixin font-light {
+  font-weight: $light;
+}
+
+@mixin font-regular {
+  font-weight: $medium;
+}
+
+@mixin font-bold {
+  font-weight: $bold;
+}

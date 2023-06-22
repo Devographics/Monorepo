@@ -73,5 +73,7 @@ export const initDbCache = async ({
 
 export const reinitialize = async ({ context, initList = defaultInitList }: InitProps) => {
     const data = await initMemoryCache({ context, initList })
-    await initDbCache({ context, data, initList })
+    // June 2023: we do not "warm" the cache from API app anymore,
+    // it is now the responsibility of each app to handle its own cache
+    // await initDbCache({ context, data, initList })
 }

@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { EditionProvider } from "~/components/SurveyContext/Provider";
 
-import { rscMustGetSurveyEdition } from "./rsc-fetchers";
+import {
+  rscGetSurveyEditionFromUrl,
+  rscMustGetSurveyEditionFromUrl,
+} from "./rsc-fetchers";
 import AppLayout from "~/app/[lang]/AppLayout";
 import EditionLayout from "~/components/common/EditionLayout";
 
@@ -17,9 +20,9 @@ export async function generateStaticParams() {
   }));
 }*/
 
-import { getSurveyImageUrl } from "~/lib/surveys/helpers";
+import { getMetadata, getSurveyImageUrl } from "~/lib/surveys/helpers";
 import { publicConfig } from "~/config/public";
-import { getEditionHomePath, getEditionTitle } from "~/lib/surveys/helpers";
+import { getEditionHomePath } from "~/lib/surveys/helpers";
 import {
   getCommonContexts,
   getEditionContexts,
@@ -27,42 +30,18 @@ import {
 } from "~/i18n/config";
 import { rscAllLocalesMetadata, rscLocale } from "~/lib/api/rsc-fetchers";
 interface SurveyPageServerProps {
+  lang: string;
   slug: string;
   year: string;
 }
 
 export async function generateMetadata({
-  params: { slug, year },
+  params,
 }: {
   params: SurveyPageServerProps;
-}): Promise<Metadata> {
+}): Promise<Metadata | undefined> {
   // TODO: it seems we need to call this initialization code on all relevant pages/layouts
-  const edition = await rscMustGetSurveyEdition({ slug, year });
-  const { socialImageUrl } = edition;
-  const imageUrl = getSurveyImageUrl(edition);
-  let imageAbsoluteUrl = socialImageUrl || imageUrl;
-  const url = publicConfig.appUrl;
-
-  const meta: Metadata = {
-    title: getEditionTitle({ edition }),
-    // NOTE: merge between route segments is shallow, you may need to repeat field from layout
-    openGraph: {
-      // @ts-ignore
-      type: "article" as const,
-      url,
-      images: imageAbsoluteUrl,
-    },
-    twitter: {
-      // @ts-ignore
-      card: "summary" as const,
-      images: imageAbsoluteUrl,
-    },
-    alternates: {
-      canonical: url,
-      // we could create alternates for languages too
-    },
-  };
-  return meta;
+  return await getMetadata({ params });
 }
 
 /**
@@ -77,7 +56,7 @@ export default async function SurveyLayout({
   children: React.ReactNode;
   params: { slug: string; year: string; lang: string };
 }) {
-  const edition = await rscMustGetSurveyEdition(params);
+  const edition = await rscMustGetSurveyEditionFromUrl(params);
   // survey specific strings
   const localeId = getLocaleIdFromParams(params);
   if (localeId.includes(".")) {

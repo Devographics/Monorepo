@@ -1,7 +1,7 @@
 import ShareSite from "../share/ShareSite";
 import Score from "../common/Score";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
-import { getSurveyImageUrl } from "~/lib/surveys/helpers";
+import { getEditionTitle, getSurveyImageUrl } from "~/lib/surveys/helpers";
 import ReadingListResults from "~/components/reading_list/ReadingListResults";
 import { EditionMetadata, ResponseDocument } from "@devographics/types";
 import { ThanksBackButton } from "./ThanksBackButton";
@@ -29,7 +29,7 @@ export const Finish = ({
             width={420}
             height={280}
             src={imageUrl}
-            alt={`${name} ${year}`}
+            alt={getEditionTitle({ edition })}
             //quality={100}
           />
         )}
@@ -40,7 +40,7 @@ export const Finish = ({
       <div>
         <FormattedMessage id="general.thanks2" />
       </div>
-      <ShareSite survey={edition} />
+      <ShareSite edition={edition} />
       <ThanksBackButton
         readOnly={readOnly}
         edition={edition}

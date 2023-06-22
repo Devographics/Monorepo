@@ -4,21 +4,21 @@ import ShareEmail from "./ShareEmail";
 import ShareFacebook from "./ShareFacebook";
 import ShareLinkedIn from "./ShareLinkedIn";
 import { useIntlContext } from "@devographics/react-i18n";
+import { getEditionTitle } from "~/lib/surveys/helpers";
 
-const ShareSite = ({ survey }) => {
+const ShareSite = ({ edition }) => {
   const intl = useIntlContext();
-  const { name, year, hashtag, shareUrl } = survey;
-  const link = `${shareUrl}?source=post_survey_share`;
-  const surveyName = `${name} ${year}`;
+  const { questionsUrl } = edition;
+  const link = `${questionsUrl}?source=post_survey_share`;
+  const surveyName = getEditionTitle({ edition });
   const values = { surveyName, link };
   const title = intl.formatMessage({ id: "general.share_subject", values });
   const body = intl.formatMessage({ id: "general.share_text", values });
-  const twitterText = body + ` #${hashtag}`;
 
   return (
     <div className="ShareSite">
       <div className="ShareSite__Content">
-        <ShareTwitter text={twitterText} />
+        <ShareTwitter text={body} />
         <ShareFacebook link={link} quote={body} />
         <ShareLinkedIn link={link} title={title} />
         <ShareEmail subject={title} body={body} />

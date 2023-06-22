@@ -2,7 +2,11 @@ import Link from "next/link";
 import { SurveyStatusEnum } from "@devographics/types";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { EditionMetadata, SurveyMetadata } from "@devographics/types";
-import { getEditionHomePath, getSurveyImageUrl } from "~/lib/surveys/helpers";
+import {
+  getEditionHomePath,
+  getEditionTitle,
+  getSurveyImageUrl,
+} from "~/lib/surveys/helpers";
 import sortBy from "lodash/sortBy";
 import { rscCurrentUserWithResponses } from "~/account/user/rsc-fetchers/rscCurrentUser";
 import { ResponseDetails } from "~/components/surveys/ResponseDetails";
@@ -38,7 +42,7 @@ const EditionItem = async ({
                   width={300}
                   height={200}
                   src={imageUrl}
-                  alt={`${name} ${year}`}
+                  alt={getEditionTitle({ edition })}
                   //quality={100}
                 />
               )}

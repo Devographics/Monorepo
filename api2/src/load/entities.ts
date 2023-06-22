@@ -17,6 +17,7 @@ import { setCache } from '../helpers/caching'
 import { EntityResolverMap, entityResolverMap } from '../resolvers/entities'
 import isEmpty from 'lodash/isEmpty.js'
 import { OptionId } from '@devographics/types'
+import clone from 'lodash/clone.js'
 
 let Entities: Entity[] = []
 
@@ -281,7 +282,8 @@ as if we were querying the API through GraphQL
 
 type ResolverKey = keyof EntityResolverMap
 
-export const applyEntityResolvers = async (entity: Entity, context: RequestContext) => {
+export const applyEntityResolvers = async (entity_: Entity, context: RequestContext) => {
+    const entity = clone(entity_)
     for (const resolverKey in entityResolverMap) {
         const resolver = entityResolverMap[resolverKey as ResolverKey]
         const resolvedValue = resolver && (await resolver(entity, null, context, {}))
