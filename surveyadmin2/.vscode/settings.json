@@ -1,0 +1,24 @@
+{
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "search.exclude": {
+    "cypress/examples/": true,
+    "logs/": true
+  },
+  "files.associations": {
+    "*.env.development": "env",
+    "*.env.production": "env",
+    "*.env.development.local": "env",
+    "*.env.production.local": "env",
+    ".env.local": "env",
+    ".env.test": "env",
+    ".env.test.local": "env"
+  },
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "javascript.preferences.importModuleSpecifier": "shortest"
+}
