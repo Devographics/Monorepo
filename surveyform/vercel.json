@@ -5,5 +5,8 @@
     "src/pages/api/**/*": {
       "memory": 768
     }
+  },
+  "github": {
+    "silent": true
   }
 }
