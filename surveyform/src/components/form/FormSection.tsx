@@ -160,6 +160,12 @@ export const FormSection = (
           headerId: id,
           extraInfo: status,
           body: message,
+          debugInfo: {
+            location: typeof window !== "undefined" && window?.location?.href,
+            timestamp: new Date(),
+            data,
+            error: res.error,
+          },
         });
         return;
       }
