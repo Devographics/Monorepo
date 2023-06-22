@@ -108,18 +108,14 @@ const NormalizationWrapper = ({ surveys }) => {
   );
 };
 
-export const Normalization = ({
-  surveys,
-  edition,
-  questionId: questionId_,
-}) => {
+export const Normalization = ({ surveys, edition, question }) => {
   const allEditions = surveys.map((s) => s.editions).flat();
 
   const [responsesCount, setResponsesCount] = useState(0);
   const [doneCount, setDoneCount] = useState(0);
   const [enabled, setEnabled] = useState(true);
   const [editionId, setEditionId] = useState(edition.id);
-  const [questionId, setQuestionId] = useState(questionId_);
+  const [questionId, setQuestionId] = useState(question.id);
   const [normalizationMode, setNormalizationMode] = useState("all");
   const emptySegments: Segment[] = [];
   const [segmentSize, setSegmentSize] = useState(defaultSegmentSize);
@@ -172,7 +168,6 @@ export const Normalization = ({
   // get list of all normalizeable ("other") field for current survey
   const normalizeableQuestions = getNormalizableQuestions(edition);
   // set field
-  const question = normalizeableQuestions.find((f) => f.id === questionId);
 
   const isAllFields = questionId === allFields.id;
   const onlyUnnormalized = normalizationMode === "only_normalized";
@@ -200,7 +195,7 @@ export const Normalization = ({
     <div className="admin-normalization admin-content">
       <Actions {...props} />
       {!!responsesCount && <Progress {...props} />}
-      {question && <Fields {...props} />}
+      {<Fields {...props} />}
     </div>
   );
 };

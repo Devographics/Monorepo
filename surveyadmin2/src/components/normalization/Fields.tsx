@@ -25,7 +25,7 @@ const Fields = ({
     );
   }
 
-  const results = get(unnormalizedFieldsData, "unnormalizedFields");
+  const results = unnormalizedFieldsData;
 
   if (!results) return <p>Nothing to normalize</p>;
 

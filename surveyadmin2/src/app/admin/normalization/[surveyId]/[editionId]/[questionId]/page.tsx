@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Normalization } from "~/components/normalization/Normalization";
 import { fetchEditionMetadata, fetchSurveysMetadata } from "~/lib/api/fetch";
 import { getUnnormalizedFields } from "~/lib/normalization/actions";
+import { getEditionQuestions } from "~/lib/normalization/helpers";
 import { routes } from "~/lib/routes";
 
 export default async function Page({ params }) {
@@ -16,7 +17,16 @@ export default async function Page({ params }) {
     );
   }
   const survey = edition.survey;
-
+  const question = getEditionQuestions(edition).find(
+    (q) => q.id === questionId
+  );
+  if (!question) {
+    return (
+      <div>
+        No question {surveyId}/{editionId}/{questionId} found.
+      </div>
+    );
+  }
   const unnormalizedFields = await getUnnormalizedFields({
     surveyId,
     editionId,
@@ -25,13 +35,9 @@ export default async function Page({ params }) {
   return (
     <div>
       <h2>
-        {survey.name}/{edition.id}/{questionId}
+        {survey.name}/{edition.id}/{question.id}
       </h2>
-      <Normalization
-        surveys={surveys}
-        edition={edition}
-        questionId={questionId}
-      />
+      <Normalization surveys={surveys} edition={edition} question={question} />
       {/* {unnormalizedFields.map((field, i) => (
         <Field key={i} field={field} />
       ))} */}
