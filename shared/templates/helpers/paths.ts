@@ -1,4 +1,13 @@
-import { Survey, Edition, Section, Question, DbPaths, DbSuffixes } from '@devographics/types'
+import {
+    Survey,
+    Edition,
+    Section,
+    Question,
+    EditionMetadata,
+    QuestionMetadata,
+    DbPaths,
+    DbSuffixes
+} from '@devographics/types'
 
 export const getRawPaths = (
     {
@@ -89,3 +98,29 @@ export const getPaths = (
     rawPaths: getRawPaths(options, suffix),
     normPaths: getNormPaths(options, suffix)
 })
+
+/*
+
+Note: we currently need to prefix all paths with the edition id
+
+TODO: In the future, get rid of this prefix, and replace formPaths with rawPaths?
+
+*/
+export const getFormPaths = ({
+    edition,
+    question
+}: {
+    edition: EditionMetadata
+    question: QuestionMetadata
+}): DbPaths => {
+    const paths: { [key in keyof DbPaths]: string } = {}
+    if (question.rawPaths) {
+        ;(Object.keys(question.rawPaths) as Array<keyof DbPaths>).forEach(key => {
+            const path = question?.rawPaths?.[key]
+            if (path) {
+                paths[key] = `${edition.id}__${path}`
+            }
+        })
+    }
+    return paths
+}

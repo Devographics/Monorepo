@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Breadcrumbs from "~/components/normalization/Breadcrumbs";
 import { fetchEditionMetadata, fetchSurveysMetadata } from "~/lib/api/fetch";
 import { routes } from "~/lib/routes";
 
@@ -11,7 +12,7 @@ export default async function Page({ params }) {
   }
   return (
     <div>
-      <h2>{survey.name}</h2>
+      <Breadcrumbs survey={survey} />
       {survey.editions.map((edition) => (
         <li key={edition.id}>
           <Link

@@ -1,6 +1,6 @@
 "use client";
-import { useRouter } from "next/navigation";
 import Options from "./Options";
+import { normalizeResponses } from "~/lib/normalization/services";
 // import Dropdown from "~/core/components/ui/Dropdown";
 
 export const allFields = { id: "all_fields", label: "All Fields" };
@@ -8,6 +8,7 @@ export const allFields = { id: "all_fields", label: "All Fields" };
 const Actions = (props) => {
   const {
     allEditions,
+    surveyId,
     editionId,
     edition,
     questionId,
@@ -27,7 +28,7 @@ const Actions = (props) => {
   return (
     <div className="normalization-actions">
       <div className="primary">
-        <select
+        {/* <select
           onChange={() => {
             // build search string to update the browser URL query string
             // const search = qs.stringify({
@@ -62,30 +63,35 @@ const Actions = (props) => {
             <option key={question.id}>{question.id}</option>
           ))}
         </select>{" "}
-        &gt;{" "}
+        &gt;{" "} */}
+        <Options {...props} />
+
         <button
           onClick={() => {
-            // const responsesCount =
-            //   result?.data?.getSurveyMetadata?.responsesCount;
-            // initializeSegments({ responsesCount, segmentSize });
+            const responsesCount =
+              result?.data?.getSurveyMetadata?.responsesCount;
+            initializeSegments({ responsesCount, segmentSize });
           }}
         >
           Renormalize {editionId}/{isAllFields ? allFields.id : questionId}
         </button>
-        <Options {...props} />
       </div>
-      <div className="secondary">
+      {/* <div className="secondary">
         <button
-          onClick={() => {
-            // const idsString = prompt("Enter comma-separated ids") || "";
-            // const responsesIds = idsString.split(",");
-            // return { mutationArguments: { responsesIds, editionId } };
-            // alert("Responses normalized");
+          onClick={async () => {
+            const idsString = prompt("Enter comma-separated ids") || "";
+            const responsesIds = idsString.split(",");
+            const result = await normalizeResponses({
+              surveyId,
+              responsesIds,
+            });
+            console.log(result);
+            alert("Responses normalized");
           }}
         >
           Renormalize Responses
         </button>
-      </div>
+      </div> */}
     </div>
   );
 };

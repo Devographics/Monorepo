@@ -21,6 +21,7 @@ import {
 import * as templateFunctions from "@devographics/templates";
 import { getNormResponsesCollection } from "@devographics/mongo";
 import { fetchEditionMetadata, fetchEntities } from "../api/fetch";
+import { getFormPaths } from "@devographics/templates";
 
 export const getFieldSegments = (field: Field) => {
   if (!field.fieldName) {
@@ -81,13 +82,17 @@ export const getFieldPaths = (questionObject: QuestionTemplateOutput) => {
 //   };
 // };
 
-export const getEditionQuestionById = (edition, questionId) => {
-  const allQuestions = edition.sections.map((s) => s.questions).flat();
+export const getEditionQuestionById = ({
+  edition,
+  questionId,
+}: {
+  edition: EditionMetadata;
+  questionId: string;
+}) => {
+  const allQuestions = getEditionQuestions(edition);
   // make sure to narrow it down to the freeform "others" field since the main "choices"
   // field can have the same id
-  const question = allQuestions.find(
-    (q) => q.id === questionId && q.template === "others"
-  );
+  const question = allQuestions.find((q) => q.id === questionId);
   if (!question) {
     throw new Error(`Could not find field for questionId "${questionId}"`);
   }
@@ -538,13 +543,11 @@ export const getSelector = async ({
   surveyId,
   editionId,
   questionId,
-  responsesIds,
   onlyUnnormalized,
 }: {
   surveyId: string;
   editionId: string;
   questionId?: string;
-  responsesIds?: string[];
   onlyUnnormalized?: boolean;
 }) => {
   const edition = await fetchEditionMetadata({ surveyId, editionId });
@@ -553,12 +556,10 @@ export const getSelector = async ({
     editionId,
   } as any;
 
-  if (responsesIds) {
-    selector._id = { $in: responsesIds };
-  }
   if (questionId) {
     if (onlyUnnormalized) {
       const { responses } = await getUnnormalizedResponses(
+        surveyId,
         editionId,
         questionId
       );
@@ -571,8 +572,11 @@ export const getSelector = async ({
           [f]: existsSelector,
         }));
       } else {
-        const field = getEditionQuestionById(edition, questionId);
-        selector[field.fieldName] = existsSelector;
+        const question = getEditionQuestionById({ edition, questionId });
+        const formPaths = getFormPaths({ edition, question });
+        if (formPaths.other) {
+          selector[formPaths.other] = existsSelector;
+        }
       }
     }
   } else {

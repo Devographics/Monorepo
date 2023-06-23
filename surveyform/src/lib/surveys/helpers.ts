@@ -26,32 +26,6 @@ import { rscIntlContext } from "~/i18n/rsc-fetchers";
 import { rscMustGetSurveyEditionFromUrl } from "~/app/[lang]/survey/[slug]/[year]/rsc-fetchers";
 import { getCommonContexts, getEditionContexts } from "~/i18n/config";
 
-/*
-
-Note: we currently need to prefix all paths with the edition id
-
-TODO: In the future, get rid of this prefix, and replace formPaths with rawPaths?
-
-*/
-export const getFormPaths = ({
-  edition,
-  question,
-}: {
-  edition: EditionMetadata;
-  question: QuestionMetadata;
-}): DbPaths => {
-  const paths: { [key in keyof DbPaths]: string } = {};
-  if (question.rawPaths) {
-    (Object.keys(question.rawPaths) as Array<keyof DbPaths>).forEach((key) => {
-      const path = question?.rawPaths?.[key];
-      if (path) {
-        paths[key] = `${edition.id}__${path}`;
-      }
-    });
-  }
-  return paths;
-};
-
 /**
  * Get the main survey image,
  * handling legacy scenario of a relative image path

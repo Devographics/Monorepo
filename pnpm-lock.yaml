@@ -878,6 +878,7 @@ importers:
       '@next/bundle-analyzer': ^9.4.4
       '@next/env': ^12.3.0
       '@next/mdx': ^10.0.2
+      '@picocss/pico': ^1.5.10
       '@testing-library/cypress': ^8.0.2
       '@testing-library/jest-dom': ^5.9.0
       '@testing-library/react': ^10.2.0
@@ -1017,6 +1018,7 @@ importers:
       '@mui/material': 5.13.5_xabsceztiqwbrwoe3gsgysdoca
       '@next/env': 12.3.3
       '@next/mdx': 10.2.3_6vwedlnwdegenaf6jioaeirvlu
+      '@picocss/pico': 1.5.10
       '@vulcanjs/core': 0.7.2-alpha.8
       '@vulcanjs/crud': 0.7.2-alpha.8_biqbaboplfbrettd7655fr4n2y
       '@vulcanjs/graphql': 0.8.1-y.0_mw7zxokgs3jbsgfxjkxtrv7jn4
@@ -8841,6 +8843,10 @@ packages:
       '@parcel/utils': 2.8.3
       chrome-trace-event: 1.0.3
       nullthrows: 1.1.1
+    dev: false
+
+  /@picocss/pico/1.5.10:
+    resolution: {integrity: sha512-+LafMsrwPxXQMk6sI///TmSInCwwZmq+K7SikyL3N/4GhhwzyPC+TQLUEqmrLyjluR+uIpFFcqjty30Rtr6GxQ==}
     dev: false
 
   /@pkgr/utils/2.3.1:

@@ -8,10 +8,15 @@ import * as steps from "./steps";
 import get from "lodash/get.js";
 import type {
   EditionMetadata,
+  ResponseDocument,
   Survey,
   SurveyMetadata,
 } from "@devographics/types";
-import { fetchEntities, fetchSurveysMetadata } from "~/lib/api/fetch";
+import {
+  fetchEditionMetadata,
+  fetchEntities,
+  fetchSurveysMetadata,
+} from "~/lib/api/fetch";
 import { getNormResponsesCollection } from "@devographics/mongo";
 import { newMongoId } from "@devographics/mongo";
 
@@ -57,7 +62,7 @@ interface NormalizationOptions {
   fileName?: string;
   verbose?: boolean;
   isSimulation?: boolean;
-  fieldId?: string;
+  questionId?: string;
   isBulk?: boolean;
   surveys?: SurveyMetadata[];
 }
@@ -80,6 +85,13 @@ export interface NormalizationParams {
   verbose?: boolean;
 }
 
+export interface NormalizedResponseDocument extends ResponseDocument {
+  responseId: ResponseDocument["_id"];
+  generatedAt: Date;
+  surveyId: SurveyMetadata["id"];
+  editionId: EditionMetadata["id"];
+}
+
 export const normalizeResponse = async (
   options: NormalizationOptions
 ): Promise<NormalizationResult | undefined> => {
@@ -92,7 +104,7 @@ export const normalizeResponse = async (
       fileName: _fileName,
       verbose = false,
       isSimulation = false,
-      fieldId,
+      questionId,
       isBulk = false,
       surveys,
     } = options;
@@ -133,12 +145,15 @@ export const normalizeResponse = async (
     }
 
     const survey = allSurveys.find((s) => s.id === response.surveyId);
-    const edition = survey.editions.find((e) => e.id === response.editionId);
+    const edition = await fetchEditionMetadata({
+      surveyId: response.surveyId,
+      editionId: response.editionId,
+    });
 
     const normCollection = await getNormResponsesCollection(survey);
 
     if (!edition)
-      throw new Error(`Could not find edition for slug ${response.editionId}`);
+      throw new Error(`Could not find edition for id ${response.editionId}`);
 
     if (entities) {
       allEntities = entities;
@@ -163,7 +178,7 @@ export const normalizeResponse = async (
       privateFields,
       result,
       errors,
-      fieldId,
+      questionId,
       verbose,
     };
 
@@ -173,10 +188,10 @@ export const normalizeResponse = async (
     
     */
 
-    if (fieldId) {
+    if (questionId) {
       let fullPath;
       // 1. we only need to renormalize a single field
-      switch (fieldId) {
+      switch (questionId) {
         case "source":
           await steps.copyFields(normalizationParams);
           await steps.normalizeSourceField(normalizationParams);
@@ -187,7 +202,10 @@ export const normalizeResponse = async (
             "Please normalize full document in order to normalize country field"
           );
         default:
-          const question = getEditionQuestionById(edition, fieldId);
+          const question = getEditionQuestionById({
+            edition,
+            questionId: questionId,
+          });
           await steps.normalizeField({ question, ...normalizationParams });
           fullPath = getFieldPaths(question).fullPath;
           break;

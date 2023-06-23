@@ -13,7 +13,8 @@ import { FormInputProps } from "./typings";
 import { CommentTrigger, CommentInput } from "./FormComment";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { getQuestioni18nIds } from "@devographics/i18n";
-import { getFormPaths, useQuestionTitle } from "~/lib/surveys/helpers";
+import { useQuestionTitle } from "~/lib/surveys/helpers";
+import { getFormPaths } from "@devographics/templates";
 import AddToList from "~/components/reading_list/AddToList";
 import QuestionLabel from "./QuestionLabel";
 

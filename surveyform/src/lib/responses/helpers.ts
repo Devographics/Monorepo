@@ -6,7 +6,7 @@ import {
   ResponseDocument,
   FeaturesOptions,
 } from "@devographics/types";
-import { getFormPaths } from "~/lib/surveys/helpers";
+import { getFormPaths } from "@devographics/templates";
 
 export const getCompletionPercentage = ({
   response,
