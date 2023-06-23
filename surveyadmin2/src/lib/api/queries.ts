@@ -30,6 +30,8 @@ resources {
   title
   url
 }
+tags
+patterns
 `;
 
 export const getEntitiesQuery = () => `

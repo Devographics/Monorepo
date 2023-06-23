@@ -1,17 +1,9 @@
 // TODO: should be imported dynamically
 import countries from "./countries";
-import {
-  cleanupValue,
-  normalize,
-  normalizeSource,
-  getFieldPaths,
-  getFieldSegments,
-} from "./helpers";
+import { cleanupValue, normalize, normalizeSource } from "./helpers";
 import set from "lodash/set.js";
-import last from "lodash/last.js";
 import intersection from "lodash/intersection.js";
 import isEmpty from "lodash/isEmpty.js";
-import type { Field, ParsedQuestion } from "@devographics/core-models";
 import { PrivateResponseDocument } from "~/admin/models/private_responses/model.server";
 import { getUUID } from "~/lib/email";
 import { logToFile } from "@devographics/helpers";
@@ -22,7 +14,6 @@ import type {
   TemplateFunction,
 } from "@devographics/types";
 import { NormalizationParams } from "./normalize";
-import { getQuestionPath } from "~/modules/surveys/parser/parseSurvey";
 import { getCollectionByName, newMongoId } from "@devographics/mongo";
 
 const replaceAll = function (target, search, replacement) {

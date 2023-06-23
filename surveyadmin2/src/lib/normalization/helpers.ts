@@ -181,7 +181,6 @@ const extractTokens = async ({
   const rawString = value;
 
   // RegExp.prototype.toJSON = RegExp.prototype.toString;
-  // console.log(JSON.stringify(rules))
 
   if (rawString.length > stringLimit) {
     await logToFile(
@@ -220,7 +219,7 @@ const extractTokens = async ({
       if (
         context &&
         fieldId &&
-        (context !== edition.foo || fieldId !== question.id)
+        (context !== edition.id || fieldId !== question.id)
       ) {
         // if a context and fieldId are defined for the current rule,
         // abort unless they match the current context and fieldId
