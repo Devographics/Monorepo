@@ -19,7 +19,7 @@ export const others: TemplateFunction = options => {
 
     const output: QuestionTemplateOutput = {
         rawPaths: {
-            response: `${sectionSegment}__${questionSegment}__${DbSuffixes.OTHERS}`
+            other: `${sectionSegment}__${questionSegment}__${DbSuffixes.OTHERS}`
         },
         normPaths,
         ...question
