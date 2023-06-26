@@ -1,31 +1,12 @@
 "use client";
 import React, { useState } from "react";
-import get from "lodash/get.js";
-import { normalizeResponses } from "~/lib/normalization/services";
+import {
+  normalizeResponseQuestion,
+  normalizeResponses,
+} from "~/lib/normalization/services";
 
-const Loading = () => <span>⌛</span>;
-
-const Fields = ({
-  survey,
-  edition,
-  question,
-  unnormalizedFieldsLoading,
-  unnormalizedFieldsData,
-}) => {
+const Fields = ({ survey, edition, question, unnormalizedFieldsData }) => {
   const [showIds, setShowIds] = useState(true);
-
-  // useEffect(()=> {
-  // run GraphQL query
-
-  // }, [survey, field])
-
-  if (unnormalizedFieldsLoading) {
-    return (
-      <div>
-        Loading… <Loading />
-      </div>
-    );
-  }
 
   const results = unnormalizedFieldsData;
 
@@ -64,6 +45,7 @@ const Fields = ({
               _id={_id}
               showIds={showIds}
               value={value}
+              questionId={question.id}
               responseId={responseId}
               surveyId={survey.id}
             />
@@ -74,7 +56,7 @@ const Fields = ({
   );
 };
 
-const Field = ({ _id, value, showIds, responseId, surveyId }) => {
+const Field = ({ _id, value, showIds, responseId, questionId, surveyId }) => {
   const [loading, setLoading] = useState(false);
   return (
     <tr>
@@ -94,7 +76,8 @@ const Field = ({ _id, value, showIds, responseId, surveyId }) => {
           aria-busy={loading}
           onClick={async () => {
             setLoading(true);
-            const result = await normalizeResponses({
+            const result = await normalizeResponseQuestion({
+              questionId,
               surveyId,
               responsesIds: [responseId],
             });

@@ -22,6 +22,9 @@ export const apiRoutes = {
     normalizeResponses: {
       href: (params) => `/api/normalization/normalizeResponses`,
     },
+    normalizeResponseQuestion: {
+      href: (params) => `/api/normalization/normalizeResponseQuestion`,
+    },
     normalizeEdition: {
       href: (params) => `/api/normalization/normalizeEdition`,
     },

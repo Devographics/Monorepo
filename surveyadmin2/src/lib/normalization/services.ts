@@ -2,6 +2,7 @@ import { apiRoutes } from "~/lib/apiRoutes";
 import {
   NormalizeEditionArgs,
   NormalizeQuestionArgs,
+  NormalizeResponseQuestionArgs,
   NormalizeResponsesArgs,
 } from "./actions";
 
@@ -27,6 +28,23 @@ import {
 export async function normalizeResponses(params: NormalizeResponsesArgs) {
   const fetchRes = await fetch(
     apiRoutes.normalization.normalizeResponses.href(params),
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(params),
+    }
+  );
+  const result: { data?: any; error: any } = await fetchRes.json();
+  return result;
+}
+
+export async function normalizeResponseQuestion(
+  params: NormalizeResponseQuestionArgs
+) {
+  const fetchRes = await fetch(
+    apiRoutes.normalization.normalizeResponseQuestion.href(params),
     {
       method: "POST",
       headers: {

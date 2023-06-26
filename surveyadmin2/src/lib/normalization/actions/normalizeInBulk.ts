@@ -108,8 +108,9 @@ export const normalizeInBulk = async ({
       isBulk: true,
     });
 
-    console.log(normalizationResult);
-    await logToFile("normalizationResult.json", normalizationResult);
+    await logToFile("normalizationResult.json", normalizationResult, {
+      mode: "overwrite",
+    });
 
     progress++;
     if (limit > 1000 && progress % tickInterval === 0) {

@@ -11,6 +11,7 @@ import { ResponsesTypes } from './metadata'
 export enum DbPathsEnum {
     RESPONSE = 'response',
     OTHER = 'other',
+    PRENORMALIZED = 'prenormalized',
     COMMENT = 'comment',
     RAW = 'raw',
     PATTERNS = 'patterns',

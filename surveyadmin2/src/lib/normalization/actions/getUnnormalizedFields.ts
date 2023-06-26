@@ -6,7 +6,7 @@ export const getUnnormalizedFields = async ({
   editionId,
   questionId,
 }) => {
-  console.log(`// unnormalizedFields ${editionId} ${questionId}`);
+  // console.log(`// unnormalizedFields ${editionId} ${questionId}`);
   if (questionId) {
     const { responses, rawFieldPath } = await getUnnormalizedResponses(
       surveyId,

@@ -3,6 +3,7 @@ import {
   generateEntityRules,
   getFieldPaths,
   getEditionQuestionById,
+  getQuestionObject,
 } from "./helpers";
 import * as steps from "./steps";
 import get from "lodash/get.js";
@@ -11,6 +12,7 @@ import type {
   ResponseDocument,
   Survey,
   SurveyMetadata,
+  SectionMetadata,
 } from "@devographics/types";
 import {
   fetchEditionMetadata,
@@ -21,8 +23,9 @@ import { getNormResponsesCollection } from "@devographics/mongo";
 import { newMongoId } from "@devographics/mongo";
 
 interface RegularField {
-  fieldName: string;
+  fieldPath: string;
   value: any;
+  normTokens?: any[];
 }
 interface NormalizedField extends RegularField {
   normTokens: Array<string>;
@@ -81,7 +84,7 @@ export interface NormalizationParams {
   privateFields?: any;
   result?: any;
   errors?: any;
-  fieldId?: string;
+  questionId?: string;
   verbose?: boolean;
 }
 
@@ -110,7 +113,11 @@ export const normalizeResponse = async (
     } = options;
 
     if (verbose) {
-      console.log(`// Normalizing document ${response._id}…`);
+      console.log(
+        `// Normalizing document ${response._id}${
+          questionId ? `, question ${questionId}` : ""
+        }…`
+      );
     }
 
     /*
@@ -206,8 +213,18 @@ export const normalizeResponse = async (
             edition,
             questionId: questionId,
           });
-          await steps.normalizeField({ question, ...normalizationParams });
-          fullPath = getFieldPaths(question).fullPath;
+          const questionObject = getQuestionObject({
+            survey,
+            edition,
+            section: question.section,
+            question,
+          });
+          await steps.normalizeField({
+            question,
+            section: question.section,
+            ...normalizationParams,
+          });
+          fullPath = questionObject?.normPaths?.response;
           break;
       }
 
@@ -277,7 +294,7 @@ export const normalizeResponse = async (
       await steps.discardEmptyResponses(normalizationParams);
 
       // handle private info (legacy)
-      await steps.handlePrivateInfo(normalizationParams);
+      // await steps.handlePrivateInfo(normalizationParams);
 
       modifier = normResp;
 

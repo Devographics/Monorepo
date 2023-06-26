@@ -1,10 +1,14 @@
 // TODO: should be imported dynamically
 import countries from "./countries";
-import { cleanupValue, normalize, normalizeSource } from "./helpers";
+import {
+  cleanupValue,
+  getQuestionObject,
+  normalize,
+  normalizeSource,
+} from "./helpers";
 import set from "lodash/set.js";
 import intersection from "lodash/intersection.js";
 import isEmpty from "lodash/isEmpty.js";
-import { PrivateResponseDocument } from "~/admin/models/private_responses/model.server";
 import { getUUID } from "~/lib/email";
 import { logToFile } from "@devographics/helpers";
 import * as templateFunctions from "@devographics/templates";
@@ -187,39 +191,39 @@ export const handleLocale = async ({ normResp, response }) => {
   set(normResp, "user_info.locale", locale);
 };
 
-export const handlePrivateInfo = async ({
-  privateFields,
-  response,
-  options,
-}: NormalizationParams) => {
-  const PrivateResponses = await getCollectionByName("private_responses");
-  const { isSimulation } = options;
-  /*
-  
-    8. Store identifying info in a separate collection
-    
-    */
-  if (!isEmpty(privateFields)) {
-    const privateInfo: Partial<PrivateResponseDocument> &
-      Pick<PrivateResponseDocument, "user_info"> = {
-      _id: newMongoId(),
-      user_info: {},
-      ...privateFields,
-      surveySlug: response.surveySlug,
-      responseId: response._id,
-    };
-    if (!isSimulation) {
-      // NOTE: findOneAndUpdate and updateOne with option "upsert:true" are roughly equivalent,
-      // but update is probably faster when appliable (the result will have a different shape)
-      await PrivateResponses.updateOne(
-        { responseId: response._id },
-        privateInfo,
-        { upsert: true }
-      );
-    }
-    //set(normResp, "user_info.hash", createHash(response.email));
-  }
-};
+// export const handlePrivateInfo = async ({
+//   privateFields,
+//   response,
+//   options,
+// }: NormalizationParams) => {
+//   const PrivateResponses = await getCollectionByName("private_responses");
+//   const { isSimulation } = options;
+//   /*
+
+//     8. Store identifying info in a separate collection
+
+//     */
+//   if (!isEmpty(privateFields)) {
+//     const privateInfo: Partial<PrivateResponseDocument> &
+//       Pick<PrivateResponseDocument, "user_info"> = {
+//       _id: newMongoId(),
+//       user_info: {},
+//       ...privateFields,
+//       surveySlug: response.surveySlug,
+//       responseId: response._id,
+//     };
+//     if (!isSimulation) {
+//       // NOTE: findOneAndUpdate and updateOne with option "upsert:true" are roughly equivalent,
+//       // but update is probably faster when appliable (the result will have a different shape)
+//       await PrivateResponses.updateOne(
+//         { responseId: response._id },
+//         privateInfo,
+//         { upsert: true }
+//       );
+//     }
+//     //set(normResp, "user_info.hash", createHash(response.email));
+//   }
+// };
 
 // a response must have at least one of those fields to be added to the normalized dataset
 // (discard empty responses)
@@ -276,18 +280,12 @@ export const normalizeField = async ({
     verbose = false,
   } = options;
 
-  const templateFunction = templateFunctions[
-    question.template
-  ] as TemplateFunction;
-  if (!templateFunction) {
-    return;
-  }
-  const questionObject = templateFunction({
+  const questionObject = getQuestionObject({
     survey,
     edition,
     section,
     question,
-  });
+  })!;
 
   const {
     template,
@@ -296,230 +294,108 @@ export const normalizeField = async ({
     matchTags: matchTags_ = [],
   } = questionObject;
 
+  if (!rawPaths || !normPaths) {
+    console.log(questionObject);
+    throw new Error(
+      `normalizeField error: could not find rawPaths or normPaths for question ${question.id}`
+    );
+  }
+
   const prefixWithEditionId = (s) => `${edition.id}__${s}`;
 
   // automatically add question's own id as a potential match tag
   const matchTags = [...(matchTags_ || []), questionObject.id];
 
-  const fieldName = prefixWithEditionId(rawPaths?.response);
+  console.log(questionObject);
 
-  if (fieldName) {
-    // const fieldPath = [edition.id, section.id, question.id].join("__");
-    // const { fieldName, suffix, matchTags = [] } = field as ParsedQuestion;
-    // console.log(field);
-    // if (!fieldName) throw new Error(`Field without fieldName!`);
+  // 1. start by copying over the "main" response value
+  if (rawPaths.response) {
+    const fieldPath = prefixWithEditionId(rawPaths.response);
+    const responseValue = cleanupValue(response[fieldPath]);
+    if (responseValue) {
+      set(normResp, normPaths.response!, responseValue);
+      regularFields.push({ fieldPath, value: responseValue });
+    }
+    if (verbose) {
+      console.log(`${fieldPath}/response: “${responseValue}”`);
+    }
+  }
 
-    const responseCommentValue = cleanupValue(
-      response[prefixWithEditionId(rawPaths.comment)]
-    );
+  // 2. copy over the comment value
+  if (rawPaths.comment) {
+    const fieldPath = prefixWithEditionId(rawPaths.comment);
+    const responseCommentValue = cleanupValue(response[fieldPath]);
     if (responseCommentValue !== null) {
-      set(normResp, normPaths.comment, responseCommentValue);
+      set(normResp, normPaths.comment!, responseCommentValue);
     }
+    if (verbose) {
+      console.log(`${fieldPath}/comment: “${responseCommentValue}”`);
+    }
+  }
 
-    const value = response[fieldName];
-    // clean value to eliminate empty spaces, "none", "n/a", etc.
-    const cleanValue = cleanupValue(value);
+  // 3. if a field has an "other" path defined, we normalize its contents
+  if (rawPaths.other) {
+    const fieldPath = prefixWithEditionId(rawPaths?.other);
+    const otherValue = cleanupValue(response[fieldPath]);
+    if (otherValue) {
+      set(normResp, normPaths.raw!, otherValue);
 
-    // new method (other value belongs to same question)
-    if (questionObject.allowOther) {
-      const otherValue = cleanupValue(
-        response[prefixWithEditionId(rawPaths?.other)]
-      );
-      if (otherValue) {
-        set(normResp, normPaths.raw, otherValue);
-
-        if (log) {
-          await logToFile(
-            `${fileName}.txt`,
-            `${
-              response._id
-            }, ${fieldName}, ${cleanValue}, ${matchTags.toString()}`
+      try {
+        if (verbose) {
+          console.log(
+            `// Normalizing key "${prefixWithEditionId(
+              rawPaths?.other
+            )}" with value "${otherValue}" and tags ${matchTags.toString()}…`
           );
         }
-        try {
-          if (verbose) {
-            console.log(
-              `// Normalizing key "${prefixWithEditionId(
-                rawPaths?.other
-              )}" with value "${otherValue}" and tags ${matchTags.toString()}…`
-            );
-          }
 
-          const normTokens = await normalize({
-            value: otherValue,
-            allRules,
-            tags: matchTags,
-            edition,
-            question,
-            verbose,
-          });
-          if (verbose) {
-            console.log(
-              `  -> Normalized values: ${JSON.stringify(normTokens)}`
-            );
-          }
-
-          if (log) {
-            if (normTokens.length > 0) {
-              normTokens.forEach(async (token) => {
-                const { id, pattern, rules, match } = token;
-                await logRow(
-                  [
-                    response._id,
-                    prefixWithEditionId(rawPaths.response),
-                    value,
-                    matchTags,
-                    id,
-                    pattern,
-                    rules,
-                    match,
-                  ],
-                  fileName
-                );
-              });
-            } else {
-              await logRow(
-                [
-                  response._id,
-                  fieldName,
-                  value,
-                  matchTags,
-                  "n/a",
-                  "n/a",
-                  "n/a",
-                  "n/a",
-                ],
-                fileName
-              );
-            }
-          }
-
-          const normIds = normTokens.map((token) => token.id);
-          const normPatterns = normTokens.map((token) =>
-            token.pattern.toString()
-          );
-          set(normResp, normPaths.other, normIds);
-          set(normResp, normPaths.patterns, normPatterns);
-
-          // keep trace of fields that were normalized
-          normalizedFields.push({
-            fieldName,
-            value,
-            normTokens,
-          });
-        } catch (error) {
-          set(normResp, normPaths.error, error.message);
+        const normTokens = await normalize({
+          value: otherValue,
+          allRules,
+          tags: matchTags,
+          edition,
+          question,
+          verbose,
+        });
+        if (verbose) {
+          console.log(`  -> Normalized values: ${JSON.stringify(normTokens)}`);
         }
+
+        const normIds = normTokens.map((token) => token.id);
+        const normPatterns = normTokens.map((token) =>
+          token.pattern.toString()
+        );
+        set(normResp, normPaths.other!, normIds);
+        set(normResp, normPaths.patterns!, normPatterns);
+
+        // keep trace of fields that were normalized
+        normalizedFields.push({
+          fieldPath,
+          value: otherValue,
+          normTokens,
+        });
+        if (verbose) {
+          console.log(`${fieldPath}/other: “${otherValue}”`);
+        }
+      } catch (error) {
+        set(normResp, normPaths.error!, error.message);
       }
     }
+  }
 
-    // legacy method (other value is treated as belonging to a separate question)
-    if (cleanValue !== null) {
-      if (template === "others") {
-        // A. "others" fields needing to be normalized
-        set(normResp, normPaths.raw, value);
-
-        if (log) {
-          await logToFile(
-            `${fileName}.txt`,
-            `${
-              response._id
-            }, ${fieldName}, ${cleanValue}, ${matchTags.toString()}`
-          );
-        }
-        try {
-          if (verbose) {
-            console.log(
-              `// Normalizing key "${fieldName}" with value "${value}" and tags ${matchTags.toString()}…`
-            );
-          }
-
-          const normTokens = await normalize({
-            value: cleanValue,
-            allRules,
-            tags: matchTags,
-            edition,
-            question,
-            verbose,
-          });
-          if (verbose) {
-            console.log(
-              `  -> Normalized values: ${JSON.stringify(normTokens)}`
-            );
-          }
-
-          // console.log(
-          //   `  -> Normalized values: ${JSON.stringify(normTokens)}`
-          // );
-
-          if (log) {
-            if (normTokens.length > 0) {
-              normTokens.forEach(async (token) => {
-                const { id, pattern, rules, match } = token;
-                await logRow(
-                  [
-                    response._id,
-                    prefixWithEditionId(rawPaths.response),
-                    value,
-                    matchTags,
-                    id,
-                    pattern,
-                    rules,
-                    match,
-                  ],
-                  fileName
-                );
-              });
-            } else {
-              await logRow(
-                [
-                  response._id,
-                  fieldName,
-                  value,
-                  matchTags,
-                  "n/a",
-                  "n/a",
-                  "n/a",
-                  "n/a",
-                ],
-                fileName
-              );
-            }
-          }
-
-          const normIds = normTokens.map((token) => token.id);
-          const normPatterns = normTokens.map((token) =>
-            token.pattern.toString()
-          );
-          set(normResp, normPaths.response, normIds);
-          set(normResp, normPaths.patterns, normPatterns);
-
-          // keep trace of fields that were normalized
-          normalizedFields.push({
-            fieldName,
-            value,
-            normTokens,
-          });
-        } catch (error) {
-          set(normResp, normPaths.error, error.message);
-        }
-      } else if (template === "project") {
-        set(normResp, normPaths.raw, value);
-        set(normResp, normPaths.response, value);
-        set(normResp, normPaths.patterns, ["prenormalized"]);
-
-        prenormalizedFields.push({
-          fieldName,
-          value,
-        });
-      } else {
-        // C. any other field
-        set(normResp, normPaths.response, value);
-        regularFields.push({
-          fieldName,
-          value,
-        });
-      }
+  // 4. when encountering a prenormalized field, we just copy its value as is
+  if (rawPaths.prenormalized) {
+    const fieldPath = prefixWithEditionId(rawPaths?.prenormalized);
+    const prenormalizedValue = response[fieldPath];
+    set(normResp, normPaths.raw!, prenormalizedValue);
+    set(normResp, normPaths.prenormalized!, prenormalizedValue);
+    set(normResp, normPaths.patterns!, ["prenormalized"]);
+    prenormalizedFields.push({
+      fieldPath,
+      value: prenormalizedValue,
+    });
+    if (verbose) {
+      console.log(`${fieldPath}/prenormalized: “${prenormalizedValue}”`);
     }
   }
 };

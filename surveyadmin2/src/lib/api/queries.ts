@@ -179,13 +179,9 @@ query ${editionId}MetadataQuery {
             randomize
             optionsAreNumeric
             # optionsAreRange
+            matchTags
             entity {
               ${entityFragment}
-            }
-            rawPaths {
-              response
-              other
-              comment
             }
             options {
               id

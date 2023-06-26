@@ -15,6 +15,7 @@ import {
   QuestionTemplateOutput,
   EditionMetadata,
   SurveyMetadata,
+  TemplateArguments,
   TemplateFunction,
   SectionMetadata,
 } from "@devographics/types";
@@ -31,6 +32,27 @@ export const getFieldSegments = (field: Field) => {
   const [initialSegment, sectionSegment, fieldSegment, suffix] =
     field.fieldName.split("__");
   return { initialSegment, sectionSegment, fieldSegment, suffix };
+};
+
+export const getQuestionObject = ({
+  survey,
+  edition,
+  section,
+  question,
+}: TemplateArguments) => {
+  const templateFunction = templateFunctions[
+    question.template
+  ] as TemplateFunction;
+  if (!templateFunction) {
+    return;
+  }
+  const questionObject = templateFunction({
+    survey,
+    edition,
+    section,
+    question,
+  });
+  return questionObject;
 };
 
 export const getFieldPaths = (questionObject: QuestionTemplateOutput) => {
@@ -585,8 +607,8 @@ export const getSelector = async ({
       // do nothing, use default selector
     }
   }
-  console.log("// selector");
-  console.log(JSON.stringify(selector, undefined, 2));
+  // console.log("// selector");
+  // console.log(JSON.stringify(selector, undefined, 2));
   return selector;
 };
 
@@ -635,16 +657,19 @@ export const getUnnormalizedResponses = async (
     ],
   };
 
-  console.log(selector);
-
   const NormResponses = await getNormResponsesCollection();
-  const responses = await NormResponses.find(selector, {
+  let responses = await NormResponses.find(selector, {
     _id: 1,
     responseId: 1,
     [rawFieldPath]: 1,
     sort: { [rawFieldPath]: 1 },
     //lean: true
   }).toArray();
+
+  // use case-insensitive sort
+  responses = sortBy(responses, [
+    (response) => String(get(response, rawFieldPath)).toLowerCase(),
+  ]);
 
   return { responses, rawFieldPath, normalizedFieldPath };
 };

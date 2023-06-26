@@ -10,17 +10,19 @@ export const projects: TemplateFunction = options => {
 
     const basePath = `${sectionSegment}.${questionSegment}.${DbSuffixes.OTHERS}`
 
+    const rawPaths: DbPaths = {
+        prenormalized: `${sectionSegment}__${questionSegment}__${DbSuffixes.PRENORMALIZED}`
+    }
+
     const normPaths: DbPaths = {
         raw: `${basePath}.${DbSuffixes.RAW}`,
         patterns: `${basePath}.${DbSuffixes.PATTERNS}`,
         error: `${basePath}.${DbSuffixes.ERROR}`,
-        response: `${basePath}.${DbSuffixes.NORMALIZED}`
+        prenormalized: `${basePath}.${DbSuffixes.NORMALIZED}`
     }
 
     const output: QuestionTemplateOutput = {
-        rawPaths: {
-            response: `${sectionSegment}__${questionSegment}__${DbSuffixes.PRENORMALIZED}`
-        },
+        rawPaths,
         normPaths,
         allowMultiple: true,
         ...question

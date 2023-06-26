@@ -139,11 +139,13 @@ type RawDbPaths {
     response: String
     other: String
     comment: String
+    prenormalized: String
 }
 
 type NormDbPaths {
     response: String
     other: String
+    prenormalized: String
     comment: String
     raw: String
     patterns: String
