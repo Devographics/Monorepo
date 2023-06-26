@@ -32,10 +32,14 @@ export const entitiesResolvers = {
     },
     entities: async (
         root: any,
-        { ids, tags }: { ids: string[]; tags: string[] },
+        {
+            ids,
+            tags,
+            includeNormalizationEntities = false
+        }: { ids: string[]; tags: string[]; includeNormalizationEntities: boolean },
         context: RequestContext
     ) => {
-        return getEntities({ ids, tags, context })
+        return getEntities({ ids, tags, context, includeNormalizationEntities })
     }
 }
 
