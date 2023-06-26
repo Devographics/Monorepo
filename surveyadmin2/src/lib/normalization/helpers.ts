@@ -590,13 +590,6 @@ export const getSelector = async ({
   return selector;
 };
 
-export const getEditionQuestionsFlat = (
-  edition: EditionMetadata
-): QuestionMetadata[] =>
-  edition.sections
-    .map((s) => s.questions.map((q) => ({ ...q, sectionId: s.id })))
-    .flat();
-
 export const getUnnormalizedResponses = async (
   surveyId,
   editionId,
@@ -608,16 +601,19 @@ export const getUnnormalizedResponses = async (
     rawFieldPath = "user_info.source.raw";
     normalizedFieldPath = "user_info.source.normalized";
   } else {
-    const question = getEditionQuestionsFlat(edition).find(
+    const question = getEditionQuestions(edition).find(
       (q) => q.id === questionId
-    ) as QuestionMetadata;
+    );
 
+    if (!question) {
+      throw new Error(`Could not find question ${editionId}/${questionId}`);
+    }
     const templateFunction = templateFunctions[
       question.template
     ] as TemplateFunction;
 
     const survey = { id: edition.surveyId } as SurveyMetadata;
-    const section = { id: question.sectionId } as SectionMetadata;
+    const section = question.section;
 
     const questionObject = templateFunction({
       survey,
@@ -626,8 +622,8 @@ export const getUnnormalizedResponses = async (
       question,
     });
 
-    rawFieldPath = questionObject.normPaths.raw;
-    normalizedFieldPath = questionObject.normPaths.response;
+    rawFieldPath = questionObject?.normPaths?.raw;
+    normalizedFieldPath = questionObject?.normPaths?.response;
   }
 
   const selector = {
@@ -638,6 +634,8 @@ export const getUnnormalizedResponses = async (
       { [normalizedFieldPath]: { $exists: false } },
     ],
   };
+
+  console.log(selector);
 
   const NormResponses = await getNormResponsesCollection();
   const responses = await NormResponses.find(selector, {

@@ -26,7 +26,7 @@ const Actions = (props) => {
   const questions = [allFields, ...normalizeableFields];
 
   return (
-    <div className="normalization-actions">
+    <article className="normalization-actions">
       <div className="primary">
         {/* <select
           onChange={() => {
@@ -92,7 +92,7 @@ const Actions = (props) => {
           Renormalize Responses
         </button>
       </div> */}
-    </div>
+    </article>
   );
 };
 

@@ -1,12 +1,10 @@
 import { normalizeResponse } from "../normalize";
-import { getSelector, getBulkOperation } from "../helpers";
+import { getBulkOperation } from "../helpers";
 import pick from "lodash/pick.js";
-import {
-  getNormResponsesCollection,
-  getRawResponsesCollection,
-} from "@devographics/mongo";
-import { fetchEntities, fetchSurveysMetadata } from "~/lib/api/fetch";
+import { getNormResponsesCollection } from "@devographics/mongo";
+import { fetchEntities } from "~/lib/api/fetch";
 import { ResponseDocument, SurveyMetadata } from "@devographics/types";
+import { logToFile } from "@devographics/helpers";
 
 /*
 
@@ -110,6 +108,9 @@ export const normalizeInBulk = async ({
       isBulk: true,
     });
 
+    console.log(normalizationResult);
+    await logToFile("normalizationResult.json", normalizationResult);
+
     progress++;
     if (limit > 1000 && progress % tickInterval === 0) {
       console.log(`  -> Normalized ${progress}/${count} responses…`);
@@ -167,15 +168,17 @@ export const normalizeInBulk = async ({
 
   */
   // see https://www.mongodb.com/docs/manual/reference/method/db.collection.bulkWrite
-  console.log(`-> Now starting bulk write…`);
 
   const normResponsesCollection = await getNormResponsesCollection(survey);
   try {
-    const operationResult = await normResponsesCollection.bulkWrite(
-      bulkOperations
-    );
-    console.log("// operationResult");
-    console.log(operationResult);
+    if (!isSimulation) {
+      console.log(`-> Now starting bulk write…`);
+      const operationResult = await normResponsesCollection.bulkWrite(
+        bulkOperations
+      );
+      console.log("// operationResult");
+      console.log(operationResult);
+    }
     // mutationResult.operationResult = operationResult.result;
     mutationResult.discardedCount = discardedCount;
   } catch (error) {

@@ -91,7 +91,9 @@ const Field = ({ _id, value, showIds, responseId, surveyId }) => {
       )}
       <td>
         <button
+          aria-busy={loading}
           onClick={async () => {
+            setLoading(true);
             const result = await normalizeResponses({
               surveyId,
               responsesIds: [responseId],
@@ -100,7 +102,7 @@ const Field = ({ _id, value, showIds, responseId, surveyId }) => {
             setLoading(false);
           }}
         >
-          Renormalize {loading ? "⌛" : ""}
+          Renormalize
         </button>
       </td>
     </tr>

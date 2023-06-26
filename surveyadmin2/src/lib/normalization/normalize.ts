@@ -292,9 +292,8 @@ export const normalizeResponse = async (
         );
       }
     }
-    // eslint-disable-next-line
-    // console.log(result);
-    return {
+
+    const normalizationResult = {
       ...result,
       modifier,
       normalizedResponse: normResp,
@@ -307,6 +306,7 @@ export const normalizeResponse = async (
       regularFieldsCount: regularFields.length,
       errors,
     };
+    return normalizationResult;
   } catch (error) {
     console.log("// normalizeResponse error");
     console.log(error);

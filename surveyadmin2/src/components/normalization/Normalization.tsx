@@ -162,9 +162,15 @@ export const Normalization = ({
   return (
     <div className="admin-normalization admin-content">
       <Actions {...props} />
-      {/* {!!responsesCount && <Progress {...props} />} */}
-      <h3>{responsesCount} total responses</h3>
-      {<Fields {...props} />}
+      {loading ? (
+        <span aria-busy={true} />
+      ) : (
+        <>
+          {/* {!!responsesCount && <Progress {...props} />} */}
+          <h3>{responsesCount} total responses</h3>
+          <Fields {...props} />
+        </>
+      )}
     </div>
   );
 };

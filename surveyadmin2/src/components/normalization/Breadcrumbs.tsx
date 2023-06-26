@@ -16,44 +16,50 @@ const Breadcrumbs = ({
   question?: QuestionMetadata;
 }) => {
   return (
-    <h3>
-      <Link href={routes.admin.normalization.href({})}>Surveys</Link>
-      {survey && (
-        <span>
-          /
-          <Link href={routes.admin.normalization.href({ surveyId: survey.id })}>
-            {survey.name}
-          </Link>
-        </span>
-      )}
-      {edition && (
-        <span>
-          /
-          <Link
-            href={routes.admin.normalization.href({
-              surveyId: survey.id,
-              editionId: edition.id,
-            })}
-          >
-            {edition.id}
-          </Link>
-        </span>
-      )}
-      {question && (
-        <span>
-          /
-          <Link
-            href={routes.admin.normalization.href({
-              surveyId: survey.id,
-              editionId: edition.id,
-              questionId: question.id,
-            })}
-          >
-            {question.id}
-          </Link>
-        </span>
-      )}
-    </h3>
+    <nav>
+      <ul>
+        <li>
+          <Link href={routes.admin.normalization.href({})}>Surveys</Link>
+        </li>
+        {survey && (
+          <li>
+            /
+            <Link
+              href={routes.admin.normalization.href({ surveyId: survey.id })}
+            >
+              {survey.name}
+            </Link>
+          </li>
+        )}
+        {survey && edition && (
+          <li>
+            /
+            <Link
+              href={routes.admin.normalization.href({
+                surveyId: survey.id,
+                editionId: edition.id,
+              })}
+            >
+              {edition.id}
+            </Link>
+          </li>
+        )}
+        {survey && edition && question && (
+          <li>
+            /
+            <Link
+              href={routes.admin.normalization.href({
+                surveyId: survey.id,
+                editionId: edition.id,
+                questionId: question.id,
+              })}
+            >
+              {question.id}
+            </Link>
+          </li>
+        )}
+      </ul>
+    </nav>
   );
 };
 

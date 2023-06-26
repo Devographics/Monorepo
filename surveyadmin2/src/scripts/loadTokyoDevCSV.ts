@@ -13,7 +13,10 @@ import yaml from "js-yaml";
 import { readFile } from "fs/promises";
 import { logToFile } from "@devographics/helpers";
 import { normalizeResponse } from "~/lib/normalization/normalize";
-import { getEditionQuestionsFlat } from "~/lib/normalization/helpers";
+import {
+  getEditionQuestions,
+  getEditionQuestionsFlat,
+} from "~/lib/normalization/helpers";
 import * as templateFunctions from "@devographics/templates";
 import { fetchEntities, fetchSurveysMetadata } from "~/lib/api/fetch";
 
@@ -122,7 +125,7 @@ const getQuestionMetadata = (
   question: Question,
   editionId: string
 ) => {
-  const allQuestions = getEditionQuestionsFlat(editionMetadata);
+  const allQuestions = getEditionQuestions(editionMetadata);
   const questionMetadata = allQuestions.find((q) => q.id === question.id);
   if (!questionMetadata) {
     throw new Error(
