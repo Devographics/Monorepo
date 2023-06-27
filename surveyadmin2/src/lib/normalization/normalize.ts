@@ -114,7 +114,7 @@ export const normalizeResponse = async (
 
     if (verbose) {
       console.log(
-        `// Normalizing document ${response._id}${
+        `⛰️ Normalizing document ${response._id}${
           questionId ? `, question ${questionId}` : ""
         }…`
       );
@@ -196,7 +196,8 @@ export const normalizeResponse = async (
     */
 
     if (questionId) {
-      let fullPath;
+      let fullPath,
+        discard = true;
       // 1. we only need to renormalize a single field
       switch (questionId) {
         case "source":
@@ -219,19 +220,24 @@ export const normalizeResponse = async (
             section: question.section,
             question,
           });
-          await steps.normalizeField({
+          const normalizeFieldResult = await steps.normalizeField({
             question,
             section: question.section,
             ...normalizationParams,
           });
-          fullPath = questionObject?.normPaths?.response;
+          if (normalizeFieldResult.wasModified) {
+            discard = false;
+          }
           break;
       }
 
       const value = get(normResp, fullPath);
-      if (!value) {
-        // we shouldn't be running field-specific normalization on documents where
-        // that field is empty, but handle it just in case
+      console.log("// normResp");
+      console.log(JSON.stringify(normResp, null, 2));
+      console.log(discard);
+      console.log(value);
+      if (discard) {
+        // if none of the question fields contained valid data, discard the operation
         result.discard = true;
       } else {
         modifier = { $set: { [fullPath]: value } };

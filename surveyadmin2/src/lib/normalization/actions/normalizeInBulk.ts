@@ -108,15 +108,13 @@ export const normalizeInBulk = async ({
       isBulk: true,
     });
 
-    await logToFile("normalizationResult.json", normalizationResult, {
-      mode: "overwrite",
-    });
-
     progress++;
     if (limit > 1000 && progress % tickInterval === 0) {
       console.log(`  -> Normalized ${progress}/${count} responses…`);
     }
-
+    await logToFile("normalizationResult.json", normalizationResult, {
+      mode: "overwrite",
+    });
     if (!normalizationResult) {
       mutationResult.errorCount++;
       mutationResult.normalizedDocuments.push({
@@ -150,6 +148,10 @@ export const normalizeInBulk = async ({
         const { selector, modifier } = normalizationResult;
         const operation = getBulkOperation(selector, modifier, isReplace);
         bulkOperations.push(operation);
+
+        await logToFile("operation.json", operation, {
+          mode: "overwrite",
+        });
       } else {
         discardedCount++;
       }

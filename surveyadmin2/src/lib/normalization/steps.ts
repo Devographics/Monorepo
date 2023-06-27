@@ -273,6 +273,8 @@ export const normalizeField = async ({
   allRules,
   privateFields,
 }: NormalizeFieldOptions) => {
+  let wasModified = false;
+
   const {
     document: response,
     log = false,
@@ -297,7 +299,7 @@ export const normalizeField = async ({
   if (!rawPaths || !normPaths) {
     console.log(questionObject);
     throw new Error(
-      `normalizeField error: could not find rawPaths or normPaths for question ${question.id}`
+      `⛰️ normalizeField error: could not find rawPaths or normPaths for question ${question.id}`
     );
   }
 
@@ -306,8 +308,6 @@ export const normalizeField = async ({
   // automatically add question's own id as a potential match tag
   const matchTags = [...(matchTags_ || []), questionObject.id];
 
-  console.log(questionObject);
-
   // 1. start by copying over the "main" response value
   if (rawPaths.response) {
     const fieldPath = prefixWithEditionId(rawPaths.response);
@@ -315,9 +315,10 @@ export const normalizeField = async ({
     if (responseValue) {
       set(normResp, normPaths.response!, responseValue);
       regularFields.push({ fieldPath, value: responseValue });
+      wasModified = true;
     }
     if (verbose) {
-      console.log(`${fieldPath}/response: “${responseValue}”`);
+      console.log(`⛰️ ${fieldPath}/response: “${responseValue}”`);
     }
   }
 
@@ -325,11 +326,12 @@ export const normalizeField = async ({
   if (rawPaths.comment) {
     const fieldPath = prefixWithEditionId(rawPaths.comment);
     const responseCommentValue = cleanupValue(response[fieldPath]);
-    if (responseCommentValue !== null) {
+    if (responseCommentValue) {
       set(normResp, normPaths.comment!, responseCommentValue);
+      wasModified = true;
     }
     if (verbose) {
-      console.log(`${fieldPath}/comment: “${responseCommentValue}”`);
+      console.log(`⛰️ ${fieldPath}/comment: “${responseCommentValue}”`);
     }
   }
 
@@ -341,14 +343,6 @@ export const normalizeField = async ({
       set(normResp, normPaths.raw!, otherValue);
 
       try {
-        if (verbose) {
-          console.log(
-            `// Normalizing key "${prefixWithEditionId(
-              rawPaths?.other
-            )}" with value "${otherValue}" and tags ${matchTags.toString()}…`
-          );
-        }
-
         const normTokens = await normalize({
           value: otherValue,
           allRules,
@@ -357,9 +351,6 @@ export const normalizeField = async ({
           question,
           verbose,
         });
-        if (verbose) {
-          console.log(`  -> Normalized values: ${JSON.stringify(normTokens)}`);
-        }
 
         const normIds = normTokens.map((token) => token.id);
         const normPatterns = normTokens.map((token) =>
@@ -371,11 +362,15 @@ export const normalizeField = async ({
         // keep trace of fields that were normalized
         normalizedFields.push({
           fieldPath,
-          value: otherValue,
+          value: normIds,
           normTokens,
         });
+
+        wasModified = true;
         if (verbose) {
-          console.log(`${fieldPath}/other: “${otherValue}”`);
+          console.log(`⛰️ ${fieldPath}/other: “${otherValue}”`);
+          console.log(`⛰️ -> Tags: ${matchTags.toString()}`);
+          console.log(`⛰️ -> Normalized values: ${JSON.stringify(normTokens)}`);
         }
       } catch (error) {
         set(normResp, normPaths.error!, error.message);
@@ -394,8 +389,10 @@ export const normalizeField = async ({
       fieldPath,
       value: prenormalizedValue,
     });
+    wasModified = true;
     if (verbose) {
       console.log(`${fieldPath}/prenormalized: “${prenormalizedValue}”`);
     }
   }
+  return { wasModified };
 };

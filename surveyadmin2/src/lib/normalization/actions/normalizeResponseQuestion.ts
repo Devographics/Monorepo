@@ -18,8 +18,8 @@ export const normalizeResponseQuestion = async (
   args: NormalizeResponseQuestionArgs
 ) => {
   const { surveyId, questionId, responsesIds } = args;
-  console.log("// normalizeResponseQuestion");
-  console.log(args);
+  // console.log("// normalizeResponseQuestion");
+  // console.log(args);
 
   const surveys = await fetchSurveysMetadata();
   const survey = surveys.find((s) => s.id === surveyId);
