@@ -8,8 +8,15 @@ import Fields from "~/components/normalization/Fields";
 import { allFields } from "./Actions";
 import Link from "next/link";
 import { routes } from "~/lib/routes";
-import { loadFields } from "~/lib/normalization/services";
-import { useUnnormalizedFields } from "~/lib/normalization/hooks";
+import {
+  UnnormalizedData,
+  useUnnormalizedData,
+} from "~/lib/normalization/hooks";
+import {
+  EditionMetadata,
+  QuestionMetadata,
+  SurveyMetadata,
+} from "@devographics/types";
 
 export const defaultSegmentSize = 500;
 
@@ -69,13 +76,34 @@ export const getSegments = ({ responsesCount, segmentSize }): Segment[] => {
   return segments;
 };
 
+export const NormalizationLoader = (props) => {
+  const { survey, edition, question } = props;
+  const { data, loading, error } = useUnnormalizedData({
+    surveyId: survey.id,
+    editionId: edition.id,
+    questionId: question.id,
+  });
+  return loading ? (
+    <div aria-busy={true} />
+  ) : (
+    <Normalization {...props} data={data} />
+  );
+};
+
 export const Normalization = ({
   surveys,
   survey,
   edition,
   question,
-  responsesCount,
+  data,
+}: {
+  surveys: SurveyMetadata[];
+  survey: SurveyMetadata;
+  edition: EditionMetadata;
+  question: QuestionMetadata;
+  data: UnnormalizedData;
 }) => {
+  const { responsesCount, unnormalizedResponses } = data;
   const allEditions = surveys.map((s) => s.editions).flat();
 
   // const [responsesCount, setResponsesCount] = useState(0);
@@ -88,7 +116,8 @@ export const Normalization = ({
   const [segmentSize, setSegmentSize] = useState(defaultSegmentSize);
   const [segments, setSegments] = useState(emptySegments);
 
-  const initializeSegments = ({ responsesCount, segmentSize }) => {
+  const initializeSegments = (options = { responsesCount, segmentSize }) => {
+    const { responsesCount, segmentSize } = options;
     const segments = getSegments({ responsesCount, segmentSize });
     // setResponsesCount(responsesCount);
     setSegments(segments);
@@ -139,12 +168,6 @@ export const Normalization = ({
   const isAllFields = questionId === allFields.id;
   const onlyUnnormalized = normalizationMode === "only_normalized";
 
-  const { data, loading, error } = useUnnormalizedFields({
-    surveyId: edition.survey.id,
-    editionId,
-    questionId: isAllFields ? null : questionId,
-  });
-
   const props = {
     allEditions,
     survey,
@@ -152,7 +175,7 @@ export const Normalization = ({
     question,
     normalizeableFields: normalizeableQuestions,
     // unnormalizedFieldsLoading: loading,
-    unnormalizedFieldsData: data,
+    unnormalizedResponses,
     onlyUnnormalized,
     refetchMissingFields: () => {},
     isAllFields,
@@ -162,17 +185,10 @@ export const Normalization = ({
   return (
     <div className="admin-normalization admin-content">
       <Actions {...props} />
-      {loading ? (
-        <span aria-busy={true} />
-      ) : (
-        <>
-          {/* {!!responsesCount && <Progress {...props} />} */}
-          <h3>{responsesCount} total responses</h3>
-          <Fields {...props} />
-        </>
-      )}
+      {segments.length > 0 && <Progress {...props} />}
+      <Fields {...props} />
     </div>
   );
 };
 
-export default Normalization;
+export default NormalizationLoader;

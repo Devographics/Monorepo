@@ -9,6 +9,7 @@ import { ResponsesTypes } from './metadata'
 // }
 
 export enum DbPathsEnum {
+    BASE = 'base',
     RESPONSE = 'response',
     OTHER = 'other',
     PRENORMALIZED = 'prenormalized',

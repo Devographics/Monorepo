@@ -2,7 +2,7 @@ import { getRawResponsesCollection } from "@devographics/mongo";
 import { fetchSurveysMetadata } from "~/lib/api/fetch";
 import { normalizeInBulk } from "./normalizeInBulk";
 
-export type NormalizeResponseQuestionArgs = {
+export type NormalizeQuestionResponsesArgs = {
   // note: we need a surveyId to figure out which database to use
   surveyId: string;
   questionId: string;
@@ -14,12 +14,10 @@ export type NormalizeResponseQuestionArgs = {
 Normalize a specific question on a specific response
 
 */
-export const normalizeResponseQuestion = async (
-  args: NormalizeResponseQuestionArgs
+export const normalizeQuestionResponses = async (
+  args: NormalizeQuestionResponsesArgs
 ) => {
   const { surveyId, questionId, responsesIds } = args;
-  // console.log("// normalizeResponseQuestion");
-  // console.log(args);
 
   const surveys = await fetchSurveysMetadata();
   const survey = surveys.find((s) => s.id === surveyId);
@@ -36,7 +34,9 @@ export const normalizeResponseQuestion = async (
   const startAt = new Date();
 
   console.log(
-    `// Renormalizing responses [${responsesIds.join(", ")}]… (${startAt})`
+    `⛰️ Renormalizing question ${questionId} for responses [${responsesIds.join(
+      ", "
+    )}]… (${startAt})`
   );
 
   const mutationResult = await normalizeInBulk({
@@ -44,6 +44,7 @@ export const normalizeResponseQuestion = async (
     responses,
     questionId,
     args,
+    isRenormalization: true,
   });
 
   return mutationResult;

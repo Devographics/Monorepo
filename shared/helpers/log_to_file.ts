@@ -10,7 +10,7 @@ export type LogOptions = {
 
 export const logToFile = async (fileName: string, object: any, options: LogOptions = {}) => {
     if (process.env.NODE_ENV === 'development') {
-        const { mode = 'append', timestamp = false, dirPath, subDir } = options
+        const { mode = 'overwrite', timestamp = false, dirPath, subDir } = options
         const envLogsDirPath = process.env.LOGS_DIRECTORY
 
         if (!envLogsDirPath) {

@@ -1,21 +1,27 @@
 "use client";
 import React, { useState } from "react";
 import {
-  normalizeResponseQuestion,
+  normalizeQuestionResponses,
   normalizeResponses,
 } from "~/lib/normalization/services";
+import { LoadingButton } from "./Actions";
 
-const Fields = ({ survey, edition, question, unnormalizedFieldsData }) => {
+const Fields = ({
+  survey,
+  edition,
+  question,
+  responsesCount,
+  unnormalizedResponses,
+}) => {
   const [showIds, setShowIds] = useState(true);
 
-  const results = unnormalizedFieldsData;
-
-  if (!results) return <p>Nothing to normalize</p>;
+  if (!unnormalizedResponses) return <p>Nothing to normalize</p>;
 
   return (
     <div>
       <h5>
-        {results.length} Missing Normalizations for {edition.id}/{question.id}
+        {unnormalizedResponses.length} missing normalizations out of{" "}
+        {responsesCount} total responses for {edition.id}/{question.id}.
       </h5>
       <p>
         <input
@@ -39,7 +45,7 @@ const Fields = ({ survey, edition, question, unnormalizedFieldsData }) => {
           <th>Normalize</th>
         </thead>
         <tbody>
-          {results.map(({ _id, responseId, value }) => (
+          {unnormalizedResponses.map(({ _id, responseId, value }) => (
             <Field
               key={_id}
               _id={_id}
@@ -57,7 +63,6 @@ const Fields = ({ survey, edition, question, unnormalizedFieldsData }) => {
 };
 
 const Field = ({ _id, value, showIds, responseId, questionId, surveyId }) => {
-  const [loading, setLoading] = useState(false);
   return (
     <tr>
       <td>{value}</td>
@@ -72,21 +77,17 @@ const Field = ({ _id, value, showIds, responseId, questionId, surveyId }) => {
         </>
       )}
       <td>
-        <button
-          aria-busy={loading}
-          onClick={async () => {
-            setLoading(true);
-            const result = await normalizeResponseQuestion({
+        <LoadingButton
+          action={async () => {
+            const result = await normalizeQuestionResponses({
               questionId,
               surveyId,
               responsesIds: [responseId],
             });
             console.log(result);
-            setLoading(false);
           }}
-        >
-          Renormalize
-        </button>
+          label="Normalize"
+        />
       </td>
     </tr>
   );

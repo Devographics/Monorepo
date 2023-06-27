@@ -1,9 +1,7 @@
 import { getSelector } from "../helpers";
 import { getRawResponsesCollection } from "@devographics/mongo";
 import { fetchSurveysMetadata } from "~/lib/api/fetch";
-import { normalizeInBulk } from "./normalizeInBulk";
-
-const defaultLimit = 999;
+import { normalizeInBulk, defaultLimit } from "./normalizeInBulk";
 
 export type NormalizeQuestionArgs = {
   surveyId: string;
@@ -17,6 +15,8 @@ export type NormalizeQuestionArgs = {
 /*
 
 Normalize all response documents for a specific question
+(only used when we want to force renormalization for all responses, including
+  ones that have already been normalized)
 
 */
 export const normalizeQuestion = async (args: NormalizeQuestionArgs) => {
@@ -28,8 +28,6 @@ export const normalizeQuestion = async (args: NormalizeQuestionArgs) => {
     limit = defaultLimit,
     onlyUnnormalized,
   } = args;
-  console.log("// normalizeQuestion");
-  console.log(args);
   const startAt = new Date();
 
   const surveys = await fetchSurveysMetadata();
@@ -56,7 +54,7 @@ export const normalizeQuestion = async (args: NormalizeQuestionArgs) => {
     .toArray();
 
   console.log(
-    `// Renormalizing question ${editionId}/${questionId}… Found ${responses.length} responses to renormalize (startFrom: ${startFrom}, limit: ${limit}). (${startAt})`
+    `⛰️ Renormalizing question ${editionId}/${questionId}… Found ${responses.length} responses to renormalize (startFrom: ${startFrom}, limit: ${limit}). (${startAt})`
   );
 
   const mutationResult = await normalizeInBulk({
@@ -65,6 +63,7 @@ export const normalizeQuestion = async (args: NormalizeQuestionArgs) => {
     args,
     limit,
     questionId,
+    isRenormalization: true,
   });
 
   return mutationResult;

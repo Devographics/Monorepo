@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { statuses } from "./Normalization";
+import { normalizeQuestion } from "~/lib/normalization/services";
 
 const Loading = () => <span>⌛</span>;
 
@@ -76,8 +77,9 @@ const SegmentDone = ({ startFrom, responsesCount, data }) => {
 };
 
 const SegmentInProgress = ({
+  survey,
   edition,
-  questionId,
+  question,
   segmentIndex,
   startFrom,
   responsesCount,
@@ -99,21 +101,25 @@ const SegmentInProgress = ({
       IDs at every iteration, so we don't need to offset them using startFrom
 
       */
-      mutateFunction({
-        editionId,
-        questionId: isAllFields ? null : questionId,
-        startFrom: onlyUnnormalized ? 0 : startFrom,
-        limit: segmentSize,
-        onlyUnnormalized,
-      }).then((data) => {
-        const doneCount = startFrom + data?.normalizeResponses?.count;
+      const fetchData = async () => {
+        const result = await normalizeQuestion({
+          surveyId: survey.id,
+          editionId: edition.id,
+          questionId: question.id,
+          startFrom: onlyUnnormalized ? 0 : startFrom,
+          limit: segmentSize,
+          onlyUnnormalized,
+        });
+
+        const doneCount = startFrom + result?.data?.normalizedDocuments?.length;
         updateSegments({
           doneCount,
           doneSegmentIndex: segmentIndex,
-          doneSegmentData: data?.normalizeResponses,
+          doneSegmentData: result?.data?.normalizedDocuments,
           segmentSize,
         });
-      });
+      };
+      fetchData().catch(console.error);
     }
   }, [segmentIndex, enabled]);
 

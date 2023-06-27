@@ -136,6 +136,7 @@ type QuestionMetadata {
 }
 
 type RawDbPaths {
+    base: String
     response: String
     other: String
     comment: String

@@ -13,8 +13,9 @@ export const apiRoutes = {
     },
   },
   normalization: {
-    loadFields: {
-      href: (params) => `/api/normalization/loadFields?${encodeParams(params)}`,
+    loadUnnormalizedData: {
+      href: (params) =>
+        `/api/normalization/loadUnnormalizedData?${encodeParams(params)}`,
     },
     normalizeQuestion: {
       href: (params) => `/api/normalization/normalizeQuestion`,
@@ -22,8 +23,8 @@ export const apiRoutes = {
     normalizeResponses: {
       href: (params) => `/api/normalization/normalizeResponses`,
     },
-    normalizeResponseQuestion: {
-      href: (params) => `/api/normalization/normalizeResponseQuestion`,
+    normalizeQuestionResponses: {
+      href: (params) => `/api/normalization/normalizeQuestionResponses`,
     },
     normalizeEdition: {
       href: (params) => `/api/normalization/normalizeEdition`,

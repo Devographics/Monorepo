@@ -272,8 +272,9 @@ export const normalizeField = async ({
   section,
   allRules,
   privateFields,
+  isRenormalization,
 }: NormalizeFieldOptions) => {
-  let wasModified = false;
+  let discard = true;
 
   const {
     document: response,
@@ -287,7 +288,12 @@ export const normalizeField = async ({
     edition,
     section,
     question,
-  })!;
+  });
+
+  if (!questionObject) {
+    // some outline questions do not have an associated questionObject; just skip them
+    return { discard: true };
+  }
 
   const {
     template,
@@ -308,91 +314,121 @@ export const normalizeField = async ({
   // automatically add question's own id as a potential match tag
   const matchTags = [...(matchTags_ || []), questionObject.id];
 
-  // 1. start by copying over the "main" response value
-  if (rawPaths.response) {
-    const fieldPath = prefixWithEditionId(rawPaths.response);
-    const responseValue = cleanupValue(response[fieldPath]);
-    if (responseValue) {
-      set(normResp, normPaths.response!, responseValue);
-      regularFields.push({ fieldPath, value: responseValue });
-      wasModified = true;
-    }
-    if (verbose) {
-      console.log(`⛰️ ${fieldPath}/response: “${responseValue}”`);
-    }
-  }
-
-  // 2. copy over the comment value
-  if (rawPaths.comment) {
-    const fieldPath = prefixWithEditionId(rawPaths.comment);
-    const responseCommentValue = cleanupValue(response[fieldPath]);
-    if (responseCommentValue) {
-      set(normResp, normPaths.comment!, responseCommentValue);
-      wasModified = true;
-    }
-    if (verbose) {
-      console.log(`⛰️ ${fieldPath}/comment: “${responseCommentValue}”`);
-    }
-  }
-
-  // 3. if a field has an "other" path defined, we normalize its contents
-  if (rawPaths.other) {
-    const fieldPath = prefixWithEditionId(rawPaths?.other);
-    const otherValue = cleanupValue(response[fieldPath]);
-    if (otherValue) {
-      set(normResp, normPaths.raw!, otherValue);
-
-      try {
-        const normTokens = await normalize({
-          value: otherValue,
-          allRules,
-          tags: matchTags,
-          edition,
-          question,
-          verbose,
-        });
-
-        const normIds = normTokens.map((token) => token.id);
-        const normPatterns = normTokens.map((token) =>
-          token.pattern.toString()
-        );
-        set(normResp, normPaths.other!, normIds);
-        set(normResp, normPaths.patterns!, normPatterns);
-
-        // keep trace of fields that were normalized
-        normalizedFields.push({
-          fieldPath,
-          value: normIds,
-          normTokens,
-        });
-
-        wasModified = true;
-        if (verbose) {
-          console.log(`⛰️ ${fieldPath}/other: “${otherValue}”`);
-          console.log(`⛰️ -> Tags: ${matchTags.toString()}`);
-          console.log(`⛰️ -> Normalized values: ${JSON.stringify(normTokens)}`);
-        }
-      } catch (error) {
-        set(normResp, normPaths.error!, error.message);
+  const processResponseField = async () => {
+    // start by copying over the "main" response value
+    if (rawPaths.response) {
+      const fieldPath = prefixWithEditionId(rawPaths.response);
+      const responseValue = cleanupValue(response[fieldPath]);
+      if (responseValue) {
+        set(normResp, normPaths.response!, responseValue);
+        regularFields.push({ fieldPath, value: responseValue });
+        discard = false;
+      }
+      if (verbose) {
+        console.log(`⛰️ ${fieldPath}/response: “${responseValue}”`);
       }
     }
+  };
+
+  const processCommentField = async () => {
+    // copy over the comment value
+    if (rawPaths.comment) {
+      const fieldPath = prefixWithEditionId(rawPaths.comment);
+      const responseCommentValue = cleanupValue(response[fieldPath]);
+      if (responseCommentValue) {
+        set(normResp, normPaths.comment!, responseCommentValue);
+        discard = false;
+      }
+      if (verbose) {
+        console.log(`⛰️ ${fieldPath}/comment: “${responseCommentValue}”`);
+      }
+    }
+  };
+
+  const processPrenormalizedField = async () => {
+    // when encountering a prenormalized field, we just copy its value as is
+    if (rawPaths.prenormalized) {
+      const fieldPath = prefixWithEditionId(rawPaths?.prenormalized);
+      const prenormalizedValue = response[fieldPath];
+      set(normResp, normPaths.raw!, prenormalizedValue);
+      set(normResp, normPaths.prenormalized!, prenormalizedValue);
+      set(normResp, normPaths.patterns!, ["prenormalized"]);
+      prenormalizedFields.push({
+        fieldPath,
+        value: prenormalizedValue,
+      });
+      discard = false;
+      if (verbose) {
+        console.log(`${fieldPath}/prenormalized: “${prenormalizedValue}”`);
+      }
+    }
+  };
+
+  const processOtherField = async () => {
+    // if a field has an "other" path defined, we normalize its contents
+    if (rawPaths.other) {
+      const fieldPath = prefixWithEditionId(rawPaths?.other);
+      const otherValue = cleanupValue(response[fieldPath]);
+      if (otherValue) {
+        set(normResp, normPaths.raw!, otherValue);
+
+        try {
+          const normTokens = await normalize({
+            value: otherValue,
+            allRules,
+            tags: matchTags,
+            edition,
+            question,
+            verbose,
+          });
+
+          const normIds = normTokens.map((token) => token.id);
+          const normPatterns = normTokens.map((token) =>
+            token.pattern.toString()
+          );
+          set(normResp, normPaths.other!, normIds);
+          set(normResp, normPaths.patterns!, normPatterns);
+
+          // keep trace of fields that were normalized
+          normalizedFields.push({
+            fieldPath,
+            value: normIds,
+            normTokens,
+          });
+
+          if (isRenormalization && normIds.length === 0) {
+            // if we are renormalizing but didn't find any new tokens, discard operation
+            discard = true;
+          } else {
+            discard = false;
+          }
+
+          if (verbose) {
+            console.log(`⛰️ ${fieldPath}/other: “${otherValue}”`);
+            console.log(`⛰️ -> Tags: ${matchTags.toString()}`);
+            console.log(
+              `⛰️ -> Normalized values: ${JSON.stringify(normTokens)}`
+            );
+          }
+        } catch (error) {
+          set(normResp, normPaths.error!, error.message);
+        }
+      }
+    }
+  };
+
+  if (isRenormalization) {
+    // when renormalizing an already-normalized response, we only need to worry about the
+    // "other" sub-field
+    await processOtherField();
+  } else {
+    // else, when normalizing from scratch we process all sub-fields
+    await processResponseField();
+    await processCommentField();
+    await processPrenormalizedField();
+    await processOtherField();
   }
 
-  // 4. when encountering a prenormalized field, we just copy its value as is
-  if (rawPaths.prenormalized) {
-    const fieldPath = prefixWithEditionId(rawPaths?.prenormalized);
-    const prenormalizedValue = response[fieldPath];
-    set(normResp, normPaths.raw!, prenormalizedValue);
-    set(normResp, normPaths.prenormalized!, prenormalizedValue);
-    set(normResp, normPaths.patterns!, ["prenormalized"]);
-    prenormalizedFields.push({
-      fieldPath,
-      value: prenormalizedValue,
-    });
-    wasModified = true;
-    if (verbose) {
-      console.log(`${fieldPath}/prenormalized: “${prenormalizedValue}”`);
-    }
-  }
-  return { wasModified };
+  // note: we only return `discard` because normResp is directly mutated using set()
+  return { discard };
 };

@@ -1,7 +1,6 @@
 import {
   EntityRule,
   generateEntityRules,
-  getFieldPaths,
   getEditionQuestionById,
   getQuestionObject,
 } from "./helpers";
@@ -68,6 +67,7 @@ interface NormalizationOptions {
   questionId?: string;
   isBulk?: boolean;
   surveys?: SurveyMetadata[];
+  isRenormalization?: boolean;
 }
 
 export interface NormalizationParams {
@@ -86,6 +86,7 @@ export interface NormalizationParams {
   errors?: any;
   questionId?: string;
   verbose?: boolean;
+  isRenormalization?: boolean;
 }
 
 export interface NormalizedResponseDocument extends ResponseDocument {
@@ -95,6 +96,12 @@ export interface NormalizedResponseDocument extends ResponseDocument {
   editionId: EditionMetadata["id"];
 }
 
+/*
+
+27/06/2023: we now assume we are always calling this from a bulk operation
+to simplify the logic.
+
+*/
 export const normalizeResponse = async (
   options: NormalizationOptions
 ): Promise<NormalizationResult | undefined> => {
@@ -110,6 +117,7 @@ export const normalizeResponse = async (
       questionId,
       isBulk = false,
       surveys,
+      isRenormalization,
     } = options;
 
     if (verbose) {
@@ -157,8 +165,6 @@ export const normalizeResponse = async (
       editionId: response.editionId,
     });
 
-    const normCollection = await getNormResponsesCollection(survey);
-
     if (!edition)
       throw new Error(`Could not find edition for id ${response.editionId}`);
 
@@ -187,6 +193,7 @@ export const normalizeResponse = async (
       errors,
       questionId,
       verbose,
+      isRenormalization,
     };
 
     /*
@@ -196,76 +203,60 @@ export const normalizeResponse = async (
     */
 
     if (questionId) {
-      let fullPath,
-        discard = true;
-      // 1. we only need to renormalize a single field
-      switch (questionId) {
-        case "source":
-          await steps.copyFields(normalizationParams);
-          await steps.normalizeSourceField(normalizationParams);
-          fullPath = "user_info.source";
-          break;
-        case "country":
-          throw new Error(
-            "Please normalize full document in order to normalize country field"
-          );
-        default:
-          const question = getEditionQuestionById({
-            edition,
-            questionId: questionId,
-          });
-          const questionObject = getQuestionObject({
-            survey,
-            edition,
-            section: question.section,
-            question,
-          });
-          const normalizeFieldResult = await steps.normalizeField({
-            question,
-            section: question.section,
-            ...normalizationParams,
-          });
-          if (normalizeFieldResult.wasModified) {
-            discard = false;
-          }
-          break;
+      const question = getEditionQuestionById({
+        edition,
+        questionId: questionId,
+      });
+      const questionObject = getQuestionObject({
+        survey,
+        edition,
+        section: question.section,
+        question,
+      });
+      const questionBasePath = questionObject?.normPaths?.base;
+      if (!questionBasePath) {
+        throw new Error(`Could not find base path for question ${questionId}`);
       }
 
-      const value = get(normResp, fullPath);
-      console.log("// normResp");
-      console.log(JSON.stringify(normResp, null, 2));
-      console.log(discard);
-      console.log(value);
-      if (discard) {
+      // 1. we only need to renormalize a single field
+      // switch (questionId) {
+      //   case "source":
+      //     await steps.copyFields(normalizationParams);
+      //     await steps.normalizeSourceField(normalizationParams);
+      //     fullPath = "user_info.source";
+      //     break;
+      //   case "country":
+      //     throw new Error(
+      //       "Please normalize full document in order to normalize country field"
+      //     );
+      //   default:
+      //     const normalizeFieldResult = await steps.normalizeField({
+      //       question,
+      //       section: question.section,
+      //       ...normalizationParams,
+      //     });
+      //     if (normalizeFieldResult.wasModified) {
+      //       discard = false;
+      //     }
+      //     break;
+      // }
+
+      const normalizeFieldResult = await steps.normalizeField({
+        question,
+        section: question.section,
+        ...normalizationParams,
+      });
+
+      const value = get(normResp, questionBasePath);
+
+      if (normalizeFieldResult.discard) {
         // if none of the question fields contained valid data, discard the operation
         result.discard = true;
       } else {
-        modifier = { $set: { [fullPath]: value } };
+        modifier = { $set: { [questionBasePath]: value } };
 
         // console.log(JSON.stringify(selector, null, 2));
         // console.log(JSON.stringify(modifier, null, 2));
-
-        if (!isSimulation && !isBulk) {
-          // update normalized response, or insert it if it doesn't exist
-          // NOTE: this will generate ObjectId _id for unknown reason, see https://github.com/Devographics/StateOfJS-next2/issues/31
-          updatedNormalizedResponse = await normCollection.updateOne(
-            selector,
-            modifier
-          );
-          if (
-            !updatedNormalizedResponse ||
-            !updatedNormalizedResponse.matchedCount
-          ) {
-            console.log(response._id);
-            console.log(updatedNormalizedResponse);
-            console.log(normResp);
-            console.log(selector);
-            console.log(modifier);
-            throw new Error(
-              `Could not find existing normalized response for responseId ${response._id}, normalize entire document first to create it.`
-            );
-          }
-        }
       }
     } else {
       // 2. we are normalizing the entire document
@@ -302,18 +293,8 @@ export const normalizeResponse = async (
       // handle private info (legacy)
       // await steps.handlePrivateInfo(normalizationParams);
 
+      // replace entire response with normResp
       modifier = normResp;
-
-      if (!isSimulation && !isBulk) {
-        // console.log(JSON.stringify(selector, null, 2));
-        // console.log(JSON.stringify(modifier, null, 2));
-
-        updatedNormalizedResponse = await normCollection.findOneAndReplace(
-          selector,
-          modifier,
-          { upsert: true, returnDocument: "after" }
-        );
-      }
     }
 
     const normalizationResult = {

@@ -2,9 +2,10 @@ import { apiRoutes } from "~/lib/apiRoutes";
 import {
   NormalizeEditionArgs,
   NormalizeQuestionArgs,
-  NormalizeResponseQuestionArgs,
+  NormalizeQuestionResponsesArgs,
   NormalizeResponsesArgs,
 } from "./actions";
+import { NormalizeSurveyResult } from "./actions/normalizeInBulk";
 
 // export async function loadFields({ surveyId, editionId, questionId }) {
 //   const fetchRes = await fetch(
@@ -36,15 +37,16 @@ export async function normalizeResponses(params: NormalizeResponsesArgs) {
       body: JSON.stringify(params),
     }
   );
-  const result: { data?: any; error: any } = await fetchRes.json();
+  const result: { data?: NormalizeSurveyResult; error: any } =
+    await fetchRes.json();
   return result;
 }
 
-export async function normalizeResponseQuestion(
-  params: NormalizeResponseQuestionArgs
+export async function normalizeQuestionResponses(
+  params: NormalizeQuestionResponsesArgs
 ) {
   const fetchRes = await fetch(
-    apiRoutes.normalization.normalizeResponseQuestion.href(params),
+    apiRoutes.normalization.normalizeQuestionResponses.href(params),
     {
       method: "POST",
       headers: {
@@ -53,7 +55,8 @@ export async function normalizeResponseQuestion(
       body: JSON.stringify(params),
     }
   );
-  const result: { data?: any; error: any } = await fetchRes.json();
+  const result: { data?: NormalizeSurveyResult; error: any } =
+    await fetchRes.json();
   return result;
 }
 
@@ -68,7 +71,8 @@ export async function normalizeQuestion(params: NormalizeQuestionArgs) {
       body: JSON.stringify(params),
     }
   );
-  const result: { data?: any; error: any } = await fetchRes.json();
+  const result: { data?: NormalizeSurveyResult; error: any } =
+    await fetchRes.json();
   return result;
 }
 
@@ -83,6 +87,7 @@ export async function normalizeEdition(params: NormalizeEditionArgs) {
       body: JSON.stringify(params),
     }
   );
-  const result: { data?: any; error: any } = await fetchRes.json();
+  const result: { data?: NormalizeSurveyResult; error: any } =
+    await fetchRes.json();
   return result;
 }

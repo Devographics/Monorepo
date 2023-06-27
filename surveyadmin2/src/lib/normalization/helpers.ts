@@ -8,8 +8,6 @@ import isEmpty from "lodash/isEmpty.js";
 import { logToFile } from "@devographics/helpers";
 import {
   Entity,
-  Field,
-  ParsedQuestion,
   DbSuffixes,
   QuestionMetadata,
   QuestionTemplateOutput,
@@ -20,19 +18,12 @@ import {
   SectionMetadata,
 } from "@devographics/types";
 import * as templateFunctions from "@devographics/templates";
-import { getNormResponsesCollection } from "@devographics/mongo";
+import {
+  getNormResponsesCollection,
+  getRawResponsesCollection,
+} from "@devographics/mongo";
 import { fetchEditionMetadata, fetchEntities } from "../api/fetch";
 import { getFormPaths } from "@devographics/templates";
-
-export const getFieldSegments = (field: Field) => {
-  if (!field.fieldName) {
-    console.log(field);
-    throw new Error("Could not find fieldName for field");
-  }
-  const [initialSegment, sectionSegment, fieldSegment, suffix] =
-    field.fieldName.split("__");
-  return { initialSegment, sectionSegment, fieldSegment, suffix };
-};
 
 export const getQuestionObject = ({
   survey,
@@ -53,31 +44,6 @@ export const getQuestionObject = ({
     question,
   });
   return questionObject;
-};
-
-export const getFieldPaths = (questionObject: QuestionTemplateOutput) => {
-  const { normPaths } = questionObject;
-  const { suffix } = field as ParsedQuestion;
-  const { sectionSegment, fieldSegment } = getFieldSegments(field);
-
-  const basePath = `${sectionSegment}.${fieldSegment}`;
-  const fullPath = suffix ? `${basePath}.${suffix}` : basePath;
-  const errorPath = `${basePath}.${DbSuffixes.ERROR}`;
-  const commentPath = `${basePath}.${DbSuffixes.COMMENT}`;
-
-  const rawFieldPath = `${fullPath}.${DbSuffixes.RAW}`;
-  const normalizedFieldPath = `${fullPath}.${DbSuffixes.NORMALIZED}`;
-  const patternsFieldPath = `${fullPath}.${DbSuffixes.PATTERNS}`;
-
-  return {
-    basePath,
-    commentPath: normPaths.comment,
-    fullPath,
-    errorPath,
-    rawFieldPath,
-    normalizedFieldPath,
-    patternsFieldPath,
-  };
 };
 
 // export const getFieldPaths = (field: Field) => {
@@ -579,13 +545,13 @@ export const getSelector = async ({
 
   if (questionId) {
     if (onlyUnnormalized) {
-      const { responses } = await getUnnormalizedResponses(
-        surveyId,
-        editionId,
-        questionId
-      );
-      const unnormalizedIds = responses.map((r) => r.responseId);
-      selector._id = { $in: unnormalizedIds };
+      // const { responses } = await getUnnormalizedResponses({
+      //   survey
+      //   edition,
+      //   question
+      // });
+      // const unnormalizedIds = responses.map((r) => r.responseId);
+      // selector._id = { $in: unnormalizedIds };
     } else {
       if (questionId === "source") {
         // source field should be treated differently
@@ -612,44 +578,58 @@ export const getSelector = async ({
   return selector;
 };
 
-export const getUnnormalizedResponses = async (
-  surveyId,
-  editionId,
-  questionId
-) => {
+/*
+
+Get responses count for a specific question
+
+*/
+export const getQuestionResponsesCount = async ({
+  survey,
+  edition,
+  question,
+}: {
+  survey: SurveyMetadata;
+  edition: EditionMetadata;
+  question: QuestionMetadata;
+}) => {
+  const selector = await getSelector({
+    surveyId: survey.id,
+    editionId: edition.id,
+    questionId: question.id,
+    // onlyUnnormalized,
+  });
+
+  const rawResponsesCollection = await getRawResponsesCollection(survey);
+  const responsesCount = await rawResponsesCollection.countDocuments(selector);
+  return responsesCount;
+};
+
+export const getUnnormalizedResponses = async ({
+  survey,
+  edition,
+  question,
+}: {
+  survey: SurveyMetadata;
+  edition: EditionMetadata;
+  question: QuestionWithSection;
+}) => {
   let rawFieldPath, normalizedFieldPath;
-  const edition = await fetchEditionMetadata({ surveyId, editionId });
-  if (questionId === "source") {
+  if (question.id === "source") {
     rawFieldPath = "user_info.source.raw";
     normalizedFieldPath = "user_info.source.normalized";
   } else {
-    const question = getEditionQuestions(edition).find(
-      (q) => q.id === questionId
-    );
-
-    if (!question) {
-      throw new Error(`Could not find question ${editionId}/${questionId}`);
-    }
-    const templateFunction = templateFunctions[
-      question.template
-    ] as TemplateFunction;
-
-    const survey = { id: edition.surveyId } as SurveyMetadata;
-    const section = question.section;
-
-    const questionObject = templateFunction({
+    const questionObject = getQuestionObject({
       survey,
       edition,
-      section,
+      section: question.section,
       question,
     });
-
     rawFieldPath = questionObject?.normPaths?.raw;
-    normalizedFieldPath = questionObject?.normPaths?.response;
+    normalizedFieldPath = questionObject?.normPaths?.other;
   }
 
   const selector = {
-    editionId,
+    editionId: edition.id,
     [rawFieldPath]: existsSelector,
     $or: [
       { [normalizedFieldPath]: [] },
@@ -657,6 +637,7 @@ export const getUnnormalizedResponses = async (
     ],
   };
 
+  console.log(selector);
   const NormResponses = await getNormResponsesCollection();
   let responses = await NormResponses.find(selector, {
     _id: 1,

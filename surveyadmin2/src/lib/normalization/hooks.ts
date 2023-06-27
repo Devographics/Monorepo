@@ -8,17 +8,24 @@ interface ApiData<T = any> {
   error: any;
 }
 
-type Project = {
-  id: string;
+export interface UnnormalizedResponses {
+  _id: string;
+  responseId: string;
+  value: string;
+}
+
+export type UnnormalizedData = {
+  unnormalizedResponses: Array<UnnormalizedResponses>;
+  responsesCount: number;
 };
 
-export const useUnnormalizedFields = (params: {
+export const useUnnormalizedData = (params: {
   surveyId: string;
   editionId: string;
   questionId: string;
 }) => {
-  const { data, error, isLoading } = useSWR<ApiData<Project>>(
-    apiRoutes.normalization.loadFields.href(params),
+  const { data, error, isLoading } = useSWR<ApiData<UnnormalizedData>>(
+    apiRoutes.normalization.loadUnnormalizedData.href(params),
     basicFetcher
   );
   console.log("data", data, error);

@@ -11,7 +11,7 @@ import { logToFile } from "@devographics/helpers";
 Normalization
 
 */
-const defaultLimit = 999;
+export const defaultLimit = 999;
 const isSimulation = true;
 const verbose = true;
 
@@ -34,7 +34,7 @@ interface NormalizedDocumentMetadata {
   regularFieldsCount?: number;
 }
 
-interface NormalizeSurveyResult {
+export interface NormalizeSurveyResult {
   editionId?: string;
   normalizedDocuments: NormalizedDocumentMetadata[];
   duration?: number;
@@ -66,14 +66,16 @@ export const normalizeInBulk = async ({
   survey,
   responses,
   args,
-  limit = defaultLimit,
+  limit,
   questionId,
+  isRenormalization = false,
 }: {
   survey: SurveyMetadata;
   responses: ResponseDocument[];
   args: any;
   limit?: number;
   questionId?: string;
+  isRenormalization?: boolean;
 }) => {
   const startAt = new Date();
   let progress = 0,
@@ -106,10 +108,11 @@ export const normalizeInBulk = async ({
       entities,
       questionId,
       isBulk: true,
+      isRenormalization,
     });
 
     progress++;
-    if (limit > 1000 && progress % tickInterval === 0) {
+    if (limit && limit > 1000 && progress % tickInterval === 0) {
       console.log(`  -> Normalized ${progress}/${count} responses…`);
     }
     await logToFile("normalizationResult.json", normalizationResult, {
@@ -182,6 +185,9 @@ export const normalizeInBulk = async ({
       console.log("// operationResult");
       console.log(operationResult);
     }
+    await logToFile("bulkOperations.json", bulkOperations, {
+      mode: "overwrite",
+    });
     // mutationResult.operationResult = operationResult.result;
     mutationResult.discardedCount = discardedCount;
   } catch (error) {
@@ -195,10 +201,8 @@ export const normalizeInBulk = async ({
   // duration in seconds
   mutationResult.duration = duration;
   console.log(
-    `👍 Normalized ${limit - discardedCount} responses ${
-      discardedCount > 0
-        ? `(${discardedCount}/${limit} responses discarded)`
-        : ""
+    `👍 Normalized ${progress - discardedCount} responses ${
+      discardedCount > 0 ? `(${discardedCount} responses discarded)` : ""
     }. (${endAt}) - ${duration}s`
   );
 

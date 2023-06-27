@@ -67,6 +67,7 @@ export const getNormPaths = (
     const basePathSegments = [sectionSegment, questionSegment]
 
     let paths = {
+        base: getPath(basePathSegments),
         response: getPath(suffix ? [...basePathSegments, suffix] : basePathSegments)
     } as DbPaths
 

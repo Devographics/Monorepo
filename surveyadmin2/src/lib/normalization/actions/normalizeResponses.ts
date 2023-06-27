@@ -1,6 +1,7 @@
 import { getRawResponsesCollection } from "@devographics/mongo";
 import { fetchSurveysMetadata } from "~/lib/api/fetch";
 import { normalizeInBulk } from "./normalizeInBulk";
+import { logToFile } from "@devographics/helpers";
 
 export type NormalizeResponsesArgs = {
   // note: we need a surveyId to figure out which database to use
@@ -10,13 +11,11 @@ export type NormalizeResponsesArgs = {
 
 /*
 
-Normalize a specific set of responses
+Normalize a specific set of responses (probably never used?)
 
 */
 export const normalizeResponses = async (args: NormalizeResponsesArgs) => {
   const { surveyId, responsesIds } = args;
-  console.log("// normalizeResponses");
-  console.log(args);
 
   const surveys = await fetchSurveysMetadata();
   const survey = surveys.find((s) => s.id === surveyId);
@@ -33,7 +32,7 @@ export const normalizeResponses = async (args: NormalizeResponsesArgs) => {
   const startAt = new Date();
 
   console.log(
-    `// Renormalizing responses [${responsesIds.join(", ")}]… (${startAt})`
+    `⛰️ Renormalizing responses [${responsesIds.join(", ")}]… (${startAt})`
   );
 
   const mutationResult = await normalizeInBulk({ survey, responses, args });

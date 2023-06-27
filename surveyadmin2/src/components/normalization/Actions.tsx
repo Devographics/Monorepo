@@ -1,6 +1,10 @@
 "use client";
+import { useState } from "react";
 import Options from "./Options";
-import { normalizeResponses } from "~/lib/normalization/services";
+import {
+  normalizeQuestionResponses,
+  normalizeResponses,
+} from "~/lib/normalization/services";
 // import Dropdown from "~/core/components/ui/Dropdown";
 
 export const allFields = { id: "all_fields", label: "All Fields" };
@@ -8,7 +12,8 @@ export const allFields = { id: "all_fields", label: "All Fields" };
 const Actions = (props) => {
   const {
     allEditions,
-    surveyId,
+    survey,
+    question,
     editionId,
     edition,
     questionId,
@@ -18,6 +23,7 @@ const Actions = (props) => {
     onlyUnnormalized,
     isAllFields,
     initializeSegments,
+    unnormalizedResponses,
     segmentSize,
   } = props;
   // const router = useRouter();
@@ -64,16 +70,26 @@ const Actions = (props) => {
           ))}
         </select>{" "}
         &gt;{" "} */}
-        <Options {...props} />
+        {/* <Options {...props} /> */}
+
+        <LoadingButton
+          action={async () => {
+            const result = await normalizeQuestionResponses({
+              surveyId: survey.id,
+              questionId: question.id,
+              responsesIds: unnormalizedResponses.map((r) => r.responseId),
+            });
+            console.log(result);
+          }}
+          label="Normalize Missing Values"
+        />
 
         <button
           onClick={() => {
-            const responsesCount =
-              result?.data?.getSurveyMetadata?.responsesCount;
-            initializeSegments({ responsesCount, segmentSize });
+            initializeSegments();
           }}
         >
-          Renormalize {editionId}/{isAllFields ? allFields.id : questionId}
+          Normalize All
         </button>
       </div>
       {/* <div className="secondary">
@@ -93,6 +109,22 @@ const Actions = (props) => {
         </button>
       </div> */}
     </article>
+  );
+};
+
+export const LoadingButton = ({ action, label }) => {
+  const [loading, setLoading] = useState(false);
+  return (
+    <button
+      aria-busy={loading}
+      onClick={async () => {
+        setLoading(true);
+        await action();
+        setLoading(false);
+      }}
+    >
+      {label}
+    </button>
   );
 };
 
