@@ -82,13 +82,14 @@ export const NormalizationResult = ({
           documents={errorDocuments}
           label="Error Documents"
           isEmpty={true}
-          defaultShow={false}
+          defaultShow={true}
           isError={true}
         />
         <DocumentGroup
           documents={normalizedDocuments}
           label="Normalized Documents"
           showQuestionId={showQuestionId}
+          defaultShow={false}
         />
         <DocumentGroup
           documents={unnormalizedDocuments}
@@ -126,7 +127,7 @@ const DocumentGroup = ({
   return documents.length > 0 ? (
     <>
       <h3 style={{ ...(isError ? { color: errorColor } : {}) }}>
-        {label}{" "}
+        {label} ({documents.length}){" "}
         <a
           href="#"
           role="button"

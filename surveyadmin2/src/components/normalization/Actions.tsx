@@ -39,9 +39,10 @@ const Actions = (props) => {
   const questions = [allFields, ...normalizeableFields];
 
   return (
-    <article className="normalization-actions">
-      <div className="primary">
-        {/* <select
+    <>
+      <article className="normalization-actions">
+        <div className="primary">
+          {/* <select
           onChange={() => {
             // build search string to update the browser URL query string
             // const search = qs.stringify({
@@ -77,36 +78,30 @@ const Actions = (props) => {
           ))}
         </select>{" "}
         &gt;{" "} */}
-        {/* <Options {...props} /> */}
+          {/* <Options {...props} /> */}
 
-        <LoadingButton
-          action={async () => {
-            const result = await normalizeQuestionResponses({
-              surveyId: survey.id,
-              questionId: question.id,
-              responsesIds: unnormalizedResponses.map((r) => r.responseId),
-            });
-            setNormalizeMissingResult(result.data);
-            console.log(result);
-          }}
-          label="Normalize Missing Values"
-        />
+          <LoadingButton
+            action={async () => {
+              const result = await normalizeQuestionResponses({
+                surveyId: survey.id,
+                questionId: question.id,
+                responsesIds: unnormalizedResponses.map((r) => r.responseId),
+              });
+              setNormalizeMissingResult(result.data);
+              console.log(result);
+            }}
+            label="Normalize Only Missing Values"
+          />
 
-        <button
-          onClick={() => {
-            initializeSegments();
-          }}
-        >
-          Normalize All
-        </button>
-      </div>
-      {normalizeMissingResult && (
-        <NormalizationResult
-          {...normalizeMissingResult}
-          showQuestionId={false}
-        />
-      )}
-      {/* <div className="secondary">
+          <button
+            onClick={() => {
+              initializeSegments();
+            }}
+          >
+            Normalize All
+          </button>
+        </div>
+        {/* <div className="secondary">
         <button
           onClick={async () => {
             const idsString = prompt("Enter comma-separated ids") || "";
@@ -122,7 +117,17 @@ const Actions = (props) => {
           Renormalize Responses
         </button>
       </div> */}
-    </article>
+      </article>
+
+      {normalizeMissingResult && (
+        <article>
+          <NormalizationResult
+            {...normalizeMissingResult}
+            showQuestionId={false}
+          />
+        </article>
+      )}
+    </>
   );
 };
 

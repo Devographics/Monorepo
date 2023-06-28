@@ -534,7 +534,7 @@ export const getSelector = async ({
 }: {
   survey: SurveyMetadata;
   edition: EditionMetadata;
-  question?: QuestionMetadata;
+  question?: QuestionWithSection;
   onlyUnnormalized?: boolean;
 }) => {
   const selector = {
@@ -542,24 +542,32 @@ export const getSelector = async ({
   } as any;
 
   if (question) {
-    if (onlyUnnormalized) {
-      // const { responses } = await getUnnormalizedResponses({
-      //   survey
-      //   edition,
-      //   question
-      // });
-      // const unnormalizedIds = responses.map((r) => r.responseId);
-      // selector._id = { $in: unnormalizedIds };
-    } else {
-      if (question.id === "source") {
-        // source field should be treated differently
-        selector["$or"] = getSourceFields(edition.id).map((f) => ({
-          [f]: existsSelector,
-        }));
+    const questionObject = getQuestionObject({
+      survey,
+      edition,
+      section: question.section,
+      question,
+    });
+    if (questionObject) {
+      if (onlyUnnormalized) {
+        // const { responses } = await getUnnormalizedResponses({
+        //   survey
+        //   edition,
+        //   question
+        // });
+        // const unnormalizedIds = responses.map((r) => r.responseId);
+        // selector._id = { $in: unnormalizedIds };
       } else {
-        const formPaths = getFormPaths({ edition, question });
-        if (formPaths.other) {
-          selector[formPaths.other] = existsSelector;
+        if (question.id === "source") {
+          // source field should be treated differently
+          selector["$or"] = getSourceFields(edition.id).map((f) => ({
+            [f]: existsSelector,
+          }));
+        } else {
+          const formPaths = getFormPaths({ edition, question: questionObject });
+          if (formPaths.other) {
+            selector[formPaths.other] = existsSelector;
+          }
         }
       }
     }
@@ -587,7 +595,7 @@ export const getQuestionResponsesCount = async ({
 }: {
   survey: SurveyMetadata;
   edition: EditionMetadata;
-  question: QuestionMetadata;
+  question: QuestionWithSection;
 }) => {
   const selector = await getSelector({
     survey,
@@ -598,7 +606,6 @@ export const getQuestionResponsesCount = async ({
 
   const rawResponsesCollection = await getRawResponsesCollection(survey);
   const responsesCount = await rawResponsesCollection.countDocuments(selector);
-  console.log(responsesCount);
   return responsesCount;
 };
 
@@ -635,7 +642,6 @@ export const getUnnormalizedResponses = async ({
     ],
   };
 
-  console.log(selector);
   const NormResponses = await getNormResponsesCollection();
   let responses = await NormResponses.find(selector, {
     _id: 1,
