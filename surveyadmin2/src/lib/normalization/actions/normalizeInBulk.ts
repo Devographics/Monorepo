@@ -5,7 +5,11 @@ import { getNormResponsesCollection } from "@devographics/mongo";
 import { fetchEntities } from "~/lib/api/fetch";
 import { ResponseDocument, SurveyMetadata } from "@devographics/types";
 import { logToFile } from "@devographics/helpers";
-import { NormalizeInBulkResult, BulkOperation } from "../types";
+import {
+  NormalizeInBulkResult,
+  BulkOperation,
+  NormalizedDocumentMetadata,
+} from "../types";
 
 /*
 
@@ -28,14 +32,12 @@ C) *all* questions on *all* documents (if neither is passed)
 export const normalizeInBulk = async ({
   survey,
   responses,
-  args,
   limit,
   questionId,
   isRenormalization = false,
 }: {
   survey: SurveyMetadata;
   responses: ResponseDocument[];
-  args: any;
   limit?: number;
   questionId?: string;
   isRenormalization?: boolean;
@@ -50,10 +52,17 @@ export const normalizeInBulk = async ({
   // to replace everything instead of updating a single field
   const isReplace = !questionId;
 
+  let allDocuments: NormalizedDocumentMetadata[] = [];
+
   const mutationResult: NormalizeInBulkResult = {
-    ...args,
     normalizedDocuments: [],
+    unnormalizedDocuments: [],
+    emptyDocuments: [],
+    errorDocuments: [],
+    totalDocumentCount: 0,
     errorCount: 0,
+    limit,
+    isSimulation,
   };
 
   const bulkOperations: BulkOperation[] = [];
@@ -83,7 +92,7 @@ export const normalizeInBulk = async ({
     });
     if (!normalizationResult) {
       mutationResult.errorCount++;
-      mutationResult.normalizedDocuments.push({
+      allDocuments.push({
         responseId: response._id,
         errors: [
           {
@@ -98,7 +107,7 @@ export const normalizeInBulk = async ({
       }
 
       // create a list of metadata about normalization process to return as mutation result
-      mutationResult.normalizedDocuments.push(
+      allDocuments.push(
         pick(normalizationResult, [
           "errors",
           "responseId",
@@ -160,6 +169,53 @@ export const normalizeInBulk = async ({
   const duration = Math.ceil((endAt.valueOf() - startAt.valueOf()) / 1000);
   // duration in seconds
   mutationResult.duration = duration;
+
+  /*
+
+  Sort documents in different "buckets" to help with logging
+
+  */
+  allDocuments = allDocuments.map((doc) => {
+    let group;
+    if (doc.errors && doc.errors.length > 0) {
+      group = "error";
+    } else {
+      if (doc.normalizedFields?.some((field) => field.raw)) {
+        // doc is not empty
+        if (
+          doc.normalizedFields?.some((field) => field.normTokens.length > 0)
+        ) {
+          group = "normalized";
+        } else {
+          group = "unnormalized";
+        }
+      } else {
+        group = "empty";
+      }
+    }
+    return { ...doc, group };
+  });
+
+  mutationResult.normalizedDocuments = allDocuments.filter(
+    (d) => d.group === "normalized"
+  );
+  mutationResult.unnormalizedDocuments = allDocuments.filter(
+    (d) => d.group === "unnormalized"
+  );
+  mutationResult.emptyDocuments = allDocuments.filter(
+    (d) => d.group === "empty"
+  );
+  mutationResult.errorDocuments = allDocuments.filter(
+    (d) => d.group === "error"
+  );
+
+  mutationResult.totalDocumentCount = allDocuments.length;
+
+  await logToFile(
+    `normalizeInBulk/mutationResult_${new Date().toString()}.json`,
+    mutationResult
+  );
+
   console.log(
     `👍 Normalized ${progress - discardedCount} responses ${
       discardedCount > 0 ? `(${discardedCount} responses discarded)` : ""

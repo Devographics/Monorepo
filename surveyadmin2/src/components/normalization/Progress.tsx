@@ -1,10 +1,31 @@
-import React, { useEffect } from "react";
-import { statuses } from "./Normalization";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Segment, SegmentDone, statuses } from "./Normalization";
 import { normalizeQuestion } from "~/lib/normalization/services";
+import { NormalizeInBulkResult } from "~/lib/normalization/types";
+import {
+  EditionMetadata,
+  QuestionMetadata,
+  SurveyMetadata,
+} from "@devographics/types";
+import { NormalizationResult } from "./NormalizationResult";
 
-const Loading = () => <span>⌛</span>;
+const Loading = () => <span aria-busy={true} />;
 
-const Progress = (props) => {
+interface ProgressProps {
+  responsesCount: number;
+  doneCount: number;
+  enabled: boolean;
+  setEnabled: Dispatch<SetStateAction<boolean>>;
+  refetchMissingFields: any;
+  segments: Segment[];
+  survey: SurveyMetadata;
+  edition: EditionMetadata;
+  question: QuestionMetadata;
+  onlyUnnormalized?: boolean;
+  updateSegments: any;
+  segmentSize: number;
+}
+const Progress = (props: ProgressProps) => {
   const {
     responsesCount,
     doneCount,
@@ -17,7 +38,9 @@ const Progress = (props) => {
     (s) => s.status === statuses.inProgress
   );
 
-  const segmentsDone = segments.filter((s) => s.status === statuses.done);
+  const segmentsDone = segments.filter(
+    (s) => s.status === statuses.done
+  ) as SegmentDone[];
 
   useEffect(() => {
     if (doneCount >= responsesCount) {
@@ -29,54 +52,85 @@ const Progress = (props) => {
     <div className="normalization-progress">
       {responsesCount > 0 && (
         <div>
-          <h3>
-            Found {responsesCount} responses to normalize…{" "}
-            {enabled ? (
-              <button
-                onClick={() => {
-                  setEnabled(false);
-                }}
-              >
-                Stop
-              </button>
-            ) : (
-              <button
-                onClick={() => {
-                  setEnabled(true);
-                }}
-              >
-                Restart
-              </button>
-            )}
-          </h3>
+          <h3>Found {responsesCount} responses to normalize… </h3>
           {segmentsDone.map((s, i) => (
-            <SegmentDone key={i} {...s} responsesCount={responsesCount} />
+            <SegmentDoneItem
+              key={i}
+              segmentIndex={i}
+              {...s}
+              responsesCount={responsesCount}
+            />
           ))}
           {segmentInProgress && (
-            <SegmentInProgress
+            <SegmentInProgressItem
               {...props}
+              {...segmentInProgress}
               segmentIndex={segmentsDone.length}
               startFrom={segmentInProgress?.startFrom}
             />
           )}
           {doneCount >= responsesCount && <div>Done</div>}
+          {enabled ? (
+            <button
+              onClick={() => {
+                setEnabled(false);
+              }}
+            >
+              Stop
+            </button>
+          ) : (
+            <button
+              onClick={() => {
+                setEnabled(true);
+              }}
+            >
+              Restart
+            </button>
+          )}
         </div>
       )}
     </div>
   );
 };
 
-const SegmentDone = ({ startFrom, responsesCount, data }) => {
-  const { duration, discardedCount, errorCount } = data;
+const SegmentDoneItem = ({
+  startFrom,
+  responsesCount,
+  data,
+  segmentIndex,
+}: SegmentDone & {
+  responsesCount: number;
+  segmentIndex: number;
+}) => {
+  const [showResults, setShowResults] = useState(false);
+  const { duration, discardedCount, errorCount, normalizedDocuments } = data;
   return (
-    <div>
-      {startFrom}/{responsesCount} done in {duration}s ({errorCount} errors,{" "}
-      {discardedCount} responses discarded)
-    </div>
+    <article>
+      <h5>Segment {segmentIndex + 1}</h5>
+      <p>
+        <span>
+          <strong>
+            {startFrom}/{responsesCount}
+          </strong>{" "}
+          done in <strong>{duration}s</strong> ({} documents normalized,{" "}
+          {errorCount} errors, {discardedCount} responses discarded)
+        </span>{" "}
+        <a
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            setShowResults(!showResults);
+          }}
+        >
+          {showResults ? "Hide Results" : "Show Results"}
+        </a>
+      </p>
+      {showResults && <NormalizationResult {...data} />}
+    </article>
   );
 };
 
-const SegmentInProgress = ({
+const SegmentInProgressItem = ({
   survey,
   edition,
   question,
@@ -85,14 +139,13 @@ const SegmentInProgress = ({
   responsesCount,
   enabled,
   onlyUnnormalized,
-  isAllFields,
   updateSegments,
   segmentSize,
-}) => {
-  const editionId = edition.id;
-
-  const mutateFunction = () => {};
-
+}: Segment &
+  ProgressProps & {
+    segmentIndex: number;
+    responsesCount: number;
+  }) => {
   useEffect(() => {
     if (enabled) {
       /*
@@ -110,12 +163,11 @@ const SegmentInProgress = ({
           limit: segmentSize,
           onlyUnnormalized,
         });
-
-        const doneCount = startFrom + result?.data?.normalizedDocuments?.length;
+        const doneCount = startFrom + (result?.data?.totalDocumentCount || 0);
         updateSegments({
           doneCount,
           doneSegmentIndex: segmentIndex,
-          doneSegmentData: result?.data?.normalizedDocuments,
+          doneSegmentData: result?.data,
           segmentSize,
         });
       };
@@ -124,10 +176,11 @@ const SegmentInProgress = ({
   }, [segmentIndex, enabled]);
 
   return (
-    <div>
+    <article>
+      <h5>Segment {segmentIndex + 1}</h5>
       Normalizing {startFrom}/{responsesCount} responses…{" "}
       {enabled ? <Loading /> : <span>Paused</span>}
-    </div>
+    </article>
   );
 };
 

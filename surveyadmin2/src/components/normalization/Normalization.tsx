@@ -17,6 +17,7 @@ import {
   QuestionMetadata,
   SurveyMetadata,
 } from "@devographics/types";
+import { NormalizeInBulkResult } from "~/lib/normalization/types";
 
 export const defaultSegmentSize = 500;
 
@@ -58,11 +59,14 @@ export const getSegmentStatus = ({ doneCount, i, segmentSize }) => {
   }
 };
 
-interface Segment {
+export interface Segment {
   i: number;
   startFrom: number;
   status: number;
-  data?: any;
+}
+
+export interface SegmentDone extends Segment {
+  data: NormalizeInBulkResult;
 }
 
 export const getSegments = ({ responsesCount, segmentSize }): Segment[] => {
@@ -128,6 +132,11 @@ export const Normalization = ({
     doneSegmentIndex,
     doneSegmentData,
     segmentSize,
+  }: {
+    doneCount: number;
+    doneSegmentIndex: number;
+    doneSegmentData: NormalizeInBulkResult;
+    segmentSize: number;
   }) => {
     setDoneCount(doneCount);
     setSegments((oldSegments) => {

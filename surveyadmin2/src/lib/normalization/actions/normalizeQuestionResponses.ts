@@ -43,7 +43,6 @@ export const normalizeQuestionResponses = async (
     survey,
     responses,
     questionId,
-    args,
     isRenormalization: true,
   });
 

@@ -8,15 +8,23 @@ export type LogOptions = {
     subDir?: string
 }
 
-export const logToFile = async (fileName: string, object: any, options: LogOptions = {}) => {
+export const logToFile = async (fileName_: string, object: any, options: LogOptions = {}) => {
     if (process.env.NODE_ENV === 'development') {
-        const { mode = 'overwrite', timestamp = false, dirPath, subDir } = options
+        let fileName = fileName_,
+            subDir = options?.subDir
+        const { mode = 'overwrite', timestamp = false, dirPath } = options
         const envLogsDirPath = process.env.LOGS_DIRECTORY
 
         if (!envLogsDirPath) {
             console.warn('Please define LOGS_DIRECTORY in your .env file to enable logging')
             return
         }
+
+        if (fileName.includes('/')) {
+            subDir = fileName.split('/')[0]
+            fileName = fileName.split('/')[1]
+        }
+
         const logsDirPath = dirPath ?? (subDir ? `${envLogsDirPath}/${subDir}` : envLogsDirPath)
 
         if (!fs.existsSync(logsDirPath)) {

@@ -32,16 +32,23 @@ export interface NormalizedDocumentMetadata {
   prenormalizedFieldsCount?: number;
   regularFieldsCount?: number;
   normalizedFields?: NormalizedField[];
+  group?: "normalized" | "unnormalized" | "empty" | "error";
 }
 
 export interface NormalizeInBulkResult {
   editionId?: string;
   normalizedDocuments: NormalizedDocumentMetadata[];
+  unnormalizedDocuments: NormalizedDocumentMetadata[];
+  emptyDocuments: NormalizedDocumentMetadata[];
+  errorDocuments: NormalizedDocumentMetadata[];
+  totalDocumentCount: number;
   duration?: number;
   count?: number;
   errorCount: number;
   operationResult?: any;
   discardedCount?: number;
+  limit?: number;
+  isSimulation: boolean;
 }
 
 export interface NormalizationResult {

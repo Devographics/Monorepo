@@ -527,23 +527,21 @@ const existsSelector = { $exists: true, $nin: ignoreValues };
 
 // get mongo selector
 export const getSelector = async ({
-  surveyId,
-  editionId,
-  questionId,
+  survey,
+  edition,
+  question,
   onlyUnnormalized,
 }: {
-  surveyId: string;
-  editionId: string;
-  questionId?: string;
+  survey: SurveyMetadata;
+  edition: EditionMetadata;
+  question?: QuestionMetadata;
   onlyUnnormalized?: boolean;
 }) => {
-  const edition = await fetchEditionMetadata({ surveyId, editionId });
-
   const selector = {
-    editionId,
+    editionId: edition.id,
   } as any;
 
-  if (questionId) {
+  if (question) {
     if (onlyUnnormalized) {
       // const { responses } = await getUnnormalizedResponses({
       //   survey
@@ -553,13 +551,12 @@ export const getSelector = async ({
       // const unnormalizedIds = responses.map((r) => r.responseId);
       // selector._id = { $in: unnormalizedIds };
     } else {
-      if (questionId === "source") {
+      if (question.id === "source") {
         // source field should be treated differently
-        selector["$or"] = getSourceFields(editionId).map((f) => ({
+        selector["$or"] = getSourceFields(edition.id).map((f) => ({
           [f]: existsSelector,
         }));
       } else {
-        const question = getEditionQuestionById({ edition, questionId });
         const formPaths = getFormPaths({ edition, question });
         if (formPaths.other) {
           selector[formPaths.other] = existsSelector;
@@ -593,14 +590,15 @@ export const getQuestionResponsesCount = async ({
   question: QuestionMetadata;
 }) => {
   const selector = await getSelector({
-    surveyId: survey.id,
-    editionId: edition.id,
-    questionId: question.id,
+    survey,
+    edition,
+    question,
     // onlyUnnormalized,
   });
 
   const rawResponsesCollection = await getRawResponsesCollection(survey);
   const responsesCount = await rawResponsesCollection.countDocuments(selector);
+  console.log(responsesCount);
   return responsesCount;
 };
 

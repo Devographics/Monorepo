@@ -59,7 +59,9 @@ const Script = ({ id, description, args, done }) => {
           )}
         </td>
         <td>
-          <button onClick={handleSubmit}>Run {loading ? "⌛" : ""}</button>
+          <button onClick={handleSubmit}>
+            Run {loading ? <span aria-busy={true} /> : ""}
+          </button>
         </td>
         <td>{done && "✅"}</td>
       </tr>

@@ -11,7 +11,7 @@ export type NormalizeResponsesArgs = {
 
 /*
 
-Normalize a specific set of responses (probably never used?)
+Normalize all questions for a specific set of responses (probably never used?)
 
 */
 export const normalizeResponses = async (args: NormalizeResponsesArgs) => {
@@ -35,7 +35,7 @@ export const normalizeResponses = async (args: NormalizeResponsesArgs) => {
     `⛰️ Renormalizing responses [${responsesIds.join(", ")}]… (${startAt})`
   );
 
-  const mutationResult = await normalizeInBulk({ survey, responses, args });
+  const mutationResult = await normalizeInBulk({ survey, responses });
 
   return mutationResult;
 };

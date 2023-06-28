@@ -1,32 +1,34 @@
 import { getRawResponsesCollection } from "@devographics/mongo";
 import { fetchSurveysMetadata } from "../../api/fetch";
 import { getSelector } from "../helpers";
+import {
+  EditionMetadata,
+  QuestionMetadata,
+  SurveyMetadata,
+} from "@devographics/types";
 
-type GetSurveyMetadataArgs = {
-  surveyId: string;
-  editionId: string;
-  questionId?: string;
+type GetQuestionResponsesCountArgs = {
+  survey: SurveyMetadata;
+  edition: EditionMetadata;
+  question?: QuestionMetadata;
   onlyUnnormalized?: boolean;
 };
 
-export const getQuestionResponsesCount = async (
-  args: GetSurveyMetadataArgs
-) => {
-  const { surveyId, editionId, questionId, onlyUnnormalized } = args;
-
-  const surveys = await fetchSurveysMetadata();
-  const survey = surveys.find((s) => s.id === surveyId);
-
+export const getQuestionResponsesCount = async ({
+  survey,
+  edition,
+  question,
+  onlyUnnormalized,
+}: GetQuestionResponsesCountArgs) => {
   const selector = await getSelector({
-    surveyId,
-    editionId,
-    questionId,
+    survey,
+    edition,
+    question,
     onlyUnnormalized,
   });
 
   const rawResponsesCollection = await getRawResponsesCollection(survey);
   const responsesCount = await rawResponsesCollection.countDocuments(selector);
-  console.log("// getQuestionResponsesCount");
-  console.log(responsesCount);
+
   return responsesCount;
 };

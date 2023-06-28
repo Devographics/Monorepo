@@ -8,108 +8,169 @@ import {
   NormalizeInBulkResult,
 } from "~/lib/normalization/types";
 
+const errorColor = "#cf2710";
+
 export const NormalizationResult = ({
   normalizedDocuments,
+  unnormalizedDocuments,
+  emptyDocuments,
+  errorDocuments,
   duration,
   discardedCount,
   showQuestionId = true,
+  isSimulation,
+  errorCount,
 }: NormalizeInBulkResult & {
   showQuestionId?: boolean;
 }) => {
   const [showResult, setShowResult] = useState(true);
-  const successDocs = normalizedDocuments.filter((doc) =>
-    doc.normalizedFields?.some((field) => field.normTokens.length > 0)
-  );
-  const failureDocs = normalizedDocuments.filter(
-    (doc) => !doc.normalizedFields?.some((field) => field.normTokens.length > 0)
-  );
+
   return (
     showResult && (
       <div>
-        <p>
+        {/* <p>
           <a
             href="#"
-            onClick={() => {
+            onClick={(e) => {
+              e.preventDefault();
               setShowResult(false);
             }}
           >
             Hide
           </a>
-        </p>
+        </p> */}
         <div>
-          <ul>
-            <li>
-              Done in <strong>{duration}s</strong>
-            </li>
-            <li>
-              <strong>{successDocs.length}</strong> documents containing
-              normalizeable fields
-            </li>
-            <li>
-              <strong>
-                {sumBy(successDocs, (doc) => doc?.normalizedFieldsCount || 0)}
-              </strong>{" "}
-              total normalized fields
-            </li>
-            <li>
-              <strong>{discardedCount}</strong> empty or invalid documents
-              dicarded
-            </li>
-          </ul>
+          <table style={{ border: "1px solid #ccc" }}>
+            <thead>
+              <tr>
+                {isSimulation && (
+                  <th>
+                    <mark>Simulation</mark>
+                  </th>
+                )}
+                <th>
+                  Done in <strong>{duration}s</strong>
+                </th>
+                <th>
+                  <strong>{normalizedDocuments.length}</strong> normalized
+                  documents
+                </th>
+                <th>
+                  <strong>
+                    {sumBy(
+                      normalizedDocuments,
+                      (doc) => doc?.normalizedFieldsCount || 0
+                    )}
+                  </strong>{" "}
+                  total normalized fields
+                </th>
+                <th>
+                  <strong>{discardedCount}</strong> empty or invalid documents
+                  dicarded
+                </th>
+                <th
+                  style={{ ...(errorCount > 0 ? { color: errorColor } : {}) }}
+                >
+                  <strong>{errorCount}</strong> errors
+                </th>
+              </tr>
+            </thead>
+          </table>
         </div>
 
-        {successDocs.length > 0 && (
-          <>
-            <h3>Normalized Documents</h3>
-            <table>
-              <thead>
-                <tr>
-                  <th></th>
-                  <th>ResponseId</th>
-                  <th>Matches</th>
-                </tr>
-              </thead>
-              <tbody>
-                {successDocs.map((doc, index) => (
-                  <NormDocument
-                    {...doc}
-                    index={index}
-                    showQuestionId={showQuestionId}
-                    key={doc.responseId}
-                  />
-                ))}
-              </tbody>
-            </table>
-          </>
-        )}
-
-        {failureDocs.length > 0 && (
-          <>
-            <h3>Unnormalized Documents</h3>
-            <table>
-              <thead>
-                <tr>
-                  <th></th>
-                  <th>ResponseId</th>
-                  <th>Matches</th>
-                </tr>
-              </thead>
-              <tbody>
-                {failureDocs.map((doc, index) => (
-                  <NormDocument
-                    {...doc}
-                    index={index}
-                    showQuestionId={showQuestionId}
-                    key={doc.responseId}
-                  />
-                ))}
-              </tbody>
-            </table>
-          </>
-        )}
+        <DocumentGroup
+          documents={errorDocuments}
+          label="Error Documents"
+          isEmpty={true}
+          defaultShow={false}
+          isError={true}
+        />
+        <DocumentGroup
+          documents={normalizedDocuments}
+          label="Normalized Documents"
+          showQuestionId={showQuestionId}
+        />
+        <DocumentGroup
+          documents={unnormalizedDocuments}
+          label="Unnormalized Documents"
+          showQuestionId={showQuestionId}
+          defaultShow={false}
+        />
+        <DocumentGroup
+          documents={emptyDocuments}
+          label="Empty Documents"
+          isEmpty={true}
+          defaultShow={false}
+        />
       </div>
     )
   );
+};
+
+const DocumentGroup = ({
+  documents,
+  label,
+  showQuestionId = true,
+  isEmpty = false,
+  isError = false,
+  defaultShow = true,
+}: {
+  documents: NormalizedDocumentMetadata[];
+  label: string;
+  showQuestionId?: boolean;
+  isEmpty?: boolean;
+  isError?: boolean;
+  defaultShow?: boolean;
+}) => {
+  const [show, setShow] = useState(defaultShow);
+  return documents.length > 0 ? (
+    <>
+      <h3 style={{ ...(isError ? { color: errorColor } : {}) }}>
+        {label}{" "}
+        <a
+          href="#"
+          role="button"
+          onClick={(e) => {
+            e.preventDefault();
+            setShow((show) => !show);
+          }}
+        >
+          {show ? "Hide" : "Show"}
+        </a>
+      </h3>
+      {show && (
+        <>
+          {isEmpty ? (
+            documents.map((doc) => (
+              <span key={doc.responseId}>
+                <code>{doc.responseId}</code>{" "}
+              </span>
+            ))
+          ) : (
+            <table>
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>ResponseId</th>
+                  <th>Contents</th>
+                </tr>
+              </thead>
+              <tbody>
+                {documents.map((doc, index) => (
+                  <NormDocument
+                    {...doc}
+                    index={index}
+                    showQuestionId={showQuestionId}
+                    key={doc.responseId}
+                  />
+                ))}
+              </tbody>
+            </table>
+          )}
+        </>
+      )}
+    </>
+  ) : null;
 };
 
 const NormDocument = ({
