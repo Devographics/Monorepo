@@ -5,6 +5,7 @@ import { getNormResponsesCollection } from "@devographics/mongo";
 import { fetchEntities } from "~/lib/api/fetch";
 import { ResponseDocument, SurveyMetadata } from "@devographics/types";
 import { logToFile } from "@devographics/helpers";
+import { NormalizeInBulkResult, BulkOperation } from "../types";
 
 /*
 
@@ -15,44 +16,6 @@ export const defaultLimit = 999;
 const isSimulation = true;
 const verbose = true;
 
-interface UpdateBulkOperation {
-  updateMany: any;
-}
-
-interface ReplaceBulkOperation {
-  replaceOne: any;
-}
-
-type BulkOperation = UpdateBulkOperation | ReplaceBulkOperation;
-
-interface NormalizedDocumentMetadata {
-  responseId: string;
-  errors?: any[];
-  normalizedResponseId?: string;
-  normalizedFieldsCount?: number;
-  prenormalizedFieldsCount?: number;
-  regularFieldsCount?: number;
-}
-
-export interface NormalizeSurveyResult {
-  editionId?: string;
-  normalizedDocuments: NormalizedDocumentMetadata[];
-  duration?: number;
-  count?: number;
-  errorCount: number;
-  operationResult?: any;
-  discardedCount?: number;
-}
-
-export type NormalizeResponsesArgs = {
-  surveyId?: string;
-  editionId?: string;
-  questionId?: string;
-  responsesIds?: string[];
-  startFrom?: number;
-  limit?: number;
-  onlyUnnormalized?: boolean;
-};
 /*
 
 We can normalize:
@@ -87,7 +50,7 @@ export const normalizeInBulk = async ({
   // to replace everything instead of updating a single field
   const isReplace = !questionId;
 
-  const mutationResult: NormalizeSurveyResult = {
+  const mutationResult: NormalizeInBulkResult = {
     ...args,
     normalizedDocuments: [],
     errorCount: 0,
@@ -143,6 +106,7 @@ export const normalizeInBulk = async ({
           "normalizedFieldsCount",
           "prenormalizedFieldsCount",
           "regularFieldsCount",
+          "normalizedFields",
         ])
       );
 
@@ -151,10 +115,6 @@ export const normalizeInBulk = async ({
         const { selector, modifier } = normalizationResult;
         const operation = getBulkOperation(selector, modifier, isReplace);
         bulkOperations.push(operation);
-
-        await logToFile("operation.json", operation, {
-          mode: "overwrite",
-        });
       } else {
         discardedCount++;
       }

@@ -5,6 +5,8 @@ import {
   normalizeQuestionResponses,
   normalizeResponses,
 } from "~/lib/normalization/services";
+import { NormalizeInBulkResult } from "~/lib/normalization/types";
+import { NormalizationResult } from "./NormalizationResult";
 // import Dropdown from "~/core/components/ui/Dropdown";
 
 export const allFields = { id: "all_fields", label: "All Fields" };
@@ -27,6 +29,11 @@ const Actions = (props) => {
     segmentSize,
   } = props;
   // const router = useRouter();
+
+  const [normalizeMissingResult, setNormalizeMissingResult] =
+    useState<NormalizeInBulkResult>();
+  const [normalizeAllResult, setNormalizeAllResult] =
+    useState<NormalizeInBulkResult>();
 
   // get list of all normalizeable ("other") field for current survey
   const questions = [allFields, ...normalizeableFields];
@@ -79,6 +86,7 @@ const Actions = (props) => {
               questionId: question.id,
               responsesIds: unnormalizedResponses.map((r) => r.responseId),
             });
+            setNormalizeMissingResult(result.data);
             console.log(result);
           }}
           label="Normalize Missing Values"
@@ -92,6 +100,12 @@ const Actions = (props) => {
           Normalize All
         </button>
       </div>
+      {normalizeMissingResult && (
+        <NormalizationResult
+          {...normalizeMissingResult}
+          showQuestionId={false}
+        />
+      )}
       {/* <div className="secondary">
         <button
           onClick={async () => {

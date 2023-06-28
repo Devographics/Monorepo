@@ -1,10 +1,9 @@
 "use client";
-import React, { useState } from "react";
-import {
-  normalizeQuestionResponses,
-  normalizeResponses,
-} from "~/lib/normalization/services";
+import { useState } from "react";
+import { normalizeQuestionResponses } from "~/lib/normalization/services";
 import { LoadingButton } from "./Actions";
+import { NormalizeInBulkResult } from "~/lib/normalization/types";
+import { NormalizationResult } from "./NormalizationResult";
 
 const Fields = ({
   survey,
@@ -63,33 +62,46 @@ const Fields = ({
 };
 
 const Field = ({ _id, value, showIds, responseId, questionId, surveyId }) => {
+  const [result, setResult] = useState<NormalizeInBulkResult>();
   return (
-    <tr>
-      <td>{value}</td>
-      {showIds && (
-        <>
-          <td>
-            <code>{responseId}</code>
+    <>
+      <tr>
+        <td>{value}</td>
+        {showIds && (
+          <>
+            <td>
+              <code>{responseId}</code>
+            </td>
+            <td>
+              <code>{_id}</code>
+            </td>
+          </>
+        )}
+        <td>
+          <LoadingButton
+            action={async () => {
+              const result = await normalizeQuestionResponses({
+                questionId,
+                surveyId,
+                responsesIds: [responseId],
+              });
+              setResult(result.data);
+              console.log(result);
+            }}
+            label="Normalize"
+          />
+        </td>
+      </tr>
+      {result && (
+        <tr>
+          <td colSpan={999}>
+            <article>
+              <NormalizationResult showQuestionId={false} {...result} />
+            </article>
           </td>
-          <td>
-            <code>{_id}</code>
-          </td>
-        </>
+        </tr>
       )}
-      <td>
-        <LoadingButton
-          action={async () => {
-            const result = await normalizeQuestionResponses({
-              questionId,
-              surveyId,
-              responsesIds: [responseId],
-            });
-            console.log(result);
-          }}
-          label="Normalize"
-        />
-      </td>
-    </tr>
+    </>
   );
 };
 export default Fields;

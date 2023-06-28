@@ -17,7 +17,7 @@ import type {
   SectionMetadata,
   TemplateFunction,
 } from "@devographics/types";
-import { NormalizationParams } from "./normalize";
+import { NormalizationParams } from "./types";
 import { getCollectionByName, newMongoId } from "@devographics/mongo";
 
 const replaceAll = function (target, search, replacement) {
@@ -392,6 +392,8 @@ export const normalizeField = async ({
           // keep trace of fields that were normalized
           normalizedFields.push({
             fieldPath,
+            questionId: question.id,
+            raw: otherValue,
             value: normIds,
             normTokens,
           });

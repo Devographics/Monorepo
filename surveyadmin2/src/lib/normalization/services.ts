@@ -5,7 +5,7 @@ import {
   NormalizeQuestionResponsesArgs,
   NormalizeResponsesArgs,
 } from "./actions";
-import { NormalizeSurveyResult } from "./actions/normalizeInBulk";
+import { NormalizeInBulkResult } from "./types";
 
 // export async function loadFields({ surveyId, editionId, questionId }) {
 //   const fetchRes = await fetch(
@@ -37,7 +37,7 @@ export async function normalizeResponses(params: NormalizeResponsesArgs) {
       body: JSON.stringify(params),
     }
   );
-  const result: { data?: NormalizeSurveyResult; error: any } =
+  const result: { data?: NormalizeInBulkResult; error: any } =
     await fetchRes.json();
   return result;
 }
@@ -55,7 +55,7 @@ export async function normalizeQuestionResponses(
       body: JSON.stringify(params),
     }
   );
-  const result: { data?: NormalizeSurveyResult; error: any } =
+  const result: { data?: NormalizeInBulkResult; error: any } =
     await fetchRes.json();
   return result;
 }
@@ -71,7 +71,7 @@ export async function normalizeQuestion(params: NormalizeQuestionArgs) {
       body: JSON.stringify(params),
     }
   );
-  const result: { data?: NormalizeSurveyResult; error: any } =
+  const result: { data?: NormalizeInBulkResult; error: any } =
     await fetchRes.json();
   return result;
 }
@@ -87,7 +87,7 @@ export async function normalizeEdition(params: NormalizeEditionArgs) {
       body: JSON.stringify(params),
     }
   );
-  const result: { data?: NormalizeSurveyResult; error: any } =
+  const result: { data?: NormalizeInBulkResult; error: any } =
     await fetchRes.json();
   return result;
 }

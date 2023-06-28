@@ -1,100 +1,25 @@
 import {
-  EntityRule,
   generateEntityRules,
   getEditionQuestionById,
   getQuestionObject,
 } from "./helpers";
 import * as steps from "./steps";
 import get from "lodash/get.js";
-import type {
-  EditionMetadata,
-  ResponseDocument,
-  Survey,
-  SurveyMetadata,
-  SectionMetadata,
-} from "@devographics/types";
 import {
   fetchEditionMetadata,
   fetchEntities,
   fetchSurveysMetadata,
 } from "~/lib/api/fetch";
-import { getNormResponsesCollection } from "@devographics/mongo";
 import { newMongoId } from "@devographics/mongo";
-
-interface RegularField {
-  fieldPath: string;
-  value: any;
-  normTokens?: any[];
-}
-interface NormalizedField extends RegularField {
-  normTokens: Array<string>;
-}
-interface NormalizationError {
-  type: string;
-  documentId: string;
-}
-
-interface NormalizationResult {
-  response: any;
-  responseId: string;
-
-  selector: any;
-  modifier: any;
-
-  errors: Array<NormalizationError>;
-  discard?: boolean;
-
-  normalizedResponseId?: string;
-  normalizedResponse?: any;
-
-  normalizedFields?: Array<NormalizedField>;
-  prenormalizedFields?: Array<RegularField>;
-  regularFields?: Array<RegularField>;
-
-  normalizedFieldsCount?: number;
-  prenormalizedFieldsCount?: number;
-  regularFieldsCount?: number;
-}
-
-interface NormalizationOptions {
-  document: any;
-  entities?: Array<any>;
-  rules?: any;
-  log?: Boolean;
-  fileName?: string;
-  verbose?: boolean;
-  isSimulation?: boolean;
-  questionId?: string;
-  isBulk?: boolean;
-  surveys?: SurveyMetadata[];
-  isRenormalization?: boolean;
-}
-
-export interface NormalizationParams {
-  response: any;
-  normResp: any;
-  prenormalizedFields: RegularField[];
-  normalizedFields: RegularField[];
-  regularFields: RegularField[];
-  options: NormalizationOptions;
-  fileName?: string;
-  survey: SurveyMetadata;
-  edition: EditionMetadata;
-  allRules: EntityRule[];
-  privateFields?: any;
-  result?: any;
-  errors?: any;
-  questionId?: string;
-  verbose?: boolean;
-  isRenormalization?: boolean;
-}
-
-export interface NormalizedResponseDocument extends ResponseDocument {
-  responseId: ResponseDocument["_id"];
-  generatedAt: Date;
-  surveyId: SurveyMetadata["id"];
-  editionId: EditionMetadata["id"];
-}
+import {
+  NormalizationOptions,
+  NormalizationResult,
+  NormalizationError,
+  NormalizedResponseDocument,
+  NormalizedField,
+  RegularField,
+  NormalizationParams,
+} from "./types";
 
 /*
 
@@ -151,7 +76,7 @@ export const normalizeResponse = async (
     const prenormalizedFields: Array<RegularField> = [];
     const regularFields: Array<RegularField> = [];
 
-    let updatedNormalizedResponse, allSurveys, allEntities, modifier;
+    let allSurveys, allEntities, modifier;
 
     if (surveys) {
       allSurveys = surveys;
@@ -301,7 +226,7 @@ export const normalizeResponse = async (
       ...result,
       modifier,
       normalizedResponse: normResp,
-      normalizedResponseId: updatedNormalizedResponse?._id,
+      // normalizedResponseId,
       normalizedFields,
       normalizedFieldsCount: normalizedFields.length,
       prenormalizedFields,

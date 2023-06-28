@@ -16,3 +16,7 @@ body {
   --font-size: $root-size;
   --primary: #d81b60;
 }
+
+:not(thead, tfoot) > * > td {
+  --font-size: 0.875rem !important;
+}
