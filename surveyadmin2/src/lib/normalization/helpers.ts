@@ -585,6 +585,28 @@ export const getSelector = async ({
 
 /*
 
+Get responses count for an entire edition
+
+*/
+export const getEditionResponsesCount = async ({
+  survey,
+  edition,
+}: {
+  survey: SurveyMetadata;
+  edition: EditionMetadata;
+}) => {
+  const selector = await getSelector({
+    survey,
+    edition,
+  });
+
+  const rawResponsesCollection = await getRawResponsesCollection(survey);
+  const responsesCount = await rawResponsesCollection.countDocuments(selector);
+  return responsesCount;
+};
+
+/*
+
 Get responses count for a specific question
 
 */

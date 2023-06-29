@@ -9,6 +9,7 @@ import {
   NormalizeInBulkResult,
   BulkOperation,
   NormalizedDocumentMetadata,
+  DocumentGroups,
 } from "../types";
 
 /*
@@ -43,8 +44,7 @@ export const normalizeInBulk = async ({
   isRenormalization?: boolean;
 }) => {
   const startAt = new Date();
-  let progress = 0,
-    discardedCount = 0;
+  let progress = 0;
   const count = responses.length;
   const tickInterval = Math.round(count / 200);
 
@@ -56,9 +56,11 @@ export const normalizeInBulk = async ({
 
   const mutationResult: NormalizeInBulkResult = {
     normalizedDocuments: [],
-    unnormalizedDocuments: [],
-    emptyDocuments: [],
+    unmatchedDocuments: [],
+    unnormalizableDocuments: [],
     errorDocuments: [],
+    discardedDocuments: [],
+    discardedCount: 0,
     totalDocumentCount: 0,
     errorCount: 0,
     limit,
@@ -87,9 +89,7 @@ export const normalizeInBulk = async ({
     if (limit && limit > 1000 && progress % tickInterval === 0) {
       console.log(`  -> Normalized ${progress}/${count} responses…`);
     }
-    await logToFile("normalizationResult.json", normalizationResult, {
-      mode: "overwrite",
-    });
+
     if (!normalizationResult) {
       mutationResult.errorCount++;
       allDocuments.push({
@@ -106,26 +106,26 @@ export const normalizeInBulk = async ({
         mutationResult.errorCount += normalizationResult.errors.length;
       }
 
-      // create a list of metadata about normalization process to return as mutation result
-      allDocuments.push(
-        pick(normalizationResult, [
-          "errors",
-          "responseId",
-          "normalizedResponseId",
-          "normalizedFieldsCount",
-          "prenormalizedFieldsCount",
-          "regularFieldsCount",
-          "normalizedFields",
-        ])
-      );
-
-      // if normalization was valid, add it to bulk operations array
-      if (!normalizationResult.discard) {
+      if (normalizationResult.discard) {
+        // keep track of documents discarded (empty documents)
+        mutationResult.discardedCount++;
+        mutationResult.discardedDocuments.push(normalizationResult.responseId);
+      } else {
+        // if normalization was valid, add it to array of all documents and bulk operations array
+        allDocuments.push(
+          pick(normalizationResult, [
+            "errors",
+            "responseId",
+            "normalizedResponseId",
+            "normalizedFieldsCount",
+            "prenormalizedFieldsCount",
+            "regularFieldsCount",
+            "normalizedFields",
+          ])
+        );
         const { selector, modifier } = normalizationResult;
         const operation = getBulkOperation(selector, modifier, isReplace);
         bulkOperations.push(operation);
-      } else {
-        discardedCount++;
       }
     }
   }
@@ -154,11 +154,6 @@ export const normalizeInBulk = async ({
       console.log("// operationResult");
       console.log(operationResult);
     }
-    await logToFile("bulkOperations.json", bulkOperations, {
-      mode: "overwrite",
-    });
-    // mutationResult.operationResult = operationResult.result;
-    mutationResult.discardedCount = discardedCount;
   } catch (error) {
     console.log("// Bulk write error");
     // console.log(JSON.stringify(bulkOperations, null, 2))
@@ -178,47 +173,49 @@ export const normalizeInBulk = async ({
   allDocuments = allDocuments.map((doc) => {
     let group;
     if (doc.errors && doc.errors.length > 0) {
-      group = "error";
+      group = DocumentGroups.ERROR;
     } else {
       if (doc.normalizedFields?.some((field) => field.raw)) {
         // doc is not empty
         if (
-          doc.normalizedFields?.some((field) => field.normTokens.length > 0)
+          doc.normalizedFields?.every((field) => field.normTokens.length > 0)
         ) {
-          group = "normalized";
+          // every question has had a match
+          group = DocumentGroups.NORMALIZED;
         } else {
-          group = "unnormalized";
+          // there are unmatched questions
+          group = DocumentGroups.UNMATCHED;
         }
       } else {
-        group = "empty";
+        group = DocumentGroups.UNNORMALIZABLE;
       }
     }
     return { ...doc, group };
   });
 
-  mutationResult.normalizedDocuments = allDocuments.filter(
-    (d) => d.group === "normalized"
-  );
-  mutationResult.unnormalizedDocuments = allDocuments.filter(
-    (d) => d.group === "unnormalized"
-  );
-  mutationResult.emptyDocuments = allDocuments.filter(
-    (d) => d.group === "empty"
-  );
-  mutationResult.errorDocuments = allDocuments.filter(
-    (d) => d.group === "error"
-  );
+  for (const groupKey in DocumentGroups) {
+    const groupName = DocumentGroups[groupKey];
+    mutationResult[`${groupName}Documents`] = allDocuments.filter(
+      (d) => d.group === groupName
+    );
+  }
 
   mutationResult.totalDocumentCount = allDocuments.length;
 
+  await logToFile(
+    `normalizeInBulk/allDocuments.json_${new Date().toString()}`,
+    allDocuments
+  );
   await logToFile(
     `normalizeInBulk/mutationResult_${new Date().toString()}.json`,
     mutationResult
   );
 
   console.log(
-    `👍 Normalized ${progress - discardedCount} responses ${
-      discardedCount > 0 ? `(${discardedCount} responses discarded)` : ""
+    `👍 Normalized ${progress - mutationResult.discardedCount} responses ${
+      mutationResult.discardedCount > 0
+        ? `(${mutationResult.discardedCount} responses discarded)`
+        : ""
     }. (${endAt}) - ${duration}s`
   );
 

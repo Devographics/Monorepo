@@ -7,12 +7,29 @@ import {
 } from "~/lib/normalization/services";
 import { NormalizeInBulkResult } from "~/lib/normalization/types";
 import { NormalizationResult } from "./NormalizationResult";
+import { QuestionMetadata, SurveyMetadata } from "@devographics/types";
+import { UnnormalizedResponses } from "~/lib/normalization/hooks";
+import { InitializeSegmentsOptions, defaultSegmentSize } from "./hooks";
 // import Dropdown from "~/core/components/ui/Dropdown";
 
 export const allFields = { id: "all_fields", label: "All Fields" };
 
-const Actions = (props) => {
-  const { survey, question, initializeSegments, unnormalizedResponses } = props;
+interface ActionProps {
+  survey: SurveyMetadata;
+  question: QuestionMetadata;
+  initializeSegments: (options: InitializeSegmentsOptions) => void;
+  unnormalizedResponses: UnnormalizedResponses[];
+  responsesCount: number;
+}
+
+const Actions = (props: ActionProps) => {
+  const {
+    survey,
+    question,
+    initializeSegments,
+    unnormalizedResponses,
+    responsesCount,
+  } = props;
   // const router = useRouter();
 
   const [normalizeMissingResult, setNormalizeMissingResult] =
@@ -75,7 +92,10 @@ const Actions = (props) => {
 
           <button
             onClick={() => {
-              initializeSegments();
+              initializeSegments({
+                responsesCount,
+                segmentSize: defaultSegmentSize,
+              });
             }}
           >
             Normalize All

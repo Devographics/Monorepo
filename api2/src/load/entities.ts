@@ -172,17 +172,22 @@ export const getEntities = async ({
     ids,
     tags,
     context,
-    includeNormalizationEntities = false
+    includeNormalizationEntities = false,
+    includeAPIOnlyEntities = true
 }: {
     ids?: OptionId[]
     tags?: string[]
     context?: RequestContext
     includeNormalizationEntities?: boolean
+    includeAPIOnlyEntities?: boolean
 }) => {
     let entities = await loadOrGetEntities({}, context)
 
     if (!includeNormalizationEntities) {
         entities = entities.filter(e => !e.normalizationOnly)
+    }
+    if (!includeAPIOnlyEntities) {
+        entities = entities.filter(e => !e.apiOnly)
     }
     if (ids) {
         entities = entities.filter(e => ids.includes(e.id))

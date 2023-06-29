@@ -35,11 +35,23 @@ export const entitiesResolvers = {
         {
             ids,
             tags,
-            includeNormalizationEntities = false
-        }: { ids: string[]; tags: string[]; includeNormalizationEntities: boolean },
+            includeNormalizationEntities = false,
+            includeAPIOnlyEntities = true
+        }: {
+            ids: string[]
+            tags: string[]
+            includeNormalizationEntities: boolean
+            includeAPIOnlyEntities: boolean
+        },
         context: RequestContext
     ) => {
-        return getEntities({ ids, tags, context, includeNormalizationEntities })
+        return getEntities({
+            ids,
+            tags,
+            context,
+            includeNormalizationEntities,
+            includeAPIOnlyEntities
+        })
     }
 }
 

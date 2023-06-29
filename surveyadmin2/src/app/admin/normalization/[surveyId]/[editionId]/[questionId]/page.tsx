@@ -1,13 +1,7 @@
-import Link from "next/link";
 import Breadcrumbs from "~/components/normalization/Breadcrumbs";
-import { NormalizationDashboard } from "~/components/normalization/Normalization";
+import { NormalizeQuestion } from "~/components/normalization/NormalizeQuestion";
 import { fetchEditionMetadata, fetchSurveysMetadata } from "~/lib/api/fetch";
-import {
-  getQuestionResponsesCount,
-  getUnnormalizedData,
-} from "~/lib/normalization/actions";
 import { getEditionQuestions } from "~/lib/normalization/helpers";
-import { routes } from "~/lib/routes";
 
 export default async function Page({ params }) {
   const { surveyId, editionId, questionId } = params;
@@ -44,8 +38,7 @@ export default async function Page({ params }) {
   return (
     <div>
       <Breadcrumbs survey={survey} edition={edition} question={question} />
-      <NormalizationDashboard
-        // responsesCount={responsesCount}
+      <NormalizeQuestion
         surveys={surveys}
         survey={survey}
         edition={edition}

@@ -36,7 +36,7 @@ patterns
 
 export const getEntitiesQuery = () => `
 query EntitiesQuery {
-  entities(includeNormalizationEntities: true) {
+  entities(includeNormalizationEntities: true, includeAPIOnlyEntities: false) {
     ${entityFragment}
   }
 }

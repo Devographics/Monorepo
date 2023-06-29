@@ -12,9 +12,10 @@ const errorColor = "#cf2710";
 
 export const NormalizationResult = ({
   normalizedDocuments,
-  unnormalizedDocuments,
-  emptyDocuments,
+  unmatchedDocuments,
+  unnormalizableDocuments,
   errorDocuments,
+  discardedDocuments,
   duration,
   discardedCount,
   showQuestionId = true,
@@ -81,26 +82,40 @@ export const NormalizationResult = ({
         <DocumentGroup
           documents={errorDocuments}
           label="Error Documents"
-          isEmpty={true}
+          description="Documents that triggered one or more errors."
           defaultShow={true}
           isError={true}
         />
         <DocumentGroup
           documents={normalizedDocuments}
           label="Normalized Documents"
+          description="Documents where a matching token was found for every normalizable question parsed."
           showQuestionId={showQuestionId}
           defaultShow={false}
         />
         <DocumentGroup
-          documents={unnormalizedDocuments}
-          label="Unnormalized Documents"
+          documents={unmatchedDocuments}
+          label="Unmatched Documents"
+          description="Documents that contained unmatched questions."
           showQuestionId={showQuestionId}
           defaultShow={false}
         />
         <DocumentGroup
-          documents={emptyDocuments}
-          label="Empty Documents"
-          isEmpty={true}
+          documents={unnormalizableDocuments}
+          label="Unnormalizable Documents"
+          description="Documents that did not contain any fields requiring normalization."
+          onlyId={true}
+          defaultShow={false}
+        />
+        <DocumentGroup
+          documents={
+            discardedDocuments.map((responseId) => ({
+              responseId,
+            })) as NormalizedDocumentMetadata[]
+          }
+          label="Discarded Documents"
+          description="Documents were discarded (either for being empty, or for not requiring any database mutation)."
+          onlyId={true}
           defaultShow={false}
         />
       </div>
@@ -111,22 +126,24 @@ export const NormalizationResult = ({
 const DocumentGroup = ({
   documents,
   label,
+  description,
   showQuestionId = true,
-  isEmpty = false,
+  onlyId = false,
   isError = false,
   defaultShow = true,
 }: {
   documents: NormalizedDocumentMetadata[];
   label: string;
+  description: string;
   showQuestionId?: boolean;
-  isEmpty?: boolean;
+  onlyId?: boolean;
   isError?: boolean;
   defaultShow?: boolean;
 }) => {
   const [show, setShow] = useState(defaultShow);
   return documents.length > 0 ? (
     <>
-      <h3 style={{ ...(isError ? { color: errorColor } : {}) }}>
+      <h4 style={{ ...(isError ? { color: errorColor } : {}) }}>
         {label} ({documents.length}){" "}
         <a
           href="#"
@@ -138,10 +155,12 @@ const DocumentGroup = ({
         >
           {show ? "Hide" : "Show"}
         </a>
-      </h3>
+      </h4>
       {show && (
         <>
-          {isEmpty ? (
+          <p>{description}</p>
+
+          {onlyId ? (
             documents.map((doc) => (
               <span key={doc.responseId}>
                 <code>{doc.responseId}</code>{" "}
@@ -184,8 +203,8 @@ const NormDocument = ({
 }: NormalizedDocumentMetadata & { index: number; showQuestionId: boolean }) => {
   return (
     <tr>
-      <th>{index + 1}.</th>
-      <th>
+      <th style={{ verticalAlign: "top" }}>{index + 1}.</th>
+      <th style={{ verticalAlign: "top" }}>
         <code>{responseId}</code>
       </th>
       <td>

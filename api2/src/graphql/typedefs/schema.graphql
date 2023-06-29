@@ -281,7 +281,12 @@ type Query {
     """
     Get multiple entities (tools, libraries, frameworks, features, etc.)
     """
-    entities(ids: [String], tags: [String], includeNormalizationEntities: Boolean): [Entity]
+    entities(
+        ids: [String]
+        tags: [String]
+        includeNormalizationEntities: Boolean
+        includeAPIOnlyEntities: Boolean
+    ): [Entity]
     """
     Translate a string
     """

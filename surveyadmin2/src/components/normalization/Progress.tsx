@@ -1,6 +1,9 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { Segment, SegmentDone, statuses } from "./Normalization";
-import { normalizeQuestion } from "~/lib/normalization/services";
+import { Segment, SegmentDone, defaultSegmentSize, statuses } from "./hooks";
+import {
+  normalizeEdition,
+  normalizeQuestion,
+} from "~/lib/normalization/services";
 import { NormalizeInBulkResult } from "~/lib/normalization/types";
 import {
   EditionMetadata,
@@ -16,24 +19,16 @@ interface ProgressProps {
   doneCount: number;
   enabled: boolean;
   setEnabled: Dispatch<SetStateAction<boolean>>;
-  refetchMissingFields: any;
   segments: Segment[];
   survey: SurveyMetadata;
   edition: EditionMetadata;
-  question: QuestionMetadata;
+  question?: QuestionMetadata;
   onlyUnnormalized?: boolean;
   updateSegments: any;
-  segmentSize: number;
 }
+
 const Progress = (props: ProgressProps) => {
-  const {
-    responsesCount,
-    doneCount,
-    enabled,
-    setEnabled,
-    refetchMissingFields,
-    segments,
-  } = props;
+  const { responsesCount, doneCount, enabled, setEnabled, segments } = props;
   const segmentInProgress = segments.find(
     (s) => s.status === statuses.inProgress
   );
@@ -42,11 +37,11 @@ const Progress = (props: ProgressProps) => {
     (s) => s.status === statuses.done
   ) as SegmentDone[];
 
-  useEffect(() => {
-    if (doneCount >= responsesCount) {
-      refetchMissingFields();
-    }
-  }, [doneCount, responsesCount]);
+  // useEffect(() => {
+  //   if (doneCount >= responsesCount) {
+  //     refetchMissingFields();
+  //   }
+  // }, [doneCount, responsesCount]);
 
   return (
     <div className="normalization-progress">
@@ -140,7 +135,6 @@ const SegmentInProgressItem = ({
   enabled,
   onlyUnnormalized,
   updateSegments,
-  segmentSize,
 }: Segment &
   ProgressProps & {
     segmentIndex: number;
@@ -155,20 +149,24 @@ const SegmentInProgressItem = ({
 
       */
       const fetchData = async () => {
-        const result = await normalizeQuestion({
+        const args = {
           surveyId: survey.id,
           editionId: edition.id,
-          questionId: question.id,
           startFrom: onlyUnnormalized ? 0 : startFrom,
-          limit: segmentSize,
+          limit: defaultSegmentSize,
           onlyUnnormalized,
-        });
+        };
+        // either run normalization for a single question, or for all questions in edition
+        const result = question
+          ? await normalizeQuestion({ ...args, questionId: question.id })
+          : await normalizeEdition(args);
+
         const doneCount = startFrom + (result?.data?.totalDocumentCount || 0);
         updateSegments({
           doneCount,
           doneSegmentIndex: segmentIndex,
           doneSegmentData: result?.data,
-          segmentSize,
+          segmentSize: defaultSegmentSize,
         });
       };
       fetchData().catch(console.error);

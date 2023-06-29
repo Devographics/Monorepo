@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { normalizeQuestionResponses } from "~/lib/normalization/services";
-import { LoadingButton } from "./Actions";
+import { LoadingButton } from "./NormalizeQuestionActions";
 import { NormalizeInBulkResult } from "~/lib/normalization/types";
 import { NormalizationResult } from "./NormalizationResult";
 

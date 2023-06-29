@@ -24,6 +24,13 @@ export interface NormalizationToken {
   range: [number, number];
 }
 
+export enum DocumentGroups {
+  NORMALIZED = "normalized",
+  UNMATCHED = "unmatched",
+  UNNORMALIZABLE = "unnormalizable",
+  ERROR = "error",
+}
+
 export interface NormalizedDocumentMetadata {
   responseId: string;
   errors?: any[];
@@ -32,21 +39,22 @@ export interface NormalizedDocumentMetadata {
   prenormalizedFieldsCount?: number;
   regularFieldsCount?: number;
   normalizedFields?: NormalizedField[];
-  group?: "normalized" | "unnormalized" | "empty" | "error";
+  group?: DocumentGroups;
 }
 
 export interface NormalizeInBulkResult {
   editionId?: string;
   normalizedDocuments: NormalizedDocumentMetadata[];
-  unnormalizedDocuments: NormalizedDocumentMetadata[];
-  emptyDocuments: NormalizedDocumentMetadata[];
+  unmatchedDocuments: NormalizedDocumentMetadata[];
+  unnormalizableDocuments: NormalizedDocumentMetadata[];
   errorDocuments: NormalizedDocumentMetadata[];
+  discardedDocuments: string[];
   totalDocumentCount: number;
   duration?: number;
   count?: number;
   errorCount: number;
   operationResult?: any;
-  discardedCount?: number;
+  discardedCount: number;
   limit?: number;
   isSimulation: boolean;
 }
