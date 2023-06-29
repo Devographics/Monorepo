@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Breadcrumbs from "~/components/normalization/Breadcrumbs";
-import { NormalizationLoader } from "~/components/normalization/Normalization";
+import { NormalizationDashboard } from "~/components/normalization/Normalization";
 import { fetchEditionMetadata, fetchSurveysMetadata } from "~/lib/api/fetch";
 import {
   getQuestionResponsesCount,
@@ -44,7 +44,7 @@ export default async function Page({ params }) {
   return (
     <div>
       <Breadcrumbs survey={survey} edition={edition} question={question} />
-      <NormalizationLoader
+      <NormalizationDashboard
         // responsesCount={responsesCount}
         surveys={surveys}
         survey={survey}

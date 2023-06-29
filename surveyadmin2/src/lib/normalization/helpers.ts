@@ -688,13 +688,21 @@ export const getEditionQuestions = (
     .flat();
 
 export const getNormalizableQuestions = ({
+  survey,
   edition,
 }: {
+  survey: SurveyMetadata;
   edition: EditionMetadata;
 }) => {
   const allQuestions = getEditionQuestions(edition);
   const questions = allQuestions.filter((question) => {
-    const rawPaths = question.rawPaths;
+    const questionObject = getQuestionObject({
+      survey,
+      edition,
+      section: question.section,
+      question,
+    });
+    const rawPaths = questionObject?.rawPaths;
     return rawPaths?.other;
   });
   // also add source

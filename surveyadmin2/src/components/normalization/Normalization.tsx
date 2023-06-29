@@ -1,13 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { useSearchParams } from "next/navigation";
 import Actions from "~/components/normalization/Actions";
 import Progress from "~/components/normalization/Progress";
 import Fields from "~/components/normalization/Fields";
 import { allFields } from "./Actions";
-import Link from "next/link";
-import { routes } from "~/lib/routes";
 import {
   UnnormalizedData,
   useUnnormalizedData,
@@ -20,31 +17,6 @@ import {
 import { NormalizeInBulkResult } from "~/lib/normalization/types";
 
 export const defaultSegmentSize = 500;
-
-// const unnormalizedFieldsQuery = gql`
-//   query UnnormalizedFieldsQuery($editionId: String, $questionId: String) {
-//     unnormalizedFields(editionId: $editionId, questionId: $questionId)
-//   }
-// `;
-
-const usePageParams = () => {
-  const searchParams = useSearchParams();
-  const editionId = searchParams.get("editionId");
-  const questionId = searchParams.get("questionId");
-  return {
-    paramsReady: true,
-    editionId: editionId as string,
-    questionId: questionId as string,
-  };
-};
-
-const getNormalizableQuestions = (edition) => {
-  const allQuestions = edition.sections.map((o) => o.questions).flat();
-  const fields = allQuestions.filter((q) => q.template === "others");
-  // also add source
-  fields.push({ id: "source", fieldName: "common__user_info__source" });
-  return fields;
-};
 
 export const statuses = { scheduled: 0, inProgress: 1, done: 2 };
 
@@ -80,7 +52,12 @@ export const getSegments = ({ responsesCount, segmentSize }): Segment[] => {
   return segments;
 };
 
-export const NormalizationLoader = (props) => {
+export const NormalizationDashboard = (props: {
+  surveys: SurveyMetadata[];
+  survey: SurveyMetadata;
+  edition: EditionMetadata;
+  question: QuestionMetadata;
+}) => {
   const { survey, edition, question } = props;
   const { data, loading, error } = useUnnormalizedData({
     surveyId: survey.id,
@@ -89,8 +66,10 @@ export const NormalizationLoader = (props) => {
   });
   return loading ? (
     <div aria-busy={true} />
-  ) : (
+  ) : data ? (
     <Normalization {...props} data={data} />
+  ) : (
+    <div>no data found.</div>
   );
 };
 
@@ -170,10 +149,6 @@ export const Normalization = ({
     setSegmentSize,
   };
 
-  // get list of all normalizeable ("other") field for current survey
-  const normalizeableQuestions = getNormalizableQuestions(edition);
-  // set field
-
   const isAllFields = questionId === allFields.id;
   const onlyUnnormalized = normalizationMode === "only_normalized";
 
@@ -182,7 +157,6 @@ export const Normalization = ({
     survey,
     edition,
     question,
-    normalizeableFields: normalizeableQuestions,
     // unnormalizedFieldsLoading: loading,
     unnormalizedResponses,
     onlyUnnormalized,
@@ -200,4 +174,4 @@ export const Normalization = ({
   );
 };
 
-export default NormalizationLoader;
+export default NormalizationDashboard;

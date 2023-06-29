@@ -18,10 +18,14 @@ const Fields = ({
 
   return (
     <div>
-      <h5>
-        {unnormalizedResponses.length} missing normalizations out of{" "}
-        {responsesCount} total responses for {edition.id}/{question.id}.
-      </h5>
+      <p>
+        <strong>{unnormalizedResponses.length}</strong> missing normalizations
+        out of <strong>{responsesCount}</strong> total responses for{" "}
+        <code>
+          {edition.id}/{question.id}
+        </code>
+        .
+      </p>
       <p>
         <input
           type="checkbox"

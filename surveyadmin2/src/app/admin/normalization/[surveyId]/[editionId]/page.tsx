@@ -15,7 +15,7 @@ export default async function Page({ params }) {
     );
   }
   const survey = edition.survey;
-  const questions = getNormalizableQuestions({ edition });
+  const questions = getNormalizableQuestions({ survey, edition });
   return (
     <div>
       <Breadcrumbs survey={survey} edition={edition} />

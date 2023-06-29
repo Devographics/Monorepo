@@ -12,31 +12,11 @@ import { NormalizationResult } from "./NormalizationResult";
 export const allFields = { id: "all_fields", label: "All Fields" };
 
 const Actions = (props) => {
-  const {
-    allEditions,
-    survey,
-    question,
-    editionId,
-    edition,
-    questionId,
-    normalizeableFields,
-    setEditionId,
-    setQuestionId,
-    onlyUnnormalized,
-    isAllFields,
-    initializeSegments,
-    unnormalizedResponses,
-    segmentSize,
-  } = props;
+  const { survey, question, initializeSegments, unnormalizedResponses } = props;
   // const router = useRouter();
 
   const [normalizeMissingResult, setNormalizeMissingResult] =
     useState<NormalizeInBulkResult>();
-  const [normalizeAllResult, setNormalizeAllResult] =
-    useState<NormalizeInBulkResult>();
-
-  // get list of all normalizeable ("other") field for current survey
-  const questions = [allFields, ...normalizeableFields];
 
   return (
     <>
