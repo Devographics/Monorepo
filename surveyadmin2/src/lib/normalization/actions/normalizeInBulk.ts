@@ -105,24 +105,25 @@ export const normalizeInBulk = async ({
       if (normalizationResult.errors.length > 0) {
         mutationResult.errorCount += normalizationResult.errors.length;
       }
+      // if normalization was valid, add it to array of all documents
+      allDocuments.push(
+        pick(normalizationResult, [
+          "errors",
+          "responseId",
+          "normalizedResponseId",
+          "normalizedFieldsCount",
+          "prenormalizedFieldsCount",
+          "regularFieldsCount",
+          "normalizedFields",
+        ])
+      );
 
       if (normalizationResult.discard) {
-        // keep track of documents discarded (empty documents)
+        // keep track of documents discarded
         mutationResult.discardedCount++;
         mutationResult.discardedDocuments.push(normalizationResult.responseId);
       } else {
-        // if normalization was valid, add it to array of all documents and bulk operations array
-        allDocuments.push(
-          pick(normalizationResult, [
-            "errors",
-            "responseId",
-            "normalizedResponseId",
-            "normalizedFieldsCount",
-            "prenormalizedFieldsCount",
-            "regularFieldsCount",
-            "normalizedFields",
-          ])
-        );
+        // add to bulk operations array
         const { selector, modifier } = normalizationResult;
         const operation = getBulkOperation(selector, modifier, isReplace);
         bulkOperations.push(operation);
@@ -187,6 +188,7 @@ export const normalizeInBulk = async ({
           group = DocumentGroups.UNMATCHED;
         }
       } else {
+        // document did not contain any normalizable fields
         group = DocumentGroups.UNNORMALIZABLE;
       }
     }

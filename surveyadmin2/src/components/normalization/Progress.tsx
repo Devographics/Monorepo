@@ -104,11 +104,11 @@ const SegmentDoneItem = ({
       <h5>Segment {segmentIndex + 1}</h5>
       <p>
         <span>
-          <strong>
-            {startFrom}/{responsesCount}
-          </strong>{" "}
-          done in <strong>{duration}s</strong> ({} documents normalized,{" "}
-          {errorCount} errors, {discardedCount} responses discarded)
+          <SegmentData
+            inProgress={false}
+            startFrom={startFrom}
+            responsesCount={responsesCount}
+          />
         </span>{" "}
         <a
           href="#"
@@ -176,9 +176,25 @@ const SegmentInProgressItem = ({
   return (
     <article>
       <h5>Segment {segmentIndex + 1}</h5>
-      Normalizing {startFrom}/{responsesCount} responses…{" "}
+      <SegmentData
+        inProgress={true}
+        startFrom={startFrom}
+        responsesCount={responsesCount}
+      />{" "}
       {enabled ? <Loading /> : <span>Paused</span>}
     </article>
+  );
+};
+
+const SegmentData = ({ inProgress, startFrom, responsesCount }) => {
+  return (
+    <span>
+      {inProgress ? "Normalizing" : "Normalized"} <strong>{startFrom}</strong>-
+      <strong>
+        {Math.min(responsesCount, startFrom + defaultSegmentSize)}
+      </strong>{" "}
+      out of <strong>{responsesCount}</strong> responses
+    </span>
   );
 };
 

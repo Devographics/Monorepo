@@ -107,7 +107,7 @@ export const NormalizationResult = ({
           onlyId={true}
           defaultShow={false}
         />
-        <DocumentGroup
+        {/* <DocumentGroup
           documents={
             discardedDocuments.map((responseId) => ({
               responseId,
@@ -117,7 +117,7 @@ export const NormalizationResult = ({
           description="Documents were discarded (either for being empty, or for not requiring any database mutation)."
           onlyId={true}
           defaultShow={false}
-        />
+        /> */}
       </div>
     )
   );
