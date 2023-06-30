@@ -1,6 +1,10 @@
 import { getEditionQuestionById, getSelector } from "../helpers";
 import { getRawResponsesCollection } from "@devographics/mongo";
-import { fetchEditionMetadata, fetchSurveysMetadata } from "~/lib/api/fetch";
+import {
+  fetchEditionMetadata,
+  fetchSurveyMetadata,
+  fetchSurveysMetadata,
+} from "~/lib/api/fetch";
 import { normalizeInBulk, defaultLimit } from "./normalizeInBulk";
 
 export type NormalizeQuestionArgs = {
@@ -30,17 +34,8 @@ export const normalizeQuestion = async (args: NormalizeQuestionArgs) => {
   } = args;
   const startAt = new Date();
 
-  const surveys = await fetchSurveysMetadata();
-  const survey = surveys.find((s) => s.id === surveyId);
-  if (!survey) {
-    throw new Error(`Could not find survey for surveyId ${surveyId}`);
-  }
-
+  const survey = await fetchSurveyMetadata({ surveyId });
   const edition = await fetchEditionMetadata({ surveyId, editionId });
-  if (!edition) {
-    throw new Error(`Could not find edition for editionId ${editionId}`);
-  }
-
   const question = getEditionQuestionById({ edition, questionId });
 
   const rawResponsesCollection = await getRawResponsesCollection(survey);
@@ -63,6 +58,7 @@ export const normalizeQuestion = async (args: NormalizeQuestionArgs) => {
 
   const mutationResult = await normalizeInBulk({
     survey,
+    edition,
     responses,
     limit,
     questionId,

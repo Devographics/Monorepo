@@ -1,9 +1,11 @@
 import {
   EditionMetadata,
+  Entity,
   ResponseDocument,
   SurveyMetadata,
 } from "@devographics/types";
 import { EntityRule } from "./helpers";
+import { number } from "@devographics/templates";
 
 export interface UpdateBulkOperation {
   updateMany: any;
@@ -29,6 +31,14 @@ export enum DocumentGroups {
   UNMATCHED = "unmatched",
   UNNORMALIZABLE = "unnormalizable",
   ERROR = "error",
+  EMPTY = "error",
+}
+
+export interface Counts {
+  normalized: number;
+  prenormalized: number;
+  comment: number;
+  regular: number;
 }
 
 export interface NormalizedDocumentMetadata {
@@ -40,6 +50,7 @@ export interface NormalizedDocumentMetadata {
   regularFieldsCount?: number;
   normalizedFields?: NormalizedField[];
   group?: DocumentGroups;
+  counts?: Counts;
 }
 
 export interface NormalizeInBulkResult {
@@ -48,7 +59,7 @@ export interface NormalizeInBulkResult {
   unmatchedDocuments: NormalizedDocumentMetadata[];
   unnormalizableDocuments: NormalizedDocumentMetadata[];
   errorDocuments: NormalizedDocumentMetadata[];
-  discardedDocuments: string[];
+  emptyDocuments: NormalizedDocumentMetadata[];
   totalDocumentCount: number;
   duration?: number;
   count?: number;
@@ -60,25 +71,20 @@ export interface NormalizeInBulkResult {
 }
 
 export interface NormalizationResult {
-  response: any;
-  responseId: string;
-
-  selector: any;
-  modifier: any;
-
-  errors: Array<NormalizationError>;
+  normalizedResponse: NormalizedResponseDocument;
+  normalizedFields: Array<NormalizedField>;
+  prenormalizedFields: Array<RegularField>;
+  regularFields: Array<RegularField>;
+  commentFields: Array<RegularField>;
+  errors?: any[];
+  modifier?: any;
   discard?: boolean;
+}
 
-  normalizedResponseId?: string;
-  normalizedResponse?: any;
-
-  normalizedFields?: Array<NormalizedField>;
-  prenormalizedFields?: Array<RegularField>;
-  regularFields?: Array<RegularField>;
-
-  normalizedFieldsCount?: number;
-  prenormalizedFieldsCount?: number;
-  regularFieldsCount?: number;
+export interface NormalizationResultExtended extends NormalizationResult {
+  response: ResponseDocument;
+  responseId: string;
+  counts: Counts;
 }
 
 export type NormalizeResponsesArgs = {
@@ -92,14 +98,16 @@ export type NormalizeResponsesArgs = {
 };
 
 export interface RegularField {
+  questionId: string;
   fieldPath: string;
   value: any;
 }
 export interface NormalizedField extends RegularField {
   normTokens: Array<NormalizationToken>;
-  questionId: string;
   raw: string;
 }
+export interface CommentField extends RegularField {}
+export interface PrenormalizedField extends RegularField {}
 
 export interface NormalizationError {
   type: string;
@@ -107,36 +115,30 @@ export interface NormalizationError {
 }
 
 export interface NormalizationOptions {
-  document: any;
-  entities?: Array<any>;
+  response: ResponseDocument;
   rules?: any;
   log?: Boolean;
-  fileName?: string;
   verbose?: boolean;
   isSimulation?: boolean;
   questionId?: string;
   isBulk?: boolean;
-  surveys?: SurveyMetadata[];
+  survey?: SurveyMetadata;
+  edition?: EditionMetadata;
+  entities?: Entity[];
+  entityRules?: EntityRule[];
   isRenormalization?: boolean;
 }
 
-export interface NormalizationParams {
-  response: any;
-  normResp: any;
-  prenormalizedFields: RegularField[];
-  normalizedFields: NormalizedField[];
-  regularFields: RegularField[];
-  options: NormalizationOptions;
-  fileName?: string;
+export interface NormalizationParams extends NormalizationOptions {
+  normResp: NormalizedResponseDocument;
   survey: SurveyMetadata;
   edition: EditionMetadata;
-  allRules: EntityRule[];
+  entityRules: EntityRule[];
   privateFields?: any;
-  result?: any;
   errors?: any;
-  questionId?: string;
-  verbose?: boolean;
-  isRenormalization?: boolean;
+  discard?: boolean;
+  empty?: boolean;
+  modifier?: any;
 }
 
 export interface NormalizedResponseDocument extends ResponseDocument {
@@ -145,3 +147,16 @@ export interface NormalizedResponseDocument extends ResponseDocument {
   surveyId: SurveyMetadata["id"];
   editionId: EditionMetadata["id"];
 }
+
+export interface NormalizeFieldResult {
+  normalizedResponse: NormalizedResponseDocument;
+  modified: boolean;
+  normalizedFields: Array<NormalizedField>;
+  prenormalizedFields: Array<RegularField>;
+  regularFields: Array<RegularField>;
+  commentFields: Array<RegularField>;
+}
+
+export type StepFunction = (
+  NormalizationParams
+) => Promise<NormalizedResponseDocument>;

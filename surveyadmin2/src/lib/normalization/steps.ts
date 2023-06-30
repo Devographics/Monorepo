@@ -1,48 +1,38 @@
 // TODO: should be imported dynamically
 import countries from "./countries";
-import {
-  cleanupValue,
-  getQuestionObject,
-  normalize,
-  normalizeSource,
-} from "./helpers";
+import { normalizeSource } from "./helpers";
 import set from "lodash/set.js";
-import intersection from "lodash/intersection.js";
-import isEmpty from "lodash/isEmpty.js";
 import { getUUID } from "~/lib/email";
-import { logToFile } from "@devographics/helpers";
-import * as templateFunctions from "@devographics/templates";
 import type {
-  QuestionMetadata,
+  QuestionTemplateOutput,
   SectionMetadata,
-  TemplateFunction,
 } from "@devographics/types";
-import { NormalizationParams } from "./types";
-import { getCollectionByName, newMongoId } from "@devographics/mongo";
+import { NormalizationParams, StepFunction } from "./types";
+import clone from "lodash/clone";
 
-const replaceAll = function (target, search, replacement) {
-  return target.replace(new RegExp(search, "g"), replacement);
-};
+// const replaceAll = function (target, search, replacement) {
+//   return target.replace(new RegExp(search, "g"), replacement);
+// };
 
-const convertForCSV = (obj) => {
-  if (!obj || (Array.isArray(obj) && obj.length === 0)) {
-    return "";
-  } else if (typeof obj === "string") {
-    return obj;
-  } else {
-    let s = JSON.stringify(obj);
-    s = replaceAll(s, '"', `'`);
-    // s = replaceAll(s, ',', '\,');
-    return s;
-  }
-};
+// const convertForCSV = (obj) => {
+//   if (!obj || (Array.isArray(obj) && obj.length === 0)) {
+//     return "";
+//   } else if (typeof obj === "string") {
+//     return obj;
+//   } else {
+//     let s = JSON.stringify(obj);
+//     s = replaceAll(s, '"', `'`);
+//     // s = replaceAll(s, ',', '\,');
+//     return s;
+//   }
+// };
 
-const logRow = async (columns, fileName) => {
-  await logToFile(
-    `${fileName}.csv`,
-    columns.map((c) => `"${convertForCSV(c)}"`).join(", ")
-  );
-};
+// const logRow = async (columns, fileName) => {
+//   await logToFile(
+//     `${fileName}.csv`,
+//     columns.map((c) => `"${convertForCSV(c)}"`).join(", ")
+//   );
+// };
 
 // fields to copy, along with the path at which to copy them (if different)
 const getFieldsToCopy = (surveyId) => [
@@ -70,7 +60,13 @@ const getFieldsToCopy = (surveyId) => [
   ],
 ];
 
-export const copyFields = async ({ normResp, response, survey, edition }) => {
+export const copyFields: StepFunction = async ({
+  normResp: normResp_,
+  response,
+  survey,
+  edition,
+}: NormalizationParams) => {
+  const normResp = clone(normResp_);
   getFieldsToCopy(edition.surveyId).forEach((field) => {
     const [fieldName, fieldPath = fieldName] = field;
     if (response[fieldName]) {
@@ -82,10 +78,14 @@ export const copyFields = async ({ normResp, response, survey, edition }) => {
   normResp.surveyId = survey.id;
   normResp.editionId = edition.id;
   normResp.year = edition.year;
+  return normResp;
 };
 
-export const normalizeCountryField = async ({ normResp, options }) => {
-  const { log } = options;
+export const normalizeCountryField: StepFunction = async ({
+  normResp: normResp_,
+  log,
+}: NormalizationParams) => {
+  const normResp = clone(normResp_);
   /*
 
   5c. Normalize country (if provided)
@@ -100,23 +100,26 @@ export const normalizeCountryField = async ({ normResp, options }) => {
       set(normResp, "user_info.country_name", countryNormalized.name);
       set(normResp, "user_info.country_alpha3", countryNormalized["alpha-3"]);
     } else {
-      if (log) {
-        await logToFile(
-          "countries_normalization.txt",
-          normResp.user_info.country
-        );
-      }
+      // if (log) {
+      //   await logToFile(
+      //     "countries_normalization.txt",
+      //     result.user_info.country
+      //   );
+      // }
     }
   }
+  return normResp;
 };
 
-export const normalizeSourceField = async ({
-  normResp,
+export const normalizeSourceField: StepFunction = async ({
+  normResp: normResp_,
   allRules,
   survey,
   verbose,
   edition,
 }: NormalizationParams) => {
+  const normResp = clone(normResp_);
+
   const normSource = await normalizeSource({
     normResp,
     allRules,
@@ -133,23 +136,29 @@ export const normalizeSourceField = async ({
   if (normSource.pattern) {
     set(normResp, "user_info.source.pattern", normSource.pattern.toString());
   }
+  return normResp;
 };
 
-export const setUuid = async ({ response, normResp }) => {
+export const setUuid: StepFunction = async ({
+  response,
+  normResp: normResp_,
+}) => {
+  const normResp = clone(normResp_);
+
   /*
     
-      2. Generate email hash
+  2. Generate email hash
 
-      TODO: clarifiy, is this the email from current user (we
-        don't have it anymore), or the email from "user_info" part,
-        which will stay and should be hashed?
+  TODO: clarifiy, is this the email from current user (we
+  don't have it anymore), or the email from "user_info" part,
+  which will stay and should be hashed?
 
-      NOTE: eventhough we don't store the user email,
-      we can have an "email" field in the survey if user still 
-      want to send their email afterward
-      => we need to hash it as well
-      
-      */
+  NOTE: eventhough we don't store the user email,
+  we can have an "email" field in the survey if user still 
+  want to send their email afterward
+  => we need to hash it as well
+  
+  */
   if (response.emailHash) {
     // If we have already seen this email, use the same uuid
     // Otherwise create a new one
@@ -157,6 +166,7 @@ export const setUuid = async ({ response, normResp }) => {
     const emailUuid = await getUUID(emailHash, response.userId);
     set(normResp, "user_info.uuid", emailUuid);
   }
+  return normResp;
 };
 
 const localesTable = [
@@ -186,9 +196,14 @@ const findCorrectLocale = (locale) => {
   return correctLocale;
 };
 
-export const handleLocale = async ({ normResp, response }) => {
+export const handleLocale: StepFunction = async ({
+  normResp: normResp_,
+  response,
+}) => {
+  const normResp = clone(normResp_);
   const locale = findCorrectLocale(response.locale);
   set(normResp, "user_info.locale", locale);
+  return normResp;
 };
 
 // export const handlePrivateInfo = async ({
@@ -224,213 +239,3 @@ export const handleLocale = async ({ normResp, response }) => {
 //     //set(normResp, "user_info.hash", createHash(response.email));
 //   }
 // };
-
-// a response must have at least one of those fields to be added to the normalized dataset
-// (discard empty responses)
-const mustHaveKeys = [
-  "features",
-  "tools",
-  "resources",
-  "usage",
-  "opinions",
-  "environments",
-  "employer_info",
-];
-export const discardEmptyResponses = async ({
-  normResp,
-  response,
-  options,
-  errors,
-  result,
-}: NormalizationParams) => {
-  const { verbose } = options;
-  // discard empty responses
-  if (intersection(Object.keys(normResp), mustHaveKeys).length === 0) {
-    if (verbose) {
-      console.log(`!! Discarding response ${response._id} as empty`);
-    }
-    errors.push({ type: "empty_document" });
-    result.discard = true;
-  }
-};
-
-interface NormalizeFieldOptions extends NormalizationParams {
-  question: QuestionMetadata;
-  section: SectionMetadata;
-}
-
-export const normalizeField = async ({
-  question,
-  normResp,
-  prenormalizedFields,
-  normalizedFields,
-  regularFields,
-  options,
-  fileName,
-  survey,
-  edition,
-  section,
-  allRules,
-  privateFields,
-  isRenormalization,
-}: NormalizeFieldOptions) => {
-  let discard = true;
-
-  const {
-    document: response,
-    log = false,
-    fileName: _fileName,
-    verbose = false,
-  } = options;
-
-  const questionObject = getQuestionObject({
-    survey,
-    edition,
-    section,
-    question,
-  });
-
-  if (!questionObject) {
-    // some outline questions do not have an associated questionObject; just skip them
-    return { discard: true };
-  }
-
-  const {
-    template,
-    rawPaths,
-    normPaths,
-    matchTags: matchTags_ = [],
-  } = questionObject;
-
-  if (!rawPaths || !normPaths) {
-    console.log(questionObject);
-    throw new Error(
-      `⛰️ normalizeField error: could not find rawPaths or normPaths for question ${question.id}`
-    );
-  }
-
-  const prefixWithEditionId = (s) => `${edition.id}__${s}`;
-
-  // automatically add question's own id as a potential match tag
-  const matchTags = [...(matchTags_ || []), questionObject.id];
-
-  const processResponseField = async () => {
-    // start by copying over the "main" response value
-    if (rawPaths.response) {
-      const fieldPath = prefixWithEditionId(rawPaths.response);
-      const responseValue = cleanupValue(response[fieldPath]);
-      if (responseValue) {
-        set(normResp, normPaths.response!, responseValue);
-        regularFields.push({ fieldPath, value: responseValue });
-        discard = false;
-      }
-      if (verbose) {
-        console.log(`⛰️ ${fieldPath}/response: “${responseValue}”`);
-      }
-    }
-  };
-
-  const processCommentField = async () => {
-    // copy over the comment value
-    if (rawPaths.comment) {
-      const fieldPath = prefixWithEditionId(rawPaths.comment);
-      const responseCommentValue = cleanupValue(response[fieldPath]);
-      if (responseCommentValue) {
-        set(normResp, normPaths.comment!, responseCommentValue);
-        discard = false;
-      }
-      if (verbose) {
-        console.log(`⛰️ ${fieldPath}/comment: “${responseCommentValue}”`);
-      }
-    }
-  };
-
-  const processPrenormalizedField = async () => {
-    // when encountering a prenormalized field, we just copy its value as is
-    if (rawPaths.prenormalized) {
-      const fieldPath = prefixWithEditionId(rawPaths?.prenormalized);
-      const prenormalizedValue = response[fieldPath];
-      set(normResp, normPaths.raw!, prenormalizedValue);
-      set(normResp, normPaths.prenormalized!, prenormalizedValue);
-      set(normResp, normPaths.patterns!, ["prenormalized"]);
-      prenormalizedFields.push({
-        fieldPath,
-        value: prenormalizedValue,
-      });
-      discard = false;
-      if (verbose) {
-        console.log(`${fieldPath}/prenormalized: “${prenormalizedValue}”`);
-      }
-    }
-  };
-
-  const processOtherField = async () => {
-    // if a field has an "other" path defined, we normalize its contents
-    if (rawPaths.other) {
-      const fieldPath = prefixWithEditionId(rawPaths?.other);
-      const otherValue = cleanupValue(response[fieldPath]);
-      if (otherValue) {
-        set(normResp, normPaths.raw!, otherValue);
-
-        try {
-          const normTokens = await normalize({
-            value: otherValue,
-            allRules,
-            tags: matchTags,
-            edition,
-            question,
-            verbose,
-          });
-
-          const normIds = normTokens.map((token) => token.id);
-          const normPatterns = normTokens.map((token) =>
-            token.pattern.toString()
-          );
-          set(normResp, normPaths.other!, normIds);
-          set(normResp, normPaths.patterns!, normPatterns);
-
-          // keep trace of fields that were normalized
-          normalizedFields.push({
-            fieldPath,
-            questionId: question.id,
-            raw: otherValue,
-            value: normIds,
-            normTokens,
-          });
-
-          if (isRenormalization && normIds.length === 0) {
-            // if we are renormalizing but didn't find any new tokens, discard operation
-            discard = true;
-          } else {
-            discard = false;
-          }
-
-          if (verbose) {
-            console.log(`⛰️ ${fieldPath}/other: “${otherValue}”`);
-            console.log(`⛰️ -> Tags: ${matchTags.toString()}`);
-            console.log(
-              `⛰️ -> Normalized values: ${JSON.stringify(normTokens)}`
-            );
-          }
-        } catch (error) {
-          set(normResp, normPaths.error!, error.message);
-        }
-      }
-    }
-  };
-
-  if (isRenormalization) {
-    // when renormalizing an already-normalized response, we only need to worry about the
-    // "other" sub-field
-    await processOtherField();
-  } else {
-    // else, when normalizing from scratch we process all sub-fields
-    await processResponseField();
-    await processCommentField();
-    await processPrenormalizedField();
-    await processOtherField();
-  }
-
-  // note: we only return `discard` because normResp is directly mutated using set()
-  return { discard };
-};

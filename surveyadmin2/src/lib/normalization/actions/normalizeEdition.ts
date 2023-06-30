@@ -60,6 +60,7 @@ export const normalizeEdition = async (args: NormalizeEditionArgs) => {
 
   const mutationResult = await normalizeInBulk({
     survey,
+    edition,
     responses,
     limit,
     isRenormalization: false,

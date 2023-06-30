@@ -65,7 +65,7 @@ export async function fetchEditionMetadata({
       });
       if (!result) {
         throw new Error(
-          `Couldn't fetch survey ${editionId}, result: ${
+          `Couldn't fetch edition ${editionId}, result: ${
             result && JSON.stringify(result)
           }`
         );
@@ -98,6 +98,20 @@ export const fetchSurveysMetadata = async (options?: {
     calledFrom: options?.calledFrom,
     serverConfig,
   });
+};
+
+export const fetchSurveyMetadata = async ({
+  surveyId,
+}: {
+  surveyId: string;
+}) => {
+  const allSurveys = await fetchSurveysMetadata();
+  const survey = allSurveys.find((s) => s.id === surveyId);
+
+  if (!survey) {
+    throw new Error(`Couldn't fetch survey ${surveyId}`);
+  }
+  return survey;
 };
 
 /**

@@ -25,6 +25,12 @@ export default async function Page({ params }) {
     <div>
       <Breadcrumbs survey={survey} edition={edition} />
 
+      <NormalizeEdition
+        responsesCount={responsesCount}
+        survey={survey}
+        edition={edition}
+      />
+
       <h4>Normalizeable Questions</h4>
       {questions.map((question) => (
         <Question
@@ -34,12 +40,6 @@ export default async function Page({ params }) {
           question={question}
         />
       ))}
-
-      <NormalizeEdition
-        responsesCount={responsesCount}
-        survey={survey}
-        edition={edition}
-      />
     </div>
   );
 }

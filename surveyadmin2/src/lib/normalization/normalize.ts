@@ -1,4 +1,5 @@
 import {
+  QuestionWithSection,
   generateEntityRules,
   getEditionQuestionById,
   getQuestionObject,
@@ -8,236 +9,260 @@ import get from "lodash/get.js";
 import {
   fetchEditionMetadata,
   fetchEntities,
+  fetchSurveyMetadata,
   fetchSurveysMetadata,
 } from "~/lib/api/fetch";
 import { newMongoId } from "@devographics/mongo";
 import {
   NormalizationOptions,
-  NormalizationResult,
+  NormalizationResultExtended,
   NormalizationError,
   NormalizedResponseDocument,
   NormalizedField,
   RegularField,
   NormalizationParams,
+  CommentField,
+  PrenormalizedField,
+  StepFunction,
+  NormalizationResult,
 } from "./types";
+import clone from "lodash/clone";
+import { normalizeField } from "./normalizeField";
 
 /*
+
+Normalize an entire document
+(can optionally be limited to a specific question if questionId is passed)
 
 27/06/2023: we now assume we are always calling this from a bulk operation
 to simplify the logic.
 
 */
-export const normalizeResponse = async (
+
+const fetchDataIfNeeded = async (options: NormalizationOptions) => {
+  const { response } = options;
+  const { surveyId, editionId } = response;
+  const survey = options.survey || (await fetchSurveyMetadata({ surveyId }));
+  const edition =
+    options.edition || (await fetchEditionMetadata({ surveyId, editionId }));
+  const entities = options.entities || (await fetchEntities());
+  const entityRules = options.entityRules || generateEntityRules(entities);
+  return {
+    survey,
+    edition,
+    entities,
+    entityRules,
+  };
+};
+
+export const normalizeDocument = async (
   options: NormalizationOptions
-): Promise<NormalizationResult | undefined> => {
+): Promise<NormalizationResultExtended | undefined> => {
   try {
-    const {
-      document: response,
-      entities,
-      rules,
-      log = false,
-      fileName: _fileName,
-      verbose = false,
-      isSimulation = false,
-      questionId,
-      isBulk = false,
-      surveys,
-      isRenormalization,
-    } = options;
-
-    if (verbose) {
-      console.log(
-        `⛰️ Normalizing document ${response._id}${
-          questionId ? `, question ${questionId}` : ""
-        }…`
-      );
-    }
-
-    /*
-
-    Init
-
-    */
-    const selector = { responseId: response._id };
-
-    const result = {
-      response,
-      responseId: response?._id,
-      selector,
-      discard: false,
-    };
+    const { response, questionId } = options;
+    const { survey, edition, entityRules } = await fetchDataIfNeeded(options);
 
     const errors: NormalizationError[] = [];
-    let normResp: Partial<NormalizedResponseDocument> = {
+    let normResp = {
       _id: newMongoId(), // generate a string _id, in case of insert
-    };
-    const privateFields = {};
-    const normalizedFields: Array<NormalizedField> = [];
-    const prenormalizedFields: Array<RegularField> = [];
-    const regularFields: Array<RegularField> = [];
-
-    let allSurveys, allEntities, modifier;
-
-    if (surveys) {
-      allSurveys = surveys;
-    } else {
-      allSurveys = await fetchSurveysMetadata();
-    }
-
-    const survey = allSurveys.find((s) => s.id === response.surveyId);
-    const edition = await fetchEditionMetadata({
-      surveyId: response.surveyId,
-      editionId: response.editionId,
-    });
-
-    if (!edition)
-      throw new Error(`Could not find edition for id ${response.editionId}`);
-
-    if (entities) {
-      allEntities = entities;
-    } else {
-      console.log("// Getting/fetching entities…");
-      allEntities = await fetchEntities();
-    }
-    const allRules = rules ?? generateEntityRules(allEntities);
-    const fileName = _fileName || `${response.surveyId}_normalization`;
+    } as NormalizedResponseDocument;
 
     const normalizationParams: NormalizationParams = {
-      response,
+      ...options,
       normResp,
-      prenormalizedFields,
-      normalizedFields,
-      regularFields,
-      options,
-      fileName,
       survey,
       edition,
-      allRules,
-      privateFields,
-      result,
+      entityRules,
       errors,
-      questionId,
-      verbose,
-      isRenormalization,
     };
 
-    /*
-
-    Start
-    
-    */
-
+    let normalizationResult;
     if (questionId) {
-      const question = getEditionQuestionById({
-        edition,
-        questionId: questionId,
-      });
-      const questionObject = getQuestionObject({
-        survey,
-        edition,
-        section: question.section,
-        question,
-      });
-      const questionBasePath = questionObject?.normPaths?.base;
-      if (!questionBasePath) {
-        throw new Error(`Could not find base path for question ${questionId}`);
-      }
-
       // 1. we only need to renormalize a single field
-      // switch (questionId) {
-      //   case "source":
-      //     await steps.copyFields(normalizationParams);
-      //     await steps.normalizeSourceField(normalizationParams);
-      //     fullPath = "user_info.source";
-      //     break;
-      //   case "country":
-      //     throw new Error(
-      //       "Please normalize full document in order to normalize country field"
-      //     );
-      //   default:
-      //     const normalizeFieldResult = await steps.normalizeField({
-      //       question,
-      //       section: question.section,
-      //       ...normalizationParams,
-      //     });
-      //     if (normalizeFieldResult.wasModified) {
-      //       discard = false;
-      //     }
-      //     break;
-      // }
-
-      const normalizeFieldResult = await steps.normalizeField({
-        question,
-        section: question.section,
+      normalizationResult = await normalizeQuestion({
         ...normalizationParams,
+        questionId,
       });
-
-      const value = get(normResp, questionBasePath);
-
-      if (normalizeFieldResult.discard) {
-        // if none of the question fields contained valid data, discard the operation
-        result.discard = true;
-      } else {
-        modifier = { $set: { [questionBasePath]: value } };
-
-        // console.log(JSON.stringify(selector, null, 2));
-        // console.log(JSON.stringify(modifier, null, 2));
-      }
     } else {
       // 2. we are normalizing the entire document
-
-      // copy fields that don't need any processing
-      await steps.copyFields(normalizationParams);
-
-      // set UUID using emailHash
-      await steps.setUuid(normalizationParams);
-
-      // handle locale field
-      await steps.handleLocale(normalizationParams);
-
-      // loop over all survey questions and normalize (or just copy over) values
-      for (const section of edition.sections) {
-        for (const question of section.questions) {
-          await steps.normalizeField({
-            question,
-            section,
-            ...normalizationParams,
-          });
-        }
-      }
-
-      // handle country field
-      await steps.normalizeCountryField(normalizationParams);
-
-      // handle source fields
-      await steps.normalizeSourceField(normalizationParams);
-
-      // discard any response that is still empty after all this
-      await steps.discardEmptyResponses(normalizationParams);
-
-      // handle private info (legacy)
-      // await steps.handlePrivateInfo(normalizationParams);
-
-      // replace entire response with normResp
-      modifier = normResp;
+      normalizationResult = await normalizeResponse(normalizationParams);
     }
 
-    const normalizationResult = {
-      ...result,
-      modifier,
-      normalizedResponse: normResp,
-      // normalizedResponseId,
-      normalizedFields,
-      normalizedFieldsCount: normalizedFields.length,
-      prenormalizedFields,
-      prenormalizedFieldsCount: prenormalizedFields.length,
-      regularFields,
-      regularFieldsCount: regularFields.length,
-      errors,
+    const normalizationResultExtended = {
+      ...normalizationResult,
+      response,
+      responseId: response.id,
+      counts: {
+        normalized: normalizationResult.normalizedFields.length,
+        regular: normalizationResult.regularFields.length,
+        comment: normalizationResult.commentFields.length,
+        prenormalized: normalizationResult.prenormalizedFields.length,
+      },
     };
-    return normalizationResult;
+    return normalizationResultExtended;
   } catch (error) {
     console.log("// normalizeResponse error");
     console.log(error);
   }
+};
+
+/*
+
+Normalize single question
+
+*/
+const normalizeQuestion = async (
+  normalizationParams: NormalizationParams & { questionId: string }
+): Promise<NormalizationResult> => {
+  const { verbose, response, survey, edition, questionId } =
+    normalizationParams;
+  if (verbose) {
+    console.log(
+      `⛰️ Normalizing document ${response._id}, question ${questionId}…`
+    );
+  }
+
+  const question = getEditionQuestionById({
+    edition,
+    questionId: questionId,
+  });
+  const questionObject = getQuestionObject({
+    survey,
+    edition,
+    section: question.section,
+    question,
+  });
+
+  if (!questionObject) {
+    throw new Error(
+      `Cannot normalize question ${questionId} because no questionObject was found. `
+    );
+  }
+  const questionBasePath = questionObject?.normPaths?.base;
+  if (!questionBasePath) {
+    throw new Error(`Could not find base path for question ${questionId}`);
+  }
+
+  // switch (questionId) {
+  //   case "source":
+  //     await steps.copyFields(normalizationParams);
+  //     await steps.normalizeSourceField(normalizationParams);
+  //     fullPath = "user_info.source";
+  //     break;
+  //   case "country":
+  //     throw new Error(
+  //       "Please normalize full document in order to normalize country field"
+  //     );
+  //   default:
+  //     const normalizeFieldResult = await steps.normalizeField({
+  //       question,
+  //       section: question.section,
+  //       ...normalizationParams,
+  //     });
+  //     if (normalizeFieldResult.wasModified) {
+  //       discard = false;
+  //     }
+  //     break;
+  // }
+
+  const result = await normalizeField({
+    questionObject,
+    section: question.section,
+    ...normalizationParams,
+  });
+
+  // if the normalizeField step didn't modify anything, discard the operation
+  const discard = !result.modified;
+  const value = get(result.normalizedResponse, questionBasePath);
+  // we replace the entire "base" question value ("resources.first_steps", "tools.react", etc.),
+  // including all sub-fields
+  const modifier = { $set: { [questionBasePath]: value } };
+  return { ...result, modifier, discard };
+};
+
+/*
+
+Normalize entire response document
+
+*/
+const normalizeResponse = async (
+  normalizationParams: NormalizationParams
+): Promise<NormalizationResult> => {
+  const {
+    survey,
+    edition,
+    verbose,
+    response,
+    normResp: normResp_,
+  } = normalizationParams;
+  if (verbose) {
+    console.log(`⛰️ Normalizing document ${response._id}…`);
+  }
+
+  const fields = {
+    prenormalizedFields: [] as PrenormalizedField[],
+    normalizedFields: [] as NormalizedField[],
+    regularFields: [] as RegularField[],
+    commentFields: [] as CommentField[],
+  };
+
+  let normResp = clone(normResp_);
+  const modifiedArray: boolean[] = [];
+
+  // note: even if the base steps modify the response,
+  // we don't count that towards keeping or discarding the operation
+  const baseSteps = [
+    "copyFields",
+    "setUuid",
+    "handleLocale",
+    "normalizeCountryField",
+    "normalizeSourceField",
+  ];
+  for (const stepName of baseSteps) {
+    const step: StepFunction = steps[stepName];
+    normResp = await step({ ...normalizationParams, normResp });
+  }
+
+  // loop over all survey questions and normalize (or just copy over) values
+  for (const section of edition.sections) {
+    for (const question of section.questions) {
+      const section = (question as QuestionWithSection).section;
+      const questionObject = getQuestionObject({
+        survey,
+        edition,
+        section,
+        question,
+      });
+
+      if (!questionObject) {
+        // some questions (such as intro text, notes, etc.
+        // do not have an associated questionObject; just skip them
+      } else {
+        const result = await normalizeField({
+          ...normalizationParams,
+          questionObject,
+          section,
+          normResp,
+        });
+        normResp = result.normalizedResponse;
+        // concatenate with normalized fields, comment fields, etc. from this field normalization
+        for (const fieldType of Object.keys(fields)) {
+          fields[fieldType] = [...fields[fieldType], ...result[fieldType]];
+        }
+        // keep track of whether this normalizeField has actually modified the response
+        modifiedArray.push(result.modified);
+      }
+    }
+  }
+
+  // if none of the normalizeField steps have modified the response,
+  // discard the entire normalization operation
+  const discard = modifiedArray.every((modified) => modified === false);
+  return {
+    // replace entire response with normResp
+    modifier: normResp,
+    normalizedResponse: normResp,
+    discard,
+    ...fields,
+  };
 };
