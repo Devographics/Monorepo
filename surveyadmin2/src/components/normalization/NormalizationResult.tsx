@@ -11,82 +11,26 @@ import { defaultSegmentSize } from "./hooks";
 
 const errorColor = "#cf2710";
 
-export const NormalizationResult = ({
-  normalizedDocuments,
-  unmatchedDocuments,
-  unnormalizableDocuments,
-  errorDocuments,
-  emptyDocuments,
-  duration,
-  discardedCount,
-  showQuestionId = true,
-  isSimulation,
-  errorCount,
-}: NormalizeInBulkResult & {
+type NormalizationResultProps = NormalizeInBulkResult & {
   showQuestionId?: boolean;
-}) => {
+  showSummary?: boolean;
+};
+export const NormalizationResult = (props: NormalizationResultProps) => {
+  const {
+    normalizedDocuments,
+    unmatchedDocuments,
+    unnormalizableDocuments,
+    errorDocuments,
+    emptyDocuments,
+    showQuestionId = true,
+    showSummary = true,
+  } = props;
   const [showResult, setShowResult] = useState(true);
 
   return (
     showResult && (
       <div>
-        {/* <p>
-          <a
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              setShowResult(false);
-            }}
-          >
-            Hide
-          </a>
-        </p> */}
-        <div>
-          <table style={{ border: "1px solid #ccc" }}>
-            <thead>
-              <tr>
-                {isSimulation && (
-                  <th>
-                    <mark>Simulation</mark>
-                  </th>
-                )}
-                <th>
-                  Done in <strong>{duration}s</strong>
-                </th>
-                <th>
-                  <strong>{normalizedDocuments.length}</strong> normalized
-                  documents
-                </th>
-                <th>
-                  <strong>
-                    {sumBy(
-                      normalizedDocuments,
-                      (doc) => doc?.normalizedFieldsCount || 0
-                    )}
-                  </strong>{" "}
-                  total normalized fields
-                </th>
-                <th>
-                  <strong>{emptyDocuments.length}</strong> empty documents
-                </th>
-                <th>
-                  <strong>
-                    {Math.round(
-                      (emptyDocuments.length * 100) / defaultSegmentSize
-                    )}
-                    %
-                  </strong>{" "}
-                  discard rate
-                </th>
-                <th
-                  style={{ ...(errorCount > 0 ? { color: errorColor } : {}) }}
-                >
-                  <strong>{errorCount}</strong> errors
-                </th>
-              </tr>
-            </thead>
-          </table>
-        </div>
+        {showSummary && <NormalizationSummary {...props} />}
 
         <DocumentGroup
           documents={errorDocuments}
@@ -128,6 +72,56 @@ export const NormalizationResult = ({
   );
 };
 
+export const NormalizationSummary = ({
+  normalizedDocuments,
+  emptyDocuments,
+  duration,
+  isSimulation,
+  errorCount,
+}: NormalizationResultProps) => {
+  const discardRate = Math.round(
+    (emptyDocuments.length * 100) / defaultSegmentSize
+  );
+  return (
+    <div>
+      <table style={{ border: "1px solid #ccc" }}>
+        <thead>
+          <tr>
+            {isSimulation && (
+              <th>
+                <mark>Simulation</mark>
+              </th>
+            )}
+            <th>
+              Done in <strong>{duration}s</strong>
+            </th>
+            <th>
+              <strong>{normalizedDocuments.length}</strong> normalized documents
+            </th>
+            <th>
+              <strong>
+                {sumBy(
+                  normalizedDocuments,
+                  (doc) => doc?.normalizedFieldsCount || 0
+                )}
+              </strong>{" "}
+              total normalized fields
+            </th>
+            <th>
+              <strong>{emptyDocuments.length}</strong> empty documents
+            </th>
+            <th style={{ ...(discardRate > 30 ? { color: errorColor } : {}) }}>
+              <strong>{discardRate}%</strong> discard rate
+            </th>
+            <th style={{ ...(errorCount > 0 ? { color: errorColor } : {}) }}>
+              <strong>{errorCount}</strong> errors
+            </th>
+          </tr>
+        </thead>
+      </table>
+    </div>
+  );
+};
 const DocumentGroup = ({
   documents,
   label,

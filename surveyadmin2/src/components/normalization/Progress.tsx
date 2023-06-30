@@ -10,7 +10,10 @@ import {
   QuestionMetadata,
   SurveyMetadata,
 } from "@devographics/types";
-import { NormalizationResult } from "./NormalizationResult";
+import {
+  NormalizationResult,
+  NormalizationSummary,
+} from "./NormalizationResult";
 
 const Loading = () => <span aria-busy={true} />;
 
@@ -101,26 +104,25 @@ const SegmentDoneItem = ({
   const { duration, discardedCount, errorCount, normalizedDocuments } = data;
   return (
     <article>
-      <h5>Segment {segmentIndex + 1}</h5>
-      <p>
-        <span>
-          <SegmentData
-            inProgress={false}
-            startFrom={startFrom}
-            responsesCount={responsesCount}
-          />
-        </span>{" "}
-        <a
-          href="#"
-          onClick={(e) => {
-            e.preventDefault();
-            setShowResults(!showResults);
-          }}
-        >
-          {showResults ? "Hide Results" : "Show Results"}
-        </a>
-      </p>
-      {showResults && <NormalizationResult {...data} />}
+      <SegmentData
+        index={segmentIndex + 1}
+        inProgress={false}
+        startFrom={startFrom}
+        responsesCount={responsesCount}
+      />
+      <NormalizationSummary {...data} />
+
+      <a
+        href="#"
+        role="button"
+        onClick={(e) => {
+          e.preventDefault();
+          setShowResults(!showResults);
+        }}
+      >
+        {showResults ? "Hide Results" : "Show Results"}
+      </a>
+      {showResults && <NormalizationResult {...data} showSummary={false} />}
     </article>
   );
 };
@@ -175,8 +177,8 @@ const SegmentInProgressItem = ({
 
   return (
     <article>
-      <h5>Segment {segmentIndex + 1}</h5>
       <SegmentData
+        index={segmentIndex + 1}
         inProgress={true}
         startFrom={startFrom}
         responsesCount={responsesCount}
@@ -186,15 +188,19 @@ const SegmentInProgressItem = ({
   );
 };
 
-const SegmentData = ({ inProgress, startFrom, responsesCount }) => {
+const SegmentData = ({ index, inProgress, startFrom, responsesCount }) => {
   return (
-    <span>
-      {inProgress ? "Normalizing" : "Normalized"} <strong>{startFrom}</strong>-
-      <strong>
-        {Math.min(responsesCount, startFrom + defaultSegmentSize)}
-      </strong>{" "}
-      out of <strong>{responsesCount}</strong> responses
-    </span>
+    <p>
+      <strong>Segment {index} / </strong>
+      <span>
+        {inProgress ? "Normalizing" : "Normalized"} <strong>{startFrom}</strong>
+        -
+        <strong>
+          {Math.min(responsesCount, startFrom + defaultSegmentSize)}
+        </strong>{" "}
+        out of <strong>{responsesCount}</strong> responses
+      </span>
+    </p>
   );
 };
 
