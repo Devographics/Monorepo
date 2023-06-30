@@ -30,7 +30,7 @@ export enum DocumentGroups {
   UNMATCHED = "unmatched",
   UNNORMALIZABLE = "unnormalizable",
   ERROR = "error",
-  EMPTY = "error",
+  EMPTY = "empty",
 }
 
 export interface Counts {

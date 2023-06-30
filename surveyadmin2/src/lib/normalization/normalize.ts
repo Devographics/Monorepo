@@ -30,6 +30,7 @@ import {
 import clone from "lodash/clone";
 import { normalizeField } from "./normalizeField";
 import { EditionMetadata, ResponseDocument } from "@devographics/types";
+import difference from "lodash/difference";
 
 /*
 
@@ -291,7 +292,7 @@ const normalizeResponse = async (
 /*
 
 Check if a response is empty (automatically filled "base" fields 
-such as common__user_info__referrer etc. don't count)
+such as _id, common__user_info__referrer etc. don't count)
 
 */
 const responseIsEmpty = ({
@@ -301,8 +302,16 @@ const responseIsEmpty = ({
   response: ResponseDocument;
   edition: EditionMetadata;
 }) => {
-  const baseFields = steps.getFieldsToCopy(edition.id).map(([f1, f2]) => f1);
+  const baseFields = [
+    ...steps.getFieldsToCopy(edition.id).map(([f1, f2]) => f1),
+    "_id",
+    "isNormalized",
+    "duration",
+    "locale",
+  ];
   const responseFields = Object.keys(response);
+  // find any response fields that are *not* base fields
+  const contentFields = difference(responseFields, baseFields);
   // response is considered empty if it only contains base fields
-  return responseFields.every((f) => baseFields.includes(f));
+  return contentFields.length === 0;
 };

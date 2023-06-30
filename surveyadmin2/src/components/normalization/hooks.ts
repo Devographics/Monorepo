@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { NormalizeInBulkResult } from "~/lib/normalization/types";
 
-export const defaultSegmentSize = 20;
+export const defaultSegmentSize = 500;
 
 export const statuses = { scheduled: 0, inProgress: 1, done: 2 };
 

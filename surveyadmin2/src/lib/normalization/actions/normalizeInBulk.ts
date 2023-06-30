@@ -25,7 +25,7 @@ Normalization
 */
 export const defaultLimit = 999;
 const isSimulation = true;
-const verbose = true;
+const verbose = false;
 
 /*
 
@@ -97,8 +97,6 @@ export const normalizeInBulk = async ({
       isRenormalization,
     });
 
-    console.log("// normalizationResult");
-    console.log(normalizationResult);
     progress++;
     if (limit && limit > 1000 && progress % tickInterval === 0) {
       console.log(`  -> Normalized ${progress}/${count} responses…`);
@@ -197,10 +195,10 @@ export const normalizeInBulk = async ({
   */
   allDocuments = allDocuments.map((doc) => {
     let group;
-    if (doc.errors && doc.errors.length > 0) {
-      group = DocumentGroups.ERROR;
-    } else if (doc.empty) {
+    if (doc.empty) {
       group = DocumentGroups.EMPTY;
+    } else if (doc.errors && doc.errors.length > 0) {
+      group = DocumentGroups.ERROR;
     } else {
       if (doc.normalizedFields?.some((field) => field.raw)) {
         // doc has normalizable fields that contain an answer

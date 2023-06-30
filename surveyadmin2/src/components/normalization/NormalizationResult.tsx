@@ -7,6 +7,7 @@ import {
   NormalizedDocumentMetadata,
   NormalizeInBulkResult,
 } from "~/lib/normalization/types";
+import { defaultSegmentSize } from "./hooks";
 
 const errorColor = "#cf2710";
 
@@ -15,6 +16,7 @@ export const NormalizationResult = ({
   unmatchedDocuments,
   unnormalizableDocuments,
   errorDocuments,
+  emptyDocuments,
   duration,
   discardedCount,
   showQuestionId = true,
@@ -65,8 +67,16 @@ export const NormalizationResult = ({
                   total normalized fields
                 </th>
                 <th>
-                  <strong>{discardedCount}</strong> empty or invalid documents
-                  dicarded
+                  <strong>{emptyDocuments.length}</strong> empty documents
+                </th>
+                <th>
+                  <strong>
+                    {Math.round(
+                      (emptyDocuments.length * 100) / defaultSegmentSize
+                    )}
+                    %
+                  </strong>{" "}
+                  discard rate
                 </th>
                 <th
                   style={{ ...(errorCount > 0 ? { color: errorColor } : {}) }}
@@ -106,17 +116,13 @@ export const NormalizationResult = ({
           onlyId={true}
           defaultShow={false}
         />
-        {/* <DocumentGroup
-          documents={
-            discardedDocuments.map((responseId) => ({
-              responseId,
-            })) as NormalizedDocumentMetadata[]
-          }
-          label="Discarded Documents"
-          description="Documents were discarded (either for being empty, or for not requiring any database mutation)."
+        <DocumentGroup
+          documents={emptyDocuments}
+          label="Empty Documents"
+          description="Documents were discarded for being empty."
           onlyId={true}
           defaultShow={false}
-        /> */}
+        />
       </div>
     )
   );
