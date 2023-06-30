@@ -1,11 +1,10 @@
-import type { NormalizationParams } from "../normalize";
 import set from "lodash/set.js";
 // TODO: should be imported dynamically
 import countries from "../countries";
 import { logToFile } from "@devographics/helpers";
+import { NormalizationParams } from "../types";
 
-export const country = async ({ normResp, options }: NormalizationParams) => {
-  const { log } = options;
+export const country = async ({ normResp, log }: NormalizationParams) => {
   /*
   
     5c. Normalize country (if provided)

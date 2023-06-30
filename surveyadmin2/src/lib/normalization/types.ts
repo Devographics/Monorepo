@@ -5,7 +5,6 @@ import {
   SurveyMetadata,
 } from "@devographics/types";
 import { EntityRule } from "./helpers";
-import { number } from "@devographics/templates";
 
 export interface UpdateBulkOperation {
   updateMany: any;
@@ -51,6 +50,7 @@ export interface NormalizedDocumentMetadata {
   normalizedFields?: NormalizedField[];
   group?: DocumentGroups;
   counts?: Counts;
+  empty?: boolean;
 }
 
 export interface NormalizeInBulkResult {
@@ -85,6 +85,16 @@ export interface NormalizationResultExtended extends NormalizationResult {
   response: ResponseDocument;
   responseId: string;
   counts: Counts;
+  selector: { responseId: string };
+}
+
+export interface NormalizationResultEmpty extends NormalizationResult {
+  discard: true;
+  empty: true;
+}
+export interface NormalizationResultError extends NormalizationResult {
+  discard: true;
+  errors: any[];
 }
 
 export type NormalizeResponsesArgs = {

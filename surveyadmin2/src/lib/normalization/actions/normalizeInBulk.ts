@@ -1,12 +1,7 @@
 import { normalizeDocument } from "../normalize";
 import { generateEntityRules, getBulkOperation } from "../helpers";
-import pick from "lodash/pick.js";
 import { getNormResponsesCollection } from "@devographics/mongo";
-import {
-  fetchEditionMetadata,
-  fetchEntities,
-  fetchSurveyMetadata,
-} from "~/lib/api/fetch";
+import { fetchEntities } from "~/lib/api/fetch";
 import {
   EditionMetadata,
   ResponseDocument,
@@ -18,6 +13,9 @@ import {
   BulkOperation,
   NormalizedDocumentMetadata,
   DocumentGroups,
+  NormalizationResultEmpty,
+  NormalizationResultError,
+  NormalizationResultExtended,
 } from "../types";
 
 /*
@@ -99,34 +97,30 @@ export const normalizeInBulk = async ({
       isRenormalization,
     });
 
+    console.log("// normalizationResult");
+    console.log(normalizationResult);
     progress++;
     if (limit && limit > 1000 && progress % tickInterval === 0) {
       console.log(`  -> Normalized ${progress}/${count} responses…`);
     }
 
-    if (!normalizationResult) {
-      mutationResult.errorCount++;
+    if ((normalizationResult as NormalizationResultError).errors) {
+      mutationResult.errorCount += (
+        normalizationResult as NormalizationResultError
+      ).errors.length;
       allDocuments.push({
         responseId: response._id,
-        errors: [
-          {
-            type: "normalization_failed",
-          },
-        ],
+        errors: normalizationResult.errors,
+      });
+    } else if ((normalizationResult as NormalizationResultEmpty).empty) {
+      allDocuments.push({
+        responseId: response._id,
+        empty: true,
       });
     } else {
-      // keep track of total error count
-      if (normalizationResult.errors.length > 0) {
-        mutationResult.errorCount += normalizationResult.errors.length;
-      }
       // if normalization was valid, add it to array of all documents
-      const {
-        errors,
-        responseId,
-        normalizedResponseId,
-        normalizedFields,
-        counts,
-      } = normalizationResult;
+      const { responseId, normalizedResponse, normalizedFields, counts } =
+        normalizationResult as NormalizationResultExtended;
 
       /* 
       
@@ -136,9 +130,9 @@ export const normalizeInBulk = async ({
 
       */
       const resultDocument = {
-        errors,
+        // errors,
         responseId,
-        normalizedResponseId,
+        normalizedResponseId: normalizedResponse._id,
         normalizedFields,
         counts,
       };
@@ -205,6 +199,8 @@ export const normalizeInBulk = async ({
     let group;
     if (doc.errors && doc.errors.length > 0) {
       group = DocumentGroups.ERROR;
+    } else if (doc.empty) {
+      group = DocumentGroups.EMPTY;
     } else {
       if (doc.normalizedFields?.some((field) => field.raw)) {
         // doc has normalizable fields that contain an answer
@@ -218,13 +214,8 @@ export const normalizeInBulk = async ({
           group = DocumentGroups.UNMATCHED;
         }
       } else {
-        if (doc.counts && Object.values(doc.counts).some((c) => c > 0)) {
-          // document did not contain any normalizable fields
-          group = DocumentGroups.UNNORMALIZABLE;
-        } else {
-          // document did not contain any data whatsoever
-          group = DocumentGroups.EMPTY;
-        }
+        // document did not contain any normalizable fields
+        group = DocumentGroups.UNNORMALIZABLE;
       }
     }
     return { ...doc, group };

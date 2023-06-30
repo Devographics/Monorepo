@@ -31,6 +31,11 @@ export const getQuestionObject = ({
   section,
   question,
 }: TemplateArguments) => {
+  if (!survey) throw new Error(`getQuestionObject: survey is undefined`);
+  if (!edition) throw new Error(`getQuestionObject: edition is undefined`);
+  if (!section) throw new Error(`getQuestionObject: section is undefined`);
+  if (!question) throw new Error(`getQuestionObject: question is undefined`);
+
   const templateFunction = templateFunctions[
     question.template
   ] as TemplateFunction;
@@ -335,7 +340,7 @@ three different fields (source field, referrer field, 'how did you hear' field)
 */
 export const normalizeSource = async ({
   normResp,
-  allRules,
+  entityRules,
   survey,
   edition,
   verbose,
@@ -366,7 +371,7 @@ export const normalizeSource = async ({
       rawSource &&
       (await normalizeSingle({
         value: rawSource,
-        allRules,
+        allRules: entityRules,
         tags,
         edition,
         question: { id: "source" },
@@ -376,7 +381,7 @@ export const normalizeSource = async ({
       rawFindOut &&
       (await normalizeSingle({
         value: rawFindOut,
-        allRules: allRules,
+        allRules: entityRules,
         tags,
         edition,
         question: { id: "how_did_user_find_out_about_the_survey" },
@@ -386,7 +391,7 @@ export const normalizeSource = async ({
       rawRef &&
       (await normalizeSingle({
         value: rawRef,
-        allRules: allRules,
+        allRules: entityRules,
         tags,
         edition,
         question: { id: "referrer" },

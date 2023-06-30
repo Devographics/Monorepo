@@ -1,16 +1,17 @@
-import type { NormalizationParams } from "../normalize";
 import set from "lodash/set.js";
 import get from "lodash/get.js";
 import compact from "lodash/compact.js";
 import { normalizeSingle } from "../helpers";
 import { copyFields } from "../steps";
+import { NormalizationParams } from "../types";
 
 export const source = async (normalizationParams: NormalizationParams) => {
   await copyFields(normalizationParams);
-  const { normResp, allRules, survey, edition, verbose } = normalizationParams;
+  const { normResp, entityRules, survey, edition, verbose } =
+    normalizationParams;
   const normSource = await normalizeSource(
     normResp,
-    allRules,
+    entityRules,
     survey,
     edition,
     verbose
@@ -24,7 +25,7 @@ export const source = async (normalizationParams: NormalizationParams) => {
   if (normSource.pattern) {
     set(normResp, "user_info.source.pattern", normSource.pattern.toString());
   }
-  fullPath = "user_info.source";
+  const fullPath = "user_info.source";
 };
 
 /*

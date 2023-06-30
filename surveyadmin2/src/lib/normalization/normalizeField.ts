@@ -19,15 +19,11 @@ interface NormalizeFieldOptions extends NormalizationParams {
 
 export const normalizeField = async ({
   response,
-  log = false,
   verbose = false,
   questionObject,
   normResp: normResp_,
-  survey,
   edition,
-  section,
-  allRules,
-  privateFields,
+  entityRules,
   isRenormalization,
 }: NormalizeFieldOptions): Promise<NormalizeFieldResult> => {
   const normResp = clone(normResp_);
@@ -132,7 +128,7 @@ export const normalizeField = async ({
         try {
           const normTokens = await normalize({
             value: otherValue,
-            allRules,
+            allRules: entityRules,
             tags: matchTags,
             edition,
             question: questionObject,

@@ -10,7 +10,6 @@ import {
   fetchEditionMetadata,
   fetchEntities,
   fetchSurveyMetadata,
-  fetchSurveysMetadata,
 } from "~/lib/api/fetch";
 import { newMongoId } from "@devographics/mongo";
 import {
@@ -25,9 +24,12 @@ import {
   PrenormalizedField,
   StepFunction,
   NormalizationResult,
+  NormalizationResultError,
+  NormalizationResultEmpty,
 } from "./types";
 import clone from "lodash/clone";
 import { normalizeField } from "./normalizeField";
+import { EditionMetadata, ResponseDocument } from "@devographics/types";
 
 /*
 
@@ -57,7 +59,13 @@ const fetchDataIfNeeded = async (options: NormalizationOptions) => {
 
 export const normalizeDocument = async (
   options: NormalizationOptions
-): Promise<NormalizationResultExtended | undefined> => {
+): Promise<
+  | NormalizationResultExtended
+  | NormalizationResultEmpty
+  | NormalizationResultError
+> => {
+  let normalizationResult;
+
   try {
     const { response, questionId } = options;
     const { survey, edition, entityRules } = await fetchDataIfNeeded(options);
@@ -76,33 +84,47 @@ export const normalizeDocument = async (
       errors,
     };
 
-    let normalizationResult;
-    if (questionId) {
-      // 1. we only need to renormalize a single field
-      normalizationResult = await normalizeQuestion({
-        ...normalizationParams,
-        questionId,
-      });
+    if (responseIsEmpty({ response, edition })) {
+      // response is empty, discard operation
+      normalizationResult = {
+        discard: true,
+        empty: true,
+      } as NormalizationResultEmpty;
+      return normalizationResult;
     } else {
-      // 2. we are normalizing the entire document
-      normalizationResult = await normalizeResponse(normalizationParams);
-    }
+      if (questionId) {
+        // 1. we only need to renormalize a single field
+        normalizationResult = await normalizeQuestion({
+          ...normalizationParams,
+          questionId,
+        });
+      } else {
+        // 2. we are normalizing the entire document
+        normalizationResult = await normalizeResponse(normalizationParams);
+      }
 
-    const normalizationResultExtended = {
-      ...normalizationResult,
-      response,
-      responseId: response.id,
-      counts: {
-        normalized: normalizationResult.normalizedFields.length,
-        regular: normalizationResult.regularFields.length,
-        comment: normalizationResult.commentFields.length,
-        prenormalized: normalizationResult.prenormalizedFields.length,
-      },
-    };
-    return normalizationResultExtended;
+      const normalizationResultExtended = {
+        ...normalizationResult,
+        response,
+        responseId: response._id,
+        selector: { responseId: response._id },
+        counts: {
+          normalized: normalizationResult.normalizedFields.length,
+          regular: normalizationResult.regularFields.length,
+          comment: normalizationResult.commentFields.length,
+          prenormalized: normalizationResult.prenormalizedFields.length,
+        },
+      };
+      return normalizationResultExtended;
+    }
   } catch (error) {
-    console.log("// normalizeResponse error");
     console.log(error);
+    // response encountered error, pass on error and discard operation
+    normalizationResult = {
+      discard: true,
+      errors: [error.message],
+    } as NormalizationResultError;
+    return normalizationResult;
   }
 };
 
@@ -226,7 +248,6 @@ const normalizeResponse = async (
   // loop over all survey questions and normalize (or just copy over) values
   for (const section of edition.sections) {
     for (const question of section.questions) {
-      const section = (question as QuestionWithSection).section;
       const questionObject = getQuestionObject({
         survey,
         edition,
@@ -265,4 +286,23 @@ const normalizeResponse = async (
     discard,
     ...fields,
   };
+};
+
+/*
+
+Check if a response is empty (automatically filled "base" fields 
+such as common__user_info__referrer etc. don't count)
+
+*/
+const responseIsEmpty = ({
+  response,
+  edition,
+}: {
+  response: ResponseDocument;
+  edition: EditionMetadata;
+}) => {
+  const baseFields = steps.getFieldsToCopy(edition.id).map(([f1, f2]) => f1);
+  const responseFields = Object.keys(response);
+  // response is considered empty if it only contains base fields
+  return responseFields.every((f) => baseFields.includes(f));
 };

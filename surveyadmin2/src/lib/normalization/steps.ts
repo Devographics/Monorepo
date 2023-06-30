@@ -35,7 +35,7 @@ import clone from "lodash/clone";
 // };
 
 // fields to copy, along with the path at which to copy them (if different)
-const getFieldsToCopy = (surveyId) => [
+export const getFieldsToCopy = (editionId) => [
   ["year"],
   ["surveyId"],
   ["editionId"],
@@ -55,7 +55,7 @@ const getFieldsToCopy = (surveyId) => [
   ["common__user_info__source", "user_info.sourcetag"],
   ["common__user_info__authmode", "user_info.authmode"],
   [
-    `${surveyId}__user_info__how_did_user_find_out_about_the_survey`,
+    `${editionId}__user_info__how_did_user_find_out_about_the_survey`,
     "user_info.how_did_user_find_out_about_the_survey",
   ],
 ];
@@ -67,7 +67,7 @@ export const copyFields: StepFunction = async ({
   edition,
 }: NormalizationParams) => {
   const normResp = clone(normResp_);
-  getFieldsToCopy(edition.surveyId).forEach((field) => {
+  getFieldsToCopy(edition.id).forEach((field) => {
     const [fieldName, fieldPath = fieldName] = field;
     if (response[fieldName]) {
       set(normResp, fieldPath, response[fieldName]);
@@ -113,7 +113,7 @@ export const normalizeCountryField: StepFunction = async ({
 
 export const normalizeSourceField: StepFunction = async ({
   normResp: normResp_,
-  allRules,
+  entityRules,
   survey,
   verbose,
   edition,
@@ -122,7 +122,7 @@ export const normalizeSourceField: StepFunction = async ({
 
   const normSource = await normalizeSource({
     normResp,
-    allRules,
+    entityRules,
     survey,
     edition,
     verbose,

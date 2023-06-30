@@ -1,17 +1,7 @@
 "use client";
 
-import Actions from "~/components/normalization/NormalizeQuestionActions";
 import Progress from "~/components/normalization/Progress";
-import Fields from "~/components/normalization/Fields";
-import {
-  UnnormalizedData,
-  useUnnormalizedData,
-} from "~/lib/normalization/hooks";
-import {
-  EditionMetadata,
-  QuestionMetadata,
-  SurveyMetadata,
-} from "@devographics/types";
+import { EditionMetadata, SurveyMetadata } from "@devographics/types";
 import { defaultSegmentSize, useSegments } from "./hooks";
 
 export const NormalizeEdition = ({

@@ -15,7 +15,6 @@ export const NormalizationResult = ({
   unmatchedDocuments,
   unnormalizableDocuments,
   errorDocuments,
-  discardedDocuments,
   duration,
   discardedCount,
   showQuestionId = true,
@@ -172,7 +171,7 @@ const DocumentGroup = ({
                 <tr>
                   <th></th>
                   <th>ResponseId</th>
-                  <th>Contents</th>
+                  <th>{isError ? "Errors" : "Contents"}</th>
                 </tr>
               </thead>
               <tbody>
@@ -182,6 +181,7 @@ const DocumentGroup = ({
                     index={index}
                     showQuestionId={showQuestionId}
                     key={doc.responseId}
+                    isError={isError}
                   />
                 ))}
               </tbody>
@@ -200,7 +200,12 @@ const NormDocument = ({
   normalizedFields,
   showQuestionId,
   index,
-}: NormalizedDocumentMetadata & { index: number; showQuestionId: boolean }) => {
+  isError,
+}: NormalizedDocumentMetadata & {
+  index: number;
+  showQuestionId: boolean;
+  isError: boolean;
+}) => {
   return (
     <tr>
       <th style={{ verticalAlign: "top" }}>{index + 1}.</th>
@@ -208,13 +213,23 @@ const NormDocument = ({
         <code>{responseId}</code>
       </th>
       <td>
-        {normalizedFields?.map((field) => (
-          <NormField
-            {...field}
-            showQuestionId={showQuestionId}
-            key={field.fieldPath}
-          />
-        ))}
+        {isError ? (
+          <ul>
+            {errors?.map((error) => (
+              <li key={error}>
+                <code>{error}</code>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          normalizedFields?.map((field) => (
+            <NormField
+              {...field}
+              showQuestionId={showQuestionId}
+              key={field.fieldPath}
+            />
+          ))
+        )}
       </td>
     </tr>
   );
