@@ -6,7 +6,7 @@ import { cronMiddleware } from "~/lib/server/edge/cronMiddleware";
 import { getLocaleFromAcceptLanguage } from "~/i18n/server/localeDetection";
 import { LOCALE_COOKIE_NAME } from "./i18n/cookie";
 import { getClosestLocale } from "./i18n/data/locales";
-import { fetchAllLocalesMetadata } from "./lib/api/fetch";
+import { fetchAllLocalesIds } from "./lib/api/fetch";
 
 function getFirstParam(pathname: string) {
   if (!pathname) {
@@ -36,8 +36,9 @@ function maybeLocale(str: string) {
  * @returns
  */
 async function getLang(pathname: string) {
-  const locales = await fetchAllLocalesMetadata();
-  const localesIds = locales.map((l) => l.id);
+  // NOTE: this call will fire a lot of request but it's ok since we use a short-lived in-memory cache
+  // robust to // calls
+  const localesIds = await fetchAllLocalesIds();
   const firstParam = getFirstParam(pathname);
   if (!firstParam) return null;
   if (

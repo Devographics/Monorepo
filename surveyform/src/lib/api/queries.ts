@@ -206,6 +206,13 @@ query AllLocalesMetadataQuery {
   }
 }`;
 
+export const getAllLocalesIdsQuery = () => `
+query AllLocalesIdsQuery {
+  locales {
+    id
+  }
+}`;
+
 export const getLocaleQuery = ({
   localeId,
   contexts,

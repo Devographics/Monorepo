@@ -17,6 +17,9 @@ export const surveyMetadataCacheKey = ({ surveyId }: { surveyId: string }) =>
 export const allLocalesMetadataCacheKey = () =>
   `${SURVEY_FORM_CONTEXT}__allLocales`;
 
+export const allLocalesIds = () =>
+  `${SURVEY_FORM_CONTEXT}__allLocalesIds`;
+
 export const localeCacheKey = ({
   localeId,
   contexts,
