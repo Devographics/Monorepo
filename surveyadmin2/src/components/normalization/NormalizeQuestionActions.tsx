@@ -7,7 +7,11 @@ import {
 } from "~/lib/normalization/services";
 import { NormalizeInBulkResult } from "~/lib/normalization/types";
 import { NormalizationResult } from "./NormalizationResult";
-import { QuestionMetadata, SurveyMetadata } from "@devographics/types";
+import {
+  EditionMetadata,
+  QuestionMetadata,
+  SurveyMetadata,
+} from "@devographics/types";
 import { UnnormalizedResponses } from "~/lib/normalization/hooks";
 import { InitializeSegmentsOptions, defaultSegmentSize } from "./hooks";
 // import Dropdown from "~/core/components/ui/Dropdown";
@@ -16,6 +20,7 @@ export const allFields = { id: "all_fields", label: "All Fields" };
 
 interface ActionProps {
   survey: SurveyMetadata;
+  edition: EditionMetadata;
   question: QuestionMetadata;
   initializeSegments: (options: InitializeSegmentsOptions) => void;
   unnormalizedResponses: UnnormalizedResponses[];
@@ -25,6 +30,7 @@ interface ActionProps {
 const Actions = (props: ActionProps) => {
   const {
     survey,
+    edition,
     question,
     initializeSegments,
     unnormalizedResponses,
@@ -81,6 +87,7 @@ const Actions = (props: ActionProps) => {
             action={async () => {
               const result = await normalizeQuestionResponses({
                 surveyId: survey.id,
+                editionId: edition.id,
                 questionId: question.id,
                 responsesIds: unnormalizedResponses.map((r) => r.responseId),
               });

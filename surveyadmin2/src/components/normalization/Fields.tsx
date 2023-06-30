@@ -57,6 +57,7 @@ const Fields = ({
               questionId={question.id}
               responseId={responseId}
               surveyId={survey.id}
+              editionId={edition.id}
             />
           ))}
         </tbody>
@@ -65,7 +66,15 @@ const Fields = ({
   );
 };
 
-const Field = ({ _id, value, showIds, responseId, questionId, surveyId }) => {
+const Field = ({
+  _id,
+  value,
+  showIds,
+  responseId,
+  questionId,
+  surveyId,
+  editionId,
+}) => {
   const [result, setResult] = useState<NormalizeInBulkResult>();
   return (
     <>
@@ -87,6 +96,7 @@ const Field = ({ _id, value, showIds, responseId, questionId, surveyId }) => {
               const result = await normalizeQuestionResponses({
                 questionId,
                 surveyId,
+                editionId,
                 responsesIds: [responseId],
               });
               setResult(result.data);
