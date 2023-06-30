@@ -1,4 +1,4 @@
-import { getEntityName, useOptionTitle } from "~/lib/surveys/helpers";
+import { getEntityName } from "~/lib/surveys/helpers";
 import EntityLabel from "~/components/common/EntityLabel";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import {

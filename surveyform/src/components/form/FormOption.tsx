@@ -3,9 +3,9 @@ import { OptionMetadata } from "@devographics/types";
 import { useIntlContext } from "@devographics/react-i18n";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { getOptioni18nIds } from "@devographics/i18n";
-import { useOptionTitle } from "~/lib/surveys/helpers";
 import AddToList from "~/components/reading_list/AddToList";
 import OptionLabel from "./OptionLabel";
+import { useOptionTitle } from "~/lib/surveys/hooks";
 
 interface FormOptionProps extends FormInputProps {
   option: OptionMetadata;
