@@ -53,6 +53,7 @@ const Progress = (props: ProgressProps) => {
           <h3>Found {responsesCount} responses to normalize… </h3>
           {segmentsDone.map((s, i) => (
             <SegmentDoneItem
+              {...props}
               key={i}
               segmentIndex={i}
               {...s}
@@ -96,10 +97,12 @@ const SegmentDoneItem = ({
   responsesCount,
   data,
   segmentIndex,
-}: SegmentDone & {
-  responsesCount: number;
-  segmentIndex: number;
-}) => {
+  segments,
+}: SegmentDone &
+  ProgressProps & {
+    responsesCount: number;
+    segmentIndex: number;
+  }) => {
   const [showResults, setShowResults] = useState(false);
   const { duration, discardedCount, errorCount, normalizedDocuments } = data;
   return (
@@ -109,6 +112,7 @@ const SegmentDoneItem = ({
         inProgress={false}
         startFrom={startFrom}
         responsesCount={responsesCount}
+        segments={segments}
       />
       <NormalizationSummary {...data} />
 
@@ -137,6 +141,7 @@ const SegmentInProgressItem = ({
   enabled,
   onlyUnnormalized,
   updateSegments,
+  segments,
 }: Segment &
   ProgressProps & {
     segmentIndex: number;
@@ -182,16 +187,31 @@ const SegmentInProgressItem = ({
         inProgress={true}
         startFrom={startFrom}
         responsesCount={responsesCount}
+        segments={segments}
       />{" "}
       {enabled ? <Loading /> : <span>Paused</span>}
     </article>
   );
 };
 
-const SegmentData = ({ index, inProgress, startFrom, responsesCount }) => {
+const SegmentData = ({
+  index,
+  inProgress,
+  startFrom,
+  responsesCount,
+  segments,
+}: {
+  index: number;
+  inProgress: boolean;
+  startFrom: number;
+  responsesCount: number;
+  segments: Segment[];
+}) => {
   return (
     <p>
-      <strong>Segment {index} / </strong>
+      <strong>
+        Segment {index}/{segments.length}
+      </strong>{" "}
       <span>
         {inProgress ? "Normalizing" : "Normalized"} <strong>{startFrom}</strong>
         -

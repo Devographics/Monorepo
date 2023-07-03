@@ -1,20 +1,14 @@
 import Breadcrumbs from "~/components/normalization/Breadcrumbs";
 import { NormalizeQuestion } from "~/components/normalization/NormalizeQuestion";
 import { fetchEditionMetadata, fetchSurveysMetadata } from "~/lib/api/fetch";
-import { getEditionQuestions } from "~/lib/normalization/normalize/helpers";
+import { getEditionQuestions } from "~/lib/normalization/helpers/getEditionQuestions";
 
 export default async function Page({ params }) {
   const { surveyId, editionId, questionId } = params;
   const surveys = await fetchSurveysMetadata();
+  const survey = surveys.find((s) => s.id === surveyId)!;
   const edition = await fetchEditionMetadata({ surveyId, editionId });
-  if (!edition) {
-    return (
-      <div>
-        No edition {surveyId}/{editionId} found.
-      </div>
-    );
-  }
-  const survey = edition.survey;
+
   const question = getEditionQuestions(edition).find(
     (q) => q.id === questionId
   );
@@ -37,9 +31,13 @@ export default async function Page({ params }) {
   // });
   return (
     <div>
-      <Breadcrumbs survey={survey} edition={edition} question={question} />
-      <NormalizeQuestion
+      <Breadcrumbs
         surveys={surveys}
+        survey={survey}
+        edition={edition}
+        question={question}
+      />
+      <NormalizeQuestion
         survey={survey}
         edition={edition}
         question={question}

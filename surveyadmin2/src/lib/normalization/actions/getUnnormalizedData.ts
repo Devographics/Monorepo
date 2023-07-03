@@ -1,10 +1,10 @@
 import { fetchEditionMetadata, fetchSurveysMetadata } from "~/lib/api/fetch";
 import {
   getEditionQuestionById,
-  getEditionQuestions,
   getQuestionResponsesCount,
   getUnnormalizedResponses,
 } from "../normalize/helpers";
+import { getEditionQuestions } from "../helpers/getEditionQuestions";
 import get from "lodash/get";
 
 export const getUnnormalizedData = async ({

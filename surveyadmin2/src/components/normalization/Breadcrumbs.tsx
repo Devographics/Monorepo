@@ -1,20 +1,40 @@
+"use client";
 import {
   EditionMetadata,
   QuestionMetadata,
   SurveyMetadata,
 } from "@devographics/types";
 import Link from "next/link";
+import { getNormalizableQuestions } from "~/lib/normalization/helpers/getNormalizableQuestions";
 import { routes } from "~/lib/routes";
+import { useRouter } from "next/navigation";
 
 const Breadcrumbs = ({
+  surveys,
   survey,
   edition,
   question,
 }: {
+  surveys?: SurveyMetadata[];
   survey?: SurveyMetadata;
   edition?: EditionMetadata;
   question?: QuestionMetadata;
 }) => {
+  const router = useRouter();
+
+  const handleNav = (e, params) => {
+    const route = routes.admin.normalization.href(params);
+    router.push(route);
+  };
+  const handleSurveyNav = (e) => handleNav(e, { surveyId: e.target.value });
+  const handleEditionNav = (e) =>
+    handleNav(e, { surveyId: survey?.id, editionId: e.target.value });
+  const handleQuestionNav = (e) =>
+    handleNav(e, {
+      surveyId: survey?.id,
+      editionId: edition?.id,
+      questionId: e.target.value,
+    });
   return (
     <nav>
       <ul>
@@ -22,44 +42,70 @@ const Breadcrumbs = ({
           <Link href={routes.admin.normalization.href({})}>Surveys</Link>
         </li>
         {survey && (
-          <li>
-            /
-            <Link
-              href={routes.admin.normalization.href({ surveyId: survey.id })}
-            >
-              {survey.name}
-            </Link>
-          </li>
+          <SurveySegment
+            handleNav={handleSurveyNav}
+            surveys={surveys}
+            survey={survey}
+          />
         )}
         {survey && edition && (
-          <li>
-            /
-            <Link
-              href={routes.admin.normalization.href({
-                surveyId: survey.id,
-                editionId: edition.id,
-              })}
-            >
-              {edition.id}
-            </Link>
-          </li>
+          <EditionSegment
+            handleNav={handleEditionNav}
+            survey={survey}
+            edition={edition}
+          />
         )}
         {survey && edition && question && (
-          <li>
-            /
-            <Link
-              href={routes.admin.normalization.href({
-                surveyId: survey.id,
-                editionId: edition.id,
-                questionId: question.id,
-              })}
-            >
-              {question.id}
-            </Link>
-          </li>
+          <QuestionSegment
+            handleNav={handleQuestionNav}
+            survey={survey}
+            edition={edition}
+            question={question}
+          />
         )}
       </ul>
     </nav>
+  );
+};
+
+const SurveySegment = ({ surveys, survey, handleNav }) => {
+  return (
+    <li>
+      <select onChange={handleNav}>
+        {surveys.map((s) => (
+          <option selected={s.id === survey.id} key={s.id}>
+            {s.id}
+          </option>
+        ))}
+      </select>
+    </li>
+  );
+};
+const EditionSegment = ({ survey, edition, handleNav }) => {
+  return (
+    <li>
+      <select onChange={handleNav}>
+        {survey?.editions?.map((e) => (
+          <option selected={e.id === edition.id} key={e.id}>
+            {e.id}
+          </option>
+        ))}
+      </select>
+    </li>
+  );
+};
+const QuestionSegment = ({ survey, edition, question, handleNav }) => {
+  const questions = getNormalizableQuestions({ survey, edition });
+  return (
+    <li>
+      <select onChange={handleNav}>
+        {questions.map((q) => (
+          <option selected={q.id === question.id} key={q.id}>
+            {q.id}
+          </option>
+        ))}
+      </select>
+    </li>
   );
 };
 

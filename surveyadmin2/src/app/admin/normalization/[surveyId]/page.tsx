@@ -6,13 +6,10 @@ import { routes } from "~/lib/routes";
 export default async function Page({ params }) {
   const { surveyId } = params;
   const surveys = await fetchSurveysMetadata();
-  const survey = surveys.find((s) => s.id === surveyId);
-  if (!survey) {
-    return <div>No survey {surveyId} found. </div>;
-  }
+  const survey = surveys.find((s) => s.id === surveyId)!;
   return (
     <div>
-      <Breadcrumbs survey={survey} />
+      <Breadcrumbs surveys={surveys} survey={survey} />
       {survey.editions.map((edition) => (
         <li key={edition.id}>
           <Link

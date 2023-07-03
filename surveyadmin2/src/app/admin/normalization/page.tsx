@@ -7,7 +7,7 @@ export default async function Page({ params }) {
   const surveys = await fetchSurveysMetadata();
   return (
     <div>
-      <Breadcrumbs />
+      <Breadcrumbs surveys={surveys} />
       {surveys.map((survey) => (
         <li key={survey.id}>
           <Link

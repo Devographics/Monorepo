@@ -13,8 +13,6 @@ import {
   BulkOperation,
   NormalizedDocumentMetadata,
   DocumentGroups,
-  NormalizationResultEmpty,
-  NormalizationResultError,
   NormalizationResultSuccessEx,
   NormalizationResultTypes,
 } from "../types";
@@ -25,7 +23,7 @@ Normalization
 
 */
 export const defaultLimit = 999;
-const isSimulation = true;
+const isSimulation = false;
 const verbose = false;
 
 /*

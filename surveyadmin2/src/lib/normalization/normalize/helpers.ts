@@ -13,43 +13,16 @@ import {
   QuestionTemplateOutput,
   EditionMetadata,
   SurveyMetadata,
-  TemplateArguments,
-  TemplateFunction,
   SectionMetadata,
 } from "@devographics/types";
-import * as templateFunctions from "@devographics/templates";
 import {
   getNormResponsesCollection,
   getRawResponsesCollection,
 } from "@devographics/mongo";
 import { fetchEditionMetadata, fetchEntities } from "../../api/fetch";
 import { getFormPaths } from "@devographics/templates";
-
-export const getQuestionObject = ({
-  survey,
-  edition,
-  section,
-  question,
-}: TemplateArguments) => {
-  if (!survey) throw new Error(`getQuestionObject: survey is undefined`);
-  if (!edition) throw new Error(`getQuestionObject: edition is undefined`);
-  if (!section) throw new Error(`getQuestionObject: section is undefined`);
-  if (!question) throw new Error(`getQuestionObject: question is undefined`);
-
-  const templateFunction = templateFunctions[
-    question.template
-  ] as TemplateFunction;
-  if (!templateFunction) {
-    return;
-  }
-  const questionObject = templateFunction({
-    survey,
-    edition,
-    section,
-    question,
-  });
-  return questionObject;
-};
+import { getQuestionObject } from "../helpers/getQuestionObject";
+import { getEditionQuestions } from "../helpers/getEditionQuestions";
 
 // export const getFieldPaths = (field: Field) => {
 //   const { suffix } = field as ParsedQuestion;
@@ -706,33 +679,3 @@ export const getBulkOperation = (selector, modifier, isReplace) =>
 export interface QuestionWithSection extends QuestionMetadata {
   section: SectionMetadata;
 }
-
-export const getEditionQuestions = (
-  edition: EditionMetadata
-): Array<QuestionWithSection> =>
-  edition.sections
-    .map((s) => s.questions.map((q) => ({ ...q, section: s })))
-    .flat();
-
-export const getNormalizableQuestions = ({
-  survey,
-  edition,
-}: {
-  survey: SurveyMetadata;
-  edition: EditionMetadata;
-}) => {
-  const allQuestions = getEditionQuestions(edition);
-  const questions = allQuestions.filter((question) => {
-    const questionObject = getQuestionObject({
-      survey,
-      edition,
-      section: question.section,
-      question,
-    });
-    const rawPaths = questionObject?.rawPaths;
-    return rawPaths?.other;
-  });
-  // also add source
-  // fields.push({ id: "source", fieldName: "common__user_info__source" });
-  return questions;
-};

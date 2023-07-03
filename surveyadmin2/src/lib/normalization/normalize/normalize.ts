@@ -2,8 +2,8 @@ import {
   QuestionWithSection,
   generateEntityRules,
   getEditionQuestionById,
-  getQuestionObject,
 } from "./helpers";
+import { getQuestionObject } from "../helpers/getQuestionObject";
 import * as steps from "./steps";
 import get from "lodash/get.js";
 import {
