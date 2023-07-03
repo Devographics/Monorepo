@@ -1,7 +1,7 @@
 import Breadcrumbs from "~/components/normalization/Breadcrumbs";
 import { NormalizeQuestion } from "~/components/normalization/NormalizeQuestion";
 import { fetchEditionMetadata, fetchSurveysMetadata } from "~/lib/api/fetch";
-import { getEditionQuestions } from "~/lib/normalization/helpers";
+import { getEditionQuestions } from "~/lib/normalization/normalize/helpers";
 
 export default async function Page({ params }) {
   const { surveyId, editionId, questionId } = params;

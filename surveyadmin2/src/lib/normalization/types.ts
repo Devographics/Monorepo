@@ -4,7 +4,7 @@ import {
   ResponseDocument,
   SurveyMetadata,
 } from "@devographics/types";
-import { EntityRule } from "./helpers";
+import { EntityRule } from "./normalize/helpers";
 
 export interface UpdateBulkOperation {
   updateMany: any;

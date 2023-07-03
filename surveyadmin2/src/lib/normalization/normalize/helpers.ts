@@ -22,7 +22,7 @@ import {
   getNormResponsesCollection,
   getRawResponsesCollection,
 } from "@devographics/mongo";
-import { fetchEditionMetadata, fetchEntities } from "../api/fetch";
+import { fetchEditionMetadata, fetchEntities } from "../../api/fetch";
 import { getFormPaths } from "@devographics/templates";
 
 export const getQuestionObject = ({

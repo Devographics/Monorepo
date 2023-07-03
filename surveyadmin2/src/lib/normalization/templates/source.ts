@@ -1,8 +1,8 @@
 import set from "lodash/set.js";
 import get from "lodash/get.js";
 import compact from "lodash/compact.js";
-import { normalizeSingle } from "../helpers";
-import { copyFields } from "../steps";
+import { normalizeSingle } from "../normalize/helpers";
+import { copyFields } from "../normalize/steps";
 import { NormalizationParams } from "../types";
 
 export const source = async (normalizationParams: NormalizationParams) => {

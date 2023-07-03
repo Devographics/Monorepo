@@ -4,7 +4,7 @@ import {
   fetchSurveyMetadata,
   fetchSurveysMetadata,
 } from "~/lib/api/fetch";
-import { normalizeInBulk } from "./normalizeInBulk";
+import { normalizeInBulk } from "../normalize/normalizeInBulk";
 
 export type NormalizeQuestionResponsesArgs = {
   // note: we need a surveyId to figure out which database to use

@@ -1,6 +1,6 @@
 import set from "lodash/set.js";
 // TODO: should be imported dynamically
-import countries from "../countries";
+import countries from "../normalize/countries";
 import { logToFile } from "@devographics/helpers";
 import { NormalizationParams } from "../types";
 

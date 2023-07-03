@@ -7,7 +7,7 @@ import {
   NormalizedField,
   PrenormalizedField,
   RegularField,
-} from "./types";
+} from "../types";
 import clone from "lodash/clone";
 import { QuestionTemplateOutput, SectionMetadata } from "@devographics/types";
 

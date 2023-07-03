@@ -7,7 +7,7 @@ import type {
   QuestionTemplateOutput,
   SectionMetadata,
 } from "@devographics/types";
-import { NormalizationParams, StepFunction } from "./types";
+import { NormalizationParams, StepFunction } from "../types";
 import clone from "lodash/clone";
 
 // const replaceAll = function (target, search, replacement) {

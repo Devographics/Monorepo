@@ -4,7 +4,7 @@ import {
   getEditionQuestions,
   getQuestionResponsesCount,
   getUnnormalizedResponses,
-} from "../helpers";
+} from "../normalize/helpers";
 import get from "lodash/get";
 
 export const getUnnormalizedData = async ({

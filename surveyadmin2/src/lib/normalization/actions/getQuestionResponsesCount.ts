@@ -1,6 +1,6 @@
 import { getRawResponsesCollection } from "@devographics/mongo";
 import { fetchSurveysMetadata } from "../../api/fetch";
-import { getSelector } from "../helpers";
+import { getSelector } from "../normalize/helpers";
 import {
   EditionMetadata,
   QuestionMetadata,

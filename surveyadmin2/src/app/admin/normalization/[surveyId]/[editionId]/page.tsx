@@ -5,7 +5,7 @@ import { fetchEditionMetadata, fetchSurveysMetadata } from "~/lib/api/fetch";
 import {
   getEditionResponsesCount,
   getNormalizableQuestions,
-} from "~/lib/normalization/helpers";
+} from "~/lib/normalization/normalize/helpers";
 import { routes } from "~/lib/routes";
 
 export default async function Page({ params }) {

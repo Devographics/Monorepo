@@ -12,11 +12,11 @@ import type {
 import yaml from "js-yaml";
 import { readFile } from "fs/promises";
 import { logToFile } from "@devographics/helpers";
-import { normalizeResponse } from "~/lib/normalization/normalize";
+import { normalizeResponse } from "~/lib/normalization/normalize/normalize";
 import {
   getEditionQuestions,
   getEditionQuestionsFlat,
-} from "~/lib/normalization/helpers";
+} from "~/lib/normalization/normalize/helpers";
 import * as templateFunctions from "@devographics/templates";
 import { fetchEntities, fetchSurveysMetadata } from "~/lib/api/fetch";
 

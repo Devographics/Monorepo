@@ -4,7 +4,7 @@ import {
   fetchSurveyMetadata,
   fetchSurveysMetadata,
 } from "~/lib/api/fetch";
-import { normalizeInBulk } from "./normalizeInBulk";
+import { normalizeInBulk } from "../normalize/normalizeInBulk";
 import { logToFile } from "@devographics/helpers";
 
 export type NormalizeResponsesArgs = {

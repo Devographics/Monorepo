@@ -27,7 +27,7 @@ import {
   NormalizationResultError,
   NormalizationResultEmpty,
   NormalizationResultTypes,
-} from "./types";
+} from "../types";
 import clone from "lodash/clone";
 import { normalizeField } from "./normalizeField";
 import { EditionMetadata, ResponseDocument } from "@devographics/types";

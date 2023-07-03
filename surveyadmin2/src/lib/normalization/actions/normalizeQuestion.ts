@@ -1,11 +1,11 @@
-import { getEditionQuestionById, getSelector } from "../helpers";
+import { getEditionQuestionById, getSelector } from "../normalize/helpers";
 import { getRawResponsesCollection } from "@devographics/mongo";
 import {
   fetchEditionMetadata,
   fetchSurveyMetadata,
   fetchSurveysMetadata,
 } from "~/lib/api/fetch";
-import { normalizeInBulk, defaultLimit } from "./normalizeInBulk";
+import { normalizeInBulk, defaultLimit } from "../normalize/normalizeInBulk";
 
 export type NormalizeQuestionArgs = {
   surveyId: string;
