@@ -1,8 +1,4 @@
-import {
-  QuestionWithSection,
-  generateEntityRules,
-  getEditionQuestionById,
-} from "./helpers";
+import { generateEntityRules, getEditionQuestionById } from "./helpers";
 import { getQuestionObject } from "../helpers/getQuestionObject";
 import * as steps from "./steps";
 import get from "lodash/get.js";
@@ -11,7 +7,6 @@ import {
   fetchEntities,
   fetchSurveyMetadata,
 } from "~/lib/api/fetch";
-import { newMongoId } from "@devographics/mongo";
 import {
   NormalizationOptions,
   NormalizationResultSuccessEx,
@@ -73,9 +68,7 @@ export const normalizeDocument = async (
     const { survey, edition, entityRules } = await fetchDataIfNeeded(options);
 
     const errors: NormalizationError[] = [];
-    let normResp = {
-      _id: newMongoId(), // generate a string _id, in case of insert
-    } as NormalizedResponseDocument;
+    let normResp = {} as NormalizedResponseDocument;
 
     const normalizationParams: NormalizationParams = {
       ...options,

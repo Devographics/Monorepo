@@ -48,14 +48,14 @@ export const NormalizationResult = (props: NormalizationResultProps) => {
         />
         <DocumentGroup
           documents={unmatchedDocuments}
-          label="Unmatched Documents"
+          label="Documents With Unmatched Freeform Fields"
           description="Documents that contained unmatched questions."
           showQuestionId={showQuestionId}
           defaultShow={false}
         />
         <DocumentGroup
           documents={unnormalizableDocuments}
-          label="Unnormalizable Documents"
+          label="Documents With No Freeform Fields"
           description="Documents that did not contain any fields requiring normalization."
           onlyId={true}
           defaultShow={false}

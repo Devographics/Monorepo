@@ -1,16 +1,17 @@
 import { getRawResponsesCollection } from "@devographics/mongo";
 import { fetchSurveysMetadata } from "../../api/fetch";
-import { getSelector } from "../normalize/helpers";
+import { getSelector } from "../helpers/getSelectors";
 import {
   EditionMetadata,
   QuestionMetadata,
   SurveyMetadata,
 } from "@devographics/types";
+import type { QuestionWithSection } from "~/lib/normalization/types";
 
 type GetQuestionResponsesCountArgs = {
   survey: SurveyMetadata;
   edition: EditionMetadata;
-  question?: QuestionMetadata;
+  question?: QuestionWithSection;
   onlyUnnormalized?: boolean;
 };
 

@@ -1,4 +1,5 @@
-import { getEditionQuestionById, getSelector } from "../normalize/helpers";
+import { getEditionQuestionById } from "../normalize/helpers";
+import { getSelector } from "../helpers/getSelectors";
 import { getRawResponsesCollection } from "@devographics/mongo";
 import {
   fetchEditionMetadata,

@@ -2,7 +2,10 @@ import Link from "next/link";
 import Breadcrumbs from "~/components/normalization/Breadcrumbs";
 import NormalizeEdition from "~/components/normalization/NormalizeEdition";
 import { fetchEditionMetadata, fetchSurveysMetadata } from "~/lib/api/fetch";
-import { getEditionResponsesCount } from "~/lib/normalization/normalize/helpers";
+import {
+  getEditionNormalizedResponsesCount,
+  getEditionResponsesCount,
+} from "~/lib/normalization/normalize/helpers";
 import { getNormalizableQuestions } from "~/lib/normalization/helpers/getNormalizableQuestions";
 import { routes } from "~/lib/routes";
 
@@ -13,12 +16,22 @@ export default async function Page({ params }) {
   const edition = await fetchEditionMetadata({ surveyId, editionId });
   const questions = getNormalizableQuestions({ survey, edition });
   const responsesCount = await getEditionResponsesCount({ survey, edition });
+  const normResponsesCount = await getEditionNormalizedResponsesCount({
+    survey,
+    edition,
+  });
   return (
     <div>
       <Breadcrumbs surveys={surveys} survey={survey} edition={edition} />
 
+      <p>
+        {responsesCount} raw responses, {normResponsesCount} normalized
+        responses
+      </p>
+
       <NormalizeEdition
         responsesCount={responsesCount}
+        normResponsesCount={normResponsesCount}
         survey={survey}
         edition={edition}
       />

@@ -71,11 +71,9 @@ const Breadcrumbs = ({
 const SurveySegment = ({ surveys, survey, handleNav }) => {
   return (
     <li>
-      <select onChange={handleNav}>
+      <select value={survey.id} onBlur={handleNav} onChange={handleNav}>
         {surveys.map((s) => (
-          <option selected={s.id === survey.id} key={s.id}>
-            {s.id}
-          </option>
+          <option key={s.id}>{s.id}</option>
         ))}
       </select>
     </li>
@@ -84,11 +82,9 @@ const SurveySegment = ({ surveys, survey, handleNav }) => {
 const EditionSegment = ({ survey, edition, handleNav }) => {
   return (
     <li>
-      <select onChange={handleNav}>
+      <select value={edition.id} onBlur={handleNav} onChange={handleNav}>
         {survey?.editions?.map((e) => (
-          <option selected={e.id === edition.id} key={e.id}>
-            {e.id}
-          </option>
+          <option key={e.id}>{e.id}</option>
         ))}
       </select>
     </li>
@@ -98,11 +94,9 @@ const QuestionSegment = ({ survey, edition, question, handleNav }) => {
   const questions = getNormalizableQuestions({ survey, edition });
   return (
     <li>
-      <select onChange={handleNav}>
+      <select value={question.id} onBlur={handleNav} onChange={handleNav}>
         {questions.map((q) => (
-          <option selected={q.id === question.id} key={q.id}>
-            {q.id}
-          </option>
+          <option key={q.id}>{q.id}</option>
         ))}
       </select>
     </li>

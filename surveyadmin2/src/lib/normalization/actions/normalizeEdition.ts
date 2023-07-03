@@ -1,4 +1,4 @@
-import { getSelector } from "../normalize/helpers";
+import { getEditionSelector, getSelector } from "../helpers/getSelectors";
 import { getRawResponsesCollection } from "@devographics/mongo";
 import { fetchEditionMetadata, fetchSurveysMetadata } from "~/lib/api/fetch";
 import { normalizeInBulk, defaultLimit } from "../normalize/normalizeInBulk";
@@ -39,7 +39,7 @@ export const normalizeEdition = async (args: NormalizeEditionArgs) => {
 
   const rawResponsesCollection = await getRawResponsesCollection(survey);
 
-  const selector = await getSelector({
+  const selector = await getEditionSelector({
     survey,
     edition,
   });

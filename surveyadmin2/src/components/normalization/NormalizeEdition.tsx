@@ -8,11 +8,14 @@ export const NormalizeEdition = ({
   survey,
   edition,
   responsesCount,
+  normResponsesCount,
 }: {
   survey: SurveyMetadata;
   edition: EditionMetadata;
   responsesCount: number;
+  normResponsesCount: number;
 }) => {
+  const isFirstNormalization = normResponsesCount === 0;
   const {
     initializeSegments,
     updateSegments,
@@ -32,6 +35,7 @@ export const NormalizeEdition = ({
     enabled,
     setEnabled,
     segments,
+    isFirstNormalization,
   };
 
   return (

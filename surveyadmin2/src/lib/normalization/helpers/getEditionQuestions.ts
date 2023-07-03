@@ -1,5 +1,5 @@
 import { EditionMetadata } from "@devographics/types";
-import { QuestionWithSection } from "../normalize/helpers";
+import type { QuestionWithSection } from "~/lib/normalization/types";
 
 export const getEditionQuestions = (
   edition: EditionMetadata

@@ -36,7 +36,9 @@ export {
     tokyodev_nationality,
     yearly_salary,
     years_of_experience,
-    quiz
+    quiz,
+    text,
+    longtext
 } from '@devographics/templates'
 
 export * from './data_explorer'

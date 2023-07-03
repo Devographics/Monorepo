@@ -20,9 +20,16 @@ import {
   getRawResponsesCollection,
 } from "@devographics/mongo";
 import { fetchEditionMetadata, fetchEntities } from "../../api/fetch";
-import { getFormPaths } from "@devographics/templates";
 import { getQuestionObject } from "../helpers/getQuestionObject";
 import { getEditionQuestions } from "../helpers/getEditionQuestions";
+import { newMongoId } from "@devographics/mongo";
+import {
+  getEditionSelector,
+  getUnnormalizedResponsesSelector,
+  ignoreValues,
+} from "../helpers/getSelectors";
+import { getSelector } from "../helpers/getSelectors";
+import { QuestionWithSection } from "../types";
 
 // export const getFieldPaths = (field: Field) => {
 //   const { suffix } = field as ParsedQuestion;
@@ -64,43 +71,6 @@ export const getEditionQuestionById = ({
   }
   return question;
 };
-
-/*
-
-Clean up values to remove 'none', 'n/a', etc.
-
-*/
-export const ignoreValues = [
-  "",
-  " ",
-  "  ",
-  "   ",
-  "    ",
-  "     ",
-  "      ",
-  "\n",
-  "\n\n",
-  "/",
-  "\\",
-  "*",
-  "+",
-  "-",
-  "—",
-  "n/a",
-  "N/A",
-  "N/a",
-  "NA",
-  "na",
-  "Na",
-  "None",
-  "none",
-  "Nothing",
-  "nothing",
-  "No",
-  "no",
-  ".",
-  "?",
-];
 
 export const cleanupValue = (value) =>
   typeof value === "undefined" || ignoreValues.includes(value) ? null : value;
@@ -495,72 +465,6 @@ export const logAllRules = async () => {
   }
 };
 
-export const getSourceFields = (surveyId) => [
-  "common__user_info__referrer",
-  "common__user_info__source",
-  `${surveyId}__user_info__how_did_user_find_out_about_the_survey`,
-];
-
-const existsSelector = { $exists: true, $nin: ignoreValues };
-
-// get mongo selector
-export const getSelector = async ({
-  survey,
-  edition,
-  question,
-  onlyUnnormalized,
-}: {
-  survey: SurveyMetadata;
-  edition: EditionMetadata;
-  question?: QuestionWithSection;
-  onlyUnnormalized?: boolean;
-}) => {
-  const selector = {
-    editionId: edition.id,
-  } as any;
-
-  if (question) {
-    const questionObject = getQuestionObject({
-      survey,
-      edition,
-      section: question.section,
-      question,
-    });
-    if (questionObject) {
-      if (onlyUnnormalized) {
-        // const { responses } = await getUnnormalizedResponses({
-        //   survey
-        //   edition,
-        //   question
-        // });
-        // const unnormalizedIds = responses.map((r) => r.responseId);
-        // selector._id = { $in: unnormalizedIds };
-      } else {
-        if (question.id === "source") {
-          // source field should be treated differently
-          selector["$or"] = getSourceFields(edition.id).map((f) => ({
-            [f]: existsSelector,
-          }));
-        } else {
-          const formPaths = getFormPaths({ edition, question: questionObject });
-          if (formPaths.other) {
-            selector[formPaths.other] = existsSelector;
-          }
-        }
-      }
-    }
-  } else {
-    if (onlyUnnormalized) {
-      selector.isNormalized = { $ne: true };
-    } else {
-      // do nothing, use default selector
-    }
-  }
-  // console.log("// selector");
-  // console.log(JSON.stringify(selector, undefined, 2));
-  return selector;
-};
-
 /*
 
 Get responses count for an entire edition
@@ -573,13 +477,35 @@ export const getEditionResponsesCount = async ({
   survey: SurveyMetadata;
   edition: EditionMetadata;
 }) => {
-  const selector = await getSelector({
+  const selector = await getEditionSelector({
     survey,
     edition,
   });
 
   const rawResponsesCollection = await getRawResponsesCollection(survey);
   const responsesCount = await rawResponsesCollection.countDocuments(selector);
+  return responsesCount;
+};
+
+/*
+
+Get responses count for an entire edition
+
+*/
+export const getEditionNormalizedResponsesCount = async ({
+  survey,
+  edition,
+}: {
+  survey: SurveyMetadata;
+  edition: EditionMetadata;
+}) => {
+  const selector = await getEditionSelector({
+    survey,
+    edition,
+  });
+
+  const normResponsesCollection = await getNormResponsesCollection(survey);
+  const responsesCount = await normResponsesCollection.countDocuments(selector);
   return responsesCount;
 };
 
@@ -618,29 +544,19 @@ export const getUnnormalizedResponses = async ({
   edition: EditionMetadata;
   question: QuestionWithSection;
 }) => {
-  let rawFieldPath, normalizedFieldPath;
-  if (question.id === "source") {
-    rawFieldPath = "user_info.source.raw";
-    normalizedFieldPath = "user_info.source.normalized";
-  } else {
-    const questionObject = getQuestionObject({
-      survey,
-      edition,
-      section: question.section,
-      question,
-    });
-    rawFieldPath = questionObject?.normPaths?.raw;
-    normalizedFieldPath = questionObject?.normPaths?.other;
-  }
+  const questionObject = getQuestionObject({
+    survey,
+    edition,
+    section: question.section,
+    question,
+  })!;
+  const rawFieldPath = questionObject?.normPaths?.raw!;
+  const normalizedFieldPath = questionObject?.normPaths?.other!;
 
-  const selector = {
-    editionId: edition.id,
-    [rawFieldPath]: existsSelector,
-    $or: [
-      { [normalizedFieldPath]: [] },
-      { [normalizedFieldPath]: { $exists: false } },
-    ],
-  };
+  const selector = getUnnormalizedResponsesSelector({
+    edition,
+    questionObject,
+  });
 
   const NormResponses = await getNormResponsesCollection();
   let responses = await NormResponses.find(selector, {
@@ -659,8 +575,24 @@ export const getUnnormalizedResponses = async ({
   return { responses, rawFieldPath, normalizedFieldPath };
 };
 
-export const getBulkOperation = (selector, modifier, isReplace) =>
-  isReplace
+export const getBulkOperation = ({
+  selector,
+  modifier,
+  isReplace,
+  isFirstNormalization,
+}: {
+  selector: any;
+  modifier: any;
+  isReplace: boolean;
+  isFirstNormalization: boolean;
+}) => {
+  // if this is the first time we are normalizing this, generate string _id
+  // (will trigger an error if done when norm. document already exists!)
+  if (isFirstNormalization) {
+    modifier._id = newMongoId();
+  }
+
+  return isReplace
     ? {
         replaceOne: {
           filter: selector,
@@ -675,7 +607,4 @@ export const getBulkOperation = (selector, modifier, isReplace) =>
           upsert: false,
         },
       };
-
-export interface QuestionWithSection extends QuestionMetadata {
-  section: SectionMetadata;
-}
+};

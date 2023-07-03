@@ -1,7 +1,9 @@
 import {
   EditionMetadata,
   Entity,
+  QuestionMetadata,
   ResponseDocument,
+  SectionMetadata,
   SurveyMetadata,
 } from "@devographics/types";
 import { EntityRule } from "./normalize/helpers";
@@ -183,3 +185,7 @@ export interface NormalizeFieldResult {
 export type StepFunction = (
   NormalizationParams
 ) => Promise<NormalizedResponseDocument>;
+
+export interface QuestionWithSection extends QuestionMetadata {
+  section: SectionMetadata;
+}

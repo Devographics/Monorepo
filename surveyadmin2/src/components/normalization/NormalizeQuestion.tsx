@@ -13,11 +13,12 @@ import {
   SurveyMetadata,
 } from "@devographics/types";
 import { useSegments } from "./hooks";
+import type { QuestionWithSection } from "~/lib/normalization/types";
 
 export const NormalizeQuestion = (props: {
   survey: SurveyMetadata;
   edition: EditionMetadata;
-  question: QuestionMetadata;
+  question: QuestionWithSection;
 }) => {
   const { survey, edition, question } = props;
   const { data, loading, error } = useUnnormalizedData({
@@ -42,7 +43,7 @@ export const Normalization = ({
 }: {
   survey: SurveyMetadata;
   edition: EditionMetadata;
-  question: QuestionMetadata;
+  question: QuestionWithSection;
   data: UnnormalizedData;
 }) => {
   const { responsesCount, unnormalizedResponses } = data;

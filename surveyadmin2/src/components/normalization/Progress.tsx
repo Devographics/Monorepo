@@ -28,6 +28,7 @@ interface ProgressProps {
   question?: QuestionMetadata;
   onlyUnnormalized?: boolean;
   updateSegments: any;
+  isFirstNormalization?: boolean;
 }
 
 const Progress = (props: ProgressProps) => {
@@ -142,6 +143,7 @@ const SegmentInProgressItem = ({
   onlyUnnormalized,
   updateSegments,
   segments,
+  isFirstNormalization = false,
 }: Segment &
   ProgressProps & {
     segmentIndex: number;
@@ -162,6 +164,7 @@ const SegmentInProgressItem = ({
           startFrom: onlyUnnormalized ? 0 : startFrom,
           limit: defaultSegmentSize,
           onlyUnnormalized,
+          isFirstNormalization,
         };
         // either run normalization for a single question, or for all questions in edition
         const result = question

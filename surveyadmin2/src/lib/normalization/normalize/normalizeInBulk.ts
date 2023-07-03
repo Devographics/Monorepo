@@ -35,22 +35,29 @@ B) a specific question on *all* documents (if questionId) is passed
 C) *all* questions on *all* documents (if neither is passed)
 
 */
-export const normalizeInBulk = async ({
-  survey,
-  edition,
-  responses,
-  limit,
-  questionId,
-  isRenormalization = false,
-}: {
+export const normalizeInBulk = async (options: {
   survey: SurveyMetadata;
   edition: EditionMetadata;
   responses: ResponseDocument[];
   limit?: number;
   questionId?: string;
   isRenormalization?: boolean;
+  isFirstNormalization?: boolean;
 }) => {
+  const {
+    survey,
+    edition,
+    responses,
+    limit,
+    questionId,
+    isRenormalization = false,
+    isFirstNormalization = false,
+  } = options;
   const startAt = new Date();
+  const timestamp = startAt.toISOString();
+
+  await logToFile(`normalizeInBulk/${timestamp}_options.json`, options);
+
   let progress = 0;
   const count = responses.length;
   const tickInterval = Math.round(count / 200);
@@ -144,7 +151,12 @@ export const normalizeInBulk = async ({
       } else {
         // add to bulk operations array
         const { selector, modifier } = normalizationResult;
-        const operation = getBulkOperation(selector, modifier, isReplace);
+        const operation = getBulkOperation({
+          selector,
+          modifier,
+          isReplace,
+          isFirstNormalization,
+        });
         bulkOperations.push(operation);
       }
     }
@@ -168,6 +180,12 @@ export const normalizeInBulk = async ({
   try {
     if (!isSimulation) {
       console.log(`-> Now starting bulk write…`);
+
+      await logToFile(
+        `normalizeInBulk/${timestamp}_bulkOperations.json`,
+        bulkOperations
+      );
+
       const operationResult = await normResponsesCollection.bulkWrite(
         bulkOperations
       );
@@ -226,11 +244,11 @@ export const normalizeInBulk = async ({
   mutationResult.totalDocumentCount = allDocuments.length;
 
   await logToFile(
-    `normalizeInBulk/allDocuments.json_${new Date().toString()}`,
+    `normalizeInBulk/${timestamp}_allDocuments.json`,
     allDocuments
   );
   await logToFile(
-    `normalizeInBulk/mutationResult_${new Date().toString()}.json`,
+    `normalizeInBulk/${timestamp}_mutationResult.json`,
     mutationResult
   );
 
