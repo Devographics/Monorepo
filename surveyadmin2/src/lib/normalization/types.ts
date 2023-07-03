@@ -70,7 +70,18 @@ export interface NormalizeInBulkResult {
   isSimulation: boolean;
 }
 
-export interface NormalizationResult {
+export enum NormalizationResultTypes {
+  EMPTY = "empty",
+  ERROR = "error",
+  SUCCESS = "success",
+}
+
+export interface NormalizationResult<Type extends NormalizationResultTypes> {
+  type: Type;
+}
+
+export interface NormalizationResultSuccess
+  extends NormalizationResult<NormalizationResultTypes.SUCCESS> {
   normalizedResponse: NormalizedResponseDocument;
   normalizedFields: Array<NormalizedField>;
   prenormalizedFields: Array<RegularField>;
@@ -81,18 +92,20 @@ export interface NormalizationResult {
   discard?: boolean;
 }
 
-export interface NormalizationResultExtended extends NormalizationResult {
+export interface NormalizationResultSuccessEx
+  extends NormalizationResultSuccess {
   response: ResponseDocument;
   responseId: string;
   counts: Counts;
   selector: { responseId: string };
 }
 
-export interface NormalizationResultEmpty extends NormalizationResult {
+export interface NormalizationResultEmpty
+  extends NormalizationResult<NormalizationResultTypes.EMPTY> {
   discard: true;
-  empty: true;
 }
-export interface NormalizationResultError extends NormalizationResult {
+export interface NormalizationResultError
+  extends NormalizationResult<NormalizationResultTypes.ERROR> {
   discard: true;
   errors: any[];
 }

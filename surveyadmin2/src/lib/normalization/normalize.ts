@@ -14,7 +14,7 @@ import {
 import { newMongoId } from "@devographics/mongo";
 import {
   NormalizationOptions,
-  NormalizationResultExtended,
+  NormalizationResultSuccessEx,
   NormalizationError,
   NormalizedResponseDocument,
   NormalizedField,
@@ -23,9 +23,10 @@ import {
   CommentField,
   PrenormalizedField,
   StepFunction,
-  NormalizationResult,
+  NormalizationResultSuccess,
   NormalizationResultError,
   NormalizationResultEmpty,
+  NormalizationResultTypes,
 } from "./types";
 import clone from "lodash/clone";
 import { normalizeField } from "./normalizeField";
@@ -61,7 +62,7 @@ const fetchDataIfNeeded = async (options: NormalizationOptions) => {
 export const normalizeDocument = async (
   options: NormalizationOptions
 ): Promise<
-  | NormalizationResultExtended
+  | NormalizationResultSuccessEx
   | NormalizationResultEmpty
   | NormalizationResultError
 > => {
@@ -89,7 +90,7 @@ export const normalizeDocument = async (
       // response is empty, discard operation
       normalizationResult = {
         discard: true,
-        empty: true,
+        type: NormalizationResultTypes.EMPTY,
       } as NormalizationResultEmpty;
       return normalizationResult;
     } else {
@@ -123,6 +124,7 @@ export const normalizeDocument = async (
     // response encountered error, pass on error and discard operation
     normalizationResult = {
       discard: true,
+      type: NormalizationResultTypes.ERROR,
       errors: [error.message],
     } as NormalizationResultError;
     return normalizationResult;
@@ -136,7 +138,7 @@ Normalize single question
 */
 const normalizeQuestion = async (
   normalizationParams: NormalizationParams & { questionId: string }
-): Promise<NormalizationResult> => {
+): Promise<NormalizationResultSuccess> => {
   const { verbose, response, survey, edition, questionId } =
     normalizationParams;
   if (verbose) {
@@ -200,7 +202,12 @@ const normalizeQuestion = async (
   // we replace the entire "base" question value ("resources.first_steps", "tools.react", etc.),
   // including all sub-fields
   const modifier = { $set: { [questionBasePath]: value } };
-  return { ...result, modifier, discard };
+  return {
+    ...result,
+    type: NormalizationResultTypes.SUCCESS,
+    modifier,
+    discard,
+  };
 };
 
 /*
@@ -210,7 +217,7 @@ Normalize entire response document
 */
 const normalizeResponse = async (
   normalizationParams: NormalizationParams
-): Promise<NormalizationResult> => {
+): Promise<NormalizationResultSuccess> => {
   const {
     survey,
     edition,
@@ -283,6 +290,7 @@ const normalizeResponse = async (
   return {
     // replace entire response with normResp
     modifier: normResp,
+    type: NormalizationResultTypes.SUCCESS,
     normalizedResponse: normResp,
     discard,
     ...fields,

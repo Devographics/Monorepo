@@ -15,7 +15,8 @@ import {
   DocumentGroups,
   NormalizationResultEmpty,
   NormalizationResultError,
-  NormalizationResultExtended,
+  NormalizationResultSuccessEx,
+  NormalizationResultTypes,
 } from "../types";
 
 /*
@@ -102,15 +103,13 @@ export const normalizeInBulk = async ({
       console.log(`  -> Normalized ${progress}/${count} responses…`);
     }
 
-    if ((normalizationResult as NormalizationResultError).errors) {
-      mutationResult.errorCount += (
-        normalizationResult as NormalizationResultError
-      ).errors.length;
+    if (normalizationResult.type === NormalizationResultTypes.ERROR) {
+      mutationResult.errorCount += normalizationResult.errors.length;
       allDocuments.push({
         responseId: response._id,
         errors: normalizationResult.errors,
       });
-    } else if ((normalizationResult as NormalizationResultEmpty).empty) {
+    } else if (normalizationResult.type === NormalizationResultTypes.EMPTY) {
       allDocuments.push({
         responseId: response._id,
         empty: true,
@@ -118,7 +117,7 @@ export const normalizeInBulk = async ({
     } else {
       // if normalization was valid, add it to array of all documents
       const { responseId, normalizedResponse, normalizedFields, counts } =
-        normalizationResult as NormalizationResultExtended;
+        normalizationResult as NormalizationResultSuccessEx;
 
       /* 
       
