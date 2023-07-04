@@ -251,39 +251,10 @@ const getQuestionResolverMap = async ({
 }
 
 const getQuestionResolver =
-    ({ survey, edition, section, question, questionObjects }: ResolverParent): ResolverType =>
-    async (parent, args, context, info) => {
+    (data: ResolverParent): ResolverType =>
+    async () => {
         console.log('// question resolver')
-        const result: QuestionResolverParent = {
-            survey,
-            edition,
-            section,
-            question,
-            questionObjects
-        }
-        // for (const subField of subFields) {
-        //     const { id, addIf, addIfAsync, resolverFunction } = subField
-        //     const addSubField = addIfAsync ? await addIfAsync(question) : addIf(question)
-        //     if (addSubField) {
-        //         result[id] = resolverFunction
-        //     }
-        // }
-        // console.log(result)
-        // if (question.options) {
-        //     const questionOptions: Option[] = question.options
-
-        //     const optionEntities = await getEntities({
-        //         ids: questionOptions.map(o => o.id),
-        //         context
-        //     })
-
-        //     result.options = questionOptions.map(option => ({
-        //         ...option,
-        //         entity: optionEntities.find(o => o.id === option.id)
-        //     }))
-        // }
-        // result._metadata = question
-        return result
+        return data
     }
 
 /*
