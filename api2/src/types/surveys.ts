@@ -13,7 +13,8 @@ import {
     QuestionTemplateOutput,
     SectionMetadata,
     EditionMetadata,
-    SurveyMetadata
+    SurveyMetadata,
+    ResultsSubFieldEnum
 } from '@devographics/types'
 
 export type TypeObject = {
@@ -53,8 +54,8 @@ export interface ResolverParent {
     responseArguments?: ResponseArguments
 }
 
-export interface QuestionResolverParent extends ResolverParent {
-    options?: Option[]
+export type QuestionResolverParent = ResolverParent & {
+    [key in ResultsSubFieldEnum]?: ResolverType
 }
 
 export type ResolverType = (
@@ -133,7 +134,7 @@ export interface QuestionApiObject extends QuestionApiTemplateOutput {
 
     sectionIds?: string[]
     sectionIndex?: number
-    surveyId?: string
+    surveyId: string
 
     // only when this appears as part of a complete edition metadata tree
     editionId?: string

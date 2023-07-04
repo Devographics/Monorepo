@@ -8,6 +8,18 @@ import { ResponsesTypes } from './metadata'
 //     contentType: 'string' | 'number'
 // }
 
+export enum ResultsSubFieldEnum {
+    RESPONSES = 'responses',
+    COMMENTS = 'comments',
+    FREEFORM = 'freeform',
+    PRENORMALIZED = 'prenormalized',
+    MEDIANS = 'medians',
+    OPTIONS = 'options',
+    ENTITY = 'entity',
+    ID = 'id',
+    METADATA = '_metadata'
+}
+
 export enum DbPathsEnum {
     BASE = 'base',
     RESPONSE = 'response',

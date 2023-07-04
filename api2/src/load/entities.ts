@@ -168,19 +168,22 @@ export const initEntities = async (context: RequestContext) => {
     return entities
 }
 
-export const getEntities = async ({
-    ids,
-    tags,
-    context,
-    includeNormalizationEntities = false,
-    includeAPIOnlyEntities = true
-}: {
-    ids?: OptionId[]
-    tags?: string[]
-    context?: RequestContext
-    includeNormalizationEntities?: boolean
-    includeAPIOnlyEntities?: boolean
-}) => {
+export const getEntities = async (
+    options: {
+        ids?: OptionId[]
+        tags?: string[]
+        context?: RequestContext
+        includeNormalizationEntities?: boolean
+        includeAPIOnlyEntities?: boolean
+    } = {}
+) => {
+    const {
+        ids,
+        tags,
+        context,
+        includeNormalizationEntities = false,
+        includeAPIOnlyEntities = true
+    } = options
     let entities = await loadOrGetEntities({}, context)
 
     if (!includeNormalizationEntities) {

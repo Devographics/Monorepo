@@ -70,7 +70,8 @@ function getMongoUri() {
 
 const start = async () => {
     const startedAt = new Date()
-    console.log('// Starting server…')
+    console.log(`// Starting server… (env: ${process.env.NODE_ENV})`)
+
     const redisClient = createClient({
         url: appSettings.redisUrl
     })
@@ -105,9 +106,9 @@ const start = async () => {
     const typeObjects = await generateTypeObjects({ surveys: parsedSurveys, questionObjects })
     const allTypeDefsString = typeObjects.map(t => t.typeDef).join('\n\n')
 
-    await logToFile('questionObjects.yml', questionObjects, { mode: 'overwrite' })
-    await logToFile('typeDefs.yml', typeObjects, { mode: 'overwrite' })
-    await logToFile('typeDefs.graphql', allTypeDefsString, { mode: 'overwrite' })
+    await logToFile('questionObjects.yml', questionObjects)
+    await logToFile('typeDefs.yml', typeObjects)
+    await logToFile('typeDefs.graphql', allTypeDefsString)
 
     const defaultResolvers = {
         JSON: GraphQLJSON,

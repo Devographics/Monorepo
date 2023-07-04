@@ -105,6 +105,7 @@ type SectionMetadata {
     questions: [QuestionMetadata]
     # whether a section only exists in the API and not the ouline
     apiOnly: Boolean
+    template: String
 }
 
 type QuestionMetadata {
@@ -325,4 +326,30 @@ type Locale {
     totalCount: Int
     completion: Int
     untranslatedKeys: [String]
+}
+
+type FeatureOption {
+    id: FeatureOptionID
+    label: String
+    entity: Entity
+}
+
+enum FeatureOptionID {
+    never_heard
+    heard
+    used
+}
+
+type ToolOption {
+    id: ToolOptionID
+    label: String
+    entity: Entity
+}
+
+enum ToolOptionID {
+    would_use
+    would_not_use
+    interested
+    not_interested
+    never_heard
 }

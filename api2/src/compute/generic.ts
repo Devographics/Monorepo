@@ -50,10 +50,12 @@ export const getDbPath = (
     responsesType: ResponsesTypes = ResponsesTypes.PREDEFINED
 ) => {
     const { normPaths } = question
+    console.log(question)
+    console.log(responsesType)
     if (responsesType === ResponsesTypes.PREDEFINED) {
-        return normPaths.response
+        return normPaths?.response
     } else {
-        return normPaths.other
+        return normPaths?.other
     }
 }
 

@@ -1,11 +1,11 @@
 import { ApiTemplateFunction, QuestionApiTemplateOutput } from '../../types/surveys'
 import { feature as templateFunction } from '@devographics/templates'
-import {
-    idResolverFunction,
-    responsesResolverFunction,
-    commentsResolverFunction,
-    entityResolverFunction
-} from '../resolvers'
+// import {
+//     idResolverFunction,
+//     responsesResolverFunction,
+//     commentsResolverFunction,
+//     entityResolverFunction
+// } from '../resolvers'
 import { getFiltersTypeName, getFacetsTypeName } from '../helpers'
 import { graphqlize } from '../helpers'
 import { getResponseTypeName } from '../../graphql/templates/responses'
@@ -22,6 +22,8 @@ export const feature: ApiTemplateFunction = options => {
         autogenerateEnumType: false,
         typeDef: `type ${fieldTypeName} {
     id: String
+    _metadata: QuestionMetadata
+    options: [FeatureOption]
     comments: ItemComments
     entity: Entity
     responses(filters: ${getFiltersTypeName(
@@ -29,13 +31,13 @@ export const feature: ApiTemplateFunction = options => {
     )},  parameters: Parameters, facet: ${getFacetsTypeName(survey.id)}): ${getResponseTypeName(
             survey.id
         )}
-}`,
-        resolverMap: {
-            id: idResolverFunction,
-            comments: commentsResolverFunction,
-            responses: responsesResolverFunction,
-            entity: entityResolverFunction
-        }
+}`
+        // resolverMap: {
+        //     id: idResolverFunction,
+        //     comments: commentsResolverFunction,
+        //     responses: responsesResolverFunction,
+        //     entity: entityResolverFunction
+        // }
     }
     return output
 }

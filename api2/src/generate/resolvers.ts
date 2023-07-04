@@ -20,13 +20,15 @@ import { useCache, computeKey } from '../helpers/caching'
 import { getRawCommentsWithCache } from '../compute/comments'
 import { getEntity, getEntities } from '../load/entities'
 import omit from 'lodash/omit.js'
-import { entitiesResolvers, entityResolver, entityResolverMap } from '../resolvers/entities'
+import { entitiesResolvers, entityResolverMap } from '../resolvers/entities'
 import { getResponseTypeName } from '../graphql/templates/responses'
 import { RequestContext, SectionApiObject } from '../types'
 import { getSectionItems, getEditionItems } from './helpers'
 import { stringOrInt } from '../graphql/string_or_int'
 import { GraphQLScalarType } from 'graphql'
 import { localesResolvers } from '../resolvers/locales'
+import { subFields } from './subfields'
+import { ResultsSubFieldEnum } from '@devographics/types'
 
 export const generateResolvers = async ({
     surveys,
@@ -121,32 +123,34 @@ export const generateResolvers = async ({
                         t => t.path === getPath({ survey, edition, section })
                     )
 
+                    const questionsToInclude = section.questions.filter(
+                        q => q.hasApiEndpoint !== false
+                    )
+
                     if (sectionTypeObject) {
                         // generate resolver map for each section field (i.e. each section question)
                         resolvers[sectionTypeObject.typeName] = Object.fromEntries(
-                            section.questions
-                                .filter(q => q.hasApiEndpoint !== false)
-                                .map((questionObject: QuestionApiObject) => {
-                                    return [
-                                        questionObject.id,
-                                        getQuestionResolver({
-                                            survey,
-                                            edition,
-                                            section,
-                                            question: questionObject,
-                                            questionObjects
-                                        })
-                                    ]
-                                })
+                            questionsToInclude.map((questionObject: QuestionApiObject) => {
+                                return [
+                                    questionObject.id,
+                                    getQuestionResolver({
+                                        survey,
+                                        edition,
+                                        section,
+                                        question: questionObject,
+                                        questionObjects
+                                    })
+                                ]
+                            })
                         )
                     }
 
-                    for (const questionObject of section.questions) {
+                    for (const questionObject of questionsToInclude) {
                         if (questionObject.fieldTypeName) {
-                            resolvers[questionObject.fieldTypeName] =
-                                questionObject.resolverMap || {
-                                    responses: responsesResolverFunction
-                                }
+                            const questionResolverMap = await getQuestionResolverMap({
+                                questionObject
+                            })
+                            resolvers[questionObject.fieldTypeName] = questionResolverMap
                         }
                     }
                 }
@@ -225,9 +229,31 @@ const getSectionResolver =
         return section
     }
 
+const getQuestionResolverMap = async ({
+    questionObject
+}: {
+    questionObject: QuestionApiObject
+}) => {
+    if (questionObject.resolverMap) {
+        return questionObject.resolverMap
+    } else {
+        const resolverMap = {} as { [key in ResultsSubFieldEnum]: ResolverType }
+        subFields.forEach(async ({ id, addIf, addIfAsync, resolverFunction }) => {
+            const addSubField = addIfAsync
+                ? await addIfAsync(questionObject)
+                : addIf(questionObject)
+            if (resolverFunction && addSubField) {
+                resolverMap[id] = resolverFunction
+            }
+        })
+        return resolverMap
+    }
+}
+
 const getQuestionResolver =
     ({ survey, edition, section, question, questionObjects }: ResolverParent): ResolverType =>
     async (parent, args, context, info) => {
+        console.log('// question resolver')
         const result: QuestionResolverParent = {
             survey,
             edition,
@@ -235,19 +261,28 @@ const getQuestionResolver =
             question,
             questionObjects
         }
-        if (question.options) {
-            const questionOptions: Option[] = question.options
+        // for (const subField of subFields) {
+        //     const { id, addIf, addIfAsync, resolverFunction } = subField
+        //     const addSubField = addIfAsync ? await addIfAsync(question) : addIf(question)
+        //     if (addSubField) {
+        //         result[id] = resolverFunction
+        //     }
+        // }
+        // console.log(result)
+        // if (question.options) {
+        //     const questionOptions: Option[] = question.options
 
-            const optionEntities = await getEntities({
-                ids: questionOptions.map(o => o.id),
-                context
-            })
+        //     const optionEntities = await getEntities({
+        //         ids: questionOptions.map(o => o.id),
+        //         context
+        //     })
 
-            result.options = questionOptions.map(option => ({
-                ...option,
-                entity: optionEntities.find(o => o.id === option.id)
-            }))
-        }
+        //     result.options = questionOptions.map(option => ({
+        //         ...option,
+        //         entity: optionEntities.find(o => o.id === option.id)
+        //     }))
+        // }
+        // result._metadata = question
         return result
     }
 
@@ -256,12 +291,6 @@ const getQuestionResolver =
 Responses 
 
 */
-
-export const responsesResolverFunction: ResolverType = async (parent, args, context, info) => {
-    console.log('// responses resolver')
-    return { ...parent, responseArguments: args }
-}
-
 export const allEditionsResolver: ResolverType = async (parent, args, context, info) => {
     console.log('// allEditionsResolver')
     const { survey, edition, section, question, responseArguments, questionObjects } = parent
@@ -319,17 +348,11 @@ export const responsesResolverMap: ResolverMap = {
     allEditions: allEditionsResolver,
     currentEdition: currentEditionResolver
 }
-
 /*
 
 Comments
 
 */
-// empty pass-through resolver
-export const commentsResolverFunction: ResolverType = parent => {
-    console.log('// comments resolver')
-    return parent
-}
 export const commentsResolverMap: ResolverMap = {
     allEditions: async ({ survey, question }, {}, context) =>
         await getRawCommentsWithCache({

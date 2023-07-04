@@ -107,7 +107,10 @@ export const generateQuestionsTypeObjects = async ({
             if (typeDef) {
                 typeObjects.push({ typeName: fieldTypeName, typeDef, typeType: 'field' })
             } else {
-                typeObjects.push(generateFieldType({ question }))
+                const generatedTypeDef = await generateFieldType({ question })
+                if (generatedTypeDef) {
+                    typeObjects.push(generatedTypeDef)
+                }
             }
         }
 

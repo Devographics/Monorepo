@@ -170,7 +170,7 @@ export const loadLocally = async () => {
                         )
                         const editionConfigYaml: any = yaml.load(editionConfigContents)
                         edition = editionConfigYaml
-                    } catch (error) { }
+                    } catch (error) {}
                     const questionsPath = editionDirPath + '/questions.yml'
                     if (existsSync(questionsPath)) {
                         try {
@@ -190,7 +190,7 @@ export const loadLocally = async () => {
                         )
                         const editionApiYaml: any = yaml.load(editionApiContents)
                         edition.apiSections = makeAPIOnly(editionApiYaml)
-                    } catch (error) { }
+                    } catch (error) {}
                     editions.push(edition)
                 }
             }
