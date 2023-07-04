@@ -163,6 +163,7 @@ query ${editionId}MetadataQuery {
           messageId
           slug
           intlId
+          template
           questions {
             id
             intlId

@@ -48,6 +48,9 @@ export const ignoreValues = [
   "no",
   ".",
   "?",
+  "ninguna",
+  "ninguno",
+  "nope",
 ];
 
 export const existsSelector = { $exists: true, $nin: ignoreValues };
@@ -100,17 +103,18 @@ export const getResponsesSelector = ({
   edition: EditionMetadata;
   questionObject: QuestionTemplateOutput;
 }) => {
-  const rawFieldPath = questionObject?.normPaths?.raw;
-  const normalizedFieldPath = questionObject?.normPaths?.other;
-  if (rawFieldPath && normalizedFieldPath) {
+  const formPaths = getFormPaths({ edition, question: questionObject });
+  console.log(questionObject.rawPaths);
+  console.log(formPaths);
+  if (formPaths.other) {
     const selector = {
       editionId: edition.id,
-      [rawFieldPath]: existsSelector,
+      [formPaths.other]: existsSelector,
     };
     return selector;
   } else {
     throw new Error(
-      `getResponsesSelector: Missing rawFieldPath or normalizedFieldPath for question ${questionObject.id}`
+      `getResponsesSelector: Missing formPaths.other for question ${questionObject.id}`
     );
   }
 };
