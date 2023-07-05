@@ -1,4 +1,4 @@
-import { EntityWithQuestion } from "~/lib/surveys/helpers";
+import { EntityWithQuestion } from "~/lib/surveys/types";
 import QuestionLabel from "../form/QuestionLabel";
 import EntityLabel from "~/components/common/EntityLabel";
 import { getQuestioni18nIds } from "@devographics/i18n";

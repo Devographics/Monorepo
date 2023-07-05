@@ -49,7 +49,8 @@
     "upgrade:vulcan": "pnpm up '@vulcanjs/*' --latest && pnpm run postinstall",
     "typecheck-watch": "tsc --noEmit --p src/tsconfig.json -w",
     "//typecheck": " # in case of error with @vulcanjs/* package, check that src/types (eg simpl-schema) are up-to-date with vulcan-npm",
-    "typecheck": "tsc --noEmit --p src/tsconfig.json"
+    "typecheck": "tsc --noEmit --p src/tsconfig.json",
+    "tokyodev": "PORT=5010 INTERNAL_API_URL=http://localhost:5030/graphql DATA_API_URL=http://localhost:5030/graphql next"
   },
   "dependencies": {
     "@devographics/fetch": "workspace:^1.0.0",

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { routes } from "~/lib/routes";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { EditionMetadata } from "@devographics/types";
-import { getEditionHomePath } from "~/lib/surveys/helpers";
+import { getEditionHomePath } from "~/lib/surveys/helpers/getEditionHomePath";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
 
 const Navigation = ({ edition }: { edition: EditionMetadata }) => {

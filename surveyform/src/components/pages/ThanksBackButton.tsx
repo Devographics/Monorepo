@@ -2,7 +2,7 @@
 import { EditionMetadata, ResponseDocument } from "@devographics/types";
 import Link from "next/link";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
-import { getEditionSectionPath } from "~/lib/surveys/helpers";
+import { getEditionSectionPath } from "~/lib/surveys/helpers/getEditionSectionPath";
 import { FormattedMessage } from "../common/FormattedMessage";
 
 export const ThanksBackButton = ({

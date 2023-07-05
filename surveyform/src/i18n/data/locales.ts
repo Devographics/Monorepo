@@ -1,6 +1,5 @@
 import { fetchAllLocalesMetadata } from "~/lib/api/fetch";
-
-export const defaultLocaleId = "en-US";
+import { defaultLocaleId } from "../config";
 
 /**
  * Return a locale that exists in our locales definitions

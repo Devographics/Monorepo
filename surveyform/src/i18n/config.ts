@@ -1,6 +1,8 @@
 import { EditionMetadata } from "@devographics/types";
 import { publicConfig } from "~/config/public";
 
+export const defaultLocaleId = "en-US";
+
 // i18n contexts common to all surveys and editions
 export const getCommonContexts = () => ["common", "surveys", "accounts"];
 

@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
-import { getEditionSectionPath } from "~/lib/surveys/helpers";
+import { getEditionSectionPath } from "~/lib/surveys/helpers/getEditionSectionPath";
 import { useEdition } from "../SurveyContext/Provider";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import type { DetailedErrorObject } from "~/lib/validation";

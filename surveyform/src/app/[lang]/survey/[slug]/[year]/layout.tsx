@@ -22,7 +22,7 @@ export async function generateStaticParams() {
 
 import { getMetadata, getSurveyImageUrl } from "~/lib/surveys/helpers";
 import { publicConfig } from "~/config/public";
-import { getEditionHomePath } from "~/lib/surveys/helpers";
+import { getEditionHomePath } from "~/lib/surveys/helpers/getEditionHomePath";
 import {
   getCommonContexts,
   getEditionContexts,

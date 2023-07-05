@@ -19,7 +19,7 @@ import { routes } from "~/lib/routes";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { Loading } from "~/components/ui/Loading";
 import { useClientData } from "~/components/page/hooks";
-import { getEditionSectionPath } from "~/lib/surveys/helpers";
+import { getEditionSectionPath } from "~/lib/surveys/helpers/getEditionSectionPath";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
 
 const useMagicLoginCheck = ({

@@ -2,11 +2,9 @@
 import { useState, useEffect, useRef } from "react";
 import { FormattedMessage } from "../common/FormattedMessage";
 import { FormInputProps } from "../form/typings";
-import {
-  EntityWithQuestion,
-  getEditionEntities,
-  getEditionQuestions,
-} from "~/lib/surveys/helpers";
+import { EntityWithQuestion } from "~/lib/surveys/types";
+import { getEditionQuestions } from "~/lib/surveys/helpers/getEditionQuestions";
+import { getEditionEntities } from "~/lib/surveys/helpers/getEditionEntities";
 import { Button } from "~/components/ui/Button";
 import { Cross } from "../icons";
 import {

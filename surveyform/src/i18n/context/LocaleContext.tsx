@@ -4,7 +4,7 @@ import { IntlContextProvider, StringsRegistry } from "@devographics/react-i18n";
 import { useRouter } from "next/navigation";
 import { useCookies } from "react-cookie";
 import { LOCALE_COOKIE_NAME } from "../cookie";
-import { defaultLocaleId } from "~/i18n/data/locales";
+import { defaultLocaleId } from "~/i18n/config";
 import { captureException } from "@sentry/nextjs";
 import { LocaleDef, LocaleDefWithStrings } from "../typings";
 import { useCurrentUser } from "~/lib/users/hooks";

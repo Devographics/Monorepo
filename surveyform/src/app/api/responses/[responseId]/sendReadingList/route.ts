@@ -6,7 +6,7 @@ import { fetchEditionMetadata } from "~/lib/api/fetch";
 import { localMailTransport } from "~/lib/server/mail/transports";
 import { getRawResponsesCollection } from "@devographics/mongo";
 import { EditionMetadata, ResponseDocument } from "@devographics/types";
-import { getEditionQuestions } from "~/lib/surveys/helpers";
+import { getEditionQuestions } from "~/lib/surveys/helpers/getEditionQuestions";
 
 export async function POST(
   req: NextRequest,

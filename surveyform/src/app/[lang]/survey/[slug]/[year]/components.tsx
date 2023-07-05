@@ -12,7 +12,7 @@ import { EditionMetadata, SurveyStatusEnum } from "@devographics/types";
 import { CenteredContainer } from "~/components/ui/CenteredContainer";
 import { useClientData } from "~/components/page/hooks";
 import { useCurrentUser } from "~/lib/users/hooks";
-import { getEditionSectionPath } from "~/lib/surveys/helpers";
+import { getEditionSectionPath } from "~/lib/surveys/helpers/getEditionSectionPath";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
 
 export const EditionMain = ({

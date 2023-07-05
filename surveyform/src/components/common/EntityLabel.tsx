@@ -1,7 +1,7 @@
 import { getOptioni18nIds } from "@devographics/i18n";
 import { Entity } from "@devographics/types";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
-import { getEntityName } from "~/lib/surveys/helpers";
+import { getEntityName } from "~/lib/surveys/helpers/getEntityName";
 
 /**
  * When using a string as label
