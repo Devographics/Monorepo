@@ -61,7 +61,7 @@ export async function getFromCache<T = any>({
     fetchFunction: fetchFromSource,
     calledFrom,
     serverConfig,
-    shouldGetFromCache: shouldGetFromCache_ = true,
+    shouldGetFromCache: shouldGetFromCacheOptions,
     shouldUpdateCache = true
 }: {
     key: string
@@ -74,7 +74,8 @@ export async function getFromCache<T = any>({
     initRedis(serverConfig().redisUrl, serverConfig().redisToken)
     const calledFromLog = calledFrom ? `(↪️  ${calledFrom})` : ''
 
-    const shouldGetFromCache = shouldGetFromCache_ || !(process.env.ENABLE_CACHE === 'false')
+    const shouldGetFromCacheEnv = !(process.env.ENABLE_CACHE === 'false')
+    const shouldGetFromCache = shouldGetFromCacheOptions ?? shouldGetFromCacheEnv
 
     let resultPromise: Promise<T>
     // 1. we have the a promise that resolve to the data in memory => return that
