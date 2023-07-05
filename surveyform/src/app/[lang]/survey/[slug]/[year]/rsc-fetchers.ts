@@ -24,7 +24,7 @@ export async function rscGetSurveyEditionFromUrl(params: {
     const edition = await fetchEditionMetadata({
       surveyId,
       editionId,
-      calledFrom: "getSurveyEditionFromUrl",
+      calledFrom: "rscGetSurveyEditionFromUrl",
     });
     return edition;
   } catch (err) {

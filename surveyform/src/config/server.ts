@@ -42,16 +42,11 @@ export function serverConfig() {
  * in scripts that reuse this code outside of Next
  */
 export function checkServerConfig() {
-  let errors: Array<string> = []
+  let errors: Array<string> = [];
   const mongoUri = process.env.MONGO_URI;
   if (!mongoUri) errors.push("MONGO_URI env variable is not defined");
   if (!process.env.GITHUB_TOKEN) {
     errors.push("GITHUB_TOKEN is now necessary to get the survey files");
-  }
-  if (!process.env.INTERNAL_API_URL) {
-    errors.push(
-      "INTERNAL_API_URL should point to the internal API. It was previously named 'TRANSLATION_API'."
-    );
   }
   if (process.env.NODE_ENV === "production") {
     // prod only check
@@ -67,7 +62,7 @@ export function checkServerConfig() {
     // dev only check
   }
   if (errors.length) {
-    console.error("// checkServerConfig")
-    throw new Error(errors.join("\n "))
+    console.error("// checkServerConfig");
+    throw new Error(errors.join("\n "));
   }
 }

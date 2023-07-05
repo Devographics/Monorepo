@@ -59,7 +59,11 @@ export async function fetchEditionMetadata({
         key,
       });
       if (!result) {
-        throw new Error(`Couldn't fetch survey ${editionId}, result: ${result && JSON.stringify(result)}`)
+        throw new Error(
+          `Couldn't fetch survey ${editionId}, result: ${
+            result && JSON.stringify(result)
+          }`
+        );
       }
       return result._metadata.surveys[0].editions[0];
     },
@@ -80,7 +84,7 @@ export const fetchSurveysMetadata = async (options?: {
     key,
     fetchFunction: async () => {
       const result = await fetchGraphQLApi({ query: getSurveysQuery(), key });
-      if (!result) throw new Error(`Couldn't fetch surveys`)
+      if (!result) throw new Error(`Couldn't fetch surveys`);
       return result._metadata.surveys as SurveyMetadata[];
     },
     calledFrom: options?.calledFrom,
@@ -100,7 +104,6 @@ export const fetchAllLocalesMetadata = async (): Promise<Array<LocaleDef>> => {
       const result = await fetchGraphQLApi({
         query: getAllLocalesMetadataQuery(),
         key,
-        apiUrl: serverConfig().translationAPI,
       });
       return result.locales;
     },
@@ -127,9 +130,8 @@ export const fetchLocale = async ({
       const result = await fetchGraphQLApi({
         query: getLocaleQuery({ localeId, contexts }),
         key,
-        apiUrl: serverConfig().translationAPI,
       });
-      if (!result) throw new Error(`Couldn't fetch locale ${localeId}`)
+      if (!result) throw new Error(`Couldn't fetch locale ${localeId}`);
       const locale = result.locale;
 
       // react-i18n expects {foo1: bar1, foo2: bar2} etc. map whereas

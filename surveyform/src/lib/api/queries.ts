@@ -214,7 +214,9 @@ export const getLocaleQuery = ({
   contexts: string[];
 }) => `
 query Locale__${localeId.replace("-", "_")}__${contexts.join("_")}__Query {
-  locale(localeId: "${localeId}", contexts: [${contexts.join(", ")}]) {
+  locale(localeId: ${localeId.replace("-", "_")}, contexts: [${contexts.join(
+  ", "
+)}]) {
     id
     completion
     label
