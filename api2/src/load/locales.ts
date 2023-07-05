@@ -1,7 +1,6 @@
 import { Locale, RawLocale, LocaleMetaData } from '@devographics/types'
 import { Octokit } from '@octokit/core'
 import fetch from 'node-fetch'
-import localesYAML from '../data/locales.yml'
 import yaml from 'js-yaml'
 import { readdir, readFile } from 'fs/promises'
 import last from 'lodash/last.js'
@@ -19,7 +18,7 @@ import { processLocales } from '../helpers/locales'
 let Locales: Locale[] = []
 
 export const allContexts: string[] = []
-const excludedFiles = ['crowdin.yml']
+const excludedFiles = ['config.yml', 'crowdin.yml']
 
 export const addToAllContexts = (context: string) => {
     if (!allContexts.includes(context)) {
@@ -31,26 +30,39 @@ export const getAllContexts = () => {
     return allContexts
 }
 
-export const loadAllFromGitHub = async (localesToLoad: LocaleMetaData[]): Promise<RawLocale[]> => {
+export const loadAllFromGitHub = async (options?: LoadAllOptions): Promise<RawLocale[]> => {
     const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
     let locales: RawLocale[] = []
     let i = 0
 
-    for (const localeMetaData of localesToLoad) {
-        const localeRawData: RawLocale = { id: localeMetaData.id, stringFiles: [] }
+    const org = 'devographics'
+    const result = await octokit.request('GET /orgs/{org}/repos', {
+        org,
+        per_page: 100 // max
+    })
+    const allRepos = result.data
+    const localeRepos = allRepos.filter(repo => repo.name.includes('locale-'))
+
+    for (const localeRepo of localeRepos) {
         i++
-        const owner = 'devographics'
-        const repo = `locale-${localeMetaData.id}`
-        console.log(`-> loading repo ${owner}/${repo} (${i}/${localesToLoad.length})`)
+        console.log(`-> loading repo ${localeRepo.full_name} (${i}/${localeRepos.length})`)
 
         const options = {
-            owner,
-            repo,
+            owner: 'devographics',
+            repo: localeRepo.name,
             path: ''
         }
-
         const contents = await octokit.request('GET /repos/{owner}/{repo}/contents/{path}', options)
         const files = contents.data as any[]
+        const localeConfigFile = files.find(f => f.name === 'config.yml')
+        if (!localeConfigFile) {
+            throw new Error(`Could not find config.yml file for locale ${localeRepo.full_name}`)
+        }
+        const localeConfigResponse = await fetch(localeConfigFile.download_url)
+        const localeConfigContents = await localeConfigResponse.text()
+        const localeConfig: any = yaml.load(localeConfigContents)
+
+        const localeRawData: RawLocale = { ...localeConfig, stringFiles: [] }
 
         // loop over repo contents and fetch raw yaml files
         for (const file of files) {
@@ -74,7 +86,7 @@ export const loadAllFromGitHub = async (localesToLoad: LocaleMetaData[]): Promis
                 }
             }
         }
-        logToFile(`github_${localeMetaData.id}.yml`, localeRawData, {
+        logToFile(`github_${localeConfig.id}.yml`, localeRawData, {
             mode: 'overwrite',
             subDir: 'locales_raw'
         })
@@ -83,21 +95,30 @@ export const loadAllFromGitHub = async (localesToLoad: LocaleMetaData[]): Promis
     return locales
 }
 
+interface LoadAllOptions {
+    localeIds?: string[]
+}
 // when developing locally, load from local files
-export const loadAllLocally = async (localesToLoad: LocaleMetaData[]): Promise<RawLocale[]> => {
+export const loadAllLocally = async (options?: LoadAllOptions): Promise<RawLocale[]> => {
     let i = 0
     let locales: RawLocale[] = []
 
-    for (const localeMetaData of localesToLoad) {
-        const localeRawData: RawLocale = { id: localeMetaData.id, stringFiles: [] }
-        i++
-        const localeDirName = `locale-${localeMetaData.id}`
-        console.log(`-> loading directory ${localeDirName} locally (${i}/${localesToLoad.length})`)
+    if (!process.env.LOCALES_DIR) {
+        throw new Error('LOCALES_DIR not set')
+    }
+    const allLocalesDirPath = path.resolve(`../../${appSettings.localesDir}`)
 
-        if (!process.env.LOCALES_DIR) {
-            throw new Error('LOCALES_DIR not set')
-        }
-        const localeDirPath = path.resolve(`../../${appSettings.localesDir}/${localeDirName}`)
+    const allFiles = await readdir(allLocalesDirPath)
+    const allLocales = allFiles.filter(fileName => fileName.includes('locale-'))
+    for (const localeDirName of allLocales) {
+        const localeDirPath = `${allLocalesDirPath}/${localeDirName}`
+        const localeConfigPath = `${allLocalesDirPath}/${localeDirName}/config.yml`
+        const localeConfigContents = await readFile(localeConfigPath, 'utf8')
+        const localeConfig: any = yaml.load(localeConfigContents)
+
+        const localeRawData: RawLocale = { ...localeConfig, stringFiles: [] }
+        i++
+        console.log(`-> loading directory ${localeDirName} locally (${i}/${allLocales.length})`)
 
         const files = await readdir(localeDirPath)
         const yamlFiles = files.filter((f: String) => f.includes('.yml'))
@@ -118,7 +139,7 @@ export const loadAllLocally = async (localesToLoad: LocaleMetaData[]): Promise<R
                 })
             }
         }
-        logToFile(`filesystem_${localeMetaData.id}.yml`, localeRawData, {
+        logToFile(`filesystem_${localeConfig.id}.yml`, localeRawData, {
             mode: 'overwrite',
             subDir: 'locales_raw'
         })
@@ -132,9 +153,9 @@ export const loadAllLocally = async (localesToLoad: LocaleMetaData[]): Promise<R
 Load the YAML file containing metadata for all locales
 
 */
-export const getLocalesMetadataYAML = (): LocaleMetaData[] => {
-    return localesYAML
-}
+// export const getLocalesMetadataYAML = (): LocaleMetaData[] => {
+//     return localesYAML
+// }
 
 /* 
 
@@ -167,19 +188,11 @@ Load locales contents through GitHub API or locally
 
 */
 export const loadLocales = async (localeIds?: string[]): Promise<RawLocale[]> => {
-    const allLocales = getLocalesMetadataYAML()
-    const localesToLoad = localeIds
-        ? allLocales.filter((locale: LocaleMetaData) => localeIds.includes(locale.id))
-        : allLocales
-    console.log(
-        `// loading ${localesToLoad.length} locales… (${localesToLoad
-            .map((l: LocaleMetaData) => l.id)
-            .join(',')})`
-    )
+    console.log(`// loading locales… `)
     const locales =
         appSettings.loadLocalesMode === 'local'
-            ? await loadAllLocally(localesToLoad)
-            : await loadAllFromGitHub(localesToLoad)
+            ? await loadAllLocally({ localeIds })
+            : await loadAllFromGitHub({ localeIds })
     console.log('// done loading locales')
     return locales
 }

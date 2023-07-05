@@ -2,7 +2,6 @@ import { Locale, RawLocale, StringFile, TranslationStringObject } from '@devogra
 import marked from 'marked'
 import sanitizeHtml from 'sanitize-html'
 import { decode } from 'html-entities'
-import { getLocalesMetadataYAML } from '../load/locales'
 import { logToFile } from '@devographics/helpers'
 
 export const filterContexts = ({ locale, contexts }: { locale: Locale; contexts: string[] }) => {
@@ -147,8 +146,7 @@ export const addLocaleMetadata = (locale: Locale, untranslatedKeys: string[]): L
         completion,
         repo
     }
-    const yamlData = getLocalesMetadataYAML().find(l => l.id === locale.id)
-    return { ...locale, ...dynamicData, ...yamlData }
+    return { ...locale, ...dynamicData }
 }
 
 export const computeUntranslatedKeys = (

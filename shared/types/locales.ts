@@ -3,9 +3,9 @@
  */
 export interface RawLocale {
     id: string
-    label?: string
+    label: string
+    translators: Array<string>
     dynamic?: boolean
-    translators?: Array<string>
     completion?: number
     repo?: string
     translatedCount?: number
