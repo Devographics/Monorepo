@@ -1,6 +1,6 @@
 export const routes = {
   home: {
-    href: "/",
+    href: () => "/",
   },
   admin: {
     normalization: {

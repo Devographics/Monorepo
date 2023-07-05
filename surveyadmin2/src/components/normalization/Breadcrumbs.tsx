@@ -39,6 +39,9 @@ const Breadcrumbs = ({
     <nav>
       <ul>
         <li>
+          <Link href={routes.home.href()}>Home</Link>
+        </li>
+        <li>
           <Link href={routes.admin.normalization.href({})}>Surveys</Link>
         </li>
         {survey && (

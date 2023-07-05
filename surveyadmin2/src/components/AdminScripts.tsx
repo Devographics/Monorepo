@@ -1,11 +1,14 @@
 "use client";
+import Link from "next/link";
 import { useState } from "react";
+import { routes } from "~/lib/routes";
 import { runScript } from "~/lib/scripts/services";
 // import { MutationButton } from "~/core/components/ui/MutationButton";
 
 const AdminScripts = ({ scripts }) => {
   return (
     <div className="admin-scripts admin-content">
+      <Link href={routes.home.href()}>Home</Link>
       <h3>Scripts</h3>
       <table className="admin-scripts-table">
         <thead>
