@@ -181,6 +181,11 @@ export const processStringFile = ({
     if (enStringFile) {
         processedStringFile = addFallbacks(processedStringFile, locale, enStringFile)
     }
+    // add stringFile's context to every one of its strings
+    processedStringFile.strings = processedStringFile.strings.map(s => ({
+        ...s,
+        context: stringFile.context
+    }))
     return processedStringFile
 }
 
@@ -230,10 +235,7 @@ export const processLocale = (
     const untranslatedKeys = computeUntranslatedKeys(locale, processedLocale.strings)
     const processedLocaleWithMetadata = addLocaleMetadata(processedLocale, untranslatedKeys)
 
-    logToFile(`${processedLocale.id}.yml`, processedLocaleWithMetadata, {
-        mode: 'overwrite',
-        subDir: 'locales_processed'
-    })
+    logToFile(`locales_processed/${processedLocale.id}.yml`, processedLocaleWithMetadata)
     return processedLocaleWithMetadata
 }
 

@@ -139,10 +139,7 @@ export const loadAllLocally = async (options?: LoadAllOptions): Promise<RawLocal
                 })
             }
         }
-        logToFile(`filesystem_${localeConfig.id}.yml`, localeRawData, {
-            mode: 'overwrite',
-            subDir: 'locales_raw'
-        })
+        logToFile(`locales_raw/filesystem_${localeConfig.id}.yml`, localeRawData)
         locales.push(localeRawData)
     }
     return locales
