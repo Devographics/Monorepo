@@ -8,6 +8,20 @@ const __dirname = path.dirname(__filename)
 
 dotenv.config()
 
+function checkEnv() {
+    const errors = []
+    if (!process.env.DATA_API_URL) {
+        errors.push("Missing DATA_API_URL")
+    }
+    if (!process.env.INTERNAL_API_URL) {
+        errors.push("Missing INTERNAL_API_URL")
+    }
+    if (errors.length) {
+        throw new Error(errors.join("\n"))
+    }
+}
+checkEnv()
+
 export default {
     siteMetadata: {
         title: `Devographics Survey Results`
