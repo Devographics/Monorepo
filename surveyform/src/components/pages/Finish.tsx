@@ -1,7 +1,8 @@
 import ShareSite from "../share/ShareSite";
 import Score from "../common/Score";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
-import { getEditionTitle, getSurveyImageUrl } from "~/lib/surveys/helpers";
+import { getSurveyImageUrl } from "~/lib/surveys/helpers/getSurveyImageUrl";
+import { getEditionTitle } from "~/lib/surveys/helpers/getEditionTitle";
 import ReadingListResults from "~/components/reading_list/ReadingListResults";
 import { EditionMetadata, ResponseDocument } from "@devographics/types";
 import { ThanksBackButton } from "./ThanksBackButton";

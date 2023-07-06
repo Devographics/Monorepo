@@ -21,8 +21,12 @@ export const useQuestionTitle = ({
   const i18nNameHtml = intl.formatMessage({ id: i18n.base });
   const i18nNameClean = intl.formatMessage({ id: i18n.base });
 
+  const i18nNameHtml2 = intl.formatMessage({ id: i18n.question });
+  const i18nNameClean2 = intl.formatMessage({ id: i18n.question });
+
   return {
-    html: entityNameHtml || i18nNameHtml,
-    clean: entityNameClean || i18nNameClean,
+    html: entityNameHtml || i18nNameHtml2 || i18nNameHtml,
+    clean: entityNameClean || i18nNameClean2 || i18nNameClean,
+    isEntity: entityNameHtml || entityNameClean,
   };
 };

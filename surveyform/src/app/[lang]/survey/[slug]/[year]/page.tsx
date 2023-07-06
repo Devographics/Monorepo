@@ -1,5 +1,5 @@
 import Support from "~/components/common/Support";
-import { getSurveyImageUrl } from "~/lib/surveys/helpers";
+import { getSurveyImageUrl } from "~/lib/surveys/helpers/getSurveyImageUrl";
 import { EditionPage as EditionPageComponent } from "./components";
 import { rscMustGetSurveyEditionFromUrl } from "./rsc-fetchers";
 

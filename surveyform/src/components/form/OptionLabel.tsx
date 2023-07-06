@@ -17,8 +17,12 @@ const OptionLabel = ({
   option: OptionMetadata;
   question: QuestionMetadata;
 }) => {
-  const { entity } = option;
   const intl = useIntlContext();
+  const { entity, label } = option;
+
+  if (label) {
+    return label;
+  }
 
   const i18n = getOptioni18nIds({ option, question });
 

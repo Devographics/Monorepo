@@ -4,6 +4,7 @@ import Hidden from "~/components/inputs/Hidden";
 import { Help } from "~/components/inputs/Help";
 import Bracket from "~/components/inputs/Bracket";
 import Text from "~/components/inputs/Default";
+import Number from "~/components/inputs/Number";
 import Feature from "~/components/inputs/experience/Feature";
 import Tool from "~/components/inputs/experience/Tool";
 import Slider from "~/components/inputs/Slider";
@@ -23,7 +24,7 @@ const customComponents = {
   feature: Feature,
   tool: Tool,
   slider: Slider,
-  select: Select,
+  dropdown: Select,
   country: Select,
   multiple: Checkboxgroup,
   longtext: Textarea,
@@ -32,12 +33,14 @@ const customComponents = {
   single: Radiogroup,
   projects: Projects,
   opinion: Radiogroup,
+  number: Number,
 };
 
 export const getQuestionComponent = (question: QuestionMetadata) => {
   const templateName = question.extends || question.template;
   const customComponent = customComponents[templateName];
   if (!customComponent) {
+    console.log(question);
     throw Error(
       `Could not find question component for question ${question.id} with template ${templateName}`
     );

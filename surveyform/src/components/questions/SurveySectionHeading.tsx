@@ -4,6 +4,7 @@ import QuestionLabel from "../form/QuestionLabel";
 import { FormInputProps } from "../form/typings";
 import { getSectioni18nIds } from "@devographics/i18n";
 import { questionIsCompleted } from "~/lib/responses/helpers";
+import { useIntlContext } from "@devographics/react-i18n";
 
 const SurveySectionHeading = ({
   section,
@@ -14,7 +15,7 @@ const SurveySectionHeading = ({
 }: FormInputProps) => {
   const { id, intlId } = section;
   const { itemPositions } = stateStuff;
-
+  const intl = useIntlContext();
   const [scrollPosition, setScrollPosition] = useState(0);
 
   const handleScroll = () => {
@@ -30,6 +31,9 @@ const SurveySectionHeading = ({
     };
   }, []);
 
+  const description = intl.formatMessage({
+    id: getSectioni18nIds({ section }).description,
+  });
   return (
     <div className="section-heading">
       <div className="section-heading-contents">
@@ -45,13 +49,15 @@ const SurveySectionHeading = ({
               values={{ ...edition }}
             />
           </h2>
-          <p className="section-description">
-            <FormattedMessage
-              id={getSectioni18nIds({ section }).description}
-              defaultMessage={id}
-              values={{ ...edition }}
-            />
-          </p>
+          {description && (
+            <p className="section-description">
+              <FormattedMessage
+                id={getSectioni18nIds({ section }).description}
+                defaultMessage={id}
+                values={{ ...edition }}
+              />
+            </p>
+          )}
         </div>
         <div className="section-toc">
           <ol>

@@ -1,6 +1,7 @@
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { getQuestioni18nIds } from "@devographics/i18n";
 import { QuestionMetadata, SectionMetadata } from "@devographics/types";
+import { useQuestionTitle } from "~/lib/surveys/helpers/useQuestionTitle";
 
 export const QuestionLabel = ({
   section,
@@ -11,25 +12,17 @@ export const QuestionLabel = ({
   question: QuestionMetadata;
   formatCode?: boolean;
 }) => {
-  const { entity } = question;
-  const i18n = getQuestioni18nIds({ section, question });
-
-  const entityName =
-    entity && (entity.nameHtml || entity.nameClean || entity.name);
-
-  return entityName ? (
-    formatCode ? (
-      <span
-        className="entity-label"
-        dangerouslySetInnerHTML={{
-          __html: entityName,
-        }}
-      />
-    ) : (
-      <span className="entity-label">{entity.nameClean}</span>
-    )
+  const { html, clean, isEntity } = useQuestionTitle({ section, question });
+  const labelClass = isEntity ? "entity-label" : "question-label";
+  return formatCode ? (
+    <span
+      className={labelClass}
+      dangerouslySetInnerHTML={{
+        __html: html,
+      }}
+    />
   ) : (
-    <FormattedMessage id={i18n.base} />
+    <span className={labelClass}>{clean}</span>
   );
 };
 

@@ -55,6 +55,9 @@ query SurveysMetadataQuery {
         status
         imageUrl
         faq
+        sections {
+          id
+        }
         credits {
           id
           role

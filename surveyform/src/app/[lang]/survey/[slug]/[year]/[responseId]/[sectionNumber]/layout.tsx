@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { SectionProvider } from "~/components/SectionContext/SectionProvider";
-import { getMetadata } from "~/lib/surveys/helpers";
+import { getMetadata } from "~/lib/surveys/helpers/getMetadata";
 import {
   rscGetSurveyEditionFromUrl,
   rscMustGetSurveyEditionFromUrl,

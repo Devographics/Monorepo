@@ -2,10 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { EditionProvider } from "~/components/SurveyContext/Provider";
 
-import {
-  rscGetSurveyEditionFromUrl,
-  rscMustGetSurveyEditionFromUrl,
-} from "./rsc-fetchers";
+import { rscMustGetSurveyEditionFromUrl } from "./rsc-fetchers";
 import AppLayout from "~/app/[lang]/AppLayout";
 import EditionLayout from "~/components/common/EditionLayout";
 
@@ -20,8 +17,7 @@ export async function generateStaticParams() {
   }));
 }*/
 
-import { getMetadata, getSurveyImageUrl } from "~/lib/surveys/helpers";
-import { publicConfig } from "~/config/public";
+import { getMetadata } from "~/lib/surveys/helpers/getMetadata";
 import { getEditionHomePath } from "~/lib/surveys/helpers/getEditionHomePath";
 import {
   getCommonContexts,

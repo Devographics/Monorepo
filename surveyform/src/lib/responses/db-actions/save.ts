@@ -11,6 +11,7 @@ import { captureException } from "@sentry/nextjs";
 import { HandlerError } from "~/lib/handler-error";
 import { validateResponse } from "./validate";
 import { emailPlaceholder } from "~/lib/responses/schema";
+import pickBy from "lodash/pickBy";
 
 export async function saveResponse({
   responseId,
@@ -110,12 +111,15 @@ export async function saveResponse({
   // validate response
   validateResponse({ ...props, serverData });
 
+  const modifiedFields = pickBy(serverData, (value, key) => value !== null);
+  const deletedFields = pickBy(serverData, (value, key) => value === null);
+  const selector = { _id: responseId };
+  const modifier = {
+    $set: modifiedFields,
+    $unset: deletedFields,
+  };
+
   // update
-  const updateRes = await RawResponse.updateOne(
-    { _id: responseId },
-    {
-      $set: { ...serverData },
-    }
-  );
+  const updateRes = await RawResponse.updateOne(selector, modifier);
   return serverData;
 }

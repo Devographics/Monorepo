@@ -10,7 +10,9 @@ export const rscFetchSurveysMetadata = cache(async () => {
   }
   filteredSurveys = filteredSurveys.map((survey) => ({
     ...survey,
-    editions: survey.editions.filter((edition) => !!edition.questionsUrl),
+    editions: survey.editions.filter(
+      (edition) => edition?.sections?.length > 0
+    ),
   }));
   return filteredSurveys;
 });
