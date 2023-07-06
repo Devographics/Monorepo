@@ -54,6 +54,8 @@ type EditionMetadata {
 
     credits: [CreditItem]
 
+    sources: [JSON]
+
     faq: [String]
 
     tshirt: TshirtDefinition

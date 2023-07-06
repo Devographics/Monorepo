@@ -15,11 +15,6 @@ import {
     applyQuestionTemplate,
     mergeOptions,
     mergeSections,
-    // getSurveyObject,
-    // getEditionObject,
-    // getSectionQuestionObjects,
-    // getRawPaths,
-    // getNormPaths,
     getContentType
 } from './helpers'
 import {

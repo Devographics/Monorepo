@@ -50,6 +50,11 @@ export type Edition = {
     status: SurveyStatus
     tshirt: Tshirt
     colors: Colors
+    /**
+     * Where the user found out about the survey
+     * Should be a valid multiselect option
+     */
+    sources?: Array<Option>
 }
 
 /**
