@@ -11,6 +11,7 @@ import {
   surveysMetadataCacheKey,
   allLocalesMetadataCacheKey,
   localeCacheKey,
+  allLocalesIdsCacheKey,
 } from "./cache_keys";
 import {
   getSurveysQuery,
@@ -115,7 +116,7 @@ export const fetchAllLocalesMetadata = async (): Promise<Array<LocaleDef>> => {
  * @returns
  */
 export const fetchAllLocalesIds = async (): Promise<Array<string>> => {
-  const key = allLocalesMetadataCacheKey();
+  const key = allLocalesIdsCacheKey();
   return await getFromCache<any>({
     key,
     fetchFunction: async () => {
