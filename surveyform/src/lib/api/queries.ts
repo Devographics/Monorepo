@@ -163,7 +163,7 @@ query ${editionId}MetadataQuery {
             yearAdded
             limit
             template
-            extends
+            inputComponent
             # contentType
             allowOther
             allowComment

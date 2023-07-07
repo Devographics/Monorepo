@@ -6,7 +6,6 @@ export const multiple: TemplateFunction = options => {
     checkHasId(options)
 
     const question = {
-        extends: 'multiple',
         allowMultiple: true,
         ...options.question
     } as QuestionTemplateOutput

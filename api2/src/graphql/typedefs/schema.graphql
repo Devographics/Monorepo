@@ -59,6 +59,8 @@ type EditionMetadata {
     tshirt: TshirtDefinition
 
     colors: Colors
+
+    enableReadingList: Boolean
 }
 
 enum IncludeEnum {
@@ -115,7 +117,7 @@ type QuestionMetadata {
     intlId: String
     i18nNamespace: String
     template: String
-    extends: String
+    inputComponent: String
     rawPaths: RawDbPaths
     normPaths: NormDbPaths
     contentType: ContentType
