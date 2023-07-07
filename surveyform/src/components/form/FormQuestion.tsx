@@ -1,6 +1,6 @@
 "use client";
 import { getQuestionComponent } from "~/lib/customComponents";
-import { getFormPaths } from "~/lib/surveys/helpers";
+import { getFormPaths } from "@devographics/templates";
 
 export const FormQuestion = (props) => {
   const {

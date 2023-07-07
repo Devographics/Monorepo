@@ -16,8 +16,14 @@ export const apiRoutes = {
     loadFields: {
       href: (params) => `/api/normalization/loadFields?${encodeParams(params)}`,
     },
+    normalizeQuestion: {
+      href: (params) => `/api/normalization/normalizeQuestion`,
+    },
     normalizeResponses: {
-      href: () => `/api/normalization/normalizeResponses`,
+      href: (params) => `/api/normalization/normalizeResponses`,
+    },
+    normalizeEdition: {
+      href: (params) => `/api/normalization/normalizeEdition`,
     },
   },
 };

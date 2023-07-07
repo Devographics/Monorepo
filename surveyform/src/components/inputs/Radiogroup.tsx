@@ -4,7 +4,7 @@ import { FormInputProps } from "~/components/form/typings";
 import { FormOption } from "~/components/form/FormOption";
 import { FormItem } from "~/components/form/FormItem";
 import OtherOption from "./OtherOption";
-import { getFormPaths } from "~/lib/surveys/helpers";
+import { getFormPaths } from "@devographics/templates";
 import { useState } from "react";
 
 export const FormComponentRadioGroup = (props: FormInputProps) => {

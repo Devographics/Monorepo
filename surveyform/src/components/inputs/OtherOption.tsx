@@ -5,8 +5,8 @@ import { FormInputProps } from "~/components/form/typings";
 import { FormOption } from "~/components/form/FormOption";
 import debounce from "lodash/debounce.js";
 import FormControl from "react-bootstrap/FormControl";
-import { getFormPaths } from "~/lib/surveys/helpers";
 import { OPTION_NA } from "@devographics/types";
+import { getFormPaths } from "@devographics/templates";
 
 const OtherOption = (
   props: FormInputProps & {

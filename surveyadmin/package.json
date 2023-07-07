@@ -94,6 +94,7 @@
     "@mui/material": "^5.0.0",
     "@next/env": "^12.3.0",
     "@next/mdx": "^10.0.2",
+    "@picocss/pico": "^1.5.10",
     "@vulcanjs/core": "0.7.2-alpha.8",
     "@vulcanjs/crud": "0.7.2-alpha.8",
     "@vulcanjs/graphql": "0.8.1-y.0",

@@ -69,49 +69,16 @@ export const getSegments = ({ responsesCount, segmentSize }): Segment[] => {
   return segments;
 };
 
-const NormalizationWrapper = ({ surveys }) => {
-  const { editionId, questionId, paramsReady } = usePageParams();
-
+export const Normalization = ({
+  surveys,
+  survey,
+  edition,
+  question,
+  responsesCount,
+}) => {
   const allEditions = surveys.map((s) => s.editions).flat();
 
-  if (!editionId) {
-    return (
-      <div>
-        <h2>No editionId provided in URL</h2>
-        <h3>Available editions:</h3>
-        <ul>
-          {allEditions.map((edition) => {
-            const normalizeUrl = `${routes.admin.normalization.href}/?editionId=${edition.id}`;
-            return (
-              <li key={edition.id}>
-                <Link href={normalizeUrl}>{edition.id}</Link>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-    );
-  }
-
-  const edition = allEditions.find((e) => e.id === editionId);
-
-  if (!edition) {
-    return <h3>Edition {editionId} not found</h3>;
-  }
-
-  return (
-    <Normalization
-      surveys={surveys}
-      edition={edition}
-      questionId={questionId}
-    />
-  );
-};
-
-export const Normalization = ({ surveys, edition, question }) => {
-  const allEditions = surveys.map((s) => s.editions).flat();
-
-  const [responsesCount, setResponsesCount] = useState(0);
+  // const [responsesCount, setResponsesCount] = useState(0);
   const [doneCount, setDoneCount] = useState(0);
   const [enabled, setEnabled] = useState(true);
   const [editionId, setEditionId] = useState(edition.id);
@@ -123,7 +90,7 @@ export const Normalization = ({ surveys, edition, question }) => {
 
   const initializeSegments = ({ responsesCount, segmentSize }) => {
     const segments = getSegments({ responsesCount, segmentSize });
-    setResponsesCount(responsesCount);
+    // setResponsesCount(responsesCount);
     setSegments(segments);
   };
 
@@ -146,7 +113,7 @@ export const Normalization = ({ surveys, edition, question }) => {
 
   const stateStuff = {
     responsesCount,
-    setResponsesCount,
+    // setResponsesCount,
     doneCount,
     setDoneCount,
     enabled,
@@ -180,6 +147,7 @@ export const Normalization = ({ surveys, edition, question }) => {
 
   const props = {
     allEditions,
+    survey,
     edition,
     question,
     normalizeableFields: normalizeableQuestions,
@@ -194,10 +162,11 @@ export const Normalization = ({ surveys, edition, question }) => {
   return (
     <div className="admin-normalization admin-content">
       <Actions {...props} />
-      {!!responsesCount && <Progress {...props} />}
+      {/* {!!responsesCount && <Progress {...props} />} */}
+      <h3>{responsesCount} total responses</h3>
       {<Fields {...props} />}
     </div>
   );
 };
 
-export default NormalizationWrapper;
+export default Normalization;

@@ -6,7 +6,7 @@ import {
 import { Schema, extendSchema } from "~/lib/schemas";
 import { nanoid } from "nanoid";
 import { getCompletionPercentage, getKnowledgeScore } from "./helpers";
-import { getFormPaths } from "~/lib/surveys/helpers";
+import { getFormPaths } from "@devographics/templates";
 import { captureException } from "@sentry/nextjs";
 
 export enum Actions {
@@ -16,7 +16,7 @@ export enum Actions {
 
 export const emailPlaceholder = "*****@*****";
 
-const isValidNumber = (n) => typeof n === "number" && !isNaN(n)
+const isValidNumber = (n) => typeof n === "number" && !isNaN(n);
 export const responseBaseSchema: Schema = {
   _id: {
     type: String,
@@ -86,16 +86,18 @@ export const responseBaseSchema: Schema = {
     onCreate: () => 0,
     // TODO: TS doesn't catch typing errors here based on "type"
     onUpdate: ({ edition, updatedResponse, existingResponse }): number => {
-      const up = updatedResponse &&
+      const up =
+        updatedResponse &&
         getCompletionPercentage({
           response: updatedResponse,
           edition,
-        })
+        });
       // Zod is adamant in getting a correct value, be careful not to corrupt it
-      if (isValidNumber(up)) return up
+      if (isValidNumber(up)) return up;
       // in case data where corrupted
-      if (isValidNumber(existingResponse.completion)) return existingResponse.completion
-      return 0
+      if (isValidNumber(existingResponse.completion))
+        return existingResponse.completion;
+      return 0;
     },
   },
   knowledgeScore: {
@@ -103,12 +105,14 @@ export const responseBaseSchema: Schema = {
     // TODO: TS doesn't catch typing errors here based on "type"
     // Zod is adamant in getting a correct value, be careful not to corrupt it
     onUpdate: ({ edition, updatedResponse, existingResponse }): number => {
-      const up = updatedResponse &&
-        getKnowledgeScore({ response: updatedResponse, edition }).score
-      if (isValidNumber(up)) return up
-      if (isValidNumber(existingResponse.knowledgeScore)) return existingResponse.knowledgeScore
-      return 0
-    }
+      const up =
+        updatedResponse &&
+        getKnowledgeScore({ response: updatedResponse, edition }).score;
+      if (isValidNumber(up)) return up;
+      if (isValidNumber(existingResponse.knowledgeScore))
+        return existingResponse.knowledgeScore;
+      return 0;
+    },
   },
   locale: {
     type: String,

@@ -1,4 +1,4 @@
-import { getUnnormalizedResponses } from "./helpers";
+import { getUnnormalizedResponses } from "../helpers";
 import get from "lodash/get";
 
 export const getUnnormalizedFields = async ({

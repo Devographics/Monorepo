@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Breadcrumbs from "~/components/normalization/Breadcrumbs";
 import { fetchEditionMetadata, fetchSurveysMetadata } from "~/lib/api/fetch";
 import { getNormalizableQuestions } from "~/lib/normalization/helpers";
 import { routes } from "~/lib/routes";
@@ -17,9 +18,8 @@ export default async function Page({ params }) {
   const questions = getNormalizableQuestions({ edition });
   return (
     <div>
-      <h2>
-        {survey.name}/{editionId}
-      </h2>
+      <Breadcrumbs survey={survey} edition={edition} />
+
       <h4>Normalizeable Questions</h4>
       {questions.map((question) => (
         <Question

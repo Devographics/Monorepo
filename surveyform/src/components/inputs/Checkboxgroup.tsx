@@ -11,7 +11,7 @@ import { seededShuffle } from "~/lib/utils";
 import { OPTION_NA } from "@devographics/types";
 import OtherOption from "./OtherOption";
 import sortBy from "lodash/sortBy";
-import { getFormPaths } from "~/lib/surveys/helpers";
+import { getFormPaths } from "@devographics/templates";
 
 const defaultCutoff = 10;
 // how many items to allow past the cutoff limit before actually cutting off the list
