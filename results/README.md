@@ -9,7 +9,7 @@ Create an `.env` file at the root of the `/results` directory.
 **If the app crash on startup double check the selected survey.
 
 ```sh
-DATA_API_URL=http://localhost:4000/graphql
+DATA_API_URL=http://localhost:4030/graphql
 INTERNAL_API_URL=http://localhost:4020/graphql
 # In prod:
 # DATA_API_URL=http://api.devographics.com/graphql

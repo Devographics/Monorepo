@@ -72,7 +72,7 @@
     "express": "4.17.1",
     "express-rate-limit": "^6.6.0",
     "lodash": "^4.17.21",
-    "nanoid": "^3.3.4",
+    "nanoid": "3.3.6",
     "new-github-issue-url": "^1.0.0",
     "next": "13.4.7",
     "next-connect": "^0.9.1",

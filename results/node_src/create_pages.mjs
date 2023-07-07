@@ -19,18 +19,35 @@ const __filename = fileURLToPath(import.meta.url)
 
 const __dirname = path.dirname(__filename)
 
+const editionFolder = path.resolve(__dirname, `../surveys/${process.env.EDITIONID}`)
+
+function checkConfig() {
+    const errors = []
+    if (!process.env.EDITIONID) errors.push("EDITIONID not defined")
+    if (!process.env.SURVEYID) errors.push("SURVEYID not defined")
+    if (!fs.existsSync(editionFolder)) {
+        errors.push((`Folder ${editionFolder} doesn't exist, this is not a valid survey edition.`))
+    }
+    if (errors.length) {
+        throw new Error(errors.join("\n"))
+    }
+}
+checkConfig()
+
 const USE_FAST_BUILD = process.env.FAST_BUILD === 'true'
+
+
 
 const rawSitemap = yaml.load(
     fs.readFileSync(
-        path.resolve(__dirname, `../surveys/${process.env.EDITIONID}/config/raw_sitemap.yml`),
+        path.join(editionFolder, "config/raw_sitemap.yml"),
         'utf8'
     )
 )
 const config = {
     ...yaml.load(
         fs.readFileSync(
-            path.resolve(__dirname, `../surveys/${process.env.EDITIONID}/config/config.yml`),
+            path.join(editionFolder, "config/config.yml"),
             'utf8'
         )
     ),
