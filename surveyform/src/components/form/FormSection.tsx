@@ -10,7 +10,12 @@ import { FormContext } from "./FormContext";
 import { ErrorBoundary } from "~/components/error";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { useResponse } from "../ResponseContext/ResponseProvider";
-import { Edition, ResponseDocument, Section } from "@devographics/types";
+import {
+  Edition,
+  ResponseDocument,
+  Section,
+  Survey,
+} from "@devographics/types";
 import { Message } from "./FormMessages";
 import { useMessagesContext } from "../common/UserMessagesContext";
 
@@ -196,6 +201,7 @@ export const FormSection = (
 
   const formProps = {
     ...props,
+    survey: edition.survey,
     response,
     stateStuff,
     previousSection,

@@ -28,7 +28,7 @@ export const FormLayout = (props: FormLayoutProps) => {
     readOnly,
   } = props;
 
-  const enableReadingList = !readOnly;
+  const enableReadingList = !readOnly && edition.enableReadingList;
 
   return (
     <div className="survey-layout">

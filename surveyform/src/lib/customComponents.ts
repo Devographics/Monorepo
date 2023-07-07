@@ -13,7 +13,7 @@ import Textarea from "~/components/inputs/Textarea";
 import Checkboxgroup from "~/components/inputs/Checkboxgroup";
 import Radiogroup from "~/components/inputs/Radiogroup";
 import Projects from "~/components/inputs/Projects";
-import { QuestionMetadata } from "@devographics/types";
+import { QuestionMetadata, QuestionTemplateOutput } from "@devographics/types";
 
 const customComponents = {
   help: Help,
@@ -36,13 +36,15 @@ const customComponents = {
   number: Number,
 };
 
-export const getQuestionComponent = (question: QuestionMetadata) => {
-  const templateName = question.extends || question.template;
-  const customComponent = customComponents[templateName];
+export const getQuestionComponent = (
+  question: QuestionMetadata | QuestionTemplateOutput
+) => {
+  const componentName = question.inputComponent || question.template;
+  const customComponent = customComponents[componentName];
   if (!customComponent) {
     console.log(question);
     throw Error(
-      `Could not find question component for question ${question.id} with template ${templateName}`
+      `Could not find question component for question ${question.id} with template ${componentName}`
     );
   }
   return customComponent;

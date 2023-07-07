@@ -1,6 +1,7 @@
 "use client";
 import { getQuestionComponent } from "~/lib/customComponents";
 import { getFormPaths } from "@devographics/templates";
+import { getQuestionObject } from "~/lib/surveys/helpers/getQuestionObject";
 
 export const FormQuestion = (props) => {
   const {
@@ -15,7 +16,13 @@ export const FormQuestion = (props) => {
   } = props;
 
   const formPaths = getFormPaths({ edition, question });
-  const Component = getQuestionComponent(question);
+  const questionObject = getQuestionObject({
+    survey,
+    edition,
+    section,
+    question,
+  });
+  const Component = getQuestionComponent(questionObject);
   const path = formPaths.response;
   const value = path && response?.[path];
 

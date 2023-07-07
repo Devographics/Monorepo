@@ -7,12 +7,18 @@ export const QuestionLabel = ({
   section,
   question,
   formatCode = true,
+  variant = "full",
 }: {
   section: SectionMetadata;
   question: QuestionMetadata;
   formatCode?: boolean;
+  variant?: "short" | "full";
 }) => {
-  const { html, clean, isEntity } = useQuestionTitle({ section, question });
+  const { html, clean, isEntity } = useQuestionTitle({
+    section,
+    question,
+    variant,
+  });
   const labelClass = isEntity ? "entity-label" : "question-label";
   return formatCode ? (
     <span

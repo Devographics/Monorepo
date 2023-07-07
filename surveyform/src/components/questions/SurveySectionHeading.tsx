@@ -117,6 +117,7 @@ const QuestionItem = ({
           section={section}
           question={question}
           formatCode={false}
+          variant="short"
         />
       </a>
     </li>
