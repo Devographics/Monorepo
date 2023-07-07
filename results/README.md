@@ -6,6 +6,8 @@ The repo for the survey results sites, such as the [2021 State of JS survey](htt
 
 Create an `.env` file at the root of the `/results` directory.
 
+**If the app crash on startup double check the selected survey.
+
 ```sh
 DATA_API_URL=http://localhost:4000/graphql
 INTERNAL_API_URL=http://localhost:4020/graphql
@@ -14,8 +16,8 @@ INTERNAL_API_URL=http://localhost:4020/graphql
 # INTERNAL_API_URL=http://api-internal.devographics.com/graphql
 
 # adapt to current survey edition
-SURVEYID=state_of_graphql
-EDITIONID=graphql2022
+SURVEYID=state_of_js
+EDITIONID=js2022
 
 # set to true to only build en-US and ru-RU locales
 FAST_BUILD=true
