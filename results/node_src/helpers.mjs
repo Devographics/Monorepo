@@ -128,10 +128,13 @@ export const getExistingData = async ({ dataFileName, dataFilePath, baseUrl }) =
     return data
 }
 
-export const getDataLocations = (surveyId, editionId) => ({
-    localPath: `./../../${process.env.SURVEYS_DIR}/${surveyId}/${editionId}`,
-    url: `https://devographics.github.io/${process.env.SURVEYS_REPO}/${surveyId}/${editionId}`
-})
+export const getDataLocations = (surveyId, editionId) => {
+    if (!process.env.SURVEYS_DIR) throw new Error("SURVEYS_DIR must be defined to get data locations")
+    return ({
+        localPath: `./../../${process.env.SURVEYS_DIR}/${surveyId}/${editionId}`,
+        url: `https://devographics.github.io/${process.env.SURVEYS_REPO}/${surveyId}/${editionId}`
+    })
+}
 
 /*
 
