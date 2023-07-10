@@ -6,7 +6,8 @@ import { publicConfig } from "~/config/public";
 import { rscMustGetSurveyEditionFromUrl } from "~/app/[lang]/survey/[slug]/[year]/rsc-fetchers";
 import { getCommonContexts, getEditionContexts } from "~/i18n/config";
 import { rscIntlContext } from "~/i18n/rsc-fetchers";
-import { getEditionTitle, getSurveyImageUrl } from "./helpers";
+import { getEditionTitle } from "~/lib/surveys/helpers/getEditionTitle";
+import { getSurveyImageUrl } from "~/lib/surveys/helpers/getSurveyImageUrl";
 import { getSectioni18nIds } from "@devographics/i18n";
 
 export const rscFetchSurveysMetadata = cache(async () => {
@@ -29,7 +30,11 @@ export const rscFetchSurveysMetadata = cache(async () => {
  * => is it ok to use "rsc" functions here? Not sure, we should call the underlying functions probably
  * as there is no nesting here
  */
-export const rscGetMetadata = async ({ params }: { params: { lang: string, sectionNumber?: string, slug: string, year: string } }) => {
+export const rscGetMetadata = async ({
+  params,
+}: {
+  params: { lang: string; sectionNumber?: string; slug: string; year: string };
+}) => {
   const { lang, sectionNumber } = params;
   const edition = await rscMustGetSurveyEditionFromUrl(params);
 
