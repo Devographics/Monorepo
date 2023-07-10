@@ -20,7 +20,6 @@ import QuestionLabel from "./QuestionLabel";
 
 export interface FormItemProps extends FormInputProps {
   children: ReactNode;
-  enableReadingList?: boolean;
   showMore?: boolean;
   showOther?: boolean;
 }
@@ -47,7 +46,6 @@ export const FormItem = (props: FormItemProps) => {
     section,
     question,
     readOnly,
-    enableReadingList,
     stateStuff,
     showMore,
     showOther,

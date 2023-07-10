@@ -6,7 +6,10 @@ import { Dropdown } from "~/components/ui/Dropdown";
 const LocaleSwitcher = () => {
   const { locales = [] } = useLocaleContext();
   const { locale: currentLocale, setLocale } = useLocaleContext();
-  return (
+
+  const showSwitcher = locales.filter((l) => l.id !== "en-US").length > 0;
+
+  return showSwitcher ? (
     <Dropdown
       buttonProps={{
         variant: "default",
@@ -29,7 +32,7 @@ const LocaleSwitcher = () => {
         label: id === currentLocale?.id ? `${label} ✓` : label,
       }))}
     />
-  );
+  ) : null;
 };
 
 export default LocaleSwitcher;

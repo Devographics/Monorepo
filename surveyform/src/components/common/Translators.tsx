@@ -6,7 +6,11 @@ const Translators = () => {
   // TODO: pass locale list from context to make it a server component
   const { locales } = useLocaleContext();
 
-  return (
+  const showTranslators = locales.some(
+    (l) => l?.translators && l?.translators?.length > 0
+  );
+
+  return showTranslators ? (
     <div className="translators survey-page-block">
       <h3 className="translators-heading survey-page-block-heading">
         <FormattedMessage id="general.translation_help" />
@@ -28,7 +32,7 @@ const Translators = () => {
         </a>
       </h4>
     </div>
-  );
+  ) : null;
 };
 
 const LocaleItem = ({ locale }) => {

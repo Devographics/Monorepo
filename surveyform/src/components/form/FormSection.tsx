@@ -199,6 +199,8 @@ export const FormSection = (
   const previousSection = edition.sections[sectionIndex - 1];
   const nextSection = edition.sections[sectionIndex + 1];
 
+  const enableReadingList = !readOnly && edition.enableReadingList;
+
   const formProps = {
     ...props,
     survey: edition.survey,
@@ -208,6 +210,7 @@ export const FormSection = (
     nextSection,
     updateCurrentValues,
     submitForm,
+    enableReadingList,
   };
 
   return (

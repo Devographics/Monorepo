@@ -78,7 +78,7 @@
     "lodash": "^4.17.21",
     "nanoid": "^3.3.4",
     "new-github-issue-url": "^1.0.0",
-    "next": "13.4.4",
+    "next": "13.4.8",
     "next-connect": "^0.9.1",
     "next-sitemap": "^1.9.12",
     "node-cache": "^5.1.2",
