@@ -1,15 +1,17 @@
-import { initEntities, cacheSurveysEntities } from './entities'
-import { initSurveys } from './surveys'
-import { initProjects } from './projects'
+import { initEntities, cacheSurveysEntities } from './load/entities'
+import { initSurveys } from './load/surveys'
+import { initProjects } from './load/projects'
+import { initLocales } from './load/locales'
 import { RequestContext, WatchedItem } from './types'
-import { applyEntityResolvers } from './entities'
-import { cacheSurveys } from './surveys'
+import { applyEntityResolvers } from './load/entities'
+import { cacheSurveys } from './load/surveys'
 
 type InitFunctionsType = {
     [k in WatchedItem]?: any
 }
 
 const initFunctions: InitFunctionsType = {
+    locales: initLocales,
     entities: initEntities,
     surveys: initSurveys
 }
@@ -19,11 +21,15 @@ interface InitProps {
     initList?: WatchedItem[]
 }
 
-const defaultInitList: WatchedItem[] = ['entities', 'surveys', 'projects']
+const defaultInitList: WatchedItem[] = ['entities', 'surveys']
 
 export const initMemoryCache = async ({ context, initList = defaultInitList }: InitProps) => {
     console.log(`// Initializing in-memory cache for ${initList.join(', ')}…`)
     const data: any = {}
+    // we need surveys data to init other stuff too
+    if (!initList.includes('surveys')) {
+        initList.push('surveys')
+    }
     for (const initFunctionName of initList) {
         const f = initFunctions[initFunctionName]
         const result = await f({ context })
@@ -67,5 +73,7 @@ export const initDbCache = async ({
 
 export const reinitialize = async ({ context, initList = defaultInitList }: InitProps) => {
     const data = await initMemoryCache({ context, initList })
-    await initDbCache({ context, data, initList })
+    // June 2023: we do not "warm" the cache from API app anymore,
+    // it is now the responsibility of each app to handle its own cache
+    // await initDbCache({ context, data, initList })
 }

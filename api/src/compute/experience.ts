@@ -2,28 +2,15 @@ import orderBy from 'lodash/orderBy.js'
 import sumBy from 'lodash/sumBy.js'
 import sortBy from 'lodash/sortBy.js'
 import uniq from 'lodash/uniq.js'
-import { Db } from 'mongodb'
 import config from '../config'
 import { ratioToPercentage, appendCompletionToYearlyResults } from './common'
-import { getEntity } from '../entities'
-import { getChartKeys } from '../helpers'
-import { YearCompletion, SurveyConfig, RequestContext } from '../types'
-import { Filters, generateFiltersQuery } from '../filters'
+import { getEntity } from '../load/entities'
+import { YearCompletion, Survey, RequestContext, Filters } from '../types'
+import { generateFiltersQuery } from '../filters'
 import { computeCompletionByYear } from './completion'
-import { computeYearlyTransitions, YearlyTransitionsResult } from './yearly_transitions'
+// import { computeYearlyTransitions, YearlyTransitionsResult } from './yearly_transitions'
 import { inspect } from 'util'
-
-const EXPERIENCE_RANKING = {
-    never_heard: 1,
-    interested: 2,
-    not_interested: 3,
-    would_use: 4,
-    would_not_use: 5
-} as const
-
-type ExperienceChoice = keyof typeof EXPERIENCE_RANKING
-
-const sortExperience = (experience: ExperienceChoice) => EXPERIENCE_RANKING[experience]
+import { getCollection } from '../helpers/db'
 
 interface ExperienceBucket {
     id: string
@@ -79,17 +66,17 @@ export async function computeExperienceOverYears({
     filters
 }: {
     context: RequestContext
-    survey: SurveyConfig
+    survey: Survey
     tool: string
     filters?: Filters
 }) {
     const { db, isDebug } = context
-    const collection = db.collection(config.mongo.normalized_collection)
+    const collection = getCollection(db, survey)
 
     const path = `tools.${tool}.experience`
 
     const match = {
-        survey: survey.survey,
+        survey: survey.id,
         [path]: { $nin: [null, ''] },
         ...generateFiltersQuery({ filters })
     }
@@ -136,7 +123,7 @@ export async function computeExperienceOverYears({
         )
     }
 
-    const completionByYear = await computeCompletionByYear(context, match)
+    const completionByYear = await computeCompletionByYear({ context, match, survey })
 
     // group by years and add counts
     const experienceByYear = orderBy(
@@ -155,9 +142,9 @@ export async function computeExperienceOverYears({
                     id: string
                     count: number
                     countDelta?: number
-                    percentage_survey: number
-                    percentage_question: number
-                    percentage_facet: number
+                    percentageSurvey: number
+                    percentageQuestion: number
+                    percentageFacet: number
                     percentageDelta?: number
                 }>
             }>
@@ -184,9 +171,9 @@ export async function computeExperienceOverYears({
             yearBucket.buckets.push({
                 id: result.experience,
                 count: result.total,
-                percentage_survey: 0,
-                percentage_question: 0,
-                percentage_facet: 0
+                percentageSurvey: 0,
+                percentageQuestion: 0,
+                percentageFacet: 0
             })
 
             return acc
@@ -198,9 +185,9 @@ export async function computeExperienceOverYears({
     experienceByYear.forEach(bucket => {
         bucket.total = sumBy(bucket.buckets, 'count')
         bucket.buckets.forEach(subBucket => {
-            subBucket['percentage_survey'] = 0 // TODO
-            subBucket['percentage_question'] = ratioToPercentage(subBucket.count / bucket.total)
-            subBucket['percentage_facet'] = 0 // TODO
+            subBucket['percentageSurvey'] = 0 // TODO
+            subBucket['percentageQuestion'] = ratioToPercentage(subBucket.count / bucket.total)
+            subBucket['percentageFacet'] = 0 // TODO
         })
     })
 
@@ -224,26 +211,27 @@ export async function computeExperienceOverYears({
                     bucket.countDelta = bucket.count - previousYearBucket.count
                     bucket.percentageDelta =
                         Math.round(
-                            100 * (bucket.percentage_facet - previousYearBucket.percentage_facet)
+                            100 * (bucket.percentageFacet - previousYearBucket.percentageFacet)
                         ) / 100
                 }
             })
         }
     })
 
+    // not sure if needed?
     return appendCompletionToYearlyResults(context, survey, experienceByYear)
 }
 
 const metrics = ['awareness', 'usage', 'interest', 'satisfaction']
 
-export async function computeToolsExperienceRanking({
+export async function computeToolsExperienceRatios({
     context,
     survey,
     tools,
     filters
 }: {
     context: RequestContext
-    survey: SurveyConfig
+    survey: Survey
     tools: string[]
     filters?: Filters
 }) {
@@ -274,7 +262,7 @@ export async function computeToolsExperienceRanking({
             metrics.forEach(metric => {
                 metricByYear[toolYear.year][metric].push({
                     tool,
-                    percentage_question: toolYear.awarenessUsageInterestSatisfaction[metric]
+                    percentageQuestion: toolYear.awarenessUsageInterestSatisfaction[metric]
                 })
             })
 
@@ -287,7 +275,7 @@ export async function computeToolsExperienceRanking({
 
     for (const yearMetrics of Object.values(metricByYear)) {
         metrics.forEach(metric => {
-            yearMetrics[metric] = sortBy(yearMetrics[metric], 'percentage_question').reverse()
+            yearMetrics[metric] = sortBy(yearMetrics[metric], 'percentageQuestion').reverse()
             yearMetrics[metric].forEach((bucket: any, index: number) => {
                 // make ranking starts at 1
                 bucket.rank = index + 1
@@ -311,13 +299,13 @@ export async function computeToolsExperienceRanking({
                             (d: any) => d.tool === tool
                         )
                         let rank = null
-                        let percentage_question = null
+                        let percentageQuestion = null
                         if (toolYearMetric !== undefined) {
                             rank = toolYearMetric.rank
-                            percentage_question = toolYearMetric.percentage_question
+                            percentageQuestion = toolYearMetric.percentageQuestion
                         }
 
-                        return { year, rank, percentage_question }
+                        return { year, rank, percentageQuestion }
                     })
                 }
             }, {})
@@ -325,62 +313,4 @@ export async function computeToolsExperienceRanking({
     }
 
     return byTool
-}
-
-/*
-
-TODO: this seems inefficient? find a way to reuse computeToolsExperienceRanking
-result instead?
-
-*/
-export async function computeToolsExperienceRankingYears({
-    context,
-    survey,
-    tools,
-    filters
-}: {
-    context: RequestContext
-    survey: SurveyConfig
-    tools: string[]
-    filters?: Filters
-}) {
-    let availableYears: any[] = []
-    for (const tool of tools) {
-        const toolAllYearsExperience = await computeExperienceOverYears({
-            context,
-            survey,
-            tool,
-            filters
-        })
-        toolAllYearsExperience.forEach((toolYear: any) => {
-            availableYears.push(toolYear.year)
-        })
-    }
-    availableYears = uniq(availableYears).sort()
-    return availableYears
-}
-
-export async function computeToolExperienceTransitions<ToolID extends string = string>({
-    context,
-    survey,
-    tool,
-    years
-}: {
-    context: RequestContext
-    survey: SurveyConfig
-    tool: ToolID
-    years: [number, number]
-}) {
-    const yearlyTransitions = await computeYearlyTransitions<ExperienceChoice>(
-        context,
-        survey,
-        `tools.${tool}.experience`,
-        years,
-        sortExperience
-    )
-
-    return {
-        ...yearlyTransitions,
-        keys: getChartKeys('tool')
-    }
 }

@@ -1,9 +1,9 @@
-import { createEmailHash } from "~/account/email/api/encryptEmail";
+import { createEmailHash } from "~/lib/email";
 import {
   getUsersCollection,
   getNormResponsesCollection,
   getRawResponsesCollection,
-} from "~/admin/server/mongo";
+} from "@devographics/mongo";
 
 export const deleteUser = async ({ email, reallyDelete = 0 }) => {
   const [name, host] = email.split("@");

@@ -1,39 +1,18 @@
-# API
-
-## Setup
-
-Create an `.env` file at the root of the `api` directory: 
+ ## Env file
 
 ```
-# MongoDB connection string and database name
-MONGO_URI=mongodb+srv://user:***@server/public
-MONGO_DB_NAME=public
+# Default values, ok for production
+SURVEYS_REPO=surveys
 
-# Redis connection string
-REDIS_URL=rediss://user:***@server:6379
-```
+# Dev-only values, change in production
+MONGO_URI=mongodb://localhost:27017/devographics
 
-Note: contact me (Sacha) on [Discord](https://discord.gg/zRDb35jfrt) if you need the actual values. 
+# Values to fill locally
+GITHUB_TOKEN=
 
-Third party services env variables (not usually needed):
-
-```
-# Third party services 
-SENTRY_DSN=***
-GITHUB_TOKEN=***
-TWITTER_KEY=***
-TWITTER_SECRET_KEY=***
-TWITTER_BEARER_TOKEN=***
-TWITTER_ACCESS_TOKEN=***
-TWITTER_ACCESS_TOKEN_SECRET=***
-```
-
-## Running the App
-
-In `/api`: 
-
-```
-pnpm install
-pnpm run dev
-pnpm run dev:clean # run without cache
+# Optionally: load entities and surveys from local clones of GitHub repos
+# at "../../entities" and "../../surveys"
+LOAD_DATA=local
+ENTITIES_DIR="entities"
+SUVRVEYS_DIR="surveys"
 ```

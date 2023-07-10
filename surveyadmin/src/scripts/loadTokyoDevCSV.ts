@@ -1,30 +1,25 @@
-import {
-  fetchSurveysList,
-  fetchSurveysListGraphQL,
-  initRedis,
-} from "@devographics/core-models/server";
-import { serverConfig } from "~/config/server";
-import fs from "fs";
 import csvParser from "csv-parser";
 import type {
   Survey,
-  Edition,
   EditionMetadata,
   QuestionMetadata,
   Section,
-  SectionMetadata,
   Question,
   SurveyMetadata,
   TemplateFunction,
+  ResponseDocument,
 } from "@devographics/types";
 import yaml from "js-yaml";
-import { readdir, readFile } from "fs/promises";
-import { logToFile } from "@devographics/core-models/server";
-import { normalizeResponse } from "~/admin/server/normalization/normalize";
-import { getOrFetchEntities } from "~/modules/entities/server";
-import { getEditionQuestionsFlat } from "~/admin/server/normalization/helpers";
+// import { readFile } from "fs/promises";
+import fs, { promises as fsPromises } from "fs";
+
+import { logToFile } from "@devographics/helpers";
+import { normalizeDocument } from "~/lib/normalization/normalize/normalize";
+import { getEditionQuestions } from "~/lib/normalization/helpers/getEditionQuestions";
 import * as templateFunctions from "@devographics/templates";
-import { loadOrGetSurveys } from "~/modules/surveys/load";
+import { fetchEntities, fetchSurveysMetadata } from "~/lib/api/fetch";
+
+const readFile = fsPromises.readFile;
 
 const editions = {
   // td2019: "International Developers in Japan Survey 2019.csv",
@@ -131,7 +126,7 @@ const getQuestionMetadata = (
   question: Question,
   editionId: string
 ) => {
-  const allQuestions = getEditionQuestionsFlat(editionMetadata);
+  const allQuestions = getEditionQuestions(editionMetadata);
   const questionMetadata = allQuestions.find((q) => q.id === question.id);
   if (!questionMetadata) {
     throw new Error(
@@ -216,8 +211,8 @@ const getOptionValues = (
 };
 
 export const loadTokyoDevCSV = async () => {
-  const allSurveysMetadata = await loadOrGetSurveys({ forceReload: true });
-  const entities = await getOrFetchEntities();
+  const allSurveysMetadata = await fetchSurveysMetadata({ forceReload: true });
+  const entities = await fetchEntities();
   const survey = allSurveysMetadata.find((s) => s.id === "tokyodev") as Survey;
   const allEditions = await loadAllEditions(allSurveysMetadata, "tokyodev");
 
@@ -243,7 +238,7 @@ export const loadTokyoDevCSV = async () => {
         editionId,
         surveyId: "tokyodev",
         _id,
-      };
+      } as ResponseDocument;
       // iterate over each { question: answer } field in the response
       for (const questionLabel of Object.keys(responseData)) {
         const questionValue = responseData[questionLabel];
@@ -270,7 +265,9 @@ export const loadTokyoDevCSV = async () => {
             );
 
             const convertToType = (value) =>
-              questionMetadata.contentType === "number" ? Number(value) : value;
+              questionMetadata.optionsAreNumeric === true
+                ? Number(value)
+                : value;
 
             // const pathOptions = {
             //   editionId,
@@ -341,14 +338,13 @@ export const loadTokyoDevCSV = async () => {
       // console.log("// document");
       // console.log(document);
 
-      const normalizedDocument = await normalizeResponse({
-        document,
+      const normalizedDocument = await normalizeDocument({
+        response: document,
         entities,
-        surveys: allSurveysMetadata,
         verbose: true,
       });
 
-      // logToFile(`${_id}.yml`, normalizedDocument, { mode: "overwrite" });
+      logToFile(`tokyodev_${editionId}/${_id}.yml`, normalizedDocument);
     }
   }
 };

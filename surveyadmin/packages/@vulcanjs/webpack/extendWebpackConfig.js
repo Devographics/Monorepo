@@ -17,6 +17,7 @@ const withMagicImports = (config = {}) => {
     ...(config.resolve.alias || {}),
     "~": path.join(__dirname, "../../../", "src"),
   };
+  // Needed to support "fake" package within the codebase
   config.resolve.modules = [
     ...(config.resolve.modules || []),
     path.join(__dirname, "../../../", "packages"),

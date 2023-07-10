@@ -1,50 +1,33 @@
-/**
- * NOTE: this is SHARED code not API only, we use this in the frontend as well
- */
+export function encodeParams(params) {
+  const searchParams = new URLSearchParams(params);
+  return searchParams.toString();
+}
+
 export const apiRoutes = {
-  account: {
-    // POST
-    signup: {
-      href: "/api/account/signup",
-      method: "POST",
+  scripts: {
+    loadScripts: {
+      href: () => `/api/scripts/loadScripts`,
     },
-    login: {
-      href: "/api/account/login",
-      method: "POST",
-    },
-    logout: {
-      href: "/api/account/logout",
-      method: "POST",
-    },
-    sendResetPasswordEmail: {
-      href: "/api/account/send-reset-password-email",
-      method: "POST",
-    },
-    changePassword: {
-      href: "/api/account/changePassword",
-      method: "POST",
-    },
-    verifyEmail: {
-      href: "/api/account/verify-email",
-      method: "POST",
-    },
-    // GET
-    user: {
-      href: "/api/account/user",
-      method: "GET",
-    },
-    magicLogin: {
-      verifyToken: {
-        href: "/api/account/magic-login/verify-token",
-        method: "GET",
-      },
-      sendEmail: {
-        href: "/api/account/magic-login/send-email",
-        method: "POST",
-      },
+    runScript: {
+      href: () => `/api/scripts/runScript`,
     },
   },
-  admin: {
-    dataExport: { href: "/api/admin/data-export" },
+  normalization: {
+    loadUnnormalizedData: {
+      href: (params) =>
+        `/api/normalization/loadUnnormalizedData?${encodeParams(params)}`,
+    },
+    normalizeQuestion: {
+      href: (params) => `/api/normalization/normalizeQuestion`,
+    },
+    normalizeResponses: {
+      href: (params) => `/api/normalization/normalizeResponses`,
+    },
+    normalizeQuestionResponses: {
+      href: (params) => `/api/normalization/normalizeQuestionResponses`,
+    },
+    normalizeEdition: {
+      href: (params) => `/api/normalization/normalizeEdition`,
+    },
   },
 };

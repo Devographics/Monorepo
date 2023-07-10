@@ -1,51 +1,113 @@
 import { generateFiltersQuery } from '../filters'
-import { getFacetPath } from '../helpers'
+import { ComputeAxisParameters } from '../types'
+import { NO_ANSWER } from '@devographics/constants'
+// const NO_ANSWER = 'no_answer'
+import { getDbPath } from './generic'
+import { ResponsesTypes } from '@devographics/types'
 
 export type PipelineProps = {
-    survey: string
-    key: string
-    facet?: string
-    fieldId: string
-    year?: number
+    surveyId: string
+    selectedEditionId?: string
     filters?: any
-    limit: number
-    match?: any
-    cutoff?: number
+    axis1: ComputeAxisParameters
+    axis2?: ComputeAxisParameters | null
+    showNoAnswer?: boolean
+    responsesType?: ResponsesTypes
 }
 
 // generate an aggregation pipeline for all years, or
 // optionally restrict it to a specific year of data
-export const getGenericPipeline = (pipelineProps: PipelineProps) => {
-    const { survey, filters, key, facet, fieldId, year, limit, cutoff = 1 } = pipelineProps
+export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
+    const {
+        surveyId,
+        selectedEditionId,
+        filters,
+        axis1,
+        axis2,
+        showNoAnswer = false,
+        responsesType
+    } = pipelineProps
 
-    const facetPath = facet && getFacetPath(facet)
+    const axis1DbPath = getDbPath(axis1.question, responsesType)
+    const axis2DbPath = axis2 && getDbPath(axis2.question, responsesType)
 
-    const match: any = {
-        survey,
-        [key]: { $nin: [null, '', [], {}] },
-        ...generateFiltersQuery({ filters, key })
+    if (!axis1DbPath) {
+        throw new Error(`Could not find dbPath for question ${axis1.question.id}`)
+    }
+
+    let match: any = {
+        surveyId: surveyId
+        // [axis1DbPath]: { $nin: [null, '', [], {}] }
+    }
+
+    if (!showNoAnswer) {
+        match[axis1DbPath] = { $nin: [null, '', [], {}] }
+    }
+
+    if (filters) {
+        const filtersQuery = await generateFiltersQuery({ filters, dbPath: axis1DbPath })
+        match = { ...match, ...filtersQuery }
     }
 
     // if year is passed, restrict aggregation to specific year
-    if (year) {
-        match.year = year
+    if (selectedEditionId) {
+        match.editionId = selectedEditionId
     }
 
     const pipeline: any[] = [
         {
             $match: match
         },
-        // { $count: 'questionRespondents' },
         {
-            $unwind: {
-                path: `$${key}`
+            $set: {
+                [`${axis1DbPath}`]: {
+                    $cond: [
+                        {
+                            $and: [
+                                { $not: [`$${axis1DbPath}`] },
+                                {
+                                    $ne: [`$${axis1DbPath}`, 0]
+                                }
+                            ]
+                        },
+                        NO_ANSWER,
+                        `$${axis1DbPath}`
+                    ]
+                }
             }
         },
-        ...(facetPath
+        {
+            $unwind: {
+                path: `$${axis1DbPath}`
+            }
+        },
+        ...(axis2
+            ? [
+                  {
+                      $set: {
+                          [`${axis2DbPath}`]: {
+                              $cond: [
+                                  {
+                                      $and: [
+                                          { $not: [`$${axis2DbPath}`] },
+                                          {
+                                              $ne: [`$${axis2DbPath}`, 0]
+                                          }
+                                      ]
+                                  },
+                                  NO_ANSWER,
+                                  `$${axis2DbPath}`
+                              ]
+                          }
+                      }
+                  }
+              ]
+            : []),
+        ...(axis2
             ? [
                   {
                       $unwind: {
-                          path: `$${facetPath}`
+                          path: `$${axis2DbPath}`
                       }
                   }
               ]
@@ -53,9 +115,9 @@ export const getGenericPipeline = (pipelineProps: PipelineProps) => {
         {
             $group: {
                 _id: {
-                    year: '$year',
-                    ...(facet && { [facet]: `$${facetPath}` }),
-                    [fieldId]: `$${key}`
+                    editionId: '$editionId',
+                    ...(axis2 && { [axis2.question.id]: `$${axis2DbPath}` }),
+                    [axis1.question.id]: `$${axis1DbPath}`
                 },
                 count: {
                     $sum: 1
@@ -65,12 +127,12 @@ export const getGenericPipeline = (pipelineProps: PipelineProps) => {
         {
             $group: {
                 _id: {
-                    year: '$_id.year',
-                    ...(facet && { [facet]: `$_id.${facet}` })
+                    editionId: '$_id.editionId',
+                    ...(axis2 && { [axis2.question.id]: `$_id.${axis2.question.id}` })
                 },
-                buckets: {
+                facetBuckets: {
                     $push: {
-                        id: `$_id.${fieldId}`,
+                        id: `$_id.${axis1.question.id}`,
                         count: '$count'
                     }
                 }
@@ -79,14 +141,14 @@ export const getGenericPipeline = (pipelineProps: PipelineProps) => {
         {
             $group: {
                 _id: {
-                    year: '$_id.year'
+                    editionId: '$_id.editionId'
                 },
-                facets: {
+                buckets: {
                     $push: {
-                        type: facet ?? 'default',
-                        id: facet ? `$_id.${facet}` : 'default',
+                        // type: axis2 ?? 'default',
+                        id: axis2 ? `$_id.${axis2.question.id}` : 'default',
                         count: '$count',
-                        buckets: '$buckets'
+                        facetBuckets: '$facetBuckets'
                     }
                 }
             }
@@ -94,21 +156,12 @@ export const getGenericPipeline = (pipelineProps: PipelineProps) => {
         {
             $project: {
                 _id: 0,
-                year: `$_id.year`,
-                facets: 1
+                editionId: `$_id.editionId`,
+                buckets: 1
             }
         },
-        { $sort: { year: 1 } }
+        { $sort: { editionId: 1 } }
     ]
-
-    // if (cutoff) {
-    //     pipeline.push({ $match: { count: { $gt: cutoff } } })
-    // }
-
-    // only add limit if year is specified
-    // if (year) {
-    //     pipeline.push({ $limit: limit })
-    // }
 
     return pipeline
 }

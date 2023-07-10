@@ -17,9 +17,14 @@ export default defineConfig([
     {
         esbuildPlugins: [yamlPlugin({}), graphqlLoaderPlugin()],
         entry: ['./src/server.ts'],
-        noExternal: [/^@devographics($|\/)/],
         ...commonConfig,
         format: ['esm'],
-        outDir: 'dist'
+        outDir: 'dist',
+        noExternal: [
+            '@devographics/constants',
+            '@devographics/templates',
+            '@devographics/core-models',
+            '@devographics/helpers'
+        ]
     }
 ])

@@ -4,25 +4,32 @@ import { MongoClient } from 'mongodb'
 import responseCachePluginPkg from 'apollo-server-plugin-response-cache'
 const responseCachePlugin = (responseCachePluginPkg as any).default
 
-import typeDefs from './type_defs/schema.graphql'
+import defaultTypeDefs from './graphql/typedefs/schema.graphql'
 import { RequestContext } from './types'
-import resolvers from './resolvers'
-import express from 'express'
-import { analyzeTwitterFollowings } from './rpcs'
+import express, { Request, Response } from 'express'
 // import { clearCache } from './caching'
 import { createClient } from 'redis'
-import { initMemoryCache, reinitialize } from './init'
+import { reinitialize } from './init'
 import path from 'path'
+import GraphQLJSON, { GraphQLJSONObject } from 'graphql-type-json'
 
 import Sentry from '@sentry/node'
 
 import { rootDir } from './rootDir'
-import { appSettings } from './settings'
+import { appSettings } from './helpers/settings'
 
-import { watchFiles } from './watch'
-import { cacheAvatars } from './avatars'
+// import { cacheAvatars } from './avatars'
+
+import { logToFile } from '@devographics/helpers'
+import { loadOrGetSurveys } from './load/surveys'
 
 //import Tracing from '@sentry/tracing'
+
+import { generateTypeObjects, getQuestionObjects, parseSurveys } from './generate/generate'
+import { generateResolvers } from './generate/resolvers'
+
+import { loadOrGetEntities } from './load/entities'
+import { watchFiles } from './helpers/watch'
 
 const app = express()
 
@@ -46,22 +53,32 @@ Sentry.init({
 
 const isDev = process.env.NODE_ENV === 'development'
 
-const checkSecretKey = (req: any) => {
+const checkSecretKey = async (req: Request, res: Response, func: () => Promise<void>) => {
     if (req?.query?.key !== process.env.SECRET_KEY) {
-        throw new Error('Authorization error')
+        // throw new Error('Authorization error')
+        res.status(401).send('Not authorized')
+    } else {
+        await func()
     }
+}
+
+function getMongoUri() {
+    const uri = process.env.MONGO_URI
+    if (!uri) throw new Error('MONGO_URI not defined')
+    return uri
 }
 
 const start = async () => {
     const startedAt = new Date()
-    console.log('// Starting server…')
+    console.log(`// Starting server… (env: ${process.env.NODE_ENV})`)
+
     const redisClient = createClient({
         url: appSettings.redisUrl
     })
 
     redisClient.on('error', err => console.log('Redis Client Error', err))
 
-    const mongoClient = new MongoClient(process.env!.MONGO_URI!, {
+    const mongoClient = new MongoClient(getMongoUri(), {
         // useNewUrlParser: true,
         // useUnifiedTopology: true,
         connectTimeoutMS: 10000
@@ -75,11 +92,38 @@ const start = async () => {
 
     const db = mongoClient.db(process.env.MONGO_DB_NAME)
 
+    const entities = await loadOrGetEntities({})
     const context = { db, redisClient }
 
+    const isDevOrTest = !!(
+        process.env.NODE_ENV && ['test', 'development'].includes(process.env.NODE_ENV)
+    )
+    const surveys = await loadOrGetSurveys({ includeDemo: isDevOrTest })
+    const questionObjects = getQuestionObjects({ surveys })
+
+    const parsedSurveys = parseSurveys({ surveys })
+
+    const typeObjects = await generateTypeObjects({ surveys: parsedSurveys, questionObjects })
+    const allTypeDefsString = typeObjects.map(t => t.typeDef).join('\n\n')
+
+    await logToFile('questionObjects.yml', questionObjects)
+    await logToFile('typeDefs.yml', typeObjects)
+    await logToFile('typeDefs.graphql', allTypeDefsString)
+
+    const defaultResolvers = {
+        JSON: GraphQLJSON,
+        JSONObject: GraphQLJSONObject
+    }
+    const generatedResolvers = await generateResolvers({
+        surveys: parsedSurveys,
+        questionObjects,
+        typeObjects
+    })
+    const resolvers = { ...defaultResolvers, ...generatedResolvers }
+
     const server = new ApolloServer({
-        typeDefs,
-        resolvers: resolvers as any,
+        typeDefs: [defaultTypeDefs, allTypeDefsString],
+        resolvers,
         debug: isDev,
         // tracing: isDev,
         // cacheControl: true,
@@ -95,7 +139,7 @@ const start = async () => {
         },
         context: (expressContext): RequestContext => {
             // TODO: do this better with a custom header
-            const isDebug = expressContext?.req?.rawHeaders?.includes('http://localhost:4001')
+            const isDebug = expressContext?.req?.rawHeaders?.includes('http://localhost:4031')
             return {
                 ...context,
                 isDebug
@@ -115,45 +159,55 @@ const start = async () => {
         res.sendFile(path.join(rootDir + '/public/welcome.html'))
     })
 
-    app.get('/debug-sentry', function mainHandler(req, res) {
-        throw new Error('My first Sentry error!')
-    })
+    // app.get('/debug-sentry', function mainHandler(req, res) {
+    //     throw new Error('My first Sentry error!')
+    // })
 
-    app.get('/analyze-twitter', async function (req, res) {
-        checkSecretKey(req)
-        analyzeTwitterFollowings()
-        res.status(200).send('Analyzing…')
-    })
+    // app.get('/analyze-twitter', async function (req, res) {
+    //     checkSecretKey(req)
+    //     analyzeTwitterFollowings()
+    //     res.status(200).send('Analyzing…')
+    // })
 
     app.get('/reinitialize', async function (req, res) {
-        checkSecretKey(req)
-        await reinitialize({ context })
-        res.status(200).send('Cache cleared')
+        await checkSecretKey(req, res, async () => {
+            await reinitialize({ context })
+            res.status(200).send('Cache cleared')
+        })
     })
 
     app.get('/reinitialize-surveys', async function (req, res) {
-        checkSecretKey(req)
-        await reinitialize({ context, initList: ['surveys'] })
-        res.status(200).send('Cache cleared')
+        await checkSecretKey(req, res, async () => {
+            await reinitialize({ context, initList: ['surveys'] })
+            res.status(200).send('Cache cleared')
+        })
     })
 
     app.get('/reinitialize-entities', async function (req, res) {
-        checkSecretKey(req)
-        await reinitialize({ context, initList: ['entities'] })
-        res.status(200).send('Cache cleared')
+        await checkSecretKey(req, res, async () => {
+            await reinitialize({ context, initList: ['entities'] })
+            res.status(200).send('Cache cleared')
+        })
     })
 
-    app.get('/cache-avatars', async function (req, res) {
-        checkSecretKey(req)
-        await cacheAvatars({ context })
-        res.status(200).send('Cache cleared')
+    app.get('/reinitialize-locales', async function (req, res) {
+        await checkSecretKey(req, res, async () => {
+            await reinitialize({ context, initList: ['locales'] })
+            res.status(200).send('Cache cleared')
+        })
     })
+
+    // app.get('/cache-avatars', async function (req, res) {
+    //     checkSecretKey(req)
+    //     await cacheAvatars({ context })
+    //     res.status(200).send('Cache cleared')
+    // })
 
     app.use(Sentry.Handlers.errorHandler())
 
-    const port = process.env.PORT || 4000
+    const port = process.env.PORT || 4030
 
-    const data = await initMemoryCache({ context, initList: ['entities', 'surveys'] })
+    // const data = await initMemoryCache({ context, initList: ['entities', 'surveys'] })
 
     // if (process.env.INITIALIZE_CACHE_ON_STARTUP) {
     //     await initDbCache({ context, data })
@@ -164,7 +218,8 @@ const start = async () => {
             context,
             config: {
                 entities: process.env.ENTITIES_DIR,
-                surveys: process.env.SURVEYS_DIR
+                surveys: process.env.SURVEYS_DIR,
+                locales: process.env.LOCALES
             }
         })
     }

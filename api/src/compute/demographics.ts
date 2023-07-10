@@ -1,61 +1,56 @@
 import orderBy from 'lodash/orderBy.js'
-import { Db } from 'mongodb'
 import config from '../config'
-import { RequestContext, SurveyConfig, YearParticipation } from '../types'
-import { Filters } from '../filters'
+import { RequestContext, EditionParticipation } from '../types'
+import { Survey } from '../types/surveys'
+import { inspect } from 'util'
+import { getCollection } from '../helpers/db'
 
 export async function computeParticipationByYear({
     context,
-    survey,
-    filters,
-    year
+    survey
 }: {
     context: RequestContext
-    survey: SurveyConfig
-    filters?: Filters
-    year?: number
-}): Promise<YearParticipation[]> {
+    survey: Survey
+}): Promise<EditionParticipation[]> {
     const { db } = context
-    const collection = db.collection(config.mongo.normalized_collection)
+    const collection = getCollection(db, survey)
 
-    const participantsByYear = (await collection
-        .aggregate([
-            {
-                $match: {
-                    survey: survey.survey
-                }
-            },
-            {
-                $group: {
-                    _id: { year: '$year' },
-                    participants: { $sum: 1 }
-                }
-            },
-            {
-                $project: {
-                    _id: 0,
-                    year: '$_id.year',
-                    participants: 1
-                }
+    const aggregationPipeline = [
+        {
+            $match: {
+                surveyId: survey.id
             }
-        ])
-        .toArray()) as YearParticipation[]
-
-    return orderBy(participantsByYear, 'year')
-}
-
-export async function getParticipationByYearMap(
-    context: RequestContext,
-    survey: SurveyConfig
-): Promise<{
-    [key: number]: number
-}> {
-    const buckets = await computeParticipationByYear({ context, survey })
-
-    return buckets.reduce((acc, bucket) => {
-        return {
-            ...acc,
-            [Number(bucket.year)]: bucket.participants
+        },
+        {
+            $group: {
+                _id: { editionId: '$editionId' },
+                total: { $sum: 1 }
+            }
+        },
+        {
+            $project: {
+                _id: 0,
+                editionId: '$_id.editionId',
+                total: 1
+            }
         }
-    }, {})
+    ]
+    const participantsByYear = (await collection
+        .aggregate(aggregationPipeline)
+        .toArray()) as EditionParticipation[]
+
+    const results = orderBy(participantsByYear, 'year')
+
+    // console.log('// computeParticipationByYear')
+    // console.log(
+    //     inspect(
+    //         {
+    //             aggregationPipeline,
+    //             results
+    //         },
+    //         { colors: true, depth: null }
+    //     )
+    // )
+
+    return results
 }
