@@ -21,6 +21,7 @@
         "api": "REACT_APP_ENDPOINT_URL=http://localhost:4000/graphql PORT=4001 react-scripts --openssl-legacy-provider start",
         "api-internal": "REACT_APP_ENDPOINT_URL=http://localhost:4020/graphql PORT=4021 react-scripts --openssl-legacy-provider start",
         "api2": "REACT_APP_ENDPOINT_URL=http://localhost:4030/graphql PORT=4031 react-scripts --openssl-legacy-provider start",
+        "tokyodev": "REACT_APP_ENDPOINT_URL=http://localhost:5030/graphql PORT=5031 react-scripts --openssl-legacy-provider start",
         "start": "PORT=4001 react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test",

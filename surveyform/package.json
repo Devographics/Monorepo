@@ -50,7 +50,7 @@
     "typecheck-watch": "tsc --noEmit --p src/tsconfig.json -w",
     "//typecheck": " # in case of error with @vulcanjs/* package, check that src/types (eg simpl-schema) are up-to-date with vulcan-npm",
     "typecheck": "tsc --noEmit --p src/tsconfig.json",
-    "tokyodev": "PORT=5010 INTERNAL_API_URL=http://localhost:5030/graphql DATA_API_URL=http://localhost:5030/graphql next"
+    "tokyodev": "dotenv -e .env.tokyodev.local next"
   },
   "dependencies": {
     "@devographics/fetch": "workspace:^1.0.0",
@@ -118,6 +118,7 @@
     "@types/unist": "^2.0.6",
     "@types/uuid": "^9.0.1",
     "chalk": "^4.1.2",
+    "dotenv": "^10.0.0",
     "esbuild-plugin-yaml": "^0.0.1",
     "eslint": "^7.32.0",
     "mongodb": "^5.5.0",
