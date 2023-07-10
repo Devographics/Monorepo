@@ -2,7 +2,7 @@
 
 ## Apps
 
-### API
+### 📡 API
 
 Node.js TypeScript app.
 
@@ -20,7 +20,7 @@ Node.js TypeScript app.
 
 -   https://render.com
 
-### GraphiQL
+### 🔍 GraphiQL
 
 GraphQL IDE
 
@@ -40,7 +40,7 @@ GraphQL IDE
 
 -   https://api.devographics.com
 
-### Survey Form
+### ✍️ Surveyform
 
 Next.js TypeScript app.
 
@@ -60,7 +60,7 @@ Next.js TypeScript app.
 
 -   https://survey.devographics.com
 
-### Results
+### 📊 Results
 
 Gatsby TypeScript app.
 
@@ -82,7 +82,11 @@ Gatsby TypeScript app.
 -   https://2023.stateofcss.com
 -   etc.
 
-### Main Database
+---
+
+## Databases
+
+### 🗂️ Main Database
 
 MongoDB database.
 
@@ -95,7 +99,7 @@ MongoDB database.
 
 -   https://www.mongodb.com/atlas/database
 
-### Cache Database
+### 💾 Cache Database
 
 Redis database.
 
@@ -107,13 +111,52 @@ Redis database.
 
 -   https://upstash.com/
 
-### Static Assets
+---
+
+## Assets
+
+### 🌐 Locales
+
+Locale strings
+
+##### What It Does
+
+-   Store locale strings for various languages as YAML files.
+
+##### Repos
+
+-   https://github.com/Devographics/locale-en-US
+-   https://github.com/Devographics/locale-es-ES
+-   https://github.com/Devographics/locale-de-DE
+-   etc.
+
+### 📖 Survey Config
+
+Outline and config files for each survey.
+
+##### What It Does
+
+-   Store outline and config files for each survey as YAML files.
+
+##### Repo
+
+-   https://github.com/Devographics/surveys/
+
+##### Domains
+
+-   https://assets.devographics.com
+
+### 🖼️ Static Assets
 
 Static image files.
 
 ##### What It Does
 
 -   Store static images such as logos, social media preview images, etc.
+
+##### Repo
+
+-   https://github.com/Devographics/images
 
 ##### Hosted On
 
@@ -122,6 +165,8 @@ Static image files.
 ##### Domains
 
 -   https://assets.devographics.com
+
+---
 
 ## Env Variables
 
