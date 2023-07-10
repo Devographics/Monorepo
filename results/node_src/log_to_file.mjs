@@ -1,6 +1,17 @@
 import fs from 'fs'
 import yaml from 'js-yaml'
 
+/**
+ * @typedef {{ mode: string, timestamp?: boolean, dirPath: string, subDir: string}} LogOptions
+ */
+
+/**
+ * 
+ * @param {string} fileName 
+ * @param {any} object 
+ * @param {LogOptions} options 
+ * @returns 
+ */
 export const logToFile = async (fileName, object, options = {}) => {
     if (process.env.NODE_ENV === 'development') {
         const { mode = 'append', timestamp = false, dirPath, subDir } = options
@@ -19,12 +30,15 @@ export const logToFile = async (fileName, object, options = {}) => {
         let contents
         if (typeof object === 'string') {
             contents = object
+        } else if (fileName.includes('.yml') || fileName.includes('.yaml')) {
+            contents = yaml.dump(object, { noRefs: true, skipInvalid: true })
+        } else if (typeof object === "undefined") {
+            // necessary because JSON.stringify of an undefined object is undefined, not a string
+            // NOTE: this mean we output invalid JSON in this case
+            console.warn(`Logging undefined object at ${fullPath}, this will produce an invalid .json file containing 'undefined'.`)
+            contents = "undefined"
         } else {
-            if (fileName.includes('.yml') || fileName.includes('.yaml')) {
-                contents = yaml.dump(object, { noRefs: true, skipInvalid: true })
-            } else {
-                contents = JSON.stringify(object, null, 2)
-            }
+            contents = JSON.stringify(object, null, 2)
         }
         const now = new Date()
         const text = timestamp ? now.toString() + '\n---\n' + contents : contents
