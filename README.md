@@ -2,6 +2,8 @@
 
 ## Apps
 
+The following apps are all contained within the monorepo.
+
 ### 📡 API
 
 Node.js TypeScript app.
@@ -81,6 +83,19 @@ Gatsby TypeScript app.
 -   https://2022.stateofjs.com
 -   https://2023.stateofcss.com
 -   etc.
+
+### 🔒 Surveyadmin
+
+Admin app.
+
+##### What It Does
+
+-   Provide a dashboard to manage all surveys.
+-   Handle data processing and normalization.
+
+##### Hosted On
+
+-   Only running locally for now.
 
 ---
 
