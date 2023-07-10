@@ -14,13 +14,6 @@ export interface DocumentLanguageProps {
   language: string;
 }
 
-// i18next-http-middleware is in charge of enhancing the req object
-// interface IncomingMessageWithI18n extends IncomingMessage {
-//   language?: string;
-//   i18n: any;
-// }
-
-
 /**
  * TO be used in API routes for instance
  * @param req

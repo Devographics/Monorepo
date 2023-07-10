@@ -10,8 +10,8 @@ import { defaultLocaleId } from "../config";
  */
 export const getClosestLocale = async (localeId?: string) => {
   if (!localeId) return defaultLocaleId;
-  const allLocalesMetadata = await fetchAllLocalesMetadata();
-  const localeIds = allLocalesMetadata.map((l) => l.id);
+  const allLocales = await fetchAllLocalesMetadata()
+  const localeIds = allLocales.map(l => l.id)
   if (localeIds.includes(localeId)) return localeId;
   const isCountry = localeId.length === 2;
   if (isCountry) {

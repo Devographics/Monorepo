@@ -6,11 +6,14 @@ The repo for the survey results sites, such as the [2021 State of JS survey](htt
 
 Create an `.env` file at the root of the `/results` directory.
 
-```
-DATA_API_URL=http://api.devographics.com/graphql
-INTERNAL_API_URL=http://api-internal.devographics.com/graphql
+```sh
+DATA_API_URL=http://localhost:4000/graphql
+INTERNAL_API_URL=http://localhost:4020/graphql
+# In prod:
+# DATA_API_URL=http://api.devographics.com/graphql
+# INTERNAL_API_URL=http://api-internal.devographics.com/graphql
 
-# adapt to current survey
+# adapt to current survey edition
 SURVEYID=state_of_graphql
 EDITIONID=graphql2022
 

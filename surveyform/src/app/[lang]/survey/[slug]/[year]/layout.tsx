@@ -17,7 +17,6 @@ export async function generateStaticParams() {
   }));
 }*/
 
-import { getMetadata } from "~/lib/surveys/helpers/getMetadata";
 import { getEditionHomePath } from "~/lib/surveys/helpers/getEditionHomePath";
 import {
   getCommonContexts,
@@ -25,6 +24,7 @@ import {
   getLocaleIdFromParams,
 } from "~/i18n/config";
 import { rscAllLocalesMetadata, rscLocale } from "~/lib/api/rsc-fetchers";
+import { rscGetMetadata } from "~/lib/surveys/rsc-fetchers";
 interface SurveyPageServerProps {
   lang: string;
   slug: string;
@@ -37,7 +37,7 @@ export async function generateMetadata({
   params: SurveyPageServerProps;
 }): Promise<Metadata | undefined> {
   // TODO: it seems we need to call this initialization code on all relevant pages/layouts
-  return await getMetadata({ params });
+  return await rscGetMetadata({ params });
 }
 
 /**

@@ -142,6 +142,7 @@ export const fetchGraphQLApi = async <T = any>({
     cache
 }: {
     query: string
+    /** Unique query identifier, will use the query name as a default */
     key?: string
     apiUrl?: string
     /**

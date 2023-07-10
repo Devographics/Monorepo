@@ -15,12 +15,11 @@ import { apiWrapper } from "~/lib/server/sentry";
 import { anonymousLoginStrategy } from "~/account/anonymousLogin/api/passport/anonymous-strategy";
 import { connectToAppDbMiddleware } from "~/lib/server/middlewares/mongoAppConnection";
 import { setToken } from "~/account/middlewares/setToken";
-import { HandlerError } from "~/lib/handler-error";
 import { createResponse } from "~/lib/responses/db-actions/create";
 
 passport.use(anonymousLoginStrategy);
 
-interface AnonymousLoginReqBody {}
+interface AnonymousLoginReqBody { }
 // NOTE: adding NextApiRequest, NextApiResponse is required to get the right typings in next-connect
 // this is the normal behaviour
 const loginAndCreateResponse = nextConnect<NextApiRequest, NextApiResponse>()

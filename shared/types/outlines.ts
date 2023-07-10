@@ -50,6 +50,11 @@ export type Edition = {
     tshirt: Tshirt
     colors: Colors
     enableReadingList: boolean
+    /**
+     * Where the user found out about the survey
+     * Should be a valid multiselect option
+     */
+    sources?: Array<Option>
 }
 
 /**

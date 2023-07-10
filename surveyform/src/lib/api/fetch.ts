@@ -11,14 +11,15 @@ import {
   surveysMetadataCacheKey,
   allLocalesMetadataCacheKey,
   localeCacheKey,
+  allLocalesIdsCacheKey,
 } from "./cache_keys";
 import {
   getSurveysQuery,
   getEditionMetadataQuery,
   getAllLocalesMetadataQuery,
   getLocaleQuery,
+  getAllLocalesIdsQuery,
 } from "./queries";
-import { publicConfig } from "~/config/public";
 import { serverConfig } from "~/config/server";
 
 interface FetcherFunctionOptions {
@@ -110,6 +111,29 @@ export const fetchAllLocalesMetadata = async (): Promise<Array<LocaleDef>> => {
     serverConfig,
   });
 };
+
+/**
+ * Fetch list of all available locale ids
+ * Used for routing the user to the right locale
+ * Safe for parallel calls (eg in Next.js middlewares)
+ * @returns
+ */
+export const fetchAllLocalesIds = async (): Promise<Array<string>> => {
+  const key = allLocalesIdsCacheKey();
+  return await getFromCache<any>({
+    key,
+    fetchFunction: async () => {
+      const result = await fetchGraphQLApi<{ locales: Array<LocaleDef> }>({
+        query: getAllLocalesIdsQuery(),
+        key,
+        apiUrl: serverConfig().translationAPI,
+      });
+      return result?.locales.map(l => l.id) || [];
+    },
+    serverConfig,
+  });
+}
+
 
 /**
  * Fetch metadata and strings for a specific locales

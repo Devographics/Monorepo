@@ -1,5 +1,4 @@
-//const util = require("util");
-const { extendNextConfig } = require("./packages/@vulcanjs/next-config");
+const path = require("path")
 // Use @next/mdx for a basic MDX support.
 // See the how Vulcan Next docs are setup with next-mdx-remote
 // which is more advanced (loading remote MD, supporting styling correctly etc.)
@@ -13,7 +12,7 @@ const { withSentryConfig } = require("@sentry/nextjs");
 // @see https://nextjs.org/docs/api-reference/next.config.js/runtime-configuration
 const moduleExports = (phase, { defaultConfig }) => {
   /**
-   * @type {import('next/dist/next-server/server/config').NextConfig}
+   * @type {import('next/dist/server/config').NextConfig}
    **/
   let nextConfig = {
     // NOTE: the doc is unclear about whether we should merge this default config or not
@@ -35,24 +34,16 @@ const moduleExports = (phase, { defaultConfig }) => {
       // your project has ESLint errors.
       ignoreDuringBuilds: true,
     },
-    /*
-    i18n: {
-      locales: uniqueLocales,
-      // It won't be prefixed
-      defaultLocale: "en-US", //-US",
-
-    },*/
     env: {
       NEXT_PUBLIC_IS_USING_LOCAL_DATABASE: !!(
         process.env.MONGO_URI || ""
       ).match(/localhost/),
     },
-    webpack: function (configArg, ...otherArgs) {
-      //console.log(util.inspect(configArg.module.rules, false, null, true));
-      //*** */ Yaml support
+    webpack: function (configArg, otherArgs) {
       // run previously configured function!
+      /** @type {import("webpack").Configuration} */
       const config = defaultConfig.webpack
-        ? defaultConfig.webpack(configArg, ...otherArgs)
+        ? defaultConfig.webpack(configArg, otherArgs)
         : configArg;
       // then extend
       config.module.rules.push({
@@ -64,6 +55,39 @@ const moduleExports = (phase, { defaultConfig }) => {
         test: /\.node$/,
         use: "node-loader",
       });
+
+      // Support differentiated import for the same folder
+      if (!config.resolve.mainFiles) {
+        config.resolve.mainFiles = [
+          "index.js",
+          "index.ts",
+          "index.jsx",
+          "index.tsx"
+        ]
+      }
+      if (otherArgs.isServer) {
+        config.resolve.mainFiles.push(
+          "index.server.ts",
+          "index.server.tsx",
+          "index.server.js",
+          "index.server.jsx",
+        )
+      } else {
+        config.resolve.mainFiles.push(
+          "index.client.ts",
+          "index.client.tsx",
+          "index.client.js",
+          "index.client.jsx",
+        )
+      }
+      if (!config.resolve) config.resolve = {};
+      // This is still needed for Storybook or 3rd party Webpack baseds tools
+      // However Next is able to resolve based just on the tsconfig.json
+      // @see https://github.com/vercel/next.js/issues/19345 for progress on this
+      config.resolve.alias = {
+        ...(config.resolve.alias || {}),
+        "~": path.join(__dirname, "src"),
+      };
 
       config.experiments.topLevelAwait = true;
       return config;
@@ -92,9 +116,6 @@ const moduleExports = (phase, { defaultConfig }) => {
     // uncomment to support markdown
     // pageExtensions:["js", "jsx", "md", "mdx", "ts", "tsx"];
   };
-
-  let extendedConfig = extendNextConfig(nextConfig);
-
   //*** */ Enable Webpack analyzer
   if (process.env.ANALYZE) {
     const debug = require("debug")("webpack");
@@ -102,7 +123,7 @@ const moduleExports = (phase, { defaultConfig }) => {
     const withBundleAnalyzer = require("@next/bundle-analyzer")({
       enabled: !!process.env.ANALYZE,
     });
-    extendedConfig = withBundleAnalyzer(extendedConfig);
+    nextConfig = withBundleAnalyzer(nextConfig);
   }
 
   //*** Sentry
@@ -156,25 +177,25 @@ const moduleExports = (phase, { defaultConfig }) => {
     disableServerWebpackPlugin: shouldDisableSentry,
     disableClientWebpackPlugin: shouldDisableSentry,
   };
-  extendedConfig.sentry = {
-    ...(extendedConfig.sentry || {}),
+  nextConfig.sentry = {
+    ...(nextConfig.sentry || {}),
     // Will disable source map upload
     disableServerWebpackPlugin: shouldDisableSentry,
     disableClientWebpackPlugin: shouldDisableSentry,
   };
 
   // Finally add relevant webpack configs/utils
-  extendedConfig = flowRight([
+  nextConfig = flowRight([
     withPkgInfo,
     //withMDX,
     (config) => withSentryConfig(config, sentryWebpackPluginOptions),
     // add other wrappers here
-  ])(extendedConfig);
+  ])(nextConfig);
 
-  debug("Extended next config FINAL " + JSON.stringify(extendedConfig));
+  debug("Extended next config FINAL " + JSON.stringify(nextConfig));
 
   if (process.env.MAINTENANCE_MODE) {
-    extendedConfig.redirects = async () => {
+    nextConfig.redirects = async () => {
       return [
         {
           source: "/",
@@ -190,7 +211,7 @@ const moduleExports = (phase, { defaultConfig }) => {
     };
   }
 
-  return extendedConfig;
+  return nextConfig;
 };
 
 module.exports = moduleExports;
