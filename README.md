@@ -183,6 +183,27 @@ Static image files.
 
 ---
 
+## Setup
+
+We use [pnpm](https://pnpm.io/).
+
+### Folder Structure
+
+Expected folder structure:
+
+```sh
+devographics
+|_ monorepo (this repo)
+|_ locales
+|____locale-en-US
+|____locale-fr-FR
+|____....
+|_ surveys
+|_ images
+```
+
+---
+
 ## Env Variables
 
 ### API
@@ -230,10 +251,11 @@ EMAIL_OCTOPUS_APIKEY
 
 ### Other Config
 
-| Variable         | Description                                         | Used By    |
-| ---------------- | --------------------------------------------------- | ---------- |
-| `ENCRYPTION_KEY` | Encryption key to hash emails                       | Surveyform |
-| `SECRET_KEY`     | Secret key used to verify external webhook requests | API        |
+| Variable         | Description                                                                            | Used By    |
+| ---------------- | -------------------------------------------------------------------------------------- | ---------- |
+| `ENCRYPTION_KEY` | Encryption key to hash emails                                                          | Surveyform |
+| `SECRET_KEY`     | Secret key used to verify external webhook requests                                    | API        |
+| `LOGS_DIRECTORY` | Absolute path to logs directory (e.g. `/Users/devographics/monorepo/surveyform/.logs`) | All        |
 
 ### Local Dev
 
