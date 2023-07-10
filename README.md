@@ -1,107 +1,183 @@
-# Monorepo
+# Devographics Monorepo
 
-## Initial setup and run
+## Apps
 
-To run the "surveyform":
-- `just dbs` will run Mongo and Redis (via Docker)
-- `cd api-internal && pnpm run dev` will run the internal API that serves locales and entities
-- `cd surveyform && pnpm run dev` will run the surveyform (surveyadmin works similarly)
+### API
 
-Sections below explain how to properly setup relevant toolings and folders.
+Node.js TypeScript app.
 
-### Other git repositories to clone
+##### What It Does
 
-APIs may depend on GitHub repository. 
+-   Make the outlines of each survey available to the survey form app.
+-   Connect to the database and generate the data for the results app's charts.
+-   Provide the internationalisation strings for each locale.
 
-To avoid calling the GitHub API systematically, you can download the repositories locally. This is relevant for `api-internal` for instance.
+##### Code
 
-Expected folder structure:
-```sh
-devographics
-|_ monorepo
-|_ locales
-# here load all locale repos: https://github.com/orgs/Devographics/repositories?language=&q=locale&sort=&type=all
-|____locale-fr-FR
-|____....
-# here load surveys yaml: https://github.com/Devographics/surveys
-|_surveys
-```
+-   https://github.com/Devographics/Monorepo/tree/main/api2
 
-The script "./scripts/listLocaleRepos.mjs" can help to get the list of commands to run.
+##### Hosted On
 
-## Shared packages
+-   https://render.com
 
-To use a shared package in your app:
-- Add a workspace dependency: "@devographics/core-models":"workspace:*"
-- When deploying, configure the host to load the whole monorepo (eg on Vercel)
-- If the shared code is not bundled, eg written in pure TypeScript, include it in the app bundle.
-In Next.js this is done via [next-transpile-modules](https://www.npmjs.com/package/next-transpile-modules) in next.config.js
+### GraphiQL
 
+GraphQL IDE
 
-## Run scripts with Just
+##### What It Does
 
-[Just](https://github.com/casey/just) is similar to NPM scripts or makefile, but language agnostic, simple and powerful.
+-   Make it easier to test and query the API.
 
-Recommended installation with [asdf](https://github.com/asdf-vm/asdf):
+##### Code
 
-```sh
-asdf plugin add just
-asdf install just latest
-asdf global just latest
-```
+-   https://github.com/Devographics/Monorepo/tree/main/graphiql
 
-You might need to create the relevant `.tool-versions` files, that defines the
-version of Node used by `asdf` (similarly to what .nvmrc do for NVM).
+##### Hosted On
 
-- Run redis (for external and internal API): `just redis`
-- Run mongo (for Next and APIs): `just mongo`
+-   https://netlify.com
 
-## Pnpm with Corepack
+##### Domain
 
-The monorepo uses PNPM as its primary package manager.
+-   https://api.devographics.com
 
-Since we rely on Node 16+, you can use `yarn` and `pnpm` by enabling the [Corepack](https://nodejs.org/api/corepack.html) feature of Node:
+### Survey Form
 
-```sh
-# If you have Node 16 installed, this will just work
-corepack enable
-```
-### Caveats with pnpm
+Next.js TypeScript app.
 
-- If you import a subdependency of a direct dependency, you need to install it explicitly as well. 
-For example, `apollo-server-express` depens on `apollo-server-core`. But if you want to use `apollo-server-core` directly in your code, it must be installed. Yarn and NPM were more flexible (but also less reliable).
-- The `node_modules` folder structure is altered. This might trick Webpack cache (see the PNPM plugin used for Gatsby) and also our Apollo patch. Subdependencies are located in `node_modules/.pnpm/node_modules`, only direct dependencies of the project are located in `node_modules` (but they also link towards PNPM shared cache)
-- You need `preserveSymlinks: true` in tsconfig.
+##### What It Does
 
+-   Let respondents take the survey.
 
-## Services
+##### Code
 
-- Upstash for serverless Redis
+-   https://github.com/Devographics/Monorepo/tree/main/surveyform
 
-/!\ This means we connect to Redis via HTTP in the surveyform
-The Justfile setup shows how to add an HTTP proxy in front of a Redis instance,
-and running `just dbs` automatically handles everything for you
+##### Hosted On
 
-- ScaleGrid for database hosting: https://scalegrid.io/
-11/2022: running on Mongo v4, be careful with compatibility matrix:
-https://www.mongodb.com/docs/drivers/node/current/compatibility/#mongodb-compatibility
-https://mongoosejs.com/docs/compatibility.html
+-   https://vercel.com
 
-- Render.com for long running: APIs, admin form
-You can configure folders that are relevant for an app (eg "surveyadmin" & "shared") from the UI
+##### Domain
 
-Admin area: https://surveyadmin.onrender.com
+-   https://survey.devographics.com
 
-- Vercel for serverless (surveyform): https://vercel.com/devographics
-You can configure folders that are relevant for an app (eg "surveyform" & "shared") via "vercel.json"
-@see https://vercel.com/guides/how-do-i-use-the-ignored-build-step-field-on-vercel
+### Results
 
-- Netlify for homepage and result pages: https://www.netlify.com/
+Gatsby TypeScript app.
 
-- Stellate for graphql caching: https://stellate.co/
+##### What It Does
 
-- Apollo Studio for graqphl debugging: https://studio.apollographql.com/
+-   Display the survey results.
 
-- Sentry for debugging: https://sentry.io/organizations/devographics
+##### Code
 
-- Logtail as the log drain for Vercel: https://logtail.com/team/61764/sources
+-   https://github.com/Devographics/Monorepo/tree/main/results
+
+##### Hosted On
+
+-   https://netlify.com
+
+##### Domains
+
+-   https://2022.stateofjs.com
+-   https://2023.stateofcss.com
+-   etc.
+
+### Main Database
+
+MongoDB database.
+
+##### What It Does
+
+-   Store the raw data entered by respondents.
+-   Store the "normalized" data once it's been processed.
+
+##### Hosted On
+
+-   https://www.mongodb.com/atlas/database
+
+### Cache Database
+
+Redis database.
+
+##### What It Does
+
+-   Cache the results of queries made to the API app.
+
+##### Hosted On
+
+-   https://upstash.com/
+
+### Static Assets
+
+Static image files.
+
+##### What It Does
+
+-   Store static images such as logos, social media preview images, etc.
+
+##### Hosted On
+
+-   https://netlify.com/
+
+##### Domains
+
+-   https://assets.devographics.com
+
+## Env Variables
+
+### API
+
+| Variable  | Description    | Used By |
+| --------- | -------------- | ------- |
+| `API_URL` | URL of the API | All     |
+
+### MongoDB
+
+| Variable           | Description                                       | Used By    |
+| ------------------ | ------------------------------------------------- | ---------- |
+| `MONGO_URI`        | URI of the Mongo database                         | All        |
+| `MONGO_PRIVATE_DB` | Name of the database where private data is stored | Surveyform |
+| `MONGO_PUBLIC_DB`  | Name of the database where public data is stored  | API        |
+
+### Redis
+
+| Variable      | Description                      | Used By    |
+| ------------- | -------------------------------- | ---------- |
+| `REDIS_URL`   | URL of the Redis database        | Surveyform |
+| `REDIS_TOKEN` | Redis token (needed for Upstash) | Surveyform |
+
+### GitHub
+
+| Variable              | Description                                      | Used By |
+| --------------------- | ------------------------------------------------ | ------- |
+| `GITHUB_TOKEN`        | GitHub access token                              | Results |
+| `GITHUB_SURVEYS_USER` | Path to JSON version of results on GitHub (user) | Results |
+| `GITHUB_SURVEYS_REPO` | Path to JSON version of results on GitHub (repo) | Results |
+
+### Email
+
+| Variable               | Description                                           | Used By    |
+| ---------------------- | ----------------------------------------------------- | ---------- |
+| `EMAIL_OCTOPUS_APIKEY` | EmailOctopus API key                                  | Surveyform |
+| `DEFAULT_MAIL_FROM`    | Default "from" email (e.g. `info@mail.stateofjs.com`) | Surveyform |
+| `SMTP_HOST`            | SMTP host (e.g. `email-smtp.us-east-1.amazonaws.com`) | Surveyform |
+| `SMTP_PORT`            | SMTP port (e.g. `465`)                                | Surveyform |
+| `SMTP_SECURE`          | Set to "1"                                            | Surveyform |
+| `SMTP_USER`            | SMTP username                                         | Surveyform |
+| `SMTP_PASS`            | SMTP password                                         | Surveyform |
+
+EMAIL_OCTOPUS_APIKEY
+
+### Other Config
+
+| Variable         | Description                                         | Used By    |
+| ---------------- | --------------------------------------------------- | ---------- |
+| `ENCRYPTION_KEY` | Encryption key to hash emails                       | Surveyform |
+| `SECRET_KEY`     | Secret key used to verify external webhook requests | API        |
+
+### Local Dev
+
+| Variable      | Description                                        | Used By |
+| ------------- | -------------------------------------------------- | ------- |
+| `SURVEYS_DIR` | Local directory from which to load survey outlines | API     |
+| `LOCALES_DIR` | Local directory from which to load locale files    | API     |
