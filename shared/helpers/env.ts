@@ -40,7 +40,7 @@ export enum EnvVar {
 
 interface EnvVariable {
     id: EnvVar
-    usedBy: AppName[]
+    usedBy?: AppName[]
     description?: string
     example?: string
     optional?: boolean
@@ -80,7 +80,7 @@ export const getConfig = (options: GetConfigOptions = {}) => {
     const missingVariables: EnvVariable[] = []
     for (const variable of config) {
         const { id, usedBy, optional = false } = variable
-        if (usedBy.includes(appName)) {
+        if ((usedBy || []).includes(appName)) {
             const value = process.env[id]
             if (value) {
                 variables[id] = value
