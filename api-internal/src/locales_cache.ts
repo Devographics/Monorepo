@@ -33,7 +33,7 @@ import { appSettings } from './settings'
 /////////////////////////////////////// Data Loading //////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
 
-const excludedFiles = ['crowdin.yml']
+const excludedFiles = ['config.yml', 'crowdin.yml']
 
 export const addToAllContexts = (context: string) => {
     if (!allContexts.includes(context)) {
