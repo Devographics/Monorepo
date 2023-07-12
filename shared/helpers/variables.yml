@@ -27,7 +27,6 @@
   example: public_data
   usedBy:
       - api
-      - surveyform
       - surveyadmin
 
 # Redis

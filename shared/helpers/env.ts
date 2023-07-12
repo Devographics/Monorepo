@@ -88,13 +88,13 @@ export const getConfig = (options: GetConfigOptions = {}) => {
     }
     if (optionalVariables.length > 0) {
         console.warn(
-            `The following optional environment variables were not defined:
+            `getConfig/${appName}: The following optional environment variables were not defined:
 ${optionalVariables.map(formatVariable).join('\n')}`
         )
     }
     if (missingVariables.length > 0) {
         throw new Error(
-            `getConfig: Found the following missing environment variables:
+            `getConfig/${appName}: Found the following missing environment variables:
 ${missingVariables.map(formatVariable).join('\n')}`
         )
     }
