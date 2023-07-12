@@ -24,6 +24,7 @@ export default defineConfig([
             '@devographics/constants',
             '@devographics/templates',
             '@devographics/helpers',
+            '@devographics/debug',
             '@devographics/redis'
         ]
     }

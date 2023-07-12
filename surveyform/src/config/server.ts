@@ -22,7 +22,7 @@ export function serverConfig() {
     /**
      * Internal API for translations and entities
      */
-    translationAPI: process.env.INTERNAL_API_URL!,
+    translationAPI: process.env.API_URL!,
     mongoUri: process.env.MONGO_URI!,
     redisUrl: process.env.REDIS_URL!,
     // Won't work with upstash, which accepts only HTTP
