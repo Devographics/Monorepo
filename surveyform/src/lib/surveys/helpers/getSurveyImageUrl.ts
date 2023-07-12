@@ -1,5 +1,6 @@
 import { EditionMetadata } from "@devographics/types";
 import { isAbsoluteUrl } from "~/lib/utils";
+import { getEnvVar, EnvVar } from "@devographics/helpers";
 
 export const variants = {
   og: "png",
@@ -13,7 +14,9 @@ export const getSurveyImageUrl = (
 ) => {
   const variantSuffix = variant ? `-${variant}` : "";
   const extension = variant ? variants[variant] : "png";
-  const imageUrl = `https://assets.devographics.com/surveys/${edition.id}${variantSuffix}.${extension}`;
+  const imageUrl = `https://${getEnvVar(EnvVar.ASSETS_URL)}/surveys/${
+    edition.id
+  }${variantSuffix}.${extension}`;
   if (!imageUrl) return;
   let finalImageUrl = isAbsoluteUrl(imageUrl)
     ? imageUrl

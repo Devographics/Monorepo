@@ -14,8 +14,8 @@ const defaultItems = [
 ];
 
 const Faq = ({ survey }) => {
-  const items = survey.faq || defaultItems;
-  return (
+  const items = survey.faq;
+  return items ? (
     <div className="faq survey-page-block">
       <h3 className="faq-heading survey-page-block-heading">
         <FormattedMessage id="general.faq" />
@@ -26,7 +26,7 @@ const Faq = ({ survey }) => {
         ))}
       </div>
     </div>
-  );
+  ) : null;
 };
 
 const FaqItem = ({ item, index }) => {

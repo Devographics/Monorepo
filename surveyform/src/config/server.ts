@@ -1,3 +1,5 @@
+import { AppName, setAppName, getConfig } from "@devographics/helpers";
+
 /**
  * Parse process env and generate an object with relevant values
  *
@@ -8,6 +10,8 @@ import { publicConfig } from "./public";
 
 export function serverConfig() {
   checkServerConfig();
+
+  setAppName(AppName.SURVEYFORM);
   return {
     // reexpose public variables for consistency
     ...publicConfig,

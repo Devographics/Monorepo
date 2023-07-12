@@ -66,7 +66,7 @@ export const getConfig = (options: GetConfigOptions = {}) => {
     const { appName: appName_, showWarnings = false } = options
     const appName = appName_ || appNameGlobal
     if (!appName) {
-        throw new Error('getConfig: please pass appName or specify APP_NAME env variable')
+        throw new Error('getConfig: please pass variable or call setAppName() to specify appName')
     }
     const variables = {} as any
     const optionalVariables = []

@@ -8,10 +8,7 @@ import { explorerPlugin } from '@graphiql/plugin-explorer'
 // dotenv.config()
 
 const fetcher: Fetcher = async graphQLParams => {
-    console.log('apiUrl')
-
     const apiUrl = process.env.REACT_APP_ENDPOINT_URL
-    console.log(apiUrl)
     if (!apiUrl) {
         throw new Error('Could not find environment variable REACT_APP_ENDPOINT_URL')
     }

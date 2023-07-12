@@ -1,5 +1,6 @@
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import type { EditionMetadata, Credit } from "@devographics/types";
+import { getEnvVar, EnvVar } from "@devographics/helpers";
 
 const SurveyCredits = ({ edition }: { edition: EditionMetadata }) => {
   return (
@@ -34,7 +35,7 @@ const SurveyCredit = ({ id, role, entity }: Credit) => {
       >
         {/* <img src={twitter?.avatarUrl} alt="twitter avatar" /> */}
         <img
-          src={`https://assets.devographics.com/avatars/${id}.jpg`}
+          src={`${getEnvVar(EnvVar.ASSETS_URL)}/avatars/${id}.jpg`}
           alt="twitter avatar"
         />
       </a>
