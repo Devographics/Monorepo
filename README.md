@@ -16,7 +16,7 @@ Node.js TypeScript app.
 
 ##### Code
 
--   https://github.com/Devographics/Monorepo/tree/main/api2
+-   https://github.com/Devographics/Monorepo/tree/main/api
 
 ##### Hosted On
 
@@ -205,6 +205,8 @@ devographics
 ---
 
 ## Env Variables
+
+See "shared/helpers/variables.yml" for a more up to date list.
 
 ### API
 

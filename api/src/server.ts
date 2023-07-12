@@ -8,8 +8,6 @@ import dotenv from 'dotenv'
 import defaultTypeDefs from './graphql/typedefs/schema.graphql'
 import { RequestContext } from './types'
 import express, { Request, Response } from 'express'
-// import { clearCache } from './caching'
-import { createClient } from 'redis'
 import { reinitialize } from './init'
 import path from 'path'
 import GraphQLJSON, { GraphQLJSONObject } from 'graphql-type-json'
@@ -17,7 +15,6 @@ import GraphQLJSON, { GraphQLJSONObject } from 'graphql-type-json'
 import Sentry from '@sentry/node'
 
 import { rootDir } from './rootDir'
-import { appSettings } from './helpers/settings'
 
 // import { cacheAvatars } from './avatars'
 
@@ -246,8 +243,7 @@ const start = async () => {
 
     app.listen({ port: port }, () =>
         console.log(
-            `🚀 Server ready at http://localhost:${port}${server.graphqlPath} (in ${
-                finishedAt.getTime() - startedAt.getTime()
+            `🚀 Server ready at http://localhost:${port}${server.graphqlPath} (in ${finishedAt.getTime() - startedAt.getTime()
             }ms)`
         )
     )

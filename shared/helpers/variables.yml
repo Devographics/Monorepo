@@ -32,14 +32,16 @@
 # Redis
 
 - id: REDIS_URL
-  description: URL of the Redis database
+  description: URL of the Redis database (using HTTP protocol for serverless)
   example: https://welcomed-porpoise-41931.upstash.io
   usedBy:
       - api
       - surveyform
       - surveyadmin
 - id: REDIS_TOKEN
-  description: Redis token (needed for Upstash)
+  description: >
+      Redis token (needed for Upstash).
+      When using a local setup, the token is set when running the Redis proxy (see Docker-compose file).
   example: AaMEASQgN...TDJjNDg1NDWQ=
   usedBy:
       - api

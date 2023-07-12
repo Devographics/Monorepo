@@ -1,4 +1,4 @@
-import { AppName, setAppName, getConfig } from "@devographics/helpers";
+import { AppName, setAppName, getConfig, EnvVar } from "@devographics/helpers";
 
 /**
  * Parse process env and generate an object with relevant values
@@ -7,6 +7,11 @@ import { AppName, setAppName, getConfig } from "@devographics/helpers";
  */
 
 import { publicConfig } from "./public";
+
+// Experimental system with getConfig
+setAppName(AppName.SURVEYFORM)
+export const envConfig = (id: EnvVar) => getConfig()[id]
+
 
 export function serverConfig() {
   checkServerConfig();

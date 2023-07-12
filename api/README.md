@@ -1,18 +1,25 @@
  ## Env file
 
-```
-# Default values, ok for production
+```sh
 SURVEYS_REPO=surveys
-
-# Dev-only values, change in production
 MONGO_URI=mongodb://localhost:27017/devographics
+MONGO_PUBLIC_DB=devographics_public
 
-# Values to fill locally
-GITHUB_TOKEN=
+REDIS_URL=http://localhost:8080
+REDIS_TOKEN=fake-dev-token
 
-# Optionally: load entities and surveys from local clones of GitHub repos
-# at "../../entities" and "../../surveys"
+GITHUB_PATH_SURVEYS=devographics/surveys
+GITHUB_PATH_LOCALES=devographics/locales
+GITHUB_PATH_ENTITIES=devographics/entities
+
+SECRET_KEY=dev-secret-key
+
+GITHUB_TOKEN=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
+
+LOGS_PATH="/code/devographics/monorepo/api/.logs"
+# To avoid calling github during local dev
 LOAD_DATA=local
-ENTITIES_DIR="entities"
-SUVRVEYS_DIR="surveys"
+ENTITIES_PATH="/code/devographics/entities"
+SURVEYS_PATH="/code/devographics/surveys"
+LOCALES_PATH="/code/devographics/locales"
 ```

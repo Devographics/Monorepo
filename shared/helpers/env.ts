@@ -62,6 +62,13 @@ export const setAppName = (appName: AppName) => {
     appNameGlobal = appName
 }
 
+/**
+ * Centralized configuration management for the whole Devographics infrastructure
+ * See ./shared/helpers/variables.yml for the actual config
+ * 
+ * Each app is still responsible for setting the default values for development
+ * (via their readme, the tracked .env files etc.)
+ */
 export const getConfig = (options: GetConfigOptions = {}) => {
     const { appName: appName_, showWarnings = false } = options
     const appName = appName_ || appNameGlobal
@@ -98,7 +105,7 @@ ${optionalVariables.map(formatVariable).join('\n')}`
 ${missingVariables.map(formatVariable).join('\n')}`
         )
     }
-    return variables
+    return variables as { [id in EnvVar]: string }
 }
 
 export const getEnvVar = (id: EnvVar) => {
