@@ -4,10 +4,13 @@
  * TODO: add joi validation, add more values to avoid loading "process.env" everywhere in the app
  */
 
+import { AppName, setAppName } from "@devographics/helpers";
 import { publicConfig } from "./public";
 
 export function serverConfig() {
   checkServerConfig();
+
+  setAppName(AppName.SURVEYADMIN);
   return {
     // reexpose public variables for consistency
     ...publicConfig,

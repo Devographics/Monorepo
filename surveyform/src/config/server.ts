@@ -28,7 +28,6 @@ export function serverConfig() {
     // Won't work with upstash, which accepts only HTTP
     // || "redis://localhost:6379",
     redisToken: process.env.REDIS_TOKEN || "",
-    githubToken: process.env.GITHUB_TOKEN,
     // NOTE: each survey should try to use their own specific domain (see magic link auth)
     defaultMailFrom: process.env.MAIL_FROM || "login@devographics.com",
     // to avoid risks of typos, reuse those values
@@ -49,9 +48,7 @@ export function checkServerConfig() {
   let errors: Array<string> = [];
   const mongoUri = process.env.MONGO_URI;
   if (!mongoUri) errors.push("MONGO_URI env variable is not defined");
-  if (!process.env.GITHUB_TOKEN) {
-    errors.push("GITHUB_TOKEN is now necessary to get the survey files");
-  }
+
   if (process.env.NODE_ENV === "production") {
     // prod only check
     if (!process.env.REDIS_URL) {
