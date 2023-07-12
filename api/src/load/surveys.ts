@@ -12,7 +12,14 @@ import { appSettings } from '../helpers/settings'
 
 let allSurveys: Survey[] = []
 
-const octokit = new Octokit({ auth: getEnvVar(EnvVar.GITHUB_TOKEN) })
+let octokit: Octokit
+
+const getOctokit = () => {
+    if (!octokit) {
+        octokit = new Octokit({ auth: getEnvVar(EnvVar.GITHUB_TOKEN) })
+    }
+    return octokit
+}
 
 // add `apiOnly` flags to questins
 const makeAPIOnly = (sections: Section[]) =>
@@ -47,6 +54,7 @@ const listGitHubFiles = async ({
     repo: string
     path: string
 }) => {
+    const octokit = getOctokit()
     const contents = await octokit.request('GET /repos/{owner}/{repo}/contents/{path}', {
         owner,
         repo,
@@ -70,12 +78,10 @@ const getGitHubYamlFile = async (url: string) => {
 const skipItem = (fileName: string) => fileName.slice(0, 1) === '_'
 
 export const loadFromGitHub = async () => {
-    console.log(`-> loading surveys repo`)
     const surveys: Survey[] = []
 
-    const [owner, repo, path] = getEnvVar(EnvVar.GITHUB_PATH_SURVEYS)?.split('/') || []
+    const [owner, repo, surveysDirPath] = getEnvVar(EnvVar.GITHUB_PATH_SURVEYS)?.split('/') || []
 
-    const surveysDirPath = path ? `${path}/` : ''
     if (!owner) {
         throw new Error(
             'loadFromGitHub: env variable GITHUB_PATH_SURVEYS did not contain [owner] segment'
@@ -87,7 +93,13 @@ export const loadFromGitHub = async () => {
         )
     }
 
-    const repoDirContents = await listGitHubFiles({ owner, repo, path: surveysDirPath + '' })
+    const getUrl = (path?: string) => {
+        return `/repos/${owner}/${repo}/contents/${path}`
+    }
+
+    console.log(`-> loading surveys repo (${getUrl()})`)
+
+    const repoDirContents = await listGitHubFiles({ owner, repo, path: surveysDirPath })
 
     // loop over repo contents and fetch raw yaml files
     for (const file of repoDirContents) {
@@ -95,13 +107,13 @@ export const loadFromGitHub = async () => {
             if (skipItem(file.name)) {
                 continue
             }
-            console.log(`// Loading survey ${file.name}…`)
+            console.log(`// Loading survey ${file.name}… (${getUrl(file.path)})`)
             const editions: any[] = []
             let surveyConfigYaml: any = { id: 'default' }
             const surveyDirContents = await listGitHubFiles({
                 owner,
                 repo,
-                path: surveysDirPath + file.path
+                path: file.path
             })
 
             for (const file2 of surveyDirContents) {
@@ -112,11 +124,11 @@ export const loadFromGitHub = async () => {
                     // found config.yml for survey
                     surveyConfigYaml = await getGitHubYamlFile(file2.download_url)
                 } else if (file2.type === 'dir') {
-                    console.log(`    -> Edition ${file2.name}…`)
+                    console.log(`    -> Edition ${file2.name}… (${getUrl(file2.path)})`)
                     const editionsDirContents = await listGitHubFiles({
                         owner,
                         repo,
-                        path: surveysDirPath + file2.path
+                        path: file2.path
                     })
                     let edition = {}
                     for (const file3 of editionsDirContents) {
@@ -127,11 +139,18 @@ export const loadFromGitHub = async () => {
                         } else if (file3.name === 'questions.yml') {
                             // found config.yml for edition
                             const editionQuestionsYaml = await getGitHubYamlFile(file3.download_url)
-                            edition = { ...edition, sections: editionQuestionsYaml }
+                            if (
+                                Array.isArray(editionQuestionsYaml) &&
+                                editionQuestionsYaml.length > 0
+                            ) {
+                                edition = { ...edition, sections: editionQuestionsYaml }
+                            }
                         } else if (file3.name === 'api.yml') {
                             // found api.yml for edition
                             const editionApiYaml = await getGitHubYamlFile(file3.download_url)
-                            edition = { ...edition, apiSections: makeAPIOnly(editionApiYaml) }
+                            if (Array.isArray(editionApiYaml) && editionApiYaml.length > 0) {
+                                edition = { ...edition, apiSections: makeAPIOnly(editionApiYaml) }
+                            }
                         }
                     }
                     editions.push(edition)

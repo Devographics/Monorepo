@@ -65,12 +65,17 @@
       - api
 - id: GITHUB_PATH_SURVEYS
   description: Path to surveys repo/directory on GitHub
-  example: foobar/surveys/surveys OR devographics/surveys
+  example: owner/repo/subdir (subdir is optional)
   usedBy:
       - api
 - id: GITHUB_PATH_LOCALES
   description: Path to locales repo/directory on GitHub
-  example: foobar/surveys/locales OR devographics
+  example: owner/repo/subdir OR owner (in which case it's assumed all locales have their own repo)
+  usedBy:
+      - api
+- id: GITHUB_PATH_ENTITIES
+  description: Path to entities repo/directory on GitHub
+  example: owner/repo/subdir (subdir is optional)
   usedBy:
       - api
 

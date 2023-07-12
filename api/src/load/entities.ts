@@ -81,17 +81,29 @@ export const highlightEntitiesExampleCode = async (entities: Entity[]) => {
 }
 
 export const loadFromGitHub = async () => {
-    const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
+    const octokit = new Octokit({ auth: getEnvVar(EnvVar.GITHUB_TOKEN) })
     const entities: Entity[] = []
-    console.log(`-> loading entities from GitHub`)
+    const [owner, repo, path] = getEnvVar(EnvVar.GITHUB_PATH_ENTITIES)?.split('/') || []
 
-    const options = {
-        owner: 'StateOfJS',
-        repo: 'entities',
-        path: ''
+    if (!owner) {
+        throw new Error(
+            'loadFromGitHub: env variable GITHUB_PATH_SURVEYS did not contain [owner] segment'
+        )
+    }
+    if (!repo) {
+        throw new Error(
+            'loadFromGitHub: env variable GITHUB_PATH_SURVEYS did not contain [repo] segment'
+        )
     }
 
-    const contents = await octokit.request('GET /repos/{owner}/{repo}/contents/{path}', options)
+    const url = `repos/${owner}/${repo}/contents/${path}`
+    console.log(`-> loading entities from GitHub (${url})`)
+
+    const contents = await octokit.request('GET /repos/{owner}/{repo}/contents/{path}/', {
+        owner,
+        repo,
+        path
+    })
     const files = contents.data as any[]
 
     // loop over repo contents and fetch raw yaml files

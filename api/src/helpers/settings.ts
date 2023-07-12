@@ -28,18 +28,17 @@ export interface AppSettings {
  *    values might be undefined
  */
 const loadSettings = () => {
-    dotenv.config()
     const redisUrl = process.env.REDIS_URL || 'redis://localhost:6379'
     const cacheType = process.env.CACHE_TYPE === 'local' ? 'local' : 'redis'
     const disableCache = !!process.env.DISABLE_CACHE
     const loadLocalesMode = process.env.LOAD_DATA
-    if (loadLocalesMode && !['local'].includes(loadLocalesMode)) {
-        throw new Error(`LOAD_LOCALES possible values: ["local"]; found: ${loadLocalesMode}`)
-    }
+    // if (loadLocalesMode && !['local'].includes(loadLocalesMode)) {
+    //     throw new Error(`LOAD_LOCALES possible values: ["local"]; found: ${loadLocalesMode}`)
+    // }
     const githubToken = process.env.GITHUB_TOKEN
-    if (!githubToken) {
-        throw new Error(`GITHUB_TOKEN should be defined`)
-    }
+    // if (!githubToken) {
+    //     throw new Error(`GITHUB_TOKEN should be defined`)
+    // }
 
     const settings: AppSettings = {
         cacheType,
@@ -55,9 +54,9 @@ const loadSettings = () => {
             envVarName: string
         ) {
             if (!process.env[envVarName]) {
-                throw new Error(
-                    `${envVarName} not defined while using local data loading mode for setting ${settingName}`
-                )
+                // throw new Error(
+                //     `${envVarName} not defined while using local data loading mode for setting ${settingName}`
+                // )
             }
             settings[settingName] = process.env[envVarName]
         }

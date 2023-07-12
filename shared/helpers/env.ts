@@ -19,6 +19,7 @@ export enum EnvVar {
     GITHUB_TOKEN = 'GITHUB_TOKEN',
     GITHUB_PATH_SURVEYS = 'GITHUB_PATH_SURVEYS',
     GITHUB_PATH_LOCALES = 'GITHUB_PATH_LOCALES',
+    GITHUB_PATH_ENTITIES = 'GITHUB_PATH_ENTITIES',
     EMAIL_OCTOPUS_APIKEY = 'EMAIL_OCTOPUS_APIKEY',
     DEFAULT_MAIL_FROM = 'DEFAULT_MAIL_FROM',
     SMTP_HOST = 'SMTP_HOST',
@@ -56,9 +57,14 @@ const formatVariable = ({ id, description, example }: EnvVariable) => {
     return `[${id}] ${description} (ex: ${example})`
 }
 
+let appNameGlobal: AppName
+export const setAppName = (appName: AppName) => {
+    appNameGlobal = appName
+}
+
 export const getConfig = (options: GetConfigOptions = {}) => {
     const { appName: appName_, showWarnings = false } = options
-    const appName = appName_ || (process.env.APP_NAME as AppName)
+    const appName = appName_ || appNameGlobal
     if (!appName) {
         throw new Error('getConfig: please pass appName or specify APP_NAME env variable')
     }

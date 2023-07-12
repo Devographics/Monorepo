@@ -58,7 +58,8 @@ const loadAllFromGitHubSameRepo = async ({
     repo: string
     dir: string
 }) => {
-    console.log('// loadAllFromGitHubSameRepo')
+    const url = `repos/${org}/${repo}/contents/${dir}`
+    console.log(`// loadAllFromGitHubSameRepo (${url}`)
 
     const octokit = new Octokit({ auth: getEnvVar(EnvVar.GITHUB_TOKEN) })
     let locales: RawLocale[] = []
@@ -72,16 +73,16 @@ const loadAllFromGitHubSameRepo = async ({
     const localeDirectories = contents.data as any[]
 
     for (const localeDirectory of localeDirectories) {
-        console.log('// localeDirectory')
-        console.log(localeDirectory)
         i++
         console.log(
-            `-> loading directory ${localeDirectory.full_name} (${i}/${localeDirectories.length})`
+            `-> loading directory ${localeDirectory.name || localeDirectory.full_name} (${i}/${
+                localeDirectories.length
+            }) (/repos/${org}/${repo}/contents/${localeDirectory.path})`
         )
         const contents = await octokit.request('GET /repos/{owner}/{repo}/contents/{path}', {
             owner: org,
-            repo: localeDirectory.name,
-            path: ''
+            repo,
+            path: localeDirectory.path
         })
         const localeRawData = await processGitHubLocale(contents, localeDirectory)
         locales.push(localeRawData)
@@ -95,6 +96,9 @@ const loadAllFromGitHubSameRepo = async ({
 
 */
 const loadAllFromGitHubMultiRepo = async ({ org }: { org: string }) => {
+    const url = `/orgs/${org}/repos`
+    console.log(`// loadAllFromGitHubMultiRepo (${url}`)
+
     const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
     let locales: RawLocale[] = []
     let i = 0

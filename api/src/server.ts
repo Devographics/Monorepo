@@ -3,6 +3,7 @@ import { MongoClient } from 'mongodb'
 // @see https://github.com/apollographql/apollo-server/issues/6022
 import responseCachePluginPkg from 'apollo-server-plugin-response-cache'
 const responseCachePlugin = (responseCachePluginPkg as any).default
+import dotenv from 'dotenv'
 
 import defaultTypeDefs from './graphql/typedefs/schema.graphql'
 import { RequestContext } from './types'
@@ -20,14 +21,7 @@ import { appSettings } from './helpers/settings'
 
 // import { cacheAvatars } from './avatars'
 
-import {
-    AppNames,
-    EnvVar,
-    VariableIDEnum,
-    getConfig,
-    getEnvVar,
-    logToFile
-} from '@devographics/helpers'
+import { AppName, EnvVar, getConfig, getEnvVar, logToFile, setAppName } from '@devographics/helpers'
 import { loadOrGetSurveys } from './load/surveys'
 
 //import Tracing from '@sentry/tracing'
@@ -78,8 +72,17 @@ function getMongoUri() {
 }
 
 const start = async () => {
+    const config: dotenv.DotenvConfigOptions = {}
+    if (process.env.ENV_PATH) {
+        config.path = process.env.ENV_PATH
+    }
+    dotenv.config(config)
+    const appName = AppName.API
+    setAppName(appName)
     const startedAt = new Date()
-    console.log(`// Starting server… (env: ${process.env.NODE_ENV})`)
+    console.log(
+        `// Starting server… (app: ${appName}, env: ${process.env.NODE_ENV}, config: ${process.env.CONFIG})`
+    )
 
     const isDev = process.env.NODE_ENV === 'development'
     // call getConfig the first time and show warnings if this is local dev env
