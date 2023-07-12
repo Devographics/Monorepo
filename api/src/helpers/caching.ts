@@ -1,5 +1,3 @@
-// import { Db } from 'mongodb'
-// import config from './config'
 import { RequestContext } from '../types'
 import { AppSettings } from './settings'
 

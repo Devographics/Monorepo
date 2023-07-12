@@ -1,11 +1,11 @@
 // import { Entity } from './types'
-import { EntityResolvedFields, Entity } from '@devographics/core-models'
+import { Entity } from '@devographics/types'
 import { Octokit } from '@octokit/core'
 import fetch from 'node-fetch'
 import yaml from 'js-yaml'
 import { readdir, readFile } from 'fs/promises'
 import last from 'lodash/last.js'
-import { logToFile } from '@devographics/helpers'
+import { EnvVar, getConfig, getEnvVar, logToFile } from '@devographics/helpers'
 import path from 'path'
 import marked from 'marked'
 import hljs from 'highlight.js/lib/common'
@@ -124,7 +124,7 @@ export const loadFromGitHub = async () => {
 export const loadLocally = async () => {
     const entities: Entity[] = []
 
-    const entitiesDirPath = path.resolve(`../../${appSettings.entitiesDir}/`)
+    const entitiesDirPath = path.resolve(getEnvVar(EnvVar.ENTITIES_PATH))
 
     console.log(`-> loading entities locally (${entitiesDirPath})`)
 
@@ -152,10 +152,9 @@ export const loadLocally = async () => {
 
 // load locales contents through GitHub API or locally
 export const loadEntities = async () => {
-    console.log('// loading entities')
-
-    const entities: Entity[] =
-        appSettings.loadLocalesMode === 'local' ? await loadLocally() : await loadFromGitHub()
+    const mode = getEnvVar(EnvVar.ENTITIES_PATH) ? 'local' : 'github'
+    console.log(`// loading entities (mode: ${mode})`)
+    const entities: Entity[] = mode === 'local' ? await loadLocally() : await loadFromGitHub()
     console.log('// done loading entities')
 
     return entities

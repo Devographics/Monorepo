@@ -1,0 +1,171 @@
+- id: APP_NAME
+  description: The name of the app
+  example: surveyform
+  usedBy:
+      - results
+      - graphiql
+      - surveyform
+      - surveyadmin
+
+- id: API_URL
+  description: URL of the API
+  example: https://api.devographics.com
+  usedBy:
+      - results
+      - graphiql
+      - surveyform
+      - surveyadmin
+
+  # Mongo
+
+- id: MONGO_URI
+  description: URI of the Mongo database
+  example: mongodb+srv://surveys:password@foobar.fnzofph.mongodb.net/private_data
+  usedBy:
+      - api
+      - surveyform
+      - surveyadmin
+- id: MONGO_PRIVATE_DB
+  description: Name of the database where private data is stored
+  example: private_data
+  usedBy:
+      - surveyform
+      - surveyadmin
+- id: MONGO_PUBLIC_DB
+  description: Name of the database where public data is stored
+  example: public_data
+  usedBy:
+      - api
+      - surveyform
+      - surveyadmin
+
+# Redis
+
+- id: REDIS_URL
+  description: URL of the Redis database
+  example: https://welcomed-porpoise-41931.upstash.io
+  usedBy:
+      - api
+      - surveyform
+      - surveyadmin
+- id: REDIS_TOKEN
+  description: Redis token (needed for Upstash)
+  example: AaMEASQgN...TDJjNDg1NDWQ=
+  usedBy:
+      - api
+      - surveyform
+      - surveyadmin
+
+### GitHub
+
+- id: GITHUB_TOKEN
+  description: GitHub access token
+  example: github_pat_11AndT_knNX54FA...
+  usedBy:
+      - api
+- id: GITHUB_PATH_SURVEYS
+  description: Path to surveys repo/directory on GitHub
+  example: foobar/surveys/surveys OR devographics/surveys
+  usedBy:
+      - api
+- id: GITHUB_PATH_LOCALES
+  description: Path to locales repo/directory on GitHub
+  example: foobar/surveys/locales OR devographics
+  usedBy:
+      - api
+
+### Email
+
+- id: EMAIL_OCTOPUS_APIKEY
+  usedBy:
+      - surveyform
+- id: DEFAULT_MAIL_FROM
+  example: surveys@devographics.com
+  usedBy:
+      - surveyform
+- id: SMTP_HOST
+  example: email-smtp.us-east-1.amazonaws.com
+  usedBy:
+      - surveyform
+- id: SMTP_HOST
+  example: email-smtp.us-east-1.amazonaws.com
+  usedBy:
+      - surveyform
+- id: SMTP_PORT
+  example: 465
+  usedBy:
+      - surveyform
+- id: SMTP_SECURE
+  example: 1
+  usedBy:
+      - surveyform
+- id: SMTP_USER
+  usedBy:
+      - surveyform
+- id: SMTP_PASS
+  usedBy:
+      - surveyform
+
+### Other Config
+
+- id: ENCRYPTION_KEY
+  description: Encryption key to hash emails
+  usedBy:
+      - surveyform
+- id: SECRET_KEY
+  description: Secret key used to verify external webhook requests
+  usedBy:
+      - surveyform
+      - api
+- id: ASSETS_URL
+  example: https://assets.devographics.com/
+  usedBy:
+      - surveyform
+      - results
+
+### Local Dev (all optional)
+
+- id: LOGS_PATH
+  optional: true
+  description: Absolute path to logs dir
+  example: /Users/sacha/monorepo/surveyform/.logs
+  usedBy:
+      - results
+      - api
+      - surveyform
+      - surveyadmin
+- id: SURVEYS_PATH
+  optional: true
+  description: Absolute path to local directory from which to load survey outlines
+  example: /Users/devographics/surveys
+  usedBy:
+      - api
+- id: LOCALES_PATH
+  optional: true
+  description: Absolute path to local directory from which to load locales data
+  example: /Users/devographics/locales
+  usedBy:
+      - api
+- id: ENTITIES_PATH
+  optional: true
+  description: Absolute path to local directory from which to load entities
+  example: /Users/devographics/entities
+  usedBy:
+      - api
+- id: ENABLE_CACHE
+  optional: true
+  description: Set to `false` to always fetch data via API
+  example: false
+  usedBy:
+      - surveyform
+      - results
+- id: PORT
+  optional: true
+  description: Which port to run the app on
+  example: 5000
+  usedBy:
+      - api
+      - surveyform
+      - surveyadmin
+      - results
+      - graphiql

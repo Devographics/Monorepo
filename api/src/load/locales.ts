@@ -5,7 +5,7 @@ import yaml from 'js-yaml'
 import { readdir, readFile } from 'fs/promises'
 import last from 'lodash/last.js'
 import path from 'path'
-import { logToFile } from '@devographics/helpers'
+import { EnvVar, getEnvVar, logToFile } from '@devographics/helpers'
 
 import { appSettings } from '../helpers/settings'
 import { RequestContext } from '../types'
@@ -31,7 +31,7 @@ export const getAllContexts = () => {
 }
 
 export const loadAllFromGitHub = async (options?: LoadAllOptions): Promise<RawLocale[]> => {
-    const localesPath = process.env.GITHUB_PATH_LOCALES
+    const localesPath = getEnvVar(EnvVar.GITHUB_PATH_LOCALES)
     const [org, repo, dir] = localesPath?.split('/') || []
     if (repo && dir) {
         return await loadAllFromGitHubSameRepo({ org, repo, dir })
@@ -60,7 +60,7 @@ const loadAllFromGitHubSameRepo = async ({
 }) => {
     console.log('// loadAllFromGitHubSameRepo')
 
-    const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
+    const octokit = new Octokit({ auth: getEnvVar(EnvVar.GITHUB_TOKEN) })
     let locales: RawLocale[] = []
     let i = 0
 
@@ -168,10 +168,11 @@ export const loadAllLocally = async (options?: LoadAllOptions): Promise<RawLocal
     let i = 0
     let locales: RawLocale[] = []
 
-    if (!process.env.LOCALES_DIR) {
-        throw new Error('LOCALES_DIR not set')
+    const localesPath = getEnvVar(EnvVar.LOCALES_PATH)
+    if (!localesPath) {
+        throw new Error('LOCALES_PATH not set')
     }
-    const allLocalesDirPath = path.resolve(`../../${appSettings.localesDir}`)
+    const allLocalesDirPath = path.resolve(localesPath)
 
     const allFiles = await readdir(allLocalesDirPath)
     const allLocales = allFiles.filter(fileName => fileName.includes('locale-'))
@@ -250,10 +251,12 @@ Load locales contents through GitHub API or locally
 
 */
 export const loadLocales = async (localeIds?: string[]): Promise<RawLocale[]> => {
-    console.log(`// loading locales… `)
-    const locales = process.env.LOCALES_DIR
-        ? await loadAllLocally({ localeIds })
-        : await loadAllFromGitHub({ localeIds })
+    const mode = getEnvVar(EnvVar.LOCALES_PATH) ? 'local' : 'github'
+    console.log(`// loading locales… (mode: ${mode})`)
+    const locales =
+        mode === 'local'
+            ? await loadAllLocally({ localeIds })
+            : await loadAllFromGitHub({ localeIds })
     console.log('// done loading locales')
     return locales
 }

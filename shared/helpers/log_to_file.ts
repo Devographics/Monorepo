@@ -13,10 +13,10 @@ export const logToFile = async (fileName_: string, object: any, options: LogOpti
         let fileName = fileName_,
             subDir = options?.subDir
         const { mode = 'overwrite', timestamp = false, dirPath } = options
-        const envLogsDirPath = process.env.LOGS_DIRECTORY
+        const envLogsDirPath = process.env.LOGS_PATH
 
         if (!envLogsDirPath) {
-            console.warn('Please define LOGS_DIRECTORY in your .env file to enable logging')
+            console.warn('Please define LOGS_PATH in your .env file to enable logging')
             return
         }
 

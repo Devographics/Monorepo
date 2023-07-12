@@ -1,4 +1,3 @@
-import { ProjectMongooseModel } from '@devographics/core-models/server'
 import fetch from 'node-fetch'
 import { RequestContext } from '../types'
 

@@ -254,22 +254,22 @@ EMAIL_OCTOPUS_APIKEY
 
 ### Other Config
 
-| Variable         | Description                                                               | Used By    |
-| ---------------- | ------------------------------------------------------------------------- | ---------- |
-| `ENCRYPTION_KEY` | Encryption key to hash emails                                             | Surveyform |
-| `SECRET_KEY`     | Secret key used to verify external webhook requests                       | API        |
-| `LOGS_DIRECTORY` | Absolute path to logs dir (e.g. `/Users/sacha/monorepo/surveyform/.logs`) | All        |
-| `ASSETS_URL`     | URL for static assets (e.g. `https://assets.devographics.com/`)           | All        |
+| Variable         | Description                                                     | Used By    |
+| ---------------- | --------------------------------------------------------------- | ---------- |
+| `ENCRYPTION_KEY` | Encryption key to hash emails                                   | Surveyform |
+| `SECRET_KEY`     | Secret key used to verify external webhook requests             | API        |
+| `ASSETS_URL`     | URL for static assets (e.g. `https://assets.devographics.com/`) | All        |
 
 ### Local Dev
 
-| Variable       | Description                                        | Used By |
-| -------------- | -------------------------------------------------- | ------- |
-| `SURVEYS_DIR`  | Local directory from which to load survey outlines | API     |
-| `LOCALES_DIR`  | Local directory from which to load locale files    | API     |
-| `ENTITIES_DIR` | Local directory from which to load entities files  | API     |
-| `ENABLE_CACHE` | Set to `false` to always load data from the API    | All     |
-| `PORT`         | Which port to run the app on                       | All     |
+| Variable         | Description                                                               | Used By |
+| ---------------- | ------------------------------------------------------------------------- | ------- |
+| `SURVEYS_DIR`    | Local directory from which to load survey outlines                        | API     |
+| `LOCALES_DIR`    | Local directory from which to load locale files                           | API     |
+| `ENTITIES_DIR`   | Local directory from which to load entities files                         | API     |
+| `ENABLE_CACHE`   | Set to `false` to always load data from the API                           | All     |
+| `PORT`           | Which port to run the app on                                              | All     |
+| `LOGS_DIRECTORY` | Absolute path to logs dir (e.g. `/Users/sacha/monorepo/surveyform/.logs`) | All     |
 
 -   If `SURVEYS_DIR` is defined, surveys data will be loaded locally instead of from GitHub.
 -   If `LOCALES_DIR` is defined, locales data will be loaded locally instead of from GitHub.

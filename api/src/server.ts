@@ -20,7 +20,14 @@ import { appSettings } from './helpers/settings'
 
 // import { cacheAvatars } from './avatars'
 
-import { logToFile } from '@devographics/helpers'
+import {
+    AppNames,
+    EnvVar,
+    VariableIDEnum,
+    getConfig,
+    getEnvVar,
+    logToFile
+} from '@devographics/helpers'
 import { loadOrGetSurveys } from './load/surveys'
 
 //import Tracing from '@sentry/tracing'
@@ -30,6 +37,8 @@ import { generateResolvers } from './generate/resolvers'
 
 import { loadOrGetEntities } from './load/entities'
 import { watchFiles } from './helpers/watch'
+
+import { initRedis } from '@devographics/redis'
 
 const app = express()
 
@@ -72,11 +81,16 @@ const start = async () => {
     const startedAt = new Date()
     console.log(`// Starting server… (env: ${process.env.NODE_ENV})`)
 
-    const redisClient = createClient({
-        url: appSettings.redisUrl
-    })
+    const isDev = process.env.NODE_ENV === 'development'
+    // call getConfig the first time and show warnings if this is local dev env
+    getConfig({ showWarnings: isDev })
 
-    redisClient.on('error', err => console.log('Redis Client Error', err))
+    // const redisClient = createClient({
+    //     url: appSettings.redisUrl
+    // })
+
+    const redisClient = await initRedis()
+    // redisClient.on('error', err => console.log('Redis Client Error', err))
 
     const mongoClient = new MongoClient(getMongoUri(), {
         // useNewUrlParser: true,
@@ -84,13 +98,13 @@ const start = async () => {
         connectTimeoutMS: 10000
     })
 
-    if (appSettings.cacheType !== 'local') {
-        await redisClient.connect()
-    }
+    // if (appSettings.cacheType !== 'local') {
+    //     await redisClient.connect()
+    // }
 
     await mongoClient.connect()
 
-    const db = mongoClient.db(process.env.MONGO_DB_NAME)
+    const db = mongoClient.db(process.env.MONGO_PUBLIC_DB)
 
     const entities = await loadOrGetEntities({})
     const context = { db, redisClient }
@@ -217,9 +231,9 @@ const start = async () => {
         await watchFiles({
             context,
             config: {
-                entities: process.env.ENTITIES_DIR,
-                surveys: process.env.SURVEYS_DIR,
-                locales: process.env.LOCALES
+                entities: getEnvVar(EnvVar.ENTITIES_PATH),
+                surveys: getEnvVar(EnvVar.SURVEYS_PATH),
+                locales: getEnvVar(EnvVar.LOCALES_PATH)
             }
         })
     }

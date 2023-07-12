@@ -5,14 +5,14 @@ import fetch from 'node-fetch'
 import yaml from 'js-yaml'
 import { existsSync } from 'fs'
 import { readdir, readFile, lstat } from 'fs/promises'
-import { logToFile } from '@devographics/helpers'
+import { EnvVar, getEnvVar, logToFile } from '@devographics/helpers'
 import path from 'path'
 import { setCache } from '../helpers/caching'
 import { appSettings } from '../helpers/settings'
 
 let allSurveys: Survey[] = []
 
-const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
+const octokit = new Octokit({ auth: getEnvVar(EnvVar.GITHUB_TOKEN) })
 
 // add `apiOnly` flags to questins
 const makeAPIOnly = (sections: Section[]) =>
@@ -73,7 +73,7 @@ export const loadFromGitHub = async () => {
     console.log(`-> loading surveys repo`)
     const surveys: Survey[] = []
 
-    const [owner, repo, path] = process.env.GITHUB_PATH_SURVEYS?.split('/') || []
+    const [owner, repo, path] = getEnvVar(EnvVar.GITHUB_PATH_SURVEYS)?.split('/') || []
 
     const surveysDirPath = path ? `${path}/` : ''
     if (!owner) {
@@ -150,7 +150,8 @@ const excludeDirs = ['.git', '.DS_Store']
 export const loadLocally = async () => {
     const surveys: Survey[] = []
 
-    const surveysDirPath = path.resolve(`../../${appSettings.surveysDir}/`)
+    const surveysPath = getEnvVar(EnvVar.SURVEYS_PATH)
+    const surveysDirPath = path.resolve(surveysPath)
 
     console.log(`-> loading surveys locally (${surveysDirPath})`)
 
@@ -222,9 +223,9 @@ export const loadLocally = async () => {
 
 // load locales contents through GitHub API or locally
 export const loadSurveys = async () => {
-    console.log('// loading surveys')
-
-    const surveys: Survey[] = process.env.SURVEYS_DIR ? await loadLocally() : await loadFromGitHub()
+    const mode = getEnvVar(EnvVar.SURVEYS_PATH) ? 'local' : 'github'
+    console.log(`// loading surveys (mode: ${mode})`)
+    const surveys: Survey[] = mode === 'local' ? await loadLocally() : await loadFromGitHub()
     console.log(`// done loading ${surveys.length} surveys`)
 
     return surveys

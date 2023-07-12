@@ -1,4 +1,4 @@
-import { EntityResolvedFields, Entity } from '@devographics/core-models'
+import { EntityResolvedFields, Entity } from '@devographics/types'
 import { RequestContext } from '../types'
 // import projects from '../data/bestofjs.yml'
 import { fetchMdnResource, fetchTwitterUser } from '../external_apis'
