@@ -229,11 +229,14 @@ devographics
 
 ### GitHub
 
-| Variable              | Description                                      | Used By |
-| --------------------- | ------------------------------------------------ | ------- |
-| `GITHUB_TOKEN`        | GitHub access token                              | Results |
-| `GITHUB_SURVEYS_USER` | Path to JSON version of results on GitHub (user) | Results |
-| `GITHUB_SURVEYS_REPO` | Path to JSON version of results on GitHub (repo) | Results |
+| Variable              | Description                                                | Used By      |
+| --------------------- | ---------------------------------------------------------- | ------------ |
+| `GITHUB_TOKEN`        | GitHub access token                                        | Results      |
+| `GITHUB_PATH_SURVEYS` | Path to surveys dir on GitHub (e.g. `org/repo/(subdir)`)   | Results      |
+| `GITHUB_PATH_LOCALES` | Path to locales dir on GitHub (e.g. `org/(repo)/(subdir)`) | Results, API |
+
+-   For `GITHUB_PATH_SURVEYS`, the `subdir` segment can be omitted. It will then be assumed that the surveys data is at the root of the repo.
+-   For `GITHUB_PATH_LOCALES`, **both** the `repo` and the `subdir` segments can be omitted. It will then be assumed that the locales each have their own separate repo.
 
 ### Email
 
@@ -251,15 +254,23 @@ EMAIL_OCTOPUS_APIKEY
 
 ### Other Config
 
-| Variable         | Description                                                                            | Used By    |
-| ---------------- | -------------------------------------------------------------------------------------- | ---------- |
-| `ENCRYPTION_KEY` | Encryption key to hash emails                                                          | Surveyform |
-| `SECRET_KEY`     | Secret key used to verify external webhook requests                                    | API        |
-| `LOGS_DIRECTORY` | Absolute path to logs directory (e.g. `/Users/devographics/monorepo/surveyform/.logs`) | All        |
+| Variable         | Description                                                               | Used By    |
+| ---------------- | ------------------------------------------------------------------------- | ---------- |
+| `ENCRYPTION_KEY` | Encryption key to hash emails                                             | Surveyform |
+| `SECRET_KEY`     | Secret key used to verify external webhook requests                       | API        |
+| `LOGS_DIRECTORY` | Absolute path to logs dir (e.g. `/Users/sacha/monorepo/surveyform/.logs`) | All        |
+| `ASSETS_URL`     | URL for static assets (e.g. `https://assets.devographics.com/`)           | All        |
 
 ### Local Dev
 
-| Variable      | Description                                        | Used By |
-| ------------- | -------------------------------------------------- | ------- |
-| `SURVEYS_DIR` | Local directory from which to load survey outlines | API     |
-| `LOCALES_DIR` | Local directory from which to load locale files    | API     |
+| Variable       | Description                                        | Used By |
+| -------------- | -------------------------------------------------- | ------- |
+| `SURVEYS_DIR`  | Local directory from which to load survey outlines | API     |
+| `LOCALES_DIR`  | Local directory from which to load locale files    | API     |
+| `ENTITIES_DIR` | Local directory from which to load entities files  | API     |
+| `ENABLE_CACHE` | Set to `false` to always load data from the API    | All     |
+| `PORT`         | Which port to run the app on                       | All     |
+
+-   If `SURVEYS_DIR` is defined, surveys data will be loaded locally instead of from GitHub.
+-   If `LOCALES_DIR` is defined, locales data will be loaded locally instead of from GitHub.
+-   If `ENTITIES_DIR` is defined, entities data will be loaded locally instead of from GitHub.

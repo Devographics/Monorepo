@@ -1,4 +1,4 @@
-import { SurveyConfig, Survey, Edition } from '../types/surveys'
+import { Survey, Edition } from '../types/surveys'
 import { RequestContext, Section } from '../types'
 import { Octokit } from '@octokit/core'
 import fetch from 'node-fetch'
@@ -38,23 +38,19 @@ export const loadOrGetSurveys = async (
     return allSurveys.filter(s => s.id !== 'demo_survey')
 }
 
-const getRepo = () => {
-    const repo = process.env.SURVEYS_REPO
-    if (!repo) {
-        throw new Error(`Env variable SURVEYS_REPO not defined`)
-    }
-    return repo
-}
-
-const options = {
-    owner: 'Devographics',
-    repo: getRepo()
-}
-
-const listGitHubFiles = async (ghPath: string) => {
+const listGitHubFiles = async ({
+    owner,
+    repo,
+    path
+}: {
+    owner: string
+    repo: string
+    path: string
+}) => {
     const contents = await octokit.request('GET /repos/{owner}/{repo}/contents/{path}', {
-        ...options,
-        path: ghPath
+        owner,
+        repo,
+        path
     })
     return contents.data as any[]
 }
@@ -77,7 +73,21 @@ export const loadFromGitHub = async () => {
     console.log(`-> loading surveys repo`)
     const surveys: Survey[] = []
 
-    const repoDirContents = await listGitHubFiles('')
+    const [owner, repo, path] = process.env.GITHUB_PATH_SURVEYS?.split('/') || []
+
+    const surveysDirPath = path ? `${path}/` : ''
+    if (!owner) {
+        throw new Error(
+            'loadFromGitHub: env variable GITHUB_PATH_SURVEYS did not contain [owner] segment'
+        )
+    }
+    if (!repo) {
+        throw new Error(
+            'loadFromGitHub: env variable GITHUB_PATH_SURVEYS did not contain [repo] segment'
+        )
+    }
+
+    const repoDirContents = await listGitHubFiles({ owner, repo, path: surveysDirPath + '' })
 
     // loop over repo contents and fetch raw yaml files
     for (const file of repoDirContents) {
@@ -87,8 +97,12 @@ export const loadFromGitHub = async () => {
             }
             console.log(`// Loading survey ${file.name}…`)
             const editions: any[] = []
-            let surveyConfigYaml: SurveyConfig = { id: 'default' }
-            const surveyDirContents = await listGitHubFiles(file.path)
+            let surveyConfigYaml: any = { id: 'default' }
+            const surveyDirContents = await listGitHubFiles({
+                owner,
+                repo,
+                path: surveysDirPath + file.path
+            })
 
             for (const file2 of surveyDirContents) {
                 if (skipItem(file2.name)) {
@@ -99,7 +113,11 @@ export const loadFromGitHub = async () => {
                     surveyConfigYaml = await getGitHubYamlFile(file2.download_url)
                 } else if (file2.type === 'dir') {
                     console.log(`    -> Edition ${file2.name}…`)
-                    const editionsDirContents = await listGitHubFiles(file2.path)
+                    const editionsDirContents = await listGitHubFiles({
+                        owner,
+                        repo,
+                        path: surveysDirPath + file2.path
+                    })
                     let edition = {}
                     for (const file3 of editionsDirContents) {
                         if (file3.name === 'config.yml') {
@@ -206,8 +224,7 @@ export const loadLocally = async () => {
 export const loadSurveys = async () => {
     console.log('// loading surveys')
 
-    const surveys: Survey[] =
-        process.env.LOAD_DATA === 'local' ? await loadLocally() : await loadFromGitHub()
+    const surveys: Survey[] = process.env.SURVEYS_DIR ? await loadLocally() : await loadFromGitHub()
     console.log(`// done loading ${surveys.length} surveys`)
 
     return surveys

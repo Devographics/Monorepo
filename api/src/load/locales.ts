@@ -31,11 +31,74 @@ export const getAllContexts = () => {
 }
 
 export const loadAllFromGitHub = async (options?: LoadAllOptions): Promise<RawLocale[]> => {
+    const localesPath = process.env.GITHUB_PATH_LOCALES
+    const [org, repo, dir] = localesPath?.split('/') || []
+    if (repo && dir) {
+        return await loadAllFromGitHubSameRepo({ org, repo, dir })
+    } else if (org) {
+        return await loadAllFromGitHubMultiRepo({ org })
+    } else {
+        throw new Error(
+            'loadAllFromGitHub: Variable GITHUB_PATH_LOCALES ("org/repo/dir") did not contained an [org] segment'
+        )
+    }
+}
+
+/*
+
+1. All locales are in a subdir of the same repo
+
+*/
+const loadAllFromGitHubSameRepo = async ({
+    org,
+    repo,
+    dir
+}: {
+    org: string
+    repo: string
+    dir: string
+}) => {
+    console.log('// loadAllFromGitHubSameRepo')
+
     const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
     let locales: RawLocale[] = []
     let i = 0
 
-    const org = 'devographics'
+    const contents = await octokit.request('GET /repos/{owner}/{repo}/contents/{path}', {
+        owner: org,
+        repo,
+        path: dir
+    })
+    const localeDirectories = contents.data as any[]
+
+    for (const localeDirectory of localeDirectories) {
+        console.log('// localeDirectory')
+        console.log(localeDirectory)
+        i++
+        console.log(
+            `-> loading directory ${localeDirectory.full_name} (${i}/${localeDirectories.length})`
+        )
+        const contents = await octokit.request('GET /repos/{owner}/{repo}/contents/{path}', {
+            owner: org,
+            repo: localeDirectory.name,
+            path: ''
+        })
+        const localeRawData = await processGitHubLocale(contents, localeDirectory)
+        locales.push(localeRawData)
+    }
+    return locales
+}
+
+/*
+
+2. If no subdir is specified, we assume all locales have their own repo
+
+*/
+const loadAllFromGitHubMultiRepo = async ({ org }: { org: string }) => {
+    const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
+    let locales: RawLocale[] = []
+    let i = 0
+
     const result = await octokit.request('GET /orgs/{org}/repos', {
         org,
         per_page: 100 // max
@@ -46,55 +109,57 @@ export const loadAllFromGitHub = async (options?: LoadAllOptions): Promise<RawLo
     for (const localeRepo of localeRepos) {
         i++
         console.log(`-> loading repo ${localeRepo.full_name} (${i}/${localeRepos.length})`)
-
-        const options = {
-            owner: 'devographics',
+        const contents = await octokit.request('GET /repos/{owner}/{repo}/contents/{path}', {
+            owner: org,
             repo: localeRepo.name,
             path: ''
-        }
-        const contents = await octokit.request('GET /repos/{owner}/{repo}/contents/{path}', options)
-        const files = contents.data as any[]
-        const localeConfigFile = files.find(f => f.name === 'config.yml')
-        if (!localeConfigFile) {
-            throw new Error(`Could not find config.yml file for locale ${localeRepo.full_name}`)
-        }
-        const localeConfigResponse = await fetch(localeConfigFile.download_url)
-        const localeConfigContents = await localeConfigResponse.text()
-        const localeConfig: any = yaml.load(localeConfigContents)
-
-        const localeRawData: RawLocale = { ...localeConfig, stringFiles: [] }
-
-        // loop over repo contents and fetch raw yaml files
-        for (const file of files) {
-            const extension: string = last(file?.name.split('.')) || ''
-            if (['yml', 'yaml'].includes(extension) && !excludedFiles.includes(file.name)) {
-                const response = await fetch(file.download_url)
-                const contents = await response.text()
-                try {
-                    const yamlContents: any = yaml.load(contents)
-                    const strings = yamlContents.translations
-                    const context = file.name.replace('./', '').replace('.yml', '')
-                    addToAllContexts(context)
-                    localeRawData.stringFiles.push({
-                        strings,
-                        url: file.download_url,
-                        context
-                    })
-                } catch (error) {
-                    console.log(`// Error loading file ${file.name}`)
-                    console.log(error)
-                }
-            }
-        }
-        logToFile(`github_${localeConfig.id}.yml`, localeRawData, {
-            mode: 'overwrite',
-            subDir: 'locales_raw'
         })
+        const localeRawData = await processGitHubLocale(contents, localeRepo)
         locales.push(localeRawData)
     }
     return locales
 }
 
+const processGitHubLocale = async (contents: any, localeRepo: any) => {
+    const files = contents.data as any[]
+    const localeConfigFile = files.find(f => f.name === 'config.yml')
+    if (!localeConfigFile) {
+        throw new Error(`Could not find config.yml file for locale ${localeRepo.full_name}`)
+    }
+    const localeConfigResponse = await fetch(localeConfigFile.download_url)
+    const localeConfigContents = await localeConfigResponse.text()
+    const localeConfig: any = yaml.load(localeConfigContents)
+
+    const localeRawData: RawLocale = { ...localeConfig, stringFiles: [] }
+
+    // loop over repo contents and fetch raw yaml files
+    for (const file of files) {
+        const extension: string = last(file?.name.split('.')) || ''
+        if (['yml', 'yaml'].includes(extension) && !excludedFiles.includes(file.name)) {
+            const response = await fetch(file.download_url)
+            const contents = await response.text()
+            try {
+                const yamlContents: any = yaml.load(contents)
+                const strings = yamlContents.translations
+                const context = file.name.replace('./', '').replace('.yml', '')
+                addToAllContexts(context)
+                localeRawData.stringFiles.push({
+                    strings,
+                    url: file.download_url,
+                    context
+                })
+            } catch (error) {
+                console.log(`// Error loading file ${file.name}`)
+                console.log(error)
+            }
+        }
+    }
+    logToFile(`github_${localeConfig.id}.yml`, localeRawData, {
+        mode: 'overwrite',
+        subDir: 'locales_raw'
+    })
+    return localeRawData
+}
 interface LoadAllOptions {
     localeIds?: string[]
 }
@@ -186,10 +251,9 @@ Load locales contents through GitHub API or locally
 */
 export const loadLocales = async (localeIds?: string[]): Promise<RawLocale[]> => {
     console.log(`// loading locales… `)
-    const locales =
-        appSettings.loadLocalesMode === 'local'
-            ? await loadAllLocally({ localeIds })
-            : await loadAllFromGitHub({ localeIds })
+    const locales = process.env.LOCALES_DIR
+        ? await loadAllLocally({ localeIds })
+        : await loadAllFromGitHub({ localeIds })
     console.log('// done loading locales')
     return locales
 }
