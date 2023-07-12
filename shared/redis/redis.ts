@@ -1,5 +1,6 @@
 // import Redis from 'ioredis'
-import { logToFile, getConfig } from '@devographics/helpers'
+import { logToFile } from '@devographics/debug'
+import { getConfig } from '@devographics/helpers'
 import { Redis } from '@upstash/redis'
 
 let redis: Redis

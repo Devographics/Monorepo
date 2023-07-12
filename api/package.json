@@ -4,6 +4,7 @@
     "license": "MIT",
     "dependencies": {
         "@devographics/constants": "workspace:^1.0.0",
+        "@devographics/debug": "workspace:^1.0.0",
         "@devographics/helpers": "workspace:^1.0.0",
         "@devographics/mongo": "workspace:^1.0.0",
         "@devographics/redis": "workspace:^1.0.0",

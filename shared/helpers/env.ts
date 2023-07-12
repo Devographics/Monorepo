@@ -69,8 +69,8 @@ export const getConfig = (options: GetConfigOptions = {}) => {
         throw new Error('getConfig: please pass variable or call setAppName() to specify appName')
     }
     const variables = {} as any
-    const optionalVariables = []
-    const missingVariables = []
+    const optionalVariables: EnvVariable[] = []
+    const missingVariables: EnvVariable[] = []
     for (const variable of config) {
         const { id, usedBy, optional = false } = variable
         if (usedBy.includes(appName)) {

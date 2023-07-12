@@ -5,7 +5,6 @@ import {
   fetchSurveysMetadata,
 } from "~/lib/api/fetch";
 import { normalizeInBulk } from "../normalize/normalizeInBulk";
-import { logToFile } from "@devographics/helpers";
 
 export type NormalizeResponsesArgs = {
   // note: we need a surveyId to figure out which database to use

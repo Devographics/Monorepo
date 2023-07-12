@@ -1,5 +1,5 @@
 {
-    "name": "@devographics/redis",
+    "name": "@devographics/debug",
     "version": "1.0.0",
     "description": "",
     "type": "module",
@@ -25,13 +25,13 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "@devographics/debug": "workspace:^1.0.0",
-        "@devographics/helpers": "workspace:^1.0.0",
-        "@devographics/types": "workspace:*",
-        "@upstash/redis": "^1.21.0",
-        "ioredis": "^5.2.4"
+        "@devographics/types": "workspace:^1.0.0",
+        "js-yaml": "^4.1.0",
+        "lodash": "^4.17.21"
     },
     "devDependencies": {
+        "@types/js-yaml": "^4.0.3",
+        "@types/lodash": "^4.14.194",
         "@types/node": "^18.11.18"
     }
 }

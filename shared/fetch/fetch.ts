@@ -5,7 +5,7 @@
  */
 import NodeCache from 'node-cache'
 import { initRedis, fetchJson as fetchRedis, storeRedis } from '@devographics/redis'
-import { logToFile } from '@devographics/helpers'
+import { logToFile } from '@devographics/debug'
 
 const memoryCache = new NodeCache({
     // This TTL must stay short, because we manually invalidate this cache

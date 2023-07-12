@@ -2,7 +2,7 @@ import { Locale, RawLocale, StringFile, TranslationStringObject } from '@devogra
 import marked from 'marked'
 import sanitizeHtml from 'sanitize-html'
 import { decode } from 'html-entities'
-import { logToFile } from '@devographics/helpers'
+import { logToFile } from '@devographics/debug'
 
 export const filterContexts = ({ locale, contexts }: { locale: Locale; contexts: string[] }) => {
     return { ...locale, strings: locale.strings.filter(s => contexts.includes(s.context)) }

@@ -21,7 +21,8 @@ import { appSettings } from './helpers/settings'
 
 // import { cacheAvatars } from './avatars'
 
-import { AppName, EnvVar, getConfig, getEnvVar, logToFile, setAppName } from '@devographics/helpers'
+import { AppName, EnvVar, getConfig, getEnvVar, setAppName } from '@devographics/helpers'
+import { logToFile } from '@devographics/debug'
 import { loadOrGetSurveys } from './load/surveys'
 
 //import Tracing from '@sentry/tracing'

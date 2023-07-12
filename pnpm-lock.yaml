@@ -14,6 +14,7 @@ importers:
   api:
     specifiers:
       '@devographics/constants': workspace:^1.0.0
+      '@devographics/debug': workspace:^1.0.0
       '@devographics/helpers': workspace:^1.0.0
       '@devographics/mongo': workspace:^1.0.0
       '@devographics/redis': workspace:^1.0.0
@@ -64,6 +65,7 @@ importers:
       typescript: ^4.3.5
     dependencies:
       '@devographics/constants': link:../shared/constants
+      '@devographics/debug': link:../shared/debug
       '@devographics/helpers': link:../shared/helpers
       '@devographics/mongo': link:../shared/mongo
       '@devographics/redis': link:../shared/redis
@@ -469,6 +471,7 @@ importers:
 
   shared/fetch:
     specifiers:
+      '@devographics/debug': workspace:^1.0.0
       '@devographics/helpers': workspace:^1.0.0
       '@devographics/redis': workspace:^1.0.0
       '@devographics/types': workspace:^1.0.0
@@ -477,6 +480,7 @@ importers:
       lodash: ^4.17.21
       node-cache: ^5.1.2
     dependencies:
+      '@devographics/debug': link:../debug
       '@devographics/helpers': link:../helpers
       '@devographics/redis': link:../redis
       '@devographics/types': link:../types
@@ -619,12 +623,14 @@ importers:
 
   shared/redis:
     specifiers:
+      '@devographics/debug': workspace:^1.0.0
       '@devographics/helpers': workspace:^1.0.0
       '@devographics/types': workspace:*
       '@types/node': ^18.11.18
       '@upstash/redis': ^1.21.0
       ioredis: ^5.2.4
     dependencies:
+      '@devographics/debug': link:../debug
       '@devographics/helpers': link:../helpers
       '@devographics/types': link:../types
       '@upstash/redis': 1.21.0
@@ -687,6 +693,7 @@ importers:
       '@babel/core': ^7.20.2
       '@cypress/code-coverage': ^3.10.0
       '@cypress/webpack-preprocessor': ^5.15.5
+      '@devographics/debug': workspace:^1.0.0
       '@devographics/fetch': workspace:^1.0.0
       '@devographics/helpers': workspace:^1.0.0
       '@devographics/i18n': workspace:^1.0.0
@@ -779,6 +786,7 @@ importers:
       yalc: ^1.0.0-pre.53
       zod: ^3.21.4
     dependencies:
+      '@devographics/debug': link:../shared/debug
       '@devographics/fetch': link:../shared/fetch
       '@devographics/helpers': link:../shared/helpers
       '@devographics/i18n': link:../shared/i18n
@@ -881,6 +889,7 @@ importers:
       '@babel/core': ^7.20.2
       '@cypress/code-coverage': ^3.10.0
       '@cypress/webpack-preprocessor': ^5.15.5
+      '@devographics/debug': workspace:^1.0.0
       '@devographics/fetch': workspace:^1.0.0
       '@devographics/helpers': workspace:^1.0.0
       '@devographics/i18n': workspace:^1.0.0
@@ -972,6 +981,7 @@ importers:
       yalc: ^1.0.0-pre.53
       zod: ^3.21.4
     dependencies:
+      '@devographics/debug': link:../shared/debug
       '@devographics/fetch': link:../shared/fetch
       '@devographics/helpers': link:../shared/helpers
       '@devographics/i18n': link:../shared/i18n
@@ -9931,7 +9941,7 @@ packages:
       '@sentry/tracing': 6.19.7
       '@sentry/utils': 6.19.7
       '@sentry/webpack-plugin': 1.18.8
-      next: 13.4.8_vgii64pd2ccbnbx2v3ro5gbin4
+      next: 13.4.8_e7wxmg5kx5hzmlsglkcl4if3fi
       react: 18.2.0
       tslib: 1.14.1
       webpack: 5.75.0
@@ -24931,7 +24941,7 @@ packages:
     dependencies:
       '@corex/deepmerge': 2.6.148
       minimist: 1.2.6
-      next: 13.4.8_vgii64pd2ccbnbx2v3ro5gbin4
+      next: 13.4.8_e7wxmg5kx5hzmlsglkcl4if3fi
     dev: false
 
   /next-tick/1.1.0:

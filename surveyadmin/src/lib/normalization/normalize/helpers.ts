@@ -5,7 +5,7 @@ import uniqBy from "lodash/uniqBy.js";
 import sortBy from "lodash/sortBy.js";
 import compact from "lodash/compact.js";
 import isEmpty from "lodash/isEmpty.js";
-import { logToFile } from "@devographics/helpers";
+import { logToFile } from "@devographics/debug";
 import {
   Entity,
   DbSuffixes,

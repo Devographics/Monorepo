@@ -7,7 +7,7 @@ import {
   ResponseDocument,
   SurveyMetadata,
 } from "@devographics/types";
-import { logToFile } from "@devographics/helpers";
+import { logToFile } from "@devographics/debug";
 import {
   NormalizeInBulkResult,
   BulkOperation,
