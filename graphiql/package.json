@@ -1,31 +1,24 @@
 {
-    "name": "client",
-    "version": "0.1.0",
+    "name": "graphiql",
     "private": true,
     "dependencies": {
-        "@testing-library/jest-dom": "^5.16.5",
-        "@testing-library/react": "^13.3.0",
-        "@testing-library/user-event": "^14.4.3",
+        "@graphiql/plugin-explorer": "^0.3.0",
+        "@graphiql/toolkit": "^0.8.4",
+        "@types/jest": "^25.2.3",
+        "@types/node": "^20.4.1",
+        "@types/react": "^18.2.14",
+        "@types/react-dom": "^18.2.6",
         "dotenv": "^10.0.0",
-        "graphiql": "^1.11.5",
-        "graphiql-explorer": "^0.9.0",
-        "graphql": "^16.7.1",
-        "graphql-ws": "^5.10.0",
-        "js-yaml": "^4.1.0",
+        "graphiql": "^2.2.0",
+        "graphql": "^16.4.0",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
-        "react-scripts": "4.0.3"
+        "react-scripts": "5.0.1"
     },
     "scripts": {
-        "dev": "PORT=4001 react-scripts --openssl-legacy-provider start",
-        "api": "REACT_APP_ENDPOINT_URL=http://localhost:4000/graphql PORT=4001 react-scripts --openssl-legacy-provider start",
-        "api-internal": "REACT_APP_ENDPOINT_URL=http://localhost:4020/graphql PORT=4021 react-scripts --openssl-legacy-provider start",
-        "api2": "REACT_APP_ENDPOINT_URL=http://localhost:4030/graphql PORT=4031 react-scripts --openssl-legacy-provider start",
-        "tokyodev": "REACT_APP_ENDPOINT_URL=http://localhost:5030/graphql PORT=5031 react-scripts --openssl-legacy-provider start",
-        "start": "PORT=4001 react-scripts start",
-        "build": "react-scripts build",
-        "test": "react-scripts test",
-        "eject": "react-scripts eject"
+        "dev": "react-scripts start",
+        "tokyodev": "REACT_APP_ENDPOINT_URL=http://localhost:5030/graphql react-scripts start",
+        "build": "react-scripts build"
     },
     "browserslist": {
         "production": [
@@ -40,6 +33,8 @@
         ]
     },
     "devDependencies": {
-        "eslint-config-react-app": "^7.0.1"
+        "eslint-config-react-app": "^5.2.1",
+        "typescript": "^5.1.6",
+        "worker-loader": "^2.0.0"
     }
 }
