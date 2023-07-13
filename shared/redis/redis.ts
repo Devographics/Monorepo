@@ -7,7 +7,7 @@ let redis: Redis
 
 export function initRedis(url_?: string, token_?: string) {
     const config = getConfig()
-    const url = url_ || config.REDIS_URL
+    const url = url_ || config.REDIS_UPSTASH_URL
     const token = token_ || config.REDIS_TOKEN
 
     // console.debug("init redis client");

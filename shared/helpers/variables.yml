@@ -44,6 +44,8 @@
 # Redis
 
 - id: REDIS_URL
+  aliases:
+      - REDIS_UPSTASH_URL
   description: URL of the Redis database (using HTTP protocol for serverless)
   example: https://welcomed-porpoise-41931.upstash.io
   usedBy:
