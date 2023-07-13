@@ -72,7 +72,7 @@ const getValue = (variable: EnvVariable) => {
     } else if (aliases) {
         for (const aliasId of aliases) {
             const aliasValue = process.env[aliasId]
-            if (aliasId) {
+            if (aliasValue) {
                 return { id: aliasId, value: aliasValue }
             }
         }

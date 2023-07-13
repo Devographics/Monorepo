@@ -14,7 +14,7 @@ export const getSurveyImageUrl = (
 ) => {
   const variantSuffix = variant ? `-${variant}` : "";
   const extension = variant ? variants[variant] : "png";
-  const imageUrl = `https://${publicConfig.assetUrl}/surveys/${edition.id}${variantSuffix}.${extension}`;
+  const imageUrl = `${publicConfig.assetUrl}/surveys/${edition.id}${variantSuffix}.${extension}`;
   if (!imageUrl) return;
   let finalImageUrl = isAbsoluteUrl(imageUrl)
     ? imageUrl
