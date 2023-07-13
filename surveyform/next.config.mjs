@@ -1,13 +1,18 @@
-const path = require("path");
+import path from "path";
 // Use @next/mdx for a basic MDX support.
 // See the how Vulcan Next docs are setup with next-mdx-remote
 // which is more advanced (loading remote MD, supporting styling correctly etc.)
-const withPkgInfo = require("./.vn/nextConfig/withPkgInfo");
+import withPkgInfo from "./.vn/nextConfig/withPkgInfo.mjs";
+import flowRight from "lodash/flowRight.js";
+import { withSentryConfig } from "@sentry/nextjs";
+import debug_ from "debug";
+import bundleAnalyzer from "@next/bundle-analyzer";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
 
-const flowRight = require("lodash/flowRight");
-const debug = require("debug")("devographics:next");
-
-const { withSentryConfig } = require("@sentry/nextjs");
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const debug = debug_("devographics:next");
 
 // @see https://nextjs.org/docs/api-reference/next.config.js/runtime-configuration
 const moduleExports = (phase, { defaultConfig }) => {
@@ -119,9 +124,9 @@ const moduleExports = (phase, { defaultConfig }) => {
   };
   //*** */ Enable Webpack analyzer
   if (process.env.ANALYZE) {
-    const debug = require("debug")("webpack");
+    const debug = debug_("webpack");
     debug("Enabling Webpack bundle analyzer");
-    const withBundleAnalyzer = require("@next/bundle-analyzer")({
+    const withBundleAnalyzer = bundleAnalyzer({
       enabled: !!process.env.ANALYZE,
     });
     nextConfig = withBundleAnalyzer(nextConfig);
@@ -215,4 +220,4 @@ const moduleExports = (phase, { defaultConfig }) => {
   return nextConfig;
 };
 
-module.exports = moduleExports;
+export default moduleExports;
