@@ -1,3 +1,11 @@
+# Uncomment me to test system
+# - id: FOO
+#   usedBy:
+#       - results
+#       - graphiql
+#       - surveyform
+#       - surveyadmin
+
 - id: API_URL
   aliases:
       - REACT_APP_API_URL
