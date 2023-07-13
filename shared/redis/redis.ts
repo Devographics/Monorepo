@@ -1,14 +1,13 @@
 // import Redis from 'ioredis'
 import { logToFile } from '@devographics/debug'
-import { getConfig } from '@devographics/helpers'
+import { EnvVar, getEnvVar } from '@devographics/helpers'
 import { Redis } from '@upstash/redis'
 
 let redis: Redis
 
 export function initRedis(url_?: string, token_?: string) {
-    const config = getConfig()
-    const url = url_ || config.REDIS_UPSTASH_URL
-    const token = token_ || config.REDIS_TOKEN
+    const url = url_ || getEnvVar(EnvVar.REDIS_UPSTASH_URL)
+    const token = token_ || getEnvVar(EnvVar.REDIS_TOKEN)
 
     // console.debug("init redis client");
     if (!redis) {
