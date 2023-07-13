@@ -8,8 +8,7 @@ let redis: Redis
 export function initRedis(url_?: string, token_?: string) {
     const url = url_ || getEnvVar(EnvVar.REDIS_UPSTASH_URL)
     const token = token_ || getEnvVar(EnvVar.REDIS_TOKEN)
-
-    // console.debug("init redis client");
+    // console.debug('init redis client', url, token)
     if (!redis) {
         // redis = new Redis(redisUrl)
         redis = new Redis({

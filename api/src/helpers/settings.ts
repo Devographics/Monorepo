@@ -28,7 +28,7 @@ export interface AppSettings {
  *    values might be undefined
  */
 const loadSettings = () => {
-    const redisUrl = process.env.REDIS_URL || 'redis://localhost:6379'
+    const redisUrl = process.env.REDIS_UPSTASH_URL || 'redis://localhost:6379'
     const cacheType = process.env.CACHE_TYPE === 'local' ? 'local' : 'redis'
     const disableCache = !!process.env.DISABLE_CACHE
     const loadLocalesMode = process.env.LOAD_DATA

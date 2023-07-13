@@ -44,10 +44,18 @@
 # Redis
 
 - id: REDIS_URL
-  aliases:
-      - REDIS_UPSTASH_URL
   description: URL of the Redis database (using HTTP protocol for serverless)
+  example: rediss://red-foo:foobar@oregon-redis.render.com:6379
+  optional: true
+  usedBy:
+      - api
+      - surveyform
+      - surveyadmin
+
+- id: REDIS_UPSTASH_URL
+  description: URL of the Redis Upstash database (using HTTP protocol for serverless)
   example: https://welcomed-porpoise-41931.upstash.io
+  optional: true
   usedBy:
       - api
       - surveyform
