@@ -11,7 +11,7 @@ const camelToTitle = (camelStr) => {
 // NOTE: NEVER import package.json elswhere in your app!
 // We can import it here because next.config is not in the client side bundle
 // We then pass only the relevant values in the config
-import packageJSON from "../../package.json" assert { type: "json" };
+const packageJSON = require("../../package.json");
 
 // Add package.json metadata to runtime configs and environment
 const withPkgInfo = (nextConfig = {}) => {
@@ -28,5 +28,4 @@ const withPkgInfo = (nextConfig = {}) => {
 
   return nextConfig;
 };
-
-export default withPkgInfo;
+module.exports = withPkgInfo;
