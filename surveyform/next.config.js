@@ -19,7 +19,7 @@ const moduleExports = (phase, { defaultConfig }) => {
     ...defaultConfig,
     experimental: {
       appDir: true,
-      instrumentationHook: true,
+      // instrumentationHook: true,
     },
     transpilePackages: [
       "@devographics/permissions",
