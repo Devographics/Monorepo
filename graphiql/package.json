@@ -19,6 +19,7 @@
         "dev": "react-scripts start",
         "dev-production": "PORT=4031 REACT_APP_ENDPOINT_URL=https://api.devographics.com/graphql react-scripts start",
         "dev-staging": "PORT=4032 REACT_APP_ENDPOINT_URL=https://api-staging.devographics.com/graphql react-scripts start",
+        "dev-internal": "PORT=4033 REACT_APP_ENDPOINT_URL=https://api-internal.devographics.com/graphql react-scripts start",
         "tokyodev": "PORT=5030 REACT_APP_ENDPOINT_URL=http://localhost:5020/graphql react-scripts start",
         "build": "react-scripts build"
     },
