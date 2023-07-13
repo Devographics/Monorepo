@@ -30,6 +30,7 @@ export enum EnvVar {
     ENCRYPTION_KEY = 'ENCRYPTION_KEY',
     SECRET_KEY = 'SECRET_KEY',
     ASSETS_URL = 'ASSETS_URL',
+    NEXT_PUBLIC_ASSETS_URL = 'NEXT_PUBLIC_ASSETS_URL',
     LOGS_PATH = 'LOGS_PATH',
     SURVEYS_PATH = 'SURVEYS_PATH',
     LOCALES_PATH = 'LOCALES_PATH',
@@ -44,6 +45,7 @@ interface EnvVariable {
     description?: string
     example?: string
     optional?: boolean
+    aliases?: EnvVar[]
 }
 
 const config = config_ as EnvVariable[]
@@ -62,10 +64,26 @@ export const setAppName = (appName: AppName) => {
     appNameGlobal = appName
 }
 
+const getValue = (variable: EnvVariable) => {
+    const { id, aliases } = variable
+    const value = process.env[id]
+    if (value) {
+        return { id, value }
+    } else if (aliases) {
+        for (const aliasId of aliases) {
+            const aliasValue = process.env[aliasId]
+            if (aliasId) {
+                return { id: aliasId, value: aliasValue }
+            }
+        }
+    }
+    return {}
+}
+
 /**
  * Centralized configuration management for the whole Devographics infrastructure
  * See ./shared/helpers/variables.yml for the actual config
- * 
+ *
  * Each app is still responsible for setting the default values for development
  * (via their readme, the tracked .env files etc.)
  */
@@ -79,9 +97,9 @@ export const getConfig = (options: GetConfigOptions = {}) => {
     const optionalVariables: EnvVariable[] = []
     const missingVariables: EnvVariable[] = []
     for (const variable of config) {
-        const { id, usedBy, optional = false } = variable
+        const { usedBy, optional = false } = variable
         if ((usedBy || []).includes(appName)) {
-            const value = process.env[id]
+            const { id, value } = getValue(variable)
             if (value) {
                 variables[id] = value
             } else if (optional === true) {

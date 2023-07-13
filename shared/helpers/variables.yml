@@ -1,4 +1,6 @@
 - id: API_URL
+  aliases:
+      - REACT_APP_API_URL
   description: URL of the API
   example: https://api.devographics.com
   usedBy:
@@ -16,12 +18,14 @@
       - api
       - surveyform
       - surveyadmin
+
 - id: MONGO_PRIVATE_DB
   description: Name of the database where private data is stored
   example: private_data
   usedBy:
       - surveyform
       - surveyadmin
+
 - id: MONGO_PUBLIC_DB
   description: Name of the database where public data is stored
   example: public_data
@@ -38,6 +42,7 @@
       - api
       - surveyform
       - surveyadmin
+
 - id: REDIS_TOKEN
   description: >
       Redis token (needed for Upstash).
@@ -55,16 +60,19 @@
   example: github_pat_11AndT_knNX54FA...
   usedBy:
       - api
+
 - id: GITHUB_PATH_SURVEYS
   description: Path to surveys repo/directory on GitHub
   example: owner/repo/subdir (subdir is optional)
   usedBy:
       - api
+
 - id: GITHUB_PATH_LOCALES
   description: Path to locales repo/directory on GitHub
   example: owner/repo/subdir OR owner (in which case it's assumed all locales have their own repo)
   usedBy:
       - api
+
 - id: GITHUB_PATH_ENTITIES
   description: Path to entities repo/directory on GitHub
   example: owner/repo/subdir (subdir is optional)
@@ -76,29 +84,36 @@
 - id: EMAIL_OCTOPUS_APIKEY
   usedBy:
       - surveyform
+
 - id: DEFAULT_MAIL_FROM
   example: surveys@devographics.com
   usedBy:
       - surveyform
+
 - id: SMTP_HOST
   example: email-smtp.us-east-1.amazonaws.com
   usedBy:
       - surveyform
+
 - id: SMTP_HOST
   example: email-smtp.us-east-1.amazonaws.com
   usedBy:
       - surveyform
+
 - id: SMTP_PORT
   example: 465
   usedBy:
       - surveyform
+
 - id: SMTP_SECURE
   example: 1
   usedBy:
       - surveyform
+
 - id: SMTP_USER
   usedBy:
       - surveyform
+
 - id: SMTP_PASS
   usedBy:
       - surveyform
@@ -114,16 +129,15 @@
   usedBy:
       - surveyform
       - api
+
 - id: ASSETS_URL
+  aliases:
+      - NEXT_PUBLIC_ASSETS_URL
   description: /!\ in frontend apps, must be public (NEXT_PUBLIC_)
   example: https://assets.devographics.com/
-  # TODO: in Next and Gatsby app, this variable should be prefixed to be available client-side
-  # with NEXT_PUBLIC_* for instance
-  client: true
   usedBy:
-      # TODO: tmp disable this variable check
-      # - surveyform
-      # - results
+      - surveyform
+      - results
 
 ### Local Dev (all optional)
 
@@ -136,24 +150,28 @@
       - api
       - surveyform
       - surveyadmin
+
 - id: SURVEYS_PATH
   optional: true
   description: Absolute path to local directory from which to load survey outlines
   example: /Users/devographics/surveys
   usedBy:
       - api
+
 - id: LOCALES_PATH
   optional: true
   description: Absolute path to local directory from which to load locales data
   example: /Users/devographics/locales
   usedBy:
       - api
+
 - id: ENTITIES_PATH
   optional: true
   description: Absolute path to local directory from which to load entities
   example: /Users/devographics/entities
   usedBy:
       - api
+
 - id: ENABLE_CACHE
   optional: true
   description: Set to `false` to always fetch data via API
@@ -161,6 +179,7 @@
   usedBy:
       - surveyform
       - results
+
 - id: PORT
   optional: true
   description: Which port to run the app on
