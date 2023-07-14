@@ -97,8 +97,15 @@ If this error still happens in a few months (2023) open an issue with repro at N
     );
   }
   // locales lists
-  const { data: locales } = (await rscAllLocalesMetadata()) || [];
+  const {
+    data: locales,
+    ___metadata,
+    error,
+  } = (await rscAllLocalesMetadata()) || [];
 
+  if (error) {
+    return <div>{JSON.stringify(error, null, 2)}</div>;
+  }
   return (
     <AppLayout
       params={params}

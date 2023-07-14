@@ -9,22 +9,14 @@ import { rscIntlContext } from "~/i18n/rsc-fetchers";
 import { getEditionTitle } from "~/lib/surveys/helpers/getEditionTitle";
 import { getSurveyImageUrl } from "~/lib/surveys/helpers/getSurveyImageUrl";
 import { getSectioni18nIds } from "@devographics/i18n";
+import { FetchPayloadResultType } from "@devographics/fetch";
 
-export const rscFetchSurveysMetadata = cache(async () => {
-  const { data: surveys, ___metadata } = await fetchSurveysMetadata({
+export const rscFetchSurveysMetadata = cache(async (options?: any) => {
+  const result = await fetchSurveysMetadata({
+    ...options,
     calledFrom: __filename,
   });
-  let filteredSurveys = surveys;
-  if (serverConfig().isProd && !serverConfig()?.isTest) {
-    filteredSurveys = surveys?.filter((s) => s.id !== "demo_survey");
-  }
-  filteredSurveys = filteredSurveys?.map((survey) => ({
-    ...survey,
-    editions: survey?.editions?.filter(
-      (edition) => edition?.sections?.length > 0
-    ),
-  }));
-  return { data: filteredSurveys, ___metadata };
+  return result;
 });
 
 /**

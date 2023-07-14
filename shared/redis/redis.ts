@@ -60,16 +60,13 @@ export async function fetchJson<T = any>(key: string): Promise<T | null> {
         const json = typeof maybeStr === 'object' ? maybeStr : JSON.parse(maybeStr)
         await logToFile(`fetchJson(${key}).json`, json, { mode: 'overwrite' })
         return json
-    } catch (err) {
-        console.error(`// error while getting redis key ${key}`, err)
-        redisClient.del(key).catch(err => {
-            console.error(
-                `Could not delete malformed Redis value for key ${key}. Is your Redis URL or token valid?`,
-                err
-            )
-            // NOTE: if this deletion call fails too, this is probably because the Redis server can't be reached
-            // for instance if your HTTP proxy or upstash token is invalid
-        })
-        throw new Error(`Malformed value for Redis key [${key}]: ${maybeStr}`)
+    } catch (error) {
+        console.error(`// error while getting redis key ${key}`)
+        // redisClient.del(key).catch(err => {
+        //     console.error(`Could not delete malformed Redis value for key ${key}`, err)
+        //     // NOTE: if this deletion call fails too, this is probably because the Redis server can't be reached
+        //     // for instance if your HTTP proxy or upstash token is invalid
+        // })
+        throw error
     }
 }

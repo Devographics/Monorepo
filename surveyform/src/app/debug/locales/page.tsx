@@ -1,7 +1,7 @@
 import { rscAllLocalesMetadata } from "~/lib/api/rsc-fetchers";
 
 export default async function Page() {
-  const result = await rscAllLocalesMetadata();
+  const result = await rscAllLocalesMetadata({ shouldThrow: false });
   return (
     <div>
       <h2>Locales Metadata</h2>

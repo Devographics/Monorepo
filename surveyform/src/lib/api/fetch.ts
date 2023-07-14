@@ -5,11 +5,7 @@ import {
   LocaleDefWithStrings,
 } from "@devographics/types";
 
-import {
-  FetchPayload,
-  getFromCache,
-  fetchGraphQLApi,
-} from "@devographics/fetch";
+import { getFromCache, fetchGraphQLApi } from "@devographics/fetch";
 import {
   editionMetadataCacheKey,
   surveysMetadataCacheKey,
@@ -41,10 +37,12 @@ export async function fetchEditionMetadata({
   surveyId,
   editionId,
   calledFrom,
+  shouldThrow,
 }: {
   surveyId: string;
   editionId: string;
   calledFrom?: string;
+  shouldThrow?: boolean;
 }) {
   if (!surveyId) {
     throw new Error(`surveyId not defined (calledFrom: ${calledFrom})`);
@@ -74,8 +72,23 @@ export async function fetchEditionMetadata({
     },
     calledFrom,
     serverConfig,
+    shouldThrow,
   });
 }
+
+const filterSurveys = (surveys) => {
+  let filteredSurveys = surveys;
+  if (serverConfig().isProd && !serverConfig()?.isTest) {
+    filteredSurveys = surveys?.filter((s) => s.id !== "demo_survey");
+  }
+  filteredSurveys = filteredSurveys?.map((survey) => ({
+    ...survey,
+    editions: survey?.editions?.filter(
+      (edition) => edition?.sections?.length > 0
+    ),
+  }));
+  return filteredSurveys;
+};
 
 /**
  * Fetch metadata for all surveys
@@ -83,6 +96,7 @@ export async function fetchEditionMetadata({
  */
 export const fetchSurveysMetadata = async (options?: {
   calledFrom?: string;
+  shouldThrow?: boolean;
 }) => {
   const key = surveysMetadataCacheKey();
   const result = await getFromCache<Array<SurveyMetadata>>({
@@ -90,10 +104,11 @@ export const fetchSurveysMetadata = async (options?: {
     fetchFunction: async () => {
       const result = await fetchGraphQLApi({ query: getSurveysQuery(), key });
       if (!result) throw new Error(`Couldn't fetch surveys`);
-      return result._metadata.surveys as SurveyMetadata[];
+      return filterSurveys(result._metadata.surveys) as SurveyMetadata[];
     },
     calledFrom: options?.calledFrom,
     serverConfig,
+    shouldThrow: options?.shouldThrow,
   });
   return result;
 };
@@ -102,9 +117,11 @@ export const fetchSurveysMetadata = async (options?: {
  * Fetch metadata for all locales
  * @returns
  */
-export const fetchAllLocalesMetadata = async () => {
+export const fetchAllLocalesMetadata = async (options?: {
+  shouldThrow?: boolean;
+}) => {
   const key = allLocalesMetadataCacheKey();
-  return await getFromCache<Array<LocaleDef>>({
+  const result = await getFromCache<Array<LocaleDef>>({
     key,
     fetchFunction: async () => {
       const result = await fetchGraphQLApi({
@@ -114,7 +131,9 @@ export const fetchAllLocalesMetadata = async () => {
       return result.locales;
     },
     serverConfig,
+    shouldThrow: options?.shouldThrow,
   });
+  return result;
 };
 
 /**
@@ -145,13 +164,15 @@ export const fetchAllLocalesIds = async () => {
 export type FetchLocaleOptions = {
   localeId: string;
   contexts: string[];
+  shouldThrow?: boolean;
 };
 export const fetchLocale = async ({
   localeId,
   contexts,
+  shouldThrow,
 }: FetchLocaleOptions) => {
   const key = localeCacheKey({ localeId, contexts });
-  return await getFromCache<LocaleDefWithStrings>({
+  const result = await getFromCache<LocaleDefWithStrings>({
     key,
     fetchFunction: async () => {
       const result = await fetchGraphQLApi({
@@ -173,5 +194,7 @@ export const fetchLocale = async ({
       return convertedLocale as LocaleDefWithStrings;
     },
     serverConfig,
+    shouldThrow,
   });
+  return result;
 };

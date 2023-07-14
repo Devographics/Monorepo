@@ -9,6 +9,7 @@ export default async function Page({ params }: { params: Params }) {
   const result = await fetchEditionMetadata({
     surveyId,
     editionId,
+    shouldThrow: false,
   });
   return (
     <div>

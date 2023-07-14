@@ -12,14 +12,22 @@ export async function generateStaticParams() {
 */
 
 const IndexPage = async ({ params }) => {
-  const { data: surveys, ___metadata: ___rscFetchSurveysMetadata } =
-    await rscFetchSurveysMetadata();
-  return (
-    <>
-      <DebugRSC {...{ ___rscFetchSurveysMetadata }} />
-      <Surveys localeId={params.lang} surveys={surveys} />
-    </>
-  );
+  const {
+    data: surveys,
+    ___metadata: ___rscFetchSurveysMetadata,
+    error,
+  } = await rscFetchSurveysMetadata();
+
+  if (error) {
+    return <div>{JSON.stringify(error, null, 2)}</div>;
+  } else {
+    return (
+      <>
+        <DebugRSC {...{ ___rscFetchSurveysMetadata }} />
+        <Surveys localeId={params.lang} surveys={surveys} />
+      </>
+    );
+  }
 };
 
 export default IndexPage;

@@ -10,11 +10,12 @@ export default async function Page({ params }: { params: Params }) {
   const result = await fetchLocale({
     localeId,
     contexts: getCommonContexts(),
+    shouldThrow: false,
   });
   return (
     <div>
       <h2>
-        {result.data.id} Metadata (contexts: {getCommonContexts().join(", ")})
+        {localeId} Metadata (contexts: {getCommonContexts().join(", ")})
       </h2>
       <pre>
         <code>{JSON.stringify(result, null, 2)}</code>

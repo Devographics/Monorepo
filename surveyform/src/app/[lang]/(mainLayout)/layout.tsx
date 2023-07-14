@@ -33,13 +33,20 @@ export default async function RootLayout({
 }) {
   const contexts = getCommonContexts();
   const localeId = getLocaleIdFromParams(params);
-  const { data: locale, ___metadata: ___rscLocale_CommonContexts } =
-    await rscLocale({
-      localeId,
-      contexts,
-    });
+  const {
+    data: locale,
+    error,
+    ___metadata: ___rscLocale_CommonContexts,
+  } = await rscLocale({
+    localeId,
+    contexts,
+  });
   const { data: locales, ___metadata: ___rscAllLocalesMetadata } =
     await rscAllLocalesMetadata();
+
+  if (error) {
+    return <div>{JSON.stringify(error, null, 2)}</div>;
+  }
   return (
     <AppLayout
       params={params}

@@ -46,12 +46,37 @@ interface Metadata {
     source: SourceType
 }
 
-export interface FetchPayload<T> {
-    data: T
-    ___metadata: Metadata
+export enum FetchPayloadResultType {
+    ERROR = 'error',
+    SUCCESS = 'success'
 }
 
-export function processFetchData<T>(data, source, key): FetchPayload<T> {
+/* 
+
+TODO: figure out why type inference didn't work and then replace
+"FetchPayloadSuccessOrError" with "FetchPayloadSuccess" or "FetchPayloadError"
+
+*/
+// export interface FetchPayload<Type extends FetchPayloadResultType> {
+//     type: Type
+//     ___metadata: Metadata
+// }
+
+// export interface FetchPayloadError extends FetchPayload<FetchPayloadResultType.ERROR> {
+//     error: any
+// }
+
+// export interface FetchPayloadSuccess<T> extends FetchPayload<FetchPayloadResultType.SUCCESS> {
+//     data: T
+// }
+
+export interface FetchPayloadSuccessOrError<T> {
+    ___metadata: Metadata
+    data: T
+    error?: any
+}
+
+export function processFetchData<T>(data, source, key): FetchPayloadSuccessOrError<T> {
     const timestamp = new Date().toISOString()
     const ___metadata: Metadata = { key, source, timestamp }
     const result = { data, ___metadata }
@@ -69,7 +94,7 @@ async function getFromRedisOrSource<T = any>({
     calledFromLog: any
     shouldUpdateCache?: boolean
 }) {
-    const redisData = await fetchRedis<FetchPayload<T>>(key)
+    const redisData = await fetchRedis<FetchPayloadSuccessOrError<T>>(key)
     if (redisData) {
         console.debug(`🔵 [${key}] in-memory cache miss, redis hit ${calledFromLog}`)
         return redisData
@@ -80,7 +105,7 @@ async function getFromRedisOrSource<T = any>({
     if (shouldUpdateCache) {
         processedResult.___metadata.source = SourceType.REDIS
         // store in Redis
-        await storeRedis<FetchPayload<T>>(key, processedResult)
+        await storeRedis<FetchPayloadSuccessOrError<T>>(key, processedResult)
     }
     return processedResult
 }
@@ -95,7 +120,8 @@ export async function getFromCache<T = any>({
     calledFrom,
     serverConfig,
     shouldGetFromCache: shouldGetFromCacheOptions,
-    shouldUpdateCache = true
+    shouldUpdateCache = true,
+    shouldThrow = true
 }: {
     key: string
     fetchFunction: () => Promise<T>
@@ -103,7 +129,8 @@ export async function getFromCache<T = any>({
     serverConfig: Function
     shouldGetFromCache?: boolean
     shouldUpdateCache?: boolean
-}): Promise<FetchPayload<T>> {
+    shouldThrow?: boolean
+}) {
     initRedis(serverConfig().redisUrl, serverConfig().redisToken)
     const calledFromLog = calledFrom ? `(↪️  ${calledFrom})` : ''
 
@@ -115,11 +142,11 @@ export async function getFromCache<T = any>({
         return processFetchData<T>(data, source, key)
     }
 
-    let resultPromise: Promise<FetchPayload<T>>
+    let resultPromise: Promise<FetchPayloadSuccessOrError<T>>
     // 1. we have the a promise that resolve to the data in memory => return that
     if (memoryCache.has(key)) {
         console.debug(`🟢 [${key}] in-memory cache hit ${calledFromLog}`)
-        resultPromise = memoryCache.get<Promise<FetchPayload<T>>>(key)!
+        resultPromise = memoryCache.get<Promise<FetchPayloadSuccessOrError<T>>>(key)!
     } else {
         // 2. store a promise that will first look in Redis, then in the main db
         if (shouldGetFromCache) {
@@ -136,7 +163,7 @@ export async function getFromCache<T = any>({
                 const result = await resultPromise
                 result.___metadata.source = SourceType.REDIS
                 // store in Redis
-                await storeRedis<FetchPayload<T>>(key, result)
+                await storeRedis<FetchPayloadSuccessOrError<T>>(key, result)
             }
         }
         memoryCache.set(key, resultPromise)
@@ -148,12 +175,17 @@ export async function getFromCache<T = any>({
             subDir: 'fetch'
         })
         return result
-    } catch (err) {
+    } catch (error) {
         console.error('// getFromCache error')
-        console.error(err)
+        console.error(error)
         console.debug(`🔴 [${key}] error when fetching from Redis or source ${calledFromLog}`)
         memoryCache.del(key)
-        throw err
+        if (shouldThrow) {
+            throw error
+        } else {
+            const result = { error: error.message } as FetchPayloadSuccessOrError<T>
+            return result
+        }
     }
 }
 
@@ -199,27 +231,21 @@ export const fetchGraphQLApi = async <T = any>({
     })
 
     // console.debug(`// querying ${apiUrl} (${query.slice(0, 15)}...)`)
-    try {
-        const response = await fetch(apiUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json'
-            },
-            body: JSON.stringify({ query, variables: {} }),
-            cache: cache || undefined
-        })
-        const json: any = await response.json()
-        if (json.errors) {
-            console.error(`// fetchGraphQLApi error 1 (${apiUrl})`)
-            console.error(JSON.stringify(json.errors, null, 2))
-            throw new Error(json.errors[0])
-        }
-
-        return json.data || {}
-    } catch (error) {
-        console.error(`// fetchGraphQLApi error 2 (${apiUrl})`)
-        throw new Error(error)
-        // return null
+    const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json'
+        },
+        body: JSON.stringify({ query, variables: {} }),
+        cache: cache || undefined
+    })
+    const json: any = await response.json()
+    if (json.errors) {
+        console.error(`// fetchGraphQLApi error 1 (${apiUrl})`)
+        console.error(JSON.stringify(json.errors, null, 2))
+        throw new Error(json.errors[0].message)
     }
+
+    return json.data || {}
 }
