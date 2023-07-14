@@ -173,10 +173,12 @@ export async function getFromCache<T = any>({
             memoryCache.set(key, resultPromise)
         }
         let result = await resultPromise
-        await logToFile(`${key}.json`, result, {
-            mode: 'overwrite',
-            subDir: 'fetch'
-        })
+        if (!memoryCache.has(key)) {
+            await logToFile(`${key}.json`, result, {
+                mode: 'overwrite',
+                subDir: 'fetch'
+            })
+        }
         return result
     } catch (error) {
         console.error('// getFromCache error')
