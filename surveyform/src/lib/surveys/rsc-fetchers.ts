@@ -14,13 +14,11 @@ export const rscFetchSurveysMetadata = cache(async () => {
   const { data: surveys, ___metadata } = await fetchSurveysMetadata({
     calledFrom: __filename,
   });
-  console.log(surveys);
-  console.log(___metadata);
   let filteredSurveys = surveys;
   if (serverConfig().isProd && !serverConfig()?.isTest) {
     filteredSurveys = surveys?.filter((s) => s.id !== "demo_survey");
   }
-  filteredSurveys = filteredSurveys.map((survey) => ({
+  filteredSurveys = filteredSurveys?.map((survey) => ({
     ...survey,
     editions: survey?.editions?.filter(
       (edition) => edition?.sections?.length > 0
