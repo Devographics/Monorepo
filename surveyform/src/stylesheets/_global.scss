@@ -280,3 +280,7 @@ Page-specific styles
   @include primary-font;
   padding: 8px 14px;
 }
+
+.info-table {
+  color: var(--text-color) !important;
+}

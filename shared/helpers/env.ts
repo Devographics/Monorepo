@@ -49,7 +49,9 @@ interface EnvVariable {
     aliases?: EnvVar[]
 }
 
-const config = config_ as EnvVariable[]
+export const config = config_ as EnvVariable[]
+
+export const getVariables = () => config
 
 interface GetConfigOptions {
     appName?: AppName
