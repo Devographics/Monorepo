@@ -143,32 +143,35 @@ export async function getFromCache<T = any>({
     }
 
     let resultPromise: Promise<FetchPayloadSuccessOrError<T>>
-    // 1. we have the a promise that resolve to the data in memory => return that
-    if (memoryCache.has(key)) {
-        console.debug(`🟢 [${key}] in-memory cache hit ${calledFromLog}`)
-        resultPromise = memoryCache.get<Promise<FetchPayloadSuccessOrError<T>>>(key)!
-    } else {
-        // 2. store a promise that will first look in Redis, then in the main db
-        if (shouldGetFromCache) {
-            resultPromise = getFromRedisOrSource<T>({
-                key,
-                fetchFromSource,
-                calledFromLog,
-                shouldUpdateCache
-            })
-        } else {
-            console.debug(`🟠 [${key}] Redis cache disabled, fetching from API ${calledFromLog}`)
-            resultPromise = fetchAndProcess<T>(SourceType.API)
-            if (shouldUpdateCache) {
-                const result = await resultPromise
-                result.___metadata.source = SourceType.REDIS
-                // store in Redis
-                await storeRedis<FetchPayloadSuccessOrError<T>>(key, result)
-            }
-        }
-        memoryCache.set(key, resultPromise)
-    }
+
     try {
+        // 1. we have the a promise that resolve to the data in memory => return that
+        if (memoryCache.has(key)) {
+            console.debug(`🟢 [${key}] in-memory cache hit ${calledFromLog}`)
+            resultPromise = memoryCache.get<Promise<FetchPayloadSuccessOrError<T>>>(key)!
+        } else {
+            // 2. store a promise that will first look in Redis, then in the main db
+            if (shouldGetFromCache) {
+                resultPromise = getFromRedisOrSource<T>({
+                    key,
+                    fetchFromSource,
+                    calledFromLog,
+                    shouldUpdateCache
+                })
+            } else {
+                console.debug(
+                    `🟠 [${key}] Redis cache disabled, fetching from API ${calledFromLog}`
+                )
+                resultPromise = fetchAndProcess<T>(SourceType.API)
+                if (shouldUpdateCache) {
+                    const result = await resultPromise
+                    result.___metadata.source = SourceType.REDIS
+                    // store in Redis
+                    await storeRedis<FetchPayloadSuccessOrError<T>>(key, result)
+                }
+            }
+            memoryCache.set(key, resultPromise)
+        }
         let result = await resultPromise
         await logToFile(`${key}.json`, result, {
             mode: 'overwrite',
