@@ -1,12 +1,14 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { useCurrentUser } from "~/lib/users/hooks";
 import { routes } from "~/lib/routes";
 import { LogoutButton } from "~/account/user/components/LogoutButton";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
+import { DebugZone } from "./DebugZone";
 
 export const Footer = () => {
+  const [showDebug, setShowDebug] = useState(false);
   const { currentUser } = useCurrentUser();
 
   return (
@@ -31,6 +33,16 @@ export const Footer = () => {
             link: "https://github.com/Devographics/Monorepo/issues",
           }}
         />{" "}
+        |{" "}
+        <a
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            setShowDebug(!showDebug);
+          }}
+        >
+          Debug
+        </a>{" "}
         |{" "}
         {!currentUser && (
           <>
@@ -58,6 +70,7 @@ export const Footer = () => {
           />
         </a> */}
       </div>
+      {showDebug && <DebugZone />}
     </footer>
   );
 };

@@ -5,7 +5,11 @@ import {
   LocaleDefWithStrings,
 } from "@devographics/types";
 
-import { getFromCache, fetchGraphQLApi } from "@devographics/fetch";
+import {
+  FetchPayload,
+  getFromCache,
+  fetchGraphQLApi,
+} from "@devographics/fetch";
 import {
   editionMetadataCacheKey,
   surveysMetadataCacheKey,
@@ -41,7 +45,7 @@ export async function fetchEditionMetadata({
   surveyId: string;
   editionId: string;
   calledFrom?: string;
-}): Promise<EditionMetadata> {
+}) {
   if (!surveyId) {
     throw new Error(`surveyId not defined (calledFrom: ${calledFrom})`);
   }
@@ -79,7 +83,7 @@ export async function fetchEditionMetadata({
  */
 export const fetchSurveysMetadata = async (options?: {
   calledFrom?: string;
-}): Promise<Array<SurveyMetadata>> => {
+}) => {
   const key = surveysMetadataCacheKey();
   return await getFromCache<Array<SurveyMetadata>>({
     key,
@@ -97,9 +101,9 @@ export const fetchSurveysMetadata = async (options?: {
  * Fetch metadata for all locales
  * @returns
  */
-export const fetchAllLocalesMetadata = async (): Promise<Array<LocaleDef>> => {
+export const fetchAllLocalesMetadata = async () => {
   const key = allLocalesMetadataCacheKey();
-  return await getFromCache<any>({
+  return await getFromCache<Array<LocaleDef>>({
     key,
     fetchFunction: async () => {
       const result = await fetchGraphQLApi({
@@ -118,9 +122,9 @@ export const fetchAllLocalesMetadata = async (): Promise<Array<LocaleDef>> => {
  * Safe for parallel calls (eg in Next.js middlewares)
  * @returns
  */
-export const fetchAllLocalesIds = async (): Promise<Array<string>> => {
+export const fetchAllLocalesIds = async () => {
   const key = allLocalesIdsCacheKey();
-  return await getFromCache<any>({
+  return await getFromCache<Array<string>>({
     key,
     fetchFunction: async () => {
       const result = await fetchGraphQLApi<{ locales: Array<LocaleDef> }>({
@@ -128,12 +132,11 @@ export const fetchAllLocalesIds = async (): Promise<Array<string>> => {
         key,
         apiUrl: serverConfig().translationAPI,
       });
-      return result?.locales.map(l => l.id) || [];
+      return result?.locales.map((l) => l.id) || [];
     },
     serverConfig,
   });
-}
-
+};
 
 /**
  * Fetch metadata and strings for a specific locales
@@ -146,9 +149,9 @@ export type FetchLocaleOptions = {
 export const fetchLocale = async ({
   localeId,
   contexts,
-}: FetchLocaleOptions): Promise<LocaleDefWithStrings> => {
+}: FetchLocaleOptions) => {
   const key = localeCacheKey({ localeId, contexts });
-  return await getFromCache<any>({
+  return await getFromCache<LocaleDefWithStrings>({
     key,
     fetchFunction: async () => {
       const result = await fetchGraphQLApi({

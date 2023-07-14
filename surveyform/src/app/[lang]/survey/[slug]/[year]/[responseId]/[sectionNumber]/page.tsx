@@ -8,6 +8,7 @@ import { rscMustGetUserResponse } from "~/lib/responses/rsc-fetchers";
 import { rscCurrentUser } from "~/account/user/rsc-fetchers/rscCurrentUser";
 import { routes } from "~/lib/routes";
 import { SurveyStatusEnum } from "@devographics/types";
+import { DebugRSC } from "~/components/debug/DebugRSC";
 
 // SectionNumber is optional in the URL so this page is exactly the same as ../index.tsx
 const SurveyFromResponseIdPage = async ({
@@ -20,7 +21,11 @@ const SurveyFromResponseIdPage = async ({
     sectionNumber: string;
   };
 }) => {
-  const edition = await rscMustGetSurveyEditionFromUrl({ slug, year });
+  const { data: edition, ___metadata: ___rscMustGetSurveyEditionFromUrl } =
+    await rscMustGetSurveyEditionFromUrl({
+      slug,
+      year,
+    });
   const sn = parseInt(sectionNumber);
   if (isNaN(sn)) notFound();
 
@@ -28,7 +33,7 @@ const SurveyFromResponseIdPage = async ({
   if (!currentUser) {
     return redirect(routes.account.login.from(`/survey/${slug}/${year}`));
   }
-  const response = await rscMustGetUserResponse({ currentUser, slug, year });
+  // const response = await rscMustGetUserResponse({ currentUser, slug, year });
 
   // read-only mode
   if (edition.status === SurveyStatusEnum.CLOSED) {
@@ -36,11 +41,14 @@ const SurveyFromResponseIdPage = async ({
   }
   // TODO: @see https://github.com/vercel/next.js/issues/49387#issuecomment-1564539515
   return (
-    <SurveySection
-    /*response={response}*/
-    // edition={edition}
-    // sectionNumber={sn}
-    />
+    <>
+      <DebugRSC {...{ ___rscMustGetSurveyEditionFromUrl }} />
+      <SurveySection
+      /*response={response}*/
+      // edition={edition}
+      // sectionNumber={sn}
+      />
+    </>
   );
 };
 

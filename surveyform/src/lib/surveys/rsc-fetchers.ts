@@ -11,7 +11,9 @@ import { getSurveyImageUrl } from "~/lib/surveys/helpers/getSurveyImageUrl";
 import { getSectioni18nIds } from "@devographics/i18n";
 
 export const rscFetchSurveysMetadata = cache(async () => {
-  const surveys = await fetchSurveysMetadata({ calledFrom: __filename });
+  const { data: surveys, ___metadata } = await fetchSurveysMetadata({
+    calledFrom: __filename,
+  });
   let filteredSurveys = surveys;
   if (serverConfig().isProd && !serverConfig()?.isTest) {
     filteredSurveys = surveys.filter((s) => s.id !== "demo_survey");
@@ -22,7 +24,7 @@ export const rscFetchSurveysMetadata = cache(async () => {
       (edition) => edition?.sections?.length > 0
     ),
   }));
-  return filteredSurveys;
+  return { data: filteredSurveys, ___metadata };
 });
 
 /**
@@ -36,7 +38,7 @@ export const rscGetMetadata = async ({
   params: { lang: string; sectionNumber?: string; slug: string; year: string };
 }) => {
   const { lang, sectionNumber } = params;
-  const edition = await rscMustGetSurveyEditionFromUrl(params);
+  const { data: edition } = await rscMustGetSurveyEditionFromUrl(params);
 
   const contexts = [...getCommonContexts(), ...getEditionContexts({ edition })];
   const intlContext = await rscIntlContext({ localeId: lang, contexts });

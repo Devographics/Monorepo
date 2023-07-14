@@ -22,7 +22,9 @@ const getResponses = cache(
 );
 
 const Profile = async ({ params }) => {
-  const surveys = await fetchSurveysMetadata({ calledFrom: "UserResponses" });
+  const { data: surveys } = await fetchSurveysMetadata({
+    calledFrom: "UserResponses",
+  });
 
   // TODO: filter out fields the user is not supposed to see
   const currentUser = await rscCurrentUser();

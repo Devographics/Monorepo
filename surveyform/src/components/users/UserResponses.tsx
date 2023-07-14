@@ -6,7 +6,6 @@ import {
 } from "@devographics/types";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { UserDocument } from "~/account/user/typings";
-import { fetchSurveysMetadata } from "~/lib/api/fetch";
 import { getEditionSectionPath } from "~/lib/surveys/helpers/getEditionSectionPath";
 import { ResponseDetails } from "../surveys/ResponseDetails";
 

@@ -47,11 +47,13 @@ export async function createResponse({
   // Get edition metadata
   let edition: EditionMetadata;
   try {
-    edition = await fetchEditionMetadata({
-      surveyId,
-      editionId,
-      calledFrom: "api/response/create",
-    });
+    edition = (
+      await fetchEditionMetadata({
+        surveyId,
+        editionId,
+        calledFrom: "api/response/create",
+      })
+    ).data;
   } catch (error) {
     throw new HandlerError({
       id: "fetch_edition",

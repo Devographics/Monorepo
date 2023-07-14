@@ -25,6 +25,7 @@ import {
 } from "~/i18n/config";
 import { rscAllLocalesMetadata, rscLocale } from "~/lib/api/rsc-fetchers";
 import { rscGetMetadata } from "~/lib/surveys/rsc-fetchers";
+import { DebugRSC } from "~/components/debug/DebugRSC";
 interface SurveyPageServerProps {
   lang: string;
   slug: string;
@@ -52,7 +53,7 @@ export default async function SurveyLayout({
   children: React.ReactNode;
   params: { slug: string; year: string; lang: string };
 }) {
-  const edition = await rscMustGetSurveyEditionFromUrl(params);
+  const { data: edition } = await rscMustGetSurveyEditionFromUrl(params);
   // survey specific strings
   const localeId = getLocaleIdFromParams(params);
   if (localeId.includes(".")) {
@@ -66,12 +67,18 @@ If this error still happens in a few months (2023) open an issue with repro at N
   }
   const i18nContexts = getEditionContexts({ edition });
 
-  const localeCommonContexts = await rscLocale({
+  const {
+    data: localeCommonContexts,
+    ___metadata: ___rscLocale_CommonContexts,
+  } = await rscLocale({
     localeId,
     contexts: getCommonContexts(),
   });
 
-  const localeEditionContexts = await rscLocale({
+  const {
+    data: localeEditionContexts,
+    ___metadata: ___rscLocale_EditionContexts,
+  } = await rscLocale({
     localeId,
     contexts: i18nContexts,
   });
@@ -90,7 +97,7 @@ If this error still happens in a few months (2023) open an issue with repro at N
     );
   }
   // locales lists
-  const locales = (await rscAllLocalesMetadata()) || [];
+  const { data: locales } = (await rscAllLocalesMetadata()) || [];
 
   return (
     <AppLayout
@@ -100,6 +107,9 @@ If this error still happens in a few months (2023) open an issue with repro at N
       localeStrings={localeAllContexts}
       addWrapper={false}
     >
+      <DebugRSC
+        {...{ ___rscLocale_CommonContexts, ___rscLocale_EditionContexts }}
+      />
       <EditionProvider
         edition={edition}
         editionPathSegments={[params.slug, params.year]}

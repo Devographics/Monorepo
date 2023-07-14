@@ -104,7 +104,9 @@ const QuestionItem = ({
 }) => {
   const currentItemId = getItemIdInViewport(scrollPosition, itemPositions);
   const isHighlighted = currentItemId === question.id;
-  const isCompleted = questionIsCompleted({ edition, question, response });
+  const isCompleted = response
+    ? questionIsCompleted({ edition, question, response })
+    : false;
   return (
     <li>
       <a

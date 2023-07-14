@@ -42,11 +42,13 @@ export async function saveResponse({
   // Get edition metadata
   let edition: EditionMetadata;
   try {
-    edition = await fetchEditionMetadata({
-      surveyId,
-      editionId,
-      calledFrom: "api/response/update",
-    });
+    edition = (
+      await fetchEditionMetadata({
+        surveyId,
+        editionId,
+        calledFrom: "api/response/update",
+      })
+    ).data;
   } catch (error) {
     throw new HandlerError({
       id: "fetch_edition",

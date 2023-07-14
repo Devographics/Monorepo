@@ -21,12 +21,12 @@ export async function rscGetSurveyEditionFromUrl(params: {
       surveySlug: slug,
       editionSlug: year,
     });
-    const edition = await fetchEditionMetadata({
+    const result = await fetchEditionMetadata({
       surveyId,
       editionId,
       calledFrom: "rscGetSurveyEditionFromUrl",
     });
-    return edition;
+    return result;
   } catch (err) {
     console.error(
       "Could not load survey",

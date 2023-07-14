@@ -40,6 +40,7 @@ export async function storeRedis<T>(key: string, val: T): Promise<boolean> {
     // io-redis version
     // const res = await redisClient.set(key, JSON.stringify(val), 'EX', TTL_SECONDS)
     // upstash-redis version
+
     const res = await redisClient.set(key, JSON.stringify(val), { ex: TTL_SECONDS })
 
     if (res !== 'OK') {

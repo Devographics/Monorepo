@@ -40,7 +40,7 @@ export async function POST(
 
     const { email, surveyId, editionId } = clientData;
 
-    const edition = await fetchEditionMetadata({
+    const { data: edition } = await fetchEditionMetadata({
       surveyId,
       editionId,
       calledFrom: "sendReadingList",

@@ -35,6 +35,28 @@ function removeNull(obj) {
     return Array.isArray(obj) ? Object.values(clean) : clean
 }
 
+export enum SourceType {
+    REDIS = 'redis',
+    MEMORY = 'memory',
+    API = 'api'
+}
+interface Metadata {
+    key: string
+    timestamp: string
+    source: SourceType
+}
+
+export interface FetchPayload<T> {
+    data: T
+    ___metadata: Metadata
+}
+
+export function processFetchData(data, source, key) {
+    const timestamp = new Date().toISOString()
+    const ___metadata: Metadata = { key, source, timestamp }
+    return removeNull({ data, ___metadata })
+}
+
 async function getFromRedisOrSource<T = any>({
     key,
     fetchFromSource,
@@ -53,11 +75,13 @@ async function getFromRedisOrSource<T = any>({
     }
     console.debug(`🟣 [${key}] in-memory & redis cache miss, fetching from API ${calledFromLog}`)
     const result = await fetchFromSource()
+    const processedResult = processFetchData(result, SourceType.API, key)
     if (shouldUpdateCache) {
+        processedResult.___metadata.source = SourceType.REDIS
         // store in Redis
-        await storeRedis<T>(key, removeNull(result))
+        await storeRedis<T>(key, processedResult)
     }
-    return result
+    return processedResult
 }
 
 /**
@@ -78,7 +102,8 @@ export async function getFromCache<T = any>({
     serverConfig: Function
     shouldGetFromCache?: boolean
     shouldUpdateCache?: boolean
-}) {
+}): Promise<FetchPayload<T>> {
+    let source
     initRedis(serverConfig().redisUrl, serverConfig().redisToken)
     const calledFromLog = calledFrom ? `(↪️  ${calledFrom})` : ''
 
@@ -90,6 +115,7 @@ export async function getFromCache<T = any>({
     if (memoryCache.has(key)) {
         console.debug(`🟢 [${key}] in-memory cache hit ${calledFromLog}`)
         resultPromise = memoryCache.get<Promise<T>>(key)!
+        source = SourceType.MEMORY
     } else {
         // 2. store a promise that will first look in Redis, then in the main db
         if (shouldGetFromCache) {
@@ -102,21 +128,23 @@ export async function getFromCache<T = any>({
         } else {
             console.debug(`🟠 [${key}] Redis cache disabled, fetching from API ${calledFromLog}`)
             resultPromise = fetchFromSource()
+            source = SourceType.API
             if (shouldUpdateCache) {
                 const result = await fetchFromSource()
                 // store in Redis
-                await storeRedis<T>(key, removeNull(result))
+                await storeRedis<T>(key, processFetchData(result, SourceType.REDIS, key))
             }
         }
         memoryCache.set(key, resultPromise)
     }
     try {
-        const result = await resultPromise
-        await logToFile(`${key}.json`, result, {
+        let result = await resultPromise
+        const processedResult = processFetchData(result, source, key)
+        await logToFile(`${key}.json`, processedResult, {
             mode: 'overwrite',
             subDir: 'fetch'
         })
-        return result
+        return processedResult
     } catch (err) {
         console.error('// getFromCache error')
         console.error(err)

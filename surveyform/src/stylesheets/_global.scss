@@ -207,6 +207,11 @@ Page-specific styles
 .footer-bottom {
   margin-top: $spacing;
 }
+.debug-message {
+  text-align: left;
+  padding: $spacing;
+  @include border;
+}
 .survey-section {
   pre,
   code {

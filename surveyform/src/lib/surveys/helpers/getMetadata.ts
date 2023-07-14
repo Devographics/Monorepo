@@ -9,7 +9,7 @@ import { getSurveyImageUrl } from "~/lib/surveys/helpers/getSurveyImageUrl";
 
 export const getMetadata = async ({ params }: { params: any }) => {
   const { lang, sectionNumber } = params;
-  const edition = await rscMustGetSurveyEditionFromUrl(params);
+  const { data: edition } = await rscMustGetSurveyEditionFromUrl(params);
 
   const contexts = [...getCommonContexts(), ...getEditionContexts({ edition })];
   const intlContext = await rscIntlContext({ localeId: lang, contexts });
