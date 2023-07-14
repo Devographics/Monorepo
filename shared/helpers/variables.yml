@@ -157,6 +157,12 @@
       - surveyform
       - results
 
+- id: TOKEN_SECRET
+  description: Used by magic login
+  example: cbabc40...115fd1affc789cc6f
+  usedBy:
+      - surveyform
+
 ### Local Dev (all optional)
 
 - id: LOGS_PATH

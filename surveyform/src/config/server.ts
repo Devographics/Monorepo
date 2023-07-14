@@ -9,9 +9,8 @@ import { AppName, setAppName, getConfig, EnvVar } from "@devographics/helpers";
 import { publicConfig } from "./public";
 
 // Experimental system with getConfig
-setAppName(AppName.SURVEYFORM)
-export const envConfig = (id: EnvVar) => getConfig()[id]
-
+setAppName(AppName.SURVEYFORM);
+export const envConfig = (id: EnvVar) => getConfig()[id];
 
 export function serverConfig() {
   checkServerConfig();
@@ -51,19 +50,9 @@ export function serverConfig() {
  */
 export function checkServerConfig() {
   let errors: Array<string> = [];
-  const mongoUri = process.env.MONGO_URI;
-  if (!mongoUri) errors.push("MONGO_URI env variable is not defined");
 
   if (process.env.NODE_ENV === "production") {
     // prod only check
-    if (!process.env.REDIS_URL) {
-      errors.push(
-        "process.env.REDIS_URL is mandatory in production.\n If building locally, set this value in .env.production.local or .env.test.local"
-      );
-    }
-    if (!process.env.TOKEN_SECRET) {
-      errors.push("process.env.TOKEN_SECRET not set");
-    }
   } else {
     // dev only check
   }

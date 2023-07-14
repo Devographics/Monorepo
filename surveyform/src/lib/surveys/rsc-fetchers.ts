@@ -16,11 +16,11 @@ export const rscFetchSurveysMetadata = cache(async () => {
   });
   let filteredSurveys = surveys;
   if (serverConfig().isProd && !serverConfig()?.isTest) {
-    filteredSurveys = surveys.filter((s) => s.id !== "demo_survey");
+    filteredSurveys = surveys?.filter((s) => s.id !== "demo_survey");
   }
   filteredSurveys = filteredSurveys.map((survey) => ({
     ...survey,
-    editions: survey.editions.filter(
+    editions: survey?.editions?.filter(
       (edition) => edition?.sections?.length > 0
     ),
   }));
