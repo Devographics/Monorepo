@@ -131,7 +131,6 @@ export const fetchAllLocalesIds = async () => {
       const result = await fetchGraphQLApi<{ locales: Array<LocaleDef> }>({
         query: getAllLocalesIdsQuery(),
         key,
-        apiUrl: serverConfig().translationAPI,
       });
       return result?.locales.map((l) => l.id) || [];
     },
