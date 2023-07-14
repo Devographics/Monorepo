@@ -83,6 +83,12 @@ export function processFetchData<T>(data, source, key): FetchPayloadSuccessOrErr
     return removeNull(result)
 }
 
+const setResultSource = (result, source) => {
+    return {
+        ...result,
+        ___metadata: { ...result.___metadata, source }
+    }
+}
 async function getFromRedisOrSource<T = any>({
     key,
     fetchFromSource,
@@ -103,9 +109,11 @@ async function getFromRedisOrSource<T = any>({
     const result = await fetchFromSource()
     const processedResult = processFetchData<T>(result, SourceType.API, key)
     if (shouldUpdateCache) {
-        processedResult.___metadata.source = SourceType.REDIS
         // store in Redis
-        await storeRedis<FetchPayloadSuccessOrError<T>>(key, processedResult)
+        await storeRedis<FetchPayloadSuccessOrError<T>>(
+            key,
+            setResultSource(processedResult, SourceType.REDIS)
+        )
     }
     return processedResult
 }
@@ -131,10 +139,11 @@ export async function getFromCache<T = any>({
     shouldUpdateCache?: boolean
     shouldThrow?: boolean
 }) {
+    let inMemory = false
     initRedis(serverConfig().redisUrl, serverConfig().redisToken)
     const calledFromLog = calledFrom ? `(↪️  ${calledFrom})` : ''
 
-    const shouldGetFromCacheEnv = !(process.env.ENABLE_CACHE === 'false')
+    const shouldGetFromCacheEnv = !(process.env.DISABLE_CACHE === 'true')
     const shouldGetFromCache = shouldGetFromCacheOptions ?? shouldGetFromCacheEnv
 
     async function fetchAndProcess<T>(source) {
@@ -148,6 +157,7 @@ export async function getFromCache<T = any>({
         // 1. we have the a promise that resolve to the data in memory => return that
         if (memoryCache.has(key)) {
             console.debug(`🟢 [${key}] in-memory cache hit ${calledFromLog}`)
+            inMemory = true
             resultPromise = memoryCache.get<Promise<FetchPayloadSuccessOrError<T>>>(key)!
         } else {
             // 2. store a promise that will first look in Redis, then in the main db
@@ -173,7 +183,9 @@ export async function getFromCache<T = any>({
             memoryCache.set(key, resultPromise)
         }
         let result = await resultPromise
-        if (!memoryCache.has(key)) {
+        if (inMemory) {
+            result = setResultSource(result, SourceType.MEMORY)
+        } else {
             await logToFile(`${key}.json`, result, {
                 mode: 'overwrite',
                 subDir: 'fetch'

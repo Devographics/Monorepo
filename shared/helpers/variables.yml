@@ -196,10 +196,10 @@
   usedBy:
       - api
 
-- id: ENABLE_CACHE
+- id: DISABLE_CACHE
   optional: true
-  description: Set to `false` to always fetch data via API
-  example: false
+  description: Set to `true` to always fetch data via API
+  example: true
   usedBy:
       - surveyform
       - results
