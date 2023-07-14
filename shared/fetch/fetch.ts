@@ -51,10 +51,11 @@ export interface FetchPayload<T> {
     ___metadata: Metadata
 }
 
-export function processFetchData(data, source, key) {
+export function processFetchData<T>(data, source, key): FetchPayload<T> {
     const timestamp = new Date().toISOString()
     const ___metadata: Metadata = { key, source, timestamp }
-    return removeNull({ data, ___metadata })
+    const result = { data, ___metadata }
+    return removeNull(result)
 }
 
 async function getFromRedisOrSource<T = any>({
@@ -68,18 +69,18 @@ async function getFromRedisOrSource<T = any>({
     calledFromLog: any
     shouldUpdateCache?: boolean
 }) {
-    const redisData = await fetchRedis<T>(key)
+    const redisData = await fetchRedis<FetchPayload<T>>(key)
     if (redisData) {
         console.debug(`🔵 [${key}] in-memory cache miss, redis hit ${calledFromLog}`)
         return redisData
     }
     console.debug(`🟣 [${key}] in-memory & redis cache miss, fetching from API ${calledFromLog}`)
     const result = await fetchFromSource()
-    const processedResult = processFetchData(result, SourceType.API, key)
+    const processedResult = processFetchData<T>(result, SourceType.API, key)
     if (shouldUpdateCache) {
         processedResult.___metadata.source = SourceType.REDIS
         // store in Redis
-        await storeRedis<T>(key, processedResult)
+        await storeRedis<FetchPayload<T>>(key, processedResult)
     }
     return processedResult
 }
@@ -103,23 +104,26 @@ export async function getFromCache<T = any>({
     shouldGetFromCache?: boolean
     shouldUpdateCache?: boolean
 }): Promise<FetchPayload<T>> {
-    let source
     initRedis(serverConfig().redisUrl, serverConfig().redisToken)
     const calledFromLog = calledFrom ? `(↪️  ${calledFrom})` : ''
 
     const shouldGetFromCacheEnv = !(process.env.ENABLE_CACHE === 'false')
     const shouldGetFromCache = shouldGetFromCacheOptions ?? shouldGetFromCacheEnv
 
-    let resultPromise: Promise<T>
+    async function fetchAndProcess<T>(source) {
+        const data = await fetchFromSource()
+        return processFetchData<T>(data, source, key)
+    }
+
+    let resultPromise: Promise<FetchPayload<T>>
     // 1. we have the a promise that resolve to the data in memory => return that
     if (memoryCache.has(key)) {
         console.debug(`🟢 [${key}] in-memory cache hit ${calledFromLog}`)
-        resultPromise = memoryCache.get<Promise<T>>(key)!
-        source = SourceType.MEMORY
+        resultPromise = memoryCache.get<Promise<FetchPayload<T>>>(key)!
     } else {
         // 2. store a promise that will first look in Redis, then in the main db
         if (shouldGetFromCache) {
-            resultPromise = getFromRedisOrSource({
+            resultPromise = getFromRedisOrSource<T>({
                 key,
                 fetchFromSource,
                 calledFromLog,
@@ -127,24 +131,23 @@ export async function getFromCache<T = any>({
             })
         } else {
             console.debug(`🟠 [${key}] Redis cache disabled, fetching from API ${calledFromLog}`)
-            resultPromise = fetchFromSource()
-            source = SourceType.API
+            resultPromise = fetchAndProcess<T>(SourceType.API)
             if (shouldUpdateCache) {
-                const result = await fetchFromSource()
+                const result = await resultPromise
+                result.___metadata.source = SourceType.REDIS
                 // store in Redis
-                await storeRedis<T>(key, processFetchData(result, SourceType.REDIS, key))
+                await storeRedis<FetchPayload<T>>(key, result)
             }
         }
         memoryCache.set(key, resultPromise)
     }
     try {
         let result = await resultPromise
-        const processedResult = processFetchData(result, source, key)
-        await logToFile(`${key}.json`, processedResult, {
+        await logToFile(`${key}.json`, result, {
             mode: 'overwrite',
             subDir: 'fetch'
         })
-        return processedResult
+        return result
     } catch (err) {
         console.error('// getFromCache error')
         console.error(err)
