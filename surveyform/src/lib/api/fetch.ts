@@ -85,7 +85,7 @@ export const fetchSurveysMetadata = async (options?: {
   calledFrom?: string;
 }) => {
   const key = surveysMetadataCacheKey();
-  return await getFromCache<Array<SurveyMetadata>>({
+  const result = await getFromCache<Array<SurveyMetadata>>({
     key,
     fetchFunction: async () => {
       const result = await fetchGraphQLApi({ query: getSurveysQuery(), key });
@@ -95,6 +95,7 @@ export const fetchSurveysMetadata = async (options?: {
     calledFrom: options?.calledFrom,
     serverConfig,
   });
+  return result;
 };
 
 /**
