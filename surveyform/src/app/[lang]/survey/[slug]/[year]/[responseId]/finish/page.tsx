@@ -26,7 +26,10 @@ const FinishPage = async ({
     );
   }
   const response = await rscMustGetResponse({ responseId, currentUser });
-  const edition = await rscMustGetSurveyEditionFromUrl({ slug, year });
+  const { data: edition } = await rscMustGetSurveyEditionFromUrl({
+    slug,
+    year,
+  });
   return <Finish response={response} edition={edition} />;
 };
 

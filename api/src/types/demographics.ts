@@ -1,9 +1,9 @@
-export interface YearParticipation {
-    year: number
-    participants: number
+export interface EditionParticipation {
+    editionId: string
+    total: number
 }
 
 export interface Participation {
-    all_years: YearParticipation[]
-    year: YearParticipation
+    allEditions: EditionParticipation[]
+    edition: EditionParticipation
 }

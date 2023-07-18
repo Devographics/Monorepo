@@ -1,12 +1,20 @@
 import { cache } from "react";
-import { fetchAllLocalesIds, fetchAllLocalesMetadata, fetchLocale } from "./fetch";
+import {
+  fetchAllLocalesIds,
+  fetchAllLocalesMetadata,
+  fetchLocale,
+} from "./fetch";
 
 /**
  * Will cache per localeId and contexts
  * /!\ Will not automatically merge cache if contexts are repeated
  * (eg fetching ["general"] then ["general", "survey"])
  */
-export const rscLocale = cache(async (...args: Parameters<typeof fetchLocale>) => fetchLocale(...args));
+export const rscLocale = cache(
+  async (...args: Parameters<typeof fetchLocale>) => fetchLocale(...args)
+);
 
-export const rscAllLocalesMetadata = cache(() => fetchAllLocalesMetadata())
-export const rscAllLocalesIds = cache(() => fetchAllLocalesIds())
+export const rscAllLocalesMetadata = cache((options?: any) =>
+  fetchAllLocalesMetadata(options)
+);
+export const rscAllLocalesIds = cache(() => fetchAllLocalesIds());

@@ -1,6 +1,5 @@
-import { fetchAllLocalesIds } from "~/lib/api/fetch";
-
-export const defaultLocaleId = "en-US";
+import { fetchAllLocalesMetadata } from "~/lib/api/fetch";
+import { defaultLocaleId } from "../config";
 
 /**
  * Return a locale that exists in our locales definitions
@@ -11,7 +10,8 @@ export const defaultLocaleId = "en-US";
  */
 export const getClosestLocale = async (localeId?: string) => {
   if (!localeId) return defaultLocaleId;
-  const localeIds = await fetchAllLocalesIds()
+  const { data: allLocales } = await fetchAllLocalesMetadata();
+  const localeIds = allLocales.map((l) => l.id);
   if (localeIds.includes(localeId)) return localeId;
   const isCountry = localeId.length === 2;
   if (isCountry) {

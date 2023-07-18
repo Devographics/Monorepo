@@ -1,39 +1,25 @@
-# API
+ ## Env file
 
-## Setup
+```sh
+SURVEYS_REPO=surveys
+MONGO_URI=mongodb://localhost:27017/devographics
+MONGO_PUBLIC_DB=devographics_public
 
-Create an `.env` file at the root of the `api` directory: 
+REDIS_URL=http://localhost:8080
+REDIS_TOKEN=fake-dev-token
 
-```
-# MongoDB connection string and database name
-MONGO_URI=mongodb+srv://user:***@server/public
-MONGO_DB_NAME=public
+GITHUB_PATH_SURVEYS=devographics/surveys
+GITHUB_PATH_LOCALES=devographics/locales
+GITHUB_PATH_ENTITIES=devographics/entities
 
-# Redis connection string
-REDIS_URL=rediss://user:***@server:6379
-```
+SECRET_KEY=dev-secret-key
 
-Note: contact me (Sacha) on [Discord](https://discord.gg/zRDb35jfrt) if you need the actual values. 
+GITHUB_TOKEN=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
 
-Third party services env variables (not usually needed):
-
-```
-# Third party services 
-SENTRY_DSN=***
-GITHUB_TOKEN=***
-TWITTER_KEY=***
-TWITTER_SECRET_KEY=***
-TWITTER_BEARER_TOKEN=***
-TWITTER_ACCESS_TOKEN=***
-TWITTER_ACCESS_TOKEN_SECRET=***
-```
-
-## Running the App
-
-In `/api`: 
-
-```
-pnpm install
-pnpm run dev
-pnpm run dev:clean # run without cache
+LOGS_PATH="/code/devographics/monorepo/api/.logs"
+# To avoid calling github during local dev
+LOAD_DATA=local
+ENTITIES_PATH="/code/devographics/entities"
+SURVEYS_PATH="/code/devographics/surveys"
+LOCALES_PATH="/code/devographics/locales"
 ```

@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 import { useCurrentUser } from "~/lib/users/hooks";
 import { Loading } from "~/components/ui/Loading";
 import { LoadingButton } from "~/components/ui/LoadingButton";
-import { getEditionSectionPath } from "~/lib/surveys/helpers";
+import { getEditionSectionPath } from "~/lib/surveys/helpers/getEditionSectionPath";
 import { createResponse } from "./services";
 import type { EditionMetadata } from "@devographics/types";
 import type { ResponseDocument } from "@devographics/types";

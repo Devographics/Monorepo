@@ -1,7 +1,8 @@
 import ShareSite from "../share/ShareSite";
 import Score from "../common/Score";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
-import { getEditionTitle, getSurveyImageUrl } from "~/lib/surveys/helpers";
+import { getSurveyImageUrl } from "~/lib/surveys/helpers/getSurveyImageUrl";
+import { getEditionTitle } from "~/lib/surveys/helpers/getEditionTitle";
 import ReadingListResults from "~/components/reading_list/ReadingListResults";
 import { EditionMetadata, ResponseDocument } from "@devographics/types";
 import { ThanksBackButton } from "./ThanksBackButton";
@@ -18,6 +19,12 @@ export const Finish = ({
   const imageUrl = getSurveyImageUrl(edition);
   const { survey, year } = edition;
   const { name } = survey;
+  const featureSections = edition.sections.filter(
+    (section) => section.slug === "features"
+  );
+  const enableScore = response && featureSections.length > 0;
+  const enableReadingList = !readOnly && edition.enableReadingList;
+
   return (
     <div className="contents-narrow thanks">
       <div className="survey-message survey-finished">
@@ -34,8 +41,10 @@ export const Finish = ({
           />
         )}
       </h1>
-      {response && <Score response={response} edition={edition} />}
-      {response && <ReadingListResults response={response} edition={edition} />}
+      {enableScore && <Score response={response} edition={edition} />}
+      {enableReadingList && response && (
+        <ReadingListResults response={response} edition={edition} />
+      )}
 
       <div>
         <FormattedMessage id="general.thanks2" />

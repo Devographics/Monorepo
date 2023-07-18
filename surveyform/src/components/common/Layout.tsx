@@ -10,7 +10,7 @@ export const Layout = ({ children }: { children: any }) => {
       <a href="#section-questions" className="skip">
         <FormattedMessage id="general.skip_to_content" />
       </a>
-      <DevographicsBanner />
+      {/* <DevographicsBanner /> */}
       <Header />
       <main className="main-contents" id="main-contents">
         {children}

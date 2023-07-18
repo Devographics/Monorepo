@@ -4,6 +4,7 @@ import Hidden from "~/components/inputs/Hidden";
 import { Help } from "~/components/inputs/Help";
 import Bracket from "~/components/inputs/Bracket";
 import Text from "~/components/inputs/Default";
+import Number from "~/components/inputs/Number";
 import Feature from "~/components/inputs/experience/Feature";
 import Tool from "~/components/inputs/experience/Tool";
 import Slider from "~/components/inputs/Slider";
@@ -12,7 +13,7 @@ import Textarea from "~/components/inputs/Textarea";
 import Checkboxgroup from "~/components/inputs/Checkboxgroup";
 import Radiogroup from "~/components/inputs/Radiogroup";
 import Projects from "~/components/inputs/Projects";
-import { QuestionMetadata } from "@devographics/types";
+import { QuestionMetadata, QuestionTemplateOutput } from "@devographics/types";
 
 const customComponents = {
   help: Help,
@@ -23,7 +24,7 @@ const customComponents = {
   feature: Feature,
   tool: Tool,
   slider: Slider,
-  select: Select,
+  dropdown: Select,
   country: Select,
   multiple: Checkboxgroup,
   longtext: Textarea,
@@ -32,14 +33,18 @@ const customComponents = {
   single: Radiogroup,
   projects: Projects,
   opinion: Radiogroup,
+  number: Number,
 };
 
-export const getQuestionComponent = (question: QuestionMetadata) => {
-  const templateName = question.extends || question.template;
-  const customComponent = customComponents[templateName];
+export const getQuestionComponent = (
+  question: QuestionMetadata | QuestionTemplateOutput
+) => {
+  const componentName = question.inputComponent || question.template;
+  const customComponent = customComponents[componentName];
   if (!customComponent) {
+    console.log(question);
     throw Error(
-      `Could not find question component for question ${question.id} with template ${templateName}`
+      `Could not find question component for question ${question.id} with template ${componentName}`
     );
   }
   return customComponent;

@@ -22,7 +22,10 @@ export const rscMustGetUserResponse = cache(
     slug: string;
     year: string;
   }) => {
-    const edition = await rscMustGetSurveyEditionFromUrl({ slug, year });
+    const { data: edition } = await rscMustGetSurveyEditionFromUrl({
+      slug,
+      year,
+    });
     // TODO: get user response directly here, so we don't need the responseId anymore
     const Responses = await getRawResponsesCollection<ResponseDocument>();
     const selector = {

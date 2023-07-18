@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { useRouter } from "next/navigation";
 import { LoadingButton } from "~/components/ui/LoadingButton";
-import { getEditionSectionPath } from "~/lib/surveys/helpers";
+import { getEditionSectionPath } from "~/lib/surveys/helpers/getEditionSectionPath";
 import { SectionMetadata } from "@devographics/types";
 import { useEdition } from "~/components/SurveyContext/Provider";
 import Link from "next/link";

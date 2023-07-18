@@ -10,17 +10,20 @@ export const others: TemplateFunction = options => {
 
     const basePath = `${sectionSegment}.${questionSegment}.${DbSuffixes.OTHERS}`
 
+    const rawPaths: DbPaths = {
+        other: `${sectionSegment}__${questionSegment}__${DbSuffixes.OTHERS}`
+    }
+
     const normPaths: DbPaths = {
+        base: basePath,
         raw: `${basePath}.${DbSuffixes.RAW}`,
         patterns: `${basePath}.${DbSuffixes.PATTERNS}`,
         error: `${basePath}.${DbSuffixes.ERROR}`,
-        response: `${basePath}.${DbSuffixes.NORMALIZED}`
+        other: `${basePath}.${DbSuffixes.NORMALIZED}`
     }
 
     const output: QuestionTemplateOutput = {
-        rawPaths: {
-            response: `${sectionSegment}__${questionSegment}__${DbSuffixes.OTHERS}`
-        },
+        rawPaths,
         normPaths,
         ...question
     }

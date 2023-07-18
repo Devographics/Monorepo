@@ -1,5 +1,5 @@
 {
     "recommendations": [
-        "irongeek.vscode-env"
+        "mikestead.dotenv"
     ]
 }

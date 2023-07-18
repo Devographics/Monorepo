@@ -37,11 +37,13 @@ export async function fetchEditionMetadata({
   surveyId,
   editionId,
   calledFrom,
+  shouldThrow,
 }: {
   surveyId: string;
   editionId: string;
   calledFrom?: string;
-}): Promise<EditionMetadata> {
+  shouldThrow?: boolean;
+}) {
   if (!surveyId) {
     throw new Error(`surveyId not defined (calledFrom: ${calledFrom})`);
   }
@@ -60,14 +62,33 @@ export async function fetchEditionMetadata({
         key,
       });
       if (!result) {
-        throw new Error(`Couldn't fetch survey ${editionId}, result: ${result && JSON.stringify(result)}`)
+        throw new Error(
+          `Couldn't fetch survey ${editionId}, result: ${
+            result && JSON.stringify(result)
+          }`
+        );
       }
       return result._metadata.surveys[0].editions[0];
     },
     calledFrom,
     serverConfig,
+    shouldThrow,
   });
 }
+
+const filterSurveys = (surveys) => {
+  let filteredSurveys = surveys;
+  if (serverConfig().isProd && !serverConfig()?.isTest) {
+    filteredSurveys = surveys?.filter((s) => s.id !== "demo_survey");
+  }
+  filteredSurveys = filteredSurveys?.map((survey) => ({
+    ...survey,
+    editions: survey?.editions?.filter(
+      (edition) => edition?.sections?.length > 0
+    ),
+  }));
+  return filteredSurveys;
+};
 
 /**
  * Fetch metadata for all surveys
@@ -75,38 +96,44 @@ export async function fetchEditionMetadata({
  */
 export const fetchSurveysMetadata = async (options?: {
   calledFrom?: string;
-}): Promise<Array<SurveyMetadata>> => {
+  shouldThrow?: boolean;
+}) => {
   const key = surveysMetadataCacheKey();
-  return await getFromCache<Array<SurveyMetadata>>({
+  const result = await getFromCache<Array<SurveyMetadata>>({
     key,
     fetchFunction: async () => {
       const result = await fetchGraphQLApi({ query: getSurveysQuery(), key });
-      if (!result) throw new Error(`Couldn't fetch surveys`)
-      return result._metadata.surveys as SurveyMetadata[];
+      if (!result) throw new Error(`Couldn't fetch surveys`);
+      return filterSurveys(result._metadata.surveys) as SurveyMetadata[];
     },
     calledFrom: options?.calledFrom,
     serverConfig,
+    shouldThrow: options?.shouldThrow,
   });
+  return result;
 };
 
 /**
  * Fetch metadata for all locales
  * @returns
  */
-export const fetchAllLocalesMetadata = async (): Promise<Array<LocaleDef>> => {
+export const fetchAllLocalesMetadata = async (options?: {
+  shouldThrow?: boolean;
+}) => {
   const key = allLocalesMetadataCacheKey();
-  return await getFromCache<any>({
+  const result = await getFromCache<Array<LocaleDef>>({
     key,
     fetchFunction: async () => {
       const result = await fetchGraphQLApi({
         query: getAllLocalesMetadataQuery(),
         key,
-        apiUrl: serverConfig().translationAPI,
       });
       return result.locales;
     },
     serverConfig,
+    shouldThrow: options?.shouldThrow,
   });
+  return result;
 };
 
 /**
@@ -115,22 +142,20 @@ export const fetchAllLocalesMetadata = async (): Promise<Array<LocaleDef>> => {
  * Safe for parallel calls (eg in Next.js middlewares)
  * @returns
  */
-export const fetchAllLocalesIds = async (): Promise<Array<string>> => {
+export const fetchAllLocalesIds = async () => {
   const key = allLocalesIdsCacheKey();
-  return await getFromCache<any>({
+  return await getFromCache<Array<string>>({
     key,
     fetchFunction: async () => {
       const result = await fetchGraphQLApi<{ locales: Array<LocaleDef> }>({
         query: getAllLocalesIdsQuery(),
         key,
-        apiUrl: serverConfig().translationAPI,
       });
-      return result?.locales.map(l => l.id) || [];
+      return result?.locales.map((l) => l.id) || [];
     },
     serverConfig,
   });
-}
-
+};
 
 /**
  * Fetch metadata and strings for a specific locales
@@ -139,21 +164,22 @@ export const fetchAllLocalesIds = async (): Promise<Array<string>> => {
 export type FetchLocaleOptions = {
   localeId: string;
   contexts: string[];
+  shouldThrow?: boolean;
 };
 export const fetchLocale = async ({
   localeId,
   contexts,
-}: FetchLocaleOptions): Promise<LocaleDefWithStrings> => {
+  shouldThrow,
+}: FetchLocaleOptions) => {
   const key = localeCacheKey({ localeId, contexts });
-  return await getFromCache<any>({
+  const result = await getFromCache<LocaleDefWithStrings>({
     key,
     fetchFunction: async () => {
       const result = await fetchGraphQLApi({
         query: getLocaleQuery({ localeId, contexts }),
         key,
-        apiUrl: serverConfig().translationAPI,
       });
-      if (!result) throw new Error(`Couldn't fetch locale ${localeId}`)
+      if (!result) throw new Error(`Couldn't fetch locale ${localeId}`);
       const locale = result.locale;
 
       // react-i18n expects {foo1: bar1, foo2: bar2} etc. map whereas
@@ -168,5 +194,7 @@ export const fetchLocale = async ({
       return convertedLocale as LocaleDefWithStrings;
     },
     serverConfig,
+    shouldThrow,
   });
+  return result;
 };

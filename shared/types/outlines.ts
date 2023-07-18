@@ -31,7 +31,6 @@ export interface Survey extends SurveyConfig {
 }
 
 export type Edition = {
-    /** js2019 */
     id: string
     sections: Section[]
     apiSections: Section[]
@@ -50,6 +49,7 @@ export type Edition = {
     status: SurveyStatus
     tshirt: Tshirt
     colors: Colors
+    enableReadingList: boolean
     /**
      * Where the user found out about the survey
      * Should be a valid multiselect option
@@ -116,6 +116,8 @@ export type ApiQuestion = {
 
 export type Question = {
     template: string
+    // override the template
+    inputComponent?: string
 
     id?: string
     intlId?: string

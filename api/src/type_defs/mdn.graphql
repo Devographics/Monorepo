@@ -1,6 +1,0 @@
-type MDN {
-    locale: String
-    url: String
-    title: String
-    summary: String
-}

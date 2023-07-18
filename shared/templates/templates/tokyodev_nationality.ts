@@ -246,13 +246,14 @@ function formatAsGraphQLEnumValue(str: string) {
 export const tokyodev_nationality: TemplateFunction = options => {
     const { question } = options
     const output: QuestionTemplateOutput = {
+        ...question,
         id: 'nationality',
+        inputComponent: 'dropdown',
         options: nationalities.map(nationality => ({
             id: formatAsGraphQLEnumValue(nationality),
             label: nationality
         })),
-        ...getPaths(options),
-        ...question
+        ...getPaths(options)
     }
     return output
 }

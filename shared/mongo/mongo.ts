@@ -1,11 +1,11 @@
 /**
  * Methods that retrieve a collection
  * All exported methods automatically handle the connection
- * 
+ *
  * This module rely on env variable, this is the best solution we have found
  * to avoid an explicit initialization step
- * 
- * Each app can pass their own typings 
+ *
+ * Each app can pass their own typings
  * (because they might want to know only a subset of each collection type)
  */
 import { Survey } from '@devographics/types'
@@ -32,7 +32,13 @@ const getClient = async ({ dbUri }: { dbUri: string }): Promise<MongoClient> => 
     }
     return await clients[dbUri]
 }
-export const getMongoDb = async ({ dbUri, dbName }: { dbUri: string, dbName: string }): Promise<Db> => {
+export const getMongoDb = async ({
+    dbUri,
+    dbName
+}: {
+    dbUri: string
+    dbName: string
+}): Promise<Db> => {
     return (await getClient({ dbUri })).db(dbName)
 }
 
@@ -41,18 +47,18 @@ export const getMongoDb = async ({ dbUri, dbName }: { dbUri: string, dbName: str
  * To be used when calling "insertOne"
  * This avoids having ObjectId leaking everywhere in relations
  * /!\ We don't guarantee that it's a valid ObjectId, we currently use nanoid instead
- * @returns 
+ * @returns
  */
-export const newMongoId = (): string => nanoid()//(new ObjectId()).toString()
+export const newMongoId = (): string => nanoid() //(new ObjectId()).toString()
 
 /**
  * Used to get the full MongoClient, eg to disconnect
  * Handles the connection automatically
- * @returns 
+ * @returns
  */
 export const getAppClient = () => {
     if (!process.env.MONGO_URI) {
-        throw new Error("MONGO_URI not set")
+        throw new Error('MONGO_URI not set')
     }
     return getClient({ dbUri: process.env.MONGO_URI })
 }
@@ -61,16 +67,18 @@ export const getAppClient = () => {
  */
 export const getAppDb = () => {
     if (!process.env.MONGO_URI) {
-        throw new Error("MONGO_URI not set")
+        throw new Error('MONGO_URI not set')
     }
-    return getMongoDb({ dbUri: process.env.MONGO_URI, dbName: "production" })
+    const dbName = process.env.MONGO_PRIVATE_DB || 'production'
+    return getMongoDb({ dbUri: process.env.MONGO_URI, dbName })
 }
 
 const getReadOnlyDb = () => {
     if (!process.env.MONGO_URI_PUBLIC_READ_ONLY) {
-        throw new Error("MONGO_URI_PUBLIC_READ_ONLY not set")
+        throw new Error('MONGO_URI_PUBLIC_READ_ONLY not set')
     }
-    return getMongoDb({ dbUri: process.env.MONGO_URI_PUBLIC_READ_ONLY, dbName: "public" })
+    const dbName = process.env.MONGO_PUBLIC_DB || 'public'
+    return getMongoDb({ dbUri: process.env.MONGO_URI_PUBLIC_READ_ONLY, dbName })
 }
 
 /**

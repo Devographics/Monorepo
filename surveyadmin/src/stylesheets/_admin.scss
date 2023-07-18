@@ -1,26 +1,8 @@
 @use "sass:math";
 
-.debug-database,
-.admin-content {
-  background: $white;
-  padding: $spacing;
-  color: $text-color-inverted;
-  h3 {
-    color: $text-color-inverted;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    gap: $spacing;
-    .dropdown {
-      display: inline-block;
-    }
-  }
-}
-
 .normalization-actions {
-  display: flex;
-  justify-content: space-between;
-  font-size: $large-font;
+  // display: flex;
+  // justify-content: space-between;
   margin-bottom: $spacing;
   .primary,
   .secondary {
@@ -31,10 +13,10 @@
 }
 
 .normalization-progress {
-  padding: $spacing;
-  border: 1px solid grey;
-  background: #cccccc;
-  margin: $spacing 0;
+  // padding: $spacing;
+  // border: 1px solid grey;
+  // background: #cccccc;
+  // margin: $spacing 0;
 }
 
 .normalization-options {
@@ -57,9 +39,6 @@
     padding: 10px;
   }
 }
-.admin-script-name {
-  @include font-bold;
-}
 
 .admin-args {
   display: flex;
@@ -72,18 +51,6 @@
   }
   input {
     width: 100px;
-  }
-}
-
-.admin-content {
-  pre {
-    border: 1px solid $border-color;
-    padding: $spacing;
-    background: #efefef;
-  }
-  code {
-    background: #efefef;
-    color: $text-color-inverted-light;
   }
 }
 

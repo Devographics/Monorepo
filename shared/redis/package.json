@@ -25,6 +25,7 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "@devographics/debug": "workspace:^1.0.0",
         "@devographics/helpers": "workspace:^1.0.0",
         "@devographics/types": "workspace:*",
         "@upstash/redis": "^1.21.0",

@@ -1,3 +1,4 @@
+import { EnvVar, getEnvVar } from '@devographics/helpers'
 import fetch from 'node-fetch'
 
 export const normalizeGithubResource = (res: any) => {
@@ -16,7 +17,7 @@ export const normalizeGithubResource = (res: any) => {
 export const fetchGithubResource = async (ownerAndRepo: string) => {
     try {
         const res = await fetch(`https://api.github.com/repos/${ownerAndRepo}`, {
-            headers: { Authorization: `token ${process.env.GITHUB_TOKEN}` }
+            headers: { Authorization: `token ${getEnvVar(EnvVar.GITHUB_TOKEN)}` }
         })
         const json = await res.json()
         const data = normalizeGithubResource(json)

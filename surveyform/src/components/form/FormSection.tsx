@@ -10,7 +10,12 @@ import { FormContext } from "./FormContext";
 import { ErrorBoundary } from "~/components/error";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { useResponse } from "../ResponseContext/ResponseProvider";
-import { Edition, ResponseDocument, Section } from "@devographics/types";
+import {
+  Edition,
+  ResponseDocument,
+  Section,
+  Survey,
+} from "@devographics/types";
 import { Message } from "./FormMessages";
 import { useMessagesContext } from "../common/UserMessagesContext";
 
@@ -194,14 +199,18 @@ export const FormSection = (
   const previousSection = edition.sections[sectionIndex - 1];
   const nextSection = edition.sections[sectionIndex + 1];
 
+  const enableReadingList = !readOnly && edition.enableReadingList;
+
   const formProps = {
     ...props,
+    survey: edition.survey,
     response,
     stateStuff,
     previousSection,
     nextSection,
     updateCurrentValues,
     submitForm,
+    enableReadingList,
   };
 
   return (

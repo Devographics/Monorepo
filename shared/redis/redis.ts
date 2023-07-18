@@ -1,11 +1,14 @@
 // import Redis from 'ioredis'
-import { logToFile } from '@devographics/helpers'
+import { logToFile } from '@devographics/debug'
+import { EnvVar, getEnvVar } from '@devographics/helpers'
 import { Redis } from '@upstash/redis'
 
 let redis: Redis
 
-export function initRedis(url: string, token: string) {
-    // console.debug("init redis client");
+export function initRedis(url_?: string, token_?: string) {
+    const url = url_ || getEnvVar(EnvVar.REDIS_UPSTASH_URL)
+    const token = token_ || getEnvVar(EnvVar.REDIS_TOKEN)
+    // console.debug('init redis client', url, token)
     if (!redis) {
         // redis = new Redis(redisUrl)
         redis = new Redis({
@@ -13,6 +16,7 @@ export function initRedis(url: string, token: string) {
             token
         })
     }
+    return redis
 }
 
 export const getRedisClient = () => {
@@ -36,6 +40,7 @@ export async function storeRedis<T>(key: string, val: T): Promise<boolean> {
     // io-redis version
     // const res = await redisClient.set(key, JSON.stringify(val), 'EX', TTL_SECONDS)
     // upstash-redis version
+
     const res = await redisClient.set(key, JSON.stringify(val), { ex: TTL_SECONDS })
 
     if (res !== 'OK') {
@@ -55,16 +60,13 @@ export async function fetchJson<T = any>(key: string): Promise<T | null> {
         const json = typeof maybeStr === 'object' ? maybeStr : JSON.parse(maybeStr)
         await logToFile(`fetchJson(${key}).json`, json, { mode: 'overwrite' })
         return json
-    } catch (err) {
-        console.error(`// error while getting redis key ${key}`, err)
-        redisClient.del(key).catch(err => {
-            console.error(
-                `Could not delete malformed Redis value for key ${key}. Is your Redis URL or token valid?`,
-                err
-            )
-            // NOTE: if this deletion call fails too, this is probably because the Redis server can't be reached
-            // for instance if your HTTP proxy or upstash token is invalid
-        })
-        throw new Error(`Malformed value for Redis key [${key}]: ${maybeStr}`)
+    } catch (error) {
+        console.error(`// error while getting redis key ${key}`)
+        // redisClient.del(key).catch(err => {
+        //     console.error(`Could not delete malformed Redis value for key ${key}`, err)
+        //     // NOTE: if this deletion call fails too, this is probably because the Redis server can't be reached
+        //     // for instance if your HTTP proxy or upstash token is invalid
+        // })
+        throw error
     }
 }

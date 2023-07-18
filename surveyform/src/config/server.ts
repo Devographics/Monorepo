@@ -1,3 +1,5 @@
+import { AppName, setAppName, getConfig, EnvVar } from "@devographics/helpers";
+
 /**
  * Parse process env and generate an object with relevant values
  *
@@ -6,8 +8,14 @@
 
 import { publicConfig } from "./public";
 
+// Experimental system with getConfig
+setAppName(AppName.SURVEYFORM);
+export const envConfig = (id: EnvVar) => getConfig()[id];
+
 export function serverConfig() {
   checkServerConfig();
+
+  setAppName(AppName.SURVEYFORM);
   return {
     // reexpose public variables for consistency
     ...publicConfig,
@@ -18,13 +26,12 @@ export function serverConfig() {
     /**
      * Internal API for translations and entities
      */
-    translationAPI: process.env.INTERNAL_API_URL!,
+    translationAPI: process.env.API_URL!,
     mongoUri: process.env.MONGO_URI!,
-    redisUrl: process.env.REDIS_URL!,
+    redisUrl: process.env.REDIS_UPSTASH_URL!,
     // Won't work with upstash, which accepts only HTTP
     // || "redis://localhost:6379",
     redisToken: process.env.REDIS_TOKEN || "",
-    githubToken: process.env.GITHUB_TOKEN,
     // NOTE: each survey should try to use their own specific domain (see magic link auth)
     defaultMailFrom: process.env.MAIL_FROM || "login@devographics.com",
     // to avoid risks of typos, reuse those values
@@ -42,32 +49,15 @@ export function serverConfig() {
  * in scripts that reuse this code outside of Next
  */
 export function checkServerConfig() {
-  let errors: Array<string> = []
-  const mongoUri = process.env.MONGO_URI;
-  if (!mongoUri) errors.push("MONGO_URI env variable is not defined");
-  if (!process.env.GITHUB_TOKEN) {
-    errors.push("GITHUB_TOKEN is now necessary to get the survey files");
-  }
-  if (!process.env.INTERNAL_API_URL) {
-    errors.push(
-      "INTERNAL_API_URL should point to the internal API. It was previously named 'TRANSLATION_API'."
-    );
-  }
+  let errors: Array<string> = [];
+
   if (process.env.NODE_ENV === "production") {
     // prod only check
-    if (!process.env.REDIS_URL) {
-      errors.push(
-        "process.env.REDIS_URL is mandatory in production.\n If building locally, set this value in .env.production.local or .env.test.local"
-      );
-    }
-    if (!process.env.TOKEN_SECRET) {
-      errors.push("process.env.TOKEN_SECRET not set");
-    }
   } else {
     // dev only check
   }
   if (errors.length) {
-    console.error("// checkServerConfig")
-    throw new Error(errors.join("\n "))
+    console.error("// checkServerConfig");
+    throw new Error(errors.join("\n "));
   }
 }

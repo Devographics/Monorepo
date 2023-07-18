@@ -1,30 +1,27 @@
 {
-    "name": "client",
-    "version": "0.1.0",
+    "name": "graphiql",
     "private": true,
     "dependencies": {
-        "@testing-library/jest-dom": "^5.16.5",
-        "@testing-library/react": "^13.3.0",
-        "@testing-library/user-event": "^14.4.3",
-        "dotenv": "^10.0.0",
-        "graphiql": "^1.11.5",
-        "graphiql-explorer": "^0.9.0",
-        "graphql": "^16.6.0",
-        "graphql-ws": "^5.10.0",
-        "js-yaml": "^4.1.0",
+        "@graphiql/plugin-explorer": "^0.3.0",
+        "@graphiql/toolkit": "^0.8.4",
+        "@types/jest": "^29.5.3",
+        "@types/node": "^20.4.1",
+        "@types/react": "^18.2.14",
+        "@types/react-dom": "^18.2.6",
+        "dotenv": "^16.3.1",
+        "graphiql": "^3.0.0",
+        "graphql": "^16.7.1",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
-        "react-scripts": "4.0.3"
+        "react-scripts": "5.0.1"
     },
     "scripts": {
-        "dev": "PORT=4001 react-scripts --openssl-legacy-provider start",
-        "api": "REACT_APP_ENDPOINT_URL=http://localhost:4000/graphql PORT=4001 react-scripts --openssl-legacy-provider start",
-        "api-internal": "REACT_APP_ENDPOINT_URL=http://localhost:4020/graphql PORT=4021 react-scripts --openssl-legacy-provider start",
-        "api2": "REACT_APP_ENDPOINT_URL=http://localhost:4030/graphql PORT=4031 react-scripts --openssl-legacy-provider start",
-        "start": "PORT=4001 react-scripts start",
-        "build": "react-scripts build",
-        "test": "react-scripts test",
-        "eject": "react-scripts eject"
+        "dev": "react-scripts start",
+        "dev-production": "PORT=4031 REACT_APP_API_URL=https://api.devographics.com/graphql react-scripts start",
+        "dev-staging": "PORT=4032 REACT_APP_API_URL=https://api-staging.devographics.com/graphql react-scripts start",
+        "dev-internal": "PORT=4033 REACT_APP_API_URL=https://api-internal.devographics.com/graphql react-scripts start",
+        "tokyodev": "PORT=5030 REACT_APP_API_URL=http://localhost:5020/graphql react-scripts start",
+        "build": "react-scripts build"
     },
     "browserslist": {
         "production": [
@@ -39,6 +36,8 @@
         ]
     },
     "devDependencies": {
-        "eslint-config-react-app": "^7.0.1"
+        "eslint-config-react-app": "^7.0.1",
+        "typescript": "^5.1.6",
+        "worker-loader": "^3.0.8"
     }
 }

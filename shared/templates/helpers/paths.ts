@@ -6,7 +6,8 @@ import {
     EditionMetadata,
     QuestionMetadata,
     DbPaths,
-    DbSuffixes
+    DbSuffixes,
+    QuestionTemplateOutput
 } from '@devographics/types'
 
 export const getRawPaths = (
@@ -67,6 +68,7 @@ export const getNormPaths = (
     const basePathSegments = [sectionSegment, questionSegment]
 
     let paths = {
+        base: getPath(basePathSegments),
         response: getPath(suffix ? [...basePathSegments, suffix] : basePathSegments)
     } as DbPaths
 
@@ -111,7 +113,7 @@ export const getFormPaths = ({
     question
 }: {
     edition: EditionMetadata
-    question: QuestionMetadata
+    question: QuestionMetadata | QuestionTemplateOutput
 }): DbPaths => {
     const paths: { [key in keyof DbPaths]: string } = {}
     if (question.rawPaths) {

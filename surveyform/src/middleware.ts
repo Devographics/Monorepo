@@ -38,7 +38,7 @@ function maybeLocale(str: string) {
 async function getLang(pathname: string) {
   // NOTE: this call will fire a lot of request but it's ok since we use a short-lived in-memory cache
   // robust to // calls
-  const localesIds = await fetchAllLocalesIds();
+  const { data: localesIds } = await fetchAllLocalesIds();
   const firstParam = getFirstParam(pathname);
   if (!firstParam) return null;
   if (

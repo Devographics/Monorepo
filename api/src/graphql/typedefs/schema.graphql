@@ -1,0 +1,359 @@
+#import "./entity.graphql"
+#import "./completion.graphql"
+#import "./mdn.graphql"
+#import "./twitter.graphql"
+#import "./github.graphql"
+#import "./tools.graphql"
+#import "./features.graphql"
+#import "./comments.graphql"
+#import "./data_explorer.graphql"
+
+scalar JSON
+scalar JSONObject
+
+type SurveyMetadata {
+    id: String
+    name: String
+    domain: String
+    hashtag: String
+
+    dbCollectionName: String
+
+    emailOctopus: EmailOctopusData
+
+    partners: [SponsorItem]
+    editions: [EditionMetadata]
+}
+
+type EmailOctopusData {
+    listId: String
+}
+
+type EditionMetadata {
+    id: String
+    surveyId: String
+
+    survey: SurveyMetadata
+
+    year: Int
+    status: Int
+    hashtag: String
+
+    startedAt: String
+    endedAt: String
+
+    questionsUrl: String
+    resultsUrl: String
+    imageUrl: String
+    faviconUrl: String
+    socialImageUrl: String
+
+    sections(include: IncludeEnum): [SectionMetadata]
+
+    sponsors: [SponsorItem]
+
+    credits: [CreditItem]
+
+    sources: [JSON]
+
+    faq: [String]
+
+    tshirt: TshirtDefinition
+
+    colors: Colors
+
+    enableReadingList: Boolean
+}
+
+enum IncludeEnum {
+    outlineOnly
+    apiOnly
+    all
+}
+
+type Colors {
+    primary: String
+    secondary: String
+    text: String
+    background: String
+    backgroundSecondary: String
+}
+
+type TshirtDefinition {
+    images: [String]
+    url: String
+    price: Float
+    designerUrl: String
+}
+
+type SponsorItem {
+    id: String
+    name: String
+    url: String
+    imageUrl: String
+}
+
+type CreditItem {
+    id: String
+    role: String
+    entity: Entity
+}
+
+type SectionMetadata {
+    id: String
+    # optionally, a message at the top of the section
+    messageId: String
+    # used to override id when building field paths
+    slug: String
+    intlId: String
+    questions: [QuestionMetadata]
+    # whether a section only exists in the API and not the ouline
+    apiOnly: Boolean
+    template: String
+}
+
+type QuestionMetadata {
+    id: String
+    yearAdded: Int
+    label: String
+    intlId: String
+    i18nNamespace: String
+    template: String
+    inputComponent: String
+    rawPaths: RawDbPaths
+    normPaths: NormDbPaths
+    contentType: ContentType
+    options: [OptionsMetadata]
+    entity: Entity
+    allowOther: Boolean
+    allowComment: Boolean
+    showCommentInput: Boolean
+    allowMultiple: Boolean
+    randomize: Boolean
+    matchTags: [String]
+    limit: Int
+    # options/values for the question are numeric
+    optionsAreNumeric: Boolean
+    # options are ranges of numbers
+    optionsAreRange: Boolean
+    # whether a question only exists in the API and not the ouline
+    apiOnly: Boolean
+}
+
+type RawDbPaths {
+    base: String
+    response: String
+    other: String
+    comment: String
+    prenormalized: String
+}
+
+type NormDbPaths {
+    response: String
+    other: String
+    prenormalized: String
+    comment: String
+    raw: String
+    patterns: String
+    error: String
+}
+
+enum ContentType {
+    string
+    number
+}
+
+scalar StringOrInt
+
+type OptionsMetadata {
+    id: StringOrInt
+    intlId: String
+    label: String
+    average: Float
+    entity: Entity
+}
+
+input Parameters {
+    limit: Int = 50
+    cutoff: Int
+    sort: SortSpecifier
+    facetSort: SortSpecifier
+    facetLimit: Int = 50
+    facetCutoff: Int
+    facetCutoffPercent: Float
+    enableCache: Boolean
+    showNoAnswer: Boolean
+}
+
+enum ResponsesType {
+    Predefined
+    Prenormalized
+    Freeform
+}
+
+input SortSpecifier {
+    property: SortProperty
+    order: SortOrder
+}
+
+enum SortProperty {
+    options
+    count
+    percent
+    id
+    mean
+    average
+}
+
+enum SortOrder {
+    asc
+    desc
+}
+
+type ResponseEditionData {
+    year: Int
+    editionId: String
+    completion: YearCompletion
+    buckets: [Bucket]
+}
+
+"""
+A data bucket
+"""
+type Bucket {
+    id: String
+    label: String
+    """
+    Respondent count
+    """
+    count: Int
+    """
+    Percentage relative to question respondents
+    """
+    percentageQuestion: Float
+    """
+    Percentage relative to survey respondents
+    """
+    percentageSurvey: Float
+    """
+    Entity associated with the current bucket
+    """
+    entity: Entity
+    """
+    An array of bucket facets, when bucket is faceted
+    """
+    facetBuckets: [FacetBucket]
+}
+
+type FacetBucket {
+    id: String
+    label: String
+    """
+    Respondent count
+    """
+    count: Int
+    """
+    Percentage relative to question respondents
+    """
+    percentageQuestion: Float
+    """
+    Percentage relative to survey respondents
+    """
+    percentageSurvey: Float
+    """
+    Percentage relative to question respondents in facet
+    """
+    percentageFacet: Float
+    """
+    Entity associated with the current bucket
+    """
+    entity: Entity
+}
+
+type Query {
+    """
+    All surveys
+    """
+    surveys: Surveys
+    """
+    Meta information about the API
+    """
+    _metadata(surveyId: SurveysID, editionId: AllEditionsID): APIMetadata
+    """
+    Data about a specific entity (tool, library, framework, features, etc.)
+    """
+    entity(id: ID!): Entity
+    """
+    Get multiple entities (tools, libraries, frameworks, features, etc.)
+    """
+    entities(
+        ids: [String]
+        tags: [String]
+        includeNormalizationEntities: Boolean
+        includeAPIOnlyEntities: Boolean
+    ): [Entity]
+    """
+    Translate a string
+    """
+    translation(key: String!, localeId: LocaleID!): TranslationString
+    """
+    Get a locale
+    """
+    locale(localeId: LocaleID!, contexts: [I18nContext], enableFallbacks: Boolean): Locale
+    """
+    Get multiple locales
+    """
+    locales(contexts: [I18nContext], localeIds: [LocaleID], enableFallbacks: Boolean): [Locale]
+}
+
+type APIMetadata {
+    surveys: [SurveyMetadata]
+}
+
+type TranslationString {
+    key: String
+    t: String
+    tHtml: String
+    tClean: String
+    context: String
+    isFallback: Boolean
+    aliasFor: String
+}
+
+type Locale {
+    id: String
+    label: String
+    translators: [String]
+    repo: String
+    strings: [TranslationString]
+    translatedCount: Int
+    totalCount: Int
+    completion: Int
+    untranslatedKeys: [String]
+}
+
+type FeatureOption {
+    id: FeatureOptionID
+    label: String
+    entity: Entity
+}
+
+enum FeatureOptionID {
+    never_heard
+    heard
+    used
+}
+
+type ToolOption {
+    id: ToolOptionID
+    label: String
+    entity: Entity
+}
+
+enum ToolOptionID {
+    would_use
+    would_not_use
+    interested
+    not_interested
+    never_heard
+}

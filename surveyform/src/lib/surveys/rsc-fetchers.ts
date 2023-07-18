@@ -6,20 +6,17 @@ import { publicConfig } from "~/config/public";
 import { rscMustGetSurveyEditionFromUrl } from "~/app/[lang]/survey/[slug]/[year]/rsc-fetchers";
 import { getCommonContexts, getEditionContexts } from "~/i18n/config";
 import { rscIntlContext } from "~/i18n/rsc-fetchers";
-import { getEditionTitle, getSurveyImageUrl } from "./helpers";
+import { getEditionTitle } from "~/lib/surveys/helpers/getEditionTitle";
+import { getSurveyImageUrl } from "~/lib/surveys/helpers/getSurveyImageUrl";
 import { getSectioni18nIds } from "@devographics/i18n";
+import { FetchPayloadResultType } from "@devographics/fetch";
 
-export const rscFetchSurveysMetadata = cache(async () => {
-  const surveys = await fetchSurveysMetadata({ calledFrom: __filename });
-  let filteredSurveys = surveys;
-  if (serverConfig().isProd && !serverConfig()?.isTest) {
-    filteredSurveys = surveys.filter((s) => s.id !== "demo_survey");
-  }
-  filteredSurveys = filteredSurveys.map((survey) => ({
-    ...survey,
-    editions: survey.editions.filter((edition) => !!edition.questionsUrl),
-  }));
-  return filteredSurveys;
+export const rscFetchSurveysMetadata = cache(async (options?: any) => {
+  const result = await fetchSurveysMetadata({
+    ...options,
+    calledFrom: __filename,
+  });
+  return result;
 });
 
 /**
@@ -27,9 +24,13 @@ export const rscFetchSurveysMetadata = cache(async () => {
  * => is it ok to use "rsc" functions here? Not sure, we should call the underlying functions probably
  * as there is no nesting here
  */
-export const rscGetMetadata = async ({ params }: { params: { lang: string, sectionNumber?: string, slug: string, year: string } }) => {
+export const rscGetMetadata = async ({
+  params,
+}: {
+  params: { lang: string; sectionNumber?: string; slug: string; year: string };
+}) => {
   const { lang, sectionNumber } = params;
-  const edition = await rscMustGetSurveyEditionFromUrl(params);
+  const { data: edition } = await rscMustGetSurveyEditionFromUrl(params);
 
   const contexts = [...getCommonContexts(), ...getEditionContexts({ edition })];
   const intlContext = await rscIntlContext({ localeId: lang, contexts });

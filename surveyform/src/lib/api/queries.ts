@@ -55,6 +55,9 @@ query SurveysMetadataQuery {
         status
         imageUrl
         faq
+        sections {
+          id
+        }
         credits {
           id
           role
@@ -160,7 +163,7 @@ query ${editionId}MetadataQuery {
             yearAdded
             limit
             template
-            extends
+            inputComponent
             # contentType
             allowOther
             allowComment
@@ -221,7 +224,9 @@ export const getLocaleQuery = ({
   contexts: string[];
 }) => `
 query Locale__${localeId.replace("-", "_")}__${contexts.join("_")}__Query {
-  locale(localeId: "${localeId}", contexts: [${contexts.join(", ")}]) {
+  locale(localeId: ${localeId.replace("-", "_")}, contexts: [${contexts.join(
+  ", "
+)}]) {
     id
     completion
     label

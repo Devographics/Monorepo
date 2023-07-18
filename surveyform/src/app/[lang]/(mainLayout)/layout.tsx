@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import AppLayout from "~/app/[lang]/AppLayout";
+import { DebugRSC } from "~/components/debug/DebugRSC";
 import { getCommonContexts, getLocaleIdFromParams } from "~/i18n/config";
 import { rscAllLocalesMetadata, rscLocale } from "~/lib/api/rsc-fetchers";
 
@@ -32,8 +33,20 @@ export default async function RootLayout({
 }) {
   const contexts = getCommonContexts();
   const localeId = getLocaleIdFromParams(params);
-  const locale = await rscLocale({ localeId, contexts });
-  const locales = await rscAllLocalesMetadata();
+  const {
+    data: locale,
+    error,
+    ___metadata: ___rscLocale_CommonContexts,
+  } = await rscLocale({
+    localeId,
+    contexts,
+  });
+  const { data: locales, ___metadata: ___rscAllLocalesMetadata } =
+    await rscAllLocalesMetadata();
+
+  if (error) {
+    return <div>{JSON.stringify(error, null, 2)}</div>;
+  }
   return (
     <AppLayout
       params={params}
@@ -41,6 +54,9 @@ export default async function RootLayout({
       localeId={localeId}
       localeStrings={locale}
     >
+      <DebugRSC
+        {...{ ___rscLocale_CommonContexts, ___rscAllLocalesMetadata }}
+      />
       {children}
     </AppLayout>
   );

@@ -49,10 +49,13 @@
     "upgrade:vulcan": "pnpm up '@vulcanjs/*' --latest && pnpm run postinstall",
     "typecheck-watch": "tsc --noEmit --p src/tsconfig.json -w",
     "//typecheck": " # in case of error with @vulcanjs/* package, check that src/types (eg simpl-schema) are up-to-date with vulcan-npm",
-    "typecheck": "tsc --noEmit --p src/tsconfig.json"
+    "typecheck": "tsc --noEmit --p src/tsconfig.json",
+    "tokyodev": "dotenv -e .env.tokyodev.local next"
   },
   "dependencies": {
+    "@devographics/debug": "workspace:^1.0.0",
     "@devographics/fetch": "workspace:^1.0.0",
+    "@devographics/helpers": "workspace:^1.0.0",
     "@devographics/i18n": "workspace:^1.0.0",
     "@devographics/mongo": "workspace:^1.0.0",
     "@devographics/react-i18n": "workspace:1.0.0",
@@ -74,7 +77,7 @@
     "lodash": "^4.17.21",
     "nanoid": "3.3.6",
     "new-github-issue-url": "^1.0.0",
-    "next": "13.4.7",
+    "next": "13.4.8",
     "next-connect": "^0.9.1",
     "next-sitemap": "^1.9.12",
     "node-cache": "^5.1.2",
@@ -113,6 +116,7 @@
     "@types/unist": "^2.0.6",
     "@types/uuid": "^9.0.1",
     "chalk": "^4.1.2",
+    "dotenv": "^10.0.0",
     "esbuild-plugin-yaml": "^0.0.1",
     "eslint": "^7.32.0",
     "mongodb": "^5.5.0",

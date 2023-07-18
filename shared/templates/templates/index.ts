@@ -1,11 +1,10 @@
-import { defaultTemplateFunction } from './default'
-
-export const text = defaultTemplateFunction
-export const longtext = defaultTemplateFunction
-
 export * from './default'
+export * from './text'
+export * from './longtext'
 export * from './multiple'
+export * from './multipleWithOther'
 export * from './single'
+export * from './singleWithOther'
 export * from './dropdown'
 export * from './number'
 export * from './slider'

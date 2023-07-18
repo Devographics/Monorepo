@@ -27,4 +27,5 @@ export type FormInputProps = {
   stateStuff: any;
   sectionNumber: number;
   questionNumber: number;
+  enableReadingList: boolean;
 };

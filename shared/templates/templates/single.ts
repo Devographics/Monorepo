@@ -6,7 +6,7 @@ export const single: TemplateFunction = options => {
     checkHasId(options)
 
     const question = {
-        extends: 'single',
+        inputComponent: 'single',
         allowMultiple: false,
         defaultSort: 'options',
         ...options.question

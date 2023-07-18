@@ -4,7 +4,7 @@ import ShareEmail from "./ShareEmail";
 import ShareFacebook from "./ShareFacebook";
 import ShareLinkedIn from "./ShareLinkedIn";
 import { useIntlContext } from "@devographics/react-i18n";
-import { getEditionTitle } from "~/lib/surveys/helpers";
+import { getEditionTitle } from "~/lib/surveys/helpers/getEditionTitle";
 
 const ShareSite = ({ edition }) => {
   const intl = useIntlContext();

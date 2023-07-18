@@ -1,4 +1,4 @@
-const path = require("path")
+const path = require("path");
 // Use @next/mdx for a basic MDX support.
 // See the how Vulcan Next docs are setup with next-mdx-remote
 // which is more advanced (loading remote MD, supporting styling correctly etc.)
@@ -19,6 +19,7 @@ const moduleExports = (phase, { defaultConfig }) => {
     ...defaultConfig,
     experimental: {
       appDir: true,
+      instrumentationHook: true,
     },
     transpilePackages: [
       "@devographics/permissions",
@@ -62,23 +63,23 @@ const moduleExports = (phase, { defaultConfig }) => {
           "index.js",
           "index.ts",
           "index.jsx",
-          "index.tsx"
-        ]
+          "index.tsx",
+        ];
       }
       if (otherArgs.isServer) {
         config.resolve.mainFiles.push(
           "index.server.ts",
           "index.server.tsx",
           "index.server.js",
-          "index.server.jsx",
-        )
+          "index.server.jsx"
+        );
       } else {
         config.resolve.mainFiles.push(
           "index.client.ts",
           "index.client.tsx",
           "index.client.js",
-          "index.client.jsx",
-        )
+          "index.client.jsx"
+        );
       }
       if (!config.resolve) config.resolve = {};
       // This is still needed for Storybook or 3rd party Webpack baseds tools

@@ -1,8 +1,8 @@
 import { getUsersCollection } from "@devographics/mongo";
-import { createEmailHash } from "~/account/email/api/encryptEmail";
+import { createEmailHash } from "~/lib/email";
 
 const isSimulation = false;
-const updateFieldName = 'updateLegacyAccounts_15Nov2022';
+const updateFieldName = "updateLegacyAccounts_15Nov2022";
 
 export const updateLegacyAccountsHashes = async ({ limit = 1000 }) => {
   limit = Number(limit);
@@ -10,7 +10,7 @@ export const updateLegacyAccountsHashes = async ({ limit = 1000 }) => {
   let i = 0;
   const result = { legacyUsersCount: 0, totalModifiedCount: 0 };
 
-  const Users = await getUsersCollection()
+  const Users = await getUsersCollection();
   const legacyUsers = await Users.find(
     {
       email: { $exists: true },
@@ -44,14 +44,14 @@ export const updateLegacyAccountsHashes = async ({ limit = 1000 }) => {
           },
         }
       );
-      result.totalModifiedCount += update.modifiedCount
+      result.totalModifiedCount += update.modifiedCount;
     }
     i++;
   }
   return result;
 };
 
-updateLegacyAccountsHashes.args = ['limit'];
+updateLegacyAccountsHashes.args = ["limit"];
 
 updateLegacyAccountsHashes.done = true;
 

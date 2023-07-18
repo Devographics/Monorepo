@@ -18,7 +18,7 @@ const EditionLayout = ({
         <a href="#section-questions" className="skip">
           <FormattedMessage id="general.skip_to_content" />
         </a>
-        <DevographicsBanner />
+        {/* <DevographicsBanner /> */}
         <Header edition={edition} />
         <main className="main-contents" id="main-contents">
           {children}

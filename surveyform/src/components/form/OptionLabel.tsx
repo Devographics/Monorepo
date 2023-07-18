@@ -1,4 +1,4 @@
-import { getEntityName } from "~/lib/surveys/helpers";
+import { getEntityName } from "~/lib/surveys/helpers/getEntityName";
 import EntityLabel from "~/components/common/EntityLabel";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import {
@@ -16,8 +16,12 @@ const OptionLabel = ({
   option: OptionMetadata;
   question: QuestionMetadata;
 }) => {
-  const { entity } = option;
   const intl = useIntlContext();
+  const { entity, label } = option;
+
+  if (label) {
+    return label;
+  }
 
   const i18n = getOptioni18nIds({ option, question });
 
