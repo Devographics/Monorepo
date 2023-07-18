@@ -15,12 +15,14 @@ export const fetchLocale = async (
     }
 ) => {
     const { localeId } = options
+    const getQuery = options.getQueryFunction || getLocaleQuery
+    const query = getQuery(options)
     const key = localeCacheKey(options)
     const result = await getFromCache<LocaleDefWithStrings>({
         key,
         fetchFunction: async () => {
             const result = await fetchGraphQLApi({
-                query: getLocaleQuery(options),
+                query,
                 key
             })
             if (!result) throw new Error(`Couldn't fetch locale ${localeId}`)

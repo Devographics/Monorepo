@@ -10,12 +10,14 @@ import { FetcherFunctionOptions } from './types'
  * @returns
  */
 export const fetchAllLocalesMetadata = async (options: FetcherFunctionOptions) => {
+    const getQuery = options.getQueryFunction || getAllLocalesMetadataQuery
+    const query = getQuery()
     const key = allLocalesMetadataCacheKey(options)
     const result = await getFromCache<Array<LocaleDef>>({
         key,
         fetchFunction: async () => {
             const result = await fetchGraphQLApi({
-                query: getAllLocalesMetadataQuery(),
+                query,
                 key
             })
             return result.locales
@@ -32,12 +34,14 @@ export const fetchAllLocalesMetadata = async (options: FetcherFunctionOptions) =
  * @returns
  */
 export const fetchAllLocalesIds = async (options: FetcherFunctionOptions) => {
+    const getQueryFunction = options.getQueryFunction || getAllLocalesIdsQuery
+    const query = getQueryFunction()
     const key = allLocalesIdsCacheKey(options)
     return await getFromCache<Array<string>>({
         key,
         fetchFunction: async () => {
             const result = await fetchGraphQLApi<{ locales: Array<LocaleDef> }>({
-                query: getAllLocalesIdsQuery(),
+                query,
                 key
             })
             return result?.locales.map(l => l.id) || []

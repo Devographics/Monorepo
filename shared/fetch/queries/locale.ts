@@ -1,3 +1,9 @@
+/*
+
+Unless specified, these queries are designed to be used by surveyform
+
+*/
+
 export const getLocaleQuery = ({
     localeId,
     contexts

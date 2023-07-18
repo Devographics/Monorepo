@@ -22,11 +22,13 @@ const filterSurveys = (surveys, serverConfig) => {
  */
 export const fetchSurveysMetadata = async (options: FetcherFunctionOptions) => {
     const { serverConfig } = options
+    const getQuery = options.getQueryFunction || getSurveysQuery
+    const query = getQuery()
     const key = surveysMetadataCacheKey(options)
     const result = await getFromCache<Array<SurveyMetadata>>({
         key,
         fetchFunction: async () => {
-            const result = await fetchGraphQLApi({ query: getSurveysQuery(), key })
+            const result = await fetchGraphQLApi({ query, key })
             if (!result) throw new Error(`Couldn't fetch surveys`)
             return filterSurveys(result._metadata.surveys, serverConfig) as SurveyMetadata[]
         },

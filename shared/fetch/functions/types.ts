@@ -5,4 +5,5 @@ export interface FetcherFunctionOptions {
     shouldThrow?: boolean
     calledFrom?: string
     serverConfig?: Function
+    getQueryFunction?: (options?: any) => string
 }

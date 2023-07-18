@@ -15,6 +15,8 @@ export async function fetchEditionMetadata(
     }
 ) {
     const { appName, surveyId, editionId, calledFrom } = options
+    const getQuery = options.getQueryFunction || getEditionMetadataQuery
+    const query = getQuery({ editionId })
     if (!surveyId) {
         throw new Error(`surveyId not defined (calledFrom: ${calledFrom})`)
     }
@@ -30,7 +32,7 @@ export async function fetchEditionMetadata(
         key,
         fetchFunction: async () => {
             const result = await fetchGraphQLApi({
-                query: getEditionMetadataQuery({ editionId }),
+                query,
                 key
             })
             if (!result) {

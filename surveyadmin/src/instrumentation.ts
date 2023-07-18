@@ -1,4 +1,5 @@
-import { AppName, setAppName, getConfig } from "@devographics/helpers";
+import { setAppName, getConfig } from "@devographics/helpers";
+import { AppName } from "@devographics/types";
 
 export async function register() {
   setAppName(AppName.SURVEYADMIN);

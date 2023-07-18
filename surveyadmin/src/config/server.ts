@@ -4,8 +4,9 @@
  * TODO: add joi validation, add more values to avoid loading "process.env" everywhere in the app
  */
 
-import { AppName, setAppName } from "@devographics/helpers";
+import { setAppName } from "@devographics/helpers";
 import { publicConfig } from "./public";
+import { AppName } from "@devographics/types";
 
 export function serverConfig() {
   checkServerConfig();

@@ -1,3 +1,9 @@
+/*
+
+Unless specified, these queries are designed to be used by surveyform
+
+*/
+
 import { entityFragment } from './entity_fragment'
 
 export const getEditionMetadataQuery = ({ editionId }: { editionId: string }) => `
