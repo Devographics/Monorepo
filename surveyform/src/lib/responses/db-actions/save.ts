@@ -1,8 +1,8 @@
 import { connectToRedis } from "~/lib/server/redis";
 import { getRawResponsesCollection } from "@devographics/mongo";
 import { Actions } from "~/lib/validation";
-import { fetchEditionMetadata } from "~/lib/api/fetch";
-import { EditionMetadata } from "@devographics/types";
+import { fetchEditionMetadata } from "@devographics/fetch";
+import { AppName, EditionMetadata } from "@devographics/types";
 import { getResponseSchema } from "~/lib/responses/schema";
 import { restoreTypes, runFieldCallbacks, OnUpdateProps } from "~/lib/schemas";
 import type { ResponseDocument } from "@devographics/types";
@@ -44,6 +44,7 @@ export async function saveResponse({
   try {
     edition = (
       await fetchEditionMetadata({
+        appName: AppName.SURVEYFORM,
         surveyId,
         editionId,
         calledFrom: "api/response/update",

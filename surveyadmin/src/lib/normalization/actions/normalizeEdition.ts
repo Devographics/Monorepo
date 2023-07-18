@@ -32,7 +32,7 @@ export const normalizeEdition = async (args: NormalizeEditionArgs) => {
     throw new Error(`Could not find survey for surveyId ${surveyId}`);
   }
 
-  const edition = await fetchEditionMetadata({ surveyId, editionId });
+  const { data: edition } = await fetchEditionMetadata({ surveyId, editionId });
   if (!edition) {
     throw new Error(`Could not find edition for editionId ${editionId}`);
   }

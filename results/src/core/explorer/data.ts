@@ -51,7 +51,7 @@ export const runQuery = async (
 
         return json.data
     } catch (error) {
-        console.log(`// runQuery error (API_URL: ${url})`)
+        console.log(`// runQuery error (GATSBY_API_URL: ${url})`)
         console.log(text)
         throw new Error(error)
     }

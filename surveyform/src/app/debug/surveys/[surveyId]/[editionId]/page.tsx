@@ -1,4 +1,5 @@
-import { fetchEditionMetadata } from "~/lib/api/fetch";
+import { fetchEditionMetadata } from "@devographics/fetch";
+import { AppName } from "@devographics/types";
 
 interface Params {
   surveyId: string;
@@ -7,6 +8,7 @@ interface Params {
 export default async function Page({ params }: { params: Params }) {
   const { surveyId, editionId } = params;
   const result = await fetchEditionMetadata({
+    appName: AppName.SURVEYFORM,
     surveyId,
     editionId,
     shouldThrow: false,

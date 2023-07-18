@@ -819,9 +819,9 @@ export const fetchSeriesData = async ({
         currentYear: year
     })
 
-    const url = process.env.GATSBY_DATA_API_URL
+    const url = process.env.GATSBY_API_URL
     if (!url) {
-        throw new Error('GATSBY_DATA_API_URL env variable is not set')
+        throw new Error('GATSBY_API_URL env variable is not set')
     }
     const result: QueryData<AllQuestionData> = await runQuery(url, query, `${block.id}FiltersQuery`)
     console.log('// result')

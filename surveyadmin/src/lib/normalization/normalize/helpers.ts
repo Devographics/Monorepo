@@ -87,7 +87,7 @@ export const getEntitiesData = async () => {
 
 export const initEntities = async () => {
   console.log(`// 🗄️ Initializing entities…`);
-  const entities = await fetchEntities();
+  const { data: entities } = await fetchEntities();
   const rules = generateEntityRules(entities);
   console.log(`  -> Initializing entities done`);
   return { entities, rules };
@@ -447,7 +447,7 @@ export const generateEntityRules = (entities: Array<Entity>) => {
 };
 
 export const logAllRules = async () => {
-  const allEntities = await fetchEntities();
+  const { data: allEntities } = await fetchEntities();
   if (allEntities) {
     let rules = generateEntityRules(allEntities);
     rules = rules.map(({ id, pattern, tags }) => ({

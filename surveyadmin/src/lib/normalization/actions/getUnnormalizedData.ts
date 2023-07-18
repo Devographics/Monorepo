@@ -17,7 +17,7 @@ export const getUnnormalizedData = async ({
   if (!survey) {
     throw new Error(`Could not find survey with id ${surveyId}`);
   }
-  const edition = await fetchEditionMetadata({ surveyId, editionId });
+  const { data: edition } = await fetchEditionMetadata({ surveyId, editionId });
   if (!edition) {
     throw new Error(`Could not find edition with id ${editionId}`);
   }

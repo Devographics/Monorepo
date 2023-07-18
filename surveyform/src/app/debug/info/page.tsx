@@ -1,4 +1,5 @@
-import { AppName, getConfig, getVariables } from "@devographics/helpers";
+import { getConfig, getVariables } from "@devographics/helpers";
+import { AppName } from "@devographics/types";
 
 const limit = 10;
 const format = (s) => {

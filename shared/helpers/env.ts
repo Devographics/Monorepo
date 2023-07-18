@@ -1,12 +1,5 @@
+import { AppName } from '@devographics/types'
 import config_ from './variables.yml'
-
-export enum AppName {
-    SURVEYFORM = 'surveyform',
-    SURVEYADMIN = 'surveyadmin',
-    API = 'api',
-    RESULTS = 'results',
-    GRAPHIQL = 'graphiql'
-}
 
 export enum EnvVar {
     APP_NAME = 'APP_NAME',
@@ -65,6 +58,10 @@ const formatVariable = ({ id, description, example }: EnvVariable) => {
 let appNameGlobal: AppName
 export const setAppName = (appName: AppName) => {
     appNameGlobal = appName
+}
+
+export const getAppName = (appName: AppName) => {
+    return appNameGlobal
 }
 
 const getValue = (variable: EnvVariable) => {

@@ -4,7 +4,7 @@ import { fetchSurveysMetadata } from "~/lib/api/fetch";
 import { routes } from "~/lib/routes";
 
 export default async function Page({ params }) {
-  const surveys = await fetchSurveysMetadata();
+  const { data: surveys } = await fetchSurveysMetadata();
   return (
     <div>
       <Breadcrumbs surveys={surveys} />

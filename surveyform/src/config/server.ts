@@ -1,4 +1,4 @@
-import { AppName, setAppName, getConfig, EnvVar } from "@devographics/helpers";
+import { setAppName, getConfig, EnvVar } from "@devographics/helpers";
 
 /**
  * Parse process env and generate an object with relevant values
@@ -7,6 +7,7 @@ import { AppName, setAppName, getConfig, EnvVar } from "@devographics/helpers";
  */
 
 import { publicConfig } from "./public";
+import { AppName } from "@devographics/types";
 
 // Experimental system with getConfig
 setAppName(AppName.SURVEYFORM);

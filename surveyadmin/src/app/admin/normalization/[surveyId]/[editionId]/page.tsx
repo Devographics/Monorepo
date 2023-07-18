@@ -11,9 +11,9 @@ import { routes } from "~/lib/routes";
 
 export default async function Page({ params }) {
   const { surveyId, editionId } = params;
-  const surveys = await fetchSurveysMetadata();
+  const { data: surveys } = await fetchSurveysMetadata();
   const survey = surveys.find((s) => s.id === surveyId)!;
-  const edition = await fetchEditionMetadata({ surveyId, editionId });
+  const { data: edition } = await fetchEditionMetadata({ surveyId, editionId });
   const questions = getNormalizableQuestions({ survey, edition });
   const responsesCount = await getEditionResponsesCount({ survey, edition });
   const normResponsesCount = await getEditionNormalizedResponsesCount({

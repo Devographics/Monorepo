@@ -39,11 +39,13 @@ export async function fetchEditionMetadata({
   surveyId,
   editionId,
   calledFrom,
+  shouldThrow,
 }: {
   surveyId: string;
   editionId: string;
   calledFrom?: string;
-}): Promise<EditionMetadata> {
+  shouldThrow?: boolean;
+}) {
   if (!surveyId) {
     throw new Error(`surveyId not defined (calledFrom: ${calledFrom})`);
   }
@@ -55,8 +57,6 @@ export async function fetchEditionMetadata({
     editionId,
   });
   return await getFromCache<EditionMetadata>({
-    shouldGetFromCache: false,
-    shouldUpdateCache: false,
     key,
     fetchFunction: async () => {
       const result = await fetchGraphQLApi({
@@ -65,7 +65,7 @@ export async function fetchEditionMetadata({
       });
       if (!result) {
         throw new Error(
-          `Couldn't fetch edition ${editionId}, result: ${
+          `Couldn't fetch survey ${editionId}, result: ${
             result && JSON.stringify(result)
           }`
         );
@@ -74,6 +74,7 @@ export async function fetchEditionMetadata({
     },
     calledFrom,
     serverConfig,
+    shouldThrow,
   });
 }
 
@@ -82,22 +83,22 @@ export async function fetchEditionMetadata({
  * @returns
  */
 export const fetchSurveysMetadata = async (options?: {
-  forceReload?: boolean;
   calledFrom?: string;
-}): Promise<Array<SurveyMetadata>> => {
+  shouldThrow?: boolean;
+}) => {
   const key = surveysMetadataCacheKey();
-  return await getFromCache<Array<SurveyMetadata>>({
-    shouldGetFromCache: false,
-    shouldUpdateCache: false,
+  const result = await getFromCache<Array<SurveyMetadata>>({
     key,
     fetchFunction: async () => {
       const result = await fetchGraphQLApi({ query: getSurveysQuery(), key });
       if (!result) throw new Error(`Couldn't fetch surveys`);
-      return result._metadata.surveys as SurveyMetadata[];
+      return result._metadata.surveys;
     },
     calledFrom: options?.calledFrom,
     serverConfig,
+    shouldThrow: options?.shouldThrow,
   });
+  return result;
 };
 
 export const fetchSurveyMetadata = async ({
@@ -106,7 +107,7 @@ export const fetchSurveyMetadata = async ({
   surveyId: string;
 }) => {
   const allSurveys = await fetchSurveysMetadata();
-  const survey = allSurveys.find((s) => s.id === surveyId);
+  const survey = allSurveys.data.find((s) => s.id === surveyId);
 
   if (!survey) {
     throw new Error(`Couldn't fetch survey ${surveyId}`);
@@ -118,22 +119,23 @@ export const fetchSurveyMetadata = async ({
  * Fetch metadata for all locales
  * @returns
  */
-export const fetchAllLocalesMetadata = async (): Promise<Array<LocaleDef>> => {
+export const fetchAllLocalesMetadata = async (options?: {
+  shouldThrow?: boolean;
+}) => {
   const key = allLocalesMetadataCacheKey();
-  return await getFromCache<any>({
-    shouldGetFromCache: false,
-    shouldUpdateCache: false,
+  const result = await getFromCache<Array<LocaleDef>>({
     key,
     fetchFunction: async () => {
       const result = await fetchGraphQLApi({
         query: getAllLocalesMetadataQuery(),
         key,
-        apiUrl: serverConfig().translationAPI,
       });
       return result.locales;
     },
     serverConfig,
+    shouldThrow: options?.shouldThrow,
   });
+  return result;
 };
 
 /**
@@ -143,21 +145,20 @@ export const fetchAllLocalesMetadata = async (): Promise<Array<LocaleDef>> => {
 export type FetchLocaleOptions = {
   localeId: string;
   contexts: string[];
+  shouldThrow?: boolean;
 };
 export const fetchLocale = async ({
   localeId,
   contexts,
-}: FetchLocaleOptions): Promise<LocaleDefWithStrings> => {
+  shouldThrow,
+}: FetchLocaleOptions) => {
   const key = localeCacheKey({ localeId, contexts });
-  return await getFromCache<any>({
-    shouldGetFromCache: false,
-    shouldUpdateCache: false,
+  const result = await getFromCache<LocaleDefWithStrings>({
     key,
     fetchFunction: async () => {
       const result = await fetchGraphQLApi({
         query: getLocaleQuery({ localeId, contexts }),
         key,
-        apiUrl: serverConfig().translationAPI,
       });
       if (!result) throw new Error(`Couldn't fetch locale ${localeId}`);
       const locale = result.locale;
@@ -174,12 +175,12 @@ export const fetchLocale = async ({
       return convertedLocale as LocaleDefWithStrings;
     },
     serverConfig,
+    shouldThrow,
   });
+  return result;
 };
 
-export const fetchEntities = async (options?: {
-  calledFrom?: string;
-}): Promise<Array<Entity>> => {
+export const fetchEntities = async (options?: { calledFrom?: string }) => {
   const key = allEntitiesCacheKey();
   return await getFromCache<Array<Entity>>({
     shouldGetFromCache: false,

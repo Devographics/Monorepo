@@ -36,7 +36,7 @@ export const normalizeQuestion = async (args: NormalizeQuestionArgs) => {
   const startAt = new Date();
 
   const survey = await fetchSurveyMetadata({ surveyId });
-  const edition = await fetchEditionMetadata({ surveyId, editionId });
+  const { data: edition } = await fetchEditionMetadata({ surveyId, editionId });
   const question = getEditionQuestionById({ edition, questionId });
 
   const rawResponsesCollection = await getRawResponsesCollection(survey);

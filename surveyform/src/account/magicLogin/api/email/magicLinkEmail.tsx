@@ -10,8 +10,8 @@ import { localMailTransport } from "~/lib/server/mail/transports";
  * @see https://reactjs.org/docs/react-dom-server.html
  */
 import Mail from "nodemailer/lib/mailer";
-import { fetchEditionMetadata } from "~/lib/api/fetch";
-import { SurveyMetadata } from "@devographics/types";
+import { fetchEditionMetadata } from "@devographics/fetch";
+import { SurveyMetadata, AppName } from "@devographics/types";
 import { MagicLoginSendEmailBody } from "../../typings/requests-body";
 
 const MagicLinkHtml = ({
@@ -60,6 +60,7 @@ export const sendMagicLinkEmail = async ({
    * We use state of js as the default context when user is connecting from the generic form
    */
   const { data: edition } = await fetchEditionMetadata({
+    appName: AppName.SURVEYFORM,
     surveyId: surveyId || defaultSurveyId,
     editionId: editionId || defaultEditionId,
     calledFrom: "sendMagicLinkEmail",

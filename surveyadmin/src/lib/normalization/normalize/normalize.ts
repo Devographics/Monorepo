@@ -43,8 +43,9 @@ const fetchDataIfNeeded = async (options: NormalizationOptions) => {
   const { surveyId, editionId } = response;
   const survey = options.survey || (await fetchSurveyMetadata({ surveyId }));
   const edition =
-    options.edition || (await fetchEditionMetadata({ surveyId, editionId }));
-  const entities = options.entities || (await fetchEntities());
+    options.edition ||
+    (await fetchEditionMetadata({ surveyId, editionId })).data;
+  const entities = options.entities || (await fetchEntities()).data;
   const entityRules = options.entityRules || generateEntityRules(entities);
   return {
     survey,

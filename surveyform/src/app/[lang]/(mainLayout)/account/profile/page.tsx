@@ -6,8 +6,8 @@ import { redirect } from "next/navigation";
 import { getRawResponsesCollection } from "@devographics/mongo";
 import { UserDocument } from "~/account/user/typings";
 import { cache } from "react";
-import type { ResponseDocument } from "@devographics/types";
-import { fetchSurveysMetadata } from "~/lib/api/fetch";
+import { AppName, type ResponseDocument } from "@devographics/types";
+import { fetchSurveysMetadata } from "@devographics/fetch";
 import { rscCurrentUser } from "~/account/user/rsc-fetchers/rscCurrentUser";
 
 const getResponses = cache(
@@ -23,6 +23,7 @@ const getResponses = cache(
 
 const Profile = async ({ params }) => {
   const { data: surveys } = await fetchSurveysMetadata({
+    appName: AppName.SURVEYFORM,
     calledFrom: "UserResponses",
   });
 

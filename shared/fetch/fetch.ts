@@ -126,7 +126,7 @@ export async function getFromCache<T = any>({
     key,
     fetchFunction: fetchFromSource,
     calledFrom,
-    serverConfig,
+    serverConfig = () => ({}),
     shouldGetFromCache: shouldGetFromCacheOptions,
     shouldUpdateCache = true,
     shouldThrow = true
@@ -134,7 +134,7 @@ export async function getFromCache<T = any>({
     key: string
     fetchFunction: () => Promise<T>
     calledFrom?: string
-    serverConfig: Function
+    serverConfig?: Function
     shouldGetFromCache?: boolean
     shouldUpdateCache?: boolean
     shouldThrow?: boolean

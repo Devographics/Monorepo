@@ -60,9 +60,9 @@ const CommentsWrapper = ({ block, name }) => {
         const getData = async () => {
             setIsLoading(true)
             const query = getQuery(queryOptions)
-            const url = process.env.GATSBY_DATA_API_URL
+            const url = process.env.GATSBY_API_URL
             if (!url) {
-                throw new Error('GATSBY_DATA_API_URL env variable is not set')
+                throw new Error('GATSBY_API_URL env variable is not set')
             }
             const result = await runQuery(url, query, getQueryName(queryOptions))
             const comments =

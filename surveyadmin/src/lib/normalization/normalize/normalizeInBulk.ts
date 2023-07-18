@@ -83,7 +83,7 @@ export const normalizeInBulk = async (options: {
 
   const bulkOperations: BulkOperation[] = [];
 
-  const entities = await fetchEntities();
+  const { data: entities } = await fetchEntities();
   const entityRules = generateEntityRules(entities);
 
   // console.log(JSON.stringify(selector, null, 2))

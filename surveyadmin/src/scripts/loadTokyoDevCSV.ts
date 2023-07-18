@@ -211,8 +211,10 @@ const getOptionValues = (
 };
 
 export const loadTokyoDevCSV = async () => {
-  const allSurveysMetadata = await fetchSurveysMetadata({ forceReload: true });
-  const entities = await fetchEntities();
+  const { data: allSurveysMetadata } = await fetchSurveysMetadata({
+    forceReload: true,
+  });
+  const { data: entities } = await fetchEntities();
   const survey = allSurveysMetadata.find((s) => s.id === "tokyodev") as Survey;
   const allEditions = await loadAllEditions(allSurveysMetadata, "tokyodev");
 
