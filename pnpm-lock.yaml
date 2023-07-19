@@ -256,9 +256,6 @@ importers:
       '@devographics/constants':
         specifier: workspace:^1.0.0
         version: link:../shared/constants
-      '@devographics/core-models':
-        specifier: workspace:^1.0.0
-        version: link:../shared/core-models
       '@devographics/helpers':
         specifier: workspace:^1.0.0
         version: link:../shared/helpers
@@ -588,95 +585,6 @@ importers:
         specifier: ^18.11.18
         version: 18.11.18
 
-  shared/core-models:
-    dependencies:
-      '@devographics/redis':
-        specifier: workspace:^1.0.0
-        version: link:../redis
-      '@devographics/types':
-        specifier: workspace:^1.0.0
-        version: link:../types
-      '@types/lodash':
-        specifier: ^4.14.175
-        version: 4.14.184
-      '@vulcanjs/graphql':
-        specifier: ^0.7.1
-        version: 0.7.1(@apollo/client@3.7.17)(apollo-server@2.26.1)(graphql@16.7.1)(moment@2.29.4)(react-dom@17.0.2)(react@17.0.2)
-      '@vulcanjs/mongo':
-        specifier: ^0.7.1
-        version: 0.7.1(moment@2.29.4)(mongodb@5.5.0)(mongoose@7.4.0)(react-dom@17.0.2)(react@17.0.2)
-      graphql-tag:
-        specifier: ^2.12.6
-        version: 2.12.6(graphql@16.7.1)
-      ioredis:
-        specifier: ^5.2.4
-        version: 5.2.4
-      js-yaml:
-        specifier: ^4.1.0
-        version: 4.1.0
-      lodash:
-        specifier: ^4.17.21
-        version: 4.17.21
-      moment:
-        specifier: ^2.29.4
-        version: 2.29.4
-      nanoid:
-        specifier: ^3.1.25
-        version: 3.3.4
-      node-cache:
-        specifier: ^5.1.2
-        version: 5.1.2
-    devDependencies:
-      '@types/node':
-        specifier: ^18.11.18
-        version: 18.11.18
-
-  shared/crud:
-    dependencies:
-      '@vulcanjs/crud':
-        specifier: ^0.7.2-alpha.8
-        version: 0.7.2-alpha.8(react-dom@17.0.2)(react@17.0.2)
-      '@vulcanjs/graphql':
-        specifier: ^0.8.1-y.0
-        version: 0.8.1-y.0(@apollo/client@3.7.17)(apollo-server@2.26.1)(graphql@15.8.0)(react-dom@17.0.2)(react@17.0.2)
-      '@vulcanjs/model':
-        specifier: 0.7.2-alpha.8
-        version: 0.7.2-alpha.8
-      '@vulcanjs/mongo':
-        specifier: ^0.8.1
-        version: 0.8.1(mongodb@5.5.0)(mongoose@7.4.0)(react-dom@17.0.2)(react@17.0.2)
-      '@vulcanjs/permissions':
-        specifier: 0.7.2-alpha.8
-        version: 0.7.2-alpha.8(react-dom@17.0.2)(react@17.0.2)
-      debug:
-        specifier: ^4.3.1
-        version: 4.3.4(supports-color@8.1.1)
-      graphql:
-        specifier: ^15.5.0
-        version: 15.8.0
-      graphql-tag:
-        specifier: ^2.12.6
-        version: 2.12.6(graphql@15.8.0)
-      lodash:
-        specifier: ^4.17.20
-        version: 4.17.21
-    devDependencies:
-      '@testing-library/react-hooks':
-        specifier: ^3.4.1
-        version: 3.7.0(react-test-renderer@16.14.0)(react@17.0.2)
-      '@vulcanjs/schema':
-        specifier: ^0.7.2-alpha.8
-        version: 0.7.2-alpha.8
-      mock-apollo-client:
-        specifier: ^1.1.0
-        version: 1.2.1(@apollo/client@3.7.17)
-      react-test-renderer:
-        specifier: ^16.13.1
-        version: 16.14.0(react@17.0.2)
-      urql:
-        specifier: ^3.0.3
-        version: 3.0.3(graphql@15.8.0)(react@17.0.2)
-
   shared/debug:
     dependencies:
       '@devographics/types':
@@ -795,113 +703,6 @@ importers:
         specifier: ^4.14.168
         version: 4.14.190
 
-  shared/react-form:
-    dependencies:
-      '@devographics/i18n':
-        specifier: workspace:*
-        version: link:../i18n
-      '@devographics/react-i18n':
-        specifier: workspace:*
-        version: link:../react-i18n
-      '@vulcanjs/core':
-        specifier: ^0.7.2-alpha.8
-        version: 0.7.2-alpha.8
-      '@vulcanjs/graphql':
-        specifier: ^0.8.1-y.0
-        version: 0.8.1-y.0(@apollo/client@3.7.17)(apollo-server@2.26.1)(graphql@15.8.0)(react-dom@18.2.0)(react@18.2.0)
-      '@vulcanjs/model':
-        specifier: ^0.7.2-alpha.8
-        version: 0.7.2-alpha.8
-      '@vulcanjs/permissions':
-        specifier: ^0.7.2-alpha.8
-        version: 0.7.2-alpha.8(react-dom@18.2.0)(react@18.2.0)
-      '@vulcanjs/schema':
-        specifier: ^0.7.2-alpha.8
-        version: 0.7.2-alpha.8
-      '@vulcanjs/utils':
-        specifier: ^0.7.2-alpha.8
-        version: 0.7.2-alpha.8
-      classnames:
-        specifier: ^2.3.1
-        version: 2.3.2
-      debug:
-        specifier: ^4.3.1
-        version: 4.3.4(supports-color@8.1.1)
-      graphql:
-        specifier: ^15.5.0
-        version: 15.8.0
-      lodash:
-        specifier: ^4.17.21
-        version: 4.17.21
-      simpl-schema:
-        specifier: ^1.12.0
-        version: 1.13.1
-      urql:
-        specifier: '>=3.0.3'
-        version: 3.0.3(graphql@15.8.0)(react@18.2.0)
-    devDependencies:
-      '@types/lodash':
-        specifier: ^4.14.168
-        version: 4.14.190
-      '@types/react':
-        specifier: ^18.0.27
-        version: 18.0.27
-      '@types/underscore':
-        specifier: ^1.11.1
-        version: 1.11.4
-      react:
-        specifier: ^18.2.0
-        version: 18.2.0
-      react-dom:
-        specifier: ^18.2.0
-        version: 18.2.0(react@18.2.0)
-
-  shared/react-hooks:
-    dependencies:
-      '@devographics/crud':
-        specifier: workspace:*
-        version: link:../crud
-      '@vulcanjs/crud':
-        specifier: ^0.7.2-alpha.8
-        version: 0.7.2-alpha.8(react-dom@17.0.2)(react@17.0.2)
-      '@vulcanjs/graphql':
-        specifier: ^0.8.1-y.0
-        version: 0.8.1-y.0(@apollo/client@3.7.17)(apollo-server@2.26.1)(graphql@15.8.0)(react-dom@17.0.2)(react@17.0.2)
-      '@vulcanjs/mongo':
-        specifier: ^0.8.1
-        version: 0.8.1(mongodb@5.5.0)(mongoose@7.4.0)(react-dom@17.0.2)(react@17.0.2)
-      debug:
-        specifier: ^4.3.1
-        version: 4.3.4(supports-color@8.1.1)
-      graphql:
-        specifier: ^15.5.0
-        version: 15.8.0
-      graphql-tag:
-        specifier: ^2.12.6
-        version: 2.12.6(graphql@15.8.0)
-      lodash:
-        specifier: ^4.17.20
-        version: 4.17.21
-      mingo:
-        specifier: ^3.0.6
-        version: 3.1.0
-    devDependencies:
-      '@testing-library/react-hooks':
-        specifier: ^3.4.1
-        version: 3.7.0(react-test-renderer@16.14.0)(react@17.0.2)
-      '@vulcanjs/schema':
-        specifier: ^0.7.2-alpha.8
-        version: 0.7.2-alpha.8
-      mock-apollo-client:
-        specifier: ^1.1.0
-        version: 1.2.1(@apollo/client@3.7.17)
-      react-test-renderer:
-        specifier: ^16.13.1
-        version: 16.14.0(react@17.0.2)
-      urql:
-        specifier: ^3.0.3
-        version: 3.0.3(graphql@15.8.0)(react@17.0.2)
-
   shared/react-i18n:
     devDependencies:
       '@types/react':
@@ -971,7 +772,7 @@ importers:
         version: 0.7.1(@apollo/client@3.7.17)(apollo-server@2.26.1)(graphql@16.7.1)(moment@2.29.4)(react-dom@17.0.2)(react@17.0.2)
       '@vulcanjs/mongo':
         specifier: ^0.7.1
-        version: 0.7.1(moment@2.29.4)(mongodb@5.5.0)(mongoose@7.4.0)(react-dom@17.0.2)(react@17.0.2)
+        version: 0.7.1(moment@2.29.4)(mongodb@5.7.0)(mongoose@7.4.0)(react-dom@17.0.2)(react@17.0.2)
       graphql-tag:
         specifier: ^2.12.6
         version: 2.12.6(graphql@16.7.1)
@@ -1631,77 +1432,6 @@ packages:
       leven: 3.1.0
     dev: false
 
-  /@apollo/client@3.7.17(graphql@15.8.0)(react-dom@17.0.2)(react@17.0.2):
-    resolution: {integrity: sha512-0EErSHEtKPNl5wgWikHJbKFAzJ/k11O0WO2QyqZSHpdxdAnw7UWHY4YiLbHCFG7lhrD+NTQ3Z/H9Jn4rcikoJA==}
-    peerDependencies:
-      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-      graphql-ws: ^5.5.5
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0
-      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-      subscriptions-transport-ws: ^0.9.0 || ^0.11.0
-    peerDependenciesMeta:
-      graphql-ws:
-        optional: true
-      react:
-        optional: true
-      react-dom:
-        optional: true
-      subscriptions-transport-ws:
-        optional: true
-    dependencies:
-      '@graphql-typed-document-node/core': 3.1.1(graphql@15.8.0)
-      '@wry/context': 0.7.0
-      '@wry/equality': 0.5.3
-      '@wry/trie': 0.4.3
-      graphql: 15.8.0
-      graphql-tag: 2.12.6(graphql@15.8.0)
-      hoist-non-react-statics: 3.3.2
-      optimism: 0.16.2
-      prop-types: 15.8.1
-      react: 17.0.2
-      react-dom: 17.0.2(react@17.0.2)
-      response-iterator: 0.2.6
-      symbol-observable: 4.0.0
-      ts-invariant: 0.10.3
-      tslib: 2.6.0
-      zen-observable-ts: 1.2.5
-
-  /@apollo/client@3.7.17(graphql@15.8.0)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-0EErSHEtKPNl5wgWikHJbKFAzJ/k11O0WO2QyqZSHpdxdAnw7UWHY4YiLbHCFG7lhrD+NTQ3Z/H9Jn4rcikoJA==}
-    peerDependencies:
-      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-      graphql-ws: ^5.5.5
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0
-      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-      subscriptions-transport-ws: ^0.9.0 || ^0.11.0
-    peerDependenciesMeta:
-      graphql-ws:
-        optional: true
-      react:
-        optional: true
-      react-dom:
-        optional: true
-      subscriptions-transport-ws:
-        optional: true
-    dependencies:
-      '@graphql-typed-document-node/core': 3.1.1(graphql@15.8.0)
-      '@wry/context': 0.7.0
-      '@wry/equality': 0.5.3
-      '@wry/trie': 0.4.3
-      graphql: 15.8.0
-      graphql-tag: 2.12.6(graphql@15.8.0)
-      hoist-non-react-statics: 3.3.2
-      optimism: 0.16.2
-      prop-types: 15.8.1
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-      response-iterator: 0.2.6
-      symbol-observable: 4.0.0
-      ts-invariant: 0.10.3
-      tslib: 2.6.0
-      zen-observable-ts: 1.2.5
-    dev: false
-
   /@apollo/client@3.7.17(graphql@16.7.1)(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-0EErSHEtKPNl5wgWikHJbKFAzJ/k11O0WO2QyqZSHpdxdAnw7UWHY4YiLbHCFG7lhrD+NTQ3Z/H9Jn4rcikoJA==}
     peerDependencies:
@@ -1929,15 +1659,6 @@ packages:
       graphql: 16.6.0
     dev: false
 
-  /@apollographql/apollo-tools@0.5.4(graphql@15.8.0):
-    resolution: {integrity: sha512-shM3q7rUbNyXVVRkQJQseXv6bnYM3BUma/eZhwXR4xsuM+bqWnJKvW7SAfRjP7LuSCocrexa5AXhjjawNHrIlw==}
-    engines: {node: '>=8', npm: '>=6'}
-    peerDependencies:
-      graphql: ^14.2.1 || ^15.0.0 || ^16.0.0
-    dependencies:
-      graphql: 15.8.0
-    dev: false
-
   /@apollographql/apollo-tools@0.5.4(graphql@16.6.0):
     resolution: {integrity: sha512-shM3q7rUbNyXVVRkQJQseXv6bnYM3BUma/eZhwXR4xsuM+bqWnJKvW7SAfRjP7LuSCocrexa5AXhjjawNHrIlw==}
     engines: {node: '>=8', npm: '>=6'}
@@ -1966,22 +1687,6 @@ packages:
     resolution: {integrity: sha512-xCcXpoz52rI4ksJSdOCxeOCn2DLocxwHf9dVT/Q90Pte1LX+LY+91SFtJF3KXVHH8kEin+g1KKCQPKBjZJfWNA==}
     dependencies:
       xss: 1.0.14
-    dev: false
-
-  /@apollographql/graphql-upload-8-fork@8.1.4(graphql@15.8.0):
-    resolution: {integrity: sha512-lHAj/PUegYu02zza9Pg0bQQYH5I0ah1nyIzu2YIqOv41P0vu3GCBISAmQCfFHThK7N3dy7dLFPhoKcXlXRLPoQ==}
-    engines: {node: '>=8.5'}
-    peerDependencies:
-      graphql: 0.13.1 - 15
-    dependencies:
-      '@types/express': 4.17.17
-      '@types/fs-capacitor': 2.0.0
-      '@types/koa': 2.13.6
-      busboy: 0.3.1
-      fs-capacitor: 2.0.4
-      graphql: 15.8.0
-      http-errors: 1.7.3
-      object-path: 0.11.8
     dev: false
 
   /@apollographql/graphql-upload-8-fork@8.1.4(graphql@16.7.1):
@@ -5494,6 +5199,7 @@ packages:
     engines: {node: '>=6.9.0'}
     dependencies:
       regenerator-runtime: 0.13.11
+    dev: false
 
   /@babel/runtime@7.21.0:
     resolution: {integrity: sha512-xwII0//EObnq89Ji5AKYQaRYiW/nZ3llSv29d49IuxPhKbtJoLP+9QUUZ4nVragQVtaVGeZrpB+ZtG/Pdy/POw==}
@@ -7045,13 +6751,6 @@ packages:
       tslib: 2.6.0
       value-or-promise: 1.0.11
     dev: false
-
-  /@graphql-typed-document-node/core@3.1.1(graphql@15.8.0):
-    resolution: {integrity: sha512-NQ17ii0rK1b34VZonlmT2QMJFI70m0TRwbknO/ihlbatXyaktDhN/98vBiUU6kNBPljqGqyIrl2T4nY2RpFANg==}
-    peerDependencies:
-      graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
-    dependencies:
-      graphql: 15.8.0
 
   /@graphql-typed-document-node/core@3.1.1(graphql@16.7.1):
     resolution: {integrity: sha512-NQ17ii0rK1b34VZonlmT2QMJFI70m0TRwbknO/ihlbatXyaktDhN/98vBiUU6kNBPljqGqyIrl2T4nY2RpFANg==}
@@ -11218,19 +10917,6 @@ packages:
     dev: false
     optional: true
 
-  /@testing-library/react-hooks@3.7.0(react-test-renderer@16.14.0)(react@17.0.2):
-    resolution: {integrity: sha512-TwfbY6BWtWIHitjT05sbllyLIProcysC0dF0q1bbDa7OHLC6A6rJOYJwZ13hzfz3O4RtOuInmprBozJRyyo7/g==}
-    requiresBuild: true
-    peerDependencies:
-      react: '>=16.9.0'
-      react-test-renderer: '>=16.9.0'
-    dependencies:
-      '@babel/runtime': 7.20.7
-      '@types/testing-library__react-hooks': 3.4.1
-      react: 17.0.2
-      react-test-renderer: 16.14.0(react@17.0.2)
-    dev: true
-
   /@testing-library/react-hooks@3.7.0(react-test-renderer@16.14.0)(react@18.2.0):
     resolution: {integrity: sha512-TwfbY6BWtWIHitjT05sbllyLIProcysC0dF0q1bbDa7OHLC6A6rJOYJwZ13hzfz3O4RtOuInmprBozJRyyo7/g==}
     requiresBuild: true
@@ -11242,6 +10928,7 @@ packages:
       '@types/testing-library__react-hooks': 3.4.1
       react: 18.2.0
       react-test-renderer: 16.14.0(react@18.2.0)
+    dev: false
     optional: true
 
   /@testing-library/react@10.4.9(react-dom@18.2.0)(react@18.2.0):
@@ -11710,6 +11397,7 @@ packages:
 
   /@types/lodash@4.14.184:
     resolution: {integrity: sha512-RoZphVtHbxPZizt4IcILciSWiC6dcn+eZ8oX9IWEYfDMcocdd42f7NPI6fQj+6zI8y4E0L7gu2pcZKLGTRaV9Q==}
+    dev: true
 
   /@types/lodash@4.14.190:
     resolution: {integrity: sha512-5iJ3FBJBvQHQ8sFhEhJfjUP+G+LalhavTkYyrAYqz5MEJG+erSv0k9KJLb6q7++17Lafk1scaTIFXcMJlwK8Mw==}
@@ -11883,6 +11571,8 @@ packages:
     resolution: {integrity: sha512-C7/5FBJ3g3sqUahguGi03O79b8afNeSD6T8/GU50oQrJCU0bVCCGQHaGKUbg2Ce8VQEEqTw8/HiS6lXHHdgkdQ==}
     dependencies:
       '@types/react': 18.2.14
+    dev: false
+    optional: true
 
   /@types/react-transition-group@4.4.5:
     resolution: {integrity: sha512-juKD/eiSM3/xZYzjuzH6ZwpP+/lejltmiS3QEzV/vmb/Q8+HfDmxu+Baga8UEMGBqV88Nbg4l2hY/K2DkyaLLA==}
@@ -12042,6 +11732,8 @@ packages:
     resolution: {integrity: sha512-G4JdzEcq61fUyV6wVW9ebHWEiLK2iQvaBuCHHn9eMSbZzVh4Z4wHnUGIvQOYCCYeu5DnUtFyNYuAAgbSaO/43Q==}
     dependencies:
       '@types/react-test-renderer': 18.0.0
+    dev: false
+    optional: true
 
   /@types/through@0.0.30:
     resolution: {integrity: sha512-FvnCJljyxhPM3gkRgWmxmDZyAQSiBQQWLI0A0VFL0K7W1oRUrPJSqNO0NvTnLkBcotdlp3lKvaT0JrnyRDkzOg==}
@@ -12065,10 +11757,6 @@ packages:
   /@types/trusted-types@2.0.3:
     resolution: {integrity: sha512-NfQ4gyz38SL8sDNrSixxU2Os1a5xcdFxipAFxYEuLUlvU2uDwS4NUpsImcf1//SlWItCVMMLiylsxbmNMToV/g==}
     dev: false
-
-  /@types/underscore@1.11.4:
-    resolution: {integrity: sha512-uO4CD2ELOjw8tasUrAhvnn2W4A0ZECOvMjCivJr4gA9pGgjv+qxKWY9GLTMVEK8ej85BxQOocUyE7hImmSQYcg==}
-    dev: true
 
   /@types/unist@2.0.6:
     resolution: {integrity: sha512-PBjIUxZHOuj0R15/xuwJYjFi+KZdNFrehocChv4g5hu6aFroHue8m0lBP0POdK2nKzbw0cgV1mws8+V/JAcEkQ==}
@@ -12722,14 +12410,6 @@ packages:
       - encoding
     dev: false
 
-  /@urql/core@3.1.1(graphql@15.8.0):
-    resolution: {integrity: sha512-Mnxtq4I4QeFJsgs7Iytw+HyhiGxISR6qtyk66c9tipozLZ6QVxrCiUPF2HY4BxNIabaxcp+rivadvm8NAnXj4Q==}
-    peerDependencies:
-      graphql: ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
-    dependencies:
-      graphql: 15.8.0
-      wonka: 6.1.2
-
   /@vercel/analytics@0.1.5(react@18.2.0):
     resolution: {integrity: sha512-/k9N8Ea3Yc5A52GlkjzUEbi2vE/izClrOf++ryBkxEfrZM/OZwtHkdNw/QExZ1h/B67RCZLK7bCOnKKrhG7gTg==}
     peerDependencies:
@@ -12767,17 +12447,6 @@ packages:
       - supports-color
     dev: false
 
-  /@vulcanjs/core@0.7.2-alpha.8:
-    resolution: {integrity: sha512-mDqAsbUJnodDBKd7ka7NEcLvHDZrg6BrM5DeOq/jugGxiegVmKhC/MLIj5rUdnyZGF6+vZJdmovjIvmTUoyVRw==}
-    dependencies:
-      '@vulcanjs/utils': 0.7.2-alpha.8
-      debug: 4.3.4(supports-color@8.1.1)
-      lodash: 4.17.21
-    transitivePeerDependencies:
-      - encoding
-      - supports-color
-    dev: false
-
   /@vulcanjs/crud@0.7.1(moment@2.29.4)(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-3vdjG4HuNhqUMpb+63JtY23V8HoM4jRIYtwgcN5+JAv8t4afzyyIIwXLHdE/OnAiHgRNvuOjRJ/mamHJ8hwLTg==}
     dependencies:
@@ -12793,44 +12462,6 @@ packages:
     transitivePeerDependencies:
       - encoding
       - moment
-      - react
-      - react-dom
-      - supports-color
-    dev: false
-
-  /@vulcanjs/crud@0.7.2-alpha.8(react-dom@17.0.2)(react@17.0.2):
-    resolution: {integrity: sha512-GdCicxLLoQYdgGm2NRiSi5e/7r52M8/KBelWgzlX8md9qusyx+JFssguuI2RuYB1MTa10Uv+yo0e0W+/4jBgZw==}
-    dependencies:
-      '@vulcanjs/core': 0.7.2-alpha.8
-      '@vulcanjs/model': 0.7.2-alpha.8
-      '@vulcanjs/permissions': 0.7.2-alpha.8(react-dom@17.0.2)(react@17.0.2)
-      '@vulcanjs/schema': 0.7.2-alpha.8
-      '@vulcanjs/utils': 0.7.2-alpha.8
-      debug: 4.3.4(supports-color@8.1.1)
-      lodash: 4.17.21
-    optionalDependencies:
-      msw: 0.35.0
-    transitivePeerDependencies:
-      - encoding
-      - react
-      - react-dom
-      - supports-color
-    dev: false
-
-  /@vulcanjs/crud@0.7.2-alpha.8(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-GdCicxLLoQYdgGm2NRiSi5e/7r52M8/KBelWgzlX8md9qusyx+JFssguuI2RuYB1MTa10Uv+yo0e0W+/4jBgZw==}
-    dependencies:
-      '@vulcanjs/core': 0.7.2-alpha.8
-      '@vulcanjs/model': 0.7.2-alpha.8
-      '@vulcanjs/permissions': 0.7.2-alpha.8(react-dom@18.2.0)(react@18.2.0)
-      '@vulcanjs/schema': 0.7.2-alpha.8
-      '@vulcanjs/utils': 0.7.2-alpha.8
-      debug: 4.3.4(supports-color@8.1.1)
-      lodash: 4.17.21
-    optionalDependencies:
-      msw: 0.35.0
-    transitivePeerDependencies:
-      - encoding
       - react
       - react-dom
       - supports-color
@@ -12870,72 +12501,6 @@ packages:
       - supports-color
     dev: false
 
-  /@vulcanjs/graphql@0.8.1-y.0(@apollo/client@3.7.17)(apollo-server@2.26.1)(graphql@15.8.0)(react-dom@17.0.2)(react@17.0.2):
-    resolution: {integrity: sha512-KovmJfUv5cNIkEwwWs3phXdvhzICrtFsai5MQXvIjKgJwiNGRHqOMB+D8CH8XVAuigE4Gv0aOilzE+EgAR2aPw==}
-    peerDependencies:
-      '@apollo/client': ^3.5.5
-      apollo-server: ^2.18.2
-      graphql: ^16.2.0
-      react: ^17.0.1
-    dependencies:
-      '@apollo/client': 3.7.17(graphql@15.8.0)(react-dom@17.0.2)(react@17.0.2)
-      '@vulcanjs/crud': 0.7.2-alpha.8(react-dom@17.0.2)(react@17.0.2)
-      '@vulcanjs/i18n': 0.8.1-y.0(@apollo/client@3.7.17)
-      '@vulcanjs/model': 0.7.2-alpha.8
-      '@vulcanjs/permissions': 0.7.2-alpha.8(react-dom@17.0.2)(react@17.0.2)
-      '@vulcanjs/schema': 0.7.2-alpha.8
-      '@vulcanjs/utils': 0.7.2-alpha.8
-      apollo-datasource: 3.3.2
-      apollo-server: 2.26.1(graphql@15.8.0)
-      debug: 4.3.4(supports-color@8.1.1)
-      deepmerge: 4.2.2
-      graphql: 15.8.0
-      graphql-date: 1.0.3(graphql@15.8.0)
-      graphql-type-json: 0.3.2(graphql@15.8.0)
-      lodash: 4.17.21
-      moment-timezone: 0.5.38
-      react: 17.0.2
-    optionalDependencies:
-      msw: 0.35.0
-    transitivePeerDependencies:
-      - encoding
-      - react-dom
-      - supports-color
-    dev: false
-
-  /@vulcanjs/graphql@0.8.1-y.0(@apollo/client@3.7.17)(apollo-server@2.26.1)(graphql@15.8.0)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-KovmJfUv5cNIkEwwWs3phXdvhzICrtFsai5MQXvIjKgJwiNGRHqOMB+D8CH8XVAuigE4Gv0aOilzE+EgAR2aPw==}
-    peerDependencies:
-      '@apollo/client': ^3.5.5
-      apollo-server: ^2.18.2
-      graphql: ^16.2.0
-      react: ^17.0.1
-    dependencies:
-      '@apollo/client': 3.7.17(graphql@15.8.0)(react-dom@18.2.0)(react@18.2.0)
-      '@vulcanjs/crud': 0.7.2-alpha.8(react-dom@18.2.0)(react@18.2.0)
-      '@vulcanjs/i18n': 0.8.1-y.0(@apollo/client@3.7.17)
-      '@vulcanjs/model': 0.7.2-alpha.8
-      '@vulcanjs/permissions': 0.7.2-alpha.8(react-dom@18.2.0)(react@18.2.0)
-      '@vulcanjs/schema': 0.7.2-alpha.8
-      '@vulcanjs/utils': 0.7.2-alpha.8
-      apollo-datasource: 3.3.2
-      apollo-server: 2.26.1(graphql@15.8.0)
-      debug: 4.3.4(supports-color@8.1.1)
-      deepmerge: 4.2.2
-      graphql: 15.8.0
-      graphql-date: 1.0.3(graphql@15.8.0)
-      graphql-type-json: 0.3.2(graphql@15.8.0)
-      lodash: 4.17.21
-      moment-timezone: 0.5.38
-      react: 18.2.0
-    optionalDependencies:
-      msw: 0.35.0
-    transitivePeerDependencies:
-      - encoding
-      - react-dom
-      - supports-color
-    dev: false
-
   /@vulcanjs/i18n@0.7.1(@apollo/client@3.7.17)(moment@2.29.4):
     resolution: {integrity: sha512-8gQdgBISAj+UCrMvvgXSpRGEv4PnyjIEzaOy+9/k9YCEPVTKpzaWJzYlfu3Le91DPFJh3j+85/atih+o/XHbzw==}
     peerDependencies:
@@ -12952,21 +12517,6 @@ packages:
       - supports-color
     dev: false
 
-  /@vulcanjs/i18n@0.8.1-y.0(@apollo/client@3.7.17):
-    resolution: {integrity: sha512-vVaG2IqOB89gMArhgs0gpQLZ6XRR8619ACvTJbruWvTZIqeq69qR13NW2apkC+epkXaFMIz7A8m1e8a9X3H1XA==}
-    peerDependencies:
-      '@apollo/client': ^3.5.5
-    dependencies:
-      '@apollo/client': 3.7.17(graphql@15.8.0)(react-dom@17.0.2)(react@17.0.2)
-      '@vulcanjs/schema': 0.7.2-alpha.8
-      '@vulcanjs/utils': 0.7.2-alpha.8
-      prop-types: 15.8.1
-      simpl-schema: 1.13.1
-    transitivePeerDependencies:
-      - encoding
-      - supports-color
-    dev: false
-
   /@vulcanjs/model@0.7.1:
     resolution: {integrity: sha512-O7528y4ShejGGlPxdrE1vj4baYaSLT265S9NS/x4FtC8i/x99ZBsu1tfHKvxYLrlAuoFf5j5rjiZH8nk1lYDSw==}
     dependencies:
@@ -12974,14 +12524,7 @@ packages:
       lodash: 4.17.21
     dev: false
 
-  /@vulcanjs/model@0.7.2-alpha.8:
-    resolution: {integrity: sha512-RAzwKuC7pWxGwvTE8RoKDRaz0qQ6ZKOGgphddWPglF7vPbHwnjIxZ1/HuqFK8b+cotwX63mlvgE0VdWO7vLAQw==}
-    dependencies:
-      '@vulcanjs/schema': 0.7.2-alpha.8
-      lodash: 4.17.21
-    dev: false
-
-  /@vulcanjs/mongo@0.7.1(moment@2.29.4)(mongodb@5.5.0)(mongoose@7.4.0)(react-dom@17.0.2)(react@17.0.2):
+  /@vulcanjs/mongo@0.7.1(moment@2.29.4)(mongodb@5.7.0)(mongoose@7.4.0)(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-7T22Exav5iUFaS8HM8QhqYPd3ig7/cGYdaUUlxxMgHJu4WzwHNfm7vTAY8IHNzRf4B5Xgjcv+S+urSmEHLn4rA==}
     peerDependencies:
       mongodb: '>= 3.6.2'
@@ -12993,7 +12536,7 @@ packages:
       '@vulcanjs/schema': 0.7.1
       '@vulcanjs/utils': 0.7.1(moment@2.29.4)
       lodash: 4.17.21
-      mongodb: 5.5.0
+      mongodb: 5.7.0
       mongoose: 7.4.0
     optionalDependencies:
       mongodb-memory-server: 8.12.2
@@ -13001,30 +12544,6 @@ packages:
       - aws-crt
       - encoding
       - moment
-      - react
-      - react-dom
-      - supports-color
-    dev: false
-
-  /@vulcanjs/mongo@0.8.1(mongodb@5.5.0)(mongoose@7.4.0)(react-dom@17.0.2)(react@17.0.2):
-    resolution: {integrity: sha512-sUHduVMSmjg3pOstZC84jBHLci2ZRRpZ8pUW2z2IWgTWsKoreYRmZ5eextNr49e+rfxFXzvyESo1gnEBjDSopQ==}
-    peerDependencies:
-      mongodb: '>= 3.6.2'
-      mongoose: '>= 6.2'
-    dependencies:
-      '@vulcanjs/crud': 0.7.2-alpha.8(react-dom@17.0.2)(react@17.0.2)
-      '@vulcanjs/model': 0.7.2-alpha.8
-      '@vulcanjs/permissions': 0.7.2-alpha.8(react-dom@17.0.2)(react@17.0.2)
-      '@vulcanjs/schema': 0.7.2-alpha.8
-      '@vulcanjs/utils': 0.7.2-alpha.8
-      lodash: 4.17.21
-      mongodb: 5.5.0
-      mongoose: 7.4.0
-    optionalDependencies:
-      mongodb-memory-server: 8.12.2
-    transitivePeerDependencies:
-      - aws-crt
-      - encoding
       - react
       - react-dom
       - supports-color
@@ -13043,44 +12562,12 @@ packages:
       react-dom: 17.0.2(react@17.0.2)
     dev: false
 
-  /@vulcanjs/permissions@0.7.2-alpha.8(react-dom@17.0.2)(react@17.0.2):
-    resolution: {integrity: sha512-3528ChFRSAKEzBqF9/ZeAKMlQnseD1R7dCqJlIYKcSsktIOy5KxbLuAqjemN8dyQIBrk5YZQuxyfNCi9JhZTKQ==}
-    peerDependencies:
-      react: ^17.0.1
-      react-dom: ^17.0.1
-    dependencies:
-      '@vulcanjs/model': 0.7.2-alpha.8
-      '@vulcanjs/schema': 0.7.2-alpha.8
-      lodash: 4.17.21
-      react: 17.0.2
-      react-dom: 17.0.2(react@17.0.2)
-    dev: false
-
-  /@vulcanjs/permissions@0.7.2-alpha.8(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-3528ChFRSAKEzBqF9/ZeAKMlQnseD1R7dCqJlIYKcSsktIOy5KxbLuAqjemN8dyQIBrk5YZQuxyfNCi9JhZTKQ==}
-    peerDependencies:
-      react: ^17.0.1
-      react-dom: ^17.0.1
-    dependencies:
-      '@vulcanjs/model': 0.7.2-alpha.8
-      '@vulcanjs/schema': 0.7.2-alpha.8
-      lodash: 4.17.21
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-    dev: false
-
   /@vulcanjs/schema@0.7.1:
     resolution: {integrity: sha512-x87gsZLtekbaFGIO1m6HiUEKsdasXBwnf87c8hRm9SNWHqHYEPnlJylJ839MM8sIvX9vCJiFdooyVjFVvHVWyA==}
     dependencies:
       lodash: 4.17.21
       simpl-schema: 1.13.1
     dev: false
-
-  /@vulcanjs/schema@0.7.2-alpha.8:
-    resolution: {integrity: sha512-H5MYtXq+A0n5V2Xh7MH6UmuyY9aXnZFFElF8GNTw1e9cjy/ZxTNxZ2RlZK4rOY+NE4CjcpZgPBMsMJx6BQjRPA==}
-    dependencies:
-      lodash: 4.17.21
-      simpl-schema: 1.13.1
 
   /@vulcanjs/utils@0.7.1(moment@2.29.4):
     resolution: {integrity: sha512-x/+o2WnqcwK6IDEzsZNBX8y9olAlZNb5H2uH+QyJSkrfzuEfvSrsZlGN+Oe7NlOBhP4JeXJ0oqVT5Ji/VhpX8w==}
@@ -13091,20 +12578,6 @@ packages:
       debug: 4.3.4(supports-color@8.1.1)
       lodash: 4.17.21
       moment: 2.29.4
-      speakingurl: 14.0.1
-    optionalDependencies:
-      msw: 0.35.0
-    transitivePeerDependencies:
-      - encoding
-      - supports-color
-    dev: false
-
-  /@vulcanjs/utils@0.7.2-alpha.8:
-    resolution: {integrity: sha512-Hd6NMEAPTvAFkDmVw7By3swejGKIHjEfCNgzJ2zhiY9/EqceKGatyAbPnvMdwKi+kOLEUTrPZZ6/WXVrFLD+Zw==}
-    dependencies:
-      '@vulcanjs/model': 0.7.2-alpha.8
-      debug: 4.3.4(supports-color@8.1.1)
-      lodash: 4.17.21
       speakingurl: 14.0.1
     optionalDependencies:
       msw: 0.35.0
@@ -13346,6 +12819,7 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       tslib: 2.6.0
+    dev: false
 
   /@xmldom/xmldom@0.7.9:
     resolution: {integrity: sha512-yceMpm/xd4W2a85iqZyO09gTnHvXF6pyiWjD2jcOJs7hRoZtNNOO1eJlhHj1ixA+xip2hOyGn+LgcvLCMo5zXA==}
@@ -13643,20 +13117,6 @@ packages:
       normalize-path: 3.0.0
       picomatch: 2.3.1
 
-  /apollo-cache-control@0.15.0(graphql@15.8.0):
-    resolution: {integrity: sha512-U2uYvHZsWmR6s6CD5zlq3PepfbUAM8953CeVM2Y2QYMtJ8i4CYplEPbIWb3zTIXSPbIPeWGddM56pChI6Iz3zA==}
-    engines: {node: '>=6.0'}
-    deprecated: The functionality provided by the `apollo-cache-control` package is built in to `apollo-server-core` starting with Apollo Server 3. See https://www.apollographql.com/docs/apollo-server/migration/#cachecontrol for details.
-    peerDependencies:
-      graphql: ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0
-    dependencies:
-      apollo-server-env: 3.2.0
-      apollo-server-plugin-base: 0.14.0(graphql@15.8.0)
-      graphql: 15.8.0
-    transitivePeerDependencies:
-      - encoding
-    dev: false
-
   /apollo-cache-control@0.15.0(graphql@16.7.1):
     resolution: {integrity: sha512-U2uYvHZsWmR6s6CD5zlq3PepfbUAM8953CeVM2Y2QYMtJ8i4CYplEPbIWb3zTIXSPbIPeWGddM56pChI6Iz3zA==}
     engines: {node: '>=6.0'}
@@ -13693,18 +13153,6 @@ packages:
       - encoding
     dev: false
 
-  /apollo-graphql@0.9.7(graphql@15.8.0):
-    resolution: {integrity: sha512-bezL9ItUWUGHTm1bI/XzIgiiZbhXpsC7uxk4UxFPmcVJwJsDc3ayZ99oXxAaK+3Rbg/IoqrHckA6CwmkCsbaSA==}
-    engines: {node: '>=6'}
-    peerDependencies:
-      graphql: ^14.2.1 || ^15.0.0
-    dependencies:
-      core-js-pure: 3.26.1
-      graphql: 15.8.0
-      lodash.sortby: 4.7.0
-      sha.js: 2.4.11
-    dev: false
-
   /apollo-graphql@0.9.7(graphql@16.7.1):
     resolution: {integrity: sha512-bezL9ItUWUGHTm1bI/XzIgiiZbhXpsC7uxk4UxFPmcVJwJsDc3ayZ99oXxAaK+3Rbg/IoqrHckA6CwmkCsbaSA==}
     engines: {node: '>=6'}
@@ -13715,18 +13163,6 @@ packages:
       graphql: 16.7.1
       lodash.sortby: 4.7.0
       sha.js: 2.4.11
-    dev: false
-
-  /apollo-link@1.2.14(graphql@15.8.0):
-    resolution: {integrity: sha512-p67CMEFP7kOG1JZ0ZkYZwRDa369w5PIjtMjvrQd/HnIV8FRsHRqLqK+oAZQnFa1DDdZtOtHTi+aMIW6EatC2jg==}
-    peerDependencies:
-      graphql: ^0.11.3 || ^0.12.3 || ^0.13.0 || ^14.0.0 || ^15.0.0
-    dependencies:
-      apollo-utilities: 1.3.4(graphql@15.8.0)
-      graphql: 15.8.0
-      ts-invariant: 0.4.4
-      tslib: 1.14.1
-      zen-observable-ts: 0.8.21
     dev: false
 
   /apollo-link@1.2.14(graphql@16.7.1):
@@ -13767,45 +13203,6 @@ packages:
     deprecated: This package is part of the legacy caching implementation used by Apollo Server v2 and v3, and is no longer maintained. We recommend you switch to the newer Keyv-based implementation (which is compatible with all versions of Apollo Server). See https://www.apollographql.com/docs/apollo-server/v3/performance/cache-backends#legacy-caching-implementation for more details.
     dependencies:
       lru-cache: 6.0.0
-    dev: false
-
-  /apollo-server-core@2.26.1(graphql@15.8.0):
-    resolution: {integrity: sha512-YnO1YXhHOnCY7Q2SZ0uUtPq6SLCw+t2uI19l59mzWuCyZYdHrtSy3zUEU6pM3tR9vvUuRGkYIfMRlo/Q8a1U5g==}
-    engines: {node: '>=6'}
-    deprecated: The `apollo-server-core` package is part of Apollo Server v2 and v3, which are now deprecated (end-of-life October 22nd 2023). This package's functionality is now found in the `@apollo/server` package. See https://www.apollographql.com/docs/apollo-server/previous-versions/ for more details.
-    peerDependencies:
-      graphql: ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0
-    dependencies:
-      '@apollographql/apollo-tools': 0.5.4(graphql@15.8.0)
-      '@apollographql/graphql-playground-html': 1.6.27
-      '@apollographql/graphql-upload-8-fork': 8.1.4(graphql@15.8.0)
-      '@josephg/resolvable': 1.0.1
-      '@types/ws': 7.4.7
-      apollo-cache-control: 0.15.0(graphql@15.8.0)
-      apollo-datasource: 0.10.0
-      apollo-graphql: 0.9.7(graphql@15.8.0)
-      apollo-reporting-protobuf: 0.8.0
-      apollo-server-caching: 0.7.0
-      apollo-server-env: 3.2.0
-      apollo-server-errors: 2.5.0(graphql@15.8.0)
-      apollo-server-plugin-base: 0.14.0(graphql@15.8.0)
-      apollo-server-types: 0.10.0(graphql@15.8.0)
-      apollo-tracing: 0.16.0(graphql@15.8.0)
-      async-retry: 1.3.3
-      fast-json-stable-stringify: 2.1.0
-      graphql: 15.8.0
-      graphql-extensions: 0.16.0(graphql@15.8.0)
-      graphql-tag: 2.12.6(graphql@15.8.0)
-      graphql-tools: 4.0.8(graphql@15.8.0)
-      loglevel: 1.8.1
-      lru-cache: 6.0.0
-      sha.js: 2.4.11
-      subscriptions-transport-ws: 0.9.19(graphql@15.8.0)
-      uuid: 8.3.2
-    transitivePeerDependencies:
-      - bufferutil
-      - encoding
-      - utf-8-validate
     dev: false
 
   /apollo-server-core@2.26.1(graphql@16.7.1):
@@ -13902,16 +13299,6 @@ packages:
       - encoding
     dev: false
 
-  /apollo-server-errors@2.5.0(graphql@15.8.0):
-    resolution: {integrity: sha512-lO5oTjgiC3vlVg2RKr3RiXIIQ5pGXBFxYGGUkKDhTud3jMIhs+gel8L8zsEjKaKxkjHhCQAA/bcEfYiKkGQIvA==}
-    engines: {node: '>=6'}
-    deprecated: The `apollo-server-errors` package is part of Apollo Server v2 and v3, which are now deprecated (end-of-life October 22nd 2023). This package's functionality is now found in the `@apollo/server` package. See https://www.apollographql.com/docs/apollo-server/previous-versions/ for more details.
-    peerDependencies:
-      graphql: ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0
-    dependencies:
-      graphql: 15.8.0
-    dev: false
-
   /apollo-server-errors@2.5.0(graphql@16.7.1):
     resolution: {integrity: sha512-lO5oTjgiC3vlVg2RKr3RiXIIQ5pGXBFxYGGUkKDhTud3jMIhs+gel8L8zsEjKaKxkjHhCQAA/bcEfYiKkGQIvA==}
     engines: {node: '>=6'}
@@ -13930,38 +13317,6 @@ packages:
       graphql: ^15.3.0 || ^16.0.0
     dependencies:
       graphql: 16.6.0
-    dev: false
-
-  /apollo-server-express@2.26.1(graphql@15.8.0):
-    resolution: {integrity: sha512-eATTtlGhZFuo4KNRgaQ25jflUchI18oMd0vZyx0uIQ/CM0FPttO1noQ0fPAO6U0oSrxS8J9fCh8naJFDTUsZ0w==}
-    engines: {node: '>=6'}
-    deprecated: The `apollo-server-express` package is part of Apollo Server v2 and v3, which are now deprecated (end-of-life October 22nd 2023). This package's functionality is now found in the `@apollo/server` package. See https://www.apollographql.com/docs/apollo-server/previous-versions/ for more details.
-    peerDependencies:
-      graphql: ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0
-    dependencies:
-      '@apollographql/graphql-playground-html': 1.6.27
-      '@types/accepts': 1.3.5
-      '@types/body-parser': 1.19.0
-      '@types/cors': 2.8.10
-      '@types/express': 4.17.17
-      '@types/express-serve-static-core': 4.17.35
-      accepts: 1.3.8
-      apollo-server-core: 2.26.1(graphql@15.8.0)
-      apollo-server-types: 0.10.0(graphql@15.8.0)
-      body-parser: 1.20.1
-      cors: 2.8.5
-      express: 4.17.1
-      graphql: 15.8.0
-      graphql-subscriptions: 1.2.1(graphql@15.8.0)
-      graphql-tools: 4.0.8(graphql@15.8.0)
-      parseurl: 1.3.3
-      subscriptions-transport-ws: 0.9.19(graphql@15.8.0)
-      type-is: 1.6.18
-    transitivePeerDependencies:
-      - bufferutil
-      - encoding
-      - supports-color
-      - utf-8-validate
     dev: false
 
   /apollo-server-express@2.26.1(graphql@16.7.1):
@@ -14021,19 +13376,6 @@ packages:
       - supports-color
     dev: false
 
-  /apollo-server-plugin-base@0.14.0(graphql@15.8.0):
-    resolution: {integrity: sha512-nTNSFuBhZURGjtWptdVqwemYUOdsvABj/GSKzeNvepiEubiv4N0rt4Gvy1inHDiMbo98wQTdF/7XohNcB9A77g==}
-    engines: {node: '>=6'}
-    deprecated: The `apollo-server-plugin-base` package is part of Apollo Server v2 and v3, which are now deprecated (end-of-life October 22nd 2023). This package's functionality is now found in the `@apollo/server` package. See https://www.apollographql.com/docs/apollo-server/previous-versions/ for more details.
-    peerDependencies:
-      graphql: ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0
-    dependencies:
-      apollo-server-types: 0.10.0(graphql@15.8.0)
-      graphql: 15.8.0
-    transitivePeerDependencies:
-      - encoding
-    dev: false
-
   /apollo-server-plugin-base@0.14.0(graphql@16.7.1):
     resolution: {integrity: sha512-nTNSFuBhZURGjtWptdVqwemYUOdsvABj/GSKzeNvepiEubiv4N0rt4Gvy1inHDiMbo98wQTdF/7XohNcB9A77g==}
     engines: {node: '>=6'}
@@ -14073,21 +13415,6 @@ packages:
       - encoding
     dev: false
 
-  /apollo-server-types@0.10.0(graphql@15.8.0):
-    resolution: {integrity: sha512-LsB3epw1X3Co/HGiKHCGtzWG35J59gG8Ypx0p22+wgdM9AVDm1ylsNGZy+osNIVJc1lUJf3nF5kZ90vA866K/w==}
-    engines: {node: '>=6'}
-    deprecated: The `apollo-server-types` package is part of Apollo Server v2 and v3, which are now deprecated (end-of-life October 22nd 2023). This package's functionality is now found in the `@apollo/server` package. See https://www.apollographql.com/docs/apollo-server/previous-versions/ for more details.
-    peerDependencies:
-      graphql: ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0
-    dependencies:
-      apollo-reporting-protobuf: 0.8.0
-      apollo-server-caching: 0.7.0
-      apollo-server-env: 3.2.0
-      graphql: 15.8.0
-    transitivePeerDependencies:
-      - encoding
-    dev: false
-
   /apollo-server-types@0.10.0(graphql@16.7.1):
     resolution: {integrity: sha512-LsB3epw1X3Co/HGiKHCGtzWG35J59gG8Ypx0p22+wgdM9AVDm1ylsNGZy+osNIVJc1lUJf3nF5kZ90vA866K/w==}
     engines: {node: '>=6'}
@@ -14118,26 +13445,6 @@ packages:
       - encoding
     dev: false
 
-  /apollo-server@2.26.1(graphql@15.8.0):
-    resolution: {integrity: sha512-aHRfp6qTCZgpD9YQAlb99js/leSthDp3/gNSlfR68R69kSxVoKMeabwEbdFr1zJKi45u9riausqh75rRaA/7AQ==}
-    deprecated: The `apollo-server` package is part of Apollo Server v2 and v3, which are now deprecated (end-of-life October 22nd 2023). This package's functionality is now found in the `@apollo/server` package. See https://www.apollographql.com/docs/apollo-server/previous-versions/ for more details.
-    peerDependencies:
-      graphql: ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0
-    dependencies:
-      apollo-server-core: 2.26.1(graphql@15.8.0)
-      apollo-server-express: 2.26.1(graphql@15.8.0)
-      express: 4.17.1
-      graphql: 15.8.0
-      graphql-subscriptions: 1.2.1(graphql@15.8.0)
-      graphql-tools: 4.0.8(graphql@15.8.0)
-      stoppable: 1.1.0
-    transitivePeerDependencies:
-      - bufferutil
-      - encoding
-      - supports-color
-      - utf-8-validate
-    dev: false
-
   /apollo-server@2.26.1(graphql@16.7.1):
     resolution: {integrity: sha512-aHRfp6qTCZgpD9YQAlb99js/leSthDp3/gNSlfR68R69kSxVoKMeabwEbdFr1zJKi45u9riausqh75rRaA/7AQ==}
     deprecated: The `apollo-server` package is part of Apollo Server v2 and v3, which are now deprecated (end-of-life October 22nd 2023). This package's functionality is now found in the `@apollo/server` package. See https://www.apollographql.com/docs/apollo-server/previous-versions/ for more details.
@@ -14156,20 +13463,6 @@ packages:
       - encoding
       - supports-color
       - utf-8-validate
-    dev: false
-
-  /apollo-tracing@0.16.0(graphql@15.8.0):
-    resolution: {integrity: sha512-Oy8kTggB+fJ/hHXwHyMpuTl5KW7u1XetKFDErZVOobUKc2zjc/NgWiC/s7SGYZCgfLodBjvwfa6rMcvLkz7c0w==}
-    engines: {node: '>=4.0'}
-    deprecated: The `apollo-tracing` package is no longer part of Apollo Server 3. See https://www.apollographql.com/docs/apollo-server/migration/#tracing for details
-    peerDependencies:
-      graphql: ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0
-    dependencies:
-      apollo-server-env: 3.2.0
-      apollo-server-plugin-base: 0.14.0(graphql@15.8.0)
-      graphql: 15.8.0
-    transitivePeerDependencies:
-      - encoding
     dev: false
 
   /apollo-tracing@0.16.0(graphql@16.7.1):
@@ -14209,18 +13502,6 @@ packages:
       extract-files: 11.0.0
       graphql: 16.7.1
     dev: true
-
-  /apollo-utilities@1.3.4(graphql@15.8.0):
-    resolution: {integrity: sha512-pk2hiWrCXMAy2fRPwEyhvka+mqwzeP60Jr1tRYi5xru+3ko94HI9o6lK0CT33/w4RDlxWchmdhDCrvdr+pHCig==}
-    peerDependencies:
-      graphql: ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0
-    dependencies:
-      '@wry/equality': 0.1.11
-      fast-json-stable-stringify: 2.1.0
-      graphql: 15.8.0
-      ts-invariant: 0.4.4
-      tslib: 1.14.1
-    dev: false
 
   /apollo-utilities@1.3.4(graphql@16.7.1):
     resolution: {integrity: sha512-pk2hiWrCXMAy2fRPwEyhvka+mqwzeP60Jr1tRYi5xru+3ko94HI9o6lK0CT33/w4RDlxWchmdhDCrvdr+pHCig==}
@@ -15413,6 +14694,7 @@ packages:
   /bson@5.3.0:
     resolution: {integrity: sha512-ukmCZMneMlaC5ebPHXIkP8YJzNl5DC41N5MAIvKDqLggdao342t4McltoJBQfQya/nHBWAcSsYRqlXPoQkTJag==}
     engines: {node: '>=14.20.1'}
+    dev: true
 
   /bson@5.4.0:
     resolution: {integrity: sha512-WRZ5SQI5GfUuKnPTNmAYPiKIof3ORXAF4IRU5UcgmivNIon01rWQlw5RUH954dpu8yGL8T59YShVddIPaU/gFA==}
@@ -15967,6 +15249,7 @@ packages:
   /clone@2.1.2:
     resolution: {integrity: sha512-3Pe/CF1Nn94hyhIYpjtiLhdCoEoz0DqQ+988E9gmeEdQZlojxnOb74wctFyuwWQHzqyf9X7C7MG8juUpqBJT8w==}
     engines: {node: '>=0.8'}
+    dev: false
 
   /clsx@1.2.1:
     resolution: {integrity: sha512-EcR6r5a8bj6pu3ycsa/E/cKVGuTgZJZdsyUYHOksG/UHIiKfjxzRxYJpyVBwYaQeOvghal9fcc4PidlgzugAQg==}
@@ -21199,15 +20482,6 @@ packages:
       graphql: 16.7.1
       graphql-type-json: 0.3.2(graphql@16.7.1)
 
-  /graphql-date@1.0.3(graphql@15.8.0):
-    resolution: {integrity: sha512-qRcdjyenXGby5PMSn8GqDY/jNm5jb8FJ+DoKprvnDz2pcFGIwPmPFzRh+83cr+6QD/mHK4pVE06kR4JS/aVN/A==}
-    peerDependencies:
-      graphql: '>=0.5.0'
-    dependencies:
-      assert-err: 1.1.0
-      graphql: 15.8.0
-    dev: false
-
   /graphql-date@1.0.3(graphql@16.7.1):
     resolution: {integrity: sha512-qRcdjyenXGby5PMSn8GqDY/jNm5jb8FJ+DoKprvnDz2pcFGIwPmPFzRh+83cr+6QD/mHK4pVE06kR4JS/aVN/A==}
     peerDependencies:
@@ -21215,21 +20489,6 @@ packages:
     dependencies:
       assert-err: 1.1.0
       graphql: 16.7.1
-    dev: false
-
-  /graphql-extensions@0.16.0(graphql@15.8.0):
-    resolution: {integrity: sha512-rZQc/USoEIw437BGRUwoHoLPR1LA791Ltj6axONqgKIyyx2sqIO3YT9kTbB/eIUdJBrCozp4KuUeZ09xKeQDxg==}
-    engines: {node: '>=6.0'}
-    deprecated: 'The `graphql-extensions` API has been removed from Apollo Server 3. Use the plugin API instead: https://www.apollographql.com/docs/apollo-server/integrations/plugins/'
-    peerDependencies:
-      graphql: ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0
-    dependencies:
-      '@apollographql/apollo-tools': 0.5.4(graphql@15.8.0)
-      apollo-server-env: 3.2.0
-      apollo-server-types: 0.10.0(graphql@15.8.0)
-      graphql: 15.8.0
-    transitivePeerDependencies:
-      - encoding
     dev: false
 
   /graphql-extensions@0.16.0(graphql@16.7.1):
@@ -21267,15 +20526,6 @@ packages:
       vscode-languageserver-types: 3.17.2
     dev: false
 
-  /graphql-subscriptions@1.2.1(graphql@15.8.0):
-    resolution: {integrity: sha512-95yD/tKi24q8xYa7Q9rhQN16AYj5wPbrb8tmHGM3WRc9EBmWrG/0kkMl+tQG8wcEuE9ibR4zyOM31p5Sdr2v4g==}
-    peerDependencies:
-      graphql: ^0.10.5 || ^0.11.3 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0
-    dependencies:
-      graphql: 15.8.0
-      iterall: 1.3.0
-    dev: false
-
   /graphql-subscriptions@1.2.1(graphql@16.7.1):
     resolution: {integrity: sha512-95yD/tKi24q8xYa7Q9rhQN16AYj5wPbrb8tmHGM3WRc9EBmWrG/0kkMl+tQG8wcEuE9ibR4zyOM31p5Sdr2v4g==}
     peerDependencies:
@@ -21284,15 +20534,6 @@ packages:
       graphql: 16.7.1
       iterall: 1.3.0
     dev: false
-
-  /graphql-tag@2.12.6(graphql@15.8.0):
-    resolution: {integrity: sha512-FdSNcu2QQcWnM2VNvSCCDCVS5PpPqpzgFT8+GXzqJuoDd0CBncxCY278u4mhRO7tMgo2JjgJA5aZ+nWSQ/Z+xg==}
-    engines: {node: '>=10'}
-    peerDependencies:
-      graphql: ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
-    dependencies:
-      graphql: 15.8.0
-      tslib: 2.5.0
 
   /graphql-tag@2.12.6(graphql@16.6.0):
     resolution: {integrity: sha512-FdSNcu2QQcWnM2VNvSCCDCVS5PpPqpzgFT8+GXzqJuoDd0CBncxCY278u4mhRO7tMgo2JjgJA5aZ+nWSQ/Z+xg==}
@@ -21312,20 +20553,6 @@ packages:
       graphql: 16.7.1
       tslib: 2.5.0
 
-  /graphql-tools@4.0.8(graphql@15.8.0):
-    resolution: {integrity: sha512-MW+ioleBrwhRjalKjYaLQbr+920pHBgy9vM/n47sswtns8+96sRn5M/G+J1eu7IMeKWiN/9p6tmwCHU7552VJg==}
-    deprecated: This package has been deprecated and now it only exports makeExecutableSchema.\nAnd it will no longer receive updates.\nWe recommend you to migrate to scoped packages such as @graphql-tools/schema, @graphql-tools/utils and etc.\nCheck out https://www.graphql-tools.com to learn what package you should use instead
-    peerDependencies:
-      graphql: ^0.13.0 || ^14.0.0 || ^15.0.0
-    dependencies:
-      apollo-link: 1.2.14(graphql@15.8.0)
-      apollo-utilities: 1.3.4(graphql@15.8.0)
-      deprecated-decorator: 0.1.6
-      graphql: 15.8.0
-      iterall: 1.3.0
-      uuid: 3.4.0
-    dev: false
-
   /graphql-tools@4.0.8(graphql@16.7.1):
     resolution: {integrity: sha512-MW+ioleBrwhRjalKjYaLQbr+920pHBgy9vM/n47sswtns8+96sRn5M/G+J1eu7IMeKWiN/9p6tmwCHU7552VJg==}
     deprecated: This package has been deprecated and now it only exports makeExecutableSchema.\nAnd it will no longer receive updates.\nWe recommend you to migrate to scoped packages such as @graphql-tools/schema, @graphql-tools/utils and etc.\nCheck out https://www.graphql-tools.com to learn what package you should use instead
@@ -21338,14 +20565,6 @@ packages:
       graphql: 16.7.1
       iterall: 1.3.0
       uuid: 3.4.0
-    dev: false
-
-  /graphql-type-json@0.3.2(graphql@15.8.0):
-    resolution: {integrity: sha512-J+vjof74oMlCWXSvt0DOf2APEdZOCdubEvGDUAlqH//VBYcOYsGgRW7Xzorr44LvkjiuvecWc8fChxuZZbChtg==}
-    peerDependencies:
-      graphql: '>=0.8.0'
-    dependencies:
-      graphql: 15.8.0
     dev: false
 
   /graphql-type-json@0.3.2(graphql@16.6.0):
@@ -21366,6 +20585,8 @@ packages:
   /graphql@15.8.0:
     resolution: {integrity: sha512-5gghUc24tP9HRznNpV2+FIoq3xKkj5dTQqf4v0CpdPbFVwFkWoxOM+o+2OC9ZSvjEMTjfmG9QT+gcvggTwW1zw==}
     engines: {node: '>= 10.x'}
+    dev: false
+    optional: true
 
   /graphql@16.6.0:
     resolution: {integrity: sha512-KPIBPDlW7NxrbT/eh4qPXz5FiFdL5UbaA0XUNz2Rp3Z3hqBSkbj0GVjwFDztsWVauZUWsbKHgMg++sk8UX0bkw==}
@@ -24376,6 +23597,7 @@ packages:
 
   /lodash._reinterpolate@3.0.0:
     resolution: {integrity: sha512-xYHt68QRoYGjeeM/XOE1uJtvXQAgvszfBhjV4yvsQH0u2i9I6cI6c6/eG4Hh3UAOVn0y/xAXwmTzEay49Q//HA==}
+    dev: false
 
   /lodash.clonedeep@4.5.0:
     resolution: {integrity: sha512-H5ZhCF25riFd9uB5UCkVKo61m3S/xZk1x4wA6yp/L3RFP6Z/eHH1ymQcGLo7J3GMPfm0V/7m1tryHuGVxpqEBQ==}
@@ -24474,11 +23696,13 @@ packages:
     dependencies:
       lodash._reinterpolate: 3.0.0
       lodash.templatesettings: 4.2.0
+    dev: false
 
   /lodash.templatesettings@4.2.0:
     resolution: {integrity: sha512-stgLz+i3Aa9mZgnjr/O+v9ruKZsPsndy7qPZOchbqk2cnTU1ZaldKK+v7m54WoKIyxiuMZTKT2H81F8BeAc3ZQ==}
     dependencies:
       lodash._reinterpolate: 3.0.0
+    dev: false
 
   /lodash.truncate@4.4.2:
     resolution: {integrity: sha512-jttmRe7bRse52OsWIMDLaXxWqRAmtIUccAQ3garviCqJjafXOfNMO0yMfNpdD6zbGaTU0P5Nz7e7gAT6cKmJRw==}
@@ -25185,6 +24409,7 @@ packages:
     resolution: {integrity: sha512-C4ccA5nHb58kTS+pLrgF/JWtr7fAIkHxRDceH7tdy5fMA783nUfbYwZ7H2XLvSeYfcnWIYCig5dWW+icK9X/Ag==}
     dependencies:
       lodash.template: 4.5.0
+    dev: false
 
   /methods@1.1.2:
     resolution: {integrity: sha512-iclAHeNqNm68zFtnZ0e+1L2yUIdvzNoauKU4WBA3VvH/vPFieF7qfRlwUZU+DA9P9bPXIS90ulxoUoCH23sV2w==}
@@ -25646,10 +24871,6 @@ packages:
     dev: false
     optional: true
 
-  /mingo@3.1.0:
-    resolution: {integrity: sha512-0Bb94A1IEz3Vwd9pbHjQEWpJfX9nVceD+hLeSue6yXvzgP7HayS6IvuOdrw2Wz3tNBgJALg6W38aq2mkBSWq/A==}
-    dev: false
-
   /mini-css-extract-plugin@1.6.2(webpack@5.88.2):
     resolution: {integrity: sha512-WhDvO3SjGm40oV5y26GjMJYjd2UMqrLAGKy5YS2/3QKJy2F7jgynuHTir/tgUUOiNQu5saXHdc8reo7YuhhT4Q==}
     engines: {node: '>= 10.13.0'}
@@ -25723,22 +24944,8 @@ packages:
     hasBin: true
     dev: true
 
-  /mock-apollo-client@1.2.1(@apollo/client@3.7.17):
-    resolution: {integrity: sha512-QYQ6Hxo+t7hard1bcHHbsHxlNQYTQsaMNsm2Psh/NbwLMi2R4tGzplJKt97MUWuARHMq3GHB4PTLj/gxej4Caw==}
-    peerDependencies:
-      '@apollo/client': ^3.0.0
-    dependencies:
-      '@apollo/client': 3.7.17(graphql@15.8.0)(react-dom@17.0.2)(react@17.0.2)
-    dev: true
-
   /moment-timezone@0.5.37:
     resolution: {integrity: sha512-uEDzDNFhfaywRl+vwXxffjjq1q0Vzr+fcQpQ1bU0kbzorfS7zVtZnCnGc8mhWmF39d4g4YriF6kwA75mJKE/Zg==}
-    dependencies:
-      moment: 2.29.4
-    dev: false
-
-  /moment-timezone@0.5.38:
-    resolution: {integrity: sha512-nMIrzGah4+oYZPflDvLZUgoVUO4fvAqHstvG3xAUnMolWncuAiLDWNnJZj6EwJGMGfb1ZcuTFE6GI3hNOVWI/Q==}
     dependencies:
       moment: 2.29.4
     dev: false
@@ -25749,6 +24956,7 @@ packages:
 
   /mongo-object@0.1.4:
     resolution: {integrity: sha512-QtYk0gupWEn2+iB+DDRt1L+WbcNYvJRaHdih/dcqthOa1DbnREUGSs2WGcW478GNYpElflo/yybZXu0sTiRXHg==}
+    dev: false
 
   /mongodb-client-encryption@2.7.1(mongodb@5.4.0):
     resolution: {integrity: sha512-LN1udDf9nZ/paUcuY2AATIVWKf7oGHb2IKMQqGu/7iiqpNlV0M6xjbQix0bxEQvzZZW0T9PG6PN8mYeMR+YDnA==}
@@ -25974,6 +25182,7 @@ packages:
       socks: 2.7.1
     optionalDependencies:
       saslprep: 1.0.3
+    dev: true
 
   /mongodb@5.7.0:
     resolution: {integrity: sha512-zm82Bq33QbqtxDf58fLWBwTjARK3NSvKYjyz997KSy6hpat0prjeX/kxjbPVyZY60XYPDNETaHkHJI2UCzSLuw==}
@@ -26845,6 +26054,7 @@ packages:
     dependencies:
       '@wry/context': 0.7.0
       '@wry/trie': 0.3.2
+    dev: false
 
   /optional-require@1.1.8:
     resolution: {integrity: sha512-jq83qaUb0wNg9Krv1c5OQ+58EK+vHde6aBPzLvPPqJm89UQWsvSuFy9X/OSNJnFeSOKo7btE0n8Nl2+nE+z5nA==}
@@ -28858,6 +28068,7 @@ packages:
       object-assign: 4.1.1
       react: 17.0.2
       scheduler: 0.20.2
+    dev: false
 
   /react-dom@18.0.0(react@18.0.0):
     resolution: {integrity: sha512-XqX7uzmFo0pUceWFCt7Gff6IyIMzFUn7QMZrbrQfGxtaxXZIcGQzoNpRLE3fQLnS4XzLLPMZX2T9TRcSrasicw==}
@@ -29270,18 +28481,6 @@ packages:
       prop-types: 15.8.1
       react: 18.0.0
     dev: false
-
-  /react-test-renderer@16.14.0(react@17.0.2):
-    resolution: {integrity: sha512-L8yPjqPE5CZO6rKsKXRO/rVPiaCOy0tQQJbC+UjPNlobl5mad59lvPjwFsQHTvL03caVDIVr9x9/OSgDe6I5Eg==}
-    peerDependencies:
-      react: ^16.14.0
-    dependencies:
-      object-assign: 4.1.1
-      prop-types: 15.8.1
-      react: 17.0.2
-      react-is: 16.13.1
-      scheduler: 0.19.1
-    dev: true
 
   /react-test-renderer@16.14.0(react@18.2.0):
     resolution: {integrity: sha512-L8yPjqPE5CZO6rKsKXRO/rVPiaCOy0tQQJbC+UjPNlobl5mad59lvPjwFsQHTvL03caVDIVr9x9/OSgDe6I5Eg==}
@@ -30222,12 +29421,14 @@ packages:
     dependencies:
       loose-envify: 1.4.0
       object-assign: 4.1.1
+    dev: false
 
   /scheduler@0.20.2:
     resolution: {integrity: sha512-2eWfGgAqqWFGqtdMmcL5zCMK1U8KlXv8SQFGglL3CEtd0aDVDWgeF/YoCmvln55m5zSk3J/20hTaSBeSObsQDQ==}
     dependencies:
       loose-envify: 1.4.0
       object-assign: 4.1.1
+    dev: false
 
   /scheduler@0.21.0:
     resolution: {integrity: sha512-1r87x5fz9MXqswA2ERLo0EbOAU74DpIUO090gIasYTqlVoJeMcl+Z1Rg7WHz+qtPujhS/hGIt9kxZOYBV3faRQ==}
@@ -30667,6 +29868,7 @@ packages:
       clone: 2.1.2
       message-box: 0.2.7
       mongo-object: 0.1.4
+    dev: false
 
   /simple-concat@1.0.1:
     resolution: {integrity: sha512-cSFtAPtRhljv69IK0hTVZQ+OfE9nePi/rtJmw5UjHeVyVroEqJXP1sFztKUy1qU+xvz3u/sfYJLa947b7nAN2Q==}
@@ -31482,23 +30684,6 @@ packages:
       browserslist: 4.21.5
       postcss: 8.4.25
       postcss-selector-parser: 6.0.11
-    dev: false
-
-  /subscriptions-transport-ws@0.9.19(graphql@15.8.0):
-    resolution: {integrity: sha512-dxdemxFFB0ppCLg10FTtRqH/31FNRL1y1BQv8209MK5I4CwALb7iihQg+7p65lFcIl8MHatINWBLOqpgU4Kyyw==}
-    deprecated: The `subscriptions-transport-ws` package is no longer maintained. We recommend you use `graphql-ws` instead. For help migrating Apollo software to `graphql-ws`, see https://www.apollographql.com/docs/apollo-server/data/subscriptions/#switching-from-subscriptions-transport-ws    For general help using `graphql-ws`, see https://github.com/enisdenjo/graphql-ws/blob/master/README.md
-    peerDependencies:
-      graphql: '>=0.10.0'
-    dependencies:
-      backo2: 1.0.2
-      eventemitter3: 3.1.2
-      graphql: 15.8.0
-      iterall: 1.3.0
-      symbol-observable: 1.2.0
-      ws: 7.5.9
-    transitivePeerDependencies:
-      - bufferutil
-      - utf-8-validate
     dev: false
 
   /subscriptions-transport-ws@0.9.19(graphql@16.7.1):
@@ -32920,30 +32105,6 @@ packages:
       querystringify: 2.2.0
       requires-port: 1.0.0
 
-  /urql@3.0.3(graphql@15.8.0)(react@17.0.2):
-    resolution: {integrity: sha512-aVUAMRLdc5AOk239DxgXt6ZxTl/fEmjr7oyU5OGo8uvpqu42FkeJErzd2qBzhAQ3DyusoZIbqbBLPlnKo/yy2A==}
-    peerDependencies:
-      graphql: ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
-      react: '>= 16.8.0'
-    dependencies:
-      '@urql/core': 3.1.1(graphql@15.8.0)
-      graphql: 15.8.0
-      react: 17.0.2
-      wonka: 6.1.2
-    dev: true
-
-  /urql@3.0.3(graphql@15.8.0)(react@18.2.0):
-    resolution: {integrity: sha512-aVUAMRLdc5AOk239DxgXt6ZxTl/fEmjr7oyU5OGo8uvpqu42FkeJErzd2qBzhAQ3DyusoZIbqbBLPlnKo/yy2A==}
-    peerDependencies:
-      graphql: ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
-      react: '>= 16.8.0'
-    dependencies:
-      '@urql/core': 3.1.1(graphql@15.8.0)
-      graphql: 15.8.0
-      react: 18.2.0
-      wonka: 6.1.2
-    dev: false
-
   /use-callback-ref@1.3.0(@types/react@17.0.52)(react@18.0.0):
     resolution: {integrity: sha512-3FT9PRuRdbB9HfXhEq35u4oZkvpJ5kuYbpqhCfmiZyReuRgpnhDlbr2ZEnnuS0RrJAPn6l23xjFg9kpDM+Ms7w==}
     engines: {node: '>=10'}
@@ -33828,9 +32989,6 @@ packages:
   /wildcard@2.0.0:
     resolution: {integrity: sha512-JcKqAHLPxcdb9KM49dufGXn2x3ssnfjbcaQdLlfZsL9rH9wgDQjUtDxbo8NE0F6SFvydeu1VhZe7hZuHsB2/pw==}
     dev: false
-
-  /wonka@6.1.2:
-    resolution: {integrity: sha512-zNrXPMccg/7OEp9tSfFkMgTvhhowqasiSHdJ3eCZolXxVTV/aT6HUTofoZk9gwRbGoFey/Nss3JaZKUMKMbofg==}
 
   /word-wrap@1.2.3:
     resolution: {integrity: sha512-Hz/mrNwitNRh/HUAtM/VT/5VH+ygD6DV7mYKZAtHOrbs8U7lvPS6xf7EJKMF0uW1KJCl0H701g3ZGus+muE5vQ==}
