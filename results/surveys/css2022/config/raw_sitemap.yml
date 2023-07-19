@@ -197,7 +197,7 @@
         variants:
             - id: disability_status_others
               defaultUnits: count
-              template: demographics
+              template: multiple_options_freeform
               blockType: HorizontalBarBlock
               units: count
               translateData: true

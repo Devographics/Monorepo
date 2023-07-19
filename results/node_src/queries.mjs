@@ -227,6 +227,7 @@ export const getDefaultQuery = ({ queryOptions, queryArgs = {} }) => {
         sectionId,
         questionId,
         fieldId,
+        subField = 'responses',
         addBucketsEntities = false,
         allEditions = false,
         addArgumentsPlaceholder = false,
@@ -249,7 +250,7 @@ surveys {
         ${questionIdString} {
           ${addQuestionEntity ? getEntityFragment() : ''}
           ${addQuestionComments ? getCommentsCountFragment() : ''}
-          responses${queryArgsString} {
+          ${subField}${queryArgsString} {
             ${editionType} {
               ${allEditions ? allEditionsFragment : ''}
               completion {

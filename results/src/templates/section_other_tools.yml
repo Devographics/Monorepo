@@ -9,3 +9,4 @@ variables:
     limit: 20
 queryOptions:
     addBucketsEntities: true
+    subField: freeform
