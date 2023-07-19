@@ -81,6 +81,7 @@
     "@devographics/types": "workspace:^1.0.0",
     "@hapi/iron": "6.0.0",
     "@next/env": "^12.3.3",
+    "@picocss/pico": "^1.5.10",
     "@sentry/nextjs": "^6.19.7",
     "@sentry/node": "^7.19.0",
     "@sentry/react": "^7.19.0",
