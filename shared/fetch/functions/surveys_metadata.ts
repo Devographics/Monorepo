@@ -6,7 +6,7 @@ import { FetcherFunctionOptions } from '../types'
 
 const filterSurveys = (surveys, serverConfig) => {
     let filteredSurveys = surveys
-    if (serverConfig().isProd && !serverConfig()?.isTest) {
+    if (serverConfig && serverConfig().isProd && !serverConfig()?.isTest) {
         filteredSurveys = surveys?.filter(s => s.id !== 'demo_survey')
     }
     filteredSurveys = filteredSurveys?.map(survey => ({
