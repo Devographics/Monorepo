@@ -5,7 +5,8 @@ SURVEYS_REPO=surveys
 MONGO_URI=mongodb://localhost:27017/devographics
 MONGO_PUBLIC_DB=devographics_public
 
-REDIS_URL=http://localhost:8080
+REDIS_URL=redis://localhost:6379
+REDIS_UPSTASH_URL=http://localhost:8080
 REDIS_TOKEN=fake-dev-token
 
 GITHUB_PATH_SURVEYS=devographics/surveys

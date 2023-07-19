@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect } from "react";
 
-import debug from "debug";
 // @see https://nextjs.org/docs/advanced-features/measuring-performance
 /*
 TODO: planned in v13 but not yet available 2022/11

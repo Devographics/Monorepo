@@ -18,7 +18,8 @@ import { rootDir } from './rootDir'
 
 // import { cacheAvatars } from './avatars'
 
-import { AppName, EnvVar, getConfig, getEnvVar, setAppName } from '@devographics/helpers'
+import { AppName } from "@devographics/types"
+import { EnvVar, getConfig, getEnvVar, setAppName } from '@devographics/helpers'
 import { logToFile } from '@devographics/debug'
 import { loadOrGetSurveys } from './load/surveys'
 
