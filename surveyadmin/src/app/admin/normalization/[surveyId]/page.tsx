@@ -1,6 +1,9 @@
 import Link from "next/link";
 import Breadcrumbs from "~/components/normalization/Breadcrumbs";
-import { fetchEditionMetadata, fetchSurveysMetadata } from "~/lib/api/fetch";
+import {
+  fetchEditionMetadata,
+  fetchSurveysMetadata,
+} from "@devographics/fetch";
 import { routes } from "~/lib/routes";
 
 export default async function Page({ params }) {

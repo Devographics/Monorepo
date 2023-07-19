@@ -6,7 +6,7 @@ import {
   fetchEditionMetadata,
   fetchEntities,
   fetchSurveyMetadata,
-} from "~/lib/api/fetch";
+} from "@devographics/fetch";
 import {
   NormalizationOptions,
   NormalizationResultSuccessEx,

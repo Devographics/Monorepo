@@ -2,7 +2,7 @@ import { LocaleDefWithStrings } from '@devographics/types'
 import { localeCacheKey } from '../cache_keys'
 import { fetchGraphQLApi, getFromCache } from '../fetch'
 import { getLocaleQuery } from '../queries'
-import { FetcherFunctionOptions } from './types'
+import { FetcherFunctionOptions } from '../types'
 
 /**
  * Fetch metadata and strings for a specific locales
@@ -15,7 +15,7 @@ export const fetchLocale = async (
     }
 ) => {
     const { localeId } = options
-    const getQuery = options.getQueryFunction || getLocaleQuery
+    const getQuery = options.getQuery || getLocaleQuery
     const query = getQuery(options)
     const key = localeCacheKey(options)
     const result = await getFromCache<LocaleDefWithStrings>({

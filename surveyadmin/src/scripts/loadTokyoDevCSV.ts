@@ -1,13 +1,14 @@
 import csvParser from "csv-parser";
-import type {
-  Survey,
-  EditionMetadata,
-  QuestionMetadata,
-  Section,
-  Question,
-  SurveyMetadata,
-  TemplateFunction,
-  ResponseDocument,
+import {
+  type Survey,
+  type EditionMetadata,
+  type QuestionMetadata,
+  type Section,
+  type Question,
+  type SurveyMetadata,
+  type TemplateFunction,
+  type ResponseDocument,
+  AppName,
 } from "@devographics/types";
 import yaml from "js-yaml";
 // import { readFile } from "fs/promises";
@@ -17,7 +18,7 @@ import { logToFile } from "@devographics/debug";
 import { normalizeDocument } from "~/lib/normalization/normalize/normalize";
 import { getEditionQuestions } from "~/lib/normalization/helpers/getEditionQuestions";
 import * as templateFunctions from "@devographics/templates";
-import { fetchEntities, fetchSurveysMetadata } from "~/lib/api/fetch";
+import { fetchEntities, fetchSurveysMetadata } from "@devographics/fetch";
 
 const readFile = fsPromises.readFile;
 
@@ -212,9 +213,12 @@ const getOptionValues = (
 
 export const loadTokyoDevCSV = async () => {
   const { data: allSurveysMetadata } = await fetchSurveysMetadata({
-    forceReload: true,
+    appName: AppName.SURVEYADMIN,
+    shouldGetFromCache: false,
   });
-  const { data: entities } = await fetchEntities();
+  const { data: entities } = await fetchEntities({
+    appName: AppName.SURVEYADMIN,
+  });
   const survey = allSurveysMetadata.find((s) => s.id === "tokyodev") as Survey;
   const allEditions = await loadAllEditions(allSurveysMetadata, "tokyodev");
 

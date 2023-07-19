@@ -8,18 +8,15 @@ import isEmpty from "lodash/isEmpty.js";
 import { logToFile } from "@devographics/debug";
 import {
   Entity,
-  DbSuffixes,
   QuestionMetadata,
-  QuestionTemplateOutput,
   EditionMetadata,
   SurveyMetadata,
-  SectionMetadata,
 } from "@devographics/types";
 import {
   getNormResponsesCollection,
   getRawResponsesCollection,
 } from "@devographics/mongo";
-import { fetchEditionMetadata, fetchEntities } from "../../api/fetch";
+import { fetchEntities } from "@devographics/fetch";
 import { getQuestionObject } from "../helpers/getQuestionObject";
 import { getEditionQuestions } from "../helpers/getEditionQuestions";
 import { newMongoId } from "@devographics/mongo";

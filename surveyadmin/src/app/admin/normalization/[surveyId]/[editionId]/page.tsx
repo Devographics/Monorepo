@@ -1,7 +1,10 @@
 import Link from "next/link";
 import Breadcrumbs from "~/components/normalization/Breadcrumbs";
 import NormalizeEdition from "~/components/normalization/NormalizeEdition";
-import { fetchEditionMetadata, fetchSurveysMetadata } from "~/lib/api/fetch";
+import {
+  fetchEditionMetadata,
+  fetchSurveysMetadata,
+} from "@devographics/fetch";
 import {
   getEditionNormalizedResponsesCount,
   getEditionResponsesCount,

@@ -3,7 +3,7 @@ import {
   fetchEditionMetadata,
   fetchSurveyMetadata,
   fetchSurveysMetadata,
-} from "~/lib/api/fetch";
+} from "@devographics/fetch";
 import { normalizeInBulk } from "../normalize/normalizeInBulk";
 
 export type NormalizeResponsesArgs = {

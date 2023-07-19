@@ -1,36 +1,39 @@
-export const editionMetadataCacheKey = ({
-    appName,
-    surveyId,
-    editionId
-}: {
-    appName: string
-    surveyId: string
-    editionId: string
-}) => `${appName}__${surveyId}__${editionId}__metadata`
+type CacheKeyOptions = {
+  appName?: string;
+};
 
-export const surveysMetadataCacheKey = ({ appName }: { appName: string }) =>
-    `${appName}__allSurveys__metadata`
+const getAppName = (options) => options.appName || process.env.APP_NAME;
 
-export const surveyMetadataCacheKey = ({
-    appName,
-    surveyId
-}: {
-    appName: string
-    surveyId: string
-}) => `${appName}__${surveyId}__metadata`
+export const editionMetadataCacheKey = (
+  options: CacheKeyOptions & {
+    surveyId: string;
+    editionId: string;
+  }
+) =>
+  `${getAppName(options)}__${options.surveyId}__${options.editionId}__metadata`;
 
-export const allLocalesMetadataCacheKey = ({ appName }: { appName: string }) =>
-    `${appName}__allLocales`
+export const surveysMetadataCacheKey = (options?: CacheKeyOptions) =>
+  `${getAppName(options)}__allSurveys__metadata`;
 
-export const allLocalesIdsCacheKey = ({ appName }: { appName: string }) =>
-    `${appName}__allLocalesIds`
+export const surveyMetadataCacheKey = (
+  options: CacheKeyOptions & {
+    surveyId: string;
+  }
+) => `${getAppName(options)}__${options.surveyId}__metadata`;
 
-export const localeCacheKey = ({
-    appName,
-    localeId,
-    contexts
-}: {
-    appName: string
-    localeId: string
-    contexts: string[]
-}) => `${appName}__${localeId}__${contexts.join('_')}`
+export const allLocalesMetadataCacheKey = (options?: CacheKeyOptions) =>
+  `${getAppName(options)}__allLocales`;
+
+export const allLocalesIdsCacheKey = (options?: CacheKeyOptions) =>
+  `${getAppName(options)}__allLocalesIds`;
+
+export const localeCacheKey = (
+  options: CacheKeyOptions & {
+    localeId: string;
+    contexts: string[];
+  }
+) =>
+  `${getAppName(options)}__${options.localeId}__${options.contexts.join("_")}`;
+
+export const allEntitiesCacheKey = (options?: CacheKeyOptions) =>
+  `${getAppName(options)}__allEntities`;

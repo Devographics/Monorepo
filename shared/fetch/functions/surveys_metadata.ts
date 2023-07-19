@@ -2,7 +2,7 @@ import { SurveyMetadata } from '@devographics/types'
 import { surveysMetadataCacheKey } from '../cache_keys'
 import { fetchGraphQLApi, getFromCache } from '../fetch'
 import { getSurveysQuery } from '../queries'
-import { FetcherFunctionOptions } from './types'
+import { FetcherFunctionOptions } from '../types'
 
 const filterSurveys = (surveys, serverConfig) => {
     let filteredSurveys = surveys
@@ -20,9 +20,8 @@ const filterSurveys = (surveys, serverConfig) => {
  * Fetch metadata for all surveys
  * @returns
  */
-export const fetchSurveysMetadata = async (options: FetcherFunctionOptions) => {
-    const { serverConfig } = options
-    const getQuery = options.getQueryFunction || getSurveysQuery
+export const fetchSurveysMetadata = async (options?: FetcherFunctionOptions) => {
+    const getQuery = options?.getQuery || getSurveysQuery
     const query = getQuery()
     const key = surveysMetadataCacheKey(options)
     const result = await getFromCache<Array<SurveyMetadata>>({
@@ -30,7 +29,10 @@ export const fetchSurveysMetadata = async (options: FetcherFunctionOptions) => {
         fetchFunction: async () => {
             const result = await fetchGraphQLApi({ query, key })
             if (!result) throw new Error(`Couldn't fetch surveys`)
-            return filterSurveys(result._metadata.surveys, serverConfig) as SurveyMetadata[]
+            return filterSurveys(
+                result._metadata.surveys,
+                options?.serverConfig
+            ) as SurveyMetadata[]
         },
         ...options
     })

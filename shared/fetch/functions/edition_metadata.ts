@@ -2,7 +2,7 @@ import { EditionMetadata } from '@devographics/types'
 import { getFromCache, fetchGraphQLApi } from '../fetch'
 import { editionMetadataCacheKey } from '../cache_keys'
 import { getEditionMetadataQuery } from '../queries'
-import { FetcherFunctionOptions } from './types'
+import { FetcherFunctionOptions } from '../types'
 
 /**
  * Load the metadata of a survey edition for the surveyform app
@@ -15,7 +15,7 @@ export async function fetchEditionMetadata(
     }
 ) {
     const { appName, surveyId, editionId, calledFrom } = options
-    const getQuery = options.getQueryFunction || getEditionMetadataQuery
+    const getQuery = options.getQuery || getEditionMetadataQuery
     const query = getQuery({ editionId })
     if (!surveyId) {
         throw new Error(`surveyId not defined (calledFrom: ${calledFrom})`)

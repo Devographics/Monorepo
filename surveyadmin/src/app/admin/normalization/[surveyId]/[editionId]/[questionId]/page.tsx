@@ -1,6 +1,9 @@
 import Breadcrumbs from "~/components/normalization/Breadcrumbs";
 import { NormalizeQuestion } from "~/components/normalization/NormalizeQuestion";
-import { fetchEditionMetadata, fetchSurveysMetadata } from "~/lib/api/fetch";
+import {
+  fetchEditionMetadata,
+  fetchSurveysMetadata,
+} from "@devographics/fetch";
 import { getEditionQuestions } from "~/lib/normalization/helpers/getEditionQuestions";
 
 export default async function Page({ params }) {

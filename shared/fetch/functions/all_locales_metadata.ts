@@ -3,14 +3,14 @@ import { LocaleDef } from '@devographics/types'
 import { getFromCache, fetchGraphQLApi } from '../fetch'
 import { allLocalesMetadataCacheKey, allLocalesIdsCacheKey } from '../cache_keys'
 import { getAllLocalesMetadataQuery, getAllLocalesIdsQuery } from '../queries'
-import { FetcherFunctionOptions } from './types'
+import { FetcherFunctionOptions } from '../types'
 
 /**
  * Fetch metadata for all locales
  * @returns
  */
 export const fetchAllLocalesMetadata = async (options: FetcherFunctionOptions) => {
-    const getQuery = options.getQueryFunction || getAllLocalesMetadataQuery
+    const getQuery = options.getQuery || getAllLocalesMetadataQuery
     const query = getQuery()
     const key = allLocalesMetadataCacheKey(options)
     const result = await getFromCache<Array<LocaleDef>>({
@@ -34,8 +34,8 @@ export const fetchAllLocalesMetadata = async (options: FetcherFunctionOptions) =
  * @returns
  */
 export const fetchAllLocalesIds = async (options: FetcherFunctionOptions) => {
-    const getQueryFunction = options.getQueryFunction || getAllLocalesIdsQuery
-    const query = getQueryFunction()
+    const getQuery = options.getQuery || getAllLocalesIdsQuery
+    const query = getQuery()
     const key = allLocalesIdsCacheKey(options)
     return await getFromCache<Array<string>>({
         key,
