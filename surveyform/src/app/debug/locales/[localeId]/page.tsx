@@ -9,7 +9,6 @@ interface Params {
 export default async function Page({ params }: { params: Params }) {
   const { localeId } = params;
   const result = await fetchLocale({
-    appName: AppName.SURVEYFORM,
     localeId,
     contexts: getCommonContexts(),
     shouldThrow: false,

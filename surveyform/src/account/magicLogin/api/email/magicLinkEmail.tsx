@@ -60,7 +60,6 @@ export const sendMagicLinkEmail = async ({
    * We use state of js as the default context when user is connecting from the generic form
    */
   const { data: edition } = await fetchEditionMetadata({
-    appName: AppName.SURVEYFORM,
     surveyId: surveyId || defaultSurveyId,
     editionId: editionId || defaultEditionId,
     calledFrom: "sendMagicLinkEmail",

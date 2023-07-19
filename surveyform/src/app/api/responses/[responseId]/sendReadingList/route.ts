@@ -45,7 +45,6 @@ export async function POST(
     const { email, surveyId, editionId } = clientData;
 
     const { data: edition } = await fetchEditionMetadata({
-      appName: AppName.SURVEYFORM,
       surveyId,
       editionId,
       calledFrom: "sendReadingList",

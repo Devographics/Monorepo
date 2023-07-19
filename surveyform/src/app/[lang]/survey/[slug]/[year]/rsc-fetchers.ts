@@ -23,7 +23,6 @@ export async function rscGetSurveyEditionFromUrl(params: {
       editionSlug: year,
     });
     const result = await fetchEditionMetadata({
-      appName: AppName.SURVEYFORM,
       surveyId,
       editionId,
       calledFrom: "rscGetSurveyEditionFromUrl",

@@ -6,6 +6,15 @@
 #       - surveyform
 #       - surveyadmin
 
+- id: APP_NAME
+  description: Name of the app
+  example: surveyform
+  usedBy:
+      - api
+      - results
+      - surveyform
+      - surveyadmin
+
 - id: API_URL
   aliases:
       - REACT_APP_API_URL

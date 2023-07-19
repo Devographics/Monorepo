@@ -8,7 +8,6 @@ interface Params {
 export default async function Page({ params }: { params: Params }) {
   const { surveyId, editionId } = params;
   const result = await fetchEditionMetadata({
-    appName: AppName.SURVEYFORM,
     surveyId,
     editionId,
     shouldThrow: false,

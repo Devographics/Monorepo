@@ -49,7 +49,6 @@ export async function createResponse({
   try {
     edition = (
       await fetchEditionMetadata({
-        appName: AppName.SURVEYFORM,
         surveyId,
         editionId,
         calledFrom: "api/response/create",

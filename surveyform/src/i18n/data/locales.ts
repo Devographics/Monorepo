@@ -11,9 +11,7 @@ import { AppName } from "@devographics/types";
  */
 export const getClosestLocale = async (localeId?: string) => {
   if (!localeId) return defaultLocaleId;
-  const { data: allLocales } = await fetchAllLocalesMetadata({
-    appName: AppName.SURVEYFORM,
-  });
+  const { data: allLocales } = await fetchAllLocalesMetadata();
   const localeIds = allLocales.map((l) => l.id);
   if (localeIds.includes(localeId)) return localeId;
   const isCountry = localeId.length === 2;

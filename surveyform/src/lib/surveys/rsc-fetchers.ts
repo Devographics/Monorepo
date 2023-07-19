@@ -15,7 +15,6 @@ import { AppName } from "@devographics/types";
 export const rscFetchSurveysMetadata = cache(async (options?: any) => {
   const result = await fetchSurveysMetadata({
     ...options,
-    appName: AppName.SURVEYFORM,
     calledFrom: __filename,
   });
   return result;

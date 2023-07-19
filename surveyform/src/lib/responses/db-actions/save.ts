@@ -44,7 +44,6 @@ export async function saveResponse({
   try {
     edition = (
       await fetchEditionMetadata({
-        appName: AppName.SURVEYFORM,
         surveyId,
         editionId,
         calledFrom: "api/response/update",

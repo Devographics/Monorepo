@@ -23,7 +23,6 @@ const getResponses = cache(
 
 const Profile = async ({ params }) => {
   const { data: surveys } = await fetchSurveysMetadata({
-    appName: AppName.SURVEYFORM,
     calledFrom: "UserResponses",
   });
 
