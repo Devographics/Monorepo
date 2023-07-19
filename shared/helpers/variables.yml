@@ -200,6 +200,8 @@
   usedBy:
       - results
 
+### SendOwl
+
 - id: SENDOWL_API_KEY
   description: SendOwl API key (used for selling chart sponsorships)
   example: 3df5f...
