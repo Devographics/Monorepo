@@ -194,6 +194,24 @@
   usedBy:
       - results
 
+- id: SURVEYS_URL
+  description: Where to get the cached JSON survey data (deployed via GitHub Pages)
+  example: https://devographics.github.io/surveys
+  usedBy:
+      - results
+
+- id: SENDOWL_API_KEY
+  description: SendOwl API key (used for selling chart sponsorships)
+  example: 3df5f...
+  usedBy:
+      - results
+
+- id: SENDOWL_SECRET
+  description: SendOwl secret (used for selling chart sponsorships)
+  example: 64754...
+  usedBy:
+      - results
+
 ### Local Dev (all optional)
 
 - id: LOGS_PATH
