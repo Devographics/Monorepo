@@ -1,5 +1,6 @@
 import { getCommonContexts } from "~/i18n/config";
-import { fetchLocale } from "~/lib/api/fetch";
+import { fetchLocale } from "@devographics/fetch";
+import { AppName } from "@devographics/types";
 
 interface Params {
   localeId: string;

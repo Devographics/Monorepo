@@ -1,7 +1,7 @@
 import { normalizeDocument } from "./normalize";
 import { generateEntityRules, getBulkOperation } from "./helpers";
 import { getNormResponsesCollection } from "@devographics/mongo";
-import { fetchEntities } from "~/lib/api/fetch";
+import { fetchEntities } from "@devographics/fetch";
 import {
   EditionMetadata,
   ResponseDocument,
@@ -83,7 +83,7 @@ export const normalizeInBulk = async (options: {
 
   const bulkOperations: BulkOperation[] = [];
 
-  const entities = await fetchEntities();
+  const { data: entities } = await fetchEntities();
   const entityRules = generateEntityRules(entities);
 
   // console.log(JSON.stringify(selector, null, 2))

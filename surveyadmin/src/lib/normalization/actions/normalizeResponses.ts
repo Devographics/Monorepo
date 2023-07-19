@@ -3,7 +3,7 @@ import {
   fetchEditionMetadata,
   fetchSurveyMetadata,
   fetchSurveysMetadata,
-} from "~/lib/api/fetch";
+} from "@devographics/fetch";
 import { normalizeInBulk } from "../normalize/normalizeInBulk";
 
 export type NormalizeResponsesArgs = {
@@ -22,7 +22,7 @@ export const normalizeResponses = async (args: NormalizeResponsesArgs) => {
   const { surveyId, editionId, responsesIds } = args;
 
   const survey = await fetchSurveyMetadata({ surveyId });
-  const edition = await fetchEditionMetadata({ surveyId, editionId });
+  const { data: edition } = await fetchEditionMetadata({ surveyId, editionId });
   const rawResponsesCollection = await getRawResponsesCollection(survey);
 
   // first, get all the responses we're going to operate on

@@ -6,6 +6,7 @@
 import NodeCache from 'node-cache'
 import { initRedis, fetchJson as fetchRedis, storeRedis } from '@devographics/redis'
 import { logToFile } from '@devographics/debug'
+import { GetFromCacheOptions } from './types'
 
 export const memoryCache = new NodeCache({
     // This TTL must stay short, because we manually invalidate this cache
@@ -126,19 +127,11 @@ export async function getFromCache<T = any>({
     key,
     fetchFunction: fetchFromSource,
     calledFrom,
-    serverConfig,
+    serverConfig = () => ({}),
     shouldGetFromCache: shouldGetFromCacheOptions,
     shouldUpdateCache = true,
     shouldThrow = true
-}: {
-    key: string
-    fetchFunction: () => Promise<T>
-    calledFrom?: string
-    serverConfig: Function
-    shouldGetFromCache?: boolean
-    shouldUpdateCache?: boolean
-    shouldThrow?: boolean
-}) {
+}: GetFromCacheOptions<T>) {
     let inMemory = false
     initRedis(serverConfig().redisUrl, serverConfig().redisToken)
     const calledFromLog = calledFrom ? `(↪️  ${calledFrom})` : ''

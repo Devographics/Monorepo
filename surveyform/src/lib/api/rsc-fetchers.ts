@@ -3,18 +3,19 @@ import {
   fetchAllLocalesIds,
   fetchAllLocalesMetadata,
   fetchLocale,
-} from "./fetch";
+} from "@devographics/fetch";
+import { AppName } from "@devographics/types";
 
 /**
  * Will cache per localeId and contexts
  * /!\ Will not automatically merge cache if contexts are repeated
  * (eg fetching ["general"] then ["general", "survey"])
  */
-export const rscLocale = cache(
-  async (...args: Parameters<typeof fetchLocale>) => fetchLocale(...args)
-);
+export const rscLocale = cache((options: any) => fetchLocale(options));
 
 export const rscAllLocalesMetadata = cache((options?: any) =>
   fetchAllLocalesMetadata(options)
 );
-export const rscAllLocalesIds = cache(() => fetchAllLocalesIds());
+export const rscAllLocalesIds = cache(() =>
+  fetchAllLocalesIds({ appName: AppName.SURVEYFORM })
+);

@@ -6,19 +6,19 @@ import yaml from 'js-yaml'
  */
 
 /**
- * 
- * @param {string} fileName 
- * @param {any} object 
- * @param {LogOptions} options 
- * @returns 
+ *
+ * @param {string} fileName
+ * @param {any} object
+ * @param {LogOptions} options
+ * @returns
  */
 export const logToFile = async (fileName, object, options = {}) => {
     if (process.env.NODE_ENV === 'development') {
         const { mode = 'append', timestamp = false, dirPath, subDir } = options
-        const envLogsDirPath = process.env.LOGS_DIRECTORY
+        const envLogsDirPath = process.env.LOGS_PATH
 
         if (!envLogsDirPath) {
-            console.warn('Please define LOGS_DIRECTORY in your .env file to enable logging')
+            console.warn('Please define LOGS_PATH in your .env file to enable logging')
             return
         }
         const logsDirPath = dirPath ?? (subDir ? `${envLogsDirPath}/${subDir}` : envLogsDirPath)
@@ -32,11 +32,13 @@ export const logToFile = async (fileName, object, options = {}) => {
             contents = object
         } else if (fileName.includes('.yml') || fileName.includes('.yaml')) {
             contents = yaml.dump(object, { noRefs: true, skipInvalid: true })
-        } else if (typeof object === "undefined") {
+        } else if (typeof object === 'undefined') {
             // necessary because JSON.stringify of an undefined object is undefined, not a string
             // NOTE: this mean we output invalid JSON in this case
-            console.warn(`Logging undefined object at ${fullPath}, this will produce an invalid .json file containing 'undefined'.`)
-            contents = "undefined"
+            console.warn(
+                `Logging undefined object at ${fullPath}, this will produce an invalid .json file containing 'undefined'.`
+            )
+            contents = 'undefined'
         } else {
             contents = JSON.stringify(object, null, 2)
         }

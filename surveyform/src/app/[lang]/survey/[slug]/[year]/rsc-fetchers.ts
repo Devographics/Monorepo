@@ -2,8 +2,9 @@
  * Fetchers optimized for Next.js
  */
 import { notFound } from "next/navigation";
-import { fetchEditionMetadata } from "~/lib/api/fetch";
+import { fetchEditionMetadata } from "@devographics/fetch";
 import { surveyParamsLookup } from "~/lib/surveys/data";
+import { AppName } from "@devographics/types";
 
 /**
  * Use in metadata

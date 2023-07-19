@@ -1,4 +1,5 @@
-import { fetchEditionMetadata } from "~/lib/api/fetch";
+import { fetchEditionMetadata } from "@devographics/fetch";
+import { AppName } from "@devographics/types";
 
 interface Params {
   surveyId: string;

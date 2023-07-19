@@ -1,5 +1,6 @@
-import { fetchAllLocalesMetadata } from "~/lib/api/fetch";
+import { fetchAllLocalesMetadata } from "@devographics/fetch";
 import { defaultLocaleId } from "../config";
+import { AppName } from "@devographics/types";
 
 /**
  * Return a locale that exists in our locales definitions

@@ -13,8 +13,8 @@ export const deleteUser = async ({ email, reallyDelete = 0 }) => {
     `// Finding and deleting all user data associated with email "${cleanEmail}" (reallyDelete = ${reallyDelete})`
   );
   let legacyUser,
-    legacyResponses = [],
-    newResponses = [];
+    legacyResponses = [] as any[],
+    newResponses = [] as any[];
 
   const users = await getUsersCollection();
   const responses = await getRawResponsesCollection();

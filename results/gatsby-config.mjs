@@ -10,14 +10,11 @@ dotenv.config()
 
 function checkEnv() {
     const errors = []
-    if (!process.env.DATA_API_URL) {
-        errors.push("Missing DATA_API_URL")
-    }
-    if (!process.env.INTERNAL_API_URL) {
-        errors.push("Missing INTERNAL_API_URL")
+    if (!process.env.GATSBY_API_URL) {
+        errors.push('Missing GATSBY_API_URL')
     }
     if (errors.length) {
-        throw new Error(errors.join("\n"))
+        throw new Error(errors.join('\n'))
     }
 }
 checkEnv()
@@ -41,7 +38,7 @@ export default {
             options: {
                 typeName: 'DataAPI',
                 fieldName: 'dataAPI',
-                url: process.env.DATA_API_URL
+                url: process.env.GATSBY_API_URL
             }
         },
         {
@@ -49,7 +46,7 @@ export default {
             options: {
                 typeName: 'InternalAPI',
                 fieldName: 'internalAPI',
-                url: process.env.INTERNAL_API_URL
+                url: process.env.GATSBY_API_URL
             }
         },
         'gatsby-plugin-react-helmet',

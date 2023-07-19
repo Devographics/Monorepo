@@ -6,7 +6,8 @@ import { cronMiddleware } from "~/lib/server/edge/cronMiddleware";
 import { getLocaleFromAcceptLanguage } from "~/i18n/server/localeDetection";
 import { LOCALE_COOKIE_NAME } from "./i18n/cookie";
 import { getClosestLocale } from "./i18n/data/locales";
-import { fetchAllLocalesIds } from "./lib/api/fetch";
+import { fetchAllLocalesIds } from "@devographics/fetch";
+import { AppName } from "@devographics/types";
 
 function getFirstParam(pathname: string) {
   if (!pathname) {

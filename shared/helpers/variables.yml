@@ -6,9 +6,19 @@
 #       - surveyform
 #       - surveyadmin
 
+- id: APP_NAME
+  description: Name of the app
+  example: surveyform
+  usedBy:
+      - api
+      - results
+      - surveyform
+      - surveyadmin
+
 - id: API_URL
   aliases:
       - REACT_APP_API_URL
+      - GATSBY_API_URL
   description: URL of the API
   example: https://api.devographics.com
   usedBy:
@@ -162,6 +172,27 @@
   example: cbabc40...115fd1affc789cc6f
   usedBy:
       - surveyform
+
+### Results
+
+- id: SURVEYID
+  description: The id of the survey, when rendering a results site
+  example: state_of_css
+  usedBy:
+      - results
+
+- id: EDITIONID
+  description: The id of the survey edition, when rendering a results site
+  example: css2023
+  usedBy:
+      - results
+
+- id: FAST_BUILD
+  optional: true
+  description: Enable "fast build" mode, which skips most locales and block subpages
+  example: true
+  usedBy:
+      - results
 
 ### Local Dev (all optional)
 
