@@ -1,8 +1,9 @@
 import { getEditionQuestionById } from "../normalize/helpers";
 import { getSelector } from "../helpers/getSelectors";
 import { getRawResponsesCollection } from "@devographics/mongo";
-import { fetchEditionMetadata, fetchSurveyMetadata } from "@devographics/fetch";
+import { fetchSurveyMetadata } from "@devographics/fetch";
 import { normalizeInBulk, defaultLimit } from "../normalize/normalizeInBulk";
+import { fetchEditionMetadataAdmin } from "~/lib/api/fetch";
 
 export type NormalizeQuestionArgs = {
   surveyId: string;
@@ -32,7 +33,10 @@ export const normalizeQuestion = async (args: NormalizeQuestionArgs) => {
   const startAt = new Date();
 
   const survey = await fetchSurveyMetadata({ surveyId });
-  const { data: edition } = await fetchEditionMetadata({ surveyId, editionId });
+  const { data: edition } = await fetchEditionMetadataAdmin({
+    surveyId,
+    editionId,
+  });
   const question = getEditionQuestionById({ edition, questionId });
 
   const rawResponsesCollection = await getRawResponsesCollection(survey);

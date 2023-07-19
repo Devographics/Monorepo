@@ -1,10 +1,8 @@
 import Link from "next/link";
 import Breadcrumbs from "~/components/normalization/Breadcrumbs";
 import NormalizeEdition from "~/components/normalization/NormalizeEdition";
-import {
-  fetchEditionMetadata,
-  fetchSurveysMetadata,
-} from "@devographics/fetch";
+import { fetchSurveysMetadata } from "@devographics/fetch";
+import { fetchEditionMetadataAdmin } from "~/lib/api/fetch";
 import {
   getEditionNormalizedResponsesCount,
   getEditionResponsesCount,
@@ -16,7 +14,10 @@ export default async function Page({ params }) {
   const { surveyId, editionId } = params;
   const { data: surveys } = await fetchSurveysMetadata();
   const survey = surveys.find((s) => s.id === surveyId)!;
-  const { data: edition } = await fetchEditionMetadata({ surveyId, editionId });
+  const { data: edition } = await fetchEditionMetadataAdmin({
+    surveyId,
+    editionId,
+  });
   const questions = getNormalizableQuestions({ survey, edition });
   const responsesCount = await getEditionResponsesCount({ survey, edition });
   const normResponsesCount = await getEditionNormalizedResponsesCount({

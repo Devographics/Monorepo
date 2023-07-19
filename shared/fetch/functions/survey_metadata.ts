@@ -1,5 +1,5 @@
 import { FetcherFunctionOptions } from '../types'
-import { fetchSurveysMetadata } from './surveys_metadata'
+import { fetchSurveysMetadata } from './all_surveys_metadata'
 
 export const fetchSurveyMetadata = async (
     options: FetcherFunctionOptions & { surveyId: string }

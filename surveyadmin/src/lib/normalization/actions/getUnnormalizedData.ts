@@ -1,7 +1,5 @@
-import {
-  fetchEditionMetadata,
-  fetchSurveysMetadata,
-} from "@devographics/fetch";
+import { fetchSurveysMetadata } from "@devographics/fetch";
+import { fetchEditionMetadataAdmin } from "~/lib/api/fetch";
 import {
   getEditionQuestionById,
   getQuestionResponsesCount,
@@ -20,7 +18,10 @@ export const getUnnormalizedData = async ({
   if (!survey) {
     throw new Error(`Could not find survey with id ${surveyId}`);
   }
-  const { data: edition } = await fetchEditionMetadata({ surveyId, editionId });
+  const { data: edition } = await fetchEditionMetadataAdmin({
+    surveyId,
+    editionId,
+  });
   if (!edition) {
     throw new Error(`Could not find edition with id ${editionId}`);
   }

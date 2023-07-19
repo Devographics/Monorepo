@@ -2,11 +2,8 @@ import { generateEntityRules, getEditionQuestionById } from "./helpers";
 import { getQuestionObject } from "../helpers/getQuestionObject";
 import * as steps from "./steps";
 import get from "lodash/get.js";
-import {
-  fetchEditionMetadata,
-  fetchEntities,
-  fetchSurveyMetadata,
-} from "@devographics/fetch";
+import { fetchEntities, fetchSurveyMetadata } from "@devographics/fetch";
+import { fetchEditionMetadataAdmin } from "~/lib/api/fetch";
 import {
   NormalizationOptions,
   NormalizationResultSuccessEx,
@@ -44,7 +41,7 @@ const fetchDataIfNeeded = async (options: NormalizationOptions) => {
   const survey = options.survey || (await fetchSurveyMetadata({ surveyId }));
   const edition =
     options.edition ||
-    (await fetchEditionMetadata({ surveyId, editionId })).data;
+    (await fetchEditionMetadataAdmin({ surveyId, editionId })).data;
   const entities = options.entities || (await fetchEntities()).data;
   const entityRules = options.entityRules || generateEntityRules(entities);
   return {
