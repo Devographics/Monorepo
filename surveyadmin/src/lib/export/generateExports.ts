@@ -100,7 +100,7 @@ function mongoExportCmd({
    */
   const baseCmd = `
  mongoexport\
- --uri ${serverConfig().publicReadonlyMongoUri}\
+ --uri ${serverConfig().publicMongoUri}\
  --collection normalized_responses \
  --pretty\
  --query='{"editionId": "${editionId}"}' \
@@ -147,9 +147,8 @@ const makeFilePath = (
   const day = now.getDate().toString().padStart(2, "0");
   const timestamp = `${year}-${month}-${day}`;
 
-  const filename = `${surveySlug}${
-    addTimestamp ? "_" + timestamp : ""
-  }.${extension}`;
+  const filename = `${surveySlug}${addTimestamp ? "_" + timestamp : ""
+    }.${extension}`;
   return path.resolve("/tmp", filename);
 };
 
@@ -204,8 +203,6 @@ export async function generateExportsZip(edition: EditionMetadata) {
     edition,
   });
   filePaths.push(jsonFilePath);
-  // TODO: generate a zip of the JSON + the CSV
-  // Currently only the JSON is streamed back
   const csvFilePath = await generateMongoExport({
     format: "csv",
     edition,

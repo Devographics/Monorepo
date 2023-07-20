@@ -574,8 +574,6 @@ importers:
   surveyadmin:
     specifiers:
       '@babel/core': ^7.20.2
-      '@cypress/code-coverage': ^3.10.0
-      '@cypress/webpack-preprocessor': ^5.15.5
       '@devographics/debug': workspace:^1.0.0
       '@devographics/fetch': workspace:^1.0.0
       '@devographics/helpers': workspace:^1.0.0
@@ -593,7 +591,6 @@ importers:
       '@sentry/node': ^7.19.0
       '@sentry/react': ^7.19.0
       '@sentry/types': ^7.19.0
-      '@testing-library/cypress': ^8.0.3
       '@testing-library/jest-dom': ^5.16.5
       '@testing-library/react': ^10.4.9
       '@testing-library/react-hooks': ^3.7.0
@@ -616,7 +613,6 @@ importers:
       cookie: ^0.5.0
       cross-env: 7.0.2
       csv-parser: ^3.0.0
-      cypress: 12.13.0
       debug: 4.3.4
       dotenv-cli: ^4.1.1
       esbuild-plugin-yaml: ^0.0.1
@@ -639,9 +635,6 @@ importers:
       node-fetch: ^3.3.0
       node-loader: ^2.0.0
       nodemailer: ^6.8.0
-      passport: ^0.4.1
-      passport-local: 1.0.0
-      passport-magic-login: ^1.2.0
       polished: ^3.7.2
       postcss-nested: ^4.2.3
       react: ^18.2.0
@@ -667,7 +660,6 @@ importers:
       typescript: ^5.1.3
       uuid: ^8.3.2
       webpack: ^5.75.0
-      yalc: ^1.0.0-pre.53
       zod: ^3.21.4
     dependencies:
       '@devographics/debug': link:../shared/debug
@@ -703,9 +695,6 @@ importers:
       node-cache: 5.1.2
       node-fetch: 3.3.0
       nodemailer: 6.9.1
-      passport: 0.4.1
-      passport-local: 1.0.0
-      passport-magic-login: 1.2.0
       polished: 3.7.2
       postcss-nested: 4.2.3
       react: 18.2.0
@@ -721,16 +710,12 @@ importers:
       uuid: 8.3.2
       zod: 3.21.4
     optionalDependencies:
-      '@cypress/code-coverage': 3.10.8_pbc5onkz3axgypdrhw7vrgsbfy
-      '@cypress/webpack-preprocessor': 5.17.1_iuwfgmumua4qktbh37y2xycnpi
       '@next/bundle-analyzer': 12.3.4
-      '@testing-library/cypress': 8.0.7_cypress@12.13.0
       '@testing-library/jest-dom': 5.16.5
       '@testing-library/react': 10.4.9_biqbaboplfbrettd7655fr4n2y
       '@testing-library/react-hooks': 3.7.0_react@18.2.0
       '@types/jest': 25.2.3
       auto-changelog: 2.4.0
-      cypress: 12.13.0
       dotenv-cli: 4.1.1
       eslint-config-next: 13.4.9_nydeehezxge4zglz7xgffbdlvu
       eslint-plugin-cypress: 2.11.1_eslint@7.32.0
@@ -767,7 +752,6 @@ importers:
       tsup: 6.5.0_typescript@5.1.3
       typescript: 5.1.3
       webpack: 5.75.0
-      yalc: 1.0.0-pre.53
 
   surveyform:
     specifiers:
@@ -4190,31 +4174,6 @@ packages:
       postcss-selector-parser: 6.0.11
     dev: false
 
-  /@cypress/code-coverage/3.10.8_pbc5onkz3axgypdrhw7vrgsbfy:
-    resolution: {integrity: sha512-9KZvQKYjoz09ocZEGC0a0+uVFSMe6gOblqGpWoTGi8HYSbKFAuOJkjJB5vJ1fb1u52GOgW2b1JqhhtJJyA/ksg==}
-    requiresBuild: true
-    peerDependencies:
-      cypress: '*'
-    dependencies:
-      '@cypress/webpack-preprocessor': 5.17.1_iuwfgmumua4qktbh37y2xycnpi
-      chalk: 4.1.2
-      cypress: 12.13.0
-      dayjs: 1.11.8
-      debug: 4.3.4
-      execa: 4.1.0
-      globby: 11.0.4
-      istanbul-lib-coverage: 3.0.0
-      js-yaml: 4.1.0
-      nyc: 15.1.0
-    transitivePeerDependencies:
-      - '@babel/core'
-      - '@babel/preset-env'
-      - babel-loader
-      - supports-color
-      - webpack
-    dev: false
-    optional: true
-
   /@cypress/code-coverage/3.10.8_tlgxnvcoxyb357zy5mo6g4s63m:
     resolution: {integrity: sha512-9KZvQKYjoz09ocZEGC0a0+uVFSMe6gOblqGpWoTGi8HYSbKFAuOJkjJB5vJ1fb1u52GOgW2b1JqhhtJJyA/ksg==}
     requiresBuild: true
@@ -4262,24 +4221,6 @@ packages:
       tough-cookie: 2.5.0
       tunnel-agent: 0.6.0
       uuid: 8.3.2
-    dev: false
-    optional: true
-
-  /@cypress/webpack-preprocessor/5.17.1_iuwfgmumua4qktbh37y2xycnpi:
-    resolution: {integrity: sha512-FE/e8ikPc8z4EVopJCaior3RGy0jd2q9Xcp5NtiwNG4XnLfEnUFTZlAGwXe75sEh4fNMPrBJW1KIz77PX5vGAw==}
-    peerDependencies:
-      '@babel/core': ^7.0.1
-      '@babel/preset-env': ^7.0.0
-      babel-loader: ^8.0.2 || ^9
-      webpack: ^4 || ^5
-    dependencies:
-      '@babel/core': 7.22.8
-      bluebird: 3.7.1
-      debug: 4.3.4
-      lodash: 4.17.21
-      webpack: 5.75.0
-    transitivePeerDependencies:
-      - supports-color
     dev: false
     optional: true
 

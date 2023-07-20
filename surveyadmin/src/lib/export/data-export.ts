@@ -1,8 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import nextConnect from "next-connect";
-import { connectToAppDbMiddleware } from "~/lib/server/middlewares/mongoAppConnection";
-import { contextFromReq } from "~/lib/server/context";
 import { mongoExportMiddleware } from "~/lib/export/mongoExport";
 
 export default nextConnect<NextApiRequest, NextApiResponse>({
@@ -11,7 +9,8 @@ export default nextConnect<NextApiRequest, NextApiResponse>({
     res.status(500).end("Unknown error");
   },
 }).get(
-  connectToAppDbMiddleware,
+  // There is no auth anymore in surveyadmin as it is run locally only
+  /*
   async function checkAuth(req, res: NextApiResponse, next) {
     // Same context is in graphql API
     const context = await contextFromReq(req);
@@ -20,5 +19,6 @@ export default nextConnect<NextApiRequest, NextApiResponse>({
     }
     next();
   },
+  */
   mongoExportMiddleware
 );
