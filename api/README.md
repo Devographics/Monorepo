@@ -1,6 +1,9 @@
  ## Env file
 
 ```sh
+# APP_NAME can be used by shared code
+APP_NAME="api"
+
 SURVEYS_REPO=surveys
 MONGO_URI=mongodb://localhost:27017/devographics
 MONGO_PUBLIC_DB=devographics_public
