@@ -24,7 +24,7 @@ export const QuestionLabel = ({
     <span
       className={labelClass}
       dangerouslySetInnerHTML={{
-        __html: html,
+        __html: html || clean,
       }}
     />
   ) : (

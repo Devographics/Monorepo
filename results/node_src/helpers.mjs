@@ -128,6 +128,8 @@ export const getExistingData = async ({ dataFileName, dataFilePath, baseUrl }) =
     return data
 }
 
+// if SURVEYS_URL is defined, then use that to load surveys;
+// if not, look in local filesystem
 export const getLoadMethod = () => (process.env.SURVEYS_URL ? 'remote' : 'local')
 
 export const getDataLocations = (surveyId, editionId) => {
