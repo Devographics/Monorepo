@@ -1,10 +1,8 @@
 import { getEditionSelector, getSelector } from "../helpers/getSelectors";
 import { getRawResponsesCollection } from "@devographics/mongo";
-import {
-  fetchEditionMetadata,
-  fetchSurveysMetadata,
-} from "@devographics/fetch";
+import { fetchSurveysMetadata } from "@devographics/fetch";
 import { normalizeInBulk, defaultLimit } from "../normalize/normalizeInBulk";
+import { fetchEditionMetadataAdmin } from "~/lib/api/fetch";
 
 export type NormalizeEditionArgs = {
   surveyId: string;
@@ -35,7 +33,10 @@ export const normalizeEdition = async (args: NormalizeEditionArgs) => {
     throw new Error(`Could not find survey for surveyId ${surveyId}`);
   }
 
-  const { data: edition } = await fetchEditionMetadata({ surveyId, editionId });
+  const { data: edition } = await fetchEditionMetadataAdmin({
+    surveyId,
+    editionId,
+  });
   if (!edition) {
     throw new Error(`Could not find edition for editionId ${editionId}`);
   }

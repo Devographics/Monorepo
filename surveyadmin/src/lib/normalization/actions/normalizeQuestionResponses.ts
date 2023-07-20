@@ -1,10 +1,7 @@
 import { getRawResponsesCollection } from "@devographics/mongo";
-import {
-  fetchEditionMetadata,
-  fetchSurveyMetadata,
-  fetchSurveysMetadata,
-} from "@devographics/fetch";
+import { fetchSurveyMetadata } from "@devographics/fetch";
 import { normalizeInBulk } from "../normalize/normalizeInBulk";
+import { fetchEditionMetadataAdmin } from "~/lib/api/fetch";
 
 export type NormalizeQuestionResponsesArgs = {
   // note: we need a surveyId to figure out which database to use
@@ -25,7 +22,10 @@ export const normalizeQuestionResponses = async (
   const { surveyId, editionId, questionId, responsesIds } = args;
 
   const survey = await fetchSurveyMetadata({ surveyId });
-  const { data: edition } = await fetchEditionMetadata({ surveyId, editionId });
+  const { data: edition } = await fetchEditionMetadataAdmin({
+    surveyId,
+    editionId,
+  });
   const rawResponsesCollection = await getRawResponsesCollection(survey);
 
   // first, get all the responses we're going to operate on

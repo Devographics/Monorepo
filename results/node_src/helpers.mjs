@@ -112,7 +112,7 @@ Get a file from the disk or from GitHub
 */
 export const getExistingData = async ({ dataFileName, dataFilePath, baseUrl }) => {
     let contents, data
-    if (process.env.JSON_CACHE_TYPE === 'local') {
+    if (getLoadMethod() === 'local') {
         if (fs.existsSync(dataFilePath)) {
             contents = fs.readFileSync(dataFilePath, 'utf8')
         }
@@ -128,12 +128,15 @@ export const getExistingData = async ({ dataFileName, dataFilePath, baseUrl }) =
     return data
 }
 
+// if SURVEYS_URL is defined, then use that to load surveys;
+// if not, look in local filesystem
+export const getLoadMethod = () => (process.env.SURVEYS_URL ? 'remote' : 'local')
+
 export const getDataLocations = (surveyId, editionId) => {
-    if (!process.env.SURVEYS_DIR) throw new Error("SURVEYS_DIR must be defined to get data locations")
-    return ({
-        localPath: `./../../${process.env.SURVEYS_DIR}/${surveyId}/${editionId}`,
-        url: `https://devographics.github.io/${process.env.SURVEYS_REPO}/${surveyId}/${editionId}`
-    })
+    return {
+        localPath: `${process.env.SURVEYS_PATH}/${surveyId}/${editionId}`,
+        url: `${process.env.SURVEYS_URL}/${surveyId}/${editionId}`
+    }
 }
 
 /*
@@ -143,7 +146,7 @@ Try loading data from disk or GitHub, or else run queries for *each block* in a 
 */
 export const runPageQueries = async ({ page, graphql, surveyId, editionId }) => {
     const startedAt = new Date()
-    const useCache = process.env.USE_CACHE === 'false' ? false : true
+    const useCache = process.env.DISABLE_CACHE === 'true' ? false : true
     console.log(`// 🔍 Running GraphQL queries for page ${page.id}… (useCache=${useCache})`)
 
     const paths = getDataLocations(surveyId, editionId)
@@ -171,10 +174,8 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId }) => 
                     baseUrl
                 })
                 if (existingData && useCache) {
-                    const loadingMethod =
-                        process.env.JSON_CACHE_TYPE === 'local' ? 'disk' : 'GitHub'
                     console.log(
-                        `// 🎯 File ${dataFileName} found on ${loadingMethod}, loading its contents…`
+                        `// 🎯 File ${dataFileName} found on ${getLoadMethod()}, loading its contents…`
                     )
                     data = existingData
                 } else {

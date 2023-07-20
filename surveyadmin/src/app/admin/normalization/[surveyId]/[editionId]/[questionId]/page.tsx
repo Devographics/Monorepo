@@ -1,16 +1,17 @@
 import Breadcrumbs from "~/components/normalization/Breadcrumbs";
 import { NormalizeQuestion } from "~/components/normalization/NormalizeQuestion";
-import {
-  fetchEditionMetadata,
-  fetchSurveysMetadata,
-} from "@devographics/fetch";
+import { fetchSurveysMetadata } from "@devographics/fetch";
+import { fetchEditionMetadataAdmin } from "~/lib/api/fetch";
 import { getEditionQuestions } from "~/lib/normalization/helpers/getEditionQuestions";
 
 export default async function Page({ params }) {
   const { surveyId, editionId, questionId } = params;
   const { data: surveys } = await fetchSurveysMetadata();
   const survey = surveys.find((s) => s.id === surveyId)!;
-  const { data: edition } = await fetchEditionMetadata({ surveyId, editionId });
+  const { data: edition } = await fetchEditionMetadataAdmin({
+    surveyId,
+    editionId,
+  });
 
   const question = getEditionQuestions(edition).find(
     (q) => q.id === questionId
