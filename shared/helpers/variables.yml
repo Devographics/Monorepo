@@ -8,7 +8,7 @@
 
 - id: APP_NAME
   description: Name of the app
-  example: surveyform
+  example: surveyform, api, results, surveyadmin
   usedBy:
       - api
       - results
