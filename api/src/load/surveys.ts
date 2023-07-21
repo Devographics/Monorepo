@@ -77,7 +77,14 @@ const getGitHubYamlFile = async (url: string) => {
     }
 }
 
-const skipItem = (fileName: string) => fileName.slice(0, 1) === '_'
+/**
+ * Skip files found on the github repository:
+ * - starting with "_"
+ * - special .github folder
+ * @param fileName 
+ * @returns 
+ */
+const skipItem = (fileName: string) => ["_", "."].includes(fileName.slice(0, 1))
 
 export const loadFromGitHub = async () => {
     const surveys: Survey[] = []
@@ -95,7 +102,7 @@ export const loadFromGitHub = async () => {
         )
     }
 
-    const getUrl = (path?: string) => {
+    const getUrl = (path: string = "") => {
         return `/repos/${owner}/${repo}/contents/${path}`
     }
 
@@ -210,7 +217,7 @@ export const loadLocally = async () => {
                         )
                         const editionConfigYaml: any = yaml.load(editionConfigContents)
                         edition = editionConfigYaml
-                    } catch (error) {}
+                    } catch (error) { }
                     const questionsPath = editionDirPath + '/questions.yml'
                     if (existsSync(questionsPath)) {
                         try {
@@ -230,7 +237,7 @@ export const loadLocally = async () => {
                         )
                         const editionApiYaml: any = yaml.load(editionApiContents)
                         edition.apiSections = makeAPIOnly(editionApiYaml)
-                    } catch (error) {}
+                    } catch (error) { }
                     editions.push(edition)
                 }
             }
