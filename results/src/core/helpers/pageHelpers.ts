@@ -72,8 +72,6 @@ export const getPageMeta = ({
     const imageUrl = getPageImageUrl({ pageContext })
     const isRoot = pageContext.path === '/' || pageContext.basePath === '/'
 
-    console.log({ pageContext })
-
     const meta = {
         url,
         title: isRoot

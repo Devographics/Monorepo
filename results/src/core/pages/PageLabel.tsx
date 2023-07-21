@@ -13,7 +13,6 @@ const PageLabel = ({
 }) => {
     const { getString } = useI18n()
     // const { getToolName } = useTools()
-    console.log({ page })
 
     return <>{getPageLabel({ pageContext: page, getString, options: { includeWebsite } })}</>
 }
