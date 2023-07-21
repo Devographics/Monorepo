@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { mq, spacing, fontSize } from 'core/theme'
 import PageLabel from './PageLabel'
 import PageLink from './PageLink'
+import { PageContextValue } from 'core/types'
 
 const StyledLink = styled(PageLink)`
     display: flex;
@@ -35,7 +36,7 @@ const StyledLink = styled(PageLink)`
     }
 `
 
-const PaginationLink = ({ page, type }) => (
+const PaginationLink = ({ page, type }: { page: PageContextValue; type: string }) => (
     <StyledLink page={page} className={`pagination__link pagination__${type}`} type={type}>
         {type === 'previous' && (
             <span>

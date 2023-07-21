@@ -1,10 +1,13 @@
-import fs from 'fs'
 import findIndex from 'lodash/findIndex.js'
 import findLastIndex from 'lodash/findLastIndex.js'
 import omit from 'lodash/omit.js'
 import template from 'lodash/template.js'
 import yaml from 'js-yaml'
 import { getQuestionId, loadTemplate } from './helpers.mjs'
+/**
+ * @typedef {{parent: PageDef, children: Array<PageDef> | any}} PageDef
+ * @typedef {{editionId: string, surveyId: string}} EditionVariables
+ */
 
 const stringify = value => {
     const json = JSON.stringify(value)
@@ -57,6 +60,14 @@ const applyTemplate = ({ block, templateObject, blockVariables = {}, contextVari
     }
 }
 
+/**
+ * Gets list of pages as a flat array given root pages
+ * Called recursively
+ * @param {{flat: Array<Page>}} stack 
+ * @param {Array<PageDef>} pages 
+ * @param {{children: string}} parent 
+ * @param {number} pageIndex 
+ */
 const flattenSitemap = (stack, pages, parent, pageIndex) => {
     pages.forEach(page => {
         if (parent) {
@@ -166,6 +177,12 @@ export const pageFromConfig = async (page, pageIndex, editionVariables) => {
 
 let computedSitemap = null
 
+/**
+ * 
+ * @param {any} rawSitemap 
+ * @param {EditionVariables} editionVariables 
+ * @returns {Promise<{flat: Array<PageDef>}>}
+ */
 export const computeSitemap = async (rawSitemap, editionVariables) => {
     if (computedSitemap !== null) {
         return computedSitemap

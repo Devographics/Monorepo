@@ -16,7 +16,7 @@ export const getTranslationValuesFromContext = (context: { section?: string, too
     return values
 }
 
-export const getPageLabelKey = ({ pageContext }: { pageContext: PageContextValue }) =>
+export const getPageLabelKey = ({ pageContext }: { pageContext: PageContextValue }): string =>
     pageContext.titleId || `sections.${pageContext.intlId || pageContext.id}.title`
 
 export const getPageLabel = ({
@@ -36,7 +36,7 @@ export const getPageLabel = ({
         label = `${pageContext.currentSurvey.name} ${pageContext.currentEdition.year}: ${label}`
     }
 
-    return label
+    return label || ""
 }
 
 /**
@@ -71,6 +71,8 @@ export const getPageMeta = ({
     const url = `${pageContext.host}${get(pageContext, 'locale.path')}${pageContext.basePath}`
     const imageUrl = getPageImageUrl({ pageContext })
     const isRoot = pageContext.path === '/' || pageContext.basePath === '/'
+
+    console.log({ pageContext })
 
     const meta = {
         url,

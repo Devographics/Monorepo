@@ -1,3 +1,4 @@
+import React from 'react'
 import { getPageLabel } from 'core/helpers/pageHelpers'
 import { useI18n } from 'core/i18n/i18nContext'
 import { PageContextValue } from 'core/types'
@@ -12,8 +13,9 @@ const PageLabel = ({
 }) => {
     const { getString } = useI18n()
     // const { getToolName } = useTools()
+    console.log({ page })
 
-    return getPageLabel({ pageContext: page, getString, options: { includeWebsite } })
+    return <>{getPageLabel({ pageContext: page, getString, options: { includeWebsite } })}</>
 }
 
 export default PageLabel
