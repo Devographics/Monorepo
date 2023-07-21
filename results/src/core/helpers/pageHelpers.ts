@@ -2,8 +2,9 @@ import get from 'lodash/get'
 import { getBlockImage } from './blockHelpers'
 import { PageContextValue, StringTranslator } from 'core/types'
 
-export const getTranslationValuesFromContext = (context, translate) => {
-    const values = {}
+// TODO: doesn't seem to be used
+export const getTranslationValuesFromContext = (context: { section?: string, tool?: string }, translate: (key: string) => string) => {
+    const values: { section?: string, tool?: string } = {}
     if (context.section !== undefined) {
         values.section = translate(`section.${context.section}`)
     }

@@ -6,11 +6,9 @@
  */
 
 import type {
-  FieldTemplateId,
-  ParsedQuestion,
-  SurveyEdition,
-  SurveySection,
-} from "@devographics/core-models";
+  QuestionMetadata,
+  SectionMetadata,
+} from "@devographics/types";
 
 interface MarkdownOptions {
   showFieldName?: boolean;
@@ -23,7 +21,8 @@ export const convertSurveyToMarkdown = ({
 }: {
   formatMessage?: any;
   entities: any;
-  survey: SurveyEdition;
+  // TODO: what's the right type here?
+  survey: any;
   options?: MarkdownOptions;
 }) => {
   let surveyString = "";
@@ -47,7 +46,7 @@ const convertSection = ({
 }: {
   formatMessage?: any;
   entities?: any;
-  section: SurveySection;
+  section: SectionMetadata;
   options?: MarkdownOptions;
 }) => {
   let sectionString = "";
@@ -64,7 +63,7 @@ const convertSection = ({
     sectionString += convertQuestion({
       formatMessage,
       entities,
-      question: question as unknown as ParsedQuestion,
+      question: question as unknown as QuestionMetadata,
       section,
       options,
     });
@@ -72,7 +71,7 @@ const convertSection = ({
   return sectionString;
 };
 
-const templateNeedsFieldName = (template?: FieldTemplateId | string) => {
+const templateNeedsFieldName = (template?: string) => {
   return (
     template &&
     [
@@ -108,8 +107,8 @@ const convertQuestion = ({
 }: {
   formatMessage: any;
   entities: any;
-  question: ParsedQuestion;
-  section: SurveySection;
+  question: QuestionMetadata;
+  section: SectionMetadata;
   options?: MarkdownOptions;
 }) => {
   let questionString = "";

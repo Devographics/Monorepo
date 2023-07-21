@@ -2,9 +2,9 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import fs from "fs";
 const fsPromises = fs.promises;
 import path from "path";
-import { getEditionById } from "~/modules/surveys/helpers";
-import { ExportOptions } from "~/admin/models/export";
 import { generateExportsZip } from "./generateExports";
+import { fetchEditionMetadataAdmin } from "../api/fetch";
+import { ExportOptions } from "./typings";
 
 export async function mongoExportMiddleware(
   req: NextApiRequest,
@@ -13,25 +13,32 @@ export async function mongoExportMiddleware(
   // We log exports so they never go unnoticed
   console.log(`Started an export with options ${JSON.stringify(req.query)}`);
   // parse options
+  const surveyId = req.query["surveyId"];
   const editionId = req.query["editionId"];
 
-  if (typeof editionId !== "string") {
+  if (!(editionId && surveyId) || typeof editionId !== "string" || typeof surveyId !== "string") {
     return res
       .status(400)
       .send(
-        "Survey slug must be defined and must be a string, got:" + editionId
+        `Expected string surveyId and editionId, got surveyId=${surveyId} editionId=${editionId}`
       );
   }
 
+  // TODO: options not yet used
   const options: ExportOptions = {
     editionId,
+    surveyId,
     format: {
       json: true,
     },
   };
 
   // find the survey
-  const edition = await getEditionById(editionId);
+  const editionRes = await fetchEditionMetadataAdmin({ editionId, surveyId })
+  if (editionRes.error) {
+    return res.status(500).send("Error while getting edition metadata: " + editionRes.error)
+  }
+  const edition = editionRes.data
 
   if (!edition) {
     return res
