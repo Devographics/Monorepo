@@ -25,9 +25,15 @@ import { ResponseError } from "~/components/error/ResponseError";
 import { ResponseDetails } from "../surveys/ResponseDetails";
 import { useClientData } from "./hooks";
 
+/**
+ * - Logged in and survey open : create new response
+ * - Logged in and survey open and resutls : update response
+ * - Logged in and survey closed and results : see response
+ * - survey closed and (logged in and no results || logged out): see outline
+ *
+ */
 const EditionAction = ({ edition }: { edition: EditionMetadata }) => {
   const { id: editionId, surveyId } = edition;
-  const [loading, setLoading] = useState(false);
   const [responseError, setResponseError] = useState();
   const { status } = edition;
   const {
@@ -44,27 +50,14 @@ const EditionAction = ({ edition }: { edition: EditionMetadata }) => {
   );
   const hasResponse = !!response;
 
-  // hide action button if there is already a duplicate response
-  // const hideAction = parsedErrors?.some(
-  //   (e) => e.id === duplicateResponseErrorId
-  // );
-
   const isAvailable = status && status !== SurveyStatusEnum.CLOSED;
 
   const getSurveyAction = () => {
     if (isAvailable) {
       // 1. the survey is available to be filled out
-      if (!hasResponse || loading) {
-        // 1a. there is no response, or there is a response but we are currently loading it
-        return (
-          <SurveyStart
-            edition={edition}
-            loading={loading}
-            setLoading={setLoading}
-            currentUser={currentUser}
-            setErrors={setResponseError}
-          />
-        );
+      if (!hasResponse) {
+        // 1a. there is no response yet
+        return <SurveyStart edition={edition} setErrors={setResponseError} />;
       } else {
         // 1b. there is a response already
         return (
@@ -76,6 +69,7 @@ const EditionAction = ({ edition }: { edition: EditionMetadata }) => {
       return hasResponse ? (
         <EditionLink message="general.review_answers" response={response} />
       ) : (
+        // will point to the outline
         <EditionLink message="general.review_survey" readOnly={true} />
       );
     }
@@ -90,17 +84,12 @@ const EditionAction = ({ edition }: { edition: EditionMetadata }) => {
 };
 
 const SurveyStart = ({
-  loading,
-  setLoading,
-  currentUser,
   setErrors,
 }: {
   edition: EditionMetadata;
-  loading: boolean;
-  setLoading: any;
-  currentUser: any;
   setErrors: any;
 }) => {
+  const [loading, setLoading] = useState(false);
   const { edition } = useEdition();
   const router = useRouter();
   const { locale } = useLocaleContext();

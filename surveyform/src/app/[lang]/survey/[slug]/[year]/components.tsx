@@ -64,7 +64,7 @@ const EditionMainAsync = ({
           surveyId={edition.surveyId}
           hideGuest={edition.status === SurveyStatusEnum.CLOSED}
           user={currentUser}
-          successRedirectionPath={editionPath}
+          // successRedirectionPath={editionPath}
           successRedirectionFunction={(res) => {
             const { response } = res;
             const path = getEditionSectionPath({

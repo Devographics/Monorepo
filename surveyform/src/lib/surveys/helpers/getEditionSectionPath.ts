@@ -32,7 +32,9 @@ export function getEditionSectionPath({
   });
   const pathSegments = [locale.id, "survey", surveySlug, editionSlug];
 
-  if (readOnly) {
+  // point to a page that will only show the questions, with no response
+  const showOutline = !response && readOnly
+  if (showOutline) {
     pathSegments.push(outlineSegment);
   } else {
     const responseSegment = response?._id;

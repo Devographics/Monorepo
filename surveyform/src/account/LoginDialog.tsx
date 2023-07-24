@@ -5,6 +5,7 @@ import {
 } from "~/account/magicLogin/components/StandaloneMagicLoginForm";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { UserDocument } from "~/account/user/typings";
+import { ResponseDocument } from "@devographics/types";
 
 export const LoginDialog = ({
   hideGuest,
@@ -21,7 +22,7 @@ export const LoginDialog = ({
    * Redirect after succesful auth
    */
   successRedirectionPath?: string;
-  successRedirectionFunction?: (any) => string;
+  successRedirectionFunction?: (res: ResponseDocument) => string;
   loginOptions?: { data?: any; createResponse?: boolean };
 } & Pick<StandaloneMagicLoginFormProps, "surveyId" | "editionId">) => {
   //const redirectedFrom = router.query?.from as string;

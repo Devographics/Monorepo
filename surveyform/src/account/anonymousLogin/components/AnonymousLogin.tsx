@@ -4,9 +4,8 @@ import { useState, ReactNode } from "react";
 import { loginAnonymously } from "../lib";
 import { useSWRConfig } from "swr";
 import { apiRoutes } from "~/lib/apiRoutes";
-import { Button } from "~/components/ui/Button";
-import { Loading } from "~/components/ui/Loading";
 import { LoadingButton } from "~/components/ui/LoadingButton";
+import { ResponseDocument } from "@devographics/types";
 
 /**
  * Will update all "useUser" hooks
@@ -27,7 +26,7 @@ export const AnonymousLoginForm = ({
   loginOptions,
 }: {
   successRedirectionPath?: string;
-  successRedirectionFunction?: (any) => string;
+  successRedirectionFunction?: (res: ResponseDocument) => string;
   label?: string | ReactNode;
   loginOptions?: { data?: any; createResponse?: boolean };
 }) => {
