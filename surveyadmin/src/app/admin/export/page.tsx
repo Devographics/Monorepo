@@ -5,7 +5,6 @@ import { fetchSurveysMetadata } from "@devographics/fetch";
 import { AdminExportPage } from "./components";
 
 const AdminExportPageWithSurveys = async () => {
-  return <div>Work in progress: must reenable the API endpoint</div>;
   // TODO: fetch survey data using shared code
   const res = await fetchSurveysMetadata();
   if (res.error) {

@@ -12,6 +12,9 @@ import { apiRoutes } from "~/lib/apiRoutes";
 // import { useQuery } from "~/lib/graphql";
 /**
  * Trigger a file download for any URL
+ *
+ * NOTE: if the download fails and the server returns a JSON,
+ * this will show the download file as a .json because of the response application type
  * @param url
  */
 const triggerDownload = (url: string, filename?: string) => {
@@ -126,7 +129,6 @@ export const AdminExportPage = ({
         <label htmlFor="editionId">Edition ID</label>
         <select
           id="surveyId"
-          defaultValue="state-of-js"
           required
           // not needed for the form, but allow to display the markdown outline
           onChange={(evt) => {
@@ -144,7 +146,6 @@ export const AdminExportPage = ({
         {surveyId && (
           <select
             id="editionId"
-            defaultValue="js2022"
             required
             // not needed for the form, but allow to display the markdown outline
             onChange={(evt) => {
@@ -164,6 +165,10 @@ export const AdminExportPage = ({
           {!state.loading ? "Download exports zip" : "Loading..."}
         </button>
       </form>
+      <p>
+        NOTE: if the downloaded file is a ".json" instead of ".zip" there has
+        been an error server-side.
+      </p>
       {state.error && <p>Error: {state.error.message}</p>}
       {state.done && <p>Download will start shortly...</p>}
       <h2>Outline</h2>
