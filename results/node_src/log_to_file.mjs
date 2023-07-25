@@ -12,15 +12,24 @@ import yaml from 'js-yaml'
  * @param {LogOptions} options
  * @returns
  */
-export const logToFile = async (fileName, object, options = {}) => {
+export const logToFile = async (fileName_, object, options = {}) => {
     if (process.env.NODE_ENV === 'development') {
-        const { mode = 'append', timestamp = false, dirPath, subDir } = options
+        let fileName = fileName_,
+            subDir = options?.subDir
+
+        const { mode = 'overwrite', timestamp = false, dirPath } = options
         const envLogsDirPath = process.env.LOGS_PATH
 
         if (!envLogsDirPath) {
             console.warn('Please define LOGS_PATH in your .env file to enable logging')
             return
         }
+
+        if (fileName.includes('/')) {
+            subDir = fileName.split('/')[0]
+            fileName = fileName.split('/')[1]
+        }
+
         const logsDirPath = dirPath ?? (subDir ? `${envLogsDirPath}/${subDir}` : envLogsDirPath)
 
         if (!fs.existsSync(logsDirPath)) {

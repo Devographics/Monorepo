@@ -1,4 +1,4 @@
-import { RequestContext } from '../types'
+import { RequestContext, SurveyApiObject } from '../types'
 import config from '../config'
 import get from 'lodash/get.js'
 import uniq from 'lodash/uniq.js'
@@ -42,7 +42,7 @@ const groupByEdition = (allComments: CommentObject[]) => {
 }
 
 interface GetRawCommentsOptions {
-    survey: Survey
+    survey: SurveyApiObject
     question: QuestionApiObject
     context: RequestContext
     editionId?: string
@@ -71,7 +71,7 @@ export const getRawComments = async ({
     const { db, isDebug } = context
     const collection = getCollection(db, survey)
 
-    const dbPath = question.normPaths.comment
+    const dbPath = question?.normPaths?.comment
     if (!dbPath) {
         throw new Error(`Could not find comments dbPath for question ${survey.id}/${question.id}`)
     }

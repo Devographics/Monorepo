@@ -41,7 +41,7 @@ export const computeKey = (func: Function, funcOptions?: any) => {
         )
     }
 
-    return `func_${func.name}(${serializedOptions})`
+    return `${process.env.APP_NAME}__func_${func.name}(${serializedOptions})`
 }
 
 /**

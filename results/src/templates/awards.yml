@@ -1,19 +1,17 @@
 blockType: AwardsBlock
 wrapBlock: false
-dataPath: internalAPI.entities
+dataPath: dataAPI.entities
 query: >
-    internalAPI {
-        entities(ids: [${entities}]) {
-            id
+    entities(ids: [${entities}]) {
+        id
+        name
+        nameHtml
+        nameClean
+        homepage {
             name
-            nameHtml
-            nameClean
-            homepage {
-                name
-                url
-            }
-            mdn {
-                url
-            }
+            url
+        }
+        mdn {
+            url
         }
     }

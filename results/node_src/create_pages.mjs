@@ -12,8 +12,9 @@ import fs from 'fs'
 import path from 'path'
 import { logToFile } from './log_to_file.mjs'
 import { getMetadataQuery } from './queries.mjs'
-import { getLocalesRedis } from './locales.mjs'
+import { getLocales } from './locales.mjs'
 import { fileURLToPath } from 'url'
+import { initRedis } from './redis.mjs'
 
 const __filename = fileURLToPath(import.meta.url)
 
@@ -23,34 +24,24 @@ const editionFolder = path.resolve(__dirname, `../surveys/${process.env.EDITIONI
 
 function checkConfig() {
     const errors = []
-    if (!process.env.EDITIONID) errors.push("EDITIONID not defined")
-    if (!process.env.SURVEYID) errors.push("SURVEYID not defined")
+    if (!process.env.EDITIONID) errors.push('EDITIONID not defined')
+    if (!process.env.SURVEYID) errors.push('SURVEYID not defined')
     if (!fs.existsSync(editionFolder)) {
-        errors.push((`Folder ${editionFolder} doesn't exist, this is not a valid survey edition.`))
+        errors.push(`Folder ${editionFolder} doesn't exist, this is not a valid survey edition.`)
     }
     if (errors.length) {
-        throw new Error(errors.join("\n"))
+        throw new Error(errors.join('\n'))
     }
 }
 checkConfig()
 
 const USE_FAST_BUILD = process.env.FAST_BUILD === 'true'
 
-
-
 const rawSitemap = yaml.load(
-    fs.readFileSync(
-        path.join(editionFolder, "config/raw_sitemap.yml"),
-        'utf8'
-    )
+    fs.readFileSync(path.join(editionFolder, 'config/raw_sitemap.yml'), 'utf8')
 )
 const config = {
-    ...yaml.load(
-        fs.readFileSync(
-            path.join(editionFolder, "config/config.yml"),
-            'utf8'
-        )
-    ),
+    ...yaml.load(fs.readFileSync(path.join(editionFolder, 'config/config.yml'), 'utf8')),
     editionId: process.env.EDITIONID
 }
 
@@ -58,6 +49,8 @@ export const createPagesSingleLoop = async ({
     graphql,
     actions: { createPage, createRedirect }
 }) => {
+    await initRedis()
+
     const surveyId = process.env.SURVEYID
     if (!surveyId) throw new Error(`Must provide "SURVEYID" env variable`)
     const editionId = process.env.EDITIONID
@@ -78,26 +71,10 @@ export const createPagesSingleLoop = async ({
     // if USE_FAST_BUILD is turned on only keep en-US and ru-RU locale to make build faster
     const localeIds = USE_FAST_BUILD ? ['en-US', 'ru-RU'] : []
 
-    /* 
-    
-    1. GraphQL version: one huge slow query
-
-    */
-
-    // const locales = await getLocalesGraphQL({
-    //     graphql,
-    //     localeIds,
-    //     contexts: config.translationContexts,
-    //     surveyId
-    // })
-
-    /*
-    
-    2. Redis version: many small fast queries (without null fields)
-
-    */
-    const locales = await getLocalesRedis({
+    // Redis version: many small fast queries (without null fields)
+    const locales = await getLocales({
         localeIds,
+        graphql,
         contexts: config.translationContexts,
         editionId
     })

@@ -1,66 +1,86 @@
-import { getLocalesQuery } from './queries.mjs'
+import { getLocalesQuery, getLocaleContextQuery } from './queries.mjs'
 import { logToFile } from './log_to_file.mjs'
-import { createClient } from 'redis'
+import { getRedisClient } from './redis.mjs'
 
-export const getLocalesGraphQL = async ({ localeIds, graphql, contexts, editionId }) => {
-    const localesQuery = getLocalesQuery(localeIds, contexts)
-    logToFile('localesQuery.graphql', localesQuery, {
-        mode: 'overwrite',
-        editionId
-    })
+const getAllLocalesCacheKey = () => `${process.env.APP_NAME}__allLocales__metadata`
+const getLocaleContextCacheKey = (localeId, context) =>
+    `${process.env.APP_NAME}__locale__${localeId}__${context}__parsed`
+
+export const getLocalesGraphQL = async ({ localeIds, graphql, contexts, key }) => {
+    const localesQuery = getLocalesQuery(localeIds, contexts, false)
+    logToFile(`locales/${key}.graphql`, localesQuery)
 
     const localesResults = await graphql(
         `
             ${localesQuery}
         `
     )
-    logToFile('localesResults.json', localesResults, {
-        mode: 'overwrite',
-        editionId
-    })
-    const locales = localesResults.data.internalAPI.locales
-
+    logToFile(`locales/${key}.json`, localesResults)
+    const locales = localesResults.data.dataAPI.locales
     return locales
 }
 
-export const getLocalesRedis = async ({ localeIds, contexts, editionId }) => {
-    const redisClient = createClient({
-        url: process.env.REDIS_URL
-    })
+export const getLocaleContextGraphQL = async ({ localeId, context, graphql, key }) => {
+    const localesQuery = getLocaleContextQuery(localeId, context)
+    logToFile(`locales/${key}.graphql`, localesQuery)
 
-    redisClient.on('error', err => console.log('Redis Client Error', err))
+    const localesResults = await graphql(
+        `
+            ${localesQuery}
+        `
+    )
+    logToFile(`locales/${key}.json`, localesResults)
+    const locale = localesResults.data.dataAPI.locale
 
-    await redisClient.connect()
+    return locale
+}
 
-    const localesRaw = await redisClient.get('locale_all_locales_metadata')
-    let locales = JSON.parse(localesRaw)
+export const getLocales = async ({ localeIds, graphql, contexts }) => {
+    let locales
+    const redisClient = getRedisClient()
+    const allLocalesKey = getAllLocalesCacheKey()
+    const localesRaw = await redisClient.get(allLocalesKey)
+    if (localesRaw) {
+        locales = localesRaw
+    } else {
+        console.log(`Redis key ${allLocalesKey} was empty, fetching from API…`)
+        locales = await getLocalesGraphQL({ localeIds, graphql, contexts, key: allLocalesKey })
+        await redisClient.set(allLocalesKey, locales)
+    }
 
     if (localeIds && localeIds.length > 0) {
         locales = locales.filter(({ id }) => localeIds.includes(id))
     }
 
-    logToFile('localesMetadataRedis.json', locales, {
-        mode: 'overwrite',
-        editionId
-    })
+    logToFile('localesMetadataRedis.json', locales)
 
     for (const locale of locales) {
         let localeStrings = []
 
         for (const context of contexts) {
-            const key = `locale_${locale.id}_${context}_parsed`
+            const key = getLocaleContextCacheKey(locale.id, context)
             const dataRaw = await redisClient.get(key)
-            const data = JSON.parse(dataRaw)
-            const strings = data.strings
+            let strings
+            if (dataRaw) {
+                const data = dataRaw
+                strings = data.strings
+            } else {
+                console.log(`Redis key ${key} was empty, fetching from API…`)
+                const data = await getLocaleContextGraphQL({
+                    localeId: locale.id,
+                    context,
+                    graphql,
+                    key
+                })
+                strings = data.strings
+                await redisClient.set(key, data)
+            }
             localeStrings = [...localeStrings, ...strings]
         }
         locale.strings = localeStrings
     }
 
-    logToFile('localesResultsRedis.json', locales, {
-        mode: 'overwrite',
-        editionId
-    })
+    logToFile('localesResultsRedis.json', locales)
 
     return locales
 }

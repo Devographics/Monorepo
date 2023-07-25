@@ -41,14 +41,6 @@ export default {
                 url: process.env.GATSBY_API_URL
             }
         },
-        {
-            resolve: 'gatsby-source-graphql',
-            options: {
-                typeName: 'InternalAPI',
-                fieldName: 'internalAPI',
-                url: process.env.GATSBY_API_URL
-            }
-        },
         'gatsby-plugin-react-helmet',
         'gatsby-plugin-sass',
         { resolve: 'gatsby-plugin-netlify', options: {} },

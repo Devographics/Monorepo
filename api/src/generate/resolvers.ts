@@ -99,7 +99,7 @@ export const generateResolvers = async ({
                 )
                 if (editionTypeObject) {
                     const editionFieldsResolvers = Object.fromEntries(
-                        edition.sections.map((section: Section) => {
+                        edition.sections.map(section => {
                             return [
                                 section.id,
                                 getSectionResolver({
@@ -220,9 +220,9 @@ const getSectionResolver =
         edition,
         section
     }: {
-        survey: Survey
-        edition: Edition
-        section: Section
+        survey: SurveyApiObject
+        edition: EditionApiObject
+        section: SectionApiObject
     }): ResolverType =>
     (parent, args, context, info) => {
         console.log('// section resolver')

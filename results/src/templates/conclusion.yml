@@ -1,9 +1,9 @@
 blockType: ConclusionBlock
 wrapBlock: false
 disableExport: true
-dataPath: internalAPI.entities
+dataPath: dataAPI.entities
 query: >
-    internalAPI {
+    dataAPI {
         entities(ids: [${entities}]) {
             id
             name

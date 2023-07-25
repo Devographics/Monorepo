@@ -18,7 +18,7 @@ import { rootDir } from './rootDir'
 
 // import { cacheAvatars } from './avatars'
 
-import { AppName } from "@devographics/types"
+import { AppName } from '@devographics/types'
 import { EnvVar, getConfig, getEnvVar, setAppName } from '@devographics/helpers'
 import { logToFile } from '@devographics/debug'
 import { loadOrGetSurveys } from './load/surveys'
@@ -87,10 +87,6 @@ const start = async () => {
     // call getConfig the first time and show warnings if this is local dev env
     getConfig({ showWarnings: isDev })
 
-    // const redisClient = createClient({
-    //     url: appSettings.redisUrl
-    // })
-
     const redisClient = await initRedis()
     // redisClient.on('error', err => console.log('Redis Client Error', err))
 
@@ -155,7 +151,7 @@ const start = async () => {
         },
         context: (expressContext): RequestContext => {
             // TODO: do this better with a custom header
-            const isDebug = expressContext?.req?.rawHeaders?.includes('http://localhost:4031')
+            const isDebug = expressContext?.req?.rawHeaders?.includes('http://localhost:4030')
             return {
                 ...context,
                 isDebug
@@ -244,7 +240,8 @@ const start = async () => {
 
     app.listen({ port: port }, () =>
         console.log(
-            `🚀 Server ready at http://localhost:${port}${server.graphqlPath} (in ${finishedAt.getTime() - startedAt.getTime()
+            `🚀 Server ready at http://localhost:${port}${server.graphqlPath} (in ${
+                finishedAt.getTime() - startedAt.getTime()
             }ms)`
         )
     )

@@ -234,8 +234,7 @@ export const wrapQuery = ({
     queryContents: string
     addRootNode?: boolean
 }) => {
-    const isInteralAPIQuery = queryContents.includes('internalAPI')
-    if (addRootNode && !isInteralAPIQuery) {
+    if (addRootNode) {
         return `query ${queryName} {
     dataAPI{
         ${indentString(queryContents, 8)}

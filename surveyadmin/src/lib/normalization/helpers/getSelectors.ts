@@ -51,6 +51,11 @@ export const ignoreValues = [
   "ninguna",
   "ninguno",
   "nope",
+  "No comment",
+  "No Comment",
+  "no comment",
+  "Nil",
+  "nil",
 ];
 
 export const existsSelector = { $exists: true, $nin: ignoreValues };

@@ -35,6 +35,7 @@ export interface OptionMetadata extends Option {
     label?: string
 }
 
+// note: could be merged with ResultsSubFieldEnum ?
 export enum ResponsesTypes {
     PREDEFINED = 'Predefined',
     PRENORMALIZED = 'Prenormalized',

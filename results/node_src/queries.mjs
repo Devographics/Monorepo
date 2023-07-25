@@ -7,10 +7,12 @@ const argumentsPlaceholder = '<ARGUMENTS_PLACEHOLDER>'
 
 export const bucketFacetsPlaceholder = '<BUCKETFACETS_PLACEHOLDER>'
 
+const convertToGraphQLEnum = s => s.replace('-', '_')
+
 export const getLocalesQuery = (localeIds, contexts, loadStrings = true) => {
     const args = []
     if (localeIds.length > 0) {
-        args.push(`localeIds: [${localeIds.map(id => `"${id}"`).join(',')}]`)
+        args.push(`localeIds: [${localeIds.map(convertToGraphQLEnum).join(',')}]`)
     }
     if (contexts.length > 0) {
         args.push(`contexts: [${contexts.join(', ')}]`)
@@ -20,7 +22,7 @@ export const getLocalesQuery = (localeIds, contexts, loadStrings = true) => {
 
     return `
 query {
-    internalAPI {
+    dataAPI {
         locales${argumentsString} {
             completion
             id
@@ -38,6 +40,27 @@ query {
                     : ''
             }
             translators
+        }
+    }
+}
+`
+}
+
+export const getLocaleContextQuery = (localeId, context) => {
+    return `
+query {
+    dataAPI {
+        locale(localeId: ${convertToGraphQLEnum(localeId)}, contexts: [${context}]) {
+            id
+            label
+            strings {
+                key
+                t
+                tHtml
+                tClean
+                context
+                isFallback
+            }
         }
     }
 }
@@ -286,8 +309,7 @@ Wrap query contents with query FooQuery {...}
 
 */
 export const wrapQuery = ({ queryName, queryContents, addRootNode }) => {
-    const isInteralAPIQuery = queryContents.includes('internalAPI')
-    if (addRootNode && !isInteralAPIQuery) {
+    if (addRootNode) {
         return `query ${queryName} {
     dataAPI{
         ${indentString(queryContents, 8)}
@@ -330,8 +352,7 @@ export const getQuery = ({ query: query_, queryOptions, queryArgs }) => {
 
     if (queryOptions.isLog) {
         // when logging we can leave out enableCache parameter
-        delete queryOptions.parameters.enableCache
-        query = cleanQuery(query)
+        delete queryArgs?.parameters?.enableCache
     }
 
     const { editionId, questionId } = queryOptions

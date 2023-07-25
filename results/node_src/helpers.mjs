@@ -208,8 +208,8 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId }) => 
                     if (query.includes('dataAPI')) {
                         const queryLog = getQuery({
                             query: block.query,
-                            queryOptions,
-                            queryArgs: { ...queryArgs, isLog: true, addRootNode: false }
+                            queryOptions: { ...queryOptions, isLog: true, addRootNode: false },
+                            queryArgs
                         })
                         logToFile(queryFileName, queryLog, {
                             mode: 'overwrite',
