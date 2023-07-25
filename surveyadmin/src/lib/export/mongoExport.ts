@@ -55,10 +55,10 @@ export async function mongoExportMiddleware(
     const stats = await fsPromises.stat(zipFilePath);
     console.log("File size: ", stats.size)
     // this gets a fs "ReadStream" but we want a web platform "ReadableStream"
-    //const downloadStream = fs.createReadStream(zipFilePath, { encoding: "utf-8" });
+    //const downloadStream = fs.createReadStream(zipFilePath);
     // TODO: see https://github.com/vercel/next.js/discussions/15453#discussioncomment-6226391
     // and https://stackoverflow.com/questions/76763053/how-to-convert-readstream-into-readablestream-in-nodejs?noredirect=1#comment135330402_76763053
-    const data = await fsPromises.readFile(zipFilePath, "utf8")
+    const data = await fsPromises.readFile(zipFilePath)
     // TODO: doesn't work yet despite the file being correct
     const res = new NextResponse(data, {
       status: 200,
