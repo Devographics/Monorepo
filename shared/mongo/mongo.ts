@@ -11,6 +11,7 @@
 import { Survey } from '@devographics/types'
 import { MongoClient, Db } from 'mongodb'
 import { nanoid } from 'nanoid'
+import { getEnvVar, EnvVar } from '@devographics/helpers'
 
 const clients: { [uri: string]: Promise<MongoClient> } = {}
 
@@ -39,10 +40,34 @@ export const getMongoDb = async ({
     dbUri: string
     dbName: string
 }): Promise<Db> => {
+    if (!dbUri) {
+        throw new Error('getMongoDb error: dbUri is not defined')
+    }
+    if (!dbName) {
+        throw new Error('getMongoDb error: dbName is not defined')
+    }
     return (await getClient({ dbUri })).db(dbName)
 }
 
-/**
+export const getPrivateDb = async () =>
+    await getMongoDb({
+        dbUri: getEnvVar(EnvVar.MONGO_PRIVATE_URI),
+        dbName: getEnvVar(EnvVar.MONGO_PRIVATE_DB)
+    })
+
+export const getPublicDb = async () =>
+    await getMongoDb({
+        dbUri: getEnvVar(EnvVar.MONGO_PUBLIC_URI),
+        dbName: getEnvVar(EnvVar.MONGO_PUBLIC_DB)
+    })
+
+export const getPublicDbReadOnly = async () =>
+    await getMongoDb({
+        dbUri: getEnvVar(EnvVar.MONGO_PUBLIC_URI_READONLY),
+        dbName: getEnvVar(EnvVar.MONGO_PUBLIC_DB)
+    })
+
+/*
  * Generate a new STRING id for Mongo
  * To be used when calling "insertOne"
  * This avoids having ObjectId leaking everywhere in relations
@@ -57,28 +82,28 @@ export const newMongoId = (): string => nanoid() //(new ObjectId()).toString()
  * @returns
  */
 export const getAppClient = () => {
-    if (!process.env.MONGO_URI) {
-        throw new Error('MONGO_URI not set')
+    if (!process.env.MONGO_PRIVATE_URI) {
+        throw new Error('MONGO_PRIVATE_URI not set')
     }
-    return getClient({ dbUri: process.env.MONGO_URI })
+    return getClient({ dbUri: process.env.MONGO_PRIVATE_URI })
 }
 /**
  * Handle the connection automatically when called the first time
  */
 export const getAppDb = () => {
-    if (!process.env.MONGO_URI) {
-        throw new Error('MONGO_URI not set')
+    if (!process.env.MONGO_PRIVATE_URI) {
+        throw new Error('MONGO_PRIVATE_URI not set')
     }
     const dbName = process.env.MONGO_PRIVATE_DB || 'production'
-    return getMongoDb({ dbUri: process.env.MONGO_URI, dbName })
+    return getMongoDb({ dbUri: process.env.MONGO_PRIVATE_URI, dbName })
 }
 
 const getReadOnlyDb = () => {
-    if (!process.env.MONGO_URI_PUBLIC_READ_ONLY) {
-        throw new Error('MONGO_URI_PUBLIC_READ_ONLY not set')
+    if (!process.env.MONGO_PUBLIC_URI_READONLY) {
+        throw new Error('MONGO_PUBLIC_URI_READONLY not set')
     }
     const dbName = process.env.MONGO_PUBLIC_DB || 'public'
-    return getMongoDb({ dbUri: process.env.MONGO_URI_PUBLIC_READ_ONLY, dbName })
+    return getMongoDb({ dbUri: process.env.MONGO_PUBLIC_URI_READONLY, dbName })
 }
 
 /**
@@ -135,9 +160,11 @@ export const getEmailHashesCollection = async () => {
 }
 
 export const isLocalMongoUri = () => {
-    const mongoUri = process.env.MONGO_URI
+    const mongoUri = process.env.MONGO_PRIVATE_URI
     if (!mongoUri)
-        throw new Error('MONGO_URI env variable not defined. Is your .env file correctly loaded?')
+        throw new Error(
+            'MONGO_PRIVATE_URI env variable not defined. Is your .env file correctly loaded?'
+        )
     const isLocal = mongoUri.match(/localhost/)
     return isLocal
 }

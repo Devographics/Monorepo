@@ -1,4 +1,4 @@
-import { QuestionApiObject } from '../../types/surveys'
+import { QuestionApiObject, TypeDefTemplateOutput, TypeTypeEnum } from '../../types'
 import { subFields } from '../../generate/subfields'
 /*
 
@@ -11,11 +11,18 @@ type StateOfJsDisabilityStatus {
 
 */
 
-export const generateFieldType = async ({ question }: { question: QuestionApiObject }) => {
+export const generateFieldType = async ({
+    question
+}: {
+    question: QuestionApiObject
+}): Promise<TypeDefTemplateOutput | undefined> => {
     const { fieldTypeName } = question
     // note: we use a for…of loop to avoid issues with async await and returning
     // promises instead of booleans
     const includedSubFields = []
+    if (question.id === 'usage_type') {
+        console.log(question)
+    }
     for (const subField of subFields) {
         const { addIf, addIfAsync } = subField
         const addSubField = addIfAsync ? await addIfAsync(question) : addIf(question)
@@ -27,8 +34,9 @@ export const generateFieldType = async ({ question }: { question: QuestionApiObj
         return
     } else {
         return {
+            generatedBy: 'field',
             typeName: fieldTypeName,
-            typeType: 'field_generated',
+            typeType: TypeTypeEnum.FIELD_GENERATED,
             typeDef: `type ${fieldTypeName} {
                 ${includedSubFields.map(({ def }) => def(question)).join('\n  ')}
               }`

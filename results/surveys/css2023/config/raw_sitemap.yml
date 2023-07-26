@@ -195,7 +195,8 @@
         blockType: HorizontalBarBlock
         translateData: true
         variants:
-            - id: disability_status
+            - id: disability_status_freeform
+              fieldId: disability_status
               defaultUnits: count
               template: multiple_options_freeform
               blockType: HorizontalBarBlock
@@ -680,7 +681,8 @@
         tabId: tabs.main_answers
         template: multiple_options
         variants:
-            - id: pre_post_processors
+            - id: pre_post_processors_freeform
+              fieldId: pre_post_processors
               template: multiple_options_freeform
               defaultUnits: count
               parameters: { cutoff: 5 }
@@ -695,7 +697,8 @@
         tabId: tabs.main_answers
         template: multiple_options
         variants:
-            - id: utilities
+            - id: utilities_freeform
+              fieldId: utilities
               template: multiple_options_freeform
               defaultUnits: count
               parameters: { cutoff: 5 }
@@ -710,7 +713,8 @@
         tabId: tabs.main_answers
         template: multiple_options
         variants:
-            - id: browsers
+            - id: browsers_freeform
+              fieldId: browsers
               template: multiple_options_freeform
               defaultUnits: count
 
@@ -738,7 +742,8 @@
         translateData: true
         template: multiple_options
         variants:
-            - id: what_do_you_use_css_for
+            - id: what_do_you_use_css_for_freeform
+              fieldId: what_do_you_use_css_for
               defaultUnits: count
               # i18nNamespace: environments
               tabId: tabs.other_answers
@@ -755,7 +760,8 @@
         translateData: true
         template: multiple_options
         variants:
-            - id: industry_sector
+            - id: industry_sector_freeform
+              fieldId: industry_sector
               defaultUnits: count
               tabId: tabs.other_answers
               translateData: true
@@ -766,7 +772,8 @@
         translateData: true
         template: multiple_options
         variants:
-            - id: usage_type
+            - id: usage_type_freeform
+              fieldId: usage_type
               defaultUnits: count
               tabId: tabs.other_answers
               translateData: true
@@ -784,7 +791,8 @@
         isFreeform: true
         parameters: { limit: 20, cutoff: 20 }
         variants:
-            - id: css_interoperability_features
+            - id: css_interoperability_features_freeform
+              fieldId: css_interoperability_features
               defaultUnits: count
               tabId: tabs.other_answers
               translateData: true
@@ -797,7 +805,8 @@
         isFreeform: true
         parameters: { limit: 20, cutoff: 20 }
         variants:
-            - id: css_interoperability_features
+            - id: css_interoperability_features_freeform
+              fieldId: css_interoperability_features
               defaultUnits: count
               tabId: tabs.other_answers
               translateData: true
@@ -810,7 +819,8 @@
         isFreeform: true
         parameters: { limit: 20, cutoff: 20 }
         variants:
-            - id: css_pain_points
+            - id: css_pain_points_freeform
+              fieldId: css_pain_points
               defaultUnits: count
               tabId: tabs.other_answers
               translateData: true
@@ -835,13 +845,14 @@
   blocks:
       - template: page_introduction
 
-      - id: first_steps
+      - id: learning_methods
         defaultUnits: count
         tabId: tabs.main_answers
         template: multiple_options
         translateData: true
         variants:
-            - id: first_steps
+            - id: learning_methods_freeform
+              fieldId: learning_methods
               defaultUnits: count
               i18nNamespace: first_steps
               tabId: tabs.other_answers
@@ -856,7 +867,8 @@
         variables:
             fieldId: resources
         variants:
-            - id: blogs_news_magazines
+            - id: blogs_news_magazines_freeform
+              fieldId: blogs_news_magazines
               i18nNamespace: blogs_news_magazines
               defaultUnits: count
               tabId: tabs.other_answers
@@ -870,7 +882,8 @@
         variables:
             fieldId: resources
         variants:
-            - id: sites_courses
+            - id: sites_courses_freeform
+              fieldId: sites_courses
               i18nNamespace: sites_courses
               defaultUnits: count
               tabId: tabs.other_answers
@@ -889,7 +902,8 @@
         variables:
             fieldId: resources
         variants:
-            - id: podcasts
+            - id: podcasts_freeform
+              fieldId: podcasts
               defaultUnits: count
               i18nNamespace: podcasts
               tabId: tabs.other_answers
@@ -903,7 +917,8 @@
         variables:
             fieldId: resources
         variants:
-            - id: people
+            - id: people_freeform
+              fieldId: people
               defaultUnits: count
               i18nNamespace: people
               tabId: tabs.other_answers
@@ -922,7 +937,8 @@
         variables:
             fieldId: resources
         variants:
-            - id: other_surveys
+            - id: other_surveys_freeform
+              fieldId: other_surveys
               defaultUnits: count
               i18nNamespace: other_surveys
               tabId: tabs.other_answers

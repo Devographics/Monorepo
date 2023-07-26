@@ -1,4 +1,4 @@
-import { Survey, QuestionApiObject, SurveyApiObject } from '../../types/surveys'
+import { Survey, QuestionApiObject, SurveyApiObject, TypeDefTemplateOutput } from '../../types'
 import { getFiltersTypeName } from '../../generate/helpers'
 
 /*
@@ -26,16 +26,17 @@ export const generateFiltersType = ({
 }: {
     survey: SurveyApiObject
     questionObjects: QuestionApiObject[]
-}) => {
+}): TypeDefTemplateOutput => {
     const typeName = getFiltersTypeName(survey.id)
     return {
+        generatedBy: 'filters',
         typeName,
         typeDef: `input ${typeName} {
     ${questionObjects
         .filter(q => q.filterTypeName && q.surveyId === survey.id)
-        .sort((q1, q2) => q1.sectionIds.at(-1)?.localeCompare(q2.sectionIds.at(-1) ?? '') ?? 0)
-        .sort((q1, q2) => q1.sectionIndex - q2.sectionIndex)
-        .map(q => `${q.sectionIds.at(-1)}__${q.id}: ${q.filterTypeName}`)
+        .sort((q1, q2) => q1?.sectionIds?.at(-1)?.localeCompare(q2?.sectionIds?.at(-1) ?? '') ?? 0)
+        .sort((q1, q2) => (q1?.sectionIndex || 0) - (q2?.sectionIndex || 0))
+        .map(q => `${q?.sectionIds?.at(-1)}__${q.id}: ${q.filterTypeName}`)
         .join('\n    ')}
 }`
     }

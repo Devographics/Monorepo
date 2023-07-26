@@ -1,6 +1,6 @@
-import { Option } from '../../types'
+import { Option, TypeTypeEnum } from '../../types'
 import { graphqlize } from '../../generate/helpers'
-import { QuestionApiObject } from '../../types/surveys'
+import { QuestionApiObject, TypeDefTemplateOutput } from '../../types'
 
 /*
 
@@ -16,13 +16,18 @@ can't be numbers.
 
 */
 
-export const generateOptionType = ({ question }: { question: QuestionApiObject }) => {
+export const generateOptionType = ({
+    question
+}: {
+    question: QuestionApiObject
+}): TypeDefTemplateOutput | undefined => {
     const { optionTypeName, enumTypeName, surveyId, options, optionsAreNumeric } = question
     if (!optionTypeName) return
     const optionsHaveAverage = options?.some((o: Option) => typeof o.average !== 'undefined')
     return {
+        generatedBy: 'option',
         typeName: optionTypeName,
-        typeType: 'option',
+        typeType: TypeTypeEnum.OPTION,
         typeDef: `type ${optionTypeName} {
     id: ${optionsAreNumeric ? 'Float' : enumTypeName}
     label: String

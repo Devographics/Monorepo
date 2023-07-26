@@ -23,7 +23,7 @@ export function serverConfig() {
      * Internal API for translations and entities
      */
     translationAPI: process.env.INTERNAL_API_URL!,
-    mongoUri: process.env.MONGO_URI,
+    mongoUri: process.env.MONGO_PUBLIC_URI,
     publicMongoUri: process.env.MONGO_PUBLIC_URI,
     redisUrl: process.env.REDIS_URL!,
     // Won't work with upstash, which accepts only HTTP
@@ -45,4 +45,4 @@ export function serverConfig() {
  * Wrapping into a function calls allow use to load env variable manually
  * in scripts that reuse this code outside of Next
  */
-export function checkServerConfig() { }
+export function checkServerConfig() {}

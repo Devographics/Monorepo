@@ -1,4 +1,4 @@
-import { QuestionApiObject } from '../../types/surveys'
+import { QuestionApiObject, TypeDefTemplateOutput, TypeTypeEnum } from '../../types'
 
 /*
 
@@ -12,12 +12,17 @@ input DisabilityStatusFilter {
 
 */
 
-export const generateFilterType = ({ question }: { question: QuestionApiObject }) => {
+export const generateFilterType = ({
+    question
+}: {
+    question: QuestionApiObject
+}): TypeDefTemplateOutput | undefined => {
     const { filterTypeName, enumTypeName } = question
     if (!filterTypeName) return
     return {
+        generatedBy: 'filter',
         typeName: filterTypeName,
-        typeType: 'filter',
+        typeType: TypeTypeEnum.FILTER,
         surveyId: question.surveyId,
         questionId: question.id,
         typeDef: `input ${filterTypeName} {

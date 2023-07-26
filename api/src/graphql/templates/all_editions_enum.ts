@@ -1,4 +1,10 @@
-import { Survey, Edition, SurveyApiObject, EditionApiObject } from '../../types/surveys'
+import {
+    Survey,
+    Edition,
+    SurveyApiObject,
+    EditionApiObject,
+    TypeDefTemplateOutput
+} from '../../types'
 /*
 
 Sample output:
@@ -21,10 +27,11 @@ export const generateAllEditionsEnumType = ({
 }: {
     surveys: SurveyApiObject[]
     path: string
-}) => {
+}): TypeDefTemplateOutput => {
     const editions = surveys.map(s => s.editions).flat()
     const typeName = 'AllEditionsID'
     return {
+        generatedBy: 'all_editions_enum',
         path,
         typeName,
         typeDef: `enum ${typeName} {

@@ -1,12 +1,10 @@
-import { graphqlize, mergeSections } from '../../generate/helpers'
+import { graphqlize } from '../../generate/helpers'
 import {
-    Survey,
-    Edition,
-    Section,
     SurveyApiObject,
     EditionApiObject,
-    SectionApiObject
-} from '../../types/surveys'
+    SectionApiObject,
+    TypeDefTemplateOutput
+} from '../../types'
 
 /*
 
@@ -33,11 +31,12 @@ export const generateEditionType = ({
     survey: SurveyApiObject
     edition: EditionApiObject
     path: string
-}) => {
+}): TypeDefTemplateOutput => {
     const typeName = `${graphqlize(edition.id)}Edition`
     const allSections = edition.sections
 
     return {
+        generatedBy: 'edition',
         path,
         typeName,
         typeDef: `type ${typeName} {

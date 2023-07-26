@@ -15,12 +15,18 @@ enum I18nContexts {
 */
 
 import { getAllContexts, loadOrGetLocales } from '../../load/locales'
+import { TypeDefTemplateOutput } from '../../types'
 
-export const generateI18nContextsEnum = async ({ path }: { path: string }) => {
+export const generateI18nContextsEnum = async ({
+    path
+}: {
+    path: string
+}): Promise<TypeDefTemplateOutput> => {
     await loadOrGetLocales()
     const allContexts = getAllContexts()
     const typeName = 'I18nContext'
     return {
+        generatedBy: 'i18n_contexts_enum',
         path,
         typeName,
         typeDef: `enum ${typeName} {

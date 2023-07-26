@@ -1,5 +1,5 @@
 import { graphqlize } from '../../generate/helpers'
-import { Survey, Edition, SurveyApiObject, EditionApiObject } from '../../types/surveys'
+import { SurveyApiObject, EditionApiObject, TypeDefTemplateOutput } from '../../types'
 
 /*
 
@@ -17,9 +17,16 @@ type StateOfJsSurvey {
 
 */
 
-export const generateSurveyType = ({ survey, path }: { survey: SurveyApiObject; path: string }) => {
+export const generateSurveyType = ({
+    survey,
+    path
+}: {
+    survey: SurveyApiObject
+    path: string
+}): TypeDefTemplateOutput => {
     const typeName = graphqlize(survey.id) + 'Survey'
     return {
+        generatedBy: 'survey',
         path,
         typeName,
         typeDef: `type ${typeName} {

@@ -6,8 +6,10 @@ import {
     QuestionApiObject,
     SectionApiObject,
     EditionApiObject,
-    SurveyApiObject
-} from '../../types/surveys'
+    SurveyApiObject,
+    TypeDefTemplateOutput,
+    TypeTypeEnum
+} from '../../types'
 
 /*
 
@@ -34,13 +36,14 @@ export const generateSectionType = ({
     edition: EditionApiObject
     section: SectionApiObject
     path: string
-}) => {
+}): TypeDefTemplateOutput => {
     const typeName = `${graphqlize(edition.id)}${graphqlize(section.id)}Section`
 
     return {
+        generatedBy: 'section',
         path,
         typeName,
-        typeType: 'section',
+        typeType: TypeTypeEnum.SECTION,
         typeDef: `type ${typeName} {
     ${section.questions
         .filter(q => q.hasApiEndpoint !== false)

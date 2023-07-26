@@ -13,7 +13,7 @@ export const single: TemplateFunction = options => {
     } as QuestionTemplateOutput
 
     const output = {
-        ...getPaths(options, DbSuffixes.CHOICES),
+        ...getPaths({ ...options, question }, DbSuffixes.CHOICES),
         ...question
     }
     return output

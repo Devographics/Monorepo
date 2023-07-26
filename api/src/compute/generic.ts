@@ -81,6 +81,7 @@ export async function genericComputeFunction({
 
     const { normPaths } = question
 
+    // TODO "responsesType" is now called "subField" elsewhere, change it here as well at some point
     const { responsesType, filters, parameters = {}, facet, selectedEditionId } = computeArguments
     const {
         cutoff = 1,

@@ -148,6 +148,7 @@ interface QueryOptions extends ProvidedQueryOptions {
     sectionId: string
     questionId: string
     fieldId?: string
+    subField?: string
 }
 
 export const getDefaultQuery = ({
@@ -163,6 +164,7 @@ export const getDefaultQuery = ({
         sectionId,
         questionId,
         fieldId,
+        subField = 'responses',
         addBucketsEntities = false,
         allEditions = false,
         addArgumentsPlaceholder = false,
@@ -185,7 +187,7 @@ surveys {
         ${questionIdString} {
           ${addQuestionEntity ? getEntityFragment() : ''}
           ${addQuestionComments ? getCommentsCountFragment() : ''}
-          responses${queryArgsString} {
+          ${subField}${queryArgsString} {
             ${editionType} {
               ${allEditions ? allEditionsFragment : ''}
               completion {

@@ -8,12 +8,15 @@ async function run() {
     // will load either from .env.development or .env.production
     process.env.NODE_ENV === "development"
   );
-  const db = await getAppDb()
-  if (!process.env.MONGO_URI?.match(/localhost/)) {
-    throw new Error("Cannot reset non local database!! Uri was: " + process.env.MONGO_URI)
+  const db = await getAppDb();
+  if (!process.env.MONGO_PUBLIC_URI?.match(/localhost/)) {
+    throw new Error(
+      "Cannot reset non local database!! Uri was: " +
+        process.env.MONGO_PUBLIC_URI
+    );
   }
   await db.dropDatabase();
-  const client = await getAppClient()
-  client.close()
+  const client = await getAppClient();
+  client.close();
 }
 run();

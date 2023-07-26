@@ -25,7 +25,8 @@ export default defineConfig([
             '@devographics/templates',
             '@devographics/helpers',
             '@devographics/debug',
-            '@devographics/redis'
+            '@devographics/redis',
+            '@devographics/mongo'
         ]
     }
 ])

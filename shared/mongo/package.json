@@ -13,6 +13,7 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "@devographics/helpers": "workspace:^",
         "@devographics/types": "workspace:*",
         "ioredis": "^5.2.4",
         "mongodb": "^5.4.0",

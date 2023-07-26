@@ -42,7 +42,7 @@ const moduleExports = (phase, { defaultConfig }) => {
     },
     env: {
       NEXT_PUBLIC_IS_USING_LOCAL_DATABASE: !!(
-        process.env.MONGO_URI || ""
+        process.env.MONGO_PUBLIC_URI || ""
       ).match(/localhost/),
     },
     webpack: function (configArg, otherArgs) {

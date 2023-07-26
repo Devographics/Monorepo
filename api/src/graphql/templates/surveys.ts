@@ -1,5 +1,5 @@
 import { graphqlize } from '../../generate/helpers'
-import { Survey, SurveyApiObject } from '../../types/surveys'
+import { TypeDefTemplateOutput, SurveyApiObject } from '../../types'
 
 /*
 
@@ -20,8 +20,9 @@ export const generateSurveysType = ({
 }: {
     surveys: SurveyApiObject[]
     path: string
-}) => {
+}): TypeDefTemplateOutput => {
     return {
+        generatedBy: 'surveys',
         path,
         typeName: 'Surveys',
         typeDef: `type Surveys {

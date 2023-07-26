@@ -32,6 +32,7 @@ import { loadOrGetEntities } from './load/entities'
 import { watchFiles } from './helpers/watch'
 
 import { initRedis } from '@devographics/redis'
+import { getPublicDb, getPublicDbReadOnly } from '@devographics/mongo'
 
 const app = express()
 
@@ -64,12 +65,6 @@ const checkSecretKey = async (req: Request, res: Response, func: () => Promise<v
     }
 }
 
-function getMongoUri() {
-    const uri = process.env.MONGO_URI
-    if (!uri) throw new Error('MONGO_URI not defined')
-    return uri
-}
-
 const start = async () => {
     const config: dotenv.DotenvConfigOptions = {}
     if (process.env.ENV_PATH) {
@@ -90,19 +85,7 @@ const start = async () => {
     const redisClient = await initRedis()
     // redisClient.on('error', err => console.log('Redis Client Error', err))
 
-    const mongoClient = new MongoClient(getMongoUri(), {
-        // useNewUrlParser: true,
-        // useUnifiedTopology: true,
-        connectTimeoutMS: 10000
-    })
-
-    // if (appSettings.cacheType !== 'local') {
-    //     await redisClient.connect()
-    // }
-
-    await mongoClient.connect()
-
-    const db = mongoClient.db(process.env.MONGO_PUBLIC_DB)
+    const db = await getPublicDb()
 
     const entities = await loadOrGetEntities({})
     const context = { db, redisClient }

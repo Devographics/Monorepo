@@ -3,18 +3,16 @@ wrapBlock: false
 disableExport: true
 dataPath: dataAPI.entities
 query: >
-    dataAPI {
-        entities(ids: [${entities}]) {
-            id
+    entities(ids: [${entities}]) {
+        id
+        name
+        homepage{
             name
-            homepage{
-                name
-                url
-            }
-            twitterName
-            twitter {
-                name
-                url
-            }
+            url
+        }
+        twitterName
+        twitter {
+            name
+            url
         }
     }

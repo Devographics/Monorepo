@@ -29,18 +29,25 @@
 
   # Mongo
 
-- id: MONGO_URI
+- id: MONGO_PRIVATE_URI
   description: URI of the private Mongo database
   example: mongodb+srv://surveys:password@foobar.fnzofph.mongodb.net/private_data
   usedBy:
-      - api
       - surveyform
       - surveyadmin
+
 - id: MONGO_PUBLIC_URI
   description: URI of the public Mongo database
   example: mongodb+srv://surveys:password@foobar.fnzofph.mongodb.net/public_data
   usedBy:
       - surveyadmin
+      - api
+
+- id: MONGO_PUBLIC_URI_READONLY
+  description: URI of the public Mongo database, read-only access
+  example: mongodb+srv://surveys:password@foobar.fnzofph.mongodb.net/public_data
+  usedBy:
+      - api
 
 - id: MONGO_PRIVATE_DB
   description: Name of the database where private data is stored

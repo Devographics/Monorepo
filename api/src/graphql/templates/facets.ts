@@ -1,4 +1,4 @@
-import { Survey, QuestionApiObject, SurveyApiObject } from '../../types/surveys'
+import { Survey, QuestionApiObject, SurveyApiObject, TypeDefTemplateOutput } from '../../types'
 import { getFacetsTypeName } from '../../generate/helpers'
 
 /*
@@ -26,18 +26,19 @@ export const generateFacetsType = ({
 }: {
     survey: SurveyApiObject
     questionObjects: QuestionApiObject[]
-}) => {
+}): TypeDefTemplateOutput => {
     const typeName = getFacetsTypeName(survey.id)
     const questionObjectsWithFilters = questionObjects.filter(
         q => typeof q.filterTypeName !== 'undefined' && q.surveyId === survey.id
     )
     return {
+        generatedBy: 'facets',
         typeName,
         typeDef: `enum ${typeName} {
     ${questionObjectsWithFilters
-        .sort((q1, q2) => q1.sectionIds.at(-1)?.localeCompare(q2.sectionIds.at(-1) ?? '') ?? 0)
-        .sort((q1, q2) => q1.sectionIndex - q2.sectionIndex)
-        .map(q => `${q.sectionIds.at(-1)}__${q.id}`)
+        .sort((q1, q2) => q1?.sectionIds?.at(-1)?.localeCompare(q2?.sectionIds?.at(-1) ?? '') ?? 0)
+        .sort((q1, q2) => (q1?.sectionIndex || 0) - (q2?.sectionIndex || 0))
+        .map(q => `${q?.sectionIds?.at(-1)}__${q.id}`)
         .join('\n    ')}
 }`
     }
