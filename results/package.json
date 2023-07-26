@@ -72,7 +72,7 @@
         "gatsby-source-graphql": "^5.11.0",
         "gatsby-transformer-remark": "^6.11.0",
         "gatsby-transformer-yaml": "^5.11.0",
-        "html-loader": "^3.1.2",
+        "html-loader": "^4.2.0",
         "indent-string": "^5.0.0",
         "js-yaml": "^4.1.0",
         "json2csv": "^5.0.7",
@@ -129,8 +129,7 @@
         "graphql": "16.7.1",
         "graphql-compose": "^9.0.10",
         "prettier": "^2.8.0",
-        "react-is": "^18.2.0",
-        "webpack": "5.75.0"
+        "react-is": "^18.2.0"
     },
     "private": true,
     "scripts": {
@@ -143,5 +142,8 @@
         "lint": "eslint src",
         "types:check": "tsc -p ./tsconfig.check.json",
         "typecheck": "tsc --noEmit --p ./tsconfig.check.json"
+    },
+    "resolutions": {
+        "webpack": "5.88.2"
     }
 }
