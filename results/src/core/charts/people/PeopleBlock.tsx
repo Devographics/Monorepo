@@ -82,7 +82,7 @@ export const getRelevantServices = allEntities => {
 const PeopleBlock = ({ block, data, controlledUnits, isCustom }: PeopleBlockProps) => {
     const chartData = data?.responses?.currentEdition
     if (!chartData) {
-        throw Error(`No data found for block ${block.id}`)
+        return <div>PeopleBlock: No data found for block {block.id}</div>
     }
     const {
         id,
