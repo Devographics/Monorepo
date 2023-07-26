@@ -9,11 +9,11 @@ export const bucketFacetsPlaceholder = '<BUCKETFACETS_PLACEHOLDER>'
 
 const convertToGraphQLEnum = s => s.replace('-', '_')
 
-export const getLocalesQuery = (localeIds, contexts, loadStrings = true) => {
+export const getLocalesQuery = (contexts, loadStrings = true) => {
     const args = []
-    if (localeIds.length > 0) {
-        args.push(`localeIds: [${localeIds.map(convertToGraphQLEnum).join(',')}]`)
-    }
+    // if (localeIds.length > 0) {
+    //     args.push(`localeIds: [${localeIds.map(convertToGraphQLEnum).join(',')}]`)
+    // }
     if (contexts.length > 0) {
         args.push(`contexts: [${contexts.join(', ')}]`)
     }

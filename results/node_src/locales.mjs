@@ -6,8 +6,8 @@ const getAllLocalesCacheKey = () => `${process.env.APP_NAME}__allLocales__metada
 const getLocaleContextCacheKey = (localeId, context) =>
     `${process.env.APP_NAME}__locale__${localeId}__${context}__parsed`
 
-export const getLocalesGraphQL = async ({ localeIds, graphql, contexts, key }) => {
-    const localesQuery = getLocalesQuery(localeIds, contexts, false)
+export const getLocalesGraphQL = async ({ graphql, contexts, key }) => {
+    const localesQuery = getLocalesQuery(contexts, false)
     logToFile(`locales/${key}.graphql`, localesQuery)
 
     const localesResults = await graphql(
@@ -44,7 +44,7 @@ export const getLocales = async ({ localeIds, graphql, contexts }) => {
         locales = localesRaw
     } else {
         console.log(`Redis key ${allLocalesKey} was empty, fetching from API…`)
-        locales = await getLocalesGraphQL({ localeIds, graphql, contexts, key: allLocalesKey })
+        locales = await getLocalesGraphQL({ graphql, contexts, key: allLocalesKey })
         await redisClient.set(allLocalesKey, locales)
     }
 
