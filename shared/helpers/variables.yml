@@ -44,10 +44,11 @@
       - api
 
 - id: MONGO_PUBLIC_URI_READONLY
+  optional: true
   description: URI of the public Mongo database, read-only access
   example: mongodb+srv://surveys:password@foobar.fnzofph.mongodb.net/public_data
   usedBy:
-      - api
+      - surveyadmin
 
 - id: MONGO_PRIVATE_DB
   description: Name of the database where private data is stored
