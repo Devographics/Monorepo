@@ -47,10 +47,10 @@ TODO:
 */
 export const getDbPath = (
     question: QuestionApiObject,
-    responsesType: ResponsesTypes = ResponsesTypes.PREDEFINED
+    responsesType: ResponsesTypes = ResponsesTypes.RESPONSES
 ) => {
     const { normPaths } = question
-    if (responsesType === ResponsesTypes.PREDEFINED) {
+    if (responsesType === ResponsesTypes.RESPONSES) {
         return normPaths?.response
     } else {
         return normPaths?.other
@@ -227,7 +227,7 @@ export async function genericComputeFunction({
     await addEditionYears(results, survey)
 
     if (axis2) {
-        if (responsesType === ResponsesTypes.PREDEFINED) {
+        if (responsesType === ResponsesTypes.RESPONSES) {
             await addMissingItems(results, axis2, axis1)
         }
         await sortData(results, axis2, axis1)
@@ -235,7 +235,7 @@ export async function genericComputeFunction({
         await cutoffData(results, axis2, axis1)
         await addLabels(results, axis2, axis1)
     } else {
-        if (responsesType === ResponsesTypes.PREDEFINED) {
+        if (responsesType === ResponsesTypes.RESPONSES) {
             await addMissingItems(results, axis1)
         }
         await sortData(results, axis1)
