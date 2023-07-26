@@ -1,7 +1,10 @@
 import React, { memo, useState } from 'react'
 import Block from 'core/blocks/block/BlockVariant'
 import ChartContainer from 'core/charts/ChartContainer'
-import HorizontalBarChart, { getChartData } from 'core/charts/horizontalBar/HorizontalBarChart'
+import HorizontalBarChart, {
+    getChartData,
+    getChartDataPath
+} from 'core/charts/horizontalBar/HorizontalBarChart'
 import { getTableData } from 'core/helpers/datatables'
 import { BlockComponentProps } from 'core/types/index'
 import { StandardQuestionData, BucketUnits } from '@devographics/types'
@@ -51,11 +54,11 @@ const HorizontalBarBlock = ({ block, data }: HorizontalBarBlockProps) => {
     const defaultSeries = { name: 'default', data }
 
     // TODO: kind of hacky?
-    const chartData = getChartData(data)
+    const chartData = getChartData(data, block)
     if (!chartData) {
         return (
             <div>
-                <h4>No data</h4>
+                <h4>HorizontalBarBlock: No data (dataPath: {getChartDataPath(block)})</h4>
                 <pre>
                     <code>{JSON.stringify(data, null, 2)}</code>
                 </pre>
@@ -98,6 +101,7 @@ const HorizontalBarBlock = ({ block, data }: HorizontalBarBlockProps) => {
             >
                 <ChartContainer fit={false}>
                     <HorizontalBarChart
+                        block={block}
                         total={total}
                         series={[{ name: 'default', data }]}
                         i18nNamespace={i18nNamespace}

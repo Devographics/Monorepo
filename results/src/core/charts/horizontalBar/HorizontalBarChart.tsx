@@ -5,7 +5,7 @@ import { ResponsiveBar } from '@nivo/bar'
 import { useI18n } from 'core/i18n/i18nContext'
 import BarTooltip from 'core/charts/common/BarTooltip'
 import HorizontalBarStripes from './HorizontalBarStripes'
-import { ChartComponentProps } from 'core/types/index'
+import { BlockDefinition, ChartComponentProps } from 'core/types/index'
 import TickItem, { getBucketLabel } from 'core/charts/common/TickItem'
 import maxBy from 'lodash/maxBy'
 import ChartLabel from 'core/components/ChartLabel'
@@ -20,8 +20,13 @@ import {
 import { useEntities } from 'core/helpers/entities'
 import { StandardQuestionData, BucketUnits, Bucket } from '@devographics/types'
 import { FacetItem, DataSeries, ChartModes } from 'core/filters/types'
+import get from 'lodash/get'
 
-export const getChartData = (data: StandardQuestionData) => data?.responses?.currentEdition?.buckets
+export const getChartDataPath = (block: BlockDefinition) =>
+    `${block?.queryOptions?.subField || 'responses'}.currentEdition.buckets`
+
+export const getChartData = (data: StandardQuestionData, block: BlockDefinition) =>
+    get(data, getChartDataPath(block))
 
 export const margin = {
     top: 40,
@@ -103,6 +108,7 @@ const getLabelsLayer = (labelTransformer: any) => (props: any) => {
 const baseUnits = Object.values(BucketUnits)
 
 export interface HorizontalBarChartProps extends ChartComponentProps {
+    block: BlockDefinition
     total: number
     size?: keyof typeof barSizes
     barColor?: BarColor
@@ -114,6 +120,7 @@ export interface HorizontalBarChartProps extends ChartComponentProps {
 }
 
 const HorizontalBarChart = ({
+    block,
     series,
     total,
     i18nNamespace,
@@ -130,7 +137,7 @@ const HorizontalBarChart = ({
 }: HorizontalBarChartProps) => {
     // TODO: currently this chart only receive one data series, but if it receives more
     // in the future it will be able to combine them into a single chart
-    let buckets = getChartData(series[0].data)
+    let buckets = getChartData(series[0].data, block)
 
     if (facet) {
         buckets = buckets.map(bucket => {

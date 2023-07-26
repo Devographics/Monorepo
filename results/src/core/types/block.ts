@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import { PageContextValue } from '@types/context'
-import { BucketUnits, ResponsesParameters } from '@devographics/types'
+import { BucketUnits, ResponsesParameters, ResultsSubFieldEnum } from '@devographics/types'
 
 export type BlockUnits =
     | 'count'
@@ -26,6 +26,7 @@ export interface BlockQueryOptions {
     addBucketsEntities?: boolean
     addQuestionEntity?: boolean
     addQuestionComments?: boolean
+    subField?: ResultsSubFieldEnum
 }
 
 export interface BlockDefinition {

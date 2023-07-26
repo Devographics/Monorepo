@@ -24,7 +24,6 @@ const BlockSwitcher = ({ pageData, block, index, ...props }) => {
             />
         )
     }
-    console.log({ blockData })
     const BlockComponent = blockRegistry[blockType]
     if (block.query && (!blockData || blockData === null || isEmpty(blockData))) {
         return (

@@ -1,3 +1,4 @@
+import { ResultsSubFieldEnum } from '@devographics/types'
 import { Entity } from './entities'
 import { Option } from './outlines'
 
@@ -28,8 +29,8 @@ export type AllQuestionData =
     | ToolRatiosQuestionData
     | OpinionQuestionData
 
-export interface StandardQuestionData extends QuestionData {
-    responses: ResponseData
+export type StandardQuestionData = QuestionData & {
+    [key in ResultsSubFieldEnum]: ResponseData
 }
 
 export interface OpinionQuestionData extends StandardQuestionData {}

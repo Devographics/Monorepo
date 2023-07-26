@@ -20,9 +20,6 @@ export const generateFieldType = async ({
     // note: we use a for…of loop to avoid issues with async await and returning
     // promises instead of booleans
     const includedSubFields = []
-    if (question.id === 'usage_type') {
-        console.log(question)
-    }
     for (const subField of subFields) {
         const { addIf, addIfAsync } = subField
         const addSubField = addIfAsync ? await addIfAsync(question) : addIf(question)
