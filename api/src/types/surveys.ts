@@ -52,6 +52,7 @@ export interface ResolverParent {
     question: QuestionApiObject
     questionObjects: QuestionApiObject[]
     responseArguments?: ResponseArguments
+    args?: any // args passed down to lower levels
 }
 
 export type QuestionResolverParent = ResolverParent & {

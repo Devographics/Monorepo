@@ -185,6 +185,12 @@ input Parameters {
     showNoAnswer: Boolean
 }
 
+input CommentParameters {
+    limit: Int = 50
+    skip: Int = 0
+    enableCache: Boolean
+}
+
 enum ResponsesType {
     Predefined
     Prenormalized

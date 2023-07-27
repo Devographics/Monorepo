@@ -64,10 +64,10 @@ export const subFields: Array<SubField> = [
         id: ResultsSubFieldEnum.COMMENTS,
         def: () => 'comments: ItemComments',
         addIf: ({ normPaths }) => !!normPaths?.comment,
-        resolverFunction: parent => {
+        resolverFunction: (parent, args) => {
             // empty pass-through resolver
             console.log('// comments resolver')
-            return parent
+            return { ...parent, args }
         }
     },
     {

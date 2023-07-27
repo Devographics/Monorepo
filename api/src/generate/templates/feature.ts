@@ -24,7 +24,7 @@ export const feature: ApiTemplateFunction = options => {
     id: String
     _metadata: QuestionMetadata
     options: [FeatureOption]
-    comments: ItemComments
+    comments(parameters: CommentParameters): ItemComments
     entity: Entity
     responses(filters: ${getFiltersTypeName(
         survey.id

@@ -327,18 +327,20 @@ Comments
 
 */
 export const commentsResolverMap: ResolverMap = {
-    allEditions: async ({ survey, question }, {}, context) =>
+    allEditions: async ({ survey, question }, args, context) =>
         await getRawCommentsWithCache({
             survey,
             question,
-            context
+            context,
+            args
         }),
-    currentEdition: async ({ survey, edition, question }, {}, context) =>
+    currentEdition: async ({ survey, edition, question, args }, args2, context) =>
         await getRawCommentsWithCache({
             survey,
             question,
             editionId: edition.id,
-            context
+            context,
+            args
         })
 }
 

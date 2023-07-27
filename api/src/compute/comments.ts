@@ -46,17 +46,21 @@ interface GetRawCommentsOptions {
     question: QuestionApiObject
     context: RequestContext
     editionId?: string
+    args?: any
 }
 
 export const getRawCommentsWithCache = async (options: GetRawCommentsOptions) => {
-    const { context, ...funcOptions } = options
+    const { context, args, ...funcOptions } = options
+    const { parameters = {} } = args
+    const { enableCache } = parameters
     return useCache({
         func: getRawComments,
         context,
         funcOptions,
-        key: `${options.survey.id}.${options.question.id}.${
+        key: `api__${options.survey.id}__${options.question.id}__${
             options.editionId ? options.editionId : 'allEditions'
-        }.comments`
+        }__comments`,
+        enableCache
     })
 }
 
@@ -68,6 +72,8 @@ export const getRawComments = async ({
 }: GetRawCommentsOptions) => {
     console.log('// getRawComments')
 
+    const surveyId = survey.id
+
     const { db, isDebug } = context
     const collection = getCollection(db, survey)
 
@@ -77,15 +83,15 @@ export const getRawComments = async ({
     }
 
     const selector = {
-        survey: survey.id,
+        surveyId,
         [dbPath]: { $exists: true },
-        ...(editionId && { surveySlug: editionId })
+        ...(editionId && { editionId })
     }
     const cursor = await collection.find(selector).project({ surveySlug: 1, [dbPath]: 1 })
 
     const results = await cursor.toArray()
-    console.log(selector)
-    console.log(results)
+    // console.log(selector)
+    // console.log(results)
     const comments = results.map(r => ({
         editionId: r.surveySlug,
         message: get(r, dbPath),
