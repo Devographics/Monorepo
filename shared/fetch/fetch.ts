@@ -75,12 +75,13 @@ export interface FetchPayloadSuccessOrError<T> {
     ___metadata: Metadata
     data: T
     error?: any
+    cacheKey?: string
 }
 
 export function processFetchData<T>(data, source, key): FetchPayloadSuccessOrError<T> {
     const timestamp = new Date().toISOString()
     const ___metadata: Metadata = { key, source, timestamp }
-    const result = { data, ___metadata }
+    const result = { data, ___metadata, cacheKey: key }
     return removeNull(result)
 }
 

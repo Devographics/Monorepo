@@ -46,6 +46,8 @@ export async function storeRedis<T>(key: string, val: T): Promise<boolean> {
     if (res !== 'OK') {
         console.error("Can't store JSON into Redis, error:" + res)
         return false
+    } else {
+        console.debug(`🟡 [${key}] Redis cache updated`)
     }
     return true
 }

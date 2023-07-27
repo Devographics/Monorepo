@@ -6,17 +6,14 @@ import { runScript } from "~/lib/scripts/services";
 export const actions = [
   {
     label: "Reload Surveys",
-    path: "reinitialize-surveys",
     script: "reloadAPISurveys",
   },
   {
     label: "Reload Locales",
-    path: "reinitialize-locales",
     script: "reloadAPILocales",
   },
   {
     label: "Reload Entities",
-    path: "reinitialize-entities",
     script: "reloadAPIEntities",
   },
 ];
@@ -34,7 +31,7 @@ export const AdminAPI = () => (
   </div>
 );
 
-const Action = ({ label, path, script }) => {
+const Action = ({ label, script }) => {
   const [loading, setLoading] = useState(false);
   const handleClick = async (e) => {
     e.preventDefault();
