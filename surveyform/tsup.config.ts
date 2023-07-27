@@ -4,7 +4,7 @@
  *
  * Those script can still import our models, or any non Next specific code.
  */
-import { defineConfig } from "tsup";
+import { defineConfig, Target } from "tsup";
 import path from "path";
 
 import yamlPluginDefault from "esbuild-plugin-yaml";
@@ -20,7 +20,7 @@ const commonConfig = {
   outDir: "scripts/dist",
   name: "",
   platform: "node" as const,
-  target: "node14",
+  target: "node18" as Target,
   // TODO: remove "~" from noExternal, remove external,
   // and use "tsup-node" instead of "tsup" when this
   // PR lands in:
