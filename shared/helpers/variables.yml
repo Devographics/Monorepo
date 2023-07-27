@@ -27,6 +27,13 @@
       - surveyform
       - surveyadmin
 
+- id: API_URL_PRODUCTION
+  optional: true
+  description: URL of the API
+  example: https://api.devographics.com
+  usedBy:
+      - surveyadmin
+
   # Mongo
 
 - id: MONGO_PRIVATE_URI

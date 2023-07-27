@@ -21,22 +21,32 @@ export const actions = [
 export const AdminAPI = () => (
   <div>
     <h2>API</h2>
+    <h3>Development</h3>
     <ul>
       {actions.map((action) => (
         <li key={action.label}>
-          <Action {...action} />
+          <Action {...action} target="development" />
+        </li>
+      ))}
+    </ul>
+
+    <h3>Production</h3>
+    <ul>
+      {actions.map((action) => (
+        <li key={action.label}>
+          <Action {...action} target="production" />
         </li>
       ))}
     </ul>
   </div>
 );
 
-const Action = ({ label, script }) => {
+const Action = ({ label, script, target }) => {
   const [loading, setLoading] = useState(false);
   const handleClick = async (e) => {
     e.preventDefault();
     setLoading(true);
-    const result = await runScript({ id: script, scriptArgs: {} });
+    const result = await runScript({ id: script, scriptArgs: { target } });
     console.log(result);
     setLoading(false);
   };
