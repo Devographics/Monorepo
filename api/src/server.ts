@@ -180,7 +180,8 @@ const start = async () => {
 
     app.get('/reinitialize-entities', async function (req, res) {
         await checkSecretKey(req, res, async () => {
-            await reinitialize({ context, initList: ['entities'] })
+            // when entities change, also update surveys metadata
+            await reinitialize({ context, initList: ['entities', 'surveys'] })
             res.status(200).send('Cache cleared')
         })
     })

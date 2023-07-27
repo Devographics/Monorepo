@@ -85,7 +85,7 @@ export const highlightEntitiesExampleCode = async (entities: Entity[]) => {
 export const loadFromGitHub = async () => {
     const octokit = new Octokit({ auth: getEnvVar(EnvVar.GITHUB_TOKEN) })
     const entities: Entity[] = []
-    const [owner, repo, path = ""] = getEnvVar(EnvVar.GITHUB_PATH_ENTITIES)?.split('/') || []
+    const [owner, repo, path = ''] = getEnvVar(EnvVar.GITHUB_PATH_ENTITIES)?.split('/') || []
 
     if (!owner) {
         throw new Error(
@@ -178,6 +178,7 @@ export const initEntities = async (context: RequestContext) => {
     console.log('// initializing entities…')
     const entities = await loadOrGetEntities({ forceReload: true }, context)
     logToFile('entities.json', entities, { mode: 'overwrite' })
+    Entities = entities
     return entities
 }
 
@@ -289,7 +290,8 @@ export const cacheSurveysEntities = async ({
             if (editionEntities.length > 0) {
                 setCache(getSurveyEditionEntitiesCacheKey({ editionId }), editionEntities, context)
                 console.log(
-                    `-> Cached ${editionEntities.length
+                    `-> Cached ${
+                        editionEntities.length
                     } entities (${getSurveyEditionEntitiesCacheKey({ editionId })})`
                 )
             }

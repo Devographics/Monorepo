@@ -247,7 +247,8 @@ export const loadOrGetLocales = async (
 }
 
 export const initLocales = async () => {
-    await loadOrGetLocales({ forceReload: true })
+    const locales = await loadOrGetLocales({ forceReload: true })
+    Locales = locales
 }
 
 /*
