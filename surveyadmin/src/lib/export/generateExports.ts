@@ -81,14 +81,22 @@ function extractSurveyFields(edition: EditionMetadata, flat?: boolean) {
   return allFields;
 }
 
+/**
+ * Exports the normalized responses
+ * Fields are automatically obtained by parsing the edition definition
+ * Documents are filtered via their "editionId" 
+ * @returns 
+ */
 function mongoExportCmd({
   filePath,
   edition,
   format,
+  normalizedResponsesCollectionName = "normalized_responses"
 }: {
   filePath: string;
   edition: EditionMetadata;
   format: SupportedFormat;
+  normalizedResponsesCollectionName: string
 }) {
   const editionId = edition.id!;
   /**
@@ -101,7 +109,7 @@ function mongoExportCmd({
   const baseCmd = `
  mongoexport\
  --uri ${serverConfig().publicMongoUri}\
- --collection normalized_responses \
+ --collection ${normalizedResponsesCollectionName} \
  --pretty\
  --query='{"editionId": "${editionId}"}' \
  --out=${filePath}\
@@ -161,7 +169,7 @@ async function generateMongoExport({
 }: {
   format: "json" | "csv";
   edition: EditionMetadata;
-}) {
+}): Promise<string> {
   const editionId = edition.id!;
   // run the export
 
