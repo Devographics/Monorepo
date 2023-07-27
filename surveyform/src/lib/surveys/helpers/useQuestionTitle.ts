@@ -12,7 +12,7 @@ export const useQuestionTitle = ({
   variant?: "short" | "full";
 }) => {
   const intl = useIntlContext();
-  const { entity } = question;
+  const { id, entity } = question;
   const i18n = getQuestioni18nIds({ section, question });
 
   const entityNameHtml = entity && (entity.nameHtml || entity.name);
@@ -37,8 +37,8 @@ export const useQuestionTitle = ({
   }
 
   return {
-    html: entityNameHtml || htmlLabel,
-    clean: entityNameClean || cleanLabel,
-    isEntity: entityNameHtml || entityNameClean,
+    html: entityNameHtml || htmlLabel || id,
+    clean: entityNameClean || cleanLabel || id,
+    isEntity: !!(entityNameHtml || entityNameClean),
   };
 };
