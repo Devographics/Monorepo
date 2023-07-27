@@ -33,6 +33,7 @@ const Action = ({ label, script }) => {
     e.preventDefault();
     setLoading(true);
     const result = await runScript({ id: script, scriptArgs: {} });
+    console.log(result);
     setLoading(false);
   };
   return (
