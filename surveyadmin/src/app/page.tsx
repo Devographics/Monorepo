@@ -14,6 +14,12 @@ const IndexPage = async ({ params }) => {
         <li>
           <Link href="/admin/normalization">Normalization</Link>
         </li>
+        <li>
+          <Link href="/admin/cache">Cache</Link>
+        </li>
+        <li>
+          <Link href="/admin/api">API</Link>
+        </li>
       </ul>
     </div>
   );

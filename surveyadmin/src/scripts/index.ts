@@ -7,3 +7,4 @@ export * from "./setMissingUUIDs";
 export * from "./loadTokyoDevCSV";
 export * from "./addEditionIdSurveyId";
 export * from "./deleteUser";
+export * from "./reloadAPI";

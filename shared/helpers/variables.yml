@@ -55,12 +55,14 @@
   example: private_data
   usedBy:
       - surveyform
+      - surveyadmin
 
 - id: MONGO_PUBLIC_DB
   description: Name of the database where public data is stored
   example: public_data
   usedBy:
       - api
+      - surveyadmin
 
 # Redis
 
