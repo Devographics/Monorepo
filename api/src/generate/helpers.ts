@@ -1,3 +1,4 @@
+import { loadOrGetParsedSurveys } from '../load/surveys'
 import {
     Survey,
     Edition,
@@ -193,3 +194,13 @@ export const getFacetsTypeName = (surveyId: string) => graphqlize(surveyId) + 'F
 
 export const getContentType = (question: QuestionTemplateOutput) =>
     question.optionsAreNumeric ? 'number' : 'string'
+
+export const getEditionById = async (editionId: string) => {
+    const surveys = await loadOrGetParsedSurveys()
+    const allEditions = surveys.map(s => s.editions).flat()
+    const edition = allEditions.find(e => e.id === editionId)
+    if (!edition) {
+        throw new Error(`getEditionById: could not find edition with id ${editionId}`)
+    }
+    return edition
+}

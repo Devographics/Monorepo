@@ -11,6 +11,7 @@ import { logToFile } from '@devographics/debug'
 import path from 'path'
 import { setCache } from '../helpers/caching'
 import { appSettings } from '../helpers/settings'
+import { parseSurveys } from '../generate/generate'
 
 let allSurveys: Survey[] = []
 
@@ -30,14 +31,13 @@ const makeAPIOnly = (sections: Section[]) =>
         questions: s.questions.map(q => ({ ...q, apiOnly: true }))
     }))
 
+interface LoadOrGetSurveysOptions {
+    forceReload?: boolean
+    /** Set to true to keep the demo survey during dev */
+    includeDemo?: boolean
+}
 // load surveys if not yet loaded
-export const loadOrGetSurveys = async (
-    options: {
-        forceReload?: boolean
-        /** Set to true to keep the demo survey during dev */
-        includeDemo?: boolean
-    } = {}
-) => {
+export const loadOrGetSurveys = async (options: LoadOrGetSurveysOptions = {}) => {
     const { forceReload, includeDemo } = options
 
     if (forceReload || allSurveys.length === 0) {
@@ -45,6 +45,11 @@ export const loadOrGetSurveys = async (
     }
     if (includeDemo) return allSurveys
     return allSurveys.filter(s => s.id !== 'demo_survey')
+}
+
+export const loadOrGetParsedSurveys = async (options: LoadOrGetSurveysOptions = {}) => {
+    const surveys = await loadOrGetSurveys(options)
+    return parseSurveys({ surveys })
 }
 
 const listGitHubFiles = async ({
@@ -81,10 +86,10 @@ const getGitHubYamlFile = async (url: string) => {
  * Skip files found on the github repository:
  * - starting with "_"
  * - special .github folder
- * @param fileName 
- * @returns 
+ * @param fileName
+ * @returns
  */
-const skipItem = (fileName: string) => ["_", "."].includes(fileName.slice(0, 1))
+const skipItem = (fileName: string) => ['_', '.'].includes(fileName.slice(0, 1))
 
 export const loadFromGitHub = async () => {
     const surveys: Survey[] = []
@@ -102,7 +107,7 @@ export const loadFromGitHub = async () => {
         )
     }
 
-    const getUrl = (path: string = "") => {
+    const getUrl = (path: string = '') => {
         return `/repos/${owner}/${repo}/contents/${path}`
     }
 
@@ -217,7 +222,7 @@ export const loadLocally = async () => {
                         )
                         const editionConfigYaml: any = yaml.load(editionConfigContents)
                         edition = editionConfigYaml
-                    } catch (error) { }
+                    } catch (error) {}
                     const questionsPath = editionDirPath + '/questions.yml'
                     if (existsSync(questionsPath)) {
                         try {
@@ -237,7 +242,7 @@ export const loadLocally = async () => {
                         )
                         const editionApiYaml: any = yaml.load(editionApiContents)
                         edition.apiSections = makeAPIOnly(editionApiYaml)
-                    } catch (error) { }
+                    } catch (error) {}
                     editions.push(edition)
                 }
             }
@@ -266,6 +271,7 @@ export const initSurveys = async () => {
     )
     const surveys = await loadOrGetSurveys({ forceReload: true, includeDemo: isDevOrTest })
     logToFile('surveys.json', surveys, { mode: 'overwrite' })
+    allSurveys = surveys
     return surveys
 }
 

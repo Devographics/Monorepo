@@ -14,7 +14,7 @@ import {
     QuestionResolverParent,
     IncludeEnum
 } from '../types/surveys'
-import { getPath, formatNumericOptions } from './helpers'
+import { getPath, formatNumericOptions, getEditionById } from './helpers'
 import { genericComputeFunction } from '../compute'
 import { useCache, computeKey } from '../helpers/caching'
 import { getRawCommentsWithCache } from '../compute/comments'
@@ -29,6 +29,7 @@ import { GraphQLScalarType } from 'graphql'
 import { localesResolvers } from '../resolvers/locales'
 import { subFields } from './subfields'
 import { ResultsSubFieldEnum } from '@devographics/types'
+import { loadOrGetParsedSurveys } from '../load/surveys'
 
 export const generateResolvers = async ({
     surveys,
@@ -161,24 +162,28 @@ export const generateResolvers = async ({
     return resolvers
 }
 
-const getGlobalMetadataResolver =
-    ({ surveys }: { surveys: SurveyApiObject[] }): ResolverType =>
-    (parent, args) => {
-        console.log('// getGlobalMetadataResolver')
-        const { surveyId, editionId } = args
-        let filteredSurveys = surveys
-        if (editionId) {
-            filteredSurveys = filteredSurveys
-                .map(s => ({
-                    ...s,
-                    editions: s.editions.filter(e => e.id === editionId)
-                }))
-                .filter(s => s.editions.length > 0)
-        } else if (surveyId) {
-            filteredSurveys = surveys.filter(s => s.id === surveyId)
-        }
-        return { surveys: filteredSurveys }
+/*
+
+Always get a fresh copy of `surveys` from memory
+
+*/
+const getGlobalMetadataResolver = (): ResolverType => async (parent, args) => {
+    console.log('// getGlobalMetadataResolver')
+    const { surveyId, editionId } = args
+    const surveys = await loadOrGetParsedSurveys()
+    let filteredSurveys = surveys
+    if (editionId) {
+        filteredSurveys = filteredSurveys
+            .map(s => ({
+                ...s,
+                editions: s.editions.filter(e => e.id === editionId)
+            }))
+            .filter(s => s.editions.length > 0)
+    } else if (surveyId) {
+        filteredSurveys = surveys.filter(s => s.id === surveyId)
     }
+    return { surveys: filteredSurveys }
+}
 
 const getSurveyResolver =
     ({ survey }: { survey: SurveyApiObject }): ResolverType =>
@@ -187,11 +192,21 @@ const getSurveyResolver =
         return survey
     }
 
+/*
+
+Note: although a survey object is passed as argument, that object
+may be stale if surveys have been reinitialized since app start. 
+So we only use its id and then make sure to get a "fresh"
+copy of the survey metadata from memory
+
+*/
 const getSurveyMetadataResolver =
     ({ survey }: { survey: SurveyApiObject }): ResolverType =>
-    (parent, args, context, info) => {
+    async (parent, args, context, info) => {
         console.log('// survey metadata resolver')
-        return survey
+        const parsedSurveys = await loadOrGetParsedSurveys()
+        const freshSurvey = parsedSurveys.find(s => s.id === survey.id)
+        return freshSurvey
     }
 
 const getEditionResolver =
@@ -201,17 +216,23 @@ const getEditionResolver =
         return edition
     }
 
+/*
+
+See getSurveyMetadataResolver() note above
+
+*/
 const getEditionMetadataResolver =
     ({ survey, edition }: { survey: SurveyApiObject; edition: EditionApiObject }): ResolverType =>
     async (parent, args, context, info) => {
         console.log('// edition metadata resolver')
-        const sections = edition.sections.map(section => ({
+        const freshEdition = await getEditionById(edition.id)
+        const sections = freshEdition.sections.map(section => ({
             ...section,
             questions: section.questions
                 .filter(question => question?.editions?.includes(edition.id))
                 .map(q => ({ ...q, editionId: edition.id }))
         }))
-        return { ...edition, surveyId: survey.id, survey, sections }
+        return { ...freshEdition, surveyId: survey.id, survey, sections }
     }
 
 const getSectionResolver =
