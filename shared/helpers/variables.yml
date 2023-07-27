@@ -174,7 +174,7 @@
 - id: ASSETS_URL
   aliases:
       - NEXT_PUBLIC_ASSETS_URL
-  description: /!\ in frontend apps, must be public (NEXT_PUBLIC_)
+  description: Where to get static assets from. /!\ in frontend apps, must be public (NEXT_PUBLIC_)
   example: https://assets.devographics.com/
   usedBy:
       - surveyform

@@ -98,14 +98,6 @@ export const getAppDb = () => {
     return getMongoDb({ dbUri: process.env.MONGO_PRIVATE_URI, dbName })
 }
 
-const getReadOnlyDb = () => {
-    if (!process.env.MONGO_PUBLIC_URI_READONLY) {
-        throw new Error('MONGO_PUBLIC_URI_READONLY not set')
-    }
-    const dbName = process.env.MONGO_PUBLIC_DB || 'public'
-    return getMongoDb({ dbUri: process.env.MONGO_PUBLIC_URI_READONLY, dbName })
-}
-
 /**
  * Handle the connection automatically when called the first time
  */
@@ -126,7 +118,7 @@ export const getRawResponsesCollection = async <T = any>(survey?: Survey) => {
  * Handle the connection automatically when called the first time
  */
 export const getNormResponsesCollection = async (survey?: Survey) => {
-    const db = await getReadOnlyDb()
+    const db = await getPublicDb()
     return db.collection(survey?.dbCollectionName || 'normalized_responses')
 }
 
