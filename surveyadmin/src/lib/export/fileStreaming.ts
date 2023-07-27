@@ -9,7 +9,8 @@ import fs from "fs"
  */
 async function* nodeStreamToIterator(stream) {
     for await (const chunk of stream) {
-        yield chunk;
+        // conversion to Uint8Array is important here otherwise the stream is not readable
+        yield new Uint8Array(chunk);
     }
 }
 
@@ -29,8 +30,7 @@ function iteratorToStream(iterator) {
             if (done) {
                 controller.close()
             } else {
-                // conversion to Uint8Array is important here otherwise the stream is not readable
-                controller.enqueue(new Uint8Array(value))
+                controller.enqueue(value)
             }
         },
     })
