@@ -5,7 +5,7 @@
 APP_NAME="api"
 
 SURVEYS_REPO=surveys
-MONGO_URI=mongodb://localhost:27017/devographics
+MONGO_PUBLIC_URI=mongodb://localhost:27017/devographics
 MONGO_PUBLIC_DB=devographics_public
 
 REDIS_URL=redis://localhost:6379
