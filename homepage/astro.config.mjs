@@ -1,5 +1,6 @@
 import { defineConfig } from 'astro/config'
 import react from '@astrojs/react'
+import yaml from '@rollup/plugin-yaml'
 
 // import netlify from '@astrojs/netlify/functions'
 
@@ -8,4 +9,7 @@ export default defineConfig({
     // Enable React to support React JSX components.
     integrations: [react()],
     // adapter: netlify()
+    vite: {
+        plugins: [yaml()]
+    }
 })

@@ -7,8 +7,11 @@ import { getLocaleSubset } from '@helpers/translator'
 const { survey, locale, surveys } = Astro.props
 const editions = survey.editions
     .sort((e1, e2) => e2.year - e1.year)
-    .filter(e => [statuses.open, statuses.closed].includes(e.status))
-const { slug } = survey
+    .filter(e => [statuses.open, statuses.closed, statuses.preview, statuses.hidden].includes(e.status))
+const { id } = survey
+
+console.log(survey)
+console.log(editions)
 
 const [lastEdition, ...pastEditions] = editions
 const openEdition = editions.find(e => e.status === statuses.open)
@@ -20,7 +23,7 @@ const closedEditions = editions.filter(e => e.status === statuses.closed)
         {survey.name}
     </h1>
     <p class="survey-description">
-        <T locale={locale} k={`general.${slug}.description`} />
+        <T locale={locale} k={`general.${id}.description`} />
     </p>
 
     <section class="last-edition">
@@ -28,7 +31,7 @@ const closedEditions = editions.filter(e => e.status === statuses.closed)
     </section>
 
     <div class="intro">
-        <T locale={locale} k={`general.${slug}.intro`} md={true} />
+        <T locale={locale} k={`general.${id}.intro`} md={true} />
     </div>
 
     <Newsletter

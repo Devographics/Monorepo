@@ -1,5 +1,5 @@
 import { getCommonContexts } from "~/i18n/config";
-import { fetchLocale } from "@devographics/fetch";
+import { fetchLocaleConverted } from "@devographics/fetch";
 import { AppName } from "@devographics/types";
 
 interface Params {
@@ -8,7 +8,7 @@ interface Params {
 
 export default async function Page({ params }: { params: Params }) {
   const { localeId } = params;
-  const result = await fetchLocale({
+  const result = await fetchLocaleConverted({
     localeId,
     contexts: getCommonContexts(),
     shouldThrow: false,

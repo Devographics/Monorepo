@@ -1,117 +1,41 @@
-import {
-    getAllSurveysQuery,
-    getAllLocalesQuery,
-    getAllLocalesMetadataQuery,
-    getSingleLocaleQuery
-} from '../data/query'
+import { fetchAllLocalesMetadata, fetchSurveysMetadata, fetchLocale } from '@devographics/fetch'
+import { getConfig } from '@devographics/helpers'
 
 type HomepageData = {
     allSurveys?: any[]
     locales?: any[]
 }
 
-export const getSizeInKB = obj => {
-    const str = JSON.stringify(obj)
-    // Get the length of the Uint8Array
-    const bytes = new TextEncoder().encode(str).length
-    return Math.round(bytes / 1000)
-}
-const runQuery = async (url: string, query: string, queryName: string): Promise<any> => {
-    const startAt = new Date()
-    const response = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            query
-        })
-    })
-    const text = await response.text()
-    const endAt = new Date()
-    try {
-        const json = JSON.parse(text) // Try to parse it as JSON
-        if (json.errors) {
-            throw new Error(json.errors[0].message)
-        }
-        console.log(
-            `🕚 Ran query ${queryName} in ${endAt.getTime() - startAt.getTime()}ms (${getSizeInKB(
-                json
-            )}kb) | ${url}`
-        )
-
-        return json.data
-    } catch (error) {
-        console.log(`// runQuery error (API_URL: ${url})`)
-        console.log(text)
-        throw new Error(error)
-    }
-}
-
-
 export const getData = async (): Promise<HomepageData> => {
-    const surveySlug = import.meta.env.SURVEY
-    const dataApiUrl = import.meta.env.DATA_API_URL
-    const internalApiUrl = import.meta.env.INTERNAL_API_URL
+    process.env.APP_NAME = import.meta.env.APP_NAME
+    process.env.API_URL = import.meta.env.API_URL
+    process.env.SURVEYID = import.meta.env.SURVEYID
+    process.env.FAST_BUILD = import.meta.env.FAST_BUILD
+    process.env.REDIS_UPSTASH_URL = import.meta.env.REDIS_UPSTASH_URL
+    process.env.REDIS_TOKEN = import.meta.env.REDIS_TOKEN
+    process.env.LOGS_PATH = import.meta.env.LOGS_PATH
+
+    const config = getConfig({ showWarnings: true })
+
+    const surveyId = import.meta.env.SURVEYID
     const fastBuild = import.meta.env.FAST_BUILD === 'true'
     const locales = []
-    const allSurveysData = await runQuery(dataApiUrl, getAllSurveysQuery(), 'AllSurveys')
+    const { data: allSurveysData } = await fetchSurveysMetadata()
+    const { data: allLocalesMetadata } = await fetchAllLocalesMetadata()
 
-    const allLocalesMetadata = await runQuery(
-        internalApiUrl,
-        getAllLocalesMetadataQuery(surveySlug),
-        'AllLocalesMetadata'
-    )
     const localesToUse = fastBuild
-        ? allLocalesMetadata.locales.filter(l => ['en-US', 'ru-RU'].includes(l.id))
-        : allLocalesMetadata.locales
+        ? allLocalesMetadata.filter(l => ['en-US', 'ru-RU'].includes(l.id))
+        : allLocalesMetadata
     for (const locale of localesToUse) {
-        const localeWithStrings = await runQuery(
-            internalApiUrl,
-            getSingleLocaleQuery(locale.id, surveySlug),
-            `SingleLocale_${locale.id}`
-        )
-        locales.push(localeWithStrings.locale)
+        const { data: localeWithStrings } = await fetchLocale({
+            localeId: locale.id,
+            contexts: ['homepage', surveyId]
+        })
+
+        locales.push(localeWithStrings)
     }
     // filter out the demo survey
-    const allSurveys = allSurveysData?.allSurveys?.filter(s => s.slug !== "demo_survey") || []
+    const allSurveys = allSurveysData?.filter(s => s.id !== 'demo_survey') || []
     const data = { allSurveys, locales }
     return data
 }
-
-// export const dataFetcher = {
-//     data: {},
-//     _init: async function () {
-//         const response = await fetch('http://localhost:4000/graphql', {
-//             method: 'POST',
-//             headers: { 'Content-Type': 'application/json' },
-//             body: JSON.stringify({
-//                 query: getQuery(import.meta.env.SURVEY)
-//             })
-//         })
-
-//         const json = await response.json()
-//         if (json.errors) {
-//             throw new Error(json.errors[0].message)
-//         }
-//         // const { surveys, locales } = json.data
-
-//         this.data = json.data
-
-//         // json.data.locales.map(locale => ({ params: { localeId: locale.id }, props: { locale, locales, surveys } }))
-//     },
-//     async getData() {
-//         if (!this.data) await this._init()
-//         return this.data
-//     }
-//     // async getLocales() {
-//     //   if (!this.cache.locales) await this._init()
-//     //   return this.cache.locales;
-//     // },
-//     // async getSurveys() {
-//     //  if (!this.cache.surveys) await this._init()
-//     //  return this.cache.surveys
-//     // },
-//     // async getSurvey(id) {
-//     //   if (!this.cache.surveys) await this._init();
-//     //   const survey = this.cache.surveys.find(id);
-//     // }
-// }

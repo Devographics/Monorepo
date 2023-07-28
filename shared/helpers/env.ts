@@ -80,7 +80,7 @@ const getValue = (variable: EnvVariable) => {
             }
         }
     }
-    return {}
+    return { id }
 }
 
 /**
@@ -92,9 +92,11 @@ const getValue = (variable: EnvVariable) => {
  */
 export const getConfig = (options: GetConfigOptions = {}) => {
     const { appName: appName_, showWarnings = false } = options
-    const appName = appName_ || appNameGlobal || process.env.APP_NAME
+    const appName = appName_ || appNameGlobal || getValue({ id: EnvVar.APP_NAME })?.value
     if (!appName) {
-        throw new Error('getConfig: please pass variable or call setAppName() to specify appName')
+        throw new Error(
+            'getConfig: please pass variable, set env variable, or call setAppName() to specify appName'
+        )
     }
     const variables = {} as any
     const optionalVariables: EnvVariable[] = []
