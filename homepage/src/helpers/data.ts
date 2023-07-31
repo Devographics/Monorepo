@@ -16,6 +16,8 @@ export const getData = async (): Promise<HomepageData> => {
     process.env.LOGS_PATH = import.meta.env.LOGS_PATH
 
     const config = getConfig({ showWarnings: true })
+    console.log('// config')
+    console.log(config)
 
     const surveyId = import.meta.env.SURVEYID
     const fastBuild = import.meta.env.FAST_BUILD === 'true'
