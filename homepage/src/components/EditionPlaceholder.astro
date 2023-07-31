@@ -1,0 +1,17 @@
+---
+import SurveyEdition from '@components/SurveyEdition.astro'
+
+const { survey } = Astro.props
+
+---
+<section class="edition-placeholder">
+    <img class="main-image" src={survey.imageUrl} alt={survey.name}/>
+</section>
+
+<style lang="scss">
+    .main-image {
+        display: block;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+</style>

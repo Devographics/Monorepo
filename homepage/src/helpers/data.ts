@@ -20,8 +20,10 @@ export const getData = async (): Promise<HomepageData> => {
     const surveyId = import.meta.env.SURVEYID
     const fastBuild = import.meta.env.FAST_BUILD === 'true'
     const locales = []
-    const { data: allSurveysData } = await fetchSurveysMetadata()
-    const { data: allLocalesMetadata } = await fetchAllLocalesMetadata()
+    const { data: allSurveysData } = await fetchSurveysMetadata({ shouldGetFromCache: false })
+    const { data: allLocalesMetadata } = await fetchAllLocalesMetadata({
+        shouldGetFromCache: false
+    })
 
     const localesToUse = fastBuild
         ? allLocalesMetadata.filter(l => ['en-US', 'ru-RU'].includes(l.id))
@@ -29,7 +31,8 @@ export const getData = async (): Promise<HomepageData> => {
     for (const locale of localesToUse) {
         const { data: localeWithStrings } = await fetchLocale({
             localeId: locale.id,
-            contexts: ['homepage', surveyId]
+            contexts: ['homepage', surveyId],
+            shouldGetFromCache: false
         })
 
         locales.push(localeWithStrings)

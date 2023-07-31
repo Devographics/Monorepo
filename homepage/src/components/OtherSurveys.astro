@@ -1,14 +1,14 @@
 ---
 import T from '@components/T'
 const { survey, surveys, locale } = Astro.props
-const otherSurveys = surveys.filter(s => s.slug !== survey.slug)
+const otherSurveys = surveys.filter(s => s.id !== survey.id)
 ---
 
 <div class="other-surveys">
   <div class="other-surveys-inner">
     <T locale={locale} k="homepage.other_surveys" />
     {otherSurveys.map(
-    ({name, domain})=> (<a class="other-survey-link" href={`https://www.${domain}`}>{name}</a>)
+    ({name, domain})=> (<a class="other-survey-link" href={`https://${domain}`}>{name}</a>)
     )}
   </div>
 </div>
@@ -23,7 +23,6 @@ const otherSurveys = surveys.filter(s => s.slug !== survey.slug)
 
   .other-surveys-inner {
     width: 100%;
-    max-width: var(--layout-width);
     margin: 0 auto;
 
     @media screen and (max-width: 666px) {
