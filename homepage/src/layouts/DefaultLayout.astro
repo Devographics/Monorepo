@@ -5,9 +5,7 @@ import Partners from '@components/Partners.astro'
 import OtherSurveys from '@components/OtherSurveys.astro'
 import { getMeta } from '@helpers/meta'
 
-import '../stylesheets/_breakpoints.scss'
-import '../stylesheets/_global.scss'
-import '../stylesheets/_buttons.scss'
+import '../stylesheets/main.scss'
 
 const { surveys, survey, locale, locales, redirect } = Astro.props;
 const { editions } = survey
@@ -39,6 +37,10 @@ const variables = `
     <meta {...tag} />)}
 
     <link rel="icon" type="image/x-icon" href={faviconUrl} />
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
 
     <style set:html={variables}/>
   </head>
