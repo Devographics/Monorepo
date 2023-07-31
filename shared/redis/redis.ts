@@ -10,6 +10,12 @@ export function initRedis(url_?: string, token_?: string) {
     const token = token_ || getEnvVar(EnvVar.REDIS_TOKEN)
     // console.debug('init redis client', url, token)
     if (!redis) {
+        if (!url) {
+            throw new Error('initRedis: url is not defined')
+        }
+        if (!token) {
+            throw new Error('initRedis: token is not defined')
+        }
         // redis = new Redis(redisUrl)
         redis = new Redis({
             url,
