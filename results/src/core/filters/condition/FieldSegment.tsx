@@ -70,7 +70,7 @@ type ItemSelectOptionsProps = {
 export const ItemSelectOptions = ({
     allFilters,
     currentQuestionId,
-    disabledList
+    disabledList = []
 }: ItemSelectOptionsProps) => {
     const entities = useEntities()
     const { getString } = useI18n()
