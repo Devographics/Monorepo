@@ -1,18 +1,21 @@
 ---
-import SurveyEdition from '@components/SurveyEdition.astro'
 import T from '@components/T'
 import Newsletter from '@components/Newsletter'
+import PastEditions from '@components/PastEditions.astro'
+import EditionPlaceholder from '@components/EditionPlaceholder.astro'
+import LastEdition from '@components/LastEdition.astro'
 import { statuses } from '@helpers/constants'
 import { getLocaleSubset } from '@helpers/translator'
 const { survey, locale, surveys } = Astro.props
-const editions = survey.editions
+const { editions =[]} = surveys
+const allEditions = (editions)
     .sort((e1, e2) => e2.year - e1.year)
-    .filter(e => [statuses.open, statuses.closed].includes(e.status))
-const { slug } = survey
+    .filter(e => [statuses.open, statuses.closed, statuses.preview].includes(e.status))
+const { id } = survey
 
-const [lastEdition, ...pastEditions] = editions
-const openEdition = editions.find(e => e.status === statuses.open)
-const closedEditions = editions.filter(e => e.status === statuses.closed)
+const [lastEdition, ...pastEditions] = allEditions
+// const openEdition = allEditions.find(e => e.status === statuses.open)
+// const closedEditions = allEditions.filter(e => e.status === statuses.closed)
 ---
 
 <div class="homepage">
@@ -20,15 +23,13 @@ const closedEditions = editions.filter(e => e.status === statuses.closed)
         {survey.name}
     </h1>
     <p class="survey-description">
-        <T locale={locale} k={`general.${slug}.description`} />
+        <T locale={locale} k={`general.${id}.description`} />
     </p>
 
-    <section class="last-edition">
-        <SurveyEdition locale={locale} edition={lastEdition} survey={survey} isLast={true} />
-    </section>
+    {lastEdition ? <LastEdition edition={lastEdition}/> : <EditionPlaceholder survey={survey}/>}
 
     <div class="intro">
-        <T locale={locale} k={`general.${slug}.intro`} md={true} />
+        <T locale={locale} k={`general.${id}.intro`} md={true} />
     </div>
 
     <Newsletter
@@ -43,22 +44,8 @@ const closedEditions = editions.filter(e => e.status === statuses.closed)
     />
 
     {
-        pastEditions.length > 0 && (
-            <section class="past-editions">
-                <h2>
-                    <T locale={locale} k="homepage.past_surveys" />
-                </h2>
-                <div class="past-editions-items">
-                    {pastEditions.map(edition => (
-                        <SurveyEdition
-                            locale={locale}
-                            key={edition.surveyId}
-                            edition={edition}
-                            survey={survey}
-                        />
-                    ))}
-                </div>
-            </section>
+        pastEditions && pastEditions.length > 0 && (
+            <PastEditions editions={editions} locale={locale} survey={survey}/>
         )
     }
 </div>

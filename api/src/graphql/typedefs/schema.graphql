@@ -17,6 +17,7 @@ type SurveyMetadata {
     domain: String
     hashtag: String
 
+    imageUrl: String
     dbCollectionName: String
 
     emailOctopus: EmailOctopusData

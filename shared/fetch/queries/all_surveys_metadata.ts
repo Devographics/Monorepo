@@ -13,6 +13,7 @@ query SurveysMetadataQuery {
       dbCollectionName
       domain
       hashtag
+      imageUrl
       emailOctopus {
         listId
       }

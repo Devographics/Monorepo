@@ -49,7 +49,7 @@ const variables = `
         <div>
         <slot />
         </div>
-        <Partners {...Astro.props} />
+        {survey.partners && <Partners {...Astro.props} />}
         <Footer {...Astro.props} />
       </div>
   </body>

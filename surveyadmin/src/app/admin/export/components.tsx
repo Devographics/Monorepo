@@ -135,6 +135,10 @@ export const AdminExportPage = ({
             setSurveyId(evt.target.value);
           }}
         >
+          <option disabled selected value="">
+            {" "}
+            -- select an option --{" "}
+          </option>
           {surveyIds.map((id) => {
             return (
               <option key={id} value={id}>

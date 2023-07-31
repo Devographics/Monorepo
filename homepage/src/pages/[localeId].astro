@@ -14,7 +14,7 @@ export async function getStaticPaths() {
 }
 
 const { locale, locales, surveys } = Astro.props
-const survey = surveys.find(s => s?.slug === import.meta.env.SURVEY)
+const survey = surveys.find(s => s.id === import.meta.env.SURVEYID)
 ---
 
 <DefaultLayout {...Astro.props} survey={survey}>

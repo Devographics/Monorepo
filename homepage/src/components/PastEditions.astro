@@ -1,0 +1,23 @@
+---
+import SurveyEdition from '@components/SurveyEdition.astro'
+import T from '@components/T'
+
+const { editions, locale, survey } = Astro.props
+
+---
+
+<section class="past-editions">
+    <h2>
+        <T locale={locale} k="homepage.past_surveys" />
+    </h2>
+    <div class="past-editions-items">
+        {editions.map(edition => (
+            <SurveyEdition
+                locale={locale}
+                key={edition.surveyId}
+                edition={edition}
+                survey={survey}
+            />
+        ))}
+    </div>
+</section>
