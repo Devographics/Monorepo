@@ -12,15 +12,27 @@ export const calculateAverage = ({
     if (!count) {
         return 0
     }
+    /*
+
+    We exclude 'no_answer' facet buckets because otherwise they would
+    warp the resulting average towards 0.
+
+    We will then use this facetTotal to divide the sum and calculate our average. 
+
+    */
+    const facetTotal = sumBy(
+        facetBuckets.filter(f => f.id !== 'no_answer'),
+        facetBucket => facetBucket.count || 0
+    )
     const averageValue =
         sumBy(facetBuckets, facetBucket => {
             const facetOption = axis.options?.find(o => o.id === facetBucket.id)
-            if (facetOption) {
-                return (facetBucket.count || 0) * (facetOption?.average || 0)
+            if (facetBucket.count && facetOption && facetOption.average) {
+                return facetBucket.count * facetOption.average
             } else {
                 return 0
             }
-        }) / count
+        }) / facetTotal
     return Math.round(averageValue)
 }
 

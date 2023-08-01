@@ -37,7 +37,7 @@ Get chart's max value
 */
 const getMaxValue = (units: Units, mode: Mode, buckets: Bucket[], total: number) => {
     if (units === 'average') {
-        return Math.max(...buckets.map(b => b[units]))
+        return Math.max(...buckets.map(b => b['averageByFacet']))
     } else if (isPercentage(units)) {
         if (getMode(units, mode) === 'absolute') {
             return 100
@@ -373,7 +373,7 @@ export const useChartKeys = ({
     const allChartKeys = useAllChartsOptions()
     if (facet) {
         if (units === 'average') {
-            return ['average']
+            return ['averageByFacet']
         } else {
             return allChartKeys
                 .find(q => q.id === facet.id)

@@ -89,6 +89,7 @@ const VerticalBarBlock = ({ block, data, context }: VerticalBarBlockProps) => {
             >
                 <ChartContainer fit={true}>
                     <VerticalBarChart
+                        block={block}
                         legends={chartLegends}
                         total={total}
                         i18nNamespace={i18nNamespace}

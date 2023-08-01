@@ -11,7 +11,7 @@ import {
 } from 'core/charts/hooks'
 import BarTooltip from '../common/BarTooltip'
 import ChartLabel from 'core/components/ChartLabel'
-import { ChartComponentProps, BlockLegend } from 'core/types/index'
+import { ChartComponentProps, BlockLegend, BlockDefinition } from 'core/types/index'
 import { handleNoAnswerBucket } from 'core/helpers/data'
 import { StandardQuestionData, BucketUnits } from '@devographics/types'
 import { combineBuckets } from 'core/filters/helpers'
@@ -79,6 +79,7 @@ const getAxisLabels = (v: any, legends: BlockLegend[]) => {
 }
 
 export interface VerticalBarChartProps extends ChartComponentProps {
+    block: BlockDefinition
     total: number
     series: DataSeries<StandardQuestionData>[]
     gridIndex?: number
@@ -89,6 +90,7 @@ export interface VerticalBarChartProps extends ChartComponentProps {
 
 const VerticalBarChart = (props: VerticalBarChartProps) => {
     const {
+        block,
         viewportWidth,
         className,
         legends,
@@ -147,6 +149,13 @@ const VerticalBarChart = (props: VerticalBarChartProps) => {
 
     const colors = [theme.colors.barChart[colorVariant]]
 
+    if (block.id === 'years_of_experience') {
+        console.log(block.id)
+        console.log(buckets)
+        console.log(handleNoAnswerBucket({ buckets, units, moveTo: 'end' }))
+        console.log(keys)
+    }
+
     return (
         <div style={{ height: 260 }} className={`VerticalBarChart ${className}`}>
             <ResponsiveBar
@@ -154,7 +163,6 @@ const VerticalBarChart = (props: VerticalBarChartProps) => {
                 groupMode={chartDisplayMode}
                 indexBy="id"
                 keys={keys}
-                maxValue={maxValue}
                 margin={getMargins(viewportWidth)}
                 padding={0.4}
                 theme={theme.charts}
@@ -195,12 +203,9 @@ const VerticalBarChart = (props: VerticalBarChartProps) => {
                     />
                 )}
                 layers={['grid', 'axes', 'bars', labelsLayer]}
-                defs={colorDefs}
-                fill={colorFills}
-                {...chartProps}
             />
         </div>
     )
 }
 
-export default memo(VerticalBarChart)
+export default VerticalBarChart
