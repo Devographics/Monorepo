@@ -58,18 +58,20 @@ const GridDataLoader = ({
     }, [chartFilters])
 
     return (
-        <WrapperGrid
-            layout={layout}
-            series={series}
-            legends={legends}
-            isLoading={isLoading}
-            showDefaultSeries={showDefaultSeries}
-        >
-            {children}
+        <>
+            <WrapperGrid
+                layout={layout}
+                series={series}
+                legends={legends}
+                isLoading={isLoading}
+                showDefaultSeries={showDefaultSeries}
+            >
+                {children}
+            </WrapperGrid>
             {series && (
                 <JSONTrigger block={block} data={series} buttonProps={{ variant: 'link' }} />
             )}
-        </WrapperGrid>
+        </>
     )
 }
 
