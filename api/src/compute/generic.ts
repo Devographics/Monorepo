@@ -29,6 +29,7 @@ import {
     addEditionYears,
     discardEmptyEditions,
     addLabels,
+    addAveragesByFacet,
     removeEmptyEditions
 } from './stages/index'
 import { ResponsesTypes, DbSuffixes, SurveyMetadata, EditionMetadata } from '@devographics/types'
@@ -96,8 +97,6 @@ export async function genericComputeFunction({
         showNoAnswer
     } = parameters
 
-    const options = question.options && question.options.map(o => o.id)
-
     /*
 
     Axis 1
@@ -110,8 +109,8 @@ export async function genericComputeFunction({
         cutoff,
         limit
     }
-    if (options) {
-        axis1.options = options
+    if (question.options) {
+        axis1.options = question.options
     }
 
     /*
@@ -134,9 +133,8 @@ export async function genericComputeFunction({
                 cutoffPercent: facetCutoffPercent,
                 limit: facetLimit
             }
-            const facetOptions = facetQuestion?.options?.map(o => o.id)
-            if (facetOptions) {
-                axis2.options = facetOptions
+            if (facetQuestion?.options) {
+                axis2.options = facetQuestion?.options
             }
             // switch both axes in order to get a better result object structure
             const temp = axis1
@@ -237,6 +235,7 @@ export async function genericComputeFunction({
         if (responsesType === ResponsesTypes.RESPONSES) {
             await addMissingItems(results, axis2, axis1)
         }
+        await addAveragesByFacet(results, axis2, axis1)
         await sortData(results, axis2, axis1)
         await limitData(results, axis2, axis1)
         await cutoffData(results, axis2, axis1)

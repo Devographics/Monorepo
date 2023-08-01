@@ -1,6 +1,6 @@
 import { QuestionApiObject } from './surveys'
 import { Filters } from './filters'
-import { OptionId, ResponsesTypes } from '@devographics/types'
+import { Option, OptionId, ResponsesTypes } from '@devographics/types'
 
 export interface GenericComputeArguments {
     responsesType?: ResponsesTypes
@@ -33,7 +33,7 @@ export interface ComputeAxisParameters {
     cutoff: number
     limit: number
     cutoffPercent?: number
-    options?: OptionId[]
+    options?: Option[]
 }
 
 export interface SortSpecifier {

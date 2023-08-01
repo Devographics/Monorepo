@@ -1,6 +1,7 @@
 export * from './add_entities'
 export * from './add_percentages'
 export * from './add_completion'
+export * from './add_averages'
 export * from './sort_data'
 export * from './limit_data'
 export * from './cutoff_data'

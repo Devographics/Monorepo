@@ -124,6 +124,7 @@ export interface Bucket extends BucketData {
     completion?: BucketCompletion
     entity?: Entity
     facetBuckets: FacetBucket[]
+    averageByFacet?: number
     label?: string
 }
 

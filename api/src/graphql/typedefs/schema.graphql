@@ -252,6 +252,11 @@ type Bucket {
     An array of bucket facets, when bucket is faceted
     """
     facetBuckets: [FacetBucket]
+    """
+    Average age/years of experience/etc. of the bucket, when bucket is faceted by a range
+    or some other numerical value
+    """
+    averageByFacet: Float
 }
 
 type FacetBucket {
@@ -273,6 +278,10 @@ type FacetBucket {
     Percentage relative to question respondents in facet
     """
     percentageFacet: Float
+    """
+    Average value based on range average
+    """
+    averageFacet: Float
     """
     Entity associated with the current bucket
     """
