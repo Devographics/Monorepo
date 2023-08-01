@@ -37,9 +37,6 @@ const BlockUnitsSelector = ({
     i18nNamespace,
     chartFilters
 }) => {
-    let axisLabel
-    if (chartFilters.facet) {
-    }
     return (
         <ButtonGroup>
             {options.map(option => (
