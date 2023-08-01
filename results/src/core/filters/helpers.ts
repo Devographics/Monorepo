@@ -600,8 +600,9 @@ export const getValueLabel = ({
             default: {
                 const key = `options.${field.id}.${value}`
                 const regular = getString(key, {}, value)?.t
-                const short = getString(`${key}.short`, {}, regular)?.t
-                return short
+                // const short = getString(`${key}.short`, {}, regular)?.t
+                // note: using short descriptions here isn't clear enough
+                return regular
             }
         }
     }
@@ -619,7 +620,13 @@ type FilterLegend = {
     label: string
     shortLabel: string
 }
-export const useFilterLegends = ({ chartFilters }: { chartFilters: CustomizationDefinition }) => {
+export const useFilterLegends = ({
+    chartFilters,
+    block
+}: {
+    chartFilters: CustomizationDefinition
+    block: BlockDefinition
+}) => {
     const context = usePageContext()
     const { currentEdition } = context
     const { year: currentYear } = currentEdition
@@ -630,7 +637,7 @@ export const useFilterLegends = ({ chartFilters }: { chartFilters: Customization
     const { options } = chartFilters
     const { showDefaultSeries, mode } = options
 
-    const reverse = mode === MODE_FACET
+    const reverse = mode === MODE_FACET && block.blockType === 'VerticalBarBlock'
 
     const theme = useTheme()
     const { colors } = theme
@@ -704,7 +711,7 @@ export const useFilterLegends = ({ chartFilters }: { chartFilters: Customization
         }
     } else if (chartFilters.options.mode === MODE_FACET && chartFilters.facet) {
         const facetField = allFilters.find(f => f.id === chartFilters?.facet?.id) as FilterItem
-        results = facetField.options.map(({ id }, index) => {
+        results = facetField?.options?.map(({ id }, index) => {
             const label = getValueLabel({
                 getString,
                 field: facetField,
@@ -771,7 +778,8 @@ export const useChartFilters = ({
     )
 
     const filterLegends = useFilterLegends({
-        chartFilters
+        chartFilters,
+        block
     })
     return { chartFilters, setChartFilters, filterLegends }
 }
@@ -834,8 +842,8 @@ export const fetchSeriesData = async ({
         throw new Error('GATSBY_API_URL env variable is not set')
     }
     const result: QueryData<AllQuestionData> = await runQuery(url, query, `${block.id}FiltersQuery`)
-    console.log('// result')
-    console.log(result)
+    // console.log('// result')
+    // console.log(result)
 
     const dataPath = getBlockDataPath({ block, pageContext, addRootNode: false })
 

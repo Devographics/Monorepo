@@ -75,8 +75,11 @@ export const getVariantBarColorItem = (
     facet?: FacetItem
 ) => {
     const { velocityBarColors, barColors } = theme.colors
-    if (facet && facet.optionsAreRange) {
+    if (facet && facet.optionsAreSequential) {
         const i = Math.min(variantIndex, velocityBarColors.length - 1)
+        console.log(velocityBarColors)
+        console.log(i)
+        console.log(velocityBarColors[i])
         return velocityBarColors[i]
     } else {
         const numberOfVariantColors = barColors.length
@@ -254,8 +257,7 @@ export const useColorFills = (options: UseColorFillsOptions) => {
             */
             const facetField = allFilters.find(f => f.id === facet?.id) as FilterItem
 
-            console.log(facet)
-            const prefix = facetField.optionsAreRange ? 'Velocity' : 'Gradient'
+            const prefix = facetField.optionsAreSequential ? 'Velocity' : 'Gradient'
 
             const averageFill = {
                 match: d => {

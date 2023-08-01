@@ -137,6 +137,8 @@ type QuestionMetadata {
     optionsAreNumeric: Boolean
     # options are ranges of numbers
     optionsAreRange: Boolean
+    # options follow each other sequentially
+    optionsAreSequential: Boolean
     # whether a question only exists in the API and not the ouline
     apiOnly: Boolean
 }

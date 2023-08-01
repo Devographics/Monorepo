@@ -40,6 +40,7 @@ company_size:
     defaultSort: options
     optionsAreRange: true
     options:
+        - id: na
         - id: range_1
           average: 1
         - id: range_1_5
@@ -61,6 +62,7 @@ yearly_salary:
     defaultSort: options
     optionsAreRange: true
     options:
+        - id: na
         - id: range_work_for_free
           average: 0
         - id: range_0_10
@@ -101,6 +103,7 @@ race_ethnicity:
 disability_status:
     defaultSort: options
     options:
+        - id: na
         - id: visual_impairments
         - id: hearing_impairments
         - id: mobility_impairments

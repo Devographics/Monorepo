@@ -27,7 +27,8 @@ const GridDataLoader = ({
     const showDefaultSeries = chartFilters.options.showDefaultSeries
 
     const legends = useFilterLegends({
-        chartFilters
+        chartFilters,
+        block
     })
 
     const [isLoading, setIsLoading] = useState(false)

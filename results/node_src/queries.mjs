@@ -177,6 +177,7 @@ query {
                                 template
                                 optionsAreNumeric
                                 optionsAreRange
+                                optionsAreSequential
                                 entity {
                                     id
                                     name

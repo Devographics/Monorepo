@@ -21,6 +21,8 @@ export const knowledge_score: TemplateFunction = options => {
         normPaths: {
             response: 'user_info.knowledge_score'
         },
+        optionsAreSequential: true,
+        optionsAreRange: true,
         ...question
     }
     return output
