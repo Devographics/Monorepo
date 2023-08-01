@@ -854,7 +854,7 @@
             - id: learning_methods_freeform
               fieldId: learning_methods
               defaultUnits: count
-              i18nNamespace: first_steps
+              i18nNamespace: learning_methods
               tabId: tabs.other_answers
               template: multiple_options_freeform
               translateData: true

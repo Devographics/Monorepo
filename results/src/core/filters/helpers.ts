@@ -517,14 +517,24 @@ export const getFieldLabel = ({
 }) => {
     const { sectionId, template, id: id } = field
     const entity = entities.find(e => e.id === id)
-    if (entity) {
-        return getEntityName(entity)
-    } else if (template === 'happiness') {
-        return getString('blocks.happiness')?.t
-    } else if (sectionId === 'other_tools') {
-        return getString(`tools_others.${id}`)?.t
+    const entityName = entity && getEntityName(entity)
+    if (entityName) {
+        return entityName
     } else {
-        return getString(`${sectionId}.${id}`)?.t
+        let key
+        if (template === 'happiness') {
+            key = 'blocks.happiness'
+        } else if (sectionId === 'other_tools') {
+            key = `tools_others.${id}`
+        } else if (template === 'feature') {
+            key = `features.${id}`
+        } else if (template === 'tool') {
+            key = `tools.${id}`
+        } else {
+            key = `${sectionId}.${id}`
+        }
+        const s = getString(key)
+        return s?.tClean || s?.t
     }
 }
 

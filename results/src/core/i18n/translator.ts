@@ -59,7 +59,7 @@ export const getStringTranslator =
             result.t = values ? applyTemplate({ t: result.t, values, locale, key }) : result.t
             result.tClean = values
                 ? applyTemplate({ t: result.tClean, values, locale, key })
-                : result.t
+                : result.tClean
             result.tHtml = values
                 ? applyTemplate({ t: result.tHtml, values, locale, key })
                 : result.tHtml

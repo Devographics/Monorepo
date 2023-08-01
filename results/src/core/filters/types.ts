@@ -44,7 +44,7 @@ export enum OperatorEnum {
 
 export type FilterItem = QuestionMetadata
 
-export type FacetItem = QuestionMetadata
+export type FacetItem = Pick<QuestionMetadata, 'id' | 'sectionId'>
 
 export type FilterValue = FilterValueString | FilterValueArray
 

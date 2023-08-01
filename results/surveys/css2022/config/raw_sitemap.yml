@@ -782,6 +782,7 @@
       - template: page_introduction
 
       - id: first_steps
+        intlId: resources.first_steps_css
         defaultUnits: count
         tabId: tabs.main_answers
         template: multiple_options
