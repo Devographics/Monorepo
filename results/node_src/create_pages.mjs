@@ -187,7 +187,7 @@ export const createPagesSingleLoop = async ({
 
         if (!USE_FAST_BUILD) {
             // skip this is fast_build option is enabled
-            createBlockPages(page, fullContext, createPage, locales, buildInfo)
+            // createBlockPages(page, fullContext, createPage, locales, buildInfo)
         }
     }
     logToFile('build.yml', yaml.dump(buildInfo, { noRefs: true }), {
