@@ -31,8 +31,9 @@ import {
     addLabels,
     removeEmptyEditions
 } from './stages/index'
-import { ResponsesTypes, DbSuffixes } from '@devographics/types'
+import { ResponsesTypes, DbSuffixes, SurveyMetadata, EditionMetadata } from '@devographics/types'
 import { getCollection } from '../helpers/db'
+import { getPastEditions } from '../helpers/surveys'
 
 const convertOrder = (order: 'asc' | 'desc') => (order === 'asc' ? 1 : -1)
 
@@ -67,8 +68,8 @@ export async function genericComputeFunction({
     computeArguments
 }: {
     context: RequestContext
-    survey: Survey
-    edition: Edition
+    survey: SurveyMetadata
+    edition: EditionMetadata
     section: Section
     question: QuestionApiObject
     questionObjects: QuestionApiObject[]
@@ -165,9 +166,13 @@ export async function genericComputeFunction({
         const filtersQuery = await generateFiltersQuery({ filters, dbPath })
         match = { ...match, ...filtersQuery }
     }
-    // if edition is passed, restrict aggregation to specific edition
     if (selectedEditionId) {
+        // if edition is passed, restrict aggregation to specific edition
         match.editionId = selectedEditionId
+    } else {
+        // restrict aggregation to current and past editions, to avoid including results from the future
+        const pastEditions = getPastEditions({ survey, edition })
+        match.editionId = { $in: pastEditions.map(e => e.id) }
     }
 
     // TODO: merge these counts into the main aggregation pipeline if possible
@@ -181,7 +186,9 @@ export async function genericComputeFunction({
         axis1,
         axis2,
         responsesType,
-        showNoAnswer
+        showNoAnswer,
+        survey,
+        edition
     }
 
     const pipeline = await getGenericPipeline(pipelineProps)
@@ -244,8 +251,8 @@ export async function genericComputeFunction({
         await addLabels(results, axis1)
     }
 
-    console.log('// results final')
-    console.log(JSON.stringify(results, undefined, 2))
+    // console.log('// results final')
+    // console.log(JSON.stringify(results, undefined, 2))
 
     return results
 }
