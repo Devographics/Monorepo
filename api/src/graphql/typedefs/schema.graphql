@@ -275,9 +275,9 @@ type FacetBucket {
     """
     percentageSurvey: Float
     """
-    Percentage relative to question respondents in facet
+    Percentage of the bucket represented by the current facet
     """
-    percentageFacet: Float
+    percentageBucket: Float
     """
     Average value based on range average
     """

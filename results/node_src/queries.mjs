@@ -107,7 +107,7 @@ const getFacetFragment = addBucketsEntities => `
         count
         percentageQuestion
         percentageSurvey
-        percentageFacet
+        percentageBucket
         ${addBucketsEntities ? getEntityFragment() : ''}
     }
 `

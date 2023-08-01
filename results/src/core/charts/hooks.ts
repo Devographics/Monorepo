@@ -39,12 +39,13 @@ const getMaxValue = (units: Units, mode: Mode, buckets: Bucket[], total: number)
     if (units === 'average') {
         return Math.max(...buckets.map(b => b['averageByFacet']))
     } else if (isPercentage(units)) {
-        if (getMode(units, mode) === 'absolute') {
-            return 100
-        } else {
-            const maxBucketPercentage = Math.max(...buckets.map(b => b[units]))
-            return ceil(maxBucketPercentage, -1)
-        }
+        return 100
+        // if (getMode(units, mode) === 'absolute') {
+        //     return 100
+        // } else {
+        //     const maxBucketPercentage = Math.max(...buckets.map(b => b[units]))
+        //     return ceil(maxBucketPercentage, -1)
+        // }
     } else {
         if (getMode(units, mode) === 'absolute') {
             return ceil(total, -3)

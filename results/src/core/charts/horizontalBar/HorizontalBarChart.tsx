@@ -120,6 +120,16 @@ export interface HorizontalBarChartProps extends ChartComponentProps {
     showDefaultSeries?: boolean
 }
 
+// if we're only showing a single key, sort by that
+// else, default to sorting by count
+const getSortKey = (keys: string[]) => {
+    if (keys.length === 1) {
+        return keys[0]
+    } else {
+        return 'count'
+    }
+}
+
 const HorizontalBarChart = ({
     block,
     series,
@@ -178,7 +188,7 @@ const HorizontalBarChart = ({
         units
     })
 
-    const sortedBuckets = sortBy(buckets, 'count')
+    const sortedBuckets = sortBy(buckets, getSortKey(keys))
 
     const defaultBarColor = theme.colors.barColors[0]
     const barColor = barColor_ || defaultBarColor

@@ -1,28 +1,45 @@
 import React, { memo } from 'react'
-import PropTypes from 'prop-types'
 import ButtonGroup from 'core/components/ButtonGroup'
 import Button from 'core/components/Button'
 import T from 'core/i18n/T'
-import { ChartModes } from '../../filters/types'
 import { BucketUnits } from '@devographics/types'
+import { useI18n } from 'core/i18n/i18nContext'
 
-const UnitButton = ({ units, current, onChange, i18nNamespace = 'chart_units' }) => (
-    <Button
-        size="small"
-        className={`Button--${current === units ? 'selected' : 'unselected'}`}
-        onClick={() => onChange(units)}
-        aria-pressed={current === units}
-    >
-        <T k={`${i18nNamespace}.${units}`} />
-    </Button>
-)
+const UnitButton = ({ units, current, onChange, i18nNamespace = 'chart_units', chartFilters }) => {
+    const { getString } = useI18n()
+
+    const values = {} as { axis: string }
+    if (units === 'average') {
+        const s = getString(`${chartFilters.facet.sectionId}.${chartFilters.facet.id}`)
+        if (s?.t) {
+            values.axis = s.t
+        }
+    }
+
+    const key = `${i18nNamespace}.${units}`
+
+    return (
+        <Button
+            size="small"
+            className={`Button--${current === units ? 'selected' : 'unselected'}`}
+            onClick={() => onChange(units)}
+            aria-pressed={current === units}
+        >
+            <T k={key} values={values} />
+        </Button>
+    )
+}
 
 const BlockUnitsSelector = ({
     units,
     onChange,
     options = [BucketUnits.PERCENTAGE_SURVEY, BucketUnits.PERCENTAGE_QUESTION, BucketUnits.COUNT],
-    i18nNamespace
+    i18nNamespace,
+    chartFilters
 }) => {
+    let axisLabel
+    if (chartFilters.facet) {
+    }
     return (
         <ButtonGroup>
             {options.map(option => (
@@ -32,6 +49,7 @@ const BlockUnitsSelector = ({
                     current={units}
                     onChange={onChange}
                     i18nNamespace={i18nNamespace}
+                    chartFilters={chartFilters}
                 />
             ))}
         </ButtonGroup>

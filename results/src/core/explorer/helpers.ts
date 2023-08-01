@@ -136,7 +136,7 @@ export const getCellData = (options: {
     // const facetPercentageQuestion = facetBucket.percentageQuestion
 
     // percentage of bucket relative to current facet (row)
-    const bucketPercentageFacet = facetBucket?.percentageFacet
+    const bucketPercentageFacet = facetBucket?.percentageBucket
 
     // percentage of respondents in column
     const normalizedPercentage = xAxisTotal.percentage
@@ -227,17 +227,17 @@ export const getCellDots = ({
             })
         } else {
             // find the right bucket for the current cell based on its xIndex (column index)
-            const percentCount = Math.max(normalizedPercentage, facetBucket.percentageFacet)
+            const percentCount = Math.max(normalizedPercentage, facetBucket.percentageBucket)
             const dotCount = Math.floor(percentCount / percentsPerDot)
             return [...Array(dotCount)].map((x, index) => {
                 const percentsInDot = index * percentsPerDot
                 let type = DotTypes.ERROR
                 if (
-                    percentsInDot <= facetBucket.percentageFacet &&
+                    percentsInDot <= facetBucket.percentageBucket &&
                     percentsInDot <= normalizedPercentage
                 ) {
                     type = DotTypes.NORMAL
-                } else if (percentsInDot <= facetBucket.percentageFacet) {
+                } else if (percentsInDot <= facetBucket.percentageBucket) {
                     type = DotTypes.EXTRA
                 } else if (percentsInDot <= normalizedPercentage) {
                     type = DotTypes.MISSING

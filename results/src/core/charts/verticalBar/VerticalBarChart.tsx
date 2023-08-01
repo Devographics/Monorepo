@@ -149,13 +149,6 @@ const VerticalBarChart = (props: VerticalBarChartProps) => {
 
     const colors = [theme.colors.barChart[colorVariant]]
 
-    if (block.id === 'years_of_experience') {
-        console.log(block.id)
-        console.log(buckets)
-        console.log(handleNoAnswerBucket({ buckets, units, moveTo: 'end' }))
-        console.log(keys)
-    }
-
     return (
         <div style={{ height: 260 }} className={`VerticalBarChart ${className}`}>
             <ResponsiveBar
@@ -163,6 +156,7 @@ const VerticalBarChart = (props: VerticalBarChartProps) => {
                 groupMode={chartDisplayMode}
                 indexBy="id"
                 keys={keys}
+                maxValue={maxValue}
                 margin={getMargins(viewportWidth)}
                 padding={0.4}
                 theme={theme.charts}
@@ -203,6 +197,9 @@ const VerticalBarChart = (props: VerticalBarChartProps) => {
                     />
                 )}
                 layers={['grid', 'axes', 'bars', labelsLayer]}
+                defs={colorDefs}
+                fill={colorFills}
+                {...chartProps}
             />
         </div>
     )
