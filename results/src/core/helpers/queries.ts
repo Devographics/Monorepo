@@ -201,6 +201,7 @@ surveys {
                 percentageQuestion
                 percentageSurvey
                 ${addBucketsEntities ? getEntityFragment() : ''}
+                ${queryArgs.facet || addBucketFacetsPlaceholder ? 'averageByFacet' : ''}
                 ${queryArgs.facet ? getFacetFragment(addBucketsEntities) : ''}
                 ${addBucketFacetsPlaceholder ? bucketFacetsPlaceholder : ''}
               }

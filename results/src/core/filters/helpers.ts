@@ -446,30 +446,6 @@ export const invertFacets = ({ facets, defaultBuckets }) => {
     return newBuckets
 }
 
-/*
-
-Calculate facet averages
-
-*/
-export const calculateAverages = ({ buckets, facet, allFilters }) => {
-    const facetOptions = allFilters[facet]
-    if (facetOptions && typeof facetOptions[0].average !== 'undefined') {
-        buckets.forEach(bucket => {
-            if (bucket.id === 'no_answer') {
-                bucket.average = 0
-                return
-            }
-            const averageValue =
-                sumBy(facetOptions, ({ id, average }) => {
-                    const facetCount = bucket[`count__${id}`] || 0
-                    return average * facetCount
-                }) / bucket.count
-            bucket.average = Math.round(averageValue)
-        })
-    }
-    return buckets
-}
-
 // const getLabelPrefix = (template)=>{    switch (template) {
 //     case 'feature'
 //         return 'feature'

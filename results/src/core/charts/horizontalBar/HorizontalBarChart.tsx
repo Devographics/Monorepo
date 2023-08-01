@@ -151,8 +151,6 @@ const HorizontalBarChart = ({
         })
     }
 
-    console.log(buckets)
-
     const theme = useTheme()
     const { translate } = useI18n()
 
