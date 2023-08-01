@@ -7,6 +7,7 @@ import { fetchSeriesData } from '../helpers'
 import { DataSeries } from 'core/filters/types'
 import styled from 'styled-components'
 import Loading from 'core/explorer/Loading'
+import { JSONTrigger } from 'core/blocks/block/BlockData'
 // import { spacing, mq, fontSize } from 'core/theme'
 
 interface CombinedDataLoaderProps extends DynamicDataLoaderProps {
@@ -62,6 +63,9 @@ const CombinedDataLoader = ({
                 })}
             </Contents_>
             {isLoading && <Loading />}
+            {series && (
+                <JSONTrigger block={block} data={series} buttonProps={{ variant: 'link' }} />
+            )}
         </Wrapper_>
     )
 }

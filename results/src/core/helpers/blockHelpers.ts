@@ -61,8 +61,8 @@ export const getBlockTitle = ({
     const blockTitle = block.titleId && getString(block.titleId)?.t
     const key = getBlockTitleKey({ block, pageContext })
 
-    const translation = getString(key)?.tClean
-    return blockTitle || translation || entityName || key
+    const translation = getString(key)
+    return blockTitle || translation?.tClean || translation?.t || entityName || key
 }
 
 export const useBlockTitle = ({ block }: { block: BlockDefinition }) => {

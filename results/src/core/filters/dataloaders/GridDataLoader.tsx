@@ -5,6 +5,7 @@ import { DynamicDataLoaderProps } from './DynamicDataLoader'
 import WrapperGrid from './WrapperGrid'
 import { fetchSeriesData } from '../helpers'
 import { DataSeries } from 'core/filters/types'
+import { JSONTrigger } from 'core/blocks/block/BlockData'
 
 interface GridDataLoaderProps extends DynamicDataLoaderProps {
     defaultSeries: DataSeries<AllQuestionData>
@@ -65,6 +66,9 @@ const GridDataLoader = ({
             showDefaultSeries={showDefaultSeries}
         >
             {children}
+            {series && (
+                <JSONTrigger block={block} data={series} buttonProps={{ variant: 'link' }} />
+            )}
         </WrapperGrid>
     )
 }

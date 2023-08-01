@@ -77,9 +77,6 @@ export const getVariantBarColorItem = (
     const { velocityBarColors, barColors } = theme.colors
     if (facet && facet.optionsAreSequential) {
         const i = Math.min(variantIndex, velocityBarColors.length - 1)
-        console.log(velocityBarColors)
-        console.log(i)
-        console.log(velocityBarColors[i])
         return velocityBarColors[i]
     } else {
         const numberOfVariantColors = barColors.length

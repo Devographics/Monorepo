@@ -16,6 +16,7 @@ import { handleNoAnswerBucket } from 'core/helpers/data'
 import { StandardQuestionData, BucketUnits } from '@devographics/types'
 import { combineBuckets } from 'core/filters/helpers'
 import { DataSeries, ChartModes, FacetItem } from 'core/filters/types'
+import cloneDeep from 'lodash/cloneDeep'
 
 const baseUnits = Object.values(BucketUnits)
 
@@ -107,8 +108,9 @@ const VerticalBarChart = (props: VerticalBarChartProps) => {
 
     // by default this chart only receive one data series, but if it receives more
     // it can combine them into a single chart
-    let buckets =
+    let buckets = cloneDeep(
         series.length > 1 ? combineSeries(series, showDefaultSeries) : getChartData(series[0].data)
+    )
 
     if (facet) {
         buckets = buckets.map(bucket => {

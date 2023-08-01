@@ -21,6 +21,7 @@ import { useEntities } from 'core/helpers/entities'
 import { StandardQuestionData, BucketUnits, Bucket } from '@devographics/types'
 import { FacetItem, DataSeries, ChartModes } from 'core/filters/types'
 import get from 'lodash/get'
+import cloneDeep from 'lodash/cloneDeep'
 
 export const getChartDataPath = (block: BlockDefinition) =>
     `${block?.queryOptions?.subField || 'responses'}.currentEdition.buckets`
@@ -137,7 +138,7 @@ const HorizontalBarChart = ({
 }: HorizontalBarChartProps) => {
     // TODO: currently this chart only receive one data series, but if it receives more
     // in the future it will be able to combine them into a single chart
-    let buckets = getChartData(series[0].data, block)
+    let buckets = cloneDeep(getChartData(series[0].data, block))
 
     if (facet) {
         buckets = buckets.map(bucket => {
@@ -149,6 +150,8 @@ const HorizontalBarChart = ({
             return bucket
         })
     }
+
+    console.log(buckets)
 
     const theme = useTheme()
     const { translate } = useI18n()

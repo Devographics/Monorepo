@@ -8,6 +8,7 @@ import { DynamicDataLoaderProps } from './DynamicDataLoader'
 import Loading from 'core/explorer/Loading'
 import styled from 'styled-components'
 import { DataSeries } from '../types'
+import { JSONTrigger } from 'core/blocks/block/BlockData'
 
 interface FacetDataLoaderProps extends DynamicDataLoaderProps {
     defaultSeries: DataSeries<AllQuestionData>
@@ -59,6 +60,9 @@ const FacetDataLoader = ({
         <Wrapper_>
             <Contents_>{React.cloneElement(children, props)}</Contents_>
             {isLoading && <Loading />}
+            {series && (
+                <JSONTrigger block={block} data={series} buttonProps={{ variant: 'link' }} />
+            )}
         </Wrapper_>
     )
 }

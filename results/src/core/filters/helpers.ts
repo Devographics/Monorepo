@@ -52,6 +52,7 @@ import get from 'lodash/get'
 import { getBlockDataPath } from 'core/helpers/data'
 import { QueryData, AllQuestionData } from '@devographics/types'
 import { NO_ANSWER } from '@devographics/constants'
+import clone from 'lodash/clone'
 
 export const getNewCondition = ({
     filter,
@@ -857,6 +858,5 @@ export const fetchSeriesData = async ({
             facet: chartFilters.facet
         }
     })
-
     return seriesData
 }

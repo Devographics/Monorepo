@@ -830,6 +830,7 @@
             url: https://webkit.org/blog/13096/css-has-pseudo-class/
 
       - id: podcasts
+        intlId: resources.podcasts_css
         defaultUnits: count
         tabId: tabs.main_answers
         template: multiple_options
@@ -844,6 +845,7 @@
               parameters: { cutoff: 10 }
 
       - id: people_others
+        intlId: resources.people.others_css
         blockType: PeopleBlock
         defaultUnits: count
         template: multiple_options_freeform
