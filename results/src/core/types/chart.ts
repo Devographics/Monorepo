@@ -1,3 +1,4 @@
+import { BucketUnits } from '@devographics/types'
 import { BlockMode, BlockUnits, BlockLegend } from './block'
 import { Entity } from './data'
 
@@ -10,7 +11,7 @@ export interface ChartComponentProps {
     i18nNamespace: string
     translateData?: boolean
     mode?: BlockMode
-    units: BlockUnits
+    units: BucketUnits
     chartProps?: any
     colorVariant?: 'primary' | 'secondary'
     // 'buckets' is declared by chart
