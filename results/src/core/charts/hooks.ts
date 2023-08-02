@@ -8,7 +8,7 @@ import { usePageContext } from 'core/helpers/pageContext'
 import round from 'lodash/round'
 import { CHART_MODE_GRID, CHART_MODE_STACKED, CHART_MODE_GROUPED } from 'core/filters/constants'
 import { ChartModes, FacetItem, FilterItem } from 'core/filters/types'
-import { Bucket } from '@devographics/types'
+import { Bucket, BucketUnits } from '@devographics/types'
 
 /*
 
@@ -36,8 +36,8 @@ Get chart's max value
 
 */
 const getMaxValue = (units: Units, mode: Mode, buckets: Bucket[], total: number) => {
-    if (units === 'average') {
-        return Math.max(...buckets.map(b => b['averageByFacet']))
+    if (units === BucketUnits.AVERAGE) {
+        return Math.max(...buckets.map(b => b[BucketUnits.AVERAGE]))
     } else if (isPercentage(units)) {
         return 100
         // if (getMode(units, mode) === 'absolute') {
@@ -373,8 +373,8 @@ export const useChartKeys = ({
 }) => {
     const allChartKeys = useAllChartsOptions()
     if (facet) {
-        if (units === 'average') {
-            return ['averageByFacet']
+        if (units === BucketUnits.AVERAGE) {
+            return [BucketUnits.AVERAGE]
         } else {
             return allChartKeys
                 .find(q => q.id === facet.id)

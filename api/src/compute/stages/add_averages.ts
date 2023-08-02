@@ -1,5 +1,23 @@
+import { BucketUnits, FacetBucket } from '@devographics/types'
 import { ResponseEditionData, ComputeAxisParameters, Bucket } from '../../types'
 import sumBy from 'lodash/sumBy.js'
+import { NO_ANSWER, NOT_APPLICABLE } from '@devographics/constants'
+
+// Given a facet bucket, find the corresponding average corresponding to its range
+export const getFacetBucketAverage = (facetBucket: FacetBucket, axis: ComputeAxisParameters) => {
+    if (facetBucket.id === 'range_work_for_free') {
+        // note: yearly_salary's "range_work_for_free" is not in options anymore, so hardcode it
+        // here for backwards compatibility's sake
+        return 0
+    }
+    const average = axis?.options?.find(o => o.id === facetBucket.id)?.average
+    if (!average) {
+        throw new Error(
+            `getFacetBucketAverage: could not find option average for facet bucket ${facetBucket.id} with axis ${axis.question.id}`
+        )
+    }
+    return average
+}
 
 export const calculateAverage = ({
     bucket,
@@ -14,21 +32,20 @@ export const calculateAverage = ({
     }
     /*
 
-    We exclude 'no_answer' facet buckets because otherwise they would
+    We exclude NO_ANSWER and na ("not applicable") facet buckets because otherwise they would
     warp the resulting average towards 0.
 
-    We will then use this facetTotal to divide the sum and calculate our average. 
-
     */
-    const facetTotal = sumBy(
-        facetBuckets.filter(f => f.id !== 'no_answer'),
-        facetBucket => facetBucket.count || 0
+    const filteredFacetBuckets = facetBuckets.filter(
+        f => f.id !== NO_ANSWER && f.id !== NOT_APPLICABLE
     )
+    const facetTotal = sumBy(filteredFacetBuckets, facetBucket => facetBucket.count || 0)
+
     const averageValue =
-        sumBy(facetBuckets, facetBucket => {
-            const facetOption = axis.options?.find(o => o.id === facetBucket.id)
-            if (facetBucket.count && facetOption && facetOption.average) {
-                return facetBucket.count * facetOption.average
+        sumBy(filteredFacetBuckets, facetBucket => {
+            const average = getFacetBucketAverage(facetBucket, axis)
+            if (facetBucket.count && average) {
+                return facetBucket.count * average
             } else {
                 return 0
             }
@@ -44,7 +61,7 @@ export async function addAveragesByFacet(
     for (let editionData of resultsByEdition) {
         if (axis2) {
             for (let bucket of editionData.buckets) {
-                bucket.averageByFacet = calculateAverage({ bucket, axis: axis2 })
+                bucket[BucketUnits.AVERAGE] = calculateAverage({ bucket, axis: axis2 })
             }
         }
     }

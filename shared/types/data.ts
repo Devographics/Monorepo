@@ -101,11 +101,23 @@ export interface FacetCompletion extends YearCompletion {
 
 export enum BucketUnits {
     COUNT = 'count',
-    AVERAGE = 'average',
     PERCENTAGE_FACET = 'percentageFacet',
     PERCENTAGE_QUESTION = 'percentageQuestion',
     PERCENTAGE_SURVEY = 'percentageSurvey',
-    PERCENTAGE_BUCKET = 'percentageBucket'
+    PERCENTAGE_BUCKET = 'percentageBucket',
+    AVERAGE = 'averageByFacet'
+}
+
+export enum Percentiles {
+    P0 = 'p0',
+    p25 = 'p25',
+    p50 = 'p50',
+    p75 = 'p75',
+    p100 = 'p100'
+}
+
+export type PercentileData = {
+    [key in Percentiles]: number
 }
 
 export enum OtherPercentages {
@@ -124,7 +136,7 @@ export interface Bucket extends BucketData {
     completion?: BucketCompletion
     entity?: Entity
     facetBuckets: FacetBucket[]
-    averageByFacet?: number
+    percentilesByFacet?: PercentileData
     label?: string
 }
 
@@ -135,6 +147,10 @@ export type CombinedBucketData = {
 export interface CombinedBucket extends Bucket, CombinedBucketData {}
 
 export interface FacetBucket extends Omit<Bucket, 'facetBuckets'> {}
+
+export interface FacetBucketWithAverage extends FacetBucket {
+    average: number
+}
 
 export interface BucketCompletion extends FacetCompletion {}
 

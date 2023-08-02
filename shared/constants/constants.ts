@@ -10,6 +10,8 @@ export const FEATURES_OPTIONS = ['never_heard', 'heard', 'used']
 
 export const NO_ANSWER = 'no_answer'
 
+export const NOT_APPLICABLE = 'na'
+
 export const PERCENTAGE_SURVEY = 'percentageSurvey'
 export const PERCENTAGE_QUESTION = 'percentageQuestion'
 export const COUNT = 'count'

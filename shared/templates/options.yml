@@ -63,8 +63,8 @@ yearly_salary:
     optionsAreRange: true
     options:
         - id: na
-        - id: range_work_for_free
-          average: 0
+        # - id: range_work_for_free
+        #   average: 0
         - id: range_0_10
           average: 5000
         - id: range_10_30

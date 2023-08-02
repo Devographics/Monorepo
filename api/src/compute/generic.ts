@@ -30,7 +30,8 @@ import {
     discardEmptyEditions,
     addLabels,
     addAveragesByFacet,
-    removeEmptyEditions
+    removeEmptyEditions,
+    addPercentiles
 } from './stages/index'
 import { ResponsesTypes, DbSuffixes, SurveyMetadata, EditionMetadata } from '@devographics/types'
 import { getCollection } from '../helpers/db'
@@ -236,6 +237,7 @@ export async function genericComputeFunction({
             await addMissingItems(results, axis2, axis1)
         }
         await addAveragesByFacet(results, axis2, axis1)
+        await addPercentiles(results, axis2, axis1)
         await sortData(results, axis2, axis1)
         await limitData(results, axis2, axis1)
         await cutoffData(results, axis2, axis1)
@@ -250,8 +252,8 @@ export async function genericComputeFunction({
         await addLabels(results, axis1)
     }
 
-    // console.log('// results final')
-    // console.log(JSON.stringify(results, undefined, 2))
+    console.log('// results final')
+    console.log(JSON.stringify(results, undefined, 2))
 
     return results
 }

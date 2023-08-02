@@ -1,7 +1,7 @@
 import { BlockDefinition } from 'core/types'
 import camelCase from 'lodash/camelCase.js'
 import { indentString } from './utils'
-import { ResponsesParameters, Filters } from '@devographics/types'
+import { ResponsesParameters, Filters, BucketUnits } from '@devographics/types'
 import { PageContextValue } from 'core/types/context'
 import isEmpty from 'lodash/isEmpty'
 import { FacetItem } from 'core/filters/types'
@@ -201,7 +201,7 @@ surveys {
                 percentageQuestion
                 percentageSurvey
                 ${addBucketsEntities ? getEntityFragment() : ''}
-                ${queryArgs.facet || addBucketFacetsPlaceholder ? 'averageByFacet' : ''}
+                ${queryArgs.facet || addBucketFacetsPlaceholder ? BucketUnits.AVERAGE : ''}
                 ${queryArgs.facet ? getFacetFragment(addBucketsEntities) : ''}
                 ${addBucketFacetsPlaceholder ? bucketFacetsPlaceholder : ''}
               }

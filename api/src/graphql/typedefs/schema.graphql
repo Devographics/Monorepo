@@ -257,6 +257,33 @@ type Bucket {
     or some other numerical value
     """
     averageByFacet: Float
+    """
+    percentiles by facet
+    """
+    percentilesByFacet: Percentiles
+}
+
+type Percentiles {
+    """
+    0th percentile (minimum) based on range average of all facet buckets
+    """
+    p0: Float
+    """
+    25th percentile based on range average of all facet buckets
+    """
+    p25: Float
+    """
+    median (50th percentile) based on range average of all facet buckets
+    """
+    p50: Float
+    """
+    75th percentile based on range average of all facet buckets
+    """
+    p75: Float
+    """
+    100th percentile (maximum) based on range average of all facet buckets
+    """
+    p100: Float
 }
 
 type FacetBucket {
@@ -278,10 +305,6 @@ type FacetBucket {
     Percentage of the bucket represented by the current facet
     """
     percentageBucket: Float
-    """
-    Average value based on range average
-    """
-    averageFacet: Float
     """
     Entity associated with the current bucket
     """
