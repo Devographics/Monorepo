@@ -107,7 +107,7 @@ const getFacetFragment = addBucketsEntities => `
         count
         percentageQuestion
         percentageSurvey
-        percentageFacet
+        percentageBucket
         ${addBucketsEntities ? getEntityFragment() : ''}
     }
 `
@@ -177,6 +177,7 @@ query {
                                 template
                                 optionsAreNumeric
                                 optionsAreRange
+                                optionsAreSequential
                                 entity {
                                     id
                                     name

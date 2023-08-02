@@ -128,6 +128,8 @@ export type Question = {
     optionsAreNumeric?: boolean
     // options are ranges of numbers
     optionsAreRange?: boolean
+    // options follow each other sequentially
+    optionsAreSequential?: boolean
     defaultSort?: string
 
     // how many options can be selected

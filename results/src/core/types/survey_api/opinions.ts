@@ -5,7 +5,7 @@ export interface OpinionBucket {
     count: number
     percentageSurvey: number
     percentageQuestion: number
-    percentageFacet: number
+    percentageBucket: number
 }
 
 export interface OpinionYearFacet {

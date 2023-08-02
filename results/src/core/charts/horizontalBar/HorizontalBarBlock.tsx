@@ -44,9 +44,9 @@ const HorizontalBarBlock = ({ block, data }: HorizontalBarBlockProps) => {
     if (chartFilters.facet) {
         // if filtering by facet, use special units
         unitsOptions = [BucketUnits.PERCENTAGE_BUCKET, BucketUnits.COUNT]
-        const facetOptions = allFilters.find(o => o.id === chartFilters?.facet?.id)?.options
-        // if this facet can be quantified numerically and has averages, add that as unit too
-        if (facetOptions && typeof facetOptions[0].average !== 'undefined') {
+        const facetQuestion = allFilters.find(o => o.id === chartFilters?.facet?.id)
+        // if this facet is in the form of numerical ranges, add the average of each range as unit too
+        if (facetQuestion?.optionsAreRange) {
             unitsOptions.push(BucketUnits.AVERAGE)
         }
     }

@@ -7,6 +7,8 @@ export const years_of_experience: TemplateFunction = options => {
     const id = 'years_of_experience'
     const output: QuestionTemplateOutput = {
         ...single(addQuestionId(options, id)),
+        optionsAreSequential: true,
+        optionsAreRange: true,
         ...questionOptions[id]
     }
     return output

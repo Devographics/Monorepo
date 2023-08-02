@@ -50,9 +50,9 @@ const VerticalBarBlock = ({ block, data, context }: VerticalBarBlockProps) => {
     if (chartFilters.facet) {
         // if filtering by facet, use special units
         unitsOptions = [BucketUnits.PERCENTAGE_BUCKET, BucketUnits.COUNT]
-        const facetField = allChartsOptions.find(o => o.id === chartFilters?.facet?.id)
+        const facetQuestion = allChartsOptions.find(o => o.id === chartFilters?.facet?.id)
         // if this facet can be quantified numerically and has averages, add that as unit too
-        if (typeof facetField?.options[0].average !== 'undefined') {
+        if (facetQuestion?.optionsAreRange) {
             unitsOptions.push(BucketUnits.AVERAGE)
         }
     }
@@ -89,6 +89,7 @@ const VerticalBarBlock = ({ block, data, context }: VerticalBarBlockProps) => {
             >
                 <ChartContainer fit={true}>
                     <VerticalBarChart
+                        block={block}
                         legends={chartLegends}
                         total={total}
                         i18nNamespace={i18nNamespace}

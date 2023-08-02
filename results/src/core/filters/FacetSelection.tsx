@@ -5,16 +5,18 @@ import { Options_, Option_ } from './Options'
 import cloneDeep from 'lodash/cloneDeep'
 import { FilterItem, PanelState } from './types'
 import { ItemSelectOptions } from './condition/FieldSegment'
+import { BlockDefinition } from 'core/types'
 
 // disable facets with too many segments
 const disabledFacets = ['source', 'country', 'industry_sector']
 
 interface FacetSelectionProps {
+    block: BlockDefinition
     allFilters: FilterItem[]
     stateStuff: PanelState
 }
 
-const FacetSelection = ({ allFilters, stateStuff }: FacetSelectionProps) => {
+const FacetSelection = ({ block, allFilters, stateStuff }: FacetSelectionProps) => {
     const { filtersState, setFiltersState } = stateStuff
     const enabledFacets = allFilters.filter(f => !disabledFacets.includes(f.id))
 
@@ -42,7 +44,10 @@ const FacetSelection = ({ allFilters, stateStuff }: FacetSelectionProps) => {
                             value={filtersState?.facet?.id}
                             defaultValue=""
                         >
-                            <ItemSelectOptions allFilters={enabledFacets} />
+                            <ItemSelectOptions
+                                currentQuestionId={block.id}
+                                allFilters={enabledFacets}
+                            />
                         </select>
                     </label>
                 </Option_>

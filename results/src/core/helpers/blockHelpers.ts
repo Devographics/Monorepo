@@ -9,7 +9,13 @@ import { usePageContext } from 'core/helpers/pageContext'
 export const replaceOthers = s => s?.replace('_others', '.others')
 
 export const getBlockKey = ({ block }: { block: BlockDefinition }) => {
-    const namespace = block.sectionId
+    let namespace = block.sectionId
+    if (block.template === 'feature_experience') {
+        namespace = 'features'
+    }
+    if (block.template === 'tool_experience') {
+        namespace = 'tools'
+    }
     const blockId = replaceOthers(block?.id)
     return `${namespace}.${blockId}`
 }
@@ -55,8 +61,8 @@ export const getBlockTitle = ({
     const blockTitle = block.titleId && getString(block.titleId)?.t
     const key = getBlockTitleKey({ block, pageContext })
 
-    const translation = getString(key)?.t
-    return blockTitle || translation || entityName || key
+    const translation = getString(key)
+    return blockTitle || translation?.tClean || translation?.t || entityName || key
 }
 
 export const useBlockTitle = ({ block }: { block: BlockDefinition }) => {

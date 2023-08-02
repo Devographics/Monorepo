@@ -8,7 +8,7 @@ import { getBlockTitle } from 'core/helpers/blockHelpers'
 import { usePageContext } from 'core/helpers/pageContext'
 import { useI18n } from 'core/i18n/i18nContext'
 import isEmpty from 'lodash/isEmpty.js'
-import { GraphQLTrigger } from 'core/blocks/block/BlockData'
+import { GraphQLTrigger, JSONTrigger } from 'core/blocks/block/BlockData'
 import * as Tabs from '@radix-ui/react-tabs'
 import { TabsList, TabsTrigger } from 'core/blocks/block/BlockTabsWrapper'
 import FacetSelection from './FacetSelection'
@@ -27,6 +27,7 @@ type FiltersPanelPropsType = {
     chartFilters: CustomizationDefinition
     setChartFilters: Dispatch<SetStateAction<CustomizationDefinition>>
     closeModal: any
+    data: any
 }
 
 type TabConfigItem = {
@@ -38,7 +39,8 @@ const FiltersPanel = ({
     block,
     chartFilters,
     setChartFilters,
-    closeModal
+    closeModal,
+    data
 }: FiltersPanelPropsType) => {
     const { getString } = useI18n()
     const pageContext = usePageContext()

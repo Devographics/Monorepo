@@ -148,9 +148,6 @@ will be merge under a single object with typeName StateOfJsBlogsNewsMagazines
 But there will also be a separate `id: blogs_news_magazines` object for css2021, css2022, etc. 
 with typeName StateOfCssBlogsNewsMagazines and different options. 
 
-On the other hand, global questions (those defined in global_questions.yml) are unique 
-at the level of the entire list.
-
 */
 export const getQuestionObjects = ({ surveys }: { surveys: Survey[] }) => {
     let allQuestionObjects: QuestionApiObject[] = []

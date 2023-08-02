@@ -1,7 +1,6 @@
 import { DefaultTheme } from 'styled-components'
 import colors_ from 'core/theme/colors'
 
-
 const colors = {
     ...colors_,
     tealDarkest: '#167387',
@@ -83,7 +82,6 @@ const colors = {
     lilacDarkest4: '#3A3444'
 }
 
-
 const velocity = [
     '#173E48',
     '#064151',
@@ -98,7 +96,12 @@ const velocity = [
     '#D3F6FF',
     '#E5FFFA',
     '#BCFFF3',
-    '#9FFFEE'
+    '#9FFFEE',
+    '#9FFFBA',
+    '#61F99E',
+    '#37EF80',
+    '#15ED6B',
+    '#06DF0E'
 ]
 
 // const velocity = [
@@ -161,7 +164,7 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
     velocityBarColors: velocity.map((color, i) => ({
         id: `velocityColor${i}`,
         color: velocity[i * 2],
-        gradient: [velocity[i * 2+1], velocity[i * 2]]
+        gradient: [velocity[i * 2 + 1], velocity[i * 2]]
     })),
     // bar colors for variants when using filters and (especially) facets
     barColors: [
@@ -237,7 +240,7 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
         // secondary: colors.yellowLight,
         // secondaryGradient: [colors.yellow, colors.yellowLight],
         secondary: colors.pink,
-        secondaryGradient: [colors.pinkDark, colors.pink],
+        secondaryGradient: [colors.pinkDark, colors.pink]
     },
     ranges: {
         tools: {

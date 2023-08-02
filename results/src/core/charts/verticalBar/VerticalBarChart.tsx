@@ -11,11 +11,12 @@ import {
 } from 'core/charts/hooks'
 import BarTooltip from '../common/BarTooltip'
 import ChartLabel from 'core/components/ChartLabel'
-import { ChartComponentProps, BlockLegend } from 'core/types/index'
+import { ChartComponentProps, BlockLegend, BlockDefinition } from 'core/types/index'
 import { handleNoAnswerBucket } from 'core/helpers/data'
 import { StandardQuestionData, BucketUnits } from '@devographics/types'
 import { combineBuckets } from 'core/filters/helpers'
 import { DataSeries, ChartModes, FacetItem } from 'core/filters/types'
+import cloneDeep from 'lodash/cloneDeep'
 
 const baseUnits = Object.values(BucketUnits)
 
@@ -78,6 +79,7 @@ const getAxisLabels = (v: any, legends: BlockLegend[]) => {
 }
 
 export interface VerticalBarChartProps extends ChartComponentProps {
+    block: BlockDefinition
     total: number
     series: DataSeries<StandardQuestionData>[]
     gridIndex?: number
@@ -88,6 +90,7 @@ export interface VerticalBarChartProps extends ChartComponentProps {
 
 const VerticalBarChart = (props: VerticalBarChartProps) => {
     const {
+        block,
         viewportWidth,
         className,
         legends,
@@ -107,8 +110,9 @@ const VerticalBarChart = (props: VerticalBarChartProps) => {
 
     // by default this chart only receive one data series, but if it receives more
     // it can combine them into a single chart
-    let buckets =
+    let buckets = cloneDeep(
         series.length > 1 ? combineSeries(series, showDefaultSeries) : getChartData(series[0].data)
+    )
 
     if (facet) {
         buckets = buckets.map(bucket => {
@@ -201,4 +205,4 @@ const VerticalBarChart = (props: VerticalBarChartProps) => {
     )
 }
 
-export default memo(VerticalBarChart)
+export default VerticalBarChart

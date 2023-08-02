@@ -14,7 +14,7 @@ export interface TableBucketItem {
     // percentage relative to the number of question respondents
     percentageQuestion?: number | TableBucketYearValue[]
     // percentage relative to the number of respondents in the facet
-    percentageFacet?: number | TableBucketYearValue[]
+    percentageBucket?: number | TableBucketYearValue[]
 }
 
 export interface TableBucketYearValue {

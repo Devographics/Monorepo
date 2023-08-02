@@ -13,7 +13,8 @@ import {
     QuestionApiObject,
     ResponseEditionData,
     ComputeAxisParameters,
-    SortProperty
+    SortProperty,
+    EditionApiObject
 } from '../types'
 import {
     discardEmptyIds,
@@ -29,10 +30,22 @@ import {
     addEditionYears,
     discardEmptyEditions,
     addLabels,
-    removeEmptyEditions
+    addAveragesByFacet,
+    removeEmptyEditions,
+    addPercentiles
 } from './stages/index'
-import { ResponsesTypes, DbSuffixes } from '@devographics/types'
+import {
+    ResponsesTypes,
+    DbSuffixes,
+    SurveyMetadata,
+    EditionMetadata,
+    ResponsesParameters,
+    Filters
+} from '@devographics/types'
 import { getCollection } from '../helpers/db'
+import { getPastEditions } from '../helpers/surveys'
+import { computeKey } from '../helpers/caching'
+import isEmpty from 'lodash/isEmpty.js'
 
 const convertOrder = (order: 'asc' | 'desc') => (order === 'asc' ? 1 : -1)
 
@@ -57,6 +70,38 @@ export const getDbPath = (
     }
 }
 
+export const getGenericCacheKey = ({
+    edition,
+    question,
+    selectedEditionId,
+    parameters,
+    filters,
+    facet
+}: {
+    edition: EditionApiObject
+    question: QuestionApiObject
+    selectedEditionId: string
+    parameters?: ResponsesParameters
+    filters?: Filters
+    facet?: string
+}) => {
+    const cacheKeyOptions: any = {
+        editionId: selectedEditionId || `allEditions(${edition.id})`,
+        questionId: question.id
+    }
+    if (!isEmpty(parameters)) {
+        const { enableCache, ...cacheKeyParameters } = parameters
+        cacheKeyOptions.parameters = { parameters: cacheKeyParameters }
+    }
+    if (!isEmpty(filters)) {
+        cacheKeyOptions.filters = { filters }
+    }
+    if (!isEmpty(facet)) {
+        cacheKeyOptions.facet = { facet }
+    }
+    return computeKey('generic', cacheKeyOptions)
+}
+
 export async function genericComputeFunction({
     context,
     survey,
@@ -67,8 +112,8 @@ export async function genericComputeFunction({
     computeArguments
 }: {
     context: RequestContext
-    survey: Survey
-    edition: Edition
+    survey: SurveyMetadata
+    edition: EditionMetadata
     section: Section
     question: QuestionApiObject
     questionObjects: QuestionApiObject[]
@@ -95,8 +140,6 @@ export async function genericComputeFunction({
         showNoAnswer
     } = parameters
 
-    const options = question.options && question.options.map(o => o.id)
-
     /*
 
     Axis 1
@@ -109,8 +152,8 @@ export async function genericComputeFunction({
         cutoff,
         limit
     }
-    if (options) {
-        axis1.options = options
+    if (question.options) {
+        axis1.options = question.options
     }
 
     /*
@@ -133,9 +176,8 @@ export async function genericComputeFunction({
                 cutoffPercent: facetCutoffPercent,
                 limit: facetLimit
             }
-            const facetOptions = facetQuestion?.options?.map(o => o.id)
-            if (facetOptions) {
-                axis2.options = facetOptions
+            if (facetQuestion?.options) {
+                axis2.options = facetQuestion?.options
             }
             // switch both axes in order to get a better result object structure
             const temp = axis1
@@ -165,9 +207,13 @@ export async function genericComputeFunction({
         const filtersQuery = await generateFiltersQuery({ filters, dbPath })
         match = { ...match, ...filtersQuery }
     }
-    // if edition is passed, restrict aggregation to specific edition
     if (selectedEditionId) {
+        // if edition is passed, restrict aggregation to specific edition
         match.editionId = selectedEditionId
+    } else {
+        // restrict aggregation to current and past editions, to avoid including results from the future
+        const pastEditions = getPastEditions({ survey, edition })
+        match.editionId = { $in: pastEditions.map(e => e.id) }
     }
 
     // TODO: merge these counts into the main aggregation pipeline if possible
@@ -181,7 +227,9 @@ export async function genericComputeFunction({
         axis1,
         axis2,
         responsesType,
-        showNoAnswer
+        showNoAnswer,
+        survey,
+        edition
     }
 
     const pipeline = await getGenericPipeline(pipelineProps)
@@ -230,6 +278,8 @@ export async function genericComputeFunction({
         if (responsesType === ResponsesTypes.RESPONSES) {
             await addMissingItems(results, axis2, axis1)
         }
+        await addAveragesByFacet(results, axis2, axis1)
+        await addPercentiles(results, axis2, axis1)
         await sortData(results, axis2, axis1)
         await limitData(results, axis2, axis1)
         await cutoffData(results, axis2, axis1)

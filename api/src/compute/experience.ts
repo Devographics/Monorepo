@@ -144,7 +144,7 @@ export async function computeExperienceOverYears({
                     countDelta?: number
                     percentageSurvey: number
                     percentageQuestion: number
-                    percentageFacet: number
+                    percentageBucket: number
                     percentageDelta?: number
                 }>
             }>
@@ -173,7 +173,7 @@ export async function computeExperienceOverYears({
                 count: result.total,
                 percentageSurvey: 0,
                 percentageQuestion: 0,
-                percentageFacet: 0
+                percentageBucket: 0
             })
 
             return acc
@@ -187,7 +187,7 @@ export async function computeExperienceOverYears({
         bucket.buckets.forEach(subBucket => {
             subBucket['percentageSurvey'] = 0 // TODO
             subBucket['percentageQuestion'] = ratioToPercentage(subBucket.count / bucket.total)
-            subBucket['percentageFacet'] = 0 // TODO
+            subBucket['percentageBucket'] = 0 // TODO
         })
     })
 
@@ -211,7 +211,7 @@ export async function computeExperienceOverYears({
                     bucket.countDelta = bucket.count - previousYearBucket.count
                     bucket.percentageDelta =
                         Math.round(
-                            100 * (bucket.percentageFacet - previousYearBucket.percentageFacet)
+                            100 * (bucket.percentageBucket - previousYearBucket.percentageBucket)
                         ) / 100
                 }
             })

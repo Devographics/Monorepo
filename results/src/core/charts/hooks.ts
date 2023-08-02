@@ -8,7 +8,7 @@ import { usePageContext } from 'core/helpers/pageContext'
 import round from 'lodash/round'
 import { CHART_MODE_GRID, CHART_MODE_STACKED, CHART_MODE_GROUPED } from 'core/filters/constants'
 import { ChartModes, FacetItem, FilterItem } from 'core/filters/types'
-import { Bucket } from '@devographics/types'
+import { Bucket, BucketUnits } from '@devographics/types'
 
 /*
 
@@ -36,15 +36,16 @@ Get chart's max value
 
 */
 const getMaxValue = (units: Units, mode: Mode, buckets: Bucket[], total: number) => {
-    if (units === 'average') {
-        return Math.max(...buckets.map(b => b[units]))
+    if (units === BucketUnits.AVERAGE) {
+        return Math.max(...buckets.map(b => b[BucketUnits.AVERAGE]))
     } else if (isPercentage(units)) {
-        if (getMode(units, mode) === 'absolute') {
-            return 100
-        } else {
-            const maxBucketPercentage = Math.max(...buckets.map(b => b[units]))
-            return ceil(maxBucketPercentage, -1)
-        }
+        return 100
+        // if (getMode(units, mode) === 'absolute') {
+        //     return 100
+        // } else {
+        //     const maxBucketPercentage = Math.max(...buckets.map(b => b[units]))
+        //     return ceil(maxBucketPercentage, -1)
+        // }
     } else {
         if (getMode(units, mode) === 'absolute') {
             return ceil(total, -3)
@@ -75,7 +76,7 @@ export const getVariantBarColorItem = (
     facet?: FacetItem
 ) => {
     const { velocityBarColors, barColors } = theme.colors
-    if (facet && facet.optionsAreRange) {
+    if (facet && facet.optionsAreSequential) {
         const i = Math.min(variantIndex, velocityBarColors.length - 1)
         return velocityBarColors[i]
     } else {
@@ -254,8 +255,7 @@ export const useColorFills = (options: UseColorFillsOptions) => {
             */
             const facetField = allFilters.find(f => f.id === facet?.id) as FilterItem
 
-            console.log(facet)
-            const prefix = facetField.optionsAreRange ? 'Velocity' : 'Gradient'
+            const prefix = facetField.optionsAreSequential ? 'Velocity' : 'Gradient'
 
             const averageFill = {
                 match: d => {
@@ -373,8 +373,8 @@ export const useChartKeys = ({
 }) => {
     const allChartKeys = useAllChartsOptions()
     if (facet) {
-        if (units === 'average') {
-            return ['average']
+        if (units === BucketUnits.AVERAGE) {
+            return [BucketUnits.AVERAGE]
         } else {
             return allChartKeys
                 .find(q => q.id === facet.id)

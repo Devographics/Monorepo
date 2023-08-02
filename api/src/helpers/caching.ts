@@ -19,7 +19,7 @@ type ResultType<F> = F extends (...args: any[]) => infer P
  * Compute a cache key from a function and its arguments,
  * the function should have a name in order to generate a proper key.
  */
-export const computeKey = (func: Function, funcOptions?: any) => {
+export const computeKey = (funcOrFuncName: Function | string, funcOptions?: any) => {
     const { parameters = {}, ...otherKeys } = funcOptions
     const { enableCache, ...validParameters } = parameters
     const validOptions = { ...otherKeys, parameters: validParameters }
@@ -33,15 +33,16 @@ export const computeKey = (func: Function, funcOptions?: any) => {
               .join(', ')
         : ''
 
-    if (func.name === '') {
+    const name = typeof funcOrFuncName === 'function' ? funcOrFuncName.name : funcOrFuncName
+    if (!name || name === '') {
         // enforce regular function usage over arrow functions, to have a proper cache key
         // console.trace is used to be able to know where the call comes from
         console.trace(
-            `found a function without name, please consider using a regular function instead of an arrow function to solve this issue as it can lead to cache mismatch`
+            `found a function without name, please consider using a regular function instead of an arrow function to solve this issue as it can lead to cache mismatch; or else explicitly pass a function name as a string`
         )
     }
 
-    return `${process.env.APP_NAME}__func_${func.name}(${serializedOptions})`
+    return `${process.env.APP_NAME}__func_${name}(${serializedOptions})`
 }
 
 /**

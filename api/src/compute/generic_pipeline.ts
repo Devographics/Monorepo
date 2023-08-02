@@ -3,7 +3,8 @@ import { ComputeAxisParameters } from '../types'
 import { NO_ANSWER } from '@devographics/constants'
 // const NO_ANSWER = 'no_answer'
 import { getDbPath } from './generic'
-import { ResponsesTypes } from '@devographics/types'
+import { EditionMetadata, ResponsesTypes, SurveyMetadata } from '@devographics/types'
+import { getPastEditions } from '../helpers/surveys'
 
 export type PipelineProps = {
     surveyId: string
@@ -13,6 +14,8 @@ export type PipelineProps = {
     axis2?: ComputeAxisParameters | null
     showNoAnswer?: boolean
     responsesType?: ResponsesTypes
+    survey: SurveyMetadata
+    edition: EditionMetadata
 }
 
 // generate an aggregation pipeline for all years, or
@@ -25,7 +28,9 @@ export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
         axis1,
         axis2,
         showNoAnswer = false,
-        responsesType
+        responsesType,
+        survey,
+        edition
     } = pipelineProps
 
     const axis1DbPath = getDbPath(axis1.question, responsesType)
@@ -49,9 +54,13 @@ export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
         match = { ...match, ...filtersQuery }
     }
 
-    // if year is passed, restrict aggregation to specific year
     if (selectedEditionId) {
+        // if edition is passed, restrict aggregation to specific edition
         match.editionId = selectedEditionId
+    } else {
+        // restrict aggregation to current and past editions, to avoid including results from the future
+        const pastEditions = getPastEditions({ survey, edition })
+        match.editionId = { $in: pastEditions.map(e => e.id) }
     }
 
     const pipeline: any[] = [

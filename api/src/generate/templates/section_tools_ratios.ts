@@ -16,9 +16,7 @@ const getResolverMap = ({
         const tools = sectionTools.map(q => q.id)
         return await useCache({
             key: computeKey(computeToolsExperienceRatios, {
-                surveyId: survey.id,
                 editionId: edition.id,
-                sectionId: section.id,
                 questionId: question.id,
                 ...args
             }),

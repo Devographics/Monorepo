@@ -52,6 +52,7 @@ import get from 'lodash/get'
 import { getBlockDataPath } from 'core/helpers/data'
 import { QueryData, AllQuestionData } from '@devographics/types'
 import { NO_ANSWER } from '@devographics/constants'
+import clone from 'lodash/clone'
 
 export const getNewCondition = ({
     filter,
@@ -445,30 +446,6 @@ export const invertFacets = ({ facets, defaultBuckets }) => {
     return newBuckets
 }
 
-/*
-
-Calculate facet averages
-
-*/
-export const calculateAverages = ({ buckets, facet, allFilters }) => {
-    const facetOptions = allFilters[facet]
-    if (facetOptions && typeof facetOptions[0].average !== 'undefined') {
-        buckets.forEach(bucket => {
-            if (bucket.id === 'no_answer') {
-                bucket.average = 0
-                return
-            }
-            const averageValue =
-                sumBy(facetOptions, ({ id, average }) => {
-                    const facetCount = bucket[`count__${id}`] || 0
-                    return average * facetCount
-                }) / bucket.count
-            bucket.average = Math.round(averageValue)
-        })
-    }
-    return buckets
-}
-
 // const getLabelPrefix = (template)=>{    switch (template) {
 //     case 'feature'
 //         return 'feature'
@@ -517,14 +494,24 @@ export const getFieldLabel = ({
 }) => {
     const { sectionId, template, id: id } = field
     const entity = entities.find(e => e.id === id)
-    if (entity) {
-        return getEntityName(entity)
-    } else if (template === 'happiness') {
-        return getString('blocks.happiness')?.t
-    } else if (sectionId === 'other_tools') {
-        return getString(`tools_others.${id}`)?.t
+    const entityName = entity && getEntityName(entity)
+    if (entityName) {
+        return entityName
     } else {
-        return getString(`${sectionId}.${id}`)?.t
+        let key
+        if (template === 'happiness') {
+            key = 'blocks.happiness'
+        } else if (sectionId === 'other_tools') {
+            key = `tools_others.${id}`
+        } else if (template === 'feature') {
+            key = `features.${id}`
+        } else if (template === 'tool') {
+            key = `tools.${id}`
+        } else {
+            key = `${sectionId}.${id}`
+        }
+        const s = getString(key)
+        return s?.tClean || s?.t
     }
 }
 
@@ -590,8 +577,9 @@ export const getValueLabel = ({
             default: {
                 const key = `options.${field.id}.${value}`
                 const regular = getString(key, {}, value)?.t
-                const short = getString(`${key}.short`, {}, regular)?.t
-                return short
+                // const short = getString(`${key}.short`, {}, regular)?.t
+                // note: using short descriptions here isn't clear enough
+                return regular
             }
         }
     }
@@ -609,7 +597,13 @@ type FilterLegend = {
     label: string
     shortLabel: string
 }
-export const useFilterLegends = ({ chartFilters }: { chartFilters: CustomizationDefinition }) => {
+export const useFilterLegends = ({
+    chartFilters,
+    block
+}: {
+    chartFilters: CustomizationDefinition
+    block: BlockDefinition
+}) => {
     const context = usePageContext()
     const { currentEdition } = context
     const { year: currentYear } = currentEdition
@@ -620,7 +614,7 @@ export const useFilterLegends = ({ chartFilters }: { chartFilters: Customization
     const { options } = chartFilters
     const { showDefaultSeries, mode } = options
 
-    const reverse = mode === MODE_FACET
+    const reverse = mode === MODE_FACET && block.blockType === 'VerticalBarBlock'
 
     const theme = useTheme()
     const { colors } = theme
@@ -694,7 +688,7 @@ export const useFilterLegends = ({ chartFilters }: { chartFilters: Customization
         }
     } else if (chartFilters.options.mode === MODE_FACET && chartFilters.facet) {
         const facetField = allFilters.find(f => f.id === chartFilters?.facet?.id) as FilterItem
-        results = facetField.options.map(({ id }, index) => {
+        results = facetField?.options?.map(({ id }, index) => {
             const label = getValueLabel({
                 getString,
                 field: facetField,
@@ -761,7 +755,8 @@ export const useChartFilters = ({
     )
 
     const filterLegends = useFilterLegends({
-        chartFilters
+        chartFilters,
+        block
     })
     return { chartFilters, setChartFilters, filterLegends }
 }
@@ -824,8 +819,8 @@ export const fetchSeriesData = async ({
         throw new Error('GATSBY_API_URL env variable is not set')
     }
     const result: QueryData<AllQuestionData> = await runQuery(url, query, `${block.id}FiltersQuery`)
-    console.log('// result')
-    console.log(result)
+    // console.log('// result')
+    // console.log(result)
 
     const dataPath = getBlockDataPath({ block, pageContext, addRootNode: false })
 
@@ -839,6 +834,5 @@ export const fetchSeriesData = async ({
             facet: chartFilters.facet
         }
     })
-
     return seriesData
 }

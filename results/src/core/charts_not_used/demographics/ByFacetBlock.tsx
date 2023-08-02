@@ -38,7 +38,7 @@ const ByFacetBlock = ({ block, data }: ByFacetBlockProps) => {
     const {
         id,
         mode = 'relative',
-        defaultUnits = 'percentageFacet',
+        defaultUnits = 'percentageBucket',
         translateData = true,
         colorVariant,
         facet,
@@ -168,7 +168,7 @@ const Facet = ({ facet, colorMapping, keys, fieldId, facetId }) => {
             <ChartContainer height={40} fit={true}>
                 <GaugeBarChart
                     keys={keys}
-                    units="percentageFacet"
+                    units="percentageBucket"
                     buckets={facet}
                     colorMapping={colorMapping}
                     i18nNamespace={fieldId}

@@ -21,6 +21,7 @@ import { useEntities } from 'core/helpers/entities'
 import { StandardQuestionData, BucketUnits, Bucket } from '@devographics/types'
 import { FacetItem, DataSeries, ChartModes } from 'core/filters/types'
 import get from 'lodash/get'
+import cloneDeep from 'lodash/cloneDeep'
 
 export const getChartDataPath = (block: BlockDefinition) =>
     `${block?.queryOptions?.subField || 'responses'}.currentEdition.buckets`
@@ -119,6 +120,16 @@ export interface HorizontalBarChartProps extends ChartComponentProps {
     showDefaultSeries?: boolean
 }
 
+// if we're only showing a single key, sort by that
+// else, default to sorting by count
+const getSortKey = (keys: string[]) => {
+    if (keys.length === 1) {
+        return keys[0]
+    } else {
+        return 'count'
+    }
+}
+
 const HorizontalBarChart = ({
     block,
     series,
@@ -137,7 +148,7 @@ const HorizontalBarChart = ({
 }: HorizontalBarChartProps) => {
     // TODO: currently this chart only receive one data series, but if it receives more
     // in the future it will be able to combine them into a single chart
-    let buckets = getChartData(series[0].data, block)
+    let buckets = cloneDeep(getChartData(series[0].data, block))
 
     if (facet) {
         buckets = buckets.map(bucket => {
@@ -177,7 +188,7 @@ const HorizontalBarChart = ({
         units
     })
 
-    const sortedBuckets = sortBy(buckets, 'count')
+    const sortedBuckets = sortBy(buckets, getSortKey(keys))
 
     const defaultBarColor = theme.colors.barColors[0]
     const barColor = barColor_ || defaultBarColor

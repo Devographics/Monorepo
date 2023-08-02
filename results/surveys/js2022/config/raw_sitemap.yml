@@ -778,7 +778,7 @@
         template: multiple_options
         variants:
             - id: libraries_others
-              template: multiple_options
+              template: multiple_options_prenormalized
               defaultUnits: count
               parameters: { limit: 15 }
 
@@ -793,7 +793,7 @@
         template: multiple_options
         variants:
             - id: date_management_others
-              template: multiple_options
+              template: multiple_options_prenormalized
               defaultUnits: count
               parameters: { limit: 5 }
 
@@ -803,7 +803,7 @@
         template: multiple_options
         variants:
             - id: data_visualization_others
-              template: multiple_options
+              template: multiple_options_prenormalized
               defaultUnits: count
               parameters: { limit: 5 }
 
@@ -813,7 +813,7 @@
         template: multiple_options
         variants:
             - id: data_fetching_others
-              template: multiple_options
+              template: multiple_options_prenormalized
               defaultUnits: count
               parameters: { limit: 10 }
 
@@ -823,7 +823,7 @@
         template: multiple_options
         variants:
             - id: backend_frameworks_others
-              template: multiple_options
+              template: multiple_options_prenormalized
               defaultUnits: count
               parameters: { limit: 10 }
 
@@ -832,7 +832,7 @@
         template: multiple_options
         variants:
             - id: utilities_others
-              template: multiple_options
+              template: multiple_options_prenormalized
               defaultUnits: count
               parameters: { limit: 10 }
 
@@ -844,7 +844,7 @@
         template: multiple_options
         variants:
             - id: runtimes_others
-              template: multiple_options
+              template: multiple_options_freeform
               defaultUnits: count
               parameters: { limit: 10 }
 
@@ -853,7 +853,7 @@
         template: multiple_options
         variants:
             - id: edge_runtimes_others
-              template: multiple_options
+              template: multiple_options_freeform
               defaultUnits: count
               parameters: { limit: 10 }
 
@@ -862,7 +862,7 @@
         template: multiple_options
         variants:
             - id: javascript_flavors_others
-              template: multiple_options
+              template: multiple_options_freeform
               defaultUnits: count
               parameters: { limit: 10 }
 
@@ -876,7 +876,7 @@
         template: multiple_options
         variants:
             - id: non_js_languages_others
-              template: multiple_options
+              template: multiple_options_freeform
               defaultUnits: count
               parameters: { limit: 15 }
 
@@ -908,7 +908,7 @@
               tabId: tabs.other_answers
               i18nNamespace: what_do_you_use_js_for
               translateData: true
-              template: multiple_options
+              template: multiple_options_freeform
               parameters: { limit: 10 }
 
       - id: industry_sector
@@ -920,7 +920,7 @@
               defaultUnits: count
               i18nNamespace: industry_sector
               tabId: tabs.other_answers
-              template: multiple_options
+              template: multiple_options_freeform
               translateData: true
               parameters: { limit: 15 }
 
@@ -932,7 +932,7 @@
             - id: js_app_patterns_others
               defaultUnits: count
               tabId: tabs.other_answers
-              template: multiple_options
+              template: multiple_options_freeform
               translateData: true
               parameters: { limit: 15 }
 

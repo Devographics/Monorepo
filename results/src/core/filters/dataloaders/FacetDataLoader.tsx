@@ -8,6 +8,8 @@ import { DynamicDataLoaderProps } from './DynamicDataLoader'
 import Loading from 'core/explorer/Loading'
 import styled from 'styled-components'
 import { DataSeries } from '../types'
+import { JSONTrigger } from 'core/blocks/block/BlockData'
+import { BucketUnits } from '@devographics/types'
 
 interface FacetDataLoaderProps extends DynamicDataLoaderProps {
     defaultSeries: DataSeries<AllQuestionData>
@@ -17,7 +19,8 @@ const FacetDataLoader = ({
     defaultSeries,
     block,
     children,
-    chartFilters
+    chartFilters,
+    setUnits
 }: FacetDataLoaderProps) => {
     const pageContext = usePageContext()
     const year = pageContext.currentEdition.year
@@ -39,6 +42,7 @@ const FacetDataLoader = ({
 
             setSeries(seriesData)
             setIsLoading(false)
+            setUnits(BucketUnits.PERCENTAGE_BUCKET)
         }
 
         if (!isEmpty(chartFilters.facet)) {
@@ -59,6 +63,9 @@ const FacetDataLoader = ({
         <Wrapper_>
             <Contents_>{React.cloneElement(children, props)}</Contents_>
             {isLoading && <Loading />}
+            {series && (
+                <JSONTrigger block={block} data={series} buttonProps={{ variant: 'link' }} />
+            )}
         </Wrapper_>
     )
 }

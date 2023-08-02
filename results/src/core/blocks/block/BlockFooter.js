@@ -26,7 +26,7 @@ const Units = styled.div`
     justify-content: center;
 `
 
-const BlockFooter = ({ unitsOptions, completion, units, setUnits }) => {
+const BlockFooter = ({ unitsOptions, completion, units, setUnits, chartFilters }) => {
     const context = usePageContext()
     const { isCapturing } = context
     return (
@@ -44,7 +44,12 @@ const BlockFooter = ({ unitsOptions, completion, units, setUnits }) => {
             )}
             {setUnits && !isCapturing && (
                 <Units>
-                    <BlockUnitsSelector units={units} onChange={setUnits} options={unitsOptions} />
+                    <BlockUnitsSelector
+                        units={units}
+                        onChange={setUnits}
+                        options={unitsOptions}
+                        chartFilters={chartFilters}
+                    />
                 </Units>
             )}
         </Footer>

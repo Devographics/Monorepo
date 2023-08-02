@@ -11,5 +11,8 @@ export default defineConfig({
     // adapter: netlify()
     vite: {
         plugins: [yaml()]
+    },
+    redirects: {
+        '/': '/en-US'
     }
 })

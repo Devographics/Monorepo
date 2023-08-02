@@ -5,6 +5,7 @@ import { DynamicDataLoaderProps } from './DynamicDataLoader'
 import WrapperGrid from './WrapperGrid'
 import { fetchSeriesData } from '../helpers'
 import { DataSeries } from 'core/filters/types'
+import { JSONTrigger } from 'core/blocks/block/BlockData'
 
 interface GridDataLoaderProps extends DynamicDataLoaderProps {
     defaultSeries: DataSeries<AllQuestionData>
@@ -27,7 +28,8 @@ const GridDataLoader = ({
     const showDefaultSeries = chartFilters.options.showDefaultSeries
 
     const legends = useFilterLegends({
-        chartFilters
+        chartFilters,
+        block
     })
 
     const [isLoading, setIsLoading] = useState(false)
@@ -56,15 +58,20 @@ const GridDataLoader = ({
     }, [chartFilters])
 
     return (
-        <WrapperGrid
-            layout={layout}
-            series={series}
-            legends={legends}
-            isLoading={isLoading}
-            showDefaultSeries={showDefaultSeries}
-        >
-            {children}
-        </WrapperGrid>
+        <>
+            <WrapperGrid
+                layout={layout}
+                series={series}
+                legends={legends}
+                isLoading={isLoading}
+                showDefaultSeries={showDefaultSeries}
+            >
+                {children}
+            </WrapperGrid>
+            {series && (
+                <JSONTrigger block={block} data={series} buttonProps={{ variant: 'link' }} />
+            )}
+        </>
     )
 }
 

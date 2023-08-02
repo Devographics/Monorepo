@@ -117,7 +117,10 @@ const velocity = [
     '#CAAAFF',
     '#AD84EF',
     '#8e5ddb',
-    '#6b36bf'
+    '#6b36bf',
+    '#50219B',
+    '#370D7A',
+    '#2A0564'
 ]
 
 const arrowsVelocity = [
@@ -179,7 +182,7 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
     velocityBarColors: velocity.map((color, i) => ({
         id: `velocityColor${i}`,
         color: velocity[i * 2],
-        gradient: [velocity[i * 2+1], velocity[i * 2]]
+        gradient: [velocity[i * 2 + 1], velocity[i * 2]]
     })),
     // bar colors for variants when using filters and (especially) facets
     barColors: [

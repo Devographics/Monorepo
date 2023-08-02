@@ -137,6 +137,8 @@ type QuestionMetadata {
     optionsAreNumeric: Boolean
     # options are ranges of numbers
     optionsAreRange: Boolean
+    # options follow each other sequentially
+    optionsAreSequential: Boolean
     # whether a question only exists in the API and not the ouline
     apiOnly: Boolean
 }
@@ -250,6 +252,38 @@ type Bucket {
     An array of bucket facets, when bucket is faceted
     """
     facetBuckets: [FacetBucket]
+    """
+    Average age/years of experience/etc. of the bucket, when bucket is faceted by a range
+    or some other numerical value
+    """
+    averageByFacet: Float
+    """
+    percentiles by facet
+    """
+    percentilesByFacet: Percentiles
+}
+
+type Percentiles {
+    """
+    0th percentile (minimum) based on range average of all facet buckets
+    """
+    p0: Float
+    """
+    25th percentile based on range average of all facet buckets
+    """
+    p25: Float
+    """
+    median (50th percentile) based on range average of all facet buckets
+    """
+    p50: Float
+    """
+    75th percentile based on range average of all facet buckets
+    """
+    p75: Float
+    """
+    100th percentile (maximum) based on range average of all facet buckets
+    """
+    p100: Float
 }
 
 type FacetBucket {
@@ -268,9 +302,9 @@ type FacetBucket {
     """
     percentageSurvey: Float
     """
-    Percentage relative to question respondents in facet
+    Percentage of the bucket represented by the current facet
     """
-    percentageFacet: Float
+    percentageBucket: Float
     """
     Entity associated with the current bucket
     """

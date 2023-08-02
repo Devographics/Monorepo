@@ -18,7 +18,7 @@ const computeBucketsWithPercentages = <T extends Bucket | FacetBucket>(
                 ? 0
                 : ratioToPercentage(bucket.count / editionData.completion.count)
         if (parentBucket) {
-            bucketWithPercentages.percentageFacet = ratioToPercentage(
+            bucketWithPercentages.percentageBucket = ratioToPercentage(
                 bucketWithPercentages.count / parentBucket.count
             )
         }
