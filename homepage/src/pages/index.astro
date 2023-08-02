@@ -23,8 +23,7 @@ const meta = getMeta({ survey, locale, lastEdition })
 <head>
   <link rel="icon" type="image/x-icon" href={faviconUrl} />
   <!-- <meta http-equiv="refresh" content={ `0; url=/en-US` } /> -->
-  {meta.map((tag) =>
-  <meta {...tag} />)}
+  {meta.map((tag) => <meta {...tag} />)}
 </head>
 
 <body>

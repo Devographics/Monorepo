@@ -7,7 +7,7 @@ import LastEdition from '@components/LastEdition.astro'
 import { statuses } from '@helpers/constants'
 import { getLocaleSubset } from '@helpers/translator'
 const { survey, locale, surveys } = Astro.props
-const { editions =[]} = surveys
+const { editions =[]} = survey
 const allEditions = (editions)
     .sort((e1, e2) => e2.year - e1.year)
     .filter(e => [statuses.open, statuses.closed, statuses.preview].includes(e.status))
@@ -26,7 +26,7 @@ const [lastEdition, ...pastEditions] = allEditions
         <T locale={locale} k={`general.${id}.description`} />
     </p>
 
-    {lastEdition ? <LastEdition edition={lastEdition}/> : <EditionPlaceholder survey={survey}/>}
+    {lastEdition ? <LastEdition edition={lastEdition} locale={locale}/> : <EditionPlaceholder survey={survey} locale={locale}/>}
 
     <div class="intro">
         <T locale={locale} k={`general.${id}.intro`} md={true} />
@@ -87,19 +87,4 @@ const [lastEdition, ...pastEditions] = allEditions
         }
     }
 
-    .last-edition,
-    .past-editions {
-        margin-bottom: var(--doublespacing);
-    }
-
-    .past-editions-items {
-        display: grid;
-        column-gap: var(--doublespacing);
-        row-gap: var(--doublespacing);
-        grid-template-columns: 1fr 1fr;
-
-        @include small {
-            grid-template-columns: 1fr;
-        }
-    }
 </style>

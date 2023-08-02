@@ -21,3 +21,25 @@ const { editions, locale, survey } = Astro.props
         ))}
     </div>
 </section>
+
+
+<style lang="scss">
+    @import '../stylesheets/_breakpoints.scss';
+
+
+    .last-edition,
+    .past-editions {
+        margin-bottom: var(--doublespacing);
+    }
+
+    .past-editions-items {
+        display: grid;
+        column-gap: var(--doublespacing);
+        row-gap: var(--doublespacing);
+        grid-template-columns: 1fr 1fr;
+
+        @include small {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>

@@ -8,3 +8,13 @@ const { edition, locale, survey } = Astro.props
 <section class="last-edition">
     <SurveyEdition locale={locale} edition={edition} survey={survey} isLast={true} />
 </section>
+
+
+<style lang="scss">
+
+    .last-edition,
+    .past-editions {
+        margin-bottom: var(--doublespacing);
+    }
+
+</style>
