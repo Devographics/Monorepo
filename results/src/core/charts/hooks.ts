@@ -36,12 +36,17 @@ const getMode = (units: Units, mode: Mode) => {
 Get chart's max value
 
 */
-const getMaxValue = (units: Units, mode: Mode, buckets: Bucket[], total: number) => {
+const getMaxValue = (units: BucketUnits, mode: Mode, buckets: Bucket[], total: number) => {
     if (units === BucketUnits.AVERAGE) {
         return Math.max(...buckets.map(b => b[BucketUnits.AVERAGE]))
     } else if (isPercentage(units)) {
-        const maxBucketPercentage = Math.max(...buckets.map(b => b[units]))
-        return ceil(maxBucketPercentage, -1)
+        if (units === BucketUnits.PERCENTAGE_BUCKET) {
+            return 100
+        } else {
+            const maxBucketPercentage = Math.max(...buckets.map(b => b[units]))
+            return ceil(maxBucketPercentage, -1)
+        }
+
         // if (getMode(units, mode) === 'absolute') {
         //     return 100
         // } else {

@@ -65,6 +65,8 @@ export const getDbPath = (
     const { normPaths } = question
     if (responsesType === ResponsesTypes.RESPONSES) {
         return normPaths?.response
+    } else if (responsesType === ResponsesTypes.PRENORMALIZED) {
+        return normPaths?.prenormalized
     } else {
         return normPaths?.other
     }
