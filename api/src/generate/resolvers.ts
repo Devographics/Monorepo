@@ -15,7 +15,7 @@ import {
     IncludeEnum
 } from '../types/surveys'
 import { getPath, formatNumericOptions, getEditionById } from './helpers'
-import { genericComputeFunction } from '../compute'
+import { genericComputeFunction, getGenericCacheKey } from '../compute'
 import { useCache, computeKey } from '../helpers/caching'
 import { getRawCommentsWithCache } from '../compute/comments'
 import { getEntity, getEntities } from '../load/entities'
@@ -30,6 +30,7 @@ import { localesResolvers } from '../resolvers/locales'
 import { subFields } from './subfields'
 import { ResultsSubFieldEnum } from '@devographics/types'
 import { loadOrGetParsedSurveys } from '../load/surveys'
+import isEmpty from 'lodash/isEmpty.js'
 
 export const generateResolvers = async ({
     surveys,
@@ -289,7 +290,7 @@ export const allEditionsResolver: ResolverType = async (parent, args, context, i
 
     const { survey, edition, section, question, responseArguments, questionObjects } = parent
     const { parameters = {}, filters, facet, responsesType = subField } = responseArguments || {}
-    const { enableCache, ...cacheKeyParameters } = parameters
+    const { enableCache } = parameters
 
     const { selectedEditionId } = args
     const computeArguments = { responsesType, parameters, filters, facet, selectedEditionId }
@@ -305,15 +306,13 @@ export const allEditionsResolver: ResolverType = async (parent, args, context, i
     }
 
     let result = await useCache({
-        key: computeKey(genericComputeFunction, {
-            surveyId: survey.id,
-            editionId: edition.id,
-            sectionId: section.id,
-            questionId: question.id,
-            parameters: cacheKeyParameters,
+        key: getGenericCacheKey({
+            edition,
+            question,
+            selectedEditionId,
+            parameters,
             filters,
-            facet,
-            selectedEditionId
+            facet
         }),
         func: genericComputeFunction,
         context,

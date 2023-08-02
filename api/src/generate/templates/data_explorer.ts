@@ -1,6 +1,6 @@
 import { ApiTemplateFunction, ResolverMap, Survey, Question } from '../../types/surveys'
 import { graphqlize, getFacetsTypeName } from '../helpers'
-import { genericComputeFunction } from '../../compute'
+import { genericComputeFunction, getGenericCacheKey } from '../../compute'
 import { useCache, computeKey } from '../../helpers/caching'
 
 const getResolverMap = ({ survey }: { survey: Survey }): ResolverMap => ({
@@ -11,7 +11,7 @@ const getResolverMap = ({ survey }: { survey: Survey }): ResolverMap => ({
         const { enableCache, ...cacheKeyParameters } = parameters
 
         const [sectionId, questionId] = axis1.split('__')
-        const question = questionObjects.find(q => q.id === questionId && q.surveyId === survey.id)
+        const question = questionObjects.find(q => q.id === questionId && q.surveyId === survey.id)!
 
         const selectedEditionId = edition.id
         const computeArguments = {
@@ -32,15 +32,12 @@ const getResolverMap = ({ survey }: { survey: Survey }): ResolverMap => ({
         }
 
         let result = await useCache({
-            key: computeKey(genericComputeFunction, {
-                surveyId: survey.id,
-                editionId: edition.id,
-                sectionId,
-                questionId,
-                parameters: cacheKeyParameters,
-                filters,
-                facet: axis2,
-                selectedEditionId
+            key: getGenericCacheKey({
+                edition,
+                question,
+                selectedEditionId,
+                parameters,
+                filters
             }),
             func: genericComputeFunction,
             context,

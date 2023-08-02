@@ -55,6 +55,16 @@ export const getFacetFragment = (addBucketsEntities?: boolean) => `
     }
 `
 
+export const getPercentilesFragment = () => `
+    percentilesByFacet {
+        p0
+        p25
+        p50
+        p75
+        p100
+    }
+`
+
 const getCommentsCountFragment = () => `
   comments {
     currentEdition {
@@ -202,6 +212,7 @@ surveys {
                 percentageSurvey
                 ${addBucketsEntities ? getEntityFragment() : ''}
                 ${queryArgs.facet || addBucketFacetsPlaceholder ? BucketUnits.AVERAGE : ''}
+                ${queryArgs.facet || addBucketFacetsPlaceholder ? getPercentilesFragment() : ''}
                 ${queryArgs.facet ? getFacetFragment(addBucketsEntities) : ''}
                 ${addBucketFacetsPlaceholder ? bucketFacetsPlaceholder : ''}
               }

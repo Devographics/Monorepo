@@ -13,7 +13,8 @@ import {
     QuestionApiObject,
     ResponseEditionData,
     ComputeAxisParameters,
-    SortProperty
+    SortProperty,
+    EditionApiObject
 } from '../types'
 import {
     discardEmptyIds,
@@ -33,9 +34,18 @@ import {
     removeEmptyEditions,
     addPercentiles
 } from './stages/index'
-import { ResponsesTypes, DbSuffixes, SurveyMetadata, EditionMetadata } from '@devographics/types'
+import {
+    ResponsesTypes,
+    DbSuffixes,
+    SurveyMetadata,
+    EditionMetadata,
+    ResponsesParameters,
+    Filters
+} from '@devographics/types'
 import { getCollection } from '../helpers/db'
 import { getPastEditions } from '../helpers/surveys'
+import { computeKey } from '../helpers/caching'
+import isEmpty from 'lodash/isEmpty.js'
 
 const convertOrder = (order: 'asc' | 'desc') => (order === 'asc' ? 1 : -1)
 
@@ -58,6 +68,38 @@ export const getDbPath = (
     } else {
         return normPaths?.other
     }
+}
+
+export const getGenericCacheKey = ({
+    edition,
+    question,
+    selectedEditionId,
+    parameters,
+    filters,
+    facet
+}: {
+    edition: EditionApiObject
+    question: QuestionApiObject
+    selectedEditionId: string
+    parameters?: ResponsesParameters
+    filters?: Filters
+    facet?: string
+}) => {
+    const cacheKeyOptions: any = {
+        editionId: selectedEditionId || `allEditions(${edition.id})`,
+        questionId: question.id
+    }
+    if (!isEmpty(parameters)) {
+        const { enableCache, ...cacheKeyParameters } = parameters
+        cacheKeyOptions.parameters = { parameters: cacheKeyParameters }
+    }
+    if (!isEmpty(filters)) {
+        cacheKeyOptions.filters = { filters }
+    }
+    if (!isEmpty(facet)) {
+        cacheKeyOptions.facet = { facet }
+    }
+    return computeKey('generic', cacheKeyOptions)
 }
 
 export async function genericComputeFunction({
