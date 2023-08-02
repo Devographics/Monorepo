@@ -91,6 +91,7 @@ const VerticalBarBlock = ({ block, data, context }: VerticalBarBlockProps) => {
                     <VerticalBarChart
                         block={block}
                         legends={chartLegends}
+                        filterLegends={filterLegends}
                         total={total}
                         i18nNamespace={i18nNamespace}
                         translateData={translateData}

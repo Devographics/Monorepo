@@ -8,16 +8,26 @@ import { StringTranslator } from 'core/types'
 import { NO_ANSWER } from '@devographics/constants'
 
 const getLabel = (props: any, getString: StringTranslator) => {
-    const { id, legends, units, indexValue, data, i18nNamespace, shouldTranslate, facet } = props
+    const {
+        id,
+        legends,
+        filterLegends,
+        units,
+        indexValue,
+        data,
+        i18nNamespace,
+        shouldTranslate,
+        facet,
+        filters
+    } = props
     const bucketKey =
         indexValue === NO_ANSWER
             ? { id: NO_ANSWER, label: getString('charts.no_answer').t }
             : legends && legends.find(b => b.id === indexValue)
     const { entity, label } = data
     const s = getString(`options.${i18nNamespace}.${indexValue}`)
-    let facetLabel = ''
+    let extraLabel = ''
 
-    console.log(props)
     if (facet) {
         if (units === BucketUnits.AVERAGE || units === BucketUnits.PERCENTILES) {
             const values = {} as { axis: string }
@@ -25,7 +35,7 @@ const getLabel = (props: any, getString: StringTranslator) => {
             if (s?.t) {
                 values.axis = s.t
             }
-            facetLabel = `, ${getString('chart_units.average', { values })?.t}`
+            extraLabel = `, ${getString('chart_units.average', { values })?.t}`
         } else {
             const [units, facetBucketId] = id.split('__')
             const labelKey =
@@ -34,16 +44,20 @@ const getLabel = (props: any, getString: StringTranslator) => {
                     : `options.${facet.id}.${facetBucketId}`
             const s2 = getString(labelKey, {}, `${facet.id}: ${facetBucketId}`)
 
-            facetLabel = `, ${s2.t}`
+            extraLabel = `, ${s2.t}`
         }
+    } else if (filters) {
+        const [units, filterIndex] = id.split('__')
+        const legendItem = filterLegends[filterIndex - 1]
+        extraLabel = `, ${legendItem.label}`
     }
 
     if (label) {
         return label
     } else if (bucketKey?.label) {
-        return bucketKey.label + facetLabel
+        return bucketKey.label + extraLabel
     } else if (shouldTranslate && !s.missing) {
-        return s.t + facetLabel
+        return s.t + extraLabel
     } else if (entity) {
         return entity.name
     } else {
@@ -66,7 +80,8 @@ const BarTooltip = props => {
     const units_ = id
     return (
         <div style={{ ...nivoTheme.tooltip.container, maxWidth: 300 }}>
-            {label}:&nbsp;
+            <span dangerouslySetInnerHTML={{ __html: label }} />
+            :&nbsp;
             <strong>
                 {data[units_]}
                 {isPercentage(units) && '%'}

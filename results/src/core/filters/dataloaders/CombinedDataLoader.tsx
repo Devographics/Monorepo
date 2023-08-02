@@ -53,15 +53,18 @@ const CombinedDataLoader = ({
         }
     }, [chartFilters])
 
+    const props = isLoading
+        ? {}
+        : {
+              series,
+              chartDisplayMode: CHART_MODE_GROUPED,
+              filters: chartFilters.filters,
+              showDefaultSeries: chartFilters.options.showDefaultSeries
+          }
+
     return (
         <Wrapper_>
-            <Contents_>
-                {React.cloneElement(children, {
-                    series,
-                    chartDisplayMode: CHART_MODE_GROUPED,
-                    showDefaultSeries: chartFilters.options.showDefaultSeries
-                })}
-            </Contents_>
+            <Contents_>{React.cloneElement(children, props)}</Contents_>
             {isLoading && <Loading />}
             {series && (
                 <JSONTrigger block={block} data={series} buttonProps={{ variant: 'link' }} />

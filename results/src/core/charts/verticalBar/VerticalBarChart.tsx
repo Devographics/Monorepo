@@ -20,7 +20,7 @@ import {
 import { handleNoAnswerBucket } from 'core/helpers/data'
 import { StandardQuestionData, BucketUnits } from '@devographics/types'
 import { combineBuckets } from 'core/filters/helpers'
-import { DataSeries, ChartModes, FacetItem } from 'core/filters/types'
+import { DataSeries, ChartModes, FacetItem, CustomizationFiltersSeries } from 'core/filters/types'
 import cloneDeep from 'lodash/cloneDeep'
 import { NO_ANSWER } from '@devographics/constants'
 
@@ -93,6 +93,7 @@ export interface VerticalBarChartProps extends ChartComponentProps {
     gridIndex?: number
     chartDisplayMode?: ChartModes
     facet?: FacetItem
+    filters?: CustomizationFiltersSeries[]
     showDefaultSeries?: boolean
 }
 
@@ -102,6 +103,7 @@ const VerticalBarChart = (props: VerticalBarChartProps) => {
         viewportWidth,
         className,
         legends,
+        filterLegends,
         total,
         i18nNamespace,
         translateData,
@@ -112,6 +114,7 @@ const VerticalBarChart = (props: VerticalBarChartProps) => {
         gridIndex = 1,
         chartDisplayMode = ChartModes.CHART_MODE_DEFAULT,
         facet,
+        filters,
         showDefaultSeries,
         series
     } = props
@@ -200,9 +203,11 @@ const VerticalBarChart = (props: VerticalBarChartProps) => {
                     <BarTooltip
                         units={units}
                         legends={legends}
+                        filterLegends={filterLegends}
                         i18nNamespace={i18nNamespace}
                         shouldTranslate={translateData}
                         facet={facet}
+                        filters={filters}
                         {...barProps}
                     />
                 )}
