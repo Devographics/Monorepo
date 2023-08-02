@@ -160,7 +160,7 @@ const VerticalBarChart = (props: VerticalBarChartProps) => {
     const colors = [theme.colors.barChart[colorVariant]]
 
     return (
-        <div style={{ height: 260 }} className={`VerticalBarChart ${className}`}>
+        <div style={{ height: 350 }} className={`VerticalBarChart ${className}`}>
             <ResponsiveBar
                 data={handleNoAnswerBucket({ buckets, units, moveTo: 'end' })}
                 groupMode={chartDisplayMode}

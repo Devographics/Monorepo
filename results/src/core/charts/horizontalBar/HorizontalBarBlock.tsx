@@ -12,6 +12,7 @@ import DynamicDataLoader from 'core/filters/dataloaders/DynamicDataLoader'
 import { MODE_GRID, MODE_FACET } from 'core/filters/constants'
 import { useChartFilters } from 'core/filters/helpers'
 import { useAllFilters } from 'core/charts/hooks'
+import { useLegends } from 'core/helpers/legends'
 
 export interface HorizontalBarBlockProps extends BlockComponentProps {
     data: StandardQuestionData
@@ -26,6 +27,9 @@ const HorizontalBarBlock = ({ block, data }: HorizontalBarBlockProps) => {
     } = block
 
     const [units, setUnits] = useState(defaultUnits)
+
+    const addNoAnswer = units === BucketUnits.PERCENTAGE_SURVEY
+    const chartLegends = useLegends({ block, addNoAnswer })
 
     const completion = data?.responses?.currentEdition?.completion
     const total = completion?.total
@@ -110,6 +114,7 @@ const HorizontalBarBlock = ({ block, data }: HorizontalBarBlockProps) => {
                         units={units}
                         colorVariant={'primary'}
                         facet={chartFilters.facet}
+                        legends={chartLegends}
                     />
                 </ChartContainer>
             </DynamicDataLoader>

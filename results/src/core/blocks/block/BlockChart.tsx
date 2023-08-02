@@ -14,7 +14,17 @@ import BlockLinks from 'core/blocks/block/BlockLinks'
 import { BlockDefinition } from 'core/types'
 
 const BlockChart = props => {
-    const { children, units, error, data, block = {}, legends, legendProps, modeProps } = props
+    const {
+        children,
+        units,
+        error,
+        data,
+        block = {},
+        legends,
+        legendProps,
+        modeProps,
+        chartFilters
+    } = props
     const {
         legendPosition = 'top',
         switcherPosition = 'bottom',
@@ -26,7 +36,15 @@ const BlockChart = props => {
     const context = usePageContext()
     const { isCapturing } = context
 
-    const legendProps_ = { block, data, units, position: legendPosition, legends, ...legendProps }
+    const legendProps_ = {
+        block,
+        data,
+        units,
+        position: legendPosition,
+        legends,
+        chartFilters,
+        ...legendProps
+    }
 
     return (
         <div>

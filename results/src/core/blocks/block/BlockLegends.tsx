@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 import { mq, spacing, fontSize, color } from 'core/theme'
 import BlockLegendsItem from './BlockLegendsItem'
+import T from 'core/i18n/T'
 
 const BlockLegends = ({
     legends = [],
@@ -20,10 +21,11 @@ const BlockLegends = ({
     units,
     position,
     useShortLabels = layout === 'horizontal',
+    chartFilters = {},
     current
 }) => {
     const { id: blockId, bucketKeysName = blockId } = block
-
+    const { facet } = chartFilters
     const blockLegends = legends
 
     const rootStyle = { ...style }
@@ -36,6 +38,11 @@ const BlockLegends = ({
             withFrame={withFrame}
             position={position}
         >
+            {facet && (
+                <LegendHeading>
+                    <T k={`${facet.sectionId}.${facet.id}`} />
+                </LegendHeading>
+            )}
             <ContainerInner layout={layout}>
                 {blockLegends.map(({ id, label, shortLabel, color }) => (
                     <BlockLegendsItem
@@ -82,6 +89,10 @@ BlockLegends.defaultProps = {
     chipStyle: {},
     chipSize: 16
 }
+
+const LegendHeading = styled.h4`
+    margin-bottom: ${spacing(0.25)};
+`
 
 const Container = styled.table`
     .rawchartmode & {

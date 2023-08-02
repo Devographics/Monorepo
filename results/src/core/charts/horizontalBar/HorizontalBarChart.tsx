@@ -132,6 +132,7 @@ const getSortKey = (keys: string[]) => {
 
 const HorizontalBarChart = ({
     block,
+    legends,
     series,
     total,
     i18nNamespace,
@@ -253,8 +254,10 @@ const HorizontalBarChart = ({
                 tooltip={barProps => (
                     <BarTooltip
                         units={units}
+                        legends={legends}
                         i18nNamespace={i18nNamespace}
                         shouldTranslate={translateData}
+                        facet={facet}
                         {...barProps}
                     />
                 )}
