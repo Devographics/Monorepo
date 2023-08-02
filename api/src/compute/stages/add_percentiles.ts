@@ -95,10 +95,12 @@ export async function addPercentiles(
     axis1: ComputeAxisParameters,
     axis2: ComputeAxisParameters
 ) {
-    for (let editionData of resultsByEdition) {
-        if (axis2) {
-            for (let bucket of editionData.buckets) {
-                bucket.percentilesByFacet = calculatePercentiles({ bucket, axis: axis2 })
+    if (axis2.question.optionsAreRange) {
+        for (let editionData of resultsByEdition) {
+            if (axis2) {
+                for (let bucket of editionData.buckets) {
+                    bucket.percentilesByFacet = calculatePercentiles({ bucket, axis: axis2 })
+                }
             }
         }
     }
