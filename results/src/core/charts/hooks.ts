@@ -40,14 +40,13 @@ const getMaxValue = (units: Units, mode: Mode, buckets: Bucket[], total: number)
     if (units === BucketUnits.AVERAGE) {
         return Math.max(...buckets.map(b => b[BucketUnits.AVERAGE]))
     } else if (isPercentage(units)) {
-        console.log(units)
-        console.log(mode)
-        console.log(getMode(units, mode))
+        const maxBucketPercentage = Math.max(...buckets.map(b => b[units]))
+        return ceil(maxBucketPercentage, -1)
         // if (getMode(units, mode) === 'absolute') {
         //     return 100
         // } else {
-        const maxBucketPercentage = Math.max(...buckets.map(b => b[units]))
-        return ceil(maxBucketPercentage, -1)
+        //     const maxBucketPercentage = Math.max(...buckets.map(b => b[units]))
+        //     return ceil(maxBucketPercentage, -1)
         // }
     } else {
         if (getMode(units, mode) === 'absolute') {

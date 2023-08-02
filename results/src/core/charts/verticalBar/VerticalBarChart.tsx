@@ -147,8 +147,6 @@ const VerticalBarChart = (props: VerticalBarChartProps) => {
 
     const { translate } = useI18n()
 
-    console.log('---------------------')
-    console.log(block.id)
     const { formatValue, maxValue, ticks } = useBarChart({
         buckets,
         total,
