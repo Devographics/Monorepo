@@ -128,12 +128,7 @@ const getPresetsArray = (options: CustomizationOptions): PresetDefinition[] => {
                             fieldId: 'yearly_salary',
                             sectionId: 'user_info',
                             operator: OperatorEnum['IN'],
-                            value: [
-                                'range_work_for_free',
-                                'range_0_10',
-                                'range_10_30',
-                                'range_30_50'
-                            ]
+                            value: ['range_0_10', 'range_10_30', 'range_30_50']
                         }
                     ]
                 },

@@ -24,7 +24,7 @@ Switch between absolute (chart always has same max value) and relative (chart ad
 
 */
 const getMode = (units: Units, mode: Mode) => {
-    if (units === 'percentageSurvey' || units === 'percentage_bucket') {
+    if (units === BucketUnits.PERCENTAGE_SURVEY || units === BucketUnits.PERCENTAGE_BUCKET) {
         return 'absolute'
     } else {
         return 'relative'
@@ -40,12 +40,14 @@ const getMaxValue = (units: Units, mode: Mode, buckets: Bucket[], total: number)
     if (units === BucketUnits.AVERAGE) {
         return Math.max(...buckets.map(b => b[BucketUnits.AVERAGE]))
     } else if (isPercentage(units)) {
-        return 100
+        console.log(units)
+        console.log(mode)
+        console.log(getMode(units, mode))
         // if (getMode(units, mode) === 'absolute') {
         //     return 100
         // } else {
-        //     const maxBucketPercentage = Math.max(...buckets.map(b => b[units]))
-        //     return ceil(maxBucketPercentage, -1)
+        const maxBucketPercentage = Math.max(...buckets.map(b => b[units]))
+        return ceil(maxBucketPercentage, -1)
         // }
     } else {
         if (getMode(units, mode) === 'absolute') {
