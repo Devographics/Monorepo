@@ -105,7 +105,8 @@ export enum BucketUnits {
     PERCENTAGE_QUESTION = 'percentageQuestion',
     PERCENTAGE_SURVEY = 'percentageSurvey',
     PERCENTAGE_BUCKET = 'percentageBucket',
-    AVERAGE = 'averageByFacet'
+    AVERAGE = 'averageByFacet',
+    PERCENTILES = 'percentilesByFacet'
 }
 
 export enum Percentiles {

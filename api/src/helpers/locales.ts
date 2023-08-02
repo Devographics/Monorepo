@@ -258,10 +258,6 @@ export const processLocales = (allLocalesRawData: Array<RawLocale>): Array<Local
         return processStringFile({ locale: rawEnLocale, stringFile })
     })
 
-    if (process.env.FAST_BUILD === 'true') {
-        allLocalesRawData = allLocalesRawData.filter(locale => locale.id === 'en-US')
-    }
-
     for (const locale of allLocalesRawData) {
         let j = 0
         i++

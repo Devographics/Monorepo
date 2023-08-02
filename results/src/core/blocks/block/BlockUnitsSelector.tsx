@@ -9,7 +9,7 @@ const UnitButton = ({ units, current, onChange, i18nNamespace = 'chart_units', c
     const { getString } = useI18n()
 
     const values = {} as { axis: string }
-    if (units === 'average') {
+    if (units === BucketUnits.AVERAGE || units === BucketUnits.PERCENTILES) {
         const s = getString(`${chartFilters.facet.sectionId}.${chartFilters.facet.id}`)
         if (s?.t) {
             values.axis = s.t
