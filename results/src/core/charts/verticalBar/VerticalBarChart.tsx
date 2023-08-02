@@ -11,12 +11,18 @@ import {
 } from 'core/charts/hooks'
 import BarTooltip from '../common/BarTooltip'
 import ChartLabel from 'core/components/ChartLabel'
-import { ChartComponentProps, BlockLegend, BlockDefinition } from 'core/types/index'
+import {
+    ChartComponentProps,
+    BlockLegend,
+    BlockDefinition,
+    StringTranslator
+} from 'core/types/index'
 import { handleNoAnswerBucket } from 'core/helpers/data'
 import { StandardQuestionData, BucketUnits } from '@devographics/types'
 import { combineBuckets } from 'core/filters/helpers'
 import { DataSeries, ChartModes, FacetItem } from 'core/filters/types'
 import cloneDeep from 'lodash/cloneDeep'
+import { NO_ANSWER } from '@devographics/constants'
 
 const baseUnits = Object.values(BucketUnits)
 
@@ -73,9 +79,11 @@ const getLabelsLayer = labelTransformer => (props: any) => {
     })
 }
 
-const getAxisLabels = (v: any, legends: BlockLegend[]) => {
-    const key = legends && legends.find(key => key.id === v)
-    return key && (key.shortLabel || key.label)
+const getAxisLabels = (v: any, getString: StringTranslator, namespace) => {
+    const key = v === NO_ANSWER ? 'charts.no_answer' : `options.${namespace}.${v}`
+    const s = getString(key)
+    const short = getString(`${key}.short`)
+    return short?.t || s?.t
 }
 
 export interface VerticalBarChartProps extends ChartComponentProps {
@@ -107,6 +115,8 @@ const VerticalBarChart = (props: VerticalBarChartProps) => {
         showDefaultSeries,
         series
     } = props
+
+    const { getString } = useI18n()
 
     // by default this chart only receive one data series, but if it receives more
     // it can combine them into a single chart
@@ -180,7 +190,7 @@ const VerticalBarChart = (props: VerticalBarChartProps) => {
                     legendOffset: 52
                 }}
                 axisBottom={{
-                    format: v => getAxisLabels(v, legends),
+                    format: v => getAxisLabels(v, getString, i18nNamespace),
                     // legend: translate(`charts.axis_legends.${i18nNamespace}`),
                     legendPosition: 'middle',
                     legendOffset: viewportWidth < breakpoint ? 90 : 50,

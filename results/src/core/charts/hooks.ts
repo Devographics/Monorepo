@@ -9,6 +9,7 @@ import round from 'lodash/round'
 import { CHART_MODE_GRID, CHART_MODE_STACKED, CHART_MODE_GROUPED } from 'core/filters/constants'
 import { ChartModes, FacetItem, FilterItem } from 'core/filters/types'
 import { Bucket, BucketUnits } from '@devographics/types'
+import { NO_ANSWER } from '@devographics/constants'
 
 /*
 
@@ -51,7 +52,7 @@ const getMaxValue = (units: Units, mode: Mode, buckets: Bucket[], total: number)
             return ceil(total, -3)
         } else {
             const maxBucketCount = Math.max(...buckets.map(b => b.count))
-            const precision = `${maxBucketCount}`.length - 1
+            const precision = `${maxBucketCount}`.length - 2
             return ceil(maxBucketCount, -precision)
         }
     }
@@ -376,9 +377,8 @@ export const useChartKeys = ({
         if (units === BucketUnits.AVERAGE) {
             return [BucketUnits.AVERAGE]
         } else {
-            return allChartKeys
-                .find(q => q.id === facet.id)
-                ?.options.map(option => `${units}__${option.id}`)
+            const options = allChartKeys.find(q => q.id === facet.id)?.options!
+            return [...options, { id: NO_ANSWER }].map(option => `${units}__${option.id}`)
         }
     } else if (seriesCount) {
         if (showDefaultSeries) {
