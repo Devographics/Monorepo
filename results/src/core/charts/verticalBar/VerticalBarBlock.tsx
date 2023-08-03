@@ -11,6 +11,7 @@ import { useChartFilters } from 'core/filters/helpers'
 import { MODE_COMBINED, MODE_FACET } from 'core/filters/constants'
 import { useAllChartsOptions } from 'core/charts/hooks'
 import { MAIN_UNITS } from '@devographics/constants'
+import { BoxPlotChart } from 'core/charts/boxPlot/BoxPlotChart'
 
 export interface VerticalBarBlockProps extends BlockComponentProps {
     data: StandardQuestionData
@@ -54,11 +55,24 @@ const VerticalBarBlock = ({ block, data, context }: VerticalBarBlockProps) => {
         // if this facet can be quantified numerically and has averages, add that as unit too
         if (facetQuestion?.optionsAreRange) {
             unitsOptions.push(BucketUnits.AVERAGE)
+            unitsOptions.push(BucketUnits.PERCENTILES)
         }
     }
 
     const defaultSeries = { name: 'default', data }
 
+    const chartProps = {
+        block,
+        legends: chartLegends,
+        filterLegends,
+        total,
+        i18nNamespace,
+        translateData,
+        units,
+        viewportWidth: width,
+        colorVariant: 'primary',
+        series: [defaultSeries]
+    }
     return (
         <BlockVariant
             tables={[
@@ -88,18 +102,11 @@ const VerticalBarBlock = ({ block, data, context }: VerticalBarBlockProps) => {
                 defaultSeries={defaultSeries}
             >
                 <ChartContainer fit={true}>
-                    <VerticalBarChart
-                        block={block}
-                        legends={chartLegends}
-                        filterLegends={filterLegends}
-                        total={total}
-                        i18nNamespace={i18nNamespace}
-                        translateData={translateData}
-                        units={units}
-                        viewportWidth={width}
-                        colorVariant={'primary'}
-                        series={[defaultSeries]}
-                    />
+                    {units === BucketUnits.PERCENTILES ? (
+                        <BoxPlotChart {...chartProps} />
+                    ) : (
+                        <VerticalBarChart {...chartProps} />
+                    )}
                 </ChartContainer>
             </DynamicDataLoader>
         </BlockVariant>

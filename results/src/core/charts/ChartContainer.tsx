@@ -1,4 +1,4 @@
-import React, { memo, PropsWithChildren } from 'react'
+import React, { memo, PropsWithChildren, useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { mq, spacing } from 'core/theme'
@@ -63,14 +63,28 @@ const ChartContainer = (props: PropsWithChildren<ChartContainerProps>) => {
         vscroll = false,
         ...otherProps
     } = props
+
+    const containerRef = useRef<HTMLDivElement>(null)
+    const [containerWidth, setContainerWidth] = useState<number | undefined>()
+
+    useEffect(() => {
+        if (containerRef.current) {
+            setContainerWidth(containerRef.current.offsetWidth)
+        }
+    }, []) // The empty dependency array makes sure this runs only once after component mount
+
     return (
-        <ChartContainerOuter className={`ChartContainerOuter ${className}`} style={{ height }}>
+        <ChartContainerOuter
+            className={`ChartContainerOuter ${className}`}
+            style={{ height }}
+            ref={containerRef}
+        >
             <Container className="ChartContainer" style={{ height }}>
                 <ChartContainerInner
                     className={`ChartContainerInner${!fit ? ' ChartContainerInner--expand' : ''}`}
                     style={{ height, minWidth: fit ? '' : minWidth }}
                 >
-                    {React.cloneElement(children, otherProps)}
+                    {React.cloneElement(children, { ...otherProps, containerWidth })}
                 </ChartContainerInner>
             </Container>
             {!fit && (

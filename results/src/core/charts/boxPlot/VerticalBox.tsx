@@ -1,42 +1,64 @@
 import React from 'react'
-const STROKE_WIDTH = 40
+const STROKE_WIDTH = 1
 
 // A reusable component that builds a vertical box shape using svg
 // Note: numbers here are px, not the real values in the dataset.
 
 type VerticalBoxProps = {
-    min: number
-    q1: number
-    median: number
-    q3: number
-    max: number
+    p0: number
+    p25: number
+    p50: number
+    p75: number
+    p100: number
     width: number
     stroke: string
     fill: string
 }
 
-export const VerticalBox = ({
-    min,
-    q1,
-    median,
-    q3,
-    max,
-    width,
-    stroke,
-    fill
-}: VerticalBoxProps) => {
+export const VerticalBox = ({ p0, p25, p50, p75, p100, width, stroke, fill }: VerticalBoxProps) => {
     return (
         <>
             <line
                 x1={width / 2}
                 x2={width / 2}
-                y1={min}
-                y2={max}
+                y1={p0}
+                y2={p100}
                 stroke={stroke}
-                width={STROKE_WIDTH}
+                strokeWidth={STROKE_WIDTH}
             />
-            <rect x={0} y={q3} width={width} height={q1 - q3} stroke={stroke} fill={fill} />
-            <line x1={0} x2={width} y1={median} y2={median} stroke={stroke} width={STROKE_WIDTH} />
+            <rect
+                x={0}
+                y={p75}
+                width={width}
+                height={p25 - p75}
+                stroke={stroke}
+                // fill={fill}
+                fill="url(#VelocityVertical2)"
+            />
+            <line
+                x1={width / 3}
+                x2={(2 * width) / 3}
+                y1={p0}
+                y2={p0}
+                stroke={stroke}
+                strokeWidth={STROKE_WIDTH}
+            />
+            <line
+                x1={width / 3}
+                x2={(2 * width) / 3}
+                y1={p100}
+                y2={p100}
+                stroke={stroke}
+                strokeWidth={STROKE_WIDTH}
+            />
+            <line
+                x1={0}
+                x2={width}
+                y1={p50}
+                y2={p50}
+                stroke={stroke}
+                strokeWidth={STROKE_WIDTH * 3}
+            />
         </>
     )
 }
