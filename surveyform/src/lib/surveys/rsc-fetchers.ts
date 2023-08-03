@@ -17,6 +17,13 @@ export const rscFetchSurveysMetadata = cache(async (options?: any) => {
     ...options,
     calledFrom: __filename,
   });
+  // remove survey editions with no questions
+  result.data = result.data?.map((survey) => ({
+    ...survey,
+    editions: survey?.editions?.filter(
+      (edition) => edition?.sections?.length > 0
+    ),
+  }));
   return result;
 });
 

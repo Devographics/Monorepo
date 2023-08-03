@@ -10,9 +10,11 @@ const { survey, locale, surveys } = Astro.props
 const { editions =[]} = survey
 const allEditions = (editions)
     .sort((e1, e2) => e2.year - e1.year)
-    .filter(e => [statuses.open, statuses.closed, statuses.preview].includes(e.status))
+    .filter(e => [statuses.preview, statuses.open, statuses.closed].includes(e.status))
 const { id } = survey
 
+console.log(editions.map(e=>e.id))
+console.log(allEditions.map(e=>e.id))
 const [lastEdition, ...pastEditions] = allEditions
 // const openEdition = allEditions.find(e => e.status === statuses.open)
 // const closedEditions = allEditions.filter(e => e.status === statuses.closed)
@@ -45,7 +47,7 @@ const [lastEdition, ...pastEditions] = allEditions
 
     {
         pastEditions && pastEditions.length > 0 && (
-            <PastEditions editions={editions} locale={locale} survey={survey}/>
+            <PastEditions editions={pastEditions} locale={locale} survey={survey}/>
         )
     }
 </div>

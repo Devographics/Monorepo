@@ -20,7 +20,10 @@ export const getData = async (): Promise<HomepageData> => {
     const surveyId = import.meta.env.SURVEYID
     const fastBuild = import.meta.env.FAST_BUILD === 'true'
     const locales = []
-    const { data: allSurveysData } = await fetchSurveysMetadata({ shouldGetFromCache: false })
+    const { data: allSurveysData } = await fetchSurveysMetadata({
+        shouldGetFromCache: false
+    })
+
     const { data: allLocalesMetadata } = await fetchAllLocalesMetadata({
         shouldGetFromCache: false
     })

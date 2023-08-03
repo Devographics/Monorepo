@@ -6,9 +6,9 @@ import { redirect } from "next/navigation";
 import { getRawResponsesCollection } from "@devographics/mongo";
 import { UserDocument } from "~/account/user/typings";
 import { cache } from "react";
-import { AppName, type ResponseDocument } from "@devographics/types";
-import { fetchSurveysMetadata } from "@devographics/fetch";
+import { type ResponseDocument } from "@devographics/types";
 import { rscCurrentUser } from "~/account/user/rsc-fetchers/rscCurrentUser";
+import { rscFetchSurveysMetadata } from "~/lib/surveys/rsc-fetchers";
 
 const getResponses = cache(
   async ({ currentUser }: { currentUser: UserDocument }) => {
@@ -22,7 +22,7 @@ const getResponses = cache(
 );
 
 const Profile = async ({ params }) => {
-  const { data: surveys } = await fetchSurveysMetadata({
+  const { data: surveys } = await rscFetchSurveysMetadata({
     calledFrom: "UserResponses",
   });
 

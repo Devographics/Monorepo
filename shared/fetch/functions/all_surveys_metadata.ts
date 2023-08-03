@@ -4,15 +4,12 @@ import { fetchGraphQLApi, getFromCache } from '../fetch'
 import { getSurveysQuery } from '../queries'
 import { FetcherFunctionOptions } from '../types'
 
-const filterSurveys = (surveys, serverConfig) => {
+const filterSurveys = (surveys: SurveyMetadata[], options: FetcherFunctionOptions) => {
+    const { serverConfig } = options
     let filteredSurveys = surveys
     if (serverConfig && serverConfig().isProd && !serverConfig()?.isTest) {
         filteredSurveys = surveys?.filter(s => s.id !== 'demo_survey')
     }
-    filteredSurveys = filteredSurveys?.map(survey => ({
-        ...survey,
-        editions: survey?.editions?.filter(edition => edition?.sections?.length > 0)
-    }))
     return filteredSurveys
 }
 
@@ -20,6 +17,7 @@ const filterSurveys = (surveys, serverConfig) => {
  * Fetch metadata for all surveys
  * @returns
  */
+
 export const fetchSurveysMetadata = async (options?: FetcherFunctionOptions) => {
     const getQuery = options?.getQuery || getSurveysQuery
     const query = getQuery()
@@ -29,10 +27,7 @@ export const fetchSurveysMetadata = async (options?: FetcherFunctionOptions) => 
         fetchFunction: async () => {
             const result = await fetchGraphQLApi({ query, key })
             if (!result) throw new Error(`Couldn't fetch surveys`)
-            return filterSurveys(
-                result._metadata.surveys,
-                options?.serverConfig
-            ) as SurveyMetadata[]
+            return filterSurveys(result._metadata.surveys, options) as SurveyMetadata[]
         },
         ...options
     })
