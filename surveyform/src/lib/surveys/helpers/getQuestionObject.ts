@@ -16,9 +16,10 @@ export const getQuestionObject = ({
     question.template
   ] as TemplateFunction;
   if (!templateFunction) {
-    throw new Error(
-      `getQuestionObject: could not find template ${question.template} for question ${question.id}`
-    );
+    return question;
+    // throw new Error(
+    //   `getQuestionObject: could not find template ${question.template} for question ${question.id}`
+    // );
   }
   const questionObject = templateFunction({
     survey,

@@ -7,6 +7,7 @@ export const multiple: TemplateFunction = options => {
 
     const question = {
         allowMultiple: true,
+        inputComponent: 'multiple',
         ...options.question
     } as QuestionTemplateOutput
 

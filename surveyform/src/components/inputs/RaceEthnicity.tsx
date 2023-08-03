@@ -8,6 +8,7 @@ export const RaceEthnicity = (props) => {
   const { document, path } = props;
   const countryFieldPath = path.replace("race_ethnicity__choices", "country");
   const isDisabled =
+    document &&
     document[countryFieldPath] &&
     disallowedCountries.includes(document[countryFieldPath]);
   if (isDisabled) {
