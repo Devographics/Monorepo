@@ -33,7 +33,7 @@ const limiter = rateLimit({
   // we can use the requested email here for this precise scenario
   keyGenerator: (request, response) => {
     // request.ip
-    return (request.body as MagicLoginSendEmailBody).destination;
+    return ((request as any).body as MagicLoginSendEmailBody).destination;
   },
 });
 
