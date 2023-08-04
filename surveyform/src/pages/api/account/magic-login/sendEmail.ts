@@ -31,7 +31,7 @@ const limiter = rateLimit({
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
   // NOTE: as a default rateLimit will use the IP but this is not totally reliable
   // we can use the requested email here for this precise scenario
-  keyGenerator: (request: NextApiRequest, response) => {
+  keyGenerator: (request, response) => {
     // request.ip
     return (request.body as MagicLoginSendEmailBody).destination;
   },

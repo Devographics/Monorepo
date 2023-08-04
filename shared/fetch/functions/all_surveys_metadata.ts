@@ -4,7 +4,7 @@ import { fetchGraphQLApi, getFromCache } from '../fetch'
 import { getSurveysQuery } from '../queries'
 import { FetcherFunctionOptions } from '../types'
 
-const filterSurveys = (surveys: SurveyMetadata[], options: FetcherFunctionOptions) => {
+const filterSurveys = (surveys: SurveyMetadata[], options: FetcherFunctionOptions = {}) => {
     const { serverConfig } = options
     let filteredSurveys = surveys
     if (serverConfig && serverConfig().isProd && !serverConfig()?.isTest) {

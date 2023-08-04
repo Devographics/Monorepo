@@ -1,4 +1,8 @@
-import { TemplateArguments, TemplateFunction } from "@devographics/types";
+import {
+  QuestionTemplateOutput,
+  TemplateArguments,
+  TemplateFunction,
+} from "@devographics/types";
 import * as templateFunctions from "@devographics/templates";
 
 export const getQuestionObject = ({
@@ -16,7 +20,7 @@ export const getQuestionObject = ({
     question.template
   ] as TemplateFunction;
   if (!templateFunction) {
-    return question;
+    return question as QuestionTemplateOutput;
     // throw new Error(
     //   `getQuestionObject: could not find template ${question.template} for question ${question.id}`
     // );
