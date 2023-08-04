@@ -1,4 +1,5 @@
 import { ResponseDocument } from "@devographics/types";
+import type { Document } from "mongodb";
 
 /**
  * Temporary user data with unhashed email
@@ -9,11 +10,11 @@ export type NewUserDocument = Omit<UserDocument, "emailHash"> & {
   email?: string;
 };
 
-export interface UserDocument {
+export interface UserDocument extends Omit<Document, "_id"> {
   _id?: string;
   anonymousId?: string;
   anonymousIds?: string[];
-  authMode: "passwordless" | "anonymous"
+  authMode: "passwordless" | "anonymous";
   emailHash?: string;
   /**
    * For passwordless, false until the user clicked the magic link for the first time

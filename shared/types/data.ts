@@ -1,4 +1,4 @@
-import { ResultsSubFieldEnum } from '@devographics/types'
+import { ResultsSubFieldEnum } from './api'
 import { Entity } from './entities'
 import { Option } from './outlines'
 
@@ -129,7 +129,7 @@ export enum OtherPercentages {
 }
 
 export type BucketData = {
-    [key in BucketUnits]?: number
+    [key in Exclude<BucketUnits, BucketUnits.PERCENTILES>]?: number
 }
 
 export interface Bucket extends BucketData {

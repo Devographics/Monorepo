@@ -2,6 +2,7 @@ import crypto from "crypto";
 import { v4 as uuidv4 } from "uuid";
 // import { EmailHashMongooseModel } from "~/account/email_hashes/model.server";
 import { getEmailHashesCollection, newMongoId } from "@devographics/mongo";
+import { ObjectId } from "mongodb";
 /**
  *
  * Creating Hash from Emails, not reversible
@@ -32,7 +33,8 @@ export async function getUUID(emailHash: string, userId: string) {
   } else {
     emailUuid = uuidv4();
     await EmailHashes.insertOne({
-      _id: newMongoId(),
+      // TODO: find cleaner way to deal with string _id type
+      _id: newMongoId() as unknown as ObjectId,
       userId: userId,
       hash: emailHash,
       uuid: emailUuid,

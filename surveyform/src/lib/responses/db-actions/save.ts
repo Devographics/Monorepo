@@ -12,6 +12,7 @@ import { HandlerError } from "~/lib/handler-error";
 import { validateResponse } from "./validate";
 import { emailPlaceholder } from "~/lib/responses/schema";
 import pickBy from "lodash/pickBy";
+import { ObjectId } from "mongodb";
 
 export async function saveResponse({
   responseId,
@@ -26,9 +27,9 @@ export async function saveResponse({
 
   // Check for existing response
   const RawResponse = await getRawResponsesCollection();
-  const existingResponse = await RawResponse.findOne({
-    _id: responseId,
-  });
+  const existingResponse = (await RawResponse.findOne({
+    _id: responseId as unknown as ObjectId,
+  })) as unknown as ResponseDocument;
   if (!existingResponse) {
     throw new HandlerError({
       id: "response_doesnt_exists",
@@ -115,7 +116,7 @@ export async function saveResponse({
 
   const modifiedFields = pickBy(serverData, (value, key) => value !== null);
   const deletedFields = pickBy(serverData, (value, key) => value === null);
-  const selector = { _id: responseId };
+  const selector = { _id: responseId as unknown as ObjectId };
   const modifier = {
     $set: modifiedFields,
     $unset: deletedFields,

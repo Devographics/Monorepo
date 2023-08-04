@@ -1,5 +1,6 @@
 import { UserDocument } from "~/account/user/typings";
 import { getUsersCollection } from "@devographics/mongo";
+import { ObjectId } from "mongodb";
 
 /**
  * If necessary, make the user verified and add an anonymousId
@@ -55,13 +56,18 @@ export const upgradeUser = async ({
       updatedUser.authMode = "passwordless";
     }
 
-    const Users = await getUsersCollection()
-    await Users.updateOne({ _id: foundUser._id }, {
-      $set: {
-        ...updatedUser
+    const Users = await getUsersCollection();
+    await Users.updateOne(
+      { _id: foundUser._id as unknown as ObjectId },
+      {
+        $set: {
+          ...updatedUser,
+        },
       }
-    })
-    const userAfterUpdate = await Users.findOne({ _id: foundUser._id })
+    );
+    const userAfterUpdate = await Users.findOne({
+      _id: foundUser._id as unknown as ObjectId,
+    });
     return userAfterUpdate;
   }
   return foundUser;

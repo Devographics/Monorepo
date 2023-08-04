@@ -4,6 +4,7 @@ import {
   UserDocument,
   UserDocumentWithResponses,
 } from "~/account/user/typings";
+import { ResponseDocument } from "@devographics/types";
 
 /**
  * Add responses to user
@@ -16,7 +17,7 @@ export async function populateUserResponses({
   connectToRedis();
 
   const RawResponses = await getRawResponsesCollection();
-  const responses = await RawResponses.find(
+  const responses = (await RawResponses.find(
     { userId: user._id },
     {
       projection: {
@@ -29,7 +30,7 @@ export async function populateUserResponses({
         completion: 1,
       },
     }
-  ).toArray();
+  ).toArray()) as unknown as ResponseDocument[];
 
   return { ...user, responses };
 }

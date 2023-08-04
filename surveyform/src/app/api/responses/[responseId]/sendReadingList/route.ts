@@ -11,6 +11,7 @@ import {
   ResponseDocument,
 } from "@devographics/types";
 import { getEditionQuestions } from "~/lib/surveys/helpers/getEditionQuestions";
+import { ObjectId } from "mongodb";
 
 export async function POST(
   req: NextRequest,
@@ -51,10 +52,11 @@ export async function POST(
     });
     const survey = edition.survey;
 
+    // TODO: handle string _id better
     const RawResponse = await getRawResponsesCollection();
-    const response = await RawResponse.findOne({
-      _id: responseId,
-    });
+    const response = (await RawResponse.findOne({
+      _id: responseId as unknown as ObjectId,
+    })) as unknown as ResponseDocument;
 
     const { subject, text, html } = getReadingListEmail({
       response,

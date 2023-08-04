@@ -127,6 +127,7 @@ const SubmitButton = (props: SubmitButtonProps) => {
   return (
     <div className={`form-btn form-btn-${type}`}>
       {readOnly ? (
+        // @ts-ignore
         <Button as={Link} href={path}>
           {contents}
         </Button>

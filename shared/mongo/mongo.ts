@@ -9,7 +9,7 @@
  * (because they might want to know only a subset of each collection type)
  */
 import { Survey } from '@devographics/types'
-import { MongoClient, Db } from 'mongodb'
+import { MongoClient, Db, Document } from 'mongodb'
 import { nanoid } from 'nanoid'
 import { getEnvVar, EnvVar } from '@devographics/helpers'
 
@@ -101,7 +101,7 @@ export const getAppDb = () => {
 /**
  * Handle the connection automatically when called the first time
  */
-export const getCollectionByName = async <T = any>(name: string) => {
+export const getCollectionByName = async <T extends Document>(name: string) => {
     const db = await getAppDb()
     return db.collection<T>(name)
 }
@@ -109,7 +109,7 @@ export const getCollectionByName = async <T = any>(name: string) => {
 /**
  * Handle the connection automatically when called the first time
  */
-export const getRawResponsesCollection = async <T = any>(survey?: Survey) => {
+export const getRawResponsesCollection = async <T extends Document>(survey?: Survey) => {
     const db = await getAppDb()
     return db.collection<T>('responses')
 }
@@ -125,7 +125,7 @@ export const getNormResponsesCollection = async (survey?: Survey) => {
 /**
  * Handle the connection automatically when called the first time
  */
-export const getUsersCollection = async <T = any>() => {
+export const getUsersCollection = async <T extends Document>() => {
     const db = await getAppDb()
     return db.collection<T>('users')
 }

@@ -8,6 +8,7 @@ import { restoreTypes, runFieldCallbacks, OnCreateProps } from "~/lib/schemas";
 import type { ResponseDocument } from "@devographics/types";
 import { HandlerError } from "~/lib/handler-error";
 import { validateResponse } from "./validate";
+import { Document } from "mongodb";
 
 export const duplicateResponseErrorId = "duplicate_response";
 
@@ -91,7 +92,7 @@ export async function createResponse({
   validateResponse({ ...props, serverData });
 
   // insert
-  const insertRes = await RawResponse.insertOne(serverData);
+  const insertRes = await RawResponse.insertOne(serverData as Document);
 
   return serverData;
 }
