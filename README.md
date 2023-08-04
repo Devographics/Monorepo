@@ -2,15 +2,15 @@
 
 ## Setup
 
-#### 1. Install pnpm
+### 1. Install pnpm
 
 This monorepo uses [pnpm](https://pnpm.io/), and you should start by installing it.
 
-#### 2. Clone monorepo
+### 2. Clone monorepo
 
 Clone this monorepo locally and install all dependencies with `pnpm i`.
 
-#### 3. Clone other repos
+### 3. Clone other repos
 
 Optionally, you can also clone these other repos if you want to load or modify their data locally:
 
@@ -32,7 +32,7 @@ I suggest using the following file structure:
         -   `devographics/locales/locale-fr-FR`
         -   `devographics/locales/...`
 
-#### 4. Set environment variables
+### 4. Set environment variables
 
 Each app within `monorepo` needs its own environment variables defined inside an `.env` files (except for `surveyform` and `surveyadmin`, which use `.env.development.local`).
 
@@ -42,9 +42,21 @@ Alternatively you can also refer to [variables.yml](https://github.com/Devograph
 
 You can also refer to the README in each individual app directory (`results/README.md`, etc.).
 
-#### 5. Running the apps
+### 5. Running the apps
 
 You can run the apps with `pnpm run dev` when inside `monorepo/surveyform`, `monorepo/results`, etc.
+
+#### Remote API Mode
+
+The easiest way to run any client-facing app (`results`, `surveyform`, etc.) is to connect to the remote production API (https://api.devographics.com/graphql).
+
+In that case, you can just run the app with no other requirements
+
+#### Local API Mode
+
+If you want to use local files for the surveys, locales, etc. you will need to run the API (`monorepo/api`) locally as well to load them. Once the API is running, you can then point the other apps to it via the `API_URL` env variable.
+
+Note that even when the API is running locally, you will still need internet access to connect to the databases and load image assets.
 
 ## Apps
 
