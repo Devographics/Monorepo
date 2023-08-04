@@ -1,5 +1,51 @@
 # Devographics Monorepo
 
+## Setup
+
+#### 1. Install pnpm
+
+This monorepo uses [pnpm](https://pnpm.io/), and you should start by installing it.
+
+#### 2. Clone monorepo
+
+Clone this monorepo locally and install all dependencies with `pnpm i`.
+
+#### 3. Clone other repos
+
+Optionally, you can also clone these other repos if you want to load or modify their data locally:
+
+1. [entities](https://github.com/Devographics/entities): the YAML files containing all metadata for the features, sites, people, libraries, etc. mentioned in the surveys.
+2. [surveys](https://github.com/Devographics/surveys): contains the YAML files that define survey configs and outlines.
+3. [locale-en-US](https://github.com/Devographics/locale-en-US): (or any other locale) contains the locale strings used in the survey.
+
+I suggest using the following file structure:
+
+-   `devographics` parent directory
+    -   `devographics/monorepo`
+        -   `devographics/monorepo/surveyform`
+        -   `devographics/monorepo/results`
+        -   `devographics/monorepo/...`
+    -   `devographics/entities`
+    -   `devographics/surveys`
+    -   `devographics/locales`
+        -   `devographics/locales/locale-en-US`
+        -   `devographics/locales/locale-fr-FR`
+        -   `devographics/locales/...`
+
+#### 4. Set environment variables
+
+Each app within `monorepo` needs its own environment variables defined inside an `.env` files (except for `surveyform` and `surveyadmin`, which use `.env.development.local`).
+
+When running the app (see next section) you will get error messages indicating which environment variables are required.
+
+Alternatively you can also refer to [variables.yml](https://github.com/Devographics/Monorepo/blob/main/shared/helpers/variables.yml) and look for variables corresponding to the current app (e.g. `results`).
+
+You can also refer to the README in each individual app directory (`results/README.md`, etc.).
+
+#### 5. Running the apps
+
+You can run the apps with `pnpm run dev` when inside `monorepo/surveyform`, `monorepo/results`, etc.
+
 ## Apps
 
 The following apps are all contained within the monorepo.

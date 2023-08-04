@@ -1,36 +1,60 @@
 # Results
 
-The repo for the survey results sites, such as the [2021 State of JS survey](https://2021.stateofjs.com/) site. Powered by [Gatsby](https://www.gatsbyjs.org/).
+The repo for the survey results sites, such as the [2022 State of JS survey](https://2022.stateofjs.com/) site. Powered by [Gatsby](https://www.gatsbyjs.org/).
 
 ## Setup
 
 Create an `.env` file at the root of the `/results` directory.
 
-**If the app crash on startup double check the selected survey.
-
 ```sh
+# General
+
 APP_NAME=results
-GATSBY_API_URL=http://localhost:4030/graphql
-# In prod:
-# DATA_API_URL=http://api.devographics.com/graphql
-# INTERNAL_API_URL=http://api-internal.devographics.com/graphql
 
-# adapt to current survey edition
+# connect to API running locally
+GATSBY_API_URL=http://localhost:4020/graphql
+
+# - OR -
+
+# connect to production Devographics API
+GATSBY_API_URL=https://api.devographics.com/graphql
+
+# Results
+
+# could be state_of_js, state_of_css, etc.
 SURVEYID=state_of_js
+# could be js2021, js2022, css2022, etc.
 EDITIONID=js2022
+# used to fetch surveys data when fetching remotely
+SURVEYS_URL=https://devographics.github.io/surveys
 
-# set to true to only build en-US and ru-RU locales
+# Local Dev
+
+# port for local development
+PORT=8001
+# used to store logs, useful for debugging
+LOGS_PATH=/local_path_to_devographics_directory/monorepo/results/.logs
+# used to fetch surveys data when fetching locally
+SURVEYS_PATH=/local_path_to_devographics_directory/devographics/surveys
+# enable to load fewer locales and speed up build
 FAST_BUILD=true
+# enable to disable cache and always load fresh data
+# DISABLE_CACHE=true
 
-# For logging (optional)
-LOGS_DIRECTORY="/code/devographics/monorepo/.logs"
-# Mandatory if logging is enabled
-SURVEYS_DIR="/code/devograhics/surveys"
+# Redis
+
+# if needed, ask on Discord https://discord.gg/zRDb35jfrt
+REDIS_UPSTASH_URL=https://xxxxxx.upstash.io
+REDIS_TOKEN=AZLSASQgODxxxxxx=
+
+# Twitter
+
+# if needed, ask on Discord https://discord.gg/zRDb35jfrt
+TWITTER_BEARER_TOKEN=AAAAAxxxxxx
+
+# SendOwl
+
+# if needed, ask on Discord https://discord.gg/zRDb35jfrt
+SENDOWL_API_KEY=3df5f6xxxx
+SENDOWL_SECRET=6475422baxxxxx
 ```
-
-The `FAST_BUILD` option turns off some features to increase build speed during development and testing, such as generating individual block pages and internationalized versions. 
-
-## Running the app
-
-- `yarn`, then
-- `yarn dev` or `yarn dev:clean` to run after cleaning all Gatsby caches. 
