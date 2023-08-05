@@ -23,3 +23,25 @@ cd locales
 
 #
 git clone https://github.com/Devographics/locale-en-US locale-en-US
+
+cd ../monorepo
+
+cd surveyform
+
+touch .env.development.local
+
+cd ../surveyadmin
+
+touch .env.development.local
+
+cd ../api
+
+touch .env
+
+cd ../results
+
+touch .env
+
+cd ../homepage
+
+touch .env

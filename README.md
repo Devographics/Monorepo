@@ -8,12 +8,21 @@ This is the codebase that runs the Devographics surveys, such as [State of JS](h
 
 This monorepo uses [pnpm](https://pnpm.io/), and you should start by installing it.
 
-### 2. Clone & Install
+### 2. Clone Repositories
+
+#### A. Install Script
+
+You can clone all repositories in the right place and create blank `.env` files with the following install script:
+
+`curl -o- https://raw.githubusercontent.com/Devographics/Monorepo/main/install.sh | bash`
+
+#### B. Manual Install
+
+##### Monorepo
 
 -   Clone this monorepo locally with `git clone https://github.com/Devographics/Monorepo.git`
--   `cd` into your new `monorepo` directory and install all dependencies with `pnpm i`.
 
-### 3. Clone other repos
+##### Other repos
 
 The survey apps rely on a lot of metadata. If you need to load or modify this metadata from your local filesystem instead of through our API, you can optionally also clone these other repos:
 
@@ -34,6 +43,10 @@ I suggest using the following file structure:
         -   `devographics/locales/locale-en-US`
         -   `devographics/locales/locale-fr-FR`
         -   `devographics/locales/...`
+
+### 3. Install Dependencies
+
+-   `cd` into your new `monorepo` directory and install all dependencies with `pnpm i`.
 
 ### 4. Set environment variables
 
