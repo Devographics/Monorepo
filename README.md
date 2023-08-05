@@ -46,21 +46,35 @@ I suggest using the following file structure:
 
 ### 3. Install Dependencies
 
--   `cd` into your new `monorepo` directory and install all dependencies with `pnpm i`.
+Whenever you need to run a project in the `monorepo` directory (such as `results`, `surveyform`, etc.), you will need to first run `pnpm install` from within its subdirectory.
 
-### 4. Set environment variables
+For example, for the `surveyform` app:
 
-Each app within `monorepo` needs its own environment variables defined inside an `.env` files (except for `surveyform` and `surveyadmin`, which use `.env.development.local`).
+-   `cd monorepo`
+-   `cd surveyform`
+-   `pnpm install`
+
+### 4. Running a Project
+
+You can run each project with `pnpm run dev` when inside its subdirectory.
+
+For example, for the `surveyform` app:
+
+-   `cd monorepo`
+-   `cd surveyform`
+-   `pnpm run dev`
+
+If you run into any issues, make sure your environment is correctly setup (see below).
+
+### 5. Environment Variables Setup
+
+Each app within `monorepo` needs its own environment variables defined inside a `.env` files (except for `surveyform` and `surveyadmin`, which use a `.env.development.local` file).
 
 When running the app (see next section) you will get error messages indicating which environment variables are required.
 
 Alternatively you can also refer to [variables.yml](https://github.com/Devographics/Monorepo/blob/main/shared/helpers/variables.yml) and look for variables corresponding to the current app (e.g. `results`).
 
 You can also refer to the README in each individual app directory (`results/README.md`, etc.).
-
-### 5. Running the apps
-
-You can run the apps with `pnpm run dev` when inside `monorepo/surveyform`, `monorepo/results`, etc.
 
 #### Remote API Mode
 
