@@ -6,9 +6,10 @@
 
 This monorepo uses [pnpm](https://pnpm.io/), and you should start by installing it.
 
-### 2. Clone monorepo
+### 2. Clone & Install
 
-Clone this monorepo locally and install all dependencies with `pnpm i`.
+-   Clone this monorepo locally with `git clone https://github.com/Devographics/Monorepo.git`
+-   Go to `monorepo` and install all dependencies with `pnpm i`.
 
 ### 3. Clone other repos
 
