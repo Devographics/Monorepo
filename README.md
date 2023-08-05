@@ -64,29 +64,27 @@ For example, for the `surveyform` app:
 -   `cd surveyform`
 -   `pnpm run dev`
 
-If you run into any issues, make sure your environment is correctly setup (see below).
+If this is your first time running a project, you will run into some issues that need to be fixed by configuring your local environment variables (see below).
+
+#### Remote vs Local API
+
+You can run the `results` and `surveyform` project by connecting to our remote production API (https://api.devographics.com/graphql).
+
+Alternatively, if you want to use local files for the surveys, locales, etc. you will need to run a local copy of the API project (`monorepo/api`) locally as well to load them. Once the API is running, you can then point the other apps to it via the `API_URL` env variable.
+
+Note that even when the API is running locally, you will still need internet access to connect to the databases and load image assets.
 
 ### 5. Environment Variables Setup
 
 Each app within `monorepo` needs its own environment variables defined inside a `.env` files (except for `surveyform` and `surveyadmin`, which use a `.env.development.local` file).
 
-Here are some ways to help with this setup:
+Here are some ways that can help with this setup:
 
--   You can use the `.env.example` file in each project subdirectory (such as [this one for the surveyform project](https://github.com/Devographics/Monorepo/blob/main/surveyform/.env.example)) as a starting point by pasting its contents into your own `.env` file.
--   When running the app (see next section) you will get error messages indicating which environment variables are required.
--   You can also refer to [variables.yml](https://github.com/Devographics/Monorepo/blob/main/shared/helpers/variables.yml) directly and look for variables corresponding to the current app (e.g. `results`).
+1.  You can use the `.env.example` file in each project subdirectory (such as [this one for the surveyform project](https://github.com/Devographics/Monorepo/blob/main/surveyform/.env.example)) as a starting point by pasting its contents into your own `.env` or `.env.development.local` (for Next.js projects such as `surveyform`) file.
+2.  You will need credentials to connect to our MongoDB and Redis staging database. You can [ask me (Sacha) on Discord](https://discord.gg/zRDb35jfrt) and I will provide them.
+3.  When running the app with `pnpm run dev` you will get error messages indicating any remaining missing environment variables.
 
-#### Remote API Mode
-
-The easiest way to run any client-facing app (`results`, `surveyform`, etc.) is to connect to the remote production API (https://api.devographics.com/graphql).
-
-In that case, you can just run the app with no other requirements
-
-#### Local API Mode
-
-If you want to use local files for the surveys, locales, etc. you will need to run the API (`monorepo/api`) locally as well to load them. Once the API is running, you can then point the other apps to it via the `API_URL` env variable.
-
-Note that even when the API is running locally, you will still need internet access to connect to the databases and load image assets.
+You can also refer to [variables.yml](https://github.com/Devographics/Monorepo/blob/main/shared/helpers/variables.yml) directly and look for variables corresponding to the current app (e.g. `results`).
 
 ## Apps
 
