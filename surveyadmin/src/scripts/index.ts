@@ -9,3 +9,4 @@ export * from "./addEditionIdSurveyId";
 export * from "./deleteUser";
 export * from "./reloadAPI";
 export * from "./refreshCache";
+export * from "./testDbConnection";

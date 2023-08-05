@@ -118,7 +118,7 @@ const QuestionItem = ({
         <QuestionLabel
           section={section}
           question={question}
-          formatCode={false}
+          formatCode={true}
           variant="short"
         />
       </a>

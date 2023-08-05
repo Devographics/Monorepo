@@ -15,8 +15,8 @@ export const useQuestionTitle = ({
   const { id, entity } = question;
   const i18n = getQuestioni18nIds({ section, question });
 
-  const entityNameHtml = entity && (entity.nameHtml || entity.name);
   const entityNameClean = entity && (entity.nameClean || entity.name);
+  const entityNameHtml = entity && (entity.nameHtml || entityNameClean);
 
   // TODO: formatMessage should return an object with html and clean versions
   // instead of just a string

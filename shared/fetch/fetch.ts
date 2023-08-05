@@ -236,10 +236,7 @@ export const fetchGraphQLApi = async <T = any>({
 }): Promise<T | null> => {
     const apiUrl = apiUrl_ || getApiUrl()
     const key = key_ || extractQueryName(query)
-    await logToFile(`${key}.gql`, query, {
-        mode: 'overwrite',
-        subDir: 'graphql'
-    })
+    await logToFile(`graphql/${key}.gql`, query)
 
     // console.debug(`// querying ${apiUrl} (${query.slice(0, 15)}...)`)
     const response = await fetch(apiUrl, {
