@@ -1,5 +1,7 @@
 # Devographics Monorepo
 
+This is the codebase that runs the Devographics surveys, such as [State of JS](http://stateofjs.com/) and [State of CSS](https://stateofcss.com/).
+
 ## Setup
 
 ### 1. Install pnpm
@@ -9,11 +11,11 @@ This monorepo uses [pnpm](https://pnpm.io/), and you should start by installing 
 ### 2. Clone & Install
 
 -   Clone this monorepo locally with `git clone https://github.com/Devographics/Monorepo.git`
--   Go to `monorepo` and install all dependencies with `pnpm i`.
+-   `cd` into your new `monorepo` directory and install all dependencies with `pnpm i`.
 
 ### 3. Clone other repos
 
-Optionally, you can also clone these other repos if you want to load or modify their data locally:
+The survey apps rely on a lot of metadata. If you need to load or modify this metadata from your local filesystem instead of through our API, you can optionally also clone these other repos:
 
 1. [entities](https://github.com/Devographics/entities): the YAML files containing all metadata for the features, sites, people, libraries, etc. mentioned in the surveys.
 2. [surveys](https://github.com/Devographics/surveys): contains the YAML files that define survey configs and outlines.
