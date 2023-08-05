@@ -72,7 +72,7 @@ Each app within `monorepo` needs its own environment variables defined inside a 
 
 Here are some ways to help with this setup:
 
--   You can use the `.env.example` file in each project subdirectory as a starting point by pasting its contents into your own `.env` file.
+-   You can use the `.env.example` file in each project subdirectory (such as [this one for the surveyform project](https://github.com/Devographics/Monorepo/blob/main/surveyform/.env.example)) as a starting point by pasting its contents into your own `.env` file.
 -   When running the app (see next section) you will get error messages indicating which environment variables are required.
 -   You can also refer to [variables.yml](https://github.com/Devographics/Monorepo/blob/main/shared/helpers/variables.yml) directly and look for variables corresponding to the current app (e.g. `results`).
 
