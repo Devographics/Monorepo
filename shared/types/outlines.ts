@@ -187,6 +187,7 @@ export enum DbSuffixes {
     NORMALIZED = 'normalized',
     PRENORMALIZED = 'prenormalized',
     COMMENT = 'comment',
+    FOLLOWUP = 'followup',
     ERROR = 'error',
     PATTERNS = 'patterns',
     RAW = 'raw'
@@ -202,7 +203,17 @@ export interface QuestionTemplateOutput extends QuestionWithId {
     rawPaths?: DbPaths
     normPaths?: DbPaths
     options?: Option[]
+    followups?: Followups[]
     extends?: string
+}
+
+export type Followups = {
+    id: string
+    options: FollowupOption[]
+}
+
+export type FollowupOption = {
+    id: string
 }
 
 export type TemplateFunction = (arg0: TemplateArguments) => QuestionTemplateOutput
