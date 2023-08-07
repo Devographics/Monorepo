@@ -23,7 +23,7 @@ export const Finish = ({
     (section) => section.slug === "features"
   );
   const enableScore = response && featureSections.length > 0;
-  const enableReadingList = !readOnly && edition.enableReadingList;
+  const enableReadingList = edition.enableReadingList;
 
   return (
     <div className="contents-narrow thanks">
