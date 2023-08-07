@@ -162,6 +162,8 @@ export type Question = {
 
     // a question that's in the outline but not in the API
     hasApiEndpoint?: boolean
+
+    followups?: Followups[]
 }
 
 export type Option = {
@@ -194,6 +196,7 @@ export enum DbSuffixes {
     NORMALIZED = 'normalized',
     PRENORMALIZED = 'prenormalized',
     COMMENT = 'comment',
+    FOLLOWUP = 'followup',
     ERROR = 'error',
     PATTERNS = 'patterns',
     RAW = 'raw'
@@ -210,6 +213,15 @@ export interface QuestionTemplateOutput extends QuestionWithId {
     normPaths?: DbPaths
     options?: Option[]
     extends?: string
+}
+
+export type Followups = {
+    id: string
+    options: FollowupOption[]
+}
+
+export type FollowupOption = {
+    id: string
 }
 
 export type TemplateFunction = (arg0: TemplateArguments) => QuestionTemplateOutput

@@ -18,7 +18,7 @@ export const getRawPaths = (
     }: {
         survey: Survey
         section: Section
-        question: Question
+        question: QuestionTemplateOutput
     },
     suffix?: string
 ) => {
@@ -41,6 +41,9 @@ export const getRawPaths = (
     }
     if (question.allowComment) {
         paths.comment = getPath(DbSuffixes.COMMENT)
+    }
+    if (question.followups) {
+        paths.followup = getPath(DbSuffixes.FOLLOWUP)
     }
     return paths
 }
@@ -85,6 +88,11 @@ export const getNormPaths = (
     if (question.allowComment) {
         paths.comment = getPath([...basePathSegments, DbSuffixes.COMMENT])
     }
+
+    if (question.allowComment) {
+        paths.followup = getPath([...basePathSegments, DbSuffixes.FOLLOWUP])
+    }
+
     return paths
 }
 
@@ -93,7 +101,7 @@ export const getPaths = (
         survey: Survey
         edition: Edition
         section: Section
-        question: Question
+        question: QuestionTemplateOutput
     },
     suffix?: string
 ) => ({
