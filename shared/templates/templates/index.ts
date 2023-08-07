@@ -16,6 +16,7 @@ export * from './opinion'
 export * from './quiz'
 
 export * from './feature'
+export * from './feature_with_followups'
 export * from './tool'
 
 export * from './locale'

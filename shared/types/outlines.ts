@@ -155,6 +155,8 @@ export type Question = {
 
     // a question that's in the outline but not in the API
     hasApiEndpoint?: boolean
+
+    followups?: Followups[]
 }
 
 export type Option = {
@@ -203,7 +205,6 @@ export interface QuestionTemplateOutput extends QuestionWithId {
     rawPaths?: DbPaths
     normPaths?: DbPaths
     options?: Option[]
-    followups?: Followups[]
     extends?: string
 }
 
