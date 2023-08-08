@@ -16,4 +16,6 @@ export interface GetFromCacheOptions<T> extends CommonOptions {
 export interface FetcherFunctionOptions extends CommonOptions {
     appName?: AppName
     getQuery?: (options?: any) => string
+    redisUrl?: string
+    redisToken?: string
 }

@@ -148,6 +148,11 @@ type RawDbPaths {
     response: String
     other: String
     comment: String
+<<<<<<< Updated upstream
+=======
+    followup_predefined: String
+    followup_freeform: String
+>>>>>>> Stashed changes
     prenormalized: String
 }
 
@@ -156,6 +161,11 @@ type NormDbPaths {
     other: String
     prenormalized: String
     comment: String
+<<<<<<< Updated upstream
+=======
+    followup_predefined: String
+    followup_freeform: String
+>>>>>>> Stashed changes
     raw: String
     patterns: String
     error: String

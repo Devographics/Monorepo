@@ -34,7 +34,8 @@
       text-decoration: none;
     }
 
-    &--small {
+    &--small,
+    &.btn-sm {
       font-size: $small-font;
       padding: math.div($spacing, 5) math.div($spacing, 2);
     }
@@ -88,6 +89,11 @@
   &-primary:disabled {
     // opacity: 0.4;
     cursor: default;
+  }
+
+  &.btn-sm {
+    font-size: $small-font;
+    padding: math.div($spacing, 5) math.div($spacing, 2);
   }
 }
 

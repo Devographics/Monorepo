@@ -26,6 +26,11 @@ export enum DbPathsEnum {
     OTHER = 'other',
     PRENORMALIZED = 'prenormalized',
     COMMENT = 'comment',
+<<<<<<< Updated upstream
+=======
+    FOLLOWUP_PREDEFINED = 'followup_predefined',
+    FOLLOWUP_FREEFORM = 'followup_freeform',
+>>>>>>> Stashed changes
     RAW = 'raw',
     PATTERNS = 'patterns',
     ERROR = 'error'

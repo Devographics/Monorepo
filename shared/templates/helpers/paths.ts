@@ -40,8 +40,15 @@ export const getRawPaths = (
         paths.other = getPath(DbSuffixes.PRENORMALIZED)
     }
     if (question.allowComment) {
-        paths.comment = getPath(DbSuffixes.COMMENT)
+        paths[DbSuffixes.COMMENT] = getPath(DbSuffixes.COMMENT)
     }
+<<<<<<< Updated upstream
+=======
+    if (question.followups) {
+        paths[DbSuffixes.FOLLOWUP_PREDEFINED] = getPath(DbSuffixes.FOLLOWUP_PREDEFINED)
+        paths[DbSuffixes.FOLLOWUP_FREEFORM] = getPath(DbSuffixes.FOLLOWUP_FREEFORM)
+    }
+>>>>>>> Stashed changes
     return paths
 }
 
@@ -85,6 +92,20 @@ export const getNormPaths = (
     if (question.allowComment) {
         paths.comment = getPath([...basePathSegments, DbSuffixes.COMMENT])
     }
+<<<<<<< Updated upstream
+=======
+
+    if (question.followups) {
+        paths[DbSuffixes.FOLLOWUP_PREDEFINED] = getPath([
+            ...basePathSegments,
+            DbSuffixes.FOLLOWUP_PREDEFINED
+        ])
+        paths[DbSuffixes.FOLLOWUP_FREEFORM] = getPath([
+            ...basePathSegments,
+            DbSuffixes.FOLLOWUP_FREEFORM
+        ])
+    }
+>>>>>>> Stashed changes
     return paths
 }
 
