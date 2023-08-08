@@ -17,6 +17,7 @@ interface MagicLoginReqBody {
 }
 // NOTE: adding NextApiRequest, NextApiResponse is required to get the right typings in next-connect
 // this is the normal behaviour
+// @ts-ignore TODO Eric
 const login = nextConnect<NextApiRequest, NextApiResponse>()
   // @ts-ignore
   .use(passport.initialize())
