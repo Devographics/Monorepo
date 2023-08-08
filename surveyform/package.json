@@ -78,7 +78,7 @@
     "nanoid": "3.3.6",
     "new-github-issue-url": "^1.0.0",
     "next": "13.4.13",
-    "next-connect": "^1.0.0",
+    "next-connect": "^0.9.1",
     "next-sitemap": "^4.1.8",
     "node-cache": "^5.1.2",
     "node-fetch": "^3.3.0",
