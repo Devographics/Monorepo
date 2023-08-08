@@ -24,7 +24,6 @@ export const getEditionMetadataQuery = ({ editionId }: { editionId: string }) =>
           faviconUrl
           socialImageUrl
           faq
-          enableReadingList
           colors {
             primary
             secondary
@@ -96,7 +95,13 @@ export const getEditionMetadataQuery = ({ editionId }: { editionId: string }) =>
               rawPaths {
                 base
                 comment
-                followup
+                followup_predefined
+                followup_freeform
+                other
+                prenormalized
+                response
+                other
+                comment
                 other
                 prenormalized
                 response

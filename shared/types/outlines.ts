@@ -42,7 +42,6 @@ export type Edition = {
     year: number
     credits: Credit[]
     resultsUrl: string
-    resultsStatus: ResultsStatusEnum
     questionsUrl: string
     imageUrl: string
     socialImageUrl: string
@@ -72,12 +71,6 @@ export enum SurveyStatusEnum {
     OPEN = 2,
     CLOSED = 3,
     HIDDEN = 4
-}
-
-export enum ResultsStatusEnum {
-    HIDDEN = 1,
-    PREVIEW = 2,
-    OPEN = 3
 }
 
 export type Colors = {
@@ -196,7 +189,8 @@ export enum DbSuffixes {
     NORMALIZED = 'normalized',
     PRENORMALIZED = 'prenormalized',
     COMMENT = 'comment',
-    FOLLOWUP = 'followup',
+    FOLLOWUP_PREDEFINED = 'followup_predefined',
+    FOLLOWUP_FREEFORM = 'followup_freeform',
     ERROR = 'error',
     PATTERNS = 'patterns',
     RAW = 'raw'

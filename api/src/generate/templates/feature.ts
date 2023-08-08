@@ -1,5 +1,8 @@
 import { ApiTemplateFunction, QuestionApiTemplateOutput } from '../../types/surveys'
-import { feature as templateFunction } from '@devographics/templates'
+import {
+    feature as featureTemplateFunction,
+    featureWithFollowups as featureWithFollowupsTemplateFunction
+} from '@devographics/templates'
 // import {
 //     idResolverFunction,
 //     responsesResolverFunction,
@@ -36,30 +39,30 @@ export const feature: ApiTemplateFunction = options => {
     const { survey, question } = options
     const fieldTypeName = `${graphqlize(survey.id)}Feature`
     const output: QuestionApiTemplateOutput = {
-        ...templateFunction(options),
+        ...featureTemplateFunction(options),
         fieldTypeName,
         filterTypeName: 'FeatureFilters',
         autogenerateFilterType: false,
         autogenerateOptionType: false,
         autogenerateEnumType: false,
         typeDef: getTypeDef({ fieldTypeName, survey, addFollowups: false })
-        // resolverMap: {
-        //     id: idResolverFunction,
-        //     comments: commentsResolverFunction,
-        //     responses: responsesResolverFunction,
-        //     entity: entityResolverFunction
-        // }
     }
     return output
 }
 
 export const featureWithFollowups: ApiTemplateFunction = options => {
-    const { survey } = options
+    const { survey, question } = options
     const fieldTypeName = `${graphqlize(survey.id)}Feature`
-
-    const output = {
-        ...feature(options),
+    const output: QuestionApiTemplateOutput = {
+        ...featureWithFollowupsTemplateFunction(options),
+        fieldTypeName,
+        filterTypeName: 'FeatureFilters',
+        autogenerateFilterType: false,
+        autogenerateOptionType: false,
+        autogenerateEnumType: false,
         typeDef: getTypeDef({ fieldTypeName, survey, addFollowups: true })
     }
     return output
 }
+
+export const featureWithFollowups2 = featureWithFollowups

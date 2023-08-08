@@ -230,7 +230,9 @@ export const getResponseSchema = ({
           type,
           required: false,
           clientMutable: true,
-          isArray: formPath === DbPathsEnum.RESPONSE && question.allowMultiple,
+          isArray:
+            formPath === DbPathsEnum.FOLLOWUP_PREDEFINED ||
+            (formPath === DbPathsEnum.RESPONSE && question.allowMultiple),
         };
       }
     }

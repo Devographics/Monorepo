@@ -13,6 +13,7 @@ import IconComment from "~/components/icons/Comment";
 import IconCommentDots from "~/components/icons/CommentDots";
 import { FormInputProps } from "./typings";
 import { getOptioni18nIds } from "@devographics/i18n";
+import { read } from "fs";
 
 export const CommentTrigger = ({
   value,
@@ -77,32 +78,11 @@ export const CommentInput = (props: CommentInputProps) => {
     question,
     readOnly,
   } = props;
-  const [localValue, setLocalValue] = useState(commentValue);
-  const { updateCurrentValues } = useFormContext();
 
   const option = question.options?.find((o) => o.id === questionValue);
 
   const i18n = option && getOptioni18nIds({ ...props, option });
   response = i18n && intl.formatMessage({ id: i18n.base });
-
-  const updateCurrentValuesDebounced = debounce(updateCurrentValues, 500);
-
-  const handleChange =
-    (isDebounced = false) =>
-    (event) => {
-      let value = event.target.value;
-      setLocalValue(value);
-      const _updateCurrentValues = isDebounced
-        ? updateCurrentValuesDebounced
-        : updateCurrentValues;
-      if (value === "") {
-        // @ts-ignore
-        _updateCurrentValues({ [commentPath]: null });
-      } else {
-        // @ts-ignore
-        _updateCurrentValues({ [commentPath]: value });
-      }
-    };
 
   return (
     <div className="comment-input">
@@ -119,15 +99,59 @@ export const CommentInput = (props: CommentInputProps) => {
           <FormattedMessage id="experience.tell_us_more_no_value" />
         )}
       </p>
-      <FormControl
-        as="textarea"
-        onChange={handleChange(true)}
-        onBlur={handleChange(false)}
-        value={localValue || ""}
-        disabled={readOnly}
-        // ref={refFunction}
-        // {...inputProperties}
+      <CommentTextarea
+        readOnly={!!readOnly}
+        value={commentValue}
+        path={commentPath}
       />
     </div>
+  );
+};
+
+export const CommentTextarea = ({
+  readOnly,
+  value,
+  path,
+  placeholder,
+}: {
+  readOnly: boolean;
+  value: string;
+  path: string;
+  placeholder?: string;
+}) => {
+  const [localValue, setLocalValue] = useState(value);
+
+  const { updateCurrentValues } = useFormContext();
+
+  const updateCurrentValuesDebounced = debounce(updateCurrentValues, 500);
+
+  const handleChange =
+    (isDebounced = false) =>
+    (event) => {
+      let value = event.target.value;
+      setLocalValue(value);
+      const _updateCurrentValues = isDebounced
+        ? updateCurrentValuesDebounced
+        : updateCurrentValues;
+      if (value === "") {
+        // @ts-ignore
+        _updateCurrentValues({ [path]: null });
+      } else {
+        // @ts-ignore
+        _updateCurrentValues({ [path]: value });
+      }
+    };
+
+  return (
+    <FormControl
+      as="textarea"
+      onChange={handleChange(true)}
+      onBlur={handleChange(false)}
+      value={localValue || ""}
+      disabled={readOnly}
+      placeholder={placeholder}
+      // ref={refFunction}
+      // {...inputProperties}
+    />
   );
 };

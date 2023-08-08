@@ -18,7 +18,7 @@ export const getRawPaths = (
     }: {
         survey: Survey
         section: Section
-        question: QuestionTemplateOutput
+        question: Question
     },
     suffix?: string
 ) => {
@@ -40,10 +40,11 @@ export const getRawPaths = (
         paths.other = getPath(DbSuffixes.PRENORMALIZED)
     }
     if (question.allowComment) {
-        paths.comment = getPath(DbSuffixes.COMMENT)
+        paths[DbSuffixes.COMMENT] = getPath(DbSuffixes.COMMENT)
     }
     if (question.followups) {
-        paths.followup = getPath(DbSuffixes.FOLLOWUP)
+        paths[DbSuffixes.FOLLOWUP_PREDEFINED] = getPath(DbSuffixes.FOLLOWUP_PREDEFINED)
+        paths[DbSuffixes.FOLLOWUP_FREEFORM] = getPath(DbSuffixes.FOLLOWUP_FREEFORM)
     }
     return paths
 }
@@ -89,10 +90,16 @@ export const getNormPaths = (
         paths.comment = getPath([...basePathSegments, DbSuffixes.COMMENT])
     }
 
-    if (question.allowComment) {
-        paths.followup = getPath([...basePathSegments, DbSuffixes.FOLLOWUP])
+    if (question.followups) {
+        paths[DbSuffixes.FOLLOWUP_PREDEFINED] = getPath([
+            ...basePathSegments,
+            DbSuffixes.FOLLOWUP_PREDEFINED
+        ])
+        paths[DbSuffixes.FOLLOWUP_FREEFORM] = getPath([
+            ...basePathSegments,
+            DbSuffixes.FOLLOWUP_FREEFORM
+        ])
     }
-
     return paths
 }
 
@@ -101,7 +108,7 @@ export const getPaths = (
         survey: Survey
         edition: Edition
         section: Section
-        question: QuestionTemplateOutput
+        question: Question
     },
     suffix?: string
 ) => ({

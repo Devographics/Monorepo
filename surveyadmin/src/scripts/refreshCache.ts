@@ -12,7 +12,8 @@ export const refreshCache = async (args) => {
   return { key };
 };
 
-export const refreshSurveysCache = async () => {
+export const refreshSurveysCache = async (args) => {
+  const { target } = args;
   const refreshedCacheKeys: string[] = [];
   // get list of all surveys
   console.log("// Refreshing all surveys metadata cache…");
@@ -42,7 +43,8 @@ export const refreshSurveysCache = async () => {
 // i18n contexts common to all surveys and editions
 export const getCommonContexts = () => ["common", "surveys", "accounts"];
 
-export const refreshLocalesCache = async () => {
+export const refreshLocalesCache = async (args) => {
+  const { target } = args;
   const { data: allSurveys } = await fetchSurveysMetadata();
 
   const refreshedCacheKeys: string[] = [];

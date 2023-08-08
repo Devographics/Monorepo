@@ -76,6 +76,9 @@
     }
   }
   .form-check {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     label {
       display: flex;
       // align-items: center;
@@ -543,5 +546,60 @@
   svg {
     height: 16px;
     width: 16px;
+  }
+}
+
+.followups {
+  margin: $spacing/2;
+  // background: var(--bg-color-light);
+  padding: $spacing;
+  font-size: $medium-font;
+  border-radius: $border-radius;
+  @include border;
+  position: relative;
+  &:after,
+  &:before {
+    bottom: 100%;
+    right: 50px;
+    border: solid transparent;
+    content: "";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+  }
+
+  &:after {
+    border-color: rgba(136, 183, 213, 0);
+    border-bottom-color: var(--bg-color);
+    border-width: 10px;
+  }
+  &:before {
+    border-color: rgba(194, 225, 245, 0);
+    border-bottom-color: var(--border-color);
+    border-width: 11px;
+  }
+
+  h5 {
+    font-size: $medium-font;
+    margin-bottom: $spacing;
+    @include font-regular;
+  }
+  .form-check-input {
+    margin: 0;
+  }
+  &-predefined {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing/2;
+    margin-bottom: $spacing;
+    &-item {
+    }
+    &-label {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: $spacing/2;
+    }
   }
 }

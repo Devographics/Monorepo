@@ -12,17 +12,39 @@ import { DbPathsEnum, OptionMetadata } from "@devographics/types";
 import { getFormPaths } from "@devographics/templates";
 
 import get from "lodash/get.js";
-import { FollowupData, FollowUpsTrigger, FollowUps } from "./Followup";
+import { FollowupData, FollowUps } from "./Followup2";
 
 export interface ExperienceProps extends FormInputProps {
   showDescription: boolean;
 }
 
 export const Experience = (props: ExperienceProps) => {
-  const { question } = props;
+  const { value, edition, question, response } = props;
 
   const { options, entity } = question;
 
+  const formPaths = getFormPaths({ edition, question });
+  // get the paths of the predefined and freeform followup answers
+  // inside the overall response document
+  const predefinedFollowupPath = formPaths[DbPathsEnum.FOLLOWUP_PREDEFINED];
+  const freeformFollowupPath = formPaths[DbPathsEnum.FOLLOWUP_FREEFORM];
+
+  const predefinedFollowupValue =
+    (predefinedFollowupPath && get(response, predefinedFollowupPath)) || [];
+  const freeformFollowupValue =
+    (freeformFollowupPath && get(response, freeformFollowupPath)) || "";
+
+  const hasFollowupData =
+    !isEmpty(predefinedFollowupValue) || !isEmpty(freeformFollowupValue);
+
+  const followupData: FollowupData = {
+    predefinedFollowupPath,
+    freeformFollowupPath,
+    predefinedFollowupValue,
+    freeformFollowupValue,
+  };
+
+  const currentOption = options?.find((o) => o.id === value);
   return (
     <FormItem {...props}>
       {entity?.example && <CodeExample {...entity.example} />}
@@ -33,6 +55,14 @@ export const Experience = (props: ExperienceProps) => {
           ))}
         </div>
       </div>
+
+      {currentOption && (
+        <FollowUps
+          option={currentOption}
+          {...props}
+          followupData={followupData}
+        />
+      )}
     </FormItem>
   );
 };
@@ -67,28 +97,6 @@ const ExperienceOption = (
   const hasValue = !isEmpty(value);
   const { followups } = question;
 
-  const formPaths = getFormPaths({ edition, question });
-  // get the paths of the predefined and freeform followup answers
-  // inside the overall response document
-  const predefinedFollowupPath = formPaths[DbPathsEnum.FOLLOWUP_PREDEFINED];
-  const freeformFollowupPath = formPaths[DbPathsEnum.FOLLOWUP_FREEFORM];
-
-  const predefinedFollowupValue =
-    (predefinedFollowupPath && get(response, predefinedFollowupPath)) || [];
-  const freeformFollowupValue =
-    (freeformFollowupPath && get(response, freeformFollowupPath)) || "";
-
-  const hasFollowupData =
-    !isEmpty(predefinedFollowupValue) || !isEmpty(freeformFollowupValue);
-  const [showFollowups, setShowFollowups] = useState(hasFollowupData);
-
-  const followupData: FollowupData = {
-    predefinedFollowupPath,
-    freeformFollowupPath,
-    predefinedFollowupValue,
-    freeformFollowupValue,
-  };
-
   const isChecked = value === option.id;
   const checkClass = hasValue
     ? isChecked
@@ -121,16 +129,7 @@ const ExperienceOption = (
           </div>
           <FormOption {...props} option={option} />
         </Form.Check.Label>
-        {followups && isChecked && (
-          <FollowUpsTrigger
-            showFollowups={showFollowups}
-            setShowFollowups={setShowFollowups}
-          />
-        )}
       </Form.Check>
-      {showFollowups && isChecked && (
-        <FollowUps {...props} followupData={followupData} />
-      )}
     </div>
   );
 };
