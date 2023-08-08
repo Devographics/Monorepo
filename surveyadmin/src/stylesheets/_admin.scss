@@ -70,3 +70,9 @@
     right: 2px;
   }
 }
+
+.admin-cache {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing;
+}

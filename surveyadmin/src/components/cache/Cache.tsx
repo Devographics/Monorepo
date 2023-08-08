@@ -5,22 +5,18 @@ import { runScript } from "~/lib/scripts/services";
 
 export const actions = [
   {
-    label: "Reload Surveys",
-    script: "reloadAPISurveys",
+    label: "Refresh Surveys Metadata Cache",
+    script: "refreshSurveysCache",
   },
   {
-    label: "Reload Locales",
-    script: "reloadAPILocales",
-  },
-  {
-    label: "Reload Entities",
-    script: "reloadAPIEntities",
+    label: "Refresh Locales Cache",
+    script: "refreshLocalesCache",
   },
 ];
 
-export const AdminAPI = () => (
+export const CacheDashboard = () => (
   <div>
-    <h2>API</h2>
+    <h2>Cache</h2>
     <h3>Development</h3>
     <ul>
       {actions.map((action) => (
@@ -29,7 +25,6 @@ export const AdminAPI = () => (
         </li>
       ))}
     </ul>
-
     <h3>Production</h3>
     <ul>
       {actions.map((action) => (
@@ -56,4 +51,4 @@ const Action = ({ label, script, target }) => {
     </a>
   );
 };
-export default AdminAPI;
+export default CacheDashboard;
