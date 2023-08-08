@@ -18,7 +18,7 @@ export const getRawPaths = (
     }: {
         survey: Survey
         section: Section
-        question: QuestionTemplateOutput
+        question: Question
     },
     suffix?: string
 ) => {
@@ -45,9 +45,6 @@ export const getRawPaths = (
     if (question.followups) {
         paths[DbSuffixes.FOLLOWUP_PREDEFINED] = getPath(DbSuffixes.FOLLOWUP_PREDEFINED)
         paths[DbSuffixes.FOLLOWUP_FREEFORM] = getPath(DbSuffixes.FOLLOWUP_FREEFORM)
-    }
-    if (question.followups) {
-        paths.followup = getPath(DbSuffixes.FOLLOWUP)
     }
     return paths
 }
@@ -111,7 +108,7 @@ export const getPaths = (
         survey: Survey
         edition: Edition
         section: Section
-        question: QuestionTemplateOutput
+        question: Question
     },
     suffix?: string
 ) => ({
