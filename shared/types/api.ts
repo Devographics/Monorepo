@@ -11,6 +11,7 @@ import { ResponsesTypes } from './metadata'
 export enum ResultsSubFieldEnum {
     RESPONSES = 'responses',
     COMMENTS = 'comments',
+    FOLLOWUPS = 'followups',
     FREEFORM = 'freeform',
     PRENORMALIZED = 'prenormalized',
     MEDIANS = 'medians',
@@ -32,6 +33,7 @@ export enum DbPathsEnum {
     PATTERNS = 'patterns',
     ERROR = 'error'
 }
+
 export type DbPaths = {
     [key in DbPathsEnum]?: string
 }

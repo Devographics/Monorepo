@@ -3,7 +3,6 @@ import {
     feature as featureTemplateFunction,
     featureWithFollowups as featureWithFollowupsTemplateFunction
 } from '@devographics/templates'
-import { Survey } from '@devographics/types'
 // import {
 //     idResolverFunction,
 //     responsesResolverFunction,
@@ -13,6 +12,7 @@ import { Survey } from '@devographics/types'
 import { getFiltersTypeName, getFacetsTypeName } from '../helpers'
 import { graphqlize } from '../helpers'
 import { getResponseTypeName } from '../../graphql/templates/responses'
+import { Survey } from '@devographics/types'
 
 const getTypeDef = ({
     fieldTypeName,
@@ -35,7 +35,6 @@ const getTypeDef = ({
 )}
 }
 `
-
 export const feature: ApiTemplateFunction = options => {
     const { survey, question } = options
     const fieldTypeName = `${graphqlize(survey.id)}Feature`

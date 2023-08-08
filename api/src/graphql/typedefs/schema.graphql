@@ -125,6 +125,7 @@ type QuestionMetadata {
     normPaths: NormDbPaths
     contentType: ContentType
     options: [OptionsMetadata]
+    followups: [FollowupsMetadata]
     entity: Entity
     allowOther: Boolean
     allowComment: Boolean
@@ -381,6 +382,15 @@ type FeatureOption {
     id: FeatureOptionID
     label: String
     entity: Entity
+}
+
+type FollowupsMetadata {
+    id: String
+    options: [FollowupOption]
+}
+
+type FollowupOption {
+    id: String
 }
 
 enum FeatureOptionID {

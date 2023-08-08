@@ -102,6 +102,10 @@ export const getEditionMetadataQuery = ({ editionId }: { editionId: string }) =>
                 response
                 other
                 comment
+                followup
+                other
+                prenormalized
+                response
               }
               options {
                 id
@@ -109,6 +113,12 @@ export const getEditionMetadataQuery = ({ editionId }: { editionId: string }) =>
                 label
                 entity {
                   ${entityFragment}
+                }
+              }
+              followups {
+                id
+                options {
+                  id
                 }
               }
             }
