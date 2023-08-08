@@ -187,11 +187,8 @@ export enum DbSuffixes {
     NORMALIZED = 'normalized',
     PRENORMALIZED = 'prenormalized',
     COMMENT = 'comment',
-<<<<<<< Updated upstream
-=======
     FOLLOWUP_PREDEFINED = 'followup_predefined',
     FOLLOWUP_FREEFORM = 'followup_freeform',
->>>>>>> Stashed changes
     ERROR = 'error',
     PATTERNS = 'patterns',
     RAW = 'raw'

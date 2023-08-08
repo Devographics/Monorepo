@@ -7,70 +7,33 @@ import { FormInputProps } from "~/components/form/typings";
 import { FormOption } from "~/components/form/FormOption";
 
 import isEmpty from "lodash/isEmpty.js";
-<<<<<<< Updated upstream
-=======
 import { useState } from "react";
-import { DbPathsEnum, Option, OptionMetadata } from "@devographics/types";
+import { DbPathsEnum, OptionMetadata } from "@devographics/types";
 import { getFormPaths } from "@devographics/templates";
 import without from "lodash/without.js";
 
 import get from "lodash/get.js";
 import { Button } from "~/components/ui/Button";
-import { CommentInput, CommentTextarea } from "~/components/form/FormComment";
+import { CommentTextarea } from "~/components/form/FormComment";
 import { useIntlContext } from "@devographics/react-i18n";
->>>>>>> Stashed changes
 
 interface ExperienceProps extends FormInputProps {
   showDescription: boolean;
 }
 
 export const Experience = (props: ExperienceProps) => {
-  const { path, value, question, updateCurrentValues, readOnly } = props;
+  const { question } = props;
 
   const { options, entity } = question;
-
-  const hasValue = !isEmpty(value);
 
   return (
     <FormItem {...props}>
       {entity?.example && <CodeExample {...entity.example} />}
       <div className="experience-contents">
         <div className="experience-options">
-          {options?.map((option, i) => {
-            const isChecked = value === option.id;
-            const checkClass = hasValue
-              ? isChecked
-                ? "form-check-checked"
-                : "form-check-unchecked"
-              : "";
-            return (
-              // @ts-ignore
-              <Form.Check
-                key={i}
-                // layout="elementOnly"
-                type="radio"
-              >
-                <Form.Check.Label htmlFor={`${path}.${i}`}>
-                  <div className="form-input-wrapper">
-                    <Form.Check.Input
-                      onChange={(e) => {
-                        updateCurrentValues({ [path]: e.target.value });
-                      }}
-                      type="radio"
-                      value={option.id}
-                      name={path}
-                      id={`${path}.${i}`}
-                      // ref={refFunction}
-                      checked={isChecked}
-                      className={checkClass}
-                      disabled={readOnly}
-                    />
-                  </div>
-                  <FormOption {...props} option={option} />
-                </Form.Check.Label>
-              </Form.Check>
-            );
-          })}
+          {options?.map((option, i) => (
+            <ExperienceOption key={i} option={option} i={i} {...props} />
+          ))}
         </div>
       </div>
     </FormItem>
@@ -90,8 +53,6 @@ const CodeExample = ({ language, code, codeHighlighted }) => {
   );
 };
 
-<<<<<<< Updated upstream
-=======
 const ExperienceOption = (
   props: ExperienceProps & { option: OptionMetadata; i: number }
 ) => {
@@ -240,5 +201,4 @@ const FollowUps = (props: ExperienceProps & { option: OptionMetadata }) => {
   );
 };
 
->>>>>>> Stashed changes
 export default Experience;

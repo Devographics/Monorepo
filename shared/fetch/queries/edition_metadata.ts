@@ -93,15 +93,12 @@ export const getEditionMetadataQuery = ({ editionId }: { editionId: string }) =>
                 ${entityFragment}
               }
               rawPaths {
-<<<<<<< Updated upstream
-=======
                 base
                 comment
                 followup_predefined
                 followup_freeform
                 other
                 prenormalized
->>>>>>> Stashed changes
                 response
                 other
                 comment
