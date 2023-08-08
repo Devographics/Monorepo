@@ -102,7 +102,6 @@ export const getEditionMetadataQuery = ({ editionId }: { editionId: string }) =>
                 response
                 other
                 comment
-                followup
                 other
                 prenormalized
                 response
