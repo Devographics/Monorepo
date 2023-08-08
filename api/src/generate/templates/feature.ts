@@ -3,6 +3,7 @@ import {
     feature as featureTemplateFunction,
     featureWithFollowups as featureWithFollowupsTemplateFunction
 } from '@devographics/templates'
+import { Survey } from '@devographics/types'
 // import {
 //     idResolverFunction,
 //     responsesResolverFunction,
@@ -13,8 +14,6 @@ import { getFiltersTypeName, getFacetsTypeName } from '../helpers'
 import { graphqlize } from '../helpers'
 import { getResponseTypeName } from '../../graphql/templates/responses'
 
-<<<<<<< Updated upstream
-=======
 const getTypeDef = ({
     fieldTypeName,
     survey,
@@ -37,7 +36,6 @@ const getTypeDef = ({
 }
 `
 
->>>>>>> Stashed changes
 export const feature: ApiTemplateFunction = options => {
     const { survey, question } = options
     const fieldTypeName = `${graphqlize(survey.id)}Feature`
@@ -48,29 +46,6 @@ export const feature: ApiTemplateFunction = options => {
         autogenerateFilterType: false,
         autogenerateOptionType: false,
         autogenerateEnumType: false,
-<<<<<<< Updated upstream
-        typeDef: `type ${fieldTypeName} {
-    id: String
-    _metadata: QuestionMetadata
-    options: [FeatureOption]
-    comments(parameters: CommentParameters): ItemComments
-    entity: Entity
-    responses(filters: ${getFiltersTypeName(
-        survey.id
-    )},  parameters: Parameters, facet: ${getFacetsTypeName(survey.id)}): ${getResponseTypeName(
-            survey.id
-        )}
-}`
-        // resolverMap: {
-        //     id: idResolverFunction,
-        //     comments: commentsResolverFunction,
-        //     responses: responsesResolverFunction,
-        //     entity: entityResolverFunction
-        // }
-    }
-    return output
-}
-=======
         typeDef: getTypeDef({ fieldTypeName, survey, addFollowups: false })
     }
     return output
@@ -92,4 +67,3 @@ export const featureWithFollowups: ApiTemplateFunction = options => {
 }
 
 export const featureWithFollowups2 = featureWithFollowups
->>>>>>> Stashed changes
