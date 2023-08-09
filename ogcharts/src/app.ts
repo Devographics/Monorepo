@@ -4,7 +4,7 @@ import { print } from "graphql"
 import fsPromises from "fs/promises"
 
 const app = express()
-const port = 3000
+const port = process.env.PORT || 4444
 
 app.use(json())
 
@@ -16,7 +16,7 @@ function getConfig() {
         /**
          * Devographics API
          */
-        chartDataApi: process.env.DATA_API_URL!, // TODO: reuse name from variables yml
+        chartDataApi: process.env.API_URL!, // TODO: reuse name from variables yml
         /**
          * Absolute URL of the application that serves the charts
          * @example https://og.devographics.com/
