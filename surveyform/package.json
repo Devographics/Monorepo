@@ -48,7 +48,6 @@
     "test": "pnpm run test:unit && pnpm run test:e2e",
     "upgrade:vulcan": "pnpm up '@vulcanjs/*' --latest && pnpm run postinstall",
     "typecheck-watch": "tsc --noEmit --p src/tsconfig.json -w",
-    "//typecheck": " # in case of error with @vulcanjs/* package, check that src/types (eg simpl-schema) are up-to-date with vulcan-npm",
     "typecheck": "tsc --noEmit --p src/tsconfig.json",
     "tokyodev": "dotenv -e .env.tokyodev.local next"
   },
