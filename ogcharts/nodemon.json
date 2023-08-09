@@ -1,0 +1,7 @@
+{
+    "watch": ["src"],
+    "ignore": ["src/**/*.test.ts"],
+    "ext": "ts,mjs,js,json,graphql",
+    "exec": "pnpm run build && node ./dist/app.mjs",
+    "legacyWatch": true
+}
